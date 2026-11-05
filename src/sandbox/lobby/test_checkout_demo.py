@@ -13,6 +13,7 @@ import hashlib
 import json
 import os
 import sys
+import time
 import urllib.error
 import urllib.request
 
@@ -43,19 +44,40 @@ def report(name, bad, detail=""):
     return bad
 
 
+TRANSPORT_RETRIES = 3
+
+
 def http(url, method="GET", body=None):
+    """Read the response, retrying TRANSPORT failures only.
+
+    Every criterion here is about the product response (status, bytes,
+    counts), never about how many TCP attempts it took, so a socket-level
+    abort under load is retried a bounded number of times and printed when
+    it happens. An HTTP status is never retried and no assertion is relaxed.
+    """
     data = None
     headers = {}
     if body is not None:
         data = json.dumps(body).encode("utf-8")
         headers["Content-Type"] = "application/json"
-    req = urllib.request.Request(url, data=data, headers=headers, method=method)
-    try:
-        with urllib.request.urlopen(req, timeout=10) as res:
-            raw = res.read()
-            return res.status, raw, dict(res.headers)
-    except urllib.error.HTTPError as exc:
-        return exc.code, exc.read(), dict(exc.headers)
+    for attempt in range(TRANSPORT_RETRIES):
+        req = urllib.request.Request(url, data=data, headers=headers,
+                                     method=method)
+        try:
+            with urllib.request.urlopen(req, timeout=10) as res:
+                raw = res.read()
+                if attempt:
+                    print("  transport retries used=%d on %s" % (attempt, url))
+                return res.status, raw, dict(res.headers)
+        except urllib.error.HTTPError as exc:
+            return exc.code, exc.read(), dict(exc.headers)
+        except (ConnectionError, OSError) as exc:
+            if attempt == TRANSPORT_RETRIES - 1:
+                raise
+            print("  transport retry %d on %s: %s"
+                  % (attempt + 1, url, type(exc).__name__))
+            time.sleep(0.1 * (attempt + 1))
+    raise AssertionError("unreachable")
 
 
 def json_of(raw):
