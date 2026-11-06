@@ -1,0 +1,28 @@
+EVIDENCE CAPTURE round=R2497 suite=src/os/test_export_driver_queue_face.py legs=2
+== LEG A rc=0 digest=FD4BB8D53F453FB8
+SUITE export_driver_queue_face (R2497) criteria=6
+PASS AC-EDQF1 the section IS queue_floor_export_face.face asked at call time (patching that reading moves the driver section, no gross re-derivation survives)
+QUEUE EXPORT os-queue-floor-export-face verdict=CURRENT path=C:\Users\sjs20\AppData\Local\Temp\edqf2-v4470686\status-export.json claimable=5,9,10
+PASS AC-EDQF2 a driver run leaves the queue block CURRENT, the gate reports no drift and the queue face itself re-reads CURRENT
+PASS AC-EDQF3 a queue that moved between the reading and the write refuses with the gate own verdict word and leaves the document byte-identical with no residue
+PASS AC-EDQF4 every already-published key keeps its value and its position, and the queue section is refreshed in place rather than reordered
+PASS AC-EDQF5 the driver prints the gate verdict and the byte count, so a refused or drifted run is visible rather than silent
+PASS AC-EDQF6 pure ASCII, stdlib only, no clock, no network, one runner entry at 6 criteria and a help face of its own
+SUITE PASS 6/6
+== LEG B rc=0 digest=FD4BB8D53F453FB8
+SUITE export_driver_queue_face (R2497) criteria=6
+PASS AC-EDQF1 the section IS queue_floor_export_face.face asked at call time (patching that reading moves the driver section, no gross re-derivation survives)
+QUEUE EXPORT os-queue-floor-export-face verdict=CURRENT path=C:\Users\sjs20\AppData\Local\Temp\edqf2-8o228y04\status-export.json claimable=5,9,10
+PASS AC-EDQF2 a driver run leaves the queue block CURRENT, the gate reports no drift and the queue face itself re-reads CURRENT
+PASS AC-EDQF3 a queue that moved between the reading and the write refuses with the gate own verdict word and leaves the document byte-identical with no residue
+PASS AC-EDQF4 every already-published key keeps its value and its position, and the queue section is refreshed in place rather than reordered
+PASS AC-EDQF5 the driver prints the gate verdict and the byte count, so a refused or drifted run is visible rather than silent
+PASS AC-EDQF6 pure ASCII, stdlib only, no clock, no network, one runner entry at 6 criteria and a help face of its own
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_export_freshness_gate.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_export_gate_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_status_export_writer_dialect_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_export_publish_path_guard.py rc=0 NO SUITE LINE
+EVIDENCE identical=True adjacent=5 fails=0 digest=FD4BB8D53F453FB8

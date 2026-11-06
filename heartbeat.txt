@@ -2,3 +2,4 @@
 2026-11-06T09:31:20+08:00 R2494 ok product-face matrix-stamp-from-liveness(6) registry=576/4432 live=LIVE-rc0 suite=6/6-twice floor=5/10/10 export=PASS(21/0)
 2026-11-06T22:59:00+08:00 R2495 ok verification-face battery-576/4432-green registry=576/4432 debt-close=ok export=PASS(21/0) queue=CURRENT product-bytes=0
 2026-11-06T23:46:48+08:00 R2496 ok verification-face battery-576/4432-green-red-then-green registry=576/4432 debt-close=ok export=PASS(21/0) queue=CURRENT product-bytes=0
+2026-11-06T23:58:00+08:00 R2497 ok product-face export-driver-queue-face registry=577/4438 debt-close=ok export=PASS(21/0) queue=CURRENT product-bytes=2

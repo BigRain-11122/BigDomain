@@ -10,12 +10,14 @@ import datetime
 import io
 import json
 import os
-import subprocess
 import sys
-import tempfile
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(BASE))
+sys.path.insert(0, BASE)
+
+import export_driver_queue_face as EDQF  # noqa: E402
+
 EXPORT = os.path.join(REPO, "docs", "status-export.json")
 STATE = os.path.join(BASE, "state.json")
 STAMP = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))) \
@@ -69,16 +71,6 @@ OUTS = ("qa/reconcile-all-R2431.log (red leg) plus "
         "criteria) and docs/sandbox-suite-matrix.md regenerated to 52317B")
 
 
-def floors():
-    proc = subprocess.run([sys.executable,
-                           os.path.join(BASE, "queue_floor.py"), "--check",
-                           "--json"], cwd=REPO, capture_output=True)
-    try:
-        return json.loads(proc.stdout.decode("utf-8", "replace"))
-    except ValueError:
-        return None
-
-
 def self_drive():
     sys.path.insert(0, BASE)
     import check_export_consistency as cec
@@ -109,10 +101,6 @@ def main():
     state = json.load(io.open(STATE, encoding="utf-8"))
     data = json.load(io.open(EXPORT, encoding="utf-8"))
     tick = str(state["tick"])
-    face = floors()
-    if face is None:
-        sys.stdout.write("E_EXP queue floor unreadable\n")
-        return 2
     rows = data.get("results") or []
     if not any(isinstance(r, list) and len(r) >= 2 and r[1] == RESULT
                for r in rows):
@@ -141,26 +129,32 @@ def main():
     ceo["updated_at"] = STAMP
     data["ceo_face"] = ceo
     data["self_drive"] = self_drive()
-    data["queue"] = {"floors": face["floors"],
-                     "queues": face["queues"]}
+    try:
+        EDQF.refresh(data, REPO)
+    except EDQF.ExportDriverQueueFaceError as exc:
+        sys.stdout.write("E_EXP queue face unreadable %s\n" % exc)
+        return 2
     text = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
-    handle, tmp = tempfile.mkstemp(dir=os.path.dirname(EXPORT),
-                                   prefix=".r2431-", suffix=".tmp")
-    with os.fdopen(handle, "w", encoding="utf-8", newline="\n") as sink:
-        sink.write(text)
-        sink.flush()
-        os.fsync(sink.fileno())
-    os.replace(tmp, EXPORT)
+    try:
+        proof = EDQF.publish(REPO, EXPORT, text)
+    except EDQF.ExportDriverQueueFaceError as exc:
+        sys.stdout.write("QUEUE FACE REFUSED %s\n" % exc)
+        return 2
     back = json.load(io.open(EXPORT, encoding="utf-8"))
     ok = (str(back["results"][0][0]) == tick
           and back["outs"][0] == OUTS
           and back["ceo_face"]["latest_artifact"] == LATEST
           and back["export_ts"] == STAMP
           and back["self_drive"]["log_lines_in_window"]
-          == back["self_drive"]["substantive_non_idle_mention_lines"])
-    sys.stdout.write("RESULTS rows=%d outs=%d tick=%s bytes=%d ok=%s\n"
+          == back["self_drive"]["substantive_non_idle_mention_lines"]
+          and proof.get("gate") == "CURRENT")
+    sys.stdout.write("RESULTS rows=%d outs=%d tick=%s bytes=%d queue=%s "
+                     "queue_bytes=%d queue_drifted=%s ok=%s\n"
                      % (len(back["results"]), len(back["outs"]), tick,
-                        os.path.getsize(EXPORT), ok))
+                        os.path.getsize(EXPORT), proof.get("gate"),
+                        proof.get("bytes"),
+                        ",".join(proof.get("drifted") or ()) or "(none)",
+                        ok))
     return 0 if ok else 2
 
 

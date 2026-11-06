@@ -5508,6 +5508,14 @@ SUITES = [
     # pinned in state/queue/tech.md:422 as the R2375 seed row BEFORE the code.)
     ("os-queue-export-gate-wire",
      os.path.join("..", "os", "test_queue_export_gate_wire.py"), 6),
+    # R2497: the round export driver re-derived the CEO-visible queue block out
+    # of queue_floor while the published section is queue_floor_export_face's
+    # DISCOUNTED reading, so a freshly refreshed export could carry a stale
+    # block and R2452/R2453 both had to land it by hand. (AC-EDQF1..AC-EDQF6
+    # were pinned in state/queue/tech.md:531 as the R2453 seed row BEFORE the
+    # code.)
+    ("os-export-driver-queue-face",
+     os.path.join("..", "os", "test_export_driver_queue_face.py"), 6),
     # R2377: R2376 gave the export a proved write path, but the closeout that
     # publishes every round still calls QFE.apply and writes the document
     # itself, so the wire had no caller in the real path and two writers
