@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T23:57:34+08:00",
+  "export_ts": "2026-11-06T23:59:16+08:00",
   "do": "R2497 product window: the round export driver now asks the shipped queue face for its section and proves the block with the freshness gate before any replace, so a refreshed CEO document can no longer carry a stale queue block or need a hand-landed fix",
   "ceo_face": {
     "current": "R2497 product window: the round export driver now asks the shipped queue face for its section and proves the block with the freshness gate before any replace, so a refreshed CEO document can no longer carry a stale queue block or need a hand-landed fix",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 a TECH face on the tech head state/queue/tech.md prefix AC-ECQF1 (export_consistency_queue_face) - the 21-check consistency face cannot see a stale queue block and must read DRIFT instead of PASS - with AC-CEPM1, AC-PLR1 and AC-EUC1 claimable behind it. Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-07T23:00:00+08:00",
     "last_artifact": "qa/export-driver-queue-face-R2497.log (2657B, utf-8 LF, crlf=0, legs=2 identical=True, adjacent=5 fails=0) at 2026-11-06, plus src/os/export_driver_queue_face.py and src/os/test_export_driver_queue_face.py",
-    "updated_at": "2026-11-06T23:57:34+08:00"
+    "updated_at": "2026-11-06T23:59:16+08:00"
   },
   "depts": [
     {
@@ -555,10 +555,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 33,
+    "log_lines_in_window": 34,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 33,
+    "substantive_non_idle_mention_lines": 34,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
