@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-06T08:12:43+08:00",
-  "do": "R2492 tech face: a declared package the read tree does not carry is now refused ONCE by name - E_RMPP_NO_PACKAGE naming the declaration and the corpus it searched - instead of being published as N broken imports",
+  "export_ts": "2026-11-06T09:15:08+08:00",
+  "do": "R2493 verification face: the R2492 registry (575 suites / 4426 criteria) is proved green on a committed tree, and the two real defects the red leg named - a matrix doc without its stamp-source provenance line and an evidence file captured through a PowerShell pipe - are repaired at their birth site",
   "ceo_face": {
-    "current": "R2492 tech face: a declared package the read tree does not carry is now refused ONCE by name - E_RMPP_NO_PACKAGE naming the declaration and the corpus it searched - instead of being published as N broken imports",
-    "latest_artifact": "src/os/relative_package_presence_refusal.py + src/os/test_relative_package_presence_refusal.py (six pre-registered criteria, SUITE PASS 6/6 twice identical at qa/relative-package-presence-refusal-R2492.log, plus the live leg qa/relative-package-presence-refusal-live-R2492.log which reads NO-PACKAGE with zero rows for an absent declaration and still names a real missing import under a carried package) at 2026-11-06 R2492",
-    "next_milestone": "2026-11-07 the owed battery on the registry this window moved to 575 suites / 4426 criteria, then a product face on the tech head state/queue/tech.md:528 prefix AC-MSFL1 (matrix_stamp_from_liveness, criteria pinned at R2442 before any code). Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
+    "current": "R2493 verification face: the R2492 registry (575 suites / 4426 criteria) is proved green on a committed tree, and the two real defects the red leg named - a matrix doc without its stamp-source provenance line and an evidence file captured through a PowerShell pipe - are repaired at their birth site",
+    "latest_artifact": "qa/reconcile-all-R2493-retry.log (868897B utf-8 LF, RUNNER PASS 575/575 suites green, reconcile controls 7/7, 1164.3s, zero FAIL rows, criteria recounted to exactly 4426) plus the repair commit e3d9c7c1 (re-taken qa/relative-package-presence-refusal-R2492.log through the shipped capture writer and docs/sandbox-suite-matrix.md regenerated stamp-aligned at 55212B) at 2026-11-06",
+    "next_milestone": "2026-11-07 a product face on the tech head state/queue/tech.md:528 prefix AC-MSFL1 (matrix_stamp_from_liveness, criteria AC-MSFL1..AC-MSFL6 pinned at R2442 before any code). Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/os/relative_package_presence_refusal.py + src/os/test_relative_package_presence_refusal.py (six pre-registered criteria, SUITE PASS 6/6 twice identical at qa/relative-package-presence-refusal-R2492.log, plus the live leg qa/relative-package-presence-refusal-live-R2492.log which reads NO-PACKAGE with zero rows for an absent declaration and still names a real missing import under a carried package) at 2026-11-06 R2492",
-    "updated_at": "2026-11-06T08:12:43+08:00"
+    "last_artifact": "qa/reconcile-all-R2493-retry.log (868897B utf-8 LF, RUNNER PASS 575/575 suites green, reconcile controls 7/7, 1164.3s, zero FAIL rows, criteria recounted to exactly 4426) plus the repair commit e3d9c7c1 (re-taken qa/relative-package-presence-refusal-R2492.log through the shipped capture writer and docs/sandbox-suite-matrix.md regenerated stamp-aligned at 55212B) at 2026-11-06",
+    "updated_at": "2026-11-06T09:15:08+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2493-retry.log + docs/sandbox-suite-matrix.md + qa/relative-package-presence-refusal-R2492.log + state/debt.md + src/os/closeout_R2493.py + src/os/fold_R2493.py + src/os/export_R2493.py + src/os/state.json + docs/status-export.json + src/os/backlog.md + heartbeat.txt",
     "src/os/relative_package_presence_refusal.py + src/os/test_relative_package_presence_refusal.py + src/sandbox/reconcile_all.py + qa/relative-package-presence-refusal-R2492.log + qa/relative-package-presence-refusal-live-R2492.log + docs/sandbox-suite-matrix.md + state/queue/tech.md + state/debt.md + src/os/capture_R2492.py + src/os/live_R2492.py + src/os/wire_R2492.py + src/os/closeout_R2492.py + src/os/export_R2492.py + src/os/state.json + docs/status-export.json + heartbeat.txt",
     "src/os/relative_module_corpus_scope.py + src/os/test_relative_module_corpus_scope.py + src/sandbox/reconcile_all.py + qa/relative-module-corpus-scope-R2491.log + qa/relative-module-corpus-scope-live-R2491.log + docs/sandbox-suite-matrix.md + state/queue/tech.md + state/debt.md + state/residue_triage.json + src/os/evidence_R2491.py + src/os/wire_R2491.py + src/os/close_tech_R2491.py + src/os/export_R2491.py + src/os/state.json + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
     "qa/reconcile-all-R2490.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/closeout_R2490.py + src/os/export_R2490.py + src/os/state.json + docs/status-export.json + heartbeat.txt + src/os/backlog.md + logs/battery-R2490.pid",
@@ -106,6 +107,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2493",
+      "2026-11-06 R2493 VERIFICATION window on the battery the register owed (product-face-R2492, pre-registered 575 suites / 4426 criteria, target re-measured by importing reconcile_all.SUITES before the run). The FIRST leg was RED at 573/575 with three failed assertions and both causes were real birth-site defects rather than load noise: reconcile-daily-census cd7 read drift because qa/relative-package-presence-refusal-R2492.log was pwsh-capture (17 CRLF) instead of the shipped writer's utf-8 LF, and os-matrix-stamp-compare AC-MSC4 read FAIL because the shipped matrix doc carried no stamp-source provenance line, so suite_matrix --check passed at 55158B while the live stamp leg re-rendered 55216B. Both were repaired at the birth site and committed ALONE as e3d9c7c1 before the retry: the evidence was re-taken through src/os/evidence_capture.py (1342B, legs=2 identical, adjacent=3 fails=0, census then DRIFT-CLEAN flags=0) and the matrix doc was regenerated stamp-aligned (55216B, both laws agreeing). RETRY GREEN on the committed repair tree: qa/reconcile-all-R2493-retry.log closes with RUNNER PASS (575/575 suites green, reconcile controls 7/7, 1164.3s), zero FAIL suite rows, and an independent recount of the 575 PASS rows sums to exactly 4426 criteria. Four follow-up sections then read PASS (matrix dry-run FAIL then stamp-aligned regeneration at green=575/575, 55212B, --check byte-identical; fingerprint CLEAN domains=5; profile byte-identical; census DRIFT-CLEAN) for VERDICT R2493 PASS. Debt: product-face-R2492 closed and product-face-R2493 opened first=yes through the shipped writers, naming the next product face AC-MSFL1. Honest: internal verification face, zero product points; both red causes were mine and are named; my aborted reconcile_daily --check left a truncated qa/reconcile-daily-20261106.log which was deleted rather than kept; the state fold ran in this window at the round-block boundary (items 1..89, 336 tokens, 12452B, FOLD-CLEAR); Docker is absent so no containerised bring-up is claimed; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; tasks.md was not touched."
+    ],
     [
       "2492",
       "2026-11-06 R2492 TECH window on the carried product leader the register named after R2491 discharged its battery (product-face-R2491, tech head state/queue/tech.md:527 prefix AC-RMPP1, criteria AC-RMPP1..AC-RMPP6 pinned in that row at R2440 BEFORE any code). Claim: neither the corpus-scope face nor the existence face asked whether the DECLARED package is itself carried by the read tree, so --package nosuchpkg joined every relative import onto a package that does not exist and a declaration typo was published as N broken imports. Shipped src/os/relative_package_presence_refusal.py: the declared package now gets a presence decision on the parent's own root-wide corpus (ABSENT / MARKER / PRESENT with a carrier count); an ABSENT declaration refuses ONCE as E_RMPP_NO_PACKAGE naming the declaration and the corpus it searched with zero per-import rows; a carried declaration keeps the parent reading byte for byte (all 22 REPORT_KEYS compared equal); a package carried only by __init__.py reads MARKER rather than ABSENT; and the corpus is the R2440 walk asked once, the parent reading being handed that same measurement behind a root equality guard and restored in a finally block. Proof: AC-RMPP1..AC-RMPP6 SUITE PASS 6/6 TWICE identical plus three adjacent suites green (qa/relative-package-presence-refusal-R2492.log, legs=2 identical=True, fails=0). LIVE on one real tree: declared=nosuchpkg rc=2 verdict=NO-PACKAGE presence=ABSENT missing_rows=0, and declared=mypkg rc=2 verdict=MISSING-MODULE presence=PRESENT missing_modules=mypkg.nosuchmodule, so the refusal does not hide a real typo (qa/relative-package-presence-refusal-live-R2492.log, utf-8 LF). Registry 574/4420 -> 575/4426 by exactly one row; matrix restamped stamp-aligned to 55158B at 575/4426 with a byte-identical --check whose green line honestly reads 574/575; product-face-R2491 closed and product-face-R2492 opened first=yes through their shipped writers, so the next window owes the battery before any further product byte. Honest: an INTERNAL face, not a CEO-clickable one; my own first live leg was wrong twice and is disclosed; the one-walk substitution is a per-call module attribute restored in a finally block, a real limit for concurrent in-process callers; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; Docker is absent so no containerised bring-up is claimed; tasks.md was not touched."
@@ -523,17 +528,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2492",
+      "2493",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 78,
+    "log_lines_in_window": 5,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 78,
+    "substantive_non_idle_mention_lines": 5,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

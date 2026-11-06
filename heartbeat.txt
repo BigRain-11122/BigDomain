@@ -1,1 +1,1 @@
-﻿2026-11-06T08:11:42+08:00 R2492 ok tech-face relative_package_presence_refusal suites=575/4426 export=PASS(21/0)
+﻿2026-11-06T09:16:45+08:00 R2493 ok verification-face battery-575/4426-green export=PASS(21/0) fold=12452B
