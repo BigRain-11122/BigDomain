@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T04:34:08+08:00",
+  "export_ts": "2026-11-07T04:35:34+08:00",
   "do": "2026-11-07 R2503 PRODUCT window on the tech head the register named (state/queue/tech.md:540 prefix AC-PLRC1 patterns_label_readability_render_consumer, criteria AC-PLRC1..AC-PLRC6 pinned in that row at R2502 BEFORE any code). Five-silence scan at open was clean at HEAD a265bfab (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new",
   "ceo_face": {
     "current": "2026-11-07 R2503 PRODUCT window on the tech head the register named (state/queue/tech.md:540 prefix AC-PLRC1 patterns_label_readability_render_consumer, criteria AC-PLRC1..AC-PLRC6 pinned in that row at R2502 BEFORE any code). Five-silence scan at open was clean at HEAD a265bfab (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new",
     "latest_artifact": "patterns-render-consumer-R2503.log (5855B) + patterns-render-consumer-live-R2503.log (405B)",
-    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T04:34:08+08:00",
-    "next_milestone_due": "2026-11-09T04:34:08+08:00",
+    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T04:35:34+08:00",
+    "next_milestone_due": "2026-11-09T04:35:34+08:00",
     "last_artifact": "patterns-render-consumer-R2503.log (5855B) + patterns-render-consumer-live-R2503.log (405B)",
-    "updated_at": "2026-11-07T04:34:08+08:00"
+    "updated_at": "2026-11-07T04:35:34+08:00"
   },
   "depts": [
     {
@@ -577,10 +577,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 80,
+    "log_lines_in_window": 81,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 80,
+    "substantive_non_idle_mention_lines": 81,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
