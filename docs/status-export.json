@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T07:32:59+08:00",
+  "export_ts": "2026-11-06T07:59:56+08:00",
   "do": "R2491 tech face: an absence in the relative-import reading now says WHERE it looked - every MISSING-MODULE row carries the root as given and the corpus size it was judged against, and an operator may declare extra module names that merge on top of the measured tree",
   "ceo_face": {
     "current": "R2491 tech face: an absence in the relative-import reading now says WHERE it looked - every MISSING-MODULE row carries the root as given and the corpus size it was judged against, and an operator may declare extra module names that merge on top of the measured tree",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 a PRODUCT face on the tech head the register now names: state/queue/tech.md:527 prefix AC-RMPP1 (relative_package_presence_refusal, criteria pinned at R2440 before any code) - a declared package the tree does not carry must refuse once instead of printing N broken imports. Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/os/relative_module_corpus_scope.py + src/os/test_relative_module_corpus_scope.py (six pre-registered criteria, SUITE PASS 6/6 twice identical at qa/relative-module-corpus-scope-R2491.log 1413B, plus the live leg qa/relative-module-corpus-scope-live-R2491.log 1666B which reproduces the seed defect on a real tree and clears it two ways) at 2026-11-06 R2491",
-    "updated_at": "2026-11-06T07:32:59+08:00"
+    "updated_at": "2026-11-06T07:59:56+08:00"
   },
   "depts": [
     {
@@ -518,17 +518,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2490",
+      "2491",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 60,
+    "log_lines_in_window": 70,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 60,
+    "substantive_non_idle_mention_lines": 70,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
