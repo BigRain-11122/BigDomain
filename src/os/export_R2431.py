@@ -141,7 +141,11 @@ def main():
         sys.stdout.write("QUEUE FACE REFUSED %s\n" % exc)
         return 2
     back = json.load(io.open(EXPORT, encoding="utf-8"))
-    ok = (str(back["results"][0][0]) == tick
+    # The tick row is the row THIS driver stamps; results[0] is the round-log
+    # row another writer owns, so reading it here made a healthy refresh fail
+    # on every round whose result row had not landed yet (R2499 battery catch).
+    ok = (any(isinstance(r, list) and len(r) >= 2 and r[1] == label
+              and str(r[0]) == tick for r in back["results"])
           and back["outs"][0] == OUTS
           and back["ceo_face"]["latest_artifact"] == LATEST
           and back["export_ts"] == STAMP
