@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T03:51:59+08:00",
+  "export_ts": "2026-11-07T04:26:06+08:00",
   "do": "2026-11-07 R2502 PRODUCT window on the tech head the register named (state/queue/tech.md:538 prefix AC-PLR1 patterns_label_readability, criteria AC-PLR1..AC-PLR6 pinned in that row at R2494 BEFORE any code). Five-silence scan at open was clean at HEAD a4393852 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the 85-toke",
   "ceo_face": {
     "current": "2026-11-07 R2502 PRODUCT window on the tech head the register named (state/queue/tech.md:538 prefix AC-PLR1 patterns_label_readability, criteria AC-PLR1..AC-PLR6 pinned in that row at R2494 BEFORE any code). Five-silence scan at open was clean at HEAD a4393852 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the 85-toke",
-    "latest_artifact": "patterns-label-readability-R2502.log (4773B) + patterns-label-readability-live-R2502.log (1589B)",
-    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T03:51:59+08:00",
-    "next_milestone_due": "2026-11-09T03:51:59+08:00",
-    "last_artifact": "patterns-label-readability-R2502.log (4773B) + patterns-label-readability-live-R2502.log (1589B)",
-    "updated_at": "2026-11-07T03:51:59+08:00"
+    "latest_artifact": "patterns-label-readability-R2502.log (4773B) + patterns-label-readability-live-R2502.log (1589B) + reconcile-all-R2502.log (877010B)",
+    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T04:26:06+08:00",
+    "next_milestone_due": "2026-11-09T04:26:06+08:00",
+    "last_artifact": "patterns-label-readability-R2502.log (4773B) + patterns-label-readability-live-R2502.log (1589B) + reconcile-all-R2502.log (877010B)",
+    "updated_at": "2026-11-07T04:26:06+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "patterns-label-readability-R2502.log (4773B) + patterns-label-readability-live-R2502.log (1589B) + reconcile-all-R2502.log (877010B)",
     "patterns-label-readability-R2502.log (4773B) + patterns-label-readability-live-R2502.log (1589B)",
     "closeout-export-parity-text-binding-R2501.log (2898B) + closeout-export-parity-text-binding-live-R2501.log (302B)",
     "reconcile-all-R2500.log (875333B)",
@@ -571,10 +572,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 69,
+    "log_lines_in_window": 73,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 69,
+    "substantive_non_idle_mention_lines": 73,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
