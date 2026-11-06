@@ -1,0 +1,5 @@
+PATTERNS RENDER CONSUMER live reading (R2503)
+LIVE   source=os-patterns-label-readability verdict=CLEAN publishable=True exit=0
+MEASURED gate-on-doctored-header publishable=True code=None artifact_carries_broken_codepoint=True
+NOTE   the gate is asked with patterns[labels] only, so header_note, response_text and every caption reach the artifact unasked
+ARTIFACT docs/sandbox-suite-matrix.md bytes=55850

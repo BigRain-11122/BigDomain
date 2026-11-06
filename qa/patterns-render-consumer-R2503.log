@@ -1,0 +1,93 @@
+PATTERNS RENDER CONSUMER evidence (R2503)
+leg1 exit=0 leg2 exit=0 identical=True fails=0 adjacent=3
+adjacent exit codes=[0, 0, 0]
+leg1 digest=f29a2c675980a1903f1b0c48b04992e6acb7a5504327555eaee46ffe43c22bcb
+leg2 digest=f29a2c675980a1903f1b0c48b04992e6acb7a5504327555eaee46ffe43c22bcb
+
+===== LEG 1 (exit 0) =====
+PATTERNS RENDER CONSUMER suite (R2503, 6 criteria)
+  PASS AC-PLRC1 a patched gate makes the real render refuse
+  PASS AC-PLRC1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-PLRC1 the refused label key travels with the refusal
+  PASS AC-PLRC1 the consumer carries no second classifier
+  PASS AC-PLRC2 the shipped tool refuses at exit 4 (got 4)
+  PASS AC-PLRC2 the refusal names the gate code and the label key
+  PASS AC-PLRC2 the target keeps every byte it had
+  PASS AC-PLRC2 no residue is left beside the target ([])
+PATTERNS RENDER CONSUMER os-patterns-label-readability-render-consumer verdict=SUSPECT source=os-patterns-label-readability
+  refused=E_PLR_SUSPECT label=title codepoints=U+04E1,U+FFFD,U+FFFD
+  PASS AC-PLRC2 the consumer CLI refuses the same file at exit 2
+  PASS AC-PLRC3 the shipped doc carries a stamp
+  PASS AC-PLRC3 a clean render is byte-identical to docs/sandbox-suite-matrix.md (55846 bytes)
+  PASS AC-PLRC3 the shipped labels read publishable
+  PASS --check on the clean tree keeps its today reading (exit 0)
+  PASS AC-PLRC4 --check refuses a suspect file at exit 4 (got 4, not drift exit 2)
+  PASS AC-PLRC4 the refusal reads as readability, never as drift
+  PASS AC-PLRC2 the shipped tool refuses at exit 4 (got 4)
+  PASS AC-PLRC2 the refusal names the gate code and the label key
+  PASS AC-PLRC2 the target keeps every byte it had
+  PASS AC-PLRC2 no residue is left beside the target ([])
+PATTERNS RENDER CONSUMER os-patterns-label-readability-render-consumer verdict=SUSPECT source=os-patterns-label-readability
+  refused=E_PLR_SUSPECT label=title codepoints=U+04E1,U+FFFD,U+FFFD
+  PASS AC-PLRC2 the consumer CLI refuses the same file at exit 2
+  PASS AC-PLRC3 the shipped doc carries a stamp
+  PASS AC-PLRC3 a clean render is byte-identical to docs/sandbox-suite-matrix.md (55846 bytes)
+  PASS AC-PLRC3 the shipped labels read publishable
+  PASS AC-PLRC5 the shipped patterns digest is unchanged (ea5773ac0c113fe1)
+  PASS AC-PLRC5 every shipped label is still exactly as it was read
+  PASS AC-PLRC5 the consumer holds no write primitive
+  PASS AC-PLRC6 the module source is pure ASCII
+  PASS AC-PLRC6 imports are stdlib plus the shipped gate (['argparse', 'json', 'patterns_label_readability', 'sys'])
+  PASS AC-PLRC6 the module reads no clock
+  PASS AC-PLRC6 zero network imports
+  PASS AC-PLRC6 the module carries its own reconcile label
+  PASS AC-PLRC6 the runner wires this suite
+  PASS AC-PLRC6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+===== LEG 2 (exit 0) =====
+PATTERNS RENDER CONSUMER suite (R2503, 6 criteria)
+  PASS AC-PLRC1 a patched gate makes the real render refuse
+  PASS AC-PLRC1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-PLRC1 the refused label key travels with the refusal
+  PASS AC-PLRC1 the consumer carries no second classifier
+  PASS AC-PLRC2 the shipped tool refuses at exit 4 (got 4)
+  PASS AC-PLRC2 the refusal names the gate code and the label key
+  PASS AC-PLRC2 the target keeps every byte it had
+  PASS AC-PLRC2 no residue is left beside the target ([])
+PATTERNS RENDER CONSUMER os-patterns-label-readability-render-consumer verdict=SUSPECT source=os-patterns-label-readability
+  refused=E_PLR_SUSPECT label=title codepoints=U+04E1,U+FFFD,U+FFFD
+  PASS AC-PLRC2 the consumer CLI refuses the same file at exit 2
+  PASS AC-PLRC3 the shipped doc carries a stamp
+  PASS AC-PLRC3 a clean render is byte-identical to docs/sandbox-suite-matrix.md (55846 bytes)
+  PASS AC-PLRC3 the shipped labels read publishable
+  PASS --check on the clean tree keeps its today reading (exit 0)
+  PASS AC-PLRC4 --check refuses a suspect file at exit 4 (got 4, not drift exit 2)
+  PASS AC-PLRC4 the refusal reads as readability, never as drift
+  PASS AC-PLRC2 the shipped tool refuses at exit 4 (got 4)
+  PASS AC-PLRC2 the refusal names the gate code and the label key
+  PASS AC-PLRC2 the target keeps every byte it had
+  PASS AC-PLRC2 no residue is left beside the target ([])
+PATTERNS RENDER CONSUMER os-patterns-label-readability-render-consumer verdict=SUSPECT source=os-patterns-label-readability
+  refused=E_PLR_SUSPECT label=title codepoints=U+04E1,U+FFFD,U+FFFD
+  PASS AC-PLRC2 the consumer CLI refuses the same file at exit 2
+  PASS AC-PLRC3 the shipped doc carries a stamp
+  PASS AC-PLRC3 a clean render is byte-identical to docs/sandbox-suite-matrix.md (55846 bytes)
+  PASS AC-PLRC3 the shipped labels read publishable
+  PASS AC-PLRC5 the shipped patterns digest is unchanged (ea5773ac0c113fe1)
+  PASS AC-PLRC5 every shipped label is still exactly as it was read
+  PASS AC-PLRC5 the consumer holds no write primitive
+  PASS AC-PLRC6 the module source is pure ASCII
+  PASS AC-PLRC6 imports are stdlib plus the shipped gate (['argparse', 'json', 'patterns_label_readability', 'sys'])
+  PASS AC-PLRC6 the module reads no clock
+  PASS AC-PLRC6 zero network imports
+  PASS AC-PLRC6 the module carries its own reconcile label
+  PASS AC-PLRC6 the runner wires this suite
+  PASS AC-PLRC6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+ADJACENT test_patterns_label_readability.py exit=0 tail=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+ADJACENT test_matrix_stamp_provenance_line.py exit=0 tail=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+ADJACENT test_matrix_stamp_from_liveness.py exit=0 tail=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+EVIDENCE PASS identical=True fails=0 adjacent_green=3/3

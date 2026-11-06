@@ -25,7 +25,9 @@ Usage:
 
 --check recomputes the matrix reusing the on-disk doc's generation
 stamp (content-only comparison) and byte-compares against the doc on
-disk; any drift or missing doc exits 2.
+disk; any drift or missing doc exits 2. A patterns file the shipped
+readability gate refuses exits 4 with FAIL readability naming the gate
+own code and the label key, and writes no artifact byte.
 
 Pre-registered criteria AC-MX1..AC-MX7: state/queue/tech.md R1683
 claim row, registered BEFORE this code (honesty law).
@@ -58,6 +60,14 @@ OS_DIR = os.path.join(os.path.dirname(BASE), "os")
 if OS_DIR not in sys.path:
     sys.path.insert(0, OS_DIR)
 import matrix_stamp_provenance_line as MSPL  # noqa: E402
+
+# R2502 seed, AC-PLRC1..AC-PLRC6 (pinned in state/queue/tech.md:540 BEFORE the
+# code): the readability gate shipped at R2502 only protected callers that
+# chose publish(), while this tool read the patterns file with json.load and
+# interpolated every label straight into the artifact. The render path now
+# asks that ONE gate through its consumer seam, which carries the gate own
+# refusal code - no second classifier exists here.
+import patterns_label_readability_render_consumer as PLRC  # noqa: E402
 
 SUITE_RE = re.compile(
     r"(?m)^(PASS|FAIL) suite (\S+) exit=(\d+) pass-lines=(\d+)"
@@ -210,6 +220,11 @@ def suite_status(entry):
 
 
 def render(patterns, evidence_path, status, run, stamp, stamp_from=None):
+    # AC-PLRC1: the refusal is the SHIPPED readability gate asked at CALL time
+    # through its consumer seam, raised BEFORE a single artifact byte is
+    # composed. A clean file is handed back untouched, so its bytes stay
+    # exactly today's (AC-PLRC3).
+    PLRC.guard(patterns["labels"])
     labels = patterns["labels"]
     suites = RA.SUITES
     total_crit = sum(crit for _, _, crit in suites)
@@ -397,8 +412,16 @@ def main(argv):
         if stamp is None:
             print("FAIL check: no stamp line found in %s" % rel(args.out))
             return 2
-        fresh = render(patterns, evidence_path, status, run, stamp,
-                       stamp_from=MSPL.recorded_source(current, patterns["labels"]))
+        try:
+            fresh = render(patterns, evidence_path, status, run, stamp,
+                           stamp_from=MSPL.recorded_source(
+                               current, patterns["labels"]))
+        except PLRC.RenderRefused as exc:
+            # AC-PLRC4: a refusal is a READABILITY verdict, never drift - it
+            # gets its own word and its own exit code so an operator cannot
+            # mistake a mis-encoded label for a stale document.
+            print("FAIL readability: %s label=%s" % (exc.code, exc.label))
+            return 4
         if fresh == current:
             print("PASS check: %s byte-identical (%d bytes, %d suites,"
                   " %d criteria)" % (rel(args.out), len(fresh.encode(
@@ -427,8 +450,14 @@ def main(argv):
         stamp = time.strftime("%Y-%m-%d %H:%M +08:00",
                               time.gmtime(time.time() + 8 * 3600))
     stamp_from_rel = rel(args.stamp_from) if args.stamp_from else None
-    fresh = render(patterns, evidence_path, status, run, stamp,
-                   stamp_from=stamp_from_rel)
+    try:
+        fresh = render(patterns, evidence_path, status, run, stamp,
+                       stamp_from=stamp_from_rel)
+    except PLRC.RenderRefused as exc:
+        # AC-PLRC2: refusal lands before the file is opened, so the target
+        # keeps every byte it had and no temp is left beside it.
+        print("FAIL readability: %s label=%s" % (exc.code, exc.label))
+        return 4
     with open(args.out, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(fresh)
     green = sum(1 for label, _, _ in RA.SUITES

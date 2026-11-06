@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 580 | 4456 | 580/580 | R2502 |
+| 581 | 4462 | 580/580 | R2502 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -618,7 +618,8 @@
 | 578 | os-comma-binding-face-row-drift | ../os/test_comma_binding_face_row_drift.py | 6 | green | 0.3 |
 | 579 | os-row-key-carrier-scope | ../os/test_row_key_carrier_scope.py | 6 | green | 0.2 |
 | 580 | os-patterns-label-readability | ../os/test_patterns_label_readability.py | 6 | green | 0.9 |
-|  | 合计 |  | 4456 | green 580 / FAIL 0 / no-evidence 0 |  |
+| 581 | os-patterns-label-readability-render-consumer | ../os/test_patterns_label_readability_render_consumer.py | 6 | no-evidence | - |
+|  | 合计 |  | 4462 | green 580 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

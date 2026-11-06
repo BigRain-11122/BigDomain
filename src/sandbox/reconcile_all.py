@@ -5755,6 +5755,17 @@ SUITES = [
     # as the R2494 seed row BEFORE the code.)
     ("os-patterns-label-readability",
      os.path.join("..", "os", "test_patterns_label_readability.py"), 6),
+    # R2503 render-path consumer of that gate: the R2502 face protected only
+    # callers that chose publish(), while the shipped generator read the
+    # patterns file with json.load and interpolated every label into the
+    # artifact. The render path now asks the same ONE gate at CALL time and
+    # refuses at exit 4 naming its code and the label key with no artifact
+    # byte written, while a clean file still renders byte-identically.
+    # (AC-PLRC1..AC-PLRC6 were pinned in state/queue/tech.md:540 at R2502
+    # BEFORE the code.)
+    ("os-patterns-label-readability-render-consumer",
+     os.path.join("..", "os",
+                  "test_patterns_label_readability_render_consumer.py"), 6),
     ]
 
 FAILS = 0

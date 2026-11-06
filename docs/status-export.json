@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T04:27:05+08:00",
-  "do": "2026-11-07 R2502 PRODUCT window on the tech head the register named (state/queue/tech.md:538 prefix AC-PLR1 patterns_label_readability, criteria AC-PLR1..AC-PLR6 pinned in that row at R2494 BEFORE any code). Five-silence scan at open was clean at HEAD a4393852 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the 85-toke",
+  "export_ts": "2026-11-07T04:34:08+08:00",
+  "do": "2026-11-07 R2503 PRODUCT window on the tech head the register named (state/queue/tech.md:540 prefix AC-PLRC1 patterns_label_readability_render_consumer, criteria AC-PLRC1..AC-PLRC6 pinned in that row at R2502 BEFORE any code). Five-silence scan at open was clean at HEAD a265bfab (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new",
   "ceo_face": {
-    "current": "2026-11-07 R2502 PRODUCT window on the tech head the register named (state/queue/tech.md:538 prefix AC-PLR1 patterns_label_readability, criteria AC-PLR1..AC-PLR6 pinned in that row at R2494 BEFORE any code). Five-silence scan at open was clean at HEAD a4393852 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the 85-toke",
-    "latest_artifact": "patterns-label-readability-R2502.log (4773B) + patterns-label-readability-live-R2502.log (1589B) + reconcile-all-R2502.log (877010B)",
-    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T04:27:05+08:00",
-    "next_milestone_due": "2026-11-09T04:27:05+08:00",
-    "last_artifact": "patterns-label-readability-R2502.log (4773B) + patterns-label-readability-live-R2502.log (1589B) + reconcile-all-R2502.log (877010B)",
-    "updated_at": "2026-11-07T04:27:05+08:00"
+    "current": "2026-11-07 R2503 PRODUCT window on the tech head the register named (state/queue/tech.md:540 prefix AC-PLRC1 patterns_label_readability_render_consumer, criteria AC-PLRC1..AC-PLRC6 pinned in that row at R2502 BEFORE any code). Five-silence scan at open was clean at HEAD a265bfab (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new",
+    "latest_artifact": "patterns-render-consumer-R2503.log (5855B) + patterns-render-consumer-live-R2503.log (405B)",
+    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T04:34:08+08:00",
+    "next_milestone_due": "2026-11-09T04:34:08+08:00",
+    "last_artifact": "patterns-render-consumer-R2503.log (5855B) + patterns-render-consumer-live-R2503.log (405B)",
+    "updated_at": "2026-11-07T04:34:08+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "patterns-render-consumer-R2503.log (5855B) + patterns-render-consumer-live-R2503.log (405B)",
     "patterns-label-readability-R2502.log (4773B) + patterns-label-readability-live-R2502.log (1589B) + reconcile-all-R2502.log (877010B)",
     "patterns-label-readability-R2502.log (4773B) + patterns-label-readability-live-R2502.log (1589B)",
     "closeout-export-parity-text-binding-R2501.log (2898B) + closeout-export-parity-text-binding-live-R2501.log (302B)",
@@ -120,6 +121,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2503",
+      "2026-11-07 R2503 PRODUCT window on the tech head the register named (state/queue/tech.md:540 prefix AC-PLRC1 patterns_label_readability_render_consumer, criteria AC-PLRC1..AC-PLRC6 pinned in that row at R2502 BEFORE any code). CLAIM: the R2502 readability gate protected only callers that chose publish(), while the shipped generator read suite_matrix_patterns.json with json.load and interpolated every label straight into the CEO-visible artifact. SHIPPED src/os/patterns_label_readability_render_consumer.py plus its suite, and src/sandbox/suite_matrix.py now asks that seam as the FIRST statement of render(): guard() asks patterns_label_readability.gate at CALL time and carries its verdict and its own code verbatim, so no second classifier exists on the render path. A suspect file refuses the shipped tool at exit 4 with FAIL readability naming E_PLR_SUSPECT and the label key, writes no artifact byte and leaves no residue, and --check reports the refusal as readability rather than as drift exit 2, while a clean file keeps exit 0 and renders byte-identically to the committed 55846-byte doc. PROOF: AC-PLRC1..AC-PLRC6 SUITE PASS 6/6 TWICE identical plus three adjacent suites green (qa/patterns-render-consumer-R2503.log, 5855B, legs=2 identical=True fails=0 adjacent=3). Two of my own assertions failed first and were repaired as TEST defects, not loosened. REGISTRY 580/4456 -> 581/4462 by exactly one row; matrix regenerated stamp-aligned from qa/reconcile-all-R2502.log to 55846B at 581/4462 with --check byte-identical and a green line honestly reading 580/581. Board row 540 closed and ONE measured gap seeded (AC-PNLT1..AC-PNLT6: the gate is asked with patterns[labels] only while render interpolates header_note, response_text and every caption - measured live, a doctored header_note carrying U+FFFD read publishable=True while the composed document really carried it). DEBT: reconcile-battery-R2503 appended first=no, so the next window owes the battery at 581 suites / 4462 criteria on the committed tree before any further product byte (R2168). Honest: zero CEO-visible business surface was rebuilt and every P-47 item still waits on CEO physical pieces; Docker is absent so no containerised bring-up is claimed; the lane task still reads InteractiveToken and needs an elevated shell."
+    ],
     [
       "2502",
       "2026-11-07 R2502 PRODUCT window on the tech head the register named (state/queue/tech.md:538 prefix AC-PLR1 patterns_label_readability, criteria AC-PLR1..AC-PLR6 pinned in that row at R2494 BEFORE any code). SHIPPED: src/os/patterns_label_readability.py asks unicodedata for every non-ASCII codepoint of every string label in suite_matrix_patterns.json at CALL time - a broken codepoint (replacement character, unnamed, control/surrogate category) or a script bucket no OTHER label in the same file carries is SUSPECT with its position, U+XXXX and Unicode name printed - and publish(labels, render) refuses to call the renderer on a suspect file while a clean file reaches it untouched. HONEST: on the shipped tree every label reads CLEAN, because the R2494 note's mojibake was a console decoding artifact rather than a damaged byte, so the detection is proved on fixtures built from the real file and is NOT claimed as a live catch. PROOF: AC-PLR1..AC-PLR6 SUITE PASS 6/6 TWICE with an identical digest plus three adjacent suites green (qa/patterns-label-readability-R2502.log, 4773B, legs=2 identical=True fails=0 adjacent=3) and a live reading whose patterns digest is unchanged before and after (qa/patterns-label-readability-live-R2502.log). The clean-file parity leg drives the REAL suite_matrix.render through publish() and gets docs/sandbox-suite-matrix.md back byte for byte. REGISTRY 579/4450 -> 580/4456 by exactly one row os-patterns-label-readability(6); matrix restamped stamp-aligned from qa/reconcile-all-R2500.log to 55718B at 580/4456 with --check byte-identical and a green line honestly reading 578/580. DEBT: reconcile-battery-R2502 appended first=no because the registry moved, so the next window owes the battery on the committed tree before any further product byte (R2168). Honest: Docker is absent so no containerised bring-up is claimed; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; the lane task still reads InteractiveToken and needs an elevated shell."
@@ -565,17 +570,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2502",
+      "2503",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 76,
+    "log_lines_in_window": 80,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 76,
+    "substantive_non_idle_mention_lines": 80,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -608,7 +613,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 11,
-        "done_rows": 417,
+        "done_rows": 418,
         "gated_rows": 1,
         "claimable": 10,
         "discounted": 0,
