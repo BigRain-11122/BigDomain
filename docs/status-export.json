@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T05:15:23+08:00",
-  "do": "2026-11-07 R2505 PRODUCT window on the tech head the register named (product-face-R2504, tech head state/queue/tech.md:542 prefix AC-PNLT1 patterns_non_label_text_readability, criteria AC-PNLT1..AC-PNLT6 pinned in that row at R2503 BEFORE any code). Five-silence scan at open was clean at HEAD 62f68212 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addre",
+  "export_ts": "2026-11-07T06:03:19+08:00",
+  "do": "2026-11-07 R2506 VERIFICATION window on the battery the register owed (reconcile-battery-R2505, opened by the R2505 product window as first=yes at a pre-registered 582 suites / 4468 criteria). Five-silence scan at open was clean at HEAD 62f68212 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the 85-token baseline, gro",
   "ceo_face": {
-    "current": "2026-11-07 R2505 PRODUCT window on the tech head the register named (product-face-R2504, tech head state/queue/tech.md:542 prefix AC-PNLT1 patterns_non_label_text_readability, criteria AC-PNLT1..AC-PNLT6 pinned in that row at R2503 BEFORE any code). Five-silence scan at open was clean at HEAD 62f68212 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addre",
-    "latest_artifact": "patterns-non-label-live-R2505.log (435B) + patterns-non-label-text-readability-R2505.log (7967B)",
-    "next_milestone": "next window owes reconcile-battery-R2505 on the committed tree, inside a 48h window due 2026-11-09T05:15:23+08:00",
-    "next_milestone_due": "2026-11-09T05:15:23+08:00",
-    "last_artifact": "patterns-non-label-live-R2505.log (435B) + patterns-non-label-text-readability-R2505.log (7967B)",
-    "updated_at": "2026-11-07T05:15:23+08:00"
+    "current": "2026-11-07 R2506 VERIFICATION window on the battery the register owed (reconcile-battery-R2505, opened by the R2505 product window as first=yes at a pre-registered 582 suites / 4468 criteria). Five-silence scan at open was clean at HEAD 62f68212 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the 85-token baseline, gro",
+    "latest_artifact": "reconcile-all-R2506-retry.log (885829B) + reconcile-all-R2506.log (884071B)",
+    "next_milestone": "next window owes product-face-R2506 on the committed tree, inside a 48h window due 2026-11-09T06:03:19+08:00",
+    "next_milestone_due": "2026-11-09T06:03:19+08:00",
+    "last_artifact": "reconcile-all-R2506-retry.log (885829B) + reconcile-all-R2506.log (884071B)",
+    "updated_at": "2026-11-07T06:03:19+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "reconcile-all-R2506-retry.log (885829B) + reconcile-all-R2506.log (884071B)",
     "patterns-non-label-live-R2505.log (435B) + patterns-non-label-text-readability-R2505.log (7967B)",
     "reconcile-all-R2504.log (881783B)",
     "patterns-render-consumer-R2503.log (5855B) + patterns-render-consumer-live-R2503.log (405B)",
@@ -580,17 +581,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2505",
+      "2506",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 18,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 24,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
