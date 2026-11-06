@@ -1,0 +1,7 @@
+ARTIFACT DISK TEXT READABILITY live R2507
+live verdict=CLEAN publishable=true fields=1226 source=os-patterns-label-readability
+registry_labels=1166 config_strings=60
+doc_digest_before=ed6139f82dd894dc
+doctored_registry refused=True code=E_PLR_SUSPECT source=registry field=registry[0].label
+doc_digest_after=ed6139f82dd894dc unchanged=True
+patterns_digest=ea5773ac0c113fe1

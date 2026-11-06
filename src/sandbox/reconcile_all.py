@@ -5777,6 +5777,19 @@ SUITES = [
     ("os-patterns-non-label-text-readability",
      os.path.join("..", "os",
                   "test_patterns_non_label_text_readability.py"), 6),
+    # R2507 (AC-ADTR1..AC-ADTR6, criteria pinned in state/queue/tech.md as
+    # the R2507 claim row BEFORE the code): both gates above read the
+    # PATTERNS DOCUMENT, while render also interpolates the registry labels
+    # and paths and every string billable_faces reads out of each product
+    # config.json - a registry label carrying U+FFFD rendered straight into
+    # the CEO-visible artifact while the shipped gate read publishable=True.
+    # The render now asks ONE reading over that disk-sourced set, derived
+    # from what the render actually reads, through the same shipped
+    # per-codepoint law, and refuses at exit 4 naming the SOURCE and the
+    # field with no artifact byte written.
+    ("os-artifact-disk-text-readability",
+     os.path.join("..", "os",
+                  "test_artifact_disk_text_readability.py"), 6),
     ]
 
 FAILS = 0

@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 582 | 4468 | 582/582 | R2506 |
+| 583 | 4474 | 582/582 | R2506 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -620,7 +620,8 @@
 | 580 | os-patterns-label-readability | ../os/test_patterns_label_readability.py | 6 | green | 0.9 |
 | 581 | os-patterns-label-readability-render-consumer | ../os/test_patterns_label_readability_render_consumer.py | 6 | green | 0.2 |
 | 582 | os-patterns-non-label-text-readability | ../os/test_patterns_non_label_text_readability.py | 6 | green | 0.3 |
-|  | 合计 |  | 4468 | green 582 / FAIL 0 / no-evidence 0 |  |
+| 583 | os-artifact-disk-text-readability | ../os/test_artifact_disk_text_readability.py | 6 | no-evidence | - |
+|  | 合计 |  | 4474 | green 582 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

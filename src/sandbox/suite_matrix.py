@@ -77,6 +77,15 @@ import patterns_label_readability_render_consumer as PLRC  # noqa: E402
 # classifier is added here either.
 import patterns_non_label_text_readability as PNLT  # noqa: E402
 
+# R2507 claim, AC-ADTR1..AC-ADTR6 (pinned in state/queue/tech.md as the R2507
+# claim row BEFORE the code): both gates above read the PATTERNS DOCUMENT,
+# while this render also interpolates text that comes from DISK - the registry
+# labels and suite paths read live from reconcile_all.SUITES, and every string
+# billable_faces pulls out of each product config.json. The third statement of
+# render asks ONE reading over that disk-sourced set, through the same shipped
+# per-codepoint law - no second classifier is added here either.
+import artifact_disk_text_readability as ADTR  # noqa: E402
+
 SUITE_RE = re.compile(
     r"(?m)^(PASS|FAIL) suite (\S+) exit=(\d+) pass-lines=(\d+)"
     r" fail-lines=(\d+) criteria=(\d+) (-?[0-9.]+)s")
@@ -238,6 +247,11 @@ def render(patterns, evidence_path, status, run, stamp, stamp_from=None):
     # before a single artifact byte is composed. A clean file passes through
     # untouched, so the artifact keeps today's bytes (AC-PNLT3).
     PNLT.guard(patterns)
+    # AC-ADTR2: the text this artifact takes from DISK (registry labels and
+    # paths, config keys/items/scalars) is refused by SOURCE and field before
+    # a single artifact byte is composed. A clean tree passes through
+    # untouched, so the artifact keeps today's bytes (AC-ADTR3).
+    ADTR.guard(patterns)
     labels = patterns["labels"]
     suites = RA.SUITES
     total_crit = sum(crit for _, _, crit in suites)
@@ -440,6 +454,12 @@ def main(argv):
             # readability verdict (exit 4), never as drift.
             print("FAIL non-label: %s field=%s" % (exc.code, exc.field))
             return 4
+        except ADTR.DiskTextRefused as exc:
+            # AC-ADTR2: disk-sourced text is refused by SOURCE and FIELD, still
+            # as a readability verdict (exit 4), never as drift.
+            print("FAIL disk-text: %s source=%s field=%s"
+                  % (exc.code, exc.source, exc.field))
+            return 4
         if fresh == current:
             print("PASS check: %s byte-identical (%d bytes, %d suites,"
                   " %d criteria)" % (rel(args.out), len(fresh.encode(
@@ -480,6 +500,12 @@ def main(argv):
         # AC-PNLT2: no artifact byte is opened before this refusal, so the
         # target keeps every byte it had and no temp is left beside it.
         print("FAIL non-label: %s field=%s" % (exc.code, exc.field))
+        return 4
+    except ADTR.DiskTextRefused as exc:
+        # AC-ADTR2: the same promise for the DISK-sourced text - no artifact
+        # byte is opened, the target keeps every byte, no temp is left.
+        print("FAIL disk-text: %s source=%s field=%s"
+              % (exc.code, exc.source, exc.field))
         return 4
     with open(args.out, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(fresh)

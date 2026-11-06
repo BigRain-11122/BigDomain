@@ -1,0 +1,74 @@
+EVIDENCE CAPTURE round=R2507 suite=src/os/test_artifact_disk_text_readability.py legs=2
+== LEG A rc=0 digest=E3B0C44298FC1C14
+ARTIFACT DISK TEXT READABILITY suite (R2507, 6 criteria)
+  PASS AC-ADTR1 a patched gate makes the real reading refuse
+  PASS AC-ADTR1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-ADTR1 the refused SOURCE and field travel with the refusal ('registry[0].label')
+  PASS AC-ADTR1 this face carries no second classifier
+  PASS AC-ADTR2 the real render refuses a doctored registry label
+  PASS AC-ADTR2 the refusal names the SOURCE registry, the label and U+FFFD ('registry'/'registry[0].label')
+  PASS AC-ADTR2 the shipped tool refuses at exit 4 naming disk-text (rc=4)
+  PASS AC-ADTR2 the artifact keeps every byte it had
+  PASS AC-ADTR2 no residue beside the artifact ([])
+  PASS AC-ADTR3 a clean tree renders byte-identically to the committed doc (56095 bytes)
+  PASS AC-ADTR3 --check keeps its today reading (rc=0)
+  PASS AC-ADTR4 the live registry label is in the derived set
+  PASS AC-ADTR4 the config-sourced strings are in the derived set
+  PASS AC-ADTR4 the set is measured over the whole tree (1226 strings)
+  PASS AC-ADTR4 a key the render never reads is not claimed
+  PASS AC-ADTR4 no literal registry label or config key lives in the module
+  PASS AC-ADTR4 the live registry label is in the derived set
+  PASS AC-ADTR4 the config-sourced strings are in the derived set
+  PASS AC-ADTR4 the set is measured over the whole tree (1226 strings)
+  PASS AC-ADTR4 a key the render never reads is not claimed
+  PASS AC-ADTR4 no literal registry label or config key lives in the module
+  PASS AC-ADTR5 the registry, patterns and config digests are unchanged
+  PASS AC-ADTR5 the coverage probe leaves no file behind
+  PASS AC-ADTR5 the module holds no write primitive
+  PASS AC-ADTR6 the module source is pure ASCII
+  PASS AC-ADTR6 imports are stdlib plus the shipped law (['argparse', 'hashlib', 'json', 'os', 'patterns_label_readability', 'sys'])
+  PASS AC-ADTR6 the module reads no clock
+  PASS AC-ADTR6 zero network imports
+  PASS AC-ADTR6 the module carries its own reconcile label
+  PASS AC-ADTR6 the runner wires this suite
+  PASS AC-ADTR6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== LEG B rc=0 digest=E3B0C44298FC1C14
+ARTIFACT DISK TEXT READABILITY suite (R2507, 6 criteria)
+  PASS AC-ADTR1 a patched gate makes the real reading refuse
+  PASS AC-ADTR1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-ADTR1 the refused SOURCE and field travel with the refusal ('registry[0].label')
+  PASS AC-ADTR1 this face carries no second classifier
+  PASS AC-ADTR2 the real render refuses a doctored registry label
+  PASS AC-ADTR2 the refusal names the SOURCE registry, the label and U+FFFD ('registry'/'registry[0].label')
+  PASS AC-ADTR2 the shipped tool refuses at exit 4 naming disk-text (rc=4)
+  PASS AC-ADTR2 the artifact keeps every byte it had
+  PASS AC-ADTR2 no residue beside the artifact ([])
+  PASS AC-ADTR3 a clean tree renders byte-identically to the committed doc (56095 bytes)
+  PASS AC-ADTR3 --check keeps its today reading (rc=0)
+  PASS AC-ADTR4 the live registry label is in the derived set
+  PASS AC-ADTR4 the config-sourced strings are in the derived set
+  PASS AC-ADTR4 the set is measured over the whole tree (1226 strings)
+  PASS AC-ADTR4 a key the render never reads is not claimed
+  PASS AC-ADTR4 no literal registry label or config key lives in the module
+  PASS AC-ADTR4 the live registry label is in the derived set
+  PASS AC-ADTR4 the config-sourced strings are in the derived set
+  PASS AC-ADTR4 the set is measured over the whole tree (1226 strings)
+  PASS AC-ADTR4 a key the render never reads is not claimed
+  PASS AC-ADTR4 no literal registry label or config key lives in the module
+  PASS AC-ADTR5 the registry, patterns and config digests are unchanged
+  PASS AC-ADTR5 the coverage probe leaves no file behind
+  PASS AC-ADTR5 the module holds no write primitive
+  PASS AC-ADTR6 the module source is pure ASCII
+  PASS AC-ADTR6 imports are stdlib plus the shipped law (['argparse', 'hashlib', 'json', 'os', 'patterns_label_readability', 'sys'])
+  PASS AC-ADTR6 the module reads no clock
+  PASS AC-ADTR6 zero network imports
+  PASS AC-ADTR6 the module carries its own reconcile label
+  PASS AC-ADTR6 the runner wires this suite
+  PASS AC-ADTR6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== ADJACENT 3
+== src/os/test_patterns_non_label_text_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_patterns_label_readability_render_consumer.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_matrix_stamp_from_liveness.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=3 fails=0 digest=E3B0C44298FC1C14
