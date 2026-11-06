@@ -224,10 +224,17 @@ def ac_msfl5(world):
     plain = os.path.join(world, "render-a.md")
     again = os.path.join(world, "render-b.md")
     for out_path in (plain, again):
+        # R2496 birth-site repair, measured not guessed: a plain render stamps
+        # the wall clock at minute resolution, so two renders that straddled a
+        # minute under battery load differed on that one line and this
+        # determinism proof was measuring the clock rather than the content.
+        # Both renders now borrow the shipped doc's own stamp through the
+        # shipped --stamp-from law, so the comparison stays byte for byte and
+        # no clock is asked.
         proc = subprocess.run(
             [sys.executable, MATRIX_TOOL, "--out", out_path,
-             "--evidence", evid], cwd=REPO, stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT)
+             "--evidence", evid, "--stamp-from", DOC], cwd=REPO,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         if proc.returncode != 0:
             raise SystemExit("FAIL setup: render refused\n%s"
                              % proc.stdout.decode("utf-8", "replace"))
