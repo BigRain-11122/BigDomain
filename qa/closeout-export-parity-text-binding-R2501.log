@@ -1,0 +1,52 @@
+EVIDENCE CAPTURE round=R2501 suite=src\os\test_closeout_export_parity_text_binding.py legs=2
+== LEG A rc=0 digest=DE28AD8F1A3D156C
+PASS AC-CEPM1 the module carries no formatter of its own
+PASS AC-CEPM1 patching the shipped composition moves the verdict
+PASS AC-CEPM1 the refusal wrote no byte
+PASS AC-CEPM2 the same document publishes and reads BOUND
+PASS AC-CEPM2 the published bytes are byte-identical to today's route
+PASS AC-CEPM2 a CRLF document keeps its transport byte-identically
+PASS AC-CEPM3 doctored fixture built
+PASS AC-CEPM3 a foreign composition is refused with its own code
+PASS AC-CEPM3 the target is byte-identical with no residue
+PASS AC-CEPM4 the refusal names the first differing field
+PASS AC-CEPM4 the named field is a real field, not a shape word
+PASS AC-CEPM4 the CLI reports the same field at exit 2
+PASS AC-CEPM5 the wire's seven keys keep their names and positions
+PASS AC-CEPM5 the published report carries exactly the nine keys
+PASS AC-CEPM5 the seven shipped readings are byte-equal to today
+PASS AC-CEPM5 the refusal carries the same nine keys
+PASS AC-CEPM6 module source is pure ASCII
+PASS AC-CEPM6 imports are stdlib plus the two shipped faces only
+PASS AC-CEPM6 no clock and zero network
+PASS AC-CEPM6 exactly one registry row wires this suite with 6 criteria
+PASS AC-CEPM6 six criteria declared
+SUMMARY pass=21 fail=0
+== LEG B rc=0 digest=DE28AD8F1A3D156C
+PASS AC-CEPM1 the module carries no formatter of its own
+PASS AC-CEPM1 patching the shipped composition moves the verdict
+PASS AC-CEPM1 the refusal wrote no byte
+PASS AC-CEPM2 the same document publishes and reads BOUND
+PASS AC-CEPM2 the published bytes are byte-identical to today's route
+PASS AC-CEPM2 a CRLF document keeps its transport byte-identically
+PASS AC-CEPM3 doctored fixture built
+PASS AC-CEPM3 a foreign composition is refused with its own code
+PASS AC-CEPM3 the target is byte-identical with no residue
+PASS AC-CEPM4 the refusal names the first differing field
+PASS AC-CEPM4 the named field is a real field, not a shape word
+PASS AC-CEPM4 the CLI reports the same field at exit 2
+PASS AC-CEPM5 the wire's seven keys keep their names and positions
+PASS AC-CEPM5 the published report carries exactly the nine keys
+PASS AC-CEPM5 the seven shipped readings are byte-equal to today
+PASS AC-CEPM5 the refusal carries the same nine keys
+PASS AC-CEPM6 module source is pure ASCII
+PASS AC-CEPM6 imports are stdlib plus the two shipped faces only
+PASS AC-CEPM6 no clock and zero network
+PASS AC-CEPM6 exactly one registry row wires this suite with 6 criteria
+PASS AC-CEPM6 six criteria declared
+SUMMARY pass=21 fail=0
+== ADJACENT 3
+== src\os\test_export_consistency_queue_face.py rc=0 NO SUITE LINE
+== src\os\test_export_driver_queue_face.py rc=0 SUITE PASS 6/6
+== src\os\test_status_export_writer_dialect_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=DE28AD8F1A3D156C

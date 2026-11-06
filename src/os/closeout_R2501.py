@@ -1,0 +1,42 @@
+"""R2501 closeout: append the round log to state.json in place, canon layout."""
+import io
+import json
+
+P = "src/os/state.json"
+LINES = [
+    "2026-11-07 R2501 PRODUCT window on the tech head the register named (product-face-R2500, state/queue/tech.md:535 prefix AC-CEPM1 closeout_export_parity_text_binding, criteria AC-CEPM1..AC-CEPM6 pinned in that row at R2454 BEFORE any code). Five-silence scan at open was clean at HEAD 3e84d40f (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, benchmarks 2026-11-03 inside the seven-day gate, group orders tail unchanged at 2026-11-06 23:46). The content-addressed decisions diff read 2 new tokens over the 83-token baseline: D-20261105-0, the known prose artifact out of a '0x7' count rather than a dispatch, and D-20261107-07, the HQ PROBE A five-item transfer escalation dispatching @CPH4 by 2026-11-07 12:00 with an @HQ dispatcher receipt ruling - a fleet/HQ lane ruling with NO BigDomain execution face, so both were ACKNOWLEDGED with no action and the baseline was advanced to them. debt_gate read CLAIM-FIRST item=product-face-R2500 first=1 because R2500 discharged its battery and changed no registry module, so the product byte came first per the R2168 mixed-tree rule.",
+    "2026-11-07 R2501 CLAIM AND SHIP: closeout_export_parity_wire.publish proves the bytes it is handed against the parity, but the parity recomposes the STAGED bytes, so nothing ever asked whether those bytes are what the document being replaced composes to. MEASURED at R2454: a composition made from document A published over document B read WRITTEN/AGREES and wrote A content into B. SHIPPED src/os/closeout_export_parity_text_binding.py plus its suite: the binding is asked through the SHIPPED composition at CALL time (closeout_export_parity_wire.compose, the one owner of the closeout byte shape), the comparison normalises line endings ONLY so transport stays the target own business and GWDA.payload_for still renders it on the write path exactly as before, and text carrying another document content is refused with E_CEPM_BINDING naming the first differing field from the shipped difference law (export_closeout_gate_parity.first_difference) BEFORE any byte is staged - no stage file, no residue, target byte-identical. The wire seven reading keys keep their names, positions AND values; binding and differs are strictly additional keys, and the refusal carries the same nine.",
+    "2026-11-07 R2501 PROOF measured, not quoted: AC-CEPM1..AC-CEPM6 SUITE PASS 21/21 TWICE with identical verdicts plus three adjacent suites green (qa/closeout-export-parity-text-binding-R2501.log, 2898B, utf-8, legs=2 identical=True adjacent=3 fails=0) taken through the shipped evidence capture callable, which refuses a red or drifting leg. The suite proves the CALL-time ask by patching closeout_export_parity_wire.compose and watching the refusal appear, proves the same document still publishes byte-identically to today on BOTH transports (an LF twin and a CRLF twin, the CRLF one keeping every line ending), proves a foreign composition is refused with the target byte-identical and no .parity-stage residue, and proves the refusal names exactly the field the shipped difference law names. LIVE on the REAL tree through the module itself: the shipped export composes to itself with difference=(none) at 215518 bytes, publishing that same composition reads WRITTEN/BOUND at 215518 bytes, and a composition made from a doctored copy reads REFUSED with differs=self_drive.window_days while the target stays byte-identical and no residue exists (qa/closeout-export-parity-text-binding-live-R2501.log, 302B, utf-8 LF, crlf=0, written through the shipped single writer).",
+    "2026-11-07 R2501 REGISTRY AND BOARD: one runner row os-closeout-export-parity-text-binding(6), so the registry reads 579 suites / 4450 criteria, recounted by importing reconcile_all.SUITES rather than quoted. docs/sandbox-suite-matrix.md regenerated stamp-aligned from this round own evidence face to 55613B at 579 suites / 4450 criteria; --check then read byte-identical, and its green line honestly reads 578/579 because no battery ran this window. The claimed row 535 was closed through a per-round stamp writer with its DISCHARGED note (dry run first, then one atomic replace, predicted 1639200B -> 1643892B and measured exactly, readback ok). TWO real measured gaps were seeded beneath it so the tech floor reads FLOOR-MET 5/5 10/10 10/10: AC-CEPB1 closeout_export_parity_wire_binding_consumer (MEASURED this window: TWELVE closeout scripts call CEPW.publish(REPO, EXPORT, text=text) directly and not one asks the binding, so the new face only protects callers that choose it) and AC-DFOB1 export_parity_difference_order_field (MEASURED this window: export_closeout_gate_parity.first_difference answers the shape word 'bytes' when the only difference is key ORDER while a value difference names 'y', so a reordered document tells an operator nothing and the R2501 refusal inherits that blind spot). Row 538 AC-PLR1 is the next head.",
+    "2026-11-07 R2501 DEBT through the shipped writers: product-face-R2500 closed at line 221 (open 2->1, done 201->202, predicted 135564B -> 135567B and measured exactly, readback ok) and reconcile-battery-R2501 appended first=no through debt_append (predicted 135567B -> 136171B, measured exactly, readback ok) because this window moved a registry module and added a suite, so the next window owes one battery on the committed tree at the measured 579 suites / 4450 criteria BEFORE any further product byte.",
+    "2026-11-07 R2501 honest disclosures: (a) this is a PRODUCT face with two points on the Executive Protocol scale because a real shipped write path changed behaviour and a real refusal was added, but nothing a CEO would open is new - the CEO face is unchanged in shape; (b) the defect it fixes was measured by an earlier window of mine (R2454) and named there, so it is repaired rather than newly discovered; (c) both seeded gaps are MEASUREMENTS I took in this window (twelve call sites; the order-only 'bytes' reading), not plans, and neither is claimed as fixed; (d) the floor was already SHORT at open (tech claimable 9 of 10) and closing the claim would have taken it to 8, so two measured gaps were seeded rather than one padded row; (e) Docker is absent on this host so no containerised bring-up is claimed; (f) the real 19.9 debit and the real msgSecCheck still wait on CEO physical items (merchant id, mini-program appid/secret); (g) tasks.md was not touched, it is the P-47 canonical board; (h) state.json measured about 50KB at open, far under the 78500B waterline, so no fold was due.",
+    "R2501 tokens: local=~26k api=0 api_reason=product window - one pre-registered face shipped with its six criteria, one suite proved twice with three adjacent suites green through the shipped capture callable, one registry row recounted by import, one live reading of the real tree plus a refusal reproduction, one matrix stamp-aligned regeneration checked byte-identical, two measured gaps seeded from this window own readings, one queue row closed and one battery row opened through their shipped writers, and the state/export/backlog/heartbeat closeout; zero cloud calls and zero external API touches",
+]
+
+raw = io.open(P, "rb").read()
+text = raw.decode("utf-8")
+assert '"tick": 2500,' in text
+text = text.replace('"tick": 2500,', '"tick": 2501,', 1)
+tail = '\r\n  ]\r\n}\r\n'
+assert text.endswith(tail), repr(text[-40:])
+block = "".join(",\r\n                " + json.dumps(line, ensure_ascii=False)
+                for line in LINES)
+text = text[:-len(tail)] + block + tail
+
+state_old = json.loads(raw.decode("utf-8"))
+tokens = list(state_old["last_dec_tokens"])
+text = text.replace('"last_decision_rows": %d' % state_old["last_decision_rows"],
+                    '"last_decision_rows": 174', 1)
+start = text.index('"last_dec_tokens": [')
+close = text.index("]", start)
+addition = "".join(',\n    %s' % json.dumps(token) for token in
+                   ("D-20261105-0", "D-20261107-07")
+                   if token not in state_old["last_dec_tokens"])
+text = text[:close] + addition + text[close:]
+
+io.open(P, "w", encoding="utf-8", newline="").write(text)
+
+state = json.loads(io.open(P, encoding="utf-8").read())
+print("tick=%d loglen=%d bytes=%d tokens=%d rows=%d"
+      % (state["tick"], len(state["log"]), len(text.encode("utf-8")),
+         len(state["last_dec_tokens"]), state["last_decision_rows"]))

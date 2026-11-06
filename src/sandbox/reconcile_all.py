@@ -5523,6 +5523,16 @@ SUITES = [
     # state/queue/tech.md:533 as the R2497 seed row BEFORE the code.)
     ("os-export-consistency-queue-face",
      os.path.join("..", "os", "test_export_consistency_queue_face.py"), 6),
+    # R2501: the closeout parity wire lands either transport but trusts the text
+    # its caller hands in - a composition made from document A published over
+    # document B read WRITTEN/AGREES and wrote A's content into B (measured at
+    # R2454). One face now binds the handed text to the target's own shipped
+    # composition at CALL time and refuses, naming the first differing field
+    # from the shipped difference law, before any byte is staged.
+    # (AC-CEPM1..AC-CEPM6 were pinned in state/queue/tech.md:535 as the R2454
+    # seed row BEFORE the code.)
+    ("os-closeout-export-parity-text-binding",
+     os.path.join("..", "os", "test_closeout_export_parity_text_binding.py"), 6),
     # R2377: R2376 gave the export a proved write path, but the closeout that
     # publishes every round still calls QFE.apply and writes the document
     # itself, so the wire had no caller in the real path and two writers
