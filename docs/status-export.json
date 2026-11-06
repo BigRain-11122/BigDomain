@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T06:41:20+08:00",
+  "export_ts": "2026-11-07T06:42:42+08:00",
   "do": "2026-11-07 R2508 VERIFICATION window on the battery the register owed (reconcile-battery-R2507, opened by the R2507 product window as first=yes at 583 suites / 4474 criteria). Five-silence scan at open was clean at HEAD 782dfc1a (git status empty, no index.lock, zero unreplied @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over a 90-token baseline at a measured",
   "ceo_face": {
     "current": "2026-11-07 R2508 VERIFICATION window on the battery the register owed (reconcile-battery-R2507, opened by the R2507 product window as first=yes at 583 suites / 4474 criteria). Five-silence scan at open was clean at HEAD 782dfc1a (git status empty, no index.lock, zero unreplied @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over a 90-token baseline at a measured",
     "latest_artifact": "reconcile-all-R2508.log (888244B)",
-    "next_milestone": "next window owes product-face-R2508 on the committed tree, inside a 48h window due 2026-11-09T06:41:20+08:00",
-    "next_milestone_due": "2026-11-09T06:41:20+08:00",
+    "next_milestone": "next window owes product-face-R2508 on the committed tree, inside a 48h window due 2026-11-09T06:42:42+08:00",
+    "next_milestone_due": "2026-11-09T06:42:42+08:00",
     "last_artifact": "reconcile-all-R2508.log (888244B)",
-    "updated_at": "2026-11-07T06:41:20+08:00"
+    "updated_at": "2026-11-07T06:42:42+08:00"
   },
   "depts": [
     {
@@ -590,10 +590,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 37,
+    "log_lines_in_window": 38,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 37,
+    "substantive_non_idle_mention_lines": 38,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
