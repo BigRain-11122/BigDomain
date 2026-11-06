@@ -1,0 +1,83 @@
+PATTERNS LABEL READABILITY evidence (R2502)
+leg1 exit=0 leg2 exit=0 identical=True fails=0 adjacent=3
+adjacent exit codes=[0, 0, 0]
+leg1 digest=7f91c270af0cc93a0d37c27a1441efaf99030133f2e0b7dfe297305f703d9274
+leg2 digest=7f91c270af0cc93a0d37c27a1441efaf99030133f2e0b7dfe297305f703d9274
+
+===== LEG 1 (exit 0) =====
+PATTERNS LABEL READABILITY suite (R2502, 6 criteria)
+  PASS AC-PLR1 every string label in the file is read (14)
+  PASS AC-PLR1 the shipped copy reads CLEAN on stamp_from
+  PASS AC-PLR1 the same call on an edited copy reads SUSPECT
+  PASS AC-PLR1 the reading follows the bytes, not a cache
+  PASS AC-PLR1 no label key is spelled in the module ([])
+  PASS AC-PLR2 the exact codepoints are printed (['U+04E1', 'U+FFFD', 'U+FFFD', 'U+FFFD', 'U+FFFD', 'U+04D4'])
+  PASS AC-PLR2 each codepoint carries the law it broke (['SCRIPT-NOT-IN-SIBLINGS', 'BROKEN-CODEPOINT'])
+  PASS AC-PLR2 the position in the label is named ([0, 1, 2, 3, 4, 5])
+  PASS AC-PLR2 the sibling labels are not tarred with it
+  PASS AC-PLR3 a suspect file raises its own refusal code
+  PASS AC-PLR3 the refusal names the label key
+  PASS AC-PLR3 the refusal carries the codepoints
+  PASS AC-PLR3 render never ran on a refused file
+  PASS AC-PLR3 a clean file renders the artifact byte-identically (55718 bytes)
+  PASS AC-PLR4 the shipped patterns digest is unchanged (ea5773ac0c11)
+  PASS AC-PLR4 both CLI paths ran (0/2)
+  PASS AC-PLR4 no label string was rewritten in the file
+  PASS AC-PLR4 the doctored copy is a different file, not the shipped one
+  PASS AC-PLR5 a clean file exits 0 (0/0)
+  PASS AC-PLR5 --json is byte-stable across runs
+  PASS AC-PLR5 --json keys are the pinned six (['code', 'labels', 'publishable', 'refused_codepoints', 'refused_label', 'tool'])
+  PASS AC-PLR5 a suspect file exits 2 with the code
+  PASS AC-PLR5 a missing file exits 3
+  PASS AC-PLR5 an unknown label exits 5
+  PASS AC-PLR6 the module source is pure ASCII
+  PASS AC-PLR6 imports are stdlib only (['argparse', 'json', 'sys', 'unicodedata'])
+  PASS AC-PLR6 the module reads no clock
+  PASS AC-PLR6 zero network imports
+  PASS AC-PLR6 the module holds no write primitive
+  PASS AC-PLR6 the module carries its own reconcile label
+  PASS AC-PLR6 the runner wires this suite
+  PASS AC-PLR6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+===== LEG 2 (exit 0) =====
+PATTERNS LABEL READABILITY suite (R2502, 6 criteria)
+  PASS AC-PLR1 every string label in the file is read (14)
+  PASS AC-PLR1 the shipped copy reads CLEAN on stamp_from
+  PASS AC-PLR1 the same call on an edited copy reads SUSPECT
+  PASS AC-PLR1 the reading follows the bytes, not a cache
+  PASS AC-PLR1 no label key is spelled in the module ([])
+  PASS AC-PLR2 the exact codepoints are printed (['U+04E1', 'U+FFFD', 'U+FFFD', 'U+FFFD', 'U+FFFD', 'U+04D4'])
+  PASS AC-PLR2 each codepoint carries the law it broke (['SCRIPT-NOT-IN-SIBLINGS', 'BROKEN-CODEPOINT'])
+  PASS AC-PLR2 the position in the label is named ([0, 1, 2, 3, 4, 5])
+  PASS AC-PLR2 the sibling labels are not tarred with it
+  PASS AC-PLR3 a suspect file raises its own refusal code
+  PASS AC-PLR3 the refusal names the label key
+  PASS AC-PLR3 the refusal carries the codepoints
+  PASS AC-PLR3 render never ran on a refused file
+  PASS AC-PLR3 a clean file renders the artifact byte-identically (55718 bytes)
+  PASS AC-PLR4 the shipped patterns digest is unchanged (ea5773ac0c11)
+  PASS AC-PLR4 both CLI paths ran (0/2)
+  PASS AC-PLR4 no label string was rewritten in the file
+  PASS AC-PLR4 the doctored copy is a different file, not the shipped one
+  PASS AC-PLR5 a clean file exits 0 (0/0)
+  PASS AC-PLR5 --json is byte-stable across runs
+  PASS AC-PLR5 --json keys are the pinned six (['code', 'labels', 'publishable', 'refused_codepoints', 'refused_label', 'tool'])
+  PASS AC-PLR5 a suspect file exits 2 with the code
+  PASS AC-PLR5 a missing file exits 3
+  PASS AC-PLR5 an unknown label exits 5
+  PASS AC-PLR6 the module source is pure ASCII
+  PASS AC-PLR6 imports are stdlib only (['argparse', 'json', 'sys', 'unicodedata'])
+  PASS AC-PLR6 the module reads no clock
+  PASS AC-PLR6 zero network imports
+  PASS AC-PLR6 the module holds no write primitive
+  PASS AC-PLR6 the module carries its own reconcile label
+  PASS AC-PLR6 the runner wires this suite
+  PASS AC-PLR6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+ADJACENT test_matrix_stamp_provenance_line.py exit=0 tail=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+ADJACENT test_matrix_stamp_from_liveness.py exit=0 tail=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+ADJACENT test_row_key_carrier_scope.py exit=0 tail=SUITE PASS 6/6 criteria
+
+EVIDENCE PASS identical=True fails=0 adjacent_green=3/3

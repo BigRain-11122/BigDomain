@@ -5745,6 +5745,16 @@ SUITES = [
     # seed row BEFORE the code.)
     ("os-row-key-carrier-scope",
      os.path.join("..", "os", "test_row_key_carrier_scope.py"), 6),
+    # R2502 patterns label readability face: a label is asked whether it is
+    # readable text at CALL time - a broken codepoint, or a script no sibling
+    # label in the same file carries, is SUSPECT with the exact codepoints
+    # named, and a suspect label refuses publication while a clean file
+    # reaches the renderer untouched. Derived from unicodedata per codepoint,
+    # never from a key list or a blessed-script table; the patterns file is
+    # never rewritten. (AC-PLR1..AC-PLR6 were pinned in state/queue/tech.md:538
+    # as the R2494 seed row BEFORE the code.)
+    ("os-patterns-label-readability",
+     os.path.join("..", "os", "test_patterns_label_readability.py"), 6),
     ]
 
 FAILS = 0

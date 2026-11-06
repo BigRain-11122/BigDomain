@@ -1,0 +1,48 @@
+PATTERNS LABEL READABILITY live reading (R2502)
+patterns=src/sandbox/suite_matrix_patterns.json
+digest before=ea5773ac0c113fe1 after=ea5773ac0c113fe1 unchanged=True
+live exit=0 publishable=true
+doctored exit=2
+
+===== LIVE (the shipped file) =====
+PATTERNS LABEL READABILITY os-patterns-label-readability publishable=true
+  command        CLEAN
+  evidence_line  CLEAN
+  faces_title    CLEAN
+  matrix_title   CLEAN
+  provenance_note CLEAN
+  provenance_title CLEAN
+  response       CLEAN
+  response_text  CLEAN
+  stamp          CLEAN
+  stamp_from     CLEAN
+  stamp_prefix   CLEAN
+  summary_title  CLEAN
+  title          CLEAN
+  total_row      CLEAN
+
+===== DOCTORED (a copy with one label replaced) =====
+PATTERNS LABEL READABILITY os-patterns-label-readability publishable=false
+  refused=E_PLR_SUSPECT label=stamp_from codepoints=U+04E1,U+FFFD,U+FFFD,U+FFFD,U+FFFD,U+04D4
+  command        CLEAN
+  evidence_line  CLEAN
+  faces_title    CLEAN
+  matrix_title   CLEAN
+  provenance_note CLEAN
+  provenance_title CLEAN
+  response       CLEAN
+  response_text  CLEAN
+  stamp          CLEAN
+  stamp_from     SUSPECT
+    U+04E1 at 0 CYRILLIC SMALL LETTER ABKHASIAN DZE (SCRIPT-NOT-IN-SIBLINGS)
+    U+FFFD at 1 REPLACEMENT CHARACTER (BROKEN-CODEPOINT)
+    U+FFFD at 2 REPLACEMENT CHARACTER (BROKEN-CODEPOINT)
+    U+FFFD at 3 REPLACEMENT CHARACTER (BROKEN-CODEPOINT)
+    U+FFFD at 4 REPLACEMENT CHARACTER (BROKEN-CODEPOINT)
+    U+04D4 at 5 CYRILLIC CAPITAL LIGATURE A IE (SCRIPT-NOT-IN-SIBLINGS)
+  stamp_prefix   CLEAN
+  summary_title  CLEAN
+  title          CLEAN
+  total_row      CLEAN
+
+EVIDENCE PASS
