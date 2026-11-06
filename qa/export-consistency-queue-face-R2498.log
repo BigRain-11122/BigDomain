@@ -1,0 +1,40 @@
+EVIDENCE CAPTURE round=R2498 suite=src/os/test_export_consistency_queue_face.py legs=2
+== LEG A rc=0 digest=ED6F3F7B6AE92486
+PASS AC-ECQF1 queue reading asked at CALL time (patched gate moves it)
+PASS AC-ECQF1 base checks asked at CALL time (patched face moves them)
+PASS AC-ECQF2 twenty-one base lines identical and counted
+PASS AC-ECQF3 fixture built from the real export
+PASS AC-ECQF3 stale block reads DRIFT naming queue and sections
+PASS AC-ECQF3 queue drift is never folded into the twenty-one
+PASS AC-ECQF4 CURRENT document reads AGREE at exit 0 with base intact
+PASS AC-ECQF4 CLI prints the base lines then exactly one queue line
+PASS AC-ECQF4 the reading left the export byte-identical
+PASS AC-ECQF5 source carries no clock and no file write call
+PASS AC-ECQF5 two readings left the export byte-identical
+PASS AC-ECQF6 module source is pure ASCII
+PASS AC-ECQF6 imports are stdlib plus the two shipped faces only
+PASS AC-ECQF6 exactly one registry row wires this suite with 6 criteria
+PASS AC-ECQF6 six criteria declared
+SUMMARY pass=15 fail=0
+== LEG B rc=0 digest=ED6F3F7B6AE92486
+PASS AC-ECQF1 queue reading asked at CALL time (patched gate moves it)
+PASS AC-ECQF1 base checks asked at CALL time (patched face moves them)
+PASS AC-ECQF2 twenty-one base lines identical and counted
+PASS AC-ECQF3 fixture built from the real export
+PASS AC-ECQF3 stale block reads DRIFT naming queue and sections
+PASS AC-ECQF3 queue drift is never folded into the twenty-one
+PASS AC-ECQF4 CURRENT document reads AGREE at exit 0 with base intact
+PASS AC-ECQF4 CLI prints the base lines then exactly one queue line
+PASS AC-ECQF4 the reading left the export byte-identical
+PASS AC-ECQF5 source carries no clock and no file write call
+PASS AC-ECQF5 two readings left the export byte-identical
+PASS AC-ECQF6 module source is pure ASCII
+PASS AC-ECQF6 imports are stdlib plus the two shipped faces only
+PASS AC-ECQF6 exactly one registry row wires this suite with 6 criteria
+PASS AC-ECQF6 six criteria declared
+SUMMARY pass=15 fail=0
+== ADJACENT 3
+== src/os/test_queue_export_freshness_gate.py rc=0 SUITE PASS 6/6
+== src/os/test_export_driver_queue_face.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_export_gate_wire.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=ED6F3F7B6AE92486

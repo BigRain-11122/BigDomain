@@ -1,0 +1,4 @@
+LIVE FACE exit=0
+QUEUE os-queue-export-freshness-gate verdict=CURRENT drifted=(none)
+VERDICT AGREE base=21/21 queue=CURRENT
+LIVE GATE {"label": "os-queue-export-freshness-gate", "verdict": "CURRENT", "path": "docs\\status-export.json", "drifted": [], "claimable": [5, 9, 10], "delivered_total": 0}

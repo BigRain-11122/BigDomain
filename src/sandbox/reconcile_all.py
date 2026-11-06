@@ -5516,6 +5516,13 @@ SUITES = [
     # code.)
     ("os-export-driver-queue-face",
      os.path.join("..", "os", "test_export_driver_queue_face.py"), 6),
+    # R2498: check_export_consistency is the twenty-one-check face every window
+    # trusts and it never opens the export's queue block - R2497 MEASURED a
+    # doctored export reading pass=21 fail=0 while queue_export_freshness_gate
+    # read STALE on the same document. (AC-ECQF1..AC-ECQF6 were pinned in
+    # state/queue/tech.md:533 as the R2497 seed row BEFORE the code.)
+    ("os-export-consistency-queue-face",
+     os.path.join("..", "os", "test_export_consistency_queue_face.py"), 6),
     # R2377: R2376 gave the export a proved write path, but the closeout that
     # publishes every round still calls QFE.apply and writes the document
     # itself, so the wire had no caller in the real path and two writers
