@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T08:11:42+08:00",
+  "export_ts": "2026-11-06T08:12:43+08:00",
   "do": "R2492 tech face: a declared package the read tree does not carry is now refused ONCE by name - E_RMPP_NO_PACKAGE naming the declaration and the corpus it searched - instead of being published as N broken imports",
   "ceo_face": {
     "current": "R2492 tech face: a declared package the read tree does not carry is now refused ONCE by name - E_RMPP_NO_PACKAGE naming the declaration and the corpus it searched - instead of being published as N broken imports",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 the owed battery on the registry this window moved to 575 suites / 4426 criteria, then a product face on the tech head state/queue/tech.md:528 prefix AC-MSFL1 (matrix_stamp_from_liveness, criteria pinned at R2442 before any code). Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/os/relative_package_presence_refusal.py + src/os/test_relative_package_presence_refusal.py (six pre-registered criteria, SUITE PASS 6/6 twice identical at qa/relative-package-presence-refusal-R2492.log, plus the live leg qa/relative-package-presence-refusal-live-R2492.log which reads NO-PACKAGE with zero rows for an absent declaration and still names a real missing import under a carried package) at 2026-11-06 R2492",
-    "updated_at": "2026-11-06T08:11:42+08:00"
+    "updated_at": "2026-11-06T08:12:43+08:00"
   },
   "depts": [
     {
@@ -530,10 +530,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 77,
+    "log_lines_in_window": 78,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 77,
+    "substantive_non_idle_mention_lines": 78,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
