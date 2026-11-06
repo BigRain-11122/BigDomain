@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T03:34:53+08:00",
+  "export_ts": "2026-11-07T03:37:14+08:00",
   "do": "2026-11-07 R2501 PRODUCT window on the tech head the register named (product-face-R2500, state/queue/tech.md:535 prefix AC-CEPM1 closeout_export_parity_text_binding, criteria AC-CEPM1..AC-CEPM6 pinned in that row at R2454 BEFORE any code). Five-silence scan at open was clean at HEAD 3e84d40f (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, benchmarks 2026-11-03 i",
   "ceo_face": {
     "current": "2026-11-07 R2501 PRODUCT window on the tech head the register named (product-face-R2500, state/queue/tech.md:535 prefix AC-CEPM1 closeout_export_parity_text_binding, criteria AC-CEPM1..AC-CEPM6 pinned in that row at R2454 BEFORE any code). Five-silence scan at open was clean at HEAD 3e84d40f (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, benchmarks 2026-11-03 i",
     "latest_artifact": "closeout-export-parity-text-binding-R2501.log (2898B) + closeout-export-parity-text-binding-live-R2501.log (302B)",
-    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T03:34:53+08:00",
-    "next_milestone_due": "2026-11-09T03:34:53+08:00",
+    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T03:37:14+08:00",
+    "next_milestone_due": "2026-11-09T03:37:14+08:00",
     "last_artifact": "closeout-export-parity-text-binding-R2501.log (2898B) + closeout-export-parity-text-binding-live-R2501.log (302B)",
-    "updated_at": "2026-11-07T03:34:53+08:00"
+    "updated_at": "2026-11-07T03:37:14+08:00"
   },
   "depts": [
     {
@@ -566,10 +566,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 63,
+    "log_lines_in_window": 65,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 63,
+    "substantive_non_idle_mention_lines": 65,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
