@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T07:24:29+08:00",
+  "export_ts": "2026-11-07T07:25:48+08:00",
   "do": "2026-11-07 R2511 PRODUCT window on the tech head the register named (product-face-R2510, state/queue/tech.md:549 prefix AC-STPT1 stamp_text_coverage, criteria AC-STPT1..AC-STPT6 pinned in that row at R2509 BEFORE any code; five-silence scan clean at HEAD 7802a2da with git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the ",
   "ceo_face": {
     "current": "2026-11-07 R2511 PRODUCT window on the tech head the register named (product-face-R2510, state/queue/tech.md:549 prefix AC-STPT1 stamp_text_coverage, criteria AC-STPT1..AC-STPT6 pinned in that row at R2509 BEFORE any code; five-silence scan clean at HEAD 7802a2da with git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the ",
     "latest_artifact": "stamp-text-coverage-R2511.log (5627B) + stamp-text-coverage-live-R2511.log (863B)",
-    "next_milestone": "next window owes reconcile-battery-R2511 on the committed tree, inside a 48h window due 2026-11-09T07:24:29+08:00",
-    "next_milestone_due": "2026-11-09T07:24:29+08:00",
+    "next_milestone": "next window owes reconcile-battery-R2511 on the committed tree, inside a 48h window due 2026-11-09T07:25:48+08:00",
+    "next_milestone_due": "2026-11-09T07:25:48+08:00",
     "last_artifact": "stamp-text-coverage-R2511.log (5627B) + stamp-text-coverage-live-R2511.log (863B)",
-    "updated_at": "2026-11-07T07:24:29+08:00"
+    "updated_at": "2026-11-07T07:25:48+08:00"
   },
   "depts": [
     {
@@ -597,10 +597,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 58,
+    "log_lines_in_window": 59,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 58,
+    "substantive_non_idle_mention_lines": 59,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
