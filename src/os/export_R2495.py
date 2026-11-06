@@ -29,6 +29,8 @@ base.NEXT = ("2026-11-07 a BUSINESS face on the tech head state/queue/tech.md:"
              "Every P-47 item beyond the shipped sandbox faces still waits on "
              "CEO physical items (merchant id, mini-program appid/secret)")
 
+base.NEXT_DUE = "2026-11-07T23:00:00+08:00"
+
 base.RESULT = (
     "2026-11-06 R2495 VERIFICATION window, resumed. The round had been "
     "interrupted: its repairs were committed (3f4adbbd, which kept the RED "

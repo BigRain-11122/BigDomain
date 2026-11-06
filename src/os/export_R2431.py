@@ -36,6 +36,8 @@ LATEST = ("qa/reconcile-all-R2431.log (red leg, 843784B) + "
           "stamp-aligned to 52317B at 543 suites / 4234 criteria with "
           "--check byte-identical")
 
+NEXT_DUE = "2026-11-06T12:00:00+08:00"
+
 NEXT = ("product face on the tech head state/queue/tech.md:494 prefix "
         "AC-BEDP1 (bare_evidence_deep_pile: a bare evidence name that lives "
         "deeper than the one-level pile walk still refuses), whose criteria "
@@ -134,7 +136,7 @@ def main():
     ceo["current"] = DO
     ceo["latest_artifact"] = LATEST
     ceo["next_milestone"] = NEXT
-    ceo["next_milestone_due"] = "2026-11-06T12:00:00+08:00"
+    ceo["next_milestone_due"] = NEXT_DUE
     ceo["last_artifact"] = LATEST
     ceo["updated_at"] = STAMP
     data["ceo_face"] = ceo
