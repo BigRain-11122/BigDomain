@@ -202,6 +202,12 @@ def disk_strings(patterns):
     # in flight. This seam must be quiet too, so it is read off the module
     # rather than frozen at the three names this probe shipped with.
     real_evnm = getattr(module, "EVNM", None)
+    # R2511 birth-site repair: render gained a FIFTH guard seam
+    # (stamp_text_coverage) after this probe was written; a probe that asks a
+    # live guard recurses into it and pays for a second composition. Read the
+    # seam off the module rather than freezing the names this probe shipped
+    # with, exactly as the EVNM seam above is read.
+    real_stpt = getattr(module, "STPT", None)
     _PROBE_DEPTH += 1
     try:
         registry.SUITES = _recording_suites(real_suites, sink)
@@ -210,6 +216,8 @@ def disk_strings(patterns):
         module.PNLT = _Quiet()
         if real_evnm is not None:
             module.EVNM = _Quiet()
+        if real_stpt is not None:
+            module.STPT = _Quiet()
         module.render(patterns, PROBE_EVIDENCE, {}, None, PROBE_STAMP,
                       stamp_from=PROBE_STAMP_FROM)
     finally:
@@ -219,6 +227,8 @@ def disk_strings(patterns):
         module.PNLT = real_pnlt
         if real_evnm is not None:
             module.EVNM = real_evnm
+        if real_stpt is not None:
+            module.STPT = real_stpt
         _PROBE_DEPTH -= 1
     return sink
 

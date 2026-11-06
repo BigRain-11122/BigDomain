@@ -195,6 +195,11 @@ def evidence_strings(evidence_path, patterns):
     real_plrc = module.PLRC
     real_pnlt = module.PNLT
     real_adtr = module.ADTR
+    # R2511 birth-site repair: render gained a FIFTH guard seam
+    # (stamp_text_coverage) after this probe was written, and a probe that asks
+    # a live guard would pay for a second full composition. Read it off the
+    # module so this probe keeps working when the seam set grows again.
+    real_stpt = getattr(module, "STPT", None)
     _PROBE_DEPTH += 1
     try:
         module.os = _OsShim(real_os, sink, target)
@@ -202,6 +207,8 @@ def evidence_strings(evidence_path, patterns):
         module.PLRC = _Quiet()
         module.PNLT = _Quiet()
         module.ADTR = _Quiet()
+        if real_stpt is not None:
+            module.STPT = _Quiet()
         module.render(patterns, evidence_path, {}, None, PROBE_STAMP,
                       stamp_from=PROBE_STAMP_FROM)
     finally:
@@ -210,6 +217,8 @@ def evidence_strings(evidence_path, patterns):
         module.PLRC = real_plrc
         module.PNLT = real_pnlt
         module.ADTR = real_adtr
+        if real_stpt is not None:
+            module.STPT = real_stpt
         _PROBE_DEPTH -= 1
     base = sink.get(PIECE_BASENAME)
     if base is not None:

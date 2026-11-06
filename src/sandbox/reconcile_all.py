@@ -5802,6 +5802,17 @@ SUITES = [
     ("os-evidence-name-text-coverage",
      os.path.join("..", "os",
                   "test_evidence_name_text_coverage.py"), 6),
+    # R2511 claim, AC-STPT1..AC-STPT6 (pinned in state/queue/tech.md:549 at
+    # R2509 BEFORE the code): the two CALLER-SUPPLIED strings the render prints
+    # - the generation stamp and the --stamp-from provenance source - were
+    # covered by no shipped reading, so a broken codepoint in either reached
+    # the CEO-visible artifact while every existing gate read publishable=True.
+    # render now asks ONE reading over what it actually prints from those two
+    # values, through the same shipped per-codepoint law, and refuses at exit 4
+    # naming the PIECE and the VALUE with no artifact byte written.
+    ("os-stamp-text-coverage",
+     os.path.join("..", "os",
+                  "test_stamp_text_coverage.py"), 6),
     ]
 
 FAILS = 0

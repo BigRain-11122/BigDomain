@@ -95,6 +95,16 @@ import artifact_disk_text_readability as ADTR  # noqa: E402
 # law - no second classifier is added here either.
 import evidence_name_text_coverage as EVNM  # noqa: E402
 
+# R2511 claim, AC-STPT1..AC-STPT6 (pinned in state/queue/tech.md:549 at R2509
+# BEFORE the code): every gate above reads text the render takes from the
+# patterns document, from DISK or from the evidence path, while this render
+# also prints two CALLER-SUPPLIED strings - the generation stamp and, when one
+# is given, the --stamp-from provenance source. The fifth statement of render
+# asks ONE reading over the strings the render actually prints from those two
+# values, through the same shipped per-codepoint law - no second classifier is
+# added here either.
+import stamp_text_coverage as STPT  # noqa: E402
+
 SUITE_RE = re.compile(
     r"(?m)^(PASS|FAIL) suite (\S+) exit=(\d+) pass-lines=(\d+)"
     r" fail-lines=(\d+) criteria=(\d+) (-?[0-9.]+)s")
@@ -265,6 +275,11 @@ def render(patterns, evidence_path, status, run, stamp, stamp_from=None):
     # by PIECE and NAME before a single artifact byte is composed. A clean name
     # passes through untouched, so the artifact keeps today's bytes (AC-EVNM3).
     EVNM.guard(evidence_path, patterns)
+    # AC-STPT2: the caller-supplied strings this artifact prints - the stamp
+    # and the borrowed-source provenance - are refused by PIECE and VALUE
+    # before a single artifact byte is composed. A clean pair passes through
+    # untouched, so the artifact keeps today's bytes (AC-STPT3).
+    STPT.guard(patterns, stamp, stamp_from)
     labels = patterns["labels"]
     suites = RA.SUITES
     total_crit = sum(crit for _, _, crit in suites)
@@ -479,6 +494,12 @@ def main(argv):
             print("FAIL evidence-name: %s piece=%s name=%s"
                   % (exc.code, exc.piece, EVNM.ascii_safe(exc.name)))
             return 4
+        except STPT.StampTextRefused as exc:
+            # AC-STPT2: a printed stamp string is refused by PIECE and VALUE,
+            # still as a readability verdict (exit 4), never as drift.
+            print("FAIL stamp-text: %s piece=%s value=%s"
+                  % (exc.code, exc.piece, STPT.ascii_safe(exc.value)))
+            return 4
         if fresh == current:
             print("PASS check: %s byte-identical (%d bytes, %d suites,"
                   " %d criteria)" % (rel(args.out), len(fresh.encode(
@@ -531,6 +552,12 @@ def main(argv):
         # artifact byte is opened, the target keeps every byte, no temp is left.
         print("FAIL evidence-name: %s piece=%s name=%s"
               % (exc.code, exc.piece, EVNM.ascii_safe(exc.name)))
+        return 4
+    except STPT.StampTextRefused as exc:
+        # AC-STPT2: the same promise for the printed stamp text - no artifact
+        # byte is opened, the target keeps every byte, no temp is left.
+        print("FAIL stamp-text: %s piece=%s value=%s"
+              % (exc.code, exc.piece, STPT.ascii_safe(exc.value)))
         return 4
     with open(args.out, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(fresh)

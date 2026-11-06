@@ -1,0 +1,76 @@
+EVIDENCE CAPTURE round=R2511 suite=src/os/test_stamp_text_coverage.py legs=2
+== LEG A rc=0 digest=52ADD8ADF4C4F5A3
+STAMP TEXT COVERAGE suite (R2511, 6 criteria)
+  PASS AC-STPT1 a patched gate makes the real reading refuse
+  PASS AC-STPT1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-STPT1 the refused PIECE and VALUE travel with the refusal ('artifact.stamp')
+  PASS AC-STPT1 this face carries no second classifier
+  PASS AC-STPT2 the real render refuses a doctored stamp
+  PASS AC-STPT2 the stamp refusal names the PIECE and the value ('artifact.stamp'/'2026\\ufffd-11-07 02:02 +08:00')
+  PASS AC-STPT2 a doctored stamp_from refuses the same way, naming artifact.stamp_from ('artifact.stamp_from')
+  PASS AC-STPT2 the shipped tool refuses at exit 4 naming stamp-text and the piece (rc=4)
+  PASS AC-STPT2 the same refusal covers stamp_from (rc=4)
+  PASS AC-STPT2 the artifact keeps every byte it had
+  PASS AC-STPT3 a clean tree renders byte-identically to the committed doc (56263 bytes)
+  PASS AC-STPT3 --check keeps its today reading (rc=0)
+  PASS AC-STPT4 the live stamp the render prints is in the derived set
+  PASS AC-STPT4 the borrow the render prints is in the set ('docs/sandbox-suite-matrix.md')
+  PASS AC-STPT4 a render given no stamp_from claims no such piece (['artifact.stamp'])
+  PASS AC-STPT4 different values yield their own pieces, so nothing is canned (['artifact.stamp', 'artifact.stamp_from'])
+  PASS AC-STPT4 no literal stamp or borrow lives in the module
+  PASS AC-STPT4 the live stamp the render prints is in the derived set
+  PASS AC-STPT4 the borrow the render prints is in the set ('docs/sandbox-suite-matrix.md')
+  PASS AC-STPT4 a render given no stamp_from claims no such piece (['artifact.stamp'])
+  PASS AC-STPT4 different values yield their own pieces, so nothing is canned (['artifact.stamp', 'artifact.stamp_from'])
+  PASS AC-STPT4 no literal stamp or borrow lives in the module
+  PASS AC-STPT5 the law, patterns, evidence and stamp source digests are unchanged
+  PASS AC-STPT5 the coverage probe leaves no file behind
+  PASS AC-STPT5 the module holds no write primitive
+  PASS AC-STPT6 the module source is pure ASCII
+  PASS AC-STPT6 imports are stdlib plus the shipped law (['argparse', 'hashlib', 'json', 'os', 'patterns_label_readability', 'sys'])
+  PASS AC-STPT6 the module reads no clock
+  PASS AC-STPT6 zero network imports
+  PASS AC-STPT6 the module carries its own reconcile label
+  PASS AC-STPT6 the runner wires this suite
+  PASS AC-STPT6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== LEG B rc=0 digest=52ADD8ADF4C4F5A3
+STAMP TEXT COVERAGE suite (R2511, 6 criteria)
+  PASS AC-STPT1 a patched gate makes the real reading refuse
+  PASS AC-STPT1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-STPT1 the refused PIECE and VALUE travel with the refusal ('artifact.stamp')
+  PASS AC-STPT1 this face carries no second classifier
+  PASS AC-STPT2 the real render refuses a doctored stamp
+  PASS AC-STPT2 the stamp refusal names the PIECE and the value ('artifact.stamp'/'2026\\ufffd-11-07 02:02 +08:00')
+  PASS AC-STPT2 a doctored stamp_from refuses the same way, naming artifact.stamp_from ('artifact.stamp_from')
+  PASS AC-STPT2 the shipped tool refuses at exit 4 naming stamp-text and the piece (rc=4)
+  PASS AC-STPT2 the same refusal covers stamp_from (rc=4)
+  PASS AC-STPT2 the artifact keeps every byte it had
+  PASS AC-STPT3 a clean tree renders byte-identically to the committed doc (56263 bytes)
+  PASS AC-STPT3 --check keeps its today reading (rc=0)
+  PASS AC-STPT4 the live stamp the render prints is in the derived set
+  PASS AC-STPT4 the borrow the render prints is in the set ('docs/sandbox-suite-matrix.md')
+  PASS AC-STPT4 a render given no stamp_from claims no such piece (['artifact.stamp'])
+  PASS AC-STPT4 different values yield their own pieces, so nothing is canned (['artifact.stamp', 'artifact.stamp_from'])
+  PASS AC-STPT4 no literal stamp or borrow lives in the module
+  PASS AC-STPT4 the live stamp the render prints is in the derived set
+  PASS AC-STPT4 the borrow the render prints is in the set ('docs/sandbox-suite-matrix.md')
+  PASS AC-STPT4 a render given no stamp_from claims no such piece (['artifact.stamp'])
+  PASS AC-STPT4 different values yield their own pieces, so nothing is canned (['artifact.stamp', 'artifact.stamp_from'])
+  PASS AC-STPT4 no literal stamp or borrow lives in the module
+  PASS AC-STPT5 the law, patterns, evidence and stamp source digests are unchanged
+  PASS AC-STPT5 the coverage probe leaves no file behind
+  PASS AC-STPT5 the module holds no write primitive
+  PASS AC-STPT6 the module source is pure ASCII
+  PASS AC-STPT6 imports are stdlib plus the shipped law (['argparse', 'hashlib', 'json', 'os', 'patterns_label_readability', 'sys'])
+  PASS AC-STPT6 the module reads no clock
+  PASS AC-STPT6 zero network imports
+  PASS AC-STPT6 the module carries its own reconcile label
+  PASS AC-STPT6 the runner wires this suite
+  PASS AC-STPT6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== ADJACENT 3
+== src/os/test_evidence_name_text_coverage.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_artifact_disk_text_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_patterns_label_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=3 fails=0 digest=52ADD8ADF4C4F5A3

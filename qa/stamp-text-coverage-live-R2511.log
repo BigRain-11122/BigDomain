@@ -1,0 +1,5 @@
+LIVE round=R2511 stamp='2026-11-07 02:02 +08:00' borrow='docs/sandbox-suite-matrix.md'
+CLEAN leg: STAMP TEXT COVERAGE os-stamp-text-coverage verdict=CLEAN source=os-patterns-label-readability pieces=2 |   artifact.stamp |   artifact.stamp_from
+DOCTORED stamp leg: STAMP TEXT COVERAGE os-stamp-text-coverage verdict=SUSPECT source=os-patterns-label-readability pieces=2 |   refused=E_PLR_SUSPECT piece=artifact.stamp value=2026\ufffd-11-07 02:02 +08:00 codepoints=U+FFFD |   artifact.stamp |   artifact.stamp_from
+DOCTORED stamp_from leg: STAMP TEXT COVERAGE os-stamp-text-coverage verdict=SUSPECT source=os-patterns-label-readability pieces=2 |   refused=E_PLR_SUSPECT piece=artifact.stamp_from value=docs/sandbox-suite-matri\ufffd.log codepoints=U+FFFD |   artifact.stamp |   artifact.stamp_from
+digests_unchanged=True clean=True refused=True other_refused=True
