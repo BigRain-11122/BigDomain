@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T05:14:43+08:00",
+  "export_ts": "2026-11-07T05:15:23+08:00",
   "do": "2026-11-07 R2505 PRODUCT window on the tech head the register named (product-face-R2504, tech head state/queue/tech.md:542 prefix AC-PNLT1 patterns_non_label_text_readability, criteria AC-PNLT1..AC-PNLT6 pinned in that row at R2503 BEFORE any code). Five-silence scan at open was clean at HEAD 62f68212 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addre",
   "ceo_face": {
     "current": "2026-11-07 R2505 PRODUCT window on the tech head the register named (product-face-R2504, tech head state/queue/tech.md:542 prefix AC-PNLT1 patterns_non_label_text_readability, criteria AC-PNLT1..AC-PNLT6 pinned in that row at R2503 BEFORE any code). Five-silence scan at open was clean at HEAD 62f68212 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addre",
     "latest_artifact": "patterns-non-label-live-R2505.log (435B) + patterns-non-label-text-readability-R2505.log (7967B)",
-    "next_milestone": "next window owes reconcile-battery-R2505 on the committed tree, inside a 48h window due 2026-11-09T05:14:43+08:00",
-    "next_milestone_due": "2026-11-09T05:14:43+08:00",
+    "next_milestone": "next window owes reconcile-battery-R2505 on the committed tree, inside a 48h window due 2026-11-09T05:15:23+08:00",
+    "next_milestone_due": "2026-11-09T05:15:23+08:00",
     "last_artifact": "patterns-non-label-live-R2505.log (435B) + patterns-non-label-text-readability-R2505.log (7967B)",
-    "updated_at": "2026-11-07T05:14:43+08:00"
+    "updated_at": "2026-11-07T05:15:23+08:00"
   },
   "depts": [
     {
@@ -587,10 +587,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 17,
+    "log_lines_in_window": 18,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 18,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
