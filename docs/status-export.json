@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-06T09:31:49+08:00",
-  "do": "R2494 product face: a borrowed stamp now says whether the document it names still exists - one reading answers LIVE / MISSING / AMBIGUOUS / NONE for docs/sandbox-suite-matrix.md at call time and names every dangling or ambiguous borrow instead of copying the recorded string",
+  "export_ts": "2026-11-06T22:39:53+08:00",
+  "do": "R2495 verification closeout: the battery the register owed reads GREEN on the committed tree - 576 of 576 suites, exactly 4432 criteria recounted independently, zero failing suites - and its evidence is committed instead of sitting untracked",
   "ceo_face": {
-    "current": "R2494 product face: a borrowed stamp now says whether the document it names still exists - one reading answers LIVE / MISSING / AMBIGUOUS / NONE for docs/sandbox-suite-matrix.md at call time and names every dangling or ambiguous borrow instead of copying the recorded string",
-    "latest_artifact": "src/os/matrix_stamp_from_liveness.py + src/os/test_matrix_stamp_from_liveness.py with qa/matrix-stamp-from-liveness-live-R2494.log (506B utf-8 LF, shipped doc reads LIVE at rc 0 and a dangling-borrow copy reads MISSING at rc 2) and qa/matrix-stamp-from-liveness-R2494.log (SUITE PASS 6/6 twice identical, adjacent=2 fails=0) at 2026-11-06",
-    "next_milestone": "2026-11-07 the battery this window owes, on the committed tree at the pre-registered 576 suites / 4432 criteria, then a product face on the tech head state/queue/tech.md:531 prefix AC-EDQF1 (export_driver_queue_face). Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
+    "current": "R2495 verification closeout: the battery the register owed reads GREEN on the committed tree - 576 of 576 suites, exactly 4432 criteria recounted independently, zero failing suites - and its evidence is committed instead of sitting untracked",
+    "latest_artifact": "qa/reconcile-all-R2495-retry.log (871018B, utf-8 LF, crlf=0, no BOM; 576 suite rows summing to 4432 criteria, zero FAIL rows, closing line RUNNER PASS 576/576 in 1125.6s) at 2026-11-06",
+    "next_milestone": "2026-11-07 a BUSINESS face on the tech head state/queue/tech.md:531 prefix AC-EDQF1 (export_driver_queue_face) - the CEO-visible export document must stop needing a hand-landed queue block. Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/os/matrix_stamp_from_liveness.py + src/os/test_matrix_stamp_from_liveness.py with qa/matrix-stamp-from-liveness-live-R2494.log (506B utf-8 LF, shipped doc reads LIVE at rc 0 and a dangling-borrow copy reads MISSING at rc 2) and qa/matrix-stamp-from-liveness-R2494.log (SUITE PASS 6/6 twice identical, adjacent=2 fails=0) at 2026-11-06",
-    "updated_at": "2026-11-06T09:31:49+08:00"
+    "last_artifact": "qa/reconcile-all-R2495-retry.log (871018B, utf-8 LF, crlf=0, no BOM; 576 suite rows summing to 4432 criteria, zero FAIL rows, closing line RUNNER PASS 576/576 in 1125.6s) at 2026-11-06",
+    "updated_at": "2026-11-06T22:39:53+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2495-retry.log + state/debt.md + src/os/state_append_R2495.py + src/os/export_R2495.py + src/os/state.json + docs/status-export.json + src/os/backlog.md + heartbeat.txt",
     "src/os/matrix_stamp_from_liveness.py + src/os/test_matrix_stamp_from_liveness.py + qa/matrix-stamp-from-liveness-R2494.log + qa/matrix-stamp-from-liveness-live-R2494.log + src/sandbox/reconcile_all.py + docs/sandbox-suite-matrix.md + state/queue/tech.md + state/debt.md + src/os/export_R2494.py + src/os/state.json + docs/status-export.json + src/os/backlog.md + heartbeat.txt",
     "qa/reconcile-all-R2493-retry.log + docs/sandbox-suite-matrix.md + qa/relative-package-presence-refusal-R2492.log + state/debt.md + src/os/closeout_R2493.py + src/os/fold_R2493.py + src/os/export_R2493.py + src/os/state.json + docs/status-export.json + src/os/backlog.md + heartbeat.txt",
     "src/os/relative_package_presence_refusal.py + src/os/test_relative_package_presence_refusal.py + src/sandbox/reconcile_all.py + qa/relative-package-presence-refusal-R2492.log + qa/relative-package-presence-refusal-live-R2492.log + docs/sandbox-suite-matrix.md + state/queue/tech.md + state/debt.md + src/os/capture_R2492.py + src/os/live_R2492.py + src/os/wire_R2492.py + src/os/closeout_R2492.py + src/os/export_R2492.py + src/os/state.json + docs/status-export.json + heartbeat.txt",
@@ -108,6 +109,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2495",
+      "2026-11-06 R2495 VERIFICATION window, resumed. The round had been interrupted: its repairs were committed (3f4adbbd, which kept the RED first battery leg as evidence) and its green retry battery finished at 10:29 without ever being recorded, committed or closed. This window finished the same round. CLAIM: reconcile-battery-R2495, pre-registered at 576 suites / 4432 criteria by R2494 under the R2168 mixed-tree rule, which ranks the battery ahead of any further product byte. RESULT: the retry evidence reads GREEN - RUNNER PASS (576/576 suites green, reconcile controls 7/7, 1125.6s) - with zero FAIL rows, an independent recount over the 576 suite rows summing to exactly 4432 criteria, and utf-8 / bom=False / crlf=0 / lone_cr=0; 932 of 932 tmp worlds were reclaimed at 326.59 MiB. The evidence file is now in git rather than untracked. DEBT: reconcile-battery-R2495 closed through the shipped debt_close writer (line 217, open 2->1, done 196->197, 131100B -> 131104B, readback ok). NO successor battery is owed: this window changed only qa/, state/ and docs/, no registry module and no suite, so the registry stands at 576 suites / 4432 criteria and the next window owes a BUSINESS face. Honest: zero product points this window; the twelve-hour gap between the green retry and this closeout is disclosed rather than dressed up; the debt gate reads OPEN-NONE because the only open row is loop-s4u-reconcile (first=no, needs an elevated shell) and no first=yes row was invented to silence it; Docker is absent so no containerised bring-up is claimed; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; tasks.md untouched."
+    ],
     [
       "2494",
       "2026-11-06 R2494 PRODUCT window on the tech head the register named (state/queue/tech.md:529 prefix AC-MSFL1 matrix_stamp_from_liveness, criteria AC-MSFL1..AC-MSFL6 pinned in that row at R2442 BEFORE any code). CLAIM: R2442 gave an artifact a provenance line naming the document its stamp was borrowed from, but recorded_source() handed the recorded string back verbatim, so a doc borrowing from a source deleted the next day read exactly like a live one. SHIPPED src/os/matrix_stamp_from_liveness.py plus src/os/test_matrix_stamp_from_liveness.py: the provenance reader stays the R2442 law asked at CALL time, the recorded string is published verbatim, and the tree is asked in two steps with no picking - the recorded path joined onto the root reads LIVE when present, otherwise one root-wide walk for the basename reads LIVE on a single match publishing the resolved path, AMBIGUOUS naming every candidate, MISSING for none, and a doc with no borrow reads NONE at exit 0. PROOF: AC-MSFL1..AC-MSFL6 SUITE PASS 6/6 TWICE identical plus two adjacent matrix suites green (qa/matrix-stamp-from-liveness-R2494.log 4259B, legs=2 identical=True adjacent=2 fails=0) and a live reading of the real tree (qa/matrix-stamp-from-liveness-live-R2494.log 506B utf-8 LF crlf=0). Registry 575/4426 -> 576/4432 by exactly one row os-matrix-stamp-from-liveness(6); matrix restamped stamp-aligned to 55317B at 576/4432 with --check byte-identical and its green line honestly reading 575/576. The tech floor was SHORT at open (9/10, one open row gated) and was refilled with two real measured gaps, AC-PLR1 patterns_label_readability and AC-EUC1 evidence_utf8_capture, so the gauge reads FLOOR-MET 5/5 10/10 10/10. Debt: reconcile-battery-R2495 appended first=no at 130269B -> 131097B (readback ok) at the pre-registered 576/4432. Honest: two of the suite's own assertions first read RED and both were my faults (the shipped doc is restamped at closeout; a fresh render carries a fresh stamp) - the suite was corrected and no criterion loosened; the first live capture landed crlf=10 with codepage-mangled text and was deleted and re-taken with PYTHONIOENCODING=utf-8 (the trap is seeded, not merely mentioned); the mojibake label measured in suite_matrix_patterns.json is PRE-EXISTING and was not fixed here; suite_matrix.py was not modified; no battery ran and none is claimed; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items."
@@ -533,17 +538,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2494",
+      "2495",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 13,
+    "log_lines_in_window": 15,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
