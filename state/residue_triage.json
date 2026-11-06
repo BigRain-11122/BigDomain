@@ -1989,6 +1989,20 @@
       "declared_by": 2491,
       "reason": "re-pinned at R2491 at its measured status DELIVERED",
       "until": 2511
+    },
+    {
+      "round": 2486,
+      "status": "DELIVERED",
+      "declared_by": "R2495",
+      "reason": "R2495 triage of the live residue the R2495 battery named at AC-RTR6: rounds 2486 and 2492 both read DELIVERED in the live reading (each round own deliverable is stamped and committed) but had never been declared in state/residue_triage.json, so the declaration set is extended at the MEASURED statuses rather than re-pinned wholesale",
+      "until": 2511
+    },
+    {
+      "round": 2492,
+      "status": "DELIVERED",
+      "declared_by": "R2495",
+      "reason": "R2495 triage of the live residue the R2495 battery named at AC-RTR6: rounds 2486 and 2492 both read DELIVERED in the live reading (each round own deliverable is stamped and committed) but had never been declared in state/residue_triage.json, so the declaration set is extended at the MEASURED statuses rather than re-pinned wholesale",
+      "until": 2511
     }
   ]
 }
