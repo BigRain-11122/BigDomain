@@ -2003,6 +2003,41 @@
       "declared_by": "R2495",
       "reason": "R2495 triage of the live residue the R2495 battery named at AC-RTR6: rounds 2486 and 2492 both read DELIVERED in the live reading (each round own deliverable is stamped and committed) but had never been declared in state/residue_triage.json, so the declaration set is extended at the MEASURED statuses rather than re-pinned wholesale",
       "until": 2511
+    },
+    {
+      "round": 2494,
+      "status": "DELIVERED",
+      "declared_by": "R2506",
+      "reason": "R2506 battery red leg: five product rounds delivered without a residue declaration",
+      "until": 2516
+    },
+    {
+      "round": 2497,
+      "status": "DELIVERED",
+      "declared_by": "R2506",
+      "reason": "R2506 battery red leg: five product rounds delivered without a residue declaration",
+      "until": 2516
+    },
+    {
+      "round": 2498,
+      "status": "DELIVERED",
+      "declared_by": "R2506",
+      "reason": "R2506 battery red leg: five product rounds delivered without a residue declaration",
+      "until": 2516
+    },
+    {
+      "round": 2501,
+      "status": "DELIVERED",
+      "declared_by": "R2506",
+      "reason": "R2506 battery red leg: five product rounds delivered without a residue declaration",
+      "until": 2516
+    },
+    {
+      "round": 2502,
+      "status": "DELIVERED",
+      "declared_by": "R2506",
+      "reason": "R2506 battery red leg: five product rounds delivered without a residue declaration",
+      "until": 2516
     }
   ]
 }
