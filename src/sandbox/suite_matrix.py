@@ -86,6 +86,15 @@ import patterns_non_label_text_readability as PNLT  # noqa: E402
 # per-codepoint law - no second classifier is added here either.
 import artifact_disk_text_readability as ADTR  # noqa: E402
 
+# R2509 seed, AC-EVNM1..AC-EVNM6 (pinned in state/queue/tech.md:547 at R2507
+# BEFORE the code): the disk-text gate derives everything the render reads off
+# DISK, but its coverage probe hands the render a CONSTANT evidence path, so
+# the evidence file NAME this render prints sits outside that derived set. The
+# fourth statement of render asks ONE reading over the strings the render
+# really takes from the evidence path, through the same shipped per-codepoint
+# law - no second classifier is added here either.
+import evidence_name_text_coverage as EVNM  # noqa: E402
+
 SUITE_RE = re.compile(
     r"(?m)^(PASS|FAIL) suite (\S+) exit=(\d+) pass-lines=(\d+)"
     r" fail-lines=(\d+) criteria=(\d+) (-?[0-9.]+)s")
@@ -252,6 +261,10 @@ def render(patterns, evidence_path, status, run, stamp, stamp_from=None):
     # a single artifact byte is composed. A clean tree passes through
     # untouched, so the artifact keeps today's bytes (AC-ADTR3).
     ADTR.guard(patterns)
+    # AC-EVNM2: the name this artifact takes from the EVIDENCE PATH is refused
+    # by PIECE and NAME before a single artifact byte is composed. A clean name
+    # passes through untouched, so the artifact keeps today's bytes (AC-EVNM3).
+    EVNM.guard(evidence_path, patterns)
     labels = patterns["labels"]
     suites = RA.SUITES
     total_crit = sum(crit for _, _, crit in suites)
@@ -460,6 +473,12 @@ def main(argv):
             print("FAIL disk-text: %s source=%s field=%s"
                   % (exc.code, exc.source, exc.field))
             return 4
+        except EVNM.EvidenceNameRefused as exc:
+            # AC-EVNM2: an evidence-derived name is refused by PIECE and NAME,
+            # still as a readability verdict (exit 4), never as drift.
+            print("FAIL evidence-name: %s piece=%s name=%s"
+                  % (exc.code, exc.piece, EVNM.ascii_safe(exc.name)))
+            return 4
         if fresh == current:
             print("PASS check: %s byte-identical (%d bytes, %d suites,"
                   " %d criteria)" % (rel(args.out), len(fresh.encode(
@@ -506,6 +525,12 @@ def main(argv):
         # byte is opened, the target keeps every byte, no temp is left.
         print("FAIL disk-text: %s source=%s field=%s"
               % (exc.code, exc.source, exc.field))
+        return 4
+    except EVNM.EvidenceNameRefused as exc:
+        # AC-EVNM2: the same promise for the evidence-derived name - no
+        # artifact byte is opened, the target keeps every byte, no temp is left.
+        print("FAIL evidence-name: %s piece=%s name=%s"
+              % (exc.code, exc.piece, EVNM.ascii_safe(exc.name)))
         return 4
     with open(args.out, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(fresh)

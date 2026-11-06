@@ -42,10 +42,12 @@ Criteria AC-ADTR1..AC-ADTR6 were pinned in state/queue/tech.md as the R2507
 claim row BEFORE this code existed.
 
 LIMIT, stated rather than buried: deriving the read set means composing the
-real render once, so four module attributes are patched for the duration of
-that single probe (the registry SUITES list, suite_matrix.face_node, and the
-two guard seams the render asks before it reads anything, each replaced by a
-quiet stand-in) and all four are restored in a finally block. A concurrent
+real render once, so the guard seams the render asks before it reads anything
+are patched for the duration of that single probe (the registry SUITES list,
+suite_matrix.face_node, and every guard module the render carries - the two
+this probe shipped with and any seam added later, read off the module so a new
+guard cannot revive a verdict the probe must read past), each replaced by a
+quiet stand-in, and all of them are restored in a finally block. A concurrent
 in-process caller could observe that window; the CLI and the shipped render
 path are single-process, so the window is not reachable there.
 
@@ -194,12 +196,20 @@ def disk_strings(patterns):
     real_face_node = module.face_node
     real_plrc = module.PLRC
     real_pnlt = module.PNLT
+    # R2509 birth-site repair: suite_matrix.render gained a FOURTH guard seam
+    # (evidence_name_text_coverage) after this probe was written, and a probe
+    # that asks a live guard recurses into it and inherits whatever verdict is
+    # in flight. This seam must be quiet too, so it is read off the module
+    # rather than frozen at the three names this probe shipped with.
+    real_evnm = getattr(module, "EVNM", None)
     _PROBE_DEPTH += 1
     try:
         registry.SUITES = _recording_suites(real_suites, sink)
         module.face_node = _recording_face_node(real_face_node, sink)
         module.PLRC = _Quiet()
         module.PNLT = _Quiet()
+        if real_evnm is not None:
+            module.EVNM = _Quiet()
         module.render(patterns, PROBE_EVIDENCE, {}, None, PROBE_STAMP,
                       stamp_from=PROBE_STAMP_FROM)
     finally:
@@ -207,6 +217,8 @@ def disk_strings(patterns):
         module.face_node = real_face_node
         module.PLRC = real_plrc
         module.PNLT = real_pnlt
+        if real_evnm is not None:
+            module.EVNM = real_evnm
         _PROBE_DEPTH -= 1
     return sink
 

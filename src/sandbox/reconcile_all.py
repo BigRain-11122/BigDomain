@@ -5790,6 +5790,18 @@ SUITES = [
     ("os-artifact-disk-text-readability",
      os.path.join("..", "os",
                   "test_artifact_disk_text_readability.py"), 6),
+    # R2509 (AC-EVNM1..AC-EVNM6, criteria pinned in state/queue/tech.md:547 at
+    # R2507 BEFORE the code): the disk-text reading above derives what the
+    # render reads off DISK, but its coverage probe hands the render a CONSTANT
+    # evidence path, so the evidence file NAME the artifact prints sits outside
+    # that set - a copy of the real evidence named with U+FFFD rendered into
+    # the document while the shipped reading still read publishable=True. The
+    # render now asks ONE reading over the strings it really takes from the
+    # evidence path, through the same shipped per-codepoint law, and refuses at
+    # exit 4 naming the PIECE and the NAME with no artifact byte written.
+    ("os-evidence-name-text-coverage",
+     os.path.join("..", "os",
+                  "test_evidence_name_text_coverage.py"), 6),
     ]
 
 FAILS = 0

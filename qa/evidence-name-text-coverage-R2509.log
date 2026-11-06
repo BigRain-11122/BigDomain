@@ -1,0 +1,73 @@
+EVIDENCE CAPTURE round=R2509 suite=src/os/test_evidence_name_text_coverage.py legs=2
+== LEG A rc=0 digest=E3B0C44298FC1C14
+EVIDENCE NAME TEXT COVERAGE suite (R2509, 6 criteria)
+  PASS AC-EVNM1 a patched gate makes the real reading refuse
+  PASS AC-EVNM1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-EVNM1 the refused PIECE and the evidence path travel with the refusal ('evidence.basename')
+  PASS AC-EVNM1 this face carries no second classifier
+  PASS AC-EVNM2 the real render refuses a doctored evidence name
+  PASS AC-EVNM2 the refusal names the PIECE and the offending name ('evidence.basename'/'reconcile-all-R2506-retr\\ufffdy.log')
+  PASS AC-EVNM2 the shipped tool refuses at exit 4 naming evidence-name (rc=4)
+  PASS AC-EVNM2 the artifact keeps every byte it had
+  PASS AC-EVNM2 no residue beside the artifact ([])
+  PASS AC-EVNM3 a clean tree renders byte-identically to the committed doc (56176 bytes)
+  PASS AC-EVNM3 --check keeps its today reading (rc=0)
+  PASS AC-EVNM4 the live evidence basename is in the derived set
+  PASS AC-EVNM4 the relative path the command line prints is in the set ('qa/reconcile-all-R2508.log')
+  PASS AC-EVNM4 a different path yields its own pieces, so nothing is canned (['evidence.basename', 'evidence.relpath', 'evidence.round_tag'])
+  PASS AC-EVNM4 a name carrying no round tag claims no separate piece (['evidence.basename', 'evidence.relpath'])
+  PASS AC-EVNM4 no literal evidence name or path lives in the module
+  PASS AC-EVNM4 the live evidence basename is in the derived set
+  PASS AC-EVNM4 the relative path the command line prints is in the set ('qa/reconcile-all-R2508.log')
+  PASS AC-EVNM4 a different path yields its own pieces, so nothing is canned (['evidence.basename', 'evidence.relpath', 'evidence.round_tag'])
+  PASS AC-EVNM4 a name carrying no round tag claims no separate piece (['evidence.basename', 'evidence.relpath'])
+  PASS AC-EVNM4 no literal evidence name or path lives in the module
+  PASS AC-EVNM5 the law, patterns and evidence digests are unchanged
+  PASS AC-EVNM5 the coverage probe leaves no file behind
+  PASS AC-EVNM5 the module holds no write primitive
+  PASS AC-EVNM6 the module source is pure ASCII
+  PASS AC-EVNM6 imports are stdlib plus the shipped law (['argparse', 'hashlib', 'json', 'os', 'patterns_label_readability', 'sys'])
+  PASS AC-EVNM6 the module reads no clock
+  PASS AC-EVNM6 zero network imports
+  PASS AC-EVNM6 the module carries its own reconcile label
+  PASS AC-EVNM6 the runner wires this suite
+  PASS AC-EVNM6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== LEG B rc=0 digest=E3B0C44298FC1C14
+EVIDENCE NAME TEXT COVERAGE suite (R2509, 6 criteria)
+  PASS AC-EVNM1 a patched gate makes the real reading refuse
+  PASS AC-EVNM1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-EVNM1 the refused PIECE and the evidence path travel with the refusal ('evidence.basename')
+  PASS AC-EVNM1 this face carries no second classifier
+  PASS AC-EVNM2 the real render refuses a doctored evidence name
+  PASS AC-EVNM2 the refusal names the PIECE and the offending name ('evidence.basename'/'reconcile-all-R2506-retr\\ufffdy.log')
+  PASS AC-EVNM2 the shipped tool refuses at exit 4 naming evidence-name (rc=4)
+  PASS AC-EVNM2 the artifact keeps every byte it had
+  PASS AC-EVNM2 no residue beside the artifact ([])
+  PASS AC-EVNM3 a clean tree renders byte-identically to the committed doc (56176 bytes)
+  PASS AC-EVNM3 --check keeps its today reading (rc=0)
+  PASS AC-EVNM4 the live evidence basename is in the derived set
+  PASS AC-EVNM4 the relative path the command line prints is in the set ('qa/reconcile-all-R2508.log')
+  PASS AC-EVNM4 a different path yields its own pieces, so nothing is canned (['evidence.basename', 'evidence.relpath', 'evidence.round_tag'])
+  PASS AC-EVNM4 a name carrying no round tag claims no separate piece (['evidence.basename', 'evidence.relpath'])
+  PASS AC-EVNM4 no literal evidence name or path lives in the module
+  PASS AC-EVNM4 the live evidence basename is in the derived set
+  PASS AC-EVNM4 the relative path the command line prints is in the set ('qa/reconcile-all-R2508.log')
+  PASS AC-EVNM4 a different path yields its own pieces, so nothing is canned (['evidence.basename', 'evidence.relpath', 'evidence.round_tag'])
+  PASS AC-EVNM4 a name carrying no round tag claims no separate piece (['evidence.basename', 'evidence.relpath'])
+  PASS AC-EVNM4 no literal evidence name or path lives in the module
+  PASS AC-EVNM5 the law, patterns and evidence digests are unchanged
+  PASS AC-EVNM5 the coverage probe leaves no file behind
+  PASS AC-EVNM5 the module holds no write primitive
+  PASS AC-EVNM6 the module source is pure ASCII
+  PASS AC-EVNM6 imports are stdlib plus the shipped law (['argparse', 'hashlib', 'json', 'os', 'patterns_label_readability', 'sys'])
+  PASS AC-EVNM6 the module reads no clock
+  PASS AC-EVNM6 zero network imports
+  PASS AC-EVNM6 the module carries its own reconcile label
+  PASS AC-EVNM6 the runner wires this suite
+  PASS AC-EVNM6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== ADJACENT 2
+== src/os/test_artifact_disk_text_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_patterns_non_label_text_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=2 fails=0 digest=E3B0C44298FC1C14

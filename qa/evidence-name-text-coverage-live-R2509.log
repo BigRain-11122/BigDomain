@@ -1,0 +1,4 @@
+EVIDENCE NAME TEXT COVERAGE live leg R2509
+clean verdict=CLEAN publishable=True pieces=evidence.basename,evidence.relpath,evidence.round_tag evidence=qa/reconcile-all-R2508.log artifact_digest=22fafc4c48d0b7e4
+doctored verdict=SUSPECT publishable=False code=E_PLR_SUSPECT piece=evidence.basename name=reconcile-all-R2508-retr\ufffdy.log codepoints=U+FFFD
+digests_unchanged evidence=True artifact=True
