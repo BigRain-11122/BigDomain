@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T04:26:06+08:00",
+  "export_ts": "2026-11-07T04:27:05+08:00",
   "do": "2026-11-07 R2502 PRODUCT window on the tech head the register named (state/queue/tech.md:538 prefix AC-PLR1 patterns_label_readability, criteria AC-PLR1..AC-PLR6 pinned in that row at R2494 BEFORE any code). Five-silence scan at open was clean at HEAD a4393852 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the 85-toke",
   "ceo_face": {
     "current": "2026-11-07 R2502 PRODUCT window on the tech head the register named (state/queue/tech.md:538 prefix AC-PLR1 patterns_label_readability, criteria AC-PLR1..AC-PLR6 pinned in that row at R2494 BEFORE any code). Five-silence scan at open was clean at HEAD a4393852 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the 85-toke",
     "latest_artifact": "patterns-label-readability-R2502.log (4773B) + patterns-label-readability-live-R2502.log (1589B) + reconcile-all-R2502.log (877010B)",
-    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T04:26:06+08:00",
-    "next_milestone_due": "2026-11-09T04:26:06+08:00",
+    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T04:27:05+08:00",
+    "next_milestone_due": "2026-11-09T04:27:05+08:00",
     "last_artifact": "patterns-label-readability-R2502.log (4773B) + patterns-label-readability-live-R2502.log (1589B) + reconcile-all-R2502.log (877010B)",
-    "updated_at": "2026-11-07T04:26:06+08:00"
+    "updated_at": "2026-11-07T04:27:05+08:00"
   },
   "depts": [
     {
@@ -572,14 +572,14 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 73,
+    "log_lines_in_window": 76,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 73,
+    "substantive_non_idle_mention_lines": 76,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
-    "queue_tech_open": 10,
+    "queue_tech_open": 11,
     "queue_explore_open": 10
   },
   "queue": {
@@ -607,15 +607,15 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 10,
+        "open_rows": 11,
         "done_rows": 417,
         "gated_rows": 1,
-        "claimable": 9,
+        "claimable": 10,
         "discounted": 0,
         "delivered": [],
         "floor": 10,
-        "shortfall": 1,
-        "status": "SHORT"
+        "shortfall": 0,
+        "status": "MET"
       },
       {
         "queue": "explore",
@@ -632,8 +632,8 @@
         "status": "MET"
       }
     ],
-    "verdict": "FLOOR-DEBT",
-    "shortfall_total": 1,
+    "verdict": "FLOOR-MET",
+    "shortfall_total": 0,
     "missing": [],
     "delivered_total": 0
   }
