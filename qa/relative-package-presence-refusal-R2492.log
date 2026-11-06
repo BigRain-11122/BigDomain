@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2492 suite=src/os/test_relative_package_presence_refusal.py legs=2
+== LEG A rc=0 digest=DA560EC365A0961A
+PASS AC-RMPP1 absent declaration refuses once with no MISSING rows
+PASS AC-RMPP2 a carried package keeps the parent reading byte for byte
+PASS AC-RMPP3 a package marker alone counts as present
+PASS AC-RMPP4 corpus is the parent walk asked once, no own walk
+PASS AC-RMPP5 exits 0/2/3/5 with a byte-stable --json over pinned keys
+PASS AC-RMPP6 ascii stdlib no clock no network read-only own label
+SUITE PASS (6/6 criteria pass)
+== LEG B rc=0 digest=DA560EC365A0961A
+PASS AC-RMPP1 absent declaration refuses once with no MISSING rows
+PASS AC-RMPP2 a carried package keeps the parent reading byte for byte
+PASS AC-RMPP3 a package marker alone counts as present
+PASS AC-RMPP4 corpus is the parent walk asked once, no own walk
+PASS AC-RMPP5 exits 0/2/3/5 with a byte-stable --json over pinned keys
+PASS AC-RMPP6 ascii stdlib no clock no network read-only own label
+SUITE PASS (6/6 criteria pass)
+== ADJACENT 3
+== src/os/test_relative_module_corpus_scope.py rc=0 SUITE PASS (6/6 criteria pass)
+== src/os/test_relative_module_existence_face.py rc=0 SUITE PASS
+== src/os/test_publish_relative_package_identity.py rc=0 SUITE PASS criteria=6 passes=6 fails=0
+EVIDENCE identical=True adjacent=3 fails=0 digest=DA560EC365A0961A

@@ -5665,6 +5665,17 @@ SUITES = [
     # state/queue/tech.md:525 as the R2440 seed row BEFORE the code.)
     ("os-relative-module-corpus-scope",
      os.path.join("..", "os", "test_relative_module_corpus_scope.py"), 6),
+    # R2492: the corpus scope face measures the tree root-wide, but nothing
+    # asked whether the DECLARED package is carried by it, so --package
+    # nosuchpkg joined every relative import onto a package that does not
+    # exist and published a declaration typo as N broken imports. A
+    # declaration with no module at or under it now refuses ONCE as
+    # E_RMPP_NO_PACKAGE, naming the declaration and the corpus searched, and
+    # no per-import MISSING-MODULE row is invented. A carried package keeps
+    # the parent reading byte for byte. (AC-RMPP1..AC-RMPP6 pinned in
+    # state/queue/tech.md as the R2440 seed row BEFORE the code.)
+    ("os-relative-package-presence-refusal",
+     os.path.join("..", "os", "test_relative_package_presence_refusal.py"), 6),
     # R2442: --stamp-from let a render follow another document's stamp but the
     # artifact could not say so - the command line named only --evidence, so a
     # borrowed-stamp render was byte-for-byte identical to an ordinary one

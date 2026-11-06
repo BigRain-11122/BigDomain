@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-06T08:00:41+08:00",
-  "do": "R2491 tech face: an absence in the relative-import reading now says WHERE it looked - every MISSING-MODULE row carries the root as given and the corpus size it was judged against, and an operator may declare extra module names that merge on top of the measured tree",
+  "export_ts": "2026-11-06T08:11:42+08:00",
+  "do": "R2492 tech face: a declared package the read tree does not carry is now refused ONCE by name - E_RMPP_NO_PACKAGE naming the declaration and the corpus it searched - instead of being published as N broken imports",
   "ceo_face": {
-    "current": "R2491 tech face: an absence in the relative-import reading now says WHERE it looked - every MISSING-MODULE row carries the root as given and the corpus size it was judged against, and an operator may declare extra module names that merge on top of the measured tree",
-    "latest_artifact": "src/os/relative_module_corpus_scope.py + src/os/test_relative_module_corpus_scope.py (six pre-registered criteria, SUITE PASS 6/6 twice identical at qa/relative-module-corpus-scope-R2491.log 1413B, plus the live leg qa/relative-module-corpus-scope-live-R2491.log 1666B which reproduces the seed defect on a real tree and clears it two ways) at 2026-11-06 R2491",
-    "next_milestone": "2026-11-07 a PRODUCT face on the tech head the register now names: state/queue/tech.md:527 prefix AC-RMPP1 (relative_package_presence_refusal, criteria pinned at R2440 before any code) - a declared package the tree does not carry must refuse once instead of printing N broken imports. Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
+    "current": "R2492 tech face: a declared package the read tree does not carry is now refused ONCE by name - E_RMPP_NO_PACKAGE naming the declaration and the corpus it searched - instead of being published as N broken imports",
+    "latest_artifact": "src/os/relative_package_presence_refusal.py + src/os/test_relative_package_presence_refusal.py (six pre-registered criteria, SUITE PASS 6/6 twice identical at qa/relative-package-presence-refusal-R2492.log, plus the live leg qa/relative-package-presence-refusal-live-R2492.log which reads NO-PACKAGE with zero rows for an absent declaration and still names a real missing import under a carried package) at 2026-11-06 R2492",
+    "next_milestone": "2026-11-07 the owed battery on the registry this window moved to 575 suites / 4426 criteria, then a product face on the tech head state/queue/tech.md:528 prefix AC-MSFL1 (matrix_stamp_from_liveness, criteria pinned at R2442 before any code). Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "src/os/relative_module_corpus_scope.py + src/os/test_relative_module_corpus_scope.py (six pre-registered criteria, SUITE PASS 6/6 twice identical at qa/relative-module-corpus-scope-R2491.log 1413B, plus the live leg qa/relative-module-corpus-scope-live-R2491.log 1666B which reproduces the seed defect on a real tree and clears it two ways) at 2026-11-06 R2491",
-    "updated_at": "2026-11-06T08:00:41+08:00"
+    "last_artifact": "src/os/relative_package_presence_refusal.py + src/os/test_relative_package_presence_refusal.py (six pre-registered criteria, SUITE PASS 6/6 twice identical at qa/relative-package-presence-refusal-R2492.log, plus the live leg qa/relative-package-presence-refusal-live-R2492.log which reads NO-PACKAGE with zero rows for an absent declaration and still names a real missing import under a carried package) at 2026-11-06 R2492",
+    "updated_at": "2026-11-06T08:11:42+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/relative_package_presence_refusal.py + src/os/test_relative_package_presence_refusal.py + src/sandbox/reconcile_all.py + qa/relative-package-presence-refusal-R2492.log + qa/relative-package-presence-refusal-live-R2492.log + docs/sandbox-suite-matrix.md + state/queue/tech.md + state/debt.md + src/os/capture_R2492.py + src/os/live_R2492.py + src/os/wire_R2492.py + src/os/closeout_R2492.py + src/os/export_R2492.py + src/os/state.json + docs/status-export.json + heartbeat.txt",
     "src/os/relative_module_corpus_scope.py + src/os/test_relative_module_corpus_scope.py + src/sandbox/reconcile_all.py + qa/relative-module-corpus-scope-R2491.log + qa/relative-module-corpus-scope-live-R2491.log + docs/sandbox-suite-matrix.md + state/queue/tech.md + state/debt.md + state/residue_triage.json + src/os/evidence_R2491.py + src/os/wire_R2491.py + src/os/close_tech_R2491.py + src/os/export_R2491.py + src/os/state.json + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
     "qa/reconcile-all-R2490.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/closeout_R2490.py + src/os/export_R2490.py + src/os/state.json + docs/status-export.json + heartbeat.txt + src/os/backlog.md + logs/battery-R2490.pid",
     "src/sandbox/lobby/hub.html + src/sandbox/lobby/hub_page.py + src/sandbox/lobby/server.py + src/sandbox/lobby/test_hub_member.py + src/sandbox/panel.py + src/sandbox/panel.html + src/sandbox/member/member_page.py + src/sandbox/reconcile_all.py + qa/hub-member-R2489.log + qa/hub-member-live-R2489.log + docs/sandbox-suite-matrix.md + state/debt.md + src/os/live_R2489.py + src/os/closeout_R2489.py + src/os/export_R2489.py + src/os/state.json + docs/status-export.json + heartbeat.txt + src/os/backlog.md",
@@ -105,6 +106,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2492",
+      "2026-11-06 R2492 TECH window on the carried product leader the register named after R2491 discharged its battery (product-face-R2491, tech head state/queue/tech.md:527 prefix AC-RMPP1, criteria AC-RMPP1..AC-RMPP6 pinned in that row at R2440 BEFORE any code). Claim: neither the corpus-scope face nor the existence face asked whether the DECLARED package is itself carried by the read tree, so --package nosuchpkg joined every relative import onto a package that does not exist and a declaration typo was published as N broken imports. Shipped src/os/relative_package_presence_refusal.py: the declared package now gets a presence decision on the parent's own root-wide corpus (ABSENT / MARKER / PRESENT with a carrier count); an ABSENT declaration refuses ONCE as E_RMPP_NO_PACKAGE naming the declaration and the corpus it searched with zero per-import rows; a carried declaration keeps the parent reading byte for byte (all 22 REPORT_KEYS compared equal); a package carried only by __init__.py reads MARKER rather than ABSENT; and the corpus is the R2440 walk asked once, the parent reading being handed that same measurement behind a root equality guard and restored in a finally block. Proof: AC-RMPP1..AC-RMPP6 SUITE PASS 6/6 TWICE identical plus three adjacent suites green (qa/relative-package-presence-refusal-R2492.log, legs=2 identical=True, fails=0). LIVE on one real tree: declared=nosuchpkg rc=2 verdict=NO-PACKAGE presence=ABSENT missing_rows=0, and declared=mypkg rc=2 verdict=MISSING-MODULE presence=PRESENT missing_modules=mypkg.nosuchmodule, so the refusal does not hide a real typo (qa/relative-package-presence-refusal-live-R2492.log, utf-8 LF). Registry 574/4420 -> 575/4426 by exactly one row; matrix restamped stamp-aligned to 55158B at 575/4426 with a byte-identical --check whose green line honestly reads 574/575; product-face-R2491 closed and product-face-R2492 opened first=yes through their shipped writers, so the next window owes the battery before any further product byte. Honest: an INTERNAL face, not a CEO-clickable one; my own first live leg was wrong twice and is disclosed; the one-walk substitution is a per-call module attribute restored in a finally block, a real limit for concurrent in-process callers; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; Docker is absent so no containerised bring-up is claimed; tasks.md was not touched."
+    ],
     [
       "2490",
       "2026-11-06 R2491 TECH window on the carried product leader the register named after R2490 discharged its battery (product-face-R2490, tech head state/queue/tech.md:525 prefix AC-RMSC1, criteria AC-RMSC1..AC-RMSC6 pinned in that row at R2440 BEFORE any code). Claim: the R2440 existence face measures its module corpus by walking the ROOT it is handed, so a join whose module is importable but lives outside that root - an installed package, or a publisher read from a subdirectory while the package sits at the tree top - read MISSING-MODULE exactly like a broken import, i.e. a scope limit and a typo were indistinguishable. Shipped src/os/relative_module_corpus_scope.py: every MISSING-MODULE row now carries scope_root (the root as given) and scope_corpus (the merged corpus size) both in the object and on screen; caller-declared --extra names are merged ON TOP of the measured tree and never replace it; the corpus is ONE root-wide walk per check (proved by a call counter reading 1 and by the module not importing the R2440 face at all); and the join plus the WIRE/FOREIGN word stay publish_relative_package_identity's own, asked at CALL time, so an extra makes a module PRESENT and cannot invent a wire. Proof: AC-RMSC1..AC-RMSC6 SUITE PASS 6/6 TWICE with identical verdicts and three adjacent suites green (qa/relative-module-corpus-scope-R2491.log, 1413B, legs=2 identical=True, fails=0). LIVE: the real tree reads verdict=WIRE corpus=1402 scanned=1400 publishers=11 wire=11 missing=0, and the seed's own defect is reproduced end to end - a scripts/ root reads MISSING-MODULE with its scope printed, --extra clears it, and the whole-tree root clears it too (qa/relative-module-corpus-scope-live-R2491.log, 1666B utf-8 LF). Registry 573/4414 -> 574/4420 by exactly one row; matrix restamped stamp-aligned to 55073B at 574/4420 with a byte-identical --check whose green line honestly reads 573/574; census DRIFT-CLEAN flags=0; tech row 525 closed and the next head is AC-RMPP1; reconcile-battery-R2491 appended first=no at the pre-registered 574/4420. The battery then ran RED on the committed product tree with four failed assertions in three suites, all traceable to two birth-site defects this window created or inherited: the residue declaration had expired at until=R2482 (283 of 284 live rounds read EXPIRED) and the product commit moved the queue without refreshing the export, so the queue face read STALE. Both were repaired at the birth site - the declaration re-pinned through the shipped writer from one live reading (283 -> 284 entries, MEASURED statuses, until=R2511) and the export re-derived then landed through the queue gate. Honest: an INTERNAL face, not a CEO-clickable one; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; Docker is absent so no containerised bring-up is claimed; tasks.md was not touched."
@@ -518,21 +523,21 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2491",
+      "2492",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 71,
+    "log_lines_in_window": 77,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 71,
+    "substantive_non_idle_mention_lines": 77,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
-    "queue_tech_open": 11,
+    "queue_tech_open": 10,
     "queue_explore_open": 10
   },
   "queue": {
@@ -550,8 +555,6 @@
         "done_rows": 5,
         "gated_rows": 1,
         "claimable": 5,
-        "discounted": 0,
-        "delivered": [],
         "floor": 5,
         "shortfall": 0,
         "status": "MET"
@@ -560,15 +563,13 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 11,
-        "done_rows": 411,
+        "open_rows": 10,
+        "done_rows": 412,
         "gated_rows": 1,
-        "claimable": 10,
-        "discounted": 0,
-        "delivered": [],
+        "claimable": 9,
         "floor": 10,
-        "shortfall": 0,
-        "status": "MET"
+        "shortfall": 1,
+        "status": "SHORT"
       },
       {
         "queue": "explore",
@@ -578,16 +579,10 @@
         "done_rows": 239,
         "gated_rows": 0,
         "claimable": 10,
-        "discounted": 0,
-        "delivered": [],
         "floor": 10,
         "shortfall": 0,
         "status": "MET"
       }
-    ],
-    "verdict": "FLOOR-MET",
-    "shortfall_total": 0,
-    "missing": [],
-    "delivered_total": 0
+    ]
   }
 }

@@ -1,0 +1,6 @@
+LIVE LEG round=R2492 module=relative_package_presence_refusal.py
+tree=C:\Users\sjs20\AppData\Local\Temp\rmpp-live-4n07nkh2
+declared=nosuchpkg rc=2 verdict=NO-PACKAGE presence=ABSENT presence_corpus=3 refusal=E_RMPP_NO_PACKAGE missing_rows=0
+declared=mypkg rc=2 verdict=MISSING-MODULE presence=PRESENT presence_carriers=2 missing_rows=1 missing_modules=mypkg.nosuchmodule
+stderr_empty=True
+VERDICT PASS
