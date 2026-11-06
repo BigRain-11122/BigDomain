@@ -1,0 +1,14 @@
+LIVE-1 shipped doc rc=0
+MATRIX STAMP FROM LIVENESS label=os-matrix-stamp-from-liveness
+  state=LIVE
+  recorded=docs/sandbox-suite-matrix.md
+  resolved=docs/sandbox-suite-matrix.md
+  candidates=-
+  segment=- 印章来源: --stamp-from docs/sandbox-suite-matrix.md
+LIVE-2 dangling borrow rc=2
+MATRIX STAMP FROM LIVENESS label=os-matrix-stamp-from-liveness
+  state=MISSING
+  recorded=docs/DOES-NOT-EXIST-R2494.md
+  resolved=-
+  candidates=-
+  segment=- 印章来源: --stamp-from docs/DOES-NOT-EXIST-R2494.md

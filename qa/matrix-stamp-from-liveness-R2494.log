@@ -1,0 +1,75 @@
+EVIDENCE CAPTURE round=R2494 suite=src/os/test_matrix_stamp_from_liveness.py legs=2
+== LEG A rc=0 digest=E3B0C44298FC1C14
+MATRIX STAMP FROM LIVENESS suite (R2494, 6 criteria)
+  PASS AC-MSFL1 a source on the tree reads LIVE
+  PASS AC-MSFL1 the same doc reads MISSING once the tree moved
+  PASS AC-MSFL1 the recorded string is published verbatim
+  PASS AC-MSFL1 reading the doc rewrites no byte of it
+  PASS AC-MSFL1 the provenance reader is asked at CALL time
+  PASS AC-MSFL2 the exact recorded path reads LIVE
+  PASS AC-MSFL2 LIVE names the resolved path ('qa/deep/borrow-R2494-b.log')
+  PASS AC-MSFL2 the reading carries the segment the doc must hold
+  PASS AC-MSFL2 deleting the source moves the reading to MISSING
+  PASS AC-MSFL2 the CLI names the dangling borrow at exit 2
+  PASS AC-MSFL3 two matching files read AMBIGUOUS
+  PASS AC-MSFL3 an ambiguous borrow is not picked for the caller
+  PASS AC-MSFL3 both candidates are named (['logs/dup-R2494.log', 'qa/dup-R2494.log'])
+  PASS AC-MSFL3 the ambiguous reading keeps the recorded string
+  PASS AC-MSFL3 the CLI publishes both candidates
+  PASS AC-MSFL4 a doc with no borrow reads NONE
+  PASS AC-MSFL4 an absent borrow is not called a dangling one
+  PASS AC-MSFL4 no segment is invented for an ordinary doc
+  PASS AC-MSFL4 the CLI reads NONE at exit 0
+  PASS AC-MSFL5 suite_matrix is untouched by this face
+  PASS AC-MSFL5 two renders are byte-identical
+  PASS AC-MSFL5 --check still reads PASS at exit 0
+  PASS AC-MSFL5 doc_stamp still reads the doc's own stamp line
+  PASS AC-MSFL5 doc_evidence_face still reads the same evidence path
+  PASS AC-MSFL6 source is pure ASCII
+  PASS AC-MSFL6 imports are stdlib only (['argparse', 'json', 'os', 'sys'])
+  PASS AC-MSFL6 the module reads no clock
+  PASS AC-MSFL6 zero network imports
+  PASS AC-MSFL6 the module holds no write primitive
+  PASS AC-MSFL6 the module names its own reconcile label
+  PASS AC-MSFL6 the runner wires this suite
+  PASS AC-MSFL6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== LEG B rc=0 digest=E3B0C44298FC1C14
+MATRIX STAMP FROM LIVENESS suite (R2494, 6 criteria)
+  PASS AC-MSFL1 a source on the tree reads LIVE
+  PASS AC-MSFL1 the same doc reads MISSING once the tree moved
+  PASS AC-MSFL1 the recorded string is published verbatim
+  PASS AC-MSFL1 reading the doc rewrites no byte of it
+  PASS AC-MSFL1 the provenance reader is asked at CALL time
+  PASS AC-MSFL2 the exact recorded path reads LIVE
+  PASS AC-MSFL2 LIVE names the resolved path ('qa/deep/borrow-R2494-b.log')
+  PASS AC-MSFL2 the reading carries the segment the doc must hold
+  PASS AC-MSFL2 deleting the source moves the reading to MISSING
+  PASS AC-MSFL2 the CLI names the dangling borrow at exit 2
+  PASS AC-MSFL3 two matching files read AMBIGUOUS
+  PASS AC-MSFL3 an ambiguous borrow is not picked for the caller
+  PASS AC-MSFL3 both candidates are named (['logs/dup-R2494.log', 'qa/dup-R2494.log'])
+  PASS AC-MSFL3 the ambiguous reading keeps the recorded string
+  PASS AC-MSFL3 the CLI publishes both candidates
+  PASS AC-MSFL4 a doc with no borrow reads NONE
+  PASS AC-MSFL4 an absent borrow is not called a dangling one
+  PASS AC-MSFL4 no segment is invented for an ordinary doc
+  PASS AC-MSFL4 the CLI reads NONE at exit 0
+  PASS AC-MSFL5 suite_matrix is untouched by this face
+  PASS AC-MSFL5 two renders are byte-identical
+  PASS AC-MSFL5 --check still reads PASS at exit 0
+  PASS AC-MSFL5 doc_stamp still reads the doc's own stamp line
+  PASS AC-MSFL5 doc_evidence_face still reads the same evidence path
+  PASS AC-MSFL6 source is pure ASCII
+  PASS AC-MSFL6 imports are stdlib only (['argparse', 'json', 'os', 'sys'])
+  PASS AC-MSFL6 the module reads no clock
+  PASS AC-MSFL6 zero network imports
+  PASS AC-MSFL6 the module holds no write primitive
+  PASS AC-MSFL6 the module names its own reconcile label
+  PASS AC-MSFL6 the runner wires this suite
+  PASS AC-MSFL6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== ADJACENT 2
+== src/os/test_matrix_stamp_provenance_line.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_matrix_stamp_compare.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=E3B0C44298FC1C14

@@ -1,1 +1,2 @@
 ﻿2026-11-06T09:16:45+08:00 R2493 ok verification-face battery-575/4426-green export=PASS(21/0) fold=12452B
+2026-11-06T09:31:20+08:00 R2494 ok product-face matrix-stamp-from-liveness(6) registry=576/4432 live=LIVE-rc0 suite=6/6-twice floor=5/10/10 export=PASS(21/0)

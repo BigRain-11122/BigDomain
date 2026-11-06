@@ -5685,6 +5685,12 @@ SUITES = [
     # state/queue/tech.md:508 as the R2418 seed row BEFORE the code.)
     ("os-matrix-stamp-provenance-line",
      os.path.join("..", "os", "test_matrix_stamp_provenance_line.py"), 6),
+    # R2494: the provenance line names the document a stamp was borrowed from
+    # but nothing asked whether that document still EXISTS, so a dangling
+    # borrow read exactly like a live one. (AC-MSFL1..AC-MSFL6 were pinned in
+    # state/queue/tech.md:529 as the R2442 seed row BEFORE the code.)
+    ("os-matrix-stamp-from-liveness",
+     os.path.join("..", "os", "test_matrix_stamp_from_liveness.py"), 6),
     # R2444: the sibling reading (R2430) compared the from-import face with
     # the relative face only, while the identity face reaches the comma-aware
     # table by a DIFFERENT seam (comma_binding_consumer_wire). All three faces

@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 575 | 4426 | 575/575 | R2493 |
+| 576 | 4432 | 575/575 | R2493 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -610,10 +610,11 @@
 | 570 | os-relative-module-corpus-scope | ../os/test_relative_module_corpus_scope.py | 6 | green | 0.7 |
 | 571 | os-relative-package-presence-refusal | ../os/test_relative_package_presence_refusal.py | 6 | green | 0.8 |
 | 572 | os-matrix-stamp-provenance-line | ../os/test_matrix_stamp_provenance_line.py | 6 | green | 1.4 |
-| 573 | os-comma-binding-identity-face-compare | ../os/test_comma_binding_identity_face_compare.py | 6 | green | 0.1 |
-| 574 | os-comma-binding-face-row-drift | ../os/test_comma_binding_face_row_drift.py | 6 | green | 0.3 |
-| 575 | os-row-key-carrier-scope | ../os/test_row_key_carrier_scope.py | 6 | green | 0.1 |
-|  | 合计 |  | 4426 | green 575 / FAIL 0 / no-evidence 0 |  |
+| 573 | os-matrix-stamp-from-liveness | ../os/test_matrix_stamp_from_liveness.py | 6 | no-evidence | - |
+| 574 | os-comma-binding-identity-face-compare | ../os/test_comma_binding_identity_face_compare.py | 6 | green | 0.1 |
+| 575 | os-comma-binding-face-row-drift | ../os/test_comma_binding_face_row_drift.py | 6 | green | 0.3 |
+| 576 | os-row-key-carrier-scope | ../os/test_row_key_carrier_scope.py | 6 | green | 0.1 |
+|  | 合计 |  | 4432 | green 575 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 
