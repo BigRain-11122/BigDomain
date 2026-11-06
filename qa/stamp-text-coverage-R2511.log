@@ -1,5 +1,5 @@
 EVIDENCE CAPTURE round=R2511 suite=src/os/test_stamp_text_coverage.py legs=2
-== LEG A rc=0 digest=52ADD8ADF4C4F5A3
+== LEG A rc=0 digest=E3B0C44298FC1C14
 STAMP TEXT COVERAGE suite (R2511, 6 criteria)
   PASS AC-STPT1 a patched gate makes the real reading refuse
   PASS AC-STPT1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
@@ -34,7 +34,7 @@ STAMP TEXT COVERAGE suite (R2511, 6 criteria)
   PASS AC-STPT6 the runner wires this suite
   PASS AC-STPT6 the suite declares its own six criteria
 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
-== LEG B rc=0 digest=52ADD8ADF4C4F5A3
+== LEG B rc=0 digest=E3B0C44298FC1C14
 STAMP TEXT COVERAGE suite (R2511, 6 criteria)
   PASS AC-STPT1 a patched gate makes the real reading refuse
   PASS AC-STPT1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
@@ -69,8 +69,7 @@ STAMP TEXT COVERAGE suite (R2511, 6 criteria)
   PASS AC-STPT6 the runner wires this suite
   PASS AC-STPT6 the suite declares its own six criteria
 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
-== ADJACENT 3
-== src/os/test_evidence_name_text_coverage.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== ADJACENT 2
 == src/os/test_artifact_disk_text_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
-== src/os/test_patterns_label_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
-EVIDENCE identical=True adjacent=3 fails=0 digest=52ADD8ADF4C4F5A3
+== src/os/test_evidence_name_text_coverage.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=2 fails=0 digest=E3B0C44298FC1C14
