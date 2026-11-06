@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T09:30:14+08:00",
+  "export_ts": "2026-11-06T09:31:49+08:00",
   "do": "R2494 product face: a borrowed stamp now says whether the document it names still exists - one reading answers LIVE / MISSING / AMBIGUOUS / NONE for docs/sandbox-suite-matrix.md at call time and names every dangling or ambiguous borrow instead of copying the recorded string",
   "ceo_face": {
     "current": "R2494 product face: a borrowed stamp now says whether the document it names still exists - one reading answers LIVE / MISSING / AMBIGUOUS / NONE for docs/sandbox-suite-matrix.md at call time and names every dangling or ambiguous borrow instead of copying the recorded string",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 the battery this window owes, on the committed tree at the pre-registered 576 suites / 4432 criteria, then a product face on the tech head state/queue/tech.md:531 prefix AC-EDQF1 (export_driver_queue_face). Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "src/os/matrix_stamp_from_liveness.py + src/os/test_matrix_stamp_from_liveness.py with qa/matrix-stamp-from-liveness-live-R2494.log (506B utf-8 LF, shipped doc reads LIVE at rc 0 and a dangling-borrow copy reads MISSING at rc 2) and qa/matrix-stamp-from-liveness-R2494.log (SUITE PASS 6/6 twice identical, adjacent=2 fails=0) at 2026-11-06",
-    "updated_at": "2026-11-06T09:30:14+08:00"
+    "updated_at": "2026-11-06T09:31:49+08:00"
   },
   "depts": [
     {
@@ -540,10 +540,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 12,
+    "log_lines_in_window": 13,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
