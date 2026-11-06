@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-11-06T09:15:08+08:00",
+  "export_ts": "2026-11-06T09:18:28+08:00",
   "do": "R2493 verification face: the R2492 registry (575 suites / 4426 criteria) is proved green on a committed tree, and the two real defects the red leg named - a matrix doc without its stamp-source provenance line and an evidence file captured through a PowerShell pipe - are repaired at their birth site",
   "ceo_face": {
     "current": "R2493 verification face: the R2492 registry (575 suites / 4426 criteria) is proved green on a committed tree, and the two real defects the red leg named - a matrix doc without its stamp-source provenance line and an evidence file captured through a PowerShell pipe - are repaired at their birth site",
@@ -7,7 +7,7 @@
     "next_milestone": "2026-11-07 a product face on the tech head state/queue/tech.md:528 prefix AC-MSFL1 (matrix_stamp_from_liveness, criteria AC-MSFL1..AC-MSFL6 pinned at R2442 before any code). Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-06T12:00:00+08:00",
     "last_artifact": "qa/reconcile-all-R2493-retry.log (868897B utf-8 LF, RUNNER PASS 575/575 suites green, reconcile controls 7/7, 1164.3s, zero FAIL rows, criteria recounted to exactly 4426) plus the repair commit e3d9c7c1 (re-taken qa/relative-package-presence-refusal-R2492.log through the shipped capture writer and docs/sandbox-suite-matrix.md regenerated stamp-aligned at 55212B) at 2026-11-06",
-    "updated_at": "2026-11-06T09:15:08+08:00"
+    "updated_at": "2026-11-06T09:18:28+08:00"
   },
   "depts": [
     {
@@ -535,10 +535,10 @@
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 5,
+    "log_lines_in_window": 7,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 5,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
