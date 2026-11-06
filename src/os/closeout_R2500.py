@@ -1,0 +1,28 @@
+"""R2500 closeout: append the round log to state.json in place, canon layout."""
+import io
+import json
+
+P = "src/os/state.json"
+LINES = [
+    "2026-11-07 R2500 VERIFICATION window on the battery the register owed (reconcile-battery-R2499, pre-registered 578 suites / 4444 criteria because R2499 repaired a shipped module without adding a suite). Five-silence scan at open was clean at HEAD 5ac3d85b (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the 83-token baseline, no 2026-11-07 row in the group orders tail so last_order stands at 2026-11-06 23:46, benchmarks 2026-11-03 inside the seven-day gate). debt_gate read CLAIM-FIRST item=reconcile-battery-R2499 carried=1 stale=no open=2 first=1, so the R2168 mixed-tree rule ranked the battery ahead of any product byte and it was claimed. The target was re-measured BEFORE the run by importing reconcile_all.SUITES: 578 suites and 4444 criteria, byte for byte the registered note.",
+    "2026-11-07 R2500 BATTERY GREEN ON THE FIRST LEG, MEASURED NOT QUOTED: qa/reconcile-all-R2500.log was written by the shipped single writer src/os/battery_stream.py launched detached and unfiltered (pid 49008) so the blocking-pipe trap was not re-paid; 873383B at the green leg, bom=False, crlf=0, lone_cr=0, closing line 'RUNNER PASS (578/578 suites green, reconcile controls 7/7, 1185.4s)', zero FAIL suite rows, and an independent recount over the 578 'PASS suite' rows sums criteria to exactly 4444 - the pre-registered total matched by measurement, not by quotation. Birth-site tmp reclaim read candidates=932 removed=932 busy=0 failed=0 reclaimed=326.59 MiB. No red leg exists for this round because none was produced, stated rather than implied.",
+    "2026-11-07 R2500 FOUR FOLLOW-UP SECTIONS in the designed order: the dry run read SECTION matrix FAIL (on-disk 55517B against regenerated 55490B, no byte written) with fingerprint CLEAN over 5 domains, profile byte-identical and census DRIFT-CLEAN; src/sandbox/suite_matrix.py then regenerated docs/sandbox-suite-matrix.md from THIS round own evidence through --evidence plus --stamp-from ('green=578/578'), --check read byte-identical at 55490B / 578 suites / 4444 criteria, and the write leg read four PASS for VERDICT R2500 PASS (APPENDED 1950B eol_ok=True). The matrix is self-describing this round: its own green line names this round's battery rather than a borrowed older leg.",
+    "2026-11-07 R2500 DEBT settled through the shipped writers: reconcile-battery-R2499 closed at line 220 (open 2->1, done 200->201, predicted 134408B -> 134411B and measured exactly, readback ok) and product-face-R2500 was appended first=yes through debt_append (predicted 134411B -> 135564B and measured exactly, readback ok) naming the next window a PRODUCT face on the tech head state/queue/tech.md:535 prefix AC-CEPM1 closeout_export_parity_text_binding, whose criteria AC-CEPM1 to AC-CEPM6 were pinned there at R2454 BEFORE any code, with AC-RSC1 runner_suite_timeout_cap, AC-PLR1 patterns_label_readability and AC-EUC1 evidence_utf8_capture still claimable behind it. No successor battery is registered: this window changed only qa/, docs/ and state/, no registry module and no suite, so the registry stands unmoved at 578 suites and 4444 criteria and the next window owes a product byte, not another battery.",
+    "2026-11-07 R2500 honest disclosures: (a) this is an INTERNAL verification face - zero points on the Executive Protocol scale and nothing a CEO could open was built; what it buys is that the tree R2499 shipped is proved green end to end rather than assumed from the leg R2499 ran before its own closeout commit landed; (b) the battery ran about 1185s plus the follow-ups, so the window overshot its 25-minute budget and that is disclosed rather than dressed up; (c) this round produced no defect and no repair, so unlike R2493 and R2496 there is nothing here to name as mine - the green is the whole finding, and it is not padded with an invented seed; (d) Docker is absent on this host so no containerised bring-up of the sandbox faces is claimed; (e) the real 19.9 debit and the real msgSecCheck still wait on CEO physical items (merchant id, mini-program appid/secret); (f) tasks.md was not touched, it is the P-47 canonical board; (g) state.json measured 50021B at open against the 78500B waterline with a FOLD-CLEAR margin of 28479B, so no fold was due and none ran; (h) heartbeat.txt still carried R2498 as its last row because the R2499 closeout never appended one, so this window writes the R2500 row rather than repairing history it did not measure.",
+    "R2500 tokens: local=~22k api=0 api_reason=verification window - one pre-registered battery re-measured by import, one green first leg at 578/578 with exactly 4444 criteria recounted independently, four follow-up sections PASS after the designed matrix FAIL and its stamp-aligned regeneration, one debt row closed and the successor opened through their shipped writers, and the state/export/backlog/heartbeat closeout; zero cloud calls and zero external API touches",
+]
+
+raw = io.open(P, "rb").read()
+text = raw.decode("utf-8")
+assert '"tick": 2499,' in text
+text = text.replace('"tick": 2499,', '"tick": 2500,', 1)
+tail = '\r\n  ]\r\n}\r\n'
+assert text.endswith(tail), repr(text[-40:])
+block = "".join(",\r\n                " + json.dumps(line, ensure_ascii=False)
+                for line in LINES)
+text = text[:-len(tail)] + block + tail
+io.open(P, "w", encoding="utf-8", newline="").write(text)
+
+state = json.loads(io.open(P, encoding="utf-8").read())
+print("tick=%d loglen=%d bytes=%d"
+      % (state["tick"], len(state["log"]), len(text.encode("utf-8"))))

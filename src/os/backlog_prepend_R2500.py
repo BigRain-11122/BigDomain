@@ -1,0 +1,50 @@
+"""R2500 backlog prepend: one done row at the top, CRLF dialect preserved."""
+import io
+
+P = "src/os/backlog.md"
+ROW = (
+    "- [x] [done 2026-11-07 R2500] R2500 VERIFICATION window on the battery the "
+    "register owed (reconcile-battery-R2499, pre-registered 578 suites / 4444 "
+    "criteria because R2499 repaired a shipped module without adding a suite; "
+    "the target was re-measured by importing reconcile_all.SUITES before the run "
+    "and matched byte for byte). Five-silence scan at open was clean at HEAD "
+    "5ac3d85b: git status empty, no index.lock, zero @BigDomain rows in "
+    "cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the "
+    "83-token baseline, no 2026-11-07 row in the group orders tail so last_order "
+    "stands at 2026-11-06 23:46, benchmarks 2026-11-03 inside the seven-day gate; "
+    "debt_gate read CLAIM-FIRST item=reconcile-battery-R2499 first=1, so the "
+    "R2168 mixed-tree rule ranked the battery ahead of any product byte. RESULT: "
+    "GREEN ON THE FIRST LEG, measured not quoted - qa/reconcile-all-R2500.log "
+    "873383B utf-8 bom=False crlf=0 lone_cr=0, closing line RUNNER PASS (578/578 "
+    "suites green, reconcile controls 7/7, 1185.4s), zero FAIL rows, an "
+    "independent recount over the 578 PASS rows summing to exactly 4444 "
+    "criteria, tmp reclaim 932/932 worlds at 326.59 MiB, written by the shipped "
+    "single writer battery_stream.py launched detached and unfiltered. Four "
+    "follow-up sections in the designed order: dry run matrix FAIL at on-disk "
+    "55517B against regenerated 55490B with no byte written, suite_matrix "
+    "regenerated the doc from this round own evidence through --evidence plus "
+    "--stamp-from at green 578/578, --check byte-identical at 55490B / 578 / "
+    "4444, write leg four PASS for VERDICT R2500 PASS (APPENDED 1950B "
+    "eol_ok=True). DEBT through the shipped writers: reconcile-battery-R2499 "
+    "closed at line 220 (predicted 134408B -> 134411B, measured exactly, "
+    "readback ok) and product-face-R2500 opened first=yes (predicted 134411B -> "
+    "135564B, measured exactly, readback ok) naming the next window a PRODUCT "
+    "face on tech head state/queue/tech.md:535 prefix AC-CEPM1 "
+    "closeout_export_parity_text_binding (AC-CEPM1..AC-CEPM6 pinned at R2454 "
+    "before any code) with AC-RSC1 runner_suite_timeout_cap, AC-PLR1 "
+    "patterns_label_readability and AC-EUC1 evidence_utf8_capture still "
+    "claimable. No successor battery is owed: this window changed only qa/, "
+    "docs/ and state/, so the registry stands unmoved at 578 suites / 4444 "
+    "criteria. HONEST: zero product points, nothing a CEO could open was built, "
+    "no defect was found so nothing is padded with an invented repair, the "
+    "window ran past its 25-minute budget, Docker is absent so no containerised "
+    "bring-up is claimed, the real 19.9 debit and the real msgSecCheck still wait "
+    "on CEO physical items, tasks.md untouched, state.json was FOLD-CLEAR at "
+    "50021B against the 78500B waterline, and heartbeat.txt still carried R2498 "
+    "because the R2499 closeout never wrote a row.\r\n"
+)
+
+raw = io.open(P, "rb").read()
+text = raw.decode("utf-8")
+io.open(P, "w", encoding="utf-8", newline="").write(ROW + text)
+print("bytes after", len(io.open(P, "rb").read()))
