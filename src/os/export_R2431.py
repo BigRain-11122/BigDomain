@@ -10,6 +10,7 @@ import datetime
 import io
 import json
 import os
+import re
 import sys
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -66,9 +67,84 @@ RESULT = (
     "product-face-R2432 opened first=yes through the shipped CLIs. Zero "
     "product points claimed.")
 
-OUTS = ("qa/reconcile-all-R2431.log (red leg) plus "
-        "qa/reconcile-all-R2431-retry.log (RUNNER PASS 543/543, 4234 "
-        "criteria) and docs/sandbox-suite-matrix.md regenerated to 52317B")
+LEGACY_OUTS = ("qa/reconcile-all-R2431.log (red leg) plus "
+               "qa/reconcile-all-R2431-retry.log (RUNNER PASS 543/543, 4234 "
+               "criteria) and docs/sandbox-suite-matrix.md regenerated to "
+               "52317B")
+
+# Kept only so any older carrier that reads the name still imports; the driver
+# itself no longer publishes this constant anywhere (R2499 derivation fix).
+OUTS = LEGACY_OUTS
+
+
+def _round_items(state, tick):
+    """This round's own log items, matched by the tick in their own text."""
+    pattern = re.compile(r"^\d{4}-\d{2}-\d{2} R%s\b" % tick)
+    items = []
+    for entry in state.get("log") or []:
+        if isinstance(entry, str) and pattern.match(entry):
+            items.append(entry)
+    return items
+
+
+def derive_current(state, tick):
+    """The CEO 'current' line is this round's opening summary, not a constant."""
+    items = _round_items(state, tick)
+    if items:
+        return items[0][:400]
+    log = state.get("log") or []
+    if log and isinstance(log[-1], str):
+        return log[-1][:400]
+    return "no log entry for tick %s" % tick
+
+
+def derive_latest(tick):
+    """The artifact line is what actually landed for this tick under qa/."""
+    hits = []
+    directory = os.path.join(REPO, "qa")
+    try:
+        names = sorted(os.listdir(directory))
+    except OSError:
+        names = []
+    for name in names:
+        if "R%s" % tick not in name:
+            continue
+        path = os.path.join(directory, name)
+        try:
+            hits.append("%s (%dB)" % (name, os.path.getsize(path)))
+        except OSError:
+            continue
+    if not hits:
+        return "none landed yet for R%s" % tick
+    return " + ".join(hits[:4])
+
+
+def derive_due():
+    """The 48h milestone window, computed at call time."""
+    return (datetime.datetime.now(
+        datetime.timezone(datetime.timedelta(hours=8)))
+        + datetime.timedelta(hours=48)).replace(microsecond=0).isoformat()
+
+
+def derive_next(tick):
+    """The milestone line is the debt the register names first, plus a 48h window."""
+    item = ""
+    try:
+        text = io.open(os.path.join(REPO, "state", "debt.md"),
+                       encoding="utf-8").read()
+    except (IOError, OSError):
+        text = ""
+    for line in text.split("\n"):
+        if line.startswith("- [ ]") and "first=yes" in line:
+            found = re.search(r"item=([^ |]+)", line)
+            if found:
+                item = found.group(1)
+                break
+    due = derive_due()
+    if item:
+        return ("next window owes %s on the committed tree, inside a 48h "
+                "window due %s" % (item, due))
+    return "next round product byte on the queue head, inside a 48h window due %s" % due
 
 
 def self_drive():
@@ -114,18 +190,21 @@ def main():
         return 2
     stamped[0][0] = tick
     data["results"] = rows
+    current = derive_current(state, tick)
+    latest = derive_latest(tick)
+    milestone = derive_next(tick)
     outs = data.get("outs") or []
-    if not outs or outs[0] != OUTS:
-        outs.insert(0, OUTS)
+    if not outs or outs[0] != latest:
+        outs.insert(0, latest)
     data["outs"] = outs
     data["export_ts"] = STAMP
-    data["do"] = DO
+    data["do"] = current
     ceo = data.get("ceo_face") or {}
-    ceo["current"] = DO
-    ceo["latest_artifact"] = LATEST
-    ceo["next_milestone"] = NEXT
-    ceo["next_milestone_due"] = NEXT_DUE
-    ceo["last_artifact"] = LATEST
+    ceo["current"] = current
+    ceo["latest_artifact"] = latest
+    ceo["next_milestone"] = milestone
+    ceo["next_milestone_due"] = derive_due()
+    ceo["last_artifact"] = latest
     ceo["updated_at"] = STAMP
     data["ceo_face"] = ceo
     data["self_drive"] = self_drive()
@@ -146,8 +225,10 @@ def main():
     # on every round whose result row had not landed yet (R2499 battery catch).
     ok = (any(isinstance(r, list) and len(r) >= 2 and r[1] == label
               and str(r[0]) == tick for r in back["results"])
-          and back["outs"][0] == OUTS
-          and back["ceo_face"]["latest_artifact"] == LATEST
+          and back["outs"][0] == latest
+          and back["ceo_face"]["latest_artifact"] == latest
+          and back["ceo_face"]["current"] == current
+          and back["ceo_face"]["next_milestone"] == milestone
           and back["export_ts"] == STAMP
           and back["self_drive"]["log_lines_in_window"]
           == back["self_drive"]["substantive_non_idle_mention_lines"]

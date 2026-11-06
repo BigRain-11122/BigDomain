@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T01:11:37+08:00",
-  "do": "R2431 verification window: the debt gate named the battery the R2168 rule owed on the committed R2430 tree, so the full reconcile battery ran FIRST at the pre-registered 543 suites / 4234 criteria and came back red on this window's own launcher (its stdout redirect was pointed into qa/ and filed as cmd-raw evidence); the captures moved to the gitignored logs face, the census re-read DRIFT-CLEAN with its baseline untouched, and the retry leg read RUNNER PASS 543/543 at the same criteria total with all four follow-up sections green",
+  "export_ts": "2026-11-07T02:04:55+08:00",
+  "do": "2026-11-07 R2499 VERIFICATION window on the battery the register owed (reconcile-battery-R2498, carried twice; target re-pre-registered by importing reconcile_all.SUITES as 578 suites / 4444 criteria). Open scan: git status empty, zero @BigDomain ledger rows, the content-addressed decisions diff read 83 current tokens against 83 baseline so no new decision landed, benchmarks 2026-11-03 inside the ",
   "ceo_face": {
-    "current": "R2431 verification window: the debt gate named the battery the R2168 rule owed on the committed R2430 tree, so the full reconcile battery ran FIRST at the pre-registered 543 suites / 4234 criteria and came back red on this window's own launcher (its stdout redirect was pointed into qa/ and filed as cmd-raw evidence); the captures moved to the gitignored logs face, the census re-read DRIFT-CLEAN with its baseline untouched, and the retry leg read RUNNER PASS 543/543 at the same criteria total with all four follow-up sections green",
-    "latest_artifact": "qa/reconcile-all-R2431.log (red leg, 843784B) + qa/reconcile-all-R2431-retry.log (RUNNER PASS 543/543, 956.2s, criteria 4234) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52317B at 543 suites / 4234 criteria with --check byte-identical",
-    "next_milestone": "product face on the tech head state/queue/tech.md:494 prefix AC-BEDP1 (bare_evidence_deep_pile: a bare evidence name that lives deeper than the one-level pile walk still refuses), whose criteria were pinned in that row at R2404 before any code",
-    "next_milestone_due": "2026-11-06T12:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2431.log (red leg, 843784B) + qa/reconcile-all-R2431-retry.log (RUNNER PASS 543/543, 956.2s, criteria 4234) + docs/sandbox-suite-matrix.md regenerated stamp-aligned to 52317B at 543 suites / 4234 criteria with --check byte-identical",
-    "updated_at": "2026-11-07T01:11:37+08:00"
+    "current": "2026-11-07 R2499 VERIFICATION window on the battery the register owed (reconcile-battery-R2498, carried twice; target re-pre-registered by importing reconcile_all.SUITES as 578 suites / 4444 criteria). Open scan: git status empty, zero @BigDomain ledger rows, the content-addressed decisions diff read 83 current tokens against 83 baseline so no new decision landed, benchmarks 2026-11-03 inside the ",
+    "latest_artifact": "export-driver-queue-face-R2499.log (2455B) + export-driver-queue-face-R2499b.log (2455B) + reconcile-all-R2499-retry.log (873306B) + reconcile-all-R2499.log (873606B)",
+    "next_milestone": "next window owes reconcile-battery-R2499 on the committed tree, inside a 48h window due 2026-11-09T02:04:55+08:00",
+    "next_milestone_due": "2026-11-09T02:04:55+08:00",
+    "last_artifact": "export-driver-queue-face-R2499.log (2455B) + export-driver-queue-face-R2499b.log (2455B) + reconcile-all-R2499-retry.log (873306B) + reconcile-all-R2499.log (873606B)",
+    "updated_at": "2026-11-07T02:04:55+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,8 @@
     }
   ],
   "outs": [
+    "export-driver-queue-face-R2499.log (2455B) + export-driver-queue-face-R2499b.log (2455B) + reconcile-all-R2499-retry.log (873306B) + reconcile-all-R2499.log (873606B)",
+    "export-driver-queue-face-R2499.log (2455B) + reconcile-all-R2499-retry.log (873306B) + reconcile-all-R2499.log (873606B)",
     "qa/reconcile-all-R2431.log (red leg) plus qa/reconcile-all-R2431-retry.log (RUNNER PASS 543/543, 4234 criteria) and docs/sandbox-suite-matrix.md regenerated to 52317B",
     "qa/export-driver-queue-face-R2497.log + src/os/export_driver_queue_face.py + src/os/test_export_driver_queue_face.py + src/os/export_R2431.py + src/os/stamp_queue_R2497.py + src/sandbox/reconcile_all.py + state/queue/tech.md + src/os/state.json + docs/status-export.json + src/os/backlog.md + heartbeat.txt",
     "qa/reconcile-all-R2496.log + qa/reconcile-all-R2496-retry.log + src/os/test_matrix_stamp_from_liveness.py + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state_append_R2496.py + src/os/export_R2496.py + src/os/state.json + docs/status-export.json + src/os/backlog.md + heartbeat.txt",
@@ -549,17 +551,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2498",
+      "2499",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 41,
+    "log_lines_in_window": 48,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 41,
+    "substantive_non_idle_mention_lines": 48,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
