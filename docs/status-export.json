@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T03:24:10+08:00",
+  "export_ts": "2026-11-07T03:26:07+08:00",
   "do": "2026-11-07 R2500 VERIFICATION window on the battery the register owed (reconcile-battery-R2499, pre-registered 578 suites / 4444 criteria because R2499 repaired a shipped module without adding a suite). Five-silence scan at open was clean at HEAD 5ac3d85b (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the 83-token bas",
   "ceo_face": {
     "current": "2026-11-07 R2500 VERIFICATION window on the battery the register owed (reconcile-battery-R2499, pre-registered 578 suites / 4444 criteria because R2499 repaired a shipped module without adding a suite). Five-silence scan at open was clean at HEAD 5ac3d85b (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the 83-token bas",
     "latest_artifact": "reconcile-all-R2500.log (875333B)",
-    "next_milestone": "next window owes product-face-R2500 on the committed tree, inside a 48h window due 2026-11-09T03:24:10+08:00",
-    "next_milestone_due": "2026-11-09T03:24:10+08:00",
+    "next_milestone": "next window owes product-face-R2500 on the committed tree, inside a 48h window due 2026-11-09T03:26:07+08:00",
+    "next_milestone_due": "2026-11-09T03:26:07+08:00",
     "last_artifact": "reconcile-all-R2500.log (875333B)",
-    "updated_at": "2026-11-07T03:24:10+08:00"
+    "updated_at": "2026-11-07T03:26:07+08:00"
   },
   "depts": [
     {
@@ -565,10 +565,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 55,
+    "log_lines_in_window": 57,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 55,
+    "substantive_non_idle_mention_lines": 57,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
