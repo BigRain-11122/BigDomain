@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-06T22:45:12+08:00",
-  "do": "R2495 verification closeout: the battery the register owed reads GREEN on the committed tree - 576 of 576 suites, exactly 4432 criteria recounted independently, zero failing suites - and its evidence is committed instead of sitting untracked",
+  "export_ts": "2026-11-06T23:46:27+08:00",
+  "do": "R2496 verification closeout: the battery the register owed went RED on two real matrix birth-site defects, both were repaired and committed alone, and the retry reads GREEN - 576 of 576 suites, exactly 4432 criteria recounted independently, zero failing suites",
   "ceo_face": {
-    "current": "R2495 verification closeout: the battery the register owed reads GREEN on the committed tree - 576 of 576 suites, exactly 4432 criteria recounted independently, zero failing suites - and its evidence is committed instead of sitting untracked",
-    "latest_artifact": "qa/reconcile-all-R2495-retry.log (871018B, utf-8 LF, crlf=0, no BOM; 576 suite rows summing to 4432 criteria, zero FAIL rows, closing line RUNNER PASS 576/576 in 1125.6s) at 2026-11-06",
-    "next_milestone": "2026-11-07 a BUSINESS face on the tech head state/queue/tech.md:531 prefix AC-EDQF1 (export_driver_queue_face) - the CEO-visible export document must stop needing a hand-landed queue block. Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
+    "current": "R2496 verification closeout: the battery the register owed went RED on two real matrix birth-site defects, both were repaired and committed alone, and the retry reads GREEN - 576 of 576 suites, exactly 4432 criteria recounted independently, zero failing suites",
+    "latest_artifact": "qa/reconcile-all-R2496-retry.log (871017B, utf-8 LF, crlf=0, no BOM; 576 suite rows summing to 4432 criteria, zero FAIL rows, closing line RUNNER PASS 576/576 in 1080.4s) at 2026-11-06, with the red first leg kept beside it as qa/reconcile-all-R2496.log",
+    "next_milestone": "2026-11-07 a TECH face on the tech head state/queue/tech.md:531 prefix AC-EDQF1 (export_driver_queue_face) - the CEO-visible export document must stop needing a hand-landed queue block - with AC-CEPM1, AC-PLR1 and AC-EUC1 claimable behind it. Every P-47 item beyond the shipped sandbox faces still waits on CEO physical items (merchant id, mini-program appid/secret)",
     "next_milestone_due": "2026-11-07T23:00:00+08:00",
-    "last_artifact": "qa/reconcile-all-R2495-retry.log (871018B, utf-8 LF, crlf=0, no BOM; 576 suite rows summing to 4432 criteria, zero FAIL rows, closing line RUNNER PASS 576/576 in 1125.6s) at 2026-11-06",
-    "updated_at": "2026-11-06T22:45:12+08:00"
+    "last_artifact": "qa/reconcile-all-R2496-retry.log (871017B, utf-8 LF, crlf=0, no BOM; 576 suite rows summing to 4432 criteria, zero FAIL rows, closing line RUNNER PASS 576/576 in 1080.4s) at 2026-11-06, with the red first leg kept beside it as qa/reconcile-all-R2496.log",
+    "updated_at": "2026-11-06T23:46:27+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2496.log + qa/reconcile-all-R2496-retry.log + src/os/test_matrix_stamp_from_liveness.py + docs/sandbox-suite-matrix.md + state/debt.md + src/os/state_append_R2496.py + src/os/export_R2496.py + src/os/state.json + docs/status-export.json + src/os/backlog.md + heartbeat.txt",
     "qa/reconcile-all-R2495-retry.log + state/debt.md + src/os/state_append_R2495.py + src/os/export_R2495.py + src/os/state.json + docs/status-export.json + src/os/backlog.md + heartbeat.txt",
     "src/os/matrix_stamp_from_liveness.py + src/os/test_matrix_stamp_from_liveness.py + qa/matrix-stamp-from-liveness-R2494.log + qa/matrix-stamp-from-liveness-live-R2494.log + src/sandbox/reconcile_all.py + docs/sandbox-suite-matrix.md + state/queue/tech.md + state/debt.md + src/os/export_R2494.py + src/os/state.json + docs/status-export.json + src/os/backlog.md + heartbeat.txt",
     "qa/reconcile-all-R2493-retry.log + docs/sandbox-suite-matrix.md + qa/relative-package-presence-refusal-R2492.log + state/debt.md + src/os/closeout_R2493.py + src/os/fold_R2493.py + src/os/export_R2493.py + src/os/state.json + docs/status-export.json + src/os/backlog.md + heartbeat.txt",
@@ -109,6 +110,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2496",
+      "2026-11-06 R2496 VERIFICATION window. CLAIM: reconcile-battery-R2496, pre-registered at 576 suites / 4432 criteria because R2495 repaired the shipped export base after the previous battery ran (the R2168 mixed-tree rule ranks the battery first). The first leg came back RED at 574/576 with three failed assertions in two matrix suites and the red leg was KEPT as evidence (qa/reconcile-all-R2496.log, commit 55aa22b1); both causes reproduced alone and both were real birth-site defects - a determinism proof that compared two plain renders whose generated-stamp line has minute resolution (so battery-load timing could red it), and a matrix document that R2495 had left one evidence face behind because it adopted a green log without regenerating the doc. Both repaired at the birth site and committed ALONE as f48b67c6: the two renders now borrow the doc own stamp through the shipped --stamp-from law, and the document was regenerated stamp-aligned from the newest eligible green evidence. RETRY GREEN on the committed tree: RUNNER PASS (576/576 suites green, reconcile controls 7/7, 1080.4s), zero FAIL rows, independent recount 4432 criteria, utf-8 / bom=False / crlf=0 / lone_cr=0, 871017B, 932/932 tmp worlds reclaimed at 326.59 MiB; four follow-up sections PASS after the designed matrix FAIL and the document now carries THIS round own evidence at 55308B with --check byte-identical and green=576/576. DEBT: the battery row closed through its shipped writer and product-face-R2496 opened first=yes naming the tech head AC-EDQF1; no successor battery is registered because no registry module moved, so the registry stands at 576 suites / 4432 criteria. Honest: zero product points; six new group orders were read and acknowledged with no BigDomain execution face; the window ran past its 25-minute budget (two full batteries), disclosed rather than dressed up; Docker absent; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; tasks.md untouched."
+    ],
     [
       "2495",
       "2026-11-06 R2495 VERIFICATION window, resumed. The round had been interrupted: its repairs were committed (3f4adbbd, which kept the RED first battery leg as evidence) and its green retry battery finished at 10:29 without ever being recorded, committed or closed. This window finished the same round. CLAIM: reconcile-battery-R2495, pre-registered at 576 suites / 4432 criteria by R2494 under the R2168 mixed-tree rule, which ranks the battery ahead of any further product byte. RESULT: the retry evidence reads GREEN - RUNNER PASS (576/576 suites green, reconcile controls 7/7, 1125.6s) - with zero FAIL rows, an independent recount over the 576 suite rows summing to exactly 4432 criteria, and utf-8 / bom=False / crlf=0 / lone_cr=0; 932 of 932 tmp worlds were reclaimed at 326.59 MiB. The evidence file is now in git rather than untracked. DEBT: reconcile-battery-R2495 closed through the shipped debt_close writer (line 217, open 2->1, done 196->197, 131100B -> 131104B, readback ok). NO successor battery is owed: this window changed only qa/, state/ and docs/, no registry module and no suite, so the registry stands at 576 suites / 4432 criteria and the next window owes a BUSINESS face. Honest: zero product points this window; the twelve-hour gap between the green retry and this closeout is disclosed rather than dressed up; the debt gate reads OPEN-NONE because the only open row is loop-s4u-reconcile (first=no, needs an elevated shell) and no first=yes row was invented to silence it; Docker is absent so no containerised bring-up is claimed; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; tasks.md untouched."
@@ -538,17 +543,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2495",
+      "2496",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-10-31..2026-11-06",
     "window_days": 7,
-    "log_lines_in_window": 18,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 24,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
