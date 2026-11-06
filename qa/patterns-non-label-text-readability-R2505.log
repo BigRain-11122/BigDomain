@@ -1,0 +1,120 @@
+EVIDENCE CAPTURE round=R2505 suite=src/os/test_patterns_non_label_text_readability.py legs=2
+== LEG A rc=0 digest=E3B0C44298FC1C14
+PATTERNS NON-LABEL READABILITY suite (R2505, 6 criteria)
+  PASS AC-PNLT1 a patched gate makes the real render refuse
+  PASS AC-PNLT1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-PNLT1 the refused FIELD travels with the refusal
+  PASS AC-PNLT1 this face carries no second classifier
+  PASS AC-PNLT1 the REAL render path asks this face for a non-label defect the label gate cannot see
+  PASS AC-PNLT2 the shipped tool refuses at exit 4 (got 4)
+  PASS AC-PNLT2 the refusal names the FIELD, not a label key: ['FAIL non-label: E_PLR_SUSPECT field=header_note']
+  PASS AC-PNLT2 the gate own code is carried into the refusal
+  PASS AC-PNLT2 the target keeps every byte it had
+  PASS AC-PNLT2 no residue is left beside the target ([])
+  PASS AC-PNLT2 the CLI reading names header_note and U+FFFD
+  PASS AC-PNLT2 the face CLI refuses the same file at exit 2
+  PASS AC-PNLT2 the CLI names the field too
+  PASS AC-PNLT3 the shipped doc carries a stamp
+  PASS AC-PNLT3 a clean render is byte-identical to docs/sandbox-suite-matrix.md (55964 bytes)
+  PASS AC-PNLT3 the shipped document reads publishable
+  PASS AC-PNLT3 --check keeps its today reading on the clean tree (exit 0)
+  PASS AC-PNLT4 the non-label header_note is covered (the measured gap)
+  PASS AC-PNLT4 the other interpolated label values are covered
+  PASS AC-PNLT4 list items are covered one by one, not as a blob
+  PASS AC-PNLT4 nested face labels and domain keys are covered
+  PASS AC-PNLT4 a field read through .get is covered too
+  PASS AC-PNLT4 a key the render never reads is not claimed as covered
+  PASS AC-PNLT4 a doctored nested face label is refused by its path ('domains[0].faces[0].label')
+  PASS AC-PNLT2 the shipped tool refuses at exit 4 (got 4)
+  PASS AC-PNLT2 the refusal names the FIELD, not a label key: ['FAIL non-label: E_PLR_SUSPECT field=header_note']
+  PASS AC-PNLT2 the gate own code is carried into the refusal
+  PASS AC-PNLT2 the target keeps every byte it had
+  PASS AC-PNLT2 no residue is left beside the target ([])
+  PASS AC-PNLT2 the CLI reading names header_note and U+FFFD
+  PASS AC-PNLT2 the face CLI refuses the same file at exit 2
+  PASS AC-PNLT2 the CLI names the field too
+  PASS AC-PNLT3 the shipped doc carries a stamp
+  PASS AC-PNLT3 a clean render is byte-identical to docs/sandbox-suite-matrix.md (55964 bytes)
+  PASS AC-PNLT3 the shipped document reads publishable
+  PASS AC-PNLT3 --check keeps its today reading on the clean tree (exit 0)
+  PASS AC-PNLT4 the non-label header_note is covered (the measured gap)
+  PASS AC-PNLT4 the other interpolated label values are covered
+  PASS AC-PNLT4 list items are covered one by one, not as a blob
+  PASS AC-PNLT4 nested face labels and domain keys are covered
+  PASS AC-PNLT4 a field read through .get is covered too
+  PASS AC-PNLT4 a key the render never reads is not claimed as covered
+  PASS AC-PNLT4 a doctored nested face label is refused by its path ('domains[0].faces[0].label')
+  PASS AC-PNLT5 the shipped patterns digest is unchanged (ea5773ac0c113fe1)
+  PASS AC-PNLT5 every shipped value is still exactly as it was read
+  PASS AC-PNLT5 the coverage probe leaves no file behind
+  PASS AC-PNLT5 the module holds no write primitive
+  PASS AC-PNLT6 the module source is pure ASCII
+  PASS AC-PNLT6 imports are stdlib plus the shipped gate (['argparse', 'hashlib', 'json', 'os', 'patterns_label_readability', 'sys'])
+  PASS AC-PNLT6 the module reads no clock
+  PASS AC-PNLT6 zero network imports
+  PASS AC-PNLT6 the module carries its own reconcile label
+  PASS AC-PNLT6 the runner wires this suite
+  PASS AC-PNLT6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== LEG B rc=0 digest=E3B0C44298FC1C14
+PATTERNS NON-LABEL READABILITY suite (R2505, 6 criteria)
+  PASS AC-PNLT1 a patched gate makes the real render refuse
+  PASS AC-PNLT1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-PNLT1 the refused FIELD travels with the refusal
+  PASS AC-PNLT1 this face carries no second classifier
+  PASS AC-PNLT1 the REAL render path asks this face for a non-label defect the label gate cannot see
+  PASS AC-PNLT2 the shipped tool refuses at exit 4 (got 4)
+  PASS AC-PNLT2 the refusal names the FIELD, not a label key: ['FAIL non-label: E_PLR_SUSPECT field=header_note']
+  PASS AC-PNLT2 the gate own code is carried into the refusal
+  PASS AC-PNLT2 the target keeps every byte it had
+  PASS AC-PNLT2 no residue is left beside the target ([])
+  PASS AC-PNLT2 the CLI reading names header_note and U+FFFD
+  PASS AC-PNLT2 the face CLI refuses the same file at exit 2
+  PASS AC-PNLT2 the CLI names the field too
+  PASS AC-PNLT3 the shipped doc carries a stamp
+  PASS AC-PNLT3 a clean render is byte-identical to docs/sandbox-suite-matrix.md (55964 bytes)
+  PASS AC-PNLT3 the shipped document reads publishable
+  PASS AC-PNLT3 --check keeps its today reading on the clean tree (exit 0)
+  PASS AC-PNLT4 the non-label header_note is covered (the measured gap)
+  PASS AC-PNLT4 the other interpolated label values are covered
+  PASS AC-PNLT4 list items are covered one by one, not as a blob
+  PASS AC-PNLT4 nested face labels and domain keys are covered
+  PASS AC-PNLT4 a field read through .get is covered too
+  PASS AC-PNLT4 a key the render never reads is not claimed as covered
+  PASS AC-PNLT4 a doctored nested face label is refused by its path ('domains[0].faces[0].label')
+  PASS AC-PNLT2 the shipped tool refuses at exit 4 (got 4)
+  PASS AC-PNLT2 the refusal names the FIELD, not a label key: ['FAIL non-label: E_PLR_SUSPECT field=header_note']
+  PASS AC-PNLT2 the gate own code is carried into the refusal
+  PASS AC-PNLT2 the target keeps every byte it had
+  PASS AC-PNLT2 no residue is left beside the target ([])
+  PASS AC-PNLT2 the CLI reading names header_note and U+FFFD
+  PASS AC-PNLT2 the face CLI refuses the same file at exit 2
+  PASS AC-PNLT2 the CLI names the field too
+  PASS AC-PNLT3 the shipped doc carries a stamp
+  PASS AC-PNLT3 a clean render is byte-identical to docs/sandbox-suite-matrix.md (55964 bytes)
+  PASS AC-PNLT3 the shipped document reads publishable
+  PASS AC-PNLT3 --check keeps its today reading on the clean tree (exit 0)
+  PASS AC-PNLT4 the non-label header_note is covered (the measured gap)
+  PASS AC-PNLT4 the other interpolated label values are covered
+  PASS AC-PNLT4 list items are covered one by one, not as a blob
+  PASS AC-PNLT4 nested face labels and domain keys are covered
+  PASS AC-PNLT4 a field read through .get is covered too
+  PASS AC-PNLT4 a key the render never reads is not claimed as covered
+  PASS AC-PNLT4 a doctored nested face label is refused by its path ('domains[0].faces[0].label')
+  PASS AC-PNLT5 the shipped patterns digest is unchanged (ea5773ac0c113fe1)
+  PASS AC-PNLT5 every shipped value is still exactly as it was read
+  PASS AC-PNLT5 the coverage probe leaves no file behind
+  PASS AC-PNLT5 the module holds no write primitive
+  PASS AC-PNLT6 the module source is pure ASCII
+  PASS AC-PNLT6 imports are stdlib plus the shipped gate (['argparse', 'hashlib', 'json', 'os', 'patterns_label_readability', 'sys'])
+  PASS AC-PNLT6 the module reads no clock
+  PASS AC-PNLT6 zero network imports
+  PASS AC-PNLT6 the module carries its own reconcile label
+  PASS AC-PNLT6 the runner wires this suite
+  PASS AC-PNLT6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== ADJACENT 3
+== src/os/test_patterns_label_readability_render_consumer.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_patterns_label_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_matrix_stamp_from_liveness.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=3 fails=0 digest=E3B0C44298FC1C14

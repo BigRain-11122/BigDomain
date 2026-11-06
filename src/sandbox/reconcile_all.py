@@ -5766,6 +5766,17 @@ SUITES = [
     ("os-patterns-label-readability-render-consumer",
      os.path.join("..", "os",
                   "test_patterns_label_readability_render_consumer.py"), 6),
+    # R2505 (AC-PNLT1..AC-PNLT6, criteria pinned in state/queue/tech.md:542 at
+    # R2503 BEFORE the code): both gates above read patterns["labels"] only,
+    # while render interpolates header_note, response_text, every caption and
+    # every face label - a doctored header_note carrying U+FFFD read
+    # publishable=True and the composed artifact really carried it. The render
+    # now asks ONE reading, derived from what the render actually reads, over
+    # the same shipped per-codepoint law, and refuses at exit 4 naming the
+    # FIELD with no artifact byte written.
+    ("os-patterns-non-label-text-readability",
+     os.path.join("..", "os",
+                  "test_patterns_non_label_text_readability.py"), 6),
     ]
 
 FAILS = 0

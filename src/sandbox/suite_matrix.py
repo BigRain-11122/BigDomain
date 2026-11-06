@@ -69,6 +69,14 @@ import matrix_stamp_provenance_line as MSPL  # noqa: E402
 # refusal code - no second classifier exists here.
 import patterns_label_readability_render_consumer as PLRC  # noqa: E402
 
+# R2505 seed, AC-PNLT1..AC-PNLT6 (pinned in state/queue/tech.md:542 BEFORE the
+# code): the R2502/R2503 gate reads patterns["labels"] only, while this render
+# interpolates header_note, response_text, every caption and every face label.
+# The second statement of render asks ONE reading over every string the render
+# actually reads, through the same shipped per-codepoint law - no second
+# classifier is added here either.
+import patterns_non_label_text_readability as PNLT  # noqa: E402
+
 SUITE_RE = re.compile(
     r"(?m)^(PASS|FAIL) suite (\S+) exit=(\d+) pass-lines=(\d+)"
     r" fail-lines=(\d+) criteria=(\d+) (-?[0-9.]+)s")
@@ -225,6 +233,11 @@ def render(patterns, evidence_path, status, run, stamp, stamp_from=None):
     # composed. A clean file is handed back untouched, so its bytes stay
     # exactly today's (AC-PLRC3).
     PLRC.guard(patterns["labels"])
+    # AC-PNLT2: the non-label text this artifact interpolates (header_note,
+    # response_text, every caption, every face label) is refused by field name
+    # before a single artifact byte is composed. A clean file passes through
+    # untouched, so the artifact keeps today's bytes (AC-PNLT3).
+    PNLT.guard(patterns)
     labels = patterns["labels"]
     suites = RA.SUITES
     total_crit = sum(crit for _, _, crit in suites)
@@ -422,6 +435,11 @@ def main(argv):
             # mistake a mis-encoded label for a stale document.
             print("FAIL readability: %s label=%s" % (exc.code, exc.label))
             return 4
+        except PNLT.NonLabelRefused as exc:
+            # AC-PNLT2: a non-label field is refused by FIELD name, still as a
+            # readability verdict (exit 4), never as drift.
+            print("FAIL non-label: %s field=%s" % (exc.code, exc.field))
+            return 4
         if fresh == current:
             print("PASS check: %s byte-identical (%d bytes, %d suites,"
                   " %d criteria)" % (rel(args.out), len(fresh.encode(
@@ -457,6 +475,11 @@ def main(argv):
         # AC-PLRC2: refusal lands before the file is opened, so the target
         # keeps every byte it had and no temp is left beside it.
         print("FAIL readability: %s label=%s" % (exc.code, exc.label))
+        return 4
+    except PNLT.NonLabelRefused as exc:
+        # AC-PNLT2: no artifact byte is opened before this refusal, so the
+        # target keeps every byte it had and no temp is left beside it.
+        print("FAIL non-label: %s field=%s" % (exc.code, exc.field))
         return 4
     with open(args.out, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(fresh)

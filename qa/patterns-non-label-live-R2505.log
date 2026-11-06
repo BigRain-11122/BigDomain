@@ -1,0 +1,6 @@
+LIVE R2505 patterns_non_label_text_readability on the shipped patterns file
+patterns=../sandbox/suite_matrix_patterns.json fields=71 verdict=CLEAN publishable=True
+registry_suites=582 criteria=4468
+GAP registry suite label carrying U+FFFD: published=True carried=True gate_publishable=True
+LIMIT the coverage probe patches PLR.gate to allow-all for the duration of one compose (restored in a finally block)
+VERDICT R2505 live measured
