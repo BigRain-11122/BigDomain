@@ -2115,6 +2115,13 @@
       "declared_by": "R2537",
       "reason": "product face shipped with its own six-criteria suite and live leg; registry moved one row",
       "until": 2547
+    },
+    {
+      "round": 2539,
+      "status": "DELIVERED",
+      "declared_by": "R2539",
+      "reason": "product window shipped probe_seam_name_binding_scope_awareness with its suite",
+      "until": 2549
     }
   ]
 }

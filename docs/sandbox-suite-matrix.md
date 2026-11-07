@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 598 | 4564 | 598/598 | R2538 |
+| 599 | 4570 | 598/598 | R2538 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -636,7 +636,8 @@
 | 596 | os-probe-seam-subscript-container-scope | ../os/test_probe_seam_subscript_container_scope.py | 6 | green | 0.2 |
 | 597 | os-probe-seam-nested-subscript-scope | ../os/test_probe_seam_nested_subscript_scope.py | 6 | green | 0.2 |
 | 598 | os-probe-seam-nested-key-binding-scope | ../os/test_probe_seam_nested_key_binding_scope.py | 6 | green | 0.2 |
-|  | 合计 |  | 4564 | green 598 / FAIL 0 / no-evidence 0 |  |
+| 599 | os-probe-seam-name-binding-scope-awareness | ../os/test_probe_seam_name_binding_scope_awareness.py | 6 | no-evidence | - |
+|  | 合计 |  | 4570 | green 598 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

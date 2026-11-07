@@ -269,7 +269,9 @@ column-0 checkbox starts one.
 - [x] opened=R2536 | item=product-face-R2536 | note=verification window R2536: battery green 597/597 4558 on committed tree 428bbdcd; next owes PRODUCT face at tech head state/queue/tech.md:573 prefix AC-PNKB1 probe_seam_nested_key_binding_scope (six criteria pinned at R2535 BEFORE any code) | closed=R2537
 - [x] opened=R2537 | item=reconcile-battery-R2537 | note=battery owed before any further product byte: registry moved to 598 suites 4564 criteria by the nested-key face row, so the next window runs the full battery on this committed tree at that pre-registered target | closed=R2538
 - [ ] opened=R2537 | item=product-face-R2537 | note=product face shipped this window, no battery owed to it: a NAME step bound to a string constant now resolves with its binding label, while an ambiguous or non-constant name is refused at its hop | first=no
-- [ ] opened=R2538 | item=product-face-R2538 | note=tech head AC-PNSB1 name-binding scope awareness: a binding table merges one name from two function bodies | first=yes
+- [x] opened=R2538 | item=product-face-R2538 | note=tech head AC-PNSB1 name-binding scope awareness: a binding table merges one name from two function bodies | closed=R2539
+- [ ] opened=R2539 | item=reconcile-battery-R2539 | note=599 suites / 4570 criteria on the committed tree before any further product byte; this window moved the registry by one row and a shipped doc | first=yes
+- [ ] opened=R2539 | item=product-face-R2539 | note=tech head AC-PNSP1 position and comprehension scope, criteria pinned at R2539 before any code | first=no
 
 ## Closed
 

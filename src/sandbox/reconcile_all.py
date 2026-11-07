@@ -5940,6 +5940,15 @@ SUITES = [
     ("os-probe-seam-nested-key-binding-scope",
      os.path.join("..", "os",
                   "test_probe_seam_nested_key_binding_scope.py"), 6),
+    # R2539 - a NAME step resolves against the binding table of the SCOPE the
+    # loop is in (module body vs the enclosing function), the scope it took is
+    # published on the row, a module name reaches a function loop only when
+    # that function does not shadow it (a shadow is announced), and a name
+    # bound twice INSIDE one scope is still NAMED ambiguous
+    # (598 -> 599 suites, 4564 -> 4570 criteria).
+    ("os-probe-seam-name-binding-scope-awareness",
+     os.path.join("..", "os",
+                  "test_probe_seam_name_binding_scope_awareness.py"), 6),
     ]
 
 FAILS = 0

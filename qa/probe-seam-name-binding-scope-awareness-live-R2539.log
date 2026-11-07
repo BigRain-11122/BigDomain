@@ -1,0 +1,8 @@
+tool=os-probe-seam-name-binding-scope-awareness
+base_tool=os-probe-seam-nested-key-binding-scope
+verdict=SEAMS-NAME-SCOPE-COVERED
+counts={"COVERED": 3, "HISTORICAL": 1283, "MISSING-SEAM": 0, "OUT-OF-SCOPE": 179, "UNREADABLE": 0}
+covered_probes=3 scope_loop_rows=2762 probes=1465
+MINE=[{"followed": {"KEY": "b"}, "line": 5, "refused": {}, "scope": "function:first", "shadowed": [], "taken_from": {"KEY": "function:first"}}, {"followed": {"KEY": "zzz"}, "line": 10, "refused": {}, "scope": "function:second", "shadowed": [], "taken_from": {"KEY": "function:second"}}]
+BASE_refused={"name": "ambiguous@hop2:D['a'][KEY]"}
+BASE_followed={}
