@@ -5904,6 +5904,15 @@ SUITES = [
     ("os-probe-seam-alias-expression-scope",
      os.path.join("..", "os",
                   "test_probe_seam_alias_expression_scope.py"), 6),
+    # R2531 - a for-loop whose iterable is a NAME, an attribute chain into a
+    # same-root module, or a container literal resolves only when it holds
+    # EXACTLY ONE element and carries the chain it took; a multi-element
+    # container is NAMED ambiguous rather than resolved to its first element,
+    # and a call, a format, a comprehension, a string and a broken hop are
+    # NAMED rather than reading empty (594 -> 595 suites, 4540 -> 4546).
+    ("os-probe-seam-for-container-name",
+     os.path.join("..", "os",
+                  "test_probe_seam_for_container_name.py"), 6),
     ]
 
 FAILS = 0
