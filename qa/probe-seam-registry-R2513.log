@@ -1,0 +1,68 @@
+EVIDENCE CAPTURE round=R2513 suite=src/os/test_probe_seam_registry.py legs=2
+== LEG A rc=0 digest=E3B0C44298FC1C14
+PROBE SEAM REGISTRY suite (R2513, 6 criteria)
+  PASS AC-PSMR1 the derived seams equal an independent AST reading of the render source (['PLRC', 'PNLT', 'ADTR', 'EVNM', 'STPT'] vs ['PLRC', 'PNLT', 'ADTR', 'EVNM', 'STPT'])
+  PASS AC-PSMR1 every derived name really carries a callable guard
+  PASS AC-PSMR1 patching the RENDER moves the set at CALL time (['ZZ'])
+  PASS AC-PSMR1 restoring the render restores the set
+  PASS AC-PSMR1 no seam name is spelled in the module source
+  PASS AC-PSMR2 every shipped probe file keeps its bytes
+  PASS AC-PSMR2 every shipped probe reads COVERED ({'COVERED': 3, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 166, 'UNREADABLE': 0, 'HISTORICAL': 1190})
+  PASS AC-PSMR2 a COVERED probe really quiets every seam it owes
+  PASS AC-PSMR2 a probe is not asked to quiet its OWN seam
+  PASS AC-PSMR3 a stale probe reads MISSING-SEAM ('MISSING-SEAM')
+  PASS AC-PSMR3 the reading names the seam it forgets (['STPT'])
+  PASS AC-PSMR3 the stale probe is named, never imported
+  PASS AC-PSMR3 the shipped tool refuses at exit 2 naming seam and file (rc=2)
+  PASS AC-PSMR3 a stale probe makes the whole tree STALE
+  PASS AC-PSMR4 a module that names no seam reads OUT-OF-SCOPE ('OUT-OF-SCOPE')
+  PASS AC-PSMR4 it is not counted as clean ({'COVERED': 0, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 1, 'UNREADABLE': 0, 'HISTORICAL': 0})
+  PASS AC-PSMR4 out-of-scope is a named bucket, not an alarm ('SEAMS-COVERED')
+  PASS AC-PSMR4 a real shipped module outside the protocol reads OUT-OF-SCOPE ('OUT-OF-SCOPE')
+  PASS AC-PSMR5 the probed root gains no file
+  PASS AC-PSMR5 the render, the patterns file, every probe and every seam owner keep their bytes (11 files)
+  PASS AC-PSMR5 the module holds no write primitive
+  PASS AC-PSMR6 the module source is pure ASCII
+  PASS AC-PSMR6 imports are stdlib only (['argparse', 'ast', 'hashlib', 'json', 'os', 're', 'sys', 'warnings'])
+  PASS AC-PSMR6 the module reads no clock
+  PASS AC-PSMR6 zero network imports
+  PASS AC-PSMR6 the module carries its own reconcile label
+  PASS AC-PSMR6 the runner wires this suite
+  PASS AC-PSMR6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== LEG B rc=0 digest=E3B0C44298FC1C14
+PROBE SEAM REGISTRY suite (R2513, 6 criteria)
+  PASS AC-PSMR1 the derived seams equal an independent AST reading of the render source (['PLRC', 'PNLT', 'ADTR', 'EVNM', 'STPT'] vs ['PLRC', 'PNLT', 'ADTR', 'EVNM', 'STPT'])
+  PASS AC-PSMR1 every derived name really carries a callable guard
+  PASS AC-PSMR1 patching the RENDER moves the set at CALL time (['ZZ'])
+  PASS AC-PSMR1 restoring the render restores the set
+  PASS AC-PSMR1 no seam name is spelled in the module source
+  PASS AC-PSMR2 every shipped probe file keeps its bytes
+  PASS AC-PSMR2 every shipped probe reads COVERED ({'COVERED': 3, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 166, 'UNREADABLE': 0, 'HISTORICAL': 1190})
+  PASS AC-PSMR2 a COVERED probe really quiets every seam it owes
+  PASS AC-PSMR2 a probe is not asked to quiet its OWN seam
+  PASS AC-PSMR3 a stale probe reads MISSING-SEAM ('MISSING-SEAM')
+  PASS AC-PSMR3 the reading names the seam it forgets (['STPT'])
+  PASS AC-PSMR3 the stale probe is named, never imported
+  PASS AC-PSMR3 the shipped tool refuses at exit 2 naming seam and file (rc=2)
+  PASS AC-PSMR3 a stale probe makes the whole tree STALE
+  PASS AC-PSMR4 a module that names no seam reads OUT-OF-SCOPE ('OUT-OF-SCOPE')
+  PASS AC-PSMR4 it is not counted as clean ({'COVERED': 0, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 1, 'UNREADABLE': 0, 'HISTORICAL': 0})
+  PASS AC-PSMR4 out-of-scope is a named bucket, not an alarm ('SEAMS-COVERED')
+  PASS AC-PSMR4 a real shipped module outside the protocol reads OUT-OF-SCOPE ('OUT-OF-SCOPE')
+  PASS AC-PSMR5 the probed root gains no file
+  PASS AC-PSMR5 the render, the patterns file, every probe and every seam owner keep their bytes (11 files)
+  PASS AC-PSMR5 the module holds no write primitive
+  PASS AC-PSMR6 the module source is pure ASCII
+  PASS AC-PSMR6 imports are stdlib only (['argparse', 'ast', 'hashlib', 'json', 'os', 're', 'sys', 'warnings'])
+  PASS AC-PSMR6 the module reads no clock
+  PASS AC-PSMR6 zero network imports
+  PASS AC-PSMR6 the module carries its own reconcile label
+  PASS AC-PSMR6 the runner wires this suite
+  PASS AC-PSMR6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== ADJACENT 3
+== src/os/test_artifact_disk_text_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_evidence_name_text_coverage.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_stamp_text_coverage.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=3 fails=0 digest=E3B0C44298FC1C14

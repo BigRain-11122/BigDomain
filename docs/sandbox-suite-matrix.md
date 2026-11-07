@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 585 | 4486 | 585/585 | R2512 |
+| 586 | 4492 | 585/585 | R2512 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -623,7 +623,8 @@
 | 583 | os-artifact-disk-text-readability | ../os/test_artifact_disk_text_readability.py | 6 | green | 0.2 |
 | 584 | os-evidence-name-text-coverage | ../os/test_evidence_name_text_coverage.py | 6 | green | 0.2 |
 | 585 | os-stamp-text-coverage | ../os/test_stamp_text_coverage.py | 6 | green | 0.3 |
-|  | 合计 |  | 4486 | green 585 / FAIL 0 / no-evidence 0 |  |
+| 586 | os-probe-seam-registry | ../os/test_probe_seam_registry.py | 6 | no-evidence | - |
+|  | 合计 |  | 4492 | green 585 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

@@ -5813,6 +5813,16 @@ SUITES = [
     ("os-stamp-text-coverage",
      os.path.join("..", "os",
                   "test_stamp_text_coverage.py"), 6),
+    # R2513 claim, AC-PSMR1..AC-PSMR6 (pinned in state/queue/tech.md:551 at
+    # R2511 BEFORE the code): wiring the fifth guard seam into render cost two
+    # hand edits to probes that had already shipped, because every probe
+    # enumerated the seam names it quieted. ONE reading now derives the seam
+    # set from the shipped render at CALL time and names every probe that has
+    # fallen behind (MISSING-SEAM with the seam and the file) instead of
+    # running it, so a probe cannot silently fall behind the render again.
+    ("os-probe-seam-registry",
+     os.path.join("..", "os",
+                  "test_probe_seam_registry.py"), 6),
     ]
 
 FAILS = 0

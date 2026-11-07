@@ -1,0 +1,13 @@
+PROBE SEAM REGISTRY os-probe-seam-registry verdict=SEAMS-COVERED seams=5 probes=1364 covered=3 missing=0 out_of_scope=166 unreadable=0 historical=1195
+  SEAM PLRC owner=patterns_label_readability_render_consumer
+  SEAM PNLT owner=patterns_non_label_text_readability
+  SEAM ADTR owner=artifact_disk_text_readability
+  SEAM EVNM owner=evidence_name_text_coverage
+  SEAM STPT owner=stamp_text_coverage
+  PROBE artifact_disk_text_readability.py COVERED quieted=4 required=4
+  PROBE evidence_name_text_coverage.py COVERED quieted=4 required=4
+  PROBE stamp_text_coverage.py COVERED quieted=5 required=4
+  live read: seams=5 unchanged=True
+  stale fixture: verdict=MISSING-SEAM missing=STPT file=stale_probe.py
+  stale fixture tree verdict=SEAMS-STALE (exit 2 by the tool)
+RESULT verdict=SEAMS-COVERED covered=3 missing=0 out_of_scope=166 historical=1195
