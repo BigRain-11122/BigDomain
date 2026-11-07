@@ -5823,6 +5823,16 @@ SUITES = [
     ("os-probe-seam-registry",
      os.path.join("..", "os",
                   "test_probe_seam_registry.py"), 6),
+    # R2515 claim, AC-PSF1..AC-PSF6 (pinned in state/queue/tech.md:552 at
+    # R2513 BEFORE the code): MEASURED at R2513 that a probe forwarding its
+    # seam quieting through a shared helper names no seam itself, so the
+    # registry read it OUT-OF-SCOPE while the helper read COVERED. ONE reading
+    # now follows the quieting one hop through the modules the probe imports
+    # at call time, so a forwarding probe is answered on its own row
+    # (COVERED or MISSING-SEAM naming the seam and the file) and is never run.
+    ("os-probe-seam-forwarding-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_forwarding_scope.py"), 6),
     ]
 
 FAILS = 0

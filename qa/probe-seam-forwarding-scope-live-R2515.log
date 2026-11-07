@@ -1,0 +1,15 @@
+PROBE SEAM FORWARDING SCOPE os-probe-seam-forwarding-scope verdict=SEAMS-FORWARDED seams=5 probes=1369 covered=3 missing=0 out_of_scope=167 unreadable=0 historical=1199
+  SEAM PLRC owner=patterns_label_readability_render_consumer
+  SEAM PNLT owner=patterns_non_label_text_readability
+  SEAM ADTR owner=artifact_disk_text_readability
+  SEAM EVNM owner=evidence_name_text_coverage
+  SEAM STPT owner=stamp_text_coverage
+  PROBE artifact_disk_text_readability.py COVERED quieted=4 required=4 direct=4 helpers=-
+  PROBE evidence_name_text_coverage.py COVERED quieted=4 required=4 direct=4 helpers=-
+  PROBE stamp_text_coverage.py COVERED quieted=5 required=4 direct=5 helpers=-
+  live read: seams=5 unchanged=True
+  forwarding fixture: verdict=COVERED helpers=quiet_helper quieted=5
+  stale forwarding fixture: verdict=MISSING-SEAM missing=STPT file=forwarding_probe.py
+  stale fixture tree verdict=SEAMS-FORWARD-STALE (exit 2 by the tool)
+  MEASURED LIMIT lazy fixture: verdict=OUT-OF-SCOPE quieted=0 (an import inside a function body is not followed)
+RESULT verdict=SEAMS-FORWARDED covered=3 missing=0 out_of_scope=167 historical=1199
