@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T11:00:58+08:00",
+  "export_ts": "2026-11-07T11:02:16+08:00",
   "do": "2026-11-07 R2519 PRODUCT window on the tech head the register named (product-face-R2518, state/queue/tech.md:555 prefix AC-PDI1, criteria AC-PDI1..AC-PDI6 pinned in that row at R2517 BEFORE any code). Five-silence scan clean at HEAD aebb7489 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the stored 90-token baseline a",
   "ceo_face": {
     "current": "2026-11-07 R2519 PRODUCT window on the tech head the register named (product-face-R2518, state/queue/tech.md:555 prefix AC-PDI1, criteria AC-PDI1..AC-PDI6 pinned in that row at R2517 BEFORE any code). Five-silence scan clean at HEAD aebb7489 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the stored 90-token baseline a",
     "latest_artifact": "probe-seam-dynamic-import-scope-R2519.log (4172B) + probe-seam-dynamic-import-scope-live-R2519.log (1352B)",
-    "next_milestone": "next window owes reconcile-battery-R2519 on the committed tree, inside a 48h window due 2026-11-09T11:00:58+08:00",
-    "next_milestone_due": "2026-11-09T11:00:58+08:00",
+    "next_milestone": "next window owes reconcile-battery-R2519 on the committed tree, inside a 48h window due 2026-11-09T11:02:16+08:00",
+    "next_milestone_due": "2026-11-09T11:02:16+08:00",
     "last_artifact": "probe-seam-dynamic-import-scope-R2519.log (4172B) + probe-seam-dynamic-import-scope-live-R2519.log (1352B)",
-    "updated_at": "2026-11-07T11:00:58+08:00"
+    "updated_at": "2026-11-07T11:02:16+08:00"
   },
   "depts": [
     {
@@ -630,10 +630,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 37,
+    "log_lines_in_window": 38,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 37,
+    "substantive_non_idle_mention_lines": 38,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
