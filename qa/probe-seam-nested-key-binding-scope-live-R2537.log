@@ -1,0 +1,10 @@
+R2537 LIVE LEG probe_seam_nested_key_binding_scope on src/os
+verdict=SEAMS-NESTED-KEY-COVERED probes=1457 covered=3 out_of_scope=179 historical=1275 missing=0 unreadable=0
+digests unchanged=True module=6e210614e0cd94ea base=6b8e3b006e1850f1 render=b2fa7ac14c68031c
+  PROBE artifact_disk_text_readability.py COVERED keys=- refused=-
+  PROBE evidence_name_text_coverage.py COVERED keys=- refused=-
+  PROBE stamp_text_coverage.py COVERED keys=- refused=-
+
+R2537 SAME FIXTURE ON BOTH READERS
+  mine    followed={'name': "nkb:name@D['a'][KEY='b']"} refused={}
+  shipped followed={} refused={'name': "key@hop2:D['a'][KEY]"}

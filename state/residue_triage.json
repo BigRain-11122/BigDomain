@@ -2108,6 +2108,13 @@
       "declared_by": 2535,
       "reason": "re-pinned at R2535 at its measured status DELIVERED",
       "until": 2545
+    },
+    {
+      "round": 2537,
+      "status": "DELIVERED",
+      "declared_by": "R2537",
+      "reason": "product face shipped with its own six-criteria suite and live leg; registry moved one row",
+      "until": 2547
     }
   ]
 }

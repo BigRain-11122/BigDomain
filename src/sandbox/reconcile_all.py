@@ -5931,6 +5931,15 @@ SUITES = [
     ("os-probe-seam-nested-subscript-scope",
      os.path.join("..", "os",
                   "test_probe_seam_nested_subscript_scope.py"), 6),
+    # R2537 - a for-loop step that is a NAME bound to a string constant
+    # resolves at CALL time through the constant tables and carries BOTH the
+    # key value and the binding label; an annotated or walrus binding of the
+    # same constant resolves too, while a twice-bound name is NAMED ambiguous
+    # and a name bound to a call, a format or a comprehension is NAMED at its
+    # hop and never evaluated (597 -> 598 suites, 4558 -> 4564 criteria).
+    ("os-probe-seam-nested-key-binding-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_nested_key_binding_scope.py"), 6),
     ]
 
 FAILS = 0

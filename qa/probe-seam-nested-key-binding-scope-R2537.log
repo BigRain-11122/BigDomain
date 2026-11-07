@@ -1,0 +1,86 @@
+EVIDENCE CAPTURE round=R2537 suite=src/os/test_probe_seam_nested_key_binding_scope.py legs=2
+== LEG A rc=0 digest=ADE33CBEFE9630B4
+PROBE SEAM NESTED KEY BINDING SUITE (AC-PNKB1..AC-PNKB6)
+PASS AC-PNKB1 a module-level named step resolves ({'KEY': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB1 a function-body named step resolves ({'KEY': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB1 the chain carries BOTH the key value and the binding label ({'followed': {'name': "nkb:name@D['a'][KEY='b']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a'][KEY='b']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PNKB1 the local chain carries both too ({'followed': {'name': "nkb:name@D['a'][KEY='b']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a'][KEY='b']", 'elements': 1, 'scope': 'local'}}, 'multi': []})
+PASS AC-PNKB1 the probe row reads COVERED and names the binding (('COVERED', ['importlib.import_module:pnkb_helper@name']))
+PASS AC-PNKB1 the row carries the chain with the label (["l:name@nkb:name@D['a'][KEY='b']"])
+PASS AC-PNKB2 an annotated binding resolves ({'KEY': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB2 the annotated chain carries the label ({'followed': {'name': "nkb:name@D['a'][KEY='b']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a'][KEY='b']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PNKB2 a walrus step binding resolves ({'KEY': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB2 the walrus chain carries the label ({'followed': {'name': "nkb:name@D['a'][KEY='b']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a'][KEY='b']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PNKB2 a walrus-bound name resolves too ({'KEY': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB2 a twice-bound name is NAMED ambiguous at its hop ({'followed': {}, 'refused': {'name': "ambiguous@hop2:D['a'][KEY]"}, 'containers': {}, 'multi': []})
+PASS AC-PNKB2 and it never enters the table
+PASS AC-PNKB3 a call-bound name is NAMED call at its hop ({'followed': {}, 'refused': {'name': "call@hop2:D['a'][KEY]"}, 'containers': {}, 'multi': []})
+PASS AC-PNKB3 nothing was evaluated (marker absent)
+PASS AC-PNKB3 and it enters no table
+PASS AC-PNKB3 a format-bound name is NAMED format ({'followed': {}, 'refused': {'name': "format@hop2:D['a'][KEY]"}, 'containers': {}, 'multi': []})
+PASS AC-PNKB3 a comprehension-bound name is NAMED ({'followed': {}, 'refused': {'name': "nested@hop2:D['a'][KEY]"}, 'containers': {}, 'multi': []})
+PASS AC-PNKB4 a mixed chain carries every step in order ({'followed': {'name': "nkb:name@D['a'][K1='b']['c']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a'][K1='b']['c']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PNKB4 and it resolves ({'K1': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB4 a same-root base with a named step resolves ({'KEY': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB4 and its label carries the module and the label ({'followed': {'name': "nkb:name@pnkb_pkg.GROUPS['a'][KEY='b']"}, 'refused': {}, 'containers': {'name': {'chain': "pnkb_pkg.GROUPS['a'][KEY='b']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PNKB4 a two-element result stays ambiguous ({'followed': {}, 'refused': {'name': 'ambiguous'}, 'containers': {}, 'multi': []})
+PASS AC-PNKB5 the probed tree is byte-identical after the audit
+PASS AC-PNKB5 the reading moved no shipped digest
+PASS AC-PNKB5 the audit still answers a verdict ({'COVERED': 2, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 2, 'UNREADABLE': 0, 'HISTORICAL': 0})
+PASS AC-PNKB5 a missing root is refused, not raised ('E_PNKB_NO_ROOT')
+PASS AC-PNKB6 the module source is pure ASCII
+PASS AC-PNKB6 this suite source is pure ASCII
+PASS AC-PNKB6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys)
+PASS AC-PNKB6 no clock and no network token in the module
+PASS AC-PNKB6 the face and its suite are wired into the registry exactly once
+PASS AC-PNKB6 no duplicate registry row
+PASS AC-PNKB6 the reconcile label is the face own (os-probe-seam-nested-key-binding-scope)
+PASS AC-PNKB6 the reading has its own verdict word (SEAMS-NESTED-KEY-COVERED)
+PASS AC-PNKB6 the shipped faces it extends are still named
+SUITE PASS 6/6 criteria green
+== LEG B rc=0 digest=ADE33CBEFE9630B4
+PROBE SEAM NESTED KEY BINDING SUITE (AC-PNKB1..AC-PNKB6)
+PASS AC-PNKB1 a module-level named step resolves ({'KEY': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB1 a function-body named step resolves ({'KEY': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB1 the chain carries BOTH the key value and the binding label ({'followed': {'name': "nkb:name@D['a'][KEY='b']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a'][KEY='b']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PNKB1 the local chain carries both too ({'followed': {'name': "nkb:name@D['a'][KEY='b']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a'][KEY='b']", 'elements': 1, 'scope': 'local'}}, 'multi': []})
+PASS AC-PNKB1 the probe row reads COVERED and names the binding (('COVERED', ['importlib.import_module:pnkb_helper@name']))
+PASS AC-PNKB1 the row carries the chain with the label (["l:name@nkb:name@D['a'][KEY='b']"])
+PASS AC-PNKB2 an annotated binding resolves ({'KEY': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB2 the annotated chain carries the label ({'followed': {'name': "nkb:name@D['a'][KEY='b']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a'][KEY='b']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PNKB2 a walrus step binding resolves ({'KEY': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB2 the walrus chain carries the label ({'followed': {'name': "nkb:name@D['a'][KEY='b']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a'][KEY='b']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PNKB2 a walrus-bound name resolves too ({'KEY': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB2 a twice-bound name is NAMED ambiguous at its hop ({'followed': {}, 'refused': {'name': "ambiguous@hop2:D['a'][KEY]"}, 'containers': {}, 'multi': []})
+PASS AC-PNKB2 and it never enters the table
+PASS AC-PNKB3 a call-bound name is NAMED call at its hop ({'followed': {}, 'refused': {'name': "call@hop2:D['a'][KEY]"}, 'containers': {}, 'multi': []})
+PASS AC-PNKB3 nothing was evaluated (marker absent)
+PASS AC-PNKB3 and it enters no table
+PASS AC-PNKB3 a format-bound name is NAMED format ({'followed': {}, 'refused': {'name': "format@hop2:D['a'][KEY]"}, 'containers': {}, 'multi': []})
+PASS AC-PNKB3 a comprehension-bound name is NAMED ({'followed': {}, 'refused': {'name': "nested@hop2:D['a'][KEY]"}, 'containers': {}, 'multi': []})
+PASS AC-PNKB4 a mixed chain carries every step in order ({'followed': {'name': "nkb:name@D['a'][K1='b']['c']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a'][K1='b']['c']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PNKB4 and it resolves ({'K1': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB4 a same-root base with a named step resolves ({'KEY': ('str', 'b'), 'name': ('str', 'pnkb_helper')})
+PASS AC-PNKB4 and its label carries the module and the label ({'followed': {'name': "nkb:name@pnkb_pkg.GROUPS['a'][KEY='b']"}, 'refused': {}, 'containers': {'name': {'chain': "pnkb_pkg.GROUPS['a'][KEY='b']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PNKB4 a two-element result stays ambiguous ({'followed': {}, 'refused': {'name': 'ambiguous'}, 'containers': {}, 'multi': []})
+PASS AC-PNKB5 the probed tree is byte-identical after the audit
+PASS AC-PNKB5 the reading moved no shipped digest
+PASS AC-PNKB5 the audit still answers a verdict ({'COVERED': 2, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 2, 'UNREADABLE': 0, 'HISTORICAL': 0})
+PASS AC-PNKB5 a missing root is refused, not raised ('E_PNKB_NO_ROOT')
+PASS AC-PNKB6 the module source is pure ASCII
+PASS AC-PNKB6 this suite source is pure ASCII
+PASS AC-PNKB6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys)
+PASS AC-PNKB6 no clock and no network token in the module
+PASS AC-PNKB6 the face and its suite are wired into the registry exactly once
+PASS AC-PNKB6 no duplicate registry row
+PASS AC-PNKB6 the reconcile label is the face own (os-probe-seam-nested-key-binding-scope)
+PASS AC-PNKB6 the reading has its own verdict word (SEAMS-NESTED-KEY-COVERED)
+PASS AC-PNKB6 the shipped faces it extends are still named
+SUITE PASS 6/6 criteria green
+== ADJACENT 5
+== src/os/test_probe_seam_nested_subscript_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_subscript_container_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_for_container_name.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_probe_seam_local_constant_scope.py rc=0 SUITE PASS 6/6 criteria green
+EVIDENCE identical=True adjacent=5 fails=0 digest=ADE33CBEFE9630B4

@@ -266,7 +266,9 @@ column-0 checkbox starts one.
 - [x] opened=R2534 | item=product-face-R2534 | note=next window is a PRODUCT face on queue head state/queue/tech.md:571 prefix AC-PCNS1 probe_seam_nested_subscript_scope, criteria pinned in that row at R2533 BEFORE any code: a two-key chain of literal subscripts reads refused nested and names no hop; no battery is owed because R2534 moved no product byte and the registry is unmoved at 596 suites 4552 criteria | closed=R2535
 - [x] opened=R2535 | item=reconcile-battery-R2535 | note=full battery owed on this committed tree at the re-measured 597 suites 4558 criteria before any further product byte, because this window moved the registry by one row and a shipped doc | closed=R2536
 - [ ] opened=R2535 | item=product-face-R2535 | note=product window that shipped the nested subscript face plus its suite, the live leg and the board row, and named the next product face on tech line 573 prefix AC-PNKB1 | first=no
-- [ ] opened=R2536 | item=product-face-R2536 | note=verification window R2536: battery green 597/597 4558 on committed tree 428bbdcd; next owes PRODUCT face at tech head state/queue/tech.md:573 prefix AC-PNKB1 probe_seam_nested_key_binding_scope (six criteria pinned at R2535 BEFORE any code) | first=yes
+- [x] opened=R2536 | item=product-face-R2536 | note=verification window R2536: battery green 597/597 4558 on committed tree 428bbdcd; next owes PRODUCT face at tech head state/queue/tech.md:573 prefix AC-PNKB1 probe_seam_nested_key_binding_scope (six criteria pinned at R2535 BEFORE any code) | closed=R2537
+- [ ] opened=R2537 | item=reconcile-battery-R2537 | note=battery owed before any further product byte: registry moved to 598 suites 4564 criteria by the nested-key face row, so the next window runs the full battery on this committed tree at that pre-registered target | first=yes
+- [ ] opened=R2537 | item=product-face-R2537 | note=product face shipped this window, no battery owed to it: a NAME step bound to a string constant now resolves with its binding label, while an ambiguous or non-constant name is refused at its hop | first=no
 
 ## Closed
 
