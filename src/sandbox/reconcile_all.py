@@ -6003,6 +6003,17 @@ SUITES = [
      os.path.join("..", "os",
                   "test_probe_seam_name_binding_nested_arm_mixed_scope.py"),
      6),
+    # R2553 - a plain with-as binding is NAMED with-as:<scope> instead of a
+    # refusal whose reason is None, two SEQUENTIAL nested groups under one arm
+    # are folded together and resolve when every leaf agrees or publish both
+    # values by full path, and a direct arm binding through ONE module-level
+    # constant name resolves to that literal while a name bound twice is named
+    # name-mixed:<name>; the arm-mixed answer rides beside it (605 -> 606
+    # suites, 4606 -> 4612 criteria).
+    ("os-probe-seam-name-binding-arm-mixed-residual-naming",
+     os.path.join("..", "os",
+                  "test_probe_seam_name_binding_arm_mixed_residual_naming.py"),
+     6),
     ]
 
 FAILS = 0

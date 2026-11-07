@@ -1,0 +1,4 @@
+BOUNDED REAL TREE files=21 verdict=SEAMS-RESIDUAL-COVERED probes=21 covered=0 out_of_scope=21 historical=0 missing=0 folded=0 named=0
+COVERED PROBES (none)
+SAME FIXTURE residual followed={'KEY': 'b'} resolved=['KEY'] folded=['if:4', 'if:8'] base_arm_mixed_refused={'KEY': 'grouped:body'}
+SAME FIXTURE with-as residual='with-as:module' base=None

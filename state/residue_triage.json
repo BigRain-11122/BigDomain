@@ -2115,6 +2115,13 @@
       "declared_by": "R2549",
       "reason": "product face shipped with its suite and a live leg",
       "until": 2559
+    },
+    {
+      "round": 2553,
+      "status": "DELIVERED",
+      "declared_by": "R2553",
+      "reason": "R2553 product window shipped probe_seam_name_binding_arm_mixed_residual_naming plus its six-criteria suite and one bounded live leg; registry moved by one row to 606 suites / 4612 criteria",
+      "until": 2563
     }
   ]
 }

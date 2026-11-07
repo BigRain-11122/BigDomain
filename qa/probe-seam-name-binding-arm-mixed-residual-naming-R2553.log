@@ -1,0 +1,122 @@
+EVIDENCE CAPTURE round=R2553 suite=src/os/test_probe_seam_name_binding_arm_mixed_residual_naming.py legs=2
+== LEG A rc=0 digest=BBCFD9671DE03853
+PROBE SEAM NAME BINDING ARM MIXED RESIDUAL NAMING SUITE (AC-PNDQ1..AC-PNDQ6)
+PASS AC-PNDQ1 a module-level with-as binding is NAMED ({'WK': 'with-as:module'})
+PASS AC-PNDQ1 no refusal on the row carries an empty reason ({'WK': 'with-as:module'})
+PASS AC-PNDQ1 the entry law names the scope ({'name': 'WK', 'scope': 'module', 'line': 5, 'state': 'refused', 'reason': 'with-as:module', 'value': None, 'values': [], 'source': 'arm-mixed-residual', 'root': None, 'groups': [], 'leaves': [], 'partial': None, 'loop': None, 'cases': 0, 'arms': [], 'base_arm_mixed_state': 'refused', 'base_arm_mixed_reason': None, 'base_arm_mixed_source': 'shipped', 'base_nested_state': 'refused', 'base_nested_reason': 'with-as', 'base_state': 'refused', 'base_reason': 'with-as', 'base_guard_state': 'refused', 'base_guard_reason': 'with-as', 'with_as': True, 'name_mixed': None, 'groups_folded': []})
+PASS AC-PNDQ1 the measured None from the shipped face is proven (None)
+PASS AC-PNDQ1 a function-level with-as binding names its scope ({'WK': 'with-as:function:f'})
+PASS AC-PNDQ2 two sequential agreeing groups resolve ({'KEY': 'b'})
+PASS AC-PNDQ2 the shipped arm-mixed face refused the same tree ({'KEY': 'grouped:body'})
+PASS AC-PNDQ2 both sequential groups are named (['if:3', 'if:7'])
+PASS AC-PNDQ2 every leaf of both groups is published ([{'path': 'if:2/body>if:3/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:3/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}])
+PASS AC-PNDQ2 the entry law folds the groups ({'name': 'KEY', 'scope': 'module', 'line': 13, 'state': 'ok', 'reason': None, 'value': 'b', 'values': [], 'source': 'arm-mixed-residual', 'root': 'if:2', 'groups': [{'group': 'if:2', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:3', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:7', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [{'path': 'if:2/body>if:3/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:3/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'partial': None, 'loop': None, 'cases': 0, 'arms': [], 'base_arm_mixed_state': 'refused', 'base_arm_mixed_reason': 'grouped:body', 'base_arm_mixed_source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'grouped:body', 'base_state': 'refused', 'base_reason': 'guarded:if:2>if:3', 'base_guard_state': 'refused', 'base_guard_reason': 'guarded:if:2>if:3', 'with_as': False, 'name_mixed': None, 'groups_folded': ['if:3', 'if:7']})
+PASS AC-PNDQ3 a direct binding through CONST resolves ({'KEY': 'b'})
+PASS AC-PNDQ3 the shipped face used a shape word ({'KEY': 'non-literal:body'})
+PASS AC-PNDQ3 the entry law follows ONE constant hop ({'name': 'KEY', 'scope': 'module', 'line': 10, 'state': 'ok', 'reason': None, 'value': 'b', 'values': [], 'source': 'arm-mixed-residual', 'root': 'if:3', 'groups': [{'group': 'if:3', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [{'path': 'if:3/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:3/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'partial': None, 'loop': None, 'cases': 0, 'arms': [], 'base_arm_mixed_state': 'refused', 'base_arm_mixed_reason': 'non-literal:body', 'base_arm_mixed_source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'non-literal:body', 'base_state': 'refused', 'base_reason': 'guarded:if:3', 'base_guard_state': 'refused', 'base_guard_reason': 'guarded:if:3', 'with_as': False, 'name_mixed': None, 'groups_folded': []})
+PASS AC-PNDQ3 a name bound twice stays mixed ({'KEY': 'name-mixed:AMB'})
+PASS AC-PNDQ3 the ambiguous name is published by name ({'KEY': 'AMB'})
+PASS AC-PNDQ3 the entry law never guesses a mixed name ({'name': 'KEY', 'scope': 'module', 'line': 12, 'state': 'refused', 'reason': 'name-mixed:AMB', 'value': None, 'values': [], 'source': 'arm-mixed-residual', 'root': 'if:4', 'groups': [{'group': 'if:4', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [], 'partial': None, 'loop': None, 'cases': 0, 'arms': [], 'base_arm_mixed_state': 'refused', 'base_arm_mixed_reason': 'non-literal:body', 'base_arm_mixed_source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'non-literal:body', 'base_state': 'refused', 'base_reason': 'guarded:if:4', 'base_guard_state': 'refused', 'base_guard_reason': 'guarded:if:4', 'with_as': False, 'name_mixed': 'AMB', 'groups_folded': []})
+PASS AC-PNDQ4 disagreeing groups resolve nothing ({'name': 'KEY', 'scope': 'module', 'line': 13, 'state': 'arms', 'reason': 'nested-arms', 'value': None, 'values': ['b', 'z'], 'source': 'arm-mixed-residual', 'root': 'if:2', 'groups': [{'group': 'if:2', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:3', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:7', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [{'path': 'if:2/body>if:3/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:3/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/else', 'arm': 'else', 'value': 'z', 'values': ['z']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'partial': None, 'loop': None, 'cases': 0, 'arms': [{'state': 'arms', 'reason': 'disagree:%s', 'values': ['b', 'z'], 'arms': [{'state': 'ok', 'value': 'b'}, {'state': 'arms', 'reason': 'nested-arms', 'values': ['b', 'z'], 'arms': [{'state': 'ok', 'value': 'b'}, {'state': 'ok', 'value': 'z'}]}], 'groups_folded': ['if:3', 'if:7']}, {'state': 'ok', 'value': 'b'}], 'base_arm_mixed_state': 'refused', 'base_arm_mixed_reason': 'grouped:body', 'base_arm_mixed_source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'grouped:body', 'base_state': 'arms', 'base_reason': 'exclusive-arms', 'base_guard_state': 'arms', 'base_guard_reason': 'exclusive-arms', 'with_as': False, 'name_mixed': None, 'groups_folded': []})
+PASS AC-PNDQ4 both values are published by full path ([{'path': 'if:2/body>if:3/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:3/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/else', 'arm': 'else', 'value': 'z', 'values': ['z']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}])
+PASS AC-PNDQ4 the report refuses to pick a leaf ([{'name': 'KEY', 'arms': [{'state': 'arms', 'reason': 'disagree:%s', 'values': ['b', 'z'], 'arms': [{'state': 'ok', 'value': 'b'}, {'state': 'arms', 'reason': 'nested-arms', 'values': ['b', 'z'], 'arms': [{'state': 'ok', 'value': 'b'}, {'state': 'ok', 'value': 'z'}]}], 'groups_folded': ['if:3', 'if:7']}, {'state': 'ok', 'value': 'b'}], 'leaves': [{'path': 'if:2/body>if:3/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:3/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/else', 'arm': 'else', 'value': 'z', 'values': ['z']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'values': ['b', 'z'], 'reason': 'nested-arms'}])
+PASS AC-PNDQ4 the shipped refusal is carried beside it ('grouped:body')
+PASS AC-PNDQ5 the arm-mixed answer is carried on was-module
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on was-module
+PASS AC-PNDQ5 the arm-mixed answer is carried on was-func
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on was-func
+PASS AC-PNDQ5 the arm-mixed answer is carried on seq-agree
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on seq-agree
+PASS AC-PNDQ5 the arm-mixed answer is carried on seq-diff
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on seq-diff
+PASS AC-PNDQ5 the arm-mixed answer is carried on const-ok
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on const-ok
+PASS AC-PNDQ5 the arm-mixed answer is carried on const-mixed
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on const-mixed
+PASS AC-PNDQ5 the arm-mixed answer is carried on nested-only
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on nested-only
+PASS AC-PNDQ5 the arm-mixed answer is carried on match
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on match
+PASS AC-PNDQ5 a resolved tree is returned UNCHANGED (('ok', 'b', 'nested'))
+PASS AC-PNDQ5 an untouched refusal keeps its own word ('match:2-cases')
+PASS AC-PNDQ5 the probed tree is byte-identical after the audit
+PASS AC-PNDQ5 the reading moved no shipped digest
+PASS AC-PNDQ5 the probe row still reads COVERED ('COVERED')
+PASS AC-PNDQ5 the row carries this face own folded loop ([{'line': 15, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'leaves': {'KEY': [{'path': 'if:4/body>if:5/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:4/body>if:5/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:4/body>if:9/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:4/body>if:9/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:4/else', 'arm': 'else', 'value': 'b', 'values': ['b']}]}, 'partial': {}, 'loops': {}, 'groups': [{'group': 'if:4', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:5', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:9', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'resolved_by_residual': ['KEY'], 'named_with_as': {}, 'named_name_mixed': {}, 'groups_folded': {'KEY': ['if:5', 'if:9']}, 'base_arm_mixed_followed': {}, 'base_arm_mixed_refused': {'KEY': 'grouped:body'}, 'base_arm_mixed_arms': [], 'base_nested_followed': {}, 'base_nested_refused': {'KEY': 'grouped:body'}, 'base_nested_arms': [], 'base_followed': {}, 'base_refused': {'KEY': 'guarded:if:4>if:5'}, 'base_arms': [], 'base_guard_followed': {}, 'base_guard_refused': {'KEY': 'guarded:if:4>if:5'}}])
+PASS AC-PNDQ5 the report keeps the shipped base label (('os-probe-seam-name-binding-arm-mixed-residual-naming', 'SEAMS-RESIDUAL-COVERED', 'os-probe-seam-name-binding-nested-arm-mixed-scope'))
+PASS AC-PNDQ5 a missing root is refused, not raised ('E_PNDQ_NO_ROOT')
+PASS AC-PNDQ6 the module source is pure ASCII
+PASS AC-PNDQ6 this suite source is pure ASCII
+PASS AC-PNDQ6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNDQ6 no clock and no network token in the module
+PASS AC-PNDQ6 the face and its suite are wired into the registry
+PASS AC-PNDQ6 no duplicate registry row
+PASS AC-PNDQ6 the reconcile label is the face own (os-probe-seam-name-binding-arm-mixed-residual-naming)
+PASS AC-PNDQ6 the reading has its own verdict words (SEAMS-RESIDUAL-COVERED/SEAMS-RESIDUAL-STALE)
+PASS AC-PNDQ6 the new refusal words are its own (with-as:%s/name-mixed:%s/disagree:%s)
+PASS AC-PNDQ6 the shipped face it extends is still named
+SUITE PASS 6/6 criteria green
+== LEG B rc=0 digest=BBCFD9671DE03853
+PROBE SEAM NAME BINDING ARM MIXED RESIDUAL NAMING SUITE (AC-PNDQ1..AC-PNDQ6)
+PASS AC-PNDQ1 a module-level with-as binding is NAMED ({'WK': 'with-as:module'})
+PASS AC-PNDQ1 no refusal on the row carries an empty reason ({'WK': 'with-as:module'})
+PASS AC-PNDQ1 the entry law names the scope ({'name': 'WK', 'scope': 'module', 'line': 5, 'state': 'refused', 'reason': 'with-as:module', 'value': None, 'values': [], 'source': 'arm-mixed-residual', 'root': None, 'groups': [], 'leaves': [], 'partial': None, 'loop': None, 'cases': 0, 'arms': [], 'base_arm_mixed_state': 'refused', 'base_arm_mixed_reason': None, 'base_arm_mixed_source': 'shipped', 'base_nested_state': 'refused', 'base_nested_reason': 'with-as', 'base_state': 'refused', 'base_reason': 'with-as', 'base_guard_state': 'refused', 'base_guard_reason': 'with-as', 'with_as': True, 'name_mixed': None, 'groups_folded': []})
+PASS AC-PNDQ1 the measured None from the shipped face is proven (None)
+PASS AC-PNDQ1 a function-level with-as binding names its scope ({'WK': 'with-as:function:f'})
+PASS AC-PNDQ2 two sequential agreeing groups resolve ({'KEY': 'b'})
+PASS AC-PNDQ2 the shipped arm-mixed face refused the same tree ({'KEY': 'grouped:body'})
+PASS AC-PNDQ2 both sequential groups are named (['if:3', 'if:7'])
+PASS AC-PNDQ2 every leaf of both groups is published ([{'path': 'if:2/body>if:3/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:3/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}])
+PASS AC-PNDQ2 the entry law folds the groups ({'name': 'KEY', 'scope': 'module', 'line': 13, 'state': 'ok', 'reason': None, 'value': 'b', 'values': [], 'source': 'arm-mixed-residual', 'root': 'if:2', 'groups': [{'group': 'if:2', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:3', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:7', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [{'path': 'if:2/body>if:3/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:3/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'partial': None, 'loop': None, 'cases': 0, 'arms': [], 'base_arm_mixed_state': 'refused', 'base_arm_mixed_reason': 'grouped:body', 'base_arm_mixed_source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'grouped:body', 'base_state': 'refused', 'base_reason': 'guarded:if:2>if:3', 'base_guard_state': 'refused', 'base_guard_reason': 'guarded:if:2>if:3', 'with_as': False, 'name_mixed': None, 'groups_folded': ['if:3', 'if:7']})
+PASS AC-PNDQ3 a direct binding through CONST resolves ({'KEY': 'b'})
+PASS AC-PNDQ3 the shipped face used a shape word ({'KEY': 'non-literal:body'})
+PASS AC-PNDQ3 the entry law follows ONE constant hop ({'name': 'KEY', 'scope': 'module', 'line': 10, 'state': 'ok', 'reason': None, 'value': 'b', 'values': [], 'source': 'arm-mixed-residual', 'root': 'if:3', 'groups': [{'group': 'if:3', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [{'path': 'if:3/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:3/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'partial': None, 'loop': None, 'cases': 0, 'arms': [], 'base_arm_mixed_state': 'refused', 'base_arm_mixed_reason': 'non-literal:body', 'base_arm_mixed_source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'non-literal:body', 'base_state': 'refused', 'base_reason': 'guarded:if:3', 'base_guard_state': 'refused', 'base_guard_reason': 'guarded:if:3', 'with_as': False, 'name_mixed': None, 'groups_folded': []})
+PASS AC-PNDQ3 a name bound twice stays mixed ({'KEY': 'name-mixed:AMB'})
+PASS AC-PNDQ3 the ambiguous name is published by name ({'KEY': 'AMB'})
+PASS AC-PNDQ3 the entry law never guesses a mixed name ({'name': 'KEY', 'scope': 'module', 'line': 12, 'state': 'refused', 'reason': 'name-mixed:AMB', 'value': None, 'values': [], 'source': 'arm-mixed-residual', 'root': 'if:4', 'groups': [{'group': 'if:4', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [], 'partial': None, 'loop': None, 'cases': 0, 'arms': [], 'base_arm_mixed_state': 'refused', 'base_arm_mixed_reason': 'non-literal:body', 'base_arm_mixed_source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'non-literal:body', 'base_state': 'refused', 'base_reason': 'guarded:if:4', 'base_guard_state': 'refused', 'base_guard_reason': 'guarded:if:4', 'with_as': False, 'name_mixed': 'AMB', 'groups_folded': []})
+PASS AC-PNDQ4 disagreeing groups resolve nothing ({'name': 'KEY', 'scope': 'module', 'line': 13, 'state': 'arms', 'reason': 'nested-arms', 'value': None, 'values': ['b', 'z'], 'source': 'arm-mixed-residual', 'root': 'if:2', 'groups': [{'group': 'if:2', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:3', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:7', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [{'path': 'if:2/body>if:3/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:3/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/else', 'arm': 'else', 'value': 'z', 'values': ['z']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'partial': None, 'loop': None, 'cases': 0, 'arms': [{'state': 'arms', 'reason': 'disagree:%s', 'values': ['b', 'z'], 'arms': [{'state': 'ok', 'value': 'b'}, {'state': 'arms', 'reason': 'nested-arms', 'values': ['b', 'z'], 'arms': [{'state': 'ok', 'value': 'b'}, {'state': 'ok', 'value': 'z'}]}], 'groups_folded': ['if:3', 'if:7']}, {'state': 'ok', 'value': 'b'}], 'base_arm_mixed_state': 'refused', 'base_arm_mixed_reason': 'grouped:body', 'base_arm_mixed_source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'grouped:body', 'base_state': 'arms', 'base_reason': 'exclusive-arms', 'base_guard_state': 'arms', 'base_guard_reason': 'exclusive-arms', 'with_as': False, 'name_mixed': None, 'groups_folded': []})
+PASS AC-PNDQ4 both values are published by full path ([{'path': 'if:2/body>if:3/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:3/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/else', 'arm': 'else', 'value': 'z', 'values': ['z']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}])
+PASS AC-PNDQ4 the report refuses to pick a leaf ([{'name': 'KEY', 'arms': [{'state': 'arms', 'reason': 'disagree:%s', 'values': ['b', 'z'], 'arms': [{'state': 'ok', 'value': 'b'}, {'state': 'arms', 'reason': 'nested-arms', 'values': ['b', 'z'], 'arms': [{'state': 'ok', 'value': 'b'}, {'state': 'ok', 'value': 'z'}]}], 'groups_folded': ['if:3', 'if:7']}, {'state': 'ok', 'value': 'b'}], 'leaves': [{'path': 'if:2/body>if:3/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:3/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:7/else', 'arm': 'else', 'value': 'z', 'values': ['z']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'values': ['b', 'z'], 'reason': 'nested-arms'}])
+PASS AC-PNDQ4 the shipped refusal is carried beside it ('grouped:body')
+PASS AC-PNDQ5 the arm-mixed answer is carried on was-module
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on was-module
+PASS AC-PNDQ5 the arm-mixed answer is carried on was-func
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on was-func
+PASS AC-PNDQ5 the arm-mixed answer is carried on seq-agree
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on seq-agree
+PASS AC-PNDQ5 the arm-mixed answer is carried on seq-diff
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on seq-diff
+PASS AC-PNDQ5 the arm-mixed answer is carried on const-ok
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on const-ok
+PASS AC-PNDQ5 the arm-mixed answer is carried on const-mixed
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on const-mixed
+PASS AC-PNDQ5 the arm-mixed answer is carried on nested-only
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on nested-only
+PASS AC-PNDQ5 the arm-mixed answer is carried on match
+PASS AC-PNDQ5 the guard and exhaustive answers still ride on match
+PASS AC-PNDQ5 a resolved tree is returned UNCHANGED (('ok', 'b', 'nested'))
+PASS AC-PNDQ5 an untouched refusal keeps its own word ('match:2-cases')
+PASS AC-PNDQ5 the probed tree is byte-identical after the audit
+PASS AC-PNDQ5 the reading moved no shipped digest
+PASS AC-PNDQ5 the probe row still reads COVERED ('COVERED')
+PASS AC-PNDQ5 the row carries this face own folded loop ([{'line': 15, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'leaves': {'KEY': [{'path': 'if:4/body>if:5/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:4/body>if:5/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:4/body>if:9/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:4/body>if:9/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:4/else', 'arm': 'else', 'value': 'b', 'values': ['b']}]}, 'partial': {}, 'loops': {}, 'groups': [{'group': 'if:4', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:5', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:9', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'resolved_by_residual': ['KEY'], 'named_with_as': {}, 'named_name_mixed': {}, 'groups_folded': {'KEY': ['if:5', 'if:9']}, 'base_arm_mixed_followed': {}, 'base_arm_mixed_refused': {'KEY': 'grouped:body'}, 'base_arm_mixed_arms': [], 'base_nested_followed': {}, 'base_nested_refused': {'KEY': 'grouped:body'}, 'base_nested_arms': [], 'base_followed': {}, 'base_refused': {'KEY': 'guarded:if:4>if:5'}, 'base_arms': [], 'base_guard_followed': {}, 'base_guard_refused': {'KEY': 'guarded:if:4>if:5'}}])
+PASS AC-PNDQ5 the report keeps the shipped base label (('os-probe-seam-name-binding-arm-mixed-residual-naming', 'SEAMS-RESIDUAL-COVERED', 'os-probe-seam-name-binding-nested-arm-mixed-scope'))
+PASS AC-PNDQ5 a missing root is refused, not raised ('E_PNDQ_NO_ROOT')
+PASS AC-PNDQ6 the module source is pure ASCII
+PASS AC-PNDQ6 this suite source is pure ASCII
+PASS AC-PNDQ6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNDQ6 no clock and no network token in the module
+PASS AC-PNDQ6 the face and its suite are wired into the registry
+PASS AC-PNDQ6 no duplicate registry row
+PASS AC-PNDQ6 the reconcile label is the face own (os-probe-seam-name-binding-arm-mixed-residual-naming)
+PASS AC-PNDQ6 the reading has its own verdict words (SEAMS-RESIDUAL-COVERED/SEAMS-RESIDUAL-STALE)
+PASS AC-PNDQ6 the new refusal words are its own (with-as:%s/name-mixed:%s/disagree:%s)
+PASS AC-PNDQ6 the shipped face it extends is still named
+SUITE PASS 6/6 criteria green
+== ADJACENT 5
+== src/os/test_probe_seam_name_binding_nested_arm_mixed_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_name_binding_nested_exhaustive_path.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_name_binding_control_flow_guard_exhaustive.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_probe_seam_registry.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=5 fails=0 digest=BBCFD9671DE03853
