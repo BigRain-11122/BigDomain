@@ -5957,6 +5957,14 @@ SUITES = [
     ("os-probe-seam-name-binding-position-scope",
      os.path.join("..", "os",
                   "test_probe_seam_name_binding_position_scope.py"), 6),
+    # R2543 - a NAME step resolves only when its binding is PROVED to run: a
+    # binding behind a branch, a loop or a handler is NAMED with its guard, a
+    # with-as binding is NAMED with that shape, and two exclusive arms of one
+    # branch publish BOTH arms instead of one ambiguity word
+    # (600 -> 601 suites, 4576 -> 4582 criteria).
+    ("os-probe-seam-name-binding-control-flow-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_name_binding_control_flow_scope.py"), 6),
     ]
 
 FAILS = 0

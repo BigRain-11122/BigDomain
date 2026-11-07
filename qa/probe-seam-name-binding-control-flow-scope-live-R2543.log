@@ -1,0 +1,10 @@
+os-probe-seam-name-binding-control-flow-scope verdict=SEAMS-CONTROL-FLOW-COVERED base=os-probe-seam-name-binding-position-scope
+  COVERED=3
+  HISTORICAL=1297
+  MISSING-SEAM=0
+  OUT-OF-SCOPE=181
+  UNREADABLE=0
+  probe artifact_disk_text_readability.py control_flow_loops=4
+  probe evidence_name_text_coverage.py control_flow_loops=1
+  probe stamp_text_coverage.py control_flow_loops=4
+  covered_loop_rows=9

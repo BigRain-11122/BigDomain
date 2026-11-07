@@ -2129,6 +2129,13 @@
       "declared_by": "R2541",
       "reason": "R2541 product window: shipped probe_seam_name_binding_position_scope plus its six-criteria suite, evidence captured through the shipped callable",
       "until": 2551
+    },
+    {
+      "round": 2543,
+      "status": "DELIVERED",
+      "declared_by": "R2543",
+      "reason": "R2543 shipped one product face (probe_seam_name_binding_control_flow_scope) with its six-criteria suite, proved twice through the shipped capture callable, live-read on the real tree, and committed with its registry row and matrix regeneration",
+      "until": 2553
     }
   ]
 }

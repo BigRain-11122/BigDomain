@@ -1,0 +1,80 @@
+EVIDENCE CAPTURE round=R2543 suite=src/os/test_probe_seam_name_binding_control_flow_scope.py legs=2
+== LEG A rc=0 digest=3879F6E5B23BDC3E
+PROBE SEAM NAME BINDING CONTROL FLOW SUITE (AC-PNCF1..AC-PNCF6)
+PASS AC-PNCF1 a binding inside a branch is NAMED with its guard and never resolved ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'guarded:if:2'}, 'arms': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}}])
+PASS AC-PNCF1 the shipped position face resolved the same binding ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'guarded:if:2'}, 'arms': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}}])
+PASS AC-PNCF1 the entry law refuses the guarded shape ({'state': 'refused', 'reason': 'guarded:if:2', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': []})
+PASS AC-PNCF1 an unconditional binding still resolves even when a later branch rebinds the name ([{'line': 5, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'base_followed': {}, 'base_refused': {'KEY': 'ambiguous'}}])
+PASS AC-PNCF2 a with-as binding is NAMED with its shape ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'with-as'}, 'arms': [], 'base_followed': {}, 'base_refused': {'KEY': 'unbound'}}])
+PASS AC-PNCF2 the shipped position face read that same name unbound ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'with-as'}, 'arms': [], 'base_followed': {}, 'base_refused': {'KEY': 'unbound'}}])
+PASS AC-PNCF2 the entry law answers the with-as shape ({'state': 'refused', 'reason': 'with-as', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': []})
+PASS AC-PNCF2 the new word is its own (with-as)
+PASS AC-PNCF3 one row publishes the arms pair ([{'line': 6, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {}, 'arms': [{'name': 'KEY', 'arms': [{'group': 'if:2', 'arm': 'body', 'value': 'b'}, {'group': 'if:2', 'arm': 'else', 'value': 'z'}]}], 'base_followed': {}, 'base_refused': {'KEY': 'ambiguous'}}])
+PASS AC-PNCF3 both arms are published with their values ({'body': 'b', 'else': 'z'})
+PASS AC-PNCF3 no ambiguity word is produced for exclusive arms ([{'line': 6, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {}, 'arms': [{'name': 'KEY', 'arms': [{'group': 'if:2', 'arm': 'body', 'value': 'b'}, {'group': 'if:2', 'arm': 'else', 'value': 'z'}]}], 'base_followed': {}, 'base_refused': {'KEY': 'ambiguous'}}])
+PASS AC-PNCF3 the entry law answers both arms ({'state': 'arms', 'reason': 'exclusive-arms', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': [{'group': 'if:2', 'arm': 'body', 'value': 'b'}, {'group': 'if:2', 'arm': 'else', 'value': 'z'}]})
+PASS AC-PNCF3 the shipped face read one ambiguity word ({'state': 'refused', 'reason': 'ambiguous', 'scope': 'module', 'shadow': False, 'later': {}})
+PASS AC-PNCF4 a binding inside a loop body is NAMED with its guard ([{'line': 2, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {}, 'arms': [], 'base_followed': {}, 'base_refused': {}}, {'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'guarded:loop:2'}, 'arms': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}}])
+PASS AC-PNCF4 the shipped face resolved the same guarded binding ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'guarded:loop:2'}, 'arms': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}}])
+PASS AC-PNCF4 the entry law refuses the loop-guarded shape ({'state': 'refused', 'reason': 'guarded:loop:2', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': []})
+PASS AC-PNCF4 a binding inside a try arm is NAMED with its guard ({'state': 'refused', 'reason': 'guarded:try:2', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': []})
+PASS AC-PNCF5 the probed tree is byte-identical after the audit
+PASS AC-PNCF5 the reading moved no shipped digest
+PASS AC-PNCF5 the probe row still reads COVERED ('COVERED')
+PASS AC-PNCF5 the row carries this face own flow loop ([{'line': 5, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}}])
+PASS AC-PNCF5 the report keeps the shipped base label and answers its own (('os-probe-seam-name-binding-control-flow-scope', 'SEAMS-CONTROL-FLOW-COVERED', 'os-probe-seam-name-binding-position-scope'))
+PASS AC-PNCF5 a missing root is refused, not raised ('E_PNCF_NO_ROOT')
+PASS AC-PNCF6 the module source is pure ASCII
+PASS AC-PNCF6 this suite source is pure ASCII
+PASS AC-PNCF6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNCF6 no clock and no network token in the module
+PASS AC-PNCF6 the face and its suite are wired into the registry exactly once
+PASS AC-PNCF6 no duplicate registry row
+PASS AC-PNCF6 the reconcile label is the face own (os-probe-seam-name-binding-control-flow-scope)
+PASS AC-PNCF6 the reading has its own verdict words (SEAMS-CONTROL-FLOW-COVERED/SEAMS-CONTROL-FLOW-STALE)
+PASS AC-PNCF6 the new refusal words are its own (guarded:%s/arms)
+PASS AC-PNCF6 the shipped face it extends is still named
+SUITE PASS 6/6 criteria green
+== LEG B rc=0 digest=3879F6E5B23BDC3E
+PROBE SEAM NAME BINDING CONTROL FLOW SUITE (AC-PNCF1..AC-PNCF6)
+PASS AC-PNCF1 a binding inside a branch is NAMED with its guard and never resolved ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'guarded:if:2'}, 'arms': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}}])
+PASS AC-PNCF1 the shipped position face resolved the same binding ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'guarded:if:2'}, 'arms': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}}])
+PASS AC-PNCF1 the entry law refuses the guarded shape ({'state': 'refused', 'reason': 'guarded:if:2', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': []})
+PASS AC-PNCF1 an unconditional binding still resolves even when a later branch rebinds the name ([{'line': 5, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'base_followed': {}, 'base_refused': {'KEY': 'ambiguous'}}])
+PASS AC-PNCF2 a with-as binding is NAMED with its shape ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'with-as'}, 'arms': [], 'base_followed': {}, 'base_refused': {'KEY': 'unbound'}}])
+PASS AC-PNCF2 the shipped position face read that same name unbound ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'with-as'}, 'arms': [], 'base_followed': {}, 'base_refused': {'KEY': 'unbound'}}])
+PASS AC-PNCF2 the entry law answers the with-as shape ({'state': 'refused', 'reason': 'with-as', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': []})
+PASS AC-PNCF2 the new word is its own (with-as)
+PASS AC-PNCF3 one row publishes the arms pair ([{'line': 6, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {}, 'arms': [{'name': 'KEY', 'arms': [{'group': 'if:2', 'arm': 'body', 'value': 'b'}, {'group': 'if:2', 'arm': 'else', 'value': 'z'}]}], 'base_followed': {}, 'base_refused': {'KEY': 'ambiguous'}}])
+PASS AC-PNCF3 both arms are published with their values ({'body': 'b', 'else': 'z'})
+PASS AC-PNCF3 no ambiguity word is produced for exclusive arms ([{'line': 6, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {}, 'arms': [{'name': 'KEY', 'arms': [{'group': 'if:2', 'arm': 'body', 'value': 'b'}, {'group': 'if:2', 'arm': 'else', 'value': 'z'}]}], 'base_followed': {}, 'base_refused': {'KEY': 'ambiguous'}}])
+PASS AC-PNCF3 the entry law answers both arms ({'state': 'arms', 'reason': 'exclusive-arms', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': [{'group': 'if:2', 'arm': 'body', 'value': 'b'}, {'group': 'if:2', 'arm': 'else', 'value': 'z'}]})
+PASS AC-PNCF3 the shipped face read one ambiguity word ({'state': 'refused', 'reason': 'ambiguous', 'scope': 'module', 'shadow': False, 'later': {}})
+PASS AC-PNCF4 a binding inside a loop body is NAMED with its guard ([{'line': 2, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {}, 'arms': [], 'base_followed': {}, 'base_refused': {}}, {'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'guarded:loop:2'}, 'arms': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}}])
+PASS AC-PNCF4 the shipped face resolved the same guarded binding ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'guarded:loop:2'}, 'arms': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}}])
+PASS AC-PNCF4 the entry law refuses the loop-guarded shape ({'state': 'refused', 'reason': 'guarded:loop:2', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': []})
+PASS AC-PNCF4 a binding inside a try arm is NAMED with its guard ({'state': 'refused', 'reason': 'guarded:try:2', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': []})
+PASS AC-PNCF5 the probed tree is byte-identical after the audit
+PASS AC-PNCF5 the reading moved no shipped digest
+PASS AC-PNCF5 the probe row still reads COVERED ('COVERED')
+PASS AC-PNCF5 the row carries this face own flow loop ([{'line': 5, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}}])
+PASS AC-PNCF5 the report keeps the shipped base label and answers its own (('os-probe-seam-name-binding-control-flow-scope', 'SEAMS-CONTROL-FLOW-COVERED', 'os-probe-seam-name-binding-position-scope'))
+PASS AC-PNCF5 a missing root is refused, not raised ('E_PNCF_NO_ROOT')
+PASS AC-PNCF6 the module source is pure ASCII
+PASS AC-PNCF6 this suite source is pure ASCII
+PASS AC-PNCF6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNCF6 no clock and no network token in the module
+PASS AC-PNCF6 the face and its suite are wired into the registry exactly once
+PASS AC-PNCF6 no duplicate registry row
+PASS AC-PNCF6 the reconcile label is the face own (os-probe-seam-name-binding-control-flow-scope)
+PASS AC-PNCF6 the reading has its own verdict words (SEAMS-CONTROL-FLOW-COVERED/SEAMS-CONTROL-FLOW-STALE)
+PASS AC-PNCF6 the new refusal words are its own (guarded:%s/arms)
+PASS AC-PNCF6 the shipped face it extends is still named
+SUITE PASS 6/6 criteria green
+== ADJACENT 5
+== src/os/test_probe_seam_name_binding_position_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_name_binding_scope_awareness.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_local_constant_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_registry.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=5 fails=0 digest=3879F6E5B23BDC3E
