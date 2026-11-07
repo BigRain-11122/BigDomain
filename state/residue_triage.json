@@ -2136,6 +2136,13 @@
       "declared_by": "R2543",
       "reason": "R2543 shipped one product face (probe_seam_name_binding_control_flow_scope) with its six-criteria suite, proved twice through the shipped capture callable, live-read on the real tree, and committed with its registry row and matrix regeneration",
       "until": 2553
+    },
+    {
+      "round": 2545,
+      "status": "DELIVERED",
+      "declared_by": "R2545",
+      "reason": "shipped probe_seam_name_binding_control_flow_guard_scope plus its six-criteria suite and the live reading",
+      "until": 2555
     }
   ]
 }

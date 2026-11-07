@@ -1,0 +1,9 @@
+os-probe-seam-name-binding-control-flow-guard-scope verdict=SEAMS-GUARD-COVERED base=os-probe-seam-name-binding-control-flow-scope
+  COVERED=3
+  HISTORICAL=1302
+  MISSING-SEAM=0
+  OUT-OF-SCOPE=182
+  UNREADABLE=0
+  probe artifact_disk_text_readability.py guard_loops=4 guard_resolved=0
+  probe evidence_name_text_coverage.py guard_loops=1 guard_resolved=0
+  probe stamp_text_coverage.py guard_loops=4 guard_resolved=0

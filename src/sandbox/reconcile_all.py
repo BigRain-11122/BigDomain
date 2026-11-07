@@ -5965,6 +5965,14 @@ SUITES = [
     ("os-probe-seam-name-binding-control-flow-scope",
      os.path.join("..", "os",
                   "test_probe_seam_name_binding_control_flow_scope.py"), 6),
+    # R2545 - guards are AGGREGATED rather than the first one named: two arms
+    # of one if binding the same literal resolve instead of refusing, two
+    # separate guard groups are published as two groups, and every guard on a
+    # nested path is published outermost first
+    # (601 -> 602 suites, 4582 -> 4588 criteria).
+    ("os-probe-seam-name-binding-control-flow-guard-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_name_binding_control_flow_guard_scope.py"), 6),
     ]
 
 FAILS = 0

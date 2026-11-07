@@ -1,0 +1,96 @@
+EVIDENCE CAPTURE round=R2545 suite=src/os/test_probe_seam_name_binding_control_flow_guard_scope.py legs=2
+== LEG A rc=0 digest=8F50C3562ACC5CD8
+PROBE SEAM NAME BINDING CONTROL FLOW GUARD SUITE (AC-PNCG1..AC-PNCG6)
+PASS AC-PNCG1 two arms binding the SAME literal resolve ([{'line': 6, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'chains': {}, 'groups': [], 'base_followed': {}, 'base_refused': {'KEY': 'guarded:if:2'}, 'base_arms': [], 'resolved_by_guard': ['KEY']}])
+PASS AC-PNCG1 the shipped face refused the same fixture ({'KEY': 'guarded:if:2'})
+PASS AC-PNCG1 the entry law resolves the agreeing pair ({'state': 'ok', 'reason': None, 'value': 'b', 'scope': 'module', 'shadow': False, 'later': {}, 'arms': [], 'source': 'guard', 'chains': ['if:2'], 'groups': [{'group': 'if:2', 'chains': ['if:2'], 'arms': {'body': 'b', 'else': 'b'}, 'values': ['b'], 'depth': 1}], 'guard_value': 'b'})
+PASS AC-PNCG1 two arms with different values still publish both ([{'line': 6, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {}, 'arms': [{'name': 'KEY', 'arms': [{'group': 'if:2', 'arm': 'body', 'value': 'b'}, {'group': 'if:2', 'arm': 'else', 'value': 'z'}]}], 'chains': {}, 'groups': [], 'base_followed': {}, 'base_refused': {}, 'base_arms': [{'name': 'KEY', 'arms': [{'group': 'if:2', 'arm': 'body', 'value': 'b'}, {'group': 'if:2', 'arm': 'else', 'value': 'z'}]}], 'resolved_by_guard': []}])
+PASS AC-PNCG1 the differing pair is still not resolved ({})
+PASS AC-PNCG2 two guard groups are named as two groups ([{'line': 6, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'guarded-groups'}, 'arms': [], 'chains': {'KEY': ['if:2', 'if:4']}, 'groups': [{'group': 'if:2', 'chains': ['if:2'], 'arms': {'body': 'b'}, 'values': ['b'], 'depth': 1}, {'group': 'if:4', 'chains': ['if:4'], 'arms': {'body': 'z'}, 'values': ['z'], 'depth': 1}], 'base_followed': {}, 'base_refused': {'KEY': 'guarded:if:2'}, 'base_arms': [], 'resolved_by_guard': []}])
+PASS AC-PNCG2 both groups are published with their guards ([{'group': 'if:2', 'chains': ['if:2'], 'arms': {'body': 'b'}, 'values': ['b'], 'depth': 1}, {'group': 'if:4', 'chains': ['if:4'], 'arms': {'body': 'z'}, 'values': ['z'], 'depth': 1}])
+PASS AC-PNCG2 both chains are published ({'KEY': ['if:2', 'if:4']})
+PASS AC-PNCG2 the shipped face published only the first group ({'KEY': 'guarded:if:2'})
+PASS AC-PNCG2 the entry law publishes both groups ({'state': 'refused', 'reason': 'guarded-groups', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': [], 'source': 'shipped', 'chains': ['if:2', 'if:4'], 'groups': [{'group': 'if:2', 'chains': ['if:2'], 'arms': {'body': 'b'}, 'values': ['b'], 'depth': 1}, {'group': 'if:4', 'chains': ['if:4'], 'arms': {'body': 'z'}, 'values': ['z'], 'depth': 1}], 'guard_value': None})
+PASS AC-PNCG2 neither group is resolved ({})
+PASS AC-PNCG3 the nested binding publishes its whole chain ([{'line': 5, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'guarded:if:2>if:3'}, 'arms': [], 'chains': {'KEY': ['if:2>if:3']}, 'groups': [{'group': 'if:2', 'chains': ['if:2>if:3'], 'arms': {}, 'values': ['b'], 'depth': 2}], 'base_followed': {}, 'base_refused': {'KEY': 'guarded:if:3'}, 'base_arms': [], 'resolved_by_guard': []}])
+PASS AC-PNCG3 the chain is published outermost first ({'KEY': ['if:2>if:3']})
+PASS AC-PNCG3 the shipped face published only the INNERMOST guard and dropped the outer one ({'KEY': 'guarded:if:3'})
+PASS AC-PNCG3 the entry law names both guards in order ({'state': 'refused', 'reason': 'guarded:if:2>if:3', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': [], 'source': 'shipped', 'chains': ['if:2>if:3'], 'groups': [{'group': 'if:2', 'chains': ['if:2>if:3'], 'arms': {}, 'values': ['b'], 'depth': 2}], 'guard_value': None})
+PASS AC-PNCG3 a nested binding is never resolved ({})
+PASS AC-PNCG4 an unconditional binding still wins ([{'line': 5, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'chains': {}, 'groups': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}, 'base_arms': [], 'resolved_by_guard': []}])
+PASS AC-PNCG4 the shipped face agreed ({'KEY': 'b'})
+PASS AC-PNCG4 a with-as binding keeps the shipped refusal ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'with-as'}, 'arms': [], 'chains': {}, 'groups': [], 'base_followed': {}, 'base_refused': {'KEY': 'with-as'}, 'base_arms': [], 'resolved_by_guard': []}])
+PASS AC-PNCG4 the shipped face named the same shape ({'KEY': 'with-as'})
+PASS AC-PNCG4 the shipped answer is carried unchanged on the agreeing fixture ({} vs {})
+PASS AC-PNCG4 the shipped answer is carried unchanged on the differing fixture ({} vs {})
+PASS AC-PNCG4 the shipped answer is carried unchanged on the two-group fixture ({} vs {})
+PASS AC-PNCG4 the shipped answer is carried unchanged on the nested fixture ({} vs {})
+PASS AC-PNCG4 the shipped answer is carried unchanged on the unconditional fixture ({'KEY': 'b'} vs {'KEY': 'b'})
+PASS AC-PNCG5 the probed tree is byte-identical after the audit
+PASS AC-PNCG5 the reading moved no shipped digest
+PASS AC-PNCG5 the probe row still reads COVERED ('COVERED')
+PASS AC-PNCG5 the row carries this face own guard loop ([{'line': 5, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'chains': {}, 'groups': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}, 'base_arms': [], 'resolved_by_guard': []}])
+PASS AC-PNCG5 the report keeps the shipped base label and answers its own (('os-probe-seam-name-binding-control-flow-guard-scope', 'SEAMS-GUARD-COVERED', 'os-probe-seam-name-binding-control-flow-scope'))
+PASS AC-PNCG5 a missing root is refused, not raised ('E_PNCG_NO_ROOT')
+PASS AC-PNCG6 the module source is pure ASCII
+PASS AC-PNCG6 this suite source is pure ASCII
+PASS AC-PNCG6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNCG6 no clock and no network token in the module
+PASS AC-PNCG6 the face and its suite are wired into the registry exactly once
+PASS AC-PNCG6 no duplicate registry row
+PASS AC-PNCG6 the reconcile label is the face own (os-probe-seam-name-binding-control-flow-guard-scope)
+PASS AC-PNCG6 the reading has its own verdict words (SEAMS-GUARD-COVERED/SEAMS-GUARD-STALE)
+PASS AC-PNCG6 the new refusal words are its own (guarded-groups/>)
+PASS AC-PNCG6 the shipped face it extends is still named
+SUITE PASS 6/6 criteria green
+== LEG B rc=0 digest=8F50C3562ACC5CD8
+PROBE SEAM NAME BINDING CONTROL FLOW GUARD SUITE (AC-PNCG1..AC-PNCG6)
+PASS AC-PNCG1 two arms binding the SAME literal resolve ([{'line': 6, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'chains': {}, 'groups': [], 'base_followed': {}, 'base_refused': {'KEY': 'guarded:if:2'}, 'base_arms': [], 'resolved_by_guard': ['KEY']}])
+PASS AC-PNCG1 the shipped face refused the same fixture ({'KEY': 'guarded:if:2'})
+PASS AC-PNCG1 the entry law resolves the agreeing pair ({'state': 'ok', 'reason': None, 'value': 'b', 'scope': 'module', 'shadow': False, 'later': {}, 'arms': [], 'source': 'guard', 'chains': ['if:2'], 'groups': [{'group': 'if:2', 'chains': ['if:2'], 'arms': {'body': 'b', 'else': 'b'}, 'values': ['b'], 'depth': 1}], 'guard_value': 'b'})
+PASS AC-PNCG1 two arms with different values still publish both ([{'line': 6, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {}, 'arms': [{'name': 'KEY', 'arms': [{'group': 'if:2', 'arm': 'body', 'value': 'b'}, {'group': 'if:2', 'arm': 'else', 'value': 'z'}]}], 'chains': {}, 'groups': [], 'base_followed': {}, 'base_refused': {}, 'base_arms': [{'name': 'KEY', 'arms': [{'group': 'if:2', 'arm': 'body', 'value': 'b'}, {'group': 'if:2', 'arm': 'else', 'value': 'z'}]}], 'resolved_by_guard': []}])
+PASS AC-PNCG1 the differing pair is still not resolved ({})
+PASS AC-PNCG2 two guard groups are named as two groups ([{'line': 6, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'guarded-groups'}, 'arms': [], 'chains': {'KEY': ['if:2', 'if:4']}, 'groups': [{'group': 'if:2', 'chains': ['if:2'], 'arms': {'body': 'b'}, 'values': ['b'], 'depth': 1}, {'group': 'if:4', 'chains': ['if:4'], 'arms': {'body': 'z'}, 'values': ['z'], 'depth': 1}], 'base_followed': {}, 'base_refused': {'KEY': 'guarded:if:2'}, 'base_arms': [], 'resolved_by_guard': []}])
+PASS AC-PNCG2 both groups are published with their guards ([{'group': 'if:2', 'chains': ['if:2'], 'arms': {'body': 'b'}, 'values': ['b'], 'depth': 1}, {'group': 'if:4', 'chains': ['if:4'], 'arms': {'body': 'z'}, 'values': ['z'], 'depth': 1}])
+PASS AC-PNCG2 both chains are published ({'KEY': ['if:2', 'if:4']})
+PASS AC-PNCG2 the shipped face published only the first group ({'KEY': 'guarded:if:2'})
+PASS AC-PNCG2 the entry law publishes both groups ({'state': 'refused', 'reason': 'guarded-groups', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': [], 'source': 'shipped', 'chains': ['if:2', 'if:4'], 'groups': [{'group': 'if:2', 'chains': ['if:2'], 'arms': {'body': 'b'}, 'values': ['b'], 'depth': 1}, {'group': 'if:4', 'chains': ['if:4'], 'arms': {'body': 'z'}, 'values': ['z'], 'depth': 1}], 'guard_value': None})
+PASS AC-PNCG2 neither group is resolved ({})
+PASS AC-PNCG3 the nested binding publishes its whole chain ([{'line': 5, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'guarded:if:2>if:3'}, 'arms': [], 'chains': {'KEY': ['if:2>if:3']}, 'groups': [{'group': 'if:2', 'chains': ['if:2>if:3'], 'arms': {}, 'values': ['b'], 'depth': 2}], 'base_followed': {}, 'base_refused': {'KEY': 'guarded:if:3'}, 'base_arms': [], 'resolved_by_guard': []}])
+PASS AC-PNCG3 the chain is published outermost first ({'KEY': ['if:2>if:3']})
+PASS AC-PNCG3 the shipped face published only the INNERMOST guard and dropped the outer one ({'KEY': 'guarded:if:3'})
+PASS AC-PNCG3 the entry law names both guards in order ({'state': 'refused', 'reason': 'guarded:if:2>if:3', 'value': None, 'scope': 'module', 'shadow': False, 'later': {}, 'arms': [], 'source': 'shipped', 'chains': ['if:2>if:3'], 'groups': [{'group': 'if:2', 'chains': ['if:2>if:3'], 'arms': {}, 'values': ['b'], 'depth': 2}], 'guard_value': None})
+PASS AC-PNCG3 a nested binding is never resolved ({})
+PASS AC-PNCG4 an unconditional binding still wins ([{'line': 5, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'chains': {}, 'groups': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}, 'base_arms': [], 'resolved_by_guard': []}])
+PASS AC-PNCG4 the shipped face agreed ({'KEY': 'b'})
+PASS AC-PNCG4 a with-as binding keeps the shipped refusal ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'with-as'}, 'arms': [], 'chains': {}, 'groups': [], 'base_followed': {}, 'base_refused': {'KEY': 'with-as'}, 'base_arms': [], 'resolved_by_guard': []}])
+PASS AC-PNCG4 the shipped face named the same shape ({'KEY': 'with-as'})
+PASS AC-PNCG4 the shipped answer is carried unchanged on the agreeing fixture ({} vs {})
+PASS AC-PNCG4 the shipped answer is carried unchanged on the differing fixture ({} vs {})
+PASS AC-PNCG4 the shipped answer is carried unchanged on the two-group fixture ({} vs {})
+PASS AC-PNCG4 the shipped answer is carried unchanged on the nested fixture ({} vs {})
+PASS AC-PNCG4 the shipped answer is carried unchanged on the unconditional fixture ({'KEY': 'b'} vs {'KEY': 'b'})
+PASS AC-PNCG5 the probed tree is byte-identical after the audit
+PASS AC-PNCG5 the reading moved no shipped digest
+PASS AC-PNCG5 the probe row still reads COVERED ('COVERED')
+PASS AC-PNCG5 the row carries this face own guard loop ([{'line': 5, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'chains': {}, 'groups': [], 'base_followed': {'KEY': 'b'}, 'base_refused': {}, 'base_arms': [], 'resolved_by_guard': []}])
+PASS AC-PNCG5 the report keeps the shipped base label and answers its own (('os-probe-seam-name-binding-control-flow-guard-scope', 'SEAMS-GUARD-COVERED', 'os-probe-seam-name-binding-control-flow-scope'))
+PASS AC-PNCG5 a missing root is refused, not raised ('E_PNCG_NO_ROOT')
+PASS AC-PNCG6 the module source is pure ASCII
+PASS AC-PNCG6 this suite source is pure ASCII
+PASS AC-PNCG6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNCG6 no clock and no network token in the module
+PASS AC-PNCG6 the face and its suite are wired into the registry exactly once
+PASS AC-PNCG6 no duplicate registry row
+PASS AC-PNCG6 the reconcile label is the face own (os-probe-seam-name-binding-control-flow-guard-scope)
+PASS AC-PNCG6 the reading has its own verdict words (SEAMS-GUARD-COVERED/SEAMS-GUARD-STALE)
+PASS AC-PNCG6 the new refusal words are its own (guarded-groups/>)
+PASS AC-PNCG6 the shipped face it extends is still named
+SUITE PASS 6/6 criteria green
+== ADJACENT 5
+== src/os/test_probe_seam_name_binding_control_flow_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_name_binding_position_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_name_binding_scope_awareness.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_probe_seam_constant_binding_scope.py rc=0 SUITE PASS 6/6 criteria green
+EVIDENCE identical=True adjacent=5 fails=0 digest=8F50C3562ACC5CD8
