@@ -1,0 +1,95 @@
+PROBE SEAM ANNOTATED CONSTANT SCOPE EVIDENCE R2525
+legs=2 identical=True fails=0 adjacent=0
+--- LEG 1 exit=0 digest=12eceb67fcf6a72f0a06f90ae49436e11a0a501cf75e8930aa5fd0ee9d28f509 ---
+PROBE SEAM ANNOTATED CONSTANT SCOPE SUITE (AC-PLAC1..AC-PLAC6)
+PASS AC-PLAC1 no seam name is spelled in the module source
+PASS AC-PLAC1 no fixture module name is written into the module
+PASS AC-PLAC1 a module-level annotated str literal is read ({'NAME': ('str', 'plac_helper')})
+PASS AC-PLAC1 an annotated computation is NOT a constant ({})
+PASS AC-PLAC1 an annotation that is not a plain name is refused ({})
+PASS AC-PLAC1 a function-body walrus binding is read ({'name': ('str', 'plac_helper')})
+PASS AC-PLAC1 a for-loop target of one str literal is read ({'name': ('str', 'plac_helper')})
+PASS AC-PLAC1 an ambiguous annotated name is NOT resolved ({})
+PASS AC-PLAC1 a nested attribute chain resolves with its binding label (('plac_helper', 'plac_pkg.CFG.NAMES'))
+PASS AC-PLAC1 a chain through a call is NOT resolved (None)
+PASS AC-PLAC2 plac_annotated_module.py reads COVERED with helper=plac_helper binding=NAME (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@NAME']))
+PASS AC-PLAC2 plac_annotated_local.py reads COVERED with helper=plac_helper binding=name (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@name']))
+PASS AC-PLAC2 plac_walrus.py reads COVERED with helper=plac_helper binding=name (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@name']))
+PASS AC-PLAC2 plac_for.py reads COVERED with helper=plac_helper binding=name (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@name']))
+PASS AC-PLAC2 plac_nested.py reads COVERED with helper=plac_helper binding=plac_pkg.CFG.NAMES (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@plac_pkg.CFG.NAMES']))
+PASS AC-PLAC2 the row names the module binding it read (['NAME'])
+PASS AC-PLAC2 the row names the local binding it read (['name'])
+PASS AC-PLAC2 a walrus probe really quiets every seam (5)
+PASS AC-PLAC2 the whole world reads SEAMS-ANNOTATED-COVERED (SEAMS-ANNOTATED-COVERED)
+PASS AC-PLAC3 an annotated binding reaching a partial helper reads MISSING-SEAM naming seam and probe (('MISSING-SEAM', ['PLRC']))
+PASS AC-PLAC3 the world verdict is SEAMS-ANNOTATED-STALE (SEAMS-ANNOTATED-STALE)
+PASS AC-PLAC3 neither probe nor helper was imported or run
+PASS AC-PLAC3 the CLI refuses with exit 2 (2)
+PASS AC-PLAC4 plac_computed.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ['importlib.import_module:name']))
+PASS AC-PLAC4 plac_computed.py is not resolved to plac_helper ([])
+PASS AC-PLAC4 plac_comprehension.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ['importlib.import_module:name']))
+PASS AC-PLAC4 plac_comprehension.py is not resolved to plac_helper ([])
+PASS AC-PLAC4 plac_opaque.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ["importlib.import_module:NAMES['x']"]))
+PASS AC-PLAC4 plac_opaque.py is not resolved to plac_helper ([])
+PASS AC-PLAC4 the computed call is reported verbatim ({'resolved': [], 'unresolved': ['importlib.import_module:name'], 'module_bindings': [], 'local_bindings': []})
+PASS AC-PLAC4 a concatenation is not resolved
+PASS AC-PLAC4 an arithmetic expression is not resolved
+PASS AC-PLAC5 every fixture digest is unchanged and nothing landed
+PASS AC-PLAC5 the shipped module and render are unchanged
+PASS AC-PLAC5 a missing root is refused, not silently clean
+PASS AC-PLAC6 the module source is pure ASCII
+PASS AC-PLAC6 this suite source is pure ASCII
+PASS AC-PLAC6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys,warnings)
+PASS AC-PLAC6 no clock and no network token in the module
+PASS AC-PLAC6 the face and its suite are wired into the registry exactly once
+PASS AC-PLAC6 no duplicate registry row
+PASS AC-PLAC6 the reconcile label is the face own (os-probe-seam-annotated-constant-scope)
+PASS AC-PLAC6 the reading has its own verdict word (SEAMS-ANNOTATED-COVERED)
+SUITE PASS 6/6 criteria green
+--- LEG 2 exit=0 digest=12eceb67fcf6a72f0a06f90ae49436e11a0a501cf75e8930aa5fd0ee9d28f509 ---
+PROBE SEAM ANNOTATED CONSTANT SCOPE SUITE (AC-PLAC1..AC-PLAC6)
+PASS AC-PLAC1 no seam name is spelled in the module source
+PASS AC-PLAC1 no fixture module name is written into the module
+PASS AC-PLAC1 a module-level annotated str literal is read ({'NAME': ('str', 'plac_helper')})
+PASS AC-PLAC1 an annotated computation is NOT a constant ({})
+PASS AC-PLAC1 an annotation that is not a plain name is refused ({})
+PASS AC-PLAC1 a function-body walrus binding is read ({'name': ('str', 'plac_helper')})
+PASS AC-PLAC1 a for-loop target of one str literal is read ({'name': ('str', 'plac_helper')})
+PASS AC-PLAC1 an ambiguous annotated name is NOT resolved ({})
+PASS AC-PLAC1 a nested attribute chain resolves with its binding label (('plac_helper', 'plac_pkg.CFG.NAMES'))
+PASS AC-PLAC1 a chain through a call is NOT resolved (None)
+PASS AC-PLAC2 plac_annotated_module.py reads COVERED with helper=plac_helper binding=NAME (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@NAME']))
+PASS AC-PLAC2 plac_annotated_local.py reads COVERED with helper=plac_helper binding=name (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@name']))
+PASS AC-PLAC2 plac_walrus.py reads COVERED with helper=plac_helper binding=name (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@name']))
+PASS AC-PLAC2 plac_for.py reads COVERED with helper=plac_helper binding=name (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@name']))
+PASS AC-PLAC2 plac_nested.py reads COVERED with helper=plac_helper binding=plac_pkg.CFG.NAMES (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@plac_pkg.CFG.NAMES']))
+PASS AC-PLAC2 the row names the module binding it read (['NAME'])
+PASS AC-PLAC2 the row names the local binding it read (['name'])
+PASS AC-PLAC2 a walrus probe really quiets every seam (5)
+PASS AC-PLAC2 the whole world reads SEAMS-ANNOTATED-COVERED (SEAMS-ANNOTATED-COVERED)
+PASS AC-PLAC3 an annotated binding reaching a partial helper reads MISSING-SEAM naming seam and probe (('MISSING-SEAM', ['PLRC']))
+PASS AC-PLAC3 the world verdict is SEAMS-ANNOTATED-STALE (SEAMS-ANNOTATED-STALE)
+PASS AC-PLAC3 neither probe nor helper was imported or run
+PASS AC-PLAC3 the CLI refuses with exit 2 (2)
+PASS AC-PLAC4 plac_computed.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ['importlib.import_module:name']))
+PASS AC-PLAC4 plac_computed.py is not resolved to plac_helper ([])
+PASS AC-PLAC4 plac_comprehension.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ['importlib.import_module:name']))
+PASS AC-PLAC4 plac_comprehension.py is not resolved to plac_helper ([])
+PASS AC-PLAC4 plac_opaque.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ["importlib.import_module:NAMES['x']"]))
+PASS AC-PLAC4 plac_opaque.py is not resolved to plac_helper ([])
+PASS AC-PLAC4 the computed call is reported verbatim ({'resolved': [], 'unresolved': ['importlib.import_module:name'], 'module_bindings': [], 'local_bindings': []})
+PASS AC-PLAC4 a concatenation is not resolved
+PASS AC-PLAC4 an arithmetic expression is not resolved
+PASS AC-PLAC5 every fixture digest is unchanged and nothing landed
+PASS AC-PLAC5 the shipped module and render are unchanged
+PASS AC-PLAC5 a missing root is refused, not silently clean
+PASS AC-PLAC6 the module source is pure ASCII
+PASS AC-PLAC6 this suite source is pure ASCII
+PASS AC-PLAC6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys,warnings)
+PASS AC-PLAC6 no clock and no network token in the module
+PASS AC-PLAC6 the face and its suite are wired into the registry exactly once
+PASS AC-PLAC6 no duplicate registry row
+PASS AC-PLAC6 the reconcile label is the face own (os-probe-seam-annotated-constant-scope)
+PASS AC-PLAC6 the reading has its own verdict word (SEAMS-ANNOTATED-COVERED)
+SUITE PASS 6/6 criteria green
+--- ADJACENT test_probe_seam_local_constant_scope.py exit=0 tail=SUITE PASS 6/6 criteria green ------ ADJACENT test_probe_seam_dynamic_import_scope.py exit=0 tail=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 ------ ADJACENT test_probe_seam_registry.py exit=0 tail=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 ---

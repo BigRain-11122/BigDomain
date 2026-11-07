@@ -5876,6 +5876,16 @@ SUITES = [
     ("os-probe-seam-local-constant-scope",
      os.path.join("..", "os",
                   "test_probe_seam_local_constant_scope.py"), 6),
+    # R2525 - a probe that declares its module name in an ANNOTATED
+    # assignment, a walrus binding or a for-loop target of one str
+    # literal reads COVERED instead of OUT-OF-SCOPE, and one more
+    # attribute hop on a module-level constant tree is followed when
+    # the probe own imports name the module; a name computed at run
+    # time is named and never evaluated (591 -> 592 suites, 4522 ->
+    # 4528 criteria).
+    ("os-probe-seam-annotated-constant-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_annotated_constant_scope.py"), 6),
     ]
 
 FAILS = 0
