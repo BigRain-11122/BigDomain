@@ -1,0 +1,88 @@
+EVIDENCE CAPTURE round=R2535 suite=test_probe_seam_nested_subscript_scope.py legs=2
+== LEG A rc=0 digest=BB913C7E06ACE9BA
+PROBE SEAM NESTED SUBSCRIPT SUITE (AC-PCNS1..AC-PCNS6)
+PASS AC-PCNS1 a module-level two-key chain resolves ({'name': ('str', 'pcns_helper')})
+PASS AC-PCNS1 a function-body two-key chain resolves ({'name': ('str', 'pcns_helper')})
+PASS AC-PCNS1 the chain carries BOTH keys ({'followed': {'name': "nsub:name@D['a']['b']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a']['b']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PCNS1 the local chain carries both keys too ({'followed': {'name': "nsub:name@D['a']['b']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a']['b']", 'elements': 1, 'scope': 'local'}}, 'multi': []})
+PASS AC-PCNS1 the probe row reads COVERED and names the chain binding (('COVERED', ['importlib.import_module:pcns_helper@name']))
+PASS AC-PCNS1 the row carries the chain with both keys (["l:name@nsub:name@D['a']['b']"])
+PASS AC-PCNS2 a same-root chained subscript resolves ({'name': ('str', 'pcns_helper')})
+PASS AC-PCNS2 the chained label carries both keys ({'followed': {'name': "nsub:name@pcns_pkg.GROUPS['a']['b']"}, 'refused': {}, 'containers': {'name': {'chain': "pcns_pkg.GROUPS['a']['b']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PCNS2 a missing second key is NAMED with its hop ({'followed': {}, 'refused': {'name': "key@hop2:D['a']['zzz']"}, 'containers': {}, 'multi': []})
+PASS AC-PCNS2 and the refusal is not a bare shape word ("key@hop2:D['a']['zzz']")
+PASS AC-PCNS2 an index into a tuple is NAMED at its hop, never followed ({'followed': {}, 'refused': {'name': "index@hop2:D['a'][0]"}, 'containers': {}, 'multi': []})
+PASS AC-PCNS2 and an index step enters no table ({})
+PASS AC-PCNS2 a broken same-root hop is NAMED ({'followed': {}, 'refused': {'name': 'attribute:pcns_pkg.MISSING'}, 'containers': {}, 'multi': []})
+PASS AC-PCNS2 a non-constant second step is NAMED, never guessed ({'followed': {}, 'refused': {'name': "key@hop2:D['a'][KEY]"}, 'containers': {}, 'multi': []})
+PASS AC-PCNS3 a two-element result never enters the table ({})
+PASS AC-PCNS3 the shape is NAMED ambiguous ({'followed': {}, 'refused': {'name': 'ambiguous'}, 'containers': {}, 'multi': []})
+PASS AC-PCNS3 and nothing is published as followed ({'followed': {}, 'refused': {'name': 'ambiguous'}, 'containers': {}, 'multi': []})
+PASS AC-PCNS3 the first element is never taken as the answer
+PASS AC-PCNS4 a call base is NAMED call with its hop ({'followed': {}, 'refused': {'name': 'call@hop1:...'}, 'containers': {}, 'multi': []})
+PASS AC-PCNS4 nothing was evaluated (marker absent)
+PASS AC-PCNS4 and a call base enters no table
+PASS AC-PCNS4 a format step is NAMED format at its hop ({'followed': {}, 'refused': {'name': "format@hop2:D['a'][...]"}, 'containers': {}, 'multi': []})
+PASS AC-PCNS4 and a format step enters no table
+PASS AC-PCNS4 a comprehension base is NAMED comprehension ({'followed': {}, 'refused': {'name': 'comprehension@hop1:?'}, 'containers': {}, 'multi': []})
+PASS AC-PCNS5 the probed tree is byte-identical after the audit
+PASS AC-PCNS5 the reading moved no shipped digest
+PASS AC-PCNS5 the audit still answers a verdict ({'COVERED': 2, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 2, 'UNREADABLE': 0, 'HISTORICAL': 0})
+PASS AC-PCNS5 a missing root is refused, not raised ('E_PCNS_NO_ROOT')
+PASS AC-PCNS6 the module source is pure ASCII
+PASS AC-PCNS6 this suite source is pure ASCII
+PASS AC-PCNS6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys)
+PASS AC-PCNS6 no clock and no network token in the module
+PASS AC-PCNS6 the face and its suite are wired into the registry exactly once
+PASS AC-PCNS6 no duplicate registry row
+PASS AC-PCNS6 the reconcile label is the face own (os-probe-seam-nested-subscript-scope)
+PASS AC-PCNS6 the reading has its own verdict word (SEAMS-NESTED-SUBSCRIPT-COVERED)
+PASS AC-PCNS6 the shipped faces it extends are still named
+SUITE PASS 6/6 criteria green
+== LEG B rc=0 digest=BB913C7E06ACE9BA
+PROBE SEAM NESTED SUBSCRIPT SUITE (AC-PCNS1..AC-PCNS6)
+PASS AC-PCNS1 a module-level two-key chain resolves ({'name': ('str', 'pcns_helper')})
+PASS AC-PCNS1 a function-body two-key chain resolves ({'name': ('str', 'pcns_helper')})
+PASS AC-PCNS1 the chain carries BOTH keys ({'followed': {'name': "nsub:name@D['a']['b']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a']['b']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PCNS1 the local chain carries both keys too ({'followed': {'name': "nsub:name@D['a']['b']"}, 'refused': {}, 'containers': {'name': {'chain': "D['a']['b']", 'elements': 1, 'scope': 'local'}}, 'multi': []})
+PASS AC-PCNS1 the probe row reads COVERED and names the chain binding (('COVERED', ['importlib.import_module:pcns_helper@name']))
+PASS AC-PCNS1 the row carries the chain with both keys (["l:name@nsub:name@D['a']['b']"])
+PASS AC-PCNS2 a same-root chained subscript resolves ({'name': ('str', 'pcns_helper')})
+PASS AC-PCNS2 the chained label carries both keys ({'followed': {'name': "nsub:name@pcns_pkg.GROUPS['a']['b']"}, 'refused': {}, 'containers': {'name': {'chain': "pcns_pkg.GROUPS['a']['b']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PCNS2 a missing second key is NAMED with its hop ({'followed': {}, 'refused': {'name': "key@hop2:D['a']['zzz']"}, 'containers': {}, 'multi': []})
+PASS AC-PCNS2 and the refusal is not a bare shape word ("key@hop2:D['a']['zzz']")
+PASS AC-PCNS2 an index into a tuple is NAMED at its hop, never followed ({'followed': {}, 'refused': {'name': "index@hop2:D['a'][0]"}, 'containers': {}, 'multi': []})
+PASS AC-PCNS2 and an index step enters no table ({})
+PASS AC-PCNS2 a broken same-root hop is NAMED ({'followed': {}, 'refused': {'name': 'attribute:pcns_pkg.MISSING'}, 'containers': {}, 'multi': []})
+PASS AC-PCNS2 a non-constant second step is NAMED, never guessed ({'followed': {}, 'refused': {'name': "key@hop2:D['a'][KEY]"}, 'containers': {}, 'multi': []})
+PASS AC-PCNS3 a two-element result never enters the table ({})
+PASS AC-PCNS3 the shape is NAMED ambiguous ({'followed': {}, 'refused': {'name': 'ambiguous'}, 'containers': {}, 'multi': []})
+PASS AC-PCNS3 and nothing is published as followed ({'followed': {}, 'refused': {'name': 'ambiguous'}, 'containers': {}, 'multi': []})
+PASS AC-PCNS3 the first element is never taken as the answer
+PASS AC-PCNS4 a call base is NAMED call with its hop ({'followed': {}, 'refused': {'name': 'call@hop1:...'}, 'containers': {}, 'multi': []})
+PASS AC-PCNS4 nothing was evaluated (marker absent)
+PASS AC-PCNS4 and a call base enters no table
+PASS AC-PCNS4 a format step is NAMED format at its hop ({'followed': {}, 'refused': {'name': "format@hop2:D['a'][...]"}, 'containers': {}, 'multi': []})
+PASS AC-PCNS4 and a format step enters no table
+PASS AC-PCNS4 a comprehension base is NAMED comprehension ({'followed': {}, 'refused': {'name': 'comprehension@hop1:?'}, 'containers': {}, 'multi': []})
+PASS AC-PCNS5 the probed tree is byte-identical after the audit
+PASS AC-PCNS5 the reading moved no shipped digest
+PASS AC-PCNS5 the audit still answers a verdict ({'COVERED': 2, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 2, 'UNREADABLE': 0, 'HISTORICAL': 0})
+PASS AC-PCNS5 a missing root is refused, not raised ('E_PCNS_NO_ROOT')
+PASS AC-PCNS6 the module source is pure ASCII
+PASS AC-PCNS6 this suite source is pure ASCII
+PASS AC-PCNS6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys)
+PASS AC-PCNS6 no clock and no network token in the module
+PASS AC-PCNS6 the face and its suite are wired into the registry exactly once
+PASS AC-PCNS6 no duplicate registry row
+PASS AC-PCNS6 the reconcile label is the face own (os-probe-seam-nested-subscript-scope)
+PASS AC-PCNS6 the reading has its own verdict word (SEAMS-NESTED-SUBSCRIPT-COVERED)
+PASS AC-PCNS6 the shipped faces it extends are still named
+SUITE PASS 6/6 criteria green
+== ADJACENT 5
+== test_probe_seam_subscript_container_scope.py rc=0 SUITE PASS 6/6 criteria green
+== test_probe_seam_for_container_name.py rc=0 SUITE PASS 6/6 criteria green
+== test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== test_probe_seam_registry.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== test_probe_seam_alias_expression_scope.py rc=0 SUITE PASS 6/6 criteria green
+EVIDENCE identical=True adjacent=5 fails=0 digest=BB913C7E06ACE9BA

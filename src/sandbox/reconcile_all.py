@@ -5922,6 +5922,15 @@ SUITES = [
     ("os-probe-seam-subscript-container-scope",
      os.path.join("..", "os",
                   "test_probe_seam_subscript_container_scope.py"), 6),
+    # R2535 - a for-loop whose iterable is a CHAIN of two or more constant
+    # subscripts on a literal container resolves only when the result holds
+    # EXACTLY ONE element and carries the chain with EVERY key; a missing key,
+    # an integer index into a tuple, a call, a format and a comprehension step
+    # are NAMED together with the HOP that broke (596 -> 597 suites,
+    # 4552 -> 4558 criteria).
+    ("os-probe-seam-nested-subscript-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_nested_subscript_scope.py"), 6),
     ]
 
 FAILS = 0

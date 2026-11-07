@@ -1,0 +1,9 @@
+PROBE SEAM NESTED SUBSCRIPT LIVE round=R2535
+  verdict=SEAMS-NESTED-SUBSCRIPT-COVERED probes=1447 covered=3 out_of_scope=177 missing=0 unreadable=0 historical=1267
+  read_only=True tree=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os
+  FIXTURE two-key chain: this face followed=nsub:name@D['a']['b']
+  FIXTURE two-key chain: this face refused=None
+  FIXTURE two-key chain: shipped subscript face followed=None refused=nested
+  FIXTURE world verdict=SEAMS-NESTED-SUBSCRIPT-COVERED probe=OUT-OF-SCOPE
+  digest module=6b8e3b006e1850f1 base=05440130930683be render=b2fa7ac14c68031c
+  digest_after module=6b8e3b006e1850f1 base=05440130930683be render=b2fa7ac14c68031c
