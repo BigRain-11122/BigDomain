@@ -25,3 +25,4 @@ tick=2530 2026-11-07 R2530 verification window: battery red leg kept and repaire
 2026-11-07 19:03 R2533 product window: subscript container scope shipped, registry 596/4552
 2026-11-07 19:26 R2534 verification window: battery green 596/596 at 4552 criteria, four follow-up sections PASS
 2026-11-07 19:41 R2535 product window: nested subscript scope shipped (two-key chain resolves with every key, refusals carry the hop), registry 597/4558
+2026-11-07 20:1x R2536 verification window: battery green 597/597 at 4558 criteria, four follow-up sections PASS, matrix restamped
