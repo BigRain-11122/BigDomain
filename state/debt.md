@@ -255,8 +255,9 @@ column-0 checkbox starts one.
 - [x] opened=R2527 | item=reconcile-battery-R2527 | note=registry moved by one row to 593 suites / 4534 criteria and a shipped module plus a shipped doc changed, so a full battery on this committed tree is owed at the pre-registered 593 suites / 4534 criteria before any further product byte | closed=R2528
 - [ ] opened=R2527 | item=product-face-R2527 | note=product window shipped probe_seam_constant_alias_scope plus its suite; next product face named on tech head line 565 prefix AC-PCAE1 | first=no
 - [x] opened=R2528 | item=product-face-R2528 | note=verification window closed the battery and moved no product byte; the next window owes the PRODUCT face the queue names at state/queue/tech.md:565 prefix AC-PCAE1 probe_seam_alias_expression_scope, whose criteria were pinned in that row at R2527 BEFORE any code | closed=R2529
-- [ ] opened=R2529 | item=reconcile-battery-R2529 | note=the registry moved by one row to 594 suites and 4540 criteria recounted by import, so this battery is owed on the committed tree BEFORE any further product byte | first=yes
+- [x] opened=R2529 | item=reconcile-battery-R2529 | note=the registry moved by one row to 594 suites and 4540 criteria recounted by import, so this battery is owed on the committed tree BEFORE any further product byte | closed=R2530
 - [ ] opened=R2529 | item=product-face-R2529 | note=product face shipped on tech line 565 prefix AC-PCAE1 probe_seam_alias_expression_scope, and the next window owes the battery above first | first=no
+- [ ] opened=R2530 | item=product-face-R2530 | note=next window is a PRODUCT face on queue head state/queue/tech.md:567 prefix AC-PCAF1 probe_seam_for_container_name, criteria pinned there at R2529 BEFORE any code | first=yes
 
 ## Closed
 
