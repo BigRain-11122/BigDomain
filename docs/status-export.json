@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T17:11:46+08:00",
-  "do": "2026-11-07 R2528 VERIFICATION window on the battery the register owed (reconcile-battery-R2527, pre-registered 593 suites / 4534 criteria). Five-silence state at open: the tree was clean at HEAD beccc381 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions diff read new=0 over the stored 160-token baseline at a measured 93 token",
+  "export_ts": "2026-11-07T17:23:57+08:00",
+  "do": "2026-11-07 R2529 PRODUCT window on the tech head the register named (product-face-R2528, state/queue/tech.md:565 prefix AC-PCAE1, criteria AC-PCAE1..AC-PCAE6 pinned in that row at R2527 BEFORE any code). Five-silence scan at open: the tree was clean at HEAD 950a38d9, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read new=0 over the stored 160",
   "ceo_face": {
-    "current": "2026-11-07 R2528 VERIFICATION window on the battery the register owed (reconcile-battery-R2527, pre-registered 593 suites / 4534 criteria). Five-silence state at open: the tree was clean at HEAD beccc381 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions diff read new=0 over the stored 160-token baseline at a measured 93 token",
-    "latest_artifact": "reconcile-all-R2528.log (920698B)",
-    "next_milestone": "next window owes product-face-R2528 on the committed tree, inside a 48h window due 2026-11-09T17:11:46+08:00",
-    "next_milestone_due": "2026-11-09T17:11:46+08:00",
-    "last_artifact": "reconcile-all-R2528.log (920698B)",
-    "updated_at": "2026-11-07T17:11:46+08:00"
+    "current": "2026-11-07 R2529 PRODUCT window on the tech head the register named (product-face-R2528, state/queue/tech.md:565 prefix AC-PCAE1, criteria AC-PCAE1..AC-PCAE6 pinned in that row at R2527 BEFORE any code). Five-silence scan at open: the tree was clean at HEAD 950a38d9, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read new=0 over the stored 160",
+    "latest_artifact": "probe-seam-alias-expression-scope-R2529.log (14914B) + probe-seam-alias-expression-scope-live-R2529.log (4242B)",
+    "next_milestone": "next window owes reconcile-battery-R2529 on the committed tree, inside a 48h window due 2026-11-09T17:23:57+08:00",
+    "next_milestone_due": "2026-11-09T17:23:57+08:00",
+    "last_artifact": "probe-seam-alias-expression-scope-R2529.log (14914B) + probe-seam-alias-expression-scope-live-R2529.log (4242B)",
+    "updated_at": "2026-11-07T17:23:57+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "probe-seam-alias-expression-scope-R2529.log (14914B) + probe-seam-alias-expression-scope-live-R2529.log (4242B)",
     "reconcile-all-R2528.log (920698B)",
     "probe-seam-constant-alias-scope-R2527.log (7503B) + probe-seam-constant-alias-scope-live-R2527.log (564B)",
     "reconcile-all-R2526.log (916964B)",
@@ -148,6 +149,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2529",
+      "2026-11-07 R2529 PRODUCT window on the tech head the register named (product-face-R2528, state/queue/tech.md:565 prefix AC-PCAE1 probe_seam_alias_expression_scope, criteria pinned at R2527 BEFORE any code). SHIPPED src/os/probe_seam_alias_expression_scope.py plus its six-criteria suite: a for-loop over a single NAMED constant, an annotated alias whose value is a subscript or attribute chain into a same-root module, and a container alias whose elements are names now resolve through the SHIPPED tables and carry the chain they took, while a call, a format, an arithmetic expression, a comprehension, a nested container and an unresolvable chain are NAMED on the row instead of reading silently absent. PROOF measured not quoted: AC-PCAE1..AC-PCAE6 SUITE PASS 6/6 TWICE with exit 0 on both legs plus five adjacent probe suites green (qa/probe-seam-alias-expression-scope-R2529.log); a live leg on the REAL tree reads SEAMS-ALIAS-COVERED over 1424 probes (3 covered, 174 out-of-scope, 1247 historical, missing=0) with the module and render digests unchanged (qa/probe-seam-alias-expression-scope-live-R2529.log, exit 0). REGISTRY 593/4534 -> 594/4540 by exactly one row recounted by importing reconcile_all.SUITES rather than trusted; docs/sandbox-suite-matrix.md regenerated stamp-aligned from the eligible battery leg to 57227 bytes at 594/4540 with green=593/594 self-describing and --check byte-identical at rc=0. BOARD: row 565 closed through the per-round writer at its predicted 1707371 bytes (measured 1707371) and ONE row seeded from this window own MEASURED limit - a for-loop over a NAME bound to a constant CONTAINER still reads empty and names nothing - as AC-PCAF1..AC-PCAF6; head now line 567, claimable=11, floor MET. DEBT: product-face-R2528 closed at its predicted 160016B -> 160019B (open 12->11, done 227->228, readback ok); because the registry moved, reconcile-battery-R2529 was appended first=yes at 160019B -> 160249B so the NEXT window owes that battery BEFORE any further product byte, and product-face-R2529 was appended first=no at 160249B -> 160450B. HONEST: two product points and nothing a CEO could open is new; my first container reading published nested trees into the shipped table and the shipped element reader raised TypeError, so the entries were flattened to the SHIPPED format and a nested container is now refused as nested by name; two assertions in my own suite were corrected against measurement rather than loosening the code; the walk shape is a fourth copy; Docker is absent; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; tasks.md was not touched; the state_fold layout defect from R2522 is still open and the append used a proved load+dump round-trip; the S4U lane reconcile still needs an ELEVATED shell."
+    ],
     [
       "2528",
       "2026-11-07 R2528 VERIFICATION window on the battery the register owed (reconcile-battery-R2527, pre-registered 593 suites / 4534 criteria; the target was re-measured by importing reconcile_all.SUITES before anything ran and matched byte for byte). RESULT GREEN ON THE FIRST LEG, measured not quoted: qa/reconcile-all-R2528.log is 920698B as delivered (1950B follow-up block appended to a 918748B green leg), utf-8 bom=False crlf=0 lone_cr=0, closing RUNNER PASS (593/593 suites green, reconcile controls 7/7, 1112.6s), zero FAIL suite rows, and an independent recount over the 593 PASS rows summing to EXACTLY 4534 criteria - the pre-registered total matched by measurement. Launched detached and unfiltered through src/os/battery_stream.py so the filtering-pipe trap was not re-paid. FOUR FOLLOW-UP SECTIONS in the designed order: the dry run read SECTION matrix FAIL at on-disk 57113B against regenerated 57108B with NO byte written while fingerprint read CLEAN domains=5, profile byte-identical and census DRIFT-CLEAN; docs/sandbox-suite-matrix.md was then regenerated stamp-aligned from THIS round own green evidence through src/sandbox/suite_matrix.py --stamp-from to 57108 bytes at 593 suites / 4534 criteria with its green line honestly reading 593/593 self-describing, --check read byte-identical at rc=0, and the re-run read all four PASS for VERDICT R2528 PASS failing=none (APPENDED 1950B, eol crlf=0 bare_cr=0 bom=False). DEBT: reconcile-battery-R2527 closed through the shipped debtor at its predicted 159687B -> 159690B (line 255, open 12->11, done 226->227, readback ok); NO successor battery is owed because this window moved no product src byte and the registry is unmoved at 593 suites / 4534 criteria, re-read by import rather than trusted; the gate then owed a leader, so product-face-R2528 was appended first=yes at 159690B -> 160016B naming the next window a PRODUCT face on queue head state/queue/tech.md:565 prefix AC-PCAE1 probe_seam_alias_expression_scope, whose criteria were pinned at R2527 BEFORE any code. HONEST: zero product points on the Executive Protocol scale - nothing a CEO could open was built this window and none is claimed; the deliverable is a green 593/4534 battery and a matrix document whose evidence column names this round own green leg; the window overshot its 25-minute budget on a 1112.6s battery; my first follow-up invocation passed --round R2528 and was refused because that flag takes an integer, reported rather than silently retried; five stale product-face rows are disclosed rather than hand-closed; the state_fold layout defect from R2522 is still open and the append used a proved load+dump round-trip instead; Docker is absent; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; tasks.md was not touched."
@@ -661,17 +666,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2528",
+      "2529",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 45,
+    "log_lines_in_window": 50,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 45,
+    "substantive_non_idle_mention_lines": 50,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -704,7 +709,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 12,
-        "done_rows": 431,
+        "done_rows": 432,
         "gated_rows": 1,
         "claimable": 11,
         "discounted": 0,

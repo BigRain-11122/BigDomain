@@ -18,3 +18,4 @@
 2026-11-07 R2526 verification window: reconcile battery green on the first leg 592/592 suites at exactly 4528 criteria, matrix regenerated self-describing, no successor battery owed
 tick=2527 2026-11-07 R2527 product window: probe_seam_constant_alias_scope shipped with its six criteria, suites and live leg green
 tick=2528 2026-11-07 R2528 verification window: reconcile battery green on the first leg 593/593 suites at exactly 4534 criteria, matrix regenerated self-describing, battery row closed and the next product face registered
+tick=2529 2026-11-07 R2529 product window: probe_seam_alias_expression_scope shipped with AC-PCAE1..AC-PCAE6 6/6 twice at 594 suites / 4540 criteria, registry moved one row so a battery is owed next

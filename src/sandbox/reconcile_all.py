@@ -5895,6 +5895,15 @@ SUITES = [
     ("os-probe-seam-constant-alias-scope",
      os.path.join("..", "os",
                   "test_probe_seam_constant_alias_scope.py"), 6),
+    # R2529 - a for-loop over a NAMED constant, an annotated alias whose
+    # value is a subscript or attribute chain, and a container alias whose
+    # elements are names resolve through the shipped tables with the chain
+    # they took published on the row, while a call, a format, a
+    # comprehension and an unresolvable element are NAMED rather than
+    # reading empty (593 -> 594 suites, 4534 -> 4540 criteria).
+    ("os-probe-seam-alias-expression-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_alias_expression_scope.py"), 6),
     ]
 
 FAILS = 0

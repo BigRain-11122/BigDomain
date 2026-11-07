@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 593 | 4534 | 593/593 | R2528 |
+| 594 | 4540 | 593/593 | R2528 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -631,7 +631,8 @@
 | 591 | os-probe-seam-local-constant-scope | ../os/test_probe_seam_local_constant_scope.py | 6 | green | 0.1 |
 | 592 | os-probe-seam-annotated-constant-scope | ../os/test_probe_seam_annotated_constant_scope.py | 6 | green | 0.2 |
 | 593 | os-probe-seam-constant-alias-scope | ../os/test_probe_seam_constant_alias_scope.py | 6 | green | 0.2 |
-|  | 合计 |  | 4534 | green 593 / FAIL 0 / no-evidence 0 |  |
+| 594 | os-probe-seam-alias-expression-scope | ../os/test_probe_seam_alias_expression_scope.py | 6 | no-evidence | - |
+|  | 合计 |  | 4540 | green 593 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 
