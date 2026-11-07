@@ -1,0 +1,80 @@
+=== LEG 1 rc=0 ===
+PROBE SEAM LAZY SCOPE suite (R2517, 6 criteria)
+  PASS AC-PSL1 the derived seams equal an independent AST reading of the render source (['PLRC', 'PNLT', 'ADTR', 'EVNM', 'STPT'] vs ['PLRC', 'PNLT', 'ADTR', 'EVNM', 'STPT'])
+  PASS AC-PSL1 every derived name really carries a callable guard
+  PASS AC-PSL1 no seam name is spelled in the module source
+  PASS AC-PSL1 a function-body import is read AND named lazy ((['quiet_helper'], [], ['quiet_helper']))
+  PASS AC-PSL1 a probe that only lazily imports its helper is followed ('COVERED' direct=[] helpers=['quiet_helper'])
+  PASS AC-PSL1 the row names the lazy import it took (['quiet_helper'])
+  PASS AC-PSL1 a differently named lazy helper is followed too, so no helper list is hard-coded (['helper_zz'])
+  PASS AC-PSL1 a bare string naming a helper is not an import ('OUT-OF-SCOPE')
+  PASS AC-PSL1 the lazy hop is re-read at CALL time: editing ONLY the helper moves the same probe 'MISSING-SEAM' -> 'COVERED'
+  PASS AC-PSL2 a lazy forwarding probe reads COVERED ('COVERED')
+  PASS AC-PSL2 the helper it was followed through is named (['quiet_helper'])
+  PASS AC-PSL2 the lazily forwarded seams cover every seam it owes (quieted=5 required=5)
+  PASS AC-PSL2 the same fixture is OUT-OF-SCOPE to the module-level face, so the closed gap is measured ('OUT-OF-SCOPE')
+  PASS AC-PSL2 the shipped tool accepts it at exit 0 naming the helper (rc=0)
+  PASS AC-PSL3 a lazy forwarding probe behind its helper reads MISSING-SEAM ('MISSING-SEAM')
+  PASS AC-PSL3 the reading names the seam the lazy helper omits (['STPT'])
+  PASS AC-PSL3 the probe that carries a module-level exit is named, never imported
+  PASS AC-PSL3 the shipped tool refuses at exit 2 naming seam and file (rc=2)
+  PASS AC-PSL3 a stale lazy probe makes the tree STALE
+  PASS AC-PSL4 lazily importing a helper that quiets nothing stays OUT-OF-SCOPE ('OUT-OF-SCOPE'/'OUT-OF-SCOPE')
+  PASS AC-PSL4 nothing in that tree is counted as clean ({'COVERED': 0, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 3, 'UNREADABLE': 0, 'HISTORICAL': 0})
+  PASS AC-PSL4 out-of-scope is a named bucket, not an alarm ('SEAMS-LAZY-COVERED')
+  PASS AC-PSL4 a lazily chained helper is followed too, so a partial helper cannot INVENT a missing seam ('COVERED' helpers=['middle_helper'])
+  PASS AC-PSL4 a lazy import cycle terminates and reads COVERED ('COVERED')
+  PASS AC-PSL4 a real shipped module outside the protocol reads OUT-OF-SCOPE ('OUT-OF-SCOPE')
+  PASS AC-PSL5 the probed root gains no file
+  PASS AC-PSL5 the render, the patterns file, both readers, every probe and every seam owner keep their bytes (13 files)
+  PASS AC-PSL5 the module holds no write primitive
+  PASS AC-PSL6 the module source is pure ASCII
+  PASS AC-PSL6 module-level imports are stdlib only (['argparse', 'ast', 'hashlib', 'json', 'os', 're', 'sys', 'warnings'])
+  PASS AC-PSL6 the module reads no clock
+  PASS AC-PSL6 zero network imports
+  PASS AC-PSL6 the module carries its own reconcile label
+  PASS AC-PSL6 the runner wires this suite
+  PASS AC-PSL6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+=== LEG 2 rc=0 ===
+PROBE SEAM LAZY SCOPE suite (R2517, 6 criteria)
+  PASS AC-PSL1 the derived seams equal an independent AST reading of the render source (['PLRC', 'PNLT', 'ADTR', 'EVNM', 'STPT'] vs ['PLRC', 'PNLT', 'ADTR', 'EVNM', 'STPT'])
+  PASS AC-PSL1 every derived name really carries a callable guard
+  PASS AC-PSL1 no seam name is spelled in the module source
+  PASS AC-PSL1 a function-body import is read AND named lazy ((['quiet_helper'], [], ['quiet_helper']))
+  PASS AC-PSL1 a probe that only lazily imports its helper is followed ('COVERED' direct=[] helpers=['quiet_helper'])
+  PASS AC-PSL1 the row names the lazy import it took (['quiet_helper'])
+  PASS AC-PSL1 a differently named lazy helper is followed too, so no helper list is hard-coded (['helper_zz'])
+  PASS AC-PSL1 a bare string naming a helper is not an import ('OUT-OF-SCOPE')
+  PASS AC-PSL1 the lazy hop is re-read at CALL time: editing ONLY the helper moves the same probe 'MISSING-SEAM' -> 'COVERED'
+  PASS AC-PSL2 a lazy forwarding probe reads COVERED ('COVERED')
+  PASS AC-PSL2 the helper it was followed through is named (['quiet_helper'])
+  PASS AC-PSL2 the lazily forwarded seams cover every seam it owes (quieted=5 required=5)
+  PASS AC-PSL2 the same fixture is OUT-OF-SCOPE to the module-level face, so the closed gap is measured ('OUT-OF-SCOPE')
+  PASS AC-PSL2 the shipped tool accepts it at exit 0 naming the helper (rc=0)
+  PASS AC-PSL3 a lazy forwarding probe behind its helper reads MISSING-SEAM ('MISSING-SEAM')
+  PASS AC-PSL3 the reading names the seam the lazy helper omits (['STPT'])
+  PASS AC-PSL3 the probe that carries a module-level exit is named, never imported
+  PASS AC-PSL3 the shipped tool refuses at exit 2 naming seam and file (rc=2)
+  PASS AC-PSL3 a stale lazy probe makes the tree STALE
+  PASS AC-PSL4 lazily importing a helper that quiets nothing stays OUT-OF-SCOPE ('OUT-OF-SCOPE'/'OUT-OF-SCOPE')
+  PASS AC-PSL4 nothing in that tree is counted as clean ({'COVERED': 0, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 3, 'UNREADABLE': 0, 'HISTORICAL': 0})
+  PASS AC-PSL4 out-of-scope is a named bucket, not an alarm ('SEAMS-LAZY-COVERED')
+  PASS AC-PSL4 a lazily chained helper is followed too, so a partial helper cannot INVENT a missing seam ('COVERED' helpers=['middle_helper'])
+  PASS AC-PSL4 a lazy import cycle terminates and reads COVERED ('COVERED')
+  PASS AC-PSL4 a real shipped module outside the protocol reads OUT-OF-SCOPE ('OUT-OF-SCOPE')
+  PASS AC-PSL5 the probed root gains no file
+  PASS AC-PSL5 the render, the patterns file, both readers, every probe and every seam owner keep their bytes (13 files)
+  PASS AC-PSL5 the module holds no write primitive
+  PASS AC-PSL6 the module source is pure ASCII
+  PASS AC-PSL6 module-level imports are stdlib only (['argparse', 'ast', 'hashlib', 'json', 'os', 're', 'sys', 'warnings'])
+  PASS AC-PSL6 the module reads no clock
+  PASS AC-PSL6 zero network imports
+  PASS AC-PSL6 the module carries its own reconcile label
+  PASS AC-PSL6 the runner wires this suite
+  PASS AC-PSL6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+=== ADJACENT ===
+test_probe_seam_forwarding_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_probe_seam_registry.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+=== SUMMARY legs=2 identical=True fails=0 adjacent=2 ===

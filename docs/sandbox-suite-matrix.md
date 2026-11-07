@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 587 | 4498 | 587/587 | R2516 |
+| 588 | 4504 | 587/587 | R2516 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -625,7 +625,8 @@
 | 585 | os-stamp-text-coverage | ../os/test_stamp_text_coverage.py | 6 | green | 0.3 |
 | 586 | os-probe-seam-registry | ../os/test_probe_seam_registry.py | 6 | green | 1.2 |
 | 587 | os-probe-seam-forwarding-scope | ../os/test_probe_seam_forwarding_scope.py | 6 | green | 3.6 |
-|  | 合计 |  | 4498 | green 587 / FAIL 0 / no-evidence 0 |  |
+| 588 | os-probe-seam-lazy-scope | ../os/test_probe_seam_lazy_scope.py | 6 | no-evidence | - |
+|  | 合计 |  | 4504 | green 587 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

@@ -1,0 +1,9 @@
+LIVE REAL TREE verdict=SEAMS-LAZY-COVERED seams=5 probes=1379 covered=3 missing=0 out_of_scope=168 unreadable=0 historical=1208
+  COVERED artifact_disk_text_readability.py helpers=- lazy=suite_matrix
+  COVERED evidence_name_text_coverage.py helpers=- lazy=suite_matrix
+  COVERED stamp_text_coverage.py helpers=- lazy=suite_matrix
+  FIXTURE lazy_probe.py lazy-face=COVERED helpers=quiet_helper quieted=5
+  FIXTURE lazy_probe.py module-level-face=OUT-OF-SCOPE quieted=0
+  FIXTURE stale_probe.py lazy-face=MISSING-SEAM missing=STPT
+  FIXTURE tree verdict=SEAMS-LAZY-STALE
+  DIGESTS render_unchanged=True artifact_unchanged=True

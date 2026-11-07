@@ -5833,6 +5833,17 @@ SUITES = [
     ("os-probe-seam-forwarding-scope",
      os.path.join("..", "os",
                   "test_probe_seam_forwarding_scope.py"), 6),
+    # R2517 claim, AC-PSL1..AC-PSL6 (pinned in state/queue/tech.md:553 at
+    # R2515 BEFORE the code): MEASURED at R2515 that a probe importing its
+    # quieting helper INSIDE a function body reads OUT-OF-SCOPE, because the
+    # forwarding face follows only module-level imports, so a lazy forwarding
+    # probe was invisible again. ONE reading now follows function-level
+    # imports too on the same cycle-guarded same-root walk, so a lazy
+    # forwarding probe is answered on its own row (COVERED or MISSING-SEAM
+    # naming the seam and the file) and is never run.
+    ("os-probe-seam-lazy-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_lazy_scope.py"), 6),
     ]
 
 FAILS = 0
