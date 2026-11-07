@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T09:32:43+08:00",
+  "export_ts": "2026-11-07T09:33:36+08:00",
   "do": "2026-11-07 R2515 PRODUCT window on the tech head the register named (product-face-R2514, state/queue/tech.md:552 prefix AC-PSF1 probe_seam_forwarding_scope, criteria AC-PSF1..AC-PSF6 pinned in that row at R2513 BEFORE any code). Five-silence scan at open was clean at HEAD f80b75a9: git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff n",
   "ceo_face": {
     "current": "2026-11-07 R2515 PRODUCT window on the tech head the register named (product-face-R2514, state/queue/tech.md:552 prefix AC-PSF1 probe_seam_forwarding_scope, criteria AC-PSF1..AC-PSF6 pinned in that row at R2513 BEFORE any code). Five-silence scan at open was clean at HEAD f80b75a9: git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff n",
     "latest_artifact": "probe-seam-forwarding-scope-R2515.log (6183B) + probe-seam-forwarding-scope-live-R2515.log (1132B)",
-    "next_milestone": "next window owes reconcile-battery-R2515 on the committed tree, inside a 48h window due 2026-11-09T09:32:43+08:00",
-    "next_milestone_due": "2026-11-09T09:32:43+08:00",
+    "next_milestone": "next window owes reconcile-battery-R2515 on the committed tree, inside a 48h window due 2026-11-09T09:33:36+08:00",
+    "next_milestone_due": "2026-11-09T09:33:36+08:00",
     "last_artifact": "probe-seam-forwarding-scope-R2515.log (6183B) + probe-seam-forwarding-scope-live-R2515.log (1132B)",
-    "updated_at": "2026-11-07T09:32:43+08:00"
+    "updated_at": "2026-11-07T09:33:36+08:00"
   },
   "depts": [
     {
@@ -613,10 +613,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 19,
+    "log_lines_in_window": 20,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 19,
+    "substantive_non_idle_mention_lines": 20,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
