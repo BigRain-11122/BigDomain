@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T10:49:56+08:00",
+  "export_ts": "2026-11-07T10:51:03+08:00",
   "do": "2026-11-07 R2518 VERIFICATION window on the battery the register owed (reconcile-battery-R2517, pre-registered 588 suites / 4504 criteria), because the R2168 mixed-tree rule puts an owed battery ahead of any further product byte after R2517 moved the registry by one row. Five-silence scan clean at HEAD f00dbd48 (git status empty, no index.lock, zero @BigDomain ledger rows, decisions diff new=0 ove",
   "ceo_face": {
     "current": "2026-11-07 R2518 VERIFICATION window on the battery the register owed (reconcile-battery-R2517, pre-registered 588 suites / 4504 criteria), because the R2168 mixed-tree rule puts an owed battery ahead of any further product byte after R2517 moved the registry by one row. Five-silence scan clean at HEAD f00dbd48 (git status empty, no index.lock, zero @BigDomain ledger rows, decisions diff new=0 ove",
     "latest_artifact": "reconcile-all-R2518.log (900373B)",
-    "next_milestone": "next window owes product-face-R2518 on the committed tree, inside a 48h window due 2026-11-09T10:49:56+08:00",
-    "next_milestone_due": "2026-11-09T10:49:56+08:00",
+    "next_milestone": "next window owes product-face-R2518 on the committed tree, inside a 48h window due 2026-11-09T10:51:03+08:00",
+    "next_milestone_due": "2026-11-09T10:51:03+08:00",
     "last_artifact": "reconcile-all-R2518.log (900373B)",
-    "updated_at": "2026-11-07T10:49:56+08:00"
+    "updated_at": "2026-11-07T10:51:03+08:00"
   },
   "depts": [
     {
@@ -625,10 +625,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 34,
+    "log_lines_in_window": 35,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 34,
+    "substantive_non_idle_mention_lines": 35,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
