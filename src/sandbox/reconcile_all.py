@@ -5857,6 +5857,15 @@ SUITES = [
     ("os-probe-seam-dynamic-import-scope",
      os.path.join("..", "os",
                   "test_probe_seam_dynamic_import_scope.py"), 6),
+    # R2521 AC-PCB1: the seam reading that follows a dynamic module name
+    # through the STRING CONSTANT bindings a probe own tree declares (str
+    # literal, tuple/list element by constant index, dict value by constant
+    # key), so a probe written that way is answered on its own row instead
+    # of reading OUT-OF-SCOPE; a name bound to a computation is named and
+    # never evaluated (589 -> 590 suites, 4510 -> 4516 criteria).
+    ("os-probe-seam-constant-binding-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_constant_binding_scope.py"), 6),
     ]
 
 FAILS = 0

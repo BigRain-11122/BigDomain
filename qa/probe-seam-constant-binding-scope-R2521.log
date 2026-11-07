@@ -1,0 +1,80 @@
+EVIDENCE CAPTURE round=R2521 suite=src/os/test_probe_seam_constant_binding_scope.py legs=2
+== LEG A rc=0 digest=F7FFF637AA17FFC5
+PROBE SEAM CONSTANT BINDING SCOPE SUITE (AC-PCB1..AC-PCB6)
+PASS AC-PCB1 no seam name is spelled in the module source
+PASS AC-PCB1 no fixture helper name is written into the module
+PASS AC-PCB1 a str-literal binding is read off the tree ({'NAME': ('str', 'pcb_helper')})
+PASS AC-PCB1 a tuple of str literals is read off the tree ({'NAMES': ('tuple', ['pcb_unused', 'pcb_helper'])})
+PASS AC-PCB1 a dict of str pairs and its key binding are read ({'MAP': ('dict', {'x': 'pcb_unused', 'h': 'pcb_helper'}), 'KEY': ('str', 'h')})
+PASS AC-PCB1 a concatenation is NOT a constant binding ({})
+PASS AC-PCB1 an f-string is NOT a constant binding ({'BASE': ('str', 'pcb')})
+PASS AC-PCB1 a call is NOT a constant binding ({})
+PASS AC-PCB1 an imported constant is NOT a constant binding ({})
+PASS AC-PCB2 pcb_str.py reads COVERED with helper=pcb_helper binding=NAME shape=importlib.import_module (('COVERED', ['pcb_helper'], ['importlib.import_module:pcb_helper@NAME']))
+PASS AC-PCB2 pcb_tuple.py reads COVERED with helper=pcb_helper binding=NAMES shape=importlib.import_module (('COVERED', ['pcb_helper'], ['importlib.import_module:pcb_helper@NAMES']))
+PASS AC-PCB2 pcb_dict.py reads COVERED with helper=pcb_helper binding=MAP shape=importlib.import_module (('COVERED', ['pcb_helper'], ['importlib.import_module:pcb_helper@MAP']))
+PASS AC-PCB2 the whole world reads SEAMS-CONSTANT-COVERED (SEAMS-CONSTANT-COVERED)
+PASS AC-PCB3 a constant-bound partial helper reads MISSING-SEAM naming seam and probe (('MISSING-SEAM', ['PLRC']))
+PASS AC-PCB3 the world verdict is SEAMS-CONSTANT-STALE (SEAMS-CONSTANT-STALE)
+PASS AC-PCB3 neither probe nor helper was imported or run
+PASS AC-PCB3 the CLI refuses with exit 2 (2)
+PASS AC-PCB4 pcb_computed.py reads OUT-OF-SCOPE with the call named (('OUT-OF-SCOPE', ['importlib.import_module:NAME']))
+PASS AC-PCB4 pcb_computed.py is not resolved to pcb_helper ([])
+PASS AC-PCB4 pcb_computed.py expression is named as computed
+PASS AC-PCB4 pcb_format.py reads OUT-OF-SCOPE with the call named (('OUT-OF-SCOPE', ['importlib.import_module:NAME']))
+PASS AC-PCB4 pcb_format.py is not resolved to pcb_helper ([])
+PASS AC-PCB4 pcb_format.py expression is named as computed
+PASS AC-PCB4 the computed call is reported verbatim ({'resolved': [], 'unresolved': ['importlib.import_module:NAME'], 'bindings': []})
+PASS AC-PCB5 every fixture digest is unchanged and nothing landed
+PASS AC-PCB5 the shipped module and render are unchanged
+PASS AC-PCB5 a missing root is refused, not silently clean
+PASS AC-PCB6 the module source is pure ASCII
+PASS AC-PCB6 this suite source is pure ASCII
+PASS AC-PCB6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys,warnings)
+PASS AC-PCB6 no clock and no network token in the module
+PASS AC-PCB6 the face and its suite are wired into the registry exactly once
+PASS AC-PCB6 no duplicate registry row
+PASS AC-PCB6 the reconcile label is the face own (os-probe-seam-constant-binding-scope)
+SUITE PASS 6/6 criteria green
+== LEG B rc=0 digest=F7FFF637AA17FFC5
+PROBE SEAM CONSTANT BINDING SCOPE SUITE (AC-PCB1..AC-PCB6)
+PASS AC-PCB1 no seam name is spelled in the module source
+PASS AC-PCB1 no fixture helper name is written into the module
+PASS AC-PCB1 a str-literal binding is read off the tree ({'NAME': ('str', 'pcb_helper')})
+PASS AC-PCB1 a tuple of str literals is read off the tree ({'NAMES': ('tuple', ['pcb_unused', 'pcb_helper'])})
+PASS AC-PCB1 a dict of str pairs and its key binding are read ({'MAP': ('dict', {'x': 'pcb_unused', 'h': 'pcb_helper'}), 'KEY': ('str', 'h')})
+PASS AC-PCB1 a concatenation is NOT a constant binding ({})
+PASS AC-PCB1 an f-string is NOT a constant binding ({'BASE': ('str', 'pcb')})
+PASS AC-PCB1 a call is NOT a constant binding ({})
+PASS AC-PCB1 an imported constant is NOT a constant binding ({})
+PASS AC-PCB2 pcb_str.py reads COVERED with helper=pcb_helper binding=NAME shape=importlib.import_module (('COVERED', ['pcb_helper'], ['importlib.import_module:pcb_helper@NAME']))
+PASS AC-PCB2 pcb_tuple.py reads COVERED with helper=pcb_helper binding=NAMES shape=importlib.import_module (('COVERED', ['pcb_helper'], ['importlib.import_module:pcb_helper@NAMES']))
+PASS AC-PCB2 pcb_dict.py reads COVERED with helper=pcb_helper binding=MAP shape=importlib.import_module (('COVERED', ['pcb_helper'], ['importlib.import_module:pcb_helper@MAP']))
+PASS AC-PCB2 the whole world reads SEAMS-CONSTANT-COVERED (SEAMS-CONSTANT-COVERED)
+PASS AC-PCB3 a constant-bound partial helper reads MISSING-SEAM naming seam and probe (('MISSING-SEAM', ['PLRC']))
+PASS AC-PCB3 the world verdict is SEAMS-CONSTANT-STALE (SEAMS-CONSTANT-STALE)
+PASS AC-PCB3 neither probe nor helper was imported or run
+PASS AC-PCB3 the CLI refuses with exit 2 (2)
+PASS AC-PCB4 pcb_computed.py reads OUT-OF-SCOPE with the call named (('OUT-OF-SCOPE', ['importlib.import_module:NAME']))
+PASS AC-PCB4 pcb_computed.py is not resolved to pcb_helper ([])
+PASS AC-PCB4 pcb_computed.py expression is named as computed
+PASS AC-PCB4 pcb_format.py reads OUT-OF-SCOPE with the call named (('OUT-OF-SCOPE', ['importlib.import_module:NAME']))
+PASS AC-PCB4 pcb_format.py is not resolved to pcb_helper ([])
+PASS AC-PCB4 pcb_format.py expression is named as computed
+PASS AC-PCB4 the computed call is reported verbatim ({'resolved': [], 'unresolved': ['importlib.import_module:NAME'], 'bindings': []})
+PASS AC-PCB5 every fixture digest is unchanged and nothing landed
+PASS AC-PCB5 the shipped module and render are unchanged
+PASS AC-PCB5 a missing root is refused, not silently clean
+PASS AC-PCB6 the module source is pure ASCII
+PASS AC-PCB6 this suite source is pure ASCII
+PASS AC-PCB6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys,warnings)
+PASS AC-PCB6 no clock and no network token in the module
+PASS AC-PCB6 the face and its suite are wired into the registry exactly once
+PASS AC-PCB6 no duplicate registry row
+PASS AC-PCB6 the reconcile label is the face own (os-probe-seam-constant-binding-scope)
+SUITE PASS 6/6 criteria green
+== ADJACENT 3
+== src/os/test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_probe_seam_lazy_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_probe_seam_registry.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=3 fails=0 digest=F7FFF637AA17FFC5
