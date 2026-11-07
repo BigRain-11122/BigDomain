@@ -1,0 +1,12 @@
+CLI rc=0
+os-probe-seam-name-binding-nested-exhaustive-path verdict=SEAMS-NESTED-COVERED base=os-probe-seam-name-binding-control-flow-guard-exhaustive
+  COVERED=3
+  HISTORICAL=1312
+  MISSING-SEAM=0
+  OUT-OF-SCOPE=184
+  probe artifact_disk_text_readability.py nested_loops=4 nested_resolved=0
+  probe evidence_name_text_coverage.py nested_loops=1 nested_resolved=0
+  probe stamp_text_coverage.py nested_loops=4 nested_resolved=0
+FIXTURE agree mine=ok/b base=refused/guarded:if:2>if:3
+FIXTURE partial mine=refused/partial:else base=ok/b
+DIGESTS unchanged=True

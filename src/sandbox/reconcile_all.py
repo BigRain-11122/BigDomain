@@ -5983,6 +5983,16 @@ SUITES = [
      os.path.join("..", "os",
                   "test_probe_seam_name_binding_control_flow_guard_exhaustive.py"),
      6),
+    # R2549 - a nested guard tree whose EVERY leaf binds the same single
+    # literal resolves to it through its ROOT group, an arm that binds nothing
+    # is named partial:<arm>, a loop standing on the path is named loop:<line>,
+    # and leaves that disagree publish every leaf by its full path; the two
+    # shipped answers ride beside it (603 -> 604 suites, 4594 -> 4600
+    # criteria).
+    ("os-probe-seam-name-binding-nested-exhaustive-path",
+     os.path.join("..", "os",
+                  "test_probe_seam_name_binding_nested_exhaustive_path.py"),
+     6),
     ]
 
 FAILS = 0

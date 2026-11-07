@@ -283,7 +283,8 @@ column-0 checkbox starts one.
 - [x] opened=R2546 | item=product-face-R2546 | note=next window a PRODUCT face on queue head state/queue/tech.md:583 prefix AC-PNCT1 probe_seam_name_binding_control_flow_guard_exhaustive, its six criteria pinned in that row at R2545 BEFORE any code | closed=R2547
 - [x] opened=R2547 | item=reconcile-battery-R2547 | note=the registry moved by one row this window (os-probe-seam-name-binding-control-flow-guard-exhaustive) and a shipped document moved, so under the R2168 mixed-tree rule this battery runs on the committed tree BEFORE any further product byte at the re-measured 603 suites / 4594 criteria | closed=R2548
 - [ ] opened=R2547 | item=product-face-R2547 | note=next window a PRODUCT face on queue head state/queue/tech.md:585 prefix AC-PNCD1 probe_seam_name_binding_nested_exhaustive_path, its six criteria pinned in that row at R2547 BEFORE any code | first=no
-- [ ] opened=R2548 | item=product-face-R2548 | note=PRODUCT window on queue head state/queue/tech.md line 585 prefix AC-PNCD1 probe_seam_name_binding_nested_exhaustive_path; its AC-PNCD1..AC-PNCD6 were pinned at R2547 before any code; no battery owed because R2548 moved no product byte and the registry is unmoved at 603 suites and 4594 criteria | first=yes
+- [x] opened=R2548 | item=product-face-R2548 | note=PRODUCT window on queue head state/queue/tech.md line 585 prefix AC-PNCD1 probe_seam_name_binding_nested_exhaustive_path; its AC-PNCD1..AC-PNCD6 were pinned at R2547 before any code; no battery owed because R2548 moved no product byte and the registry is unmoved at 603 suites and 4594 criteria | closed=R2549
+- [ ] opened=R2549 | item=reconcile-battery-R2549 | note=VERIFICATION window on this committed tree at the pre-registered 604 suites / 4600 criteria, because R2549 moved the registry by one row os-probe-seam-name-binding-nested-exhaustive-path and a shipped document | first=yes
 
 ## Closed
 
