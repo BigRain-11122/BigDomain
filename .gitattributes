@@ -1,0 +1,5 @@
+# Evidence files are byte-exact products: the writer census classifies them by
+# their on-disk dialect (utf-8, no BOM, bare LF), so git must never convert
+# their line endings. Born at R2530 after core.autocrlf=true rewrote two
+# repaired evidence logs towards CRLF on the next touch.
+qa/*.log -text
