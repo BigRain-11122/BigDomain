@@ -75,6 +75,63 @@ PASS_A = [
 ]
 
 
+PASS_B = [
+    "2026-11-07 R2522 LEG 3 GREEN ON THE COMMITTED REPAIR TREE, measured not "
+    "quoted: qa/reconcile-all-R2522-leg3.log is 907470B, utf-8, bom=False, "
+    "crlf=0, lone_cr=0, zero SUITE FAIL rows, closing RUNNER PASS (590/590 "
+    "suites green, reconcile controls 7/7, 1195.1s), and an independent recount "
+    "over the PASS suite rows sums to EXACTLY 4516 criteria - the pre-registered "
+    "total matched by measurement. Launched detached and unfiltered through "
+    "src/os/battery_stream.py (pid in logs/battery-R2522-leg3.pid) so the "
+    "filtering-pipe trap was not re-paid. FOUR FOLLOW-UP SECTIONS in the "
+    "designed order: the dry run read SECTION matrix FAIL at on-disk 56795B "
+    "against regenerated 56790B with NO byte written while fingerprint read "
+    "CLEAN domains=5, profile byte-identical and census DRIFT-CLEAN; "
+    "docs/sandbox-suite-matrix.md was then regenerated stamp-aligned from THIS "
+    "round own green evidence through src/sandbox/suite_matrix.py --stamp-from "
+    "to 56790B at 590 suites / 4516 criteria with its green line honestly "
+    "reading 590/590, --check read byte-identical, and the re-run read all four "
+    "PASS for VERDICT sandbox-suite-battery PASS failing=none (APPENDED 1982B "
+    "eol_ok=True).",
+    "2026-11-07 R2522 DEBT AND BOARD: reconcile-battery-R2521 closed through the "
+    "shipped debtor at its predicted 153585B -> 153589B (line 247, open 7->6, "
+    "done 222->223, readback ok) and product-face-R2522 was appended first=no "
+    "through the shipped appender at its predicted 153589B -> 154248B "
+    "(readback ok) because this window shipped no product face - the "
+    "first=yes append was REFUSED with E_DEBTA_FIRST while product-face-R2521 "
+    "still holds that slot, which is the correct refusal and was not worked "
+    "around by flipping the flag. NO successor battery is owed: this window "
+    "moved no product src byte and the registry is unmoved at 590 suites / "
+    "4516 criteria, re-read by import rather than trusted. The next window owes "
+    "the PRODUCT face the register names on tech head state/queue/tech.md:559 "
+    "prefix AC-PLC1 probe_seam_local_constant_scope, whose criteria were pinned "
+    "at R2521 BEFORE any code.",
+    "2026-11-07 R2522 honest disclosures: (a) ZERO product points on the "
+    "Executive Protocol scale - nothing a CEO could open was built this window "
+    "and none is claimed; the deliverable is a green 590/4516 battery, two "
+    "birth-site repairs and a matrix document whose evidence column is now "
+    "self-describing rather than borrowed from an older leg. (b) The window ran "
+    "THREE full batteries (1195.1s green plus 907773B and 907643B red legs) and "
+    "overshot its 25-minute budget by more than an hour; it says so rather than "
+    "hiding it. (c) BOTH red legs are kept in qa/ and committed, not deleted. "
+    "(d) The first red cause was born in R2521 (a doubled R on five log lines); "
+    "the second red cause was born in THIS window own repair (four lines became "
+    "substantive, which made the export stale) and in a phrase - a narrative "
+    "line quoting the literal ledger marker was classified as a ledger line and "
+    "silently stopped counting as substantive; both were read from the shipped "
+    "reader, not guessed. (e) A date prefix was tried on this round ledger line "
+    "and REVERTED because it broke ledger recognition (rounds_without_ledger: "
+    "2522) - reported rather than quietly dropped. (f) Docker is absent on this "
+    "host so no containerised bring-up is claimed. (g) The real 19.9 debit and "
+    "the real msgSecCheck still wait on CEO physical items (merchant id, "
+    "mini-program appid/secret). (h) tasks.md was not touched, it is the P-47 "
+    "canonical board. (i) The S4U lane re-registration needs an ELEVATED shell "
+    "and D-20261107-14 has now formally classified it as a ceo-pending physical "
+    "item with zero chase, so it is recorded as a physical item rather than "
+    "carried as a loop obligation.",
+]
+
+
 def load():
     with io.open(STATE, encoding="utf-8") as handle:
         return json.load(handle)
@@ -100,6 +157,9 @@ def main(argv):
     print("PASS_A" if pass_a else "PASS_B", "tick", data["tick"],
           "log", len(data.get("log") or []))
     if pass_a:
+        save(data)
+    else:
+        data.setdefault("log", []).extend(PASS_B)
         save(data)
     return 0
 

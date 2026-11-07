@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T13:53:51+08:00",
+  "export_ts": "2026-11-07T14:21:40+08:00",
   "do": "2026-11-07 R2522 VERIFICATION window on the battery the register owed (reconcile-battery-R2521, pre-registered 590 suites / 4516 criteria). Five-silence scan: git status empty and no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, group orders tail unchanged at 2026-11-06 23:46, benchmarks 2026-11-03 inside the seven-day gate, but the content-addressed decisions diff read 5 new token",
   "ceo_face": {
     "current": "2026-11-07 R2522 VERIFICATION window on the battery the register owed (reconcile-battery-R2521, pre-registered 590 suites / 4516 criteria). Five-silence scan: git status empty and no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, group orders tail unchanged at 2026-11-06 23:46, benchmarks 2026-11-03 inside the seven-day gate, but the content-addressed decisions diff read 5 new token",
-    "latest_artifact": "reconcile-all-R2522-retry.log (907643B) + reconcile-all-R2522.log (907773B)",
-    "next_milestone": "next window owes product-face-R2521 on the committed tree, inside a 48h window due 2026-11-09T13:53:51+08:00",
-    "next_milestone_due": "2026-11-09T13:53:51+08:00",
-    "last_artifact": "reconcile-all-R2522-retry.log (907643B) + reconcile-all-R2522.log (907773B)",
-    "updated_at": "2026-11-07T13:53:51+08:00"
+    "latest_artifact": "reconcile-all-R2522-leg3.log (909452B) + reconcile-all-R2522-retry.log (907643B) + reconcile-all-R2522.log (907773B)",
+    "next_milestone": "next window owes product-face-R2521 on the committed tree, inside a 48h window due 2026-11-09T14:21:40+08:00",
+    "next_milestone_due": "2026-11-09T14:21:40+08:00",
+    "last_artifact": "reconcile-all-R2522-leg3.log (909452B) + reconcile-all-R2522-retry.log (907643B) + reconcile-all-R2522.log (907773B)",
+    "updated_at": "2026-11-07T14:21:40+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "reconcile-all-R2522-leg3.log (909452B) + reconcile-all-R2522-retry.log (907643B) + reconcile-all-R2522.log (907773B)",
     "reconcile-all-R2522-retry.log (907643B) + reconcile-all-R2522.log (907773B)",
     "decisions-scan-R2521.log (21026B) + probe-seam-constant-binding-scope-R2521.log (6528B) + probe-seam-constant-binding-scope-live-R2521.log (1548B)",
     "reconcile-all-R2520-retry.log (908059B) + reconcile-all-R2520.log (904869B)",
@@ -641,10 +642,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 52,
+    "log_lines_in_window": 55,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 52,
+    "substantive_non_idle_mention_lines": 55,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
