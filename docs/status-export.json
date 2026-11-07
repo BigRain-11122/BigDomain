@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T12:47:27+08:00",
+  "export_ts": "2026-11-07T12:49:47+08:00",
   "do": "2026-11-07 R2521 DECISIONS ADJUDICATION, named per row (the two rows the scan flagged as naming this company, read in full after the console mangled them - the log file itself is clean utf-8): (1) D-20261028-11 '组根/方言判据扩面: FluxVerse 第二形态 (.Path 空串) + BigDomain 检出方言 (autocrlf)' - it CITES this company own R2171 P2 mechanism finding as evidence in a group-level dialect ruling; it opens no execution ",
   "ceo_face": {
     "current": "2026-11-07 R2521 DECISIONS ADJUDICATION, named per row (the two rows the scan flagged as naming this company, read in full after the console mangled them - the log file itself is clean utf-8): (1) D-20261028-11 '组根/方言判据扩面: FluxVerse 第二形态 (.Path 空串) + BigDomain 检出方言 (autocrlf)' - it CITES this company own R2171 P2 mechanism finding as evidence in a group-level dialect ruling; it opens no execution ",
     "latest_artifact": "decisions-scan-R2521.log (21026B) + probe-seam-constant-binding-scope-R2521.log (6528B) + probe-seam-constant-binding-scope-live-R2521.log (1548B)",
-    "next_milestone": "next window owes product-face-R2521 on the committed tree, inside a 48h window due 2026-11-09T12:47:27+08:00",
-    "next_milestone_due": "2026-11-09T12:47:27+08:00",
+    "next_milestone": "next window owes product-face-R2521 on the committed tree, inside a 48h window due 2026-11-09T12:49:47+08:00",
+    "next_milestone_due": "2026-11-09T12:49:47+08:00",
     "last_artifact": "decisions-scan-R2521.log (21026B) + probe-seam-constant-binding-scope-R2521.log (6528B) + probe-seam-constant-binding-scope-live-R2521.log (1548B)",
-    "updated_at": "2026-11-07T12:47:27+08:00"
+    "updated_at": "2026-11-07T12:49:47+08:00"
   },
   "depts": [
     {
@@ -636,10 +636,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 48,
+    "log_lines_in_window": 49,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 44,
+    "substantive_non_idle_mention_lines": 45,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
