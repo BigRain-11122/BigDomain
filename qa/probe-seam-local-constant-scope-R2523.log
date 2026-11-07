@@ -1,0 +1,86 @@
+EVIDENCE CAPTURE round=R2523 suite=src/os/test_probe_seam_local_constant_scope.py legs=2
+== LEG A rc=0 digest=0F2C0C6ABAE86EB7
+PROBE SEAM LOCAL CONSTANT SCOPE SUITE (AC-PLC1..AC-PLC6)
+PASS AC-PLC1 no seam name is spelled in the module source
+PASS AC-PLC1 no fixture helper or config name is written into the module
+PASS AC-PLC1 a function-body str literal is read off the tree ({'name': ('str', 'plc_helper')})
+PASS AC-PLC1 a function-body computation is NOT a local constant ({})
+PASS AC-PLC1 an ambiguous local name is NOT resolved ({})
+PASS AC-PLC1 a function-body assignment is not a module binding ({})
+PASS AC-PLC1 a constant-key container reached by a plain attribute resolves (('plc_helper', 'plc_cfg.NAMES'))
+PASS AC-PLC1 a container reached through a call is NOT resolved (None)
+PASS AC-PLC1 a str literal argument resolves with no binding (('plc_helper', ''))
+PASS AC-PLC2 plc_local.py reads COVERED with helper=plc_helper binding=name (('COVERED', ['plc_helper'], ['importlib.import_module:plc_helper@name']))
+PASS AC-PLC2 plc_container.py reads COVERED with helper=plc_helper binding=plc_cfg.NAMES (('COVERED', ['plc_helper'], ['importlib.import_module:plc_helper@plc_cfg.NAMES']))
+PASS AC-PLC2 the row names the local binding it read (['name'])
+PASS AC-PLC2 the local probe really quiets every seam (5)
+PASS AC-PLC2 the whole world reads SEAMS-LOCAL-COVERED (SEAMS-LOCAL-COVERED)
+PASS AC-PLC3 a local constant reaching a partial helper reads MISSING-SEAM naming seam and probe (('MISSING-SEAM', ['PLRC']))
+PASS AC-PLC3 the world verdict is SEAMS-LOCAL-STALE (SEAMS-LOCAL-STALE)
+PASS AC-PLC3 neither probe nor helper was imported or run
+PASS AC-PLC3 the CLI refuses with exit 2 (2)
+PASS AC-PLC4 plc_local_computed.py reads OUT-OF-SCOPE with the call named (('OUT-OF-SCOPE', ['importlib.import_module:name']))
+PASS AC-PLC4 plc_local_computed.py is not resolved to plc_helper ([])
+PASS AC-PLC4 plc_called_container.py reads OUT-OF-SCOPE with the call named (('OUT-OF-SCOPE', ['importlib.import_module:plc_cfg.names()[0]']))
+PASS AC-PLC4 plc_called_container.py is not resolved to plc_helper ([])
+PASS AC-PLC4 plc_comprehension.py reads OUT-OF-SCOPE with the call named (('OUT-OF-SCOPE', ['importlib.import_module:names[1]']))
+PASS AC-PLC4 plc_comprehension.py is not resolved to plc_helper ([])
+PASS AC-PLC4 the computed call is reported verbatim ({'resolved': [], 'unresolved': ['importlib.import_module:name'], 'module_bindings': [], 'local_bindings': []})
+PASS AC-PLC4 a module-level container reached through a call is not resolved (None)
+PASS AC-PLC4 a concatenation is not resolved (None)
+PASS AC-PLC5 every fixture digest is unchanged and nothing landed
+PASS AC-PLC5 the shipped module and render are unchanged
+PASS AC-PLC5 a missing root is refused, not silently clean
+PASS AC-PLC6 the module source is pure ASCII
+PASS AC-PLC6 this suite source is pure ASCII
+PASS AC-PLC6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys,warnings)
+PASS AC-PLC6 no clock and no network token in the module
+PASS AC-PLC6 the face and its suite are wired into the registry exactly once
+PASS AC-PLC6 no duplicate registry row
+PASS AC-PLC6 the reconcile label is the face own (os-probe-seam-local-constant-scope)
+SUITE PASS 6/6 criteria green
+== LEG B rc=0 digest=0F2C0C6ABAE86EB7
+PROBE SEAM LOCAL CONSTANT SCOPE SUITE (AC-PLC1..AC-PLC6)
+PASS AC-PLC1 no seam name is spelled in the module source
+PASS AC-PLC1 no fixture helper or config name is written into the module
+PASS AC-PLC1 a function-body str literal is read off the tree ({'name': ('str', 'plc_helper')})
+PASS AC-PLC1 a function-body computation is NOT a local constant ({})
+PASS AC-PLC1 an ambiguous local name is NOT resolved ({})
+PASS AC-PLC1 a function-body assignment is not a module binding ({})
+PASS AC-PLC1 a constant-key container reached by a plain attribute resolves (('plc_helper', 'plc_cfg.NAMES'))
+PASS AC-PLC1 a container reached through a call is NOT resolved (None)
+PASS AC-PLC1 a str literal argument resolves with no binding (('plc_helper', ''))
+PASS AC-PLC2 plc_local.py reads COVERED with helper=plc_helper binding=name (('COVERED', ['plc_helper'], ['importlib.import_module:plc_helper@name']))
+PASS AC-PLC2 plc_container.py reads COVERED with helper=plc_helper binding=plc_cfg.NAMES (('COVERED', ['plc_helper'], ['importlib.import_module:plc_helper@plc_cfg.NAMES']))
+PASS AC-PLC2 the row names the local binding it read (['name'])
+PASS AC-PLC2 the local probe really quiets every seam (5)
+PASS AC-PLC2 the whole world reads SEAMS-LOCAL-COVERED (SEAMS-LOCAL-COVERED)
+PASS AC-PLC3 a local constant reaching a partial helper reads MISSING-SEAM naming seam and probe (('MISSING-SEAM', ['PLRC']))
+PASS AC-PLC3 the world verdict is SEAMS-LOCAL-STALE (SEAMS-LOCAL-STALE)
+PASS AC-PLC3 neither probe nor helper was imported or run
+PASS AC-PLC3 the CLI refuses with exit 2 (2)
+PASS AC-PLC4 plc_local_computed.py reads OUT-OF-SCOPE with the call named (('OUT-OF-SCOPE', ['importlib.import_module:name']))
+PASS AC-PLC4 plc_local_computed.py is not resolved to plc_helper ([])
+PASS AC-PLC4 plc_called_container.py reads OUT-OF-SCOPE with the call named (('OUT-OF-SCOPE', ['importlib.import_module:plc_cfg.names()[0]']))
+PASS AC-PLC4 plc_called_container.py is not resolved to plc_helper ([])
+PASS AC-PLC4 plc_comprehension.py reads OUT-OF-SCOPE with the call named (('OUT-OF-SCOPE', ['importlib.import_module:names[1]']))
+PASS AC-PLC4 plc_comprehension.py is not resolved to plc_helper ([])
+PASS AC-PLC4 the computed call is reported verbatim ({'resolved': [], 'unresolved': ['importlib.import_module:name'], 'module_bindings': [], 'local_bindings': []})
+PASS AC-PLC4 a module-level container reached through a call is not resolved (None)
+PASS AC-PLC4 a concatenation is not resolved (None)
+PASS AC-PLC5 every fixture digest is unchanged and nothing landed
+PASS AC-PLC5 the shipped module and render are unchanged
+PASS AC-PLC5 a missing root is refused, not silently clean
+PASS AC-PLC6 the module source is pure ASCII
+PASS AC-PLC6 this suite source is pure ASCII
+PASS AC-PLC6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys,warnings)
+PASS AC-PLC6 no clock and no network token in the module
+PASS AC-PLC6 the face and its suite are wired into the registry exactly once
+PASS AC-PLC6 no duplicate registry row
+PASS AC-PLC6 the reconcile label is the face own (os-probe-seam-local-constant-scope)
+SUITE PASS 6/6 criteria green
+== ADJACENT 3
+== src/os/test_probe_seam_constant_binding_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_probe_seam_lazy_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=3 fails=0 digest=0F2C0C6ABAE86EB7

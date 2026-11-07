@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 590 | 4516 | 590/590 | R2522 |
+| 591 | 4522 | 590/590 | R2522 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -628,7 +628,8 @@
 | 588 | os-probe-seam-lazy-scope | ../os/test_probe_seam_lazy_scope.py | 6 | green | 6.9 |
 | 589 | os-probe-seam-dynamic-import-scope | ../os/test_probe_seam_dynamic_import_scope.py | 6 | green | 13.3 |
 | 590 | os-probe-seam-constant-binding-scope | ../os/test_probe_seam_constant_binding_scope.py | 6 | green | 0.1 |
-|  | 合计 |  | 4516 | green 590 / FAIL 0 / no-evidence 0 |  |
+| 591 | os-probe-seam-local-constant-scope | ../os/test_probe_seam_local_constant_scope.py | 6 | no-evidence | - |
+|  | 合计 |  | 4522 | green 590 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

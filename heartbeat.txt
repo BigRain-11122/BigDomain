@@ -12,3 +12,4 @@
 2026-11-07 12:0x R2520 verification window: battery green 589/589 at 4510 criteria on the retry, matrix doc repaired at its birth site, no successor battery owed
 2026-11-07 RR2521 product window: seam constant-binding scope shipped, registry 590/4516, matrix 589/590 honest
 2026-11-07 14:2x R2522 verification window: battery green 590/590 at 4516 criteria on the third leg, two birth sites repaired (RR2521 round token, stale export), matrix 590/590 self-describing, no successor battery owed
+2026-11-07 14:3x R2523 product window: seam local-constant scope shipped (a constant declared in a function body and a container reached by a plain attribute now resolve), suite 6/6 twice plus a live leg on the real tree, registry 591/4522, matrix 590/591 honest, battery owed next

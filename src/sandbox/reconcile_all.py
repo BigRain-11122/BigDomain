@@ -5866,6 +5866,16 @@ SUITES = [
     ("os-probe-seam-constant-binding-scope",
      os.path.join("..", "os",
                   "test_probe_seam_constant_binding_scope.py"), 6),
+    # R2523 AC-PLC1: the seam reading that follows a dynamic module name
+    # through string constants declared in the enclosing FUNCTION body and
+    # through a constant-key lookup into a module-level container reached by
+    # a plain attribute on a module bound in the same root, so a probe
+    # written that way is answered on its own row instead of reading
+    # OUT-OF-SCOPE; a name built by a call or a comprehension is named and
+    # never evaluated (590 -> 591 suites, 4516 -> 4522 criteria).
+    ("os-probe-seam-local-constant-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_local_constant_scope.py"), 6),
     ]
 
 FAILS = 0

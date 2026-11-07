@@ -1,0 +1,14 @@
+PROBE SEAM LOCAL CONSTANT SCOPE os-probe-seam-local-constant-scope verdict=SEAMS-LOCAL-COVERED seams=5 probes=1400 covered=3 missing=0 out_of_scope=171 unreadable=0 historical=1226
+  SEAM PLRC owner=patterns_label_readability_render_consumer
+  SEAM PNLT owner=patterns_non_label_text_readability
+  SEAM ADTR owner=artifact_disk_text_readability
+  SEAM EVNM owner=evidence_name_text_coverage
+  SEAM STPT owner=stamp_text_coverage
+  PROBE artifact_disk_text_readability.py COVERED quieted=4 required=4 direct=4 helpers=- dynamic=- local=rows,sink
+  PROBE evidence_name_text_coverage.py COVERED quieted=4 required=4 direct=4 helpers=- dynamic=- local=sink
+  MODULE runner_abort_history.py OUT-OF-SCOPE unresolved=__import__:name
+  PROBE stamp_text_coverage.py COVERED quieted=5 required=4 direct=5 helpers=- dynamic=- local=names,out
+  MODULE status_export_writer_transport_scope.py OUT-OF-SCOPE unresolved=importlib.import_module:stem
+LIVE local_rows=3 covered_probes=3 out_of_scope=171 historical=1226 read_only=True
+FIXTURE local-face=COVERED helpers=plc_live_helper dynamic=importlib.import_module:plc_live_helper@name local_bindings=name | constant-binding-face=OUT-OF-SCOPE quieted=0
+STALE local-face=MISSING-SEAM missing=PLRC world=SEAMS-LOCAL-STALE
