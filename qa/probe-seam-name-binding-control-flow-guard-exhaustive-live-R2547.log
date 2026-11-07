@@ -1,0 +1,7 @@
+FACE os-probe-seam-name-binding-control-flow-guard-exhaustive
+BASE os-probe-seam-name-binding-control-flow-guard-scope
+VERDICT SEAMS-EXHAUSTIVE-COVERED
+COUNTS COVERED=3 HISTORICAL=1306 MISSING-SEAM=0 OUT-OF-SCOPE=183 UNREADABLE=0
+PROBES 1492 LOOPS 4813 RESOLVED_BY_EXHAUSTIVE 0
+FIXTURE chain-agree mine=ok/b shipped=refused/guarded:if:2
+READ_ONLY module_digest_unchanged=True

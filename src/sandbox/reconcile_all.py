@@ -5973,6 +5973,16 @@ SUITES = [
     ("os-probe-seam-name-binding-control-flow-guard-scope",
      os.path.join("..", "os",
                   "test_probe_seam_name_binding_control_flow_guard_scope.py"), 6),
+    # R2547 - a binding resolves only when its guard group covers EVERY path
+    # and every arm binds the same single literal: an if/elif/else chain, a
+    # one-handler try/except with no else and no finally, and a conditional
+    # expression whose operands agree; a differing group publishes EVERY arm,
+    # and a match statement is collected with its case count but never
+    # resolved (602 -> 603 suites, 4588 -> 4594 criteria).
+    ("os-probe-seam-name-binding-control-flow-guard-exhaustive",
+     os.path.join("..", "os",
+                  "test_probe_seam_name_binding_control_flow_guard_exhaustive.py"),
+     6),
     ]
 
 FAILS = 0

@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-08T04:01:42+08:00",
-  "do": "2026-11-08 R2546 VERIFICATION window on the battery the register owed (reconcile-battery-R2545, pre-registered 602 suites / 4588 criteria). Five-silence scan at open: ONE untracked battery leg qa/reconcile-all-R2546.log was already on disk from an earlier attempt of this same round, with no index.lock and no live reconcile process, so it was READ rather than restarted; git status otherwise empty a",
+  "export_ts": "2026-11-08T04:22:41+08:00",
+  "do": "2026-11-08 R2547 PRODUCT window on the tech head the register named (product-face-R2546, state/queue/tech.md:583 prefix AC-PNCT1, criteria AC-PNCT1..AC-PNCT6 pinned in that row at R2545 BEFORE any code). Five-silence scan at open: git status EMPTY at HEAD 62cbe977 with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions diff read new=0 over the stored 1",
   "ceo_face": {
-    "current": "2026-11-08 R2546 VERIFICATION window on the battery the register owed (reconcile-battery-R2545, pre-registered 602 suites / 4588 criteria). Five-silence scan at open: ONE untracked battery leg qa/reconcile-all-R2546.log was already on disk from an earlier attempt of this same round, with no index.lock and no live reconcile process, so it was READ rather than restarted; git status otherwise empty a",
-    "latest_artifact": "reconcile-all-R2546.log (967255B)",
-    "next_milestone": "next window owes product-face-R2546 on the committed tree, inside a 48h window due 2026-11-10T04:01:42+08:00",
-    "next_milestone_due": "2026-11-10T04:01:42+08:00",
-    "last_artifact": "reconcile-all-R2546.log (967255B)",
-    "updated_at": "2026-11-08T04:01:42+08:00"
+    "current": "2026-11-08 R2547 PRODUCT window on the tech head the register named (product-face-R2546, state/queue/tech.md:583 prefix AC-PNCT1, criteria AC-PNCT1..AC-PNCT6 pinned in that row at R2545 BEFORE any code). Five-silence scan at open: git status EMPTY at HEAD 62cbe977 with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions diff read new=0 over the stored 1",
+    "latest_artifact": "probe-seam-name-binding-control-flow-guard-exhaustive-R2547.log (28865B) + probe-seam-name-binding-control-flow-guard-exhaustive-live-R2547.log (376B)",
+    "next_milestone": "next window owes reconcile-battery-R2547 on the committed tree, inside a 48h window due 2026-11-10T04:22:41+08:00",
+    "next_milestone_due": "2026-11-10T04:22:41+08:00",
+    "last_artifact": "probe-seam-name-binding-control-flow-guard-exhaustive-R2547.log (28865B) + probe-seam-name-binding-control-flow-guard-exhaustive-live-R2547.log (376B)",
+    "updated_at": "2026-11-08T04:22:41+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "probe-seam-name-binding-control-flow-guard-exhaustive-R2547.log (28865B) + probe-seam-name-binding-control-flow-guard-exhaustive-live-R2547.log (376B)",
     "reconcile-all-R2546.log (967255B)",
     "probe-seam-name-binding-control-flow-guard-scope-R2545.log (13469B) + probe-seam-name-binding-control-flow-guard-scope-live-R2545.log (417B)",
     "reconcile-all-R2544.log (958737B)",
@@ -166,6 +167,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2547",
+      "2026-11-08 R2547 PRODUCT window on the tech head the register named (product-face-R2546, state/queue/tech.md:583 prefix AC-PNCT1, criteria pinned in that row at R2545 BEFORE any code). Five-silence scan at open: git status EMPTY at HEAD 62cbe977 with no index.lock, zero @BigDomain rows in the group ledger, the content-addressed decisions diff read new=0 over the stored 182-token baseline at a measured 104 rows, the group orders tail unchanged at 2026-11-08 00:04 (a lane dispatch already judged knowledge-only), benchmarks 2026-11-03 inside the gate; the debt gate read CLAIM-FIRST product-face-R2546 with no battery owed and queue_head named tech line 583 claimable=11 with the floor MET. SHIPPED src/os/probe_seam_name_binding_control_flow_guard_exhaustive.py plus its six-criteria suite: a binding resolves ONLY when its guard group covers EVERY path and every arm binds the same single literal - an if/elif/else chain with a final else, a one-handler try/except with no else and no finally, and a conditional expression whose operands agree - while a differing group publishes EVERY arm by name, a conditional expression publishes both operands as condexpr:b|z, and a match statement is COLLECTED with its case count (match:2-cases) and never resolved. The shipped guard and control-flow answers are carried on every row and the seam classifier is still the shipped registry single quiets. PROOF: AC-PNCT1..AC-PNCT6 SUITE PASS 6/6 TWICE through the shipped capture callable plus five adjacent suites green (qa/probe-seam-name-binding-control-flow-guard-exhaustive-R2547.log, 28865B, legs=2 identical=True fails=0 adjacent=5); a live leg on the REAL tree reads SEAMS-EXHAUSTIVE-COVERED over 1492 probes (3 covered, 183 out-of-scope, 1306 historical, missing=0) with the SAME agreeing-chain fixture reading ok/b here while the shipped guard face still reads guarded:if:2 (qa/probe-seam-name-binding-control-flow-guard-exhaustive-live-R2547.log, 376B, crlf=0, bom=False). REGISTRY 602/4588 -> 603/4594 by one row recounted by import; docs/sandbox-suite-matrix.md regenerated stamp-aligned from qa/reconcile-all-R2546.log to 58383 bytes with its green line honestly reading 602/603 and --check byte-identical. BOARD: row 583 closed through src/os/queue_close_R2547.py at 1747062B and ONE row seeded from this window own measured limits (AC-PNCD1..AC-PNCD6: a nested exhaustive chain reads as two groups and never resolves, a partially binding arm is still counted, a loop inside an arm keeps the shipped loop guard), head now line 585, floor FLOOR-MET 5/5 11/10 10/10. DEBT: product-face-R2546 closed (169517B -> 169520B, open 20->19, done 245->246) and reconcile-battery-R2547 opened first=yes at 603/4594 (169520B -> 169873B) with product-face-R2547 opened first=no (169873B -> 170126B); the round was declared through the residue batch writer at 300->301 entries until R2557 and the check reads TRIAGED. HONEST: two product points but nothing a CEO could newly open and no P-47 business surface moved; the defect was measured at R2545 and re-measured here; one assertion was corrected against measurement (the shipped face publishes the inner pair as ARMS not as a refusal); the registry row was first split across two source lines and the suite refused it rather than letting an unwired suite through; my first live probe asked the wrong line and both readings are named; FOLD-DUE is carried because state.json stands at 189280B against the 78500B waterline and the shipped state_fold ships only a --check face, so the append used a PROVED byte-identical load+dump round-trip; Docker is absent; the real 19.9 debit and the real msgSecCheck wait on CEO physical items; tasks.md was not touched; the S4U lane re-registration needs an ELEVATED shell."
+    ],
     [
       "2546",
       "2026-11-08 R2546 VERIFICATION window on the battery the register owed (reconcile-battery-R2545, pre-registered 602 suites / 4588 criteria). Five-silence scan at open: ONE untracked battery leg qa/reconcile-all-R2546.log was already on disk from an earlier attempt of this same round, with no index.lock and no live reconcile process, so it was READ rather than restarted; git status otherwise empty at HEAD b0d32e12; zero @BigDomain rows in the group ledger; the content-addressed decisions scan read new=0 over the stored 182-token baseline at a measured 46 file tokens (the group file keeps shrinking under a group-level fold, disclosed rather than smoothed); the group orders tail still reads 2026-11-08 00:04 (a lane-batch dispatch already judged knowledge-only); benchmarks 2026-11-03 inside the seven-day gate. The debt gate read CLAIM-FIRST item=reconcile-battery-R2545 first=1, and the target was RE-MEASURED before anything ran by importing reconcile_all.SUITES: 602 suites / 4588 criteria, byte for byte the registered number. RESULT: qa/reconcile-all-R2546.log reads RUNNER PASS (602/602 suites green, reconcile controls 7/7, 1688.0s) with ZERO FAIL rows, 602 UNIQUE suite rows with zero duplicates, and an independent recount over their own criteria fields summing to EXACTLY 4588; the evidence is 967255B on disk (963416B at the green leg plus the 1889B designed FAIL block and the 1950B PASS block), utf-8, bom=False, crlf=0, lone_cr=0, and no shell redirection ever touched qa/. FOUR FOLLOW-UP SECTIONS in the designed order: the dry run read matrix FAIL at on-disk 58228B against regenerated 58224B with NO byte written while fingerprint read CLEAN domains=5, profile byte-identical and census DRIFT-CLEAN; docs/sandbox-suite-matrix.md was then regenerated stamp-aligned from THIS round own green evidence to 58224 bytes at 602 suites / 4588 criteria with its green line honestly reading 602/602 self-describing, --check read byte-identical, and the re-run read all four PASS for VERDICT R2546 PASS failing=none (APPENDED 1950B eol_ok=True). DEBT: reconcile-battery-R2545 was closed through the shipped debtor at its predicted 169253B -> 169256B (line 282, open 20->19, done 244->245, readback ok) and, because this window moved no product src byte and the registry is unmoved at 602 suites / 4588 criteria, NO successor battery is owed; product-face-R2546 was appended first=yes at its predicted 169256B -> 169517B (readback ok) naming the next window a PRODUCT face on the queue head state/queue/tech.md:583 prefix AC-PNCT1 probe_seam_name_binding_control_flow_guard_exhaustive, whose criteria were pinned in that row at R2545 BEFORE any code. HONEST: ZERO product points - nothing a CEO could open was built this window and none is claimed; the window opened on an interrupted attempt and read its leg rather than restarting it; FOLD-DUE is CARRIED because the shipped state_fold layout reader still refuses a json.dump layout with E_SF_BAD_LAYOUT (log item lines do not match log length 142), reproduced this round rather than assumed; the five stale product-face rows R2511/R2513/R2515/R2517/R2522 are disclosed and not mass-closed by hand; Docker is absent so no containerised bring-up is claimed; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; tasks.md was not touched; the S4U lane re-registration needs an ELEVATED shell and remains a ceo-pending physical item with zero chase."
@@ -743,17 +748,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2546",
+      "2547",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-11-02..2026-11-08",
     "window_days": 7,
-    "log_lines_in_window": 121,
+    "log_lines_in_window": 126,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 121,
+    "substantive_non_idle_mention_lines": 126,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -786,7 +791,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 12,
-        "done_rows": 440,
+        "done_rows": 441,
         "gated_rows": 1,
         "claimable": 11,
         "discounted": 0,

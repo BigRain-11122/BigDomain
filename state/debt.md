@@ -280,7 +280,9 @@ column-0 checkbox starts one.
 - [ ] opened=R2543 | item=product-face-R2543 | note=next window is a PRODUCT face on tech head state/queue/tech.md:581 prefix AC-PNCG1 probe_seam_name_binding_control_flow_guard_scope, criteria AC-PNCG1..AC-PNCG6 pinned in that row at R2543 BEFORE any code | first=no
 - [x] opened=R2544 | item=product-face-R2544 | note=next window owes a PRODUCT face on queue head state/queue/tech.md:581 prefix AC-PNCG1 probe_seam_name_binding_control_flow_guard_scope whose six criteria were pinned in that row at R2543 BEFORE any code | closed=R2545
 - [x] opened=R2545 | item=reconcile-battery-R2545 | note=battery owed on this committed tree at the pre-registered 602 suites / 4588 criteria after this window moved the registry by exactly one row (os-probe-seam-name-binding-control-flow-guard-scope) and a shipped document | closed=R2546
-- [ ] opened=R2546 | item=product-face-R2546 | note=next window a PRODUCT face on queue head state/queue/tech.md:583 prefix AC-PNCT1 probe_seam_name_binding_control_flow_guard_exhaustive, its six criteria pinned in that row at R2545 BEFORE any code | first=yes
+- [x] opened=R2546 | item=product-face-R2546 | note=next window a PRODUCT face on queue head state/queue/tech.md:583 prefix AC-PNCT1 probe_seam_name_binding_control_flow_guard_exhaustive, its six criteria pinned in that row at R2545 BEFORE any code | closed=R2547
+- [ ] opened=R2547 | item=reconcile-battery-R2547 | note=the registry moved by one row this window (os-probe-seam-name-binding-control-flow-guard-exhaustive) and a shipped document moved, so under the R2168 mixed-tree rule this battery runs on the committed tree BEFORE any further product byte at the re-measured 603 suites / 4594 criteria | first=yes
+- [ ] opened=R2547 | item=product-face-R2547 | note=next window a PRODUCT face on queue head state/queue/tech.md:585 prefix AC-PNCD1 probe_seam_name_binding_nested_exhaustive_path, its six criteria pinned in that row at R2547 BEFORE any code | first=no
 
 ## Closed
 
