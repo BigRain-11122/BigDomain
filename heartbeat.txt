@@ -1,2 +1,3 @@
 R2538 2026-11-07T21:33:21+08:00 verification window: battery retry RUNNER PASS 598/598 after a red leg born in this window own stdout redirection
 2026-11-07 21:55 product window R2539: shipped probe_seam_name_binding_scope_awareness + suite, 6/6 twice, live SEAMS-NAME-SCOPE-COVERED over 1465 probes, registry 599/4570, matrix 57846B byte-identical, battery owed next
+2026-11-07T22:29:54+08:00 verification window R2540: reconcile battery RUNNER PASS 599/599 at the registered 4570 criteria in 1500.0s, matrix 57822B byte-identical, four follow-up sections PASS, registry unmoved so no successor battery owed; next window ships tech:577 AC-PNSP1
