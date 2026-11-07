@@ -3,3 +3,4 @@
 2026-11-07 07:2x R2511 product window: stamp text coverage shipped, registry 585/4486
 2026-11-07 08:1x R2512 verification window: battery green 585/585 at 4486 criteria after one birth-site evidence repair
 2026-11-07 08:2x R2513 product window: probe seam registry shipped, registry 586/4492, stale probes named not run
+2026-11-07 09:2x R2514 verification window: battery red leg kept (residue declaration expired + 5 undeclared rounds), re-pinned at 296/296, retry green 586/586 at 4492 criteria
