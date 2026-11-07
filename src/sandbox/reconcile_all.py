@@ -5913,6 +5913,15 @@ SUITES = [
     ("os-probe-seam-for-container-name",
      os.path.join("..", "os",
                   "test_probe_seam_for_container_name.py"), 6),
+    # R2533 - a for-loop whose iterable is a constant SUBSCRIPT of a container
+    # name or of a same-root module chain resolves only when the result holds
+    # EXACTLY ONE element and carries the chain WITH its key; a missing or
+    # computed key, a broken hop, a two-element result and a call base are
+    # NAMED, and a multi-target loop is NAMED instead of being ignored
+    # (595 -> 596 suites, 4546 -> 4552 criteria).
+    ("os-probe-seam-subscript-container-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_subscript_container_scope.py"), 6),
     ]
 
 FAILS = 0

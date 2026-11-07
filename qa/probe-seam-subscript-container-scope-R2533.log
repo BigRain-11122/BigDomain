@@ -1,0 +1,297 @@
+=== LEG test_probe_seam_subscript_container_scope.py exit=0 ===
+PROBE SEAM SUBSCRIPT CONTAINER SUITE (AC-PCSC1..AC-PCSC6)
+PASS AC-PCSC1 a module-level subscript loop resolves ({'name': ('str', 'pcsc_helper')})
+PASS AC-PCSC1 a function-body subscript loop resolves ({'name': ('str', 'pcsc_helper')})
+PASS AC-PCSC1 the chain carries the key ({'followed': {'name': "sub:name@GROUPS['a']"}, 'refused': {'GROUPS': 'nested'}, 'containers': {'name': {'chain': "GROUPS['a']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PCSC1 the local chain carries the key too ({'followed': {'name': "sub:name@groups['a']"}, 'refused': {'groups': 'nested'}, 'containers': {'name': {'chain': "groups['a']", 'elements': 1, 'scope': 'local'}}, 'multi': []})
+PASS AC-PCSC1 the probe row reads COVERED and names the subscript binding (('COVERED', ['importlib.import_module:pcsc_helper@name']))
+PASS AC-PCSC1 the row carries the subscript chain (["l:name@sub:name@groups['a']"])
+PASS AC-PCSC2 a chained subscript resolves ({'name': ('str', 'pcsc_helper')})
+PASS AC-PCSC2 the chained label carries the key ({'followed': {'name': "sub:name@pcsc_pkg.GROUPS['a']"}, 'refused': {}, 'containers': {'name': {'chain': "pcsc_pkg.GROUPS['a']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PCSC2 a broken chain hop is NAMED ({'followed': {}, 'refused': {'name': 'attribute:pcsc_pkg.MISSING'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC2 a missing key is NAMED with the key ({'followed': {}, 'refused': {'name': "key:GROUPS['zzz']", 'GROUPS': 'nested'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC2 a non-constant key is NAMED, never guessed ({'followed': {}, 'refused': {'name': 'key:GROUPS[KEY]', 'GROUPS': 'nested'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC2 and no refused key enters the table ({'KEY': ('str', 'a')})
+PASS AC-PCSC3 a two-element result never enters the table ({})
+PASS AC-PCSC3 the shape is NAMED ambiguous ({'followed': {}, 'refused': {'name': 'ambiguous', 'GROUPS': 'nested'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC3 and nothing is published as followed ({'followed': {}, 'refused': {'name': 'ambiguous', 'GROUPS': 'nested'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC3 a multi-target loop resolves nothing
+PASS AC-PCSC3 a multi-target loop is NAMED instead of ignored ({'followed': {}, 'refused': {'PAIRS': 'nested'}, 'containers': {}, 'multi': ['multi-target:first,second']})
+PASS AC-PCSC3 the row carries the named multi target (['multi-target:first,second'])
+PASS AC-PCSC4 a call base is NAMED call ({'followed': {}, 'refused': {'name': 'call', 'GROUPS': 'nested'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC4 nothing was evaluated (marker absent)
+PASS AC-PCSC4 a computed key is NAMED key ({'followed': {}, 'refused': {'name': 'key:GROUPS[KEY]', 'GROUPS': 'nested'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC4 and it never enters the table ({})
+PASS AC-PCSC4 a comprehension base resolves nothing
+PASS AC-PCSC4 a comprehension is NAMED comprehension ({'followed': {}, 'refused': {'name': 'comprehension'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC4 a format call iterable is NAMED format by the shipped law, never treated as a container ({'followed': {}, 'refused': {'GROUPS': 'nested', 'name': 'format'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC5 the probed tree is byte-identical after the audit
+PASS AC-PCSC5 the reading moved no shipped digest
+PASS AC-PCSC5 the audit still answers a verdict ({'COVERED': 2, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 2, 'UNREADABLE': 0, 'HISTORICAL': 0})
+PASS AC-PCSC5 a missing root is refused, not raised ('E_PCSC_NO_ROOT')
+PASS AC-PCSC6 the module source is pure ASCII
+PASS AC-PCSC6 this suite source is pure ASCII
+PASS AC-PCSC6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys)
+PASS AC-PCSC6 no clock and no network token in the module
+PASS AC-PCSC6 the face and its suite are wired into the registry exactly once
+PASS AC-PCSC6 no duplicate registry row
+PASS AC-PCSC6 the reconcile label is the face own (os-probe-seam-subscript-container-scope)
+PASS AC-PCSC6 the reading has its own verdict word (SEAMS-SUBSCRIPT-COVERED)
+PASS AC-PCSC6 the shipped base face it extends is still named (os-probe-seam-for-container-name)
+SUITE PASS 6/6 criteria green
+=== LEG test_probe_seam_subscript_container_scope.py exit=0 ===
+PROBE SEAM SUBSCRIPT CONTAINER SUITE (AC-PCSC1..AC-PCSC6)
+PASS AC-PCSC1 a module-level subscript loop resolves ({'name': ('str', 'pcsc_helper')})
+PASS AC-PCSC1 a function-body subscript loop resolves ({'name': ('str', 'pcsc_helper')})
+PASS AC-PCSC1 the chain carries the key ({'followed': {'name': "sub:name@GROUPS['a']"}, 'refused': {'GROUPS': 'nested'}, 'containers': {'name': {'chain': "GROUPS['a']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PCSC1 the local chain carries the key too ({'followed': {'name': "sub:name@groups['a']"}, 'refused': {'groups': 'nested'}, 'containers': {'name': {'chain': "groups['a']", 'elements': 1, 'scope': 'local'}}, 'multi': []})
+PASS AC-PCSC1 the probe row reads COVERED and names the subscript binding (('COVERED', ['importlib.import_module:pcsc_helper@name']))
+PASS AC-PCSC1 the row carries the subscript chain (["l:name@sub:name@groups['a']"])
+PASS AC-PCSC2 a chained subscript resolves ({'name': ('str', 'pcsc_helper')})
+PASS AC-PCSC2 the chained label carries the key ({'followed': {'name': "sub:name@pcsc_pkg.GROUPS['a']"}, 'refused': {}, 'containers': {'name': {'chain': "pcsc_pkg.GROUPS['a']", 'elements': 1, 'scope': 'module'}}, 'multi': []})
+PASS AC-PCSC2 a broken chain hop is NAMED ({'followed': {}, 'refused': {'name': 'attribute:pcsc_pkg.MISSING'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC2 a missing key is NAMED with the key ({'followed': {}, 'refused': {'name': "key:GROUPS['zzz']", 'GROUPS': 'nested'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC2 a non-constant key is NAMED, never guessed ({'followed': {}, 'refused': {'name': 'key:GROUPS[KEY]', 'GROUPS': 'nested'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC2 and no refused key enters the table ({'KEY': ('str', 'a')})
+PASS AC-PCSC3 a two-element result never enters the table ({})
+PASS AC-PCSC3 the shape is NAMED ambiguous ({'followed': {}, 'refused': {'name': 'ambiguous', 'GROUPS': 'nested'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC3 and nothing is published as followed ({'followed': {}, 'refused': {'name': 'ambiguous', 'GROUPS': 'nested'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC3 a multi-target loop resolves nothing
+PASS AC-PCSC3 a multi-target loop is NAMED instead of ignored ({'followed': {}, 'refused': {'PAIRS': 'nested'}, 'containers': {}, 'multi': ['multi-target:first,second']})
+PASS AC-PCSC3 the row carries the named multi target (['multi-target:first,second'])
+PASS AC-PCSC4 a call base is NAMED call ({'followed': {}, 'refused': {'name': 'call', 'GROUPS': 'nested'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC4 nothing was evaluated (marker absent)
+PASS AC-PCSC4 a computed key is NAMED key ({'followed': {}, 'refused': {'name': 'key:GROUPS[KEY]', 'GROUPS': 'nested'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC4 and it never enters the table ({})
+PASS AC-PCSC4 a comprehension base resolves nothing
+PASS AC-PCSC4 a comprehension is NAMED comprehension ({'followed': {}, 'refused': {'name': 'comprehension'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC4 a format call iterable is NAMED format by the shipped law, never treated as a container ({'followed': {}, 'refused': {'GROUPS': 'nested', 'name': 'format'}, 'containers': {}, 'multi': []})
+PASS AC-PCSC5 the probed tree is byte-identical after the audit
+PASS AC-PCSC5 the reading moved no shipped digest
+PASS AC-PCSC5 the audit still answers a verdict ({'COVERED': 2, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 2, 'UNREADABLE': 0, 'HISTORICAL': 0})
+PASS AC-PCSC5 a missing root is refused, not raised ('E_PCSC_NO_ROOT')
+PASS AC-PCSC6 the module source is pure ASCII
+PASS AC-PCSC6 this suite source is pure ASCII
+PASS AC-PCSC6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys)
+PASS AC-PCSC6 no clock and no network token in the module
+PASS AC-PCSC6 the face and its suite are wired into the registry exactly once
+PASS AC-PCSC6 no duplicate registry row
+PASS AC-PCSC6 the reconcile label is the face own (os-probe-seam-subscript-container-scope)
+PASS AC-PCSC6 the reading has its own verdict word (SEAMS-SUBSCRIPT-COVERED)
+PASS AC-PCSC6 the shipped base face it extends is still named (os-probe-seam-for-container-name)
+SUITE PASS 6/6 criteria green
+IDENTICAL=True LEG1=0 LEG2=0
+=== LEG test_probe_seam_for_container_name.py exit=0 ===
+PROBE SEAM FOR CONTAINER NAME SUITE (AC-PCAF1..AC-PCAF6)
+PASS AC-PCAF1 a module-level loop over a container name resolves ({'NAMES': ('tuple', ['pcfn_helper']), 'name': ('str', 'pcfn_helper')})
+PASS AC-PCAF1 a function-body loop over a container name resolves ({'names': ('tuple', ['pcfn_helper']), 'name': ('str', 'pcfn_helper')})
+PASS AC-PCAF1 the reading carries the chain it took ({'followed': {'name': 'for:name@NAMES'}, 'refused': {}, 'containers': {'name': {'chain': 'NAMES', 'elements': 1, 'scope': 'module'}}})
+PASS AC-PCAF1 the container count is published ({'followed': {'name': 'for:name@NAMES'}, 'refused': {}, 'containers': {'name': {'chain': 'NAMES', 'elements': 1, 'scope': 'module'}}})
+PASS AC-PCAF1 the local chain is carried too ({'followed': {'name': 'for:name@names'}, 'refused': {}, 'containers': {'name': {'chain': 'names', 'elements': 1, 'scope': 'local'}}})
+PASS AC-PCAF1 the probe row reads COVERED and names the container binding (('COVERED', ['importlib.import_module:pcfn_helper@name']))
+PASS AC-PCAF1 the row carries the container chain (['l:name@for:name@names'])
+PASS AC-PCAF2 a multi-element container never enters the table ({'NAMES': ('tuple', ['pcfn_unused', 'pcfn_helper'])})
+PASS AC-PCAF2 the shape is NAMED ambiguous ({'followed': {}, 'refused': {'name': 'ambiguous'}, 'containers': {}})
+PASS AC-PCAF2 and nothing is published as followed ({'followed': {}, 'refused': {'name': 'ambiguous'}, 'containers': {}})
+PASS AC-PCAF2 an empty container resolves nothing ({'NAMES': ('tuple', [])})
+PASS AC-PCAF2 an empty container is NAMED empty ({'followed': {}, 'refused': {'name': 'empty'}, 'containers': {}})
+PASS AC-PCAF2 a string iterable resolves nothing ({})
+PASS AC-PCAF2 a string iterable is NAMED string ({'followed': {}, 'refused': {'char': 'string'}, 'containers': {}})
+PASS AC-PCAF3 a chain container resolves ({'name': ('str', 'pcfn_helper')})
+PASS AC-PCAF3 the chain label is published ({'followed': {'name': 'for:name@pcfn_pkg.NAMES'}, 'refused': {}, 'containers': {'name': {'chain': 'pcfn_pkg.NAMES', 'elements': 1, 'scope': 'module'}}})
+PASS AC-PCAF3 a broken chain resolves nothing ({})
+PASS AC-PCAF3 the broken hop is NAMED ({'followed': {}, 'refused': {'name': 'attribute:pcfn_pkg.MISSING'}, 'containers': {}})
+PASS AC-PCAF3 a subscript container is refused by name ({'followed': {}, 'refused': {'GROUPS': 'nested', 'name': 'subscript:GROUPS'}, 'containers': {}})
+PASS AC-PCAF4 a call iterable is NAMED call ({'followed': {}, 'refused': {'name': 'call'}, 'containers': {}})
+PASS AC-PCAF4 nothing was evaluated (marker absent)
+PASS AC-PCAF4 a format iterable is NAMED format ({'followed': {}, 'refused': {'name': 'format'}, 'containers': {}})
+PASS AC-PCAF4 a comprehension is NAMED comprehension ({'followed': {}, 'refused': {'name': 'comprehension'}, 'containers': {}})
+PASS AC-PCAF4 and none of them enters the table ({})
+PASS AC-PCAF5 the probed tree is byte-identical after the audit
+PASS AC-PCAF5 the reading moved no shipped digest
+PASS AC-PCAF5 the audit still answers a verdict ({'COVERED': 2, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 2, 'UNREADABLE': 0, 'HISTORICAL': 0})
+PASS AC-PCAF5 a missing root is refused, not raised ('E_PCFN_NO_ROOT')
+PASS AC-PCAF6 the module source is pure ASCII
+PASS AC-PCAF6 this suite source is pure ASCII
+PASS AC-PCAF6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys)
+PASS AC-PCAF6 no clock and no network token in the module
+PASS AC-PCAF6 the face and its suite are wired into the registry exactly once
+PASS AC-PCAF6 no duplicate registry row
+PASS AC-PCAF6 the reconcile label is the face own (os-probe-seam-for-container-name)
+PASS AC-PCAF6 the reading has its own verdict word (SEAMS-CONTAINER-COVERED)
+SUITE PASS 6/6 criteria green
+=== LEG test_probe_seam_alias_expression_scope.py exit=0 ===
+PROBE SEAM ALIAS EXPRESSION SCOPE SUITE (AC-PCAE1..AC-PCAE6)
+PASS AC-PCAE1 a module-level for-loop over a named constant resolves ({'BASE_NAME': ('str', 'pcae_helper'), 'name': ('str', 'pcae_helper')})
+PASS AC-PCAE1 a function-body for-loop over a named constant resolves ({'base': ('str', 'pcae_helper'), 'name': ('str', 'pcae_helper')})
+PASS AC-PCAE1 the reading carries the chain it took ({'followed': {'name': 'BASE_NAME'}, 'refused': {}})
+PASS AC-PCAE1 the local chain is carried too ({'followed': {'name': 'base'}, 'refused': {}})
+PASS AC-PCAE1 a multi-value for target is NOT resolved ({'UNUSED': ('str', 'x')})
+PASS AC-PCAE1 the probe row reads COVERED and names the for-loop binding (('COVERED', ['importlib.import_module:pcae_helper@name']))
+PASS AC-PCAE1 the row carries the alias chain (['l:name@base'])
+PASS AC-PCAE2 an annotated subscript alias resolves ({'ALIAS': ('str', 'pcae_helper')})
+PASS AC-PCAE2 the full chain label is published ({'followed': {'ALIAS': 'pcae_pkg.NAMES'}, 'refused': {}})
+PASS AC-PCAE2 an unresolvable alias is NAMED with the hop that broke, not absent ({'followed': {}, 'refused': {'BAD': 'call'}})
+PASS AC-PCAE2 and it does not enter the table ({})
+PASS AC-PCAE2 the probe reads COVERED through the alias (('COVERED', ['importlib.import_module:pcae_helper@ALIAS']))
+PASS AC-PCAE2 the row carries the module chain (['m:ALIAS@pcae_pkg.NAMES'])
+PASS AC-PCAE3 a container alias substitutes its named element ({'BASE': ('str', 'pcae_helper'), 'ALIASES': ('tuple', ['pcae_helper'])})
+PASS AC-PCAE3 the element provenance is published ({'followed': {'ALIASES': 'BASE'}, 'refused': {}})
+PASS AC-PCAE3 the element resolves with its chain (('pcae_helper', 'ALIASES[0]'))
+PASS AC-PCAE3 an unresolvable element is refused by name ({'followed': {}, 'refused': {'MIXED': 'call'}})
+PASS AC-PCAE3 and the container never enters the table ({'BASE': ('str', 'pcae_helper')})
+PASS AC-PCAE3 the probe reads COVERED through the element (('COVERED', ['importlib.import_module:pcae_helper@ALIASES[0]']))
+PASS AC-PCAE4 the module never evaluates or imports by name
+PASS AC-PCAE4 every compile call in the module is re.compile (2)
+PASS AC-PCAE4 an arithmetic value is named expression ({'name': 'expression', 'fmt': 'format', 'comp': 'comprehension'})
+PASS AC-PCAE4 a format call is named format ({'name': 'expression', 'fmt': 'format', 'comp': 'comprehension'})
+PASS AC-PCAE4 a comprehension element is named, not resolved ({'name': 'expression', 'fmt': 'format', 'comp': 'comprehension'})
+PASS AC-PCAE4 no refused value enters the table ({})
+PASS AC-PCAE4 a returned container is not a constant ({})
+PASS AC-PCAE4 a plain call is named call ({'followed': {}, 'refused': {'VALUE': 'call'}})
+PASS AC-PCAE5 every fixture digest is unchanged and nothing landed
+PASS AC-PCAE5 the shipped module and render are unchanged
+PASS AC-PCAE5 a missing root is refused, not silently clean
+PASS AC-PCAE5 the REAL tree reads SEAMS-ALIAS-COVERED (('SEAMS-ALIAS-COVERED', {'COVERED': 3, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 176, 'UNREADABLE': 0, 'HISTORICAL': 1258}))
+PASS AC-PCAE5 the live leg moved no digest either
+PASS AC-PCAE6 the module source is pure ASCII
+PASS AC-PCAE6 this suite source is pure ASCII
+PASS AC-PCAE6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys)
+PASS AC-PCAE6 no clock and no network token in the module
+PASS AC-PCAE6 the face and its suite are wired into the registry exactly once
+PASS AC-PCAE6 no duplicate registry row
+PASS AC-PCAE6 the reconcile label is the face own (os-probe-seam-alias-expression-scope)
+PASS AC-PCAE6 the reading has its own verdict word (SEAMS-ALIAS-COVERED)
+SUITE PASS 6/6 criteria green
+=== LEG test_probe_seam_annotated_constant_scope.py exit=0 ===
+PROBE SEAM ANNOTATED CONSTANT SCOPE SUITE (AC-PLAC1..AC-PLAC6)
+PASS AC-PLAC1 no seam name is spelled in the module source
+PASS AC-PLAC1 no fixture module name is written into the module
+PASS AC-PLAC1 a module-level annotated str literal is read ({'NAME': ('str', 'plac_helper')})
+PASS AC-PLAC1 an annotated computation is NOT a constant ({})
+PASS AC-PLAC1 an annotation that is not a plain name is refused ({})
+PASS AC-PLAC1 a function-body walrus binding is read ({'name': ('str', 'plac_helper')})
+PASS AC-PLAC1 a for-loop target of one str literal is read ({'name': ('str', 'plac_helper')})
+PASS AC-PLAC1 an ambiguous annotated name is NOT resolved ({})
+PASS AC-PLAC1 a nested attribute chain resolves with its binding label (('plac_helper', 'plac_pkg.CFG.NAMES'))
+PASS AC-PLAC1 a chain through a call is NOT resolved (None)
+PASS AC-PLAC2 plac_annotated_module.py reads COVERED with helper=plac_helper binding=NAME (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@NAME']))
+PASS AC-PLAC2 plac_annotated_local.py reads COVERED with helper=plac_helper binding=name (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@name']))
+PASS AC-PLAC2 plac_walrus.py reads COVERED with helper=plac_helper binding=name (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@name']))
+PASS AC-PLAC2 plac_for.py reads COVERED with helper=plac_helper binding=name (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@name']))
+PASS AC-PLAC2 plac_nested.py reads COVERED with helper=plac_helper binding=plac_pkg.CFG.NAMES (('COVERED', ['plac_helper'], ['importlib.import_module:plac_helper@plac_pkg.CFG.NAMES']))
+PASS AC-PLAC2 the row names the module binding it read (['NAME'])
+PASS AC-PLAC2 the row names the local binding it read (['name'])
+PASS AC-PLAC2 a walrus probe really quiets every seam (5)
+PASS AC-PLAC2 the whole world reads SEAMS-ANNOTATED-COVERED (SEAMS-ANNOTATED-COVERED)
+PASS AC-PLAC3 an annotated binding reaching a partial helper reads MISSING-SEAM naming seam and probe (('MISSING-SEAM', ['PLRC']))
+PASS AC-PLAC3 the world verdict is SEAMS-ANNOTATED-STALE (SEAMS-ANNOTATED-STALE)
+PASS AC-PLAC3 neither probe nor helper was imported or run
+PASS AC-PLAC3 the CLI refuses with exit 2 (2)
+PASS AC-PLAC4 plac_computed.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ['importlib.import_module:name']))
+PASS AC-PLAC4 plac_computed.py is not resolved to plac_helper ([])
+PASS AC-PLAC4 plac_comprehension.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ['importlib.import_module:name']))
+PASS AC-PLAC4 plac_comprehension.py is not resolved to plac_helper ([])
+PASS AC-PLAC4 plac_opaque.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ["importlib.import_module:NAMES['x']"]))
+PASS AC-PLAC4 plac_opaque.py is not resolved to plac_helper ([])
+PASS AC-PLAC4 the computed call is reported verbatim ({'resolved': [], 'unresolved': ['importlib.import_module:name'], 'module_bindings': [], 'local_bindings': []})
+PASS AC-PLAC4 a concatenation is not resolved
+PASS AC-PLAC4 an arithmetic expression is not resolved
+PASS AC-PLAC5 every fixture digest is unchanged and nothing landed
+PASS AC-PLAC5 the shipped module and render are unchanged
+PASS AC-PLAC5 a missing root is refused, not silently clean
+PASS AC-PLAC6 the module source is pure ASCII
+PASS AC-PLAC6 this suite source is pure ASCII
+PASS AC-PLAC6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys,warnings)
+PASS AC-PLAC6 no clock and no network token in the module
+PASS AC-PLAC6 the face and its suite are wired into the registry exactly once
+PASS AC-PLAC6 no duplicate registry row
+PASS AC-PLAC6 the reconcile label is the face own (os-probe-seam-annotated-constant-scope)
+PASS AC-PLAC6 the reading has its own verdict word (SEAMS-ANNOTATED-COVERED)
+SUITE PASS 6/6 criteria green
+=== LEG test_probe_seam_dynamic_import_scope.py exit=0 ===
+PROBE SEAM DYNAMIC IMPORT SCOPE suite (R2519, 6 criteria)
+  PASS AC-PDI1 no seam name is spelled in the module source
+  PASS AC-PDI1 no helper name is written into the module
+  PASS AC-PDI1 an importlib attribute call with a literal name is resolved ({'resolved': [('importlib.import_module', 'quiet_helper')], 'unresolved': []})
+  PASS AC-PDI1 __import__ with a literal name is resolved ({'resolved': [('__import__', 'quiet_helper')], 'unresolved': []})
+  PASS AC-PDI1 a from-import alias is resolved at call time ({'resolved': [('import_module', 'quiet_helper')], 'unresolved': []})
+  PASS AC-PDI1 a module-level binding of the callable is resolved ({'resolved': [('importlib.import_module', 'quiet_helper')], 'unresolved': []})
+  PASS AC-PDI1 a name that is not a literal constant is NOT resolved ({'resolved': [], 'unresolved': ['importlib.import_module:name']})
+  PASS AC-PDI1 a source that will not parse reads None
+  PASS AC-PDI1 a probe whose only import is dynamic is followed ('COVERED' direct=[] helpers=['pdi_dyn_helper'])
+  PASS AC-PDI1 the hop is re-read at CALL time: editing ONLY the helper moves the same probe 'MISSING-SEAM' -> 'COVERED'
+  PASS AC-PDI2 a dynamically forwarding probe reads COVERED ('COVERED')
+  PASS AC-PDI2 the helper it was followed through is named (['quiet_helper'])
+  PASS AC-PDI2 the dynamic shape it took is named on the row (['importlib.import_module:quiet_helper'])
+  PASS AC-PDI2 the dynamic seams cover every seam it owes (quieted=5 required=5)
+  PASS AC-PDI2 the same fixture is OUT-OF-SCOPE to the lazy face, so the closed gap is measured ('OUT-OF-SCOPE')
+  PASS AC-PDI2 the __import__ shape is followed too ('COVERED' dynamic=['__import__:quiet_helper'])
+  PASS AC-PDI2 the shipped tool accepts it at exit 0 naming the helper (rc=0)
+  PASS AC-PDI3 a dynamic forwarding probe behind its helper reads MISSING-SEAM ('MISSING-SEAM')
+  PASS AC-PDI3 the reading names the seam the helper omits (['STPT'])
+  PASS AC-PDI3 the probe that carries a module-level exit is named, never imported
+  PASS AC-PDI3 the shipped tool refuses at exit 2 naming seam and file (rc=2)
+  PASS AC-PDI3 a stale dynamic probe makes the tree STALE
+  PASS AC-PDI4 a computed module name reads OUT-OF-SCOPE ('OUT-OF-SCOPE')
+  PASS AC-PDI4 the unresolved call is named on the row (['importlib.import_module:NAME'])
+  PASS AC-PDI4 neither the computed call nor a bare string is counted as clean ([]/'OUT-OF-SCOPE')
+  PASS AC-PDI4 out-of-scope is a named bucket, not an alarm ('SEAMS-DYNAMIC-COVERED')
+  PASS AC-PDI4 a dynamically chained helper is followed, so a partial helper cannot INVENT a missing seam ('COVERED' helpers=['middle_helper'])
+  PASS AC-PDI4 a dynamic import cycle terminates and reads COVERED ('COVERED')
+  PASS AC-PDI4 a real shipped module outside the protocol reads OUT-OF-SCOPE ('OUT-OF-SCOPE')
+  PASS AC-PDI5 the probed root gains no file
+  PASS AC-PDI5 the render, the patterns file, all three readers, every probe and every seam owner keep their bytes (14 files)
+  PASS AC-PDI5 the module holds no write primitive
+  PASS AC-PDI6 the module source is pure ASCII
+  PASS AC-PDI6 module-level imports are stdlib only (['argparse', 'ast', 'hashlib', 'json', 'os', 're', 'sys', 'warnings'])
+  PASS AC-PDI6 the module reads no clock
+  PASS AC-PDI6 zero network imports
+  PASS AC-PDI6 the module carries its own reconcile label
+  PASS AC-PDI6 the runner wires this suite
+  PASS AC-PDI6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+=== LEG test_probe_seam_registry.py exit=0 ===
+PROBE SEAM REGISTRY suite (R2513, 6 criteria)
+  PASS AC-PSMR1 the derived seams equal an independent AST reading of the render source (['PLRC', 'PNLT', 'ADTR', 'EVNM', 'STPT'] vs ['PLRC', 'PNLT', 'ADTR', 'EVNM', 'STPT'])
+  PASS AC-PSMR1 every derived name really carries a callable guard
+  PASS AC-PSMR1 patching the RENDER moves the set at CALL time (['ZZ'])
+  PASS AC-PSMR1 restoring the render restores the set
+  PASS AC-PSMR1 no seam name is spelled in the module source
+  PASS AC-PSMR2 every shipped probe file keeps its bytes
+  PASS AC-PSMR2 every shipped probe reads COVERED ({'COVERED': 3, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 176, 'UNREADABLE': 0, 'HISTORICAL': 1258})
+  PASS AC-PSMR2 a COVERED probe really quiets every seam it owes
+  PASS AC-PSMR2 a probe is not asked to quiet its OWN seam
+  PASS AC-PSMR3 a stale probe reads MISSING-SEAM ('MISSING-SEAM')
+  PASS AC-PSMR3 the reading names the seam it forgets (['STPT'])
+  PASS AC-PSMR3 the stale probe is named, never imported
+  PASS AC-PSMR3 the shipped tool refuses at exit 2 naming seam and file (rc=2)
+  PASS AC-PSMR3 a stale probe makes the whole tree STALE
+  PASS AC-PSMR4 a module that names no seam reads OUT-OF-SCOPE ('OUT-OF-SCOPE')
+  PASS AC-PSMR4 it is not counted as clean ({'COVERED': 0, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 1, 'UNREADABLE': 0, 'HISTORICAL': 0})
+  PASS AC-PSMR4 out-of-scope is a named bucket, not an alarm ('SEAMS-COVERED')
+  PASS AC-PSMR4 a real shipped module outside the protocol reads OUT-OF-SCOPE ('OUT-OF-SCOPE')
+  PASS AC-PSMR5 the probed root gains no file
+  PASS AC-PSMR5 the render, the patterns file, every probe and every seam owner keep their bytes (11 files)
+  PASS AC-PSMR5 the module holds no write primitive
+  PASS AC-PSMR6 the module source is pure ASCII
+  PASS AC-PSMR6 imports are stdlib only (['argparse', 'ast', 'hashlib', 'json', 'os', 're', 'sys', 'warnings'])
+  PASS AC-PSMR6 the module reads no clock
+  PASS AC-PSMR6 zero network imports
+  PASS AC-PSMR6 the module carries its own reconcile label
+  PASS AC-PSMR6 the runner wires this suite
+  PASS AC-PSMR6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+ADJACENT [('test_probe_seam_for_container_name.py', 0, 'SUITE PASS 6/6 criteria green'), ('test_probe_seam_alias_expression_scope.py', 0, 'SUITE PASS 6/6 criteria green'), ('test_probe_seam_annotated_constant_scope.py', 0, 'SUITE PASS 6/6 criteria green'), ('test_probe_seam_dynamic_import_scope.py', 0, 'SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6'), ('test_probe_seam_registry.py', 0, 'SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6')]
+=== LIVE exit=0 ===
+PROBE SEAM SUBSCRIPT CONTAINER os-probe-seam-subscript-container-scope verdict=SEAMS-SUBSCRIPT-COVERED seams=5 probes=1437 covered=3 missing=0 out_of_scope=176 unreadable=0 historical=1258
+  SEAM PLRC owner=patterns_label_readability_render_consumer
+  SEAM PNLT owner=patterns_non_label_text_readability
+  SEAM ADTR owner=artifact_disk_text_readability
+  SEAM EVNM owner=evidence_name_text_coverage
+  SEAM STPT owner=stamp_text_coverage
+  PROBE artifact_disk_text_readability.py COVERED quieted=4 required=4 direct=4 helpers=- dynamic=- subscripts=- refused=m:BASE@call,m:SANDBOX@format,m:_PROBE_DEPTH@shape,m:after@call,m:args@call,m:argv@attribute,m:before@call,m:document@call,m:key@call,m:lines@expression,m:module@call,m:name@call,m:node@call,m:obj@call,m:parser@call,m:real_evnm@call,m:real_face_node@attribute,m:real_plrc@attribute,m:real_pnlt@attribute,m:real_stpt@call,m:real_suites@attribute,m:registry@attribute,m:row@call,m:strings@call,m:text@call,m:verdict@call,l:field@unresolved-name multi=multi-target:index,?,multi-target:index,item
+  PROBE evidence_name_text_coverage.py COVERED quieted=4 required=4 direct=4 helpers=- dynamic=- subscripts=- refused=m:BASE@call,m:SANDBOX@format,m:_PROBE_DEPTH@shape,m:after@call,m:args@call,m:argv@attribute,m:base@call,m:before@call,m:document@call,m:lines@expression,m:match@call,m:module@call,m:parser@call,m:piece@subscript,m:real@call,m:real_adtr@attribute,m:real_os@attribute,m:real_plrc@attribute,m:real_pnlt@attribute,m:real_rel@attribute,m:real_stpt@call,m:row@call,m:strings@call,m:tag@call,m:target@call,m:value@call,m:verdict@call,l:field@unresolved-name multi=-
+  MODULE runner_abort_history.py OUT-OF-SCOPE unresolved=__import__:name
+  PROBE stamp_text_coverage.py COVERED quieted=5 required=4 direct=5 helpers=- dynamic=- subscripts=- refused=m:BASE@call,m:SANDBOX@format,m:_PROBE_DEPTH@shape,m:args@call,m:argv@attribute,m:before@call,m:borrowed@call,m:document@call,m:lines@expression,m:module@call,m:parser@call,m:piece@
+DIGESTS module_same=True render_same=True base_same=True

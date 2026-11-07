@@ -22,3 +22,4 @@ tick=2529 2026-11-07 R2529 product window: probe_seam_alias_expression_scope shi
 tick=2530 2026-11-07 R2530 verification window: battery red leg kept and repaired at its birth site (two R2529 evidence logs were UTF-16, census flagged them, rewrite tool plus a git -text pin), retry green 594/594 at exactly 4540 criteria, no successor battery owed, next window owes the product face on tech.md:567
 2026-11-07 18:32 R2531 product window: container-name seam scope shipped, registry 595/4546
 2026-11-07 18:57 R2532 verification window: battery green 595/595 at 4546 criteria, four follow-up sections PASS
+2026-11-07 19:03 R2533 product window: subscript container scope shipped, registry 596/4552
