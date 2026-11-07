@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T08:13:19+08:00",
+  "export_ts": "2026-11-07T08:14:12+08:00",
   "do": "2026-11-07 R2512 VERIFICATION window on the battery the register owed (reconcile-battery-R2511, pre-registered at 585 suites / 4486 criteria, target re-measured by importing reconcile_all.SUITES before the launch). Five-quiet scan clean at HEAD fbafb177: git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the stored token b",
   "ceo_face": {
     "current": "2026-11-07 R2512 VERIFICATION window on the battery the register owed (reconcile-battery-R2511, pre-registered at 585 suites / 4486 criteria, target re-measured by importing reconcile_all.SUITES before the launch). Five-quiet scan clean at HEAD fbafb177: git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the stored token b",
     "latest_artifact": "reconcile-all-R2512-retry.log (893619B) + reconcile-all-R2512.log (891646B)",
-    "next_milestone": "next window owes product-face-R2512 on the committed tree, inside a 48h window due 2026-11-09T08:13:19+08:00",
-    "next_milestone_due": "2026-11-09T08:13:19+08:00",
+    "next_milestone": "next window owes product-face-R2512 on the committed tree, inside a 48h window due 2026-11-09T08:14:12+08:00",
+    "next_milestone_due": "2026-11-09T08:14:12+08:00",
     "last_artifact": "reconcile-all-R2512-retry.log (893619B) + reconcile-all-R2512.log (891646B)",
-    "updated_at": "2026-11-07T08:13:19+08:00"
+    "updated_at": "2026-11-07T08:14:12+08:00"
   },
   "depts": [
     {
@@ -602,10 +602,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 66,
+    "log_lines_in_window": 67,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 66,
+    "substantive_non_idle_mention_lines": 67,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
