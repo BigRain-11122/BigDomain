@@ -9,3 +9,4 @@
 2026-11-07 10:5x R2517 product window: probe seam lazy scope shipped, registry 588/4504
 2026-11-07 10:5x R2518 verification window: battery green 588/588 at 4504 criteria on the first leg, matrix restamped, no repairs needed
 2026-11-07 11:0x R2519 product window: probe seam dynamic import scope shipped, registry 589/4510, battery owed next
+2026-11-07 12:0x R2520 verification window: battery green 589/589 at 4510 criteria on the retry, matrix doc repaired at its birth site, no successor battery owed

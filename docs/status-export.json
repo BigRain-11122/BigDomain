@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T11:02:16+08:00",
-  "do": "2026-11-07 R2519 PRODUCT window on the tech head the register named (product-face-R2518, state/queue/tech.md:555 prefix AC-PDI1, criteria AC-PDI1..AC-PDI6 pinned in that row at R2517 BEFORE any code). Five-silence scan clean at HEAD aebb7489 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the stored 90-token baseline a",
+  "export_ts": "2026-11-07T11:58:21+08:00",
+  "do": "2026-11-07 R2520 VERIFICATION window on the battery the register owed (reconcile-battery-R2519, pre-registered 589 suites / 4510 criteria). Five-silence scan clean at HEAD 37c5f448 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the stored 90-token baseline at a measured 190 rows, group orders tail unchanged at 2026-11",
   "ceo_face": {
-    "current": "2026-11-07 R2519 PRODUCT window on the tech head the register named (product-face-R2518, state/queue/tech.md:555 prefix AC-PDI1, criteria AC-PDI1..AC-PDI6 pinned in that row at R2517 BEFORE any code). Five-silence scan clean at HEAD aebb7489 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the stored 90-token baseline a",
-    "latest_artifact": "probe-seam-dynamic-import-scope-R2519.log (4172B) + probe-seam-dynamic-import-scope-live-R2519.log (1352B)",
-    "next_milestone": "next window owes reconcile-battery-R2519 on the committed tree, inside a 48h window due 2026-11-09T11:02:16+08:00",
-    "next_milestone_due": "2026-11-09T11:02:16+08:00",
-    "last_artifact": "probe-seam-dynamic-import-scope-R2519.log (4172B) + probe-seam-dynamic-import-scope-live-R2519.log (1352B)",
-    "updated_at": "2026-11-07T11:02:16+08:00"
+    "current": "2026-11-07 R2520 VERIFICATION window on the battery the register owed (reconcile-battery-R2519, pre-registered 589 suites / 4510 criteria). Five-silence scan clean at HEAD 37c5f448 (git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, content-addressed decisions diff new=0 over the stored 90-token baseline at a measured 190 rows, group orders tail unchanged at 2026-11",
+    "latest_artifact": "reconcile-all-R2520-retry.log (908059B) + reconcile-all-R2520.log (904869B)",
+    "next_milestone": "next window owes product-face-R2520 on the committed tree, inside a 48h window due 2026-11-09T11:58:21+08:00",
+    "next_milestone_due": "2026-11-09T11:58:21+08:00",
+    "last_artifact": "reconcile-all-R2520-retry.log (908059B) + reconcile-all-R2520.log (904869B)",
+    "updated_at": "2026-11-07T11:58:21+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "reconcile-all-R2520-retry.log (908059B) + reconcile-all-R2520.log (904869B)",
     "probe-seam-dynamic-import-scope-R2519.log (4172B) + probe-seam-dynamic-import-scope-live-R2519.log (1352B)",
     "reconcile-all-R2518.log (900373B)",
     "probe-seam-lazy-scope-R2517.log (6504B) + probe-seam-lazy-scope-live-R2517.log (625B)",
@@ -623,17 +624,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2519",
+      "2520",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 38,
+    "log_lines_in_window": 43,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 38,
+    "substantive_non_idle_mention_lines": 43,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
