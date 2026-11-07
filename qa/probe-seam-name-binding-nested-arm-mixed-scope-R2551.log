@@ -1,0 +1,124 @@
+EVIDENCE CAPTURE round=R2551 suite=test_probe_seam_name_binding_nested_arm_mixed_scope.py legs=2
+== LEG A rc=0 digest=D3E6C23AEF2B46F8
+PROBE SEAM NAME BINDING NESTED ARM MIXED SCOPE SUITE (AC-PNDP1..AC-PNDP6)
+PASS AC-PNDP1 a direct plus agreeing nested tree resolves ({'KEY': 'b'})
+PASS AC-PNDP1 the nested face refused the same tree ({'KEY': 'mixed:body'})
+PASS AC-PNDP1 every leaf including the direct one is published ([{'path': 'if:2/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}])
+PASS AC-PNDP1 the entry law merges to the ROOT group ({'name': 'KEY', 'scope': 'module', 'line': 10, 'state': 'ok', 'reason': None, 'value': 'b', 'source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'mixed:body', 'base_nested_source': 'nested', 'base_nested_followed': None, 'base_state': 'refused', 'base_reason': 'guarded:if:2', 'base_guard_state': 'refused', 'base_guard_reason': 'guarded:if:2', 'root': 'if:2', 'groups': [{'group': 'if:2', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:4', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [{'path': 'if:2/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'partial': None, 'loop': None, 'cases': 0, 'arms': [], 'values': []})
+PASS AC-PNDP1 a three-deep agreeing tree also resolves ({'KEY': 'b'})
+PASS AC-PNDP2 a disagreeing tree resolves nothing ({})
+PASS AC-PNDP2 the fold names the disagreeing arm ([{'state': 'arms', 'reason': 'disagree:body', 'values': ['b', 'z']}, {'state': 'ok', 'value': 'b'}])
+PASS AC-PNDP2 both values are published by full path ([{'path': 'if:2/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/else', 'arm': 'else', 'value': 'z', 'values': ['z']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}])
+PASS AC-PNDP2 the entry law refuses to pick a leaf ({'name': 'KEY', 'scope': 'module', 'line': 10, 'state': 'arms', 'reason': 'nested-arms', 'value': None, 'source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'mixed:body', 'base_nested_source': 'nested', 'base_nested_followed': None, 'base_state': 'arms', 'base_reason': 'exclusive-arms', 'base_guard_state': 'arms', 'base_guard_reason': 'exclusive-arms', 'root': 'if:2', 'groups': [{'group': 'if:2', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:4', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [{'path': 'if:2/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/else', 'arm': 'else', 'value': 'z', 'values': ['z']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'partial': None, 'loop': None, 'cases': 0, 'arms': [{'state': 'arms', 'reason': 'disagree:body', 'values': ['b', 'z']}, {'state': 'ok', 'value': 'b'}], 'values': ['b', 'z']})
+PASS AC-PNDP3 a try whose else rebinds the literal resolves ({'KEY': 'b'})
+PASS AC-PNDP3 the nested face refused the same try ({'KEY': 'incomplete:try:2'})
+PASS AC-PNDP3 the else arm is counted as coverage ([{'path': 'try:2/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'try:2/except0', 'arm': 'except0', 'value': 'b', 'values': ['b']}, {'path': 'try:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}])
+PASS AC-PNDP3 an else binding nothing is named partial:else ({'KEY': 'partial:else'})
+PASS AC-PNDP3 the entry law never resolves an empty else ({'name': 'KEY', 'scope': 'module', 'line': 8, 'state': 'refused', 'reason': 'partial:else', 'value': None, 'source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'incomplete:try:2', 'base_nested_source': 'nested', 'base_nested_followed': None, 'base_state': 'refused', 'base_reason': 'guarded:try:2', 'base_guard_state': 'refused', 'base_guard_reason': 'guarded:try:2', 'root': 'try:2', 'groups': [{'group': 'try:2', 'kind': 'try', 'exhaustive': False, 'cases': 0, 'arms': ['body', 'except0']}], 'leaves': [{'path': 'try:2/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'try:2/except0', 'arm': 'except0', 'value': 'b', 'values': ['b']}, {'path': 'try:2/else', 'arm': 'else', 'value': None, 'values': []}], 'partial': 'else', 'loop': None, 'cases': 0, 'arms': [], 'values': []})
+PASS AC-PNDP3 a finally is still refused as incomplete ({'KEY': 'incomplete:try:2'})
+PASS AC-PNDP4 the with-as arm is named with-as:body ({'KEY': 'with-as:body'})
+PASS AC-PNDP4 the nested face used a shape word ({'KEY': 'non-literal:body'})
+PASS AC-PNDP4 the entry law never resolves a with-as key ({'name': 'KEY', 'scope': 'module', 'line': 7, 'state': 'refused', 'reason': 'with-as:body', 'value': None, 'source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'non-literal:body', 'base_nested_source': 'nested', 'base_nested_followed': None, 'base_state': 'refused', 'base_reason': 'with-as', 'base_guard_state': 'refused', 'base_guard_reason': 'with-as', 'root': 'if:2', 'groups': [{'group': 'if:2', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [{'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'partial': None, 'loop': None, 'cases': 0, 'arms': [], 'values': []})
+PASS AC-PNDP4 the with-as arm publishes no value leaf ([{'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}])
+PASS AC-PNDP5 all three shipped answers are carried on the mix-agree fixture
+PASS AC-PNDP5 the mix-agree row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the mix-deep fixture
+PASS AC-PNDP5 the mix-deep row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the mix-diff fixture
+PASS AC-PNDP5 the mix-diff row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the try-else-agree fixture
+PASS AC-PNDP5 the try-else-agree row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the try-else-empty fixture
+PASS AC-PNDP5 the try-else-empty row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the try-finally fixture
+PASS AC-PNDP5 the try-finally row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the with-as fixture
+PASS AC-PNDP5 the with-as row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the nested-only fixture
+PASS AC-PNDP5 the nested-only row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the no-else fixture
+PASS AC-PNDP5 the no-else row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 a tree with no direct arm keeps the nested answer ({'KEY': 'b'})
+PASS AC-PNDP5 a chain with no final else is never resolved ({'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'incomplete:if:2'}, 'arms': [], 'leaves': {}, 'partial': {}, 'loops': {}, 'groups': [], 'resolved_by_arm_mixed': [], 'base_nested_followed': {}, 'base_nested_refused': {'KEY': 'incomplete:if:2'}, 'base_nested_arms': [], 'base_followed': {}, 'base_refused': {'KEY': 'guarded:if:2'}, 'base_arms': [], 'base_guard_followed': {}, 'base_guard_refused': {'KEY': 'guarded:if:2'}})
+PASS AC-PNDP5 the probed tree is byte-identical after the audit
+PASS AC-PNDP5 the reading moved no shipped digest
+PASS AC-PNDP5 the probe row still reads COVERED ('COVERED')
+PASS AC-PNDP5 the row carries this face own folded loop ([{'line': 12, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'leaves': {'KEY': [{'path': 'if:4/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:4/body>if:6/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:4/body>if:6/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:4/else', 'arm': 'else', 'value': 'b', 'values': ['b']}]}, 'partial': {}, 'loops': {}, 'groups': [{'group': 'if:4', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:6', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'resolved_by_arm_mixed': ['KEY'], 'base_nested_followed': {}, 'base_nested_refused': {'KEY': 'mixed:body'}, 'base_nested_arms': [], 'base_followed': {}, 'base_refused': {'KEY': 'guarded:if:4'}, 'base_arms': [], 'base_guard_followed': {}, 'base_guard_refused': {'KEY': 'guarded:if:4'}}])
+PASS AC-PNDP5 the report keeps the shipped base label (('os-probe-seam-name-binding-nested-arm-mixed-scope', 'SEAMS-ARM-MIXED-COVERED', 'os-probe-seam-name-binding-nested-exhaustive-path'))
+PASS AC-PNDP5 a missing root is refused, not raised ('E_PNDP_NO_ROOT')
+PASS AC-PNDP6 the module source is pure ASCII
+PASS AC-PNDP6 this suite source is pure ASCII
+PASS AC-PNDP6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNDP6 no clock and no network token in the module
+PASS AC-PNDP6 the face and its suite are wired into the registry exactly once
+PASS AC-PNDP6 no duplicate registry row
+PASS AC-PNDP6 the reconcile label is the face own (os-probe-seam-name-binding-nested-arm-mixed-scope)
+PASS AC-PNDP6 the reading has its own verdict words (SEAMS-ARM-MIXED-COVERED/SEAMS-ARM-MIXED-STALE)
+PASS AC-PNDP6 the new refusal words are its own (with-as:%s/disagree:%s)
+PASS AC-PNDP6 the shipped face it extends is still named
+SUITE PASS 6/6 criteria green
+== LEG B rc=0 digest=D3E6C23AEF2B46F8
+PROBE SEAM NAME BINDING NESTED ARM MIXED SCOPE SUITE (AC-PNDP1..AC-PNDP6)
+PASS AC-PNDP1 a direct plus agreeing nested tree resolves ({'KEY': 'b'})
+PASS AC-PNDP1 the nested face refused the same tree ({'KEY': 'mixed:body'})
+PASS AC-PNDP1 every leaf including the direct one is published ([{'path': 'if:2/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}])
+PASS AC-PNDP1 the entry law merges to the ROOT group ({'name': 'KEY', 'scope': 'module', 'line': 10, 'state': 'ok', 'reason': None, 'value': 'b', 'source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'mixed:body', 'base_nested_source': 'nested', 'base_nested_followed': None, 'base_state': 'refused', 'base_reason': 'guarded:if:2', 'base_guard_state': 'refused', 'base_guard_reason': 'guarded:if:2', 'root': 'if:2', 'groups': [{'group': 'if:2', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:4', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [{'path': 'if:2/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'partial': None, 'loop': None, 'cases': 0, 'arms': [], 'values': []})
+PASS AC-PNDP1 a three-deep agreeing tree also resolves ({'KEY': 'b'})
+PASS AC-PNDP2 a disagreeing tree resolves nothing ({})
+PASS AC-PNDP2 the fold names the disagreeing arm ([{'state': 'arms', 'reason': 'disagree:body', 'values': ['b', 'z']}, {'state': 'ok', 'value': 'b'}])
+PASS AC-PNDP2 both values are published by full path ([{'path': 'if:2/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/else', 'arm': 'else', 'value': 'z', 'values': ['z']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}])
+PASS AC-PNDP2 the entry law refuses to pick a leaf ({'name': 'KEY', 'scope': 'module', 'line': 10, 'state': 'arms', 'reason': 'nested-arms', 'value': None, 'source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'mixed:body', 'base_nested_source': 'nested', 'base_nested_followed': None, 'base_state': 'arms', 'base_reason': 'exclusive-arms', 'base_guard_state': 'arms', 'base_guard_reason': 'exclusive-arms', 'root': 'if:2', 'groups': [{'group': 'if:2', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:4', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [{'path': 'if:2/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:2/body>if:4/else', 'arm': 'else', 'value': 'z', 'values': ['z']}, {'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'partial': None, 'loop': None, 'cases': 0, 'arms': [{'state': 'arms', 'reason': 'disagree:body', 'values': ['b', 'z']}, {'state': 'ok', 'value': 'b'}], 'values': ['b', 'z']})
+PASS AC-PNDP3 a try whose else rebinds the literal resolves ({'KEY': 'b'})
+PASS AC-PNDP3 the nested face refused the same try ({'KEY': 'incomplete:try:2'})
+PASS AC-PNDP3 the else arm is counted as coverage ([{'path': 'try:2/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'try:2/except0', 'arm': 'except0', 'value': 'b', 'values': ['b']}, {'path': 'try:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}])
+PASS AC-PNDP3 an else binding nothing is named partial:else ({'KEY': 'partial:else'})
+PASS AC-PNDP3 the entry law never resolves an empty else ({'name': 'KEY', 'scope': 'module', 'line': 8, 'state': 'refused', 'reason': 'partial:else', 'value': None, 'source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'incomplete:try:2', 'base_nested_source': 'nested', 'base_nested_followed': None, 'base_state': 'refused', 'base_reason': 'guarded:try:2', 'base_guard_state': 'refused', 'base_guard_reason': 'guarded:try:2', 'root': 'try:2', 'groups': [{'group': 'try:2', 'kind': 'try', 'exhaustive': False, 'cases': 0, 'arms': ['body', 'except0']}], 'leaves': [{'path': 'try:2/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'try:2/except0', 'arm': 'except0', 'value': 'b', 'values': ['b']}, {'path': 'try:2/else', 'arm': 'else', 'value': None, 'values': []}], 'partial': 'else', 'loop': None, 'cases': 0, 'arms': [], 'values': []})
+PASS AC-PNDP3 a finally is still refused as incomplete ({'KEY': 'incomplete:try:2'})
+PASS AC-PNDP4 the with-as arm is named with-as:body ({'KEY': 'with-as:body'})
+PASS AC-PNDP4 the nested face used a shape word ({'KEY': 'non-literal:body'})
+PASS AC-PNDP4 the entry law never resolves a with-as key ({'name': 'KEY', 'scope': 'module', 'line': 7, 'state': 'refused', 'reason': 'with-as:body', 'value': None, 'source': 'arm-mixed', 'base_nested_state': 'refused', 'base_nested_reason': 'non-literal:body', 'base_nested_source': 'nested', 'base_nested_followed': None, 'base_state': 'refused', 'base_reason': 'with-as', 'base_guard_state': 'refused', 'base_guard_reason': 'with-as', 'root': 'if:2', 'groups': [{'group': 'if:2', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'leaves': [{'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}], 'partial': None, 'loop': None, 'cases': 0, 'arms': [], 'values': []})
+PASS AC-PNDP4 the with-as arm publishes no value leaf ([{'path': 'if:2/else', 'arm': 'else', 'value': 'b', 'values': ['b']}])
+PASS AC-PNDP5 all three shipped answers are carried on the mix-agree fixture
+PASS AC-PNDP5 the mix-agree row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the mix-deep fixture
+PASS AC-PNDP5 the mix-deep row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the mix-diff fixture
+PASS AC-PNDP5 the mix-diff row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the try-else-agree fixture
+PASS AC-PNDP5 the try-else-agree row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the try-else-empty fixture
+PASS AC-PNDP5 the try-else-empty row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the try-finally fixture
+PASS AC-PNDP5 the try-finally row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the with-as fixture
+PASS AC-PNDP5 the with-as row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the nested-only fixture
+PASS AC-PNDP5 the nested-only row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 all three shipped answers are carried on the no-else fixture
+PASS AC-PNDP5 the no-else row matches the exhaustive and guard faces directly
+PASS AC-PNDP5 a tree with no direct arm keeps the nested answer ({'KEY': 'b'})
+PASS AC-PNDP5 a chain with no final else is never resolved ({'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'incomplete:if:2'}, 'arms': [], 'leaves': {}, 'partial': {}, 'loops': {}, 'groups': [], 'resolved_by_arm_mixed': [], 'base_nested_followed': {}, 'base_nested_refused': {'KEY': 'incomplete:if:2'}, 'base_nested_arms': [], 'base_followed': {}, 'base_refused': {'KEY': 'guarded:if:2'}, 'base_arms': [], 'base_guard_followed': {}, 'base_guard_refused': {'KEY': 'guarded:if:2'}})
+PASS AC-PNDP5 the probed tree is byte-identical after the audit
+PASS AC-PNDP5 the reading moved no shipped digest
+PASS AC-PNDP5 the probe row still reads COVERED ('COVERED')
+PASS AC-PNDP5 the row carries this face own folded loop ([{'line': 12, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'arms': [], 'leaves': {'KEY': [{'path': 'if:4/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:4/body>if:6/body', 'arm': 'body', 'value': 'b', 'values': ['b']}, {'path': 'if:4/body>if:6/else', 'arm': 'else', 'value': 'b', 'values': ['b']}, {'path': 'if:4/else', 'arm': 'else', 'value': 'b', 'values': ['b']}]}, 'partial': {}, 'loops': {}, 'groups': [{'group': 'if:4', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}, {'group': 'if:6', 'kind': 'if', 'exhaustive': True, 'cases': 0, 'arms': ['body', 'else']}], 'resolved_by_arm_mixed': ['KEY'], 'base_nested_followed': {}, 'base_nested_refused': {'KEY': 'mixed:body'}, 'base_nested_arms': [], 'base_followed': {}, 'base_refused': {'KEY': 'guarded:if:4'}, 'base_arms': [], 'base_guard_followed': {}, 'base_guard_refused': {'KEY': 'guarded:if:4'}}])
+PASS AC-PNDP5 the report keeps the shipped base label (('os-probe-seam-name-binding-nested-arm-mixed-scope', 'SEAMS-ARM-MIXED-COVERED', 'os-probe-seam-name-binding-nested-exhaustive-path'))
+PASS AC-PNDP5 a missing root is refused, not raised ('E_PNDP_NO_ROOT')
+PASS AC-PNDP6 the module source is pure ASCII
+PASS AC-PNDP6 this suite source is pure ASCII
+PASS AC-PNDP6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNDP6 no clock and no network token in the module
+PASS AC-PNDP6 the face and its suite are wired into the registry exactly once
+PASS AC-PNDP6 no duplicate registry row
+PASS AC-PNDP6 the reconcile label is the face own (os-probe-seam-name-binding-nested-arm-mixed-scope)
+PASS AC-PNDP6 the reading has its own verdict words (SEAMS-ARM-MIXED-COVERED/SEAMS-ARM-MIXED-STALE)
+PASS AC-PNDP6 the new refusal words are its own (with-as:%s/disagree:%s)
+PASS AC-PNDP6 the shipped face it extends is still named
+SUITE PASS 6/6 criteria green
+== ADJACENT 5
+== test_probe_seam_name_binding_nested_exhaustive_path.py rc=0 SUITE PASS 6/6 criteria green
+== test_probe_seam_name_binding_control_flow_guard_exhaustive.py rc=0 SUITE PASS 6/6 criteria green
+== test_probe_seam_name_binding_control_flow_guard_scope.py rc=0 SUITE PASS 6/6 criteria green
+== test_probe_seam_nested_subscript_scope.py rc=0 SUITE PASS 6/6 criteria green
+== test_probe_seam_subscript_container_scope.py rc=0 SUITE PASS 6/6 criteria green
+EVIDENCE identical=True adjacent=5 fails=0 digest=D3E6C23AEF2B46F8

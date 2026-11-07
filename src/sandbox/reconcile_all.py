@@ -5993,6 +5993,16 @@ SUITES = [
      os.path.join("..", "os",
                   "test_probe_seam_name_binding_nested_exhaustive_path.py"),
      6),
+    # R2551 - a direct arm binding that AGREES with a nested tree under it
+    # resolves to that literal, a direct binding that disagrees publishes both
+    # by full path, a try else rebinding the same literal is coverage while an
+    # empty else is named partial:else, and a with-as arm is named
+    # with-as:<arm>; the nested face answer rides beside it (604 -> 605
+    # suites, 4600 -> 4606 criteria).
+    ("os-probe-seam-name-binding-nested-arm-mixed-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_name_binding_nested_arm_mixed_scope.py"),
+     6),
     ]
 
 FAILS = 0

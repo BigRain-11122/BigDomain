@@ -1,0 +1,10 @@
+scope=BOUNDED real tree, 20 probe_seam_*.py modules copied from src/os (whole-tree audit declined on budget)
+tool=os-probe-seam-name-binding-nested-arm-mixed-scope
+base_tool=os-probe-seam-name-binding-nested-exhaustive-path
+verdict=SEAMS-ARM-MIXED-COVERED
+counts={"COVERED": 0, "HISTORICAL": 0, "MISSING-SEAM": 0, "OUT-OF-SCOPE": 20, "UNREADABLE": 0}
+covered_probes=0 arm_loop_rows=571 probes=20
+MINE_followed={"KEY": "b"}
+MINE_resolved=["KEY"]
+BASE_refused={"KEY": "mixed:body"}
+BASE_followed={}
