@@ -3,3 +3,18 @@
 # their line endings. Born at R2530 after core.autocrlf=true rewrote two
 # repaired evidence logs towards CRLF on the next touch.
 qa/*.log -text
+
+# Queue files are written with bare LF by their per-round writers and their
+# readers report lf_only, so core.autocrlf=true must not reintroduce CRLF on
+# checkout. Born at R2548: the seed writer read lf_only=False straight after a
+# git checkout of the same file, which is churn no reader can distinguish from
+# a real edit.
+state/queue/*.md text eol=lf
+
+# The suite matrix is machine-regenerated every window by suite_matrix.py, which
+# writes bare LF. Without a pin a checkout hands it back as CRLF, so the next
+# --check compares CRLF on disk against regenerated LF and reports a mismatch
+# that is pure dialect. Pinned to LF so a diff shows content only. CORRECTION:
+# an earlier version of this comment claimed a 491/491 R2548 diff was that
+# dialect churn - it was not, it was 491 genuine per-suite timing cells.
+docs/sandbox-suite-matrix.md text eol=lf
