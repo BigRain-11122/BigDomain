@@ -2073,6 +2073,34 @@
       "declared_by": 2514,
       "reason": "re-pinned at R2511 at its measured status DELIVERED",
       "until": 2524
+    },
+    {
+      "round": 2513,
+      "status": "DELIVERED",
+      "declared_by": "R2524",
+      "reason": "product rounds shipped and committed without a declaration row; triaged at the birth site",
+      "until": 2534
+    },
+    {
+      "round": 2515,
+      "status": "DELIVERED",
+      "declared_by": "R2524",
+      "reason": "product rounds shipped and committed without a declaration row; triaged at the birth site",
+      "until": 2534
+    },
+    {
+      "round": 2517,
+      "status": "DELIVERED",
+      "declared_by": "R2524",
+      "reason": "product rounds shipped and committed without a declaration row; triaged at the birth site",
+      "until": 2534
+    },
+    {
+      "round": 2519,
+      "status": "DELIVERED",
+      "declared_by": "R2524",
+      "reason": "product rounds shipped and committed without a declaration row; triaged at the birth site",
+      "until": 2534
     }
   ]
 }
