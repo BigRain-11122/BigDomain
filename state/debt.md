@@ -267,8 +267,9 @@ column-0 checkbox starts one.
 - [x] opened=R2535 | item=reconcile-battery-R2535 | note=full battery owed on this committed tree at the re-measured 597 suites 4558 criteria before any further product byte, because this window moved the registry by one row and a shipped doc | closed=R2536
 - [ ] opened=R2535 | item=product-face-R2535 | note=product window that shipped the nested subscript face plus its suite, the live leg and the board row, and named the next product face on tech line 573 prefix AC-PNKB1 | first=no
 - [x] opened=R2536 | item=product-face-R2536 | note=verification window R2536: battery green 597/597 4558 on committed tree 428bbdcd; next owes PRODUCT face at tech head state/queue/tech.md:573 prefix AC-PNKB1 probe_seam_nested_key_binding_scope (six criteria pinned at R2535 BEFORE any code) | closed=R2537
-- [ ] opened=R2537 | item=reconcile-battery-R2537 | note=battery owed before any further product byte: registry moved to 598 suites 4564 criteria by the nested-key face row, so the next window runs the full battery on this committed tree at that pre-registered target | first=yes
+- [x] opened=R2537 | item=reconcile-battery-R2537 | note=battery owed before any further product byte: registry moved to 598 suites 4564 criteria by the nested-key face row, so the next window runs the full battery on this committed tree at that pre-registered target | closed=R2538
 - [ ] opened=R2537 | item=product-face-R2537 | note=product face shipped this window, no battery owed to it: a NAME step bound to a string constant now resolves with its binding label, while an ambiguous or non-constant name is refused at its hop | first=no
+- [ ] opened=R2538 | item=product-face-R2538 | note=tech head AC-PNSB1 name-binding scope awareness: a binding table merges one name from two function bodies | first=yes
 
 ## Closed
 
