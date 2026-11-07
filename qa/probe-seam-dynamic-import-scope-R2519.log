@@ -1,0 +1,55 @@
+PROBE SEAM DYNAMIC IMPORT SCOPE evidence (R2519, AC-PDI1..AC-PDI6)
+suite=src/os/test_probe_seam_dynamic_import_scope.py
+leg1 rc=0 digest=70a63007580f8c2154bdad1b34067b570941f2de4f041083e97d547221c009d6
+leg2 rc=0 digest=70a63007580f8c2154bdad1b34067b570941f2de4f041083e97d547221c009d6
+legs=2 identical=True
+
+--- leg1 output ---
+PROBE SEAM DYNAMIC IMPORT SCOPE suite (R2519, 6 criteria)
+  PASS AC-PDI1 no seam name is spelled in the module source
+  PASS AC-PDI1 no helper name is written into the module
+  PASS AC-PDI1 an importlib attribute call with a literal name is resolved ({'resolved': [('importlib.import_module', 'quiet_helper')], 'unresolved': []})
+  PASS AC-PDI1 __import__ with a literal name is resolved ({'resolved': [('__import__', 'quiet_helper')], 'unresolved': []})
+  PASS AC-PDI1 a from-import alias is resolved at call time ({'resolved': [('import_module', 'quiet_helper')], 'unresolved': []})
+  PASS AC-PDI1 a module-level binding of the callable is resolved ({'resolved': [('importlib.import_module', 'quiet_helper')], 'unresolved': []})
+  PASS AC-PDI1 a name that is not a literal constant is NOT resolved ({'resolved': [], 'unresolved': ['importlib.import_module:name']})
+  PASS AC-PDI1 a source that will not parse reads None
+  PASS AC-PDI1 a probe whose only import is dynamic is followed ('COVERED' direct=[] helpers=['pdi_dyn_helper'])
+  PASS AC-PDI1 the hop is re-read at CALL time: editing ONLY the helper moves the same probe 'MISSING-SEAM' -> 'COVERED'
+  PASS AC-PDI2 a dynamically forwarding probe reads COVERED ('COVERED')
+  PASS AC-PDI2 the helper it was followed through is named (['quiet_helper'])
+  PASS AC-PDI2 the dynamic shape it took is named on the row (['importlib.import_module:quiet_helper'])
+  PASS AC-PDI2 the dynamic seams cover every seam it owes (quieted=5 required=5)
+  PASS AC-PDI2 the same fixture is OUT-OF-SCOPE to the lazy face, so the closed gap is measured ('OUT-OF-SCOPE')
+  PASS AC-PDI2 the __import__ shape is followed too ('COVERED' dynamic=['__import__:quiet_helper'])
+  PASS AC-PDI2 the shipped tool accepts it at exit 0 naming the helper (rc=0)
+  PASS AC-PDI3 a dynamic forwarding probe behind its helper reads MISSING-SEAM ('MISSING-SEAM')
+  PASS AC-PDI3 the reading names the seam the helper omits (['STPT'])
+  PASS AC-PDI3 the probe that carries a module-level exit is named, never imported
+  PASS AC-PDI3 the shipped tool refuses at exit 2 naming seam and file (rc=2)
+  PASS AC-PDI3 a stale dynamic probe makes the tree STALE
+  PASS AC-PDI4 a computed module name reads OUT-OF-SCOPE ('OUT-OF-SCOPE')
+  PASS AC-PDI4 the unresolved call is named on the row (['importlib.import_module:NAME'])
+  PASS AC-PDI4 neither the computed call nor a bare string is counted as clean ([]/'OUT-OF-SCOPE')
+  PASS AC-PDI4 out-of-scope is a named bucket, not an alarm ('SEAMS-DYNAMIC-COVERED')
+  PASS AC-PDI4 a dynamically chained helper is followed, so a partial helper cannot INVENT a missing seam ('COVERED' helpers=['middle_helper'])
+  PASS AC-PDI4 a dynamic import cycle terminates and reads COVERED ('COVERED')
+  PASS AC-PDI4 a real shipped module outside the protocol reads OUT-OF-SCOPE ('OUT-OF-SCOPE')
+  PASS AC-PDI5 the probed root gains no file
+  PASS AC-PDI5 the render, the patterns file, all three readers, every probe and every seam owner keep their bytes (14 files)
+  PASS AC-PDI5 the module holds no write primitive
+  PASS AC-PDI6 the module source is pure ASCII
+  PASS AC-PDI6 module-level imports are stdlib only (['argparse', 'ast', 'hashlib', 'json', 'os', 're', 'sys', 'warnings'])
+  PASS AC-PDI6 the module reads no clock
+  PASS AC-PDI6 zero network imports
+  PASS AC-PDI6 the module carries its own reconcile label
+  PASS AC-PDI6 the runner wires this suite
+  PASS AC-PDI6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+--- adjacent suites ---
+test_probe_seam_lazy_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_probe_seam_forwarding_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_probe_seam_registry.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+adjacent=3 fails=0
+VERDICT PASS

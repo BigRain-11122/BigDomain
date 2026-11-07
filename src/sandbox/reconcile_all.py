@@ -5844,6 +5844,19 @@ SUITES = [
     ("os-probe-seam-lazy-scope",
      os.path.join("..", "os",
                   "test_probe_seam_lazy_scope.py"), 6),
+    # R2519 claim, AC-PDI1..AC-PDI6 (pinned in state/queue/tech.md:555 at
+    # R2517 BEFORE the code): MEASURED at R2517 that a probe building its
+    # import at RUN time reads OUT-OF-SCOPE, because every reader below it
+    # resolves import STATEMENTS off a syntax tree. ONE reading now follows a
+    # computed import whose module name is a string constant visible in the
+    # probe own tree (importlib.import_module, __import__, a from-import of
+    # import_module, a module-level binding of the callable) on the same
+    # cycle-guarded same-root walk, so such a probe is answered on its own row
+    # (COVERED or MISSING-SEAM naming the seam and the file) and is never run;
+    # a name that is not a constant is named as unresolved rather than guessed.
+    ("os-probe-seam-dynamic-import-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_dynamic_import_scope.py"), 6),
     ]
 
 FAILS = 0

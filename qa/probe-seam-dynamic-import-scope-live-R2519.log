@@ -1,0 +1,15 @@
+PROBE SEAM DYNAMIC IMPORT SCOPE os-probe-seam-dynamic-import-scope verdict=SEAMS-DYNAMIC-COVERED seams=5 probes=1386 covered=3 missing=0 out_of_scope=169 unreadable=0 historical=1214
+  SEAM PLRC owner=patterns_label_readability_render_consumer
+  SEAM PNLT owner=patterns_non_label_text_readability
+  SEAM ADTR owner=artifact_disk_text_readability
+  SEAM EVNM owner=evidence_name_text_coverage
+  SEAM STPT owner=stamp_text_coverage
+  PROBE artifact_disk_text_readability.py COVERED quieted=4 required=4 direct=4 helpers=- dynamic=-
+  MODULE comma_binding_face_row_drift.py OUT-OF-SCOPE unresolved=importlib.import_module:PARENT
+  MODULE comma_binding_identity_face_compare.py OUT-OF-SCOPE unresolved=importlib.import_module:FACE_SOURCE,importlib.import_module:FACE_CONSUMER
+  PROBE evidence_name_text_coverage.py COVERED quieted=4 required=4 direct=4 helpers=- dynamic=-
+  MODULE row_key_carrier_scope.py OUT-OF-SCOPE unresolved=importlib.import_module:PARENT
+  MODULE runner_abort_history.py OUT-OF-SCOPE unresolved=__import__:name
+  PROBE stamp_text_coverage.py COVERED quieted=5 required=4 direct=5 helpers=- dynamic=-
+  MODULE status_export_writer_transport_scope.py OUT-OF-SCOPE unresolved=importlib.import_module:stem
+VERDICT SEAMS-DYNAMIC-COVERED counts={'COVERED': 3, 'MISSING-SEAM': 0, 'OUT-OF-SCOPE': 169, 'UNREADABLE': 0, 'HISTORICAL': 1214}
