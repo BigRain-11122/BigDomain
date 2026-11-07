@@ -1,0 +1,20 @@
+LIVE os-probe-seam-name-binding-position-scope root=src/os
+verdict=SEAMS-POSITION-COVERED base=os-probe-seam-name-binding-scope-awareness
+probes=1474
+COVERED=3
+HISTORICAL=1291
+MISSING-SEAM=0
+OUT-OF-SCOPE=180
+UNREADABLE=0
+probe=artifact_disk_text_readability.py position_loops=4
+  line=131 kind=for scope=function:__iter__ followed=[] refused=[] later=[] shadowed=[]
+  line=145 kind=for scope=function:__iter__ followed=[] refused=[] later=[] shadowed=[]
+  line=180 kind=for scope=function:_recording_suites followed=[] refused=[] later=[] shadowed=[]
+  line=302 kind=for scope=function:render followed=[] refused=[] later=[] shadowed=[]
+probe=evidence_name_text_coverage.py position_loops=1
+  line=300 kind=for scope=function:render followed=[] refused=[] later=[] shadowed=[]
+probe=stamp_text_coverage.py position_loops=4
+  line=119 kind=comprehension:list scope=function:_quiet_seams followed=[] refused=[] later=[] shadowed=[]
+  line=131 kind=for scope=function:printed_strings followed=[] refused=[] later=[] shadowed=[]
+  line=136 kind=for scope=function:printed_strings followed=[] refused=[] later=[] shadowed=[]
+  line=215 kind=for scope=function:render followed=[] refused=[] later=[] shadowed=[]

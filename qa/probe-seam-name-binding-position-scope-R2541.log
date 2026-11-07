@@ -1,0 +1,90 @@
+EVIDENCE CAPTURE round=R2541 suite=src/os/test_probe_seam_name_binding_position_scope.py legs=2
+== LEG A rc=0 digest=21F20EA6608CE529
+PROBE SEAM NAME BINDING POSITION SUITE (AC-PNSP1..AC-PNSP6)
+PASS AC-PNSP1 a binding written before the loop resolves ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP1 a binding written after the loop is NAMED not-yet-bound and never resolved ([{'line': 3, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'not-yet-bound'}, 'shadowed': [], 'later': {'KEY': 'b'}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP1 and the later write is published as a fact ([{'line': 3, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'not-yet-bound'}, 'shadowed': [], 'later': {'KEY': 'b'}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP1 the entry law refuses the same shape ({'state': 'refused', 'reason': 'not-yet-bound', 'scope': 'module', 'shadow': False, 'later': {'KEY': 'b'}})
+PASS AC-PNSP1 the same name resolves at a later loop line ({'state': 'ok', 'value': 'b', 'reason': None, 'scope': 'module', 'shadow': False, 'later': {}})
+PASS AC-PNSP2 the loop is attributed to the class body ([{'line': 6, 'kind': 'for', 'scope': 'class:Room', 'followed': {'KEY': 'c'}, 'refused': {}, 'shadowed': ['KEY'], 'later': {}, 'taken_from': {'KEY': 'class:Room'}}])
+PASS AC-PNSP2 the class constant resolves for a loop in that class ([{'line': 6, 'kind': 'for', 'scope': 'class:Room', 'followed': {'KEY': 'c'}, 'refused': {}, 'shadowed': ['KEY'], 'later': {}, 'taken_from': {'KEY': 'class:Room'}}])
+PASS AC-PNSP2 the module name of the same name is announced as shadowed ([{'line': 6, 'kind': 'for', 'scope': 'class:Room', 'followed': {'KEY': 'c'}, 'refused': {}, 'shadowed': ['KEY'], 'later': {}, 'taken_from': {'KEY': 'class:Room'}}])
+PASS AC-PNSP2 a class-only constant resolves with no shadow claimed ([{'line': 5, 'kind': 'for', 'scope': 'class:Room', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'class:Room'}}])
+PASS AC-PNSP2 the entry law answers the class scope directly ({'state': 'ok', 'value': 'c', 'reason': None, 'scope': 'class:Room', 'shadow': True, 'later': {}})
+PASS AC-PNSP2 a module-level reading still sees the module value ({'state': 'ok', 'value': 'b', 'reason': None, 'scope': 'module', 'shadow': False, 'later': {}})
+PASS AC-PNSP3 the loop resolves the value written before it ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {'KEY': 'z'}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP3 the later rebinding is published on the row ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {'KEY': 'z'}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP3 the rebinding does not make the name ambiguous ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {'KEY': 'z'}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP3 the entry law carries both the value and the later write ({'state': 'ok', 'value': 'b', 'reason': None, 'scope': 'module', 'shadow': False, 'later': {'KEY': 'z'}})
+PASS AC-PNSP3 two bindings BEFORE the loop stay ambiguous ({'state': 'refused', 'reason': 'ambiguous', 'scope': 'module', 'shadow': False, 'later': {}})
+PASS AC-PNSP4 the list comprehension loop is read ([{'line': 4, 'kind': 'comprehension:list', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}, {'line': 5, 'kind': 'comprehension:generator', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP4 the generator comprehension loop is read ([{'line': 4, 'kind': 'comprehension:list', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}, {'line': 5, 'kind': 'comprehension:generator', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP4 the reading does not invent a plain for-loop ([{'line': 4, 'kind': 'comprehension:list', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}, {'line': 5, 'kind': 'comprehension:generator', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP4 comprehension:list resolves the preceding constant ({'line': 4, 'kind': 'comprehension:list', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}})
+PASS AC-PNSP4 comprehension:generator resolves the preceding constant ({'line': 5, 'kind': 'comprehension:generator', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}})
+PASS AC-PNSP4 the comprehension rows carry their scope ([{'line': 4, 'kind': 'comprehension:list', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}, {'line': 5, 'kind': 'comprehension:generator', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP5 the probed tree is byte-identical after the audit
+PASS AC-PNSP5 the reading moved no shipped digest
+PASS AC-PNSP5 the probe row still reads COVERED ('COVERED')
+PASS AC-PNSP5 the row carries this face own position loop ([{'line': 6, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP5 the report keeps the shipped base label and answers its own (('os-probe-seam-name-binding-position-scope', 'SEAMS-POSITION-COVERED', 'os-probe-seam-name-binding-scope-awareness'))
+PASS AC-PNSP5 a missing root is refused, not raised ('E_PNSP_NO_ROOT')
+PASS AC-PNSP6 the module source is pure ASCII
+PASS AC-PNSP6 this suite source is pure ASCII
+PASS AC-PNSP6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNSP6 no clock and no network token in the module
+PASS AC-PNSP6 the face and its suite are wired into the registry exactly once
+PASS AC-PNSP6 no duplicate registry row
+PASS AC-PNSP6 the reconcile label is the face own (os-probe-seam-name-binding-position-scope)
+PASS AC-PNSP6 the reading has its own verdict words (SEAMS-POSITION-COVERED/SEAMS-POSITION-STALE)
+PASS AC-PNSP6 the new refusal word is its own (not-yet-bound)
+PASS AC-PNSP6 the shipped face it extends is still named
+SUITE PASS 6/6 criteria green
+== LEG B rc=0 digest=21F20EA6608CE529
+PROBE SEAM NAME BINDING POSITION SUITE (AC-PNSP1..AC-PNSP6)
+PASS AC-PNSP1 a binding written before the loop resolves ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP1 a binding written after the loop is NAMED not-yet-bound and never resolved ([{'line': 3, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'not-yet-bound'}, 'shadowed': [], 'later': {'KEY': 'b'}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP1 and the later write is published as a fact ([{'line': 3, 'kind': 'for', 'scope': 'module', 'followed': {}, 'refused': {'KEY': 'not-yet-bound'}, 'shadowed': [], 'later': {'KEY': 'b'}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP1 the entry law refuses the same shape ({'state': 'refused', 'reason': 'not-yet-bound', 'scope': 'module', 'shadow': False, 'later': {'KEY': 'b'}})
+PASS AC-PNSP1 the same name resolves at a later loop line ({'state': 'ok', 'value': 'b', 'reason': None, 'scope': 'module', 'shadow': False, 'later': {}})
+PASS AC-PNSP2 the loop is attributed to the class body ([{'line': 6, 'kind': 'for', 'scope': 'class:Room', 'followed': {'KEY': 'c'}, 'refused': {}, 'shadowed': ['KEY'], 'later': {}, 'taken_from': {'KEY': 'class:Room'}}])
+PASS AC-PNSP2 the class constant resolves for a loop in that class ([{'line': 6, 'kind': 'for', 'scope': 'class:Room', 'followed': {'KEY': 'c'}, 'refused': {}, 'shadowed': ['KEY'], 'later': {}, 'taken_from': {'KEY': 'class:Room'}}])
+PASS AC-PNSP2 the module name of the same name is announced as shadowed ([{'line': 6, 'kind': 'for', 'scope': 'class:Room', 'followed': {'KEY': 'c'}, 'refused': {}, 'shadowed': ['KEY'], 'later': {}, 'taken_from': {'KEY': 'class:Room'}}])
+PASS AC-PNSP2 a class-only constant resolves with no shadow claimed ([{'line': 5, 'kind': 'for', 'scope': 'class:Room', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'class:Room'}}])
+PASS AC-PNSP2 the entry law answers the class scope directly ({'state': 'ok', 'value': 'c', 'reason': None, 'scope': 'class:Room', 'shadow': True, 'later': {}})
+PASS AC-PNSP2 a module-level reading still sees the module value ({'state': 'ok', 'value': 'b', 'reason': None, 'scope': 'module', 'shadow': False, 'later': {}})
+PASS AC-PNSP3 the loop resolves the value written before it ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {'KEY': 'z'}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP3 the later rebinding is published on the row ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {'KEY': 'z'}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP3 the rebinding does not make the name ambiguous ([{'line': 4, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {'KEY': 'z'}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP3 the entry law carries both the value and the later write ({'state': 'ok', 'value': 'b', 'reason': None, 'scope': 'module', 'shadow': False, 'later': {'KEY': 'z'}})
+PASS AC-PNSP3 two bindings BEFORE the loop stay ambiguous ({'state': 'refused', 'reason': 'ambiguous', 'scope': 'module', 'shadow': False, 'later': {}})
+PASS AC-PNSP4 the list comprehension loop is read ([{'line': 4, 'kind': 'comprehension:list', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}, {'line': 5, 'kind': 'comprehension:generator', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP4 the generator comprehension loop is read ([{'line': 4, 'kind': 'comprehension:list', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}, {'line': 5, 'kind': 'comprehension:generator', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP4 the reading does not invent a plain for-loop ([{'line': 4, 'kind': 'comprehension:list', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}, {'line': 5, 'kind': 'comprehension:generator', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP4 comprehension:list resolves the preceding constant ({'line': 4, 'kind': 'comprehension:list', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}})
+PASS AC-PNSP4 comprehension:generator resolves the preceding constant ({'line': 5, 'kind': 'comprehension:generator', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}})
+PASS AC-PNSP4 the comprehension rows carry their scope ([{'line': 4, 'kind': 'comprehension:list', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}, {'line': 5, 'kind': 'comprehension:generator', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP5 the probed tree is byte-identical after the audit
+PASS AC-PNSP5 the reading moved no shipped digest
+PASS AC-PNSP5 the probe row still reads COVERED ('COVERED')
+PASS AC-PNSP5 the row carries this face own position loop ([{'line': 6, 'kind': 'for', 'scope': 'module', 'followed': {'KEY': 'b'}, 'refused': {}, 'shadowed': [], 'later': {}, 'taken_from': {'KEY': 'module'}}])
+PASS AC-PNSP5 the report keeps the shipped base label and answers its own (('os-probe-seam-name-binding-position-scope', 'SEAMS-POSITION-COVERED', 'os-probe-seam-name-binding-scope-awareness'))
+PASS AC-PNSP5 a missing root is refused, not raised ('E_PNSP_NO_ROOT')
+PASS AC-PNSP6 the module source is pure ASCII
+PASS AC-PNSP6 this suite source is pure ASCII
+PASS AC-PNSP6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNSP6 no clock and no network token in the module
+PASS AC-PNSP6 the face and its suite are wired into the registry exactly once
+PASS AC-PNSP6 no duplicate registry row
+PASS AC-PNSP6 the reconcile label is the face own (os-probe-seam-name-binding-position-scope)
+PASS AC-PNSP6 the reading has its own verdict words (SEAMS-POSITION-COVERED/SEAMS-POSITION-STALE)
+PASS AC-PNSP6 the new refusal word is its own (not-yet-bound)
+PASS AC-PNSP6 the shipped face it extends is still named
+SUITE PASS 6/6 criteria green
+== ADJACENT 5
+== src/os/test_probe_seam_name_binding_scope_awareness.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_nested_key_binding_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_for_container_name.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_registry.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=5 fails=0 digest=21F20EA6608CE529

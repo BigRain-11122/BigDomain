@@ -2122,6 +2122,13 @@
       "declared_by": "R2539",
       "reason": "product window shipped probe_seam_name_binding_scope_awareness with its suite",
       "until": 2549
+    },
+    {
+      "round": 2541,
+      "status": "DELIVERED",
+      "declared_by": "R2541",
+      "reason": "R2541 product window: shipped probe_seam_name_binding_position_scope plus its six-criteria suite, evidence captured through the shipped callable",
+      "until": 2551
     }
   ]
 }

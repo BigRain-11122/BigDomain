@@ -5949,6 +5949,14 @@ SUITES = [
     ("os-probe-seam-name-binding-scope-awareness",
      os.path.join("..", "os",
                   "test_probe_seam_name_binding_scope_awareness.py"), 6),
+    # R2541 - a NAME step resolves against the bindings that PRECEDE the loop
+    # in its scope, a class body is its own scope, a name rebound after the
+    # loop resolves to the earlier value with the later write published, and
+    # a comprehension loop is NAMED with its kind instead of dropped
+    # (599 -> 600 suites, 4570 -> 4576 criteria).
+    ("os-probe-seam-name-binding-position-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_name_binding_position_scope.py"), 6),
     ]
 
 FAILS = 0
