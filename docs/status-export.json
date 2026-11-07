@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T15:41:03+08:00",
+  "export_ts": "2026-11-07T15:42:47+08:00",
   "do": "2026-11-07 R2524 VERIFICATION window on the battery the register owed (reconcile-battery-R2523, pre-registered 591 suites / 4522 criteria). Five-silence scan at open: one untracked file was already on disk - qa/reconcile-all-R2524.log, a battery leg this round had started before the window was opened - with no index.lock and no python reconcile process alive, so it was read rather than restarted. ",
   "ceo_face": {
     "current": "2026-11-07 R2524 VERIFICATION window on the battery the register owed (reconcile-battery-R2523, pre-registered 591 suites / 4522 criteria). Five-silence scan at open: one untracked file was already on disk - qa/reconcile-all-R2524.log, a battery leg this round had started before the window was opened - with no index.lock and no python reconcile process alive, so it was read rather than restarted. ",
     "latest_artifact": "reconcile-all-R2524-retry.log (912816B) + reconcile-all-R2524.log (911059B)",
-    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T15:41:03+08:00",
-    "next_milestone_due": "2026-11-09T15:41:03+08:00",
+    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T15:42:47+08:00",
+    "next_milestone_due": "2026-11-09T15:42:47+08:00",
     "last_artifact": "reconcile-all-R2524-retry.log (912816B) + reconcile-all-R2524.log (911059B)",
-    "updated_at": "2026-11-07T15:41:03+08:00"
+    "updated_at": "2026-11-07T15:42:47+08:00"
   },
   "depts": [
     {
@@ -652,10 +652,10 @@
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 26,
+    "log_lines_in_window": 27,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 26,
+    "substantive_non_idle_mention_lines": 27,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
