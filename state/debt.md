@@ -279,7 +279,8 @@ column-0 checkbox starts one.
 - [x] opened=R2543 | item=reconcile-battery-R2543 | note=battery owed on this committed tree at the pre-registered 601 suites / 4582 criteria after this window moved the registry by exactly one row (os-probe-seam-name-binding-control-flow-scope) and a shipped document | closed=R2544
 - [ ] opened=R2543 | item=product-face-R2543 | note=next window is a PRODUCT face on tech head state/queue/tech.md:581 prefix AC-PNCG1 probe_seam_name_binding_control_flow_guard_scope, criteria AC-PNCG1..AC-PNCG6 pinned in that row at R2543 BEFORE any code | first=no
 - [x] opened=R2544 | item=product-face-R2544 | note=next window owes a PRODUCT face on queue head state/queue/tech.md:581 prefix AC-PNCG1 probe_seam_name_binding_control_flow_guard_scope whose six criteria were pinned in that row at R2543 BEFORE any code | closed=R2545
-- [ ] opened=R2545 | item=reconcile-battery-R2545 | note=battery owed on this committed tree at the pre-registered 602 suites / 4588 criteria after this window moved the registry by exactly one row (os-probe-seam-name-binding-control-flow-guard-scope) and a shipped document | first=yes
+- [x] opened=R2545 | item=reconcile-battery-R2545 | note=battery owed on this committed tree at the pre-registered 602 suites / 4588 criteria after this window moved the registry by exactly one row (os-probe-seam-name-binding-control-flow-guard-scope) and a shipped document | closed=R2546
+- [ ] opened=R2546 | item=product-face-R2546 | note=next window a PRODUCT face on queue head state/queue/tech.md:583 prefix AC-PNCT1 probe_seam_name_binding_control_flow_guard_exhaustive, its six criteria pinned in that row at R2545 BEFORE any code | first=yes
 
 ## Closed
 
