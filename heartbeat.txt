@@ -14,3 +14,4 @@
 2026-11-07 14:2x R2522 verification window: battery green 590/590 at 4516 criteria on the third leg, two birth sites repaired (RR2521 round token, stale export), matrix 590/590 self-describing, no successor battery owed
 2026-11-07 14:3x R2523 product window: seam local-constant scope shipped (a constant declared in a function body and a container reached by a plain attribute now resolve), suite 6/6 twice plus a live leg on the real tree, registry 591/4522, matrix 590/591 honest, battery owed next
 2026-11-07 15:4x R2524 verification window: battery green 591/591 at 4522 criteria on the retry after one birth-site repair (four undeclared product rounds R2513/R2515/R2517/R2519 declared through the shipped batch writer), matrix 591/591 self-describing, no successor battery owed, one tech row seeded (AC-DSRC1 debt stale-open scan)
+2026-11-07 R2525 product window: annotated/walrus/for constant bindings read in the seam probe, registry 592/4528

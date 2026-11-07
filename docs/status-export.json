@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-07T15:42:47+08:00",
-  "do": "2026-11-07 R2524 VERIFICATION window on the battery the register owed (reconcile-battery-R2523, pre-registered 591 suites / 4522 criteria). Five-silence scan at open: one untracked file was already on disk - qa/reconcile-all-R2524.log, a battery leg this round had started before the window was opened - with no index.lock and no python reconcile process alive, so it was read rather than restarted. ",
+  "export_ts": "2026-11-07T15:58:30+08:00",
+  "do": "2026-11-07 R2525 PRODUCT window on the tech head the queue named (state/queue/tech.md:561 prefix AC-PLAC1 probe_seam_annotated_constant_scope, criteria AC-PLAC1..AC-PLAC6 pinned in that row at R2523 BEFORE any code). Five-silence scan at open: git status empty, no index.lock, content-addressed decisions diff read new=0 over the stored 160-token baseline (the group canon file still carries 91 token",
   "ceo_face": {
-    "current": "2026-11-07 R2524 VERIFICATION window on the battery the register owed (reconcile-battery-R2523, pre-registered 591 suites / 4522 criteria). Five-silence scan at open: one untracked file was already on disk - qa/reconcile-all-R2524.log, a battery leg this round had started before the window was opened - with no index.lock and no python reconcile process alive, so it was read rather than restarted. ",
-    "latest_artifact": "reconcile-all-R2524-retry.log (912816B) + reconcile-all-R2524.log (911059B)",
-    "next_milestone": "next round product byte on the queue head, inside a 48h window due 2026-11-09T15:42:47+08:00",
-    "next_milestone_due": "2026-11-09T15:42:47+08:00",
-    "last_artifact": "reconcile-all-R2524-retry.log (912816B) + reconcile-all-R2524.log (911059B)",
-    "updated_at": "2026-11-07T15:42:47+08:00"
+    "current": "2026-11-07 R2525 PRODUCT window on the tech head the queue named (state/queue/tech.md:561 prefix AC-PLAC1 probe_seam_annotated_constant_scope, criteria AC-PLAC1..AC-PLAC6 pinned in that row at R2523 BEFORE any code). Five-silence scan at open: git status empty, no index.lock, content-addressed decisions diff read new=0 over the stored 160-token baseline (the group canon file still carries 91 token",
+    "latest_artifact": "probe-seam-annotated-constant-scope-R2525.log (8335B) + probe-seam-annotated-constant-scope-live-R2525.log (1267B)",
+    "next_milestone": "next window owes reconcile-battery-R2525 on the committed tree, inside a 48h window due 2026-11-09T15:58:30+08:00",
+    "next_milestone_due": "2026-11-09T15:58:30+08:00",
+    "last_artifact": "probe-seam-annotated-constant-scope-R2525.log (8335B) + probe-seam-annotated-constant-scope-live-R2525.log (1267B)",
+    "updated_at": "2026-11-07T15:58:30+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "probe-seam-annotated-constant-scope-R2525.log (8335B) + probe-seam-annotated-constant-scope-live-R2525.log (1267B)",
     "reconcile-all-R2524-retry.log (912816B) + reconcile-all-R2524.log (911059B)",
     "probe-seam-local-constant-scope-R2523.log (6833B) + probe-seam-local-constant-scope-live-R2523.log (1254B)",
     "reconcile-all-R2522-leg3.log (909452B) + reconcile-all-R2522-retry.log (907643B) + reconcile-all-R2522.log (907773B)",
@@ -144,6 +145,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2525",
+      "2026-11-07 R2525 PRODUCT window on the tech head the queue named (state/queue/tech.md:561 prefix AC-PLAC1, criteria AC-PLAC1..AC-PLAC6 pinned at R2523 BEFORE any code; debt gate OPEN-NONE, queue_head claimable=11, all five anchors re-checked at zero occupancy). SHIPPED src/os/probe_seam_annotated_constant_scope.py plus its suite: the shipped constant tables are EXTENDED rather than replaced - an annotated assignment whose annotation is a plain name, a walrus binding and a for-loop target of one str literal are read in the module body and in function bodies with the same ambiguity rule - and the shipped resolution law is asked FIRST with those tables, so only when it answers None is ONE more attribute hop taken on a module-level constant tree with the binding label carried on the row. An annotation that is not a plain name is refused; a call, a concatenation, a comprehension and an arithmetic expression are never evaluated and are named unresolved. PROOF: AC-PLAC1..AC-PLAC6 SUITE PASS 6/6 TWICE with an identical digest plus three adjacent probe faces green (qa/probe-seam-annotated-constant-scope-R2525.log, 8335B, legs=2 identical=True fails=0 adjacent=3) with LF only and a byte read-back; a live leg on the REAL tree reads SEAMS-ANNOTATED-COVERED over 1410 probes (3 covered, 172 out-of-scope, 1235 historical, missing=0) with the real probes showing their annotated local bindings, one annotated fixture reads MISSING-SEAM missing=PLRC dynamic=importlib.import_module:plac_live_helper@NAME, a missing root is refused E_PLAC_NO_ROOT, and the module and render digests are unchanged (qa/probe-seam-annotated-constant-scope-live-R2525.log, 1267B). REGISTRY 591/4522 -> 592/4528 by one row recounted by importing reconcile_all.SUITES; docs/sandbox-suite-matrix.md regenerated stamp-aligned from the eligible battery leg qa/reconcile-all-R2524-retry.log to 57026B with --check byte-identical and green honestly 591/592. BIRTH SITE: the R2514 residue block had expired at until R2524, so the shipped idempotent repin re-read every live round it carries and re-pinned them through R2535 (300 -> 301 entries, 83156B -> 83255B, readback PINNED), which also declared R2525 DELIVERED, after which the batch appender correctly REFUSED a duplicate and residue_triage --check reads R2525 TRIAGED live=DELIVERED at exit 0. BOARD: row 561 closed with its DISCHARGED note (predicted and measured 1698899B) and ONE row seeded from this window own measured limit naming AC-PCAS1..AC-PCAS6, floor FLOOR-MET 5/5 10/10 10/10, head now line 563. DEBT: reconcile-battery-R2525 appended first=yes at 592 suites / 4528 criteria (156539B -> 156981B) and product-face-R2525 first=no (156981B -> 157320B), both readback ok. HONEST: two product points on a runnable reading, nothing a CEO opens is new and no P-47 business surface moved; the defect was measured at R2523 and re-measured here, so this is a repair of a disclosed gap; the limits are measured rather than assumed; the walk shape is a third copy because parameterising a shipped face would owe a same-window battery while tables, resolution law, shape detector and seam classifier all stay the shipped ones; the state_fold layout defect from R2524 is still open and the append used a proved load+dump round-trip instead; Docker is absent; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items; tasks.md was not touched."
+    ],
     [
       "2524",
       "2026-11-07 R2524 VERIFICATION window on the battery the register owed (reconcile-battery-R2523, pre-registered 591 suites / 4522 criteria; the target was re-measured by importing reconcile_all.SUITES and matched byte for byte). LEG 1 RED AND KEPT: qa/reconcile-all-R2524.log 911059B read 590/591 with exactly one failed suite, os-residue-triage 5/6 on AC-RTR6, and the cause was READ from the shipped reader rather than guessed - residue 300, triaged 296, untriaged 4, and the set difference named FOUR product rounds that shipped and were committed with no declaration row: R2513, R2515, R2517 and R2519. REPAIRED AT THE BIRTH SITE through the shipped residue_triage_append_batch writer (dry run 296 to 300 entries, 82268B to 83156B predicted, then executed at that prediction with readback TRIAGED), the suite re-read 6/6 alone, and the repair plus its red leg were committed ALONE as b8da165e. LEG 2 GREEN: qa/reconcile-all-R2524-retry.log 910866B utf-8 LF bom=False crlf=0 lone_cr=0, zero FAIL rows, RUNNER PASS (591/591 suites green, reconcile controls 7/7, 1145.9s), independent recount summing to EXACTLY 4522, launched detached through src/os/battery_stream.py. FOUR FOLLOW-UP SECTIONS: matrix FAIL first by design (56905B vs 56903B, no byte written), then a stamp-aligned regeneration from this round own green evidence to 56903B at 591/4522 with green=591/591 and --check byte-identical, then all four PASS for VERDICT R2524 PASS failing=none. DEBT: reconcile-battery-R2523 closed (open 8->7, done 224->225, readback ok) and product-face-R2524 appended first=no; no successor battery is owed because no product src byte and no registry row moved. ONE SEED from this window own measured limit: src/os/seed_queue_R2524.py appended AC-DSRC1..AC-DSRC6 for a reading of open debt rows whose named work already shipped, because FOUR open rows on the live register name product windows that demonstrably shipped and no shipped reader names them. HONEST: zero product points, nothing a CEO could open was built; the same birth site had already been repaired twice (R2506, R2514) and the batch writer is still not wired into the product closeout; those four stale rows are disclosed rather than hand-closed; Docker is absent; the real 19.9 debit and the real msgSecCheck still wait on CEO physical items."
@@ -645,17 +650,17 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2524",
+      "2525",
       "OSLoop 执行 tick"
     ]
   ],
   "self_drive": {
     "window": "2026-11-01..2026-11-07",
     "window_days": 7,
-    "log_lines_in_window": 27,
+    "log_lines_in_window": 32,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 27,
+    "substantive_non_idle_mention_lines": 32,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -688,7 +693,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 12,
-        "done_rows": 429,
+        "done_rows": 430,
         "gated_rows": 1,
         "claimable": 11,
         "discounted": 0,
