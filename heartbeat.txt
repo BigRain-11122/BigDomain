@@ -5,3 +5,4 @@
 2026-11-07 08:2x R2513 product window: probe seam registry shipped, registry 586/4492, stale probes named not run
 2026-11-07 09:2x R2514 verification window: battery red leg kept (residue declaration expired + 5 undeclared rounds), re-pinned at 296/296, retry green 586/586 at 4492 criteria
 2026-11-07 09:3x R2515 product window: probe seam forwarding scope shipped, registry 587/4498
+2026-11-07 10:5x R2516 verification window: battery green 587/587 at 4498 criteria on the first leg, no repairs needed
