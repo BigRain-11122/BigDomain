@@ -5886,6 +5886,15 @@ SUITES = [
     ("os-probe-seam-annotated-constant-scope",
      os.path.join("..", "os",
                   "test_probe_seam_annotated_constant_scope.py"), 6),
+    # R2527 - a constant followed through an ALIAS resolves to the same
+    # value with the chain it took published on the row, a with-as
+    # binding and a multi-value for target are NAMED instead of reading
+    # empty, and a deep dict chain either resolves with its full label
+    # or names the hop that broke (592 -> 593 suites, 4528 -> 4534
+    # criteria).
+    ("os-probe-seam-constant-alias-scope",
+     os.path.join("..", "os",
+                  "test_probe_seam_constant_alias_scope.py"), 6),
     ]
 
 FAILS = 0

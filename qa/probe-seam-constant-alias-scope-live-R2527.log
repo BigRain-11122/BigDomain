@@ -1,0 +1,7 @@
+LIVE real tree root=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os verdict=SEAMS-ALIAS-COVERED probes=1418 covered=3 out_of_scope=173 historical=1242 unreadable=0 missing=0
+DIGEST render_unchanged=True module_unchanged=True
+SAME FIXTURE alias_face=COVERED quieted=5 dynamic=importlib.import_module:pcas_live_helper@ALIAS<-BASE_NAME
+SAME FIXTURE annotated_face=OUT-OF-SCOPE quieted=0
+CHAIN ALIAS<-BASE_NAME
+REFUSED OUT-OF-SCOPE shapes=- refused=pcas_live_pkg.FLAT.A.NAMES:not-a-dict NAMES
+WORLD alias=SEAMS-ALIAS-COVERED annotated=SEAMS-ANNOTATED-COVERED

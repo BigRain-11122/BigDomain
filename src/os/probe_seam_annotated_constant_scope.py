@@ -475,7 +475,7 @@ def _chain_entry(node, root, imports, memo):
         if tree is None:
             return None
         steps.append(attribute)
-    label = ".".join([stem, inner] + list(reversed(steps)))
+    label = ".".join([stem, inner] + list(steps))
     return tree, label
 
 

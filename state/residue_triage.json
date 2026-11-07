@@ -2108,6 +2108,13 @@
       "declared_by": 2524,
       "reason": "re-pinned at R2525 at its measured status DELIVERED",
       "until": 2535
+    },
+    {
+      "round": 2527,
+      "status": "DELIVERED",
+      "declared_by": "R2527",
+      "reason": "product window shipped probe_seam_constant_alias_scope plus its suite and committed them in this round",
+      "until": 2537
     }
   ]
 }

@@ -1,0 +1,90 @@
+EVIDENCE CAPTURE round=R2527 suite=src/os/test_probe_seam_constant_alias_scope.py legs=2
+== LEG A rc=0 digest=D25485809A3B63A3
+PROBE SEAM CONSTANT ALIAS SCOPE SUITE (AC-PCAS1..AC-PCAS6)
+PASS AC-PCAS1 no seam name is spelled in the module source
+PASS AC-PCAS1 no fixture module name is written into the module
+PASS AC-PCAS1 an annotated alias reads the SAME value as its source ({'BASE_NAME': ('str', 'pcas_helper'), 'ALIAS': ('str', 'pcas_helper')})
+PASS AC-PCAS1 the alias chain it followed is published (['ALIAS<-BASE_NAME'])
+PASS AC-PCAS1 a walrus alias in a function body resolves ({'alias': ('str', 'pcas_helper')})
+PASS AC-PCAS1 a plain annotated literal keeps the shipped answer ({'NAME': ('str', 'pcas_helper')})
+PASS AC-PCAS1 an alias of an alias resolves at the fixpoint ({'BASE_NAME': ('str', 'pcas_helper'), 'ALIAS': ('str', 'pcas_helper'), 'SECOND': ('str', 'pcas_helper')})
+PASS AC-PCAS1 a name bound twice is NOT resolved ({'BASE': ('str', 'pcas_helper')})
+PASS AC-PCAS2 a with-as binding is NAMED on the row (['handle=with-as'])
+PASS AC-PCAS2 a multi-value for target is NAMED on the row (['name=for-multi'])
+PASS AC-PCAS2 a with-as binding is never resolved to a value
+PASS AC-PCAS2 a multi-value for target is never resolved
+PASS AC-PCAS2 the with-as probe reads OUT-OF-SCOPE with the call named (('OUT-OF-SCOPE', ['importlib.import_module:handle']))
+PASS AC-PCAS2 both shapes are printed, not silent
+PASS AC-PCAS3 a one-hop dict chain resolves with its full label ((('pcas_helper', 'pcas_pkg.CFG.NAMES'), None))
+PASS AC-PCAS3 a three-hop dict chain resolves with its full label ((('pcas_helper', 'pcas_pkg.DEEP.A.B.NAMES'), None))
+PASS AC-PCAS3 a hop that is not a dict is REFUSED by name, not silently None ((None, 'pcas_pkg.FLAT.A.NAMES:not-a-dict NAMES'))
+PASS AC-PCAS3 a missing key is REFUSED by name ((None, 'pcas_pkg.CFG.NOSUCH:no-key NOSUCH'))
+PASS AC-PCAS3 an alias-of-alias probe reads COVERED (('COVERED', ['pcas_helper']))
+PASS AC-PCAS3 the row carries the whole chain it followed (['ALIAS<-BASE_NAME', 'SECOND<-ALIAS<-BASE_NAME'])
+PASS AC-PCAS4 pcas_call.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ['importlib.import_module:name']))
+PASS AC-PCAS4 pcas_format.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ['importlib.import_module:name']))
+PASS AC-PCAS4 a call result is never a constant ({})
+PASS AC-PCAS4 the unresolved call is reported verbatim ({'resolved': [], 'unresolved': ['importlib.import_module:name'], 'refused': [], 'shapes': {'name': 'call'}, 'alias_chains': [], 'module_bindings': [], 'local_bindings': []})
+PASS AC-PCAS4 the call is named as that shape ({'name': 'call'})
+PASS AC-PCAS4 a percent format is named as an expression ({'name': 'expression'})
+PASS AC-PCAS5 every fixture digest is unchanged and nothing landed
+PASS AC-PCAS5 the shipped module and render are unchanged
+PASS AC-PCAS5 a missing root is refused, not silently clean
+PASS AC-PCAS6 the module source is pure ASCII
+PASS AC-PCAS6 this suite source is pure ASCII
+PASS AC-PCAS6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys,warnings)
+PASS AC-PCAS6 no clock and no network token in the module
+PASS AC-PCAS6 the face and its suite are wired into the registry exactly once
+PASS AC-PCAS6 no duplicate registry row
+PASS AC-PCAS6 the reconcile label is the face own (os-probe-seam-constant-alias-scope)
+PASS AC-PCAS6 the reading has its own verdict word (SEAMS-ALIAS-COVERED)
+PASS AC-PCAS6 the extension asks the shipped faces, not a copy
+PASS AC-PCAS6 the resolution answers a pair ((('pcas_helper', ''), None))
+SUITE PASS 6/6 criteria green
+== LEG B rc=0 digest=D25485809A3B63A3
+PROBE SEAM CONSTANT ALIAS SCOPE SUITE (AC-PCAS1..AC-PCAS6)
+PASS AC-PCAS1 no seam name is spelled in the module source
+PASS AC-PCAS1 no fixture module name is written into the module
+PASS AC-PCAS1 an annotated alias reads the SAME value as its source ({'BASE_NAME': ('str', 'pcas_helper'), 'ALIAS': ('str', 'pcas_helper')})
+PASS AC-PCAS1 the alias chain it followed is published (['ALIAS<-BASE_NAME'])
+PASS AC-PCAS1 a walrus alias in a function body resolves ({'alias': ('str', 'pcas_helper')})
+PASS AC-PCAS1 a plain annotated literal keeps the shipped answer ({'NAME': ('str', 'pcas_helper')})
+PASS AC-PCAS1 an alias of an alias resolves at the fixpoint ({'BASE_NAME': ('str', 'pcas_helper'), 'ALIAS': ('str', 'pcas_helper'), 'SECOND': ('str', 'pcas_helper')})
+PASS AC-PCAS1 a name bound twice is NOT resolved ({'BASE': ('str', 'pcas_helper')})
+PASS AC-PCAS2 a with-as binding is NAMED on the row (['handle=with-as'])
+PASS AC-PCAS2 a multi-value for target is NAMED on the row (['name=for-multi'])
+PASS AC-PCAS2 a with-as binding is never resolved to a value
+PASS AC-PCAS2 a multi-value for target is never resolved
+PASS AC-PCAS2 the with-as probe reads OUT-OF-SCOPE with the call named (('OUT-OF-SCOPE', ['importlib.import_module:handle']))
+PASS AC-PCAS2 both shapes are printed, not silent
+PASS AC-PCAS3 a one-hop dict chain resolves with its full label ((('pcas_helper', 'pcas_pkg.CFG.NAMES'), None))
+PASS AC-PCAS3 a three-hop dict chain resolves with its full label ((('pcas_helper', 'pcas_pkg.DEEP.A.B.NAMES'), None))
+PASS AC-PCAS3 a hop that is not a dict is REFUSED by name, not silently None ((None, 'pcas_pkg.FLAT.A.NAMES:not-a-dict NAMES'))
+PASS AC-PCAS3 a missing key is REFUSED by name ((None, 'pcas_pkg.CFG.NOSUCH:no-key NOSUCH'))
+PASS AC-PCAS3 an alias-of-alias probe reads COVERED (('COVERED', ['pcas_helper']))
+PASS AC-PCAS3 the row carries the whole chain it followed (['ALIAS<-BASE_NAME', 'SECOND<-ALIAS<-BASE_NAME'])
+PASS AC-PCAS4 pcas_call.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ['importlib.import_module:name']))
+PASS AC-PCAS4 pcas_format.py reads OUT-OF-SCOPE with the name reported (('OUT-OF-SCOPE', ['importlib.import_module:name']))
+PASS AC-PCAS4 a call result is never a constant ({})
+PASS AC-PCAS4 the unresolved call is reported verbatim ({'resolved': [], 'unresolved': ['importlib.import_module:name'], 'refused': [], 'shapes': {'name': 'call'}, 'alias_chains': [], 'module_bindings': [], 'local_bindings': []})
+PASS AC-PCAS4 the call is named as that shape ({'name': 'call'})
+PASS AC-PCAS4 a percent format is named as an expression ({'name': 'expression'})
+PASS AC-PCAS5 every fixture digest is unchanged and nothing landed
+PASS AC-PCAS5 the shipped module and render are unchanged
+PASS AC-PCAS5 a missing root is refused, not silently clean
+PASS AC-PCAS6 the module source is pure ASCII
+PASS AC-PCAS6 this suite source is pure ASCII
+PASS AC-PCAS6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,re,sys,warnings)
+PASS AC-PCAS6 no clock and no network token in the module
+PASS AC-PCAS6 the face and its suite are wired into the registry exactly once
+PASS AC-PCAS6 no duplicate registry row
+PASS AC-PCAS6 the reconcile label is the face own (os-probe-seam-constant-alias-scope)
+PASS AC-PCAS6 the reading has its own verdict word (SEAMS-ALIAS-COVERED)
+PASS AC-PCAS6 the extension asks the shipped faces, not a copy
+PASS AC-PCAS6 the resolution answers a pair ((('pcas_helper', ''), None))
+SUITE PASS 6/6 criteria green
+== ADJACENT 3
+== src/os/test_probe_seam_annotated_constant_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_local_constant_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_constant_binding_scope.py rc=0 SUITE PASS 6/6 criteria green
+EVIDENCE identical=True adjacent=3 fails=0 digest=D25485809A3B63A3

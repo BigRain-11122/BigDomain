@@ -16,3 +16,4 @@
 2026-11-07 15:4x R2524 verification window: battery green 591/591 at 4522 criteria on the retry after one birth-site repair (four undeclared product rounds R2513/R2515/R2517/R2519 declared through the shipped batch writer), matrix 591/591 self-describing, no successor battery owed, one tech row seeded (AC-DSRC1 debt stale-open scan)
 2026-11-07 R2525 product window: annotated/walrus/for constant bindings read in the seam probe, registry 592/4528
 2026-11-07 R2526 verification window: reconcile battery green on the first leg 592/592 suites at exactly 4528 criteria, matrix regenerated self-describing, no successor battery owed
+tick=2527 2026-11-07 R2527 product window: probe_seam_constant_alias_scope shipped with its six criteria, suites and live leg green
