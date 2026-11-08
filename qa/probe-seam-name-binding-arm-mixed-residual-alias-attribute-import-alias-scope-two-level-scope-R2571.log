@@ -1,0 +1,82 @@
+EVIDENCE CAPTURE round=R2571 suite=src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_two_level_scope.py legs=2
+== LEG A rc=0 digest=2F12CA657F9AC0C2
+PASS AC-PNDCG1 a two-level relative module import resolves to b (ok/b)
+PASS AC-PNDCG1 the shipped answer it replaces refused it (attr-base-local:helper)
+PASS AC-PNDCG1 the two-level hop is named (from-relative/direct)
+PASS AC-PNDCG1 without an anchor the two-level import stays refused (refused)
+PASS AC-PNDCG1 without an anchor the shipped word is kept (attr-base-local:helper)
+PASS AC-PNDCG2 a cross-module method returning a module resolves to b (ok/b)
+PASS AC-PNDCG2 the shipped answer it replaces refused it (attr-call-target:m.ATTR)
+PASS AC-PNDCG2 the cross-call hop is named (with-as-cross-call/direct)
+PASS AC-PNDCG2 a cross-module method returning something else is refused (refused)
+PASS AC-PNDCG2 a non-module cross-call is NAMED (attr-cross-call:m.ATTR)
+PASS AC-PNDCG2 a refusal resolves nothing (None)
+PASS AC-PNDCG3 a class-body constant resolves to b (ok/b)
+PASS AC-PNDCG3 the shipped answer it replaces refused it (attr-from-import:cls.K.ATTR)
+PASS AC-PNDCG3 the class hop is named (import/class)
+PASS AC-PNDCG3 an inherited class constant is NAMED rather than guessed (attr-class-constant:cls.K.ATTR)
+PASS AC-PNDCG3 the inherited refusal resolves nothing (None)
+PASS AC-PNDCG4 a relative FROM-imported NAME is refused (refused)
+PASS AC-PNDCG4 it carries its own word (attr-relative-from-name:K.ATTR)
+PASS AC-PNDCG4 it is never published as a local (attr-relative-from-name:K.ATTR)
+PASS AC-PNDCG4 the shipped local word still rides beside it (attr-base-local:K)
+PASS AC-PNDCG4 the refusal resolves nothing (None)
+PASS AC-PNDCG5 the shipped ok answer rides beside this face (ok/b)
+PASS AC-PNDCG5 this face does not rewrite the shipped ok answer (ok/b)
+PASS AC-PNDCG5 the shipped hop rides beside this face (import)
+PASS AC-PNDCG5 this face stamps its own source (two-level)
+PASS AC-PNDCG5 the shipped from-import alias answer still rides (ok/b)
+PASS AC-PNDCG6 module source is pure ASCII (20162B)
+PASS AC-PNDCG6 suite source is pure ASCII (13035B)
+PASS AC-PNDCG6 zero network imports (none)
+PASS AC-PNDCG6 no clock import (none)
+PASS AC-PNDCG6 no eval/exec/__import__ (none)
+PASS AC-PNDCG6 the face carries its own label (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-two-level-scope)
+PASS AC-PNDCG6 the label is wired into reconcile_all
+PASS AC-PNDCG6 the suite is wired into reconcile_all
+PASS AC-PNDCG6 the suite declares its six criteria (6)
+SUITE PASS 6/6
+== LEG B rc=0 digest=2F12CA657F9AC0C2
+PASS AC-PNDCG1 a two-level relative module import resolves to b (ok/b)
+PASS AC-PNDCG1 the shipped answer it replaces refused it (attr-base-local:helper)
+PASS AC-PNDCG1 the two-level hop is named (from-relative/direct)
+PASS AC-PNDCG1 without an anchor the two-level import stays refused (refused)
+PASS AC-PNDCG1 without an anchor the shipped word is kept (attr-base-local:helper)
+PASS AC-PNDCG2 a cross-module method returning a module resolves to b (ok/b)
+PASS AC-PNDCG2 the shipped answer it replaces refused it (attr-call-target:m.ATTR)
+PASS AC-PNDCG2 the cross-call hop is named (with-as-cross-call/direct)
+PASS AC-PNDCG2 a cross-module method returning something else is refused (refused)
+PASS AC-PNDCG2 a non-module cross-call is NAMED (attr-cross-call:m.ATTR)
+PASS AC-PNDCG2 a refusal resolves nothing (None)
+PASS AC-PNDCG3 a class-body constant resolves to b (ok/b)
+PASS AC-PNDCG3 the shipped answer it replaces refused it (attr-from-import:cls.K.ATTR)
+PASS AC-PNDCG3 the class hop is named (import/class)
+PASS AC-PNDCG3 an inherited class constant is NAMED rather than guessed (attr-class-constant:cls.K.ATTR)
+PASS AC-PNDCG3 the inherited refusal resolves nothing (None)
+PASS AC-PNDCG4 a relative FROM-imported NAME is refused (refused)
+PASS AC-PNDCG4 it carries its own word (attr-relative-from-name:K.ATTR)
+PASS AC-PNDCG4 it is never published as a local (attr-relative-from-name:K.ATTR)
+PASS AC-PNDCG4 the shipped local word still rides beside it (attr-base-local:K)
+PASS AC-PNDCG4 the refusal resolves nothing (None)
+PASS AC-PNDCG5 the shipped ok answer rides beside this face (ok/b)
+PASS AC-PNDCG5 this face does not rewrite the shipped ok answer (ok/b)
+PASS AC-PNDCG5 the shipped hop rides beside this face (import)
+PASS AC-PNDCG5 this face stamps its own source (two-level)
+PASS AC-PNDCG5 the shipped from-import alias answer still rides (ok/b)
+PASS AC-PNDCG6 module source is pure ASCII (20162B)
+PASS AC-PNDCG6 suite source is pure ASCII (13035B)
+PASS AC-PNDCG6 zero network imports (none)
+PASS AC-PNDCG6 no clock import (none)
+PASS AC-PNDCG6 no eval/exec/__import__ (none)
+PASS AC-PNDCG6 the face carries its own label (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-two-level-scope)
+PASS AC-PNDCG6 the label is wired into reconcile_all
+PASS AC-PNDCG6 the suite is wired into reconcile_all
+PASS AC-PNDCG6 the suite declares its six criteria (6)
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_call_target_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_capture.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_head.py rc=0 SUITE PASS 6/6
+== src/os/test_debt_gate.py rc=0 SUITE PASS 5/5
+EVIDENCE identical=True adjacent=5 fails=0 digest=2F12CA657F9AC0C2

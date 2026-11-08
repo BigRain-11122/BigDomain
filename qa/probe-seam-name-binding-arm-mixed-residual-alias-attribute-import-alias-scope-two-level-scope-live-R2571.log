@@ -1,0 +1,5 @@
+live files=6 loops=151 tl_resolved=0 tl_named=0 read_only=True
+fixture two-level      mine=ok/b there=refused/attr-base-local:helper
+fixture cross-module   mine=ok/b there=refused/attr-call-target:m.ATTR
+fixture class-body     mine=ok/b there=refused/attr-from-import:cls.K.ATTR
+fixture relative-name  mine=refused/attr-relative-from-name:K.ATTR there=refused/attr-base-local:K

@@ -6099,6 +6099,18 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_call_target_scope.py"),
      6),
+    # R2571 two-level face: a level-bearing from-import resolves against
+    # the parent package once an anchor is known, a with-as call on a
+    # method defined in ANOTHER module resolves or is NAMED attr-cross-call,
+    # a class-body constant resolves through its class path, and a relative
+    # FROM-imported NAME is refused with its own word instead of being
+    # published as a local; every shipped answer rides beside it
+    # (614 -> 615 suites, 4660 -> 4666 criteria).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-two-level-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_two_level_scope.py"),
+     6),
     ]
 
 FAILS = 0

@@ -313,7 +313,9 @@ column-0 checkbox starts one.
 - [x] opened=R2568 | item=product-face-R2568 | note=next window owes a PRODUCT face on the tech head state/queue/tech.md:603 prefix AC-PNDCF1 (criteria pinned at R2565 before any code); registry unmoved at 613/4654 and no product src byte moved this window | closed=R2569
 - [x] opened=R2569 | item=reconcile-battery-R2569 | note=R2569 moved the registry to 614 suites / 4660 criteria (one face plus its suite); this battery is owed next window on the committed tree, and the product face after it is the two-level relative row now open at state/queue/tech.md:605 prefix AC-PNDCG1 | closed=R2570
 - [ ] opened=R2569 | item=product-face-R2569 | note=closed at R2569: call-target face shipped with its six criteria and both evidence legs; the next product face is the two-level relative row at state/queue/tech.md:605 prefix AC-PNDCG1 | first=no
-- [ ] opened=R2570 | item=product-face-R2570 | note=next window owes a PRODUCT face on the tech head state/queue/tech.md:605 prefix AC-PNDCG1 (two-level relative import, cross-module method call, class-body constant, relative FROM-import of a NAME; criteria pinned at R2569 before any code); registry unmoved at 614/4660 | first=yes
+- [x] opened=R2570 | item=product-face-R2570 | note=next window owes a PRODUCT face on the tech head state/queue/tech.md:605 prefix AC-PNDCG1 (two-level relative import, cross-module method call, class-body constant, relative FROM-import of a NAME; criteria pinned at R2569 before any code); registry unmoved at 614/4660 | closed=R2571
+- [ ] opened=R2571 | item=reconcile-battery-R2571 | note=the registry moved by one row to 615 suites / 4666 criteria and a document was regenerated, so this window owes a full battery on a clean committed tree with the target re-measured by import before the launch | first=yes
+- [ ] opened=R2571 | item=product-face-R2571 | note=next window is a PRODUCT face on the queue head state/queue/tech.md:607 prefix AC-PNDCH1 (inherited class constant, absolute FROM-imported class, cross-module method returning self.NAME, from-import alias receiver), criteria pinned there before any code | first=no
 
 ## Closed
 

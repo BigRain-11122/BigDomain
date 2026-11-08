@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 614 | 4660 | 614/614 | R2569 |
+| 615 | 4666 | 614/614 | R2569 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -652,7 +652,8 @@
 | 612 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope.py | 6 | green | 0.2 |
 | 613 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope.py | 6 | green | 0.2 |
 | 614 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-call-target-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_call_target_scope.py | 6 | green | 0.2 |
-|  | 合计 |  | 4660 | green 614 / FAIL 0 / no-evidence 0 |  |
+| 615 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-two-level-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_two_level_scope.py | 6 | no-evidence | - |
+|  | 合计 |  | 4666 | green 614 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

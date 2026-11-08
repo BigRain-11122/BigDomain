@@ -2248,6 +2248,13 @@
       "declared_by": "R2569",
       "reason": "R2569: R2559 shipped its own face and evidence legs and is live residue again; R2569 ships the call-target face, suite, both evidence legs, board and debt movement in this commit.",
       "until": 2578
+    },
+    {
+      "round": 2571,
+      "status": "DELIVERED",
+      "declared_by": "R2571",
+      "reason": "R2571 shipped its product face and its suite plus a green evidence capture; the round own work is delivered",
+      "until": 2578
     }
   ]
 }
