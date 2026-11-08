@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-09T04:55:00+08:00",
+  "export_ts": "2026-11-09T06:19:40+08:00",
   "do": "2026-11-09 R2585 PRODUCT window on the queue head the debt gate named (product-face-R2584, state/queue/tech.md:617 prefix AC-PNAA1, criteria AC-PNAA1..AC-PNAA6 pinned in that row at R2583 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 81e6d6b0 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the decisions file read 273 rows against the st",
   "ceo_face": {
     "current": "2026-11-09 R2585 PRODUCT window on the queue head the debt gate named (product-face-R2584, state/queue/tech.md:617 prefix AC-PNAA1, criteria AC-PNAA1..AC-PNAA6 pinned in that row at R2583 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 81e6d6b0 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the decisions file read 273 rows against the st",
     "latest_artifact": "module-alias-walrus-relative-limits-R2585.log (580B) + module-alias-walrus-relative-limits-next-R2585.log (296B) + module-alias-walrus-relative-scope-R2585.log (4003B)",
     "last_artifact": "module-alias-walrus-relative-limits-R2585.log (580B) + module-alias-walrus-relative-limits-next-R2585.log (296B) + module-alias-walrus-relative-scope-R2585.log (4003B)",
-    "next_milestone": "next window owes reconcile-battery-R2585 on the committed tree, inside a 48h window due 2026-11-11T04:55:00+08:00",
-    "next_milestone_due": "2026-11-11T04:55:00+08:00",
-    "updated_at": "2026-11-09T04:55:00+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2585 on the committed tree, inside a 48h window due 2026-11-11T06:19:41+08:00",
+    "next_milestone_due": "2026-11-11T06:19:41+08:00",
+    "updated_at": "2026-11-09T06:19:40+08:00"
   },
   "depts": [
     {
@@ -920,7 +920,7 @@
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
-    "queue_tech_open": 13,
+    "queue_tech_open": 14,
     "queue_explore_open": 10
   },
   "queue": {
@@ -948,15 +948,19 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 13,
+        "open_rows": 14,
         "done_rows": 461,
         "gated_rows": 1,
         "claimable": 11,
-        "discounted": 1,
+        "discounted": 2,
         "delivered": [
           {
             "line": 619,
             "prefix": "AC-PNAB1"
+          },
+          {
+            "line": 634,
+            "prefix": "AC-SEQAF1"
           }
         ],
         "floor": 10,
@@ -981,6 +985,6 @@
     "verdict": "FLOOR-MET",
     "shortfall_total": 0,
     "missing": [],
-    "delivered_total": 1
+    "delivered_total": 2
   }
 }
