@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-08T15:10:52+08:00",
-  "do": "2026-11-08 R2565 PRODUCT window on the tech head the register named (product-face-R2564, state/queue/tech.md:601 prefix AC-PNDCE1 probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope, criteria AC-PNDCE1..AC-PNDCE6 pinned in that row at R2563 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 78bc78ff with no index.lock, zero @BigDomain rows in cph4",
+  "export_ts": "2026-11-08T15:42:26+08:00",
+  "do": "2026-11-08 R2566 VERIFICATION window on the battery the register named first (reconcile-battery-R2565, pre-registered 612 suites / 4648 criteria because R2565 moved the registry by one row and shipped a document, the R2168 mixed-tree rule). Five-silence scan at open: git status EMPTY at HEAD ebf0820c committed 2026-11-08 15:11:04 with no index.lock; the ledger scan read unreplied_groups=0 over 0 a",
   "ceo_face": {
-    "current": "2026-11-08 R2565 PRODUCT window on the tech head the register named (product-face-R2564, state/queue/tech.md:601 prefix AC-PNDCE1 probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope, criteria AC-PNDCE1..AC-PNDCE6 pinned in that row at R2563 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 78bc78ff with no index.lock, zero @BigDomain rows in cph4",
-    "latest_artifact": "probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope-R2565.log (5397B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope-live-R2565.log (285B)",
-    "last_artifact": "probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope-R2565.log (5397B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope-live-R2565.log (285B)",
-    "next_milestone": "next window owes reconcile-battery-R2565 on the committed tree, inside a 48h window due 2026-11-10T15:10:52+08:00",
-    "next_milestone_due": "2026-11-10T15:10:52+08:00",
-    "updated_at": "2026-11-08T15:10:52+08:00"
+    "current": "2026-11-08 R2566 VERIFICATION window on the battery the register named first (reconcile-battery-R2565, pre-registered 612 suites / 4648 criteria because R2565 moved the registry by one row and shipped a document, the R2168 mixed-tree rule). Five-silence scan at open: git status EMPTY at HEAD ebf0820c committed 2026-11-08 15:11:04 with no index.lock; the ledger scan read unreplied_groups=0 over 0 a",
+    "latest_artifact": "reconcile-all-R2566.log (1030814B)",
+    "last_artifact": "reconcile-all-R2566.log (1030814B)",
+    "next_milestone": "next window owes product-face-R2566 on the committed tree, inside a 48h window due 2026-11-10T15:42:26+08:00",
+    "next_milestone_due": "2026-11-10T15:42:26+08:00",
+    "updated_at": "2026-11-08T15:42:26+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "reconcile-all-R2566.log (1030814B)",
     "probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope-R2565.log (5397B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope-live-R2565.log (285B)",
     "reconcile-all-R2564.log (1028256B)",
     "probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-R2563.log (4891B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-live-R2563.log (932B)",
@@ -184,6 +185,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2566",
+      "2026-11-08 R2566 VERIFICATION window on the battery the register named first (reconcile-battery-R2565, pre-registered 612 suites / 4648 criteria because R2565 moved the registry by one row and shipped a document, the R2168 mixed-tree rule). Five-silence at open: tree clean at HEAD ebf0820c with no index.lock, ledger scan unreplied_groups=0, content-addressed decisions diff new=0 at 273 rows / 164 tokens, group orders tail = 2026-11-08 12:06 exactly the stored last_order, benchmarks 2026-11-03 inside the seven-day gate; debt gate read CLAIM-FIRST reconcile-battery-R2565 first=1 and the target was RE-MEASURED by import as 612 suites / 4648 criteria with 612 unique names and paths, byte for byte the registered number. GREEN ON THE FIRST LEG, measured not quoted: qa/reconcile-all-R2566.log 1028863B utf-8 bom=False crlf=0 nul=0, RUNNER PASS (612/612 suites green, reconcile controls 7/7, 1426.0s), zero FAIL suite rows, zero PASS suite rows with a non-zero exit, and an INDEPENDENT recount over the 612 PASS suite rows (each carrying its own criteria= field) summing to EXACTLY 4648 with 612 unique names and zero duplicates. Two FAIL lines inside the log are fixture expectations that PASS at exit=2 with the failure detected. FOUR FOLLOW-UP SECTIONS in the designed order: matrix FAILED first by design at on-disk 59929B against regenerated 59921B with no byte written while fingerprint read CLEAN domains=5, profile byte-identical and census DRIFT-CLEAN; docs/sandbox-suite-matrix.md was then regenerated stamp-aligned from THIS round own green evidence to 59921 bytes at 612 suites / 4648 criteria with green=612/612 self-describing, --check byte-identical at rc=0, and the write leg read all four PASS for VERDICT R2566 PASS failing=none (APPENDED 1951B eol_ok=True). DEBT through the shipped writers: reconcile-battery-R2565 closed at its predicted 176975B -> 176978B (open 27->26, done 265->266, readback ok) and product-face-R2566 appended first=yes at its predicted 176978B -> 177292B naming the next window a PRODUCT face on tech head state/queue/tech.md:603 prefix AC-PNDCF1. NO successor battery is owed because no product src byte moved and the registry is unmoved at 612/4648. Zero cloud calls, zero external API touches."
+    ],
     [
       "2565",
       "2026-11-08 R2565 PRODUCT window on the tech head the register named (product-face-R2564, state/queue/tech.md:601 prefix AC-PNDCE1 probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope, criteria AC-PNDCE1..AC-PNDCE6 pinned at R2563 BEFORE any code). Five-silence at open: tree clean at HEAD 78bc78ff, no index.lock, zero unreplied @BigDomain ledger rows, content-addressed decisions diff new=0 at 164 tokens, group orders tail unchanged at 2026-11-08 12:06, benchmarks 2026-11-03 inside the seven-day gate; the debt gate read CLAIM-FIRST product-face-R2564 with no battery owed and queue_head named line 601 claimable=12 with the floor MET; all five pinned anchors were re-checked at zero occupancy before any code and the three shapes were RE-MEASURED through src/os/limits_import_alias_residual_R2563.py (from-import refused attr-base-local:helper, function-body-constant refused attr-plain-import:helper.ATTR, with-as-call refused attr-with-as:m.ATTR). SHIPPED the from-scope face plus its six criteria: a FROM-imported module, plain or aliased, is a MODULE base resolved through pkg/helper.py instead of being called a local; a helper constant declared only inside a function body resolves when that function returns it and is NAMED attr-function-constant when it does not; a `with call() as NAME` binding whose call returns a module name resolves while a call returning anything else keeps the shipped attr-with-as word; every shipped import-alias key rides unchanged beside this face own. PROOF: SUITE PASS 6/6 TWICE with an identical digest plus five adjacent probe suites green (qa/...from-scope-R2565.log, 5397B, legs=2 identical=True adjacent=5 fails=0) through the shipped capture callable, and a BOUNDED live leg over 6 real probe_seam modules reads loops=123 from_resolved=0 from_named=0 read_only=True with the SAME fixtures measured on BOTH readers (ok/b here against attr-base-local:helper and refused/attr-with-as:m.ATTR there). Registry 611/4642 -> 612/4648 by one row recounted by import; matrix regenerated stamp-aligned from the eligible R2564 leg to 59929B at 612/4648 with green honestly 611/612 and --check byte-identical. DEBT: product-face-R2564 closed (open 26->25, readback ok), reconcile-battery-R2565 opened first=yes at 612/4648 and product-face-R2565 opened first=no naming tech line 603 AC-PNDCF1, so the next window owes that battery BEFORE any further product byte. DISCLOSED: four of my own first-pass defects were found by running and fixed in the code, one assertion was corrected against measurement, and four residual limits were measured and seeded (attribute/method with-as call, local-variable module return, relative from-import, nested-function constant over-resolution). Zero cloud calls, zero external API touches."
@@ -833,7 +838,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2565",
+      "2566",
       "OSLoop 执行 tick"
     ],
     [
@@ -844,10 +849,10 @@
   "self_drive": {
     "window": "2026-11-02..2026-11-08",
     "window_days": 7,
-    "log_lines_in_window": 190,
+    "log_lines_in_window": 195,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 190,
+    "substantive_non_idle_mention_lines": 195,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

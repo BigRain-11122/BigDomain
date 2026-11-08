@@ -306,8 +306,9 @@ column-0 checkbox starts one.
 - [x] opened=R2563 | item=reconcile-battery-R2563 | note=611 suites / 4642 criteria after this product window moved the registry by one row and shipped a document; run on this committed tree BEFORE any further product byte (R2168 mixed-tree rule) | closed=R2564
 - [ ] opened=R2563 | item=product-face-R2563 | note=product face on queue head state/queue/tech.md:601 prefix AC-PNDCE1, criteria AC-PNDCE1..AC-PNDCE6 pinned in that row at R2563 BEFORE any code | first=no
 - [x] opened=R2564 | item=product-face-R2564 | note=PRODUCT face owed next on tech head state/queue/tech.md:601 prefix AC-PNDCE1 probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope, criteria AC-PNDCE1..AC-PNDCE6 pinned in that row at R2563 BEFORE any code. No successor battery is owed because this window moved no product src byte and the registry is unmoved at 611 suites and 4642 criteria. | closed=R2565
-- [ ] opened=R2565 | item=reconcile-battery-R2565 | note=owed on the committed R2565 tree at the re-measured 612 suites / 4648 criteria because this window moved the registry by one row and a shipped document | first=yes
+- [x] opened=R2565 | item=reconcile-battery-R2565 | note=owed on the committed R2565 tree at the re-measured 612 suites / 4648 criteria because this window moved the registry by one row and a shipped document | closed=R2566
 - [ ] opened=R2565 | item=product-face-R2565 | note=next window owes a PRODUCT face on tech head state queue tech line 603 prefix AC-PNDCF1 probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_call_target_scope, criteria AC-PNDCF1..AC-PNDCF6 pinned in that row at R2565 BEFORE any code | first=no
+- [ ] opened=R2566 | item=product-face-R2566 | note=PRODUCT face on tech head state/queue/tech.md:603 prefix AC-PNDCF1, criteria pinned in that row at R2565 BEFORE any code; this verification window moved no product src byte and the registry is unmoved at 612 suites / 4648 criteria, re-read by import | first=yes
 
 ## Closed
 
