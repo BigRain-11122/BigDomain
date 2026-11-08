@@ -303,8 +303,9 @@ column-0 checkbox starts one.
 - [x] opened=R2561 | item=reconcile-battery-R2561 | note=pre-registered 610 suites / 4636 criteria because R2561 moved the registry by one row and shipped a document (R2168 mixed-tree rule) | closed=R2562
 - [ ] opened=R2561 | item=product-face-R2561 | note=naming the next window a PRODUCT face on tech head state/queue/tech.md:599 prefix AC-PNDC1 probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope whose six criteria were pinned at R2561 BEFORE any code | first=no
 - [x] opened=R2562 | item=product-face-R2562 | note=product face owed on queue head state/queue/tech.md:599 prefix AC-PNDC1 | closed=R2563
-- [ ] opened=R2563 | item=reconcile-battery-R2563 | note=611 suites / 4642 criteria after this product window moved the registry by one row and shipped a document; run on this committed tree BEFORE any further product byte (R2168 mixed-tree rule) | first=yes
+- [x] opened=R2563 | item=reconcile-battery-R2563 | note=611 suites / 4642 criteria after this product window moved the registry by one row and shipped a document; run on this committed tree BEFORE any further product byte (R2168 mixed-tree rule) | closed=R2564
 - [ ] opened=R2563 | item=product-face-R2563 | note=product face on queue head state/queue/tech.md:601 prefix AC-PNDCE1, criteria AC-PNDCE1..AC-PNDCE6 pinned in that row at R2563 BEFORE any code | first=no
+- [ ] opened=R2564 | item=product-face-R2564 | note=PRODUCT face owed next on tech head state/queue/tech.md:601 prefix AC-PNDCE1 probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope, criteria AC-PNDCE1..AC-PNDCE6 pinned in that row at R2563 BEFORE any code. No successor battery is owed because this window moved no product src byte and the registry is unmoved at 611 suites and 4642 criteria. | first=yes
 
 ## Closed
 
