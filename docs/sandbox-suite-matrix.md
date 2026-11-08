@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 607 | 4618 | 607/607 | R2556 |
+| 608 | 4624 | 607/607 | R2556 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -645,7 +645,8 @@
 | 605 | os-probe-seam-name-binding-nested-arm-mixed-scope | ../os/test_probe_seam_name_binding_nested_arm_mixed_scope.py | 6 | green | 0.2 |
 | 606 | os-probe-seam-name-binding-arm-mixed-residual-naming | ../os/test_probe_seam_name_binding_arm_mixed_residual_naming.py | 6 | green | 0.3 |
 | 607 | os-probe-seam-name-binding-arm-mixed-residual-alias-chain | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_chain.py | 6 | green | 0.3 |
-|  | 合计 |  | 4618 | green 607 / FAIL 0 / no-evidence 0 |  |
+| 608 | os-probe-seam-name-binding-arm-mixed-residual-alias-position | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_position.py | 6 | no-evidence | - |
+|  | 合计 |  | 4624 | green 607 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

@@ -6025,6 +6025,16 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_chain.py"),
      6),
+    # R2557: the alias-position face. A walrus binding is an alias edge, one
+    # attribute hop on a same-root module constant is followed, and a binding
+    # whose every line is later than the loop line is NAMED not-yet-bound
+    # instead of being over-resolved; the alias-chain answer rides beside it
+    # (607 -> 608 suites, 4618 -> 4624 criteria).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-position",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_position.py"),
+     6),
     ]
 
 FAILS = 0

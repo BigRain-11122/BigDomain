@@ -1,0 +1,76 @@
+EVIDENCE CAPTURE round=R2557 suite=src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_position.py legs=2
+== LEG A rc=0 digest=E2E1AF3FB7B005BC
+PROBE SEAM NAME BINDING ARM MIXED RESIDUAL ALIAS POSITION SUITE (AC-PNDS1..AC-PNDS6)
+PASS AC-PNDS1 a walrus alias ((B := A)) resolves to b (ok/b)
+PASS AC-PNDS1 the walrus chain names every hop it took (['KEY', 'B', 'A'])
+PASS AC-PNDS1 a walrus str literal ((B := "b")) resolves to b
+PASS AC-PNDS1 the SAME fixture still reads name-unbound:B on the shipped face
+PASS AC-PNDS1 the answer says it came from this face
+PASS AC-PNDS2 B = helpermod.ATTR resolves to b (ok/b)
+PASS AC-PNDS2 the attribute hop is published with its module (['KEY', 'B', 'helpermod.ATTR'])
+PASS AC-PNDS2 the SAME fixture still reads name-unbound:B on the shipped face
+PASS AC-PNDS2 an imported module with no file is NAMED (attr-missing:ghostmod.ATTR)
+PASS AC-PNDS2 a module the probe never imports is NAMED (attr-not-imported:helpermod.ATTR)
+PASS AC-PNDS3 a constant declared after the loop is NAMED (not-yet-bound:C)
+PASS AC-PNDS3 the over-resolution is closed: no value published
+PASS AC-PNDS3 the SAME fixture still resolves to b on the shipped face
+PASS AC-PNDS3 a chain that ends in a later binding is NAMED at its end (not-yet-bound:A)
+PASS AC-PNDS3 the row publishes the refusal ({'KEY': 'not-yet-bound:C'})
+PASS AC-PNDS4 a chain deeper than one hop is NAMED (attr-deep:helpermod.sub.ATTR)
+PASS AC-PNDS4 a missing attribute is NAMED with its hop (attr-missing:helpermod.NOPE)
+PASS AC-PNDS4 a non-str attribute is NAMED (attr-non-constant:helpermod.NOTSTR)
+PASS AC-PNDS4 nothing is guessed: every refusal publishes no value
+PASS AC-PNDS5 every shipped answer is carried unchanged (no drift)
+PASS AC-PNDS5 the shipped refusal rides beside the new answer (name-unbound:B)
+PASS AC-PNDS5 the residual answer is carried too (refused/name-unbound:B)
+PASS AC-PNDS6 the module source is pure ASCII
+PASS AC-PNDS6 this suite source is pure ASCII
+PASS AC-PNDS6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNDS6 no clock and no network token in the module
+PASS AC-PNDS6 the face and its suite are wired into the registry
+PASS AC-PNDS6 no duplicate registry row
+PASS AC-PNDS6 the reconcile label is the face own (os-probe-seam-name-binding-arm-mixed-residual-alias-position)
+PASS AC-PNDS6 the reading has its own verdict words
+PASS AC-PNDS6 the shipped alias face it extends is on disk
+SUITE PASS 6/6 criteria green
+== LEG B rc=0 digest=E2E1AF3FB7B005BC
+PROBE SEAM NAME BINDING ARM MIXED RESIDUAL ALIAS POSITION SUITE (AC-PNDS1..AC-PNDS6)
+PASS AC-PNDS1 a walrus alias ((B := A)) resolves to b (ok/b)
+PASS AC-PNDS1 the walrus chain names every hop it took (['KEY', 'B', 'A'])
+PASS AC-PNDS1 a walrus str literal ((B := "b")) resolves to b
+PASS AC-PNDS1 the SAME fixture still reads name-unbound:B on the shipped face
+PASS AC-PNDS1 the answer says it came from this face
+PASS AC-PNDS2 B = helpermod.ATTR resolves to b (ok/b)
+PASS AC-PNDS2 the attribute hop is published with its module (['KEY', 'B', 'helpermod.ATTR'])
+PASS AC-PNDS2 the SAME fixture still reads name-unbound:B on the shipped face
+PASS AC-PNDS2 an imported module with no file is NAMED (attr-missing:ghostmod.ATTR)
+PASS AC-PNDS2 a module the probe never imports is NAMED (attr-not-imported:helpermod.ATTR)
+PASS AC-PNDS3 a constant declared after the loop is NAMED (not-yet-bound:C)
+PASS AC-PNDS3 the over-resolution is closed: no value published
+PASS AC-PNDS3 the SAME fixture still resolves to b on the shipped face
+PASS AC-PNDS3 a chain that ends in a later binding is NAMED at its end (not-yet-bound:A)
+PASS AC-PNDS3 the row publishes the refusal ({'KEY': 'not-yet-bound:C'})
+PASS AC-PNDS4 a chain deeper than one hop is NAMED (attr-deep:helpermod.sub.ATTR)
+PASS AC-PNDS4 a missing attribute is NAMED with its hop (attr-missing:helpermod.NOPE)
+PASS AC-PNDS4 a non-str attribute is NAMED (attr-non-constant:helpermod.NOTSTR)
+PASS AC-PNDS4 nothing is guessed: every refusal publishes no value
+PASS AC-PNDS5 every shipped answer is carried unchanged (no drift)
+PASS AC-PNDS5 the shipped refusal rides beside the new answer (name-unbound:B)
+PASS AC-PNDS5 the residual answer is carried too (refused/name-unbound:B)
+PASS AC-PNDS6 the module source is pure ASCII
+PASS AC-PNDS6 this suite source is pure ASCII
+PASS AC-PNDS6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNDS6 no clock and no network token in the module
+PASS AC-PNDS6 the face and its suite are wired into the registry
+PASS AC-PNDS6 no duplicate registry row
+PASS AC-PNDS6 the reconcile label is the face own (os-probe-seam-name-binding-arm-mixed-residual-alias-position)
+PASS AC-PNDS6 the reading has its own verdict words
+PASS AC-PNDS6 the shipped alias face it extends is on disk
+SUITE PASS 6/6 criteria green
+== ADJACENT 5
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_chain.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_naming.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_name_binding_nested_arm_mixed_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_probe_seam_local_constant_scope.py rc=0 SUITE PASS 6/6 criteria green
+EVIDENCE identical=True adjacent=5 fails=0 digest=E2E1AF3FB7B005BC

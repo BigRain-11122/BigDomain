@@ -1,0 +1,7 @@
+verdict=SEAMS-ALIAS-POSITION-COVERED files=8 probes=8 covered=0 out_of_scope=8 historical=0 missing=0 bound=8_of_23
+position_loops=223 position_resolved=0 position_named=4
+walrus mine=ok,None,b base=refused,name-unbound:B
+attribute mine=ok,None,b base=refused,name-unbound:B
+after-loop mine=refused,not-yet-bound:C,None base=ok,None
+missing_root refusal=E_PNDS_NO_ROOT verdict=SEAMS-ALIAS-POSITION-STALE
+digests_unchanged=True read_only=True
