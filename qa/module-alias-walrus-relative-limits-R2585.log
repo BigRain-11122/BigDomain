@@ -1,0 +1,4 @@
+(A) WALRUS module-alias head ((M := consts)) -> state=refused value=None reason=attr-module-alias-unbound:M.HW chain=['mk.REG', 'REG', 'BASE', 'M.HW']
+(B) RELATIVE from-import at the call site -> state=refused value=None reason=attr-module-alias-unbound:mk.REG() chain=['mk.REG()']
+(C) RELATIVE from-import of a name that is NOT a function -> state=refused value=None reason=attr-module-alias-unbound:mk.REG() chain=['mk.REG()']
+(D) RELATIVE from-imported MODULE alias head -> state=refused value=None reason=attr-module-alias-unbound:M.HW chain=['mk.REG', 'REG', 'BASE', 'M.HW']

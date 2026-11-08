@@ -1,0 +1,2 @@
+(N1) WALRUS inside a module-level if block -> state=refused value=None reason=attr-module-alias-unbound:M.HW chain=['mk.REG', 'REG', 'BASE', 'M.HW']
+(N2) TWO-LEVEL relative from-import module alias head -> state=ok value=b reason=None chain=['mk.REG->hw', 'REG', 'BASE', 'M<-pkg.consts', 'M.HW']

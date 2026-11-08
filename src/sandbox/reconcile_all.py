@@ -6184,6 +6184,16 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_scope.py"),
      6),
+    # R2585 walrus-head / level-bearing-import face: a module alias head bound
+    # by a walrus, a with-as call context on a RELATIVE FROM-imported function
+    # name, a relative non-function refused with its own word, and a relative
+    # module alias head; every parent answer rides beside it
+    # (622 -> 623 suites, 4708 -> 4714).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_scope.py"),
+     6),
     ]
 
 FAILS = 0
