@@ -1,13 +1,12 @@
 {
-  "export_ts": "2026-11-08T09:52:07+08:00",
-  "do": "2026-11-08 R2557 PRODUCT window on the tech head the register named (product-face-R2556, state/queue/tech.md:593 prefix AC-PNDS1 probe_seam_name_binding_arm_mixed_residual_alias_position, criteria AC-PNDS1..AC-PNDS6 pinned in that row at R2555 BEFORE any code). Five-silence scan at open: git status EMPTY at HEAD 3535065f equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evoluti",
+  "export_ts": "2026-11-08T10:45:45+08:00",
+  "do": "verification window R2558 on the debt register first item: the whole reconcile battery and the suite matrix were re-proven on the committed tree with zero product code changed.",
   "ceo_face": {
-    "current": "2026-11-08 R2557 PRODUCT window on the tech head the register named (product-face-R2556, state/queue/tech.md:593 prefix AC-PNDS1 probe_seam_name_binding_arm_mixed_residual_alias_position, criteria AC-PNDS1..AC-PNDS6 pinned in that row at R2555 BEFORE any code). Five-silence scan at open: git status EMPTY at HEAD 3535065f equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evoluti",
-    "latest_artifact": "probe-seam-name-binding-arm-mixed-residual-alias-position-R2557.log (5430B) + probe-seam-name-binding-arm-mixed-residual-alias-position-live-R2557.log (442B)",
-    "next_milestone": "next window owes reconcile-battery-R2557 on the committed tree, inside a 48h window due 2026-11-10T09:52:07+08:00",
-    "next_milestone_due": "2026-11-10T09:52:07+08:00",
-    "last_artifact": "probe-seam-name-binding-arm-mixed-residual-alias-position-R2557.log (5430B) + probe-seam-name-binding-arm-mixed-residual-alias-position-live-R2557.log (442B)",
-    "updated_at": "2026-11-08T09:52:07+08:00"
+    "current": "2026-11-08 R2558 VERIFICATION window: the reconcile battery the register owed (reconcile-battery-R2557) was re-proven on the committed tree with zero product code changed. GREEN on the first leg - 608 suites / 4624 criteria, reconcile controls 7/7, zero FAIL suite rows, 608 unique suite names, criteria recount summing to the pre-registered total in 2099.4 s.",
+    "latest_artifact": "qa/reconcile-all-R2558.log (1021185B, utf-8 LF, crlf=0 bare_cr=0 bom=False) + docs/sandbox-suite-matrix.md (608 suites / 4624 criteria, 59134B, green=608/608 self-describing) + the follow-up quad PASS",
+    "last_artifact": "qa/reconcile-all-R2558.log (1021185B, utf-8 LF, crlf=0 bare_cr=0 bom=False) + docs/sandbox-suite-matrix.md (2 suites / ? criteria, 59134B, green=2/2 self-describing) + the follow-up quad PASS",
+    "next_milestone": "R2559 PRODUCT face on queue head state/queue/tech.md:595 prefix AC-PNDA probe_seam_name_binding_arm_mixed_residual_alias_attribute_base (criteria AC-PNDA1..AC-PNDA6 pinned at R2557 before any code); a battery on the committed tree becomes owed BEFORE any further product byte once the registry moves by one row, inside a 48h window due 2026-11-10T23:59:59+08:00",
+    "next_milestone_due": "2026-11-10T23:59:59+08:00"
   },
   "depts": [
     {
@@ -800,6 +799,10 @@
     [
       "2557",
       "OSLoop 执行 tick"
+    ],
+    [
+      "R2558",
+      "R2558 verification window on the debt register first item (reconcile-battery-R2557): zero product code changed (the R2168 mixed-tree rule). The target was re-measured by IMPORTING reconcile_all.SUITES before the launch - 608 suites / 4624 criteria, 608 unique paths, zero duplicates - and matched the pre-registered number exactly. RUNNER PASS 608/608 suites plus controls 7/7 in 2099.4 s with zero FAIL rows, zero non-zero exits and zero fail-lines (qa/reconcile-all-R2558.log, 1021185B, single-writer utf-8 LF through src/os/battery_stream.py, bom=False crlf=0 lone_cr=0 nul=0). Four follow-up sections all PASS through src/os/battery_followup.py - matrix 608 suites / 4624 criteria byte-identical (59134B, green=608/608), fingerprint CLEAN domains=5, runner profile --check byte-identical, writer census DRIFT-CLEAN files=2714 flags=0 disappeared=0 - for VERDICT PASS failing=none. The dry matrix run FAILED first by design (59134 on-disk vs regenerated) and wrote no byte before the stamp-aligned regeneration. Honest score 0 product points. Register row closed, successor product-face-R2558 opened first=yes."
     ]
   ],
   "self_drive": {

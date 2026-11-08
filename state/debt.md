@@ -294,8 +294,9 @@ column-0 checkbox starts one.
 - [x] opened=R2555 | item=reconcile-battery-R2555 | note=the registry moved by one row to 607 suites / 4618 criteria and product src bytes moved, so a battery on this committed tree is owed BEFORE any further product byte | closed=R2556
 - [ ] opened=R2555 | item=product-face-R2555 | note=next window owes a PRODUCT face on queue head state/queue/tech.md:593 prefix AC-PNDS1 probe_seam_name_binding_arm_mixed_residual_alias_position, criteria AC-PNDS1..AC-PNDS6 pinned in that row at R2555 BEFORE any code | first=no
 - [x] opened=R2556 | item=product-face-R2556 | note=next window owes a PRODUCT face on queue head state/queue/tech.md:593 prefix AC-PNDS1 probe_seam_name_binding_arm_mixed_residual_alias_position, criteria AC-PNDS1..AC-PNDS6 pinned in that row at R2555 BEFORE any code | closed=R2557
-- [ ] opened=R2557 | item=reconcile-battery-R2557 | note=pre-registered 608 suites / 4624 criteria on the committed R2557 tree | first=yes
+- [x] opened=R2557 | item=reconcile-battery-R2557 | note=pre-registered 608 suites / 4624 criteria on the committed R2557 tree | closed=R2558
 - [ ] opened=R2557 | item=product-face-R2557 | note=next window owes a product face on queue head state/queue/tech.md:595 prefix AC-PNDA1 | first=no
+- [ ] opened=R2558 | item=product-face-R2558 | note=next window a PRODUCT face on the queue head state/queue/tech.md:595 prefix AC-PNDA probe_seam_name_binding_arm_mixed_residual_alias_attribute_base, whose AC-PNDA1..AC-PNDA6 were pinned in that row at R2557 BEFORE any code; no battery owed because this verification window moved the registry not at all (608 suites / 4624 criteria re-measured by import before and after) and only a derived stamp-aligned matrix document | first=yes
 
 ## Closed
 
