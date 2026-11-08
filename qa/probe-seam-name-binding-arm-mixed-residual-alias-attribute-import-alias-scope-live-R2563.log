@@ -1,0 +1,10 @@
+LIVE LEG round=R2563 modules=5 limit=5
+MODULE probe_seam_alias_expression_scope.py loops=39 pred_resolved=0 pred_named=0 ia_resolved=0 ia_named=0
+MODULE probe_seam_annotated_constant_scope.py loops=30 pred_resolved=0 pred_named=0 ia_resolved=0 ia_named=0
+MODULE probe_seam_constant_alias_scope.py loops=43 pred_resolved=0 pred_named=2 ia_resolved=0 ia_named=0
+MODULE probe_seam_constant_binding_scope.py loops=25 pred_resolved=0 pred_named=0 ia_resolved=0 ia_named=0
+MODULE probe_seam_dynamic_import_scope.py loops=24 pred_resolved=0 pred_named=0 ia_resolved=0 ia_named=0
+FIXTURE import-alias pred=refused/attr-base-local:h face=ok/b hop=import-alias chain=['h->helper.ATTR']
+READONLY mine=yes base=yes
+TOTALS ia_named=0 ia_resolved=0 loops=161 pred_named=2 pred_resolved=0
+VERDICT BOUNDED-READ-CLEAN modules=5 unreadable=0 note=the whole-tree audit was NOT run: an earlier round measured it costing minutes, so this leg is bounded

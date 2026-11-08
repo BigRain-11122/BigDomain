@@ -6057,6 +6057,18 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_predicate_scope.py"),
      6),
+    # R2563: the attribute import-alias face resolves a plain `import m` base
+    # instead of reading it silent, resolves `import m as x` and a with-as module
+    # binding through the ACTUAL module name instead of calling the alias a
+    # local, follows a constant that is an alias of another constant to its
+    # literal (and reads name-mixed on two values where the predicate face
+    # over-resolved), and follows a `from other import NAME` re-export; every
+    # shipped answer rides beside it (610 -> 611 suites, 4636 -> 4642 criteria).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope.py"),
+     6),
     ]
 
 FAILS = 0

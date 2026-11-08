@@ -2122,6 +2122,13 @@
       "declared_by": "R2561",
       "reason": "R2561 shipped the attribute-predicate face with its suite and closed the board row it claimed",
       "until": 2571
+    },
+    {
+      "round": 2563,
+      "status": "DELIVERED",
+      "declared_by": "R2563",
+      "reason": "R2563 product face AC-PNDC1..AC-PNDC6 shipped with its suite, evidence and live leg",
+      "until": 2573
     }
   ]
 }

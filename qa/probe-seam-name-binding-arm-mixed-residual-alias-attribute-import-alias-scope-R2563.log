@@ -1,0 +1,78 @@
+EVIDENCE CAPTURE round=R2563 suite=src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope.py legs=2
+== LEG A rc=0 digest=0666D54105BB9F2A
+PASS AC-PNDC1 a plain import base resolves to b (ok/b)
+PASS AC-PNDC1 the shipped answer it replaces was silent (None/None)
+PASS AC-PNDC1 the hop is named (import)
+PASS AC-PNDC1 an unresolvable plain import is refused (refused)
+PASS AC-PNDC1 an unresolvable plain import is NAMED (attr-plain-import:helper.ATTR)
+PASS AC-PNDC1 a refusal resolves nothing (None)
+PASS AC-PNDC2 an import alias resolves to b (ok/b)
+PASS AC-PNDC2 the shipped answer it replaces called it a local (attr-base-local:h)
+PASS AC-PNDC2 the alias is never a local on this row (None)
+PASS AC-PNDC2 the alias hop is named (import-alias)
+PASS AC-PNDC2 the chain names alias and module (['h->helper.ATTR'])
+PASS AC-PNDC3 a with-as module resolves to b (ok/b)
+PASS AC-PNDC3 the shipped answer it replaces called it a local (attr-base-local:m)
+PASS AC-PNDC3 the with-as hop is named (with-as)
+PASS AC-PNDC3 a non-module with-as context is NAMED (attr-with-as:m.ATTR)
+PASS AC-PNDC4 an alias constant resolves to b (ok/b)
+PASS AC-PNDC4 the shipped answer it replaces refused it (attr-non-constant:helper.ATTR)
+PASS AC-PNDC4 two values read name-mixed (name-mixed:helper.ATTR)
+PASS AC-PNDC4 a mixed name resolves nothing (None)
+PASS AC-PNDC4 the shipped answer it replaces OVER-resolved (ok)
+PASS AC-PNDC5 a re-export resolves to b (ok/b)
+PASS AC-PNDC5 the shipped answer it replaces read attr-missing (attr-missing:helper.ATTR)
+PASS AC-PNDC5 the re-export hop is published (import/reexport)
+PASS AC-PNDC5 a re-export of an alias resolves to b (ok/b)
+PASS AC-PNDC6 module source is pure ASCII (21285B)
+PASS AC-PNDC6 suite source is pure ASCII (13022B)
+PASS AC-PNDC6 zero network imports (none)
+PASS AC-PNDC6 no clock import (none)
+PASS AC-PNDC6 no eval/exec/__import__ (none)
+PASS AC-PNDC6 the face carries its own label (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope)
+PASS AC-PNDC6 the label is wired into reconcile_all
+PASS AC-PNDC6 the suite is wired into reconcile_all
+PASS AC-PNDC6 the suite declares its six criteria (6)
+SUITE PASS 6/6
+== LEG B rc=0 digest=0666D54105BB9F2A
+PASS AC-PNDC1 a plain import base resolves to b (ok/b)
+PASS AC-PNDC1 the shipped answer it replaces was silent (None/None)
+PASS AC-PNDC1 the hop is named (import)
+PASS AC-PNDC1 an unresolvable plain import is refused (refused)
+PASS AC-PNDC1 an unresolvable plain import is NAMED (attr-plain-import:helper.ATTR)
+PASS AC-PNDC1 a refusal resolves nothing (None)
+PASS AC-PNDC2 an import alias resolves to b (ok/b)
+PASS AC-PNDC2 the shipped answer it replaces called it a local (attr-base-local:h)
+PASS AC-PNDC2 the alias is never a local on this row (None)
+PASS AC-PNDC2 the alias hop is named (import-alias)
+PASS AC-PNDC2 the chain names alias and module (['h->helper.ATTR'])
+PASS AC-PNDC3 a with-as module resolves to b (ok/b)
+PASS AC-PNDC3 the shipped answer it replaces called it a local (attr-base-local:m)
+PASS AC-PNDC3 the with-as hop is named (with-as)
+PASS AC-PNDC3 a non-module with-as context is NAMED (attr-with-as:m.ATTR)
+PASS AC-PNDC4 an alias constant resolves to b (ok/b)
+PASS AC-PNDC4 the shipped answer it replaces refused it (attr-non-constant:helper.ATTR)
+PASS AC-PNDC4 two values read name-mixed (name-mixed:helper.ATTR)
+PASS AC-PNDC4 a mixed name resolves nothing (None)
+PASS AC-PNDC4 the shipped answer it replaces OVER-resolved (ok)
+PASS AC-PNDC5 a re-export resolves to b (ok/b)
+PASS AC-PNDC5 the shipped answer it replaces read attr-missing (attr-missing:helper.ATTR)
+PASS AC-PNDC5 the re-export hop is published (import/reexport)
+PASS AC-PNDC5 a re-export of an alias resolves to b (ok/b)
+PASS AC-PNDC6 module source is pure ASCII (21285B)
+PASS AC-PNDC6 suite source is pure ASCII (13022B)
+PASS AC-PNDC6 zero network imports (none)
+PASS AC-PNDC6 no clock import (none)
+PASS AC-PNDC6 no eval/exec/__import__ (none)
+PASS AC-PNDC6 the face carries its own label (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope)
+PASS AC-PNDC6 the label is wired into reconcile_all
+PASS AC-PNDC6 the suite is wired into reconcile_all
+PASS AC-PNDC6 the suite declares its six criteria (6)
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_predicate_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_base.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_position.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_chain.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_annotated_constant_scope.py rc=0 SUITE PASS 6/6 criteria green
+EVIDENCE identical=True adjacent=5 fails=0 digest=0666D54105BB9F2A
