@@ -57,7 +57,17 @@ NARRATIVE_RE = re.compile(r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s")
 # round narratives, so a fold that archived a round's ledger line while
 # keeping its summary live reported that round as having no ledger at all.
 # The guard is word-bounded, so "R<n> folder of ..." is not swallowed.
-FOLD_SUMMARY_RE = re.compile(r"^R(\d{3,5}) fold\b")
+#
+# R2581 AC-LKND1/AC-LKND2: that guard was still anchored at the line start
+# and knew only the bare "fold" inflection, so two real fold-summary shapes
+# fell back to NARRATIVE_RE and re-opened the same gap - a summary stamped
+# with the date the fold ran ("2026-11-08 R2568 fold of log lines ...") and
+# the past-tense form ("R2568 folded the block into the archive"). Both are
+# summary lines and never round narratives. The optional date prefix is the
+# same one NARRATIVE_RE already tolerates, and both alternatives stay
+# word-bounded so "R<n> folder of ..." is STILL a narrative.
+FOLD_SUMMARY_RE = re.compile(
+    r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s+(?:fold\b|folded\b)")
 LOCAL_NUM_RE = re.compile(r"^(\d+(?:\.\d+)?)([kKmM]?)$")
 API_NUM_RE = re.compile(r"^\d+$")
 UNITS = {"": 1, "k": 1000, "m": 1000000}

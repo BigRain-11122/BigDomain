@@ -1,0 +1,26 @@
+EVIDENCE CAPTURE round=R2581 suite=src/os/test_ledger_fold_kind_dateprefix.py legs=2
+== LEG A rc=0 digest=060493330530B3EA
+PASS AC-LKND1 date-prefixed fold summary is other and leaves no gap
+PASS AC-LKND2 inflected 'folded' form is other, dated or bare
+PASS AC-LKND3 a narrative merely mentioning the fold still gates
+PASS AC-LKND4 'folder' stays round, anchored summaries stay other
+PASS AC-LKND5 bare narrative, typo prefix and shipped families unchanged
+PASS AC-LKND6 real log clean, R2580 suite still 6/6, ASCII, no network
+suite: fold-summary date-prefix and inflection (R2581 AC-LKND1..AC-LKND6)
+SUITE PASS 6/6 criteria
+== LEG B rc=0 digest=060493330530B3EA
+PASS AC-LKND1 date-prefixed fold summary is other and leaves no gap
+PASS AC-LKND2 inflected 'folded' form is other, dated or bare
+PASS AC-LKND3 a narrative merely mentioning the fold still gates
+PASS AC-LKND4 'folder' stays round, anchored summaries stay other
+PASS AC-LKND5 bare narrative, typo prefix and shipped families unchanged
+PASS AC-LKND6 real log clean, R2580 suite still 6/6, ASCII, no network
+suite: fold-summary date-prefix and inflection (R2581 AC-LKND1..AC-LKND6)
+SUITE PASS 6/6 criteria
+== ADJACENT 5
+== src/os/test_ledger_fold_kind.py rc=0 SUITE PASS 6/6 criteria
+== src/os/test_ledger_lines.py rc=0 SUITE PASS 8/8 criteria
+== src/os/test_ledger_archive.py rc=0 SUITE PASS 8/8 criteria
+== src/os/test_ledger_baseline.py rc=0 SUITE PASS 8/8 criteria
+== src/os/test_ledger_closeout.py rc=0 SUITE PASS 8/8 criteria
+EVIDENCE identical=True adjacent=5 fails=0 digest=060493330530B3EA

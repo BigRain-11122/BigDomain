@@ -4455,6 +4455,15 @@ SUITES = [
     # (AC-FCLS1..AC-FCLS6 pre-registered in state/queue/tech.md R2580.)
     ("os-ledger-fold-kind",
      os.path.join("..", "os", "test_ledger_fold_kind.py"), 6),
+    # R2581: that guard was still anchored at the line start and knew only
+    # the bare "fold" inflection, so a date-stamped summary and the
+    # past-tense "folded" form fell back to the narrative pattern and
+    # re-opened the same gap. This suite pins both shapes as other, pins
+    # that nothing is over-swallowed, and pins the real-tree live face
+    # beside the R2580 suite still reading 6/6.
+    # (AC-LKND1..AC-LKND6 pre-registered in state/queue/tech.md:626.)
+    ("os-ledger-fold-kind-dateprefix",
+     os.path.join("..", "os", "test_ledger_fold_kind_dateprefix.py"), 6),
     # R2153: the double-run identity dialect gets one dialect instead of
     # two - explicit bytes/conclusions modes, claim verification against
     # the files (a byte claim that does not hold is a false claim) and a
