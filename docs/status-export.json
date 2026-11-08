@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-08T22:28:01+08:00",
+  "export_ts": "2026-11-08T23:43:07+08:00",
   "do": "2026-11-08 R2579 PRODUCT window on the queue head the debt gate named (product-face-R2578, state/queue/tech.md:613 prefix AC-PNMA1, criteria AC-PNMA1..AC-PNMA6 pinned in that row at R2577 BEFORE any code). Five-silence at open: git status EMPTY at HEAD a4da456a equal to origin/main with no index.lock, the group ledger BigDomain mentions read as audit prose rather than unreplied transfer rows, the ",
   "ceo_face": {
     "current": "2026-11-08 R2579 PRODUCT window on the queue head the debt gate named (product-face-R2578, state/queue/tech.md:613 prefix AC-PNMA1, criteria AC-PNMA1..AC-PNMA6 pinned in that row at R2577 BEFORE any code). Five-silence at open: git status EMPTY at HEAD a4da456a equal to origin/main with no index.lock, the group ledger BigDomain mentions read as audit prose rather than unreplied transfer rows, the ",
     "latest_artifact": "module-alias-attribute-scope-limits-R2579.log (576B) + module-alias-attribute-scope-limits-next-R2579.log (512B) + module-alias-attribute-scope-live-R2579.log (179B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-scope-R2579.log (5849B)",
     "last_artifact": "module-alias-attribute-scope-limits-R2579.log (576B) + module-alias-attribute-scope-limits-next-R2579.log (512B) + module-alias-attribute-scope-live-R2579.log (179B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-scope-R2579.log (5849B)",
-    "next_milestone": "next window owes reconcile-battery-R2579 on the committed tree, inside a 48h window due 2026-11-10T22:28:01+08:00",
-    "next_milestone_due": "2026-11-10T22:28:01+08:00",
-    "updated_at": "2026-11-08T22:28:01+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2579 on the committed tree, inside a 48h window due 2026-11-10T23:43:07+08:00",
+    "next_milestone_due": "2026-11-10T23:43:07+08:00",
+    "updated_at": "2026-11-08T23:43:07+08:00"
   },
   "depts": [
     {
@@ -914,7 +914,7 @@
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
-    "queue_tech_open": 12,
+    "queue_tech_open": 13,
     "queue_explore_open": 10
   },
   "queue": {
@@ -942,10 +942,10 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 12,
+        "open_rows": 13,
         "done_rows": 457,
         "gated_rows": 1,
-        "claimable": 11,
+        "claimable": 12,
         "discounted": 0,
         "delivered": [],
         "floor": 10,
