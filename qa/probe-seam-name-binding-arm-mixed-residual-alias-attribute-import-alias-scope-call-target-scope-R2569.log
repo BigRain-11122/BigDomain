@@ -1,0 +1,82 @@
+EVIDENCE CAPTURE round=R2569 suite=src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_call_target_scope.py legs=2
+== LEG A rc=0 digest=E4B53EE2EC5FB526
+PASS AC-PNDCF1 an attribute call returning a module resolves to b (ok/b)
+PASS AC-PNDCF1 the shipped answer it replaces refused it (attr-with-as:m.ATTR)
+PASS AC-PNDCF1 the call-target hop is named (with-as-call-target)
+PASS AC-PNDCF1 an attribute call returning something else is refused (refused)
+PASS AC-PNDCF1 a non-module attribute call is NAMED (attr-call-target:m.ATTR)
+PASS AC-PNDCF1 a refusal resolves nothing (None)
+PASS AC-PNDCF2 a local-returned module resolves to b (ok/b)
+PASS AC-PNDCF2 the shipped answer it replaces refused it (attr-with-as:md.ATTR)
+PASS AC-PNDCF2 the with-as call hop is named (with-as-call)
+PASS AC-PNDCF2 a local that is not a module resolves nothing (refused/None)
+PASS AC-PNDCF3 a relative from-import resolves to b (ok/b)
+PASS AC-PNDCF3 the shipped answer it replaces called it a local (attr-base-local:helper)
+PASS AC-PNDCF3 the relative hop is named (from-relative)
+PASS AC-PNDCF3 the module is never a local on this row (None)
+PASS AC-PNDCF3 an absent relative module resolves nothing (refused)
+PASS AC-PNDCF3 an absent relative module is not a local either (attr-base-local:helper)
+PASS AC-PNDCF4 the shipped faces resolved the nested constant (ok/b)
+PASS AC-PNDCF4 this face refuses the over-resolution (refused)
+PASS AC-PNDCF4 the nested constant is NAMED (attr-nested-constant:helper.ATTR)
+PASS AC-PNDCF4 a nested-only constant resolves nothing (None)
+PASS AC-PNDCF4 a module-level function constant still resolves (ok/b)
+PASS AC-PNDCF5 the shipped ok answer rides beside this face (ok/b)
+PASS AC-PNDCF5 this face does not rewrite the shipped ok answer (ok/b)
+PASS AC-PNDCF5 the shipped hop rides beside this face (import)
+PASS AC-PNDCF5 this face stamps its own source (call-target)
+PASS AC-PNDCF5 the shipped from-import alias answer still rides (ok/b)
+PASS AC-PNDCF6 module source is pure ASCII (22926B)
+PASS AC-PNDCF6 suite source is pure ASCII (14507B)
+PASS AC-PNDCF6 zero network imports (none)
+PASS AC-PNDCF6 no clock import (none)
+PASS AC-PNDCF6 no eval/exec/__import__ (none)
+PASS AC-PNDCF6 the face carries its own label (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-call-target-scope)
+PASS AC-PNDCF6 the label is wired into reconcile_all
+PASS AC-PNDCF6 the suite is wired into reconcile_all
+PASS AC-PNDCF6 the suite declares its six criteria (6)
+SUITE PASS 6/6
+== LEG B rc=0 digest=E4B53EE2EC5FB526
+PASS AC-PNDCF1 an attribute call returning a module resolves to b (ok/b)
+PASS AC-PNDCF1 the shipped answer it replaces refused it (attr-with-as:m.ATTR)
+PASS AC-PNDCF1 the call-target hop is named (with-as-call-target)
+PASS AC-PNDCF1 an attribute call returning something else is refused (refused)
+PASS AC-PNDCF1 a non-module attribute call is NAMED (attr-call-target:m.ATTR)
+PASS AC-PNDCF1 a refusal resolves nothing (None)
+PASS AC-PNDCF2 a local-returned module resolves to b (ok/b)
+PASS AC-PNDCF2 the shipped answer it replaces refused it (attr-with-as:md.ATTR)
+PASS AC-PNDCF2 the with-as call hop is named (with-as-call)
+PASS AC-PNDCF2 a local that is not a module resolves nothing (refused/None)
+PASS AC-PNDCF3 a relative from-import resolves to b (ok/b)
+PASS AC-PNDCF3 the shipped answer it replaces called it a local (attr-base-local:helper)
+PASS AC-PNDCF3 the relative hop is named (from-relative)
+PASS AC-PNDCF3 the module is never a local on this row (None)
+PASS AC-PNDCF3 an absent relative module resolves nothing (refused)
+PASS AC-PNDCF3 an absent relative module is not a local either (attr-base-local:helper)
+PASS AC-PNDCF4 the shipped faces resolved the nested constant (ok/b)
+PASS AC-PNDCF4 this face refuses the over-resolution (refused)
+PASS AC-PNDCF4 the nested constant is NAMED (attr-nested-constant:helper.ATTR)
+PASS AC-PNDCF4 a nested-only constant resolves nothing (None)
+PASS AC-PNDCF4 a module-level function constant still resolves (ok/b)
+PASS AC-PNDCF5 the shipped ok answer rides beside this face (ok/b)
+PASS AC-PNDCF5 this face does not rewrite the shipped ok answer (ok/b)
+PASS AC-PNDCF5 the shipped hop rides beside this face (import)
+PASS AC-PNDCF5 this face stamps its own source (call-target)
+PASS AC-PNDCF5 the shipped from-import alias answer still rides (ok/b)
+PASS AC-PNDCF6 module source is pure ASCII (22926B)
+PASS AC-PNDCF6 suite source is pure ASCII (14507B)
+PASS AC-PNDCF6 zero network imports (none)
+PASS AC-PNDCF6 no clock import (none)
+PASS AC-PNDCF6 no eval/exec/__import__ (none)
+PASS AC-PNDCF6 the face carries its own label (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-call-target-scope)
+PASS AC-PNDCF6 the label is wired into reconcile_all
+PASS AC-PNDCF6 the suite is wired into reconcile_all
+PASS AC-PNDCF6 the suite declares its six criteria (6)
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_predicate_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_base.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_chain.py rc=0 SUITE PASS 6/6 criteria green
+EVIDENCE identical=True adjacent=5 fails=0 digest=E4B53EE2EC5FB526

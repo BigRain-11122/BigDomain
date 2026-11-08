@@ -1,0 +1,5 @@
+os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-call-target-scope BOUNDED-READ files=6 loops=123 ct_resolved=0 ct_named=134 read_only=True modules=6
+local-return mine=ok/b hop=with-as-call base=refused/attr-with-as:md.ATTR
+nested-constant mine=refused/None hop=nested-constant base=ok/None
+relative-from mine=ok/b hop=from-relative base=refused/attr-base-local:helper
+with-as-attribute mine=ok/b hop=with-as-call-target base=refused/attr-with-as:m.ATTR

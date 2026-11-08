@@ -6087,6 +6087,18 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope.py"),
      6),
+    # R2569 call-target face: a with-as context that is a call on an
+    # ATTRIBUTE resolves when that method returns a module name and is NAMED
+    # otherwise, a function returning its module name through a LOCAL
+    # resolves, a relative `from . import helper` resolves against the
+    # package own directory, and a constant only a NESTED function binds is
+    # NAMED instead of resolved; every shipped answer rides beside it
+    # (612 -> 613 suites, 4648 -> 4654 criteria).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-call-target-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_call_target_scope.py"),
+     6),
     ]
 
 FAILS = 0
