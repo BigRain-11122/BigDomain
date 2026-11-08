@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-08T18:56:55+08:00",
+  "export_ts": "2026-11-08T18:58:04+08:00",
   "do": "2026-11-08 R2573 PRODUCT window on the tech head the register named (product-face-R2572, state/queue/tech.md:607 prefix AC-PNDCH1, criteria AC-PNDCH1..AC-PNDCH6 pinned in that row at R2571 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 20f49071 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read rows",
   "ceo_face": {
     "current": "2026-11-08 R2573 PRODUCT window on the tech head the register named (product-face-R2572, state/queue/tech.md:607 prefix AC-PNDCH1, criteria AC-PNDCH1..AC-PNDCH6 pinned in that row at R2571 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 20f49071 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read rows",
     "latest_artifact": "probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-class-base-scope-R2573.log (6852B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-class-base-scope-live-R2573.log (350B)",
     "last_artifact": "probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-class-base-scope-R2573.log (6852B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-class-base-scope-live-R2573.log (350B)",
-    "next_milestone": "next window owes reconcile-battery-R2573 on the committed tree, inside a 48h window due 2026-11-10T18:56:55+08:00",
-    "next_milestone_due": "2026-11-10T18:56:55+08:00",
-    "updated_at": "2026-11-08T18:56:55+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2573 on the committed tree, inside a 48h window due 2026-11-10T18:58:04+08:00",
+    "next_milestone_due": "2026-11-10T18:58:04+08:00",
+    "updated_at": "2026-11-08T18:58:04+08:00"
   },
   "depts": [
     {
@@ -884,10 +884,10 @@
   "self_drive": {
     "window": "2026-11-02..2026-11-08",
     "window_days": 7,
-    "log_lines_in_window": 23,
+    "log_lines_in_window": 24,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 23,
+    "substantive_non_idle_mention_lines": 24,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
