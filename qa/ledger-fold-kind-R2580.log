@@ -1,0 +1,23 @@
+# R2580 fold-line kind evidence (utf-8, LF, ASCII source)
+leg1 rc=0
+PASS AC-FCLS1 a fold summary line classifies as other
+PASS AC-FCLS2 date narrative, battery outcome and ledger kinds unchanged
+PASS AC-FCLS3 guard is word-bounded: 'folder' stays a round narrative
+PASS AC-FCLS4 fold summary plus narrative, no ledger for that round reads clean
+PASS AC-FCLS5 bare narrative and typo prefix still gate
+PASS AC-FCLS6 real state.json log reads clean, source is ASCII and network-free
+suite: fold-summary line kind (R2580 AC-FCLS1..AC-FCLS6)
+SUITE PASS 6/6 criteria
+leg2 rc=0 identical=True
+PASS AC-FCLS1 a fold summary line classifies as other
+PASS AC-FCLS2 date narrative, battery outcome and ledger kinds unchanged
+PASS AC-FCLS3 guard is word-bounded: 'folder' stays a round narrative
+PASS AC-FCLS4 fold summary plus narrative, no ledger for that round reads clean
+PASS AC-FCLS5 bare narrative and typo prefix still gate
+PASS AC-FCLS6 real state.json log reads clean, source is ASCII and network-free
+suite: fold-summary line kind (R2580 AC-FCLS1..AC-FCLS6)
+SUITE PASS 6/6 criteria
+adjacent test_ledger_lines.py rc=0 SUITE PASS 8/8 criteria
+adjacent test_ledger_archive.py rc=0 SUITE PASS 8/8 criteria
+adjacent test_ledger_baseline.py rc=0 SUITE PASS 8/8 criteria
+SUMMARY legs=2 identical=True adjacent=3 fails=0
