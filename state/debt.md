@@ -329,8 +329,9 @@ column-0 checkbox starts one.
 - [x] opened=R2579 | item=reconcile-battery-R2579 | note=R2579 moved the registry by one row (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-scope(6)) and shipped src bytes, so a full battery is owed on the committed tree BEFORE any further product byte (the R2168 mixed-tree rule). Pre-registered target 619 suites / 4690 criteria, recounted by importing reconcile_all.SUITES rather than trusted. | closed=R2580
 - [ ] opened=R2579 | item=product-face-R2579 | note=PRODUCT face on the queue head state/queue/tech.md:615 prefix AC-PNAM1 (criteria AC-PNAM1..AC-PNAM6 pinned there at R2579 BEFORE any code): an attribute head bound by a module alias reads attr-module-alias-unbound, a two-step attribute path reads attr-module-alias-unbound on its first hop, and a with-as call context on a FROM-imported function name reads attr-cross-call. | first=no
 - [x] opened=R2580 | item=product-face-R2580 | note=tech line 626 prefix AC-LKND1 (date-prefixed and inflected fold-summary kinds), seeded this window from measured limits with AC-LKND1..AC-LKND6 pinned BEFORE any code | closed=R2581
-- [ ] opened=R2581 | item=reconcile-battery-R2581 | note=pre-registered 621 suites / 4702 criteria (registry moved by one row and a shipped document this round) | first=yes
+- [x] opened=R2581 | item=reconcile-battery-R2581 | note=pre-registered 621 suites / 4702 criteria (registry moved by one row and a shipped document this round) | closed=R2582
 - [ ] opened=R2581 | item=product-face-R2581 | note=PRODUCT face on the queue head state/queue/tech.md:615 prefix AC-PNAM1, criteria pinned in that row at R2579 BEFORE any code | first=no
+- [ ] opened=R2581 | item=product-face-R2582 | note=PRODUCT face on the queue head state/queue/tech.md:615 prefix AC-PNAM1 (criteria AC-PNAM1..AC-PNAM6 pinned in that row at R2579 BEFORE any code), carried by product-face-R2581 which names the same row after the R2581 battery was discharged green | first=yes
 
 ## Closed
 
