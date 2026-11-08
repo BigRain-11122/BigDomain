@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-09T04:24:13+08:00",
+  "export_ts": "2026-11-09T04:25:43+08:00",
   "do": "2026-11-09 R2584 VERIFICATION window on the battery the register named first (reconcile-battery-R2583, pre-registered 622 suites / 4708 criteria). Five-silence at open: git status carried exactly TWO untracked files from an INTERRUPTED ATTEMPT of this same round (qa/reconcile-all-R2584.log and src/os/launch_battery_R2584.py), zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed ",
   "ceo_face": {
     "current": "2026-11-09 R2584 VERIFICATION window on the battery the register named first (reconcile-battery-R2583, pre-registered 622 suites / 4708 criteria). Five-silence at open: git status carried exactly TWO untracked files from an INTERRUPTED ATTEMPT of this same round (qa/reconcile-all-R2584.log and src/os/launch_battery_R2584.py), zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed ",
     "latest_artifact": "reconcile-all-R2584.log (1053502B)",
     "last_artifact": "reconcile-all-R2584.log (1053502B)",
-    "next_milestone": "next window owes product-face-R2584 on the committed tree, inside a 48h window due 2026-11-11T04:24:13+08:00",
-    "next_milestone_due": "2026-11-11T04:24:13+08:00",
-    "updated_at": "2026-11-09T04:24:13+08:00"
+    "next_milestone": "next window owes product-face-R2584 on the committed tree, inside a 48h window due 2026-11-11T04:25:44+08:00",
+    "next_milestone_due": "2026-11-11T04:25:44+08:00",
+    "updated_at": "2026-11-09T04:25:43+08:00"
   },
   "depts": [
     {
@@ -912,10 +912,10 @@
   "self_drive": {
     "window": "2026-11-03..2026-11-09",
     "window_days": 7,
-    "log_lines_in_window": 51,
+    "log_lines_in_window": 52,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 51,
+    "substantive_non_idle_mention_lines": 52,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
