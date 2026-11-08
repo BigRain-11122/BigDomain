@@ -309,7 +309,8 @@ column-0 checkbox starts one.
 - [x] opened=R2565 | item=reconcile-battery-R2565 | note=owed on the committed R2565 tree at the re-measured 612 suites / 4648 criteria because this window moved the registry by one row and a shipped document | closed=R2566
 - [ ] opened=R2565 | item=product-face-R2565 | note=next window owes a PRODUCT face on tech head state queue tech line 603 prefix AC-PNDCF1 probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_call_target_scope, criteria AC-PNDCF1..AC-PNDCF6 pinned in that row at R2565 BEFORE any code | first=no
 - [x] opened=R2566 | item=product-face-R2566 | note=PRODUCT face on tech head state/queue/tech.md:603 prefix AC-PNDCF1, criteria pinned in that row at R2565 BEFORE any code; this verification window moved no product src byte and the registry is unmoved at 612 suites / 4648 criteria, re-read by import | closed=R2567
-- [ ] opened=R2567 | item=reconcile-battery-R2567 | note=R2567 moved the registry to 613 suites / 4654 criteria by wiring os-state-fold-run(6); this battery is owed next window on the committed tree, and the product face after it is the probe-seam call-target row still open at state/queue/tech.md AC-PNDCF1 | first=yes
+- [x] opened=R2567 | item=reconcile-battery-R2567 | note=R2567 moved the registry to 613 suites / 4654 criteria by wiring os-state-fold-run(6); this battery is owed next window on the committed tree, and the product face after it is the probe-seam call-target row still open at state/queue/tech.md AC-PNDCF1 | closed=R2568
+- [ ] opened=R2568 | item=product-face-R2568 | note=next window owes a PRODUCT face on the tech head state/queue/tech.md:603 prefix AC-PNDCF1 (criteria pinned at R2565 before any code); registry unmoved at 613/4654 and no product src byte moved this window | first=yes
 
 ## Closed
 
