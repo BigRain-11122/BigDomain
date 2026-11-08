@@ -1,0 +1,2 @@
+LIVE modules=6 loops=159 ma_resolved=0 ma_named=0 unreadable=0 read_only=True
+SAME-FIXTURE alias-head here=ok/b hop=module-alias-attribute/attribute/direct there=refused/attr-module-alias-unbound:M.HW; from-import-call here=ok/b hop=with-as-call-from-import/direct there=refused/attr-cross-call:m.ATTR

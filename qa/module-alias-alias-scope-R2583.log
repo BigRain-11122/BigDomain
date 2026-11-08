@@ -1,0 +1,65 @@
+EVIDENCE CAPTURE round=R2583 suite=src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_scope.py legs=2
+== LEG A rc=0 digest=765712B5FC5FD677
+PASS AC-PNAM1 a module-alias head resolves (ok/b)
+PASS AC-PNAM1 the alias link is named on the chain (['mk.REG->hw', 'REG', 'BASE', 'M<-consts', 'M.HW'])
+PASS AC-PNAM1 the shipped reader still refuses this shape (refused/attr-with-as:m.ATTR)
+PASS AC-PNAM2 a two-step attribute path resolves (ok/b)
+PASS AC-PNAM2 every step is carried on the chain (['mk.REG->hw', 'REG', 'BASE', 'inner.INNER', 'inner.INNER.HW'])
+PASS AC-PNAM2 the shipped one-hop reader still refuses (refused/attr-with-as:m.ATTR)
+PASS AC-PNAM2 a middle link naming no module is refused by name (attr-module-alias-unbound:wedge.INNER | ['mk.REG', 'REG', 'BASE', 'wedge.INNER'])
+PASS AC-PNAM3 a FROM-imported function call resolves (ok/b)
+PASS AC-PNAM3 the import hop is named (with-as-call-from-import/direct)
+PASS AC-PNAM3 the shipped same-file reader still refuses (refused/attr-cross-call:m.ATTR)
+PASS AC-PNAM4 a non-function import is not resolved (refused/None)
+PASS AC-PNAM4 it is refused with this face own word (attr-import-not-callable:REG)
+PASS AC-PNAM4 the shipped reader refuses it too (refused)
+PASS AC-PNAM5 the shipped ok answer rides beside this face (ok/b)
+PASS AC-PNAM5 this face does not rewrite a shipped answer (ok/b)
+PASS AC-PNAM5 the shipped relative-name refusal is kept (attr-relative-from-name:K.ATTR)
+PASS AC-PNAM5 the shipped with-as refusal still rides (attr-with-as:m.ATTR)
+PASS AC-PNAM5 the shipped module-value answer is carried (ok/b)
+PASS AC-PNAM6 module source is pure ASCII (24917B)
+PASS AC-PNAM6 suite source is pure ASCII (13266B)
+PASS AC-PNAM6 zero network imports (none)
+PASS AC-PNAM6 no clock import (none)
+PASS AC-PNAM6 no eval/exec (none)
+PASS AC-PNAM6 the face carries its own label (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-scope)
+PASS AC-PNAM6 the face imports its own stdlib modules
+PASS AC-PNAM6 the label is wired into reconcile_all
+PASS AC-PNAM6 the suite is wired into reconcile_all
+PASS AC-PNAM6 the suite declares its six criteria (6)
+SUITE PASS 6/6
+== LEG B rc=0 digest=765712B5FC5FD677
+PASS AC-PNAM1 a module-alias head resolves (ok/b)
+PASS AC-PNAM1 the alias link is named on the chain (['mk.REG->hw', 'REG', 'BASE', 'M<-consts', 'M.HW'])
+PASS AC-PNAM1 the shipped reader still refuses this shape (refused/attr-with-as:m.ATTR)
+PASS AC-PNAM2 a two-step attribute path resolves (ok/b)
+PASS AC-PNAM2 every step is carried on the chain (['mk.REG->hw', 'REG', 'BASE', 'inner.INNER', 'inner.INNER.HW'])
+PASS AC-PNAM2 the shipped one-hop reader still refuses (refused/attr-with-as:m.ATTR)
+PASS AC-PNAM2 a middle link naming no module is refused by name (attr-module-alias-unbound:wedge.INNER | ['mk.REG', 'REG', 'BASE', 'wedge.INNER'])
+PASS AC-PNAM3 a FROM-imported function call resolves (ok/b)
+PASS AC-PNAM3 the import hop is named (with-as-call-from-import/direct)
+PASS AC-PNAM3 the shipped same-file reader still refuses (refused/attr-cross-call:m.ATTR)
+PASS AC-PNAM4 a non-function import is not resolved (refused/None)
+PASS AC-PNAM4 it is refused with this face own word (attr-import-not-callable:REG)
+PASS AC-PNAM4 the shipped reader refuses it too (refused)
+PASS AC-PNAM5 the shipped ok answer rides beside this face (ok/b)
+PASS AC-PNAM5 this face does not rewrite a shipped answer (ok/b)
+PASS AC-PNAM5 the shipped relative-name refusal is kept (attr-relative-from-name:K.ATTR)
+PASS AC-PNAM5 the shipped with-as refusal still rides (attr-with-as:m.ATTR)
+PASS AC-PNAM5 the shipped module-value answer is carried (ok/b)
+PASS AC-PNAM6 module source is pure ASCII (24917B)
+PASS AC-PNAM6 suite source is pure ASCII (13266B)
+PASS AC-PNAM6 zero network imports (none)
+PASS AC-PNAM6 no clock import (none)
+PASS AC-PNAM6 no eval/exec (none)
+PASS AC-PNAM6 the face carries its own label (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-scope)
+PASS AC-PNAM6 the face imports its own stdlib modules
+PASS AC-PNAM6 the label is wired into reconcile_all
+PASS AC-PNAM6 the suite is wired into reconcile_all
+PASS AC-PNAM6 the suite declares its six criteria (6)
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_chain_scope.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=765712B5FC5FD677

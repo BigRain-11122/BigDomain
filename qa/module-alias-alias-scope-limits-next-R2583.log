@@ -1,0 +1,3 @@
+(1) ANNOTATED module-alias head (M: object = consts) -> state=ok value=b reason=None chain=['mk.REG->hw', 'REG', 'BASE', 'M<-consts', 'M.HW']
+(2) WALRUS module-alias head ((M := consts)) -> state=refused value=None reason=attr-module-alias-unbound:M.HW chain=['mk.REG', 'REG', 'BASE', 'M.HW']
+(3) a THREE-step attribute path (a.B.C.HW) -> state=ok value=b reason=None chain=['mk.REG->hw', 'REG', 'BASE', 'a.C', 'a.C.B', 'a.C.B.HW']

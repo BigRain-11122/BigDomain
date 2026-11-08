@@ -331,7 +331,9 @@ column-0 checkbox starts one.
 - [x] opened=R2580 | item=product-face-R2580 | note=tech line 626 prefix AC-LKND1 (date-prefixed and inflected fold-summary kinds), seeded this window from measured limits with AC-LKND1..AC-LKND6 pinned BEFORE any code | closed=R2581
 - [x] opened=R2581 | item=reconcile-battery-R2581 | note=pre-registered 621 suites / 4702 criteria (registry moved by one row and a shipped document this round) | closed=R2582
 - [ ] opened=R2581 | item=product-face-R2581 | note=PRODUCT face on the queue head state/queue/tech.md:615 prefix AC-PNAM1, criteria pinned in that row at R2579 BEFORE any code | first=no
-- [ ] opened=R2581 | item=product-face-R2582 | note=PRODUCT face on the queue head state/queue/tech.md:615 prefix AC-PNAM1 (criteria AC-PNAM1..AC-PNAM6 pinned in that row at R2579 BEFORE any code), carried by product-face-R2581 which names the same row after the R2581 battery was discharged green | first=yes
+- [x] opened=R2581 | item=product-face-R2582 | note=PRODUCT face on the queue head state/queue/tech.md:615 prefix AC-PNAM1 (criteria AC-PNAM1..AC-PNAM6 pinned in that row at R2579 BEFORE any code), carried by product-face-R2581 which names the same row after the R2581 battery was discharged green | closed=R2583
+- [ ] opened=R2583 | item=reconcile-battery-R2583 | note=the battery for the 622 suites / 4708 criteria registry this window moved by one row: full reconcile battery on the committed tree at the pre-registered target BEFORE any further product byte (R2168 mixed-tree rule) | first=yes
+- [ ] opened=R2583 | item=product-face-R2583 | note=a PRODUCT face on the queue head state/queue/tech.md:617 prefix AC-PNAA1 (criteria AC-PNAA1..AC-PNAA6 pinned in that row THIS window BEFORE any code): a WALRUS module-alias head and a RELATIVE FROM-import call context | first=no
 
 ## Closed
 

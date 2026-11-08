@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 621 | 4702 | 621/621 | R2581 |
+| 622 | 4708 | 621/621 | R2581 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -659,7 +659,8 @@
 | 619 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-class-source-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_class_source_scope.py | 6 | green | 0.6 |
 | 620 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-chain-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_chain_scope.py | 6 | green | 0.5 |
 | 621 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_scope.py | 6 | green | 0.7 |
-|  | 合计 |  | 4702 | green 621 / FAIL 0 / no-evidence 0 |  |
+| 622 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_scope.py | 6 | no-evidence | - |
+|  | 合计 |  | 4708 | green 621 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

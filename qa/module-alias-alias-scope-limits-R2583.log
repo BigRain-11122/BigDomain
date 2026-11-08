@@ -1,0 +1,4 @@
+(a) attribute head bound by a module ALIAS (import consts; M = consts; BASE = M.HW) -> state=refused value=None reason=attr-module-alias-unbound:M.HW hop=with-as-module-alias/M.HW chain=['mk.REG', 'REG', 'BASE', 'M.HW']
+(b) two-step attribute path (BASE = inner.INNER.HW) -> state=refused value=None reason=attr-module-alias-unbound:inner.HW hop=with-as-module-alias/inner.HW chain=['mk.REG', 'REG', 'BASE', 'inner.HW']
+(c) call context on a FROM-imported function name (from mk import mkmod as REG) -> state=refused value=None reason=attr-cross-call:m.ATTR hop=None chain=[]
+(d) call on a FROM-imported name that is NOT a function -> state=refused value=None reason=attr-cross-call:m.ATTR hop=None chain=[]

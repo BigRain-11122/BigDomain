@@ -1,0 +1,2 @@
+(4) RELATIVE from-import at the call site (from .mk import mkmod as REG) -> state=refused value=None reason=attr-module-alias-unbound:mk.REG() chain=['mk.REG()']
+(5) a module-alias head whose target is itself a FROM-imported module name -> state=ok value=b reason=None chain=['mk.REG->hw', 'REG', 'BASE', 'M<-pkg.consts', 'M.HW']
