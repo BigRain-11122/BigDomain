@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-09T02:04:29+08:00",
+  "export_ts": "2026-11-09T02:06:58+08:00",
   "do": "2026-11-09 R2581 PRODUCT window on the queue row the debt gate named (product-face-R2580, state/queue/tech.md:626 prefix AC-LKND1, criteria AC-LKND1..AC-LKND6 pinned in that row at R2580 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 1a514249 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed D-/C- decisions scan read ",
   "ceo_face": {
     "current": "2026-11-09 R2581 PRODUCT window on the queue row the debt gate named (product-face-R2580, state/queue/tech.md:626 prefix AC-LKND1, criteria AC-LKND1..AC-LKND6 pinned in that row at R2580 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 1a514249 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed D-/C- decisions scan read ",
     "latest_artifact": "ledger-fold-kind-dateprefix-R2581.log (1560B)",
     "last_artifact": "ledger-fold-kind-dateprefix-R2581.log (1560B)",
-    "next_milestone": "next window owes reconcile-battery-R2581 on the committed tree, inside a 48h window due 2026-11-11T02:04:29+08:00",
-    "next_milestone_due": "2026-11-11T02:04:29+08:00",
-    "updated_at": "2026-11-09T02:04:29+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2581 on the committed tree, inside a 48h window due 2026-11-11T02:06:58+08:00",
+    "next_milestone_due": "2026-11-11T02:06:58+08:00",
+    "updated_at": "2026-11-09T02:06:58+08:00"
   },
   "depts": [
     {
@@ -909,10 +909,10 @@
   "self_drive": {
     "window": "2026-11-03..2026-11-09",
     "window_days": 7,
-    "log_lines_in_window": 55,
+    "log_lines_in_window": 56,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 55,
+    "substantive_non_idle_mention_lines": 56,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
