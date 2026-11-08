@@ -335,8 +335,9 @@ column-0 checkbox starts one.
 - [x] opened=R2583 | item=reconcile-battery-R2583 | note=the battery for the 622 suites / 4708 criteria registry this window moved by one row: full reconcile battery on the committed tree at the pre-registered target BEFORE any further product byte (R2168 mixed-tree rule) | closed=R2584
 - [ ] opened=R2583 | item=product-face-R2583 | note=a PRODUCT face on the queue head state/queue/tech.md:617 prefix AC-PNAA1 (criteria AC-PNAA1..AC-PNAA6 pinned in that row THIS window BEFORE any code): a WALRUS module-alias head and a RELATIVE FROM-import call context | first=no
 - [x] opened=R2584 | item=product-face-R2584 | note=the gate names the next window a PRODUCT face on the queue head state/queue/tech.md:617 prefix AC-PNAA1, whose AC-PNAA1..AC-PNAA6 were pinned in that row at R2583 BEFORE any code; no successor battery is owed because this window moved no product src byte and the registry is unmoved at 622 suites / 4708 criteria | closed=R2585
-- [ ] opened=R2585 | item=reconcile-battery-R2585 | note=623 suites / 4714 criteria pre-registered at R2585 because this window moved the registry by one row and shipped a document | first=yes
+- [x] opened=R2585 | item=reconcile-battery-R2585 | note=623 suites / 4714 criteria pre-registered at R2585 because this window moved the registry by one row and shipped a document | closed=R2586
 - [ ] opened=R2585 | item=product-face-R2585 | note=PRODUCT face on the queue head state/queue/tech.md:619 prefix AC-PNAB1 (criteria AC-PNAB1..AC-PNAB6 pinned in that row at R2585 BEFORE any code): follow a walrus bound inside a module-level branch | first=no
+- [ ] opened=R2586 | item=product-face-R2586 | note=623 suites / 4714 criteria pre-registered at R2585; this window discharged it on the committed tree at a MEASURED 624 suites / 4720 criteria because the birth-site repair shipped its own six-criteria suite, and names the next window a PRODUCT face on the queue head state/queue/tech.md:619 prefix AC-PNAB1 whose AC-PNAB1..AC-PNAB6 were pinned in that row at R2585 BEFORE any code | first=yes
 
 ## Closed
 
