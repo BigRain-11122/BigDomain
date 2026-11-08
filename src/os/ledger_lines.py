@@ -51,6 +51,13 @@ import sys
 
 LEDGER_PREFIX_RE = re.compile(r"^R(\d{3,5}) tokens:")
 NARRATIVE_RE = re.compile(r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s")
+# R2580 AC-FCLS1..AC-FCLS3: the summary a fold leaves behind starts with
+# the round it folded ("R2568 fold of log lines 1..20 ..."). The kind
+# table above calls fold lines other, but NARRATIVE_RE matched them as
+# round narratives, so a fold that archived a round's ledger line while
+# keeping its summary live reported that round as having no ledger at all.
+# The guard is word-bounded, so "R<n> folder of ..." is not swallowed.
+FOLD_SUMMARY_RE = re.compile(r"^R(\d{3,5}) fold\b")
 LOCAL_NUM_RE = re.compile(r"^(\d+(?:\.\d+)?)([kKmM]?)$")
 API_NUM_RE = re.compile(r"^\d+$")
 UNITS = {"": 1, "k": 1000, "m": 1000000}
@@ -74,6 +81,8 @@ def classify(line):
     text = line if isinstance(line, str) else str(line)
     if LEDGER_PREFIX_RE.match(text):
         return "ledger"
+    if FOLD_SUMMARY_RE.match(text):
+        return "other"
     if NARRATIVE_RE.match(text):
         return "round"
     return "other"

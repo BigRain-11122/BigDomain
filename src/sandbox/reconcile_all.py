@@ -4445,6 +4445,16 @@ SUITES = [
     # (AC-LGB1..AC-LGB8 pre-registered in state/queue/tech.md R2157.)
     ("os-ledger-baseline",
      os.path.join("..", "os", "test_ledger_baseline.py"), 8),
+    # R2580: the kind table says a fold line is "other", but the fold
+    # summary a fold leaves behind begins with the round it folded, so
+    # NARRATIVE_RE read it as a round narrative - and once a fold archived
+    # that round's ledger line while keeping the summary live, the live
+    # audit reported a round with no ledger at all (the red this window
+    # battery carried). This suite pins the word-bounded guard, the
+    # unchanged shipped families, and the real-tree live face.
+    # (AC-FCLS1..AC-FCLS6 pre-registered in state/queue/tech.md R2580.)
+    ("os-ledger-fold-kind",
+     os.path.join("..", "os", "test_ledger_fold_kind.py"), 6),
     # R2153: the double-run identity dialect gets one dialect instead of
     # two - explicit bytes/conclusions modes, claim verification against
     # the files (a byte claim that does not hold is a false claim) and a
