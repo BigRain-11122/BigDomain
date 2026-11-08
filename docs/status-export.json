@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-08T22:03:02+08:00",
-  "do": "2026-11-08 R2578 VERIFICATION window on the battery the register owed (reconcile-battery-R2577, pre-registered 618 suites / 4684 criteria at R2577 because that window moved the registry by one row and shipped a document). Five-silence at open: git status EMPTY at HEAD a996d630 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the decisions file read 284 row",
+  "export_ts": "2026-11-08T22:26:32+08:00",
+  "do": "2026-11-08 R2579 PRODUCT window on the queue head the debt gate named (product-face-R2578, state/queue/tech.md:613 prefix AC-PNMA1, criteria AC-PNMA1..AC-PNMA6 pinned in that row at R2577 BEFORE any code). Five-silence at open: git status EMPTY at HEAD a4da456a equal to origin/main with no index.lock, the group ledger BigDomain mentions read as audit prose rather than unreplied transfer rows, the ",
   "ceo_face": {
-    "current": "2026-11-08 R2578 VERIFICATION window on the battery the register owed (reconcile-battery-R2577, pre-registered 618 suites / 4684 criteria at R2577 because that window moved the registry by one row and shipped a document). Five-silence at open: git status EMPTY at HEAD a996d630 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the decisions file read 284 row",
-    "latest_artifact": "none landed yet for R2578",
-    "last_artifact": "none landed yet for R2578",
-    "next_milestone": "next window owes product-face-R2578 on the committed tree, inside a 48h window due 2026-11-10T22:03:02+08:00",
-    "next_milestone_due": "2026-11-10T22:03:02+08:00",
-    "updated_at": "2026-11-08T22:03:02+08:00"
+    "current": "2026-11-08 R2579 PRODUCT window on the queue head the debt gate named (product-face-R2578, state/queue/tech.md:613 prefix AC-PNMA1, criteria AC-PNMA1..AC-PNMA6 pinned in that row at R2577 BEFORE any code). Five-silence at open: git status EMPTY at HEAD a4da456a equal to origin/main with no index.lock, the group ledger BigDomain mentions read as audit prose rather than unreplied transfer rows, the ",
+    "latest_artifact": "module-alias-attribute-scope-limits-R2579.log (576B) + module-alias-attribute-scope-limits-next-R2579.log (512B) + module-alias-attribute-scope-live-R2579.log (179B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-scope-R2579.log (5849B)",
+    "last_artifact": "module-alias-attribute-scope-limits-R2579.log (576B) + module-alias-attribute-scope-limits-next-R2579.log (512B) + module-alias-attribute-scope-live-R2579.log (179B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-scope-R2579.log (5849B)",
+    "next_milestone": "next window owes reconcile-battery-R2579 on the committed tree, inside a 48h window due 2026-11-10T22:26:32+08:00",
+    "next_milestone_due": "2026-11-10T22:26:32+08:00",
+    "updated_at": "2026-11-08T22:26:32+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "module-alias-attribute-scope-limits-R2579.log (576B) + module-alias-attribute-scope-limits-next-R2579.log (512B) + module-alias-attribute-scope-live-R2579.log (179B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-scope-R2579.log (5849B)",
     "none landed yet for R2578",
     "module-alias-chain-scope-limits-R2577.log (232B) + module-alias-chain-scope-live-R2577.log (301B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-chain-scope-R2577.log (6337B)",
     "module-alias-chain-scope-limits-R2577.log (474B) + module-alias-chain-scope-live-R2577.log (301B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-chain-scope-R2577.log (6337B)",
@@ -895,7 +896,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2578",
+      "2579",
       "OSLoop 执行 tick"
     ],
     [
@@ -906,10 +907,10 @@
   "self_drive": {
     "window": "2026-11-02..2026-11-08",
     "window_days": 7,
-    "log_lines_in_window": 51,
+    "log_lines_in_window": 53,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 51,
+    "substantive_non_idle_mention_lines": 53,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -942,7 +943,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 12,
-        "done_rows": 456,
+        "done_rows": 457,
         "gated_rows": 1,
         "claimable": 11,
         "discounted": 0,

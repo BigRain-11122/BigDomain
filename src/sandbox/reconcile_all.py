@@ -6146,6 +6146,16 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_chain_scope.py"),
      6),
+    # R2579 module-alias-attribute face: an alias chain whose FINAL link is an
+    # attribute naming a module, a module-level function returning a NAME bound
+    # to a class attribute, and a with-as context that is a CALL on an alias
+    # chain name; every shipped answer rides beside it
+    # (618 -> 619 suites, 4684 -> 4690).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_scope.py"),
+     6),
     ]
 
 FAILS = 0

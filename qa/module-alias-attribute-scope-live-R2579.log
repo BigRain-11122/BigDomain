@@ -1,0 +1,2 @@
+LIVE modules=6 loops=159 ma_resolved=0 ma_named=0 unreadable=0 read_only=True
+SAME-FIXTURE here=ok/b hop=module-alias-attribute/attribute/direct there=refused/attr-with-as:m.ATTR

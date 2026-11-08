@@ -1,0 +1,48 @@
+"""Append the R2579 round block to src/os/state.json in place."""
+import io
+import json
+import os
+import sys
+
+ROOT = r"C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain"
+PATH = os.path.join(ROOT, "src", "os", "state.json")
+
+LINES = [
+    "2026-11-08 R2579 PRODUCT window on the queue head the debt gate named (product-face-R2578, state/queue/tech.md:613 prefix AC-PNMA1, criteria AC-PNMA1..AC-PNMA6 pinned in that row at R2577 BEFORE any code). Five-silence at open: git status EMPTY at HEAD a4da456a equal to origin/main with no index.lock, the group ledger BigDomain mentions read as audit prose rather than unreplied transfer rows, the content-addressed decisions scan read 284 rows against the stored 284 baseline (no new token), the group orders tail held last_tok=2026-11-08 18:03 (OB-20261108-180341-868, an @BigMoney re-dispatch, knowledge-only for this company; the 12:06 row is @BigMoney too), benchmarks 2026-11-03 inside the seven-day gate. The debt gate read CLAIM-FIRST item=product-face-R2578 first=1 with NO battery owed because R2578 moved no product src byte and the registry was unmoved at 618 suites / 4684 criteria; queue_head named tech line 613 prefix AC-PNMA1 claimable=11 and queue_floor read FLOOR-MET at main 5/5 tech 11/10 explore 10/10.",
+    "2026-11-08 R2579 THE THREE LIMITS WERE RE-MEASURED BEFORE ANY CODE through src/os/limits_module_alias_attribute_R2579.py on private worlds where the honest answer is b, and every one matched the row: an attribute-final alias chain read refused/attr-with-as:m.ATTR, a module-level function returning a NAME bound to a class attribute read refused/attr-with-as:m.ATTR, and a with-as call context on an alias chain name read refused/attr-cross-call:m.ATTR (qa/module-alias-attribute-scope-limits-R2579.log, 576B, utf-8 LF, zero CRLF, zero BOM).",
+    "2026-11-08 R2579 SHIPPED src/os/probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_scope.py plus its six-criteria suite. The extension is applied THROUGH the shipped reading rather than beside it: the three readers the module-alias-chain face calls at run time (module_alias_literal, module_function_returns, with_as_targets_chain) are swapped for this face own inside one guarded block and restored in a finally, so no shipped module was edited and every answer the fifteen shipped faces already gave rides unchanged on the row. The four shapes now resolve: an alias chain whose FINAL link is an ATTRIBUTE naming a module, a module-level function returning a NAME bound to a class attribute, a with-as context that is a CALL on an alias chain name, and a chain whose attribute link names a module that is not on disk (NAMED with the link that broke, attr-module-alias-unbound:<link>). The SHIPPED baseline on every row is measured with the readers UNPATCHED, so base_pnma_* really carries what the face it extends answered.",
+    "2026-11-08 R2579 PROOF measured not quoted: AC-PNMA1..AC-PNMA6 SUITE PASS 6/6 on the first run and 6/6 TWICE with identical output plus two adjacent probe suites green through the shipped capture callable (qa/probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-scope-R2579.log, 5849B, legs=2, identical=True, adjacent=2, fails=0). A BOUNDED live leg reads six REAL probe modules per file reading loops=159 ma_resolved=0 ma_named=0 unreadable=0 read_only=True and measures the SAME fixture on BOTH readers - attribute-final ok/b with hop module-alias-attribute/attribute/direct here against refused/attr-with-as:m.ATTR there (qa/module-alias-attribute-scope-live-R2579.log, 179B, utf-8, crlf=0, bom=False). The live reading of zero on the real tree is honest: the six real probe modules carry no attribute-final, function-name or call-context shape, so this face speaks only where its own fixtures prove it.",
+    "2026-11-08 R2579 ONE OWN MISUSE DISCLOSED RATHER THAN HIDDEN: the first bounded leg passed a probe module NAME where the shipped face chain expects the RENDER module object and read E_PSMR_NO_RENDER on all six modules; the leg was rewritten to read each file through this face own report and its log was re-taken, so no shipped module was edited for it. TWO captures also first landed as PowerShell output (UTF-8 BOM plus CRLF) and were rewritten from the scripts themselves to utf-8 LF and re-measured before any census could read them.",
+    "2026-11-08 R2579 REGISTRY, BOARD AND DEBT: the registry moved by ONE row to 619 suites / 4690 criteria, recounted by importing reconcile_all.SUITES rather than trusted (619 unique names, 619 unique paths); docs/sandbox-suite-matrix.md read FAIL (stale) BEFORE any byte was written, was then regenerated stamp-aligned from the eligible R2577 battery leg through src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2577.log --stamp-from docs/sandbox-suite-matrix.md to 61469 bytes at 619 suites / 4690 criteria with its green line honestly reading 618/619, and --check then read byte-identical at rc=0. Row 613 was closed through src/os/queue_close_R2579.py at its predicted and measured 1815502B with its DISCHARGED note, and ONE row was seeded from this window own MEASURED limits through the same script: an attribute head bound by a MODULE ALIAS, a TWO-STEP attribute path, and a with-as call context on a FROM-imported function name - seeded as AC-PNAM1..AC-PNAM6 at line 615; queue_head then read the new head at line 615 prefix AC-PNAM1 claimable=11 and queue_floor read FLOOR-MET at 5/5 11/10 10/10. DEBT through the shipped writers: product-face-R2578 closed at its predicted and measured 183511B -> 183514B (line 328, open 32->31, done 278->279, readback ok), reconcile-battery-R2579 appended first=yes at the pre-registered 619 suites / 4690 criteria (183514B -> 183981B) and product-face-R2579 appended first=no (183981B -> 184418B), both readback ok, so the gate now names that battery first and the next window owes it on this committed tree BEFORE any further product byte.",
+    "2026-11-08 R2579 honest disclosures: (a) TWO product points on the Executive Protocol scale - a runnable module with its own six-criteria suite and a bounded live reading a maintainer can run - but nothing a CEO could newly open was built and no P-47 business surface moved, so every P-47 item still waits on CEO physical pieces (merchant id, mini-program appid/secret). (b) The three defects were MEASURED at R2577 in that window own legs and re-measured here before any code, so this is a repair of a disclosed gap rather than a new discovery. (c) The extension swaps three module-level readers during a read; it is guarded by a lock and restored in a finally, and the SHIPPED baseline is measured separately with the readers unpatched, which is why a row can carry both answers. (d) The live leg reads ma_resolved=0 on the real tree, so the closed gaps are proved on fixtures and are NOT claimed as a live catch. (e) state.json read 72929B against the 78500B waterline at open (FOLD-CLEAR margin 5571) and this append was checked for the indent=1 no-trailing-newline round-trip before mutation; the append pushes the file past the gate, so a fold at a true round-block boundary is run in this window and its result is reported by the next line rather than assumed here. (f) last_decision_rows stands at 284 and the content-addressed token set is unchanged because the scan read no new token. (g) Docker is absent on this host so no containerised bring-up of the sandbox faces is claimed. (h) tasks.md was not touched, it is the P-47 canonical board. (i) The S4U lane re-registration still needs an ELEVATED shell and D-20261107-14 has classified it as a ceo-pending physical item with zero chase.",
+    "R2579 tokens: local=~22k api=0 api_reason=product window - five-silence scan with the decisions, orders and ledger faces actually read, one debt gate read naming the product face, one queue head and floor read, one limits script re-measuring the three seeded shapes on private worlds, one pre-registered face shipped with its six criteria, one suite green 6/6 on the first run and twice through the shipped capture callable plus two adjacent suites, one bounded live leg over six real probe modules measuring the same fixture on BOTH readers, one own misuse diagnosed and corrected, two PowerShell captures re-taken as utf-8 LF, one registry row wired and recounted by import, one designed matrix FAIL then one stamp-aligned regeneration checked byte-identical, one board row closed and one seeded through their writers, three debt rows moved through their shipped writers, and the state/export/heartbeat closeout; zero cloud calls and zero external API touches",
+]
+
+
+def main():
+    raw = io.open(PATH, "rb").read()
+    text = raw.decode("utf-8")
+    data = json.loads(text)
+    proved = json.dumps(data, ensure_ascii=False, indent=1)
+    if proved != text:
+        sys.stdout.write("E_APPEND_ROUNDTRIP: layout is not indent=1\n")
+        return 2
+    if "tick" not in data or "log" not in data:
+        sys.stdout.write("E_APPEND_SHAPE: tick or log missing\n")
+        return 2
+    data["tick"] = data["tick"] + 1
+    data["last_order"] = "2026-11-08 18:03"
+    data["last_decision_rows"] = 284
+    data["log"].extend(LINES)
+    out = json.dumps(data, ensure_ascii=False, indent=1)
+    io.open(PATH, "wb").write(out.encode("utf-8"))
+    back = io.open(PATH, "rb").read().decode("utf-8")
+    check = json.loads(back)
+    sys.stdout.write("APPENDED bytes %d -> %d tick=%d log_lines=%d ok=%s\n" % (
+        len(raw), len(out.encode("utf-8")), check["tick"], len(check["log"]),
+        check["log"][-1].startswith("R2579 tokens:")))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
