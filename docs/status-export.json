@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-08T15:52:53+08:00",
+  "export_ts": "2026-11-08T15:53:44+08:00",
   "do": "2026-11-08 R2567 PRODUCT face: the fold that state_fold.py could only REPORT is now a face an operator can run - src/os/state_fold_run.py plus src/os/test_state_fold_run.py, criteria AC-SFOLD1..AC-SFOLD6 pinned at R2548 in state/queue/tech.md BEFORE any code. The predicate, the verbatim append and the waterline read are the shipped ones (imported, never copied); this face adds the refusals and the",
   "ceo_face": {
     "current": "2026-11-08 R2567 PRODUCT face: the fold that state_fold.py could only REPORT is now a face an operator can run - src/os/state_fold_run.py plus src/os/test_state_fold_run.py, criteria AC-SFOLD1..AC-SFOLD6 pinned at R2548 in state/queue/tech.md BEFORE any code. The predicate, the verbatim append and the waterline read are the shipped ones (imported, never copied); this face adds the refusals and the",
     "latest_artifact": "state-fold-live-R2567.log (382B) + state-fold-run-R2567.log (2353B)",
     "last_artifact": "state-fold-live-R2567.log (382B) + state-fold-run-R2567.log (2353B)",
-    "next_milestone": "next window owes reconcile-battery-R2567 on the committed tree, inside a 48h window due 2026-11-10T15:52:53+08:00",
-    "next_milestone_due": "2026-11-10T15:52:53+08:00",
-    "updated_at": "2026-11-08T15:52:53+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2567 on the committed tree, inside a 48h window due 2026-11-10T15:53:44+08:00",
+    "next_milestone_due": "2026-11-10T15:53:44+08:00",
+    "updated_at": "2026-11-08T15:53:44+08:00"
   },
   "depts": [
     {
