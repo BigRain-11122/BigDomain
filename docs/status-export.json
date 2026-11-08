@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-08T14:09:48+08:00",
+  "export_ts": "2026-11-08T14:10:47+08:00",
   "do": "2026-11-08 R2563 PRODUCT window on the tech head the register named (product-face-R2562, state/queue/tech.md:599 prefix AC-PNDC1, criteria AC-PNDC1..AC-PNDC6 pinned in that row at R2561 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 5929bd14 with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions diff read new=0 over the stored 192-to",
   "ceo_face": {
     "current": "2026-11-08 R2563 PRODUCT window on the tech head the register named (product-face-R2562, state/queue/tech.md:599 prefix AC-PNDC1, criteria AC-PNDC1..AC-PNDC6 pinned in that row at R2561 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 5929bd14 with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions diff read new=0 over the stored 192-to",
     "latest_artifact": "probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-R2563.log (4891B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-live-R2563.log (932B)",
     "last_artifact": "probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-R2563.log (4891B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-live-R2563.log (932B)",
-    "next_milestone": "next window owes reconcile-battery-R2563 on the committed tree, inside a 48h window due 2026-11-10T14:09:48+08:00",
-    "next_milestone_due": "2026-11-10T14:09:48+08:00",
-    "updated_at": "2026-11-08T14:09:48+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2563 on the committed tree, inside a 48h window due 2026-11-10T14:10:47+08:00",
+    "next_milestone_due": "2026-11-10T14:10:47+08:00",
+    "updated_at": "2026-11-08T14:10:47+08:00"
   },
   "depts": [
     {
@@ -834,10 +834,10 @@
   "self_drive": {
     "window": "2026-11-02..2026-11-08",
     "window_days": 7,
-    "log_lines_in_window": 179,
+    "log_lines_in_window": 180,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 179,
+    "substantive_non_idle_mention_lines": 180,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
