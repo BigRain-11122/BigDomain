@@ -1,0 +1,5 @@
+live files=6 loops=151 cb_resolved=0 cb_named=0 read_only=True
+fixture inherited       mine=ok/b there=refused/attr-class-constant:cls.K.ATTR
+fixture from-class      mine=ok/b there=refused/attr-base-local:K
+fixture self-attribute  mine=ok/b there=refused/attr-cross-call:m.ATTR
+fixture from-alias      mine=ok/b there=refused/attr-cross-call:m.ATTR

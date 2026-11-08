@@ -2255,6 +2255,20 @@
       "declared_by": "R2571",
       "reason": "R2571 shipped its product face and its suite plus a green evidence capture; the round own work is delivered",
       "until": 2578
+    },
+    {
+      "round": 2561,
+      "status": "DELIVERED",
+      "declared_by": "R2573",
+      "reason": "R2561 shipped the predicate-scope face and its suite (both on disk, registry row present) and was never declared; R2573 shipped the class-base face, its suite, one registry row and one board row",
+      "until": 2583
+    },
+    {
+      "round": 2573,
+      "status": "DELIVERED",
+      "declared_by": "R2573",
+      "reason": "R2561 shipped the predicate-scope face and its suite (both on disk, registry row present) and was never declared; R2573 shipped the class-base face, its suite, one registry row and one board row",
+      "until": 2583
     }
   ]
 }
