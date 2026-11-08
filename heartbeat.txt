@@ -1,1 +1,1 @@
-2026-11-08T17:5x+08:00 R2569 product: call-target face shipped (AC-PNDCF1..6, SUITE 6/6 twice, legs=2 adjacent=5), four fixtures closed on both readers, registry 614/4660, matrix 60266B green=613/614, board row 603 closed + AC-PNDCG1 seeded, next = battery reconcile-battery-R2569
+2026-11-08T17:5x+08:00 R2570 verification: battery reconcile-battery-R2569 green on the first leg 614/614 at exactly 4660 criteria, matrix restamped to 60236B green=614/614, debt closed, next = product face tech:605 AC-PNDCG1
