@@ -1,0 +1,5 @@
+live files=7 loops=178 cs_resolved=0 cs_named=0 read_only=True
+fixture cross-module-base   mine=ok/b there=refused/attr-class-base-constant:cls.K.ATTR
+fixture self-cross-base     mine=ok/b there=refused/attr-cross-call:m.ATTR
+fixture module-value        mine=ok/b there=refused/attr-with-as:m.ATTR
+fixture class-alias         mine=ok/b there=refused/attr-class-base-constant:cls.K.OTHER

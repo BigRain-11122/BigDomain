@@ -6122,6 +6122,18 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_class_base_scope.py"),
      6),
+    # R2575 class-source face: a base class imported from ANOTHER module
+    # resolves through the subclass path (cycle-guarded, depth-bounded), a
+    # method returning an inherited class attribute through self is re-read
+    # through that cross table, a module value bound by a call returning a
+    # class attribute resolves as a with-as receiver, and a class-constant
+    # alias resolves to its literal to a fixpoint; every shipped answer rides
+    # beside it (616 -> 617 suites, 4672 -> 4678).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-class-source-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_class_source_scope.py"),
+     6),
     ]
 
 FAILS = 0
