@@ -37,6 +37,11 @@ DONE_STAMP_RE = re.compile(r"\[done\s+\d{4}-\d{2}-\d{2}\s+R(\d{3,5})\]")
 
 QUEUE_DIR = ("state", "queue")
 
+# Folded round blocks live here, not in the live log (R2586).
+ARCHIVE_DIR = ("logs",)
+
+ARCHIVE_PREFIX = "state-log-archive-"
+
 VERDICTS = ("EMPTY", "SEQUENCE-OK", "SEQUENCE-BROKEN")
 
 REPEAT_KEYS = ("round", "count")
@@ -102,6 +107,41 @@ def extract_labels(state):
         if number is None:
             continue
         labels.append(number)
+    return labels
+
+
+def archived_labels(root):
+    """Round labels of the folded blocks, read through the same law (R2586).
+
+    A fold moves a round's log items out of the live log and into
+    `logs/state-log-archive-*.md`. Those rounds were logged, so they must not
+    read as stamped-but-never-logged; the owning label of an archived line is
+    the same `round_evidence.item_round` law the live log uses, never a
+    second parser. A missing directory reads zero labels rather than raising.
+    """
+    directory = os.path.join(root, *ARCHIVE_DIR)
+    if not os.path.isdir(directory):
+        return []
+    try:
+        names = sorted(os.listdir(directory))
+    except (IOError, OSError) as exc:
+        raise StateSeqError("E_SEQAF_BAD_ARCHIVE",
+                            "%s (%s)" % (directory, exc))
+    labels = []
+    for name in names:
+        if not name.endswith(".md") or not name.startswith(ARCHIVE_PREFIX):
+            continue
+        path = os.path.join(directory, name)
+        try:
+            with io.open(path, "r", encoding="utf-8") as handle:
+                text = handle.read()
+        except (IOError, OSError, ValueError) as exc:
+            raise StateSeqError("E_SEQAF_BAD_ARCHIVE",
+                                "%s (%s)" % (path, exc))
+        for line in text.split("\n"):
+            number = round_evidence.item_round(line)
+            if number is not None:
+                labels.append(number)
     return labels
 
 
@@ -189,7 +229,10 @@ def audit(root):
     repeats = find_repeats(labels)
     backwards = find_backwards(labels)
     done = queue_done_rounds(root)
-    logged = set(labels)
+    # "Logged" means logged ANYWHERE: the live log or a fold archive (R2586).
+    # The sequence checks above still read the live log alone, because they
+    # are about live order and a fold is not a reordering.
+    logged = set(labels) | set(archived_labels(root))
     queue_only = [number for number in done if number not in logged]
     if not labels:
         verdict = "EMPTY"

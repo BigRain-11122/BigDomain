@@ -6194,6 +6194,14 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_scope.py"),
      6),
+    # R2586 archive-fold face: the stamped-but-never-logged decision also
+    # counts a folded round's block in logs/state-log-archive-*.md, read
+    # through the same owning-label law, while a round logged nowhere still
+    # reads queue_only and the sequence checks stay on the live log
+    # (623 -> 624 suites, 4714 -> 4720).
+    ("os-state-seq-archive",
+     os.path.join("..", "os", "test_state_seq_archive.py"),
+     6),
     ]
 
 FAILS = 0

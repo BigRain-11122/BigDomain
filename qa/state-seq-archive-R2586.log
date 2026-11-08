@@ -1,0 +1,64 @@
+=== self-1 test_state_seq_archive.py rc=0
+state_seq archive-fold suite (expected criteria 6)
+  measured: archived=[2575]
+PASS AC-SEQAF1 archive labels read through the owning-label law
+  measured: folded=[] plain=[2575] verdict=SEQUENCE-OK/SEQUENCE-OK
+PASS AC-SEQAF2 a folded round is no longer stamped-never-logged
+  measured: queue_only=[2165]
+PASS AC-SEQAF3 unlogged-anywhere round still reads queue_only
+  measured: gaps=[901] repeats=1 backwards=[{'index': 2, 'round': 900, 'previous': 902}] verdict=SEQUENCE-BROKEN
+PASS AC-SEQAF4 sequence checks still read the live log alone
+  measured: empty=[] quiet=True code='E_SEQAF_BAD_ARCHIVE' named=True
+PASS AC-SEQAF5 missing dir is zero, unreadable file fails closed
+PASS AC-SEQAF6 pure, wired, and the live residue is measured
+SUITE PASS 6/6
+=== self-2 test_state_seq_archive.py rc=0
+state_seq archive-fold suite (expected criteria 6)
+  measured: archived=[2575]
+PASS AC-SEQAF1 archive labels read through the owning-label law
+  measured: folded=[] plain=[2575] verdict=SEQUENCE-OK/SEQUENCE-OK
+PASS AC-SEQAF2 a folded round is no longer stamped-never-logged
+  measured: queue_only=[2165]
+PASS AC-SEQAF3 unlogged-anywhere round still reads queue_only
+  measured: gaps=[901] repeats=1 backwards=[{'index': 2, 'round': 900, 'previous': 902}] verdict=SEQUENCE-BROKEN
+PASS AC-SEQAF4 sequence checks still read the live log alone
+  measured: empty=[] quiet=True code='E_SEQAF_BAD_ARCHIVE' named=True
+PASS AC-SEQAF5 missing dir is zero, unreadable file fails closed
+PASS AC-SEQAF6 pure, wired, and the live residue is measured
+SUITE PASS 6/6
+=== adjacent-state-seq test_state_seq.py rc=0
+state_seq suite (expected criteria 6)
+PASS AC-SEQ1 tick read as int with tick_lead, bad tick fails closed
+PASS AC-SEQ2 only the item's own label counts, log order kept
+PASS AC-SEQ3 gaps named inside the span, verdict off OK
+PASS AC-SEQ4 repeats and backwards reported separately
+PASS AC-SEQ5 CLI codes 0/2/3 and the queue stamp counted
+PASS AC-SEQ6 pure read, ASCII source, no network, wired, byte-stable json, queue_only named
+SUITE PASS 6/6
+=== adjacent-residue-triage test_residue_triage.py rc=0
+residue_triage suite (expected criteria 6)
+PASS AC-RTR1 residue and statuses imported, patch flows through
+PASS AC-RTR2 unmatched entry never covers the live debt
+PASS AC-RTR3 disagreement names both statuses
+PASS AC-RTR4 expiry names until, missing declaration is UNPINNED
+PASS AC-RTR5 CLI codes, byte-stable pinned json, zero writes
+PASS AC-RTR6 pure source, wired, live residue fully triaged
+SUITE PASS 6/6
+=== adjacent-stamp-residue test_stamp_residue.py rc=0
+stamp_residue suite (expected criteria 6)
+PASS AC-SRS1 residue list and stamp law imported
+PASS AC-SRS2 each round once, counts reconcile
+PASS AC-SRS3 open-only stamp reads STAMP-ONLY-OPEN
+PASS AC-SRS4 NO-HIT named, empty residue CLEAN at exit 0
+PASS AC-SRS5 CLI codes and byte-stable --json
+PASS AC-SRS6 pure, both imports live, wired, zero writes
+SUITE PASS 6/6
+=== adjacent-queue-only-reconcile test_queue_only_reconcile.py rc=0
+PASS AC-QOC1 stamps and labels read through state_seq, no second implementation
+PASS AC-QOC2 LOGGED/FOLDED/NEVER-LOGGED are exhaustive, sum to the stamp count, and the floor boundary is at-or-above
+PASS AC-QOC3 the floor is mandatory, integer-only, and refused before any read
+PASS AC-QOC4 zero writes, unreadable input fails closed, empty queues read honestly empty
+PASS AC-QOC5 CLI exits 0/2/2/2/3 as pinned and --json carries the nine pinned keys byte-stably
+LIVE QUEUE ONLY floor=R2568 stamps=334 logged=7 folded=324 never_logged=3 max_stamp=2585 verdict=RESIDUE
+PASS AC-QOC6 pure ASCII, stdlib only, wired as os-queue-only(6), live reading reconciled
+SUITE PASS 6/6

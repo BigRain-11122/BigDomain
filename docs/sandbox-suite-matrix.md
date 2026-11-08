@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 623 | 4714 | 622/622 | R2584 |
+| 624 | 4720 | 622/622 | R2584 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -661,7 +661,8 @@
 | 621 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_scope.py | 6 | green | 0.6 |
 | 622 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_scope.py | 6 | green | 0.8 |
 | 623 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_scope.py | 6 | no-evidence | - |
-|  | 合计 |  | 4714 | green 622 / FAIL 0 / no-evidence 1 |  |
+| 624 | os-state-seq-archive | ../os/test_state_seq_archive.py | 6 | no-evidence | - |
+|  | 合计 |  | 4720 | green 622 / FAIL 0 / no-evidence 2 |  |
 
 ## 证据出处
 
