@@ -2269,6 +2269,27 @@
       "declared_by": "R2573",
       "reason": "R2561 shipped the predicate-scope face and its suite (both on disk, registry row present) and was never declared; R2573 shipped the class-base face, its suite, one registry row and one board row",
       "until": 2583
+    },
+    {
+      "round": 2563,
+      "status": "DELIVERED",
+      "declared_by": "R2574",
+      "reason": "R2574 verification window declared three product rounds shipped without a residue row",
+      "until": 2584
+    },
+    {
+      "round": 2565,
+      "status": "DELIVERED",
+      "declared_by": "R2574",
+      "reason": "R2574 verification window declared three product rounds shipped without a residue row",
+      "until": 2584
+    },
+    {
+      "round": 2567,
+      "status": "DELIVERED",
+      "declared_by": "R2574",
+      "reason": "R2574 verification window declared three product rounds shipped without a residue row",
+      "until": 2584
     }
   ]
 }
