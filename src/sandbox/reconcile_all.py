@@ -6035,6 +6035,17 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_position.py"),
      6),
+    # R2559: an attribute whose BASE is a parameter or a local is NAMED
+    # attr-base-local instead of a module the probe forgot to import, a dotted
+    # pkg.mod.ATTR hop is joined on its FULL path, and a walrus or
+    # function-level helper constant is read rather than called missing; every
+    # shipped answer rides beside it (608 -> 609 suites, 4624 -> 4630
+    # criteria).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-base",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_base.py"),
+     6),
     ]
 
 FAILS = 0

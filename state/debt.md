@@ -296,7 +296,9 @@ column-0 checkbox starts one.
 - [x] opened=R2556 | item=product-face-R2556 | note=next window owes a PRODUCT face on queue head state/queue/tech.md:593 prefix AC-PNDS1 probe_seam_name_binding_arm_mixed_residual_alias_position, criteria AC-PNDS1..AC-PNDS6 pinned in that row at R2555 BEFORE any code | closed=R2557
 - [x] opened=R2557 | item=reconcile-battery-R2557 | note=pre-registered 608 suites / 4624 criteria on the committed R2557 tree | closed=R2558
 - [ ] opened=R2557 | item=product-face-R2557 | note=next window owes a product face on queue head state/queue/tech.md:595 prefix AC-PNDA1 | first=no
-- [ ] opened=R2558 | item=product-face-R2558 | note=next window a PRODUCT face on the queue head state/queue/tech.md:595 prefix AC-PNDA probe_seam_name_binding_arm_mixed_residual_alias_attribute_base, whose AC-PNDA1..AC-PNDA6 were pinned in that row at R2557 BEFORE any code; no battery owed because this verification window moved the registry not at all (608 suites / 4624 criteria re-measured by import before and after) and only a derived stamp-aligned matrix document | first=yes
+- [x] opened=R2558 | item=product-face-R2558 | note=next window a PRODUCT face on the queue head state/queue/tech.md:595 prefix AC-PNDA probe_seam_name_binding_arm_mixed_residual_alias_attribute_base, whose AC-PNDA1..AC-PNDA6 were pinned in that row at R2557 BEFORE any code; no battery owed because this verification window moved the registry not at all (608 suites / 4624 criteria re-measured by import before and after) and only a derived stamp-aligned matrix document | closed=R2559
+- [ ] opened=R2559 | item=reconcile-battery-R2559 | note=registry 609/4630 at R2559 by one row and a shipped doc moved | first=yes
+- [ ] opened=R2559 | item=product-face-R2559 | note=window shipped the AC-PNDA1 attribute-base read; 609/4630 | first=no
 
 ## Closed
 

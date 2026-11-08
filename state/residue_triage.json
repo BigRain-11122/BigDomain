@@ -2108,6 +2108,13 @@
       "declared_by": 2557,
       "reason": "re-pinned at R2557 at its measured status DELIVERED",
       "until": 2567
+    },
+    {
+      "round": 2559,
+      "status": "DELIVERED",
+      "declared_by": "R2559",
+      "reason": "AC-PNDA1 attribute-base face shipped with its suite and bounded live leg",
+      "until": 2569
     }
   ]
 }

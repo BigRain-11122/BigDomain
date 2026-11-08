@@ -1,0 +1,8 @@
+LABEL os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-base
+base_tool os-probe-seam-name-binding-arm-mixed-residual-alias-position
+bounded_modules=8
+covered_probes=0 attribute_loops=0 attr_resolved=0 attr_named=0
+local_fixture attr_face=refused reason=attr-base-local:node
+local_fixture position_face=refused reason=attr-not-imported:node.value
+dotted_fixture attr_face=ok reason=None value=b
+dotted_fixture position_face=refused reason=attr-deep:pkg.mod.ATTR

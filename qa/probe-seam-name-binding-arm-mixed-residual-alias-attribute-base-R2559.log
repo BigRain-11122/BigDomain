@@ -1,0 +1,72 @@
+EVIDENCE CAPTURE round=R2559 suite=src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_base.py legs=2
+== LEG A rc=0 digest=A2CA1A20CC50BF17
+LABEL os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-base
+PASS AC-PNDA1 a parameter base reads attr-base-local:node (attr-base-local:node)
+PASS AC-PNDA1 a parameter base resolves nothing (refused/None)
+PASS AC-PNDA1 the shipped answer it replaces was attr-not-imported (attr-not-imported:node.value)
+PASS AC-PNDA1 a local base reads attr-base-local:node (attr-base-local:node)
+PASS AC-PNDA2 an absent module keeps attr-not-imported with its text (attr-not-imported:ghostmod.ATTR)
+PASS AC-PNDA2 the shipped word is unchanged for that shape (attr-not-imported:ghostmod.ATTR/attr-not-imported:ghostmod.ATTR)
+PASS AC-PNDA2 a same-root world with other modules still keeps the word
+PASS AC-PNDA3 a dotted module path resolves to b (ok/b)
+PASS AC-PNDA3 the chain names the dotted hop (['pkg.mod.ATTR'])
+PASS AC-PNDA3 the shipped answer it replaces was attr-deep (attr-deep:pkg.mod.ATTR)
+PASS AC-PNDA3 a dotted path with no file on disk does not resolve
+PASS AC-PNDA4 a walrus helper constant resolves to w (ok/w/attr-non-constant:helpere.WAL)
+PASS AC-PNDA4 a function-level helper constant resolves to c (ok/c)
+PASS AC-PNDA4 two helper values read name-mixed (name-mixed:helpere.DUP)
+PASS AC-PNDA5 the a plain alias chain row carries every shipped key unchanged
+PASS AC-PNDA5 the a plain alias chain row carries the shipped alias answer unchanged
+PASS AC-PNDA5 the a direct literal row carries every shipped key unchanged
+PASS AC-PNDA5 the a direct literal row carries the shipped alias answer unchanged
+PASS AC-PNDA5 the a refused hop row carries every shipped key unchanged
+PASS AC-PNDA5 the a refused hop row carries the shipped alias answer unchanged
+PASS AC-PNDA5 an already-resolved name keeps the shipped answer and its source
+PASS AC-PNDA6 the module is pure ASCII
+PASS AC-PNDA6 the module reads no clock
+PASS AC-PNDA6 the module opens no network
+PASS AC-PNDA6 the module imports the stdlib and its shipped readers only (outside=[])
+PASS AC-PNDA6 the one project import is the shipped reader it extends (['probe_seam_name_binding_arm_mixed_residual_alias_position'])
+PASS AC-PNDA6 the registry carries the row exactly once (1)
+PASS AC-PNDA6 the registry wires the suite exactly once (1)
+PASS AC-PNDA6 the suite file is on disk
+SUITE PASS 6/6
+== LEG B rc=0 digest=A2CA1A20CC50BF17
+LABEL os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-base
+PASS AC-PNDA1 a parameter base reads attr-base-local:node (attr-base-local:node)
+PASS AC-PNDA1 a parameter base resolves nothing (refused/None)
+PASS AC-PNDA1 the shipped answer it replaces was attr-not-imported (attr-not-imported:node.value)
+PASS AC-PNDA1 a local base reads attr-base-local:node (attr-base-local:node)
+PASS AC-PNDA2 an absent module keeps attr-not-imported with its text (attr-not-imported:ghostmod.ATTR)
+PASS AC-PNDA2 the shipped word is unchanged for that shape (attr-not-imported:ghostmod.ATTR/attr-not-imported:ghostmod.ATTR)
+PASS AC-PNDA2 a same-root world with other modules still keeps the word
+PASS AC-PNDA3 a dotted module path resolves to b (ok/b)
+PASS AC-PNDA3 the chain names the dotted hop (['pkg.mod.ATTR'])
+PASS AC-PNDA3 the shipped answer it replaces was attr-deep (attr-deep:pkg.mod.ATTR)
+PASS AC-PNDA3 a dotted path with no file on disk does not resolve
+PASS AC-PNDA4 a walrus helper constant resolves to w (ok/w/attr-non-constant:helpere.WAL)
+PASS AC-PNDA4 a function-level helper constant resolves to c (ok/c)
+PASS AC-PNDA4 two helper values read name-mixed (name-mixed:helpere.DUP)
+PASS AC-PNDA5 the a plain alias chain row carries every shipped key unchanged
+PASS AC-PNDA5 the a plain alias chain row carries the shipped alias answer unchanged
+PASS AC-PNDA5 the a direct literal row carries every shipped key unchanged
+PASS AC-PNDA5 the a direct literal row carries the shipped alias answer unchanged
+PASS AC-PNDA5 the a refused hop row carries every shipped key unchanged
+PASS AC-PNDA5 the a refused hop row carries the shipped alias answer unchanged
+PASS AC-PNDA5 an already-resolved name keeps the shipped answer and its source
+PASS AC-PNDA6 the module is pure ASCII
+PASS AC-PNDA6 the module reads no clock
+PASS AC-PNDA6 the module opens no network
+PASS AC-PNDA6 the module imports the stdlib and its shipped readers only (outside=[])
+PASS AC-PNDA6 the one project import is the shipped reader it extends (['probe_seam_name_binding_arm_mixed_residual_alias_position'])
+PASS AC-PNDA6 the registry carries the row exactly once (1)
+PASS AC-PNDA6 the registry wires the suite exactly once (1)
+PASS AC-PNDA6 the suite file is on disk
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_position.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_chain.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_naming.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_registry.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=5 fails=0 digest=A2CA1A20CC50BF17
