@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-08T18:38:03+08:00",
+  "export_ts": "2026-11-08T18:39:05+08:00",
   "do": "2026-11-08 R2572 VERIFICATION window on the battery the register named first (reconcile-battery-R2571, pre-registered 615 suites / 4666 criteria at R2571 because that window moved the registry by one row and shipped a document). Five-silence at open: git status EMPTY at HEAD d40afe29 with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions diff read FIV",
   "ceo_face": {
     "current": "2026-11-08 R2572 VERIFICATION window on the battery the register named first (reconcile-battery-R2571, pre-registered 615 suites / 4666 criteria at R2571 because that window moved the registry by one row and shipped a document). Five-silence at open: git status EMPTY at HEAD d40afe29 with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions diff read FIV",
     "latest_artifact": "none landed yet for R2572",
     "last_artifact": "none landed yet for R2572",
-    "next_milestone": "next window owes product-face-R2572 on the committed tree, inside a 48h window due 2026-11-10T18:38:03+08:00",
-    "next_milestone_due": "2026-11-10T18:38:03+08:00",
-    "updated_at": "2026-11-08T18:38:03+08:00"
+    "next_milestone": "next window owes product-face-R2572 on the committed tree, inside a 48h window due 2026-11-10T18:39:05+08:00",
+    "next_milestone_due": "2026-11-10T18:39:05+08:00",
+    "updated_at": "2026-11-08T18:39:05+08:00"
   },
   "depts": [
     {
@@ -879,10 +879,10 @@
   "self_drive": {
     "window": "2026-11-02..2026-11-08",
     "window_days": 7,
-    "log_lines_in_window": 46,
+    "log_lines_in_window": 47,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 46,
+    "substantive_non_idle_mention_lines": 47,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
