@@ -1,0 +1,4 @@
+os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-chain-scope bounded probes=6 loops=161 ma_resolved=0 ma_named=0 read_only=True
+fixture alias-chain here=ok/b there=refused/attr-with-as:m.ATTR
+fixture hop here=with-as-module-alias/direct there=None
+fails=0

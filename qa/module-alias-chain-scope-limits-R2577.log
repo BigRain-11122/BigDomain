@@ -1,0 +1,4 @@
+PASS limit1 attribute-final chain refused=None/attr-with-as:m.ATTR
+PASS limit2 function returning a NAME refused=None/attr-with-as:m.ATTR
+PASS limit3 call-context on an alias chain refused=None/attr-cross-call:m.ATTR
+LIMITS fails=0

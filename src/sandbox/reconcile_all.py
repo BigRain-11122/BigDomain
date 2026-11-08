@@ -6134,6 +6134,18 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_class_source_scope.py"),
      6),
+    # R2577 module-alias-chain face: a module-level value bound by an alias
+    # chain ending at a call resolves as a with-as receiver, a module-level
+    # function returning a class attribute resolves while one returning a
+    # non-module literal is refused, a class constant aliasing a FROM-imported
+    # constant resolves, and a chain ending at a name bound nowhere is NAMED
+    # with that name; every shipped answer rides beside it
+    # (617 -> 618 suites, 4678 -> 4684).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-chain-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_chain_scope.py"),
+     6),
     ]
 
 FAILS = 0
