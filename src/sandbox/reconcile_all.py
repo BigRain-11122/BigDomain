@@ -4492,6 +4492,12 @@ SUITES = [
     # (AC-SF1..AC-SF6 pre-registered in state/queue/tech.md R2240 b.)
     ("os-state-fold",
      os.path.join("..", "os", "test_state_fold.py"), 6),
+    # R2567: the fold FACE state_fold.py never shipped (AC-SFOLD1..AC-SFOLD6
+    # pinned at R2548): shipped predicate reused, archive copy proved byte-equal,
+    # ledger coverage read THROUGH the archive, layout writer/reader agreement,
+    # and a gate that only clears at or under the waterline.
+    ("os-state-fold-run",
+     os.path.join("..", "os", "test_state_fold_run.py"), 6),
     # R2407: a tokens line is not automatically a block's LAST line - a round
     # may append disclosures after its ledger, and the R2405 fold then left
     # R2395's ledger in the archive while the rest of the round stayed live.

@@ -1,0 +1,5 @@
+state-fold-run-R2567 live fold through the shipped face
+window=1..192 of 247 log lines, tokens=124, live_lines_after=56
+bytes 327622 -> 71125, gate=78500, margin=7375, verdict=FOLD-CLEAR
+archive=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\logs\state-log-archive-2026-11.md appendix_bytes=257082 verified=True
+ledger_rounds 1368 -> 1369, layout_agree=True, field_set_same=True

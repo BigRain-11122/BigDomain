@@ -1,0 +1,24 @@
+EVIDENCE CAPTURE round=R2567 suite=src/os/test_state_fold_run.py legs=2
+== LEG A rc=0 digest=F63F7DCAE6646B46
+PASS AC-SFOLD1 verbatim archive copy for all 12 moved lines, live block 33 >= 30, verdict CLEAR
+PASS AC-SFOLD2 ledger coverage unchanged through the archive: ledger_lines 11 -> 11, rounds 44 -> 44 (R1001 still found)
+PASS AC-SFOLD3 round-trip: field set preserved, re-run reads ALREADY-FOLDED with zero bytes written
+PASS AC-SFOLD4 the reader derives the file own indent: a 2-space real-style file folds in its own layout (header bytes and prefix intact), and items disagreeing with each other refused with the shipped code and no byte written [agree=True other=CLEAR layout=True header=True prefix=True refused=True untouched=True]
+PASS AC-SFOLD5 gate honest: a fold that would leave 2340 bytes over 100 refused E_SFOLD_GATE, the real fold cleared at 2340 <= 78500
+PASS AC-SFOLD6 dry run wrote zero bytes (digest 1e7c2fce4b1ea799), source ASCII and clockless, wired as os-state-fold-run(6)
+CRITERIA 6/6 passes=6 fails=0
+== LEG B rc=0 digest=F63F7DCAE6646B46
+PASS AC-SFOLD1 verbatim archive copy for all 12 moved lines, live block 33 >= 30, verdict CLEAR
+PASS AC-SFOLD2 ledger coverage unchanged through the archive: ledger_lines 11 -> 11, rounds 44 -> 44 (R1001 still found)
+PASS AC-SFOLD3 round-trip: field set preserved, re-run reads ALREADY-FOLDED with zero bytes written
+PASS AC-SFOLD4 the reader derives the file own indent: a 2-space real-style file folds in its own layout (header bytes and prefix intact), and items disagreeing with each other refused with the shipped code and no byte written [agree=True other=CLEAR layout=True header=True prefix=True refused=True untouched=True]
+PASS AC-SFOLD5 gate honest: a fold that would leave 2340 bytes over 100 refused E_SFOLD_GATE, the real fold cleared at 2340 <= 78500
+PASS AC-SFOLD6 dry run wrote zero bytes (digest 1e7c2fce4b1ea799), source ASCII and clockless, wired as os-state-fold-run(6)
+CRITERIA 6/6 passes=6 fails=0
+== ADJACENT 5
+== src/os/test_state_fold.py rc=0 SUITE PASS 6/6
+== src/os/test_state_io.py rc=0 SUITE PASS 8/8 criteria=8
+== src/os/test_ledger_lines.py rc=0 SUITE PASS 8/8 criteria
+== src/os/test_ledger_archive.py rc=0 SUITE PASS 8/8 criteria
+== src/os/test_round_evidence.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=F63F7DCAE6646B46

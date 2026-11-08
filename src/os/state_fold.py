@@ -117,16 +117,20 @@ def read_state(path=None):
 
 
 def split_layout(text, log_len):
-    """Locate the log item lines in the canonical PS layout.
+    """Locate the log item lines in the layout the FILE ITSELF uses.
 
-    Returns a dict with the split lines, the newline, the ordered item line
-    indices and the first item index, or None when the file is not in the
-    canonical layout for this log length.
+    R2522 measured a reader that insisted on a 16-space item indent while the
+    shipped append path wrote 2-space items, so the fold refused the real
+    file. The indent is therefore DERIVED from the first item line and every
+    item must share it; a file whose items disagree with each other is refused
+    rather than reformatted. Returns the split lines, the newline, the ordered
+    item line indices, the first item index and the derived item prefix.
     """
     newline = "\r\n" if "\r\n" in text else "\n"
     lines = text.split(newline)
     first = None
     items = []
+    prefix = None
     for index, line in enumerate(lines):
         stripped = line.strip()
         if stripped.startswith('"log"') and stripped.endswith("["):
@@ -134,18 +138,23 @@ def split_layout(text, log_len):
             continue
         if first is None:
             continue
-        if (len(line) > ITEM_INDENT and line[:ITEM_INDENT] == ITEM_PREFIX
-                and line[ITEM_INDENT] == '"'):
+        indent = line[:len(line) - len(line.lstrip(" "))]
+        if indent and line[len(indent):len(indent) + 1] == '"':
+            if prefix is None:
+                prefix = indent
+            if indent != prefix:
+                return None
             items.append(index)
         elif stripped.startswith("]"):
             break
-    if first is None or len(items) != log_len:
+    if first is None or prefix is None or len(items) != log_len:
         return None
     return {
         "lines": lines,
         "newline": newline,
         "item_index": items,
         "first_item": items[0],
+        "item_prefix": prefix,
     }
 
 
@@ -210,7 +219,7 @@ def plan_fold(raw, state, window_start, window_end, summary, reserve=0,
     for line in window:
         tokens |= set(PAT.findall(line))
     missing = sorted(token for token in tokens if token not in summary)
-    literal = ITEM_PREFIX + ps_escape(summary)
+    literal = layout["item_prefix"] + ps_escape(summary)
     if end < count:
         literal += ","
     drop = end - start + 1
