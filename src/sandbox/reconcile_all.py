@@ -6069,6 +6069,18 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope.py"),
      6),
+    # R2565: the from-scope face takes a FROM-imported module (`from pkg import
+    # helper`, plain or aliased) as a module base instead of calling it a local,
+    # reads a helper constant declared only inside a function body when that
+    # function returns it and NAMES it when it does not, and resolves a
+    # `with call() as NAME` binding whose call returns a module name while a
+    # call returning anything else keeps the shipped attr-with-as word; every
+    # shipped answer rides beside it (611 -> 612 suites, 4642 -> 4648 criteria).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope.py"),
+     6),
     ]
 
 FAILS = 0

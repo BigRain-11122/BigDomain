@@ -2129,6 +2129,13 @@
       "declared_by": "R2563",
       "reason": "R2563 product face AC-PNDC1..AC-PNDC6 shipped with its suite, evidence and live leg",
       "until": 2573
+    },
+    {
+      "round": 2565,
+      "status": "DELIVERED",
+      "declared_by": "R2565",
+      "reason": "product window: the from-scope face and its six criteria shipped",
+      "until": 2575
     }
   ]
 }

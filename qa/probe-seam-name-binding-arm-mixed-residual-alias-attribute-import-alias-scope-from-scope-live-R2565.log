@@ -1,0 +1,3 @@
+os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope BOUNDED-READ files=6 loops=123 from_resolved=0 from_named=0 read_only=True modules=6
+from-import mine=ok/b base=-/attr-base-local:helper
+with-as-call mine=ok/b base=refused/attr-with-as:m.ATTR

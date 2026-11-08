@@ -1,0 +1,80 @@
+EVIDENCE CAPTURE round=R2565 suite=src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope.py legs=2
+== LEG A rc=0 digest=51C76A2AEA922F24
+PASS AC-PNDCE1 a from-imported module resolves to b (ok/b)
+PASS AC-PNDCE1 the shipped answer it replaces called it a local (attr-base-local:helper)
+PASS AC-PNDCE1 the from-import hop is named (from-import)
+PASS AC-PNDCE1 the module is never a local on this row (None)
+PASS AC-PNDCE1 an absent from-imported module resolves nothing (refused/None)
+PASS AC-PNDCE2 a from-import alias resolves to b (ok/b)
+PASS AC-PNDCE2 the shipped answer it replaces called it a local (attr-base-local:h)
+PASS AC-PNDCE2 the shipped import-alias layer was silent here (None/None)
+PASS AC-PNDCE2 the alias is never a local on this row (None)
+PASS AC-PNDCE2 the module is reached by its real name (from-import)
+PASS AC-PNDCE3 a returned function constant resolves to b (ok/b)
+PASS AC-PNDCE3 the shipped answer it replaces refused it (attr-plain-import:helper.ATTR)
+PASS AC-PNDCE3 an unreturned function constant is refused (refused)
+PASS AC-PNDCE3 an unreturned function constant is NAMED (attr-function-constant:helper.ATTR)
+PASS AC-PNDCE3 a refusal resolves nothing (None)
+PASS AC-PNDCE4 a with-as call returning a module resolves to b (ok/b)
+PASS AC-PNDCE4 the shipped answer it replaces refused it (attr-with-as:m.ATTR)
+PASS AC-PNDCE4 the with-as call hop is named (with-as-call)
+PASS AC-PNDCE4 a call returning something else is refused (refused)
+PASS AC-PNDCE4 a non-module call keeps the shipped word (attr-with-as:m.ATTR)
+PASS AC-PNDCE4 a non-module call resolves nothing (None)
+PASS AC-PNDCE5 the shipped ok answer rides beside this face (ok/b)
+PASS AC-PNDCE5 this face does not rewrite the shipped ok answer (ok/b)
+PASS AC-PNDCE5 the shipped hop rides beside this face (import)
+PASS AC-PNDCE5 the shipped alias answer still rides (ok/b)
+PASS AC-PNDCE6 module source is pure ASCII (20023B)
+PASS AC-PNDCE6 suite source is pure ASCII (13503B)
+PASS AC-PNDCE6 zero network imports (none)
+PASS AC-PNDCE6 no clock import (none)
+PASS AC-PNDCE6 no eval/exec/__import__ (none)
+PASS AC-PNDCE6 the face carries its own label (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope)
+PASS AC-PNDCE6 the label is wired into reconcile_all
+PASS AC-PNDCE6 the suite is wired into reconcile_all
+PASS AC-PNDCE6 the suite declares its six criteria (6)
+SUITE PASS 6/6
+== LEG B rc=0 digest=51C76A2AEA922F24
+PASS AC-PNDCE1 a from-imported module resolves to b (ok/b)
+PASS AC-PNDCE1 the shipped answer it replaces called it a local (attr-base-local:helper)
+PASS AC-PNDCE1 the from-import hop is named (from-import)
+PASS AC-PNDCE1 the module is never a local on this row (None)
+PASS AC-PNDCE1 an absent from-imported module resolves nothing (refused/None)
+PASS AC-PNDCE2 a from-import alias resolves to b (ok/b)
+PASS AC-PNDCE2 the shipped answer it replaces called it a local (attr-base-local:h)
+PASS AC-PNDCE2 the shipped import-alias layer was silent here (None/None)
+PASS AC-PNDCE2 the alias is never a local on this row (None)
+PASS AC-PNDCE2 the module is reached by its real name (from-import)
+PASS AC-PNDCE3 a returned function constant resolves to b (ok/b)
+PASS AC-PNDCE3 the shipped answer it replaces refused it (attr-plain-import:helper.ATTR)
+PASS AC-PNDCE3 an unreturned function constant is refused (refused)
+PASS AC-PNDCE3 an unreturned function constant is NAMED (attr-function-constant:helper.ATTR)
+PASS AC-PNDCE3 a refusal resolves nothing (None)
+PASS AC-PNDCE4 a with-as call returning a module resolves to b (ok/b)
+PASS AC-PNDCE4 the shipped answer it replaces refused it (attr-with-as:m.ATTR)
+PASS AC-PNDCE4 the with-as call hop is named (with-as-call)
+PASS AC-PNDCE4 a call returning something else is refused (refused)
+PASS AC-PNDCE4 a non-module call keeps the shipped word (attr-with-as:m.ATTR)
+PASS AC-PNDCE4 a non-module call resolves nothing (None)
+PASS AC-PNDCE5 the shipped ok answer rides beside this face (ok/b)
+PASS AC-PNDCE5 this face does not rewrite the shipped ok answer (ok/b)
+PASS AC-PNDCE5 the shipped hop rides beside this face (import)
+PASS AC-PNDCE5 the shipped alias answer still rides (ok/b)
+PASS AC-PNDCE6 module source is pure ASCII (20023B)
+PASS AC-PNDCE6 suite source is pure ASCII (13503B)
+PASS AC-PNDCE6 zero network imports (none)
+PASS AC-PNDCE6 no clock import (none)
+PASS AC-PNDCE6 no eval/exec/__import__ (none)
+PASS AC-PNDCE6 the face carries its own label (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope)
+PASS AC-PNDCE6 the label is wired into reconcile_all
+PASS AC-PNDCE6 the suite is wired into reconcile_all
+PASS AC-PNDCE6 the suite declares its six criteria (6)
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_predicate_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_base.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_position.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=5 fails=0 digest=51C76A2AEA922F24

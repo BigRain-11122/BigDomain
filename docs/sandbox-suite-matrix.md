@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 611 | 4642 | 611/611 | R2564 |
+| 612 | 4648 | 611/611 | R2564 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -649,7 +649,8 @@
 | 609 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-base | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_base.py | 6 | green | 0.2 |
 | 610 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-predicate | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_predicate_scope.py | 6 | green | 0.2 |
 | 611 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope.py | 6 | green | 0.2 |
-|  | 合计 |  | 4642 | green 611 / FAIL 0 / no-evidence 0 |  |
+| 612 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope.py | 6 | no-evidence | - |
+|  | 合计 |  | 4648 | green 611 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 
