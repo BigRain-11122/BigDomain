@@ -1,0 +1,5 @@
+BOUNDED REAL TREE files=22 verdict=SEAMS-ALIAS-CHAIN-COVERED probes=22 covered=0 out_of_scope=22 historical=0 missing=0 alias_resolved=0 alias_named=0
+COVERED PROBES (none)
+SAME FIXTURE TWO_HOP scope=module this_state=ok this_value=b this_chain=['B', 'A'] base_state=refused base_reason=name-unbound:B
+SAME FIXTURE FUNC_CONST scope=function:f this_state=ok this_value=b this_chain=['C'] base_state=refused base_reason=name-unbound:C
+SAME FIXTURE SEQ_DIFF scope=module this_state=arms this_reason=nested-arms:if:7 this_values=['b', 'z'] this_group=if:7 base_state=arms base_reason=nested-arms

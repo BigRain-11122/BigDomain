@@ -6014,6 +6014,17 @@ SUITES = [
      os.path.join("..", "os",
                   "test_probe_seam_name_binding_arm_mixed_residual_naming.py"),
      6),
+    # R2555: the alias-chain face. A module constant bound to another
+    # module constant is followed to a FIXPOINT, a constant declared in the
+    # loop own function body is read as that scope own constant, and a
+    # multi-group arm whose leaves disagree names the disagreeing group key
+    # while every leaf keeps its full path and its value; the residual
+    # answer rides beside it (606 -> 607 suites, 4612 -> 4618 criteria).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-chain",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_chain.py"),
+     6),
     ]
 
 FAILS = 0

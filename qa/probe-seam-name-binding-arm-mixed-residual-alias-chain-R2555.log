@@ -1,0 +1,76 @@
+EVIDENCE CAPTURE round=R2555 suite=src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_chain.py legs=2
+== LEG A rc=0 digest=85F4A6CA91039ADC
+PROBE SEAM NAME BINDING ARM MIXED RESIDUAL ALIAS CHAIN SUITE (AC-PNDR1..AC-PNDR6)
+PASS AC-PNDR1 a two-hop chain (B = A, A = 'b') resolves to b
+PASS AC-PNDR1 the chain it took is published (['B', 'A'])
+PASS AC-PNDR1 a three-name chain follows to a FIXPOINT (['BB', 'B', 'A'])
+PASS AC-PNDR1 the SAME fixture still reads name-unbound:B on the shipped face
+PASS AC-PNDR1 the shipped refusal is carried beside the answer
+PASS AC-PNDR2 a chain ending in two values reads name-mixed:AMB
+PASS AC-PNDR2 no value is published for a mixed chain
+PASS AC-PNDR2 the LAST name in the chain is named (AMB)
+PASS AC-PNDR2 the SAME fixture reads name-unbound:B on the shipped face
+PASS AC-PNDR3 the fixture loop really sits in a function scope (function:f)
+PASS AC-PNDR3 a constant bound in the loop own function body resolves to b
+PASS AC-PNDR3 the function-scope name is the chain it took (['C'])
+PASS AC-PNDR3 the SAME fixture reads name-unbound:C on the shipped face
+PASS AC-PNDR4 a disagreeing multi-group arm stays an arms answer
+PASS AC-PNDR4 the disagreeing group key is NAMED (if:7 / nested-arms:if:7)
+PASS AC-PNDR4 both values are still published (['b', 'z'])
+PASS AC-PNDR4 every leaf is published by FULL path with its value (5 leaves, ['b', 'b', 'b', 'b', 'z'])
+PASS AC-PNDR4 the disagreeing leaf path is on the row (['if:2/body>if:3/body', 'if:2/body>if:3/else', 'if:2/body>if:7/body', 'if:2/body>if:7/else', 'if:2/else'])
+PASS AC-PNDR4 the SAME fixture still reads nested-arms on the shipped face
+PASS AC-PNDR5 every shipped answer is carried unchanged (no drift)
+PASS AC-PNDR5 the residual answers ride on the row itself ({'KEY': 'b'} / {'WK': 'with-as:module'})
+PASS AC-PNDR5 a with-as refusal keeps the shipped reason (with-as:module)
+PASS AC-PNDR6 the module source is pure ASCII
+PASS AC-PNDR6 this suite source is pure ASCII
+PASS AC-PNDR6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNDR6 no clock and no network token in the module
+PASS AC-PNDR6 the face and its suite are wired into the registry
+PASS AC-PNDR6 no duplicate registry row
+PASS AC-PNDR6 the reconcile label is the face own (os-probe-seam-name-binding-arm-mixed-residual-alias-chain)
+PASS AC-PNDR6 the reading has its own verdict words
+PASS AC-PNDR6 the shipped residual face it extends is on disk
+SUITE PASS 6/6 criteria green
+== LEG B rc=0 digest=85F4A6CA91039ADC
+PROBE SEAM NAME BINDING ARM MIXED RESIDUAL ALIAS CHAIN SUITE (AC-PNDR1..AC-PNDR6)
+PASS AC-PNDR1 a two-hop chain (B = A, A = 'b') resolves to b
+PASS AC-PNDR1 the chain it took is published (['B', 'A'])
+PASS AC-PNDR1 a three-name chain follows to a FIXPOINT (['BB', 'B', 'A'])
+PASS AC-PNDR1 the SAME fixture still reads name-unbound:B on the shipped face
+PASS AC-PNDR1 the shipped refusal is carried beside the answer
+PASS AC-PNDR2 a chain ending in two values reads name-mixed:AMB
+PASS AC-PNDR2 no value is published for a mixed chain
+PASS AC-PNDR2 the LAST name in the chain is named (AMB)
+PASS AC-PNDR2 the SAME fixture reads name-unbound:B on the shipped face
+PASS AC-PNDR3 the fixture loop really sits in a function scope (function:f)
+PASS AC-PNDR3 a constant bound in the loop own function body resolves to b
+PASS AC-PNDR3 the function-scope name is the chain it took (['C'])
+PASS AC-PNDR3 the SAME fixture reads name-unbound:C on the shipped face
+PASS AC-PNDR4 a disagreeing multi-group arm stays an arms answer
+PASS AC-PNDR4 the disagreeing group key is NAMED (if:7 / nested-arms:if:7)
+PASS AC-PNDR4 both values are still published (['b', 'z'])
+PASS AC-PNDR4 every leaf is published by FULL path with its value (5 leaves, ['b', 'b', 'b', 'b', 'z'])
+PASS AC-PNDR4 the disagreeing leaf path is on the row (['if:2/body>if:3/body', 'if:2/body>if:3/else', 'if:2/body>if:7/body', 'if:2/body>if:7/else', 'if:2/else'])
+PASS AC-PNDR4 the SAME fixture still reads nested-arms on the shipped face
+PASS AC-PNDR5 every shipped answer is carried unchanged (no drift)
+PASS AC-PNDR5 the residual answers ride on the row itself ({'KEY': 'b'} / {'WK': 'with-as:module'})
+PASS AC-PNDR5 a with-as refusal keeps the shipped reason (with-as:module)
+PASS AC-PNDR6 the module source is pure ASCII
+PASS AC-PNDR6 this suite source is pure ASCII
+PASS AC-PNDR6 only the allowed stdlib modules are imported (argparse,ast,hashlib,json,os,sys)
+PASS AC-PNDR6 no clock and no network token in the module
+PASS AC-PNDR6 the face and its suite are wired into the registry
+PASS AC-PNDR6 no duplicate registry row
+PASS AC-PNDR6 the reconcile label is the face own (os-probe-seam-name-binding-arm-mixed-residual-alias-chain)
+PASS AC-PNDR6 the reading has its own verdict words
+PASS AC-PNDR6 the shipped residual face it extends is on disk
+SUITE PASS 6/6 criteria green
+== ADJACENT 5
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_naming.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_name_binding_nested_arm_mixed_scope.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_name_binding_nested_exhaustive_path.py rc=0 SUITE PASS 6/6 criteria green
+== src/os/test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src/os/test_probe_seam_registry.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=5 fails=0 digest=85F4A6CA91039ADC
