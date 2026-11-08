@@ -1,1 +1,1 @@
-tick 2561 2026-11-08 R2561 product window: attribute-predicate face verified by re-run 6/6, registry 610/4636, matrix 59508B byte-identical, battery R2561 owed next
+tick 2562 2026-11-08 R2562 verification window: owed battery green on the first leg 610/610 suites at the pre-registered 4636 criteria (1474.2s, zero FAIL rows), matrix 59493B byte-identical, debt closed and product-face-R2562 opened on tech line 599 AC-PNDC1

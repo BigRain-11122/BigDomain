@@ -300,8 +300,9 @@ column-0 checkbox starts one.
 - [x] opened=R2559 | item=reconcile-battery-R2559 | note=registry 609/4630 at R2559 by one row and a shipped doc moved | closed=R2560
 - [ ] opened=R2559 | item=product-face-R2559 | note=window shipped the AC-PNDA1 attribute-base read; 609/4630 | first=no
 - [x] opened=R2560 | item=product-face-R2560 | note=verification window, no product byte; next window PRODUCT face on tech head state/queue/tech.md:597 prefix AC-PNDB1 probe_seam_name_binding_arm_mixed_residual_alias_attribute_base_residual | closed=R2561
-- [ ] opened=R2561 | item=reconcile-battery-R2561 | note=pre-registered 610 suites / 4636 criteria because R2561 moved the registry by one row and shipped a document (R2168 mixed-tree rule) | first=yes
+- [x] opened=R2561 | item=reconcile-battery-R2561 | note=pre-registered 610 suites / 4636 criteria because R2561 moved the registry by one row and shipped a document (R2168 mixed-tree rule) | closed=R2562
 - [ ] opened=R2561 | item=product-face-R2561 | note=naming the next window a PRODUCT face on tech head state/queue/tech.md:599 prefix AC-PNDC1 probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope whose six criteria were pinned at R2561 BEFORE any code | first=no
+- [ ] opened=R2562 | item=product-face-R2562 | note=product face owed on queue head state/queue/tech.md:599 prefix AC-PNDC1 | first=yes
 
 ## Closed
 
