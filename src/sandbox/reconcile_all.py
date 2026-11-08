@@ -6046,6 +6046,17 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_base.py"),
      6),
+    # R2561: the attribute-predicate face takes the base text from the ACTUAL
+    # binding the loop followed, so a subscript or call base is published as its
+    # own text and is never a question mark, reads a walrus attribute edge
+    # inside a function body, joins a package own __init__.py as well as
+    # <mod>.py, and reads a with-as helper binding; every shipped answer rides
+    # beside it (609 -> 610 suites, 4630 -> 4636 criteria).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-predicate",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_predicate_scope.py"),
+     6),
     ]
 
 FAILS = 0

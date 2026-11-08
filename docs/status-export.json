@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-08T12:41:15+08:00",
-  "do": "2026-11-08 R2560 VERIFICATION window on the battery the register owed (reconcile-battery-R2559, pre-registered 609 suites / 4630 criteria at R2559 because that window moved the registry by one row and a shipped doc). THIS WINDOW OPENED ON AN INTERRUPTED EARLIER ATTEMPT: two legs and an export driver were already on disk (qa/reconcile-all-R2560-red.log 1022274B, qa/reconcile-all-R2560.log 1021721B,",
+  "export_ts": "2026-11-08T13:14:50+08:00",
+  "do": "2026-11-08 R2561 PRODUCT window on the tech head the register named (product-face-R2560, state/queue/tech.md:597 prefix AC-PNDB1, criteria AC-PNDB1..AC-PNDB6 pinned in that row at R2559 BEFORE any code). THIS WINDOW OPENED ON AN INTERRUPTED ATTEMPT: the face module, its suite, the registry row, two evidence logs and five scratch drivers were already on disk with no index.lock and no live python re",
   "ceo_face": {
-    "current": "2026-11-08 R2560 VERIFICATION window on the battery the register owed (reconcile-battery-R2559, pre-registered 609 suites / 4630 criteria at R2559 because that window moved the registry by one row and a shipped doc). THIS WINDOW OPENED ON AN INTERRUPTED EARLIER ATTEMPT: two legs and an export driver were already on disk (qa/reconcile-all-R2560-red.log 1022274B, qa/reconcile-all-R2560.log 1021721B,",
-    "latest_artifact": "reconcile-all-R2560-red.log (1022274B) + reconcile-all-R2560.log (1023672B)",
-    "last_artifact": "reconcile-all-R2560-red.log (1022274B) + reconcile-all-R2560.log (1023672B)",
-    "next_milestone": "next window owes product-face-R2560 on the committed tree, inside a 48h window due 2026-11-10T12:41:15+08:00",
-    "next_milestone_due": "2026-11-10T12:41:15+08:00",
-    "updated_at": "2026-11-08T12:41:15+08:00"
+    "current": "2026-11-08 R2561 PRODUCT window on the tech head the register named (product-face-R2560, state/queue/tech.md:597 prefix AC-PNDB1, criteria AC-PNDB1..AC-PNDB6 pinned in that row at R2559 BEFORE any code). THIS WINDOW OPENED ON AN INTERRUPTED ATTEMPT: the face module, its suite, the registry row, two evidence logs and five scratch drivers were already on disk with no index.lock and no live python re",
+    "latest_artifact": "probe-seam-name-binding-arm-mixed-residual-alias-attribute-predicate-R2561.log (4850B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-predicate-live-R2561.log (852B)",
+    "last_artifact": "probe-seam-name-binding-arm-mixed-residual-alias-attribute-predicate-R2561.log (4850B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-predicate-live-R2561.log (852B)",
+    "next_milestone": "next window owes reconcile-battery-R2561 on the committed tree, inside a 48h window due 2026-11-10T13:14:50+08:00",
+    "next_milestone_due": "2026-11-10T13:14:50+08:00",
+    "updated_at": "2026-11-08T13:14:50+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "probe-seam-name-binding-arm-mixed-residual-alias-attribute-predicate-R2561.log (4850B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-predicate-live-R2561.log (852B)",
     "reconcile-all-R2560-red.log (1022274B) + reconcile-all-R2560.log (1023672B)",
     "probe-seam-name-binding-arm-mixed-residual-alias-attribute-base-R2559.log (5326B) + probe-seam-name-binding-arm-mixed-residual-alias-attribute-base-live-R2559.log (473B)",
     "probe-seam-name-binding-arm-mixed-residual-alias-position-R2557.log (5430B) + probe-seam-name-binding-arm-mixed-residual-alias-position-live-R2557.log (442B)",
@@ -179,6 +180,10 @@
     "closeout export parity dialect wire (src/os/closeout_export_parity_dialect_wire.py) on: the closeout publish path could not land a CRLF export at all: export_closeout_gate_parity.closeout_style appended a hardcoded LF while queue_export_gate_wire kept the target's own dialect, so the parity read DISAGREES/bytes and the wire refused at exit 2. The composition now renders through general_writer_dialect_audit.payload_for asked at CALL time, and the new wire publishes, reads back and reports the transport and the lone-LF count. Suite 20/20 twice, registry 555 suites / 4306 criteria, matrix 53662B --check byte-identical."
   ],
   "results": [
+    [
+      "2561",
+      "2026-11-08 R2561 PRODUCT window on the tech head the register named (product-face-R2560, state/queue/tech.md:597 prefix AC-PNDB1, criteria pinned there at R2559 BEFORE any code). THE WINDOW OPENED ON AN INTERRUPTED ATTEMPT: the face module, its suite, the registry row, two evidence logs and five scratch drivers were already on disk, so all of it was MEASURED rather than rebuilt and none is claimed as newly written here. VERIFIED BY RE-RUNNING: the suite re-ran SUITE PASS 6/6 alone at closeout (30 PASS lines, exit 0), the capture log reads legs=2 with an identical digest 489031857ADE8A94 plus adjacent=5 green (4850B, utf-8 bom=False crlf=0 nul=0), and the bounded live leg reads modules=5 loops=161 pred_resolved=0 pred_named=2 unreadable=0 BOUNDED-READ-CLEAN with both readers proved read-only (852B, same dialect). The face names a walrus-bound attribute alias, publishes a subscript or call base as its own text instead of the shipped question mark, joins a package own __init__.py as well as <mod>.py, and reads a with-as helper binding, carrying every shipped key beside its own on every row. REGISTRY 609/4630 -> 610/4636 by exactly one row, recounted by import (610 unique names, 610 unique paths); docs/sandbox-suite-matrix.md was regenerated from the eligible R2560 battery leg to 59508B at 610 suites / 4636 criteria with its green line honestly reading 609/610 and --check byte-identical. BOARD: row 597 closed through src/os/queue_close_R2561.py at its predicted and measured 1776924B, and ONE row seeded from this window own measured limits as AC-PNDC1..AC-PNDC6 - a plain `import m` base reads state=None with no reason at all, an `import m as x` base and a with-as module base both read attr-base-local, and an alias or re-exported helper constant reads attr-non-constant / attr-missing - with the new head at line 599 and the floor MET at 5/5 12/10 10/10. DEBT: product-face-R2560 closed (line 302, open 24->23, done 260->261, 174884B -> 174887B), reconcile-battery-R2561 appended first=yes at the pre-registered 610/4636 (175089B) and product-face-R2561 appended first=no naming tech line 599 (175377B), so the gate now names that battery first. DECISIONS: 113 group rows / 112 row-owner tokens, NEW=0 over the stored baseline, after MY FIRST READER WAS FOUND BROKEN and replaced. Two product points, zero cloud calls, zero external API touches."
+    ],
     [
       "2560",
       "2026-11-08 R2560 VERIFICATION window on the battery the register owed (reconcile-battery-R2559, pre-registered 609 suites / 4630 criteria because R2559 moved the registry by one row and shipped a document, the R2168 mixed-tree rule). THE WINDOW OPENED ON AN INTERRUPTED EARLIER ATTEMPT: a red leg, a green leg and an export driver were already on disk with no index.lock and no live reconcile process, so the legs were MEASURED rather than restarted and neither leg is claimed as this window own run. RED LEG KEPT (qa/reconcile-all-R2560-red.log, 1022274B, utf-8 bom=False crlf=0): RUNNER FAIL (3 failed assertions) at 607/609 suites with os-matrix-stamp-compare 5/6 and os-stamp-text-coverage exit=1, and the cause was READ rather than guessed - the matrix document had been regenerated WITHOUT --stamp-from so the artifact lost its provenance line while --check still passed on content alone. GREEN LEG MEASURED (qa/reconcile-all-R2560.log, 1021721B at the green leg and 1023672B after the follow-up block): RUNNER PASS (609/609 suites green, reconcile controls 7/7, 2276.6s) with zero FAIL suite rows, the runner own summary reading 'PASS suites 609/609 green, expected criteria total=4630', and the 609 / 4630 target re-read from the registry by import rather than trusted; provenance checked against the commit timestamp, which the green log mtime exceeds. FOLLOW-UP in the designed order: the dry run read matrix FAIL with on-disk 59313B against regenerated 59313B - equal SIZE, different CONTENT - while fingerprint read CLEAN 5 domains, profile byte-identical and census DRIFT-CLEAN; the document was then regenerated stamp-aligned from THIS round own green leg (59313B, 609 suites / 4630 criteria, green=609/609 self-describing), --check read byte-identical at rc=0, and the re-run read all four PASS for VERDICT R2560 PASS failing=none (APPENDED 1951B). DEBT: reconcile-battery-R2559 closed through the shipped debtor (line 300, open 24->23, done 259->260, 174628B -> 174631B) and product-face-R2560 appended first=yes (174631B -> 174884B) naming the next window a PRODUCT face on queue head state/queue/tech.md:597 prefix AC-PNDB1, criteria pinned there at R2559 BEFORE any code. Zero product points claimed."
@@ -808,7 +813,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2560",
+      "2561",
       "OSLoop 执行 tick"
     ],
     [
@@ -819,10 +824,10 @@
   "self_drive": {
     "window": "2026-11-02..2026-11-08",
     "window_days": 7,
-    "log_lines_in_window": 167,
+    "log_lines_in_window": 168,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 167,
+    "substantive_non_idle_mention_lines": 168,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -855,7 +860,7 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 13,
-        "done_rows": 447,
+        "done_rows": 448,
         "gated_rows": 1,
         "claimable": 12,
         "discounted": 0,

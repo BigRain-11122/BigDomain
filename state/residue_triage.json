@@ -2115,6 +2115,13 @@
       "declared_by": "R2559",
       "reason": "AC-PNDA1 attribute-base face shipped with its suite and bounded live leg",
       "until": 2569
+    },
+    {
+      "round": 2561,
+      "status": "DELIVERED",
+      "declared_by": "R2561",
+      "reason": "R2561 shipped the attribute-predicate face with its suite and closed the board row it claimed",
+      "until": 2571
     }
   ]
 }

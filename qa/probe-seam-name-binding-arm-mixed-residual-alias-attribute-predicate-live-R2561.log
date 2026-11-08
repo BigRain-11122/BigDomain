@@ -1,0 +1,9 @@
+LIVE LEG round=R2561 modules=5 limit=5
+MODULE probe_seam_alias_expression_scope.py loops=39 base_resolved=0 base_named=0 pred_resolved=0 pred_named=0
+MODULE probe_seam_annotated_constant_scope.py loops=30 base_resolved=0 base_named=0 pred_resolved=0 pred_named=0
+MODULE probe_seam_constant_alias_scope.py loops=43 base_resolved=0 base_named=2 pred_resolved=0 pred_named=2
+MODULE probe_seam_constant_binding_scope.py loops=25 base_resolved=0 base_named=0 pred_resolved=0 pred_named=0
+MODULE probe_seam_dynamic_import_scope.py loops=24 base_resolved=0 base_named=0 pred_resolved=0 pred_named=0
+READONLY mine=yes base=yes
+TOTALS attr_named=2 attr_resolved=0 loops=161 pred_named=2 pred_resolved=0
+VERDICT BOUNDED-READ-CLEAN modules=5 unreadable=0 note=the whole-tree audit was NOT run: an earlier round measured it costing minutes, so this leg is bounded

@@ -1,0 +1,72 @@
+EVIDENCE CAPTURE round=R2561 suite=src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_predicate_scope.py legs=2
+== LEG A rc=0 digest=489031857ADE8A94
+PASS AC-PNDB1 a walrus attribute edge resolves to b (ok/b)
+PASS AC-PNDB1 the edge is recorded as a walrus (walrus-attr)
+PASS AC-PNDB1 the chain names the hop (['hw.ATTR'])
+PASS AC-PNDB1 the shipped answer it replaces refused the name (name-unbound:B)
+PASS AC-PNDB1 an unresolvable walrus edge is NAMED (attr-non-constant:hw.ATTR)
+PASS AC-PNDB1 an unresolvable walrus edge resolves nothing (None)
+PASS AC-PNDB2 a subscript base keeps its text (attr-subscript-base:items[0].ATTR)
+PASS AC-PNDB2 a subscript base is never reported as ? (attr-subscript-base:items[0].ATTR)
+PASS AC-PNDB2 the shipped answer it replaces did carry the ? (attr-not-imported:?.ATTR)
+PASS AC-PNDB2 a call base keeps its text (attr-call-base:factory().ATTR)
+PASS AC-PNDB2 a call base is never reported as ? (attr-call-base:factory().ATTR)
+PASS AC-PNDB3 a package index constant resolves to b (ok/b)
+PASS AC-PNDB3 the shipped answer it replaces was attr-missing (attr-missing:pkg3.ATTR)
+PASS AC-PNDB3 a <mod>.py hop the shipped face already answers is carried unchanged (ok/None)
+PASS AC-PNDB4 a with-as helper binding resolves (ok/b)
+PASS AC-PNDB4 two values read name-mixed (name-mixed:hwb.ATTR)
+PASS AC-PNDB4 a mixed name resolves nothing (None)
+PASS AC-PNDB4 a with-as-only name is NAMED rather than silent (attr-non-constant:hwc.ATTR)
+PASS AC-PNDB5 a plain name keeps the shipped answer (ok/b/shipped)
+PASS AC-PNDB5 a direct literal keeps the shipped answer (ok/b)
+PASS AC-PNDB5 every shipped key is still on the row
+PASS AC-PNDB5 the row agrees with the face it extends (ok/b)
+PASS AC-PNDB6 module source is pure ASCII (21778B)
+PASS AC-PNDB6 suite source is pure ASCII (13697B)
+PASS AC-PNDB6 zero network imports (none)
+PASS AC-PNDB6 no clock import (none)
+PASS AC-PNDB6 no eval/exec/__import__ (none)
+PASS AC-PNDB6 the face carries its own label (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-predicate)
+PASS AC-PNDB6 the label is wired into reconcile_all
+PASS AC-PNDB6 the suite is wired into reconcile_all
+SUITE PASS 6/6
+== LEG B rc=0 digest=489031857ADE8A94
+PASS AC-PNDB1 a walrus attribute edge resolves to b (ok/b)
+PASS AC-PNDB1 the edge is recorded as a walrus (walrus-attr)
+PASS AC-PNDB1 the chain names the hop (['hw.ATTR'])
+PASS AC-PNDB1 the shipped answer it replaces refused the name (name-unbound:B)
+PASS AC-PNDB1 an unresolvable walrus edge is NAMED (attr-non-constant:hw.ATTR)
+PASS AC-PNDB1 an unresolvable walrus edge resolves nothing (None)
+PASS AC-PNDB2 a subscript base keeps its text (attr-subscript-base:items[0].ATTR)
+PASS AC-PNDB2 a subscript base is never reported as ? (attr-subscript-base:items[0].ATTR)
+PASS AC-PNDB2 the shipped answer it replaces did carry the ? (attr-not-imported:?.ATTR)
+PASS AC-PNDB2 a call base keeps its text (attr-call-base:factory().ATTR)
+PASS AC-PNDB2 a call base is never reported as ? (attr-call-base:factory().ATTR)
+PASS AC-PNDB3 a package index constant resolves to b (ok/b)
+PASS AC-PNDB3 the shipped answer it replaces was attr-missing (attr-missing:pkg3.ATTR)
+PASS AC-PNDB3 a <mod>.py hop the shipped face already answers is carried unchanged (ok/None)
+PASS AC-PNDB4 a with-as helper binding resolves (ok/b)
+PASS AC-PNDB4 two values read name-mixed (name-mixed:hwb.ATTR)
+PASS AC-PNDB4 a mixed name resolves nothing (None)
+PASS AC-PNDB4 a with-as-only name is NAMED rather than silent (attr-non-constant:hwc.ATTR)
+PASS AC-PNDB5 a plain name keeps the shipped answer (ok/b/shipped)
+PASS AC-PNDB5 a direct literal keeps the shipped answer (ok/b)
+PASS AC-PNDB5 every shipped key is still on the row
+PASS AC-PNDB5 the row agrees with the face it extends (ok/b)
+PASS AC-PNDB6 module source is pure ASCII (21778B)
+PASS AC-PNDB6 suite source is pure ASCII (13697B)
+PASS AC-PNDB6 zero network imports (none)
+PASS AC-PNDB6 no clock import (none)
+PASS AC-PNDB6 no eval/exec/__import__ (none)
+PASS AC-PNDB6 the face carries its own label (os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-predicate)
+PASS AC-PNDB6 the label is wired into reconcile_all
+PASS AC-PNDB6 the suite is wired into reconcile_all
+SUITE PASS 6/6
+== ADJACENT 5
+== src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_base.py rc=0 SUITE PASS 6/6
+== src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_position.py rc=0 SUITE PASS 6/6 criteria green
+== src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_chain.py rc=0 SUITE PASS 6/6 criteria green
+== src\os\test_probe_seam_dynamic_import_scope.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+== src\os\test_probe_seam_registry.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=5 fails=0 digest=489031857ADE8A94
