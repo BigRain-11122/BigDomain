@@ -1,0 +1,13 @@
+{
+ "doc": "docs/sandbox-suite-matrix.md",
+ "doc_rows": 635,
+ "evidence": "qa/reconcile-all-R2595-retry2.log",
+ "exit": 0,
+ "leg_green": 630,
+ "leg_total": 630,
+ "registry_criteria": 4786,
+ "registry_rows": 635,
+ "shipped_check": 0,
+ "verdict": "DOC-CURRENT",
+ "written": false
+}

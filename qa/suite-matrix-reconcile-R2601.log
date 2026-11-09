@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2601 suite=src/os/test_suite_matrix_reconcile.py legs=2
+== LEG A rc=0 digest=E3B0C44298FC1C14
+  PASS AC-EDM1 regenerated doc rows=635 registry rows=635 evidence names reconcile-all-R2595-retry2.log with RUNNER PASS 630/630
+  PASS AC-EDM2 rows word=ROWS-MISMATCH doc=634 registry=635 BOTH named
+  PASS AC-EDM3 red leg refused word=RED-LEG, doc byte-identical, shipped check unchanged (exit=2)
+  PASS AC-EDM4 patch parse_evidence -> RED-LEG, patch check face -> DOC-CURRENT, live -> DOC-CURRENT
+  PASS AC-EDM5 report wrote nothing, one verdict word (ROWS-MISMATCH), idempotent rewrite (DOC-CURRENT)
+  PASS AC-EDM6 hygiene ascii=True clock=False network=[] registered=True
+SUITE PASS 6/6
+== LEG B rc=0 digest=E3B0C44298FC1C14
+  PASS AC-EDM1 regenerated doc rows=635 registry rows=635 evidence names reconcile-all-R2595-retry2.log with RUNNER PASS 630/630
+  PASS AC-EDM2 rows word=ROWS-MISMATCH doc=634 registry=635 BOTH named
+  PASS AC-EDM3 red leg refused word=RED-LEG, doc byte-identical, shipped check unchanged (exit=2)
+  PASS AC-EDM4 patch parse_evidence -> RED-LEG, patch check face -> DOC-CURRENT, live -> DOC-CURRENT
+  PASS AC-EDM5 report wrote nothing, one verdict word (ROWS-MISMATCH), idempotent rewrite (DOC-CURRENT)
+  PASS AC-EDM6 hygiene ascii=True clock=False network=[] registered=True
+SUITE PASS 6/6
+== ADJACENT 3
+== src/sandbox/test_suite_matrix.py rc=0 SUITE PASS (16/16 cases)
+== src/os/test_matrix_stamp_compare.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_name_text_coverage.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+EVIDENCE identical=True adjacent=3 fails=0 digest=E3B0C44298FC1C14

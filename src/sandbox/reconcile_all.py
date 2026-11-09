@@ -4578,6 +4578,14 @@ SUITES = [
     # R2600 seed BEFORE the code existed.)
     ("os-debt-note-append",
      os.path.join("..", "os", "test_debt_note_append.py"), 6),
+    # R2601: the matrix document can carry the CURRENT registry truth while
+    # its evidence line still names a RUNNER PASS leg, so the six readability
+    # suites and the check face are green at once and the battery is no
+    # longer deadlocked on a stale document.
+    # (AC-EDM1..AC-EDM6 pre-registered in state/queue/tech.md:633 as the
+    # R2599 seed BEFORE the code existed.)
+    ("os-suite-matrix-reconcile",
+     os.path.join("..", "os", "test_suite_matrix_reconcile.py"), 6),
     # R2253: a claimable queue row must name its criteria prefix, so
     # pre-registration is a gate instead of a habit. The row law is
     # imported from queue_floor rather than rewritten, two declaration
