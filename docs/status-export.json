@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-09T17:37:36+08:00",
+  "export_ts": "2026-11-09T17:41:50+08:00",
   "do": "2026-11-09 R2592 PRODUCT window on the queue head the debt gate named (product-face-R2591, state/queue/tech.md:625 prefix AC-PNAE1, criteria AC-PNAE1..AC-PNAE6 pinned in that row at R2590 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 31eb4612 with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read rows=393 with known_tokens",
   "ceo_face": {
     "current": "2026-11-09 R2592 PRODUCT window on the queue head the debt gate named (product-face-R2591, state/queue/tech.md:625 prefix AC-PNAE1, criteria AC-PNAE1..AC-PNAE6 pinned in that row at R2590 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 31eb4612 with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read rows=393 with known_tokens",
     "latest_artifact": "module-alias-walrus-while-else-nested-scope-R2592.log (6852B)",
     "last_artifact": "module-alias-walrus-while-else-nested-scope-R2592.log (6852B)",
-    "next_milestone": "next window owes reconcile-battery-R2592 on the committed tree, inside a 48h window due 2026-11-11T17:37:36+08:00",
-    "next_milestone_due": "2026-11-11T17:37:36+08:00",
-    "updated_at": "2026-11-09T17:37:36+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2592 on the committed tree, inside a 48h window due 2026-11-11T17:41:50+08:00",
+    "next_milestone_due": "2026-11-11T17:41:50+08:00",
+    "updated_at": "2026-11-09T17:41:50+08:00"
   },
   "depts": [
     {
@@ -927,10 +927,10 @@
   "self_drive": {
     "window": "2026-11-03..2026-11-09",
     "window_days": 7,
-    "log_lines_in_window": 50,
+    "log_lines_in_window": 51,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 50,
+    "substantive_non_idle_mention_lines": 51,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
