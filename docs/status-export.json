@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-09T20:17:51+08:00",
+  "export_ts": "2026-11-09T21:25:26+08:00",
   "do": "2026-11-09 R2594 fold of log items 68..75 (the complete R2592 product-round block, ending on its push line) moved verbatim into the monthly archive at a true round-block boundary; window tokens: AC-PNAE1 AC-PNAE6 AC-PNAF1 AC-PNAF6 D-CLEAR R-MET",
   "ceo_face": {
     "current": "2026-11-09 R2594 fold of log items 68..75 (the complete R2592 product-round block, ending on its push line) moved verbatim into the monthly archive at a true round-block boundary; window tokens: AC-PNAE1 AC-PNAE6 AC-PNAF1 AC-PNAF6 D-CLEAR R-MET",
     "latest_artifact": "module-alias-walrus-match-ordinal-scope-R2594.log (12850B)",
     "last_artifact": "module-alias-walrus-match-ordinal-scope-R2594.log (12850B)",
-    "next_milestone": "next window owes product-face-R2593 on the committed tree, inside a 48h window due 2026-11-11T20:17:51+08:00",
-    "next_milestone_due": "2026-11-11T20:17:51+08:00",
-    "updated_at": "2026-11-09T20:17:51+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2594 on the committed tree, inside a 48h window due 2026-11-11T21:25:26+08:00",
+    "next_milestone_due": "2026-11-11T21:25:26+08:00",
+    "updated_at": "2026-11-09T21:25:26+08:00"
   },
   "depts": [
     {
@@ -936,7 +936,7 @@
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
-    "queue_tech_open": 14,
+    "queue_tech_open": 15,
     "queue_explore_open": 10
   },
   "queue": {
@@ -964,18 +964,18 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 14,
-        "done_rows": 466,
+        "open_rows": 15,
+        "done_rows": 467,
         "gated_rows": 1,
-        "claimable": 11,
+        "claimable": 12,
         "discounted": 2,
         "delivered": [
           {
-            "line": 629,
+            "line": 631,
             "prefix": "AC-PNAG1"
           },
           {
-            "line": 644,
+            "line": 646,
             "prefix": "AC-SEQAF1"
           }
         ],
