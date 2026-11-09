@@ -1,13 +1,12 @@
 {
-  "export_ts": "2026-11-09T08:00:05+08:00",
-  "do": "2026-11-09 R2587 PRODUCT window on the queue head the register named: state/queue/tech.md:619 prefix AC-PNAB1, whose AC-PNAB1..AC-PNAB6 were pinned in that row at R2585 BEFORE any code. Five-silence at open: git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed D-/C- token scan read 167 tokens against the stored 200-token baseline with new=0, benc",
+  "export_ts": "2026-11-09T08:23:28+08:00",
+  "do": "product window R2588: one runnable reading extends the module-alias branch table to elif and with bindings, proved by its own six-criteria suite twice and by the parent suite.",
   "ceo_face": {
-    "current": "2026-11-09 R2587 PRODUCT window on the queue head the register named: state/queue/tech.md:619 prefix AC-PNAB1, whose AC-PNAB1..AC-PNAB6 were pinned in that row at R2585 BEFORE any code. Five-silence at open: git status empty, no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed D-/C- token scan read 167 tokens against the stored 200-token baseline with new=0, benc",
-    "latest_artifact": "module-alias-walrus-branch-limits-R2587.log (484B) + module-alias-walrus-branch-limits-next-R2587.log (484B) + module-alias-walrus-branch-scope-R2587.log (3450B)",
+    "current": "2026-11-09 R2588 PRODUCT window: a module alias head bound by a walrus inside a module-level elif section or a module-level with body is now followed through the R2587 reading instead of beside it. Elif names branch:M@elif, with names branch:M@with, a for body and a branch nested inside another branch keep the shipped refusal attr-module-alias-unbound:M.HW with no branch read, and an elif/else pair is refused as attr-module-alias-ambiguous:M@elif+else. Registry now reads 626 suites / 4732 criteria.",
+    "latest_artifact": "src/os/probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_scope.py + its suite; qa/module-alias-walrus-elif-with-scope-R2588.log (7104 bytes, legs green =3, legs_identical=True, adjacent_green=True) and qa/module-alias-walrus-elif-with-limits-next-R2588.log (361 bytes, 2 shipped refusals measured) at 2026-11-09",
     "last_artifact": "module-alias-walrus-branch-limits-R2587.log (484B) + module-alias-walrus-branch-limits-next-R2587.log (484B) + module-alias-walrus-branch-scope-R2587.log (3450B)",
-    "next_milestone": "next window owes product-face-R2586 on the committed tree, inside a 48h window due 2026-11-11T08:00:05+08:00",
-    "next_milestone_due": "2026-11-11T08:00:05+08:00",
-    "updated_at": "2026-11-09T08:00:05+08:00"
+    "next_milestone": "R2589 VERIFICATION window on the debt register first item reconcile-battery-R2588: the full reconcile battery on the committed R2588 tree at the pre-registered 626 suites / 4732 criteria, with zero product edits, then the designed matrix follow-up; the queue head is state/queue/tech.md:623 prefix AC-PNAD1 whose criteria were pinned before any code. Window due 2026-11-11T23:59:59+08:00.",
+    "next_milestone_due": "2026-11-11T23:59:59+08:00"
   },
   "depts": [
     {
@@ -910,6 +909,10 @@
     [
       "R2558",
       "R2558 verification window on the debt register first item (reconcile-battery-R2557): zero product code changed (the R2168 mixed-tree rule). The target was re-measured by IMPORTING reconcile_all.SUITES before the launch - 608 suites / 4624 criteria, 608 unique paths, zero duplicates - and matched the pre-registered number exactly. RUNNER PASS 608/608 suites plus controls 7/7 in 2099.4 s with zero FAIL rows, zero non-zero exits and zero fail-lines (qa/reconcile-all-R2558.log, 1021185B, single-writer utf-8 LF through src/os/battery_stream.py, bom=False crlf=0 lone_cr=0 nul=0). Four follow-up sections all PASS through src/os/battery_followup.py - matrix 608 suites / 4624 criteria byte-identical (59134B, green=608/608), fingerprint CLEAN domains=5, runner profile --check byte-identical, writer census DRIFT-CLEAN files=2714 flags=0 disappeared=0 - for VERDICT PASS failing=none. The dry matrix run FAILED first by design (59134 on-disk vs regenerated) and wrote no byte before the stamp-aligned regeneration. Honest score 0 product points. Register row closed, successor product-face-R2558 opened first=yes."
+    ],
+    [
+      "R2588",
+      "R2588 product window on the queue head the register named (state/queue/tech.md:621 prefix AC-PNAC1, criteria pinned at R2587 BEFORE any code). Shipped one reading that extends the R2587 branch table: elif sections of an if chain and module-level with bodies are followed, while a for body and a nested branch stay refused without a branch read. Proof: own suite PASS 6/6 on the first run and 6/6 twice with identical output, the R2587 parent suite still 6/6, the bounded live leg reads 2 real modules at 49 loops with no mismatch, and the same fixture is measured on both readers (ok/b here against refused/attr-module-alias-unbound:M.HW there). Registry moved 625/4726 -> 626/4732 by exactly one row, recounted by importing reconcile_all.SUITES with 626 unique names and paths. Next limits measured this window: a while body and a match case body are still unread (2 refusals in the limits log) and are seeded as row 623. Board row 621 closed with its DISCHARGED note. Debt: product-face-R2586 closed through the shipped writer at its predicted and measured byte count, and reconcile-battery-R2588 opened first=yes."
     ]
   ],
   "self_drive": {
