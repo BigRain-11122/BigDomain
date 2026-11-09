@@ -1,0 +1,130 @@
+== own leg 1 rc=0 ==
+PASS AC-PNAD1 a while-body walrus alias head resolves (ok/b)
+PASS AC-PNAD1 the while it was read in is named (['mk.REG->hw', 'REG', 'BASE', 'M<-consts', 'M.HW', 'branch:M@while'])
+PASS AC-PNAD1 the R2588 reader still refuses this shape (refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAD2 a case-body walrus alias head resolves (ok/b)
+PASS AC-PNAD2 the case it was read in is named (['mk.REG->hw', 'REG', 'BASE', 'M<-consts', 'M.HW', 'branch:M@case'])
+PASS AC-PNAD2 the R2588 reader still refuses this shape (refused/None)
+PASS AC-PNAD3 two case bodies are never resolved (refused/None)
+PASS AC-PNAD3 the refusal names BOTH cases (attr-module-alias-ambiguous:M@case+case2)
+PASS AC-PNAD4 a for body walrus is still refused (refused/None)
+PASS AC-PNAD4 the shipped refusal is kept byte for byte (attr-module-alias-unbound:M.HW/attr-module-alias-unbound:M.HW)
+PASS AC-PNAD4 no branch read is published ([])
+PASS AC-PNAD4 a nested two deep walrus is still refused (refused/None)
+PASS AC-PNAD4 the shipped refusal is kept byte for byte (attr-module-alias-unbound:M.HW/attr-module-alias-unbound:M.HW)
+PASS AC-PNAD4 no branch read is published ([])
+PASS AC-PNAD5 module-level if branch reads exactly what R2588 answered (ok/b vs ok/b)
+PASS AC-PNAD5 module-level if/else pair reads exactly what R2588 answered (refused/None vs refused/None)
+PASS AC-PNAD5 module-level elif section reads exactly what R2588 answered (ok/b vs ok/b)
+PASS AC-PNAD5 module-level with body reads exactly what R2588 answered (ok/b vs ok/b)
+PASS AC-PNAD5 function-body walrus reads exactly what R2588 answered (refused/None vs refused/None)
+PASS AC-PNAD5 top-level walrus reads exactly what R2588 answered (ok/b vs ok/b)
+PASS AC-PNAD5 a relative module alias head reads as before (ok/b vs ok/b)
+PASS AC-PNAD5 a bounded live leg reads real modules read-only and agrees with BOTH parents (modules=2 loops=49 unreadable=0 mismatched=[])
+PASS AC-PNAD5 the SAME fixture is measured on BOTH readers (here=ok/b there=refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAD5 the R2588 keys ride on the row (['base_pnad_state', 'base_pnad_value', 'base_pnad_reason', 'base_pnad_chain', 'base_pnad_branch_reads'])
+PASS AC-PNAD5 the R2587 keys are untouched beside them (['ma_chain', 'branch_reads', 'base_pnac_state'])
+PASS AC-PNAD5 an elif/else pair still reads ambiguous, never resolved (refused/attr-module-alias-ambiguous:M@elif+else)
+PASS AC-PNAD6 the module source is pure ASCII (9652 bytes)
+PASS AC-PNAD6 no clock, no network, no shell ([])
+PASS AC-PNAD6 the registry carries exactly one label row (1)
+PASS AC-PNAD6 the registry carries exactly one suite row (1)
+PASS AC-PNAD6 this suite exists on disk
+PASS AC-PNAD6 six criteria are declared
+SUITE PASS 6/6
+== own leg 2 rc=0 ==
+PASS AC-PNAD1 a while-body walrus alias head resolves (ok/b)
+PASS AC-PNAD1 the while it was read in is named (['mk.REG->hw', 'REG', 'BASE', 'M<-consts', 'M.HW', 'branch:M@while'])
+PASS AC-PNAD1 the R2588 reader still refuses this shape (refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAD2 a case-body walrus alias head resolves (ok/b)
+PASS AC-PNAD2 the case it was read in is named (['mk.REG->hw', 'REG', 'BASE', 'M<-consts', 'M.HW', 'branch:M@case'])
+PASS AC-PNAD2 the R2588 reader still refuses this shape (refused/None)
+PASS AC-PNAD3 two case bodies are never resolved (refused/None)
+PASS AC-PNAD3 the refusal names BOTH cases (attr-module-alias-ambiguous:M@case+case2)
+PASS AC-PNAD4 a for body walrus is still refused (refused/None)
+PASS AC-PNAD4 the shipped refusal is kept byte for byte (attr-module-alias-unbound:M.HW/attr-module-alias-unbound:M.HW)
+PASS AC-PNAD4 no branch read is published ([])
+PASS AC-PNAD4 a nested two deep walrus is still refused (refused/None)
+PASS AC-PNAD4 the shipped refusal is kept byte for byte (attr-module-alias-unbound:M.HW/attr-module-alias-unbound:M.HW)
+PASS AC-PNAD4 no branch read is published ([])
+PASS AC-PNAD5 module-level if branch reads exactly what R2588 answered (ok/b vs ok/b)
+PASS AC-PNAD5 module-level if/else pair reads exactly what R2588 answered (refused/None vs refused/None)
+PASS AC-PNAD5 module-level elif section reads exactly what R2588 answered (ok/b vs ok/b)
+PASS AC-PNAD5 module-level with body reads exactly what R2588 answered (ok/b vs ok/b)
+PASS AC-PNAD5 function-body walrus reads exactly what R2588 answered (refused/None vs refused/None)
+PASS AC-PNAD5 top-level walrus reads exactly what R2588 answered (ok/b vs ok/b)
+PASS AC-PNAD5 a relative module alias head reads as before (ok/b vs ok/b)
+PASS AC-PNAD5 a bounded live leg reads real modules read-only and agrees with BOTH parents (modules=2 loops=49 unreadable=0 mismatched=[])
+PASS AC-PNAD5 the SAME fixture is measured on BOTH readers (here=ok/b there=refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAD5 the R2588 keys ride on the row (['base_pnad_state', 'base_pnad_value', 'base_pnad_reason', 'base_pnad_chain', 'base_pnad_branch_reads'])
+PASS AC-PNAD5 the R2587 keys are untouched beside them (['ma_chain', 'branch_reads', 'base_pnac_state'])
+PASS AC-PNAD5 an elif/else pair still reads ambiguous, never resolved (refused/attr-module-alias-ambiguous:M@elif+else)
+PASS AC-PNAD6 the module source is pure ASCII (9652 bytes)
+PASS AC-PNAD6 no clock, no network, no shell ([])
+PASS AC-PNAD6 the registry carries exactly one label row (1)
+PASS AC-PNAD6 the registry carries exactly one suite row (1)
+PASS AC-PNAD6 this suite exists on disk
+PASS AC-PNAD6 six criteria are declared
+SUITE PASS 6/6
+== own legs identical=True ==
+== adjacent test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_scope.py rc=0 ==
+PASS AC-PNAC1 an elif-body walrus alias head resolves (ok/b)
+PASS AC-PNAC1 the elif it was read in is named (['mk.REG->hw', 'REG', 'BASE', 'M<-consts', 'M.HW', 'branch:M@elif'])
+PASS AC-PNAC1 the R2587 reader still refuses this shape (refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAC2 a with-body walrus alias head resolves (ok/b)
+PASS AC-PNAC2 the with it was read in is named (['mk.REG->hw', 'REG', 'BASE', 'M<-consts', 'M.HW', 'branch:M@with'])
+PASS AC-PNAC2 the R2587 reader still refuses this shape (refused/None)
+PASS AC-PNAC3 a for body walrus is still refused (refused/None)
+PASS AC-PNAC3 the shipped refusal is kept byte for byte (attr-module-alias-unbound:M.HW/attr-module-alias-unbound:M.HW)
+PASS AC-PNAC3 no branch read is published ([])
+PASS AC-PNAC3 a nested two deep walrus is still refused (refused/None)
+PASS AC-PNAC3 the shipped refusal is kept byte for byte (attr-module-alias-unbound:M.HW/attr-module-alias-unbound:M.HW)
+PASS AC-PNAC3 no branch read is published ([])
+PASS AC-PNAC4 module-level if branch reads exactly what R2587 answered (ok/b vs ok/b)
+PASS AC-PNAC4 module-level if/else pair reads exactly what R2587 answered (refused/None vs refused/None)
+PASS AC-PNAC4 function-body walrus reads exactly what R2587 answered (refused/None vs refused/None)
+PASS AC-PNAC4 top-level walrus reads exactly what R2587 answered (ok/b vs ok/b)
+PASS AC-PNAC4 a relative module alias head reads as before (ok/b vs ok/b)
+PASS AC-PNAC4 an elif/else pair is named ambiguous, never resolved (refused/attr-module-alias-ambiguous:M@elif+else)
+PASS AC-PNAC5 a bounded live leg reads real modules read-only and agrees with the parent (modules=2 loops=49 unreadable=0 mismatched=[])
+PASS AC-PNAC5 the SAME fixture is measured on BOTH readers (here=ok/b there=refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAC5 the R2587 keys ride on the row (['base_pnac_state', 'base_pnac_value', 'base_pnac_reason', 'base_pnac_chain', 'base_pnac_branch_reads'])
+PASS AC-PNAC5 the R2587 row keys are untouched beside them (['ma_chain', 'branch_reads', 'ma_source'])
+PASS AC-PNAC6 the module source is pure ASCII (9470 bytes)
+PASS AC-PNAC6 no clock, no network, no shell ([])
+PASS AC-PNAC6 the registry carries exactly one label row (1)
+PASS AC-PNAC6 the registry carries exactly one suite row (1)
+PASS AC-PNAC6 this suite exists on disk
+PASS AC-PNAC6 six criteria are declared
+SUITE PASS 6/6
+== adjacent test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_scope.py rc=0 ==
+PASS AC-PNAB1 a branch walrus alias head resolves (ok/b)
+PASS AC-PNAB1 the branch it was read in is named (['mk.REG->hw', 'REG', 'BASE', 'M<-consts', 'M.HW', 'branch:M@if'])
+PASS AC-PNAB1 the shipped reader still refuses this shape (refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAB2 two branches are named ambiguous (refused/attr-module-alias-ambiguous:M@else+if)
+PASS AC-PNAB2 both branches are named in the answer (attr-module-alias-ambiguous:M@else+if)
+PASS AC-PNAB2 nothing is resolved to either branch
+PASS AC-PNAB2 the shipped reader states no reason (attr-module-alias-unbound:M.HW)
+PASS AC-PNAB3 a function-body walrus is not a module alias (refused/None)
+PASS AC-PNAB3 the shipped refusal is kept byte for byte (attr-module-alias-unbound:M.HW/attr-module-alias-unbound:M.HW)
+PASS AC-PNAB3 no branch read is published ([])
+PASS AC-PNAB4 top-level walrus reads exactly what R2585 answered (ok/b vs ok/b)
+PASS AC-PNAB4 relative module alias head reads exactly what R2585 answered (ok/b vs ok/b)
+PASS AC-PNAB4 an AMBIGUOUS unanchored head is still refused, never guessed (refused/refused)
+PASS AC-PNAB5 a bounded live leg reads real modules read-only and agrees with the parent (modules=4 loops=80 unreadable=0 mismatched=[])
+PASS AC-PNAB5 the SAME fixture is measured on BOTH readers (here=ok/b there=refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAB5 the parent keys ride on the row (['base_pnab_state', 'base_pnab_hop', 'ma_chain', 'ma_source'])
+PASS AC-PNAB6 the module source is pure ASCII (13238 bytes)
+PASS AC-PNAB6 no clock, no network, no shell ([])
+PASS AC-PNAB6 the registry carries exactly one row for this face
+PASS AC-PNAB6 this suite exists on disk
+PASS AC-PNAB6 six criteria are declared
+SUITE PASS 6/6
+== limits rc=0 ==
+LIMITS R2590 re-measured on the committed tree, before any code
+  while body                   pnac=refused/attr-module-alias-unbound:M.HW base=refused/attr-module-alias-unbound:M.HW
+  match case body              pnac=refused/attr-module-alias-unbound:M.HW base=refused/attr-module-alias-unbound:M.HW
+  for body (kept refusal)      pnac=refused/attr-module-alias-unbound:M.HW base=refused/attr-module-alias-unbound:M.HW
+  nested branch (kept refusal) pnac=refused/attr-module-alias-unbound:M.HW base=refused/attr-module-alias-unbound:M.HW
+LIMITS MATCHED fails=0
+EVIDENCE identical=True adjacent=2 fails=0
