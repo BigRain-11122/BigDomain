@@ -5497,6 +5497,14 @@ SUITES = [
     # R2393 seed row BEFORE the code.)
     ("os-ledger-line-shape-guard",
      os.path.join("..", "os", "test_ledger_line_shape_guard.py"), 6),
+    # R2597: the R2596 closeout appended 'tokens: local=...' with no round
+    # label, so seven ledger suites read that round as having no ledger line.
+    # The write path still has no door asking the law, so the repair face is
+    # shipped with its proof instead of a hand edit. (AC-RTP1..AC-RTP6 were
+    # stated in the module docstring BEFORE this file existed and are the
+    # R2597 verification window's birth-site repair.)
+    ("os-ledger-tokens-prefix-repair",
+     os.path.join("..", "os", "test_repair_tokens_prefix.py"), 6),
     # R2383: the imported runner contract had one owner after R2373, but a
     # tool's OWN argument block still had none - the guard wrote a literal
     # and the help wire composed its own flag line. One renderer owns that

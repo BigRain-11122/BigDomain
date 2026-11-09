@@ -1,0 +1,125 @@
+EVIDENCE CAPTURE round=R2597 suite=src/os/test_repair_tokens_prefix.py legs=2
+== LEG A rc=0 digest=E3B0C44298FC1C14
+test_ac_rtp1_check_reads_dirty_and_writes_nothing (__main__.RepairTokensPrefixCase.test_ac_rtp1_check_reads_dirty_and_writes_nothing) ... C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:163: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-8eb6jvy7\\state.json'>
+  raw = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:49: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-8eb6jvy7\\state.json'>
+  self.assertEqual(open(self.path, 'rb').read().decode('utf-8'), text)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:54: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-8eb6jvy7\\state.json'>
+  self.assertEqual(open(self.path, 'rb').read().decode('utf-8'), clean)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_ac_rtp2_only_an_unlabelled_tokens_line_is_labelled (__main__.RepairTokensPrefixCase.test_ac_rtp2_only_an_unlabelled_tokens_line_is_labelled) ... C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:121: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-kbe65kdu\\state.json'>
+  raw = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:155: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-kbe65kdu\\state.json'>
+  written = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:62: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-kbe65kdu\\state.json'>
+  payload = json.loads(open(self.path, 'rb').read().decode('utf-8'))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:163: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-kbe65kdu\\state.json'>
+  raw = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_ac_rtp3_second_apply_is_a_no_byte_no_op (__main__.RepairTokensPrefixCase.test_ac_rtp3_second_apply_is_a_no_byte_no_op) ... C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:121: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-e7sgp9_c\\state.json'>
+  raw = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:155: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-e7sgp9_c\\state.json'>
+  written = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:77: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-e7sgp9_c\\state.json'>
+  first = open(self.path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:80: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-e7sgp9_c\\state.json'>
+  self.assertEqual(open(self.path, 'rb').read(), first)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_ac_rtp4_payload_proof_and_layout_preserved (__main__.RepairTokensPrefixCase.test_ac_rtp4_payload_proof_and_layout_preserved) ... C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:121: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-1wlzfrjy\\state.json'>
+  raw = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:155: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-1wlzfrjy\\state.json'>
+  written = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:88: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-1wlzfrjy\\state.json'>
+  after_text = open(self.path, 'rb').read().decode('utf-8')
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_ac_rtp5_ambiguous_and_already_ledger_refuse (__main__.RepairTokensPrefixCase.test_ac_rtp5_ambiguous_and_already_ledger_refuse) ... C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:121: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-fgjtulij\\state.json'>
+  raw = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_ac_rtp6_source_is_ascii_and_stdlib_only (__main__.RepairTokensPrefixCase.test_ac_rtp6_source_is_ascii_and_stdlib_only) ... C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:108: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\repair_tokens_prefix_R2597.py'>
+  'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.021s
+
+OK
+== LEG B rc=0 digest=E3B0C44298FC1C14
+test_ac_rtp1_check_reads_dirty_and_writes_nothing (__main__.RepairTokensPrefixCase.test_ac_rtp1_check_reads_dirty_and_writes_nothing) ... C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:163: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-n0568c1l\\state.json'>
+  raw = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:49: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-n0568c1l\\state.json'>
+  self.assertEqual(open(self.path, 'rb').read().decode('utf-8'), text)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:54: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-n0568c1l\\state.json'>
+  self.assertEqual(open(self.path, 'rb').read().decode('utf-8'), clean)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_ac_rtp2_only_an_unlabelled_tokens_line_is_labelled (__main__.RepairTokensPrefixCase.test_ac_rtp2_only_an_unlabelled_tokens_line_is_labelled) ... C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:121: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-qnxwdi_7\\state.json'>
+  raw = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:155: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-qnxwdi_7\\state.json'>
+  written = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:62: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-qnxwdi_7\\state.json'>
+  payload = json.loads(open(self.path, 'rb').read().decode('utf-8'))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:163: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-qnxwdi_7\\state.json'>
+  raw = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_ac_rtp3_second_apply_is_a_no_byte_no_op (__main__.RepairTokensPrefixCase.test_ac_rtp3_second_apply_is_a_no_byte_no_op) ... C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:121: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-t4bf8_7q\\state.json'>
+  raw = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:155: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-t4bf8_7q\\state.json'>
+  written = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:77: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-t4bf8_7q\\state.json'>
+  first = open(self.path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:80: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-t4bf8_7q\\state.json'>
+  self.assertEqual(open(self.path, 'rb').read(), first)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_ac_rtp4_payload_proof_and_layout_preserved (__main__.RepairTokensPrefixCase.test_ac_rtp4_payload_proof_and_layout_preserved) ... C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:121: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-oer8auch\\state.json'>
+  raw = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:155: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-oer8auch\\state.json'>
+  written = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:88: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-oer8auch\\state.json'>
+  after_text = open(self.path, 'rb').read().decode('utf-8')
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_ac_rtp5_ambiguous_and_already_ledger_refuse (__main__.RepairTokensPrefixCase.test_ac_rtp5_ambiguous_and_already_ledger_refuse) ... C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\repair_tokens_prefix_R2597.py:121: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\rtp-r9lvq81g\\state.json'>
+  raw = open(state_path, 'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_ac_rtp6_source_is_ascii_and_stdlib_only (__main__.RepairTokensPrefixCase.test_ac_rtp6_source_is_ascii_and_stdlib_only) ... C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src/os/test_repair_tokens_prefix.py:108: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\repair_tokens_prefix_R2597.py'>
+  'rb').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.022s
+
+OK
+== ADJACENT 2
+== src/os/test_ledger_lines.py rc=0 SUITE PASS 8/8 criteria
+== src/os/test_ledger_closeout.py rc=0 SUITE PASS 8/8 criteria
+EVIDENCE identical=True adjacent=2 fails=0 digest=E3B0C44298FC1C14
