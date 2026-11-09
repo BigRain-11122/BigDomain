@@ -8,6 +8,13 @@
       "declared_by": 2593,
       "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
       "until": 2603
+    },
+    {
+      "round": 2595,
+      "status": "DELIVERED",
+      "declared_by": "R2595",
+      "reason": "R2595 verification window: the interrupted attempt of this same round shipped the export driver health repair plus its regression suite and the refreshed CEO export, so the round reads DELIVERED and is declared here rather than left untriaged",
+      "until": 2605
     }
   ]
 }
