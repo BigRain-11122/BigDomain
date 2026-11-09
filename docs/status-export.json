@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-10T04:53:33+08:00",
+  "export_ts": "2026-11-10T04:55:18+08:00",
   "do": "2026-11-10 R2600 PRODUCT window on a REPOSITORY-WIDE breakage measured at open, not chosen from a list: `src/os/debt_gate.py --check` answered exit 3 (E_DR_BAD_FIRST) for EVERY round because state/debt.md no longer parsed. BIRTH SITE FOUND BY MEASUREMENT: the R2599 note helper appended its text at the END of the open row whose last segment was `first=yes`, so the `first` field swallowed the whole ",
   "ceo_face": {
     "current": "2026-11-10 R2600 PRODUCT window on a REPOSITORY-WIDE breakage measured at open, not chosen from a list: `src/os/debt_gate.py --check` answered exit 3 (E_DR_BAD_FIRST) for EVERY round because state/debt.md no longer parsed. BIRTH SITE FOUND BY MEASUREMENT: the R2599 note helper appended its text at the END of the open row whose last segment was `first=yes`, so the `first` field swallowed the whole ",
     "latest_artifact": "debt-note-append-R2600.log (937B) + debt-note-append-live-R2600.log (299B)",
     "last_artifact": "debt-note-append-R2600.log (937B) + debt-note-append-live-R2600.log (299B)",
-    "next_milestone": "next window owes reconcile-battery-R2596 on the committed tree, inside a 48h window due 2026-11-12T04:53:33+08:00",
-    "next_milestone_due": "2026-11-12T04:53:33+08:00",
-    "updated_at": "2026-11-10T04:53:33+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2596 on the committed tree, inside a 48h window due 2026-11-12T04:55:18+08:00",
+    "next_milestone_due": "2026-11-12T04:55:18+08:00",
+    "updated_at": "2026-11-10T04:55:18+08:00"
   },
   "depts": [
     {
