@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-09T19:02:30+08:00",
+  "export_ts": "2026-11-09T19:06:20+08:00",
   "do": "2026-11-09 R2593 VERIFICATION window on the battery the register named first (reconcile-battery-R2592, pre-registered 628 suites / 4744 criteria at R2592). AN INTERRUPTED ATTEMPT OF THIS SAME ROUND IS ADOPTED, NOT RESTARTED: the tree at open carried docs/sandbox-suite-matrix.md and state/debt.md modified plus qa/reconcile-all-R2593.log and src/os/launch_battery_R2593.py untracked, with NO battery ",
   "ceo_face": {
     "current": "2026-11-09 R2593 VERIFICATION window on the battery the register named first (reconcile-battery-R2592, pre-registered 628 suites / 4744 criteria at R2592). AN INTERRUPTED ATTEMPT OF THIS SAME ROUND IS ADOPTED, NOT RESTARTED: the tree at open carried docs/sandbox-suite-matrix.md and state/debt.md modified plus qa/reconcile-all-R2593.log and src/os/launch_battery_R2593.py untracked, with NO battery ",
     "latest_artifact": "reconcile-all-R2593.log (1069642B)",
     "last_artifact": "reconcile-all-R2593.log (1069642B)",
-    "next_milestone": "next window owes product-face-R2593 on the committed tree, inside a 48h window due 2026-11-11T19:02:30+08:00",
-    "next_milestone_due": "2026-11-11T19:02:30+08:00",
-    "updated_at": "2026-11-09T19:02:30+08:00"
+    "next_milestone": "next window owes product-face-R2593 on the committed tree, inside a 48h window due 2026-11-11T19:06:20+08:00",
+    "next_milestone_due": "2026-11-11T19:06:20+08:00",
+    "updated_at": "2026-11-09T19:06:20+08:00"
   },
   "depts": [
     {
