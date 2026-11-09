@@ -1,0 +1,4 @@
+(N1) WALRUS inside a module-level elif branch -> state=refused value=None reason=attr-module-alias-unbound:M.HW reads=[]
+(N2) WALRUS inside a module-level with body -> state=refused value=None reason=attr-module-alias-unbound:M.HW reads=[]
+(N3) WALRUS inside a module-level for body -> state=refused value=None reason=attr-module-alias-unbound:M.HW reads=[]
+(N4) WALRUS inside a branch nested two levels deep -> state=refused value=None reason=attr-module-alias-unbound:M.HW reads=[]

@@ -6202,6 +6202,16 @@ SUITES = [
     ("os-state-seq-archive",
      os.path.join("..", "os", "test_state_seq_archive.py"),
      6),
+    # R2587 module-level-branch walrus face: a walrus bound inside a
+    # module-level if/else/try body is followed and names the branch it was
+    # read in, two branches are named ambiguous rather than resolved, a
+    # function-body walrus keeps the shipped refusal, and every parent answer
+    # rides beside it (624 -> 625 suites, 4720 -> 4726).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_scope.py"),
+     6),
     ]
 
 FAILS = 0

@@ -1,0 +1,46 @@
+== suite rc=0 ==
+PASS AC-PNAB1 a branch walrus alias head resolves (ok/b)
+PASS AC-PNAB1 the branch it was read in is named (['mk.REG->hw', 'REG', 'BASE', 'M<-consts', 'M.HW', 'branch:M@if'])
+PASS AC-PNAB1 the shipped reader still refuses this shape (refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAB2 two branches are named ambiguous (refused/attr-module-alias-ambiguous:M@else+if)
+PASS AC-PNAB2 both branches are named in the answer (attr-module-alias-ambiguous:M@else+if)
+PASS AC-PNAB2 nothing is resolved to either branch
+PASS AC-PNAB2 the shipped reader states no reason (attr-module-alias-unbound:M.HW)
+PASS AC-PNAB3 a function-body walrus is not a module alias (refused/None)
+PASS AC-PNAB3 the shipped refusal is kept byte for byte (attr-module-alias-unbound:M.HW/attr-module-alias-unbound:M.HW)
+PASS AC-PNAB3 no branch read is published ([])
+PASS AC-PNAB4 top-level walrus reads exactly what R2585 answered (ok/b vs ok/b)
+PASS AC-PNAB4 relative module alias head reads exactly what R2585 answered (ok/b vs ok/b)
+PASS AC-PNAB4 an AMBIGUOUS unanchored head is still refused, never guessed (refused/refused)
+PASS AC-PNAB5 a bounded live leg reads real modules read-only and agrees with the parent (modules=4 loops=80 unreadable=0 mismatched=[])
+PASS AC-PNAB5 the SAME fixture is measured on BOTH readers (here=ok/b there=refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAB5 the parent keys ride on the row (['base_pnab_state', 'base_pnab_hop', 'ma_chain', 'ma_source'])
+PASS AC-PNAB6 the module source is pure ASCII (13238 bytes)
+PASS AC-PNAB6 no clock, no network, no shell ([])
+PASS AC-PNAB6 the registry carries exactly one row for this face
+PASS AC-PNAB6 this suite exists on disk
+PASS AC-PNAB6 six criteria are declared
+SUITE PASS 6/6
+== adjacent rc=0 ==
+PASS AC-PNAA1 a walrus alias head resolves (ok/b)
+PASS AC-PNAA1 the walrus link is named on the chain (['mk.REG->hw', 'REG', 'BASE', 'M<-consts', 'M.HW'])
+PASS AC-PNAA1 the shipped reader still refuses this shape (refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAA2 a relative from-imported call resolves (ok/b)
+PASS AC-PNAA2 the relative hop is named (with-as-call-chain/direct/['mk.REG()'])
+PASS AC-PNAA2 the shipped reader still refuses this shape (refused/attr-module-alias-unbound:mk.REG())
+PASS AC-PNAA3 a relative non-function refuses with this face own word (refused/attr-relative-import-not-callable:REG)
+PASS AC-PNAA3 the refusal is not the shipped absolute word (attr-relative-import-not-callable:REG)
+PASS AC-PNAA3 nothing is resolved for the refusal
+PASS AC-PNAA4 a relative module alias head resolves (ok/b)
+PASS AC-PNAA4 the shipped reader still refuses this shape (refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAA4 an AMBIGUOUS unanchored head is refused, never guessed (refused)
+PASS AC-PNAA5 an already-resolving shape reads exactly what the parent answered (ok/ok)
+PASS AC-PNAA5 the parent keys ride on the row (['base_pnma_state', 'base_pnma_hop', 'ma_chain', 'ma_source'])
+PASS AC-PNAA5 a bounded live leg reads real modules read-only (modules=4 loops=80 unreadable=0)
+PASS AC-PNAA5 the SAME fixture is measured on BOTH readers (here=ok/b there=refused/attr-module-alias-unbound:M.HW)
+PASS AC-PNAA6 the module source is pure ASCII (33257 bytes)
+PASS AC-PNAA6 no clock, no network, no shell ([])
+PASS AC-PNAA6 the registry carries exactly one row for this face
+PASS AC-PNAA6 this suite exists on disk
+PASS AC-PNAA6 six criteria are declared
+SUITE PASS 6/6
