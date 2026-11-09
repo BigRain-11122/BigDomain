@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-10T05:20:07+08:00",
+  "export_ts": "2026-11-10T05:21:12+08:00",
   "do": "2026-11-10 R2602 PRODUCT window on the queue head the register and the queue named (state/queue/tech.md:634 prefix AC-EDMB1, criteria AC-EDMB1..AC-EDMB6 pinned in that row at R2601 BEFORE any code). Readings at open: git status EMPTY at HEAD a96155c7 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the group orders tail carrying only BigStream and fleet ro",
   "ceo_face": {
     "current": "2026-11-10 R2602 PRODUCT window on the queue head the register and the queue named (state/queue/tech.md:634 prefix AC-EDMB1, criteria AC-EDMB1..AC-EDMB6 pinned in that row at R2601 BEFORE any code). Readings at open: git status EMPTY at HEAD a96155c7 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the group orders tail carrying only BigStream and fleet ro",
     "latest_artifact": "limits-matrix-reconcile-next-R2602.log (220B) + suite-matrix-reconcile-evidence-face-R2602.log (1594B)",
     "last_artifact": "limits-matrix-reconcile-next-R2602.log (220B) + suite-matrix-reconcile-evidence-face-R2602.log (1594B)",
-    "next_milestone": "next window owes reconcile-battery-R2596 on the committed tree, inside a 48h window due 2026-11-12T05:20:07+08:00",
-    "next_milestone_due": "2026-11-12T05:20:07+08:00",
-    "updated_at": "2026-11-10T05:20:07+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2596 on the committed tree, inside a 48h window due 2026-11-12T05:21:12+08:00",
+    "next_milestone_due": "2026-11-12T05:21:12+08:00",
+    "updated_at": "2026-11-10T05:21:12+08:00"
   },
   "depts": [
     {
