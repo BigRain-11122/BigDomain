@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-09T16:49:59+08:00",
+  "export_ts": "2026-11-09T16:54:40+08:00",
   "do": "2026-11-09 R2591 VERIFICATION window on the battery the register named first (reconcile-battery-R2590, pre-registered 627 suites / 4738 criteria at R2590). Five-silence at open: git status carried exactly ONE untracked file from the INTERRUPTED ATTEMPT of the previous round (src/os/launch_battery_R2590.py) and a LIVE BATTERY was already running on the committed tree f41231c2 (pids 49316 battery_st",
   "ceo_face": {
     "current": "2026-11-09 R2591 VERIFICATION window on the battery the register named first (reconcile-battery-R2590, pre-registered 627 suites / 4738 criteria at R2590). Five-silence at open: git status carried exactly ONE untracked file from the INTERRUPTED ATTEMPT of the previous round (src/os/launch_battery_R2590.py) and a LIVE BATTERY was already running on the committed tree f41231c2 (pids 49316 battery_st",
     "latest_artifact": "none landed yet for R2591",
     "last_artifact": "none landed yet for R2591",
-    "next_milestone": "next window owes product-face-R2591 on the committed tree, inside a 48h window due 2026-11-11T16:50:00+08:00",
-    "next_milestone_due": "2026-11-11T16:50:00+08:00",
-    "updated_at": "2026-11-09T16:49:59+08:00"
+    "next_milestone": "next window owes product-face-R2591 on the committed tree, inside a 48h window due 2026-11-11T16:54:44+08:00",
+    "next_milestone_due": "2026-11-11T16:54:44+08:00",
+    "updated_at": "2026-11-09T16:54:40+08:00"
   },
   "depts": [
     {
@@ -926,10 +926,10 @@
   "self_drive": {
     "window": "2026-11-03..2026-11-09",
     "window_days": 7,
-    "log_lines_in_window": 53,
+    "log_lines_in_window": 54,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 53,
+    "substantive_non_idle_mention_lines": 54,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
