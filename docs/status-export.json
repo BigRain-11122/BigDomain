@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-09T16:54:40+08:00",
-  "do": "2026-11-09 R2591 VERIFICATION window on the battery the register named first (reconcile-battery-R2590, pre-registered 627 suites / 4738 criteria at R2590). Five-silence at open: git status carried exactly ONE untracked file from the INTERRUPTED ATTEMPT of the previous round (src/os/launch_battery_R2590.py) and a LIVE BATTERY was already running on the committed tree f41231c2 (pids 49316 battery_st",
+  "export_ts": "2026-11-09T17:37:36+08:00",
+  "do": "2026-11-09 R2592 PRODUCT window on the queue head the debt gate named (product-face-R2591, state/queue/tech.md:625 prefix AC-PNAE1, criteria AC-PNAE1..AC-PNAE6 pinned in that row at R2590 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 31eb4612 with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read rows=393 with known_tokens",
   "ceo_face": {
-    "current": "2026-11-09 R2591 VERIFICATION window on the battery the register named first (reconcile-battery-R2590, pre-registered 627 suites / 4738 criteria at R2590). Five-silence at open: git status carried exactly ONE untracked file from the INTERRUPTED ATTEMPT of the previous round (src/os/launch_battery_R2590.py) and a LIVE BATTERY was already running on the committed tree f41231c2 (pids 49316 battery_st",
-    "latest_artifact": "none landed yet for R2591",
-    "last_artifact": "none landed yet for R2591",
-    "next_milestone": "next window owes product-face-R2591 on the committed tree, inside a 48h window due 2026-11-11T16:54:44+08:00",
-    "next_milestone_due": "2026-11-11T16:54:44+08:00",
-    "updated_at": "2026-11-09T16:54:40+08:00"
+    "current": "2026-11-09 R2592 PRODUCT window on the queue head the debt gate named (product-face-R2591, state/queue/tech.md:625 prefix AC-PNAE1, criteria AC-PNAE1..AC-PNAE6 pinned in that row at R2590 BEFORE any code). Five-silence at open: git status EMPTY at HEAD 31eb4612 with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read rows=393 with known_tokens",
+    "latest_artifact": "module-alias-walrus-while-else-nested-scope-R2592.log (6852B)",
+    "last_artifact": "module-alias-walrus-while-else-nested-scope-R2592.log (6852B)",
+    "next_milestone": "next window owes reconcile-battery-R2592 on the committed tree, inside a 48h window due 2026-11-11T17:37:36+08:00",
+    "next_milestone_due": "2026-11-11T17:37:36+08:00",
+    "updated_at": "2026-11-09T17:37:36+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "module-alias-walrus-while-else-nested-scope-R2592.log (6852B)",
     "none landed yet for R2591",
     "module-alias-walrus-while-match-scope-R2590.log (10594B)",
     "none landed yet for R2589",
@@ -907,7 +908,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2591",
+      "2592",
       "OSLoop 执行 tick"
     ],
     [
@@ -926,10 +927,10 @@
   "self_drive": {
     "window": "2026-11-03..2026-11-09",
     "window_days": 7,
-    "log_lines_in_window": 54,
+    "log_lines_in_window": 50,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 54,
+    "substantive_non_idle_mention_lines": 50,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -962,17 +963,17 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 14,
-        "done_rows": 464,
+        "done_rows": 465,
         "gated_rows": 1,
         "claimable": 11,
         "discounted": 2,
         "delivered": [
           {
-            "line": 625,
-            "prefix": "AC-PNAE1"
+            "line": 627,
+            "prefix": "AC-PNAF1"
           },
           {
-            "line": 640,
+            "line": 642,
             "prefix": "AC-SEQAF1"
           }
         ],

@@ -6234,6 +6234,19 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_scope.py"),
      6),
+    # R2592 while-else / nested-case walrus face: a walrus bound in a
+    # module-level while else section resolves and is named branch:M@while_else,
+    # a lone match nested one level in a while body resolves and is named
+    # branch:M@while>case, two while bodies binding one name refuse as
+    # attr-module-alias-ambiguous: naming BOTH whiles, and a for body plus a
+    # with body or a two-deep branch nested in a while keep the shipped
+    # refusal with no branch read; every R2590 answer rides beside it
+    # (627 -> 628 suites, 4738 -> 4744).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_scope.py"),
+     6),
     ]
 
 FAILS = 0
