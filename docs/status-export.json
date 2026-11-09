@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-09T21:25:26+08:00",
-  "do": "2026-11-09 R2594 fold of log items 68..75 (the complete R2592 product-round block, ending on its push line) moved verbatim into the monthly archive at a true round-block boundary; window tokens: AC-PNAE1 AC-PNAE6 AC-PNAF1 AC-PNAF6 D-CLEAR R-MET",
+  "export_ts": "2026-11-09T22:54:08+08:00",
+  "do": "2026-11-09 R2595 VERIFICATION window on the battery the register owed (reconcile-battery-R2594, pre-registered 629 suites / 4750 criteria). An interrupted attempt of this same round was ADOPTED, NOT RESTARTED: at open the tree already carried its birth-site repair of the export driver health term (the whole self_drive block recomputed instead of compared against log lines), the six-criteria regres",
   "ceo_face": {
-    "current": "2026-11-09 R2594 fold of log items 68..75 (the complete R2592 product-round block, ending on its push line) moved verbatim into the monthly archive at a true round-block boundary; window tokens: AC-PNAE1 AC-PNAE6 AC-PNAF1 AC-PNAF6 D-CLEAR R-MET",
-    "latest_artifact": "module-alias-walrus-match-ordinal-scope-R2594.log (12850B)",
-    "last_artifact": "module-alias-walrus-match-ordinal-scope-R2594.log (12850B)",
-    "next_milestone": "next window owes reconcile-battery-R2594 on the committed tree, inside a 48h window due 2026-11-11T21:25:26+08:00",
-    "next_milestone_due": "2026-11-11T21:25:26+08:00",
-    "updated_at": "2026-11-09T21:25:26+08:00"
+    "current": "2026-11-09 R2595 VERIFICATION window on the battery the register owed (reconcile-battery-R2594, pre-registered 629 suites / 4750 criteria). An interrupted attempt of this same round was ADOPTED, NOT RESTARTED: at open the tree already carried its birth-site repair of the export driver health term (the whole self_drive block recomputed instead of compared against log lines), the six-criteria regres",
+    "latest_artifact": "export-driver-self-drive-health-R2595.log (2322B) + reconcile-all-R2595-retry.log (1073477B) + reconcile-all-R2595-retry2.log (1075240B) + reconcile-all-R2595.log (1072499B)",
+    "last_artifact": "export-driver-self-drive-health-R2595.log (2322B) + reconcile-all-R2595-retry.log (1073477B) + reconcile-all-R2595-retry2.log (1075240B) + reconcile-all-R2595.log (1072499B)",
+    "next_milestone": "next window owes product-face-R2595 on the committed tree, inside a 48h window due 2026-11-11T22:54:08+08:00",
+    "next_milestone_due": "2026-11-11T22:54:08+08:00",
+    "updated_at": "2026-11-09T22:54:08+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "export-driver-self-drive-health-R2595.log (2322B) + reconcile-all-R2595-retry.log (1073477B) + reconcile-all-R2595-retry2.log (1075240B) + reconcile-all-R2595.log (1072499B)",
     "module-alias-walrus-match-ordinal-scope-R2594.log (12850B)",
     "reconcile-all-R2593.log (1069642B)",
     "module-alias-walrus-while-else-nested-scope-R2592.log (6852B)",
@@ -910,7 +911,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2594",
+      "2595",
       "OSLoop 执行 tick"
     ],
     [
@@ -929,10 +930,10 @@
   "self_drive": {
     "window": "2026-11-03..2026-11-09",
     "window_days": 7,
-    "log_lines_in_window": 51,
+    "log_lines_in_window": 42,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 50,
+    "substantive_non_idle_mention_lines": 41,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
