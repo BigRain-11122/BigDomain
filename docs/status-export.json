@@ -1,12 +1,13 @@
 {
-  "export_ts": "2026-11-09T08:23:28+08:00",
-  "do": "product window R2588: one runnable reading extends the module-alias branch table to elif and with bindings, proved by its own six-criteria suite twice and by the parent suite.",
+  "export_ts": "2026-11-09T09:50:59+08:00",
+  "do": "2026-11-09 R2589 VERIFICATION window on the battery the register named first (reconcile-battery-R2588, pre-registered 626 suites / 4732 criteria at R2588). Five-silence at open: git status carried exactly TWO untracked files from an INTERRUPTED ATTEMPT of this same round (qa/reconcile-all-R2588-retry.log and src/os/launch_battery_R2589_retry.py) with no battery process live, zero @BigDomain rows i",
   "ceo_face": {
-    "current": "2026-11-09 R2588 PRODUCT window: a module alias head bound by a walrus inside a module-level elif section or a module-level with body is now followed through the R2587 reading instead of beside it. Elif names branch:M@elif, with names branch:M@with, a for body and a branch nested inside another branch keep the shipped refusal attr-module-alias-unbound:M.HW with no branch read, and an elif/else pair is refused as attr-module-alias-ambiguous:M@elif+else. Registry now reads 626 suites / 4732 criteria.",
-    "latest_artifact": "src/os/probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_scope.py + its suite; qa/module-alias-walrus-elif-with-scope-R2588.log (7104 bytes, legs green =3, legs_identical=True, adjacent_green=True) and qa/module-alias-walrus-elif-with-limits-next-R2588.log (361 bytes, 2 shipped refusals measured) at 2026-11-09",
-    "last_artifact": "module-alias-walrus-branch-limits-R2587.log (484B) + module-alias-walrus-branch-limits-next-R2587.log (484B) + module-alias-walrus-branch-scope-R2587.log (3450B)",
-    "next_milestone": "R2589 VERIFICATION window on the debt register first item reconcile-battery-R2588: the full reconcile battery on the committed R2588 tree at the pre-registered 626 suites / 4732 criteria, with zero product edits, then the designed matrix follow-up; the queue head is state/queue/tech.md:623 prefix AC-PNAD1 whose criteria were pinned before any code. Window due 2026-11-11T23:59:59+08:00.",
-    "next_milestone_due": "2026-11-11T23:59:59+08:00"
+    "current": "2026-11-09 R2589 VERIFICATION window on the battery the register named first (reconcile-battery-R2588, pre-registered 626 suites / 4732 criteria at R2588). Five-silence at open: git status carried exactly TWO untracked files from an INTERRUPTED ATTEMPT of this same round (qa/reconcile-all-R2588-retry.log and src/os/launch_battery_R2589_retry.py) with no battery process live, zero @BigDomain rows i",
+    "latest_artifact": "none landed yet for R2589",
+    "last_artifact": "none landed yet for R2589",
+    "next_milestone": "next window owes product-face-R2589 on the committed tree, inside a 48h window due 2026-11-11T09:50:59+08:00",
+    "next_milestone_due": "2026-11-11T09:50:59+08:00",
+    "updated_at": "2026-11-09T09:50:59+08:00"
   },
   "depts": [
     {
@@ -36,6 +37,7 @@
     }
   ],
   "outs": [
+    "none landed yet for R2589",
     "module-alias-walrus-branch-limits-R2587.log (484B) + module-alias-walrus-branch-limits-next-R2587.log (484B) + module-alias-walrus-branch-scope-R2587.log (3450B)",
     "reconcile-all-R2586-retry.log (1054577B) + reconcile-all-R2586-retry2.log (1056357B) + reconcile-all-R2586.log (1053708B) + state-seq-archive-R2586.log (3698B)",
     "module-alias-walrus-relative-limits-R2585.log (580B) + module-alias-walrus-relative-limits-next-R2585.log (296B) + module-alias-walrus-relative-scope-R2585.log (4003B)",
@@ -903,7 +905,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2588",
+      "2589",
       "OSLoop 执行 tick"
     ],
     [
@@ -913,15 +915,19 @@
     [
       "R2588",
       "R2588 product window on the queue head the register named (state/queue/tech.md:621 prefix AC-PNAC1, criteria pinned at R2587 BEFORE any code). Shipped one reading that extends the R2587 branch table: elif sections of an if chain and module-level with bodies are followed, while a for body and a nested branch stay refused without a branch read. Proof: own suite PASS 6/6 on the first run and 6/6 twice with identical output, the R2587 parent suite still 6/6, the bounded live leg reads 2 real modules at 49 loops with no mismatch, and the same fixture is measured on both readers (ok/b here against refused/attr-module-alias-unbound:M.HW there). Registry moved 625/4726 -> 626/4732 by exactly one row, recounted by importing reconcile_all.SUITES with 626 unique names and paths. Next limits measured this window: a while body and a match case body are still unread (2 refusals in the limits log) and are seeded as row 623. Board row 621 closed with its DISCHARGED note. Debt: product-face-R2586 closed through the shipped writer at its predicted and measured byte count, and reconcile-battery-R2588 opened first=yes."
+    ],
+    [
+      "R2589",
+      "R2589 verification window on the battery the register named first (reconcile-battery-R2588, pre-registered 626 suites / 4732 criteria). An interrupted attempt of this same round had already finished the leg green, so it was ADOPTED and re-measured rather than re-run and its launcher was deleted instead of staged. Measured not quoted: 1061109 bytes, utf-8, bom=False, crlf=0, nul=0, 626 PASS suite rows with unique names, independent criteria recount exactly 4732, closing 'RUNNER PASS (626/626 suites green, reconcile controls 7/7, 2022.2s)'. Follow-up in the designed order: a designed matrix FAIL first with no byte written, then a stamp-aligned regeneration from this round own green evidence checked byte-identical, then four sections PASS for VERDICT R2588 PASS failing=none. Debt: reconcile-battery-R2588 closed and product-face-R2589 opened first=yes; no successor battery is owed because this window moved no product src byte and the registry is unmoved at 626/4732. No queue row was opened or closed."
     ]
   ],
   "self_drive": {
     "window": "2026-11-03..2026-11-09",
     "window_days": 7,
-    "log_lines_in_window": 50,
+    "log_lines_in_window": 48,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 50,
+    "substantive_non_idle_mention_lines": 48,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
@@ -954,17 +960,17 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 14,
-        "done_rows": 462,
+        "done_rows": 463,
         "gated_rows": 1,
         "claimable": 11,
         "discounted": 2,
         "delivered": [
           {
-            "line": 621,
-            "prefix": "AC-PNAC1"
+            "line": 623,
+            "prefix": "AC-PNAD1"
           },
           {
-            "line": 636,
+            "line": 638,
             "prefix": "AC-SEQAF1"
           }
         ],
@@ -990,9 +996,6 @@
     "verdict": "FLOOR-MET",
     "shortfall_total": 0,
     "missing": [],
-    "delivered_total": 2,
-    "queue_main_open": 6,
-    "queue_tech_open": 14,
-    "queue_explore_open": 10
+    "delivered_total": 2
   }
 }
