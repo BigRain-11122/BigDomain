@@ -4586,6 +4586,16 @@ SUITES = [
     # R2599 seed BEFORE the code existed.)
     ("os-suite-matrix-reconcile",
      os.path.join("..", "os", "test_suite_matrix_reconcile.py"), 6),
+    # R2602: the evidence face of the matrix reconciliation - a PASS leg that
+    # differs from the leg the document records reads its own word naming BOTH
+    # legs, the candidate walk reports what it decoded, a MISSING document can
+    # be composed from a --stamp-from source, and a matrix table that is not
+    # six cells refuses by header shape instead of reading zero rows.
+    # (AC-EDMB1..AC-EDMB6 pre-registered in state/queue/tech.md:634 as the
+    # R2601 seed BEFORE the code existed.)
+    ("os-suite-matrix-reconcile-evidence-face",
+     os.path.join("..", "os", "test_suite_matrix_reconcile_evidence_face.py"),
+     6),
     # R2253: a claimable queue row must name its criteria prefix, so
     # pre-registration is a gate instead of a habit. The row law is
     # imported from queue_floor rather than rewritten, two declaration

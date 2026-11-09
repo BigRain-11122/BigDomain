@@ -1,0 +1,20 @@
+EVIDENCE CAPTURE round=R2602 suite=src/os/test_suite_matrix_reconcile_evidence_face.py legs=2
+== LEG A rc=0 digest=E3B0C44298FC1C14
+  PASS AC-EDMB1 evidence-face=EVIDENCE-FACE (fixture leg) both legs named, patched doc_evidence_face -> STALE-CONTENT
+  PASS AC-EDMB2 walk stopped at yy-pass.log considered=3 decoded=2 printed=True
+  PASS AC-EDMB3 composed=WRITTEN (636 rows/4792 criteria, stamp 2026-11-08 14:49 +08:00 carried), no --stamp-from=NO-DOC exit=2 wrote nothing=True
+  PASS AC-EDMB4 header cells=5 -> HEADER-SHAPE E_EDMB_HEADER exit=3, write refused
+  PASS AC-EDMB5 five words kept: ROWS-MISMATCH,STALE-CONTENT,RED-LEG,NO-DOC,DOC-CURRENT -> [2,2,3,2,0]
+  PASS AC-EDMB6 hygiene ascii=True clock=False network=[] registered=True (1 rows, 6 criteria)
+SUITE PASS 6/6
+== LEG B rc=0 digest=E3B0C44298FC1C14
+  PASS AC-EDMB1 evidence-face=EVIDENCE-FACE (fixture leg) both legs named, patched doc_evidence_face -> STALE-CONTENT
+  PASS AC-EDMB2 walk stopped at yy-pass.log considered=3 decoded=2 printed=True
+  PASS AC-EDMB3 composed=WRITTEN (636 rows/4792 criteria, stamp 2026-11-08 14:49 +08:00 carried), no --stamp-from=NO-DOC exit=2 wrote nothing=True
+  PASS AC-EDMB4 header cells=5 -> HEADER-SHAPE E_EDMB_HEADER exit=3, write refused
+  PASS AC-EDMB5 five words kept: ROWS-MISMATCH,STALE-CONTENT,RED-LEG,NO-DOC,DOC-CURRENT -> [2,2,3,2,0]
+  PASS AC-EDMB6 hygiene ascii=True clock=False network=[] registered=True (1 rows, 6 criteria)
+SUITE PASS 6/6
+== ADJACENT 1
+== src/os/test_suite_matrix_reconcile.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=1 fails=0 digest=E3B0C44298FC1C14
