@@ -6269,6 +6269,15 @@ SUITES = [
     # at call time (629 -> 630 suites, 4750 -> 4756).
     ("os-export-driver-self-drive-health",
      os.path.join("..", "os", "test_export_driver_self_drive_health.py"), 6),
+    # R2596 product face on the R2595 seed: the repaired health term re-read
+    # the tree a SECOND time after the write, so one log line appended in
+    # between made a healthy refresh read ok=False, and the printed
+    # queue_bytes was never proved against the file on disk. The block is now
+    # stamped once and the two causes are named apart (DRIFT-UNDER-WRITE vs
+    # DOC-DOCTORED), the byte pair is asserted, and one refresh emits exactly
+    # one verdict word (630 -> 631 suites, 4756 -> 4762).
+    ("os-export-driver-health-verdict",
+     os.path.join("..", "os", "test_export_R2431_health_verdict.py"), 6),
     ]
 
 FAILS = 0

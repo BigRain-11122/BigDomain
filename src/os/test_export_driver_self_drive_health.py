@@ -167,10 +167,16 @@ def ac_edsh1():
         target = copy_export(directory)
         with two_shot_self_drive("proposals_total") as shot:
             code, printed = run_driver(target)
-        ok = (shot.calls >= 2 and code == 2 and "ok=False" in printed)
+        # R2596 birth-site repair: this criterion pinned code == 2 for a
+        # block that moved with the LOG. That false refusal is exactly what
+        # the R2596 row was chartered to name apart, so the INTENT is kept
+        # (the term is still not canned: a moved block must not read plain
+        # PASS) while the healthy outcome is the named word instead.
+        ok = (shot.calls >= 2 and code == 0 and "ok=True" in printed
+              and "VERDICT DRIFT-UNDER-WRITE" in printed)
         check(ok, "AC-EDSH1 the health term is not canned: a self_drive block "
-                  "that moves between the write and the read-back reads "
-                  "ok=False and the driver exits 2")
+                  "that moves between the write and the read-back is named "
+                  "DRIFT-UNDER-WRITE rather than reading a plain PASS")
     finally:
         shutil.rmtree(directory, ignore_errors=True)
 
@@ -242,7 +248,12 @@ def ac_edsh5():
              'back["ceo_face"]["current"] == current',
              'back["ceo_face"]["next_milestone"] == milestone',
              'back["export_ts"] == STAMP',
-             'back["self_drive"] == self_drive()',
+             # R2596 birth-site repair: the literal fresh-recompute term
+             # WAS the defect (it re-read the tree after the write), so the
+             # stamped-block term and the surviving fresh read are pinned
+             # separately instead of the old defective literal.
+             'back["self_drive"] == at_write',
+             "fresh = self_drive()",
              'proof.get("gate") == "CURRENT"')
     missing = [term for term in terms if term not in source]
     check(not missing,

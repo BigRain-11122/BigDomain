@@ -173,6 +173,36 @@ def tick_label():
     return cec._load_patterns()["tick_row_label"]
 
 
+# R2596 (AC-EDSW1/2/3/4): one verdict word per refresh, never two.
+DOC_DOCTORED = "DOC-DOCTORED"
+DRIFT_UNDER_WRITE = "DRIFT-UNDER-WRITE"
+SIZE_MISMATCH = "SIZE-MISMATCH"
+CHECK_MISMATCH = "CHECK-MISMATCH"
+VERDICT_PASS = "PASS"
+HEALTHY = (VERDICT_PASS, DRIFT_UNDER_WRITE)
+
+
+def classify(back_self_drive, at_write, fresh, base_ok, queue_bytes, disk_bytes):
+    """Name why a refresh is healthy or not, in exactly one word.
+
+    The read-back block is compared with what THIS driver stamped. If it
+    differs the document was rewritten by someone else after the write and
+    keeps today's refusal. Only then is the fresh recompute consulted: a block
+    that still equals the stamp while the tree moved is DRIFT-UNDER-WRITE, a
+    document that honestly recorded write-time truth and cannot be called a
+    defect. Byte accounting is last, because it can only name a pair.
+    """
+    if back_self_drive != at_write:
+        return DOC_DOCTORED
+    if not base_ok:
+        return CHECK_MISMATCH
+    if fresh != at_write:
+        return DRIFT_UNDER_WRITE
+    if queue_bytes != disk_bytes:
+        return SIZE_MISMATCH
+    return VERDICT_PASS
+
+
 def main():
     state = json.load(io.open(STATE, encoding="utf-8"))
     data = json.load(io.open(EXPORT, encoding="utf-8"))
@@ -207,7 +237,10 @@ def main():
     ceo["last_artifact"] = latest
     ceo["updated_at"] = STAMP
     data["ceo_face"] = ceo
-    data["self_drive"] = self_drive()
+    # One read of the tree, stamped into the document, and never re-read for
+    # the write: the block that lands is the block that was measured here.
+    at_write = self_drive()
+    data["self_drive"] = at_write
     try:
         EDQF.refresh(data, REPO)
     except EDQF.ExportDriverQueueFaceError as exc:
@@ -226,8 +259,9 @@ def main():
     # R2595: the old health term demanded log_lines_in_window ==
     # substantive_non_idle_mention_lines, which the recompute caliber can never
     # satisfy once one tokens line sits in the window (a tokens line counts as
-    # a window line and never as substantive). The document is now proved
-    # against a FRESH recompute of the whole self_drive block instead.
+    # a window line and never as substantive). The document is proved against
+    # the block the driver itself stamped, and the fresh recompute is taken
+    # ONCE more below to name drift rather than to fail the refresh.
     ok = (any(isinstance(r, list) and len(r) >= 2 and r[1] == label
               and str(r[0]) == tick for r in back["results"])
           and back["outs"][0] == latest
@@ -235,16 +269,22 @@ def main():
           and back["ceo_face"]["current"] == current
           and back["ceo_face"]["next_milestone"] == milestone
           and back["export_ts"] == STAMP
-          and back["self_drive"] == self_drive()
+          and back["self_drive"] == at_write
           and proof.get("gate") == "CURRENT")
+    fresh = self_drive()
+    disk_bytes = os.path.getsize(EXPORT)
+    verdict = classify(back["self_drive"], at_write, fresh, ok,
+                       proof.get("bytes"), disk_bytes)
     sys.stdout.write("RESULTS rows=%d outs=%d tick=%s bytes=%d queue=%s "
                      "queue_bytes=%d queue_drifted=%s ok=%s\n"
                      % (len(back["results"]), len(back["outs"]), tick,
-                        os.path.getsize(EXPORT), proof.get("gate"),
+                        disk_bytes, proof.get("gate"),
                         proof.get("bytes"),
                         ",".join(proof.get("drifted") or ()) or "(none)",
                         ok))
-    return 0 if ok else 2
+    sys.stdout.write("VERDICT %s queue_bytes=%s disk_bytes=%d\n"
+                     % (verdict, proof.get("bytes"), disk_bytes))
+    return 0 if verdict in HEALTHY else 2
 
 
 if __name__ == "__main__":

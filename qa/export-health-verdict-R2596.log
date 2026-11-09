@@ -1,0 +1,36 @@
+===== new-leg1 rc=0 =====
+SUITE export_R2431_health_verdict (R2596) criteria=6
+PASS AC-EDSW1 a block that moved because the LOG moved reads DRIFT-UNDER-WRITE ('DRIFT-UNDER-WRITE') while a still tree reads PASS ('PASS')
+PASS AC-EDSW2 a document whose block no longer matches the stamp reads DOC-DOCTORED ('DOC-DOCTORED') even when the tree also moved ('DOC-DOCTORED'), stays out of HEALTHY, and the RESULTS line it refused with is unchanged (True)
+PASS AC-EDSW3 a printed byte count that differs from the disk reads SIZE-MISMATCH ('SIZE-MISMATCH') and the pair is named in the verdict line (True)
+PASS AC-EDSW4 exactly two tree reads (one stamped, one at verdict), one publish, one verdict site, every outcome a single word
+PASS AC-EDSW5 the eight R2595 terms plus the fresh read all survive (missing=[])
+PASS AC-EDSW6 pure ASCII, stdlib only, zero network, own reconcile label and own suite
+SUITE PASS 6/6
+===== new-leg2 rc=0 =====
+SUITE export_R2431_health_verdict (R2596) criteria=6
+PASS AC-EDSW1 a block that moved because the LOG moved reads DRIFT-UNDER-WRITE ('DRIFT-UNDER-WRITE') while a still tree reads PASS ('PASS')
+PASS AC-EDSW2 a document whose block no longer matches the stamp reads DOC-DOCTORED ('DOC-DOCTORED') even when the tree also moved ('DOC-DOCTORED'), stays out of HEALTHY, and the RESULTS line it refused with is unchanged (True)
+PASS AC-EDSW3 a printed byte count that differs from the disk reads SIZE-MISMATCH ('SIZE-MISMATCH') and the pair is named in the verdict line (True)
+PASS AC-EDSW4 exactly two tree reads (one stamped, one at verdict), one publish, one verdict site, every outcome a single word
+PASS AC-EDSW5 the eight R2595 terms plus the fresh read all survive (missing=[])
+PASS AC-EDSW6 pure ASCII, stdlib only, zero network, own reconcile label and own suite
+SUITE PASS 6/6
+===== adjacent-1 rc=0 =====
+PASS AC-EDSH1 the health term is not canned: a self_drive block that moves between the write and the read-back is named DRIFT-UNDER-WRITE rather than reading a plain PASS
+PASS AC-EDSH2 a window holding a tokens line counts MORE window lines than substantive lines and the driver still exits 0 (the equality this repair replaced could never hold)
+PASS AC-EDSH3 a self_drive field doctored on disk AFTER the write reads ok=False and exits 2, so the proof binds the bytes rather than the dict it just built
+PASS AC-EDSH4 a non-CURRENT gate word keeps the run red, so the queue verdict is not swallowed by the self_drive repair
+PASS AC-EDSH5 every earlier health term survives beside the repaired one (tick row, outs, three ceo fields, stamp, fresh self_drive, gate; missing=none)
+PASS AC-EDSH6 the driver stays pure ASCII stdlib with no network egress (datetime is legitimately used for the 48h due), and the runner carries this row at 6 criteria (ascii=True banned=none wired=True)
+SUITE PASS 6/6
+===== adjacent-2 rc=0 =====
+SUITE export_driver_queue_face (R2497) criteria=6
+PASS AC-EDQF1 the section IS queue_floor_export_face.face asked at call time (patching that reading moves the driver section, no gross re-derivation survives)
+QUEUE EXPORT os-queue-floor-export-face verdict=CURRENT path=C:\Users\sjs20\AppData\Local\Temp\edqf2-7tlqrs_r\status-export.json claimable=5,12,10
+PASS AC-EDQF2 a driver run leaves the queue block CURRENT, the gate reports no drift and the queue face itself re-reads CURRENT
+PASS AC-EDQF3 a queue that moved between the reading and the write refuses with the gate own verdict word and leaves the document byte-identical with no residue
+PASS AC-EDQF4 every already-published key keeps its value and its position, and the queue section is refreshed in place rather than reordered
+PASS AC-EDQF5 the driver prints the gate verdict and the byte count, so a refused or drifted run is visible rather than silent
+PASS AC-EDQF6 pure ASCII, stdlib only, no clock, no network, one runner entry at 6 criteria and a help face of its own
+SUITE PASS 6/6
