@@ -1,0 +1,125 @@
+EVIDENCE CAPTURE round=R2604 suite=src/os/test_suite_matrix_reconcile_table_shape.py legs=2
+== LEG A rc=0 digest=E3B0C44298FC1C14
+[AC-EDMC1] separator width is a shape answer
+  PASS separator width 4 reads shape=(6, 4) got (6, 4)
+  PASS separator width 4 verdict HEADER-SHAPE got HEADER-SHAPE
+  PASS separator width 4 names BOTH widths ((6, 4))
+  PASS separator width 4 exits 3 got 3
+  PASS separator width 8 reads shape=(6, 8) got (6, 8)
+  PASS separator width 8 verdict HEADER-SHAPE got HEADER-SHAPE
+  PASS separator width 8 names BOTH widths ((6, 8))
+  PASS separator width 8 exits 3 got 3
+[AC-EDMC2] a missing matrix table is its own word
+  PASS no table reads shape=(None, None) got (None, None)
+  PASS no table verdict TABLE-MISSING got TABLE-MISSING
+  PASS no table does NOT read ROWS-MISMATCH
+  PASS no table names the missing table ('## �׼����оݡ�״̬����')
+  PASS no table exits 2 got 2
+  PASS write() restores a table-less document (WRITTEN)
+  PASS restored document carries a six-cell header
+[AC-EDMC3] the candidate walk is bounded and says so
+  PASS no-PASS pile returns no leg under a ceiling
+  PASS walk stops AT the ceiling decoded=8 bounded=True
+  PASS walk still reports what it listed (40)
+  PASS walk declares its ceiling (8)
+  PASS report says BOUND-REACHED on a capped pile (RED-LEG)
+  PASS a declared default ceiling exists (64)
+[AC-EDMC4] both evidence sources are named
+  PASS explicit leg wins and is named ('explicit')
+  PASS the unused qa-dir is named rather than ignored (True/False)
+  PASS a walk-only reading names itself walk ('walk')
+  PASS the CLI prints the source it used
+  PASS the CLI names the qa-dir it did not use
+[AC-EDMC5] the R2602 answers survive
+  PASS word DOC-CURRENT still in the shipped vocabulary (got 'DOC-CURRENT')
+  PASS word ROWS-MISMATCH still in the shipped vocabulary (got 'ROWS-MISMATCH')
+  PASS word STALE-CONTENT still in the shipped vocabulary (got 'STALE-CONTENT')
+  PASS word RED-LEG still in the shipped vocabulary (got 'RED-LEG')
+  PASS word NO-DOC still in the shipped vocabulary (got 'NO-DOC')
+  PASS word EVIDENCE-FACE still in the shipped vocabulary (got 'EVIDENCE-FACE')
+  PASS word HEADER-SHAPE still in the shipped vocabulary (got 'HEADER-SHAPE')
+  PASS the new word is additive, not a rename
+  PASS DOC-CURRENT still reachable with exit 0 (DOC-CURRENT)
+  PASS NO-DOC still exits 2 (NO-DOC)
+  PASS ROWS-MISMATCH still exits 2 (ROWS-MISMATCH)
+  PASS ROWS-MISMATCH still names BOTH counts (636/637)
+  PASS STALE-CONTENT still exits 2 (STALE-CONTENT)
+  PASS EVIDENCE-FACE still exits 2 (EVIDENCE-FACE)
+  PASS RED-LEG still exits 3 (RED-LEG)
+  PASS CLI prints ONE verdict word for ROWS-MISMATCH (got 'ROWS-MISMATCH')
+  PASS CLI prints ONE verdict word for NO-DOC (got 'NO-DOC')
+[AC-EDMC6] ASCII, stdlib, no clock, own label
+  PASS module is pure ASCII
+  PASS suite is pure ASCII
+  PASS module imports no clock/network face (['argparse', 'contextlib', 'io', 'json', 'matrix_stamp_provenance_line', 'os', 're', 'reconcile_all', 'suite_matrix', 'sys'])
+  PASS module imports stdlib and shipped faces only ([])
+  PASS its own reconcile label is registered ('os-suite-matrix-reconcile-table-shape')
+  PASS the base reconcile label is still registered
+  PASS its own label carries six criteria ([('os-suite-matrix-reconcile-table-shape', '..\\os\\test_suite_matrix_reconcile_table_shape.py', 6)])
+  PASS the label points at THIS suite
+  PASS the module keeps its own reconcile identity
+SUITE PASS 6/6
+== LEG B rc=0 digest=E3B0C44298FC1C14
+[AC-EDMC1] separator width is a shape answer
+  PASS separator width 4 reads shape=(6, 4) got (6, 4)
+  PASS separator width 4 verdict HEADER-SHAPE got HEADER-SHAPE
+  PASS separator width 4 names BOTH widths ((6, 4))
+  PASS separator width 4 exits 3 got 3
+  PASS separator width 8 reads shape=(6, 8) got (6, 8)
+  PASS separator width 8 verdict HEADER-SHAPE got HEADER-SHAPE
+  PASS separator width 8 names BOTH widths ((6, 8))
+  PASS separator width 8 exits 3 got 3
+[AC-EDMC2] a missing matrix table is its own word
+  PASS no table reads shape=(None, None) got (None, None)
+  PASS no table verdict TABLE-MISSING got TABLE-MISSING
+  PASS no table does NOT read ROWS-MISMATCH
+  PASS no table names the missing table ('## �׼����оݡ�״̬����')
+  PASS no table exits 2 got 2
+  PASS write() restores a table-less document (WRITTEN)
+  PASS restored document carries a six-cell header
+[AC-EDMC3] the candidate walk is bounded and says so
+  PASS no-PASS pile returns no leg under a ceiling
+  PASS walk stops AT the ceiling decoded=8 bounded=True
+  PASS walk still reports what it listed (40)
+  PASS walk declares its ceiling (8)
+  PASS report says BOUND-REACHED on a capped pile (RED-LEG)
+  PASS a declared default ceiling exists (64)
+[AC-EDMC4] both evidence sources are named
+  PASS explicit leg wins and is named ('explicit')
+  PASS the unused qa-dir is named rather than ignored (True/False)
+  PASS a walk-only reading names itself walk ('walk')
+  PASS the CLI prints the source it used
+  PASS the CLI names the qa-dir it did not use
+[AC-EDMC5] the R2602 answers survive
+  PASS word DOC-CURRENT still in the shipped vocabulary (got 'DOC-CURRENT')
+  PASS word ROWS-MISMATCH still in the shipped vocabulary (got 'ROWS-MISMATCH')
+  PASS word STALE-CONTENT still in the shipped vocabulary (got 'STALE-CONTENT')
+  PASS word RED-LEG still in the shipped vocabulary (got 'RED-LEG')
+  PASS word NO-DOC still in the shipped vocabulary (got 'NO-DOC')
+  PASS word EVIDENCE-FACE still in the shipped vocabulary (got 'EVIDENCE-FACE')
+  PASS word HEADER-SHAPE still in the shipped vocabulary (got 'HEADER-SHAPE')
+  PASS the new word is additive, not a rename
+  PASS DOC-CURRENT still reachable with exit 0 (DOC-CURRENT)
+  PASS NO-DOC still exits 2 (NO-DOC)
+  PASS ROWS-MISMATCH still exits 2 (ROWS-MISMATCH)
+  PASS ROWS-MISMATCH still names BOTH counts (636/637)
+  PASS STALE-CONTENT still exits 2 (STALE-CONTENT)
+  PASS EVIDENCE-FACE still exits 2 (EVIDENCE-FACE)
+  PASS RED-LEG still exits 3 (RED-LEG)
+  PASS CLI prints ONE verdict word for ROWS-MISMATCH (got 'ROWS-MISMATCH')
+  PASS CLI prints ONE verdict word for NO-DOC (got 'NO-DOC')
+[AC-EDMC6] ASCII, stdlib, no clock, own label
+  PASS module is pure ASCII
+  PASS suite is pure ASCII
+  PASS module imports no clock/network face (['argparse', 'contextlib', 'io', 'json', 'matrix_stamp_provenance_line', 'os', 're', 'reconcile_all', 'suite_matrix', 'sys'])
+  PASS module imports stdlib and shipped faces only ([])
+  PASS its own reconcile label is registered ('os-suite-matrix-reconcile-table-shape')
+  PASS the base reconcile label is still registered
+  PASS its own label carries six criteria ([('os-suite-matrix-reconcile-table-shape', '..\\os\\test_suite_matrix_reconcile_table_shape.py', 6)])
+  PASS the label points at THIS suite
+  PASS the module keeps its own reconcile identity
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_suite_matrix_reconcile_evidence_face.py rc=0 SUITE PASS 6/6
+== src/os/test_suite_matrix_reconcile.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=E3B0C44298FC1C14

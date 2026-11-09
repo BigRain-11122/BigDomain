@@ -58,12 +58,23 @@ candidate walk reports what it decoded, a MISSING document can be composed
 from a --stamp-from source, and a matrix table that is not six cells refuses
 by header shape instead of reading zero rows.
 
+R2604 extended the same face again with AC-EDMC1..AC-EDMC6 (pinned in
+state/queue/tech.md:636 at R2602 BEFORE any code, from four limits MEASURED
+there): a SEPARATOR row whose width disagrees with its own header is refused
+by HEADER-SHAPE naming BOTH widths instead of falling through to a content
+word, a document that carries no matrix table at all refuses with its own
+word naming the missing table instead of reading ROWS-MISMATCH rows=0, the
+candidate walk is bounded by a DECLARED ceiling and says so, and a caller
+that passes an explicit --evidence together with a --qa-dir is told which
+source answered and which one was ignored.
+
 Pure ASCII, stdlib only, no clock, no network. Default mode is read-only.
 
-CLI: [--doc PATH] [--evidence PATH] [--stamp-from PATH] [--check | --write]
-     [--json]
+CLI: [--doc PATH] [--evidence PATH] [--stamp-from PATH] [--qa-dir PATH]
+     [--ceiling N] [--check | --write] [--json]
   exit 0 = DOC-CURRENT (or WRITTEN)
-  exit 2 = document missing, ROWS-MISMATCH, EVIDENCE-FACE or STALE-CONTENT
+  exit 2 = document missing, ROWS-MISMATCH, EVIDENCE-FACE, STALE-CONTENT or
+           TABLE-MISSING
   exit 3 = RED-LEG / HEADER-SHAPE / REWRITE-REFUSED / bad flags
   exit 4 = the shipped check face refused for readability (its own reasons)
 """
@@ -107,11 +118,19 @@ WORD_EVID = "EVIDENCE-FACE"
 WORD_HEADER = "HEADER-SHAPE"
 CODE_HEADER = "E_EDMB_HEADER"
 MATRIX_CELLS = 6
+# AC-EDMC2: a document that carries NO matrix table is not a row mismatch
+# against a table it never had; it gets its own word and names what is absent.
+WORD_TABLE = "TABLE-MISSING"
+CODE_TABLE = "E_EDMC_TABLE"
+# AC-EDMC3: the candidate walk is bounded by a DECLARED ceiling so a qa pile
+# with no PASS leg cannot be decoded end to end. The bound is reported.
+WALK_CEILING = 64
 
 # Matrix table data rows carry SIX cells (index, suite, path, criteria, state,
 # secs). The billable-faces table below it also starts with a number, so a
 # bare "^| <n> |" would count it too and inflate the row count by design.
 ROW_RE = re.compile(r"(?m)^\| \d+ \|(?:[^|\n]*\|){5}$")
+SEPARATOR_CHARS = set("-: ")
 
 
 def rel(path):
@@ -131,13 +150,18 @@ def registry_counts():
     return len(RA.SUITES), sum(c for _, _, c in RA.SUITES)
 
 
-def newest_pass_leg_scanned(qa_dir=None):
+def newest_pass_leg_scanned(qa_dir=None, ceiling=None):
     """Newest qa/*.log whose RUNNER line reads PASS, asked of the shipped
     parse_evidence. Returns (path, run, walk) where walk names the cost that
     was paid: how many candidate files were listed and how many were actually
     decoded before the answer was found (AC-EDMB2 - the walk stops at the
-    first PASS leg, so its cost is bounded and now visible)."""
+    first PASS leg, so its cost is bounded and now visible).
+
+    AC-EDMC3: `ceiling` bounds how many candidates may be decoded at all. A
+    pile with no PASS leg stops at the ceiling, reports bounded=True and
+    returns None rather than decoding every file it can list."""
     qa_dir = qa_dir or QA_DIR
+    ceiling = WALK_CEILING if ceiling is None else int(ceiling)
     if not os.path.isdir(qa_dir):
         return None, None, {"considered": 0, "decoded": 0}
     paths = [os.path.join(qa_dir, name) for name in os.listdir(qa_dir)
@@ -145,6 +169,12 @@ def newest_pass_leg_scanned(qa_dir=None):
     paths.sort(key=lambda p: (-os.path.getmtime(p), os.path.basename(p)))
     decoded = 0
     for path in paths:
+        if decoded >= ceiling:
+            # AC-EDMC3: the bound ENGAGED, so it is named on the walk. When it
+            # does not engage the walk keeps the exact R2602 shape
+            # {"considered", "decoded"} and nothing else.
+            return None, None, {"considered": len(paths), "decoded": decoded,
+                                "ceiling": ceiling, "bounded": True}
         try:
             _, run = SM.parse_evidence(path)
         except (OSError, UnicodeDecodeError):
@@ -161,22 +191,37 @@ def newest_pass_leg(qa_dir=None):
     return path, run
 
 
-def matrix_header_cells(text, patterns):
-    """Cells of the matrix table header line, or None when that table is
-    absent. Read by POSITION under the shipped matrix title, never by a row
-    shape guess, so a table that changed its column layout is named rather
-    than silently counted as zero rows (AC-EDMB4)."""
+def matrix_shape(text, patterns):
+    """(header_cells, separator_cells) of the matrix table, each None when the
+    table or that row is absent. Read by POSITION under the shipped matrix
+    title, never by a row shape guess, so a table that changed its column
+    layout is named rather than silently counted as zero rows (AC-EDMB4) and
+    a SEPARATOR that disagrees with its own header is a shape answer instead
+    of a content word (AC-EDMC1)."""
     title = patterns["labels"]["matrix_title"]
     lines = text.splitlines()
     for index, line in enumerate(lines):
-        if line.strip() == title.strip():
-            for follow in lines[index + 1:]:
-                if follow.startswith("|"):
-                    return follow.count("|") - 1
+        if line.strip() != title.strip():
+            continue
+        header = None
+        for follow in lines[index + 1:]:
+            if not follow.startswith("|"):
                 if follow.strip():
-                    return None
-            return None
-    return None
+                    return None, None
+                continue
+            if header is None:
+                header = follow.count("|") - 1
+                continue
+            if set(follow.replace("|", "").strip()) <= SEPARATOR_CHARS:
+                return header, follow.count("|") - 1
+            return header, None
+        return header, None
+    return None, None
+
+
+def matrix_header_cells(text, patterns):
+    """Header cells only - the shape R2602 published, kept byte for byte."""
+    return matrix_shape(text, patterns)[0]
 
 
 def shipped_check(doc_path, evidence_path):
@@ -208,7 +253,7 @@ def compose(doc_path, evidence_path, source_text=None):
     return text, status, run
 
 
-def report(doc_path=None, evidence_path=None, qa_dir=None):
+def report(doc_path=None, evidence_path=None, qa_dir=None, ceiling=None):
     doc_path = doc_path or DOC
     if not os.path.exists(doc_path):
         return {"verdict": WORD_NONE, "doc": rel(doc_path),
@@ -216,36 +261,60 @@ def report(doc_path=None, evidence_path=None, qa_dir=None):
     current = read_text(doc_path)
     patterns = SM.load_patterns()
     rows, criteria = registry_counts()
-    cells = matrix_header_cells(current, patterns)
-    if cells is not None and cells != MATRIX_CELLS:
+    header, separator = matrix_shape(current, patterns)
+    # AC-EDMC2: no matrix table is its own answer, naming what is absent.
+    if header is None:
+        return {"verdict": WORD_TABLE, "doc": rel(doc_path), "exit": 2,
+                "written": False, "code": CODE_TABLE,
+                "table_title": patterns["labels"]["matrix_title"],
+                "reason": "the matrix table is absent from this document"}
+    # AC-EDMC1: a separator whose width disagrees with its own header is a
+    # SHAPE answer naming BOTH widths, not a content drift.
+    if separator is not None and separator != header:
         return {"verdict": WORD_HEADER, "doc": rel(doc_path), "exit": 3,
-                "written": False, "code": CODE_HEADER, "cells": cells,
-                "expected_cells": MATRIX_CELLS,
+                "written": False, "code": CODE_HEADER,
+                "header_cells": header, "separator_cells": separator,
+                "cells": header, "expected_cells": MATRIX_CELLS,
+                "reason": "matrix separator carries %d cells under a %d-cell"
+                          " header" % (separator, header)}
+    if header != MATRIX_CELLS:
+        return {"verdict": WORD_HEADER, "doc": rel(doc_path), "exit": 3,
+                "written": False, "code": CODE_HEADER, "cells": header,
+                "header_cells": header, "expected_cells": MATRIX_CELLS,
                 "reason": "matrix table carries %d cells, expected %d"
-                          % (cells, MATRIX_CELLS)}
+                          % (header, MATRIX_CELLS)}
     have_rows = doc_rows(current)
     walk = None
+    # AC-EDMC4: the caller is always told WHICH source answered, and a source
+    # it handed over but that was not used is named rather than ignored.
     if evidence_path is None:
-        evidence_path, _, walk = newest_pass_leg_scanned(qa_dir)
+        source = "walk"
+        evidence_path, _, walk = newest_pass_leg_scanned(qa_dir, ceiling)
         if evidence_path is None:
             return {"verdict": WORD_RED, "doc": rel(doc_path),
                     "exit": 3, "written": False, "reason": "no runner leg",
-                    "walk": walk}
+                    "evidence_source": source, "walk": walk,
+                    "bound_reached": walk.get("bounded", False)}
     else:
+        source = "explicit"
         evidence_path = (evidence_path if os.path.isabs(evidence_path)
                          else os.path.join(REPO, evidence_path))
     status, run = SM.parse_evidence(evidence_path)
     if run is None or run["verdict"] != "PASS":
         return {"verdict": WORD_RED, "doc": rel(doc_path),
                 "evidence": rel(evidence_path), "exit": 3,
-                "written": False, "walk": walk,
+                "written": False, "walk": walk, "evidence_source": source,
                 "reason": (run or {}).get("verdict", "no RUNNER line")}
     code, message = shipped_check(doc_path, evidence_path)
     result = {"doc": rel(doc_path), "evidence": rel(evidence_path),
               "doc_rows": have_rows, "registry_rows": rows,
               "registry_criteria": criteria,
               "leg_green": run["green"], "leg_total": run["total"],
-              "shipped_check": code, "written": False}
+              "shipped_check": code, "written": False,
+              "evidence_source": source}
+    if qa_dir is not None:
+        result["qa_dir_given"] = True
+        result["qa_dir_used"] = source != "explicit"
     if walk is not None:
         result["walk"] = walk
     if code == 0:
@@ -270,16 +339,34 @@ def report(doc_path=None, evidence_path=None, qa_dir=None):
     return result
 
 
-def write(doc_path=None, evidence_path=None, qa_dir=None, stamp_from=None):
+def write(doc_path=None, evidence_path=None, qa_dir=None, stamp_from=None,
+          ceiling=None):
     doc_path = doc_path or DOC
     if not os.path.exists(doc_path) and stamp_from is not None:
-        return _compose_missing(doc_path, evidence_path, qa_dir, stamp_from)
-    result = report(doc_path, evidence_path, qa_dir)
-    if result["verdict"] in (WORD_CURRENT, WORD_NONE):
+        return _compose_missing(doc_path, evidence_path, qa_dir, stamp_from,
+                                ceiling)
+    result = report(doc_path, evidence_path, qa_dir, ceiling)
+    if result["verdict"] in (WORD_CURRENT, WORD_NONE, WORD_RED,
+                             "READABILITY-REFUSED", WORD_HEADER):
         return result
-    if result["verdict"] in (WORD_RED, "READABILITY-REFUSED", WORD_HEADER):
-        return result
-    leg = os.path.join(REPO, result["evidence"])
+    # A TABLE-MISSING answer (AC-EDMC2) carries no resolved evidence because
+    # the shape was refused before the leg was looked at, so the leg is
+    # resolved here rather than assumed to be in the result.
+    if "evidence" in result:
+        leg = os.path.join(REPO, result["evidence"])
+    elif evidence_path is not None:
+        leg = (evidence_path if os.path.isabs(evidence_path)
+               else os.path.join(REPO, evidence_path))
+    else:
+        leg, run, walk = newest_pass_leg_scanned(qa_dir, ceiling)
+        if leg is None:
+            return {"verdict": WORD_RED, "doc": rel(doc_path), "exit": 3,
+                    "written": False, "reason": "no runner leg",
+                    "walk": walk, "evidence_source": "walk",
+                    "bound_reached": walk.get("bounded", False)}
+        result["evidence"] = rel(leg)
+        result["walk"] = walk
+        result["evidence_source"] = "walk"
     previous = read_text(doc_path)
     text, _, _ = compose(doc_path, leg)
     with open(doc_path, "w", encoding="utf-8", newline="\n") as handle:
@@ -298,7 +385,8 @@ def write(doc_path=None, evidence_path=None, qa_dir=None, stamp_from=None):
     return result
 
 
-def _compose_missing(doc_path, evidence_path, qa_dir, stamp_from):
+def _compose_missing(doc_path, evidence_path, qa_dir, stamp_from,
+                     ceiling=None):
     """AC-EDMB3: compose a document that does not exist from a --stamp-from
     source. The source lends the stamp and the recorded borrow ONLY; the rows
     and the evidence line come from the CURRENT registry and the named leg.
@@ -308,11 +396,12 @@ def _compose_missing(doc_path, evidence_path, qa_dir, stamp_from):
                   else os.path.join(REPO, stamp_from))
     walk = None
     if evidence_path is None:
-        evidence_path, _, walk = newest_pass_leg_scanned(qa_dir)
+        evidence_path, _, walk = newest_pass_leg_scanned(qa_dir, ceiling)
         if evidence_path is None:
             return {"verdict": WORD_RED, "doc": rel(doc_path), "exit": 3,
                     "written": False, "reason": "no runner leg",
-                    "walk": walk}
+                    "walk": walk, "evidence_source": "walk",
+                    "bound_reached": walk.get("bounded", False)}
     else:
         evidence_path = (evidence_path if os.path.isabs(evidence_path)
                          else os.path.join(REPO, evidence_path))
@@ -352,6 +441,7 @@ def main(argv):
     parser.add_argument("--evidence", default=None)
     parser.add_argument("--qa-dir", default=None)
     parser.add_argument("--stamp-from", default=None)
+    parser.add_argument("--ceiling", type=int, default=None)
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--json", action="store_true")
@@ -361,9 +451,9 @@ def main(argv):
         return 3
     if args.write:
         result = write(args.doc, args.evidence, args.qa_dir,
-                       args.stamp_from)
+                       args.stamp_from, args.ceiling)
     else:
-        result = report(args.doc, args.evidence, args.qa_dir)
+        result = report(args.doc, args.evidence, args.qa_dir, args.ceiling)
     if args.json:
         print(json.dumps(result, sort_keys=True))
     else:
@@ -384,16 +474,29 @@ def main(argv):
             print("  %s %s cells=%d expected=%d"
                   % (result["code"], result["reason"], result["cells"],
                      result["expected_cells"]))
+        elif result["verdict"] == WORD_TABLE:
+            print("  %s %s table=%s"
+                  % (result["code"], result["reason"], result["table_title"]))
         elif result["verdict"] == WORD_RED:
-            print("  evidence=%s reason=%s"
-                  % (result.get("evidence"), result.get("reason")))
+            print("  evidence=%s reason=%s%s"
+                  % (result.get("evidence"), result.get("reason"),
+                     " bound-reached" if result.get("bound_reached") else ""))
         elif result["verdict"] == WORD_WRITTEN:
             print("  %d bytes, %d rows, evidence=%s"
                   % (result["bytes"], result["doc_rows"],
                      result["evidence"]))
+        if result.get("evidence_source"):
+            print("  evidence-source=%s%s"
+                  % (result["evidence_source"],
+                     " (qa-dir given, not used)"
+                     if result.get("qa_dir_given")
+                     and result.get("qa_dir_used") is False else ""))
         if result.get("walk"):
-            print("  evidence-walk considered=%d decoded=%d"
-                  % (result["walk"]["considered"], result["walk"]["decoded"]))
+            print("  evidence-walk considered=%d decoded=%d ceiling=%d%s"
+                  % (result["walk"]["considered"], result["walk"]["decoded"],
+                     result["walk"].get("ceiling", WALK_CEILING),
+                     " BOUND-REACHED" if result["walk"].get("bounded")
+                     else ""))
     return result["exit"]
 
 

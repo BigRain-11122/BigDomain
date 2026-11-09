@@ -1,0 +1,2 @@
+LIVE-REAL-TREE verdict=DOC-CURRENT exit=0 source=walk doc_rows=637 registry_rows=637 criteria=4798
+LIVE-WALK-BOUNDED ceiling=4 decoded=2 considered=2801 bounded=None

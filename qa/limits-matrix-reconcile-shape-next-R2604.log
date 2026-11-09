@@ -1,0 +1,4 @@
+A eq-separator shape=(6, None) verdict=STALE-CONTENT exit=2
+B no-separator shape=(6, None) verdict=STALE-CONTENT rows=637
+C ceiling-0 path=None decoded=0 bounded=True
+D title-twice shape=(6, 6) verdict=STALE-CONTENT rows=637

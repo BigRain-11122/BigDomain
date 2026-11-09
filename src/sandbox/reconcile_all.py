@@ -4596,6 +4596,17 @@ SUITES = [
     ("os-suite-matrix-reconcile-evidence-face",
      os.path.join("..", "os", "test_suite_matrix_reconcile_evidence_face.py"),
      6),
+    # R2604: the TABLE-SHAPE face of the matrix reconciliation - a separator
+    # whose width disagrees with its own header refuses as HEADER-SHAPE
+    # naming BOTH widths, a document carrying no matrix table refuses with its
+    # own TABLE-MISSING word, the candidate walk is bounded by a DECLARED
+    # ceiling and says so, and an explicit --evidence beside a --qa-dir names
+    # which source answered.
+    # (AC-EDMC1..AC-EDMC6 pre-registered in state/queue/tech.md:636 as the
+    # R2602 seed BEFORE the code existed.)
+    ("os-suite-matrix-reconcile-table-shape",
+     os.path.join("..", "os", "test_suite_matrix_reconcile_table_shape.py"),
+     6),
     # R2253: a claimable queue row must name its criteria prefix, so
     # pre-registration is a gate instead of a habit. The row law is
     # imported from queue_floor rather than rewritten, two declaration
