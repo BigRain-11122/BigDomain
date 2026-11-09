@@ -6212,6 +6212,16 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_scope.py"),
      6),
+    # R2588 elif/with walrus face: a walrus bound inside a module-level elif
+    # section or a module-level with body is followed and names the branch it
+    # was read in, while a for body and a branch nested inside another branch
+    # keep the shipped refusal and publish no branch read; every parent answer
+    # rides beside it (625 -> 626 suites, 4726 -> 4732).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_scope.py"),
+     6),
     ]
 
 FAILS = 0

@@ -1,0 +1,4 @@
+N5 while body -> state=refused value=None reason=attr-module-alias-unbound:M.HW reads=[]
+N6 match case body -> state=refused value=None reason=attr-module-alias-unbound:M.HW reads=[]
+N7 with body holding a nested if -> state=ok value=b reason=None reads=['branch:M@with']
+N8 three-link if/elif/elif chain -> state=ok value=b reason=None reads=['branch:M@elif']
