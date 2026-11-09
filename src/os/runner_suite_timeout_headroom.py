@@ -147,14 +147,85 @@ def registry_labels(runner_path):
                         "no literal SUITES table in %s" % runner_path)
 
 
-def assess(cap, band_fraction, labels, durations):
-    """One report: per-suite slowest leg, headroom, band, verdict, code."""
+OVERRIDES_NAME = "SUITE_TIMEOUT_OVERRIDES"
+
+
+def read_overrides(runner_path):
+    """Declared per-suite caps, read from one AST pass over the runner (R2599).
+
+    AC-EDWU1: the AC-RSC2 override table the runner already applies is
+    finally consumed here, so a declared ceiling is visible to the report
+    instead of the flat global cap being printed against a suite the battery
+    actually allows longer.
+
+    AC-EDWU3: the table is parsed by AST, not by a loose regex, and a
+    declaration that is not a dict literal of label -> positive number
+    REFUSES with its own code rather than silently reading as "no overrides"
+    (which would report a fictional 0.0s headroom for a suite the runner
+    gives 900s). An ABSENT table is not a defect: fixture worlds carry none,
+    and every suite then reads the flat global cap byte for byte (AC-EDWU2).
+    """
+    try:
+        with io.open(runner_path, "r", encoding="utf-8") as handle:
+            source = handle.read()
+    except OSError as exc:
+        raise HeadroomError("E_RTH_NO_REGISTRY",
+                            "cannot read runner %s: %s"
+                            % (runner_path, exc.strerror or exc))
+    try:
+        tree = ast.parse(source)
+    except SyntaxError as exc:
+        raise HeadroomError("E_RTH_NO_REGISTRY",
+                            "runner does not parse: %s" % exc)
+    overrides = {}
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        names = [target.id for target in node.targets
+                 if isinstance(target, ast.Name)]
+        if OVERRIDES_NAME not in names:
+            continue
+        if not isinstance(node.value, ast.Dict):
+            raise HeadroomError(
+                "E_RTH_BAD_OVERRIDES",
+                "%s is not a dict literal in %s"
+                % (OVERRIDES_NAME, runner_path))
+        for key_node, value_node in zip(node.value.keys, node.value.values):
+            if not (isinstance(key_node, ast.Constant)
+                    and isinstance(key_node.value, str)):
+                raise HeadroomError(
+                    "E_RTH_BAD_OVERRIDES",
+                    "%s carries a non-literal label in %s"
+                    % (OVERRIDES_NAME, runner_path))
+            value = None
+            if (isinstance(value_node, ast.Constant)
+                    and isinstance(value_node.value, (int, float))
+                    and not isinstance(value_node.value, bool)):
+                value = float(value_node.value)
+            if value is None or value <= 0:
+                raise HeadroomError(
+                    "E_RTH_BAD_OVERRIDES",
+                    "%s[%s] is not a positive literal number in %s"
+                    % (OVERRIDES_NAME, key_node.value, runner_path))
+            overrides[key_node.value] = value
+        break
+    return overrides
+
+
+def assess(cap, band_fraction, labels, durations, overrides=None):
+    """One report: per-suite slowest leg, cap, headroom, band, verdict, code.
+
+    R2599: a suite with a declared override is judged against ITS OWN cap
+    (AC-EDWU1) and every row names the cap it was judged against
+    (AC-EDWU4), so a declared ceiling can never be read as the global one.
+    With no overrides the R2395 answers stand byte for byte.
+    """
     if cap <= 0:
         raise HeadroomError("E_RTH_BAD_CAP", "cap must be positive")
     if not 0 < band_fraction <= 1:
         raise HeadroomError("E_RTH_BAD_BAND",
                             "band fraction must sit inside (0, 1]")
-    threshold = cap * band_fraction
+    declared = dict(overrides or {})
     order = list(labels)
     for label in sorted(durations):
         if label not in order:
@@ -163,16 +234,20 @@ def assess(cap, band_fraction, labels, durations):
     band = []
     missing = []
     for label in order:
+        row_cap = float(declared.get(label, cap))
+        threshold = row_cap * band_fraction
         legs = durations.get(label) or []
         if not legs:
-            suites.append({"suite": label, "legs": 0, "slowest": "-",
+            suites.append({"suite": label, "cap": "%.1f" % row_cap,
+                           "legs": 0, "slowest": "-",
                            "headroom": "-", "status": NO_MEASURE})
             missing.append(label)
             continue
         slowest = max(legs)
-        headroom = cap - slowest
+        headroom = row_cap - slowest
         status = BAND_HIT if slowest >= threshold else COMFORTABLE
-        suites.append({"suite": label, "legs": len(legs),
+        suites.append({"suite": label, "cap": "%.1f" % row_cap,
+                       "legs": len(legs),
                        "slowest": "%.1f" % slowest,
                        "headroom": "%.1f" % headroom,
                        "status": status})
@@ -203,18 +278,20 @@ def render(report):
                 threshold)]
     for row in report["suites"]:
         if row["status"] == NO_MEASURE:
-            lines.append("SUITE %s NO-MEASURE (no measured leg)"
-                         % row["suite"])
+            lines.append("SUITE %s cap=%ss NO-MEASURE (no measured leg)"
+                         % (row["suite"], row["cap"]))
         else:
-            lines.append("SUITE %s legs=%d slowest=%ss headroom=%ss %s"
-                         % (row["suite"], row["legs"], row["slowest"],
-                            row["headroom"], row["status"]))
+            lines.append("SUITE %s cap=%ss legs=%d slowest=%ss "
+                         "headroom=%ss %s"
+                         % (row["suite"], row["cap"], row["legs"],
+                            row["slowest"], row["headroom"], row["status"]))
     for label in report["band"]:
         row = [item for item in report["suites"] if item["suite"] == label][0]
         lines.append("BAND %s slowest=%ss headroom=%ss"
                      % (label, row["slowest"], row["headroom"]))
     for label in report["no_measure"]:
-        lines.append("NO-MEASURE %s" % label)
+        row = [item for item in report["suites"] if item["suite"] == label][0]
+        lines.append("NO-MEASURE %s cap=%ss" % (label, row["cap"]))
     lines.append("VERDICT %s suites=%d measured=%d band=%d no_measure=%d"
                  % (report["verdict"], report["total"], report["measured"],
                     len(report["band"]), len(report["no_measure"])))
@@ -285,10 +362,12 @@ def default_inputs(root):
     return paths
 
 
-def check(root, evidence, runner, cap, band):
+def check(root, evidence, runner, cap, band, overrides=None):
     labels = registry_labels(runner)
+    if overrides is None:
+        overrides = read_overrides(runner)
     durations, lines = read_evidence(evidence)
-    report = assess(cap, band, labels, durations)
+    report = assess(cap, band, labels, durations, overrides)
     report["evidence_lines"] = lines
     return report
 

@@ -1,0 +1,18 @@
+EVIDENCE CAPTURE round=R2599 suite=os-runner-suite-timeout-headroom-overrides
+LEG 1 rc=0 digest=fac4ab8dc22947c4
+LEG 2 rc=0 digest=fac4ab8dc22947c4
+LEGS identical=True
+
+--- leg 1 ---
+runner_suite_timeout_headroom_overrides suite (expected criteria 6)
+PASS AC-EDWU1 declared override is the cap judged against
+PASS AC-EDWU2 undeclared suite reads the flat global cap
+PASS AC-EDWU3 malformed override table refuses with its own code
+PASS AC-EDWU4 every row names the cap it was judged against
+PASS AC-EDWU5 every R2395 answer survives beside the new ones
+PASS AC-EDWU6 pure, read-only, and wired with its own label
+SUITE PASS 6/6
+
+ADJACENT test_runner_suite_timeout_headroom.py rc=0 SUITE PASS 6/6
+ADJACENT test_runner_suite_timeout_cap.py rc=0 SUITE PASS 6/6
+ADJACENT fails=0

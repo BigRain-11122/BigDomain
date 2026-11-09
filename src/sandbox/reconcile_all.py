@@ -5144,6 +5144,13 @@ SUITES = [
     # state/queue/tech.md line 462 as the R2393 seed BEFORE the code.)
     ("os-runner-suite-timeout-headroom",
      os.path.join("..", "os", "test_runner_suite_timeout_headroom.py"), 6),
+    # R2599: the AC-RSC2 override table the runner already applies is now a
+    # reading too, so a suite with a declared ceiling is judged against that
+    # ceiling instead of the flat global cap. (AC-EDWU1..AC-EDWU6 pinned in
+    # state/queue/tech.md line 632 as the R2598 seed BEFORE the code.)
+    ("os-runner-suite-timeout-headroom-overrides",
+     os.path.join("..", "os", "test_runner_suite_timeout_headroom_overrides.py"),
+     6),
     # R2403: the headroom reading only knows suites some leg FINISHED, so the
     # suite that actually killed a battery was the one line the pile never
     # carried - R2393 leg 3 died on ledger/test_apimarket_report_claims.py at
