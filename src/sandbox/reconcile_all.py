@@ -67,11 +67,18 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SUITE_TIMEOUT_S = 600
 
 # R2479 AC-RSC2: declared per-suite overrides, keyed by the suite label that
-# appears in the registry and in every evidence line. Empty today because the
-# raised global cap is enough headroom for the three measured slow suites; the
-# mechanism exists so the next slow arrival is a one-line declaration instead
-# of a global widening that would hide every other suite.
-SUITE_TIMEOUT_OVERRIDES = {}
+# appears in the registry and in every evidence line. The mechanism exists so
+# the next slow arrival is a one-line declaration instead of a global widening
+# that would hide every other suite.
+#
+# R2598 declaration: ledger-apimarket-refundregister measured 191.6s (R2595
+# leg) then 409.6s (R2596 leg) and then lost the 600s cap inside the R2598
+# battery, while the SAME suite finished in 296s when run alone on this same
+# tree at 04:22-04:27 - the load artefact the headroom reader names, not a
+# code defect. 900s = 1.5x the slowest measured in-battery leg.
+SUITE_TIMEOUT_OVERRIDES = {
+    "ledger-apimarket-refundregister": 900,
+}
 
 LEDGER = os.path.join(BASE, "ledger")
 PAY = os.path.join(BASE, "pay")
