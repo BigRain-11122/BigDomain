@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 629 | 4750 | 628/628 | R2593 |
+| 630 | 4756 | 628/628 | R2593 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -667,7 +667,8 @@
 | 627 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_scope.py | 6 | green | 215.5 |
 | 628 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_scope.py | 6 | green | 155.5 |
 | 629 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_scope.py | 6 | no-evidence | - |
-|  | 合计 |  | 4750 | green 628 / FAIL 0 / no-evidence 1 |  |
+| 630 | os-export-driver-self-drive-health | ../os/test_export_driver_self_drive_health.py | 6 | no-evidence | - |
+|  | 合计 |  | 4756 | green 628 / FAIL 0 / no-evidence 2 |  |
 
 ## 证据出处
 

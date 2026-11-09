@@ -223,6 +223,11 @@ def main():
     # The tick row is the row THIS driver stamps; results[0] is the round-log
     # row another writer owns, so reading it here made a healthy refresh fail
     # on every round whose result row had not landed yet (R2499 battery catch).
+    # R2595: the old health term demanded log_lines_in_window ==
+    # substantive_non_idle_mention_lines, which the recompute caliber can never
+    # satisfy once one tokens line sits in the window (a tokens line counts as
+    # a window line and never as substantive). The document is now proved
+    # against a FRESH recompute of the whole self_drive block instead.
     ok = (any(isinstance(r, list) and len(r) >= 2 and r[1] == label
               and str(r[0]) == tick for r in back["results"])
           and back["outs"][0] == latest
@@ -230,8 +235,7 @@ def main():
           and back["ceo_face"]["current"] == current
           and back["ceo_face"]["next_milestone"] == milestone
           and back["export_ts"] == STAMP
-          and back["self_drive"]["log_lines_in_window"]
-          == back["self_drive"]["substantive_non_idle_mention_lines"]
+          and back["self_drive"] == self_drive()
           and proof.get("gate") == "CURRENT")
     sys.stdout.write("RESULTS rows=%d outs=%d tick=%s bytes=%d queue=%s "
                      "queue_bytes=%d queue_drifted=%s ok=%s\n"

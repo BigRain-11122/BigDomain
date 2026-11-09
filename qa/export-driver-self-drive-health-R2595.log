@@ -1,0 +1,21 @@
+EVIDENCE CAPTURE round=R2595 suite=src/os/test_export_driver_self_drive_health.py legs=2
+== LEG A rc=0 digest=3B07490687C84A62
+PASS AC-EDSH1 the health term is not canned: a self_drive block that moves between the write and the read-back reads ok=False and the driver exits 2
+PASS AC-EDSH2 a window holding a tokens line counts MORE window lines than substantive lines and the driver still exits 0 (the equality this repair replaced could never hold)
+PASS AC-EDSH3 a self_drive field doctored on disk AFTER the write reads ok=False and exits 2, so the proof binds the bytes rather than the dict it just built
+PASS AC-EDSH4 a non-CURRENT gate word keeps the run red, so the queue verdict is not swallowed by the self_drive repair
+PASS AC-EDSH5 every earlier health term survives beside the repaired one (tick row, outs, three ceo fields, stamp, fresh self_drive, gate; missing=none)
+PASS AC-EDSH6 the driver stays pure ASCII stdlib with no network egress (datetime is legitimately used for the 48h due), and the runner carries this row at 6 criteria (ascii=True banned=none wired=True)
+SUITE PASS 6/6
+== LEG B rc=0 digest=3B07490687C84A62
+PASS AC-EDSH1 the health term is not canned: a self_drive block that moves between the write and the read-back reads ok=False and the driver exits 2
+PASS AC-EDSH2 a window holding a tokens line counts MORE window lines than substantive lines and the driver still exits 0 (the equality this repair replaced could never hold)
+PASS AC-EDSH3 a self_drive field doctored on disk AFTER the write reads ok=False and exits 2, so the proof binds the bytes rather than the dict it just built
+PASS AC-EDSH4 a non-CURRENT gate word keeps the run red, so the queue verdict is not swallowed by the self_drive repair
+PASS AC-EDSH5 every earlier health term survives beside the repaired one (tick row, outs, three ceo fields, stamp, fresh self_drive, gate; missing=none)
+PASS AC-EDSH6 the driver stays pure ASCII stdlib with no network egress (datetime is legitimately used for the 48h due), and the runner carries this row at 6 criteria (ascii=True banned=none wired=True)
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_export_driver_queue_face.py rc=0 SUITE PASS 6/6
+== src/os/test_export_consistency_queue_face.py rc=0 NO SUITE LINE
+EVIDENCE identical=True adjacent=2 fails=0 digest=3B07490687C84A62

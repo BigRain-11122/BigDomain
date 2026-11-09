@@ -6260,6 +6260,15 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_scope.py"),
      6),
+    # R2595 birth-site repair of the round export driver health term: it
+    # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
+    # the recompute caliber can never satisfy once one tokens line sits in the
+    # window, so a healthy refresh read ok=False and exit 2 (found by the R2595
+    # battery as os-export-driver-queue-face AC-EDQF2 + AC-EDQF5 red). The term
+    # now compares the document's whole self_drive block with a fresh recompute
+    # at call time (629 -> 630 suites, 4750 -> 4756).
+    ("os-export-driver-self-drive-health",
+     os.path.join("..", "os", "test_export_driver_self_drive_health.py"), 6),
     ]
 
 FAILS = 0
