@@ -4568,6 +4568,16 @@ SUITES = [
     # R2248 a seed BEFORE the code existed.)
     ("os-debt-append",
      os.path.join("..", "os", "test_debt_append.py"), 6),
+    # R2600: a note segment must grow INSIDE the note field and never
+    # after a scalar one - the R2598/R2599 appenders wrote at the end of
+    # the row, so a trailing first=yes swallowed the text and the whole
+    # register became unparseable (debt_gate exit 3 every round). This
+    # writer grows note and refuses when the composed row would not
+    # parse through the shipped law.
+    # (AC-DRNA1..AC-DRNA6 pre-registered in state/queue/tech.md as the
+    # R2600 seed BEFORE the code existed.)
+    ("os-debt-note-append",
+     os.path.join("..", "os", "test_debt_note_append.py"), 6),
     # R2253: a claimable queue row must name its criteria prefix, so
     # pre-registration is a gate instead of a habit. The row law is
     # imported from queue_floor rather than rewritten, two declaration

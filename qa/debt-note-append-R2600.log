@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2600 suite=src/os/test_debt_note_append.py legs=2
+== LEG A rc=0 digest=D705A86E05CC7F9E
+PASS AC-DRNA1 note grows inside the note field
+PASS AC-DRNA2 refusals write nothing
+PASS AC-DRNA3 composed row must parse through the shipped law
+PASS AC-DRNA4 atomic write and dry run
+PASS AC-DRNA5 CLI codes and pinned JSON
+PASS AC-DRNA6 purity and registration
+SUITE PASS 6/6
+== LEG B rc=0 digest=D705A86E05CC7F9E
+PASS AC-DRNA1 note grows inside the note field
+PASS AC-DRNA2 refusals write nothing
+PASS AC-DRNA3 composed row must parse through the shipped law
+PASS AC-DRNA4 atomic write and dry run
+PASS AC-DRNA5 CLI codes and pinned JSON
+PASS AC-DRNA6 purity and registration
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_debt_register.py rc=0 SUITE PASS 8/8
+== src/os/test_debt_gate.py rc=0 SUITE PASS 5/5
+== src/os/test_debt_append.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=D705A86E05CC7F9E

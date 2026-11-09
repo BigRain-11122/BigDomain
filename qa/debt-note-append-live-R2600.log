@@ -1,0 +1,5 @@
+LIVE READ on the real register at HEAD (read-only, dry run)
+register_parses=True rows=333 open=37 first_yes=reconcile-battery-R2596
+dry_grow item=reconcile-battery-R2596 note_grew=True first_kept=yes before=193117B after=193149B wrote=False
+live_row_ends_with_first=True
+probe_written_to_disk=False
