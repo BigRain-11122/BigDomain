@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-09T22:54:08+08:00",
+  "export_ts": "2026-11-09T22:55:12+08:00",
   "do": "2026-11-09 R2595 VERIFICATION window on the battery the register owed (reconcile-battery-R2594, pre-registered 629 suites / 4750 criteria). An interrupted attempt of this same round was ADOPTED, NOT RESTARTED: at open the tree already carried its birth-site repair of the export driver health term (the whole self_drive block recomputed instead of compared against log lines), the six-criteria regres",
   "ceo_face": {
     "current": "2026-11-09 R2595 VERIFICATION window on the battery the register owed (reconcile-battery-R2594, pre-registered 629 suites / 4750 criteria). An interrupted attempt of this same round was ADOPTED, NOT RESTARTED: at open the tree already carried its birth-site repair of the export driver health term (the whole self_drive block recomputed instead of compared against log lines), the six-criteria regres",
     "latest_artifact": "export-driver-self-drive-health-R2595.log (2322B) + reconcile-all-R2595-retry.log (1073477B) + reconcile-all-R2595-retry2.log (1075240B) + reconcile-all-R2595.log (1072499B)",
     "last_artifact": "export-driver-self-drive-health-R2595.log (2322B) + reconcile-all-R2595-retry.log (1073477B) + reconcile-all-R2595-retry2.log (1075240B) + reconcile-all-R2595.log (1072499B)",
-    "next_milestone": "next window owes product-face-R2595 on the committed tree, inside a 48h window due 2026-11-11T22:54:08+08:00",
-    "next_milestone_due": "2026-11-11T22:54:08+08:00",
-    "updated_at": "2026-11-09T22:54:08+08:00"
+    "next_milestone": "next window owes product-face-R2595 on the committed tree, inside a 48h window due 2026-11-11T22:55:12+08:00",
+    "next_milestone_due": "2026-11-11T22:55:12+08:00",
+    "updated_at": "2026-11-09T22:55:12+08:00"
   },
   "depts": [
     {
