@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-09T20:16:29+08:00",
+  "export_ts": "2026-11-09T20:17:51+08:00",
   "do": "2026-11-09 R2594 fold of log items 68..75 (the complete R2592 product-round block, ending on its push line) moved verbatim into the monthly archive at a true round-block boundary; window tokens: AC-PNAE1 AC-PNAE6 AC-PNAF1 AC-PNAF6 D-CLEAR R-MET",
   "ceo_face": {
     "current": "2026-11-09 R2594 fold of log items 68..75 (the complete R2592 product-round block, ending on its push line) moved verbatim into the monthly archive at a true round-block boundary; window tokens: AC-PNAE1 AC-PNAE6 AC-PNAF1 AC-PNAF6 D-CLEAR R-MET",
     "latest_artifact": "module-alias-walrus-match-ordinal-scope-R2594.log (12850B)",
     "last_artifact": "module-alias-walrus-match-ordinal-scope-R2594.log (12850B)",
-    "next_milestone": "next window owes product-face-R2593 on the committed tree, inside a 48h window due 2026-11-11T20:16:29+08:00",
-    "next_milestone_due": "2026-11-11T20:16:29+08:00",
-    "updated_at": "2026-11-09T20:16:29+08:00"
+    "next_milestone": "next window owes product-face-R2593 on the committed tree, inside a 48h window due 2026-11-11T20:17:51+08:00",
+    "next_milestone_due": "2026-11-11T20:17:51+08:00",
+    "updated_at": "2026-11-09T20:17:51+08:00"
   },
   "depts": [
     {
