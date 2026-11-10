@@ -1,0 +1,2 @@
+verdict=DOC-CURRENT exit=0 doc_rows=639 registry_rows=639 criteria=4810 evidence_source=walk
+{"doc": "docs/sandbox-suite-matrix.md", "doc_rows": 639, "evidence": "qa/reconcile-all-R2607.log", "evidence_source": "walk", "exit": 0, "leg_green": 638, "leg_total": 638, "registry_criteria": 4810, "registry_rows": 639, "shipped_check": 0, "verdict": "DOC-CURRENT", "walk": {"considered": 2810, "decoded": 4}, "written": false}

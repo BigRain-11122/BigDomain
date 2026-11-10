@@ -4619,6 +4619,16 @@ SUITES = [
     ("os-suite-matrix-reconcile-shape",
      os.path.join("..", "os", "test_suite_matrix_reconcile_shape.py"),
      6),
+    # R2608: the shape law widens once more - a separator drawn with MIXED
+    # punctuation is a separator, a matrix title inside a fenced block or a
+    # title that introduces no table is not a second title, and a walk that
+    # reached its DECLARED ceiling reads CEILING-STARVED instead of sharing
+    # RED-LEG with an honest miss.
+    # (AC-EDME1..AC-EDME6 pre-registered in state/queue/tech.md:640 as the
+    # R2606 seed BEFORE the code existed.)
+    ("os-suite-matrix-reconcile-fence",
+     os.path.join("..", "os", "test_suite_matrix_reconcile_fence.py"),
+     6),
     # R2253: a claimable queue row must name its criteria prefix, so
     # pre-registration is a gate instead of a habit. The row law is
     # imported from queue_floor rather than rewritten, two declaration

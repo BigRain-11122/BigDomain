@@ -1,0 +1,4 @@
+A fenced-data-row doc_rows=640 before=639 verdict=ROWS-MISMATCH
+B same-header-one-no-separator titles=2 verdict=TITLE-REPEATED
+C two-bare-titles titles=1 verdict=STALE-CONTENT
+D write-starved verdict=CEILING-STARVED written=False bytes_changed=False

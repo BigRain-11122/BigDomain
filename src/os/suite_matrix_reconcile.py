@@ -216,11 +216,11 @@ def newest_pass_leg(qa_dir=None):
 
 
 def is_separator_row(cells_text):
-    """True when a table row is a SEPARATOR: every non-space character is one
-    of the markdown separator characters, or the row is drawn with ONE single
-    repeated punctuation character (AC-EDMD1 - "=" and friends are legal
-    separators too, and before R2606 a "=" separator was invisible to the
-    shape law, which then fell through to a content word)."""
+    """True when a table row is a SEPARATOR: every non-space character is
+    punctuation (AC-EDMD1 accepted ONE repeated punctuation character; R2608
+    AC-EDME1 widens it to ANY mix of punctuation, so a row drawn "-=-=" is a
+    separator too instead of being called absent). A content row always
+    carries a letter or a digit, so nothing readable is swallowed."""
     stripped = cells_text.replace("|", "").strip()
     if not stripped:
         return False
@@ -232,41 +232,74 @@ def is_separator_row(cells_text):
     if len(chars) == 1:
         only = next(iter(chars))
         return not only.isalnum()
-    return False
+    return all(not ch.isalnum() for ch in chars)
 
 
-def matrix_title_count(text, patterns):
-    """How many lines carry the shipped matrix title (AC-EDMD4)."""
+def title_tables(text, patterns):
+    """Every matrix TABLE introduced by the shipped title OUTSIDE fenced code
+    blocks, as (header_cells, separator_cells, signature).
+
+    AC-EDME2: a title inside a fence is quoted sample text, not a table.
+    AC-EDME3: a title line that introduces no table at all (a bare repeat,
+    trailing whitespace or not) is not a table title. Two titles that
+    introduce the SAME table read as one, and two that introduce DIFFERENT
+    tables read as two - that is what makes AC-EDMD4's repeated real table a
+    repeat while a quoted or bare repeat is not."""
     title = patterns["labels"]["matrix_title"].strip()
-    return sum(1 for line in text.splitlines() if line.strip() == title)
-
-
-def matrix_shape(text, patterns):
-    """(header_cells, separator_cells) of the matrix table, each None when the
-    table or that row is absent. Read by POSITION under the shipped matrix
-    title, never by a row shape guess, so a table that changed its column
-    layout is named rather than silently counted as zero rows (AC-EDMB4) and
-    a SEPARATOR that disagrees with its own header is a shape answer instead
-    of a content word (AC-EDMC1, widened by AC-EDMD1)."""
-    title = patterns["labels"]["matrix_title"]
     lines = text.splitlines()
+    found = []
+    in_fence = False
     for index, line in enumerate(lines):
-        if line.strip() != title.strip():
+        if line.strip().startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence or line.strip() != title:
             continue
         header = None
+        header_text = None
+        separator = None
         for follow in lines[index + 1:]:
+            stripped = follow.strip()
+            if stripped.startswith("```"):
+                break
             if not follow.startswith("|"):
-                if follow.strip():
-                    return None, None
+                if stripped:
+                    break
                 continue
             if header is None:
                 header = follow.count("|") - 1
+                header_text = "|".join(cell.strip() for cell in
+                                       follow.strip().strip("|").split("|"))
                 continue
             if is_separator_row(follow):
-                return header, follow.count("|") - 1
-            return header, None
-        return header, None
-    return None, None
+                separator = follow.count("|") - 1
+            break
+        if header is None:
+            continue
+        found.append((header, separator, (header_text, header, separator)))
+    return found
+
+
+def matrix_title_count(text, patterns):
+    """How many DISTINCT matrix tables the shipped title introduces outside
+    fenced blocks (AC-EDMD4 count, refined by AC-EDME2/AC-EDME3)."""
+    signatures = set(sig for _, _, sig in title_tables(text, patterns))
+    return len(signatures)
+
+
+def matrix_shape(text, patterns):
+    """(header_cells, separator_cells) of the FIRST matrix table outside
+    fenced blocks, each None when that row is absent. Read by POSITION under
+    the shipped matrix title, never by a row shape guess, so a table that
+    changed its column layout is named rather than silently counted as zero
+    rows (AC-EDMB4) and a SEPARATOR that disagrees with its own header is a
+    shape answer instead of a content word (AC-EDMC1, widened by AC-EDMD1 and
+    again by AC-EDME1)."""
+    found = title_tables(text, patterns)
+    if not found:
+        return None, None
+    header, separator, _ = found[0]
+    return header, separator
 
 
 def matrix_header_cells(text, patterns):
@@ -301,6 +334,26 @@ def compose(doc_path, evidence_path, source_text=None):
                      stamp_from=MSPL.recorded_source(current,
                                                      patterns["labels"]))
     return text, status, run
+
+
+def _walk_miss(doc_path, source, walk):
+    """AC-EDME4: a walk whose DECLARED ceiling was reached before a PASS leg
+    was found is starved and says so with the ceiling named; a pile whose
+    every candidate was decoded is an honest miss and reads RED-LEG. Before
+    this, both states shared one verdict word and only the walk block told
+    them apart."""
+    walk = walk or {"considered": 0, "decoded": 0}
+    if walk.get("bounded"):
+        return {"verdict": WORD_CEILING, "doc": rel(doc_path), "exit": 3,
+                "written": False, "code": CODE_CEILING,
+                "ceiling": walk.get("ceiling"), "evidence_source": source,
+                "walk": walk,
+                "reason": "the walk reached its ceiling of %s before a PASS"
+                          " leg was found" % walk.get("ceiling")}
+    return {"verdict": WORD_RED, "doc": rel(doc_path), "exit": 3,
+            "written": False, "reason": "no runner leg",
+            "evidence_source": source, "walk": walk,
+            "bound_reached": False}
 
 
 def report(doc_path=None, evidence_path=None, qa_dir=None, ceiling=None):
@@ -365,10 +418,7 @@ def report(doc_path=None, evidence_path=None, qa_dir=None, ceiling=None):
         source = "walk"
         evidence_path, _, walk = newest_pass_leg_scanned(qa_dir, ceiling)
         if evidence_path is None:
-            return {"verdict": WORD_RED, "doc": rel(doc_path),
-                    "exit": 3, "written": False, "reason": "no runner leg",
-                    "evidence_source": source, "walk": walk,
-                    "bound_reached": walk.get("bounded", False)}
+            return _walk_miss(doc_path, source, walk)
     else:
         source = "explicit"
         evidence_path = (evidence_path if os.path.isabs(evidence_path)
@@ -435,10 +485,7 @@ def write(doc_path=None, evidence_path=None, qa_dir=None, stamp_from=None,
     else:
         leg, run, walk = newest_pass_leg_scanned(qa_dir, ceiling)
         if leg is None:
-            return {"verdict": WORD_RED, "doc": rel(doc_path), "exit": 3,
-                    "written": False, "reason": "no runner leg",
-                    "walk": walk, "evidence_source": "walk",
-                    "bound_reached": walk.get("bounded", False)}
+            return _walk_miss(doc_path, "walk", walk)
         result["evidence"] = rel(leg)
         result["walk"] = walk
         result["evidence_source"] = "walk"
@@ -480,10 +527,7 @@ def _compose_missing(doc_path, evidence_path, qa_dir, stamp_from,
                               % int(ceiling)}
         evidence_path, _, walk = newest_pass_leg_scanned(qa_dir, ceiling)
         if evidence_path is None:
-            return {"verdict": WORD_RED, "doc": rel(doc_path), "exit": 3,
-                    "written": False, "reason": "no runner leg",
-                    "walk": walk, "evidence_source": "walk",
-                    "bound_reached": walk.get("bounded", False)}
+            return _walk_miss(doc_path, "walk", walk)
     else:
         evidence_path = (evidence_path if os.path.isabs(evidence_path)
                          else os.path.join(REPO, evidence_path))

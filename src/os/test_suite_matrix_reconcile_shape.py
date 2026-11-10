@@ -314,8 +314,18 @@ def verify():
         recorded = doctor_recorded_evidence("qa/edmd-other-leg.log")
         evid = temp_copy(workdir, "evid-face.md", recorded)
         re_ = SMR.report(evid, green)
-        drop = temp_copy(workdir, "rows.md", lambda t: t.replace(
-            "| 1 | lobby | lobby/test_client.py | 79 | green | 45.2 |\n", ""))
+        def doctor_drop_row(text):
+            # R2608 repair at birth site: this fixture used to pin one literal
+            # row INCLUDING its seconds, so every restamp of the document
+            # made the substitution a no-op and the criterion read DOC-CURRENT
+            # instead of ROWS-MISMATCH. It now removes the FIRST data row by
+            # the shipped row law, which survives any restamp.
+            match = SMR.ROW_RE.search(text)
+            if match is None:
+                raise AssertionError("E_EDMD_SUITE_NO_ROW")
+            return text[:match.start()] + text[match.end():]
+
+        drop = temp_copy(workdir, "rows.md", doctor_drop_row)
         rr = SMR.report(drop, green)
         live = SMR.report(DOC, green)
         results.append(check(
@@ -326,7 +336,7 @@ def verify():
             and rd.get("separator_cells") == 2
             and rt["verdict"] == SMR.WORD_TABLE
             and missing["verdict"] == SMR.WORD_NONE
-            and rw["verdict"] == SMR.WORD_RED
+            and rw["verdict"] == SMR.WORD_CEILING
             and rw.get("walk", {}).get("bounded") is True
             and rw.get("walk", {}).get("decoded") == 1
             and rp.get("evidence_source") == "walk"
