@@ -4667,6 +4667,17 @@ SUITES = [
     ("os-suite-matrix-reconcile-row-shape",
      os.path.join("..", "os", "test_suite_matrix_reconcile_row_shape.py"),
      6),
+    # R2630: table membership is decided by the SEPARATOR row a header carries
+    # rather than by a digit in its first cell, so a malformed row whose first
+    # cell is not numeric is ONE non-row instead of ending the table (measured
+    # 643 -> 0 at R2624 and re-measured before this window wrote a byte). A
+    # genuine header of a SECOND table still ends the first table and the
+    # footer/total row is still a non-row.
+    # (AC-EDMI1..AC-EDMI6 pre-registered in state/queue/tech.md:653 as the
+    # R2624 seed BEFORE the code existed.)
+    ("os-suite-matrix-reconcile-row-membership",
+     os.path.join("..", "os", "test_suite_matrix_reconcile_row_membership.py"),
+     6),
     # R2253: a claimable queue row must name its criteria prefix, so
     # pre-registration is a gate instead of a habit. The row law is
     # imported from queue_floor rather than rewritten, two declaration

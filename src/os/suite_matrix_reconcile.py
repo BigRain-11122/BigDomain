@@ -314,16 +314,23 @@ def doc_rows(text, patterns=None):
             # AC-EDMH3: a separator row reappearing inside the table neither
             # restarts nor ends it.
             pass
+        elif is_second_table_header(lines, mask, index):
+            # AC-EDMI2: a row followed by a SEPARATOR of its OWN WIDTH opens
+            # ANOTHER table, so the first table ends here (AC-EDMG1 unchanged).
+            break
         elif DATA_HEAD_RE.match(line):
             # AC-EDMH1: a data-shaped row whose CELL COUNT is wrong is skipped
             # as one non-row and every well-formed row after it is still
             # counted, so the count falls by one instead of to zero.
             pass
         else:
-            # A row that is neither data nor separator is the header of
-            # ANOTHER table: the first table ends here (AC-EDMG1, unchanged by
-            # AC-EDMH2).
-            break
+            # AC-EDMI1: table membership is decided by the separator row a
+            # header carries, not by a digit in the first cell. A row that is
+            # not followed by a separator of its own width is ONE non-row -
+            # a malformed data row, or the footer/total row (AC-EDMI3) - so
+            # every well-formed row after it is still counted instead of the
+            # count collapsing.
+            pass
         index += 1
     return count
 
@@ -391,6 +398,32 @@ def is_separator_row(cells_text):
         only = next(iter(chars))
         return not only.isalnum()
     return all(not ch.isalnum() for ch in chars)
+
+
+def is_second_table_header(lines, mask, index):
+    """True when the row at `index` opens ANOTHER table.
+
+    AC-EDMI2: a header is recognised by the SEPARATOR row that follows it, and
+    only when that separator carries the SAME cell count as the header. A row
+    that no such separator follows is not a header - it is one non-row inside
+    the table being counted (AC-EDMI1/AC-EDMI3).
+    """
+    candidate = lines[index]
+    if not candidate.startswith("|"):
+        return False
+    width = candidate.count("|") - 1
+    follow = index + 1
+    while follow < len(lines):
+        if mask[follow] or not lines[follow].strip():
+            follow += 1
+            continue
+        break
+    if follow >= len(lines):
+        return False
+    below = lines[follow]
+    if not below.startswith("|") or not is_separator_row(below):
+        return False
+    return below.count("|") - 1 == width
 
 
 def title_tables(text, patterns):

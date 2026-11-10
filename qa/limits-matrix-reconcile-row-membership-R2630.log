@@ -1,0 +1,8 @@
+R2630 limits for the table-membership law (read-only)
+doc=docs/sandbox-suite-matrix.md
+registry_rows=643 registry_criteria=4834
+real_rows=643 delta=0
+malformed_row_nonnumeric_first_cell rows=642 delta=-1 (the gap)
+genuine_second_header rows=643 delta=+0 (must stay 0)
+footer_after_last_data_row rows=643 delta=+0 (must stay 0)
+malformed_row_as_last_row rows=642 delta=-1 (must stay -1)

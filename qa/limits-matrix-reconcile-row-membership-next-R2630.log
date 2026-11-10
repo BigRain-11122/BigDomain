@@ -1,0 +1,6 @@
+R2630 successor limits (read-only, measured after the AC-EDMI fix)
+registry_rows=644 registry_criteria=4840 real_rows=644
+second_header_narrow_separator rows=645 delta=+1
+second_header_no_separator rows=645 delta=+1
+two_adjacent_nonnumeric_rows rows=642 delta=-2 (expected -2)
+numeric_footer_row rows=644 delta=+0 (expected 0)
