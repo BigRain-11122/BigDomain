@@ -1,0 +1,20 @@
+R2615 write-sensitive suite re-run on committed tree HEAD 9c5da584
+purpose: the adopted battery leg for reconcile-battery-R2608 runs across two R2614 closeout commits and this window fold/append/export, so the suites that read state.json, docs/status-export.json, the log archive and the matrix document are re-run individually here
+cwd: src/sandbox   interpreter: sys.executable   one utf-8 LF writer, no shell redirection
+SUITE os-status-export-writer-dialect-wire rc=0 pass-lines=6 fail-lines=0 criteria=6 PASS
+SUITE os-queue-floor-export-face rc=0 pass-lines=6 fail-lines=0 criteria=6 PASS
+SUITE os-export-consistency-queue-face rc=0 pass-lines=15 fail-lines=0 criteria=6 PASS
+SUITE os-patterns-label-readability rc=0 pass-lines=32 fail-lines=0 criteria=6 PASS
+SUITE os-patterns-label-readability-render-consumer rc=0 pass-lines=32 fail-lines=0 criteria=6 PASS
+SUITE os-patterns-non-label-text-readability rc=0 pass-lines=54 fail-lines=0 criteria=6 PASS
+SUITE os-artifact-disk-text-readability rc=0 pass-lines=31 fail-lines=0 criteria=6 PASS
+SUITE os-evidence-name-text-coverage rc=0 pass-lines=31 fail-lines=0 criteria=6 PASS
+SUITE os-stamp-text-coverage rc=0 pass-lines=32 fail-lines=0 criteria=6 PASS
+TOTAL suites=9 red=0 fails=0
+
+SECOND BLOCK - ledger round coverage and the writer census, re-run after this window added one qa evidence file
+SUITE reconcile-daily-census rc=0 pass-lines=0 fail-lines=0 criteria=8 PASS
+SUITE os-state-seq rc=0 pass-lines=6 fail-lines=0 criteria=6 PASS
+SUITE os-state-seq-archive rc=0 pass-lines=6 fail-lines=0 criteria=6 PASS
+SUITE os-ledger-lines rc=0 pass-lines=8 fail-lines=0 criteria=8 PASS
+TOTAL suites=4 red=0
