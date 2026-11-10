@@ -224,9 +224,17 @@ def criterion_edmc3(work, text, leg):
     doc = os.path.join(work, "bounded.md")
     write_text(doc, text)
     result = SMR.report(doc, None, dump, ceiling)
-    ok &= check(result["verdict"] == SMR.WORD_RED
-                and result.get("bound_reached") is True,
-                "report says BOUND-REACHED on a capped pile (%s)"
+    # R2609 birth-site repair: R2608 renamed the starved walk to its own word
+    # (CEILING-STARVED) and amended only the R2606 suite, so this pre-registered
+    # R2604 assertion still pinned the old RED-LEG state and the battery went
+    # red. The law is unchanged - a capped pile is refused, names its ceiling
+    # and never reads current - and the assertion now follows the shipped word.
+    ok &= check(result["verdict"] == SMR.WORD_CEILING
+                and result.get("code") == SMR.CODE_CEILING
+                and result.get("ceiling") == ceiling
+                and (result.get("walk") or {}).get("bounded") is True
+                and result["verdict"] != SMR.WORD_RED,
+                "report says CEILING-STARVED on a capped pile (%s)"
                 % result["verdict"])
     ok &= check(isinstance(SMR.WALK_CEILING, int) and SMR.WALK_CEILING > 0,
                 "a declared default ceiling exists (%r)" % SMR.WALK_CEILING)
