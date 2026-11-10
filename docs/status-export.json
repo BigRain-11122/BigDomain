@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-10T18:00:09+08:00",
-  "do": "2026-11-10 R2614 VERIFICATION/REPAIR window on the battery the debt gate named first (reconcile-battery-R2608, registered 639 suites / 4810 criteria at R2608). Five readings at open: git status EMPTY at HEAD ab0093435 equal to origin/main with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read 69 file tokens against the 225-token union baseli",
+  "export_ts": "2026-11-10T18:15:51+08:00",
+  "do": "2026-11-10 R2615 VERIFICATION window adopting the live battery leg for reconcile-battery-R2608 (registered 640 suites / 4816 criteria at R2608, target moved to 640/4816 by NOTE-R2614 and RE-MEASURED BY IMPORT at open as 640 suites / 4816 criteria / 640 unique names, byte for byte the registered number). Five readings at open: git status EMPTY at HEAD ab52a9fc equal to origin/main with no index.loc",
   "ceo_face": {
-    "current": "2026-11-10 R2614 VERIFICATION/REPAIR window on the battery the debt gate named first (reconcile-battery-R2608, registered 639 suites / 4810 criteria at R2608). Five readings at open: git status EMPTY at HEAD ab0093435 equal to origin/main with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read 69 file tokens against the 225-token union baseli",
-    "latest_artifact": "none landed yet for R2614",
-    "last_artifact": "none landed yet for R2614",
-    "next_milestone": "next window owes reconcile-battery-R2608 on the committed tree, inside a 48h window due 2026-11-12T18:00:15+08:00",
-    "next_milestone_due": "2026-11-12T18:00:15+08:00",
-    "updated_at": "2026-11-10T18:00:09+08:00"
+    "current": "2026-11-10 R2615 VERIFICATION window adopting the live battery leg for reconcile-battery-R2608 (registered 640 suites / 4816 criteria at R2608, target moved to 640/4816 by NOTE-R2614 and RE-MEASURED BY IMPORT at open as 640 suites / 4816 criteria / 640 unique names, byte for byte the registered number). Five readings at open: git status EMPTY at HEAD ab52a9fc equal to origin/main with no index.loc",
+    "latest_artifact": "none landed yet for R2615",
+    "last_artifact": "none landed yet for R2615",
+    "next_milestone": "next window owes reconcile-battery-R2608 on the committed tree, inside a 48h window due 2026-11-12T18:15:51+08:00",
+    "next_milestone_due": "2026-11-12T18:15:51+08:00",
+    "updated_at": "2026-11-10T18:15:51+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "none landed yet for R2615",
     "none landed yet for R2614",
     "claim-nesting-repair-R2613.log (1550B)",
     "none landed yet for R2611",
@@ -929,7 +930,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2614",
+      "2615",
       "OSLoop 执行 tick"
     ],
     [
