@@ -1,0 +1,41 @@
+== test_suite_matrix_reconcile_fence_table.py rc=0 ==
+  PASS AC-EDMG1 second-table rows=642 real=642 registry=642 titles=1 verdict=STALE-CONTENT
+  PASS AC-EDMG2 unclosed verdict=FENCE-UNCLOSED code=E_EDMG_FENCE line=690 open-line=690 cli=FENCE-UNCLOSED/3
+  PASS AC-EDMG3 nested verdict=FENCE-NESTED markers=4/3 rows=642 real=642 cli=FENCE-NESTED/3
+  PASS AC-EDMG4 asked live=1 diff=1 verdict=DOC-CURRENT/STALE-CONTENT
+  PASS AC-EDMG5 quoted=642/642 same-titles=1 other=TITLE-REPEATED(2) none=TABLE-MISSING narrow=HEADER-SHAPE/2 nosep=SEPARATOR-MISSING starved=CEILING-STARVED rows=ROWS-MISMATCH(641/642) src=explicit/walk
+  PASS AC-EDMG6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+
+SUITE PASS 6/6
+== test_suite_matrix_reconcile_fence_rows.py rc=0 ==
+PASS AC-EDMF1 quoted rows=642 real=642 (quoted row present, not counted) law=DOC-CURRENT untouched=STALE-CONTENT live=DOC-CURRENT registry=642
+PASS AC-EDMF2 same-header-no-separator titles=1 (live=1) -> STALE-CONTENT exit=2
+PASS AC-EDMF3 other-header titles=2 -> TITLE-REPEATED titles=2 exit=3 CLI=TITLE-REPEATED rc=3
+PASS AC-EDMF4 check-asked=1 code=2 content=STALE-CONTENT | live asked=1 code=0 verdict=DOC-CURRENT
+PASS AC-EDMF5 twice=2 fenced=1 bare=1 nodoc=NO-DOC narrow=HEADER-SHAPE/2 starved=CEILING-STARVED drained=RED-LEG red=RED-LEG src=walk/explicit rows=ROWS-MISMATCH(641/642)
+PASS AC-EDMF6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+
+SUITE PASS 6/6
+== test_suite_matrix_reconcile_fence.py rc=0 ==
+PASS AC-EDME1 mixed-separator narrow-shape=(6, 2) -> HEADER-SHAPE cells=6/2, wide-shape=(6, 6) verdict=STALE-CONTENT
+PASS AC-EDME2 fenced-title count=1 -> STALE-CONTENT rows=642/642 CLI=STALE-CONTENT rc=2 (the row counter is NOT fence-aware: a quoted data row still counts, which is the seeded successor limit)
+PASS AC-EDME3 trailing-bare-title count=1 -> STALE-CONTENT rows=642/642
+PASS AC-EDME4 starved=CEILING-STARVED(ceiling=1 bounded=True) drained=RED-LEG(decoded=3) CLI=CEILING-STARVED rc=3
+PASS AC-EDME5 sep=SEPARATOR-MISSING dash2=6/2 nodoc=NO-DOC header5=5/6 src=walk/explicit rows=ROWS-MISMATCH(641<642) live=DOC-CURRENT
+PASS AC-EDME6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+
+SUITE PASS 6/6
+== test_suite_matrix_reconcile.py rc=0 ==
+  PASS AC-EDM1 regenerated doc rows=642 registry rows=642 evidence names reconcile-all-R2616.log with RUNNER PASS 641/641
+  PASS AC-EDM2 rows word=ROWS-MISMATCH doc=641 registry=642 BOTH named
+  PASS AC-EDM3 red leg refused word=RED-LEG, doc byte-identical, shipped check unchanged (exit=2)
+  PASS AC-EDM4 patch parse_evidence -> RED-LEG, patch check face -> DOC-CURRENT, live -> DOC-CURRENT
+  PASS AC-EDM5 report wrote nothing, one verdict word (ROWS-MISMATCH), idempotent rewrite (DOC-CURRENT)
+  PASS AC-EDM6 hygiene ascii=True clock=False network=[] registered=True
+SUITE PASS 6/6
+
+SUITE PASS 6/6
+RE-RUN POST-COMMIT PASS green=4 red=0

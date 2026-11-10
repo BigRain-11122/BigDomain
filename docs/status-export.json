@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-11T04:21:55+08:00",
+  "export_ts": "2026-11-11T04:23:09+08:00",
   "do": "2026-11-11 R2621 PRODUCT window on the queue head the debt gate named (product-face-R2620, state/queue/tech.md:650 prefix AC-EDMG1, criteria AC-EDMG1..AC-EDMG6 pinned in that row at R2616 BEFORE any code). Five readings at open: git status EMPTY at HEAD 1d9a00c4 equal to origin/main with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md, the content-addressed D-/C-/T- decisions scan ",
   "ceo_face": {
     "current": "2026-11-11 R2621 PRODUCT window on the queue head the debt gate named (product-face-R2620, state/queue/tech.md:650 prefix AC-EDMG1, criteria AC-EDMG1..AC-EDMG6 pinned in that row at R2616 BEFORE any code). Five readings at open: git status EMPTY at HEAD 1d9a00c4 equal to origin/main with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md, the content-addressed D-/C-/T- decisions scan ",
-    "latest_artifact": "limits-matrix-reconcile-fence-table-R2621.log (391B) + limits-matrix-reconcile-fence-table-next-R2621.log (259B) + suite-matrix-reconcile-fence-table-R2621.log (3400B)",
-    "last_artifact": "limits-matrix-reconcile-fence-table-R2621.log (391B) + limits-matrix-reconcile-fence-table-next-R2621.log (259B) + suite-matrix-reconcile-fence-table-R2621.log (3400B)",
-    "next_milestone": "next window owes reconcile-battery-R2621 on the committed tree, inside a 48h window due 2026-11-13T04:21:55+08:00",
-    "next_milestone_due": "2026-11-13T04:21:55+08:00",
-    "updated_at": "2026-11-11T04:21:55+08:00"
+    "latest_artifact": "limits-matrix-reconcile-fence-table-R2621.log (391B) + limits-matrix-reconcile-fence-table-next-R2621.log (259B) + suite-matrix-reconcile-fence-table-R2621.log (3400B) + write-sensitive-rerun-R2621.log (2972B)",
+    "last_artifact": "limits-matrix-reconcile-fence-table-R2621.log (391B) + limits-matrix-reconcile-fence-table-next-R2621.log (259B) + suite-matrix-reconcile-fence-table-R2621.log (3400B) + write-sensitive-rerun-R2621.log (2972B)",
+    "next_milestone": "next window owes reconcile-battery-R2621 on the committed tree, inside a 48h window due 2026-11-13T04:23:09+08:00",
+    "next_milestone_due": "2026-11-13T04:23:09+08:00",
+    "updated_at": "2026-11-11T04:23:09+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "limits-matrix-reconcile-fence-table-R2621.log (391B) + limits-matrix-reconcile-fence-table-next-R2621.log (259B) + suite-matrix-reconcile-fence-table-R2621.log (3400B) + write-sensitive-rerun-R2621.log (2972B)",
     "limits-matrix-reconcile-fence-table-R2621.log (391B) + limits-matrix-reconcile-fence-table-next-R2621.log (259B) + suite-matrix-reconcile-fence-table-R2621.log (3400B)",
     "write-sensitive-rerun-R2620.log (10386B)",
     "none landed yet for R2619",
