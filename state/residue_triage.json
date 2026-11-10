@@ -1,13 +1,13 @@
 {
-  "declared_by": 2604,
-  "reason": "R2604 product window: matrix reconciliation table-shape face shipped and delivered in this round own commit (no residue owed)",
+  "declared_by": 2612,
+  "reason": "R2612 verification window: the R2604 declaration expired at until R2606, so each entry is re-pinned only after its own evidence was measured live in this window",
   "entries": [
     {
       "round": 2165,
       "status": "STAMP-ONLY-OPEN",
-      "declared_by": 2604,
-      "reason": "re-pinned at R2353: the R2331 head expired at until R2350, so every live round was read once more from stamp_residue and accepted at its reported status until R2363",
-      "until": 2606
+      "declared_by": 2612,
+      "reason": "measured at R2612 rather than restated: the R2165 stamp sits on state/queue/explore.md:55 criterion AC-MHH8 inside a parent row that is still open, and that criterion evidence verifies live - qa/apimarket-hourheatmap-R2165-a.log and -b.log are byte-identical (736 bytes each, sha256 55634543bbfff7c42f61d62b3f709556433d864f95aa4adff635471bfbb53bf6, matching the sha prefix published in the row) and ledger-apimarket-hourheatmap is present in the 639-suite registry imported this window - so this is delivered work standing on a partially-done parent row, not unaccounted residue",
+      "until": 2660
     }
   ]
 }
