@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-10T17:33:49+08:00",
-  "do": "2026-11-10 R2613 PRODUCT repair of the battery red, INHERITED AND VERIFIED not re-run: the window that opened it was rotated before closing its books, so this one measured its landed work and shipped it. Measured: test_apimarket_report_claims.py AC-AMCLM8 now spawns only the two cheap children (rc=0 each) and reads SUITE PASS 8/8 at 25s wall where R2612 recorded exit=124 at 600.2s, covered=True re",
+  "export_ts": "2026-11-10T18:00:09+08:00",
+  "do": "2026-11-10 R2614 VERIFICATION/REPAIR window on the battery the debt gate named first (reconcile-battery-R2608, registered 639 suites / 4810 criteria at R2608). Five readings at open: git status EMPTY at HEAD ab0093435 equal to origin/main with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read 69 file tokens against the 225-token union baseli",
   "ceo_face": {
-    "current": "2026-11-10 R2613 PRODUCT repair of the battery red, INHERITED AND VERIFIED not re-run: the window that opened it was rotated before closing its books, so this one measured its landed work and shipped it. Measured: test_apimarket_report_claims.py AC-AMCLM8 now spawns only the two cheap children (rc=0 each) and reads SUITE PASS 8/8 at 25s wall where R2612 recorded exit=124 at 600.2s, covered=True re",
-    "latest_artifact": "claim-nesting-repair-R2613.log (1550B)",
-    "last_artifact": "claim-nesting-repair-R2613.log (1550B)",
-    "next_milestone": "next window owes reconcile-battery-R2608 on the committed tree, inside a 48h window due 2026-11-12T17:33:52+08:00",
-    "next_milestone_due": "2026-11-12T17:33:52+08:00",
-    "updated_at": "2026-11-10T17:33:49+08:00"
+    "current": "2026-11-10 R2614 VERIFICATION/REPAIR window on the battery the debt gate named first (reconcile-battery-R2608, registered 639 suites / 4810 criteria at R2608). Five readings at open: git status EMPTY at HEAD ab0093435 equal to origin/main with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read 69 file tokens against the 225-token union baseli",
+    "latest_artifact": "none landed yet for R2614",
+    "last_artifact": "none landed yet for R2614",
+    "next_milestone": "next window owes reconcile-battery-R2608 on the committed tree, inside a 48h window due 2026-11-12T18:00:15+08:00",
+    "next_milestone_due": "2026-11-12T18:00:15+08:00",
+    "updated_at": "2026-11-10T18:00:09+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "none landed yet for R2614",
     "claim-nesting-repair-R2613.log (1550B)",
     "none landed yet for R2611",
     "none landed yet for R2610",
@@ -928,7 +929,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2613",
+      "2614",
       "OSLoop 执行 tick"
     ],
     [
@@ -947,10 +948,10 @@
   "self_drive": {
     "window": "2026-11-04..2026-11-10",
     "window_days": 7,
-    "log_lines_in_window": 49,
+    "log_lines_in_window": 45,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 48,
+    "substantive_non_idle_mention_lines": 44,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,

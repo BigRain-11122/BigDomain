@@ -1,0 +1,68 @@
+"""R2614 verification/repair closeout append: the red R2609 leg, its birth-site repair, a fresh leg."""
+
+import json
+import os
+import sys
+import tempfile
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import state_io  # noqa: E402
+
+PATH = os.path.join(HERE, "state.json")
+
+LINES = [
+    "2026-11-10 R2614 VERIFICATION/REPAIR window on the battery the debt gate named first (reconcile-battery-R2608, registered 639 suites / 4810 criteria at R2608). Five readings at open: git status EMPTY at HEAD ab0093435 equal to origin/main with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read 69 file tokens against the 225-token union baseline with new=0, the group orders tail still the 2026-11-09 00:59 BigStream row (knowledge-only here) so last_order stands, benchmarks 2026-11-10 current. debt_gate read CLAIM-FIRST item=reconcile-battery-R2608 first=1 open=39 stale=yes, queue_head named tech line 646 prefix AC-EDMF1 claimable=15 and queue_floor read FLOOR-MET at 5/5, 15/10, 10/10. state read 78247B against the 78500B gate so a fold was owed BEFORE any long append.",
+    "2026-11-10 R2614 THE R2609 LEG FINISHED AND IT IS RED; THE RED IS MEASURED, NOT GLOSSED: logs/battery-R2609.stream closed at 1096793 bytes with 'RUNNER FAIL (11 failed assertions)' and 'BATTERY rc=1 6685.6s' on 2026-11-10 17:47, and no reconcile_all, battery_stream or capture process was live afterwards. Ten red SUITE rows were listed: ledger-apimarket-reportclaims exit=124 600.2s (the per-suite cap, whose nesting birth site R2613 already repaired and whose suite now reads SUITE PASS 8/8 in 25s), os-status-export-writer-dialect-wire, os-queue-floor-export-face and os-export-consistency-queue-face (the export trio), and SIX readability suites - patterns-label-readability, patterns-label-readability-render-consumer, patterns-non-label-text-readability, artifact-disk-text-readability, evidence-name-text-coverage and stamp-text-coverage - each at 0 pass-lines with exit=1, i.e. they died at their first assertion.",
+    "2026-11-10 R2614 THE READABILITY CLUSTER ROOT CAUSE WAS READ OFF THE SHIPPED FACE, NOT GUESSED, AND REPAIRED AT ITS BIRTH SITE: a bounded reproduction of test_patterns_label_readability.py on HEAD printed 'FAIL AC-PLR3 a clean file renders the artifact byte-identically (65248 bytes)', and the shipped reconcile report read ROWS-MISMATCH docs/sandbox-suite-matrix.md doc-rows=639 registry-rows=640 (4816 criteria) - the matrix document was ONE ROW STALE behind the registry R2613 recounted, so byte-identity could not hold for any of the six. The repair went THROUGH the shipped face (src/os/suite_matrix_reconcile.py --write), which composed from the CURRENT registry keeping the document own stamp and recorded --stamp-from provenance: WRITTEN 65367 bytes / 640 rows, --check then read DOC-CURRENT, and all SIX readability suites re-ran SUITE PASS 6/6 rc=0 individually. The repair was committed ALONE as e8af955c before any retry, so the next leg runs on a committed tree.",
+    "2026-11-10 R2614 THE R2609 LEG IS NOT ADMISSIBLE AS A VERDICT AND IS NOT DRESSED UP AS ONE: it started 15:56:17 and finished 17:47, spanning the R2611, R2612 and R2613 windows which wrote docs/global-benchmarks.md, state/residue_triage.json, product src bytes (the claim-nesting repair) and state/export/heartbeat files - so the tree it measured was NOT one committed tree (the R2168 law), and the export trio reds are consistent with mid-write reads rather than with a product defect: all three read SUITE PASS on the current HEAD. Its evidence also never landed in qa/ (only logs/battery-R2609.stream exists), which is named rather than hidden. A FRESH leg on the committed repair tree was launched: a one-off launcher that now REFUSES on a moved registry (it refused once at 640/0 on my own wrong criteria count, disclosed) Popen'ed src/os/battery_stream.py detached with CREATE_NO_WINDOW|DETACHED_PROCESS, stream and pid in SEPARATE files under logs/, target re-measured by import at 640 suites / 4816 criteria; pid 5212 with its reconcile_all child 55512 were confirmed live by command line at open+15s. A full leg has measured 3500-6700s here against this window 25-minute budget, so reconcile-battery-R2608 STAYS OPEN and its target was MOVED to 640/4816 through the shipped debt note writer (marker NOTE-R2614, line 359, 196563B -> 196890B, readback ok).",
+    "R2614 honest disclosures: (a) ZERO product points on the Executive Protocol scale - the window wrote no product byte, only one document regenerated through its shipped face and one birth-site repair, and nothing a CEO could newly open exists, so every P-47 item still waits on CEO physical items (merchant id, mini-program appid/secret); (b) the six readability reds were a DOC-STALENESS symptom, not a product regression, and that is why one shipped write healed all six - the underlying defect is that the matrix document is not regenerated by the windows that move the registry, which is NAMED here and NOT repaired; (c) the cap red was inherited and already repaired at R2613, so this window only re-measured it; (d) the R2609 leg is discarded as a verdict because three later windows wrote the tree under it, and that contamination is the direct cost of carrying a battery across windows; (e) my own launcher counted criteria from the wrong tuple slot and refused at 640/0 - the refusal is the shipped fail-closed face working and the count was corrected, not the target; (f) the fold ran at a true round-block boundary (items 101..103, the complete R2613 block ending on its tokens line, 3 tokens preserved verbatim) 78247B -> 76987B with archive VERIFIED before the append; (g) Docker is absent on this host so no containerised bring-up is claimed; (h) tasks.md was not touched, it is the P-47 canonical board; (i) BigDomain-OSLoop still needs an ELEVATED shell for its S4U re-registration (carried as the ceo-pending physical item loop-s4u-reconcile).",
+    "R2614 tokens: local=~14k api=0 api_reason=verification/repair window - one five-silence scan with the content-addressed decisions diff, the ledger face and the group orders tail actually read, one debt gate plus queue head and floor read, one finished red leg measured on its bytes, closing line, suite rows and process liveness, one bounded reproduction of a readability suite, one shipped reconcile report naming the one-row drift, one birth-site repair through the shipped write face and six suites re-run green individually, one repair committed alone, one fail-closed launcher written and one detached leg launched on the committed tree with its process chain re-read, one fold at a true block boundary, one debt note moving the target through the shipped writer, and the state/export/heartbeat closeout; zero cloud calls and zero external API touches",
+]
+
+
+def main():
+    text = state_io.decode(state_io.read_raw(PATH))
+    data = state_io.parse(text)
+    expected = json.loads(json.dumps(data))
+    expected["tick"] = int(data["tick"]) + 1
+    expected["log"] = list(data["log"]) + list(LINES)
+    lines = state_io._lf_lines(text)
+    start, end = state_io._log_block(lines)
+    for index in range(start):
+        if lines[index].strip().startswith('"tick":'):
+            lines[index] = ' "tick": %d,' % expected["tick"]
+            break
+    else:
+        print("REFUSED no tick line")
+        return 6
+    if not lines[end - 1].strip().endswith(","):
+        lines[end - 1] = lines[end - 1].rstrip() + ","
+    inserted = []
+    for index, item in enumerate(LINES):
+        suffix = "," if index < len(LINES) - 1 else ""
+        inserted.append(" " * state_io.ITEM_INDENT +
+                        json.dumps(item, ensure_ascii=False) + suffix)
+    out = state_io.EOL.join(lines[:end] + inserted + lines[end:])
+    if state_io.parse(out) != expected:
+        print("REFUSED payload moved")
+        return 3
+    payload = out.encode("utf-8")
+    handle, temp = tempfile.mkstemp(dir=HERE, prefix=".r2614_")
+    with os.fdopen(handle, "wb") as sink:
+        sink.write(payload)
+        sink.flush()
+        os.fsync(sink.fileno())
+    os.replace(temp, PATH)
+    if state_io.read_raw(PATH) != payload:
+        print("REFUSED read-back mismatch")
+        return 4
+    after = state_io.report(PATH)
+    print("APPEND ok tick=%d bytes=%d log_len=%d layout_ok=%s"
+          % (expected["tick"], after["bytes"], after["log_len"],
+             after["layout_ok"]))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -356,7 +356,7 @@ column-0 checkbox starts one.
 - [x] opened=R2605 | item=product-face-R2605 | note=next window a PRODUCT face on queue head state/queue/tech.md:638 prefix AC-EDMD1, whose AC-EDMD1..AC-EDMD6 were pinned in that row at R2604 BEFORE any code; no battery owed because this verification window moved no product src byte and the registry stands unmoved at 637 suites / 4798 criteria | closed=R2606
 - [x] opened=R2606 | item=reconcile-battery-R2606 | note=pre-registered 638 suites / 4804 criteria; this window moved product src bytes and one registry row (R2168 mixed-tree rule) | closed=R2607
 - [x] opened=R2607 | item=product-face-R2607 | note=PRODUCT face on the queue head state/queue/tech.md:640 prefix AC-EDME1, whose AC-EDME1..AC-EDME6 were pinned there at R2606 BEFORE any code; the owed battery reconcile-battery-R2606 went GREEN this window at 638/638 suites and 4804 criteria. | closed=R2608
-- [ ] opened=R2608 | item=reconcile-battery-R2608 | note=pre-registered 639 suites / 4810 criteria; this window moved product src bytes, one registry row and the matrix document (R2168 mixed-tree rule) | first=yes
+- [ ] opened=R2608 | item=reconcile-battery-R2608 | note=pre-registered 639 suites / 4810 criteria; this window moved product src bytes, one registry row and the matrix document (R2168 mixed-tree rule) ; NOTE-R2614 target moved to 640 suites / 4816 criteria: the registry grew to 640/4816 at R2613 and the R2609 leg is red and contaminated (it ran 15:56-17:47 across three later windows that wrote product src bytes, state, docs and qa), so the next window owes a green leg on this committed tree before any further product byte | first=yes
 
 ## Closed
 
