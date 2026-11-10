@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-10T08:14:00+08:00",
+  "export_ts": "2026-11-10T08:16:23+08:00",
   "do": "2026-11-10 R2606 PRODUCT window on the queue head the debt gate named (product-face-R2605, state/queue/tech.md:638 prefix AC-EDMD1, criteria AC-EDMD1..AC-EDMD6 pinned there at R2604 BEFORE any code). Five readings at open: git status EMPTY at HEAD 39d98836 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed D-/C- scan read 63 file tokens",
   "ceo_face": {
     "current": "2026-11-10 R2606 PRODUCT window on the queue head the debt gate named (product-face-R2605, state/queue/tech.md:638 prefix AC-EDMD1, criteria AC-EDMD1..AC-EDMD6 pinned there at R2604 BEFORE any code). Five readings at open: git status EMPTY at HEAD 39d98836 equal to origin/main with no index.lock, zero @BigDomain rows in cph4/evolution-ledger.md, the content-addressed D-/C- scan read 63 file tokens",
     "latest_artifact": "limits-matrix-reconcile-shape-next-R2606.log (281B) + suite-matrix-reconcile-shape-R2606.log (1972B) + suite-matrix-reconcile-shape-live-R2606.log (159B)",
     "last_artifact": "limits-matrix-reconcile-shape-next-R2606.log (281B) + suite-matrix-reconcile-shape-R2606.log (1972B) + suite-matrix-reconcile-shape-live-R2606.log (159B)",
-    "next_milestone": "next window owes reconcile-battery-R2606 on the committed tree, inside a 48h window due 2026-11-12T08:14:00+08:00",
-    "next_milestone_due": "2026-11-12T08:14:00+08:00",
-    "updated_at": "2026-11-10T08:14:00+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2606 on the committed tree, inside a 48h window due 2026-11-12T08:16:23+08:00",
+    "next_milestone_due": "2026-11-12T08:16:23+08:00",
+    "updated_at": "2026-11-10T08:16:23+08:00"
   },
   "depts": [
     {
