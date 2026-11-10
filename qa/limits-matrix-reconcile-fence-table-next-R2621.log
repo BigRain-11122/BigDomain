@@ -1,0 +1,4 @@
+DOC doc_rows=642 registry=642 criteria=4828
+(a) tilde fence: doc_rows=642 delta=0 verdict=STALE-CONTENT shape_named=False
+(b) bare row after the table: doc_rows=642 delta=0 verdict=STALE-CONTENT
+(c) seven-cell row: doc_rows=0 delta=-642 verdict=ROWS-MISMATCH

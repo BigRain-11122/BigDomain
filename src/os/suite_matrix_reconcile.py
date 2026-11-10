@@ -83,6 +83,15 @@ R2608 extended the same face again with AC-EDME1..AC-EDME6 (pinned in
 state/queue/tech.md:640 at R2606 BEFORE any code), and its own suite printed
 the successor limit in plain words: "the row counter is NOT fence-aware".
 
+R2621 extends the same face with AC-EDMG1..AC-EDMG6 (pinned in
+state/queue/tech.md:650 at R2616 BEFORE any code, re-measured here before any
+byte): the row law is TABLE-AWARE as well as fence-aware, so a data-shaped row
+in a SECOND table (fenced or not) is not a matrix row; the fence law names its
+own malformations instead of toggling blind - an opening mark that is never
+closed is refused naming the LINE it was opened on, and a closing mark SHORTER
+than the mark that opened the block is a nested dialect refused naming BOTH
+marker widths.
+
 R2616 extends the same face with AC-EDMF1..AC-EDMF6 (pinned in
 state/queue/tech.md:646 at R2608 BEFORE any code, from four limits MEASURED
 there and re-measured here before any byte): the row law is FENCE-AWARE, so a
@@ -166,6 +175,14 @@ CODE_TITLE = "E_EDMD_TITLE"
 # with no PASS leg cannot be decoded end to end. The bound is reported.
 WALK_CEILING = 64
 
+# AC-EDMG2/AC-EDMG3: the fence law used to toggle on any line starting with
+# three backticks, so a mark never closed quoted the rest of the document and
+# a LONGER mark carrying a shorter one toggled twice. Both are refused by name.
+WORD_FENCE = "FENCE-UNCLOSED"
+WORD_NEST = "FENCE-NESTED"
+CODE_FENCE = "E_EDMG_FENCE"
+CODE_NEST = "E_EDMG_NEST"
+
 # Matrix table data rows carry SIX cells (index, suite, path, criteria, state,
 # secs). The billable-faces table below it also starts with a number, so a
 # bare "^| <n> |" would count it too and inflate the row count by design.
@@ -174,6 +191,10 @@ SEPARATOR_CHARS = set("-: ")
 # AC-EDMF1: a fenced code block quotes example text. A quoted data-shaped row
 # is not a matrix row, so the row law has to know where the fence is.
 FENCE_MARK = "```"
+# AC-EDMG2/AC-EDMG3: an OPENING mark may carry an info string; a CLOSING mark
+# may not. A closing mark shorter than its opening mark is not a close.
+FENCE_OPEN_RE = re.compile(r"^[ \t]*(`{3,})([^`]*)$")
+FENCE_CLOSE_RE = re.compile(r"^[ \t]*(`{3,})[ \t]*$")
 
 
 def rel(path):
@@ -185,23 +206,101 @@ def read_text(path):
         return handle.read()
 
 
-def doc_rows(text):
-    """Matrix table data rows of a composed document, FENCE-AWARE.
+def fence_scan(text):
+    """(mask, problem): which lines are INSIDE a fenced block, and the first
+    malformation the block law meets.
 
-    AC-EDMF1: R2608 measured a quoted data row inside a ``` fence being
-    counted by the row law (doc_rows 640 -> 641 against a 640-row registry),
-    so a document that only QUOTED a row read ROWS-MISMATCH. A fenced block is
-    example text, never a matrix row, so the scan skips it."""
+    AC-EDMG2: a block opened and never closed quotes every remaining line and
+    is never named, so the document silently loses rows. It is refused here
+    naming the line the block was opened on.
+    AC-EDMG3: a block opened with FOUR backticks and carrying a THREE-backtick
+    line toggled twice - the quoted row was counted and the row after the block
+    was swallowed. A closing candidate shorter than its opening mark is content
+    inside the block, and the dialect is refused here naming both widths."""
+    lines = text.splitlines()
+    mask = [False] * len(lines)
+    open_len = 0
+    open_line = 0
+    problem = None
+    for index, line in enumerate(lines):
+        if open_len:
+            mask[index] = True
+            close = FENCE_CLOSE_RE.match(line)
+            if close:
+                width = len(close.group(1))
+                if width >= open_len:
+                    open_len = 0
+                    open_line = 0
+                elif problem is None:
+                    problem = {"code": CODE_NEST, "line": index + 1,
+                               "open_line": open_line,
+                               "open_marker": open_len, "inner_marker": width}
+            continue
+        opening = FENCE_OPEN_RE.match(line)
+        if opening:
+            mask[index] = True
+            open_len = len(opening.group(1))
+            open_line = index + 1
+    if open_len and problem is None:
+        problem = {"code": CODE_FENCE, "line": open_line,
+                   "open_marker": open_len}
+    return mask, problem
+
+
+def doc_rows(text, patterns=None):
+    """Matrix table data rows of a composed document, FENCE-AWARE (R2616) and
+    TABLE-AWARE (R2621).
+
+    AC-EDMF1: a quoted data row inside a ``` block is not a matrix row.
+    AC-EDMG1: R2616 measured a data-shaped row in a SECOND table (fenced or
+    not) still counted, so a document whose only difference was a second table
+    read ROWS-MISMATCH. Only rows of the FIRST table introduced by the shipped
+    matrix title are matrix rows."""
+    patterns = patterns or SM.load_patterns()
+    title = patterns["labels"]["matrix_title"].strip()
+    lines = text.splitlines()
+    mask, _problem = fence_scan(text)
+    start = None
+    for index, line in enumerate(lines):
+        if mask[index] or line.strip() != title:
+            continue
+        follow = index + 1
+        while (follow < len(lines) and not mask[follow]
+               and not lines[follow].strip()):
+            follow += 1
+        if follow < len(lines) and not mask[follow] \
+                and lines[follow].startswith("|"):
+            start = follow
+            break
+    if start is None:
+        return 0
     count = 0
-    in_fence = False
-    for line in text.splitlines():
-        if line.strip().startswith(FENCE_MARK):
-            in_fence = not in_fence
+    index = start + 1
+    if (index < len(lines) and not mask[index]
+            and lines[index].startswith("|")
+            and is_separator_row(lines[index])):
+        index += 1
+    while index < len(lines):
+        line = lines[index]
+        if mask[index]:
+            index += 1
             continue
-        if in_fence:
+        if not line.strip():
+            # A blank line inside a table is a doctoring artefact (deleting a
+            # row leaves one behind), not the end of the matrix table.
+            index += 1
             continue
+        if not line.startswith("|"):
+            break
         if ROW_RE.match(line):
             count += 1
+        elif is_separator_row(line):
+            pass
+        else:
+            # A row that is neither data nor separator is the header of
+            # ANOTHER table: the first table ends here (AC-EDMG1).
+            break
+        index += 1
     return count
 
 
@@ -403,6 +502,30 @@ def report(doc_path=None, evidence_path=None, qa_dir=None, ceiling=None):
                 "exit": 2, "written": False}
     current = read_text(doc_path)
     patterns = SM.load_patterns()
+    # AC-EDMG2/AC-EDMG3: a malformed fence is a SHAPE answer that names itself,
+    # and it comes before any row count, because a blind toggle either swallows
+    # the rest of the document or counts a quoted row.
+    _mask, fence_problem = fence_scan(current)
+    if fence_problem is not None:
+        nested = fence_problem["code"] == CODE_NEST
+        answer = {"doc": rel(doc_path), "exit": 3, "written": False,
+                  "code": fence_problem["code"],
+                  "line": fence_problem["line"],
+                  "open_marker": fence_problem["open_marker"]}
+        if nested:
+            answer["inner_marker"] = fence_problem["inner_marker"]
+            answer["open_line"] = fence_problem["open_line"]
+            answer["reason"] = ("a %d-backtick fence at line %d carries a"
+                                " %d-backtick closing mark"
+                                % (fence_problem["open_marker"],
+                                   fence_problem["open_line"],
+                                   fence_problem["inner_marker"]))
+            answer.update({"verdict": WORD_NEST, "titles": None})
+        else:
+            answer["reason"] = ("the fence opened on line %d is never closed"
+                                % fence_problem["line"])
+            answer["verdict"] = WORD_FENCE
+        return answer
     rows, criteria = registry_counts()
     # AC-EDMD4: a document carrying the matrix title more than once was read
     # as its FIRST table with every other table dropped in silence.
@@ -512,7 +635,7 @@ def write(doc_path=None, evidence_path=None, qa_dir=None, stamp_from=None,
     result = report(doc_path, evidence_path, qa_dir, ceiling)
     if result["verdict"] in (WORD_CURRENT, WORD_NONE, WORD_RED,
                              "READABILITY-REFUSED", WORD_HEADER, WORD_SEP,
-                             WORD_TITLE, WORD_CEILING):
+                             WORD_TITLE, WORD_CEILING, WORD_FENCE, WORD_NEST):
         return result
     # A TABLE-MISSING answer (AC-EDMC2) carries no resolved evidence because
     # the shape was refused before the leg was looked at, so the leg is
@@ -653,6 +776,15 @@ def main(argv):
         elif result["verdict"] == WORD_CEILING:
             print("  %s %s ceiling=%d"
                   % (result["code"], result["reason"], result["ceiling"]))
+        elif result["verdict"] == WORD_FENCE:
+            print("  %s %s line=%d marker=%s"
+                  % (result["code"], result["reason"], result["line"],
+                     "`" * result["open_marker"]))
+        elif result["verdict"] == WORD_NEST:
+            print("  %s %s open-line=%d open-marker=%s inner-marker=%s"
+                  % (result["code"], result["reason"],
+                     result["open_line"], "`" * result["open_marker"],
+                     "`" * result["inner_marker"]))
         elif result["verdict"] == WORD_RED:
             print("  evidence=%s reason=%s%s"
                   % (result.get("evidence"), result.get("reason"),

@@ -1,0 +1,5 @@
+DOC bytes=65476 doc_rows=641 registry=641 criteria=4822
+PASS leg=reconcile-all-R2616.log
+(a) second unfenced table: doc_rows=642 real=641 delta=1 verdict=ROWS-MISMATCH
+(b) unclosed fence at EOF: doc_rows=641 real=641 delta=0 verdict=STALE-CONTENT shape_named=False
+(c) four-backtick fence carrying a three-backtick line: doc_rows=642 real=641 delta=1 verdict=ROWS-MISMATCH shape_named=False

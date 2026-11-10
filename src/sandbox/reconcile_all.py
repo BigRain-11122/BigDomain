@@ -4646,6 +4646,16 @@ SUITES = [
     ("os-suite-matrix-reconcile-fence-rows",
      os.path.join("..", "os", "test_suite_matrix_reconcile_fence_rows.py"),
      6),
+    # R2621: the row law goes TABLE-AWARE as well as fence-aware - a data row
+    # in a SECOND table is not a matrix row - and the fence law names its own
+    # malformations: an opening mark never closed is refused naming its line,
+    # and a closing mark shorter than its opening mark is a nested dialect
+    # refused naming BOTH widths.
+    # (AC-EDMG1..AC-EDMG6 pre-registered in state/queue/tech.md:650 as the
+    # R2616 seed BEFORE the code existed.)
+    ("os-suite-matrix-reconcile-fence-table",
+     os.path.join("..", "os", "test_suite_matrix_reconcile_fence_table.py"),
+     6),
     # R2253: a claimable queue row must name its criteria prefix, so
     # pre-registration is a gate instead of a habit. The row law is
     # imported from queue_floor rather than rewritten, two declaration
