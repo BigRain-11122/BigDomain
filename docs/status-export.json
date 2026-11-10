@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-11T06:43:19+08:00",
+  "export_ts": "2026-11-11T06:44:44+08:00",
   "do": "2026-11-11 R2628 VERIFICATION window that CLOSED the battery the debt gate named first (reconcile-battery-R2624, pre-registered 643 suites / 4834 criteria at R2624). Five readings at open: git status EMPTY at HEAD fa5d4a7f equal to origin/main with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied=0), the content-addressed D-/C- decisions scan read tokens=189 ",
   "ceo_face": {
     "current": "2026-11-11 R2628 VERIFICATION window that CLOSED the battery the debt gate named first (reconcile-battery-R2624, pre-registered 643 suites / 4834 criteria at R2624). Five readings at open: git status EMPTY at HEAD fa5d4a7f equal to origin/main with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied=0), the content-addressed D-/C- decisions scan read tokens=189 ",
     "latest_artifact": "none landed yet for R2628",
     "last_artifact": "none landed yet for R2628",
-    "next_milestone": "next window owes product-face-R2628 on the committed tree, inside a 48h window due 2026-11-13T06:43:19+08:00",
-    "next_milestone_due": "2026-11-13T06:43:19+08:00",
-    "updated_at": "2026-11-11T06:43:19+08:00"
+    "next_milestone": "next window owes product-face-R2628 on the committed tree, inside a 48h window due 2026-11-13T06:44:44+08:00",
+    "next_milestone_due": "2026-11-13T06:44:44+08:00",
+    "updated_at": "2026-11-11T06:44:44+08:00"
   },
   "depts": [
     {
