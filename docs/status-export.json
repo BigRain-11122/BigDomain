@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-10T18:21:29+08:00",
-  "do": "2026-11-10 R2615 WRITE-SENSITIVE RE-RUN EXECUTED AS PRE-REGISTERED, and it is MEASURED not quoted: on the clean committed tree HEAD 9c5da584, THIRTEEN suites were run individually through sys.executable from src/sandbox and every one read rc=0 with zero FAIL lines - the export trio (os-status-export-writer-dialect-wire 6/6, os-queue-floor-export-face 6/6, os-export-consistency-queue-face 6/6), the",
+  "export_ts": "2026-11-10T19:03:55+08:00",
+  "do": "R2615 fold of log items 94..104 (the complete R2615 verification block: adopt, contamination inventory, reverted appender, fold, thirteen-suite re-run, green leg, follow-up, debt) into the archive; all 6 tokens preserved verbatim in this line: AC-EDMF1 AC-EDMF6 D-CLEAR R-MET R-ROUND T-CLEAN",
   "ceo_face": {
-    "current": "2026-11-10 R2615 WRITE-SENSITIVE RE-RUN EXECUTED AS PRE-REGISTERED, and it is MEASURED not quoted: on the clean committed tree HEAD 9c5da584, THIRTEEN suites were run individually through sys.executable from src/sandbox and every one read rc=0 with zero FAIL lines - the export trio (os-status-export-writer-dialect-wire 6/6, os-queue-floor-export-face 6/6, os-export-consistency-queue-face 6/6), the",
-    "latest_artifact": "none landed yet for R2616",
-    "last_artifact": "none landed yet for R2616",
-    "next_milestone": "next window owes reconcile-battery-R2608 on the committed tree, inside a 48h window due 2026-11-12T18:21:29+08:00",
-    "next_milestone_due": "2026-11-12T18:21:29+08:00",
-    "updated_at": "2026-11-10T18:21:29+08:00"
+    "current": "R2615 fold of log items 94..104 (the complete R2615 verification block: adopt, contamination inventory, reverted appender, fold, thirteen-suite re-run, green leg, follow-up, debt) into the archive; all 6 tokens preserved verbatim in this line: AC-EDMF1 AC-EDMF6 D-CLEAR R-MET R-ROUND T-CLEAN",
+    "latest_artifact": "none landed yet for R2617",
+    "last_artifact": "none landed yet for R2617",
+    "next_milestone": "next window owes product-face-R2615 on the committed tree, inside a 48h window due 2026-11-12T19:03:55+08:00",
+    "next_milestone_due": "2026-11-12T19:03:55+08:00",
+    "updated_at": "2026-11-10T19:03:55+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "none landed yet for R2617",
     "none landed yet for R2616",
     "none landed yet for R2615",
     "none landed yet for R2614",
@@ -931,7 +932,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2616",
+      "2617",
       "OSLoop 执行 tick"
     ],
     [
@@ -950,10 +951,10 @@
   "self_drive": {
     "window": "2026-11-04..2026-11-10",
     "window_days": 7,
-    "log_lines_in_window": 46,
+    "log_lines_in_window": 41,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 45,
+    "substantive_non_idle_mention_lines": 40,
     "proposals_total": 6,
     "proposals_open": 4,
     "queue_main_open": 6,
