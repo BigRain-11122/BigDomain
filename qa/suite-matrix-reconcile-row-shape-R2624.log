@@ -1,0 +1,21 @@
+EVIDENCE CAPTURE round=R2624 suite=src/os/test_suite_matrix_reconcile_row_shape.py legs=2
+== LEG A rc=0 digest=7B480522AEE30916
+PASS AC-EDMH1 four=642 seven=642 real=643 registry=643 verdict=ROWS-MISMATCH/ROWS-MISMATCH
+PASS AC-EDMH2 genuine-header rows=643 ac-edmg1-rows=643 real=643 titles=1 verdict=STALE-CONTENT
+PASS AC-EDMH3 separator-inside rows=643 real=643 verdict=STALE-CONTENT
+PASS AC-EDMH4 asked live=1 diff=1 verdict=DOC-CURRENT/STALE-CONTENT
+PASS AC-EDMH5 quoted=643/643 fence=FENCE-UNCLOSED/691 nest=FENCE-NESTED/4/3 titles=1/2 other=TITLE-REPEATED narrow=HEADER-SHAPE nosep=SEPARATOR-MISSING starved=CEILING-STARVED drop=642 src=explicit/walk
+PASS AC-EDMH6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+== LEG B rc=0 digest=7B480522AEE30916
+PASS AC-EDMH1 four=642 seven=642 real=643 registry=643 verdict=ROWS-MISMATCH/ROWS-MISMATCH
+PASS AC-EDMH2 genuine-header rows=643 ac-edmg1-rows=643 real=643 titles=1 verdict=STALE-CONTENT
+PASS AC-EDMH3 separator-inside rows=643 real=643 verdict=STALE-CONTENT
+PASS AC-EDMH4 asked live=1 diff=1 verdict=DOC-CURRENT/STALE-CONTENT
+PASS AC-EDMH5 quoted=643/643 fence=FENCE-UNCLOSED/691 nest=FENCE-NESTED/4/3 titles=1/2 other=TITLE-REPEATED narrow=HEADER-SHAPE nosep=SEPARATOR-MISSING starved=CEILING-STARVED drop=642 src=explicit/walk
+PASS AC-EDMH6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_suite_matrix_reconcile_fence_table.py rc=0 SUITE PASS 6/6
+== src/os/test_suite_matrix_reconcile_shape.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=7B480522AEE30916

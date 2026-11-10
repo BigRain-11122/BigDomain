@@ -1,0 +1,9 @@
+R2624 limits for the table-aware row law (read-only)
+doc=docs/sandbox-suite-matrix.md
+registry_rows=642 registry_criteria=4828 titles=1
+real_rows=642 delta=0
+wrong_cell_row(4 cells) rows=0 delta=-642
+wrong_cell_row(7 cells) rows=0 delta=-642
+genuine_second_header rows=642 delta=+0 (must stay 0)
+separator_inside_table rows=642 delta=+0 (must stay 0)
+verdict wrong4=ROWS-MISMATCH wrong7=ROWS-MISMATCH

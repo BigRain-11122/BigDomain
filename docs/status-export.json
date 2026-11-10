@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-11T05:37:22+08:00",
-  "do": "2026-11-11 R2623 VERIFICATION window ADOPTING the leg R2622 left running for the battery the debt gate named first (reconcile-battery-R2621, pre-registered 642 suites / 4828 criteria). Five readings at open: git status EMPTY at HEAD a7343636 equal to origin/main with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read tokens=182 with new=0 ove",
+  "export_ts": "2026-11-11T05:47:29+08:00",
+  "do": "2026-11-11 R2624 PRODUCT window on the queue head the debt gate named (product-face-R2623, state/queue/tech.md:652 prefix AC-EDMH1, criteria AC-EDMH1..AC-EDMH6 pinned in that row at R2621 BEFORE any code). Five readings at open: git status EMPTY at HEAD f271f7fc equal to origin/main with no index.lock, ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0), th",
   "ceo_face": {
-    "current": "2026-11-11 R2623 VERIFICATION window ADOPTING the leg R2622 left running for the battery the debt gate named first (reconcile-battery-R2621, pre-registered 642 suites / 4828 criteria). Five readings at open: git status EMPTY at HEAD a7343636 equal to origin/main with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read tokens=182 with new=0 ove",
-    "latest_artifact": "none landed yet for R2623",
-    "last_artifact": "none landed yet for R2623",
-    "next_milestone": "next window owes product-face-R2623 on the committed tree, inside a 48h window due 2026-11-13T05:37:22+08:00",
-    "next_milestone_due": "2026-11-13T05:37:22+08:00",
-    "updated_at": "2026-11-11T05:37:22+08:00"
+    "current": "2026-11-11 R2624 PRODUCT window on the queue head the debt gate named (product-face-R2623, state/queue/tech.md:652 prefix AC-EDMH1, criteria AC-EDMH1..AC-EDMH6 pinned in that row at R2621 BEFORE any code). Five readings at open: git status EMPTY at HEAD f271f7fc equal to origin/main with no index.lock, ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0), th",
+    "latest_artifact": "limits-matrix-reconcile-row-shape-R2624.log (401B) + limits-matrix-reconcile-row-shape-next-R2624.log (253B) + suite-matrix-reconcile-row-shape-R2624.log (1645B)",
+    "last_artifact": "limits-matrix-reconcile-row-shape-R2624.log (401B) + limits-matrix-reconcile-row-shape-next-R2624.log (253B) + suite-matrix-reconcile-row-shape-R2624.log (1645B)",
+    "next_milestone": "next window owes reconcile-battery-R2624 on the committed tree, inside a 48h window due 2026-11-13T05:47:29+08:00",
+    "next_milestone_due": "2026-11-13T05:47:29+08:00",
+    "updated_at": "2026-11-11T05:47:29+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "limits-matrix-reconcile-row-shape-R2624.log (401B) + limits-matrix-reconcile-row-shape-next-R2624.log (253B) + suite-matrix-reconcile-row-shape-R2624.log (1645B)",
     "none landed yet for R2623",
     "none landed yet for R2622",
     "limits-matrix-reconcile-fence-table-R2621.log (391B) + limits-matrix-reconcile-fence-table-next-R2621.log (259B) + suite-matrix-reconcile-fence-table-R2621.log (3400B) + write-sensitive-rerun-R2621.log (2972B)",
@@ -941,7 +942,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2625",
+      "2626",
       "OSLoop 执行 tick"
     ],
     [
@@ -996,21 +997,21 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 16,
-        "done_rows": 478,
+        "done_rows": 479,
         "gated_rows": 1,
         "claimable": 12,
         "discounted": 3,
         "delivered": [
           {
-            "line": 652,
-            "prefix": "AC-EDMH1"
+            "line": 653,
+            "prefix": "AC-EDMI1"
           },
           {
-            "line": 654,
+            "line": 656,
             "prefix": "AC-PNAG1"
           },
           {
-            "line": 669,
+            "line": 671,
             "prefix": "AC-SEQAF1"
           }
         ],

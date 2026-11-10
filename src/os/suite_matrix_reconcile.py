@@ -104,6 +104,17 @@ table and still refuses by TITLE-REPEATED with the count; the shipped check
 face is still asked on every reading so a content difference keeps its
 content word; and every R2608 answer survives beside the new ones.
 
+R2624 extends the same face with AC-EDMH1..AC-EDMH6 (pinned in
+state/queue/tech.md:652 at R2621 BEFORE any code, and re-measured here with
+src/os/limits_matrix_reconcile_row_shape_R2624.py before any byte): a
+data-shaped row with the WRONG CELL COUNT is ONE non-row, so one bad row
+undercounts by one instead of collapsing the count to zero - MEASURED at
+R2624 as 642 -> 0 for both a four-cell and a seven-cell row, where the honest
+answer is 641. A genuine header of a SECOND table still ends the first table
+(the AC-EDMG1 law, re-proved on the same fixture), a separator row reappearing
+inside the table still neither restarts nor ends it, and the shipped check
+face is still asked exactly once per reading.
+
 Pure ASCII, stdlib only, no clock, no network. Default mode is read-only.
 
 CLI: [--doc PATH] [--evidence PATH] [--stamp-from PATH] [--qa-dir PATH]
@@ -187,6 +198,11 @@ CODE_NEST = "E_EDMG_NEST"
 # secs). The billable-faces table below it also starts with a number, so a
 # bare "^| <n> |" would count it too and inflate the row count by design.
 ROW_RE = re.compile(r"(?m)^\| \d+ \|(?:[^|\n]*\|){5}$")
+# AC-EDMH1: a row that OPENS like a data row (a pipe, digits, a pipe) but
+# carries the wrong cell count is ONE malformed row, not the end of the table.
+# Measured at R2624: one such row collapsed the whole count to 0 (delta -642)
+# because it fell through to the second-table branch.
+DATA_HEAD_RE = re.compile(r"^\|\s*\d+\s*\|")
 SEPARATOR_CHARS = set("-: ")
 # AC-EDMF1: a fenced code block quotes example text. A quoted data-shaped row
 # is not a matrix row, so the row law has to know where the fence is.
@@ -295,10 +311,18 @@ def doc_rows(text, patterns=None):
         if ROW_RE.match(line):
             count += 1
         elif is_separator_row(line):
+            # AC-EDMH3: a separator row reappearing inside the table neither
+            # restarts nor ends it.
+            pass
+        elif DATA_HEAD_RE.match(line):
+            # AC-EDMH1: a data-shaped row whose CELL COUNT is wrong is skipped
+            # as one non-row and every well-formed row after it is still
+            # counted, so the count falls by one instead of to zero.
             pass
         else:
             # A row that is neither data nor separator is the header of
-            # ANOTHER table: the first table ends here (AC-EDMG1).
+            # ANOTHER table: the first table ends here (AC-EDMG1, unchanged by
+            # AC-EDMH2).
             break
         index += 1
     return count

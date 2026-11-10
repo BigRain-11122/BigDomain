@@ -4656,6 +4656,17 @@ SUITES = [
     ("os-suite-matrix-reconcile-fence-table",
      os.path.join("..", "os", "test_suite_matrix_reconcile_fence_table.py"),
      6),
+    # R2624: a data-shaped row whose CELL COUNT is wrong is ONE non-row, so a
+    # single malformed row inside the matrix table undercounts by one instead
+    # of collapsing the count to zero (measured 642 -> 0 at R2624 for both a
+    # four-cell and a seven-cell row). A genuine header of a SECOND table
+    # still ends the first table, and a separator row inside it still neither
+    # restarts nor ends it.
+    # (AC-EDMH1..AC-EDMH6 pre-registered in state/queue/tech.md:652 as the
+    # R2621 seed BEFORE the code existed.)
+    ("os-suite-matrix-reconcile-row-shape",
+     os.path.join("..", "os", "test_suite_matrix_reconcile_row_shape.py"),
+     6),
     # R2253: a claimable queue row must name its criteria prefix, so
     # pre-registration is a gate instead of a habit. The row law is
     # imported from queue_floor rather than rewritten, two declaration

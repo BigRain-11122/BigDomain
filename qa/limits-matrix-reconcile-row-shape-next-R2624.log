@@ -1,0 +1,5 @@
+R2624 successor limits (read-only, measured after the AC-EDMH fix)
+real_rows=643
+malformed_row_nonnumeric_first_cell rows=0 delta=-643
+malformed_row_as_last_row rows=642 delta=-1 (expected -1)
+two_adjacent_malformed_rows rows=641 delta=-2 (expected -2)
