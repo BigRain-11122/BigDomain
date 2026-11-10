@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-10T19:03:55+08:00",
-  "do": "R2615 fold of log items 94..104 (the complete R2615 verification block: adopt, contamination inventory, reverted appender, fold, thirteen-suite re-run, green leg, follow-up, debt) into the archive; all 6 tokens preserved verbatim in this line: AC-EDMF1 AC-EDMF6 D-CLEAR R-MET R-ROUND T-CLEAN",
+  "export_ts": "2026-11-10T19:04:46+08:00",
+  "do": "R2615 push and export: git push origin main SUCCEEDED twice - 9c5da584..edaf9d79 for the thirteen-suite re-run evidence and edaf9d79..132a8052 for the green verdict, the closed debt row, the opened product face and the regenerated matrix document - and git rev-parse read HEAD equal to origin/main at 132a8052 with an empty git status after the second commit, so the whole window is delivered; this l",
   "ceo_face": {
-    "current": "R2615 fold of log items 94..104 (the complete R2615 verification block: adopt, contamination inventory, reverted appender, fold, thirteen-suite re-run, green leg, follow-up, debt) into the archive; all 6 tokens preserved verbatim in this line: AC-EDMF1 AC-EDMF6 D-CLEAR R-MET R-ROUND T-CLEAN",
-    "latest_artifact": "none landed yet for R2617",
-    "last_artifact": "none landed yet for R2617",
-    "next_milestone": "next window owes product-face-R2615 on the committed tree, inside a 48h window due 2026-11-12T19:03:55+08:00",
-    "next_milestone_due": "2026-11-12T19:03:55+08:00",
-    "updated_at": "2026-11-10T19:03:55+08:00"
+    "current": "R2615 push and export: git push origin main SUCCEEDED twice - 9c5da584..edaf9d79 for the thirteen-suite re-run evidence and edaf9d79..132a8052 for the green verdict, the closed debt row, the opened product face and the regenerated matrix document - and git rev-parse read HEAD equal to origin/main at 132a8052 with an empty git status after the second commit, so the whole window is delivered; this l",
+    "latest_artifact": "none landed yet for R2618",
+    "last_artifact": "none landed yet for R2618",
+    "next_milestone": "next window owes product-face-R2615 on the committed tree, inside a 48h window due 2026-11-12T19:04:46+08:00",
+    "next_milestone_due": "2026-11-12T19:04:46+08:00",
+    "updated_at": "2026-11-10T19:04:46+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "none landed yet for R2618",
     "none landed yet for R2617",
     "none landed yet for R2616",
     "none landed yet for R2615",
@@ -932,7 +933,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2617",
+      "2618",
       "OSLoop 执行 tick"
     ],
     [
