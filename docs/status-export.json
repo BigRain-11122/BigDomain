@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-11T07:10:49+08:00",
+  "export_ts": "2026-11-11T07:12:16+08:00",
   "do": "2026-11-11 R2631 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2630, pre-registered 644 suites / 4840 criteria at R2630 because that window moved product src bytes and one registry row, so the R2168 mixed-tree rule puts the full battery on the committed tree BEFORE any further product byte). Five readings at open: git status EMPTY at HEAD 44f7f3a9 equal to origin",
   "ceo_face": {
     "current": "2026-11-11 R2631 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2630, pre-registered 644 suites / 4840 criteria at R2630 because that window moved product src bytes and one registry row, so the R2168 mixed-tree rule puts the full battery on the committed tree BEFORE any further product byte). Five readings at open: git status EMPTY at HEAD 44f7f3a9 equal to origin",
     "latest_artifact": "none landed yet for R2631",
     "last_artifact": "none landed yet for R2631",
-    "next_milestone": "next window owes reconcile-battery-R2630 on the committed tree, inside a 48h window due 2026-11-13T07:10:49+08:00",
-    "next_milestone_due": "2026-11-13T07:10:49+08:00",
-    "updated_at": "2026-11-11T07:10:49+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2630 on the committed tree, inside a 48h window due 2026-11-13T07:12:16+08:00",
+    "next_milestone_due": "2026-11-13T07:12:16+08:00",
+    "updated_at": "2026-11-11T07:12:16+08:00"
   },
   "depts": [
     {
