@@ -1,0 +1,5 @@
+DOC docs/sandbox-suite-matrix.md bytes=65364 doc_rows=640
+(a) fenced data row: real_rows=640 doctored_rows=640 delta=0 registry_rows=640 quoted_counted=False
+(b) same-header repeat: one-with-sep titles=1 one-without-sep titles=1 mixed titles=1 mixed_reads_TITLE-REPEATED=False
+(c) bare titles: titles=1
+(d) starved walk: verdict=CEILING-STARVED written=False bytes_changed=False

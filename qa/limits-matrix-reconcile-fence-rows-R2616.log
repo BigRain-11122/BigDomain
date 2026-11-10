@@ -1,0 +1,4 @@
+DOC bytes=65483 doc_rows=641 registry_rows=641 criteria=4822
+(a) second unfenced table: doc_rows=642 real=641 delta=1 titles=2 -> TITLE-REPEATED
+(b) unclosed fence at EOF: doc_rows=641 real=641 delta=0 -> STALE-CONTENT
+(c) four-backtick fence with an inner three-backtick line: doc_rows=642 real=641 delta=1 -> ROWS-MISMATCH

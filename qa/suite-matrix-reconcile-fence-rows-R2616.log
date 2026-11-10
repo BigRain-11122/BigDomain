@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2616 suite=src/os/test_suite_matrix_reconcile_fence_rows.py legs=2
+== LEG A rc=0 digest=8BF6A2A18FFF1898
+PASS AC-EDMF1 quoted rows=641 real=641 (quoted row present, not counted) law=DOC-CURRENT untouched=STALE-CONTENT live=DOC-CURRENT registry=641
+PASS AC-EDMF2 same-header-no-separator titles=1 (live=1) -> ROWS-MISMATCH exit=2
+PASS AC-EDMF3 other-header titles=2 -> TITLE-REPEATED titles=2 exit=3 CLI=TITLE-REPEATED rc=3
+PASS AC-EDMF4 check-asked=1 code=2 content=STALE-CONTENT | live asked=1 code=0 verdict=DOC-CURRENT
+PASS AC-EDMF5 twice=2 fenced=1 bare=1 nodoc=NO-DOC narrow=HEADER-SHAPE/2 starved=CEILING-STARVED drained=RED-LEG red=RED-LEG src=walk/explicit rows=ROWS-MISMATCH(640/641)
+PASS AC-EDMF6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+== LEG B rc=0 digest=8BF6A2A18FFF1898
+PASS AC-EDMF1 quoted rows=641 real=641 (quoted row present, not counted) law=DOC-CURRENT untouched=STALE-CONTENT live=DOC-CURRENT registry=641
+PASS AC-EDMF2 same-header-no-separator titles=1 (live=1) -> ROWS-MISMATCH exit=2
+PASS AC-EDMF3 other-header titles=2 -> TITLE-REPEATED titles=2 exit=3 CLI=TITLE-REPEATED rc=3
+PASS AC-EDMF4 check-asked=1 code=2 content=STALE-CONTENT | live asked=1 code=0 verdict=DOC-CURRENT
+PASS AC-EDMF5 twice=2 fenced=1 bare=1 nodoc=NO-DOC narrow=HEADER-SHAPE/2 starved=CEILING-STARVED drained=RED-LEG red=RED-LEG src=walk/explicit rows=ROWS-MISMATCH(640/641)
+PASS AC-EDMF6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_suite_matrix_reconcile_fence.py rc=0 SUITE PASS 6/6
+== src/os/test_suite_matrix_reconcile_shape.py rc=0 SUITE PASS 6/6
+== src/sandbox/test_suite_matrix.py rc=0 SUITE PASS (16/16 cases)
+EVIDENCE identical=True adjacent=3 fails=0 digest=8BF6A2A18FFF1898

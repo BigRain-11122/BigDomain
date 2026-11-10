@@ -77,6 +77,26 @@ LEGACY_OUTS = ("qa/reconcile-all-R2431.log (red leg) plus "
 OUTS = LEGACY_OUTS
 
 
+ROUND_RE = re.compile(r"^\d{4}-\d{2}-\d{2} R(\d{4})\b")
+
+
+def round_label(state):
+    """The ROUND label this tree is actually on, derived from its own log.
+
+    R2616 MEASURED the defect this closes: the tick and the round number have
+    drifted apart (tick 2619, round R2616), so matching log items and qa/
+    evidence by R<tick> found NOTHING - the CEO 'current' line silently fell
+    back to the newest log item and the artifact line read 'none landed yet'
+    for every round while four artifacts really sat under qa/. The round is
+    read from the newest dated item instead of assumed to equal the tick."""
+    for entry in reversed(state.get("log") or []):
+        if isinstance(entry, str):
+            found = ROUND_RE.match(entry)
+            if found:
+                return found.group(1)
+    return None
+
+
 def _round_items(state, tick):
     """This round's own log items, matched by the tick in their own text."""
     pattern = re.compile(r"^\d{4}-\d{2}-\d{2} R%s\b" % tick)
@@ -220,8 +240,12 @@ def main():
         return 2
     stamped[0][0] = tick
     data["results"] = rows
-    current = derive_current(state, tick)
-    latest = derive_latest(tick)
+    # R2616: the round label is DERIVED from the tree (tick and round have
+    # drifted apart), so the round block, the opening line and the artifact
+    # line all name what really happened instead of falling back to "none".
+    round_no = round_label(state) or tick
+    current = derive_current(state, round_no)
+    latest = derive_latest(round_no)
     milestone = derive_next(tick)
     outs = data.get("outs") or []
     if not outs or outs[0] != latest:

@@ -1,0 +1,4 @@
+LIVE doc=docs/sandbox-suite-matrix.md bytes=65483 rows_outside_fence=641 rows_inside_fence=0 doc_rows=641 registry_rows=641 criteria=4822 titles=1
+LIVE verdict=DOC-CURRENT exit=0 walk={'considered': 2819, 'decoded': 4}
+FIXTURE quoted: rows_outside=641 rows_inside=1 doc_rows=641 (registry=641) -> STALE-CONTENT
+FIXTURE same-header-no-separator: titles=1 (real=1) -> ROWS-MISMATCH

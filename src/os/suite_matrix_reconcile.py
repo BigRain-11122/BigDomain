@@ -79,6 +79,22 @@ name so a starved walk cannot look like an honest empty pile; and a document
 whose matrix title appears more than once refuses by name with the count
 instead of reading the first table and ignoring the rest.
 
+R2608 extended the same face again with AC-EDME1..AC-EDME6 (pinned in
+state/queue/tech.md:640 at R2606 BEFORE any code), and its own suite printed
+the successor limit in plain words: "the row counter is NOT fence-aware".
+
+R2616 extends the same face with AC-EDMF1..AC-EDMF6 (pinned in
+state/queue/tech.md:646 at R2608 BEFORE any code, from four limits MEASURED
+there and re-measured here before any byte): the row law is FENCE-AWARE, so a
+data-shaped row inside a ``` block is quoted text and not a matrix row and a
+document whose only row difference is quoted reads the check face own word
+instead of ROWS-MISMATCH; a table is identified by its header text and width,
+so the same table repeated WITHOUT its separator row is the SAME table rather
+than a second title; a table with DIFFERENT header text is still a second
+table and still refuses by TITLE-REPEATED with the count; the shipped check
+face is still asked on every reading so a content difference keeps its
+content word; and every R2608 answer survives beside the new ones.
+
 Pure ASCII, stdlib only, no clock, no network. Default mode is read-only.
 
 CLI: [--doc PATH] [--evidence PATH] [--stamp-from PATH] [--qa-dir PATH]
@@ -155,6 +171,9 @@ WALK_CEILING = 64
 # bare "^| <n> |" would count it too and inflate the row count by design.
 ROW_RE = re.compile(r"(?m)^\| \d+ \|(?:[^|\n]*\|){5}$")
 SEPARATOR_CHARS = set("-: ")
+# AC-EDMF1: a fenced code block quotes example text. A quoted data-shaped row
+# is not a matrix row, so the row law has to know where the fence is.
+FENCE_MARK = "```"
 
 
 def rel(path):
@@ -167,7 +186,23 @@ def read_text(path):
 
 
 def doc_rows(text):
-    return len(ROW_RE.findall(text))
+    """Matrix table data rows of a composed document, FENCE-AWARE.
+
+    AC-EDMF1: R2608 measured a quoted data row inside a ``` fence being
+    counted by the row law (doc_rows 640 -> 641 against a 640-row registry),
+    so a document that only QUOTED a row read ROWS-MISMATCH. A fenced block is
+    example text, never a matrix row, so the scan skips it."""
+    count = 0
+    in_fence = False
+    for line in text.splitlines():
+        if line.strip().startswith(FENCE_MARK):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        if ROW_RE.match(line):
+            count += 1
+    return count
 
 
 def registry_counts():
@@ -276,7 +311,12 @@ def title_tables(text, patterns):
             break
         if header is None:
             continue
-        found.append((header, separator, (header_text, header, separator)))
+        # AC-EDMF2: a table is identified by its HEADER TEXT and its width.
+        # R2608 put the separator width in the signature, so the same table
+        # repeated WITHOUT its separator row counted as a second table and
+        # read TITLE-REPEATED. The separator is a row of a table, not part of
+        # its identity.
+        found.append((header, separator, (header_text, header)))
     return found
 
 
