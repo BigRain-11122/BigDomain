@@ -3251,6 +3251,14 @@ SUITES = [
     # the JSON schema moves 16 -> 17 additively.
     ("ledger-apimarket-reportclaims", os.path.join(
         "ledger", "test_apimarket_report_claims.py"), 8),
+    # R2613 birth-site repair: the claim block suite nested the heavy
+    # refund-register child (already a battery row with its own 900s
+    # override) and lost the 600s cap inside the R2612 battery, so the
+    # nesting was bounded to the two cheap children and the heavy
+    # coverage is proved by its registration on this runner. Six
+    # criteria pinned on the R2613 board row BEFORE the code.
+    ("ledger-apimarket-reportclaims-nesting", os.path.join(
+        "ledger", "test_apimarket_report_claims_nesting.py"), 6),
     # R2135 single-purchase dossier (api_purchase_dossier): one trade's
     # whole story behind one party-gated read face, because a support
     # ticket or a settlement dispute had to be assembled by hand from

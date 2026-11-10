@@ -42,13 +42,19 @@ Criteria:
     the sixteen column headers and every claim id are on the page; a
     hostile claim_text is escaped; a report dict without the claims
     key renders the honest empty state.
-  AC-AMCLM8 Regression + wiring: the base report, JSON and refund
-    register suites still pass and the runner label
-    ledger-apimarket-reportclaims(8) is registered.
+  AC-AMCLM8 Regression + wiring: the base report and JSON suites still
+    pass, the refund register suite's coverage is proved by its WIRING
+    on the shipped runner (it is a battery row of its own), and the
+    runner label ledger-apimarket-reportclaims(8) is registered.
+    R2613 birth-site repair: this check used to spawn the refund
+    register suite as a child, which re-ran work the battery already
+    pays for and lost the 600s per-suite cap at R2612 (exit=124
+    pass-lines=0 600.2s); the nesting is now bounded (AC-AMCF1..6).
 
 Usage: python test_apimarket_report_claims.py
 """
 
+import ast
 import hashlib
 import io
 import json
@@ -57,6 +63,7 @@ import sqlite3
 import subprocess
 import sys
 import tempfile
+import time
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 LOBBY = os.path.join(os.path.dirname(BASE), "lobby")
@@ -354,30 +361,157 @@ def escape_ok():
             and R.DISCLAIMER in page)
 
 
-def check_regression():
+CHEAP_CHILDREN = ("test_apimarket_report.py",
+                  "test_apimarket_report_json.py")
+HEAVY_LABEL = "ledger-apimarket-refundregister"
+HEAVY_FILE = "test_apimarket_report_refundregister.py"
+
+# R2613 AC-AMCF6: the parent row must finish far inside the runner's
+# 600s per-suite cap. Measured on the loaded tree: the two cheap
+# children cost 11.1s and 16.4s, so 300s is 7x the measured cost and
+# still leaves the cap half free.
+NESTING_BUDGET_S = 300
+
+
+def _const_str(node):
+    """A literal string or number as text, or an os.path.join of them."""
+    if isinstance(node, ast.Constant):
+        if isinstance(node.value, str):
+            return node.value
+        if isinstance(node.value, int):
+            return str(node.value)
+        return None
+    if (isinstance(node, ast.Call)
+            and getattr(node.func, "attr", None) == "join"):
+        parts = [_const_str(arg) for arg in node.args]
+        if all(part is not None for part in parts):
+            return "/".join(parts)
+    return None
+
+
+def registered_rows(registry_path):
+    """Read the shipped runner registry by AST at CALL time.
+
+    The suite never imports the runner and never trusts a cached list,
+    so a row that moved or disappeared is visible here."""
+    with io.open(registry_path, "r", encoding="utf-8") as handle:
+        tree = ast.parse(handle.read())
+    rows = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign):
+            continue
+        for target in node.targets:
+            if not (isinstance(target, ast.Name) and target.id == "SUITES"):
+                continue
+            for elt in getattr(node.value, "elts", ()):
+                if not isinstance(elt, ast.Tuple) or len(elt.elts) != 3:
+                    continue
+                label = _const_str(elt.elts[0])
+                rel = _const_str(elt.elts[1])
+                crit = _const_str(elt.elts[2])
+                if label and rel and crit:
+                    rows.append((label, rel, crit))
+    return rows
+
+
+def spawned_children():
+    """The .py names THIS suite is ABLE to hand to subprocess.run: every
+    literal that reaches a run() call either directly or through a
+    module-level tuple/list constant. Read off its own source at call
+    time, so a child added back is visible without running anything."""
+    with io.open(os.path.abspath(__file__), "r", encoding="utf-8") as handle:
+        tree = ast.parse(handle.read())
+    found = set()
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        if not isinstance(node.value, (ast.Tuple, ast.List)):
+            continue
+        for elt in node.value.elts:
+            text = _const_str(elt)
+            if text and text.endswith(".py"):
+                found.add(os.path.basename(text))
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        name = getattr(func, "attr", None) or getattr(func, "id", None)
+        if name != "run":
+            continue
+        holders = list(node.args) + [kw.value for kw in node.keywords]
+        for holder in holders:
+            if not isinstance(holder, (ast.List, ast.Tuple)):
+                continue
+            for item in holder.elts:
+                text = _const_str(item)
+                if text and text.endswith(".py"):
+                    found.add(os.path.basename(text))
+    return found
+
+
+def regression_verdict(bounded, codes, covered, wired, elapsed,
+                       registry_error=None):
+    """ONE pure decision, so a doctored world can be asked directly
+    instead of being faked through the filesystem (R2613 AC-AMCF5)."""
+    reasons = []
+    if not bounded:
+        reasons.append("nesting-heavy-child")
+    if not all(code == 0 for code in codes):
+        reasons.append("child-rc:%s" % (codes,))
+    if registry_error:
+        reasons.append("registry-%s" % registry_error)
+    if not covered:
+        reasons.append("heavy-row-missing")
+    if not wired:
+        reasons.append("own-row-missing")
+    if not elapsed < NESTING_BUDGET_S:
+        reasons.append("over-budget:%.1fs" % elapsed)
+    return (not reasons), (",".join(reasons) or "ok")
+
+
+def check_regression(started):
+    """AC-AMCLM8 (+AC-AMCF1..6): cheap children run for real, the heavy
+    coverage is proved by REGISTRATION on the shipped runner."""
     base = os.path.dirname(BASE)
-    labels = ("test_apimarket_report.py",
-              "test_apimarket_report_json.py",
-              "test_apimarket_report_refundregister.py")
+    spawned = spawned_children()
+    bounded = HEAVY_FILE not in spawned and set(CHEAP_CHILDREN) <= spawned
     codes = []
-    for name in labels:
+    for name in CHEAP_CHILDREN:
         proc = subprocess.run(
             [sys.executable, os.path.join(base, "ledger", name)],
             cwd=base, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         codes.append(proc.returncode)
         print("  child %s rc=%d" % (name, proc.returncode))
-    wired = False
+    rows = []
+    registry_error = None
     try:
-        src = io.open(RECONCILE, "r", encoding="utf-8").read()
-        wired = ('"ledger-apimarket-reportclaims"' in src
-                 and "test_apimarket_report_claims.py" in src)
-    except OSError:
-        wired = False
-    record("AC-AMCLM8", all(c == 0 for c in codes) and wired,
-           "rc=%s wired=%s" % (codes, wired))
+        rows = registered_rows(RECONCILE)
+    except (OSError, SyntaxError, ValueError) as exc:
+        registry_error = "%s: %s" % (type(exc).__name__, exc)
+    heavy = [row for row in rows if row[0] == HEAVY_LABEL]
+    covered = (len(heavy) == 1
+               and os.path.basename(heavy[0][1]) == HEAVY_FILE
+               and os.path.isfile(os.path.join(base, "ledger", HEAVY_FILE)))
+    mine = [row for row in rows if row[0] == "ledger-apimarket-reportclaims"]
+    wired = (len(mine) == 1
+             and os.path.basename(mine[0][1]) == os.path.basename(__file__)
+             and mine[0][2] == "8")
+    elapsed = time.time() - started
+    ok, reason = regression_verdict(
+        bounded, codes, covered, wired, elapsed, registry_error)
+    print("  elapsed=%.1fs budget=%ds spawned=%s"
+          % (elapsed, NESTING_BUDGET_S, ",".join(sorted(spawned))))
+    # The elapsed number is MEASURED and printed above, but it never goes
+    # into the criterion line: a wall time that varies leg to leg would
+    # make the two legs' digests differ and the capture would refuse.
+    record("AC-AMCLM8", ok,
+           "bounded=%s rc=%s covered=%s wired=%s inside_budget=%s reason=%s"
+           % (bounded, codes, covered, wired,
+              elapsed < NESTING_BUDGET_S, reason))
 
 
 def main():
+    started = time.time()
     tmp, db, ids = fresh_world("main")
     cids = seed_claims(db, ids)
     check_contract(db)
@@ -391,7 +525,7 @@ def main():
     record("AC-AMCLM7", ok and esc,
            "heads=%d rows=%d degrade=%s escape=%s"
            % (len(R.CLAIM_COLUMNS), rows, degrade, esc))
-    check_regression()
+    check_regression(started)
     failed = [ac for ac, ok, _ in RESULTS if not ok]
     print("SUITE %s %d/%d" % ("PASS" if not failed else "FAIL",
                               len(RESULTS) - len(failed), len(RESULTS)))

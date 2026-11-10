@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2613 suite=src/sandbox/ledger/test_apimarket_report_claims_nesting.py legs=2
+== LEG A rc=0 digest=01F78576ACC8709B
+PASS AC-AMCF1 spawned=test_apimarket_report.py,test_apimarket_report_json.py heavy_absent=True cheap_present=True
+PASS AC-AMCF2 heavy_rows=1 path=ledger/test_apimarket_report_refundregister.py on_disk=True
+PASS AC-AMCF3 good=True bad=False reason=child-rc:[0, 1] source_runs=True
+PASS AC-AMCF4 rows=1 path=ledger/test_apimarket_report_claims.py criteria=8
+PASS AC-AMCF5 registry_error=registry-OSError: missing,heavy-row-missing missing_row=heavy-row-missing doctored_reads_empty=True
+  elapsed=0.1s budget=300s cap=600s
+PASS AC-AMCF6 budget=300s cap=600s inside_cap=True inside_own_bound=True
+SUITE PASS 6/6
+== LEG B rc=0 digest=01F78576ACC8709B
+PASS AC-AMCF1 spawned=test_apimarket_report.py,test_apimarket_report_json.py heavy_absent=True cheap_present=True
+PASS AC-AMCF2 heavy_rows=1 path=ledger/test_apimarket_report_refundregister.py on_disk=True
+PASS AC-AMCF3 good=True bad=False reason=child-rc:[0, 1] source_runs=True
+PASS AC-AMCF4 rows=1 path=ledger/test_apimarket_report_claims.py criteria=8
+PASS AC-AMCF5 registry_error=registry-OSError: missing,heavy-row-missing missing_row=heavy-row-missing doctored_reads_empty=True
+  elapsed=0.1s budget=300s cap=600s
+PASS AC-AMCF6 budget=300s cap=600s inside_cap=True inside_own_bound=True
+SUITE PASS 6/6
+== ADJACENT 1
+== src/sandbox/ledger/test_apimarket_report_claims.py rc=0 SUITE PASS 8/8
+EVIDENCE identical=True adjacent=1 fails=0 digest=01F78576ACC8709B
