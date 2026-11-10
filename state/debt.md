@@ -353,7 +353,8 @@ column-0 checkbox starts one.
 - [x] opened=R2603 | item=product-face-R2603 | note=next window a PRODUCT face on the queue head state/queue/tech.md:636 prefix AC-EDMC1, whose AC-EDMC1..AC-EDMC6 were pinned in that row at R2601 BEFORE any code; NO successor battery owed - this verification window moved no product src byte and the registry stands unmoved at 636 suites / 4792 criteria recounted by import | closed=R2604
 - [x] opened=R2604 | item=reconcile-battery-R2604 | note=target 637 suites / 4798 criteria recounted by import before any product byte; this window moved product src bytes and one registry row, so the R2168 mixed-tree rule puts the full battery on the committed tree BEFORE the next product byte | closed=R2605
 - [ ] opened=R2604 | item=product-face-R2604 | note=next window a PRODUCT face on the queue head state/queue/tech.md:638 prefix AC-EDMD1, whose AC-EDMD1..AC-EDMD6 were pinned in that row at R2602 BEFORE any code | first=no
-- [ ] opened=R2605 | item=product-face-R2605 | note=next window a PRODUCT face on queue head state/queue/tech.md:638 prefix AC-EDMD1, whose AC-EDMD1..AC-EDMD6 were pinned in that row at R2604 BEFORE any code; no battery owed because this verification window moved no product src byte and the registry stands unmoved at 637 suites / 4798 criteria | first=yes
+- [x] opened=R2605 | item=product-face-R2605 | note=next window a PRODUCT face on queue head state/queue/tech.md:638 prefix AC-EDMD1, whose AC-EDMD1..AC-EDMD6 were pinned in that row at R2604 BEFORE any code; no battery owed because this verification window moved no product src byte and the registry stands unmoved at 637 suites / 4798 criteria | closed=R2606
+- [ ] opened=R2606 | item=reconcile-battery-R2606 | note=pre-registered 638 suites / 4804 criteria; this window moved product src bytes and one registry row (R2168 mixed-tree rule) | first=yes
 
 ## Closed
 

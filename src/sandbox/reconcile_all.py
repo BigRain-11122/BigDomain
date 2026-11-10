@@ -4607,6 +4607,18 @@ SUITES = [
     ("os-suite-matrix-reconcile-table-shape",
      os.path.join("..", "os", "test_suite_matrix_reconcile_table_shape.py"),
      6),
+    # R2606: the same reconciliation face extended in place - a separator
+    # drawn with any single repeated punctuation character is read as the
+    # separator and a width disagreement refuses by HEADER-SHAPE naming BOTH
+    # widths, a header with NO separator row refuses with its own
+    # SEPARATOR-MISSING word, a ceiling below one candidate refuses by name
+    # instead of returning an empty pile, and a document carrying the matrix
+    # title more than once refuses by name with the count.
+    # (AC-EDMD1..AC-EDMD6 pre-registered in state/queue/tech.md:638 as the
+    # R2604 seed BEFORE the code existed.)
+    ("os-suite-matrix-reconcile-shape",
+     os.path.join("..", "os", "test_suite_matrix_reconcile_shape.py"),
+     6),
     # R2253: a claimable queue row must name its criteria prefix, so
     # pre-registration is a gate instead of a habit. The row law is
     # imported from queue_floor rather than rewritten, two declaration

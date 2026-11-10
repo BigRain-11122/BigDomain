@@ -68,6 +68,17 @@ candidate walk is bounded by a DECLARED ceiling and says so, and a caller
 that passes an explicit --evidence together with a --qa-dir is told which
 source answered and which one was ignored.
 
+R2606 extended the same face again with AC-EDMD1..AC-EDMD6 (pinned in
+state/queue/tech.md:638 at R2604 BEFORE any code, from four limits MEASURED
+there): a SEPARATOR row drawn with any single repeated punctuation character
+("=", "~", "*", ...) is read as the separator and a width disagreement is
+refused by HEADER-SHAPE naming BOTH widths instead of falling through to a
+content word; a header carrying NO separator row at all refuses with its own
+word naming the missing separator; a ceiling below one candidate refuses by
+name so a starved walk cannot look like an honest empty pile; and a document
+whose matrix title appears more than once refuses by name with the count
+instead of reading the first table and ignoring the rest.
+
 Pure ASCII, stdlib only, no clock, no network. Default mode is read-only.
 
 CLI: [--doc PATH] [--evidence PATH] [--stamp-from PATH] [--qa-dir PATH]
@@ -75,7 +86,8 @@ CLI: [--doc PATH] [--evidence PATH] [--stamp-from PATH] [--qa-dir PATH]
   exit 0 = DOC-CURRENT (or WRITTEN)
   exit 2 = document missing, ROWS-MISMATCH, EVIDENCE-FACE, STALE-CONTENT or
            TABLE-MISSING
-  exit 3 = RED-LEG / HEADER-SHAPE / REWRITE-REFUSED / bad flags
+  exit 3 = RED-LEG / HEADER-SHAPE / SEPARATOR-MISSING / TITLE-REPEATED /
+           CEILING-STARVED / REWRITE-REFUSED / bad flags
   exit 4 = the shipped check face refused for readability (its own reasons)
 """
 
@@ -122,6 +134,18 @@ MATRIX_CELLS = 6
 # against a table it never had; it gets its own word and names what is absent.
 WORD_TABLE = "TABLE-MISSING"
 CODE_TABLE = "E_EDMC_TABLE"
+# AC-EDMD2: a header that carries NO separator row is its own answer. Failing
+# through to a content word told the operator nothing about the shape.
+WORD_SEP = "SEPARATOR-MISSING"
+CODE_SEP = "E_EDMD_SEPARATOR"
+# AC-EDMD3: a ceiling smaller than one candidate cannot read anything, so it
+# is refused by name rather than returning an empty answer that looks honest.
+WORD_CEILING = "CEILING-STARVED"
+CODE_CEILING = "E_EDMD_CEILING"
+# AC-EDMD4: a document carrying the matrix title more than once was read as
+# its FIRST table with the rest silently dropped.
+WORD_TITLE = "TITLE-REPEATED"
+CODE_TITLE = "E_EDMD_TITLE"
 # AC-EDMC3: the candidate walk is bounded by a DECLARED ceiling so a qa pile
 # with no PASS leg cannot be decoded end to end. The bound is reported.
 WALK_CEILING = 64
@@ -191,13 +215,39 @@ def newest_pass_leg(qa_dir=None):
     return path, run
 
 
+def is_separator_row(cells_text):
+    """True when a table row is a SEPARATOR: every non-space character is one
+    of the markdown separator characters, or the row is drawn with ONE single
+    repeated punctuation character (AC-EDMD1 - "=" and friends are legal
+    separators too, and before R2606 a "=" separator was invisible to the
+    shape law, which then fell through to a content word)."""
+    stripped = cells_text.replace("|", "").strip()
+    if not stripped:
+        return False
+    chars = set(stripped) - set(" ")
+    if not chars:
+        return False
+    if chars <= SEPARATOR_CHARS:
+        return True
+    if len(chars) == 1:
+        only = next(iter(chars))
+        return not only.isalnum()
+    return False
+
+
+def matrix_title_count(text, patterns):
+    """How many lines carry the shipped matrix title (AC-EDMD4)."""
+    title = patterns["labels"]["matrix_title"].strip()
+    return sum(1 for line in text.splitlines() if line.strip() == title)
+
+
 def matrix_shape(text, patterns):
     """(header_cells, separator_cells) of the matrix table, each None when the
     table or that row is absent. Read by POSITION under the shipped matrix
     title, never by a row shape guess, so a table that changed its column
     layout is named rather than silently counted as zero rows (AC-EDMB4) and
     a SEPARATOR that disagrees with its own header is a shape answer instead
-    of a content word (AC-EDMC1)."""
+    of a content word (AC-EDMC1, widened by AC-EDMD1)."""
     title = patterns["labels"]["matrix_title"]
     lines = text.splitlines()
     for index, line in enumerate(lines):
@@ -212,7 +262,7 @@ def matrix_shape(text, patterns):
             if header is None:
                 header = follow.count("|") - 1
                 continue
-            if set(follow.replace("|", "").strip()) <= SEPARATOR_CHARS:
+            if is_separator_row(follow):
                 return header, follow.count("|") - 1
             return header, None
         return header, None
@@ -261,6 +311,14 @@ def report(doc_path=None, evidence_path=None, qa_dir=None, ceiling=None):
     current = read_text(doc_path)
     patterns = SM.load_patterns()
     rows, criteria = registry_counts()
+    # AC-EDMD4: a document carrying the matrix title more than once was read
+    # as its FIRST table with every other table dropped in silence.
+    titles = matrix_title_count(current, patterns)
+    if titles > 1:
+        return {"verdict": WORD_TITLE, "doc": rel(doc_path), "exit": 3,
+                "written": False, "code": CODE_TITLE, "titles": titles,
+                "table_title": patterns["labels"]["matrix_title"],
+                "reason": "the matrix title appears %d times" % titles}
     header, separator = matrix_shape(current, patterns)
     # AC-EDMC2: no matrix table is its own answer, naming what is absent.
     if header is None:
@@ -268,6 +326,14 @@ def report(doc_path=None, evidence_path=None, qa_dir=None, ceiling=None):
                 "written": False, "code": CODE_TABLE,
                 "table_title": patterns["labels"]["matrix_title"],
                 "reason": "the matrix table is absent from this document"}
+    # AC-EDMD2: a header with no separator row is a shape answer naming the
+    # missing separator, not a content word.
+    if separator is None:
+        return {"verdict": WORD_SEP, "doc": rel(doc_path), "exit": 3,
+                "written": False, "code": CODE_SEP,
+                "header_cells": header, "cells": header,
+                "expected_cells": MATRIX_CELLS,
+                "reason": "the matrix header carries no separator row"}
     # AC-EDMC1: a separator whose width disagrees with its own header is a
     # SHAPE answer naming BOTH widths, not a content drift.
     if separator is not None and separator != header:
@@ -288,6 +354,14 @@ def report(doc_path=None, evidence_path=None, qa_dir=None, ceiling=None):
     # AC-EDMC4: the caller is always told WHICH source answered, and a source
     # it handed over but that was not used is named rather than ignored.
     if evidence_path is None:
+        # AC-EDMD3: a ceiling that cannot read even one candidate is refused
+        # by name, so a starved walk never looks like an honest empty pile.
+        if ceiling is not None and int(ceiling) < 1:
+            return {"verdict": WORD_CEILING, "doc": rel(doc_path), "exit": 3,
+                    "written": False, "code": CODE_CEILING,
+                    "ceiling": int(ceiling), "evidence_source": "walk",
+                    "reason": "a ceiling of %d cannot read one candidate"
+                              % int(ceiling)}
         source = "walk"
         evidence_path, _, walk = newest_pass_leg_scanned(qa_dir, ceiling)
         if evidence_path is None:
@@ -347,7 +421,8 @@ def write(doc_path=None, evidence_path=None, qa_dir=None, stamp_from=None,
                                 ceiling)
     result = report(doc_path, evidence_path, qa_dir, ceiling)
     if result["verdict"] in (WORD_CURRENT, WORD_NONE, WORD_RED,
-                             "READABILITY-REFUSED", WORD_HEADER):
+                             "READABILITY-REFUSED", WORD_HEADER, WORD_SEP,
+                             WORD_TITLE, WORD_CEILING):
         return result
     # A TABLE-MISSING answer (AC-EDMC2) carries no resolved evidence because
     # the shape was refused before the leg was looked at, so the leg is
@@ -396,6 +471,13 @@ def _compose_missing(doc_path, evidence_path, qa_dir, stamp_from,
                   else os.path.join(REPO, stamp_from))
     walk = None
     if evidence_path is None:
+        # AC-EDMD3 on the compose path: same refusal, no file created.
+        if ceiling is not None and int(ceiling) < 1:
+            return {"verdict": WORD_CEILING, "doc": rel(doc_path), "exit": 3,
+                    "written": False, "code": CODE_CEILING,
+                    "ceiling": int(ceiling), "evidence_source": "walk",
+                    "reason": "a ceiling of %d cannot read one candidate"
+                              % int(ceiling)}
         evidence_path, _, walk = newest_pass_leg_scanned(qa_dir, ceiling)
         if evidence_path is None:
             return {"verdict": WORD_RED, "doc": rel(doc_path), "exit": 3,
@@ -477,6 +559,16 @@ def main(argv):
         elif result["verdict"] == WORD_TABLE:
             print("  %s %s table=%s"
                   % (result["code"], result["reason"], result["table_title"]))
+        elif result["verdict"] == WORD_SEP:
+            print("  %s %s header-cells=%d"
+                  % (result["code"], result["reason"],
+                     result["header_cells"]))
+        elif result["verdict"] == WORD_TITLE:
+            print("  %s %s titles=%d"
+                  % (result["code"], result["reason"], result["titles"]))
+        elif result["verdict"] == WORD_CEILING:
+            print("  %s %s ceiling=%d"
+                  % (result["code"], result["reason"], result["ceiling"]))
         elif result["verdict"] == WORD_RED:
             print("  evidence=%s reason=%s%s"
                   % (result.get("evidence"), result.get("reason"),

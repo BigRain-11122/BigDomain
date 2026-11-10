@@ -1,0 +1,2 @@
+LIVE READ-ONLY round=R2606 doc=docs/sandbox-suite-matrix.md
+verdict=DOC-CURRENT exit=0 rows=638 registry=638 criteria=4804 evidence=qa/reconcile-all-R2605.log

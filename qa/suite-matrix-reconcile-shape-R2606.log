@@ -1,0 +1,22 @@
+EVIDENCE CAPTURE round=R2606 suite=src/os/test_suite_matrix_reconcile_shape.py legs=2
+== LEG A rc=0 digest=4921D77253FAC1B3
+PASS AC-EDMD1 eq-separator 2/6 -> HEADER-SHAPE cells=6/2, eq-separator 6/6 shape=(6, 6) verdict=STALE-CONTENT
+PASS AC-EDMD2 no-separator -> SEPARATOR-MISSING (code=E_EDMD_SEPARATOR, exit=3) nothing written, CLI word=SEPARATOR-MISSING rc=3
+PASS AC-EDMD3 ceiling 0 -> CEILING-STARVED (exit=3) nothing written, CLI=CEILING-STARVED rc=3
+PASS AC-EDMD4 title lines=2 -> TITLE-REPEATED titles=2 (exit=3), nothing written, CLI=TITLE-REPEATED rc=3
+PASS AC-EDMD5 header5=HEADER-SHAPE(dash2=6/2) table=TABLE-MISSING nodoc=NO-DOC walk=RED-LEG(bounded=True,decoded=1) src=walk/explicit evid=EVIDENCE-FACE(qa/edmd-other-leg.log) rows=ROWS-MISMATCH(637<638) live=DOC-CURRENT
+PASS AC-EDMD6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+== LEG B rc=0 digest=4921D77253FAC1B3
+PASS AC-EDMD1 eq-separator 2/6 -> HEADER-SHAPE cells=6/2, eq-separator 6/6 shape=(6, 6) verdict=STALE-CONTENT
+PASS AC-EDMD2 no-separator -> SEPARATOR-MISSING (code=E_EDMD_SEPARATOR, exit=3) nothing written, CLI word=SEPARATOR-MISSING rc=3
+PASS AC-EDMD3 ceiling 0 -> CEILING-STARVED (exit=3) nothing written, CLI=CEILING-STARVED rc=3
+PASS AC-EDMD4 title lines=2 -> TITLE-REPEATED titles=2 (exit=3), nothing written, CLI=TITLE-REPEATED rc=3
+PASS AC-EDMD5 header5=HEADER-SHAPE(dash2=6/2) table=TABLE-MISSING nodoc=NO-DOC walk=RED-LEG(bounded=True,decoded=1) src=walk/explicit evid=EVIDENCE-FACE(qa/edmd-other-leg.log) rows=ROWS-MISMATCH(637<638) live=DOC-CURRENT
+PASS AC-EDMD6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+== ADJACENT 3
+== src/os/test_suite_matrix_reconcile.py rc=0 SUITE PASS 6/6
+== src/os/test_suite_matrix_reconcile_evidence_face.py rc=0 SUITE PASS 6/6
+== src/os/test_suite_matrix_reconcile_table_shape.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=3 fails=0 digest=4921D77253FAC1B3

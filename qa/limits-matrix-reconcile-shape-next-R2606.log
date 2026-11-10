@@ -1,0 +1,4 @@
+A mixed-punct-separator shape=(6, None) verdict=SEPARATOR-MISSING exit=3
+B fenced-title titles=2 verdict=TITLE-REPEATED exit=3
+C trailing-title titles=2 verdict=TITLE-REPEATED exit=3
+D ceiling-one verdict=RED-LEG walk={'considered': 2, 'decoded': 1, 'ceiling': 1, 'bounded': True}
