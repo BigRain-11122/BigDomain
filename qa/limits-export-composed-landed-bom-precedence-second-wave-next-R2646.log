@@ -1,0 +1,7 @@
+WORLD a_trunc_mixed_extra        word=TRANSPORT-MIXED        transport=mixed bom=0 kind=None composed=None disk=18 delta=None
+WORLD b_bom_only_vs_text         word=BOM-EMPTY-PAYLOAD      transport=lf    bom=3 kind=utf8-empty composed=None disk=3 delta=None
+WORLD c_trunc_empty_body         word=BOM-TRUNCATED          transport=lf    bom=2 kind=utf8-truncated composed=0 disk=2 delta=2
+WORLD d_bom_then_utf16           word=BOM-BODY-MISMATCH      transport=lf    bom=3 kind=utf8 composed=12 disk=5 delta=-10
+WORLD e_legit_ef_mixed           word=TRANSPORT-MIXED        transport=mixed bom=0 kind=None composed=None disk=12 delta=None
+WORLD f_utf16_one_byte           word=UTF16-BOM-LANDING      transport=lf    bom=2 kind=utf16 composed=None disk=3 delta=None
+WORLD g_clean_lf                 word=PASS                   transport=lf    bom=0 kind=None composed=12 disk=12 delta=0

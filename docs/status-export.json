@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-11T21:58:20+08:00",
+  "export_ts": "2026-11-11T23:00:17+08:00",
   "do": "2026-11-11 R2645 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2643, pre-registered 648 suites / 4864 criteria at R2643 because that window moved product src bytes and one registry row). Five readings at open: git status carried ONE untracked file, the one-off launcher of an INTERRUPTED ATTEMPT of this same round, with no index.lock; ZERO unreplied @BigDomain row",
   "ceo_face": {
     "current": "2026-11-11 R2645 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2643, pre-registered 648 suites / 4864 criteria at R2643 because that window moved product src bytes and one registry row). Five readings at open: git status carried ONE untracked file, the one-off launcher of an INTERRUPTED ATTEMPT of this same round, with no index.lock; ZERO unreplied @BigDomain row",
     "latest_artifact": "reconcile-all-R2645.log (1098203B)",
     "last_artifact": "reconcile-all-R2645.log (1098203B)",
-    "next_milestone": "next window owes product-face-R2645 on the committed tree, inside a 48h window due 2026-11-13T21:58:20+08:00",
-    "next_milestone_due": "2026-11-13T21:58:20+08:00",
-    "updated_at": "2026-11-11T21:58:20+08:00"
+    "next_milestone": "next window owes product-face-R2645 on the committed tree, inside a 48h window due 2026-11-13T23:00:17+08:00",
+    "next_milestone_due": "2026-11-13T23:00:17+08:00",
+    "updated_at": "2026-11-11T23:00:17+08:00"
   },
   "depts": [
     {
@@ -1012,25 +1012,25 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 16,
-        "done_rows": 484,
+        "done_rows": 485,
         "gated_rows": 1,
         "claimable": 11,
         "discounted": 4,
         "delivered": [
           {
-            "line": 661,
-            "prefix": "AC-EDWX1"
+            "line": 662,
+            "prefix": "AC-EDWY1"
           },
           {
-            "line": 665,
+            "line": 667,
             "prefix": "AC-PNAG1"
           },
           {
-            "line": 680,
+            "line": 682,
             "prefix": "AC-SEQAF1"
           },
           {
-            "line": 682,
+            "line": 684,
             "prefix": "AC-EDMK1"
           }
         ],

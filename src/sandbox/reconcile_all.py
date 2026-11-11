@@ -4647,6 +4647,15 @@ SUITES = [
     ("os-export-composed-landed-bom-precedence",
      os.path.join("..", "os", "test_export_composed_landed_bom_precedence.py"),
      6),
+    # R2646 second wave: a truncated BOM prefix over a MIXED body names BOTH
+    # facts in one word, a UTF-16 marker with no body is not a landing, and a
+    # BOM-only landing names its empty payload instead of reading clean.
+    # (AC-EDWX1..AC-EDWX6 pre-registered in state/queue/tech.md:661 at R2643
+    # BEFORE the code existed.)
+    ("os-export-composed-landed-bom-precedence-second-wave",
+     os.path.join("..", "os",
+                  "test_export_composed_landed_bom_precedence_second_wave.py"),
+     6),
     # R2608: the shape law widens once more - a separator drawn with MIXED
     # punctuation is a separator, a matrix title inside a fenced block or a
     # title that introduces no table is not a second title, and a walk that

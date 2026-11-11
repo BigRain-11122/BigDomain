@@ -51,6 +51,20 @@ WORD_BOM_BODY_MISMATCH = "BOM-BODY-MISMATCH"
 WORD_BOM_TRANSPORT_MIXED = "BOM-TRANSPORT-MIXED"
 WORD_UTF16_BOM = "UTF16-BOM-LANDING"
 WORD_BOM_TRUNCATED = "BOM-TRUNCATED"
+# R2646 second wave (AC-EDWX1..AC-EDWX6 pinned at R2643 in
+# state/queue/tech.md:661 BEFORE this code existed). Three shapes rode on a
+# word that named only half of what the landing carried, MEASURED at R2643
+# with src/os/limits_export_composed_landed_next_R2643.py and re-measured by
+# this window before any byte was written:
+#   TRANSPORT-MIXED bom=0 - a TRUNCATED BOM prefix over a MIXED body lost the
+#                           truncation fact because the truncated law needed a
+#                           clean body;
+#   UTF16-BOM-LANDING     - a UTF-16 marker with NO body was indistinguishable
+#                           from a whole UTF-16 landing;
+#   BOM-LANDING delta=0   - a BOM-ONLY landing against empty text read clean.
+WORD_BOM_TRUNCATED_MIXED = "BOM-TRUNCATED-MIXED"
+WORD_UTF16_BOM_MARKER_ONLY = "UTF16-BOM-MARKER-ONLY"
+WORD_BOM_EMPTY_PAYLOAD = "BOM-EMPTY-PAYLOAD"
 
 BOM = b"\xef\xbb\xbf"
 # A strict PREFIX of the UTF-8 BOM, one or two bytes: the shape a writer lands
@@ -119,20 +133,46 @@ def account(path, text):
             "delta": None,
             "bom": 0,
         }
-    # R2643 pinned order, extended so a landing can still never earn two words:
-    # EMPTY (above), UTF-16 BOM, TRUNCATED BOM, BOM (mixed / body gap / clean),
-    # MIXED, then the composed/landed compare.
+    # R2646 pinned order (AC-EDWX1..AC-EDWX6 pinned at R2643 BEFORE this code),
+    # still so no landing can ever earn two words: EMPTY (above), UTF-16 BOM
+    # MARKER-ONLY before a whole UTF-16 landing, BOM-ONLY before any BOM body
+    # judgement, TRUNCATED BOM (a MIXED body named as BOTH facts), BOM (mixed /
+    # body gap / clean), MIXED, then the composed/landed compare.
     for mark in UTF16_BOMS:
         if raw.startswith(mark):
+            body16 = raw[len(mark):]
+            if not body16:
+                # AC-EDWX2: a marker with nothing behind it is not a landing.
+                return {
+                    "word": WORD_UTF16_BOM_MARKER_ONLY,
+                    "transport": TRANSPORT_LF,
+                    "composed": None,
+                    "disk": len(raw),
+                    "delta": None,
+                    "bom": len(mark),
+                    "bom_kind": "utf16-empty",
+                }
             return {
                 "word": WORD_UTF16_BOM,
-                "transport": read_transport(raw[len(mark):]),
+                "transport": read_transport(body16),
                 "composed": None,
                 "disk": len(raw),
                 "delta": None,
                 "bom": len(mark),
                 "bom_kind": "utf16",
             }
+    if raw == BOM:
+        # AC-EDWX3: a BOM with no payload names the empty payload instead of
+        # reading a clean BOM landing at delta=0.
+        return {
+            "word": WORD_BOM_EMPTY_PAYLOAD,
+            "transport": TRANSPORT_LF,
+            "composed": None,
+            "disk": len(raw),
+            "delta": None,
+            "bom": len(BOM),
+            "bom_kind": "utf8-empty",
+        }
     if not raw.startswith(BOM):
         # The LONGEST matching strict prefix is the one that gets judged: a two
         # byte cut must not be measured as a one byte cut (MEASURED at R2643,
@@ -143,9 +183,29 @@ def account(path, text):
             prefix = max(matches, key=len)
             cut = raw[len(prefix):]
             cut_transport = read_transport(cut)
-            if cut_transport != TRANSPORT_MIXED:
+            folded = text.replace("\r\n", "\n").encode("utf-8")
+            if cut_transport == TRANSPORT_MIXED:
+                # AC-EDWX1: the truncation and the transport are named in ONE
+                # word, and only when the body is the composed text up to its
+                # separators, so a legitimate 0xef-leading payload is not
+                # accused of being a cut marker.
+                if cut.replace(b"\r\n", b"\n") == folded:
+                    return {
+                        "word": WORD_BOM_TRUNCATED_MIXED,
+                        "transport": cut_transport,
+                        "composed": len(folded),
+                        "disk": len(raw),
+                        "delta": len(raw) - len(folded),
+                        "bom": len(prefix),
+                        "bom_kind": "utf8-truncated",
+                    }
+            else:
                 cut_composed = composed_bytes(text, cut_transport)
-                if len(cut) == cut_composed:
+                if cut_transport == TRANSPORT_CRLF:
+                    expected = folded.replace(b"\n", b"\r\n")
+                else:
+                    expected = folded
+                if len(cut) == cut_composed and cut == expected:
                     return {
                         "word": WORD_BOM_TRUNCATED,
                         "transport": cut_transport,
