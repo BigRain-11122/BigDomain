@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T03:00:11+08:00",
+  "export_ts": "2026-11-12T03:01:42+08:00",
   "do": "2026-11-12 R2647 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2646, pre-registered 649 suites / 4870 criteria at R2646 because that window moved product src bytes and one registry row). Five readings at open: git status carried TWO untracked files, the retry leg and the one-off launcher of an INTERRUPTED ATTEMPT of this same round, with no index.lock; ZERO unrep",
   "ceo_face": {
     "current": "2026-11-12 R2647 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2646, pre-registered 649 suites / 4870 criteria at R2646 because that window moved product src bytes and one registry row). Five readings at open: git status carried TWO untracked files, the retry leg and the one-off launcher of an INTERRUPTED ATTEMPT of this same round, with no index.lock; ZERO unrep",
     "latest_artifact": "reconcile-all-R2647-retry.log (1099524B) + reconcile-all-R2647.log (1097735B)",
     "last_artifact": "reconcile-all-R2647-retry.log (1099524B) + reconcile-all-R2647.log (1097735B)",
-    "next_milestone": "next window owes product-face-R2647 on the committed tree, inside a 48h window due 2026-11-14T03:00:11+08:00",
-    "next_milestone_due": "2026-11-14T03:00:11+08:00",
-    "updated_at": "2026-11-12T03:00:11+08:00"
+    "next_milestone": "next window owes product-face-R2647 on the committed tree, inside a 48h window due 2026-11-14T03:01:42+08:00",
+    "next_milestone_due": "2026-11-14T03:01:42+08:00",
+    "updated_at": "2026-11-12T03:01:42+08:00"
   },
   "depts": [
     {
@@ -958,7 +958,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2645",
+      "2646",
       "OSLoop 执行 tick"
     ],
     [
