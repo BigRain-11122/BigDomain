@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-11T19:38:05+08:00",
+  "export_ts": "2026-11-11T19:39:15+08:00",
   "do": "2026-11-11 R2639 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2638, pre-registered 647 suites / 4858 criteria at R2638). The window opened on an interrupted attempt of the same round: git status carried exactly two untracked files - the finished red leg qa/reconcile-all-R2638.log and its one-off launcher - with no index.lock, so the leg was ADOPTED and measured ",
   "ceo_face": {
     "current": "2026-11-11 R2639 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2638, pre-registered 647 suites / 4858 criteria at R2638). The window opened on an interrupted attempt of the same round: git status carried exactly two untracked files - the finished red leg qa/reconcile-all-R2638.log and its one-off launcher - with no index.lock, so the leg was ADOPTED and measured ",
     "latest_artifact": "none landed yet for R2639",
     "last_artifact": "none landed yet for R2639",
-    "next_milestone": "next window owes reconcile-battery-R2638 on the committed tree, inside a 48h window due 2026-11-13T19:38:05+08:00",
-    "next_milestone_due": "2026-11-13T19:38:05+08:00",
-    "updated_at": "2026-11-11T19:38:05+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2638 on the committed tree, inside a 48h window due 2026-11-13T19:39:15+08:00",
+    "next_milestone_due": "2026-11-13T19:39:15+08:00",
+    "updated_at": "2026-11-11T19:39:15+08:00"
   },
   "depts": [
     {
