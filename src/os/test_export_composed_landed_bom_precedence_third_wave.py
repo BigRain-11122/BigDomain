@@ -244,7 +244,13 @@ def legacy_answers(workdir):
         and rep["utf16le"]["word"] == CLF.WORD_UTF16_BOM
         and rep["utf16le"]["bom_kind"] == "utf16"
         and rep["utf16_empty"]["word"] == CLF.WORD_UTF16_BOM_MARKER_ONLY
-        and rep["utf16_one"]["word"] == CLF.WORD_UTF16_BOM
+        # AC-EDWZ1 (pinned at R2649 in state/queue/tech.md:663 BEFORE the
+        # R2653 code) changes exactly this shape: a UTF-16 body is an even
+        # number of bytes, so the one byte remnant can no longer be called a
+        # whole landing. The assertion stays an EXACT word equality - the new
+        # word is the shipped answer, not a loosened subset - and the rest of
+        # this legacy reading is untouched.
+        and rep["utf16_one"]["word"] == CLF.WORD_UTF16_BOM_SHORT_BODY
         and rep["short2"]["word"] == CLF.WORD_BOM_TRUNCATED
         and rep["short2"]["bom"] == 2 and rep["short2"]["delta"] == 2
         and rep["short1"]["word"] == CLF.WORD_BOM_TRUNCATED

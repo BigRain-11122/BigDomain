@@ -83,6 +83,23 @@ WORD_BOM_EMPTY_PAYLOAD = "BOM-EMPTY-PAYLOAD"
 WORD_BOM_TRUNCATED_MIXED_GAP = "BOM-TRUNCATED-MIXED-GAP"
 WORD_BOM_CUT_NO_BODY = "BOM-CUT-NO-BODY"
 WORD_BOM_DOUBLE_MARKER = "BOM-DOUBLE-MARKER"
+# R2653 fourth wave (AC-EDWZ1..AC-EDWZ6 pinned at R2649 in
+# state/queue/tech.md:663 BEFORE this code existed). Three shapes still rode on
+# a word that described the landing only partly, MEASURED at R2649 with
+# src/os/limits_export_composed_landed_next_R2649.py and re-measured by this
+# window before any byte was written (qa/limits-export-composed-landed-fourth-
+# wave-before-R2653.log, 778B):
+#   UTF16-BOM-LANDING disk=3   - a UTF-16 marker with ONE byte behind it read
+#                                as a whole landing, so an odd remnant (a body
+#                                that cannot be a whole UTF-16 payload) was
+#                                indistinguishable from a complete one;
+#   UTF16-BOM-LANDING composed=None - the same remnant against a NON-EMPTY
+#                                text carried no count at all, so nothing said
+#                                what it had been measured against;
+#   BOM-DOUBLE-MARKER disk=8 composed=None delta=None - two markers with a
+#                                BODY behind them named both markers and then
+#                                described the body with no field at all.
+WORD_UTF16_BOM_SHORT_BODY = "UTF16-BOM-SHORT-BODY"
 
 BOM = b"\xef\xbb\xbf"
 # A strict PREFIX of the UTF-8 BOM, one or two bytes: the shape a writer lands
@@ -170,6 +187,30 @@ def account(path, text):
                     "bom": len(mark),
                     "bom_kind": "utf16-empty",
                 }
+            if len(body16) % 2:
+                # AC-EDWZ1: a UTF-16 body is an even number of bytes, so an
+                # ODD remnant cannot be a whole landing and is not called one.
+                # AC-EDWZ2: when the composed text is not empty the count the
+                # remnant was measured against is carried - the whole landing
+                # it would have been, marker included, in its own byte order -
+                # rather than an unqualified word.
+                folded16 = text.replace("\r\n", "\n").encode("utf-8")
+                expected = None
+                if folded16:
+                    codec = ("utf-16-le" if mark == b"\xff\xfe"
+                             else "utf-16-be")
+                    expected = len(mark) + len(
+                        text.replace("\r\n", "\n").encode(codec))
+                return {
+                    "word": WORD_UTF16_BOM_SHORT_BODY,
+                    "transport": read_transport(body16),
+                    "composed": expected,
+                    "disk": len(raw),
+                    "delta": (len(raw) - expected) if expected else None,
+                    "bom": len(mark),
+                    "bom_kind": "utf16-short",
+                    "body": len(body16),
+                }
             return {
                 "word": WORD_UTF16_BOM,
                 "transport": read_transport(body16),
@@ -182,6 +223,10 @@ def account(path, text):
     if raw.startswith(BOM) and raw[len(BOM):len(BOM) + 2] in UTF16_BOMS:
         # AC-EDWY4: two markers on one landing are named as BOTH markers
         # instead of being judged as a body gap of the first one.
+        # AC-EDWZ3: whatever sits BEHIND both markers is described by its own
+        # fields (its size and the transport it carries), so the body is no
+        # longer an invisible remainder under a marker count.
+        behind = raw[len(BOM) + 2:]
         return {
             "word": WORD_BOM_DOUBLE_MARKER,
             "transport": TRANSPORT_LF,
@@ -190,6 +235,8 @@ def account(path, text):
             "delta": None,
             "bom": len(BOM) + 2,
             "bom_kind": "utf8+utf16",
+            "body": len(behind),
+            "body_transport": read_transport(behind),
         }
     if raw == BOM:
         # AC-EDWX3: a BOM with no payload names the empty payload instead of
@@ -330,6 +377,9 @@ def render(report):
     if report.get("bom"):
         kind = report.get("bom_kind")
         suffix = "" if kind in (None, "utf8") else " kind=%s" % kind
+        if report.get("body") is not None:
+            suffix += " body=%d body_transport=%s" % (
+                report["body"], report.get("body_transport"))
         return ("COMPOSED-LANDED %s transport=%s bom=%d composed=%s disk=%d"
                 " delta=%s%s") % (
             report["word"], report["transport"], report["bom"],

@@ -4667,6 +4667,16 @@ SUITES = [
      os.path.join("..", "os",
                   "test_export_composed_landed_bom_precedence_third_wave.py"),
      6),
+    # R2653 FOURTH WAVE: a UTF-16 body is an EVEN number of bytes, so an odd
+    # remnant is named as a short body rather than as a whole landing, that
+    # remnant carries the composed count it was measured against, and two
+    # markers carrying a body describe that body by its own fields.
+    # (AC-EDWZ1..AC-EDWZ6 pre-registered in state/queue/tech.md:663 at R2649
+    # BEFORE the code existed.)
+    ("os-export-composed-landed-bom-precedence-fourth-wave",
+     os.path.join("..", "os",
+                  "test_export_composed_landed_bom_precedence_fourth_wave.py"),
+     6),
     # R2608: the shape law widens once more - a separator drawn with MIXED
     # punctuation is a separator, a matrix title inside a fenced block or a
     # title that introduces no table is not a second title, and a walk that

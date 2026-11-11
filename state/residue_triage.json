@@ -8,6 +8,13 @@
       "declared_by": 2612,
       "reason": "measured at R2612 rather than restated: the R2165 stamp sits on state/queue/explore.md:55 criterion AC-MHH8 inside a parent row that is still open, and that criterion evidence verifies live - qa/apimarket-hourheatmap-R2165-a.log and -b.log are byte-identical (736 bytes each, sha256 55634543bbfff7c42f61d62b3f709556433d864f95aa4adff635471bfbb53bf6, matching the sha prefix published in the row) and ledger-apimarket-hourheatmap is present in the 639-suite registry imported this window - so this is delivered work standing on a partially-done parent row, not unaccounted residue",
       "until": 2660
+    },
+    {
+      "round": 2653,
+      "status": "DELIVERED",
+      "declared_by": "R2653",
+      "reason": "AC-EDWZ fourth wave shipped with its own suite, twice-identical evidence and a regenerated matrix document in this round own product commit",
+      "until": 2663
     }
   ]
 }
