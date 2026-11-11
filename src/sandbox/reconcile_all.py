@@ -4678,6 +4678,17 @@ SUITES = [
     ("os-suite-matrix-reconcile-row-membership",
      os.path.join("..", "os", "test_suite_matrix_reconcile_row_membership.py"),
      6),
+    # R2633: a SECOND-table header whose separator width disagrees, or that
+    # carries no separator at all, used to be read as one non-row and the rows
+    # under it were then counted as matrix rows (measured +1 either way at
+    # R2630). Such a run now ENDS the first table and is named with both
+    # widths, or with the absent separator.
+    # (AC-EDMJ1..AC-EDMJ6 pinned in state/queue/tech.md:654 at R2630 BEFORE
+    # the code existed.)
+    ("os-suite-matrix-reconcile-second-table-separator",
+     os.path.join("..", "os",
+                  "test_suite_matrix_reconcile_second_table_separator.py"),
+     6),
     # R2253: a claimable queue row must name its criteria prefix, so
     # pre-registration is a gate instead of a habit. The row law is
     # imported from queue_floor rather than rewritten, two declaration

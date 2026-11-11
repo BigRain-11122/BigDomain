@@ -204,6 +204,14 @@ ROW_RE = re.compile(r"(?m)^\| \d+ \|(?:[^|\n]*\|){5}$")
 # because it fell through to the second-table branch.
 DATA_HEAD_RE = re.compile(r"^\|\s*\d+\s*\|")
 SEPARATOR_CHARS = set("-: ")
+# AC-EDMJ1/AC-EDMJ2: a table-shaped run that opens with a header and carries
+# NO separator of its own width was read as one non-row, and the rows under it
+# were then counted as matrix rows (measured at R2630: delta +1 either way).
+# Such a run ends the first table and names itself instead of being absorbed.
+WORD_STRAY = "STRAY-HEADER"
+WORD_UNSEP = "HEADER-UNSEPARATED"
+CODE_STRAY = "E_EDMJ_STRAY"
+CODE_UNSEP = "E_EDMJ_UNSEP"
 # AC-EDMF1: a fenced code block quotes example text. A quoted data-shaped row
 # is not a matrix row, so the row law has to know where the fence is.
 FENCE_MARK = "```"
@@ -263,15 +271,66 @@ def fence_scan(text):
     return mask, problem
 
 
-def doc_rows(text, patterns=None):
-    """Matrix table data rows of a composed document, FENCE-AWARE (R2616) and
-    TABLE-AWARE (R2621).
+def _numeric_cell(cell):
+    """True when a cell reads as a number (`6`, `1.0`), False for text."""
+    try:
+        float(cell)
+    except (TypeError, ValueError):
+        return False
+    return True
 
-    AC-EDMF1: a quoted data row inside a ``` block is not a matrix row.
-    AC-EDMG1: R2616 measured a data-shaped row in a SECOND table (fenced or
-    not) still counted, so a document whose only difference was a second table
-    read ROWS-MISMATCH. Only rows of the FIRST table introduced by the shipped
-    matrix title are matrix rows."""
+
+def stray_header(lines, mask, index):
+    """(width, separator_width_or_None) when the row at `index` opens a
+    table-shaped run that carries NO separator of its OWN width.
+
+    AC-EDMJ1: R2630 measured a second-table header whose separator carried a
+    DIFFERENT cell count read as one non-row, after which the rows under it
+    were counted as matrix rows (delta +1). AC-EDMJ2: the same happened for a
+    header carrying no separator at all. A matrix data row always carries a
+    numeric criteria cell and a numeric seconds cell, so a pipe row whose
+    cells are ALL non-numeric is a header of a table this walk cannot
+    classify - it ends the first table and is named rather than absorbed
+    (AC-EDMJ3 keeps a genuinely malformed data row, which does carry those
+    numeric cells, as one non-row)."""
+    candidate = lines[index]
+    if not candidate.startswith("|"):
+        return None
+    if ROW_RE.match(candidate) or is_separator_row(candidate):
+        return None
+    if DATA_HEAD_RE.match(candidate):
+        return None
+    cells = [cell.strip()
+             for cell in candidate.strip().strip("|").split("|")]
+    if len(cells) < 2:
+        return None
+    if any(cell and _numeric_cell(cell) for cell in cells):
+        return None
+    width = candidate.count("|") - 1
+    follow = index + 1
+    while follow < len(lines):
+        if mask[follow] or not lines[follow].strip():
+            follow += 1
+            continue
+        break
+    if follow >= len(lines):
+        return (width, None)
+    below = lines[follow]
+    if below.startswith("|") and is_separator_row(below):
+        separator_width = below.count("|") - 1
+        if separator_width != width:
+            return (width, separator_width)
+        return None
+    return (width, None)
+
+
+def doc_rows_scan(text, patterns=None):
+    """(count, problem): matrix table data rows of a composed document, plus
+    the FIRST table-shaped run this walk refuses to absorb (AC-EDMJ1/2).
+
+    FENCE-AWARE (R2616), TABLE-AWARE (R2621), membership by the separator a
+    header carries (R2630), and now a run that opens with a header and carries
+    no separator of its own width ENDS the table instead of being absorbed."""
     patterns = patterns or SM.load_patterns()
     title = patterns["labels"]["matrix_title"].strip()
     lines = text.splitlines()
@@ -289,8 +348,9 @@ def doc_rows(text, patterns=None):
             start = follow
             break
     if start is None:
-        return 0
+        return 0, None
     count = 0
+    problem = None
     index = start + 1
     if (index < len(lines) and not mask[index]
             and lines[index].startswith("|")
@@ -323,6 +383,12 @@ def doc_rows(text, patterns=None):
             # as one non-row and every well-formed row after it is still
             # counted, so the count falls by one instead of to zero.
             pass
+        elif stray_header(lines, mask, index) is not None:
+            # AC-EDMJ1/AC-EDMJ2: a header carrying no separator of its own
+            # width opens a run this walk cannot classify, so the first table
+            # ENDS here and the run is named rather than counted.
+            problem = stray_header(lines, mask, index)
+            break
         else:
             # AC-EDMI1: table membership is decided by the separator row a
             # header carries, not by a digit in the first cell. A row that is
@@ -332,7 +398,14 @@ def doc_rows(text, patterns=None):
             # count collapsing.
             pass
         index += 1
-    return count
+    return count, problem
+
+
+def doc_rows(text, patterns=None):
+    """Matrix table data rows only - the count this module has always
+    published. AC-EDMJ keeps the signature by returning the count from
+    doc_rows_scan and dropping the named problem."""
+    return doc_rows_scan(text, patterns)[0]
 
 
 def registry_counts():
@@ -622,7 +695,30 @@ def report(doc_path=None, evidence_path=None, qa_dir=None, ceiling=None):
                 "header_cells": header, "expected_cells": MATRIX_CELLS,
                 "reason": "matrix table carries %d cells, expected %d"
                           % (header, MATRIX_CELLS)}
-    have_rows = doc_rows(current)
+    have_rows, body_problem = doc_rows_scan(current)
+    # AC-EDMJ1/AC-EDMJ2: a table-shaped run that opens with a header and
+    # carries no separator of its own width ENDS the matrix table and is named
+    # here, before any evidence is read, the same way a malformed fence is -
+    # it is a document-shape answer, and the row count it publishes is the
+    # first table own rows rather than a number inflated by the run.
+    if body_problem is not None:
+        width, separator_width = body_problem
+        answer = {"doc": rel(doc_path), "exit": 3, "written": False,
+                  "doc_rows": have_rows, "header_cells": width}
+        if separator_width is None:
+            answer.update({
+                "verdict": WORD_UNSEP, "code": CODE_UNSEP,
+                "reason": ("a table-shaped header carrying %d cells is never"
+                           " followed by a separator row of its own width"
+                           % width)})
+        else:
+            answer.update({
+                "verdict": WORD_STRAY, "code": CODE_STRAY,
+                "separator_cells": separator_width,
+                "reason": ("a table-shaped header carrying %d cells is"
+                           " followed by a %d-cell separator"
+                           % (width, separator_width))})
+        return answer
     walk = None
     # AC-EDMC4: the caller is always told WHICH source answered, and a source
     # it handed over but that was not used is named rather than ignored.

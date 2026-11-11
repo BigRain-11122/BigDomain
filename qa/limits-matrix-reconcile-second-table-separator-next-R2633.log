@@ -1,0 +1,5 @@
+R2633 successor limits (read-only, measured after the AC-EDMJ fix)
+real_rows=645
+numeric_first_cell_header rows=647 delta=+2 problem=None
+agreeing_separator rows=647 delta=+2 problem=None
+trailing_header rows=645 delta=+0 problem=None

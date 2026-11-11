@@ -1,0 +1,6 @@
+R2633 measurement of the AC-EDMJ fix (read-only, private copies)
+registry_rows=645 registry_criteria=4846 real_rows=645
+second_header_narrow_separator rows=645 delta=+0 problem=(6, 2)
+second_header_no_separator rows=645 delta=+0 problem=(6, None)
+two_adjacent_nonnumeric_rows rows=643 delta=-2 problem=None
+numeric_footer_row rows=645 delta=+0 problem=None

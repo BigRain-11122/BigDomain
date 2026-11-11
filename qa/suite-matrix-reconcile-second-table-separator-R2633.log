@@ -1,0 +1,32 @@
+EVIDENCE CAPTURE round=R2633 suite=src/os/test_suite_matrix_reconcile_second_table_separator.py legs=2
+== LEG A rc=0 digest=FB8528404DDBA127
+PASS AC-EDMJ1 narrow-header rows=645 real=645 delta=+0 problem=(6, 2) verdict=STRAY-HEADER widths=6/2 doc_rows=645
+PASS AC-EDMJ2 no-separator rows=645 real=645 delta=+0 problem=(6, None) verdict=HEADER-UNSEPARATED doc_rows=645
+PASS AC-EDMJ3 malformed-data rows=644 real=645 delta=-1 problem=None verdict=ROWS-MISMATCH
+PASS AC-EDMJ4 asked live=1 diff=1 verdict=DOC-CURRENT/STALE-CONTENT
+PASS AC-EDMJ5 four=644 two=643 nfoot=645 foot=645 second=645 sep=645 quoted=645 fence=FENCE-UNCLOSED/693 nest=FENCE-NESTED/4/3 titles=1/2 other=TITLE-REPEATED/2 narrow=HEADER-SHAPE/6/2 nosep=SEPARATOR-MISSING starved=CEILING-STARVED nodoc=NO-DOC counts=645/645 src=explicit/walk
+PASS AC-EDMJ6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+== LEG B rc=0 digest=FB8528404DDBA127
+PASS AC-EDMJ1 narrow-header rows=645 real=645 delta=+0 problem=(6, 2) verdict=STRAY-HEADER widths=6/2 doc_rows=645
+PASS AC-EDMJ2 no-separator rows=645 real=645 delta=+0 problem=(6, None) verdict=HEADER-UNSEPARATED doc_rows=645
+PASS AC-EDMJ3 malformed-data rows=644 real=645 delta=-1 problem=None verdict=ROWS-MISMATCH
+PASS AC-EDMJ4 asked live=1 diff=1 verdict=DOC-CURRENT/STALE-CONTENT
+PASS AC-EDMJ5 four=644 two=643 nfoot=645 foot=645 second=645 sep=645 quoted=645 fence=FENCE-UNCLOSED/693 nest=FENCE-NESTED/4/3 titles=1/2 other=TITLE-REPEATED/2 narrow=HEADER-SHAPE/6/2 nosep=SEPARATOR-MISSING starved=CEILING-STARVED nodoc=NO-DOC counts=645/645 src=explicit/walk
+PASS AC-EDMJ6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+== ADJACENT 6
+== src/os/test_suite_matrix_reconcile_row_membership.py rc=0 SUITE PASS 6/6
+== src/os/test_suite_matrix_reconcile_row_shape.py rc=0 SUITE PASS 6/6
+== src/os/test_suite_matrix_reconcile_fence_table.py rc=0 SUITE PASS 6/6
+== src/os/test_suite_matrix_reconcile_fence_rows.py rc=0 SUITE PASS 6/6
+== src/os/test_suite_matrix_reconcile_table_shape.py rc=0 SUITE PASS 6/6
+== src/os/test_suite_matrix_reconcile_shape.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=6 fails=0 digest=FB8528404DDBA127
+== limits rc=0 ==
+R2633 measurement of the AC-EDMJ fix (read-only, private copies)
+registry_rows=645 registry_criteria=4846 real_rows=645
+second_header_narrow_separator rows=645 delta=+0 problem=(6, 2)
+second_header_no_separator rows=645 delta=+0 problem=(6, None)
+two_adjacent_nonnumeric_rows rows=643 delta=-2 problem=None
+numeric_footer_row rows=645 delta=+0 problem=None
