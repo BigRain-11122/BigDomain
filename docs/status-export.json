@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-11T08:25:16+08:00",
+  "export_ts": "2026-11-11T09:12:16+08:00",
   "do": "2026-11-11 R2635 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2633, pre-registered 645 suites / 4846 criteria at R2633 because that window moved product src bytes and one registry row). Five readings at open: git status EMPTY with no index.lock, ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0), the content-addressed de",
   "ceo_face": {
     "current": "2026-11-11 R2635 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2633, pre-registered 645 suites / 4846 criteria at R2633 because that window moved product src bytes and one registry row). Five readings at open: git status EMPTY with no index.lock, ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0), the content-addressed de",
-    "latest_artifact": "none landed yet for R2635",
-    "last_artifact": "none landed yet for R2635",
-    "next_milestone": "next window owes reconcile-battery-R2633 on the committed tree, inside a 48h window due 2026-11-13T08:25:16+08:00",
-    "next_milestone_due": "2026-11-13T08:25:16+08:00",
-    "updated_at": "2026-11-11T08:25:16+08:00"
+    "latest_artifact": "reconcile-all-R2635.log (1095798B)",
+    "last_artifact": "reconcile-all-R2635.log (1095798B)",
+    "next_milestone": "next window owes product-face-R2635 on the committed tree, inside a 48h window due 2026-11-13T09:12:16+08:00",
+    "next_milestone_due": "2026-11-13T09:12:16+08:00",
+    "updated_at": "2026-11-11T09:12:16+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "reconcile-all-R2635.log (1095798B)",
     "none landed yet for R2635",
     "limits-matrix-reconcile-second-table-separator-R2633.log (357B) + limits-matrix-reconcile-second-table-separator-next-R2633.log (235B) + suite-matrix-reconcile-second-table-separator-R2633.log (2597B)",
     "none landed yet for R2632",
