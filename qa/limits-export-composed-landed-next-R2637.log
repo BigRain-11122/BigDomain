@@ -1,0 +1,6 @@
+WORLD a_mixed transport=mixed composed=None disk=14 word=COMPOSED-MISMATCH delta=None
+WORLD b_empty transport=lf composed=12 disk=0 word=COMPOSED-MISMATCH delta=-12
+WORLD c_bom transport=lf composed=12 disk=15 word=COMPOSED-MISMATCH delta=3
+WORLD d_caller_crlf transport=crlf composed=15 disk=15 word=PASS delta=0
+WORLD d_caller_crlf naive_normalised=18 disk=15
+WORLD e_single_line transport=lf composed=7 disk=7 word=PASS delta=0

@@ -4627,6 +4627,12 @@ SUITES = [
     ("os-suite-matrix-reconcile-shape",
      os.path.join("..", "os", "test_suite_matrix_reconcile_shape.py"),
      6),
+    # R2637 product face: the composed text is compared with the LANDED bytes
+    # in the landing own transport. (AC-EDWT1..AC-EDWT6 pre-registered in
+    # state/queue/tech.md:658 at R2596 BEFORE the code existed.)
+    ("os-export-composed-landed-face",
+     os.path.join("..", "os", "test_export_composed_landed_face.py"),
+     6),
     # R2608: the shape law widens once more - a separator drawn with MIXED
     # punctuation is a separator, a matrix title inside a fenced block or a
     # title that introduces no table is not a second title, and a walk that

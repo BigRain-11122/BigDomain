@@ -1,0 +1,5 @@
+WORLD A transport=lf composed=12 landed=12 delta=0
+WORLD B transport=crlf composed=12 landed=15 delta=3 lines=3
+WORLD B naive_composed_equals_landed=False
+WORLD C shipped_verdict=PASS composed_gap_visible=False
+WORLD D absent_target=resolved

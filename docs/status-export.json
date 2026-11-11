@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-11T09:12:16+08:00",
-  "do": "2026-11-11 R2635 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2633, pre-registered 645 suites / 4846 criteria at R2633 because that window moved product src bytes and one registry row). Five readings at open: git status EMPTY with no index.lock, ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0), the content-addressed de",
+  "export_ts": "2026-11-11T09:22:41+08:00",
+  "do": "2026-11-11 R2637 PRODUCT window on the queue head the debt gate named (product-face-R2635, state/queue/tech.md:658 prefix AC-EDWT1, criteria AC-EDWT1..AC-EDWT6 pinned in that row at R2596 BEFORE any code). Five readings at open, taken in this same session and re-confirmed by one scan: git status carried only this window own work with no index.lock, ZERO unreplied @BigDomain rows in cph4/evolution-",
   "ceo_face": {
-    "current": "2026-11-11 R2635 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2633, pre-registered 645 suites / 4846 criteria at R2633 because that window moved product src bytes and one registry row). Five readings at open: git status EMPTY with no index.lock, ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0), the content-addressed de",
-    "latest_artifact": "reconcile-all-R2635.log (1095798B)",
-    "last_artifact": "reconcile-all-R2635.log (1095798B)",
-    "next_milestone": "next window owes product-face-R2635 on the committed tree, inside a 48h window due 2026-11-13T09:12:16+08:00",
-    "next_milestone_due": "2026-11-13T09:12:16+08:00",
-    "updated_at": "2026-11-11T09:12:16+08:00"
+    "current": "2026-11-11 R2637 PRODUCT window on the queue head the debt gate named (product-face-R2635, state/queue/tech.md:658 prefix AC-EDWT1, criteria AC-EDWT1..AC-EDWT6 pinned in that row at R2596 BEFORE any code). Five readings at open, taken in this same session and re-confirmed by one scan: git status carried only this window own work with no index.lock, ZERO unreplied @BigDomain rows in cph4/evolution-",
+    "latest_artifact": "export-composed-landed-R2637.log (1949B) + limits-export-composed-landed-R2637.log (242B) + limits-export-composed-landed-next-R2637.log (431B)",
+    "last_artifact": "export-composed-landed-R2637.log (1949B) + limits-export-composed-landed-R2637.log (242B) + limits-export-composed-landed-next-R2637.log (431B)",
+    "next_milestone": "next window owes reconcile-battery-R2637 on the committed tree, inside a 48h window due 2026-11-13T09:22:41+08:00",
+    "next_milestone_due": "2026-11-13T09:22:41+08:00",
+    "updated_at": "2026-11-11T09:22:41+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "export-composed-landed-R2637.log (1949B) + limits-export-composed-landed-R2637.log (242B) + limits-export-composed-landed-next-R2637.log (431B)",
     "reconcile-all-R2635.log (1095798B)",
     "none landed yet for R2635",
     "limits-matrix-reconcile-second-table-separator-R2633.log (357B) + limits-matrix-reconcile-second-table-separator-next-R2633.log (235B) + suite-matrix-reconcile-second-table-separator-R2633.log (2597B)",
@@ -950,7 +951,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2636",
+      "2637",
       "OSLoop 执行 tick"
     ],
     [
@@ -969,10 +970,10 @@
   "self_drive": {
     "window": "2026-11-05..2026-11-11",
     "window_days": 7,
-    "log_lines_in_window": 38,
+    "log_lines_in_window": 35,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 37,
+    "substantive_non_idle_mention_lines": 34,
     "proposals_total": 7,
     "proposals_open": 5,
     "queue_main_open": 6,
@@ -1005,21 +1006,25 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 16,
-        "done_rows": 481,
+        "done_rows": 482,
         "gated_rows": 1,
-        "claimable": 12,
-        "discounted": 3,
+        "claimable": 11,
+        "discounted": 4,
         "delivered": [
           {
             "line": 659,
+            "prefix": "AC-EDWV1"
+          },
+          {
+            "line": 661,
             "prefix": "AC-PNAG1"
           },
           {
-            "line": 674,
+            "line": 676,
             "prefix": "AC-SEQAF1"
           },
           {
-            "line": 676,
+            "line": 678,
             "prefix": "AC-EDMK1"
           }
         ],
@@ -1045,6 +1050,6 @@
     "verdict": "FLOOR-MET",
     "shortfall_total": 0,
     "missing": [],
-    "delivered_total": 3
+    "delivered_total": 4
   }
 }

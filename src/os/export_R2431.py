@@ -18,6 +18,7 @@ REPO = os.path.dirname(os.path.dirname(BASE))
 sys.path.insert(0, BASE)
 
 import export_driver_queue_face as EDQF  # noqa: E402
+import export_composed_landed_face as CLF  # noqa: E402
 
 EXPORT = os.path.join(REPO, "docs", "status-export.json")
 STATE = os.path.join(BASE, "state.json")
@@ -202,7 +203,8 @@ VERDICT_PASS = "PASS"
 HEALTHY = (VERDICT_PASS, DRIFT_UNDER_WRITE)
 
 
-def classify(back_self_drive, at_write, fresh, base_ok, queue_bytes, disk_bytes):
+def classify(back_self_drive, at_write, fresh, base_ok, queue_bytes, disk_bytes,
+             composed_text=None, path=None):
     """Name why a refresh is healthy or not, in exactly one word.
 
     The read-back block is compared with what THIS driver stamped. If it
@@ -211,6 +213,14 @@ def classify(back_self_drive, at_write, fresh, base_ok, queue_bytes, disk_bytes)
     that still equals the stamp while the tree moved is DRIFT-UNDER-WRITE, a
     document that honestly recorded write-time truth and cannot be called a
     defect. Byte accounting is last, because it can only name a pair.
+
+    R2637 (AC-EDWT1..AC-EDWT6) adds ONE term after the queue/disk pair: with a
+    composed text and its landing path supplied, the composed length is
+    normalised into the transport READ OFF THE LANDED BYTES and compared with
+    what reached disk, so a composed/landed gap earns its own word instead of
+    riding on a pair the writer produced from the very payload it compared.
+    Both arguments are optional, so every caller that passes six arguments
+    keeps today's five words byte for byte.
     """
     if back_self_drive != at_write:
         return DOC_DOCTORED
@@ -220,6 +230,9 @@ def classify(back_self_drive, at_write, fresh, base_ok, queue_bytes, disk_bytes)
         return DRIFT_UNDER_WRITE
     if queue_bytes != disk_bytes:
         return SIZE_MISMATCH
+    if composed_text is not None and path is not None:
+        if CLF.account(path, composed_text)["word"] != CLF.WORD_PASS:
+            return CLF.WORD_COMPOSED_MISMATCH
     return VERDICT_PASS
 
 
@@ -298,7 +311,8 @@ def main():
     fresh = self_drive()
     disk_bytes = os.path.getsize(EXPORT)
     verdict = classify(back["self_drive"], at_write, fresh, ok,
-                       proof.get("bytes"), disk_bytes)
+                       proof.get("bytes"), disk_bytes,
+                       composed_text=text, path=EXPORT)
     sys.stdout.write("RESULTS rows=%d outs=%d tick=%s bytes=%d queue=%s "
                      "queue_bytes=%d queue_drifted=%s ok=%s\n"
                      % (len(back["results"]), len(back["outs"]), tick,

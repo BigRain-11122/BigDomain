@@ -1,0 +1,29 @@
+EVIDENCE CAPTURE round=R2637 suite=src/os/test_export_composed_landed_face.py legs=2
+== LEG A rc=0 digest=E5A73D43C2AB51AF
+PASS AC-EDWT1 gap word=COMPOSED-MISMATCH composed=12 disk=18 delta=6 line=COMPOSED-LANDED COMPOSED-MISMATCH transport=lf composed=12 disk=18 delta=6
+PASS AC-EDWT2 crlf word=PASS transport=crlf composed=15 disk=15 caller_crlf=PASS/15
+PASS AC-EDWT3 lf=lf crlf=crlf mixed=mixed mixed_word=COMPOSED-MISMATCH
+PASS AC-EDWT4 reads=1 word=PASS untouched=True
+PASS AC-EDWT5 doctor=DOC-DOCTORED check=CHECK-MISMATCH drift=DRIFT-UNDER-WRITE size=SIZE-MISMATCH pass=PASS by_call=COMPOSED-MISMATCH
+PASS AC-EDWT6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+== LEG B rc=0 digest=E5A73D43C2AB51AF
+PASS AC-EDWT1 gap word=COMPOSED-MISMATCH composed=12 disk=18 delta=6 line=COMPOSED-LANDED COMPOSED-MISMATCH transport=lf composed=12 disk=18 delta=6
+PASS AC-EDWT2 crlf word=PASS transport=crlf composed=15 disk=15 caller_crlf=PASS/15
+PASS AC-EDWT3 lf=lf crlf=crlf mixed=mixed mixed_word=COMPOSED-MISMATCH
+PASS AC-EDWT4 reads=1 word=PASS untouched=True
+PASS AC-EDWT5 doctor=DOC-DOCTORED check=CHECK-MISMATCH drift=DRIFT-UNDER-WRITE size=SIZE-MISMATCH pass=PASS by_call=COMPOSED-MISMATCH
+PASS AC-EDWT6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_status_export_writer_dialect_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+== src/os/test_export_consistency_queue_face.py rc=0 NO SUITE LINE
+== src/os/test_closeout_export_parity_dialect_wire.py rc=0 SUITE PASS 20/20
+EVIDENCE identical=True adjacent=4 fails=0 digest=E5A73D43C2AB51AF
+== limits rc=0 ==
+WORLD A transport=lf composed=12 landed=12 delta=0
+WORLD B transport=crlf composed=12 landed=15 delta=3 lines=3
+WORLD B naive_composed_equals_landed=False
+WORLD C shipped_verdict=PASS composed_gap_visible=False
+WORLD D absent_target=resolved
