@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-11T21:03:44+08:00",
+  "export_ts": "2026-11-11T21:05:08+08:00",
   "do": "2026-11-11 R2643 PRODUCT window on the queue head the debt gate named (product-face-R2641, state/queue/tech.md:660 prefix AC-EDWW1, criteria AC-EDWW1..AC-EDWW6 pinned in that row at R2638 BEFORE any code). Five readings at open: git status EMPTY at HEAD d9b907ee equal to origin/main with no index.lock; ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0); th",
   "ceo_face": {
     "current": "2026-11-11 R2643 PRODUCT window on the queue head the debt gate named (product-face-R2641, state/queue/tech.md:660 prefix AC-EDWW1, criteria AC-EDWW1..AC-EDWW6 pinned in that row at R2638 BEFORE any code). Five readings at open: git status EMPTY at HEAD d9b907ee equal to origin/main with no index.lock; ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0); th",
     "latest_artifact": "export-composed-landed-bom-precedence-R2643.log (2121B) + limits-export-composed-landed-bom-precedence-next-R2643.log (687B)",
     "last_artifact": "export-composed-landed-bom-precedence-R2643.log (2121B) + limits-export-composed-landed-bom-precedence-next-R2643.log (687B)",
-    "next_milestone": "next window owes reconcile-battery-R2643 on the committed tree, inside a 48h window due 2026-11-13T21:03:44+08:00",
-    "next_milestone_due": "2026-11-13T21:03:44+08:00",
-    "updated_at": "2026-11-11T21:03:44+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2643 on the committed tree, inside a 48h window due 2026-11-13T21:05:08+08:00",
+    "next_milestone_due": "2026-11-13T21:05:08+08:00",
+    "updated_at": "2026-11-11T21:05:08+08:00"
   },
   "depts": [
     {
