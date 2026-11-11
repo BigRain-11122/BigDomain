@@ -4656,6 +4656,17 @@ SUITES = [
      os.path.join("..", "os",
                   "test_export_composed_landed_bom_precedence_second_wave.py"),
      6),
+    # R2649 third wave: a cut over a MIXED body whose HEAD is the composed
+    # text names BOTH the cut and the transport in one word, an empty payload
+    # carries the composed count it was measured against, a prefix with no
+    # body behind it is named as a cut alone, and two markers on one landing
+    # are named as both markers instead of one body gap.
+    # (AC-EDWY1..AC-EDWY6 pre-registered in state/queue/tech.md:662 at R2646
+    # BEFORE the code existed.)
+    ("os-export-composed-landed-bom-precedence-third-wave",
+     os.path.join("..", "os",
+                  "test_export_composed_landed_bom_precedence_third_wave.py"),
+     6),
     # R2608: the shape law widens once more - a separator drawn with MIXED
     # punctuation is a separator, a matrix title inside a fenced block or a
     # title that introduces no table is not a second title, and a walk that
