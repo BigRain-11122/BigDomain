@@ -39,8 +39,28 @@ WORD_COMPOSED_MISMATCH = "COMPOSED-MISMATCH"
 WORD_EMPTY_LANDING = "EMPTY-LANDING"
 WORD_BOM_LANDING = "BOM-LANDING"
 WORD_TRANSPORT_MIXED = "TRANSPORT-MIXED"
+# R2643 (AC-EDWW1..AC-EDWW6): four more landing shapes MEASURED at R2638 with
+# src/os/limits_export_composed_landed_next_R2638.py and re-measured here
+# before any byte of this extension was written. Each used to ride on a word
+# that named only half of what it saw: a BOM landing whose BODY disagreed with
+# the composed text still read BOM-LANDING (delta=6 invisible in the word), a
+# BOM landing carrying MIXED separators read BOM-LANDING with the transport
+# surviving only as a field, a UTF-16LE BOM read COMPOSED-MISMATCH at delta=14,
+# and a TRUNCATED two byte BOM prefix read COMPOSED-MISMATCH at delta=2.
+WORD_BOM_BODY_MISMATCH = "BOM-BODY-MISMATCH"
+WORD_BOM_TRANSPORT_MIXED = "BOM-TRANSPORT-MIXED"
+WORD_UTF16_BOM = "UTF16-BOM-LANDING"
+WORD_BOM_TRUNCATED = "BOM-TRUNCATED"
 
 BOM = b"\xef\xbb\xbf"
+# A strict PREFIX of the UTF-8 BOM, one or two bytes: the shape a writer lands
+# when it is cut off mid-marker. A prefix is only called truncated when the
+# REST of the payload really is the composed text (AC-EDWW4), so a legitimate
+# three byte UTF-8 character that happens to start with 0xef is not accused.
+BOM_PREFIXES = (b"\xef", b"\xef\xbb")
+# UTF-16 markers in both byte orders: these are NOT UTF-8 BOMs and comparing
+# their length against a UTF-8 composed text can only invent a delta.
+UTF16_BOMS = (b"\xff\xfe", b"\xfe\xff")
 
 EXIT_OK = 0
 EXIT_MISMATCH = 2
@@ -99,18 +119,66 @@ def account(path, text):
             "delta": None,
             "bom": 0,
         }
+    # R2643 pinned order, extended so a landing can still never earn two words:
+    # EMPTY (above), UTF-16 BOM, TRUNCATED BOM, BOM (mixed / body gap / clean),
+    # MIXED, then the composed/landed compare.
+    for mark in UTF16_BOMS:
+        if raw.startswith(mark):
+            return {
+                "word": WORD_UTF16_BOM,
+                "transport": read_transport(raw[len(mark):]),
+                "composed": None,
+                "disk": len(raw),
+                "delta": None,
+                "bom": len(mark),
+                "bom_kind": "utf16",
+            }
+    if not raw.startswith(BOM):
+        # The LONGEST matching strict prefix is the one that gets judged: a two
+        # byte cut must not be measured as a one byte cut (MEASURED at R2643,
+        # the first suite run read the two byte world as COMPOSED-MISMATCH
+        # because the shortest prefix won and its body was one byte too long).
+        matches = [p for p in BOM_PREFIXES if raw.startswith(p)]
+        if matches:
+            prefix = max(matches, key=len)
+            cut = raw[len(prefix):]
+            cut_transport = read_transport(cut)
+            if cut_transport != TRANSPORT_MIXED:
+                cut_composed = composed_bytes(text, cut_transport)
+                if len(cut) == cut_composed:
+                    return {
+                        "word": WORD_BOM_TRUNCATED,
+                        "transport": cut_transport,
+                        "composed": cut_composed,
+                        "disk": len(raw),
+                        "delta": len(raw) - cut_composed,
+                        "bom": len(prefix),
+                        "bom_kind": "utf8-truncated",
+                    }
     bom = len(BOM) if raw.startswith(BOM) else 0
     body = raw[bom:]
     transport = read_transport(body)
     if bom:
+        if transport == TRANSPORT_MIXED:
+            return {
+                "word": WORD_BOM_TRANSPORT_MIXED,
+                "transport": transport,
+                "composed": None,
+                "disk": len(raw),
+                "delta": None,
+                "bom": bom,
+                "bom_kind": "utf8",
+            }
         composed = composed_bytes(text, transport)
+        delta = len(body) - composed
         return {
-            "word": WORD_BOM_LANDING,
+            "word": WORD_BOM_LANDING if delta == 0 else WORD_BOM_BODY_MISMATCH,
             "transport": transport,
             "composed": composed,
             "disk": len(raw),
-            "delta": len(body) - composed,
+            "delta": delta,
             "bom": bom,
+            "bom_kind": "utf8",
         }
     if transport == TRANSPORT_MIXED:
         return {
@@ -140,10 +208,12 @@ def render(report):
         return "COMPOSED-LANDED PASS transport=%s bytes=%d" % (
             report["transport"], report["disk"])
     if report.get("bom"):
+        kind = report.get("bom_kind")
+        suffix = "" if kind in (None, "utf8") else " kind=%s" % kind
         return ("COMPOSED-LANDED %s transport=%s bom=%d composed=%s disk=%d"
-                " delta=%s") % (
+                " delta=%s%s") % (
             report["word"], report["transport"], report["bom"],
-            report["composed"], report["disk"], report["delta"])
+            report["composed"], report["disk"], report["delta"], suffix)
     if report["composed"] is None:
         return "COMPOSED-LANDED %s transport=%s disk=%d" % (
             report["word"], report["transport"], report["disk"])

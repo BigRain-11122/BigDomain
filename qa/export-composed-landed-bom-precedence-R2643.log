@@ -1,0 +1,21 @@
+EVIDENCE CAPTURE round=R2643 suite=src/os/test_export_composed_landed_bom_precedence.py legs=2
+== LEG A rc=0 digest=F1D1161902F4A292
+PASS AC-EDWW1 bom_gap word=BOM-BODY-MISMATCH bom=3 delta=6 disk=21 line=COMPOSED-LANDED BOM-BODY-MISMATCH transport=lf bom=3 composed=12 disk=21 delta=6
+PASS AC-EDWW2 bom_mixed word=BOM-TRANSPORT-MIXED transport=mixed bom=3 disk=17 line=COMPOSED-LANDED BOM-TRANSPORT-MIXED transport=mixed bom=3 composed=None disk=17 delta=None
+PASS AC-EDWW3 utf16 le=UTF16-BOM-LANDING/utf16 be=UTF16-BOM-LANDING/utf16 disk=26 line=COMPOSED-LANDED UTF16-BOM-LANDING transport=lf bom=2 composed=None disk=26 delta=None kind=utf16
+PASS AC-EDWW4 short2=BOM-TRUNCATED/2/2 short1=BOM-TRUNCATED/1 legit=PASS/0
+PASS AC-EDWW5 mixed=TRANSPORT-MIXED empty=EMPTY-LANDING bom=BOM-LANDING/0 crlf=PASS caller=PASS lf=PASS gap=COMPOSED-MISMATCH/6 one=PASS export=True untouched=True
+PASS AC-EDWW6 hygiene ascii=True/True clock=False network=[] registered=True cells=6 parent_cells=6
+SUITE PASS 6/6
+== LEG B rc=0 digest=F1D1161902F4A292
+PASS AC-EDWW1 bom_gap word=BOM-BODY-MISMATCH bom=3 delta=6 disk=21 line=COMPOSED-LANDED BOM-BODY-MISMATCH transport=lf bom=3 composed=12 disk=21 delta=6
+PASS AC-EDWW2 bom_mixed word=BOM-TRANSPORT-MIXED transport=mixed bom=3 disk=17 line=COMPOSED-LANDED BOM-TRANSPORT-MIXED transport=mixed bom=3 composed=None disk=17 delta=None
+PASS AC-EDWW3 utf16 le=UTF16-BOM-LANDING/utf16 be=UTF16-BOM-LANDING/utf16 disk=26 line=COMPOSED-LANDED UTF16-BOM-LANDING transport=lf bom=2 composed=None disk=26 delta=None kind=utf16
+PASS AC-EDWW4 short2=BOM-TRUNCATED/2/2 short1=BOM-TRUNCATED/1 legit=PASS/0
+PASS AC-EDWW5 mixed=TRANSPORT-MIXED empty=EMPTY-LANDING bom=BOM-LANDING/0 crlf=PASS caller=PASS lf=PASS gap=COMPOSED-MISMATCH/6 one=PASS export=True untouched=True
+PASS AC-EDWW6 hygiene ascii=True/True clock=False network=[] registered=True cells=6 parent_cells=6
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_export_composed_landed_wordspace.py rc=0 SUITE PASS 6/6
+== src/os/test_export_composed_landed_face.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=F1D1161902F4A292

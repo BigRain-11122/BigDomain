@@ -1,0 +1,6 @@
+WORLD a_truncated_mixed      word=TRANSPORT-MIXED    transport=mixed bom=0 kind=None composed=None disk=16 delta=None
+WORLD b_utf16_against_empty  word=UTF16-BOM-LANDING  transport=lf    bom=2 kind=utf16 composed=None disk=2 delta=None
+WORLD c_bom_only             word=BOM-LANDING        transport=lf    bom=3 kind=utf8 composed=0 disk=3 delta=0
+WORLD d_utf16_no_bom         word=COMPOSED-MISMATCH  transport=lf    bom=0 kind=None composed=12 disk=24 delta=12
+WORLD e_legit_ef_start       word=PASS               transport=lf    bom=0 kind=None composed=11 disk=11 delta=0
+WORLD f_clean_lf             word=PASS               transport=lf    bom=0 kind=None composed=12 disk=12 delta=0

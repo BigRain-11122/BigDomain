@@ -4639,6 +4639,14 @@ SUITES = [
     ("os-export-composed-landed-wordspace",
      os.path.join("..", "os", "test_export_composed_landed_wordspace.py"),
      6),
+    # R2643 BOM precedence: a BOM landing whose body disagrees, a BOM landing
+    # carrying MIXED separators, a UTF-16 BOM and a truncated BOM prefix each
+    # earn their own word instead of riding on BOM-LANDING or a content delta.
+    # (AC-EDWW1..AC-EDWW6 pre-registered in state/queue/tech.md:660 at R2638
+    # BEFORE the code existed.)
+    ("os-export-composed-landed-bom-precedence",
+     os.path.join("..", "os", "test_export_composed_landed_bom_precedence.py"),
+     6),
     # R2608: the shape law widens once more - a separator drawn with MIXED
     # punctuation is a separator, a matrix title inside a fenced block or a
     # title that introduces no table is not a second title, and a walk that
