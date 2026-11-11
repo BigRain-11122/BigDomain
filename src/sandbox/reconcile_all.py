@@ -4633,6 +4633,12 @@ SUITES = [
     ("os-export-composed-landed-face",
      os.path.join("..", "os", "test_export_composed_landed_face.py"),
      6),
+    # R2638 word-space face: MIXED, EMPTY and BOM landings each earn their own word.
+    # (AC-EDWV1..AC-EDWV6 pre-registered in state/queue/tech.md:659 at R2637
+    # BEFORE the code existed.)
+    ("os-export-composed-landed-wordspace",
+     os.path.join("..", "os", "test_export_composed_landed_wordspace.py"),
+     6),
     # R2608: the shape law widens once more - a separator drawn with MIXED
     # punctuation is a separator, a matrix title inside a fenced block or a
     # title that introduces no table is not a second title, and a walk that

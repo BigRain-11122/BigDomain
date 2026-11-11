@@ -133,7 +133,11 @@ def verify():
             rep_lf["transport"] == CLF.TRANSPORT_LF
             and same_text_two_transports
             and rep_mixed["transport"] == CLF.TRANSPORT_MIXED
-            and rep_mixed["word"] == CLF.WORD_COMPOSED_MISMATCH
+            # R2638 (AC-EDWV1) gave the MIXED shape its OWN word; this criterion
+            # was always about the transport being READ OFF THE LANDED BYTES,
+            # which is unchanged, so the word it must now see follows the new
+            # law rather than the old one.
+            and rep_mixed["word"] == CLF.WORD_TRANSPORT_MIXED
             and rep_mixed["composed"] is None,
             "AC-EDWT3 lf=%s crlf=%s mixed=%s mixed_word=%s"
             % (rep_lf["transport"], rep_crlf["transport"],

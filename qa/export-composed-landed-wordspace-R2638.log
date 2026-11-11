@@ -1,0 +1,30 @@
+EVIDENCE CAPTURE round=R2638 suite=src/os/test_export_composed_landed_wordspace.py legs=2
+== LEG A rc=0 digest=8C9AC7439DF872D1
+PASS AC-EDWV1 mixed word=TRANSPORT-MIXED transport=mixed disk=14 line=COMPOSED-LANDED TRANSPORT-MIXED transport=mixed disk=14
+PASS AC-EDWV2 empty word=EMPTY-LANDING disk=0 distinct=True
+PASS AC-EDWV3 bom word=BOM-LANDING bom=3 composed=12 body_delta=0 disk=15
+PASS AC-EDWV4 words=['TRANSPORT-MIXED', 'EMPTY-LANDING', 'BOM-LANDING', 'PASS', 'PASS'] untouched=True
+PASS AC-EDWV5 lf=PASS crlf=PASS caller=PASS gap=COMPOSED-MISMATCH/6 export_words=True
+PASS AC-EDWV6 hygiene ascii=True/True clock=False network=[] registered=True cells=6 old_cells=6
+SUITE PASS 6/6
+== LEG B rc=0 digest=8C9AC7439DF872D1
+PASS AC-EDWV1 mixed word=TRANSPORT-MIXED transport=mixed disk=14 line=COMPOSED-LANDED TRANSPORT-MIXED transport=mixed disk=14
+PASS AC-EDWV2 empty word=EMPTY-LANDING disk=0 distinct=True
+PASS AC-EDWV3 bom word=BOM-LANDING bom=3 composed=12 body_delta=0 disk=15
+PASS AC-EDWV4 words=['TRANSPORT-MIXED', 'EMPTY-LANDING', 'BOM-LANDING', 'PASS', 'PASS'] untouched=True
+PASS AC-EDWV5 lf=PASS crlf=PASS caller=PASS gap=COMPOSED-MISMATCH/6 export_words=True
+PASS AC-EDWV6 hygiene ascii=True/True clock=False network=[] registered=True cells=6 old_cells=6
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_export_composed_landed_face.py rc=0 SUITE PASS 6/6
+== src/os/test_status_export_writer_dialect_wire.py rc=0 SUITE PASS 6/6
+== src/os/test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+== src/os/test_export_consistency_queue_face.py rc=0 NO SUITE LINE
+EVIDENCE identical=True adjacent=4 fails=0 digest=8C9AC7439DF872D1
+== limits rc=0 ==
+WORLD a_mixed transport=mixed composed=None disk=14 word=TRANSPORT-MIXED delta=None
+WORLD b_empty transport=lf composed=None disk=0 word=EMPTY-LANDING delta=None
+WORLD c_bom transport=lf composed=12 disk=15 word=BOM-LANDING delta=0
+WORLD d_caller_crlf transport=crlf composed=15 disk=15 word=PASS delta=0
+WORLD d_caller_crlf naive_normalised=18 disk=15
+WORLD e_single_line transport=lf composed=7 disk=7 word=PASS delta=0

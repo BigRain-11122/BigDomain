@@ -1,0 +1,5 @@
+WORLD a_bom_body_gap word=BOM-LANDING      transport=lf    bom=3 composed=12 disk=21 delta=6
+WORLD b_bom_mixed word=BOM-LANDING      transport=mixed bom=3 composed=12 disk=17 delta=2
+WORLD c_utf16_bom word=COMPOSED-MISMATCH transport=lf    bom=0 composed=12 disk=26 delta=14
+WORLD d_short_bom word=COMPOSED-MISMATCH transport=lf    bom=0 composed=12 disk=14 delta=2
+WORLD e_empty_both word=EMPTY-LANDING    transport=lf    bom=0 composed=None disk=0 delta=None

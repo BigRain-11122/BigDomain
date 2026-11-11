@@ -31,6 +31,16 @@ TRANSPORT_MIXED = "mixed"
 
 WORD_PASS = "PASS"
 WORD_COMPOSED_MISMATCH = "COMPOSED-MISMATCH"
+# R2638 (AC-EDWV1..AC-EDWV6): three landing shapes that used to ride on
+# COMPOSED-MISMATCH now carry their own word, decided in a pinned order so a
+# landing can never earn two: EMPTY first (there is no transport to read),
+# then BOM (a byte-level marker on the payload), then MIXED (a transport fact),
+# and only then the composed/landed compare.
+WORD_EMPTY_LANDING = "EMPTY-LANDING"
+WORD_BOM_LANDING = "BOM-LANDING"
+WORD_TRANSPORT_MIXED = "TRANSPORT-MIXED"
+
+BOM = b"\xef\xbb\xbf"
 
 EXIT_OK = 0
 EXIT_MISMATCH = 2
@@ -72,20 +82,46 @@ def account(path, text):
     """One read of the landed bytes, one normalised compare, one verdict word.
 
     Returns the word beside the pair it was decided on, so a caller can print
-    both counts rather than assert one.
+    both counts rather than assert one. The shapes are asked in ONE pinned
+    order (AC-EDWV4): an EMPTY landing first, a BOM landing second, a MIXED
+    transport third, and the composed/landed compare last, so no landing can
+    earn two words.
     """
     with io.open(path, "rb") as handle:
         raw = handle.read()
-    transport = read_transport(raw)
-    disk = len(raw)
+    transport_default = TRANSPORT_LF
+    if not raw:
+        return {
+            "word": WORD_EMPTY_LANDING,
+            "transport": transport_default,
+            "composed": None,
+            "disk": 0,
+            "delta": None,
+            "bom": 0,
+        }
+    bom = len(BOM) if raw.startswith(BOM) else 0
+    body = raw[bom:]
+    transport = read_transport(body)
+    if bom:
+        composed = composed_bytes(text, transport)
+        return {
+            "word": WORD_BOM_LANDING,
+            "transport": transport,
+            "composed": composed,
+            "disk": len(raw),
+            "delta": len(body) - composed,
+            "bom": bom,
+        }
     if transport == TRANSPORT_MIXED:
         return {
-            "word": WORD_COMPOSED_MISMATCH,
-            "transport": TRANSPORT_MIXED,
+            "word": WORD_TRANSPORT_MIXED,
+            "transport": transport,
             "composed": None,
-            "disk": disk,
+            "disk": len(raw),
             "delta": None,
+            "bom": 0,
         }
+    disk = len(raw)
     composed = composed_bytes(text, transport)
     word = WORD_PASS if composed == disk else WORD_COMPOSED_MISMATCH
     return {
@@ -94,6 +130,7 @@ def account(path, text):
         "composed": composed,
         "disk": disk,
         "delta": disk - composed,
+        "bom": 0,
     }
 
 
@@ -102,6 +139,11 @@ def render(report):
     if report["word"] == WORD_PASS:
         return "COMPOSED-LANDED PASS transport=%s bytes=%d" % (
             report["transport"], report["disk"])
+    if report.get("bom"):
+        return ("COMPOSED-LANDED %s transport=%s bom=%d composed=%s disk=%d"
+                " delta=%s") % (
+            report["word"], report["transport"], report["bom"],
+            report["composed"], report["disk"], report["delta"])
     if report["composed"] is None:
         return "COMPOSED-LANDED %s transport=%s disk=%d" % (
             report["word"], report["transport"], report["disk"])
