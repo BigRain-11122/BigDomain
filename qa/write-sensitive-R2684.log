@@ -1,0 +1,17 @@
+R2684 R2614 write-sensitive re-run on the final committed tree
+suites=14 rc-failures=0 missing=0
+PASS os-state-seq rc=0 pass-lines=6 path=..\os\test_state_seq.py
+PASS os-state-seq-archive rc=0 pass-lines=6 path=..\os\test_state_seq_archive.py
+PASS os-status-export-writer-dialect-wire rc=0 pass-lines=6 path=..\os\test_status_export_writer_dialect_wire.py
+PASS os-status-export-writer-transport-scope rc=0 pass-lines=6 path=..\os\test_status_export_writer_transport_scope.py
+PASS os-queue-floor-export-face rc=0 pass-lines=6 path=..\os\test_queue_floor_export_face.py
+PASS os-export-consistency-queue-face rc=0 pass-lines=15 path=..\os\test_export_consistency_queue_face.py
+PASS os-export-driver-self-drive-health rc=0 pass-lines=6 path=..\os\test_export_driver_self_drive_health.py
+PASS os-export-driver-health-verdict rc=0 pass-lines=6 path=..\os\test_export_R2431_health_verdict.py
+PASS os-patterns-label-readability rc=0 pass-lines=0 path=..\os\test_patterns_label_readability.py
+PASS os-patterns-label-readability-render-consumer rc=0 pass-lines=0 path=..\os\test_patterns_label_readability_render_consumer.py
+PASS os-patterns-non-label-text-readability rc=0 pass-lines=0 path=..\os\test_patterns_non_label_text_readability.py
+PASS os-artifact-disk-text-readability rc=0 pass-lines=0 path=..\os\test_artifact_disk_text_readability.py
+PASS os-evidence-name-text-coverage rc=0 pass-lines=0 path=..\os\test_evidence_name_text_coverage.py
+PASS os-stamp-text-coverage rc=0 pass-lines=0 path=..\os\test_stamp_text_coverage.py
+SUMMARY pass=14 fail=0
