@@ -1,0 +1,37 @@
+PASS AC-PNAJ1 a strict-prefix label carries its OWN word ({'x': 'strict-prefix-of:xy'})
+PASS AC-PNAJ1 the reason is NOT fully named (False)
+PASS AC-PNAJ1 only the prefix side is unnameable, the sibling is not (strict-prefix-of:xy/None)
+PASS AC-PNAJ1 a healthy prefix set beside an unnameable label reads SEAMS-MATCH-ORDINAL-UNIQUE-PREFIX-UNNAMEABLE, never the covered word
+PASS AC-PNAJ2 a duplicated label carries a duplicate word with its count ({'a': 'duplicate:2'})
+PASS AC-PNAJ2 the count is measured rather than assumed
+PASS AC-PNAJ2 a duplicate is never fully named, a single one is
+PASS AC-PNAJ2 a duplicate label withholds the covered word (SEAMS-MATCH-ORDINAL-UNIQUE-PREFIX-UNNAMEABLE)
+PASS AC-PNAJ2 the two shapes carry DIFFERENT words rather than one generic refusal
+PASS AC-PNAJ3 the three-binding prefixes ride byte for byte ({'while2>case': 'while2>', 'while2_body>case': 'while2_', 'while>case': 'while>'})
+PASS AC-PNAJ3 the three-binding labels are all nameable, so nothing is newly withheld
+PASS AC-PNAJ3 the three-binding prefixes stay prefix-free (['while2>', 'while2_', 'while>'])
+PASS AC-PNAJ3 the else pair prefixes ride byte for byte ({'while_else2>case': 'while_else2', 'while_else>case': 'while_else>'})
+PASS AC-PNAJ3 the else pair labels are all nameable, so nothing is newly withheld
+PASS AC-PNAJ3 the else pair prefixes stay prefix-free (['while_else2', 'while_else>'])
+PASS AC-PNAJ4 a match inside a for body nested in a while keeps the shipped refusal byte for byte (attr-module-alias-unbound:M.HW)
+PASS AC-PNAJ4 no branch read is published ([])
+PASS AC-PNAJ4 a refusal carries no ack labels and no unnameable labels ([]/{})
+PASS AC-PNAJ4 a match nested one level in a while inside another while keeps the shipped refusal byte for byte (attr-module-alias-unbound:M.HW)
+PASS AC-PNAJ4 no branch read is published ([])
+PASS AC-PNAJ4 a refusal carries no ack labels and no unnameable labels ([]/{})
+PASS AC-PNAJ4 a walrus bound by an if nested inside a match case keeps the shipped refusal byte for byte (attr-module-alias-unbound:M.HW)
+PASS AC-PNAJ4 no branch read is published ([])
+PASS AC-PNAJ4 a refusal carries no ack labels and no unnameable labels ([]/{})
+PASS AC-PNAJ5 module-level if branch reads exactly what R2675 answered (ok/b)
+PASS AC-PNAJ5 while else direct walrus reads exactly what R2675 answered (ok/b)
+PASS AC-PNAJ5 two matches in ONE while reads exactly what R2675 answered (refused/None)
+PASS AC-PNAJ5 the three-binding answer is unchanged from R2678 (refused)
+PASS AC-PNAJ5 the else pair answer is unchanged from R2678 (refused)
+PASS AC-PNAJ5 a bounded live leg rides unchanged and read-only (modules=1 loops=22 unreadable=0 changed=[] disagree=[])
+PASS AC-PNAJ6 the module source is pure ASCII (9691 bytes)
+PASS AC-PNAJ6 no clock, no network, no shell ([])
+PASS AC-PNAJ6 the registry carries exactly one label row (1)
+PASS AC-PNAJ6 the registry carries exactly one suite row (1)
+PASS AC-PNAJ6 this suite exists on disk
+PASS AC-PNAJ6 six criteria are declared
+SUITE PASS 6/6

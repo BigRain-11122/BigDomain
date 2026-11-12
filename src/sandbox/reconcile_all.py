@@ -6513,6 +6513,18 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_scope.py"),
      6),
+    # R2679: the R2678 ack index could publish COVERED while a label was
+    # unnameable, because prefix_free only sees PUBLISHED prefixes. Two shapes
+    # were measured first: ['x','xy'] (strict prefix of a sibling) and ['a','a']
+    # (the same string twice) each read prefix_free True with a non-empty
+    # ack_unmatched. This face names every unnameable label with its own word
+    # and withholds the covered word whenever one exists (656 -> 657 suites,
+    # 4912 -> 4918).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-unnameable-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_scope.py"),
+     6),
     # R2595 birth-site repair of the round export driver health term: it
     # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
     # the recompute caliber can never satisfy once one tokens line sits in the
