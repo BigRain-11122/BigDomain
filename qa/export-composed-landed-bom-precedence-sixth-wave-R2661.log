@@ -1,0 +1,25 @@
+EVIDENCE CAPTURE round=R2659 suite=src/os/test_export_composed_landed_bom_precedence_sixth_wave.py legs=2
+== LEG A rc=0 digest=A41B49D517C3E19A
+PASS AC-EDXB1 le_cut=UTF16-BOM-CUT/1 body=22 be_cut=UTF16-BOM-CUT/2 line=COMPOSED-LANDED UTF16-BOM-CUT transport=lf bom=2 composed=26 disk=24 delta=-2 kind=utf16-cut body=22 body_transport=None cut_units=1
+PASS AC-EDXB2 composed=26 disk=24 delta=-2 be_delta=-4 line=COMPOSED-LANDED UTF16-BOM-CUT transport=lf bom=2 composed=26 disk=24 delta=-2 kind=utf16-cut body=22 body_transport=None cut_units=1
+PASS AC-EDXB3 word=UTF16-BOM-LANDING composed=None delta=None judged=False refusal=NOT-TEXT-NOR-HEAD line=COMPOSED-LANDED UTF16-BOM-LANDING transport=lf bom=2 composed=None disk=4 delta=None kind=utf16 refusal=NOT-TEXT-NOR-HEAD
+PASS AC-EDXB4 empty_text=UTF16-BOM-BODY-GAP/2/24 double_even_two=BOM-DOUBLE-MARKER/2
+PASS AC-EDXB5 utf16=UTF16-BOM-LANDING/26 gap=UTF16-BOM-BODY-GAP/4 marker_only=UTF16-BOM-MARKER-ONLY short2=BOM-TRUNCATED/2 short1=BOM-TRUNCATED/1 trunc_mixed=BOM-TRUNCATED-MIXED trunc_gap=BOM-TRUNCATED-MIXED-GAP bom_only=BOM-EMPTY-PAYLOAD empty=EMPTY-LANDING lf=PASS crlf=PASS mixed=TRANSPORT-MIXED/0 legit=TRANSPORT-MIXED/0 one=COMPOSED-MISMATCH untouched=True
+PASS AC-EDXB6 hygiene ascii=True/True clock=False network=[] registered=True cells=6 parent_cells=6
+SUMMARY PASS 6/6
+== LEG B rc=0 digest=A41B49D517C3E19A
+PASS AC-EDXB1 le_cut=UTF16-BOM-CUT/1 body=22 be_cut=UTF16-BOM-CUT/2 line=COMPOSED-LANDED UTF16-BOM-CUT transport=lf bom=2 composed=26 disk=24 delta=-2 kind=utf16-cut body=22 body_transport=None cut_units=1
+PASS AC-EDXB2 composed=26 disk=24 delta=-2 be_delta=-4 line=COMPOSED-LANDED UTF16-BOM-CUT transport=lf bom=2 composed=26 disk=24 delta=-2 kind=utf16-cut body=22 body_transport=None cut_units=1
+PASS AC-EDXB3 word=UTF16-BOM-LANDING composed=None delta=None judged=False refusal=NOT-TEXT-NOR-HEAD line=COMPOSED-LANDED UTF16-BOM-LANDING transport=lf bom=2 composed=None disk=4 delta=None kind=utf16 refusal=NOT-TEXT-NOR-HEAD
+PASS AC-EDXB4 empty_text=UTF16-BOM-BODY-GAP/2/24 double_even_two=BOM-DOUBLE-MARKER/2
+PASS AC-EDXB5 utf16=UTF16-BOM-LANDING/26 gap=UTF16-BOM-BODY-GAP/4 marker_only=UTF16-BOM-MARKER-ONLY short2=BOM-TRUNCATED/2 short1=BOM-TRUNCATED/1 trunc_mixed=BOM-TRUNCATED-MIXED trunc_gap=BOM-TRUNCATED-MIXED-GAP bom_only=BOM-EMPTY-PAYLOAD empty=EMPTY-LANDING lf=PASS crlf=PASS mixed=TRANSPORT-MIXED/0 legit=TRANSPORT-MIXED/0 one=COMPOSED-MISMATCH untouched=True
+PASS AC-EDXB6 hygiene ascii=True/True clock=False network=[] registered=True cells=6 parent_cells=6
+SUMMARY PASS 6/6
+== ADJACENT 6
+== src/os/test_export_composed_landed_bom_precedence_fifth_wave.py rc=0 NO SUITE LINE
+== src/os/test_export_composed_landed_bom_precedence_fourth_wave.py rc=0 SUITE PASS 6/6
+== src/os/test_export_composed_landed_bom_precedence_third_wave.py rc=0 SUITE PASS 6/6
+== src/os/test_export_composed_landed_bom_precedence_second_wave.py rc=0 SUITE PASS 6/6
+== src/os/test_export_composed_landed_bom_precedence.py rc=0 SUITE PASS 6/6
+== src/os/test_export_composed_landed_face.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=6 fails=0 digest=A41B49D517C3E19A

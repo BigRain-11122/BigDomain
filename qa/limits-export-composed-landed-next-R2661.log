@@ -1,0 +1,4 @@
+WORLD a_surrogate_half       word=UTF16-BOM-CUT          composed=12     disk=10   delta=-2    kind=utf16-cut    body=8     cut_units=1    refusal=None
+WORLD b_crlf_cut             word=UTF16-BOM-LANDING      composed=10     disk=10   delta=0     kind=utf16        body=None  cut_units=None refusal=None
+WORLD c_cut_behind_two       word=BOM-DOUBLE-MARKER      composed=None   disk=13   delta=None  kind=utf8+utf16   body=8     cut_units=None refusal=None
+WORLD d_be_three_units       word=UTF16-BOM-CUT          composed=16     disk=10   delta=-6    kind=utf16-cut    body=8     cut_units=3    refusal=None

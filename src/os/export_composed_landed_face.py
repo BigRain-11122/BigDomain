@@ -113,6 +113,28 @@ WORD_UTF16_BOM_SHORT_BODY = "UTF16-BOM-SHORT-BODY"
 #                               its count only, never as short, although a
 #                               UTF-16 body is an even number of bytes.
 WORD_UTF16_BOM_BODY_GAP = "UTF16-BOM-BODY-GAP"
+# R2659 sixth wave (AC-EDXB1..AC-EDXB6 pinned at R2657 in
+# state/queue/tech.md:665 BEFORE this code existed). Two shapes still rode on a
+# word that decided nothing, MEASURED at R2657 with
+# src/os/limits_export_composed_landed_next_R2657.py and re-measured by this
+# window before any byte was written (qa/limits-export-composed-landed-sixth-
+# wave-before-R2659.log):
+#   UTF16-BOM-LANDING disk=24 - a UTF-16LE landing CUT by exactly one code
+#                               unit, whose body is an EVEN number of bytes and
+#                               a strict PREFIX of the text encoding, read as a
+#                               whole landing with composed=None, so a lost
+#                               character in a UTF-16 landing was named by no
+#                               word and no delta;
+#   UTF16-BOM-LANDING disk=4  - an EVEN body that is neither the text nor a
+#                               head of it read the historical word with no
+#                               count, which is the right ANSWER but a silent
+#                               one: the refusal to judge was never named.
+WORD_UTF16_BOM_CUT = "UTF16-BOM-CUT"
+# AC-EDXB3: the refusal is named rather than left silent. A body that is
+# neither the composed text nor a head of it is not something this face can
+# decide from bytes alone, so it keeps the historical whole-landing word and
+# says out loud that it declined.
+REFUSAL_NOT_TEXT_NOR_HEAD = "NOT-TEXT-NOR-HEAD"
 
 BOM = b"\xef\xbb\xbf"
 # A strict PREFIX of the UTF-8 BOM, one or two bytes: the shape a writer lands
@@ -258,6 +280,26 @@ def account(path, text):
                     "bom_kind": "utf16-gap",
                     "agrees": False,
                 }
+            if len(body16) < len(folded16) and body16 == folded16[:len(body16)]:
+                # AC-EDXB1/AC-EDXB2: a body that is a strict PREFIX of the
+                # composed text in its own codec is a CUT, not a whole
+                # landing, and the number of code units it lost is carried
+                # beside the count the whole landing would have been, so a
+                # delta is published rather than None. The even-length check
+                # above cannot catch this shape: one lost UTF-16 character is
+                # two bytes, so a cut landing still has an EVEN body.
+                lost = len(folded16) - len(body16)
+                return {
+                    "word": WORD_UTF16_BOM_CUT,
+                    "transport": read_transport(body16),
+                    "composed": expected,
+                    "disk": len(raw),
+                    "delta": len(raw) - expected,
+                    "bom": len(mark),
+                    "bom_kind": "utf16-cut",
+                    "body": len(body16),
+                    "cut_units": lost // 2,
+                }
             return {
                 "word": WORD_UTF16_BOM,
                 "transport": read_transport(body16),
@@ -266,6 +308,11 @@ def account(path, text):
                 "delta": None,
                 "bom": len(mark),
                 "bom_kind": "utf16",
+                # AC-EDXB3: the answer stays the historical word, and the
+                # reason nothing was compared is published instead of being
+                # left as an absent count a reader has to guess at.
+                "judged": False,
+                "refusal": REFUSAL_NOT_TEXT_NOR_HEAD,
             }
     if raw.startswith(BOM) and raw[len(BOM):len(BOM) + 2] in UTF16_BOMS:
         # AC-EDWY4: two markers on one landing are named as BOTH markers
@@ -438,6 +485,13 @@ def render(report):
             # reader sees BOTH that it sits behind two markers and that the
             # remainder cannot be a whole UTF-16 payload.
             suffix += " body_short=1"
+        if report.get("cut_units") is not None:
+            # AC-EDXB1: the units the landing lost ride in the line itself, so
+            # a CUT can be read without opening the report dict.
+            suffix += " cut_units=%d" % report["cut_units"]
+        if report.get("refusal"):
+            # AC-EDXB3: a refusal to judge is spoken, not implied by a gap.
+            suffix += " refusal=%s" % report["refusal"]
         return ("COMPOSED-LANDED %s transport=%s bom=%d composed=%s disk=%d"
                 " delta=%s%s") % (
             report["word"], report["transport"], report["bom"],

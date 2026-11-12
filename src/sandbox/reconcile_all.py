@@ -4689,6 +4689,18 @@ SUITES = [
      os.path.join("..", "os",
                   "test_export_composed_landed_bom_precedence_fifth_wave.py"),
      6),
+    # R2659: a UTF-16 body that is the text encoding minus a WHOLE NUMBER of
+    # code units is a CUT rather than a whole landing, and the units it lost
+    # ride in the answer beside the whole landing it would have been, so a
+    # delta is published rather than None. A body that is neither the text nor
+    # a head of it keeps the historical word, reports no delta, and NAMES the
+    # refusal instead of leaving it silent.
+    # (AC-EDXB1..AC-EDXB6 pre-registered in state/queue/tech.md:665 at R2657
+    # BEFORE the code existed.)
+    ("os-export-composed-landed-bom-precedence-sixth-wave",
+     os.path.join("..", "os",
+                  "test_export_composed_landed_bom_precedence_sixth_wave.py"),
+     6),
     # R2608: the shape law widens once more - a separator drawn with MIXED
     # punctuation is a separator, a matrix title inside a fenced block or a
     # title that introduces no table is not a second title, and a walk that
