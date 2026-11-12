@@ -4701,6 +4701,17 @@ SUITES = [
      os.path.join("..", "os",
                   "test_export_composed_landed_bom_precedence_sixth_wave.py"),
      6),
+    # R2671 seventh wave: the equal-length branch compares BYTES instead of
+    # lengths, so a wrong payload of the right size is named apart from a clean
+    # landing; the code units a cut lost are named apart from the whole
+    # characters it lost, so a lone surrogate half is not counted as one; and
+    # a cut that sits behind two markers is named instead of vanishing.
+    # (AC-EDXC1..AC-EDXC6 pre-registered in state/queue/tech.md:666 at R2661
+    # BEFORE the code existed.)
+    ("os-export-composed-landed-bom-precedence-seventh-wave",
+     os.path.join("..", "os",
+                  "test_export_composed_landed_bom_precedence_seventh_wave.py"),
+     6),
     # R2608: the shape law widens once more - a separator drawn with MIXED
     # punctuation is a separator, a matrix title inside a fenced block or a
     # title that introduces no table is not a second title, and a walk that

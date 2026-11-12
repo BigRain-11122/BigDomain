@@ -135,6 +135,22 @@ WORD_UTF16_BOM_CUT = "UTF16-BOM-CUT"
 # decide from bytes alone, so it keeps the historical whole-landing word and
 # says out loud that it declined.
 REFUSAL_NOT_TEXT_NOR_HEAD = "NOT-TEXT-NOR-HEAD"
+# R2671 seventh wave (AC-EDXC1..AC-EDXC6 pinned at R2661 in
+# state/queue/tech.md:666 BEFORE this code existed). Two shapes still rode on
+# an answer that decided nothing, MEASURED at R2661 with
+# src/os/limits_export_composed_landed_next_R2661.py and re-measured by this
+# window before any byte was written
+# (qa/limits-export-composed-landed-seventh-wave-before-R2671.log):
+#   UTF16-BOM-LANDING composed=10 disk=10 delta=0 agrees=True - a UTF-16 body
+#                               of the SAME LENGTH as the composed text but a
+#                               DIFFERENT content, because the equal-length
+#                               branch compared LENGTHS ONLY, so a wrong
+#                               payload of the right size read as a clean
+#                               whole landing;
+#   UTF16-BOM-CUT cut_units=1  - the lost count was code units and nothing
+#                               said whether the unit lost was a whole
+#                               character or HALF of a surrogate pair.
+WORD_UTF16_BOM_BODY_MISMATCH = "UTF16-BOM-BODY-MISMATCH"
 
 BOM = b"\xef\xbb\xbf"
 # A strict PREFIX of the UTF-8 BOM, one or two bytes: the shape a writer lands
@@ -180,6 +196,41 @@ def composed_bytes(text, transport):
     if transport == TRANSPORT_CRLF:
         return len(folded.replace("\n", "\r\n").encode("utf-8"))
     return len(folded.encode("utf-8"))
+
+
+def cut_facts(body, folded, codec, folded_text):
+    """What a CUT landing lost, with the units and the whole characters apart.
+
+    AC-EDXC3: a UTF-16 code unit is not a character. A body whose tail is a
+    LONE SURROGATE HALF lost one unit that is only half of the character it
+    belonged to, so the number of WHOLE characters lost is one less than the
+    number of units, and the half is flagged rather than counted. Nothing is
+    guessed: the flag is read from the bytes, which either decode in their
+    own codec or do not.
+    """
+    units = (len(folded) - len(body)) // 2
+    decoded = None
+    surrogate_half = False
+    try:
+        decoded = body.decode(codec)
+    except UnicodeDecodeError:
+        # The tail is an unpaired surrogate: the last unit is half a character.
+        surrogate_half = True
+        try:
+            decoded = body[:-2].decode(codec)
+        except UnicodeDecodeError:
+            decoded = None
+    if decoded is None:
+        chars = None
+    elif surrogate_half:
+        chars = len(folded_text) - (len(decoded) + 1)
+    else:
+        chars = len(folded_text) - len(decoded)
+    return {
+        "cut_units": units,
+        "cut_chars": chars,
+        "surrogate_half": surrogate_half,
+    }
 
 
 def account(path, text):
@@ -258,6 +309,23 @@ def account(path, text):
             codec = ("utf-16-le" if mark == b"\xff\xfe" else "utf-16-be")
             folded16 = text.replace("\r\n", "\n").encode(codec)
             expected = len(mark) + len(folded16)
+            if len(body16) == len(folded16) and body16 != folded16:
+                # AC-EDXC1/AC-EDXC2: the same LENGTH is not the same payload.
+                # A body that is the right size and the wrong content is named
+                # apart from an agreeing landing, and the counts it was
+                # measured against ride with it so the word is never bare.
+                return {
+                    "word": WORD_UTF16_BOM_BODY_MISMATCH,
+                    "transport": read_transport(body16),
+                    "composed": expected,
+                    "disk": len(raw),
+                    "delta": len(raw) - expected,
+                    "bom": len(mark),
+                    "bom_kind": "utf16-body-mismatch",
+                    "agrees": False,
+                    "body": len(body16),
+                    "body_differs": True,
+                }
             if len(body16) == len(folded16):
                 return {
                     "word": WORD_UTF16_BOM,
@@ -289,6 +357,8 @@ def account(path, text):
                 # above cannot catch this shape: one lost UTF-16 character is
                 # two bytes, so a cut landing still has an EVEN body.
                 lost = len(folded16) - len(body16)
+                facts = cut_facts(
+                    body16, folded16, codec, text.replace("\r\n", "\n"))
                 return {
                     "word": WORD_UTF16_BOM_CUT,
                     "transport": read_transport(body16),
@@ -299,6 +369,8 @@ def account(path, text):
                     "bom_kind": "utf16-cut",
                     "body": len(body16),
                     "cut_units": lost // 2,
+                    "cut_chars": facts["cut_chars"],
+                    "surrogate_half": facts["surrogate_half"],
                 }
             return {
                 "word": WORD_UTF16_BOM,
@@ -326,7 +398,25 @@ def account(path, text):
         # because AC-EDWZ3 own fixture (a three byte body) must keep its answer
         # (AC-EDXA5), so the short fact is published as its own field and its
         # own rendered token rather than by replacing a word a parent pinned.
-        return {
+        # AC-EDXC4: a CUT that sits behind BOTH markers is named too - the
+        # body is read in the SECOND marker own codec, because that is the
+        # codec the marker behind it already declared.
+        second = raw[len(BOM):len(BOM) + 2]
+        second_codec = ("utf-16-le" if second == b"\xff\xfe"
+                        else "utf-16-be")
+        folded_second = text.replace("\r\n", "\n").encode(second_codec)
+        cut = {}
+        if behind and len(behind) < len(folded_second) \
+                and behind == folded_second[:len(behind)]:
+            facts = cut_facts(
+                behind, folded_second, second_codec,
+                text.replace("\r\n", "\n"))
+            cut = {
+                "cut_units": facts["cut_units"],
+                "cut_chars": facts["cut_chars"],
+                "surrogate_half": facts["surrogate_half"],
+            }
+        report = {
             "word": WORD_BOM_DOUBLE_MARKER,
             "transport": TRANSPORT_LF,
             "composed": None,
@@ -338,6 +428,8 @@ def account(path, text):
             "body_transport": read_transport(behind),
             "body_short": bool(len(behind) % 2),
         }
+        report.update(cut)
+        return report
     if raw == BOM:
         # AC-EDWX3: a BOM with no payload names the empty payload instead of
         # reading a clean BOM landing at delta=0. AC-EDWY2: when the composed
@@ -488,7 +580,19 @@ def render(report):
         if report.get("cut_units") is not None:
             # AC-EDXB1: the units the landing lost ride in the line itself, so
             # a CUT can be read without opening the report dict.
+            # AC-EDXC3: the whole characters lost ride BESIDE the units, and a
+            # tail that is half a surrogate pair is flagged, so one lost unit
+            # is never read as one lost character.
             suffix += " cut_units=%d" % report["cut_units"]
+            if report.get("cut_chars") is not None:
+                suffix += " cut_chars=%d" % report["cut_chars"]
+            if report.get("surrogate_half"):
+                suffix += " surrogate_half=1"
+        if report.get("body_differs"):
+            # AC-EDXC2: the counts alone would read clean here, because a
+            # wrong payload of the right size has delta=0, so the fact that
+            # the BYTES differ is spoken rather than inferred.
+            suffix += " body_differs=1"
         if report.get("refusal"):
             # AC-EDXB3: a refusal to judge is spoken, not implied by a gap.
             suffix += " refusal=%s" % report["refusal"]

@@ -1,0 +1,19 @@
+LIMITS export_composed_landed_face, SEVENTH WAVE, measured at R2671 OPEN
+BEFORE any byte of this window was written (src/os/limits_export_composed_landed_next_R2661.py,
+re-run on the committed tree d0ee050c-era HEAD 780fe163). These are the readings the seed
+row state/queue/tech.md:666 was pinned from, re-measured rather than quoted:
+
+WORLD a_surrogate_half       word=UTF16-BOM-CUT          composed=12  disk=10  delta=-2  kind=utf16-cut  body=8  cut_units=1  refusal=None
+WORLD b_crlf_cut             word=UTF16-BOM-LANDING      composed=10  disk=10  delta=0   kind=utf16      body=None cut_units=None refusal=None
+WORLD c_cut_behind_two       word=BOM-DOUBLE-MARKER      composed=None disk=13 delta=None kind=utf8+utf16 body=8 cut_units=None refusal=None
+WORLD d_be_three_units       word=UTF16-BOM-CUT          composed=16  disk=10  delta=-6  kind=utf16-cut  body=8  cut_units=3  refusal=None
+
+Naming of what each reading means, measured not guessed:
+  b_crlf_cut      a UTF-16 body of the SAME LENGTH as the composed text (10) and a DIFFERENT
+                  content read as a clean whole landing with agrees=True, because the
+                  equal-length branch compared lengths only (AC-EDXC1).
+  a_surrogate_half a cut landed cut_units=1 and nothing said whether the unit lost was a whole
+                  character or half of a surrogate pair (AC-EDXC3).
+  c_cut_behind_two a cut behind the UTF-8 BOM and a UTF-16 marker at once kept the parent word
+                  and never named the cut (AC-EDXC4).
+  d_be_three_units re-measured unchanged: cut_units=3, delta=-6 (AC-EDXC4).
