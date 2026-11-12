@@ -1,0 +1,12 @@
+SUITE PASS 6/? suite=os-status-export-writer-dialect-wire exit=0 pass-lines=6 fail-lines=0
+SUITE PASS 6/? suite=os-queue-floor-export-face exit=0 pass-lines=6 fail-lines=0
+SUITE PASS 15/? suite=os-export-consistency-queue-face exit=0 pass-lines=15 fail-lines=0
+SUITE PASS 0/? suite=os-patterns-label-readability exit=0 pass-lines=0 fail-lines=0
+SUITE PASS 0/? suite=os-patterns-label-readability-render-consumer exit=0 pass-lines=0 fail-lines=0
+SUITE PASS 0/? suite=os-patterns-non-label-text-readability exit=0 pass-lines=0 fail-lines=0
+SUITE PASS 0/? suite=os-artifact-disk-text-readability exit=0 pass-lines=0 fail-lines=0
+SUITE PASS 0/? suite=os-evidence-name-text-coverage exit=0 pass-lines=0 fail-lines=0
+SUITE PASS 0/? suite=os-stamp-text-coverage exit=0 pass-lines=0 fail-lines=0
+SUITE PASS 6/? suite=os-export-driver-self-drive-health exit=0 pass-lines=6 fail-lines=0
+SUITE PASS 6/? suite=os-export-driver-health-verdict exit=0 pass-lines=6 fail-lines=0
+WRITE-SENSITIVE rc-failures=0 suites=11 tree=final-committed
