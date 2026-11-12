@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T06:41:02+08:00",
+  "export_ts": "2026-11-13T06:42:56+08:00",
   "do": "2026-11-13 R2688 VERIFICATION window ADOPTING the retry leg R2687 launched and CLOSING reconcile-battery-R2685 GREEN at the pre-registered 659 suites / 4930 criteria. Five readings at open: git status carried exactly ONE untracked file qa/reconcile-all-R2686-retry.log, which is this window own adopted work and not residue, at HEAD 93c08930 with no index.lock; ZERO @BigDomain rows in the group ledg",
   "ceo_face": {
     "current": "2026-11-13 R2688 VERIFICATION window ADOPTING the retry leg R2687 launched and CLOSING reconcile-battery-R2685 GREEN at the pre-registered 659 suites / 4930 criteria. Five readings at open: git status carried exactly ONE untracked file qa/reconcile-all-R2686-retry.log, which is this window own adopted work and not residue, at HEAD 93c08930 with no index.lock; ZERO @BigDomain rows in the group ledg",
     "latest_artifact": "write-sensitive-R2688-first-red.log (1204B) + write-sensitive-R2688.log (1204B)",
     "last_artifact": "write-sensitive-R2688-first-red.log (1204B) + write-sensitive-R2688.log (1204B)",
-    "next_milestone": "next window owes product-face-R2688 on the committed tree, inside a 48h window due 2026-11-15T06:41:02+08:00",
-    "next_milestone_due": "2026-11-15T06:41:02+08:00",
-    "updated_at": "2026-11-13T06:41:02+08:00"
+    "next_milestone": "next window owes product-face-R2688 on the committed tree, inside a 48h window due 2026-11-15T06:42:56+08:00",
+    "next_milestone_due": "2026-11-15T06:42:56+08:00",
+    "updated_at": "2026-11-13T06:42:56+08:00"
   },
   "depts": [
     {
@@ -1009,7 +1009,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 61,
+    "log_lines_in_window": 62,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 18,
