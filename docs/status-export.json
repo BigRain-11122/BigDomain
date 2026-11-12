@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T15:24:13+08:00",
+  "export_ts": "2026-11-12T15:26:31+08:00",
   "do": "2026-11-12 R2674 VERIFICATION window ADOPTED the detached battery leg R2673 launched and CLOSED reconcile-battery-R2671 GREEN at the pre-registered 654 suites / 4900 criteria. MEASURED NOT QUOTED: the stream closed on RUNNER PASS (654/654 suites green, reconcile controls 7/7, 3238.7s) and BATTERY rc=0 3241.0s after TMP RECLAIM 697/697 at 241.16 MiB, and the pid chain (63200, 38276, 72800) was gone",
   "ceo_face": {
     "current": "2026-11-12 R2674 VERIFICATION window ADOPTED the detached battery leg R2673 launched and CLOSED reconcile-battery-R2671 GREEN at the pre-registered 654 suites / 4900 criteria. MEASURED NOT QUOTED: the stream closed on RUNNER PASS (654/654 suites green, reconcile controls 7/7, 3238.7s) and BATTERY rc=0 3241.0s after TMP RECLAIM 697/697 at 241.16 MiB, and the pid chain (63200, 38276, 72800) was gone",
     "latest_artifact": "none landed yet for R2674",
     "last_artifact": "none landed yet for R2674",
-    "next_milestone": "next window owes product-face-R2674 on the committed tree, inside a 48h window due 2026-11-14T15:24:13+08:00",
-    "next_milestone_due": "2026-11-14T15:24:13+08:00",
-    "updated_at": "2026-11-12T15:24:13+08:00"
+    "next_milestone": "next window owes product-face-R2674 on the committed tree, inside a 48h window due 2026-11-14T15:26:31+08:00",
+    "next_milestone_due": "2026-11-14T15:26:31+08:00",
+    "updated_at": "2026-11-12T15:26:31+08:00"
   },
   "depts": [
     {
