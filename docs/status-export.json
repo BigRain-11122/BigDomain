@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T13:33:04+08:00",
+  "export_ts": "2026-11-12T13:37:39+08:00",
   "do": "2026-11-12 R2669 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2661 at 653 suites / 4894 criteria). Five readings at open: git status EMPTY at HEAD d0ee050c equal to origin/main with no index.lock; atbd_lines=0 unreplied_groups=0 in cph4/evolution-ledger.md; the content-addressed decisions scan read rows=114 tokens=63 with new=0; the group orders tail still carri",
   "ceo_face": {
     "current": "2026-11-12 R2669 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2661 at 653 suites / 4894 criteria). Five readings at open: git status EMPTY at HEAD d0ee050c equal to origin/main with no index.lock; atbd_lines=0 unreplied_groups=0 in cph4/evolution-ledger.md; the content-addressed decisions scan read rows=114 tokens=63 with new=0; the group orders tail still carri",
-    "latest_artifact": "none landed yet for R2669",
-    "last_artifact": "none landed yet for R2669",
-    "next_milestone": "next window owes product-face-R2669 on the committed tree, inside a 48h window due 2026-11-14T13:33:04+08:00",
-    "next_milestone_due": "2026-11-14T13:33:04+08:00",
-    "updated_at": "2026-11-12T13:33:04+08:00"
+    "latest_artifact": "verify-reinsert-R2669.log (1109B)",
+    "last_artifact": "verify-reinsert-R2669.log (1109B)",
+    "next_milestone": "next window owes product-face-R2669 on the committed tree, inside a 48h window due 2026-11-14T13:37:39+08:00",
+    "next_milestone_due": "2026-11-14T13:37:39+08:00",
+    "updated_at": "2026-11-12T13:37:39+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "verify-reinsert-R2669.log (1109B)",
     "none landed yet for R2669",
     "none landed yet for R2667",
     "none landed yet for R2665",
@@ -989,10 +990,10 @@
   "self_drive": {
     "window": "2026-11-06..2026-11-12",
     "window_days": 7,
-    "log_lines_in_window": 19,
+    "log_lines_in_window": 18,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 17,
     "proposals_total": 7,
     "proposals_open": 5,
     "queue_main_open": 6,
