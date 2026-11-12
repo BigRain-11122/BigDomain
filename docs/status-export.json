@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T03:57:57+08:00",
+  "export_ts": "2026-11-13T03:59:47+08:00",
   "do": "2026-11-13 R2684 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2682, pre-registered 658 suites / 4924 criteria at R2682). Five readings at open: git status carried exactly ONE untracked file qa/reconcile-all-R2683.log, which is this window own adopted work and not residue, at HEAD 6d66183e with no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unreplied",
   "ceo_face": {
     "current": "2026-11-13 R2684 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2682, pre-registered 658 suites / 4924 criteria at R2682). Five readings at open: git status carried exactly ONE untracked file qa/reconcile-all-R2683.log, which is this window own adopted work and not residue, at HEAD 6d66183e with no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unreplied",
     "latest_artifact": "write-sensitive-R2684.log (1548B)",
     "last_artifact": "write-sensitive-R2684.log (1548B)",
-    "next_milestone": "next window owes product-face-R2684 on the committed tree, inside a 48h window due 2026-11-15T03:57:57+08:00",
-    "next_milestone_due": "2026-11-15T03:57:57+08:00",
-    "updated_at": "2026-11-13T03:57:57+08:00"
+    "next_milestone": "next window owes product-face-R2684 on the committed tree, inside a 48h window due 2026-11-15T03:59:47+08:00",
+    "next_milestone_due": "2026-11-15T03:59:47+08:00",
+    "updated_at": "2026-11-13T03:59:47+08:00"
   },
   "depts": [
     {
@@ -1005,7 +1005,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 69,
+    "log_lines_in_window": 70,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 28,
