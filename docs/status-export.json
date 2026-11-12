@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T11:06:53+08:00",
+  "export_ts": "2026-11-12T11:10:03+08:00",
   "do": "2026-11-12 R2659 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2657, pre-registered 652 suites / 4888 criteria at R2657 because that window moved one product src file, one suite and one registry row). Five readings at open: git status carried ONLY this round own two untracked artifacts (the evidence file and its one-off launcher) at HEAD c6595f63 equal to origin/",
   "ceo_face": {
     "current": "2026-11-12 R2659 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2657, pre-registered 652 suites / 4888 criteria at R2657 because that window moved one product src file, one suite and one registry row). Five readings at open: git status carried ONLY this round own two untracked artifacts (the evidence file and its one-off launcher) at HEAD c6595f63 equal to origin/",
     "latest_artifact": "reconcile-all-R2659.log (1105823B)",
     "last_artifact": "reconcile-all-R2659.log (1105823B)",
-    "next_milestone": "next window owes product-face-R2659 on the committed tree, inside a 48h window due 2026-11-14T11:06:53+08:00",
-    "next_milestone_due": "2026-11-14T11:06:53+08:00",
-    "updated_at": "2026-11-12T11:06:53+08:00"
+    "next_milestone": "next window owes product-face-R2659 on the committed tree, inside a 48h window due 2026-11-14T11:10:03+08:00",
+    "next_milestone_due": "2026-11-14T11:10:03+08:00",
+    "updated_at": "2026-11-12T11:10:03+08:00"
   },
   "depts": [
     {
@@ -984,10 +984,10 @@
   "self_drive": {
     "window": "2026-11-06..2026-11-12",
     "window_days": 7,
-    "log_lines_in_window": 18,
+    "log_lines_in_window": 17,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 7,
     "proposals_open": 5,
     "queue_main_open": 6,
