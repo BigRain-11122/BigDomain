@@ -106,10 +106,19 @@ def recompute():
     d_max = max(dates)
     d_min = d_max - _dt.timedelta(days=6)
 
+    # A round's sub-lines carry no date of their own - tokens lines never do and
+    # the proof/board/push receipt lines usually do not either - so they belong to
+    # the round line they follow rather than to no window at all. Reading only the
+    # prefixed lines measured 16 window lines against 36 undated ones at R2676,
+    # which made the substantive count trivially equal to the line count and cost
+    # this health term the discrimination it exists to give.
     win_lines = []
+    cur = None
     for ln in log:
         m = RE_DATE_PREFIX.match(ln)
-        if m and d_min <= _dt.date.fromisoformat(m.group(1)) <= d_max:
+        if m:
+            cur = _dt.date.fromisoformat(m.group(1))
+        if cur is not None and d_min <= cur <= d_max:
             win_lines.append(ln)
 
     idle = sum(1 for ln in win_lines if MARKER_IDLE in ln)
