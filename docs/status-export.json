@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T07:06:43+08:00",
+  "export_ts": "2026-11-13T07:07:50+08:00",
   "do": "2026-11-13 R2689 PRODUCT window on the queue head the debt gate named (product-face-R2688, state/queue/tech.md line 681 prefix AC-PNAO1, criteria AC-PNAO1..AC-PNAO6 pinned in that row at R2685 BEFORE any code). Five readings at open, all clean: git status EMPTY at HEAD f2199335 equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger; the content-addressed decisions scan r",
   "ceo_face": {
     "current": "2026-11-13 R2689 PRODUCT window on the queue head the debt gate named (product-face-R2688, state/queue/tech.md line 681 prefix AC-PNAO1, criteria AC-PNAO1..AC-PNAO6 pinned in that row at R2685 BEFORE any code). Five readings at open, all clean: git status EMPTY at HEAD f2199335 equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger; the content-addressed decisions scan r",
     "latest_artifact": "prefix-part-joiner-R2689.log (8430B)",
     "last_artifact": "prefix-part-joiner-R2689.log (8430B)",
-    "next_milestone": "next window owes reconcile-battery-R2689 on the committed tree, inside a 48h window due 2026-11-15T07:06:43+08:00",
-    "next_milestone_due": "2026-11-15T07:06:43+08:00",
-    "updated_at": "2026-11-13T07:06:43+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2689 on the committed tree, inside a 48h window due 2026-11-15T07:07:50+08:00",
+    "next_milestone_due": "2026-11-15T07:07:50+08:00",
+    "updated_at": "2026-11-13T07:07:50+08:00"
   },
   "depts": [
     {
@@ -1010,7 +1010,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 70,
+    "log_lines_in_window": 71,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 20,
