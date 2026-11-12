@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T23:03:46+08:00",
+  "export_ts": "2026-11-12T23:05:06+08:00",
   "do": "2026-11-12 R2679 PRODUCT window on the queue head the debt gate named (product-face-R2678, state/queue/tech.md line 678 prefix AC-PNAJ1, criteria AC-PNAJ1..AC-PNAJ6 pinned in that row at R2678 BEFORE any code). Five readings at open, all clean: git status EMPTY with no index.lock; ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0); the content-addressed de",
   "ceo_face": {
     "current": "2026-11-12 R2679 PRODUCT window on the queue head the debt gate named (product-face-R2678, state/queue/tech.md line 678 prefix AC-PNAJ1, criteria AC-PNAJ1..AC-PNAJ6 pinned in that row at R2678 BEFORE any code). Five readings at open, all clean: git status EMPTY with no index.lock; ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0); the content-addressed de",
     "latest_artifact": "prefix-unnameable-R2679-a.log (3023B) + prefix-unnameable-R2679-b.log (3023B) + prefix-unnameable-R2679.summary (126B)",
     "last_artifact": "prefix-unnameable-R2679-a.log (3023B) + prefix-unnameable-R2679-b.log (3023B) + prefix-unnameable-R2679.summary (126B)",
-    "next_milestone": "next window owes reconcile-battery-R2679 on the committed tree, inside a 48h window due 2026-11-14T23:03:46+08:00",
-    "next_milestone_due": "2026-11-14T23:03:46+08:00",
-    "updated_at": "2026-11-12T23:03:46+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2679 on the committed tree, inside a 48h window due 2026-11-14T23:05:06+08:00",
+    "next_milestone_due": "2026-11-14T23:05:06+08:00",
+    "updated_at": "2026-11-12T23:05:06+08:00"
   },
   "depts": [
     {
@@ -1000,7 +1000,7 @@
   "self_drive": {
     "window": "2026-11-06..2026-11-12",
     "window_days": 7,
-    "log_lines_in_window": 53,
+    "log_lines_in_window": 54,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 24,
