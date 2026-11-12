@@ -390,7 +390,8 @@ column-0 checkbox starts one.
 - [x] opened=R2659 | item=product-face-R2659 | note=next window a PRODUCT face on the queue head state/queue/tech.md:665 prefix AC-EDXB1; NO successor battery owed because this window moved no product src byte and the registry is unmoved at 652 suites / 4888 criteria, re-measured by import | closed=R2659
 - [x] opened=R2661 | item=reconcile-battery-R2661 | note=653 suites / 4894 criteria; this window moved one product src file, one suite and one registry row, so the R2168 mixed-tree rule puts the full battery on the committed tree BEFORE any further product byte | closed=R2669
 - [x] opened=R2669 | item=product-face-R2669 | note=product face on the queue head state/queue/tech.md:666 prefix AC-EDXC1; the battery reconcile-battery-R2661 closed green at 653 suites / 4894 criteria on the committed tree from the R2665 leg, and NO successor battery is owed because this window moved no product src byte and the registry is unmoved at 653/4894 re-measured by import | closed=R2671
-- [ ] opened=R2671 | item=reconcile-battery-R2671 | note=battery owed because this window moved product src bytes (export_composed_landed_face.py, seventh wave) and the registry moved 653/4894 -> 654/4900 re-measured by import; target 654 suites / 4900 criteria | first=yes
+- [x] opened=R2671 | item=reconcile-battery-R2671 | note=battery owed because this window moved product src bytes (export_composed_landed_face.py, seventh wave) and the registry moved 653/4894 -> 654/4900 re-measured by import; target 654 suites / 4900 criteria | closed=R2674
+- [ ] opened=R2674 | item=product-face-R2674 | note=next window owes a PRODUCT face on the queue head state/queue/tech.md:676 prefix AC-PNAG1 while claimable reads 14; no successor battery is owed because the R2674 verification window moved no product src byte and the registry is unmoved at 654 suites / 4900 criteria | first=yes
 
 ## Closed
 
