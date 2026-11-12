@@ -1,0 +1,9 @@
+R2687 write-sensitive re-run at HEAD (the three suites the R2686 red leg named)
+doc_bytes=69560
+check_exit=0 PASS check: docs/sandbox-suite-matrix.md byte-identical (69560 bytes, 659 suites, 4930 criteria)
+
+test_suite_matrix_reconcile_evidence_face.py         exit=0 SUITE PASS 6/6
+test_matrix_stamp_compare.py                         exit=0 SUITE PASS 6/6
+test_stamp_text_coverage.py                          exit=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+rc_failures=0 suites=3
