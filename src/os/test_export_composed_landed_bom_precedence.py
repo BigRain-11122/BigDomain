@@ -156,7 +156,15 @@ def verify():
             and rep_le["word"] != CLF.WORD_COMPOSED_MISMATCH
             and rep_le["bom"] == 2 and rep_be["bom"] == 2
             and rep_le.get("bom_kind") == "utf16"
-            and rep_le["delta"] is None
+            # AC-EDXA2 (pinned in state/queue/tech.md:664 at R2653 BEFORE the
+            # R2657 code) deliberately replaces exactly this shape: a whole
+            # UTF-16 landing is now COMPARED with the composed text in its own
+            # byte order, so the delta this row pinned as None is published as
+            # an exact zero for an agreeing landing. The assertion stays an
+            # EXACT equality and the word is untouched - one named limitation
+            # was superseded by a newer pin, nothing was loosened.
+            and rep_le["delta"] == 0
+            and rep_be["delta"] == 0
             and rep_le["disk"] == 26
             and "UTF16" in line_le and "kind=utf16" in line_le,
             "AC-EDWW3 utf16 le=%s/%s be=%s/%s disk=%d line=%s"

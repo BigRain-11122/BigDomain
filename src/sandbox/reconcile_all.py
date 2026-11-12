@@ -4677,6 +4677,18 @@ SUITES = [
      os.path.join("..", "os",
                   "test_export_composed_landed_bom_precedence_fourth_wave.py"),
      6),
+    # R2657: a whole UTF-16 landing is COMPARED with the composed text in its
+    # own byte order, so an agreeing one is named apart from a disagreeing one
+    # and both counts are published; an odd body behind two markers names BOTH
+    # that it sits behind two markers and that it is short while the pinned
+    # double-marker word survives; the even two byte body and the UTF-16BE
+    # short remnant keep the answers measured at R2653.
+    # (AC-EDXA1..AC-EDXA6 pre-registered in state/queue/tech.md:664 at R2653
+    # BEFORE the code existed.)
+    ("os-export-composed-landed-bom-precedence-fifth-wave",
+     os.path.join("..", "os",
+                  "test_export_composed_landed_bom_precedence_fifth_wave.py"),
+     6),
     # R2608: the shape law widens once more - a separator drawn with MIXED
     # punctuation is a separator, a matrix title inside a fenced block or a
     # title that introduces no table is not a second title, and a walk that

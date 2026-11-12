@@ -100,6 +100,19 @@ WORD_BOM_DOUBLE_MARKER = "BOM-DOUBLE-MARKER"
 #                                BODY behind them named both markers and then
 #                                described the body with no field at all.
 WORD_UTF16_BOM_SHORT_BODY = "UTF16-BOM-SHORT-BODY"
+# R2657 fifth wave (AC-EDXA1..AC-EDXA6 pinned at R2653 in
+# state/queue/tech.md:664 BEFORE this code existed). Two shapes still rode on a
+# word that decided nothing, MEASURED at R2653 and re-measured by this window
+# before any byte was written (qa/limits-export-composed-landed-fifth-wave-
+# before-R2657.log, 1236B):
+#   UTF16-BOM-LANDING disk=26 - a whole UTF-16LE landing that AGREES with the
+#                               composed text and one that DISAGREES read the
+#                               SAME word with composed=None, so agreement was
+#                               never decided for a UTF-16 landing;
+#   BOM-DOUBLE-MARKER body=1  - an ODD body behind two markers was described by
+#                               its count only, never as short, although a
+#                               UTF-16 body is an even number of bytes.
+WORD_UTF16_BOM_BODY_GAP = "UTF16-BOM-BODY-GAP"
 
 BOM = b"\xef\xbb\xbf"
 # A strict PREFIX of the UTF-8 BOM, one or two bytes: the shape a writer lands
@@ -211,6 +224,40 @@ def account(path, text):
                     "bom_kind": "utf16-short",
                     "body": len(body16),
                 }
+            # AC-EDXA1/AC-EDXA2: a whole UTF-16 landing is COMPARED with the
+            # composed text in its own byte order, so an agreeing one is named
+            # apart from a disagreeing one and both counts are published. The
+            # compare is done on the body bytes the marker own codec produces,
+            # never on the UTF-8 length. AC-EDXA4 is why the fallback exists:
+            # a body that is merely SHORTER, or longer without carrying the
+            # composed text as its head, is not a judgement this face can make
+            # from bytes alone, so it keeps the historical whole-landing word
+            # with no count instead of inventing a delta.
+            codec = ("utf-16-le" if mark == b"\xff\xfe" else "utf-16-be")
+            folded16 = text.replace("\r\n", "\n").encode(codec)
+            expected = len(mark) + len(folded16)
+            if len(body16) == len(folded16):
+                return {
+                    "word": WORD_UTF16_BOM,
+                    "transport": read_transport(body16),
+                    "composed": expected,
+                    "disk": len(raw),
+                    "delta": 0,
+                    "bom": len(mark),
+                    "bom_kind": "utf16",
+                    "agrees": True,
+                }
+            if len(body16) > len(folded16) and body16[:len(folded16)] == folded16:
+                return {
+                    "word": WORD_UTF16_BOM_BODY_GAP,
+                    "transport": read_transport(body16),
+                    "composed": expected,
+                    "disk": len(raw),
+                    "delta": len(raw) - expected,
+                    "bom": len(mark),
+                    "bom_kind": "utf16-gap",
+                    "agrees": False,
+                }
             return {
                 "word": WORD_UTF16_BOM,
                 "transport": read_transport(body16),
@@ -227,6 +274,11 @@ def account(path, text):
         # fields (its size and the transport it carries), so the body is no
         # longer an invisible remainder under a marker count.
         behind = raw[len(BOM) + 2:]
+        # AC-EDXA3: a UTF-16 body is an even number of bytes, so an ODD body
+        # behind both markers is a remnant. The WORD stays BOM-DOUBLE-MARKER
+        # because AC-EDWZ3 own fixture (a three byte body) must keep its answer
+        # (AC-EDXA5), so the short fact is published as its own field and its
+        # own rendered token rather than by replacing a word a parent pinned.
         return {
             "word": WORD_BOM_DOUBLE_MARKER,
             "transport": TRANSPORT_LF,
@@ -237,6 +289,7 @@ def account(path, text):
             "bom_kind": "utf8+utf16",
             "body": len(behind),
             "body_transport": read_transport(behind),
+            "body_short": bool(len(behind) % 2),
         }
     if raw == BOM:
         # AC-EDWX3: a BOM with no payload names the empty payload instead of
@@ -380,6 +433,11 @@ def render(report):
         if report.get("body") is not None:
             suffix += " body=%d body_transport=%s" % (
                 report["body"], report.get("body_transport"))
+        if report.get("body_short"):
+            # AC-EDXA3: the short fact is rendered beside the body count, so a
+            # reader sees BOTH that it sits behind two markers and that the
+            # remainder cannot be a whole UTF-16 payload.
+            suffix += " body_short=1"
         return ("COMPOSED-LANDED %s transport=%s bom=%d composed=%s disk=%d"
                 " delta=%s%s") % (
             report["word"], report["transport"], report["bom"],

@@ -1,0 +1,8 @@
+WORLD a_utf16_whole_agree      word=UTF16-BOM-LANDING          composed=26    disk=26  delta=0     bom=2 kind=utf16 body=None body_short=None agrees=True
+WORLD b_utf16_whole_disagree   word=UTF16-BOM-BODY-GAP         composed=26    disk=30  delta=4     bom=2 kind=utf16-gap body=None body_short=None agrees=False
+WORLD c_double_odd_body        word=BOM-DOUBLE-MARKER          composed=None  disk=6   delta=None  bom=5 kind=utf8+utf16 body=1 body_short=True agrees=None
+WORLD d_utf16be_short          word=UTF16-BOM-SHORT-BODY       composed=26    disk=3   delta=-23   bom=2 kind=utf16-short body=1 body_short=None agrees=None
+WORLD e_utf16_even_two         word=UTF16-BOM-LANDING          composed=None  disk=4   delta=None  bom=2 kind=utf16 body=None body_short=None agrees=None
+WORLD f_clean_lf               word=PASS                       composed=12    disk=12  delta=0     bom=0 kind=None body=None body_short=None agrees=None
+WORLD g_utf16_whole_be         word=UTF16-BOM-LANDING          composed=26    disk=26  delta=0     bom=2 kind=utf16 body=None body_short=None agrees=True
+WORLD h_utf16_whole_empty_text word=UTF16-BOM-BODY-GAP         composed=2     disk=26  delta=24    bom=2 kind=utf16-gap body=None body_short=None agrees=False

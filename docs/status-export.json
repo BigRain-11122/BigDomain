@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T09:20:27+08:00",
-  "do": "2026-11-12 R2655 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2653, pre-registered 651 suites / 4882 criteria at R2653 because that window moved one product src file and one registry row). Five readings at open: git status EMPTY with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0), the decisions face reading 117 rows against the st",
+  "export_ts": "2026-11-12T09:33:13+08:00",
+  "do": "2026-11-12 R2657 PRODUCT window on the queue head the debt gate named (product-face-R2655, state/queue/tech.md:664 prefix AC-EDXA1, criteria AC-EDXA1..AC-EDXA6 pinned in that row at R2653 BEFORE any code). Five readings at open: git status EMPTY at HEAD 956acfb9 equal to origin/main with no index.lock; ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0); th",
   "ceo_face": {
-    "current": "2026-11-12 R2655 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2653, pre-registered 651 suites / 4882 criteria at R2653 because that window moved one product src file and one registry row). Five readings at open: git status EMPTY with no index.lock, ZERO @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0), the decisions face reading 117 rows against the st",
-    "latest_artifact": "reconcile-all-R2655.log (1102729B)",
-    "last_artifact": "reconcile-all-R2655.log (1102729B)",
-    "next_milestone": "next window owes product-face-R2655 on the committed tree, inside a 48h window due 2026-11-14T09:20:27+08:00",
-    "next_milestone_due": "2026-11-14T09:20:27+08:00",
-    "updated_at": "2026-11-12T09:20:27+08:00"
+    "current": "2026-11-12 R2657 PRODUCT window on the queue head the debt gate named (product-face-R2655, state/queue/tech.md:664 prefix AC-EDXA1, criteria AC-EDXA1..AC-EDXA6 pinned in that row at R2653 BEFORE any code). Five readings at open: git status EMPTY at HEAD 956acfb9 equal to origin/main with no index.lock; ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0); th",
+    "latest_artifact": "export-composed-landed-bom-precedence-fifth-wave-R2657.log (2869B) + limits-export-composed-landed-fifth-wave-after-R2657.log (1246B) + limits-export-composed-landed-fifth-wave-before-R2657.log (1236B) + limits-export-composed-landed-next-R2657.log (748B)",
+    "last_artifact": "export-composed-landed-bom-precedence-fifth-wave-R2657.log (2869B) + limits-export-composed-landed-fifth-wave-after-R2657.log (1246B) + limits-export-composed-landed-fifth-wave-before-R2657.log (1236B) + limits-export-composed-landed-next-R2657.log (748B)",
+    "next_milestone": "next window owes reconcile-battery-R2657 on the committed tree, inside a 48h window due 2026-11-14T09:33:13+08:00",
+    "next_milestone_due": "2026-11-14T09:33:13+08:00",
+    "updated_at": "2026-11-12T09:33:13+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "export-composed-landed-bom-precedence-fifth-wave-R2657.log (2869B) + limits-export-composed-landed-fifth-wave-after-R2657.log (1246B) + limits-export-composed-landed-fifth-wave-before-R2657.log (1236B) + limits-export-composed-landed-next-R2657.log (748B)",
     "reconcile-all-R2655.log (1102729B)",
     "none landed yet for R2655",
     "export-composed-landed-bom-precedence-fourth-wave-R2653.log (3772B) + limits-export-composed-landed-fourth-wave-after-R2653.log (992B) + limits-export-composed-landed-fourth-wave-before-R2653.log (787B) + limits-export-composed-landed-next-R2653.log (981B)",
@@ -963,7 +964,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2651",
+      "2652",
       "OSLoop 执行 tick"
     ],
     [
@@ -982,10 +983,10 @@
   "self_drive": {
     "window": "2026-11-06..2026-11-12",
     "window_days": 7,
-    "log_lines_in_window": 17,
+    "log_lines_in_window": 18,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 17,
     "proposals_total": 7,
     "proposals_open": 5,
     "queue_main_open": 6,
@@ -1018,25 +1019,25 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 16,
-        "done_rows": 487,
+        "done_rows": 488,
         "gated_rows": 1,
         "claimable": 11,
         "discounted": 4,
         "delivered": [
           {
-            "line": 664,
-            "prefix": "AC-EDXA1"
+            "line": 665,
+            "prefix": "AC-EDXB1"
           },
           {
-            "line": 671,
+            "line": 673,
             "prefix": "AC-PNAG1"
           },
           {
-            "line": 686,
+            "line": 688,
             "prefix": "AC-SEQAF1"
           },
           {
-            "line": 688,
+            "line": 690,
             "prefix": "AC-EDMK1"
           }
         ],
