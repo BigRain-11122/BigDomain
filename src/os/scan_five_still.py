@@ -6,9 +6,22 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 GRP = r"C:\Users\sjs20\Desktop\FluxGroup"
 
+# A UTF-8 BOM survives a plain "utf-8" decode as U+FEFF, which a cp936 console
+# cannot encode; that killed every scan at its first non-ASCII print (the [ORD-TOP]
+# row of orders.md). Strip it at the reader and keep the console from dying on any
+# future unmappable character instead of patching one line.
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(errors="backslashreplace")
+    except Exception:
+        pass
+
+
 def rd(p):
-    with io.open(p, "r", encoding="utf-8", errors="replace") as f:
-        return f.read()
+    with io.open(p, "r", encoding="utf-8-sig", errors="replace") as f:
+        # utf-8-sig only drops a BOM at byte 0; these ledgers also carry one mid-file
+        # after a paste, so strip every U+FEFF instead of trusting the offset.
+        return f.read().replace("\ufeff", "")
 
 TOKRE = re.compile(r"(?:P|D|C|O|T|XL)-\d{4}-\d{2}-\d{2}-\d+|O-2026\d{5}-\d+|D-\d{8}-\d+|C-\d{8}-\d+|BD-PROP-\d+|OH-\d{8}")
 
