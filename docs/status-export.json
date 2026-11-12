@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T02:37:22+08:00",
-  "do": "2026-11-13 R2682 PRODUCT window on the queue head the debt gate named (product-face-R2681, state/queue/tech.md:679 prefix AC-PNAK1, criteria AC-PNAK1..AC-PNAK6 pinned there at R2679 BEFORE any code). Five readings at open, all clean: git status EMPTY at HEAD 4f5ab235 with no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unreplied_groups=0); the decisions scan read rows=120 tokens=64 new",
+  "export_ts": "2026-11-13T03:01:07+08:00",
+  "do": "2026-11-13 R2683 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2682, pre-registered 658 suites / 4924 criteria at R2682). Five readings at open, all clean: git status EMPTY at HEAD f270d1cb equal to origin/main with no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unreplied_groups=0); the content-addressed decisions scan read rows=120 tokens=64 new=0; ",
   "ceo_face": {
-    "current": "2026-11-13 R2682 PRODUCT window on the queue head the debt gate named (product-face-R2681, state/queue/tech.md:679 prefix AC-PNAK1, criteria AC-PNAK1..AC-PNAK6 pinned there at R2679 BEFORE any code). Five readings at open, all clean: git status EMPTY at HEAD 4f5ab235 with no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unreplied_groups=0); the decisions scan read rows=120 tokens=64 new",
-    "latest_artifact": "prefix-unnameable-siblings-R2682.log (6163B)",
-    "last_artifact": "prefix-unnameable-siblings-R2682.log (6163B)",
-    "next_milestone": "next window owes reconcile-battery-R2682 on the committed tree, inside a 48h window due 2026-11-15T02:37:22+08:00",
-    "next_milestone_due": "2026-11-15T02:37:22+08:00",
-    "updated_at": "2026-11-13T02:37:22+08:00"
+    "current": "2026-11-13 R2683 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2682, pre-registered 658 suites / 4924 criteria at R2682). Five readings at open, all clean: git status EMPTY at HEAD f270d1cb equal to origin/main with no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unreplied_groups=0); the content-addressed decisions scan read rows=120 tokens=64 new=0; ",
+    "latest_artifact": "none landed yet for R2683",
+    "last_artifact": "none landed yet for R2683",
+    "next_milestone": "next window owes reconcile-battery-R2682 on the committed tree, inside a 48h window due 2026-11-15T03:01:07+08:00",
+    "next_milestone_due": "2026-11-15T03:01:07+08:00",
+    "updated_at": "2026-11-13T03:01:07+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "none landed yet for R2683",
     "prefix-unnameable-siblings-R2682.log (6163B)",
     "write-sensitive-R2681.log (1294B)",
     "none landed yet for R2680",
@@ -984,7 +985,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2674",
+      "2675",
       "OSLoop 执行 tick"
     ],
     [
@@ -1003,7 +1004,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 70,
+    "log_lines_in_window": 69,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 30,
