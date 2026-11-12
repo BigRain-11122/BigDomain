@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 657 | 4918 | 657/657 | R2680 |
+| 658 | 4924 | 657/657 | R2680 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -693,9 +693,10 @@
 | 653 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_scope.py | 6 | green | 238.1 |
 | 654 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_scope.py | 6 | green | 181.2 |
 | 655 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-unnameable-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_scope.py | 6 | green | 196.0 |
-| 656 | os-export-driver-self-drive-health | ../os/test_export_driver_self_drive_health.py | 6 | green | 0.7 |
-| 657 | os-export-driver-health-verdict | ../os/test_export_R2431_health_verdict.py | 6 | green | 0.1 |
-|  | 合计 |  | 4918 | green 657 / FAIL 0 / no-evidence 0 |  |
+| 656 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-unnameable-siblings-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_scope.py | 6 | no-evidence | - |
+| 657 | os-export-driver-self-drive-health | ../os/test_export_driver_self_drive_health.py | 6 | green | 0.7 |
+| 658 | os-export-driver-health-verdict | ../os/test_export_R2431_health_verdict.py | 6 | green | 0.1 |
+|  | 合计 |  | 4924 | green 657 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

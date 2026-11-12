@@ -6525,6 +6525,16 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_scope.py"),
      6),
+    # R2682: the R2679 strict-prefix word named only the FIRST sibling, so
+    # a caller could not count the labels that outrank it. This face names
+    # EVERY sibling in published order while the single-sibling word and
+    # the duplicate count stay byte for byte (657 -> 658 suites,
+    # 4918 -> 4924).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-unnameable-siblings-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_scope.py"),
+     6),
     # R2595 birth-site repair of the round export driver health term: it
     # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
     # the recompute caliber can never satisfy once one tokens line sits in the

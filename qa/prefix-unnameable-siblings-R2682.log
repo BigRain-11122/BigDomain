@@ -1,0 +1,67 @@
+EVIDENCE CAPTURE round=R2682 suite=src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_scope.py legs=2
+== LEG A rc=0 digest=5FF98AFDE5A14B18
+PASS AC-PNAK1 a strict prefix of two siblings names BOTH ({'a': 'strict-prefix-of:ab,ac'})
+PASS AC-PNAK1 a third sibling is named too ({'a': 'strict-prefix-of:ab,ac,ad'})
+PASS AC-PNAK1 the list follows PUBLISHED order, not sorted ({'a': 'strict-prefix-of:ac,ab'})
+PASS AC-PNAK1 the sibling reader answers the list in order
+PASS AC-PNAK2 two copies plus two siblings keep both ({'a': 'strict-prefix-of:ab,ac+duplicate:2'})
+PASS AC-PNAK2 the count and the full sibling list both ride (strict-prefix-of:ab,ac+duplicate:2)
+PASS AC-PNAK2 a duplicate with no sibling keeps its own word ({'a': 'duplicate:2'})
+PASS AC-PNAK3 the single-sibling word is byte identical to R2679 ({'x': 'strict-prefix-of:xy'} vs {'x': 'strict-prefix-of:xy'})
+PASS AC-PNAK3 the first-sibling reader is carried unchanged
+PASS AC-PNAK4 nameable labels carry no reason ({})
+PASS AC-PNAK4 a nameable reason is fully named
+PASS AC-PNAK4 an unnameable label is never fully named
+PASS AC-PNAK4 the covered word is withheld beside an unnameable label (SEAMS-MATCH-ORDINAL-UNIQUE-PREFIX-UNNAMEABLE)
+PASS AC-PNAK4 a fully nameable reason still reaches the covered word (SEAMS-MATCH-ORDINAL-UNIQUE-PREFIX-COVERED)
+PASS AC-PNAK4 a stale verdict is never overwritten (SEAMS-MATCH-ORDINAL-UNIQUE-PREFIX-STALE)
+PASS AC-PNAK5 the three-binding answer rides PNAJ byte for byte ({'while2>case': 'while2>', 'while2_body>case': 'while2_', 'while>case': 'while>'})
+PASS AC-PNAK5 the three-binding prefixes ride PNAI byte for byte ({'while2>case': 'while2>', 'while2_body>case': 'while2_', 'while>case': 'while>'})
+PASS AC-PNAK5 the else pair answer rides PNAJ byte for byte ({'while_else2>case': 'while_else2', 'while_else>case': 'while_else>'})
+PASS AC-PNAK5 the else pair prefixes ride PNAI byte for byte ({'while_else2>case': 'while_else2', 'while_else>case': 'while_else>'})
+PASS AC-PNAK5 a for body in a while keeps the parked refusal with no ack labels (attr-module-alias-unbound:M.HW)
+PASS AC-PNAK5 a while in a while keeps the parked refusal with no ack labels (attr-module-alias-unbound:M.HW)
+PASS AC-PNAK5 a if inside a match case keeps the parked refusal with no ack labels (attr-module-alias-unbound:M.HW)
+PASS AC-PNAK5 a bounded live leg rides unchanged and read-only (modules=1 loops=22 unreadable=0 changed=[] disagree=[])
+PASS AC-PNAK6 the module source is pure ASCII (10042 bytes)
+PASS AC-PNAK6 no clock, no network, no shell ([])
+PASS AC-PNAK6 the registry carries exactly one label row (1)
+PASS AC-PNAK6 the registry carries exactly one suite row (1)
+PASS AC-PNAK6 this suite exists on disk
+PASS AC-PNAK6 six criteria are declared
+SUITE PASS 6/6
+== LEG B rc=0 digest=5FF98AFDE5A14B18
+PASS AC-PNAK1 a strict prefix of two siblings names BOTH ({'a': 'strict-prefix-of:ab,ac'})
+PASS AC-PNAK1 a third sibling is named too ({'a': 'strict-prefix-of:ab,ac,ad'})
+PASS AC-PNAK1 the list follows PUBLISHED order, not sorted ({'a': 'strict-prefix-of:ac,ab'})
+PASS AC-PNAK1 the sibling reader answers the list in order
+PASS AC-PNAK2 two copies plus two siblings keep both ({'a': 'strict-prefix-of:ab,ac+duplicate:2'})
+PASS AC-PNAK2 the count and the full sibling list both ride (strict-prefix-of:ab,ac+duplicate:2)
+PASS AC-PNAK2 a duplicate with no sibling keeps its own word ({'a': 'duplicate:2'})
+PASS AC-PNAK3 the single-sibling word is byte identical to R2679 ({'x': 'strict-prefix-of:xy'} vs {'x': 'strict-prefix-of:xy'})
+PASS AC-PNAK3 the first-sibling reader is carried unchanged
+PASS AC-PNAK4 nameable labels carry no reason ({})
+PASS AC-PNAK4 a nameable reason is fully named
+PASS AC-PNAK4 an unnameable label is never fully named
+PASS AC-PNAK4 the covered word is withheld beside an unnameable label (SEAMS-MATCH-ORDINAL-UNIQUE-PREFIX-UNNAMEABLE)
+PASS AC-PNAK4 a fully nameable reason still reaches the covered word (SEAMS-MATCH-ORDINAL-UNIQUE-PREFIX-COVERED)
+PASS AC-PNAK4 a stale verdict is never overwritten (SEAMS-MATCH-ORDINAL-UNIQUE-PREFIX-STALE)
+PASS AC-PNAK5 the three-binding answer rides PNAJ byte for byte ({'while2>case': 'while2>', 'while2_body>case': 'while2_', 'while>case': 'while>'})
+PASS AC-PNAK5 the three-binding prefixes ride PNAI byte for byte ({'while2>case': 'while2>', 'while2_body>case': 'while2_', 'while>case': 'while>'})
+PASS AC-PNAK5 the else pair answer rides PNAJ byte for byte ({'while_else2>case': 'while_else2', 'while_else>case': 'while_else>'})
+PASS AC-PNAK5 the else pair prefixes ride PNAI byte for byte ({'while_else2>case': 'while_else2', 'while_else>case': 'while_else>'})
+PASS AC-PNAK5 a for body in a while keeps the parked refusal with no ack labels (attr-module-alias-unbound:M.HW)
+PASS AC-PNAK5 a while in a while keeps the parked refusal with no ack labels (attr-module-alias-unbound:M.HW)
+PASS AC-PNAK5 a if inside a match case keeps the parked refusal with no ack labels (attr-module-alias-unbound:M.HW)
+PASS AC-PNAK5 a bounded live leg rides unchanged and read-only (modules=1 loops=22 unreadable=0 changed=[] disagree=[])
+PASS AC-PNAK6 the module source is pure ASCII (10042 bytes)
+PASS AC-PNAK6 no clock, no network, no shell ([])
+PASS AC-PNAK6 the registry carries exactly one label row (1)
+PASS AC-PNAK6 the registry carries exactly one suite row (1)
+PASS AC-PNAK6 this suite exists on disk
+PASS AC-PNAK6 six criteria are declared
+SUITE PASS 6/6
+== ADJACENT 2
+== src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_scope.py rc=0 SUITE PASS 6/6
+== src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_scope.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=5FF98AFDE5A14B18
