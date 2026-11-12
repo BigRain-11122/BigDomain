@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T02:00:58+08:00",
+  "export_ts": "2026-11-13T02:02:02+08:00",
   "do": "2026-11-13 R2681 VERIFICATION window ADOPTED the battery leg R2680 left running by its evidence path and CLOSED reconcile-battery-R2679 GREEN at the pre-registered 657 suites / 4918 criteria. Five readings at open, all clean: no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unreplied_groups=0); the content-addressed decisions scan read rows=120 tokens=64 new=0; the group orders tail max",
   "ceo_face": {
     "current": "2026-11-13 R2681 VERIFICATION window ADOPTED the battery leg R2680 left running by its evidence path and CLOSED reconcile-battery-R2679 GREEN at the pre-registered 657 suites / 4918 criteria. Five readings at open, all clean: no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unreplied_groups=0); the content-addressed decisions scan read rows=120 tokens=64 new=0; the group orders tail max",
     "latest_artifact": "write-sensitive-R2681.log (1294B)",
     "last_artifact": "write-sensitive-R2681.log (1294B)",
-    "next_milestone": "next window owes product-face-R2681 on the committed tree, inside a 48h window due 2026-11-15T02:00:58+08:00",
-    "next_milestone_due": "2026-11-15T02:00:58+08:00",
-    "updated_at": "2026-11-13T02:00:58+08:00"
+    "next_milestone": "next window owes product-face-R2681 on the committed tree, inside a 48h window due 2026-11-15T02:02:02+08:00",
+    "next_milestone_due": "2026-11-15T02:02:02+08:00",
+    "updated_at": "2026-11-13T02:02:02+08:00"
   },
   "depts": [
     {
@@ -1002,7 +1002,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 66,
+    "log_lines_in_window": 67,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 32,
