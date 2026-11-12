@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T17:55:30+08:00",
+  "export_ts": "2026-11-12T17:59:08+08:00",
   "do": "2026-11-12 R2676 VERIFICATION window opened on the battery the debt gate names first (reconcile-battery-R2675, pre-registered 655 suites / 4906 criteria) because the R2675 product window moved product src bytes and one registry row (the R2168 mixed-tree rule). Five readings at open, all clean: git status EMPTY at HEAD 327f914f with no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unrepl",
   "ceo_face": {
     "current": "2026-11-12 R2676 VERIFICATION window opened on the battery the debt gate names first (reconcile-battery-R2675, pre-registered 655 suites / 4906 criteria) because the R2675 product window moved product src bytes and one registry row (the R2168 mixed-tree rule). Five readings at open, all clean: git status EMPTY at HEAD 327f914f with no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unrepl",
     "latest_artifact": "reconcile-all-R2676.log (1112916B)",
     "last_artifact": "reconcile-all-R2676.log (1112916B)",
-    "next_milestone": "next window owes reconcile-battery-R2675 on the committed tree, inside a 48h window due 2026-11-14T17:55:30+08:00",
-    "next_milestone_due": "2026-11-14T17:55:30+08:00",
-    "updated_at": "2026-11-12T17:55:30+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2675 on the committed tree, inside a 48h window due 2026-11-14T17:59:08+08:00",
+    "next_milestone_due": "2026-11-14T17:59:08+08:00",
+    "updated_at": "2026-11-12T17:59:08+08:00"
   },
   "depts": [
     {
@@ -977,7 +977,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2666",
+      "2667",
       "OSLoop 执行 tick"
     ],
     [
@@ -996,10 +996,10 @@
   "self_drive": {
     "window": "2026-11-06..2026-11-12",
     "window_days": 7,
-    "log_lines_in_window": 51,
+    "log_lines_in_window": 55,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 19,
     "proposals_total": 7,
     "proposals_open": 5,
     "queue_main_open": 6,
