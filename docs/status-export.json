@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T14:08:06+08:00",
+  "export_ts": "2026-11-12T14:10:36+08:00",
   "do": "2026-11-12 R2653 PRODUCT window on the queue head the debt gate named (product-face-R2651, state/queue/tech.md:663 prefix AC-EDWZ1, criteria AC-EDWZ1..AC-EDWZ6 pinned in that row at R2649 BEFORE any code). Five readings at open: git status EMPTY at HEAD c2eb3156 equal to origin/main with no index.lock; ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0); th",
   "ceo_face": {
     "current": "2026-11-12 R2653 PRODUCT window on the queue head the debt gate named (product-face-R2651, state/queue/tech.md:663 prefix AC-EDWZ1, criteria AC-EDWZ1..AC-EDWZ6 pinned in that row at R2649 BEFORE any code). Five readings at open: git status EMPTY at HEAD c2eb3156 equal to origin/main with no index.lock; ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md (atbd_lines=0 unreplied_groups=0); th",
     "latest_artifact": "export-composed-landed-bom-precedence-fourth-wave-R2653.log (3772B) + limits-export-composed-landed-fourth-wave-after-R2653.log (992B) + limits-export-composed-landed-fourth-wave-before-R2653.log (787B) + limits-export-composed-landed-next-R2653.log (981B)",
     "last_artifact": "export-composed-landed-bom-precedence-fourth-wave-R2653.log (3772B) + limits-export-composed-landed-fourth-wave-after-R2653.log (992B) + limits-export-composed-landed-fourth-wave-before-R2653.log (787B) + limits-export-composed-landed-next-R2653.log (981B)",
-    "next_milestone": "next window owes reconcile-battery-R2671 on the committed tree, inside a 48h window due 2026-11-14T14:08:06+08:00",
-    "next_milestone_due": "2026-11-14T14:08:06+08:00",
-    "updated_at": "2026-11-12T14:08:06+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2671 on the committed tree, inside a 48h window due 2026-11-14T14:10:36+08:00",
+    "next_milestone_due": "2026-11-14T14:10:36+08:00",
+    "updated_at": "2026-11-12T14:10:36+08:00"
   },
   "depts": [
     {
