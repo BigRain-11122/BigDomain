@@ -1,0 +1,16 @@
+os-status-export-writer-dialect-wire rc=0 pass-lines=6 fail-lines=0 criteria=6 10.5s
+os-queue-floor-export-face rc=0 pass-lines=6 fail-lines=0 criteria=6 0.8s
+os-export-consistency-queue-face rc=0 pass-lines=15 fail-lines=0 criteria=6 0.4s
+os-state-seq rc=0 pass-lines=6 fail-lines=0 criteria=6 2.0s
+os-state-seq-archive rc=0 pass-lines=6 fail-lines=0 criteria=6 0.5s
+os-patterns-label-readability rc=0 pass-lines=0 fail-lines=0 criteria=6 0.9s
+os-patterns-label-readability-render-consumer rc=0 pass-lines=0 fail-lines=0 criteria=6 0.3s
+os-patterns-non-label-text-readability rc=0 pass-lines=0 fail-lines=0 criteria=6 0.5s
+os-artifact-disk-text-readability rc=1 pass-lines=0 fail-lines=0 criteria=6 0.4s
+os-evidence-name-text-coverage rc=1 pass-lines=0 fail-lines=0 criteria=6 0.3s
+os-stamp-text-coverage rc=1 pass-lines=0 fail-lines=0 criteria=6 0.6s
+os-suite-matrix-reconcile-evidence-face rc=0 pass-lines=0 fail-lines=0 criteria=6 0.6s
+os-matrix-stamp-compare rc=1 pass-lines=5 fail-lines=1 criteria=6 2.9s
+os-export-driver-self-drive-health rc=0 pass-lines=6 fail-lines=0 criteria=6 0.4s
+os-export-driver-health-verdict rc=0 pass-lines=6 fail-lines=0 criteria=6 0.1s
+SUMMARY suites=15 rc-failures=4
