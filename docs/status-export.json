@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T15:26:31+08:00",
-  "do": "2026-11-12 R2674 VERIFICATION window ADOPTED the detached battery leg R2673 launched and CLOSED reconcile-battery-R2671 GREEN at the pre-registered 654 suites / 4900 criteria. MEASURED NOT QUOTED: the stream closed on RUNNER PASS (654/654 suites green, reconcile controls 7/7, 3238.7s) and BATTERY rc=0 3241.0s after TMP RECLAIM 697/697 at 241.16 MiB, and the pid chain (63200, 38276, 72800) was gone",
+  "export_ts": "2026-11-12T16:42:08+08:00",
+  "do": "2026-11-12 R2675 PRODUCT window on the queue head the debt gate named (product-face-R2674, state/queue/tech.md:676 prefix AC-PNAG1, criteria AC-PNAG1..AC-PNAG6 pinned in that row at R2594 BEFORE any code). Five readings at open: git status EMPTY at HEAD 32badef3 with no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unreplied_groups=0); the content-addressed decisions scan read rows=114 ",
   "ceo_face": {
-    "current": "2026-11-12 R2674 VERIFICATION window ADOPTED the detached battery leg R2673 launched and CLOSED reconcile-battery-R2671 GREEN at the pre-registered 654 suites / 4900 criteria. MEASURED NOT QUOTED: the stream closed on RUNNER PASS (654/654 suites green, reconcile controls 7/7, 3238.7s) and BATTERY rc=0 3241.0s after TMP RECLAIM 697/697 at 241.16 MiB, and the pid chain (63200, 38276, 72800) was gone",
-    "latest_artifact": "none landed yet for R2674",
-    "last_artifact": "none landed yet for R2674",
-    "next_milestone": "next window owes product-face-R2674 on the committed tree, inside a 48h window due 2026-11-14T15:26:31+08:00",
-    "next_milestone_due": "2026-11-14T15:26:31+08:00",
-    "updated_at": "2026-11-12T15:26:31+08:00"
+    "current": "2026-11-12 R2675 PRODUCT window on the queue head the debt gate named (product-face-R2674, state/queue/tech.md:676 prefix AC-PNAG1, criteria AC-PNAG1..AC-PNAG6 pinned in that row at R2594 BEFORE any code). Five readings at open: git status EMPTY at HEAD 32badef3 with no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unreplied_groups=0); the content-addressed decisions scan read rows=114 ",
+    "latest_artifact": "module-alias-walrus-match-ordinal-unique-scope-R2675.log (15349B)",
+    "last_artifact": "module-alias-walrus-match-ordinal-unique-scope-R2675.log (15349B)",
+    "next_milestone": "next window owes reconcile-battery-R2675 on the committed tree, inside a 48h window due 2026-11-14T16:42:08+08:00",
+    "next_milestone_due": "2026-11-14T16:42:08+08:00",
+    "updated_at": "2026-11-12T16:42:08+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "module-alias-walrus-match-ordinal-unique-scope-R2675.log (15349B)",
     "none landed yet for R2674",
     "none landed yet for R2673",
     "export-composed-landed-bom-precedence-fourth-wave-R2653.log (3772B) + limits-export-composed-landed-fourth-wave-after-R2653.log (992B) + limits-export-composed-landed-fourth-wave-before-R2653.log (787B) + limits-export-composed-landed-next-R2653.log (981B)",
@@ -974,7 +975,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2663",
+      "2664",
       "OSLoop 执行 tick"
     ],
     [
@@ -993,10 +994,10 @@
   "self_drive": {
     "window": "2026-11-06..2026-11-12",
     "window_days": 7,
-    "log_lines_in_window": 19,
+    "log_lines_in_window": 13,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 7,
     "proposals_open": 5,
     "queue_main_open": 6,
@@ -1029,21 +1030,21 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 15,
-        "done_rows": 490,
+        "done_rows": 491,
         "gated_rows": 1,
         "claimable": 11,
         "discounted": 3,
         "delivered": [
           {
-            "line": 676,
-            "prefix": "AC-PNAG1"
+            "line": 677,
+            "prefix": "AC-PNAH1"
           },
           {
-            "line": 691,
+            "line": 692,
             "prefix": "AC-SEQAF1"
           },
           {
-            "line": 693,
+            "line": 694,
             "prefix": "AC-EDMK1"
           }
         ],

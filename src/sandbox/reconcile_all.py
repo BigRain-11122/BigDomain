@@ -6488,6 +6488,20 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_scope.py"),
      6),
+    # R2675 unique-ordinal walrus face: the match ordinal is unique ACROSS
+    # matches and whiles, so one while with two matches plus a second while
+    # with one match names THREE distinct labels (while>case, while2>case,
+    # while2_body>case) instead of two; a while else section names its second
+    # match while_else2>case rather than the join artifact while_elsem2>case;
+    # a match in a for body nested in a while, a match in a while inside a
+    # while and an if nested in a match case keep the shipped refusal with no
+    # branch read; every R2585/R2588/R2590/R2592/R2594 answer is carried on
+    # the row by asking all five parents (654 -> 655 suites, 4900 -> 4906).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_scope.py"),
+     6),
     # R2595 birth-site repair of the round export driver health term: it
     # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
     # the recompute caliber can never satisfy once one tokens line sits in the
