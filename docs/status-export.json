@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T20:20:52+08:00",
+  "export_ts": "2026-11-12T20:21:41+08:00",
   "do": "2026-11-12 R2677 VERIFICATION window ADOPTED the retry leg R2676 left running by its evidence path and CLOSED reconcile-battery-R2675 GREEN at the pre-registered 655 suites / 4906 criteria. At open the tree carried no index.lock at HEAD d4c50260 and exactly TWO untracked files - the retry evidence and one one-off write-sensitive script the aborted attempt left behind - and both are named rather th",
   "ceo_face": {
     "current": "2026-11-12 R2677 VERIFICATION window ADOPTED the retry leg R2676 left running by its evidence path and CLOSED reconcile-battery-R2675 GREEN at the pre-registered 655 suites / 4906 criteria. At open the tree carried no index.lock at HEAD d4c50260 and exactly TWO untracked files - the retry evidence and one one-off write-sensitive script the aborted attempt left behind - and both are named rather th",
     "latest_artifact": "write-sensitive-R2677.log (1024B)",
     "last_artifact": "write-sensitive-R2677.log (1024B)",
-    "next_milestone": "next window owes product-face-R2677 on the committed tree, inside a 48h window due 2026-11-14T20:20:52+08:00",
-    "next_milestone_due": "2026-11-14T20:20:52+08:00",
-    "updated_at": "2026-11-12T20:20:52+08:00"
+    "next_milestone": "next window owes product-face-R2677 on the committed tree, inside a 48h window due 2026-11-14T20:21:41+08:00",
+    "next_milestone_due": "2026-11-14T20:21:41+08:00",
+    "updated_at": "2026-11-12T20:21:41+08:00"
   },
   "depts": [
     {
@@ -997,7 +997,7 @@
   "self_drive": {
     "window": "2026-11-06..2026-11-12",
     "window_days": 7,
-    "log_lines_in_window": 60,
+    "log_lines_in_window": 61,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 23,
