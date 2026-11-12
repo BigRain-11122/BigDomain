@@ -1,1 +1,1 @@
-2026-11-13T04:40:00+08:00 R2685 product window green, battery owed next
+2026-11-13T04:58:52+08:00 R2686 verification window: battery R2685 leg launched (pid 48512) and still live at closeout, next window adopts
