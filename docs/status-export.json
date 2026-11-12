@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T22:15:36+08:00",
+  "export_ts": "2026-11-12T22:16:25+08:00",
   "do": "2026-11-12 R2678 PRODUCT window on the queue head the debt gate named (product-face-R2677, state/queue/tech.md:677 prefix AC-PNAH1, criteria AC-PNAH1..AC-PNAH6 pinned in that row at R2675 BEFORE any code). Five readings at open: ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read 75 tokens with 9 not on the baseline (eight B-/F- sibling-company ref",
   "ceo_face": {
     "current": "2026-11-12 R2678 PRODUCT window on the queue head the debt gate named (product-face-R2677, state/queue/tech.md:677 prefix AC-PNAH1, criteria AC-PNAH1..AC-PNAH6 pinned in that row at R2675 BEFORE any code). Five readings at open: ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read 75 tokens with 9 not on the baseline (eight B-/F- sibling-company ref",
     "latest_artifact": "prefix-ack-R2678-a.log (2720B) + prefix-ack-R2678-b.log (2720B) + reconcile-all-R2678.log (1116100B)",
     "last_artifact": "prefix-ack-R2678-a.log (2720B) + prefix-ack-R2678-b.log (2720B) + reconcile-all-R2678.log (1116100B)",
-    "next_milestone": "next window owes product-face-R2678 on the committed tree, inside a 48h window due 2026-11-14T22:15:36+08:00",
-    "next_milestone_due": "2026-11-14T22:15:36+08:00",
-    "updated_at": "2026-11-12T22:15:36+08:00"
+    "next_milestone": "next window owes product-face-R2678 on the committed tree, inside a 48h window due 2026-11-14T22:16:25+08:00",
+    "next_milestone_due": "2026-11-14T22:16:25+08:00",
+    "updated_at": "2026-11-12T22:16:25+08:00"
   },
   "depts": [
     {
@@ -999,7 +999,7 @@
   "self_drive": {
     "window": "2026-11-06..2026-11-12",
     "window_days": 7,
-    "log_lines_in_window": 45,
+    "log_lines_in_window": 46,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 19,
