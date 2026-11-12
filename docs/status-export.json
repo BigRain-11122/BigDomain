@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T21:13:06+08:00",
+  "export_ts": "2026-11-12T22:15:36+08:00",
   "do": "2026-11-12 R2678 PRODUCT window on the queue head the debt gate named (product-face-R2677, state/queue/tech.md:677 prefix AC-PNAH1, criteria AC-PNAH1..AC-PNAH6 pinned in that row at R2675 BEFORE any code). Five readings at open: ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read 75 tokens with 9 not on the baseline (eight B-/F- sibling-company ref",
   "ceo_face": {
     "current": "2026-11-12 R2678 PRODUCT window on the queue head the debt gate named (product-face-R2677, state/queue/tech.md:677 prefix AC-PNAH1, criteria AC-PNAH1..AC-PNAH6 pinned in that row at R2675 BEFORE any code). Five readings at open: ZERO unreplied @BigDomain rows in cph4/evolution-ledger.md, the content-addressed decisions scan read 75 tokens with 9 not on the baseline (eight B-/F- sibling-company ref",
-    "latest_artifact": "prefix-ack-R2678-a.log (2720B) + prefix-ack-R2678-b.log (2720B)",
-    "last_artifact": "prefix-ack-R2678-a.log (2720B) + prefix-ack-R2678-b.log (2720B)",
-    "next_milestone": "next window owes reconcile-battery-R2678 on the committed tree, inside a 48h window due 2026-11-14T21:13:06+08:00",
-    "next_milestone_due": "2026-11-14T21:13:06+08:00",
-    "updated_at": "2026-11-12T21:13:06+08:00"
+    "latest_artifact": "prefix-ack-R2678-a.log (2720B) + prefix-ack-R2678-b.log (2720B) + reconcile-all-R2678.log (1116100B)",
+    "last_artifact": "prefix-ack-R2678-a.log (2720B) + prefix-ack-R2678-b.log (2720B) + reconcile-all-R2678.log (1116100B)",
+    "next_milestone": "next window owes product-face-R2678 on the committed tree, inside a 48h window due 2026-11-14T22:15:36+08:00",
+    "next_milestone_due": "2026-11-14T22:15:36+08:00",
+    "updated_at": "2026-11-12T22:15:36+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "prefix-ack-R2678-a.log (2720B) + prefix-ack-R2678-b.log (2720B) + reconcile-all-R2678.log (1116100B)",
     "prefix-ack-R2678-a.log (2720B) + prefix-ack-R2678-b.log (2720B)",
     "write-sensitive-R2677.log (1024B)",
     "reconcile-all-R2676.log (1112916B)",
@@ -979,7 +980,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2669",
+      "2670",
       "OSLoop 执行 tick"
     ],
     [
@@ -998,10 +999,10 @@
   "self_drive": {
     "window": "2026-11-06..2026-11-12",
     "window_days": 7,
-    "log_lines_in_window": 69,
+    "log_lines_in_window": 45,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 24,
+    "substantive_non_idle_mention_lines": 19,
     "proposals_total": 7,
     "proposals_open": 5,
     "queue_main_open": 6,
