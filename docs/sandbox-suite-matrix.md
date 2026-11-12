@@ -1,9 +1,8 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-08 14:49 +08:00
+- 生成时间: generated: 2026-11-13 04:33 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2683.log
-- 印章来源: --stamp-from docs/sandbox-suite-matrix.md
 - 状态证据: reconcile-all-R2683.log (RUNNER PASS 658/658 suites green, reconcile controls 7/7, 2990.1s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
 
@@ -11,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 658 | 4924 | 658/658 | R2683 |
+| 659 | 4930 | 658/658 | R2683 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -694,9 +693,10 @@
 | 654 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_scope.py | 6 | green | 145.9 |
 | 655 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-unnameable-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_scope.py | 6 | green | 161.6 |
 | 656 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-unnameable-siblings-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_scope.py | 6 | green | 108.2 |
-| 657 | os-export-driver-self-drive-health | ../os/test_export_driver_self_drive_health.py | 6 | green | 0.4 |
-| 658 | os-export-driver-health-verdict | ../os/test_export_R2431_health_verdict.py | 6 | green | 0.1 |
-|  | 合计 |  | 4924 | green 658 / FAIL 0 / no-evidence 0 |  |
+| 657 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-unnameable-siblings-escaped-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_escaped_scope.py | 6 | no-evidence | - |
+| 658 | os-export-driver-self-drive-health | ../os/test_export_driver_self_drive_health.py | 6 | green | 0.4 |
+| 659 | os-export-driver-health-verdict | ../os/test_export_R2431_health_verdict.py | 6 | green | 0.1 |
+|  | 合计 |  | 4930 | green 658 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

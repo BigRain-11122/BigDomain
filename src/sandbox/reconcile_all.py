@@ -6535,6 +6535,19 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_scope.py"),
      6),
+    # R2685: the strict-prefix word joined its siblings with a bare
+    # comma that nothing escaped, so the unnameable word for one label
+    # carrying that separator was byte for byte the two-sibling word and
+    # ONE sibling read as TWO. This face escapes the escape character
+    # first and the list separator second, publishes the round trip so
+    # the sibling count is a reading, and keeps the two-sibling word, the
+    # single-sibling word and the duplicate count byte for byte
+    # (658 -> 659 suites, 4924 -> 4930).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-unnameable-siblings-escaped-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_escaped_scope.py"),
+     6),
     # R2595 birth-site repair of the round export driver health term: it
     # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
     # the recompute caliber can never satisfy once one tokens line sits in the

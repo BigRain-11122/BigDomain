@@ -1,0 +1,39 @@
+PASS AC-PNAL1 one sibling carrying a comma is escaped ({'a': 'strict-prefix-of:ab\\,ac'})
+PASS AC-PNAL1 the word differs from the two-sibling word
+PASS AC-PNAL1 the escaped word names ONE sibling (1)
+PASS AC-PNAL1 the round trip recovers the whole label (['ab,ac'])
+PASS AC-PNAL1 the separator does not swallow the next sibling ({'a': 'strict-prefix-of:ab\\,ac,ad'})
+PASS AC-PNAL2 ['a', 'ab', 'ac'] rides R2682 byte for byte ({'a': 'strict-prefix-of:ab,ac'} vs {'a': 'strict-prefix-of:ab,ac'})
+PASS AC-PNAL2 ['a', 'ab', 'ac', 'ad'] rides R2682 byte for byte ({'a': 'strict-prefix-of:ab,ac,ad'} vs {'a': 'strict-prefix-of:ab,ac,ad'})
+PASS AC-PNAL2 ['a', 'ac', 'ab'] rides R2682 byte for byte ({'a': 'strict-prefix-of:ac,ab'} vs {'a': 'strict-prefix-of:ac,ab'})
+PASS AC-PNAL2 the two-sibling word is still strict-prefix-of:ab,ac
+PASS AC-PNAL2 a plain word still names two siblings
+PASS AC-PNAL3 the single-sibling word is byte identical to R2679 ({'x': 'strict-prefix-of:xy'} vs {'x': 'strict-prefix-of:xy'})
+PASS AC-PNAL3 the first-sibling readers are carried unchanged
+PASS AC-PNAL3 the single word names one sibling
+PASS AC-PNAL4 a duplicate and an escaped sibling both ride ({'a': 'strict-prefix-of:ab\\,ac+duplicate:2'})
+PASS AC-PNAL4 the list and the count are both present (strict-prefix-of:ab\,ac+duplicate:2)
+PASS AC-PNAL4 the count is read past the list safely (['ab,ac'])
+PASS AC-PNAL4 a duplicate with no sibling keeps its own word
+PASS AC-PNAL4 nameable labels carry no reason
+PASS AC-PNAL4 an unnameable label is never fully named
+PASS AC-PNAL4 the covered word is withheld beside an unnameable label (SEAMS-MATCH-ORDINAL-UNIQUE-PREFIX-UNNAMEABLE)
+PASS AC-PNAL4 a fully nameable reason still reaches the covered word (SEAMS-MATCH-ORDINAL-UNIQUE-PREFIX-COVERED)
+PASS AC-PNAL4 a stale verdict is never overwritten (SEAMS-MATCH-ORDINAL-UNIQUE-PREFIX-STALE)
+PASS AC-PNAL5 the three-binding answer rides PNAK byte for byte ({'while2>case': 'while2>', 'while2_body>case': 'while2_', 'while>case': 'while>'})
+PASS AC-PNAL5 the three-binding prefixes ride PNAI byte for byte ({'while2>case': 'while2>', 'while2_body>case': 'while2_', 'while>case': 'while>'})
+PASS AC-PNAL5 the three-binding sibling counts are derived ({} vs {})
+PASS AC-PNAL5 the else pair answer rides PNAK byte for byte ({'while_else2>case': 'while_else2', 'while_else>case': 'while_else>'})
+PASS AC-PNAL5 the else pair prefixes ride PNAI byte for byte ({'while_else2>case': 'while_else2', 'while_else>case': 'while_else>'})
+PASS AC-PNAL5 the else pair sibling counts are derived ({} vs {})
+PASS AC-PNAL5 a for body in a while keeps the parked refusal with no ack labels (attr-module-alias-unbound:M.HW)
+PASS AC-PNAL5 a while in a while keeps the parked refusal with no ack labels (attr-module-alias-unbound:M.HW)
+PASS AC-PNAL5 a if inside a match case keeps the parked refusal with no ack labels (attr-module-alias-unbound:M.HW)
+PASS AC-PNAL5 a bounded live leg rides unchanged and read-only (modules=1 loops=22 unreadable=0 changed=[] disagree=[])
+PASS AC-PNAL6 the module source is pure ASCII (13152 bytes)
+PASS AC-PNAL6 no clock, no network, no shell ([])
+PASS AC-PNAL6 the registry carries exactly one label row (1)
+PASS AC-PNAL6 the registry carries exactly one suite row (1)
+PASS AC-PNAL6 this suite exists on disk
+PASS AC-PNAL6 six criteria are declared
+SUITE PASS 6/6
