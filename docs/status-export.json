@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T04:37:50+08:00",
+  "export_ts": "2026-11-13T04:38:36+08:00",
   "do": "2026-11-13 R2685 PRODUCT window on the queue head the debt gate named (product-face-R2684, state/queue/tech.md line 680 prefix AC-PNAL1, criteria AC-PNAL1..AC-PNAL6 pinned in that row at R2682 BEFORE any code). Five readings at open, all clean: git status EMPTY at HEAD fd3ee76b with no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unreplied_groups=0); the content-addressed decisions sca",
   "ceo_face": {
     "current": "2026-11-13 R2685 PRODUCT window on the queue head the debt gate named (product-face-R2684, state/queue/tech.md line 680 prefix AC-PNAL1, criteria AC-PNAL1..AC-PNAL6 pinned in that row at R2682 BEFORE any code). Five readings at open, all clean: git status EMPTY at HEAD fd3ee76b with no index.lock; ZERO unreplied @BigDomain rows (atbd_lines=0 unreplied_groups=0); the content-addressed decisions sca",
     "latest_artifact": "prefix-escaped-R2685-a.log (3350B) + prefix-escaped-R2685-b.log (3350B)",
     "last_artifact": "prefix-escaped-R2685-a.log (3350B) + prefix-escaped-R2685-b.log (3350B)",
-    "next_milestone": "next window owes reconcile-battery-R2685 on the committed tree, inside a 48h window due 2026-11-15T04:37:50+08:00",
-    "next_milestone_due": "2026-11-15T04:37:50+08:00",
-    "updated_at": "2026-11-13T04:37:50+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2685 on the committed tree, inside a 48h window due 2026-11-15T04:38:36+08:00",
+    "next_milestone_due": "2026-11-15T04:38:36+08:00",
+    "updated_at": "2026-11-13T04:38:36+08:00"
   },
   "depts": [
     {
@@ -1006,7 +1006,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 39,
+    "log_lines_in_window": 40,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 15,
