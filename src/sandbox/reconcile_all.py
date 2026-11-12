@@ -6548,6 +6548,21 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_escaped_scope.py"),
      6),
+    # R2689: the R2685 face escapes the escape character and the list
+    # separator but NEVER the part joiner, so one label named
+    # `ab+duplicate:2` published byte for byte the word a real sibling plus a
+    # real duplicate part publishes, and parsing that word recovered ['ab']
+    # with the whole tail lost. This face escapes the escape character
+    # first, the list separator second and the part joiner third, publishes
+    # BOTH readings a word carries (the siblings and the duplicate count),
+    # and keeps the comma word, the two-sibling word, the single-sibling
+    # word and the duplicate words byte for byte (659 -> 660 suites,
+    # 4930 -> 4936).
+    ("os-probe-seam-unnameable-part-joiner-escaped-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_unnameable_part_joiner_escaped_scope.py"),
+     6),
     # R2595 birth-site repair of the round export driver health term: it
     # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
     # the recompute caliber can never satisfy once one tokens line sits in the

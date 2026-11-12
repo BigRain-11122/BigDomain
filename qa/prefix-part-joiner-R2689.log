@@ -1,0 +1,99 @@
+EVIDENCE CAPTURE round=R2689 suite=src/os/test_probe_seam_unnameable_part_joiner_escaped_scope.py legs=2
+== LEG A rc=0 digest=7E55A1015CBF4398
+PASS AC-PNAO1 one label carrying the joiner is escaped ({'a': 'strict-prefix-of:ab\\+duplicate:2'})
+PASS AC-PNAO1 the word differs from the genuine duplicate word (strict-prefix-of:ab\+duplicate:2 vs strict-prefix-of:ab+duplicate:2)
+PASS AC-PNAO1 the round trip recovers the whole label (['ab+duplicate:2'])
+PASS AC-PNAO1 the escaped word names ONE sibling (1)
+PASS AC-PNAO1 the escaped label carries NO duplicate part (None)
+PASS AC-PNAO1 the genuine word still reads one sibling AND two copies ({'siblings': ['ab'], 'duplicate': 2})
+PASS AC-PNAO2 the comma word rides R2685 byte for byte (strict-prefix-of:ab\,ac)
+PASS AC-PNAO2 the comma answer equals the R2685 face ({'a': 'strict-prefix-of:ab\\,ac'})
+PASS AC-PNAO2 the comma round trip still names ONE sibling (['ab,ac'])
+PASS AC-PNAO2 the comma word counts one sibling (1)
+PASS AC-PNAO2 the backslash fixture is byte identical ({'a': 'strict-prefix-of:ab\\\\\\,ac'} vs {'a': 'strict-prefix-of:ab\\\\\\,ac'})
+PASS AC-PNAO2 a label carrying a backslash keeps it (['ab\\,ac'])
+PASS AC-PNAO3 the two-sibling word is still strict-prefix-of:ab,ac
+PASS AC-PNAO3 the two-sibling answer equals R2685
+PASS AC-PNAO3 a plain word still names two siblings
+PASS AC-PNAO3 the single-sibling word is byte identical to R2679 ({'x': 'strict-prefix-of:xy'})
+PASS AC-PNAO3 the first-sibling reader is carried unchanged
+PASS AC-PNAO3 a duplicate with no sibling keeps its own word ({'a': 'duplicate:2'})
+PASS AC-PNAO3 a sibling beside a duplicate still joins with one part ({'a': 'strict-prefix-of:ab+duplicate:2'})
+PASS AC-PNAO3 three siblings still publish in order ({'a': 'strict-prefix-of:ab,ac,ad'})
+PASS AC-PNAO4 the covered word is withheld beside an unnameable label
+PASS AC-PNAO4 a fully nameable reason still reaches the covered word
+PASS AC-PNAO4 a stale verdict is never overwritten
+PASS AC-PNAO4 the sibling count reads from the word ({'a': 2})
+PASS AC-PNAO4 both readings are published ({'siblings': ['ab,ac', 'ab+duplicate:2'], 'duplicate': None})
+PASS AC-PNAO4 an unnameable label is never fully named
+PASS AC-PNAO4 nameable labels carry no reason
+PASS AC-PNAO5 the fixture 0 answer rides R2685 byte for byte ({'a': 'strict-prefix-of:ab\\,ac'} vs {'a': 'strict-prefix-of:ab\\,ac'})
+PASS AC-PNAO5 the fixture 1 answer rides R2685 byte for byte ({'a': 'strict-prefix-of:ab,ac'} vs {'a': 'strict-prefix-of:ab,ac'})
+PASS AC-PNAO5 the fixture 2 answer rides R2685 byte for byte ({'x': 'strict-prefix-of:xy'} vs {'x': 'strict-prefix-of:xy'})
+PASS AC-PNAO5 the fixture 3 answer rides R2685 byte for byte ({'a': 'duplicate:2'} vs {'a': 'duplicate:2'})
+PASS AC-PNAO5 the fixture 4 answer rides R2685 byte for byte ({'a': 'strict-prefix-of:ab+duplicate:2'} vs {'a': 'strict-prefix-of:ab+duplicate:2'})
+PASS AC-PNAO5 the fixture 5 answer rides R2685 byte for byte ({'a': 'strict-prefix-of:ab,ac,ad'} vs {'a': 'strict-prefix-of:ab,ac,ad'})
+PASS AC-PNAO5 the fixture 6 answer rides R2685 byte for byte ({'p': 'strict-prefix-of:pq\\,pr,ps'} vs {'p': 'strict-prefix-of:pq\\,pr,ps'})
+PASS AC-PNAO5 the unnameable readers ride unchanged (index=True unmatched=True)
+PASS AC-PNAO5 the prefix readers ride unchanged (index=True unmatched=True)
+PASS AC-PNAO5 the unique readers ride unchanged (index=True unmatched=True)
+PASS AC-PNAO5 a bounded live leg is read-only and BOTH readers are measured on the same fixture (modules=6 loops=104 unreadable=0 disagree=0)
+PASS AC-PNAO5 the SAME fixture reads tail-lost there and whole here (['ab'] vs ['ab+duplicate:2'])
+PASS AC-PNAO6 the module source is pure ASCII (14143 bytes)
+PASS AC-PNAO6 no clock, no network, no shell ([])
+PASS AC-PNAO6 the registry carries exactly one label row (1)
+PASS AC-PNAO6 the registry carries exactly one suite row (1)
+PASS AC-PNAO6 this suite exists on disk
+PASS AC-PNAO6 six criteria are declared
+SUITE PASS 6/6
+== LEG B rc=0 digest=7E55A1015CBF4398
+PASS AC-PNAO1 one label carrying the joiner is escaped ({'a': 'strict-prefix-of:ab\\+duplicate:2'})
+PASS AC-PNAO1 the word differs from the genuine duplicate word (strict-prefix-of:ab\+duplicate:2 vs strict-prefix-of:ab+duplicate:2)
+PASS AC-PNAO1 the round trip recovers the whole label (['ab+duplicate:2'])
+PASS AC-PNAO1 the escaped word names ONE sibling (1)
+PASS AC-PNAO1 the escaped label carries NO duplicate part (None)
+PASS AC-PNAO1 the genuine word still reads one sibling AND two copies ({'siblings': ['ab'], 'duplicate': 2})
+PASS AC-PNAO2 the comma word rides R2685 byte for byte (strict-prefix-of:ab\,ac)
+PASS AC-PNAO2 the comma answer equals the R2685 face ({'a': 'strict-prefix-of:ab\\,ac'})
+PASS AC-PNAO2 the comma round trip still names ONE sibling (['ab,ac'])
+PASS AC-PNAO2 the comma word counts one sibling (1)
+PASS AC-PNAO2 the backslash fixture is byte identical ({'a': 'strict-prefix-of:ab\\\\\\,ac'} vs {'a': 'strict-prefix-of:ab\\\\\\,ac'})
+PASS AC-PNAO2 a label carrying a backslash keeps it (['ab\\,ac'])
+PASS AC-PNAO3 the two-sibling word is still strict-prefix-of:ab,ac
+PASS AC-PNAO3 the two-sibling answer equals R2685
+PASS AC-PNAO3 a plain word still names two siblings
+PASS AC-PNAO3 the single-sibling word is byte identical to R2679 ({'x': 'strict-prefix-of:xy'})
+PASS AC-PNAO3 the first-sibling reader is carried unchanged
+PASS AC-PNAO3 a duplicate with no sibling keeps its own word ({'a': 'duplicate:2'})
+PASS AC-PNAO3 a sibling beside a duplicate still joins with one part ({'a': 'strict-prefix-of:ab+duplicate:2'})
+PASS AC-PNAO3 three siblings still publish in order ({'a': 'strict-prefix-of:ab,ac,ad'})
+PASS AC-PNAO4 the covered word is withheld beside an unnameable label
+PASS AC-PNAO4 a fully nameable reason still reaches the covered word
+PASS AC-PNAO4 a stale verdict is never overwritten
+PASS AC-PNAO4 the sibling count reads from the word ({'a': 2})
+PASS AC-PNAO4 both readings are published ({'siblings': ['ab,ac', 'ab+duplicate:2'], 'duplicate': None})
+PASS AC-PNAO4 an unnameable label is never fully named
+PASS AC-PNAO4 nameable labels carry no reason
+PASS AC-PNAO5 the fixture 0 answer rides R2685 byte for byte ({'a': 'strict-prefix-of:ab\\,ac'} vs {'a': 'strict-prefix-of:ab\\,ac'})
+PASS AC-PNAO5 the fixture 1 answer rides R2685 byte for byte ({'a': 'strict-prefix-of:ab,ac'} vs {'a': 'strict-prefix-of:ab,ac'})
+PASS AC-PNAO5 the fixture 2 answer rides R2685 byte for byte ({'x': 'strict-prefix-of:xy'} vs {'x': 'strict-prefix-of:xy'})
+PASS AC-PNAO5 the fixture 3 answer rides R2685 byte for byte ({'a': 'duplicate:2'} vs {'a': 'duplicate:2'})
+PASS AC-PNAO5 the fixture 4 answer rides R2685 byte for byte ({'a': 'strict-prefix-of:ab+duplicate:2'} vs {'a': 'strict-prefix-of:ab+duplicate:2'})
+PASS AC-PNAO5 the fixture 5 answer rides R2685 byte for byte ({'a': 'strict-prefix-of:ab,ac,ad'} vs {'a': 'strict-prefix-of:ab,ac,ad'})
+PASS AC-PNAO5 the fixture 6 answer rides R2685 byte for byte ({'p': 'strict-prefix-of:pq\\,pr,ps'} vs {'p': 'strict-prefix-of:pq\\,pr,ps'})
+PASS AC-PNAO5 the unnameable readers ride unchanged (index=True unmatched=True)
+PASS AC-PNAO5 the prefix readers ride unchanged (index=True unmatched=True)
+PASS AC-PNAO5 the unique readers ride unchanged (index=True unmatched=True)
+PASS AC-PNAO5 a bounded live leg is read-only and BOTH readers are measured on the same fixture (modules=6 loops=104 unreadable=0 disagree=0)
+PASS AC-PNAO5 the SAME fixture reads tail-lost there and whole here (['ab'] vs ['ab+duplicate:2'])
+PASS AC-PNAO6 the module source is pure ASCII (14143 bytes)
+PASS AC-PNAO6 no clock, no network, no shell ([])
+PASS AC-PNAO6 the registry carries exactly one label row (1)
+PASS AC-PNAO6 the registry carries exactly one suite row (1)
+PASS AC-PNAO6 this suite exists on disk
+PASS AC-PNAO6 six criteria are declared
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_escaped_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_scope.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=7E55A1015CBF4398
