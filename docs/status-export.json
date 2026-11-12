@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-12T13:00:33+08:00",
-  "do": "2026-11-12 R2667 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2661, 653/4894). Five readings: tree EMPTY at HEAD 5aac6b7d=origin/main, no index.lock; atbd_lines=0 unreplied_groups=0; decisions rows=114 tokens=63 new=0; group orders tail NEW row 2026-11-12 12:45 read and judged knowledge-only (a bm-a station_drive lane dispatch, no BigDomain face), so last_order ",
+  "export_ts": "2026-11-12T13:33:04+08:00",
+  "do": "2026-11-12 R2669 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2661 at 653 suites / 4894 criteria). Five readings at open: git status EMPTY at HEAD d0ee050c equal to origin/main with no index.lock; atbd_lines=0 unreplied_groups=0 in cph4/evolution-ledger.md; the content-addressed decisions scan read rows=114 tokens=63 with new=0; the group orders tail still carri",
   "ceo_face": {
-    "current": "2026-11-12 R2667 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2661, 653/4894). Five readings: tree EMPTY at HEAD 5aac6b7d=origin/main, no index.lock; atbd_lines=0 unreplied_groups=0; decisions rows=114 tokens=63 new=0; group orders tail NEW row 2026-11-12 12:45 read and judged knowledge-only (a bm-a station_drive lane dispatch, no BigDomain face), so last_order ",
-    "latest_artifact": "none landed yet for R2667",
-    "last_artifact": "none landed yet for R2667",
-    "next_milestone": "next window owes reconcile-battery-R2661 on the committed tree, inside a 48h window due 2026-11-14T13:00:33+08:00",
-    "next_milestone_due": "2026-11-14T13:00:33+08:00",
-    "updated_at": "2026-11-12T13:00:33+08:00"
+    "current": "2026-11-12 R2669 VERIFICATION window on the battery the debt gate named first (reconcile-battery-R2661 at 653 suites / 4894 criteria). Five readings at open: git status EMPTY at HEAD d0ee050c equal to origin/main with no index.lock; atbd_lines=0 unreplied_groups=0 in cph4/evolution-ledger.md; the content-addressed decisions scan read rows=114 tokens=63 with new=0; the group orders tail still carri",
+    "latest_artifact": "none landed yet for R2669",
+    "last_artifact": "none landed yet for R2669",
+    "next_milestone": "next window owes product-face-R2669 on the committed tree, inside a 48h window due 2026-11-14T13:33:04+08:00",
+    "next_milestone_due": "2026-11-14T13:33:04+08:00",
+    "updated_at": "2026-11-12T13:33:04+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "none landed yet for R2669",
     "none landed yet for R2667",
     "none landed yet for R2665",
     "none landed yet for R2663",
@@ -969,7 +970,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2659",
+      "2660",
       "OSLoop 执行 tick"
     ],
     [
@@ -988,10 +989,10 @@
   "self_drive": {
     "window": "2026-11-06..2026-11-12",
     "window_days": 7,
-    "log_lines_in_window": 18,
+    "log_lines_in_window": 19,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 18,
     "proposals_total": 7,
     "proposals_open": 5,
     "queue_main_open": 6,
