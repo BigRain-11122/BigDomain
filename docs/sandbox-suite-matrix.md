@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 655 | 4906 | 655/655 | R2676 |
+| 656 | 4912 | 655/655 | R2676 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -691,9 +691,10 @@
 | 651 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_scope.py | 6 | green | 180.2 |
 | 652 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_scope.py | 6 | green | 245.3 |
 | 653 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_scope.py | 6 | green | 239.9 |
-| 654 | os-export-driver-self-drive-health | ../os/test_export_driver_self_drive_health.py | 6 | green | 0.9 |
-| 655 | os-export-driver-health-verdict | ../os/test_export_R2431_health_verdict.py | 6 | green | 0.1 |
-|  | 合计 |  | 4906 | green 655 / FAIL 0 / no-evidence 0 |  |
+| 654 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_scope.py | 6 | no-evidence | - |
+| 655 | os-export-driver-self-drive-health | ../os/test_export_driver_self_drive_health.py | 6 | green | 0.9 |
+| 656 | os-export-driver-health-verdict | ../os/test_export_R2431_health_verdict.py | 6 | green | 0.1 |
+|  | 合计 |  | 4912 | green 655 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

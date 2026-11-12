@@ -6502,6 +6502,17 @@ SUITES = [
          "..", "os",
          "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_scope.py"),
      6),
+    # R2676 prefix-free ack index face: the R2675 labels were distinct but not
+    # tellable apart by a prefix - on the three-binding fixture `while2` named
+    # TWO labels and `while` named all three. Every label stays byte for byte
+    # and each one now publishes the SHORTEST prefix of itself that names
+    # exactly one label in the SAME reason, so the published prefixes are
+    # prefix-free among themselves (655 -> 656 suites, 4906 -> 4912).
+    ("os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_scope.py"),
+     6),
     # R2595 birth-site repair of the round export driver health term: it
     # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
     # the recompute caliber can never satisfy once one tokens line sits in the
