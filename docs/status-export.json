@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T15:50:31+08:00",
+  "export_ts": "2026-11-13T15:52:17+08:00",
   "do": "2026-11-13 R2697 VERIFICATION window ADOPTING the R2695 leg and CLOSING reconcile-battery-R2692 GREEN at the pre-registered 661 suites / 4942 criteria. Five readings at open: git status carried only this round own untracked evidence from an aborted R2697 attempt (qa/write-sensitive-R2697.log) at HEAD 3821e9b4 with no index.lock; ZERO @BigDomain rows in the group ledger; the five-still scan read DE",
   "ceo_face": {
     "current": "2026-11-13 R2697 VERIFICATION window ADOPTING the R2695 leg and CLOSING reconcile-battery-R2692 GREEN at the pre-registered 661 suites / 4942 criteria. Five readings at open: git status carried only this round own untracked evidence from an aborted R2697 attempt (qa/write-sensitive-R2697.log) at HEAD 3821e9b4 with no index.lock; ZERO @BigDomain rows in the group ledger; the five-still scan read DE",
     "latest_artifact": "write-sensitive-R2697-first-red.log (24858B) + write-sensitive-R2697.log (24877B)",
     "last_artifact": "write-sensitive-R2697-first-red.log (24858B) + write-sensitive-R2697.log (24877B)",
-    "next_milestone": "next window owes product-face-R2697 on the committed tree, inside a 48h window due 2026-11-15T15:50:31+08:00",
-    "next_milestone_due": "2026-11-15T15:50:31+08:00",
-    "updated_at": "2026-11-13T15:50:31+08:00"
+    "next_milestone": "next window owes product-face-R2697 on the committed tree, inside a 48h window due 2026-11-15T15:52:17+08:00",
+    "next_milestone_due": "2026-11-15T15:52:17+08:00",
+    "updated_at": "2026-11-13T15:52:17+08:00"
   },
   "depts": [
     {
@@ -1018,7 +1018,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 64,
+    "log_lines_in_window": 65,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 12,
