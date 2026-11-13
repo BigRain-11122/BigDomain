@@ -1,0 +1,24 @@
+--- sentinel: fingerprint-regen --check ---
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+sentinel exit=0 elapsed=3.7s
+--- profile: runner-profile --daily --check ---
+== stale-baseline check ==
+baseline source: qa/reconcile-daily-20261011-4.log
+check: byte-identical PASS
+profile exit=0 (observation-window: recorded, not gating)
+--- census: qa-writer-census --check ---
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+[flag] new-dialect: write-sensitive-R2709.log (class=other)
+census: files=2925 tee=2393 baselined=531
+disappeared=0
+flags=1
+verdict: DRIFT-FLAG
+census exit=2 elapsed=1.7s
