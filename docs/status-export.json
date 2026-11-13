@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T08:07:46+08:00",
+  "export_ts": "2026-11-13T08:08:53+08:00",
   "do": "2026-11-13 R2691 VERIFICATION window ADOPTING the R2690 leg and CLOSING reconcile-battery-R2689 GREEN at the pre-registered 660 suites / 4936 criteria. Five readings at open: git status EMPTY at HEAD 6cd11f18 equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger (the ledger face read no match at all); the content-addressed decisions scan read rows=143 tokens=66 against ",
   "ceo_face": {
     "current": "2026-11-13 R2691 VERIFICATION window ADOPTING the R2690 leg and CLOSING reconcile-battery-R2689 GREEN at the pre-registered 660 suites / 4936 criteria. Five readings at open: git status EMPTY at HEAD 6cd11f18 equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger (the ledger face read no match at all); the content-addressed decisions scan read rows=143 tokens=66 against ",
     "latest_artifact": "write-sensitive-R2691-first-red.log (26402B) + write-sensitive-R2691.log (25749B)",
     "last_artifact": "write-sensitive-R2691-first-red.log (26402B) + write-sensitive-R2691.log (25749B)",
-    "next_milestone": "next window owes product-face-R2691 on the committed tree, inside a 48h window due 2026-11-15T08:07:46+08:00",
-    "next_milestone_due": "2026-11-15T08:07:46+08:00",
-    "updated_at": "2026-11-13T08:07:46+08:00"
+    "next_milestone": "next window owes product-face-R2691 on the committed tree, inside a 48h window due 2026-11-15T08:08:53+08:00",
+    "next_milestone_due": "2026-11-15T08:08:53+08:00",
+    "updated_at": "2026-11-13T08:08:53+08:00"
   },
   "depts": [
     {
@@ -1012,7 +1012,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 65,
+    "log_lines_in_window": 66,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 12,
