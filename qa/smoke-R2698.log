@@ -1,0 +1,11 @@
+BigDomain QA charter daily crawl smoke - R2698 - 2026-11-13
+product face: src/os/probe_seam_dialect_tag_guard_scope.py + test_..._guard_scope.py
+  SUITE PASS 6/6 (AC-PNAQ1..AC-PNAQ6), evidence qa/prefix-tag-guard-R2698.log
+  capture legs=2 identical=True digest=76538109EAA41809 adjacent=2 fails=0
+  registry 662 suites / 4948 criteria / 662 unique names / 662 unique paths (by import)
+  matrix DOC-CURRENT at 69964 bytes / 662 rows
+crawl check 1 daily crawl: 1 direct official source fetched (A tier, cac.gov.cn full text)
+crawl check 2 benchmark freshness: docs/global-benchmarks.md section 4 appended today
+crawl check 3 source chain: URL + tier A + consumption point W39 recorded
+crawl check 4 signal wall: docs/research/intelligence-wall.md W39 row appended
+result: PASS 4/4 checks, zero fetch failures

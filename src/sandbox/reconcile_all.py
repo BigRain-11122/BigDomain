@@ -6577,6 +6577,18 @@ SUITES = [
          "..", "os",
          "test_probe_seam_unnameable_dialect_marker_scope.py"),
      6),
+    # R2698: the R2692 marker names the dialect but nothing validated the tag
+    # it names, so a word from a FUTURE dialect was silently read as a LEGACY
+    # word (body verbatim, then parsed by the legacy law) and a doubled marker
+    # was accepted as this face own output. This face refuses an unknown tag by
+    # name and a doubled marker by count, reports no body and no readings for a
+    # refusal, and keeps every legacy word and every R2692-published word byte
+    # for byte (661 -> 662 suites, 4942 -> 4948).
+    ("os-probe-seam-dialect-tag-guard-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_dialect_tag_guard_scope.py"),
+     6),
     # R2595 birth-site repair of the round export driver health term: it
     # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
     # the recompute caliber can never satisfy once one tokens line sits in the

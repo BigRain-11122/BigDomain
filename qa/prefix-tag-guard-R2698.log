@@ -1,0 +1,213 @@
+EVIDENCE CAPTURE round=R2698 suite=src/os/test_probe_seam_dialect_tag_guard_scope.py legs=2
+== LEG A rc=0 digest=76538109EAA41809
+PASS AC-PNAQ1 a future dialect is refused (unknown-dialect)
+PASS AC-PNAQ1 the refusal NAMES the unknown tag ('2')
+PASS AC-PNAQ1 the refusal carries its own word ('refused:unknown-dialect:2')
+PASS AC-PNAQ1 it is never handed back as a legacy word with its body verbatim (None / None)
+PASS AC-PNAQ1 and it states NO readings (None / None)
+PASS AC-PNAQ1 the word is not a legal reading
+PASS AC-PNAQ1 the R2692 reading of the same word WAS the legacy mis-typing this face refuses ({'dialect': None, 'markers': 0, 'body': 'dialect:2+strict-prefix-of:ab', 'siblings': ['ab'], 'duplicate': None})
+PASS AC-PNAQ1 a bare future marker is refused too ('refused:unknown-dialect:2')
+PASS AC-PNAQ1 an empty tag is an unknown tag, not a pedigree ('')
+PASS AC-PNAQ1 a named stranger tag is refused by that name ('refused:unknown-dialect:x')
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab\\,ac' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab\\,ac', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab\\,ac', 'siblings': ['ab,ac'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab\\,ac', 'siblings': ['ab,ac'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab\\,ac' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab,ac' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab,ac', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab,ac', 'siblings': ['ab', 'ac'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab,ac', 'siblings': ['ab', 'ac'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab,ac' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:xy' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:xy', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:xy', 'siblings': ['xy'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:xy', 'siblings': ['xy'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:xy' is read, not refused
+PASS AC-PNAQ2 'dialect:1+duplicate:2' rides R2692 on every reading key ({'word': 'dialect:1+duplicate:2', 'dialect': '1', 'markers': 1, 'body': 'duplicate:2', 'siblings': None, 'duplicate': 2, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'duplicate:2', 'siblings': None, 'duplicate': 2})
+PASS AC-PNAQ2 'dialect:1+duplicate:2' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab+duplicate:2' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab+duplicate:2', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab+duplicate:2', 'siblings': ['ab'], 'duplicate': 2, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab+duplicate:2', 'siblings': ['ab'], 'duplicate': 2})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab+duplicate:2' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab,ac,ad' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab,ac,ad', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab,ac,ad', 'siblings': ['ab', 'ac', 'ad'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab,ac,ad', 'siblings': ['ab', 'ac', 'ad'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab,ac,ad' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:pq\\,pr,ps' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:pq\\,pr,ps', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:pq\\,pr,ps', 'siblings': ['pq,pr', 'ps'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:pq\\,pr,ps', 'siblings': ['pq,pr', 'ps'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:pq\\,pr,ps' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab\\+duplicate:2' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab\\+duplicate:2', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab\\+duplicate:2', 'siblings': ['ab+duplicate:2'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab\\+duplicate:2', 'siblings': ['ab+duplicate:2'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab\\+duplicate:2' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab\\\\\\,ac' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab\\\\\\,ac', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab\\\\\\,ac', 'siblings': ['ab\\,ac'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab\\\\\\,ac', 'siblings': ['ab\\,ac'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab\\\\\\,ac' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab,ac+duplicate:2' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab,ac+duplicate:2', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab,ac+duplicate:2', 'siblings': ['ab', 'ac'], 'duplicate': 2, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab,ac+duplicate:2', 'siblings': ['ab', 'ac'], 'duplicate': 2})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab,ac+duplicate:2' is read, not refused
+PASS AC-PNAQ2 the legacy face covered 10 distinct words
+PASS AC-PNAQ2 the legacy string reports no dialect (None)
+PASS AC-PNAQ2 and the same readings as before (['ab'] / 2)
+PASS AC-PNAQ2 its body is handed back verbatim ('strict-prefix-of:ab+duplicate:2')
+PASS AC-PNAQ2 the legacy words of a fixture ride R2692 byte for byte
+PASS AC-PNAQ3 the published word is byte for byte R2692's ({'a': 'dialect:1+strict-prefix-of:ab\\+duplicate:2'} vs {'a': 'dialect:1+strict-prefix-of:ab\\+duplicate:2'})
+PASS AC-PNAQ3 and that word is the marked one ('dialect:1+strict-prefix-of:ab\\+duplicate:2')
+PASS AC-PNAQ3 it reads back its tag ('1')
+PASS AC-PNAQ3 it carries one dialect part and is not refused
+PASS AC-PNAQ3 the body is the stripped word ('strict-prefix-of:ab\\+duplicate:2')
+PASS AC-PNAQ3 the readings are R2692's own (['ab+duplicate:2'] / None)
+PASS AC-PNAQ3 the validated tag agrees
+PASS AC-PNAQ3 every word this face publishes is legal
+PASS AC-PNAQ3 fixture ['a', 'ab,ac'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'ab', 'ac'] publishes only legal words
+PASS AC-PNAQ3 fixture ['x', 'xy'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'a'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'ab', 'a'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'ab', 'ac', 'ad'] publishes only legal words
+PASS AC-PNAQ3 fixture ['p', 'pq,pr', 'ps'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'ab+duplicate:2'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'ab\\,ac'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'ab', 'ac', 'a'] publishes only legal words
+PASS AC-PNAQ4 a doubled marker is refused ('multiple-dialect-parts')
+PASS AC-PNAQ4 the refusal NAMES the count (2)
+PASS AC-PNAQ4 and carries its own word ('refused:multiple-dialect-parts:2')
+PASS AC-PNAQ4 it is not read as this face own word
+PASS AC-PNAQ4 the R2692 reading of the same word ACCEPTED it as tag 1 with markers=2 ({'dialect': '1', 'markers': 2, 'body': 'dialect:1+strict-prefix-of:ab', 'siblings': ['ab'], 'duplicate': None})
+PASS AC-PNAQ4 ONE tail marker still claims no pedigree (None / None)
+PASS AC-PNAQ4 and the count reports it without a refusal (1)
+PASS AC-PNAQ4 while the marker count still sees it (1)
+PASS AC-PNAQ4 a marker with no body is still a legal tag-1 word (the SHAPE is the seeded successor, not this criterion) ({'word': 'dialect:1', 'dialect': '1', 'markers': 1, 'body': 'dialect:1', 'siblings': None, 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None})
+PASS AC-PNAQ5 R2689 fixture 0 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 0 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 1 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 1 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 2 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 2 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 3 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 3 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 4 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 4 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 5 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 5 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 6 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 6 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 7 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 7 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 8 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 8 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 9 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 9 rides byte for byte
+PASS AC-PNAQ5 R2685 fixture 0 rides unchanged
+PASS AC-PNAQ5 R2685 fixture 1 rides unchanged
+PASS AC-PNAQ5 R2685 fixture 2 rides unchanged
+PASS AC-PNAQ5 R2685 fixture 3 rides unchanged
+PASS AC-PNAQ5 R2685 fixture 4 rides unchanged
+PASS AC-PNAQ5 R2685 fixture 5 rides unchanged
+PASS AC-PNAQ5 nameable labels still carry no word
+PASS AC-PNAQ5 an unnameable label is never fully named
+PASS AC-PNAQ5 the body parser itself rides R2692 unchanged
+PASS AC-PNAQ5 a reason summary over a legacy word is all legal
+PASS AC-PNAQ5 a bounded live leg is read-only (modules=4 loops=74 unreadable=0 disagree=0)
+PASS AC-PNAQ5 the SAME fixture reads the same on BOTH readers
+PASS AC-PNAQ5 the same FUTURE word is REFUSED here and was read as a legacy body there ({'dialect': None, 'markers': 0, 'body': 'dialect:2+strict-prefix-of:ab', 'siblings': ['ab'], 'duplicate': None})
+PASS AC-PNAQ6 the module source is pure ASCII (13122 bytes)
+PASS AC-PNAQ6 no clock, no network, no shell ([])
+PASS AC-PNAQ6 every import is stdlib or a shipped probe (['import argparse', 'import json', 'import os', 'import sys', 'import probe_seam_unnameable_dialect_marker_scope as PNAP  # noqa'])
+PASS AC-PNAQ6 the registry carries exactly one label row (1)
+PASS AC-PNAQ6 the registry carries exactly one suite row (1)
+PASS AC-PNAQ6 this suite exists on disk
+PASS AC-PNAQ6 six criteria are declared
+SUITE PASS 6/6
+== LEG B rc=0 digest=76538109EAA41809
+PASS AC-PNAQ1 a future dialect is refused (unknown-dialect)
+PASS AC-PNAQ1 the refusal NAMES the unknown tag ('2')
+PASS AC-PNAQ1 the refusal carries its own word ('refused:unknown-dialect:2')
+PASS AC-PNAQ1 it is never handed back as a legacy word with its body verbatim (None / None)
+PASS AC-PNAQ1 and it states NO readings (None / None)
+PASS AC-PNAQ1 the word is not a legal reading
+PASS AC-PNAQ1 the R2692 reading of the same word WAS the legacy mis-typing this face refuses ({'dialect': None, 'markers': 0, 'body': 'dialect:2+strict-prefix-of:ab', 'siblings': ['ab'], 'duplicate': None})
+PASS AC-PNAQ1 a bare future marker is refused too ('refused:unknown-dialect:2')
+PASS AC-PNAQ1 an empty tag is an unknown tag, not a pedigree ('')
+PASS AC-PNAQ1 a named stranger tag is refused by that name ('refused:unknown-dialect:x')
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab\\,ac' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab\\,ac', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab\\,ac', 'siblings': ['ab,ac'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab\\,ac', 'siblings': ['ab,ac'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab\\,ac' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab,ac' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab,ac', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab,ac', 'siblings': ['ab', 'ac'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab,ac', 'siblings': ['ab', 'ac'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab,ac' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:xy' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:xy', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:xy', 'siblings': ['xy'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:xy', 'siblings': ['xy'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:xy' is read, not refused
+PASS AC-PNAQ2 'dialect:1+duplicate:2' rides R2692 on every reading key ({'word': 'dialect:1+duplicate:2', 'dialect': '1', 'markers': 1, 'body': 'duplicate:2', 'siblings': None, 'duplicate': 2, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'duplicate:2', 'siblings': None, 'duplicate': 2})
+PASS AC-PNAQ2 'dialect:1+duplicate:2' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab+duplicate:2' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab+duplicate:2', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab+duplicate:2', 'siblings': ['ab'], 'duplicate': 2, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab+duplicate:2', 'siblings': ['ab'], 'duplicate': 2})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab+duplicate:2' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab,ac,ad' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab,ac,ad', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab,ac,ad', 'siblings': ['ab', 'ac', 'ad'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab,ac,ad', 'siblings': ['ab', 'ac', 'ad'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab,ac,ad' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:pq\\,pr,ps' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:pq\\,pr,ps', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:pq\\,pr,ps', 'siblings': ['pq,pr', 'ps'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:pq\\,pr,ps', 'siblings': ['pq,pr', 'ps'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:pq\\,pr,ps' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab\\+duplicate:2' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab\\+duplicate:2', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab\\+duplicate:2', 'siblings': ['ab+duplicate:2'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab\\+duplicate:2', 'siblings': ['ab+duplicate:2'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab\\+duplicate:2' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab\\\\\\,ac' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab\\\\\\,ac', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab\\\\\\,ac', 'siblings': ['ab\\,ac'], 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab\\\\\\,ac', 'siblings': ['ab\\,ac'], 'duplicate': None})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab\\\\\\,ac' is read, not refused
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab,ac+duplicate:2' rides R2692 on every reading key ({'word': 'dialect:1+strict-prefix-of:ab,ac+duplicate:2', 'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab,ac+duplicate:2', 'siblings': ['ab', 'ac'], 'duplicate': 2, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None} vs {'dialect': '1', 'markers': 1, 'body': 'strict-prefix-of:ab,ac+duplicate:2', 'siblings': ['ab', 'ac'], 'duplicate': 2})
+PASS AC-PNAQ2 'dialect:1+strict-prefix-of:ab,ac+duplicate:2' is read, not refused
+PASS AC-PNAQ2 the legacy face covered 10 distinct words
+PASS AC-PNAQ2 the legacy string reports no dialect (None)
+PASS AC-PNAQ2 and the same readings as before (['ab'] / 2)
+PASS AC-PNAQ2 its body is handed back verbatim ('strict-prefix-of:ab+duplicate:2')
+PASS AC-PNAQ2 the legacy words of a fixture ride R2692 byte for byte
+PASS AC-PNAQ3 the published word is byte for byte R2692's ({'a': 'dialect:1+strict-prefix-of:ab\\+duplicate:2'} vs {'a': 'dialect:1+strict-prefix-of:ab\\+duplicate:2'})
+PASS AC-PNAQ3 and that word is the marked one ('dialect:1+strict-prefix-of:ab\\+duplicate:2')
+PASS AC-PNAQ3 it reads back its tag ('1')
+PASS AC-PNAQ3 it carries one dialect part and is not refused
+PASS AC-PNAQ3 the body is the stripped word ('strict-prefix-of:ab\\+duplicate:2')
+PASS AC-PNAQ3 the readings are R2692's own (['ab+duplicate:2'] / None)
+PASS AC-PNAQ3 the validated tag agrees
+PASS AC-PNAQ3 every word this face publishes is legal
+PASS AC-PNAQ3 fixture ['a', 'ab,ac'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'ab', 'ac'] publishes only legal words
+PASS AC-PNAQ3 fixture ['x', 'xy'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'a'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'ab', 'a'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'ab', 'ac', 'ad'] publishes only legal words
+PASS AC-PNAQ3 fixture ['p', 'pq,pr', 'ps'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'ab+duplicate:2'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'ab\\,ac'] publishes only legal words
+PASS AC-PNAQ3 fixture ['a', 'ab', 'ac', 'a'] publishes only legal words
+PASS AC-PNAQ4 a doubled marker is refused ('multiple-dialect-parts')
+PASS AC-PNAQ4 the refusal NAMES the count (2)
+PASS AC-PNAQ4 and carries its own word ('refused:multiple-dialect-parts:2')
+PASS AC-PNAQ4 it is not read as this face own word
+PASS AC-PNAQ4 the R2692 reading of the same word ACCEPTED it as tag 1 with markers=2 ({'dialect': '1', 'markers': 2, 'body': 'dialect:1+strict-prefix-of:ab', 'siblings': ['ab'], 'duplicate': None})
+PASS AC-PNAQ4 ONE tail marker still claims no pedigree (None / None)
+PASS AC-PNAQ4 and the count reports it without a refusal (1)
+PASS AC-PNAQ4 while the marker count still sees it (1)
+PASS AC-PNAQ4 a marker with no body is still a legal tag-1 word (the SHAPE is the seeded successor, not this criterion) ({'word': 'dialect:1', 'dialect': '1', 'markers': 1, 'body': 'dialect:1', 'siblings': None, 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None})
+PASS AC-PNAQ5 R2689 fixture 0 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 0 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 1 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 1 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 2 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 2 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 3 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 3 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 4 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 4 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 5 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 5 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 6 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 6 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 7 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 7 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 8 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 8 rides byte for byte
+PASS AC-PNAQ5 R2689 fixture 9 rides byte for byte
+PASS AC-PNAQ5 R2692 fixture 9 rides byte for byte
+PASS AC-PNAQ5 R2685 fixture 0 rides unchanged
+PASS AC-PNAQ5 R2685 fixture 1 rides unchanged
+PASS AC-PNAQ5 R2685 fixture 2 rides unchanged
+PASS AC-PNAQ5 R2685 fixture 3 rides unchanged
+PASS AC-PNAQ5 R2685 fixture 4 rides unchanged
+PASS AC-PNAQ5 R2685 fixture 5 rides unchanged
+PASS AC-PNAQ5 nameable labels still carry no word
+PASS AC-PNAQ5 an unnameable label is never fully named
+PASS AC-PNAQ5 the body parser itself rides R2692 unchanged
+PASS AC-PNAQ5 a reason summary over a legacy word is all legal
+PASS AC-PNAQ5 a bounded live leg is read-only (modules=4 loops=74 unreadable=0 disagree=0)
+PASS AC-PNAQ5 the SAME fixture reads the same on BOTH readers
+PASS AC-PNAQ5 the same FUTURE word is REFUSED here and was read as a legacy body there ({'dialect': None, 'markers': 0, 'body': 'dialect:2+strict-prefix-of:ab', 'siblings': ['ab'], 'duplicate': None})
+PASS AC-PNAQ6 the module source is pure ASCII (13122 bytes)
+PASS AC-PNAQ6 no clock, no network, no shell ([])
+PASS AC-PNAQ6 every import is stdlib or a shipped probe (['import argparse', 'import json', 'import os', 'import sys', 'import probe_seam_unnameable_dialect_marker_scope as PNAP  # noqa'])
+PASS AC-PNAQ6 the registry carries exactly one label row (1)
+PASS AC-PNAQ6 the registry carries exactly one suite row (1)
+PASS AC-PNAQ6 this suite exists on disk
+PASS AC-PNAQ6 six criteria are declared
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_probe_seam_unnameable_dialect_marker_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_unnameable_part_joiner_escaped_scope.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=76538109EAA41809

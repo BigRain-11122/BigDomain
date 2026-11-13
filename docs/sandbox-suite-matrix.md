@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 661 | 4942 | 661/661 | R2695 |
+| 662 | 4948 | 661/661 | R2695 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -697,9 +697,10 @@
 | 657 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-unnameable-siblings-escaped-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_escaped_scope.py | 6 | green | 170.3 |
 | 658 | os-probe-seam-unnameable-part-joiner-escaped-scope | ../os/test_probe_seam_unnameable_part_joiner_escaped_scope.py | 6 | green | 87.5 |
 | 659 | os-probe-seam-unnameable-dialect-marker-scope | ../os/test_probe_seam_unnameable_dialect_marker_scope.py | 6 | green | 29.9 |
-| 660 | os-export-driver-self-drive-health | ../os/test_export_driver_self_drive_health.py | 6 | green | 0.9 |
-| 661 | os-export-driver-health-verdict | ../os/test_export_R2431_health_verdict.py | 6 | green | 0.9 |
-|  | 合计 |  | 4942 | green 661 / FAIL 0 / no-evidence 0 |  |
+| 660 | os-probe-seam-dialect-tag-guard-scope | ../os/test_probe_seam_dialect_tag_guard_scope.py | 6 | no-evidence | - |
+| 661 | os-export-driver-self-drive-health | ../os/test_export_driver_self_drive_health.py | 6 | green | 0.9 |
+| 662 | os-export-driver-health-verdict | ../os/test_export_R2431_health_verdict.py | 6 | green | 0.9 |
+|  | 合计 |  | 4948 | green 661 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 
