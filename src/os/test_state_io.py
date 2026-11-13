@@ -31,6 +31,10 @@ EXPECTED_CRITERIA = 8
 MODULE = os.path.join(BASE, "state_io.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-io"
+# The drift sample must sit OFF the canon indent, so derive it from the
+# module own value: hardcoding it made the drift leg vanish the moment
+# ITEM_INDENT became that same number (R2692 change, caught by R2693 battery).
+DRIFT_INDENT = SIO.ITEM_INDENT + 2
 
 PASSES = 0
 FAILS = 0
@@ -54,31 +58,25 @@ def sample_text(eol="\n", indent=2):
     body = json.dumps({"tick": 7, "note": "x", "log": ["one", "two"]},
                       indent=2)
     lines = body.split("\n")
-    out = []
+    fixed = []
     inside = False
     for line in lines:
-        out.append(line)
         if line.strip().startswith('"log": ['):
             inside = True
-        elif inside and line.strip() == "]":
-            inside = False
-    if indent != 2:
-        fixed = []
-        inside = False
-        for line in out:
-            if line.strip().startswith('"log": ['):
-                inside = True
-                fixed.append(line)
-                continue
-            if inside and line.strip() == "]":
-                inside = False
-                fixed.append(line)
-                continue
-            if inside and line.strip().startswith('"'):
-                fixed.append(" " * indent + line.strip())
-                continue
             fixed.append(line)
-        out = fixed
+            continue
+        if inside and line.strip() == "]":
+            inside = False
+            fixed.append(line)
+            continue
+        if inside and line.strip().startswith('"'):
+            # Always apply the requested indent: json.dumps parks log items at
+            # 4 spaces, so skipping this when indent==2 silently produced a
+            # "clean" sample that was off the canon indent.
+            fixed.append(" " * indent + line.strip())
+            continue
+        fixed.append(line)
+    out = fixed
     return eol.join(out) + eol
 
 
@@ -92,7 +90,7 @@ def write_sample(folder, text, name="state.json"):
 def ac_sio1():
     folder = tmpdir()
     good = write_sample(folder, sample_text("\r\n", SIO.ITEM_INDENT), "good.json")
-    bad = write_sample(folder, sample_text("\n", 2), "bad.json")
+    bad = write_sample(folder, sample_text("\n", DRIFT_INDENT), "bad.json")
     measured_good = SIO.report(good)
     measured_bad = SIO.report(bad)
     ok = (
@@ -118,7 +116,7 @@ def ac_sio1():
 
 def ac_sio2():
     folder = tmpdir()
-    bad = write_sample(folder, sample_text("\n", 2), "bad.json")
+    bad = write_sample(folder, sample_text("\n", DRIFT_INDENT), "bad.json")
     text = SIO.decode(SIO.read_raw(bad))
     out = SIO.canon(text)
     data_ok = SIO.parse(out) == SIO.parse(text)
@@ -129,7 +127,7 @@ def ac_sio2():
           and all((len(line) - len(line.lstrip(" "))) == SIO.ITEM_INDENT
                   for line in out.split("\r\n")
                   if line.strip() in ('"one",', '"two"')))
-    check(ok, "AC-SIO2 canon forces CRLF+16-space items, payload unchanged")
+    check(ok, "AC-SIO2 canon forces CRLF and the canon indent, payload unchanged")
 
 
 def ac_sio3():
