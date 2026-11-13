@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T09:52:07+08:00",
+  "export_ts": "2026-11-13T09:53:13+08:00",
   "do": "2026-11-13 R2695 VERIFICATION window ADOPTING the R2693 leg and MEASURING ITS RED RATHER THAN DRESSING IT UP. Five readings at open, all clean: git status EMPTY at HEAD 85dc4e6b with no index.lock; ZERO @BigDomain rows in the group ledger (atbd_lines=0); the content-addressed decisions scan read file_tokens=77 against the stored 258-token union baseline with new=5, every one of them a B- prefix (B",
   "ceo_face": {
     "current": "2026-11-13 R2695 VERIFICATION window ADOPTING the R2693 leg and MEASURING ITS RED RATHER THAN DRESSING IT UP. Five readings at open, all clean: git status EMPTY at HEAD 85dc4e6b with no index.lock; ZERO @BigDomain rows in the group ledger (atbd_lines=0); the content-addressed decisions scan read file_tokens=77 against the stored 258-token union baseline with new=5, every one of them a B- prefix (B",
     "latest_artifact": "none landed yet for R2695",
     "last_artifact": "none landed yet for R2695",
-    "next_milestone": "next window owes reconcile-battery-R2692 on the committed tree, inside a 48h window due 2026-11-15T09:52:07+08:00",
-    "next_milestone_due": "2026-11-15T09:52:07+08:00",
-    "updated_at": "2026-11-13T09:52:07+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2692 on the committed tree, inside a 48h window due 2026-11-15T09:53:13+08:00",
+    "next_milestone_due": "2026-11-15T09:53:13+08:00",
+    "updated_at": "2026-11-13T09:53:13+08:00"
   },
   "depts": [
     {
@@ -1016,7 +1016,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 65,
+    "log_lines_in_window": 66,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 12,
