@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T10:48:27+08:00",
+  "export_ts": "2026-11-13T10:49:30+08:00",
   "do": "2026-11-13 R2696 VERIFICATION continuation window on the battery the debt gate names first (reconcile-battery-R2692, pre-registered 661 suites / 4942 criteria at R2692). Five readings at open: git status carried exactly ONE untracked entry, tmp/, holding two R2696 decision-scan scripts and one R2694 __pycache__ file that no earlier round deleted - own residue rather than another writer - at HEAD 2",
   "ceo_face": {
     "current": "2026-11-13 R2696 VERIFICATION continuation window on the battery the debt gate names first (reconcile-battery-R2692, pre-registered 661 suites / 4942 criteria at R2692). Five readings at open: git status carried exactly ONE untracked entry, tmp/, holding two R2696 decision-scan scripts and one R2694 __pycache__ file that no earlier round deleted - own residue rather than another writer - at HEAD 2",
     "latest_artifact": "none landed yet for R2696",
     "last_artifact": "none landed yet for R2696",
-    "next_milestone": "next window owes reconcile-battery-R2692 on the committed tree, inside a 48h window due 2026-11-15T10:48:27+08:00",
-    "next_milestone_due": "2026-11-15T10:48:27+08:00",
-    "updated_at": "2026-11-13T10:48:27+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2692 on the committed tree, inside a 48h window due 2026-11-15T10:49:30+08:00",
+    "next_milestone_due": "2026-11-15T10:49:30+08:00",
+    "updated_at": "2026-11-13T10:49:30+08:00"
   },
   "depts": [
     {
@@ -1017,7 +1017,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 57,
+    "log_lines_in_window": 58,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 11,
