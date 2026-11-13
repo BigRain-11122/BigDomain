@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T04:57:45+08:00",
+  "export_ts": "2026-11-14T05:00:36+08:00",
   "do": "2026-11-14 R2713 VERIFICATION ADOPTION window that CLOSED the round-long battery loop: reconcile-battery-R2710 (opened R2710, carried 3 windows, stale) was ADOPTED by its evidence path qa/reconcile-all-R2713.log and never relaunched. PID CHAIN GONE BY COMMAND LINE before any byte was read (battery_stream 53944 and reconcile_all 14856 both absent from the process table), and the stream closes on 'T",
   "ceo_face": {
     "current": "2026-11-14 R2713 VERIFICATION ADOPTION window that CLOSED the round-long battery loop: reconcile-battery-R2710 (opened R2710, carried 3 windows, stale) was ADOPTED by its evidence path qa/reconcile-all-R2713.log and never relaunched. PID CHAIN GONE BY COMMAND LINE before any byte was read (battery_stream 53944 and reconcile_all 14856 both absent from the process table), and the stream closes on 'T",
-    "latest_artifact": "reconcile-all-R2713.log (1197458B)",
-    "last_artifact": "reconcile-all-R2713.log (1197458B)",
-    "next_milestone": "next window owes product-face-R2713 on the committed tree, inside a 48h window due 2026-11-16T04:57:45+08:00",
-    "next_milestone_due": "2026-11-16T04:57:45+08:00",
-    "updated_at": "2026-11-14T04:57:45+08:00"
+    "latest_artifact": "reconcile-all-R2713.log (1197458B) + write-sensitive-R2713.log (14192B)",
+    "last_artifact": "reconcile-all-R2713.log (1197458B) + write-sensitive-R2713.log (14192B)",
+    "next_milestone": "next window owes product-face-R2713 on the committed tree, inside a 48h window due 2026-11-16T05:00:36+08:00",
+    "next_milestone_due": "2026-11-16T05:00:36+08:00",
+    "updated_at": "2026-11-14T05:00:36+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "reconcile-all-R2713.log (1197458B) + write-sensitive-R2713.log (14192B)",
     "reconcile-all-R2713.log (1197458B)",
     "census-baseline-add-R2712.log (798B)",
     "reconcile-all-R2711.log (1195013B)",
@@ -1037,7 +1038,7 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 39,
+    "log_lines_in_window": 40,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 6,

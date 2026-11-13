@@ -1,0 +1,219 @@
+WRITE-SENSITIVE RERUN R2713
+leg: battery-R2713 window 2026-11-14 04:00:18..04:55:06 (BATTERY rc=0 3287.9s), adopted at R2713
+commits under the leg: 83266139, bda48094 and this window own 8178e39f
+tree: final committed tree at HEAD 8178e39f084aceff0e0192c1a88e4e93169b1a25 (measured after the closeout commit)
+suites: 15, the same set R2709 pinned
+
+=== SUITE os-matrix-stamp-compare rc=0 pass_lines=6 fail_lines=0
+matrix_stamp_compare suite (expected criteria 6)
+PASS AC-MSC1 a doc from another minute reads PASS and the real generator follows its stamp
+PASS AC-MSC2 a genuine equal-length content difference FAILs naming both byte counts
+PASS AC-MSC3 missing doc / missing tool / unreadable evidence keep their own codes and never fail open
+PASS AC-MSC4 --check remains the authority and no path rewrites the shipped doc
+PASS AC-MSC5 stamp-line absence is a refusal with its own code rather than an assumed pass
+PASS AC-MSC6 pure ASCII, stdlib only, no clock, no network, one stamp law, wired with its own label
+SUITE PASS 6/6
+=== SUITE os-matrix-stamp-provenance-line rc=0 pass_lines=28 fail_lines=0
+MATRIX STAMP PROVENANCE LINE suite (R2442, 6 criteria)
+  PASS AC-MSPL1 stamp-from render records the flag and source
+  PASS AC-MSPL1 command line keeps today's wording
+  PASS AC-MSPL1 ordinary render records nothing extra
+  PASS AC-MSPL1 ordinary render keeps the header/label block byte for byte
+  PASS AC-MSPL2 the stamp line carries the value doc_stamp answered
+  PASS AC-MSPL2 the provenance line is the seam's own segment
+  PASS AC-MSPL2 the recorded line restates no stamp value
+  PASS AC-MSPL3 ordinary doc answers the evidence path
+  PASS AC-MSPL3 stamp-aligned doc answers the evidence path
+  PASS AC-MSPL3 shipped doc answers the same path
+  PASS AC-MSPL4 --check PASS on the ordinary render
+  PASS AC-MSPL4 --check PASS on the stamp-aligned render
+  PASS AC-MSPL4 the recorded source reads back at exit 0
+  PASS AC-MSPL4 the read-back equals the render's own source
+  PASS AC-MSPL5 the patterns file carries the new label
+  PASS AC-MSPL5 the label text is not in the source
+  PASS AC-MSPL5 the label is asked of the patterns at CALL time
+  PASS AC-MSPL5 a patterns file without the label fails closed
+  PASS AC-MSPL5 existing label lines keep their order
+  PASS AC-MSPL5 the shipped doc carries that same order
+  PASS AC-MSPL5 the new segment sits directly under the command line
+  PASS AC-MSPL6 source is pure ASCII
+  PASS AC-MSPL6 imports are stdlib only (['argparse', 'json', 'sys'])
+  PASS AC-MSPL6 the module reads no clock
+  PASS AC-MSPL6 zero network imports
+  PASS AC-MSPL6 the module holds no write primitive
+  PASS AC-MSPL6 the runner wires this suite
+  PASS AC-MSPL6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+=== SUITE os-matrix-stamp-from-liveness rc=0 pass_lines=32 fail_lines=0
+MATRIX STAMP FROM LIVENESS suite (R2494, 6 criteria)
+  PASS AC-MSFL1 a source on the tree reads LIVE
+  PASS AC-MSFL1 the same doc reads MISSING once the tree moved
+  PASS AC-MSFL1 the recorded string is published verbatim
+  PASS AC-MSFL1 reading the doc rewrites no byte of it
+  PASS AC-MSFL1 the provenance reader is asked at CALL time
+  PASS AC-MSFL2 the exact recorded path reads LIVE
+  PASS AC-MSFL2 LIVE names the resolved path ('qa/deep/borrow-R2494-b.log')
+  PASS AC-MSFL2 the reading carries the segment the doc must hold
+  PASS AC-MSFL2 deleting the source moves the reading to MISSING
+  PASS AC-MSFL2 the CLI names the dangling borrow at exit 2
+  PASS AC-MSFL3 two matching files read AMBIGUOUS
+  PASS AC-MSFL3 an ambiguous borrow is not picked for the caller
+  PASS AC-MSFL3 both candidates are named (['logs/dup-R2494.log', 'qa/dup-R2494.log'])
+  PASS AC-MSFL3 the ambiguous reading keeps the recorded string
+  PASS AC-MSFL3 the CLI publishes both candidates
+  PASS AC-MSFL4 a doc with no borrow reads NONE
+  PASS AC-MSFL4 an absent borrow is not called a dangling one
+  PASS AC-MSFL4 no segment is invented for an ordinary doc
+  PASS AC-MSFL4 the CLI reads NONE at exit 0
+  PASS AC-MSFL5 suite_matrix is untouched by this face
+  PASS AC-MSFL5 two renders are byte-identical
+  PASS AC-MSFL5 --check still reads PASS at exit 0
+  PASS AC-MSFL5 doc_stamp still reads the doc's own stamp line
+  PASS AC-MSFL5 doc_evidence_face still reads the same evidence path
+  PASS AC-MSFL6 source is pure ASCII
+  PASS AC-MSFL6 imports are stdlib only (['argparse', 'json', 'os', 'sys'])
+  PASS AC-MSFL6 the module reads no clock
+  PASS AC-MSFL6 zero network imports
+  PASS AC-MSFL6 the module holds no write primitive
+  PASS AC-MSFL6 the module names its own reconcile label
+  PASS AC-MSFL6 the runner wires this suite
+  PASS AC-MSFL6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+=== SUITE os-matrix-evidence-pile-consistency rc=0 pass_lines=6 fail_lines=0
+matrix_evidence_pile_consistency suite (expected criteria 6)
+PASS AC-MEPC1 a bare evidence name reaches the tool as the measured pile plus the basename, and a patched derivation moves the argument the tool receives
+PASS AC-MEPC2 a name that carries a directory is handed through unchanged, byte for byte, and its section report is the pre-wire reading
+PASS AC-MEPC3 the tool argument and the guarded pile resolve to the same file under a root that is not the cwd - the old bare name resolved to nothing there
+PASS AC-MEPC4 a name that cannot be placed refuses before the tool is called at all, so no doc is rendered from a pile the guard cannot name
+PASS AC-MEPC5 the section report for an unchanged pile stays byte-identical to the R2386 reading and the CLI codes 0/2/3/5 with a byte-stable --json over the pinned keys are unchanged
+PASS AC-MEPC6 pure ASCII, stdlib only, zero network, no clock, the sibling laws imported at call time, asked by the matrix section, plus its own reconcile label
+SUITE PASS 6/6
+=== SUITE os-suite-matrix-reconcile rc=0 pass_lines=6 fail_lines=0
+  PASS AC-EDM1 regenerated doc rows=667 registry rows=667 evidence names reconcile-all-R2713.log with RUNNER PASS 667/667
+  PASS AC-EDM2 rows word=ROWS-MISMATCH doc=666 registry=667 BOTH named
+  PASS AC-EDM3 red leg refused word=RED-LEG, doc byte-identical, shipped check unchanged (exit=2)
+  PASS AC-EDM4 patch parse_evidence -> RED-LEG, patch check face -> DOC-CURRENT, live -> DOC-CURRENT
+  PASS AC-EDM5 report wrote nothing, one verdict word (ROWS-MISMATCH), idempotent rewrite (DOC-CURRENT)
+  PASS AC-EDM6 hygiene ascii=True clock=False network=[] registered=True
+SUITE PASS 6/6
+=== SUITE os-suite-matrix-reconcile-evidence-face rc=0 pass_lines=6 fail_lines=0
+  PASS AC-EDMB1 evidence-face=EVIDENCE-FACE (fixture leg) both legs named, patched doc_evidence_face -> STALE-CONTENT
+  PASS AC-EDMB2 walk stopped at yy-pass.log considered=3 decoded=2 printed=True
+  PASS AC-EDMB3 composed=WRITTEN (667 rows/4978 criteria, stamp 2026-11-13 04:33 +08:00 carried), no --stamp-from=NO-DOC exit=2 wrote nothing=True
+  PASS AC-EDMB4 header cells=5 -> HEADER-SHAPE E_EDMB_HEADER exit=3, write refused
+  PASS AC-EDMB5 five words kept: ROWS-MISMATCH,STALE-CONTENT,RED-LEG,NO-DOC,DOC-CURRENT -> [2,2,3,2,0]
+  PASS AC-EDMB6 hygiene ascii=True clock=False network=[] registered=True (1 rows, 6 criteria)
+SUITE PASS 6/6
+=== SUITE os-export-consistency-queue-face rc=0 pass_lines=15 fail_lines=0
+PASS AC-ECQF1 queue reading asked at CALL time (patched gate moves it)
+PASS AC-ECQF1 base checks asked at CALL time (patched face moves them)
+PASS AC-ECQF2 twenty-one base lines identical and counted
+PASS AC-ECQF3 fixture built from the real export
+PASS AC-ECQF3 stale block reads DRIFT naming queue and sections
+PASS AC-ECQF3 queue drift is never folded into the twenty-one
+PASS AC-ECQF4 CURRENT document reads AGREE at exit 0 with base intact
+PASS AC-ECQF4 CLI prints the base lines then exactly one queue line
+PASS AC-ECQF4 the reading left the export byte-identical
+PASS AC-ECQF5 source carries no clock and no file write call
+PASS AC-ECQF5 two readings left the export byte-identical
+PASS AC-ECQF6 module source is pure ASCII
+PASS AC-ECQF6 imports are stdlib plus the two shipped faces only
+PASS AC-ECQF6 exactly one registry row wires this suite with 6 criteria
+PASS AC-ECQF6 six criteria declared
+SUMMARY pass=15 fail=0
+=== SUITE os-closeout-export-parity-text-binding rc=0 pass_lines=21 fail_lines=0
+PASS AC-CEPM1 the module carries no formatter of its own
+PASS AC-CEPM1 patching the shipped composition moves the verdict
+PASS AC-CEPM1 the refusal wrote no byte
+PASS AC-CEPM2 the same document publishes and reads BOUND
+PASS AC-CEPM2 the published bytes are byte-identical to today's route
+PASS AC-CEPM2 a CRLF document keeps its transport byte-identically
+PASS AC-CEPM3 doctored fixture built
+PASS AC-CEPM3 a foreign composition is refused with its own code
+PASS AC-CEPM3 the target is byte-identical with no residue
+PASS AC-CEPM4 the refusal names the first differing field
+PASS AC-CEPM4 the named field is a real field, not a shape word
+PASS AC-CEPM4 the CLI reports the same field at exit 2
+PASS AC-CEPM5 the wire's seven keys keep their names and positions
+PASS AC-CEPM5 the published report carries exactly the nine keys
+PASS AC-CEPM5 the seven shipped readings are byte-equal to today
+PASS AC-CEPM5 the refusal carries the same nine keys
+PASS AC-CEPM6 module source is pure ASCII
+PASS AC-CEPM6 imports are stdlib plus the two shipped faces only
+PASS AC-CEPM6 no clock and zero network
+PASS AC-CEPM6 exactly one registry row wires this suite with 6 criteria
+PASS AC-CEPM6 six criteria declared
+SUMMARY pass=21 fail=0
+=== SUITE os-single-append-status-face rc=0 pass_lines=6 fail_lines=0
+PASS AC-SASF1 the status is the batch face's reading
+PASS AC-SASF2 one --check names the round and its live status
+PASS AC-SASF3 NOT-RESIDUE carries its own code
+PASS AC-SASF4 append codes and lines unchanged, face untouched
+PASS AC-SASF5 CLI 0/2/3/5 and a byte-stable JSON
+PASS AC-SASF6 pure ASCII stdlib, no clock, no network, wired
+SUITE os-single-append-status-face expected-criteria=6 pass=6 fail=0
+=== SUITE os-state-seq-archive rc=0 pass_lines=6 fail_lines=0
+state_seq archive-fold suite (expected criteria 6)
+  measured: archived=[2575]
+PASS AC-SEQAF1 archive labels read through the owning-label law
+  measured: folded=[] plain=[2575] verdict=SEQUENCE-OK/SEQUENCE-OK
+PASS AC-SEQAF2 a folded round is no longer stamped-never-logged
+  measured: queue_only=[2165]
+PASS AC-SEQAF3 unlogged-anywhere round still reads queue_only
+  measured: gaps=[901] repeats=1 backwards=[{'index': 2, 'round': 900, 'previous': 902}] verdict=SEQUENCE-BROKEN
+PASS AC-SEQAF4 sequence checks still read the live log alone
+  measured: empty=[] quiet=True code='E_SEQAF_BAD_ARCHIVE' named=True
+PASS AC-SEQAF5 missing dir is zero, unreadable file fails closed
+PASS AC-SEQAF6 pure, wired, and the live residue is measured
+SUITE PASS 6/6
+=== SUITE os-state-io rc=0 pass_lines=8 fail_lines=0
+PASS AC-SIO1 layout measured from bytes (clean vs drift, live size)
+PASS AC-SIO2 canon forces CRLF and the canon indent, payload unchanged
+PASS AC-SIO3 bad item count and bad JSON refused, nothing written
+PASS AC-SIO4 payload change refused, old bytes byte-identical
+PASS AC-SIO5 atomic write, read-back proof, zero temp residue
+PASS AC-SIO6 dry plan writes nothing, execute lands on prediction
+PASS AC-SIO7 CLI codes 0/2/3, pinned --json keys, second fix no-op
+PASS AC-SIO8 ASCII, stdlib-only, offline, wired as os-state-io
+SUITE PASS 8/8 criteria=8
+=== SUITE os-ledger-line-shape-guard rc=0 pass_lines=6 fail_lines=0
+ledger_line_shape_guard suite (expected criteria 6)
+PASS AC-LLSG1 the verdict follows the shipped law, patched or real
+PASS AC-LLSG2 a date prefix is refused by name, a conforming line passes
+PASS AC-LLSG3 local/api verdicts are the law's own codes, no local number grammar
+PASS AC-LLSG4 refusal writes nothing, the dry run predicts the exact post size, the write lands the line
+PASS AC-LLSG5 CLI exits 0/2/3/5 with a byte-stable --json over the pinned keys
+PASS AC-LLSG6 pure, stdlib only, no clock, no net, wired with its own label
+SUITE PASS 6/6
+=== SUITE os-ledger-lines rc=0 pass_lines=8 fail_lines=0
+suite: round ledger line checker (R2152 AC-LGR1..AC-LGR8)
+PASS AC-LGR1 canonical parse, units and approx marker resolved
+PASS AC-LGR2 nine bad forms named, gate order round/local/api/reason
+PASS AC-LGR3 coverage law derives missing and orphan rounds
+PASS AC-LGR4 tail window scopes the audit and echoes its arithmetic
+PASS AC-LGR5 zero false positives, typo caught by coverage law
+PASS AC-LGR6 api is a pure integer and always carries a reason
+PASS AC-LGR7 CLI exit 0/2/3, stable JSON, zero file writes
+PASS AC-LGR8 live gate clean on the coverage scope, folded gaps proven healed by the archive, exemption list empty, hygiene
+SUITE PASS 8/8 criteria
+=== SUITE os-queue-head-delivered rc=0 pass_lines=6 fail_lines=0
+queue_head_delivered suite (expected criteria 6)
+PASS AC-QHO1 occupancy is imported from queue_occupancy and no second module-path scan exists
+PASS AC-QHO2 a delivered head is walked over with its module named and the offer continues
+PASS AC-QHO3 a queue of shipped rows reads ALL-DELIVERED, not NO-HEAD
+PASS AC-QHO4 walked-over rows are in file order and only rows before the head are walked over
+PASS AC-QHO5 CLI 0/2/3/5 and a byte-stable JSON over pinned keys
+PASS AC-QHO6 pure ASCII, stdlib only, no clock, no network, wired
+SUITE PASS 6/6
+=== SUITE os-queue-floor rc=0 pass_lines=8 fail_lines=0
+PASS AC-QF1 report and row keys pinned, deterministic, verdict in the closed set
+PASS AC-QF2 only column-0 boxed rows count, exact box letters only
+PASS AC-QF3 seven gate marker forms excluded from claimable, still counted as open
+PASS AC-QF4 floors pinned to 5/10/10, shortfall clamps at zero, total sums the queues
+PASS AC-QF5 empty queue reads an honest zero, absent queue reads MISSING with the whole floor as shortfall
+PASS AC-QF6 CLI exits 0/2/3 on met/short/missing, bad flags exit 2, JSON parses and is byte-stable
+PASS AC-QF7 one line carries every queue, live tree matches an independent recount
+PASS AC-QF8 gauge is a pure read, source ASCII with zero network imports and wired as os-queue-floor(8)
+SUITE PASS 8/8
+
+SUMMARY green=15 red=0 verdict=PASS
