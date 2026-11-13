@@ -1,0 +1,234 @@
+EVIDENCE CAPTURE round=R2710 suite=src/os/test_probe_seam_dialect_marker_escape_guard_scope.py legs=2
+== LEG A rc=0 digest=502CF82BEBDF54B3
+PASS AC-PNAU1 R2706 really reads 'dialect\\\\:1+duplicate:2' as a legacy word today (None)
+PASS AC-PNAU1 the escaped marker is refused as 'marker-escaped', got 'marker-escaped'
+PASS AC-PNAU1 a refusal hands back no body and no dialect
+PASS AC-PNAU1 the escape form is NAMED, got 'refused:marker-escaped::'
+PASS AC-PNAU1 the rule answers its own refusal directly
+PASS AC-PNAU1 a plain marker carries no escape and is untouched
+PASS AC-PNAU1 an escape that does NOT unescape into a marker leaves the word alone
+PASS AC-PNAU2 R2706 answers the shape law alone today ('duplicate-not-counted')
+PASS AC-PNAU2 the escape is named as well, got 'duplicate-escape-not-counted'
+PASS AC-PNAU2 the ONE code names BOTH the escape and the shape ('duplicate-escape-not-counted')
+PASS AC-PNAU2 the raw tail bytes are kept as the shape ('a\\2c')
+PASS AC-PNAU2 the refusal word carries code AND raw tail ('refused:duplicate-escape-not-counted:a\\2c')
+PASS AC-PNAU2 the refusal is not mistakable for a reading
+PASS AC-PNAU2 a canonical tail with no escape stays legal
+PASS AC-PNAU3 R2706 names the SHAPE alone and keeps the raw tail ('a\\+2')
+PASS AC-PNAU3 the escaped joiner is refused by name ('duplicate-escape-not-counted')
+PASS AC-PNAU3 the refusal keeps the RAW tail bytes ('a\\+2')
+PASS AC-PNAU3 the escaped joiner stays inside ONE raw span (['dialect:1', 'duplicate:a\\+2'])
+PASS AC-PNAU3 the tail rule answers its own refusal directly
+PASS AC-PNAU3 the tail rule is off for a marker-less legacy word
+PASS AC-PNAU4 R2689 fixture 0 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 0 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\,ac' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab\\\\,ac' is still legal here
+PASS AC-PNAU4 R2689 fixture 1 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 1 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab,ac' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab,ac' is still legal here
+PASS AC-PNAU4 R2689 fixture 2 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 2 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:xy' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:xy' is still legal here
+PASS AC-PNAU4 R2689 fixture 3 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 3 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+duplicate:2' rides on every reading key
+PASS AC-PNAU4 R2685 word 'duplicate:2' is still legal here
+PASS AC-PNAU4 R2689 fixture 4 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 4 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab+duplicate:2' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab+duplicate:2' is still legal here
+PASS AC-PNAU4 R2689 fixture 5 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 5 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab,ac,ad' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab,ac,ad' is still legal here
+PASS AC-PNAU4 R2689 fixture 6 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 6 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:pq\\\\,pr,ps' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:pq\\\\,pr,ps' is still legal here
+PASS AC-PNAU4 R2689 fixture 7 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 7 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\+duplicate:2' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab+duplicate:2' is still legal here
+PASS AC-PNAU4 R2689 fixture 8 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 8 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\\\\\\\\\,ac' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab\\\\\\\\\\\\,ac' is still legal here
+PASS AC-PNAU4 R2689 fixture 9 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 9 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\\\\\\\\\+c' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab\\\\\\\\+c' is still legal here
+PASS AC-PNAU4 R2689 fixture 10 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 10 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:a\\\\\\\\b,a\\\\\\\\bc' rides on every reading key
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:a\\\\\\\\bc' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:a\\\\\\\\b,a\\\\\\\\bc' is still legal here
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:a\\\\\\\\bc' is still legal here
+PASS AC-PNAU4 R2689 fixture 11 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 11 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab,ac+duplicate:2' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab,ac+duplicate:2' is still legal here
+PASS AC-PNAU4 R2689 fixture 12 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 12 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+duplicate:2' rides on every reading key
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab' rides on every reading key
+PASS AC-PNAU4 R2685 word 'duplicate:2' is still legal here
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab' is still legal here
+PASS AC-PNAU4 the published face covered 15 distinct words
+PASS AC-PNAU4 the base reading IS the R2706 reading
+PASS AC-PNAU4 legal 'dialect:1+duplicate:2' is byte for byte what R2706 read
+PASS AC-PNAU4 legal 'dialect:1+strict-prefix-of:ab+duplicate:2' is byte for byte what R2706 read
+PASS AC-PNAU4 legal 'duplicate:2' is byte for byte what R2706 read
+PASS AC-PNAU4 legal 'strict-prefix-of:a\\\\bc' is byte for byte what R2706 read
+PASS AC-PNAU4 a bounded live leg is read-only (modules=6 loops=146 unreadable=0 disagree=0)
+PASS AC-PNAU4 the SAME published fixture reads the same on BOTH readers
+PASS AC-PNAU4 the same bytes are ONE reading there and a refusal here
+PASS AC-PNAU5 legacy 'duplicate:2' is not refused by either rule (None)
+PASS AC-PNAU5 legacy 'duplicate:2' rides R2706 on every reading key
+PASS AC-PNAU5 legacy 'duplicate:2' carries no pedigree and so no shape
+PASS AC-PNAU5 legacy 'duplicate:2' has no body parts for either rule
+PASS AC-PNAU5 legacy 'duplicate:a\\\\2c' is not refused by either rule (None)
+PASS AC-PNAU5 legacy 'duplicate:a\\\\2c' rides R2706 on every reading key
+PASS AC-PNAU5 legacy 'duplicate:a\\\\2c' carries no pedigree and so no shape
+PASS AC-PNAU5 legacy 'duplicate:a\\\\2c' has no body parts for either rule
+PASS AC-PNAU5 legacy 'duplicate:a\\\\+2' is not refused by either rule (None)
+PASS AC-PNAU5 legacy 'duplicate:a\\\\+2' rides R2706 on every reading key
+PASS AC-PNAU5 legacy 'duplicate:a\\\\+2' carries no pedigree and so no shape
+PASS AC-PNAU5 legacy 'duplicate:a\\\\+2' has no body parts for either rule
+PASS AC-PNAU5 legacy 'strict-prefix-of:a\\\\bc' is not refused by either rule (None)
+PASS AC-PNAU5 legacy 'strict-prefix-of:a\\\\bc' rides R2706 on every reading key
+PASS AC-PNAU5 legacy 'strict-prefix-of:a\\\\bc' carries no pedigree and so no shape
+PASS AC-PNAU5 legacy 'strict-prefix-of:a\\\\bc' has no body parts for either rule
+PASS AC-PNAU5 the marker rule answers None off a legacy word
+PASS AC-PNAU5 so a legacy escaped tail is left as text
+PASS AC-PNAU6 the module source is pure ASCII (14541 bytes)
+PASS AC-PNAU6 no clock, no network, no shell ([])
+PASS AC-PNAU6 every import is stdlib or a shipped probe (['import argparse', 'import json', 'import os', 'import sys', 'import probe_seam_dialect_escape_guard_scope as PNAT  # noqa', 'import probe_seam_dialect_canonical_guard_scope as PNAS  # noqa', 'import probe_seam_unnameable_part_joiner_escaped_scope as PNAO  # noqa'])
+PASS AC-PNAU6 the registry carries exactly one label row (1)
+PASS AC-PNAU6 the registry carries exactly one suite row (1)
+PASS AC-PNAU6 this suite exists on disk
+PASS AC-PNAU6 six criteria are declared
+PASS AC-PNAU6 the face carries its own reconcile label ('os-probe-seam-dialect-marker-escape-guard-scope')
+SUITE PASS 6/6
+== LEG B rc=0 digest=502CF82BEBDF54B3
+PASS AC-PNAU1 R2706 really reads 'dialect\\\\:1+duplicate:2' as a legacy word today (None)
+PASS AC-PNAU1 the escaped marker is refused as 'marker-escaped', got 'marker-escaped'
+PASS AC-PNAU1 a refusal hands back no body and no dialect
+PASS AC-PNAU1 the escape form is NAMED, got 'refused:marker-escaped::'
+PASS AC-PNAU1 the rule answers its own refusal directly
+PASS AC-PNAU1 a plain marker carries no escape and is untouched
+PASS AC-PNAU1 an escape that does NOT unescape into a marker leaves the word alone
+PASS AC-PNAU2 R2706 answers the shape law alone today ('duplicate-not-counted')
+PASS AC-PNAU2 the escape is named as well, got 'duplicate-escape-not-counted'
+PASS AC-PNAU2 the ONE code names BOTH the escape and the shape ('duplicate-escape-not-counted')
+PASS AC-PNAU2 the raw tail bytes are kept as the shape ('a\\2c')
+PASS AC-PNAU2 the refusal word carries code AND raw tail ('refused:duplicate-escape-not-counted:a\\2c')
+PASS AC-PNAU2 the refusal is not mistakable for a reading
+PASS AC-PNAU2 a canonical tail with no escape stays legal
+PASS AC-PNAU3 R2706 names the SHAPE alone and keeps the raw tail ('a\\+2')
+PASS AC-PNAU3 the escaped joiner is refused by name ('duplicate-escape-not-counted')
+PASS AC-PNAU3 the refusal keeps the RAW tail bytes ('a\\+2')
+PASS AC-PNAU3 the escaped joiner stays inside ONE raw span (['dialect:1', 'duplicate:a\\+2'])
+PASS AC-PNAU3 the tail rule answers its own refusal directly
+PASS AC-PNAU3 the tail rule is off for a marker-less legacy word
+PASS AC-PNAU4 R2689 fixture 0 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 0 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\,ac' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab\\\\,ac' is still legal here
+PASS AC-PNAU4 R2689 fixture 1 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 1 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab,ac' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab,ac' is still legal here
+PASS AC-PNAU4 R2689 fixture 2 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 2 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:xy' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:xy' is still legal here
+PASS AC-PNAU4 R2689 fixture 3 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 3 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+duplicate:2' rides on every reading key
+PASS AC-PNAU4 R2685 word 'duplicate:2' is still legal here
+PASS AC-PNAU4 R2689 fixture 4 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 4 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab+duplicate:2' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab+duplicate:2' is still legal here
+PASS AC-PNAU4 R2689 fixture 5 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 5 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab,ac,ad' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab,ac,ad' is still legal here
+PASS AC-PNAU4 R2689 fixture 6 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 6 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:pq\\\\,pr,ps' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:pq\\\\,pr,ps' is still legal here
+PASS AC-PNAU4 R2689 fixture 7 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 7 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\+duplicate:2' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab+duplicate:2' is still legal here
+PASS AC-PNAU4 R2689 fixture 8 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 8 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\\\\\\\\\,ac' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab\\\\\\\\\\\\,ac' is still legal here
+PASS AC-PNAU4 R2689 fixture 9 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 9 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\\\\\\\\\+c' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab\\\\\\\\+c' is still legal here
+PASS AC-PNAU4 R2689 fixture 10 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 10 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:a\\\\\\\\b,a\\\\\\\\bc' rides on every reading key
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:a\\\\\\\\bc' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:a\\\\\\\\b,a\\\\\\\\bc' is still legal here
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:a\\\\\\\\bc' is still legal here
+PASS AC-PNAU4 R2689 fixture 11 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 11 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab,ac+duplicate:2' rides on every reading key
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab,ac+duplicate:2' is still legal here
+PASS AC-PNAU4 R2689 fixture 12 rides byte for byte
+PASS AC-PNAU4 R2692 fixture 12 rides byte for byte
+PASS AC-PNAU4 R2704 word 'dialect:1+duplicate:2' rides on every reading key
+PASS AC-PNAU4 R2704 word 'dialect:1+strict-prefix-of:ab' rides on every reading key
+PASS AC-PNAU4 R2685 word 'duplicate:2' is still legal here
+PASS AC-PNAU4 R2685 word 'strict-prefix-of:ab' is still legal here
+PASS AC-PNAU4 the published face covered 15 distinct words
+PASS AC-PNAU4 the base reading IS the R2706 reading
+PASS AC-PNAU4 legal 'dialect:1+duplicate:2' is byte for byte what R2706 read
+PASS AC-PNAU4 legal 'dialect:1+strict-prefix-of:ab+duplicate:2' is byte for byte what R2706 read
+PASS AC-PNAU4 legal 'duplicate:2' is byte for byte what R2706 read
+PASS AC-PNAU4 legal 'strict-prefix-of:a\\\\bc' is byte for byte what R2706 read
+PASS AC-PNAU4 a bounded live leg is read-only (modules=6 loops=146 unreadable=0 disagree=0)
+PASS AC-PNAU4 the SAME published fixture reads the same on BOTH readers
+PASS AC-PNAU4 the same bytes are ONE reading there and a refusal here
+PASS AC-PNAU5 legacy 'duplicate:2' is not refused by either rule (None)
+PASS AC-PNAU5 legacy 'duplicate:2' rides R2706 on every reading key
+PASS AC-PNAU5 legacy 'duplicate:2' carries no pedigree and so no shape
+PASS AC-PNAU5 legacy 'duplicate:2' has no body parts for either rule
+PASS AC-PNAU5 legacy 'duplicate:a\\\\2c' is not refused by either rule (None)
+PASS AC-PNAU5 legacy 'duplicate:a\\\\2c' rides R2706 on every reading key
+PASS AC-PNAU5 legacy 'duplicate:a\\\\2c' carries no pedigree and so no shape
+PASS AC-PNAU5 legacy 'duplicate:a\\\\2c' has no body parts for either rule
+PASS AC-PNAU5 legacy 'duplicate:a\\\\+2' is not refused by either rule (None)
+PASS AC-PNAU5 legacy 'duplicate:a\\\\+2' rides R2706 on every reading key
+PASS AC-PNAU5 legacy 'duplicate:a\\\\+2' carries no pedigree and so no shape
+PASS AC-PNAU5 legacy 'duplicate:a\\\\+2' has no body parts for either rule
+PASS AC-PNAU5 legacy 'strict-prefix-of:a\\\\bc' is not refused by either rule (None)
+PASS AC-PNAU5 legacy 'strict-prefix-of:a\\\\bc' rides R2706 on every reading key
+PASS AC-PNAU5 legacy 'strict-prefix-of:a\\\\bc' carries no pedigree and so no shape
+PASS AC-PNAU5 legacy 'strict-prefix-of:a\\\\bc' has no body parts for either rule
+PASS AC-PNAU5 the marker rule answers None off a legacy word
+PASS AC-PNAU5 so a legacy escaped tail is left as text
+PASS AC-PNAU6 the module source is pure ASCII (14541 bytes)
+PASS AC-PNAU6 no clock, no network, no shell ([])
+PASS AC-PNAU6 every import is stdlib or a shipped probe (['import argparse', 'import json', 'import os', 'import sys', 'import probe_seam_dialect_escape_guard_scope as PNAT  # noqa', 'import probe_seam_dialect_canonical_guard_scope as PNAS  # noqa', 'import probe_seam_unnameable_part_joiner_escaped_scope as PNAO  # noqa'])
+PASS AC-PNAU6 the registry carries exactly one label row (1)
+PASS AC-PNAU6 the registry carries exactly one suite row (1)
+PASS AC-PNAU6 this suite exists on disk
+PASS AC-PNAU6 six criteria are declared
+PASS AC-PNAU6 the face carries its own reconcile label ('os-probe-seam-dialect-marker-escape-guard-scope')
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_probe_seam_dialect_escape_guard_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_dialect_canonical_guard_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_dialect_shape_guard_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_dialect_tag_guard_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_unnameable_dialect_marker_scope.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=502CF82BEBDF54B3

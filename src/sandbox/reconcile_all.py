@@ -6631,6 +6631,17 @@ SUITES = [
          "..", "os",
          "test_probe_seam_dialect_escape_guard_scope.py"),
      6),
+    # R2710: the escape walk covered the strict-prefix sibling text alone, so
+    # an escape inside the MARKER part was never looked at (the word read as
+    # legacy) and an illegal escape inside a DUPLICATE tail was named by the
+    # shape law alone while the escaped part joiner lost its raw bytes. Two
+    # rules now name those forms without moving any earlier reading
+    # (665 -> 666 suites, 4966 -> 4972 criteria).
+    ("os-probe-seam-dialect-marker-escape-guard-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_dialect_marker_escape_guard_scope.py"),
+     6),
     # R2595 birth-site repair of the round export driver health term: it
     # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
     # the recompute caliber can never satisfy once one tokens line sits in the

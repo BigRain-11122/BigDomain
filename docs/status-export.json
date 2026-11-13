@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T02:17:40+08:00",
-  "do": "2026-11-14 R2709 VERIFICATION adoption window on the battery the debt gate named first (reconcile-battery-R2706 at the pre-registered 665 suites / 4966 criteria). Five readings at open: git status carried exactly ONE untracked entry, qa/reconcile-all-R2707.log, at HEAD c412864a equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger (atbd_lines=0, unreplied_groups=0); the",
+  "export_ts": "2026-11-14T02:41:44+08:00",
+  "do": "2026-11-14 R2710 product window on AC-PNAU1..AC-PNAU6 (state/queue/tech.md:687, pinned at R2706 BEFORE any code): shipped src/os/probe_seam_dialect_marker_escape_guard_scope.py plus src/os/test_probe_seam_dialect_marker_escape_guard_scope.py. A first raw part that carries an escape and unescapes to a dialect marker is REFUSED as marker-escaped naming the escape character instead of being read as a",
   "ceo_face": {
-    "current": "2026-11-14 R2709 VERIFICATION adoption window on the battery the debt gate named first (reconcile-battery-R2706 at the pre-registered 665 suites / 4966 criteria). Five readings at open: git status carried exactly ONE untracked entry, qa/reconcile-all-R2707.log, at HEAD c412864a equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger (atbd_lines=0, unreplied_groups=0); the",
-    "latest_artifact": "write-sensitive-R2709.log (14160B)",
-    "last_artifact": "write-sensitive-R2709.log (14160B)",
-    "next_milestone": "next window owes product-face-R2709 on the committed tree, inside a 48h window due 2026-11-16T02:17:40+08:00",
-    "next_milestone_due": "2026-11-16T02:17:40+08:00",
-    "updated_at": "2026-11-14T02:17:40+08:00"
+    "current": "2026-11-14 R2710 product window on AC-PNAU1..AC-PNAU6 (state/queue/tech.md:687, pinned at R2706 BEFORE any code): shipped src/os/probe_seam_dialect_marker_escape_guard_scope.py plus src/os/test_probe_seam_dialect_marker_escape_guard_scope.py. A first raw part that carries an escape and unescapes to a dialect marker is REFUSED as marker-escaped naming the escape character instead of being read as a",
+    "latest_artifact": "probe-seam-dialect-marker-escape-guard-scope-R2710.log (16713B) + probe-seam-dialect-marker-escape-guard-scope-live-R2710.log (982B)",
+    "last_artifact": "probe-seam-dialect-marker-escape-guard-scope-R2710.log (16713B) + probe-seam-dialect-marker-escape-guard-scope-live-R2710.log (982B)",
+    "next_milestone": "next window owes product-face-R2709 on the committed tree, inside a 48h window due 2026-11-16T02:41:44+08:00",
+    "next_milestone_due": "2026-11-16T02:41:44+08:00",
+    "updated_at": "2026-11-14T02:41:44+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "probe-seam-dialect-marker-escape-guard-scope-R2710.log (16713B) + probe-seam-dialect-marker-escape-guard-scope-live-R2710.log (982B)",
     "write-sensitive-R2709.log (14160B)",
     "none landed yet for R2709",
     "smoke-R2708.log (1501B) + smoke-R2708.png (48869B)",
@@ -1013,7 +1014,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2702",
+      "2703",
       "OSLoop 执行 tick"
     ],
     [
@@ -1032,14 +1033,14 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 57,
+    "log_lines_in_window": 59,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 7,
     "proposals_open": 5,
     "queue_main_open": 6,
-    "queue_tech_open": 15,
+    "queue_tech_open": 14,
     "queue_explore_open": 10
   },
   "queue": {
@@ -1067,16 +1068,12 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 15,
-        "done_rows": 501,
+        "open_rows": 14,
+        "done_rows": 502,
         "gated_rows": 1,
         "claimable": 11,
-        "discounted": 3,
+        "discounted": 2,
         "delivered": [
-          {
-            "line": 687,
-            "prefix": "AC-PNAU1"
-          },
           {
             "line": 703,
             "prefix": "AC-SEQAF1"
@@ -1108,6 +1105,6 @@
     "verdict": "FLOOR-MET",
     "shortfall_total": 0,
     "missing": [],
-    "delivered_total": 3
+    "delivered_total": 2
   }
 }

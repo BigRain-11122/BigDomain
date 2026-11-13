@@ -1,0 +1,7 @@
+LIVE files=6 loops=146 read_only=True
+FIXTURE marker-escaped mine={"duplicate": null, "refused": "marker-escaped", "siblings": null} theirs={"duplicate": 2, "refused": null, "siblings": null}
+FIXTURE dup-illegal mine={"duplicate": null, "refused": "duplicate-escape-not-counted", "siblings": null} theirs={"duplicate": null, "refused": "duplicate-not-counted", "siblings": null}
+FIXTURE dup-joiner mine={"duplicate": null, "refused": "duplicate-escape-not-counted", "siblings": null} theirs={"duplicate": null, "refused": "duplicate-not-counted", "siblings": null}
+FIXTURE legacy-bare mine={"duplicate": 2, "refused": null, "siblings": null} theirs={"duplicate": 2, "refused": null, "siblings": null}
+FIXTURE legacy-escape mine={"duplicate": null, "refused": null, "siblings": null} theirs={"duplicate": null, "refused": null, "siblings": null}
+FIXTURE plain-marked mine={"duplicate": 2, "refused": null, "siblings": null} theirs={"duplicate": 2, "refused": null, "siblings": null}
