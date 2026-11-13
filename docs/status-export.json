@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T22:16:54+08:00",
-  "do": "2026-11-13 R2705 VERIFICATION window on the debt the gate named (reconcile-battery-R2704, first=yes, open=45), because R2704 moved product src bytes and the R2168 mixed-tree rule puts a full battery BEFORE any further product byte. Five readings at open, all clean: git status EMPTY at HEAD ce25b72c equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger; the content-addre",
+  "export_ts": "2026-11-13T23:51:31+08:00",
+  "do": "2026-11-13 R2706 PRODUCT window on the row the register named (product-face-R2705, state/queue/tech.md line 685 prefix AC-PNAT1, criteria AC-PNAT1..AC-PNAT6 pinned there at R2704 BEFORE any code). Four readings at open, all clean: git status EMPTY at HEAD 7a5e72ea equal to origin/main with no index.lock; the content-addressed decisions face read rows=120 tokens=64 new=0; ZERO @BigDomain rows in th",
   "ceo_face": {
-    "current": "2026-11-13 R2705 VERIFICATION window on the debt the gate named (reconcile-battery-R2704, first=yes, open=45), because R2704 moved product src bytes and the R2168 mixed-tree rule puts a full battery BEFORE any further product byte. Five readings at open, all clean: git status EMPTY at HEAD ce25b72c equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger; the content-addre",
-    "latest_artifact": "reconcile-all-R2705.log (1408454B) + write-sensitive-R2705.log (14067B)",
-    "last_artifact": "reconcile-all-R2705.log (1408454B) + write-sensitive-R2705.log (14067B)",
-    "next_milestone": "next window owes product-face-R2705 on the committed tree, inside a 48h window due 2026-11-15T22:16:54+08:00",
-    "next_milestone_due": "2026-11-15T22:16:54+08:00",
-    "updated_at": "2026-11-13T22:16:54+08:00"
+    "current": "2026-11-13 R2706 PRODUCT window on the row the register named (product-face-R2705, state/queue/tech.md line 685 prefix AC-PNAT1, criteria AC-PNAT1..AC-PNAT6 pinned there at R2704 BEFORE any code). Four readings at open, all clean: git status EMPTY at HEAD 7a5e72ea equal to origin/main with no index.lock; the content-addressed decisions face read rows=120 tokens=64 new=0; ZERO @BigDomain rows in th",
+    "latest_artifact": "probe-seam-dialect-escape-guard-scope-R2706.log (19394B) + probe-seam-dialect-escape-guard-scope-live-R2706.log (669B)",
+    "last_artifact": "probe-seam-dialect-escape-guard-scope-R2706.log (19394B) + probe-seam-dialect-escape-guard-scope-live-R2706.log (669B)",
+    "next_milestone": "next window owes reconcile-battery-R2706 on the committed tree, inside a 48h window due 2026-11-15T23:51:31+08:00",
+    "next_milestone_due": "2026-11-15T23:51:31+08:00",
+    "updated_at": "2026-11-13T23:51:31+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "probe-seam-dialect-escape-guard-scope-R2706.log (19394B) + probe-seam-dialect-escape-guard-scope-live-R2706.log (669B)",
     "reconcile-all-R2705.log (1408454B) + write-sensitive-R2705.log (14067B)",
     "none landed yet for R2705",
     "canonical-guard-R2704.log (471564B)",
@@ -1008,7 +1009,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2698",
+      "2699",
       "OSLoop 执行 tick"
     ],
     [
@@ -1027,10 +1028,10 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 54,
+    "log_lines_in_window": 61,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 7,
     "proposals_open": 5,
     "queue_main_open": 6,
@@ -1063,21 +1064,21 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 15,
-        "done_rows": 500,
+        "done_rows": 501,
         "gated_rows": 1,
         "claimable": 11,
         "discounted": 3,
         "delivered": [
           {
-            "line": 685,
-            "prefix": "AC-PNAT1"
+            "line": 687,
+            "prefix": "AC-PNAU1"
           },
           {
-            "line": 702,
+            "line": 703,
             "prefix": "AC-SEQAF1"
           },
           {
-            "line": 704,
+            "line": 705,
             "prefix": "AC-EDMK1"
           }
         ],

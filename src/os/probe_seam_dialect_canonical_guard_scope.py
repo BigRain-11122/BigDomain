@@ -151,7 +151,7 @@ def repeated_sibling_of_part(part):
     """The first sibling label a strict-prefix part names twice, else None.
 
     Labels are compared AFTER unescaping, because the publishing face dedupes
-    by label: a comma inside one label is escaped, so 'ab\,ac' is one label
+    by label: a comma inside one label is escaped, so 'ab\\,ac' is one label
     and never a repeat of 'ab' plus 'ac'.
     """
     siblings = prefix_siblings_of_part(part)

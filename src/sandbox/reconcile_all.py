@@ -6617,6 +6617,20 @@ SUITES = [
          "..", "os",
          "test_probe_seam_dialect_canonical_guard_scope.py"),
      6),
+    # R2706 product face on the R2704 seed: the R2704 guard validated the
+    # canonical form of a count and a sibling list but never the ESCAPES a
+    # sibling label carries, so a backslash before a letter read back exactly
+    # as the plain label ('a\bc' -> ['abc'], byte for byte what 'abc' gave)
+    # and a trailing lone backslash was kept as text rather than refused. This
+    # face refuses both, naming the form found, while the three escapes the
+    # publishing face emits (itself, the list separator, the part joiner) keep
+    # their bytes and readings and every legacy word is untouched
+    # (664 -> 665 suites, 4960 -> 4966).
+    ("os-probe-seam-dialect-escape-guard-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_dialect_escape_guard_scope.py"),
+     6),
     # R2595 birth-site repair of the round export driver health term: it
     # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
     # the recompute caliber can never satisfy once one tokens line sits in the

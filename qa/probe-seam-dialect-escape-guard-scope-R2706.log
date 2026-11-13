@@ -1,0 +1,273 @@
+EVIDENCE CAPTURE round=R2706 suite=src/os/test_probe_seam_dialect_escape_guard_scope.py legs=2
+== LEG A rc=0 digest=1DC0BADB2D615008
+PASS AC-PNAT1 'dialect:1+strict-prefix-of:a\\\\bc' is refused as escape-not-published ('escape-not-published')
+PASS AC-PNAT1 and it NAMES the character it escaped ('b')
+PASS AC-PNAT1 its own word is derived from code and form ('refused:escape-not-published:b')
+PASS AC-PNAT1 it is refused rather than read as siblings (None / None)
+PASS AC-PNAT1 the R2704 reading of the same word ACCEPTED it (['abc'])
+PASS AC-PNAT1 'dialect:1+strict-prefix-of:a\\\\7b' is refused as escape-not-published ('escape-not-published')
+PASS AC-PNAT1 and it NAMES the character it escaped ('7')
+PASS AC-PNAT1 its own word is derived from code and form ('refused:escape-not-published:7')
+PASS AC-PNAT1 it is refused rather than read as siblings (None / None)
+PASS AC-PNAT1 the R2704 reading of the same word ACCEPTED it (['a7b'])
+PASS AC-PNAT1 it is never read as the label its text would unescape to (None vs ['abc'])
+PASS AC-PNAT1 the plain label still reads as itself (['abc'])
+PASS AC-PNAT1 an illegal escape in the SECOND sibling is refused too ('escape-not-published')
+PASS AC-PNAT1 the form is named in ASCII only ('b')
+PASS AC-PNAT2 'dialect:1+strict-prefix-of:ab\\\\' is refused as trailing-escape ('trailing-escape')
+PASS AC-PNAT2 and it names the trailing form ('trailing')
+PASS AC-PNAT2 its own word is derived ('refused:trailing-escape:trailing')
+PASS AC-PNAT2 it hands back no siblings and no body
+PASS AC-PNAT2 the R2704 reading of the same word kept the lone backslash as text (['ab\\'])
+PASS AC-PNAT2 a trailing lone escape after a pair is refused as trailing ('trailing-escape')
+PASS AC-PNAT2 an escaped backslash at the end is NOT trailing
+PASS AC-PNAT3 'dialect:1+strict-prefix-of:ab\\\\,ac' stays legal (None)
+PASS AC-PNAT3 and its unescaped reading is exact (['ab,ac'])
+PASS AC-PNAT3 and its own bytes are untouched
+PASS AC-PNAT3 every reading key rides the R2704 face
+PASS AC-PNAT3 'dialect:1+strict-prefix-of:ab\\\\+c' stays legal (None)
+PASS AC-PNAT3 and its unescaped reading is exact (['ab+c'])
+PASS AC-PNAT3 and its own bytes are untouched
+PASS AC-PNAT3 every reading key rides the R2704 face
+PASS AC-PNAT3 'dialect:1+strict-prefix-of:ab\\\\\\\\c' stays legal (None)
+PASS AC-PNAT3 and its unescaped reading is exact (['ab\\c'])
+PASS AC-PNAT3 and its own bytes are untouched
+PASS AC-PNAT3 every reading key rides the R2704 face
+PASS AC-PNAT3 the legal set IS what the publishing face escapes (('\\', ',', '+'))
+PASS AC-PNAT3 every word those faces publish stays legal here (offenders=[])
+PASS AC-PNAT3 and the publishing face own escapes read back tag 1
+PASS AC-PNAT4 R2689 fixture 0 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 0 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\,ac' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab\\\\,ac' is still legal here
+PASS AC-PNAT4 R2689 fixture 1 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 1 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab,ac' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab,ac' is still legal here
+PASS AC-PNAT4 R2689 fixture 2 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 2 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:xy' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:xy' is still legal here
+PASS AC-PNAT4 R2689 fixture 3 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 3 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+duplicate:2' rides on every reading key
+PASS AC-PNAT4 R2685 word 'duplicate:2' is still legal here
+PASS AC-PNAT4 R2689 fixture 4 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 4 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab+duplicate:2' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab+duplicate:2' is still legal here
+PASS AC-PNAT4 R2689 fixture 5 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 5 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab,ac,ad' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab,ac,ad' is still legal here
+PASS AC-PNAT4 R2689 fixture 6 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 6 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:pq\\\\,pr,ps' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:pq\\\\,pr,ps' is still legal here
+PASS AC-PNAT4 R2689 fixture 7 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 7 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\+duplicate:2' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab+duplicate:2' is still legal here
+PASS AC-PNAT4 R2689 fixture 8 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 8 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\\\\\\\\\,ac' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab\\\\\\\\\\\\,ac' is still legal here
+PASS AC-PNAT4 R2689 fixture 9 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 9 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\\\\\\\\\+c' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab\\\\\\\\+c' is still legal here
+PASS AC-PNAT4 R2689 fixture 10 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 10 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:a\\\\\\\\b,a\\\\\\\\bc' rides on every reading key
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:a\\\\\\\\bc' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:a\\\\\\\\b,a\\\\\\\\bc' is still legal here
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:a\\\\\\\\bc' is still legal here
+PASS AC-PNAT4 R2689 fixture 11 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 11 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab,ac+duplicate:2' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab,ac+duplicate:2' is still legal here
+PASS AC-PNAT4 R2689 fixture 12 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 12 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+duplicate:2' rides on every reading key
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab' rides on every reading key
+PASS AC-PNAT4 R2685 word 'duplicate:2' is still legal here
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab' is still legal here
+PASS AC-PNAT4 the published face covered 15 distinct words
+PASS AC-PNAT4 the base reading IS the R2704 reading
+PASS AC-PNAT4 a bounded live leg is read-only (modules=5 loops=122 unreadable=0 disagree=0)
+PASS AC-PNAT4 the SAME published fixture reads the same on BOTH readers
+PASS AC-PNAT4 the same bytes are ONE reading there and a refusal here
+PASS AC-PNAT5 legacy 'strict-prefix-of:a\\\\bc' is not refused by the escape rule (None)
+PASS AC-PNAT5 legacy 'strict-prefix-of:a\\\\bc' rides R2704 on every reading key
+PASS AC-PNAT5 legacy 'strict-prefix-of:a\\\\bc' carries no pedigree and so no shape
+PASS AC-PNAT5 legacy 'strict-prefix-of:a\\\\bc' has no body parts for this rule
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab\\\\' is not refused by the escape rule (None)
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab\\\\' rides R2704 on every reading key
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab\\\\' carries no pedigree and so no shape
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab\\\\' has no body parts for this rule
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab,ac' is not refused by the escape rule (None)
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab,ac' rides R2704 on every reading key
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab,ac' carries no pedigree and so no shape
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab,ac' has no body parts for this rule
+PASS AC-PNAT5 legacy 'duplicate:2' is not refused by the escape rule (None)
+PASS AC-PNAT5 legacy 'duplicate:2' rides R2704 on every reading key
+PASS AC-PNAT5 legacy 'duplicate:2' carries no pedigree and so no shape
+PASS AC-PNAT5 legacy 'duplicate:2' has no body parts for this rule
+PASS AC-PNAT5 legacy 'duplicate:02' is not refused by the escape rule (None)
+PASS AC-PNAT5 legacy 'duplicate:02' rides R2704 on every reading key
+PASS AC-PNAT5 legacy 'duplicate:02' carries no pedigree and so no shape
+PASS AC-PNAT5 legacy 'duplicate:02' has no body parts for this rule
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab+duplicate:2' is not refused by the escape rule (None)
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab+duplicate:2' rides R2704 on every reading key
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab+duplicate:2' carries no pedigree and so no shape
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab+duplicate:2' has no body parts for this rule
+PASS AC-PNAT5 the escape rule answers None off a legacy word
+PASS AC-PNAT5 so a legacy trailing backslash is left as text
+PASS AC-PNAT6 the module source is pure ASCII (14431 bytes)
+PASS AC-PNAT6 no clock, no network, no shell ([])
+PASS AC-PNAT6 every import is stdlib or a shipped probe (['import argparse', 'import json', 'import os', 'import sys', 'import probe_seam_dialect_canonical_guard_scope as PNAS  # noqa', 'import probe_seam_unnameable_part_joiner_escaped_scope as PNAO  # noqa'])
+PASS AC-PNAT6 the registry carries exactly one label row (1)
+PASS AC-PNAT6 the registry carries exactly one suite row (1)
+PASS AC-PNAT6 this suite exists on disk
+PASS AC-PNAT6 six criteria are declared
+PASS AC-PNAT6 the face carries its own reconcile label ('os-probe-seam-dialect-escape-guard-scope')
+SUITE PASS 6/6
+== LEG B rc=0 digest=1DC0BADB2D615008
+PASS AC-PNAT1 'dialect:1+strict-prefix-of:a\\\\bc' is refused as escape-not-published ('escape-not-published')
+PASS AC-PNAT1 and it NAMES the character it escaped ('b')
+PASS AC-PNAT1 its own word is derived from code and form ('refused:escape-not-published:b')
+PASS AC-PNAT1 it is refused rather than read as siblings (None / None)
+PASS AC-PNAT1 the R2704 reading of the same word ACCEPTED it (['abc'])
+PASS AC-PNAT1 'dialect:1+strict-prefix-of:a\\\\7b' is refused as escape-not-published ('escape-not-published')
+PASS AC-PNAT1 and it NAMES the character it escaped ('7')
+PASS AC-PNAT1 its own word is derived from code and form ('refused:escape-not-published:7')
+PASS AC-PNAT1 it is refused rather than read as siblings (None / None)
+PASS AC-PNAT1 the R2704 reading of the same word ACCEPTED it (['a7b'])
+PASS AC-PNAT1 it is never read as the label its text would unescape to (None vs ['abc'])
+PASS AC-PNAT1 the plain label still reads as itself (['abc'])
+PASS AC-PNAT1 an illegal escape in the SECOND sibling is refused too ('escape-not-published')
+PASS AC-PNAT1 the form is named in ASCII only ('b')
+PASS AC-PNAT2 'dialect:1+strict-prefix-of:ab\\\\' is refused as trailing-escape ('trailing-escape')
+PASS AC-PNAT2 and it names the trailing form ('trailing')
+PASS AC-PNAT2 its own word is derived ('refused:trailing-escape:trailing')
+PASS AC-PNAT2 it hands back no siblings and no body
+PASS AC-PNAT2 the R2704 reading of the same word kept the lone backslash as text (['ab\\'])
+PASS AC-PNAT2 a trailing lone escape after a pair is refused as trailing ('trailing-escape')
+PASS AC-PNAT2 an escaped backslash at the end is NOT trailing
+PASS AC-PNAT3 'dialect:1+strict-prefix-of:ab\\\\,ac' stays legal (None)
+PASS AC-PNAT3 and its unescaped reading is exact (['ab,ac'])
+PASS AC-PNAT3 and its own bytes are untouched
+PASS AC-PNAT3 every reading key rides the R2704 face
+PASS AC-PNAT3 'dialect:1+strict-prefix-of:ab\\\\+c' stays legal (None)
+PASS AC-PNAT3 and its unescaped reading is exact (['ab+c'])
+PASS AC-PNAT3 and its own bytes are untouched
+PASS AC-PNAT3 every reading key rides the R2704 face
+PASS AC-PNAT3 'dialect:1+strict-prefix-of:ab\\\\\\\\c' stays legal (None)
+PASS AC-PNAT3 and its unescaped reading is exact (['ab\\c'])
+PASS AC-PNAT3 and its own bytes are untouched
+PASS AC-PNAT3 every reading key rides the R2704 face
+PASS AC-PNAT3 the legal set IS what the publishing face escapes (('\\', ',', '+'))
+PASS AC-PNAT3 every word those faces publish stays legal here (offenders=[])
+PASS AC-PNAT3 and the publishing face own escapes read back tag 1
+PASS AC-PNAT4 R2689 fixture 0 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 0 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\,ac' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab\\\\,ac' is still legal here
+PASS AC-PNAT4 R2689 fixture 1 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 1 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab,ac' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab,ac' is still legal here
+PASS AC-PNAT4 R2689 fixture 2 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 2 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:xy' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:xy' is still legal here
+PASS AC-PNAT4 R2689 fixture 3 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 3 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+duplicate:2' rides on every reading key
+PASS AC-PNAT4 R2685 word 'duplicate:2' is still legal here
+PASS AC-PNAT4 R2689 fixture 4 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 4 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab+duplicate:2' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab+duplicate:2' is still legal here
+PASS AC-PNAT4 R2689 fixture 5 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 5 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab,ac,ad' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab,ac,ad' is still legal here
+PASS AC-PNAT4 R2689 fixture 6 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 6 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:pq\\\\,pr,ps' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:pq\\\\,pr,ps' is still legal here
+PASS AC-PNAT4 R2689 fixture 7 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 7 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\+duplicate:2' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab+duplicate:2' is still legal here
+PASS AC-PNAT4 R2689 fixture 8 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 8 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\\\\\\\\\,ac' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab\\\\\\\\\\\\,ac' is still legal here
+PASS AC-PNAT4 R2689 fixture 9 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 9 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab\\\\\\\\\\\\+c' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab\\\\\\\\+c' is still legal here
+PASS AC-PNAT4 R2689 fixture 10 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 10 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:a\\\\\\\\b,a\\\\\\\\bc' rides on every reading key
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:a\\\\\\\\bc' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:a\\\\\\\\b,a\\\\\\\\bc' is still legal here
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:a\\\\\\\\bc' is still legal here
+PASS AC-PNAT4 R2689 fixture 11 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 11 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab,ac+duplicate:2' rides on every reading key
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab,ac+duplicate:2' is still legal here
+PASS AC-PNAT4 R2689 fixture 12 rides byte for byte
+PASS AC-PNAT4 R2692 fixture 12 rides byte for byte
+PASS AC-PNAT4 R2704 word 'dialect:1+duplicate:2' rides on every reading key
+PASS AC-PNAT4 R2704 word 'dialect:1+strict-prefix-of:ab' rides on every reading key
+PASS AC-PNAT4 R2685 word 'duplicate:2' is still legal here
+PASS AC-PNAT4 R2685 word 'strict-prefix-of:ab' is still legal here
+PASS AC-PNAT4 the published face covered 15 distinct words
+PASS AC-PNAT4 the base reading IS the R2704 reading
+PASS AC-PNAT4 a bounded live leg is read-only (modules=5 loops=122 unreadable=0 disagree=0)
+PASS AC-PNAT4 the SAME published fixture reads the same on BOTH readers
+PASS AC-PNAT4 the same bytes are ONE reading there and a refusal here
+PASS AC-PNAT5 legacy 'strict-prefix-of:a\\\\bc' is not refused by the escape rule (None)
+PASS AC-PNAT5 legacy 'strict-prefix-of:a\\\\bc' rides R2704 on every reading key
+PASS AC-PNAT5 legacy 'strict-prefix-of:a\\\\bc' carries no pedigree and so no shape
+PASS AC-PNAT5 legacy 'strict-prefix-of:a\\\\bc' has no body parts for this rule
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab\\\\' is not refused by the escape rule (None)
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab\\\\' rides R2704 on every reading key
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab\\\\' carries no pedigree and so no shape
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab\\\\' has no body parts for this rule
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab,ac' is not refused by the escape rule (None)
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab,ac' rides R2704 on every reading key
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab,ac' carries no pedigree and so no shape
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab,ac' has no body parts for this rule
+PASS AC-PNAT5 legacy 'duplicate:2' is not refused by the escape rule (None)
+PASS AC-PNAT5 legacy 'duplicate:2' rides R2704 on every reading key
+PASS AC-PNAT5 legacy 'duplicate:2' carries no pedigree and so no shape
+PASS AC-PNAT5 legacy 'duplicate:2' has no body parts for this rule
+PASS AC-PNAT5 legacy 'duplicate:02' is not refused by the escape rule (None)
+PASS AC-PNAT5 legacy 'duplicate:02' rides R2704 on every reading key
+PASS AC-PNAT5 legacy 'duplicate:02' carries no pedigree and so no shape
+PASS AC-PNAT5 legacy 'duplicate:02' has no body parts for this rule
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab+duplicate:2' is not refused by the escape rule (None)
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab+duplicate:2' rides R2704 on every reading key
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab+duplicate:2' carries no pedigree and so no shape
+PASS AC-PNAT5 legacy 'strict-prefix-of:ab+duplicate:2' has no body parts for this rule
+PASS AC-PNAT5 the escape rule answers None off a legacy word
+PASS AC-PNAT5 so a legacy trailing backslash is left as text
+PASS AC-PNAT6 the module source is pure ASCII (14431 bytes)
+PASS AC-PNAT6 no clock, no network, no shell ([])
+PASS AC-PNAT6 every import is stdlib or a shipped probe (['import argparse', 'import json', 'import os', 'import sys', 'import probe_seam_dialect_canonical_guard_scope as PNAS  # noqa', 'import probe_seam_unnameable_part_joiner_escaped_scope as PNAO  # noqa'])
+PASS AC-PNAT6 the registry carries exactly one label row (1)
+PASS AC-PNAT6 the registry carries exactly one suite row (1)
+PASS AC-PNAT6 this suite exists on disk
+PASS AC-PNAT6 six criteria are declared
+PASS AC-PNAT6 the face carries its own reconcile label ('os-probe-seam-dialect-escape-guard-scope')
+SUITE PASS 6/6
+== ADJACENT 4
+== src/os/test_probe_seam_dialect_canonical_guard_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_dialect_shape_guard_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_dialect_tag_guard_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_unnameable_dialect_marker_scope.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=4 fails=0 digest=1DC0BADB2D615008

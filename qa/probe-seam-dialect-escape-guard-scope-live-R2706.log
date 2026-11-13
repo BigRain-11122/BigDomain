@@ -1,0 +1,5 @@
+LIVE files=5 loops=122 read_only=True
+FIXTURE illegal-letter mine={"duplicate": null, "refused": "escape-not-published", "siblings": null} theirs={"duplicate": null, "refused": null, "siblings": ["abc"]}
+FIXTURE trailing mine={"duplicate": null, "refused": "trailing-escape", "siblings": null} theirs={"duplicate": null, "refused": null, "siblings": ["ab\\"]}
+FIXTURE escaped-comma mine={"duplicate": null, "refused": null, "siblings": ["ab,ac"]} theirs={"duplicate": null, "refused": null, "siblings": ["ab,ac"]}
+FIXTURE escaped-escape mine={"duplicate": null, "refused": null, "siblings": ["ab\\c"]} theirs={"duplicate": null, "refused": null, "siblings": ["ab\\c"]}
