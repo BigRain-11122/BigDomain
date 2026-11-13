@@ -6589,6 +6589,20 @@ SUITES = [
          "..", "os",
          "test_probe_seam_dialect_tag_guard_scope.py"),
      6),
+    # R2701 product face on the R2698 seed: the R2698 guard validated the
+    # dialect TAG and left the SHAPE unchecked, so a bare marker was read back
+    # with the marker as its own body, an empty body part read as an empty
+    # body, and any body text at all was accepted as a tag-1 word. This face
+    # refuses a marked word whose body is absent, empty, or outside the three
+    # shapes it publishes (strict-prefix-of, a counted duplicate with n >= 2,
+    # or that pair in order), naming the shape it found, while every legacy
+    # word and every published word keeps its bytes (662 -> 663 suites,
+    # 4948 -> 4954).
+    ("os-probe-seam-dialect-shape-guard-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_dialect_shape_guard_scope.py"),
+     6),
     # R2595 birth-site repair of the round export driver health term: it
     # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
     # the recompute caliber can never satisfy once one tokens line sits in the

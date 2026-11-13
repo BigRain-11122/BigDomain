@@ -1,0 +1,352 @@
+EVIDENCE CAPTURE round=R2701 suite=src/os/test_probe_seam_dialect_shape_guard_scope.py legs=2
+== LEG A rc=0 digest=C0B628097F09B600
+PASS AC-PNAR1 a bare marker is refused as no-body ('no-body')
+PASS AC-PNAR1 the refusal carries its own word ('refused:no-body:marker-only')
+PASS AC-PNAR1 it is never read back as a tag-1 word with the marker as its body (None / None)
+PASS AC-PNAR1 and it states NO readings (None / None)
+PASS AC-PNAR1 the R2698 reading of the same word WAS the accepted marker-as-body this face refuses ({'word': 'dialect:1', 'dialect': '1', 'markers': 1, 'body': 'dialect:1', 'siblings': None, 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None})
+PASS AC-PNAR1 the word is not a legal reading any more
+PASS AC-PNAR1 a marked word with an EMPTY body part is refused by its own word ('refused:empty-body:empty-part')
+PASS AC-PNAR1 and it is not handed back as an empty body
+PASS AC-PNAR1 the tag guard still runs FIRST on 'dialect:2+strict-prefix-of:ab' ('unknown-dialect')
+PASS AC-PNAR1 the tag guard still runs FIRST on 'dialect:1+dialect:1+strict-prefix-of:ab' ('multiple-dialect-parts')
+PASS AC-PNAR2 'dialect:1+garbage' is refused as not-published ('not-published')
+PASS AC-PNAR2 and it NAMES the shape found ('garbage')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:not-published:garbage')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 'dialect:1+duplicate:1' is refused as duplicate-not-counted ('duplicate-not-counted')
+PASS AC-PNAR2 and it NAMES the shape found ('1')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:duplicate-not-counted:1')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 'dialect:1+duplicate:x' is refused as duplicate-not-counted ('duplicate-not-counted')
+PASS AC-PNAR2 and it NAMES the shape found ('x')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:duplicate-not-counted:x')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 'dialect:1+strict-prefix-of:' is refused as siblings-empty ('siblings-empty')
+PASS AC-PNAR2 and it NAMES the shape found ('none')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:siblings-empty:none')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 'dialect:1+strict-prefix-of:,ab' is refused as siblings-empty ('siblings-empty')
+PASS AC-PNAR2 and it NAMES the shape found ('empty-sibling')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:siblings-empty:empty-sibling')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 'dialect:1+duplicate:2+strict-prefix-of:ab' is refused as part-order ('part-order')
+PASS AC-PNAR2 and it NAMES the shape found ('duplicate')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:part-order:duplicate')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 'dialect:1+strict-prefix-of:ab+duplicate:2+duplicate:3' is refused as part-count ('part-count')
+PASS AC-PNAR2 and it NAMES the shape found ('3')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:part-count:3')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 a refused word carries no shape
+PASS AC-PNAR2 the refusal map names ONLY the refused word
+PASS AC-PNAR3 fixture ['a', 'ab,ac'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab\\,ac' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab\\,ac')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab\,ac)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['a', 'ab', 'ac'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab,ac' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab,ac')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab,ac)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['x', 'xy'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:xy' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:xy')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:xy)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['a', 'a'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+duplicate:2' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('duplicate:2')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+duplicate:2)
+PASS AC-PNAR3 the word names a published shape ('duplicate')
+PASS AC-PNAR3 fixture ['a', 'ab', 'a'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab+duplicate:2' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab+duplicate:2')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab+duplicate:2)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of+duplicate')
+PASS AC-PNAR3 fixture ['a', 'ab', 'ac', 'ad'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab,ac,ad' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab,ac,ad')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab,ac,ad)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['p', 'pq,pr', 'ps'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:pq\\,pr,ps' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:pq\\,pr,ps')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:pq\,pr,ps)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['a', 'ab+duplicate:2'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab\\+duplicate:2' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab\\+duplicate:2')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab\+duplicate:2)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['a', 'ab\\,ac'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab\\\\\\,ac' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab\\\\\\,ac')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab\\\,ac)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['a', 'ab', 'ac', 'a'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab,ac+duplicate:2' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab,ac+duplicate:2')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab,ac+duplicate:2)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of+duplicate')
+PASS AC-PNAR3 a bare prefix body is a published shape
+PASS AC-PNAR3 a bare counted duplicate body is a published shape (measured for ['a','a'], correcting the R2698 note)
+PASS AC-PNAR3 the pair body is a published shape
+PASS AC-PNAR3 the duplicate-only label set publishes a legal word (['a','a'] -> {'a': 'dialect:1+duplicate:2'})
+PASS AC-PNAR4 R2689 fixture 0 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 0 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab\\,ac' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 1 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 1 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab,ac' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 2 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 2 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:xy' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 3 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 3 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+duplicate:2' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 4 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 4 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab+duplicate:2' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 5 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 5 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab,ac,ad' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 6 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 6 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:pq\\,pr,ps' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 7 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 7 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab\\+duplicate:2' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 8 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 8 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab\\\\\\,ac' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 9 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 9 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab,ac+duplicate:2' rides on every reading key
+PASS AC-PNAR4 the published face covered 10 distinct words
+PASS AC-PNAR4 the base reading IS the R2698 reading
+PASS AC-PNAR4 R2685 fixture 0 rides unchanged
+PASS AC-PNAR4 R2685 fixture 1 rides unchanged
+PASS AC-PNAR4 R2685 fixture 2 rides unchanged
+PASS AC-PNAR4 R2685 fixture 3 rides unchanged
+PASS AC-PNAR4 R2685 fixture 4 rides unchanged
+PASS AC-PNAR4 R2685 fixture 5 rides unchanged
+PASS AC-PNAR4 a bounded live leg is read-only (modules=5 loops=104 unreadable=0 disagree=0)
+PASS AC-PNAR4 the SAME legacy fixture reads the same on BOTH readers
+PASS AC-PNAR4 the same marked fixture is REFUSED here and was read as a tag-1 body there ({'word': 'dialect:1', 'dialect': '1', 'markers': 1, 'body': 'dialect:1', 'siblings': None, 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None})
+PASS AC-PNAR5 legacy 'duplicate:2' is not refused by the shape rule (None)
+PASS AC-PNAR5 legacy 'duplicate:2' rides R2698 on every reading key
+PASS AC-PNAR5 legacy 'duplicate:2' carries no pedigree and so no shape
+PASS AC-PNAR5 legacy 'duplicate:2' has no body parts for this rule
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab+duplicate:2' is not refused by the shape rule (None)
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab+duplicate:2' rides R2698 on every reading key
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab+duplicate:2' carries no pedigree and so no shape
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab+duplicate:2' has no body parts for this rule
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab' is not refused by the shape rule (None)
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab' rides R2698 on every reading key
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab' carries no pedigree and so no shape
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab' has no body parts for this rule
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab,ac' is not refused by the shape rule (None)
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab,ac' rides R2698 on every reading key
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab,ac' carries no pedigree and so no shape
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab,ac' has no body parts for this rule
+PASS AC-PNAR5 legacy 'duplicate:9' is not refused by the shape rule (None)
+PASS AC-PNAR5 legacy 'duplicate:9' rides R2698 on every reading key
+PASS AC-PNAR5 legacy 'duplicate:9' carries no pedigree and so no shape
+PASS AC-PNAR5 legacy 'duplicate:9' has no body parts for this rule
+PASS AC-PNAR5 a bare duplicate stays a legal legacy word ({'word': 'duplicate:2', 'dialect': None, 'markers': 0, 'body': 'duplicate:2', 'siblings': None, 'duplicate': 2, 'refused': None, 'tag': None, 'count': 0, 'refusal_word': None})
+PASS AC-PNAR5 a TAIL marker is still legacy rather than a shape failure
+PASS AC-PNAR5 the shape rule answers None off a legacy word
+PASS AC-PNAR6 the module source is pure ASCII (15528 bytes)
+PASS AC-PNAR6 no clock, no network, no shell ([])
+PASS AC-PNAR6 every import is stdlib or a shipped probe (['import argparse', 'import json', 'import os', 'import sys', 'import probe_seam_dialect_tag_guard_scope as PNAQ  # noqa', 'import probe_seam_unnameable_dialect_marker_scope as PNAP  # noqa'])
+PASS AC-PNAR6 the registry carries exactly one label row (1)
+PASS AC-PNAR6 the registry carries exactly one suite row (1)
+PASS AC-PNAR6 this suite exists on disk
+PASS AC-PNAR6 six criteria are declared
+SUITE PASS 6/6
+== LEG B rc=0 digest=C0B628097F09B600
+PASS AC-PNAR1 a bare marker is refused as no-body ('no-body')
+PASS AC-PNAR1 the refusal carries its own word ('refused:no-body:marker-only')
+PASS AC-PNAR1 it is never read back as a tag-1 word with the marker as its body (None / None)
+PASS AC-PNAR1 and it states NO readings (None / None)
+PASS AC-PNAR1 the R2698 reading of the same word WAS the accepted marker-as-body this face refuses ({'word': 'dialect:1', 'dialect': '1', 'markers': 1, 'body': 'dialect:1', 'siblings': None, 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None})
+PASS AC-PNAR1 the word is not a legal reading any more
+PASS AC-PNAR1 a marked word with an EMPTY body part is refused by its own word ('refused:empty-body:empty-part')
+PASS AC-PNAR1 and it is not handed back as an empty body
+PASS AC-PNAR1 the tag guard still runs FIRST on 'dialect:2+strict-prefix-of:ab' ('unknown-dialect')
+PASS AC-PNAR1 the tag guard still runs FIRST on 'dialect:1+dialect:1+strict-prefix-of:ab' ('multiple-dialect-parts')
+PASS AC-PNAR2 'dialect:1+garbage' is refused as not-published ('not-published')
+PASS AC-PNAR2 and it NAMES the shape found ('garbage')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:not-published:garbage')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 'dialect:1+duplicate:1' is refused as duplicate-not-counted ('duplicate-not-counted')
+PASS AC-PNAR2 and it NAMES the shape found ('1')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:duplicate-not-counted:1')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 'dialect:1+duplicate:x' is refused as duplicate-not-counted ('duplicate-not-counted')
+PASS AC-PNAR2 and it NAMES the shape found ('x')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:duplicate-not-counted:x')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 'dialect:1+strict-prefix-of:' is refused as siblings-empty ('siblings-empty')
+PASS AC-PNAR2 and it NAMES the shape found ('none')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:siblings-empty:none')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 'dialect:1+strict-prefix-of:,ab' is refused as siblings-empty ('siblings-empty')
+PASS AC-PNAR2 and it NAMES the shape found ('empty-sibling')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:siblings-empty:empty-sibling')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 'dialect:1+duplicate:2+strict-prefix-of:ab' is refused as part-order ('part-order')
+PASS AC-PNAR2 and it NAMES the shape found ('duplicate')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:part-order:duplicate')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 'dialect:1+strict-prefix-of:ab+duplicate:2+duplicate:3' is refused as part-count ('part-count')
+PASS AC-PNAR2 and it NAMES the shape found ('3')
+PASS AC-PNAR2 its own word is derived from code and shape ('refused:part-count:3')
+PASS AC-PNAR2 it is refused rather than read (None / None)
+PASS AC-PNAR2 the R2698 reading of the same word ACCEPTED it as tag 1 ('1')
+PASS AC-PNAR2 a refused word carries no shape
+PASS AC-PNAR2 the refusal map names ONLY the refused word
+PASS AC-PNAR3 fixture ['a', 'ab,ac'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab\\,ac' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab\\,ac')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab\,ac)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['a', 'ab', 'ac'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab,ac' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab,ac')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab,ac)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['x', 'xy'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:xy' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:xy')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:xy)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['a', 'a'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+duplicate:2' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('duplicate:2')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+duplicate:2)
+PASS AC-PNAR3 the word names a published shape ('duplicate')
+PASS AC-PNAR3 fixture ['a', 'ab', 'a'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab+duplicate:2' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab+duplicate:2')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab+duplicate:2)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of+duplicate')
+PASS AC-PNAR3 fixture ['a', 'ab', 'ac', 'ad'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab,ac,ad' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab,ac,ad')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab,ac,ad)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['p', 'pq,pr', 'ps'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:pq\\,pr,ps' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:pq\\,pr,ps')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:pq\,pr,ps)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['a', 'ab+duplicate:2'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab\\+duplicate:2' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab\\+duplicate:2')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab\+duplicate:2)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['a', 'ab\\,ac'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab\\\\\\,ac' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab\\\\\\,ac')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab\\\,ac)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of')
+PASS AC-PNAR3 fixture ['a', 'ab', 'ac', 'a'] publishes only legal words
+PASS AC-PNAR3 'dialect:1+strict-prefix-of:ab,ac+duplicate:2' reads back tag 1 ('1')
+PASS AC-PNAR3 its body is the stripped word ('strict-prefix-of:ab,ac+duplicate:2')
+PASS AC-PNAR3 every reading key rides R2698 (dialect:1+strict-prefix-of:ab,ac+duplicate:2)
+PASS AC-PNAR3 the word names a published shape ('strict-prefix-of+duplicate')
+PASS AC-PNAR3 a bare prefix body is a published shape
+PASS AC-PNAR3 a bare counted duplicate body is a published shape (measured for ['a','a'], correcting the R2698 note)
+PASS AC-PNAR3 the pair body is a published shape
+PASS AC-PNAR3 the duplicate-only label set publishes a legal word (['a','a'] -> {'a': 'dialect:1+duplicate:2'})
+PASS AC-PNAR4 R2689 fixture 0 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 0 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab\\,ac' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 1 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 1 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab,ac' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 2 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 2 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:xy' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 3 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 3 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+duplicate:2' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 4 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 4 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab+duplicate:2' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 5 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 5 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab,ac,ad' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 6 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 6 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:pq\\,pr,ps' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 7 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 7 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab\\+duplicate:2' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 8 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 8 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab\\\\\\,ac' rides on every reading key
+PASS AC-PNAR4 R2689 fixture 9 rides byte for byte
+PASS AC-PNAR4 R2692 fixture 9 rides byte for byte
+PASS AC-PNAR4 R2698 word 'dialect:1+strict-prefix-of:ab,ac+duplicate:2' rides on every reading key
+PASS AC-PNAR4 the published face covered 10 distinct words
+PASS AC-PNAR4 the base reading IS the R2698 reading
+PASS AC-PNAR4 R2685 fixture 0 rides unchanged
+PASS AC-PNAR4 R2685 fixture 1 rides unchanged
+PASS AC-PNAR4 R2685 fixture 2 rides unchanged
+PASS AC-PNAR4 R2685 fixture 3 rides unchanged
+PASS AC-PNAR4 R2685 fixture 4 rides unchanged
+PASS AC-PNAR4 R2685 fixture 5 rides unchanged
+PASS AC-PNAR4 a bounded live leg is read-only (modules=5 loops=104 unreadable=0 disagree=0)
+PASS AC-PNAR4 the SAME legacy fixture reads the same on BOTH readers
+PASS AC-PNAR4 the same marked fixture is REFUSED here and was read as a tag-1 body there ({'word': 'dialect:1', 'dialect': '1', 'markers': 1, 'body': 'dialect:1', 'siblings': None, 'duplicate': None, 'refused': None, 'tag': '1', 'count': 1, 'refusal_word': None})
+PASS AC-PNAR5 legacy 'duplicate:2' is not refused by the shape rule (None)
+PASS AC-PNAR5 legacy 'duplicate:2' rides R2698 on every reading key
+PASS AC-PNAR5 legacy 'duplicate:2' carries no pedigree and so no shape
+PASS AC-PNAR5 legacy 'duplicate:2' has no body parts for this rule
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab+duplicate:2' is not refused by the shape rule (None)
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab+duplicate:2' rides R2698 on every reading key
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab+duplicate:2' carries no pedigree and so no shape
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab+duplicate:2' has no body parts for this rule
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab' is not refused by the shape rule (None)
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab' rides R2698 on every reading key
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab' carries no pedigree and so no shape
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab' has no body parts for this rule
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab,ac' is not refused by the shape rule (None)
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab,ac' rides R2698 on every reading key
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab,ac' carries no pedigree and so no shape
+PASS AC-PNAR5 legacy 'strict-prefix-of:ab,ac' has no body parts for this rule
+PASS AC-PNAR5 legacy 'duplicate:9' is not refused by the shape rule (None)
+PASS AC-PNAR5 legacy 'duplicate:9' rides R2698 on every reading key
+PASS AC-PNAR5 legacy 'duplicate:9' carries no pedigree and so no shape
+PASS AC-PNAR5 legacy 'duplicate:9' has no body parts for this rule
+PASS AC-PNAR5 a bare duplicate stays a legal legacy word ({'word': 'duplicate:2', 'dialect': None, 'markers': 0, 'body': 'duplicate:2', 'siblings': None, 'duplicate': 2, 'refused': None, 'tag': None, 'count': 0, 'refusal_word': None})
+PASS AC-PNAR5 a TAIL marker is still legacy rather than a shape failure
+PASS AC-PNAR5 the shape rule answers None off a legacy word
+PASS AC-PNAR6 the module source is pure ASCII (15528 bytes)
+PASS AC-PNAR6 no clock, no network, no shell ([])
+PASS AC-PNAR6 every import is stdlib or a shipped probe (['import argparse', 'import json', 'import os', 'import sys', 'import probe_seam_dialect_tag_guard_scope as PNAQ  # noqa', 'import probe_seam_unnameable_dialect_marker_scope as PNAP  # noqa'])
+PASS AC-PNAR6 the registry carries exactly one label row (1)
+PASS AC-PNAR6 the registry carries exactly one suite row (1)
+PASS AC-PNAR6 this suite exists on disk
+PASS AC-PNAR6 six criteria are declared
+SUITE PASS 6/6
+== ADJACENT 1
+== src/os/test_probe_seam_dialect_tag_guard_scope.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=1 fails=0 digest=C0B628097F09B600
