@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T16:09:09+08:00",
+  "export_ts": "2026-11-13T16:10:50+08:00",
   "do": "2026-11-13 R2698 PRODUCT window on the queue head the debt gate named (product-face-R2697, state/queue/tech.md line 682 prefix AC-PNAQ1, criteria AC-PNAQ1..AC-PNAQ6 pinned in that row at R2692 BEFORE any code). Five readings at open: git status EMPTY at HEAD 50bc9984 with no index.lock; ZERO @BigDomain rows in the group ledger (atbd_rows=0; the ledger parse flags conflict=1, a numbering conflict i",
   "ceo_face": {
     "current": "2026-11-13 R2698 PRODUCT window on the queue head the debt gate named (product-face-R2697, state/queue/tech.md line 682 prefix AC-PNAQ1, criteria AC-PNAQ1..AC-PNAQ6 pinned in that row at R2692 BEFORE any code). Five readings at open: git status EMPTY at HEAD 50bc9984 with no index.lock; ZERO @BigDomain rows in the group ledger (atbd_rows=0; the ledger parse flags conflict=1, a numbering conflict i",
     "latest_artifact": "prefix-tag-guard-R2698.log (21818B) + smoke-R2698.log (808B) + smoke-R2698.png (27428B)",
     "last_artifact": "prefix-tag-guard-R2698.log (21818B) + smoke-R2698.log (808B) + smoke-R2698.png (27428B)",
-    "next_milestone": "next window owes reconcile-battery-R2698 on the committed tree, inside a 48h window due 2026-11-15T16:09:09+08:00",
-    "next_milestone_due": "2026-11-15T16:09:09+08:00",
-    "updated_at": "2026-11-13T16:09:09+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2698 on the committed tree, inside a 48h window due 2026-11-15T16:10:50+08:00",
+    "next_milestone_due": "2026-11-15T16:10:50+08:00",
+    "updated_at": "2026-11-13T16:10:50+08:00"
   },
   "depts": [
     {
@@ -1019,7 +1019,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 64,
+    "log_lines_in_window": 65,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 12,
