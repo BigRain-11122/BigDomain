@@ -170,8 +170,14 @@ def parse_duplicate_from_word(word):
     for part in split_parts_escaped(word):
         if part.startswith(DUP_HEAD):
             body = unescape_label(part[len(DUP_HEAD):])
-            if body.isdigit():
+            if not body.isdigit():
+                continue
+            try:
                 return int(body)
+            except ValueError:
+                # Measured at R2704: a superscript two is isdigit() True and
+                # int() raises, so this face CRASHED where it owed no count.
+                continue
     return None
 
 

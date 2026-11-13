@@ -127,13 +127,24 @@ def duplicate_count_of_part(part):
     """(is_counted, count) for a counted duplicate part, else (False, None).
 
     A count is only counted when it is a bare integer of at least two, which
-    is the only form the publishing face ever writes.
+    is the only form the publishing face ever writes. int() is reached only
+    after a form it can read: measured at R2704, a superscript two is
+    isdigit() True and int() raises ValueError, so the shipped face CRASHED
+    where it owed a refusal. Both int() reaches of that defect family are
+    repaired at their birth sites in the R2704 window (this one and the legacy
+    parser in probe_seam_unnameable_part_joiner_escaped_scope).
     """
     if not isinstance(part, str) or not part.startswith(DUP_HEAD):
         return (False, None)
     tail = part[len(DUP_HEAD):]
-    if tail.isdigit() and int(tail) >= 2:
-        return (True, int(tail))
+    if not tail.isdigit():
+        return (False, None)
+    try:
+        count = int(tail)
+    except ValueError:
+        return (False, None)
+    if count >= 2:
+        return (True, count)
     return (False, None)
 
 

@@ -6603,6 +6603,20 @@ SUITES = [
          "..", "os",
          "test_probe_seam_dialect_shape_guard_scope.py"),
      6),
+    # R2704 product face on the R2701 seed: the R2701 guard validated the
+    # SHAPE and left the CANONICAL FORM unchecked, so 'duplicate:02' read back
+    # exactly as 'duplicate:2' and 'strict-prefix-of:ab,ab' was accepted as a
+    # sibling list the publishing face never emits; a fourth measurement found
+    # the R2701 face RAISED ValueError on a superscript two instead of
+    # refusing it, repaired at that birth site here. This face refuses a
+    # counted duplicate written non-canonically and a sibling list naming one
+    # label twice, naming the form found, while every legacy word and every
+    # published word keeps its bytes (663 -> 664 suites, 4954 -> 4960).
+    ("os-probe-seam-dialect-canonical-guard-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_dialect_canonical_guard_scope.py"),
+     6),
     # R2595 birth-site repair of the round export driver health term: it
     # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
     # the recompute caliber can never satisfy once one tokens line sits in the
