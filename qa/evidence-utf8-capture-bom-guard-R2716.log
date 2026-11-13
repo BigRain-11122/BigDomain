@@ -1,0 +1,111 @@
+EVIDENCE CAPTURE round=R2716 suite=src/os/test_evidence_utf8_capture_bom_guard.py legs=2
+== LEG A rc=0 digest=5CB7471CDE637D57
+PASS AC-EBOM1 a BOM payload is refused as E_EBOM_BOM (got 'E_EBOM_BOM')
+PASS AC-EBOM1 the refused BOM capture wrote NO file
+PASS AC-EBOM1 the shipped eol law reads bom=True eol_ok=False on the SAME bytes
+PASS AC-EBOM1 the refusal carries that same eol reading
+PASS AC-EBOM1 the refusal line prints bom=True eol_ok=False ('REFUSED code=E_EBOM_BOM target=<scratch>\\bom.txt bytes=9 crlf=0 lone_cr=0 nul=0 bom=True eol_ok=False')
+PASS AC-EBOM1 the shipped capture still LANDS the same BOM bytes (so this face is a new law, not a duplicate)
+PASS AC-EBOM1 a patched eol law moves the verdict on CLEAN bytes, so the law is asked at CALL time
+PASS AC-EBOM1 the patched refusal wrote nothing
+PASS AC-EBOM2 a NUL payload is refused as E_EBOM_NUL (got 'E_EBOM_NUL')
+PASS AC-EBOM2 the NUL count is measured as 2 (got 2)
+PASS AC-EBOM2 the refusal line prints nul=2 ('REFUSED code=E_EBOM_NUL target=<scratch>\\nul.txt bytes=5 crlf=0 lone_cr=0 nul=2 bom=False eol_ok=True')
+PASS AC-EBOM2 the refused NUL capture wrote NO file
+PASS AC-EBOM2 the NUL code is distinct from the BOM code
+PASS AC-EBOM2 the shipped capture LANDS it with nul=2 measured and never enforced
+PASS AC-EBOM3 a clean payload still reports LANDED ('LANDED')
+PASS AC-EBOM3 every byte landed unchanged (28 bytes)
+PASS AC-EBOM3 the byte count and digest match the shipped law (28, E68F2A0F878B633A)
+PASS AC-EBOM3 the landed report names bom=False eol_ok=True
+PASS AC-EBOM3 text input still lands as its utf-8 encoding
+PASS AC-EBOM3 the real committed evidence reads ACCEPT (write-sensitive-R2715.log, 8783 bytes)
+PASS AC-EBOM3 the live read wrote nothing (60E952DC85ADD1F0)
+PASS AC-EBOM4 the R2714 reading 'crlf' still refuses as E_EUC_CRLF (got 'E_EUC_CRLF')
+PASS AC-EBOM4 its crlf count still reads 2 (got 2)
+PASS AC-EBOM4 the refused 'crlf' still wrote NO file
+PASS AC-EBOM4 the R2714 reading 'lone_cr' still refuses as E_EUC_LONE_CR (got 'E_EUC_LONE_CR')
+PASS AC-EBOM4 its lone_cr count still reads 1 (got 1)
+PASS AC-EBOM4 the refused 'lone_cr' still wrote NO file
+PASS AC-EBOM4 the R2714 reading 'bad_offset' still refuses as E_EUC_NOT_UTF8 (got 'E_EUC_NOT_UTF8')
+PASS AC-EBOM4 its bad_offset count still reads 2 (got 2)
+PASS AC-EBOM4 the refused 'bad_offset' still wrote NO file
+PASS AC-EBOM4 the two new codes never shadow a shipped code
+PASS AC-EBOM4 the fixture of 13 bytes reads the SAME code E_EUC_CRLF on BOTH readers
+PASS AC-EBOM4 the fixture of 10 bytes reads the SAME code E_EUC_LONE_CR on BOTH readers
+PASS AC-EBOM4 the fixture of 6 bytes reads the SAME code E_EUC_NOT_UTF8 on BOTH readers
+PASS AC-EBOM4 the clean payload is accepted on BOTH readers
+PASS AC-EBOM4 the real evidence file reads ACCEPT on BOTH readers (8783 bytes)
+PASS AC-EBOM4 the bounded live leg changed no real byte (60E952DC85ADD1F0)
+PASS AC-EBOM5 a refused BOM capture leaves the target absent
+PASS AC-EBOM5 an existing target is refused as E_EUC_EXISTS (got 'E_EUC_EXISTS')
+PASS AC-EBOM5 the existing target is byte-identical (2B8425C4D20E7437)
+PASS AC-EBOM5 the existence law is asked before the BOM shape
+PASS AC-EBOM5 the second refusal left it byte-identical too
+PASS AC-EBOM6 the module source is pure ASCII (5513 bytes)
+PASS AC-EBOM6 no clock, no network, no shell ([])
+PASS AC-EBOM6 every import is stdlib or a shipped face (['import argparse', 'import json', 'import os', 'import sys', 'import tempfile', 'import battery_followup as BF', 'import evidence_utf8_capture as EUC'])
+PASS AC-EBOM6 the registry carries exactly one label row (1)
+PASS AC-EBOM6 the registry carries exactly one suite row (1)
+PASS AC-EBOM6 the shipped base label row is untouched (1)
+PASS AC-EBOM6 this suite exists on disk
+PASS AC-EBOM6 six criteria are declared
+PASS AC-EBOM6 the face carries its own reconcile label ('os-evidence-utf8-capture-bom-guard')
+SUITE PASS 6/6
+== LEG B rc=0 digest=5CB7471CDE637D57
+PASS AC-EBOM1 a BOM payload is refused as E_EBOM_BOM (got 'E_EBOM_BOM')
+PASS AC-EBOM1 the refused BOM capture wrote NO file
+PASS AC-EBOM1 the shipped eol law reads bom=True eol_ok=False on the SAME bytes
+PASS AC-EBOM1 the refusal carries that same eol reading
+PASS AC-EBOM1 the refusal line prints bom=True eol_ok=False ('REFUSED code=E_EBOM_BOM target=<scratch>\\bom.txt bytes=9 crlf=0 lone_cr=0 nul=0 bom=True eol_ok=False')
+PASS AC-EBOM1 the shipped capture still LANDS the same BOM bytes (so this face is a new law, not a duplicate)
+PASS AC-EBOM1 a patched eol law moves the verdict on CLEAN bytes, so the law is asked at CALL time
+PASS AC-EBOM1 the patched refusal wrote nothing
+PASS AC-EBOM2 a NUL payload is refused as E_EBOM_NUL (got 'E_EBOM_NUL')
+PASS AC-EBOM2 the NUL count is measured as 2 (got 2)
+PASS AC-EBOM2 the refusal line prints nul=2 ('REFUSED code=E_EBOM_NUL target=<scratch>\\nul.txt bytes=5 crlf=0 lone_cr=0 nul=2 bom=False eol_ok=True')
+PASS AC-EBOM2 the refused NUL capture wrote NO file
+PASS AC-EBOM2 the NUL code is distinct from the BOM code
+PASS AC-EBOM2 the shipped capture LANDS it with nul=2 measured and never enforced
+PASS AC-EBOM3 a clean payload still reports LANDED ('LANDED')
+PASS AC-EBOM3 every byte landed unchanged (28 bytes)
+PASS AC-EBOM3 the byte count and digest match the shipped law (28, E68F2A0F878B633A)
+PASS AC-EBOM3 the landed report names bom=False eol_ok=True
+PASS AC-EBOM3 text input still lands as its utf-8 encoding
+PASS AC-EBOM3 the real committed evidence reads ACCEPT (write-sensitive-R2715.log, 8783 bytes)
+PASS AC-EBOM3 the live read wrote nothing (60E952DC85ADD1F0)
+PASS AC-EBOM4 the R2714 reading 'crlf' still refuses as E_EUC_CRLF (got 'E_EUC_CRLF')
+PASS AC-EBOM4 its crlf count still reads 2 (got 2)
+PASS AC-EBOM4 the refused 'crlf' still wrote NO file
+PASS AC-EBOM4 the R2714 reading 'lone_cr' still refuses as E_EUC_LONE_CR (got 'E_EUC_LONE_CR')
+PASS AC-EBOM4 its lone_cr count still reads 1 (got 1)
+PASS AC-EBOM4 the refused 'lone_cr' still wrote NO file
+PASS AC-EBOM4 the R2714 reading 'bad_offset' still refuses as E_EUC_NOT_UTF8 (got 'E_EUC_NOT_UTF8')
+PASS AC-EBOM4 its bad_offset count still reads 2 (got 2)
+PASS AC-EBOM4 the refused 'bad_offset' still wrote NO file
+PASS AC-EBOM4 the two new codes never shadow a shipped code
+PASS AC-EBOM4 the fixture of 13 bytes reads the SAME code E_EUC_CRLF on BOTH readers
+PASS AC-EBOM4 the fixture of 10 bytes reads the SAME code E_EUC_LONE_CR on BOTH readers
+PASS AC-EBOM4 the fixture of 6 bytes reads the SAME code E_EUC_NOT_UTF8 on BOTH readers
+PASS AC-EBOM4 the clean payload is accepted on BOTH readers
+PASS AC-EBOM4 the real evidence file reads ACCEPT on BOTH readers (8783 bytes)
+PASS AC-EBOM4 the bounded live leg changed no real byte (60E952DC85ADD1F0)
+PASS AC-EBOM5 a refused BOM capture leaves the target absent
+PASS AC-EBOM5 an existing target is refused as E_EUC_EXISTS (got 'E_EUC_EXISTS')
+PASS AC-EBOM5 the existing target is byte-identical (2B8425C4D20E7437)
+PASS AC-EBOM5 the existence law is asked before the BOM shape
+PASS AC-EBOM5 the second refusal left it byte-identical too
+PASS AC-EBOM6 the module source is pure ASCII (5513 bytes)
+PASS AC-EBOM6 no clock, no network, no shell ([])
+PASS AC-EBOM6 every import is stdlib or a shipped face (['import argparse', 'import json', 'import os', 'import sys', 'import tempfile', 'import battery_followup as BF', 'import evidence_utf8_capture as EUC'])
+PASS AC-EBOM6 the registry carries exactly one label row (1)
+PASS AC-EBOM6 the registry carries exactly one suite row (1)
+PASS AC-EBOM6 the shipped base label row is untouched (1)
+PASS AC-EBOM6 this suite exists on disk
+PASS AC-EBOM6 six criteria are declared
+PASS AC-EBOM6 the face carries its own reconcile label ('os-evidence-utf8-capture-bom-guard')
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_evidence_utf8_capture.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_dialect_marker_escape_guard_scope.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=5CB7471CDE637D57

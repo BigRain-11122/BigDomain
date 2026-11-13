@@ -1,0 +1,6 @@
+R2716 BOM AND NUL GUARD LIVE LEG
+fixture bom bytes=9 shipped_capture=LANDED shipped_eol_bom=True shipped_eol_ok=False guard=E_EBOM_BOM
+fixture nul bytes=5 shipped_capture=LANDED nul=2 guard=E_EBOM_NUL
+fixture crlf bytes=13 shipped=E_EUC_CRLF guard=E_EUC_CRLF
+real qa/write-sensitive-R2715.log bytes=8783 shipped=LANDED nul=0 guard=ACCEPT sha=60E952DC85ADD1F0
+landed_by this guard through evidence_utf8_capture_bom_guard.capture

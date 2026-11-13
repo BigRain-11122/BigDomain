@@ -6680,6 +6680,17 @@ SUITES = [
     # (AC-EUC1..AC-EUC6 pinned in state/queue/tech.md:689 at R2494.)
     ("os-evidence-utf8-capture",
      os.path.join("..", "os", "test_evidence_utf8_capture.py"), 6),
+    # R2716: the shipped capture guard refuses CRLF, lone CR and non-utf-8
+    # bytes, but MEASURED on it a payload beginning with a UTF-8 BOM LANDS
+    # while battery_followup.eol_state then reads bom=True and eol_ok=False
+    # on that very file, and a payload carrying NUL LANDS with nul=1
+    # measured and never enforced. This face asks that shipped eol law at
+    # CALL time on the same bytes and refuses both shapes with its own
+    # codes and counters, landing only through the shipped face unchanged
+    # (668 -> 669 suites, 4984 -> 4990 criteria).
+    # (AC-EBOM1..AC-EBOM6 pinned in state/queue/tech.md:691 at R2714.)
+    ("os-evidence-utf8-capture-bom-guard",
+     os.path.join("..", "os", "test_evidence_utf8_capture_bom_guard.py"), 6),
     ]
 
 FAILS = 0
