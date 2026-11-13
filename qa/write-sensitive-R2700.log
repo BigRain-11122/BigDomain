@@ -1,0 +1,38 @@
+WRITE-SENSITIVE R2700 (R2614 discipline on the FINAL committed tree HEAD 4d3aa31d).
+LEG WINDOW 16:27:02-17:32:05 carried commits 309d4c3f (16:33:26) and 4d3aa31d (16:34:22),
+so this set was re-run rather than assumed.
+FIRST PASS ON THAT HEAD READ FOUR REDS, each reproduced directly and each naming the SAME root:
+  test_artifact_disk_text_readability AC-ADTR3 --check keeps its today reading (rc=2)
+  test_evidence_name_text_coverage rc=1
+  test_stamp_text_coverage rc=1
+  test_matrix_stamp_compare AC-MSC4 --check remains the authority (rc=2)
+cause read off the shipped face, not guessed: suite_matrix_reconcile --check answered
+EVIDENCE-FACE recorded-evidence=qa/reconcile-all-R2695.log named-evidence=qa/reconcile-all-R2699.log
+at registry-rows=662 (4948 criteria), i.e. the DESIGNED matrix-FAIL-first step against a doc stamped
+from the PREVIOUS leg, with NO byte written by that check.
+HONEST DEFECT OF THIS WINDOW OWN RUNNER: that first-red pass was written to THIS SAME path and was
+OVERWRITTEN by the green pass below, because the one-off runner did not separate a first-red file
+(the R2697 precedent used qa/write-sensitive-R2697-first-red.log). The four red names and their codes
+are recorded above from the measured console output, and they stay REPRODUCIBLE for any maintainer by
+checking out 4d3aa31d and running the same four suites against the doc stamped from R2695.
+THEN the doc was regenerated STAMP-ALIGNED from THIS round own green leg qa/reconcile-all-R2699.log
+through the shipped write face --write --evidence: 69964B -> 69961B at 662 rows, after which
+suite_matrix_reconcile --check read DOC-CURRENT rc=0, and the SAME fifteen-suite set re-ran:
+WRITE-SENSITIVE R2700 re-run on the FINAL committed tree
+HEAD 4d3aa31d32230378fb5e6adb98d117eb28c9538f
+test_export_driver_self_drive_health.py rc=0 SUITE PASS 6/6
+test_export_driver_queue_face.py rc=0 SUITE PASS 6/6
+test_ledger_lines.py rc=0 SUITE PASS 8/8 criteria
+test_ledger_line_shape_guard.py rc=0 SUITE PASS 6/6
+test_artifact_disk_text_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_evidence_name_text_coverage.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_stamp_text_coverage.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_patterns_label_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_patterns_label_readability_render_consumer.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_patterns_non_label_text_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_matrix_stamp_compare.py rc=0 SUITE PASS 6/6
+test_suite_matrix_reconcile.py rc=0 SUITE PASS 6/6
+test_suite_matrix_reconcile_evidence_face.py rc=0 SUITE PASS 6/6
+test_queue_floor.py rc=0 SUITE PASS 8/8
+test_queue_floor_decl.py rc=0 SUITE PASS 6/6
+rc-failures=0 over 15 suites
