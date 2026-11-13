@@ -1,1 +1,1 @@
-﻿2026-11-14T01:2x R2708 QA crawl window: W40 iOS virtual-pay parameter face (device routing, Apple leg has NO sandbox, four iOS order conditions, display-name prerequisite) landed in benchmarks + intelligence wall + smoke evidence; carried leg R2707 measured DEAD at 649 PASS / 0 FAIL with no closing line so NO verdict and reconcile-battery-R2706 stays open at 665/4966; fresh leg pid 36604 live at closeout on the doc-only tree; tick 2701
+2026-11-14 02:15:30
