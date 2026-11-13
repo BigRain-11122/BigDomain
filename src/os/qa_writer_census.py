@@ -387,6 +387,80 @@ def accept_reconciled(target, path, name):
     return lines, 0
 
 
+def baseline_add(target, path, name):
+    """Narrow additive disposition face (R2712 AC-WCB7-1..AC-WCB7-6).
+
+    The shipped disposition face is one-directional: --accept DROPS a
+    baselined file that was legitimately rebuilt in the tee dialect,
+    so a genuine one-off evidence file that stays in a non-tee dialect
+    flags new-dialect forever, and its only exit was --update-baseline
+    - a whole-baseline re-freeze that would also mask unrelated drift.
+    This face adds EXACTLY ONE named file to the baseline list of the
+    class it currently measures, so the drift gate keeps its teeth for
+    every other file. Refusals never touch the baseline file, and the
+    post-check is reported rather than assumed. Returns (lines, code).
+    """
+    lines = []
+    if not os.path.exists(path):
+        lines.append("baseline file missing: %s" % os.path.basename(path))
+        lines.append("hint: run --update-baseline first "
+                     "(probe not deployed - honest refusal, "
+                     "zero fabricated empty baseline)")
+        return lines, 2
+    try:
+        with io.open(path, "r", encoding="utf-8") as fh:
+            base = json.load(fh)
+    except (OSError, ValueError) as exc:
+        lines.append("baseline unreadable: %s (%s)"
+                     % (os.path.basename(path), exc.__class__.__name__))
+        return lines, 2
+    for c in BASELINE_CLASSES:
+        if c not in base:
+            lines.append("baseline malformed: missing class key %s" % c)
+            return lines, 2
+    base_of = {}
+    for c in BASELINE_CLASSES:
+        for n in base[c]:
+            base_of[n] = c
+    if (not name or name in (".", "..")
+            or os.path.basename(name) != name
+            or (os.altsep and os.altsep in name)):
+        lines.append("refused: %r is not a bare file name inside the "
+                     "target dir (no path, no parent)" % name)
+        return lines, 2
+    fpath = os.path.join(target, name)
+    if not os.path.isfile(fpath):
+        lines.append("refused: %s not on disk (the add face needs a "
+                     "measured file, not a promise)" % name)
+        return lines, 2
+    row = classify_file(fpath)
+    cls = row["class"]
+    if cls == "tee":
+        lines.append("refused: %s is class=tee (healthy dialect files "
+                     "are never baselined - a new tee file must never "
+                     "flag)" % name)
+        return lines, 2
+    if name in base_of:
+        total = sum(len(base[c]) for c in BASELINE_CLASSES)
+        lines.append("already-baselined: %s (class=%s)"
+                     % (name, base_of[name]))
+        lines.append("baseline: %s" % os.path.abspath(path))
+        lines.append("baselined=%d" % total)
+        return lines, 0
+    base[cls] = sorted(base[cls] + [name])
+    clean = dict((c, sorted(base[c])) for c in BASELINE_CLASSES)
+    _write_baseline_json(path, clean)
+    lines.append("added: %s (class=%s)" % (name, cls))
+    lines.append("baseline: %s" % os.path.abspath(path))
+    lines.append("baselined=%d"
+                 % sum(len(clean[c]) for c in BASELINE_CLASSES))
+    post, post_code = check_against_baseline(target, path)
+    lines.append("--- post-check (self-run after add) ---")
+    lines.extend(post)
+    lines.append("post-check exit=%d" % post_code)
+    return lines, (0 if post_code == 0 else 2)
+
+
 def _hygiene_lines():
     out = []
     with io.open(os.path.abspath(__file__), "r", encoding="ascii",
@@ -619,6 +693,13 @@ def main(argv=None):
                         help="per-file disposition: drop a baselined "
                              "file that was rebuilt in the tee dialect "
                              "from the baseline (repeatable, R2151)")
+    parser.add_argument("--baseline-add", action="append", default=None,
+                        metavar="NAME",
+                        help="per-file disposition: add ONE named "
+                             "non-tee file to the baseline so a genuine "
+                             "one-off evidence file stops flagging "
+                             "without re-freezing the whole baseline "
+                             "(repeatable, R2712)")
     if argv is None:
         argv = sys.argv[1:]
     args = parser.parse_args(argv)
@@ -629,6 +710,11 @@ def main(argv=None):
     if args.accept and (args.check or args.update_baseline):
         parser.error("--accept is a disposition face of its own; "
                      "do not combine it with --check/--update-baseline")
+    if args.baseline_add and (args.check or args.update_baseline
+                              or args.accept):
+        parser.error("--baseline-add is a disposition face of its own; "
+                     "do not combine it with --check, --update-baseline "
+                     "or --accept")
     print("probe: qa writer-mode census (BigDomain R1836 AC-SL3; "
           "R1841 baseline+drift AC-WCB1..WCB6)")
     if args.selftest:
@@ -655,6 +741,18 @@ def main(argv=None):
         code = 0
         for name in args.accept:
             lines, sub = accept_reconciled(target, bpath, name)
+            for line in lines:
+                print(line)
+            if sub != 0:
+                code = 2
+        return code
+    if args.baseline_add:
+        print("mode: baseline-add (per-file disposition)")
+        print("dir: %s" % target)
+        print("baseline: %s" % bpath)
+        code = 0
+        for name in args.baseline_add:
+            lines, sub = baseline_add(target, bpath, name)
             for line in lines:
                 print(line)
             if sub != 0:

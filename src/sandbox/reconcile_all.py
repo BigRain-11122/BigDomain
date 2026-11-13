@@ -4436,6 +4436,15 @@ SUITES = [
     # (AC-CDN1..AC-CDN8 pre-registered in state/queue/tech.md R2151.)
     ("ledger-census-negative",
      os.path.join("..", "os", "test_census_negative.py"), 12),
+    # R2712: the disposition face above was one-directional, so a
+    # genuine one-off evidence file in a non-tee dialect flagged
+    # new-dialect forever and the only exit was a whole-baseline
+    # re-freeze that also masks unrelated drift. --baseline-add adds
+    # EXACTLY ONE named file and reports any remaining drift instead of
+    # claiming a green it does not have.
+    # (AC-WCB7-1..AC-WCB7-6 pinned in the suite header BEFORE the face.)
+    ("ledger-census-baseline-add",
+     os.path.join("..", "os", "test_census_baseline_add.py"), 6),
     # R2152: the round ledger line that the F3 law and the
     # status-export self_drive face derive from gets a machine check -
     # pinned parse, bad-shape family with its gate order, the
