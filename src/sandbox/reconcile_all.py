@@ -6669,6 +6669,17 @@ SUITES = [
     # one verdict word (630 -> 631 suites, 4756 -> 4762).
     ("os-export-driver-health-verdict",
      os.path.join("..", "os", "test_export_R2431_health_verdict.py"), 6),
+    # R2714: the shipped capture ritual runs a suite twice and lands one
+    # utf-8 LF body for its OWN callers, but nothing refuses arbitrary
+    # evidence bytes at capture time - the shipped normaliser rewrites CRLF
+    # silently, the shipped decode replaces a bad byte and loses its offset,
+    # and the census family only names the artifact on the NEXT battery.
+    # This face refuses at CALL time with its own codes and measured
+    # counters, and lands only clean bytes through one atomic write with a
+    # read-back (667 -> 668 suites, 4978 -> 4984 criteria).
+    # (AC-EUC1..AC-EUC6 pinned in state/queue/tech.md:689 at R2494.)
+    ("os-evidence-utf8-capture",
+     os.path.join("..", "os", "test_evidence_utf8_capture.py"), 6),
     ]
 
 FAILS = 0

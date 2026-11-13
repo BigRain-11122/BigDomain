@@ -1,0 +1,103 @@
+EVIDENCE CAPTURE round=R2714 suite=src/os/test_evidence_utf8_capture.py legs=2
+== LEG A rc=0 digest=609A4E09958BE523
+PASS AC-EUC1 a clean capture reports LANDED ('LANDED')
+PASS AC-EUC1 the target exists on disk
+PASS AC-EUC1 the read-back equals the bytes handed in
+PASS AC-EUC1 the report carries the input digest (E68F2A0F878B633A)
+PASS AC-EUC1 no temp file survives the atomic write ([])
+PASS AC-EUC1 a patched measuring law moves the verdict, so the guard asks it at CALL time
+PASS AC-EUC1 the patched refusal wrote nothing
+PASS AC-EUC1 a missing directory refuses before any byte ('E_EUC_BADDIR')
+PASS AC-EUC2 the landed byte count is the input count (28)
+PASS AC-EUC2 every byte landed unchanged (28 bytes)
+PASS AC-EUC2 the counters read clean (crlf=0 lone_cr=0 utf8=True)
+PASS AC-EUC2 the direct reading agrees no refusal is owed
+PASS AC-EUC2 text input lands as its utf-8 encoding (12 bytes)
+PASS AC-EUC2 the non-ASCII fixture really is non-ASCII
+PASS AC-EUC3 'crlf' is refused as E_EUC_CRLF (got 'E_EUC_CRLF')
+PASS AC-EUC3 the crlf count is measured as 2 (got 2)
+PASS AC-EUC3 the refusal line prints crlf=2 ('REFUSED code=E_EUC_CRLF target=<scratch>\\crlf.txt bytes=13 crlf=2 lone_cr=0 nul=0')
+PASS AC-EUC3 the refused 'crlf' wrote NO file
+PASS AC-EUC3 'lone_cr' is refused as E_EUC_LONE_CR (got 'E_EUC_LONE_CR')
+PASS AC-EUC3 the lone_cr count is measured as 1 (got 1)
+PASS AC-EUC3 the refusal line prints lone_cr=1 ('REFUSED code=E_EUC_LONE_CR target=<scratch>\\lone.txt bytes=10 crlf=0 lone_cr=1 nul=0')
+PASS AC-EUC3 the refused 'lone_cr' wrote NO file
+PASS AC-EUC3 the two newline laws are separate codes
+PASS AC-EUC4 non-utf-8 bytes are refused as E_EUC_NOT_UTF8 (got 'E_EUC_NOT_UTF8')
+PASS AC-EUC4 the first offending offset is named (got 2)
+PASS AC-EUC4 the decode code is distinct from both newline codes
+PASS AC-EUC4 the refusal line prints offset=2 ('REFUSED code=E_EUC_NOT_UTF8 target=<scratch>\\badutf8.txt bytes=6 crlf=0 lone_cr=0 nul=0 offset=2')
+PASS AC-EUC4 the refused capture wrote NO file
+PASS AC-EUC4 the raw measurement agrees the bytes do not decode
+PASS AC-EUC5 a refused capture leaves the target absent
+PASS AC-EUC5 an existing target is refused as E_EUC_EXISTS (got 'E_EUC_EXISTS')
+PASS AC-EUC5 the existing target is byte-identical after the refusal (2B8425C4D20E7437)
+PASS AC-EUC5 the SHIPPED normaliser REWRITES the same bytes (13 -> 11)
+PASS AC-EUC5 this guard REFUSES them instead of rewriting
+PASS AC-EUC5 the shipped decode replaces the bad byte and loses the offset ('ok\\ufffdbad')
+PASS AC-EUC5 this guard names the offset the shipped decode loses
+PASS AC-EUC5 the real committed evidence passes this guard (14192 bytes)
+PASS AC-EUC5 the same real bytes read identically on BOTH readers
+PASS AC-EUC5 the live leg wrote nothing to the real file (4FE266FDB50EA399)
+PASS AC-EUC6 the module source is pure ASCII (7577 bytes)
+PASS AC-EUC6 no clock, no network, no shell ([])
+PASS AC-EUC6 every import is stdlib (['import argparse', 'import hashlib', 'import json', 'import os', 'import sys'])
+PASS AC-EUC6 the registry carries exactly one label row (1)
+PASS AC-EUC6 the registry carries exactly one suite row (1)
+PASS AC-EUC6 this suite exists on disk
+PASS AC-EUC6 six criteria are declared
+PASS AC-EUC6 the face carries its own reconcile label ('os-evidence-utf8-capture')
+SUITE PASS 6/6
+== LEG B rc=0 digest=609A4E09958BE523
+PASS AC-EUC1 a clean capture reports LANDED ('LANDED')
+PASS AC-EUC1 the target exists on disk
+PASS AC-EUC1 the read-back equals the bytes handed in
+PASS AC-EUC1 the report carries the input digest (E68F2A0F878B633A)
+PASS AC-EUC1 no temp file survives the atomic write ([])
+PASS AC-EUC1 a patched measuring law moves the verdict, so the guard asks it at CALL time
+PASS AC-EUC1 the patched refusal wrote nothing
+PASS AC-EUC1 a missing directory refuses before any byte ('E_EUC_BADDIR')
+PASS AC-EUC2 the landed byte count is the input count (28)
+PASS AC-EUC2 every byte landed unchanged (28 bytes)
+PASS AC-EUC2 the counters read clean (crlf=0 lone_cr=0 utf8=True)
+PASS AC-EUC2 the direct reading agrees no refusal is owed
+PASS AC-EUC2 text input lands as its utf-8 encoding (12 bytes)
+PASS AC-EUC2 the non-ASCII fixture really is non-ASCII
+PASS AC-EUC3 'crlf' is refused as E_EUC_CRLF (got 'E_EUC_CRLF')
+PASS AC-EUC3 the crlf count is measured as 2 (got 2)
+PASS AC-EUC3 the refusal line prints crlf=2 ('REFUSED code=E_EUC_CRLF target=<scratch>\\crlf.txt bytes=13 crlf=2 lone_cr=0 nul=0')
+PASS AC-EUC3 the refused 'crlf' wrote NO file
+PASS AC-EUC3 'lone_cr' is refused as E_EUC_LONE_CR (got 'E_EUC_LONE_CR')
+PASS AC-EUC3 the lone_cr count is measured as 1 (got 1)
+PASS AC-EUC3 the refusal line prints lone_cr=1 ('REFUSED code=E_EUC_LONE_CR target=<scratch>\\lone.txt bytes=10 crlf=0 lone_cr=1 nul=0')
+PASS AC-EUC3 the refused 'lone_cr' wrote NO file
+PASS AC-EUC3 the two newline laws are separate codes
+PASS AC-EUC4 non-utf-8 bytes are refused as E_EUC_NOT_UTF8 (got 'E_EUC_NOT_UTF8')
+PASS AC-EUC4 the first offending offset is named (got 2)
+PASS AC-EUC4 the decode code is distinct from both newline codes
+PASS AC-EUC4 the refusal line prints offset=2 ('REFUSED code=E_EUC_NOT_UTF8 target=<scratch>\\badutf8.txt bytes=6 crlf=0 lone_cr=0 nul=0 offset=2')
+PASS AC-EUC4 the refused capture wrote NO file
+PASS AC-EUC4 the raw measurement agrees the bytes do not decode
+PASS AC-EUC5 a refused capture leaves the target absent
+PASS AC-EUC5 an existing target is refused as E_EUC_EXISTS (got 'E_EUC_EXISTS')
+PASS AC-EUC5 the existing target is byte-identical after the refusal (2B8425C4D20E7437)
+PASS AC-EUC5 the SHIPPED normaliser REWRITES the same bytes (13 -> 11)
+PASS AC-EUC5 this guard REFUSES them instead of rewriting
+PASS AC-EUC5 the shipped decode replaces the bad byte and loses the offset ('ok\\ufffdbad')
+PASS AC-EUC5 this guard names the offset the shipped decode loses
+PASS AC-EUC5 the real committed evidence passes this guard (14192 bytes)
+PASS AC-EUC5 the same real bytes read identically on BOTH readers
+PASS AC-EUC5 the live leg wrote nothing to the real file (4FE266FDB50EA399)
+PASS AC-EUC6 the module source is pure ASCII (7577 bytes)
+PASS AC-EUC6 no clock, no network, no shell ([])
+PASS AC-EUC6 every import is stdlib (['import argparse', 'import hashlib', 'import json', 'import os', 'import sys'])
+PASS AC-EUC6 the registry carries exactly one label row (1)
+PASS AC-EUC6 the registry carries exactly one suite row (1)
+PASS AC-EUC6 this suite exists on disk
+PASS AC-EUC6 six criteria are declared
+PASS AC-EUC6 the face carries its own reconcile label ('os-evidence-utf8-capture')
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_evidence_capture.py rc=0 SUITE PASS 6/6
+== src/os/test_census_baseline_add.py rc=0 SUITE PASS 6/6 criteria
+EVIDENCE identical=True adjacent=2 fails=0 digest=609A4E09958BE523

@@ -1,0 +1,6 @@
+EUC LIVE LEG R2714 - the same bytes on BOTH readers
+real qa\write-sensitive-R2713.log bytes=14192 crlf=0 lone_cr=0 nul=0 guard=ACCEPT shipped=IDENTICAL digest=4FE266FDB50EA399
+real qa\evidence-utf8-capture-R2714.log bytes=6776 crlf=0 lone_cr=0 nul=0 guard=ACCEPT shipped=IDENTICAL digest=E51979E3DCA8BD08
+fixture crlf bytes=13 crlf=2 guard=E_EUC_CRLF shipped_bytes=11 shipped_rewrote=True guard_wrote=None
+fixture badutf8 bytes=6 guard=E_EUC_NOT_UTF8 offset=2 shipped_replaced=True guard_wrote=None
+read_only real_files=2 identical_on_both=2 modules_untouched verdict=PASS

@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 667 | 4978 | 667/667 | R2713 |
+| 668 | 4984 | 667/667 | R2713 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -705,7 +705,8 @@
 | 665 | os-probe-seam-dialect-marker-escape-guard-scope | ../os/test_probe_seam_dialect_marker_escape_guard_scope.py | 6 | green | 69.8 |
 | 666 | os-export-driver-self-drive-health | ../os/test_export_driver_self_drive_health.py | 6 | green | 0.4 |
 | 667 | os-export-driver-health-verdict | ../os/test_export_R2431_health_verdict.py | 6 | green | 0.1 |
-|  | 合计 |  | 4978 | green 667 / FAIL 0 / no-evidence 0 |  |
+| 668 | os-evidence-utf8-capture | ../os/test_evidence_utf8_capture.py | 6 | no-evidence | - |
+|  | 合计 |  | 4984 | green 667 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 
