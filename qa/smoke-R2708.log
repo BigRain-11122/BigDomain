@@ -1,0 +1,17 @@
+BigDomain QA charter daily crawl smoke - R2708 - 2026-11-14
+carried leg check: reconcile-battery-R2706 leg (R2707 launch) FOUND DEAD, no closing line
+  logs/battery-R2707.stream 1094112B / 8443 lines / 649 PASS suite rows / 0 FAIL suite rows
+  pid 13896 + child 53780 gone by process id; no RUNNER line, no BATTERY closing line
+  qa/reconcile-all-R2707.log NOT written -> NO verdict claimable, debt stays OPEN at 665 suites / 4966 criteria
+crawl check 1 daily crawl: 1 direct official source fetched (A tier, official full text page)
+  source: developers.weixin.qq.com/miniprogram/dev/platform-capabilities/business-capabilities/virtual-payment.html
+  page last edited 2026-09-14; fetch attempts 1, hits 1, failures 0
+crawl check 2 benchmark freshness: docs/global-benchmarks.md section 4 appended today (W40 record line)
+  benchmarks_refreshed set to 2026-11-14, 7-day gate next due 2026-11-21
+crawl check 3 source chain: URL + tier A + consumption point recorded
+  new parameter-level facts: device routing, Apple payment has NO sandbox, iOS four order conditions, iOS display name prerequisite
+crawl check 4 signal wall: docs/research/intelligence-wall.md W40 row + W40 conclusion row appended
+honesty note: two facts remain unverified and were NOT promoted
+  iOS 15% preferential rate = B tier trade-press only (official page reads "a certain rate")
+  2026-04-01 all-terminal deadline = C tier community source only
+result: PASS 4/4 charter checks, zero fetch failures, zero false grade promotion
