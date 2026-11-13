@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T07:13:20+08:00",
-  "do": "2026-11-13 R2690 VERIFICATION window LAUNCHING the battery the debt gate named first (reconcile-battery-R2689, pre-registered 660 suites / 4936 criteria at R2689). Five readings at open, all clean: git status EMPTY at HEAD e81fb7c6 equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger; the content-addressed decisions scan read rows=144 tokens=64 against the stored 256-t",
+  "export_ts": "2026-11-13T08:07:46+08:00",
+  "do": "2026-11-13 R2691 VERIFICATION window ADOPTING the R2690 leg and CLOSING reconcile-battery-R2689 GREEN at the pre-registered 660 suites / 4936 criteria. Five readings at open: git status EMPTY at HEAD 6cd11f18 equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger (the ledger face read no match at all); the content-addressed decisions scan read rows=143 tokens=66 against ",
   "ceo_face": {
-    "current": "2026-11-13 R2690 VERIFICATION window LAUNCHING the battery the debt gate named first (reconcile-battery-R2689, pre-registered 660 suites / 4936 criteria at R2689). Five readings at open, all clean: git status EMPTY at HEAD e81fb7c6 equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger; the content-addressed decisions scan read rows=144 tokens=64 against the stored 256-t",
-    "latest_artifact": "none landed yet for R2690",
-    "last_artifact": "none landed yet for R2690",
-    "next_milestone": "next window owes reconcile-battery-R2689 on the committed tree, inside a 48h window due 2026-11-15T07:13:20+08:00",
-    "next_milestone_due": "2026-11-15T07:13:20+08:00",
-    "updated_at": "2026-11-13T07:13:20+08:00"
+    "current": "2026-11-13 R2691 VERIFICATION window ADOPTING the R2690 leg and CLOSING reconcile-battery-R2689 GREEN at the pre-registered 660 suites / 4936 criteria. Five readings at open: git status EMPTY at HEAD 6cd11f18 equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger (the ledger face read no match at all); the content-addressed decisions scan read rows=143 tokens=66 against ",
+    "latest_artifact": "write-sensitive-R2691-first-red.log (26402B) + write-sensitive-R2691.log (25749B)",
+    "last_artifact": "write-sensitive-R2691-first-red.log (26402B) + write-sensitive-R2691.log (25749B)",
+    "next_milestone": "next window owes product-face-R2691 on the committed tree, inside a 48h window due 2026-11-15T08:07:46+08:00",
+    "next_milestone_due": "2026-11-15T08:07:46+08:00",
+    "updated_at": "2026-11-13T08:07:46+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "write-sensitive-R2691-first-red.log (26402B) + write-sensitive-R2691.log (25749B)",
     "none landed yet for R2690",
     "prefix-part-joiner-R2689.log (8430B)",
     "write-sensitive-R2688-first-red.log (1204B) + write-sensitive-R2688.log (1204B)",
@@ -992,7 +993,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2682",
+      "2683",
       "OSLoop 执行 tick"
     ],
     [
@@ -1011,10 +1012,10 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 68,
+    "log_lines_in_window": 65,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 7,
     "proposals_open": 5,
     "queue_main_open": 6,

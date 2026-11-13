@@ -1,0 +1,379 @@
+# R2691 write-sensitive set on the final committed tree
+# writer=single python, utf-8 LF, repo root cwd=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain
+
+===== os-status-export-writer-dialect-wire =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_status_export_writer_dialect_wire.py rc=0 pass-lines=6 fail-lines=0
+SUITE status_export_writer_dialect_wire (R2450) criteria=6
+PASS AC-SEWD1 the writer set is derived from the audit reading at CALL time, never a fixed list of three names
+PASS AC-SEWD2 a CRLF docs/status-export.json keeps CRLF through a real writer call with zero lone LF
+PASS AC-SEWD3 an LF export keeps exactly today's bytes
+PASS AC-SEWD4 every one of the three writers keeps its existing refusal code, exit code and printed line
+PASS AC-SEWD5 the audit reads AUDIT-CLEAN with routed == keeps after the wire
+PASS AC-SEWD6 pure ASCII, stdlib only, no clock, zero network, own reconcile label and suite
+SUITE PASS 6/6
+
+===== os-queue-floor-export-face =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_queue_floor_export_face.py rc=0 pass-lines=6 fail-lines=0
+SUITE queue_floor_export_face (R2374) criteria=6
+PASS AC-QFE1 the section IS queue_floor_reading_wire.published (patching its reading moves the export)
+PASS AC-QFE2 publishes the discounted claimable plus every discounted row (line+prefix), never the gross alone
+PASS AC-QFE3 check_export_consistency reads 21/21 with the new field, and the field is not a second derivation
+PASS AC-QFE4 one stable key order plus one trailing LF, byte-stable across two runs
+PASS AC-QFE5 the value is derived at write time (a changed queue moves it, no canned copy)
+PASS AC-QFE6 pure ASCII, stdlib only, no clock, no network, one runner entry at 6 criteria
+SUITE PASS 6/6
+
+===== os-export-consistency-queue-face =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_export_consistency_queue_face.py rc=0 pass-lines=15 fail-lines=0
+PASS AC-ECQF1 queue reading asked at CALL time (patched gate moves it)
+PASS AC-ECQF1 base checks asked at CALL time (patched face moves them)
+PASS AC-ECQF2 twenty-one base lines identical and counted
+PASS AC-ECQF3 fixture built from the real export
+PASS AC-ECQF3 stale block reads DRIFT naming queue and sections
+PASS AC-ECQF3 queue drift is never folded into the twenty-one
+PASS AC-ECQF4 CURRENT document reads AGREE at exit 0 with base intact
+PASS AC-ECQF4 CLI prints the base lines then exactly one queue line
+PASS AC-ECQF4 the reading left the export byte-identical
+PASS AC-ECQF5 source carries no clock and no file write call
+PASS AC-ECQF5 two readings left the export byte-identical
+PASS AC-ECQF6 module source is pure ASCII
+PASS AC-ECQF6 imports are stdlib plus the two shipped faces only
+PASS AC-ECQF6 exactly one registry row wires this suite with 6 criteria
+PASS AC-ECQF6 six criteria declared
+SUMMARY pass=15 fail=0
+
+===== os-state-seq =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_state_seq.py rc=0 pass-lines=6 fail-lines=0
+state_seq suite (expected criteria 6)
+PASS AC-SEQ1 tick read as int with tick_lead, bad tick fails closed
+PASS AC-SEQ2 only the item's own label counts, log order kept
+PASS AC-SEQ3 gaps named inside the span, verdict off OK
+PASS AC-SEQ4 repeats and backwards reported separately
+PASS AC-SEQ5 CLI codes 0/2/3 and the queue stamp counted
+PASS AC-SEQ6 pure read, ASCII source, no network, wired, byte-stable json, queue_only named
+SUITE PASS 6/6
+
+===== os-state-seq-archive =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_state_seq_archive.py rc=0 pass-lines=6 fail-lines=0
+state_seq archive-fold suite (expected criteria 6)
+  measured: archived=[2575]
+PASS AC-SEQAF1 archive labels read through the owning-label law
+  measured: folded=[] plain=[2575] verdict=SEQUENCE-OK/SEQUENCE-OK
+PASS AC-SEQAF2 a folded round is no longer stamped-never-logged
+  measured: queue_only=[2165]
+PASS AC-SEQAF3 unlogged-anywhere round still reads queue_only
+  measured: gaps=[901] repeats=1 backwards=[{'index': 2, 'round': 900, 'previous': 902}] verdict=SEQUENCE-BROKEN
+PASS AC-SEQAF4 sequence checks still read the live log alone
+  measured: empty=[] quiet=True code='E_SEQAF_BAD_ARCHIVE' named=True
+PASS AC-SEQAF5 missing dir is zero, unreadable file fails closed
+PASS AC-SEQAF6 pure, wired, and the live residue is measured
+SUITE PASS 6/6
+
+===== os-patterns-label-readability =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_patterns_label_readability.py rc=0 pass-lines=32 fail-lines=0
+PATTERNS LABEL READABILITY suite (R2502, 6 criteria)
+  PASS AC-PLR1 every string label in the file is read (14)
+  PASS AC-PLR1 the shipped copy reads CLEAN on stamp_from
+  PASS AC-PLR1 the same call on an edited copy reads SUSPECT
+  PASS AC-PLR1 the reading follows the bytes, not a cache
+  PASS AC-PLR1 no label key is spelled in the module ([])
+  PASS AC-PLR2 the exact codepoints are printed (['U+04E1', 'U+FFFD', 'U+FFFD', 'U+FFFD', 'U+FFFD', 'U+04D4'])
+  PASS AC-PLR2 each codepoint carries the law it broke (['SCRIPT-NOT-IN-SIBLINGS', 'BROKEN-CODEPOINT'])
+  PASS AC-PLR2 the position in the label is named ([0, 1, 2, 3, 4, 5])
+  PASS AC-PLR2 the sibling labels are not tarred with it
+  PASS AC-PLR3 a suspect file raises its own refusal code
+  PASS AC-PLR3 the refusal names the label key
+  PASS AC-PLR3 the refusal carries the codepoints
+  PASS AC-PLR3 render never ran on a refused file
+  PASS AC-PLR3 a clean file renders the artifact byte-identically (69697 bytes)
+  PASS AC-PLR4 the shipped patterns digest is unchanged (ea5773ac0c11)
+  PASS AC-PLR4 both CLI paths ran (0/2)
+  PASS AC-PLR4 no label string was rewritten in the file
+  PASS AC-PLR4 the doctored copy is a different file, not the shipped one
+  PASS AC-PLR5 a clean file exits 0 (0/0)
+  PASS AC-PLR5 --json is byte-stable across runs
+  PASS AC-PLR5 --json keys are the pinned six (['code', 'labels', 'publishable', 'refused_codepoints', 'refused_label', 'tool'])
+  PASS AC-PLR5 a suspect file exits 2 with the code
+  PASS AC-PLR5 a missing file exits 3
+  PASS AC-PLR5 an unknown label exits 5
+  PASS AC-PLR6 the module source is pure ASCII
+  PASS AC-PLR6 imports are stdlib only (['argparse', 'json', 'sys', 'unicodedata'])
+  PASS AC-PLR6 the module reads no clock
+  PASS AC-PLR6 zero network imports
+  PASS AC-PLR6 the module holds no write primitive
+  PASS AC-PLR6 the module carries its own reconcile label
+  PASS AC-PLR6 the runner wires this suite
+  PASS AC-PLR6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+===== os-patterns-label-readability-render-consumer =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_patterns_label_readability_render_consumer.py rc=0 pass-lines=33 fail-lines=0
+PATTERNS RENDER CONSUMER suite (R2503, 6 criteria)
+  PASS AC-PLRC1 a patched gate makes the real render refuse
+  PASS AC-PLRC1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-PLRC1 the refused label key travels with the refusal
+  PASS AC-PLRC1 the consumer carries no second classifier
+  PASS AC-PLRC2 the shipped tool refuses at exit 4 (got 4)
+  PASS AC-PLRC2 the refusal names the gate code and the label key
+  PASS AC-PLRC2 the target keeps every byte it had
+  PASS AC-PLRC2 no residue is left beside the target ([])
+PATTERNS RENDER CONSUMER os-patterns-label-readability-render-consumer verdict=SUSPECT source=os-patterns-label-readability
+  refused=E_PLR_SUSPECT label=title codepoints=U+04E1,U+FFFD,U+FFFD
+  PASS AC-PLRC2 the consumer CLI refuses the same file at exit 2
+  PASS AC-PLRC3 the shipped doc carries a stamp
+  PASS AC-PLRC3 a clean render is byte-identical to docs/sandbox-suite-matrix.md (69697 bytes)
+  PASS AC-PLRC3 the shipped labels read publishable
+  PASS --check on the clean tree keeps its today reading (exit 0)
+  PASS AC-PLRC4 --check refuses a suspect file at exit 4 (got 4, not drift exit 2)
+  PASS AC-PLRC4 the refusal reads as readability, never as drift
+  PASS AC-PLRC2 the shipped tool refuses at exit 4 (got 4)
+  PASS AC-PLRC2 the refusal names the gate code and the label key
+  PASS AC-PLRC2 the target keeps every byte it had
+  PASS AC-PLRC2 no residue is left beside the target ([])
+PATTERNS RENDER CONSUMER os-patterns-label-readability-render-consumer verdict=SUSPECT source=os-patterns-label-readability
+  refused=E_PLR_SUSPECT label=title codepoints=U+04E1,U+FFFD,U+FFFD
+  PASS AC-PLRC2 the consumer CLI refuses the same file at exit 2
+  PASS AC-PLRC3 the shipped doc carries a stamp
+  PASS AC-PLRC3 a clean render is byte-identical to docs/sandbox-suite-matrix.md (69697 bytes)
+  PASS AC-PLRC3 the shipped labels read publishable
+  PASS AC-PLRC5 the shipped patterns digest is unchanged (ea5773ac0c113fe1)
+  PASS AC-PLRC5 every shipped label is still exactly as it was read
+  PASS AC-PLRC5 the consumer holds no write primitive
+  PASS AC-PLRC6 the module source is pure ASCII
+  PASS AC-PLRC6 imports are stdlib plus the shipped gate (['argparse', 'json', 'patterns_label_readability', 'sys'])
+  PASS AC-PLRC6 the module reads no clock
+  PASS AC-PLRC6 zero network imports
+  PASS AC-PLRC6 the module carries its own reconcile label
+  PASS AC-PLRC6 the runner wires this suite
+  PASS AC-PLRC6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+===== os-patterns-non-label-text-readability =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_patterns_non_label_text_readability.py rc=0 pass-lines=54 fail-lines=0
+PATTERNS NON-LABEL READABILITY suite (R2505, 6 criteria)
+  PASS AC-PNLT1 a patched gate makes the real render refuse
+  PASS AC-PNLT1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-PNLT1 the refused FIELD travels with the refusal
+  PASS AC-PNLT1 this face carries no second classifier
+  PASS AC-PNLT1 the REAL render path asks this face for a non-label defect the label gate cannot see
+  PASS AC-PNLT2 the shipped tool refuses at exit 4 (got 4)
+  PASS AC-PNLT2 the refusal names the FIELD, not a label key: ['FAIL non-label: E_PLR_SUSPECT field=header_note']
+  PASS AC-PNLT2 the gate own code is carried into the refusal
+  PASS AC-PNLT2 the target keeps every byte it had
+  PASS AC-PNLT2 no residue is left beside the target ([])
+  PASS AC-PNLT2 the CLI reading names header_note and U+FFFD
+  PASS AC-PNLT2 the face CLI refuses the same file at exit 2
+  PASS AC-PNLT2 the CLI names the field too
+  PASS AC-PNLT3 the shipped doc carries a stamp
+  PASS AC-PNLT3 a clean render is byte-identical to docs/sandbox-suite-matrix.md (69697 bytes)
+  PASS AC-PNLT3 the shipped document reads publishable
+  PASS AC-PNLT3 --check keeps its today reading on the clean tree (exit 0)
+  PASS AC-PNLT4 the non-label header_note is covered (the measured gap)
+  PASS AC-PNLT4 the other interpolated label values are covered
+  PASS AC-PNLT4 list items are covered one by one, not as a blob
+  PASS AC-PNLT4 nested face labels and domain keys are covered
+  PASS AC-PNLT4 a field read through .get is covered too
+  PASS AC-PNLT4 a key the render never reads is not claimed as covered
+  PASS AC-PNLT4 a doctored nested face label is refused by its path ('domains[0].faces[0].label')
+  PASS AC-PNLT2 the shipped tool refuses at exit 4 (got 4)
+  PASS AC-PNLT2 the refusal names the FIELD, not a label key: ['FAIL non-label: E_PLR_SUSPECT field=header_note']
+  PASS AC-PNLT2 the gate own code is carried into the refusal
+  PASS AC-PNLT2 the target keeps every byte it had
+  PASS AC-PNLT2 no residue is left beside the target ([])
+  PASS AC-PNLT2 the CLI reading names header_note and U+FFFD
+  PASS AC-PNLT2 the face CLI refuses the same file at exit 2
+  PASS AC-PNLT2 the CLI names the field too
+  PASS AC-PNLT3 the shipped doc carries a stamp
+  PASS AC-PNLT3 a clean render is byte-identical to docs/sandbox-suite-matrix.md (69697 bytes)
+  PASS AC-PNLT3 the shipped document reads publishable
+  PASS AC-PNLT3 --check keeps its today reading on the clean tree (exit 0)
+  PASS AC-PNLT4 the non-label header_note is covered (the measured gap)
+  PASS AC-PNLT4 the other interpolated label values are covered
+  PASS AC-PNLT4 list items are covered one by one, not as a blob
+  PASS AC-PNLT4 nested face labels and domain keys are covered
+  PASS AC-PNLT4 a field read through .get is covered too
+  PASS AC-PNLT4 a key the render never reads is not claimed as covered
+  PASS AC-PNLT4 a doctored nested face label is refused by its path ('domains[0].faces[0].label')
+  PASS AC-PNLT5 the shipped patterns digest is unchanged (ea5773ac0c113fe1)
+  PASS AC-PNLT5 every shipped value is still exactly as it was read
+  PASS AC-PNLT5 the coverage probe leaves no file behind
+  PASS AC-PNLT5 the module holds no write primitive
+  PASS AC-PNLT6 the module source is pure ASCII
+  PASS AC-PNLT6 imports are stdlib plus the shipped gate (['argparse', 'hashlib', 'json', 'os', 'patterns_label_readability', 'sys'])
+  PASS AC-PNLT6 the module reads no clock
+  PASS AC-PNLT6 zero network imports
+  PASS AC-PNLT6 the module carries its own reconcile label
+  PASS AC-PNLT6 the runner wires this suite
+  PASS AC-PNLT6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+===== os-artifact-disk-text-readability =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_artifact_disk_text_readability.py rc=0 pass-lines=31 fail-lines=0
+ARTIFACT DISK TEXT READABILITY suite (R2507, 6 criteria)
+  PASS AC-ADTR1 a patched gate makes the real reading refuse
+  PASS AC-ADTR1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-ADTR1 the refused SOURCE and field travel with the refusal ('registry[0].label')
+  PASS AC-ADTR1 this face carries no second classifier
+  PASS AC-ADTR2 the real render refuses a doctored registry label
+  PASS AC-ADTR2 the refusal names the SOURCE registry, the label and U+FFFD ('registry'/'registry[0].label')
+  PASS AC-ADTR2 the shipped tool refuses at exit 4 naming disk-text (rc=4)
+  PASS AC-ADTR2 the artifact keeps every byte it had
+  PASS AC-ADTR2 no residue beside the artifact ([])
+  PASS AC-ADTR3 a clean tree renders byte-identically to the committed doc (69697 bytes)
+  PASS AC-ADTR3 --check keeps its today reading (rc=0)
+  PASS AC-ADTR4 the live registry label is in the derived set
+  PASS AC-ADTR4 the config-sourced strings are in the derived set
+  PASS AC-ADTR4 the set is measured over the whole tree (1380 strings)
+  PASS AC-ADTR4 a key the render never reads is not claimed
+  PASS AC-ADTR4 no literal registry label or config key lives in the module
+  PASS AC-ADTR4 the live registry label is in the derived set
+  PASS AC-ADTR4 the config-sourced strings are in the derived set
+  PASS AC-ADTR4 the set is measured over the whole tree (1380 strings)
+  PASS AC-ADTR4 a key the render never reads is not claimed
+  PASS AC-ADTR4 no literal registry label or config key lives in the module
+  PASS AC-ADTR5 the registry, patterns and config digests are unchanged
+  PASS AC-ADTR5 the coverage probe leaves no file behind
+  PASS AC-ADTR5 the module holds no write primitive
+  PASS AC-ADTR6 the module source is pure ASCII
+  PASS AC-ADTR6 imports are stdlib plus the shipped law (['argparse', 'hashlib', 'json', 'os', 'patterns_label_readability', 'sys'])
+  PASS AC-ADTR6 the module reads no clock
+  PASS AC-ADTR6 zero network imports
+  PASS AC-ADTR6 the module carries its own reconcile label
+  PASS AC-ADTR6 the runner wires this suite
+  PASS AC-ADTR6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+===== os-evidence-name-text-coverage =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_evidence_name_text_coverage.py rc=0 pass-lines=31 fail-lines=0
+EVIDENCE NAME TEXT COVERAGE suite (R2509, 6 criteria)
+  PASS AC-EVNM1 a patched gate makes the real reading refuse
+  PASS AC-EVNM1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-EVNM1 the refused PIECE and the evidence path travel with the refusal ('evidence.basename')
+  PASS AC-EVNM1 this face carries no second classifier
+  PASS AC-EVNM2 the real render refuses a doctored evidence name
+  PASS AC-EVNM2 the refusal names the PIECE and the offending name ('evidence.basename'/'reconcile-all-R2506-retr\\ufffdy.log')
+  PASS AC-EVNM2 the shipped tool refuses at exit 4 naming evidence-name (rc=4)
+  PASS AC-EVNM2 the artifact keeps every byte it had
+  PASS AC-EVNM2 no residue beside the artifact ([])
+  PASS AC-EVNM3 a clean tree renders byte-identically to the committed doc (69697 bytes)
+  PASS AC-EVNM3 --check keeps its today reading (rc=0)
+  PASS AC-EVNM4 the live evidence basename is in the derived set
+  PASS AC-EVNM4 the relative path the command line prints is in the set ('qa/reconcile-all-R2690.log')
+  PASS AC-EVNM4 a different path yields its own pieces, so nothing is canned (['evidence.basename', 'evidence.relpath', 'evidence.round_tag'])
+  PASS AC-EVNM4 a name carrying no round tag claims no separate piece (['evidence.basename', 'evidence.relpath'])
+  PASS AC-EVNM4 no literal evidence name or path lives in the module
+  PASS AC-EVNM4 the live evidence basename is in the derived set
+  PASS AC-EVNM4 the relative path the command line prints is in the set ('qa/reconcile-all-R2690.log')
+  PASS AC-EVNM4 a different path yields its own pieces, so nothing is canned (['evidence.basename', 'evidence.relpath', 'evidence.round_tag'])
+  PASS AC-EVNM4 a name carrying no round tag claims no separate piece (['evidence.basename', 'evidence.relpath'])
+  PASS AC-EVNM4 no literal evidence name or path lives in the module
+  PASS AC-EVNM5 the law, patterns and evidence digests are unchanged
+  PASS AC-EVNM5 the coverage probe leaves no file behind
+  PASS AC-EVNM5 the module holds no write primitive
+  PASS AC-EVNM6 the module source is pure ASCII
+  PASS AC-EVNM6 imports are stdlib plus the shipped law (['argparse', 'hashlib', 'json', 'os', 'patterns_label_readability', 'sys'])
+  PASS AC-EVNM6 the module reads no clock
+  PASS AC-EVNM6 zero network imports
+  PASS AC-EVNM6 the module carries its own reconcile label
+  PASS AC-EVNM6 the runner wires this suite
+  PASS AC-EVNM6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+===== os-stamp-text-coverage =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_stamp_text_coverage.py rc=0 pass-lines=32 fail-lines=0
+STAMP TEXT COVERAGE suite (R2511, 6 criteria)
+  PASS AC-STPT1 a patched gate makes the real reading refuse
+  PASS AC-STPT1 the refusal code is the gate own, carried verbatim ('E_GATE_AS_ASKED')
+  PASS AC-STPT1 the refused PIECE and VALUE travel with the refusal ('artifact.stamp')
+  PASS AC-STPT1 this face carries no second classifier
+  PASS AC-STPT2 the real render refuses a doctored stamp
+  PASS AC-STPT2 the stamp refusal names the PIECE and the value ('artifact.stamp'/'2026\\ufffd-11-13 04:33 +08:00')
+  PASS AC-STPT2 a doctored stamp_from refuses the same way, naming artifact.stamp_from ('artifact.stamp_from')
+  PASS AC-STPT2 the shipped tool refuses at exit 4 naming stamp-text and the piece (rc=4)
+  PASS AC-STPT2 the same refusal covers stamp_from (rc=4)
+  PASS AC-STPT2 the artifact keeps every byte it had
+  PASS AC-STPT3 a clean tree renders byte-identically to the committed doc (69697 bytes)
+  PASS AC-STPT3 --check keeps its today reading (rc=0)
+  PASS AC-STPT4 the live stamp the render prints is in the derived set
+  PASS AC-STPT4 the borrow the render prints is in the set ('docs/sandbox-suite-matrix.md')
+  PASS AC-STPT4 a render given no stamp_from claims no such piece (['artifact.stamp'])
+  PASS AC-STPT4 different values yield their own pieces, so nothing is canned (['artifact.stamp', 'artifact.stamp_from'])
+  PASS AC-STPT4 no literal stamp or borrow lives in the module
+  PASS AC-STPT4 the live stamp the render prints is in the derived set
+  PASS AC-STPT4 the borrow the render prints is in the set ('docs/sandbox-suite-matrix.md')
+  PASS AC-STPT4 a render given no stamp_from claims no such piece (['artifact.stamp'])
+  PASS AC-STPT4 different values yield their own pieces, so nothing is canned (['artifact.stamp', 'artifact.stamp_from'])
+  PASS AC-STPT4 no literal stamp or borrow lives in the module
+  PASS AC-STPT5 the law, patterns, evidence and stamp source digests are unchanged
+  PASS AC-STPT5 the coverage probe leaves no file behind
+  PASS AC-STPT5 the module holds no write primitive
+  PASS AC-STPT6 the module source is pure ASCII
+  PASS AC-STPT6 imports are stdlib plus the shipped law (['argparse', 'hashlib', 'json', 'os', 'patterns_label_readability', 'sys'])
+  PASS AC-STPT6 the module reads no clock
+  PASS AC-STPT6 zero network imports
+  PASS AC-STPT6 the module carries its own reconcile label
+  PASS AC-STPT6 the runner wires this suite
+  PASS AC-STPT6 the suite declares its own six criteria
+SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+
+===== os-matrix-stamp-compare =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_matrix_stamp_compare.py rc=0 pass-lines=6 fail-lines=0
+matrix_stamp_compare suite (expected criteria 6)
+PASS AC-MSC1 a doc from another minute reads PASS and the real generator follows its stamp
+PASS AC-MSC2 a genuine equal-length content difference FAILs naming both byte counts
+PASS AC-MSC3 missing doc / missing tool / unreadable evidence keep their own codes and never fail open
+PASS AC-MSC4 --check remains the authority and no path rewrites the shipped doc
+PASS AC-MSC5 stamp-line absence is a refusal with its own code rather than an assumed pass
+PASS AC-MSC6 pure ASCII, stdlib only, no clock, no network, one stamp law, wired with its own label
+SUITE PASS 6/6
+
+===== os-suite-matrix-reconcile-evidence-face =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_suite_matrix_reconcile_evidence_face.py rc=0 pass-lines=6 fail-lines=0
+  PASS AC-EDMB1 evidence-face=EVIDENCE-FACE (fixture leg) both legs named, patched doc_evidence_face -> STALE-CONTENT
+  PASS AC-EDMB2 walk stopped at yy-pass.log considered=3 decoded=2 printed=True
+  PASS AC-EDMB3 composed=WRITTEN (660 rows/4936 criteria, stamp 2026-11-13 04:33 +08:00 carried), no --stamp-from=NO-DOC exit=2 wrote nothing=True
+  PASS AC-EDMB4 header cells=5 -> HEADER-SHAPE E_EDMB_HEADER exit=3, write refused
+  PASS AC-EDMB5 five words kept: ROWS-MISMATCH,STALE-CONTENT,RED-LEG,NO-DOC,DOC-CURRENT -> [2,2,3,2,0]
+  PASS AC-EDMB6 hygiene ascii=True clock=False network=[] registered=True (1 rows, 6 criteria)
+SUITE PASS 6/6
+
+===== os-export-driver-health-verdict =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_export_R2431_health_verdict.py rc=0 pass-lines=6 fail-lines=0
+SUITE export_R2431_health_verdict (R2596) criteria=6
+PASS AC-EDSW1 a block that moved because the LOG moved reads DRIFT-UNDER-WRITE ('DRIFT-UNDER-WRITE') while a still tree reads PASS ('PASS')
+PASS AC-EDSW2 a document whose block no longer matches the stamp reads DOC-DOCTORED ('DOC-DOCTORED') even when the tree also moved ('DOC-DOCTORED'), stays out of HEALTHY, and the RESULTS line it refused with is unchanged (True)
+PASS AC-EDSW3 a printed byte count that differs from the disk reads SIZE-MISMATCH ('SIZE-MISMATCH') and the pair is named in the verdict line (True)
+PASS AC-EDSW4 exactly two tree reads (one stamped, one at verdict), one publish, one verdict site, every outcome a single word
+PASS AC-EDSW5 the eight R2595 terms plus the fresh read all survive (missing=[])
+PASS AC-EDSW6 pure ASCII, stdlib only, zero network, own reconcile label and own suite
+SUITE PASS 6/6
+
+===== os-queue-floor-decl =====
+path=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_queue_floor_decl.py rc=0 pass-lines=6 fail-lines=0
+PASS AC-FDL1 the floor comes from log_floor.audit (a patched verdict flows straight through) and the shape is never re-derived
+PASS AC-FDL2 UNPINNED, DRIFT, a consistency refusal and unreadable input each refuse with their own code and hand back no floor
+PASS AC-FDL3 a caller floor equal to the declared one reads AGREES, a different one reads DISAGREES naming both rounds
+PASS AC-FDL4 the resolver writes nothing (both the temp world and the live state/ tree digest identically) and reads no clock
+PASS AC-FDL5 CLI exits 0/0/2/2/0/3 as pinned, --json is byte-stable over the seven keys
+LIVE QUEUE FLOOR DECL floor=R2249 caller=- oldest_label=R2681 declarations=1 verdict=AGREES
+PASS AC-FDL6 pure ASCII, stdlib only, zero network, wired as os-queue-floor-decl(6), live reading issued
+SUITE PASS 6/6
+
+===== SUMMARY =====
+suites=15 rc-failures=0
+ROW os-status-export-writer-dialect-wire state=RUN rc=0 pass-lines=6 fail-lines=0
+ROW os-queue-floor-export-face state=RUN rc=0 pass-lines=6 fail-lines=0
+ROW os-export-consistency-queue-face state=RUN rc=0 pass-lines=15 fail-lines=0
+ROW os-state-seq state=RUN rc=0 pass-lines=6 fail-lines=0
+ROW os-state-seq-archive state=RUN rc=0 pass-lines=6 fail-lines=0
+ROW os-patterns-label-readability state=RUN rc=0 pass-lines=32 fail-lines=0
+ROW os-patterns-label-readability-render-consumer state=RUN rc=0 pass-lines=33 fail-lines=0
+ROW os-patterns-non-label-text-readability state=RUN rc=0 pass-lines=54 fail-lines=0
+ROW os-artifact-disk-text-readability state=RUN rc=0 pass-lines=31 fail-lines=0
+ROW os-evidence-name-text-coverage state=RUN rc=0 pass-lines=31 fail-lines=0
+ROW os-stamp-text-coverage state=RUN rc=0 pass-lines=32 fail-lines=0
+ROW os-matrix-stamp-compare state=RUN rc=0 pass-lines=6 fail-lines=0
+ROW os-suite-matrix-reconcile-evidence-face state=RUN rc=0 pass-lines=6 fail-lines=0
+ROW os-export-driver-health-verdict state=RUN rc=0 pass-lines=6 fail-lines=0
+ROW os-queue-floor-decl state=RUN rc=0 pass-lines=6 fail-lines=0
+SUMMARY suites=15 rc-failures=0
