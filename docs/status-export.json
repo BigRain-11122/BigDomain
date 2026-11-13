@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T07:32:17+08:00",
+  "export_ts": "2026-11-14T07:33:50+08:00",
   "do": "2026-11-14 R2715 BATTERY LAUNCH window on reconcile-battery-R2714, the debt gate CLAIM-FIRST item at the pre-registered 668 suites / 4984 criteria on the committed tree 190a61b9: the R2168 mixed-tree rule owes a full battery BEFORE any product byte because R2714 moved product src (src/os/evidence_utf8_capture.py plus its six-criteria suite) and one registry row. MEASURED BEFORE any launch: reconci",
   "ceo_face": {
     "current": "2026-11-14 R2715 BATTERY LAUNCH window on reconcile-battery-R2714, the debt gate CLAIM-FIRST item at the pre-registered 668 suites / 4984 criteria on the committed tree 190a61b9: the R2168 mixed-tree rule owes a full battery BEFORE any product byte because R2714 moved product src (src/os/evidence_utf8_capture.py plus its six-criteria suite) and one registry row. MEASURED BEFORE any launch: reconci",
-    "latest_artifact": "reconcile-all-R2715.log (1198928B) + reconcile-all-R2715b.log (1202874B)",
-    "last_artifact": "reconcile-all-R2715.log (1198928B) + reconcile-all-R2715b.log (1202874B)",
-    "next_milestone": "next window owes product-face-R2715 on the committed tree, inside a 48h window due 2026-11-16T07:32:17+08:00",
-    "next_milestone_due": "2026-11-16T07:32:17+08:00",
-    "updated_at": "2026-11-14T07:32:17+08:00"
+    "latest_artifact": "reconcile-all-R2715.log (1198928B) + reconcile-all-R2715b.log (1202874B) + write-sensitive-R2715.log (8783B)",
+    "last_artifact": "reconcile-all-R2715.log (1198928B) + reconcile-all-R2715b.log (1202874B) + write-sensitive-R2715.log (8783B)",
+    "next_milestone": "next window owes product-face-R2715 on the committed tree, inside a 48h window due 2026-11-16T07:33:50+08:00",
+    "next_milestone_due": "2026-11-16T07:33:50+08:00",
+    "updated_at": "2026-11-14T07:33:50+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "reconcile-all-R2715.log (1198928B) + reconcile-all-R2715b.log (1202874B) + write-sensitive-R2715.log (8783B)",
     "reconcile-all-R2715.log (1198928B) + reconcile-all-R2715b.log (1202874B)",
     "reconcile-all-R2715.log (1198928B)",
     "none landed yet for R2715",
@@ -1042,10 +1043,10 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 56,
+    "log_lines_in_window": 57,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 7,
     "proposals_open": 5,
     "queue_main_open": 6,
