@@ -6563,6 +6563,20 @@ SUITES = [
          "..", "os",
          "test_probe_seam_unnameable_part_joiner_escaped_scope.py"),
      6),
+    # R2692 dialect-marked ack face: R2685 published the SAME word
+    # strict-prefix-of:ab+duplicate:2 for the one-label shape and for the
+    # genuine sibling-plus-copy shape, and neither publisher stamps which
+    # dialect produced a word, so a consumer holding a pre-R2689 string
+    # reads siblings ['ab'] plus duplicate 2 and cannot tell what was
+    # meant. This face writes the marker dialect:1 as the FIRST part of
+    # every word, reads the marker back from the bytes, keeps the body
+    # byte for byte what R2689 published, and parses a marker-less legacy
+    # word exactly as R2689 does (660 -> 661 suites, 4936 -> 4942).
+    ("os-probe-seam-unnameable-dialect-marker-scope",
+     os.path.join(
+         "..", "os",
+         "test_probe_seam_unnameable_dialect_marker_scope.py"),
+     6),
     # R2595 birth-site repair of the round export driver health term: it
     # demanded log_lines_in_window == substantive_non_idle_mention_lines, which
     # the recompute caliber can never satisfy once one tokens line sits in the

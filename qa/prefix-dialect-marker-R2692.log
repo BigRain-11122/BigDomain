@@ -1,0 +1,217 @@
+EVIDENCE CAPTURE round=R2692 suite=src/os/test_probe_seam_unnameable_dialect_marker_scope.py legs=2
+== LEG A rc=0 digest=21708D12384D9072
+PASS AC-PNAP1 the one-label word is marked (dialect:1+strict-prefix-of:ab\+duplicate:2)
+PASS AC-PNAP1 the marker is present in the first part
+PASS AC-PNAP1 the marker READS BACK as its tag (1)
+PASS AC-PNAP1 a legacy string reports NO dialect (None)
+PASS AC-PNAP1 with the marker removed the SAME word reports none, so the reading is taken from the bytes
+PASS AC-PNAP1 a marker appended to the TAIL claims no dialect (None)
+PASS AC-PNAP1 a marker in the FIRST part is read even when the word is handed in from outside
+PASS AC-PNAP2 'strict-prefix-of:ab\\,ac' siblings ride R2689 (['ab,ac'])
+PASS AC-PNAP2 'strict-prefix-of:ab\\,ac' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab\\,ac' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:ab\\,ac' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab\\,ac' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab,ac' siblings ride R2689 (['ab', 'ac'])
+PASS AC-PNAP2 'strict-prefix-of:ab,ac' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab,ac' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:ab,ac' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab,ac' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:xy' siblings ride R2689 (['xy'])
+PASS AC-PNAP2 'strict-prefix-of:xy' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:xy' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:xy' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:xy' is handed back byte for byte
+PASS AC-PNAP2 'duplicate:2' siblings ride R2689 (None)
+PASS AC-PNAP2 'duplicate:2' sibling count rides R2689
+PASS AC-PNAP2 'duplicate:2' duplicate rides R2689 (2)
+PASS AC-PNAP2 'duplicate:2' both readings ride R2689
+PASS AC-PNAP2 'duplicate:2' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' siblings ride R2689 (['ab'])
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' duplicate rides R2689 (2)
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab,ac,ad' siblings ride R2689 (['ab', 'ac', 'ad'])
+PASS AC-PNAP2 'strict-prefix-of:ab,ac,ad' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab,ac,ad' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:ab,ac,ad' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab,ac,ad' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:pq\\,pr,ps' siblings ride R2689 (['pq,pr', 'ps'])
+PASS AC-PNAP2 'strict-prefix-of:pq\\,pr,ps' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:pq\\,pr,ps' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:pq\\,pr,ps' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:pq\\,pr,ps' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' siblings ride R2689 (['ab'])
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' duplicate rides R2689 (2)
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab\\+duplicate:2' siblings ride R2689 (['ab+duplicate:2'])
+PASS AC-PNAP2 'strict-prefix-of:ab\\+duplicate:2' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab\\+duplicate:2' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:ab\\+duplicate:2' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab\\+duplicate:2' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab\\\\\\,ac' siblings ride R2689 (['ab\\,ac'])
+PASS AC-PNAP2 'strict-prefix-of:ab\\\\\\,ac' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab\\\\\\,ac' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:ab\\\\\\,ac' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab\\\\\\,ac' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab,ac+duplicate:2' siblings ride R2689 (['ab', 'ac'])
+PASS AC-PNAP2 'strict-prefix-of:ab,ac+duplicate:2' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab,ac+duplicate:2' duplicate rides R2689 (2)
+PASS AC-PNAP2 'strict-prefix-of:ab,ac+duplicate:2' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab,ac+duplicate:2' is handed back byte for byte
+PASS AC-PNAP2 the legacy face covered 11 distinct words
+PASS AC-PNAP2 the legacy string reads exactly as before, with dialect None ({'dialect': None, 'markers': 0, 'body': 'strict-prefix-of:ab+duplicate:2', 'siblings': ['ab'], 'duplicate': 2})
+PASS AC-PNAP3 the body equals the R2689 word ('strict-prefix-of:ab\\+duplicate:2' vs 'strict-prefix-of:ab\\+duplicate:2')
+PASS AC-PNAP3 and that word is 'strict-prefix-of:ab\\+duplicate:2' ('strict-prefix-of:ab\\+duplicate:2')
+PASS AC-PNAP3 the marked word is the marker plus that body ('dialect:1+strict-prefix-of:ab\\+duplicate:2')
+PASS AC-PNAP3 the marked word still names ONE sibling
+PASS AC-PNAP3 the marked word still recovers the whole label (['ab+duplicate:2'])
+PASS AC-PNAP4 the forger word carries exactly ONE marker part (1)
+PASS AC-PNAP4 that one marker is this face own first part
+PASS AC-PNAP4 the forger label cannot produce a second, unescaped marker part ('dialect:1+strict-prefix-of:ab\\+dialect:1')
+PASS AC-PNAP4 the forger label stays ONE whole sibling (['ab+dialect:1'])
+PASS AC-PNAP4 a sibling NAMED the marker text adds no marker part (1)
+PASS AC-PNAP4 that sibling is read as a label, not as pedigree (['dialect:1'])
+PASS AC-PNAP4 the marker is FIRST and the body SECOND (['dialect:1', 'strict-prefix-of:ab\\+dialect:1'])
+PASS AC-PNAP5 fixture 0 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab\\,ac'} vs {'a': 'strict-prefix-of:ab\\,ac'})
+PASS AC-PNAP5 fixture 1 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab,ac'} vs {'a': 'strict-prefix-of:ab,ac'})
+PASS AC-PNAP5 fixture 2 body rides R2689 byte for byte ({'x': 'strict-prefix-of:xy'} vs {'x': 'strict-prefix-of:xy'})
+PASS AC-PNAP5 fixture 3 body rides R2689 byte for byte ({'a': 'duplicate:2'} vs {'a': 'duplicate:2'})
+PASS AC-PNAP5 fixture 4 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab+duplicate:2'} vs {'a': 'strict-prefix-of:ab+duplicate:2'})
+PASS AC-PNAP5 fixture 5 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab,ac,ad'} vs {'a': 'strict-prefix-of:ab,ac,ad'})
+PASS AC-PNAP5 fixture 6 body rides R2689 byte for byte ({'p': 'strict-prefix-of:pq\\,pr,ps'} vs {'p': 'strict-prefix-of:pq\\,pr,ps'})
+PASS AC-PNAP5 fixture 7 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab\\+duplicate:2'} vs {'a': 'strict-prefix-of:ab\\+duplicate:2'})
+PASS AC-PNAP5 fixture 8 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab\\\\\\,ac'} vs {'a': 'strict-prefix-of:ab\\\\\\,ac'})
+PASS AC-PNAP5 fixture 9 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab,ac+duplicate:2'} vs {'a': 'strict-prefix-of:ab,ac+duplicate:2'})
+PASS AC-PNAP5 R2685 fixture 0 rides unchanged ({'a': 'strict-prefix-of:ab\\,ac'} vs {'a': 'strict-prefix-of:ab\\,ac'})
+PASS AC-PNAP5 R2685 fixture 1 rides unchanged ({'a': 'strict-prefix-of:ab,ac'} vs {'a': 'strict-prefix-of:ab,ac'})
+PASS AC-PNAP5 R2685 fixture 2 rides unchanged ({'x': 'strict-prefix-of:xy'} vs {'x': 'strict-prefix-of:xy'})
+PASS AC-PNAP5 R2685 fixture 3 rides unchanged ({'a': 'duplicate:2'} vs {'a': 'duplicate:2'})
+PASS AC-PNAP5 R2685 fixture 4 rides unchanged ({'a': 'strict-prefix-of:ab,ac,ad'} vs {'a': 'strict-prefix-of:ab,ac,ad'})
+PASS AC-PNAP5 R2685 fixture 5 rides unchanged ({'p': 'strict-prefix-of:pq\\,pr,ps'} vs {'p': 'strict-prefix-of:pq\\,pr,ps'})
+PASS AC-PNAP5 nameable labels still carry no word
+PASS AC-PNAP5 the index and unmatched readers ride R2685
+PASS AC-PNAP5 an unnameable label is never fully named
+PASS AC-PNAP5 the legacy string reads the SAME on both readers ({'siblings': ['ab'], 'duplicate': 2} vs {'siblings': ['ab'], 'duplicate': 2})
+PASS AC-PNAP5 the same fixture is pedigree-less there and marked here (None vs 1)
+PASS AC-PNAP5 a bounded live leg is read-only (modules=5 loops=68 unreadable=0 disagree=0)
+PASS AC-PNAP6 the module source is pure ASCII (13923 bytes)
+PASS AC-PNAP6 no clock, no network, no shell ([])
+PASS AC-PNAP6 the registry carries exactly one label row (1)
+PASS AC-PNAP6 the registry carries exactly one suite row (1)
+PASS AC-PNAP6 this suite exists on disk
+PASS AC-PNAP6 six criteria are declared
+SUITE PASS 6/6
+== LEG B rc=0 digest=21708D12384D9072
+PASS AC-PNAP1 the one-label word is marked (dialect:1+strict-prefix-of:ab\+duplicate:2)
+PASS AC-PNAP1 the marker is present in the first part
+PASS AC-PNAP1 the marker READS BACK as its tag (1)
+PASS AC-PNAP1 a legacy string reports NO dialect (None)
+PASS AC-PNAP1 with the marker removed the SAME word reports none, so the reading is taken from the bytes
+PASS AC-PNAP1 a marker appended to the TAIL claims no dialect (None)
+PASS AC-PNAP1 a marker in the FIRST part is read even when the word is handed in from outside
+PASS AC-PNAP2 'strict-prefix-of:ab\\,ac' siblings ride R2689 (['ab,ac'])
+PASS AC-PNAP2 'strict-prefix-of:ab\\,ac' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab\\,ac' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:ab\\,ac' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab\\,ac' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab,ac' siblings ride R2689 (['ab', 'ac'])
+PASS AC-PNAP2 'strict-prefix-of:ab,ac' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab,ac' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:ab,ac' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab,ac' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:xy' siblings ride R2689 (['xy'])
+PASS AC-PNAP2 'strict-prefix-of:xy' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:xy' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:xy' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:xy' is handed back byte for byte
+PASS AC-PNAP2 'duplicate:2' siblings ride R2689 (None)
+PASS AC-PNAP2 'duplicate:2' sibling count rides R2689
+PASS AC-PNAP2 'duplicate:2' duplicate rides R2689 (2)
+PASS AC-PNAP2 'duplicate:2' both readings ride R2689
+PASS AC-PNAP2 'duplicate:2' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' siblings ride R2689 (['ab'])
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' duplicate rides R2689 (2)
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab,ac,ad' siblings ride R2689 (['ab', 'ac', 'ad'])
+PASS AC-PNAP2 'strict-prefix-of:ab,ac,ad' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab,ac,ad' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:ab,ac,ad' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab,ac,ad' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:pq\\,pr,ps' siblings ride R2689 (['pq,pr', 'ps'])
+PASS AC-PNAP2 'strict-prefix-of:pq\\,pr,ps' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:pq\\,pr,ps' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:pq\\,pr,ps' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:pq\\,pr,ps' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' siblings ride R2689 (['ab'])
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' duplicate rides R2689 (2)
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab+duplicate:2' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab\\+duplicate:2' siblings ride R2689 (['ab+duplicate:2'])
+PASS AC-PNAP2 'strict-prefix-of:ab\\+duplicate:2' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab\\+duplicate:2' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:ab\\+duplicate:2' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab\\+duplicate:2' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab\\\\\\,ac' siblings ride R2689 (['ab\\,ac'])
+PASS AC-PNAP2 'strict-prefix-of:ab\\\\\\,ac' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab\\\\\\,ac' duplicate rides R2689 (None)
+PASS AC-PNAP2 'strict-prefix-of:ab\\\\\\,ac' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab\\\\\\,ac' is handed back byte for byte
+PASS AC-PNAP2 'strict-prefix-of:ab,ac+duplicate:2' siblings ride R2689 (['ab', 'ac'])
+PASS AC-PNAP2 'strict-prefix-of:ab,ac+duplicate:2' sibling count rides R2689
+PASS AC-PNAP2 'strict-prefix-of:ab,ac+duplicate:2' duplicate rides R2689 (2)
+PASS AC-PNAP2 'strict-prefix-of:ab,ac+duplicate:2' both readings ride R2689
+PASS AC-PNAP2 'strict-prefix-of:ab,ac+duplicate:2' is handed back byte for byte
+PASS AC-PNAP2 the legacy face covered 11 distinct words
+PASS AC-PNAP2 the legacy string reads exactly as before, with dialect None ({'dialect': None, 'markers': 0, 'body': 'strict-prefix-of:ab+duplicate:2', 'siblings': ['ab'], 'duplicate': 2})
+PASS AC-PNAP3 the body equals the R2689 word ('strict-prefix-of:ab\\+duplicate:2' vs 'strict-prefix-of:ab\\+duplicate:2')
+PASS AC-PNAP3 and that word is 'strict-prefix-of:ab\\+duplicate:2' ('strict-prefix-of:ab\\+duplicate:2')
+PASS AC-PNAP3 the marked word is the marker plus that body ('dialect:1+strict-prefix-of:ab\\+duplicate:2')
+PASS AC-PNAP3 the marked word still names ONE sibling
+PASS AC-PNAP3 the marked word still recovers the whole label (['ab+duplicate:2'])
+PASS AC-PNAP4 the forger word carries exactly ONE marker part (1)
+PASS AC-PNAP4 that one marker is this face own first part
+PASS AC-PNAP4 the forger label cannot produce a second, unescaped marker part ('dialect:1+strict-prefix-of:ab\\+dialect:1')
+PASS AC-PNAP4 the forger label stays ONE whole sibling (['ab+dialect:1'])
+PASS AC-PNAP4 a sibling NAMED the marker text adds no marker part (1)
+PASS AC-PNAP4 that sibling is read as a label, not as pedigree (['dialect:1'])
+PASS AC-PNAP4 the marker is FIRST and the body SECOND (['dialect:1', 'strict-prefix-of:ab\\+dialect:1'])
+PASS AC-PNAP5 fixture 0 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab\\,ac'} vs {'a': 'strict-prefix-of:ab\\,ac'})
+PASS AC-PNAP5 fixture 1 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab,ac'} vs {'a': 'strict-prefix-of:ab,ac'})
+PASS AC-PNAP5 fixture 2 body rides R2689 byte for byte ({'x': 'strict-prefix-of:xy'} vs {'x': 'strict-prefix-of:xy'})
+PASS AC-PNAP5 fixture 3 body rides R2689 byte for byte ({'a': 'duplicate:2'} vs {'a': 'duplicate:2'})
+PASS AC-PNAP5 fixture 4 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab+duplicate:2'} vs {'a': 'strict-prefix-of:ab+duplicate:2'})
+PASS AC-PNAP5 fixture 5 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab,ac,ad'} vs {'a': 'strict-prefix-of:ab,ac,ad'})
+PASS AC-PNAP5 fixture 6 body rides R2689 byte for byte ({'p': 'strict-prefix-of:pq\\,pr,ps'} vs {'p': 'strict-prefix-of:pq\\,pr,ps'})
+PASS AC-PNAP5 fixture 7 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab\\+duplicate:2'} vs {'a': 'strict-prefix-of:ab\\+duplicate:2'})
+PASS AC-PNAP5 fixture 8 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab\\\\\\,ac'} vs {'a': 'strict-prefix-of:ab\\\\\\,ac'})
+PASS AC-PNAP5 fixture 9 body rides R2689 byte for byte ({'a': 'strict-prefix-of:ab,ac+duplicate:2'} vs {'a': 'strict-prefix-of:ab,ac+duplicate:2'})
+PASS AC-PNAP5 R2685 fixture 0 rides unchanged ({'a': 'strict-prefix-of:ab\\,ac'} vs {'a': 'strict-prefix-of:ab\\,ac'})
+PASS AC-PNAP5 R2685 fixture 1 rides unchanged ({'a': 'strict-prefix-of:ab,ac'} vs {'a': 'strict-prefix-of:ab,ac'})
+PASS AC-PNAP5 R2685 fixture 2 rides unchanged ({'x': 'strict-prefix-of:xy'} vs {'x': 'strict-prefix-of:xy'})
+PASS AC-PNAP5 R2685 fixture 3 rides unchanged ({'a': 'duplicate:2'} vs {'a': 'duplicate:2'})
+PASS AC-PNAP5 R2685 fixture 4 rides unchanged ({'a': 'strict-prefix-of:ab,ac,ad'} vs {'a': 'strict-prefix-of:ab,ac,ad'})
+PASS AC-PNAP5 R2685 fixture 5 rides unchanged ({'p': 'strict-prefix-of:pq\\,pr,ps'} vs {'p': 'strict-prefix-of:pq\\,pr,ps'})
+PASS AC-PNAP5 nameable labels still carry no word
+PASS AC-PNAP5 the index and unmatched readers ride R2685
+PASS AC-PNAP5 an unnameable label is never fully named
+PASS AC-PNAP5 the legacy string reads the SAME on both readers ({'siblings': ['ab'], 'duplicate': 2} vs {'siblings': ['ab'], 'duplicate': 2})
+PASS AC-PNAP5 the same fixture is pedigree-less there and marked here (None vs 1)
+PASS AC-PNAP5 a bounded live leg is read-only (modules=5 loops=68 unreadable=0 disagree=0)
+PASS AC-PNAP6 the module source is pure ASCII (13923 bytes)
+PASS AC-PNAP6 no clock, no network, no shell ([])
+PASS AC-PNAP6 the registry carries exactly one label row (1)
+PASS AC-PNAP6 the registry carries exactly one suite row (1)
+PASS AC-PNAP6 this suite exists on disk
+PASS AC-PNAP6 six criteria are declared
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_probe_seam_unnameable_part_joiner_escaped_scope.py rc=0 SUITE PASS 6/6
+== src/os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_escaped_scope.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=21708D12384D9072

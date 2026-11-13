@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 660 | 4936 | 660/660 | R2690 |
+| 661 | 4942 | 660/660 | R2690 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -696,9 +696,10 @@
 | 656 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-unnameable-siblings-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_scope.py | 6 | green | 108.7 |
 | 657 | os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-match-ordinal-unique-prefix-unnameable-siblings-escaped-scope | ../os/test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_walrus_relative_branch_elif_with_while_match_while_else_nested_match_ordinal_unique_prefix_unnameable_siblings_escaped_scope.py | 6 | green | 111.5 |
 | 658 | os-probe-seam-unnameable-part-joiner-escaped-scope | ../os/test_probe_seam_unnameable_part_joiner_escaped_scope.py | 6 | green | 71.6 |
-| 659 | os-export-driver-self-drive-health | ../os/test_export_driver_self_drive_health.py | 6 | green | 0.9 |
-| 660 | os-export-driver-health-verdict | ../os/test_export_R2431_health_verdict.py | 6 | green | 0.1 |
-|  | 合计 |  | 4936 | green 660 / FAIL 0 / no-evidence 0 |  |
+| 659 | os-probe-seam-unnameable-dialect-marker-scope | ../os/test_probe_seam_unnameable_dialect_marker_scope.py | 6 | no-evidence | - |
+| 660 | os-export-driver-self-drive-health | ../os/test_export_driver_self_drive_health.py | 6 | green | 0.9 |
+| 661 | os-export-driver-health-verdict | ../os/test_export_R2431_health_verdict.py | 6 | green | 0.1 |
+|  | 合计 |  | 4942 | green 660 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

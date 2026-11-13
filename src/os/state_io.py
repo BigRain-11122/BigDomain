@@ -25,7 +25,7 @@ import sys
 import tempfile
 
 EOL = "\r\n"
-ITEM_INDENT = 16
+ITEM_INDENT = 2
 PINS = ("bytes", "crlf", "bare_lf", "lone_cr", "eol_ok", "log_items",
         "log_len", "items_off_indent", "indent_ok", "count_ok", "layout_ok")
 
