@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T16:32:48+08:00",
+  "export_ts": "2026-11-13T16:34:03+08:00",
   "do": "2026-11-13 R2699 VERIFICATION window LAUNCHING the battery the debt gate names first (reconcile-battery-R2698, pre-registered 662 suites / 4948 criteria at R2698). Five readings at open, all clean: git status EMPTY at HEAD 1839889c equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger; the decisions file read 120 rows with no new dispatch token against the stored union ",
   "ceo_face": {
     "current": "2026-11-13 R2699 VERIFICATION window LAUNCHING the battery the debt gate names first (reconcile-battery-R2698, pre-registered 662 suites / 4948 criteria at R2698). Five readings at open, all clean: git status EMPTY at HEAD 1839889c equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger; the decisions file read 120 rows with no new dispatch token against the stored union ",
     "latest_artifact": "none landed yet for R2699",
     "last_artifact": "none landed yet for R2699",
-    "next_milestone": "next window owes reconcile-battery-R2698 on the committed tree, inside a 48h window due 2026-11-15T16:32:48+08:00",
-    "next_milestone_due": "2026-11-15T16:32:48+08:00",
-    "updated_at": "2026-11-13T16:32:48+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2698 on the committed tree, inside a 48h window due 2026-11-15T16:34:03+08:00",
+    "next_milestone_due": "2026-11-15T16:34:03+08:00",
+    "updated_at": "2026-11-13T16:34:03+08:00"
   },
   "depts": [
     {
@@ -1020,7 +1020,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 41,
+    "log_lines_in_window": 42,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 6,
