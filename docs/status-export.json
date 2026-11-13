@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-13T23:51:31+08:00",
+  "export_ts": "2026-11-13T23:52:35+08:00",
   "do": "2026-11-13 R2706 PRODUCT window on the row the register named (product-face-R2705, state/queue/tech.md line 685 prefix AC-PNAT1, criteria AC-PNAT1..AC-PNAT6 pinned there at R2704 BEFORE any code). Four readings at open, all clean: git status EMPTY at HEAD 7a5e72ea equal to origin/main with no index.lock; the content-addressed decisions face read rows=120 tokens=64 new=0; ZERO @BigDomain rows in th",
   "ceo_face": {
     "current": "2026-11-13 R2706 PRODUCT window on the row the register named (product-face-R2705, state/queue/tech.md line 685 prefix AC-PNAT1, criteria AC-PNAT1..AC-PNAT6 pinned there at R2704 BEFORE any code). Four readings at open, all clean: git status EMPTY at HEAD 7a5e72ea equal to origin/main with no index.lock; the content-addressed decisions face read rows=120 tokens=64 new=0; ZERO @BigDomain rows in th",
     "latest_artifact": "probe-seam-dialect-escape-guard-scope-R2706.log (19394B) + probe-seam-dialect-escape-guard-scope-live-R2706.log (669B)",
     "last_artifact": "probe-seam-dialect-escape-guard-scope-R2706.log (19394B) + probe-seam-dialect-escape-guard-scope-live-R2706.log (669B)",
-    "next_milestone": "next window owes reconcile-battery-R2706 on the committed tree, inside a 48h window due 2026-11-15T23:51:31+08:00",
-    "next_milestone_due": "2026-11-15T23:51:31+08:00",
-    "updated_at": "2026-11-13T23:51:31+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2706 on the committed tree, inside a 48h window due 2026-11-15T23:52:35+08:00",
+    "next_milestone_due": "2026-11-15T23:52:35+08:00",
+    "updated_at": "2026-11-13T23:52:35+08:00"
   },
   "depts": [
     {
@@ -1028,7 +1028,7 @@
   "self_drive": {
     "window": "2026-11-07..2026-11-13",
     "window_days": 7,
-    "log_lines_in_window": 61,
+    "log_lines_in_window": 62,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 8,
