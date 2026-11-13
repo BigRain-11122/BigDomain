@@ -1,1 +1,2 @@
 ﻿2026-11-13 R2702 battery-R2701 launched pid=8756 live at closeout
+2026-11-13 R2703 battery-R2701 ADOPTED green 663/663 suites 4954 criteria; matrix restamped 70077B; product-face-R2703 opened

@@ -1,0 +1,23 @@
+WRITE-SENSITIVE R2703 (R2614 discipline on the FINAL committed tree HEAD 86aaeb2b).
+LEG WINDOW 19:12:22-20:15:42 carried commits e1462efd (19:19:47) and 86aaeb2b (19:21:02),
+so this set was re-run rather than assumed; the matrix was regenerated STAMP-ALIGNED
+from THIS round own green leg qa/reconcile-all-R2702.log BEFORE this run and --check read
+DOC-CURRENT at rc=0 against 70077 bytes / 663 rows, so no designed red is expected here.
+WRITE-SENSITIVE R2703 re-run on the FINAL committed tree
+HEAD 86aaeb2ba9a3853e591b234adde3f541b67b30b8
+test_export_driver_self_drive_health.py rc=0 SUITE PASS 6/6
+test_export_driver_queue_face.py rc=0 SUITE PASS 6/6
+test_ledger_lines.py rc=0 SUITE PASS 8/8 criteria
+test_ledger_line_shape_guard.py rc=0 SUITE PASS 6/6
+test_artifact_disk_text_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_evidence_name_text_coverage.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_stamp_text_coverage.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_patterns_label_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_patterns_label_readability_render_consumer.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_patterns_non_label_text_readability.py rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+test_matrix_stamp_compare.py rc=0 SUITE PASS 6/6
+test_suite_matrix_reconcile.py rc=0 SUITE PASS 6/6
+test_suite_matrix_reconcile_evidence_face.py rc=0 SUITE PASS 6/6
+test_queue_floor.py rc=0 SUITE PASS 8/8
+test_queue_floor_decl.py rc=0 SUITE PASS 6/6
+rc-failures=0 over 15 suites
