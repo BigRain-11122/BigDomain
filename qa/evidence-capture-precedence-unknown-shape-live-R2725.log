@@ -1,0 +1,7 @@
+LIVE round=R2725 law patched to answer E_EBOM_UTF16
+CHAIN sole=E_EBOM_UTF16 mix=E_EBOM_UTF16
+ORDER derived=bom,nul,utf8,crlf,lone_cr,tail probes=15 items=6
+READER R2723 sole=ACCEPT mix_code=E_EBOM_UTF16 mix_shapes=nul,utf8,tail
+READER R2725 sole=REFUSED:E_EBOM_UTF16 mix_code=E_EBOM_UTF16 mix_shapes=E_EBOM_UTF16,nul,utf8,tail
+REAL qa/reconcile-all-R2723.log ACCEPT bytes=1220981 digest=27D9568AF888F827
+RESTORED order=bom,nul,utf8,crlf,lone_cr,tail sole=ACCEPT

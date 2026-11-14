@@ -1,0 +1,190 @@
+EVIDENCE CAPTURE round=R2725 suite=src/os/test_evidence_capture_precedence_unknown_shape.py legs=2
+== LEG A rc=0 digest=D9F029DBC6D74A67
+PASS AC-EPDU1 an unknown first code is never an ACCEPT ({'code': 'E_EBOM_UTF16', 'shapes': ['E_EBOM_UTF16', 'nul', 'utf8', 'tail'], 'shape_codes': ['E_EBOM_UTF16', 'E_EBOM_NUL', 'E_EUC_NOT_UTF8', 'E_ETAIL_TAIL'], 'counters': {'bytes': 5, 'crlf': 0, 'lone_cr': 0, 'nul': 1, 'utf8': False, 'bad_offset': 0}})
+PASS AC-EPDU1 the refusal names the unknown code ('E_EBOM_UTF16')
+PASS AC-EPDU1 no published list omits the unknown code (['E_EBOM_UTF16', 'E_EBOM_NUL', 'E_EUC_NOT_UTF8', 'E_ETAIL_TAIL'])
+PASS AC-EPDU1 the unknown code stands FIRST in the list (['E_EBOM_UTF16', 'nul', 'utf8', 'tail'])
+PASS AC-EPDU1 the R2723 face still omits it (['E_EBOM_NUL', 'E_EUC_NOT_UTF8', 'E_ETAIL_TAIL'])
+PASS AC-EPDU1 the R2723 first shape still disagrees ('E_EBOM_NUL' vs 'E_EBOM_UTF16')
+PASS AC-EPDU1 capture refuses with that code ('E_EBOM_UTF16')
+PASS AC-EPDU1 the refused target is absent
+PASS AC-EPDU1 the refusal line names the code ('REFUSED code=E_EBOM_UTF16 target=<scratch>\\unknown.txt shapes=E_EBOM_UTF16,nul,utf8,tail bytes=5 crlf=0 lone_cr=0 nul=1 offset=0')
+PASS AC-EPDU2 the shipped tree accepts the sole fixture (None)
+PASS AC-EPDU2 the patched chain refuses it ('E_EBOM_UTF16')
+PASS AC-EPDU2 the R2723 face reads ACCEPT on it (None)
+PASS AC-EPDU2 this face refuses it naming the code ('E_EBOM_UTF16')
+PASS AC-EPDU2 the sole shape is named alone (['E_EBOM_UTF16'])
+PASS AC-EPDU2 capture refuses and lands nothing ('E_EBOM_UTF16')
+PASS AC-EPDU2 the sole report line uses the shipped format
+PASS AC-EPDU3 b'a\x00b' publishes the R2723 answer (['nul', 'tail'])
+PASS AC-EPDU3 b'a\x00b' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbfabc' publishes the R2723 answer (['bom', 'tail'])
+PASS AC-EPDU3 b'\xef\xbb\xbfabc' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbfa\x00b' publishes the R2723 answer (['bom', 'nul', 'tail'])
+PASS AC-EPDU3 b'\xef\xbb\xbfa\x00b' report line is byte-identical
+PASS AC-EPDU3 b'a\r\n\x00\n' publishes the R2723 answer (['nul', 'crlf'])
+PASS AC-EPDU3 b'a\r\n\x00\n' report line is byte-identical
+PASS AC-EPDU3 b'alpha\r\nbeta\r' publishes the R2723 answer (['crlf'])
+PASS AC-EPDU3 b'alpha\r\nbeta\r' report line is byte-identical
+PASS AC-EPDU3 b'alpha\rbeta' publishes the R2723 answer (['lone_cr', 'tail'])
+PASS AC-EPDU3 b'alpha\rbeta' report line is byte-identical
+PASS AC-EPDU3 b'ok\xffbad' publishes the R2723 answer (['utf8', 'tail'])
+PASS AC-EPDU3 b'ok\xffbad' report line is byte-identical
+PASS AC-EPDU3 b'a\x00b\x00\n' publishes the R2723 answer (['nul'])
+PASS AC-EPDU3 b'a\x00b\x00\n' report line is byte-identical
+PASS AC-EPDU3 b'alpha\nunterm' publishes the R2723 answer (['tail'])
+PASS AC-EPDU3 b'alpha\nunterm' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbfa\x00b\n' publishes the R2723 answer (['bom', 'nul'])
+PASS AC-EPDU3 b'\xef\xbb\xbfa\x00b\n' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbf\xff\n' publishes the R2723 answer (['bom', 'utf8'])
+PASS AC-EPDU3 b'\xef\xbb\xbf\xff\n' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbfa\r\nb\n' publishes the R2723 answer (['bom', 'crlf'])
+PASS AC-EPDU3 b'\xef\xbb\xbfa\r\nb\n' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbfa\rb\n' publishes the R2723 answer (['bom', 'lone_cr'])
+PASS AC-EPDU3 b'\xef\xbb\xbfa\rb\n' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbfabc' publishes the R2723 answer (['bom', 'tail'])
+PASS AC-EPDU3 b'\xef\xbb\xbfabc' report line is byte-identical
+PASS AC-EPDU3 b'\xff\x00\n' publishes the R2723 answer (['nul', 'utf8'])
+PASS AC-EPDU3 b'\xff\x00\n' report line is byte-identical
+PASS AC-EPDU3 b'a\x00\r\n' publishes the R2723 answer (['nul', 'crlf'])
+PASS AC-EPDU3 b'a\x00\r\n' report line is byte-identical
+PASS AC-EPDU3 b'a\x00\rb\n' publishes the R2723 answer (['nul', 'lone_cr'])
+PASS AC-EPDU3 b'a\x00\rb\n' report line is byte-identical
+PASS AC-EPDU3 b'a\x00b' publishes the R2723 answer (['nul', 'tail'])
+PASS AC-EPDU3 b'a\x00b' report line is byte-identical
+PASS AC-EPDU3 b'\xff\r\n' publishes the R2723 answer (['utf8', 'crlf'])
+PASS AC-EPDU3 b'\xff\r\n' report line is byte-identical
+PASS AC-EPDU3 b'\xff\rb\n' publishes the R2723 answer (['utf8', 'lone_cr'])
+PASS AC-EPDU3 b'\xff\rb\n' report line is byte-identical
+PASS AC-EPDU3 b'\xff' publishes the R2723 answer (['utf8', 'tail'])
+PASS AC-EPDU3 b'\xff' report line is byte-identical
+PASS AC-EPDU3 b'a\r\nb\rc\n' publishes the R2723 answer (['crlf', 'lone_cr'])
+PASS AC-EPDU3 b'a\r\nb\rc\n' report line is byte-identical
+PASS AC-EPDU3 b'a\r\nb' publishes the R2723 answer (['crlf', 'tail'])
+PASS AC-EPDU3 b'a\r\nb' report line is byte-identical
+PASS AC-EPDU3 b'a\rb' publishes the R2723 answer (['lone_cr', 'tail'])
+PASS AC-EPDU3 b'a\rb' report line is byte-identical
+PASS AC-EPDU3 the order line is byte-identical ('ORDER derived=bom,nul,utf8,crlf,lone_cr,tail probes=15 items=6')
+PASS AC-EPDU3 the known code set is the shipped six (6)
+PASS AC-EPDU4 a clean payload lands with shapes=none
+PASS AC-EPDU4 every byte landed unchanged (28 bytes)
+PASS AC-EPDU4 the zero-byte payload still lands empty
+PASS AC-EPDU4 the real evidence reads ACCEPT (write-sensitive-R2724.log, 14245 bytes)
+PASS AC-EPDU4 the live read changed no real byte (4AA443D47C850A79)
+PASS AC-EPDU4 a known-shape refusal leaves the target absent
+PASS AC-EPDU4 an existing target is refused as E_EUC_EXISTS (got 'E_EUC_EXISTS')
+PASS AC-EPDU4 the existing target is byte-identical (2B8425C4D20E7437)
+PASS AC-EPDU5 the face reads the order from the chain at call time
+PASS AC-EPDU5 a reordered shipped law MOVES this face order (('bom', 'nul', 'utf8', 'crlf', 'lone_cr', 'tail') -> ('nul', 'bom', 'utf8', 'crlf', 'lone_cr', 'tail'))
+PASS AC-EPDU5 the patched law puts nul before bom (('nul', 'bom', 'utf8', 'crlf', 'lone_cr', 'tail'))
+PASS AC-EPDU5 restoring the shipped law restores the order
+PASS AC-EPDU5 a different patched code MOVES the unknown answer ('E_EBOM_UTF16' -> 'E_EBOM_UTF32')
+PASS AC-EPDU5 no cached order or unknown-code attribute exists
+PASS AC-EPDU6 the module source is pure ASCII (7117 bytes)
+PASS AC-EPDU6 no clock, no network, no shell ([])
+PASS AC-EPDU6 every import is stdlib or a shipped face ([])
+PASS AC-EPDU6 the registry carries exactly one label row (1)
+PASS AC-EPDU6 the registry carries exactly one suite row (1)
+PASS AC-EPDU6 the shipped derived row is untouched (1)
+PASS AC-EPDU6 this suite exists on disk
+PASS AC-EPDU6 six criteria are declared
+PASS AC-EPDU6 the face carries its own reconcile label ('os-evidence-capture-precedence-unknown-shape')
+SUITE PASS 6/6
+== LEG B rc=0 digest=D9F029DBC6D74A67
+PASS AC-EPDU1 an unknown first code is never an ACCEPT ({'code': 'E_EBOM_UTF16', 'shapes': ['E_EBOM_UTF16', 'nul', 'utf8', 'tail'], 'shape_codes': ['E_EBOM_UTF16', 'E_EBOM_NUL', 'E_EUC_NOT_UTF8', 'E_ETAIL_TAIL'], 'counters': {'bytes': 5, 'crlf': 0, 'lone_cr': 0, 'nul': 1, 'utf8': False, 'bad_offset': 0}})
+PASS AC-EPDU1 the refusal names the unknown code ('E_EBOM_UTF16')
+PASS AC-EPDU1 no published list omits the unknown code (['E_EBOM_UTF16', 'E_EBOM_NUL', 'E_EUC_NOT_UTF8', 'E_ETAIL_TAIL'])
+PASS AC-EPDU1 the unknown code stands FIRST in the list (['E_EBOM_UTF16', 'nul', 'utf8', 'tail'])
+PASS AC-EPDU1 the R2723 face still omits it (['E_EBOM_NUL', 'E_EUC_NOT_UTF8', 'E_ETAIL_TAIL'])
+PASS AC-EPDU1 the R2723 first shape still disagrees ('E_EBOM_NUL' vs 'E_EBOM_UTF16')
+PASS AC-EPDU1 capture refuses with that code ('E_EBOM_UTF16')
+PASS AC-EPDU1 the refused target is absent
+PASS AC-EPDU1 the refusal line names the code ('REFUSED code=E_EBOM_UTF16 target=<scratch>\\unknown.txt shapes=E_EBOM_UTF16,nul,utf8,tail bytes=5 crlf=0 lone_cr=0 nul=1 offset=0')
+PASS AC-EPDU2 the shipped tree accepts the sole fixture (None)
+PASS AC-EPDU2 the patched chain refuses it ('E_EBOM_UTF16')
+PASS AC-EPDU2 the R2723 face reads ACCEPT on it (None)
+PASS AC-EPDU2 this face refuses it naming the code ('E_EBOM_UTF16')
+PASS AC-EPDU2 the sole shape is named alone (['E_EBOM_UTF16'])
+PASS AC-EPDU2 capture refuses and lands nothing ('E_EBOM_UTF16')
+PASS AC-EPDU2 the sole report line uses the shipped format
+PASS AC-EPDU3 b'a\x00b' publishes the R2723 answer (['nul', 'tail'])
+PASS AC-EPDU3 b'a\x00b' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbfabc' publishes the R2723 answer (['bom', 'tail'])
+PASS AC-EPDU3 b'\xef\xbb\xbfabc' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbfa\x00b' publishes the R2723 answer (['bom', 'nul', 'tail'])
+PASS AC-EPDU3 b'\xef\xbb\xbfa\x00b' report line is byte-identical
+PASS AC-EPDU3 b'a\r\n\x00\n' publishes the R2723 answer (['nul', 'crlf'])
+PASS AC-EPDU3 b'a\r\n\x00\n' report line is byte-identical
+PASS AC-EPDU3 b'alpha\r\nbeta\r' publishes the R2723 answer (['crlf'])
+PASS AC-EPDU3 b'alpha\r\nbeta\r' report line is byte-identical
+PASS AC-EPDU3 b'alpha\rbeta' publishes the R2723 answer (['lone_cr', 'tail'])
+PASS AC-EPDU3 b'alpha\rbeta' report line is byte-identical
+PASS AC-EPDU3 b'ok\xffbad' publishes the R2723 answer (['utf8', 'tail'])
+PASS AC-EPDU3 b'ok\xffbad' report line is byte-identical
+PASS AC-EPDU3 b'a\x00b\x00\n' publishes the R2723 answer (['nul'])
+PASS AC-EPDU3 b'a\x00b\x00\n' report line is byte-identical
+PASS AC-EPDU3 b'alpha\nunterm' publishes the R2723 answer (['tail'])
+PASS AC-EPDU3 b'alpha\nunterm' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbfa\x00b\n' publishes the R2723 answer (['bom', 'nul'])
+PASS AC-EPDU3 b'\xef\xbb\xbfa\x00b\n' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbf\xff\n' publishes the R2723 answer (['bom', 'utf8'])
+PASS AC-EPDU3 b'\xef\xbb\xbf\xff\n' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbfa\r\nb\n' publishes the R2723 answer (['bom', 'crlf'])
+PASS AC-EPDU3 b'\xef\xbb\xbfa\r\nb\n' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbfa\rb\n' publishes the R2723 answer (['bom', 'lone_cr'])
+PASS AC-EPDU3 b'\xef\xbb\xbfa\rb\n' report line is byte-identical
+PASS AC-EPDU3 b'\xef\xbb\xbfabc' publishes the R2723 answer (['bom', 'tail'])
+PASS AC-EPDU3 b'\xef\xbb\xbfabc' report line is byte-identical
+PASS AC-EPDU3 b'\xff\x00\n' publishes the R2723 answer (['nul', 'utf8'])
+PASS AC-EPDU3 b'\xff\x00\n' report line is byte-identical
+PASS AC-EPDU3 b'a\x00\r\n' publishes the R2723 answer (['nul', 'crlf'])
+PASS AC-EPDU3 b'a\x00\r\n' report line is byte-identical
+PASS AC-EPDU3 b'a\x00\rb\n' publishes the R2723 answer (['nul', 'lone_cr'])
+PASS AC-EPDU3 b'a\x00\rb\n' report line is byte-identical
+PASS AC-EPDU3 b'a\x00b' publishes the R2723 answer (['nul', 'tail'])
+PASS AC-EPDU3 b'a\x00b' report line is byte-identical
+PASS AC-EPDU3 b'\xff\r\n' publishes the R2723 answer (['utf8', 'crlf'])
+PASS AC-EPDU3 b'\xff\r\n' report line is byte-identical
+PASS AC-EPDU3 b'\xff\rb\n' publishes the R2723 answer (['utf8', 'lone_cr'])
+PASS AC-EPDU3 b'\xff\rb\n' report line is byte-identical
+PASS AC-EPDU3 b'\xff' publishes the R2723 answer (['utf8', 'tail'])
+PASS AC-EPDU3 b'\xff' report line is byte-identical
+PASS AC-EPDU3 b'a\r\nb\rc\n' publishes the R2723 answer (['crlf', 'lone_cr'])
+PASS AC-EPDU3 b'a\r\nb\rc\n' report line is byte-identical
+PASS AC-EPDU3 b'a\r\nb' publishes the R2723 answer (['crlf', 'tail'])
+PASS AC-EPDU3 b'a\r\nb' report line is byte-identical
+PASS AC-EPDU3 b'a\rb' publishes the R2723 answer (['lone_cr', 'tail'])
+PASS AC-EPDU3 b'a\rb' report line is byte-identical
+PASS AC-EPDU3 the order line is byte-identical ('ORDER derived=bom,nul,utf8,crlf,lone_cr,tail probes=15 items=6')
+PASS AC-EPDU3 the known code set is the shipped six (6)
+PASS AC-EPDU4 a clean payload lands with shapes=none
+PASS AC-EPDU4 every byte landed unchanged (28 bytes)
+PASS AC-EPDU4 the zero-byte payload still lands empty
+PASS AC-EPDU4 the real evidence reads ACCEPT (write-sensitive-R2724.log, 14245 bytes)
+PASS AC-EPDU4 the live read changed no real byte (4AA443D47C850A79)
+PASS AC-EPDU4 a known-shape refusal leaves the target absent
+PASS AC-EPDU4 an existing target is refused as E_EUC_EXISTS (got 'E_EUC_EXISTS')
+PASS AC-EPDU4 the existing target is byte-identical (2B8425C4D20E7437)
+PASS AC-EPDU5 the face reads the order from the chain at call time
+PASS AC-EPDU5 a reordered shipped law MOVES this face order (('bom', 'nul', 'utf8', 'crlf', 'lone_cr', 'tail') -> ('nul', 'bom', 'utf8', 'crlf', 'lone_cr', 'tail'))
+PASS AC-EPDU5 the patched law puts nul before bom (('nul', 'bom', 'utf8', 'crlf', 'lone_cr', 'tail'))
+PASS AC-EPDU5 restoring the shipped law restores the order
+PASS AC-EPDU5 a different patched code MOVES the unknown answer ('E_EBOM_UTF16' -> 'E_EBOM_UTF32')
+PASS AC-EPDU5 no cached order or unknown-code attribute exists
+PASS AC-EPDU6 the module source is pure ASCII (7117 bytes)
+PASS AC-EPDU6 no clock, no network, no shell ([])
+PASS AC-EPDU6 every import is stdlib or a shipped face ([])
+PASS AC-EPDU6 the registry carries exactly one label row (1)
+PASS AC-EPDU6 the registry carries exactly one suite row (1)
+PASS AC-EPDU6 the shipped derived row is untouched (1)
+PASS AC-EPDU6 this suite exists on disk
+PASS AC-EPDU6 six criteria are declared
+PASS AC-EPDU6 the face carries its own reconcile label ('os-evidence-capture-precedence-unknown-shape')
+SUITE PASS 6/6
+== ADJACENT 5
+== src/os/test_evidence_utf8_capture.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_utf8_capture_bom_guard.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_capture_tail_guard.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_capture_compound_refusal.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_capture_precedence_derived.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=5 fails=0 digest=D9F029DBC6D74A67

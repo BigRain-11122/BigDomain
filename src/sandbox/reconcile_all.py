@@ -6723,6 +6723,17 @@ SUITES = [
     # (AC-ECORD1..AC-ECORD6 pinned in state/queue/tech.md:694 at R2720.)
     ("os-evidence-capture-precedence-derived",
      os.path.join("..", "os", "test_evidence_capture_precedence_derived.py"), 6),
+    # R2725: the derivation covers exactly the SIX shapes the shipped chain
+    # names today, so an earned shape whose code is outside that table is
+    # invisible to the detector while the first code still names it - a payload
+    # earning only the unknown shape read ACCEPT, and a compound payload
+    # published the unknown code beside a list that omitted it. This face
+    # REFUSES any first code outside the six known shapes and names it first
+    # (672 -> 673 suites, 5008 -> 5014 criteria).
+    # (AC-EPDU1..AC-EPDU6 pinned in state/queue/tech.md:695 at R2723.)
+    ("os-evidence-capture-precedence-unknown-shape",
+     os.path.join("..", "os",
+                  "test_evidence_capture_precedence_unknown_shape.py"), 6),
     ]
 
 FAILS = 0
