@@ -1,1 +1,1 @@
-﻿2026-11-14 20:20 BigDomain-OSLoop R2734 verification window: battery reconcile-battery-R2733 launched pid=65136 target 675/5026 measured by import, zero product bytes, export + proposal refreshed
+﻿2026-11-14 20:44 BigDomain-OSLoop R2735 monitored-wait window: battery reconcile-battery-R2733 still live pid=65136 at 331/675 pass rows zero FAIL, measured ETA 80-110 min at 19 heavy apimarket suites left, zero product bytes, board line repaired so no next window can double-fire the leg, export refreshed

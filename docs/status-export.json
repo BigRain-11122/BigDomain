@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T20:08:10+08:00",
-  "do": "R2734 验证窗：675 套件／5026 判据的全量电池已发射在跑（发射前按 import 实测 675/5026/675/675，与预注册逐字一致），流在长、PASS 行在落、零 FAIL行；本窗零产品字节——按 R2168 混合树律，电池绿之前不许再落产品改动",
+  "export_ts": "2026-11-14T20:44:28+08:00",
+  "do": "R2735 监控等待窗：675 套件／5026 判据的全量电池仍在跑（pid 65136·331/675·零 FAIL），按本腿实测时长投影还需约 80-110 分钟（19 条重型 apimarket 套件实测 89-272s/条），本窗验收不了；产品字节继续按 R2168 混合树律冻结",
   "ceo_face": {
-    "current": "R2734 验证窗：675 套件／5026 判据的全量电池已发射在跑（发射前按 import 实测 675/5026/675/675，与预注册逐字一致），流在长、PASS 行在落、零 FAIL行；本窗零产品字节——按 R2168 混合树律，电池绿之前不许再落产品改动",
-    "latest_artifact": "src/os/launch_battery_R2733.py 发射器 ＋ logs/battery-R2733.stream 实时流（pid 65136·2026-11-14 20:1x 起·目标 675 套件／5026 判据按 import 实测）",
-    "last_artifact": "src/os/launch_battery_R2733.py 发射器 ＋ logs/battery-R2733.stream 实时流（pid 65136·2026-11-14 20:1x 起·目标 675 套件／5026 判据按 import 实测）",
-    "next_milestone": "下一窗 48h 内：先按证据路径 qa/reconcile-all-R2733.log 验收本电池（绿则跑写敏感集、四段 followup、重压矩阵、关债），随即修那处已欠三窗的静默失效导出钩子 src/os/export_R2431.py（驱动方按文档打补丁会被无声忽略），同期把 tech 队列补回 10 条（现 9 条·SHORT 1）",
-    "next_milestone_due": "2026-11-16T20:08:10+08:00",
-    "updated_at": "2026-11-14T20:08:10+08:00"
+    "current": "R2735 监控等待窗：675 套件／5026 判据的全量电池仍在跑（pid 65136·331/675·零 FAIL），按本腿实测时长投影还需约 80-110 分钟（19 条重型 apimarket 套件实测 89-272s/条），本窗验收不了；产品字节继续按 R2168 混合树律冻结",
+    "latest_artifact": "src/os/backlog.md 顶行修正（已发射的电池行改标 launched 并写明 pid，堵掉下窗重复发射的口子）＋ logs/battery-R2733.stream 实时流（331/675·零 FAIL·2026-11-14 20:40 实测）",
+    "last_artifact": "src/os/backlog.md 顶行修正（已发射的电池行改标 launched 并写明 pid，堵掉下窗重复发射的口子）＋ logs/battery-R2733.stream 实时流（331/675·零 FAIL·2026-11-14 20:40 实测）",
+    "next_milestone": "下一窗 48h 内：先按证据路径 qa/reconcile-all-R2733.log 验收本电池（绿则跑写敏感集、四段 followup、重压矩阵、关债），随即修那处已欠四窗的静默失效导出钩子 src/os/export_R2431.py（驱动方按文档打补丁会被无声忽略），再取 tech 队头 state/queue/tech.md:703 AC-DFOB1",
+    "next_milestone_due": "2026-11-16T20:44:28+08:00",
+    "updated_at": "2026-11-14T20:44:28+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/backlog.md 顶行修正（已发射的电池行改标 launched 并写明 pid，堵掉下窗重复发射的口子）＋ logs/battery-R2733.stream 实时流（331/675·零 FAIL·2026-11-14 20:40 实测）",
     "src/os/launch_battery_R2733.py 发射器 ＋ logs/battery-R2733.stream 实时流（pid 65136·2026-11-14 20:1x 起·目标 675 套件／5026 判据按 import 实测）",
     "src/os/closeout_export_parity_wire_binding_consumer.py ＋六判据套件全绿（qa/closeout-export-parity-wire-binding-consumer-R2733.log·2026-11-14·2951B·两次跑同 digest E038F813·相邻 5 套件绿）",
     "src/os/launch_battery_R2731.py 分离启动器（2026-11-14 17:51:39 落地·目标674/5020 常量钉死·二次启动负控读 E_LAUNCH_PID_EXISTS rc=2）＋在飞证据流 logs/battery-R2731.stream（开窗 +4 分钟 18002B/139 行/7 PASS/0 FAIL）",
@@ -1043,7 +1044,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2731",
+      "2732",
       "OSLoop 执行 tick"
     ],
     [
@@ -1066,10 +1067,10 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 74,
+    "log_lines_in_window": 81,
     "idle_fast_mention_lines": 1,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 9,
     "proposals_open": 7,
     "queue_main_open": 6,
