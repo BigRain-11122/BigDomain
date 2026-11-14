@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T07:58:21+08:00",
+  "export_ts": "2026-11-14T08:00:42+08:00",
   "do": "2026-11-14 R2716 PRODUCT window on AC-EBOM1..AC-EBOM6 (state/queue/tech.md:691, pinned at R2714 BEFORE any code): shipped src/os/evidence_utf8_capture_bom_guard.py plus src/os/test_evidence_utf8_capture_bom_guard.py. Five readings at open: git status EMPTY at HEAD aba1afde equal to origin/main with no index.lock; ZERO @BigDomain rows new in the group ledger; the content-addressed decisions face re",
   "ceo_face": {
     "current": "2026-11-14 R2716 PRODUCT window on AC-EBOM1..AC-EBOM6 (state/queue/tech.md:691, pinned at R2714 BEFORE any code): shipped src/os/evidence_utf8_capture_bom_guard.py plus src/os/test_evidence_utf8_capture_bom_guard.py. Five readings at open: git status EMPTY at HEAD aba1afde equal to origin/main with no index.lock; ZERO @BigDomain rows new in the group ledger; the content-addressed decisions face re",
     "latest_artifact": "evidence-utf8-capture-bom-guard-R2716.log (7979B) + evidence-utf8-capture-bom-guard-live-R2716.log (428B)",
     "last_artifact": "evidence-utf8-capture-bom-guard-R2716.log (7979B) + evidence-utf8-capture-bom-guard-live-R2716.log (428B)",
-    "next_milestone": "next window owes reconcile-battery-R2716 on the committed tree, inside a 48h window due 2026-11-16T07:58:21+08:00",
-    "next_milestone_due": "2026-11-16T07:58:21+08:00",
-    "updated_at": "2026-11-14T07:58:21+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2716 on the committed tree, inside a 48h window due 2026-11-16T08:00:42+08:00",
+    "next_milestone_due": "2026-11-16T08:00:42+08:00",
+    "updated_at": "2026-11-14T08:00:42+08:00"
   },
   "depts": [
     {
@@ -1048,8 +1048,8 @@
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 15,
-    "proposals_total": 7,
-    "proposals_open": 5,
+    "proposals_total": 8,
+    "proposals_open": 6,
     "queue_main_open": 6,
     "queue_tech_open": 14,
     "queue_explore_open": 10
