@@ -1,0 +1,7 @@
+PASS suite os-export-consistency-queue-face exit=0 pass-lines=15 fail-lines=0 0.4s
+PASS suite os-queue-floor-export-face exit=0 pass-lines=6 fail-lines=0 0.4s
+PASS suite os-status-export-writer-dialect-wire exit=0 pass-lines=6 fail-lines=0 14.6s
+PASS suite reconcile-daily-census exit=0 pass-lines=8 fail-lines=0 1.6s
+PASS suite os-queue-export-gate-wire exit=0 pass-lines=6 fail-lines=0 0.5s
+PASS suite os-queue-export-freshness-gate exit=0 pass-lines=6 fail-lines=0 0.8s
+WRITE-SENSITIVE RERUN suites=6 green=6 red=0 total=18.5s on committed tree e1c854de

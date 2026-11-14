@@ -140,6 +140,32 @@ def derive_latest(tick):
     return " + ".join(hits[:4])
 
 
+NONE_PREFIX = "none landed"
+
+
+def next_outs(outs, latest, keep=4):
+    """The CEO artifact list: recent real artifacts only (R2751 D1-D3).
+
+    The old shape inserted every new line at index 0 and never removed one,
+    so the list grew without bound and kept SUPERSEDED 'none landed yet'
+    rows above real artifacts - the CEO scrolled a history of nothing.
+    D1: a round that landed an artifact contributes no none-line.
+    D2: at most `keep` recent real artifacts; superseded rows are dropped.
+    D3: a none-line is never shown above a real artifact line.
+    """
+    rows = [r for r in (outs or []) if isinstance(r, str)]
+    real = [r for r in rows if not r.startswith(NONE_PREFIX)]
+    if real:
+        deduped = [real[0]]
+        for row in real[1:]:
+            if row != deduped[0]:
+                deduped.append(row)
+        real = deduped
+    if latest.startswith(NONE_PREFIX):
+        return real[:keep] if real else [latest]
+    return ([latest] + [r for r in real if r != latest])[:keep]
+
+
 def derive_due():
     """The 48h milestone window, computed at call time."""
     return (datetime.datetime.now(
@@ -261,9 +287,7 @@ def main():
     latest = derive_latest(round_no)
     milestone = derive_next(tick)
     outs = data.get("outs") or []
-    if not outs or outs[0] != latest:
-        outs.insert(0, latest)
-    data["outs"] = outs
+    data["outs"] = next_outs(outs, latest)
     data["export_ts"] = STAMP
     data["do"] = current
     ceo = data.get("ceo_face") or {}
