@@ -169,6 +169,19 @@ def refresh_export():
         datetime.timezone(datetime.timedelta(hours=8))).replace(
             microsecond=0).isoformat()
     doc["ceo_face"] = face
+    # The consistency face reads the tick out of this document's results table
+    # and compares it to state.tick, so a bumped tick must be mirrored HERE or
+    # the queue face reads DRIFT on results.tick_row (measured: stored 2724
+    # against recomputed 2725 before this line existed).
+    with io.open(os.path.join(HERE, "export_consistency_patterns.json"),
+                 encoding="utf-8") as fh:
+        label = json.load(fh)["tick_row_label"]
+    with io.open(PATH, encoding="utf-8") as fh:
+        tick_now = str(json.load(fh)["tick"])
+    rows = [r for r in (doc.get("results") or [])
+            if isinstance(r, list) and len(r) >= 2 and r[1] == label]
+    if len(rows) == 1:
+        rows[0][0] = tick_now
     doc["export_ts"] = stamp
     doc["do"] = (
         "2026-11-14 R2729 ADOPTION window: the R2725 reconcile battery was "
