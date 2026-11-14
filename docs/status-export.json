@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T01:59:25+08:00",
-  "do": "2026-11-15 R2742 PRODUCT window on AC-DFOB1..AC-DFOB6 (state/queue/tech.md:703, pinned at R2501 BEFORE any code): shipped src/os/export_parity_difference_order_field.py plus its six-criteria suite and one evidence driver. Five readings at open: git status EMPTY at HEAD 4829e853 equal to origin/main with no index.lock; ZERO unreplied @BigDomain rows in the group ledger (its 30 BigDomain mentions ar",
+  "export_ts": "2026-11-15T02:12:09+08:00",
+  "do": "R2744 监控等待窗：R2742 全量电池腿实测 253/676 套件、零红、仍在跑（423 套待跑），产品字节按混合树律冻结；本轮把债务册剩余 open 行按三分法逐行复核，37→11，26 行闭合（独立读回一致）",
   "ceo_face": {
-    "current": "2026-11-15 R2742 PRODUCT window on AC-DFOB1..AC-DFOB6 (state/queue/tech.md:703, pinned at R2501 BEFORE any code): shipped src/os/export_parity_difference_order_field.py plus its six-criteria suite and one evidence driver. Five readings at open: git status EMPTY at HEAD 4829e853 equal to origin/main with no index.lock; ZERO unreplied @BigDomain rows in the group ledger (its 30 BigDomain mentions ar",
-    "latest_artifact": "export-parity-difference-order-field-R2742.log (8139B) + export-parity-difference-order-field-R2742b.log (8139B)",
-    "last_artifact": "export-parity-difference-order-field-R2742.log (8139B) + export-parity-difference-order-field-R2742b.log (8139B)",
-    "next_milestone": "next window owes reconcile-battery-R2742 on the committed tree, inside a 48h window due 2026-11-17T01:59:25+08:00",
-    "next_milestone_due": "2026-11-17T01:59:25+08:00",
-    "updated_at": "2026-11-15T01:59:25+08:00"
+    "current": "R2744 监控等待窗：R2742 全量电池腿实测 253/676 套件、零红、仍在跑（423 套待跑），产品字节按混合树律冻结；本轮把债务册剩余 open 行按三分法逐行复核，37→11，26 行闭合（独立读回一致）",
+    "latest_artifact": "src/os/debt.md 复核对账（open 37→11·恰 26 行带 closed=R2744·240479 字节）＋ logs/battery-R2742.stream（491925 字节·253/676·零红）（2026-11-15 本窗实测）",
+    "last_artifact": "src/os/debt.md 复核对账（open 37→11·恰 26 行带 closed=R2744·240479 字节）＋ logs/battery-R2742.stream（491925 字节·253/676·零红）（2026-11-15 本窗实测）",
+    "next_milestone": "48 小时内：R2742 电池 676 套件跑完后按证据路径采纳（不重启腿），绿后修已欠九窗的导出钩子并取队列头 state/queue/tech.md:713 AC-LKNF1（claimable 10）；腿若 48h 未收仍按监控窗续记",
+    "next_milestone_due": "2026-11-17T02:12:09+08:00",
+    "updated_at": "2026-11-15T02:12:09+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/debt.md 复核对账（open 37→11·恰 26 行带 closed=R2744·240479 字节）＋ logs/battery-R2742.stream（491925 字节·253/676·零红）（2026-11-15 本窗实测）",
     "export-parity-difference-order-field-R2742.log (8139B) + export-parity-difference-order-field-R2742b.log (8139B)",
     "qa/export-parity-difference-order-field-R2742b.log（8139 字节·两跑同一摘要·邻域 3/3全绿）＋重刷的 docs/sandbox-suite-matrix.md（71635 字节·676 套件 / 5032 判据·--check 退出 0）（2026-11-15 本窗实测）",
     "qa/reconcile-all-R2739.log（1248602 字节·675 套件全绿·5026 判据）＋重刷的 docs/sandbox-suite-matrix.md（71510 字节·--check 退出 0）＋qa/write-sensitive-R2739.log（15/15 全绿·14036 字节）（2026-11-15 01:0x 本窗实测）",
@@ -1050,7 +1051,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2743",
+      "2744",
       "OSLoop 执行 tick"
     ],
     [
@@ -1073,10 +1074,10 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 78,
-    "idle_fast_mention_lines": 1,
+    "log_lines_in_window": 85,
+    "idle_fast_mention_lines": 2,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 9,
     "proposals_open": 7,
     "queue_main_open": 6,
