@@ -1,0 +1,18 @@
+SETTLE battery-R2742 leg measured, not quoted
+evidence=qa/reconcile-all-R2742.log bytes=1252699 utf8=True bom=False crlf=0 lone_cr=0 nul=0
+rows=676 pass_rows=671 fail_rows=5 unique_names=676 criteria_sum=5032 target=676/5032
+fail_names=os-ledger-lines,os-ledger-archive,os-ledger-baseline,os-ledger-fold-kind,os-ledger-fold-kind-dateprefix
+closing_battery=NONE
+runner_line=RUNNER FAIL (6 failed assertions)
+
+REGISTRY BY IMPORT on the current committed tree
+suites=676 criteria=5032 unique_names=676 unique_paths=676 matches_leg_target=True
+
+RED SUITES RE-RUN ON THE CURRENT TREE (birth site check)
+os-ledger-lines rehealed=True rc=0 pass=8 fail=0 SUITE PASS 8/8 criteria
+os-ledger-archive rehealed=True rc=0 pass=8 fail=0 SUITE PASS 8/8 criteria
+os-ledger-baseline rehealed=True rc=0 pass=8 fail=0 SUITE PASS 8/8 criteria
+os-ledger-fold-kind rehealed=True rc=0 pass=6 fail=0 SUITE PASS 6/6 criteria
+os-ledger-fold-kind-dateprefix rehealed=True rc=0 pass=6 fail=0 SUITE PASS 6/6 criteria
+
+VERDICT leg=RED adopted=NO red_suites=5 rehealed_on_current_tree=5/5 delta_criteria=0
