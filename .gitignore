@@ -47,3 +47,5 @@ state/funnel/*.db
 # apimarket preview runs write sqlite dbs next to their HTML/JSON samples; the
 # tracked evidence is the rendered .html/.json pair, the binary db is disposable
 preview/*.db
+# scratch dir the shell tool leaves untracked; empty and never tracked (R2726)
+tmp/
