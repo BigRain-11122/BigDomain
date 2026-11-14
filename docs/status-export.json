@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T17:56:13+08:00",
-  "do": "R2731 验证窗（零产品字节）：按 R2168 混合树律先跑债务闸点名的全量电池（reconcile-battery-R2730）——目标按导入实测 674 套件/5020 判据/674 唯一名/674 唯一路径，已在干净提交树 5a70e601 上分离启动 pid=59208，开窗 +4 分钟证据流读 7 套件全绿零 FAIL；本窗不宣称电池结果，结果由下一窗按证据路径验收",
+  "export_ts": "2026-11-14T10:39:56+00:00",
+  "do": "2026-11-14 R2732 monitored-wait window: the R2731 battery leg was read live through the shipped reader (333/674 rows, zero FAIL, heavy apimarket tail) and was neither adopted nor relaunched; the stale product-face rows of the debt register were swept by a three-part verification rule and 17 were closed through the shipped writer (open 52 -> 35); no product src byte and no registry row moved.",
   "ceo_face": {
-    "current": "R2731 验证窗（零产品字节）：按 R2168 混合树律先跑债务闸点名的全量电池（reconcile-battery-R2730）——目标按导入实测 674 套件/5020 判据/674 唯一名/674 唯一路径，已在干净提交树 5a70e601 上分离启动 pid=59208，开窗 +4 分钟证据流读 7 套件全绿零 FAIL；本窗不宣称电池结果，结果由下一窗按证据路径验收",
-    "latest_artifact": "src/os/launch_battery_R2731.py 分离启动器（2026-11-14 17:51:39 落地·目标674/5020 常量钉死·二次启动负控读 E_LAUNCH_PID_EXISTS rc=2）＋在飞证据流 logs/battery-R2731.stream（开窗 +4 分钟 18002B/139 行/7 PASS/0 FAIL）",
-    "last_artifact": "src/os/launch_battery_R2731.py 分离启动器（2026-11-14 17:51:39 落地·目标674/5020 常量钉死·二次启动负控读 E_LAUNCH_PID_EXISTS rc=2）＋在飞证据流 logs/battery-R2731.stream（开窗 +4 分钟 18002B/139 行/7 PASS/0 FAIL）",
-    "next_milestone": "下一窗按证据路径 qa/reconcile-all-R2731.log 验收该腿：逐字节测得 674 套件、独立重算判据恰为 5020、零 FAIL、BATTERY rc= 收尾行；随后跑写敏感集与四段 followup、重压矩阵并关闭债务行，之后才开队头 state/queue/tech.md:702 AC-CEPB1",
-    "next_milestone_due": "2026-11-16T17:56:13+08:00",
-    "updated_at": "2026-11-14T17:56:13+08:00"
+    "current": "R2732 监控等待窗：R2731 电池腿（674 套件/5020 判据）仍在跑——实测 333/674 全绿零 FAIL，尾部是 300 秒级重套件，本窗不验收也不重启；空档做了债务台账的可核验清理（52 开放 → 35）",
+    "latest_artifact": "state/debt.md 17 条产品面陈旧行按三重核验销账（2026-11-14 R2732·队列行已勾选+无 superseded/carried 标记+指名脸与其测试均在盘）",
+    "last_artifact": "src/os/state_append_R2732.py 收账脚本（日志 6 行+决策基线并集+tick 镜像防 drift·2026-11-14 R2732）",
+    "next_milestone": "下一窗：按证据路径 qa/reconcile-all-R2731.log 验收电池（当前 333/674·尾部重套件·建议窗内先读 leg_status 再决定是否守候），绿则重压矩阵+追加 verdict+关 reconcile-battery-R2730，然后开队头 AC-CEPB1 产品面",
+    "next_milestone_due": "2026-11-15T22:00:00+08:00",
+    "updated_at": "2026-11-14T18:39:56+08:00"
   },
   "depts": [
     {
@@ -1041,7 +1041,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2727",
+      "2728",
       "OSLoop 执行 tick"
     ],
     [
@@ -1064,10 +1064,10 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 49,
-    "idle_fast_mention_lines": 0,
+    "log_lines_in_window": 55,
+    "idle_fast_mention_lines": 1,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 8,
     "proposals_open": 6,
     "queue_main_open": 6,
