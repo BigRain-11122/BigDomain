@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T10:43:32+08:00",
-  "do": "2026-11-14 R2720 PRODUCT window on AC-ECMP1..AC-ECMP6 (state/queue/tech.md:693, pinned at R2718 BEFORE any code): shipped src/os/evidence_capture_compound_refusal.py plus src/os/test_evidence_capture_compound_refusal.py. Five readings at open: git status EMPTY at HEAD f908e32c equal to origin/main with no index.lock; ZERO @BigDomain rows new in the group ledger; the content-addressed decisions fac",
+  "export_ts": "2026-11-14T10:45:59+08:00",
+  "do": "2026-11-14 R2721 BATTERY LAUNCH window on reconcile-battery-R2720, the debt gate CLAIM-FIRST item at the pre-registered 671 suites / 5002 criteria on the committed tree 691f66e8: the R2168 mixed-tree rule owes a full battery BEFORE any product byte because R2720 moved product src (the compound refusal report plus its six-criteria suite) and one registry row. MEASURED BEFORE any launch: reconcile_a",
   "ceo_face": {
-    "current": "2026-11-14 R2720 PRODUCT window on AC-ECMP1..AC-ECMP6 (state/queue/tech.md:693, pinned at R2718 BEFORE any code): shipped src/os/evidence_capture_compound_refusal.py plus src/os/test_evidence_capture_compound_refusal.py. Five readings at open: git status EMPTY at HEAD f908e32c equal to origin/main with no index.lock; ZERO @BigDomain rows new in the group ledger; the content-addressed decisions fac",
-    "latest_artifact": "evidence-capture-compound-refusal-R2720.log (8828B) + evidence-capture-compound-refusal-live-R2720.log (491B)",
-    "last_artifact": "evidence-capture-compound-refusal-R2720.log (8828B) + evidence-capture-compound-refusal-live-R2720.log (491B)",
-    "next_milestone": "next window owes reconcile-battery-R2720 on the committed tree, inside a 48h window due 2026-11-16T10:43:32+08:00",
-    "next_milestone_due": "2026-11-16T10:43:32+08:00",
-    "updated_at": "2026-11-14T10:43:32+08:00"
+    "current": "2026-11-14 R2721 BATTERY LAUNCH window on reconcile-battery-R2720, the debt gate CLAIM-FIRST item at the pre-registered 671 suites / 5002 criteria on the committed tree 691f66e8: the R2168 mixed-tree rule owes a full battery BEFORE any product byte because R2720 moved product src (the compound refusal report plus its six-criteria suite) and one registry row. MEASURED BEFORE any launch: reconcile_a",
+    "latest_artifact": "none landed yet for R2721",
+    "last_artifact": "none landed yet for R2721",
+    "next_milestone": "next window owes reconcile-battery-R2720 on the committed tree, inside a 48h window due 2026-11-16T10:45:59+08:00",
+    "next_milestone_due": "2026-11-16T10:45:59+08:00",
+    "updated_at": "2026-11-14T10:45:59+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "none landed yet for R2721",
     "evidence-capture-compound-refusal-R2720.log (8828B) + evidence-capture-compound-refusal-live-R2720.log (491B)",
     "reconcile-all-R2719.log (1208650B) + write-sensitive-R2719.log (14220B)",
     "reconcile-all-R2719.log (1208650B)",
@@ -1032,7 +1033,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2714",
+      "2715",
       "OSLoop 执行 tick"
     ],
     [
@@ -1051,10 +1052,10 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 54,
+    "log_lines_in_window": 57,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 8,
     "proposals_open": 6,
     "queue_main_open": 6,
