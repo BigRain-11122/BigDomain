@@ -1,0 +1,49 @@
+CLOSEOUT EXPORT PARITY WIRE BINDING CONSUMER R2733
+suite=test_closeout_export_parity_wire_binding_consumer.py criteria=6
+legs=2 identical=True rc=0,0 digest=E038F813C7AD2EF87BB68D288D5CA89519EF2A63A92F37D6629ADA70FB9C5F53
+adjacent=5 green=5
+  adjacent test_closeout_export_parity_wire.py rc=0 SUITE PASS 16/16
+  adjacent test_closeout_export_parity_text_binding.py rc=0 (no suite line)
+  adjacent test_closeout_export_parity_dialect_wire.py rc=0 SUITE PASS 20/20
+  adjacent test_evidence_capture_precedence_shape_typing.py rc=0 SUITE PASS 6/6
+  adjacent test_evidence_capture_precedence_unknown_shape.py rc=0 SUITE PASS 6/6
+---- leg output ----
+PASS AC-CEPB1 a new file on disk MOVES the scan count (5 -> 6)
+PASS AC-CEPB1 the set grows with the tree (5 -> 6 names)
+PASS AC-CEPB1 the new caller moves the BOUND count (1 -> 2)
+PASS AC-CEPB1 no fixture name is planted in the face ([])
+PASS AC-CEPB1 the face enumerates the folder it is given
+PASS AC-CEPB2 caller_own.py carries one row (1)
+PASS AC-CEPB2 its verdict is BOUND ('BOUND')
+PASS AC-CEPB2 the row names the document it composed ('own document status-export.json')
+PASS AC-CEPB2 the caller bytes are unchanged (E3489B5FD132..)
+PASS AC-CEPB2 a bound caller names no differing field ('(unchanged)')
+PASS AC-CEPB3 caller_other.py carries one row (1)
+PASS AC-CEPB3 its verdict is UNBOUND ('UNBOUND')
+PASS AC-CEPB3 the row names the file ('caller_other.py')
+PASS AC-CEPB3 the first differing field is named ('do')
+PASS AC-CEPB3 the other document is named ('other.json')
+PASS AC-CEPB3 the unbound caller was NOT run (no marker)
+PASS AC-CEPB3 no marker landed beside the caller either
+PASS AC-CEPB4 three out-of-scope rows are counted (3)
+PASS AC-CEPB4 plain.py reads OUT-OF-SCOPE rather than vanishing
+PASS AC-CEPB4 string_only.py reads OUT-OF-SCOPE rather than vanishing
+PASS AC-CEPB4 import_only.py reads OUT-OF-SCOPE rather than vanishing
+PASS AC-CEPB4 every row carries one of the three verdicts (6 rows)
+PASS AC-CEPB4 every scanned file is represented (6/6)
+PASS AC-CEPB5 the scanned world is byte-identical (B38D2C1EE9DA..)
+PASS AC-CEPB5 the live src/os tree is byte-identical (74D9BE1C1574..)
+PASS AC-CEPB5 the live reading scans the real tree (2265 files)
+LIVE os-closeout-export-parity-wire-binding-consumer scanned=2265 bound=21 unbound=1 out_of_scope=2238
+PASS AC-CEPB5 the live reading carries its own label
+PASS AC-CEPB6 the module source is pure ASCII (15433 bytes)
+PASS AC-CEPB6 no clock, no network, no shell ([])
+PASS AC-CEPB6 every import is stdlib ([])
+PASS AC-CEPB6 the registry carries exactly one label row (1)
+PASS AC-CEPB6 the registry carries exactly one suite row (1)
+PASS AC-CEPB6 the R2501 binding row is untouched (1)
+PASS AC-CEPB6 the R2377 wire row is untouched (1)
+PASS AC-CEPB6 this suite exists on disk
+PASS AC-CEPB6 six criteria are declared
+PASS AC-CEPB6 the face carries its own reconcile label ('os-closeout-export-parity-wire-binding-consumer')
+SUITE PASS 6/6

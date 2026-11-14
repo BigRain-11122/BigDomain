@@ -6740,6 +6740,14 @@ SUITES = [
     ("os-evidence-capture-precedence-shape-typing",
      os.path.join("..", "os",
                   "test_evidence_capture_precedence_shape_typing.py"), 6),
+    # Derives the parity wire caller set from the tree at CALL time and names
+    # each binding BOUND / UNBOUND / OUT-OF-SCOPE, so a closeout handing in
+    # another document's composition is named rather than run
+    # (674 -> 675 suites, 5020 -> 5026 criteria).
+    # (AC-CEPB1..AC-CEPB6 pinned in state/queue/tech.md:702 at R2501.)
+    ("os-closeout-export-parity-wire-binding-consumer",
+     os.path.join("..", "os",
+                  "test_closeout_export_parity_wire_binding_consumer.py"), 6),
     ]
 
 FAILS = 0

@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T11:44:44+00:00",
-  "do": "2026-11-14 R2732 second half: the R2731 reconcile battery was adopted green on bytes (674 suites, 5020 criteria, zero FAIL, RUNNER PASS 6410s), the matrix was restamped stamp-aligned from that leg and read DOC-CURRENT, the verdict block was appended and the debt row was closed, with the next product face registered on queue head AC-CEPB1.",
+  "export_ts": "2026-11-14T19:59:23+08:00",
+  "do": "R2733 产品窗：把 closeout_export_parity_wire 的调用方集合在调用时用 AST 从树上派生并逐个判绑定——真实树 2265 个文件里 22 个真调用、21 个 BOUND、1 个 UNBOUND（closeout_R2385.py:159·首个不同字段 export_ts），另 12 个无法解析的文件被点名而非吞掉；同一批如果用正则扫会读出 52 处/32 文件，因为其中大半只是印在字符串里的示例行",
   "ceo_face": {
-    "current": "R2732 采纳窗：R2731 全量电池按其证据路径验收全绿并关债——674 套件、判据 5020（与预注册逐字一致）、零 FAIL、RUNNER PASS 6410s；矩阵已按本轮绿腿重压至 674 行并读 DOC-CURRENT",
-    "latest_artifact": "qa/reconcile-all-R2731.log 电池证据（2026-11-14 19:39·1248031B·含 VERDICT PASS 块）＋ docs/sandbox-suite-matrix.md 重压至 71385B/674 行",
-    "last_artifact": "state/debt.md 电池债行关闭（open 35→34）+ 新产品面债行 R2732 开出（钉死队头 AC-CEPB1 六判据·2026-11-14 R2732）",
-    "next_milestone": "下一窗：开队头 state/queue/tech.md:702 AC-CEPB1 产品面——把 closeout_export_parity_wire 的调用方集合在调用时从树上派生，逐调用方判 BOUND / UNBOUND（指名文件与首个不同字段）/ OUT-OF-SCOPE；该窗会动注册表，之后欠一条全量电池",
-    "next_milestone_due": "2026-11-15T22:00:00+08:00",
-    "updated_at": "2026-11-14T19:44:44+08:00"
+    "current": "R2733 产品窗：把 closeout_export_parity_wire 的调用方集合在调用时用 AST 从树上派生并逐个判绑定——真实树 2265 个文件里 22 个真调用、21 个 BOUND、1 个 UNBOUND（closeout_R2385.py:159·首个不同字段 export_ts），另 12 个无法解析的文件被点名而非吞掉；同一批如果用正则扫会读出 52 处/32 文件，因为其中大半只是印在字符串里的示例行",
+    "latest_artifact": "src/os/closeout_export_parity_wire_binding_consumer.py ＋六判据套件全绿（qa/closeout-export-parity-wire-binding-consumer-R2733.log·2026-11-14·2951B·两次跑同 digest E038F813·相邻 5 套件绿）",
+    "last_artifact": "src/os/closeout_export_parity_wire_binding_consumer.py ＋六判据套件全绿（qa/closeout-export-parity-wire-binding-consumer-R2733.log·2026-11-14·2951B·两次跑同 digest E038F813·相邻 5 套件绿）",
+    "next_milestone": "下一窗：先按证据路径 qa/reconcile-all-R2733.log 验收预注册 675 套件/5026 判据的全量电池（已按 R2168 混合树律登记 first=yes），绿后跑写敏感集与四段 followup、重压矩阵并关债，再开队头 tech.md:703 AC-DFOB1——只换了键序的文档会被旧法报成 shape word bytes，运维看不出到底哪个字段不同",
+    "next_milestone_due": "2026-11-16T19:59:23+08:00",
+    "updated_at": "2026-11-14T19:59:23+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/closeout_export_parity_wire_binding_consumer.py ＋六判据套件全绿（qa/closeout-export-parity-wire-binding-consumer-R2733.log·2026-11-14·2951B·两次跑同 digest E038F813·相邻 5 套件绿）",
     "src/os/launch_battery_R2731.py 分离启动器（2026-11-14 17:51:39 落地·目标674/5020 常量钉死·二次启动负控读 E_LAUNCH_PID_EXISTS rc=2）＋在飞证据流 logs/battery-R2731.stream（开窗 +4 分钟 18002B/139 行/7 PASS/0 FAIL）",
     "none landed yet for R2726",
     "evidence-capture-precedence-unknown-shape-R2725.log (13634B) + evidence-capture-precedence-unknown-shape-live-R2725.log (462B)",
@@ -1041,7 +1042,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2729",
+      "2730",
       "OSLoop 执行 tick"
     ],
     [
@@ -1064,14 +1065,14 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 61,
+    "log_lines_in_window": 68,
     "idle_fast_mention_lines": 1,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 8,
     "proposals_open": 6,
     "queue_main_open": 6,
-    "queue_tech_open": 13,
+    "queue_tech_open": 12,
     "queue_explore_open": 10
   },
   "queue": {
@@ -1099,10 +1100,10 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 13,
-        "done_rows": 509,
+        "open_rows": 12,
+        "done_rows": 510,
         "gated_rows": 1,
-        "claimable": 10,
+        "claimable": 9,
         "discounted": 2,
         "delivered": [
           {
@@ -1115,8 +1116,8 @@
           }
         ],
         "floor": 10,
-        "shortfall": 0,
-        "status": "MET"
+        "shortfall": 1,
+        "status": "SHORT"
       },
       {
         "queue": "explore",
@@ -1133,8 +1134,8 @@
         "status": "MET"
       }
     ],
-    "verdict": "FLOOR-MET",
-    "shortfall_total": 0,
+    "verdict": "FLOOR-DEBT",
+    "shortfall_total": 1,
     "missing": [],
     "delivered_total": 2
   }
