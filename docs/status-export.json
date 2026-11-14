@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T09:27:55+08:00",
+  "export_ts": "2026-11-14T10:38:45+08:00",
   "do": "2026-11-14 R2719 BATTERY LAUNCH window on reconcile-battery-R2718, the debt gate CLAIM-FIRST item at the pre-registered 670 suites / 4996 criteria on the committed tree e2b50b2b: the R2168 mixed-tree rule owes a full battery BEFORE any product byte because R2718 moved product src (the tail guard plus its six-criteria suite) and one registry row. MEASURED BEFORE any launch: reconcile_all imported a",
   "ceo_face": {
     "current": "2026-11-14 R2719 BATTERY LAUNCH window on reconcile-battery-R2718, the debt gate CLAIM-FIRST item at the pre-registered 670 suites / 4996 criteria on the committed tree e2b50b2b: the R2168 mixed-tree rule owes a full battery BEFORE any product byte because R2718 moved product src (the tail guard plus its six-criteria suite) and one registry row. MEASURED BEFORE any launch: reconcile_all imported a",
-    "latest_artifact": "none landed yet for R2719",
-    "last_artifact": "none landed yet for R2719",
-    "next_milestone": "next window owes reconcile-battery-R2718 on the committed tree, inside a 48h window due 2026-11-16T09:27:56+08:00",
-    "next_milestone_due": "2026-11-16T09:27:56+08:00",
-    "updated_at": "2026-11-14T09:27:55+08:00"
+    "latest_artifact": "reconcile-all-R2719.log (1208650B)",
+    "last_artifact": "reconcile-all-R2719.log (1208650B)",
+    "next_milestone": "next window owes product-face-R2719 on the committed tree, inside a 48h window due 2026-11-16T10:38:45+08:00",
+    "next_milestone_due": "2026-11-16T10:38:45+08:00",
+    "updated_at": "2026-11-14T10:38:45+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "reconcile-all-R2719.log (1208650B)",
     "none landed yet for R2719",
     "evidence-capture-tail-guard-R2718.log (6980B) + evidence-capture-tail-guard-live-R2718.log (399B)",
     "reconcile-all-R2717.log (1205057B) + write-sensitive-R2717.log (14200B)",
@@ -1029,7 +1030,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2712",
+      "2713",
       "OSLoop 执行 tick"
     ],
     [
@@ -1048,10 +1049,10 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 38,
+    "log_lines_in_window": 45,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 8,
     "proposals_open": 6,
     "queue_main_open": 6,
