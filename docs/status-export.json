@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T07:57:38+08:00",
+  "export_ts": "2026-11-15T07:59:19+08:00",
   "do": "2026-11-15 R2760 PRODUCT window: the P-47 item-5 face is openable, so all five business faces now have a page a reader can open. preview/membership-benefit-report.html (10260B) + .json (9817B) are rendered in ONE command by tools/membership_benefit_report.py, which wires the SHIPPED classes the way member_page.build_world wires them and drives the SHIPPED join path (create_order -> place_order -> ",
   "ceo_face": {
     "current": "2026-11-15 R2760 PRODUCT window: the P-47 item-5 face is openable, so all five business faces now have a page a reader can open. preview/membership-benefit-report.html (10260B) + .json (9817B) are rendered in ONE command by tools/membership_benefit_report.py, which wires the SHIPPED classes the way member_page.build_world wires them and drives the SHIPPED join path (create_order -> place_order -> ",
     "latest_artifact": "membership-benefit-R2760.log (2075B)",
     "last_artifact": "membership-benefit-R2760.log (2075B)",
-    "next_milestone": "next window owes reconcile-battery-R2757 on the committed tree, inside a 48h window due 2026-11-17T07:57:38+08:00",
-    "next_milestone_due": "2026-11-17T07:57:38+08:00",
-    "updated_at": "2026-11-15T07:57:38+08:00",
+    "next_milestone": "next window owes reconcile-battery-R2757 on the committed tree, inside a 48h window due 2026-11-17T07:59:19+08:00",
+    "next_milestone_due": "2026-11-17T07:59:19+08:00",
+    "updated_at": "2026-11-15T07:59:19+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\payment-gate-report.html"
   },
   "depts": [
@@ -764,7 +764,7 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 110,
+    "log_lines_in_window": 111,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 16,
