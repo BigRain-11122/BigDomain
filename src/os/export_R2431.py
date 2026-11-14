@@ -287,7 +287,12 @@ def main():
     latest = derive_latest(round_no)
     milestone = derive_next(tick)
     outs = data.get("outs") or []
-    data["outs"] = next_outs(outs, latest)
+    # R2757: the list this driver appends is kept so the read-back below can
+    # compare the LANDED list with what was written. The old health term asked
+    # outs[0] == latest, which R2751 D3 forbids whenever latest is a none-line
+    # above a real artifact, so a legitimate wait round exited 2 forever.
+    written_outs = next_outs(outs, latest)
+    data["outs"] = written_outs
     data["export_ts"] = STAMP
     data["do"] = current
     ceo = data.get("ceo_face") or {}
@@ -323,9 +328,14 @@ def main():
     # a window line and never as substantive). The document is proved against
     # the block the driver itself stamped, and the fresh recompute is taken
     # ONCE more below to name drift rather than to fail the refresh.
+    # R2757 conflict, resolved in one line: R2751 C2 gives way. A wait round
+    # still NAMES the newest prior artifact in ceo_face.latest_artifact, but
+    # outs[0] stays governed by R2751 D3 (a none-line is never shown above a
+    # real artifact line), so the health term asks what this driver actually
+    # appended rather than demanding outs[0] == latest.
     ok = (any(isinstance(r, list) and len(r) >= 2 and r[1] == label
               and str(r[0]) == tick for r in back["results"])
-          and back["outs"][0] == latest
+          and back["outs"] == written_outs
           and back["ceo_face"]["latest_artifact"] == latest
           and back["ceo_face"]["current"] == current
           and back["ceo_face"]["next_milestone"] == milestone

@@ -243,7 +243,12 @@ def ac_edsh5():
         source = handle.read()
     terms = ('r[1] == label',
              'str(r[0]) == tick',
-             'back["outs"][0] == latest',
+             # R2757 birth-site repair: the pinned literal WAS the defect - it
+             # demanded outs[0] == latest, which R2751 D3 forbids as soon as
+             # latest is a none-line above a real artifact. The INTENT (the
+             # landed outs list is still proved against what the driver
+             # appended) survives as the term below.
+             'back["outs"] == written_outs',
              'back["ceo_face"]["latest_artifact"] == latest',
              'back["ceo_face"]["current"] == current',
              'back["ceo_face"]["next_milestone"] == milestone',
