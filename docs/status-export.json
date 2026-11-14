@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T22:40:00+08:00",
+  "export_ts": "2026-11-14T22:41:00+08:00",
   "do": "R2737 修复轮：R2733 电池腿闭合为红（BATTERY rc=1·675 行 660 绿 15 红·判据总和恰好 5026·变异零命中），红源=矩阵文档陈旧；证据面只认 RUNNER PASS 腿，故用最近合格腿 R2731 盖章对齐重生矩阵（71526B·675 套件／5026 判据·唯一 R2733 新套件如实标 no-evidence·--check 字节一致退出 0），十五个红套件复跑 15/15 全绿，红腿不冒充绿腿；产品字节继续按 R2168 冻结",
   "ceo_face": {
     "current": "R2737 修复轮：R2733 电池腿闭合为红（BATTERY rc=1·675 行 660 绿 15 红·判据总和恰好 5026·变异零命中），红源=矩阵文档陈旧；证据面只认 RUNNER PASS 腿，故用最近合格腿 R2731 盖章对齐重生矩阵（71526B·675 套件／5026 判据·唯一 R2733 新套件如实标 no-evidence·--check 字节一致退出 0），十五个红套件复跑 15/15 全绿，红腿不冒充绿腿；产品字节继续按 R2168 冻结",
     "latest_artifact": "docs/sandbox-suite-matrix.md 盖章对齐重生（71526B·675 套件／5026 判据·--check 字节一致·2026-11-14 22:3x）＋十五个文档面套件 15/15 全绿＋qa/reconcile-all-R2733.log 红腿证据在盘（1248580B·675 行·15 红全部点名）",
     "last_artifact": "docs/sandbox-suite-matrix.md 盖章对齐重生（71526B·675 套件／5026 判据·--check 字节一致·2026-11-14 22:3x）＋十五个文档面套件 15/15 全绿＋qa/reconcile-all-R2733.log 红腿证据在盘（1248580B·675 行·15 红全部点名）",
-    "next_milestone": "下一窗 48h 内：采纳新电池腿 R2737（本窗已在干净树上派发）→ 用该腿盖章对齐重生矩阵 → R2614 写敏感集在最终提交树重跑 → 四段 followup → 关 reconcile-battery-R2733 → 取 tech 队头 state/queue/tech.md:703 AC-DFOB1（claimable 11）；另欠 export_R2431.py 静默失效钩子修复（已欠五窗）",
+    "next_milestone": "下一窗 48h 内：采纳本窗派发的新电池腿 R2737（pid 31080·stream logs/battery-R2737.stream·目标 675 套件／5026 判据·干净树 head ba3dd285）→ 先用该腿盖章对齐重生矩阵并确认 --check 退出 0 → R2614 写敏感集在最终提交树重跑 → 四段 followup → 关 reconcile-battery-R2733 → 取 tech 队头 state/queue/tech.md:703 AC-DFOB1（claimable 11）；另欠 export_R2431.py 静默失效钩子修复（已欠五窗）",
     "next_milestone_due": "2026-11-16T22:40:00+08:00",
-    "updated_at": "2026-11-14T22:40:00+08:00"
+    "updated_at": "2026-11-14T22:41:00+08:00"
   },
   "depts": [
     {
