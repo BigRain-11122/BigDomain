@@ -6734,6 +6734,12 @@ SUITES = [
     ("os-evidence-capture-precedence-unknown-shape",
      os.path.join("..", "os",
                   "test_evidence_capture_precedence_unknown_shape.py"), 6),
+    # Keeps every published shape list NAMES-ONLY and carries the code no name
+    # can place in its own field (673 -> 674 suites, 5014 -> 5020 criteria).
+    # (AC-EPTYP1..AC-EPTYP6 pinned in state/queue/tech.md:697 at R2725.)
+    ("os-evidence-capture-precedence-shape-typing",
+     os.path.join("..", "os",
+                  "test_evidence_capture_precedence_shape_typing.py"), 6),
     ]
 
 FAILS = 0

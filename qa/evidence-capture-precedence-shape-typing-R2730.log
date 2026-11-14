@@ -1,0 +1,15 @@
+# R2730 evidence-capture-precedence-shape-typing
+# module src/os/evidence_capture_precedence_shape_typing.py
+# suite src/os/test_evidence_capture_precedence_shape_typing.py
+# criteria AC-EPTYP1..AC-EPTYP6 pinned at R2725 tech.md:697
+LEG 1 rc=0 bytes=19215 sha256=11835F727853560A SUITE PASS 6/6
+LEG 2 rc=0 bytes=19215 sha256=11835F727853560A SUITE PASS 6/6
+DIGEST identical=True legs=2
+ADJACENT test_evidence_capture_precedence_unknown_shape.py rc=0 SUITE PASS 6/6
+ADJACENT test_evidence_capture_precedence_derived.py rc=0 SUITE PASS 6/6
+ADJACENT test_evidence_capture_compound_refusal.py rc=0 SUITE PASS 6/6
+ADJACENT test_evidence_capture_tail_guard.py rc=0 SUITE PASS 6/6
+ADJACENT test_evidence_utf8_capture_bom_guard.py rc=0 SUITE PASS 6/6
+ADJACENT suites=5 fails=0
+LIVE fixture=reconcile-all-R2725.log bytes=1227962 digest=8A333900A12698F3 mine=ACCEPT theirs=ACCEPT
+VERDICT RED

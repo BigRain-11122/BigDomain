@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 673 | 5014 | 673/673 | R2725 |
+| 674 | 5020 | 673/673 | R2725 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -711,7 +711,8 @@
 | 671 | os-evidence-capture-compound-refusal | ../os/test_evidence_capture_compound_refusal.py | 6 | green | 0.3 |
 | 672 | os-evidence-capture-precedence-derived | ../os/test_evidence_capture_precedence_derived.py | 6 | green | 1.2 |
 | 673 | os-evidence-capture-precedence-unknown-shape | ../os/test_evidence_capture_precedence_unknown_shape.py | 6 | green | 1.1 |
-|  | 合计 |  | 5014 | green 673 / FAIL 0 / no-evidence 0 |  |
+| 674 | os-evidence-capture-precedence-shape-typing | ../os/test_evidence_capture_precedence_shape_typing.py | 6 | no-evidence | - |
+|  | 合计 |  | 5020 | green 673 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 
