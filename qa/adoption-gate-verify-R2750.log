@@ -1,0 +1,36 @@
+R2750 verification transcript - targeted re-check of the failed-looking tool result
+
+### controls (contract: 9/9 PASS, rc=0) rc=0
+registry suites=676 criteria=5032
+PASS positive-full-green          rc=0 expect=0  VERDICT ADOPT-READY gates=14 failed=0
+PASS negative-closing-rc-1        rc=2 expect=2  VERDICT NOT-READY gates=14 failed=1
+PASS negative-no-evidence         rc=2 expect=2  VERDICT NOT-READY gates=14 failed=12
+PASS negative-crlf-in-evidence    rc=2 expect=2  VERDICT NOT-READY gates=14 failed=1
+PASS negative-missing-suite       rc=2 expect=2  VERDICT NOT-READY gates=14 failed=3
+PASS negative-foreign-name        rc=2 expect=2  VERDICT NOT-READY gates=14 failed=1
+PASS negative-pid-alive           rc=2 expect=2  VERDICT NOT-READY gates=14 failed=1
+PASS negative-unattributed-fail   rc=2 expect=2  VERDICT NOT-READY gates=14 failed=1
+PASS positive-attributed-fail     rc=0 expect=0  VERDICT ADOPT-READY gates=14 failed=0
+SUMMARY PASS pass=9/9
+### live gate (contract: rc=2 means NOT-READY, not a tool failure) rc=2
+FAIL pid-gone               pid=77080 kernel=ALIVE
+FAIL stream-closing-line    closing_rc=None stream_rows=654 stream_fail=4
+FAIL closing-rc-zero        closing_rc=None
+FAIL evidence-exists        qa/reconcile-all-R2747.log
+PASS registry-imported      suites=676 criteria=5032
+FAIL utf8                   unmeasurable: evidence file absent
+FAIL no-bom                 unmeasurable: evidence file absent
+FAIL lf-clean               unmeasurable: evidence file absent
+FAIL suite-count            unmeasurable: evidence file absent
+FAIL unique-names           unmeasurable: evidence file absent
+FAIL name-set-equal         unmeasurable: evidence file absent
+FAIL zero-unattributed-fail-rows unmeasurable: evidence file absent
+FAIL criteria-recount       unmeasurable: evidence file absent
+FAIL evidence-closing-line  unmeasurable: evidence file absent
+VERDICT NOT-READY gates=14 failed=13
+{"failed": ["pid-gone", "stream-closing-line", "closing-rc-zero", "evidence-exists", "utf8", "no-bom", "lf-clean", "suite-count", "unique-names", "name-set-equal", "zero-unattributed-fail-rows", "criteria-recount", "evidence-closing-line"], "ready": false}
+### state canon rc=0
+STATE IO CANON-CLEAN bytes=69443 crlf=82 bare_lf=0 lone_cr=0 log_items=72 off_indent=0 predicted=69443 written=0
+### interpretation
+exit 2 from adoption_preflight.py is the DOCUMENTED NOT-READY code, so the flagged result was the gate doing its job: pid ALIVE, no closing BATTERY rc line, no evidence file. The same gate reads rc=0 on all nine control worlds, which is what proves the logic healthy rather than stuck.
+controls_rc=0 live_rc=2 canon_rc=0
