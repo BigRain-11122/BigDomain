@@ -1,0 +1,31 @@
+R2751 ceo_face_latest read side - pre-registered R2750 criteria C1/C2/C3
+
+SECTION A --self-check private worlds plus shipped equality rc=0
+  PASS W1-round-shipped-identity latest='a-R2751.log (10B) + b-R2751-R2751.log (20B)' shipped='a-R2751.log (10B) + b-R2751-R2751.log (20B)'
+  PASS W1-round-criteria {"last_artifact": "a-R2751.log (10B) + b-R2751-R2751.log (20B)", "latest_artifact": "a-R2751.log (10B) + b-R2751-R2751.log (20B)", "mode": "round"}
+  PASS W2-wait-shipped-identity latest='none landed yet for R2751' shipped='none landed yet for R2751'
+  PASS W2-wait-criteria {"last_artifact": "R2750: y-R2750.log (7B)", "latest_artifact": "none landed yet for R2751", "mode": "fallback"}
+  PASS W3-empty-shipped-identity latest='none landed yet for R2751' shipped='none landed yet for R2751'
+  PASS W3-empty-criteria {"last_artifact": "none landed yet for R2751", "latest_artifact": "none landed yet for R2751", "mode": "empty"}
+  PASS W4-future-guard-shipped-identity latest='none landed yet for R2751' shipped='none landed yet for R2751'
+  PASS W4-future-guard-criteria {"last_artifact": "none landed yet for R2751", "latest_artifact": "none landed yet for R2751", "mode": "empty"}
+  PASS W5-cap-shipped-identity latest='none landed yet for R2751' shipped='none landed yet for R2751'
+  PASS W5-cap-criteria {"last_artifact": "R2750: f1-R2750.log (1B) + f2-R2750.log (2B) + f3-R2750.log (3B) + f4-R2750.log (4B)", "latest_artifact": "none landed yet for R2751", "mode": "fallback"}
+  PASS W2-names-prior-round last='R2750: y-R2750.log (7B)'
+  PASS W4-does-not-name-future last='none landed yet for R2751'
+  PASS W5-four-entry-cap last='R2750: f1-R2750.log (1B) + f2-R2750.log (2B) + f3-R2750.log (3B) + f4-R2750.log (4B)'
+  PASS LIVE-round-identity-2750 latest='adoption-gate-verify-R2750.log (2645B)' shipped='adoption-gate-verify-R2750.log (2645B)'
+  SELF-CHECK 14/14 rc=0 live_tick=2750
+
+SECTION B --check on the real tree tick 2751 rc=0
+  PASS C1-round-identity not applicable: no qa artifact for this round
+  PASS C2-wait-fallback strict none-line kept while last_artifact names a prior round
+  PASS C3-never-blank prior qa artifacts exist=True
+  FIELDS {"last_artifact": "R2750: adoption-gate-verify-R2750.log (2645B)", "latest_artifact": "none landed yet for R2751", "mode": "fallback"}
+
+SECTION C live fields at tick 2751
+  LATEST none landed yet for R2751
+  LAST   R2750: adoption-gate-verify-R2750.log (2645B)
+  MODE   fallback
+  QA_FILES 3044
+
