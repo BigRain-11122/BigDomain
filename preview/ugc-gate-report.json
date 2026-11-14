@@ -1,0 +1,207 @@
+{
+  "aigc": {
+    "found": true,
+    "line": 146,
+    "token": "ai_generated"
+  },
+  "call_sites": [
+    "src/sandbox/frontdoor.py:626",
+    "src/sandbox/journey_demo.py:90",
+    "src/sandbox/lobby/msgsec_stub.py:40",
+    "src/sandbox/lobby/msgsec_stub.py:123"
+  ],
+  "contract": {
+    "blocked_on": "CEO physical item: mini-program appid/secret",
+    "endpoint": "https://api.weixin.qq.com/wxa/msg_sec_check",
+    "fail_closed": "unwired or error -> refuse serve (E_GATE_OFFLINE / E_MSSC_UNWIRED)",
+    "provider_prod": "msgSecCheck-v2",
+    "query": [
+      "access_token"
+    ],
+    "request_keys": [
+      "content",
+      "version",
+      "scene",
+      "openid"
+    ],
+    "response_keys": [
+      "errcode",
+      "errmsg",
+      "trace_id",
+      "result"
+    ],
+    "result_keys": [
+      "suggest",
+      "label"
+    ],
+    "suggest_values": [
+      "pass",
+      "review",
+      "risky"
+    ],
+    "transport": "POST"
+  },
+  "criteria": [
+    {
+      "id": "AC-UGR1",
+      "text": "report renders as HTML and JSON, both non-empty, and every measured case row appears in the HTML exactly once"
+    },
+    {
+      "id": "AC-UGR2",
+      "text": "every construction that MUST refuse is executed and recorded as blocked, and the one construction that does NOT refuse is recorded as NOT BLOCKED with its own status rather than folded into a pass count"
+    },
+    {
+      "id": "AC-UGR3",
+      "text": "every rendered decision equals the shipped decision_for(stub, resp) recomputed by the caller, never a typed literal"
+    },
+    {
+      "id": "AC-UGR4",
+      "text": "the production blocker and provider name come from the shipped contract(), not from this script"
+    },
+    {
+      "id": "AC-UGR5",
+      "text": "the AIGC flag face is quoted from the shipped server source, or reported UNVERIFIED when that source does not carry it"
+    },
+    {
+      "id": "AC-UGR6",
+      "text": "stdlib only, ASCII source, read-only on src/, writes only under preview/ and qa/, exit 0 on pass and 2 on any failed criterion"
+    },
+    {
+      "id": "AC-UGR7",
+      "text": "the shipped parity face msgsec_stub.py --parity reads PARITY-OK and its own line is carried verbatim"
+    },
+    {
+      "id": "AC-UGR8",
+      "text": "the constructor hole is measured at its call sites by scanning non-test sandbox sources, and the report states LATENT or LIVE with the sites named, never a bare assertion"
+    },
+    {
+      "id": "AC-SGV1",
+      "text": "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"
+    },
+    {
+      "id": "AC-SGV2",
+      "text": "PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists"
+    },
+    {
+      "id": "AC-SGV3",
+      "text": "PRE-REGISTERED: tools/ugc_gate_report.py --check reads VERDICT PASS with AC-UGR2 counting 4 must-refuse constructions and zero measured holes"
+    }
+  ],
+  "gate_order": [
+    "gate 1 content safety (msgSecCheck / wordlist mock)",
+    "gate 2 non-advisory (profit-promise ban)",
+    "gate 3 rate limit (server.py sliding window)"
+  ],
+  "generated_by": "tools/ugc_gate_report.py",
+  "hole": {
+    "attempt": "SecGate([], [])",
+    "blocked": false,
+    "code": null,
+    "kind": "measured-hole",
+    "raised": null
+  },
+  "hole_status": "LIVE",
+  "parity": {
+    "line": "MSGSEC PARITY cases=14 stub_mismatch=0 gate_agree=14 verdict=PARITY-OK",
+    "ok": true,
+    "rc": 0
+  },
+  "proof": [
+    {
+      "attempt": "SecGate.from_config({})",
+      "blocked": true,
+      "code": "E_GATE_OFFLINE",
+      "kind": "must-refuse",
+      "raised": "GateOfflineError"
+    },
+    {
+      "attempt": "MsgSecStub([], [])",
+      "blocked": true,
+      "code": "E_GATE_OFFLINE",
+      "kind": "must-refuse",
+      "raised": "GateOfflineError"
+    },
+    {
+      "attempt": "MsgSecStub.from_config({})",
+      "blocked": true,
+      "code": "E_GATE_OFFLINE",
+      "kind": "must-refuse",
+      "raised": "GateOfflineError"
+    },
+    {
+      "attempt": "SecGate([], [])",
+      "blocked": false,
+      "code": null,
+      "kind": "measured-hole",
+      "raised": null
+    }
+  ],
+  "rows": [
+    {
+      "billable": false,
+      "decision": "SERVE",
+      "decision_recomputed": "SERVE",
+      "gate_hit": null,
+      "kind": "clean",
+      "label": 100,
+      "mock": true,
+      "origin": "literal control case",
+      "provider": "stub",
+      "suggest": "pass",
+      "text_len": 19,
+      "trace_id": "0505c10fb30287fcef537c3c617c777b"
+    },
+    {
+      "billable": false,
+      "decision": "REFUSE",
+      "decision_recomputed": "REFUSE",
+      "gate_hit": {
+        "gate": 1,
+        "word_len": 2
+      },
+      "kind": "forbidden",
+      "label": 20001,
+      "mock": true,
+      "origin": "gate.forbidden_words[0]",
+      "provider": "stub",
+      "suggest": "risky",
+      "text_len": 12,
+      "trace_id": "af814a49e809db2278350e5371c41ae9"
+    },
+    {
+      "billable": false,
+      "decision": "REVIEW",
+      "decision_recomputed": "REVIEW",
+      "gate_hit": {
+        "gate": 2,
+        "word_len": 2
+      },
+      "kind": "advisory",
+      "label": 20002,
+      "mock": true,
+      "origin": "gate.advisory_ban_words[0]",
+      "provider": "stub",
+      "suggest": "review",
+      "text_len": 12,
+      "trace_id": "cb6fc8268b8d028093bd13725c1eb6c0"
+    },
+    {
+      "billable": false,
+      "decision": "SERVE",
+      "decision_recomputed": "SERVE",
+      "gate_hit": null,
+      "kind": "empty",
+      "label": 100,
+      "mock": true,
+      "origin": "whitespace-only control",
+      "provider": "stub",
+      "suggest": "pass",
+      "text_len": 3,
+      "trace_id": "1ed800037db5d9763fef03c96ea6912c"
+    }
+  ],
+  "wordlist": {
+    "advisory": 7,
+    "forbidden": 6
+  }
+}

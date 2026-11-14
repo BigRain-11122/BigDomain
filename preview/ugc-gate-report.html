@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>BigDomain - UGC content-safety gate face (P-47 item 3)</title>
+<style>
+body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;margin:0;background:#0f1216;color:#dbe2ea}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:22px;margin:0 0 4px;letter-spacing:.2px}
+h2{font-size:15px;margin:32px 0 10px;color:#8fb8e8;text-transform:uppercase;letter-spacing:.8px}
+.sub{color:#7d8b9a;font-size:13px;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#151a20;border-radius:6px;overflow:hidden}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #222a33}
+th{background:#1b222a;color:#9fb0c0;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:#a9b7c6}
+.serve{color:#54b06a;font-weight:600}.review{color:#d8a640;font-weight:600}.refuse{color:#d9605a;font-weight:600}
+.card{background:#151a20;border:1px solid #222a33;border-radius:6px;padding:14px 16px;margin:10px 0;font-size:13px;line-height:1.65}
+ul{margin:6px 0 0 18px;padding:0}li{margin:4px 0;font-size:13px;line-height:1.6}
+.note{background:#1a1512;border-color:#3a2a1e;color:#d7b58c}
+.hole{background:#1d1416;border-color:#4a2028;color:#e8b4ae}
+.hole b{color:#ff8a80}
+.foot{margin-top:36px;padding-top:14px;border-top:1px solid #222a33;color:#6d7b8a;font-size:12px;line-height:1.7}
+</style></head><body><div class="wrap">
+<h1>UGC content-safety gate face</h1>
+<div class="sub">P-47 item 3 - UGC + msgSecCheck pipeline. Every number below was measured by calling the shipped
+modules at render time. Nothing is a mock-up.</div>
+
+<h2>Gate order (constitutional)</h2>
+<div class="card"><ul><li>gate 1 content safety (msgSecCheck / wordlist mock)</li><li>gate 2 non-advisory (profit-promise ban)</li><li>gate 3 rate limit (server.py sliding window)</li></ul></div>
+
+<h2>Wordlists in force</h2>
+<div class="card">forbidden_words = <b>6</b> entries &nbsp;|&nbsp; advisory_ban_words = <b>7</b> entries
+<div class="sub" style="margin:8px 0 0">Loaded from <span class="mono">src/sandbox/lobby/config.json</span>.
+Wordlists are data, never code literals - the source stays ASCII.</div></div>
+
+<h2>Live submissions through the shipped gate</h2>
+<table><tr><th>case</th><th>text source</th><th>len</th><th>suggest</th><th>label</th><th>gate hit</th><th>trace_id</th><th>decision</th></tr>
+<tr><td>clean</td><td class='mono'>literal control case</td><td>19</td><td>pass</td><td>100</td><td>-</td><td class='mono'>0505c10fb30287fc</td><td class='serve'>SERVE</td></tr>
+<tr><td>forbidden</td><td class='mono'>gate.forbidden_words[0]</td><td>12</td><td>risky</td><td>20001</td><td>gate 1</td><td class='mono'>af814a49e809db22</td><td class='refuse'>REFUSE</td></tr>
+<tr><td>advisory</td><td class='mono'>gate.advisory_ban_words[0]</td><td>12</td><td>review</td><td>20002</td><td>gate 2</td><td class='mono'>cb6fc8268b8d0280</td><td class='review'>REVIEW</td></tr>
+<tr><td>empty</td><td class='mono'>whitespace-only control</td><td>3</td><td>pass</td><td>100</td><td>-</td><td class='mono'>1ed800037db5d976</td><td class='serve'>SERVE</td></tr></table>
+<div class="card"><b>Decision map</b> is the shipped <span class="mono">gate_page.decision_for(stub, resp)</span>:
+risky &rarr; REFUSE, review &rarr; human queue REVIEW, pass &rarr; SERVE. "review" is never a pass.</div>
+
+<h2>Fail-closed law, executed</h2>
+<table><tr><th>construction</th><th>class</th><th>raised</th><th>code</th><th>outcome</th></tr><tr><td class='mono'>SecGate.from_config({})</td><td>must-refuse</td><td>GateOfflineError</td><td class='mono'>E_GATE_OFFLINE</td><td class='refuse'>BLOCKED</td></tr>
+<tr><td class='mono'>MsgSecStub([], [])</td><td>must-refuse</td><td>GateOfflineError</td><td class='mono'>E_GATE_OFFLINE</td><td class='refuse'>BLOCKED</td></tr>
+<tr><td class='mono'>MsgSecStub.from_config({})</td><td>must-refuse</td><td>GateOfflineError</td><td class='mono'>E_GATE_OFFLINE</td><td class='refuse'>BLOCKED</td></tr>
+<tr><td class='mono'>SecGate([], [])</td><td>measured-hole</td><td></td><td class='mono'></td><td class='serve'>NOT BLOCKED</td></tr></table>
+<div class='card hole'><b>MEASURED HOLE - SecGate([], []) (LIVE)</b><br><span class='mono'>SecGate([], [])</span> constructs a gate with no wordlists and does <b>not</b> refuse, so that object approves every string. The emptiness refusal lives in <span class='mono'>from_config</span> only.<br><br>Non-test call sites that construct the gate directly and would therefore skip that refusal:<ul><li><span class='mono'>src/sandbox/frontdoor.py:626</span></li><li><span class='mono'>src/sandbox/journey_demo.py:90</span></li><li><span class='mono'>src/sandbox/lobby/msgsec_stub.py:40</span></li><li><span class='mono'>src/sandbox/lobby/msgsec_stub.py:123</span></li></ul><br>Status: <b>LIVE</b> - every site above passes lists read from config today, so the door is shut only because the config is not empty, not because the type forbids an empty gate.<br><br>Repair pre-registered, NOT applied in this window: src/ bytes are frozen under the live battery leg, so the fix is written down as AC-SGV1..AC-SGV3 rather than landed.</div>
+<div class="card note"><b>A gate that cannot answer never reads as pass.</b> Every row above was actually
+constructed and actually raised during this render. In production an unwired gate refuses to start the server.</div>
+
+<h2>Production contract (shipped)</h2>
+<div class="card">
+provider in production: <span class="mono">msgSecCheck-v2</span><br>
+endpoint: <span class="mono">https://api.weixin.qq.com/wxa/msg_sec_check</span> (POST)<br>
+request keys: <span class="mono">content, version, scene, openid</span><br>
+response keys: <span class="mono">errcode, errmsg, trace_id, result</span><br>
+suggest vocabulary: <span class="mono">pass, review, risky</span><br>
+fail-closed rule: unwired or error -&gt; refuse serve (E_GATE_OFFLINE / E_MSSC_UNWIRED)<br>
+<b>blocked on: CEO physical item: mini-program appid/secret</b>
+</div>
+
+<h2>Stub / gate parity</h2>
+<div class="card"><span class="mono">msgsec_stub.py --parity</span> &rarr; rc=<b>0</b><br>
+<span class="mono">MSGSEC PARITY cases=14 stub_mismatch=0 gate_agree=14 verdict=PARITY-OK</span></div>
+
+<h2>AIGC marking face</h2>
+<div class="card">server-authoritative <span class='mono'>ai_generated</span> at server.py:146 (client-supplied values ignored)</div>
+
+<h2>Criteria satisfied by this document (pre-registered before the code)</h2>
+<div class="card"><ul><li><b>AC-UGR1</b> report renders as HTML and JSON, both non-empty, and every measured case row appears in the HTML exactly once</li><li><b>AC-UGR2</b> every construction that MUST refuse is executed and recorded as blocked, and the one construction that does NOT refuse is recorded as NOT BLOCKED with its own status rather than folded into a pass count</li><li><b>AC-UGR3</b> every rendered decision equals the shipped decision_for(stub, resp) recomputed by the caller, never a typed literal</li><li><b>AC-UGR4</b> the production blocker and provider name come from the shipped contract(), not from this script</li><li><b>AC-UGR5</b> the AIGC flag face is quoted from the shipped server source, or reported UNVERIFIED when that source does not carry it</li><li><b>AC-UGR6</b> stdlib only, ASCII source, read-only on src/, writes only under preview/ and qa/, exit 0 on pass and 2 on any failed criterion</li><li><b>AC-UGR7</b> the shipped parity face msgsec_stub.py --parity reads PARITY-OK and its own line is carried verbatim</li><li><b>AC-UGR8</b> the constructor hole is measured at its call sites by scanning non-test sandbox sources, and the report states LATENT or LIVE with the sites named, never a bare assertion</li><li><b>AC-SGV1</b> PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too</li><li><b>AC-SGV2</b> PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists</li><li><b>AC-SGV3</b> PRE-REGISTERED: tools/ugc_gate_report.py --check reads VERDICT PASS with AC-UGR2 counting 4 must-refuse constructions and zero measured holes</li></ul></div>
+
+<div class="foot">
+Regenerate: <span class="mono">python tools/ugc_gate_report.py</span><br>
+Verify: <span class="mono">python tools/ugc_gate_report.py --check</span><br>
+Scope: sandbox only. The production transport needs the WeChat mini-program appid/secret, a CEO physical item
+(account domain is never self-served). Read-only on src/.
+</div>
+</div></body></html>

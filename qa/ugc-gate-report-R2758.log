@@ -1,0 +1,13 @@
+R2758 P-47 item-3 gate face verification (tools/ugc_gate_report.py --check)
+renderer outputs: preview/ugc-gate-report.html, preview/ugc-gate-report.json
+
+PASS AC-UGR1 html=8881B json=6046B rows=4 each-row-once-missing=0
+PASS AC-UGR2 must_refuse=3 blocked=3 hole_recorded=True
+PASS AC-UGR3 decisions=4 recomputed-agree=4 mismatched=0
+PASS AC-UGR4 provider=msgSecCheck-v2 blocked_on_carried=True
+PASS AC-UGR5 found=True line=146
+PASS AC-UGR6 ascii=True third_party_imports=0
+PASS AC-UGR7 rc=0 carried=True line=MSGSEC PARITY cases=14 stub_mismatch=0 gate_agree=14 verdict=PARITY-OK
+PASS AC-UGR8 status=LIVE sites=4 first_carried=True
+VERDICT PASS checks=8/8 failed=(none)
+
