@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-13 04:33 +08:00
+- 生成时间: generated: 2026-11-14 22:25 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2731.log
 - 印章来源: --stamp-from docs/sandbox-suite-matrix.md
 - 状态证据: reconcile-all-R2731.log (RUNNER PASS 674/674 suites green, reconcile controls 7/7, 6410.0s)
@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 674 | 5020 | 674/674 | R2731 |
+| 675 | 5026 | 674/674 | R2731 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -712,7 +712,8 @@
 | 672 | os-evidence-capture-precedence-derived | ../os/test_evidence_capture_precedence_derived.py | 6 | green | 1.2 |
 | 673 | os-evidence-capture-precedence-unknown-shape | ../os/test_evidence_capture_precedence_unknown_shape.py | 6 | green | 1.4 |
 | 674 | os-evidence-capture-precedence-shape-typing | ../os/test_evidence_capture_precedence_shape_typing.py | 6 | green | 1.7 |
-|  | 合计 |  | 5020 | green 674 / FAIL 0 / no-evidence 0 |  |
+| 675 | os-closeout-export-parity-wire-binding-consumer | ../os/test_closeout_export_parity_wire_binding_consumer.py | 6 | no-evidence | - |
+|  | 合计 |  | 5026 | green 674 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 
