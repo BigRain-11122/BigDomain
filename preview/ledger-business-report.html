@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>代币双式账本业务报告</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--ok:#1f7a4d;--bad:#a4302c;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1040px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12.5px}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+.kpi{display:flex;gap:12px;flex-wrap:wrap}
+.kpi div{flex:1 1 160px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.ok{color:var(--ok);font-weight:650}.bad{color:var(--bad);font-weight:650}
+pre{background:#0f1419;color:#dfe4ea;padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:12.5px;line-height:1.5}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;font-size:13px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+</style></head><body><main>
+<h1>代币双式账本业务报告</h1>
+<div class=meta>BigDomain · P-47 二·沙箱实测件 · 生成时间 2026-11-14 21:58:07Z · 数据库 <code>preview/ledger-demo.db</code> · 由库内分录现算·非手填</div>
+
+<div class=card><div class=kpi>
+<div><span>已铸出</span><b>300</b></div>
+<div><span>用户流通中</span><b>75</b></div>
+<div><span>池余额</span><b>225</b></div>
+<div><span>复式零和 Σ全部账户 = 0</span><b class=ok>0</b></div>
+</div></div>
+
+<h2>二、账户表（物化余额 vs 分录派生）</h2>
+<div class=card><table>
+<tr><th>账户</th><th>类别</th><th class=n>余额</th><th class=n>派生余额</th><th class=n>一致</th></tr>
+<tr><td><code>equity:auth</code></td><td>equity</td><td class=n>-300</td><td class=n>-300</td><td class=n>✓</td></tr>
+<tr><td><code>pool:reserve</code></td><td>pool</td><td class=n>45</td><td class=n>45</td><td class=n>✓</td></tr>
+<tr><td><code>pool:share</code></td><td>pool</td><td class=n>180</td><td class=n>180</td><td class=n>✓</td></tr>
+<tr><td><code>usr:avatar-001</code></td><td>usr</td><td class=n>75</td><td class=n>75</td><td class=n>✓</td></tr>
+<tr><td><code>usr:avatar-002</code></td><td>usr</td><td class=n>0</td><td class=n>0</td><td class=n>✓</td></tr>
+</table></div>
+
+<h2>三、交易与双式分录</h2>
+<div class=card><table>
+<tr><th>tx</th><th>类型</th><th>来源引用</th><th>分录</th><th class=n>AI</th></tr>
+<tr><td><code>c5a4cab6a41e</code></td><td>mint</td><td><code>seed-mint-001</code></td><td>debit <code>equity:auth</code> 300<br>credit <code>pool:share</code> 300</td><td class=n>-</td></tr>
+<tr><td><code>1b3493aef582</code></td><td>share</td><td><code>order-19001</code></td><td>debit <code>pool:share</code> 120<br>credit <code>usr:avatar-001</code> 120</td><td class=n>-</td></tr>
+<tr><td><code>82ca476006ba</code></td><td>spend</td><td><code>order-19002</code></td><td>debit <code>usr:avatar-001</code> 45<br>credit <code>pool:reserve</code> 45</td><td class=n>-</td></tr>
+</table></div>
+
+<h2>四、对账八查（直接调用现役 reconcile.py）</h2>
+<div class=card><pre>1 double-entry-balance PASS
+2 balance-sign-law PASS
+3 materialized-vs-derived PASS
+4 zero-sum-and-mint-identity PASS
+5 ref-idempotence PASS
+6 content-gate-refs PASS
+7 orphan-entries PASS
+8 cap-scan-and-adjust-lines PASS
+RECONCILE PASS (8/8 checks)</pre><div class=ok>RECONCILE PASS</div></div>
+
+<h2>五、拒绝注入（负向验证）</h2>
+<div class=card><table>
+<tr><th>场景</th><th class=n>错码</th><th>详情</th><th class=n>拦截</th></tr>
+<tr><td>same-ref share</td><td class=n>E_REF_DUPLICATE</td><td>E_REF_DUPLICATE: UNIQUE constraint failed: ledger_tx.ref, ledger_tx.ref_type</td><td class=n>✓</td></tr>
+<tr><td>overspend</td><td class=n>E_NEGATIVE_BALANCE</td><td>E_NEGATIVE_BALANCE: E_NEGATIVE_BALANCE</td><td class=n>✓</td></tr>
+</table></div>
+
+<h2>六、常驻风险提示</h2>
+<div class=card><div class=disclaimer>非投顾常驻提示：站内代币为平台内消费型虚拟权益，仅可用于站内消费（皮肤/房间/加急/特效/数字印记），不可提现、不可兑换法币、不可转赠场外，非投资品、非证券、非存款，平台不作任何收益承诺；请独立判断，风险自担。（常驻展示·不可折叠）</div></div>
+
+<h2>七、复现</h2>
+<div class=card><code>python tools/ledger_business_report.py</code></div>
+<footer>BigDomain OSLoop · 2026-11-14 21:58:07Z · 本页由 tools/ledger_business_report.py 生成，不手改</footer>
+</main></body></html>

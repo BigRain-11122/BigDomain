@@ -1,0 +1,50 @@
+{
+ "generated_utc": "2026-11-14 21:58:07Z",
+ "db": "preview/ledger-demo.db",
+ "accounts": [
+  {
+   "account_id": "equity:auth",
+   "census_avatar_id": null,
+   "balance": -300
+  },
+  {
+   "account_id": "pool:reserve",
+   "census_avatar_id": null,
+   "balance": 45
+  },
+  {
+   "account_id": "pool:share",
+   "census_avatar_id": null,
+   "balance": 180
+  },
+  {
+   "account_id": "usr:avatar-001",
+   "census_avatar_id": "avatar-001",
+   "balance": 75
+  },
+  {
+   "account_id": "usr:avatar-002",
+   "census_avatar_id": "avatar-002",
+   "balance": 0
+  }
+ ],
+ "tx_count": 3,
+ "entry_count": 6,
+ "issued": 300,
+ "reconcile_rc": 0,
+ "rejected": [
+  {
+   "case": "same-ref share",
+   "code": "E_REF_DUPLICATE",
+   "detail": "E_REF_DUPLICATE: UNIQUE constraint failed: ledger_tx.ref, ledger_tx.ref_type",
+   "blocked": true
+  },
+  {
+   "case": "overspend",
+   "code": "E_NEGATIVE_BALANCE",
+   "detail": "E_NEGATIVE_BALANCE: E_NEGATIVE_BALANCE",
+   "blocked": true
+  }
+ ],
+ "report": "preview/ledger-business-report.html"
+}
