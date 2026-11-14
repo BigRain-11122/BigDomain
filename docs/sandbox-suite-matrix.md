@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 675 | 5026 | 675/675 | R2739 |
+| 676 | 5032 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -713,7 +713,8 @@
 | 673 | os-evidence-capture-precedence-unknown-shape | ../os/test_evidence_capture_precedence_unknown_shape.py | 6 | green | 1.2 |
 | 674 | os-evidence-capture-precedence-shape-typing | ../os/test_evidence_capture_precedence_shape_typing.py | 6 | green | 2.2 |
 | 675 | os-closeout-export-parity-wire-binding-consumer | ../os/test_closeout_export_parity_wire_binding_consumer.py | 6 | green | 14.6 |
-|  | 合计 |  | 5026 | green 675 / FAIL 0 / no-evidence 0 |  |
+| 676 | os-export-parity-difference-order-field | ../os/test_export_parity_difference_order_field.py | 6 | no-evidence | - |
+|  | 合计 |  | 5032 | green 675 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

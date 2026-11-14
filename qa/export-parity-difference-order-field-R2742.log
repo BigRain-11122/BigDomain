@@ -1,0 +1,120 @@
+EXPORT PARITY DIFFERENCE ORDER FIELD R2742
+SUITE test_export_parity_difference_order_field.py
+LEG 1 rc=0 digest=80B8E965A2310B84 SUITE PASS 6/6
+PASS AC-DFOB1 the face holds the SHIPPED module object, not a copy
+PASS AC-DFOB1 a patched shipped law moves differs ('PATCHED-FIELD')
+PASS AC-DFOB1 the published answer equals first_difference on every order pair, byte for byte
+PASS AC-DFOB1 the restored law answers the real field (x)
+PASS AC-DFOB2 shipped law reads the shape word on '{"x": 1, "y": 2}' ('bytes')
+PASS AC-DFOB2 forward order names the first moved key 'x' ('x')
+PASS AC-DFOB2 the OTHER order names its own first key 'y' ('y')
+PASS AC-DFOB2 the two orders do not fake one answer
+PASS AC-DFOB2 shipped law reads the shape word on '{"a": 1, "b": 2, "c": 3}' ('bytes')
+PASS AC-DFOB2 forward order names the first moved key 'b' ('b')
+PASS AC-DFOB2 the OTHER order names its own first key 'c' ('c')
+PASS AC-DFOB2 the two orders do not fake one answer
+PASS AC-DFOB2 shipped law reads the shape word on '{"a": {"x": 1, "y": 2}}' ('bytes')
+PASS AC-DFOB2 forward order names the first moved key 'a.x' ('a.x')
+PASS AC-DFOB2 the OTHER order names its own first key 'a.y' ('a.y')
+PASS AC-DFOB2 the two orders do not fake one answer
+PASS AC-DFOB2 shipped law reads the shape word on '{"rows": [{"x": 1, "y": 2}]}' ('bytes')
+PASS AC-DFOB2 forward order names the first moved key 'rows[0].x' ('rows[0].x')
+PASS AC-DFOB2 the OTHER order names its own first key 'rows[0].y' ('rows[0].y')
+PASS AC-DFOB2 the two orders do not fake one answer
+PASS AC-DFOB3 differs stays the shipped field 'y' ('y')
+PASS AC-DFOB3 no order claim rides on a value difference ('')
+PASS AC-DFOB3 the verdict reads VALUE ('VALUE')
+PASS AC-DFOB3 differs stays the shipped field 'a.y' ('a.y')
+PASS AC-DFOB3 no order claim rides on a value difference ('')
+PASS AC-DFOB3 the verdict reads VALUE ('VALUE')
+PASS AC-DFOB3 differs stays the shipped field 'y' ('y')
+PASS AC-DFOB3 no order claim rides on a value difference ('')
+PASS AC-DFOB3 the verdict reads VALUE ('VALUE')
+PASS AC-DFOB3 differs stays the shipped field 'list[2]' ('list[2]')
+PASS AC-DFOB3 no order claim rides on a value difference ('')
+PASS AC-DFOB3 the verdict reads VALUE ('VALUE')
+PASS AC-DFOB3 reorder PLUS a value difference names the value field and claims no order ('y'/'')
+PASS AC-DFOB4 byte-identical text reads no difference ('{"x": 1, "y": 2}')
+PASS AC-DFOB4 byte-identical text reads no difference ('not json at all')
+PASS AC-DFOB4 byte-identical text reads no difference ('')
+PASS AC-DFOB4 an unparseable pair keeps the shipped shape word ('bytes')
+PASS AC-DFOB4 an unparseable pair is never given an order field (''/'UNPARSEABLE')
+PASS AC-DFOB4 a whitespace-only difference is named FORMAT and claims no moved key ('FORMAT'/'')
+PASS AC-DFOB5 every open() call in the face is read-binary ([])
+PASS AC-DFOB5 no write/remove/rename call exists ([])
+PASS AC-DFOB5 the face imports no clock and no network ([])
+PASS AC-DFOB5 the CLI compares and names the moved key (rc=0, 'os-export-parity-difference-order-field verdict=ORDER-ONLY differs=bytes order_field=x order_only=yes left_bytes=17 right_bytes=17')
+PASS AC-DFOB5 the CLI created no file in the tree it read (['left.json', 'right.json'])
+PASS AC-DFOB5 both sources are byte-identical after the run
+PASS AC-DFOB5 a missing source refuses at its own exit code (2, 'REFUSED code=E_DFOB_NO_SOURCE detail=absent.json')
+PASS AC-DFOB6 the module source is pure ASCII (7051 bytes)
+PASS AC-DFOB6 no clock, no network, no shell ([])
+PASS AC-DFOB6 every import is stdlib or the shipped law ([])
+PASS AC-DFOB6 the registry carries exactly one label row (1)
+PASS AC-DFOB6 the registry carries exactly one suite row (1)
+PASS AC-DFOB6 the shipped parity-wire row is untouched (1)
+PASS AC-DFOB6 this suite exists on disk
+PASS AC-DFOB6 six criteria are declared
+PASS AC-DFOB6 the face carries its own reconcile label ('os-export-parity-difference-order-field')
+SUITE PASS 6/6
+LEG 2 rc=0 digest=80B8E965A2310B84 SUITE PASS 6/6
+PASS AC-DFOB1 the face holds the SHIPPED module object, not a copy
+PASS AC-DFOB1 a patched shipped law moves differs ('PATCHED-FIELD')
+PASS AC-DFOB1 the published answer equals first_difference on every order pair, byte for byte
+PASS AC-DFOB1 the restored law answers the real field (x)
+PASS AC-DFOB2 shipped law reads the shape word on '{"x": 1, "y": 2}' ('bytes')
+PASS AC-DFOB2 forward order names the first moved key 'x' ('x')
+PASS AC-DFOB2 the OTHER order names its own first key 'y' ('y')
+PASS AC-DFOB2 the two orders do not fake one answer
+PASS AC-DFOB2 shipped law reads the shape word on '{"a": 1, "b": 2, "c": 3}' ('bytes')
+PASS AC-DFOB2 forward order names the first moved key 'b' ('b')
+PASS AC-DFOB2 the OTHER order names its own first key 'c' ('c')
+PASS AC-DFOB2 the two orders do not fake one answer
+PASS AC-DFOB2 shipped law reads the shape word on '{"a": {"x": 1, "y": 2}}' ('bytes')
+PASS AC-DFOB2 forward order names the first moved key 'a.x' ('a.x')
+PASS AC-DFOB2 the OTHER order names its own first key 'a.y' ('a.y')
+PASS AC-DFOB2 the two orders do not fake one answer
+PASS AC-DFOB2 shipped law reads the shape word on '{"rows": [{"x": 1, "y": 2}]}' ('bytes')
+PASS AC-DFOB2 forward order names the first moved key 'rows[0].x' ('rows[0].x')
+PASS AC-DFOB2 the OTHER order names its own first key 'rows[0].y' ('rows[0].y')
+PASS AC-DFOB2 the two orders do not fake one answer
+PASS AC-DFOB3 differs stays the shipped field 'y' ('y')
+PASS AC-DFOB3 no order claim rides on a value difference ('')
+PASS AC-DFOB3 the verdict reads VALUE ('VALUE')
+PASS AC-DFOB3 differs stays the shipped field 'a.y' ('a.y')
+PASS AC-DFOB3 no order claim rides on a value difference ('')
+PASS AC-DFOB3 the verdict reads VALUE ('VALUE')
+PASS AC-DFOB3 differs stays the shipped field 'y' ('y')
+PASS AC-DFOB3 no order claim rides on a value difference ('')
+PASS AC-DFOB3 the verdict reads VALUE ('VALUE')
+PASS AC-DFOB3 differs stays the shipped field 'list[2]' ('list[2]')
+PASS AC-DFOB3 no order claim rides on a value difference ('')
+PASS AC-DFOB3 the verdict reads VALUE ('VALUE')
+PASS AC-DFOB3 reorder PLUS a value difference names the value field and claims no order ('y'/'')
+PASS AC-DFOB4 byte-identical text reads no difference ('{"x": 1, "y": 2}')
+PASS AC-DFOB4 byte-identical text reads no difference ('not json at all')
+PASS AC-DFOB4 byte-identical text reads no difference ('')
+PASS AC-DFOB4 an unparseable pair keeps the shipped shape word ('bytes')
+PASS AC-DFOB4 an unparseable pair is never given an order field (''/'UNPARSEABLE')
+PASS AC-DFOB4 a whitespace-only difference is named FORMAT and claims no moved key ('FORMAT'/'')
+PASS AC-DFOB5 every open() call in the face is read-binary ([])
+PASS AC-DFOB5 no write/remove/rename call exists ([])
+PASS AC-DFOB5 the face imports no clock and no network ([])
+PASS AC-DFOB5 the CLI compares and names the moved key (rc=0, 'os-export-parity-difference-order-field verdict=ORDER-ONLY differs=bytes order_field=x order_only=yes left_bytes=17 right_bytes=17')
+PASS AC-DFOB5 the CLI created no file in the tree it read (['left.json', 'right.json'])
+PASS AC-DFOB5 both sources are byte-identical after the run
+PASS AC-DFOB5 a missing source refuses at its own exit code (2, 'REFUSED code=E_DFOB_NO_SOURCE detail=absent.json')
+PASS AC-DFOB6 the module source is pure ASCII (7051 bytes)
+PASS AC-DFOB6 no clock, no network, no shell ([])
+PASS AC-DFOB6 every import is stdlib or the shipped law ([])
+PASS AC-DFOB6 the registry carries exactly one label row (1)
+PASS AC-DFOB6 the registry carries exactly one suite row (1)
+PASS AC-DFOB6 the shipped parity-wire row is untouched (1)
+PASS AC-DFOB6 this suite exists on disk
+PASS AC-DFOB6 six criteria are declared
+PASS AC-DFOB6 the face carries its own reconcile label ('os-export-parity-difference-order-field')
+SUITE PASS 6/6
+ADJACENT FAIL test_export_closeout_gate_parity.py rc=0 SUITE export_closeout_gate_parity (R2377) criteria=6
+ADJACENT PASS test_closeout_export_parity_wire_binding_consumer.py rc=0 SUITE PASS 6/6
+ADJACENT FAIL test_closeout_export_parity_text_binding.py rc=0 (no suite line)
+SUMMARY legs=2 identical=True adjacent=3 fails=2

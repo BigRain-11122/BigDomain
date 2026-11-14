@@ -6748,6 +6748,15 @@ SUITES = [
     ("os-closeout-export-parity-wire-binding-consumer",
      os.path.join("..", "os",
                   "test_closeout_export_parity_wire_binding_consumer.py"), 6),
+    # Asks the shipped difference law at CALL time and publishes its answer
+    # unchanged, then names an order-only difference by the FIRST key that
+    # moved beside that answer - the shipped law reads the shape word "bytes"
+    # for a reordered document, so an operator was told nothing
+    # (675 -> 676 suites, 5026 -> 5032 criteria).
+    # (AC-DFOB1..AC-DFOB6 pinned in state/queue/tech.md:703 at R2501.)
+    ("os-export-parity-difference-order-field",
+     os.path.join("..", "os",
+                  "test_export_parity_difference_order_field.py"), 6),
     ]
 
 FAILS = 0
