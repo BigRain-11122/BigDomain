@@ -1,0 +1,6 @@
+R2718 EVIDENCE TAIL GUARD LIVE LEG
+fixture tail bytes=18 shipped_capture=LANDED bom_guard=LANDED tail_guard=E_ETAIL_TAIL last=0x64
+fixture clean-lf bytes=11 three_readers=ACCEPT/ACCEPT/ACCEPT
+fixture empty bytes=0 tail_guard=ACCEPT
+real qa/reconcile-all-R2717.log bytes=1205057 three_readers=ACCEPT/ACCEPT/ACCEPT sha=CC6F79D521F196B0
+landed_by this guard through evidence_capture_tail_guard.capture

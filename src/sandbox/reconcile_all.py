@@ -6691,6 +6691,17 @@ SUITES = [
     # (AC-EBOM1..AC-EBOM6 pinned in state/queue/tech.md:691 at R2714.)
     ("os-evidence-utf8-capture-bom-guard",
      os.path.join("..", "os", "test_evidence_utf8_capture_bom_guard.py"), 6),
+    # R2718: MEASURED on the shipped pair of capture faces a payload whose
+    # last line is UNTERMINATED still LANDS on BOTH readers (bytes=18 on a
+    # two-line fixture), so an evidence file can end mid-line while every
+    # downstream line reader counts that fragment as a line. This face
+    # refuses that tail with its own code and the measured byte count while
+    # handing every other payload to the pair unchanged, and names its one
+    # positive decision - a ZERO-byte payload is ACCEPTED and landed empty
+    # (669 -> 670 suites, 4990 -> 4996 criteria).
+    # (AC-ETAIL1..AC-ETAIL6 pinned in state/queue/tech.md:692 at R2716.)
+    ("os-evidence-capture-tail-guard",
+     os.path.join("..", "os", "test_evidence_capture_tail_guard.py"), 6),
     ]
 
 FAILS = 0

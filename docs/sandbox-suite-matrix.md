@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 669 | 4990 | 669/669 | R2717 |
+| 670 | 4996 | 669/669 | R2717 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -707,7 +707,8 @@
 | 667 | os-export-driver-health-verdict | ../os/test_export_R2431_health_verdict.py | 6 | green | 0.1 |
 | 668 | os-evidence-utf8-capture | ../os/test_evidence_utf8_capture.py | 6 | green | 0.1 |
 | 669 | os-evidence-utf8-capture-bom-guard | ../os/test_evidence_utf8_capture_bom_guard.py | 6 | green | 0.2 |
-|  | 合计 |  | 4990 | green 669 / FAIL 0 / no-evidence 0 |  |
+| 670 | os-evidence-capture-tail-guard | ../os/test_evidence_capture_tail_guard.py | 6 | no-evidence | - |
+|  | 合计 |  | 4996 | green 669 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

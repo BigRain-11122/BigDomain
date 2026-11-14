@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T09:20:05+08:00",
-  "do": "2026-11-14 R2717 VERIFICATION ADOPTION window on the battery the debt gate named first (reconcile-battery-R2716, pre-registered 669 suites / 4990 criteria at R2716): the R2168 mixed-tree rule owed the full battery BEFORE any product byte because R2716 moved product src (the BOM and NUL guard plus its six-criteria suite) and one registry row. Five readings at open: git status EMPTY at HEAD fbd34c92",
+  "export_ts": "2026-11-14T09:25:20+08:00",
+  "do": "2026-11-14 R2718 PRODUCT window on AC-ETAIL1..AC-ETAIL6 (state/queue/tech.md:692, pinned at R2716 BEFORE any code): shipped src/os/evidence_capture_tail_guard.py plus src/os/test_evidence_capture_tail_guard.py. Five readings at open: git status EMPTY at HEAD cd5f5e7d equal to origin/main with no index.lock; ZERO @BigDomain rows new in the group ledger; the content-addressed decisions face read no ",
   "ceo_face": {
-    "current": "2026-11-14 R2717 VERIFICATION ADOPTION window on the battery the debt gate named first (reconcile-battery-R2716, pre-registered 669 suites / 4990 criteria at R2716): the R2168 mixed-tree rule owed the full battery BEFORE any product byte because R2716 moved product src (the BOM and NUL guard plus its six-criteria suite) and one registry row. Five readings at open: git status EMPTY at HEAD fbd34c92",
-    "latest_artifact": "reconcile-all-R2717.log (1205057B) + write-sensitive-R2717.log (14200B)",
-    "last_artifact": "reconcile-all-R2717.log (1205057B) + write-sensitive-R2717.log (14200B)",
-    "next_milestone": "next window owes product-face-R2717 on the committed tree, inside a 48h window due 2026-11-16T09:20:05+08:00",
-    "next_milestone_due": "2026-11-16T09:20:05+08:00",
-    "updated_at": "2026-11-14T09:20:05+08:00"
+    "current": "2026-11-14 R2718 PRODUCT window on AC-ETAIL1..AC-ETAIL6 (state/queue/tech.md:692, pinned at R2716 BEFORE any code): shipped src/os/evidence_capture_tail_guard.py plus src/os/test_evidence_capture_tail_guard.py. Five readings at open: git status EMPTY at HEAD cd5f5e7d equal to origin/main with no index.lock; ZERO @BigDomain rows new in the group ledger; the content-addressed decisions face read no ",
+    "latest_artifact": "evidence-capture-tail-guard-R2718.log (6980B) + evidence-capture-tail-guard-live-R2718.log (399B)",
+    "last_artifact": "evidence-capture-tail-guard-R2718.log (6980B) + evidence-capture-tail-guard-live-R2718.log (399B)",
+    "next_milestone": "next window owes reconcile-battery-R2718 on the committed tree, inside a 48h window due 2026-11-16T09:25:20+08:00",
+    "next_milestone_due": "2026-11-16T09:25:20+08:00",
+    "updated_at": "2026-11-14T09:25:20+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "evidence-capture-tail-guard-R2718.log (6980B) + evidence-capture-tail-guard-live-R2718.log (399B)",
     "reconcile-all-R2717.log (1205057B) + write-sensitive-R2717.log (14200B)",
     "reconcile-all-R2717.log (1205057B)",
     "evidence-utf8-capture-bom-guard-R2716.log (7979B) + evidence-utf8-capture-bom-guard-live-R2716.log (428B)",
@@ -1027,7 +1028,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2710",
+      "2711",
       "OSLoop 执行 tick"
     ],
     [
@@ -1046,10 +1047,10 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 74,
+    "log_lines_in_window": 35,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 8,
     "proposals_open": 6,
     "queue_main_open": 6,
@@ -1082,17 +1083,17 @@
         "path": "state/queue/tech.md",
         "present": true,
         "open_rows": 14,
-        "done_rows": 504,
+        "done_rows": 505,
         "gated_rows": 1,
         "claimable": 11,
         "discounted": 2,
         "delivered": [
           {
-            "line": 707,
+            "line": 709,
             "prefix": "AC-SEQAF1"
           },
           {
-            "line": 709,
+            "line": 711,
             "prefix": "AC-EDMK1"
           }
         ],
