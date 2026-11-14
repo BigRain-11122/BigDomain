@@ -67,7 +67,8 @@ def _lf_lines(text):
 def _log_block(lines):
     start = None
     for index, line in enumerate(lines):
-        if line.strip().startswith('"log": ['):
+        stripped = line.strip()
+        if stripped.startswith('"log": [') or stripped.startswith('"log":['):
             start = index
             break
     if start is None:
@@ -115,9 +116,50 @@ def layout(text):
     }
 
 
+def dump_canon(data):
+    """Emit the canonical text for a payload, preserving key order (R2738).
+
+    Why this exists: a minified document carries no log block, so the shipped
+    indentation-only rewrite has nothing to re-indent and refuses. A drift the
+    repair path cannot even measure is a drift nothing can fix, which is how a
+    one-line writer poisoned this file unnoticed. This rebuilds the document
+    from its own payload instead of from its broken layout.
+    """
+    if not isinstance(data, dict):
+        raise StateIOError("E_SIO_LAYOUT", "state document is not an object")
+    log = data.get("log")
+    if not isinstance(log, list):
+        raise StateIOError("E_SIO_LAYOUT", "state.json has no log array")
+    keys = list(data.keys())
+    lines = ["{"]
+    for index, key in enumerate(keys):
+        tail = "" if index == len(keys) - 1 else ","
+        if key == "log":
+            lines.append('  "log": [')
+            for item_index, item in enumerate(log):
+                item_tail = "" if item_index == len(log) - 1 else ","
+                lines.append(" " * ITEM_INDENT
+                             + json.dumps(item, ensure_ascii=False)
+                             + item_tail)
+            lines.append("  ]" + tail)
+        else:
+            lines.append("  " + json.dumps(key, ensure_ascii=False) + ":"
+                         + json.dumps(data[key], ensure_ascii=False) + tail)
+    lines.append("}")
+    return EOL.join(lines) + EOL
+
+
 def canon(text):
     """Return the canonical text. Refuses rather than guesses."""
-    measured = layout(text)
+    try:
+        measured = layout(text)
+    except StateIOError as exc:
+        if exc.code != "E_SIO_LAYOUT":
+            raise
+        rebuilt = dump_canon(parse(text))
+        if parse(rebuilt) != parse(text):
+            raise StateIOError("E_SIO_JSON", "canon moved the payload")
+        return rebuilt
     if not measured["count_ok"]:
         raise StateIOError("E_SIO_LAYOUT",
                            "%d item lines for a log of %d entries"
@@ -164,6 +206,42 @@ def write_canon(path, new_text):
             "previous": None if previous is None else len(previous)}
 
 
+def write_document(path, payload):
+    """Atomic canonical write of a NEW payload (the round closeout path).
+
+    write_canon deliberately refuses any payload change, so the rounds that do
+    have to move the tick had no canonical writer and reached for a bare
+    json.dump - which is exactly how the one-line form arrived. This is that
+    missing writer: it dumps the canon, proves the dump round-trips, writes
+    atomically and refuses to return unless the file reads back canonical.
+    """
+    text = dump_canon(payload)
+    if parse(text) != payload:
+        raise StateIOError("E_SIO_JSON", "dump_canon moved the payload")
+    new_bytes = text.encode("utf-8")
+    folder = os.path.dirname(os.path.abspath(path))
+    handle, temp = tempfile.mkstemp(dir=folder, prefix=".state_io_")
+    try:
+        with os.fdopen(handle, "wb") as sink:
+            sink.write(new_bytes)
+            sink.flush()
+            os.fsync(sink.fileno())
+        os.replace(temp, path)
+    except BaseException:
+        try:
+            os.unlink(temp)
+        except OSError:
+            pass
+        raise
+    back = read_raw(path)
+    if back != new_bytes:
+        raise StateIOError("E_SIO_BACK", "read-back does not match the write")
+    after = report(path)
+    if not after["layout_ok"]:
+        raise StateIOError("E_SIO_LAYOUT", "document write did not read clean")
+    return {"written": len(new_bytes), "after": after}
+
+
 def report(path):
     return layout(decode(read_raw(path)))
 
@@ -172,7 +250,21 @@ def fix(path, execute=False):
     """Plan (or perform) the canonical rewrite of one state file."""
     raw = read_raw(path)
     text = decode(raw)
-    before = layout(text)
+    try:
+        before = layout(text)
+    except StateIOError as exc:
+        if exc.code != "E_SIO_LAYOUT":
+            raise
+        before = {"bytes": len(raw), "crlf": text.count("\r\n"),
+                  "bare_lf": text.count("\n") - text.count("\r\n"),
+                  "lone_cr": 0,
+                  "eol_ok": False,
+                  "log_items": 0,
+                  "log_len": len(parse(text).get("log") or []),
+                  "items_off_indent": 0,
+                  "indent_ok": False,
+                  "count_ok": False,
+                  "layout_ok": False}
     if before["layout_ok"]:
         return {"verdict": "CANON-CLEAN", "before": before,
                 "predicted_bytes": len(raw), "written": 0,

@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T22:41:00+08:00",
-  "do": "R2737 修复轮：R2733 电池腿闭合为红（BATTERY rc=1·675 行 660 绿 15 红·判据总和恰好 5026·变异零命中），红源=矩阵文档陈旧；证据面只认 RUNNER PASS 腿，故用最近合格腿 R2731 盖章对齐重生矩阵（71526B·675 套件／5026 判据·唯一 R2733 新套件如实标 no-evidence·--check 字节一致退出 0），十五个红套件复跑 15/15 全绿，红腿不冒充绿腿；产品字节继续按 R2168 冻结",
+  "export_ts": "2026-11-14T23:25:41+08:00",
+  "do": "R2738 修复窗：R2737 全量电池未被采纳（开轮实测 649/675、4 条红、26 条未跑完），四条红收敛为两个出生地——state.json 被写成压缩单行（修复路径连测量都做不到）与导出停在 tick 2732，均已在出生地修好并复验",
   "ceo_face": {
-    "current": "R2737 修复轮：R2733 电池腿闭合为红（BATTERY rc=1·675 行 660 绿 15 红·判据总和恰好 5026·变异零命中），红源=矩阵文档陈旧；证据面只认 RUNNER PASS 腿，故用最近合格腿 R2731 盖章对齐重生矩阵（71526B·675 套件／5026 判据·唯一 R2733 新套件如实标 no-evidence·--check 字节一致退出 0），十五个红套件复跑 15/15 全绿，红腿不冒充绿腿；产品字节继续按 R2168 冻结",
-    "latest_artifact": "docs/sandbox-suite-matrix.md 盖章对齐重生（71526B·675 套件／5026 判据·--check 字节一致·2026-11-14 22:3x）＋十五个文档面套件 15/15 全绿＋qa/reconcile-all-R2733.log 红腿证据在盘（1248580B·675 行·15 红全部点名）",
-    "last_artifact": "docs/sandbox-suite-matrix.md 盖章对齐重生（71526B·675 套件／5026 判据·--check 字节一致·2026-11-14 22:3x）＋十五个文档面套件 15/15 全绿＋qa/reconcile-all-R2733.log 红腿证据在盘（1248580B·675 行·15 红全部点名）",
-    "next_milestone": "下一窗 48h 内：采纳本窗派发的新电池腿 R2737（pid 31080·stream logs/battery-R2737.stream·目标 675 套件／5026 判据·干净树 head ba3dd285）→ 先用该腿盖章对齐重生矩阵并确认 --check 退出 0 → R2614 写敏感集在最终提交树重跑 → 四段 followup → 关 reconcile-battery-R2733 → 取 tech 队头 state/queue/tech.md:703 AC-DFOB1（claimable 11）；另欠 export_R2431.py 静默失效钩子修复（已欠五窗）",
-    "next_milestone_due": "2026-11-16T22:40:00+08:00",
-    "updated_at": "2026-11-14T22:41:00+08:00"
+    "current": "R2738 修复窗：R2737 全量电池未被采纳（开轮实测 649/675、4 条红、26 条未跑完），四条红收敛为两个出生地——state.json 被写成压缩单行（修复路径连测量都做不到）与导出停在 tick 2732，均已在出生地修好并复验",
+    "latest_artifact": "src/os/state_io.py 正典重建与写入（dump_canon／write_document／压缩形态可测可修）＋ src/os/state.json 修复 81979B→82670B 且 payload 不变、os-state-io SUITE PASS 8/8（2026-11-14 本窗实测）",
+    "last_artifact": "src/os/state_io.py 正典重建与写入（dump_canon／write_document／压缩形态可测可修）＋ src/os/state.json 修复 81979B→82670B 且 payload 不变、os-state-io SUITE PASS 8/8（2026-11-14 本窗实测）",
+    "next_milestone": "48h 内：接管 R2737 电池腿（675 套件/5026 判据）按证据路径完成验收；并把已欠六窗的静默失效导出钩子 src/os/export_R2431.py 修在出生地（驱动方补的 CEO 行会被无声忽略）",
+    "next_milestone_due": "2026-11-16T23:25:41+08:00",
+    "updated_at": "2026-11-14T23:25:41+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/state_io.py 正典重建与写入（dump_canon／write_document／压缩形态可测可修）＋ src/os/state.json 修复 81979B→82670B 且 payload 不变、os-state-io SUITE PASS 8/8（2026-11-14 本窗实测）",
     "src/os/backlog.md 顶行修正（已发射的电池行改标 launched 并写明 pid，堵掉下窗重复发射的口子）＋ logs/battery-R2733.stream 实时流（331/675·零 FAIL·2026-11-14 20:40 实测）",
     "src/os/launch_battery_R2733.py 发射器 ＋ logs/battery-R2733.stream 实时流（pid 65136·2026-11-14 20:1x 起·目标 675 套件／5026 判据按 import 实测）",
     "src/os/closeout_export_parity_wire_binding_consumer.py ＋六判据套件全绿（qa/closeout-export-parity-wire-binding-consumer-R2733.log·2026-11-14·2951B·两次跑同 digest E038F813·相邻 5 套件绿）",
@@ -1044,7 +1045,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2732",
+      "2738",
       "OSLoop 执行 tick"
     ],
     [
@@ -1067,7 +1068,7 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 81,
+    "log_lines_in_window": 89,
     "idle_fast_mention_lines": 1,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 12,
