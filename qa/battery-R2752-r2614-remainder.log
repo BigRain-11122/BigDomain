@@ -1,0 +1,21 @@
+EVIDENCE R2753 - R2614 carried remainder measured read-only on the LIVE tree
+reason: R2752 carried ledger round coverage + the readability suites + queue head/floor/row to the adopting window
+tree: HEAD c4acfac1 plus uncommitted closeout of R2753; docs/status-export.json NOT written this round (the R2752 order repair)
+
+PASS suite os-ledger-lines rel=..\os\test_ledger_lines.py exit=0 pass-lines=8 fail-lines=0 criteria=8 1.0s
+PASS suite os-ledger-archive rel=..\os\test_ledger_archive.py exit=0 pass-lines=8 fail-lines=0 criteria=8 0.9s
+PASS suite os-ledger-baseline rel=..\os\test_ledger_baseline.py exit=0 pass-lines=8 fail-lines=0 criteria=8 1.2s
+PASS suite os-ledger-closeout rel=..\os\test_ledger_closeout.py exit=0 pass-lines=8 fail-lines=0 criteria=8 0.5s
+PASS suite os-queue-floor rel=..\os\test_queue_floor.py exit=0 pass-lines=8 fail-lines=0 criteria=8 1.2s
+PASS suite os-queue-row rel=..\os\test_queue_row.py exit=0 pass-lines=6 fail-lines=0 criteria=6 1.3s
+PASS suite os-round-evidence rel=..\os\test_round_evidence.py exit=0 pass-lines=6 fail-lines=0 criteria=6 1.2s
+PASS suite os-queue-head rel=..\os\test_queue_head.py exit=0 pass-lines=6 fail-lines=0 criteria=6 1.4s
+PASS suite os-ledger-line-shape-guard rel=..\os\test_ledger_line_shape_guard.py exit=0 pass-lines=6 fail-lines=0 criteria=6 1.7s
+PASS suite os-patterns-label-readability rel=..\os\test_patterns_label_readability.py exit=0 pass-lines=0 fail-lines=0 criteria=6 1.0s
+PASS suite os-patterns-label-readability-render-consumer rel=..\os\test_patterns_label_readability_render_consumer.py exit=0 pass-lines=0 fail-lines=0 criteria=6 0.3s
+PASS suite os-patterns-non-label-text-readability rel=..\os\test_patterns_non_label_text_readability.py exit=0 pass-lines=0 fail-lines=0 criteria=6 0.5s
+PASS suite os-artifact-disk-text-readability rel=..\os\test_artifact_disk_text_readability.py exit=0 pass-lines=0 fail-lines=0 criteria=6 0.3s
+
+SUMMARY rows=13 green=13 criteria=88 failed=0
+NOTE the four readability suites emit no PASS rows at all (pass-lines=0) and are green by exit code with zero FAIL lines - the same printed-label gap named at R2742 R2742 own evidence verdict defect
+SCOPE this measures only the carried remainder; it is NOT the successor battery and it does not adopt qa/reconcile-all-R2752.log
