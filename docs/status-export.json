@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T03:26:19+08:00",
-  "do": "R2747 采纳＋出生站修复窗：R2742 电池腿已终结并按证据路径采纳（671/676；5 红全为 ledger 家族，已在最终树独立重跑全绿 8/8·8/8·8/8·6/6·6/6）；折叠口径缺陷三处修好，按轮对齐折叠后 state.json 96461B→47708B，水位线转绿",
+  "export_ts": "2026-11-15T03:49:38+08:00",
+  "do": "2026-11-15 R2748 MONITORED-WAIT window that became a MEASURED EVIDENCE-DIALECT REPAIR, zero product bytes because reconcile-battery-R2742 is still OPEN and its retry leg is still LIVE. Five readings at open: git status EMPTY at HEAD 918198ef on main with no index.lock; the group ledger carries ZERO @BigDomain rows (atbd_lines=0 unreplied_groups=0); the content-addressed decisions face read rows=13",
   "ceo_face": {
-    "current": "R2747 采纳＋出生站修复窗：R2742 电池腿已终结并按证据路径采纳（671/676；5 红全为 ledger 家族，已在最终树独立重跑全绿 8/8·8/8·8/8·6/6·6/6）；折叠口径缺陷三处修好，按轮对齐折叠后 state.json 96461B→47708B，水位线转绿",
-    "latest_artifact": "src/os/logs_toolkit.py 折叠口径三处修复（文档自派生 2/16 空格，仍拒 8 空格与混合）＋按轮对齐折叠＋qa/reconcile-all-R2742.log（1252699 字节·671/676·criteria 恰 5032）",
-    "last_artifact": "src/os/logs_toolkit.py 折叠口径三处修复（文档自派生 2/16 空格，仍拒 8 空格与混合）＋按轮对齐折叠＋qa/reconcile-all-R2742.log（1252699 字节·671/676·criteria 恰 5032）",
-    "next_milestone": "48 小时内：在提交树上起全量电池并按证据路径采纳（676 套件/5032 判据），绿后关闭 reconcile-battery-R2742 并取队列头 state/queue/tech.md:713 AC-LKNF1（claimable 10）",
-    "next_milestone_due": "2026-11-17T03:26:19+08:00",
-    "updated_at": "2026-11-15T03:26:19+08:00"
+    "current": "2026-11-15 R2748 MONITORED-WAIT window that became a MEASURED EVIDENCE-DIALECT REPAIR, zero product bytes because reconcile-battery-R2742 is still OPEN and its retry leg is still LIVE. Five readings at open: git status EMPTY at HEAD 918198ef on main with no index.lock; the group ledger carries ZERO @BigDomain rows (atbd_lines=0 unreplied_groups=0); the content-addressed decisions face read rows=13",
+    "latest_artifact": "none landed yet for R2748",
+    "last_artifact": "none landed yet for R2748",
+    "next_milestone": "next window owes reconcile-battery-R2742 on the committed tree, inside a 48h window due 2026-11-17T03:49:38+08:00",
+    "next_milestone_due": "2026-11-17T03:49:38+08:00",
+    "updated_at": "2026-11-15T03:49:38+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "none landed yet for R2748",
     "src/os/logs_toolkit.py 折叠口径三处修复（文档自派生 2/16 空格，仍拒 8 空格与混合）＋按轮对齐折叠＋qa/reconcile-all-R2742.log（1252699 字节·671/676·criteria 恰 5032）",
     "tools/fold_caliber_check.py（口径实测器·--check 可跑）＋ qa/fold-caliber-R2746.log（私有世界 15/15 全绿·含 shipped 工具对私有副本的真实拒绝）（2026-11-15 本窗实测）",
     "src/os/state_append_R2745.py 补回 R2742 账目行＋5 套件重跑全绿＋ logs/battery-R2742.stream（1091967 字节·644/676·5 红已查明出生地）（2026-11-15 本窗实测）",
@@ -747,7 +748,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2747",
+      "2748",
       "OSLoop 执行 tick"
     ],
     [
@@ -770,14 +771,14 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 51,
+    "log_lines_in_window": 60,
     "idle_fast_mention_lines": 1,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 9,
     "proposals_open": 7,
     "queue_main_open": 6,
-    "queue_tech_open": 11,
+    "queue_tech_open": 12,
     "queue_explore_open": 10
   },
   "queue": {
@@ -805,10 +806,10 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 11,
+        "open_rows": 12,
         "done_rows": 511,
         "gated_rows": 1,
-        "claimable": 8,
+        "claimable": 9,
         "discounted": 2,
         "delivered": [
           {
@@ -821,7 +822,7 @@
           }
         ],
         "floor": 10,
-        "shortfall": 2,
+        "shortfall": 1,
         "status": "SHORT"
       },
       {
@@ -840,7 +841,7 @@
       }
     ],
     "verdict": "FLOOR-DEBT",
-    "shortfall_total": 2,
+    "shortfall_total": 1,
     "missing": [],
     "delivered_total": 2
   }
