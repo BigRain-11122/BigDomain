@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T23:54:45+08:00",
-  "do": "R2740 监视等待窗：R2739 继任电池仍在跑（实测 282/675 套件、零失败、累计套件时间 707.6 秒），按其自身字节推算 ETA 00:45-01:20，超出本窗 25 分钟，故只监视不采纳；顶行指令已补实测状态与采纳闸门",
+  "export_ts": "2026-11-15T01:12:14+08:00",
+  "do": "R2741 采纳窗：R2739 继任电池按证据路径采纳为绿（实测 1248602 字节、675/675 套件全绿、675 个唯一套件名、零失败、独立复算判据恰値 5026、注册表按导入 675/5026/675/675、BATTERY rc=0 4986.6 秒），未重启且未背离字节读；矩阵重刷后 --check 退出 0，写敏集 15/15 全绿，已结清 battery 欠账且新开 ACS 产品面欠账",
   "ceo_face": {
-    "current": "R2740 监视等待窗：R2739 继任电池仍在跑（实测 282/675 套件、零失败、累计套件时间 707.6 秒），按其自身字节推算 ETA 00:45-01:20，超出本窗 25 分钟，故只监视不采纳；顶行指令已补实测状态与采纳闸门",
-    "latest_artifact": "src/os/backlog.md 顶行实测标注（套件计数 282/675、零失败、ETA 00:45-01:20、采纳闸逐项列出、欠账销账命令具名）（2026-11-14 23:5x 本窗实测）",
-    "last_artifact": "src/os/backlog.md 顶行实测标注（套件计数 282/675、零失败、ETA 00:45-01:20、采纳闸逐项列出、欠账销账命令具名）（2026-11-14 23:5x 本窗实测）",
-    "next_milestone": "24h 内：按证据路径 qa/reconcile-all-R2739.log 收养电池（675 套件／5026 判据，绿则重刷矩阵、跑 R2614 写敏集、结清 reconcile-battery-R2733）；随后首个非电池窗修已欠八窗的导出钩子 export_R2431.py 与八个裸 json.dump 写盘点",
-    "next_milestone_due": "2026-11-16T23:54:45+08:00",
-    "updated_at": "2026-11-14T23:54:45+08:00"
+    "current": "R2741 采纳窗：R2739 继任电池按证据路径采纳为绿（实测 1248602 字节、675/675 套件全绿、675 个唯一套件名、零失败、独立复算判据恰値 5026、注册表按导入 675/5026/675/675、BATTERY rc=0 4986.6 秒），未重启且未背离字节读；矩阵重刷后 --check 退出 0，写敏集 15/15 全绿，已结清 battery 欠账且新开 ACS 产品面欠账",
+    "latest_artifact": "qa/reconcile-all-R2739.log（1248602 字节·675 套件全绿·5026 判据）＋重刷的 docs/sandbox-suite-matrix.md（71510 字节·--check 退出 0）＋qa/write-sensitive-R2739.log（15/15 全绿·14036 字节）（2026-11-15 01:0x 本窗实测）",
+    "last_artifact": "qa/reconcile-all-R2739.log（1248602 字节·675 套件全绿·5026 判据）＋重刷的 docs/sandbox-suite-matrix.md（71510 字节·--check 退出 0）＋qa/write-sensitive-R2739.log（15/15 全绿·14036 字节）（2026-11-15 01:0x 本窗实测）",
+    "next_milestone": "48 小时内：队列头 state/queue/tech.md:703 AC-DFOB1 产品面（src/os/export_parity_difference_order_field.py：键序不同时须点名 ORDER 字段而非只答 bytes）；其后修已欠八窗的导出钩子 src/os/export_R2431.py（DO/LATEST/NEXT/OUTS 常量已不被 main() 读取）",
+    "next_milestone_due": "2026-11-17T01:12:14+08:00",
+    "updated_at": "2026-11-15T01:12:14+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "qa/reconcile-all-R2739.log（1248602 字节·675 套件全绿·5026 判据）＋重刷的 docs/sandbox-suite-matrix.md（71510 字节·--check 退出 0）＋qa/write-sensitive-R2739.log（15/15 全绿·14036 字节）（2026-11-15 01:0x 本窗实测）",
     "src/os/backlog.md 顶行实测标注（套件计数 282/675、零失败、ETA 00:45-01:20、采纳闸逐项列出、欠账销账命令具名）（2026-11-14 23:5x 本窗实测）",
     "src/os/launch_battery_R2739.py（发射前按 import 重测 675 套件/5026 判据，双击守卫负控 E_LAUNCH_PID_EXISTS）＋ 只读普查：474 个写盘脚本中仅 1 个用正典写入器、8 个仍裸 json.dump（单行化复发风险已量化入台账）（2026-11-14 本窗实测）",
     "src/os/state_io.py 正典重建与写入（dump_canon／write_document／压缩形态可测可修）＋ src/os/state.json 修复 81979B→82670B 且 payload 不变、os-state-io SUITE PASS 8/8（2026-11-14 本窗实测）",
@@ -1047,7 +1048,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2740",
+      "2741",
       "OSLoop 执行 tick"
     ],
     [
@@ -1068,12 +1069,12 @@
     ]
   ],
   "self_drive": {
-    "window": "2026-11-08..2026-11-14",
+    "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 102,
+    "log_lines_in_window": 70,
     "idle_fast_mention_lines": 1,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 9,
     "proposals_open": 7,
     "queue_main_open": 6,

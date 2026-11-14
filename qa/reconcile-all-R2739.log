@@ -10411,3 +10411,55 @@ PASS reconcile member-demo exit=0 (expect 0, clean six checks)
 PASS reconcile member-tamper exit=2 (expect 2, FAIL detected)
 TMP RECLAIM candidates=697 removed=697 busy=0 failed=0 reclaimed=241.16 MiB
 RUNNER PASS (675/675 suites green, reconcile controls 7/7, 4986.4s)
+--- MATRIX ---
+PASS
+PASS check: docs/sandbox-suite-matrix.md byte-identical (71510 bytes, 675 suites, 5026 criteria)
+
+--- FINGERPRINT ---
+PASS
+PASS domain=ledger baseline matches live constructor (R1676 cross-validation)
+PASS domain=lobby baseline matches live constructor (R1676 cross-validation)
+PASS domain=member baseline matches live constructor (R1676 cross-validation)
+PASS domain=pay baseline matches live constructor (R1676 cross-validation)
+PASS domain=ugc baseline matches live constructor (R1676 cross-validation)
+verdict CLEAN domains=5
+
+--- PROFILE ---
+PASS
+== stale-baseline check ==
+baseline source: qa/reconcile-daily-20261011-4.log
+check: byte-identical PASS
+
+--- CENSUS ---
+PASS
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: update-baseline (re-freeze gate)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+baseline written: writer-census-baseline.json
+  cmd-raw: 15 names
+  pwsh-capture: 316 names
+  ps-utf16: 98 names
+  other: 103 names
+  tee: 2431 files (healthy dialect, NOT baselined)
+--- post-check (self-run after freeze) ---
+census: files=2963 tee=2431 baselined=532
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+post-check exit=0
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=2963 tee=2431 baselined=532
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+SECTION matrix PASS matrix byte-identical 71510B
+SECTION fingerprint PASS verdict CLEAN domains=5
+SECTION profile PASS check: byte-identical PASS
+SECTION census PASS verdict: DRIFT-CLEAN
+VERDICT battery-R2739 PASS failing=none
+--- VERDICT battery-R2739: PASS eol crlf=0 bare_cr=0 bom=False bytes=1248602 ---
