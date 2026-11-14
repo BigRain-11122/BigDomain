@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T03:49:38+08:00",
+  "export_ts": "2026-11-15T03:50:28+08:00",
   "do": "2026-11-15 R2748 MONITORED-WAIT window that became a MEASURED EVIDENCE-DIALECT REPAIR, zero product bytes because reconcile-battery-R2742 is still OPEN and its retry leg is still LIVE. Five readings at open: git status EMPTY at HEAD 918198ef on main with no index.lock; the group ledger carries ZERO @BigDomain rows (atbd_lines=0 unreplied_groups=0); the content-addressed decisions face read rows=13",
   "ceo_face": {
     "current": "2026-11-15 R2748 MONITORED-WAIT window that became a MEASURED EVIDENCE-DIALECT REPAIR, zero product bytes because reconcile-battery-R2742 is still OPEN and its retry leg is still LIVE. Five readings at open: git status EMPTY at HEAD 918198ef on main with no index.lock; the group ledger carries ZERO @BigDomain rows (atbd_lines=0 unreplied_groups=0); the content-addressed decisions face read rows=13",
     "latest_artifact": "none landed yet for R2748",
     "last_artifact": "none landed yet for R2748",
-    "next_milestone": "next window owes reconcile-battery-R2742 on the committed tree, inside a 48h window due 2026-11-17T03:49:38+08:00",
-    "next_milestone_due": "2026-11-17T03:49:38+08:00",
-    "updated_at": "2026-11-15T03:49:38+08:00"
+    "next_milestone": "next window owes reconcile-battery-R2742 on the committed tree, inside a 48h window due 2026-11-17T03:50:28+08:00",
+    "next_milestone_due": "2026-11-17T03:50:28+08:00",
+    "updated_at": "2026-11-15T03:50:28+08:00"
   },
   "depts": [
     {
@@ -771,7 +771,7 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 60,
+    "log_lines_in_window": 61,
     "idle_fast_mention_lines": 1,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 9,
