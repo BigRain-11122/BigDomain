@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T12:19:24+08:00",
+  "export_ts": "2026-11-14T12:26:21+08:00",
   "do": "2026-11-14 R2722 VERIFICATION ADOPTION window that closed reconcile-battery-R2720 at its pre-registered 671 suites / 5002 criteria: the leg was launched at R2721 own launch window as pid 55868 on the committed tree 691f66e8 and was ADOPTED by its evidence path qa/reconcile-all-R2721.log, never relaunched. Five readings at open: git status carried ONE untracked item (the evidence file the leg itsel",
   "ceo_face": {
     "current": "2026-11-14 R2722 VERIFICATION ADOPTION window that closed reconcile-battery-R2720 at its pre-registered 671 suites / 5002 criteria: the leg was launched at R2721 own launch window as pid 55868 on the committed tree 691f66e8 and was ADOPTED by its evidence path qa/reconcile-all-R2721.log, never relaunched. Five readings at open: git status carried ONE untracked item (the evidence file the leg itsel",
-    "latest_artifact": "none landed yet for R2722",
-    "last_artifact": "none landed yet for R2722",
-    "next_milestone": "next window owes product-face-R2722 on the committed tree, inside a 48h window due 2026-11-16T12:19:24+08:00",
-    "next_milestone_due": "2026-11-16T12:19:24+08:00",
-    "updated_at": "2026-11-14T12:19:24+08:00"
+    "latest_artifact": "write-sensitive-R2722.log (14193B)",
+    "last_artifact": "write-sensitive-R2722.log (14193B)",
+    "next_milestone": "next window owes product-face-R2722 on the committed tree, inside a 48h window due 2026-11-16T12:26:21+08:00",
+    "next_milestone_due": "2026-11-16T12:26:21+08:00",
+    "updated_at": "2026-11-14T12:26:21+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "write-sensitive-R2722.log (14193B)",
     "none landed yet for R2722",
     "none landed yet for R2721",
     "evidence-capture-compound-refusal-R2720.log (8828B) + evidence-capture-compound-refusal-live-R2720.log (491B)",
@@ -1053,7 +1054,7 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 63,
+    "log_lines_in_window": 64,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 15,
