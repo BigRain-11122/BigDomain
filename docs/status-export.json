@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T09:45:31+00:00",
-  "do": "2026-11-14 R2730 PRODUCT window: shipped src/os/evidence_capture_precedence_shape_typing.py plus its six-criteria suite so every published shape list stays names-only and the code no shape name can place rides in its own unknown_code field; registry 673 suites / 5014 criteria -> 674 / 5020 measured by import, the matrix restamped stamp-aligned at 674 rows, one queue row closed and a full battery registered as owed before the next product byte.",
+  "export_ts": "2026-11-14T17:56:13+08:00",
+  "do": "R2731 验证窗（零产品字节）：按 R2168 混合树律先跑债务闸点名的全量电池（reconcile-battery-R2730）——目标按导入实测 674 套件/5020 判据/674 唯一名/674 唯一路径，已在干净提交树 5a70e601 上分离启动 pid=59208，开窗 +4 分钟证据流读 7 套件全绿零 FAIL；本窗不宣称电池结果，结果由下一窗按证据路径验收",
   "ceo_face": {
-    "current": "R2730 产品面已交付：形状列表只放形状名、放不进名字表的码进独立 unknown_code 字段（注册表 674 套件/5020 判据）；债务闸点名一条全量电池",
-    "latest_artifact": "src/os/evidence_capture_precedence_shape_typing.py 形状类型面 + 六判据套件（2026-11-14 R2730·双腿同一摘要 11835F727853560A·证据 qa/evidence-capture-precedence-shape-typing-R2730b.log 899B·五邻域全绿）",
-    "last_artifact": "docs/sandbox-suite-matrix.md 重压至 674 行 71388B（2026-11-14 R2730·先按设计读 ROWS-MISMATCH 673 对 674 零写入，再 DOC-CURRENT）",
-    "next_milestone": "下一窗：在干净提交树上跑全量电池 674/5020（reconcile-battery-R2730），按其证据路径验收并重压矩阵；之后开队头 state/queue/tech.md:702 AC-CEPB1",
-    "next_milestone_due": "2026-11-15T23:00:00+08:00",
-    "updated_at": "2026-11-14T17:45:31+08:00"
+    "current": "R2731 验证窗（零产品字节）：按 R2168 混合树律先跑债务闸点名的全量电池（reconcile-battery-R2730）——目标按导入实测 674 套件/5020 判据/674 唯一名/674 唯一路径，已在干净提交树 5a70e601 上分离启动 pid=59208，开窗 +4 分钟证据流读 7 套件全绿零 FAIL；本窗不宣称电池结果，结果由下一窗按证据路径验收",
+    "latest_artifact": "src/os/launch_battery_R2731.py 分离启动器（2026-11-14 17:51:39 落地·目标674/5020 常量钉死·二次启动负控读 E_LAUNCH_PID_EXISTS rc=2）＋在飞证据流 logs/battery-R2731.stream（开窗 +4 分钟 18002B/139 行/7 PASS/0 FAIL）",
+    "last_artifact": "src/os/launch_battery_R2731.py 分离启动器（2026-11-14 17:51:39 落地·目标674/5020 常量钉死·二次启动负控读 E_LAUNCH_PID_EXISTS rc=2）＋在飞证据流 logs/battery-R2731.stream（开窗 +4 分钟 18002B/139 行/7 PASS/0 FAIL）",
+    "next_milestone": "下一窗按证据路径 qa/reconcile-all-R2731.log 验收该腿：逐字节测得 674 套件、独立重算判据恰为 5020、零 FAIL、BATTERY rc= 收尾行；随后跑写敏感集与四段 followup、重压矩阵并关闭债务行，之后才开队头 state/queue/tech.md:702 AC-CEPB1",
+    "next_milestone_due": "2026-11-16T17:56:13+08:00",
+    "updated_at": "2026-11-14T17:56:13+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "src/os/launch_battery_R2731.py 分离启动器（2026-11-14 17:51:39 落地·目标674/5020 常量钉死·二次启动负控读 E_LAUNCH_PID_EXISTS rc=2）＋在飞证据流 logs/battery-R2731.stream（开窗 +4 分钟 18002B/139 行/7 PASS/0 FAIL）",
     "none landed yet for R2726",
     "evidence-capture-precedence-unknown-shape-R2725.log (13634B) + evidence-capture-precedence-unknown-shape-live-R2725.log (462B)",
     "write-sensitive-R2724.log (14245B)",
@@ -1040,7 +1041,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2726",
+      "2727",
       "OSLoop 执行 tick"
     ],
     [
@@ -1063,10 +1064,10 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 46,
+    "log_lines_in_window": 49,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 8,
     "proposals_total": 8,
     "proposals_open": 6,
     "queue_main_open": 6,
