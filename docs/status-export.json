@@ -1,13 +1,13 @@
 {
- "export_ts": "2026-11-14T09:00:31+00:00",
- "do": "2026-11-14 R2728 MONITORED-WAIT window: the R2725 battery leg is still live (652 of 673 suite rows, zero FAIL, no evidence file yet) and was not relaunched; the one artifact is src/os/verify_writesensitive.py, a parameterised consolidation of the three per-window write-sensitive runners. No debt closed and no verdict issued.",
+ "export_ts": "2026-11-14T09:29:34+00:00",
+ "do": "2026-11-14 R2729 ADOPTION window: the R2725 reconcile battery was adopted green off qa/reconcile-all-R2725.log (673 suites, 5014 criteria, zero FAIL, RUNNER PASS 6412s), the matrix was restamped stamp-aligned from that leg, the verdict block was appended and the debt row was closed; one read-only leg-status tool shipped with a 10/10 self-check.",
  "ceo_face": {
-  "current": "R2725 电池腿（673 套件/5014 判据）仍在跑：652/673 套零 FAIL，本窗未重发、未验收；上一窗三件 W40 设计面在盘",
-  "latest_artifact": "src/os/verify_writesensitive.py 参数化写敏感复验工具（2026-11-14 R2728·替代三份逐窗复制·自检 15 名全在册在盘）",
-  "last_artifact": "docs/spec/payment-integration-spec.md §六之二 终端分列验证矩阵 + docs/spec/membership-spec.md §〇之二 订阅扣款分端表（2026-11-14 R2727）",
-  "next_milestone": "下一窗：按证据路径验收 R2725 电池腿（qa/reconcile-all-R2725.log·673 套件/5014 判据）→ 四节 followup（矩阵先 FAIL 后重压）→ 关债 → R2614 十五条写敏感复验；随后开队头 AC-EPTYP1 产品面",
+  "current": "R2725 电池腿已按其证据路径验收全绿并关债（673 套件/5014 判据·零 FAIL·RUNNER PASS 6412s），矩阵已按本轮绿腿重压；下一步开队头 AC-EPTYP1 产品面",
+  "latest_artifact": "src/os/leg_status.py 电池腿单一只读判读面（2026-11-14 R2729·一条判定行+退出码·自检 10/10 含 summary 行误计陷阱断言）",
+  "last_artifact": "docs/sandbox-suite-matrix.md 按 R2725 绿腿重压至 673 行 71255B（2026-11-14 R2729·DOC-CURRENT）",
+  "next_milestone": "下一窗：开队头 state/queue/tech.md:697 AC-EPTYP1 产品面（形状表把 CODE 当 shape NAME → CODES[shapes[0]] 在该面本该拒的载荷上 KeyError），判据 AC-EPTYP1..AC-EPTYP6 已在册；该窗会动注册表，之后欠一条全量电池",
   "next_milestone_due": "2026-11-15T22:00:00+08:00",
-  "updated_at": "2026-11-14T17:00:31+08:00"
+  "updated_at": "2026-11-14T17:29:34+08:00"
  },
  "depts": [
   {
@@ -1063,10 +1063,10 @@
  "self_drive": {
   "window": "2026-11-08..2026-11-14",
   "window_days": 7,
-  "log_lines_in_window": 31,
+  "log_lines_in_window": 37,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
-  "substantive_non_idle_mention_lines": 5,
+  "substantive_non_idle_mention_lines": 6,
   "proposals_total": 8,
   "proposals_open": 6,
   "queue_main_open": 6,
