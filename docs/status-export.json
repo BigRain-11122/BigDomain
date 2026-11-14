@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T20:44:28+08:00",
-  "do": "R2735 监控等待窗：675 套件／5026 判据的全量电池仍在跑（pid 65136·331/675·零 FAIL），按本腿实测时长投影还需约 80-110 分钟（19 条重型 apimarket 套件实测 89-272s/条），本窗验收不了；产品字节继续按 R2168 混合树律冻结",
+  "export_ts": "2026-11-14T21:08:33+08:00",
+  "do": "R2736 监控等待窗：全量电池仍在跑（pid 65136·634/675·15 红），15 红同源=docs/sandbox-suite-matrix.md 仍记 R2731 旧证据（registry 实测 675 套件／5026 判据／675 名／675 路径），故验收判据已就地修正为「除这 15 个文档面套件外零红 → 用本腿重生成矩阵 → 重跑 15 个转绿」，字面零红不再作判据；本窗实测 41.27 套件/分钟，推翻上窗 80-110 分钟投影；产品字节继续按 R2168 混合树律冻结",
   "ceo_face": {
-    "current": "R2735 监控等待窗：675 套件／5026 判据的全量电池仍在跑（pid 65136·331/675·零 FAIL），按本腿实测时长投影还需约 80-110 分钟（19 条重型 apimarket 套件实测 89-272s/条），本窗验收不了；产品字节继续按 R2168 混合树律冻结",
-    "latest_artifact": "src/os/backlog.md 顶行修正（已发射的电池行改标 launched 并写明 pid，堵掉下窗重复发射的口子）＋ logs/battery-R2733.stream 实时流（331/675·零 FAIL·2026-11-14 20:40 实测）",
-    "last_artifact": "src/os/backlog.md 顶行修正（已发射的电池行改标 launched 并写明 pid，堵掉下窗重复发射的口子）＋ logs/battery-R2733.stream 实时流（331/675·零 FAIL·2026-11-14 20:40 实测）",
-    "next_milestone": "下一窗 48h 内：先按证据路径 qa/reconcile-all-R2733.log 验收本电池（绿则跑写敏感集、四段 followup、重压矩阵、关债），随即修那处已欠四窗的静默失效导出钩子 src/os/export_R2431.py（驱动方按文档打补丁会被无声忽略），再取 tech 队头 state/queue/tech.md:703 AC-DFOB1",
+    "current": "R2736 监控等待窗：全量电池仍在跑（pid 65136·634/675·15 红），15 红同源=docs/sandbox-suite-matrix.md 仍记 R2731 旧证据（registry 实测 675 套件／5026 判据／675 名／675 路径），故验收判据已就地修正为「除这 15 个文档面套件外零红 → 用本腿重生成矩阵 → 重跑 15 个转绿」，字面零红不再作判据；本窗实测 41.27 套件/分钟，推翻上窗 80-110 分钟投影；产品字节继续按 R2168 混合树律冻结",
+    "latest_artifact": "src/os/backlog.md 顶行判据修正（字面零红 → 同源 15 红豁免+重生成后转绿）＋ HQ-FEEDBACK.md P2 实况行（集团 18:00 决策轮点名的 8 天未刷已补）＋ logs/battery-R2733.stream（634/675·2026-11-14 21:1x 实测）",
+    "last_artifact": "src/os/backlog.md 顶行判据修正（字面零红 → 同源 15 红豁免+重生成后转绿）＋ HQ-FEEDBACK.md P2 实况行（集团 18:00 决策轮点名的 8 天未刷已补）＋ logs/battery-R2733.stream（634/675·2026-11-14 21:1x 实测）",
+    "next_milestone": "下一窗 48h 内：电池收尾后按新判据采纳 qa/reconcile-all-R2733.log → R2614 写敏感集在最终提交树重跑 → 四段 followup（矩阵 stamp 对齐重生成+回读）→ 关 reconcile-battery-R2733 → 取 tech 队头 state/queue/tech.md:703 AC-DFOB1；另欠 export_R2431.py 静默失效钩子修复（已欠四窗）",
     "next_milestone_due": "2026-11-16T20:44:28+08:00",
-    "updated_at": "2026-11-14T20:44:28+08:00"
+    "updated_at": "2026-11-14T21:08:33+08:00"
   },
   "depts": [
     {
