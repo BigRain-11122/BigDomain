@@ -1063,7 +1063,7 @@
  "self_drive": {
   "window": "2026-11-08..2026-11-14",
   "window_days": 7,
-  "log_lines_in_window": 37,
+  "log_lines_in_window": 38,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
   "substantive_non_idle_mention_lines": 6,
