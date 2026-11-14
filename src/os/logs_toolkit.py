@@ -381,6 +381,24 @@ def cmd_catalog(args):
 BARE_LF = re.compile(r'(?<!\r)\n')
 
 
+def item_indent_caliber(items):
+    """Derive the log-item indent FROM THE DOCUMENT (R2747).
+
+    The canonical writer emits two-space items while the legacy R1710
+    form carries sixteen. Both are healthy; an eight-space block (the
+    R1710 json.dump collapse) or a mixed block is disease. Returns the
+    caliber (2 or 16) when the block is uniform and known, else None.
+    """
+    seen = set()
+    for ln in items:
+        m = re.match(r'^( +)"', ln)
+        seen.add(len(m.group(1)) if m else -1)
+    if len(seen) != 1:
+        return None
+    only = next(iter(seen))
+    return only if only in (2, 16) else None
+
+
 def eol_profile(raw):
     """Count terminator classes in raw (utf-8 bytes) without mutating."""
     text = raw.decode('utf-8')
@@ -401,18 +419,24 @@ def eol_profile(raw):
             break
     log_block_found = log_start is not None
     log_item_lines = indent16 = indent_anomaly = 0
+    caliber = None
     if log_block_found:
+        # R2747: the close line may carry a trailing comma ('  ],') whenever
+        # a sibling key follows the log array, which is exactly how the real
+        # state.json closes. Comparing strip() == ']' alone never saw that
+        # close and counted every line after the array as an item.
+        items = []
         for ln in lines[log_start + 1:]:
             s = ln.strip()
-            if s == ']':
+            if s == ']' or s == '],':
                 break
             if not s:
                 continue
-            log_item_lines += 1
-            if re.match(r'^ {16}"', ln):
-                indent16 += 1
-            else:
-                indent_anomaly += 1
+            items.append(ln)
+        log_item_lines = len(items)
+        caliber = item_indent_caliber(items)
+        indent16 = sum(1 for ln in items if ln.startswith(' ' * 16 + '"'))
+        indent_anomaly = 0 if caliber is not None else len(items)
     return {
         'bytes': len(raw),
         'total_lf': total_lf,
@@ -425,6 +449,7 @@ def eol_profile(raw):
         'log_item_lines': log_item_lines,
         'indent16_lines': indent16,
         'indent_anomaly': indent_anomaly,
+        'indent_caliber': caliber,
         'indent_ok': (not log_block_found) or indent_anomaly == 0,
     }
 
@@ -644,15 +669,21 @@ def split_ps_layout(text, log_len):
         return None
     items, close_idx = [], None
     for j in range(log_start + 1, len(lines)):
-        if lines[j].strip() == ']':
+        s = lines[j].strip()
+        # R2747: accept the comma-carrying close ('  ],') the canonical
+        # writer emits when a sibling key follows the log array.
+        if s == ']' or s == '],':
             close_idx = j
             break
-        if not re.match(r'^ {16}"', lines[j]):
-            return None
+        if not s:
+            continue
         items.append(j)
     if close_idx is None or len(items) != log_len:
         return None
-    return lines, log_start, items, close_idx
+    caliber = item_indent_caliber([lines[j] for j in items])
+    if caliber is None:
+        return None
+    return lines, log_start, items, close_idx, caliber
 
 
 def cmd_fold(args):
@@ -710,7 +741,7 @@ def cmd_fold(args):
         print('hint: run: python src/os/logs_toolkit.py eol --fix-indent --execute',
               file=sys.stderr)
         return 2
-    lines, log_start, item_idx, close_idx = layout
+    lines, log_start, item_idx, close_idx, item_caliber = layout
     if window_mode == 'tail':
         if args.window_tail > len(st['log']):
             print('error: --window-tail exceeds log length', file=sys.stderr)
@@ -733,7 +764,7 @@ def cmd_fold(args):
         toks |= set(PAT.findall(line))
     missing = sorted(t for t in toks if t not in summary)
 
-    summary_literal = ' ' * 16 + ps_escape(summary)
+    summary_literal = ' ' * item_caliber + ps_escape(summary)
     if w_end < len(st['log']):
         summary_literal += ','  # mid-window: item lines follow the summary
     first_window_idx = log_start + 1 + (w_start - 1)

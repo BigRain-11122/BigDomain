@@ -1,0 +1,51 @@
+﻿=== test_ledger_lines.py rc=0 ===
+  suite: round ledger line checker (R2152 AC-LGR1..AC-LGR8)
+  PASS AC-LGR1 canonical parse, units and approx marker resolved
+  PASS AC-LGR2 nine bad forms named, gate order round/local/api/reason
+  PASS AC-LGR3 coverage law derives missing and orphan rounds
+  PASS AC-LGR4 tail window scopes the audit and echoes its arithmetic
+  PASS AC-LGR5 zero false positives, typo caught by coverage law
+  PASS AC-LGR6 api is a pure integer and always carries a reason
+  PASS AC-LGR7 CLI exit 0/2/3, stable JSON, zero file writes
+  PASS AC-LGR8 live gate clean on the coverage scope, folded gaps proven healed by the archive, exemption list empty, hygiene
+  SUITE PASS 8/8 criteria
+=== test_ledger_archive.py rc=0 ===
+  suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA8)
+  PASS AC-LGA1 archive loader keeps log lines in order, drops markers, rewrites nothing
+  PASS AC-LGA2 union floor passes where the live-only floor fails
+  PASS AC-LGA3 live drift still gates even with a full archive
+  PASS AC-LGA4 archived gaps are informational, never gated
+  PASS AC-LGA5 tail scopes the live window only
+  PASS AC-LGA6 bad archive input fails closed with zero stdout
+  PASS AC-LGA7 default face byte-identical, only the counts block and one scope line differ
+  PASS AC-LGA8 real tree floor met on the union, drift clean, hygiene
+  SUITE PASS 8/8 criteria
+=== test_ledger_baseline.py rc=0 ===
+  suite: ledger baseline semantics (R2157 AC-LGB1..AC-LGB8)
+  PASS AC-LGB1 stale keys added, existing keys and clean law kept
+  PASS AC-LGB2 one entry exempts one round, errors never suppressed
+  PASS AC-LGB3 stale baseline entries reported, not silently kept
+  PASS AC-LGB4 stale line only when stale, JSON always carries keys
+  PASS AC-LGB5 four broken baselines fail closed, zero writes
+  PASS AC-LGB6 absent baseline equals --no-baseline, zero writes
+  PASS AC-LGB7 unknown keys ignored, absent keys empty, lists independent
+  PASS AC-LGB8 live gate clean on the coverage scope, shipped baseline fresh, hygiene, runner seat
+  SUITE PASS 8/8 criteria
+=== test_ledger_fold_kind.py rc=0 ===
+  PASS AC-FCLS1 a fold summary line classifies as other
+  PASS AC-FCLS2 date narrative, battery outcome and ledger kinds unchanged
+  PASS AC-FCLS3 guard is word-bounded: 'folder' stays a round narrative
+  PASS AC-FCLS4 fold summary plus narrative, no ledger for that round reads clean
+  PASS AC-FCLS5 bare narrative and typo prefix still gate
+  PASS AC-FCLS6 real state.json log reads clean, source is ASCII and network-free
+  suite: fold-summary line kind (R2580 AC-FCLS1..AC-FCLS6)
+  SUITE PASS 6/6 criteria
+=== test_ledger_fold_kind_dateprefix.py rc=0 ===
+  PASS AC-LKND1 date-prefixed fold summary is other and leaves no gap
+  PASS AC-LKND2 inflected 'folded' form is other, dated or bare
+  PASS AC-LKND3 a narrative merely mentioning the fold still gates
+  PASS AC-LKND4 'folder' stays round, anchored summaries stay other
+  PASS AC-LKND5 bare narrative, typo prefix and shipped families unchanged
+  PASS AC-LKND6 real log clean, R2580 suite still 6/6, ASCII, no network
+  suite: fold-summary date-prefix and inflection (R2581 AC-LKND1..AC-LKND6)
+  SUITE PASS 6/6 criteria

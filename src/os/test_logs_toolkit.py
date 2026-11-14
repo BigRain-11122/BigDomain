@@ -77,7 +77,7 @@ def build_fixture():
         p = os.path.join(ld, 'run_20260101_%06d.log' % (i + 1))
         open(p, 'wb').write(b'x' * 10)
         os.utime(p, (old - 300 - i, old - 300 - i))
-    open(os.path.join(ld, 'state-log-archive-2026-10.md'), 'wb').write(b'# archive\n')
+    open(os.path.join(ld, archive_name()), 'wb').write(b'# archive\n')
     open(os.path.join(ld, 'round.lock'), 'wb').write(b'')
     open(os.path.join(ld, 'tmp_must_not_die.md'), 'wb').write(b'protected')
     open(os.path.join(ld, 'other.dat'), 'wb').write(b'keepme')
@@ -104,6 +104,21 @@ def split_json_blocks(out):
     return [b for b in blocks if b.strip()]
 
 
+def archive_name():
+    """The month-stamped archive filename the tool derives at call time.
+
+    R2747: this fixture used to hardcode state-log-archive-2026-10.md while
+    the tool names the archive from datetime.now(CST), so the whole suite
+    went red the moment the calendar left 2026-10 - a rot that stayed
+    invisible because this suite is not registered in the battery. Derived
+    from the tool's own CST so the fixture tracks the calendar instead of
+    pinning it.
+    """
+    import logs_toolkit
+    from datetime import datetime as _dt
+    return 'state-log-archive-%s.md' % _dt.now(logs_toolkit.CST).strftime('%Y-%m')
+
+
 def build_ps_state(root, logs, archive_text='# archive\n'):
     """Canonical PS 5.1 layout fixture: CRLF, 4-space indent, two spaces
     after colon, 16-space log items, 12-space closing bracket, no trailing
@@ -121,7 +136,7 @@ def build_ps_state(root, logs, archive_text='# archive\n'):
     with open(path, 'wb') as f:
         f.write('\r\n'.join(lines).encode('utf-8'))
     if archive_text is not None:
-        with open(os.path.join(root, 'logs', 'state-log-archive-2026-10.md'), 'wb') as f:
+        with open(os.path.join(root, 'logs', archive_name()), 'wb') as f:
             f.write(archive_text.encode('utf-8'))
     return path
 
@@ -183,7 +198,7 @@ def main():
     ok(rc == 0, 'prune execute exit 0')
     ok(ex['prediction_match'] is True and ex['deleted_total'] == 88, 'prune predicted==actual 88')
     ok(ex['deleted'] == {'preop-bak': 8, 'round-transcript': 60, 'tmp-script': 20}, 'prune per-class deleted counts')
-    ok(os.path.exists(os.path.join(ld, 'state-log-archive-2026-10.md')), 'protected archive survived')
+    ok(os.path.exists(os.path.join(ld, archive_name())), 'protected archive survived')
     ok(os.path.exists(os.path.join(ld, 'round.lock')), 'protected lock survived')
     ok(os.path.exists(os.path.join(ld, 'tmp_must_not_die.md')), 'protected md-named tmp survived')
     ok(os.path.exists(os.path.join(ld, 'other.dat')), 'other class untouched')
@@ -235,7 +250,7 @@ def main():
     spath = build_ps_state(sfold, PS_LOGS)
     sfile = os.path.join(sfold, 'summary.txt')
     open(sfile, 'w', encoding='utf-8').write(SUMMARY + '\n')
-    arc = os.path.join(sfold, 'logs', 'state-log-archive-2026-10.md')
+    arc = os.path.join(sfold, 'logs', archive_name())
     pre_state = open(spath, 'rb').read()
     pre_arc = open(arc, 'rb').read()
 
@@ -291,7 +306,7 @@ def main():
     sfile2 = os.path.join(sf2, 'summary.txt')
     open(sfile2, 'w', encoding='utf-8').write('2026-10-09 roll line missing all tokens\n')
     pre2 = open(os.path.join(sf2, 'src', 'os', 'state.json'), 'rb').read()
-    arc2 = os.path.join(sf2, 'logs', 'state-log-archive-2026-10.md')
+    arc2 = os.path.join(sf2, 'logs', archive_name())
     prearc2 = open(arc2, 'rb').read()
     rc, out, _ = run(sf2, 'fold', '--round', 'R9002', '--fold-no', '456',
                      '--desc', 'x', '--window-tail', '2', '--summary-file', sfile2,
@@ -326,7 +341,7 @@ def main():
     build_ps_state(sf4, PS_LOGS, archive_text=None)
     sfile4 = os.path.join(sf4, 'summary.txt')
     open(sfile4, 'w', encoding='utf-8').write(SUMMARY + '\n')
-    arc4 = os.path.join(sf4, 'logs', 'state-log-archive-2026-10.md')
+    arc4 = os.path.join(sf4, 'logs', archive_name())
     rc, out, _ = run(sf4, 'fold', '--round', 'R9004', '--fold-no', '458',
                      '--desc', 'x', '--window-tail', '2', '--summary-file', sfile4,
                      '--execute')
@@ -338,7 +353,7 @@ def main():
                      '--allow-create', '--execute')
     ok(rc == 0 and os.path.exists(arc4), 'fold --allow-create creates archive + executes')
     a4 = open(arc4, encoding='utf-8').read()
-    ok(a4.startswith('# logs/state-log-archive-2026-10.md (created by logs_toolkit.py fold')
+    ok(a4.startswith('# logs/' + archive_name() + ' (created by logs_toolkit.py fold')
        and '# --- R9004 fold append (' in a4 and PS_LOGS[-1] in a4,
        'fold created archive carries preamble + header + verbatim window')
 
@@ -347,7 +362,7 @@ def main():
     build_ps_state(sf5, PS_LOGS, archive_text='# archive no trailing newline')
     sfile5 = os.path.join(sf5, 'summary.txt')
     open(sfile5, 'w', encoding='utf-8').write(SUMMARY + '\n')
-    arc5 = os.path.join(sf5, 'logs', 'state-log-archive-2026-10.md')
+    arc5 = os.path.join(sf5, 'logs', archive_name())
     pre5 = open(arc5, 'rb').read()
     rc, _, _ = run(sf5, 'fold', '--round', 'R9005', '--fold-no', '459',
                    '--desc', 'x', '--window-tail', '2', '--summary-file', sfile5,
@@ -387,7 +402,7 @@ def main():
     mspath = build_ps_state(ms, MS_LOGS)
     mfile = os.path.join(ms, 'summary.txt')
     open(mfile, 'w', encoding='utf-8').write(MS_SUMMARY + '\n')
-    marc = os.path.join(ms, 'logs', 'state-log-archive-2026-10.md')
+    marc = os.path.join(ms, 'logs', archive_name())
     pre_ms = open(mspath, 'rb').read()
     pre_marc = open(marc, 'rb').read()
     mbase = ['fold', '--round', 'R9010', '--fold-no', '470', '--desc', 'x',
@@ -457,7 +472,7 @@ def main():
     bad = os.path.join(ms2, 'summary.txt')
     open(bad, 'w', encoding='utf-8').write('2026-10-09 summary with no window tokens\n')
     pre2 = open(mspath2, 'rb').read()
-    marc2 = os.path.join(ms2, 'logs', 'state-log-archive-2026-10.md')
+    marc2 = os.path.join(ms2, 'logs', archive_name())
     pre_marc2 = open(marc2, 'rb').read()
     rc, out, _ = run(ms2, 'fold', '--round', 'R9011', '--fold-no', '471',
                      '--desc', 'x', '--window-slice', '3:4', '--summary-file', bad,
