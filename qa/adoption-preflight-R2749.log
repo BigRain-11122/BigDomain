@@ -1,0 +1,29 @@
+### controls positive+negative (9 worlds) rc=0
+registry suites=676 criteria=5032
+PASS positive-full-green          rc=0 expect=0  VERDICT ADOPT-READY gates=14 failed=0
+PASS negative-closing-rc-1        rc=2 expect=2  VERDICT NOT-READY gates=14 failed=1
+PASS negative-no-evidence         rc=2 expect=2  VERDICT NOT-READY gates=14 failed=12
+PASS negative-crlf-in-evidence    rc=2 expect=2  VERDICT NOT-READY gates=14 failed=1
+PASS negative-missing-suite       rc=2 expect=2  VERDICT NOT-READY gates=14 failed=3
+PASS negative-foreign-name        rc=2 expect=2  VERDICT NOT-READY gates=14 failed=1
+PASS negative-pid-alive           rc=2 expect=2  VERDICT NOT-READY gates=14 failed=1
+PASS negative-unattributed-fail   rc=2 expect=2  VERDICT NOT-READY gates=14 failed=1
+PASS positive-attributed-fail     rc=0 expect=0  VERDICT ADOPT-READY gates=14 failed=0
+SUMMARY PASS pass=9/9
+### live leg qa/reconcile-all-R2747.log pidfile logs/battery-R2747.pid rc=2
+FAIL pid-gone               pid=77080 kernel=ALIVE
+FAIL stream-closing-line    closing_rc=None stream_rows=650 stream_fail=4
+FAIL closing-rc-zero        closing_rc=None
+FAIL evidence-exists        qa/reconcile-all-R2747.log
+PASS registry-imported      suites=676 criteria=5032
+FAIL utf8                   unmeasurable: evidence file absent
+FAIL no-bom                 unmeasurable: evidence file absent
+FAIL lf-clean               unmeasurable: evidence file absent
+FAIL suite-count            unmeasurable: evidence file absent
+FAIL unique-names           unmeasurable: evidence file absent
+FAIL name-set-equal         unmeasurable: evidence file absent
+FAIL zero-unattributed-fail-rows unmeasurable: evidence file absent
+FAIL criteria-recount       unmeasurable: evidence file absent
+FAIL evidence-closing-line  unmeasurable: evidence file absent
+VERDICT NOT-READY gates=14 failed=13
+{"failed": ["pid-gone", "stream-closing-line", "closing-rc-zero", "evidence-exists", "utf8", "no-bom", "lf-clean", "suite-count", "unique-names", "name-set-equal", "zero-unattributed-fail-rows", "criteria-recount", "evidence-closing-line"], "ready": false}
