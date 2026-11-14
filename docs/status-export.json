@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-11-14T15:39:32+08:00",
+  "export_ts": "2026-11-14T08:19:35+00:00",
   "do": "2026-11-14 R2726 BATTERY LAUNCH window on reconcile-battery-R2725, the debt gate CLAIM-FIRST item at the pre-registered 673 suites / 5014 criteria on the committed tree d5334aea: the R2168 mixed-tree rule owes a full battery BEFORE any further product byte because R2725 moved product src (the unknown-shape refusal face plus its six-criteria suite) and one registry row. MEASURED BEFORE any launch: ",
   "ceo_face": {
-    "current": "2026-11-14 R2726 BATTERY LAUNCH window on reconcile-battery-R2725, the debt gate CLAIM-FIRST item at the pre-registered 673 suites / 5014 criteria on the committed tree d5334aea: the R2168 mixed-tree rule owes a full battery BEFORE any further product byte because R2725 moved product src (the unknown-shape refusal face plus its six-criteria suite) and one registry row. MEASURED BEFORE any launch: ",
-    "latest_artifact": "none landed yet for R2726",
+    "current": "W40 消费窗：三件设计面落盘（支付件终端分列验证矩阵 / 月度卡分端结算表 / BLUEPRINT 物理件清单补 display name）；R2725 电池腿（673 套件/5014 判据）在跑，未重发",
+    "latest_artifact": "docs/spec/payment-integration-spec.md §六之二 终端分列验证矩阵 + docs/spec/membership-spec.md §〇之二 订阅扣款分端表（2026-11-14 R2727）",
     "last_artifact": "none landed yet for R2726",
-    "next_milestone": "next window owes reconcile-battery-R2725 on the committed tree, inside a 48h window due 2026-11-16T15:39:32+08:00",
+    "next_milestone": "下一窗：按证据路径验收 R2725 电池腿（qa/reconcile-all-R2725.log）→ 四节 followup → 关债 → 矩阵重压；随后开队头 AC-EPTYP1 产品面（ETA 2026-11-14 当日）",
     "next_milestone_due": "2026-11-16T15:39:32+08:00",
     "updated_at": "2026-11-14T15:39:32+08:00"
   },
@@ -1040,7 +1040,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2722",
+      "2723",
       "OSLoop 执行 tick"
     ],
     [
@@ -1059,10 +1059,10 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 85,
+    "log_lines_in_window": 26,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 4,
     "proposals_total": 8,
     "proposals_open": 6,
     "queue_main_open": 6,
