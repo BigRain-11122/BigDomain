@@ -1,0 +1,13 @@
+R2759 P-47 item-4 payment channel face verification (tools/payment_gate_report.py --check)
+renderer outputs: preview/payment-gate-report.html (6711B), preview/payment-gate-report.json (6362B)
+
+PASS AC-PAYG1 criteria rows=8
+PASS AC-PAYG2 2/2 accepted
+PASS AC-PAYG3 3/3 refused
+PASS AC-PAYG4 accepted; headers 4/4
+PASS AC-PAYG5 4/4 refused
+PASS AC-PAYG6 pack_compute_19_9 price_cent=1990 needs_ceo=True
+PASS AC-PAYG7 disclaimer 372B, marking note 146B
+PASS AC-PAYG8 ascii=True network_refs=0 imports_ok=True imports=adapters,argparse,copy,datetime,hashlib,html,json,os,sys,v3
+channels_built=standard,virtual accepted=3 refused=7
+VERDICT PASS checks=8/8 failed=()
