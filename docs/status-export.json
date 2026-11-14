@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-14T09:17:45+08:00",
+  "export_ts": "2026-11-14T09:20:05+08:00",
   "do": "2026-11-14 R2717 VERIFICATION ADOPTION window on the battery the debt gate named first (reconcile-battery-R2716, pre-registered 669 suites / 4990 criteria at R2716): the R2168 mixed-tree rule owed the full battery BEFORE any product byte because R2716 moved product src (the BOM and NUL guard plus its six-criteria suite) and one registry row. Five readings at open: git status EMPTY at HEAD fbd34c92",
   "ceo_face": {
     "current": "2026-11-14 R2717 VERIFICATION ADOPTION window on the battery the debt gate named first (reconcile-battery-R2716, pre-registered 669 suites / 4990 criteria at R2716): the R2168 mixed-tree rule owed the full battery BEFORE any product byte because R2716 moved product src (the BOM and NUL guard plus its six-criteria suite) and one registry row. Five readings at open: git status EMPTY at HEAD fbd34c92",
-    "latest_artifact": "reconcile-all-R2717.log (1205057B)",
-    "last_artifact": "reconcile-all-R2717.log (1205057B)",
-    "next_milestone": "next window owes product-face-R2717 on the committed tree, inside a 48h window due 2026-11-16T09:17:45+08:00",
-    "next_milestone_due": "2026-11-16T09:17:45+08:00",
-    "updated_at": "2026-11-14T09:17:45+08:00"
+    "latest_artifact": "reconcile-all-R2717.log (1205057B) + write-sensitive-R2717.log (14200B)",
+    "last_artifact": "reconcile-all-R2717.log (1205057B) + write-sensitive-R2717.log (14200B)",
+    "next_milestone": "next window owes product-face-R2717 on the committed tree, inside a 48h window due 2026-11-16T09:20:05+08:00",
+    "next_milestone_due": "2026-11-16T09:20:05+08:00",
+    "updated_at": "2026-11-14T09:20:05+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "reconcile-all-R2717.log (1205057B) + write-sensitive-R2717.log (14200B)",
     "reconcile-all-R2717.log (1205057B)",
     "evidence-utf8-capture-bom-guard-R2716.log (7979B) + evidence-utf8-capture-bom-guard-live-R2716.log (428B)",
     "reconcile-all-R2715.log (1198928B) + reconcile-all-R2715b.log (1202874B) + write-sensitive-R2715.log (8783B)",
@@ -1045,7 +1046,7 @@
   "self_drive": {
     "window": "2026-11-08..2026-11-14",
     "window_days": 7,
-    "log_lines_in_window": 73,
+    "log_lines_in_window": 74,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 16,
