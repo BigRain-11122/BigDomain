@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 670 | 4996 | 670/670 | R2719 |
+| 671 | 5002 | 670/670 | R2719 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -708,7 +708,8 @@
 | 668 | os-evidence-utf8-capture | ../os/test_evidence_utf8_capture.py | 6 | green | 0.1 |
 | 669 | os-evidence-utf8-capture-bom-guard | ../os/test_evidence_utf8_capture_bom_guard.py | 6 | green | 0.6 |
 | 670 | os-evidence-capture-tail-guard | ../os/test_evidence_capture_tail_guard.py | 6 | green | 0.2 |
-|  | 合计 |  | 4996 | green 670 / FAIL 0 / no-evidence 0 |  |
+| 671 | os-evidence-capture-compound-refusal | ../os/test_evidence_capture_compound_refusal.py | 6 | no-evidence | - |
+|  | 合计 |  | 5002 | green 670 / FAIL 0 / no-evidence 1 |  |
 
 ## 证据出处
 

@@ -1,0 +1,117 @@
+EVIDENCE CAPTURE round=R2720 suite=src/os/test_evidence_capture_compound_refusal.py legs=2
+== LEG A rc=0 digest=E180F5E0F761F32B
+PASS AC-ECMP1 nul+tail reports EVERY shape ['nul', 'tail'] (got ['nul', 'tail'])
+PASS AC-ECMP1 nul+tail names one code per shape
+PASS AC-ECMP1 nul+tail prints its shapes on one ASCII line ('REFUSED code=E_EBOM_NUL shapes=nul,tail codes=E_EBOM_NUL,E_ETAIL_TAIL bytes=3 crlf=0 lone_cr=0 nul=1')
+PASS AC-ECMP1 bom+tail reports EVERY shape ['bom', 'tail'] (got ['bom', 'tail'])
+PASS AC-ECMP1 bom+tail names one code per shape
+PASS AC-ECMP1 bom+tail prints its shapes on one ASCII line ('REFUSED code=E_EBOM_BOM shapes=bom,tail codes=E_EBOM_BOM,E_ETAIL_TAIL bytes=6 crlf=0 lone_cr=0 nul=0')
+PASS AC-ECMP1 bom+nul+tail reports EVERY shape ['bom', 'nul', 'tail'] (got ['bom', 'nul', 'tail'])
+PASS AC-ECMP1 bom+nul+tail names one code per shape
+PASS AC-ECMP1 bom+nul+tail prints its shapes on one ASCII line ('REFUSED code=E_EBOM_BOM shapes=bom,nul,tail codes=E_EBOM_BOM,E_EBOM_NUL,E_ETAIL_TAIL bytes=6 crlf=0 lone_cr=0 nul=1')
+PASS AC-ECMP1 crlf+nul reports EVERY shape ['nul', 'crlf'] (got ['nul', 'crlf'])
+PASS AC-ECMP1 crlf+nul names one code per shape
+PASS AC-ECMP1 crlf+nul prints its shapes on one ASCII line ('REFUSED code=E_EBOM_NUL shapes=nul,crlf codes=E_EBOM_NUL,E_EUC_CRLF bytes=5 crlf=1 lone_cr=0 nul=1')
+PASS AC-ECMP1 capture() refuses with both shapes (['nul', 'tail'])
+PASS AC-ECMP1 the compound refusal wrote NO file
+PASS AC-ECMP1 the refusal line names both shapes
+PASS AC-ECMP2 first code stays E_EUC_CRLF exactly as shipped (got 'E_EUC_CRLF'/'E_EUC_CRLF')
+PASS AC-ECMP2 the crlf counter still reads 2 (got 2)
+PASS AC-ECMP2 first code stays E_EUC_LONE_CR exactly as shipped (got 'E_EUC_LONE_CR'/'E_EUC_LONE_CR')
+PASS AC-ECMP2 the lone_cr counter still reads 1 (got 1)
+PASS AC-ECMP2 first code stays E_EUC_NOT_UTF8 exactly as shipped (got 'E_EUC_NOT_UTF8'/'E_EUC_NOT_UTF8')
+PASS AC-ECMP2 the bad_offset counter still reads 2 (got 2)
+PASS AC-ECMP2 first code stays E_EBOM_BOM exactly as shipped (got 'E_EBOM_BOM'/'E_EBOM_BOM')
+PASS AC-ECMP2 the bytes counter still reads 6 (got 6)
+PASS AC-ECMP2 first code stays E_EBOM_NUL exactly as shipped (got 'E_EBOM_NUL'/'E_EBOM_NUL')
+PASS AC-ECMP2 the nul counter still reads 2 (got 2)
+PASS AC-ECMP2 first code stays E_ETAIL_TAIL exactly as shipped (got 'E_ETAIL_TAIL'/'E_ETAIL_TAIL')
+PASS AC-ECMP2 the bytes counter still reads 18 (got 18)
+PASS AC-ECMP2 a clean payload is accepted by both readings
+PASS AC-ECMP2 the shipped first code is asked at CALL time
+PASS AC-ECMP3 a clean payload lands with shapes=none
+PASS AC-ECMP3 every byte landed unchanged (28 bytes)
+PASS AC-ECMP3 the real evidence reads ACCEPT (write-sensitive-R2719.log, 14220 bytes)
+PASS AC-ECMP3 the live read changed no real byte (67C10918677B8957)
+PASS AC-ECMP3 the zero-byte payload still lands empty
+PASS AC-ECMP4 the report line is pure ASCII ('REFUSED code=E_EBOM_BOM shapes=bom,nul,tail codes=E_EBOM_BOM,E_EBOM_NUL,E_ETAIL_TAIL bytes=6 crlf=0 lone_cr=0 nul=1')
+PASS AC-ECMP4 the same payload reads the same shapes twice (('bom', 'nul', 'tail'))
+PASS AC-ECMP4 the order follows the published precedence (['bom', 'nul', 'tail'])
+PASS AC-ECMP4 a compound refusal leaves the target absent
+PASS AC-ECMP4 an existing target is refused as E_EUC_EXISTS (got 'E_EUC_EXISTS')
+PASS AC-ECMP4 the existing target is byte-identical (2B8425C4D20E7437)
+PASS AC-ECMP5 the empty payload earns no shape
+PASS AC-ECMP5 the shape list for empty bytes is empty
+PASS AC-ECMP5 the empty file really exists and is empty
+PASS AC-ECMP5 the landing report names bytes=0 LANDED
+PASS AC-ECMP5 the shipped tail guard agrees about the same bytes
+PASS AC-ECMP6 the module source is pure ASCII (6509 bytes)
+PASS AC-ECMP6 no clock, no network, no shell ([])
+PASS AC-ECMP6 every import is stdlib or a shipped face (['import argparse', 'import json', 'import os', 'import sys', 'import evidence_capture_tail_guard as ETG', 'import evidence_utf8_capture as EUC'])
+PASS AC-ECMP6 the registry carries exactly one label row (1)
+PASS AC-ECMP6 the registry carries exactly one suite row (1)
+PASS AC-ECMP6 the shipped tail-guard row is untouched (1)
+PASS AC-ECMP6 this suite exists on disk
+PASS AC-ECMP6 six criteria are declared
+PASS AC-ECMP6 the face carries its own reconcile label ('os-evidence-capture-compound-refusal')
+SUITE PASS 6/6
+== LEG B rc=0 digest=E180F5E0F761F32B
+PASS AC-ECMP1 nul+tail reports EVERY shape ['nul', 'tail'] (got ['nul', 'tail'])
+PASS AC-ECMP1 nul+tail names one code per shape
+PASS AC-ECMP1 nul+tail prints its shapes on one ASCII line ('REFUSED code=E_EBOM_NUL shapes=nul,tail codes=E_EBOM_NUL,E_ETAIL_TAIL bytes=3 crlf=0 lone_cr=0 nul=1')
+PASS AC-ECMP1 bom+tail reports EVERY shape ['bom', 'tail'] (got ['bom', 'tail'])
+PASS AC-ECMP1 bom+tail names one code per shape
+PASS AC-ECMP1 bom+tail prints its shapes on one ASCII line ('REFUSED code=E_EBOM_BOM shapes=bom,tail codes=E_EBOM_BOM,E_ETAIL_TAIL bytes=6 crlf=0 lone_cr=0 nul=0')
+PASS AC-ECMP1 bom+nul+tail reports EVERY shape ['bom', 'nul', 'tail'] (got ['bom', 'nul', 'tail'])
+PASS AC-ECMP1 bom+nul+tail names one code per shape
+PASS AC-ECMP1 bom+nul+tail prints its shapes on one ASCII line ('REFUSED code=E_EBOM_BOM shapes=bom,nul,tail codes=E_EBOM_BOM,E_EBOM_NUL,E_ETAIL_TAIL bytes=6 crlf=0 lone_cr=0 nul=1')
+PASS AC-ECMP1 crlf+nul reports EVERY shape ['nul', 'crlf'] (got ['nul', 'crlf'])
+PASS AC-ECMP1 crlf+nul names one code per shape
+PASS AC-ECMP1 crlf+nul prints its shapes on one ASCII line ('REFUSED code=E_EBOM_NUL shapes=nul,crlf codes=E_EBOM_NUL,E_EUC_CRLF bytes=5 crlf=1 lone_cr=0 nul=1')
+PASS AC-ECMP1 capture() refuses with both shapes (['nul', 'tail'])
+PASS AC-ECMP1 the compound refusal wrote NO file
+PASS AC-ECMP1 the refusal line names both shapes
+PASS AC-ECMP2 first code stays E_EUC_CRLF exactly as shipped (got 'E_EUC_CRLF'/'E_EUC_CRLF')
+PASS AC-ECMP2 the crlf counter still reads 2 (got 2)
+PASS AC-ECMP2 first code stays E_EUC_LONE_CR exactly as shipped (got 'E_EUC_LONE_CR'/'E_EUC_LONE_CR')
+PASS AC-ECMP2 the lone_cr counter still reads 1 (got 1)
+PASS AC-ECMP2 first code stays E_EUC_NOT_UTF8 exactly as shipped (got 'E_EUC_NOT_UTF8'/'E_EUC_NOT_UTF8')
+PASS AC-ECMP2 the bad_offset counter still reads 2 (got 2)
+PASS AC-ECMP2 first code stays E_EBOM_BOM exactly as shipped (got 'E_EBOM_BOM'/'E_EBOM_BOM')
+PASS AC-ECMP2 the bytes counter still reads 6 (got 6)
+PASS AC-ECMP2 first code stays E_EBOM_NUL exactly as shipped (got 'E_EBOM_NUL'/'E_EBOM_NUL')
+PASS AC-ECMP2 the nul counter still reads 2 (got 2)
+PASS AC-ECMP2 first code stays E_ETAIL_TAIL exactly as shipped (got 'E_ETAIL_TAIL'/'E_ETAIL_TAIL')
+PASS AC-ECMP2 the bytes counter still reads 18 (got 18)
+PASS AC-ECMP2 a clean payload is accepted by both readings
+PASS AC-ECMP2 the shipped first code is asked at CALL time
+PASS AC-ECMP3 a clean payload lands with shapes=none
+PASS AC-ECMP3 every byte landed unchanged (28 bytes)
+PASS AC-ECMP3 the real evidence reads ACCEPT (write-sensitive-R2719.log, 14220 bytes)
+PASS AC-ECMP3 the live read changed no real byte (67C10918677B8957)
+PASS AC-ECMP3 the zero-byte payload still lands empty
+PASS AC-ECMP4 the report line is pure ASCII ('REFUSED code=E_EBOM_BOM shapes=bom,nul,tail codes=E_EBOM_BOM,E_EBOM_NUL,E_ETAIL_TAIL bytes=6 crlf=0 lone_cr=0 nul=1')
+PASS AC-ECMP4 the same payload reads the same shapes twice (('bom', 'nul', 'tail'))
+PASS AC-ECMP4 the order follows the published precedence (['bom', 'nul', 'tail'])
+PASS AC-ECMP4 a compound refusal leaves the target absent
+PASS AC-ECMP4 an existing target is refused as E_EUC_EXISTS (got 'E_EUC_EXISTS')
+PASS AC-ECMP4 the existing target is byte-identical (2B8425C4D20E7437)
+PASS AC-ECMP5 the empty payload earns no shape
+PASS AC-ECMP5 the shape list for empty bytes is empty
+PASS AC-ECMP5 the empty file really exists and is empty
+PASS AC-ECMP5 the landing report names bytes=0 LANDED
+PASS AC-ECMP5 the shipped tail guard agrees about the same bytes
+PASS AC-ECMP6 the module source is pure ASCII (6509 bytes)
+PASS AC-ECMP6 no clock, no network, no shell ([])
+PASS AC-ECMP6 every import is stdlib or a shipped face (['import argparse', 'import json', 'import os', 'import sys', 'import evidence_capture_tail_guard as ETG', 'import evidence_utf8_capture as EUC'])
+PASS AC-ECMP6 the registry carries exactly one label row (1)
+PASS AC-ECMP6 the registry carries exactly one suite row (1)
+PASS AC-ECMP6 the shipped tail-guard row is untouched (1)
+PASS AC-ECMP6 this suite exists on disk
+PASS AC-ECMP6 six criteria are declared
+PASS AC-ECMP6 the face carries its own reconcile label ('os-evidence-capture-compound-refusal')
+SUITE PASS 6/6
+== ADJACENT 2
+== src/os/test_evidence_capture_tail_guard.py rc=0 SUITE PASS 6/6
+== src/os/test_evidence_utf8_capture_bom_guard.py rc=0 SUITE PASS 6/6
+EVIDENCE identical=True adjacent=2 fails=0 digest=E180F5E0F761F32B

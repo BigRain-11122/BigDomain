@@ -6702,6 +6702,17 @@ SUITES = [
     # (AC-ETAIL1..AC-ETAIL6 pinned in state/queue/tech.md:692 at R2716.)
     ("os-evidence-capture-tail-guard",
      os.path.join("..", "os", "test_evidence_capture_tail_guard.py"), 6),
+    # R2720: MEASURED on the shipped trio a payload can carry TWO shapes at
+    # once and only the FIRST code is reported - NUL plus an unterminated
+    # tail reads only E_EBOM_NUL, BOM plus a tail reads only E_EBOM_BOM, and
+    # CRLF plus NUL reads only E_EBOM_NUL - so an operator fixes one defect,
+    # retries and is told about the next one only then. This face reports
+    # EVERY shape a payload earns with its own counter in the shipped
+    # precedence order, beside the shipped first code asked at CALL time
+    # (670 -> 671 suites, 4996 -> 5002 criteria).
+    # (AC-ECMP1..AC-ECMP6 pinned in state/queue/tech.md:693 at R2718.)
+    ("os-evidence-capture-compound-refusal",
+     os.path.join("..", "os", "test_evidence_capture_compound_refusal.py"), 6),
     ]
 
 FAILS = 0

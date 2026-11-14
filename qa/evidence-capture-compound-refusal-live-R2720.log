@@ -1,0 +1,7 @@
+R2720 COMPOUND REFUSAL LIVE LEG
+fixture nul+tail bytes=3 shipped_first=E_EBOM_NUL compound_shapes=nul,tail
+fixture bom+tail bytes=6 shipped_first=E_EBOM_BOM compound_shapes=bom,tail
+fixture crlf+nul+tail bytes=5 shipped_first=E_EBOM_NUL compound_shapes=nul,crlf,tail
+fixture clean-lf three_readers=ACCEPT/ACCEPT/ACCEPT
+real qa/reconcile-all-R2719.log bytes=1208650 three_readers=ACCEPT/ACCEPT/ACCEPT sha=1A62637A3EEE0D20
+landed_by this face through evidence_capture_compound_refusal.capture
