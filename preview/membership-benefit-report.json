@@ -1,0 +1,281 @@
+{
+ "generated_by": "tools/membership_benefit_report.py",
+ "p47_item": 5,
+ "title": "会员权益验收报告",
+ "generated_utc": "2026-11-14T23:55:47Z",
+ "facts": {
+  "tiers": {
+   "cocreator": {
+    "monthly_credits": 30,
+    "period_days": 30,
+    "grace_days": 0,
+    "privileges": [
+     "cocreation_priority",
+     "priority_queue",
+     "private_room",
+     "skin_free"
+    ],
+    "copy": "共创者卡：30 次算力包+加急通道+共创优先筛选+私人房间+皮肤自由换（¥99/月初版正典 BLUEPRINT §四 C2·未入 C-20261010-03④ 订阅梯生效射程·开闸前 [needs-CEO] 呈批；加急=排队优先位非投资建议优先产出；优先筛选=ugc 入池排序权重·永不绕 msgSecCheck/灰区人工复核/CEO 终审三层；房间/皮肤池=FluxVerse/参观端件【blocked】）"
+   },
+   "experience": {
+    "monthly_credits": 3,
+    "period_days": 30,
+    "grace_days": 0,
+    "privileges": [
+     "basic_badge",
+     "emoji_pack_standard"
+    ],
+    "copy": "体验卡：3 次算力包+基础身份+大厅普通表情（¥19.9/月·订阅梯 19.9/29.9/49.9=委员会已决生效 C-20261010-03④·否决窗至 2026-10-17 12:00〔19.9 早经委托决策令 v2 锁价〕；档内数值与正式命名=[needs-CEO] 开闸前呈批）"
+   },
+   "mayor": {
+    "monthly_credits": 10,
+    "period_days": 30,
+    "grace_days": 0,
+    "privileges": [
+     "building_naming_voucher",
+     "chat_highlight",
+     "resident_companion"
+    ],
+    "copy": "城主卡：10 次算力包+专属居民陪伴+发言高亮+1 次/月建筑署名券（¥49.9/月·订阅梯第三档=委员会已决生效 C-20261010-03④·否决窗至 2026-10-17 12:00·初版正典 BLUEPRINT §四 C2；档内数值与正式命名=[needs-CEO] 开闸前呈批；居民陪伴呈现面=BigLife 台词管线引用【blocked】；署名券消费=FluxVerse DevLoop【blocked M2-M3】）"
+   },
+   "patron": {
+    "monthly_credits": 5,
+    "period_days": 30,
+    "grace_days": 0,
+    "privileges": [
+     "cocreation_block_seat",
+     "growth_archive_slot"
+    ],
+    "copy": "入门订阅卡：5 次算力包+共创区块优先位+成长档案存储位（¥29.9/月·C-20260927-01 决议③案 A·票档归档 2026-09-29 12:00 赞成 6/7·执行司=BigDomain 价目正典增补·定价值=委员会已决生效〔C-20261010-03④·T1 代决·否决窗至 2026-10-17 12:00·CEO 一句话可翻〕·正式命名 [needs-CEO] 开闸前呈批；算力 5 次=设计占位·>19.9 档 3 次=溢价叙事；成长档案存储位=N2 居民成长档案同层供给面=BigLife N2 供给【blocked】；共创区块优先位=共创入池排序权重·永不绕 msgSecCheck/灰区人工复核/CEO 终审三层）"
+   }
+  },
+  "members": [
+   {
+    "avatar": "usr:avatar-R2760-a",
+    "tier": "experience",
+    "product": "tier_experience",
+    "sandbox_tier_constant": "experience",
+    "credits_granted": 3,
+    "privileges": [
+     "basic_badge",
+     "emoji_pack_standard"
+    ],
+    "tiers_active": [
+     "experience"
+    ]
+   },
+   {
+    "avatar": "usr:avatar-R2760-b",
+    "tier": "cocreator",
+    "product": "tier_cocreator",
+    "credits_granted": 30,
+    "privileges": [
+     "cocreation_priority",
+     "priority_queue",
+     "private_room",
+     "skin_free"
+    ],
+    "tiers_active": [
+     "cocreator"
+    ]
+   }
+  ],
+  "join": {
+   "base": {
+    "amount_cent": 1990,
+    "channel": "virtual",
+    "idempotent": false
+   },
+   "co": {
+    "amount_cent": 1990,
+    "channel": "virtual",
+    "idempotent": false
+   }
+  },
+  "credits": {
+   "granted": 3,
+   "after_one_draw": 2,
+   "over_code": "E_NO_CREDITS",
+   "after_refused_over": 2,
+   "stranger_code": "E_PERIOD_EXPIRED"
+  },
+  "privileges": {
+   "granted_priv": "basic_badge",
+   "granted": true,
+   "off_tier_priv": "cocreation_priority",
+   "tier_required_code": "E_TIER_REQUIRED",
+   "unknown_code": "E_BAD_STATE"
+  },
+  "birth_cert": {
+   "birth_cert": true,
+   "permanent": true,
+   "judgement_source": "pay.grants_for (lobby E_ENTRANCE_REQUIRED face)",
+   "after_spend": true,
+   "member_domain_marker": true
+  },
+  "gate": {
+   "provider": "msgSecCheck-v2",
+   "blocked_on": "CEO physical item: mini-program appid/secret",
+   "cases": [
+    {
+     "case": "clean",
+     "text": "an ordinary rainy afternoon on the rooftop",
+     "anon_suggest": "pass",
+     "anon_decision": "SERVE",
+     "member_suggest": "pass",
+     "member_decision": "SERVE",
+     "provider": "stub",
+     "identical": true
+    },
+    {
+     "case": "advisory",
+     "text": "monthly card promo: 保本",
+     "anon_suggest": "review",
+     "anon_decision": "REVIEW",
+     "member_suggest": "review",
+     "member_decision": "REVIEW",
+     "provider": "stub",
+     "identical": true
+    },
+    {
+     "case": "forbidden",
+     "text": "posting rights: 赌博",
+     "anon_suggest": "risky",
+     "anon_decision": "REFUSE",
+     "member_suggest": "risky",
+     "member_decision": "REFUSE",
+     "provider": "stub",
+     "identical": true
+    }
+   ],
+   "privilege_wordlist_overlap": [],
+   "all_identical": true
+  },
+  "config_refusals": [
+   {
+    "case": "unknown_privilege",
+    "code": "E_GATE_OFFLINE",
+    "refused": true
+   },
+   {
+    "case": "banned_copy_word",
+    "code": "E_GATE_OFFLINE",
+    "refused": true
+   },
+   {
+    "case": "missing_disclaimer",
+    "code": "E_GATE_OFFLINE",
+    "refused": true
+   }
+  ],
+  "expiry": {
+   "window_days": 30,
+   "count": 2,
+   "avatars": [
+    "usr:avatar-R2760-a",
+    "usr:avatar-R2760-b"
+   ]
+  },
+  "ceo": {
+   "prices_total": 4,
+   "prices_needs_ceo": 4,
+   "params_status": "[needs-CEO] 全部数值为占位：四档定价终值（19.9/29.9/49.9 订阅梯=C-20261010-03④ 委员会已决生效·T1 代决否决窗至 2026-10-17 12:00·CEO 一句话可翻〔19.9 早经委托决策令 v2 锁价·29.9 入门档=C-20260927-01 决议③案 A 票档归档 2026-09-29 12:00 赞成 6/7·49.9 初版正典 BLUEPRINT §四 C2〕；99 共创者卡未入生效射程=开闸前呈批 AC-MP5）/月次数 3/5/10/30（§四 C2 初版+29.9 档设计占位 5）/周期天数/宽限天数（默认 0=即时降级·不假装宽限）/次数结转（默认不结转·如实呈现不掩饰）/退款与升降档 prorate（默认无·明示呈现）/档位正式命名（AC-MP6）/到期前提醒天数与日限档（reminder 节·默认 3 天·日限两档=官方原文 1kw/3kw）=CEO 呈批面不越权；两域隔离律=次数≠代币（AC-M11·配额账零进代币账本）；出生证=永久（C0·AC-M3）；自动续费【待证】接线日核（AC-MP1）；到期前提醒=订阅消息授权制通道（W15 消费·AC-M17·自动续费态双时点【待证】）",
+   "sandbox_price_cent": 1990
+  },
+  "compliance": {
+   "disclaimer": "非投顾常驻提示：会员权益为 AI 生成工具与历史回测研究展示相关的服务配额与平台特权，非投资建议，不构成任何个股买卖建议、点位预测或收益承诺；「加急通道」为服务排队优先位，非投资建议优先产出，产出物同过非投顾定性；历史回测数据仅作研究展示，不代表未来表现；请独立判断，风险自担。（常驻展示·不可折叠）",
+   "ai_label": "AI 生成",
+   "persistent": true
+  }
+ },
+ "periods": [
+  "cc8f4d61bc13bd7e",
+  "47991d8b6a83ead3"
+ ],
+ "expires": [
+  "2026-12-14T23:55:47Z",
+  "2026-12-14T23:55:47Z"
+ ],
+ "fingerprint": "df3e8dcbe02dd0d3",
+ "criteria": [
+  {
+   "id": "AC-MBG1",
+   "text": "the html and json land non-zero and the criteria table carries exactly eight rows"
+  },
+  {
+   "id": "AC-MBG2",
+   "text": "the join path opens an ACTIVE period and its granted credits equal the catalog monthly_credits for that tier"
+  },
+  {
+   "id": "AC-MBG3",
+   "text": "privileges_for equals the catalog tier privilege set and has_privilege grants a privilege that tier carries"
+  },
+  {
+   "id": "AC-MBG4",
+   "text": "birth_cert is TRUE, permanent, sourced from pay.grants_for and still TRUE after the credits are spent"
+  },
+  {
+   "id": "AC-MBG5",
+   "text": "a draw debits exactly N; an over-balance draw is refused with E_NO_CREDITS and moves nothing; a non-member draw is refused with E_PERIOD_EXPIRED"
+  },
+  {
+   "id": "AC-MBG6",
+   "text": "three broken catalogs (unknown privilege, banned copy word, missing disclaimer) are refused 3/3"
+  },
+  {
+   "id": "AC-MBG7",
+   "text": "membership grants zero review bypass: gate decisions are identical for anonymous and co-creation holders, the privilege vocabulary and wordlists are disjoint, and an off-tier privilege is refused"
+  },
+  {
+   "id": "AC-MBG8",
+   "text": "source is ASCII with no network reference, and --check reads PASS only on byte-identical fresh facts"
+  }
+ ],
+ "checks": [
+  {
+   "id": "AC-MBG1",
+   "pass": true,
+   "detail": "html=10218B json=9817B criteria=8"
+  },
+  {
+   "id": "AC-MBG2",
+   "pass": true,
+   "detail": "tier=experience credits=3 catalog=3 product=tier_experience constant=experience"
+  },
+  {
+   "id": "AC-MBG3",
+   "pass": true,
+   "detail": "measured=['basic_badge', 'emoji_pack_standard'] catalog=['basic_badge', 'emoji_pack_standard'] granted=basic_badge"
+  },
+  {
+   "id": "AC-MBG4",
+   "pass": true,
+   "detail": "birth_cert=True permanent=True after_spend=True source=pay.grants_for (lobby E_ENTRANCE_REQUIRED face)"
+  },
+  {
+   "id": "AC-MBG5",
+   "pass": true,
+   "detail": "granted=3 after_one=2 over=E_NO_CREDITS after_over=2 stranger=E_PERIOD_EXPIRED"
+  },
+  {
+   "id": "AC-MBG6",
+   "pass": true,
+   "detail": "refused=3/3 codes=E_GATE_OFFLINE"
+  },
+  {
+   "id": "AC-MBG7",
+   "pass": true,
+   "detail": "identical=True overlap=none co_has_queue=True off_tier=cocreation_priority->E_TIER_REQUIRED"
+  },
+  {
+   "id": "AC-MBG8",
+   "pass": true,
+   "detail": "ascii=True imports=none calls=0"
+  }
+ ],
+ "verdict": "PASS",
+ "sizes": {
+  "html": 10218,
+  "json": 9817
+ }
+}
