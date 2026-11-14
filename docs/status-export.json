@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T03:58:09+08:00",
-  "do": "2026-11-15 R2749 MONITORED-WAIT window that shipped a reusable ADOPTION GATE, zero product bytes because reconcile-battery-R2742 is still OPEN and its retry leg pid 77080 is still LIVE. Five readings at open: git status EMPTY at HEAD 31798f91 on main with no index.lock; ZERO @BigDomain rows in the group ledger; the content-addressed decisions face read rows=131 tokens=67 new=0; the group orders ta",
+  "export_ts": "2026-11-15T04:07:29+08:00",
+  "do": "2026-11-15 R2750 MONITORED-WAIT that CORRECTED ITS PREDECESSOR'S NUMBER rather than inheriting it: the R2749 projection of 1939.9s / 32.3 minutes for the remaining suites was measured WRONG by the live rate. Two bounded samples on the running leg read 651->652 rows in 140s and 652->653 rows in 80s, i.e. 80-140s per suite on the deep os-probe-seam names against the roughly 72s per suite that histor",
   "ceo_face": {
-    "current": "2026-11-15 R2749 MONITORED-WAIT window that shipped a reusable ADOPTION GATE, zero product bytes because reconcile-battery-R2742 is still OPEN and its retry leg pid 77080 is still LIVE. Five readings at open: git status EMPTY at HEAD 31798f91 on main with no index.lock; ZERO @BigDomain rows in the group ledger; the content-addressed decisions face read rows=131 tokens=67 new=0; the group orders ta",
-    "latest_artifact": "adoption-preflight-R2749.log (2092B)",
-    "last_artifact": "adoption-preflight-R2749.log (2092B)",
-    "next_milestone": "next window owes reconcile-battery-R2742 on the committed tree, inside a 48h window due 2026-11-17T03:58:09+08:00",
-    "next_milestone_due": "2026-11-17T03:58:09+08:00",
-    "updated_at": "2026-11-15T03:58:09+08:00"
+    "current": "2026-11-15 R2750 MONITORED-WAIT that CORRECTED ITS PREDECESSOR'S NUMBER rather than inheriting it: the R2749 projection of 1939.9s / 32.3 minutes for the remaining suites was measured WRONG by the live rate. Two bounded samples on the running leg read 651->652 rows in 140s and 652->653 rows in 80s, i.e. 80-140s per suite on the deep os-probe-seam names against the roughly 72s per suite that histor",
+    "latest_artifact": "none landed yet for R2750",
+    "last_artifact": "none landed yet for R2750",
+    "next_milestone": "next window owes reconcile-battery-R2742 on the committed tree, inside a 48h window due 2026-11-17T04:07:29+08:00",
+    "next_milestone_due": "2026-11-17T04:07:29+08:00",
+    "updated_at": "2026-11-15T04:07:29+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "none landed yet for R2750",
     "adoption-preflight-R2749.log (2092B)",
     "none landed yet for R2748",
     "src/os/logs_toolkit.py 折叠口径三处修复（文档自派生 2/16 空格，仍拒 8 空格与混合）＋按轮对齐折叠＋qa/reconcile-all-R2742.log（1252699 字节·671/676·criteria 恰 5032）",
@@ -749,7 +750,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2749",
+      "2750",
       "OSLoop 执行 tick"
     ],
     [
@@ -772,10 +773,10 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 69,
+    "log_lines_in_window": 72,
     "idle_fast_mention_lines": 1,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 9,
     "proposals_open": 7,
     "queue_main_open": 6,
