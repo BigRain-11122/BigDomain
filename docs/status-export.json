@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T01:33:57+08:00",
-  "do": "R2742 产品窗：交付 src/os/export_parity_difference_order_field.py——当键序是唯一差异时点名第一个移位字段（两种顺序互证·四种形形态），并原样保留已有差异律的答案；实证两跑同一摘要 DC582D20F8A0EA12、邻域 3 套全绿、注册表按导入 676/5032、矩阵 --check 退出 0",
+  "export_ts": "2026-11-15T01:59:25+08:00",
+  "do": "2026-11-15 R2742 PRODUCT window on AC-DFOB1..AC-DFOB6 (state/queue/tech.md:703, pinned at R2501 BEFORE any code): shipped src/os/export_parity_difference_order_field.py plus its six-criteria suite and one evidence driver. Five readings at open: git status EMPTY at HEAD 4829e853 equal to origin/main with no index.lock; ZERO unreplied @BigDomain rows in the group ledger (its 30 BigDomain mentions ar",
   "ceo_face": {
-    "current": "R2742 产品窗：交付 src/os/export_parity_difference_order_field.py——当键序是唯一差异时点名第一个移位字段（两种顺序互证·四种形形态），并原样保留已有差异律的答案；实证两跑同一摘要 DC582D20F8A0EA12、邻域 3 套全绿、注册表按导入 676/5032、矩阵 --check 退出 0",
-    "latest_artifact": "qa/export-parity-difference-order-field-R2742b.log（8139 字节·两跑同一摘要·邻域 3/3全绿）＋重刷的 docs/sandbox-suite-matrix.md（71635 字节·676 套件 / 5032 判据·--check 退出 0）（2026-11-15 本窗实测）",
-    "last_artifact": "qa/export-parity-difference-order-field-R2742b.log（8139 字节·两跑同一摘要·邻域 3/3全绿）＋重刷的 docs/sandbox-suite-matrix.md（71635 字节·676 套件 / 5032 判据·--check 退出 0）（2026-11-15 本窗实测）",
-    "next_milestone": "48 小时内：先跑全量电池 676 套件（debt_gate 已列 reconcile-battery-R2742 first=yes，不跑完不进下一个产品字节），绿后提已欠八窗的导出钩子修复；队列头实测为 state/queue/tech.md:713 AC-LKNF1 · claimable 10 · 地板 MET",
-    "next_milestone_due": "2026-11-17T01:33:57+08:00",
-    "updated_at": "2026-11-15T01:33:57+08:00"
+    "current": "2026-11-15 R2742 PRODUCT window on AC-DFOB1..AC-DFOB6 (state/queue/tech.md:703, pinned at R2501 BEFORE any code): shipped src/os/export_parity_difference_order_field.py plus its six-criteria suite and one evidence driver. Five readings at open: git status EMPTY at HEAD 4829e853 equal to origin/main with no index.lock; ZERO unreplied @BigDomain rows in the group ledger (its 30 BigDomain mentions ar",
+    "latest_artifact": "export-parity-difference-order-field-R2742.log (8139B) + export-parity-difference-order-field-R2742b.log (8139B)",
+    "last_artifact": "export-parity-difference-order-field-R2742.log (8139B) + export-parity-difference-order-field-R2742b.log (8139B)",
+    "next_milestone": "next window owes reconcile-battery-R2742 on the committed tree, inside a 48h window due 2026-11-17T01:59:25+08:00",
+    "next_milestone_due": "2026-11-17T01:59:25+08:00",
+    "updated_at": "2026-11-15T01:59:25+08:00"
   },
   "depts": [
     {
@@ -37,6 +37,7 @@
     }
   ],
   "outs": [
+    "export-parity-difference-order-field-R2742.log (8139B) + export-parity-difference-order-field-R2742b.log (8139B)",
     "qa/export-parity-difference-order-field-R2742b.log（8139 字节·两跑同一摘要·邻域 3/3全绿）＋重刷的 docs/sandbox-suite-matrix.md（71635 字节·676 套件 / 5032 判据·--check 退出 0）（2026-11-15 本窗实测）",
     "qa/reconcile-all-R2739.log（1248602 字节·675 套件全绿·5026 判据）＋重刷的 docs/sandbox-suite-matrix.md（71510 字节·--check 退出 0）＋qa/write-sensitive-R2739.log（15/15 全绿·14036 字节）（2026-11-15 01:0x 本窗实测）",
     "src/os/backlog.md 顶行实测标注（套件计数 282/675、零失败、ETA 00:45-01:20、采纳闸逐项列出、欠账销账命令具名）（2026-11-14 23:5x 本窗实测）",
@@ -1049,7 +1050,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2742",
+      "2743",
       "OSLoop 执行 tick"
     ],
     [
@@ -1072,7 +1073,7 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 76,
+    "log_lines_in_window": 78,
     "idle_fast_mention_lines": 1,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 10,
