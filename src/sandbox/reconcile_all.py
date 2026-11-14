@@ -6713,6 +6713,16 @@ SUITES = [
     # (AC-ECMP1..AC-ECMP6 pinned in state/queue/tech.md:693 at R2718.)
     ("os-evidence-capture-compound-refusal",
      os.path.join("..", "os", "test_evidence_capture_compound_refusal.py"), 6),
+    # R2723: the compound report own shape ORDER was a hardcoded constant tuple
+    # while the first code was asked from the shipped chain at CALL time, so a
+    # precedence change could make the two disagree silently. This face DERIVES
+    # the order at call time by probing each of the fifteen shape pairs through
+    # the shipped chain and reading the winner off the answer, then refusing a
+    # relation that is not total instead of guessing (671 -> 672 suites,
+    # 5002 -> 5008 criteria).
+    # (AC-ECORD1..AC-ECORD6 pinned in state/queue/tech.md:694 at R2720.)
+    ("os-evidence-capture-precedence-derived",
+     os.path.join("..", "os", "test_evidence_capture_precedence_derived.py"), 6),
     ]
 
 FAILS = 0

@@ -1,0 +1,108 @@
+EVIDENCE capture-precedence-derived R2723
+face: src/os/evidence_capture_precedence_derived.py
+suite: src/os/test_evidence_capture_precedence_derived.py
+legs=2 identical=True adjacent=True both_green=True fails=0
+leg1 rc=0 digest=2ED2BEEEA604D839
+leg2 rc=0 digest=2ED2BEEEA604D839
+
+PASS AC-ECORD1 the same chain derives the same order twice (('bom', 'nul', 'utf8', 'crlf', 'lone_cr', 'tail'))
+PASS AC-ECORD1 a patched shipped law MOVES the derived order (('bom', 'nul', 'utf8', 'crlf', 'lone_cr', 'tail') -> ('nul', 'bom', 'utf8', 'crlf', 'lone_cr', 'tail'))
+PASS AC-ECORD1 the patched law puts nul before bom (('nul', 'bom', 'utf8', 'crlf', 'lone_cr', 'tail'))
+PASS AC-ECORD1 restoring the shipped law restores the order
+PASS AC-ECORD1 no constant ORDER attribute exists on the face
+PASS AC-ECORD2 b'a\x00b' first named shape maps to the shipped code 'E_EBOM_NUL' (['nul', 'tail'])
+PASS AC-ECORD2 b'\xef\xbb\xbfabc' first named shape maps to the shipped code 'E_EBOM_BOM' (['bom', 'tail'])
+PASS AC-ECORD2 b'\xef\xbb\xbfa\x00b' first named shape maps to the shipped code 'E_EBOM_BOM' (['bom', 'nul', 'tail'])
+PASS AC-ECORD2 b'a\r\n\x00\n' first named shape maps to the shipped code 'E_EBOM_NUL' (['nul', 'crlf'])
+PASS AC-ECORD2 b'alpha\r\nbeta\r' first named shape maps to the shipped code 'E_EUC_CRLF' (['crlf'])
+PASS AC-ECORD2 b'alpha\rbeta' first named shape maps to the shipped code 'E_EUC_LONE_CR' (['lone_cr', 'tail'])
+PASS AC-ECORD2 b'ok\xffbad' first named shape maps to the shipped code 'E_EUC_NOT_UTF8' (['utf8', 'tail'])
+PASS AC-ECORD2 b'a\x00b\x00\n' first named shape maps to the shipped code 'E_EBOM_NUL' (['nul'])
+PASS AC-ECORD2 b'alpha\nunterm' first named shape maps to the shipped code 'E_ETAIL_TAIL' (['tail'])
+PASS AC-ECORD2 seed bom,nul reads in derived order (['bom', 'nul'])
+PASS AC-ECORD2 seed bom,utf8 reads in derived order (['bom', 'utf8'])
+PASS AC-ECORD2 seed bom,crlf reads in derived order (['bom', 'crlf'])
+PASS AC-ECORD2 seed bom,lone_cr reads in derived order (['bom', 'lone_cr'])
+PASS AC-ECORD2 seed bom,tail reads in derived order (['bom', 'tail'])
+PASS AC-ECORD2 seed nul,utf8 reads in derived order (['nul', 'utf8'])
+PASS AC-ECORD2 seed crlf,nul reads in derived order (['nul', 'crlf'])
+PASS AC-ECORD2 seed lone_cr,nul reads in derived order (['nul', 'lone_cr'])
+PASS AC-ECORD2 seed nul,tail reads in derived order (['nul', 'tail'])
+PASS AC-ECORD2 seed crlf,utf8 reads in derived order (['utf8', 'crlf'])
+PASS AC-ECORD2 seed lone_cr,utf8 reads in derived order (['utf8', 'lone_cr'])
+PASS AC-ECORD2 seed tail,utf8 reads in derived order (['utf8', 'tail'])
+PASS AC-ECORD2 seed crlf,lone_cr reads in derived order (['crlf', 'lone_cr'])
+PASS AC-ECORD2 seed crlf,tail reads in derived order (['crlf', 'tail'])
+PASS AC-ECORD2 seed lone_cr,tail reads in derived order (['lone_cr', 'tail'])
+PASS AC-ECORD2 a clean payload names no shape
+PASS AC-ECORD3 b'a\x00b' publishes the R2720 answer (['nul', 'tail'])
+PASS AC-ECORD3 b'a\x00b' report line is byte-identical
+PASS AC-ECORD3 b'\xef\xbb\xbfabc' publishes the R2720 answer (['bom', 'tail'])
+PASS AC-ECORD3 b'\xef\xbb\xbfabc' report line is byte-identical
+PASS AC-ECORD3 b'\xef\xbb\xbfa\x00b' publishes the R2720 answer (['bom', 'nul', 'tail'])
+PASS AC-ECORD3 b'\xef\xbb\xbfa\x00b' report line is byte-identical
+PASS AC-ECORD3 b'a\r\n\x00\n' publishes the R2720 answer (['nul', 'crlf'])
+PASS AC-ECORD3 b'a\r\n\x00\n' report line is byte-identical
+PASS AC-ECORD3 b'alpha\r\nbeta\r' publishes the R2720 answer (['crlf'])
+PASS AC-ECORD3 b'alpha\r\nbeta\r' report line is byte-identical
+PASS AC-ECORD3 b'alpha\rbeta' publishes the R2720 answer (['lone_cr', 'tail'])
+PASS AC-ECORD3 b'alpha\rbeta' report line is byte-identical
+PASS AC-ECORD3 b'ok\xffbad' publishes the R2720 answer (['utf8', 'tail'])
+PASS AC-ECORD3 b'ok\xffbad' report line is byte-identical
+PASS AC-ECORD3 b'a\x00b\x00\n' publishes the R2720 answer (['nul'])
+PASS AC-ECORD3 b'a\x00b\x00\n' report line is byte-identical
+PASS AC-ECORD3 b'alpha\nunterm' publishes the R2720 answer (['tail'])
+PASS AC-ECORD3 b'alpha\nunterm' report line is byte-identical
+PASS AC-ECORD3 b'\xef\xbb\xbfa\x00b\n' publishes the R2720 answer (['bom', 'nul'])
+PASS AC-ECORD3 b'\xef\xbb\xbfa\x00b\n' report line is byte-identical
+PASS AC-ECORD3 b'\xef\xbb\xbf\xff\n' publishes the R2720 answer (['bom', 'utf8'])
+PASS AC-ECORD3 b'\xef\xbb\xbf\xff\n' report line is byte-identical
+PASS AC-ECORD3 b'\xef\xbb\xbfa\r\nb\n' publishes the R2720 answer (['bom', 'crlf'])
+PASS AC-ECORD3 b'\xef\xbb\xbfa\r\nb\n' report line is byte-identical
+PASS AC-ECORD3 b'\xef\xbb\xbfa\rb\n' publishes the R2720 answer (['bom', 'lone_cr'])
+PASS AC-ECORD3 b'\xef\xbb\xbfa\rb\n' report line is byte-identical
+PASS AC-ECORD3 b'\xef\xbb\xbfabc' publishes the R2720 answer (['bom', 'tail'])
+PASS AC-ECORD3 b'\xef\xbb\xbfabc' report line is byte-identical
+PASS AC-ECORD3 b'\xff\x00\n' publishes the R2720 answer (['nul', 'utf8'])
+PASS AC-ECORD3 b'\xff\x00\n' report line is byte-identical
+PASS AC-ECORD3 b'a\x00\r\n' publishes the R2720 answer (['nul', 'crlf'])
+PASS AC-ECORD3 b'a\x00\r\n' report line is byte-identical
+PASS AC-ECORD3 b'a\x00\rb\n' publishes the R2720 answer (['nul', 'lone_cr'])
+PASS AC-ECORD3 b'a\x00\rb\n' report line is byte-identical
+PASS AC-ECORD3 b'a\x00b' publishes the R2720 answer (['nul', 'tail'])
+PASS AC-ECORD3 b'a\x00b' report line is byte-identical
+PASS AC-ECORD3 b'\xff\r\n' publishes the R2720 answer (['utf8', 'crlf'])
+PASS AC-ECORD3 b'\xff\r\n' report line is byte-identical
+PASS AC-ECORD3 b'\xff\rb\n' publishes the R2720 answer (['utf8', 'lone_cr'])
+PASS AC-ECORD3 b'\xff\rb\n' report line is byte-identical
+PASS AC-ECORD3 b'\xff' publishes the R2720 answer (['utf8', 'tail'])
+PASS AC-ECORD3 b'\xff' report line is byte-identical
+PASS AC-ECORD3 b'a\r\nb\rc\n' publishes the R2720 answer (['crlf', 'lone_cr'])
+PASS AC-ECORD3 b'a\r\nb\rc\n' report line is byte-identical
+PASS AC-ECORD3 b'a\r\nb' publishes the R2720 answer (['crlf', 'tail'])
+PASS AC-ECORD3 b'a\r\nb' report line is byte-identical
+PASS AC-ECORD3 b'a\rb' publishes the R2720 answer (['lone_cr', 'tail'])
+PASS AC-ECORD3 b'a\rb' report line is byte-identical
+PASS AC-ECORD4 a clean payload lands with shapes=none
+PASS AC-ECORD4 every byte landed unchanged (28 bytes)
+PASS AC-ECORD4 the zero-byte payload still lands empty
+PASS AC-ECORD4 the real evidence reads ACCEPT (write-sensitive-R2722.log, 14193 bytes)
+PASS AC-ECORD4 the live read changed no real byte (A2807E2B419A17B2)
+PASS AC-ECORD4 a refusal leaves the target absent
+PASS AC-ECORD4 an existing target is refused as E_EUC_EXISTS (got 'E_EUC_EXISTS')
+PASS AC-ECORD4 the existing target is byte-identical (2B8425C4D20E7437)
+PASS AC-ECORD5 the readings created no file (3 -> 3)
+PASS AC-ECORD5 every report line is pure ASCII
+PASS AC-ECORD5 the face reads no clock ([])
+PASS AC-ECORD5 the face opens no target for text writing ([])
+PASS AC-ECORD5 the order line names the derivation ('ORDER derived=bom,nul,utf8,crlf,lone_cr,tail probes=15 items=6')
+PASS AC-ECORD6 the module source is pure ASCII (10882 bytes)
+PASS AC-ECORD6 no clock, no network, no shell ([])
+PASS AC-ECORD6 every import is stdlib or a shipped face ([])
+PASS AC-ECORD6 the registry carries exactly one label row (1)
+PASS AC-ECORD6 the registry carries exactly one suite row (1)
+PASS AC-ECORD6 the shipped compound row is untouched (1)
+PASS AC-ECORD6 this suite exists on disk
+PASS AC-ECORD6 six criteria are declared
+PASS AC-ECORD6 the face carries its own reconcile label ('os-evidence-capture-precedence-derived')
+SUITE PASS 6/6

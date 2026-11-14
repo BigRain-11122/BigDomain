@@ -1,0 +1,7 @@
+LIVE capture-precedence-derived R2723
+face: src/os/evidence_capture_precedence_derived.py
+order rc=0 line=ORDER derived=bom,nul,utf8,crlf,lone_cr,tail probes=15 items=6
+real evidence: qa\reconcile-all-R2721.log
+real rc=0 line=ACCEPT bytes=1213193 shapes=none
+bom+nul+tail rc=2 line=REFUSED code=E_EBOM_BOM shapes=bom,nul,tail codes=E_EBOM_BOM,E_EBOM_NUL,E_ETAIL_TAIL bytes=6 crlf=0 lone_cr=0 nul=1
+crlf+nul rc=2 line=REFUSED code=E_EBOM_NUL shapes=nul,crlf codes=E_EBOM_NUL,E_EUC_CRLF bytes=5 crlf=1 lone_cr=0 nul=1
