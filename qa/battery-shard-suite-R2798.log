@@ -1,0 +1,19 @@
+R2798 battery-shard guard suite - evidence
+scope=os-battery-shard criteria=AC-BSGB1..AC-BSGB8
+SUITE rc=0
+  | PASS AC-BSGB1 suites=688 crit=5126 quoted=688/5126 leaked=0
+  | PASS AC-BSGB2 expected=10 picked=10 nomatch_rc=2 dry_exec=0
+  | PASS AC-BSGB3 parity=True cwd=probe-m3bhkcuc env=utf-8 timeout_rc=124
+  | PASS AC-BSGB4 mixed_rc=2 named=True exec=2 green_rc=0 exec_g=1
+SHARD-CHECK name=shard-probe-evidence.log rows=1 green=1 bytes=256B
+SHARD-CHECK VERDICT PASS
+  | PASS AC-BSGB5 exec=1 rows=1 green=1 clean=0 bad=2 named=True
+  | PASS AC-BSGB8 claim_rc=2 named=True shipped_clean=True
+  | PASS AC-BSGB6 refusals=3 dry_rc=2 shipped_check=0
+  | PASS AC-BSGB7 untouched=True banned=0
+SUITE PASS 8/8
+NEGCTL rc=0
+CTL c1-claim-full-allowed expect=AC-BSGB8 rc=1 reddened=1 other_reds=0 -> CONFIRMED
+CTL c2-evidence-path-unguarded expect=AC-BSGB6 rc=1 reddened=1 other_reds=0 -> CONFIRMED
+CTL c3-accounting-typed expect=AC-BSGB5 rc=1 reddened=1 other_reds=0 -> CONFIRMED
+VERDICT CONFIRMED controls=3/3

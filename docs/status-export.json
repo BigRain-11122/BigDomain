@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T20:32:00+08:00",
-  "do": "R2797 工程：全量电池的「全有或全无」被打开成可监督分片——新 tools/battery_shard.py 按前缀从注册表本身（实测 687 套件 / 5118 判据）选一族套件，用与电池完全相同的调用方式跑，并打自己的收尾行；真分片 --match os-ledger 实测 selected=10 criteria=70、10/10 绿、8.6 秒、crit_mismatch=0；红色反控（私有世界一条绿一条故意红）混合分片 rc=2 点名 ctl-bad:rc=1、全绿 rc=0 → CONFIRMED；只读实测四件（注册表/一张已发货页面/一个套件源/真账本库）size+mtime+sha16 前后全等",
+  "export_ts": "2026-11-15T20:44:38+08:00",
+  "do": "R2798 工程：给「决定一族套件是否全绿」的分片工具补上电池行——src/os/test_battery_shard.py 承 AC-BSGB1..8（先钉 backlog 后写码），在私有临时注册表上驱动真实函数，仓库注册表/真账本/已发货证据全程零写入；SUITE 8/8 首跑即绿，按电池调用方式从 src/sandbox 再跑仍 8/8；注册表按 import 实测 688 套件 / 5126 判据（原 687/5118），矩阵重生成 72595B/688 行 DOC-CURRENT，入口页 35359B 且 14/14 PASS；三处负控各只翻红它自己那条判据（AC-BSGB8/6/5）→ CONFIRMED 3/3",
   "ceo_face": {
-    "current": "R2797 工程：全量电池的「全有或全无」被打开成可监督分片——新 tools/battery_shard.py 按前缀从注册表本身（实测 687 套件 / 5118 判据）选一族套件，用与电池完全相同的调用方式跑，并打自己的收尾行；真分片 --match os-ledger 实测 selected=10 criteria=70、10/10 绿、8.6 秒、crit_mismatch=0；红色反控（私有世界一条绿一条故意红）混合分片 rc=2 点名 ctl-bad:rc=1、全绿 rc=0 → CONFIRMED；只读实测四件（注册表/一张已发货页面/一个套件源/真账本库）size+mtime+sha16 前后全等",
-    "latest_artifact": "tools/battery_shard.py（分片跑批器）+ qa/battery-shard-R2797.log（977B·10 行·sha256 1de46b10e4151e79）+ qa/battery-shard-negctl-R2797.log（827B·红色反控·sha256 e74b66e57d34ff0f）",
-    "last_artifact": "tools/battery_shard.py（分片跑批器）+ qa/battery-shard-R2797.log（977B·10 行·sha256 1de46b10e4151e79）+ qa/battery-shard-negctl-R2797.log（827B·红色反控·sha256 e74b66e57d34ff0f）",
-    "next_milestone": "48 小时内：把本周动过的族各跑一条分片并落证据（ledger 已跑、lobby / os-export / os-queue 待跑），并给 tools/battery_shard.py 自身补 src/os/test_battery_shard.py 电池行；全量电池（687 套件 / 5118 判据）仍欠，须能监督的窗口早发并按自身 BATTERY rc= 行采纳",
-    "next_milestone_due": "2026-11-17T20:32:00+08:00",
-    "updated_at": "2026-11-15T20:32:00+08:00",
+    "current": "R2798 工程：给「决定一族套件是否全绿」的分片工具补上电池行——src/os/test_battery_shard.py 承 AC-BSGB1..8（先钉 backlog 后写码），在私有临时注册表上驱动真实函数，仓库注册表/真账本/已发货证据全程零写入；SUITE 8/8 首跑即绿，按电池调用方式从 src/sandbox 再跑仍 8/8；注册表按 import 实测 688 套件 / 5126 判据（原 687/5118），矩阵重生成 72595B/688 行 DOC-CURRENT，入口页 35359B 且 14/14 PASS；三处负控各只翻红它自己那条判据（AC-BSGB8/6/5）→ CONFIRMED 3/3",
+    "latest_artifact": "src/os/test_battery_shard.py（AC-BSGB1..8 守护套件·8/8） + qa/battery-shard-suite-R2798.log（1000B·19 行·sha256 d1c4ee2051a932db·负控 3/3 CONFIRMED）",
+    "last_artifact": "src/os/test_battery_shard.py（AC-BSGB1..8 守护套件·8/8） + qa/battery-shard-suite-R2798.log（1000B·19 行·sha256 d1c4ee2051a932db·负控 3/3 CONFIRMED）",
+    "next_milestone": "48 小时内：用 tools/battery_shard.py 把本周动过却未验的族（lobby / os-export / os-queue）各跑一条分片并落证据，让「全量电池欠账」第一次有族级绿/红行；并把 state.json 在确认 log 窗口安全后收回 78500B 水线下",
+    "next_milestone_due": "2026-11-17T20:44:38+08:00",
+    "updated_at": "2026-11-15T20:44:38+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -38,6 +38,7 @@
     }
   ],
   "outs": [
+    "src/os/test_battery_shard.py（AC-BSGB1..8 守护套件·8/8） + qa/battery-shard-suite-R2798.log（1000B·19 行·sha256 d1c4ee2051a932db·负控 3/3 CONFIRMED）",
     "tools/battery_shard.py（分片跑批器）+ qa/battery-shard-R2797.log（977B·10 行·sha256 1de46b10e4151e79）+ qa/battery-shard-negctl-R2797.log（827B·红色反控·sha256 e74b66e57d34ff0f）",
     "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（72516B·687 行）",
     "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B)",
@@ -760,7 +761,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2797",
+      "2798",
       "OSLoop 执行 tick"
     ],
     [
@@ -783,10 +784,10 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 116,
+    "log_lines_in_window": 121,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 23,
+    "substantive_non_idle_mention_lines": 24,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,

@@ -6839,6 +6839,15 @@ SUITES = [
     # negative controls so a criterion nobody can redden is not counted.
     ("os-deliverable-index",
      os.path.join("..", "os", "test_deliverable_index.py"), 14),
+    # R2798. tools/battery_shard.py decides whether a FAMILY of suites is green
+    # and carried no battery row, so a tool that grades suites was graded only
+    # by the run that graded them. AC-BSH1..AC-BSH8 pinned in src/os/backlog.md
+    # at R2797 BEFORE the tool; AC-BSGB1..AC-BSGB8 (this guard shape) at R2798
+    # BEFORE this suite. The world it mutates is a private temp registry of
+    # probe suites, so the repo registry, the sandbox book and the shipped
+    # evidence are never written.
+    ("os-battery-shard",
+     os.path.join("..", "os", "test_battery_shard.py"), 8),
     ]
 
 FAILS = 0
