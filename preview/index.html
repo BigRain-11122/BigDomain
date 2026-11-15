@@ -78,12 +78,12 @@
 
   <!-- BD-DELIVERABLE-INDEX:BEGIN -->
 <h2>最新实物（盘上 mtime 派生，禁写死）</h2>
-<div class="note">battery-shard-report.json · 14927B · 2026-11-15T21:39:03</div>
+<div class="note">battery-shard-report.json · 15138B · 2026-11-15T21:51:33</div>
 
 <h2>全部已上线面（盘上 pair 派生·点开即看）</h2>
 <div class="note">本块面数=36，逐条直接从 <code>preview/</code> 扫描得出：面名·字节·时间戳均实读。</div>
 <ul>
-<li><a href="battery-shard-report.html">battery-shard-report</a> <span class="tag">15283B</span> <span class="tag">2026-11-15 21:39</span> <span class="tag">json=battery-shard-report.json</span></li>
+<li><a href="battery-shard-report.html">battery-shard-report</a> <span class="tag">15461B</span> <span class="tag">2026-11-15 21:51</span> <span class="tag">json=battery-shard-report.json</span></li>
 <li><a href="ledger-reconcile-face.html">ledger-reconcile-face</a> <span class="tag">7963B</span> <span class="tag">2026-11-15 19:39</span> <span class="tag">json=ledger-reconcile-face.json</span></li>
 <li><a href="lobby-protocol-map.html">lobby-protocol-map</a> <span class="tag">27260B</span> <span class="tag">2026-11-15 17:51</span> <span class="tag">json=lobby-protocol-map.json</span></li>
 <li><a href="lobby-session-trace.html">lobby-session-trace</a> <span class="tag">8347B</span> <span class="tag">2026-11-15 17:50</span> <span class="tag">json=lobby-session-trace.json</span></li>
@@ -126,7 +126,7 @@
 <div class="disclaimer">常驻合规三面：<b>AIGC 标识</b>（生成内容全呈现面标注）· <b>msgSecCheck 前置闸</b>（内容安全未接禁开门）· <b>非投顾</b>（本平台产出不构成投资建议）。</div>
 <table>
 <tr><th>#</th><th>面</th><th>实物（点开即看）</th><th>实测判据</th><th>占位 / 阻塞</th></tr>
-<tr><td>1</td><td><b>shard-battery</b><br>BigDomain 分片电池面 R2800</td><td><a href="battery-shard-report.html">battery-shard-report.html</a><br><span class="tag ok">verdict=PASS</span> <span class="tag">15283B</span> <span class="tag">2026-11-15T13:39:03Z</span></td><td>本周动过的三族（大厅/导出/队列）实跑分片：43 套件 / 336 判据的族级绿红与逐套件行，全部解析自分片器真实 stdout</td><td>分片不是全量电池：645 套件未覆盖，全量一趟仍需单窗监督</td></tr>
+<tr><td>1</td><td><b>shard-battery</b><br>BigDomain 分片电池面 R2800</td><td><a href="battery-shard-report.html">battery-shard-report.html</a><br><span class="tag ok">verdict=PASS</span> <span class="tag">15461B</span> <span class="tag">2026-11-15T13:51:33Z</span></td><td>本周动过的三族（大厅/导出/队列）实跑分片：43 套件 / 336 判据的族级绿红与逐套件行，全部解析自分片器真实 stdout</td><td>分片不是全量电池：645 套件未覆盖，全量一趟仍需单窗监督</td></tr>
 <tr><td>2</td><td><b>platform-live</b><br>BigDomain 沙箱 · 六门实测在线（一指令拉起）</td><td><a href="platform-live-report.html">platform-live-report.html</a><br><span class="tag ok">verdict=PASS</span> <span class="tag">6889B</span> <span class="tag">2026-11-15T00:43:41Z</span></td><td>六道沙箱门由一条命令拉起，逐门实测 HTTP 200，跑完即拆（4/4 子进程归零 · 8/8 端口拒连）</td><td>生产 wss/ICP/日志留存/1000 并发 p95 = CEO 物理件</td></tr>
 <tr><td>3</td><td><b>lobby-ws</b><br>P-47-1 lobby WebSocket handshake - driven on a real socket</td><td><a href="lobby-ws-report.html">lobby-ws-report.html</a><br><span class="tag ok">verdict=PASS</span> <span class="tag">5952B</span> <span class="tag">2026-11-15T00:28:42Z</span></td><td>P-47① 大厅 WebSocket：两个真实客户端走 RFC6455，服务端拒绝伪造 actor/ai_generated</td><td>入场为 mock；违禁词表为沙箱替身</td></tr>
 <tr><td>4</td><td><b>city-face</b><br>城市观测面验收报告</td><td><a href="city-face-report.html">city-face-report.html</a><br><span class="tag ok">verdict=PASS</span> <span class="tag">7300B</span> <span class="tag">2026-11-15T00:03:27.829099Z</span></td><td>城市观测面：12 白名单字段实服务、越权字段拒发、零写端点</td><td>城市数据为样例包，非实况导出</td></tr>
@@ -136,7 +136,7 @@
 <tr><td>8</td><td><b>ledger</b><br>代币双式账本业务报告</td><td><a href="ledger-business-report.html">ledger-business-report.html</a><br><span class="tag warn">verdict=n/a</span> <span class="tag">5276B</span> <span class="tag">2026-11-15 01:46:48Z</span></td><td>P-47② 代币双式账本：账户/交易/分录三表与对账脚本实跑</td><td>真实支付入账待商户号到位</td></tr>
 <tr><td>9</td><td><b>apimarket</b><br>BigDomain API Market - Settlement Ledger</td><td><a href="apimarket-report.html">apimarket-report.html</a><br><span class="tag warn">verdict=n/a</span> <span class="tag">11678B</span> <span class="tag">2026-10-24T14:58:18Z</span></td><td>API 市场结算台账：卖家账本、结算分录与注意力项（示例集）</td><td>结算数据为示例集；真实结算待商户号/支付物理件</td></tr>
 </table>
-<!-- fingerprint c91ecbde218d1dc6 -->
+<!-- fingerprint 0f2ff83e9df53fe4 -->
 <!-- BD-DELIVERABLE-INDEX:END -->
 
   <h2>会员价目档（四档 · 全部数值 [needs-CEO] 开闸前呈批）</h2>

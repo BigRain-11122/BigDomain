@@ -1,0 +1,68 @@
+R2801 battery row for tools/battery_shard_report.py - evidence
+
+WHY THIS ROUND EXISTED
+  The face that decides whether six FAMILIES are green shipped at R2799 with
+  eight criteria (AC-BSR1..AC-BSR8) and its own --check, and no row in
+  src/sandbox/reconcile_all.py.  R2799 and R2800 both named the missing guard
+  as the cheapest open debt: the grader was graded only by the run that
+  rendered it.
+
+WHAT LANDED
+  src/os/test_battery_shard_report.py carries AC-BSRB1..AC-BSRB8, pinned in
+  src/os/backlog.md BEFORE the file existed, each mapped one-to-one onto a
+  tool criterion.  It never runs a real family: the machinery is driven
+  through the real functions with synthetic runner streams in a private temp
+  world, removed before the run ends.
+
+MEASURED
+  SUITE PASS 10/10, twice in a row, identical output.
+  AC-BSRB1 suites=688 criteria=5126 families=6 exp_equal=True literals=0
+           (registry read at suite time, before the row was added)
+  AC-BSRB2 rows/nums/red/refused/crlf_refused all True
+           (CRLF stream is REFUSED, so run_family newline normalisation is
+            load-bearing rather than decorative)
+  AC-BSRB3 E_REGISTRY_DRIFT named AND no file written in the private world
+  AC-BSRB4 verdict=RED red=2 green=1 row_red=True, fam_c(unparsable)=True
+  AC-BSRB5 clean fails=0, all six tamper tokens reddened, json/html fixed point
+  AC-BSRB6 zero http literals, scope note present, uncovered arithmetic, links
+  AC-BSRB7 drift/verdict controls redden only their own token (cross=False)
+  AC-BSRB8 prefix-overlap, duplicate-key, typed-count, absent-count all red
+  AC-BSRB6b landed pair + tool + registry stat-identical before and after
+  AC-BSRB7b banned imports 0, this source pure ASCII
+
+  registry BY IMPORT after the row: 689 suites / 5136 criteria /
+  689 unique names / 689 unique paths  (was 688 / 5126)
+  docs/sandbox-suite-matrix.md regenerated 72689B; --check byte-identical
+  (689 suites, 5136 criteria)
+
+FIVE SELF-CAUGHT DEFECTS IN THIS SUITE, FIXED AT BIRTH
+  (a) AC-BSRB3 compared os.listdir to a fixed list, so directory order alone
+      reddened it - now sorted() on both sides;
+  (b) the tamper matcher used exact list membership, but the tool appends
+      ":<family>" to drift tokens, so five of six controls read as absent -
+      now matched by prefix, the same law the shipped do_control uses;
+  (c) AC-BSRB7 and AC-BSRB8 inherited that exact-match bug and now share one
+      prefix helper;
+  (d) the banned-import needle table matched ITSELF (the needles are literals
+      in this file) - six false positives; needles are now assembled from
+      fragments, the same self-match trap the fleet process probes hit;
+  (e) sorted() was applied to one side only in the first repair.  No criterion
+      was relaxed by any of these: every fix made the check stricter or
+      correct.
+
+CEO-VISIBLE INCREMENT
+  preview/battery-shard-report.json 15138B + .html 15461B re-rendered over the
+  new registry: six families, 58 suites / 450 criteria, all six rc=0,
+  uncovered 631 of 689, verdict PASS.  The OS battery family row now reads
+  4 suites / 30 criteria instead of 3 / 20, i.e. the new guard is visible on
+  the page rather than only in the registry.
+  python tools/battery_shard_report.py --check: VERDICT PASS checks=8
+  bytes_html=15461 bytes_json=15138 read_only=True
+  preview/index.html re-rendered 36090B; deliverable_index --check
+  VERDICT PASS 14/14 fingerprint=0f2ff83e9df53fe4
+
+NOT CLAIMED
+  The full battery is still owed (689 suites / 5136 criteria, one leg of
+  4000-5900s).  This window measured six families; it says nothing about the
+  631 uncovered suites.  state.json remains above the 78500B waterline, so the
+  round-aligned fold stays owed.

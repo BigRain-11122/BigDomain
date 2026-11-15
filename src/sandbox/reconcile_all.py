@@ -6848,6 +6848,16 @@ SUITES = [
     # evidence are never written.
     ("os-battery-shard",
      os.path.join("..", "os", "test_battery_shard.py"), 8),
+    # R2801. tools/battery_shard_report.py - the face that decides whether six
+    # FAMILIES are green - shipped with eight criteria and no row, so for two
+    # windows it was graded only by the run that rendered it. AC-BSR1..AC-BSR8
+    # were pinned at R2799/R2800 BEFORE the tool; AC-BSRB1..AC-BSRB8 (this
+    # guard shape) at R2801 BEFORE this suite. It never runs a real family:
+    # the machinery is driven with synthetic streams in a private temp world,
+    # and the landed report pair, the tool and this registry are stat-signed
+    # before and after.
+    ("os-battery-shard-report",
+     os.path.join("..", "os", "test_battery_shard_report.py"), 10),
     ]
 
 FAILS = 0

@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T21:40:20+08:00",
-  "do": "R2800 - PRODUCT: the family-level shard face answered for three families (43 suites / 336 criteria) while six families were touched this week, so the page a CEO opens to ask 'are the families we moved green' covered less than half of them. FAMILIES now carries six frozen prefixes - lobby, os-export, os-queu...",
+  "export_ts": "2026-11-15T21:53:01+08:00",
+  "do": "R2801 - PRODUCT/ENGINEERING: the face that decides whether six families are green was graded only by the run that rendered it - tools/battery_shard_report.py shipped at R2799 with eight criteria (AC-BSR1..AC-BSR8) and its own --check, and NO row in src/sandbox/reconcile_all.py, a debt named by R2799 and aga...",
   "ceo_face": {
-    "current": "R2800 - PRODUCT: the family-level shard face answered for three families (43 suites / 336 criteria) while six families were touched this week, so the page a CEO opens to ask 'are the families we moved green' covered less than half of them. FAMILIES now carries six frozen prefixes - lobby, os-export, os-queu...",
-    "latest_artifact": "preview/battery-shard-report.html (15283B) + preview/battery-shard-report.json (14927B)",
-    "last_artifact": "preview/battery-shard-report.html (15283B) + preview/battery-shard-report.json (14927B)",
-    "next_milestone": "全量电池仍欠（688 套件 / 5126 判据），且本窗已证明族级面能红——下一窗把 `--match` 扩到本周其余动过的族（`os-ledger` / `os-battery` / `os-deliverable`），让页面按族并列而非只三族。",
-    "next_milestone_due": "2026-11-17T21:40:20+08:00",
-    "updated_at": "2026-11-15T21:40:20+08:00",
+    "current": "R2801 - PRODUCT/ENGINEERING: the face that decides whether six families are green was graded only by the run that rendered it - tools/battery_shard_report.py shipped at R2799 with eight criteria (AC-BSR1..AC-BSR8) and its own --check, and NO row in src/sandbox/reconcile_all.py, a debt named by R2799 and aga...",
+    "latest_artifact": "preview/battery-shard-report.html (15461B) + preview/battery-shard-report.json (15138B)",
+    "last_artifact": "preview/battery-shard-report.html (15461B) + preview/battery-shard-report.json (15138B)",
+    "next_milestone": "**全量电池仍欠**且又长一格——**689 套件 / 5136 判据**，一趟 4000-5900s；本窗只给六族真行（58/689，覆盖 8.4%），对未覆盖 631 套件**不宣称任何状态**。能 supervise 的窗口须**早发**（显式证据路径，禁 shell-capture），收口后经 `tools/adoption_preflight.py` 以自身 `BATTERY rc=` 行采纳。",
+    "next_milestone_due": "2026-11-17T21:53:01+08:00",
+    "updated_at": "2026-11-15T21:53:01+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -38,6 +38,7 @@
     }
   ],
   "outs": [
+    "preview/battery-shard-report.html (15461B) + preview/battery-shard-report.json (15138B)",
     "preview/battery-shard-report.html (15283B) + preview/battery-shard-report.json (14927B)",
     "preview/battery-shard-report.html (11502B) + preview/battery-shard-report.json (10802B)",
     "preview/battery-shard-report.html (11497B) + preview/battery-shard-report.json (10834B)",
@@ -764,7 +765,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2800",
+      "2801",
       "OSLoop 执行 tick"
     ],
     [
@@ -787,10 +788,10 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 131,
+    "log_lines_in_window": 138,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 30,
+    "substantive_non_idle_mention_lines": 31,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
