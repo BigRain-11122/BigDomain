@@ -1,14 +1,14 @@
 {
-  "export_ts": "2026-11-15T08:31:41+08:00",
-  "do": "2026-11-15 R2763 PRODUCT window: the P-47 item-1 lobby WebSocket handshake face is openable, so all five business faces carry a page. preview/lobby-ws-report.html (5952B) + .json (3070B) are rendered in ONE command by tools/lobby_ws_report.py, which wires the SHIPPED Lobby exactly as server.py main() does, serves it through the SHIPPED handler on an ephemeral loopback port and speaks RFC 6455 to it with two real websockets clients. Measured on the wire 8/8 pre-registered criteria: hello {v,rooms,risk_doc} plus the persistent 115B non-advisory frame verbatim; spectator chat refused E_ENTRANCE_REQUIRED with zero broadcast; pay.grant_sandbox then chat.broadcast reaching the second client; client-supplied actor and ai_generated=true both ignored; a forbidden word refused E_CONTENT_REJECTED with the event table unchanged 2->2; census.query serving the 12 whitelist fields with hook/recent_ring/recent_ring_date absent and an off-whitelist request refused E_FORBIDDEN_FIELD; room.board and idea.board carrying the shipped disclaimer verbatim with an unknown frame type refused gracefully and the connection still alive; and every connect target loopback with the shipped four files hash-identical before and after.",
+  "export_ts": "2026-11-15T08:46:44+08:00",
+  "do": "2026-11-15 R2764 PRODUCT window on a live leg. Five readings at open: git status EMPTY at HEAD 1e6bc560 equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger; the content-addressed decisions face read rows=141 tokens=73 new=0; the group orders tail is the carried 2026-11-14 00:30 main-control row, older than the 01:3x baseline and therefore knowledge-only; benchmarks_re",
   "ceo_face": {
-    "current": "2026-11-15 R2763 PRODUCT window: the P-47 item-1 lobby WebSocket handshake face is openable, so all five business faces carry a page. preview/lobby-ws-report.html (5952B) + .json (3070B) are rendered in ONE command by tools/lobby_ws_report.py, which wires the SHIPPED Lobby exactly as server.py main() does, serves it through the SHIPPED handler on an ephemeral loopback port and speaks RFC 6455 to it with two real websockets clients. Measured on the wire 8/8 pre-registered criteria: hello {v,rooms,risk_doc} plus the persistent 115B non-advisory frame verbatim; spectator chat refused E_ENTRANCE_REQUIRED with zero broadcast; pay.grant_sandbox then chat.broadcast reaching the second client; client-supplied actor and ai_generated=true both ignored; a forbidden word refused E_CONTENT_REJECTED with the event table unchanged 2->2; census.query serving the 12 whitelist fields with hook/recent_ring/recent_ring_date absent and an off-whitelist request refused E_FORBIDDEN_FIELD; room.board and idea.board carrying the shipped disclaimer verbatim with an unknown frame type refused gracefully and the connection still alive; and every connect target loopback with the shipped four files hash-identical before and after.",
-    "latest_artifact": "preview/lobby-ws-report.html (5952B)",
-    "last_artifact": "preview/lobby-ws-report.html (5952B)",
-    "next_milestone": "next window owes reconcile-battery-R2762 adoption by its own closing BATTERY rc= row through tools/adoption_preflight.py (pid 79308 kernel-ALIVE at R2763 close, stream 330 rows, 1 FAIL, no evidence file), and because this window landed a tools/ file, two preview artifacts and one qa log UNDER that live leg it must also re-run the census family and the export cohort on the FINAL committed tree, inside a 48h window due 2026-11-17T08:31:41+08:00",
-    "next_milestone_due": "2026-11-17T08:31:41+08:00",
-    "updated_at": "2026-11-15T08:17:20+08:00",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\payment-gate-report.html"
+    "current": "2026-11-15 R2764 PRODUCT window on a live leg. Five readings at open: git status EMPTY at HEAD 1e6bc560 equal to origin/main with no index.lock; ZERO @BigDomain rows in the group ledger; the content-addressed decisions face read rows=141 tokens=73 new=0; the group orders tail is the carried 2026-11-14 00:30 main-control row, older than the 01:3x baseline and therefore knowledge-only; benchmarks_re",
+    "latest_artifact": "platform-live-report.html (6889B) @2026-11-15T08:46",
+    "last_artifact": "platform-live-report.html (6889B) @2026-11-15T08:46",
+    "next_milestone": "next window adopts reconcile-battery-R2762 on the committed tree by its own closing BATTERY rc= row, then re-runs the census/export/queue sets it wrote under; 48h window due 2026-11-17T08:46:44+08:00",
+    "next_milestone_due": "2026-11-17T08:46:44+08:00",
+    "updated_at": "2026-11-15T08:46:44+08:00",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\platform-live-report.html"
   },
   "depts": [
     {
@@ -38,10 +38,10 @@
     }
   ],
   "outs": [
+    "platform-live-R2764.log (1641B)",
+    "lobby-ws-R2763.log (1439B)",
     "city-face-R2761.log (1946B)",
-    "membership-benefit-R2760.log (2075B)",
-    "payment-gate-report-R2759.log (661B)",
-    "ugc-gate-report-R2758.log (671B)"
+    "membership-benefit-R2760.log (2075B)"
   ],
   "results": [
     [
@@ -741,7 +741,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2763",
+      "2764",
       "OSLoop 执行 tick"
     ],
     [
@@ -764,10 +764,10 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 124,
+    "log_lines_in_window": 127,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 19,
     "proposals_total": 9,
     "proposals_open": 7,
     "queue_main_open": 6,
