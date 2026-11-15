@@ -1,0 +1,19 @@
+R2780b TARGETED VERIFICATION SET ON THE FINAL TREE (no battery leg was launched)
+reason: two detached legs died truncated today with no closing BATTERY rc= row,
+so this window records per-suite green by name instead of a run nobody supervised.
+
+test_ship_checklist.py rc=0 lines=25 SUITE PASS 21/21 AC-SCL2 item ids equal the ITEMS registry AC-SCL2 every item carries criterion and owner AC-SCL2 owner counts derived match the registry AC-SCL1 deleting an evidence file moves exactly that row AC-SCL1 the json on disk keeps the old stamp until re-rendered AC-SCL1 --check catches the stale stamp AC-SCL1 re-render restores READY and --check reads clean AC-SCL3 html holds no http(s) literal AC-SCL4 every row carries a stable data-ck id AC-SCL4 exactly one inline script and no external script AC-SCL4 one localStorage namespace guards the tick state AC-SCL5 recorded sizes equal the bytes on disk AC-SCL5 a second render is byte identical (no clock, no drift) AC-SCL6 --check writes nothing and both files keep bytes and mtime AC-SCL6 the CLI exit code is 0 on a clean world AC-SCL7 removing an evidence file flips --check red AC-SCL7 the CLI exit code is 2 on a red world AC-SCL7 restoring the file returns --check to clean AC-SCL8 the three hard doors exist, have faces and are rendered AC-SCL8 suite source is pure ASCII AC-SCL8 suite has no network and no shell import
+test_ledger_lines.py rc=0 lines=10 SUITE PASS 8/8 criteria
+test_ledger_archive.py rc=0 lines=10 SUITE PASS 8/8 criteria
+test_ledger_baseline.py rc=0 lines=10 SUITE PASS 8/8 criteria
+test_ledger_fold_kind.py rc=0 lines=8 SUITE PASS 6/6 criteria
+test_ledger_fold_kind_dateprefix.py rc=0 lines=8 SUITE PASS 6/6 criteria
+test_status_export_writer_dialect_wire.py rc=0 lines=8 SUITE PASS 6/6
+test_queue_floor_export_face.py rc=0 lines=8 SUITE PASS 6/6
+test_export_consistency_queue_face.py rc=0 lines=16 SUMMARY pass=15 fail=0
+test_status_export_writer_transport_scope.py rc=0 lines=8 SUITE PASS 6/6
+suite_matrix.py --check rc=0 PASS check: docs/sandbox-suite-matrix.md byte-identical (71658 bytes, 677 suites, 5040 criteria)
+check_export_consistency.py rc=0 SUMMARY pass=21 fail=0 state_tick=2780 window=2026-11-09..2026-11-15 W=34 idle=0 nop=0 sub=3 proposals=10/8 queues=6/13/10
+
+registry by import: 677 suites / 5040 criteria (os-ship-checklist added this round)
+VERDICT PASS red=0 of 12 faces
