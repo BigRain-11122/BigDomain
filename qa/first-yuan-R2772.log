@@ -1,0 +1,8 @@
+BigDomain R2772 first-yuan face negative controls (private world, restored after each)
+C1-stale-size-1B rc=2 FAIL AC-FYP6 recorded={'html': 3911, 'json': 2601} disk={'html': 3911, 'json': 2600}
+C2-forged-carrier-state rc=2 FAIL AC-FYP2 states=['verdict=PASS', 'verdict=PASS', 'verdict=PASS', 'verdict=PASS', 'reconcile_rc=0 refused=2 tx=3 entries=6', 'hole_status=LIVE']; FAIL AC-FYP6 recorded={'html': 3911, 'json': 2600} disk={'html': 3911, 'json': 2607}
+C3-missing-carrier-row rc=2 FAIL AC-FYP1 carriers=5 fresh=6 order_equal=False; FAIL AC-FYP6 recorded={'html': 3911, 'json': 2600} disk={'html': 3911, 'json': 2343}
+C4-gate-line-removed rc=2 FAIL AC-FYP4 compliance_missing=1; FAIL AC-FYP6 recorded={'html': 3911, 'json': 2600} disk={'html': 3861, 'json': 2600}
+C5-external-literal rc=2 FAIL AC-FYP5 external_literals=['https://']; FAIL AC-FYP6 recorded={'html': 3911, 'json': 2600} disk={'html': 3952, 'json': 2600}
+C6-forged-verdict rc=2 FAIL AC-FYP6 recorded={'html': 3911, 'json': 2600} disk={'html': 3911, 'json': 2589}; FAIL AC-FYP7 verdict=BLOCKED-PHYSICAL top_edge=物理件未到位 3 项（具名清单见 preview/ceo-blockers.html）；UGC 闸现读 hole_status=LIVE
+C7-restored-clean rc=0 no-FAIL
