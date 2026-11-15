@@ -6788,6 +6788,25 @@ SUITES = [
     # (AC-FCL1..AC-FCL8 pinned in src/os/backlog.md at R2781 BEFORE the code.)
     ("os-filing-checklist",
      os.path.join("..", "os", "test_filing_checklist.py"), 8),
+    # R2783 shipped tools/membership_face.py with six criteria of its own and NO
+    # battery row, so its gate was the only thing guarding it: a page that had
+    # drifted from the spec could still be the thing a human opened. This suite
+    # repoints the module at a private copy of preview/ and re-derives.
+    # (AC-MEMF1..AC-MEMF6 pinned in src/os/backlog.md at R2783, BEFORE the tool.)
+    ("os-membership-face",
+     os.path.join("..", "os", "test_membership_face.py"), 6),
+    # R2782 shipped tools/money_path_demo.py with the same hole - the 19.9 money
+    # path page was guarded only by its own --check, which cannot catch a page
+    # whose derivation changed under it.
+    # (AC-MPD1..AC-MPD6 pinned in src/os/backlog.md at R2782, BEFORE the tool.)
+    ("os-money-path-demo",
+     os.path.join("..", "os", "test_money_path_demo.py"), 6),
+    # Owed since R2775: tools/first_yuan_path.py carried seven criteria and no
+    # battery row. Its carrier table is the whole "is the money path open" claim,
+    # so a silent drift in one report would have gone unnoticed.
+    # (AC-FYP1..AC-FYP7 pinned in state/queue/tech.md, BEFORE the tool.)
+    ("os-first-yuan-path",
+     os.path.join("..", "os", "test_first_yuan_path.py"), 7),
     ]
 
 FAILS = 0

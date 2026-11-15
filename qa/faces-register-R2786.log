@@ -1,0 +1,57 @@
+BIGDOMAIN R2786 registry faces (three suites under a battery row where they had none)
+== src/os/test_membership_face.py
+  | PASS AC-MEMF1 counts equal a recomputation from the tier rows counts={'tiers': 4, 'paid': 3, 'pending': 2, 'matched': 1, 'blocked': 4, 'privileges': 11}
+  | PASS AC-MEMF1 every tier name is parsed from the spec text rows=4 stray=[]
+  | PASS AC-MEMF1 the tool source carries no price literal found=[]
+  | PASS AC-MEMF2 tier product matches equal the price cross-check bad=[]
+  | PASS AC-MEMF2 every tier is rendered on the page missing=[]
+  | PASS AC-MEMF2 every matched product id reaches the page unsigned=[]
+  | PASS AC-MEMF3 every needle and compliance marker is found needles=4 compliance=4
+  | PASS AC-MEMF3 stripping a needle turns the gate red naming E_NEEDLE lost=['ai_generated'] reasons=['E_NEEDLE spec lost needle(s) ai_generated', 'E_STALE html is not the fresh derivation']
+  | PASS AC-MEMF4 the page holds no http literal links=5
+  | PASS AC-MEMF4 every relative link target exists on disk dead=[]
+  | PASS AC-MEMF5 recorded sizes equal the bytes on disk sizes={'spec_bytes': 29184, 'pay_bytes': 6415, 'config_bytes': 2517}
+  | PASS AC-MEMF5 a second render is byte identical on both artifacts 
+  | PASS AC-MEMF6 --check exits 0 and writes nothing (bytes and mtime) rc=0
+  | PASS AC-MEMF6 one flipped byte on disk is caught as E_STALE reasons=['E_STALE html is not the fresh derivation']
+  | PASS AC-MEMF6 restoring the byte returns the gate to clean 
+  | PASS AC-MEMF6 suite source is pure ASCII non_ascii=0
+  | PASS AC-MEMF6 suite has no network and no shell import found=[]
+SUITE PASS 17/17
+== src/os/test_money_path_demo.py
+  | PASS AC-MPD1 product and step counts are derived from the lists counts={'decision': 5, 'physical': 3, 'products': 4, 'steps': 8, 'steps_pass': 6}
+  | PASS AC-MPD1 every price is the source price_cent, id for id products=4 drift=[]
+  | PASS AC-MPD2 product ids equal the source list id for id ids=['birthright_entry', 'pack_compute_19_9', 'report_data_b', 'share_observation']
+  | PASS AC-MPD2 every CEO-blocked product carries a visible CEO gate ceo_products=4
+  | PASS AC-MPD2 every product reaches the page missing=[]
+  | PASS AC-MPD3 the page states it is a mock surface label=本页为演示面
+  | PASS AC-MPD3 the page holds no absolute url 
+  | PASS AC-MPD4 every step verdict string reaches the page unaltered steps=8 missing=[]
+  | PASS AC-MPD4 every step id reaches the page missing=[]
+  | PASS AC-MPD4 every product entitlement and channel is rendered missing=[]
+  | PASS AC-MPD5 recorded source sizes equal the bytes on disk sources=3 drift=[]
+  | PASS AC-MPD5 a second render is byte identical on both artifacts html=9673B json=4311B
+  | PASS AC-MPD6 --check exits 0 and writes nothing (bytes and mtime) rc=0
+  | PASS AC-MPD6 one flipped byte is caught by check() problems=1
+  | PASS AC-MPD6 restoring the byte returns check() to clean 
+  | PASS AC-MPD6 exactly one inline script and one namespace declaration script=1 ns=1 storage=2
+  | PASS AC-MPD6 suite source is pure ASCII non_ascii=0
+  | PASS AC-MPD6 suite has no network and no shell import found=[]
+SUITE PASS 18/18
+== src/os/test_first_yuan_path.py
+WROTE preview/first-yuan.html 3879B preview/first-yuan.json 2567B verdict=BLOCKED-PHYSICAL
+  | PASS AC-FYP1 carriers equal the pinned carrier table in order carriers=6
+  | PASS AC-FYP2 every carrier state equals a fresh read of its report states=['verdict=PASS', 'verdict=PASS', 'verdict=PASS', 'verdict=PASS', 'reconcile_rc=0 refused=2 tx=3 entries=6', 'hole_status=LIVE']
+  | PASS AC-FYP2 every recorded carrier size equals the bytes on disk drift=[]
+  | PASS AC-FYP3 --check exits 0 and leaves both artifacts byte- and mtime-stable rc=0
+  | PASS AC-FYP4 every standing compliance face is rendered compliance=3 missing=0
+  | PASS AC-FYP5 the page holds no absolute url 
+  | PASS AC-FYP6 recorded sizes equal the bytes on disk recorded={'html': 3879, 'json': 2567} disk={'html': 3879, 'json': 2567}
+  | PASS AC-FYP6 the build reaches a fixed point on both artifacts 
+  | PASS AC-FYP7 the landed verdict equals the rule applied to a fresh derive verdict=BLOCKED-PHYSICAL
+  | PASS AC-FYP7 with no blockers the rule falls to code and names C6 (UGC hole) verdict=BLOCKED-CODE edge=代码面未绿 C6
+  | PASS AC-FYP7 flipping C3 adds it to the named code edge verdict=BLOCKED-CODE edge=代码面未绿 C3,C6
+  | PASS AC-FYP7 restoring both reports returns the verdict 
+  | PASS AC-FYP7 suite source is pure ASCII non_ascii=0
+  | PASS AC-FYP7 suite has no network and no shell import found=[]
+SUITE PASS 14/14

@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T15:01:02+08:00",
-  "do": "R2785 - THREE RED SUITES WERE REAL TREE REDS, and one missing line closed all three: reconciliation battery R2781 closed rc=1 with three FAIL rows (os-suite-matrix-reconcile-evidence-face, os-matrix-stamp-compare, os-stamp-text-coverage), and re-running them BY NAME on the FINAL tree reproduced 5/6, 5/6 and...",
+  "export_ts": "2026-11-15T16:02:28+08:00",
+  "do": "R2786 - PRODUCT: three shipped CEO-openable faces finally got the battery row they never had - os-membership-face (6), os-money-path-demo (6), os-first-yuan-path (7), all owed since R2775/R2782/R2783 when src/ was frozen under a live leg. The suites repoint each tool at a private copy of preview/ (membershi...",
   "ceo_face": {
-    "current": "R2785 - THREE RED SUITES WERE REAL TREE REDS, and one missing line closed all three: reconciliation battery R2781 closed rc=1 with three FAIL rows (os-suite-matrix-reconcile-evidence-face, os-matrix-stamp-compare, os-stamp-text-coverage), and re-running them BY NAME on the FINAL tree reproduced 5/6, 5/6 and...",
+    "current": "R2786 - PRODUCT: three shipped CEO-openable faces finally got the battery row they never had - os-membership-face (6), os-money-path-demo (6), os-first-yuan-path (7), all owed since R2775/R2782/R2783 when src/ was frozen under a live leg. The suites repoint each tool at a private copy of preview/ (membershi...",
     "latest_artifact": "preview/core-loop-walkthrough.html (5433B) + preview/core-loop-walkthrough.json (4056B)",
     "last_artifact": "preview/core-loop-walkthrough.html (5433B) + preview/core-loop-walkthrough.json (4056B)",
-    "next_milestone": "the registry has read 680 suites / 5060 criteria while the newest PARSEABLE evidence is R2739 at 675/675, so five suites carry no evidence at all - RUN a full battery whose output is NOT shell-capture (an explicit evidence path, so SUITE rows exist) and re-render the matrix from it; the shell-captur...",
-    "next_milestone_due": "2026-11-17T15:01:02+08:00",
-    "updated_at": "2026-11-15T15:01:02+08:00",
+    "next_milestone": "ADOPT the R2786 full battery by its OWN closing BATTERY rc= row through tools/adoption_preflight.py - it must be launched EARLY in the next window and supervised, NOT at the tail (two detached legs in earlier rounds died without a closing row when the host window ended) with an explicit evidence pat...",
+    "next_milestone_due": "2026-11-17T16:02:28+08:00",
+    "updated_at": "2026-11-15T16:02:28+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -750,7 +750,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2785",
+      "2786",
       "OSLoop 执行 tick"
     ],
     [
@@ -773,10 +773,10 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 67,
+    "log_lines_in_window": 71,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,

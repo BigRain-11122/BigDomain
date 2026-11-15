@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 680 | 5060 | 675/675 | R2739 |
+| 683 | 5079 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -718,7 +718,10 @@
 | 678 | os-export-round | ../os/test_export_round.py | 6 | no-evidence | - |
 | 679 | os-scan-five-still | ../os/test_scan_five_still.py | 6 | no-evidence | - |
 | 680 | os-filing-checklist | ../os/test_filing_checklist.py | 8 | no-evidence | - |
-|  | 合计 |  | 5060 | green 675 / FAIL 0 / no-evidence 5 |  |
+| 681 | os-membership-face | ../os/test_membership_face.py | 6 | no-evidence | - |
+| 682 | os-money-path-demo | ../os/test_money_path_demo.py | 6 | no-evidence | - |
+| 683 | os-first-yuan-path | ../os/test_first_yuan_path.py | 7 | no-evidence | - |
+|  | 合计 |  | 5079 | green 675 / FAIL 0 / no-evidence 8 |  |
 
 ## 证据出处
 
