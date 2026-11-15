@@ -85,8 +85,57 @@ def facts(entry):
     }
 
 
-def render_body(rows, defects_total):
+def newest_artifact():
+    """Derive the newest preview artifact pair by mtime (R2775).
+
+    The registry is editorial and covers only the *-report.html family, so a
+    face shipped under another filename family (first-yuan.html, journey-19.9
+    .html) is invisible in the ledger table and the CEO entry page silently
+    stopped carrying the window's newest artifact. This scans every preview
+    *.json by mtime instead of trusting a name convention, and it never
+    renders a blank recent-artifact line while artifacts exist (R2751 K1).
+    """
+    best = None
+    for name in sorted(os.listdir(PREVIEW)):
+        if not name.endswith(".json"):
+            continue
+        stem = os.path.splitext(name)[0]
+        # An artifact pair is X.html + X.json. The editorial registry
+        # (deliverable-index.json) is not an artifact and carries no sibling
+        # page, so it can never become the newest "shipped" face.
+        if not os.path.exists(os.path.join(PREVIEW, stem + ".html")):
+            continue
+        path = os.path.join(PREVIEW, name)
+        try:
+            mtime = os.path.getmtime(path)
+            nbytes = os.path.getsize(path)
+        except OSError:
+            continue
+        if best is None or mtime > best[1]:
+            best = (name, mtime, nbytes)
+    if best is None:
+        return {"json": "", "bytes": 0, "stamp": "", "empty": True}
+    import datetime
+    stamp = datetime.datetime.fromtimestamp(best[1]).strftime("%Y-%m-%dT%H:%M:%S")
+    return {"json": best[0], "bytes": best[2], "stamp": stamp, "empty": False}
+
+
+def newest_line(new):
+    """The one derived line AC-DIX8 compares against a fresh read."""
+    if new["empty"]:
+        return "preview/ carries no json artifact yet - stated, not blank."
+    return "%s \u00b7 %dB \u00b7 %s" % (new["json"], new["bytes"], new["stamp"])
+
+
+def render_newest(new):
     out = []
+    out.append("<h2>\u6700\u65b0\u5b9e\u7269\uff08\u76d8\u4e0a mtime \u6d3e\u751f\uff0c\u7981\u5199\u6b7b\uff09</h2>")
+    out.append('<div class="note">%s</div>' % html.escape(newest_line(new)))
+    return "\n".join(out)
+
+
+def render_body(rows, defects_total, newest):
+    out = [render_newest(newest), ""]
     out.append("<h2>\u5b9e\u7269\u53f0\u8d26\uff08\u4e00\u9875\u70b9\u8fdb\u6bcf\u4e2a\u5b9e\u6d4b\u9762\uff09</h2>")
     out.append(
         '<div class="note">\u672c\u5757\u7531 <code>tools/deliverable_index.py</code> '
@@ -139,10 +188,12 @@ def render_body(rows, defects_total):
 def render_block():
     rows = [facts(e) for e in load_registry()]
     defects = sum(len(r["defects"]) for r in rows)
-    body = render_body(rows, defects)
+    newest = newest_artifact()
+    body = render_body(rows, defects, newest)
     fp = hashlib.sha256(body.encode("utf-8")).hexdigest()[:16]
     return (
-        "%s\n%s\n<!-- fingerprint %s -->\n%s" % (BEGIN, body, fp, END), fp, rows
+        "%s\n%s\n<!-- fingerprint %s -->\n%s" % (BEGIN, body, fp, END), fp, rows,
+        newest
     )
 
 
@@ -200,7 +251,7 @@ def front_count(text):
 def main(argv):
     check = "--check" in argv[1:]
     text = read(INDEX)
-    block, fp, rows = render_block()
+    block, fp, rows, newest = render_block()
 
     checks = []
 
@@ -251,6 +302,23 @@ def main(argv):
     record("AC-DIX7", len(quoted) == len(rows),
            "verdicts-quoted=%d/%d defect-rows=%d"
            % (len(quoted), len(rows), sum(1 for r in rows if r["defects"])))
+
+    # AC-DIX8 (pinned 2026-11-15 R2775 before this code was written): the
+    # newest-artifact band must equal a FRESH mtime scan of preview/*.json, so
+    # the entry page cannot keep pointing at last window's face after a new
+    # one lands, and it may never read as a blank line while artifacts exist.
+    fresh = newest_artifact()
+    want = newest_line(fresh)
+    # The criterion must score the LANDED document, not the block this run just
+    # built: comparing the fresh derivation against the fresh render is a
+    # self-matching test that passes on any bytes (R2760/R2761 class, caught
+    # here by control c2 of tmp/negctl_dix8_R2775.py).
+    landed_block = get_block(text) if check else block
+    record("AC-DIX8", want in landed_block,
+           "newest=%s bytes=%d band=%s fresh_derivation_quoted=%s"
+           % (fresh["json"] or "(none)", fresh["bytes"],
+              "present" if newest_line(newest) in landed_block else "absent",
+              want in landed_block))
 
     if check:
         for code, ok, detail in checks:
