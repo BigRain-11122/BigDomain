@@ -1,0 +1,45 @@
+R2800 battery-shard-report: family set 3 -> 6 (AC-BSR7 / AC-BSR8)
+===============================================================
+registry (by import, tools/battery_shard.py) : 688 suites / 5126 criteria
+
+frozen request (prefix, family):
+  lobby          7 suites /  118 crit   rc=0 green=7/7   129.0s
+  os-export     20 suites /  120 crit   rc=0 green=20/20  12.4s
+  os-queue      16 suites /   98 crit   rc=0 green=16/16  19.9s
+  os-ledger     10 suites /   70 crit   rc=0 green=10/10   9.9s
+  os-battery     3 suites /   20 crit   rc=0 green=3/3    15.6s
+  os-deliverable 1 suite  /   14 crit   rc=0 green=1/1     0.2s
+  ---------------------------------------------------------------
+  totals        57 suites /  440 crit   uncovered 631   cover 8.3%
+
+landed: preview/battery-shard-report.json 14927B  .html 15283B
+report exit: rc=0 verdict=PASS  (measured run 188s wall)
+
+read-only gate
+  python tools/battery_shard_report.py --check  -> rc=0
+  BSR-CHECK checks=8 verdict=PASS read_only=True
+
+AC-BSR7 / AC-BSR8 controls (tmp/_bsr_negctl_R2800.py, private, no repo write)
+  c0 baseline                     fails=[]
+  c1 FAMILIES + ("os-", ...)      E_FAMILY_PREFIX_OVERLAP x5 + E_FAMILY_SET
+  c1b FAMILIES + duplicate row    E_FAMILY_KEY_DUP + E_FAMILY_SET
+  c2 html 6->"三族"               E_TYPED_FAMILY_COUNT + E_HTML_FIXED_POINT
+                                  + E_FAMILY_COUNT_ABSENT
+  c3 repo untouched after all     fails=[]
+  BSR-NEGCTL VERDICT CONFIRMED fails=0
+  collateral tokens are printed above rather than hidden: each mutation also
+  moves the family SET or the html fixed point, which is expected because the
+  payload and the request are checked against each other.
+
+entry page
+  python tools/deliverable_index.py            faces=9 index=36090B
+  --check                                       VERDICT PASS 14/14
+  AC-DIX8 newest=battery-shard-report.json bytes=14927 band=present
+
+honest notes
+  (a) six shards are NOT the battery: 631 of 688 suites stay uncovered and the
+      page says so on its first screen.
+  (b) the lobby family dominates the wall clock (129s of 188s); a future window
+      that only wants the OS families can call the runner directly.
+  (c) tools/battery_shard_report.py already has no battery row of its own - the
+      R2799 carry for src/os/test_battery_shard_report.py stays OPEN.

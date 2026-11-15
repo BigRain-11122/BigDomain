@@ -33,7 +33,7 @@ PREVIEW = os.path.join(ROOT, "preview")
 OUT_JSON = os.path.join(PREVIEW, "battery-shard-report.json")
 OUT_HTML = os.path.join(PREVIEW, "battery-shard-report.html")
 SHARD = os.path.join(HERE, "battery_shard.py")
-ROUND = "R2799"
+ROUND = "R2800"
 
 # label prefix, family key, what the family guards.  These are the REQUEST;
 # every number that comes back is measured.
@@ -41,6 +41,9 @@ FAMILIES = (
     ("lobby", "\u5927\u5385\u5b9e\u65f6\u5c42", "\u4f1a\u8bdd\u3001\u623f\u95f4\u3001\u9650\u6d41\u3001UGC \u95f8\u3001\u6301\u4e45\u5316"),
     ("os-export", "OS \u5bfc\u51fa\u9762", "\u5bfc\u51fa\u65b0\u9c9c\u5ea6\u3001\u53d1\u5e03\u8def\u5f84\u3001\u4e00\u81f4\u6027"),
     ("os-queue", "OS \u961f\u5217\u9762", "\u961f\u5934/\u961f\u5c3e/\u5360\u4f4d/\u76d6\u7ae0/\u4ea4\u4ed8"),
+    ("os-ledger", "OS \u53f0\u8d26\u9762", "\u53cc\u5f0f\u8bb0\u8d26\u3001\u5bf9\u8d26\u95f8\u3001\u53f0\u8d26\u5f52\u6863\u3001\u5224\u636e\u524d\u7f00"),
+    ("os-battery", "OS \u7535\u6c60\u9762", "\u5206\u7247\u5668\u3001\u5168\u91cf\u7535\u6c60\u53e3\u5f84\u3001\u81ea\u6d4b\u8bd5"),
+    ("os-deliverable", "OS \u4ea4\u4ed8\u9762", "\u5165\u53e3\u9875\u751f\u6210\u5668\u3001\u94fe\u63a5\u8986\u76d6"),
 )
 
 LINKS = ("index.html", "lobby-session-trace.html", "ledger-reconcile-face.html")
@@ -213,8 +216,10 @@ def render_html(p):
                  r["crit"], r["elapsed_s"]))
         a("</table>")
     a("<h2>\u8bda\u5b9e\u6ce8</h2><ul>")
-    a("<li>\u5c01\u9762\u4e0a\u7684\u6bcf\u4e2a\u6570\u90fd\u89e3\u6790\u81ea\u5206\u7247\u5668\u672c\u6b21 stdout\uff0c\u6e90\u7801\u4e0d\u5e26\u8fd9\u4e9b\u6570\u5b57\u7684\u5b57\u9762\u91cf\uff1b"
-      "\u6ce8\u518c\u8868\u5927\u5c0f\u53d6\u81ea\u4e09\u65cf\u5404\u81ea\u6253\u5370\u7684 <code>SHARD scope=</code> \u884c\uff0c\u4e92\u4e0d\u4e00\u81f4\u5373\u62d2\u6e32\u67d3\u3002</li>")
+    a(("<li>\u5c01\u9762\u4e0a\u7684\u6bcf\u4e2a\u6570\u90fd\u89e3\u6790\u81ea\u5206\u7247\u5668\u672c\u6b21 stdout\uff0c"
+       "\u6e90\u7801\u4e0d\u5e26\u8fd9\u4e9b\u6570\u5b57\u7684\u5b57\u9762\u91cf\uff1b\u6ce8\u518c\u8868\u5927\u5c0f\u53d6\u81ea\u672c\u9875\u8dd1\u7684 "
+       "%d \u65cf\u5404\u81ea\u6253\u5370\u7684 <code>SHARD scope=</code> \u884c\uff0c\u4e92\u4e0d\u4e00\u81f4\u5373\u62d2\u6e32\u67d3\u3002</li>")
+      % len(p["families"]))
     a("<li>\u8017\u65f6\u9010\u6b21\u4e0d\u540c\uff0c\u6240\u4ee5 <code>--check</code> \u4e0d\u91cd\u8dd1\u5957\u4ef6\uff1b\u5b83\u590d\u7b97\u7684\u662f"
       "json \u9010\u5b57\u8282\u91cd\u5e8f\u5217\u5316\u3001html \u9010\u5b57\u8282\u91cd\u6e32\u67d3\u3001\u5404\u65cf\u5224\u636e\u6570\u4e0e\u6ce8\u518c\u8868\u91cd\u65b0\u9009\u62e9\u76f8\u7b49\u3001"
       "\u6c47\u603b\u7b97\u672f\u81ea\u6d3d\u3001verdict=\u5404\u65cf rc \u6700\u5927\u503c\u6620\u5c04\u3002</li>")
@@ -267,6 +272,21 @@ def check_payload(payload, html_text, json_text, reg_suites, reg_criteria, exp):
         elif (fam["selected"], fam["selected_criteria"]) != want:
             fails.append("E_REGISTRY_DRIFT:%s" % fam["key"])
     t = payload["totals"]
+    # AC-BSR7: the family SET must be self-consistent, or totals double-count.
+    want_keys = [k for _p, k, _g in FAMILIES]
+    if len(set(want_keys)) != len(want_keys):
+        fails.append("E_FAMILY_KEY_DUP")
+    for i, (pi, _k, _g) in enumerate(FAMILIES):
+        for j, (pj, _k2, _g2) in enumerate(FAMILIES):
+            if i != j and pj.startswith(pi):
+                fails.append("E_FAMILY_PREFIX_OVERLAP:%s:%s" % (pi, pj))
+    if [f["key"] for f in payload["families"]] != want_keys:
+        fails.append("E_FAMILY_SET")
+    # AC-BSR8: every count on the page is arithmetic over the payload.
+    if "\u4e09\u65cf" in html_text:
+        fails.append("E_TYPED_FAMILY_COUNT")
+    if ("%d \u65cf" % len(payload["families"])) not in html_text:
+        fails.append("E_FAMILY_COUNT_ABSENT")
     if t["selected"] != sum(f["selected"] for f in payload["families"]):
         fails.append("E_TOTALS_SELECTED")
     if t["selected_criteria"] != sum(f["selected_criteria"]
@@ -276,6 +296,10 @@ def check_payload(payload, html_text, json_text, reg_suites, reg_criteria, exp):
         fails.append("E_TOTALS_FAMILIES")
     if t["uncovered_suites"] != reg_suites - t["selected"]:
         fails.append("E_TOTALS_UNCOVERED")
+    want_cover = (round(100.0 * t["selected"] / reg_suites, 1)
+                  if reg_suites else 0.0)
+    if abs(float(t["cover_pct"]) - want_cover) > 1e-9:
+        fails.append("E_TOTALS_COVER")
     reds = [f for f in payload["families"]
             if f["rc"] != 0 or f["parse"] != "ok"]
     want_verdict = "PASS" if not reds else "RED"
@@ -315,7 +339,7 @@ def do_check():
     if fails:
         print("BSR-CHECK RED %s" % ",".join(fails))
         return 2
-    print("BSR-CHECK name=battery-shard-report checks=6 bytes_html=%d "
+    print("BSR-CHECK name=battery-shard-report checks=8 bytes_html=%d "
           "bytes_json=%d verdict=%s read_only=True"
           % (stats[OUT_HTML][0], stats[OUT_JSON][0], payload["verdict"]))
     print("BSR-CHECK VERDICT PASS")
