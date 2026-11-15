@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 696 | 5213 | 675/675 | R2739 |
+| 696 | 5214 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -26,7 +26,7 @@
 | member | 会员商品面（products·可计费） | 4 | tier:experience, tier:patron, tier:mayor, tier:cocreator |
 | member | 权益券面（vouchers） | 1 | building_naming |
 | member | 提醒参数面（reminder） | 9 | channel, note, remind_days_before, remind_days_before_status, daily_send_cap_default, daily_send_cap_paid, daily_send_cap_note, reason_templates, templates |
-| pay | 商品 SKU 面（products·可计费） | 4 | pack_compute_19_9, birthright_entry, report_data_b, share_observation |
+| pay | 商品 SKU 面（products·可计费） | 5 | pack_compute_19_9, birthright_entry, tier_patron_30d, report_data_b, share_observation |
 | pay | 支付渠道面（channels） | 2 | virtual, standard |
 | pay | 合规面（compliance） | 3 | disclaimer, disclaimer_persistent, note |
 | ugc | 内容来源面（sources） | 4 | enum, enabled, entrance_required, note |
@@ -716,7 +716,7 @@
 | 677 | os-export-parity-difference-order-field | ../os/test_export_parity_difference_order_field.py | 6 | no-evidence | - |
 | 678 | os-ship-checklist | ../os/test_ship_checklist.py | 8 | no-evidence | - |
 | 679 | os-export-round | ../os/test_export_round.py | 11 | no-evidence | - |
-| 680 | os-payment-gate-report | ../os/test_payment_gate_report.py | 9 | no-evidence | - |
+| 680 | os-payment-gate-report | ../os/test_payment_gate_report.py | 10 | no-evidence | - |
 | 681 | os-qa-log | ../os/test_qa_log.py | 10 | no-evidence | - |
 | 682 | os-census-nul-class | ../os/test_census_nul_class.py | 7 | no-evidence | - |
 | 683 | os-ceo-blockers | ../os/test_ceo_blockers.py | 11 | no-evidence | - |
@@ -733,7 +733,7 @@
 | 694 | os-battery-shard | ../os/test_battery_shard.py | 8 | no-evidence | - |
 | 695 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
 | 696 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 11 | no-evidence | - |
-|  | 合计 |  | 5213 | green 675 / FAIL 0 / no-evidence 21 |  |
+|  | 合计 |  | 5214 | green 675 / FAIL 0 / no-evidence 21 |  |
 
 ## 证据出处
 

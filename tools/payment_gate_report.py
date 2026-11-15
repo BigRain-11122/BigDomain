@@ -35,7 +35,13 @@ Criteria pre-registered BEFORE the code was written (AC-PAYG1..8):
 Honest boundaries stated on the page itself: the mock keys are explicitly fake,
 zero real payment call is made, the real merchant id / appid / keys are CEO
 account-domain physical items, the V3 RSA verify mode is NOT exercised here
-(needs the platform public key), and the product prices are placeholders.
+(needs the platform public key).
+
+The --check face carries one guard the criteria table cannot state, because it
+is a property of the LANDED document rather than of a fresh render: the landed
+product rows and the landed config sha256 are compared against the config on
+disk, so a price change that was never re-rendered reddens here instead of
+leaving a stale number on a page a reader trusts (R2817; AC-PAYGB10/11).
 
 Usage:
   python tools/payment_gate_report.py [--out PATH] [--json PATH] [--check]
@@ -67,7 +73,7 @@ L = {
     "sub": "BigDomain \u00b7 P-47 \u7b2c\u56db\u9762 \u00b7 \u6c99\u7bb1\u5b9e\u6d4b",
     "g": "\u751f\u6210\u65f6\u95f4",
     "s": "\u914d\u7f6e\u6765\u6e90",
-    "sec1": "\u5546\u54c1\u4e0e\u4ef7\u683c\uff08\u5360\u4f4d\u00b7\u5f85 CEO \u786e\u8ba4\uff09",
+    "sec1": "\u5546\u54c1\u4e0e\u4ef7\u683c\uff08\u9010\u884c\u8bfb\u81ea\u914d\u7f6e\uff09",
     "sec2": "\u901a\u9053\u6b63\u4f8b\uff08\u5df2\u53d1\u8d27\u9002\u914d\u5668\uff09",
     "sec3": "\u53cd\u4f8b\uff08\u5fc5\u987b\u88ab\u62d2\uff09",
     "sec4": "\u5fae\u4fe1\u652f\u4ed8 V3 \u56de\u8c03\u9762\uff08\u5b98\u65b9\u89c4\u5219\uff09",
@@ -105,9 +111,12 @@ N = {
            "\u5c5e CEO \u7269\u7406\u4ef6\uff09\uff0c\u5f53\u524d\u6267\u884c"
            "\u7684\u662f HMAC \u6807\u51c6\u66ff\u8eab\u4e14\u9a8c\u7b7e"
            "\u8f93\u5165\u5b57\u7b26\u4e32\u4e0e\u751f\u4ea7\u4e00\u81f4",
-    "price": "\u4ef7\u683c\u5747\u4e3a\u5360\u4f4d\u503c\uff0c\u5b9a\u4ef7"
-             "\u786e\u8ba4\u6743\u5f52 CEO\uff1b\u672c\u62a5\u544a\u4e0d\u5bf9"
-             "\u5916\u58f0\u79f0\u4efb\u4f55\u6210\u4ea4\u4ef7",
+    "price": "\u4ef7\u76ee\u9010\u884c\u8bfb\u81ea config.json\uff08\u542b"
+             "D-20261116-05 \u88c1\u51b3\u7684 9.90 \u6c38\u4e45\u5165\u573a"
+             "\u5238\u4e0e 29.90 \u6708\u5361\uff09\uff1b\u4ecd\u6807 "
+             "[needs-CEO] \u7684\u884c=\u5b9a\u4ef7\u786e\u8ba4\u6743\u5728 "
+             "CEO\uff0c\u672c\u62a5\u544a\u4e0d\u5bf9\u5916\u58f0\u79f0\u4efb"
+             "\u4f55\u6210\u4ea4\u4ef7",
     "docker": "\u672c\u673a\u65e0 Docker\uff0c\u6545\u4e3a\u9759\u6001\u6587"
               "\u6863\u800c\u975e\u670d\u52a1\u6f14\u793a",
 }
@@ -477,6 +486,30 @@ def check(meas, out, jout):
         run = fresh.get(c.get("id"))
         if not run or run["measured"] != c.get("measured"):
             fails.append("%s drift" % c.get("id"))
+    # AC-PAYGB10/11 (R2817): the criteria TEXT and the artifact SIZES can agree
+    # while the landed price table belongs to an older config, which is exactly
+    # what R2816 measured on three faces at once. money_path_demo and
+    # membership_face both derive FROM this document, so a stale table here makes
+    # the whole chain agree with itself; the price face therefore has to be
+    # compared against the config, not merely printed from it.
+    landed_shas = (landed.get("config") or {}).get("sha256")
+    if landed_shas != meas["config"]["sha256"]:
+        fails.append("config drift: landed sha256 %s != current %s" % (
+            str(landed_shas)[:16], meas["config"]["sha256"][:16]))
+    fresh_rows = {p["id"]: p for p in meas["products"]}
+    landed_rows = {p.get("id"): p for p in landed.get("products", [])}
+    for pid in sorted(set(fresh_rows) | set(landed_rows)):
+        new, old = fresh_rows.get(pid), landed_rows.get(pid)
+        if new is None:
+            fails.append("product %s is not in the config any more" % pid)
+            continue
+        if old is None:
+            fails.append("product %s is missing from the landed table" % pid)
+            continue
+        for key in ("price_cent", "channel", "entitlement"):
+            if old.get(key) != new.get(key):
+                fails.append("stale product row on %s: landed %s=%r != config %r"
+                             % (pid, key, old.get(key), new.get(key)))
     sizes = landed.get("sizes") or {}
     if sizes.get("html") != os.path.getsize(out):
         fails.append("sizes html %s != %d on disk" % (sizes.get("html"),

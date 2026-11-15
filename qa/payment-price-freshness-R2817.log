@@ -1,0 +1,64 @@
+R2817 price-face freshness evidence - every line below is a real run
+
+$ python tools/payment_gate_report.py --check
+PAYMENT GATE CHECK PASS fails=0
+rc=0
+
+$ python src/os/test_payment_gate_report.py
+PAYMENT GATE REPORT html=6939B json=6885B channels=standard,virtual accepted=3 refused=7 verdict=PASS
+  | PASS AC-PAYGB1 both artifacts land non-empty with eight named criteria rc=0 html=6939B json=6885B ids=AC-PAYG1,AC-PAYG2,AC-PAYG3,AC-PAYG4,AC-PAYG5,AC-PAYG6,AC-PAYG7,AC-PAYG8
+  | PASS AC-PAYGB2 two shipped channels accept a signed callback (2/2) built=standard,virtual accepted=2/2 tool_rows=2
+  | PASS AC-PAYGB3 three legacy negatives are refused as AdapterError (3/3) refused=3/3 classes=AdapterError,AdapterError,AdapterError
+  | PASS AC-PAYGB4 one V3 callback with four headers verifies (1/1, 4/4) ok=True headers=4/4 tool=True
+  | PASS AC-PAYGB5 four V3 negatives refused, NOTPAY by trade_state (4/4) refused=4/4 notpay_named=True
+  | PASS AC-PAYGB6 config price, tool constant and landed row agree cfg=1990 const=1990 landed=1990 needs_ceo=True
+  | PASS AC-PAYGB7 disclaimer is byte-equal to config and AIGC note rides along disc=372B note=146B verbatim=True
+  | PASS AC-PAYGB8 both sources ASCII, whitelisted imports, zero network tool_imp=adapters,argparse,copy,datetime,hashlib,html,json,os,sys,v3 suite_extra= net=[] ascii=True/True
+PAYMENT GATE CHECK PASS fails=0
+PAYMENT GATE CHECK FAIL fails=1
+  - sizes html 6940 != 6939 on disk
+PAYMENT GATE CHECK PASS fails=0
+  | PASS AC-PAYGB9 --check is read-only, a tamper reddens, one row declares 10 clean=0 bad=2 restored=0 stat_stable=True rows=['10']
+  | PASS AC-PAYGB9b repo preview faces and pay config unchanged preview=650cfb5ab910aab4->650cfb5ab910aab4 cfg=True
+PAYMENT GATE CHECK FAIL fails=1
+  - stale product row on birthright_entry: landed price_cent=1990 != config 990
+  | PASS AC-PAYGB10 a stale price row reddens --check and names the product rc=2 fails=['stale product row on birthright_entry: landed price_cent=1990 != config 990']
+PAYMENT GATE CHECK FAIL fails=1
+  - config drift: landed sha256 0000000000000000 != current 1f3dd9233a82b565
+  | PASS AC-PAYGB11 a document rendered against another config reddens alone rc=2 fails=['config drift: landed sha256 0000000000000000 != current 1f3dd9233a82b565']
+  | PASS AC-PAYGB9c temp world removed (a leak is loud, not silent) removed=True
+SUITE PASS 13/13 in 0.1s
+rc=0
+
+$ python tools/money_path_demo.py --check
+VERDICT PASS products=5 steps=8 physical=3 decision=5 html=10161B json=4705B
+rc=0
+
+$ python tools/membership_face.py --check
+VERDICT PASS tiers=4 paid=3 pending=2 matched=1 blocked=4 privs=11
+rc=0
+
+$ python src/os/suite_matrix_reconcile.py --check
+DOC-CURRENT docs/sandbox-suite-matrix.md
+  evidence-source=walk-leg
+  evidence-walk considered=756 decoded=12 ceiling=64
+rc=0
+
+$ python tools/deliverable_index.py --check
+PASS AC-DIX1   registry=9 disk=9 missing=[] extra=[]
+PASS AC-DIX2   quoted-sizes=9 of 9, each equal to os.path.getsize
+PASS AC-DIX3   landed-names-newest=True snapshot-label=True fingerprint=5b452af591131eb5
+PASS AC-DIX4   markers=True scheme_free=True fronts_before=5 fronts_after=5 bytes=36501
+PASS AC-DIX5   links=46 relative-and-present=46 bad=[]
+PASS AC-DIX6   compliance=3/3 blocker-named=9/9
+PASS AC-DIX7   verdicts-quoted=9/9 defect-rows=0
+PASS AC-DIX8   newest=membership-face.json bytes=4602 names_fresh=True snapshot_label=True
+PASS AC-DIX9   band-rows=37 fresh-scan=37 listed-in-landed=37
+PASS AC-DIX10  pairs=37 missing-targets=[]
+PASS AC-DIX11  check-left-size+mtime-unchanged=True
+PASS AC-DIX12  band-offline=True rows=37
+PASS AC-DIX13  self-referential-bytes-wrong=[]
+PASS AC-DIX14  gate-pages-listed=[]
+VERDICT PASS 14/14 fingerprint=5b452af591131eb5
+{"failed": [], "fingerprint": "5b452af591131eb5", "passed": 14, "total": 14}
+rc=0

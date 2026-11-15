@@ -310,9 +310,9 @@ def main():
                               reg[pos:pos + 200])
             if found:
                 declared_rows.append(found.group(1))
-        ok('AC-PAYGB9 --check is read-only, a tamper reddens, one row declares 9',
+        ok('AC-PAYGB9 --check is read-only, a tamper reddens, one row declares 10',
            before == after and rc_clean == 0 and rc_bad == 2
-           and rc_restored == 0 and declared_rows == ['9'],
+           and rc_restored == 0 and declared_rows == ['10'],
            'clean=%d bad=%d restored=%d stat_stable=%s rows=%s' % (
                rc_clean, rc_bad, rc_restored, before == after,
                declared_rows))
@@ -323,6 +323,54 @@ def main():
            post_preview == pre_preview and digest(CONFIG) == pre_cfg,
            'preview=%s->%s cfg=%s' % (pre_preview[0], post_preview[0],
                                       digest(CONFIG) == pre_cfg))
+
+        # ---- AC-PAYGB10/11 (R2817): the price face is compared, not printed ----
+        # Both tampered documents are made SELF-CONSISTENT (their sizes key is
+        # iterated to the fixed point) so the inherited size guard cannot be the
+        # reason they redden - only the new price guard can.
+        def selfconsistent(folder, mutate):
+            os.makedirs(folder)
+            h = os.path.join(folder, 'payment-gate-report.html')
+            j = os.path.join(folder, 'payment-gate-report.json')
+            shutil.copyfile(html, h)
+            doc = json.loads(read(js))
+            mutate(doc)
+            for _ in range(8):
+                doc['sizes'] = {
+                    'html': os.path.getsize(h),
+                    'json': os.path.getsize(j) if os.path.exists(j) else 0}
+                with io.open(j, 'w', encoding='utf-8', newline='\n') as f:
+                    json.dump(doc, f, ensure_ascii=False, indent=2,
+                              sort_keys=True)
+                    f.write('\n')
+                if doc['sizes']['json'] == os.path.getsize(j):
+                    break
+            return h, j
+
+        def stale_price(doc):
+            for row in doc['products']:
+                if row['id'] == 'birthright_entry':
+                    row['price_cent'] = 1990
+
+        def stale_sha(doc):
+            doc['config']['sha256'] = '0' * 64
+
+        fresh = mod.collect()
+        p_html, p_js = selfconsistent(os.path.join(world, 'stale'), stale_price)
+        f_price = mod.check(fresh, p_html, p_js)
+        rc_price = mod.main(['--check', '--out', p_html, '--json', p_js])
+        ok('AC-PAYGB10 a stale price row reddens --check and names the product',
+           rc_price == 2 and any('birthright_entry' in f for f in f_price)
+           and not any('sizes' in f for f in f_price),
+           'rc=%d fails=%s' % (rc_price, f_price))
+
+        s_html, s_js = selfconsistent(os.path.join(world, 'shadrift'), stale_sha)
+        f_sha = mod.check(fresh, s_html, s_js)
+        rc_sha = mod.main(['--check', '--out', s_html, '--json', s_js])
+        ok('AC-PAYGB11 a document rendered against another config reddens alone',
+           rc_sha == 2 and any('config drift' in f for f in f_sha)
+           and not any('sizes' in f for f in f_sha),
+           'rc=%d fails=%s' % (rc_sha, f_sha))
     finally:
         shutil.rmtree(world, ignore_errors=True)
 

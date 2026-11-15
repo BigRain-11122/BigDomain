@@ -81,7 +81,7 @@
       "text": "tool source ASCII, stdlib+shipped imports, zero network refs"
     }
   ],
-  "generated_utc": "2026-11-15T22:38:55Z",
+  "generated_utc": "2026-11-15T22:52:51Z",
   "legacy_negative": [
     {
       "case": "tampered signature",
@@ -99,7 +99,7 @@
     },
     {
       "case": "stale timestamp",
-      "detail": "E_CALLBACK_REJECTED: ts outside +-300s window (delta=401s)",
+      "detail": "E_CALLBACK_REJECTED: ts outside +-300s window (delta=400s)",
       "expect": "已拒",
       "got": "已拒",
       "ok": true
@@ -108,7 +108,7 @@
   "notes": [
     "[needs-CEO] 真实商户号 / AppID / AppKey / 对公结算 = 集团账号域物理件；本报告零真实支付调用，沙箱钥为显式假钥",
     "V3 RSA 真实验签模式本报告未执行（需平台公钥，属 CEO 物理件），当前执行的是 HMAC 标准替身且验签输入字符串与生产一致",
-    "价格均为占位值，定价确认权归 CEO；本报告不对外声称任何成交价",
+    "价目逐行读自 config.json（含D-20261116-05 裁决的 9.90 永久入场券与 29.90 月卡）；仍标 [needs-CEO] 的行=定价确认权在 CEO，本报告不对外声称任何成交价",
     "本机无 Docker，故为静态文档而非服务演示"
   ],
   "products": [
@@ -154,8 +154,8 @@
     }
   ],
   "sizes": {
-    "html": 6839,
-    "json": 6781
+    "html": 6939,
+    "json": 6885
   },
   "source": {
     "ascii": true,
@@ -172,7 +172,7 @@
       "v3"
     ],
     "network_refs": 0,
-    "sha256": "376d2369b5522b545661b051b8d9f7f723a5422781589f467a9be95564f54cbd"
+    "sha256": "049eae4dbbc75d1d7eddd513d2fa84d2cd0152a0a17fbead554f1330646e554c"
   },
   "v3_negative": [
     {
@@ -191,7 +191,7 @@
     },
     {
       "case": "stale timestamp",
-      "detail": "E_CALLBACK_REJECTED: ts outside +-300s window (delta=401s)",
+      "detail": "E_CALLBACK_REJECTED: ts outside +-300s window (delta=400s)",
       "expect": "已拒",
       "got": "已拒",
       "ok": true

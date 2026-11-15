@@ -6792,9 +6792,11 @@ SUITES = [
     # payload, so a tool that prints green while the suite recomputes red is red.
     # (AC-PAYGB1..AC-PAYGB9 pinned in src/os/backlog.md at R2806 BEFORE the
     # suite existed; a pre-registration run read exactly one red - the registry
-    # assertion - which is the proof that sub-check carries weight.)
+    # assertion - which is the proof that sub-check carries weight. R2817 added
+    # AC-PAYGB10/11 for the stale-price false green measured at R2816, so the
+    # row moves 9 -> 10 and its own pre-registration run read exactly that row.)
     ("os-payment-gate-report",
-     os.path.join("..", "os", "test_payment_gate_report.py"), 9),
+     os.path.join("..", "os", "test_payment_gate_report.py"), 10),
     # R2807: tools/qa_log.py writes every window's evidence (tools/battery_shard.py
     # calls its do_write directly) yet all 691 registered suites covered zero
     # AC-QAL* tokens, so its seven criteria were guarded only by its own

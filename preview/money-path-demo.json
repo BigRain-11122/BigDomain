@@ -75,7 +75,7 @@
       "path": "preview/journey-19.9.json"
     },
     "payment": {
-      "bytes": 6781,
+      "bytes": 6885,
       "path": "preview/payment-gate-report.json"
     }
   },

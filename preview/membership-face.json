@@ -178,7 +178,7 @@
   ],
   "sizes": {
     "spec_bytes": 29184,
-    "pay_bytes": 6781,
+    "pay_bytes": 6885,
     "config_bytes": 2517
   },
   "sources": {
@@ -187,7 +187,7 @@
     "config": "tools/membership_face_config.json"
   },
   "spec_sha16": "bb0a5dc0b2a49946",
-  "pay_sha16": "513edbabafbead6f",
+  "pay_sha16": "75e7e8c148747db6",
   "criteria": [
     "AC-MEMF1",
     "AC-MEMF2",
