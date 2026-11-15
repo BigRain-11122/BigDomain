@@ -1,0 +1,12 @@
+R2787 lobby protocol map - evidence log
+spec docs/spec/lobby-websocket-spec.md 24207B 27 criteria rows 17 implemented messages
+artifact preview/lobby-protocol-map.html 22841B preview/lobby-protocol-map.json 21370B
+gate --check VERDICT PASS criteria=27 messages=17 uncovered=4 file_refs=13 rc=0
+controls
+  double render: html sha256 equal TRUE json sha256 equal TRUE
+  read only: --check leaves html mtime identical TRUE
+  offline: http literals 0 inline scripts 1 localStorage namespaces 1
+  fixed point: recorded spec_bytes 24207 == os.path.getsize 24207
+  negative control (private world, sys.hello replaced by sys_gone): rc=2 messages 16 fails=3
+uncovered messages measured: err.rate_limit room.subscribe room.unsubscribe sys.notice
+entry page re-rendered: DELIVERABLE INDEX faces=8 defects=0 index=34959B and --check PASS

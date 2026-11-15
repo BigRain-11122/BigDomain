@@ -1,0 +1,708 @@
+{
+ "namespace": "bd-lobby-protocol-map-v1",
+ "spec": "docs/spec/lobby-websocket-spec.md",
+ "spec_bytes": 24207,
+ "spec_lines": 141,
+ "impl": "src/sandbox/lobby/server.py",
+ "impl_bytes": 30231,
+ "section_count": 20,
+ "criteria_rows": 27,
+ "criteria_sandbox": 22,
+ "criteria_prod": 5,
+ "token_count": 37,
+ "message_count": 17,
+ "file_ref_count": 13,
+ "field_path_count": 7,
+ "uncovered_count": 4,
+ "uncovered": [
+  "err.rate_limit",
+  "room.subscribe",
+  "room.unsubscribe",
+  "sys.notice"
+ ],
+ "criteria": [
+  {
+   "id": "AC-S1",
+   "tokens": [
+    "sys.hello"
+   ],
+   "text": "客户端连 `ws://localhost:8091/ws` 握手成功；服务端首条=`sys.hello`（协议版本/房间列表/风险提示文案指针）"
+  },
+  {
+   "id": "AC-S2",
+   "tokens": [
+    "chat.send"
+   ],
+   "text": "围观态（无入城凭证）可收广播不可发：发 `chat.send`→拒 `E_ENTRANCE_REQUIRED`，不广播"
+  },
+  {
+   "id": "AC-S3",
+   "tokens": [
+    "pay.grant_sandbox"
+   ],
+   "text": "入城态（沙箱 mock 凭证 `pay.grant_sandbox`）发 chat 经安全闸→全房间广播；本机往返 ≤500ms"
+  },
+  {
+   "id": "AC-S4",
+   "tokens": [],
+   "text": "安全闸（沙箱=违禁词表 mock 闸）命中→拒 `E_CONTENT_REJECTED`，不广播、不落公共事件流；**闸配置缺失/未接线=serve 模式拒绝启动**（前置闸自检·§五.3 未接内容安全=禁开门）"
+  },
+  {
+   "id": "AC-S5",
+   "tokens": [],
+   "text": "AI 生成消息（居民台词/AI 整理产物/AI 系统发言）体带 `ai_generated:true`+呈现标识字段；人工消息该字段服务端权威覆写 false（客户端传值忽略·不可伪造）"
+  },
+  {
+   "id": "AC-S6",
+   "tokens": [
+    "sys.risk_warning"
+   ],
+   "text": "连接建立即下发 `sys.risk_warning`（非投顾定性+风险提示常驻文案）；本规格要求前端常驻渲染非折叠（生产验收项·本机验消息到位）"
+  },
+  {
+   "id": "AC-S7",
+   "tokens": [],
+   "text": "一切公共面事件落 SQLite WAL 单写者（BEGIN IMMEDIATE）；行=六字段核超集 `ts_utc/type/actor/repo/zone/summary`+`evt_id`（内容寻址·UNIQUE 去重）；按日导出 jsonl 兼容层可读"
+  },
+  {
+   "id": "AC-S8",
+   "tokens": [],
+   "text": "心跳 ping/pong 30s；60s 无 pong 服务端断开；100 并发连接 5 分钟稳定，广播 p95 ≤200ms（本机口径）"
+  },
+  {
+   "id": "AC-S8c",
+   "tokens": [],
+   "text": "客户端重连语义-心跳超时：死网仿真（冻结代理双流持 socket·无 FIN 达客户端）下客户端保活（ping 1s+pong 等待 1s）≤6s 自检死连并断开；重连后 chat 广播往返复证"
+  },
+  {
+   "id": "AC-S8d",
+   "tokens": [
+    "hello.rooms"
+   ],
+   "text": "客户端重连语义-断线重连：服务器进程硬停→客户端退避重连（实测 ≥1 次 ≤10 次=非忙旋自证）；恢复序列=重 grant+房间集精确恢复（对 hello.rooms 逐房 ∈订阅/∉退订），quant 广播收到+lobby 广播隔离不收"
+  },
+  {
+   "id": "AC-S8e",
+   "tokens": [
+    "chat.duplicate"
+   ],
+   "text": "客户端重连语义-幂等恢复：send 达而 ack 丢失（armed 代理标记帧过即冻）→观察者直连恰收 1 次→客户端重连后同 `client_msg_id` 同文本重放→`chat.duplicate`（`E_DUPLICATE_MSG`·原 evt_id 回带）→store 恰 1 行+无二次广播+pending 清空"
+  },
+  {
+   "id": "AC-S9",
+   "tokens": [
+    "sec.reject"
+   ],
+   "text": "单连接 chat 限速 5 条/10s：超限→`E_RATE_LIMIT`；连续超限 3 次→临时禁言 60s（`sec.reject` 告知）"
+  },
+  {
+   "id": "AC-S10",
+   "tokens": [],
+   "text": "消息分流：`chat`（大厅聊天）/`idea`（脑洞→提案池队列 stub·三层共创筛选第一入口）；沙箱=关键词路由"
+  },
+  {
+   "id": "AC-S11",
+   "tokens": [
+    "census.query",
+    "census.snapshot"
+   ],
+   "text": "census 查询：`census.query`→`census.snapshot`（按 id）——返回字段 ⊆ server-city §4 白名单初版（recent_ring/hook 留深水区**不出**·荣誉市民席 C-00001~09 空席零渲染）；白名单外字段请求→`E_FORBIDDEN_FIELD`；数据源=git 只读导入件（零新增采集）"
+  },
+  {
+   "id": "AC-S12",
+   "tokens": [
+    "avatar.intake_receipt",
+    "avatar.register"
+   ],
+   "text": "化身注册 intake：`avatar.register`→闸1 内容安全+闸2 非投顾词表→落 intake 队列（公共面事件行）→回 `avatar.intake_receipt`（含 evt_id 受理回执）；受理与户籍写入归 BigLife T-04（引用不复制·本服务只 intake+回执）；未经闸内容不落队列不回执"
+  },
+  {
+   "id": "AC-S13",
+   "tokens": [],
+   "text": "参观只读 read API：HTTP GET 只读端点（`/city/snapshot`·`/census/<id>`）数据源=world-public 快照包 git 只读通道（响应带 `as_of` 时间戳·延迟≤20min 异步生活感）；城市数据目录 `:ro`（写试=拒）；intake 面外无任何写端点（405/404）"
+  },
+  {
+   "id": "AC-S14",
+   "tokens": [
+    "chat.broadcast"
+   ],
+   "text": "房间级消息读面（存储层·R1773）：`EventStore.room_message_board()` 纯读派生=每房 `chat.broadcast` 计数+活跃户（DISTINCT actor）聚合·零 UPDATE 零缓存（读时派生）·信封常驻非投顾 disclaimer·无 disclaimer fail-closed 拒"
+  },
+  {
+   "id": "AC-S15",
+   "tokens": [],
+   "text": "读面卫生律（R1773）：显式空/空白/非 str disclaimer 构造拒·legacy 无 disclaimer 构造面调拒 `E_STORE_NO_DISCLAIMER`·方法源零写语句（inspect 机检）·确定性双调同一"
+  },
+  {
+   "id": "AC-S16",
+   "tokens": [
+    "room.board",
+    "sec.reject"
+   ],
+   "text": "room.board 协议接线（R1790）：请求帧 `{\"type\":\"room.board\"}` 零参公共读面（围观态可查=AC-S11 同律）→响应帧 `room.board`（payload={board,disclaimer}·board 经存储层读面公有 API 引用零第二引擎·ai_generated/actor 服务端权威）·board==manual SQL 并发只读交叉·新广播后复查询计数 +1（零缓存活态）·legacy 无 disclaimer store 经 `sec.reject` graceful 拒不崩连接"
+  },
+  {
+   "id": "AC-S17",
+   "tokens": [
+    "payload.rooms",
+    "room.board",
+    "sec.reject"
+   ],
+   "text": "room.board 订阅过滤参数（R1791）：可选 `payload.rooms`——缺省（无键/None）=全榜现行行为零漂移·过滤=board 后 Python 侧行过滤（读面单源零第二 SQL 引擎·zone 升序保序子序列·请求序不重写结果序）·空列表 []=诚实空兴趣集 board==[]·未知房名=零幻影行零报错（兴趣集语义）·坏参（非 list/成员非 str/空串/纯空白）fail-closed `sec.reject E_BAD_FRAME`（门序先于 store 调用）·拒后同连接恢复（不崩连接）·响应帧零键漂移（ai_generated/actor 承传）"
+  },
+  {
+   "id": "AC-S18",
+   "tokens": [
+    "idea.submit"
+   ],
+   "text": "事件派生 idea 池读面（存储层·R1792）：`EventStore.idea_pool_board()` 纯读派生=per zone（池）`idea.submit` 计数+提交户（DISTINCT actor）聚合〔行 {room,ideas,actors}·zone 渲染为 room=R1773 家族律〕·零 UPDATE 零缓存（读时派生）·信封常驻非投顾 disclaimer·legacy 无 disclaimer 构造面调拒 `E_STORE_NO_DISCLAIMER`·显式空/空白/非 str 构造拒·方法源零写语句（inspect 机检）·**事件派生取代内存 stub 读依赖**（proposal_pool 重启即失→读面自 events 恒真）"
+  },
+  {
+   "id": "AC-S19",
+   "tokens": [
+    "idea.board",
+    "payload.rooms",
+    "sec.reject"
+   ],
+   "text": "idea.board 协议接线（R1792）：请求帧 `{\"type\":\"idea.board\"}` 零参公共读面（围观态可查=AC-S11 同律）+可选 `payload.rooms` 过滤（AC-S17 同律：缺省=全榜·坏参 fail-closed `sec.reject E_BAD_FRAME` 先于 store 调用·空列表=诚实空榜·未知房名零幻影·board 后 Python 侧保序子序列过滤）→响应帧 `idea.board`（payload={board,disclaimer} 零键漂移·ai_generated/actor 服务端权威）·board==manual SQL 并发只读交叉·新 idea 后复查询计数 +1（零缓存活态）·**重启存活证**=server 进程重启（新进程同 db·内存 stub 必空）后 idea.board 仍返回全量榜（事件派生 vs stub 失真根治证）·legacy 无 disclaimer store 经 `sec.reject` graceful 拒不崩连接"
+  },
+  {
+   "id": "AC-P1",
+   "tokens": [],
+   "text": "wss+TLS+域名；ICP 备案完成才可公网 serve"
+  },
+  {
+   "id": "AC-P2",
+   "tokens": [],
+   "text": "msgSecCheck 真实接口接线（微信资质）+违禁词库+人工复核队列；未接线=大厅禁开门"
+  },
+  {
+   "id": "AC-P3",
+   "tokens": [],
+   "text": "入城凭证=真实 19.9 支付回执签发（对接 P-47-4 后换掉 mock）"
+  },
+  {
+   "id": "AC-P4",
+   "tokens": [],
+   "text": "日志留存 ≥6 个月（等保口径）；公测前等保测评呈报"
+  },
+  {
+   "id": "AC-P5",
+   "tokens": [],
+   "text": "云上 1000 并发压测广播 p95 ≤500ms"
+  }
+ ],
+ "messages": [
+  {
+   "token": "avatar.register",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧"
+   ],
+   "count": 2,
+   "criteria": [
+    "AC-S12"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "census.query",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧"
+   ],
+   "count": 2,
+   "criteria": [
+    "AC-S11"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "chat.broadcast",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧",
+    "安全闸管道（顺序即宪法·三道闸串行）"
+   ],
+   "count": 3,
+   "criteria": [
+    "AC-S14"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "chat.duplicate",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧",
+    "客户端重连语义（2026-10-09 R1675 增补·S8b 后继·AC-S8c/S8d/S8e 承载）",
+    "六、生产开闸前置清单（物理件到位后依序）"
+   ],
+   "count": 4,
+   "criteria": [
+    "AC-S8e"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "chat.send",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧",
+    "安全闸管道（顺序即宪法·三道闸串行）",
+    "客户端重连语义（2026-10-09 R1675 增补·S8b 后继·AC-S8c/S8d/S8e 承载）"
+   ],
+   "count": 4,
+   "criteria": [
+    "AC-S2"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "err.rate_limit",
+   "kind": "message",
+   "sections": [
+    "传输与帧"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "idea.board",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧",
+    "事件派生 idea 池读面（R1792 接线·AC-S18/S19 承载）",
+    "六、生产开闸前置清单（物理件到位后依序）"
+   ],
+   "count": 7,
+   "criteria": [
+    "AC-S19"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "idea.submit",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧",
+    "事件派生 idea 池读面（R1792 接线·AC-S18/S19 承载）",
+    "安全闸管道（顺序即宪法·三道闸串行）"
+   ],
+   "count": 4,
+   "criteria": [
+    "AC-S18"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "pay.grant_sandbox",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧"
+   ],
+   "count": 2,
+   "criteria": [
+    "AC-S3"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "payload.rooms",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "房间级消息读面（R1790 接线·AC-S14..S17 承载）",
+    "事件派生 idea 池读面（R1792 接线·AC-S18/S19 承载）",
+    "六、生产开闸前置清单（物理件到位后依序）"
+   ],
+   "count": 5,
+   "criteria": [
+    "AC-S17",
+    "AC-S19"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "room.board",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧",
+    "房间级消息读面（R1790 接线·AC-S14..S17 承载）",
+    "六、生产开闸前置清单（物理件到位后依序）"
+   ],
+   "count": 8,
+   "criteria": [
+    "AC-S16",
+    "AC-S17"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "room.subscribe",
+   "kind": "message",
+   "sections": [
+    "传输与帧",
+    "安全闸管道（顺序即宪法·三道闸串行）"
+   ],
+   "count": 2,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "room.unsubscribe",
+   "kind": "message",
+   "sections": [
+    "传输与帧"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "sec.reject",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧",
+    "房间级消息读面（R1790 接线·AC-S14..S17 承载）",
+    "事件派生 idea 池读面（R1792 接线·AC-S18/S19 承载）"
+   ],
+   "count": 10,
+   "criteria": [
+    "AC-S9",
+    "AC-S16",
+    "AC-S17",
+    "AC-S19"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "sys.hello",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧",
+    "安全闸管道（顺序即宪法·三道闸串行）"
+   ],
+   "count": 3,
+   "criteria": [
+    "AC-S1"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "sys.notice",
+   "kind": "message",
+   "sections": [
+    "传输与帧"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true,
+   "implemented": true
+  },
+  {
+   "token": "sys.risk_warning",
+   "kind": "message",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧",
+    "安全闸管道（顺序即宪法·三道闸串行）",
+    "四、合规四件套自检（每设计件必含·本件对照）"
+   ],
+   "count": 4,
+   "criteria": [
+    "AC-S6"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": true
+  }
+ ],
+ "file_refs": [
+  {
+   "token": "bigdomain.md",
+   "kind": "file-ref",
+   "sections": [
+    "同步层选型（cocreate 房共创状态收敛·应用层 CRDT·2026-10-08 R1553 回写·评估行②）"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true
+  },
+  {
+   "token": "city.md",
+   "kind": "file-ref",
+   "sections": [],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": false
+  },
+  {
+   "token": "city.py",
+   "kind": "file-ref",
+   "sections": [
+    "三、沙箱骨架实现规格（P-47-1b 执行面·本轮只注册不实现）"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true
+  },
+  {
+   "token": "compose.yml",
+   "kind": "file-ref",
+   "sections": [
+    "三、沙箱骨架实现规格（P-47-1b 执行面·本轮只注册不实现）"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true
+  },
+  {
+   "token": "events.md",
+   "kind": "file-ref",
+   "sections": [],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": false
+  },
+  {
+   "token": "light.jsonl",
+   "kind": "file-ref",
+   "sections": [
+    "三、沙箱骨架实现规格（P-47-1b 执行面·本轮只注册不实现）"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true
+  },
+  {
+   "token": "public.json",
+   "kind": "file-ref",
+   "sections": [
+    "三、沙箱骨架实现规格（P-47-1b 执行面·本轮只注册不实现）"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true
+  },
+  {
+   "token": "sec_gate.py",
+   "kind": "file-ref",
+   "sections": [
+    "三、沙箱骨架实现规格（P-47-1b 执行面·本轮只注册不实现）"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true
+  },
+  {
+   "token": "server.py",
+   "kind": "file-ref",
+   "sections": [
+    "三、沙箱骨架实现规格（P-47-1b 执行面·本轮只注册不实现）"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true
+  },
+  {
+   "token": "store.py",
+   "kind": "file-ref",
+   "sections": [
+    "三、沙箱骨架实现规格（P-47-1b 执行面·本轮只注册不实现）"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true
+  },
+  {
+   "token": "tech.md",
+   "kind": "file-ref",
+   "sections": [
+    "四、合规四件套自检（每设计件必含·本件对照）",
+    "六、生产开闸前置清单（物理件到位后依序）"
+   ],
+   "count": 6,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true
+  },
+  {
+   "token": "test_client.py",
+   "kind": "file-ref",
+   "sections": [
+    "客户端重连语义（2026-10-09 R1675 增补·S8b 后继·AC-S8c/S8d/S8e 承载）",
+    "三、沙箱骨架实现规格（P-47-1b 执行面·本轮只注册不实现）"
+   ],
+   "count": 2,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true
+  },
+  {
+   "token": "yws.mjs",
+   "kind": "file-ref",
+   "sections": [
+    "同步层选型（cocreate 房共创状态收敛·应用层 CRDT·2026-10-08 R1553 回写·评估行②）"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true
+  }
+ ],
+ "field_paths": [
+  {
+   "token": "avatar.intake_receipt",
+   "kind": "spec-only",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧"
+   ],
+   "count": 2,
+   "criteria": [
+    "AC-S12"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": false
+  },
+  {
+   "token": "census.snapshot",
+   "kind": "spec-only",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "传输与帧"
+   ],
+   "count": 2,
+   "criteria": [
+    "AC-S11"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": false
+  },
+  {
+   "token": "hello.rooms",
+   "kind": "spec-only",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
+    "客户端重连语义（2026-10-09 R1675 增补·S8b 后继·AC-S8c/S8d/S8e 承载）"
+   ],
+   "count": 2,
+   "criteria": [
+    "AC-S8d"
+   ],
+   "covered": true,
+   "in_scope": true,
+   "implemented": false
+  },
+  {
+   "token": "payload.board",
+   "kind": "spec-only",
+   "sections": [
+    "房间级消息读面（R1790 接线·AC-S14..S17 承载）",
+    "事件派生 idea 池读面（R1792 接线·AC-S18/S19 承载）"
+   ],
+   "count": 2,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true,
+   "implemented": false
+  },
+  {
+   "token": "payload.disclaimer",
+   "kind": "spec-only",
+   "sections": [
+    "房间级消息读面（R1790 接线·AC-S14..S17 承载）",
+    "事件派生 idea 池读面（R1792 接线·AC-S18/S19 承载）"
+   ],
+   "count": 2,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true,
+   "implemented": false
+  },
+  {
+   "token": "payload.evt_id",
+   "kind": "spec-only",
+   "sections": [
+    "客户端重连语义（2026-10-09 R1675 增补·S8b 后继·AC-S8c/S8d/S8e 承载）"
+   ],
+   "count": 1,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true,
+   "implemented": false
+  },
+  {
+   "token": "risk_warning.text",
+   "kind": "spec-only",
+   "sections": [
+    "房间级消息读面（R1790 接线·AC-S14..S17 承载）",
+    "事件派生 idea 池读面（R1792 接线·AC-S18/S19 承载）"
+   ],
+   "count": 2,
+   "criteria": [],
+   "covered": false,
+   "in_scope": true,
+   "implemented": false
+  }
+ ],
+ "gate": "derived from the spec at render time; no message name is typed in the source",
+ "html_bytes": 22841,
+ "json_bytes": 21374
+}
