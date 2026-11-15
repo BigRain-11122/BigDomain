@@ -1,0 +1,55 @@
+2026-11-16 R2806 SMOKE - BigDomain OSLoop, charter daily crawl round (v1.0)
+================================================================================
+1. DAILY CRAWL (web direct, zero key, read-only)
+   SOURCE A  https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay4_0.shtml
+             page last edited 2024.11.21 | fetched 2026-11-16 | 1 read, 1 hit, 0 fail
+             landed : four signing scenarios (request signature split by Path/Body/
+                      Query/image upload; 调起支付 split into JSAPI / APP / 小程序),
+                      two verify modes (微信支付公钥 [recommended] / 平台证书),
+                      callbacks must be DECRYPTED with the APIv3 key before verify
+             NOT landed: the canonical-string field order and the timestamp tolerance
+                      numbers live on the sub-pages, so NO design file was rewritten
+   SOURCE B attempt 1  gov.cn/zhengce/content/202409/content_6977766.htm
+             -> navigation shell only, zero article text (measured, not assumed)
+   SOURCE B attempt 2  gov.cn/zhengce/zhengceku/202409/content_6977766.htm
+             -> HTTP 404 Not Found
+             therefore the Network Data Security Regulation ch2..ch9 remains
+             M / UNSOURCED and stays owed (carried from R2778 and W41). No design
+             change may rest on a half page.
+
+2. BENCHMARK 15h LAW
+   docs/global-benchmarks.md section 4 update row appended for 2026-11-16;
+   state.json benchmarks_refreshed advanced to 2026-11-16 (was 2026-11-15).
+
+3. SOURCE CHAIN
+   One A-grade official source used today. Zero B/C/D sources were used to justify
+   any statement, and no statement in this log rests on a community page.
+
+4. SIGNAL WALL
+   docs/research/intelligence-wall.md W42 appended with its consumption line:
+   the P-47 item-4 verify matrix must carry BOTH verify modes as parallel branches,
+   and the 调起支付 trio (JSAPI/APP/小程序) means the current single 小程序 branch is
+   incomplete if 元宙 opens to H5/APP. Registered, not implemented, this window.
+
+WINDOW PRODUCT / ENGINEERING (the actual increment, not the crawl)
+   src/os/test_payment_gate_report.py  AC-PAYGB1..AC-PAYGB9
+     SUITE PASS 11/11, double run byte-identical sha16 38F01ED0C53BCE81
+     it drives the SHIPPED pay/adapters.py and pay/v3.py itself: 2 channels positive,
+     3 legacy negatives, 1 V3 positive with 4 headers, 4 V3 negatives incl NOTPAY
+     registry by import  691 suites / 5163 criteria   (was 690 / 5154)
+     matrix regenerated 72867B, --check reads byte-identical
+     entry page 36506B, deliverable_index --check VERDICT PASS 14/14
+   MEASURED BEFORE THE FIX: all 690 registered suites were searched for the eight
+   AC-PAYG* tokens and found ZERO, so the face that decides whether the 19.9 channel
+   may be connected was guarded only by its own --check.
+   SELF-CAUGHT DEFECT: AC-PAYGB8 first matched the banned-word literals inside its own
+   guard text and inside the tool's guard, so it reddened on healthy sources. The
+   assertion was repaired to measure imports and dereference use, not literals; the
+   criterion was not relaxed.
+   PRE-REGISTRATION RUN (control): with no battery row yet, the suite read exactly one
+   red - AC-PAYGB9 rows=[] - while its other sub-assertions (read-only stat, tamper
+   rc=2, restore rc=0) were already green. That is the proof the registry sub-check
+   carries weight rather than being decorative.
+   ISOLATION: every render, check and tamper happened in the system temp dir; repo
+   preview/payment-gate-report.{html,json} and pay/config.json sha256 were unchanged
+   across the whole suite, and the temp world was removed (a leak throws loudly).

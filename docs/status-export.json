@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-16T01:14:12+08:00",
-  "do": "R2805 - PRODUCT: the CEO \"latest artifact\" line was naming a census of open work instead of a face anyone can open. MEASURED at open on the final tree: export_round --check read VERDICT PASS tick=R2804 while ceo_face.latest_artifact read preview/ceo-blockers.html (8453B) + preview/ceo-blockers.json (6754B),...",
+  "export_ts": "2026-11-16T01:26:39+08:00",
+  "do": "R2806 - ENGINEERING: the face that decides whether the 19.9 channel may be connected was guarded only by itself, and it now has a battery row. Measured at open by import: 690 suites / 5154 criteria, and a full-text search of all 690 registered suites found ZERO of the eight AC-PAYG* tokens printed by tools/...",
   "ceo_face": {
-    "current": "R2805 - PRODUCT: the CEO \"latest artifact\" line was naming a census of open work instead of a face anyone can open. MEASURED at open on the final tree: export_round --check read VERDICT PASS tick=R2804 while ceo_face.latest_artifact read preview/ceo-blockers.html (8453B) + preview/ceo-blockers.json (6754B),...",
+    "current": "R2806 - ENGINEERING: the face that decides whether the 19.9 channel may be connected was guarded only by itself, and it now has a battery row. Measured at open by import: 690 suites / 5154 criteria, and a full-text search of all 690 registered suites found ZERO of the eight AC-PAYG* tokens printed by tools/...",
     "latest_artifact": "preview/first-yuan-chain.html (3078B) + preview/first-yuan-chain.json (4159B)",
     "last_artifact": "preview/first-yuan-chain.html (3078B) + preview/first-yuan-chain.json (4159B)",
     "next_milestone": "**全量电池仍欠**且现为 **690 套件 / 5154 判据**（一趟 4000-5900s）；本窗顺带实测 `src/os/suite_matrix_reconcile.py --check` 读 `CEILING-STARVED rc=3`，并在 **HEAD 副本**上复现同一红（`git show HEAD:docs/sandbox-suite-matrix.md` 落 `tmp/` 后带 `--doc` 重跑），证明它是「走查 64 文件触顶、找不到近期全绿腿」的**既有红**，不是本窗引入——能 supervise 的窗口须**早发**腿，并同时解开矩阵这条红。",
-    "next_milestone_due": "2026-11-18T01:14:12+08:00",
-    "updated_at": "2026-11-16T01:14:12+08:00",
+    "next_milestone_due": "2026-11-18T01:26:39+08:00",
+    "updated_at": "2026-11-16T01:26:39+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html",
     "board_pages_skipped": [
       "preview/ceo-blockers.html (8453B)",
@@ -775,7 +775,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2805",
+      "2806",
       "OSLoop 执行 tick"
     ],
     [
@@ -798,10 +798,10 @@
   "self_drive": {
     "window": "2026-11-10..2026-11-16",
     "window_days": 7,
-    "log_lines_in_window": 162,
+    "log_lines_in_window": 167,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 35,
+    "substantive_non_idle_mention_lines": 36,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,

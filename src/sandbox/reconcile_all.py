@@ -6775,6 +6775,19 @@ SUITES = [
     # the gate must carry both. The row therefore declares ten.
     ("os-export-round",
      os.path.join("..", "os", "test_export_round.py"), 10),
+    # R2806: tools/payment_gate_report.py renders the face that decides whether
+    # the 19.9 channel may be connected, and all 690 registered suites were
+    # measured to mention ZERO of its AC-PAYG1..AC-PAYG8 tokens, so it was
+    # guarded only by its own --check. The suite drives the SHIPPED
+    # pay/adapters.py and pay/v3.py itself (two channels positive, three legacy
+    # negatives, one V3 positive with four headers, four V3 negatives including
+    # trade_state NOTPAY) and compares its own recomputation against the landed
+    # payload, so a tool that prints green while the suite recomputes red is red.
+    # (AC-PAYGB1..AC-PAYGB9 pinned in src/os/backlog.md at R2806 BEFORE the
+    # suite existed; a pre-registration run read exactly one red - the registry
+    # assertion - which is the proof that sub-check carries weight.)
+    ("os-payment-gate-report",
+     os.path.join("..", "os", "test_payment_gate_report.py"), 9),
     # R2780: the group ledger writes wildcard forms ("no reply cites
     # D-20261114-0x") and a token regex without a right-hand boundary harvests
     # D-20261114-0 out of them, inventing a decision that never existed. Every

@@ -1,0 +1,17 @@
+PAYMENT GATE REPORT html=6737B json=6415B channels=standard,virtual accepted=3 refused=7 verdict=PASS
+  | PASS AC-PAYGB1 both artifacts land non-empty with eight named criteria rc=0 html=6737B json=6415B ids=AC-PAYG1,AC-PAYG2,AC-PAYG3,AC-PAYG4,AC-PAYG5,AC-PAYG6,AC-PAYG7,AC-PAYG8
+  | PASS AC-PAYGB2 two shipped channels accept a signed callback (2/2) built=standard,virtual accepted=2/2 tool_rows=2
+  | PASS AC-PAYGB3 three legacy negatives are refused as AdapterError (3/3) refused=3/3 classes=AdapterError,AdapterError,AdapterError
+  | PASS AC-PAYGB4 one V3 callback with four headers verifies (1/1, 4/4) ok=True headers=4/4 tool=True
+  | PASS AC-PAYGB5 four V3 negatives refused, NOTPAY by trade_state (4/4) refused=4/4 notpay_named=True
+  | PASS AC-PAYGB6 config price, tool constant and landed row agree cfg=1990 const=1990 landed=1990 needs_ceo=True
+  | PASS AC-PAYGB7 disclaimer is byte-equal to config and AIGC note rides along disc=372B note=146B verbatim=True
+  | PASS AC-PAYGB8 both sources ASCII, whitelisted imports, zero network tool_imp=adapters,argparse,copy,datetime,hashlib,html,json,os,sys,v3 suite_extra= net=[] ascii=True/True
+PAYMENT GATE CHECK PASS fails=0
+PAYMENT GATE CHECK FAIL fails=1
+  - sizes html 6738 != 6737 on disk
+PAYMENT GATE CHECK PASS fails=0
+  | PASS AC-PAYGB9 --check is read-only, a tamper reddens, one row declares 9 clean=0 bad=2 restored=0 stat_stable=True rows=['9']
+  | PASS AC-PAYGB9b repo preview faces and pay config unchanged preview=f5bb99bd11348766->f5bb99bd11348766 cfg=True
+  | PASS AC-PAYGB9c temp world removed (a leak is loud, not silent) removed=True
+SUITE PASS 11/11 in 0.1s
