@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T08:56:58+08:00",
+  "export_ts": "2026-11-15T09:01:12+08:00",
   "do": "2026-11-15 R2765 PRODUCT window: the CEO can now open ONE page and click into every measured face, and the 19.9 payment page carries its real title.",
   "ceo_face": {
     "current": "2026-11-15 R2765 PRODUCT window: the CEO can now open ONE page and click into every measured face, and the 19.9 payment page carries its real title.",
-    "latest_artifact": "index.html (27999B) @08:56",
-    "last_artifact": "index.html (27999B) @08:56",
-    "next_milestone": "next window owes reconcile-battery-R2762 on the committed tree, inside a 48h window due 2026-11-17T08:56:58+08:00",
-    "next_milestone_due": "2026-11-17T08:56:58+08:00",
-    "updated_at": "2026-11-15T08:56:58+08:00",
+    "latest_artifact": "index.html (27999B) @09:01",
+    "last_artifact": "index.html (27999B) @09:01",
+    "next_milestone": "next window owes reconcile-battery-R2762 on the committed tree, inside a 48h window due 2026-11-17T09:01:12+08:00",
+    "next_milestone_due": "2026-11-17T09:01:12+08:00",
+    "updated_at": "2026-11-15T09:01:12+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -764,12 +764,12 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 132,
+    "log_lines_in_window": 133,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 20,
-    "proposals_total": 9,
-    "proposals_open": 7,
+    "substantive_non_idle_mention_lines": 21,
+    "proposals_total": 10,
+    "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 12,
     "queue_explore_open": 10

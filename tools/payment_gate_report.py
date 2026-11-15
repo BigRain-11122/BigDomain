@@ -477,6 +477,13 @@ def check(meas, out, jout):
         run = fresh.get(c.get("id"))
         if not run or run["measured"] != c.get("measured"):
             fails.append("%s drift" % c.get("id"))
+    sizes = landed.get("sizes") or {}
+    if sizes.get("html") != os.path.getsize(out):
+        fails.append("sizes html %s != %d on disk" % (sizes.get("html"),
+                                                      os.path.getsize(out)))
+    if sizes.get("json") != os.path.getsize(jout):
+        fails.append("sizes json %s != %d on disk" % (sizes.get("json"),
+                                                      os.path.getsize(jout)))
     return fails
 
 
@@ -500,9 +507,19 @@ def main(argv):
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     with open(args.out, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(doc)
-    with open(args.json, "w", encoding="utf-8", newline="\n") as fh:
-        json.dump(meas, fh, ensure_ascii=False, indent=2, sort_keys=True)
-        fh.write("\n")
+    # BD-PROP-010: the json states the size of both artifacts it belongs to.
+    # The html is already on disk and never reads this key, so only the json's
+    # own byte count is self-referential; iterate to the fixed point.
+    for _ in range(6):
+        meas["sizes"] = {
+            "html": os.path.getsize(args.out),
+            "json": os.path.getsize(args.json) if os.path.exists(args.json) else 0,
+        }
+        with open(args.json, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump(meas, fh, ensure_ascii=False, indent=2, sort_keys=True)
+            fh.write("\n")
+        if meas["sizes"]["json"] == os.path.getsize(args.json):
+            break
     size = os.path.getsize(args.out)
     jsize = os.path.getsize(args.json)
     print("PAYMENT GATE REPORT html=%dB json=%dB channels=%s accepted=%d "
