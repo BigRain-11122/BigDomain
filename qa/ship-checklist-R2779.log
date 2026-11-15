@@ -1,0 +1,20 @@
+R2779 ship-checklist surface - measured, not asserted
+
+render     : python tools/ship_checklist.py
+  items=11 ready=8 open=0 blocked=3
+  preview/ship-checklist.html = 9182B
+  preview/ship-checklist.json = 4983B
+
+AC-SCL1 derived readiness : every SELF row recomputed at render from BLUEPRINT.md / docs/global-benchmarks.md / preview/*.json
+AC-SCL2 registry equality : PASS (ids, criterion, owner all present)
+AC-SCL3 offline           : zero http:// and https:// literals in the page
+AC-SCL4 tick ids          : 11 data-ck ids, one namespace bd-ship-checklist-v1, exactly one inline script
+AC-SCL5 fixed point       : recorded sizes == os.path.getsize (9182 / 4983)
+AC-SCL6 read-only         : --check rc=0 and bytes+mtime identical before/after
+AC-SCL7 negative control  : removed preview/platform-live-report.json -> VERDICT FAIL 1 rc=2; restored -> PASS 8/8 rc=0
+AC-SCL8 hard doors        : hard-aigc-label / hard-msgseccheck / hard-non-advisory rendered with landing faces on disk
+
+entry page : tools/deliverable_index.py -> band rows 28, newest=ship-checklist.json, VERDICT PASS 14/14
+adoption   : reconcile-battery-R2775 closed rc=1 with 2 fail suites; both re-run on the FINAL tree
+  src/sandbox/test_reconcile_daily_census.py -> SUITE PASS 8/8
+  src/os/test_ledger_closeout.py             -> SUITE PASS 8/8

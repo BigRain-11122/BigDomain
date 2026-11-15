@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "surface": "preview/ship-checklist.html",
+  "note": "Readiness is derived from disk at render time; sizes are a fixed point.",
+  "owner_counts": {
+    "SELF": 8,
+    "CEO": 3
+  },
+  "state_counts": {
+    "READY": 8,
+    "OPEN": 0,
+    "BLOCKED": 3
+  },
+  "items": [
+    {
+      "id": "hard-aigc-label",
+      "owner": "SELF",
+      "title": "AIGC 生成标识：每一处生成内容在呈现面都带标识",
+      "criterion": "BLUEPRINT §五 生死线：生成内容全呈现面标识，缺标识即不得开门",
+      "state": "READY",
+      "note": "证据在盘（1 条，渲染时实测）",
+      "face": "preview/face-sweep.html",
+      "face_present": true,
+      "face_bytes": 5113
+    },
+    {
+      "id": "hard-msgseccheck",
+      "owner": "SELF",
+      "title": "msgSecCheck 前置闸：内容安全未接不得开门",
+      "criterion": "BLUEPRINT §五：msgSecCheck 为前置闸而非事后过滤，未接禁开门",
+      "state": "READY",
+      "note": "证据在盘（1 条，渲染时实测）",
+      "face": "preview/ugc-gate-report.html",
+      "face_present": true,
+      "face_bytes": 9576
+    },
+    {
+      "id": "hard-non-advisory",
+      "owner": "SELF",
+      "title": "非投顾风险提示：常驻面逐帧在场，禁事后补",
+      "criterion": "BLUEPRINT §五：非投顾定性为常驻面，任何删除即判负",
+      "state": "READY",
+      "note": "证据在盘（1 条，渲染时实测）",
+      "face": "preview/lobby-ws-report.html",
+      "face_present": true,
+      "face_bytes": 5952
+    },
+    {
+      "id": "self-ugc-gate-face",
+      "owner": "SELF",
+      "title": "UGC 安全闸已上线可打开（含拒绝路径实测）",
+      "criterion": "面在盘且自检 --check 通过，才可勾",
+      "state": "READY",
+      "note": "证据在盘（1 条，渲染时实测）",
+      "face": "preview/ugc-gate-report.html",
+      "face_present": true,
+      "face_bytes": 9576
+    },
+    {
+      "id": "self-six-doors",
+      "owner": "SELF",
+      "title": "六道沙箱门一条命令拉起、逐门实测、跑完即拆",
+      "criterion": "面在盘且带实测字节与端口回收证据，才可勾",
+      "state": "READY",
+      "note": "证据在盘（1 条，渲染时实测）",
+      "face": "preview/platform-live-report.html",
+      "face_present": true,
+      "face_bytes": 6889
+    },
+    {
+      "id": "self-payment-gate",
+      "owner": "SELF",
+      "title": "19.9 支付通道验收面（沙箱档，chargeable=false）",
+      "criterion": "面在盘且明示 mock=true/chargeable=false，才可勾",
+      "state": "READY",
+      "note": "证据在盘（1 条，渲染时实测）",
+      "face": "preview/payment-gate-report.html",
+      "face_present": true,
+      "face_bytes": 6737
+    },
+    {
+      "id": "self-filing-playbook",
+      "owner": "SELF",
+      "title": "小程序备案流程已由官方页入册（发布前硬顺序）",
+      "criterion": "docs/global-benchmarks.md 载官方备案指引全文本与时限，才可勾",
+      "state": "READY",
+      "note": "证据在盘（1 条，渲染时实测）",
+      "face": "preview/face-sweep.html",
+      "face_present": true,
+      "face_bytes": 5113
+    },
+    {
+      "id": "self-pre-approval",
+      "owner": "SELF",
+      "title": "前置审批类目判定（出版【游戏】须版号）已入册",
+      "criterion": "docs/global-benchmarks.md 载类目十条与版号要求，才可勾",
+      "state": "READY",
+      "note": "证据在盘（1 条，渲染时实测）",
+      "face": "preview/face-sweep.html",
+      "face_present": true,
+      "face_bytes": 5113
+    },
+    {
+      "id": "ceo-physical-pieces",
+      "owner": "CEO",
+      "title": "物理件四件：服务器 / 域名 / 备案+ICP / 微信支付商户号",
+      "criterion": "四件到位才能 bootstrap 部署与收款；本司零代办",
+      "state": "BLOCKED",
+      "note": "待 CEO（阻塞面登记 physical=3）",
+      "face": "preview/platform-live-report.html",
+      "face_present": true,
+      "face_bytes": 6889
+    },
+    {
+      "id": "ceo-miniprogram-keys",
+      "owner": "CEO",
+      "title": "小程序 AppID / secret（msgSecCheck 真实调用凭据）",
+      "criterion": "凭据只进 .env 且不入 git；无凭据时安全闸只能跑本地桩",
+      "state": "BLOCKED",
+      "note": "待 CEO（阻塞面登记 physical=3）",
+      "face": "preview/ceo-blockers.html",
+      "face_present": true,
+      "face_bytes": 8453
+    },
+    {
+      "id": "ceo-filing-number",
+      "owner": "CEO",
+      "title": "备案号下发（管局审核通过后）",
+      "criterion": "官方原文：审核通过下发备案号后方可进入版本发布流程",
+      "state": "BLOCKED",
+      "note": "待 CEO（阻塞面登记 physical=3）",
+      "face": "preview/ceo-blockers.html",
+      "face_present": true,
+      "face_bytes": 8453
+    }
+  ],
+  "sizes": {
+    "html": 9182,
+    "json": 4983
+  }
+}
