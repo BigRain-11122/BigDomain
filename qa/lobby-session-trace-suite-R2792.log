@@ -1,0 +1,34 @@
+R2792 lobby session trace registered: the shipped preview pair is now under a battery row
+==========================================================================================
+Criteria pinned first: src/os/backlog.md row committed as bfcb853b BEFORE this suite existed
+(AC-LST1..AC-LST6 belong to the tool at R2790; AC-LSTB1..AC-LSTB8 are the guard shape pinned
+at R2792). Nothing was backdated.
+
+New suite: src/os/test_lobby_session_trace.py -- SUITE PASS 9/9
+  AC-LSTB1 landed pair readable        html=8347B json=8008B
+  AC-LST2  six derived facts == config  facts=6 drift=0
+  AC-LST1  frame count == frame rows    rows=17 announced=17
+  AC-LST4  refusal codes + ai flag      refusals=6 uncoded=0 codes=3 flagged=6
+  AC-LST3  html == render(landed json)  render=8347B identical=True
+  AC-LST5  offline + links resolve      hrefs=0 external=0 missing=0
+  AC-LST6  recorded source sizes        config=True server=True
+  AC-LST7  read-only gate is real       rc=0 findings=0 untouched=True
+  AC-LSTB8 negative control             rc=2 stale=True findings=1
+
+Double run byte-identical: sha16 7f2e5c883efdbf2d (both runs).
+
+Registry measured by IMPORT, not by prose: 685 suites / 5096 criteria / 685 unique names /
+685 unique paths (was 684 / 5087). New row: ('os-lobby-session-trace',
+os.path.join('..','os','test_lobby_session_trace.py'), 9).
+
+Matrix regenerated: docs/sandbox-suite-matrix.md 72391B, --check reads byte-identical at
+685 suites / 5096 criteria; the summary line still states green=675/685 honestly, because the
+newest PARSEABLE evidence log is R2739 and ten rows carry none.
+
+Entry page re-rendered: preview/index.html 35155B, deliverable_index --check VERDICT PASS 14/14
+fingerprint=a09407764464ed82.
+
+Honest scope: this suite does NOT re-drive a socket. run_session() needs the sandbox venv and
+would open a local port on every battery run, so the suite guards the RECORDED face, the config
+it claims to read, the render function and the read-only gate, and proves the gate load-bearing
+with a tampered private copy. The six criteria it carries are the tool's own ids.

@@ -6813,6 +6813,12 @@ SUITES = [
     # uncovered=0 - which makes the page load-bearing for coverage claims and
     # therefore worth a battery row of its own.
     # (AC-LPM1..AC-LPM6 pinned in src/os/backlog.md at R2787, BEFORE the tool.)
+    # The lobby session trace shipped with a read-only gate of its own and no
+    # battery row, so its six criteria were guarded only by the tool grading
+    # itself. AC-LST1..AC-LST6 were pinned at R2790 and AC-LSTB1..AC-LSTB8
+    # (the guard shape this suite implements) at R2792, both BEFORE their code.
+    ("os-lobby-session-trace",
+     os.path.join("..", "os", "test_lobby_session_trace.py"), 9),
     ("os-lobby-protocol-map",
      os.path.join("..", "os", "test_lobby_protocol_map.py"), 6),
     ]
