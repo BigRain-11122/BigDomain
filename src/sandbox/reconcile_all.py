@@ -6819,6 +6819,13 @@ SUITES = [
     # (the guard shape this suite implements) at R2792, both BEFORE their code.
     ("os-lobby-session-trace",
      os.path.join("..", "os", "test_lobby_session_trace.py"), 9),
+    # R2803 shipped src/os/test_first_yuan_chain.py, putting the eight criteria
+    # of tools/first_yuan_chain.py under a battery row. The suite drives the
+    # real pay/member/ledger modules inside throwaway temp worlds and recomputes
+    # the ledger invariant with its own SQL. AC-FYC1..8 were pinned at R2802
+    # (before the tool) and AC-FYCB1..8 at R2803 (before this suite).
+    ("os-first-yuan-chain",
+     os.path.join("..", "os", "test_first_yuan_chain.py"), 12),
     ("os-lobby-protocol-map",
      os.path.join("..", "os", "test_lobby_protocol_map.py"), 6),
     # R2794 shipped tools/ledger_reconcile_face.py (the double-entry self-check

@@ -159,11 +159,16 @@ def build_world():
 
 
 def tear(world):
-    for key in ("store", "pay", "led"):
-        close = getattr(world[key], "close", None)
+    for key in ("store", "pay", "led", "events"):
+        close = getattr(world.get(key), "close", None)
         if close:
             close()
     shutil.rmtree(world["tmp"], ignore_errors=True)
+    # A world left on disk is a defect, not housekeeping: on Windows the
+    # removal fails silently while any sqlite handle is still open (the event
+    # store was the one this loop used to miss), so the leak is raised.
+    if os.path.exists(world["tmp"]):
+        raise Refuse("E_TEMP_LEAK", world["tmp"])
 
 
 def drive_leg(world, product_id, avatar, nonce):
