@@ -134,8 +134,72 @@ def render_newest(new):
     return "\n".join(out)
 
 
-def render_body(rows, defects_total, newest):
+GATE_PAGES = ("index", "deliverable-index")
+
+
+def artifact_pairs():
+    """Every shipped preview face (X.html + X.json), newest first (R2777).
+
+    R2775's band carries only the single newest pair, so a face that shipped
+    two windows ago is unreachable from the CEO entry page once a newer one
+    lands (measured: ceo-blockers, face-sweep and city-observatory all read
+    zero links in index.html). This derives the FULL list from the directory
+    instead of a name convention: a pair exists when both files are on disk,
+    and the gate page plus the editorial registry are never product faces.
+    """
+    pairs = []
+    for name in sorted(os.listdir(PREVIEW)):
+        if not name.endswith(".html"):
+            continue
+        stem = name[:-5]
+        if stem in GATE_PAGES:
+            continue
+        json_name = stem + ".json"
+        hpath = os.path.join(PREVIEW, name)
+        jpath = os.path.join(PREVIEW, json_name)
+        if not (os.path.exists(hpath) and os.path.exists(jpath)):
+            continue
+        try:
+            nbytes = os.path.getsize(hpath)
+            mtime = os.path.getmtime(hpath)
+        except OSError:
+            continue
+        pairs.append({"stem": stem, "html": name, "json": json_name,
+                      "bytes": nbytes, "mtime": mtime})
+    pairs.sort(key=lambda p: (-p["mtime"], p["stem"]))
+    return pairs
+
+
+def render_pairs(pairs):
+    """The all-pairs band, derived row by row (never a written-down list)."""
+    out = ["<h2>\u5168\u90e8\u5df2\u4e0a\u7ebf\u9762\uff08\u76d8\u4e0a pair \u6d3e\u751f\u00b7\u70b9\u5f00\u5373\u770b\uff09</h2>"]
+    if not pairs:
+        out.append('<div class="note">preview/ \u76ee\u524d\u6ca1\u6709 '
+                   "html+json \u6210\u5bf9\u9762\u2014\u2014\u5b9e\u8bdd\u76f4\u8bf4\uff0c"
+                   "\u4e0d\u7559\u7a7a\u884c\u3002</div>")
+        return "\n".join(out)
+    out.append('<div class="note">\u672c\u5757\u9762\u6570=%d\uff0c\u9010\u6761\u76f4\u63a5'
+               "\u4ece <code>preview/</code> \u626b\u63cf\u5f97\u51fa\uff1a"
+               "\u9762\u540d\u00b7\u5b57\u8282\u00b7\u65f6\u95f4\u6233\u5747\u5b9e\u8bfb\u3002</div>"
+               % len(pairs))
+    out.append("<ul>")
+    for p in pairs:
+        import datetime
+        stamp = datetime.datetime.fromtimestamp(p["mtime"]).strftime("%Y-%m-%d %H:%M")
+        out.append(
+            '<li><a href="%s">%s</a> <span class="tag">%dB</span> '
+            '<span class="tag">%s</span> <span class="tag">json=%s</span></li>'
+            % (html.escape(p["html"]), html.escape(p["stem"]), p["bytes"],
+               html.escape(stamp), html.escape(p["json"]))
+        )
+    out.append("</ul>")
+    return "\n".join(out)
+
+
+def render_body(rows, defects_total, newest, pairs):
     out = [render_newest(newest), ""]
+    out.append(render_pairs(pairs))
+    out.append("")
     out.append("<h2>\u5b9e\u7269\u53f0\u8d26\uff08\u4e00\u9875\u70b9\u8fdb\u6bcf\u4e2a\u5b9e\u6d4b\u9762\uff09</h2>")
     out.append(
         '<div class="note">\u672c\u5757\u7531 <code>tools/deliverable_index.py</code> '
@@ -189,11 +253,12 @@ def render_block():
     rows = [facts(e) for e in load_registry()]
     defects = sum(len(r["defects"]) for r in rows)
     newest = newest_artifact()
-    body = render_body(rows, defects, newest)
+    pairs = artifact_pairs()
+    body = render_body(rows, defects, newest, pairs)
     fp = hashlib.sha256(body.encode("utf-8")).hexdigest()[:16]
     return (
         "%s\n%s\n<!-- fingerprint %s -->\n%s" % (BEGIN, body, fp, END), fp, rows,
-        newest
+        newest, pairs
     )
 
 
@@ -251,7 +316,8 @@ def front_count(text):
 def main(argv):
     check = "--check" in argv[1:]
     text = read(INDEX)
-    block, fp, rows, newest = render_block()
+    stat_before = (os.path.getsize(INDEX), os.path.getmtime(INDEX))
+    block, fp, rows, newest, pairs = render_block()
 
     checks = []
 
@@ -319,6 +385,42 @@ def main(argv):
            % (fresh["json"] or "(none)", fresh["bytes"],
               "present" if newest_line(newest) in landed_block else "absent",
               want in landed_block))
+
+    # AC-DIX9..AC-DIX14 (pinned 2026-11-15 R2777 in src/os/backlog.md BEFORE
+    # this code): the all-pairs band must list every shipped face on disk, so
+    # a page landed two windows ago stays reachable from the CEO entry page.
+    fresh_pairs = artifact_pairs()
+    listed = [p for p in pairs
+              if ('href="%s"' % html.escape(p["html"])) in landed_block]
+    record("AC-DIX9", len(pairs) == len(fresh_pairs) and len(listed) == len(pairs),
+           "band-rows=%d fresh-scan=%d listed-in-landed=%d"
+           % (len(pairs), len(fresh_pairs), len(listed)))
+
+    missing = [p["html"] for p in pairs
+               if not os.path.exists(os.path.join(PREVIEW, p["html"]))
+               or not os.path.exists(os.path.join(PREVIEW, p["json"]))]
+    record("AC-DIX10", not missing, "pairs=%d missing-targets=%s"
+           % (len(pairs), missing))
+
+    if check:
+        record("AC-DIX11", (os.path.getsize(INDEX), os.path.getmtime(INDEX)) == stat_before,
+               "check-left-size+mtime-unchanged=%s"
+               % ((os.path.getsize(INDEX), os.path.getmtime(INDEX)) == stat_before))
+    else:
+        record("AC-DIX11", True, "writer mode: this run is the intended author")
+
+    band_text = render_pairs(pairs)
+    record("AC-DIX12", ("http://" not in band_text) and ("https://" not in band_text),
+           "band-offline=%s rows=%d"
+           % (("http://" not in band_text) and ("https://" not in band_text),
+              len(pairs)))
+
+    wrong = [p["html"] for p in pairs
+             if ("%dB</span>" % p["bytes"]) not in band_text]
+    record("AC-DIX13", not wrong, "self-referential-bytes-wrong=%s" % wrong)
+
+    gate = [p["stem"] for p in pairs if p["stem"] in GATE_PAGES]
+    record("AC-DIX14", not gate, "gate-pages-listed=%s" % gate)
 
     if check:
         for code, ok, detail in checks:

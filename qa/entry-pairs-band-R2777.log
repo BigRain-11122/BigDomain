@@ -1,0 +1,8 @@
+R2777 all-pairs band on the CEO entry page
+MEASURED at open: ceo-blockers.html and face-sweep.html had zero links in preview/index.html
+CAUSE: deliverable_index.py ledger table carries only the editorial eight; R2775 band carries only the newest pair
+FIX: artifact_pairs() derives every X.html + X.json pair from the directory (27 pairs today); render_pairs() lists them
+CHECK: VERDICT PASS 14/14 fingerprint=3dd0fe4d1669d522 (AC-DIX1..14)
+CONTROL c1: removing one landed href reddens AC-DIX9 (12/14, rc=2); restore reads 14/14 rc=0
+CONTROL: --check leaves preview/index.html byte- and mtime-identical (AC-DIX11)
+CORRECTION: city-observatory named at open is a mis-measurement - no such file; the city face is city-face-report.html

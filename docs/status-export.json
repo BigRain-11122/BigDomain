@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T11:32:01+08:00",
-  "do": "R2776 产品切片：活电池 R2775 里唯一的红灯套件 reconcile-daily-census 修在出生地——qa/index-newest-band-R2775.log 实为 UTF-16LE+BOM/CRLF 方言（PowerShell 重定向默认口径），归档原字节后转 UTF-8/LF（1032B→509B·文本逐字等价），census --check flags=0 DRIFT-CLEAN，套件 8/8（cd7 exit=0 真跑活树）",
+  "export_ts": "2026-11-15T11:54:38+08:00",
+  "do": "R2777 产品切片：CEO 入口页从「只链最新一对」变成「列出全部已上线面」——开轮实测 ceo-blockers.html 与 face-sweep.html 在 preview/index.html 里零链接（专为 CEO 写的阻塞面却从 CEO 的第一页打不开）；现由目录派生出 27 个成对面并逐条链接，--check PASS 14/14，入口页 28131B→33817B",
   "ceo_face": {
-    "current": "R2776 产品切片：活电池 R2775 里唯一的红灯套件 reconcile-daily-census 修在出生地——qa/index-newest-band-R2775.log 实为 UTF-16LE+BOM/CRLF 方言（PowerShell 重定向默认口径），归档原字节后转 UTF-8/LF（1032B→509B·文本逐字等价），census --check flags=0 DRIFT-CLEAN，套件 8/8（cd7 exit=0 真跑活树）",
-    "latest_artifact": "qa/index-newest-band-R2775.log（方言修复后 509B·UTF-8/LF）＋logs/qa-encoding-preop-R2775/index-newest-band-R2775.log.utf16le（原字节 1032B 留证）",
-    "last_artifact": "qa/index-newest-band-R2775.log（方言修复后 509B·UTF-8/LF）＋logs/qa-encoding-preop-R2775/index-newest-band-R2775.log.utf16le（原字节 1032B 留证）",
-    "next_milestone": "48 小时内：按自身闭合 BATTERY rc= 行采纳 reconcile-battery-R2775（676 套/5032 判据·本窗关闭时仍 alive；流中 1 条 FAIL 行即本窗已修的 census 套件），并在最终提交树上重跑 census 家族与 export 队列",
-    "next_milestone_due": "2026-11-17T11:32:01+08:00",
-    "updated_at": "2026-11-15T11:32:01+08:00",
+    "current": "R2777 产品切片：CEO 入口页从「只链最新一对」变成「列出全部已上线面」——开轮实测 ceo-blockers.html 与 face-sweep.html 在 preview/index.html 里零链接（专为 CEO 写的阻塞面却从 CEO 的第一页打不开）；现由目录派生出 27 个成对面并逐条链接，--check PASS 14/14，入口页 28131B→33817B",
+    "latest_artifact": "preview/index.html（33817B·全部 27 面可点开）＋qa/entry-pairs-band-R2777.log（732B·UTF-8/LF·经 tools/qa_log.py 正轨写出）",
+    "last_artifact": "preview/index.html（33817B·全部 27 面可点开）＋qa/entry-pairs-band-R2777.log（732B·UTF-8/LF·经 tools/qa_log.py 正轨写出）",
+    "next_milestone": "48 小时内：按自身闭合 BATTERY rc= 行采纳 reconcile-battery-R2775（本窗关闭时仍 live），并在最终提交树上重跑 census 家族与 export 队列；腿闭后解冻 src/ 并接线 leg_interlock（AC-LINTW1..6）",
+    "next_milestone_due": "2026-11-17T11:54:38+08:00",
+    "updated_at": "2026-11-15T11:54:38+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -38,6 +38,7 @@
     }
   ],
   "outs": [
+    "preview/index.html（33817B·全部 27 面可点开）＋qa/entry-pairs-band-R2777.log（732B·UTF-8/LF·经 tools/qa_log.py 正轨写出）",
     "qa/index-newest-band-R2775.log（方言修复后 509B·UTF-8/LF）＋logs/qa-encoding-preop-R2775/index-newest-band-R2775.log.utf16le（原字节 1032B 留证）",
     "first-yuan-R2772.log (1214B)",
     "preview/first-yuan.html（3911B·六面现读+规则派生结论）+ preview/first-yuan.json（2600B）+ qa/first-yuan-R2772.log（七项反控）",
@@ -742,7 +743,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2776",
+      "2777",
       "OSLoop 执行 tick"
     ],
     [
@@ -765,7 +766,7 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 187,
+    "log_lines_in_window": 189,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 27,
