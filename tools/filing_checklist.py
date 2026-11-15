@@ -250,7 +250,10 @@ def render_html(rows, sizes):
     groups = [("DERIVED\uff08\u76d8\u4e0a\u6d4b\u5f97\uff09", "ready",
                [r for r in rows if r["kind"] == DERIVED and r["state"] == "READY"]),
               ("DERIVED\uff08\u672a\u8fbe\uff09", "open",
-               [r for r in rows if r["kind"] == DERIVED and r["state"] != "READY"]),
+               [r for r in rows if r["kind"] == DERIVED and r["state"] == "OPEN"]),
+              ("\u524d\u7f6e\u5ba1\u6279\u7c7b\u76ee\uff08\u4ec5\u5f53\u5c5e\u6b64\u7c7b\u65f6\u9700"
+               "\uff09", "blocked",
+               [r for r in rows if r["state"] == "N/A"]),
               ("\u4eba\u5de5\u884c\uff08\u4e0d\u53ef\u52fe\uff09", "blocked",
                [r for r in rows if r["kind"] == MANUAL])]
     for title, cls, items in groups:
