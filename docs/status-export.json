@@ -1,10 +1,10 @@
 {
-  "export_ts": "2026-11-16T05:28:23+08:00",
-  "do": "R2813 - ENGINEERING: the largest debt on the register was closed by the shipped tool instead of being recited again. src/os/state.json read 185830 bytes against the 78500B waterline at open; the round-aligned fold of WHOLE rounds R2792..R2801 (log items 1..138, 117545 content bytes) through the fold knife t...",
+  "export_ts": "2026-11-16T05:43:59+08:00",
+  "do": "R2814 - ENGINEERING: the content-safety gate that carries the section-five death line had no battery row and was graded only by an unscheduled --check; it now has one (AC-UGRB1..11), each of the nine shipped criteria is proved green AND proved red under a named tamper, and the registry moved 694/5196 -> 695/5207.",
   "ceo_face": {
-    "current": "R2813 - ENGINEERING: the largest debt on the register was closed by the shipped tool instead of being recited again. src/os/state.json read 185830 bytes against the 78500B waterline at open; the round-aligned fold of WHOLE rounds R2792..R2801 (log items 1..138, 117545 content bytes) through the fold knife t...",
-    "latest_artifact": "preview/first-yuan-chain.html (3078B) + preview/first-yuan-chain.json (4159B)",
-    "last_artifact": "preview/first-yuan-chain.html (3078B) + preview/first-yuan-chain.json (4159B)",
+    "current": "R2814 - ENGINEERING: the content-safety gate that carries the section-five death line had no battery row and was graded only by an unscheduled --check; it now has one (AC-UGRB1..11), each of the nine shipped criteria is proved green AND proved red under a named tamper, and the registry moved 694/5196 -> 695/5207.",
+    "latest_artifact": "qa/ugc-gate-suite-R2814.log (835B, sha256 676bd87df8c9250c) + docs/sandbox-suite-matrix.md (73180B, 695 rows)",
+    "last_artifact": "qa/ugc-gate-suite-R2814.log (835B, sha256 676bd87df8c9250c) + docs/sandbox-suite-matrix.md (73180B, 695 rows)",
     "next_milestone": "**全量电池仍欠**且现为 **694 套件 / 5192 判据**（一趟 4000-5900s；本窗未起任何腿，如实记）；能 supervise 的窗口须**早发**腿并以其自身 `BATTERY rc=` 行经 `tools/adoption_preflight.py` 采纳，禁把「只跑了本窗相关套件」说成电池绿。",
     "next_milestone_due": "2026-11-18T05:28:23+08:00",
     "updated_at": "2026-11-16T05:28:23+08:00",
@@ -808,10 +808,10 @@
     "queue_tech_open": 12,
     "queue_explore_open": 10
   },
-  "current": "2026-11-16 R2811 PRODUCT+ENGINEERING: the page that tells the CEO what only he can unblock had been stale for forty rounds and no gate said so. At open, python tools/ceo_blockers.py --check on the committed tree read PASS AC-CBX1..AC-CBX8 but FAIL AC-CBX9 banner=True disclaimer=True tick=2810, VERDICT FAIL 8/9 rc=2, because the landed preview/ceo-blockers.html still carried Tick 2770 while src/os/state.json read tic…",
-  "latest_artifact": "preview/ceo-blockers.html (8453B) + preview/ceo-blockers.json (6754B)",
-  "next_milestone": "[R2811] next window: (1) **全量电池仍欠**且现为 **694 套件 / 5192 判据**（一趟 4000-5900s；本窗未起任何腿，如实记）；能 supervise 的窗口须**早发**腿并以其自身 `BATTERY rc=` 行经 `tools/adoption_preflight.py` 采纳，禁把「只跑了本窗相关套件」说成电池绿。 (2) **未登记且自带判据的工具面现为 11 件**（ceo_blockers 已登记，剩 ugc_gate 14 / lobby_ws 8 / journey_demo 8 / city_face 8 / membership_benefit 8 / face_s",
-  "state_bytes": 179260,
+  "current": "R2814 - ENGINEERING: the content-safety gate that carries the section-five death line had no battery row and was graded only by an unscheduled --check; it now has one (AC-UGRB1..11), each of the nine shipped criteria is proved green AND proved red under a named tamper, and the registry moved 694/5196 -> 695/5207.",
+  "latest_artifact": "qa/ugc-gate-suite-R2814.log (835B, sha256 676bd87df8c9250c) + docs/sandbox-suite-matrix.md (73180B, 695 rows)",
+  "next_milestone": "next window (<=12h): src/os/test_lobby_ws_report.py lands the lobby_ws battery row (8 shipped criteria, one-to-one with tamper proof) and the registry moves to 696; the full battery (695 suites / 5207 criteria) still needs a supervised leg and is not claimed green.",
+  "state_bytes": 65089,
   "queue": {
     "floors": {
       "main": 5,

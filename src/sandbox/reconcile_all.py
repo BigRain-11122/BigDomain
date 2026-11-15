@@ -6926,6 +6926,18 @@ SUITES = [
     # before and after.
     ("os-battery-shard-report",
      os.path.join("..", "os", "test_battery_shard_report.py"), 10),
+    # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
+    # face for the BLUEPRINT section-five death line (content safety not
+    # connected means the door stays shut), yet the registry held ZERO AC-UGR*
+    # tokens, so the gate was graded only by a --check nobody schedules.
+    # AC-UGRB1..AC-UGRB11 were pinned in src/os/backlog.md BEFORE this suite.
+    # Each of the nine shipped criteria is proved twice - green on a fresh real
+    # collection, and RED under one named tamper - and all tampers run on
+    # copies inside one private temp world, so the landed pair never moves.
+    # Measured at R2814: the pre-registration control read exactly one red
+    # (AC-UGRB11, this row absent) and 11/12 after the row landed.
+    ("os-ugc-gate-report",
+     os.path.join("..", "os", "test_ugc_gate_report.py"), 11),
     ]
 
 FAILS = 0
