@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T10:04:22+08:00",
+  "export_ts": "2026-11-15T10:07:21+08:00",
   "do": "2026-11-15 R2768 PRODUCT window that shipped a board capable of catching a defect family the whole register had missed, and then caught one with it. Product: tools/face_sweep.py plus preview/face-sweep.html (5113B) and preview/face-sweep.json, one command that EXECUTES each of the eight CEO-facing pages' own read-only --check as a subprocess and renders the eight results as one page. Five readings",
   "ceo_face": {
     "current": "2026-11-15 R2768 PRODUCT window that shipped a board capable of catching a defect family the whole register had missed, and then caught one with it. Product: tools/face_sweep.py plus preview/face-sweep.html (5113B) and preview/face-sweep.json, one command that EXECUTES each of the eight CEO-facing pages' own read-only --check as a subprocess and renders the eight results as one page. Five readings",
     "latest_artifact": "face-sweep-R2768.log (1534B)",
     "last_artifact": "face-sweep-R2768.log (1534B)",
-    "next_milestone": "next window owes reconcile-battery-R2762 on the committed tree, inside a 48h window due 2026-11-17T10:04:22+08:00",
-    "next_milestone_due": "2026-11-17T10:04:22+08:00",
-    "updated_at": "2026-11-15T10:04:22+08:00",
+    "next_milestone": "next window owes reconcile-battery-R2762 on the committed tree, inside a 48h window due 2026-11-17T10:07:21+08:00",
+    "next_milestone_due": "2026-11-17T10:07:21+08:00",
+    "updated_at": "2026-11-15T10:07:21+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -764,7 +764,7 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 148,
+    "log_lines_in_window": 149,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 23,
