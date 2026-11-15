@@ -1,4 +1,8 @@
-"""Launch the R2768 reconcile battery detached on the committed tree.
+"""
+R2775 note: this copy carries the R2768 launcher body unchanged apart
+from its own three paths (evidence / stream / pidfile), so the R2768
+evidence file stays untouched and that leg remains its own closed row.
+Launch the R2768 reconcile battery detached on the committed tree.
 
 Why this leg exists: R2768 shipped a new read-only verification tool
 (tools/face_sweep.py), repaired tools/ugc_gate_report.py so a --check run can
@@ -29,10 +33,6 @@ itself, which is a new src/os byte landed by the closeout of the same round;
 it is declared in the state log so the adopting window attributes rather than
 discovers it.
 """
-R2775 note: this copy carries the R2768 launcher body unchanged apart from
-its own three paths (evidence / stream / pidfile), so the R2768 evidence
-file stays untouched and that leg's adoption remains its own closed row.
-
 
 import os
 import subprocess
