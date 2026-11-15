@@ -6780,6 +6780,14 @@ SUITES = [
     # suite, after the repair - disclosed rather than backdated.)
     ("os-scan-five-still",
      os.path.join("..", "os", "test_scan_five_still.py"), 6),
+    # R2781: the official mini-program filing guide landed at R2778 as PROSE and
+    # filing is the hard pre-release gate (the bureau must issue the filing
+    # number before version release). tools/filing_checklist.py turns that row
+    # into an executable page AND cross-checks the row at render time, so the
+    # page cannot show a stale count.
+    # (AC-FCL1..AC-FCL8 pinned in src/os/backlog.md at R2781 BEFORE the code.)
+    ("os-filing-checklist",
+     os.path.join("..", "os", "test_filing_checklist.py"), 8),
     ]
 
 FAILS = 0

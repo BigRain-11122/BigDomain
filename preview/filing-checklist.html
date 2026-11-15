@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BigDomain · 小程序备案执行清单</title>
+<style>
+body{margin:0;background:#12141a;color:#dfe3ea;font:15px/1.65 -apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:40px 22px 90px}
+h1{font-size:23px;margin:0 0 6px}
+.sub{color:#8f98a8;font-size:13px;margin-bottom:22px}
+.hard{background:#2a1d1d;border:1px solid #5a3232;border-radius:9px;padding:12px 16px;margin:0 0 22px;color:#e8b9b9;font-size:13.5px}
+.hard b{color:#ff9d9d}
+h2{font-size:16px;margin:30px 0 12px;color:#a9b4c6;border-left:3px solid #3a4252;padding-left:10px}
+.row{background:#191d25;border:1px solid #262c38;border-radius:9px;padding:12px 15px;margin:9px 0}
+.row.ready{border-color:#2b4a34}.row.open{border-color:#4a2b2b}.row.blocked{border-color:#4a3a2b}
+.t{font-weight:600;font-size:15px;margin:0 0 5px}
+.c{color:#98a2b3;font-size:13px;margin:0 0 6px}
+.n{font-size:12.5px;color:#7f8899}
+.badge{display:inline-block;font-size:11px;padding:1px 8px;border-radius:20px;margin-right:8px}
+.b-ready{background:#1f3a29;color:#7fd6a0}.b-open{background:#3a2020;color:#e08a8a}
+.b-blocked{background:#3a2f1f;color:#e0bb7f}.b-na{background:#232936;color:#9aa4b4}
+.b-human{background:#1d2a3a;color:#8fb6e0}
+label{display:flex;gap:10px;align-items:flex-start}
+input[type=checkbox]{margin-top:4px;width:15px;height:15px;accent-color:#5ac78c}
+code{background:#0d1016;padding:1px 5px;border-radius:4px;font-size:12.5px;color:#9fb3d1}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid #262c38;color:#6f7889;font-size:12px}
+a{color:#7fb2ff;text-decoration:none;border-bottom:1px dotted #3c5573}
+</style></head><body><main>
+<h1>小程序备案执行清单</h1>
+<div class="sub">每一行的状态都是渲染这一刻在盘上测出来的；测不出的一律标为需人工确认，从不写成已完成。勾选只存本机（<code>bd-filing-checklist-v1</code>）。</div>
+<div class="hard"><b>硬门：</b>官方原文：管局审核通过后，将下发的小程序备案号…可以进入下一步版本发布等流程。签发前不得发布。</div>
+<h2>DERIVED（盘上测得） (2)</h2>
+<div class="row ready">
+<label>
+<input type="checkbox" data-ck="step-playbook">
+<span>
+<div class="t"><span class="badge b-ready">READY</span>官方指引已入册（七类材料／五环流程／十类前置审批）</div>
+<div class="c">判据：底稿行仍载计数所依的六个字面短语，缺一即判负</div>
+<div class="n">字面短语齐备（6 项）</div>
+<div class="n">证据面：<a href="preview/face-sweep.html">preview/face-sweep.html</a></div>
+</span></label></div>
+<div class="row ready">
+<label>
+<input type="checkbox" data-ck="step-hard-door">
+<span>
+<div class="t"><span class="badge b-ready">READY</span>硬门：备案号未下发不得发布</div>
+<div class="c">判据：官方硬顺序写入 BLUEPRINT 生死线</div>
+<div class="n">生死线两条在册</div>
+<div class="n">证据面：<a href="preview/face-sweep.html">preview/face-sweep.html</a></div>
+</span></label></div>
+<h2>DERIVED（未达） (10)</h2>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="pre-01" disabled>
+<span>
+<div class="t"><span class="badge b-na">N/A</span>出版【游戏】须版号</div>
+<div class="c">判据：仅当小程序属此类目时需该许可</div>
+<div class="n">假如上架小游戏类目则需版号</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="pre-02" disabled>
+<span>
+<div class="t"><span class="badge b-na">N/A</span>网络出版许可证</div>
+<div class="c">判据：仅当小程序属此类目时需该许可</div>
+<div class="n">本业务形态不属此类</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="pre-03" disabled>
+<span>
+<div class="t"><span class="badge b-na">N/A</span>信息网络传播视听节目许可证</div>
+<div class="c">判据：仅当小程序属此类目时需该许可</div>
+<div class="n">本业务形态不属此类</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="pre-04" disabled>
+<span>
+<div class="t"><span class="badge b-na">N/A</span>互联网药品信息服务资格</div>
+<div class="c">判据：仅当小程序属此类目时需该许可</div>
+<div class="n">本业务形态不属此类</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="pre-05" disabled>
+<span>
+<div class="t"><span class="badge b-na">N/A</span>网络文化经营许可</div>
+<div class="c">判据：仅当小程序属此类目时需该许可</div>
+<div class="n">本业务形态不属此类</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="pre-06" disabled>
+<span>
+<div class="t"><span class="badge b-na">N/A</span>互联网新闻服务许可</div>
+<div class="c">判据：仅当小程序属此类目时需该许可</div>
+<div class="n">本业务形态不属此类</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="pre-07" disabled>
+<span>
+<div class="t"><span class="badge b-na">N/A</span>网约车许可</div>
+<div class="c">判据：仅当小程序属此类目时需该许可</div>
+<div class="n">本业务形态不属此类</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="pre-08" disabled>
+<span>
+<div class="t"><span class="badge b-na">N/A</span>校外培训审批</div>
+<div class="c">判据：仅当小程序属此类目时需该许可</div>
+<div class="n">本业务形态不属此类</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="pre-09" disabled>
+<span>
+<div class="t"><span class="badge b-na">N/A</span>宗教信息服务</div>
+<div class="c">判据：仅当小程序属此类目时需该许可</div>
+<div class="n">本业务形态不属此类</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="pre-10" disabled>
+<span>
+<div class="t"><span class="badge b-na">N/A</span>互金监管批复</div>
+<div class="c">判据：仅当小程序属此类目时需该许可</div>
+<div class="n">本业务形态不属此类</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<h2>人工行（不可勾） (9)</h2>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="step-ceo-pieces" disabled>
+<span>
+<div class="t"><span class="badge b-blocked">BLOCKED</span>物理件：服务器／域名／备案+ICP／商户号</div>
+<div class="c">判据：四件到位才能提交备案与收款；本司零代办</div>
+<div class="n">阻塞面登记 physical=3</div>
+<div class="n">证据面：<a href="preview/platform-live-report.html">preview/platform-live-report.html</a></div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="step-sms-window" disabled>
+<span>
+<div class="t"><span class="badge b-human">NEEDS-HUMAN</span>短信核验窗：12381 · 24h 内完成，逾期系统自动驳回</div>
+<div class="c">判据：负责人手机可接收且当日在位</div>
+<div class="n">本司无法从盘上测得，必须人工确认</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="mat-01" disabled>
+<span>
+<div class="t"><span class="badge b-human">NEEDS-HUMAN</span>主办单位证件</div>
+<div class="c">判据：官方列举的七类材料之一，须真实上传</div>
+<div class="n">无法从盘上判定</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="mat-02" disabled>
+<span>
+<div class="t"><span class="badge b-human">NEEDS-HUMAN</span>主体负责人证件</div>
+<div class="c">判据：官方列举的七类材料之一，须真实上传</div>
+<div class="n">无法从盘上判定</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="mat-03" disabled>
+<span>
+<div class="t"><span class="badge b-human">NEEDS-HUMAN</span>小程序负责人证件</div>
+<div class="c">判据：官方列举的七类材料之一，须真实上传</div>
+<div class="n">无法从盘上判定</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="mat-04" disabled>
+<span>
+<div class="t"><span class="badge b-human">NEEDS-HUMAN</span>前置审批文件</div>
+<div class="c">判据：官方列举的七类材料之一，须真实上传</div>
+<div class="n">无法从盘上判定</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="mat-05" disabled>
+<span>
+<div class="t"><span class="badge b-human">NEEDS-HUMAN</span>补充材料（授权书·承诺书等）</div>
+<div class="c">判据：官方列举的七类材料之一，须真实上传</div>
+<div class="n">无法从盘上判定</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="mat-06" disabled>
+<span>
+<div class="t"><span class="badge b-human">NEEDS-HUMAN</span>负责人人脸核身现场照</div>
+<div class="c">判据：官方列举的七类材料之一，须真实上传</div>
+<div class="n">无法从盘上判定</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<div class="row blocked">
+<label>
+<input type="checkbox" data-ck="mat-07" disabled>
+<span>
+<div class="t"><span class="badge b-human">NEEDS-HUMAN</span>真实性核验单</div>
+<div class="c">判据：官方列举的七类材料之一，须真实上传</div>
+<div class="n">无法从盘上判定</div>
+<div class="n">证据面：本页 preview/filing-checklist.html</div>
+</span></label></div>
+<h2>五环流程与官方时限</h2>
+<div class="row"><div class="t">1. 备案信息填写 · <code>主办单位与负责人身份信息、小程序信息、服务内容类型</code></div><div class="n">负责：本司填 · 状态：MANUAL</div></div>
+<div class="row"><div class="t">2. 平台初审 · <code>1-2 个工作日</code></div><div class="n">负责：微信平台 · 状态：WAIT-PLATFORM</div></div>
+<div class="row"><div class="t">3. 工信部短信核验 · <code>12381 · 24h 内于 beian.miit.gov.cn 完成，逾期系统自动驳回</code></div><div class="n">负责：主办单位负责人 · 状态：MANUAL</div></div>
+<div class="row"><div class="t">4. 通管局审核 · <code>1-20 个工作日</code></div><div class="n">负责：省级通信管理局 · 状态：WAIT-PLATFORM</div></div>
+<div class="row"><div class="t">5. 备案号下发 · <code>由平台自动展示于小程序更多资料页</code></div><div class="n">负责：平台 · 状态：WAIT-PLATFORM</div></div>
+<h2>备案类型（3）</h2>
+<div class="row"><div class="n">新增备案 · 变更备案 · 注销备案</div></div>
+<div class="foot">本页由 <code>python tools/filing_checklist.py</code> 派生（html 12798 B · json 8138 B）。常驻提示：一切沙箱面均 mock=true / chargeable=false，不构成投资建议；生成内容一律带 AIGC 标识。来源：docs/global-benchmarks.md（官方页直采）。</div>
+</main><script>
+(function(){
+  var NS='bd-filing-checklist-v1';
+  var boxes=document.querySelectorAll('input[data-ck]');
+  function load(){try{return JSON.parse(localStorage.getItem(NS)||'{}')}catch(e){return {}}}
+  var state=load();
+  Array.prototype.forEach.call(boxes,function(b){
+    var k=b.getAttribute('data-ck');
+    b.checked=!!state[k];
+    b.addEventListener('change',function(){state[k]=b.checked;
+      try{localStorage.setItem(NS,JSON.stringify(state))}catch(e){}});
+  });
+})();
+</script></body></html>
