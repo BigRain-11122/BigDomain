@@ -66,8 +66,16 @@ NARRATIVE_RE = re.compile(r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s")
 # summary lines and never round narratives. The optional date prefix is the
 # same one NARRATIVE_RE already tolerates, and both alternatives stay
 # word-bounded so "R<n> folder of ..." is STILL a narrative.
+#
+# R2815 AC-LKNF1/AC-LKNF2: the inflection list was still lower-case and
+# had no third-person form, so "R<n> Fold of log lines ..." and
+# "R<n> folds the block ..." both fell back to NARRATIVE_RE and reported
+# a false missing-ledger gap (measured at HEAD over five fixture lines).
+# Case folding is scoped to the verb only - the round marker stays "R" -
+# and the word boundary is unchanged, so "folder" and "foldsomething"
+# remain narratives.
 FOLD_SUMMARY_RE = re.compile(
-    r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s+(?:fold\b|folded\b)")
+    r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s+(?i:fold(?:s|ed)?)\b")
 LOCAL_NUM_RE = re.compile(r"^(\d+(?:\.\d+)?)([kKmM]?)$")
 API_NUM_RE = re.compile(r"^\d+$")
 UNITS = {"": 1, "k": 1000, "m": 1000000}

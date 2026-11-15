@@ -4488,6 +4488,13 @@ SUITES = [
     # (AC-LKND1..AC-LKND6 pre-registered in state/queue/tech.md:626.)
     ("os-ledger-fold-kind-dateprefix",
      os.path.join("..", "os", "test_ledger_fold_kind_dateprefix.py"), 6),
+    # R2815: the same guard, one inflection further - a capitalized fold
+    # summary and the third-person "folds" form both fell back to the
+    # narrative pattern and reported a false missing-ledger gap, measured
+    # at HEAD over five fixture lines. (AC-LKNF1..AC-LKNF6 pre-registered
+    # in state/queue/tech.md:715.)
+    ("os-ledger-fold-kind-inflection",
+     os.path.join("..", "os", "test_ledger_fold_kind_inflection.py"), 6),
     # R2153: the double-run identity dialect gets one dialect instead of
     # two - explicit bytes/conclusions modes, claim verification against
     # the files (a byte claim that does not hold is a false claim) and a

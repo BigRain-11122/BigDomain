@@ -1,0 +1,8 @@
+PASS AC-LKNF1 capitalized fold summary is other, dated or bare
+PASS AC-LKNF2 third-person 'folds' form is other, dated or bare
+PASS AC-LKNF3 'Folder'/'foldsomething'/mention stay round and gate
+PASS AC-LKNF4 all R2580/R2581 pinned shapes unchanged
+PASS AC-LKNF5 bare narrative, typo prefix, shipped families unchanged
+PASS AC-LKNF6 real log clean, both siblings 6/6, ASCII, no network (test_ledger_fold_kind.py rc=0, test_ledger_fold_kind_dateprefix.py rc=0)
+suite: fold-summary inflection (R2815 AC-LKNF1..AC-LKNF6)
+SUITE PASS 6/6 criteria

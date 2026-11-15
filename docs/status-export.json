@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-16T05:43:59+08:00",
-  "do": "R2814 - ENGINEERING: the content-safety gate that carries the section-five death line had no battery row and was graded only by an unscheduled --check; it now has one (AC-UGRB1..11), each of the nine shipped criteria is proved green AND proved red under a named tamper, and the registry moved 694/5196 -> 695/5207.",
+  "export_ts": "2026-11-16T05:55:44+08:00",
+  "do": "R2815 - THE FOLD-SUMMARY GUARD NOW KNOWS BOTH INFLECTIONS THE SEED ROW MEASURED, AND THE TWO NEW CRITERIA EARNED THEIR PLACE BY READING RED FIRST: the queue head was state/queue/tech.md:715 (read through queue_head.py --head tech, AC-LKNF1..AC-LKNF6 pinned there BEFORE this code and not re-legislated here)....",
   "ceo_face": {
-    "current": "R2814 - ENGINEERING: the content-safety gate that carries the section-five death line had no battery row and was graded only by an unscheduled --check; it now has one (AC-UGRB1..11), each of the nine shipped criteria is proved green AND proved red under a named tamper, and the registry moved 694/5196 -> 695/5207.",
-    "latest_artifact": "qa/ugc-gate-suite-R2814.log (835B, sha256 676bd87df8c9250c) + docs/sandbox-suite-matrix.md (73180B, 695 rows)",
-    "last_artifact": "qa/ugc-gate-suite-R2814.log (835B, sha256 676bd87df8c9250c) + docs/sandbox-suite-matrix.md (73180B, 695 rows)",
-    "next_milestone": "**全量电池仍欠**且现为 **694 套件 / 5192 判据**（一趟 4000-5900s；本窗未起任何腿，如实记）；能 supervise 的窗口须**早发**腿并以其自身 `BATTERY rc=` 行经 `tools/adoption_preflight.py` 采纳，禁把「只跑了本窗相关套件」说成电池绿。",
-    "next_milestone_due": "2026-11-18T05:28:23+08:00",
-    "updated_at": "2026-11-16T05:28:23+08:00",
+    "current": "R2815 - THE FOLD-SUMMARY GUARD NOW KNOWS BOTH INFLECTIONS THE SEED ROW MEASURED, AND THE TWO NEW CRITERIA EARNED THEIR PLACE BY READING RED FIRST: the queue head was state/queue/tech.md:715 (read through queue_head.py --head tech, AC-LKNF1..AC-LKNF6 pinned there BEFORE this code and not re-legislated here)....",
+    "latest_artifact": "preview/first-yuan-chain.html (3078B) + preview/first-yuan-chain.json (4159B)",
+    "last_artifact": "preview/first-yuan-chain.html (3078B) + preview/first-yuan-chain.json (4159B)",
+    "next_milestone": "队头=`state/queue/tech.md:718`（`queue_head.py --head tech` 实测新头，判据 AC-SEQAF1..AC-SEQAF6 已在板）——`src/os/state_seq.py` 的「盖了戳但没记日志」只读活日志，折进留档的轮次被永久误判为残留；全量电池仍欠 **696/5213**，能 supervise 的窗口须早发腿。",
+    "next_milestone_due": "2026-11-18T05:55:44+08:00",
+    "updated_at": "2026-11-16T05:55:44+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ceo-blockers.html",
     "board_pages_skipped": [
       "preview/ceo-blockers.html (8453B)",
@@ -775,7 +775,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2813",
+      "2815",
       "OSLoop 执行 tick"
     ],
     [
@@ -798,14 +798,14 @@
   "self_drive": {
     "window": "2026-11-10..2026-11-16",
     "window_days": 7,
-    "log_lines_in_window": 55,
+    "log_lines_in_window": 61,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
-    "queue_tech_open": 12,
+    "queue_tech_open": 11,
     "queue_explore_open": 10
   },
   "current": "R2814 - ENGINEERING: the content-safety gate that carries the section-five death line had no battery row and was graded only by an unscheduled --check; it now has one (AC-UGRB1..11), each of the nine shipped criteria is proved green AND proved red under a named tamper, and the registry moved 694/5196 -> 695/5207.",
@@ -837,23 +837,23 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 12,
-        "done_rows": 513,
+        "open_rows": 11,
+        "done_rows": 514,
         "gated_rows": 1,
-        "claimable": 9,
+        "claimable": 8,
         "discounted": 2,
         "delivered": [
           {
-            "line": 716,
+            "line": 718,
             "prefix": "AC-SEQAF1"
           },
           {
-            "line": 718,
+            "line": 720,
             "prefix": "AC-EDMK1"
           }
         ],
         "floor": 10,
-        "shortfall": 1,
+        "shortfall": 2,
         "status": "SHORT"
       },
       {
@@ -872,7 +872,7 @@
       }
     ],
     "verdict": "FLOOR-DEBT",
-    "shortfall_total": 1,
+    "shortfall_total": 2,
     "missing": [],
     "delivered_total": 2
   }
