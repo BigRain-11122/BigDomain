@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T13:41:33+08:00",
+  "export_ts": "2026-11-15T13:43:02+08:00",
   "do": "R2781 - PRODUCT: the filing flow the official guide landed as PROSE stopped being prose and became an object the operator can open, follow in order and tick - preview/filing-checklist.html (12798B) + .json (8138B), rendered in one command by tools/filing_checklist.py. Twenty-one rows in four groups over twe...",
   "ceo_face": {
     "current": "R2781 - PRODUCT: the filing flow the official guide landed as PROSE stopped being prose and became an object the operator can open, follow in order and tick - preview/filing-checklist.html (12798B) + .json (8138B), rendered in one command by tools/filing_checklist.py. Twenty-one rows in four groups over twe...",
-    "latest_artifact": "preview/filing-checklist.html (12798B) + preview/filing-checklist.json (8138B)",
-    "last_artifact": "preview/filing-checklist.html (12798B) + preview/filing-checklist.json (8138B)",
+    "latest_artifact": "preview/filing-checklist.html (12917B) + preview/filing-checklist.json (8138B)",
+    "last_artifact": "preview/filing-checklist.html (12917B) + preview/filing-checklist.json (8138B)",
     "next_milestone": "The successor full battery is OWED (this window moved `src/os/state.json` and `docs/status-export.json`) and was NOT launched: two detached legs today died without a closing row when the host window ended, so the next window should launch it EARLY and supervise, not at the tail.",
-    "next_milestone_due": "2026-11-17T13:41:33+08:00",
-    "updated_at": "2026-11-15T13:41:33+08:00",
+    "next_milestone_due": "2026-11-17T13:43:02+08:00",
+    "updated_at": "2026-11-15T13:43:02+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -38,6 +38,7 @@
     }
   ],
   "outs": [
+    "preview/filing-checklist.html (12917B) + preview/filing-checklist.json (8138B)",
     "preview/filing-checklist.html (12798B) + preview/filing-checklist.json (8138B)",
     "preview/ship-checklist.html (9182B) + preview/ship-checklist.json (4983B)",
     "preview/ship-checklist.html（9182B）+ preview/ship-checklist.json（4983B·sizes 自指字节）",
