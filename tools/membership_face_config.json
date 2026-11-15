@@ -1,0 +1,56 @@
+{
+  "page_title": "硅基域 权益 / 月卡面",
+  "page_subtitle": "四档权益逐行取自 docs/spec/membership-spec.md 第三节的档位矩阵，价目锚与已发货商品载荷在渲染那一刻交叉核对。",
+  "honesty_note": "本页是 MOCK 呈现面：不接支付网关、不签发权益、不写账本、不扣次数。它把「三档月卡各自给什么、各自卡在哪」摆到同一屏上，仅此而已。",
+  "ceo_note": "带此徽标的档位价目属初版正典，开闸前须 CEO 呈批；19.9 一档已锁价。",
+  "columns": {
+    "tier": "档位",
+    "price": "价目锚",
+    "quota": "月次数",
+    "privileges": "特权集",
+    "dependencies": "消费面依赖"
+  },
+  "labels": {
+    "counters": "渲染时派生",
+    "tiers": "档位数",
+    "paid": "付费档",
+    "pending": "待 CEO 批准",
+    "matched": "已挂商品载荷",
+    "blocked": "下游 blocked 引用",
+    "badge_pending": "待 CEO 批准",
+    "badge_locked": "已锁价",
+    "badge_free": "免费态",
+    "product": "对应商品载荷",
+    "product_none": "无对应商品载荷（价目锚只在正典里）",
+    "needles": "本页如何变红",
+    "needles_note": "下列四根针必须始终留在规格里：任何一根消失，本页 --check 立刻转红并点名缺哪一根。",
+    "compliance": "合规四件套落位",
+    "sources": "数据来源与字节",
+    "how_to": "复跑"
+  },
+  "ceo_markers": ["呈批", "[needs-CEO]"],
+  "locked_marker": "已锁",
+  "blocked_marker": "【blocked",
+  "dependency_sep": "；",
+  "privilege_sep": "+",
+  "empty_price": "—",
+  "needles": [
+    {"label": "AIGC 服务端权威字段", "needle": "ai_generated"},
+    {"label": "msgSecCheck 前置闸", "needle": "msgSecCheck"},
+    {"label": "闸未接线拒启", "needle": "E_GATE_OFFLINE"},
+    {"label": "AIGC 标识面总述", "needle": "AIGC"}
+  ],
+  "compliance": [
+    {"label": "判据预注册", "needle": "AC-M1"},
+    {"label": "AIGC 生成标识面", "needle": "ai_generated"},
+    {"label": "msgSecCheck 前置闸", "needle": "msgSecCheck"},
+    {"label": "非投顾风险提示常驻面", "needle": "AC-M9"}
+  ],
+  "links": [
+    {"label": "权益 / 月卡规格全文", "href": "../docs/spec/membership-spec.md"},
+    {"label": "支付闸报告", "href": "payment-gate-report.html"},
+    {"label": "19.9 收款路径 MOCK 面", "href": "money-path-demo.html"},
+    {"label": "CEO 阻塞面", "href": "ceo-blockers.html"},
+    {"label": "入口页", "href": "index.html"}
+  ]
+}

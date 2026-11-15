@@ -1,0 +1,12 @@
+membership-face-R2783  (BigDomain OSLoop round 2783)
+product: preview/membership-face.html + .json, rendered by tools/membership_face.py
+criteria: AC-MEMF1..AC-MEMF6 pinned in src/os/backlog.md BEFORE the tool existed
+check: VERDICT PASS tiers=4 paid=3 pending=2 matched=1 blocked=4 privs=11 rc=0
+double render: html sha256 equal, json sha256 equal (byte identical, no clock in derivation)
+read-only: --check left html size+mtime unchanged
+negative control 1: one byte flipped in the landed html -> VERDICT FAIL E_STALE rc=2; re-render -> PASS
+negative control 2: private-world needle removal -> E_NEEDLE naming msgSecCheck
+derivation proof: tier count read from the spec table = 4; source is pure ASCII
+entry page: preview/index.html 34559B, deliverable_index --check PASS 14/14
+neighbour gates: ship_checklist 8/8, filing_checklist 8/8, money_path_demo PASS
+leg supervision: reconcile-battery-R2781 pid 82532 ALIVE, 501 PASS rows / 1 FAIL (os-suite-matrix-reconcile-evidence-face exit=1, zero output lines) -> recorded, not adopted, not relaunched

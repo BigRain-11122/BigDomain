@@ -1,0 +1,205 @@
+{
+  "columns": [
+    "档位",
+    "价目锚（法币在订单域）",
+    "月次数（配额）",
+    "特权集",
+    "消费面依赖（引用·不预建）"
+  ],
+  "counts": {
+    "tiers": 4,
+    "paid": 3,
+    "pending": 2,
+    "matched": 1,
+    "blocked": 4,
+    "privileges": 11
+  },
+  "tiers": [
+    {
+      "name": "体验卡",
+      "price_text": "¥19.9/月（19.9 已锁）",
+      "price_yuan": 19.9,
+      "quota_text": "3 次算力包",
+      "quota": 3,
+      "privileges": [
+        "基础身份徽标",
+        "大厅普通表情包"
+      ],
+      "dependencies": [
+        "lobby 呈现面（既有件）"
+      ],
+      "blocked_refs": 0,
+      "needs_ceo": false,
+      "locked": true,
+      "is_free": false,
+      "products": [
+        {
+          "id": "birthright_entry",
+          "entitlement": "birthright",
+          "price_cent": 1990
+        },
+        {
+          "id": "pack_compute_19_9",
+          "entitlement": "compute_pack",
+          "price_cent": 1990
+        }
+      ]
+    },
+    {
+      "name": "城主卡",
+      "price_text": "¥49.9/月（初版正典·开闸前呈批）",
+      "price_yuan": 49.9,
+      "quota_text": "10 次算力包",
+      "quota": 10,
+      "privileges": [
+        "发言高亮",
+        "专属居民陪伴",
+        "建筑署名券 1 次/月"
+      ],
+      "dependencies": [
+        "lobby 高亮字段（既有件）",
+        "陪伴=BigLife 台词管线引用【blocked 其呈现面】",
+        "署名券消费=FluxVerse DevLoop【blocked M2-M3】"
+      ],
+      "blocked_refs": 2,
+      "needs_ceo": true,
+      "locked": false,
+      "is_free": false,
+      "products": []
+    },
+    {
+      "name": "共创者卡",
+      "price_text": "¥99/月（初版正典·开闸前呈批）",
+      "price_yuan": 99.0,
+      "quota_text": "30 次算力包",
+      "quota": 30,
+      "privileges": [
+        "加急通道（排队优先位）",
+        "共创优先筛选（入池权重）",
+        "私人房间",
+        "皮肤自由换"
+      ],
+      "dependencies": [
+        "加急=服务队列优先位【blocked 执行面 BigMoney 引用】",
+        "优先筛选=ugc 入池参数（既有件可接）",
+        "房间/皮肤池【blocked FluxVerse/参观端·皮肤目录 [needs-CEO]】"
+      ],
+      "blocked_refs": 2,
+      "needs_ceo": true,
+      "locked": false,
+      "is_free": false,
+      "products": []
+    },
+    {
+      "name": "免费态（非会员）",
+      "price_text": "—",
+      "price_yuan": null,
+      "quota_text": "0",
+      "quota": 0,
+      "privileges": [
+        "围观",
+        "出生证者入城基础面（C0）"
+      ],
+      "dependencies": [
+        "lobby 既有面"
+      ],
+      "blocked_refs": 0,
+      "needs_ceo": false,
+      "locked": false,
+      "is_free": true,
+      "products": []
+    }
+  ],
+  "needles": [
+    {
+      "label": "AIGC 服务端权威字段",
+      "needle": "ai_generated",
+      "found": true
+    },
+    {
+      "label": "msgSecCheck 前置闸",
+      "needle": "msgSecCheck",
+      "found": true
+    },
+    {
+      "label": "闸未接线拒启",
+      "needle": "E_GATE_OFFLINE",
+      "found": true
+    },
+    {
+      "label": "AIGC 标识面总述",
+      "needle": "AIGC",
+      "found": true
+    }
+  ],
+  "compliance": [
+    {
+      "label": "判据预注册",
+      "needle": "AC-M1",
+      "found": true
+    },
+    {
+      "label": "AIGC 生成标识面",
+      "needle": "ai_generated",
+      "found": true
+    },
+    {
+      "label": "msgSecCheck 前置闸",
+      "needle": "msgSecCheck",
+      "found": true
+    },
+    {
+      "label": "非投顾风险提示常驻面",
+      "needle": "AC-M9",
+      "found": true
+    }
+  ],
+  "links": [
+    {
+      "label": "权益 / 月卡规格全文",
+      "href": "../docs/spec/membership-spec.md",
+      "exists": true
+    },
+    {
+      "label": "支付闸报告",
+      "href": "payment-gate-report.html",
+      "exists": true
+    },
+    {
+      "label": "19.9 收款路径 MOCK 面",
+      "href": "money-path-demo.html",
+      "exists": true
+    },
+    {
+      "label": "CEO 阻塞面",
+      "href": "ceo-blockers.html",
+      "exists": true
+    },
+    {
+      "label": "入口页",
+      "href": "index.html",
+      "exists": true
+    }
+  ],
+  "sizes": {
+    "spec_bytes": 29184,
+    "pay_bytes": 6415,
+    "config_bytes": 2517
+  },
+  "sources": {
+    "spec": "docs/spec/membership-spec.md",
+    "pay": "preview/payment-gate-report.json",
+    "config": "tools/membership_face_config.json"
+  },
+  "spec_sha16": "bb0a5dc0b2a49946",
+  "pay_sha16": "532b09f86c6eead0",
+  "criteria": [
+    "AC-MEMF1",
+    "AC-MEMF2",
+    "AC-MEMF3",
+    "AC-MEMF4",
+    "AC-MEMF5",
+    "AC-MEMF6"
+  ],
+  "verdict": "PASS"
+}
