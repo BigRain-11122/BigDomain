@@ -1,0 +1,176 @@
+{
+ "counts": {
+  "PENDING-DECISION": 5,
+  "PENDING-PHYSICAL": 3,
+  "UNKNOWN": 0,
+  "faces_missing": 0,
+  "total": 8
+ },
+ "rows": [
+  {
+   "action": "hand over the four physical pieces; the deploy chain is already gated and needs no re-decision",
+   "anchor": "≥11 天零到位",
+   "exists": true,
+   "face": "preview/platform-live-report.html",
+   "face_state": {
+    "bytes": 6889,
+    "path": "preview/platform-live-report.html",
+    "state": "PRESENT"
+   },
+   "id": "B1-physical-four",
+   "lineno": 274,
+   "path": "BLUEPRINT.md",
+   "quote": "≥11 天零到位·C-20261009-02 审计定谳「实质停摆」根因①）=**物理件 4 项**：服务器/域名/备案+ICP/微信支付商户号（前台部署链+收款链·AppID/主体核验随开店窗）→ bootstrap gated·可访问前台 0·沙箱链全绿待件（reconcile-daily RUN",
+   "quote_truncated": true,
+   "reason": "source says zero delivery after a stated interval",
+   "resolved": true,
+   "status": "PENDING-PHYSICAL",
+   "title": "Physical pieces: server + domain + filing/ICP + WeChat Pay merchant id"
+  },
+  {
+   "action": "same four pieces; this row is the spec-level echo, kept so the two registers cannot drift",
+   "anchor": "物理件依赖",
+   "exists": true,
+   "face": "preview/payment-gate-report.html",
+   "face_state": {
+    "bytes": 6737,
+    "path": "preview/payment-gate-report.html",
+    "state": "PRESENT"
+   },
+   "id": "B2-pay-merchant-row",
+   "lineno": 36,
+   "path": "docs/spec/in-store-experience-v2-spec.md",
+   "quote": "物理件依赖 | 商户号/服务器/域名/备案（AC-YP1/AC-P1~P3） | blocked on CEO 物理件（如实待） |",
+   "quote_truncated": false,
+   "reason": "source states the block explicitly",
+   "resolved": true,
+   "status": "PENDING-PHYSICAL",
+   "title": "In-store experience spec carries the same physical dependency row"
+  },
+  {
+   "action": "confirm the tier values; confirmation locks them with zero re-legislation",
+   "anchor": "决策件=定价确认批",
+   "exists": true,
+   "face": "preview/membership-benefit-report.html",
+   "face_state": {
+    "bytes": 10218,
+    "path": "preview/membership-benefit-report.html",
+    "state": "PRESENT"
+   },
+   "id": "B3-pricing-confirm",
+   "lineno": 274,
+   "path": "BLUEPRINT.md",
+   "quote": "决策件=定价确认批**：19.9 确认即锁+¥29.9/¥9.9 两档定价值（C-20260927-01 采纳序·回访窗 10-04 已过）+激励首档参数/分成比例（§三/§四 needs-CEO 标记在册）——定价确认权=CEO 保留面零转移·零重议零新立法·到位即按既有正典执行。",
+   "quote_truncated": false,
+   "reason": "source names the matter as a CEO reserved decision",
+   "resolved": true,
+   "status": "PENDING-DECISION",
+   "title": "Pricing confirmation batch (19.9 locked, 29.9 / 9.9 tier values)"
+  },
+  {
+   "action": "approve the first-notch numbers; the structure and discipline are already locked",
+   "anchor": "数值纪律",
+   "exists": true,
+   "face": "preview/ledger-business-report.html",
+   "face_state": {
+    "bytes": 5276,
+    "path": "preview/ledger-business-report.html",
+    "state": "PRESENT"
+   },
+   "id": "B4-incentive-first-notch",
+   "lineno": 5,
+   "path": "docs/spec/incentive-agent-spec.md",
+   "quote": "数值纪律：本件只锁**结构与纪律**；全部首档数值=[needs-CEO] 呈批面（AC-LP4 先例·T1 否决窗）；BLUEPRINT 已在册数字（19.9/49.9/99/20/30/10/9.9/29.9/199）=引用不新增。",
+   "quote_truncated": false,
+   "reason": "source marks the value as a CEO-only approval",
+   "resolved": true,
+   "status": "PENDING-DECISION",
+   "title": "Incentive agent first-notch parameters (numeric values only)"
+  },
+  {
+   "action": "name the three numbers; missing any one of them keeps the split face a black box",
+   "anchor": "\\*\\*三公示\\*\\*（gv 标准 1）",
+   "exists": true,
+   "face": "preview/ledger-business-report.html",
+   "face_state": {
+    "bytes": 5276,
+    "path": "preview/ledger-business-report.html",
+    "state": "PRESENT"
+   },
+   "id": "B5-three-publicity",
+   "lineno": 22,
+   "path": "docs/spec/incentive-agent-spec.md",
+   "quote": "**三公示**（gv 标准 1）：分成比例〔恒代币计·学 YouTube 透明度**形式**·55-60% 法币口径锚不照搬〕+结算周期+起兑点——三缺一=黑箱（数值全 [needs-CEO]·§二.1）。",
+   "quote_truncated": false,
+   "reason": "source marks the value as a CEO-only approval",
+   "resolved": true,
+   "status": "PENDING-DECISION",
+   "title": "Three publicity faces: split ratio, settlement period, redemption floor"
+  },
+  {
+   "action": "approve the pricing cases and the gate for the T2 pilot",
+   "anchor": "\\[needs-CEO\\] 呈批清单",
+   "exists": true,
+   "face": "preview/index.html",
+   "face_state": {
+    "bytes": 27999,
+    "path": "preview/index.html",
+    "state": "PRESENT"
+   },
+   "id": "B6-t2-heritage",
+   "lineno": 57,
+   "path": "docs/spec/heritage-t2-spec.md",
+   "quote": "[needs-CEO] 呈批清单（P1 律·只呈批不执行·批准制非报备制）**：",
+   "quote_truncated": false,
+   "reason": "source marks the value as a CEO-only approval",
+   "resolved": true,
+   "status": "PENDING-DECISION",
+   "title": "T2 heritage commercial line approval list"
+  },
+  {
+   "action": "supply the mini-program appid/secret so the content gate leaves the sandbox",
+   "anchor": "msgSecCheck 账号域物理件",
+   "exists": true,
+   "face": "preview/ugc-gate-report.html",
+   "face_state": {
+    "bytes": 9576,
+    "path": "preview/ugc-gate-report.html",
+    "state": "PRESENT"
+   },
+   "id": "B7-msgseccheck-wiring",
+   "lineno": 46,
+   "path": "BLUEPRINT.md",
+   "quote": "msgSecCheck 账号域物理件）——准入四判据/三公示/三不可协议条款见 spec |",
+   "quote_truncated": false,
+   "reason": "source names a physical piece as the block",
+   "resolved": true,
+   "status": "PENDING-PHYSICAL",
+   "title": "Production wiring of msgSecCheck (account-domain physical piece)"
+  },
+  {
+   "action": "approve the hook values; the funnel design already maps every segment to a shipped face",
+   "anchor": "入群权益钩/裂变奖励参数",
+   "exists": true,
+   "face": "preview/index.html",
+   "face_state": {
+    "bytes": 27999,
+    "path": "preview/index.html",
+    "state": "PRESENT"
+   },
+   "id": "B8-growth-hooks",
+   "lineno": 168,
+   "path": "BLUEPRINT.md",
+   "quote": "入群权益钩/裂变奖励参数=[needs-CEO] 呈批面。",
+   "quote_truncated": false,
+   "reason": "source marks the value as a CEO-only approval",
+   "resolved": true,
+   "status": "PENDING-DECISION",
+   "title": "Growth hooks: join-benefit grants and referral reward parameters"
+  }
+ ],
+ "sizes": {
+  "html": 8453,
+  "json": 6754
+ },
+ "tick": "2769"
+}

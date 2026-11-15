@@ -1,0 +1,14 @@
+CEO blocker face negative controls (tools/ceo_blockers.py)
+world=tmp/world_r2770 (private copy; real repository untouched)
+criterion under test reddens only for its own mutation; clean world 9/9
+
+PASS C1 source file removed :: rc=2 expected_criterion=AC-CBX1 observed=red
+PASS C2 anchor duplicated across rows :: rc=2 expected_criterion=AC-CBX2 observed=red
+PASS C3 carrier face removed :: rc=2 expected_criterion=AC-CBX4 observed=red
+PASS C4 network literal planted :: rc=2 expected_criterion=AC-CBX6 observed=red
+PASS C5 recorded size stale by one :: rc=2 expected_criterion=AC-CBX7 observed=red
+PASS C6 one card deleted :: rc=2 expected_criterion=AC-CBX8 observed=red
+PASS C7 standing banner removed :: rc=2 expected_criterion=AC-CBX9 observed=red
+PASS C8 --check does not rewrite artifacts :: size+mtime equal=True
+PASS C9 clean world reads 9/9 PASS :: rc=0
+VERDICT PASS 9/9
