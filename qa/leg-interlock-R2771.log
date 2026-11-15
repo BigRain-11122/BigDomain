@@ -1,0 +1,9 @@
+LEG-INTERLOCK PASS 8/8 PASS checks=8 failed=0
+PASS AC-LINT1 one live leg -> rc=2 E_INTERLOCK_LIVE_LEG live=1 refused R9001(pid=80280)
+PASS AC-LINT2 two live legs -> interlock rc=2 E_INTERLOCK_DUPLICATE_LEG live=2 refused R9001(pid=80280) R9002(pid=80280) ; old own-only rule would_launch=True
+PASS AC-LINT3 reaped child pid=80484 -> status=GONE rc=0 INTERLOCK CLEAR live=0 gone=1 unparsed=0
+PASS AC-LINT4 no logs dir -> rows=0 rc=0 INTERLOCK CLEAR live=0 gone=0 unparsed=0
+PASS AC-LINT5 no network import measured=none
+PASS AC-LINT6 no shell or subprocess use measured=none
+PASS AC-LINT7 two censuses identical=True unparsable_reported=UNPARSED
+PASS AC-LINT8 pidfile aged 10800s with a live pid -> status=REUSED rc=0 INTERLOCK CLEAR live=0 gone=0 unparsed=0
