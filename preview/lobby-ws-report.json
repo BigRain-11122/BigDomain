@@ -1,0 +1,74 @@
+{
+ "artifact": "lobby-ws-report",
+ "face": "P-47 item-1 lobby WebSocket handshake",
+ "uri": "ws://127.0.0.1:59971/ws",
+ "verdict": "PASS",
+ "passed": 8,
+ "total": 8,
+ "criteria": [
+  {
+   "id": "AC-LWS1",
+   "intent": "handshake answers sys.hello {v, rooms, risk_doc} then sys.risk_warning persistent with the shipped text",
+   "pass": true,
+   "measured": "hello keys=['risk_doc', 'rooms', 'v'] v=1 rooms=['lobby', 'quant', 'cocreate'] risk_doc_set=True risk_frame=persistent:True text_len=115 verbatim=True"
+  },
+  {
+   "id": "AC-LWS2",
+   "intent": "spectator chat.send refused E_ENTRANCE_REQUIRED and nothing broadcast",
+   "pass": true,
+   "measured": "reject=sec.reject code=E_ENTRANCE_REQUIRED broadcast_to_peer=None rows=0"
+  },
+  {
+   "id": "AC-LWS3",
+   "intent": "pay.grant_sandbox grants and the next chat reaches a second client as chat.broadcast",
+   "pass": true,
+   "measured": "granted=True mock=True token_prefix=sbx- evt=True peer_frame=chat.broadcast peer_actor=res-c60a5945"
+  },
+  {
+   "id": "AC-LWS4",
+   "intent": "server-authoritative actor and ai_generated=false on a human broadcast",
+   "pass": true,
+   "measured": "client_supplied_actor=forged-actor server_actor=res-c60a5945 client_supplied_ai_generated=true server_ai_generated=False"
+  },
+  {
+   "id": "AC-LWS5",
+   "intent": "forbidden word refused E_CONTENT_REJECTED, not broadcast, zero rows appended",
+   "pass": true,
+   "measured": "word=赌博 code=E_CONTENT_REJECTED broadcast_to_peer=None rows 2->2"
+  },
+  {
+   "id": "AC-LWS6",
+   "intent": "census.query whitelist-only with deep-water fields absent; off-whitelist refused E_FORBIDDEN_FIELD",
+   "pass": true,
+   "measured": "id=B-00231 served=12 whitelist=12 off_whitelist=[] deep_water_present=[]"
+  },
+  {
+   "id": "AC-LWS7",
+   "intent": "room.board and idea.board carry the standing disclaimer; unknown type refused, connection alive",
+   "pass": true,
+   "measured": "room_board=room.board idea_board=idea.board disclaimer_verbatim=True unknown=E_BAD_FRAME alive_after=room.board"
+  },
+  {
+   "id": "AC-LWS8",
+   "intent": "all connect targets loopback, no cloud call, shipped four files byte-identical",
+   "pass": true,
+   "measured": "connect_targets=['ws://127.0.0.1'] external=[] shipped_sha={'server.py': 'fa1c0bd6', 'store.py': '56378213', 'sec_gate.py': 'e44e87bf', 'config.json': 'ab7cc978'}"
+  }
+ ],
+ "fingerprint": "fbdb7f517fb06222",
+ "shipped_sha256": {
+  "server.py": "fa1c0bd679ed3ad52196d98db5c69c616eef365dc56ebc034b32232459d5aae5",
+  "store.py": "563782138fcb2177271b2ca861a116aa942835c9a0148a9325bfdec9a0e16e2e",
+  "sec_gate.py": "e44e87bf4cfa770c4508103eca609022cb7778e078d3311a975e6385ab90ae15",
+  "config.json": "ab7cc97834f4950d068139f0236564fdad57a3646b88ef2a8bf7100ae9285f58"
+ },
+ "disclosures": [
+  "sandbox entrance is a mock; the real 19.9 receipt needs the CEO merchant id",
+  "content gate is the shipped wordlist stub; msgSecCheck needs the mini-program credentials",
+  "production criteria AC-P1..P5 are pre-registered and not executed"
+ ],
+ "sizes": {
+  "html": 5952,
+  "json": 3070
+ }
+}

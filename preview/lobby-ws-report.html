@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>P-47-1 lobby WebSocket handshake - driven on a real socket</title>
+<style>
+body{font:15px/1.6 -apple-system,"Segoe UI",sans-serif;margin:0;background:#0f1115;color:#e8eaed}
+main{max-width:1040px;margin:0 auto;padding:32px 24px 64px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{color:#9aa0a6;margin:0 0 24px}
+.card{background:#171a21;border:1px solid #262b36;border-radius:10px;padding:16px 18px;margin:0 0 16px}
+.card h2{font-size:16px;margin:0 0 10px;color:#cfd4dc}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{text-align:left;padding:8px 6px;border-bottom:1px solid #262b36;vertical-align:top}
+tr.ok td:first-child{color:#7ee787} tr.bad td:first-child{color:#ff7b72}
+pre{background:#0b0d11;border:1px solid #262b36;border-radius:8px;padding:12px;overflow:auto;font-size:12px;color:#c9d1d9}
+.score{font-size:28px;color:#7ee787}
+.risk{border-left:3px solid #d29922;padding-left:12px;color:#e3b341}
+code{color:#79c0ff}
+</style>
+<main>
+<h1>P-47 item-1 · 大厅 WebSocket 握手面</h1>
+<p class="sub">在真实 loopback 套接字上驱动 shipped 类（不是复刻）：ws://127.0.0.1:59971/ws</p>
+<div class="card"><h2>判据结果</h2>
+<p class="score">8/8 PASS</p>
+<table><tr><th>判据</th><th>意图（预注册）</th><th>实测</th></tr>
+<tr class="ok"><td>AC-LWS1</td><td>handshake answers sys.hello {v, rooms, risk_doc} then sys.risk_warning persistent with the shipped text</td><td>hello keys=['risk_doc', 'rooms', 'v'] v=1 rooms=['lobby', 'quant', 'cocreate'] risk_doc_set=True risk_frame=persistent:True text_len=115 verbatim=True</td></tr>
+<tr class="ok"><td>AC-LWS2</td><td>spectator chat.send refused E_ENTRANCE_REQUIRED and nothing broadcast</td><td>reject=sec.reject code=E_ENTRANCE_REQUIRED broadcast_to_peer=None rows=0</td></tr>
+<tr class="ok"><td>AC-LWS3</td><td>pay.grant_sandbox grants and the next chat reaches a second client as chat.broadcast</td><td>granted=True mock=True token_prefix=sbx- evt=True peer_frame=chat.broadcast peer_actor=res-c60a5945</td></tr>
+<tr class="ok"><td>AC-LWS4</td><td>server-authoritative actor and ai_generated=false on a human broadcast</td><td>client_supplied_actor=forged-actor server_actor=res-c60a5945 client_supplied_ai_generated=true server_ai_generated=False</td></tr>
+<tr class="ok"><td>AC-LWS5</td><td>forbidden word refused E_CONTENT_REJECTED, not broadcast, zero rows appended</td><td>word=赌博 code=E_CONTENT_REJECTED broadcast_to_peer=None rows 2->2</td></tr>
+<tr class="ok"><td>AC-LWS6</td><td>census.query whitelist-only with deep-water fields absent; off-whitelist refused E_FORBIDDEN_FIELD</td><td>id=B-00231 served=12 whitelist=12 off_whitelist=[] deep_water_present=[]</td></tr>
+<tr class="ok"><td>AC-LWS7</td><td>room.board and idea.board carry the standing disclaimer; unknown type refused, connection alive</td><td>room_board=room.board idea_board=idea.board disclaimer_verbatim=True unknown=E_BAD_FRAME alive_after=room.board</td></tr>
+<tr class="ok"><td>AC-LWS8</td><td>all connect targets loopback, no cloud call, shipped four files byte-identical</td><td>connect_targets=['ws://127.0.0.1'] external=[] shipped_sha={'server.py': 'fa1c0bd6', 'store.py': '56378213', 'sec_gate.py': 'e44e87bf', 'config.json': 'ab7cc978'}</td></tr>
+</table></div>
+<div class="card"><h2>常驻非投顾风险提示（连接第二个帧，逐字）</h2>
+<p class="risk">风险提示（常驻·不可折叠）：本大厅为 AI 算力验证与历史回测研究展示场景，一切内容均非投资建议，不构成任何收益承诺，不代客实盘；围观所见为研究过程展示，非跟单依据；站内代币为内循环权益，不可提现、不可外流；请独立判断，风险自担。</p></div>
+<div class="card"><h2>首帧 sys.hello（实测原文）</h2><pre>{
+ "v": 1,
+ "type": "sys.hello",
+ "ts_utc": "2026-11-15T00:28:41.261148Z",
+ "actor": "system",
+ "payload": {
+  "v": 1,
+  "rooms": [
+   "lobby",
+   "quant",
+   "cocreate"
+  ],
+  "risk_doc": "docs/spec/lobby-websocket-spec.md §二 安全闸管道（sys.risk_warning 常驻面）"
+ }
+}</pre></div>
+<div class="card"><h2>第二帧 sys.risk_warning（实测原文）</h2><pre>{
+ "v": 1,
+ "type": "sys.risk_warning",
+ "ts_utc": "2026-11-15T00:28:41.261256Z",
+ "room": "lobby",
+ "actor": "system",
+ "payload": {
+  "text": "风险提示（常驻·不可折叠）：本大厅为 AI 算力验证与历史回测研究展示场景，一切内容均非投资建议，不构成任何收益承诺，不代客实盘；围观所见为研究过程展示，非跟单依据；站内代币为内循环权益，不可提现、不可外流；请独立判断，风险自担。",
+  "persistent": true,
+  "doc": "docs/spec/lobby-websocket-spec.md §二 安全闸管道（sys.risk_warning 常驻面）"
+ }
+}</pre></div>
+<div class="card"><h2>入城后 chat 广播（服务端权威字段）</h2><pre>{
+ "v": 1,
+ "type": "chat.broadcast",
+ "ts_utc": "2026-11-15T00:28:41.880327Z",
+ "room": "lobby",
+ "actor": "res-c60a5945",
+ "payload": {
+  "text": "hello from the lobby face driver"
+ },
+ "ai_generated": false,
+ "evt_id": "06b2598d26e45a64"
+}</pre></div>
+<div class="card"><h2>census 白名单只读面</h2>
+<p>查询 id <code>B-00231</code>：服务字段 12 个，白名单 12 个，白名单外 0 个，深水位字段（hook/recent_ring/recent_ring_date）出现 <b>0</b> 个。</p></div>
+<div class="card"><h2>边界（诚实披露）</h2>
+<ul>
+<li>沙箱入城凭证 = <code>pay.grant_sandbox</code> mock；真实 19.9 支付回执签发要等 CEO 物理件（微信商户号）。</li>
+<li>内容安全闸 = shipped 词表 stub；msgSecCheck 真实接口要等小程序资质（CEO 物理件），未接线状态按规格是「大厅禁开门」。</li>
+<li>生产面 wss/TLS/域名/ICP/1000 并发压测均为 AC-P1..P5，预注册不预执行。</li>
+<li>本件证明的是协议与门禁在真实连接上的行为，不是上线许可。</li>
+</ul></div>
+</main>

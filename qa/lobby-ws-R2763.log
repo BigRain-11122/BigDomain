@@ -1,0 +1,14 @@
+=== lobby WebSocket face R2763 (P-47 item-1) ===
+driver=tools/lobby_ws_report.py --check rc=0
+| PASS AC-LWS1: hello keys=['risk_doc', 'rooms', 'v'] v=1 rooms=['lobby', 'quant', 'cocreate'] risk_doc_set=True risk_frame=persistent:True text_len=115 verbatim=True
+ | PASS AC-LWS2: reject=sec.reject code=E_ENTRANCE_REQUIRED broadcast_to_peer=None rows=0
+ | PASS AC-LWS3: granted=True mock=True token_prefix=sbx- evt=True peer_frame=chat.broadcast peer_actor=res-96d379bd
+ | PASS AC-LWS4: client_supplied_actor=forged-actor server_actor=res-96d379bd client_supplied_ai_generated=true server_ai_generated=False
+ | PASS AC-LWS5: word=赌博 code=E_CONTENT_REJECTED broadcast_to_peer=None rows 2->2
+ | PASS AC-LWS6: id=B-00231 served=12 whitelist=12 off_whitelist=[] deep_water_present=[]
+ | PASS AC-LWS7: room_board=room.board idea_board=idea.board disclaimer_verbatim=True unknown=E_BAD_FRAME alive_after=room.board
+ | PASS AC-LWS8: connect_targets=['ws://127.0.0.1'] external=[] shipped_sha={'server.py': 'fa1c0bd6', 'store.py': '56378213', 'sec_gate.py': 'e44e87bf', 'config.json': 'ab7cc978'}
+VERDICT PASS 8/8 fingerprint=fbdb7f517fb06222 landed=fbdb7f517fb06222 sizes={'html': 5952, 'json': 3070}
+artifacts=preview/lobby-ws-report.html preview/lobby-ws-report.json
+shipped=src/sandbox/lobby/{server.py,store.py,sec_gate.py,config.json} byte-identical before/after
+note=driven over a real loopback websockets connection on an ephemeral port

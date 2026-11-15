@@ -1,12 +1,12 @@
 {
-  "export_ts": "2026-11-15T08:17:20+08:00",
-  "do": "2026-11-15 R2761 PRODUCT window: the P-47 item-1 face is openable, so all five business faces now have a page. preview/city-face-report.html (7300B) + .json (5004B) are rendered in ONE command by tools/city_face_report.py, which builds the SHIPPED CityFace out of the SHIPPED lobby config, drives it in process and starts the SHIPPED CityReadHandler on an ephemeral loopback port so the answers are m",
+  "export_ts": "2026-11-15T08:31:41+08:00",
+  "do": "2026-11-15 R2763 PRODUCT window: the P-47 item-1 lobby WebSocket handshake face is openable, so all five business faces carry a page. preview/lobby-ws-report.html (5952B) + .json (3070B) are rendered in ONE command by tools/lobby_ws_report.py, which wires the SHIPPED Lobby exactly as server.py main() does, serves it through the SHIPPED handler on an ephemeral loopback port and speaks RFC 6455 to it with two real websockets clients. Measured on the wire 8/8 pre-registered criteria: hello {v,rooms,risk_doc} plus the persistent 115B non-advisory frame verbatim; spectator chat refused E_ENTRANCE_REQUIRED with zero broadcast; pay.grant_sandbox then chat.broadcast reaching the second client; client-supplied actor and ai_generated=true both ignored; a forbidden word refused E_CONTENT_REJECTED with the event table unchanged 2->2; census.query serving the 12 whitelist fields with hook/recent_ring/recent_ring_date absent and an off-whitelist request refused E_FORBIDDEN_FIELD; room.board and idea.board carrying the shipped disclaimer verbatim with an unknown frame type refused gracefully and the connection still alive; and every connect target loopback with the shipped four files hash-identical before and after.",
   "ceo_face": {
-    "current": "2026-11-15 R2761 PRODUCT window: the P-47 item-1 face is openable, so all five business faces now have a page. preview/city-face-report.html (7300B) + .json (5004B) are rendered in ONE command by tools/city_face_report.py, which builds the SHIPPED CityFace out of the SHIPPED lobby config, drives it in process and starts the SHIPPED CityReadHandler on an ephemeral loopback port so the answers are m",
-    "latest_artifact": "city-face-R2761.log (1946B)",
-    "last_artifact": "city-face-R2761.log (1946B)",
-    "next_milestone": "next window owes reconcile-battery-R2757 on the committed tree, inside a 48h window due 2026-11-17T08:17:20+08:00",
-    "next_milestone_due": "2026-11-17T08:17:20+08:00",
+    "current": "2026-11-15 R2763 PRODUCT window: the P-47 item-1 lobby WebSocket handshake face is openable, so all five business faces carry a page. preview/lobby-ws-report.html (5952B) + .json (3070B) are rendered in ONE command by tools/lobby_ws_report.py, which wires the SHIPPED Lobby exactly as server.py main() does, serves it through the SHIPPED handler on an ephemeral loopback port and speaks RFC 6455 to it with two real websockets clients. Measured on the wire 8/8 pre-registered criteria: hello {v,rooms,risk_doc} plus the persistent 115B non-advisory frame verbatim; spectator chat refused E_ENTRANCE_REQUIRED with zero broadcast; pay.grant_sandbox then chat.broadcast reaching the second client; client-supplied actor and ai_generated=true both ignored; a forbidden word refused E_CONTENT_REJECTED with the event table unchanged 2->2; census.query serving the 12 whitelist fields with hook/recent_ring/recent_ring_date absent and an off-whitelist request refused E_FORBIDDEN_FIELD; room.board and idea.board carrying the shipped disclaimer verbatim with an unknown frame type refused gracefully and the connection still alive; and every connect target loopback with the shipped four files hash-identical before and after.",
+    "latest_artifact": "preview/lobby-ws-report.html (5952B)",
+    "last_artifact": "preview/lobby-ws-report.html (5952B)",
+    "next_milestone": "next window owes reconcile-battery-R2762 adoption by its own closing BATTERY rc= row through tools/adoption_preflight.py (pid 79308 kernel-ALIVE at R2763 close, stream 330 rows, 1 FAIL, no evidence file), and because this window landed a tools/ file, two preview artifacts and one qa log UNDER that live leg it must also re-run the census family and the export cohort on the FINAL committed tree, inside a 48h window due 2026-11-17T08:31:41+08:00",
+    "next_milestone_due": "2026-11-17T08:31:41+08:00",
     "updated_at": "2026-11-15T08:17:20+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\payment-gate-report.html"
   },
@@ -741,7 +741,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2762",
+      "2763",
       "OSLoop 执行 tick"
     ],
     [
@@ -764,10 +764,10 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 117,
+    "log_lines_in_window": 124,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 18,
     "proposals_total": 9,
     "proposals_open": 7,
     "queue_main_open": 6,
