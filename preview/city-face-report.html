@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>城市观测面验收报告</title>
+<style>
+:root{--ink:#14202b;--mut:#5c6b7a;--line:#d8e0e8;--ok:#1f7a4c;--bad:#a8322c;
+--bg:#f7f9fb;--card:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+font:15px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1080px;margin:0 auto;padding:28px 20px 64px}
+h1{font-size:26px;margin:0 0 4px}
+.sub{color:var(--mut);margin-bottom:18px}
+h2{font-size:17px;margin:30px 0 10px;padding-bottom:6px;
+border-bottom:1px solid var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;
+padding:16px 18px;margin-bottom:6px}
+table{width:100%;border-collapse:collapse;background:var(--card);
+border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);
+vertical-align:top;font-size:13.5px}
+th{background:#eef3f7;font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+ul{margin:6px 0 0;padding-left:20px}
+.meta{color:var(--mut);font-size:13px}
+.disc{background:#fff7e6;border:1px solid #f0d9a8;border-radius:10px;
+padding:14px 16px;font-size:13.5px;white-space:pre-wrap}
+.tag{display:inline-block;background:#e8f2ec;color:var(--ok);border-radius:6px;
+padding:1px 8px;font-size:12.5px;margin-left:6px}
+</style></head><body><main>
+<h1>城市观测面验收报告<span class="tag">通过 8/8</span></h1>
+<div class="sub">BigDomain · P-47 第一面 · 沙箱实测</div>
+<div class="card meta"><ul>
+<li><b>生成时间</b> 2026-11-15T00:03:27.829099Z</li>
+<li><b>数据来源</b> src/sandbox/lobby city.py, store.py, sec_gate.py + config.json
+/ city_data (city_data), 城民行 3, 荣誉席（零渲染） 9</li>
+<li><b>注</b> loopback server on 127.0.0.1:50870 (ephemeral, dies with the process)</li>
+</ul></div>
+
+<h2>白名单读面与深水字段（超白名单请求必须被拒）</h2>
+<table><thead><tr><th>字段</th><th>判定</th></tr></thead>
+<tbody><tr><td>id</td><td>通过</td></tr><tr><td>name</td><td>通过</td></tr><tr><td>species</td><td>通过</td></tr><tr><td>faction</td><td>通过</td></tr><tr><td>gender</td><td>通过</td></tr><tr><td>age</td><td>通过</td></tr><tr><td>district</td><td>通过</td></tr><tr><td>block</td><td>通过</td></tr><tr><td>profession</td><td>通过</td></tr><tr><td>creed</td><td>通过</td></tr><tr><td>brain_digest</td><td>通过</td></tr><tr><td>behavior_hint</td><td>通过</td></tr></tbody></table>
+<div class="card meta"><b>深水字段（不得外泄）: hook, recent_ring, recent_ring_date</b></div>
+<table><thead><tr><th>字段</th><th>状态</th><th>判定</th></tr></thead>
+<tbody><tr><td>hook</td><td>absent</td><td>通过</td></tr><tr><td>recent_ring</td><td>absent</td><td>通过</td></tr><tr><td>recent_ring_date</td><td>absent</td><td>通过</td></tr></tbody></table>
+
+<h2>荣誉席与未知身份</h2>
+<table><thead><tr><th>用例</th><th>期望</th><th>实测</th>
+<th>判定</th></tr></thead><tbody><tr><td>census full read</td><td>only whitelist fields</td><td>12 fields</td><td>通过</td></tr><tr><td>off-whitelist field hook</td><td>E_FORBIDDEN_FIELD, no payload</td><td>E_FORBIDDEN_FIELD</td><td>通过</td></tr><tr><td>honorary C-00001</td><td>found=true rendered=false fields={}</td><td>rendered=False fields_empty=True</td><td>通过</td></tr><tr><td>unknown B-99999</td><td>found=false</td><td>found=False</td><td>通过</td></tr><tr><td>intake with banned word</td><td>E_CONTENT_REJECTED, zero rows</td><td>E_CONTENT_REJECTED rows 0-&gt;0</td><td>通过</td></tr><tr><td>intake clean</td><td>receipt with the landed evt_id</td><td>avatar.intake_receipt rows 0-&gt;1</td><td>通过</td></tr></tbody></table>
+
+<h2>入城 intake 闸门（需过内容闸）</h2>
+<div class="card meta">intake queue: rows 0 &rarr; 1 &middot;
+clean receipt carries the evt_id that landed (yes); household registration
+itself stays BigLife T-04 and this service only intakes.</div>
+
+<h2>只读 HTTP 面（真回环实测）</h2>
+<table><thead><tr><th>用例</th><th>期望</th><th>判定</th></tr></thead>
+<tbody><tr><td>GET /city/snapshot</td><td>200 + as_of=2026-09-24T14:00:00Z</td><td>通过</td></tr><tr><td>GET /census/B-00231</td><td>200, whitelist only</td><td>通过</td></tr><tr><td>GET /city/</td><td>200, == city_view.html on disk (6653B)</td><td>通过</td></tr><tr><td>POST /city/snapshot</td><td>405 (no write endpoint)</td><td>通过</td></tr><tr><td>GET /nope</td><td>404</td><td>通过</td></tr></tbody></table>
+<div class="card meta"><b>只读结论</b> zero write endpoints: every non-GET verb
+answers 405 and every unknown path answers 404, measured over a real socket.</div>
+
+<h2>合规常驻面</h2>
+<div class="disc"><b>非投顾常驻提示（原文）</b>
+风险提示（常驻·不可折叠）：本大厅为 AI 算力验证与历史回测研究展示场景，一切内容均非投资建议，不构成任何收益承诺，不代客实盘；围观所见为研究过程展示，非跟单依据；站内代币为内循环权益，不可提现、不可外流；请独立判断，风险自担。
+
+<b>AIGC 标识</b> AI 生成
+</div>
+
+<h2>本文件满足的判据（先于代码钉定）</h2>
+<div class="card"><ul><li><b>AC-CFY1</b> the html and json land non-zero and the criteria table carries exactly eight rows &mdash; 通过 (html=7300B json=5004B criteria=8)</li><li><b>AC-CFY2</b> a full census read returns only whitelist fields while the source row carries deep-water fields, and every one of them is absent from the response &mdash; 通过 (served=12 source=15 deep_water=hook,recent_ring,recent_ring_date leaked=none)</li><li><b>AC-CFY3</b> an off-whitelist field request is refused with E_FORBIDDEN_FIELD and carries no field payload &mdash; 通过 (field=hook type=sec.reject code=E_FORBIDDEN_FIELD carried_fields=False)</li><li><b>AC-CFY4</b> an honorary seat answers found=true rendered=false with an empty field map, and an unknown id answers found=false &mdash; 通过 (honorary=C-00001 found=True rendered=False fields_empty=True unknown_found=False)</li><li><b>AC-CFY5</b> a gated intake is refused with zero rows appended, while a clean intake returns the evt_id that landed and the queue grows by exactly one &mdash; 通过 (gated=E_CONTENT_REJECTED rows 0-&gt;0 clean=avatar.intake_receipt evt=True rows=1 landed=1)</li><li><b>AC-CFY6</b> the shipped handler answers 200/200/200/405/404 over a real loopback socket, and GET /city/ equals city_view.html byte for byte &mdash; 通过 (snapshot=200 as_of=2026-09-24T14:00:00Z census=200 page=200(6653B,match=True) post=405 miss=404)</li><li><b>AC-CFY7</b> the disclaimer and AIGC label are carried verbatim from config and the page states there are zero write endpoints &mdash; 通过 (disclaimer=115B ai_label=AI 生成 write_endpoints=0)</li><li><b>AC-CFY8</b> source is ASCII, every http:// literal is 127.0.0.1 loopback, and --check reads PASS only on byte-identical fresh facts &mdash; 通过 (ascii=True url_literals=0 loopback_only=yes urlopen_calls=1)</li></ul></div>
+<div class="card meta">fingerprint df3e72fb3c9d182f &middot; generated by
+tools/city_face_report.py</div>
+</main></body></html>

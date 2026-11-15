@@ -1,0 +1,193 @@
+{
+ "generated_by": "tools/city_face_report.py",
+ "p47_item": 1,
+ "title": "城市观测面验收报告",
+ "generated_utc": "2026-11-15T00:03:27.829099Z",
+ "facts": {
+  "city": {
+   "whitelist": [
+    "id",
+    "name",
+    "species",
+    "faction",
+    "gender",
+    "age",
+    "district",
+    "block",
+    "profession",
+    "creed",
+    "brain_digest",
+    "behavior_hint"
+   ],
+   "imported_rows": 3,
+   "honorary_seats": 9,
+   "city_dir_basename": "city_data"
+  },
+  "read": {
+   "id": "B-00231",
+   "served_fields": [
+    "age",
+    "behavior_hint",
+    "block",
+    "brain_digest",
+    "creed",
+    "district",
+    "faction",
+    "gender",
+    "id",
+    "name",
+    "profession",
+    "species"
+   ],
+   "served_count": 12,
+   "source_field_count": 15,
+   "deep_water": [
+    "hook",
+    "recent_ring",
+    "recent_ring_date"
+   ],
+   "deep_water_leaked": [],
+   "frame_type": "census.snapshot"
+  },
+  "refusal": {
+   "field": "hook",
+   "type": "sec.reject",
+   "code": "E_FORBIDDEN_FIELD",
+   "carried_fields": false
+  },
+  "honorary": {
+   "id": "C-00001",
+   "found": true,
+   "rendered": false,
+   "fields_empty": true
+  },
+  "unknown": {
+   "id": "B-99999",
+   "found": false
+  },
+  "intake": {
+   "gated_type": "sec.reject",
+   "gated_code": "E_CONTENT_REJECTED",
+   "rows_before": 0,
+   "rows_after_gated": 0,
+   "clean_type": "avatar.intake_receipt",
+   "has_evt_id": true,
+   "receipt_evt_matches": true,
+   "rows_after_clean": 1,
+   "landed_rows": 1
+  },
+  "http": {
+   "snapshot_code": 200,
+   "snapshot_as_of": "2026-09-24T14:00:00Z",
+   "snapshot_source": "world-public snapshot package (sandbox stand-in for the git read-only channel; production = FluxVerse tick-round-end export, visitor-facing delay <= 20min)",
+   "census_code": 200,
+   "census_fields": [
+    "age",
+    "behavior_hint",
+    "block",
+    "brain_digest",
+    "creed",
+    "district",
+    "faction",
+    "gender",
+    "id",
+    "name",
+    "profession",
+    "species"
+   ],
+   "census_rendered": true,
+   "page_code": 200,
+   "page_bytes": 6653,
+   "page_matches_disk": true,
+   "post_code": 405,
+   "missing_code": 404
+  },
+  "compliance": {
+   "disclaimer": "风险提示（常驻·不可折叠）：本大厅为 AI 算力验证与历史回测研究展示场景，一切内容均非投资建议，不构成任何收益承诺，不代客实盘；围观所见为研究过程展示，非跟单依据；站内代币为内循环权益，不可提现、不可外流；请独立判断，风险自担。",
+   "ai_label": "AI 生成",
+   "write_endpoints": 0
+  }
+ },
+ "fingerprint": "df3e72fb3c9d182f",
+ "criteria": [
+  {
+   "id": "AC-CFY1",
+   "text": "the html and json land non-zero and the criteria table carries exactly eight rows"
+  },
+  {
+   "id": "AC-CFY2",
+   "text": "a full census read returns only whitelist fields while the source row carries deep-water fields, and every one of them is absent from the response"
+  },
+  {
+   "id": "AC-CFY3",
+   "text": "an off-whitelist field request is refused with E_FORBIDDEN_FIELD and carries no field payload"
+  },
+  {
+   "id": "AC-CFY4",
+   "text": "an honorary seat answers found=true rendered=false with an empty field map, and an unknown id answers found=false"
+  },
+  {
+   "id": "AC-CFY5",
+   "text": "a gated intake is refused with zero rows appended, while a clean intake returns the evt_id that landed and the queue grows by exactly one"
+  },
+  {
+   "id": "AC-CFY6",
+   "text": "the shipped handler answers 200/200/200/405/404 over a real loopback socket, and GET /city/ equals city_view.html byte for byte"
+  },
+  {
+   "id": "AC-CFY7",
+   "text": "the disclaimer and AIGC label are carried verbatim from config and the page states there are zero write endpoints"
+  },
+  {
+   "id": "AC-CFY8",
+   "text": "source is ASCII, every http:// literal is 127.0.0.1 loopback, and --check reads PASS only on byte-identical fresh facts"
+  }
+ ],
+ "checks": [
+  {
+   "id": "AC-CFY1",
+   "pass": true,
+   "detail": "html=7300B json=5004B criteria=8"
+  },
+  {
+   "id": "AC-CFY2",
+   "pass": true,
+   "detail": "served=12 source=15 deep_water=hook,recent_ring,recent_ring_date leaked=none"
+  },
+  {
+   "id": "AC-CFY3",
+   "pass": true,
+   "detail": "field=hook type=sec.reject code=E_FORBIDDEN_FIELD carried_fields=False"
+  },
+  {
+   "id": "AC-CFY4",
+   "pass": true,
+   "detail": "honorary=C-00001 found=True rendered=False fields_empty=True unknown_found=False"
+  },
+  {
+   "id": "AC-CFY5",
+   "pass": true,
+   "detail": "gated=E_CONTENT_REJECTED rows 0->0 clean=avatar.intake_receipt evt=True rows=1 landed=1"
+  },
+  {
+   "id": "AC-CFY6",
+   "pass": true,
+   "detail": "snapshot=200 as_of=2026-09-24T14:00:00Z census=200 page=200(6653B,match=True) post=405 miss=404"
+  },
+  {
+   "id": "AC-CFY7",
+   "pass": true,
+   "detail": "disclaimer=115B ai_label=AI 生成 write_endpoints=0"
+  },
+  {
+   "id": "AC-CFY8",
+   "pass": true,
+   "detail": "ascii=True url_literals=0 loopback_only=yes urlopen_calls=1"
+  }
+ ],
+ "verdict": "PASS",
+ "sizes": {
+  "html": 7300,
+  "json": 5004
+ }
+}

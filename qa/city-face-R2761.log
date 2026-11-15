@@ -1,0 +1,26 @@
+# R2761 P-47 item-1 city observation face - measured over a real loopback socket
+# command: python tools/city_face_report.py (then --check)
+# dialects: utf-8 without BOM, LF only
+
+CITY FACE html=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\preview\city-face-report.html (7300B) json=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\preview\city-face-report.json (5004B) port=50870
+  PASS AC-CFY1 html=7300B json=5004B criteria=8
+  PASS AC-CFY2 served=12 source=15 deep_water=hook,recent_ring,recent_ring_date leaked=none
+  PASS AC-CFY3 field=hook type=sec.reject code=E_FORBIDDEN_FIELD carried_fields=False
+  PASS AC-CFY4 honorary=C-00001 found=True rendered=False fields_empty=True unknown_found=False
+  PASS AC-CFY5 gated=E_CONTENT_REJECTED rows 0->0 clean=avatar.intake_receipt evt=True rows=1 landed=1
+  PASS AC-CFY6 snapshot=200 as_of=2026-09-24T14:00:00Z census=200 page=200(6653B,match=True) post=405 miss=404
+  PASS AC-CFY7 disclaimer=115B ai_label=AI 生成 write_endpoints=0
+  PASS AC-CFY8 ascii=True url_literals=0 loopback_only=yes urlopen_calls=1
+VERDICT PASS checks=8/8 fingerprint=df3e72fb3c9d182f
+CITY FACE --check facts_drift=no port=50876
+  PASS AC-CFY1 html=7300B json=5004B criteria=8
+  PASS AC-CFY2 served=12 source=15 deep_water=hook,recent_ring,recent_ring_date leaked=none
+  PASS AC-CFY3 field=hook type=sec.reject code=E_FORBIDDEN_FIELD carried_fields=False
+  PASS AC-CFY4 honorary=C-00001 found=True rendered=False fields_empty=True unknown_found=False
+  PASS AC-CFY5 gated=E_CONTENT_REJECTED rows 0->0 clean=avatar.intake_receipt evt=True rows=1 landed=1
+  PASS AC-CFY6 snapshot=200 as_of=2026-09-24T14:00:00Z census=200 page=200(6653B,match=True) post=405 miss=404
+  PASS AC-CFY7 disclaimer=115B ai_label=AI 生成 write_endpoints=0
+  PASS AC-CFY8 ascii=True url_literals=0 loopback_only=yes urlopen_calls=1
+VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f
+
+RUN rc=0 CHECK rc=0
