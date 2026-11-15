@@ -6807,6 +6807,14 @@ SUITES = [
     # (AC-FYP1..AC-FYP7 pinned in state/queue/tech.md, BEFORE the tool.)
     ("os-first-yuan-path",
      os.path.join("..", "os", "test_first_yuan_path.py"), 7),
+    # R2787 shipped tools/lobby_protocol_map.py and, in the same window, its page
+    # MEASURED four implemented messages that no acceptance criterion named. R2788
+    # wrote those four rows (AC-S20..AC-S23) into the spec and the page now reads
+    # uncovered=0 - which makes the page load-bearing for coverage claims and
+    # therefore worth a battery row of its own.
+    # (AC-LPM1..AC-LPM6 pinned in src/os/backlog.md at R2787, BEFORE the tool.)
+    ("os-lobby-protocol-map",
+     os.path.join("..", "os", "test_lobby_protocol_map.py"), 6),
     ]
 
 FAILS = 0

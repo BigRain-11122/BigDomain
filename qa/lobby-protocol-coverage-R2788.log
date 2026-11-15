@@ -1,0 +1,18 @@
+R2788 lobby protocol coverage closeout (P-47 item 1)
+spec docs/spec/lobby-websocket-spec.md gained AC-S20..AC-S23 naming err.rate_limit,
+room.subscribe, room.unsubscribe and sys.notice, each tied to the shipped suite that
+already asserts the behaviour (lobby-chat-mute-idem AC-CMI2/AC-CMI3,
+os-lobby-room-picker AC-RP6). Two sub-clauses have NO assertion and are stated as
+pending on the spec itself rather than counted as coverage: unknown-room refusal and
+post-unsubscribe chat refusal.
+tools/lobby_protocol_map.py re-rendered: criteria 27 -> 31, messages 17, uncovered 4 -> 0.
+An earlier draft of the honesty note wrote two attribute paths and the scanner listed
+them as messages; the note was reworded so the vocabulary stays clean (measured, not
+papered over).
+src/os/test_lobby_protocol_map.py guards AC-LPM1..AC-LPM6 in a private world:
+SUITE PASS 17/17 twice, including AC-LPM1a comparing every string literal in the tool
+against the REAL derived vocabulary (29 tokens) and AC-LPM5b deleting a criterion row
+so --check reddens rc=2 while AC-LPM5c restores rc=0.
+registry by import: 684 suites / 5085 criteria, 684 unique names, 684 unique paths.
+matrix regenerated 72299B, --check byte-identical (684/5085).
+entry page re-rendered 34959B, deliverable_index --check PASS 14/14.

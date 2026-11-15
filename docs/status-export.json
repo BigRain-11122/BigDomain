@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T16:21:02+08:00",
-  "do": "R2787 - PRODUCT: the lobby protocol surface (P-47 item 1) became a page that answers a question nothing on disk answered - WHICH messages the protocol defines, which spec section defines each, and which of them no acceptance criterion tests. tools/lobby_protocol_map.py renders preview/lobby-protocol-map.htm...",
+  "export_ts": "2026-11-15T16:40:15+08:00",
+  "do": "R2788 - PRODUCT: the four messages the R2787 page measured as uncovered now carry criteria, and the page that measured them is under the battery. docs/spec/lobby-websocket-spec.md gained AC-S20..AC-S23 naming err.rate_limit, room.subscribe, room.unsubscribe and sys.notice, each row pointing its verification...",
   "ceo_face": {
-    "current": "R2787 - PRODUCT: the lobby protocol surface (P-47 item 1) became a page that answers a question nothing on disk answered - WHICH messages the protocol defines, which spec section defines each, and which of them no acceptance criterion tests. tools/lobby_protocol_map.py renders preview/lobby-protocol-map.htm...",
-    "latest_artifact": "preview/lobby-protocol-map.html (22841B) + preview/lobby-protocol-map.json (21374B)",
-    "last_artifact": "preview/lobby-protocol-map.html (22841B) + preview/lobby-protocol-map.json (21374B)",
-    "next_milestone": "WRITE the four missing criterion rows the new page measured (err.rate_limit refusal semantics, room.subscribe / room.unsubscribe handshake, sys.notice push channel) into docs/spec/lobby-websocket-spec.md as AC-S rows with their pre-registered verification method, then register tools/lobby_protocol_m...",
-    "next_milestone_due": "2026-11-17T16:21:02+08:00",
-    "updated_at": "2026-11-15T16:21:02+08:00",
+    "current": "R2788 - PRODUCT: the four messages the R2787 page measured as uncovered now carry criteria, and the page that measured them is under the battery. docs/spec/lobby-websocket-spec.md gained AC-S20..AC-S23 naming err.rate_limit, room.subscribe, room.unsubscribe and sys.notice, each row pointing its verification...",
+    "latest_artifact": "preview/lobby-protocol-map.html (26405B) + preview/lobby-protocol-map.json (25597B)",
+    "last_artifact": "preview/lobby-protocol-map.html (26405B) + preview/lobby-protocol-map.json (25597B)",
+    "next_milestone": "给 AC-S22 的两条未断言子句补断言（未知房拒绝不改变房间集、退订后 chat.send 被 `E_ROOM_UNKNOWN` 拒），落进 os-lobby-room-picker 或新套件，然后规格正文那行「待补断言项」才可以删。",
+    "next_milestone_due": "2026-11-17T16:40:15+08:00",
+    "updated_at": "2026-11-15T16:40:15+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -38,6 +38,7 @@
     }
   ],
   "outs": [
+    "preview/lobby-protocol-map.html (26405B) + preview/lobby-protocol-map.json (25597B)",
     "preview/lobby-protocol-map.html (22841B) + preview/lobby-protocol-map.json (21374B)",
     "preview/core-loop-walkthrough.html (5433B) + preview/core-loop-walkthrough.json (4056B)",
     "preview/membership-face.html (8916B) + preview/membership-face.json (4727B)",
@@ -751,7 +752,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2787",
+      "2788",
       "OSLoop 执行 tick"
     ],
     [
@@ -774,10 +775,10 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 76,
+    "log_lines_in_window": 82,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 15,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,

@@ -1,25 +1,20 @@
 {
  "namespace": "bd-lobby-protocol-map-v1",
  "spec": "docs/spec/lobby-websocket-spec.md",
- "spec_bytes": 24207,
- "spec_lines": 141,
+ "spec_bytes": 26337,
+ "spec_lines": 148,
  "impl": "src/sandbox/lobby/server.py",
  "impl_bytes": 30231,
  "section_count": 20,
- "criteria_rows": 27,
- "criteria_sandbox": 22,
+ "criteria_rows": 31,
+ "criteria_sandbox": 26,
  "criteria_prod": 5,
- "token_count": 37,
+ "token_count": 42,
  "message_count": 17,
  "file_ref_count": 13,
- "field_path_count": 7,
- "uncovered_count": 4,
- "uncovered": [
-  "err.rate_limit",
-  "room.subscribe",
-  "room.unsubscribe",
-  "sys.notice"
- ],
+ "field_path_count": 12,
+ "uncovered_count": 0,
+ "uncovered": [],
  "criteria": [
   {
    "id": "AC-S1",
@@ -167,6 +162,47 @@
    "text": "idea.board 协议接线（R1792）：请求帧 `{\"type\":\"idea.board\"}` 零参公共读面（围观态可查=AC-S11 同律）+可选 `payload.rooms` 过滤（AC-S17 同律：缺省=全榜·坏参 fail-closed `sec.reject E_BAD_FRAME` 先于 store 调用·空列表=诚实空榜·未知房名零幻影·board 后 Python 侧保序子序列过滤）→响应帧 `idea.board`（payload={board,disclaimer} 零键漂移·ai_generated/actor 服务端权威）·board==manual SQL 并发只读交叉·新 idea 后复查询计数 +1（零缓存活态）·**重启存活证**=server 进程重启（新进程同 db·内存 stub 必空）后 idea.board 仍返回全量榜（事件派生 vs stub 失真根治证）·legacy 无 disclaimer store 经 `sec.reject` graceful 拒不崩连接"
   },
   {
+   "id": "AC-S20",
+   "tokens": [
+    "err.rate_limit",
+    "payload.code",
+    "payload.muted_until",
+    "sec.reject"
+   ],
+   "text": "`err.rate_limit` 拒绝帧语义（承 AC-S9·R2788）：单连接超限（5 条/10s）回**独立拒绝帧** `err.rate_limit`（payload.code=`E_RATE_LIMIT`·reason 载 max_msgs/window_s 实测值）；禁言升级回的是**另一种帧型** `sec.reject`（code=`E_RATE_LIMIT`·reason 载 `muted for N seconds`·payload.muted_until=壁钟）——客户端须按 `type` 分流，不可按 code 认帧；禁言触发当次 violations 归零，且被拒帧不增加窗口内落库行数"
+  },
+  {
+   "id": "AC-S21",
+   "tokens": [
+    "cfg.rooms",
+    "payload.room",
+    "room.subscribe",
+    "sec.reject",
+    "sys.notice"
+   ],
+   "text": "`room.subscribe` 握手（R2464 房选器·R2788 入册）：`payload.room` ∈ cfg.rooms → 该房加入连接房间集，回 `sys.notice`（notice 文本载 `room subscribe: <room>` 且 room 字段=该房）；未知房 → `sec.reject` code=`E_ROOM_UNKNOWN`"
+  },
+  {
+   "id": "AC-S22",
+   "tokens": [
+    "cfg.rooms",
+    "payload.room",
+    "room.unsubscribe",
+    "sec.reject",
+    "sys.notice"
+   ],
+   "text": "`room.unsubscribe` 握手（R2788 入册）：`payload.room` ∈ cfg.rooms → 该房移出连接房间集，回 `sys.notice`（`room unsubscribe: <room>`）；未知房 → `sec.reject` code=`E_ROOM_UNKNOWN`"
+  },
+  {
+   "id": "AC-S23",
+   "tokens": [
+    "cfg.rooms",
+    "payload.notice",
+    "sys.notice"
+   ],
+   "text": "`sys.notice` 服务端推送通道（R2788 入册）：actor=`system`·`ai_generated=false`（服务端权威，客户端传值忽略）；`payload.notice` 载事件文本；同一连接连续的订阅/退订须**两帧分开到达**而非合并；room 缺省=已订阅房的最小字典序，无订阅时取 cfg.rooms[0]"
+  },
+  {
    "id": "AC-P1",
    "tokens": [],
    "text": "wss+TLS+域名；ICP 备案完成才可公网 serve"
@@ -265,7 +301,7 @@
     "安全闸管道（顺序即宪法·三道闸串行）",
     "客户端重连语义（2026-10-09 R1675 增补·S8b 后继·AC-S8c/S8d/S8e 承载）"
    ],
-   "count": 4,
+   "count": 5,
    "criteria": [
     "AC-S2"
    ],
@@ -277,11 +313,14 @@
    "token": "err.rate_limit",
    "kind": "message",
    "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
     "传输与帧"
    ],
-   "count": 1,
-   "criteria": [],
-   "covered": false,
+   "count": 3,
+   "criteria": [
+    "AC-S20"
+   ],
+   "covered": true,
    "in_scope": true,
    "implemented": true
   },
@@ -374,12 +413,15 @@
    "token": "room.subscribe",
    "kind": "message",
    "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
     "传输与帧",
     "安全闸管道（顺序即宪法·三道闸串行）"
    ],
-   "count": 2,
-   "criteria": [],
-   "covered": false,
+   "count": 3,
+   "criteria": [
+    "AC-S21"
+   ],
+   "covered": true,
    "in_scope": true,
    "implemented": true
   },
@@ -387,11 +429,14 @@
    "token": "room.unsubscribe",
    "kind": "message",
    "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
     "传输与帧"
    ],
-   "count": 1,
-   "criteria": [],
-   "covered": false,
+   "count": 2,
+   "criteria": [
+    "AC-S22"
+   ],
+   "covered": true,
    "in_scope": true,
    "implemented": true
   },
@@ -404,12 +449,15 @@
     "房间级消息读面（R1790 接线·AC-S14..S17 承载）",
     "事件派生 idea 池读面（R1792 接线·AC-S18/S19 承载）"
    ],
-   "count": 10,
+   "count": 13,
    "criteria": [
     "AC-S9",
     "AC-S16",
     "AC-S17",
-    "AC-S19"
+    "AC-S19",
+    "AC-S20",
+    "AC-S21",
+    "AC-S22"
    ],
    "covered": true,
    "in_scope": true,
@@ -435,11 +483,16 @@
    "token": "sys.notice",
    "kind": "message",
    "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
     "传输与帧"
    ],
-   "count": 1,
-   "criteria": [],
-   "covered": false,
+   "count": 4,
+   "criteria": [
+    "AC-S21",
+    "AC-S22",
+    "AC-S23"
+   ],
+   "covered": true,
    "in_scope": true,
    "implemented": true
   },
@@ -550,9 +603,10 @@
    "token": "server.py",
    "kind": "file-ref",
    "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
     "三、沙箱骨架实现规格（P-47-1b 执行面·本轮只注册不实现）"
    ],
-   "count": 1,
+   "count": 2,
    "criteria": [],
    "covered": false,
    "in_scope": true
@@ -636,6 +690,22 @@
    "implemented": false
   },
   {
+   "token": "cfg.rooms",
+   "kind": "spec-only",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）"
+   ],
+   "count": 3,
+   "criteria": [
+    "AC-S21",
+    "AC-S22",
+    "AC-S23"
+   ],
+   "covered": true,
+   "in_scope": false,
+   "implemented": false
+  },
+  {
    "token": "hello.rooms",
    "kind": "spec-only",
    "sections": [
@@ -664,6 +734,20 @@
    "implemented": false
   },
   {
+   "token": "payload.code",
+   "kind": "spec-only",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）"
+   ],
+   "count": 1,
+   "criteria": [
+    "AC-S20"
+   ],
+   "covered": true,
+   "in_scope": false,
+   "implemented": false
+  },
+  {
    "token": "payload.disclaimer",
    "kind": "spec-only",
    "sections": [
@@ -689,6 +773,49 @@
    "implemented": false
   },
   {
+   "token": "payload.muted_until",
+   "kind": "spec-only",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）"
+   ],
+   "count": 1,
+   "criteria": [
+    "AC-S20"
+   ],
+   "covered": true,
+   "in_scope": false,
+   "implemented": false
+  },
+  {
+   "token": "payload.notice",
+   "kind": "spec-only",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）"
+   ],
+   "count": 1,
+   "criteria": [
+    "AC-S23"
+   ],
+   "covered": true,
+   "in_scope": false,
+   "implemented": false
+  },
+  {
+   "token": "payload.room",
+   "kind": "spec-only",
+   "sections": [
+    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）"
+   ],
+   "count": 2,
+   "criteria": [
+    "AC-S21",
+    "AC-S22"
+   ],
+   "covered": true,
+   "in_scope": false,
+   "implemented": false
+  },
+  {
    "token": "risk_warning.text",
    "kind": "spec-only",
    "sections": [
@@ -703,6 +830,6 @@
   }
  ],
  "gate": "derived from the spec at render time; no message name is typed in the source",
- "html_bytes": 22841,
- "json_bytes": 21374
+ "html_bytes": 26405,
+ "json_bytes": 25597
 }

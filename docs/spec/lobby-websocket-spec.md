@@ -40,6 +40,13 @@
 | AC-S18 | 事件派生 idea 池读面（存储层·R1792）：`EventStore.idea_pool_board()` 纯读派生=per zone（池）`idea.submit` 计数+提交户（DISTINCT actor）聚合〔行 {room,ideas,actors}·zone 渲染为 room=R1773 家族律〕·零 UPDATE 零缓存（读时派生）·信封常驻非投顾 disclaimer·legacy 无 disclaimer 构造面调拒 `E_STORE_NO_DISCLAIMER`·显式空/空白/非 str 构造拒·方法源零写语句（inspect 机检）·**事件派生取代内存 stub 读依赖**（proposal_pool 重启即失→读面自 events 恒真） | 单元读面断言+manual SQL 交叉+行数恒定纯读律+live db 交叉〔预注册载体=state/queue/tech.md R1792 板行·本表入册=R1792 闭口〕 |
 | AC-S19 | idea.board 协议接线（R1792）：请求帧 `{"type":"idea.board"}` 零参公共读面（围观态可查=AC-S11 同律）+可选 `payload.rooms` 过滤（AC-S17 同律：缺省=全榜·坏参 fail-closed `sec.reject E_BAD_FRAME` 先于 store 调用·空列表=诚实空榜·未知房名零幻影·board 后 Python 侧保序子序列过滤）→响应帧 `idea.board`（payload={board,disclaimer} 零键漂移·ai_generated/actor 服务端权威）·board==manual SQL 并发只读交叉·新 idea 后复查询计数 +1（零缓存活态）·**重启存活证**=server 进程重启（新进程同 db·内存 stub 必空）后 idea.board 仍返回全量榜（事件派生 vs stub 失真根治证）·legacy 无 disclaimer store 经 `sec.reject` graceful 拒不崩连接 | live 套件断言〔test_client.py AC-S18/S19 例·fresh 进程重启探针〕 |
 
+| AC-S20 | `err.rate_limit` 拒绝帧语义（承 AC-S9·R2788）：单连接超限（5 条/10s）回**独立拒绝帧** `err.rate_limit`（payload.code=`E_RATE_LIMIT`·reason 载 max_msgs/window_s 实测值）；禁言升级回的是**另一种帧型** `sec.reject`（code=`E_RATE_LIMIT`·reason 载 `muted for N seconds`·payload.muted_until=壁钟）——客户端须按 `type` 分流，不可按 code 认帧；禁言触发当次 violations 归零，且被拒帧不增加窗口内落库行数 | live 断言〔lobby-chat-mute-idem AC-CMI2/AC-CMI3〕 |
+| AC-S21 | `room.subscribe` 握手（R2464 房选器·R2788 入册）：`payload.room` ∈ cfg.rooms → 该房加入连接房间集，回 `sys.notice`（notice 文本载 `room subscribe: <room>` 且 room 字段=该房）；未知房 → `sec.reject` code=`E_ROOM_UNKNOWN` | live 断言〔os-lobby-room-picker AC-RP6〕 |
+| AC-S22 | `room.unsubscribe` 握手（R2788 入册）：`payload.room` ∈ cfg.rooms → 该房移出连接房间集，回 `sys.notice`（`room unsubscribe: <room>`）；未知房 → `sec.reject` code=`E_ROOM_UNKNOWN` | live 断言〔os-lobby-room-picker AC-RP6〕 |
+| AC-S23 | `sys.notice` 服务端推送通道（R2788 入册）：actor=`system`·`ai_generated=false`（服务端权威，客户端传值忽略）；`payload.notice` 载事件文本；同一连接连续的订阅/退订须**两帧分开到达**而非合并；room 缺省=已订阅房的最小字典序，无订阅时取 cfg.rooms[0] | live 断言〔os-lobby-room-picker AC-RP6 双通知用例〕 |
+
+**R2788 覆盖诚实注（上四行入册时实测）**：AC-S21~S23 的「未知房拒绝」以及 AC-S22 的「退订后向该房 chat.send 必被 `E_ROOM_UNKNOWN` 拒」两条**当前无任何套件断言**——代码路径存在（server.py 的 `handle_room` 先判该房是否属于服务端房间清单、`handle_chat` 再判该房是否在连接已订阅房集内，两处都以 `E_ROOM_UNKNOWN` fail-closed），但断言未写，故列为**待补断言项**、不计入已验覆盖；AC-S20 的「被拒帧不增加落库行数」由 AC-CMI3 的 `fresh_rows == 5` 覆盖。
+
 ### 生产判据（P 系·预注册不预执行·blocked on CEO 物理件）
 
 | # | 判据 | 阻塞依赖 |
