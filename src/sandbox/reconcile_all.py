@@ -6812,6 +6812,23 @@ SUITES = [
     # registry assertion - which is the proof that sub-check carries weight.)
     ("os-census-nul-class",
      os.path.join("..", "os", "test_census_nul_class.py"), 7),
+    # R2811: tools/ceo_blockers.py renders preview/ceo-blockers.{html,json} -
+    # the one page that tells the CEO what only he can unblock - and carries
+    # nine criteria AC-CBX1..AC-CBX9 in AC_CBX. Importing the shipped registry
+    # read 693 suites / 5181 criteria and not one of them held an AC-CBX*
+    # token, so the face was guarded only by its own --check, and nothing made
+    # that check run. The cost was measurable at open: the landed page still
+    # said "Tick 2770" while state.json read tick 2810, forty rounds of drift
+    # on the CEO's own unblock page with no gate red. This suite re-proves each
+    # shipped criterion in a private world AND requires it to redden on a
+    # tamper, and AC-CBXB10 holds the measured defect: a page one tick behind
+    # the state fails AC-CBX9 until it is re-rendered.
+    # (AC-CBXB1..AC-CBXB11 pinned in src/os/backlog.md at R2811 BEFORE the
+    # suite existed. The pre-registration run read exactly one red - the
+    # registry assertion, AC-CBXB11 - which is the proof that sub-check
+    # carries weight.)
+    ("os-ceo-blockers",
+     os.path.join("..", "os", "test_ceo_blockers.py"), 11),
     # R2780: the group ledger writes wildcard forms ("no reply cites
     # D-20261114-0x") and a token regex without a right-hand boundary harvests
     # D-20261114-0 out of them, inventing a decision that never existed. Every

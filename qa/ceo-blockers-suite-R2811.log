@@ -1,0 +1,49 @@
+R2811 CEO BLOCKER FACE: the page that tells the CEO what only he can unblock had been stale for forty rounds, and no gate said so.
+
+MEASURED AT OPEN, not asserted: python tools/ceo_blockers.py --check on the committed tree read
+  PASS AC-CBX1..AC-CBX8 (unresolved=none, duplicate_anchors=none, unknown_rows=none, faces_missing=none,
+       artifacts untouched=True, sizes={html:8453,json:6754}==disk, cards=8 header=8 registry=8)
+  FAIL AC-CBX9 banner=True disclaimer=True tick=2810
+  VERDICT FAIL 8/9 rc=2
+i.e. the landed preview/ceo-blockers.html still carried Tick 2770 while src/os/state.json read tick 2810.
+The cause is structural: tools/ceo_blockers.py carries nine criteria in AC_CBX, and importing the shipped
+registry read 693 suites / 5181 criteria with NOT ONE AC-CBX* token, so the face was guarded only by its own
+--check and nothing made that check run.
+
+REPAIR 1 - the artifact: python tools/ceo_blockers.py rewrote the pair at tick 2810 and --check now reads
+  VERDICT PASS 9/9 rc=0 (same 8453/6754 bytes; only the tick text moved).
+
+REPAIR 2 - the birth site: src/os/test_ceo_blockers.py lands AC-CBXB1..AC-CBXB11 plus one isolation check.
+Each shipped criterion is re-proved in a private world (fixture BLUEPRINT/faces/state, tool globals rebound,
+restored in finally) AND required to REDDEN on a tamper, so a decorative criterion would be reported rather
+than hidden. Measured: SUITE PASS 12/12.
+  AC-CBXB1 3/3 rows resolve; anchors matching 0 and 2 lines both read unresolved with the count named
+  AC-CBXB2 duplicate anchors -> duplicate_anchors=[PHYSROW], gate red
+  AC-CBXB3 statuses PENDING-PHYSICAL / PENDING-DECISION / UNKNOWN from declared rules; unmatched reason exact
+  AC-CBXB4 missing face -> MISSING/bytes None and gate red naming X1-phys
+  AC-CBXB5 --check leaves size+mtime_ns identical
+  AC-CBXB6 no network literal, and a planted http:// literal is caught (scan proved non-vacuous)
+  AC-CBXB7 sizes fixed point == disk; a one-byte lie reddens AC-CBX7
+  AC-CBXB8 cards=3 header=3; a dropped card reddens AC-CBX8
+  AC-CBXB9 banner + non-advisory notice + live tick present
+  AC-CBXB10 the measured defect: tick one behind the state -> AC-CBX9 red; re-render -> green
+  AC-CBXB11 registry declares exactly one row for this suite, eleven
+  AC-CBXB0 real preview pair + temp world untouched (preview_stable=True world_removed=True)
+
+PRE-REGISTRATION CONTROL (the proof this row carries weight): run BEFORE the registry row existed read
+  SUITE FAIL 11/12 failed=[AC-CBXB11 registry declares exactly one row for this suite, eleven]
+and after registration reads SUITE PASS 12/12 in 0.2s. Source is pure ASCII, stdlib only, no network, no shell.
+
+REGISTRY MEASURED BY IMPORT: 694 suites / 5192 criteria / 694 unique names / 694 unique paths (was 693/5181).
+MACHINE-OWNED DERIVATIONS AFTER THE CHANGE:
+  src/os/suite_matrix_reconcile.py --write -> docs/sandbox-suite-matrix.md 73096B, 694 rows,
+      evidence=qa/reconcile-all-R2739.log, evidence-source=walk-leg, considered=756 decoded=12 ceiling=64;
+      --check reads DOC-CURRENT rc=0 (same walk, no hand edit of the document).
+  tools/deliverable_index.py -> preview/index.html 36506B, faces=9 defects=0 fingerprint=561f88857102f7a4;
+      --check reads VERDICT PASS 14/14.
+
+NOT CLAIMED: the full battery was not run this window (694 suites / 5192 criteria is a 4000-5900s leg); no
+suite outside this one was executed, so no other suite is called green here. Every P-47 business face still
+waits on the same CEO physical pieces (server, domain, filing/ICP, merchant id, mini-program appid+secret).
+
+WRITTEN BY tools/qa_log.py (the R2807 birth-site writer), never by PowerShell redirection.
