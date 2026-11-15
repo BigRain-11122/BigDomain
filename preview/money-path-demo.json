@@ -3,7 +3,7 @@
   "counts": {
     "decision": 5,
     "physical": 3,
-    "products": 4,
+    "products": 5,
     "steps": 8,
     "steps_pass": 6
   },
@@ -21,12 +21,12 @@
   "products": [
     {
       "channel": "virtual",
-      "copy": "入城出生证：付费即入城资格（发放产物=入城凭证·lobby E_ENTRANCE_REQUIRED 判据源=本件 grants 查询面）",
+      "copy": "永久入场券：付费即入城资格，一次性永久，无周期、无续费、无到期（发放产物=入城凭证·lobby E_ENTRANCE_REQUIRED 判据源=本件 grants 查询面）",
       "entitlement": "birthright",
       "id": "birthright_entry",
-      "needs_ceo": true,
-      "price_cent": 1990,
-      "price_yuan": "19.90"
+      "needs_ceo": false,
+      "price_cent": 990,
+      "price_yuan": "9.90"
     },
     {
       "channel": "virtual",
@@ -54,6 +54,15 @@
       "needs_ceo": true,
       "price_cent": 100000,
       "price_yuan": "1000.00"
+    },
+    {
+      "channel": "virtual",
+      "copy": "月卡（入门订阅卡）：30 天会员周期 + 2 项会员特权（权益明细以会员页目录为准·entitlement=tier:patron）",
+      "entitlement": "tier:patron",
+      "id": "tier_patron_30d",
+      "needs_ceo": false,
+      "price_cent": 2990,
+      "price_yuan": "29.90"
     }
   ],
   "sources": {
@@ -66,7 +75,7 @@
       "path": "preview/journey-19.9.json"
     },
     "payment": {
-      "bytes": 6415,
+      "bytes": 6781,
       "path": "preview/payment-gate-report.json"
     }
   },

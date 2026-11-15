@@ -29,7 +29,7 @@
   },
   "config": {
     "path": "src/sandbox/pay/config.json",
-    "sha256": "6c35b1765d9075f460f87fc77c5cd32bea63407e54e46adbbd4e781f9e3580a0"
+    "sha256": "1f3dd9233a82b5658bcda969bb86ae4b9ce20e1eafd6cf2e6e43e7106b6309e8"
   },
   "criteria": [
     {
@@ -81,7 +81,7 @@
       "text": "tool source ASCII, stdlib+shipped imports, zero network refs"
     }
   ],
-  "generated_utc": "2026-11-15T01:00:38Z",
+  "generated_utc": "2026-11-15T22:38:55Z",
   "legacy_negative": [
     {
       "case": "tampered signature",
@@ -114,11 +114,11 @@
   "products": [
     {
       "channel": "virtual",
-      "copy": "入城出生证：付费即入城资格（发放产物=入城凭证·lobby E_ENTRANCE_REQUIRED 判据源=本件 grants 查询面）",
+      "copy": "永久入场券：付费即入城资格，一次性永久，无周期、无续费、无到期（发放产物=入城凭证·lobby E_ENTRANCE_REQUIRED 判据源=本件 grants 查询面）",
       "entitlement": "birthright",
       "id": "birthright_entry",
-      "needs_ceo": true,
-      "price_cent": 1990
+      "needs_ceo": false,
+      "price_cent": 990
     },
     {
       "channel": "virtual",
@@ -143,11 +143,19 @@
       "id": "share_observation",
       "needs_ceo": true,
       "price_cent": 100000
+    },
+    {
+      "channel": "virtual",
+      "copy": "月卡（入门订阅卡）：30 天会员周期 + 2 项会员特权（权益明细以会员页目录为准·entitlement=tier:patron）",
+      "entitlement": "tier:patron",
+      "id": "tier_patron_30d",
+      "needs_ceo": false,
+      "price_cent": 2990
     }
   ],
   "sizes": {
-    "html": 6737,
-    "json": 6415
+    "html": 6839,
+    "json": 6781
   },
   "source": {
     "ascii": true,

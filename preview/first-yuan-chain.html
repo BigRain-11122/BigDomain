@@ -24,12 +24,15 @@ at render time.</p>
 <table>
 <tr><th>Product</th><th>Price</th><th>Entitlement</th><th>Tier</th>
 <th>Permanent</th><th>Periods</th><th>Privileges</th><th>Credits</th></tr>
-<tr><td><code>birthright_entry</code></td><td>19.90</td><td>birthright</td><td>None</td><td>yes</td><td>0</td><td>0</td><td>-</td></tr>
-<tr><td><code>tier_experience</code></td><td>19.90</td><td>tier:experience</td><td>experience</td><td>no</td><td>1</td><td>2</td><td>3</td></tr>
+<tr><td><code>birthright_entry</code><br>永久入场券</td><td>9.90</td><td>birthright</td><td>None</td><td>yes</td><td>0</td><td>0</td><td>-</td></tr>
+<tr><td><code>tier_patron_30d</code><br>月卡（入门订阅卡）</td><td>29.90</td><td>tier:patron</td><td>patron</td><td>no</td><td>1</td><td>2</td><td>5</td></tr>
 </table>
 
+<h2>Two products, side by side</h2>
+<ul><li><strong>永久入场券</strong> (<code>birthright_entry</code>) &mdash; 9.90 &mdash; benefits: none (permanent entry, no cycle, no renewal)</li><li><strong>月卡（入门订阅卡）</strong> (<code>tier_patron_30d</code>) &mdash; 29.90 &mdash; benefits: cocreation_block_seat, growth_archive_slot</li></ul>
+
 <h2>Same price, different value</h2>
-<ul><li><code>birthright_entry</code>: tier=None, privileges=0, periods=0, credits=None, permanent=yes</li><li><code>tier_experience</code>: tier=experience, privileges=2, periods=1, credits=3, permanent=no</li></ul>
+<ul><li><code>birthright_entry</code>: tier=None, privileges=0, periods=0, credits=None, permanent=yes</li><li><code>tier_patron_30d</code>: tier=patron, privileges=2, periods=1, credits=5, permanent=no</li></ul>
 
 <h2>Money invariant, read back by SQL</h2>
 <ul>
@@ -43,8 +46,10 @@ at render time.</p>
 <strong>Honest scope.</strong> No merchant, no payment signature and no network call
 was made. <code>msgSecCheck</code> was NOT called - the sandbox content gates are local
 wordlists. A real purchase remains gated on the CEO physical pieces (merchant id,
-server, domain, filing). The monthly-tier product row exists ONLY in the temp copy of
-the pay config, because a real monthly price row is a needs-CEO approval face.
+server, domain, filing). Both price rows are REAL rows in
+<code>src/sandbox/pay/config.json</code>, landed under council ruling
+D-20261116-05: the permanent ticket carries no cycle, the monthly card carries a
+period. Nothing is injected into a temp copy.
 </div>
 
 <div class="foot">Rendered by <code>tools/first_yuan_chain.py</code>. Volatile order,

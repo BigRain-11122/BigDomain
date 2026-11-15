@@ -44,11 +44,21 @@
     },
     "birthright_entry": {
       "channel": "virtual",
-      "price_cent": 1990,
+      "price_cent": 990,
       "share_tokens": 0,
       "entitlement": "birthright",
-      "copy": "入城出生证：付费即入城资格（发放产物=入城凭证·lobby E_ENTRANCE_REQUIRED 判据源=本件 grants 查询面）",
-      "note": "[needs-CEO] 定价占位"
+      "name": "永久入场券",
+      "copy": "永久入场券：付费即入城资格，一次性永久，无周期、无续费、无到期（发放产物=入城凭证·lobby E_ENTRANCE_REQUIRED 判据源=本件 grants 查询面）",
+      "note": "D-20261116-05 裁决落地（T2 代决·价目非 CEO 保留面·git 即回滚）：本件=永久档，定 9.90，禁加周期/禁加续费（把永久商品做成伪订阅=裁决明令禁止）"
+    },
+    "tier_patron_30d": {
+      "channel": "virtual",
+      "price_cent": 2990,
+      "share_tokens": 0,
+      "entitlement": "tier:patron",
+      "name": "月卡（入门订阅卡）",
+      "copy": "月卡（入门订阅卡）：30 天会员周期 + 2 项会员特权（权益明细以会员页目录为准·entitlement=tier:patron）",
+      "note": "D-20261116-05 裁决落地（T2 代决）：月卡独立定价 29.90/30 天，权益=member config 的 patron 档 2 项特权；与永久档禁止同价，两件在目录中并列可辨"
     },
     "report_data_b": {
       "channel": "standard",
@@ -67,5 +77,5 @@
       "note": "[needs-CEO] 换算比例与面额占位·MVP 面=共创分成类"
     }
   },
-  "params_status": "[needs-CEO] 全部数值为占位值，定价确认/退款政策/换算比例/道具正式命名=CEO 呈批面不越权（BLUEPRINT §十.4）；权益目录（三档卡内容/次数/有效期）=P-47-5 件定·本件不预录防重复；外部成交通道归 BigCompute 引用不复制；真实通道接线=AC-YP1 blocked on 物理件"
+  "params_status": "[needs-CEO] 除首元双件外全部数值仍为占位：定价确认/退款政策/换算比例/道具正式命名=CEO 呈批面不越权（BLUEPRINT §十.4）；首元双件价目已由 D-20261116-05 裁决落地（永久档 9.90 / 月卡 29.90·T2 代决）：本司只执行价目与周期语义，档内次数与正式命名仍=[needs-CEO]；权益目录（三档卡内容/次数/有效期）=P-47-5 件定·本件不预录防重复；外部成交通道归 BigCompute 引用不复制；真实通道接线=AC-YP1 blocked on 物理件"
 }

@@ -34,11 +34,6 @@
       "is_free": false,
       "products": [
         {
-          "id": "birthright_entry",
-          "entitlement": "birthright",
-          "price_cent": 1990
-        },
-        {
           "id": "pack_compute_19_9",
           "entitlement": "compute_pack",
           "price_cent": 1990
@@ -183,7 +178,7 @@
   ],
   "sizes": {
     "spec_bytes": 29184,
-    "pay_bytes": 6415,
+    "pay_bytes": 6781,
     "config_bytes": 2517
   },
   "sources": {
@@ -192,7 +187,7 @@
     "config": "tools/membership_face_config.json"
   },
   "spec_sha16": "bb0a5dc0b2a49946",
-  "pay_sha16": "532b09f86c6eead0",
+  "pay_sha16": "513edbabafbead6f",
   "criteria": [
     "AC-MEMF1",
     "AC-MEMF2",

@@ -43,8 +43,8 @@ PREVIEW = os.path.join(ROOT, "preview")
 HTML_PATH = os.path.join(PREVIEW, "first-yuan-chain.html")
 JSON_PATH = os.path.join(PREVIEW, "first-yuan-chain.json")
 
-DOCK_PRODUCT_ID = "tier_experience"
-DOCK_ENTITLEMENT = "tier:experience"
+DOCK_PRODUCT_ID = "tier_patron_30d"
+DOCK_ENTITLEMENT = "tier:patron"
 
 ACCOUNTS = ("sys.probe.one", "sys.probe.two")
 
@@ -127,21 +127,12 @@ def build_world():
     real_id = "birthright_entry"
     if real_id not in pay_cfg["products"]:
         raise Refuse("E_NO_REAL_PRODUCT", real_id)
-
-    # The dock row exists ONLY in this temp copy. The shipped config carries no
-    # monthly-tier price row because a real one is a [needs-CEO] approval face;
-    # its price is DERIVED from the real product so the comparison is honest.
-    dock_price = pay_cfg["products"][real_id]["price_cent"]
-    pay_cfg["products"][DOCK_PRODUCT_ID] = {
-        "channel": "virtual",
-        "price_cent": dock_price,
-        "share_tokens": 0,
-        "entitlement": DOCK_ENTITLEMENT,
-        "copy": "sandbox dock product: monthly experience tier (temp only)",
-    }
-    pay_path = os.path.join(tmp, "pay-config.json")
-    with open(pay_path, "w", encoding="utf-8") as handle:
-        json.dump(pay_cfg, handle, ensure_ascii=False, indent=2)
+    # AC-FYCD1: the monthly leg is driven through a row that EXISTS in the
+    # shipped config. Injecting a derived temp row is exactly how the
+    # same-price defect stayed invisible for many rounds, so its absence is a
+    # refusal rather than a fallback.
+    if DOCK_PRODUCT_ID not in pay_cfg["products"]:
+        raise Refuse("E_NO_REAL_MONTHLY", DOCK_PRODUCT_ID)
 
     events = mods["store"].EventStore(os.path.join(tmp, "events.db"))
     led = mods["ledger"].Ledger(os.path.join(tmp, "ledger.db"), ledger_cfg)
@@ -174,10 +165,12 @@ def tear(world):
 def drive_leg(world, product_id, avatar, nonce):
     mods = world["mods"]
     price = world["pay_cfg"]["products"][product_id]["price_cent"]
+    spec = world["pay_cfg"]["products"][product_id]
     bought = _buy(world, product_id, avatar, nonce)
     grant = bought["grant"]
     leg = {"product_id": product_id, "avatar": avatar,
            "price_cent": price,
+           "name": str(spec.get("name") or product_id),
            "channel": bought["channel"],
            "amount_cent": bought["amount_cent"],
            "entitlement": grant.get("entitlement"),
@@ -209,6 +202,10 @@ def drive_leg(world, product_id, avatar, nonce):
                        "catalog_privileges": declared,
                        "sets_equal": sorted(leg["privileges"]) == declared}
     leg["tier_control"] = assert_tier
+    # AC-FYCD4: the benefits line comes from the catalog the activation was
+    # scored against, never from a template string.
+    leg["benefits"] = (list(assert_tier["catalog_privileges"])
+                       if assert_tier else [])
 
     period_ok = False
     period_days = None
@@ -283,6 +280,12 @@ def build_payload():
             "same_price": same_price,
             "value_differs": differs,
             "price_cent": legs[0]["price_cent"] if same_price else None,
+            "price_pair": [
+                {"product_id": leg["product_id"],
+                 "name": leg["name"],
+                 "price_cent": leg["price_cent"],
+                 "benefits": list(leg["benefits"])}
+                for leg in legs],
             "leg_values": [
                 {"product_id": leg["product_id"],
                  "privileges": len(leg["privileges"]),
@@ -297,7 +300,9 @@ def build_payload():
             "merchant": "none - no merchant id, no signature, no gateway call",
             "msgseccheck": "not called - the sandbox wordlists are local mocks",
             "real_purchase": "gated on the CEO physical pieces",
-            "dock_row": "the dock product row exists only in this temp copy",
+            "monthly_row": "the monthly product row is a real row in"
+                           " src/sandbox/pay/config.json (D-20261116-05);"
+                           " no temp row is injected",
         },
     }
     return _canon(payload, state)
@@ -311,9 +316,10 @@ def render_html(payload):
     for leg in payload["legs"]:
         act = leg["activation"] or {}
         rows.append(
-            "<tr><td><code>%s</code></td><td>%s</td><td>%s</td><td>%s</td>"
+            "<tr><td><code>%s</code><br>%s</td><td>%s</td><td>%s</td><td>%s</td>"
             "<td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (
                 html.escape(leg["product_id"]),
+                html.escape(str(leg.get("name") or "")),
                 money(leg["price_cent"]),
                 html.escape(str(leg["entitlement"])),
                 html.escape(str(act.get("tier"))),
@@ -332,6 +338,16 @@ def render_html(payload):
                 html.escape(str(item["credits"])),
                 "yes" if item["permanent"] else "no"))
     money_row = payload["money"]
+    pair_lines = []
+    for item in cmp_row["price_pair"]:
+        benefits = item["benefits"]
+        pair_lines.append(
+            "<li><strong>%s</strong> (<code>%s</code>) &mdash; %s &mdash; "
+            "benefits: %s</li>" % (
+                html.escape(item["name"]), html.escape(item["product_id"]),
+                money(item["price_cent"]),
+                html.escape(", ".join(benefits)) if benefits
+                else "none (permanent entry, no cycle, no renewal)"))
     return """<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <title>First-yuan chain - one purchase through pay, member and ledger</title>
@@ -361,6 +377,9 @@ at render time.</p>
 %s
 </table>
 
+<h2>Two products, side by side</h2>
+<ul>%s</ul>
+
 <h2>Same price, different value</h2>
 %s
 
@@ -376,8 +395,10 @@ at render time.</p>
 <strong>Honest scope.</strong> No merchant, no payment signature and no network call
 was made. <code>msgSecCheck</code> was NOT called - the sandbox content gates are local
 wordlists. A real purchase remains gated on the CEO physical pieces (merchant id,
-server, domain, filing). The monthly-tier product row exists ONLY in the temp copy of
-the pay config, because a real monthly price row is a needs-CEO approval face.
+server, domain, filing). Both price rows are REAL rows in
+<code>src/sandbox/pay/config.json</code>, landed under council ruling
+D-20261116-05: the permanent ticket carries no cycle, the monthly card carries a
+period. Nothing is injected into a temp copy.
 </div>
 
 <div class="foot">Rendered by <code>tools/first_yuan_chain.py</code>. Volatile order,
@@ -386,6 +407,7 @@ ordinals so that a fresh run renders byte-identically and <code>--check</code> c
 compare bytes honestly.</div>
 </body></html>
 """ % ("\n".join(rows),
+       "".join(pair_lines),
        '<ul>%s</ul>' % "".join(value_lines) if cmp_row["value_differs"] else
        "<p>The two legs delivered identical value.</p>",
        money_row["entries"], money_row["transactions"],
@@ -427,10 +449,11 @@ def do_render():
     write_atomic(JSON_PATH, dumps(payload))
     write_atomic(HTML_PATH, body)
     money = payload["money"]
-    print("RENDER legs=%d price=%s same_price=%s value_differs=%s "
+    print("RENDER legs=%d prices=%s same_price=%s value_differs=%s "
           "entries=%d tx=%d reconcile_rc=%d zero_delta=%s html=%dB json=%dB"
           % (len(payload["legs"]),
-             payload["comparison"]["price_cent"],
+             ",".join("%s=%s" % (i["product_id"], i["price_cent"])
+                      for i in payload["comparison"]["price_pair"]),
              payload["comparison"]["same_price"],
              payload["comparison"]["value_differs"],
              money["entries"], money["transactions"],
@@ -461,10 +484,43 @@ def do_check():
     if "http://" in got_html or "https://" in got_html:
         fails.append("E_OFFLINE html carries a network literal")
     cmp_row = payload["comparison"]
-    if cmp_row["same_price"] and not cmp_row["value_differs"]:
-        fails.append("E_COMPARE same price but no difference was stated")
-    if not cmp_row["value_differs"] and "identical value" not in got_html:
-        fails.append("E_COMPARE differing value not stated on the page")
+    # AC-FYCD2: the ruling forbids the permanent ticket and the monthly card
+    # sharing a price, so a collision is a red, not a curiosity.
+    if cmp_row["same_price"]:
+        fails.append("E_PRICE_COLLISION both legs priced %s"
+                     % cmp_row["price_cent"])
+    # AC-FYCD3: the permanent leg must carry no period and no tier; the
+    # monthly leg must carry exactly one period and a named tier.
+    permanent_leg = next(
+        (l for l in payload["legs"]
+         if bool((l["activation"] or {}).get("permanent"))
+         and (l["activation"] or {}).get("tier") is None), None)
+    monthly_leg = next(
+        (l for l in payload["legs"]
+         if (l["activation"] or {}).get("tier")), None)
+    if permanent_leg is None:
+        fails.append("E_PERMANENT_SHAPE no leg read permanent=True with no tier")
+    elif permanent_leg["periods"]:
+        fails.append("E_PERMANENT_SHAPE permanent leg opened %d period(s)"
+                     % len(permanent_leg["periods"]))
+    if monthly_leg is None:
+        fails.append("E_MONTHLY_SHAPE no leg opened a tier")
+    elif len(monthly_leg["periods"]) != 1:
+        fails.append("E_MONTHLY_SHAPE monthly leg opened %d period(s), want 1"
+                     % len(monthly_leg["periods"]))
+    # AC-FYCD4: the page must carry one name line and one benefits line per
+    # product, both derived from config/catalog at render time.
+    for item in cmp_row["price_pair"]:
+        if html.escape(item["name"]) not in got_html:
+            fails.append("E_NAME product name missing from page: %s"
+                         % item["product_id"])
+        for priv in item["benefits"]:
+            if html.escape(priv) not in got_html:
+                fails.append("E_BENEFIT privilege not printed: %s/%s"
+                             % (item["product_id"], priv))
+        if not item["benefits"] and "no cycle, no renewal" not in got_html:
+            fails.append("E_BENEFIT permanent leg benefits line missing"
+                         " for %s" % item["product_id"])
     for leg in payload["legs"]:
         tier_control = leg["tier_control"]
         if tier_control and not tier_control["sets_equal"]:

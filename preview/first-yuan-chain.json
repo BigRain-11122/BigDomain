@@ -10,16 +10,33 @@
         "tier": null
       },
       {
-        "credits": 3,
+        "credits": 5,
         "periods": 1,
         "permanent": false,
         "privileges": 2,
-        "product_id": "tier_experience",
-        "tier": "experience"
+        "product_id": "tier_patron_30d",
+        "tier": "patron"
       }
     ],
-    "price_cent": 1990,
-    "same_price": true,
+    "price_cent": null,
+    "price_pair": [
+      {
+        "benefits": [],
+        "name": "永久入场券",
+        "price_cent": 990,
+        "product_id": "birthright_entry"
+      },
+      {
+        "benefits": [
+          "cocreation_block_seat",
+          "growth_archive_slot"
+        ],
+        "name": "月卡（入门订阅卡）",
+        "price_cent": 2990,
+        "product_id": "tier_patron_30d"
+      }
+    ],
+    "same_price": false,
     "value_differs": true
   },
   "legs": [
@@ -36,16 +53,18 @@
         "tier": null
       },
       "active": false,
-      "amount_cent": 1990,
+      "amount_cent": 990,
       "avatar": "sys.probe.one",
+      "benefits": [],
       "channel": "virtual",
       "entitlement": "birthright",
       "grant_id": "<id:01>",
+      "name": "永久入场券",
       "order_id": "<id:02>",
       "period_days": null,
       "period_ok": false,
       "periods": [],
-      "price_cent": 1990,
+      "price_cent": 990,
       "privileges": [],
       "product_id": "birthright_entry",
       "refusal": null,
@@ -56,55 +75,60 @@
       "activation": {
         "ai_generated": 0,
         "census_avatar_id": "sys.probe.two",
-        "credits_balance": 3,
+        "credits_balance": 5,
         "disclaimer": "非投顾常驻提示：会员权益为 AI 生成工具与历史回测研究展示相关的服务配额与平台特权，非投资建议，不构成任何个股买卖建议、点位预测或收益承诺；「加急通道」为服务排队优先位，非投资建议优先产出，产出物同过非投顾定性；历史回测数据仅作研究展示，不代表未来表现；请独立判断，风险自担。（常驻展示·不可折叠）",
         "end_utc": "<ts:02>",
         "idempotent": false,
         "period_id": "<id:05>",
         "period_no": 1,
         "persistent": true,
-        "product": "tier:experience",
+        "product": "tier:patron",
         "start_utc": "<ts:01>",
         "status": "active",
-        "tier": "experience",
+        "tier": "patron",
         "vouchers_opened": []
       },
       "active": true,
-      "amount_cent": 1990,
+      "amount_cent": 2990,
       "avatar": "sys.probe.two",
+      "benefits": [
+        "cocreation_block_seat",
+        "growth_archive_slot"
+      ],
       "channel": "virtual",
-      "entitlement": "tier:experience",
+      "entitlement": "tier:patron",
       "grant_id": "<id:03>",
+      "name": "月卡（入门订阅卡）",
       "order_id": "<id:04>",
       "period_days": 30,
       "period_ok": true,
       "periods": [
         {
-          "balance": 3,
+          "balance": 5,
           "end_utc": "<ts:02>",
           "period_id": "<id:05>",
           "start_utc": "<ts:01>",
           "status": "active",
-          "tier": "experience"
+          "tier": "patron"
         }
       ],
-      "price_cent": 1990,
+      "price_cent": 2990,
       "privileges": [
-        "basic_badge",
-        "emoji_pack_standard"
+        "cocreation_block_seat",
+        "growth_archive_slot"
       ],
-      "product_id": "tier_experience",
+      "product_id": "tier_patron_30d",
       "refusal": null,
       "tier_control": {
         "catalog_privileges": [
-          "basic_badge",
-          "emoji_pack_standard"
+          "cocreation_block_seat",
+          "growth_archive_slot"
         ],
         "sets_equal": true,
-        "tier": "experience"
+        "tier": "patron"
       },
       "tiers": [
-        "experience"
+        "patron"
       ]
     }
   ],
@@ -123,8 +147,8 @@
   },
   "protocol_version": "fyc-v1",
   "scope": {
-    "dock_row": "the dock product row exists only in this temp copy",
     "merchant": "none - no merchant id, no signature, no gateway call",
+    "monthly_row": "the monthly product row is a real row in src/sandbox/pay/config.json (D-20261116-05); no temp row is injected",
     "msgseccheck": "not called - the sandbox wordlists are local mocks",
     "network": "none",
     "real_purchase": "gated on the CEO physical pieces"

@@ -1,0 +1,40 @@
+D-20261116-05 LANDING EVIDENCE (round R2816)
+Ruling: dispatched @BigDomain, deadline 2026-11-16 18:00.
+Requirement: land REAL config (not a sandbox copy) + receipt with pay/member/ledger three-chain measured values.
+
+[PAY CHAIN - read by import from src/sandbox/pay/config.json, not by grep]
+birthright_entry : price_cent=990  entitlement=birthright  name=永久入场券
+                   period fields (period_days/billing_cycle/recurring) : ABSENT
+tier_patron_30d  : price_cent=2990 entitlement=tier:patron  name=月卡（入门订阅卡）
+price collision  : False (990 != 2990)
+orders gate      : PayOrders accepts both rows; amount_cent read back == price_cent for both legs
+
+[MEMBER CHAIN - driven through the shipped member.py activate()]
+birthright_entry : tier=None  permanent=True  periods=0  privileges=[]   auth face OK
+tier_patron_30d  : tier=patron permanent=None periods=1  privileges=[cocreation_block_seat, growth_archive_slot]
+                   privilege set == catalog patron declaration : True
+                   period end > start, period_id present        : True
+
+[LEDGER CHAIN - read back by SQL + shipped reconcile.py]
+entries=2 transactions=1 directions=credit,debit balanced=1 unbalanced=0 zero_delta=True
+reconcile.py rc=0 line="RECONCILE PASS (8/8 checks)"
+note: both products carry share_tokens=0, so a purchase posts no per-order
+ledger entry; the 1 transaction is the settlement mint. Stated rather than
+implied - this receipt does not claim a per-purchase ledger post.
+
+[TOOL] python tools/first_yuan_chain.py --check -> VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=3560B read_only=True
+
+[FACES RE-RENDERED because the price moved]
+payment_gate_report      : birthright 1990 -> 990, monthly row 2990, check PASS fails=0
+membership_face          : check PASS tiers=4 paid=3 pending=2 matched=1 blocked=4
+membership_benefit_report: fingerprint 918674b2db958676, before=stale after=identical
+money_path_demo          : products=5, check PASS
+
+[SUITES] pay test_pay 16/16, test_channel_matrix 7/7, test_authorize 7/7;
+member test_entry_tier 7/7, test_entry_tier_persist 7/7, test_member 25 assertions/16 criteria/all pass.
+
+[MEASURED GATE GAP - recorded, not hidden]
+Before re-render, payment_gate_report --check, money_path_demo --check and
+membership_face --check all printed PASS while the landed JSON still carried
+birthright price_cent=1990 against config 990. Three faces were green over a
+stale price. Their checks cover structure, not the price value.
