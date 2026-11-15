@@ -1,9 +1,8 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-14 22:25 +08:00
+- 生成时间: generated: 2026-11-15 13:20 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
-- 印章来源: --stamp-from docs/sandbox-suite-matrix.md
 - 状态证据: reconcile-all-R2739.log (RUNNER PASS 675/675 suites green, reconcile controls 7/7, 4986.4s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
 
@@ -11,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 676 | 5032 | 675/675 | R2739 |
+| 677 | 5040 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -714,7 +713,8 @@
 | 674 | os-evidence-capture-precedence-shape-typing | ../os/test_evidence_capture_precedence_shape_typing.py | 6 | green | 2.2 |
 | 675 | os-closeout-export-parity-wire-binding-consumer | ../os/test_closeout_export_parity_wire_binding_consumer.py | 6 | green | 14.6 |
 | 676 | os-export-parity-difference-order-field | ../os/test_export_parity_difference_order_field.py | 6 | no-evidence | - |
-|  | 合计 |  | 5032 | green 675 / FAIL 0 / no-evidence 1 |  |
+| 677 | os-ship-checklist | ../os/test_ship_checklist.py | 8 | no-evidence | - |
+|  | 合计 |  | 5040 | green 675 / FAIL 0 / no-evidence 2 |  |
 
 ## 证据出处
 

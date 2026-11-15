@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T13:15:33+08:00",
+  "export_ts": "2026-11-15T13:21:02+08:00",
   "do": "R2779 产品切片：上线前置清单从散文变成可打开的实物——preview/ship-checklist.html（9182B）/ .json（4983B），一条命令派生；十一行三档，八条本司行的「已具备」在渲染那一刻从盘上实测（BLUEPRINT 的 AIGC 与 msgSecCheck、benchmarks 的备案指引与前置审批类目、四个 preview 面），三条 CEO 行永不可勾；AC-SCL1..8 PASS 8/8，只读性与负控双向实测",
   "ceo_face": {
     "current": "R2779 产品切片：上线前置清单从散文变成可打开的实物——preview/ship-checklist.html（9182B）/ .json（4983B），一条命令派生；十一行三档，八条本司行的「已具备」在渲染那一刻从盘上实测（BLUEPRINT 的 AIGC 与 msgSecCheck、benchmarks 的备案指引与前置审批类目、四个 preview 面），三条 CEO 行永不可勾；AC-SCL1..8 PASS 8/8，只读性与负控双向实测",
     "latest_artifact": "preview/ship-checklist.html（9182B）+ preview/ship-checklist.json（4983B·sizes 自指字节）",
     "last_artifact": "preview/ship-checklist.html（9182B）+ preview/ship-checklist.json（4983B·sizes 自指字节）",
     "next_milestone": "48 小时内：按自身闭合 BATTERY rc= 行采纳 reconcile-battery-R2779（676 套/5032 判据·收账提交后 detached 启动），并把 ship_checklist 的 8 条判据注册进 src/sandbox/reconcile_all.py",
-    "next_milestone_due": "2026-11-17T13:15:33+08:00",
-    "updated_at": "2026-11-15T13:15:33+08:00",
+    "next_milestone_due": "2026-11-17T13:21:02+08:00",
+    "updated_at": "2026-11-15T13:21:02+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -767,7 +767,7 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 30,
+    "log_lines_in_window": 34,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 3,

@@ -6757,6 +6757,14 @@ SUITES = [
     ("os-export-parity-difference-order-field",
      os.path.join("..", "os",
                   "test_export_parity_difference_order_field.py"), 6),
+    # R2779 shipped tools/ship_checklist.py with eight criteria of its own and
+    # NO battery row, so its gate was the only thing guarding it. This suite
+    # puts every one of them under the battery, and it runs in a PRIVATE world
+    # because AC-SCL7 is a negative control that removes an evidence file - the
+    # real preview/ tree is never touched by a test run.
+    # (AC-SCL1..AC-SCL8 pinned in src/os/backlog.md at R2779, BEFORE the tool.)
+    ("os-ship-checklist",
+     os.path.join("..", "os", "test_ship_checklist.py"), 8),
     ]
 
 FAILS = 0
