@@ -45,6 +45,8 @@ CRITERIA = (
     ("AC-UGR7", "the shipped parity face msgsec_stub.py --parity reads PARITY-OK and its own line is carried verbatim"),
     ("AC-UGR8", "the constructor hole is measured at its call sites by scanning non-test sandbox sources, and the report states LATENT or LIVE with the sites named, never a bare assertion"),
     ("AC-UGR9", "BD-PROP-010: the json states the byte size of both artifacts it belongs to, iterated to a fixed point, and --check refuses when either number disagrees with the bytes on disk"),
+    ("AC-UGR10", "a --check run must not author the document it verifies: both artifacts keep their bytes and mtimes across a --check, so a stale document stays visibly stale instead of being silently refreshed into a pass (verified by an mtime control; measured red before R2768 when --check alone re-rendered)"),
+    ("AC-UGR11", "re-rendering is an explicit act: --write re-renders before checking, and a bare run with no flags still renders, so no caller loses its previous behaviour"),
     ("AC-SGV1", "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"),
     ("AC-SGV2", "PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists"),
     ("AC-SGV3", "PRE-REGISTERED: tools/ugc_gate_report.py --check reads VERDICT PASS with AC-UGR2 counting 4 must-refuse constructions and zero measured holes"),
@@ -495,10 +497,14 @@ def main():
     parser = argparse.ArgumentParser(description="Render the P-47 item 3 UGC content-safety gate face")
     parser.add_argument("--check", action="store_true", help="verify criteria against the landed document")
     parser.add_argument("--no-write", action="store_true", help="measure only, write nothing")
+    parser.add_argument("--write", action="store_true", help="re-render before checking (explicit opt-in)")
     args = parser.parse_args()
 
     data = collect()
-    if not args.no_write:
+    # A check must not author what it verifies. Before R2768 --check alone re-rendered,
+    # so the gate refreshed its own evidence and could never see a stale document.
+    write = args.write or (not args.check and not args.no_write)
+    if write:
         write_outputs(data)
     if args.check:
         return check(data)

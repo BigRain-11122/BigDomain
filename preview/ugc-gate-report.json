@@ -79,6 +79,14 @@
       "text": "BD-PROP-010: the json states the byte size of both artifacts it belongs to, iterated to a fixed point, and --check refuses when either number disagrees with the bytes on disk"
     },
     {
+      "id": "AC-UGR10",
+      "text": "a --check run must not author the document it verifies: both artifacts keep their bytes and mtimes across a --check, so a stale document stays visibly stale instead of being silently refreshed into a pass (verified by an mtime control; measured red before R2768 when --check alone re-rendered)"
+    },
+    {
+      "id": "AC-UGR11",
+      "text": "re-rendering is an explicit act: --write re-renders before checking, and a bare run with no flags still renders, so no caller loses its previous behaviour"
+    },
+    {
       "id": "AC-SGV1",
       "text": "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"
     },
@@ -205,8 +213,8 @@
     }
   ],
   "sizes": {
-    "html": 9079,
-    "json": 6326
+    "html": 9576,
+    "json": 6881
   },
   "wordlist": {
     "advisory": 7,

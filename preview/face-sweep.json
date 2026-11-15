@@ -1,0 +1,142 @@
+{
+ "schema_version": "face-sweep-v1",
+ "generated_utc": "2026-11-15T02:02:19Z",
+ "sizes": {
+  "html": 5113,
+  "json": 4703
+ },
+ "headline": {
+  "pass": 8,
+  "total": 8,
+  "verdict": "PASS"
+ },
+ "fingerprint": "652c791de0d0a46a",
+ "faces": [
+  {
+   "id": "six-gate-live",
+   "label": "六门实况 / six gates live",
+   "driver": "tools/platform_live_report.py",
+   "html": "preview/platform-live-report.html",
+   "json": "preview/platform-live-report.json",
+   "exit": 0,
+   "verdict": "VERDICT PASS 8/8 fingerprint=44ec8b5a60f4d1f3 landed=44ec8b5a60f4d1f3 sizes={'html': 6889, 'json': 5292}",
+   "duration_s": 5.32,
+   "html_bytes": 6889,
+   "json_bytes": 5292,
+   "tail": "VERDICT PASS 8/8 fingerprint=44ec8b5a60f4d1f3 landed=44ec8b5a60f4d1f3 sizes={'html': 6889, 'json': 5292}",
+   "mutated": false,
+   "mutated_files": []
+  },
+  {
+   "id": "lobby-ws",
+   "label": "大厅 WebSocket / P-47 第 1 项",
+   "driver": "tools/lobby_ws_report.py",
+   "html": "preview/lobby-ws-report.html",
+   "json": "preview/lobby-ws-report.json",
+   "exit": 0,
+   "verdict": "VERDICT PASS 8/8 fingerprint=fbdb7f517fb06222 landed=fbdb7f517fb06222 sizes={'html': 5952, 'json': 3070}",
+   "duration_s": 1.59,
+   "html_bytes": 5952,
+   "json_bytes": 3070,
+   "tail": "VERDICT PASS 8/8 fingerprint=fbdb7f517fb06222 landed=fbdb7f517fb06222 sizes={'html': 5952, 'json': 3070}",
+   "mutated": false,
+   "mutated_files": []
+  },
+  {
+   "id": "city-face",
+   "label": "城市观测面 / P-47 第 1 项",
+   "driver": "tools/city_face_report.py",
+   "html": "preview/city-face-report.html",
+   "json": "preview/city-face-report.json",
+   "exit": 0,
+   "verdict": "VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f",
+   "duration_s": 0.73,
+   "html_bytes": 7300,
+   "json_bytes": 5004,
+   "tail": "VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f",
+   "mutated": false,
+   "mutated_files": []
+  },
+  {
+   "id": "ugc-gate",
+   "label": "UGC 安全面 / P-47 第 3 项",
+   "driver": "tools/ugc_gate_report.py",
+   "html": "preview/ugc-gate-report.html",
+   "json": "preview/ugc-gate-report.json",
+   "exit": 0,
+   "verdict": "VERDICT PASS checks=9/9 failed=(none)",
+   "duration_s": 0.28,
+   "html_bytes": 9576,
+   "json_bytes": 6881,
+   "tail": "VERDICT PASS checks=9/9 failed=(none)",
+   "mutated": false,
+   "mutated_files": []
+  },
+  {
+   "id": "payment-gate",
+   "label": "19.9 支付面 / P-47 第 4 项",
+   "driver": "tools/payment_gate_report.py",
+   "html": "preview/payment-gate-report.html",
+   "json": "preview/payment-gate-report.json",
+   "exit": 0,
+   "verdict": "PAYMENT GATE CHECK PASS fails=0",
+   "duration_s": 0.14,
+   "html_bytes": 6737,
+   "json_bytes": 6415,
+   "tail": "PAYMENT GATE CHECK PASS fails=0",
+   "mutated": false,
+   "mutated_files": []
+  },
+  {
+   "id": "membership",
+   "label": "权益月卡面 / P-47 第 5 项",
+   "driver": "tools/membership_benefit_report.py",
+   "html": "preview/membership-benefit-report.html",
+   "json": "preview/membership-benefit-report.json",
+   "exit": 0,
+   "verdict": "VERDICT PASS checks=8/8 fresh_fingerprint=df3e8dcbe02dd0d3 landed=df3e8dcbe02dd0d3",
+   "duration_s": 0.89,
+   "html_bytes": 10218,
+   "json_bytes": 9817,
+   "tail": "VERDICT PASS checks=8/8 fresh_fingerprint=df3e8dcbe02dd0d3 landed=df3e8dcbe02dd0d3",
+   "mutated": false,
+   "mutated_files": []
+  },
+  {
+   "id": "ledger-business",
+   "label": "代币账本面 / P-47 第 2 项",
+   "driver": "tools/ledger_business_report.py",
+   "html": "preview/ledger-business-report.html",
+   "json": "preview/ledger-business-report.json",
+   "exit": 0,
+   "verdict": "LEDGER BUSINESS CHECK PASS fails=0",
+   "duration_s": 0.11,
+   "html_bytes": 5276,
+   "json_bytes": 1061,
+   "tail": "LEDGER BUSINESS CHECK PASS fails=0",
+   "mutated": false,
+   "mutated_files": []
+  },
+  {
+   "id": "entry-index",
+   "label": "入口页实物台账 / index",
+   "driver": "tools/deliverable_index.py",
+   "html": "preview/index.html",
+   "json": "preview/deliverable-index.json",
+   "exit": 0,
+   "verdict": "VERDICT PASS 7/7 fingerprint=0ee896f651d795b7",
+   "duration_s": 0.12,
+   "html_bytes": 27999,
+   "json_bytes": 2321,
+   "tail": "{\"failed\": [], \"fingerprint\": \"0ee896f651d795b7\", \"passed\": 7, \"total\": 7}",
+   "mutated": false,
+   "mutated_files": []
+  }
+ ],
+ "notes": [
+  "Every row is a subprocess execution of that face's own read-only --check.",
+  "A row counts as passing only when the gate exited zero AND printed PASS.",
+  "Artifact byte counts are read from disk at sweep time.",
+  "API 市场面不在本板实测面内：src/sandbox/ledger/apimarket_report.py 无只读 --check，强行入板只能引用声明。"
+ ]
+}

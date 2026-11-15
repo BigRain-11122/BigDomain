@@ -1,0 +1,415 @@
+"""Face sweep: execute every CEO-facing page's own --check gate right now and render
+the result as ONE openable page.
+
+Why this exists: preview/index.html lists the eight faces and quotes the verdict each
+artifact DECLARED when it was written, but nothing re-executes those gates. This driver
+runs each shipped tool's read-only --check as a subprocess, records its exit code, its
+VERDICT line and the landed artifact bytes, and renders a single board.
+
+Laws honoured:
+- criteria are pre-registered in --check (AC-FSW1..AC-FSW8, see check()).
+- nothing is hardcoded: verdicts, sizes and timestamps are measured from the subprocess
+  and from disk.
+- the board never counts a face as passing unless its own gate exited zero AND printed a
+  PASS verdict line.
+- read-only toward every artifact: this tool only writes its own two outputs.
+
+Usage:
+    python tools/face_sweep.py                # run the sweep and render the board
+    python tools/face_sweep.py --check        # verify the landed board, no sweep
+    python tools/face_sweep.py --faces-json P # sweep an alternate face spec (controls)
+"""
+
+import hashlib
+import json
+import os
+import re
+import subprocess
+import sys
+import time
+from datetime import datetime, timezone
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT_HTML = os.path.join(ROOT, "preview", "face-sweep.html")
+OUT_JSON = os.path.join(ROOT, "preview", "face-sweep.json")
+
+SCHEMA = "face-sweep-v1"
+
+# id, label, driver, html, json.  The driver is invoked as: python <driver> --check
+FACES = [
+    ("six-gate-live", "\u516d\u95e8\u5b9e\u51b5 / six gates live",
+     "tools/platform_live_report.py",
+     "preview/platform-live-report.html", "preview/platform-live-report.json"),
+    ("lobby-ws", "\u5927\u5385 WebSocket / P-47 \u7b2c 1 \u9879",
+     "tools/lobby_ws_report.py",
+     "preview/lobby-ws-report.html", "preview/lobby-ws-report.json"),
+    ("city-face", "\u57ce\u5e02\u89c2\u6d4b\u9762 / P-47 \u7b2c 1 \u9879",
+     "tools/city_face_report.py",
+     "preview/city-face-report.html", "preview/city-face-report.json"),
+    ("ugc-gate", "UGC \u5b89\u5168\u9762 / P-47 \u7b2c 3 \u9879",
+     "tools/ugc_gate_report.py",
+     "preview/ugc-gate-report.html", "preview/ugc-gate-report.json"),
+    ("payment-gate", "19.9 \u652f\u4ed8\u9762 / P-47 \u7b2c 4 \u9879",
+     "tools/payment_gate_report.py",
+     "preview/payment-gate-report.html", "preview/payment-gate-report.json"),
+    ("membership", "\u6743\u76ca\u6708\u5361\u9762 / P-47 \u7b2c 5 \u9879",
+     "tools/membership_benefit_report.py",
+     "preview/membership-benefit-report.html", "preview/membership-benefit-report.json"),
+    ("ledger-business", "\u4ee3\u5e01\u8d26\u672c\u9762 / P-47 \u7b2c 2 \u9879",
+     "tools/ledger_business_report.py",
+     "preview/ledger-business-report.html", "preview/ledger-business-report.json"),
+    ("entry-index", "\u5165\u53e3\u9875\u5b9e\u7269\u53f0\u8d26 / index",
+     "tools/deliverable_index.py",
+     "preview/index.html", "preview/deliverable-index.json"),
+]
+
+# Deliberately excluded, and named instead of silently dropped: the API-market face
+# (preview/apimarket-report.html) is rendered by src/sandbox/ledger/apimarket_report.py,
+# which has NO read-only --check, so a sweep row for it could only quote a declaration.
+EXCLUDED_NOTE = ("API \u5e02\u573a\u9762\u4e0d\u5728\u672c\u677f\u5b9e\u6d4b\u9762\u5185\uff1a"
+                 "src/sandbox/ledger/apimarket_report.py \u65e0\u53ea\u8bfb --check\uff0c"
+                 "\u5f3a\u884c\u5165\u677f\u53ea\u80fd\u5f15\u7528\u58f0\u660e\u3002")
+
+VERDICT_WORD_RE = re.compile(r"\b(PASS|FAIL)\b")
+EXTERNAL_RE = re.compile(r"https?://[A-Za-z0-9_.\-]+")
+STANDING = [
+    "\u975e\u6295\u8d44\u5efa\u8bae\uff1a\u672c\u9875\u4e0d\u6784\u6210\u4efb\u4f55\u6295\u8d44\u5efa\u8bae\uff0c\u4e0d\u63d0\u4f9b\u6295\u8d44\u54a8\u8be2\u670d\u52a1\u3002",
+    "AIGC \u751f\u6210\u6807\u8bc6\uff1a\u4e00\u5207\u751f\u6210\u5185\u5bb9\u5728\u5448\u73b0\u9762\u5e26\u6807\u8bc6\uff0c\u672a\u6807\u8bc6\u4e0d\u5bf9\u5916\u3002",
+    "msgSecCheck \u524d\u7f6e\u95f8\uff1a\u5185\u5bb9\u5b89\u5168\u672a\u63a5\u901a\u524d\u4e0d\u5f00\u95e8\u3002",
+]
+
+
+def _rel(p):
+    return p.replace(os.sep, "/")
+
+
+def _read_args(argv):
+    opts = {"check": False, "faces_json": None, "timeout": 120}
+    i = 0
+    while i < len(argv):
+        a = argv[i]
+        if a == "--check":
+            opts["check"] = True
+        elif a == "--faces-json":
+            i += 1
+            opts["faces_json"] = argv[i]
+        elif a == "--timeout":
+            i += 1
+            opts["timeout"] = int(argv[i])
+        else:
+            raise SystemExit("unknown argument: %s" % a)
+        i += 1
+    return opts
+
+
+def load_faces(path):
+    if not path:
+        return [dict(zip(("id", "label", "driver", "html", "json"), row)) for row in FACES]
+    with open(path, "r", encoding="utf-8") as fh:
+        rows = json.load(fh)
+    out = []
+    for r in rows:
+        out.append({k: r[k] for k in ("id", "label", "driver", "html", "json")})
+    return out
+
+
+def _stat(rel):
+    p = os.path.join(ROOT, rel)
+    if not os.path.exists(p):
+        return None
+    st = os.stat(p)
+    return (st.st_size, st.st_mtime_ns)
+
+
+def run_face(face, timeout):
+    driver = os.path.join(ROOT, face["driver"])
+    row = {
+        "id": face["id"],
+        "label": face["label"],
+        "driver": face["driver"],
+        "html": face["html"],
+        "json": face["json"],
+    }
+    if not os.path.exists(driver):
+        row.update({"exit": 127, "verdict": "MISSING-DRIVER", "duration_s": 0.0,
+                    "html_bytes": None, "json_bytes": None, "tail": "",
+                    "mutated": False, "mutated_files": []})
+        return row
+    before = {"html": _stat(face["html"]), "json": _stat(face["json"])}
+    t0 = time.time()
+    try:
+        proc = subprocess.run(
+            [sys.executable, driver, "--check"],
+            cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            timeout=timeout,
+        )
+        text = proc.stdout.decode("utf-8", "replace")
+        rc = proc.returncode
+    except subprocess.TimeoutExpired:
+        text, rc = "", 124
+    dur = round(time.time() - t0, 2)
+    # The eight gates do not share one summary dialect: four print a VERDICT line, two
+    # print "<NAME> CHECK PASS fails=N". So the verdict is the LAST line carrying a PASS
+    # or FAIL word, read from the output rather than assumed from a fixed prefix.
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    verdict = ""
+    for ln in reversed(lines):
+        if VERDICT_WORD_RE.search(ln):
+            verdict = ln[:200]
+            break
+    if rc == 124:
+        verdict = "TIMEOUT"
+    elif not verdict:
+        verdict = "NO-VERDICT-LINE" if rc == 0 else "EXIT-%d-NO-VERDICT" % rc
+    after = {"html": _stat(face["html"]), "json": _stat(face["json"])}
+    mutated_files = [k for k in ("html", "json") if before[k] != after[k]]
+    row.update({
+        "exit": rc,
+        "verdict": verdict,
+        "duration_s": dur,
+        "html_bytes": _size(face["html"]),
+        "json_bytes": _size(face["json"]),
+        "tail": lines[-1][:240] if lines else "",
+        "mutated": bool(mutated_files),
+        "mutated_files": mutated_files,
+    })
+    return row
+
+
+def _size(rel):
+    p = os.path.join(ROOT, rel)
+    if not os.path.exists(p):
+        return None
+    return os.path.getsize(p)
+
+
+def _passing(row):
+    v = str(row.get("verdict") or "")
+    return (row.get("exit") == 0 and "PASS" in v and "FAIL" not in v
+            and not row.get("mutated"))
+
+
+def fingerprint(rows):
+    payload = "|".join(
+        "%s:%s:%s:%s:%s:%s" % (r["id"], r["exit"], r["verdict"], r["html_bytes"],
+                               r["json_bytes"], r.get("mutated"))
+        for r in rows
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]
+
+
+def build_json(rows, sizes, stamp):
+    doc = {
+        "schema_version": SCHEMA,
+        "generated_utc": stamp,
+        "sizes": {"html": sizes["html"], "json": sizes["json"]},
+        "headline": {
+            "pass": sum(1 for r in rows if _passing(r)),
+            "total": len(rows),
+            "verdict": "PASS" if all(_passing(r) for r in rows) else "FAIL",
+        },
+        "fingerprint": fingerprint(rows),
+        "faces": rows,
+        "notes": [
+            "Every row is a subprocess execution of that face's own read-only --check.",
+            "A row counts as passing only when the gate exited zero AND printed PASS.",
+            "Artifact byte counts are read from disk at sweep time.",
+            EXCLUDED_NOTE,
+        ],
+    }
+    return json.dumps(doc, ensure_ascii=False, indent=1) + "\n"
+
+
+CSS = """
+body{font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;margin:0;background:#12151a;color:#e8ebf0}
+.wrap{max-width:1020px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:22px;margin:0 0 6px}
+.sub{color:#98a2b3;font-size:13px;margin-bottom:22px}
+.big{font-size:44px;font-weight:700;letter-spacing:1px}
+.ok{color:#37d67a}.bad{color:#ff5c5c}
+table{width:100%;border-collapse:collapse;margin-top:18px;font-size:13px}
+th,td{padding:9px 8px;border-bottom:1px solid #262c36;text-align:left;vertical-align:top}
+th{color:#98a2b3;font-weight:600}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+a{color:#7cc4ff;text-decoration:none}
+.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:12px}
+.tag.ok{background:#12351f;color:#37d67a}.tag.bad{background:#3a1416;color:#ff5c5c}
+.note{margin-top:26px;padding:14px 16px;background:#171c23;border-left:3px solid #2f3742;font-size:12.5px;line-height:1.7;color:#b6bfcc}
+code{background:#1d232b;padding:1px 5px;border-radius:3px}
+"""
+
+
+def build_html(rows, sizes, stamp):
+    passing = sum(1 for r in rows if _passing(r))
+    total = len(rows)
+    allpass = passing == total
+    cls = "ok" if allpass else "bad"
+    body = []
+    body.append('<div class="wrap">')
+    body.append("<h1>\u516b\u9762\u5b9e\u51b5\u677f / face sweep board</h1>")
+    body.append('<div class="sub">%s \u2014 \u4e00\u6761\u547d\u4ee4\u628a\u6bcf\u9762\u9875\u81ea\u5df1\u7684\u95f8\u5b9e\u8dd1\u4e00\u904d\uff0c'
+                '\u7ed3\u679c\u6c47\u5230\u8fd9\u4e00\u9875\u3002' % stamp)
+    body.append("</div>")
+    body.append('<div class="big %s">%d / %d</div>' % (cls, passing, total))
+    body.append('<div class="sub">VERDICT <span class="tag %s">%s</span> \u00b7 fingerprint <code>%s</code>'
+                ' \u00b7 \u672c\u9875 %d \u5b57\u8282 \u00b7 json %d \u5b57\u8282</div>'
+                % (cls, "PASS" if allpass else "FAIL", fingerprint(rows), sizes["html"], sizes["json"]))
+    body.append("<table><thead><tr><th>\u9762</th><th>\u95f8\u7ed3\u679c</th><th>\u9000\u51fa\u7801</th>"
+                "<th>\u8017\u65f6</th><th>\u4ea7\u7269\u5b57\u8282</th></tr></thead><tbody>")
+    for r in rows:
+        ok = _passing(r)
+        tag = "ok" if ok else "bad"
+        hb = "-" if r["html_bytes"] is None else format(r["html_bytes"], ",")
+        jb = "-" if r["json_bytes"] is None else format(r["json_bytes"], ",")
+        body.append(
+            '<tr><td><a href="%s">%s</a><br><span style="color:#7b8595;font-size:12px">%s</span>%s</td>'
+            '<td><span class="tag %s">%s</span></td><td class="n">%d</td><td class="n">%.2fs</td>'
+            '<td class="n">%s / %s</td></tr>'
+            % (r["html"], r["label"], r["driver"],
+               (' <span class="tag bad">MUTATED %s</span>' % ",".join(r.get("mutated_files") or []))
+               if r.get("mutated") else "",
+               tag, _esc(r["verdict"]), r["exit"],
+               r["duration_s"], hb, jb)
+        )
+    body.append("</tbody></table>")
+    body.append('<div class="note">')
+    body.append('<div><code>python tools/face_sweep.py</code> \u91cd\u6d4b\u5168\u90e8\u516b\u9762\uff1b'
+                '<code>python tools/face_sweep.py --check</code> \u53ea\u6838\u5bf9\u672c\u9875\u81ea\u8eab'
+                '\u4e0e\u76d8\u4e0a\u4e00\u81f4\u3002</div>')
+    for line in STANDING:
+        body.append("<div>%s</div>" % _esc(line))
+    body.append("<div>%s</div>" % _esc(EXCLUDED_NOTE))
+    body.append("</div>")
+    body.append("</div>")
+    return ("<!doctype html>\n<html lang=\"zh-CN\"><head><meta charset=\"utf-8\">"
+            "<title>\u516b\u9762\u5b9e\u51b5\u677f / face sweep board</title>"
+            "<style>%s</style></head><body>\n%s\n</body></html>\n" % (CSS, "\n".join(body)))
+
+
+def _esc(s):
+    return (str(s).replace("&", "&amp;").replace("<", "&lt;")
+            .replace(">", "&gt;").replace('"', "&quot;"))
+
+
+def render(rows, stamp):
+    sizes = {"html": 0, "json": 0}
+    html_text = json_text = None
+    for _ in range(8):
+        html_text = build_html(rows, sizes, stamp)
+        json_text = build_json(rows, sizes, stamp)
+        fresh = {"html": len(html_text.encode("utf-8")), "json": len(json_text.encode("utf-8"))}
+        if fresh == sizes:
+            break
+        sizes = fresh
+    if {"html": len(html_text.encode("utf-8")), "json": len(json_text.encode("utf-8"))} != sizes:
+        raise SystemExit("E_SIZE_FIXPOINT: sizes did not converge")
+    return html_text, json_text, sizes
+
+
+def sweep(opts):
+    faces = load_faces(opts["faces_json"])
+    rows = [run_face(f, opts["timeout"]) for f in faces]
+    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    html_text, json_text, sizes = render(rows, stamp)
+    os.makedirs(os.path.dirname(OUT_HTML), exist_ok=True)
+    with open(OUT_HTML, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(html_text)
+    with open(OUT_JSON, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(json_text)
+    dh, dj = os.path.getsize(OUT_HTML), os.path.getsize(OUT_JSON)
+    if (dh, dj) != (sizes["html"], sizes["json"]):
+        raise SystemExit("E_SIZE_DISK: landed bytes %d/%d != stated %d/%d"
+                         % (dh, dj, sizes["html"], sizes["json"]))
+    passing = sum(1 for r in rows if _passing(r))
+    for r in rows:
+        print("face %-16s exit=%-3d verdict=%s (%.2fs)" % (r["id"], r["exit"], r["verdict"], r["duration_s"]))
+    print("landed %s %dB / %s %dB" % (_rel(OUT_HTML), dh, _rel(OUT_JSON), dj))
+    print("VERDICT %s %d/%d fingerprint=%s"
+          % ("PASS" if passing == len(rows) else "FAIL", passing, len(rows), fingerprint(rows)))
+    return 0 if passing == len(rows) else 2
+
+
+def check():
+    fails = []
+    if not os.path.exists(OUT_JSON) or not os.path.exists(OUT_HTML):
+        print("FAIL AC-FSW0: landed board missing")
+        return 2
+    with open(OUT_JSON, "r", encoding="utf-8") as fh:
+        doc = json.load(fh)
+    with open(OUT_HTML, "r", encoding="utf-8") as fh:
+        html_text = fh.read()
+    dh, dj = os.path.getsize(OUT_HTML), os.path.getsize(OUT_JSON)
+
+    # AC-FSW1 the document states its own landed byte counts
+    if doc.get("sizes") != {"html": dh, "json": dj}:
+        fails.append("AC-FSW1 sizes %r != disk %r" % (doc.get("sizes"), {"html": dh, "json": dj}))
+
+    # AC-FSW2 one row per registered face, ids unique
+    rows = doc.get("faces") or []
+    ids = [r.get("id") for r in rows]
+    if len(rows) != len(FACES) or len(set(ids)) != len(ids) or not all(ids):
+        fails.append("AC-FSW2 rows=%d unique=%d" % (len(rows), len(set(ids))))
+
+    # AC-FSW3 the headline is derived, never asserted
+    passing = sum(1 for r in rows if _passing(r))
+    hl = doc.get("headline") or {}
+    if hl.get("pass") != passing or hl.get("total") != len(rows):
+        fails.append("AC-FSW3 headline %r vs derived %d/%d" % (hl, passing, len(rows)))
+    if hl.get("verdict") != ("PASS" if passing == len(rows) else "FAIL"):
+        fails.append("AC-FSW3b headline verdict %r inconsistent" % (hl.get("verdict"),))
+
+    # AC-FSW4 every artifact path exists and the stated bytes match the disk
+    for r in rows:
+        for key in ("html", "json"):
+            p = os.path.join(ROOT, r.get(key) or "")
+            stated = r.get(key + "_bytes")
+            if not os.path.exists(p):
+                fails.append("AC-FSW4 %s %s missing" % (r.get("id"), r.get(key)))
+            elif stated is not None and os.path.getsize(p) != stated:
+                fails.append("AC-FSW4 %s %s %r != %d"
+                             % (r.get("id"), key, stated, os.path.getsize(p)))
+
+    # AC-FSW5 the fingerprint is recomputed from the landed rows
+    if doc.get("fingerprint") != fingerprint(rows):
+        fails.append("AC-FSW5 fingerprint %r != %r" % (doc.get("fingerprint"), fingerprint(rows)))
+
+    # AC-FSW6 no external literal: every link is a relative path
+    ext = [m for m in EXTERNAL_RE.findall(html_text)]
+    if ext:
+        fails.append("AC-FSW6 external literals %r" % (ext[:3],))
+
+    # AC-FSW7 the page renders every row and quotes its verdict token
+    for r in rows:
+        if r["html"] not in html_text:
+            fails.append("AC-FSW7 row %s link absent" % r.get("id"))
+        if _esc(r["verdict"]) not in html_text:
+            fails.append("AC-FSW7 row %s verdict not quoted" % r.get("id"))
+
+    # AC-FSW8 the three standing compliance faces are resident
+    for line in STANDING:
+        if _esc(line) not in html_text:
+            fails.append("AC-FSW8 standing line absent")
+
+    # AC-FSW9 no face authored the document it verified: a gate that rewrites its own
+    # evidence can never report staleness, so mutation is a FAIL and not a footnote.
+    for r in rows:
+        if r.get("mutated"):
+            fails.append("AC-FSW9 %s mutated %r during its own check"
+                         % (r.get("id"), r.get("mutated_files")))
+
+    total = 9
+    for f in fails:
+        print("FAIL " + f)
+    print("VERDICT %s %d/%d" % ("PASS" if not fails else "FAIL", total - len(fails), total))
+    return 0 if not fails else 2
+
+
+def main(argv):
+    opts = _read_args(argv)
+    if opts["check"]:
+        return check()
+    return sweep(opts)
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

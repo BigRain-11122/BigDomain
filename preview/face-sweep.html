@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>八面实况板 / face sweep board</title><style>
+body{font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;margin:0;background:#12151a;color:#e8ebf0}
+.wrap{max-width:1020px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:22px;margin:0 0 6px}
+.sub{color:#98a2b3;font-size:13px;margin-bottom:22px}
+.big{font-size:44px;font-weight:700;letter-spacing:1px}
+.ok{color:#37d67a}.bad{color:#ff5c5c}
+table{width:100%;border-collapse:collapse;margin-top:18px;font-size:13px}
+th,td{padding:9px 8px;border-bottom:1px solid #262c36;text-align:left;vertical-align:top}
+th{color:#98a2b3;font-weight:600}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+a{color:#7cc4ff;text-decoration:none}
+.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:12px}
+.tag.ok{background:#12351f;color:#37d67a}.tag.bad{background:#3a1416;color:#ff5c5c}
+.note{margin-top:26px;padding:14px 16px;background:#171c23;border-left:3px solid #2f3742;font-size:12.5px;line-height:1.7;color:#b6bfcc}
+code{background:#1d232b;padding:1px 5px;border-radius:3px}
+</style></head><body>
+<div class="wrap">
+<h1>八面实况板 / face sweep board</h1>
+<div class="sub">2026-11-15T02:02:19Z — 一条命令把每面页自己的闸实跑一遍，结果汇到这一页。
+</div>
+<div class="big ok">8 / 8</div>
+<div class="sub">VERDICT <span class="tag ok">PASS</span> · fingerprint <code>652c791de0d0a46a</code> · 本页 5113 字节 · json 4703 字节</div>
+<table><thead><tr><th>面</th><th>闸结果</th><th>退出码</th><th>耗时</th><th>产物字节</th></tr></thead><tbody>
+<tr><td><a href="preview/platform-live-report.html">六门实况 / six gates live</a><br><span style="color:#7b8595;font-size:12px">tools/platform_live_report.py</span></td><td><span class="tag ok">VERDICT PASS 8/8 fingerprint=44ec8b5a60f4d1f3 landed=44ec8b5a60f4d1f3 sizes={'html': 6889, 'json': 5292}</span></td><td class="n">0</td><td class="n">5.32s</td><td class="n">6,889 / 5,292</td></tr>
+<tr><td><a href="preview/lobby-ws-report.html">大厅 WebSocket / P-47 第 1 项</a><br><span style="color:#7b8595;font-size:12px">tools/lobby_ws_report.py</span></td><td><span class="tag ok">VERDICT PASS 8/8 fingerprint=fbdb7f517fb06222 landed=fbdb7f517fb06222 sizes={'html': 5952, 'json': 3070}</span></td><td class="n">0</td><td class="n">1.59s</td><td class="n">5,952 / 3,070</td></tr>
+<tr><td><a href="preview/city-face-report.html">城市观测面 / P-47 第 1 项</a><br><span style="color:#7b8595;font-size:12px">tools/city_face_report.py</span></td><td><span class="tag ok">VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f</span></td><td class="n">0</td><td class="n">0.73s</td><td class="n">7,300 / 5,004</td></tr>
+<tr><td><a href="preview/ugc-gate-report.html">UGC 安全面 / P-47 第 3 项</a><br><span style="color:#7b8595;font-size:12px">tools/ugc_gate_report.py</span></td><td><span class="tag ok">VERDICT PASS checks=9/9 failed=(none)</span></td><td class="n">0</td><td class="n">0.28s</td><td class="n">9,576 / 6,881</td></tr>
+<tr><td><a href="preview/payment-gate-report.html">19.9 支付面 / P-47 第 4 项</a><br><span style="color:#7b8595;font-size:12px">tools/payment_gate_report.py</span></td><td><span class="tag ok">PAYMENT GATE CHECK PASS fails=0</span></td><td class="n">0</td><td class="n">0.14s</td><td class="n">6,737 / 6,415</td></tr>
+<tr><td><a href="preview/membership-benefit-report.html">权益月卡面 / P-47 第 5 项</a><br><span style="color:#7b8595;font-size:12px">tools/membership_benefit_report.py</span></td><td><span class="tag ok">VERDICT PASS checks=8/8 fresh_fingerprint=df3e8dcbe02dd0d3 landed=df3e8dcbe02dd0d3</span></td><td class="n">0</td><td class="n">0.89s</td><td class="n">10,218 / 9,817</td></tr>
+<tr><td><a href="preview/ledger-business-report.html">代币账本面 / P-47 第 2 项</a><br><span style="color:#7b8595;font-size:12px">tools/ledger_business_report.py</span></td><td><span class="tag ok">LEDGER BUSINESS CHECK PASS fails=0</span></td><td class="n">0</td><td class="n">0.11s</td><td class="n">5,276 / 1,061</td></tr>
+<tr><td><a href="preview/index.html">入口页实物台账 / index</a><br><span style="color:#7b8595;font-size:12px">tools/deliverable_index.py</span></td><td><span class="tag ok">VERDICT PASS 7/7 fingerprint=0ee896f651d795b7</span></td><td class="n">0</td><td class="n">0.12s</td><td class="n">27,999 / 2,321</td></tr>
+</tbody></table>
+<div class="note">
+<div><code>python tools/face_sweep.py</code> 重测全部八面；<code>python tools/face_sweep.py --check</code> 只核对本页自身与盘上一致。</div>
+<div>非投资建议：本页不构成任何投资建议，不提供投资咨询服务。</div>
+<div>AIGC 生成标识：一切生成内容在呈现面带标识，未标识不对外。</div>
+<div>msgSecCheck 前置闸：内容安全未接通前不开门。</div>
+<div>API 市场面不在本板实测面内：src/sandbox/ledger/apimarket_report.py 无只读 --check，强行入板只能引用声明。</div>
+</div>
+</div>
+</body></html>

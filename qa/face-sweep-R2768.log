@@ -1,0 +1,26 @@
+R2768 face sweep board evidence
+
+sweep rc=0
+face six-gate-live    exit=0   verdict=VERDICT PASS 8/8 fingerprint=44ec8b5a60f4d1f3 landed=44ec8b5a60f4d1f3 sizes={'html': 6889, 'json': 5292} (5.33s)
+face lobby-ws         exit=0   verdict=VERDICT PASS 8/8 fingerprint=fbdb7f517fb06222 landed=fbdb7f517fb06222 sizes={'html': 5952, 'json': 3070} (1.82s)
+face city-face        exit=0   verdict=VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f (0.86s)
+face ugc-gate         exit=0   verdict=VERDICT PASS checks=9/9 failed=(none) (0.29s)
+face payment-gate     exit=0   verdict=PAYMENT GATE CHECK PASS fails=0 (0.13s)
+face membership       exit=0   verdict=VERDICT PASS checks=8/8 fresh_fingerprint=df3e8dcbe02dd0d3 landed=df3e8dcbe02dd0d3 (0.87s)
+face ledger-business  exit=0   verdict=LEDGER BUSINESS CHECK PASS fails=0 (0.11s)
+face entry-index      exit=0   verdict=VERDICT PASS 7/7 fingerprint=0ee896f651d795b7 (0.10s)
+landed C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/preview/face-sweep.html 5113B / C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/preview/face-sweep.json 4702B
+VERDICT PASS 8/8 fingerprint=652c791de0d0a46a
+
+board check rc=0
+VERDICT PASS 9/9
+
+negative controls rc=0
+PASS C1 missing driver -> FAIL/MISSING-DRIVER
+PASS C2 mutating gate -> MUTATED and FAIL
+PASS C6a real sweep -> PASS 8/8
+PASS C3 external literal -> FAIL AC-FSW6
+PASS C4 html byte drift -> FAIL AC-FSW1
+PASS C5 stale json size -> FAIL AC-FSW1
+PASS C6b restored -> sweep PASS 8/8 and check PASS 9/9
+VERDICT PASS 7/7
