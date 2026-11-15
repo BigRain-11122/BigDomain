@@ -1,0 +1,166 @@
+{
+ "honest": [
+  "This runs the SANDBOX modules. No merchant, no platform API, no msgSecCheck network call: the gate is the shipped local wordlist mock.",
+  "The clean idea is Chinese text sourced from the config data file, not typed into this module, so the tool source stays pure ASCII.",
+  "Adoption in the sandbox writes a chronicle export under the repo, which this run deletes before it exits; nothing of the world survives."
+ ],
+ "item_id": "941583318965b474",
+ "ledger_invariant": {
+  "account_balance": 20,
+  "credit_total": 120,
+  "debit_total": 120,
+  "delta": 0,
+  "entries": 4,
+  "tx_count": 2
+ },
+ "ledger_steps": [
+  {
+   "code": "E_GATE_REF",
+   "detail": "E_GATE_REF: 941583318965b474",
+   "module": "ledger",
+   "name": "pay a co-creation share with NO gate pass",
+   "refused": true,
+   "type": "LedgerError"
+  },
+  {
+   "module": "ledger",
+   "name": "record the gate pass the UGC pipeline produced",
+   "refused": false,
+   "value": {
+    "returned_bytes": 16
+   }
+  },
+  {
+   "code": "E_NEGATIVE_BALANCE",
+   "detail": "E_NEGATIVE_BALANCE: E_NEGATIVE_BALANCE",
+   "module": "ledger",
+   "name": "pay the SAME share again, gate now satisfied",
+   "refused": true,
+   "type": "LedgerError"
+  },
+  {
+   "module": "ledger",
+   "name": "mint issuance into the share pool",
+   "refused": false,
+   "value": {
+    "returned_bytes": 16
+   }
+  },
+  {
+   "module": "ledger",
+   "name": "pay the share out of the funded pool",
+   "refused": false,
+   "value": {
+    "returned_bytes": 16
+   }
+  }
+ ],
+ "receipt_evt_id": "941583318965b474",
+ "seam": "The two sandboxes keep separate databases. The receipt event id is the only thing joining them: the ledger pays a content reward solely when its own gate record says pass, which is why row 1 of the ledger trace is REFUSED and row 3 is not.",
+ "sources": [
+  {
+   "bytes": 44841,
+   "path": "src/sandbox/ugc/pipeline.py"
+  },
+  {
+   "bytes": 23388,
+   "path": "src/sandbox/ledger/ledger.py"
+  }
+ ],
+ "subtitle": "the shipped sandbox pieces, executed; every verdict below was produced by this run, not typed",
+ "title": "Core loop walkthrough",
+ "ugc_steps": [
+  {
+   "module": "pipeline",
+   "name": "submit a clean idea",
+   "refused": false,
+   "value": {
+    "evt_id": "941583318965b474",
+    "line": "bigdomain",
+    "noise": false
+   }
+  },
+  {
+   "code": "E_DUPLICATE",
+   "detail": "E_DUPLICATE: UNIQUE constraint failed: ugc_events.evt_id",
+   "module": "pipeline",
+   "name": "submit the SAME text again",
+   "refused": true,
+   "type": "PipelineError"
+  },
+  {
+   "code": "E_CONTENT_REJECTED",
+   "detail": "E_CONTENT_REJECTED: gate 1 wordlist hit",
+   "module": "pipeline",
+   "name": "submit a forbidden word",
+   "refused": true,
+   "type": "PipelineError"
+  },
+  {
+   "code": "E_CONTENT_REJECTED",
+   "detail": "E_CONTENT_REJECTED: gate 2 wordlist hit",
+   "module": "pipeline",
+   "name": "submit an investment-advice word",
+   "refused": true,
+   "type": "PipelineError"
+  },
+  {
+   "module": "pipeline",
+   "name": "submit an under-length post",
+   "refused": false,
+   "value": {
+    "evt_id": "7e71c40da0e8d607",
+    "line": "unsorted",
+    "noise": true
+   }
+  },
+  {
+   "module": "pipeline",
+   "name": "read the bigdomain pool",
+   "refused": false,
+   "value": {
+    "pooled_items": 1
+   }
+  },
+  {
+   "module": "pipeline",
+   "name": "draft the first version",
+   "refused": false,
+   "value": {
+    "keys": [
+     "ai_generated",
+     "ai_label",
+     "producer",
+     "title",
+     "原意重述",
+     "命中关键词",
+     "建议消化线",
+     "风险注记"
+    ]
+   }
+  },
+  {
+   "module": "pipeline",
+   "name": "open final review",
+   "refused": false,
+   "value": {
+    "item_id": "941583318965b474",
+    "state": "final_review"
+   }
+  },
+  {
+   "module": "pipeline",
+   "name": "decide: adopt",
+   "refused": false,
+   "value": {
+    "item_id": "941583318965b474",
+    "state": "adopted"
+   }
+  }
+ ],
+ "world": {
+  "database": "system temp dir (removed at end of run)",
+  "export_dir_removed": true,
+  "export_dir_within_repo": "export-clw-walkthrough"
+ }
+}

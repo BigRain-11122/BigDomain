@@ -1,0 +1,49 @@
+CORE LOOP WALKTHROUGH R2784 (AC-CLW1..AC-CLW6 pinned in src/os/backlog.md before code)
+
+WHAT RAN
+  tools/core_loop_walkthrough.py executed the shipped sandbox modules against a
+  throwaway world under the system temp dir, then rendered the trace.
+  UGC:  src/sandbox/ugc/pipeline.py  UGCPipeline.submit / pool_query / draft /
+        final_review / final_decide
+  LED:  src/sandbox/ledger/ledger.py  ensure_account / grant_reward /
+        record_gate_pass / mint_to_pool / balance
+
+MEASURED UGC ROWS (9, all read from the run)
+  1 submit a clean idea                        ACCEPTED
+  2 submit the SAME text again                 REFUSED  E_DUPLICATE
+  3 submit a forbidden word                    REFUSED  E_CONTENT_REJECTED (gate 1 wordlist hit)
+  4 submit an investment-advice word           REFUSED  E_CONTENT_REJECTED (gate 2 wordlist hit)
+  5 submit an under-length post                ACCEPTED noise=true line=unsorted
+  6 read the bigdomain pool                    pooled_items=1
+  7 draft the first version                    ACCEPTED producer=rule_template ai_generated=false
+  8 open final review                          ACCEPTED
+  9 decide: adopt                              ACCEPTED state=adopted
+
+MEASURED LEDGER ROWS (5)
+  1 pay a co-creation share with NO gate pass   REFUSED  E_GATE_REF
+  2 record the gate pass from the UGC receipt   ACCEPTED
+  3 pay the SAME share, gate satisfied          REFUSED  E_NEGATIVE_BALANCE (pool unfunded)
+  4 mint issuance into the share pool           ACCEPTED
+  5 pay the share out of the funded pool        ACCEPTED
+
+DOUBLE-ENTRY INVARIANT (SQL over ledger_entries after the run)
+  entries=4 credit_total=120 debit_total=120 delta=0 tx_count=2 account_balance=20
+
+GATES
+  python tools/core_loop_walkthrough.py          RENDERED json=4056B html=5433B
+  python tools/core_loop_walkthrough.py --check   VERDICT PASS rc=0
+  double render                                 json sha256 identical=True
+  --check read-only                             html mtime stable=True json mtime stable=True
+  negative control (json delta 0 -> 7)          VERDICT FAIL 3 rc=2
+  re-render then --check                        VERDICT PASS rc=0
+  source purity                                 pure_ascii=True
+  export dir inside repo                        created then removed, EXPORT_CLEANED
+  entry page                                    deliverable_index --check PASS 14/14, band-rows=32
+
+HONEST
+  - The gate is the shipped local wordlist mock, not msgSecCheck: no platform
+    API, no merchant, no network call was made.
+  - Clean text is sourced from the config data file, so the tool source stays
+    pure ASCII.
+  - The two sandboxes keep separate databases; the receipt event id is the only
+    joint, which is why ledger row 1 is refused and row 3 is not.

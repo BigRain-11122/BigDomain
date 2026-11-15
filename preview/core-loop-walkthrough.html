@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Core loop walkthrough</title>
+<style>
+body{font-family:system-ui,Segoe UI,Arial,sans-serif;margin:0;padding:24px;background:#0f1115;color:#e6e8ee}
+h1{font-size:20px;margin:0 0 4px}h2{font-size:15px;margin:26px 0 8px;color:#9fb4ff}
+p.sub{color:#9aa3b2;margin:0 0 18px;font-size:13px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid #232733;vertical-align:top}
+th{color:#8f98a8;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+tr.ok td:nth-child(3){color:#6ee7a8}tr.bad td:nth-child(3){color:#ff8b7a}
+code{color:#c9d1e6}.box{background:#161a22;border:1px solid #232733;border-radius:8px;padding:14px;margin:10px 0;font-size:13px}
+ul{margin:6px 0 0 18px;padding:0}li{margin:3px 0;color:#b6bfd0;font-size:13px}
+.big{font-size:15px}
+</style></head><body>
+<h1>Core loop walkthrough</h1>
+<p class="sub">the shipped sandbox pieces, executed; every verdict below was produced by this run, not typed</p>
+<p class="sub"><a href="index.html" style="color:#9fb4ff">back to the entry page</a></p>
+
+<h2>1. What the UGC pipeline did with the content</h2>
+<table><tr><th>Probe</th><th>Verdict code</th><th>Outcome</th><th>Detail read from the run</th></tr>
+<tr class="ok"><td>submit a clean idea</td><td><code>-</code></td><td>ACCEPTED</td><td>{&quot;evt_id&quot;: &quot;941583318965b474&quot;, &quot;line&quot;: &quot;bigdomain&quot;, &quot;noise&quot;: false}</td></tr><tr class="bad"><td>submit the SAME text again</td><td><code>E_DUPLICATE</code></td><td>REFUSED</td><td>E_DUPLICATE: UNIQUE constraint failed: ugc_events.evt_id</td></tr><tr class="bad"><td>submit a forbidden word</td><td><code>E_CONTENT_REJECTED</code></td><td>REFUSED</td><td>E_CONTENT_REJECTED: gate 1 wordlist hit</td></tr><tr class="bad"><td>submit an investment-advice word</td><td><code>E_CONTENT_REJECTED</code></td><td>REFUSED</td><td>E_CONTENT_REJECTED: gate 2 wordlist hit</td></tr><tr class="ok"><td>submit an under-length post</td><td><code>-</code></td><td>ACCEPTED</td><td>{&quot;evt_id&quot;: &quot;7e71c40da0e8d607&quot;, &quot;line&quot;: &quot;unsorted&quot;, &quot;noise&quot;: true}</td></tr><tr class="ok"><td>read the bigdomain pool</td><td><code>-</code></td><td>ACCEPTED</td><td>{&quot;pooled_items&quot;: 1}</td></tr><tr class="ok"><td>draft the first version</td><td><code>-</code></td><td>ACCEPTED</td><td>{&quot;keys&quot;: [&quot;ai_generated&quot;, &quot;ai_label&quot;, &quot;producer&quot;, &quot;title&quot;, &quot;原意重述&quot;, &quot;命中关键词&quot;, &quot;建议消化线&quot;, &quot;风险注记&quot;]}</td></tr><tr class="ok"><td>open final review</td><td><code>-</code></td><td>ACCEPTED</td><td>{&quot;item_id&quot;: &quot;941583318965b474&quot;, &quot;state&quot;: &quot;final_review&quot;}</td></tr><tr class="ok"><td>decide: adopt</td><td><code>-</code></td><td>ACCEPTED</td><td>{&quot;item_id&quot;: &quot;941583318965b474&quot;, &quot;state&quot;: &quot;adopted&quot;}</td></tr>
+</table>
+
+<h2>2. What the ledger did with the receipt</h2>
+<table><tr><th>Action</th><th>Verdict code</th><th>Outcome</th><th>Detail read from the run</th></tr>
+<tr class="bad"><td>pay a co-creation share with NO gate pass</td><td><code>E_GATE_REF</code></td><td>REFUSED</td><td>E_GATE_REF: 941583318965b474</td></tr><tr class="ok"><td>record the gate pass the UGC pipeline produced</td><td><code>-</code></td><td>BOOKED</td><td>{&quot;returned_bytes&quot;: 16}</td></tr><tr class="bad"><td>pay the SAME share again, gate now satisfied</td><td><code>E_NEGATIVE_BALANCE</code></td><td>REFUSED</td><td>E_NEGATIVE_BALANCE: E_NEGATIVE_BALANCE</td></tr><tr class="ok"><td>mint issuance into the share pool</td><td><code>-</code></td><td>BOOKED</td><td>{&quot;returned_bytes&quot;: 16}</td></tr><tr class="ok"><td>pay the share out of the funded pool</td><td><code>-</code></td><td>BOOKED</td><td>{&quot;returned_bytes&quot;: 16}</td></tr>
+</table>
+
+<h2>3. Double-entry invariant, recomputed from the ledger database</h2>
+<div class="box big">entries 4 &nbsp; credit 120 &nbsp; debit 120
+&nbsp; delta <strong>0</strong> &nbsp; tx 2 &nbsp; account balance 20</div>
+<p class="sub">Read by SQL over <code>ledger_entries</code> after the run, not asserted by hand.</p>
+
+<h2>4. Why the two halves are joined this way</h2>
+<div class="box">The two sandboxes keep separate databases. The receipt event id is the only thing joining them: the ledger pays a content reward solely when its own gate record says pass, which is why row 1 of the ledger trace is REFUSED and row 3 is not.</div>
+
+<h2>5. Honest notes</h2>
+<ul><li>This runs the SANDBOX modules. No merchant, no platform API, no msgSecCheck network call: the gate is the shipped local wordlist mock.</li><li>The clean idea is Chinese text sourced from the config data file, not typed into this module, so the tool source stays pure ASCII.</li><li>Adoption in the sandbox writes a chronicle export under the repo, which this run deletes before it exits; nothing of the world survives.</li></ul>
+<h2>6. Executed sources</h2>
+<ul><li><code>src/sandbox/ugc/pipeline.py</code> 44841B</li><li><code>src/sandbox/ledger/ledger.py</code> 23388B</li></ul>
+<p class="sub">Rendered offline. Non-investment-advice surface: in-city tokens are
+in-loop entitlements, not withdrawable, and no content here is investment advice.</p>
+</body></html>
