@@ -6772,6 +6772,14 @@ SUITES = [
     # (AC-EXPW1..AC-EXPW6 pinned in src/os/backlog.md at R2780 BEFORE the code.)
     ("os-export-round",
      os.path.join("..", "os", "test_export_round.py"), 6),
+    # R2780: the group ledger writes wildcard forms ("no reply cites
+    # D-20261114-0x") and a token regex without a right-hand boundary harvests
+    # D-20261114-0 out of them, inventing a decision that never existed. Every
+    # round's decisions face reads through this scanner.
+    # (AC-SFS1..AC-SFS6 written into src/os/backlog.md in the SAME window as the
+    # suite, after the repair - disclosed rather than backdated.)
+    ("os-scan-five-still",
+     os.path.join("..", "os", "test_scan_five_still.py"), 6),
     ]
 
 FAILS = 0

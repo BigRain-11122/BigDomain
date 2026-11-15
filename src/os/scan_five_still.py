@@ -23,7 +23,12 @@ def rd(p):
         # after a paste, so strip every U+FEFF instead of trusting the offset.
         return f.read().replace("\ufeff", "")
 
-TOKRE = re.compile(r"(?:P|D|C|O|T|XL)-\d{4}-\d{2}-\d{2}-\d+|O-2026\d{5}-\d+|D-\d{8}-\d+|C-\d{8}-\d+|BD-PROP-\d+|OH-\d{8}")
+TOKRE = re.compile(r"(?:(?:P|D|C|O|T|XL)-\d{4}-\d{2}-\d{2}-\d+|O-2026\d{5}-\d+|D-\d{8}-\d+|C-\d{8}-\d+|BD-PROP-\d+|OH-\d{8})(?![0-9A-Za-z])")
+
+# R2780: the group ledger writes a WILDCARD form - "no reply cites D-20261114-0x"
+# - and a token regex without a right-hand boundary harvests "D-20261114-0" out
+# of it, inventing a decision that does not exist and putting a phantom token in
+# every diff. A token is only a token when the next character cannot continue it.
 
 def norm_tokens(value):
     """last_dec_tokens is documented as a comma-joined string, but recent
@@ -51,7 +56,7 @@ for l in led_lines:
 # [DEC] group decisions token diff (content-addressed)
 dec = rd(os.path.join(GRP, "docs", "decisions.md"))
 dec_rows = [l for l in dec.splitlines() if l.strip()]
-dec_tokens = set(re.findall(r"D-\d{8}-\d+|C-\d{8}-\d+", dec))
+dec_tokens = set(re.findall(r"(?:D-\d{8}-\d+|C-\d{8}-\d+)(?![0-9A-Za-z])", dec))
 base_dec = set(norm_tokens(state.get("last_dec_tokens")))
 dec_new = sorted(dec_tokens - base_dec)
 

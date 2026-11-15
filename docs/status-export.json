@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T13:32:26+08:00",
+  "export_ts": "2026-11-15T13:36:18+08:00",
   "do": "R2780 - MONITORED-WAIT window that closed the largest measured debt on record and repaired the export birth site instead of refreshing around it. Five readings at open: git status EMPTY on main with no index.lock (the startup round.lock only), the group ledger carries ZERO unreplied @BigDomain rows (atbd_li...",
   "ceo_face": {
     "current": "R2780 - MONITORED-WAIT window that closed the largest measured debt on record and repaired the export birth site instead of refreshing around it. Five readings at open: git status EMPTY on main with no index.lock (the startup round.lock only), the group ledger carries ZERO unreplied @BigDomain rows (atbd_li...",
     "latest_artifact": "preview/ship-checklist.html (9182B) + preview/ship-checklist.json (4983B)",
     "last_artifact": "preview/ship-checklist.html (9182B) + preview/ship-checklist.json (4983B)",
     "next_milestone": "The successor full battery is OWED (this window moved `src/os/state.json` and `docs/status-export.json`) and was NOT launched: two detached legs today died without a closing row when the host window ended, so the next window should launch it EARLY and supervise, not at the tail.",
-    "next_milestone_due": "2026-11-17T13:32:26+08:00",
-    "updated_at": "2026-11-15T13:32:26+08:00",
+    "next_milestone_due": "2026-11-17T13:36:18+08:00",
+    "updated_at": "2026-11-15T13:36:18+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -768,7 +768,7 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 40,
+    "log_lines_in_window": 43,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 3,
