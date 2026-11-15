@@ -1,0 +1,20 @@
+R2808 writer-census nul-bytes class - evidence
+
+indep probe: qa/*.log files=3032, carrying NUL=115
+decomposition by BOM: utf-16le BOM=98 (already named ps-utf16), utf-8-sig=3 (other), no BOM=14
+of the 14 no-BOM NUL files: 13 were previously classified tee (healthy dialect), 1 was cmd-raw
+NUL density check (half-byte padding is the UTF-16 signature): apimarket-ratingagg-R2077.log 4852B nul=2106 density=0.434
+all-qa-files reconciliation of the R2807 155 figure: 115 *.log + 40 *.png over 3107 files; png are out of census scope
+
+census --check on the final tree:
+
+src/os/qa_writer_census.py 37485B classes=tee,cmd-raw,pwsh-capture,ps-utf16,nul-bytes,other
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+census: files=3032 tee=2487 baselined=545
+nul_bytes=14
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN

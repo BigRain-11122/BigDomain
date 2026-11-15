@@ -19,6 +19,15 @@ directory by writer-dialect signature and counts the three states:
 
 Classification rule (pre-registered AC-SL3, mechanical and total):
   * BOM utf-16le/utf-16be            -> ps-utf16    (PS 5.1 `>` family)
+  * no BOM + any NUL byte present    -> nul-bytes   (BOM-less UTF-16:
+                                                    endianness cannot
+                                                    be verified, and
+                                                    the NUL padding
+                                                    decodes as valid
+                                                    utf-8, so this
+                                                    branch must run
+                                                    BEFORE the EOL
+                                                    branches - R2808)
   * no BOM + crlf==0 + strict utf-8  -> tee         (LF + utf-8 dialect)
   * no BOM + crlf-dominant (crlf > bare_lf) + strict utf-8 FAILS
                                      -> cmd-raw     (raw cp936 family)
@@ -49,11 +58,15 @@ dialect file appear SINCE the baseline" on every future call:
     python qa_writer_census.py --check             # drift detector
 
 Baseline law (AC-WCB1): writer-census-baseline.json (default under
-the target dir, --baseline overridable) carries ONLY the four non-tee
-class name lists {cmd-raw, pwsh-capture, ps-utf16, other} sorted;
-tee files are deliberately NOT baselined because the runner Tee is
-the healthy dialect - a NEW tee file is a normal evidence product
-and must never flag (the zero-tee-key baseline IS that mechanism).
+the target dir, --baseline overridable) carries ONLY the five non-tee
+class name lists {cmd-raw, pwsh-capture, ps-utf16, nul-bytes, other}
+sorted; tee files are deliberately NOT baselined because the runner
+Tee is the healthy dialect - a NEW tee file is a normal evidence
+product and must never flag (the zero-tee-key baseline IS that
+mechanism). nul-bytes joined this set at R2808 as a KNOWN-DEBT
+class: the 115 BOM-less UTF-16 evidence logs already on disk are
+baselined by name (so the debt is counted every run instead of
+passing as healthy) while any NEW nul-bytes file still flags.
 The baseline is a pure parse product: zero timestamps, zero paths,
 indent=2 + sort_keys + trailing NL round-trip format, atomic
 tempfile+os.replace write, idempotent re-freeze byte-identical
@@ -119,8 +132,10 @@ NET_IMPORTS = ("urllib", "requests", "socket", "http", "ftplib",
                "xmlrpc", "smtplib", "asyncio")
 QA_DIR = os.path.join(ROOT, "qa")
 LABEL = RA.SHELL_CAPTURE_LABEL
-CLASSES = ("tee", "cmd-raw", "pwsh-capture", "ps-utf16", "other")
-BASELINE_CLASSES = ("cmd-raw", "pwsh-capture", "ps-utf16", "other")
+CLASSES = ("tee", "cmd-raw", "pwsh-capture", "ps-utf16", "nul-bytes",
+           "other")
+BASELINE_CLASSES = ("cmd-raw", "pwsh-capture", "ps-utf16", "nul-bytes",
+                    "other")
 BASELINE_NAME = "writer-census-baseline.json"
 
 
@@ -158,6 +173,14 @@ def classify_file(path):
         row["class"] = "ps-utf16"
     elif row["bom"] == "utf-8-sig":
         row["class"] = "other"
+    elif b"\x00" in raw:
+        # R2808 (R2807 carry): BOM-less UTF-16 has no BOM to name it,
+        # and its every-other-byte NUL padding decodes as VALID utf-8,
+        # so the crlf==0 branch below called it tee - the healthy
+        # dialect - and 115 evidence logs carried the defect unseen.
+        # Endianness cannot be verified without a BOM, so the honest
+        # face is a named class, not a silent decode message.
+        row["class"] = "nul-bytes"
     elif row["crlf"] == 0:
         row["class"] = "tee" if row["utf8"] else "other"
     elif row["crlf"] > row["bare_lf"]:
@@ -306,6 +329,11 @@ def check_against_baseline(target, path):
     lines.append("census: files=%d tee=%d baselined=%d"
                  % (sum(len(lists[c]) for c in CLASSES),
                     len(lists["tee"]), len(base_of)))
+    # R2808: the known-debt face is counted on EVERY run. Baselined
+    # nul-bytes files never flag (they are recorded by name), so
+    # without this line the debt would be invisible again - the very
+    # defect this class exists to name.
+    lines.append("nul_bytes=%d" % len(lists["nul-bytes"]))
     lines.append("disappeared=%d" % len(gone))
     lines.append("flags=%d" % flags)
     lines.append("verdict: %s" % ("DRIFT-CLEAN" if flags == 0

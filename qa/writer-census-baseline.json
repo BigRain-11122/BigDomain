@@ -12,9 +12,24 @@
     "reconcile-all-R1800.log",
     "reconcile-daily-20261011-rerun.log",
     "reconcile-daily-20261011.log",
-    "ugc-window-cap-R1703.log",
     "wiring-R942.log",
     "wiring-R943.log"
+  ],
+  "nul-bytes": [
+    "apimarket-claimlatency-R2159-a.log",
+    "apimarket-claimlatency-R2159-b.log",
+    "apimarket-ratingagg-R2077.log",
+    "banner-queue-window-R1866.log",
+    "clawback-persist-R1957.log",
+    "freetrial-callplan-R1830.log",
+    "freetrial-caplimit-R1849.log",
+    "ledger-reconcile-face-suite-R2795.log",
+    "liveroom-persist-R1933.log",
+    "member-bannerqueuelimit-R1872.log",
+    "sistercity-R1696.log",
+    "ugc-pooldelta-R1785.log",
+    "ugc-verdictwater-R1799.log",
+    "ugc-window-cap-R1703.log"
   ],
   "other": [
     "apidev-chainusage-roll-R1839.log",
