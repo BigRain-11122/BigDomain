@@ -1,0 +1,64 @@
+R2805 export-round latest-artifact repair - evidence
+====================================================
+
+CRITERIA: AC-EXPW7..AC-EXPW10 pinned in src/os/backlog.md and committed as
+9b05c132 BEFORE any code changed.
+
+MEASURED AT OPEN (final tree, tick 2804)
+  python src/os/export_round.py --check
+    VERDICT PASS tick=R2804 (the gate was green while the line was wrong)
+  ceo_face.latest_artifact
+    preview/ceo-blockers.html (8453B) + preview/ceo-blockers.json (6754B)
+  preview pairs by mtime, newest first
+    11-16 00:53:40 ceo-blockers.html        8453  6754   <- meta board page
+    11-16 00:53:40 face-sweep.html          5325  4705   <- meta board page
+    11-16 00:52:41 battery-shard-report.html 15458 15172 <- meta board page
+    11-15 22:24:19 first-yuan-chain.html    3078  4159   <- newest REAL face
+  root cause: newest_pair() picked the newest html+json pair with no notion of
+  what the pair was.
+
+FIX (birth site, src/os/export_round.py)
+  BOARD_PAGES = (ceo-blockers, face-sweep, battery-shard-report, index)
+  newest_artifact() -> (newest pair outside that set, board pairs actually
+  passed over, newest_pair_on_disk_is_board)
+  face publishes board_pages_skipped + newest_pair_on_disk_is_board
+  all-board tree -> the line STATES the fact, never names a board page
+
+MEASURED AFTER (real tree)
+  python src/os/export_round.py
+    WROTE tick=2805 ok=True queue=CURRENT queue_bytes=369683
+    latest=preview/first-yuan-chain.html (3078B) + preview/first-yuan-chain.json (4159B)
+  python src/os/export_round.py --check
+    VERDICT PASS tick=R2805 rc=0
+  python src/os/test_export_round.py
+    SUITE PASS 32/32   (was 24 checks)
+  double run: identical=True sha16 69356d4c24fa3b58 bytes=5992
+
+CONTROLS THAT CARRY THE NEW CRITERIA (private worlds, repo never written)
+  board-on-top world  -> line picks first-yuan-chain, skipped=3
+  product-on-top      -> skipped=[] and newest_pair_on_disk_is_board=False
+  board-only world    -> "(no product pair on disk - every pair is a meta board page...)"
+  empty preview       -> "(no preview pair on disk)" unchanged
+  face naming ceo-blockers -> AC-EXPW7 red (AC-EXPW1 also red: the value is not
+                              the newest product pair either - disclosed, not a
+                              silent second failure)
+  emptied skipped audit    -> AC-EXPW9 red
+  restored derived face    -> fails=[] clean
+
+REGISTRY
+  os-export-round row 6 -> 10 criteria; recounted BY IMPORT
+  690 suites / 5154 criteria / 690 unique names / 690 unique paths
+  matrix regenerated with src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
+  PASS generated docs/sandbox-suite-matrix.md (72776 bytes) green=675/690
+
+ADJACENT SUITES RE-RUN ON THIS TREE (the three rows that read red at R2780)
+  test_export_consistency_queue_face.py  SUMMARY pass=15 fail=0
+  test_queue_floor_export_face.py        SUITE PASS 6/6
+  test_status_export_writer_dialect_wire.py SUITE PASS 6/6
+
+PRE-EXISTING RED, MEASURED NOT ASSUMED
+  src/os/suite_matrix_reconcile.py --check reads CEILING-STARVED rc=3 on this
+  tree AND on the HEAD copy of the matrix doc (git show HEAD:... written to
+  tmp/matrix-HEAD.md and re-run with --doc), so it is not caused by this round:
+  the evidence walk reaches its 64-file ceiling because no recent full battery
+  leg exists. Carried.

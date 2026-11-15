@@ -10,13 +10,22 @@ stale whenever a window is in a hurry - which is the thirteen-window debt.
 
 This module derives all three lines from live files at write time:
   current  <- the last ROUND narrative line of the live state log
-  latest   <- the newest preview/X.html + X.json pair by mtime
+  latest   <- the newest preview/X.html + X.json pair that is NOT a meta page
   next     <- the topmost open next-window row of src/os/backlog.md
 Nothing about a particular round is typed in, so the face cannot describe a
 past window without the files disagreeing.
 
 Criteria AC-EXPW1..AC-EXPW6 were pinned in src/os/backlog.md at R2780 BEFORE
 this file existed.
+
+R2805: the "latest" line used to be the newest pair on disk with no notion of
+what the pair WAS, so it named preview/ceo-blockers.html - a census of open work
+items - as the CEO's latest artifact while the newest real face sat fourth. A
+meta page reports on the tree (blockers, link sweeps, test shards, the entry
+index); it is not something the CEO can use as a product. BOARD_PAGES therefore
+names those stems and newest_artifact() skips them, publishing what it skipped
+so the exclusion is auditable instead of silent. AC-EXPW7..AC-EXPW10 were pinned
+in src/os/backlog.md at R2805 BEFORE this change.
 
 Usage:
   python src/os/export_round.py                 # write the face
@@ -40,6 +49,13 @@ NEXT_ROW_RE = re.compile(r'^- \[ \] \[R\d{4}\] next window')
 LEDGER_RE = re.compile(r'^R\d{4} tokens:')
 FOLD_RE = re.compile(r'fold of log items')
 SHORT = 300
+
+# Meta pages report on the tree, not on the business: open-work censuses, link
+# sweeps, test shard verdicts and the delivered-faces index. They are useful to
+# the CEO but they are never "the artifact of this window", so they must not
+# occupy the latest-artifact slot (AC-EXPW7). This set is the single definition;
+# every reader derives from it rather than repeating the names.
+BOARD_PAGES = ('ceo-blockers', 'face-sweep', 'battery-shard-report', 'index')
 
 
 def _read(path):
@@ -73,12 +89,16 @@ def last_round_line(state):
     return log[-1]
 
 
-def newest_pair(repo):
-    """The newest preview/X.html that has a sibling X.json, by mtime."""
+def _pairs(repo):
+    """Every preview/X.html with a sibling X.json, newest first.
+
+    Returns tuples of (mtime, html_rel, json_rel, html_bytes, json_bytes) so a
+    caller can filter without re-statting the tree.
+    """
     prev = os.path.join(repo, 'preview')
-    best = None
+    rows = []
     if not os.path.isdir(prev):
-        return None
+        return rows
     for name in os.listdir(prev):
         if not name.endswith('.html'):
             continue
@@ -88,12 +108,48 @@ def newest_pair(repo):
         if not os.path.isfile(doc):
             continue
         m = max(os.path.getmtime(html), os.path.getmtime(doc))
-        if best is None or m > best[0]:
-            best = (m, 'preview/' + name, 'preview/' + stem + '.json',
-                    os.path.getsize(html), os.path.getsize(doc))
-    if best is None:
+        rows.append((m, 'preview/' + name, 'preview/' + stem + '.json',
+                     os.path.getsize(html), os.path.getsize(doc)))
+    rows.sort(key=lambda r: (-r[0], r[1]))
+    return rows
+
+
+def newest_pair(repo):
+    """The newest preview/X.html that has a sibling X.json, by mtime."""
+    rows = _pairs(repo)
+    if not rows:
         return None
-    return best[1:]
+    return rows[0][1:]
+
+
+def newest_artifact(repo):
+    """The newest pair that is NOT a meta board page, plus what was skipped.
+
+    Returns (pair, skipped, newest_is_board) where pair is
+    (html_rel, json_rel, html_bytes, json_bytes) or None when every pair on disk
+    is a meta page, skipped is the list of meta pairs passed over (newest first,
+    formatted "path (NB)"), and newest_is_board says whether the newest pair on
+    disk at all was one of them (AC-EXPW9: the exclusion is published, not
+    silent).
+    """
+    rows = _pairs(repo)
+    if not rows:
+        return None, [], False
+    newest_is_board = os.path.basename(rows[0][1])[:-5] in BOARD_PAGES
+    for idx, r in enumerate(rows):
+        if os.path.basename(r[1])[:-5] not in BOARD_PAGES:
+            # only the board pairs ABOVE the chosen one were actually passed
+            # over; an older meta page is not evidence of an exclusion
+            skipped = ['%s (%dB)' % (b[1], b[3]) for b in rows[:idx]
+                       if os.path.basename(b[1])[:-5] in BOARD_PAGES]
+            return r[1:], skipped, newest_is_board
+    skipped = ['%s (%dB)' % (r[1], r[3]) for r in rows
+               if os.path.basename(r[1])[:-5] in BOARD_PAGES]
+    return None, skipped, newest_is_board
+
+
+def _fmt_pair(pair):
+    return '%s (%dB) + %s (%dB)' % (pair[0], pair[2], pair[1], pair[3])
 
 
 def next_window_row(repo):
@@ -120,9 +176,12 @@ def derive(repo, state, stamp):
     cur = re.sub(r'^(?:\d{4}-\d{2}-\d{2} )?R\d{4}\s+', '', cur).strip()
     if len(cur) > SHORT:
         cur = cur[:SHORT].rstrip() + '...'
-    pair = newest_pair(repo)
+    pair, skipped, newest_is_board = newest_artifact(repo)
     if pair:
-        latest = '%s (%dB) + %s (%dB)' % (pair[0], pair[2], pair[1], pair[3])
+        latest = _fmt_pair(pair)
+    elif skipped:
+        latest = ('(no product pair on disk - every pair is a meta board page: '
+                  + ', '.join(skipped) + ')')
     else:
         latest = '(no preview pair on disk)'
     nxt = next_window_row(repo)
@@ -139,6 +198,8 @@ def derive(repo, state, stamp):
         'next_due': due,
         'stamp': stamp,
         'tick': str(state.get('tick')),
+        'board_skipped': skipped,
+        'newest_is_board': newest_is_board,
     }
 
 
@@ -170,6 +231,8 @@ def payload(repo, state, stamp):
     ceo['current'] = d['current']
     ceo['latest_artifact'] = d['latest']
     ceo['last_artifact'] = d['latest']
+    ceo['board_pages_skipped'] = d['board_skipped']
+    ceo['newest_pair_on_disk_is_board'] = d['newest_is_board']
     ceo['next_milestone'] = d['next']
     ceo['next_milestone_due'] = d['next_due']
     ceo['updated_at'] = stamp
@@ -210,6 +273,9 @@ def write(repo, stamp):
     ok = (back['ceo_face']['current'] == d['current']
           and back['ceo_face']['latest_artifact'] == d['latest']
           and back['ceo_face']['next_milestone'] == d['next']
+          and back['ceo_face']['board_pages_skipped'] == d['board_skipped']
+          and back['ceo_face']['newest_pair_on_disk_is_board']
+          == d['newest_is_board']
           and back['export_ts'] == stamp
           and back['outs'][0] == d['latest']
           and back['self_drive'] == data['self_drive'])
@@ -225,10 +291,21 @@ def check(repo):
     state = json.loads(_read(os.path.join(repo, 'src', 'os', 'state.json')))
     cur = data.get('ceo_face') or {}
     fails = []
-    pair = newest_pair(repo)
-    if pair and cur.get('latest_artifact') != '%s (%dB) + %s (%dB)' % (
-            pair[0], pair[2], pair[1], pair[3]):
-        fails.append('AC-EXPW1 latest_artifact is not the newest pair on disk')
+    pair, skipped, newest_is_board = newest_artifact(repo)
+    if pair and cur.get('latest_artifact') != _fmt_pair(pair):
+        fails.append('AC-EXPW1 latest_artifact is not the newest product pair '
+                     'on disk')
+    named = str(cur.get('latest_artifact') or '')
+    stem = ''
+    m = re.match(r'preview/(.+)\.html', named)
+    if m:
+        stem = m.group(1)
+    if stem in BOARD_PAGES:
+        fails.append('AC-EXPW7 latest_artifact names a meta board page (%s)'
+                     % stem)
+    if newest_is_board and not cur.get('board_pages_skipped'):
+        fails.append('AC-EXPW9 newest pair on disk is a board page but the '
+                     'skipped audit is empty')
     if not str(cur.get('current') or '').startswith('R%s' % state.get('tick')):
         fails.append('AC-EXPW1 current does not start with the live tick R%s'
                      % state.get('tick'))

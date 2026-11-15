@@ -6770,8 +6770,11 @@ SUITES = [
     # R2780 close it read tick 2780 while ceo_face.current still described
     # R2779). export_round.py derives all three lines from live files instead.
     # (AC-EXPW1..AC-EXPW6 pinned in src/os/backlog.md at R2780 BEFORE the code.)
+    # R2805 added AC-EXPW7..AC-EXPW10: a meta board page must never occupy the
+    # CEO latest-artifact slot, the exclusion must be auditable on the face, and
+    # the gate must carry both. The row therefore declares ten.
     ("os-export-round",
-     os.path.join("..", "os", "test_export_round.py"), 6),
+     os.path.join("..", "os", "test_export_round.py"), 10),
     # R2780: the group ledger writes wildcard forms ("no reply cites
     # D-20261114-0x") and a token regex without a right-hand boundary harvests
     # D-20261114-0 out of them, inventing a decision that never existed. Every

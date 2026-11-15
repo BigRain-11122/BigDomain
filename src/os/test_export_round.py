@@ -1,7 +1,8 @@
-"""Battery suite for src/os/export_round.py - criteria AC-EXPW1..AC-EXPW6.
+"""Battery suite for src/os/export_round.py - criteria AC-EXPW1..AC-EXPW10.
 
 AC-EXPW1..AC-EXPW6 were pinned in src/os/backlog.md at R2780 BEFORE this suite or
-the tool existed. The tool is read against a PRIVATE world built by copying the
+the tool existed. AC-EXPW7..AC-EXPW10 were pinned at R2805 BEFORE the board-page
+exclusion existed. The tool is read against a PRIVATE world built by copying the
 few real inputs it needs, so a test run never rewrites the CEO-visible face.
 
 Source discipline: pure ASCII, stdlib only, no clock, no network, no shell.
@@ -15,6 +16,7 @@ import re
 import shutil
 import sys
 import tempfile
+import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TOOL = os.path.join(ROOT, 'src', 'os', 'export_round.py')
@@ -94,6 +96,45 @@ def load_tool():
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
+
+
+def build_pair_world(rows, tick=9100):
+    """A world whose preview/ holds exactly the pairs named in rows.
+
+    rows is a list of (stem, age_seconds): a SMALLER age is a NEWER file, so the
+    ordering of the derived line is controlled by the caller instead of by
+    whatever mtimes the real tree happens to carry.
+    """
+    d = tempfile.mkdtemp(prefix='expw-pair-')
+    write(os.path.join(d, 'src', 'os', 'state.json'),
+          json.dumps({'tick': tick,
+                      'log': ['R%s SOMETHING MEASURED IN THIS WINDOW' % tick]},
+                     ensure_ascii=False))
+    copy(os.path.join(ROOT, 'src', 'os', 'backlog.md'),
+         os.path.join(d, 'src', 'os', 'backlog.md'))
+    prev = os.path.join(d, 'preview')
+    if not os.path.isdir(prev):
+        os.makedirs(prev)
+    now = time.time()
+    for stem, age in rows:
+        for ext, body in (('.html', '<!DOCTYPE html>\n'), ('.json', '{}\n')):
+            p = os.path.join(prev, stem + ext)
+            write(p, body)
+            t = now - age
+            os.utime(p, (t, t))
+    label = 'TICK-ROW-LABEL'
+    try:
+        import check_export_consistency as cec
+        label = cec._load_patterns().get('tick_row_label') or label
+    except Exception:
+        pass
+    face = {'results': [[str(tick), label]], 'outs': ['x'], 'do': 'x',
+            'ceo_face': {'current': 'x', 'latest_artifact': 'x',
+                         'next_milestone': 'x'},
+            'self_drive': {}}
+    write(os.path.join(d, 'docs', 'status-export.json'),
+          json.dumps(face, ensure_ascii=False, indent=2) + '\n')
+    return d
 
 
 def main():
@@ -203,7 +244,106 @@ def main():
         ok('AC-EXPW5 a duplicated tick row refuses with E_EXP and zero write',
            err4.startswith('E_EXP') and read(f4) == before4, err4[:34])
 
-        # ---- AC-EXPW6: hygiene, one battery row, six criteria ----
+        # ---- AC-EXPW7: a meta board page never occupies the product slot ----
+        board = tuple(mod.BOARD_PAGES)
+        ok('AC-EXPW7 the board set is an explicit constant, not a guess',
+           board == ('ceo-blockers', 'face-sweep', 'battery-shard-report',
+                     'index'), 'board=%s' % (board,))
+        wp = build_pair_world([('ceo-blockers', 0), ('face-sweep', 10),
+                               ('battery-shard-report', 20),
+                               ('first-yuan-chain', 100)])
+        worlds.append(wp)
+        sp = json.loads(read(os.path.join(wp, 'src', 'os', 'state.json')))
+        dp = mod.derive(wp, sp, 'TP')
+        ok('AC-EXPW7 the newest pair on disk being a board page does not move '
+           'the line', 'first-yuan-chain.html' in dp['latest']
+           and 'ceo-blockers' not in dp['latest'], dp['latest'][:40])
+        ok('AC-EXPW7 every skipped name is a member of the same constant',
+           [os.path.basename(s).split('.html')[0] for s in dp['board_skipped']]
+           == ['ceo-blockers', 'face-sweep', 'battery-shard-report'],
+           'skipped=%d' % len(dp['board_skipped']))
+        wp2 = build_pair_world([('first-yuan-chain', 0), ('ceo-blockers', 100)])
+        worlds.append(wp2)
+        sp2 = json.loads(read(os.path.join(wp2, 'src', 'os', 'state.json')))
+        dp2 = mod.derive(wp2, sp2, 'TP2')
+        ok('AC-EXPW7 a product pair on top needs no exclusion',
+           'first-yuan-chain.html' in dp2['latest'] and dp2['board_skipped'] == []
+           and dp2['newest_is_board'] is False, dp2['latest'][:40])
+        real_stem = os.path.basename(mod.newest_artifact(ROOT)[0][0])[:-5]
+        ok('AC-EXPW7 the live tree picks a non-board face',
+           real_stem not in board, 'picked=%s' % real_stem)
+
+        # ---- AC-EXPW8: with no product pair the face STATES the fact ----
+        wb = build_pair_world([('ceo-blockers', 0), ('index', 10)])
+        worlds.append(wb)
+        sb = json.loads(read(os.path.join(wb, 'src', 'os', 'state.json')))
+        db = mod.derive(wb, sb, 'TB')
+        ok('AC-EXPW8 an all-board tree yields a stated fact, not a board name',
+           'no product pair on disk' in db['latest']
+           and 'preview/ceo-blockers.html' in db['latest'], db['latest'][:52])
+        ok('AC-EXPW8 the stated fact is not a pair receipt',
+           not re.match(r'^preview/[^ ]+\.html \(\d+B\) \+ ', db['latest']),
+           db['latest'][:40])
+        wb2 = build_pair_world([('ceo-blockers', 0), ('index', 10),
+                                ('first-yuan-chain', 20)])
+        worlds.append(wb2)
+        sb2 = json.loads(read(os.path.join(wb2, 'src', 'os', 'state.json')))
+        db2 = mod.derive(wb2, sb2, 'TB2')
+        ok('AC-EXPW8 adding one product pair replaces the fact with its name',
+           'no product pair on disk' not in db2['latest']
+           and 'first-yuan-chain.html' in db2['latest'], db2['latest'][:40])
+        we = build_pair_world([])
+        worlds.append(we)
+        se = json.loads(read(os.path.join(we, 'src', 'os', 'state.json')))
+        de = mod.derive(we, se, 'TE')
+        ok('AC-EXPW8 an empty preview keeps the existing empty-tree sentence',
+           de['latest'] == '(no preview pair on disk)', de['latest'][:40])
+
+        # ---- AC-EXPW9: what was skipped is published and derived ----
+        data_p, d_p = mod.payload(wp, sp, 'TP')
+        ok('AC-EXPW9 the face carries the skipped audit and the board flag',
+           data_p['ceo_face']['board_pages_skipped'] == d_p['board_skipped']
+           and bool(data_p['ceo_face']['newest_pair_on_disk_is_board']) is True,
+           'skipped=%d' % len(data_p['ceo_face']['board_pages_skipped']))
+        data_p2, d_p2 = mod.payload(wp2, sp2, 'TP2')
+        ok('AC-EXPW9 the audit empties when no board pair is newer',
+           data_p2['ceo_face']['board_pages_skipped'] == []
+           and data_p2['ceo_face']['newest_pair_on_disk_is_board'] is False,
+           'skipped=%d' % len(data_p2['ceo_face']['board_pages_skipped']))
+        ok('AC-EXPW9 the audit names bytes so it cannot be typed in',
+           all(re.search(r'\(\d+B\)$', s) for s in d_p['board_skipped']),
+           d_p['board_skipped'][0][-12:] if d_p['board_skipped'] else 'none')
+
+        # ---- AC-EXPW10: the gate carries AC-EXPW7 and AC-EXPW9 ----
+        wc = build_pair_world([('ceo-blockers', 0), ('first-yuan-chain', 100)])
+        worlds.append(wc)
+        sc = json.loads(read(os.path.join(wc, 'src', 'os', 'state.json')))
+        face_c = os.path.join(wc, 'docs', 'status-export.json')
+        built, _ = mod.payload(wc, sc, 'TC')
+        write(face_c, json.dumps(built, ensure_ascii=False, indent=2) + '\n')
+        ok('AC-EXPW10 a correct private face reads clean',
+           mod.check(wc) == [], 'fails=%s' % mod.check(wc)[:2])
+        tampered = json.loads(read(face_c))
+        tampered['ceo_face']['latest_artifact'] = \
+            'preview/ceo-blockers.html (10B) + preview/ceo-blockers.json (3B)'
+        write(face_c, json.dumps(tampered, ensure_ascii=False, indent=2) + '\n')
+        fails_c = mod.check(wc)
+        ok('AC-EXPW10 naming a board page reddens AC-EXPW7',
+           any('AC-EXPW7' in f for f in fails_c), 'fails=%s' % fails_c[:2])
+        tampered2 = json.loads(read(face_c))
+        tampered2['ceo_face']['latest_artifact'] = \
+            mod._fmt_pair(mod.newest_artifact(wc)[0])
+        tampered2['ceo_face']['board_pages_skipped'] = []
+        write(face_c, json.dumps(tampered2, ensure_ascii=False, indent=2) + '\n')
+        fails_c2 = mod.check(wc)
+        ok('AC-EXPW10 a silent exclusion reddens AC-EXPW9',
+           any('AC-EXPW9' in f for f in fails_c2), 'fails=%s' % fails_c2[:2])
+        restored, _ = mod.payload(wc, sc, 'TC')
+        write(face_c, json.dumps(restored, ensure_ascii=False, indent=2) + '\n')
+        ok('AC-EXPW10 restoring the derived face reads clean again',
+           mod.check(wc) == [], 'fails=%s' % mod.check(wc)[:2])
+
+        # ---- AC-EXPW6: hygiene, one battery row, ten criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')
                if ('import ' + m) in src]
@@ -216,8 +356,8 @@ def main():
             found = re.search(r'test_export_round\.py"\)\s*,\s*(\d+)', window)
             if found:
                 rows.append(found.group(1))
-        ok('AC-EXPW6 exactly one battery row declares six criteria',
-           rows == ['6'], 'rows=%s' % rows)
+        ok('AC-EXPW6 exactly one battery row declares ten criteria',
+           rows == ['10'], 'rows=%s' % rows)
     finally:
         for w in worlds:
             shutil.rmtree(w, ignore_errors=True)
