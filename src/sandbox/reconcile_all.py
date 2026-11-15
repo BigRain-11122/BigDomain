@@ -4612,7 +4612,7 @@ SUITES = [
     # R2601 seed BEFORE the code existed.)
     ("os-suite-matrix-reconcile-evidence-face",
      os.path.join("..", "os", "test_suite_matrix_reconcile_evidence_face.py"),
-     6),
+     7),
     # R2604: the TABLE-SHAPE face of the matrix reconciliation - a separator
     # whose width disagrees with its own header refuses as HEADER-SHAPE
     # naming BOTH widths, a document carrying no matrix table refuses with its

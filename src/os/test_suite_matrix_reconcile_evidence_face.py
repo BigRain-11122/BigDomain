@@ -33,7 +33,7 @@ import suite_matrix_reconcile as SMR  # noqa: E402
 import suite_matrix as SM  # noqa: E402
 import reconcile_all as RA  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 7
 MODULE = os.path.join(BASE, "suite_matrix_reconcile.py")
 DOC = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
 QA_DIR = os.path.join(REPO, "qa")
@@ -205,6 +205,50 @@ def verify():
             "AC-EDMB2 walk stopped at %s considered=%d decoded=%d printed=%s"
             % (os.path.basename(walk_path) if walk_path else "-",
                walk["considered"], walk["decoded"], printed in out2)))
+
+        # AC-EDMB7 (R2810): the default leg resolution asks the runner name
+        # family FIRST and the whole pile second, so a green leg the blind
+        # walk cannot afford is still reached; and the narrowing must never
+        # hide a leg that carries a foreign name, so stage 2 keeps the old
+        # walk unchanged. The SAME private world is measured through both
+        # paths, so this is a measured difference and not a description.
+        family_qa = os.path.join(workdir, "probe-family-qa")
+        os.makedirs(family_qa)
+        family = [("zz-noise-a.log", "STATUS unknown\n"),
+                  ("zz-noise-b.log", "STATUS unknown\n"),
+                  ("reconcile-all-R0001.log", PASS_LEG + "\n")]
+        for offset, (name, body) in enumerate(family):
+            write_text(os.path.join(family_qa, name), body)
+            os.utime(os.path.join(family_qa, name),
+                     (2000 - offset, 2000 - offset))
+        blind_path, _blind_run, blind_walk = SMR.newest_pass_leg_scanned(
+            family_qa, 2)
+        fam_path, fam_walk, fam_source = SMR.resolve_walk_leg(family_qa, 2)
+        unique_qa = os.path.join(workdir, "probe-unique-qa")
+        os.makedirs(unique_qa)
+        write_text(os.path.join(unique_qa, "legacy-name.log"), PASS_LEG + "\n")
+        uni_path, _uni_walk, uni_source = SMR.resolve_walk_leg(unique_qa)
+        empty_qa = os.path.join(workdir, "probe-empty-qa")
+        os.makedirs(empty_qa)
+        non_path, non_walk, non_source = SMR.resolve_walk_leg(empty_qa)
+        results.append(check(
+            blind_path is None and blind_walk.get("bounded") is True
+            and fam_path is not None
+            and os.path.basename(fam_path) == "reconcile-all-R0001.log"
+            and fam_source == "walk-leg"
+            and fam_walk == {"considered": 1, "decoded": 1}
+            and uni_path is not None and uni_source == "walk"
+            and os.path.basename(uni_path) == "legacy-name.log"
+            and non_path is None and non_source == "walk"
+            and non_walk == {"considered": 0, "decoded": 0},
+            "AC-EDMB7 blind=%s(bounded=%s) family=%s(%s considered=%d"
+            " decoded=%d) foreign=%s(%s) miss=%s(%s)"
+            % (os.path.basename(blind_path) if blind_path else "-",
+               blind_walk.get("bounded"),
+               os.path.basename(fam_path) if fam_path else "-", fam_source,
+               fam_walk["considered"], fam_walk["decoded"],
+               os.path.basename(uni_path) if uni_path else "-", uni_source,
+               os.path.basename(non_path) if non_path else "-", non_source)))
 
         # AC-EDMB3: a MISSING document is composed from a --stamp-from source;
         # with no source it still reads NO-DOC and writes nothing. ONE

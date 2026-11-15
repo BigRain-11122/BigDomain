@@ -1,0 +1,63 @@
+R2810 matrix walk: the tool that reconciles docs/sandbox-suite-matrix.md read
+CEILING-STARVED on a tree that owns a green leg, and the cause was measured,
+not guessed.
+
+MEASURED AT OPEN (final tree, tick 2809):
+  python src/os/suite_matrix_reconcile.py --check
+  -> CEILING-STARVED docs/sandbox-suite-matrix.md
+     E_EDMD_CEILING the walk reached its ceiling of 64 before a PASS leg
+     evidence-walk considered=3034 decoded=64 ceiling=64 BOUND-REACHED
+
+INDEPENDENT PROBE (does not ask the tool, does not decode full files):
+  qa/*.log = 3034 files
+  qa/reconcile-all-*.log = 756 files (the runner name family written by
+    src/sandbox/reconcile_all.py)
+  newest leg whose tail carries RUNNER PASS = qa/reconcile-all-R2739.log
+    position inside the family = 12 of 756
+  -> the walk spent its 64-file bound on single-suite evidence and could never
+     reach its own leg. This is a candidate-set defect, not a missing leg.
+
+FIX AT THE BIRTH SITE (src/os/suite_matrix_reconcile.py):
+  LEG_NAME_PREFIX / LEG_NAME_SUFFIX declare the runner name family once.
+  newest_pass_leg_scanned gains an optional `names` restriction; the walk
+  block keeps its published shape exactly ({"considered","decoded"}, plus
+  "ceiling"/"bounded" only when the bound engages).
+  resolve_walk_leg asks the family FIRST and the whole pile SECOND; a family
+  miss falls through to the unchanged pile walk, so a foreign-named leg is
+  still reachable and no leg can be hidden by the predicate.
+
+MEASURED AFTER (same tree):
+  --check  -> ROWS-MISMATCH (doc 692 vs registry 693)
+              evidence-source=walk-leg
+              evidence-walk considered=756 decoded=12 ceiling=64
+  --write  -> WRITTEN 73018 bytes, 693 rows, evidence=qa/reconcile-all-R2739.log
+  --check  -> DOC-CURRENT rc=0
+  registry recounted BY IMPORT: 693 suites / 5181 criteria / 693 unique names
+  / 693 unique paths (criteria +1 from the new AC-EDMB7).
+
+SECOND FINDING, PRE-EXISTING AND MEASURED ON A CLEAN HEAD WORKTREE:
+  AC-EDMB3 was RED at HEAD independently of this window's change - the suite
+  run in a pristine worktree of HEAD read AC-EDMB3 FAIL with the same cause.
+  compose() read the borrowed-stamp origin only from a RECORDED ancestor, so
+  a document that records none (which is what the live document holds)
+  composed WITHOUT the --stamp-from line the criterion requires. compose()
+  now accepts the source it actually borrowed from and that source wins, so
+  the line cannot disappear again. No criterion was relaxed for this.
+
+THE ONE CRITERION THAT HAD TO CHANGE, AND WHY IT IS STILL LOAD-BEARING:
+  AC-EDMC4 in test_suite_matrix_reconcile_table_shape.py asserted
+  evidence_source == "walk" for a walk-only reading. That exact value was
+  only ever true while the real pile could NOT answer; it now truthfully
+  reads "walk-leg". The assertion is now: the word is in ("walk","walk-leg"),
+  is never "explicit", and the CLI echo is compared to that same exact word
+  instead of a substring - so a silent merge of the two evidence sources,
+  which is the whole point of AC-EDMC4, still reddens.
+
+SUITES RE-RUN ON THIS TREE:
+  os-suite-matrix-reconcile-evidence-face           SUITE PASS 7/7
+  os-suite-matrix-reconcile                         SUITE PASS 6/6
+  os-suite-matrix-reconcile-table-shape             SUITE PASS 6/6
+  os-suite-matrix-reconcile-shape                   SUITE PASS 6/6
+  os-suite-matrix-reconcile-fence                   SUITE PASS 6/6
+  os-matrix-stamp-provenance-line                   SUITE PASS 6/6
+  suite-matrix-discovery                            SUITE PASS (16/16 cases)

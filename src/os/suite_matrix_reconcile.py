@@ -186,6 +186,17 @@ CODE_TITLE = "E_EDMD_TITLE"
 # with no PASS leg cannot be decoded end to end. The bound is reported.
 WALK_CEILING = 64
 
+# AC-EDMM1 (R2810): a RUNNER leg is written by src/sandbox/reconcile_all.py
+# under one declared name family, so the walk may look there FIRST. Measured
+# on the R2810 tree: 3034 qa/*.log files, 756 of them legs, and the newest
+# PASS leg sat 12th inside the family but far outside the first 64 of the
+# whole pile - the walk spent its bound on single-suite evidence and reported
+# CEILING-STARVED on a tree that owns a green leg. This is a stage ORDER and
+# not a filter: a family miss still walks the whole pile unchanged
+# (AC-EDMM3 keeps a foreign-named leg findable).
+LEG_NAME_PREFIX = "reconcile-all-"
+LEG_NAME_SUFFIX = ".log"
+
 # AC-EDMG2/AC-EDMG3: the fence law used to toggle on any line starting with
 # three backticks, so a mark never closed quoted the rest of the document and
 # a LONGER mark carrying a shorter one toggled twice. Both are refused by name.
@@ -412,7 +423,7 @@ def registry_counts():
     return len(RA.SUITES), sum(c for _, _, c in RA.SUITES)
 
 
-def newest_pass_leg_scanned(qa_dir=None, ceiling=None):
+def newest_pass_leg_scanned(qa_dir=None, ceiling=None, names=None):
     """Newest qa/*.log whose RUNNER line reads PASS, asked of the shipped
     parse_evidence. Returns (path, run, walk) where walk names the cost that
     was paid: how many candidate files were listed and how many were actually
@@ -421,13 +432,20 @@ def newest_pass_leg_scanned(qa_dir=None, ceiling=None):
 
     AC-EDMC3: `ceiling` bounds how many candidates may be decoded at all. A
     pile with no PASS leg stops at the ceiling, reports bounded=True and
-    returns None rather than decoding every file it can list."""
+    returns None rather than decoding every file it can list.
+
+    AC-EDMM2: `names` narrows the candidate set to these basenames, and the
+    walk block keeps its exact published shape - {"considered", "decoded"}
+    when the bound does not engage, plus "ceiling"/"bounded" when it does -
+    so narrowing the set changes WHICH cost is reported, never the fields."""
     qa_dir = qa_dir or QA_DIR
     ceiling = WALK_CEILING if ceiling is None else int(ceiling)
     if not os.path.isdir(qa_dir):
         return None, None, {"considered": 0, "decoded": 0}
+    wanted = None if names is None else set(names)
     paths = [os.path.join(qa_dir, name) for name in os.listdir(qa_dir)
-             if name.endswith(".log")]
+             if name.endswith(".log")
+             and (wanted is None or name in wanted)]
     paths.sort(key=lambda p: (-os.path.getmtime(p), os.path.basename(p)))
     decoded = 0
     for path in paths:
@@ -445,6 +463,33 @@ def newest_pass_leg_scanned(qa_dir=None, ceiling=None):
         if run and run["verdict"] == "PASS":
             return path, run, {"considered": len(paths), "decoded": decoded}
     return None, None, {"considered": len(paths), "decoded": decoded}
+
+
+def leg_candidate_names(qa_dir=None):
+    """AC-EDMM1: the basenames the shipped runner would have written. Names
+    only - a file is never trusted by its name, only reached first by it."""
+    qa_dir = qa_dir or QA_DIR
+    if not os.path.isdir(qa_dir):
+        return []
+    return sorted(name for name in os.listdir(qa_dir)
+                  if name.startswith(LEG_NAME_PREFIX)
+                  and name.endswith(LEG_NAME_SUFFIX))
+
+
+def resolve_walk_leg(qa_dir=None, ceiling=None):
+    """AC-EDMM1: the newest PASS leg, asked of the runner name family FIRST
+    and of the whole pile second. Returns (path, walk, source) where source
+    reads "walk-leg" when the family answered and "walk" when the pile did, so
+    a caller can tell which candidate set paid the cost. A miss in BOTH returns
+    the pile walk untouched, which keeps _walk_miss wording and the
+    CEILING-STARVED / RED-LEG split exactly as AC-EDME4 pinned them."""
+    names = leg_candidate_names(qa_dir)
+    if names:
+        path, _run, walk = newest_pass_leg_scanned(qa_dir, ceiling, names)
+        if path is not None:
+            return path, walk, "walk-leg"
+    path, _run, walk = newest_pass_leg_scanned(qa_dir, ceiling)
+    return path, walk, "walk"
 
 
 def newest_pass_leg(qa_dir=None):
@@ -585,23 +630,30 @@ def shipped_check(doc_path, evidence_path):
     return code, buffer.getvalue()
 
 
-def compose(doc_path, evidence_path, source_text=None):
+def compose(doc_path, evidence_path, source_text=None, origin=None):
     """Compose the document from the CURRENT registry, keeping its stamp and
     recorded provenance so only content moves. Returns (text, status, run).
 
     `source_text` is the text the stamp and the recorded borrow are read from;
     it defaults to the document being written and is the ONLY way a MISSING
     document can be composed (AC-EDMB3), because a document that does not
-    exist cannot lend its own stamp."""
+    exist cannot lend its own stamp.
+
+    `origin` is the source actually lent from, and it WINS over a recorded
+    ancestor when both exist (R2810): AC-EDMB3 requires the composed document
+    to name the file its stamp was borrowed from, and reading only the
+    ancestor made that line disappear the moment the live document carried no
+    borrow of its own - which is what the tree holds today."""
     patterns = SM.load_patterns()
     current = read_text(doc_path) if source_text is None else source_text
     stamp = SM.doc_stamp(current, patterns)
     if stamp is None:
         raise ValueError("E_EDM_STAMP")
     status, run = SM.parse_evidence(evidence_path)
+    borrowed = (origin if origin is not None
+                else MSPL.recorded_source(current, patterns["labels"]))
     text = SM.render(patterns, evidence_path, status, run, stamp,
-                     stamp_from=MSPL.recorded_source(current,
-                                                     patterns["labels"]))
+                     stamp_from=borrowed)
     return text, status, run
 
 
@@ -731,8 +783,7 @@ def report(doc_path=None, evidence_path=None, qa_dir=None, ceiling=None):
                     "ceiling": int(ceiling), "evidence_source": "walk",
                     "reason": "a ceiling of %d cannot read one candidate"
                               % int(ceiling)}
-        source = "walk"
-        evidence_path, _, walk = newest_pass_leg_scanned(qa_dir, ceiling)
+        evidence_path, walk, source = resolve_walk_leg(qa_dir, ceiling)
         if evidence_path is None:
             return _walk_miss(doc_path, source, walk)
     else:
@@ -799,12 +850,12 @@ def write(doc_path=None, evidence_path=None, qa_dir=None, stamp_from=None,
         leg = (evidence_path if os.path.isabs(evidence_path)
                else os.path.join(REPO, evidence_path))
     else:
-        leg, run, walk = newest_pass_leg_scanned(qa_dir, ceiling)
+        leg, walk, source = resolve_walk_leg(qa_dir, ceiling)
         if leg is None:
-            return _walk_miss(doc_path, "walk", walk)
+            return _walk_miss(doc_path, source, walk)
         result["evidence"] = rel(leg)
         result["walk"] = walk
-        result["evidence_source"] = "walk"
+        result["evidence_source"] = source
     previous = read_text(doc_path)
     text, _, _ = compose(doc_path, leg)
     with open(doc_path, "w", encoding="utf-8", newline="\n") as handle:
@@ -841,9 +892,9 @@ def _compose_missing(doc_path, evidence_path, qa_dir, stamp_from,
                     "ceiling": int(ceiling), "evidence_source": "walk",
                     "reason": "a ceiling of %d cannot read one candidate"
                               % int(ceiling)}
-        evidence_path, _, walk = newest_pass_leg_scanned(qa_dir, ceiling)
+        evidence_path, walk, walk_source = resolve_walk_leg(qa_dir, ceiling)
         if evidence_path is None:
-            return _walk_miss(doc_path, "walk", walk)
+            return _walk_miss(doc_path, walk_source, walk)
     else:
         evidence_path = (evidence_path if os.path.isabs(evidence_path)
                          else os.path.join(REPO, evidence_path))
@@ -858,7 +909,8 @@ def _compose_missing(doc_path, evidence_path, qa_dir, stamp_from,
                 "written": False, "stamp_from": rel(stamp_from)}
     try:
         text, _, _ = compose(doc_path, evidence_path,
-                             source_text=read_text(stamp_from))
+                             source_text=read_text(stamp_from),
+                             origin=rel(stamp_from))
     except ValueError:
         return {"verdict": WORD_REFUSED, "doc": rel(doc_path), "exit": 3,
                 "written": False, "stamp_from": rel(stamp_from)}

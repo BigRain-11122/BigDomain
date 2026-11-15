@@ -254,12 +254,20 @@ def criterion_edmc4(work, text, leg):
                 "the unused qa-dir is named rather than ignored (%r/%r)"
                 % (both.get("qa_dir_given"), both.get("qa_dir_used")))
     walked = SMR.report(doc, None, QA_DIR)
-    ok &= check(walked.get("evidence_source") == "walk",
-                "a walk-only reading names itself walk (%r)"
-                % (walked.get("evidence_source"),))
+    # R2810: the walk now answers in two stages, so a walk-derived reading
+    # names the STAGE that paid the cost - "walk-leg" when the runner name
+    # family answered, "walk" when the whole pile did. What this criterion
+    # protects is unchanged: a walk reading must never present itself as an
+    # explicit one. The CLI echo is now compared to the SAME word instead of
+    # a substring, so the two stages cannot merge silently either.
+    walked_word = walked.get("evidence_source")
+    ok &= check(walked_word in ("walk", "walk-leg")
+                and walked_word != "explicit",
+                "a walk-only reading names its stage, never explicit (%r)"
+                % (walked_word,))
     code, word, out = cli_first_word(["--doc", doc, "--qa-dir", QA_DIR])
-    ok &= check("evidence-source=walk" in out,
-                "the CLI prints the source it used")
+    ok &= check("evidence-source=%s" % walked_word in out,
+                "the CLI prints the source it used (%r)" % (walked_word,))
     code2, word2, out2 = cli_first_word(["--doc", doc, "--evidence", leg,
                                          "--qa-dir", QA_DIR])
     ok &= check("qa-dir given, not used" in out2,

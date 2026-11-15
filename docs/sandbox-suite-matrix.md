@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 692 | 5172 | 675/675 | R2739 |
+| 693 | 5181 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -491,7 +491,7 @@
 | 452 | os-debt-append | ../os/test_debt_append.py | 6 | green | 0.2 |
 | 453 | os-debt-note-append | ../os/test_debt_note_append.py | 6 | green | 0.2 |
 | 454 | os-suite-matrix-reconcile | ../os/test_suite_matrix_reconcile.py | 6 | green | 1.0 |
-| 455 | os-suite-matrix-reconcile-evidence-face | ../os/test_suite_matrix_reconcile_evidence_face.py | 6 | green | 0.7 |
+| 455 | os-suite-matrix-reconcile-evidence-face | ../os/test_suite_matrix_reconcile_evidence_face.py | 7 | green | 0.7 |
 | 456 | os-suite-matrix-reconcile-table-shape | ../os/test_suite_matrix_reconcile_table_shape.py | 6 | green | 32.3 |
 | 457 | os-suite-matrix-reconcile-shape | ../os/test_suite_matrix_reconcile_shape.py | 6 | green | 0.6 |
 | 458 | os-export-composed-landed-face | ../os/test_export_composed_landed_face.py | 6 | green | 0.3 |
@@ -716,20 +716,21 @@
 | 677 | os-ship-checklist | ../os/test_ship_checklist.py | 8 | no-evidence | - |
 | 678 | os-export-round | ../os/test_export_round.py | 10 | no-evidence | - |
 | 679 | os-payment-gate-report | ../os/test_payment_gate_report.py | 9 | no-evidence | - |
-| 680 | os-qa-log | ../os/test_qa_log.py | 9 | no-evidence | - |
-| 681 | os-scan-five-still | ../os/test_scan_five_still.py | 6 | no-evidence | - |
-| 682 | os-filing-checklist | ../os/test_filing_checklist.py | 8 | no-evidence | - |
-| 683 | os-membership-face | ../os/test_membership_face.py | 6 | no-evidence | - |
-| 684 | os-money-path-demo | ../os/test_money_path_demo.py | 6 | no-evidence | - |
-| 685 | os-first-yuan-path | ../os/test_first_yuan_path.py | 7 | no-evidence | - |
-| 686 | os-lobby-session-trace | ../os/test_lobby_session_trace.py | 9 | no-evidence | - |
-| 687 | os-first-yuan-chain | ../os/test_first_yuan_chain.py | 12 | no-evidence | - |
-| 688 | os-lobby-protocol-map | ../os/test_lobby_protocol_map.py | 6 | no-evidence | - |
-| 689 | os-ledger-reconcile-face | ../os/test_ledger_reconcile_face.py | 8 | no-evidence | - |
-| 690 | os-deliverable-index | ../os/test_deliverable_index.py | 16 | no-evidence | - |
-| 691 | os-battery-shard | ../os/test_battery_shard.py | 8 | no-evidence | - |
-| 692 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
-|  | 合计 |  | 5172 | green 675 / FAIL 0 / no-evidence 17 |  |
+| 680 | os-qa-log | ../os/test_qa_log.py | 10 | no-evidence | - |
+| 681 | os-census-nul-class | ../os/test_census_nul_class.py | 7 | no-evidence | - |
+| 682 | os-scan-five-still | ../os/test_scan_five_still.py | 6 | no-evidence | - |
+| 683 | os-filing-checklist | ../os/test_filing_checklist.py | 8 | no-evidence | - |
+| 684 | os-membership-face | ../os/test_membership_face.py | 6 | no-evidence | - |
+| 685 | os-money-path-demo | ../os/test_money_path_demo.py | 6 | no-evidence | - |
+| 686 | os-first-yuan-path | ../os/test_first_yuan_path.py | 7 | no-evidence | - |
+| 687 | os-lobby-session-trace | ../os/test_lobby_session_trace.py | 9 | no-evidence | - |
+| 688 | os-first-yuan-chain | ../os/test_first_yuan_chain.py | 12 | no-evidence | - |
+| 689 | os-lobby-protocol-map | ../os/test_lobby_protocol_map.py | 6 | no-evidence | - |
+| 690 | os-ledger-reconcile-face | ../os/test_ledger_reconcile_face.py | 8 | no-evidence | - |
+| 691 | os-deliverable-index | ../os/test_deliverable_index.py | 16 | no-evidence | - |
+| 692 | os-battery-shard | ../os/test_battery_shard.py | 8 | no-evidence | - |
+| 693 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
+|  | 合计 |  | 5181 | green 675 / FAIL 0 / no-evidence 18 |  |
 
 ## 证据出处
 
