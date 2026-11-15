@@ -126,7 +126,6 @@ def ac_edsw5():
     source = read(MODULE)
     terms = {
         "tick_row": 'and str(r[0]) == tick for r in back["results"]',
-        "outs": 'back["outs"][0] == latest',
         "ceo_latest": 'back["ceo_face"]["latest_artifact"] == latest',
         "ceo_current": 'back["ceo_face"]["current"] == current',
         "ceo_next": 'back["ceo_face"]["next_milestone"] == milestone',
@@ -135,10 +134,22 @@ def ac_edsw5():
         "fresh": "fresh = self_drive()",
         "gate": 'proof.get("gate") == "CURRENT"',
     }
+    # R2762: the outs term keeps its INTENT - the outs face must be proved
+    # against what this run actually wrote - but not its R2595 literal. R2757
+    # rewrote that birth site to back["outs"] == written_outs because the old
+    # head-row form, back["outs"][0] == latest, is exactly what R2751 D3
+    # forbids once a none-line sits above a real artifact, so every legitimate
+    # wait round refused forever. Either literal satisfies the term; a total
+    # drop of the term still reddens this criterion.
+    outs_terms = ('back["outs"] == written_outs',
+                  'back["outs"][0] == latest')
+    outs_form = [text for text in outs_terms if text in source]
+    if not outs_form:
+        terms["outs"] = outs_terms[0]
     missing = sorted(name for name, text in terms.items() if text not in source)
     check(not missing,
           "AC-EDSW5 the eight R2595 terms plus the fresh read all survive "
-          "(missing=%r)" % (missing,))
+          "(missing=%r outs_form=%r)" % (missing, outs_form))
 
 
 def ac_edsw6():
