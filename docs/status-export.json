@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T20:44:38+08:00",
-  "do": "R2798 工程：给「决定一族套件是否全绿」的分片工具补上电池行——src/os/test_battery_shard.py 承 AC-BSGB1..8（先钉 backlog 后写码），在私有临时注册表上驱动真实函数，仓库注册表/真账本/已发货证据全程零写入；SUITE 8/8 首跑即绿，按电池调用方式从 src/sandbox 再跑仍 8/8；注册表按 import 实测 688 套件 / 5126 判据（原 687/5118），矩阵重生成 72595B/688 行 DOC-CURRENT，入口页 35359B 且 14/14 PASS；三处负控各只翻红它自己那条判据（AC-BSGB8/6/5）→ CONFIRMED 3/3",
+  "export_ts": "2026-11-15T21:10:44+08:00",
+  "do": "R2799 - PRODUCT: the CEO can now see a family-level green/red without paying for the whole battery. tools/battery_shard_report.py (AC-BSR1..AC-BSR6 pinned in src/os/backlog.md BEFORE the file existed) runs the SHIPPED tools/battery_shard.py over the three families touched this week (lobby / os-export / os-q...",
   "ceo_face": {
-    "current": "R2798 工程：给「决定一族套件是否全绿」的分片工具补上电池行——src/os/test_battery_shard.py 承 AC-BSGB1..8（先钉 backlog 后写码），在私有临时注册表上驱动真实函数，仓库注册表/真账本/已发货证据全程零写入；SUITE 8/8 首跑即绿，按电池调用方式从 src/sandbox 再跑仍 8/8；注册表按 import 实测 688 套件 / 5126 判据（原 687/5118），矩阵重生成 72595B/688 行 DOC-CURRENT，入口页 35359B 且 14/14 PASS；三处负控各只翻红它自己那条判据（AC-BSGB8/6/5）→ CONFIRMED 3/3",
-    "latest_artifact": "src/os/test_battery_shard.py（AC-BSGB1..8 守护套件·8/8） + qa/battery-shard-suite-R2798.log（1000B·19 行·sha256 d1c4ee2051a932db·负控 3/3 CONFIRMED）",
-    "last_artifact": "src/os/test_battery_shard.py（AC-BSGB1..8 守护套件·8/8） + qa/battery-shard-suite-R2798.log（1000B·19 行·sha256 d1c4ee2051a932db·负控 3/3 CONFIRMED）",
-    "next_milestone": "48 小时内：用 tools/battery_shard.py 把本周动过却未验的族（lobby / os-export / os-queue）各跑一条分片并落证据，让「全量电池欠账」第一次有族级绿/红行；并把 state.json 在确认 log 窗口安全后收回 78500B 水线下",
-    "next_milestone_due": "2026-11-17T20:44:38+08:00",
-    "updated_at": "2026-11-15T20:44:38+08:00",
+    "current": "R2799 - PRODUCT: the CEO can now see a family-level green/red without paying for the whole battery. tools/battery_shard_report.py (AC-BSR1..AC-BSR6 pinned in src/os/backlog.md BEFORE the file existed) runs the SHIPPED tools/battery_shard.py over the three families touched this week (lobby / os-export / os-q...",
+    "latest_artifact": "preview/battery-shard-report.html (11502B) + preview/battery-shard-report.json (10802B)",
+    "last_artifact": "preview/battery-shard-report.html (11502B) + preview/battery-shard-report.json (10802B)",
+    "next_milestone": "全量电池仍欠（688 套件 / 5126 判据），且本窗已证明族级面能红——下一窗把 `--match` 扩到本周其余动过的族（`os-ledger` / `os-battery` / `os-deliverable`），让页面按族并列而非只三族。",
+    "next_milestone_due": "2026-11-17T21:10:44+08:00",
+    "updated_at": "2026-11-15T21:10:44+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -38,6 +38,8 @@
     }
   ],
   "outs": [
+    "preview/battery-shard-report.html (11502B) + preview/battery-shard-report.json (10802B)",
+    "preview/battery-shard-report.html (11497B) + preview/battery-shard-report.json (10834B)",
     "src/os/test_battery_shard.py（AC-BSGB1..8 守护套件·8/8） + qa/battery-shard-suite-R2798.log（1000B·19 行·sha256 d1c4ee2051a932db·负控 3/3 CONFIRMED）",
     "tools/battery_shard.py（分片跑批器）+ qa/battery-shard-R2797.log（977B·10 行·sha256 1de46b10e4151e79）+ qa/battery-shard-negctl-R2797.log（827B·红色反控·sha256 e74b66e57d34ff0f）",
     "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（72516B·687 行）",
@@ -761,7 +763,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2798",
+      "2799",
       "OSLoop 执行 tick"
     ],
     [
@@ -784,10 +786,10 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 121,
+    "log_lines_in_window": 127,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 24,
+    "substantive_non_idle_mention_lines": 29,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,

@@ -1,0 +1,8 @@
+BSR family 大厅实时层 rc=0 selected=7 green=7 criteria=118 130.5s
+BSR family OS 导出面 rc=0 selected=20 green=20 criteria=120 13.9s
+BSR family OS 队列面 rc=0 selected=16 green=16 criteria=98 22.7s
+BSR landed json=10802B html=11502B verdict=PASS families=3 selected=43 criteria=336 uncovered=645
+BSR-CHECK name=battery-shard-report checks=6 bytes_html=11502 bytes_json=10802 verdict=PASS read_only=True
+BSR-CHECK VERDICT PASS
+BSR-CONTROL tampered=大厅实时层 field=selected_criteria delta=+7 named=E_REGISTRY_DRIFT:大厅实时层,E_TOTALS_CRITERIA
+BSR-CONTROL VERDICT CONFIRMED

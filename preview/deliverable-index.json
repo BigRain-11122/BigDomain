@@ -2,6 +2,12 @@
   "note": "Editorial face list for the CEO walkthrough block in preview/index.html. Sizes, titles, verdicts and timestamps are DERIVED from disk by tools/deliverable_index.py at render time and are never stored here.",
   "faces": [
     {
+      "id": "shard-battery",
+      "html": "battery-shard-report.html",
+      "claim": "本周动过的三族（大厅/导出/队列）实跑分片：43 套件 / 336 判据的族级绿红与逐套件行，全部解析自分片器真实 stdout",
+      "blocker": "分片不是全量电池：645 套件未覆盖，全量一趟仍需单窗监督"
+    },
+    {
       "id": "platform-live",
       "html": "platform-live-report.html",
       "claim": "六道沙箱门由一条命令拉起，逐门实测 HTTP 200，跑完即拆（4/4 子进程归零 · 8/8 端口拒连）",
