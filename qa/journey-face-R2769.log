@@ -1,0 +1,9 @@
+PASS NEG1-tampered-carrier rc=2 FAIL AC-JNY2 carriers=6 mismatch=['JV-2:PASS!=FAIL', 'JV-3:PASS!=FAIL']
+PASS NEG1-restored rc=0 VERDICT PASS 8/8
+PASS NEG2-stale-size rc=2 FAIL AC-JNY7 recorded={'html': 11115, 'json': 6835} disk={'html': 11116, 'json': 6835}
+PASS NEG3-external-literal rc=2 FAIL AC-JNY6 external_literals=['https://']
+PASS NEG4-no-disclaimer rc=2 FAIL AC-JNY4 shipped_len=115 doc_match=True page_match=False
+PASS NEG5-check-does-not-write before=(11115, 1794708774.1525476) after=(11115, 1794708774.1525476)
+PASS NEG6-spec-edit rc=2 FAIL AC-JNY1 landed=8 fresh=8 match=False
+PASS RESTORED-GREEN rc=0 VERDICT PASS 8/8
+NEGCTL VERDICT PASS 8/8
