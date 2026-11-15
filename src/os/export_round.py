@@ -48,7 +48,30 @@ ROUND_RE = re.compile(r'^(?:\d{4}-\d{2}-\d{2} )?R(\d{4})')
 NEXT_ROW_RE = re.compile(r'^- \[ \] \[R\d{4}\] next window')
 LEDGER_RE = re.compile(r'^R\d{4} tokens:')
 FOLD_RE = re.compile(r'fold of log items')
+FOLD_RANGE_RE = re.compile(r'log items \d+\.\.\d+')
+ARCHIVE_RE = re.compile(r'state-log-archive')
+ROUND_HEAD_RE = re.compile(r'^(?:\d{4}-\d{2}-\d{2} )?R\d{4} [A-Z][A-Z0-9 /_-]{2,}')
 SHORT = 300
+
+
+def is_fold_summary(line):
+    """True for a fold summary line, whatever prose the operator wrote.
+
+    The knife writes free text, so matching one phrase missed the R2813 second
+    knife and its summary became the CEO current line. Detector, then a
+    narrowing the first draft needed and is recorded for: a summary carries the
+    structural pair (the folded item range AND the archive the window went to),
+    BUT this register also writes round narratives ABOUT folds, and those carry
+    the same pair. A line that opens with the round-label shape this log uses
+    (R#### followed by an uppercase word such as ENGINEERING: or PRODUCT) is a
+    narrative no matter what it discusses; a summary never opens that way.
+    """
+    text = line or ''
+    if FOLD_RE.search(text):
+        return True
+    if not (FOLD_RANGE_RE.search(text) and ARCHIVE_RE.search(text)):
+        return False
+    return not ROUND_HEAD_RE.match(text)
 
 # Meta pages report on the tree, not on the business: open-work censuses, link
 # sweeps, test shard verdicts and the delivered-faces index. They are useful to
@@ -76,7 +99,7 @@ def last_round_line(state):
     rounds = []
     for line in log:
         m = ROUND_RE.match(line or '')
-        if m and not LEDGER_RE.match(line) and not FOLD_RE.search(line):
+        if m and not LEDGER_RE.match(line) and not is_fold_summary(line):
             rounds.append(m.group(1))
     if not rounds:
         return log[-1] if log else ''
@@ -84,7 +107,7 @@ def last_round_line(state):
     for line in log:
         m = ROUND_RE.match(line or '')
         if m and m.group(1) == last and not LEDGER_RE.match(line) \
-                and not FOLD_RE.search(line):
+                and not is_fold_summary(line):
             return line
     return log[-1]
 

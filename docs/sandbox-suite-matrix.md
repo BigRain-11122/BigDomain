@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 694 | 5195 | 675/675 | R2739 |
+| 694 | 5196 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -714,7 +714,7 @@
 | 675 | os-closeout-export-parity-wire-binding-consumer | ../os/test_closeout_export_parity_wire_binding_consumer.py | 6 | green | 14.6 |
 | 676 | os-export-parity-difference-order-field | ../os/test_export_parity_difference_order_field.py | 6 | no-evidence | - |
 | 677 | os-ship-checklist | ../os/test_ship_checklist.py | 8 | no-evidence | - |
-| 678 | os-export-round | ../os/test_export_round.py | 10 | no-evidence | - |
+| 678 | os-export-round | ../os/test_export_round.py | 11 | no-evidence | - |
 | 679 | os-payment-gate-report | ../os/test_payment_gate_report.py | 9 | no-evidence | - |
 | 680 | os-qa-log | ../os/test_qa_log.py | 10 | no-evidence | - |
 | 681 | os-census-nul-class | ../os/test_census_nul_class.py | 7 | no-evidence | - |
@@ -731,7 +731,7 @@
 | 692 | os-deliverable-index | ../os/test_deliverable_index.py | 16 | no-evidence | - |
 | 693 | os-battery-shard | ../os/test_battery_shard.py | 8 | no-evidence | - |
 | 694 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
-|  | 合计 |  | 5195 | green 675 / FAIL 0 / no-evidence 19 |  |
+|  | 合计 |  | 5196 | green 675 / FAIL 0 / no-evidence 19 |  |
 
 ## 证据出处
 

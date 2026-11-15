@@ -1,4 +1,4 @@
-"""Battery suite for src/os/export_round.py - criteria AC-EXPW1..AC-EXPW10.
+﻿"""Battery suite for src/os/export_round.py - criteria AC-EXPW1..AC-EXPW10.
 
 AC-EXPW1..AC-EXPW6 were pinned in src/os/backlog.md at R2780 BEFORE this suite or
 the tool existed. AC-EXPW7..AC-EXPW10 were pinned at R2805 BEFORE the board-page
@@ -343,7 +343,39 @@ def main():
         ok('AC-EXPW10 restoring the derived face reads clean again',
            mod.check(wc) == [], 'fails=%s' % mod.check(wc)[:2])
 
-        # ---- AC-EXPW6: hygiene, one battery row, ten criteria ----
+        # ---- AC-EXPW11: a fold summary is never the current narrative ----
+        w11 = build_world(9011)
+        worlds.append(w11)
+        s11 = json.loads(read(os.path.join(w11, 'src', 'os', 'state.json')))
+        headline = 'R9011 ENGINEERING: the round did one measurable thing'
+        summary_line = ('2026-11-16 R9011 knife, prose of the operator choice: '
+                        'log items 4..9 verbatim in '
+                        'logs/state-log-archive-9999-01.md')
+        about_fold = ('R9011 FOLD ACCOUNTING: this round folded log items 4..9 '
+                      'into logs/state-log-archive-9999-01.md and says so in '
+                      'its own headline')
+        range_only = ('R9011 NOTES: the window covered log items 12..30 of the '
+                      'old file')
+        s11['log'] = [summary_line, headline, about_fold, range_only]
+        expect = 'R9011 - ENGINEERING: the round did one measurable thing'
+        cur = mod.derive(w11, s11, 'T11')['current']
+        ok('AC-EXPW11 a summary line above the headline never becomes current',
+           cur == expect, cur[:44])
+        s11['log'] = [headline, about_fold, range_only]
+        cur2 = mod.derive(w11, s11, 'T11')['current']
+        ok('AC-EXPW11 removing the summary leaves current unchanged',
+           cur2 == expect, cur2[:44])
+        ok('AC-EXPW11 a narrative about a fold stays a narrative, a bare range '
+           'too, and the summary shape is excluded',
+           mod.is_fold_summary(about_fold) is False
+           and mod.is_fold_summary(range_only) is False
+           and mod.is_fold_summary(summary_line) is True,
+           'about=%r range=%r summary=%r'
+           % (mod.is_fold_summary(about_fold),
+              mod.is_fold_summary(range_only),
+              mod.is_fold_summary(summary_line)))
+
+        # ---- AC-EXPW6: hygiene, one battery row, eleven criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')
                if ('import ' + m) in src]
@@ -356,8 +388,8 @@ def main():
             found = re.search(r'test_export_round\.py"\)\s*,\s*(\d+)', window)
             if found:
                 rows.append(found.group(1))
-        ok('AC-EXPW6 exactly one battery row declares ten criteria',
-           rows == ['10'], 'rows=%s' % rows)
+        ok('AC-EXPW6 exactly one battery row declares eleven criteria',
+           rows == ['11'], 'rows=%s' % rows)
     finally:
         for w in worlds:
             shutil.rmtree(w, ignore_errors=True)
