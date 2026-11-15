@@ -43,9 +43,9 @@ REPO = os.path.dirname(SRC)
 SANDBOX = os.path.join(SRC, "sandbox")
 
 DEFAULT_DOC = "docs/sandbox-suite-matrix.md"
-DEFAULT_EVIDENCE = "qa/reconcile-all.log"
 
 E_MSC_BAD_ARGS = "E_MSC_BAD_ARGS"
+E_MSC_NO_EVIDENCE = "E_MSC_NO_EVIDENCE"
 E_MSC_NO_DOC = "E_MSC_NO_DOC"
 E_MSC_NO_STAMP = "E_MSC_NO_STAMP"
 E_MSC_NO_TOOL = "E_MSC_NO_TOOL"
@@ -55,6 +55,7 @@ PASS = "PASS"
 FAIL = "FAIL"
 MISSING_DOC = "MISSING-DOC"
 NO_STAMP = "NO-STAMP"
+NO_EVIDENCE = "NO-EVIDENCE"
 NO_TOOL = "NO-TOOL"
 REGEN_FAILED = "REGEN-FAILED"
 
@@ -79,6 +80,21 @@ def run(cmd, root):
     return (proc.returncode,
             proc.stdout.decode("utf-8", "replace")
             + proc.stderr.decode("utf-8", "replace"))
+
+
+def recorded_evidence_face(doc_path):
+    """The evidence face the doc states it was rendered from, or None.
+
+    Read through the shipped law instead of a pinned round filename: the doc
+    already names its own source, so naming a round here would drift the
+    moment the next leg renders the document (R2421 class, one layer up).
+    """
+    if not os.path.isfile(doc_path):
+        return None
+    with open(doc_path, "r", encoding="utf-8", errors="replace") as handle:
+        text = handle.read()
+    face = law().doc_evidence_face(text, law().load_patterns())
+    return face or None
 
 
 def first_line(text):
@@ -132,9 +148,31 @@ def render(root, doc_path, evidence_path, call=None):
         shutil.rmtree(work, ignore_errors=True)
 
 
+def _strip_borrow(data):
+    """Drop stamp-borrow provenance rows from both sides of the compare.
+
+    A render asked to borrow a stamp prints ONE extra header row naming the
+    source (wording owned by matrix_stamp_provenance_line). That row exists
+    because this comparison asked for it, not because the document says
+    anything else, so it is removed from both sides before the byte compare -
+    otherwise a doc produced by a plain --write could never match a
+    stamp-aligned render and the check would read red forever.
+    """
+    if BASE not in sys.path:
+        sys.path.insert(0, BASE)
+    import matrix_stamp_provenance_line as MSPL
+    flag = MSPL.FLAG.encode("ascii")
+    return b"\n".join(line for line in data.split(b"\n") if flag not in line)
+
+
 def compare(root, doc_path, evidence_path, call=None):
     """One row: is the shipped doc content-identical after the stamp aligns?"""
     verdict, code, stamp, detail = stamp_of(doc_path)
+    if evidence_path is None:
+        return {"doc": doc_path, "stamp": stamp if verdict == PASS else None,
+                "verdict": NO_EVIDENCE, "code": E_MSC_NO_EVIDENCE,
+                "on_disk_bytes": None, "fresh_bytes": None,
+                "detail": "doc states no evidence face"}
     if verdict != PASS:
         return {"doc": doc_path, "stamp": None, "verdict": verdict,
                 "code": code, "on_disk_bytes": None, "fresh_bytes": None,
@@ -152,10 +190,10 @@ def compare(root, doc_path, evidence_path, call=None):
                 "fresh_bytes": len(fresh), "detail": "doc unreadable"}
     row = {"doc": doc_path, "stamp": stamp, "on_disk_bytes": len(disk),
            "fresh_bytes": len(fresh)}
-    if disk == fresh:
+    if _strip_borrow(disk) == _strip_borrow(fresh):
         row.update({"verdict": PASS, "code": 0,
                     "detail": "matrix byte-identical %dB stamp-aligned"
-                              % len(fresh)})
+                              " (borrow row excluded)" % len(fresh)})
         return row
     row.update({"verdict": FAIL, "code": 2,
                 "detail": "matrix content mismatch on-disk=%dB"
@@ -177,7 +215,7 @@ def render_row(row):
 
 def parse(argv):
     """The flag table this tree keeps once; bad flags refuse BAD-ARGS."""
-    opts = {"doc": DEFAULT_DOC, "evidence": DEFAULT_EVIDENCE,
+    opts = {"doc": DEFAULT_DOC, "evidence": None,
             "root": REPO, "check": False, "json": False}
     index = 0
     while index < len(argv):
@@ -207,7 +245,12 @@ def main(argv):
         return 5
     root = os.path.abspath(opts["root"])
     doc = os.path.join(root, opts["doc"].replace("/", os.sep))
-    evidence = os.path.join(root, opts["evidence"].replace("/", os.sep))
+    if opts["evidence"] is None:
+        face = recorded_evidence_face(doc)
+        evidence = (os.path.join(root, face.replace("/", os.sep))
+                    if face else None)
+    else:
+        evidence = os.path.join(root, opts["evidence"].replace("/", os.sep))
     row = compare(root, doc, evidence)
     payload = {"doc": opts["doc"], "stamp": row["stamp"],
                "verdict": row["verdict"], "code": row["code"],
@@ -217,6 +260,8 @@ def main(argv):
         print(json.dumps(payload, sort_keys=True))
     else:
         print(render_row(row))
+    if row["verdict"] == NO_EVIDENCE:
+        return 4
     return 0 if row["verdict"] == PASS else (2 if row["code"] == 2 else 3)
 
 

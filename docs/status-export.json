@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-16T04:43:06+08:00",
-  "do": "2026-11-16 R2811 PRODUCT+ENGINEERING: the page that tells the CEO what only he can unblock had been stale for forty rounds and no gate said so. At open, python tools/ceo_blockers.py --check on the committed tree read PASS AC-CBX1..AC-CBX8 but FAIL AC-CBX9 banner=True disclaimer=True tick=2810, VERDICT FAIL 8/9 rc=2, because the landed preview/ceo-blockers.html still carried Tick 2770 while src/os/state.json read tic…",
+  "export_ts": "2026-11-16T05:16:39+08:00",
+  "do": "R2812 - ENGINEERING: a closed red leg named three rows and no window had attributed them; the final tree still reddened two, and both roots were dead default paths inside self-gated tools rather than a wrong law. Measured at open with tools/adoption_preflight.py: reconcile-battery-R2781 pid=82532 kernel=GON...",
   "ceo_face": {
-    "current": "2026-11-16 R2811 PRODUCT+ENGINEERING: the page that tells the CEO what only he can unblock had been stale for forty rounds and no gate said so. At open, python tools/ceo_blockers.py --check on the committed tree read PASS AC-CBX1..AC-CBX8 but FAIL AC-CBX9 banner=True disclaimer=True tick=2810, VERDICT FAIL 8/9 rc=2, because the landed preview/ceo-blockers.html still carried Tick 2770 while src/os/state.json read tic…",
-    "latest_artifact": "preview/ceo-blockers.html (8453B) + preview/ceo-blockers.json (6754B)",
-    "last_artifact": "preview/ceo-blockers.html (8453B) + preview/ceo-blockers.json (6754B)",
-    "next_milestone": "[R2811] next window: (1) **全量电池仍欠**且现为 **694 套件 / 5192 判据**（一趟 4000-5900s；本窗未起任何腿，如实记）；能 supervise 的窗口须**早发**腿并以其自身 `BATTERY rc=` 行经 `tools/adoption_preflight.py` 采纳，禁把「只跑了本窗相关套件」说成电池绿。 (2) **未登记且自带判据的工具面现为 11 件**（ceo_blockers 已登记，剩 ugc_gate 14 / lobby_ws 8 / journey_demo 8 / city_face 8 / membership_benefit 8 / face_s",
-    "next_milestone_due": "2026-11-18T04:43:06+08:00",
-    "updated_at": "2026-11-16T04:43:06+08:00",
+    "current": "R2812 - ENGINEERING: a closed red leg named three rows and no window had attributed them; the final tree still reddened two, and both roots were dead default paths inside self-gated tools rather than a wrong law. Measured at open with tools/adoption_preflight.py: reconcile-battery-R2781 pid=82532 kernel=GON...",
+    "latest_artifact": "preview/first-yuan-chain.html (3078B) + preview/first-yuan-chain.json (4159B)",
+    "last_artifact": "preview/first-yuan-chain.html (3078B) + preview/first-yuan-chain.json (4159B)",
+    "next_milestone": "**全量电池仍欠**且现为 **694 套件 / 5192 判据**（一趟 4000-5900s；本窗未起任何腿，如实记）；能 supervise 的窗口须**早发**腿并以其自身 `BATTERY rc=` 行经 `tools/adoption_preflight.py` 采纳，禁把「只跑了本窗相关套件」说成电池绿。",
+    "next_milestone_due": "2026-11-18T05:16:39+08:00",
+    "updated_at": "2026-11-16T05:16:39+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ceo-blockers.html",
     "board_pages_skipped": [
       "preview/ceo-blockers.html (8453B)",
@@ -775,7 +775,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2811",
+      "2812",
       "OSLoop 执行 tick"
     ],
     [
@@ -798,10 +798,10 @@
   "self_drive": {
     "window": "2026-11-10..2026-11-16",
     "window_days": 7,
-    "log_lines_in_window": 200,
+    "log_lines_in_window": 207,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 41,
+    "substantive_non_idle_mention_lines": 42,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,

@@ -1,4 +1,4 @@
-"""Product health-check runner (BigDomain explore-line item #9, R594;
+﻿"""Product health-check runner (BigDomain explore-line item #9, R594;
 pay/member standalone-reconcile extension, R595 follow-up row;
 five-suite fan-out expansion, R1063 - benchgate/citymodel/compliance/
 minors wiring, closing the drift between this runner's fan-out and the
@@ -5624,7 +5624,7 @@ SUITES = [
     # (AC-MSC1..AC-MSC6 were pinned in state/queue/tech.md:493 as the R2414
     # seed row BEFORE the code.)
     ("os-matrix-stamp-compare",
-     os.path.join("..", "os", "test_matrix_stamp_compare.py"), 6),
+     os.path.join("..", "os", "test_matrix_stamp_compare.py"), 9),
     # R2420: three shipped tables answer three different alias questions and
     # nothing said which one a reader meant, so `from some_wire import other as
     # publish` read bound in the receiver table and unbound in both

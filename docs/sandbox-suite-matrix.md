@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 694 | 5192 | 675/675 | R2739 |
+| 694 | 5195 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -595,7 +595,7 @@
 | 556 | os-export-publish-from-import-law | ../os/test_export_publish_from_import_law.py | 6 | green | 2.1 |
 | 557 | os-relative-import-publish-binding | ../os/test_relative_import_publish_binding.py | 6 | green | 2.1 |
 | 558 | os-publish-relative-package-identity | ../os/test_publish_relative_package_identity.py | 6 | green | 1.5 |
-| 559 | os-matrix-stamp-compare | ../os/test_matrix_stamp_compare.py | 6 | green | 3.3 |
+| 559 | os-matrix-stamp-compare | ../os/test_matrix_stamp_compare.py | 9 | green | 3.3 |
 | 560 | os-relative-import-alias-gate | ../os/test_relative_import_alias_gate.py | 6 | green | 1.9 |
 | 561 | os-plain-import-alias-gate | ../os/test_plain_import_alias_gate.py | 6 | green | 2.0 |
 | 562 | os-plain-import-comma-binding | ../os/test_plain_import_comma_binding.py | 6 | green | 1.5 |
@@ -731,7 +731,7 @@
 | 692 | os-deliverable-index | ../os/test_deliverable_index.py | 16 | no-evidence | - |
 | 693 | os-battery-shard | ../os/test_battery_shard.py | 8 | no-evidence | - |
 | 694 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
-|  | 合计 |  | 5192 | green 675 / FAIL 0 / no-evidence 19 |  |
+|  | 合计 |  | 5195 | green 675 / FAIL 0 / no-evidence 19 |  |
 
 ## 证据出处
 

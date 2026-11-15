@@ -1,0 +1,29 @@
+R2812 attribution of a closed red leg (reconcile-battery-R2781)
+adoption_preflight: pid=82532 kernel=GONE closing_rc=1 stream_rows=680 stream_fail=3
+The three named rows re-run INDIVIDUALLY on the final tree:
+  os-suite-matrix-reconcile-evidence-face  7/7 PASS
+  os-matrix-stamp-compare                  9/9 PASS after repair
+  os-stamp-text-coverage                   6/6 PASS after repair
+Root 1 (matrix_stamp_compare): the module carried DEFAULT_EVIDENCE =
+  qa/reconcile-all.log, a file this tree does not hold, so the authority run
+  read E_MSC_REGEN forever while the doc-recorded run read PASS. AC-MSC4's
+  agreement leg therefore could never be green. Repair: the default evidence is
+  DERIVED from the face the doc states it was rendered from; a doc stating none
+  refuses E_MSC_NO_EVIDENCE at rc=4 with zero regenerator calls and zero writes.
+  Second defect found while measuring: a --stamp-from render prints one
+  provenance row that a plain --write doc never carries, so the byte compare was
+  comparing two different document shapes (58 bytes apart). That row is now
+  stripped from BOTH sides, because it exists only because this comparison
+  asked for it.
+Root 2 (test_stamp_text_coverage): with no borrow line recorded, source is None
+  and the criterion compared str(None) - the word "None" - against the module
+  source, reddening on the docstring stamp_from=None. Repair: the borrow guard
+  applies only to a real path, and the borrow legs build their probe document
+  through the shipped renderer instead of assuming the doc carries one.
+Criteria AC-MSC7..AC-MSC9 were pinned in src/os/backlog.md and committed as
+  2270cf4c BEFORE the code.
+registry 694 suites / 5195 criteria / 694 unique names (criteria 5192 -> 5195)
+matrix docs/sandbox-suite-matrix.md 73096B, suite_matrix --check byte-identical
+entry page preview/index.html 36506B, deliverable_index --check PASS 14/14
+adjacent suites green: stamp_from_liveness 6/6, stamp_provenance_line 6/6,
+  suite_matrix_reconcile_evidence_face 7/7

@@ -1,4 +1,4 @@
-"""matrix_stamp_compare suite (R2418; criteria AC-MSC1..AC-MSC6 were pinned
+﻿"""matrix_stamp_compare suite (R2418; criteria AC-MSC1..AC-MSC6 were pinned
 at R2414 inside the seed row of state/queue/tech.md line 493 BEFORE this code).
 
 What this proves: the matrix section's compare is content-only because the
@@ -32,7 +32,7 @@ sys.path.insert(0, BASE)
 
 import matrix_stamp_compare as MSC  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 9
 MODULE = os.path.join(BASE, "matrix_stamp_compare.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-matrix-stamp-compare"
@@ -400,6 +400,105 @@ def ac_msc6():
               "stamp law, wired with its own label")
 
 
+def ac_msc7():
+    """No evidence flag: the face comes from the doc, not from a literal.
+
+    The module used to carry DEFAULT_EVIDENCE = "qa/reconcile-all.log", a file
+    this tree does not hold, so the authority run read E_MSC_REGEN forever
+    while the doc-recorded run read PASS - the exact split AC-MSC4 measures.
+    """
+    source = read_text(MODULE)
+    literal = re.findall(r"qa/[A-Za-z0-9._-]+\.log", source)
+    recorded = MSC.recorded_evidence_face(DOC)
+    code_default, out_default = cli(["--check"])
+    if recorded is None:
+        check(False, "AC-MSC7 an absent --evidence derives the face the doc "
+                     "states, and no evidence path literal survives")
+        return
+    code_explicit, out_explicit = cli(["--check", "--evidence", recorded])
+    ok = (not literal
+          and code_default == code_explicit
+          and out_default.replace(recorded, "") ==
+          out_explicit.replace(recorded, ""))
+    if not ok:
+        print("  measured: recorded=%r literals=%r default=%r explicit=%r"
+              % (recorded, literal, code_default, code_explicit), flush=True)
+    check(ok, "AC-MSC7 an absent --evidence derives the face the doc states, "
+              "and no evidence path literal survives in the module")
+
+
+def ac_msc8():
+    """A doc that states no evidence face refuses with its own code.
+
+    Derived-not-assumed: the guard lives in compare(), so no regenerator is
+    called and nothing is written - a doc with no provenance cannot be scored
+    against an invented leg.
+    """
+    world = make_world()
+    path = os.path.join(world, "docs", "sandbox-suite-matrix.md")
+    os.makedirs(os.path.dirname(path))
+    body = "%s%s\n# matrix\n\nno evidence face here\n" % (PREFIX, STAMP)
+    with io.open(path, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(body)
+    calls = []
+
+    def recorder(cmd):
+        calls.append(cmd)
+        return 0, "should not run"
+
+    row = MSC.compare(world, path, None, call=recorder)
+    before = read_text(path)
+    try:
+        code, out = cli(["--check", "--root", world, "--doc", path])
+        code_json, out_json = cli(["--check", "--json", "--root", world,
+                                   "--doc", path])
+    finally:
+        shutil.rmtree(world, ignore_errors=True)
+    payload = json.loads(out_json.splitlines()[-1])
+    ok = (row["verdict"] == "NO-EVIDENCE"
+          and row["code"] == "E_MSC_NO_EVIDENCE"
+          and row["detail"] == "doc states no evidence face"
+          and before == body
+          and code == 4
+          and code_json == 4
+          and payload["verdict"] == "NO-EVIDENCE"
+          and payload["code"] == "E_MSC_NO_EVIDENCE"
+          and calls == [])
+    if not ok:
+        print("  measured: row=%r code=%r json=%r calls=%r"
+              % (row, code, payload, calls), flush=True)
+    check(ok, "AC-MSC8 a doc stating no evidence face refuses with its own "
+              "code, calls no regenerator and writes nothing")
+
+
+def ac_msc9():
+    """Live tree: the default run and the doc-recorded run are one payload,
+    and both agree with suite_matrix --check in both directions."""
+    recorded = MSC.recorded_evidence_face(DOC)
+    if recorded is None:
+        check(False, "AC-MSC9 live default and doc-recorded runs agree")
+        return
+    default_row = MSC.compare(REPO, DOC, os.path.join(REPO, recorded))
+    code_default, _out = cli(["--check"])
+    elided = [k for k in ("verdict", "code", "on_disk_bytes") if
+              default_row[k] != MSC.compare(REPO, DOC,
+                                           os.path.join(REPO, recorded))[k]]
+    authority = subprocess.run([sys.executable, MATRIX_TOOL, "--check"],
+                               cwd=REPO, capture_output=True)
+    agrees = ((authority.returncode == 0)
+              == (default_row["verdict"] == MSC.PASS))
+    ok = (code_default == 0
+          and default_row["verdict"] == MSC.PASS
+          and not elided
+          and agrees)
+    if not ok:
+        print("  measured: code=%r row=%r drift=%r authority=%r agrees=%r"
+              % (code_default, default_row, elided, authority.returncode,
+                 agrees), flush=True)
+    check(ok, "AC-MSC9 live default and doc-recorded runs read one payload "
+              "and agree with suite_matrix --check")
+
+
 def main():
     print("matrix_stamp_compare suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -412,6 +511,9 @@ def main():
     ac_msc4()
     ac_msc5()
     ac_msc6()
+    ac_msc7()
+    ac_msc8()
+    ac_msc9()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:
