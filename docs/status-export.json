@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T16:54:18+08:00",
-  "do": "R2789 - closed the two clauses R2788 shipped with a code path but no assertion. AC-RP7: the unknown-room refusal is inert - an entitled client already on a second room gets sec.reject E_ROOM_UNKNOWN, receives NO sys.notice naming the refused room inside a one-second quiet window, keeps its send into the sec...",
+  "export_ts": "2026-11-15T17:26:41+08:00",
+  "do": "R2790 - PRODUCT: the lobby real-time layer stopped being described and was DRIVEN - preview/lobby-session-trace.html (8372B) + .json (7958B), rendered in one command by tools/lobby_session_trace.py, which spawns the shipped src/sandbox/lobby/server.py on a free loopback port over a temp database, opens two...",
   "ceo_face": {
-    "current": "R2789 - closed the two clauses R2788 shipped with a code path but no assertion. AC-RP7: the unknown-room refusal is inert - an entitled client already on a second room gets sec.reject E_ROOM_UNKNOWN, receives NO sys.notice naming the refused room inside a one-second quiet window, keeps its send into the sec...",
-    "latest_artifact": "preview/lobby-protocol-map.html (26458B) + preview/lobby-protocol-map.json (25645B)",
-    "last_artifact": "preview/lobby-protocol-map.html (26458B) + preview/lobby-protocol-map.json (25645B)",
-    "next_milestone": "the full 684-suite battery is OWED and must be launched EARLY, with an explicit evidence path (qa/reconcile-all-R2789.log), by a window that can supervise it - no single-label mode, 4000-5900s per leg, and earlier detached legs died without a closing row; adopt it afterwards through tools/adoption_p...",
-    "next_milestone_due": "2026-11-17T16:54:18+08:00",
-    "updated_at": "2026-11-15T16:54:18+08:00",
+    "current": "R2790 - PRODUCT: the lobby real-time layer stopped being described and was DRIVEN - preview/lobby-session-trace.html (8372B) + .json (7958B), rendered in one command by tools/lobby_session_trace.py, which spawns the shipped src/sandbox/lobby/server.py on a free loopback port over a temp database, opens two...",
+    "latest_artifact": "preview/lobby-session-trace.html (8372B) + preview/lobby-session-trace.json (7958B)",
+    "last_artifact": "preview/lobby-session-trace.html (8372B) + preview/lobby-session-trace.json (7958B)",
+    "next_milestone": "the full battery is OWED and grows with every registration - launch it EARLY with an explicit evidence path by a window that can supervise 4000-5900s, then adopt by its own closing `BATTERY rc=` row.",
+    "next_milestone_due": "2026-11-17T17:26:41+08:00",
+    "updated_at": "2026-11-15T17:26:41+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -38,6 +38,7 @@
     }
   ],
   "outs": [
+    "preview/lobby-session-trace.html (8372B) + preview/lobby-session-trace.json (7958B)",
     "preview/lobby-protocol-map.html (26458B) + preview/lobby-protocol-map.json (25645B)",
     "preview/lobby-protocol-map.html (26405B) + preview/lobby-protocol-map.json (25597B)",
     "preview/lobby-protocol-map.html (22841B) + preview/lobby-protocol-map.json (21374B)",
@@ -753,7 +754,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2789",
+      "2790",
       "OSLoop 执行 tick"
     ],
     [
@@ -776,7 +777,7 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 85,
+    "log_lines_in_window": 91,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 16,

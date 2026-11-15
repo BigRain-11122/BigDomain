@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lobby session trace - frames the sandbox really answered</title>
+<style>
+body{font:14px/1.55 -apple-system,Segoe UI,Roboto,sans-serif;margin:0;background:#0f1116;color:#e8eaf0}
+main{max-width:1080px;margin:0 auto;padding:26px 20px 60px}
+h1{font-size:21px;margin:0 0 6px}h2{font-size:15px;margin:26px 0 8px;color:#9fb0d0}
+.hint{color:#8d96ab;font-size:12.5px}
+.warn{border-left:3px solid #d0a24a;background:#1a1a12;padding:10px 12px;margin:14px 0;font-size:13px}
+.cards{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.card{background:#161a22;border:1px solid #232a37;border-radius:8px;padding:10px 14px;min-width:120px}
+.card b{display:block;font-size:20px;color:#7fd1a0}
+table{width:100%;border-collapse:collapse;margin:8px 0 4px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid #202634;vertical-align:top;font-size:12.5px}
+th{color:#93a2bd;font-weight:600;background:#141821}
+.step{background:#141a24;font-weight:600}
+.t{font-family:Consolas,monospace;color:#9ecbff}
+.code{font-family:Consolas,monospace;color:#ffb4a2}
+.ok{color:#7fd1a0}.no{color:#ff9c8a}
+footer{margin-top:26px;color:#77819a;font-size:12px}
+</style></head><body><main>
+<h1>Lobby session trace</h1>
+<p class="hint">One local session against <span class="t">src/sandbox/lobby/server.py</span>. Every row below is a frame that actually crossed the socket in this render.</p>
+<div class="warn">This page connects to nothing and is not a live service: it is a recording of one sandbox session on 127.0.0.1. The entrance is a mock, there is no merchant, no platform content API and no cloud call. Refusal rows show the codes the shipped server itself emitted.</div>
+<div class="cards">
+<div class="card"><b>17</b>frames captured</div>
+<div class="card"><b>11</b>steps driven</div>
+<div class="card"><b>5</b>refusals</div>
+<div class="card"><b>7</b>distinct types</div>
+</div>
+<h2>Read from the sandbox config, not typed here</h2>
+<table><tr><th>fact</th><th>value</th><th>source</th></tr>
+<tr><td>rooms</td><td class="t">lobby, quant, cocreate</td><td>src/sandbox/lobby/config.json</td></tr>
+<tr><td>text cap</td><td class="t">2000 chars</td><td>src/sandbox/lobby/config.json</td></tr>
+<tr><td>rate budget</td><td class="t">5 msgs / 10 s, mute after 3 violations</td><td>src/sandbox/lobby/config.json</td></tr>
+<tr><td>gate 1 sample</td><td class="t">赌博</td><td>src/sandbox/lobby/config.json</td></tr>
+<tr><td>gate 2 sample</td><td class="t">保本</td><td>src/sandbox/lobby/config.json</td></tr>
+</table>
+<h2>Frames, in the order they crossed the socket</h2>
+<table><tr><th>#</th><th>type</th><th>code</th><th>room</th><th>text len</th><th>actor</th><th>ai_generated</th><th>evt</th></tr>
+<tr class="step"><td>-</td><td colspan="7">connect: server pushes hello and the standing risk warning &middot; client sends</td></tr>
+<tr><td>1</td><td class='t ok'>sys.hello</td><td class='code'></td><td class='t'></td><td></td><td class='t'>system</td><td></td><td></td></tr>
+<tr><td>2</td><td class='t ok'>sys.risk_warning</td><td class='code'></td><td class='t'>lobby</td><td>115</td><td class='t'>system</td><td></td><td></td></tr>
+<tr class="step"><td>-</td><td colspan="7">pay.grant_sandbox: mock entrance, resident flag &middot; client sends pay.grant_sandbox</td></tr>
+<tr><td>3</td><td class='t ok'>pay.grant_sandbox</td><td class='code'></td><td class='t'>lobby</td><td></td><td class='t'>system</td><td>false</td><td>yes</td></tr>
+<tr class="step"><td>-</td><td colspan="7">room.subscribe lobby &middot; client sends room.subscribe room=lobby</td></tr>
+<tr><td>4</td><td class='t ok'>sys.notice</td><td class='code'></td><td class='t'>lobby</td><td></td><td class='t'>system</td><td>false</td><td></td></tr>
+<tr class="step"><td>-</td><td colspan="7">chat.send clean line (accepted) &middot; client sends chat.send room=lobby text=61 chars</td></tr>
+<tr><td>5</td><td class='t ok'>chat.broadcast</td><td class='code'></td><td class='t'>lobby</td><td>61</td><td class='t'>res-<id></td><td>false</td><td>yes</td></tr>
+<tr class="step"><td>-</td><td colspan="7">chat.send carrying a forbidden word (gate 1) &middot; client sends chat.send room=lobby text=14 chars</td></tr>
+<tr><td>6</td><td class='t no'>sec.reject</td><td class='code'>E_CONTENT_REJECTED</td><td class='t'></td><td></td><td class='t'>system</td><td>false</td><td></td></tr>
+<tr class="step"><td>-</td><td colspan="7">chat.send carrying an advisory word (gate 2) &middot; client sends chat.send room=lobby text=14 chars</td></tr>
+<tr><td>7</td><td class='t no'>sec.reject</td><td class='code'>E_CONTENT_REJECTED</td><td class='t'></td><td></td><td class='t'>system</td><td>false</td><td></td></tr>
+<tr class="step"><td>-</td><td colspan="7">chat.send over the text cap (cap x2 chars) &middot; client sends chat.send room=lobby text=4000 chars</td></tr>
+<tr><td>8</td><td class='t ok'>chat.broadcast</td><td class='code'></td><td class='t'>lobby</td><td>2000</td><td class='t'>res-<id></td><td>false</td><td>yes</td></tr>
+<tr class="step"><td>-</td><td colspan="7">room.subscribe an unknown room &middot; client sends room.subscribe room=trace-no-such-room</td></tr>
+<tr><td>9</td><td class='t no'>sec.reject</td><td class='code'>E_ROOM_UNKNOWN</td><td class='t'></td><td></td><td class='t'>system</td><td>false</td><td></td></tr>
+<tr class="step"><td>-</td><td colspan="7">room.unsubscribe lobby &middot; client sends room.unsubscribe room=lobby</td></tr>
+<tr><td>10</td><td class='t ok'>sys.notice</td><td class='code'></td><td class='t'>lobby</td><td></td><td class='t'>system</td><td>false</td><td></td></tr>
+<tr class="step"><td>-</td><td colspan="7">chat.send into the just-released room &middot; client sends chat.send room=lobby text=13 chars</td></tr>
+<tr><td>11</td><td class='t no'>sec.reject</td><td class='code'>E_ROOM_UNKNOWN</td><td class='t'></td><td></td><td class='t'>system</td><td>false</td><td></td></tr>
+<tr class="step"><td>-</td><td colspan="7">second connection bursts 6 sends against a budget of 5 &middot; client sends chat.send room=lobby x6</td></tr>
+<tr><td>12</td><td class='t ok'>chat.broadcast</td><td class='code'></td><td class='t'>lobby</td><td>7</td><td class='t'>res-<id></td><td>false</td><td>yes</td></tr>
+<tr><td>13</td><td class='t ok'>chat.broadcast</td><td class='code'></td><td class='t'>lobby</td><td>7</td><td class='t'>res-<id></td><td>false</td><td>yes</td></tr>
+<tr><td>14</td><td class='t ok'>chat.broadcast</td><td class='code'></td><td class='t'>lobby</td><td>7</td><td class='t'>res-<id></td><td>false</td><td>yes</td></tr>
+<tr><td>15</td><td class='t ok'>chat.broadcast</td><td class='code'></td><td class='t'>lobby</td><td>7</td><td class='t'>res-<id></td><td>false</td><td>yes</td></tr>
+<tr><td>16</td><td class='t ok'>chat.broadcast</td><td class='code'></td><td class='t'>lobby</td><td>7</td><td class='t'>res-<id></td><td>false</td><td>yes</td></tr>
+<tr><td>17</td><td class='t no'>err.rate_limit</td><td class='code'>E_RATE_LIMIT</td><td class='t'></td><td></td><td class='t'>system</td><td>false</td><td></td></tr>
+</table>
+<h2>One seam this trace measured</h2>
+<div class="warn">An over-long send was NOT refused. The client sent 4000 characters and the server broadcast 2000: the text cap <b>truncates silently</b>, so a client that depends on a refusal code for over-length text is depending on behaviour the server does not have. The spec owes an explicit over-length clause (refuse vs truncate) before any client leans on either. Carried to the board.</div>
+<h2>Codes the server emitted</h2>
+<p class="t">E_CONTENT_REJECTED, E_ROOM_UNKNOWN, E_RATE_LIMIT</p>
+<h2>Frame types observed</h2>
+<p class="t">sys.hello, sys.risk_warning, pay.grant_sandbox, sys.notice, chat.broadcast, sec.reject, err.rate_limit</p>
+<footer>
+config src/sandbox/lobby/config.json &middot; 1712 bytes &middot; server src/sandbox/lobby/server.py &middot; 30231 bytes<br>
+namespace bd-lobby-session-trace-v1 &middot; this page is rendered from preview/lobby-session-trace.json, which is the landed payload.
+</footer>
+</main>
+<script>
+(function(){var k='bd-lobby-session-trace-v1';try{var v=localStorage.getItem(k);document.documentElement.setAttribute('data-seen',v?'yes':'no');localStorage.setItem(k,'1');}catch(e){}})();
+</script></body></html>

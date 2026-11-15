@@ -1,0 +1,460 @@
+{
+ "derived": {
+  "advisory_sample": "保本",
+  "forbidden_sample": "赌博",
+  "long_sent_len": 4000,
+  "max_text_len": 2000,
+  "mute_trigger_violations": 3,
+  "rate_max_messages": 5,
+  "rate_window_seconds": 10,
+  "rooms": [
+   "lobby",
+   "quant",
+   "cocreate"
+  ]
+ },
+ "namespace": "bd-lobby-session-trace-v1",
+ "page": "preview/lobby-session-trace.html",
+ "source": {
+  "config": "src/sandbox/lobby/config.json",
+  "config_bytes": 1712,
+  "server": "src/sandbox/lobby/server.py",
+  "server_bytes": 30231
+ },
+ "steps": [
+  {
+   "frames": [
+    {
+     "actor": "system",
+     "ai_generated": null,
+     "code": null,
+     "evt": false,
+     "keys": [
+      "actor",
+      "payload",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": null,
+     "text_len": null,
+     "type": "sys.hello"
+    },
+    {
+     "actor": "system",
+     "ai_generated": null,
+     "code": null,
+     "evt": false,
+     "keys": [
+      "actor",
+      "payload",
+      "room",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": "lobby",
+     "text_len": 115,
+     "type": "sys.risk_warning"
+    }
+   ],
+   "label": "connect: server pushes hello and the standing risk warning",
+   "sent": null
+  },
+  {
+   "frames": [
+    {
+     "actor": "system",
+     "ai_generated": false,
+     "code": null,
+     "evt": true,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "evt_id",
+      "payload",
+      "room",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": "lobby",
+     "text_len": null,
+     "type": "pay.grant_sandbox"
+    }
+   ],
+   "label": "pay.grant_sandbox: mock entrance, resident flag",
+   "sent": {
+    "type": "pay.grant_sandbox"
+   }
+  },
+  {
+   "frames": [
+    {
+     "actor": "system",
+     "ai_generated": false,
+     "code": null,
+     "evt": false,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "payload",
+      "room",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": "lobby",
+     "text_len": null,
+     "type": "sys.notice"
+    }
+   ],
+   "label": "room.subscribe lobby",
+   "sent": {
+    "room": "lobby",
+    "text_len": null,
+    "type": "room.subscribe"
+   }
+  },
+  {
+   "frames": [
+    {
+     "actor": "res-<id>",
+     "ai_generated": false,
+     "code": null,
+     "evt": true,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "evt_id",
+      "payload",
+      "room",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": "lobby",
+     "text_len": 61,
+     "type": "chat.broadcast"
+    }
+   ],
+   "label": "chat.send clean line (accepted)",
+   "sent": {
+    "room": "lobby",
+    "text_len": 61,
+    "type": "chat.send"
+   }
+  },
+  {
+   "frames": [
+    {
+     "actor": "system",
+     "ai_generated": false,
+     "code": "E_CONTENT_REJECTED",
+     "evt": false,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "payload",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": null,
+     "text_len": null,
+     "type": "sec.reject"
+    }
+   ],
+   "label": "chat.send carrying a forbidden word (gate 1)",
+   "sent": {
+    "room": "lobby",
+    "text_len": 14,
+    "type": "chat.send"
+   }
+  },
+  {
+   "frames": [
+    {
+     "actor": "system",
+     "ai_generated": false,
+     "code": "E_CONTENT_REJECTED",
+     "evt": false,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "payload",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": null,
+     "text_len": null,
+     "type": "sec.reject"
+    }
+   ],
+   "label": "chat.send carrying an advisory word (gate 2)",
+   "sent": {
+    "room": "lobby",
+    "text_len": 14,
+    "type": "chat.send"
+   }
+  },
+  {
+   "frames": [
+    {
+     "actor": "res-<id>",
+     "ai_generated": false,
+     "code": null,
+     "evt": true,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "evt_id",
+      "payload",
+      "room",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": "lobby",
+     "text_len": 2000,
+     "type": "chat.broadcast"
+    }
+   ],
+   "label": "chat.send over the text cap (cap x2 chars)",
+   "sent": {
+    "room": "lobby",
+    "text_len": 4000,
+    "type": "chat.send"
+   }
+  },
+  {
+   "frames": [
+    {
+     "actor": "system",
+     "ai_generated": false,
+     "code": "E_ROOM_UNKNOWN",
+     "evt": false,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "payload",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": null,
+     "text_len": null,
+     "type": "sec.reject"
+    }
+   ],
+   "label": "room.subscribe an unknown room",
+   "sent": {
+    "room": "trace-no-such-room",
+    "text_len": null,
+    "type": "room.subscribe"
+   }
+  },
+  {
+   "frames": [
+    {
+     "actor": "system",
+     "ai_generated": false,
+     "code": null,
+     "evt": false,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "payload",
+      "room",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": "lobby",
+     "text_len": null,
+     "type": "sys.notice"
+    }
+   ],
+   "label": "room.unsubscribe lobby",
+   "sent": {
+    "room": "lobby",
+    "text_len": null,
+    "type": "room.unsubscribe"
+   }
+  },
+  {
+   "frames": [
+    {
+     "actor": "system",
+     "ai_generated": false,
+     "code": "E_ROOM_UNKNOWN",
+     "evt": false,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "payload",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": null,
+     "text_len": null,
+     "type": "sec.reject"
+    }
+   ],
+   "label": "chat.send into the just-released room",
+   "sent": {
+    "room": "lobby",
+    "text_len": 13,
+    "type": "chat.send"
+   }
+  },
+  {
+   "frames": [
+    {
+     "actor": "res-<id>",
+     "ai_generated": false,
+     "code": null,
+     "evt": true,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "evt_id",
+      "payload",
+      "room",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": "lobby",
+     "text_len": 7,
+     "type": "chat.broadcast"
+    },
+    {
+     "actor": "res-<id>",
+     "ai_generated": false,
+     "code": null,
+     "evt": true,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "evt_id",
+      "payload",
+      "room",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": "lobby",
+     "text_len": 7,
+     "type": "chat.broadcast"
+    },
+    {
+     "actor": "res-<id>",
+     "ai_generated": false,
+     "code": null,
+     "evt": true,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "evt_id",
+      "payload",
+      "room",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": "lobby",
+     "text_len": 7,
+     "type": "chat.broadcast"
+    },
+    {
+     "actor": "res-<id>",
+     "ai_generated": false,
+     "code": null,
+     "evt": true,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "evt_id",
+      "payload",
+      "room",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": "lobby",
+     "text_len": 7,
+     "type": "chat.broadcast"
+    },
+    {
+     "actor": "res-<id>",
+     "ai_generated": false,
+     "code": null,
+     "evt": true,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "evt_id",
+      "payload",
+      "room",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": "lobby",
+     "text_len": 7,
+     "type": "chat.broadcast"
+    },
+    {
+     "actor": "system",
+     "ai_generated": false,
+     "code": "E_RATE_LIMIT",
+     "evt": false,
+     "keys": [
+      "actor",
+      "ai_generated",
+      "payload",
+      "ts_utc",
+      "type",
+      "v"
+     ],
+     "room": null,
+     "text_len": null,
+     "type": "err.rate_limit"
+    }
+   ],
+   "label": "second connection bursts 6 sends against a budget of 5",
+   "sent": {
+    "count": 6,
+    "room": "lobby",
+    "text_len": null,
+    "type": "chat.send"
+   }
+  }
+ ],
+ "summary": {
+  "codes": [
+   "E_CONTENT_REJECTED",
+   "E_ROOM_UNKNOWN",
+   "E_RATE_LIMIT"
+  ],
+  "frames": 17,
+  "refusals": 5,
+  "steps": 11,
+  "truncation": {
+   "received_len": 2000,
+   "sent_len": 4000
+  },
+  "types": [
+   "sys.hello",
+   "sys.risk_warning",
+   "pay.grant_sandbox",
+   "sys.notice",
+   "chat.broadcast",
+   "sec.reject",
+   "err.rate_limit"
+  ]
+ }
+}

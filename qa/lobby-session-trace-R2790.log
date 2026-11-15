@@ -1,0 +1,10 @@
+R2790 lobby session trace - evidence
+tool: tools/lobby_session_trace.py (AC-LST1..AC-LST6 pinned in src/os/backlog.md before the file)
+render: steps=11 frames=17 refusals=5 types=7 codes=3 html=8372B json=7958B
+double run: json sha256 identical and html sha256 identical (sha16 json 2BC4AC99901BDF62)
+gate: --check VERDICT PASS steps=11 frames=17 refusals=5 types=7 codes=3 rc=0; bytes and mtime unchanged
+control c1: one byte injected into the landed html -> rc=2 E_STALE, restored -> rc=0, bytes_same=True
+seam measured: client sent 4000 chars, server broadcast 2000 chars - silent truncation, no refusal code
+codes observed: E_CONTENT_REJECTED (gate 1 and gate 2), E_ROOM_UNKNOWN (unknown room, and after release), E_RATE_LIMIT (6th send against a budget of 5)
+offline: zero http:// or https:// literals; source pure ASCII; only host contacted is 127.0.0.1
+entry page: deliverable_index PASS 14/14 band-rows=34 newest=lobby-session-trace.json
