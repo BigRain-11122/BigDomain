@@ -1,0 +1,20 @@
+BigDomain QA charter daily crawl smoke - R2778 - 2026-11-15
+carried leg check: leg census run before writing (tools/leg_interlock.py --census)
+  LEG-CENSUS live=1 reused=5 gone=129 unparsed=0 duplicate=False
+  LIVE leg=R2775 pid=44264 -> NOT adopted (no closing BATTERY rc= row read this window)
+  consequence: src/ stays frozen; this window wrote docs/ + qa/ + tmp/ only, zero product src bytes
+crawl check 1 daily crawl: 2 direct official sources fetched (both A tier), 0 connection failures, 0 x404
+  source A: developers.weixin.qq.com/miniprogram/product/record/ (miniprogram filing guide, page last edited 2026-08-18) FULL TEXT
+  source B: gov.cn/zhengce/content/202409/content_6977766.htm (Network Data Security Regulation, State Council Order 790) CHAPTER 1 ONLY
+crawl check 2 benchmark freshness: docs/global-benchmarks.md section 3 gained 2 source rows, section 4 appended today
+  benchmarks_refreshed set to 2026-11-15; 7-day gate next due 2026-11-22
+  section 1 deliberately NOT touched this window (avoid duplicate enrollment of filing facts already present)
+crawl check 3 source chain: both sources carry URL + tier + consumption point
+  A: filing is an OFFICIAL pre-release hard order, quoted verbatim; closes the W39 open item that rested on community source only
+  A: three timelines captured (platform review 1-2 working days, MIIT SMS 12381 within 24h or auto-reject, telecom bureau 1-20 working days)
+  A: pre-approval category table captured; the game publication category requires a publication licence number
+  B: only article 5 (classified-graded protection), order number, effective date and extraterritorial scope are quotable
+crawl check 4 signal wall: docs/research/intelligence-wall.md W41 row + W41 conclusion row appended
+honesty note: the regulation fetch returned chapter 1 only (articles 1-7); chapters 2-9 stayed UNVERIFIED
+  therefore no design document was changed on the strength of a half page, and the item is recorded as M (unverified) for a later full-text pass
+result: PASS 4/4 charter checks, 0 fetch failures, 1 deliberately partial source recorded as M not as verified

@@ -1,6 +1,6 @@
 {
-  "export_ts": "2026-11-15T11:54:38+08:00",
-  "do": "R2777 产品切片：CEO 入口页从「只链最新一对」变成「列出全部已上线面」——开轮实测 ceo-blockers.html 与 face-sweep.html 在 preview/index.html 里零链接（专为 CEO 写的阻塞面却从 CEO 的第一页打不开）；现由目录派生出 27 个成对面并逐条链接，--check PASS 14/14，入口页 28131B→33817B",
+  "export_ts": "2026-11-15T12:04:44+08:00",
+  "do": "R2778 合规与基准切片：直采官方页关闭一个 M 待证项——小程序备案是官方「发布前硬顺序」（原文级），并落定三处时限（平台初审 1-2 工作日／工信部短信核验 12381 且 24h 内否则自动驳回／通管局 1-20 工作日）与前置审批类目十类（出版【游戏】须版号）；同窗《网络数据安全管理条例》只取到第一章，不足部分如实留 M，不据半页改设计件",
   "ceo_face": {
     "current": "R2777 产品切片：CEO 入口页从「只链最新一对」变成「列出全部已上线面」——开轮实测 ceo-blockers.html 与 face-sweep.html 在 preview/index.html 里零链接（专为 CEO 写的阻塞面却从 CEO 的第一页打不开）；现由目录派生出 27 个成对面并逐条链接，--check PASS 14/14，入口页 28131B→33817B",
     "latest_artifact": "preview/index.html（33817B·全部 27 面可点开）＋qa/entry-pairs-band-R2777.log（732B·UTF-8/LF·经 tools/qa_log.py 正轨写出）",
@@ -776,14 +776,14 @@
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "R2769 shipped the 19.9 journey as a runnable face: 8 steps, each with its live gate status read from the report that carries it (6 of 8 declared PASS, the 2 ugc steps honestly DECLARED).",
+  "current": "R2778 charter crawl window. Two A-tier official sources fetched (0 failures): the miniprogram filing guide in FULL TEXT, which closes the W39 item that rested on a community source, and the Network Data Security Regulation which returned CHAPTER 1 ONLY and therefore stays M. A live battery leg R2775 (pid 44264) kept src/ frozen, so this window moved zero product src bytes; the landed artifacts are the benchmark surfaces, the intelligence-wall pair, and the rendered smoke evidence.",
   "latest_artifact": {
-    "path": "preview/journey-19.9.html",
-    "bytes": 11115,
-    "ts": "2026-11-15T02:13:55Z"
+    "path": "qa/smoke-R2778.png",
+    "bytes": 67096,
+    "ts": "2026-11-15T04:04:44Z"
   },
-  "next_milestone": "Adopt a battery leg by its own closing row (both R2767 and R2768 were still live at this close) and register the two unguarded face drivers in the reconcile registry - target within 48h.",
-  "state_bytes": 145360,
+  "next_milestone": "Fetch chapters 2-9 of the Network Data Security Regulation in full, then write the filing-number and pre-approval-category checks into the P-47-3 pre-release checklist - target within 48h.",
+  "state_bytes": 179147,
   "queue": {
     "floors": {
       "main": 5,
