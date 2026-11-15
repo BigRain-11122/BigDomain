@@ -18,8 +18,14 @@ opened for writing.
 
 Usage:
   python tools/ledger_business_report.py [--db PATH] [--out PATH] [--json PATH]
+  python tools/ledger_business_report.py --check
 Exit codes: 0 rendered, 2 reconcile FAIL or an unexpected ledger error,
             3 missing input file, 5 bad flags.
+
+AC-LBR9 (BD-PROP-010, pre-registered before the change): the rendered json
+carries a sizes block naming the byte count of both artifacts it belongs to,
+iterated to a fixed point, and --check refuses when either number disagrees
+with the bytes on disk.
 ASCII source, stdlib only, no network. Chinese only appears in the rendered
 document, never in this file.
 """
@@ -279,6 +285,8 @@ def main(argv):
     ap.add_argument("--db", default=os.path.join(ROOT, "preview", "ledger-demo.db"))
     ap.add_argument("--out", default=os.path.join(ROOT, "preview", "ledger-business-report.html"))
     ap.add_argument("--json", default=os.path.join(ROOT, "preview", "ledger-business-report.json"))
+    ap.add_argument("--check", action="store_true",
+                    help="verify the landed json sizes against the bytes on disk")
     try:
         args = ap.parse_args(argv[1:])
     except SystemExit:
@@ -286,6 +294,13 @@ def main(argv):
     if not os.path.exists(os.path.join(LEDGER_DIR, "ledger.py")):
         sys.stderr.write("E_NO_LEDGER: src/sandbox/ledger/ledger.py missing\n")
         return 3
+    if args.check:
+        fails = check_sizes(args.out, args.json)
+        print("LEDGER BUSINESS CHECK %s fails=%d" % (
+            "PASS" if not fails else "FAIL", len(fails)))
+        for f in fails:
+            print("  - %s" % f)
+        return 0 if not fails else 2
 
     config = load_config()
     steps, rejected, disclaimer, rows = seed_demo(args.db, config)
@@ -332,11 +347,46 @@ def main(argv):
     with open(args.json, "w", encoding="utf-8", newline="\n") as fh:
         json.dump(payload, fh, ensure_ascii=False, indent=1)
         fh.write("\n")
+    # BD-PROP-010: the json states the size of both artifacts it belongs to.
+    # The html is already on disk and never reads this key, so only the json's
+    # own byte count is self-referential; iterate to the fixed point.
+    for _ in range(6):
+        payload["sizes"] = {
+            "html": os.path.getsize(args.out),
+            "json": os.path.getsize(args.json) if os.path.exists(args.json) else 0,
+        }
+        with open(args.json, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump(payload, fh, ensure_ascii=False, indent=1)
+            fh.write("\n")
+        if payload["sizes"]["json"] == os.path.getsize(args.json):
+            break
 
     print("REPORT %s bytes=%d tx=%d entries=%d issued=%d reconcile=%s"
           % (payload["report"], len(doc.encode("utf-8")), len(rows["tx"]),
              len(rows["entries"]), issued, rc_line_of(rc)))
     return 0 if rc == 0 else 2
+
+
+def check_sizes(out, jout):
+    """AC-LBR9: the json's own size note must agree with the bytes on disk.
+
+    Read-only: it opens the landed artifacts and never renders. A json whose
+    sizes block is missing, empty or stale fails, so the note cannot rot into
+    decoration.
+    """
+    if not (os.path.exists(out) and os.path.exists(jout)):
+        return ["artifacts missing: %s / %s" % (out, jout)]
+    with open(jout, "r", encoding="utf-8") as fh:
+        doc = json.load(fh)
+    sizes = doc.get("sizes") or {}
+    fails = []
+    if sizes.get("html") != os.path.getsize(out):
+        fails.append("sizes html %s != %d on disk" % (sizes.get("html"),
+                                                     os.path.getsize(out)))
+    if sizes.get("json") != os.path.getsize(jout):
+        fails.append("sizes json %s != %d on disk" % (sizes.get("json"),
+                                                      os.path.getsize(jout)))
+    return fails
 
 
 def rc_line_of(rc):

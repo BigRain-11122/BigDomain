@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T09:01:12+08:00",
-  "do": "2026-11-15 R2765 PRODUCT window: the CEO can now open ONE page and click into every measured face, and the 19.9 payment page carries its real title.",
+  "export_ts": "2026-11-15T09:49:02+08:00",
+  "do": "R2767 产品切片：8 面中的 UGC 安全面与代币账本面现已自带尺寸注记（覆盖 5/8 → 7/8），且该注记被门控住而非装饰：UGC 面 --check 9/9（9079B/6326B），账本面 --check PASS（5276B/1061B）",
   "ceo_face": {
-    "current": "2026-11-15 R2765 PRODUCT window: the CEO can now open ONE page and click into every measured face, and the 19.9 payment page carries its real title.",
-    "latest_artifact": "index.html (27999B) @09:01",
-    "last_artifact": "index.html (27999B) @09:01",
-    "next_milestone": "next window owes reconcile-battery-R2762 on the committed tree, inside a 48h window due 2026-11-17T09:01:12+08:00",
-    "next_milestone_due": "2026-11-17T09:01:12+08:00",
-    "updated_at": "2026-11-15T09:01:12+08:00",
+    "current": "R2767 产品切片：8 面中的 UGC 安全面与代币账本面现已自带尺寸注记（覆盖 5/8 → 7/8），且该注记被门控住而非装饰：UGC 面 --check 9/9（9079B/6326B），账本面 --check PASS（5276B/1061B）",
+    "latest_artifact": "preview/ugc-gate-report.json（新增 sizes 块·自指自身字节数）＋preview/ledger-business-report.json（同上·新增只读 --check）＋qa/BD-PROP-010-R2767.log（负控 6/6·捕获并修复一个出生地缺陷）",
+    "last_artifact": "preview/ugc-gate-report.json（新增 sizes 块·自指自身字节数）＋preview/ledger-business-report.json（同上·新增只读 --check）＋qa/BD-PROP-010-R2767.log（负控 6/6·捕获并修复一个出生地缺陷）",
+    "next_milestone": "48 小时内：采纳本窗口提交树后启动的 reconcile-battery-R2767 全量电池（676 套件/5032 判据）；再补 API 市场面尺寸注记（需同步改 src/sandbox/ledger/test_apimarket_report_json.py:124 的键集断言）",
+    "next_milestone_due": "2026-11-17T09:49:02+08:00",
+    "updated_at": "2026-11-15T09:49:02+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -38,6 +38,7 @@
     }
   ],
   "outs": [
+    "preview/ugc-gate-report.json（新增 sizes 块·自指自身字节数）＋preview/ledger-business-report.json（同上·新增只读 --check）＋qa/BD-PROP-010-R2767.log（负控 6/6·捕获并修复一个出生地缺陷）",
     "deliverable-index-R2765.log (2132B)",
     "platform-live-R2764.log (1641B)",
     "lobby-ws-R2763.log (1439B)",
@@ -741,7 +742,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2765",
+      "2767",
       "OSLoop 执行 tick"
     ],
     [
@@ -764,10 +765,10 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 133,
+    "log_lines_in_window": 142,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 21,
+    "substantive_non_idle_mention_lines": 22,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,

@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-14 21:58:07Z",
+ "generated_utc": "2026-11-15 01:46:48Z",
  "db": "preview/ledger-demo.db",
  "accounts": [
   {
@@ -46,5 +46,9 @@
    "blocked": true
   }
  ],
- "report": "preview/ledger-business-report.html"
+ "report": "preview/ledger-business-report.html",
+ "sizes": {
+  "html": 5276,
+  "json": 1061
+ }
 }

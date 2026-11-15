@@ -75,6 +75,10 @@
       "text": "the constructor hole is measured at its call sites by scanning non-test sandbox sources, and the report states LATENT or LIVE with the sites named, never a bare assertion"
     },
     {
+      "id": "AC-UGR9",
+      "text": "BD-PROP-010: the json states the byte size of both artifacts it belongs to, iterated to a fixed point, and --check refuses when either number disagrees with the bytes on disk"
+    },
+    {
       "id": "AC-SGV1",
       "text": "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"
     },
@@ -200,6 +204,10 @@
       "trace_id": "1ed800037db5d9763fef03c96ea6912c"
     }
   ],
+  "sizes": {
+    "html": 9079,
+    "json": 6326
+  },
   "wordlist": {
     "advisory": 7,
     "forbidden": 6

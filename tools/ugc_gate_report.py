@@ -44,6 +44,7 @@ CRITERIA = (
     ("AC-UGR6", "stdlib only, ASCII source, read-only on src/, writes only under preview/ and qa/, exit 0 on pass and 2 on any failed criterion"),
     ("AC-UGR7", "the shipped parity face msgsec_stub.py --parity reads PARITY-OK and its own line is carried verbatim"),
     ("AC-UGR8", "the constructor hole is measured at its call sites by scanning non-test sandbox sources, and the report states LATENT or LIVE with the sites named, never a bare assertion"),
+    ("AC-UGR9", "BD-PROP-010: the json states the byte size of both artifacts it belongs to, iterated to a fixed point, and --check refuses when either number disagrees with the bytes on disk"),
     ("AC-SGV1", "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"),
     ("AC-SGV2", "PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists"),
     ("AC-SGV3", "PRE-REGISTERED: tools/ugc_gate_report.py --check reads VERDICT PASS with AC-UGR2 counting 4 must-refuse constructions and zero measured holes"),
@@ -370,8 +371,18 @@ def write_outputs(data):
     os.makedirs(os.path.dirname(OUT_HTML), exist_ok=True)
     with open(OUT_HTML, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(render_html(data))
-    with open(OUT_JSON, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(render_json(data) + "\n")
+    # BD-PROP-010: the json states the size of both artifacts it belongs to.
+    # The html is already on disk and never reads this key, so only the json's
+    # own byte count is self-referential; iterate to the fixed point.
+    for _ in range(6):
+        data["sizes"] = {
+            "html": os.path.getsize(OUT_HTML),
+            "json": os.path.getsize(OUT_JSON) if os.path.exists(OUT_JSON) else 0,
+        }
+        with open(OUT_JSON, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(render_json(data) + "\n")
+        if data["sizes"]["json"] == os.path.getsize(OUT_JSON):
+            break
 
 
 def check(data):
@@ -453,6 +464,19 @@ def check(data):
            and (not sites or (sites[0] in html_text and data["hole_status"] == "LIVE")))
     results.append(("AC-UGR8", ok8, "status=%s sites=%d first_carried=%s"
                     % (status, len(sites), bool(sites) and sites[0] in html_text)))
+
+    # AC-UGR9: the sizes block is read back FROM THE LANDED DOCUMENT, never from
+    # the in-memory dict, so a --no-write run still gates on what is on disk.
+    try:
+        landed = json.loads(json_text) if json_text else {}
+    except ValueError:
+        landed = {}
+    sizes = landed.get("sizes") or {}
+    ok9 = (bool(sizes)
+           and sizes.get("html") == os.path.getsize(OUT_HTML)
+           and sizes.get("json") == os.path.getsize(OUT_JSON))
+    results.append(("AC-UGR9", ok9, "json_sizes=%s disk=%d/%d"
+                    % (sizes, os.path.getsize(OUT_HTML), os.path.getsize(OUT_JSON))))
 
     for cid, ok, detail in results:
         print("%s %s %s" % ("PASS" if ok else "FAIL", cid, detail))
