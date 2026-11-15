@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "surface": "preview/ledger-reconcile-face.html",
+  "note": "Every number here came out of the shipped reconcile.py run at render time.",
+  "source": {
+    "script": "src/sandbox/ledger/reconcile.py",
+    "script_bytes": 5778,
+    "config": "src/sandbox/ledger/config.json",
+    "config_bytes": 2320,
+    "db": "src/sandbox/ledger/ledger.db",
+    "db_bytes": 53248,
+    "wal_present": true
+  },
+  "stats": {
+    "accounts": 5,
+    "tx": 0,
+    "entries": 0,
+    "net": 0
+  },
+  "real": {
+    "rc": 0,
+    "verdict": "PASS",
+    "verdict_line": "RECONCILE PASS (8/8 checks)",
+    "checks": [
+      {
+        "index": 1,
+        "name": "double-entry-balance",
+        "verdict": "PASS",
+        "n": 0,
+        "detail": ""
+      },
+      {
+        "index": 2,
+        "name": "balance-sign-law",
+        "verdict": "PASS",
+        "n": 0,
+        "detail": ""
+      },
+      {
+        "index": 3,
+        "name": "materialized-vs-derived",
+        "verdict": "PASS",
+        "n": 0,
+        "detail": ""
+      },
+      {
+        "index": 4,
+        "name": "zero-sum-and-mint-identity",
+        "verdict": "PASS",
+        "n": 0,
+        "detail": ""
+      },
+      {
+        "index": 5,
+        "name": "ref-idempotence",
+        "verdict": "PASS",
+        "n": 0,
+        "detail": ""
+      },
+      {
+        "index": 6,
+        "name": "content-gate-refs",
+        "verdict": "PASS",
+        "n": 0,
+        "detail": ""
+      },
+      {
+        "index": 7,
+        "name": "orphan-entries",
+        "verdict": "PASS",
+        "n": 0,
+        "detail": ""
+      },
+      {
+        "index": 8,
+        "name": "cap-scan-and-adjust-lines",
+        "verdict": "PASS",
+        "n": 0,
+        "detail": ""
+      }
+    ],
+    "details": [],
+    "stderr": ""
+  },
+  "seeded": {
+    "steps": [
+      {
+        "step": "ensure_account user",
+        "ok": true,
+        "out": "usr:lrc-demo"
+      },
+      {
+        "step": "ensure_account pool",
+        "ok": true,
+        "out": "pool:share"
+      },
+      {
+        "step": "record_gate_pass",
+        "ok": true,
+        "out": "evt-reconcile-face-0001"
+      },
+      {
+        "step": "mint_to_pool 100",
+        "ok": true,
+        "out": "7f6b4c3a4c5eb4a0"
+      },
+      {
+        "step": "grant_reward cocreate",
+        "ok": true,
+        "out": "e8328738a5a63023"
+      },
+      {
+        "step": "balance",
+        "ok": true,
+        "out": "{'account_id': 'usr:lrc-demo', 'balance': 20, 'disclaimer': '非投顾常驻提示：站内代币为平台内消费型虚拟权益，仅可用于站内消费（皮肤/房间/加急/特效/数字印记），不可提现、不可兑"
+      }
+    ],
+    "stats": {
+      "accounts": 6,
+      "tx": 2,
+      "entries": 4,
+      "net": 0
+    },
+    "run": {
+      "rc": 0,
+      "verdict": "PASS",
+      "verdict_line": "RECONCILE PASS (8/8 checks)",
+      "checks": [
+        {
+          "index": 1,
+          "name": "double-entry-balance",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        },
+        {
+          "index": 2,
+          "name": "balance-sign-law",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        },
+        {
+          "index": 3,
+          "name": "materialized-vs-derived",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        },
+        {
+          "index": 4,
+          "name": "zero-sum-and-mint-identity",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        },
+        {
+          "index": 5,
+          "name": "ref-idempotence",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        },
+        {
+          "index": 6,
+          "name": "content-gate-refs",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        },
+        {
+          "index": 7,
+          "name": "orphan-entries",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        },
+        {
+          "index": 8,
+          "name": "cap-scan-and-adjust-lines",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        }
+      ],
+      "details": [],
+      "stderr": ""
+    }
+  },
+  "control": {
+    "operation": {
+      "applied": true,
+      "reason": "one entry removed from a multi-entry tx",
+      "tx_id": "7f6b4c3a4c5eb4a0",
+      "entry_id": 1,
+      "entries_before": 2,
+      "entries_after": 1
+    },
+    "run": {
+      "rc": 2,
+      "verdict": "FAIL",
+      "verdict_line": "RECONCILE FAIL (2/8 checks failed)",
+      "checks": [
+        {
+          "index": 1,
+          "name": "double-entry-balance",
+          "verdict": "FAIL",
+          "n": 1,
+          "detail": ""
+        },
+        {
+          "index": 2,
+          "name": "balance-sign-law",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        },
+        {
+          "index": 3,
+          "name": "materialized-vs-derived",
+          "verdict": "FAIL",
+          "n": 1,
+          "detail": ""
+        },
+        {
+          "index": 4,
+          "name": "zero-sum-and-mint-identity",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        },
+        {
+          "index": 5,
+          "name": "ref-idempotence",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        },
+        {
+          "index": 6,
+          "name": "content-gate-refs",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        },
+        {
+          "index": 7,
+          "name": "orphan-entries",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        },
+        {
+          "index": 8,
+          "name": "cap-scan-and-adjust-lines",
+          "verdict": "PASS",
+          "n": 0,
+          "detail": ""
+        }
+      ],
+      "details": [],
+      "stderr": ""
+    },
+    "flipped": [
+      "double-entry-balance",
+      "materialized-vs-derived"
+    ],
+    "vacuous": false
+  },
+  "counts": {
+    "checks": 8,
+    "real_fail": 0,
+    "seeded_fail": 0,
+    "control_fail": 2,
+    "flipped": 2,
+    "real_empty": true
+  },
+  "sizes": {
+    "html": 7963,
+    "json": 6151
+  }
+}

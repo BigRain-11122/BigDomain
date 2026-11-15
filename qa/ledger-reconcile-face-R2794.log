@@ -1,0 +1,19 @@
+R2794 ledger reconcile face - evidence
+surface: preview/ledger-reconcile-face.html + .json (rendered by tools/ledger_reconcile_face.py)
+pass 1 real sandbox book: accounts=5 tx=0 entries=0 net=0 -> reconcile rc=0, eight PASS rows
+  honest reading: this is a VACUOUS PASS over an empty book and the page states it in words
+pass 2 positive control (book built through the shipped ledger API: usr:lrc-demo + pool:share,
+  record_gate_pass, mint_to_pool 100, grant_reward cocreate): tx=2 entries=4 net=0
+  -> reconcile rc=0, eight PASS rows, account balance 20
+pass 3 negative control: one entry removed from a two-entry tx (2 -> 1)
+  -> reconcile rc=2, flipped=double-entry-balance,materialized-vs-derived
+face bytes: html=7963B json=6151B
+gate: VERDICT PASS 6/6 (row set and verdicts re-measured from a fresh run, counts recomputed,
+  sizes equal os.path.getsize, landed html byte-identical to rendering the landed json,
+  zero http/https literals)
+isolation: src/sandbox/ledger/ledger.db sha256 prefix E405E605D4D8542B identical before and after
+  the render and after --check; mtime unchanged (2026-11-15T05:56:19), the live DB is never opened
+entry page: preview/index.html re-rendered 35359B, deliverable_index --check VERDICT PASS 14/14
+honest disclosure: two renders are NOT byte-identical - the shipped ledger API mints a random
+  tx_id per run and the page carries the concrete tx/entry ids it acted on, so --check compares
+  check names and verdicts rather than ids
