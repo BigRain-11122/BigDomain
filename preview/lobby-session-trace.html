@@ -26,7 +26,7 @@ footer{margin-top:26px;color:#77819a;font-size:12px}
 <div class="cards">
 <div class="card"><b>17</b>frames captured</div>
 <div class="card"><b>11</b>steps driven</div>
-<div class="card"><b>5</b>refusals</div>
+<div class="card"><b>6</b>refusals</div>
 <div class="card"><b>7</b>distinct types</div>
 </div>
 <h2>Read from the sandbox config, not typed here</h2>
@@ -53,7 +53,7 @@ footer{margin-top:26px;color:#77819a;font-size:12px}
 <tr class="step"><td>-</td><td colspan="7">chat.send carrying an advisory word (gate 2) &middot; client sends chat.send room=lobby text=14 chars</td></tr>
 <tr><td>7</td><td class='t no'>sec.reject</td><td class='code'>E_CONTENT_REJECTED</td><td class='t'></td><td></td><td class='t'>system</td><td>false</td><td></td></tr>
 <tr class="step"><td>-</td><td colspan="7">chat.send over the text cap (cap x2 chars) &middot; client sends chat.send room=lobby text=4000 chars</td></tr>
-<tr><td>8</td><td class='t ok'>chat.broadcast</td><td class='code'></td><td class='t'>lobby</td><td>2000</td><td class='t'>res-<id></td><td>false</td><td>yes</td></tr>
+<tr><td>8</td><td class='t no'>sec.reject</td><td class='code'>E_TEXT_TOO_LONG</td><td class='t'></td><td></td><td class='t'>system</td><td>false</td><td></td></tr>
 <tr class="step"><td>-</td><td colspan="7">room.subscribe an unknown room &middot; client sends room.subscribe room=trace-no-such-room</td></tr>
 <tr><td>9</td><td class='t no'>sec.reject</td><td class='code'>E_ROOM_UNKNOWN</td><td class='t'></td><td></td><td class='t'>system</td><td>false</td><td></td></tr>
 <tr class="step"><td>-</td><td colspan="7">room.unsubscribe lobby &middot; client sends room.unsubscribe room=lobby</td></tr>
@@ -68,14 +68,14 @@ footer{margin-top:26px;color:#77819a;font-size:12px}
 <tr><td>16</td><td class='t ok'>chat.broadcast</td><td class='code'></td><td class='t'>lobby</td><td>7</td><td class='t'>res-<id></td><td>false</td><td>yes</td></tr>
 <tr><td>17</td><td class='t no'>err.rate_limit</td><td class='code'>E_RATE_LIMIT</td><td class='t'></td><td></td><td class='t'>system</td><td>false</td><td></td></tr>
 </table>
-<h2>One seam this trace measured</h2>
-<div class="warn">An over-long send was NOT refused. The client sent 4000 characters and the server broadcast 2000: the text cap <b>truncates silently</b>, so a client that depends on a refusal code for over-length text is depending on behaviour the server does not have. The spec owes an explicit over-length clause (refuse vs truncate) before any client leans on either. Carried to the board.</div>
+<h2>What the text cap does</h2>
+<div class="warn">An over-cap send is <b>refused</b>: the client sent 4000 characters and the server answered <span class="code">E_TEXT_TOO_LONG</span> instead of broadcasting a shorter line, so no text is silently lost. The spec names the code and its payload (AC-S24), the gate console answers the same input with 413, and the same cap applies to idea.submit.</div>
 <h2>Codes the server emitted</h2>
-<p class="t">E_CONTENT_REJECTED, E_ROOM_UNKNOWN, E_RATE_LIMIT</p>
+<p class="t">E_CONTENT_REJECTED, E_TEXT_TOO_LONG, E_ROOM_UNKNOWN, E_RATE_LIMIT</p>
 <h2>Frame types observed</h2>
 <p class="t">sys.hello, sys.risk_warning, pay.grant_sandbox, sys.notice, chat.broadcast, sec.reject, err.rate_limit</p>
 <footer>
-config src/sandbox/lobby/config.json &middot; 1712 bytes &middot; server src/sandbox/lobby/server.py &middot; 30231 bytes<br>
+config src/sandbox/lobby/config.json &middot; 1712 bytes &middot; server src/sandbox/lobby/server.py &middot; 31142 bytes<br>
 namespace bd-lobby-session-trace-v1 &middot; this page is rendered from preview/lobby-session-trace.json, which is the landed payload.
 </footer>
 </main>

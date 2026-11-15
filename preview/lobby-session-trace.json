@@ -19,7 +19,7 @@
   "config": "src/sandbox/lobby/config.json",
   "config_bytes": 1712,
   "server": "src/sandbox/lobby/server.py",
-  "server_bytes": 30231
+  "server_bytes": 31142
  },
  "steps": [
   {
@@ -202,23 +202,21 @@
   {
    "frames": [
     {
-     "actor": "res-<id>",
+     "actor": "system",
      "ai_generated": false,
-     "code": null,
-     "evt": true,
+     "code": "E_TEXT_TOO_LONG",
+     "evt": false,
      "keys": [
       "actor",
       "ai_generated",
-      "evt_id",
       "payload",
-      "room",
       "ts_utc",
       "type",
       "v"
      ],
-     "room": "lobby",
-     "text_len": 2000,
-     "type": "chat.broadcast"
+     "room": null,
+     "text_len": null,
+     "type": "sec.reject"
     }
    ],
    "label": "chat.send over the text cap (cap x2 chars)",
@@ -437,16 +435,19 @@
  "summary": {
   "codes": [
    "E_CONTENT_REJECTED",
+   "E_TEXT_TOO_LONG",
    "E_ROOM_UNKNOWN",
    "E_RATE_LIMIT"
   ],
   "frames": 17,
-  "refusals": 5,
-  "steps": 11,
-  "truncation": {
-   "received_len": 2000,
+  "over_cap": {
+   "code": "E_TEXT_TOO_LONG",
+   "outcome": "REFUSED",
+   "received_len": null,
    "sent_len": 4000
   },
+  "refusals": 6,
+  "steps": 11,
   "types": [
    "sys.hello",
    "sys.risk_warning",

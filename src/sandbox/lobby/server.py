@@ -185,7 +185,7 @@ class Lobby:
     def _text_of(self, msg):
         payload = msg.get("payload")
         text = str(payload.get("text", "")) if isinstance(payload, dict) else ""
-        return text.strip()[: self.max_text]
+        return text.strip()
 
     def _idem_key(self, client_msg_id, text):
         """Dedup key binds the client-supplied id to the exact text so a
@@ -222,6 +222,18 @@ class Lobby:
         text = self._text_of(msg)
         if not text:
             await self.send_reject(client, "E_BAD_FRAME", "chat text empty")
+            return
+        # R2791: over-cap text is refused, never truncated. A silent slice
+        # would store fewer characters than the client sent and say nothing,
+        # while the shipped gate console already answers 413 for the same
+        # input - one platform, one answer.
+        if len(text) > self.max_text:
+            await self.send_reject(
+                client,
+                "E_TEXT_TOO_LONG",
+                "chat text exceeds the cap",
+                {"limit": self.max_text, "actual": len(text)},
+            )
             return
         # gate 1 (content safety) + gate 2 (non-advisory): rejected content is
         # never broadcast and never lands in the public event stream
@@ -314,6 +326,16 @@ class Lobby:
         text = self._text_of(msg)
         if not text:
             await self.send_reject(client, "E_BAD_FRAME", "idea text empty")
+            return
+        # R2791: same cap, same code as chat.send - the co-create path does
+        # not get its own policy.
+        if len(text) > self.max_text:
+            await self.send_reject(
+                client,
+                "E_TEXT_TOO_LONG",
+                "idea text exceeds the cap",
+                {"limit": self.max_text, "actual": len(text)},
+            )
             return
         try:
             self.gate.check_text(text)

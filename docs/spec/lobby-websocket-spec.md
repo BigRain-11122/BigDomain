@@ -44,6 +44,7 @@
 | AC-S21 | `room.subscribe` 握手（R2464 房选器·R2788 入册）：`payload.room` ∈ cfg.rooms → 该房加入连接房间集，回 `sys.notice`（notice 文本载 `room subscribe: <room>` 且 room 字段=该房）；未知房 → `sec.reject` code=`E_ROOM_UNKNOWN` | live 断言〔os-lobby-room-picker AC-RP6〕 |
 | AC-S22 | `room.unsubscribe` 握手（R2788 入册）：`payload.room` ∈ cfg.rooms → 该房移出连接房间集，回 `sys.notice`（`room unsubscribe: <room>`）；未知房 → `sec.reject` code=`E_ROOM_UNKNOWN`；**释放须真实生效**——退订后向该房 `chat.send` 被 `E_ROOM_UNKNOWN` 拒、且仍在该房的见证连接收不到该条广播 | live 断言〔AC-RP6 通知面 + AC-RP8 释放面〕 |
 | AC-S23 | `sys.notice` 服务端推送通道（R2788 入册）：actor=`system`·`ai_generated=false`（服务端权威，客户端传值忽略）；`payload.notice` 载事件文本；同一连接连续的订阅/退订须**两帧分开到达**而非合并；room 缺省=已订阅房的最小字典序，无订阅时取 cfg.rooms[0] | live 断言〔os-lobby-room-picker AC-RP6 双通知用例〕 |
+| AC-S24 | 文本上限=`拒`而非`截`（R2791）：`chat.send` / `idea.submit` 的 `payload.text` 先 strip，再按**字符数**与 cfg.`max_text_len` 比较——超上限回 `sec.reject` code=`E_TEXT_TOO_LONG`，payload 载 `limit`（上限）与 `actual`（strip 后实长），该帧**不广播、不落库**（`idea.submit` 另不 append proposal_pool）；恰等于上限=接受并按原文落库；上限值只从 cfg 读，不在拒绝路径写字面量。与 HTTP 内容闸控制台（`413`+`E_GC_TOO_LONG`·AC-GC5）同一答案：同平台对同一问题不给两种回答 | live 断言〔os-lobby-chat-gate AC-S47 拒绝面 + `tools/lobby_session_trace.py` 实测帧〕 |
 
 **R2789 覆盖更新（承 R2788 诚实注·两条待补断言已关闭）**：R2788 列出的两条待补断言现已各有实测断言——「未知房拒绝是惰性的」= AC-RP7（拒绝帧 `E_ROOM_UNKNOWN` + 一秒静默窗内无该房 notice + 第二房发送仍通 + 向未知房发送同码被拒，房间集从进程外可证未变）；「退订后向该房 chat.send 被拒」= AC-RP8（退订 notice 之后该房发送回 `E_ROOM_UNKNOWN`，且仍在该房的见证连接零广播）。两者在真实 server 进程 + 真实 WebSocket 客户端上读出，`SUITE PASS 8/8`；负控=把 `handle_chat` 的第二道房间归属判定（该房是否属于本连接已订阅房集）从私有副本删掉后，见证连接确实收到该条广播（`NEGCTL VERDICT CONFIRMED`），故断言承重而非装饰。AC-S20 的「被拒帧不增加落库行数」仍由 AC-CMI3 的 `fresh_rows == 5` 覆盖。
 
@@ -63,7 +64,7 @@
 - RFC 6455 WebSocket；生产 wss·沙箱 ws；JSON 单行帧·UTF-8。
 - 消息封套：`{v, type, ts_utc, room, actor, payload, ai_generated, evt_id?, trace_id?}`。`ai_generated` 与 `actor` 为服务端权威字段（客户端传值忽略）。
 - type 初版枚举：`sys.hello / sys.risk_warning / sys.notice / chat.send / chat.broadcast / chat.duplicate / idea.submit / room.subscribe / room.unsubscribe / sec.reject / err.rate_limit / pay.grant_sandbox`+城市面（P-52①）：`census.query / census.snapshot / avatar.register / avatar.intake_receipt`+房间读面（R1790）：`room.board`+idea 池读面（R1792）：`idea.board`。
-- 错误码表：`E_ENTRANCE_REQUIRED / E_CONTENT_REJECTED / E_RATE_LIMIT / E_ROOM_UNKNOWN / E_BAD_FRAME / E_GATE_OFFLINE / E_FORBIDDEN_FIELD / E_DUPLICATE_MSG / E_STORE_NO_DISCLAIMER`。
+- 错误码表：`E_ENTRANCE_REQUIRED / E_CONTENT_REJECTED / E_RATE_LIMIT / E_ROOM_UNKNOWN / E_BAD_FRAME / E_TEXT_TOO_LONG / E_GATE_OFFLINE / E_FORBIDDEN_FIELD / E_DUPLICATE_MSG / E_STORE_NO_DISCLAIMER`。
 
 ### 房间级消息读面（R1790 接线·AC-S14..S17 承载）
 - `room.board` 请求帧零参零入城门（公共读面·围观可查）；响应帧 `payload.board`=存储层 `EventStore.room_message_board()` 公有 API 引用派生（每房 {room,messages,actors}·zone 升序·零缓存读时聚合·零第二引擎）+`payload.disclaimer`=常驻非投顾文案（服务端 store 构造期接线自 config `risk_warning.text` 既有键——shipped config 零改动）。

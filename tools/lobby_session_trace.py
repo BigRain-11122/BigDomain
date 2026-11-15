@@ -13,10 +13,12 @@ both wordlist samples are read from src/sandbox/lobby/config.json at render
 time, so no Chinese literal and no numeric limit is typed here.
 
 Criteria AC-LST1..AC-LST6 are pinned in src/os/backlog.md BEFORE this file.
-Two consequences are visible on purpose: the text cap TRUNCATES an over-long
-send rather than refusing it (a spec seam, carried to the board), and the
-actor on a broadcast is masked to its class because the server assigns a
-per-session id that would otherwise break render determinism.
+The page reports what the text cap DOES, read off the captured frames rather
+than off a spec sentence: an over-cap send is refused with the server's own
+code once AC-S24 is in force, and the page reverts to the truncation warning
+by itself if the server ever regresses. The actor on a broadcast is masked to
+its class because the server assigns a per-session id that would otherwise
+break render determinism.
 
 Usage:
     python tools/lobby_session_trace.py            # run the session, render
@@ -258,13 +260,22 @@ def run_session(cfg):
             if frame["code"] and frame["code"] not in codes:
                 codes.append(frame["code"])
 
-    truncation = None
+    over_cap = None
     for row in steps:
         if row["label"].startswith("chat.send over the text cap"):
             sent_len = (cap * LONG_MULT)
             for frame in row["frames"]:
+                if frame["type"] in ("sec.reject", "err.rate_limit"):
+                    over_cap = {"sent_len": sent_len, "outcome": "REFUSED",
+                                "code": frame["code"], "received_len": None}
+                    break
                 if frame["type"] == "chat.broadcast":
-                    truncation = {"sent_len": sent_len, "received_len": frame["text_len"]}
+                    got = frame["text_len"]
+                    over_cap = {"sent_len": sent_len,
+                                "outcome": ("ACCEPTED" if got == sent_len
+                                            else "TRUNCATED"),
+                                "code": None, "received_len": got}
+                    break
 
     return {
         "namespace": NS,
@@ -292,7 +303,7 @@ def run_session(cfg):
             "refusals": refusals,
             "types": types,
             "codes": codes,
-            "truncation": truncation,
+            "over_cap": over_cap,
         },
     }
 
@@ -393,18 +404,28 @@ def render_html(payload):
                    "yes" if frame["evt"] else ""))
     add("</table>")
 
-    truncation = summary["truncation"]
-    add("<h2>One seam this trace measured</h2>")
-    if truncation:
+    over_cap = summary["over_cap"]
+    add("<h2>What the text cap does</h2>")
+    if over_cap and over_cap["outcome"] == "REFUSED":
+        add('<div class="warn">An over-cap send is <b>refused</b>: the client sent %d characters '
+            "and the server answered <span class=\"code\">%s</span> instead of broadcasting a "
+            'shorter line, so no text is silently lost. The spec names the code and its payload '
+            "(AC-S24), the gate console answers the same input with 413, and the same cap applies "
+            "to idea.submit.</div>" % (over_cap["sent_len"], over_cap["code"]))
+    elif over_cap and over_cap["outcome"] == "TRUNCATED":
         add('<div class="warn">An over-long send was NOT refused. The client sent %d characters and '
             "the server broadcast %d: the text cap <b>truncates silently</b>, so a client that "
             "depends on a refusal code for over-length text is depending on behaviour the server "
-            "does not have. The spec owes an explicit over-length clause (refuse vs truncate) "
-            "before any client leans on either. Carried to the board.</div>"
-            % (truncation["sent_len"], truncation["received_len"]))
+            "does not have. This page reads the outcome off the captured frames, so it will say so "
+            "again if the server ever regresses.</div>"
+            % (over_cap["sent_len"], over_cap["received_len"]))
+    elif over_cap and over_cap["outcome"] == "ACCEPTED":
+        add('<div class="warn">The over-cap send was accepted at full length (%d characters), so '
+            "the text cap is not enforced at all on this path.</div>"
+            % over_cap["sent_len"])
     else:
-        add('<div class="warn">No broadcast row was captured for the over-length probe, so the '
-            "truncation seam is NOT confirmed by this render.</div>")
+        add('<div class="warn">No refusal and no broadcast row was captured for the over-cap probe, '
+            "so what the cap does is NOT confirmed by this render.</div>")
 
     add("<h2>Codes the server emitted</h2>")
     add('<p class="t">%s</p>' % (", ".join(summary["codes"]) or "none"))
@@ -530,9 +551,10 @@ def main(argv):
               % (summary["steps"], summary["frames"], summary["refusals"],
                  len(summary["types"]), len(summary["codes"]),
                  os.path.getsize(OUT_HTML), os.path.getsize(OUT_JSON)))
-        if summary.get("truncation"):
-            print("  seam: sent=%d received=%d (silent truncation)"
-                  % (summary["truncation"]["sent_len"], summary["truncation"]["received_len"]))
+        if summary.get("over_cap"):
+            print("  cap: sent=%d outcome=%s code=%s received=%s"
+                  % (summary["over_cap"]["sent_len"], summary["over_cap"]["outcome"],
+                     summary["over_cap"]["code"], summary["over_cap"]["received_len"]))
         return 0
 
     cfg = _load_json(CONFIG)
@@ -549,9 +571,10 @@ def main(argv):
              os.path.getsize(OUT_HTML), os.path.getsize(OUT_JSON)))
     print("types: " + " ".join(summary["types"]))
     print("codes: " + " ".join(summary["codes"]))
-    if summary.get("truncation"):
-        print("seam: sent=%d received=%d"
-              % (summary["truncation"]["sent_len"], summary["truncation"]["received_len"]))
+    if summary.get("over_cap"):
+        print("cap: sent=%d outcome=%s code=%s received=%s"
+              % (summary["over_cap"]["sent_len"], summary["over_cap"]["outcome"],
+                 summary["over_cap"]["code"], summary["over_cap"]["received_len"]))
     findings, code = check(_read_bytes(OUT_JSON), _read_bytes(OUT_HTML))
     for finding in findings:
         print("  - " + finding)

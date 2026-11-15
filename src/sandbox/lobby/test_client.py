@@ -3267,8 +3267,9 @@ async def idem_keybind_cases():
     original (same id + different text = a fresh event with both keys
     coexisting), the cache is server-instance scoped (a replay from a
     different connection absorbs), the id and text domains are
-    independent, and the strip/truncate normalization happens before
-    the key digest. Suite-only round: server.py and the shipped
+    independent, and the strip normalization happens before the key
+    digest (R2791: over-cap text is refused, never truncated). Suite-only
+    round: server.py and the shipped
     config are not modified (R1892 precedent)."""
     sha_server_pre = hashlib.sha256(open(SERVER, "rb").read()).hexdigest()
     sha_config_pre = hashlib.sha256(open(CONFIG, "rb").read()).hexdigest()
@@ -3406,7 +3407,7 @@ async def idem_keybind_cases():
         srv_46.stop()
 
     # ---- AC-S47: normalization happens before the key digest
-    # (strip / id-strip / truncation all feed the same normalized key)
+    # (strip / id-strip feed the same normalized key; over-cap refused)
     port_47 = _free_port()
     srv_47 = ServerProc(port_47, db=os.path.join(
         tempfile.mkdtemp(prefix="lobby-keybind-47-"), "events.db"))
@@ -3430,26 +3431,39 @@ async def idem_keybind_cases():
         await chat_send(ws_47, "lobby", "s47 idnorm", "kb-47-b")
         di = await dup_of(ws_47, bi.get("evt_id"))
         idnorm_absorb = bi is not None and di is not None
-        # truncation face: 2001-char texts identical to char 2000 share
-        # the normalized key (digest is computed after the slice)
-        base47 = "s47 tr" + "a" * 1994  # exactly 2000 chars
-        await chat_send(ws_47, "lobby", base47 + "X", "kb-47-c")
+        # R2791 face (replaces the R1899 truncation face): an over-cap text
+        # is REFUSED with E_TEXT_TOO_LONG and writes nothing, the exact-cap
+        # text is accepted and stored at cap, and a padded replay of it still
+        # absorbs - so the cap is applied to the STRIPPED text and the
+        # idempotency purpose of this case survives the behaviour change.
+        cap47 = int(json.loads(open(CONFIG, encoding="utf-8").read())
+                    .get("max_text_len", 2000))
+        over47 = "s47 ov" + "a" * (cap47 - 6) + "b"  # cap+1 chars
+        await chat_send(ws_47, "lobby", over47, "kb-47-c")
+        rj = await recv_until(ws_47, lambda f: f.get("type") == "sec.reject"
+                              and f.get("payload", {}).get("code") == "E_TEXT_TOO_LONG")
+        cap_refused = (rj is not None
+                       and rj.get("payload", {}).get("limit") == cap47
+                       and rj.get("payload", {}).get("actual") == len(over47))
+        base47 = "s47 tr" + "a" * (cap47 - 6)  # exactly cap chars
+        await chat_send(ws_47, "lobby", base47, "kb-47-c")
         bt = await recv_until(ws_47, lambda f: f.get("type") == "chat.broadcast"
                               and f.get("payload", {}).get("text") == base47)
-        trunc_stored = (bt is not None
-                        and len(bt.get("payload", {}).get("text", "")) == 2000)
-        await chat_send(ws_47, "lobby", base47 + "Y", "kb-47-c")
+        cap_stored = (bt is not None
+                      and len(bt.get("payload", {}).get("text", "")) == cap47)
+        await chat_send(ws_47, "lobby", "  " + base47 + "  ", "kb-47-c")
         dt = await dup_of(ws_47, bt.get("evt_id"))
-        trunc_absorb = trunc_stored and dt is not None
+        cap_absorb = cap_stored and dt is not None
         rows47 = chat_rows(srv_47.db)
         ok47 = (strip_stored and strip_absorb and idnorm_absorb
-                and trunc_stored and trunc_absorb and rows47 == 3)
+                and cap_refused and cap_stored and cap_absorb and rows47 == 3)
         record("AC-S47", ok47,
                "strip-face stored+absorbed=%s/%s; id-normalized "
-               "absorbed=%s; truncation stored(2000)+absorbed=%s/%s; "
+               "absorbed=%s; over-cap refused(E_TEXT_TOO_LONG)=%s; "
+               "exact-cap stored(%d)=%s; padded replay absorbed=%s; "
                "rows 3 stable=%s"
-               % (strip_stored, strip_absorb, idnorm_absorb, trunc_stored,
-                  trunc_absorb, rows47 == 3))
+               % (strip_stored, strip_absorb, idnorm_absorb, cap_refused,
+                  cap47, cap_stored, cap_absorb, rows47 == 3))
     finally:
         if ws_47 is not None:
             try:

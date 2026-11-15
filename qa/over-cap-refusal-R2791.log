@@ -1,0 +1,59 @@
+R2791 over-cap text refusal - evidence (window 2026-11-15)
+
+Criteria AC-OVL1..AC-OVL6 were pinned in src/os/backlog.md and committed as
+d102a7cf BEFORE any code existed in this window.
+
+BIRTH SITE (behaviour change, not a test patch)
+  src/sandbox/lobby/server.py
+    _text_of()                : returns text.strip() - the silent slice is gone
+    handle_chat()             : len(text) > self.max_text -> sec.reject
+                                E_TEXT_TOO_LONG with payload {limit, actual};
+                                placed before the content gates, after the room
+                                check; that send adds no store row
+    handle_idea()             : same cap, same code, no proposal_pool append
+  The limit is self.max_text, read from src/sandbox/lobby/config.json at
+  start-up; the refusal path carries no numeric literal.
+
+SPEC (discoverable before a client meets it)
+  docs/spec/lobby-websocket-spec.md
+    AC-S24 row added to the AC table: strip -> character count -> refuse;
+    exact-cap accepted; not broadcast, not stored; same cap for idea.submit;
+    same answer as the HTTP gate console (413 / E_GC_TOO_LONG, AC-GC5)
+    error-code table gains E_TEXT_TOO_LONG
+
+TEST FACE REPLACED IN THE SAME WINDOW (AC-OVL5, disclosed)
+  src/sandbox/lobby/test_client.py AC-S47
+    old: 2001-char text truncated to 2000, second 2001-char text absorbed
+    new: cap+1 refused with E_TEXT_TOO_LONG (limit and actual asserted),
+         exact-cap text accepted and stored at cap, padded replay of the
+         same client_msg_id still absorbs, db rows still exactly 3
+    the idempotency purpose of the case is preserved; the criterion was
+    re-decided by this window, not relaxed to make a test pass
+
+MEASURED ON THE REAL TREE
+  python src/sandbox/lobby/test_client.py
+    SUITE PASS (79/79 criteria pass)
+    PASS AC-S47: over-cap refused(E_TEXT_TOO_LONG)=True; exact-cap
+    stored(2000)=True; padded replay absorbed=True; rows 3 stable=True
+  python src/sandbox/lobby/test_lobby_rooms.py         SUITE PASS 8/8
+  python tools/lobby_session_trace.py
+    RENDERED steps=11 frames=17 refusals=6 types=7 codes=4
+    cap: sent=4000 outcome=REFUSED code=E_TEXT_TOO_LONG
+    codes: E_CONTENT_REJECTED E_TEXT_TOO_LONG E_ROOM_UNKNOWN E_RATE_LIMIT
+    second render byte-identical on BOTH artifacts; --check leaves bytes and
+    mtime unchanged; injected one byte -> VERDICT FAIL 1 E_STALE rc=2;
+    restored -> VERDICT PASS rc=0
+  python tools/lobby_protocol_map.py (spec moved, so the map had to move)
+    criteria=32 messages=17 uncovered=0 file_refs=13 html=27260B fails=0
+  python tools/deliverable_index.py --check
+    VERDICT PASS 14/14 fingerprint=d1f95fbab7d03cc6
+
+HONEST BOUNDARIES
+  - the gate console's 413 is what made refuse the answer for the lobby; the
+    console and the lobby now agree, which is the product point of the change;
+  - the whole battery is still owed (it is owed since before this window and
+    this window does not claim a leg verdict);
+  - tools/lobby_session_trace.py is still unregistered in
+    src/sandbox/reconcile_all.py;
+  - the entrance is a mock, there is no merchant, no platform content API, no
+    msgSecCheck call and no cloud call anywhere in this trace.

@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T17:26:41+08:00",
-  "do": "R2790 - PRODUCT: the lobby real-time layer stopped being described and was DRIVEN - preview/lobby-session-trace.html (8372B) + .json (7958B), rendered in one command by tools/lobby_session_trace.py, which spawns the shipped src/sandbox/lobby/server.py on a free loopback port over a temp database, opens two...",
+  "export_ts": "2026-11-15T17:53:38+08:00",
+  "do": "R2791 产品与行为修正：大厅超长发言从「静默截断」改成「明确拒绝」——4000 字送进来，服务端回 sec.reject code=E_TEXT_TOO_LONG 并载 limit/actual，不广播也不落库，idea.submit 同码同上限；理由不是口味而是平台一致性，HTTP 内容闸控制台早已对同样输入回 413；preview/lobby-session-trace.html（8347B）重渲染后读者能看到这条拒绝帧与它自己的码（frames=17 refusals=6 codes=4）；规格新增 AC-S24，判据 AC-OVL1..6 先落板后写码，大厅大套件 79/79、房选器 8/8、入口页 14/14",
   "ceo_face": {
-    "current": "R2790 - PRODUCT: the lobby real-time layer stopped being described and was DRIVEN - preview/lobby-session-trace.html (8372B) + .json (7958B), rendered in one command by tools/lobby_session_trace.py, which spawns the shipped src/sandbox/lobby/server.py on a free loopback port over a temp database, opens two...",
-    "latest_artifact": "preview/lobby-session-trace.html (8372B) + preview/lobby-session-trace.json (7958B)",
-    "last_artifact": "preview/lobby-session-trace.html (8372B) + preview/lobby-session-trace.json (7958B)",
-    "next_milestone": "the full battery is OWED and grows with every registration - launch it EARLY with an explicit evidence path by a window that can supervise 4000-5900s, then adopt by its own closing `BATTERY rc=` row.",
-    "next_milestone_due": "2026-11-17T17:26:41+08:00",
-    "updated_at": "2026-11-15T17:26:41+08:00",
+    "current": "R2791 产品与行为修正：大厅超长发言从「静默截断」改成「明确拒绝」——4000 字送进来，服务端回 sec.reject code=E_TEXT_TOO_LONG 并载 limit/actual，不广播也不落库，idea.submit 同码同上限；理由不是口味而是平台一致性，HTTP 内容闸控制台早已对同样输入回 413；preview/lobby-session-trace.html（8347B）重渲染后读者能看到这条拒绝帧与它自己的码（frames=17 refusals=6 codes=4）；规格新增 AC-S24，判据 AC-OVL1..6 先落板后写码，大厅大套件 79/79、房选器 8/8、入口页 14/14",
+    "latest_artifact": "preview/lobby-session-trace.html（8347B）+ preview/lobby-session-trace.json（8008B·双渲染逐字节同一）",
+    "last_artifact": "preview/lobby-session-trace.html（8347B）+ preview/lobby-session-trace.json（8008B·双渲染逐字节同一）",
+    "next_milestone": "48 小时内：把 AC-VAC1..6 的账本对账判据补进 src/sandbox/ledger/reconcile.py，并注册 tools/lobby_session_trace.py（注册表需要携带判据的套件模块）；全量电池仍欠，须由能 supervising 4000-5900s 的窗口早发并以自身 BATTERY rc= 行采纳",
+    "next_milestone_due": "2026-11-17T17:53:38+08:00",
+    "updated_at": "2026-11-15T17:53:38+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -38,6 +38,7 @@
     }
   ],
   "outs": [
+    "preview/lobby-session-trace.html（8347B）+ preview/lobby-session-trace.json（8008B·双渲染逐字节同一）",
     "preview/lobby-session-trace.html (8372B) + preview/lobby-session-trace.json (7958B)",
     "preview/lobby-protocol-map.html (26458B) + preview/lobby-protocol-map.json (25645B)",
     "preview/lobby-protocol-map.html (26405B) + preview/lobby-protocol-map.json (25597B)",
@@ -754,7 +755,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2790",
+      "2791",
       "OSLoop 执行 tick"
     ],
     [
@@ -777,10 +778,10 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 91,
+    "log_lines_in_window": 95,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 17,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
