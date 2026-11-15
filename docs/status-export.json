@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T13:24:51+08:00",
-  "do": "R2779 产品切片：上线前置清单从散文变成可打开的实物——preview/ship-checklist.html（9182B）/ .json（4983B），一条命令派生；十一行三档，八条本司行的「已具备」在渲染那一刻从盘上实测（BLUEPRINT 的 AIGC 与 msgSecCheck、benchmarks 的备案指引与前置审批类目、四个 preview 面），三条 CEO 行永不可勾；AC-SCL1..8 PASS 8/8，只读性与负控双向实测",
+  "export_ts": "2026-11-15T13:32:26+08:00",
+  "do": "R2780 - MONITORED-WAIT window that closed the largest measured debt on record and repaired the export birth site instead of refreshing around it. Five readings at open: git status EMPTY on main with no index.lock (the startup round.lock only), the group ledger carries ZERO unreplied @BigDomain rows (atbd_li...",
   "ceo_face": {
-    "current": "R2779 产品切片：上线前置清单从散文变成可打开的实物——preview/ship-checklist.html（9182B）/ .json（4983B），一条命令派生；十一行三档，八条本司行的「已具备」在渲染那一刻从盘上实测（BLUEPRINT 的 AIGC 与 msgSecCheck、benchmarks 的备案指引与前置审批类目、四个 preview 面），三条 CEO 行永不可勾；AC-SCL1..8 PASS 8/8，只读性与负控双向实测",
-    "latest_artifact": "preview/ship-checklist.html（9182B）+ preview/ship-checklist.json（4983B·sizes 自指字节）",
-    "last_artifact": "preview/ship-checklist.html（9182B）+ preview/ship-checklist.json（4983B·sizes 自指字节）",
-    "next_milestone": "48 小时内：按自身闭合 BATTERY rc= 行采纳 reconcile-battery-R2779（676 套/5032 判据·收账提交后 detached 启动），并把 ship_checklist 的 8 条判据注册进 src/sandbox/reconcile_all.py",
-    "next_milestone_due": "2026-11-17T13:24:51+08:00",
-    "updated_at": "2026-11-15T13:24:51+08:00",
+    "current": "R2780 - MONITORED-WAIT window that closed the largest measured debt on record and repaired the export birth site instead of refreshing around it. Five readings at open: git status EMPTY on main with no index.lock (the startup round.lock only), the group ledger carries ZERO unreplied @BigDomain rows (atbd_li...",
+    "latest_artifact": "preview/ship-checklist.html (9182B) + preview/ship-checklist.json (4983B)",
+    "last_artifact": "preview/ship-checklist.html (9182B) + preview/ship-checklist.json (4983B)",
+    "next_milestone": "The successor full battery is OWED (this window moved `src/os/state.json` and `docs/status-export.json`) and was NOT launched: two detached legs today died without a closing row when the host window ended, so the next window should launch it EARLY and supervise, not at the tail.",
+    "next_milestone_due": "2026-11-17T13:32:26+08:00",
+    "updated_at": "2026-11-15T13:32:26+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -38,6 +38,7 @@
     }
   ],
   "outs": [
+    "preview/ship-checklist.html (9182B) + preview/ship-checklist.json (4983B)",
     "preview/ship-checklist.html（9182B）+ preview/ship-checklist.json（4983B·sizes 自指字节）",
     "preview/index.html（33817B·全部 27 面可点开）＋qa/entry-pairs-band-R2777.log（732B·UTF-8/LF·经 tools/qa_log.py 正轨写出）",
     "qa/index-newest-band-R2775.log（方言修复后 509B·UTF-8/LF）＋logs/qa-encoding-preop-R2775/index-newest-band-R2775.log.utf16le（原字节 1032B 留证）",
@@ -767,7 +768,7 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 35,
+    "log_lines_in_window": 40,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 3,

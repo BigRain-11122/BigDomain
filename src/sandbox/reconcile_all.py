@@ -6765,6 +6765,13 @@ SUITES = [
     # (AC-SCL1..AC-SCL8 pinned in src/os/backlog.md at R2779, BEFORE the tool.)
     ("os-ship-checklist",
      os.path.join("..", "os", "test_ship_checklist.py"), 8),
+    # R2780: every window since R2431 shipped a BESPOKE export driver whose three
+    # CEO lines were typed in, so the face kept narrating its own round (at the
+    # R2780 close it read tick 2780 while ceo_face.current still described
+    # R2779). export_round.py derives all three lines from live files instead.
+    # (AC-EXPW1..AC-EXPW6 pinned in src/os/backlog.md at R2780 BEFORE the code.)
+    ("os-export-round",
+     os.path.join("..", "os", "test_export_round.py"), 6),
     ]
 
 FAILS = 0
