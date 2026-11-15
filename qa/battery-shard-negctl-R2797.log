@@ -1,0 +1,12 @@
+SHARD scope=SHARD registry_suites=2 registry_criteria=2 selected=2 selected_criteria=2 cap=60s overrides=0
+SHARD selected ctl-good crit=1 path=test_good.py
+SHARD selected ctl-bad crit=1 path=test_bad.py
+SHARD row ctl-good rc=0 pass=1 fail=0 suite=PASS 1/1 crit=1 0.1s
+SHARD row ctl-bad rc=1 pass=0 fail=1 suite=FAIL 1/1 crit=1 0.1s
+SHARD rc=2 scope=SHARD selected=2 executed=2 green=1 criteria=2 crit_mismatch=0 elapsed=0.2s
+SHARD red ctl-bad:rc=1
+SHARD scope=SHARD registry_suites=2 registry_criteria=2 selected=1 selected_criteria=1 cap=60s overrides=0
+SHARD selected ctl-good crit=1 path=test_good.py
+SHARD row ctl-good rc=0 pass=1 fail=0 suite=PASS 1/1 crit=1 0.1s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=1 crit_mismatch=0 elapsed=0.1s
+NEGCTL mixed_rc=2 expect=2 green_rc=0 expect=0 VERDICT CONFIRMED
