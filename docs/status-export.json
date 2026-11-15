@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T11:29:34+08:00",
+  "export_ts": "2026-11-15T11:32:01+08:00",
   "do": "R2776 产品切片：活电池 R2775 里唯一的红灯套件 reconcile-daily-census 修在出生地——qa/index-newest-band-R2775.log 实为 UTF-16LE+BOM/CRLF 方言（PowerShell 重定向默认口径），归档原字节后转 UTF-8/LF（1032B→509B·文本逐字等价），census --check flags=0 DRIFT-CLEAN，套件 8/8（cd7 exit=0 真跑活树）",
   "ceo_face": {
     "current": "R2776 产品切片：活电池 R2775 里唯一的红灯套件 reconcile-daily-census 修在出生地——qa/index-newest-band-R2775.log 实为 UTF-16LE+BOM/CRLF 方言（PowerShell 重定向默认口径），归档原字节后转 UTF-8/LF（1032B→509B·文本逐字等价），census --check flags=0 DRIFT-CLEAN，套件 8/8（cd7 exit=0 真跑活树）",
     "latest_artifact": "qa/index-newest-band-R2775.log（方言修复后 509B·UTF-8/LF）＋logs/qa-encoding-preop-R2775/index-newest-band-R2775.log.utf16le（原字节 1032B 留证）",
     "last_artifact": "qa/index-newest-band-R2775.log（方言修复后 509B·UTF-8/LF）＋logs/qa-encoding-preop-R2775/index-newest-band-R2775.log.utf16le（原字节 1032B 留证）",
     "next_milestone": "48 小时内：按自身闭合 BATTERY rc= 行采纳 reconcile-battery-R2775（676 套/5032 判据·本窗关闭时仍 alive；流中 1 条 FAIL 行即本窗已修的 census 套件），并在最终提交树上重跑 census 家族与 export 队列",
-    "next_milestone_due": "2026-11-17T11:29:34+08:00",
-    "updated_at": "2026-11-15T11:29:34+08:00",
+    "next_milestone_due": "2026-11-17T11:32:01+08:00",
+    "updated_at": "2026-11-15T11:32:01+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -765,7 +765,7 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 185,
+    "log_lines_in_window": 187,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 27,

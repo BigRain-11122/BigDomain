@@ -1,0 +1,45 @@
+qa_log birth-site evidence (R2776, AC-QAL1..7)
+
+Open measurement: the live battery leg R2775 carried exactly one red suite,
+reconcile-daily-census, failing cd7 with exit=2 label=drift. Reading
+qa_writer_census --check directly named one flag: qa/index-newest-band-R2775.log
+class=ps-utf16. The artifact was healthy in content (the 5/5 AC-DIX8
+private-world controls) and wrong in dialect: UTF-16LE, BOM FF FE, six CRLF
+endings - the default posture of PowerShell redirection.
+
+Artifact repair, measured: original bytes archived to
+logs/qa-encoding-preop-R2775/index-newest-band-R2775.log.utf16le (1032B, sha256
+prefix 5eaa057429df2b4d), then re-encoded to UTF-8/LF at 509B with the decoded
+text proven identical before and after and zero CR remaining. No baseline edit
+was needed - the file became tee dialect, so the flag disappeared instead of
+being absorbed.
+
+Post-repair tree state: qa_writer_census --check reads files=2997 tee=2465
+baselined=532 disappeared=0 flags=0 verdict DRIFT-CLEAN rc=0;
+src/sandbox/test_reconcile_daily_census.py reads SUITE PASS 8/8 with
+cd7-live-real-tree exit=0 label=ok DRIFT-CLEAN. The FAIL row already written in
+logs/battery-R2775.stream is not rewritten; it stays as the record of what the
+tree held at that point and is attributed here.
+
+Birth site: this was the third artifact of the class (R2768 re-encoded two), so
+tools/qa_log.py now writes any source dialect (utf-8, utf-8 BOM, utf-16 BOM,
+gb18030 fallback) as UTF-8 without BOM, LF only, one trailing newline, atomically
+via tmp plus os.replace, and then proves the result by reading the file back:
+no BOM, no CR, decodable, non-empty, trailing newline. --check NAME is read-only
+and refuses UTF-16/BOM/CR/undecodable files.
+
+Criteria were pinned in src/os/backlog.md and committed (4473c77b) before the
+tool existed. Selftest verdict:
+
+PASS qal1-utf16-bom-crlf-normalized
+PASS qal1-trailing-newline-added
+PASS qal2-readback-proof
+PASS qal3-atomic-no-tmp-left
+PASS qal2-cr-refused
+PASS qal4-utf16-classified-red
+PASS qal6-bad-names-refused
+PASS qal5-r2775-sample-replays-byte-equal
+VERDICT PASS 8/8 qa_log selftest (qa/ untouched)
+
+Live read after writing this file with the tool itself:
+QA-LOG WROTE name=qa-log-birthsite-R2776.log dialect=utf-8/lf VERDICT PASS
