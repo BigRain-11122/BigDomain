@@ -299,7 +299,7 @@ SUITES = [
     # visitor needs before three rooms mean anything.
     # (AC-RP1..AC-RP6 were pre-registered in src/os/backlog.md at R2464
     # BEFORE this suite, the module change and the page change.)
-    ("os-lobby-room-picker", os.path.join("lobby", "test_lobby_rooms.py"), 6),
+    ("os-lobby-room-picker", os.path.join("lobby", "test_lobby_rooms.py"), 8),
     # content-gate console (R2467): the shipped msgSecCheck stub became a face a
     # person can use - GET /gate/ serves the page from disk, /gate/api/contract
     # publishes the endpoint the real WeChat gate must satisfy, and

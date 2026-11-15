@@ -1,0 +1,9 @@
+PASS AC-RP1 status=200 rooms=lobby,quant,cocreate default=lobby not_hardcoded=True
+PASS AC-RP2 selector=True ledger=True fetches_rooms=True literals=0
+PASS AC-RP3 same_as_disk=True offline=True bytes=10077 bom=False crlf=0 ascii_module=True surfaces=3
+PASS AC-RP4 subscribe_notice=True room=quant unknown_room=E_ROOM_UNKNOWN
+PASS AC-RP5 partitioned=True stranger_quiet=True shared_evt=True evt_len=16
+PASS AC-RP6 switch_frames_accepted=True subscribe_notice=True unsubscribe_notice=True banner_route=True wired=True
+PASS AC-RP7 set_unchanged=True notices_after_refusal=0 second_room_send=ok unknown_send=E_ROOM_UNKNOWN
+PASS AC-RP8 unsubscribe_notice=True late_send=E_ROOM_UNKNOWN witness_broadcasts=0
+SUITE PASS 8/8

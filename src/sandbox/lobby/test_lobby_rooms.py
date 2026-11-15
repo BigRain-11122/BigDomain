@@ -1,8 +1,11 @@
-"""Suite for the lobby room picker and event ledger (AC-RP1..AC-RP6).
+"""Suite for the lobby room picker and event ledger (AC-RP1..AC-RP8).
 
 Every criterion is read off a REAL server process and a REAL WebSocket client,
 never asserted from source text alone. The six criteria were pre-registered in
-src/os/backlog.md BEFORE this file or the page change existed.
+src/os/backlog.md BEFORE this file or the page change existed. AC-RP7 and
+AC-RP8 were pre-registered there too (R2789 row), before this file gained the
+two clauses they measure: they close the two sub-clauses R2788 shipped with a
+code path but no assertion.
 
   AC-RP1  GET /lobby/api/rooms answers 200 JSON whose rooms equal the server
            configured list in order with default=first, and the room names are
@@ -25,6 +28,13 @@ src/os/backlog.md BEFORE this file or the page change existed.
            two sys.notice lines naming the right actions and rooms, the registry
            carries the suite row, and the rooms route is reachable through the
            banner URL.
+  AC-RP7  the unknown-room refusal is inert: an entitled client already on a
+           second room that is refused a subscribe to an unknown room gets
+           E_ROOM_UNKNOWN, no notice naming the refused room, keeps its send
+           into the second room, and its send into the unknown room is refused
+           - the subscribed set is read from outside the process.
+  AC-RP8  a send into a JUST-unsubscribed room is refused with E_ROOM_UNKNOWN
+           and a witness still on that room hears no broadcast carrying it.
 """
 
 import json
@@ -168,7 +178,7 @@ def main():
     for path, what in ((PAGE, "page"), (MODULE, "module")):
         if not os.path.exists(path):
             print("FAIL AC-RP1 %s missing on disk: %s" % (what, path))
-            print("SUITE FAIL 0/6")
+            print("SUITE FAIL 0/8")
             return 1
 
     with open(PAGE, "rb") as fh:
@@ -339,6 +349,90 @@ def main():
             failed += 1
             print("FAIL AC-RP6 :: %s: %s" % (type(exc).__name__, exc))
 
+        # ---------------- AC-RP7 ----------------
+        # The refused subscribe must be INERT: same room set afterwards, read
+        # from outside the process (no notice, live send still routed, unknown
+        # room still refused).
+        try:
+            ws_k = connect_entitled(leg)
+            opened.append(ws_k)
+            ws_k.send(json.dumps({"v": 1, "type": "room.subscribe",
+                                  "payload": {"room": room_two}}))
+            wait_for(ws_k, "sys.notice")
+            ghost = "no-such-room-xyz"
+            ws_k.send(json.dumps({"v": 1, "type": "room.subscribe",
+                                  "payload": {"room": ghost}}))
+            refused = wait_for(ws_k, "sec.reject")
+            assert refused["payload"]["code"] == "E_ROOM_UNKNOWN", (
+                "unknown-room refusal code=%s" % refused["payload"]["code"])
+            quiet = drain(ws_k, seconds=1.0)
+            ghosts = [f for f in quiet
+                      if f.get("type") == "sys.notice"
+                      and ghost in str((f.get("payload") or {}).get("notice", ""))]
+            assert not ghosts, (
+                "a refused subscribe still announced the room: %s" % ghosts)
+            ws_k.send(json.dumps({"v": 1, "type": "chat.send", "room": room_two,
+                                  "payload": {"text": "still subscribed after refusal"},
+                                  "client_msg_id": "rp7-live"}))
+            cast = wait_for(ws_k, "chat.broadcast")
+            assert cast.get("room") == room_two, "cast room=%s" % cast.get("room")
+            ws_k.send(json.dumps({"v": 1, "type": "chat.send", "room": ghost,
+                                  "payload": {"text": "into the refused room"},
+                                  "client_msg_id": "rp7-ghost"}))
+            second = wait_for(ws_k, "sec.reject")
+            assert second["payload"]["code"] == "E_ROOM_UNKNOWN", (
+                "send into the refused room code=%s" % second["payload"]["code"])
+            print("PASS AC-RP7 set_unchanged=True notices_after_refusal=0 "
+                  "second_room_send=ok unknown_send=E_ROOM_UNKNOWN")
+        except AssertionError as exc:
+            failed += 1
+            print("FAIL AC-RP7 :: %s" % exc)
+        except Exception as exc:  # noqa: BLE001
+            failed += 1
+            print("FAIL AC-RP7 :: %s: %s" % (type(exc).__name__, exc))
+
+        # ---------------- AC-RP8 ----------------
+        # Releasing a room must actually disconnect the sender, not just print
+        # a notice: a witness still on that room hears nothing.
+        try:
+            ws_w = connect_entitled(leg)
+            opened.append(ws_w)
+            ws_u = connect_entitled(leg)
+            opened.append(ws_u)
+            ws_w.send(json.dumps({"v": 1, "type": "room.subscribe",
+                                  "payload": {"room": room_two}}))
+            wait_for(ws_w, "sys.notice")
+            ws_u.send(json.dumps({"v": 1, "type": "room.subscribe",
+                                  "payload": {"room": room_two}}))
+            wait_for(ws_u, "sys.notice")
+            ws_u.send(json.dumps({"v": 1, "type": "room.unsubscribe",
+                                  "payload": {"room": room_two}}))
+            notice = wait_for(ws_u, "sys.notice")
+            text = (notice.get("payload") or {}).get("notice", "")
+            assert ("room unsubscribe" in text and room_two in text), (
+                "unsubscribe notice=%r" % text)
+            marker = "after the release nobody hears this"
+            ws_u.send(json.dumps({"v": 1, "type": "chat.send", "room": room_two,
+                                  "payload": {"text": marker},
+                                  "client_msg_id": "rp8-late"}))
+            refused = wait_for(ws_u, "sec.reject")
+            assert refused["payload"]["code"] == "E_ROOM_UNKNOWN", (
+                "send after release code=%s" % refused["payload"]["code"])
+            heard = drain(ws_w, seconds=1.0)
+            leaks = [f for f in heard
+                     if f.get("type") == "chat.broadcast"
+                     and marker in str((f.get("payload") or {}).get("text", ""))]
+            assert not leaks, (
+                "a witness on the released room heard the send: %s" % leaks)
+            print("PASS AC-RP8 unsubscribe_notice=True late_send=E_ROOM_UNKNOWN "
+                  "witness_broadcasts=0")
+        except AssertionError as exc:
+            failed += 1
+            print("FAIL AC-RP8 :: %s" % exc)
+        except Exception as exc:  # noqa: BLE001
+            failed += 1
+            print("FAIL AC-RP8 :: %s: %s" % (type(exc).__name__, exc))
+
     finally:
         for conn in opened:
             try:
@@ -349,9 +443,9 @@ def main():
             leg.close()
 
     if failed:
-        print("SUITE FAIL %d/6" % (6 - failed))
+        print("SUITE FAIL %d/8" % (8 - failed))
         return 1
-    print("SUITE PASS 6/6")
+    print("SUITE PASS 8/8")
     return 0
 
 

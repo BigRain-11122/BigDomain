@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 684 | 5085 | 675/675 | R2739 |
+| 684 | 5087 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -51,7 +51,7 @@
 | 11 | panel-lobby | test_panel_lobby.py | 6 | green | 9.1 |
 | 12 | os-lobby-lobby-page | lobby/test_lobby_page.py | 6 | green | 1.3 |
 | 13 | os-sandbox-hub | lobby/test_hub_page.py | 6 | green | 0.6 |
-| 14 | os-lobby-room-picker | lobby/test_lobby_rooms.py | 6 | green | 11.7 |
+| 14 | os-lobby-room-picker | lobby/test_lobby_rooms.py | 8 | green | 11.7 |
 | 15 | os-content-gate-console | lobby/test_gate_console.py | 6 | green | 0.6 |
 | 16 | os-ledger-page | ledger/test_ledger_page.py | 6 | green | 1.9 |
 | 17 | ugc-console | ugc/test_ugc_console.py | 6 | green | 2.4 |
@@ -722,7 +722,7 @@
 | 682 | os-money-path-demo | ../os/test_money_path_demo.py | 6 | no-evidence | - |
 | 683 | os-first-yuan-path | ../os/test_first_yuan_path.py | 7 | no-evidence | - |
 | 684 | os-lobby-protocol-map | ../os/test_lobby_protocol_map.py | 6 | no-evidence | - |
-|  | 合计 |  | 5085 | green 675 / FAIL 0 / no-evidence 9 |  |
+|  | 合计 |  | 5087 | green 675 / FAIL 0 / no-evidence 9 |  |
 
 ## 证据出处
 

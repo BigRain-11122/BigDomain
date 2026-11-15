@@ -42,10 +42,10 @@
 
 | AC-S20 | `err.rate_limit` 拒绝帧语义（承 AC-S9·R2788）：单连接超限（5 条/10s）回**独立拒绝帧** `err.rate_limit`（payload.code=`E_RATE_LIMIT`·reason 载 max_msgs/window_s 实测值）；禁言升级回的是**另一种帧型** `sec.reject`（code=`E_RATE_LIMIT`·reason 载 `muted for N seconds`·payload.muted_until=壁钟）——客户端须按 `type` 分流，不可按 code 认帧；禁言触发当次 violations 归零，且被拒帧不增加窗口内落库行数 | live 断言〔lobby-chat-mute-idem AC-CMI2/AC-CMI3〕 |
 | AC-S21 | `room.subscribe` 握手（R2464 房选器·R2788 入册）：`payload.room` ∈ cfg.rooms → 该房加入连接房间集，回 `sys.notice`（notice 文本载 `room subscribe: <room>` 且 room 字段=该房）；未知房 → `sec.reject` code=`E_ROOM_UNKNOWN` | live 断言〔os-lobby-room-picker AC-RP6〕 |
-| AC-S22 | `room.unsubscribe` 握手（R2788 入册）：`payload.room` ∈ cfg.rooms → 该房移出连接房间集，回 `sys.notice`（`room unsubscribe: <room>`）；未知房 → `sec.reject` code=`E_ROOM_UNKNOWN` | live 断言〔os-lobby-room-picker AC-RP6〕 |
+| AC-S22 | `room.unsubscribe` 握手（R2788 入册）：`payload.room` ∈ cfg.rooms → 该房移出连接房间集，回 `sys.notice`（`room unsubscribe: <room>`）；未知房 → `sec.reject` code=`E_ROOM_UNKNOWN`；**释放须真实生效**——退订后向该房 `chat.send` 被 `E_ROOM_UNKNOWN` 拒、且仍在该房的见证连接收不到该条广播 | live 断言〔AC-RP6 通知面 + AC-RP8 释放面〕 |
 | AC-S23 | `sys.notice` 服务端推送通道（R2788 入册）：actor=`system`·`ai_generated=false`（服务端权威，客户端传值忽略）；`payload.notice` 载事件文本；同一连接连续的订阅/退订须**两帧分开到达**而非合并；room 缺省=已订阅房的最小字典序，无订阅时取 cfg.rooms[0] | live 断言〔os-lobby-room-picker AC-RP6 双通知用例〕 |
 
-**R2788 覆盖诚实注（上四行入册时实测）**：AC-S21~S23 的「未知房拒绝」以及 AC-S22 的「退订后向该房 chat.send 必被 `E_ROOM_UNKNOWN` 拒」两条**当前无任何套件断言**——代码路径存在（server.py 的 `handle_room` 先判该房是否属于服务端房间清单、`handle_chat` 再判该房是否在连接已订阅房集内，两处都以 `E_ROOM_UNKNOWN` fail-closed），但断言未写，故列为**待补断言项**、不计入已验覆盖；AC-S20 的「被拒帧不增加落库行数」由 AC-CMI3 的 `fresh_rows == 5` 覆盖。
+**R2789 覆盖更新（承 R2788 诚实注·两条待补断言已关闭）**：R2788 列出的两条待补断言现已各有实测断言——「未知房拒绝是惰性的」= AC-RP7（拒绝帧 `E_ROOM_UNKNOWN` + 一秒静默窗内无该房 notice + 第二房发送仍通 + 向未知房发送同码被拒，房间集从进程外可证未变）；「退订后向该房 chat.send 被拒」= AC-RP8（退订 notice 之后该房发送回 `E_ROOM_UNKNOWN`，且仍在该房的见证连接零广播）。两者在真实 server 进程 + 真实 WebSocket 客户端上读出，`SUITE PASS 8/8`；负控=把 `handle_chat` 的第二道房间归属判定（该房是否属于本连接已订阅房集）从私有副本删掉后，见证连接确实收到该条广播（`NEGCTL VERDICT CONFIRMED`），故断言承重而非装饰。AC-S20 的「被拒帧不增加落库行数」仍由 AC-CMI3 的 `fresh_rows == 5` 覆盖。
 
 ### 生产判据（P 系·预注册不预执行·blocked on CEO 物理件）
 

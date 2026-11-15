@@ -1,7 +1,7 @@
 {
  "namespace": "bd-lobby-protocol-map-v1",
  "spec": "docs/spec/lobby-websocket-spec.md",
- "spec_bytes": 26337,
+ "spec_bytes": 26817,
  "spec_lines": 148,
  "impl": "src/sandbox/lobby/server.py",
  "impl_bytes": 30231,
@@ -186,12 +186,13 @@
    "id": "AC-S22",
    "tokens": [
     "cfg.rooms",
+    "chat.send",
     "payload.room",
     "room.unsubscribe",
     "sec.reject",
     "sys.notice"
    ],
-   "text": "`room.unsubscribe` 握手（R2788 入册）：`payload.room` ∈ cfg.rooms → 该房移出连接房间集，回 `sys.notice`（`room unsubscribe: <room>`）；未知房 → `sec.reject` code=`E_ROOM_UNKNOWN`"
+   "text": "`room.unsubscribe` 握手（R2788 入册）：`payload.room` ∈ cfg.rooms → 该房移出连接房间集，回 `sys.notice`（`room unsubscribe: <room>`）；未知房 → `sec.reject` code=`E_ROOM_UNKNOWN`；**释放须真实生效**——退订后向该房 `chat.send` 被 `E_ROOM_UNKNOWN` 拒、且仍在该房的见证连接收不到该条广播"
   },
   {
    "id": "AC-S23",
@@ -301,9 +302,10 @@
     "安全闸管道（顺序即宪法·三道闸串行）",
     "客户端重连语义（2026-10-09 R1675 增补·S8b 后继·AC-S8c/S8d/S8e 承载）"
    ],
-   "count": 5,
+   "count": 6,
    "criteria": [
-    "AC-S2"
+    "AC-S2",
+    "AC-S22"
    ],
    "covered": true,
    "in_scope": true,
@@ -603,10 +605,9 @@
    "token": "server.py",
    "kind": "file-ref",
    "sections": [
-    "沙箱判据（S 系·本地可全验·不依赖 Docker 在机：compose 缺位=本机原生 Python 同判据直跑）",
     "三、沙箱骨架实现规格（P-47-1b 执行面·本轮只注册不实现）"
    ],
-   "count": 2,
+   "count": 1,
    "criteria": [],
    "covered": false,
    "in_scope": true
@@ -830,6 +831,6 @@
   }
  ],
  "gate": "derived from the spec at render time; no message name is typed in the source",
- "html_bytes": 26405,
- "json_bytes": 25597
+ "html_bytes": 26458,
+ "json_bytes": 25645
 }
