@@ -22,6 +22,9 @@
     "badge_free": "免费态",
     "product": "对应商品载荷",
     "product_none": "无对应商品载荷（价目锚只在正典里）",
+    "products": "已发货商品行",
+    "catalogue": "已发货价目（渲染时取自 src/sandbox/pay/config.json）",
+    "catalogue_note": "上表四档是设计矩阵；本表是**真正在卖的东西**——每一行在渲染那一刻从发货配置派生，周期与特权再按 entitlement 到会员档位里查。D-20261116-05 裁决的两件在此并列可辨：永久入场券无周期、一次付清，月卡 30 天、带两项特权，两件不同价。",
     "needles": "本页如何变红",
     "needles_note": "下列四根针必须始终留在规格里：任何一根消失，本页 --check 立刻转红并点名缺哪一根。",
     "compliance": "合规四件套落位",
@@ -34,6 +37,15 @@
   "dependency_sep": "；",
   "privilege_sep": "+",
   "empty_price": "—",
+  "catalogue": {
+    "name": "商品",
+    "price": "价目",
+    "benefit": "权益（发货配置原文）",
+    "cycle": "周期",
+    "privileges": "特权数",
+    "no_cycle": "无周期·一次付清",
+    "cycle_days": "%d 天/期"
+  },
   "needles": [
     {"label": "AIGC 服务端权威字段", "needle": "ai_generated"},
     {"label": "msgSecCheck 前置闸", "needle": "msgSecCheck"},

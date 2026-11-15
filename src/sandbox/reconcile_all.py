@@ -6859,8 +6859,12 @@ SUITES = [
     # drifted from the spec could still be the thing a human opened. This suite
     # repoints the module at a private copy of preview/ and re-derives.
     # (AC-MEMF1..AC-MEMF6 pinned in src/os/backlog.md at R2783, BEFORE the tool.)
+    # R2818 added AC-MEMF7..AC-MEMF10 for the debt R2816 recorded: the page
+    # listed the four spec tiers and NONE of the two products the ruling
+    # D-20261116-05 sells, so a buyer opening the membership page saw no
+    # permanent ticket at all. Pinned in src/os/backlog.md BEFORE the code.
     ("os-membership-face",
-     os.path.join("..", "os", "test_membership_face.py"), 6),
+     os.path.join("..", "os", "test_membership_face.py"), 10),
     # R2782 shipped tools/money_path_demo.py with the same hole - the 19.9 money
     # path page was guarded only by its own --check, which cannot catch a page
     # whose derivation changed under it.

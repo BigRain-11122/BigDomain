@@ -12,7 +12,9 @@
     "pending": 2,
     "matched": 1,
     "blocked": 4,
-    "privileges": 11
+    "privileges": 11,
+    "products": 5,
+    "no_cycle_products": 4
   },
   "tiers": [
     {
@@ -105,6 +107,76 @@
       "products": []
     }
   ],
+  "catalogue": [
+    {
+      "id": "pack_compute_19_9",
+      "name": "",
+      "price_cent": 1990,
+      "price_yuan": 19.9,
+      "entitlement": "compute_pack",
+      "channel": "virtual",
+      "copy": "19.9 算力包：AI 生成工具验证服务（次数明细=[needs-CEO]）",
+      "period_days": null,
+      "privileges": [],
+      "no_cycle": true,
+      "needs_ceo": false
+    },
+    {
+      "id": "birthright_entry",
+      "name": "永久入场券",
+      "price_cent": 990,
+      "price_yuan": 9.9,
+      "entitlement": "birthright",
+      "channel": "virtual",
+      "copy": "永久入场券：付费即入城资格，一次性永久，无周期、无续费、无到期（发放产物=入城凭证·lobby E_ENTRANCE_REQUIRED 判据源=本件 grants 查询面）",
+      "period_days": null,
+      "privileges": [],
+      "no_cycle": true,
+      "needs_ceo": false
+    },
+    {
+      "id": "tier_patron_30d",
+      "name": "月卡（入门订阅卡）",
+      "price_cent": 2990,
+      "price_yuan": 29.9,
+      "entitlement": "tier:patron",
+      "channel": "virtual",
+      "copy": "月卡（入门订阅卡）：30 天会员周期 + 2 项会员特权（权益明细以会员页目录为准·entitlement=tier:patron）",
+      "period_days": 30,
+      "privileges": [
+        "cocreation_block_seat",
+        "growth_archive_slot"
+      ],
+      "no_cycle": false,
+      "needs_ceo": false
+    },
+    {
+      "id": "report_data_b",
+      "name": "",
+      "price_cent": 199900,
+      "price_yuan": 1999.0,
+      "entitlement": "report:data",
+      "channel": "standard",
+      "copy": "B 端真实服务：数据报告（标准商户通道·对公结算）",
+      "period_days": null,
+      "privileges": [],
+      "no_cycle": true,
+      "needs_ceo": false
+    },
+    {
+      "id": "share_observation",
+      "name": "",
+      "price_cent": 100000,
+      "price_yuan": 1000.0,
+      "entitlement": "obs:credit",
+      "channel": "standard",
+      "copy": "观测费分成单：30% 代币分成示意（换算桥演示件）",
+      "period_days": null,
+      "privileges": [],
+      "no_cycle": true,
+      "needs_ceo": false
+    }
+  ],
   "needles": [
     {
       "label": "AIGC 服务端权威字段",
@@ -179,22 +251,31 @@
   "sizes": {
     "spec_bytes": 29184,
     "pay_bytes": 6885,
-    "config_bytes": 2517
+    "config_bytes": 3233,
+    "payconf_bytes": 4769,
+    "mconf_bytes": 7890
   },
   "sources": {
     "spec": "docs/spec/membership-spec.md",
     "pay": "preview/payment-gate-report.json",
-    "config": "tools/membership_face_config.json"
+    "config": "tools/membership_face_config.json",
+    "payconf": "src/sandbox/pay/config.json",
+    "mconf": "src/sandbox/member/config.json"
   },
   "spec_sha16": "bb0a5dc0b2a49946",
   "pay_sha16": "75e7e8c148747db6",
+  "payconf_sha16": "1f3dd9233a82b565",
   "criteria": [
     "AC-MEMF1",
     "AC-MEMF2",
     "AC-MEMF3",
     "AC-MEMF4",
     "AC-MEMF5",
-    "AC-MEMF6"
+    "AC-MEMF6",
+    "AC-MEMF7",
+    "AC-MEMF8",
+    "AC-MEMF9",
+    "AC-MEMF10"
   ],
   "verdict": "PASS"
 }

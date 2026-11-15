@@ -1,8 +1,12 @@
-"""Battery suite for tools/membership_face.py - criteria AC-MEMF1..AC-MEMF6.
+"""Battery suite for tools/membership_face.py - criteria AC-MEMF1..AC-MEMF10.
 
 AC-MEMF1..AC-MEMF6 were pinned in src/os/backlog.md at R2783, BEFORE the tool
 existed; this suite is what finally puts them under a battery row (the tool
-shipped at R2783 with only its own --check guarding it).
+shipped at R2783 with only its own --check guarding it). AC-MEMF7..AC-MEMF10
+were pinned at R2818, also BEFORE the code, for the debt R2816 recorded: the
+page listed the four spec tiers and NONE of the two products the ruling
+D-20261116-05 actually sells, so a buyer could open the membership page and see
+no permanent ticket at all.
 
 Isolation: every run happens in a PRIVATE world - the real preview/ tree is
 copied into a temp directory and the module's path globals are repointed, so the
@@ -49,6 +53,12 @@ def build_world():
                 os.path.join(d, "docs", "spec", "membership-spec.md"))
     shutil.copy(os.path.join(ROOT, "tools", "membership_face_config.json"),
                 os.path.join(d, "tools", "membership_face_config.json"))
+    os.makedirs(os.path.join(d, "src", "sandbox", "pay"))
+    os.makedirs(os.path.join(d, "src", "sandbox", "member"))
+    shutil.copy(os.path.join(ROOT, "src", "sandbox", "pay", "config.json"),
+                os.path.join(d, "src", "sandbox", "pay", "config.json"))
+    shutil.copy(os.path.join(ROOT, "src", "sandbox", "member", "config.json"),
+                os.path.join(d, "src", "sandbox", "member", "config.json"))
     return d
 
 
@@ -61,12 +71,14 @@ def load_tool(world):
     mod.CONF = os.path.join(world, "tools", "membership_face_config.json")
     mod.OUT_HTML = os.path.join(world, "preview", "membership-face.html")
     mod.OUT_JSON = os.path.join(world, "preview", "membership-face.json")
+    mod.PAYCONF = os.path.join(world, "src", "sandbox", "pay", "config.json")
+    mod.MCONF = os.path.join(world, "src", "sandbox", "member", "config.json")
     return mod
 
 
 def main():
     if not os.path.isfile(TOOL):
-        print("SUITE FAIL 0/6 tool missing %s" % TOOL)
+        print("SUITE FAIL 0/10 tool missing %s" % TOOL)
         return 1
     src = read(os.path.join(ROOT, "src", "os", "test_membership_face.py"))
     tool_src = read(TOOL)
@@ -89,6 +101,9 @@ def main():
             "matched": sum(1 for t in tiers if t["products"]),
             "blocked": sum(t["blocked_refs"] for t in tiers),
             "privileges": sum(len(t["privileges"]) for t in tiers),
+            "products": len(payload.get("catalogue") or []),
+            "no_cycle_products": sum(1 for r in payload.get("catalogue") or []
+                                     if r["no_cycle"]),
         }
         ok("AC-MEMF1 counts equal a recomputation from the tier rows",
            payload["counts"] == want, "counts=%s" % payload["counts"])
@@ -151,7 +166,9 @@ def main():
         # ---- AC-MEMF5: recorded sizes and a byte-identical second render ----
         real = {"spec_bytes": os.path.getsize(mod.SPEC),
                 "pay_bytes": os.path.getsize(mod.PAY),
-                "config_bytes": os.path.getsize(mod.CONF)}
+                "config_bytes": os.path.getsize(mod.CONF),
+                "payconf_bytes": os.path.getsize(mod.PAYCONF),
+                "mconf_bytes": os.path.getsize(mod.MCONF)}
         ok("AC-MEMF5 recorded sizes equal the bytes on disk",
            payload["sizes"] == real, "sizes=%s" % payload["sizes"])
         html2 = mod.render_html(conf, payload)
@@ -187,6 +204,108 @@ def main():
         ok("AC-MEMF6 restoring the byte returns the gate to clean",
            mod.gate(conf4, payload4, mod.render_html(conf4, payload4),
                     mod.payload_bytes(payload4)) == [])
+
+        # ---- AC-MEMF7: the shipped catalogue is derived, not typed ----
+        payconf_path = mod.PAYCONF
+        mconf_path = mod.MCONF
+        payconf_keep = read(payconf_path)
+        catalogue = payload.get("catalogue") or []
+        shipped_ids = sorted(json.loads(payconf_keep)["products"].keys())
+        ok("AC-MEMF7 the page lists every shipped pay-config product",
+           sorted(r["id"] for r in catalogue) == shipped_ids,
+           "page=%s config=%s" % (len(catalogue), len(shipped_ids)))
+        off_page = [r["id"] for r in catalogue if r["id"] not in html]
+        ok("AC-MEMF7 every shipped product reaches the landed page",
+           not off_page, "off_page=%s" % off_page)
+        grown = json.loads(payconf_keep)
+        grown["products"]["probe_growth_R2818"] = {
+            "channel": "virtual", "copy": "probe row", "entitlement": "probe",
+            "price_cent": 1234, "share_tokens": 0}
+        with io.open(payconf_path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(grown, ensure_ascii=False, indent=2) + "\n")
+        conf5, payload5, _ = mod.build()
+        html5 = mod.render_html(conf5, payload5)
+        ok("AC-MEMF7 a product added to the config appears with no module edit",
+           "probe_growth_R2818" in [r["id"] for r in payload5.get("catalogue") or []]
+           and "probe_growth_R2818" in html5,
+           "rows=%d" % len(payload5.get("catalogue") or []))
+        with io.open(payconf_path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(payconf_keep)
+        conf, payload, spec_text = mod.build()
+        html = mod.render_html(conf, payload)
+        jb = mod.payload_bytes(payload)
+
+        # ---- AC-MEMF8: the two D-05 products stand side by side, shape checked ----
+        by_id = {r["id"]: r for r in payload.get("catalogue") or []}
+        perm = by_id.get("birthright_entry") or {}
+        month = by_id.get("tier_patron_30d") or {}
+        ok("AC-MEMF8 the permanent ticket carries no cycle and no privileges",
+           perm.get("period_days") is None and not perm.get("privileges")
+           and perm.get("no_cycle") is True,
+           "perm=%s" % {k: perm.get(k) for k in ("period_days", "privileges", "no_cycle")})
+        ok("AC-MEMF8 the monthly card carries its period and its privileges",
+           month.get("period_days") == 30 and len(month.get("privileges") or []) == 2
+           and month.get("no_cycle") is False,
+           "month=%s" % {k: month.get(k) for k in ("period_days", "privileges", "no_cycle")})
+        ok("AC-MEMF8 both names and both prices reach the landed page",
+           bool(perm.get("name")) and bool(month.get("name"))
+           and perm.get("name") in html and month.get("name") in html
+           and ("%.2f" % perm.get("price_yuan", -1)) in html
+           and ("%.2f" % month.get("price_yuan", -1)) in html,
+           "perm=%s month=%s" % (perm.get("price_yuan"), month.get("price_yuan")))
+        swapped = json.loads(json.dumps(payload))
+        for r in swapped.get("catalogue") or []:
+            if r["id"] == "birthright_entry":
+                r["period_days"] = 30
+                r["no_cycle"] = False
+            elif r["id"] == "tier_patron_30d":
+                r["period_days"] = None
+                r["no_cycle"] = True
+        swap_reasons = mod.gate(conf, swapped, html, mod.payload_bytes(swapped))
+        ok("AC-MEMF8 swapping the two cycle shapes reddens E_PRODUCT_SHAPE",
+           any(r.startswith("E_PRODUCT_SHAPE") for r in swap_reasons),
+           "reasons=%s" % swap_reasons[:2])
+
+        # ---- AC-MEMF9: a landed page rendered against another config reddens ----
+        real_payconf = {"payconf_bytes": os.path.getsize(mod.PAYCONF),
+                        "mconf_bytes": os.path.getsize(mod.MCONF)}
+        rec = dict((k, payload["sizes"].get(k)) for k in real_payconf)
+        ok("AC-MEMF9 the shipped config bytes are recorded at render time",
+           rec == real_payconf, "recorded=%s disk=%s" % (rec, real_payconf))
+        with io.open(payconf_path, "a", encoding="utf-8", newline="\n") as fh:
+            fh.write(" ")
+        stale_reasons = mod.gate(conf, payload, html, jb)
+        ok("AC-MEMF9 a config that moved under the page reddens E_PAYCONF_STALE",
+           any(r.startswith("E_PAYCONF_STALE") for r in stale_reasons),
+           "reasons=%s" % stale_reasons[:2])
+        with io.open(payconf_path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(payconf_keep)
+        conf, payload, spec_text = mod.build()
+        html = mod.render_html(conf, payload)
+        jb = mod.payload_bytes(payload)
+        ok("AC-MEMF9 restoring the config returns the gate to clean",
+           mod.gate(conf, payload, html, jb) == [])
+
+        # ---- AC-MEMF10: prices are derived from cents, not typed into a template ----
+        moved = json.loads(payconf_keep)
+        moved["products"]["birthright_entry"]["price_cent"] = 1290
+        with io.open(payconf_path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(moved, ensure_ascii=False, indent=2) + "\n")
+        conf6, payload6, _ = mod.build()
+        html6 = mod.render_html(conf6, payload6)
+        probe = {r["id"]: r for r in payload6.get("catalogue") or []}.get("birthright_entry") or {}
+        yen = chr(0xa5)
+        ok("AC-MEMF10 a one-cent-scale move changes the printed yuan on the page",
+           abs((probe.get("price_yuan") or 0) - 12.90) < 1e-9
+           and (yen + "12.90") in html6 and (yen + "9.90") not in html6,
+           "yuan=%s moved=%s" % (probe.get("price_yuan"), (yen + "12.90") in html6))
+        with io.open(payconf_path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(payconf_keep)
+        conf, payload, spec_text = mod.build()
+        html = mod.render_html(conf, payload)
+        jb = mod.payload_bytes(payload)
+        mod.write_atomic(mod.OUT_JSON, jb)
+        mod.write_atomic(mod.OUT_HTML, html.encode("utf-8"))
 
         # ---- hygiene ----
         bad_bytes = [b for b in src if ord(b) > 127]

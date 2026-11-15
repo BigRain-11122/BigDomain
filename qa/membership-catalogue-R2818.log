@@ -1,0 +1,48 @@
+R2818 membership face: the shipped catalogue is now ON the page
+=============================================================
+
+DEFECT MEASURED AT OPEN
+  preview/membership-face.html listed four tiers parsed from
+  docs/spec/membership-spec.md (19.9 / 49.9 / 99.0 / free) and NOT ONE of the
+  two products the ruling D-20261116-05 actually sells:
+    birthright_entry  price_cent=990  name present  period absent
+    tier_patron_30d   price_cent=2990 name present  period 30 via member tier
+  The page bound exactly one product (pack_compute_19_9 to the 19.9 tier), so a
+  buyer opening the membership page could not see the permanent ticket at all.
+
+CRITERIA PINNED BEFORE THE CODE (src/os/backlog.md, R2818 row)
+  AC-MEMF7  every pay-config product reaches the page, proven by ADDING a
+            product in a private world and seeing it appear with no module edit
+  AC-MEMF8  the two ruling products are side by side and shape-distinguishable:
+            permanent = no period, zero privileges; monthly = 30 days, two
+            privileges; swapping them reddens E_PRODUCT_SHAPE; equal prices also
+            redden (the ruling forbids a same-price pair)
+  AC-MEMF9  landed page records pay-config bytes and sha16, so a config that
+            moved under the page reddens E_PAYCONF_STALE
+  AC-MEMF10 a price is printed from price_cent (cents -> yuan), proven by moving
+            one row to 1290 and reading 12.90 on the page
+
+PRE-REGISTRATION CONTROL (suite run against the UNFIXED tool)
+  SUITE FAIL 19/28, exactly the nine new sub-checks red, all six old criteria
+  green: AC-MEMF7 page=0 config=5; AC-MEMF8 four sub-checks red with reasons=[];
+  AC-MEMF9 recorded={payconf_bytes: None}; AC-MEMF10 yuan=None.
+
+AFTER THE FIX
+  SUITE PASS 28/28 (src/os/test_membership_face.py)
+  python tools/membership_face.py      WROTE tiers=4 products=5 html=10881B
+  python tools/membership_face.py --check
+        VERDICT PASS tiers=4 paid=3 pending=2 matched=1 blocked=4 privs=11
+  Landed page carries, verified by reading the file back:
+        永久入场券 / birthright_entry / 9.90 / 无周期·一次付清
+        月卡（入门订阅卡）/ tier_patron_30d / 29.90 / 30 天/期
+  Registry row os-membership-face 6 -> 10 criteria (declared, pinned first)
+  Matrix regenerated: 73306B / 696 rows, --check reads DOC-CURRENT
+  Entry page: 36502B, deliverable_index --check VERDICT PASS 14/14
+
+HONEST LIMITS
+  * A buyer STILL CANNOT PAY: no merchant id, server, domain, filing+ICP or
+    miniprogram appid+secret has arrived; this is a face, not a checkout.
+  * The page derives from src/sandbox/pay/config.json, which is the sandbox
+    config, not a production price table.
+  * tasks.md was not touched; it is the P-47 canonical board.
+  * The full battery is still owed; only this suite and its neighbours ran.

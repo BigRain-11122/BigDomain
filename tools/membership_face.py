@@ -37,6 +37,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPEC = os.path.join(ROOT, "docs", "spec", "membership-spec.md")
 PAY = os.path.join(ROOT, "preview", "payment-gate-report.json")
 CONF = os.path.join(ROOT, "tools", "membership_face_config.json")
+PAYCONF = os.path.join(ROOT, "src", "sandbox", "pay", "config.json")
+MCONF = os.path.join(ROOT, "src", "sandbox", "member", "config.json")
 OUT_HTML = os.path.join(ROOT, "preview", "membership-face.html")
 OUT_JSON = os.path.join(ROOT, "preview", "membership-face.json")
 
@@ -128,11 +130,54 @@ def split_list(text, sep):
     return [p for p in parts if p]
 
 
+def build_catalogue(payconf, mconf):
+    """Every shipped pay product, joined to its member tier for cycle shape.
+
+    The four spec tiers are the design matrix; this list is what is actually
+    sellable. They are different questions and the page answers both, because a
+    page that listed only the matrix showed none of the two products the ruling
+    D-20261116-05 sells.
+    """
+    mproducts = (mconf.get("products") or {})
+    mtiers = (mconf.get("tiers") or {})
+    rows = []
+    for pid, row in (payconf.get("products") or {}).items():
+        cents = row.get("price_cent")
+        ent = row.get("entitlement") or ""
+        tier_name = None
+        ref = mproducts.get(ent)
+        if isinstance(ref, dict):
+            tier_name = ref.get("tier")
+        tinfo = mtiers.get(tier_name) if tier_name else None
+        period = None
+        privileges = []
+        if isinstance(tinfo, dict):
+            period = tinfo.get("period_days")
+            privileges = list(tinfo.get("privileges") or [])
+        rows.append({
+            "id": pid,
+            "name": row.get("name") or "",
+            "price_cent": cents,
+            "price_yuan": (float(cents) / 100.0) if isinstance(cents, int) else None,
+            "entitlement": ent,
+            "channel": row.get("channel"),
+            "copy": row.get("copy") or "",
+            "period_days": period,
+            "privileges": privileges,
+            "no_cycle": period is None,
+            "needs_ceo": bool(row.get("needs_ceo")),
+        })
+    return rows
+
+
 def build():
     conf = json.loads(read_text(CONF))
     spec_text = read_text(SPEC)
     pay = json.loads(read_text(PAY))
     products = pay.get("products") or []
+    payconf = json.loads(read_text(PAYCONF))
+    mconf = json.loads(read_text(MCONF))
+    catalogue = build_catalogue(payconf, mconf)
 
     header, rows = pick_tier_table(spec_text)
 
@@ -196,18 +241,23 @@ def build():
         "matched": sum(1 for t in tiers if t["products"]),
         "blocked": sum(t["blocked_refs"] for t in tiers),
         "privileges": sum(len(t["privileges"]) for t in tiers),
+        "products": len(catalogue),
+        "no_cycle_products": sum(1 for r in catalogue if r["no_cycle"]),
     }
 
     sizes = {
         "spec_bytes": os.path.getsize(SPEC),
         "pay_bytes": os.path.getsize(PAY),
         "config_bytes": os.path.getsize(CONF),
+        "payconf_bytes": os.path.getsize(PAYCONF),
+        "mconf_bytes": os.path.getsize(MCONF),
     }
 
     payload = {
         "columns": header,
         "counts": counts,
         "tiers": tiers,
+        "catalogue": catalogue,
         "needles": needles,
         "compliance": compliance,
         "links": links,
@@ -216,11 +266,15 @@ def build():
             "spec": "docs/spec/membership-spec.md",
             "pay": "preview/payment-gate-report.json",
             "config": "tools/membership_face_config.json",
+            "payconf": "src/sandbox/pay/config.json",
+            "mconf": "src/sandbox/member/config.json",
         },
         "spec_sha16": sha16(SPEC),
         "pay_sha16": sha16(PAY),
+        "payconf_sha16": sha16(PAYCONF),
         "criteria": ["AC-MEMF1", "AC-MEMF2", "AC-MEMF3", "AC-MEMF4",
-                     "AC-MEMF5", "AC-MEMF6"],
+                     "AC-MEMF5", "AC-MEMF6", "AC-MEMF7", "AC-MEMF8",
+                     "AC-MEMF9", "AC-MEMF10"],
         "verdict": "PASS",
     }
     return conf, payload, spec_text
@@ -298,6 +352,7 @@ def render_html(conf, payload):
     parts.append("<div class=\"kpi\"><b>%d</b><span>%s</span></div>" % (c["matched"], esc(L["matched"])))
     parts.append("<div class=\"kpi\"><b>%d</b><span>%s</span></div>" % (c["blocked"], esc(L["blocked"])))
     parts.append("<div class=\"kpi\"><b>%d</b><span>%s</span></div>" % (c["privileges"], esc(conf["columns"]["privileges"])))
+    parts.append("<div class=\"kpi\"><b>%d</b><span>%s</span></div>" % (c["products"], esc(conf["labels"]["products"])))
     parts.append("</div>")
 
     parts.append("<div class=\"grid\">")
@@ -334,6 +389,29 @@ def render_html(conf, payload):
             parts.append("%s" % esc(L["product_none"]))
         parts.append("</dd></dl></article>")
     parts.append("</div>")
+
+    parts.append("<h3>%s</h3>" % esc(L["catalogue"]))
+    parts.append("<p class=\"sub\">%s</p>" % esc(L["catalogue_note"]))
+    cat = conf["catalogue"]
+    parts.append("<table><tr><th>%s</th><th>%s</th><th>%s</th><th>%s</th><th>%s</th></tr>"
+                 % (esc(cat["name"]), esc(cat["price"]), esc(cat["benefit"]),
+                    esc(cat["cycle"]), esc(cat["privileges"])))
+    for r in payload["catalogue"]:
+        nm = r["name"] or r["id"]
+        if r["price_yuan"] is None:
+            price_cell = esc(conf["empty_price"])
+        else:
+            price_cell = "%s%.2f" % (YEN, r["price_yuan"])
+        if r["no_cycle"]:
+            cycle_cell = "<span class=\"badge b-ok\">%s</span>" % esc(cat["no_cycle"])
+        else:
+            cycle_cell = "<span class=\"badge b-warn\">%s</span>" % esc(
+                (cat["cycle_days"] % r["period_days"]))
+        parts.append("<tr><td><b>%s</b><div class=\"pid\">%s</div></td>"
+                     "<td>%s</td><td>%s</td><td>%s</td><td>%d</td></tr>"
+                     % (esc(nm), esc(r["id"]), price_cell, esc(r["copy"]),
+                        cycle_cell, len(r["privileges"])))
+    parts.append("</table>")
 
     parts.append("<h3>%s</h3>" % esc(L["needles"]))
     parts.append("<p class=\"sub\">%s</p>" % esc(L["needles_note"]))
@@ -406,9 +484,37 @@ def gate(conf, payload, html_text, json_bytes):
     for l in payload["links"]:
         if not l["exists"]:
             reasons.append("E_LINK target missing " + l["href"])
-    for key, path in (("spec_bytes", SPEC), ("pay_bytes", PAY), ("config_bytes", CONF)):
+    for key, path in (("spec_bytes", SPEC), ("pay_bytes", PAY), ("config_bytes", CONF),
+                      ("payconf_bytes", PAYCONF), ("mconf_bytes", MCONF)):
         if payload["sizes"][key] != os.path.getsize(path):
             reasons.append("E_SIZE recorded %s does not equal disk" % key)
+    if payload.get("payconf_sha16") != sha16(PAYCONF):
+        reasons.append("E_PAYCONF_STALE landed page was rendered against another "
+                       "pay config (recorded %s current %s)"
+                       % (payload.get("payconf_sha16"), sha16(PAYCONF)))
+    cat = payload.get("catalogue") or []
+    if not cat:
+        reasons.append("E_PRODUCT_EMPTY pay config carries no product row")
+    for r in cat:
+        if r.get("period_days") is None and (r.get("privileges") or []):
+            reasons.append("E_PRODUCT_SHAPE %s has no period yet carries privileges"
+                           % r.get("id"))
+        if r.get("period_days") is not None and r.get("no_cycle"):
+            reasons.append("E_PRODUCT_SHAPE %s carries a period but claims no cycle"
+                           % r.get("id"))
+        if r.get("id") not in html_text:
+            reasons.append("E_PRODUCT_MISSING %s did not reach the page" % r.get("id"))
+        if r.get("name") and r["name"] not in html_text:
+            reasons.append("E_PRODUCT_MISSING name of %s did not reach the page" % r.get("id"))
+    prices = {}
+    for r in cat:
+        if r.get("price_cent") is not None:
+            prices.setdefault(r["price_cent"], []).append(r.get("id"))
+    for cents, ids in prices.items():
+        if len(ids) > 1 and any(i in ("birthright_entry", "tier_patron_30d") for i in ids):
+            reasons.append("E_PRODUCT_SHAPE ruling D-20261116-05 forbids equal prices "
+                           "between the permanent ticket and the monthly card: %s"
+                           % ",".join(sorted(ids)))
     if not os.path.exists(OUT_HTML):
         reasons.append("E_ABSENT html not on disk")
     else:

@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-16T06:57:43+08:00",
-  "do": "R2817 - ENGINEERING+OPS: three price faces printed PASS over a stale price table and the root was ONE gate, not three. tools/payment_gate_report.py --check compared criterion TEXT and artifact SIZES but never the landed product rows against src/sandbox/pay/config.json, while money_path_demo and membership_f...",
+  "export_ts": "2026-11-16T07:39:13+08:00",
+  "do": "R2818 - PRODUCT: the membership page listed four design tiers and not one of the two products this company actually sells, so the ruling D-20261116-05 was invisible on the very face that exists to explain tiers. Measured at open: preview/membership-face.html parsed its four rows out of docs/spec/membership-...",
   "ceo_face": {
-    "current": "R2817 - ENGINEERING+OPS: three price faces printed PASS over a stale price table and the root was ONE gate, not three. tools/payment_gate_report.py --check compared criterion TEXT and artifact SIZES but never the landed product rows against src/sandbox/pay/config.json, while money_path_demo and membership_f...",
-    "latest_artifact": "preview/membership-face.html (8853B) + preview/membership-face.json (4602B)",
-    "last_artifact": "preview/membership-face.html (8853B) + preview/membership-face.json (4602B)",
-    "next_milestone": "**价目陈旧假绿三面**（payment_gate_report / money_path_demo / membership_face）：`--check` 必须在落盘价目≠配置价目时转红，判据先钉后改；",
-    "next_milestone_due": "2026-11-18T06:57:44+08:00",
-    "updated_at": "2026-11-16T06:57:43+08:00",
+    "current": "R2818 - PRODUCT: the membership page listed four design tiers and not one of the two products this company actually sells, so the ruling D-20261116-05 was invisible on the very face that exists to explain tiers. Measured at open: preview/membership-face.html parsed its four rows out of docs/spec/membership-...",
+    "latest_artifact": "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
+    "last_artifact": "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
+    "next_milestone": "**会员页仍不列永久档**——「两件并列可辨」在 `membership_face` 缺（承 R2816 #4），判据先钉后改；",
+    "next_milestone_due": "2026-11-18T07:39:13+08:00",
+    "updated_at": "2026-11-16T07:39:13+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ceo-blockers.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -40,6 +40,7 @@
     }
   ],
   "outs": [
+    "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
     "preview/membership-face.html (8853B) + preview/membership-face.json (4602B)",
     "preview/money-path-demo.html (10161B) + preview/money-path-demo.json (4705B)",
     "preview/first-yuan-chain.html (3078B) + preview/first-yuan-chain.json (4159B)",
@@ -773,7 +774,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2817",
+      "2818",
       "OSLoop 执行 tick"
     ],
     [
@@ -796,10 +797,10 @@
   "self_drive": {
     "window": "2026-11-10..2026-11-16",
     "window_days": 7,
-    "log_lines_in_window": 61,
+    "log_lines_in_window": 65,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
