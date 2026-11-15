@@ -1,0 +1,53 @@
+R2804 evidence: the two-page interlock was measured in both directions, then broken at its birth site.
+
+OPEN CENSUS (read-only --check of 20 shipped tools on the final tree)
+  PASS  ship_checklist 8/8 | filing_checklist 8/8 | money_path_demo | membership_face
+  PASS  first_yuan_chain | first_yuan_path | core_loop_walkthrough | payment_gate_report
+  PASS  ugc_gate_report | platform_live_report | journey_demo | lobby_ws_report
+  PASS  ledger_business_report | membership_benefit_report | city_face_report
+  PASS  lobby_protocol_map | lobby_session_trace
+  FAIL  ceo_blockers rc=2 AC-CBX9 tick=2803 (landed page carried the previous tick)
+  FAIL  face_sweep  rc=2 AC-FSW4 entry-index html 27999 != 36272
+  FAIL  battery_shard_report rc=2 E_REGISTRY_DRIFT E_TOTALS_UNCOVERED (689/5136 vs 690/5148)
+
+INTERLOCK PROVEN BOTH WAYS (not inferred from reading code)
+  (a) render face_sweep then entry page  -> face_sweep red (recorded 36272, entry now 36266)
+  (b) render entry page then face_sweep  -> entry red AC-DIX3 AC-DIX8 (newest pair became face-sweep)
+  => at least one page is permanently red under EVERY ordering.
+
+ROOT CAUSE
+  AC-FSW4 asserted LIVE byte equality against another face's artifact, and AC-DIX3 compared
+  the whole landed block byte for byte. Both quote a number that changes whenever the quoted
+  face is re-rendered, which happens every closeout.
+
+REPAIR (birth site, guards raised not lowered)
+  AC-FSW4  existence + integer byte receipt (no live equality with others)
+  AC-FSW9  new: the board must LABEL the bytes a snapshot, rendered from one constant
+  AC-DIX15 new: newest band asserts the artifact NAME; bytes and stamp are labelled a snapshot
+  AC-DIX16 new: board pages (face-sweep, ceo-blockers) never win the newest-artifact race
+  AC-DIX7  now scored against the LANDED page, which is the half of AC-DIX3 that really
+           caught a tampered ledger row - so dropping the byte-equality lost no protection
+  suite    src/os/test_deliverable_index.py AC-DIX3 retargeted (verdict tamper must redden
+           AC-DIX7) plus AC-DIX3b label-removal control; SUITE PASS 16/16 announced 16
+  registry os-deliverable-index 14 -> 16 criteria, measured BY IMPORT: 690 suites / 5150
+
+NEGATIVE CONTROLS RUN AGAINST THE REAL FILES, THEN RESTORED
+  face-sweep.html minus the snapshot sentence -> AC-FSW9 FAIL (and AC-FSW1 too: that criterion
+    is a self-size fixed point, so ANY byte edit trips it - the pinned wording that said
+    otherwise was wrong and is corrected in the board rather than quietly dropped)
+  index.html minus the snapshot sentence -> AC-DIX3 FAIL and AC-DIX8 FAIL, AC-DIX1 PASS
+  both restored by re-render: rc=0
+
+FINAL GATES ON THE COMMITTED TREE
+  deliverable_index --check   VERDICT PASS 14/14  index=36506B
+  face_sweep --check          VERDICT PASS 9/9
+  ceo_blockers --check        VERDICT PASS 9/9  html=8453B json=6754B
+  battery_shard_report --check VERDICT PASS (six families 58/58 suites, 452 criteria, 632 uncovered)
+  export_round --check        VERDICT PASS tick 2804
+  suite_matrix --check        byte-identical 72775B, 690 suites, 5150 criteria
+
+CARRIED, NOT FIXED HERE
+  export_round's newest-pair rule does not know BOARD_PAGES, so the CEO "latest artifact" line
+  names ceo-blockers.html rather than the window's product face. It is internally consistent and
+  its gate is green, so it is recorded as the next window's cheapest repair rather than changed
+  at the tail of this one.

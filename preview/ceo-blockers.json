@@ -113,7 +113,7 @@
    "exists": true,
    "face": "preview/index.html",
    "face_state": {
-    "bytes": 27999,
+    "bytes": 36506,
     "path": "preview/index.html",
     "state": "PRESENT"
    },
@@ -153,7 +153,7 @@
    "exists": true,
    "face": "preview/index.html",
    "face_state": {
-    "bytes": 27999,
+    "bytes": 36506,
     "path": "preview/index.html",
     "state": "PRESENT"
    },
@@ -172,5 +172,5 @@
   "html": 8453,
   "json": 6754
  },
- "tick": "2769"
+ "tick": "2804"
 }

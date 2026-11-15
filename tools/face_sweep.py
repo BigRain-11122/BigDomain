@@ -7,7 +7,7 @@ runs each shipped tool's read-only --check as a subprocess, records its exit cod
 VERDICT line and the landed artifact bytes, and renders a single board.
 
 Laws honoured:
-- criteria are pre-registered in --check (AC-FSW1..AC-FSW8, see check()).
+- criteria are pre-registered in --check (AC-FSW1..AC-FSW9, see check()).
 - nothing is hardcoded: verdicts, sizes and timestamps are measured from the subprocess
   and from disk.
 - the board never counts a face as passing unless its own gate exited zero AND printed a
@@ -69,6 +69,14 @@ FACES = [
 EXCLUDED_NOTE = ("API \u5e02\u573a\u9762\u4e0d\u5728\u672c\u677f\u5b9e\u6d4b\u9762\u5185\uff1a"
                  "src/sandbox/ledger/apimarket_report.py \u65e0\u53ea\u8bfb --check\uff0c"
                  "\u5f3a\u884c\u5165\u677f\u53ea\u80fd\u5f15\u7528\u58f0\u660e\u3002")
+
+# AC-FSW9: the per-face byte counts are a snapshot of the sweep that wrote them, never a
+# live equality claim. Any face re-rendered afterwards changes its own bytes, so asserting
+# equality here would redden this board forever and say nothing about the face. The live
+# assertion on this board is each face's own gate, re-executed by every sweep.
+SNAPSHOT_NOTE = ("The artifact bytes above are a snapshot taken when this sweep ran: a later "
+                 "re-render of any face changes them, so the live assertion on this board is "
+                 "each face's re-executed gate, not these numbers.")
 
 VERDICT_WORD_RE = re.compile(r"\b(PASS|FAIL)\b")
 EXTERNAL_RE = re.compile(r"https?://[A-Za-z0-9_.\-]+")
@@ -279,6 +287,7 @@ def build_html(rows, sizes, stamp):
     for line in STANDING:
         body.append("<div>%s</div>" % _esc(line))
     body.append("<div>%s</div>" % _esc(EXCLUDED_NOTE))
+    body.append("<div>%s</div>" % _esc(SNAPSHOT_NOTE))
     body.append("</div>")
     body.append("</div>")
     return ("<!doctype html>\n<html lang=\"zh-CN\"><head><meta charset=\"utf-8\">"
@@ -358,16 +367,22 @@ def check():
     if hl.get("verdict") != ("PASS" if passing == len(rows) else "FAIL"):
         fails.append("AC-FSW3b headline verdict %r inconsistent" % (hl.get("verdict"),))
 
-    # AC-FSW4 every artifact path exists and the stated bytes match the disk
+    # AC-FSW4 every artifact path exists and carries a non-negative integer byte receipt.
+    # AC-FSW9 (added R2804) split the old live-equality claim out of this criterion: a face
+    # re-rendered after this sweep legitimately changes its own bytes, and this board must
+    # not redden for that. Existence is still live; the receipt is a receipt.
     for r in rows:
         for key in ("html", "json"):
             p = os.path.join(ROOT, r.get(key) or "")
             stated = r.get(key + "_bytes")
             if not os.path.exists(p):
                 fails.append("AC-FSW4 %s %s missing" % (r.get("id"), r.get(key)))
-            elif stated is not None and os.path.getsize(p) != stated:
-                fails.append("AC-FSW4 %s %s %r != %d"
-                             % (r.get("id"), key, stated, os.path.getsize(p)))
+            elif not isinstance(stated, int) or isinstance(stated, bool) or stated < 0:
+                fails.append("AC-FSW4 %s %s receipt=%r" % (r.get("id"), key, stated))
+
+    # AC-FSW9 the snapshot label is present, so no reader mistakes the bytes for live truth
+    if SNAPSHOT_NOTE not in html_text:
+        fails.append("AC-FSW9 snapshot label absent")
 
     # AC-FSW5 the fingerprint is recomputed from the landed rows
     if doc.get("fingerprint") != fingerprint(rows):

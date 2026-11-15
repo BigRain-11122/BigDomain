@@ -28,7 +28,7 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TOOL = os.path.join(ROOT, "tools", "deliverable_index.py")
-N = 14
+N = 16  # AC-DIX1..AC-DIX14 plus the two R2804 controls that own the new snapshot contract
 
 FAILS = []
 CHECKS = []
@@ -223,9 +223,33 @@ def main():
         ok("AC-DIX3 two writer runs byte identical and the gate reads 14/14",
            first == second and rc_c == 0 and "VERDICT PASS 14/14" in out_c
            and "VERDICT FAIL" in out_t and rc_t == 2
-           and rows_t.get("AC-DIX3") == "FAIL",
-           "identical=%s rc=%s tamper_rc=%s tamper_row=%s"
-           % (first == second, rc_c, rc_t, rows_t.get("AC-DIX3")))
+           and rows_t.get("AC-DIX7") == "FAIL"
+           and rows_t.get("AC-DIX1") in (None, "PASS"),
+           "identical=%s rc=%s tamper_rc=%s tamper_row=%s verdict_row=%s"
+           % (first == second, rc_c, rc_t, rows_t.get("AC-DIX3"), rows_t.get("AC-DIX7")))
+
+        # ---- AC-DIX3b (R2804): the snapshot label is the load-bearing half of the new
+        # contract. Removing it must flip AC-DIX3 AND AC-DIX8 and nothing else, which is
+        # what stops the newest band from re-acquiring a byte-equality claim that would
+        # redden this page every time the newest face is re-rendered in the same closeout.
+        world4 = os.path.join(tempfile.mkdtemp(prefix="dix3b-"), "w")
+        shutil.copytree(world, world4)
+        landed_now = read(os.path.join(world4, "preview", "index.html"))
+        needle = "Snapshot: the size and stamp above"
+        ok("AC-DIX3b snapshot label present in the landed page",
+           needle in landed_now, "label_present=%s" % (needle in landed_now))
+        write(os.path.join(world4, "preview", "index.html"),
+              landed_now.replace(needle, "XX-REMOVED-XX", 1))
+        point_to(mod, world4)
+        rc_l, out_l = call(mod, ["--check"])
+        rows_l = rows_of(out_l)
+        point_to(mod, world)
+        ok("AC-DIX3b removing the snapshot label flips AC-DIX3 and AC-DIX8 only",
+           rc_l == 2 and rows_l.get("AC-DIX3") == "FAIL"
+           and rows_l.get("AC-DIX8") == "FAIL"
+           and rows_l.get("AC-DIX1") == "PASS",
+           "rc=%s dix3=%s dix8=%s dix1=%s"
+           % (rc_l, rows_l.get("AC-DIX3"), rows_l.get("AC-DIX8"), rows_l.get("AC-DIX1")))
 
         # ---- AC-DIX4: markers, offline, byte floor ----
         markers = ["AIGC", "msgSecCheck", "\u6295\u987e", "19.9"]

@@ -105,6 +105,8 @@ def newest_artifact():
         # page, so it can never become the newest "shipped" face.
         if not os.path.exists(os.path.join(PREVIEW, stem + ".html")):
             continue
+        if stem in BOARD_PAGES:
+            continue
         path = os.path.join(PREVIEW, name)
         try:
             mtime = os.path.getmtime(path)
@@ -131,10 +133,28 @@ def render_newest(new):
     out = []
     out.append("<h2>\u6700\u65b0\u5b9e\u7269\uff08\u76d8\u4e0a mtime \u6d3e\u751f\uff0c\u7981\u5199\u6b7b\uff09</h2>")
     out.append('<div class="note">%s</div>' % html.escape(newest_line(new)))
+    out.append('<div class="note">%s</div>' % html.escape(NEWEST_SNAPSHOT))
     return "\n".join(out)
 
 
 GATE_PAGES = ("index", "deliverable-index")
+
+# AC-DIX16 (pinned 2026-11-15 R2804 before this code): the BOARD pages re-render on every
+# closeout and are not product faces, but they were winning the "newest artifact" race and
+# stealing the band from the artifact the window actually shipped - which reddened this page
+# one render later, and reddened the export face (AC-EXPW1) after that. Boards are CEO-openable
+# and stay in the pairs band; they are simply not "the newest thing the line produced".
+BOARD_PAGES = ("face-sweep", "ceo-blockers")
+
+# AC-DIX15 (pinned 2026-11-15 R2804 before this code): the newest band quotes a byte count
+# and an mtime that belong to whatever rendered that face LAST. Re-rendering that face in the
+# same closeout changes both, which is why this page read AC-DIX3/AC-DIX8 red the moment the
+# sweep board was refreshed after it. The band must therefore LABEL those two numbers a
+# snapshot, and its live assertion must be the artifact NAME - the fact a reader needs is
+# "which face is newest", never "how many bytes it had at 23:10".
+NEWEST_SNAPSHOT = ("Snapshot: the size and stamp above were measured when this page was rendered; "
+                   "a later re-render of that face changes them. The live fact this band asserts "
+                   "is which artifact is newest, not its byte count.")
 
 
 def artifact_pairs():
@@ -339,8 +359,14 @@ def main(argv):
            "quoted-sizes=%d of %d, each equal to os.path.getsize" % (len(size_rows), len(rows)))
 
     landed = get_block(text)
-    record("AC-DIX3", landed == block,
-           "landed-block==fresh-block %s, fingerprint=%s" % (landed == block, fp))
+    # AC-DIX15 relaxed the byte-equality of this criterion, not its purpose: the landed band
+    # must still name the same newest face the fresh scan names, and must label its size and
+    # stamp a snapshot, so a same-closeout re-render of that face cannot redden the page.
+    landed_name = (newest["json"] or "") in landed
+    label_ok = NEWEST_SNAPSHOT in landed
+    record("AC-DIX3", landed_name and label_ok,
+           "landed-names-newest=%s snapshot-label=%s fingerprint=%s"
+           % (landed_name, label_ok, fp))
 
     clean = strip_block(text)
     before = set(front_count(clean))
@@ -364,7 +390,11 @@ def main(argv):
            "compliance=%d/%d blocker-named=%d/%d" % (len(have), len(COMPLIANCE),
                                                      len(blockers), len(rows)))
 
-    quoted = [r for r in rows if ("verdict=%s" % html.escape(r["verdict"])) in block]
+    # R2804: scored against the LANDED page, not the block this run just built. AC-DIX3 used
+    # to catch a tampered ledger row only because it compared the whole landed block byte for
+    # byte; that comparison is gone (it was the two-page interlock), so the row-level claim has
+    # to be made against the file a reader actually opens.
+    quoted = [r for r in rows if ("verdict=%s" % html.escape(r["verdict"])) in text]
     record("AC-DIX7", len(quoted) == len(rows),
            "verdicts-quoted=%d/%d defect-rows=%d"
            % (len(quoted), len(rows), sum(1 for r in rows if r["defects"])))
@@ -380,11 +410,13 @@ def main(argv):
     # self-matching test that passes on any bytes (R2760/R2761 class, caught
     # here by control c2 of tmp/negctl_dix8_R2775.py).
     landed_block = get_block(text) if check else block
-    record("AC-DIX8", want in landed_block,
-           "newest=%s bytes=%d band=%s fresh_derivation_quoted=%s"
-           % (fresh["json"] or "(none)", fresh["bytes"],
-              "present" if newest_line(newest) in landed_block else "absent",
-              want in landed_block))
+    # AC-DIX15 (R2804): the NAME is the live fact. The byte count and stamp are a snapshot of
+    # whichever render came last, so they are asserted as labelled, never as equal.
+    landed_names_fresh = (fresh["json"] or "") in landed_block
+    record("AC-DIX8", landed_names_fresh and (NEWEST_SNAPSHOT in landed_block),
+           "newest=%s bytes=%d names_fresh=%s snapshot_label=%s"
+           % (fresh["json"] or "(none)", fresh["bytes"], landed_names_fresh,
+              NEWEST_SNAPSHOT in landed_block))
 
     # AC-DIX9..AC-DIX14 (pinned 2026-11-15 R2777 in src/os/backlog.md BEFORE
     # this code): the all-pairs band must list every shipped face on disk, so

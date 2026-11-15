@@ -6844,8 +6844,12 @@ SUITES = [
     # re-derives its fact independently (from the private world or from disk)
     # instead of replaying the tool's verdict, and AC-DIX1 / AC-DIX3 carry
     # negative controls so a criterion nobody can redden is not counted.
+    # R2804: the count moved 14 -> 16 when the two-page interlock was broken and
+    # the ownership of the snapshot contract moved into this suite (AC-DIX3 now
+    # names AC-DIX7 as the row the verdict tamper reddens, and AC-DIX3b is the
+    # label-removal control). Counted from the suite's own announcement.
     ("os-deliverable-index",
-     os.path.join("..", "os", "test_deliverable_index.py"), 14),
+     os.path.join("..", "os", "test_deliverable_index.py"), 16),
     # R2798. tools/battery_shard.py decides whether a FAMILY of suites is green
     # and carried no battery row, so a tool that grades suites was graded only
     # by the run that graded them. AC-BSH1..AC-BSH8 pinned in src/os/backlog.md
