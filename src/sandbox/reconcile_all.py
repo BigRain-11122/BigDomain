@@ -6788,6 +6788,14 @@ SUITES = [
     # assertion - which is the proof that sub-check carries weight.)
     ("os-payment-gate-report",
      os.path.join("..", "os", "test_payment_gate_report.py"), 9),
+    # R2807: tools/qa_log.py writes every window's evidence (tools/battery_shard.py
+    # calls its do_write directly) yet all 691 registered suites covered zero
+    # AC-QAL* tokens, so its seven criteria were guarded only by its own
+    # --selftest. AC-QALB8 holds the defect measured this window: a BOM-less
+    # UTF-16 source was accepted, landed NUL bytes and reported VERDICT PASS
+    # while both this tool and the writer census named the result utf-8/lf.
+    ("os-qa-log",
+     os.path.join("..", "os", "test_qa_log.py"), 9),
     # R2780: the group ledger writes wildcard forms ("no reply cites
     # D-20261114-0x") and a token regex without a right-hand boundary harvests
     # D-20261114-0 out of them, inventing a decision that never existed. Every

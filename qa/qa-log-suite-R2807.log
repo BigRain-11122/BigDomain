@@ -1,0 +1,38 @@
+R2807 QA-LOG BATTERY ROW + BIRTH-SITE NUL REPAIR
+------------------------------------------------
+open baseline (final tree, tick 2806): registry by import 691 suites / 5163 criteria
+coverage search: AC-QAL* tokens across all 691 registered suites = 0 occurrences
+pin: AC-QALB1..AC-QALB9 written into src/os/backlog.md and committed 87f22296
+     BEFORE src/os/test_qa_log.py existed
+pre-registration run (no registry row yet): SUITE FAIL 9/11
+     reds = AC-QALB8 (defect) and AC-QALB9 (row absent); AC-QALB1..7 already green
+defect measured BEFORE any repair:
+     source = 'PASS line one\nPASS line two\n'.encode('utf-16-le')  (40 bytes, no BOM)
+     do_write printed VERDICT PASS and landed 41 bytes carrying 20 NUL bytes
+     lines read back as 5 for a 2-line source
+     classify() named the landed file utf-8/lf - the healthy dialect
+     qa_writer_census.classify_file has its own rule and does not call qa_log,
+     so a no-BOM + LF-only + utf-8-decodable file is classified tee (healthy)
+     live library: 3106 files under qa/, 155 of them carry NUL, zero flags raised
+repair at the birth site (tools/qa_log.py, three places):
+     1 read_source refuses any source whose DECODED text still contains NUL,
+       because endianness cannot be verified without a BOM
+     2 classify names such a file nul-bytes (BOM checks still run first, so the
+       R2775 ps-utf16 class keeps its name and its refusal)
+     3 the module docstring states the refusal so the contract is visible
+after repair, the SAME criterion reads:
+     refused=True class=nul-bytes check_rc=2
+     reason="source carries NUL bytes (BOM-less UTF-16 is not an evidence dialect)"
+suite: SUITE PASS 11/11, double run byte-identical sha16 289bbfd901a85276 (12 rows)
+registry by import: 692 suites / 5172 criteria / 692 unique names / 692 unique paths
+matrix: docs/sandbox-suite-matrix.md 72932B, --check byte-identical, green=675/692
+entry page: preview/index.html 36506B, deliverable_index --check VERDICT PASS 14/14
+adjacency re-run on the final tree:
+     src/os/test_battery_shard.py 8/8     (it calls qa_log.do_write directly)
+     src/sandbox/test_reconcile_daily_census.py 8/8
+     src/os/qa_writer_census.py --check DRIFT-CLEAN flags=0
+     tools/qa_log.py --selftest VERDICT PASS 8/8
+honest scope: the 155 legacy NUL-bearing files are NOT rewritten by this window.
+     They are now named nul-bytes by qa_log --check, but the writer census still
+     reads them tee because it carries its own classifier, so the library-level
+     reconciliation is a real open queue item, not a closed one.

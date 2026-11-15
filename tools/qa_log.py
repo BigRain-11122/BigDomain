@@ -25,6 +25,11 @@ Contract (AC-QAL1..7):
   AC-QAL7 the selftest never touches qa/, this source is ASCII, and it imports no
           network or subprocess module.
 
+R2807 (AC-QALB8): a source that still carries NUL after decoding is REFUSED
+rather than stored - BOM-less UTF-16 used to be written as a NUL-riddled file
+with VERDICT PASS and read back as the healthy utf-8/lf dialect by this tool and
+by the writer census. --check names such a file nul-bytes.
+
 Stdlib only, ASCII source, zero network, zero shell.
 """
 
@@ -44,19 +49,34 @@ BOM_16BE = b"\xfe\xff"
 
 
 def read_source(raw):
-    """AC-QAL1: decode whatever the shell produced, without guessing silently."""
+    """AC-QAL1: decode whatever the shell produced, without guessing silently.
+
+    AC-QALB8 (R2807): a decoded NUL is never legitimate in an evidence log. It
+    means the source was BOM-less UTF-16, the one encoding the old fallback
+    could not tell from plain text - it used to be accepted as readable, land a
+    NUL-riddled file, and report VERDICT PASS. Refusing is the honest face: the
+    endianness cannot be verified without a BOM, so the writer names the
+    corruption instead of storing it.
+    """
     if raw.startswith(BOM_UTF8):
-        return raw[len(BOM_UTF8):].decode("utf-8")
-    if raw.startswith(BOM_16LE):
-        return raw[2:].decode("utf-16-le")
-    if raw.startswith(BOM_16BE):
-        return raw[2:].decode("utf-16-be")
-    for enc in ("utf-8", "gb18030"):
-        try:
-            return raw.decode(enc)
-        except UnicodeDecodeError:
-            continue
-    raise ValueError("undecodable source bytes")
+        text = raw[len(BOM_UTF8):].decode("utf-8")
+    elif raw.startswith(BOM_16LE):
+        text = raw[2:].decode("utf-16-le")
+    elif raw.startswith(BOM_16BE):
+        text = raw[2:].decode("utf-16-be")
+    else:
+        for enc in ("utf-8", "gb18030"):
+            try:
+                text = raw.decode(enc)
+                break
+            except UnicodeDecodeError:
+                continue
+        else:
+            raise ValueError("undecodable source bytes")
+    if "\x00" in text:
+        raise ValueError("source carries NUL bytes (BOM-less UTF-16 is not "
+                         "an evidence dialect)")
+    return text
 
 
 def normalize(text):
@@ -114,11 +134,19 @@ def verify_written(path):
 
 
 def classify(raw):
-    """AC-QAL4: name the dialect of an existing file, read-only."""
+    """AC-QAL4: name the dialect of an existing file, read-only.
+
+    AC-QALB8 (R2807): a BOM-less UTF-16 file has no BOM to catch it and decodes
+    as valid utf-8 once the NULs are ignored, so it used to be named utf-8/lf -
+    the healthy dialect - by both this face and the writer census. NUL is the
+    signature that catches it, and it is named here rather than absorbed.
+    """
     if raw.startswith(BOM_16LE) or raw.startswith(BOM_16BE):
         return "ps-utf16"
     if raw.startswith(BOM_UTF8):
         return "utf-8-bom"
+    if b"\x00" in raw:
+        return "nul-bytes"
     if b"\r" in raw:
         return "crlf"
     try:
