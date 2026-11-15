@@ -29,12 +29,33 @@ def make_front(root, name="index.html"):
 
 
 class Rd1Tests(unittest.TestCase):
+    """AC-BGF1..3: R-D1 asserts the criterion it states (fronts >= 1), not an
+    incidental count, and anchors the canonical entry page by name so the count
+    cannot be satisfied by a page nobody opens."""
+
     def test_pass_on_real_repo_front(self):
+        # AC-BGF1: the shipped rule is "accessible front count >= 1", so this
+        # assertion must not redden each time a new face page lands beside the
+        # entry (it did in R2760 and R2761 under an exact-count assertion).
         fronts = bench_gate.find_fronts(PREVIEW)
-        self.assertEqual(len(fronts), 1)
+        self.assertGreaterEqual(len(fronts), 1)
+        # AC-BGF2: the page the CEO actually opens must itself survive the
+        # real-front test (size + all four markers + no external refs).
+        self.assertIn(os.path.join(PREVIEW, "index.html"), fronts)
         v = bench_gate.check_rd1(PREVIEW)
         self.assertEqual(v["status"], "PASS")
         self.assertTrue(any("deliverable-metrics-R683.json" in e for e in v["evidence"]))
+
+    def test_entry_anchor_has_teeth(self):
+        # AC-BGF3: prove AC-BGF2 can fail. Size passes (4200B) but the four
+        # markers are absent, so the entry must drop out of fronts entirely.
+        with tempfile.TemporaryDirectory() as tmp:
+            entry = os.path.join(tmp, "index.html")
+            with open(entry, "w", encoding="utf-8") as fh:
+                fh.write("<html><body>%s</body></html>" % ("x" * 4200))
+            fronts = bench_gate.find_fronts(tmp)
+            self.assertEqual(fronts, [])
+            self.assertNotIn(entry, fronts)
 
     def test_fail_on_empty_dir(self):
         with tempfile.TemporaryDirectory() as tmp:
