@@ -1,0 +1,133 @@
+{
+  "comparison": {
+    "leg_values": [
+      {
+        "credits": null,
+        "periods": 0,
+        "permanent": true,
+        "privileges": 0,
+        "product_id": "birthright_entry",
+        "tier": null
+      },
+      {
+        "credits": 3,
+        "periods": 1,
+        "permanent": false,
+        "privileges": 2,
+        "product_id": "tier_experience",
+        "tier": "experience"
+      }
+    ],
+    "price_cent": 1990,
+    "same_price": true,
+    "value_differs": true
+  },
+  "legs": [
+    {
+      "activation": {
+        "ai_generated": 0,
+        "birth_cert": true,
+        "census_avatar_id": "sys.probe.one",
+        "disclaimer": "非投顾常驻提示：会员权益为 AI 生成工具与历史回测研究展示相关的服务配额与平台特权，非投资建议，不构成任何个股买卖建议、点位预测或收益承诺；「加急通道」为服务排队优先位，非投资建议优先产出，产出物同过非投顾定性；历史回测数据仅作研究展示，不代表未来表现；请独立判断，风险自担。（常驻展示·不可折叠）",
+        "idempotent": false,
+        "permanent": true,
+        "persistent": true,
+        "product": "birthright",
+        "tier": null
+      },
+      "active": false,
+      "amount_cent": 1990,
+      "avatar": "sys.probe.one",
+      "channel": "virtual",
+      "entitlement": "birthright",
+      "grant_id": "<id:01>",
+      "order_id": "<id:02>",
+      "period_days": null,
+      "period_ok": false,
+      "periods": [],
+      "price_cent": 1990,
+      "privileges": [],
+      "product_id": "birthright_entry",
+      "refusal": null,
+      "tier_control": null,
+      "tiers": []
+    },
+    {
+      "activation": {
+        "ai_generated": 0,
+        "census_avatar_id": "sys.probe.two",
+        "credits_balance": 3,
+        "disclaimer": "非投顾常驻提示：会员权益为 AI 生成工具与历史回测研究展示相关的服务配额与平台特权，非投资建议，不构成任何个股买卖建议、点位预测或收益承诺；「加急通道」为服务排队优先位，非投资建议优先产出，产出物同过非投顾定性；历史回测数据仅作研究展示，不代表未来表现；请独立判断，风险自担。（常驻展示·不可折叠）",
+        "end_utc": "<ts:02>",
+        "idempotent": false,
+        "period_id": "<id:05>",
+        "period_no": 1,
+        "persistent": true,
+        "product": "tier:experience",
+        "start_utc": "<ts:01>",
+        "status": "active",
+        "tier": "experience",
+        "vouchers_opened": []
+      },
+      "active": true,
+      "amount_cent": 1990,
+      "avatar": "sys.probe.two",
+      "channel": "virtual",
+      "entitlement": "tier:experience",
+      "grant_id": "<id:03>",
+      "order_id": "<id:04>",
+      "period_days": 30,
+      "period_ok": true,
+      "periods": [
+        {
+          "balance": 3,
+          "end_utc": "<ts:02>",
+          "period_id": "<id:05>",
+          "start_utc": "<ts:01>",
+          "status": "active",
+          "tier": "experience"
+        }
+      ],
+      "price_cent": 1990,
+      "privileges": [
+        "basic_badge",
+        "emoji_pack_standard"
+      ],
+      "product_id": "tier_experience",
+      "refusal": null,
+      "tier_control": {
+        "catalog_privileges": [
+          "basic_badge",
+          "emoji_pack_standard"
+        ],
+        "sets_equal": true,
+        "tier": "experience"
+      },
+      "tiers": [
+        "experience"
+      ]
+    }
+  ],
+  "money": {
+    "balanced_transactions": 1,
+    "directions": [
+      "credit",
+      "debit"
+    ],
+    "entries": 2,
+    "reconcile_line": "RECONCILE PASS (8/8 checks)",
+    "reconcile_rc": 0,
+    "transactions": 1,
+    "unbalanced_transactions": 0,
+    "zero_delta": true
+  },
+  "protocol_version": "fyc-v1",
+  "scope": {
+    "dock_row": "the dock product row exists only in this temp copy",
+    "merchant": "none - no merchant id, no signature, no gateway call",
+    "msgseccheck": "not called - the sandbox wordlists are local mocks",
+    "network": "none",
+    "real_purchase": "gated on the CEO physical pieces"
+  },
+  "tool": "first_yuan_chain"
+}

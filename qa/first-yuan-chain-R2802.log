@@ -1,0 +1,67 @@
+R2802 first-yuan chain face - evidence
+=====================================
+
+Tool: tools/first_yuan_chain.py
+Criteria AC-FYC1..AC-FYC8 pinned in src/os/backlog.md BEFORE the tool existed.
+
+Renderer output (python tools/first_yuan_chain.py)
+--------------------------------------------------
+RENDER legs=2 price=1990 same_price=True value_differs=True entries=2 tx=1
+reconcile_rc=0 zero_delta=True html=3078B json=4159B
+
+Gate (python tools/first_yuan_chain.py --check)
+-----------------------------------------------
+VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=3078B read_only=True
+
+Negative control (tmp/_fyc_negctl.py: one byte injected into the landed html,
+then restored from the captured original)
+------------------------------------------------------------------------
+tampered_rc=2 VERDICT FAIL 1 E_STALE html is not the fresh derivation
+restored_rc=0 VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=3078B
+VERDICT CONFIRMED
+
+What the two legs measured
+--------------------------
+Leg 1 birthright_entry, the REAL shipped pay product: price 19.90, entitlement
+"birthright", activation accepted with tier=null, permanent=true, period count 0,
+privilege count 0. So the first-yuan product delivers a permanent birth
+certificate and no membership tier, no credits and no privileges.
+
+Leg 2 tier_experience, a dock row that exists ONLY in the temp copy of the pay
+config (a real monthly price row is a needs-CEO approval face): price 19.90 as
+well, entitlement "tier:experience", activation accepted with tier=experience,
+period count 1, period length 30 days, credits 3, privileges
+basic_badge + emoji_pack_standard, and the privilege set EQUALS the member
+catalog declaration for that tier.
+
+That is the finding: two products at the identical 19.90 price deliver wildly
+different value, and the one that is actually shipped is the one with the
+smaller value. The page states the difference rather than showing two tables.
+
+Money invariant
+---------------
+Read back by SQL over the temp ledger: 2 entries, 1 transaction, directions
+credit+debit, balanced=1, unbalanced=0, zero-delta. The shipped
+src/sandbox/ledger/reconcile.py on the same temp book printed
+"RECONCILE PASS (8/8 checks)" rc=0.
+
+Isolation
+---------
+The live src/sandbox/ledger/ledger.db sha256 prefix was identical before and
+after the render (E_LIVE_BOOK_TOUCHED would have refused otherwise). The temp
+world is removed before exit. The source is pure ASCII and imports only the
+stdlib plus the shipped sandbox modules.
+
+Entry page
+----------
+preview/index.html re-rendered to 36272B; deliverable_index --check reads
+VERDICT PASS 14/14 fingerprint=0ebcaebf74390136 with
+AC-DIX8 newest=first-yuan-chain.json, AC-DIX9 band-rows=37, AC-DIX10 pairs=37
+with no missing targets.
+
+Honest scope
+------------
+No merchant, no payment signature and no network call was made anywhere in this
+run. msgSecCheck was NOT called - the sandbox content gates are local wordlists.
+A real purchase remains gated on the CEO physical pieces (merchant id, server,
+domain, filing).
