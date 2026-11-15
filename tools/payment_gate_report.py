@@ -364,7 +364,7 @@ def render_html(meas):
     parts = []
     parts.append(
         '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">'
-        '<title>%s</title><style>'
+        '<title>' + e(L["title"]) + '</title><style>'
         'body{font-family:-apple-system,"Segoe UI",sans-serif;margin:0;'
         'padding:28px 34px;color:#1c1f23;background:#fbfbf9;line-height:1.55}'
         'h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:30px 0 10px;'
@@ -372,7 +372,7 @@ def render_html(meas):
         '.sub{color:#5b6168;font-size:13px;margin-bottom:16px}'
         '.meta{font-size:12px;color:#5b6168;background:#f1f2ee;padding:9px 12px;'
         'border-radius:6px;word-break:break-all}'
-        'table{border-collapse:collapse;width:100%%;font-size:13px;margin:8px 0}'
+        'table{border-collapse:collapse;width:100%;font-size:13px;margin:8px 0}'
         'th,td{border:1px solid #d9dbd4;padding:6px 9px;text-align:left;'
         'vertical-align:top}th{background:#eceee7;font-weight:600}'
         'tr.ok td:nth-child(n){}tr.bad td{background:#fdeeee}'

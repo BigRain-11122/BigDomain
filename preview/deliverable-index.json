@@ -1,0 +1,53 @@
+{
+  "note": "Editorial face list for the CEO walkthrough block in preview/index.html. Sizes, titles, verdicts and timestamps are DERIVED from disk by tools/deliverable_index.py at render time and are never stored here.",
+  "faces": [
+    {
+      "id": "platform-live",
+      "html": "platform-live-report.html",
+      "claim": "六道沙箱门由一条命令拉起，逐门实测 HTTP 200，跑完即拆（4/4 子进程归零 · 8/8 端口拒连）",
+      "blocker": "生产 wss/ICP/日志留存/1000 并发 p95 = CEO 物理件"
+    },
+    {
+      "id": "lobby-ws",
+      "html": "lobby-ws-report.html",
+      "claim": "P-47① 大厅 WebSocket：两个真实客户端走 RFC6455，服务端拒绝伪造 actor/ai_generated",
+      "blocker": "入场为 mock；违禁词表为沙箱替身"
+    },
+    {
+      "id": "city-face",
+      "html": "city-face-report.html",
+      "claim": "城市观测面：12 白名单字段实服务、越权字段拒发、零写端点",
+      "blocker": "城市数据为样例包，非实况导出"
+    },
+    {
+      "id": "ugc-gate",
+      "html": "ugc-gate-report.html",
+      "claim": "P-47③ UGC 内容安全：msgSecCheck 契约、闸序、parity 14 例零错配",
+      "blocker": "真实 msgSecCheck 需小程序 appid/secret"
+    },
+    {
+      "id": "payment-gate",
+      "html": "payment-gate-report.html",
+      "claim": "P-47④ 19.9 支付通道：双通道正例 3 条全收、反例 7 条全拒，含 V3 回调面",
+      "blocker": "真实商户号/AppID/平台公钥/对公结算 = CEO 物理件"
+    },
+    {
+      "id": "membership",
+      "html": "membership-benefit-report.html",
+      "claim": "P-47⑤ 权益月卡：入会、权益授予、出生证、扣次、越权与过期拒绝",
+      "blocker": "档内数值与命名待 CEO 确认（[needs-CEO]）"
+    },
+    {
+      "id": "ledger",
+      "html": "ledger-business-report.html",
+      "claim": "P-47② 代币双式账本：账户/交易/分录三表与对账脚本实跑",
+      "blocker": "真实支付入账待商户号到位"
+    },
+    {
+      "id": "apimarket",
+      "html": "apimarket-report.html",
+      "claim": "API 市场结算台账：卖家账本、结算分录与注意力项（示例集）",
+      "blocker": "结算数据为示例集；真实结算待商户号/支付物理件"
+    }
+  ]
+}

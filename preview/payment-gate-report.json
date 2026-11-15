@@ -81,7 +81,7 @@
       "text": "tool source ASCII, stdlib+shipped imports, zero network refs"
     }
   ],
-  "generated_utc": "2026-11-14T23:28:28Z",
+  "generated_utc": "2026-11-15T00:53:52Z",
   "legacy_negative": [
     {
       "case": "tampered signature",
@@ -99,7 +99,7 @@
     },
     {
       "case": "stale timestamp",
-      "detail": "E_CALLBACK_REJECTED: ts outside +-300s window (delta=401s)",
+      "detail": "E_CALLBACK_REJECTED: ts outside +-300s window (delta=400s)",
       "expect": "已拒",
       "got": "已拒",
       "ok": true
@@ -160,7 +160,7 @@
       "v3"
     ],
     "network_refs": 0,
-    "sha256": "2fc8186e674fe60c5680c081ca84cc5034382ef81917d0a1b79b6a89d2c1154e"
+    "sha256": "8debeb1d6587c76c2b4c7121e82c0ee755a06e8ed545168549adfc76887658f5"
   },
   "v3_negative": [
     {
@@ -179,7 +179,7 @@
     },
     {
       "case": "stale timestamp",
-      "detail": "E_CALLBACK_REJECTED: ts outside +-300s window (delta=401s)",
+      "detail": "E_CALLBACK_REJECTED: ts outside +-300s window (delta=400s)",
       "expect": "已拒",
       "got": "已拒",
       "ok": true

@@ -1,0 +1,34 @@
+DELIVERABLE-INDEX-R2765 evidence capture (two consecutive --check runs)
+
+--- run 1 rc=0 ---
+ | PASS AC-DIX1   registry=8 disk=8 missing=[] extra=[]
+ | PASS AC-DIX2   quoted-sizes=8 of 8, each equal to os.path.getsize
+ | PASS AC-DIX3   landed-block==fresh-block True, fingerprint=c96b25c743a2b7b0
+ | PASS AC-DIX4   markers=True scheme_free=True fronts_before=2 fronts_after=2 bytes=27999
+ | PASS AC-DIX5   links=8 relative-and-present=8 bad=[]
+ | PASS AC-DIX6   compliance=3/3 blocker-named=8/8
+ | PASS AC-DIX7   verdicts-quoted=8/8 defect-rows=0
+ | VERDICT PASS 7/7 fingerprint=c96b25c743a2b7b0
+ | {"failed": [], "fingerprint": "c96b25c743a2b7b0", "passed": 7, "total": 7}
+
+--- run 2 rc=0 ---
+ | PASS AC-DIX1   registry=8 disk=8 missing=[] extra=[]
+ | PASS AC-DIX2   quoted-sizes=8 of 8, each equal to os.path.getsize
+ | PASS AC-DIX3   landed-block==fresh-block True, fingerprint=c96b25c743a2b7b0
+ | PASS AC-DIX4   markers=True scheme_free=True fronts_before=2 fronts_after=2 bytes=27999
+ | PASS AC-DIX5   links=8 relative-and-present=8 bad=[]
+ | PASS AC-DIX6   compliance=3/3 blocker-named=8/8
+ | PASS AC-DIX7   verdicts-quoted=8/8 defect-rows=0
+ | VERDICT PASS 7/7 fingerprint=c96b25c743a2b7b0
+ | {"failed": [], "fingerprint": "c96b25c743a2b7b0", "passed": 7, "total": 7}
+
+--- payment title defect repair (birth site: tools/payment_gate_report.py) ---
+ | BEFORE <title>%s</title> plus literal 100%% inside the head block: the head string was
+ |   authored for %-formatting that no code path applied, so both literals shipped as-is
+ | AFTER  <title>19.9 支付通道验收报告</title> rendered from L[title] via html.escape, 100% collapsed
+ | MEASURED html=6711B -> 6737B (+26B) verdict=PASS channels=standard,virtual accepted=3 refused=7
+
+--- tree defect carried, measured not fixed (src/ frozen under the live leg) ---
+ | FAIL benchgate test_pass_on_real_repo_front: find_fronts=2 (index.html, membership-benefit-report.html)
+ |   expects 1. Pre-dates this window (both pages landed in R2760/R2761). Suite re-run 10/11 pass.
+ |   This window proved its own injection does NOT add a third front: fronts_before=2 fronts_after=2.
