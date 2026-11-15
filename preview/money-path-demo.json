@@ -1,0 +1,139 @@
+{
+  "blocked_on": "CEO physical item: real merchant id / appid / appkey / settlement (AC-YP1); platform public key for V3 rsa mode",
+  "counts": {
+    "decision": 5,
+    "physical": 3,
+    "products": 4,
+    "steps": 8,
+    "steps_pass": 6
+  },
+  "criteria": [
+    "AC-MPD1 derived numbers only",
+    "AC-MPD2 product list equals source, CEO gate badged",
+    "AC-MPD3 MOCK statement, offline",
+    "AC-MPD4 selection carries copy/entitlement/channel, verdicts unaltered",
+    "AC-MPD5 recorded source sizes, byte-identical rerender",
+    "AC-MPD6 read-only --check, one script, one namespace, ASCII source"
+  ],
+  "face": "money-path-demo",
+  "generated_by": "tools/money_path_demo.py",
+  "kind": "MOCK",
+  "products": [
+    {
+      "channel": "virtual",
+      "copy": "入城出生证：付费即入城资格（发放产物=入城凭证·lobby E_ENTRANCE_REQUIRED 判据源=本件 grants 查询面）",
+      "entitlement": "birthright",
+      "id": "birthright_entry",
+      "needs_ceo": true,
+      "price_cent": 1990,
+      "price_yuan": "19.90"
+    },
+    {
+      "channel": "virtual",
+      "copy": "19.9 算力包：AI 生成工具验证服务（次数明细=[needs-CEO]）",
+      "entitlement": "compute_pack",
+      "id": "pack_compute_19_9",
+      "needs_ceo": true,
+      "price_cent": 1990,
+      "price_yuan": "19.90"
+    },
+    {
+      "channel": "standard",
+      "copy": "B 端真实服务：数据报告（标准商户通道·对公结算）",
+      "entitlement": "report:data",
+      "id": "report_data_b",
+      "needs_ceo": true,
+      "price_cent": 199900,
+      "price_yuan": "1999.00"
+    },
+    {
+      "channel": "standard",
+      "copy": "观测费分成单：30% 代币分成示意（换算桥演示件）",
+      "entitlement": "obs:credit",
+      "id": "share_observation",
+      "needs_ceo": true,
+      "price_cent": 100000,
+      "price_yuan": "1000.00"
+    }
+  ],
+  "sources": {
+    "blockers": {
+      "bytes": 6754,
+      "path": "preview/ceo-blockers.json"
+    },
+    "journey": {
+      "bytes": 6835,
+      "path": "preview/journey-19.9.json"
+    },
+    "payment": {
+      "bytes": 6415,
+      "path": "preview/payment-gate-report.json"
+    }
+  },
+  "steps": [
+    {
+      "carrier": "platform-live-report",
+      "gate": "非投顾风险提示直播间常驻（launch-ops-rehearsal §1.1.3）",
+      "id": "JV-1",
+      "ok": true,
+      "touchpoint": "直播间挂 19.9 购物车（公域漏斗·免费围观付费入城）",
+      "verdict": "PASS"
+    },
+    {
+      "carrier": "payment-gate-report",
+      "gate": "充值页代币三不可条款常驻（L79 分配层③）",
+      "id": "JV-2",
+      "ok": true,
+      "touchpoint": "19.9 算力包下单（单次爆款·三形态一句话）",
+      "verdict": "PASS"
+    },
+    {
+      "carrier": "payment-gate-report",
+      "gate": "法币/代币双域隔离 AC-Y7",
+      "id": "JV-3",
+      "ok": true,
+      "touchpoint": "回调/幂等/对账",
+      "verdict": "PASS"
+    },
+    {
+      "carrier": "ledger-business-report",
+      "gate": "双域隔离对账复验（对账脚本）",
+      "id": "JV-4",
+      "ok": true,
+      "touchpoint": "双式账本入账",
+      "verdict": "PASS"
+    },
+    {
+      "carrier": "lobby-ws-report",
+      "gate": "入城呈现面=AIGC 生成标识呈现位",
+      "id": "JV-5",
+      "ok": true,
+      "touchpoint": "出生证=入城资格+户籍分配",
+      "verdict": "PASS"
+    },
+    {
+      "carrier": "ugc-gate-report",
+      "gate": "AIGC 标识双轨=显式 ai_label（ugc 沙箱 config L63+pipeline L332 行级锚）+隐式盲水印（R321 套件 5/5）",
+      "id": "JV-6",
+      "ok": false,
+      "touchpoint": "一句话→量化策略+回测/小游戏 Demo/短视频（§四.1 三形态）",
+      "verdict": "DECLARED"
+    },
+    {
+      "carrier": "ugc-gate-report",
+      "gate": "三层筛选+违规追回",
+      "id": "JV-7",
+      "ok": false,
+      "touchpoint": "优质创意→过闸采纳→署名/分成",
+      "verdict": "DECLARED"
+    },
+    {
+      "carrier": "membership-benefit-report",
+      "gate": "续费页非投顾常驻+调价走 T1 否决窗公告（L79 gv 标准 4）",
+      "id": "JV-8",
+      "ok": true,
+      "touchpoint": "余额不足提示→续购 19.9 单次或升档订阅",
+      "verdict": "PASS"
+    }
+  ]
+}

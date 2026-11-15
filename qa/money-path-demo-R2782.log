@@ -1,0 +1,31 @@
+R2782 money-path-demo face -- private verification
+=================================================
+criteria pinned in src/os/backlog.md BEFORE tools/money_path_demo.py existed
+(AC-MPD1..AC-MPD6).
+
+AC-MPD1 derived-only numbers ...... PASS  products=4 price_yuan from price_cent,
+                                          counts from ceo-blockers.json counts
+AC-MPD2 product list == source .... PASS  ids equal payment-gate-report.json;
+                                          needs_ceo renders CEO badge (4 of 4)
+AC-MPD3 MOCK statement + offline ... PASS  zero http:// / https:// literals,
+                                          first screen carries the MOCK line
+AC-MPD4 selection + verdicts ...... PASS  detail shows copy/entitlement/channel,
+                                          step verdict strings unaltered
+AC-MPD5 source sizes + rerender ... PASS  bytes match os.path.getsize,
+                                          double render html_same=True json_same=True
+AC-MPD6 read-only --check .......... PASS  mtime unchanged by --check,
+                                          1 script block, 1 namespace declaration,
+                                          2 storage calls both via NS
+
+render: WROTE money-path-demo.html 9673B / money-path-demo.json 4311B
+--check: VERDICT PASS products=4 steps=8 physical=3 decision=5
+negative control: one price byte tampered in the landed html -> VERDICT FAIL 1
+                  (html is not the fresh derivation) rc=2; re-render -> PASS rc=0
+
+entry page: deliverable_index --check VERDICT PASS 14/14
+            AC-DIX9 band-rows=30 fresh-scan=30 listed-in-landed=30
+adjacent gates: ship_checklist --check PASS 8/8 ; filing_checklist --check PASS 8/8
+
+honest scope: the page is a MOCK surface. It connects to no merchant, signs no
+order and writes no ledger entry. Every price, product and verdict it prints is
+read from the three shipped payloads at render time.
