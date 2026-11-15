@@ -6830,6 +6830,15 @@ SUITES = [
     # with module paths pointed at a tampered private copy.
     ("os-ledger-reconcile-face",
      os.path.join("..", "os", "test_ledger_reconcile_face.py"), 8),
+    # R2796. tools/deliverable_index.py gates the CEO ENTRY PAGE with
+    # AC-DIX1..AC-DIX14 and had no battery row, so the one page every window
+    # re-renders was guarded only by the run that rendered it. AC-DIX1..14
+    # pinned in src/os/backlog.md at R2796 BEFORE this suite. Every check
+    # re-derives its fact independently (from the private world or from disk)
+    # instead of replaying the tool's verdict, and AC-DIX1 / AC-DIX3 carry
+    # negative controls so a criterion nobody can redden is not counted.
+    ("os-deliverable-index",
+     os.path.join("..", "os", "test_deliverable_index.py"), 14),
     ]
 
 FAILS = 0

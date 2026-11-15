@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 686 | 5104 | 675/675 | R2739 |
+| 687 | 5118 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -723,7 +723,8 @@
 | 684 | os-lobby-session-trace | ../os/test_lobby_session_trace.py | 9 | no-evidence | - |
 | 685 | os-lobby-protocol-map | ../os/test_lobby_protocol_map.py | 6 | no-evidence | - |
 | 686 | os-ledger-reconcile-face | ../os/test_ledger_reconcile_face.py | 8 | no-evidence | - |
-|  | 合计 |  | 5104 | green 675 / FAIL 0 / no-evidence 11 |  |
+| 687 | os-deliverable-index | ../os/test_deliverable_index.py | 14 | no-evidence | - |
+|  | 合计 |  | 5118 | green 675 / FAIL 0 / no-evidence 12 |  |
 
 ## 证据出处
 

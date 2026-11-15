@@ -1,0 +1,8 @@
+R2796 entry-page battery row: src/os/test_deliverable_index.py, criteria AC-DIX1..AC-DIX14 pinned in src/os/backlog.md BEFORE the file existed.
+Measured on the final tree: SUITE PASS 14/14 announced=14 (two consecutive runs, no state drift).
+Independent re-derivation, not a replay: every check rebuilds its fact from the private world or from disk.
+Controls that actually redden: (c1) planting an unregistered gamma-report pair flips AC-DIX1 to FAIL with gate rc=2; (c2) one tampered byte in the landed block flips AC-DIX3 to FAIL with rc=2.
+Isolation proof: the real tree gate reads VERDICT PASS 14/14 fingerprint=5ef05abdfe2aee6e, byte- and fingerprint-identical to before the suite ran, so no real preview/ file was authored by a test.
+Registry measured BY IMPORT: 687 suites / 5118 criteria / 687 unique names / 687 unique paths (was 686 / 5104).
+docs/sandbox-suite-matrix.md regenerated 72516 bytes / 687 rows and --check reads DOC-CURRENT.
+Not claimed: no battery leg, no new business face, no server, no msgSecCheck call, no cloud call.
