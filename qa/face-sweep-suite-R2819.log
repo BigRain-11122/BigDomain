@@ -1,0 +1,46 @@
+R2819 face_sweep battery row (AC-FSWB1..AC-FSWB10) + the staleness gate the board never had
+
+DEFECT MEASURED AT OPEN, not assumed: python tools/face_sweep.py --check read
+VERDICT PASS 9/9 while the landed board carried generated_utc=2026-11-15T16:53:40Z
+and two faces it claims to have verified had been re-rendered AFTER it -
+preview/index.html at 07:38 and preview/membership-face.html at 07:37. The board's
+sentence "every face gate exited zero" had become unfalsifiable, because R2804
+deliberately made AC-FSW4/AC-FSW9 existence-only (face bytes are a snapshot). Same
+disease family as R2811 (ceo-blockers forty rounds stale) and R2817 (three price
+faces green over a stale table), this time on an eight-panel board.
+
+TWO REPAIRS, BOTH IN THE BIRTH SITE:
+1. tools/face_sweep.py now stamps swept_ns (epoch ns, taken BEFORE any gate runs)
+   into the landed json, and check() gains:
+   - AC-FSW10 E_FACE_STALE: any face artifact whose st_mtime_ns is past swept_ns
+     reddens the board and NAMES the face. A face re-rendered after the sweep is a
+     verdict nobody measured.
+   - AC-FSW11 E_FSW_NO_SWEEP_STAMP: a landed board carrying no swept_ns is
+     REFUSED at rc=2 instead of being read as "nothing is stale" (same law as the
+     writer-census baseline that refused a missing class key).
+   check() total 9 -> 11.
+2. src/os/test_face_sweep.py lands AC-FSWB1..AC-FSWB10 so the eleven criteria of a
+   tool that drives EIGHT CEO-openable faces are under a battery row at last.
+
+CRITERIA PINNED IN src/os/backlog.md BEFORE THE CODE (R2819), and the control is
+measured: the pre-registration run read SUITE FAIL 18/19 with EXACTLY AC-FSWB10 red
+(the registry row absent); after the row landed, SUITE PASS 19/19 in 1.4s.
+AC-FSWB3 is the positive leg (every artifact older than the stamp), so the new gate
+cannot be satisfied by being permanently red. AC-FSWB2 is the difference on ONE
+private world with the byte count held constant, so the size criterion cannot be
+the reason it reddens. AC-FSWB7 proves the mutation catch is live: a stub driver
+that rewrites its own artifact during --check reads mutated=True and is not passing.
+
+ONE PARSER DEFECT OF MY OWN, DISCLOSED: the first AC-FSWB10 read rows=[] against a
+registry row that was already present, because it looked at the line AFTER the path
+while the row is a two-line tuple. Fixed by matching the tuple itself; no criterion
+was relaxed and the fail-then-pass sequence is left on the record.
+
+REGISTRY BY IMPORT: 697 suites / 5228 criteria / 697 unique names / 697 unique paths
+(was 696 / 5218). Matrix regenerated 73380 bytes / 697 rows, --check DOC-CURRENT.
+Entry page 36502B, deliverable_index --check VERDICT PASS 14/14.
+RENDER ORDER: the entry page was rendered BEFORE the sweep and the sweep ran LAST,
+because a face written after the sweep is exactly what AC-FSW10 reports.
+
+REAL TREE AFTER: python tools/face_sweep.py -> 8/8 faces exit 0, VERDICT PASS 8/8
+fingerprint=64e3f66bc2f50b7f; python tools/face_sweep.py --check -> VERDICT PASS 11/11.

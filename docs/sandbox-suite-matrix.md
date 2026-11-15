@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 696 | 5218 | 675/675 | R2739 |
+| 697 | 5228 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -723,17 +723,18 @@
 | 684 | os-scan-five-still | ../os/test_scan_five_still.py | 6 | no-evidence | - |
 | 685 | os-filing-checklist | ../os/test_filing_checklist.py | 8 | no-evidence | - |
 | 686 | os-membership-face | ../os/test_membership_face.py | 10 | no-evidence | - |
-| 687 | os-money-path-demo | ../os/test_money_path_demo.py | 6 | no-evidence | - |
-| 688 | os-first-yuan-path | ../os/test_first_yuan_path.py | 7 | no-evidence | - |
-| 689 | os-lobby-session-trace | ../os/test_lobby_session_trace.py | 9 | no-evidence | - |
-| 690 | os-first-yuan-chain | ../os/test_first_yuan_chain.py | 12 | no-evidence | - |
-| 691 | os-lobby-protocol-map | ../os/test_lobby_protocol_map.py | 6 | no-evidence | - |
-| 692 | os-ledger-reconcile-face | ../os/test_ledger_reconcile_face.py | 8 | no-evidence | - |
-| 693 | os-deliverable-index | ../os/test_deliverable_index.py | 16 | no-evidence | - |
-| 694 | os-battery-shard | ../os/test_battery_shard.py | 8 | no-evidence | - |
-| 695 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
-| 696 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 11 | no-evidence | - |
-|  | 合计 |  | 5218 | green 675 / FAIL 0 / no-evidence 21 |  |
+| 687 | os-face-sweep | ../os/test_face_sweep.py | 10 | no-evidence | - |
+| 688 | os-money-path-demo | ../os/test_money_path_demo.py | 6 | no-evidence | - |
+| 689 | os-first-yuan-path | ../os/test_first_yuan_path.py | 7 | no-evidence | - |
+| 690 | os-lobby-session-trace | ../os/test_lobby_session_trace.py | 9 | no-evidence | - |
+| 691 | os-first-yuan-chain | ../os/test_first_yuan_chain.py | 12 | no-evidence | - |
+| 692 | os-lobby-protocol-map | ../os/test_lobby_protocol_map.py | 6 | no-evidence | - |
+| 693 | os-ledger-reconcile-face | ../os/test_ledger_reconcile_face.py | 8 | no-evidence | - |
+| 694 | os-deliverable-index | ../os/test_deliverable_index.py | 16 | no-evidence | - |
+| 695 | os-battery-shard | ../os/test_battery_shard.py | 8 | no-evidence | - |
+| 696 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
+| 697 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 11 | no-evidence | - |
+|  | 合计 |  | 5228 | green 675 / FAIL 0 / no-evidence 22 |  |
 
 ## 证据出处
 

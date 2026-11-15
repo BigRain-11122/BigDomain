@@ -6865,6 +6865,21 @@ SUITES = [
     # permanent ticket at all. Pinned in src/os/backlog.md BEFORE the code.
     ("os-membership-face",
      os.path.join("..", "os", "test_membership_face.py"), 10),
+    # R2819: tools/face_sweep.py carried eleven criteria and NO battery row while
+    # driving the read-only --check of EIGHT CEO-openable faces, so the only thing
+    # guarding the eight-panel board was the board's own gate and nothing scheduled
+    # it. Measured at open: --check read PASS 9/9 over a board stamped
+    # 2026-11-15T16:53:40Z while preview/index.html (07:38) and
+    # preview/membership-face.html (07:37) had been re-rendered after it, i.e. the
+    # board asserted every face gate exited zero about versions nobody measured.
+    # AC-FSW10/AC-FSW11 close it in the tool (a face artifact newer than the sweep
+    # reddens with the face named; a board carrying no sweep stamp is refused) and
+    # this suite re-proves all eleven criteria plus the tamper that gives each its
+    # weight. (AC-FSWB1..AC-FSWB10 pinned in src/os/backlog.md at R2819 BEFORE the
+    # suite; the pre-registration run read SUITE FAIL 18/19 with exactly AC-FSWB10
+    # red, which is the proof this registry criterion carries weight.)
+    ("os-face-sweep",
+     os.path.join("..", "os", "test_face_sweep.py"), 10),
     # R2782 shipped tools/money_path_demo.py with the same hole - the 19.9 money
     # path page was guarded only by its own --check, which cannot catch a page
     # whose derivation changed under it.

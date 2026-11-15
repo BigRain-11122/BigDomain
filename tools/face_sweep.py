@@ -206,10 +206,17 @@ def fingerprint(rows):
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]
 
 
-def build_json(rows, sizes, stamp):
+def build_json(rows, sizes, stamp, swept_ns):
     doc = {
         "schema_version": SCHEMA,
         "generated_utc": stamp,
+        # AC-FSW10 (R2819): the epoch stamp of the sweep that measured these rows. Every
+        # face artifact must be OLDER than this; an artifact written after the sweep is a
+        # face whose gate result nobody has re-run, which is exactly how this board sat at
+        # 8/8 for fifteen rounds while the entry page and the membership page were
+        # re-rendered underneath it. Stored as integer ns so the comparison is the same
+        # quantity os.stat reports and no string parsing can blur it.
+        "swept_ns": int(swept_ns),
         "sizes": {"html": sizes["html"], "json": sizes["json"]},
         "headline": {
             "pass": sum(1 for r in rows if _passing(r)),
@@ -300,12 +307,12 @@ def _esc(s):
             .replace(">", "&gt;").replace('"', "&quot;"))
 
 
-def render(rows, stamp):
+def render(rows, stamp, swept_ns):
     sizes = {"html": 0, "json": 0}
     html_text = json_text = None
     for _ in range(8):
         html_text = build_html(rows, sizes, stamp)
-        json_text = build_json(rows, sizes, stamp)
+        json_text = build_json(rows, sizes, stamp, swept_ns)
         fresh = {"html": len(html_text.encode("utf-8")), "json": len(json_text.encode("utf-8"))}
         if fresh == sizes:
             break
@@ -317,9 +324,12 @@ def render(rows, stamp):
 
 def sweep(opts):
     faces = load_faces(opts["faces_json"])
+    # Taken BEFORE a single gate runs: any artifact touched from here on is newer than the
+    # result this board is about to publish, so it must be reported stale rather than counted.
+    swept_ns = time.time_ns()
     rows = [run_face(f, opts["timeout"]) for f in faces]
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    html_text, json_text, sizes = render(rows, stamp)
+    html_text, json_text, sizes = render(rows, stamp, swept_ns)
     os.makedirs(os.path.dirname(OUT_HTML), exist_ok=True)
     with open(OUT_HTML, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(html_text)
@@ -412,7 +422,30 @@ def check():
             fails.append("AC-FSW9 %s mutated %r during its own check"
                          % (r.get("id"), r.get("mutated_files")))
 
-    total = 9
+    # AC-FSW11 (R2819) a board that carries no sweep stamp cannot answer "am I behind?", so
+    # it is REFUSED rather than read as "nothing is stale". Same law as the writer-census
+    # baseline that refused a missing class key: an absent key is not a passing value.
+    swept_ns = doc.get("swept_ns")
+    if not isinstance(swept_ns, int) or isinstance(swept_ns, bool) or swept_ns <= 0:
+        fails.append("AC-FSW11 E_FSW_NO_SWEEP_STAMP swept_ns=%r" % (swept_ns,))
+
+    # AC-FSW10 (R2819) THE HOLE THIS SUITE WAS BUILT FOR: this board's verdicts are
+    # subprocess executions, and nothing in the tree re-runs them, so a board whose stamp
+    # predates an artifact re-render is a claim about a version of that face nobody
+    # measured. Existing-only checks (AC-FSW4/AC-FSW9) cannot see it by design. Every face
+    # artifact must therefore be OLDER than the sweep that published its verdict.
+    if isinstance(swept_ns, int) and not isinstance(swept_ns, bool):
+        for r in rows:
+            for key in ("html", "json"):
+                p = os.path.join(ROOT, r.get(key) or "")
+                if not os.path.exists(p):
+                    continue
+                mtime_ns = os.stat(p).st_mtime_ns
+                if mtime_ns > swept_ns:
+                    fails.append("AC-FSW10 E_FACE_STALE %s %s written %dns after the sweep"
+                                 % (r.get("id"), r.get(key), mtime_ns - swept_ns))
+
+    total = 11
     for f in fails:
         print("FAIL " + f)
     print("VERDICT %s %d/%d" % ("PASS" if not fails else "FAIL", total - len(fails), total))
