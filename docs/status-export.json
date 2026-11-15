@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T19:41:58+08:00",
-  "do": "R2794 产品切片：账本对账机第一次变成可打开的实物——preview/ledger-reconcile-face.html（7963B）/ .json（6151B），一条命令真跑已发货的 reconcile.py 三次：真库空账簿 rc=0 八条 PASS（页面明写属无内容通过）、用已发货账本 API 建账后仍八条 PASS、删掉一条分录后 rc=2 并点名翻红两条检查；AC-LRC1..AC-LRC6 PASS 6/6，真库 sha256 与 mtime 在渲染前/后/闸后三点全等",
+  "export_ts": "2026-11-15T19:58:02+08:00",
+  "do": "R2795 - PRODUCT + DEBT CLOSED: the R2794 carry (a face with no battery row) is gone - src/os/test_ledger_reconcile_face.py lands AC-LRB1..AC-LRB8 in a private world and drives the SHIPPED gate twice: clean (rc=0, zero findings, repo pair bytes AND mtime untouched) and against a PRIVATE copy whose first chec...",
   "ceo_face": {
-    "current": "R2794 产品切片：账本对账机第一次变成可打开的实物——preview/ledger-reconcile-face.html（7963B）/ .json（6151B），一条命令真跑已发货的 reconcile.py 三次：真库空账簿 rc=0 八条 PASS（页面明写属无内容通过）、用已发货账本 API 建账后仍八条 PASS、删掉一条分录后 rc=2 并点名翻红两条检查；AC-LRC1..AC-LRC6 PASS 6/6，真库 sha256 与 mtime 在渲染前/后/闸后三点全等",
-    "latest_artifact": "preview/ledger-reconcile-face.html（7963B）+ preview/ledger-reconcile-face.json（6151B·sizes 自指字节）",
-    "last_artifact": "preview/ledger-reconcile-face.html（7963B）+ preview/ledger-reconcile-face.json（6151B·sizes 自指字节）",
-    "next_milestone": "48 小时内：给 ledger_reconcile_face 补套件模块并注册进 src/sandbox/reconcile_all.py，使六条判据入电池；同时落地「给沙箱真账本灌一本真实流水」的决定——当前真账本 0 分录，对账绿只是空书绿",
-    "next_milestone_due": "2026-11-17T19:41:58+08:00",
-    "updated_at": "2026-11-15T19:41:58+08:00",
+    "current": "R2795 - PRODUCT + DEBT CLOSED: the R2794 carry (a face with no battery row) is gone - src/os/test_ledger_reconcile_face.py lands AC-LRB1..AC-LRB8 in a private world and drives the SHIPPED gate twice: clean (rc=0, zero findings, repo pair bytes AND mtime untouched) and against a PRIVATE copy whose first chec...",
+    "latest_artifact": "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B)",
+    "last_artifact": "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B)",
+    "next_milestone": "**全量电池仍欠**且又长了一格——686 套件 / 5104 判据，无单标签模式、一趟 4000-5900s，必须在能 supervise 的窗口**早发**（显式证据路径 `qa/reconcile-all-R2795.log`，禁 shell-capture），收口后经 `tools/adoption_preflight.py` 以自身 `BATTERY rc=` 行采纳；本窗未启动任何腿，如实记。",
+    "next_milestone_due": "2026-11-17T19:58:02+08:00",
+    "updated_at": "2026-11-15T19:58:02+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -38,6 +38,7 @@
     }
   ],
   "outs": [
+    "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B)",
     "preview/ledger-reconcile-face.html（7963B）+ preview/ledger-reconcile-face.json（6151B·sizes 自指字节）",
     "src/os/launch_battery_R2128..R2781.py (36 launchers wired to the single interlock gate, py_compile 36/36 clean) + the private-world control record in this round log",
     "preview/lobby-session-trace.html（8347B）+ preview/lobby-session-trace.json（8008B·双渲染逐字节同一）",
@@ -757,7 +758,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2794",
+      "2795",
       "OSLoop 执行 tick"
     ],
     [
@@ -780,10 +781,10 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 103,
+    "log_lines_in_window": 108,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 21,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,

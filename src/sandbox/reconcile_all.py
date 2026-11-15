@@ -6821,6 +6821,15 @@ SUITES = [
      os.path.join("..", "os", "test_lobby_session_trace.py"), 9),
     ("os-lobby-protocol-map",
      os.path.join("..", "os", "test_lobby_protocol_map.py"), 6),
+    # R2794 shipped tools/ledger_reconcile_face.py (the double-entry self-check
+    # rendered as a page) and closed with an explicit debt: no battery row, so
+    # AC-LRC1..AC-LRC6 were guarded only by the tool grading itself.
+    # (AC-LRC1..AC-LRC6 pinned in src/os/backlog.md at R2794 BEFORE the tool;
+    # AC-LRB1..AC-LRB8, the guard shape this suite implements, pinned at R2795
+    # BEFORE this suite.) The suite drives the real gate twice - clean, then
+    # with module paths pointed at a tampered private copy.
+    ("os-ledger-reconcile-face",
+     os.path.join("..", "os", "test_ledger_reconcile_face.py"), 8),
     ]
 
 FAILS = 0
