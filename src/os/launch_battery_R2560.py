@@ -4,12 +4,21 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+_TOOLS = os.path.join(ROOT, "tools")
+if _TOOLS not in sys.path:
+    sys.path.insert(0, _TOOLS)
+import leg_interlock  # noqa: E402
 EVIDENCE = os.path.join(ROOT, "qa", "reconcile-all-R2560.log")
 STREAM = os.path.join(ROOT, "logs", "battery-R2560.stream.log")
 PID = os.path.join(ROOT, "logs", "battery-R2560.pid")
 
 
 def main():
+    rc, interlock_line = leg_interlock.guard(ROOT)
+    print(interlock_line)
+    if rc != 0:
+        return 2
     cmd = [sys.executable, os.path.join(ROOT, "src", "os", "battery_stream.py"),
            "--evidence", EVIDENCE]
     flags = 0

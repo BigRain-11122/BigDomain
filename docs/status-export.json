@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-15T19:13:48+08:00",
-  "do": "R2792 工程闭环：上一窗发货的大厅会话轨迹页原本只有自身 --check 守护、电池里没有任何一行，本轮把它的六条判据接进电池——新套件在私有临时世界跑、从不写真仓，SUITE PASS 9/9、双跑逐字节同一 sha16 7f2e5c883efdbf2d；注册表按 import 实测 685 套件 / 5096 判据（原 684 / 5087），矩阵重生成 72391B 且 --check 逐字节同一，入口页 35155B 重渲染后 14/14 全过",
+  "export_ts": "2026-11-15T19:34:00+08:00",
+  "do": "R2793 engineering close: the duplicate-battery-leg guard now has ONE owner. All 36 src/os/launch_battery*.py launchers call tools/leg_interlock.guard() at the head of main(); the 20 per-launcher live_pid copies and their own-pidfile-only rule are gone (text scan def live_pid = 0), py_compile clean 36/36. Four private-world controls measured: a foreign live leg refuses the launch (rc=2 E_INTERLOCK_LIVE_LEG) with its own pidfile NOT written and no child spawned; a clear world launches once and the pidfile it wrote refuses the SECOND launch by name; an unparsable pidfile is named UNPARSED and still permits. tools/leg_interlock.py --check stays PASS 8/8.",
   "ceo_face": {
-    "current": "R2792 工程闭环：上一窗发货的大厅会话轨迹页原本只有自身 --check 守护、电池里没有任何一行，本轮把它的六条判据接进电池——新套件在私有临时世界跑、从不写真仓，SUITE PASS 9/9、双跑逐字节同一 sha16 7f2e5c883efdbf2d；注册表按 import 实测 685 套件 / 5096 判据（原 684 / 5087），矩阵重生成 72391B 且 --check 逐字节同一，入口页 35155B 重渲染后 14/14 全过",
-    "latest_artifact": "qa/lobby-session-trace-suite-R2792.log（2092B·本轮证据，qa_log 写出并回读 OK）+ src/os/test_lobby_session_trace.py（9 条判据的电池套件）",
-    "last_artifact": "qa/lobby-session-trace-suite-R2792.log（2092B·本轮证据，qa_log 写出并回读 OK）+ src/os/test_lobby_session_trace.py（9 条判据的电池套件）",
-    "next_milestone": "48 小时内：全量电池仍欠且已多轮未跑，须由能 supervising 4000-5900s 的窗口早发、按自身 BATTERY rc= 行经 adoption_preflight 采纳；并清 AC-VAC1..6 账本对账判据、把 state.json 压回 78500B 水位（本轮后 89602B）",
+    "current": "R2793 engineering close: the duplicate-battery-leg guard now has ONE owner. All 36 src/os/launch_battery*.py launchers call tools/leg_interlock.guard() at the head of main(); the 20 per-launcher live_pid copies and their own-pidfile-only rule are gone (text scan def live_pid = 0), py_compile clean 36/36. Four private-world controls measured: a foreign live leg refuses the launch (rc=2 E_INTERLOCK_LIVE_LEG) with its own pidfile NOT written and no child spawned; a clear world launches once and the pidfile it wrote refuses the SECOND launch by name; an unparsable pidfile is named UNPARSED and still permits. tools/leg_interlock.py --check stays PASS 8/8.",
+    "latest_artifact": "src/os/launch_battery_R2128..R2781.py (36 launchers wired to the single interlock gate, py_compile 36/36 clean) + the private-world control record in this round log",
+    "last_artifact": "src/os/launch_battery_R2128..R2781.py (36 launchers wired to the single interlock gate, py_compile 36/36 clean) + the private-world control record in this round log",
+    "next_milestone": "Within 48h: the R2767 and R2768 legs each closed on their own BATTERY rc=1 but adoption_preflight still reads NOT-READY (closing rc=1, registry grew 676->685 under the leg, evidence carries no closing row), so they must be re-run on the FINAL committed tree and adopted by their own closing row; then AC-VAC1..6 in the ledger reconcile and the state.json fold back under the 78500B waterline (90716B now).",
     "next_milestone_due": "2026-11-17T19:13:48+08:00",
-    "updated_at": "2026-11-15T19:13:48+08:00",
+    "updated_at": "2026-11-15T19:34:00+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html"
   },
   "depts": [
@@ -38,7 +38,7 @@
     }
   ],
   "outs": [
-    "qa/lobby-session-trace-suite-R2792.log（2092B·本轮证据，qa_log 写出并回读 OK）+ src/os/test_lobby_session_trace.py（9 条判据的电池套件）",
+    "src/os/launch_battery_R2128..R2781.py (36 launchers wired to the single interlock gate, py_compile 36/36 clean) + the private-world control record in this round log",
     "preview/lobby-session-trace.html（8347B）+ preview/lobby-session-trace.json（8008B·双渲染逐字节同一）",
     "preview/lobby-session-trace.html (8372B) + preview/lobby-session-trace.json (7958B)",
     "preview/lobby-protocol-map.html (26458B) + preview/lobby-protocol-map.json (25645B)",
@@ -756,7 +756,7 @@
       "2026-11-04 R2434 the general-writer dialect audit shipped (AC-GWDA1..AC-GWDA6 pinned at R2409): 7 writers landing state/debt.md, state/residue_triage.json and src/os/state.json now ask the shared payload derivation at their own call sites, 2 are excluded as E_GWDA_REPAIR with their reason printed, 129 unread destinations are named rather than counted clean; SUITE 6/6 twice identical plus 5 adjacent green, seven writer suites re-run green, live AUDIT-CLEAN"
     ],
     [
-      "2792",
+      "2793",
       "OSLoop 执行 tick"
     ],
     [
@@ -779,14 +779,14 @@
   "self_drive": {
     "window": "2026-11-09..2026-11-15",
     "window_days": 7,
-    "log_lines_in_window": 98,
+    "log_lines_in_window": 100,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 18,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
-    "queue_tech_open": 13,
+    "queue_tech_open": 12,
     "queue_explore_open": 10
   },
   "current": "R2778 charter crawl window. Two A-tier official sources fetched (0 failures): the miniprogram filing guide in FULL TEXT, which closes the W39 item that rested on a community source, and the Network Data Security Regulation which returned CHAPTER 1 ONLY and therefore stays M. A live battery leg R2775 (pid 44264) kept src/ frozen, so this window moved zero product src bytes; the landed artifacts are the benchmark surfaces, the intelligence-wall pair, and the rendered smoke evidence.",

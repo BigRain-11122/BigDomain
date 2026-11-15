@@ -1,0 +1,22 @@
+R2793 leg-interlock wiring evidence (measured this window, private worlds under tmp/lintw)
+
+AC-LINTW1 36/36 launchers call leg_interlock.guard() at the head of main();
+         text scan launch_battery*.py with no guard call = 0; py_compile 36/36 clean
+AC-LINTW2 foreign live pidfile battery-R9999.pid (pid=live python) -> rc=2
+         E_INTERLOCK_LIVE_LEG live=1 refused R9999(pid=N); own pidfile written = False
+AC-LINTW3 def live_pid occurrences across launch_battery*.py = 0 (was 20)
+AC-LINTW4 unparsable pidfile battery-R8888.pid -> INTERLOCK CLEAR unparsed=1,
+         launch permitted rc=0 (permission named in the guard line)
+         DISCLOSED: launcher-level REUSED (aged pidfile over live pid) was not
+         separately red/green; tool-level AC-LINT8 covers it
+AC-LINTW5 tools/leg_interlock.py --check -> LEG-INTERLOCK PASS 8/8 checks=8 failed=0;
+         no network import and no shell/subprocess use added by the wiring
+AC-LINTW6 clear private world -> rc=0 LAUNCHED pid=N, pidfile written; SECOND run
+         -> rc=2 E_INTERLOCK_LIVE_LEG live=1 refused R2781(pid=N)
+
+ADOPTION carried (not adopted): reconcile-battery-R2767 pid GONE, own closing row
+BATTERY rc=1 present; adoption_preflight VERDICT NOT-READY gates=14 failed=6:
+closing-rc-zero, suite-count (ran 676 / registry 685), name-set-equal,
+zero-unattributed-fail-rows (reconcile-daily-census), criteria-recount (5032/5096),
+evidence-closing-line. Registry moved under the leg, so a re-run on the final
+committed tree is owed.

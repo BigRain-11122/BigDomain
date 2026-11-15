@@ -22,6 +22,11 @@ import sys
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(BASE))
+
+_TOOLS = os.path.join(REPO, "tools")
+if _TOOLS not in sys.path:
+    sys.path.insert(0, _TOOLS)
+import leg_interlock  # noqa: E402
 LOGS = os.path.join(REPO, "logs")
 EVIDENCE = os.path.join(REPO, "qa", "reconcile-all-R2717.log")
 STREAM = os.path.join(LOGS, "battery-R2717.stream")
@@ -41,55 +46,15 @@ def measure():
             len({row[1] for row in suites}))
 
 
-def live_pid():
-    """Return the pid recorded in the pidfile when that process is still alive.
-
-    os.kill(pid, 0) is NOT a liveness probe on Windows - it does not raise for
-    a live pid, so an earlier version of this guard silently failed and let a
-    second leg fire against the same evidence path. The probe now asks the
-    kernel through OpenProcess + WaitForSingleObject, which needs no console
-    child and no signal.
-    """
-    if not os.path.exists(PIDFILE):
-        return 0
-    try:
-        with open(PIDFILE, "r", encoding="ascii") as fh:
-            pid = int(fh.read().strip())
-    except (ValueError, OSError):
-        return 0
-    if pid <= 0:
-        return 0
-    if os.name != "nt":
-        try:
-            os.kill(pid, 0)
-        except OSError:
-            return 0
-        return pid
-    import ctypes
-    from ctypes import wintypes
-    SYNCHRONIZE = 0x00100000
-    WAIT_TIMEOUT = 0x00000102
-    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
-    kernel32.OpenProcess.restype = wintypes.HANDLE
-    handle = kernel32.OpenProcess(SYNCHRONIZE, False, wintypes.DWORD(pid))
-    if not handle:
-        return 0
-    try:
-        state = kernel32.WaitForSingleObject(handle, 0)
-        return pid if state == WAIT_TIMEOUT else 0
-    finally:
-        kernel32.CloseHandle(handle)
-
-
 def main():
+    rc, interlock_line = leg_interlock.guard(REPO)
+    print(interlock_line)
+    if rc != 0:
+        return 2
     if not os.path.isdir(LOGS):
         os.makedirs(LOGS)
     if os.path.exists(EVIDENCE):
         print("E_LAUNCH_EVIDENCE_EXISTS %s" % EVIDENCE)
-        return 2
-    running = live_pid()
-    if running:
-        print("E_LAUNCH_PID_EXISTS pid=%d" % running)
         return 2
     suites, criteria, names, paths = measure()
     if suites != TARGET_SUITES or criteria != TARGET_CRITERIA:

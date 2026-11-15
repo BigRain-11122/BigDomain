@@ -11,6 +11,11 @@ import sys
 BASE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(BASE))
 
+_TOOLS = os.path.join(REPO, "tools")
+if _TOOLS not in sys.path:
+    sys.path.insert(0, _TOOLS)
+import leg_interlock  # noqa: E402
+
 ROUND = sys.argv[1] if len(sys.argv) > 1 else "R2554"
 STREAM = os.path.join(REPO, "logs", "battery-%s.stream.log" % (ROUND,))
 PIDFILE = os.path.join(REPO, "logs", "battery-%s.pid" % (ROUND,))
@@ -18,6 +23,10 @@ EVIDENCE = os.path.join(REPO, "qa", "reconcile-all-%s.log" % (ROUND,))
 
 
 def main():
+    rc, interlock_line = leg_interlock.guard(REPO)
+    print(interlock_line)
+    if rc != 0:
+        return 2
     handle = open(STREAM, "wb")
     proc = subprocess.Popen(
         [sys.executable, os.path.join(BASE, "battery_stream.py"),

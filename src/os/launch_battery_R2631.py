@@ -18,6 +18,11 @@ import sys
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(BASE))
+
+_TOOLS = os.path.join(REPO, "tools")
+if _TOOLS not in sys.path:
+    sys.path.insert(0, _TOOLS)
+import leg_interlock  # noqa: E402
 LOGS = os.path.join(REPO, "logs")
 EVIDENCE = os.path.join(REPO, "qa", "reconcile-all-R2631.log")
 STREAM = os.path.join(LOGS, "battery-R2631.stream")
@@ -35,6 +40,10 @@ def measure():
 
 
 def main():
+    rc, interlock_line = leg_interlock.guard(REPO)
+    print(interlock_line)
+    if rc != 0:
+        return 2
     if not os.path.isdir(LOGS):
         os.makedirs(LOGS)
     if os.path.exists(EVIDENCE):
