@@ -6795,7 +6795,23 @@ SUITES = [
     # UTF-16 source was accepted, landed NUL bytes and reported VERDICT PASS
     # while both this tool and the writer census named the result utf-8/lf.
     ("os-qa-log",
-     os.path.join("..", "os", "test_qa_log.py"), 9),
+     os.path.join("..", "os", "test_qa_log.py"), 10),
+    # R2808 added the nul-bytes class to the writer census and re-froze the
+    # baseline, but the new rule was guarded only by the tool's own --check and
+    # by two census suites whose expectations derive from BASELINE_CLASSES on
+    # BOTH sides - so adding or deleting a class cannot redden either of them.
+    # No registered suite therefore verified, by import, that thirteen BOM-less
+    # UTF-16 evidence files had once been certified `tee`. This suite holds both
+    # classifiers side by side on identical bytes (AC-NULC2), pins the branch
+    # order that keeps the ps-utf16 name and its refusal face intact (AC-NULC1),
+    # and proves the class is quiet when baselined by name while a newly
+    # appearing NUL file still flags (AC-NULC3).
+    # (AC-NULC1..AC-NULC6 pinned in src/os/backlog.md at R2808 BEFORE the suite
+    # existed; AC-NULC7 is the registry-declaration criterion added here and
+    # disclosed as such. The pre-registration run read exactly one red - the
+    # registry assertion - which is the proof that sub-check carries weight.)
+    ("os-census-nul-class",
+     os.path.join("..", "os", "test_census_nul_class.py"), 7),
     # R2780: the group ledger writes wildcard forms ("no reply cites
     # D-20261114-0x") and a token regex without a right-hand boundary harvests
     # D-20261114-0 out of them, inventing a decision that never existed. Every

@@ -301,6 +301,33 @@ def main():
            'refused=%s class=%s check_rc=%d reason=%s' % (
                refused_nul, nul_class, nul_check, nul_err))
 
+        # ---- AC-QALB10: a flag is never a log name, refusal writes nothing --
+        flag_names = ['--help', '-x.log', '--from']
+        flag_refused = 0
+        for name in flag_names:
+            try:
+                mod.check_name(name)
+            except ValueError:
+                flag_refused += 1
+        before_entries = sorted(os.listdir(qa_private))
+        wrote_nothing = True
+        for name in flag_names:
+            try:
+                mod.do_write(name, b'flag probe\n', directory=qa_private)
+                wrote_nothing = False
+            except ValueError:
+                pass
+        after_entries = sorted(os.listdir(qa_private))
+        rc_probe, _out = quiet(mod.do_write, 'probe-R2809.log', b'ok\n',
+                               directory=qa_private)
+        ok('AC-QALB10 a leading dash is refused and a refusal writes no file',
+           flag_refused == 3 and before_entries == after_entries
+           and wrote_nothing and rc_probe == 0
+           and os.path.isfile(os.path.join(qa_private, 'probe-R2809.log')),
+           'refused=%d/3 dir_stable=%s wrote_nothing=%s good_rc=%d' % (
+               flag_refused, before_entries == after_entries,
+               wrote_nothing, rc_probe))
+
         # ---- AC-QALB9: one registry row declares nine ----------------------
         reg = read_text(REGISTRY)
         hits = [m.start() for m in re.finditer(r'"os-qa-log"', reg)]
@@ -310,8 +337,8 @@ def main():
                               reg[pos:pos + 200])
             if found:
                 declared.append(found.group(1))
-        ok('AC-QALB9 registry declares exactly one row for this suite, nine',
-           declared == ['9'], 'rows=%s hits=%d' % (declared, len(hits)))
+        ok('AC-QALB9 registry declares exactly one row for this suite, ten',
+           declared == ['10'], 'rows=%s hits=%d' % (declared, len(hits)))
     finally:
         mod.QA = original_qa
         shutil.rmtree(world, ignore_errors=True)

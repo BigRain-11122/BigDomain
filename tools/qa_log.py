@@ -87,13 +87,21 @@ def normalize(text):
 
 
 def check_name(name):
-    """AC-QAL6: one flat file name, never a path."""
+    """AC-QAL6: one flat file name, never a path. AC-QAL8: never a flag."""
     if not name or not name.strip():
         raise ValueError("empty name")
     if "/" in name or "\\" in name or ":" in name:
         raise ValueError("name must be a flat file name, got %r" % name)
     if name in (".", "..") or name.startswith("."):
         raise ValueError("name must not start with a dot, got %r" % name)
+    if name.startswith("-"):
+        # AC-QAL8 (pinned at R2809 BEFORE this branch): a leading dash made
+        # `python tools/qa_log.py --help` write qa/--help at 1 byte, twice -
+        # R2808 recorded it and R2809 reproduced it. The pollution was silent
+        # because a one-byte file lands in the healthy tee dialect, which the
+        # writer census never flags. main() routes its three known flags
+        # before a name reaches this guard, so nothing legitimate is blocked.
+        raise ValueError("name must not start with a dash, got %r" % name)
 
 
 def write_atomic(directory, name, text):

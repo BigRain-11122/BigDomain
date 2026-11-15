@@ -1,0 +1,22 @@
+R2809 CENSUS NUL-CLASS BATTERY ROW (BigDomain OSLoop)
+suite=src/os/test_census_nul_class.py criteria=AC-NULC1..AC-NULC7
+pre-registration control run=SUITE FAIL 8/9, exactly AC-NULC7 red (registry row absent)
+final run=SUITE PASS 9/9
+AC-NULC1 class=ps-utf16 bom=utf-16le has_nul=True (BOM branch still wins over NUL)
+AC-NULC2 legacy_rule=tee shipped_rule=nul-bytes utf8_strict=True crlf=0 nul=yes
+AC-NULC3 baseline_class=True named=['known-nul.log'] quiet_rc=0 new_file_red_rc=2 flag_named=True
+AC-NULC4 printed=2 independent_recount=2
+AC-NULC5 old_baseline_rc=2 bytes_stable=True mtime_stable=True message=missing class key nul-bytes
+AC-NULC6 real_qa_entries=3109 stable=True escapes=0 temp_world_removed=True
+AC-NULC7 registry_rows=['7'] hits=1
+registry BY IMPORT suites=693 criteria=5180 unique_names=693 unique_paths=693 (was 692/5172)
+matrix: suite_matrix_reconcile --write and --check both rc=3 CEILING-STARVED
+  E_EDMD_CEILING considered=3033 decoded=64 ceiling=64 BOUND-REACHED
+  inherited red (same as R2805); docs/sandbox-suite-matrix.md deliberately NOT hand-edited
+entry page re-rendered index=36506B deliverable_index --check VERDICT PASS 14/14 fingerprint=b01be3daf37cd127
+DEFECT reproduced in this window: python tools/qa_log.py --help wrote qa/--help bytes=1 sha256=01ba4719c80b6fe9
+  stray file removed; AC-QAL8 pinned in src/os/backlog.md BEFORE the fix
+  after fix: QA-LOG REFUSED name=--help reason=name must not start with a dash, rc=2
+  qa file count 3108 -> 3108 (refusal writes nothing)
+src/os/test_qa_log.py run=SUITE PASS 12/12 (AC-QALB10 added; regression row 9 -> 10)
+honest note: the pollution class is silent because a 1-byte file lands in the healthy tee dialect
