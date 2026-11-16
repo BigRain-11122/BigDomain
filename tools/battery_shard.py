@@ -16,6 +16,7 @@ tools/adoption_preflight.py, which keys on a closing "BATTERY rc=" row.
 
 Usage:
   python tools/battery_shard.py --match os-ledger --match ledger
+  python tools/battery_shard.py --exact ledger --exact member --exact pay
   python tools/battery_shard.py --match os-lobby --dry
   python tools/battery_shard.py --match os-ledger --evidence battery-shard-R2797.log
   python tools/battery_shard.py --claim full        # refused, rc=2
@@ -72,13 +73,27 @@ def registry():
     return rows, base, cap, overrides
 
 
-def select(rows, prefixes, limit):
-    """AC-BSH2: a case-sensitive label PREFIX test, in registry order."""
-    if prefixes:
-        picked = [r for r in rows if any(r[0].startswith(p) for p in prefixes)]
+def select(rows, prefixes, limit, exacts=()):
+    """AC-BSH2: a case-sensitive label PREFIX test, in registry order.
+
+    AC-EXL1/AC-EXL2 (R2843): labels may also be named EXACTLY. A prefix test
+    cannot reach a bare label such as "ledger" without also dragging in every
+    "ledger-*" suite (measured: 336 suites), and a family slice drawn by
+    "does not start with ledger-/member-/pay-" excludes the bare labels too -
+    so three suites totalling 43 criteria were reachable by no slice at all.
+    Exact names are a union with the prefixes, never a second selection law:
+    order stays the registry's, and an exact name the registry does not carry
+    refuses by name rather than silently selecting nothing.
+    """
+    exacts = [e for e in (exacts or ()) if e]
+    if prefixes or exacts:
+        missing = [e for e in exacts if not any(r[0] == e for r in rows)]
         unmatched = [p for p in prefixes if not any(r[0].startswith(p) for r in rows)]
-        if unmatched:
-            raise Refuse("E_NO_MATCH %s" % ",".join(unmatched))
+        if missing or unmatched:
+            raise Refuse("E_NO_MATCH %s" % ",".join(missing + unmatched))
+        wanted = set(exacts)
+        picked = [r for r in rows
+                  if r[0] in wanted or any(r[0].startswith(p) for p in prefixes)]
     else:
         picked = list(rows)
     if limit and limit > 0:
@@ -182,6 +197,7 @@ def do_check(name):
 def main(argv=None):
     ap = argparse.ArgumentParser(add_help=True)
     ap.add_argument("--match", action="append", default=[])
+    ap.add_argument("--exact", action="append", default=[])
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--check", action="store_true")
@@ -213,12 +229,12 @@ def _round(args):
         return do_check(evidence_name(args.evidence))
 
     rows, base, cap, overrides = registry()
-    picked = select(rows, args.match, args.limit)
+    picked = select(rows, args.match, args.limit, args.exact)
     total_crit = sum(int(r[2]) for r in picked)
     print("SHARD scope=SHARD registry_suites=%d registry_criteria=%d "
-          "selected=%d selected_criteria=%d cap=%ds overrides=%d"
+          "selected=%d selected_criteria=%d cap=%ds overrides=%d exact=%d"
           % (len(rows), sum(int(r[2]) for r in rows), len(picked),
-             total_crit, cap, len(overrides)))
+             total_crit, cap, len(overrides), len(args.exact)))
     for label, rel, crit in picked:
         print("SHARD selected %s crit=%d path=%s" % (label, crit, rel))
     if args.dry:
@@ -260,9 +276,9 @@ def _round(args):
                % (rc, len(picked), executed, green, crit_run, len(mismatch), elapsed))
     print(closing)
     lines.insert(0, "SHARD scope=SHARD registry_suites=%d registry_criteria=%d "
-                    "selected=%d selected_criteria=%d cap=%ds"
+                    "selected=%d selected_criteria=%d cap=%ds exact=%d"
                  % (len(rows), sum(int(r[2]) for r in rows), len(picked),
-                    total_crit, cap))
+                    total_crit, cap, len(args.exact)))
     lines.append(closing)
     if mismatch:
         print("SHARD disclosure crit_mismatch=%s" % ",".join(mismatch))

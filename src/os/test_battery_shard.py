@@ -1,5 +1,11 @@
 """Battery suite for tools/battery_shard.py - AC-BSH1..AC-BSH8.
 
+AC-BSGB9/AC-BSGB10 (the exact-label selector) were pinned at R2843, before that
+face existed, when the three bare legacy labels ledger/member/pay (43 criteria)
+turned out to be reachable by NO slice: a prefix test cannot name them without
+also dragging in every "ledger-*" suite, and the family slice is drawn by "does
+not start with ledger-/member-/pay-", which excludes them by construction.
+
 The eight criteria belong to the tool and were pinned in src/os/backlog.md at
 R2797, BEFORE the tool existed. This suite is what finally puts them under a
 battery row; AC-BSGB1..AC-BSGB8 (the guard shape) were pinned at R2798, again
@@ -164,6 +170,49 @@ def main():
        and dry_executed == 0,
        "expected=%d picked=%d nomatch_rc=%d dry_exec=%d"
        % (len(expected), len(picked), code_no, dry_executed))
+
+    # AC-BSGB9 (R2843) - exact names are a union with the prefixes, kept in
+    # registry order with no duplicate row, and they are the only way to reach
+    # a bare legacy label: a prefix test for "ledger" drags in every
+    # "ledger-*" suite, so foo = 336 rows instead of 3 (measured R2843).
+    bare = ("ledger", "member", "pay")
+    bare_expected = [l for l in labels if l in bare]
+    bare_crit = sum(r[2] for r in rows if r[0] in bare)
+    exact_picked = [r[0] for r in shard.select(rows, [], 0, list(bare))]
+    union = [r[0] for r in shard.select(rows, [prefix], 0, ["ledger"])]
+    union_expected = [l for l in labels if l == "ledger" or l.startswith(prefix)]
+    no_dup = len(union) == len(set(union))
+    code_x, out_x = run_cli(shard, ["--dry", "--exact", "ledger",
+                                    "--exact", "member", "--exact", "pay"])
+    x_selected = x_crit = -1
+    for line in out_x.splitlines():
+        if line.startswith("SHARD scope=SHARD"):
+            for piece in line.split():
+                if piece.startswith("selected_criteria="):
+                    x_crit = int(piece.split("=", 1)[1])
+        if line.startswith("SHARD rc=0 scope=SHARD dry=True"):
+            for piece in line.split():
+                if piece.startswith("selected="):
+                    x_selected = int(piece.split("=", 1)[1])
+    ok("AC-BSGB9",
+       len(bare_expected) == 3 and exact_picked == bare_expected
+       and union == union_expected and no_dup
+       and code_x == 0 and x_selected == 3 and x_crit == bare_crit,
+       "bare=%d exact=%d crit=%d union=%d dup=%s dry_sel=%d dry_crit=%d"
+       % (len(bare_expected), len(exact_picked), bare_crit, len(union),
+          not no_dup, x_selected, x_crit))
+
+    # AC-BSGB10 (R2843) - an exact name the registry does not carry refuses BY
+    # NAME instead of selecting nothing, both at the function and at the CLI.
+    code_nm, out_nm = run_cli(shard, ["--dry", "--exact", "zzz-no-such"])
+    named_cli = "E_NO_MATCH" in out_nm and "zzz-no-such" in out_nm
+    try:
+        shard.select(rows, [], 0, ["zzz-no-such"])
+        named_fn = False
+    except shard.Refuse as exc:
+        named_fn = "E_NO_MATCH" in str(exc) and "zzz-no-such" in str(exc)
+    ok("AC-BSGB10", code_nm == 2 and named_cli and named_fn,
+       "cli_rc=%d named_cli=%s named_fn=%s" % (code_nm, named_cli, named_fn))
 
     # AC-BSGB3 - slice parity: the probe sees the battery's own construction,
     # and a one-second per-label override caps a sleeping probe at 124.

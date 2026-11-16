@@ -7002,9 +7002,11 @@ SUITES = [
     # at R2797 BEFORE the tool; AC-BSGB1..AC-BSGB8 (this guard shape) at R2798
     # BEFORE this suite. The world it mutates is a private temp registry of
     # probe suites, so the repo registry, the sandbox book and the shipped
-    # evidence are never written.
+    # evidence are never written. R2843 adds AC-BSGB9/AC-BSGB10 for the exact
+    # label face (the three bare legacy labels reachable by no slice), pinned
+    # in src/os/backlog.md before the code: 8 -> 10 criteria.
     ("os-battery-shard",
-     os.path.join("..", "os", "test_battery_shard.py"), 8),
+     os.path.join("..", "os", "test_battery_shard.py"), 10),
     # R2801. tools/battery_shard_report.py - the face that decides whether six
     # FAMILIES are green - shipped with eight criteria and no row, so for two
     # windows it was graded only by the run that rendered it. AC-BSR1..AC-BSR8
