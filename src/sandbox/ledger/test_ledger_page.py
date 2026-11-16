@@ -42,7 +42,7 @@ TRANSPORT_RETRIES = 3
 
 def report(name, bad, detail=""):
     RESULTS.append((name, not bad))
-    print("%s %s%s" % (name, "FAIL" if bad else "PASS",
+    print("%s %s%s" % ("FAIL" if bad else "PASS", name,
                        ("  " + detail) if detail else ""))
     return bad
 

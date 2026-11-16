@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T07:11:22+08:00",
-  "do": "2026-11-17 R2857 PRODUCT+ENGINEERING: the 88-suite law_split family is measured at output level in two halves and ends 88 of 88 detail=yes, but only after three suites that printed no per-criterion line at all were given one at their own birth site and a registry count stale since R1063 was corrected against the suite that runs.",
+  "export_ts": "2026-11-17T07:30:11+08:00",
+  "do": "2026-11-17 R2858 PRODUCT+ENGINEERING: the 103-suite law_direct family runs as one leg in 255.6s (inside the 600s cap, measured) and ends 103 of 103 detail=yes with zero red, after five suites that had gone red for two different reasons were repaired and seven suites that printed their verdict mid-line were moved to the front.",
   "ceo_face": {
-    "current": "2026-11-17 R2857 PRODUCT+ENGINEERING: the 88-suite law_split family is measured at output level in two halves and ends 88 of 88 detail=yes, but only after three suites that printed no per-criterion line at all were given one at their own birth site and a registry count stale since R1063 was corrected against the suite that runs.",
+    "current": "2026-11-17 R2858 PRODUCT+ENGINEERING: the 103-suite law_direct family runs as one leg in 255.6s (inside the 600s cap, measured) and ends 103 of 103 detail=yes with zero red, after five suites that had gone red for two different reasons were repaired and seven suites that printed their verdict mid-line were moved to the front.",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2857] next window (<=12h): (0) FOLD, planned rather than improvised: read the window boundaries FROM the log (do not assume 1..58), name every displaced id in the summary line, and dry-run until the vehicle stops refusing - state will be past the 78500B gate after this closeout; (1) MAIN - `law_direct=103` in one leg: the 88-suite window measured 159.2s of runner time for 576 criteria, so 103 suites fit the 600s cap, but measure it rather than assume; (2) `law_status=316` still needs its NAMED split plan committed BEFORE any leg - seven shards of ~45 by label prefix, shard 1 only; (3) the same `pass=0 fail=0 detail=none` shape this window fixed at three birth sites is likely to recur wherever a suite ends through a unittest footer - the census cannot see it, so a targeted sweep over suites whose source contains `testsRun` is the cheap way to find the rest; (4) the declared single-quote limitation becomes real the first time a suite binds with single quotes: the census will read it as debt, and that moment is when AC-CEN2's probe should be flipped deliberately (truncated)",
-    "next_milestone_due": "2026-11-17T19:11:22+08:00",
-    "updated_at": "2026-11-17T07:11:22+08:00",
+    "next_milestone": "[R2858] next window (<=12h): (1) MAIN - settle `crit_mismatch=13` with a pinned decision, not thirteen edits: either (a) the thirteen suites declare both units in their own row (`SUITE PASS 21/21 assertions 8/8 criteria`, the dialect the corpus already carries as `legacy_lower`) with runner support read from the runner itself, or (b) the registry gains an explicit unit field - (a) is preferred because it keeps the registry meaning one thing, and either way the runner's numeric identity must be proven on a red control; (2) `law_status=316` is the last family without a detail reading and needs its named split plan committed BEFORE any leg - seven shards of ~45 by label prefix, shard 1 only; (3) the doubled `R2854 tokens:` prefix shows that a malformed ledger line can sit invisible for rounds because its detector never runs - the cheap answer is to ask `ledger_lines.audit` once per window as part of closeout rather than once per several windows; (4) the fold recipe is recorded but untested twice - the next window that folds should re-use the R2857 method (bounds from the log, end on a tokens line, every id named) (truncated)",
+    "next_milestone_due": "2026-11-17T19:30:11+08:00",
+    "updated_at": "2026-11-17T07:30:11+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 104,
+    "log_lines_in_window": 57,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 19,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2857 PRODUCT+ENGINEERING: the 88-suite law_split family is measured at output level in two halves and ends 88 of 88 detail=yes, but only after three suites that printed no per-criterion line at all were given one at their own birth site and a registry count stale since R1063 was corrected against the suite that runs.",
+  "current": "2026-11-17 R2858 PRODUCT+ENGINEERING: the 103-suite law_direct family runs as one leg in 255.6s (inside the 600s cap, measured) and ends 103 of 103 detail=yes with zero red, after five suites that had gone red for two different reasons were repaired and seven suites that printed their verdict mid-line were moved to the front.",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2857] next window (<=12h): (0) FOLD, planned rather than improvised: read the window boundaries FROM the log (do not assume 1..58), name every displaced id in the summary line, and dry-run until the vehicle stops refusing - state will be past the 78500B gate after this closeout; (1) MAIN - `law_direct=103` in one leg: the 88-suite window measured 159.2s of runner time for 576 criteria, so 103 suites fit the 600s cap, but measure it rather than assume; (2) `law_status=316` still needs its NAMED split plan committed BEFORE any leg - seven shards of ~45 by label prefix, shard 1 only; (3) the same `pass=0 fail=0 detail=none` shape this window fixed at three birth sites is likely to recur wherever a suite ends through a unittest footer - the census cannot see it, so a targeted sweep over suites whose source contains `testsRun` is the cheap way to find the rest; (4) the declared single-quote limitation becomes real the first time a suite binds with single quotes: the census will read it as debt, and that moment is when AC-CEN2's probe should be flipped deliberately (truncated)",
-  "state_bytes": 80931,
+  "next_milestone": "[R2858] next window (<=12h): (1) MAIN - settle `crit_mismatch=13` with a pinned decision, not thirteen edits: either (a) the thirteen suites declare both units in their own row (`SUITE PASS 21/21 assertions 8/8 criteria`, the dialect the corpus already carries as `legacy_lower`) with runner support read from the runner itself, or (b) the registry gains an explicit unit field - (a) is preferred because it keeps the registry meaning one thing, and either way the runner's numeric identity must be proven on a red control; (2) `law_status=316` is the last family without a detail reading and needs its named split plan committed BEFORE any leg - seven shards of ~45 by label prefix, shard 1 only; (3) the doubled `R2854 tokens:` prefix shows that a malformed ledger line can sit invisible for rounds because its detector never runs - the cheap answer is to ask `ledger_lines.audit` once per window as part of closeout rather than once per several windows; (4) the fold recipe is recorded but untested twice - the next window that folds should re-use the R2857 method (bounds from the log, end on a tokens line, every id named) (truncated)",
+  "state_bytes": 45352,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2857",
+      "2858",
       "OSLoop 执行 tick"
     ]
   ],
