@@ -11,6 +11,16 @@ reading of format literals, not an output-level proof: a suite that builds the
 row through a helper module outside its own file is reported as non_law, and the
 remedy is to read that file rather than to trust this number.
 
+DECLARED LIMITATION (law, R2855): the status-binding test reads DOUBLE-QUOTED
+verdict literals only, so a suite that binds its slot with single quotes is
+classified suspect_status or no_status. That direction is conservative - it can
+over-report debt and can never fake a green - and it is measured, not assumed:
+of 706 registered suites, 3 carry a single-quoted PASS/FAIL token and all 3 are
+law by a stronger shape (law_direct=2, law_status=1), so the blind set is 0 on
+2026-11-17. AC-CEN2 pins both halves of the asymmetry (the same binding read
+suspect_status single-quoted and law_status double-quoted), so teaching single
+quotes later is a deliberate criterion change and not a silent drift.
+
 Usage:
     python tools/suite_closing_row_census.py [--root .] [--quiet-list]
 """

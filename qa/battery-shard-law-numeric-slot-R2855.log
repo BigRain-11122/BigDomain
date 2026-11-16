@@ -1,0 +1,6 @@
+SHARD scope=SHARD registry_suites=706 registry_criteria=5382 selected=4 selected_criteria=32 cap=600s exact=4
+SHARD row ledger-apimarket-marketfeed rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-feedlisting rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-feeddev rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row os-decwatermark rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 11.1s
+SHARD rc=0 scope=SHARD selected=4 executed=4 green=4 criteria=32 crit_mismatch=0 elapsed=12.0s

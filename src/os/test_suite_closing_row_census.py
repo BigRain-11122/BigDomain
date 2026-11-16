@@ -9,7 +9,10 @@ cited it.
 
   - the law it reads is the runner's own pattern, proven both ways in a
     private world (a wrong pattern is REFUSED, the right one is read);
-  - eight probe sources classify into the families they were measured to be;
+  - the probe table classifies into the families it was measured to be, and it
+    carries both halves of the R2855 quote-style asymmetry (single-quoted
+    binding reads suspect_status, the same binding double-quoted reads
+    law_status), so the declared limitation is pinned rather than described;
   - on the live tree the ten law families partition the registry: law equals
     the registry size and non_law reads zero;
   - two runs read byte-identical output (no clock, no randomness);
@@ -59,6 +62,16 @@ PROBES = [
     ('print("SUITE PASS")\n', "no_numbers"),
     ('print("done")\n', "no_row"),
     ('print("SUITE %s %d/%d" % (s, p, t))\n', "suspect_status"),
+    # R2855: the declared quote-style limitation, both halves of the asymmetry.
+    # The same binding is law only when it is DOUBLE quoted; single quotes are
+    # read as suspect on purpose (conservative direction, never a fake green).
+    ("verdict = 'PASS' if ok else 'FAIL'\n"
+     "print('SUITE %s %d/%d' % (verdict, p, t))\n", "suspect_status"),
+    ('verdict = "PASS" if ok else "FAIL"\n'
+     'print("SUITE %s %d/%d" % (verdict, p, t))\n', "law_status"),
+    # A single-quoted format literal alone (no verdict token at all) is also
+    # suspect: the literal is read, the missing binding is what fails.
+    ("print('SUITE %s %d/%d' % (s, p, t))\n", "suspect_status"),
 ]
 
 
@@ -153,7 +166,7 @@ def ac_cen2():
            for src, want in PROBES if census.classify(src) != want]
     if bad:
         print("  measured mismatches=%r" % (bad,), flush=True)
-    check(not bad, "AC-CEN2 eight probe shapes classify as measured")
+    check(not bad, "AC-CEN2 %d probe shapes classify as measured" % len(PROBES))
 
 
 def ac_cen3():
