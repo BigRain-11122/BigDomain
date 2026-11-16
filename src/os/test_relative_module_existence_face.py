@@ -259,6 +259,9 @@ def main():
     print("SUMMARY pass=%d fail=%d criteria=%d" % (PASSES, FAILS,
                                                    EXPECTED_CRITERIA),
           flush=True)
+    counts_ok = PASSES + FAILS == EXPECTED_CRITERIA
+    law_verdict = "SUITE PASS" if (counts_ok and not FAILS) else "SUITE FAIL"
+    print("%s %d/%d" % (law_verdict, PASSES, EXPECTED_CRITERIA), flush=True)
     if FAILS or PASSES + FAILS != EXPECTED_CRITERIA:
         print("SUITE FAIL", flush=True)
         return 2

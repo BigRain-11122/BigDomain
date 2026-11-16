@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=705 registry_criteria=5368 selected=2 selected_criteria=12 cap=600s exact=2
+SHARD row os-review-window-guard-parity-consumer-wire rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-relative-module-existence-face rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.3s
+SHARD rc=0 scope=SHARD selected=2 executed=2 green=2 criteria=12 crit_mismatch=0 elapsed=1.5s

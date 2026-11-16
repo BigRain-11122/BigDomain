@@ -330,6 +330,8 @@ def main():
 
     print("SUITE %s criteria=%d pass=%d fail=%d"
           % (LABEL, EXPECTED_CRITERIA, PASSES, FAILS))
+    law_verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
+    print("%s %d/%d" % (law_verdict, PASSES, EXPECTED_CRITERIA))
     if FAILS:
         print("SUITE FAIL")
         return 1
