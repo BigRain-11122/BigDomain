@@ -1,0 +1,8 @@
+R2830 fixes: the three red rows of leg 2, re-run after the birth-site repairs (R2830)
+SUITE PASS 6/6 test_queue_floor_export_face.py
+SUITE PASS 6/6 test_status_export_writer_dialect_wire.py
+SUITE PASS 16/16 test_closeout_export_parity_wire.py
+SUITE PASS 20/20 test_closeout_export_parity_dialect_wire.py
+SUITE PASS 9/9 test_os_retry_naming.py
+SUITE PASS 31/31 test_logs_inventory.py
+SUITE PASS 6/6 test_stamp_exempt_review.py

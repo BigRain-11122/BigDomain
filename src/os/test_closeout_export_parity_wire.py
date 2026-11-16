@@ -32,12 +32,13 @@ import closeout_export_parity_wire as CEPW  # noqa: E402
 import export_closeout_gate_parity as ECGP  # noqa: E402
 import queue_floor_export_face as QFE  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 16
 MODULE = os.path.join(BASE, "closeout_export_parity_wire.py")
 SUITE = os.path.join(BASE, "test_closeout_export_parity_wire.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout-export-parity-wire"
-WIRED_EXPECT = '"test_closeout_export_parity_wire.py"), 6),'
+WIRED_EXPECT = ('"test_closeout_export_parity_wire.py"), %d),'
+                % EXPECTED_CRITERIA)
 
 PASSES = 0
 FAILS = 0
@@ -312,9 +313,9 @@ def ac_cepw6():
     check('"os-closeout-export-parity-wire"' in source
           and WIRED_EXPECT in wired,
           "AC-CEPW6b the wire carries its own label and is registry-wired")
-    check(EXPECTED_CRITERIA == 6
-          and 'test_closeout_export_parity_wire.py"), 6),' in wired,
-          "AC-CEPW6c six criteria declared to the registry")
+    check(WIRED_EXPECT in wired,
+          "AC-CEPW6c the registry declares the criteria this suite runs "
+          "(%d)" % EXPECTED_CRITERIA)
 
 
 def _census(directory):

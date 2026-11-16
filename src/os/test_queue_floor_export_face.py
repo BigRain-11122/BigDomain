@@ -186,9 +186,12 @@ def ac_qfe4():
             second = QFE.compose(".", target)
         after = list(json.loads(first).keys())
         # One stable order: the section is the LAST key, whether the document
-        # already carried it (append once) or not (append here). The order is
-        # what is proved, not the presence of a duplicate.
-        expected = before if QFE.FACE_KEY in before else before + [QFE.FACE_KEY]
+        # already carried it (it is MOVED to the end, so a section another
+        # writer appended later cannot leave the queue face in the middle) or
+        # not (it is appended here). Every other key keeps its original order
+        # and no key is lost or duplicated - the law is the order, not an
+        # unchanged byte prefix.
+        expected = [k for k in before if k != QFE.FACE_KEY] + [QFE.FACE_KEY]
         ok = (first == second
               and first.endswith("\n")
               and not first.endswith("\n\n")

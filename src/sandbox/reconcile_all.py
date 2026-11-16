@@ -4524,7 +4524,7 @@ SUITES = [
     # blind to the proof files the rounds produce.
     # (AC-LTI1..AC-LTI8 pre-registered in state/queue/tech.md R2156.)
     ("os-logs-inventory",
-     os.path.join("..", "os", "test_logs_inventory.py"), 8),
+     os.path.join("..", "os", "test_logs_inventory.py"), 31),
     # R2244: the standing-line floors (main >= 5, tech >= 10, explore >= 10)
     # become a reading instead of a mid-window discovery - a read-only gauge
     # over the three queue files, column-0 row law, gate markers reported but
@@ -5830,7 +5830,7 @@ SUITES = [
     # AC-CEPW6 were pinned in state/queue/tech.md:424 as the R2377 seed row
     # BEFORE the code.)
     ("os-closeout-export-parity-wire",
-     os.path.join("..", "os", "test_closeout_export_parity_wire.py"), 6),
+     os.path.join("..", "os", "test_closeout_export_parity_wire.py"), 16),
     # R2454: MEASURED at R2452 the closeout wire could not publish a CRLF
     # export at all - the parity composed LF text while the gate wire kept the
     # target dialect, so the refusal was transport-only, not content drift. The
@@ -5839,7 +5839,7 @@ SUITES = [
     # landed. (AC-CEPD1..AC-CEPD6 were pinned in state/queue/tech.md:520 as the
     # R2452 seed row BEFORE the code.)
     ("os-closeout-export-parity-dialect-wire",
-     os.path.join("..", "os", "test_closeout_export_parity_dialect_wire.py"), 6),
+     os.path.join("..", "os", "test_closeout_export_parity_dialect_wire.py"), 20),
     # R2379: the batch writer refused a status that disagreed with the live
     # reading, but nothing told the operator WHAT that status was, so a --pair
     # list cost a refused call to compose. This face names every residue round

@@ -1,0 +1,6 @@
+SHARD leg 2 evidence (renamed from -green.log because it is NOT green)
+SHARD rc=2 scope=SHARD selected=160 executed=160 green=157 criteria=1048 crit_mismatch=0 elapsed=440.0s
+SHARD red os-status-export-writer-dialect-wire:rc=1,os-closeout-export-parity-wire:rc=1,os-closeout-export-parity-dialect-wire:rc=1
+R2830 root A: queue_floor_export_face.apply kept the section in whatever position an earlier writer left it, so the live export ended ['queue','results_archive','results'] and AC-QFE4 read red; apply now drops the key before writing it last.
+R2830 root B: state/queue/tech.md line 2 (done#937b438d, R2793) had no declaration entry; declared at R2830, live reading NO-DRIFT 384/384.
+R2830 root C: the two closeout-export-parity suites pinned EXPECTED_CRITERIA=6 while running 16 and 20, and the registry inherited the stale 6; the constant is now the executed count and the registry literal is derived from it.

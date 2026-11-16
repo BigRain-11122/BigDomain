@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-16 15:42 +08:00
+- 生成时间: generated: 2026-11-16 18:10 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
 - 状态证据: reconcile-all-R2739.log (RUNNER PASS 675/675 suites green, reconcile controls 7/7, 4986.4s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 699 | 5258 | 675/675 | R2739 |
+| 699 | 5305 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -481,7 +481,7 @@
 | 442 | os-run-identity | ../os/test_run_identity.py | 8 | green | 2.4 |
 | 443 | os-retry-naming | ../os/test_os_retry_naming.py | 9 | green | 0.9 |
 | 444 | os-ledger-closeout | ../os/test_ledger_closeout.py | 8 | green | 1.4 |
-| 445 | os-logs-inventory | ../os/test_logs_inventory.py | 8 | green | 2.0 |
+| 445 | os-logs-inventory | ../os/test_logs_inventory.py | 31 | green | 2.0 |
 | 446 | os-queue-floor | ../os/test_queue_floor.py | 8 | green | 1.2 |
 | 447 | os-state-fold | ../os/test_state_fold.py | 6 | green | 1.0 |
 | 448 | os-state-fold-run | ../os/test_state_fold_run.py | 6 | green | 0.2 |
@@ -620,8 +620,8 @@
 | 581 | os-export-consistency-queue-face | ../os/test_export_consistency_queue_face.py | 6 | green | 0.4 |
 | 582 | os-closeout-export-parity-text-binding | ../os/test_closeout_export_parity_text_binding.py | 6 | green | 0.9 |
 | 583 | os-export-closeout-gate-parity | ../os/test_export_closeout_gate_parity.py | 6 | green | 1.0 |
-| 584 | os-closeout-export-parity-wire | ../os/test_closeout_export_parity_wire.py | 6 | green | 0.5 |
-| 585 | os-closeout-export-parity-dialect-wire | ../os/test_closeout_export_parity_dialect_wire.py | 6 | green | 0.3 |
+| 584 | os-closeout-export-parity-wire | ../os/test_closeout_export_parity_wire.py | 16 | green | 0.5 |
+| 585 | os-closeout-export-parity-dialect-wire | ../os/test_closeout_export_parity_dialect_wire.py | 20 | green | 0.3 |
 | 586 | os-residue-batch-status-face | ../os/test_residue_batch_status_face.py | 6 | green | 2.3 |
 | 587 | os-export-publish-path-guard | ../os/test_export_publish_path_guard.py | 6 | green | 1.2 |
 | 588 | os-single-append-status-face | ../os/test_single_append_status_face.py | 6 | green | 3.3 |
@@ -736,7 +736,7 @@
 | 697 | os-battery-shard | ../os/test_battery_shard.py | 8 | no-evidence | - |
 | 698 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
 | 699 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 11 | no-evidence | - |
-|  | 合计 |  | 5258 | green 675 / FAIL 0 / no-evidence 24 |  |
+|  | 合计 |  | 5305 | green 675 / FAIL 0 / no-evidence 24 |  |
 
 ## 证据出处
 

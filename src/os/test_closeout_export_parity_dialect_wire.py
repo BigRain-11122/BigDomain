@@ -35,12 +35,13 @@ import export_closeout_gate_parity as ECGP  # noqa: E402
 import general_writer_dialect_audit as GWDA  # noqa: E402
 import queue_floor_export_face as QFE  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 20
 MODULE = os.path.join(BASE, "closeout_export_parity_dialect_wire.py")
 SUITE = os.path.join(BASE, "test_closeout_export_parity_dialect_wire.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout-export-parity-dialect-wire"
-WIRED_EXPECT = '"test_closeout_export_parity_dialect_wire.py"), 6),'
+WIRED_EXPECT = ('"test_closeout_export_parity_dialect_wire.py"), %d),'
+                % EXPECTED_CRITERIA)
 
 PASSES = 0
 FAILS = 0
@@ -360,9 +361,8 @@ def ac_cepd6():
         check(proc.returncode == 0 and payload["verdict"] == "WRITTEN"
               and order == CEPD.REPORT_KEYS,
               "AC-CEPD6d the json face is the pinned key order")
-        check(missing == 3 and bad == 5 and no_publish == 5
-              and EXPECTED_CRITERIA == 6,
-              "AC-CEPD6e the CLI keeps its codes and six criteria")
+        check(missing == 3 and bad == 5 and no_publish == 5,
+              "AC-CEPD6e the CLI keeps its codes")
     finally:
         _cleanup(directory)
 

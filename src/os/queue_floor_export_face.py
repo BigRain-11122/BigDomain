@@ -79,6 +79,13 @@ def apply(data, root):
     """Insert or refresh the queue section in one export document."""
     if not isinstance(data, dict):
         raise QueueFloorExportFaceError("E_QFE_NOT_AN_OBJECT")
+    # The section is the LAST key of the document, so it is dropped before it
+    # is written: a plain assignment keeps whatever position an earlier writer
+    # left it in, and a later section then sits after the queue face and
+    # breaks the one-stable-order law (R2830 measured the live document ending
+    # with ['queue', 'results_archive', 'results']).
+    if FACE_KEY in data:
+        del data[FACE_KEY]
     data[FACE_KEY] = face(root)
     return data
 
