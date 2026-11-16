@@ -1,0 +1,21 @@
+R2820 EVIDENCE - tools/status_export_fresh.py
+==============================================
+PRE-FIX MEASUREMENT (recorded earlier in this window, before any write):
+  python tools/status_export_fresh.py --check
+  VERDICT R2819 FAIL
+  E_SXF_STALE: do does not name R2819 (found R2796)
+  E_SXF_STALE: ceo_face.current does not name R2819 (found R2796)
+  rc=2
+APPLY MEASUREMENT (recorded earlier in this window):
+  APPLIED R2819 changed=True bytes=372650 lf_only=True bom=False
+  after-apply --check: VERDICT R2819 PASS (rc=0)
+  second --apply: changed=False, sha256 identical (idempotent)
+CONTROL F (live, this run) - copy with do rewound to R2796:
+VERDICT R2819 FAIL
+E_SXF_STALE: do leads with R2796, expected R2819
+  stale-copy rc=2
+CONTROL G (live, this run) - the real tree after the fix:
+VERDICT R2819 PASS: do and ceo_face.current both name R2819
+export_ts=2026-11-16T07:58:03+08:00
+  real-tree rc=0
+SUMMARY stale_rc=2 real_rc=0 stale_is_red=True real_is_green=True
