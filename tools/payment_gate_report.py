@@ -59,6 +59,10 @@ import os
 import sys
 import datetime
 
+# D-20261116-13: the value-domain assertion is ONE module shared by the four
+# price faces, not four copies. This file historically carried its own version.
+import value_domain as VD
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAY_DIR = os.path.join(ROOT, "src", "sandbox", "pay")
 CONFIG = os.path.join(PAY_DIR, "config.json")
@@ -129,7 +133,8 @@ CHECKS = [
     ("AC-PAYG5", "four V3 negatives refused (4/4)"),
     ("AC-PAYG6", "19.9 product carries price_cent 1990 and needs_ceo True"),
     ("AC-PAYG7", "disclaimer verbatim from config, AIGC marking note present"),
-    ("AC-PAYG8", "tool source ASCII, stdlib+shipped imports, zero network refs"),
+    ("AC-PAYG8", "tool source ASCII, stdlib+shipped imports (incl. the shared "
+                 "value_domain module), zero network refs"),
 ]
 
 
@@ -282,7 +287,7 @@ def collect():
     imports = sorted({ln.split()[1].split(".")[0] for ln in import_lines
                       if ln.startswith("import ")})
     allowed = {"argparse", "copy", "datetime", "hashlib", "html", "json",
-               "os", "sys", "adapters", "v3"}
+               "os", "sys", "adapters", "v3", "value_domain"}
     imports_ok = all(name in allowed for name in imports)
 
     meas = {
@@ -486,30 +491,14 @@ def check(meas, out, jout):
         run = fresh.get(c.get("id"))
         if not run or run["measured"] != c.get("measured"):
             fails.append("%s drift" % c.get("id"))
-    # AC-PAYGB10/11 (R2817): the criteria TEXT and the artifact SIZES can agree
-    # while the landed price table belongs to an older config, which is exactly
-    # what R2816 measured on three faces at once. money_path_demo and
-    # membership_face both derive FROM this document, so a stale table here makes
-    # the whole chain agree with itself; the price face therefore has to be
-    # compared against the config, not merely printed from it.
+    # AC-PAYGB10/11 -> AC-VD2/VD3 (R2825): the comparison now lives in
+    # tools/value_domain.py, which the other three price faces import too. The
+    # criteria TEXT and the artifact SIZES can agree while the landed price
+    # table belongs to an older config, which is exactly what R2816 measured.
+    cat = VD.catalog(ROOT)
     landed_shas = (landed.get("config") or {}).get("sha256")
-    if landed_shas != meas["config"]["sha256"]:
-        fails.append("config drift: landed sha256 %s != current %s" % (
-            str(landed_shas)[:16], meas["config"]["sha256"][:16]))
-    fresh_rows = {p["id"]: p for p in meas["products"]}
-    landed_rows = {p.get("id"): p for p in landed.get("products", [])}
-    for pid in sorted(set(fresh_rows) | set(landed_rows)):
-        new, old = fresh_rows.get(pid), landed_rows.get(pid)
-        if new is None:
-            fails.append("product %s is not in the config any more" % pid)
-            continue
-        if old is None:
-            fails.append("product %s is missing from the landed table" % pid)
-            continue
-        for key in ("price_cent", "channel", "entitlement"):
-            if old.get(key) != new.get(key):
-                fails.append("stale product row on %s: landed %s=%r != config %r"
-                             % (pid, key, old.get(key), new.get(key)))
+    fails.extend(VD.config_drift(landed_shas, cat, "pay_sha256"))
+    fails.extend(VD.product_failures(landed.get("products") or [], cat))
     sizes = landed.get("sizes") or {}
     if sizes.get("html") != os.path.getsize(out):
         fails.append("sizes html %s != %d on disk" % (sizes.get("html"),

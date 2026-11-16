@@ -22,6 +22,9 @@ import json
 import os
 import sys
 
+# D-20261116-13: value-domain assertion imported from the one shared module.
+import value_domain as VD
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 PREVIEW = os.path.join(ROOT, "preview")
@@ -321,6 +324,11 @@ def check():
     ids = [p["id"] for p in landed_json["products"]]
     if len(ids) != len(payload["products"]) or sorted(ids) != sorted([p["id"] for p in payload["products"]]):
         problems.append("product list diverges from source")
+    # AC-VD2/AC-VD5 (D-20261116-13): a fresh derivation is not a value-domain
+    # assertion by itself - the landed price rows are compared to the catalog.
+    cat = VD.catalog(ROOT)
+    problems.extend(VD.product_failures(landed_json["products"], cat,
+                                       ("price_cent",)))
     if any(("price" in k and "cent" not in k and isinstance(v, str) and "." in v and k != "price_yuan") for k, v in payload.items()):
         problems.append("unexpected price field")
     if landed_json["counts"]["products"] != len(landed_json["products"]):

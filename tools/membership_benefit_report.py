@@ -103,6 +103,10 @@ import orders as PAY                       # noqa: E402
 import sec_gate                            # noqa: E402
 import store as LOBBY_STORE                # noqa: E402
 
+# D-20261116-13: value-domain assertion imported from the one shared module.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import value_domain as VD                  # noqa: E402
+
 MEMBER_CFG = os.path.join(MEMBER_DIR, "config.json")
 LOBBY_CFG = os.path.join(LOBBY_DIR, "config.json")
 PAY_CFG = os.path.join(PAY_DIR, "config.json")
@@ -476,6 +480,11 @@ def verify(facts, sizes):
         rows.append({"id": cid, "pass": bool(ok), "detail": detail})
 
     tiers = facts["tiers"]
+    # AC-VD4 (D-20261116-13): the cycle/quota is compared against the LIVE
+    # catalog, so "facts == the derivation that made them" is no longer enough.
+    _vd_cat = VD.catalog(ROOT)
+    _vdcat = (_vd_cat.get("tiers") or {}).get(MEMBER_TIER) or {}
+    _vdfails = VD.tier_failures(tiers, _vd_cat)
     members = facts["members"]
     base = members[0]
     co = members[1]
@@ -488,7 +497,8 @@ def verify(facts, sizes):
 
     add("AC-MBG2",
         base["tier"] == MEMBER_TIER
-        and base["credits_granted"] == tiers[MEMBER_TIER]["monthly_credits"]
+        and base["credits_granted"] == _vdcat.get("monthly_credits")
+        and not _vdfails
         and base["sandbox_tier_constant"] == MEMBER_TIER
         and facts["join"]["base"]["idempotent"] is False,
         "tier=%s credits=%s catalog=%s product=%s constant=%s"
@@ -497,7 +507,7 @@ def verify(facts, sizes):
            base["sandbox_tier_constant"]))
 
     add("AC-MBG3",
-        base["privileges"] == tiers[MEMBER_TIER]["privileges"]
+        base["privileges"] == _vdcat.get("privileges")
         and facts["privileges"]["granted"],
         "measured=%s catalog=%s granted=%s"
         % (base["privileges"], tiers[MEMBER_TIER]["privileges"],

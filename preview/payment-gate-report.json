@@ -76,12 +76,12 @@
     },
     {
       "id": "AC-PAYG8",
-      "measured": "ascii=True network_refs=0 imports_ok=True imports=adapters,argparse,copy,datetime,hashlib,html,json,os,sys,v3",
+      "measured": "ascii=True network_refs=0 imports_ok=True imports=adapters,argparse,copy,datetime,hashlib,html,json,os,sys,v3,value_domain",
       "pass": true,
-      "text": "tool source ASCII, stdlib+shipped imports, zero network refs"
+      "text": "tool source ASCII, stdlib+shipped imports (incl. the shared value_domain module), zero network refs"
     }
   ],
-  "generated_utc": "2026-11-15T22:52:51Z",
+  "generated_utc": "2026-11-16T07:23:11Z",
   "legacy_negative": [
     {
       "case": "tampered signature",
@@ -154,8 +154,8 @@
     }
   ],
   "sizes": {
-    "html": 6939,
-    "json": 6885
+    "html": 6991,
+    "json": 6959
   },
   "source": {
     "ascii": true,
@@ -169,10 +169,11 @@
       "json",
       "os",
       "sys",
-      "v3"
+      "v3",
+      "value_domain"
     ],
     "network_refs": 0,
-    "sha256": "049eae4dbbc75d1d7eddd513d2fa84d2cd0152a0a17fbead554f1330646e554c"
+    "sha256": "87aa07a0e720111e17be07993c91b0c224ba26b04e21f5ec877933b7eff51695"
   },
   "v3_negative": [
     {

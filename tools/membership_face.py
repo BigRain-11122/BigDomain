@@ -33,6 +33,9 @@ import os
 import re
 import sys
 
+# D-20261116-13: value-domain assertion imported from the one shared module.
+import value_domain as VD
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPEC = os.path.join(ROOT, "docs", "spec", "membership-spec.md")
 PAY = os.path.join(ROOT, "preview", "payment-gate-report.json")
@@ -506,6 +509,13 @@ def gate(conf, payload, html_text, json_bytes):
             reasons.append("E_PRODUCT_MISSING %s did not reach the page" % r.get("id"))
         if r.get("name") and r["name"] not in html_text:
             reasons.append("E_PRODUCT_MISSING name of %s did not reach the page" % r.get("id"))
+    # AC-VD2/AC-VD4/AC-VD5 (D-20261116-13): the landed catalogue is compared to
+    # the LIVE catalog by value (price, entitlement, period, privileges), not
+    # merely re-derived and compared to itself.
+    _vdcat = VD.catalog(ROOT)
+    reasons.extend(VD.product_failures(cat, _vdcat, ("price_cent", "entitlement")))
+    reasons.extend(VD.tier_failures(cat, _vdcat, ("period_days", "privileges"),
+                                    require_one=True))
     prices = {}
     for r in cat:
         if r.get("price_cent") is not None:

@@ -6878,6 +6878,13 @@ SUITES = [
     # permanent ticket at all. Pinned in src/os/backlog.md BEFORE the code.
     ("os-membership-face",
      os.path.join("..", "os", "test_membership_face.py"), 10),
+    # R2825 / D-20261116-13 (deadline 2026-11-17 12:00): ONE value-domain module
+    # (tools/value_domain.py) imported by all four price faces, so a --check
+    # green carries a price, entitlement, period or quota compared against the
+    # catalog instead of structural self-consistency. R2816 measured three faces
+    # printing PASS over a landed price_cent=1990 against a config reading 990.
+    ("os-value-domain",
+     os.path.join("..", "os", "test_value_domain.py"), 9),
     # R2819: tools/face_sweep.py carried eleven criteria and NO battery row while
     # driving the read-only --check of EIGHT CEO-openable faces, so the only thing
     # guarding the eight-panel board was the board's own gate and nothing scheduled

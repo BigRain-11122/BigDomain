@@ -1,0 +1,101 @@
+R2825 / D-20261116-13 value-domain assertion shared by the four price faces
+================================================================================
+Dispatch: D-20261116-13 to @BigDomain, deadline 2026-11-17 12:00.
+Ruling text: every --check green must carry at least one VALUE-DOMAIN assertion
+(price, entitlement, period or quota compared against the catalog, not
+structural self-consistency); the four price faces must gain them and be green
+together; it must be one reusable module rather than four copies.
+
+WHAT WAS MEASURED AT OPEN (not guessed)
+---------------------------------------
+payment_gate_report.check() already compared landed product rows against
+src/sandbox/pay/config.json (R2817, AC-PAYGB10/11).
+money_path_demo.check(), membership_face.gate() and membership_benefit_report
+.verify() carried ONLY structural checks: "landed == fresh derivation",
+"size == disk", "cycle shape is not self-contradictory". A chain that is
+consistently wrong with itself reads green - exactly what R2816 measured when
+three faces printed PASS over a landed price_cent=1990 and a config reading 990.
+
+WHAT SHIPPED
+------------
+tools/value_domain.py - ONE module:
+  catalog(root)                 live products + tiers + both config sha256
+  product_failures(rows, cat)   price_cent / channel / entitlement by value,
+                                names the product and both numbers
+  tier_failures(rows, cat)      period_days / monthly_credits / privileges by
+                                value, names the tier
+  config_drift(sha, cat)        document rendered against another config
+  require_one=True              a face that compares NOTHING is RED, so
+                                "structurally green" cannot pass
+Four importers of that one module:
+  tools/payment_gate_report.py        VD.config_drift + VD.product_failures
+  tools/money_path_demo.py            VD.product_failures (price_cent)
+  tools/membership_face.py            VD.product_failures + VD.tier_failures
+  tools/membership_benefit_report.py  VD.tier_failures folded into AC-MBG2's
+                                      condition, and the per-tier values in
+                                      AC-MBG2/AC-MBG3 now come from the LIVE
+                                      catalog instead of the derivation that
+                                      produced the facts
+
+CRITERIA PINNED BEFORE THE CODE (src/os/backlog.md, R2825 [PIN] row)
+  AC-VD1 one module, four importers.       AC-VD2 product value assertion.
+  AC-VD3 config drift.                     AC-VD4 period/quota assertion.
+  AC-VD5 four faces green together.        AC-VD6 private-world red control.
+  AC-VD7 reuse is machine-checked.         AC-VD8 registered in the battery.
+
+PRE-REGISTRATION CONTROL (measured, not asserted)
+-------------------------------------------------
+python src/os/test_value_domain.py  ->  SUITE FAIL 6/9  (AC-VDB6/7/8 red)
+   AC-VDB6 red: the benefit face's landed tier rows live under facts.tiers and
+                had no reader in the suite yet.
+   AC-VDB7 red: the benefit face imported the module but called none of its
+                comparators - import without a call is dead wiring.
+   AC-VDB8 red: no battery row existed, exactly as the criterion requires.
+After registering ("os-value-domain", test_value_domain.py, 9) and regenerating
+the matrix:  SUITE PASS 9/9.
+One of my own defects is on the record: the first AC-VDB8 computed
+DECLARED == len(results) + 1, but two more rows land after it (the criterion
+itself and ISOLATION), so it read red against a HEALTHY registry; corrected to
++ 2 with no assertion loosened.
+
+NEGATIVE CONTROL, ON EACH FACE'S OWN LANDED DOCUMENT (AC-VDB6)
+--------------------------------------------------------------
+Each face's real landed JSON was read, one price (or one tier period) was moved
+inside a private copy, and the shared comparator was required to redden and name
+the entity:
+  payment_gate_report.py : 5 products, price moved  -> RED
+  money_path_demo.py     : 5 products, price moved  -> RED
+  membership_face.py     : 5 products, price moved  -> RED
+  membership_benefit_report.py : 4 tiers, period moved -> RED
+Honest boundary: this is the comparator measured on production bytes, not each
+face re-run with a tampered artifact. The face-level red path for a wrong price
+is proven end-to-end only for payment_gate_report, whose suite already drives it
+(AC-PAYGB10, a self-consistent tampered document that still reddens).
+
+FOUR FACES GREEN TOGETHER, AFTER THE DEPENDENCY RE-RENDER
+---------------------------------------------------------
+  python tools/payment_gate_report.py --check        rc=0  CHECK PASS fails=0
+  python tools/money_path_demo.py --check           rc=0  VERDICT PASS
+  python tools/membership_face.py --check           rc=0  VERDICT PASS
+  python tools/membership_benefit_report.py --check rc=0  VERDICT PASS 8/8
+
+A DEPENDENCY THAT BIT DURING THE ROUND, RECORDED RATHER THAN HIDDEN
+-------------------------------------------------------------------
+After the payment face was re-rendered, money_path_demo and membership_face
+turned red BY THEMSELVES ("json is not the fresh derivation"): they record
+source bytes, and the source they record had changed. Re-rendering them in
+dependency order made both green with no assertion touched. The four faces are a
+chain, and the matrix of who reads whom is now measured, not assumed.
+
+REGISTRY AND MATRIX
+-------------------
+src/sandbox/reconcile_all.SUITES: ("os-value-domain", test_value_domain.py, 9)
+python src/sandbox/suite_matrix.py --check --out docs/sandbox-suite-matrix.md
+  PASS check: byte-identical (73607 bytes, 699 suites, 5255 criteria)
+python src/os/suite_matrix_reconcile.py -> DOC-CURRENT
+
+WHAT THIS DOES NOT CLAIM
+------------------------
+A buyer still cannot pay: no merchant id, server, domain, filing+ICP or
+miniprogram appid+secret has arrived. This round changes what a green MEANS on
+the four price faces; it does not add a payment capability.
