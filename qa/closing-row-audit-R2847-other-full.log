@@ -1,0 +1,65 @@
+AUDIT row label=ledger-incentive family=other rc=0 law=no row=SUITE PASS (7/7) crit=7 0.2s
+AUDIT row label=pay-notify-bannerlimit family=other rc=0 law=no row=none crit=8 0.3s
+AUDIT row label=pay-notify-bannerwin family=other rc=0 law=no row=none crit=7 0.3s
+AUDIT row label=member-entry family=other rc=0 law=no row=SUITE PASS: 7/7 crit=7 0.1s
+AUDIT row label=opsreview family=other rc=0 law=no row=none crit=7 1.1s
+AUDIT row label=minors family=other rc=0 law=no row=SUITE PASS - 19/19 green crit=19 0.1s
+AUDIT row label=minors-persist family=other rc=0 law=no row=SUITE PASS - 7/7 green crit=7 0.4s
+AUDIT row label=ledger-curation-hotpersist family=other rc=0 law=no row=SUITE PASS (6/6 criteria green) crit=6 0.3s
+AUDIT row label=ledger-curation-coldpersist family=other rc=0 law=no row=SUITE PASS (6/6 criteria green) crit=6 0.2s
+AUDIT row label=ledger-curation-combined family=other rc=0 law=no row=SUITE PASS 7 checks crit=7 0.3s
+AUDIT row label=ledger-curation-combinedpersist family=other rc=0 law=no row=SUITE PASS (6/6 criteria green) crit=6 0.3s
+AUDIT row label=ledger-curation-combinedboundary family=other rc=0 law=no row=SUITE PASS (6/6 criteria green) crit=6 0.2s
+AUDIT row label=ledger-curation-combinedmonth family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=ledger-curation-regpersist family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.5s
+AUDIT row label=ledger-civicpersist family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.4s
+AUDIT row label=ledger-eventtickets-roll family=other rc=0 law=no row=SUITE PASS (7/7) crit=7 0.2s
+AUDIT row label=ledger-eventtickets-telescope family=other rc=0 law=no row=SUITE PASS (6/6) crit=6 0.3s
+AUDIT row label=ugc-pool-waterpersist family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.3s
+AUDIT row label=ledger-apimarket-devsalespersist family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.3s
+AUDIT row label=ledger-apimarket-devboardwindow family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.5s
+AUDIT row label=ledger-apimarket-devboardmonthpersist family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.4s
+AUDIT row label=ledger-apimarket-devboardboundary family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.4s
+AUDIT row label=ledger-apimarket-devboardgatepersist family=other rc=0 law=no row=SUITE PASS (8/8 criteria green) crit=8 0.3s
+AUDIT row label=ledger-apimarket-devboardmonthboundary family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.3s
+AUDIT row label=ledger-datasub-coveragegatepersist family=other rc=0 law=no row=SUITE PASS (8/8 criteria green) crit=8 0.3s
+AUDIT row label=civic-behavior-monthwindow-persist family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=civic-competition-monthwindow-persist family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=os-export-composed-landed-bom-precedence-fifth-wave family=other rc=0 law=no row=none crit=6 0.2s
+AUDIT row label=os-export-composed-landed-bom-precedence-sixth-wave family=other rc=0 law=no row=none crit=6 0.2s
+AUDIT row label=os-export-composed-landed-bom-precedence-seventh-wave family=other rc=0 law=no row=none crit=6 0.2s
+AUDIT row label=os-stamp-exempt-append family=other rc=0 law=no row=SUITE RESULT passes=6 fails=0 criteria=6 crit=6 0.4s
+AUDIT row label=os-stamp-exempt-guard family=other rc=0 law=no row=SUITE RESULT passes=6 fails=0 criteria=6 crit=6 0.2s
+AUDIT row label=os-stamp-exempt-seed-guard-wire family=other rc=0 law=no row=SUITE RESULT passes=6 fails=0 criteria=6 crit=6 0.4s
+AUDIT row label=os-runner-arg-guard family=other rc=0 law=no row=SUITE RESULT passes=6 fails=0 criteria=6 crit=6 0.2s
+AUDIT row label=os-declaration-writer-noop-parity family=other rc=0 law=no row=none crit=6 0.6s
+AUDIT row label=os-export-publish-from-import-law family=other rc=0 law=no row=SUITE PASS criteria=6 passes=8 fails=0 crit=6 1.3s
+AUDIT row label=os-relative-import-publish-binding family=other rc=0 law=no row=SUITE PASS criteria=6 passes=7 fails=0 crit=6 1.2s
+AUDIT row label=os-publish-relative-package-identity family=other rc=0 law=no row=SUITE PASS criteria=6 passes=6 fails=0 crit=6 1.5s
+AUDIT row label=os-relative-import-alias-gate family=other rc=0 law=no row=SUITE PASS criteria=6 passes=6 fails=0 crit=6 1.5s
+AUDIT row label=os-plain-import-alias-gate family=other rc=0 law=no row=SUITE PASS criteria=6 passes=6 fails=0 crit=6 1.0s
+AUDIT row label=os-plain-import-comma-binding family=other rc=0 law=no row=SUITE PASS criteria=6 passes=6 fails=0 crit=6 1.2s
+AUDIT row label=os-comma-binding-wire family=other rc=0 law=no row=SUITE PASS criteria=6 passes=6 fails=0 crit=6 5.7s
+AUDIT row label=os-comma-binding-consumer-wire family=other rc=0 law=no row=SUITE PASS criteria=6 passes=6 fails=0 crit=6 11.3s
+AUDIT row label=os-comma-binding-sibling-faces family=other rc=0 law=no row=SUITE PASS criteria=6 pass=6 fail=0 crit=6 5.9s
+AUDIT row label=os-general-writer-dialect-audit family=other rc=0 law=no row=SUITE PASS criteria=6 pass=6 fail=0 crit=6 23.8s
+AUDIT row label=os-parameter-destination-resolution family=other rc=0 law=no row=SUITE PASS criteria=6 pass=6 fail=0 crit=6 9.5s
+AUDIT row label=os-export-consistency-queue-face family=other rc=0 law=no row=none crit=6 0.4s
+AUDIT row label=os-closeout-export-parity-text-binding family=other rc=0 law=no row=none crit=6 0.7s
+AUDIT row label=os-residue-batch-status-face family=other rc=0 law=no row=SUITE 6/6 crit=6 1.5s
+AUDIT row label=os-single-append-status-face family=other rc=0 law=no row=SUITE os-single-append-status-face expected-criteria=6 pass=6 fail=0 crit=6 2.3s
+AUDIT row label=os-relative-package-presence-refusal family=other rc=0 law=no row=SUITE PASS (6/6 criteria pass) crit=6 1.1s
+AUDIT row label=os-matrix-stamp-provenance-line family=other rc=0 law=no row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 2.3s
+AUDIT row label=os-matrix-stamp-from-liveness family=other rc=0 law=no row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 1.2s
+AUDIT row label=os-patterns-label-readability family=other rc=0 law=no row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 1.3s
+AUDIT row label=os-patterns-label-readability-render-consumer family=other rc=0 law=no row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 0.3s
+AUDIT row label=os-patterns-non-label-text-readability family=other rc=0 law=no row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 0.5s
+AUDIT row label=os-artifact-disk-text-readability family=other rc=0 law=no row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 0.4s
+AUDIT row label=os-evidence-name-text-coverage family=other rc=0 law=no row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 0.4s
+AUDIT row label=os-stamp-text-coverage family=other rc=0 law=no row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 0.5s
+AUDIT row label=os-probe-seam-registry family=other rc=0 law=no row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 2.3s
+AUDIT row label=os-probe-seam-forwarding-scope family=other rc=0 law=no row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 10.1s
+AUDIT row label=os-probe-seam-lazy-scope family=other rc=0 law=no row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 23.1s
+AUDIT row label=os-probe-seam-dynamic-import-scope family=other rc=0 law=no row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 36.3s
+AUDIT family=other total=63 selected=63 law_emit=0 non_law=63 red=0
+AUDIT TOTAL selected=63 law_emit=0 non_law=63 red=0 families=1

@@ -1,0 +1,68 @@
+AUDIT row label=member-face family=no_status rc=0 law=no row=SUITE 6/6 green crit=6 0.9s
+AUDIT row label=ledger-apimarket-pricerev family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-buyerlibrary family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-search family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-searchpaging family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-searchsort family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-devprofile family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-metadata family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-watchlist family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-supply family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.6s
+AUDIT row label=ledger-apimarket-refund family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.8s
+AUDIT row label=ledger-apimarket-marketdaily family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-refundlatency family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-refundreasons family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-sellerrefundreasons family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.6s
+AUDIT row label=ledger-apimarket-buyerwatchcategorymix family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-marketwatchmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.7s
+AUDIT row label=ledger-apimarket-categorywatchmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-categorywatchconversionmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-sellerwatchmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-sellerwatchconversionmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 1.3s
+AUDIT row label=ledger-apimarket-buyerwatchmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.6s
+AUDIT row label=ledger-apimarket-marketsupplymonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-categoryquestionmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-categoryclaimmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-ratingmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.6s
+AUDIT row label=ledger-apimarket-sellerratingmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.7s
+AUDIT row label=ledger-apimarket-categoryratingmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-questionmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.6s
+AUDIT row label=ledger-apimarket-feedmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 1.2s
+AUDIT row label=ledger-apimarket-sellermonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-sellerquestionmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-buyeranswerwait family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-backlogmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-marketrelistmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-sellerpricecadencemonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.8s
+AUDIT row label=ledger-apimarket-sellerpricedemandmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-buyerrefundmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-buyerclaimmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-sellerreplymonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.6s
+AUDIT row label=ledger-apimarket-sellerrestockmonths family=no_status rc=0 law=no row=SUITE 9/9 crit=9 0.4s
+AUDIT row label=ledger-apimarket-marketconversionmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-buyerpricereaction family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-sellerrepeatmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-ratreply family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-ratingrev family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-restock family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-sellerinbox family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-revenuemonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-marketmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-buyermonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-watchalerts family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-watchbudget family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-marketfeed family=no_status rc=0 law=no row=SUITE 8/8 PASS crit=8 0.3s
+AUDIT row label=ledger-apimarket-feedlisting family=no_status rc=0 law=no row=SUITE 8/8 PASS crit=8 0.3s
+AUDIT row label=ledger-apimarket-feeddev family=no_status rc=0 law=no row=SUITE 8/8 PASS crit=8 1.1s
+AUDIT row label=ledger-apimarket-buyertodo family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-purchasedossier family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-sellertodo family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-buyerclaimtodo family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-providerrev family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-qna family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-buyerquestions family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-selleranswers family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-provideridentity family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=os-decwatermark family=no_status rc=0 law=no row=SUITE 8/8 PASS crit=8 11.2s
+AUDIT family=no_status total=66 selected=66 law_emit=0 non_law=66 red=0
+AUDIT TOTAL selected=66 law_emit=0 non_law=66 red=0 families=1
