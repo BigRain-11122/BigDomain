@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T02:02:48+08:00",
+  "export_ts": "2026-11-17T02:04:36+08:00",
   "do": "2026-11-17 R2840 ROUND: the freeze-round law finally has a commit-side call site - a staged foo_R<freeze>.py is refused by the commit that would carry it, named, with the commit count unchanged (proven in a real private git world through a real git commit), and the same law is asked by the battery before the first suite runs, so a leg reddens before it reports instead of after.",
   "ceo_face": {
     "current": "2026-11-17 R2840 ROUND: the freeze-round law finally has a commit-side call site - a staged foo_R<freeze>.py is refused by the commit that would carry it, named, with the commit count unchanged (proven in a real private git world through a real git commit), and the same law is asked by the battery before the first suite runs, so a leg reddens before it reports instead of after.",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "next_milestone": "[R2840] next window (<=12h): (1) MAIN - run ONE full reconcile battery on the tree that carries the commit gate and the law-first step: AC-HK8 is proven statically and by parse only, and the runner still has to be shown to FAIL CLOSED when the law refuses (private world with `foo_R2838.py`, `phase_freeze_law()` must return False and RUNNER must fail); (2) the 904 sub-freeze one-offs are still on disk - the freeze stops NEW ones and has never shrunk the historical body, and a measured retirement is its own job (R2837 deleted 682 in one window, so the shape of that work is known); (3) the gate reads STAGED paths only: `git commit --amend`, `git rebase`, `git stash` and anything that writes outside git all bypass it, so the triple (hook + closeout + battery) is the boundary and should be pinned as such in one line rather than rediscovered (truncated)",
-    "next_milestone_due": "2026-11-17T14:02:48+08:00",
-    "updated_at": "2026-11-17T02:02:48+08:00",
+    "next_milestone_due": "2026-11-17T14:04:36+08:00",
+    "updated_at": "2026-11-17T02:04:36+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -89,7 +89,7 @@
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
-    "queue_tech_open": 11,
+    "queue_tech_open": 13,
     "queue_explore_open": 10
   },
   "current": "2026-11-17 R2840 ROUND: the freeze-round law finally has a commit-side call site - a staged foo_R<freeze>.py is refused by the commit that would carry it, named, with the commit count unchanged (proven in a real private git world through a real git commit), and the same law is asked by the battery before the first suite runs, so a leg reddens before it reports instead of after.",
@@ -133,24 +133,24 @@
         "queue": "tech",
         "path": "state/queue/tech.md",
         "present": true,
-        "open_rows": 11,
+        "open_rows": 13,
         "done_rows": 514,
         "gated_rows": 1,
-        "claimable": 8,
+        "claimable": 10,
         "discounted": 2,
         "delivered": [
           {
-            "line": 718,
+            "line": 722,
             "prefix": "AC-SEQAF1"
           },
           {
-            "line": 720,
+            "line": 724,
             "prefix": "AC-EDMK1"
           }
         ],
         "floor": 10,
-        "shortfall": 2,
-        "status": "SHORT"
+        "shortfall": 0,
+        "status": "MET"
       },
       {
         "queue": "explore",
@@ -167,8 +167,8 @@
         "status": "MET"
       }
     ],
-    "verdict": "FLOOR-DEBT",
-    "shortfall_total": 2,
+    "verdict": "FLOOR-MET",
+    "shortfall_total": 0,
     "missing": [],
     "delivered_total": 2
   }
