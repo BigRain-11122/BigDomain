@@ -37,7 +37,7 @@ SUITE PASS 13/13 in 1.0s
   | PASS AC-MPD2 product ids equal the source list id for id ids=['birthright_entry', 'pack_compute_19_9', 'report_data_b', 'share_observation', 'tier_patron_30d']
   | PASS AC-MPD2 every CEO-blocked product carries a visible CEO gate ceo_products=3
   | PASS AC-MPD2 every product reaches the page missing=[]
-  | PASS AC-MPD3 the page states it is a mock surface label=本页为演示面
+  | PASS AC-MPD3 the page states it is a mock surface label=鏈〉涓烘紨绀洪潰
   | PASS AC-MPD3 the page holds no absolute url 
   | PASS AC-MPD4 every step verdict string reaches the page unaltered steps=8 missing=[]
   | PASS AC-MPD4 every step id reaches the page missing=[]
