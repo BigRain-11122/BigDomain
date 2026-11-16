@@ -129,6 +129,9 @@ def main():
           "AC-OR7 idempotence: two runs same exit=%d and same SUMMARY"
           % code_a)
 
+    ok_run = FAILS == 0 and PASSES == 7
+    law_verdict = "SUITE PASS" if ok_run else "SUITE FAIL"
+    print("%s %d/%d" % (law_verdict, PASSES, 7), flush=True)
     print("suite opsreview: %d/7 green" % PASSES, flush=True)
     return 0 if FAILS == 0 and PASSES == 7 else 1
 

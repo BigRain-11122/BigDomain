@@ -1,0 +1,14 @@
+SHARD scope=SHARD registry_suites=705 registry_criteria=5368 selected=12 selected_criteria=73 cap=600s exact=1
+SHARD row os-suite-matrix-reconcile rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 1.1s
+SHARD row os-suite-matrix-reconcile-evidence-face rc=0 pass=0 fail=0 suite=PASS 7/7 crit=7 0.7s
+SHARD row os-suite-matrix-reconcile-table-shape rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 15.4s
+SHARD row os-suite-matrix-reconcile-shape rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD row os-suite-matrix-reconcile-fence rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.1s
+SHARD row os-suite-matrix-reconcile-fence-rows rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.1s
+SHARD row os-suite-matrix-reconcile-fence-table rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD row os-suite-matrix-reconcile-row-shape rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD row os-suite-matrix-reconcile-row-membership rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-suite-matrix-reconcile-second-table-separator rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.7s
+SHARD row os-export-consistency-queue-face rc=0 pass=15 fail=0 suite=PASS 6/6 crit=6 0.5s
+SHARD row os-suite-output-audit rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 2.9s
+SHARD rc=0 scope=SHARD selected=12 executed=12 green=12 criteria=73 crit_mismatch=0 elapsed=27.8s

@@ -423,6 +423,9 @@ def main():
     ac_dwnp4()
     ac_dwnp5()
     ac_dwnp6()
+    ok_run = FAILS == 0 and PASSES == 6
+    law_verdict = "SUITE PASS" if ok_run else "SUITE FAIL"
+    print("%s %d/%d" % (law_verdict, PASSES, 6), flush=True)
     print("SUMMARY passes=%d fails=%d" % (PASSES, FAILS), flush=True)
     return 0 if FAILS == 0 else 1
 

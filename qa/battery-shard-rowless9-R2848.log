@@ -1,0 +1,11 @@
+SHARD scope=SHARD registry_suites=705 registry_criteria=5368 selected=9 selected_criteria=58 cap=600s exact=9
+SHARD row pay-notify-bannerlimit rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.3s
+SHARD row pay-notify-bannerwin rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 0.3s
+SHARD row opsreview rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 1.1s
+SHARD row os-export-composed-landed-bom-precedence-fifth-wave rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-sixth-wave rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-seventh-wave rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-declaration-writer-noop-parity rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.6s
+SHARD row os-export-consistency-queue-face rc=0 pass=15 fail=0 suite=PASS 6/6 crit=6 0.5s
+SHARD row os-closeout-export-parity-text-binding rc=0 pass=21 fail=0 suite=PASS 6/6 crit=6 0.7s
+SHARD rc=0 scope=SHARD selected=9 executed=9 green=9 criteria=58 crit_mismatch=0 elapsed=4.1s

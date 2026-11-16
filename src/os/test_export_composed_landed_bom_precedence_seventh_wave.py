@@ -307,6 +307,10 @@ def verify():
 
     print("SUMMARY %s %d/%d" % ("PASS" if all(results) else "FAIL",
                                 sum(results), EXPECTED_CRITERIA))
+    ok_run = all(results) and len(results) == EXPECTED_CRITERIA
+    law_verdict = "SUITE PASS" if ok_run else "SUITE FAIL"
+    print("%s %d/%d" % (law_verdict, sum(1 for r in results if r),
+                          len(results)))
     return 0 if all(results) and len(results) == EXPECTED_CRITERIA else 1
 
 

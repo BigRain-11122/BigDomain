@@ -247,6 +247,11 @@ def main():
     ac_ecqf4_current_shape()
     ac_ecqf5_purity()
     ac_ecqf6_hygiene()
+    ok_run = FAILS == 0 and PASSES >= EXPECTED_CRITERIA
+    law_verdict = "SUITE PASS" if ok_run else "SUITE FAIL"
+    print("%s %d/%d" % (law_verdict,
+                        EXPECTED_CRITERIA if ok_run else 0,
+                        EXPECTED_CRITERIA), flush=True)
     print("SUMMARY pass=%d fail=%d" % (PASSES, FAILS), flush=True)
     return 0 if FAILS == 0 else 2
 

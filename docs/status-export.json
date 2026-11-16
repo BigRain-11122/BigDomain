@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T04:08:28+08:00",
-  "do": "2026-11-17 R2847 PRODUCT+ENGINEERING: the two families the source reading could not place are now measured at OUTPUT level - 129 rows, zero false negatives, all rc=0 - and the audit surfaced a harder class nobody had named: nine registered suites print no closing row at all",
+  "export_ts": "2026-11-17T04:16:09+08:00",
+  "do": "2026-11-17 R2848 PRODUCT+ENGINEERING: the nine registered suites that printed no closing row at all now each emit one bound battery-law row, so a green suite can no longer be invisible to every machine reader",
   "ceo_face": {
-    "current": "2026-11-17 R2847 PRODUCT+ENGINEERING: the two families the source reading could not place are now measured at OUTPUT level - 129 rows, zero false negatives, all rc=0 - and the audit surfaced a harder class nobody had named: nine registered suites print no closing row at all",
+    "current": "2026-11-17 R2848 PRODUCT+ENGINEERING: the nine registered suites that printed no closing row at all now each emit one bound battery-law row, so a green suite can no longer be invisible to every machine reader",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2847] next window (<=12h): (1) MAIN - the NINE rowless suites named above get ONE battery-law closing row each at their birth site (they are green and report nothing machine-readable; `opsreview` and the three `bom-precedence` waves are the cheapest of the nine), then re-run both family legs and record law_emit 9; (2) the 65 numeric-only `no_status` rows (`SUITE p/t`, verdict derivable from p==t) need a DECISION pinned before any edit: fix 65 files at their birth sites, or teach the law a derived verdict - and that second path touches THREE readers (`battery_shard.SUITE_LINE`, `run_identity.SUITE_RE`, `runner_suite_timeout_headroom.SUITE_LINE_RE`), so it needs its own criteria block and controls; (3) register a suite for `tools/suite_closing_row_census.py` (two-run stability + law-from-the-runner) or declare the debt with a reason - carried four windows now; (4) `os-ugc-gate-report` is still the only `suspect_status` row; (5) 703 of 705 registry suites still never run in any slice, and the shard offset/resume slice remains the named carrier blocker (truncated)",
-    "next_milestone_due": "2026-11-17T16:08:28+08:00",
-    "updated_at": "2026-11-17T04:08:28+08:00",
+    "next_milestone": "[R2848] next window (<=12h): (1) MAIN - the 65 numeric-only `no_status` rows are SAFE to close at one point, measured this window: their rows are computed (`print(\"SUITE %d/%d\" % (passed, total))` in `test_apimarket_buyerquestions.py` L424 and `test_apimarket_selleranswers.py` L484), not hardcoded, so no false-green lives there - the debt is one missing verdict word. Pin criteria first, then either teach the law a DERIVED verdict (`SUITE p/t` with p==t => PASS) at its single authority - which touches THREE readers (`battery_shard.SUITE_LINE`, `run_identity.SUITE_RE`, `runner_suite_timeout_headroom.SUITE_LINE_RE`) and needs a red control - or fix 65 files at their birth sites; (2) `legacy_label=39` / `legacy_status_colon=22` / `legacy_paren=20` / `no_row=20` / `suspect_status=1` are still unmeasured at OUTPUT level - one audit leg per family, full not sampled; (3) register a suite for `tools/suite_closing_row_census.py` or declare the debt with a reason - carried five windows now; (4) 694 of 705 registry suites still never run in any slice, and the shard offset/resume slice remains the named carrier blocker (truncated)",
+    "next_milestone_due": "2026-11-17T16:16:09+08:00",
+    "updated_at": "2026-11-17T04:16:09+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 42,
+    "log_lines_in_window": 47,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2847 PRODUCT+ENGINEERING: the two families the source reading could not place are now measured at OUTPUT level - 129 rows, zero false negatives, all rc=0 - and the audit surfaced a harder class nobody had named: nine registered suites print no closing row at all",
+  "current": "2026-11-17 R2848 PRODUCT+ENGINEERING: the nine registered suites that printed no closing row at all now each emit one bound battery-law row, so a green suite can no longer be invisible to every machine reader",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2847] next window (<=12h): (1) MAIN - the NINE rowless suites named above get ONE battery-law closing row each at their birth site (they are green and report nothing machine-readable; `opsreview` and the three `bom-precedence` waves are the cheapest of the nine), then re-run both family legs and record law_emit 9; (2) the 65 numeric-only `no_status` rows (`SUITE p/t`, verdict derivable from p==t) need a DECISION pinned before any edit: fix 65 files at their birth sites, or teach the law a derived verdict - and that second path touches THREE readers (`battery_shard.SUITE_LINE`, `run_identity.SUITE_RE`, `runner_suite_timeout_headroom.SUITE_LINE_RE`), so it needs its own criteria block and controls; (3) register a suite for `tools/suite_closing_row_census.py` (two-run stability + law-from-the-runner) or declare the debt with a reason - carried four windows now; (4) `os-ugc-gate-report` is still the only `suspect_status` row; (5) 703 of 705 registry suites still never run in any slice, and the shard offset/resume slice remains the named carrier blocker (truncated)",
-  "state_bytes": 35444,
+  "next_milestone": "[R2848] next window (<=12h): (1) MAIN - the 65 numeric-only `no_status` rows are SAFE to close at one point, measured this window: their rows are computed (`print(\"SUITE %d/%d\" % (passed, total))` in `test_apimarket_buyerquestions.py` L424 and `test_apimarket_selleranswers.py` L484), not hardcoded, so no false-green lives there - the debt is one missing verdict word. Pin criteria first, then either teach the law a DERIVED verdict (`SUITE p/t` with p==t => PASS) at its single authority - which touches THREE readers (`battery_shard.SUITE_LINE`, `run_identity.SUITE_RE`, `runner_suite_timeout_headroom.SUITE_LINE_RE`) and needs a red control - or fix 65 files at their birth sites; (2) `legacy_label=39` / `legacy_status_colon=22` / `legacy_paren=20` / `no_row=20` / `suspect_status=1` are still unmeasured at OUTPUT level - one audit leg per family, full not sampled; (3) register a suite for `tools/suite_closing_row_census.py` or declare the debt with a reason - carried five windows now; (4) 694 of 705 registry suites still never run in any slice, and the shard offset/resume slice remains the named carrier blocker (truncated)",
+  "state_bytes": 39012,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2847",
+      "2848",
       "OSLoop 执行 tick"
     ]
   ],

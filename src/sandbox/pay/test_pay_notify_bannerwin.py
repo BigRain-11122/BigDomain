@@ -277,6 +277,10 @@ def main():
     fails = [ac for ac, ok in RESULTS if not ok]
     print("---- pay-notify-bannerwin acceptance: %d/%d passed"
           % (len(RESULTS) - len(fails), len(RESULTS)))
+    ok_run = not fails and len(RESULTS) == EXPECTED
+    law_verdict = "SUITE PASS" if ok_run else "SUITE FAIL"
+    print("%s %d/%d" % (law_verdict, len(RESULTS) - len(fails),
+                        len(RESULTS)))
     if fails or len(RESULTS) != EXPECTED:
         if fails:
             print("FAILED: %s" % ", ".join(fails))
