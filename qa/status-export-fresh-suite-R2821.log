@@ -1,0 +1,50 @@
+STATUS EXPORT FRESHNESS SUITE - R2821 evidence
+================================================
+
+WHY: docs/status-export.json read VERDICT R2820 PASS while carrying two
+provable falsehoods, measured at open on the real tree:
+  state_bytes=65089   real os.path.getsize(src/os/state.json)=81159
+  top-level current leading R2814   live round R2820 (six rounds behind)
+  results key = 332486 bytes = 89 percent of a 372300-byte file, unmaintained
+
+PRE-CODE CONTROL, measured on the unfixed tree after the criteria were pinned
+and committed as 357242e7:
+  VERDICT R2820 FAIL
+  E_SXF_STALE: current leads with R2814, expected R2820
+  E_SXF_STATE_BYTES: doc state_bytes=65089 real=81159
+  E_SXF_TOO_BIG: export 372300B over waterline 60000B
+  rc=2
+The same file read PASS before this change, so all three criteria carry weight.
+
+ARCHIVE WRITE-OUT (no pruning):
+  ARCHIVED logs/status-export-legacy-2026-11.json 179 entries 336680B
+           sha256=f69438b333bfdcbf...
+  live 372300 -> 36059B  keys_drift=none
+  after --apply: 37049B
+
+AFTER:
+  VERDICT R2820 PASS: do, ceo_face.current and current all name R2820
+  state_bytes=81159 export_bytes=37049 archive=logs/status-export-legacy-2026-11.json
+  rc=0
+
+SUITE src/os/test_status_export_fresh.py (AC-SXFB1..AC-SXFB10)
+  pre-registration control: SUITE FAIL 9/10 with EXACTLY AC-SXFB10 red
+  after the registry row:   SUITE PASS 10/10
+  AC-SXFB2 current rewound rc=2, restored rc=0
+  AC-SXFB3 state_bytes skewed rc=2, after --apply rc=0 and equals disk
+  AC-SXFB4 archive sha256 tampered rc=2, bytes restored afterwards
+  AC-SXFB5 archive path missing rc=2
+  AC-SXFB6 waterline forced to 8B rc=2
+  AC-SXFB7 kept=True count=True dropped=True drift=none
+  AC-SXFB8 --check leaves size+mtime_ns unchanged
+  AC-SXFB9 no narrative round rc=5 with zero writes
+  AC-SXFB10 registry row present
+  ISOLATION real export+state size+mtime untouched
+
+ONE TEST-SIDE DEFECT DISCLOSED: the first AC-SXFB7 compared the document as it
+stood before --apply against the document after archiving, so export_ts and
+ceo_face legitimately moved and the criterion reddened for my own mistake. The
+baseline is now captured immediately before the archive. No criterion relaxed.
+
+REGISTRY by import: 698 suites / 5238 criteria (was 697 / 5228)
+MATRIX: 73472 bytes / 698 rows, --check reads DOC-CURRENT rc=0

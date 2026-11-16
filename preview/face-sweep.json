@@ -1,17 +1,17 @@
 {
  "schema_version": "face-sweep-v1",
- "generated_utc": "2026-11-15T23:49:07Z",
- "swept_ns": 1794786537352368300,
+ "generated_utc": "2026-11-16T00:26:58Z",
+ "swept_ns": 1794788808379001700,
  "sizes": {
   "html": 5325,
-  "json": 4740
+  "json": 4741
  },
  "headline": {
   "pass": 8,
   "total": 8,
   "verdict": "PASS"
  },
- "fingerprint": "64e3f66bc2f50b7f",
+ "fingerprint": "435dcb341eb6e64d",
  "faces": [
   {
    "id": "six-gate-live",
@@ -21,7 +21,7 @@
    "json": "preview/platform-live-report.json",
    "exit": 0,
    "verdict": "VERDICT PASS 8/8 fingerprint=44ec8b5a60f4d1f3 landed=44ec8b5a60f4d1f3 sizes={'html': 6889, 'json': 5292}",
-   "duration_s": 5.37,
+   "duration_s": 6.62,
    "html_bytes": 6889,
    "json_bytes": 5292,
    "tail": "VERDICT PASS 8/8 fingerprint=44ec8b5a60f4d1f3 landed=44ec8b5a60f4d1f3 sizes={'html': 6889, 'json': 5292}",
@@ -36,7 +36,7 @@
    "json": "preview/lobby-ws-report.json",
    "exit": 0,
    "verdict": "VERDICT PASS 8/8 fingerprint=fbdb7f517fb06222 landed=fbdb7f517fb06222 sizes={'html': 5952, 'json': 3070}",
-   "duration_s": 1.73,
+   "duration_s": 1.59,
    "html_bytes": 5952,
    "json_bytes": 3070,
    "tail": "VERDICT PASS 8/8 fingerprint=fbdb7f517fb06222 landed=fbdb7f517fb06222 sizes={'html': 5952, 'json': 3070}",
@@ -51,7 +51,7 @@
    "json": "preview/city-face-report.json",
    "exit": 0,
    "verdict": "VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f",
-   "duration_s": 1.14,
+   "duration_s": 0.76,
    "html_bytes": 7300,
    "json_bytes": 5004,
    "tail": "VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f",
@@ -66,7 +66,7 @@
    "json": "preview/ugc-gate-report.json",
    "exit": 0,
    "verdict": "VERDICT PASS checks=9/9 failed=(none)",
-   "duration_s": 1.1,
+   "duration_s": 0.36,
    "html_bytes": 9576,
    "json_bytes": 6881,
    "tail": "VERDICT PASS checks=9/9 failed=(none)",
@@ -81,7 +81,7 @@
    "json": "preview/payment-gate-report.json",
    "exit": 0,
    "verdict": "PAYMENT GATE CHECK PASS fails=0",
-   "duration_s": 0.14,
+   "duration_s": 0.21,
    "html_bytes": 6939,
    "json_bytes": 6885,
    "tail": "PAYMENT GATE CHECK PASS fails=0",
@@ -96,7 +96,7 @@
    "json": "preview/membership-benefit-report.json",
    "exit": 0,
    "verdict": "VERDICT PASS checks=8/8 fresh_fingerprint=918674b2db958676 landed=918674b2db958676",
-   "duration_s": 0.24,
+   "duration_s": 0.47,
    "html_bytes": 10218,
    "json_bytes": 9817,
    "tail": "VERDICT PASS checks=8/8 fresh_fingerprint=918674b2db958676 landed=918674b2db958676",
@@ -125,11 +125,11 @@
    "html": "preview/index.html",
    "json": "preview/deliverable-index.json",
    "exit": 0,
-   "verdict": "VERDICT PASS 14/14 fingerprint=a0c992f5d1713fff",
-   "duration_s": 0.11,
+   "verdict": "VERDICT PASS 14/14 fingerprint=0d0856a0bc28c5d4",
+   "duration_s": 0.12,
    "html_bytes": 36502,
    "json_bytes": 2678,
-   "tail": "{\"failed\": [], \"fingerprint\": \"a0c992f5d1713fff\", \"passed\": 14, \"total\": 14}",
+   "tail": "{\"failed\": [], \"fingerprint\": \"0d0856a0bc28c5d4\", \"passed\": 14, \"total\": 14}",
    "mutated": false,
    "mutated_files": []
   }

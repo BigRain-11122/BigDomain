@@ -5709,6 +5709,14 @@ SUITES = [
     # pinned in state/queue/tech.md line 514 as the R2434 seed BEFORE the code.)
     ("os-parameter-destination-resolution",
      os.path.join("..", "os", "test_parameter_destination_resolution.py"), 6),
+    # R2821: the CEO three-line face read PASS while its own state_bytes said
+    # 65089 against a real 81159 and its top-level current led with R2814
+    # against a live R2820, because check() graded two of three synonym fields
+    # and never compared a derived count to its source. The unmaintained
+    # results block was also 89 percent of a 372300-byte file. (AC-SXF6..AC-SXF10
+    # were pinned in src/os/backlog.md BEFORE the code; AC-SXF10 is this row.)
+    ("os-status-export-fresh",
+     os.path.join("..", "os", "test_status_export_fresh.py"), 10),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives
