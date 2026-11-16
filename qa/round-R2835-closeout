@@ -1,0 +1,9 @@
+closeout suite (expected criteria 7)
+PASS AC-COUT1 the closeout delegates both writes to state_append and export_round, owns no serialisation of its own, is ASCII with no net, and answers --help
+PASS AC-COUT2 an undated round line reads E_CO_NO_STATE with rc=2, the face keeps its exact bytes and mtime, and the state did not move - so a face describing a round the state never got is unreachable
+PASS AC-COUT3 a face that cannot be derived reads E_CO_NO_FACE, names the face step, states face=state was already WRITTEN, and the state on disk really carries the new tick and line
+PASS AC-COUT4 one closeout call moves the state by one tick and two lines and publishes a face whose current line and tick row both name the new tick
+PASS AC-COUT5 --check writes zero bytes to the state AND the face, prints the state dry-run verdict, and does not invent a face verdict it cannot derive
+PASS AC-COUT6 replaying the same closeout reads E_CO_DUPLICATE with rc=0, leaves the face byte-identical and the state untouched, so a no-op cannot pass for a refresh
+PASS AC-COUT7 the registry declares this suite at 7 criteria
+SUITE PASS 7/7
