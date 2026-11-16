@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T01:29:53+08:00",
-  "do": "2026-11-17 R2839 ENGINEERING: the freeze-round law now has a production call site, so a new one-off is refused in the window that creates it with the state and the CEO face untouched",
+  "export_ts": "2026-11-17T02:02:48+08:00",
+  "do": "2026-11-17 R2840 ROUND: the freeze-round law finally has a commit-side call site - a staged foo_R<freeze>.py is refused by the commit that would carry it, named, with the commit count unchanged (proven in a real private git world through a real git commit), and the same law is asked by the battery before the first suite runs, so a leg reddens before it reports instead of after.",
   "ceo_face": {
-    "current": "2026-11-17 R2839 ENGINEERING: the freeze-round law now has a production call site, so a new one-off is refused in the window that creates it with the state and the CEO face untouched",
+    "current": "2026-11-17 R2840 ROUND: the freeze-round law finally has a commit-side call site - a staged foo_R<freeze>.py is refused by the commit that would carry it, named, with the commit count unchanged (proven in a real private git world through a real git commit), and the same law is asked by the battery before the first suite runs, so a leg reddens before it reports instead of after.",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2839] next window (<=12h): (1) MAIN - the gate now runs at closeout but nowhere else: a window that writes `foo_R<N>.py` and then dies before closing leaves the file on disk with no refusal, and `git commit` still has no gate (`.git/hooks` is not versioned). Pin a decision: either ship a versioned `tools/hooks/pre-commit` plus a `git config core.hooksPath` recipe with its own measured enablement, or make the battery leg's first step run `one_off_round_scripts --check` so a leg reddens before it reports; (2) the 904 sub-freeze one-offs are still on disk - the freeze stops NEW ones and does not shrink the historical body, and a measured retirement is its own job; (3) os- family leg still 160/274 (114 unrun), full ledger ~540/703 unrun, shard offset/resume remains the named blocker (a 160 leg measures ~488s) (truncated)",
-    "next_milestone_due": "2026-11-17T13:29:53+08:00",
-    "updated_at": "2026-11-17T01:29:53+08:00",
+    "next_milestone": "[R2840] next window (<=12h): (1) MAIN - run ONE full reconcile battery on the tree that carries the commit gate and the law-first step: AC-HK8 is proven statically and by parse only, and the runner still has to be shown to FAIL CLOSED when the law refuses (private world with `foo_R2838.py`, `phase_freeze_law()` must return False and RUNNER must fail); (2) the 904 sub-freeze one-offs are still on disk - the freeze stops NEW ones and has never shrunk the historical body, and a measured retirement is its own job (R2837 deleted 682 in one window, so the shape of that work is known); (3) the gate reads STAGED paths only: `git commit --amend`, `git rebase`, `git stash` and anything that writes outside git all bypass it, so the triple (hook + closeout + battery) is the boundary and should be pinned as such in one line rather than rediscovered (truncated)",
+    "next_milestone_due": "2026-11-17T14:02:48+08:00",
+    "updated_at": "2026-11-17T02:02:48+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 57,
+    "log_lines_in_window": 60,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 15,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 11,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2839 ENGINEERING: the freeze-round law now has a production call site, so a new one-off is refused in the window that creates it with the state and the CEO face untouched",
+  "current": "2026-11-17 R2840 ROUND: the freeze-round law finally has a commit-side call site - a staged foo_R<freeze>.py is refused by the commit that would carry it, named, with the commit count unchanged (proven in a real private git world through a real git commit), and the same law is asked by the battery before the first suite runs, so a leg reddens before it reports instead of after.",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2839] next window (<=12h): (1) MAIN - the gate now runs at closeout but nowhere else: a window that writes `foo_R<N>.py` and then dies before closing leaves the file on disk with no refusal, and `git commit` still has no gate (`.git/hooks` is not versioned). Pin a decision: either ship a versioned `tools/hooks/pre-commit` plus a `git config core.hooksPath` recipe with its own measured enablement, or make the battery leg's first step run `one_off_round_scripts --check` so a leg reddens before it reports; (2) the 904 sub-freeze one-offs are still on disk - the freeze stops NEW ones and does not shrink the historical body, and a measured retirement is its own job; (3) os- family leg still 160/274 (114 unrun), full ledger ~540/703 unrun, shard offset/resume remains the named blocker (a 160 leg measures ~488s) (truncated)",
-  "state_bytes": 52781,
+  "next_milestone": "[R2840] next window (<=12h): (1) MAIN - run ONE full reconcile battery on the tree that carries the commit gate and the law-first step: AC-HK8 is proven statically and by parse only, and the runner still has to be shown to FAIL CLOSED when the law refuses (private world with `foo_R2838.py`, `phase_freeze_law()` must return False and RUNNER must fail); (2) the 904 sub-freeze one-offs are still on disk - the freeze stops NEW ones and has never shrunk the historical body, and a measured retirement is its own job (R2837 deleted 682 in one window, so the shape of that work is known); (3) the gate reads STAGED paths only: `git commit --amend`, `git rebase`, `git stash` and anything that writes outside git all bypass it, so the triple (hook + closeout + battery) is the boundary and should be pinned as such in one line rather than rediscovered (truncated)",
+  "state_bytes": 55194,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2839",
+      "2840",
       "OSLoop 执行 tick"
     ]
   ],

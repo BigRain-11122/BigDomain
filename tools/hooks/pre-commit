@@ -1,0 +1,21 @@
+#!/bin/sh
+# Versioned pre-commit gate (R2840). The law itself lives in
+# src/os/one_off_round_scripts.py; this script only finds an interpreter and
+# hands the staged set to tools/hooks/pre_commit_gate.py.
+#
+# A missing interpreter is a NAMED refusal, never a silent pass: a gate that
+# opens when its own toolchain is broken is not a gate. `git commit
+# --no-verify` remains the documented escape for an emergency.
+PY=""
+for candidate in python python3 py; do
+    if command -v "$candidate" >/dev/null 2>&1; then
+        PY="$candidate"
+        break
+    fi
+done
+if [ -z "$PY" ]; then
+    echo "E_HOOK_NO_PYTHON the pre-commit freeze gate cannot run: no python on PATH." >&2
+    echo "E_HOOK_NO_PYTHON bypass deliberately with: git commit --no-verify" >&2
+    exit 1
+fi
+exec "$PY" "$(git rev-parse --show-toplevel)/tools/hooks/pre_commit_gate.py"

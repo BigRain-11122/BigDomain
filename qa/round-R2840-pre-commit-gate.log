@@ -1,0 +1,9 @@
+PASS AC-HK1 gate asks the law for shape and round, owns no regex or walk, ASCII
+PASS AC-HK3 permanent module and a sub-freeze one-off both commit (baseline rc=0, R2431 rc=0)
+PASS AC-HK2 a staged one-off is refused, named, count unchanged (2)
+PASS AC-HK5 hook is LF-only, names E_HOOK_NO_PYTHON and the bypass
+PASS AC-HK4 enablement measured: DISABLED rc=2, APPLIED, ENABLED rc=0
+PASS AC-HK6 real tree: law clean, enable --check honest (rc=2), gate clean
+PASS AC-HK7 os-pre-commit-gate registered with its criterion count
+PASS AC-HK8 the freeze law is asked before the first suite
+SUITE PASS 8/8 criteria

@@ -4580,6 +4580,9 @@ SUITES = [
     # needs an entry (AC-OOS1..AC-OOS6).
     ("os-one-off-round-scripts",
      os.path.join("..", "os", "test_one_off_round_scripts.py"), 6),
+    # R2840 AC-HK7: the commit-side call site of the same freeze law.
+    ("os-pre-commit-gate",
+     os.path.join("..", "os", "test_pre_commit_gate.py"), 8),
     # R2835: closing a round used to be two commands in two processes, so a
     # face (derived FROM state) could be published while the state write
     # failed - the R2831 defect with a different trigger. closeout.py makes
@@ -7107,6 +7110,35 @@ def echo(out):
         print("  | %s" % line)
 
 
+def phase_freeze_law():
+    """R2840 AC-HK8: ask the freeze-round law before the first suite runs.
+
+    The law is the one at src/os/one_off_round_scripts.py; this leg adds no
+    traversal and no shape regex of its own, so the battery cannot disagree
+    with closeout or with the commit hook about what a one-off is.
+    """
+    law_dir = os.path.join(os.path.dirname(BASE), "os")
+    if law_dir not in sys.path:
+        sys.path.insert(0, law_dir)
+    import one_off_round_scripts as _oor
+
+    root = os.path.dirname(os.path.dirname(BASE))
+    report, code = _oor.audit(root)
+    if code == 2:
+        print("FREEZE LAW REFUSE refused=%d freeze=%d files=%s"
+              % (len(report["refused"]), report["freeze"],
+                 ",".join(report["refused"])), flush=True)
+        return False
+    if code != 0:
+        print("FREEZE LAW ERROR code=%d scope=%s"
+              % (code, report.get("scope")), flush=True)
+        return False
+    print("FREEZE LAW OK scanned=%d one_offs=%d max_round=%d freeze=%d"
+          % (report["scanned"], report["one_offs"], report["max_round"],
+             report["freeze"]), flush=True)
+    return True
+
+
 def phase_suites():
     green = 0
     total = 0
@@ -7416,6 +7448,7 @@ def main(argv):
         tee = Tee(argv[1])
         sys.stdout = tee
     t0 = time.time()
+    law_ok = phase_freeze_law()
     suites_ok = phase_suites()
     tmp = tempfile.mkdtemp(prefix="reconcile-all-")
     try:
@@ -7431,10 +7464,14 @@ def main(argv):
               % (reclaim["candidates"], reclaim["removed"],
                  reclaim["busy_skipped"], reclaim["failed"],
                  reclaim["mib"]), flush=True)
-    if FAILS == 0 and suites_ok:
+    if FAILS == 0 and suites_ok and law_ok:
         print("RUNNER PASS (%d/%d suites green, reconcile controls 7/7, %.1fs)"
               % (len(SUITES), len(SUITES), time.time() - t0), flush=True)
         code = 0
+    elif not law_ok:
+        print("RUNNER FAIL (freeze law refused a per-round one-off)",
+              flush=True)
+        code = 1
     else:
         print("RUNNER FAIL (%d failed assertions)" % FAILS, flush=True)
         code = 1

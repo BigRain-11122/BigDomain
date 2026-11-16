@@ -4,6 +4,11 @@
 # repaired evidence logs towards CRLF on the next touch.
 qa/*.log -text
 
+# The commit-side freeze gate is executed by sh, which would read a CR before
+# the first newline as part of the interpreter path. Pinned to LF so a checkout
+# on an autocrlf host cannot silently disable the gate. Born at R2840.
+tools/hooks/pre-commit text eol=lf
+
 # Queue files are written with bare LF by their per-round writers and their
 # readers report lf_only, so core.autocrlf=true must not reintroduce CRLF on
 # checkout. Born at R2548: the seed writer read lf_only=False straight after a
