@@ -208,6 +208,16 @@ def main():
         shutil.rmtree(world, ignore_errors=True)
 
     total = len(CHECKS)
+    # R2859: this suite owns two units - the checks above and the AC ids the
+    # registry counts - so it states both in the corpus's lowercase dialect.
+    # The count is derived from CHECKS itself, never copied from the registry:
+    # a declaration that echoed the registry could never disagree with it.
+    acs = set()
+    for name in CHECKS:
+        token = name.split(" ", 1)[0]
+        if token.startswith("AC-SCL"):
+            acs.add(token)
+    print("suite: %d assertions over %d criteria" % (total, len(acs)))
     if FAILS:
         print("SUITE FAIL %d/%d failed=%s" % (total - len(FAILS), total, FAILS))
         return 1

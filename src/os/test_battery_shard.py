@@ -67,6 +67,18 @@ print("SUITE PASS 1/1")
 PROBE_BARE = """print("SUITE PASS 1/1")
 """
 
+# R2859: the declared-units pair. Both probes print the SAME verdict row; only
+# the declaration differs, so a mismatch can only come from the declaration.
+PROBE_DECL_OK = """print("  | PASS probe-decl-ok")
+print("suite: 21 assertions over 8 criteria")
+print("SUITE PASS 21/21")
+"""
+
+PROBE_DECL_BAD = """print("  | PASS probe-decl-bad")
+print("suite: 21 assertions over 7 criteria")
+print("SUITE PASS 21/21")
+"""
+
 
 def ok(name, cond, detail=""):
     CHECKS.append(name)
@@ -99,7 +111,9 @@ def write_probes(base):
     for name, body in (("probe_good.py", PROBE_GOOD),
                        ("probe_bad.py", PROBE_BAD),
                        ("probe_slow.py", PROBE_SLOW),
-                       ("probe_bare.py", PROBE_BARE)):
+                       ("probe_bare.py", PROBE_BARE),
+                       ("probe_decl_ok.py", PROBE_DECL_OK),
+                       ("probe_decl_bad.py", PROBE_DECL_BAD)):
         with open(os.path.join(base, name), "w", encoding="utf-8",
                   newline="\n") as handle:
             handle.write(body)
@@ -332,6 +346,28 @@ def main():
         ok("AC-BSGB11", code_d == 0 and good_ok and bare_ok,
            "indented_detail=%s bare_detail=%s rc=%d"
            % (good_ok, bare_ok, code_d))
+
+        # AC-BSGB12 (R2859) - a suite that declares its own criteria count is
+        # compared in the registry's unit, and the declaration may not move a
+        # verdict: the agreeing probe reads no mismatch, the disagreeing probe
+        # reads a NAMED one, and both keep suite=PASS 21/21 and rc=0.
+        decl = [("probe-decl-ok", "probe_decl_ok.py", 8),
+                ("probe-decl-bad", "probe_decl_bad.py", 8)]
+        patch_registry(shard, decl, world)
+        code_u, out_u = run_cli(shard, ["--match", "probe-decl"])
+        rows_u = [l for l in out_u.splitlines() if l.startswith("SHARD row ")]
+        ok_row = [l for l in rows_u if " probe-decl-ok " in l]
+        bad_row = [l for l in rows_u if " probe-decl-bad " in l]
+        unit_ok = (code_u == 0
+                   and bool(ok_row) and "suite=PASS 21/21" in ok_row[0]
+                   and "rc=0" in ok_row[0]
+                   and bool(bad_row) and "suite=PASS 21/21" in bad_row[0]
+                   and "rc=0" in bad_row[0]
+                   and "probe-decl-bad:7!=8" in out_u
+                   and "probe-decl-ok:8!=8" not in out_u)
+        ok("AC-BSGB12", unit_ok,
+           "agree_row=%s red_named=%s rc=%d"
+           % (bool(ok_row), "probe-decl-bad:7!=8" in out_u, code_u))
 
         # AC-BSGB5 - accounting is recomputed from the same file's own rows.
         qa_dir = os.path.join(world, "qa")

@@ -66,8 +66,21 @@ COUNTER_FAIL = re.compile(r"(?:fails|fail-lines|fail)=(\d+)")
 COUNTER_WORD_TOTAL = re.compile(r"(\d+)\s+criteria\b")
 COUNTER_WORD_PASS = re.compile(r"(\d+)\s+pass\b")
 COUNTER_WORD_FAIL = re.compile(r"(\d+)\s+fail\b")
+# A suite may own TWO units: the checks it runs and the AC ids the registry
+# counts. Two member-side suites already print that pair in one lowercase line
+# ("suite: 21 assertions over 8 criteria"), so the
+# comparison reads the DECLARED criteria when it is there and keeps the SUITE
+# pair's total otherwise. A declaration may never move a verdict or an rc.
+CRITERIA_UNIT = re.compile(
+    r"(?m)^suite:\s*(\d+)\s+assertions over\s*(\d+)\s+criteria")
 SUITE_ROW = re.compile(r"(?m)^SUITE\b[^\n]*$")
 VERDICT_WORD = re.compile(r"^SUITE\s+(PASS|FAIL)\b")
+
+
+def parse_criteria_unit(text):
+    """The criteria count a suite declares about itself, or None."""
+    match = CRITERIA_UNIT.search(text)
+    return int(match.group(2)) if match else None
 
 
 def _counter_row(line):
@@ -365,7 +378,13 @@ def _round(args):
         detail = "yes" if (passes + fails) else "none"
         parsed = parse_suite_row(out)
         suite = ("%s %d/%d" % parsed) if parsed else "none"
-        if parsed and parsed[2] != int(crit):
+        # R2859: a suite that declares its own criteria count is compared in
+        # the registry's unit; a suite that does not keeps the old reading.
+        declared = parse_criteria_unit(out)
+        if declared is not None:
+            if declared != int(crit):
+                mismatch.append("%s:%d!=%d" % (label, declared, crit))
+        elif parsed and parsed[2] != int(crit):
             mismatch.append("%s:%d!=%d" % (label, parsed[2], crit))
         executed += 1
         crit_run += int(crit)

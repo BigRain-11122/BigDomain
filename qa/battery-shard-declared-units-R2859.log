@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=706 registry_criteria=5384 selected=2 selected_criteria=26 cap=600s exact=2
+SHARD row os-ship-checklist rc=0 pass=21 fail=0 detail=yes suite=PASS 21/21 crit=8 0.2s
+SHARD row os-battery-shard rc=0 pass=18 fail=0 detail=yes suite=PASS 18/18 crit=18 2.0s
+SHARD rc=0 scope=SHARD selected=2 executed=2 green=2 criteria=26 crit_mismatch=0 elapsed=2.2s

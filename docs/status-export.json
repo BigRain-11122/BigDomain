@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T07:30:11+08:00",
-  "do": "2026-11-17 R2858 PRODUCT+ENGINEERING: the 103-suite law_direct family runs as one leg in 255.6s (inside the 600s cap, measured) and ends 103 of 103 detail=yes with zero red, after five suites that had gone red for two different reasons were repaired and seven suites that printed their verdict mid-line were moved to the front.",
+  "export_ts": "2026-11-17T07:57:44+08:00",
+  "do": "2026-11-17 R2859 PRODUCT+ENGINEERING: the thirteen assertion-vs-criteria rows are settled by a DECLARED-UNITS law rather than thirteen silent count edits, and measuring all thirteen in both units showed the class was not one thing: ten rows are honest unit artifacts and THREE rows are registry disagreements with their own numbers.",
   "ceo_face": {
-    "current": "2026-11-17 R2858 PRODUCT+ENGINEERING: the 103-suite law_direct family runs as one leg in 255.6s (inside the 600s cap, measured) and ends 103 of 103 detail=yes with zero red, after five suites that had gone red for two different reasons were repaired and seven suites that printed their verdict mid-line were moved to the front.",
+    "current": "2026-11-17 R2859 PRODUCT+ENGINEERING: the thirteen assertion-vs-criteria rows are settled by a DECLARED-UNITS law rather than thirteen silent count edits, and measuring all thirteen in both units showed the class was not one thing: ten rows are honest unit artifacts and THREE rows are registry disagreements with their own numbers.",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2858] next window (<=12h): (1) MAIN - settle `crit_mismatch=13` with a pinned decision, not thirteen edits: either (a) the thirteen suites declare both units in their own row (`SUITE PASS 21/21 assertions 8/8 criteria`, the dialect the corpus already carries as `legacy_lower`) with runner support read from the runner itself, or (b) the registry gains an explicit unit field - (a) is preferred because it keeps the registry meaning one thing, and either way the runner's numeric identity must be proven on a red control; (2) `law_status=316` is the last family without a detail reading and needs its named split plan committed BEFORE any leg - seven shards of ~45 by label prefix, shard 1 only; (3) the doubled `R2854 tokens:` prefix shows that a malformed ledger line can sit invisible for rounds because its detector never runs - the cheap answer is to ask `ledger_lines.audit` once per window as part of closeout rather than once per several windows; (4) the fold recipe is recorded but untested twice - the next window that folds should re-use the R2857 method (bounds from the log, end on a tokens line, every id named) (truncated)",
-    "next_milestone_due": "2026-11-17T19:30:11+08:00",
-    "updated_at": "2026-11-17T07:30:11+08:00",
+    "next_milestone": "[R2859] next window (<=12h): (1) MAIN - the three registry disagreements need a per-row DECISION, not a bulk edit: `os-export-round` prints 13 own-prefix AC ids while the registry counts 18 (and its docstring still claims AC-EXPW1..14 while AC-EXPW12 never prints), `os-payment-gate-report` prints 11 while the registry counts 10 (docstring still claims AC-PAYGB1..9), `os-ceo-blockers` prints 12 because CBXB0 reads as a boundary probe rather than a criterion - decide per row which side is stale, move the number with the reason written next to it, regenerate the matrix and re-run the `law_direct` leg so `crit_mismatch` is finally read as a number instead of inherited; (2) the other ten rows should print their own declaration too (the same own-inventory derivation used at `os-ship-checklist`), so the class cannot silently reappear, then one leg over the thirteen; (3) `law_status=316` still needs its named split plan committed BEFORE any leg (seven shards of ~45 by label prefix, shard 1 only) - carried untouched this window (truncated)",
+    "next_milestone_due": "2026-11-17T19:57:44+08:00",
+    "updated_at": "2026-11-17T07:57:44+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 57,
+    "log_lines_in_window": 63,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2858 PRODUCT+ENGINEERING: the 103-suite law_direct family runs as one leg in 255.6s (inside the 600s cap, measured) and ends 103 of 103 detail=yes with zero red, after five suites that had gone red for two different reasons were repaired and seven suites that printed their verdict mid-line were moved to the front.",
+  "current": "2026-11-17 R2859 PRODUCT+ENGINEERING: the thirteen assertion-vs-criteria rows are settled by a DECLARED-UNITS law rather than thirteen silent count edits, and measuring all thirteen in both units showed the class was not one thing: ten rows are honest unit artifacts and THREE rows are registry disagreements with their own numbers.",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2858] next window (<=12h): (1) MAIN - settle `crit_mismatch=13` with a pinned decision, not thirteen edits: either (a) the thirteen suites declare both units in their own row (`SUITE PASS 21/21 assertions 8/8 criteria`, the dialect the corpus already carries as `legacy_lower`) with runner support read from the runner itself, or (b) the registry gains an explicit unit field - (a) is preferred because it keeps the registry meaning one thing, and either way the runner's numeric identity must be proven on a red control; (2) `law_status=316` is the last family without a detail reading and needs its named split plan committed BEFORE any leg - seven shards of ~45 by label prefix, shard 1 only; (3) the doubled `R2854 tokens:` prefix shows that a malformed ledger line can sit invisible for rounds because its detector never runs - the cheap answer is to ask `ledger_lines.audit` once per window as part of closeout rather than once per several windows; (4) the fold recipe is recorded but untested twice - the next window that folds should re-use the R2857 method (bounds from the log, end on a tokens line, every id named) (truncated)",
-  "state_bytes": 45352,
+  "next_milestone": "[R2859] next window (<=12h): (1) MAIN - the three registry disagreements need a per-row DECISION, not a bulk edit: `os-export-round` prints 13 own-prefix AC ids while the registry counts 18 (and its docstring still claims AC-EXPW1..14 while AC-EXPW12 never prints), `os-payment-gate-report` prints 11 while the registry counts 10 (docstring still claims AC-PAYGB1..9), `os-ceo-blockers` prints 12 because CBXB0 reads as a boundary probe rather than a criterion - decide per row which side is stale, move the number with the reason written next to it, regenerate the matrix and re-run the `law_direct` leg so `crit_mismatch` is finally read as a number instead of inherited; (2) the other ten rows should print their own declaration too (the same own-inventory derivation used at `os-ship-checklist`), so the class cannot silently reappear, then one leg over the thirteen; (3) `law_status=316` still needs its named split plan committed BEFORE any leg (seven shards of ~45 by label prefix, shard 1 only) - carried untouched this window (truncated)",
+  "state_bytes": 48330,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2858",
+      "2859",
       "OSLoop 执行 tick"
     ]
   ],
