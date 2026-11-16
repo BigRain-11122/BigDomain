@@ -1,0 +1,31 @@
+R2837 one-off family retirement - measured evidence
+===================================================
+families: src/os/export_R*.py + src/os/closeout_R*.py
+family_total = 682
+kept_live = 2
+  export_R2431.py  <- imported by tools/ceo_face_latest.py and by registered suites
+                      (test_export_driver_queue_face, test_export_driver_self_drive_health,
+                       test_export_R2431_health_verdict, test_export_composed_landed_* x6)
+  export_round.py  <- shipped generic vehicle, imported by src/os/closeout.py + suites
+retired_family = 680
+retired_dead_importers = 4
+  src/os/foldrecord_R2429.py   (imported closeout_R2429.py)
+  src/os/push_R2484.py         (imported export_R2484.py)
+  src/os/renew_residue_R2331.py(imported closeout_R2310.py)
+  src/os/repair_R2497.py       (imported export_R2497.py)
+one-off scripts importing a KEPT file were left alone:
+  src/os/limits_export_composed_landed_R2637.py, src/os/repair_R2433.py
+total_deleted = 684
+
+pre-sweep controls
+  dynamic imports (import_module/getattr on the families) = 0 hits
+  executable refs in .ps1/.cmd = 0 hits (.json/.md hits are narrative text only)
+  retiree listed as a registered suite = 0
+
+post-sweep controls
+  dangling imports of any deleted module = 0
+  remaining src/os/export_R*.py = export_R2431.py, export_round.py
+  remaining src/os/closeout_R*.py = 0
+  suites re-read: os-export-driver-queue-face 6/6, os-export-driver-self-drive-health 6/6,
+                  os-export-r2431-health-verdict 6/6
+  suite_matrix.py --check = PASS byte-identical 73857 bytes, 702 suites, 5337 criteria
