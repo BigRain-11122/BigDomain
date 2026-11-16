@@ -4572,6 +4572,14 @@ SUITES = [
     # than discovered later by a crash or a battery leg (AC-RSA1..AC-RSA7).
     ("os-state-append",
      os.path.join("..", "os", "test_state_append.py"), 7),
+    # R2838: retiring a one-off family does not stop it from growing again -
+    # 226 state_append_R*.py and 682 export_R*/closeout_R*.py were deleted and
+    # nothing refused the next one (R2837 disclosure (b)). The law is a freeze
+    # round, not a 904-name allowlist: any _R<digits>[a-z]?.py at or above the
+    # freeze round is refused, so the reading only ever gets stricter and never
+    # needs an entry (AC-OOS1..AC-OOS6).
+    ("os-one-off-round-scripts",
+     os.path.join("..", "os", "test_one_off_round_scripts.py"), 6),
     # R2835: closing a round used to be two commands in two processes, so a
     # face (derived FROM state) could be published while the state write
     # failed - the R2831 defect with a different trigger. closeout.py makes

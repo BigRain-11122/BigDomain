@@ -1,0 +1,19 @@
+R2838 one-off round scripts: birth-site refusal measured
+
+law: any _R<digits>[a-z]?.py at or above the freeze round is refused;
+      non-one-off names and sub-freeze one-offs are never called offenders.
+
+real tree  : python src/os/one_off_round_scripts.py --check
+             ONE-OFF ROUND SCRIPTS os-one-off-round-scripts verdict=OK
+             scanned=1451 one_offs=904 max_round=2781 freeze=2838 refused=0  rc=0
+
+pre-code control: private world with foo_R2838.py / bar_R2999.py / zap_R3000b.py
+             verdict=REFUSE rc=2, all three named, old_R2431.py not refused
+
+suite      : python src/os/test_one_off_round_scripts.py
+             SUITE FAIL 5/6 before registration (only AC-OOS6 red = pre-registration control)
+             SUITE PASS 6/6 after the registry row landed
+
+registry   : 702 suites / 5337 criteria -> 703 / 5343 (+1 suite / +6 criteria)
+matrix     : docs/sandbox-suite-matrix.md 73894 bytes, --check byte-identical
+regression : os-state-append 7/7, os-ledger-round-main-shape 6/6, os-closeout 12/12

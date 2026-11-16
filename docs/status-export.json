@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T01:07:04+08:00",
-  "do": "2026-11-17 R2837 ENGINEERING: the two one-off families are gone - 684 scripts retired only after a live-root closure proved exactly two of them are load-bearing",
+  "export_ts": "2026-11-17T01:18:28+08:00",
+  "do": "2026-11-17 R2838 ENGINEERING: per-round one-off scripts now have a birth-site refusal, and it is a freeze round rather than a 904-name allowlist",
   "ceo_face": {
-    "current": "2026-11-17 R2837 ENGINEERING: the two one-off families are gone - 684 scripts retired only after a live-root closure proved exactly two of them are load-bearing",
+    "current": "2026-11-17 R2838 ENGINEERING: per-round one-off scripts now have a birth-site refusal, and it is a freeze round rather than a 904-name allowlist",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2836] next window (<=12h): (1) MAIN - retire the ONE-OFF APPENDER class' successors: `src/os/export_R*.py` (**280** files on disk) and `src/os/closeout_R*.py` (**402** files on disk) are the largest unmaintained body left in `src/os/` after the 226 appenders went; per family prove zero live import/call, record the count, delete, and re-read the suites that touch them; (2) `E_CO_FACE_BEHIND` compares COMMITTED state to COMMITTED face, so a window that dies between the two writes is still discovered by the NEXT window's `--check` - it is named now, not silent; whether closeout should also repair on that path is a design decision to pin, not an amendment to make quietly; (3) os- family leg still 160/274 (114 unrun), full ledger ~540/702 unrun, shard offset/resume remains the named blocker (truncated)",
-    "next_milestone_due": "2026-11-17T13:07:04+08:00",
-    "updated_at": "2026-11-17T01:07:04+08:00",
+    "next_milestone": "[R2838] next window (<=12h): (1) MAIN - the freeze-round guard has no automatic call site: `git config core.hooksPath` is empty and `.git/hooks/pre-commit` does not exist on this host, so `one_off_round_scripts.py --check` is a reading that only this suite runs - wire it into a commit-side gate (or into the closeout path) so a new `foo_R<freeze>.py` is refused by the vehicle, not by a reviewer's memory; (2) the 904 sub-freeze one-offs are still on disk: the freeze stops NEW ones and does not shrink the historical body - a measured retirement of that tail is a separate, larger job and needs its own live-root closure like R2837's; (3) os- family leg still 160/274 (114 unrun), full ledger ~540/703 unrun, shard offset/resume remains the named blocker (one 160 leg measures ~488s) (truncated)",
+    "next_milestone_due": "2026-11-17T13:18:28+08:00",
+    "updated_at": "2026-11-17T01:18:28+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 46,
+    "log_lines_in_window": 52,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 11,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2837 ENGINEERING: the two one-off families are gone - 684 scripts retired only after a live-root closure proved exactly two of them are load-bearing",
+  "current": "2026-11-17 R2838 ENGINEERING: per-round one-off scripts now have a birth-site refusal, and it is a freeze round rather than a 904-name allowlist",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2836] next window (<=12h): (1) MAIN - retire the ONE-OFF APPENDER class' successors: `src/os/export_R*.py` (**280** files on disk) and `src/os/closeout_R*.py` (**402** files on disk) are the largest unmaintained body left in `src/os/` after the 226 appenders went; per family prove zero live import/call, record the count, delete, and re-read the suites that touch them; (2) `E_CO_FACE_BEHIND` compares COMMITTED state to COMMITTED face, so a window that dies between the two writes is still discovered by the NEXT window's `--check` - it is named now, not silent; whether closeout should also repair on that path is a design decision to pin, not an amendment to make quietly; (3) os- family leg still 160/274 (114 unrun), full ledger ~540/702 unrun, shard offset/resume remains the named blocker (truncated)",
-  "state_bytes": 44898,
+  "next_milestone": "[R2838] next window (<=12h): (1) MAIN - the freeze-round guard has no automatic call site: `git config core.hooksPath` is empty and `.git/hooks/pre-commit` does not exist on this host, so `one_off_round_scripts.py --check` is a reading that only this suite runs - wire it into a commit-side gate (or into the closeout path) so a new `foo_R<freeze>.py` is refused by the vehicle, not by a reviewer's memory; (2) the 904 sub-freeze one-offs are still on disk: the freeze stops NEW ones and does not shrink the historical body - a measured retirement of that tail is a separate, larger job and needs its own live-root closure like R2837's; (3) os- family leg still 160/274 (114 unrun), full ledger ~540/703 unrun, shard offset/resume remains the named blocker (one 160 leg measures ~488s) (truncated)",
+  "state_bytes": 49027,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2837",
+      "2838",
       "OSLoop 执行 tick"
     ]
   ],
