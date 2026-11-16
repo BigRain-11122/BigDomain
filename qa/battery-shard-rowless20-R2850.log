@@ -1,0 +1,23 @@
+SHARD scope=SHARD registry_suites=705 registry_criteria=5368 selected=20 selected_criteria=142 cap=600s exact=20
+SHARD row pay-notify rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 0.4s
+SHARD row pay-notify-wiring rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 1.3s
+SHARD row pay-authorize rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 0.4s
+SHARD row pay-notify-revoke rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 5.7s
+SHARD row pay-revoke-reconcile rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 1.0s
+SHARD row benchgate rc=0 pass=0 fail=0 suite=PASS 12/12 crit=11 0.2s
+SHARD row compliance rc=0 pass=0 fail=0 suite=PASS 15/15 crit=15 0.1s
+SHARD row pay-reconcile-persist rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 1.4s
+SHARD row pay-sweep-persist rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 0.3s
+SHARD row lobby-persist rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 0.2s
+SHARD row os-state-fold-run rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-repin-noop-eol-dialect rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 2.0s
+SHARD row os-owner-table-parity rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.4s
+SHARD row os-export-publish-wire-identity rc=0 pass=9 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-ledger-tokens-prefix-repair rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-publish-path-guard rc=0 pass=8 fail=0 suite=PASS 6/6 crit=6 1.1s
+SHARD row os-owner-table-usage-wire rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.7s
+SHARD row os-owner-table-reader-parity rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.1s
+SHARD row os-owner-table-split-triage rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.9s
+SHARD row os-owner-table-triage-expiry rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.7s
+SHARD rc=0 scope=SHARD selected=20 executed=20 green=20 criteria=142 crit_mismatch=1 elapsed=23.5s
+SHARD disclosure crit_mismatch=benchgate:12!=11

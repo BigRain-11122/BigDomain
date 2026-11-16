@@ -1,0 +1,22 @@
+AUDIT row label=pay-notify family=no_row rc=0 law=no row=none crit=7 0.4s
+AUDIT row label=pay-notify-wiring family=no_row rc=0 law=no row=none crit=7 1.3s
+AUDIT row label=pay-authorize family=no_row rc=0 law=no row=none crit=7 0.4s
+AUDIT row label=pay-notify-revoke family=no_row rc=0 law=no row=none crit=7 5.3s
+AUDIT row label=pay-revoke-reconcile family=no_row rc=0 law=no row=none crit=7 0.9s
+AUDIT row label=benchgate family=no_row rc=0 law=no row=none crit=11 0.2s
+AUDIT row label=compliance family=no_row rc=0 law=no row=none crit=15 0.1s
+AUDIT row label=pay-reconcile-persist family=no_row rc=0 law=no row=none crit=7 1.3s
+AUDIT row label=pay-sweep-persist family=no_row rc=0 law=no row=none crit=7 0.3s
+AUDIT row label=lobby-persist family=no_row rc=0 law=no row=none crit=7 0.2s
+AUDIT row label=os-state-fold-run family=no_row rc=0 law=no row=none crit=6 0.2s
+AUDIT row label=os-repin-noop-eol-dialect family=no_row rc=0 law=no row=none crit=6 1.8s
+AUDIT row label=os-owner-table-parity family=no_row rc=0 law=no row=none crit=6 1.3s
+AUDIT row label=os-export-publish-wire-identity family=no_row rc=0 law=no row=none crit=6 1.3s
+AUDIT row label=os-ledger-tokens-prefix-repair family=no_row rc=0 law=no row=none crit=6 0.2s
+AUDIT row label=os-export-publish-path-guard family=no_row rc=0 law=no row=none crit=6 1.1s
+AUDIT row label=os-owner-table-usage-wire family=no_row rc=0 law=no row=none crit=6 1.6s
+AUDIT row label=os-owner-table-reader-parity family=no_row rc=0 law=no row=none crit=6 1.1s
+AUDIT row label=os-owner-table-split-triage family=no_row rc=0 law=no row=none crit=6 1.6s
+AUDIT row label=os-owner-table-triage-expiry family=no_row rc=0 law=no row=none crit=6 1.5s
+AUDIT family=no_row total=20 selected=20 law_emit=0 non_law=20 red=0
+AUDIT TOTAL selected=20 law_emit=0 non_law=20 red=0 families=1

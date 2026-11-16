@@ -114,5 +114,11 @@ class RepairTokensPrefixCase(unittest.TestCase):
         self.assertIn('--apply', src.decode('ascii'))
 
 
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
+if __name__ == "__main__":
+    _law_suite = unittest.defaultTestLoader.loadTestsFromModule(__import__("__main__"))
+    _law_res = unittest.TextTestRunner(verbosity=2).run(_law_suite)
+    _law_bad = len(_law_res.failures) + len(_law_res.errors)
+    _law_total = _law_res.testsRun
+    _law_verdict = "SUITE PASS" if _law_bad == 0 else "SUITE FAIL"
+    print("%s %d/%d" % (_law_verdict, _law_total - _law_bad, _law_total))
+    raise SystemExit(0 if _law_bad == 0 else 1)

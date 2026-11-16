@@ -301,6 +301,8 @@ def main():
 
     print("CRITERIA EXPECTED %d OBSERVED %d PASS %d FAIL %d"
           % (EXPECTED_CRITERIA, PASSES + FAILS, PASSES, FAILS), flush=True)
+    _law_verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
+    print("%s %d/%d" % (_law_verdict, EXPECTED_CRITERIA - FAILS, EXPECTED_CRITERIA))
     return 0 if FAILS == 0 else 1
 
 

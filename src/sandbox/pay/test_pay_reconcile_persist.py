@@ -393,6 +393,9 @@ def main():
     fails = [ac for ac, ok in RESULTS if not ok]
     print("---- pay reconcile persist acceptance: %d/%d passed"
           % (len(RESULTS) - len(fails), len(RESULTS)))
+    _law_ok = 0 if fails else 1
+    _law_verdict = "SUITE PASS" if _law_ok else "SUITE FAIL"
+    print("%s %d/%d" % (_law_verdict, len(RESULTS) - len(fails), len(RESULTS)))
     if fails:
         print("FAILED: %s" % ", ".join(fails))
         return 1

@@ -217,6 +217,8 @@ def main():
 
     print("CRITERIA %d/%d passes=%d fails=%d"
           % (EXPECTED_CRITERIA, EXPECTED_CRITERIA, PASSES, FAILS))
+    _law_verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
+    print("%s %d/%d" % (_law_verdict, PASSES, EXPECTED_CRITERIA))
     return 0 if FAILS == 0 and PASSES == EXPECTED_CRITERIA else 1
 
 

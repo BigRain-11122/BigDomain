@@ -357,6 +357,9 @@ def main():
     ac_otuw5()
     ac_otuw6()
     print("SUMMARY passes=%d fails=%d" % (PASSES, FAILS), flush=True)
+    _law_total = PASSES + FAILS
+    _law_verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
+    print("%s %d/%d" % (_law_verdict, PASSES, _law_total))
     return 0 if FAILS == 0 else 1
 
 
