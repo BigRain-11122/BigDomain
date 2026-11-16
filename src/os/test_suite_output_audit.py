@@ -43,7 +43,10 @@ PROBES = {
     "probe_nostatus.py": ('print("SUITE 2/2 green")\n', 'print("PASS a")\n'),
     "probe_nostatus2.py": ('print("SUITE 3/3 green")\n', 'print("PASS a")\n'),
     "probe_nonumbers.py": ('print("SUITE PASS")\n', 'print("PASS a")\n'),
-    "probe_other.py": ('print("SUITE civic: 3 criteria, 3 pass, 0 fail")\n',
+    # R2851: the counter dialect this probe used to print is law now, so the
+    # `other` family has to be represented by a row the law genuinely refuses:
+    # a verdict word and one count, with no pair and no fail count.
+    "probe_other.py": ('print("SUITE PASS 7 checks")\n',
                        'print("PASS a")\n'),
 }
 

@@ -41,6 +41,26 @@ SPLIT_NUM = re.compile(r"%d\s*/\s*%d")
 # "SUITE %d/%d" (or the same with a PASS/FAIL word or a %s slot) is law there.
 LAW_NUMERIC = re.compile(r"^SUITE " + NUM + r"\s*/\s*" + NUM + r"(\s+(PASS|FAIL))?$")
 LAW_NUMERIC_SLOT = re.compile(r"^SUITE " + NUM + r"\s*/\s*" + NUM + r"\s+%s$")
+# The pair joined by other punctuation is the same row as LAW_DIRECT:
+# "SUITE PASS (%d/%d criteria green)", "SUITE PASS: %d/%d", "SUITE PASS - %d/%d".
+LAW_PUNCT = re.compile(r"^SUITE (PASS|FAIL)\s*[\(\:\-]\s*" + NUM + r"\s*/\s*" + NUM)
+# "SUITE apidev: %d/%d criteria pass" names the suite instead of the verdict, so
+# the verdict is derived from p==t there, exactly as LAW_NUMERIC does.
+LAW_LABEL_PT = re.compile(
+    r"^SUITE (?!PASS\b|FAIL\b)[A-Za-z0-9_.-]+:\s*" + NUM + r"\s*/\s*" + NUM)
+# The remaining paren/dash skin injects the verdict: "SUITE %s (%d/%d criteria
+# pass)", "SUITE %s - %d/%d green". Law only when the slot is bound to PASS/FAIL,
+# otherwise the row's verdict is whatever it happened to say (suspect).
+LAW_STATUS_PUNCT = re.compile(r"^SUITE %s\s*[\(\:\-]\s*" + NUM + r"\s*/\s*" + NUM)
+# Counters are the third skin: criteria/expected-criteria (total), pass/passes/
+# pass-lines, fail/fails/fail-lines, in any order. Read like the runner does.
+COUNTER_TOTAL = re.compile(r"(?:expected-criteria|criteria)=(?:%d|\{[^{}\n]*\}|\d+)")
+COUNTER_PASS = re.compile(r"(?:passes|pass-lines|pass)=(?:%d|\{[^{}\n]*\}|\d+)")
+COUNTER_FAIL = re.compile(r"(?:fails|fail-lines|fail)=(?:%d|\{[^{}\n]*\}|\d+)")
+# The equals-free dialect: "SUITE PASS: %d criteria, %d pass, %d fail".
+COUNTER_WORD_TOTAL = re.compile(r"(?:%d|\{[^{}\n]*\}|\d+)\s+criteria\b")
+COUNTER_WORD_PASS = re.compile(r"(?:%d|\{[^{}\n]*\}|\d+)\s+pass\b")
+COUNTER_WORD_FAIL = re.compile(r"(?:%d|\{[^{}\n]*\}|\d+)\s+fail\b")
 
 
 def normalise(lit):
@@ -85,14 +105,33 @@ def classify(src):
         elif LAW_NUMERIC_SLOT.match(lit):
             binds = ('"PASS"' in src and '"FAIL"' in src)
             shapes.append("law_numeric_slot" if binds else "no_status")
+        elif LAW_PUNCT.match(lit):
+            # the verdict word is explicit here, so no binding question arises
+            shapes.append("law_punct")
+        elif LAW_LABEL_PT.match(lit):
+            # verdict is derived from p==t, the same rule as law_numeric
+            shapes.append("law_label_pt")
+        elif LAW_STATUS_PUNCT.match(lit):
+            binds = re.search(r'"PASS"|"FAIL"|PASS if|FAIL if|if not fail|if fail == 0', src)
+            shapes.append("law_status_punct" if binds else "suspect_status")
+        elif (COUNTER_TOTAL.search(lit) and COUNTER_PASS.search(lit)
+              and COUNTER_FAIL.search(lit)) or \
+                (COUNTER_WORD_TOTAL.search(lit) and COUNTER_WORD_PASS.search(lit)
+                 and COUNTER_WORD_FAIL.search(lit)):
+            # a counter row carries total, passed and failed, so the verdict is
+            # the fail count; a row without all three is not law
+            shapes.append("law_counters")
+        elif LEGACY_STATUS_COLON.match(lit):
+            # "SUITE %s: %d/%d": law only when the slot is bound to PASS/FAIL,
+            # otherwise the verdict is whatever the row happened to say
+            binds = re.search(r'"PASS"|"FAIL"|PASS if|FAIL if|if not fail|if fail == 0', src)
+            shapes.append("law_status_colon" if binds else "suspect_status")
         elif NO_STATUS.match(lit):
             shapes.append("no_status")
         elif LEGACY_PAREN.match(lit):
             shapes.append("legacy_paren")
         elif LEGACY_LABEL.match(lit):
             shapes.append("legacy_label")
-        elif LEGACY_STATUS_COLON.match(lit):
-            shapes.append("legacy_status_colon")
         elif NO_NUMBERS.match(lit):
             shapes.append("no_numbers")
         elif LEGACY_LOWER.match(lit):
@@ -100,9 +139,10 @@ def classify(src):
         else:
             shapes.append("other")
     for name in ("law_direct", "law_status", "law_split", "law_numeric",
-                 "law_numeric_slot", "suspect_status", "no_status",
-                 "legacy_paren", "legacy_label", "legacy_status_colon",
-                 "no_numbers", "legacy_lower", "other"):
+                 "law_numeric_slot", "law_punct", "law_label_pt",
+                 "law_counters", "law_status_colon", "law_status_punct",
+                 "suspect_status", "no_status", "legacy_paren",
+                 "legacy_label", "no_numbers", "legacy_lower", "other"):
         if name in shapes:
             return name
     return "no_row"
@@ -146,18 +186,24 @@ def main(argv=None):
             shape = classify(fh.read())
         counts[shape] = counts.get(shape, 0) + 1
         if shape not in ("law_direct", "law_status", "law_split", "law_numeric",
-                         "law_numeric_slot"):
+                         "law_numeric_slot", "law_punct", "law_label_pt",
+                         "law_counters", "law_status_colon",
+                         "law_status_punct"):
             non_law.append((label, shape))
 
-    law = (counts.get("law_direct", 0) + counts.get("law_status", 0)
-           + counts.get("law_split", 0) + counts.get("law_numeric", 0)
-           + counts.get("law_numeric_slot", 0))
+    law = 0
+    for name in ("law_direct", "law_status", "law_split", "law_numeric",
+                 "law_numeric_slot", "law_punct", "law_label_pt",
+                 "law_counters", "law_status_colon", "law_status_punct"):
+        law += counts.get(name, 0)
     print("CENSUS registry=%d law=%d non_law=%d missing=%d"
           % (len(rows), law, len(non_law), len(missing)))
     for name in ("law_direct", "law_status", "law_split", "law_numeric",
-                 "law_numeric_slot", "suspect_status", "no_status",
-                 "legacy_paren", "legacy_label", "legacy_status_colon",
-                 "no_numbers", "legacy_lower", "other", "no_row", "missing_file"):
+                 "law_numeric_slot", "law_punct", "law_label_pt",
+                 "law_counters", "law_status_colon", "law_status_punct",
+                 "suspect_status", "no_status", "legacy_paren",
+                 "legacy_label", "no_numbers", "legacy_lower", "other",
+                 "no_row", "missing_file"):
         if counts.get(name):
             print("CENSUS shape %s=%d" % (name, counts[name]))
     if not args.quiet_list:

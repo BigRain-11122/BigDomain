@@ -214,6 +214,63 @@ def main():
     ok("AC-BSGB10", code_nm == 2 and named_cli and named_fn,
        "cli_rc=%d named_cli=%s named_fn=%s" % (code_nm, named_cli, named_fn))
 
+    # AC-SK1 (R2851) - the two rows the law already read are unchanged: an
+    # explicit word wins, a numbers-only row derives, and "green" is still not
+    # the law's vocabulary.
+    read = shard.parse_suite_row
+    sk1 = (read("SUITE PASS 6/6\n") == ("PASS", 6, 6)
+           and read("SUITE FAIL 5/6\n") == ("FAIL", 5, 6)
+           and read("SUITE 8/8\n") == ("PASS", 8, 8)
+           and read("SUITE 7/8\n") == ("FAIL", 7, 8)
+           and read("SUITE 6/6 green\n") is None)
+    ok("AC-SK1", sk1, "canonical+numeric unchanged")
+
+    # AC-SK2 (R2851) - a verdict word joined to the pair by other punctuation is
+    # the same row; the numbers are the row's own, never a default.
+    sk2 = (read("SUITE PASS (7/7)\n") == ("PASS", 7, 7)
+           and read("SUITE PASS (6/6 criteria green)\n") == ("PASS", 6, 6)
+           and read("SUITE PASS: 7/7\n") == ("PASS", 7, 7)
+           and read("SUITE PASS - 19/19 green\n") == ("PASS", 19, 19)
+           and read("SUITE PASS (8/8 criteria green)\n") == ("PASS", 8, 8))
+    ok("AC-SK2", sk2, "punct pair skin read")
+
+    # AC-SK3 (R2851) - a labelled pair names the suite, so the verdict is
+    # derived from p==t exactly as the numbers-only row: never invented.
+    sk3 = (read("SUITE apidev: 7/7 criteria pass\n") == ("PASS", 7, 7)
+           and read("SUITE foo: 5/6\n") == ("FAIL", 5, 6))
+    ok("AC-SK3", sk3, "label pair derives from p==t")
+
+    # AC-SK4 (R2851) - a counter row states the verdict as counts. passes may be
+    # assertions rather than criteria, so 8 passes over 6 criteria with 0 fails
+    # is a PASS; the fail count, not p==t, decides.
+    sk4 = (read("SUITE RESULT passes=6 fails=0 criteria=6\n") == ("PASS", 6, 6)
+           and read("SUITE PASS criteria=6 passes=8 fails=0\n") == ("PASS", 8, 6)
+           and read("SUITE os-x expected-criteria=6 pass=6 fail=0\n") == ("PASS", 6, 6)
+           and read("SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6\n")
+           == ("PASS", 6, 6)
+           and read("SUITE PASS: 6 criteria, 6 pass, 0 fail\n") == ("PASS", 6, 6))
+    ok("AC-SK4", sk4, "counter skin bound to fails")
+
+    # AC-SK5 (R2851) - red controls: every contradiction reads FAIL or refuses.
+    # A row that cannot say its verdict from a fail count is not guessed.
+    sk5 = (read("SUITE FAIL (7/7 criteria green)\n") == ("FAIL", 7, 7)
+           and read("SUITE PASS (7/8 criteria green)\n") == ("FAIL", 7, 8)
+           and read("SUITE foo: 5/6\n") == ("FAIL", 5, 6)
+           and read("SUITE PASS criteria=6 passes=5 fails=1\n") == ("FAIL", 5, 6)
+           and read("SUITE RESULT passes=6 fails=1 criteria=6\n") == ("FAIL", 6, 6)
+           and read("SUITE PASS exit=1 pass-lines=6 fail-lines=1 criteria=6\n")
+           == ("FAIL", 6, 6)
+           and read("SUITE PASS 7 checks\n") is None
+           and read("SUITE PASS\n") is None)
+    ok("AC-SK5", sk5, "8 red controls")
+
+    # AC-SK6 (R2851) - order: a canonical row anywhere wins over a legacy row,
+    # and among the new skins the LAST row is the reading (numeric's rule).
+    sk6 = (read("SUITE FAIL 1/2\nSUITE PASS (2/2)\n") == ("FAIL", 1, 2)
+           and read("SUITE PASS (5/5)\nSUITE PASS (7/7 criteria green)\n")
+           == ("PASS", 7, 7))
+    ok("AC-SK6", sk6, "canonical wins, new skins take the last row")
+
     # AC-BSGB3 - slice parity: the probe sees the battery's own construction,
     # and a one-second per-label override caps a sleeping probe at 124.
     world = tempfile.mkdtemp(prefix="bsh-probe-")

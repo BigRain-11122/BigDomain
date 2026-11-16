@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T05:00:21+08:00",
-  "do": "2026-11-17 R2850 PRODUCT+ENGINEERING: the last 20 registered suites that printed no closing row at all now each emit one bound battery-law row, and a 20-label exact leg reads suite=PASS n/n for every one - a green suite can no longer be invisible to a machine reader",
+  "export_ts": "2026-11-17T05:33:15+08:00",
+  "do": "2026-11-17 R2851 PRODUCT+ENGINEERING: the four remaining closing-row skins are law at their owners now, not by editing 134 files - a 133-label leg reads every one of them green with a number.",
   "ceo_face": {
-    "current": "2026-11-17 R2850 PRODUCT+ENGINEERING: the last 20 registered suites that printed no closing row at all now each emit one bound battery-law row, and a 20-label exact leg reads suite=PASS n/n for every one - a green suite can no longer be invisible to a machine reader",
+    "current": "2026-11-17 R2851 PRODUCT+ENGINEERING: the four remaining closing-row skins are law at their owners now, not by editing 134 files - a 133-label leg reads every one of them green with a number.",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2850] next window (<=12h): (1) MAIN - `other=54` is now the LARGEST debt family and the last one never resolved; its 53 real rows are three skins of one question (`SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6`, `SUITE PASS (7/7 criteria green)`, `SUITE PASS criteria=6 pass=6 fail=0`) - decide ONE way: teach the law a verdict-word-plus-criteria-count shape at its single authority (touching `battery_shard.SUITE_LINE`, `run_identity.SUITE_RE`, `runner_suite_timeout_headroom.SUITE_LINE_RE`) with red controls, or fix 53 files at their birth sites; (2) the punctuation trio `legacy_paren=20` / `legacy_status_colon=22` / `legacy_label=39` is the SAME question and should be settled in the same pass, not three; (3) `benchgate` three-way inconsistency (registry 11 / test methods 12 / AC ids 4) - decide whether the registry row is stale or the module over-asserts, and only then touch a number; (4) `os-residue-batch-status-face` is a census FALSE NEGATIVE (emits `SUITE 6/6` through a helper) - teach the census or declare the class; (5) `tools/suite_closing_row_census.py` still carries no registered suite - carried seven windows now (truncated)",
-    "next_milestone_due": "2026-11-17T17:00:21+08:00",
-    "updated_at": "2026-11-17T05:00:21+08:00",
+    "next_milestone": "[R2851] next window (<=12h): (1) MAIN - the four residual rows the law still refuses, decided ONE at a time at its birth site: `member-face` (`SUITE %d/%d green`, the only `no_status` left - either decide that `green` is a verdict word or change the row to say PASS/FAIL); `ledger-curation-combined` (`SUITE PASS 7 checks` - a verdict and ONE count with no fail counter, so add the count at the birth site or declare the row unreadable on purpose); `os-residue-batch-status-face` (`SUITE %s/%s` - a census FALSE NEGATIVE that prints `SUITE 6/6` through a helper; teach the census a bound two-slot pair or declare the class); `os-ugc-gate-report` (`SUITE %s %d/%d` - the status slot is not provably bound, so bind it or declare it); (2) the per-family output legs for the five new law families (`law_punct=37`, `law_label_pt=24`, `law_counters=31`, `law_status_punct=41`, `law_status_colon=0`) were NOT run one family at a time - the aggregate 133-label leg is the only output proof, so `tools/suite_output_audit.py --family law_punct` (and the other four) should be measured next window and their `law_emit` recorded (truncated)",
+    "next_milestone_due": "2026-11-17T17:33:15+08:00",
+    "updated_at": "2026-11-17T05:33:15+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 58,
+    "log_lines_in_window": 63,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2850 PRODUCT+ENGINEERING: the last 20 registered suites that printed no closing row at all now each emit one bound battery-law row, and a 20-label exact leg reads suite=PASS n/n for every one - a green suite can no longer be invisible to a machine reader",
+  "current": "2026-11-17 R2851 PRODUCT+ENGINEERING: the four remaining closing-row skins are law at their owners now, not by editing 134 files - a 133-label leg reads every one of them green with a number.",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2850] next window (<=12h): (1) MAIN - `other=54` is now the LARGEST debt family and the last one never resolved; its 53 real rows are three skins of one question (`SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6`, `SUITE PASS (7/7 criteria green)`, `SUITE PASS criteria=6 pass=6 fail=0`) - decide ONE way: teach the law a verdict-word-plus-criteria-count shape at its single authority (touching `battery_shard.SUITE_LINE`, `run_identity.SUITE_RE`, `runner_suite_timeout_headroom.SUITE_LINE_RE`) with red controls, or fix 53 files at their birth sites; (2) the punctuation trio `legacy_paren=20` / `legacy_status_colon=22` / `legacy_label=39` is the SAME question and should be settled in the same pass, not three; (3) `benchgate` three-way inconsistency (registry 11 / test methods 12 / AC ids 4) - decide whether the registry row is stale or the module over-asserts, and only then touch a number; (4) `os-residue-batch-status-face` is a census FALSE NEGATIVE (emits `SUITE 6/6` through a helper) - teach the census or declare the class; (5) `tools/suite_closing_row_census.py` still carries no registered suite - carried seven windows now (truncated)",
-  "state_bytes": 47440,
+  "next_milestone": "[R2851] next window (<=12h): (1) MAIN - the four residual rows the law still refuses, decided ONE at a time at its birth site: `member-face` (`SUITE %d/%d green`, the only `no_status` left - either decide that `green` is a verdict word or change the row to say PASS/FAIL); `ledger-curation-combined` (`SUITE PASS 7 checks` - a verdict and ONE count with no fail counter, so add the count at the birth site or declare the row unreadable on purpose); `os-residue-batch-status-face` (`SUITE %s/%s` - a census FALSE NEGATIVE that prints `SUITE 6/6` through a helper; teach the census a bound two-slot pair or declare the class); `os-ugc-gate-report` (`SUITE %s %d/%d` - the status slot is not provably bound, so bind it or declare it); (2) the per-family output legs for the five new law families (`law_punct=37`, `law_label_pt=24`, `law_counters=31`, `law_status_punct=41`, `law_status_colon=0`) were NOT run one family at a time - the aggregate 133-label leg is the only output proof, so `tools/suite_output_audit.py --family law_punct` (and the other four) should be measured next window and their `law_emit` recorded (truncated)",
+  "state_bytes": 52562,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2850",
+      "2851",
       "OSLoop 执行 tick"
     ]
   ],

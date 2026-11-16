@@ -7005,8 +7005,10 @@ SUITES = [
     # evidence are never written. R2843 adds AC-BSGB9/AC-BSGB10 for the exact
     # label face (the three bare legacy labels reachable by no slice), pinned
     # in src/os/backlog.md before the code: 8 -> 10 criteria.
+    # R2851: AC-SK1..AC-SK6 pin the four remaining row skins at the law's
+    # owners: 10 -> 16 criteria.
     ("os-battery-shard",
-     os.path.join("..", "os", "test_battery_shard.py"), 10),
+     os.path.join("..", "os", "test_battery_shard.py"), 16),
     # R2845: the OUTPUT-level face of the same question the census asks from
     # source. Four probe suites in a private world classify by the row they
     # really printed, the law and the invocation are imported from the runner,

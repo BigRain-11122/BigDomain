@@ -43,17 +43,99 @@ SUITE_LINE = re.compile(r"(?m)^SUITE\s+(PASS|FAIL)\s+(\d+)\s*/\s*(\d+)")
 # law's vocabulary and guessing it would invent a word the suite never said.
 SUITE_LINE_NUM = re.compile(
     r"(?m)^SUITE\s+(\d+)\s*/\s*(\d+)(?:\s+(PASS|FAIL))?\s*$")
+# The same pair, joined by other punctuation: "SUITE PASS (7/7)",
+# "SUITE PASS (6/6 criteria green)", "SUITE PASS: 7/7", "SUITE PASS - 19/19".
+SUITE_LINE_PUNCT = re.compile(
+    r"(?m)^SUITE\s+(PASS|FAIL)\s*[(:-]\s*(\d+)\s*/\s*(\d+)")
+# A labelled pair names the suite instead of the verdict, so the verdict is
+# derived from p==t exactly as the numbers-only row above: "SUITE apidev: 7/7".
+# The lookahead keeps it off a verdict word, which the row above already reads.
+SUITE_LINE_LABEL = re.compile(
+    r"(?m)^SUITE\s+(?!PASS\b|FAIL\b)[A-Za-z0-9_.-]+:\s*(\d+)\s*/\s*(\d+)")
+# A counter row states the verdict as counts: "SUITE RESULT passes=6 fails=0
+# criteria=6", "SUITE PASS criteria=6 pass=6 fail=0", "SUITE PASS exit=0
+# pass-lines=6 fail-lines=0 criteria=6", "SUITE x expected-criteria=6 pass=6
+# fail=0". Field order varies, so each counter is read on its own; the verdict
+# follows the FAIL count, never the word, because passes may be assertions
+# rather than criteria and p>t must not be read as a red row.
+COUNTER_TOTAL = re.compile(r"(?:expected-criteria|criteria)=(\d+)")
+COUNTER_PASS = re.compile(r"(?:passes|pass-lines|pass)=(\d+)")
+COUNTER_FAIL = re.compile(r"(?:fails|fail-lines|fail)=(\d+)")
+# The same three counts without an equals sign: "SUITE PASS: 6 criteria,
+# 6 pass, 0 fail". The words are the binding, so the count must precede them.
+COUNTER_WORD_TOTAL = re.compile(r"(\d+)\s+criteria\b")
+COUNTER_WORD_PASS = re.compile(r"(\d+)\s+pass\b")
+COUNTER_WORD_FAIL = re.compile(r"(\d+)\s+fail\b")
+SUITE_ROW = re.compile(r"(?m)^SUITE\b[^\n]*$")
+VERDICT_WORD = re.compile(r"^SUITE\s+(PASS|FAIL)\b")
+
+
+def _counter_row(line):
+    """(verdict, passed, total) from a counter row, or None when incomplete.
+
+    A row that states no FAIL count cannot say its verdict from counts, so it is
+    refused rather than guessed ("SUITE PASS 7 checks" is that case).
+    """
+    if not line.startswith("SUITE"):
+        return None
+    total = COUNTER_TOTAL.search(line)
+    passed = COUNTER_PASS.search(line)
+    failed = COUNTER_FAIL.search(line)
+    if not (total and passed and failed):
+        total = COUNTER_WORD_TOTAL.search(line)
+        passed = COUNTER_WORD_PASS.search(line)
+        failed = COUNTER_WORD_FAIL.search(line)
+    if not (total and passed and failed):
+        return None
+    word = VERDICT_WORD.match(line)
+    if int(failed.group(1)) > 0:
+        return "FAIL", int(passed.group(1)), int(total.group(1))
+    if word and word.group(1) == "FAIL":
+        return "FAIL", int(passed.group(1)), int(total.group(1))
+    return "PASS", int(passed.group(1)), int(total.group(1))
+
+
+def _paired(word, passed, total):
+    """A verdict word beside a pair, except that a PASS word over p<t is a lie.
+
+    A row that claims PASS while a criterion is missing is read FAIL: the pair
+    is real evidence and reddening a contradictory row can never hide a red
+    suite. The reverse (passes over criteria) is a counting-unit mismatch, not a
+    failure, so it keeps its word.
+    """
+    if word == "PASS" and passed < total:
+        return "FAIL", passed, total
+    return word, passed, total
 
 
 def parse_suite_row(text):
     """(verdict, passed, total) from a suite body, or None.
 
     An explicit verdict word always wins; a numbers-only row derives PASS when
-    passed == total and FAIL otherwise.
+    passed == total and FAIL otherwise. The other row skins the registry still
+    carries are read here, at the one authority the runner, the audit and the
+    census all ask, so a suite that names its verdict in its own dialect stops
+    being invisible to every machine reader at once.
     """
     match = SUITE_LINE.search(text)
     if match:
-        return match.group(1), int(match.group(2)), int(match.group(3))
+        return _paired(match.group(1), int(match.group(2)), int(match.group(3)))
+    found = []
+    for match in SUITE_LINE_PUNCT.finditer(text):
+        verdict, passed, total = _paired(match.group(1), int(match.group(2)),
+                                         int(match.group(3)))
+        found.append((match.start(), 2, verdict, passed, total))
+    for match in SUITE_LINE_LABEL.finditer(text):
+        passed, total = int(match.group(1)), int(match.group(2))
+        found.append((match.start(), 1, "PASS" if passed == total else "FAIL",
+                      passed, total))
+    for match in SUITE_ROW.finditer(text):
+        row = _counter_row(match.group(0))
+        if row:
+            found.append((match.start(), 3) + row)
+    if found:
+        _, _, verdict, passed, total = max(found)
+        return verdict, passed, total
     rows = SUITE_LINE_NUM.findall(text)
     if not rows:
         return None

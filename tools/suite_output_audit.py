@@ -32,8 +32,9 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FAMILIES = ("law_direct", "law_status", "law_split", "law_numeric",
-            "law_numeric_slot", "suspect_status", "no_status",
-            "legacy_paren", "legacy_label", "legacy_status_colon",
+            "law_numeric_slot", "law_punct", "law_label_pt", "law_counters",
+            "law_status_colon", "law_status_punct", "suspect_status",
+            "no_status", "legacy_paren", "legacy_label", "legacy_status_colon",
             "no_numbers", "legacy_lower", "other", "no_row")
 ROW_RE = re.compile(r"(?m)^SUITE\b.*$")
 

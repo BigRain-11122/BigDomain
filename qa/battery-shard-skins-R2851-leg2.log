@@ -1,0 +1,8 @@
+SHARD scope=SHARD registry_suites=705 registry_criteria=5374 selected=6 selected_criteria=40 cap=600s exact=6
+SHARD row civic-behavior-distribution rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row civic-behavior-monthwindow rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 0.2s
+SHARD row civic-competition-monthwindow rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 0.2s
+SHARD row os-run-identity rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.9s
+SHARD row os-suite-matrix-reconcile rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 1.1s
+SHARD row os-suite-output-audit rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 3.0s
+SHARD rc=0 scope=SHARD selected=6 executed=6 green=6 criteria=40 crit_mismatch=0 elapsed=5.7s
