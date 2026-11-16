@@ -1,4 +1,4 @@
-﻿"""Product health-check runner (BigDomain explore-line item #9, R594;
+"""Product health-check runner (BigDomain explore-line item #9, R594;
 pay/member standalone-reconcile extension, R595 follow-up row;
 five-suite fan-out expansion, R1063 - benchgate/citymodel/compliance/
 minors wiring, closing the drift between this runner's fan-out and the

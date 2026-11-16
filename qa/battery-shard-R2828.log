@@ -1,0 +1,61 @@
+SHARD scope=SHARD registry_suites=699 registry_criteria=5258 selected=41 selected_criteria=304 cap=600s
+SHARD row member-face rc=0 pass=6 fail=0 suite=none crit=6 0.9s
+SHARD row pay-v3 rc=0 pass=14 fail=0 suite=none crit=14 0.3s
+SHARD row pay-v3-real rc=0 pass=9 fail=0 suite=none crit=9 0.5s
+SHARD row pay-v3-window rc=0 pass=6 fail=0 suite=none crit=6 0.4s
+SHARD row pay-notify rc=0 pass=7 fail=0 suite=none crit=7 0.5s
+SHARD row pay-notify-bannerlimit rc=0 pass=8 fail=0 suite=none crit=8 0.3s
+SHARD row pay-notify-bannerwin rc=0 pass=7 fail=0 suite=none crit=7 0.3s
+SHARD row pay-notify-bannerroll rc=0 pass=7 fail=0 suite=none crit=7 0.4s
+SHARD row pay-notify-bannerpersist rc=0 pass=7 fail=0 suite=none crit=7 0.4s
+SHARD row pay-authorize-persist rc=0 pass=7 fail=0 suite=none crit=7 0.4s
+SHARD row pay-authorize-idem rc=0 pass=7 fail=0 suite=none crit=7 2.1s
+SHARD row pay-notify-wiring rc=0 pass=7 fail=0 suite=none crit=7 1.3s
+SHARD row pay-authorize rc=0 pass=7 fail=0 suite=none crit=7 0.4s
+SHARD row pay-notify-revoke rc=1 pass=6 fail=0 suite=none crit=7 5.8s
+SHARD detail pay-notify-revoke PASS AC-VR1: schema=True no-UPDATE=True az-no-db=True receipt=非投顾常驻提示：本商品为 AI 生成工具与历史回测研究展示服务，非投资建议，不构成任何个股买卖建议、点位预测或收益承诺；历史回测数据仅作研究展示，不代表未来表现；虚拟商品一经发放不可退款的部分以购买页明示为准；请独立判断，风险自担。（常驻展示·不可折叠） row=True
+SHARD detail pay-notify-revoke PASS AC-VR2: pre={'once': 2, 'longterm': 0, 'consumed': 0} revoke=revoked post={'once': 0, 'longterm': 0, 'consumed': 0} rearm={'once': 1, 'longterm': 0, 'consumed': 0} none=nothing_to_revoke rows=0
+SHARD detail pay-notify-revoke PASS AC-VR4: reg1=True cycle=True once-rearm=True (pre={'once': 2, 'longterm': 1, 'consumed': 0} whole-kill longterm 1->0) same-second-edge=True
+SHARD detail pay-notify-revoke PASS AC-VR5: fresh=True live=True dead=True exhausted-not-revoked=True
+SHARD detail pay-notify-revoke PASS AC-VR3: pre-sent=1 dead-budget={'once': 0, 'longterm': 0, 'consumed': 0} skipped=skipped_no_budget granted=True banner=1 rearm={'once': 1, 'longterm': 0, 'consumed': 0} resend=sent immutable-sent=2
+SHARD detail pay-notify-revoke PASS AC-VR6: empty=True(E_AZ_BAD_ARGS) none=True(E_AZ_BAD_ARGS) blank=True(E_AZ_BAD_ARGS) unknown-tpl=True(E_PN_UNKNOWN_TEMPLATE) rows=7->7; grant-refused=True revoke-on-unapproved=revoked rows=1
+SHARD detail pay-notify-revoke Traceback (most recent call last):
+SHARD detail pay-notify-revoke   File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\pay\test_notify_revoke.py", line 339, in <module>
+SHARD detail pay-notify-revoke     sys.exit(main())
+SHARD detail pay-notify-revoke              ~~~~^^
+SHARD detail pay-notify-revoke   File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\pay\test_notify_revoke.py", line 316, in main
+SHARD detail pay-notify-revoke     encoding="ascii").read()
+SHARD detail pay-notify-revoke                       ~~~~^^
+SHARD detail pay-notify-revoke   File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\encodings\ascii.py", line 26, in decode
+SHARD detail pay-notify-revoke     return codecs.ascii_decode(input, self.errors)[0]
+SHARD detail pay-notify-revoke            ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+SHARD detail pay-notify-revoke UnicodeDecodeError: 'ascii' codec can't decode byte 0xef in position 0: ordinal not in range(128)
+SHARD row pay-revoke-reconcile rc=0 pass=7 fail=0 suite=none crit=7 1.0s
+SHARD row pay-channel-matrix rc=0 pass=7 fail=0 suite=none crit=7 0.7s
+SHARD row pay-channel-window rc=0 pass=7 fail=0 suite=none crit=7 1.6s
+SHARD row pay-channel-persist rc=0 pass=7 fail=0 suite=none crit=7 0.3s
+SHARD row pay-channel-migrate-persist rc=0 pass=5 fail=0 suite=PASS 5/5 crit=5 0.3s
+SHARD row member-entry rc=0 pass=7 fail=0 suite=none crit=7 0.1s
+SHARD row member-entrytier-persist rc=0 pass=7 fail=0 suite=none crit=7 0.3s
+SHARD row member-refund-recovery rc=0 pass=7 fail=0 suite=none crit=7 0.9s
+SHARD row member-expiring rc=0 pass=7 fail=0 suite=none crit=7 1.0s
+SHARD row member-reminder-scanwire rc=0 pass=7 fail=0 suite=none crit=7 0.5s
+SHARD row member-banner-board rc=0 pass=17 fail=0 suite=none crit=17 0.5s
+SHARD row member-banner-roll rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 1.4s
+SHARD row member-banner-queue-window rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 0.3s
+SHARD row member-banner-queue-limit rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.2s
+SHARD row member-banner-queue-caproll rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 0.2s
+SHARD row member-banner-queue-persist rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 0.7s
+SHARD row member-banner-board-persist rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 0.2s
+SHARD row member-expiring-dist rc=0 pass=7 fail=0 suite=none crit=7 0.5s
+SHARD row member-expiring-soon-persist rc=0 pass=7 fail=0 suite=none crit=7 0.3s
+SHARD row member-balanceface-persist rc=0 pass=7 fail=0 suite=none crit=7 0.3s
+SHARD row member-privileges-persist rc=0 pass=7 fail=0 suite=none crit=7 0.5s
+SHARD row member-birthcert-persist rc=0 pass=7 fail=0 suite=none crit=7 0.5s
+SHARD row member-expiring-dist-persist rc=0 pass=7 fail=0 suite=none crit=7 1.5s
+SHARD row member-refund-recovery-persist rc=0 pass=7 fail=0 suite=none crit=7 0.3s
+SHARD row member-reminder-persist rc=0 pass=7 fail=0 suite=none crit=7 0.7s
+SHARD row pay-reconcile-persist rc=0 pass=7 fail=0 suite=none crit=7 1.3s
+SHARD row pay-sweep-persist rc=0 pass=7 fail=0 suite=none crit=7 0.6s
+SHARD rc=2 scope=SHARD selected=41 executed=41 green=40 criteria=304 crit_mismatch=0 elapsed=31.1s
+SHARD red pay-notify-revoke:rc=1
