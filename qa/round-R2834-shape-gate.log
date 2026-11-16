@@ -1,0 +1,36 @@
+R2834 evidence - export_round asks the round-main shape law; 226 one-off appenders retired
+=====================================================================================
+criteria: AC-EXPG1..AC-EXPG5 pinned in src/os/backlog.md BEFORE the code (commit e7674c81)
+
+[1] RED before the fix (measured, suite run with the 226 appenders still on disk)
+    SUITE FAIL 44/47 failed=['AC-EXPW10 a correct private face reads clean',
+                              'AC-EXPW10 restoring the derived face reads clean again',
+                              'AC-EXPG5 the one-off state appenders are retired ...',
+                              leftovers=226]
+    Two of those reds were the pair fixture itself: build_pair_world's log line
+    carried no date prefix, i.e. the fixture modelled a world the new law forbids.
+    The fixture was anchored; no assertion was loosened.
+
+[2] GREEN after (measured)
+    python src/os/test_export_round.py
+    SUITE PASS 47/47
+
+[3] Real tree verdicts after the change
+    python src/os/export_round.py --check
+    VERDICT PASS tick=2026-11-16 R2833 ENGINEERING           rc=0
+    python tools/status_export_fresh.py --check
+    VERDICT R2833 PASS: do, ceo_face.current and current all name R2833
+    state_bytes=32086 export_bytes=34565 archive=logs/status-export-legacy-2026-11.json
+    rc=0
+    python src/os/ledger_lines.py --round-main --check
+    ROUND-MAIN OK 2833                                        rc=0
+
+[4] Regression legs
+    python src/os/test_state_append.py   -> SUITE PASS 7/7
+    python src/os/test_ledger_lines.py   -> SUITE PASS 8/8
+
+[5] Retirement of the 226 one-off state appenders
+    measured callers before deletion: import state_append_R* / from state_append_R*
+    across *.py, *.ps1, *.cmd, *.bat, *.json  -> 0 hits
+    after git rm: src/os/state_append*.py == ['state_append.py'] + state_io.py intact
+    AC-EXPG5 reads leftovers=0

@@ -18,6 +18,14 @@ past window without the files disagreeing.
 Criteria AC-EXPW1..AC-EXPW6 were pinned in src/os/backlog.md at R2780 BEFORE
 this file existed.
 
+R2834: the round-main shape law (R2832) had exactly one production call site,
+inside state_append (R2833). That still left the CEO-facing face writable from a
+log whose newest round line had lost its date anchor - and a face derived from an
+unanchored line is precisely what R2831 shipped. The exporter therefore asks the
+same law, from the same module, before it publishes and before it grades. No
+second regex lives here: the code printed is the law's own. AC-EXPG1..AC-EXPG5
+were pinned in src/os/backlog.md at R2834 BEFORE this change.
+
 R2805: the "latest" line used to be the newest pair on disk with no notion of
 what the pair WAS, so it named preview/ceo-blockers.html - a census of open work
 items - as the CEO's latest artifact while the newest real face sat fourth. A
@@ -353,10 +361,31 @@ def _grader_reconcile(repo):
     return code, problems
 
 
+def round_shape_refusal(state):
+    """Ask the round-main shape law before the CEO face is written (R2834).
+
+    The law landed at R2832 with its only production call site inside
+    state_append (R2833). A state log whose newest round line lost its date
+    anchor was still writable into the face, and R2831 shipped exactly such a
+    face. This returns '' when the law is satisfied and a named refusal, built
+    from the law's OWN code and detail, when it is not - so this module never
+    grows a second opinion about what a round main line looks like.
+    """
+    import ledger_lines
+    report = ledger_lines.check_round_main_shape(state.get('log') or [])
+    if report.get('ok'):
+        return ''
+    return 'E_EXP_ROUND_SHAPE %s round=%s %s' % (
+        report.get('code'), report.get('round'), report.get('detail'))
+
+
 def write(repo, stamp):
     import export_driver_queue_face as EDQF
-    data, d = payload(repo, json.loads(_read(os.path.join(repo, 'src', 'os',
-                                                         'state.json'))), stamp)
+    state = json.loads(_read(os.path.join(repo, 'src', 'os', 'state.json')))
+    refusal = round_shape_refusal(state)
+    if refusal:
+        raise ValueError(refusal)
+    data, d = payload(repo, state, stamp)
     exp = os.path.join(repo, 'docs', 'status-export.json')
     text = json.dumps(data, ensure_ascii=False, indent=2) + '\n'
     proof = EDQF.publish(repo, exp, text)
@@ -373,7 +402,14 @@ def write(repo, stamp):
           and back['ceo_face']['board_pages_skipped'] == d['board_skipped']
           and back['ceo_face']['newest_pair_on_disk_is_board']
           == d['newest_is_board']
-          and back['export_ts'] == stamp
+          # R2834 measured: this used to read `back['export_ts'] == stamp`, which
+          # compares TWO clocks. The grader that publishes the stamp takes its own
+          # `now()` after this function's stamp exists, so a one-second boundary
+          # made a perfectly good write report ok=False while the freshness gate
+          # read PASS. The stamp's freshness is the grader's to own; what this
+          # write may assert is that the published stamp is not OLDER than the
+          # clock it wrote under.
+          and str(back.get('export_ts') or '') >= stamp
           and back['outs'][0] == d['latest']
           and back['self_drive'] == data['self_drive']
           and grader_code == 0
@@ -390,6 +426,11 @@ def check(repo):
     state = json.loads(_read(os.path.join(repo, 'src', 'os', 'state.json')))
     cur = data.get('ceo_face') or {}
     fails = []
+    # AC-EXPG3: the read-only verdict asks the same law, so an unanchored log
+    # reddens the gate without anyone writing anything.
+    refusal = round_shape_refusal(state)
+    if refusal:
+        fails.append(refusal)
     pair, skipped, newest_is_board = newest_artifact(repo)
     if pair and cur.get('latest_artifact') != _fmt_pair(pair):
         fails.append('AC-EXPW1 latest_artifact is not the newest product pair '

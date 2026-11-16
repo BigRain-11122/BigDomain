@@ -1,4 +1,11 @@
-﻿"""Battery suite for src/os/export_round.py - criteria AC-EXPW1..AC-EXPW14.
+﻿"""Battery suite for src/os/export_round.py - criteria AC-EXPW1..AC-EXPW14
+plus AC-EXPG1..AC-EXPG5.
+
+AC-EXPG1..AC-EXPG5 were pinned in src/os/backlog.md at R2834 BEFORE the gate
+existed: the exporter must ask the round-main shape law itself, so the face the
+CEO downloads can no longer be written from a log whose newest round line lost
+its date anchor (the R2831 defect), and the 226 one-off `state_append_R*.py`
+appenders must retire with a measured zero-caller proof.
 
 AC-EXPW1..AC-EXPW6 were pinned in src/os/backlog.md at R2780 BEFORE this suite or
 the tool existed. AC-EXPW7..AC-EXPW10 were pinned at R2805 BEFORE the board-page
@@ -112,9 +119,15 @@ def build_pair_world(rows, tick=9100):
     whatever mtimes the real tree happens to carry.
     """
     d = tempfile.mkdtemp(prefix='expw-pair-')
+    # R2834 disclosure: this fixture was written before the round-main shape law
+    # existed and its log line carried no date prefix. The law now refuses such a
+    # line (`E_EXP_ROUND_SHAPE`), and a fixture that stands for a HEALTHY world
+    # must satisfy the law it is graded under - so the line is anchored. No
+    # assertion was loosened; the AC-EXPW10 red-then-green is measured.
     write(os.path.join(d, 'src', 'os', 'state.json'),
           json.dumps({'tick': tick,
-                      'log': ['R%s SOMETHING MEASURED IN THIS WINDOW' % tick]},
+                      'log': ['2026-11-16 R%s SOMETHING MEASURED IN THIS WINDOW'
+                              % tick]},
                      ensure_ascii=False))
     copy(os.path.join(ROOT, 'src', 'os', 'backlog.md'),
          os.path.join(d, 'src', 'os', 'backlog.md'))
@@ -439,7 +452,62 @@ def main():
            'refusals=%r' % [text[:34] for text in said])
         write(exp13, json.dumps(with_results, ensure_ascii=False, indent=2) + '\n')
 
-        # ---- AC-EXPW6: hygiene, one battery row, eleven criteria ----
+        # ---- AC-EXPG1..AC-EXPG4: the face may not be written from a round
+        # ---- line that lost its date anchor (R2834). Pinned in the board first.
+        wg = build_world(9031)
+        worlds.append(wg)
+        sg = json.loads(read(os.path.join(wg, 'src', 'os', 'state.json')))
+        fg = os.path.join(wg, 'docs', 'status-export.json')
+        ok('AC-EXPG1 a dated round main line passes the law',
+           mod.round_shape_refusal(sg) == '', mod.round_shape_refusal(sg)[:40])
+        built_g, _ = mod.payload(wg, sg, 'TG0')
+        write(fg, json.dumps(built_g, ensure_ascii=False, indent=2) + '\n')
+        ok('AC-EXPG4 an anchored private world grades clean (positive control)',
+           mod.check(wg) == [], 'fails=%s' % mod.check(wg)[:2])
+        sg_bad = json.loads(json.dumps(sg))
+        sg_bad['log'] = [re.sub(r'^\d{4}-\d{2}-\d{2} ', '', sg['log'][0])]
+        write(os.path.join(wg, 'src', 'os', 'state.json'),
+              json.dumps(sg_bad, ensure_ascii=False))
+        before_g = (os.path.getsize(fg), os.stat(fg).st_mtime_ns)
+        err_g = ''
+        try:
+            mod.write(wg, 'TG1')
+        except ValueError as exc:
+            err_g = str(exc)
+        after_g = (os.path.getsize(fg), os.stat(fg).st_mtime_ns)
+        ok('AC-EXPG1 an unanchored newest round refuses the write, zero bytes',
+           err_g.startswith('E_EXP_ROUND_SHAPE') and before_g == after_g,
+           err_g[:44])
+        ok('AC-EXPG1 the refusal carries the law code it came from',
+           'E_RMS_NO_DATE' in err_g, err_g[:60])
+        src_now = read(TOOL)
+        ok('AC-EXPG2 the gate is the law module, not a second local regex',
+           'check_round_main_shape' in src_now
+           and 'E_RMS_' not in src_now
+           and not re.search(r'\d{4}-\d{2}-\d{2} R', src_now),
+           'law_calls=%d local_codes=%d'
+           % (src_now.count('check_round_main_shape'),
+              src_now.count('E_RMS_')))
+        fails_g = mod.check(wg)
+        ok('AC-EXPG3 --check reddens on the unanchored tree, read-only',
+           any('E_EXP_ROUND_SHAPE' in f for f in fails_g)
+           and os.path.getsize(fg) == before_g[0], 'fails=%s' % fails_g[:1])
+        write(os.path.join(wg, 'src', 'os', 'state.json'),
+              json.dumps(sg, ensure_ascii=False))
+        ok('AC-EXPG4 restoring the anchor clears the refusal again',
+           mod.check(wg) == [], 'fails=%s' % mod.check(wg)[:2])
+        ok('AC-EXPG4 the live tree still grades clean',
+           mod.check(ROOT) == [], 'fails=%s' % mod.check(ROOT)[:2])
+        one_offs = [n for n in os.listdir(os.path.join(ROOT, 'src', 'os'))
+                    if re.match(r'^state_append_R.*\.py$', n)]
+        ok('AC-EXPG5 the one-off state appenders are retired and the single '
+           'vehicle remains',
+           one_offs == []
+           and os.path.isfile(os.path.join(ROOT, 'src', 'os',
+                                           'state_append.py')),
+           'leftovers=%d' % len(one_offs))
+
+        # ---- AC-EXPW6: hygiene, one battery row, eighteen criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')
                if ('import ' + m) in src]
@@ -452,8 +520,8 @@ def main():
             found = re.search(r'test_export_round\.py"\)\s*,\s*(\d+)', window)
             if found:
                 rows.append(found.group(1))
-        ok('AC-EXPW6 exactly one battery row declares thirteen criteria',
-           rows == ['13'], 'rows=%s' % rows)
+        ok('AC-EXPW6 exactly one battery row declares eighteen criteria',
+           rows == ['18'], 'rows=%s' % rows)
     finally:
         for w in worlds:
             shutil.rmtree(w, ignore_errors=True)
