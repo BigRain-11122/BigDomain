@@ -4566,6 +4566,12 @@ SUITES = [
     # claim.)
     ("os-state-io",
      os.path.join("..", "os", "test_state_io.py"), 8),
+    # R2833: the one vehicle that appends to state.json. It reads through
+    # state_io and gates through ledger_lines BEFORE writing, so a round
+    # line that forgot its date prefix is refused at the write site rather
+    # than discovered later by a crash or a battery leg (AC-RSA1..AC-RSA7).
+    ("os-state-append",
+     os.path.join("..", "os", "test_state_append.py"), 7),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with

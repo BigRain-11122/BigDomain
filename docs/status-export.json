@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-16T19:59:53+08:00",
-  "do": "2026-11-16 R2832 PRODUCT+ENGINEERING: the round-main shape now has a detector that reddens instead of crashing, and the crash it replaced is closed as a named code. ledger_lines.check_round_main_shape() asks the law of the NEWEST round only - newest by round number, never by position - and returns a verdict with a code (E_RMS_NO_DATE / E_RMS_NO_ROUND), never an exception; the shipped CLI gained --round-main and reads exactly one line ('ROUND-MAIN OK 2831' on the real tree, rc=0). AC-RMS1..AC-RMS6 were pinned in the R2832 backlog row BEFORE the code, and the pre-code control was measured: the same command read 'E_LGR_BAD_ARGS: unknown flag --round-main' rc=2. One wording was refined at code time and is stated rather than smoothed: the pinned text said the newest round's round line must match the dated shape, but a round legitimately writes undated sub-lines (disclosures, group scans, notes) under its dated main line, so the shipped law asks the round for AT LEAST ONE dated main line - any round with zero dated mains still reddens, so the measured R2831 failure (14 live lines, none anchored) is still caught, while a healthy tree no longer would be.",
+  "export_ts": "2026-11-16T21:31:16+08:00",
+  "do": "2026-11-16 R2833 ENGINEERING: the repo finally has ONE state appender, and it refuses a forgotten date prefix before a byte is written",
   "ceo_face": {
-    "current": "2026-11-16 R2832 PRODUCT+ENGINEERING: the round-main shape now has a detector that reddens instead of crashing, and the crash it replaced is closed as a named code. ledger_lines.check_round_main_shape() asks the law of the NEWEST round only - newest by round number, never by position - and returns a verdict with a code (E_RMS_NO_DATE / E_RMS_NO_ROUND), never an exception; the shipped CLI gained --round-main and reads exactly one line ('ROUND-MAIN OK 2831' on the real tree, rc=0). AC-RMS1..AC-RMS6 were pinned in the R2832 backlog row BEFORE the code, and the pre-code control was measured: the same command read 'E_LGR_BAD_ARGS: unknown flag --round-main' rc=2. One wording was refined at code time and is stated rather than smoothed: the pinned text said the newest round's round line must match the dated shape, but a round legitimately writes undated sub-lines (disclosures, group scans, notes) under its dated main line, so the shipped law asks the round for AT LEAST ONE dated main line - any round with zero dated mains still reddens, so the measured R2831 failure (14 live lines, none anchored) is still caught, while a healthy tree no longer would be.",
+    "current": "2026-11-16 R2833 ENGINEERING: the repo finally has ONE state appender, and it refuses a forgotten date prefix before a byte is written",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2832] next window (<=12h): (1) MAIN - `--round-main` 目前**没有任何生产路径调用**，下窗须把它接进收账写入车辆（append 前置闸）或 `export_round` 前置，使「忘记日期前缀」在**写之前**被拦，而不是等下一腿电池才发现；(2) 该仓仍**没有通用 state appender**——本窗与前几十窗一样又写了两个一次性 `state_append_R2832*.py`，建议以 `state_io` 为基做成唯一车辆并清理历史 `state_append_R28xx.py` 堆积；(3) `export_round.check()` 对 `current` 仍保留比判分器更松的律（允许可选日期前缀），属冗余而非第二权威，可择机收拢；(4) os- 家族腿仍 160/274（114 未跑），全册 539/700 未跑，分片 offset/resume 仍是命名阻塞（一条 160 腿已 488s）；(5) 承旧：`outs` 37 条无人维护、7 件工具面无电池行、AC-VAC1..6、`state/queue/tech.md` 队头 AC-LKNF1、R2778 对《网络数据安全管理条例》的立场、13 件无 BOM 的 UTF-16 证据件、`src/os/export_R2431.py` 死钩、18 件带 BOM 的历史脚本、BigDomain-OSLoop 的 S4U 重注册（需提权壳）。",
-    "next_milestone_due": "2026-11-17T07:59:53+08:00",
-    "updated_at": "2026-11-16T19:59:53+08:00",
+    "next_milestone": "[R2833] next window (<=12h): (1) MAIN - wire `state_append` into `export_round` (or into the closeout path) so the shape gate is the LAST line of defence, not the only one, and so `--round-main` is asked on every real write; (2) retire the 223 historical `state_append_R*.py` one-offs - keep `state_append.py` + `state_io.py`, and prove no live caller imports the rest before deleting (a grep + one battery leg); (3) os- family leg still 160/274 (114 unrun), full ledger 539/701 unrun, and shard offset/resume remains the named blocker (one 160 leg already 488s); (4) carried unchanged: `outs` 37 unmaintained entries, 7 tool faces with no battery row, AC-VAC1..6, `state/queue/tech.md` head AC-LKNF1, the R2778 stand on the Network Data Security Regulation, 13 BOM-less UTF-16 evidence files, the dead `src/os/export_R2431.py` hook, 18 BOM-carrying historical scripts, `BigDomain-OSLoop` S4U re-registration (needs an elevated shell).",
+    "next_milestone_due": "2026-11-17T09:31:16+08:00",
+    "updated_at": "2026-11-16T21:31:16+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-10..2026-11-16",
     "window_days": 7,
-    "log_lines_in_window": 25,
+    "log_lines_in_window": 28,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 11,
     "queue_explore_open": 10
   },
-  "current": "2026-11-16 R2832 PRODUCT+ENGINEERING: the round-main shape now has a detector that reddens instead of crashing, and the crash it replaced is closed as a named code. ledger_lines.check_round_main_shape() asks the law of the NEWEST round only - newest by round number, never by position - and returns a verdict with a code (E_RMS_NO_DATE / E_RMS_NO_ROUND), never an exception; the shipped CLI gained --round-main and reads exactly one line ('ROUND-MAIN OK 2831' on the real tree, rc=0). AC-RMS1..AC-RMS6 were pinned in the R2832 backlog row BEFORE the code, and the pre-code control was measured: the same command read 'E_LGR_BAD_ARGS: unknown flag --round-main' rc=2. One wording was refined at code time and is stated rather than smoothed: the pinned text said the newest round's round line must match the dated shape, but a round legitimately writes undated sub-lines (disclosures, group scans, notes) under its dated main line, so the shipped law asks the round for AT LEAST ONE dated main line - any round with zero dated mains still reddens, so the measured R2831 failure (14 live lines, none anchored) is still caught, while a healthy tree no longer would be.",
+  "current": "2026-11-16 R2833 ENGINEERING: the repo finally has ONE state appender, and it refuses a forgotten date prefix before a byte is written",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2832] next window (<=12h): (1) MAIN - `--round-main` 目前**没有任何生产路径调用**，下窗须把它接进收账写入车辆（append 前置闸）或 `export_round` 前置，使「忘记日期前缀」在**写之前**被拦，而不是等下一腿电池才发现；(2) 该仓仍**没有通用 state appender**——本窗与前几十窗一样又写了两个一次性 `state_append_R2832*.py`，建议以 `state_io` 为基做成唯一车辆并清理历史 `state_append_R28xx.py` 堆积；(3) `export_round.check()` 对 `current` 仍保留比判分器更松的律（允许可选日期前缀），属冗余而非第二权威，可择机收拢；(4) os- 家族腿仍 160/274（114 未跑），全册 539/700 未跑，分片 offset/resume 仍是命名阻塞（一条 160 腿已 488s）；(5) 承旧：`outs` 37 条无人维护、7 件工具面无电池行、AC-VAC1..6、`state/queue/tech.md` 队头 AC-LKNF1、R2778 对《网络数据安全管理条例》的立场、13 件无 BOM 的 UTF-16 证据件、`src/os/export_R2431.py` 死钩、18 件带 BOM 的历史脚本、BigDomain-OSLoop 的 S4U 重注册（需提权壳）。",
-  "state_bytes": 30333,
+  "next_milestone": "[R2833] next window (<=12h): (1) MAIN - wire `state_append` into `export_round` (or into the closeout path) so the shape gate is the LAST line of defence, not the only one, and so `--round-main` is asked on every real write; (2) retire the 223 historical `state_append_R*.py` one-offs - keep `state_append.py` + `state_io.py`, and prove no live caller imports the rest before deleting (a grep + one battery leg); (3) os- family leg still 160/274 (114 unrun), full ledger 539/701 unrun, and shard offset/resume remains the named blocker (one 160 leg already 488s); (4) carried unchanged: `outs` 37 unmaintained entries, 7 tool faces with no battery row, AC-VAC1..6, `state/queue/tech.md` head AC-LKNF1, the R2778 stand on the Network Data Security Regulation, 13 BOM-less UTF-16 evidence files, the dead `src/os/export_R2431.py` hook, 18 BOM-carrying historical scripts, `BigDomain-OSLoop` S4U re-registration (needs an elevated shell).",
+  "state_bytes": 32086,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2832",
+      "2833",
       "OSLoop 执行 tick"
     ]
   ],
