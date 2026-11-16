@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 706 | 5382 | 675/675 | R2739 |
+| 706 | 5383 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -144,7 +144,7 @@
 | 105 | watermark-dualbit | watermark/test_dual_bit.py | 7 | green | 2.4 |
 | 106 | opsreview | opsreview/test_opsreview.py | 7 | green | 0.9 |
 | 107 | liveroom | liveroom/test_liveroom.py | 10 | green | 1.2 |
-| 108 | benchgate | benchgate/test_bench_gate.py | 11 | green | 0.2 |
+| 108 | benchgate | benchgate/test_bench_gate.py | 12 | green | 0.2 |
 | 109 | citymodel | citymodel/test_scenario.py | 10 | green | 0.3 |
 | 110 | compliance | compliance/test_sku_compliance_map.py | 15 | green | 0.1 |
 | 111 | minors | minors/test_minors.py | 19 | green | 0.2 |
@@ -743,7 +743,7 @@
 | 704 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 6 | no-evidence | - |
 | 705 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
 | 706 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 12 | no-evidence | - |
-|  | 合计 |  | 5382 | green 675 / FAIL 0 / no-evidence 31 |  |
+|  | 合计 |  | 5383 | green 675 / FAIL 0 / no-evidence 31 |  |
 
 ## 证据出处
 

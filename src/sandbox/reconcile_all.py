@@ -886,10 +886,12 @@ SUITES = [
     # R1063 fan-out expansion: five suites shipped after R595 but never
     # wired into this runner (the fan-out had drifted behind the shipped
     # modules). Pure wiring - the suite files themselves are unchanged.
-    # benchgate/compliance run unittest-style (exit 0 + "OK", zero
-    # PASS-lines by design); their criteria counts are their test-method
-    # counts. citymodel/minors/minors-wiring use the PASS-line convention.
-    ("benchgate", os.path.join("benchgate", "test_bench_gate.py"), 11),
+    # benchgate/compliance run unittest-style; R2857 gave both of them (and
+    # os-ledger-tokens-prefix-repair) one PASS/FAIL line per test method so the
+    # runner reports detail=yes instead of detail=none. Their criteria counts
+    # are their test-method counts, and benchgate's was stale at 11 while the
+    # suite ran 12 - the suite is the authority, so the row moved to 12.
+    ("benchgate", os.path.join("benchgate", "test_bench_gate.py"), 12),
     ("citymodel", os.path.join("citymodel", "test_scenario.py"), 10),
     ("compliance",
      os.path.join("compliance", "test_sku_compliance_map.py"), 15),
