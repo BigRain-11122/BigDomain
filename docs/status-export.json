@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T06:59:13+08:00",
-  "do": "2026-11-17 R2855 PRODUCT+ENGINEERING: the smallest never-asked law family is measured at output level - law_numeric_slot reads 4 of 4 rows detail=yes with 8/8 criteria each at rc=0 - and the census question that had been carried two windows (does the status-binding test accept single quotes?) is answered by law with a measured blind set of 0 rather than a third carry.",
+  "export_ts": "2026-11-17T07:02:04+08:00",
+  "do": "2026-11-17 R2856 PRODUCT+ENGINEERING: the 62-suite law_numeric family is measured at output level in two named halves of 31 and reads 62 of 62 detail=yes with zero red rows, and the AC-CEN3 question about reading a live registry is decided as intent instead of being carried a third window.",
   "ceo_face": {
-    "current": "2026-11-17 R2855 PRODUCT+ENGINEERING: the smallest never-asked law family is measured at output level - law_numeric_slot reads 4 of 4 rows detail=yes with 8/8 criteria each at rc=0 - and the census question that had been carried two windows (does the status-binding test accept single quotes?) is answered by law with a measured blind set of 0 rather than a third carry.",
+    "current": "2026-11-17 R2856 PRODUCT+ENGINEERING: the 62-suite law_numeric family is measured at output level in two named halves of 31 and reads 62 of 62 detail=yes with zero red rows, and the AC-CEN3 question about reading a live registry is decided as intent instead of being carried a third window.",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2855] next window (<=12h): (1) MAIN - next smallest never-asked family is `law_numeric=62`; one leg over it risks the 600s cap (measured: 4 suites took 12.0s but `os-decwatermark` alone 11.1s), so split by label order into two named halves of ~31 and report `detail=yes`/`detail=none` per row per half; (2) `law_status=316` still needs a NAMED split plan committed BEFORE any leg - propose seven shards of ~45 by label prefix and measure shard 1 only; (3) `AC-CEN3` reads the LIVE registry, so it reddens when a suite is added mid-window - decide snapshot vs declared moving-target intent (carried one window); (4) the declared single-quote limitation becomes real the first time a suite binds with single quotes: the census will read it as debt, and that moment is when it should be taught, with the AC-CEN2 probe flipped deliberately (truncated)",
-    "next_milestone_due": "2026-11-17T18:59:13+08:00",
-    "updated_at": "2026-11-17T06:59:13+08:00",
+    "next_milestone": "[R2856] next window (<=12h): (1) MAIN - next family is `law_split=88`; the two legs this window proved 62 suites cost 27.5s total, so run `law_split` as two halves of 44 (label order, cut file re-derived by import) and report `detail=yes`/`detail=none` per row; (2) then `law_direct=103` fits one leg on this measured throughput, but measure it rather than assume; (3) `law_status=316` still needs its NAMED split plan committed BEFORE any leg - seven shards of ~45 by label prefix, shard 1 only; (4) the declared single-quote limitation becomes real the first time a suite binds with single quotes: the census will read it as debt, and that moment is when AC-CEN2's probe should be flipped deliberately; (5) carried unchanged: ~570 of 706 registry suites never run in any slice, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, 8 tool faces with no battery row, AC-VAC1..6, the AC-LKNF1 queue head, the R2778 stand on the Network Data Security Regulation, 11 BOM-less UTF-16 evidence files, 18 BOM-carrying scripts, `tasks.md` untouched (it is the P-47 canonical board), Docker absent, `BigDomain-OSLoop` S4U re-registration (needs an ELEVATED shell).",
+    "next_milestone_due": "2026-11-17T19:02:04+08:00",
+    "updated_at": "2026-11-17T07:02:04+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 89,
+    "log_lines_in_window": 96,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 18,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2855 PRODUCT+ENGINEERING: the smallest never-asked law family is measured at output level - law_numeric_slot reads 4 of 4 rows detail=yes with 8/8 criteria each at rc=0 - and the census question that had been carried two windows (does the status-binding test accept single quotes?) is answered by law with a measured blind set of 0 rather than a third carry.",
+  "current": "2026-11-17 R2856 PRODUCT+ENGINEERING: the 62-suite law_numeric family is measured at output level in two named halves of 31 and reads 62 of 62 detail=yes with zero red rows, and the AC-CEN3 question about reading a live registry is decided as intent instead of being carried a third window.",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2855] next window (<=12h): (1) MAIN - next smallest never-asked family is `law_numeric=62`; one leg over it risks the 600s cap (measured: 4 suites took 12.0s but `os-decwatermark` alone 11.1s), so split by label order into two named halves of ~31 and report `detail=yes`/`detail=none` per row per half; (2) `law_status=316` still needs a NAMED split plan committed BEFORE any leg - propose seven shards of ~45 by label prefix and measure shard 1 only; (3) `AC-CEN3` reads the LIVE registry, so it reddens when a suite is added mid-window - decide snapshot vs declared moving-target intent (carried one window); (4) the declared single-quote limitation becomes real the first time a suite binds with single quotes: the census will read it as debt, and that moment is when it should be taught, with the AC-CEN2 probe flipped deliberately (truncated)",
-  "state_bytes": 71327,
+  "next_milestone": "[R2856] next window (<=12h): (1) MAIN - next family is `law_split=88`; the two legs this window proved 62 suites cost 27.5s total, so run `law_split` as two halves of 44 (label order, cut file re-derived by import) and report `detail=yes`/`detail=none` per row; (2) then `law_direct=103` fits one leg on this measured throughput, but measure it rather than assume; (3) `law_status=316` still needs its NAMED split plan committed BEFORE any leg - seven shards of ~45 by label prefix, shard 1 only; (4) the declared single-quote limitation becomes real the first time a suite binds with single quotes: the census will read it as debt, and that moment is when AC-CEN2's probe should be flipped deliberately; (5) carried unchanged: ~570 of 706 registry suites never run in any slice, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, 8 tool faces with no battery row, AC-VAC1..6, the AC-LKNF1 queue head, the R2778 stand on the Network Data Security Regulation, 11 BOM-less UTF-16 evidence files, 18 BOM-carrying scripts, `tasks.md` untouched (it is the P-47 canonical board), Docker absent, `BigDomain-OSLoop` S4U re-registration (needs an ELEVATED shell).",
+  "state_bytes": 75488,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2855",
+      "2856",
       "OSLoop 执行 tick"
     ]
   ],

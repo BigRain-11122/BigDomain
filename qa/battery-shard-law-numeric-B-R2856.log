@@ -1,0 +1,33 @@
+SHARD scope=SHARD registry_suites=706 registry_criteria=5382 selected=31 selected_criteria=247 cap=600s exact=31
+SHARD row ledger-apimarket-search rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-searchpaging rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-searchsort rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-watchlist rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-supply rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-refund rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-refundlatency rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-refundreasons rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-sellerrefundreasons rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-sellerwatchmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-sellerwatchconversionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-ratingmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-sellerratingmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-questionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-sellermonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-sellerquestionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-sellerpricecadencemonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-sellerpricedemandmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-sellerreplymonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-sellerrestockmonths rc=0 pass=9 fail=0 detail=yes suite=PASS 9/9 crit=9 0.5s
+SHARD row ledger-apimarket-sellerrepeatmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-ratreply rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-ratingrev rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-restock rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-sellerinbox rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-revenuemonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-watchalerts rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-watchbudget rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-sellertodo rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-selleranswers rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row os-residue-batch-status-face rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.5s
+SHARD rc=0 scope=SHARD selected=31 executed=31 green=31 criteria=247 crit_mismatch=0 elapsed=14.6s

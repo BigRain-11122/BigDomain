@@ -1,0 +1,33 @@
+SHARD scope=SHARD registry_suites=706 registry_criteria=5382 selected=31 selected_criteria=248 cap=600s exact=31
+SHARD row ledger-apimarket-pricerev rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-buyerlibrary rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-devprofile rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-metadata rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-marketdaily rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-buyerwatchcategorymix rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-marketwatchmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-categorywatchmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-categorywatchconversionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-buyerwatchmonths rc=0 pass=9 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-marketsupplymonths rc=0 pass=9 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-categoryquestionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-categoryclaimmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-categoryratingmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-feedmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-buyeranswerwait rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-backlogmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-marketrelistmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-buyerrefundmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-buyerclaimmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-marketconversionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-buyerpricereaction rc=0 pass=9 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-marketmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-buyermonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-buyertodo rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-purchasedossier rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-buyerclaimtodo rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-providerrev rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-qna rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-buyerquestions rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-provideridentity rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD rc=0 scope=SHARD selected=31 executed=31 green=31 criteria=248 crit_mismatch=0 elapsed=12.9s

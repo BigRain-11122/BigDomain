@@ -14,7 +14,13 @@ cited it.
     binding reads suspect_status, the same binding double-quoted reads
     law_status), so the declared limitation is pinned rather than described;
   - on the live tree the ten law families partition the registry: law equals
-    the registry size and non_law reads zero;
+    the registry size and non_law reads zero. AC-CEN3 reads the LIVE registry
+    ON PURPOSE (decided R2856, not carried a third window): a frozen snapshot
+    would let the tree that is actually shipped drift while this suite stayed
+    green, and the census' one job is to measure that tree. The cost is stated
+    rather than hidden - adding a non-law suite mid-window reddens this suite
+    until the new suite grows a law row or the census is taught its shape, and
+    that is the intended pressure, not a flake;
   - two runs read byte-identical output (no clock, no randomness);
   - --quiet-list drops the per-family non_law listing and keeps the shapes;
   - the registry declares this suite at six criteria.
