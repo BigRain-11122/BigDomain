@@ -18,6 +18,7 @@ write failed describes a round the state never got.
 
 This module makes the order a law instead of a habit:
 
+    step 0 one-off law (one_off_round_scripts.audit) <- REFUSES a new one-off
     state step  (state_append.run)   <- HARD PRECONDITION, and it is verified
     face step   (export_round.write) <- only reachable when state really moved
 
@@ -69,6 +70,7 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 import export_round as ER  # noqa: E402
+import one_off_round_scripts as OOR  # noqa: E402
 import state_append as SA  # noqa: E402
 import state_io  # noqa: E402
 
@@ -160,12 +162,46 @@ def _confirm_state_moved(path, result):
     return ""
 
 
+def one_off_refusal(root):
+    """The freeze-round law, asked at the one place every round must pass.
+
+    R2838 shipped the law as a reading and nothing called it, so a new
+    `foo_R2839.py` could still be written and committed; only a later battery
+    leg would find it. The closeout vehicle runs before the state step, so a
+    one-off is now refused in the window that creates it, with the state and
+    the CEO face untouched.
+
+    The law is not re-implemented here: the walk, the name shape and the
+    freeze round all come from one_off_round_scripts.audit(), and the numbers
+    printed below are that report's numbers (AC-OOSW5).
+    """
+    try:
+        report, code = OOR.audit(root, OOR.DEFAULT_SCOPE, OOR.FREEZE_ROUND)
+    except OOR.OneOffRoundScriptsError as exc:
+        return ("E_CO_ONE_OFF_SCOPE %s scope=%s (the one-off law could not "
+                "read its scope; nothing was written)"
+                % (exc.code, OOR.DEFAULT_SCOPE.replace(os.sep, "/")))
+    if code == 2:
+        names = " ".join(row["path"] for row in report["detail"])
+        return ("E_CO_ONE_OFF refused=%d freeze=%d scanned=%d one_offs=%d "
+                "max_round=%d files=[%s]"
+                % (len(report["refused"]), report["freeze"], report["scanned"],
+                   report["one_offs"], report["max_round"], names))
+    return ""
+
+
 def run(args):
     """Return (rc, message lines). One command, two writes, named steps."""
     root = os.path.abspath(args.root)
     lines = []
 
-    # ---- step 1: state. A refusal here costs the face zero bytes. ----------
+    # ---- step 0: the one-off law. A refused name costs zero bytes. --------
+    one_off = one_off_refusal(root)
+    if one_off:
+        return 2, ["CLOSEOUT FAIL %s step=one-off state=NOT-WRITTEN "
+                   "face=NOT-WRITTEN" % one_off]
+
+    # ---- step 1: state. A refusal here costs the face zero bytes. ---------
     result = SA.run(_state_args(args, root))
     if not result.get("ok"):
         code = result.get("code") or "E_CO_NO_STATE"

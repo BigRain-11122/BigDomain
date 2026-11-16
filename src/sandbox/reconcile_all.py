@@ -4584,9 +4584,10 @@ SUITES = [
     # face (derived FROM state) could be published while the state write
     # failed - the R2831 defect with a different trigger. closeout.py makes
     # the state step a hard, re-read precondition for the face step and owns
-    # no write path of its own (AC-COUT1..AC-COUT7).
+    # no write path of its own (AC-COUT1..AC-COUT7). R2839 adds the one-off
+    # gate call site (AC-OOSW1..AC-OOSW7).
     ("os-closeout",
-     os.path.join("..", "os", "test_closeout.py"), 12),
+     os.path.join("..", "os", "test_closeout.py"), 19),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with

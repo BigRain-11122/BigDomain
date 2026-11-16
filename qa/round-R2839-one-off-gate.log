@@ -1,0 +1,28 @@
+R2839 EVIDENCE - the freeze-round law now has a production call site (closeout step 0)
+
+== live tree: one_off_round_scripts --check ==
+ONE-OFF ROUND SCRIPTS os-one-off-round-scripts verdict=OK scanned=1451 one_offs=904 max_round=2781 freeze=2838 refused=0
+rc=0
+
+== live tree: closeout --check (no E_CO_ONE_OFF expected) ==
+CLOSEOUT CHECK step=state tick=2838 log=54 bytes=49070 fold_margin=29430 +1 line(s) face=NOT-MEASURED
+rc=0
+
+== suite test_closeout (12 -> 19 criteria) ==
+SUITE PASS 19/19
+
+== regressions ==
+test_one_off_round_scripts => SUITE PASS 6/6
+test_state_append => SUITE PASS 7/7
+test_ledger_round_main_shape => SUITE PASS 6/6
+test_export_round => SUITE PASS 47/47
+test_export_freshness => SUITE PASS 6/6
+
+== matrix ==
+PASS check: docs/sandbox-suite-matrix.md byte-identical (73894 bytes, 703 suites, 5350 criteria)
+
+== private-world controls (from the suite) ==
+AC-OOSW2 foo_R2839.py refused, state+face sha256/bytes/mtime unchanged
+AC-OOSW4 --check refuses the same with zero writes
+AC-OOSW5 refusal carries scanned/one_offs/max_round/freeze from the law report
+AC-OOSW6 root without src/os reads E_CO_ONE_OFF_SCOPE, no traceback, no file

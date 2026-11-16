@@ -30,7 +30,7 @@ sys.path.insert(0, BASE)
 
 import closeout as CO  # noqa: E402
 
-EXPECTED_CRITERIA = 12
+EXPECTED_CRITERIA = 19
 MODULE = os.path.join(BASE, "closeout.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout"
@@ -510,6 +510,174 @@ def ac_coutb5():
           "suite at %d criteria" % EXPECTED_CRITERIA)
 
 
+def ac_oosw1():
+    """AC-OOSW1: one call site, and the law is not re-implemented here."""
+    source = io.open(MODULE, encoding="utf-8").read()
+    calls = ("import one_off_round_scripts" in source
+             and "OOR.audit(" in source)
+    no_walk = "os.walk(" not in source
+    no_shape = not re.search(r"re\.compile\([^)]*_R\\?\d", source)
+    with io.open(MODULE, "rb") as handle:
+        ascii_only = all(byte < 128 for byte in handle.read())
+    ok = calls and no_walk and no_shape and ascii_only
+    if not ok:
+        print("  measured: calls=%r no_walk=%r no_shape=%r ascii=%r"
+              % (calls, no_walk, no_shape, ascii_only), flush=True)
+    check(ok, "AC-OOSW1 the closeout imports one_off_round_scripts and asks its "
+          "audit(), owns no walk and no one-off shape regex of its own, and "
+          "stays ASCII")
+
+
+def ac_oosw2():
+    """AC-OOSW2: a new one-off is refused before any byte is written."""
+    folder = world()
+    state_p = os.path.join(folder, "src", "os", "state.json")
+    face_p = os.path.join(folder, "docs", "status-export.json")
+    try:
+        write(os.path.join(folder, "src", "os", "foo_R2839.py"),
+              "print('a new one-off')\n")
+        before = (fingerprint(state_p), fingerprint(face_p))
+        code, out, _ = run_cli(["--root", folder, "--round", str(ROUND),
+                                "--line",
+                                "2026-11-16 R%d PRODUCT: a healthy line"
+                                % ROUND, "--tick"])
+        after = (fingerprint(state_p), fingerprint(face_p))
+        ok = (code == 2 and "E_CO_ONE_OFF" in out
+              and "foo_R2839.py" in out and before == after
+              and "state=NOT-WRITTEN" in out and "face=NOT-WRITTEN" in out)
+        if not ok:
+            print("  measured: code=%r out=%r state_same=%r face_same=%r"
+                  % (code, out.strip()[:200], before[0] == after[0],
+                     before[1] == after[1]), flush=True)
+    finally:
+        cleanup(folder)
+    check(ok, "AC-OOSW2 a one-off named at or above the freeze round reads "
+          "E_CO_ONE_OFF at rc=2, is named file by file, and both the state "
+          "and the face keep their exact bytes and mtime")
+
+
+def ac_oosw3():
+    """AC-OOSW3: a clean world still closes, and the live tree is not reddened."""
+    folder = world()
+    try:
+        code, out, _ = run_cli(["--root", folder, "--round", str(ROUND),
+                                "--line",
+                                "2026-11-16 R%d PRODUCT: a clean close"
+                                % ROUND, "--tick"])
+        live_code, live_out, _ = run_cli(["--root", ROOT, "--round",
+                                          str(ROUND), "--line",
+                                          "2026-11-16 R%d PRODUCT: live probe"
+                                          % ROUND, "--check"])
+        ok = (code == 0 and "CLOSEOUT OK" in out and "E_CO_ONE_OFF" not in out
+              and "E_CO_ONE_OFF" not in live_out)
+        if not ok:
+            print("  measured: code=%r out=%r live=%r live_out=%r"
+                  % (code, out.strip()[:160], live_code,
+                     live_out.strip()[:160]), flush=True)
+    finally:
+        cleanup(folder)
+    check(ok, "AC-OOSW3 a world with no one-off at the freeze closes normally, "
+          "and the live tree's --check carries no E_CO_ONE_OFF")
+
+
+def ac_oosw4():
+    """AC-OOSW4: --check asks the same law and still writes nothing."""
+    folder = world()
+    state_p = os.path.join(folder, "src", "os", "state.json")
+    face_p = os.path.join(folder, "docs", "status-export.json")
+    try:
+        write(os.path.join(folder, "src", "os", "bar_R2999.py"),
+              "print('another one-off')\n")
+        before = (fingerprint(state_p), fingerprint(face_p))
+        code, out, _ = run_cli(["--root", folder, "--round", str(ROUND),
+                                "--line",
+                                "2026-11-16 R%d PRODUCT: checked" % ROUND,
+                                "--check"])
+        after = (fingerprint(state_p), fingerprint(face_p))
+        ok = (code == 2 and "E_CO_ONE_OFF" in out and before == after)
+        if not ok:
+            print("  measured: code=%r out=%r state_same=%r face_same=%r"
+                  % (code, out.strip()[:200], before[0] == after[0],
+                     before[1] == after[1]), flush=True)
+    finally:
+        cleanup(folder)
+    check(ok, "AC-OOSW4 --check reddens on the same one-off with rc=2 and "
+          "leaves both files' sha256 and mtime unchanged")
+
+
+def ac_oosw5():
+    """AC-OOSW5: the refusal quotes the law's own numbers, not a recount."""
+    folder = world()
+    try:
+        write(os.path.join(folder, "src", "os", "zap_R3000b.py"),
+              "print('a third one-off')\n")
+        import one_off_round_scripts as OOR
+        report, _ = OOR.audit(folder, OOR.DEFAULT_SCOPE, OOR.FREEZE_ROUND)
+        code, out, _ = run_cli(["--root", folder, "--round", str(ROUND),
+                                "--line",
+                                "2026-11-16 R%d PRODUCT: counted" % ROUND,
+                                "--tick"])
+        wanted = ("scanned=%d" % report["scanned"],
+                  "one_offs=%d" % report["one_offs"],
+                  "max_round=%d" % report["max_round"],
+                  "freeze=%d" % report["freeze"])
+        ok = code == 2 and all(token in out for token in wanted)
+        if not ok:
+            print("  measured: code=%r wanted=%r out=%r"
+                  % (code, wanted, out.strip()[:220]), flush=True)
+    finally:
+        cleanup(folder)
+    check(ok, "AC-OOSW5 the refusal carries scanned / one_offs / max_round / "
+          "freeze from the law's own report")
+
+
+def ac_oosw6():
+    """AC-OOSW6: a missing scope is named, not a traceback, and writes nothing."""
+    folder = tempfile.mkdtemp(prefix="cout-scope-")
+    try:
+        code, out, err = run_cli(["--root", folder, "--round", str(ROUND),
+                                  "--line",
+                                  "2026-11-16 R%d PRODUCT: no scope" % ROUND,
+                                  "--tick"])
+        leftovers = sorted(os.listdir(folder))
+        ok = (code == 2 and "E_CO_ONE_OFF_SCOPE" in out
+              and "Traceback" not in (out + err) and leftovers == [])
+        if not ok:
+            print("  measured: code=%r out=%r err=%r leftovers=%r"
+                  % (code, out.strip()[:160], err.strip()[:160], leftovers),
+                  flush=True)
+    finally:
+        cleanup(folder)
+    check(ok, "AC-OOSW6 a root with no src/os reads E_CO_ONE_OFF_SCOPE with "
+          "rc=2, no traceback, and no file written")
+
+
+def ac_oosw7():
+    """AC-OOSW7: registered, and the gate really sits ahead of the state step."""
+    runner_text = io.open(RUNNER, encoding="utf-8").read()
+    pattern = re.compile(
+        r"\(" + json.dumps(LABEL) + r",\s*\n\s*os\.path\.join\([^)]*\),\s*"
+        r"(\d+)\)")
+    match = pattern.search(runner_text)
+    registered = int(match.group(1)) if match else -1
+    matrix_path = os.path.join(ROOT, "docs", "sandbox-suite-matrix.md")
+    row = re.search(r"^\|\s*\d+\s*\|\s*%s\s*\|\s*[^|]*\|\s*(\d+)\s*\|"
+                    % re.escape(LABEL), read(matrix_path), re.MULTILINE)
+    declared = int(row.group(1)) if row else -1
+    source = io.open(MODULE, encoding="utf-8").read()
+    gate_at = source.find("one_off = one_off_refusal(root)")
+    state_at = source.find("SA.run(")
+    order_ok = gate_at != -1 and state_at != -1 and gate_at < state_at
+    ok = (registered == EXPECTED_CRITERIA and declared == EXPECTED_CRITERIA
+          and order_ok)
+    if not ok:
+        print("  measured: registry=%r matrix=%r expected=%r order=%r"
+              % (registered, declared, EXPECTED_CRITERIA, order_ok), flush=True)
+    check(ok, "AC-OOSW7 the registry and the suite matrix declare this suite at "
+          "%d criteria, and the one-off gate is called before the state step"
+          % EXPECTED_CRITERIA)
+
+
 def main():
     print("closeout suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -525,6 +693,13 @@ def main():
     ac_coutb3()
     ac_coutb4()
     ac_coutb5()
+    ac_oosw1()
+    ac_oosw2()
+    ac_oosw3()
+    ac_oosw4()
+    ac_oosw5()
+    ac_oosw6()
+    ac_oosw7()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:
