@@ -1,0 +1,26 @@
+AUDIT row label=ledger-apidev family=law_label_pt rc=0 law=yes row=SUITE apidev: 7/7 criteria pass crit=7 0.2s
+AUDIT row label=ledger-apidev-lifecycle family=law_label_pt rc=0 law=yes row=SUITE apidev-lifecycle: 8/8 criteria pass crit=8 0.2s
+AUDIT row label=ledger-apidev-rate family=law_label_pt rc=0 law=yes row=SUITE apidev-rate: 7/7 criteria pass crit=7 0.3s
+AUDIT row label=ledger-apidev-reject family=law_label_pt rc=0 law=yes row=SUITE apidev-reject: 7/7 criteria pass crit=7 0.3s
+AUDIT row label=ledger-apidev-usagelog family=law_label_pt rc=0 law=yes row=SUITE apidev-usagelog: 7/7 criteria pass crit=7 0.2s
+AUDIT row label=ledger-apidev-rejectwin family=law_label_pt rc=0 law=yes row=SUITE apidev-rejectwin: 7/7 criteria pass crit=7 0.2s
+AUDIT row label=ledger-apidev-usagewin family=law_label_pt rc=0 law=yes row=SUITE apidev-usagewin: 8/8 criteria pass crit=8 0.2s
+AUDIT row label=ledger-apidev-usagekind family=law_label_pt rc=0 law=yes row=SUITE apidev-usagekind: 8/8 criteria pass crit=8 0.3s
+AUDIT row label=ledger-apidev-lifecycletrace family=law_label_pt rc=0 law=yes row=SUITE apidev-lifecycle-trace: 14/14 criteria pass crit=14 0.2s
+AUDIT row label=ledger-apidev-lineage family=law_label_pt rc=0 law=yes row=SUITE apidev-lineage: 22/22 criteria pass crit=22 0.3s
+AUDIT row label=ledger-apidev-chainusage family=law_label_pt rc=0 law=yes row=SUITE apidev-chainusage: 14/14 criteria pass crit=14 0.3s
+AUDIT row label=ledger-apidev-devboard-roll family=law_label_pt rc=0 law=yes row=SUITE apidev-devboard-roll: 7/7 criteria pass crit=7 0.2s
+AUDIT row label=ledger-apidev-devboard-limit family=law_label_pt rc=0 law=yes row=SUITE apidev-devboard-limit: 14/14 criteria pass crit=14 0.4s
+AUDIT row label=ledger-apidev-devboard-ancestry family=law_label_pt rc=0 law=yes row=SUITE apidev-devboard-ancestry: 7/7 criteria pass crit=7 0.2s
+AUDIT row label=ledger-apidev-lineagepersist family=law_label_pt rc=0 law=yes row=SUITE apidev-lineagepersist: 7/7 criteria pass crit=7 0.2s
+AUDIT row label=ledger-apidev-chainusagepersist family=law_label_pt rc=0 law=yes row=SUITE apidev-chainusagepersist: 7/7 criteria pass crit=7 0.3s
+AUDIT row label=ledger-apidev-devboardpersist family=law_label_pt rc=0 law=yes row=SUITE apidev-devboardpersist: 7/7 criteria pass crit=7 0.3s
+AUDIT row label=ledger-eventtickets-boardpersist family=law_label_pt rc=0 law=yes row=SUITE eventtickets-boardpersist: 7/7 criteria pass crit=7 0.2s
+AUDIT row label=ledger-eventtickets-sessionpersist family=law_label_pt rc=0 law=yes row=SUITE eventtickets-sessionpersist: 7/7 criteria pass crit=7 0.2s
+AUDIT row label=ledger-apidev-usagelogpersist family=law_label_pt rc=0 law=yes row=SUITE apidev-usagelogpersist: 7/7 criteria pass crit=7 0.7s
+AUDIT row label=ledger-apidev-keyviewpersist family=law_label_pt rc=0 law=yes row=SUITE apidev-keyviewpersist: 7/7 criteria pass crit=7 0.2s
+AUDIT row label=ledger-apidev-rejecttallpersist family=law_label_pt rc=0 law=yes row=SUITE apidev-rejecttallpersist: 7/7 criteria pass crit=7 0.3s
+AUDIT row label=ledger-apidev-lifecycletracepersist family=law_label_pt rc=0 law=yes row=SUITE apidev-lifecycletracepersist: 7/7 criteria pass crit=7 0.4s
+AUDIT row label=ledger-apidev-usagekindpersist family=law_label_pt rc=0 law=yes row=SUITE apidev-usagekindpersist: 7/7 criteria pass crit=7 0.3s
+AUDIT family=law_label_pt total=24 selected=24 law_emit=24 non_law=0 red=0
+AUDIT TOTAL selected=24 law_emit=24 non_law=0 red=0 families=1

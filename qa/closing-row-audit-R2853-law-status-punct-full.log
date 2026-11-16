@@ -1,0 +1,43 @@
+AUDIT row label=lobby family=law_status_punct rc=0 law=yes row=SUITE PASS (79/79 criteria pass) crit=79 42.1s
+AUDIT row label=ledger-studio family=law_status_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=ledger-metered family=law_status_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=ledger-metered-persist family=law_status_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.3s
+AUDIT row label=ledger-reports family=law_status_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=ledger-reports-persist family=law_status_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=ugc family=law_status_punct rc=0 law=yes row=SUITE PASS (37/37 criteria pass) crit=37 6.7s
+AUDIT row label=ugc-sec-batch family=law_status_punct rc=0 law=yes row=SUITE PASS: 22/22 crit=22 0.4s
+AUDIT row label=ugc-sec-batch-roll family=law_status_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.2s
+AUDIT row label=ugc-sec-batch-bannerpersist family=law_status_punct rc=0 law=yes row=SUITE PASS: 7/7 criteria pass crit=7 0.2s
+AUDIT row label=ugc-sec-batch-rowpersist family=law_status_punct rc=0 law=yes row=SUITE PASS: 7/7 criteria pass crit=7 0.4s
+AUDIT row label=pay-v3 family=law_status_punct rc=0 law=yes row=SUITE PASS: 14/14 crit=14 0.3s
+AUDIT row label=pay-v3-real family=law_status_punct rc=0 law=yes row=SUITE PASS: 9/9 crit=9 0.5s
+AUDIT row label=pay-v3-window family=law_status_punct rc=0 law=yes row=SUITE PASS: 6/6 crit=6 0.5s
+AUDIT row label=pay-notify-bannerroll family=law_status_punct rc=0 law=yes row=SUITE PASS: 7/7 pass-lines crit=7 0.3s
+AUDIT row label=pay-notify-bannerpersist family=law_status_punct rc=0 law=yes row=SUITE PASS: 7/7 pass-lines crit=7 0.3s
+AUDIT row label=pay-authorize-persist family=law_status_punct rc=0 law=yes row=SUITE PASS: 7/7 pass-lines crit=7 0.3s
+AUDIT row label=pay-authorize-idem family=law_status_punct rc=0 law=yes row=SUITE PASS: 7/7 pass-lines crit=7 1.5s
+AUDIT row label=watermark family=law_status_punct rc=0 law=yes row=SUITE PASS (5/5 criteria pass) crit=5 1.3s
+AUDIT row label=watermark-robust family=law_status_punct rc=0 law=yes row=SUITE PASS (6/6 criteria pass) crit=6 2.1s
+AUDIT row label=watermark-sweep family=law_status_punct rc=0 law=yes row=SUITE PASS (6/6 criteria pass) crit=6 26.3s
+AUDIT row label=watermark-scale-recover family=law_status_punct rc=0 law=yes row=SUITE PASS (7/7 criteria pass) crit=7 8.3s
+AUDIT row label=watermark-scale-unknown family=law_status_punct rc=0 law=yes row=SUITE PASS (6/6 criteria pass) crit=6 13.2s
+AUDIT row label=watermark-scale-refine family=law_status_punct rc=0 law=yes row=SUITE PASS (6/6 criteria pass) crit=6 16.6s
+AUDIT row label=dual-track family=law_status_punct rc=0 law=yes row=SUITE PASS: 7/7 PASS crit=7 1.3s
+AUDIT row label=minors family=law_status_punct rc=0 law=yes row=SUITE PASS - 19/19 green crit=19 0.1s
+AUDIT row label=minors-persist family=law_status_punct rc=0 law=yes row=SUITE PASS - 7/7 green crit=7 0.2s
+AUDIT row label=suite-matrix-discovery family=law_status_punct rc=0 law=yes row=SUITE PASS (16/16 cases) crit=16 1.9s
+AUDIT row label=ledger-proposal-persist family=law_status_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=ledger-incentive-persist family=law_status_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=ledger-apidev-keyviewwin family=law_status_punct rc=0 law=yes row=SUITE PASS: 7/7 criteria crit=7 0.4s
+AUDIT row label=ugc-sec-batch-rowsroll family=law_status_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.2s
+AUDIT row label=member-expiring-soon-persist family=law_status_punct rc=0 law=yes row=SUITE member-expiring-soon-persist: 7/7 criteria pass crit=7 0.4s
+AUDIT row label=member-balanceface-persist family=law_status_punct rc=0 law=yes row=SUITE member-balanceface-persist: 7/7 criteria pass crit=7 0.9s
+AUDIT row label=member-privileges-persist family=law_status_punct rc=0 law=yes row=SUITE member-privileges-persist: 7/7 criteria pass crit=7 0.4s
+AUDIT row label=member-birthcert-persist family=law_status_punct rc=0 law=yes row=SUITE member-birthcert-persist: 7/7 criteria pass crit=7 0.3s
+AUDIT row label=member-expiring-dist-persist family=law_status_punct rc=0 law=yes row=SUITE member-expiring-dist-persist: 7/7 criteria pass crit=7 0.4s
+AUDIT row label=ledger-growth-archive-persist family=law_status_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.4s
+AUDIT row label=ledger-coverageboard-window family=law_status_punct rc=0 law=yes row=SUITE PASS (7/7) crit=7 0.2s
+AUDIT row label=ledger-datasub-coveragedual family=law_status_punct rc=0 law=yes row=SUITE PASS (7/7) crit=7 0.3s
+AUDIT row label=os-relative-module-corpus-scope family=law_status_punct rc=0 law=yes row=SUITE PASS (6/6 criteria pass) crit=6 0.9s
+AUDIT family=law_status_punct total=41 selected=41 law_emit=41 non_law=0 red=0
+AUDIT TOTAL selected=41 law_emit=41 non_law=0 red=0 families=1

@@ -1,0 +1,33 @@
+AUDIT row label=civic-behavior-distribution family=law_counters rc=0 law=yes row=SUITE PASS: 6 criteria, 6 pass, 0 fail crit=6 0.2s
+AUDIT row label=civic-behavior-monthwindow family=law_counters rc=0 law=yes row=SUITE PASS: 7 criteria, 7 pass, 0 fail crit=7 0.2s
+AUDIT row label=civic-competition-monthwindow family=law_counters rc=0 law=yes row=SUITE PASS: 7 criteria, 7 pass, 0 fail crit=7 0.2s
+AUDIT row label=os-stamp-exempt-append family=law_counters rc=0 law=yes row=SUITE RESULT passes=6 fails=0 criteria=6 crit=6 0.4s
+AUDIT row label=os-stamp-exempt-guard family=law_counters rc=0 law=yes row=SUITE RESULT passes=6 fails=0 criteria=6 crit=6 0.2s
+AUDIT row label=os-stamp-exempt-seed-guard-wire family=law_counters rc=0 law=yes row=SUITE RESULT passes=6 fails=0 criteria=6 crit=6 0.1s
+AUDIT row label=os-runner-arg-guard family=law_counters rc=0 law=yes row=SUITE RESULT passes=6 fails=0 criteria=6 crit=6 0.2s
+AUDIT row label=os-export-publish-from-import-law family=law_counters rc=0 law=yes row=SUITE PASS criteria=6 passes=8 fails=0 crit=6 1.2s
+AUDIT row label=os-relative-import-publish-binding family=law_counters rc=0 law=yes row=SUITE PASS criteria=6 passes=7 fails=0 crit=6 1.2s
+AUDIT row label=os-publish-relative-package-identity family=law_counters rc=0 law=yes row=SUITE PASS criteria=6 passes=6 fails=0 crit=6 1.4s
+AUDIT row label=os-relative-import-alias-gate family=law_counters rc=0 law=yes row=SUITE PASS criteria=6 passes=6 fails=0 crit=6 1.2s
+AUDIT row label=os-plain-import-alias-gate family=law_counters rc=0 law=yes row=SUITE PASS criteria=6 passes=6 fails=0 crit=6 1.2s
+AUDIT row label=os-plain-import-comma-binding family=law_counters rc=0 law=yes row=SUITE PASS criteria=6 passes=6 fails=0 crit=6 1.1s
+AUDIT row label=os-comma-binding-wire family=law_counters rc=0 law=yes row=SUITE PASS criteria=6 passes=6 fails=0 crit=6 5.8s
+AUDIT row label=os-comma-binding-consumer-wire family=law_counters rc=0 law=yes row=SUITE PASS criteria=6 passes=6 fails=0 crit=6 11.4s
+AUDIT row label=os-comma-binding-sibling-faces family=law_counters rc=0 law=yes row=SUITE PASS criteria=6 pass=6 fail=0 crit=6 5.9s
+AUDIT row label=os-general-writer-dialect-audit family=law_counters rc=0 law=yes row=SUITE PASS criteria=6 pass=6 fail=0 crit=6 24.1s
+AUDIT row label=os-parameter-destination-resolution family=law_counters rc=0 law=yes row=SUITE PASS criteria=6 pass=6 fail=0 crit=6 11.2s
+AUDIT row label=os-single-append-status-face family=law_counters rc=0 law=yes row=SUITE os-single-append-status-face expected-criteria=6 pass=6 fail=0 crit=6 2.9s
+AUDIT row label=os-matrix-stamp-provenance-line family=law_counters rc=0 law=yes row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 2.2s
+AUDIT row label=os-matrix-stamp-from-liveness family=law_counters rc=0 law=yes row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 1.2s
+AUDIT row label=os-patterns-label-readability family=law_counters rc=0 law=yes row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 1.2s
+AUDIT row label=os-patterns-label-readability-render-consumer family=law_counters rc=0 law=yes row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 0.4s
+AUDIT row label=os-patterns-non-label-text-readability family=law_counters rc=0 law=yes row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 0.5s
+AUDIT row label=os-artifact-disk-text-readability family=law_counters rc=0 law=yes row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 0.4s
+AUDIT row label=os-evidence-name-text-coverage family=law_counters rc=0 law=yes row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 0.4s
+AUDIT row label=os-stamp-text-coverage family=law_counters rc=0 law=yes row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 0.5s
+AUDIT row label=os-probe-seam-registry family=law_counters rc=0 law=yes row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 2.4s
+AUDIT row label=os-probe-seam-forwarding-scope family=law_counters rc=0 law=yes row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 9.9s
+AUDIT row label=os-probe-seam-lazy-scope family=law_counters rc=0 law=yes row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 21.7s
+AUDIT row label=os-probe-seam-dynamic-import-scope family=law_counters rc=0 law=yes row=SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6 crit=6 36.3s
+AUDIT family=law_counters total=31 selected=31 law_emit=31 non_law=0 red=0
+AUDIT TOTAL selected=31 law_emit=31 non_law=0 red=0 families=1

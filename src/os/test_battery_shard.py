@@ -64,6 +64,9 @@ print("  | PASS probe-slow")
 print("SUITE PASS 1/1")
 """
 
+PROBE_BARE = """print("SUITE PASS 1/1")
+"""
+
 
 def ok(name, cond, detail=""):
     CHECKS.append(name)
@@ -95,7 +98,8 @@ def stat_sig(path):
 def write_probes(base):
     for name, body in (("probe_good.py", PROBE_GOOD),
                        ("probe_bad.py", PROBE_BAD),
-                       ("probe_slow.py", PROBE_SLOW)):
+                       ("probe_slow.py", PROBE_SLOW),
+                       ("probe_bare.py", PROBE_BARE)):
         with open(os.path.join(base, name), "w", encoding="utf-8",
                   newline="\n") as handle:
             handle.write(body)
@@ -311,6 +315,23 @@ def main():
            and code_o == 0 and executed_o == len(only_good),
            "mixed_rc=%d named=%s exec=%d green_rc=%d exec_g=%d"
            % (code_m, named, executed_m, code_o, executed_o))
+
+        # AC-BSGB11 (R2853) - the detail counter reads the corpus convention
+        # (indented line, optional "| " separator), and absent detail is
+        # declared rather than implied by a zero count.
+        both = [("probe-good", "probe_good.py", 1),
+                ("probe-bare", "probe_bare.py", 1)]
+        patch_registry(shard, both, world)
+        code_d, out_d = run_cli(shard, ["--match", "probe"])
+        rows_d = [l for l in out_d.splitlines() if l.startswith("SHARD row ")]
+        good_d = [l for l in rows_d if " probe-good " in l]
+        bare_d = [l for l in rows_d if " probe-bare " in l]
+        good_ok = bool(good_d) and "pass=1 fail=0 detail=yes" in good_d[0]
+        bare_ok = (bool(bare_d) and "pass=0 fail=0 detail=none" in bare_d[0]
+                   and "suite=PASS 1/1" in bare_d[0])
+        ok("AC-BSGB11", code_d == 0 and good_ok and bare_ok,
+           "indented_detail=%s bare_detail=%s rc=%d"
+           % (good_ok, bare_ok, code_d))
 
         # AC-BSGB5 - accounting is recomputed from the same file's own rows.
         qa_dir = os.path.join(world, "qa")

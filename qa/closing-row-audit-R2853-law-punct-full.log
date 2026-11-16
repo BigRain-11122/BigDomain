@@ -1,0 +1,39 @@
+AUDIT row label=ledger-incentive family=law_punct rc=0 law=yes row=SUITE PASS (7/7) crit=7 0.2s
+AUDIT row label=pay-channel-matrix family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.6s
+AUDIT row label=pay-channel-window family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.6s
+AUDIT row label=pay-channel-persist family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.4s
+AUDIT row label=member-entry family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.1s
+AUDIT row label=member-entrytier-persist family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.3s
+AUDIT row label=member-refund-recovery family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.9s
+AUDIT row label=member-expiring family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 1.1s
+AUDIT row label=member-reminder-scanwire family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.4s
+AUDIT row label=member-banner-board family=law_punct rc=0 law=yes row=SUITE PASS: 17/17 crit=17 0.7s
+AUDIT row label=watermark-bindbit family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 4.9s
+AUDIT row label=watermark-dualbit family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 3.0s
+AUDIT row label=ledger-curation-hotpersist family=law_punct rc=0 law=yes row=SUITE PASS (6/6 criteria green) crit=6 0.2s
+AUDIT row label=ledger-curation-coldpersist family=law_punct rc=0 law=yes row=SUITE PASS (6/6 criteria green) crit=6 0.3s
+AUDIT row label=ledger-curation-combinedpersist family=law_punct rc=0 law=yes row=SUITE PASS (6/6 criteria green) crit=6 0.5s
+AUDIT row label=ledger-curation-combinedboundary family=law_punct rc=0 law=yes row=SUITE PASS (6/6 criteria green) crit=6 0.2s
+AUDIT row label=ledger-curation-combinedmonth family=law_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.4s
+AUDIT row label=ledger-curation-regpersist family=law_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=ledger-civicpersist family=law_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=ledger-eventtickets-roll family=law_punct rc=0 law=yes row=SUITE PASS (7/7) crit=7 0.2s
+AUDIT row label=ledger-eventtickets-telescope family=law_punct rc=0 law=yes row=SUITE PASS (6/6) crit=6 0.2s
+AUDIT row label=ugc-pool-water family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.4s
+AUDIT row label=ugc-pool-delta family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.4s
+AUDIT row label=member-expiring-dist family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.5s
+AUDIT row label=ugc-pool-waterpersist family=law_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.3s
+AUDIT row label=ledger-apimarket-devsalespersist family=law_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.3s
+AUDIT row label=ledger-apimarket-devboardwindow family=law_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.4s
+AUDIT row label=ledger-apimarket-devboardmonthpersist family=law_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.3s
+AUDIT row label=ledger-apimarket-devboardboundary family=law_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.3s
+AUDIT row label=ledger-apimarket-devboardgatepersist family=law_punct rc=0 law=yes row=SUITE PASS (8/8 criteria green) crit=8 0.3s
+AUDIT row label=ledger-apimarket-devboardmonthboundary family=law_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.3s
+AUDIT row label=member-refund-recovery-persist family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.5s
+AUDIT row label=member-reminder-persist family=law_punct rc=0 law=yes row=SUITE PASS: 7/7 crit=7 0.4s
+AUDIT row label=ledger-datasub-coveragegatepersist family=law_punct rc=0 law=yes row=SUITE PASS (8/8 criteria green) crit=8 0.2s
+AUDIT row label=civic-behavior-monthwindow-persist family=law_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=civic-competition-monthwindow-persist family=law_punct rc=0 law=yes row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=os-relative-package-presence-refusal family=law_punct rc=0 law=yes row=SUITE PASS (6/6 criteria pass) crit=6 1.0s
+AUDIT family=law_punct total=37 selected=37 law_emit=37 non_law=0 red=0
+AUDIT TOTAL selected=37 law_emit=37 non_law=0 red=0 families=1

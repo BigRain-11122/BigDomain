@@ -206,6 +206,9 @@ def select(rows, prefixes, limit, exacts=()):
     return picked
 
 
+DETAIL_LINE = re.compile(r"(?m)^[ \t]*(?:\|[ \t]*)?(PASS|FAIL)\b")
+
+
 def run_one(base, label, rel, cap, overrides):
     """AC-BSH3: the battery's own invocation, byte for byte in behaviour.
 
@@ -355,8 +358,11 @@ def _round(args):
     started = time.time()
     for label, rel, crit in picked:
         code, out, secs = run_one(base, label, rel, cap, overrides)
-        passes = len(re.findall(r"(?m)^PASS\b", out))
-        fails = len(re.findall(r"(?m)^FAIL\b", out))
+        tokens = DETAIL_LINE.findall(out)
+        passes = tokens.count("PASS")
+        fails = tokens.count("FAIL")
+        # AC-LF6C: absent detail is declared, never implied by a zero count.
+        detail = "yes" if (passes + fails) else "none"
         parsed = parse_suite_row(out)
         suite = ("%s %d/%d" % parsed) if parsed else "none"
         if parsed and parsed[2] != int(crit):
@@ -367,8 +373,8 @@ def _round(args):
             green += 1
         else:
             reds.append("%s:rc=%d" % (label, code))
-        line = ("SHARD row %s rc=%d pass=%d fail=%d suite=%s crit=%d %.1fs"
-                % (label, code, passes, fails, suite, crit, secs))
+        line = ("SHARD row %s rc=%d pass=%d fail=%d detail=%s suite=%s crit=%d %.1fs"
+                % (label, code, passes, fails, detail, suite, crit, secs))
         print(line)
         lines.append(line)
         if code != 0:
