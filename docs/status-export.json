@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-16T18:41:41+08:00",
-  "do": "R2830 PRODUCT+ENGINEERING: the os- family leg doubled from 80 to 160 suites and its first execution named three red rows plus four registry rows that under-declared their own suites; all seven are now closed at their birth site. Leg 1 (qa/battery-shard-os-R2830.log) read selected=160 executed=160 green=157 criteria=1001 crit_mismatch=4 elapsed=399.7s. Leg 2 on the same slice read crit_mismatch=0 (registry repaired) and still green=157 (qa/battery-shard-os-R2830-leg2.log - deliberately NOT named -green). Root A: queue_floor_export_face.apply() assigned the section key in place, so a section another writer appended later left the queue face in the middle; the live export ends ['queue','results_archive','results'] and AC-QFE4 reddened on a healthy tree. apply() now drops the key before writing it last (self-healing) and the suite states the same law: every other key keeps its order, the section moves to the end, no key lost or duplicated. Root B: state/queue/tech.md line 2 (done#937b438d, R2793) had no declaration entry, so the live reading was UNDECLARED=1 / DRIFT; one entry was declared at R2830 and the live reading is NO-DRIFT 384/384, written one-entry-per-line after a first attempt expanded the whole file (2307+/383-) and was reflowed back to 2+/1-. Root C (AC-OL2-5, four rows judged one by one): os-retry-naming declared 9 and ran 9 - the SUITE was wrong, its closing row hardcoded /8 while AC-RTN6b made it nine; os-logs-inventory declared 8 and runs 31, the two closeout-export-parity suites declared 6 and run 16 and 20 - there the REGISTRY row and the suite's own EXPECTED_CRITERIA literal had drifted together, so both now derive from one constant. Registry 699 suites / 5305 criteria (+47), matrix 73553B byte-identical, reconcile DOC-CURRENT, seven suites re-read 6/6, 6/6, 16/16, 20/20, 9/9, 31/31, 6/6 (qa/battery-shard-os-R2830-fixes.log 426B/8 lines/sha256 70b8ae52963ed613).",
+  "export_ts": "2026-11-16T19:18:52+08:00",
+  "do": "R2831 - PRODUCT+ENGINEERING: the leg the last two windows owed is now measured green (160 selected / 160 executed / 160 green / 1048 criteria / rc=0 / 487.8s), and the four reds its first run produced were ONE root whose repair sat in the log itself, not in any product module. Leg 1 (qa/battery-shard-os-R28...",
   "ceo_face": {
-    "current": "R2830 PRODUCT+ENGINEERING: the os- family leg doubled from 80 to 160 suites and its first execution named three red rows plus four registry rows that under-declared their own suites; all seven are now closed at their birth site. Leg 1 (qa/battery-shard-os-R2830.log) read selected=160 executed=160 green=157 criteria=1001 crit_mismatch=4 elapsed=399.7s. Leg 2 on the same slice read crit_mismatch=0 (registry repaired) and still green=157 (qa/battery-shard-os-R2830-leg2.log - deliberately NOT named -green). Root A: queue_floor_export_face.apply() assigned the section key in place, so a section another writer appended later left the queue face in the middle; the live export ends ['queue','results_archive','results'] and AC-QFE4 reddened on a healthy tree. apply() now drops the key before writing it last (self-healing) and the suite states the same law: every other key keeps its order, the section moves to the end, no key lost or duplicated. Root B: state/queue/tech.md line 2 (done#937b438d, R2793) had no declaration entry, so the live reading was UNDECLARED=1 / DRIFT; one entry was declared at R2830 and the live reading is NO-DRIFT 384/384, written one-entry-per-line after a first attempt expanded the whole file (2307+/383-) and was reflowed back to 2+/1-. Root C (AC-OL2-5, four rows judged one by one): os-retry-naming declared 9 and ran 9 - the SUITE was wrong, its closing row hardcoded /8 while AC-RTN6b made it nine; os-logs-inventory declared 8 and runs 31, the two closeout-export-parity suites declared 6 and run 16 and 20 - there the REGISTRY row and the suite's own EXPECTED_CRITERIA literal had drifted together, so both now derive from one constant. Registry 699 suites / 5305 criteria (+47), matrix 73553B byte-identical, reconcile DOC-CURRENT, seven suites re-read 6/6, 6/6, 16/16, 20/20, 9/9, 31/31, 6/6 (qa/battery-shard-os-R2830-fixes.log 426B/8 lines/sha256 70b8ae52963ed613).",
+    "current": "R2831 - PRODUCT+ENGINEERING: the leg the last two windows owed is now measured green (160 selected / 160 executed / 160 green / 1048 criteria / rc=0 / 487.8s), and the four reds its first run produced were ONE root whose repair sat in the log itself, not in any product module. Leg 1 (qa/battery-shard-os-R28...",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2830] next window (<=12h): (1) MAIN - re-run the same 160-suite os- leg to a measured rc=0 (it was killed twice at the 640s carrier cap, so the green leg is owed, not claimed) and then extend to --limit 274; (2) the shard leg's own carrier limit is a real tooling gap: a 160-suite leg takes ~440s and a 274-suite leg will not fit any single carrier window - either the carrier grows or the leg must be split and stitched with one closing row; (3) the byte-stability law AC-QFE4 is now self-healing on the write side and the live export still ends with ['queue','results_archive','results'] until the face is next written - run one real write and confirm the order moves; (4) carried unchanged: `outs` as a 37-entry unmaintained list, the remaining 539 of 699 suites, 7 tool faces with no battery row, AC-VAC1..6, the AC-LKNF1 queue head, the R2778 stand on the Network Data Security Regulation, the 13 BOM-less UTF-16 evidence files, the dead export_R2431.py hook, and BigDomain-OSLoop's S4U re-registration.",
-    "next_milestone_due": "2026-11-17T06:41:41+08:00",
-    "updated_at": "2026-11-16T18:41:41+08:00",
+    "next_milestone": "[R2831] next window (<=12h): (1) MAIN - the durable guard the shape still owes: one suite or audit must redden when the newest round main line of the live log does not start with `YYYY-MM-DD R<num> ` (today only the checker's `ValueError` catches it, and it catches it as a crash); (2) the os- family leg is measured green at 160/274 - extend to the remaining 114 suites, and since a 160-suite leg now measures 487.8s the shard carrier limit is the named blocker: add an offset/resume slice so 274 can be run as two stitched legs with ONE closing row; (3) carried unchanged: `outs` as a 37-entry unmaintained list, 539 of 699 suites unrun, 7 tool faces with no battery row, AC-VAC1..6 in src/sandbox/ledger/reconcile.py, the AC-LKNF1 queue head, the R2778 stand on the Network Data Security Regulation, the 13 BOM-less UTF-16 evidence files, the dead src/os/export_R2431.py hook, and BigDomain-OSLoop's S4U re-registration (needs an ELEVATED shell).",
+    "next_milestone_due": "2026-11-18T19:18:52+08:00",
+    "updated_at": "2026-11-16T19:18:52+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,32 @@
   "self_drive": {
     "window": "2026-11-10..2026-11-16",
     "window_days": 7,
-    "log_lines_in_window": 59,
+    "log_lines_in_window": 18,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 5,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 11,
     "queue_explore_open": 10
   },
-  "current": "R2830 PRODUCT+ENGINEERING: the os- family leg doubled from 80 to 160 suites and its first execution named three red rows plus four registry rows that under-declared their own suites; all seven are now closed at their birth site. Leg 1 (qa/battery-shard-os-R2830.log) read selected=160 executed=160 green=157 criteria=1001 crit_mismatch=4 elapsed=399.7s. Leg 2 on the same slice read crit_mismatch=0 (registry repaired) and still green=157 (qa/battery-shard-os-R2830-leg2.log - deliberately NOT named -green). Root A: queue_floor_export_face.apply() assigned the section key in place, so a section another writer appended later left the queue face in the middle; the live export ends ['queue','results_archive','results'] and AC-QFE4 reddened on a healthy tree. apply() now drops the key before writing it last (self-healing) and the suite states the same law: every other key keeps its order, the section moves to the end, no key lost or duplicated. Root B: state/queue/tech.md line 2 (done#937b438d, R2793) had no declaration entry, so the live reading was UNDECLARED=1 / DRIFT; one entry was declared at R2830 and the live reading is NO-DRIFT 384/384, written one-entry-per-line after a first attempt expanded the whole file (2307+/383-) and was reflowed back to 2+/1-. Root C (AC-OL2-5, four rows judged one by one): os-retry-naming declared 9 and ran 9 - the SUITE was wrong, its closing row hardcoded /8 while AC-RTN6b made it nine; os-logs-inventory declared 8 and runs 31, the two closeout-export-parity suites declared 6 and run 16 and 20 - there the REGISTRY row and the suite's own EXPECTED_CRITERIA literal had drifted together, so both now derive from one constant. Registry 699 suites / 5305 criteria (+47), matrix 73553B byte-identical, reconcile DOC-CURRENT, seven suites re-read 6/6, 6/6, 16/16, 20/20, 9/9, 31/31, 6/6 (qa/battery-shard-os-R2830-fixes.log 426B/8 lines/sha256 70b8ae52963ed613).",
+  "current": "R2831 - PRODUCT+ENGINEERING: the leg the last two windows owed is now measured green (160 selected / 160 executed / 160 green / 1048 criteria / rc=0 / 487.8s), and the four reds its first run produced were ONE root whose repair sat in the log itself, not in any product module. Leg 1 (qa/battery-shard-os-R28...",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2830] next window (<=12h): (1) MAIN - re-run the same 160-suite os- leg to a measured rc=0 (it was killed twice at the 640s carrier cap, so the green leg is owed, not claimed) and then extend to --limit 274; (2) the shard leg's own carrier limit is a real tooling gap: a 160-suite leg takes ~440s and a 274-suite leg will not fit any single carrier window - either the carrier grows or the leg must be split and stitched with one closing row; (3) the byte-stability law AC-QFE4 is now self-healing on the write side and the live export still ends with ['queue','results_archive','results'] until the face is next written - run one real write and confirm the order moves; (4) carried unchanged: `outs` as a 37-entry unmaintained list, the remaining 539 of 699 suites, 7 tool faces with no battery row, AC-VAC1..6, the AC-LKNF1 queue head, the R2778 stand on the Network Data Security Regulation, the 13 BOM-less UTF-16 evidence files, the dead export_R2431.py hook, and BigDomain-OSLoop's S4U re-registration.",
-  "state_bytes": 19490,
+  "next_milestone": "[R2831] next window (<=12h): (1) MAIN - the durable guard the shape still owes: one suite or audit must redden when the newest round main line of the live log does not start with `YYYY-MM-DD R<num> ` (today only the checker's `ValueError` catches it, and it catches it as a crash); (2) the os- family leg is measured green at 160/274 - extend to the remaining 114 suites, and since a 160-suite leg now measures 487.8s the shard carrier limit is the named blocker: add an offset/resume slice so 274 can be run as two stitched legs with ONE closing row; (3) carried unchanged: `outs` as a 37-entry unmaintained list, 539 of 699 suites unrun, 7 tool faces with no battery row, AC-VAC1..6 in src/sandbox/ledger/reconcile.py, the AC-LKNF1 queue head, the R2778 stand on the Network Data Security Regulation, the 13 BOM-less UTF-16 evidence files, the dead src/os/export_R2431.py hook, and BigDomain-OSLoop's S4U re-registration (needs an ELEVATED shell).",
+  "state_bytes": 24455,
+  "results_archive": {
+    "path": "logs/status-export-legacy-2026-11.json",
+    "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
+    "count": 179,
+    "bytes": 336680
+  },
+  "results": [
+    [
+      "2831",
+      "OSLoop 执行 tick"
+    ]
+  ],
   "queue": {
     "floors": {
       "main": 5,
@@ -159,17 +171,5 @@
     "shortfall_total": 2,
     "missing": [],
     "delivered_total": 2
-  },
-  "results_archive": {
-    "path": "logs/status-export-legacy-2026-11.json",
-    "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
-    "count": 179,
-    "bytes": 336680
-  },
-  "results": [
-    [
-      "2829",
-      "OSLoop 执行 tick"
-    ]
-  ]
+  }
 }
