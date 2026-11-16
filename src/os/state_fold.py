@@ -38,7 +38,12 @@ from datetime import datetime
 GATE = 78500
 
 # Token family from the group ledger grammar (AC/BD/C/D/O/T/XL/OH/R).
-PAT = re.compile(r'(?:AC|BD|C|D|O|T|XL|OH|R)-[0-9A-Za-z][0-9A-Za-z]*'
+# AC-FTOK1/2: the multi-letter families keep a loose body because none of them
+# collides with English prose; the single-letter families require a DIGIT right
+# after the hyphen, otherwise ordinary hyphenations (C-tier, D-copy, T-based,
+# O-face, R-CHECK) are counted as ledger tokens and every fold is refused.
+PAT = re.compile(r'(?:(?:AC|BD|XL|OH)-[0-9A-Za-z][0-9A-Za-z]*'
+                 r'|[CDOTR]-\d[0-9A-Za-z]*)'
                  r'(?:-[0-9A-Za-z]+)*')
 
 # Round-block boundary law (R2407). A tokens line ends a round's ledger, but a
@@ -189,8 +194,20 @@ def round_split(window, kept):
     return None
 
 
+def archive_tokens(path):
+    """Tokens already standing in the archive, read from disk (AC-FTOK6)."""
+    if not path or not os.path.exists(path):
+        return set()
+    try:
+        with io.open(path, "rb") as handle:
+            text = handle.read().decode("utf-8", "replace")
+    except (IOError, OSError):
+        return set()
+    return set(PAT.findall(text))
+
+
 def plan_fold(raw, state, window_start, window_end, summary, reserve=0,
-              gate=GATE):
+              gate=GATE, covered=()):
     """The fold predicate. Returns (plan, folded_text); writes nothing."""
     if not isinstance(summary, str) or not summary.strip():
         raise StateFoldError("E_SF_BAD_SUMMARY", "summary must be a line")
@@ -218,7 +235,12 @@ def plan_fold(raw, state, window_start, window_end, summary, reserve=0,
     tokens = set()
     for line in window:
         tokens |= set(PAT.findall(line))
-    missing = sorted(token for token in tokens if token not in summary)
+    # AC-FTOK6: the fold summary is one line and cannot name hundreds of ids,
+    # so a token survives either by being named in the summary OR by already
+    # standing in the archive, which is the byte-verified verbatim vehicle.
+    held = set(covered)
+    missing = sorted(token for token in tokens
+                     if token not in summary and token not in held)
     literal = layout["item_prefix"] + ps_escape(summary)
     if end < count:
         literal += ","
@@ -322,8 +344,11 @@ def fold(root, round_label, fold_no, window_start, window_end, summary,
     """
     path = state_path(root)
     raw, state = read_state(path)
+    cov_archive = archive_path or default_archive(root)
+    covered = archive_tokens(cov_archive)
     plan, folded_text = plan_fold(raw, state, window_start, window_end,
-                                  summary, reserve=reserve, gate=gate)
+                                  summary, reserve=reserve, gate=gate,
+                                  covered=covered)
     fail = []
     if plan["tokens_missing"]:
         fail.append("token-missing")

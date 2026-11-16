@@ -138,7 +138,9 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
         }
 
     plan, folded_text = SF.plan_fold(raw, state, window_start, window_end,
-                                     summary, gate=gate)
+                                     summary, gate=gate,
+                                     covered=SF.archive_tokens(
+                                         archive_path or SF.default_archive(root)))
     # AC-SFOLD4: the layout the append path lands and the layout this fold
     # reader expects must agree about the SAME file.
     payload = GWDA.payload_for(path, folded_text)

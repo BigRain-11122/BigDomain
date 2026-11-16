@@ -1,16 +1,18 @@
 {
-  "export_ts": "2026-11-16T08:27:29+08:00",
-  "do": "2026-11-16 R2821 PRODUCT+ENGINEERING: CEO 每次要下载的那份过程面，既读 PASS 又带着两处可证伪的谎，还 89% 是没人维护的历史。开轮实测 `python tools/status_export_fresh.py --check` 读 `VERDICT R2820 PASS`，而同一份 `docs/status-export.json` 里 (a) `state_bytes=65089` 而 `os.path.getsize('src/os/state.json')=81159` —— 一个自称派生自实况的字段错了 16070B；(b) 顶层 `current` 领标 `R2814`，活轮次是 `R2820`，落后六轮，因为 `check()` 只核 `do` 与 `ceo_face.current` 两处，第三个同义字段无人守；(c) `results` 一项 JSON 化 332486B，占全文件 372300B 的 89%，179 条逐轮叙述无人再动也无闸看守。裁决=**归档写盘不裁历史**：`--archive-legacy --confirm` 把 `results` 整块写进 `logs/status-export-legacy-2026-11.json`（179 条 / 336680B / sha256 `f69438b333bfdcbf`），活文档只留 `results_archive={path,sha256,count,bytes}`，`keys_drift=none`。**实测体积 372300B → 36059B，`--apply` 后 37049B**，`--check` 回 `VERDICT R2820 PASS state_bytes=81159 export_bytes=37049 archive=logs/status-export-legacy-2026-11.json`。",
+  "export_ts": "2026-11-16T08:56:52+08:00",
+  "do": "R2822 how the change was held to its own criteria: AC-FTOK1..AC-FTOK6 were pinned in src/os/backlog.md and committed as 0e3e9d23 BEFORE state_fold.py was touched. The negative control ran on production bytes twice - a summary naming no ids was REFUSED token-missing at end=49 (23 real ids), and after the summary carried those 23 ids the same call returned verdict=CLEAR with missing=0 and bytes_after=35552. Regression: src/os/test_state_fold.py SUITE PASS 6/6 and src/os/test_state_fold_run.py CRITERIA 6/6 passes=6 fails=0 after the edit, so no existing expectation was loosened to make the new predicate green.",
   "ceo_face": {
-    "current": "2026-11-16 R2821 PRODUCT+ENGINEERING: CEO 每次要下载的那份过程面，既读 PASS 又带着两处可证伪的谎，还 89% 是没人维护的历史。开轮实测 `python tools/status_export_fresh.py --check` 读 `VERDICT R2820 PASS`，而同一份 `docs/status-export.json` 里 (a) `state_bytes=65089` 而 `os.path.getsize('src/os/state.json')=81159` —— 一个自称派生自实况的字段错了 16070B；(b) 顶层 `current` 领标 `R2814`，活轮次是 `R2820`，落后六轮，因为 `check()` 只核 `do` 与 `ceo_face.current` 两处，第三个同义字段无人守；(c) `results` 一项 JSON 化 332486B，占全文件 372300B 的 89%，179 条逐轮叙述无人再动也无闸看守。裁决=**归档写盘不裁历史**：`--archive-legacy --confirm` 把 `results` 整块写进 `logs/status-export-legacy-2026-11.json`（179 条 / 336680B / sha256 `f69438b333bfdcbf`），活文档只留 `results_archive={path,sha256,count,bytes}`，`keys_drift=none`。**实测体积 372300B → 36059B，`--apply` 后 37049B**，`--check` 回 `VERDICT R2820 PASS state_bytes=81159 export_bytes=37049 archive=logs/status-export-legacy-2026-11.json`。",
+    "current": "R2822 how the change was held to its own criteria: AC-FTOK1..AC-FTOK6 were pinned in src/os/backlog.md and committed as 0e3e9d23 BEFORE state_fold.py was touched. The negative control ran on production bytes twice - a summary naming no ids was REFUSED token-missing at end=49 (23 real ids), and after the summary carried those 23 ids the same call returned verdict=CLEAR with missing=0 and bytes_after=35552. Regression: src/os/test_state_fold.py SUITE PASS 6/6 and src/os/test_state_fold_run.py CRITERIA 6/6 passes=6 fails=0 after the edit, so no existing expectation was loosened to make the new predicate green.",
     "latest_artifact": "preview/face-sweep.json (4741B, 2026-11-16T08:26:58+08:00)",
     "last_artifact": "preview/face-sweep.json (4741B, 2026-11-16T08:26:58+08:00)",
     "next_milestone": "[R2821] next window (<=12h): (1) `src/os/state.json` closed at **85049B** against the 78500B waterline (+6549) — round-aligned fold owed, and the fold must not swallow the round being closed; (2) full battery still owes **698/5238**, no leg started for many windows; (3) 8 tool faces still carry their own criteria with no battery row (lobby_ws 8 / journey_demo 8 / city_face 8 / membership_benefit 8",
-    "next_milestone_due": "2026-11-16T20:27:29+08:00",
-    "updated_at": "2026-11-16T08:27:29+08:00",
+    "next_milestone_due": "2026-11-16T20:56:52+08:00",
+    "updated_at": "2026-11-16T08:56:52+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\face-sweep.json",
-    "board_pages_skipped": [],
-    "newest_pair_on_disk_is_board": false
+    "board_pages_skipped": [
+      "preview/face-sweep.html (5325B)"
+    ],
+    "newest_pair_on_disk_is_board": true
   },
   "depts": [
     {
@@ -40,6 +42,7 @@
     }
   ],
   "outs": [
+    "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
     "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（72516B·687 行）",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
     "preview/membership-face.html (8853B) + preview/membership-face.json (4602B)",
@@ -80,20 +83,20 @@
   "self_drive": {
     "window": "2026-11-10..2026-11-16",
     "window_days": 7,
-    "log_lines_in_window": 68,
+    "log_lines_in_window": 34,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 15,
+    "substantive_non_idle_mention_lines": 6,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 11,
     "queue_explore_open": 10
   },
-  "current": "2026-11-16 R2821 PRODUCT+ENGINEERING: CEO 每次要下载的那份过程面，既读 PASS 又带着两处可证伪的谎，还 89% 是没人维护的历史。开轮实测 `python tools/status_export_fresh.py --check` 读 `VERDICT R2820 PASS`，而同一份 `docs/status-export.json` 里 (a) `state_bytes=65089` 而 `os.path.getsize('src/os/state.json')=81159` —— 一个自称派生自实况的字段错了 16070B；(b) 顶层 `current` 领标 `R2814`，活轮次是 `R2820`，落后六轮，因为 `check()` 只核 `do` 与 `ceo_face.current` 两处，第三个同义字段无人守；(c) `results` 一项 JSON 化 332486B，占全文件 372300B 的 89%，179 条逐轮叙述无人再动也无闸看守。裁决=**归档写盘不裁历史**：`--archive-legacy --confirm` 把 `results` 整块写进 `logs/status-export-legacy-2026-11.json`（179 条 / 336680B / sha256 `f69438b333bfdcbf`），活文档只留 `results_archive={path,sha256,count,bytes}`，`keys_drift=none`。**实测体积 372300B → 36059B，`--apply` 后 37049B**，`--check` 回 `VERDICT R2820 PASS state_bytes=81159 export_bytes=37049 archive=logs/status-export-legacy-2026-11.json`。",
+  "current": "R2822 how the change was held to its own criteria: AC-FTOK1..AC-FTOK6 were pinned in src/os/backlog.md and committed as 0e3e9d23 BEFORE state_fold.py was touched. The negative control ran on production bytes twice - a summary naming no ids was REFUSED token-missing at end=49 (23 real ids), and after the summary carried those 23 ids the same call returned verdict=CLEAR with missing=0 and bytes_after=35552. Regression: src/os/test_state_fold.py SUITE PASS 6/6 and src/os/test_state_fold_run.py CRITERIA 6/6 passes=6 fails=0 after the edit, so no existing expectation was loosened to make the new predicate green.",
   "latest_artifact": "qa/ugc-gate-suite-R2814.log (835B, sha256 676bd87df8c9250c) + docs/sandbox-suite-matrix.md (73180B, 695 rows)",
   "next_milestone": "next window (<=12h): src/os/test_lobby_ws_report.py lands the lobby_ws battery row (8 shipped criteria, one-to-one with tamper proof) and the registry moves to 696; the full battery (695 suites / 5207 criteria) still needs a supervised leg and is not claimed green.",
-  "state_bytes": 85049,
+  "state_bytes": 39057,
   "queue": {
     "floors": {
       "main": 5,
@@ -163,5 +166,11 @@
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
     "count": 179,
     "bytes": 336680
-  }
+  },
+  "results": [
+    [
+      "2822",
+      "OSLoop 执行 tick"
+    ]
+  ]
 }
