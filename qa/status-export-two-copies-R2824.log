@@ -1,0 +1,183 @@
+R2824 status_export_fresh: two of three law rows carried twice, neither graded
+
+=== A production negative control, HEAD document bytes, new gate (rc=0) ===
+VERDICT R2823 FAIL
+E_SXF_MILESTONE_STALE: next_milestone top='next window (<=12h): src/os/test_lobby_ws_report.py lands th' ceo_face='[R2823] next window (<=12h): (1) `outs` is a 37-entry list n' derived='[R2824] next window (<=12h): (1) `outs` is STILL a 37-entry '
+E_SXF_ARTIFACT_STALE: latest_artifact top='qa/ugc-gate-suite-R2814.log (835B, sha256 676bd87df8c9250c) ' ceo_face='preview/membership-face.html (10881B) + preview/membership-f' derived='preview/membership-face.html (10881B) + preview/membership-f'
+RC= 2
+
+=== B suite before the registry row moved (expect 15/16 with AC-SXFB10 red) (rc=0) ===
+VERDICT R2821 FAIL
+E_SXF_STALE: current leads with R2814, expected R2821
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=107 export_bytes=1253 archive=none
+export_ts=2026-11-16T00:00:00+08:00
+PASS AC-SXFB2 rewound=2 restored=0
+VERDICT R2821 FAIL
+E_SXF_STATE_BYTES: doc state_bytes=108 real=107
+APPLIED R2821 changed=True bytes=1253 lf_only=True bom=False
+do->R2821 ENGINEERING: fixture narrative for the private world at length
+latest_artifact->preview/fixture.html (21B) + preview/fixture.json (3B)
+next_milestone->R2821 [R2821] next window (<=12h): fixture milestone row... due=2026-11-17T02:59:02+08:00
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=107 export_bytes=1253 archive=none
+export_ts=2026-11-16T14:59:02+08:00
+PASS AC-SXFB3 skewed=2 applied=0 state_bytes=107
+ARCHIVED logs/status-export-legacy-2026-11.json 3 entries 482B sha256=8ddc531228057ec2
+live 1253 -> 1205B keys_drift=none archive=logs/status-export-legacy-2026-11.json
+VERDICT R2821 FAIL
+E_SXF_ARCHIVE: archive sha256 8ddc531228057ec2e199e7deffd258cd5605fe6b070bbf7b7e2fe173213d7532 != disk b13b5a319bfd980cc66f677dff9e845f042ba914ef662243434a4741f7804b83
+PASS AC-SXFB4 tampered archive sha256 rc=2
+VERDICT R2821 FAIL
+E_SXF_ARCHIVE: results_archive.path='logs/status-export-legacy-2026-11.json' is not on disk
+PASS AC-SXFB5 missing archive rc=2
+VERDICT R2821 FAIL
+E_SXF_TOO_BIG: export 1205B over waterline 8B
+PASS AC-SXFB6 waterline 8B rc=2
+PASS AC-SXFB7 kept=True count=True dropped=True drift=none
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=107 export_bytes=1205 archive=logs/status-export-legacy-2026-11.json
+export_ts=2026-11-16T14:59:02+08:00
+PASS AC-SXFB8 size+mtime unchanged
+E_SXF_NO_ROUND: state.json log carries no narrative round line
+PASS AC-SXFB9 no-round rc=5 writes=0
+PASS AC-SXFB11 picked='R2821 ENGINEERING: the round-aligned fold finally ran an'
+APPLIED R2821 changed=True bytes=1301 lf_only=True bom=False
+do->R2821 ENGINEERING: the round-aligned fold finally ran and the log items budget moved
+latest_artifact->preview/fixture.html (21B) + preview/fixture.json (3B)
+next_milestone->R2821 [R2821] next window (<=12h): fixture milestone row... due=2026-11-17T02:59:03+08:00
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=319 export_bytes=1301 archive=none
+export_ts=2026-11-16T14:59:03+08:00
+PASS AC-SXFB12 fragment=2 named=True applied=0
+PASS AC-SXFB13 published='preview/fixture.html (21B) + preview/fix' skipped=1 repeated='none'
+VERDICT R2821 FAIL
+E_SXF_MILESTONE_STALE: next_milestone top='R2821 ENGINEERING: a milestone sentence left behind by an ea' ceo_face='[R2821] next window (<=12h): fixture milestone row' derived='[R2821] next window (<=12h): fixture milestone row'
+APPLIED R2821 changed=True bytes=1301 lf_only=True bom=False
+do->R2821 ENGINEERING: the round-aligned fold finally ran and the log items budget moved
+latest_artifact->preview/fixture.html (21B) + preview/fixture.json (3B)
+next_milestone->R2821 [R2821] next window (<=12h): fixture milestone row... due=2026-11-17T02:59:03+08:00
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=319 export_bytes=1301 archive=none
+export_ts=2026-11-16T14:59:03+08:00
+PASS AC-SXFB14 inner=2 top=2 cut=2 fixed=0 fragment_named=True
+VERDICT R2821 FAIL
+E_SXF_ARTIFACT_STALE: latest_artifact top='preview/fixture.html (21B) + preview/fixture.json (3B)' ceo_face='qa/ugc-gate-suite-R2814.log (835B, sha256 676bd87df8c9250c)' derived='preview/fixture.html (21B) + preview/fixture.json (3B)'
+APPLIED R2821 changed=True bytes=1301 lf_only=True bom=False
+do->R2821 ENGINEERING: the round-aligned fold finally ran and the log items budget moved
+latest_artifact->preview/fixture.html (21B) + preview/fixture.json (3B)
+next_milestone->R2821 [R2821] next window (<=12h): fixture milestone row... due=2026-11-17T02:59:03+08:00
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=319 export_bytes=1301 archive=none
+export_ts=2026-11-16T14:59:03+08:00
+PASS AC-SXFB15 top=2 inner=2 fixed=0
+APPLIED R2821 changed=True bytes=3575 lf_only=True bom=False
+do->R2821 ENGINEERING: the round-aligned fold finally ran and the log items budget moved
+latest_artifact->preview/fixture.html (21B) + preview/fixture.json (3B)
+next_milestone->R2821 [R2821] next window (<=12h): clause 00 carries one fact; clause 01 carries one f... due=2026-11-17T02:59:03+08:00
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=319 export_bytes=3575 archive=none
+export_ts=2026-11-16T14:59:03+08:00
+APPLIED R2821 changed=True bytes=1313 lf_only=True bom=False
+do->R2821 ENGINEERING: the round-aligned fold finally ran and the log items budget moved
+latest_artifact->preview/fixture.html (21B) + preview/fixture.json (3B)
+next_milestone->R2821 [R2821] next window (<=12h): a short row that fits whole... due=2026-11-17T02:59:03+08:00
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=319 export_bytes=1313 archive=none
+export_ts=2026-11-16T14:59:03+08:00
+PASS AC-SXFB16 short_whole=True clause_cut=True long_rc=0 shared_def=True restored=0
+PASS AC-SXFB10 matrix_row=True declared=16
+PASS ISOLATION real export+state untouched
+SUITE PASS 16/16
+
+=== C suite after the registry row moved 13 -> 16 (rc=0) ===
+VERDICT R2821 FAIL
+E_SXF_STALE: current leads with R2814, expected R2821
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=107 export_bytes=1253 archive=none
+export_ts=2026-11-16T00:00:00+08:00
+PASS AC-SXFB2 rewound=2 restored=0
+VERDICT R2821 FAIL
+E_SXF_STATE_BYTES: doc state_bytes=108 real=107
+APPLIED R2821 changed=True bytes=1253 lf_only=True bom=False
+do->R2821 ENGINEERING: fixture narrative for the private world at length
+latest_artifact->preview/fixture.html (21B) + preview/fixture.json (3B)
+next_milestone->R2821 [R2821] next window (<=12h): fixture milestone row... due=2026-11-17T02:59:03+08:00
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=107 export_bytes=1253 archive=none
+export_ts=2026-11-16T14:59:03+08:00
+PASS AC-SXFB3 skewed=2 applied=0 state_bytes=107
+ARCHIVED logs/status-export-legacy-2026-11.json 3 entries 482B sha256=8ddc531228057ec2
+live 1253 -> 1205B keys_drift=none archive=logs/status-export-legacy-2026-11.json
+VERDICT R2821 FAIL
+E_SXF_ARCHIVE: archive sha256 8ddc531228057ec2e199e7deffd258cd5605fe6b070bbf7b7e2fe173213d7532 != disk b13b5a319bfd980cc66f677dff9e845f042ba914ef662243434a4741f7804b83
+PASS AC-SXFB4 tampered archive sha256 rc=2
+VERDICT R2821 FAIL
+E_SXF_ARCHIVE: results_archive.path='logs/status-export-legacy-2026-11.json' is not on disk
+PASS AC-SXFB5 missing archive rc=2
+VERDICT R2821 FAIL
+E_SXF_TOO_BIG: export 1205B over waterline 8B
+PASS AC-SXFB6 waterline 8B rc=2
+PASS AC-SXFB7 kept=True count=True dropped=True drift=none
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=107 export_bytes=1205 archive=logs/status-export-legacy-2026-11.json
+export_ts=2026-11-16T14:59:03+08:00
+PASS AC-SXFB8 size+mtime unchanged
+E_SXF_NO_ROUND: state.json log carries no narrative round line
+PASS AC-SXFB9 no-round rc=5 writes=0
+PASS AC-SXFB11 picked='R2821 ENGINEERING: the round-aligned fold finally ran an'
+APPLIED R2821 changed=True bytes=1301 lf_only=True bom=False
+do->R2821 ENGINEERING: the round-aligned fold finally ran and the log items budget moved
+latest_artifact->preview/fixture.html (21B) + preview/fixture.json (3B)
+next_milestone->R2821 [R2821] next window (<=12h): fixture milestone row... due=2026-11-17T02:59:03+08:00
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=319 export_bytes=1301 archive=none
+export_ts=2026-11-16T14:59:03+08:00
+PASS AC-SXFB12 fragment=2 named=True applied=0
+PASS AC-SXFB13 published='preview/fixture.html (21B) + preview/fix' skipped=1 repeated='none'
+VERDICT R2821 FAIL
+E_SXF_MILESTONE_STALE: next_milestone top='R2821 ENGINEERING: a milestone sentence left behind by an ea' ceo_face='[R2821] next window (<=12h): fixture milestone row' derived='[R2821] next window (<=12h): fixture milestone row'
+APPLIED R2821 changed=True bytes=1301 lf_only=True bom=False
+do->R2821 ENGINEERING: the round-aligned fold finally ran and the log items budget moved
+latest_artifact->preview/fixture.html (21B) + preview/fixture.json (3B)
+next_milestone->R2821 [R2821] next window (<=12h): fixture milestone row... due=2026-11-17T02:59:03+08:00
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=319 export_bytes=1301 archive=none
+export_ts=2026-11-16T14:59:03+08:00
+PASS AC-SXFB14 inner=2 top=2 cut=2 fixed=0 fragment_named=True
+VERDICT R2821 FAIL
+E_SXF_ARTIFACT_STALE: latest_artifact top='preview/fixture.html (21B) + preview/fixture.json (3B)' ceo_face='qa/ugc-gate-suite-R2814.log (835B, sha256 676bd87df8c9250c)' derived='preview/fixture.html (21B) + preview/fixture.json (3B)'
+APPLIED R2821 changed=True bytes=1301 lf_only=True bom=False
+do->R2821 ENGINEERING: the round-aligned fold finally ran and the log items budget moved
+latest_artifact->preview/fixture.html (21B) + preview/fixture.json (3B)
+next_milestone->R2821 [R2821] next window (<=12h): fixture milestone row... due=2026-11-17T02:59:03+08:00
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=319 export_bytes=1301 archive=none
+export_ts=2026-11-16T14:59:03+08:00
+PASS AC-SXFB15 top=2 inner=2 fixed=0
+APPLIED R2821 changed=True bytes=3575 lf_only=True bom=False
+do->R2821 ENGINEERING: the round-aligned fold finally ran and the log items budget moved
+latest_artifact->preview/fixture.html (21B) + preview/fixture.json (3B)
+next_milestone->R2821 [R2821] next window (<=12h): clause 00 carries one fact; clause 01 carries one f... due=2026-11-17T02:59:03+08:00
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=319 export_bytes=3575 archive=none
+export_ts=2026-11-16T14:59:03+08:00
+APPLIED R2821 changed=True bytes=1313 lf_only=True bom=False
+do->R2821 ENGINEERING: the round-aligned fold finally ran and the log items budget moved
+latest_artifact->preview/fixture.html (21B) + preview/fixture.json (3B)
+next_milestone->R2821 [R2821] next window (<=12h): a short row that fits whole... due=2026-11-17T02:59:03+08:00
+VERDICT R2821 PASS: do, ceo_face.current and current all name R2821
+state_bytes=319 export_bytes=1313 archive=none
+export_ts=2026-11-16T14:59:03+08:00
+PASS AC-SXFB16 short_whole=True clause_cut=True long_rc=0 shared_def=True restored=0
+PASS AC-SXFB10 matrix_row=True declared=16
+PASS ISOLATION real export+state untouched
+SUITE PASS 16/16
+
+=== D live gate on the real document (rc=0) ===
+VERDICT R2823 PASS: do, ceo_face.current and current all name R2823
+state_bytes=43229 export_bytes=37113 archive=logs/status-export-legacy-2026-11.json
+export_ts=2026-11-16T10:09:57+08:00
+
+=== E matrix regeneration check (rc=0) ===
+PASS check: docs/sandbox-suite-matrix.md byte-identical (73472 bytes, 698 suites, 5246 criteria)

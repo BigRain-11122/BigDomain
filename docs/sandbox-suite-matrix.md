@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-16 09:56 +08:00
+- 生成时间: generated: 2026-11-16 14:58 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
 - 状态证据: reconcile-all-R2739.log (RUNNER PASS 675/675 suites green, reconcile controls 7/7, 4986.4s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 698 | 5243 | 675/675 | R2739 |
+| 698 | 5246 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -606,7 +606,7 @@
 | 567 | os-bare-evidence-deep-pile | ../os/test_bare_evidence_deep_pile.py | 6 | green | 1.8 |
 | 568 | os-general-writer-dialect-audit | ../os/test_general_writer_dialect_audit.py | 6 | green | 31.8 |
 | 569 | os-parameter-destination-resolution | ../os/test_parameter_destination_resolution.py | 6 | green | 12.2 |
-| 570 | os-status-export-fresh | ../os/test_status_export_fresh.py | 13 | no-evidence | - |
+| 570 | os-status-export-fresh | ../os/test_status_export_fresh.py | 16 | no-evidence | - |
 | 571 | os-status-export-writer-dialect-wire | ../os/test_status_export_writer_dialect_wire.py | 6 | green | 13.3 |
 | 572 | os-status-export-writer-transport-scope | ../os/test_status_export_writer_transport_scope.py | 6 | green | 31.6 |
 | 573 | os-ledger-line-shape-guard | ../os/test_ledger_line_shape_guard.py | 6 | green | 1.0 |
@@ -735,7 +735,7 @@
 | 696 | os-battery-shard | ../os/test_battery_shard.py | 8 | no-evidence | - |
 | 697 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
 | 698 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 11 | no-evidence | - |
-|  | 合计 |  | 5243 | green 675 / FAIL 0 / no-evidence 23 |  |
+|  | 合计 |  | 5246 | green 675 / FAIL 0 / no-evidence 23 |  |
 
 ## 证据出处
 

@@ -5715,8 +5715,13 @@ SUITES = [
     # and never compared a derived count to its source. The unmaintained
     # results block was also 89 percent of a 372300-byte file. (AC-SXF6..AC-SXF10
     # were pinned in src/os/backlog.md BEFORE the code; AC-SXF10 is this row.)
+    # R2824: two of the three law rows existed TWICE with different values and
+    # neither copy was graded, because apply() only wrote the ceo_face copies and
+    # check() graded do/current only. Both copies must now equal the derivation,
+    # a strict prefix reddens as a fragment, and one milestone_text() serves the
+    # writer and the grader (AC-SXF14..AC-SXF16, pinned BEFORE the code).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 13),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 16),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives

@@ -1,4 +1,4 @@
-"""Battery suite for tools/status_export_fresh.py - criteria AC-SXFB1..AC-SXFB13.
+"""Battery suite for tools/status_export_fresh.py - criteria AC-SXFB1..AC-SXFB16.
 
 WHY THIS SUITE EXISTS (measured at R2821, not hypothesised): the CEO three-line
 face read VERDICT R2820 PASS while the same document carried two provable
@@ -89,19 +89,27 @@ def build_world(root):
     with io.open(os.path.join(root, "src", "os", "backlog.md"), "w",
                  encoding="utf-8", newline="\n") as handle:
         handle.write("- [ ] [R2821] next window (<=12h): fixture milestone row\n")
+    # AC-SXFB14/15: the fixture is a HEALTHY document, so both copies of the two
+    # rows that used to be ungraded carry the derived value here. Building the
+    # fixture from the derivation (rather than hand-writing a sentence that has to
+    # be kept in step) is also what the real writer now does.
+    derived_artifact = sx.newest_artifact(os.path.join(root, "preview"))["line"]
+    derived_milestone = sx.next_milestone(os.path.join(root, "src", "os", "backlog.md"))["text"]
     doc = {
         "export_ts": "2026-11-16T00:00:00+08:00",
         "do": NARRATIVE,
         "ceo_face": {
             "current": NARRATIVE,
-            "latest_artifact": "preview/fixture.html (1B, x)",
-            "last_artifact": "preview/fixture.html (1B, x)",
+            "latest_artifact": derived_artifact,
+            "last_artifact": derived_artifact,
             "latest_artifact_abs": os.path.join(root, "preview", "fixture.html"),
-            "next_milestone": "fixture",
+            "next_milestone": derived_milestone,
             "next_milestone_due": "2026-11-17T00:00:00+08:00",
             "updated_at": "2026-11-16T00:00:00+08:00",
         },
         "current": NARRATIVE,
+        "latest_artifact": derived_artifact,
+        "next_milestone": derived_milestone,
         "depts": [],
         "outs": [],
         "results": LEGACY,
@@ -273,6 +281,110 @@ def run(root):
            "published=%r skipped=%r repeated=%r"
            % (published[:40], len(skipped), repeated or "none"))
 
+    # AC-SXFB14 (AC-SXF14): the milestone row was carried TWICE with different
+    # values and neither copy was graded, because the writer only ever wrote the
+    # ceo_face copy. Both directions must redden; a strict prefix of the
+    # derivation must be named a FRAGMENT rather than merely stale, because that
+    # is the same complaint the CEO made about the headline at R2823; and one
+    # --apply must make the two copies equal again.
+    healthy = json.loads(io.open(export, encoding="utf-8").read())
+    derived_ms = sx.next_milestone(sx.BACKLOG)["text"]
+    older = "R2821 ENGINEERING: a milestone sentence left behind by an earlier round"
+    inner_stale = json.loads(json.dumps(healthy))
+    inner_stale["ceo_face"]["next_milestone"] = older
+    write_json(export, inner_stale)
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer):
+        rc_inner = sx.check(export, sx.STATE)
+    said_inner = buffer.getvalue()
+    top_stale = json.loads(json.dumps(healthy))
+    top_stale["next_milestone"] = older
+    write_json(export, top_stale)
+    rc_top = sx.check(export, sx.STATE)
+    cut = json.loads(json.dumps(healthy))
+    cut["next_milestone"] = derived_ms[:40]
+    write_json(export, cut)
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer):
+        rc_cut = sx.check(export, sx.STATE)
+    said_cut = buffer.getvalue()
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    rc_ms_fixed = sx.check(export, sx.STATE)
+    landed = json.loads(io.open(export, encoding="utf-8").read())
+    record("AC-SXFB14",
+           rc_inner == 2 and "E_SXF_MILESTONE_STALE" in said_inner
+           and rc_top == 2 and rc_cut == 2
+           and "E_SXF_MILESTONE_FRAGMENT" in said_cut
+           and rc_ms_fixed == 0
+           and landed.get("next_milestone") == landed["ceo_face"].get("next_milestone")
+           == derived_ms,
+           "inner=%d top=%d cut=%d fixed=%d fragment_named=%s"
+           % (rc_inner, rc_top, rc_cut, rc_ms_fixed,
+              "E_SXF_MILESTONE_FRAGMENT" in said_cut))
+
+    # AC-SXFB15 (AC-SXF15): the same disease on the artifact row - and here the
+    # measured shape was real: the top-level copy still named a qa log while the
+    # ceo_face copy already named the membership page.
+    healthy = json.loads(io.open(export, encoding="utf-8").read())
+    derived_art = sx.newest_artifact(sx.PREVIEW)["line"]
+    stale_art = "qa/ugc-gate-suite-R2814.log (835B, sha256 676bd87df8c9250c)"
+    art_top = json.loads(json.dumps(healthy))
+    art_top["latest_artifact"] = stale_art
+    write_json(export, art_top)
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer):
+        rc_art_top = sx.check(export, sx.STATE)
+    said_art = buffer.getvalue()
+    art_inner = json.loads(json.dumps(healthy))
+    art_inner["ceo_face"]["latest_artifact"] = stale_art
+    write_json(export, art_inner)
+    rc_art_inner = sx.check(export, sx.STATE)
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    rc_art_fixed = sx.check(export, sx.STATE)
+    landed = json.loads(io.open(export, encoding="utf-8").read())
+    record("AC-SXFB15",
+           rc_art_top == 2 and "E_SXF_ARTIFACT_STALE" in said_art
+           and rc_art_inner == 2 and rc_art_fixed == 0
+           and landed.get("latest_artifact") == landed["ceo_face"].get("latest_artifact")
+           == derived_art,
+           "top=%d inner=%d fixed=%d" % (rc_art_top, rc_art_inner, rc_art_fixed))
+
+    # AC-SXFB16 (AC-SXF16): the milestone used to be cut at 400 chars mid-word, so
+    # the CEO read half a sentence. A short row must land WHOLE (no marker), a long
+    # row must be cut at a clause boundary with an explicit marker, and the writer
+    # and the grader must be the SAME function - proved by publishing a long row
+    # through apply() and requiring --check to stay green on the result, which it
+    # cannot if either side invents its own truncation.
+    short_row = "- [ ] [R2821] next window (<=12h): a short row that fits whole"
+    long_row = ("- [ ] [R2821] next window (<=12h): "
+                + "; ".join("clause %02d carries one fact" % i for i in range(200)))
+    short_text = sx.milestone_text(short_row)
+    with io.open(sx.BACKLOG, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(long_row + "\n")
+    # The reader hands milestone_text() the row WITHOUT its "- [ ] " marker, so the
+    # expectation is derived through the same two functions the writer uses rather
+    # than from the raw line (that difference is a defect in this criterion's
+    # first draft, found by running it, not a reason to loosen the assertion).
+    read_row = sx.next_milestone(sx.BACKLOG)["row"]
+    long_text = sx.milestone_text(read_row)
+    body = long_text[:-len(sx.MILESTONE_MARK)] if long_text.endswith(sx.MILESTONE_MARK) else long_text
+    clause_cut = (read_row.startswith(body) and read_row[len(body):].startswith("; ")
+                  and len(long_text) <= sx.MILESTONE_MAX + len(sx.MILESTONE_MARK))
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    rc_long = sx.check(export, sx.STATE)
+    published = json.loads(io.open(export, encoding="utf-8").read())
+    same_definition = (published.get("next_milestone") == long_text
+                       and published.get("next_milestone") == published["ceo_face"]["next_milestone"])
+    with io.open(sx.BACKLOG, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(short_row + "\n")
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    rc_restored = sx.check(export, sx.STATE)
+    record("AC-SXFB16",
+           short_text == short_row and clause_cut and rc_long == 0
+           and same_definition and rc_restored == 0,
+           "short_whole=%s clause_cut=%s long_rc=%d shared_def=%s restored=%d"
+           % (short_text == short_row, clause_cut, rc_long, same_definition, rc_restored))
+
     # AC-SXFB10 (AC-SXF10): the registry row exists AND declares this many
     # criteria, so adding a criterion without moving the count is red instead of
     # silently uncounted.
@@ -287,7 +399,7 @@ def run(root):
             if "test_status_export_fresh.py" in line:
                 row = line
                 break
-    record("AC-SXFB10", row is not None and declared == 13,
+    record("AC-SXFB10", row is not None and declared == 16,
            "matrix_row=%s declared=%d" % (bool(row), declared))
 
 

@@ -40,6 +40,21 @@ the same field disagreed on a healthy tree:
   AC-SXF13 latest_artifact excludes meta board pages by IMPORTING the one shipped
            definition (export_round.BOARD_PAGES) instead of repeating the names.
 
+Added at R2824 (pinned in src/os/backlog.md BEFORE this code), because two of the
+three rows this document must carry existed TWICE with different values and
+neither copy was graded: apply() only ever wrote the 4-space ceo_face copies, so
+the top-level latest_artifact and next_milestone had no writer at all and could
+only rot, while check() graded do/ceo_face.current/current and nothing else:
+  AC-SXF14 the two copies of next_milestone must be equal to each other and to
+           the derivation; a landed value that is a strict prefix of the derived
+           one is reported as E_SXF_MILESTONE_FRAGMENT instead of merely stale.
+  AC-SXF15 the two copies of latest_artifact must be equal to each other and to
+           newest_artifact()'s line.
+  AC-SXF16 the milestone is never cut mid-word: milestone_text() lands the row
+           whole while it fits under MILESTONE_MAX, and otherwise cuts at the
+           last clause boundary with an explicit "(truncated)" marker. The writer
+           and the grader call that one function.
+
 ASCII source only (repository encoding law). Product text is read from the live
 state, never authored here.
 """
@@ -64,6 +79,11 @@ BACKLOG = os.path.join(ROOT, "src", "os", "backlog.md")
 PREVIEW = os.path.join(ROOT, "preview")
 ARCHIVE_DIR = os.path.join(ROOT, "logs")
 EXPORT_MAX_BYTES = 60000
+# AC-SXF16: the milestone used to be cut at 400 chars mid-word, so the CEO read
+# half a sentence ("...695 suites / 5207"). A clause cut carrying an explicit
+# marker is the only truncation this face allows.
+MILESTONE_MAX = 1200
+MILESTONE_MARK = " (truncated)"
 LEGACY_KEY = "results"
 
 ROUND_RE = re.compile(r"\bR(\d{4})\b")
@@ -200,6 +220,27 @@ def newest_artifact(preview_dir):
     }
 
 
+def milestone_text(row):
+    """AC-SXF16: the one definition of what the milestone row publishes.
+
+    A whole row is published verbatim. Only a row that overflows MILESTONE_MAX is
+    cut, and it is cut at a clause boundary with an explicit marker, so the CEO
+    never reads a sentence that stops mid-word.
+    """
+    row = (row or "").strip()
+    if len(row) <= MILESTONE_MAX:
+        return row
+    window = row[:MILESTONE_MAX]
+    cut = window.rfind("; ")
+    if cut <= 0:
+        cut = window.rfind(". ")
+    if cut <= 0:
+        cut = window.rfind(" ")
+    if cut <= 0:
+        cut = MILESTONE_MAX
+    return row[:cut].rstrip() + MILESTONE_MARK
+
+
 def next_milestone(backlog_path):
     """Newest declared next-window row, verbatim, with its own hour claim."""
     text = read_text(backlog_path)
@@ -212,7 +253,7 @@ def next_milestone(backlog_path):
     end = text.find("\n", start)
     row = text[start:end if end != -1 else len(text)].strip()
     hours = 12 if "<=12h" in row else 48
-    return {"round": round_int, "text": row[:400], "hours": hours}
+    return {"round": round_int, "row": row, "text": milestone_text(row), "hours": hours}
 
 
 def sha256_file(path):
@@ -282,6 +323,35 @@ def check(export_path, state_path):
                 problems.append(("E_SXF_ARCHIVE",
                                  "archive sha256 %s != disk %s"
                                  % (archive.get("sha256"), actual)))
+    # AC-SXF14/15: two of the three rows this document must carry existed TWICE
+    # with different values, because apply() only ever wrote the ceo_face copies.
+    # A document that answers "what is the latest artifact" twice is not truthful
+    # even when one of the answers is stale and the other is current, so both
+    # copies must equal each other AND the derivation.
+    milestone = next_milestone(BACKLOG)
+    derived_milestone = milestone["text"] if milestone else ""
+    artifact = newest_artifact(PREVIEW)
+    derived_artifact = artifact["line"] if artifact else ""
+    face = doc.get("ceo_face") or {}
+    for label, top, inner, derived in (
+            ("next_milestone", doc.get("next_milestone"), face.get("next_milestone"),
+             derived_milestone),
+            ("latest_artifact", doc.get("latest_artifact"), face.get("latest_artifact"),
+             derived_artifact)):
+        tops = top or ""
+        inners = inner or ""
+        if tops == derived and inners == derived:
+            continue
+        code = ("E_SXF_MILESTONE_STALE" if label == "next_milestone"
+                else "E_SXF_ARTIFACT_STALE")
+        # AC-SXF14 second half: a landed value that is a strict prefix of the
+        # derivation was cut rather than left behind, and that is the same
+        # complaint the CEO made about the headline fragment at R2823.
+        if (label == "next_milestone" and derived and tops
+                and derived.startswith(tops) and tops != derived):
+            code = "E_SXF_MILESTONE_FRAGMENT"
+        problems.append((code, "%s top=%r ceo_face=%r derived=%r"
+                         % (label, tops[:60], inners[:60], derived[:60])))
     if problems:
         print("VERDICT %s FAIL" % tag)
         for code, problem in problems:
@@ -316,6 +386,26 @@ def _set_number(text, key, value, indent):
     return text[:match.start()] + replacement + text[match.end():], True
 
 
+def _ensure_top(text, key, value, indent="  "):
+    """AC-SXF14/15: publish a top-level row, inserting it when no writer ever did.
+
+    Two writers over one file is how the two copies came to disagree; rather than
+    deleting a copy an unknown consumer may read, the writer makes BOTH copies
+    carry the same derived value and the gate refuses any document where they
+    differ. When the key is absent the row is inserted after "current", so a
+    document produced by the other writer is repaired instead of refused.
+    """
+    text, ok = _set_line(text, key, value, indent)
+    if ok:
+        return text, True
+    anchor = re.compile(r'^%s"current": .*?,(?=\n)' % re.escape(indent), re.MULTILINE)
+    match = anchor.search(text)
+    if not match:
+        return text, False
+    row = "\n%s\"%s\": %s," % (indent, key, json.dumps(value, ensure_ascii=False))
+    return text[:match.end()] + row + text[match.end():], True
+
+
 def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     state = load_state(state_path)
     round_int, narrative = newest_round(state)
@@ -331,6 +421,7 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     due = moment + dt.timedelta(hours=milestone["hours"] if milestone else 48)
 
     text = read_text(export_path)
+    milestone_line = milestone["text"] if milestone else ""
     edits = [
         ("", "export_ts", iso(moment), "  "),
         ("", "do", narrative, "  "),
@@ -339,11 +430,18 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
         ("", "latest_artifact", artifact["line"], "    "),
         ("", "last_artifact", artifact["line"], "    "),
         ("", "latest_artifact_abs", artifact["abs"], "    "),
-        ("", "next_milestone", milestone["text"] if milestone else "", "    "),
+        ("", "next_milestone", milestone_line, "    "),
         ("", "next_milestone_due", iso(due), "    "),
         ("", "updated_at", iso(moment), "    "),
     ]
     missing = []
+    # AC-SXF14/15: the top-level copies are published by the same derivation, so
+    # the file the CEO downloads can no longer answer these two questions twice.
+    for key, value in (("latest_artifact", artifact["line"]),
+                       ("next_milestone", milestone_line)):
+        text, ok = _ensure_top(text, key, value, "  ")
+        if not ok:
+            missing.append(key + "@top")
     for _, key, value, indent in edits:
         text, ok = _set_line(text, key, value, indent)
         if not ok:
@@ -362,6 +460,16 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     if parsed.get("current") != narrative:
         print("E_SXF_WRITE: top-level current is not the derived narrative")
         return 7
+    # AC-SXF14/15: the write is only complete when BOTH copies carry the derived
+    # value, so a document that leaves one of them behind cannot be published.
+    landed_face = parsed.get("ceo_face") or {}
+    for key, derived in (("latest_artifact", artifact["line"]),
+                         ("next_milestone", milestone_line)):
+        pair = (parsed.get(key), landed_face.get(key))
+        if pair != (derived, derived):
+            print("E_SXF_WRITE: %s copies are not both the derived value (top=%r ceo_face=%r)"
+                  % (key, (pair[0] or "")[:40], (pair[1] or "")[:40]))
+            return 7
     before = read_text(export_path)
     changed = text != before
     if dry_run:
