@@ -1,0 +1,138 @@
+SHARD scope=SHARD registry_suites=699 registry_criteria=5258 selected=80 selected_criteria=508 cap=600s
+SHARD row os-lobby-city-view rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.3s
+SHARD row os-lobby-checkout-demo rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 0.7s
+SHARD row os-lobby-lobby-page rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.6s
+SHARD row os-sandbox-hub rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.6s
+SHARD row os-lobby-room-picker rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 43.6s
+SHARD row os-content-gate-console rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-ledger-page rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 1.9s
+SHARD row os-decwatermark rc=0 pass=8 fail=0 suite=none crit=8 11.2s
+SHARD row os-evidence-writer rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.1s
+SHARD row os-evidence-writer-dir rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.9s
+SHARD row os-ledger-lines rc=2 pass=7 fail=1 suite=FAIL 7/8 crit=8 1.7s
+SHARD detail os-ledger-lines suite: round ledger line checker (R2152 AC-LGR1..AC-LGR8)
+SHARD detail os-ledger-lines PASS AC-LGR1 canonical parse, units and approx marker resolved
+SHARD detail os-ledger-lines PASS AC-LGR2 nine bad forms named, gate order round/local/api/reason
+SHARD detail os-ledger-lines PASS AC-LGR3 coverage law derives missing and orphan rounds
+SHARD detail os-ledger-lines PASS AC-LGR4 tail window scopes the audit and echoes its arithmetic
+SHARD detail os-ledger-lines PASS AC-LGR5 zero false positives, typo caught by coverage law
+SHARD detail os-ledger-lines PASS AC-LGR6 api is a pure integer and always carries a reason
+SHARD detail os-ledger-lines PASS AC-LGR7 CLI exit 0/2/3, stable JSON, zero file writes
+SHARD detail os-ledger-lines FAIL AC-LGR8 live gate clean on the coverage scope, folded gaps proven healed by the archive, exemption list empty, hygiene
+SHARD detail os-ledger-lines SUITE FAIL 7/8 criteria
+SHARD row os-ledger-archive rc=2 pass=6 fail=2 suite=FAIL 6/8 crit=8 0.9s
+SHARD detail os-ledger-archive suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA8)
+SHARD detail os-ledger-archive PASS AC-LGA1 archive loader keeps log lines in order, drops markers, rewrites nothing
+SHARD detail os-ledger-archive PASS AC-LGA2 union floor passes where the live-only floor fails
+SHARD detail os-ledger-archive PASS AC-LGA3 live drift still gates even with a full archive
+SHARD detail os-ledger-archive PASS AC-LGA4 archived gaps are informational, never gated
+SHARD detail os-ledger-archive PASS AC-LGA5 tail scopes the live window only
+SHARD detail os-ledger-archive PASS AC-LGA6 bad archive input fails closed with zero stdout
+SHARD detail os-ledger-archive FAIL AC-LGA7 default face byte-identical, only the counts block and one scope line differ
+SHARD detail os-ledger-archive FAIL AC-LGA8 real tree floor met on the union, drift clean, hygiene
+SHARD detail os-ledger-archive SUITE FAIL 6/8 criteria
+SHARD row os-ledger-baseline rc=2 pass=7 fail=1 suite=FAIL 7/8 crit=8 1.0s
+SHARD detail os-ledger-baseline suite: ledger baseline semantics (R2157 AC-LGB1..AC-LGB8)
+SHARD detail os-ledger-baseline PASS AC-LGB1 stale keys added, existing keys and clean law kept
+SHARD detail os-ledger-baseline PASS AC-LGB2 one entry exempts one round, errors never suppressed
+SHARD detail os-ledger-baseline PASS AC-LGB3 stale baseline entries reported, not silently kept
+SHARD detail os-ledger-baseline PASS AC-LGB4 stale line only when stale, JSON always carries keys
+SHARD detail os-ledger-baseline PASS AC-LGB5 four broken baselines fail closed, zero writes
+SHARD detail os-ledger-baseline PASS AC-LGB6 absent baseline equals --no-baseline, zero writes
+SHARD detail os-ledger-baseline PASS AC-LGB7 unknown keys ignored, absent keys empty, lists independent
+SHARD detail os-ledger-baseline FAIL AC-LGB8 live gate clean on the coverage scope, shipped baseline fresh, hygiene, runner seat
+SHARD detail os-ledger-baseline SUITE FAIL 7/8 criteria
+SHARD row os-ledger-fold-kind rc=1 pass=5 fail=1 suite=FAIL 5/6 crit=6 0.1s
+SHARD detail os-ledger-fold-kind PASS AC-FCLS1 a fold summary line classifies as other
+SHARD detail os-ledger-fold-kind PASS AC-FCLS2 date narrative, battery outcome and ledger kinds unchanged
+SHARD detail os-ledger-fold-kind PASS AC-FCLS3 guard is word-bounded: 'folder' stays a round narrative
+SHARD detail os-ledger-fold-kind PASS AC-FCLS4 fold summary plus narrative, no ledger for that round reads clean
+SHARD detail os-ledger-fold-kind PASS AC-FCLS5 bare narrative and typo prefix still gate
+SHARD detail os-ledger-fold-kind FAIL AC-FCLS6 real state.json log reads clean, source is ASCII and network-free
+SHARD detail os-ledger-fold-kind suite: fold-summary line kind (R2580 AC-FCLS1..AC-FCLS6)
+SHARD detail os-ledger-fold-kind SUITE FAIL 5/6 criteria
+SHARD row os-ledger-fold-kind-dateprefix rc=1 pass=5 fail=1 suite=FAIL 5/6 crit=6 0.2s
+SHARD detail os-ledger-fold-kind-dateprefix PASS AC-LKND1 date-prefixed fold summary is other and leaves no gap
+SHARD detail os-ledger-fold-kind-dateprefix PASS AC-LKND2 inflected 'folded' form is other, dated or bare
+SHARD detail os-ledger-fold-kind-dateprefix PASS AC-LKND3 a narrative merely mentioning the fold still gates
+SHARD detail os-ledger-fold-kind-dateprefix PASS AC-LKND4 'folder' stays round, anchored summaries stay other
+SHARD detail os-ledger-fold-kind-dateprefix PASS AC-LKND5 bare narrative, typo prefix and shipped families unchanged
+SHARD detail os-ledger-fold-kind-dateprefix FAIL AC-LKND6 real log clean, R2580 suite still 6/6, ASCII, no network
+SHARD detail os-ledger-fold-kind-dateprefix suite: fold-summary date-prefix and inflection (R2581 AC-LKND1..AC-LKND6)
+SHARD detail os-ledger-fold-kind-dateprefix SUITE FAIL 5/6 criteria
+SHARD row os-ledger-fold-kind-inflection rc=1 pass=5 fail=1 suite=FAIL 5/6 crit=6 0.4s
+SHARD detail os-ledger-fold-kind-inflection PASS AC-LKNF1 capitalized fold summary is other, dated or bare
+SHARD detail os-ledger-fold-kind-inflection PASS AC-LKNF2 third-person 'folds' form is other, dated or bare
+SHARD detail os-ledger-fold-kind-inflection PASS AC-LKNF3 'Folder'/'foldsomething'/mention stay round and gate
+SHARD detail os-ledger-fold-kind-inflection PASS AC-LKNF4 all R2580/R2581 pinned shapes unchanged
+SHARD detail os-ledger-fold-kind-inflection PASS AC-LKNF5 bare narrative, typo prefix, shipped families unchanged
+SHARD detail os-ledger-fold-kind-inflection FAIL AC-LKNF6 real log clean, both siblings 6/6, ASCII, no network (test_ledger_fold_kind.py rc=1, test_ledger_fold_kind_dateprefix.py rc=1)
+SHARD detail os-ledger-fold-kind-inflection suite: fold-summary inflection (R2815 AC-LKNF1..AC-LKNF6)
+SHARD detail os-ledger-fold-kind-inflection SUITE FAIL 5/6 criteria
+SHARD row os-run-identity rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.9s
+SHARD row os-retry-naming rc=0 pass=9 fail=0 suite=PASS 9/8 crit=9 0.5s
+SHARD row os-ledger-closeout rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.5s
+SHARD row os-logs-inventory rc=0 pass=31 fail=0 suite=PASS 31/31 crit=8 1.7s
+SHARD row os-queue-floor rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.9s
+SHARD row os-state-fold rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD row os-state-fold-run rc=0 pass=6 fail=0 suite=none crit=6 0.1s
+SHARD row os-fold-round-block-boundary rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.1s
+SHARD row os-state-io rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.8s
+SHARD row os-debt-register rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.0s
+SHARD row os-export-freshness rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-debt-append rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.1s
+SHARD row os-debt-note-append rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-suite-matrix-reconcile rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 1.3s
+SHARD row os-suite-matrix-reconcile-evidence-face rc=0 pass=0 fail=0 suite=PASS 7/7 crit=7 0.7s
+SHARD row os-suite-matrix-reconcile-table-shape rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 18.2s
+SHARD row os-suite-matrix-reconcile-shape rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-export-composed-landed-face rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-wordspace rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-second-wave rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-third-wave rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-fourth-wave rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-fifth-wave rc=0 pass=6 fail=0 suite=none crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-sixth-wave rc=0 pass=6 fail=0 suite=none crit=6 0.3s
+SHARD row os-export-composed-landed-bom-precedence-seventh-wave rc=0 pass=6 fail=0 suite=none crit=6 0.2s
+SHARD row os-suite-matrix-reconcile-fence rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-suite-matrix-reconcile-fence-rows rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-suite-matrix-reconcile-fence-table rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-suite-matrix-reconcile-row-shape rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-suite-matrix-reconcile-row-membership rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-suite-matrix-reconcile-second-table-separator rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.7s
+SHARD row os-queue-row rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-round-evidence rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD row os-state-seq rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 2.1s
+SHARD row os-seed-anchor rc=0 pass=5 fail=0 suite=PASS 5/5 crit=5 12.0s
+SHARD row os-evidence-capture rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 3.7s
+SHARD row os-queue-only rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-log-floor rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.5s
+SHARD row os-queue-floor-decl rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-queue-only-floor-wire rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.3s
+SHARD row os-debt-gate rc=0 pass=5 fail=0 suite=PASS 5/5 crit=5 0.8s
+SHARD row os-queue-head rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.1s
+SHARD row os-battery-followup rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 7.0s
+SHARD row os-battery-followup-help-wire rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 5.4s
+SHARD row os-debt-close rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.5s
+SHARD row os-debt-item-unique rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.6s
+SHARD row os-queue-row-exempt rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-queue-done-stamp rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.7s
+SHARD row os-queue-done-stamp-exempt rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 2.1s
+SHARD row os-evidence-parity rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.7s
+SHARD row os-evidence-output-map rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD row os-stamp-locator rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.1s
+SHARD row os-stamp-residue rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD row os-machine-gate rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.4s
+SHARD row os-gate-drift rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.8s
+SHARD row os-gate-decl-identity rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.1s
+SHARD row os-gate-decl-identity-wire rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-gate-decl-retire rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-gate-decl-retire-wire rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-gate-decl-retire-scope rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-retire-candidate rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-retire-accept rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-retire-apply rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.3s
+SHARD rc=2 scope=SHARD selected=80 executed=80 green=74 criteria=508 crit_mismatch=2 elapsed=163.7s
+SHARD disclosure crit_mismatch=os-retry-naming:8!=9,os-logs-inventory:31!=8
+SHARD red os-ledger-lines:rc=2,os-ledger-archive:rc=2,os-ledger-baseline:rc=2,os-ledger-fold-kind:rc=1,os-ledger-fold-kind-dateprefix:rc=1,os-ledger-fold-kind-inflection:rc=1

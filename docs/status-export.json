@@ -1,18 +1,16 @@
 {
-  "export_ts": "2026-11-16T16:56:28+08:00",
-  "do": "R2828 PRODUCT+ENGINEERING: the first supervised battery leg in many windows actually ran - 41 pay/member suites / 304 criteria through the shipped shard runner - and it caught a real regression on its first execution. pay-notify-revoke read rc=1 with 6 passes and ZERO FAIL lines, which is a crash rather than a verdict: its AC-VR7 opens src/sandbox/reconcile_all.py with encoding=\"ascii\" to grade the registry row, and that file carried a UTF-8 BOM (451284B), so UnicodeDecodeError fired before the seventh criterion could print. Stripped the 3 bytes (451284 -> 451281B, LF kept), the suite reads 7/7 PASS with AC-VR7 ascii=True registered=True, and the re-run leg reads selected=41 executed=41 green=41 criteria=304 crit_mismatch=0 elapsed=52.9s.",
+  "export_ts": "2026-11-16T17:22:03+08:00",
+  "do": "R2829 PRODUCT+ENGINEERING: the battery leg machine moved to a NAMED second family and its first execution found six red suites with ONE root cause, now healed at the birth site. Leg 1 (evidence qa/battery-shard-os-R2829.log, 12213B / 138 lines, sha256 cc338f1d17f9d03d) read selected=80 executed=80 green=74 criteria=508 crit_mismatch=2, every red in os-ledger-*: os-ledger-lines rc=2, os-ledger-archive rc=2, os-ledger-baseline rc=2, os-ledger-fold-kind rc=1, -dateprefix rc=1, -inflection rc=1. Root cause measured, not guessed: ledger_lines.audit(live) read ledger_without_round=[2815] because the live log still carried the R2815 tokens line while every R2815 narrative line had been moved into the archive by the R2822 cut at item 49 - one item past the narrative block and one short of the ledger line. One orphan line made six suites red on a healthy tree.",
   "ceo_face": {
-    "current": "R2828 PRODUCT+ENGINEERING: the first supervised battery leg in many windows actually ran - 41 pay/member suites / 304 criteria through the shipped shard runner - and it caught a real regression on its first execution. pay-notify-revoke read rc=1 with 6 passes and ZERO FAIL lines, which is a crash rather than a verdict: its AC-VR7 opens src/sandbox/reconcile_all.py with encoding=\"ascii\" to grade the registry row, and that file carried a UTF-8 BOM (451284B), so UnicodeDecodeError fired before the seventh criterion could print. Stripped the 3 bytes (451284 -> 451281B, LF kept), the suite reads 7/7 PASS with AC-VR7 ascii=True registered=True, and the re-run leg reads selected=41 executed=41 green=41 criteria=304 crit_mismatch=0 elapsed=52.9s.",
+    "current": "R2829 PRODUCT+ENGINEERING: the battery leg machine moved to a NAMED second family and its first execution found six red suites with ONE root cause, now healed at the birth site. Leg 1 (evidence qa/battery-shard-os-R2829.log, 12213B / 138 lines, sha256 cc338f1d17f9d03d) read selected=80 executed=80 green=74 criteria=508 crit_mismatch=2, every red in os-ledger-*: os-ledger-lines rc=2, os-ledger-archive rc=2, os-ledger-baseline rc=2, os-ledger-fold-kind rc=1, -dateprefix rc=1, -inflection rc=1. Root cause measured, not guessed: ledger_lines.audit(live) read ledger_without_round=[2815] because the live log still carried the R2815 tokens line while every R2815 narrative line had been moved into the archive by the R2822 cut at item 49 - one item past the narrative block and one short of the ledger line. One orphan line made six suites red on a healthy tree.",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2828] next window (<=12h): (1) MAIN - keep the leg machine moving: the pay/member family is measured green end to end (41/304), so take a leg over a NAMED second family (`--match os-`, 274 suites / but start with a `--limit` slice and record selected/executed honestly) rather than re-running what is already green, and fix any red at its birth site; (2) a UTF-8 BOM in a tracked .py is a live trap - the repo-wide scan found 19 BOM-carrying tracked files, of which `src/sandbox/reconcile_all.py` was load-bearing and is now clean; decide whether the other 18 (historical one-off scripts, `qa/bonsai-bd/summary.json`, `src/sandbox/ledger/test_apimarket_report_refundregister.py`, `tools/adoption_preflight_controls.py`) get stripped or are explicitly exempted with a reason; (3) `outs` is still a 37-entry list no round maintains - archive it with a sha256 pointer like `results` at R2821; (4) 7 tool faces still carry their own criteria with no battery row (lobby_ws 8 / journey_demo 8 / city_face 8 / leg_interlock 3 / core_loop_walkthrough 3 / ledger_business 1 / fold_caliber 2) (truncated)",
-    "next_milestone_due": "2026-11-17T04:56:28+08:00",
-    "updated_at": "2026-11-16T16:56:28+08:00",
+    "next_milestone": "[R2829] next window (<=12h): (1) MAIN - the os- family leg has 80/274 suites measured green; extend the slice (--limit 160 then 274) and fix any red at its birth site; (2) the shard runner discloses crit_mismatch=2 and it is a REGISTRY defect carried openly: os-retry-naming declares 8 criteria and runs 9, os-logs-inventory declares 31 and runs 8 - reconcile the two rows or state which side is wrong; (3) state.json is at 74646B against the 78500B gate, so the next window should fold early rather than at the waterline, and a fold repair must not share a window with a whole-file log append; (4) 7 tool faces still carry their own criteria with no battery row (lobby_ws 8 / journey_demo 8 / city_face 8 / leg_interlock 3 / core_loop_walkthrough 3 / ledger_business 1 / fold_caliber 2); (5) carried unchanged: AC-VAC1..6 in src/sandbox/ledger/reconcile.py, outs as a 37-entry unmaintained list, the R2778 stand on the Network Data Security Regulation, the 13 BOM-less UTF-16 evidence files, the dead src/os/export_R2431.py hook; (6) BigDomain-OSLoop still reads InteractiveToken and needs an ELEVATED shell for S4U re-registration.",
+    "next_milestone_due": "2026-11-17T05:22:03+08:00",
+    "updated_at": "2026-11-16T17:22:03+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
-    "board_pages_skipped": [
-      "preview/face-sweep.html (5325B)"
-    ],
-    "newest_pair_on_disk_is_board": true
+    "board_pages_skipped": [],
+    "newest_pair_on_disk_is_board": false
   },
   "depts": [
     {
@@ -42,6 +40,7 @@
     }
   ],
   "outs": [
+    "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
     "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（72516B·687 行）",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
@@ -83,7 +82,7 @@
   "self_drive": {
     "window": "2026-11-10..2026-11-16",
     "window_days": 7,
-    "log_lines_in_window": 34,
+    "log_lines_in_window": 59,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 6,
@@ -93,10 +92,10 @@
     "queue_tech_open": 11,
     "queue_explore_open": 10
   },
-  "current": "R2828 PRODUCT+ENGINEERING: the first supervised battery leg in many windows actually ran - 41 pay/member suites / 304 criteria through the shipped shard runner - and it caught a real regression on its first execution. pay-notify-revoke read rc=1 with 6 passes and ZERO FAIL lines, which is a crash rather than a verdict: its AC-VR7 opens src/sandbox/reconcile_all.py with encoding=\"ascii\" to grade the registry row, and that file carried a UTF-8 BOM (451284B), so UnicodeDecodeError fired before the seventh criterion could print. Stripped the 3 bytes (451284 -> 451281B, LF kept), the suite reads 7/7 PASS with AC-VR7 ascii=True registered=True, and the re-run leg reads selected=41 executed=41 green=41 criteria=304 crit_mismatch=0 elapsed=52.9s.",
+  "current": "R2829 PRODUCT+ENGINEERING: the battery leg machine moved to a NAMED second family and its first execution found six red suites with ONE root cause, now healed at the birth site. Leg 1 (evidence qa/battery-shard-os-R2829.log, 12213B / 138 lines, sha256 cc338f1d17f9d03d) read selected=80 executed=80 green=74 criteria=508 crit_mismatch=2, every red in os-ledger-*: os-ledger-lines rc=2, os-ledger-archive rc=2, os-ledger-baseline rc=2, os-ledger-fold-kind rc=1, -dateprefix rc=1, -inflection rc=1. Root cause measured, not guessed: ledger_lines.audit(live) read ledger_without_round=[2815] because the live log still carried the R2815 tokens line while every R2815 narrative line had been moved into the archive by the R2822 cut at item 49 - one item past the narrative block and one short of the ledger line. One orphan line made six suites red on a healthy tree.",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2828] next window (<=12h): (1) MAIN - keep the leg machine moving: the pay/member family is measured green end to end (41/304), so take a leg over a NAMED second family (`--match os-`, 274 suites / but start with a `--limit` slice and record selected/executed honestly) rather than re-running what is already green, and fix any red at its birth site; (2) a UTF-8 BOM in a tracked .py is a live trap - the repo-wide scan found 19 BOM-carrying tracked files, of which `src/sandbox/reconcile_all.py` was load-bearing and is now clean; decide whether the other 18 (historical one-off scripts, `qa/bonsai-bd/summary.json`, `src/sandbox/ledger/test_apimarket_report_refundregister.py`, `tools/adoption_preflight_controls.py`) get stripped or are explicitly exempted with a reason; (3) `outs` is still a 37-entry list no round maintains - archive it with a sha256 pointer like `results` at R2821; (4) 7 tool faces still carry their own criteria with no battery row (lobby_ws 8 / journey_demo 8 / city_face 8 / leg_interlock 3 / core_loop_walkthrough 3 / ledger_business 1 / fold_caliber 2) (truncated)",
-  "state_bytes": 69762,
+  "next_milestone": "[R2829] next window (<=12h): (1) MAIN - the os- family leg has 80/274 suites measured green; extend the slice (--limit 160 then 274) and fix any red at its birth site; (2) the shard runner discloses crit_mismatch=2 and it is a REGISTRY defect carried openly: os-retry-naming declares 8 criteria and runs 9, os-logs-inventory declares 31 and runs 8 - reconcile the two rows or state which side is wrong; (3) state.json is at 74646B against the 78500B gate, so the next window should fold early rather than at the waterline, and a fold repair must not share a window with a whole-file log append; (4) 7 tool faces still carry their own criteria with no battery row (lobby_ws 8 / journey_demo 8 / city_face 8 / leg_interlock 3 / core_loop_walkthrough 3 / ledger_business 1 / fold_caliber 2); (5) carried unchanged: AC-VAC1..6 in src/sandbox/ledger/reconcile.py, outs as a 37-entry unmaintained list, the R2778 stand on the Network Data Security Regulation, the 13 BOM-less UTF-16 evidence files, the dead src/os/export_R2431.py hook; (6) BigDomain-OSLoop still reads InteractiveToken and needs an ELEVATED shell for S4U re-registration.",
+  "state_bytes": 74646,
   "queue": {
     "floors": {
       "main": 5,
@@ -169,7 +168,7 @@
   },
   "results": [
     [
-      "2822",
+      "2829",
       "OSLoop 执行 tick"
     ]
   ]

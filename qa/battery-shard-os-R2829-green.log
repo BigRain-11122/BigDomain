@@ -1,0 +1,83 @@
+SHARD scope=SHARD registry_suites=699 registry_criteria=5258 selected=80 selected_criteria=508 cap=600s
+SHARD row os-lobby-city-view rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.4s
+SHARD row os-lobby-checkout-demo rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 0.7s
+SHARD row os-lobby-lobby-page rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.6s
+SHARD row os-sandbox-hub rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.5s
+SHARD row os-lobby-room-picker rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 43.6s
+SHARD row os-content-gate-console rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.6s
+SHARD row os-ledger-page rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 1.6s
+SHARD row os-decwatermark rc=0 pass=8 fail=0 suite=none crit=8 10.9s
+SHARD row os-evidence-writer rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.8s
+SHARD row os-evidence-writer-dir rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.9s
+SHARD row os-ledger-lines rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 2.1s
+SHARD row os-ledger-archive rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.9s
+SHARD row os-ledger-baseline rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.2s
+SHARD row os-ledger-fold-kind rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.1s
+SHARD row os-ledger-fold-kind-dateprefix rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-ledger-fold-kind-inflection rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.4s
+SHARD row os-run-identity rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 2.5s
+SHARD row os-retry-naming rc=0 pass=9 fail=0 suite=PASS 9/8 crit=9 0.5s
+SHARD row os-ledger-closeout rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.5s
+SHARD row os-logs-inventory rc=0 pass=31 fail=0 suite=PASS 31/31 crit=8 1.9s
+SHARD row os-queue-floor rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.1s
+SHARD row os-state-fold rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-state-fold-run rc=0 pass=6 fail=0 suite=none crit=6 0.1s
+SHARD row os-fold-round-block-boundary rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.1s
+SHARD row os-state-io rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.9s
+SHARD row os-debt-register rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.2s
+SHARD row os-export-freshness rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-debt-append rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-debt-note-append rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.1s
+SHARD row os-suite-matrix-reconcile rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 2.0s
+SHARD row os-suite-matrix-reconcile-evidence-face rc=0 pass=0 fail=0 suite=PASS 7/7 crit=7 0.7s
+SHARD row os-suite-matrix-reconcile-table-shape rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 17.3s
+SHARD row os-suite-matrix-reconcile-shape rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.7s
+SHARD row os-export-composed-landed-face rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.1s
+SHARD row os-export-composed-landed-wordspace rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.1s
+SHARD row os-export-composed-landed-bom-precedence rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.1s
+SHARD row os-export-composed-landed-bom-precedence-second-wave rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-third-wave rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-fourth-wave rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-fifth-wave rc=0 pass=6 fail=0 suite=none crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-sixth-wave rc=0 pass=6 fail=0 suite=none crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-seventh-wave rc=0 pass=6 fail=0 suite=none crit=6 0.2s
+SHARD row os-suite-matrix-reconcile-fence rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-suite-matrix-reconcile-fence-rows rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-suite-matrix-reconcile-fence-table rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 0.7s
+SHARD row os-suite-matrix-reconcile-row-shape rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-suite-matrix-reconcile-row-membership rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-suite-matrix-reconcile-second-table-separator rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.7s
+SHARD row os-queue-row rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-round-evidence rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-state-seq rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 2.6s
+SHARD row os-seed-anchor rc=0 pass=5 fail=0 suite=PASS 5/5 crit=5 14.0s
+SHARD row os-evidence-capture rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 3.8s
+SHARD row os-queue-only rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-log-floor rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-queue-floor-decl rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-queue-only-floor-wire rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.5s
+SHARD row os-debt-gate rc=0 pass=5 fail=0 suite=PASS 5/5 crit=5 0.8s
+SHARD row os-queue-head rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.6s
+SHARD row os-battery-followup rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 7.3s
+SHARD row os-battery-followup-help-wire rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 6.6s
+SHARD row os-debt-close rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-debt-item-unique rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.6s
+SHARD row os-queue-row-exempt rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-queue-done-stamp rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.7s
+SHARD row os-queue-done-stamp-exempt rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.6s
+SHARD row os-evidence-parity rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-evidence-output-map rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD row os-stamp-locator rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-stamp-residue rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-machine-gate rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.1s
+SHARD row os-gate-drift rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-gate-decl-identity rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-gate-decl-identity-wire rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-gate-decl-retire rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD row os-gate-decl-retire-wire rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD row os-gate-decl-retire-scope rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.9s
+SHARD row os-retire-candidate rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.5s
+SHARD row os-retire-accept rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.2s
+SHARD row os-retire-apply rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD rc=0 scope=SHARD selected=80 executed=80 green=80 criteria=508 crit_mismatch=2 elapsed=168.1s
+SHARD disclosure crit_mismatch=os-retry-naming:8!=9,os-logs-inventory:31!=8

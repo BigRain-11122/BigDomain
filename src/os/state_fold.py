@@ -186,11 +186,25 @@ def round_split(window, kept):
     if not window or not kept:
         return None
     last = TOKENS_RE.match(window[-1])
-    if not last:
-        return None
-    head = ROUND_HEAD_RE.match(kept[0])
-    if head and head.group(1) == last.group(1):
-        return "R" + last.group(1)
+    if last:
+        head = ROUND_HEAD_RE.match(kept[0])
+        if head and head.group(1) == last.group(1):
+            return "R" + last.group(1)
+    # R2829 mirror case: a cut can also leave a round's tokens line LIVE while
+    # moving that round's narrative into the archive. The R2822 fold did
+    # exactly this to R2815 - it cut at item 49 of the then log, one item past
+    # the R2815 narrative block and one short of its ledger line - so the round
+    # read as a ledger with no round and AC-LGR8/AC-LGA8/AC-LGB8/AC-FCLS6/
+    # AC-LKND6/AC-LKNF6 all went red on a healthy tree. Both directions split
+    # one round, so both are refused and the round is named.
+    kept_head = TOKENS_RE.match(kept[0])
+    if kept_head:
+        round_no = kept_head.group(1)
+        for line in window:
+            head = ROUND_HEAD_RE.match(line)
+            if (head and head.group(1) == round_no
+                    and not TOKENS_RE.match(line)):
+                return "R" + round_no
     return None
 
 
