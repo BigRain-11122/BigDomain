@@ -31,8 +31,8 @@ at render time.</p>
 <h2>Two products, side by side</h2>
 <ul><li><strong>永久入场券</strong> (<code>birthright_entry</code>) &mdash; 9.90 &mdash; benefits: none (permanent entry, no cycle, no renewal)</li><li><strong>月卡（入门订阅卡）</strong> (<code>tier_patron_30d</code>) &mdash; 29.90 &mdash; benefits: cocreation_block_seat, growth_archive_slot</li></ul>
 
-<h2>Same price, different value</h2>
-<ul><li><code>birthright_entry</code>: tier=None, privileges=0, periods=0, credits=None, permanent=yes</li><li><code>tier_patron_30d</code>: tier=patron, privileges=2, periods=1, credits=5, permanent=no</li></ul>
+<h2>Two prices, two products</h2>
+<p><code>birthright_entry</code> costs 9.90; <code>tier_patron_30d</code> costs 29.90 &mdash; a difference of 20.00, read from the catalog at render time.</p><ul><li><code>birthright_entry</code>: tier=None, privileges=0, periods=0, credits=None, permanent=yes</li><li><code>tier_patron_30d</code>: tier=patron, privileges=2, periods=1, credits=5, permanent=no</li></ul>
 
 <h2>Money invariant, read back by SQL</h2>
 <ul>

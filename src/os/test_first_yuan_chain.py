@@ -97,17 +97,61 @@ def main():
        "cfg_price=%d typed_in_source=%s legs=%d"
        % (cfg_price, typed, len(legs)))
 
-    # AC-FYCB2 <- AC-FYC2: same price, different value must be STATED.
+    # AC-FYCB2 <- AC-FYC2, rewritten at R2827 (AC-FYCE4): D-20261116-05 moved
+    # the law from "same price, different value" to "two products, two
+    # prices", so the criterion asserts the DIFFERENCE and that the landed
+    # page states it, and refuses the old equal-price claim outright. Nothing
+    # is deleted and nothing is relaxed: the assertion followed the law.
     values = set((len(leg["privileges"]), len(leg["periods"]),
                   (leg["activation"] or {}).get("tier")) for leg in legs)
     cmp_row = payload["comparison"]
-    stated = ("Same price, different value" in html_text
+    pair = cmp_row["price_pair"]
+    delta_text = "%.2f" % (abs(pair[0]["price_cent"] - pair[1]["price_cent"])
+                           / 100.0)
+    stated = (tool.price_section(payload)["heading"] in html_text
+              and delta_text in html_text
+              and "Same price" not in html_text
               and all(quoted_leg(html_text, leg["product_id"]) for leg in legs))
+
+    # AC-FYCE3: the red path must be measurable - a renderer that stops
+    # stating the difference has to be refused BY NAME, on a self-consistent
+    # private pair where the byte comparison cannot be the reason.
+    real_section = tool.price_section
+    priv_dir = tempfile.mkdtemp(prefix="fyce3-")
+    orig_paths = (tool.HTML_PATH, tool.JSON_PATH)
+    try:
+        def silent_section(payload_arg):
+            row = real_section(payload_arg)
+            return {"heading": row["heading"],
+                    "body": "<p>prices as configured</p>"}
+
+        tool.price_section = silent_section
+        silent_html = tool.render_html(payload)
+        priv_html = os.path.join(priv_dir, "first-yuan-chain.html")
+        priv_json = os.path.join(priv_dir, "first-yuan-chain.json")
+        with open(priv_html, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(silent_html)
+        with open(priv_json, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(tool.dumps(payload))
+        tool.HTML_PATH, tool.JSON_PATH = priv_html, priv_json
+        buf_silent = io.StringIO()
+        with contextlib.redirect_stdout(buf_silent):
+            rc_silent = tool.do_check()
+        silent_out = buf_silent.getvalue()
+    finally:
+        tool.price_section = real_section
+        tool.HTML_PATH, tool.JSON_PATH = orig_paths
+        shutil.rmtree(priv_dir, ignore_errors=True)
+
     ok("fycb2-stated",
-       bool(cmp_row["same_price"]) and bool(cmp_row["value_differs"])
-       and len(values) > 1 and stated,
-       "same_price=%s differs=%s distinct_values=%d quoted=%s"
-       % (cmp_row["same_price"], cmp_row["value_differs"], len(values), stated))
+       (not cmp_row["same_price"]) and bool(cmp_row["value_differs"])
+       and len(values) > 1 and stated
+       and rc_silent == 2 and "E_PRICE_NOT_STATED" in silent_out,
+       "same_price=%s differs=%s distinct_values=%d delta=%s stated=%s"
+       " silent_rc=%d names_E_PRICE_NOT_STATED=%s"
+       % (cmp_row["same_price"], cmp_row["value_differs"], len(values),
+          delta_text, stated, rc_silent,
+          "E_PRICE_NOT_STATED" in silent_out))
 
     # AC-FYCB3 <- AC-FYC3 and AC-FYCB4 <- AC-FYC4 share ONE throwaway world,
     # read RAW (the rendered payload is canonicalised, so its period stamps are
@@ -147,13 +191,22 @@ def main():
         span = (datetime.datetime.strptime(period0["end_utc"], fmt)
                 - datetime.datetime.strptime(period0["start_utc"], fmt))
         period_days = span.days
-    chain_ok = (tier == "experience" and bool(period0.get("period_id"))
+    # AC-FYCB3 <- AC-FYC3, tier expectation derived at R2827 (AC-FYCE4): the
+    # dock product's entitlement names the tier, so the criterion reads
+    # "tier:<name>" from the catalog instead of hardcoding a tier name that a
+    # later ruling can rename (it did: experience -> patron at
+    # D-20261116-05, which is why this row read red on a healthy tree).
+    entitlement = pay_cfg["products"][tool.DOCK_PRODUCT_ID].get("entitlement", "")
+    expect_tier = (entitlement.split(":", 1)[1]
+                   if entitlement.startswith("tier:") else None)
+    chain_ok = (expect_tier is not None and tier == expect_tier
+                and bool(period0.get("period_id"))
                 and period_days > 0
                 and sorted(raw_dock["privileges"]) == declared
                 and bool(declared))
     ok("fycb3-chain", chain_ok,
-       "tier=%s period_id=%s days=%d privs=%d catalog=%d equal=%s"
-       % (tier, bool(period0.get("period_id")), period_days,
+       "tier=%s expect=%s period_id=%s days=%d privs=%d catalog=%d equal=%s"
+       % (tier, expect_tier, bool(period0.get("period_id")), period_days,
           len(raw_dock["privileges"]), len(declared),
           sorted(raw_dock["privileges"]) == declared))
 
@@ -208,8 +261,8 @@ def main():
         with open(priv_html, "wb") as handle:
             handle.write(clean_html)
         tool.HTML_PATH, tool.JSON_PATH = priv_html, priv_json
-        tampered = clean_html.replace(b"Same price, different value",
-                                      b"Same price, identical value", 1)
+        tampered = clean_html.replace(b"Two prices, two products",
+                                      b"Two prices, one product", 1)
         with open(priv_html, "wb") as handle:
             handle.write(tampered)
         buf_bad = io.StringIO()

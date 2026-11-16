@@ -308,9 +308,42 @@ def build_payload():
     return _canon(payload, state)
 
 
+def money_text(cent):
+    return "%.2f" % (cent / 100.0) if cent is not None else "-"
+
+
+def price_section(payload):
+    """The page's price statement, derived from the catalog-driven comparison.
+
+    One definition shared by the renderer and the checker (R2823 law): the
+    checker must grade the SAME text the renderer publishes, otherwise a
+    renderer that silently stops printing a price stays green.
+    """
+    cmp_row = payload["comparison"]
+    pair = cmp_row["price_pair"]
+    if cmp_row["same_price"]:
+        return {
+            "heading": "Same price, different value",
+            "body": "<p>The two products cost the same %s; what differs is"
+                    " what they grant.</p>" % money_text(cmp_row["price_cent"]),
+        }
+    first, second = pair[0], pair[1]
+    delta = abs(first["price_cent"] - second["price_cent"])
+    return {
+        "heading": "Two prices, two products",
+        "body": ("<p><code>%s</code> costs %s; <code>%s</code> costs %s"
+                 " &mdash; a difference of %s, read from the catalog at"
+                 " render time.</p>"
+                 % (html.escape(first["product_id"]),
+                    money_text(first["price_cent"]),
+                    html.escape(second["product_id"]),
+                    money_text(second["price_cent"]),
+                    money_text(delta))),
+    }
+
+
 def render_html(payload):
-    def money(cent):
-        return "%.2f" % (cent / 100.0) if cent is not None else "-"
+    money = money_text
 
     rows = []
     for leg in payload["legs"]:
@@ -348,6 +381,10 @@ def render_html(payload):
                 money(item["price_cent"]),
                 html.escape(", ".join(benefits)) if benefits
                 else "none (permanent entry, no cycle, no renewal)"))
+    price_row = price_section(payload)
+    value_html = ('<ul>%s</ul>' % "".join(value_lines)
+                  if cmp_row["value_differs"]
+                  else "<p>The two legs delivered identical value.</p>")
     return """<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <title>First-yuan chain - one purchase through pay, member and ledger</title>
@@ -380,7 +417,7 @@ at render time.</p>
 <h2>Two products, side by side</h2>
 <ul>%s</ul>
 
-<h2>Same price, different value</h2>
+<h2>%s</h2>
 %s
 
 <h2>Money invariant, read back by SQL</h2>
@@ -408,8 +445,8 @@ compare bytes honestly.</div>
 </body></html>
 """ % ("\n".join(rows),
        "".join(pair_lines),
-       '<ul>%s</ul>' % "".join(value_lines) if cmp_row["value_differs"] else
-       "<p>The two legs delivered identical value.</p>",
+       html.escape(price_row["heading"]),
+       price_row["body"] + value_html,
        money_row["entries"], money_row["transactions"],
        html.escape(", ".join(money_row["directions"])),
        money_row["balanced_transactions"], money_row["unbalanced_transactions"],
@@ -489,6 +526,33 @@ def do_check():
     if cmp_row["same_price"]:
         fails.append("E_PRICE_COLLISION both legs priced %s"
                      % cmp_row["price_cent"])
+    # AC-FYCE1/AC-FYCE2: the landed page must state the prices the catalog
+    # carries, must state the difference between them, and must not keep the
+    # old equal-price claim alive. The difference figure is the unique
+    # detector: it appears in the price statement only, never in the table.
+    price_row = price_section(payload)
+    if price_row["heading"] not in got_html:
+        fails.append("E_PRICE_NOT_STATED heading missing: %s"
+                     % price_row["heading"])
+    for item in cmp_row["price_pair"]:
+        if money_text(item["price_cent"]) not in got_html:
+            fails.append("E_PRICE_NOT_STATED %s price %s missing from page"
+                         % (item["product_id"],
+                            money_text(item["price_cent"])))
+    if cmp_row["same_price"]:
+        if "Same price" not in got_html:
+            fails.append("E_PRICE_NOT_STATED equal-price claim missing")
+    else:
+        pair = cmp_row["price_pair"]
+        delta = abs(pair[0]["price_cent"] - pair[1]["price_cent"])
+        if money_text(delta) not in got_html:
+            fails.append("E_PRICE_NOT_STATED difference %s missing from page"
+                         % money_text(delta))
+        if "Same price" in got_html:
+            fails.append("E_FALSE_SAME_PRICE page claims equal prices while"
+                         " catalog reads %s vs %s"
+                         % (money_text(pair[0]["price_cent"]),
+                            money_text(pair[1]["price_cent"])))
     # AC-FYCD3: the permanent leg must carry no period and no tier; the
     # monthly leg must carry exactly one period and a named tier.
     permanent_leg = next(

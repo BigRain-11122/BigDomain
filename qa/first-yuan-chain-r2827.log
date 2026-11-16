@@ -1,0 +1,22 @@
+R2827 MEASURED AT OPEN (before any edit, clean tree, commit 0c4eb935)
+  SUITE FAIL 10/12 fycb2-stated,fycb3-chain
+  | FAIL fycb2-stated same_price=False differs=True distinct_values=2 quoted=True
+  | FAIL fycb3-chain tier=patron period_id=True days=30 privs=2 catalog=2 equal=True
+  page at HEAD printed <h2>Same price, different value</h2> while the catalog read 990 / 2990
+
+R2827 AFTER THE FIX
+  | PASS fycb1-derived cfg_price=990 typed_in_source=[] legs=2
+  | PASS fycb2-stated same_price=False differs=True distinct_values=2 delta=20.00 stated=True silent_rc=2 names_E_PRICE_NOT_STATED=True
+  | PASS fycb3-chain tier=patron expect=patron period_id=True days=30 privs=2 catalog=2 equal=True
+  | PASS fycb3-real-leg product=birthright_entry tier=None periods=0 privs=0
+  | PASS fycb4-ledger own_balanced=True entries=2/2 tx=1/1 rc=0 zero_delta=True
+  | PASS fycb7-temp-removed removed=True
+  | PASS fycb5-readonly rc=0 stats_equal=True verdict=PASS
+  | PASS fycb6-negctl tampered=True rc_bad=2 names_E_STALE=True rc_restored=0
+  | PASS fycb7-offline html_network_literals=0
+  | PASS fycb7-pure pure_ascii=True network_imports=[]
+  | PASS fycb7-live-book e405e605d4d8542b -> e405e605d4d8542b
+  | PASS fycb8-scope network=none honest=True msgseccheck=True ceo=True
+SUITE PASS 12/12 criteria=12
+
+rc=0

@@ -1,0 +1,28 @@
+R2827 four price faces re-checked together after the first_yuan_chain page change
+
+$ python tools/payment_gate_report.py --check -> rc=0
+  PAYMENT GATE CHECK PASS fails=0
+  value-domain: PASS products=5 tiers=0
+
+$ python tools/money_path_demo.py --check -> rc=0
+  value-domain: PASS products=5 tiers=0
+  VERDICT PASS products=5 steps=8 physical=3 decision=5 html=10161B json=4705B
+
+$ python tools/membership_face.py --check -> rc=0
+  VERDICT PASS tiers=4 paid=3 pending=2 matched=1 blocked=4 privs=11
+  value-domain: PASS products=5 tiers=1
+
+$ python tools/membership_benefit_report.py --check -> rc=0
+  MEMBERSHIP BENEFIT --check files=html/json facts_drift=no
+    PASS AC-MBG1 html=10218B json=9817B criteria=8
+    PASS AC-MBG2 tier=experience credits=3 catalog=3 product=tier_experience constant=experience
+    PASS AC-MBG3 measured=['basic_badge', 'emoji_pack_standard'] catalog=['basic_badge', 'emoji_pack_standard'] granted=basic_badge
+    PASS AC-MBG4 birth_cert=True permanent=True after_spend=True source=pay.grants_for (lobby E_ENTRANCE_REQUIRED face)
+    PASS AC-MBG5 granted=3 after_one=2 over=E_NO_CREDITS after_over=2 stranger=E_PERIOD_EXPIRED
+    PASS AC-MBG6 refused=3/3 codes=E_GATE_OFFLINE
+    PASS AC-MBG7 identical=True overlap=none co_has_queue=True off_tier=cocreation_priority->E_TIER_REQUIRED
+    PASS AC-MBG8 ascii=True imports=none calls=0
+  VERDICT PASS checks=8/8 fresh_fingerprint=918674b2db958676 landed=918674b2db958676
+  value-domain: PASS products=0 tiers=4
+
+all_four_rc_zero=True
