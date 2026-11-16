@@ -7018,6 +7018,18 @@ SUITES = [
     # and the world's bytes are unchanged after the audit (AC-SOA1..AC-SOA6).
     ("os-suite-output-audit",
      os.path.join("..", "os", "test_suite_output_audit.py"), 6),
+    # R2854. tools/suite_closing_row_census.py is the number this line has
+    # quoted for ten windows ("law=568/701/705, non_law=N"), and for all ten
+    # it carried NO registered suite. AC-CEN1..AC-CEN6 were pinned BEFORE the
+    # file. The law is read from the runner both ways in private worlds (a
+    # wrong pattern is REFUSED), eight probe shapes are pinned to the family
+    # measured for them, the live tree must PARTITION (law equals the
+    # registry size, non_law zero), two runs must read identical bytes, and
+    # --quiet-list must drop the naming while keeping the shapes. Worlds are
+    # read through subprocesses because the tool imports battery_shard and
+    # reconcile_all by bare module name.
+    ("os-suite-closing-row-census",
+     os.path.join("..", "os", "test_suite_closing_row_census.py"), 6),
     # R2801. tools/battery_shard_report.py - the face that decides whether six
     # FAMILIES are green - shipped with eight criteria and no row, so for two
     # windows it was graded only by the run that rendered it. AC-BSR1..AC-BSR8
