@@ -29,6 +29,17 @@ one unmaintained key:
            the live count equals that number.
   AC-SXF10 this tool must be registered in the battery (control, not product).
 
+Added at R2823 (pinned in src/os/backlog.md BEFORE this code), because the CEO
+read a mid-sentence fragment as the current line AND the two faces that publish
+the same field disagreed on a healthy tree:
+  AC-SXF11 the round HEADLINE wins: a skip marker that merely MENTIONS "log
+           items" must not demote the headline, and the fold summary must still
+           be skipped.
+  AC-SXF12 a value carrying the right round tag but not the headline reddens
+           E_SXF_FRAGMENT, so a continuation line cannot read PASS again.
+  AC-SXF13 latest_artifact excludes meta board pages by IMPORTING the one shipped
+           definition (export_round.BOARD_PAGES) instead of repeating the names.
+
 ASCII source only (repository encoding law). Product text is read from the live
 state, never authored here.
 """
@@ -43,6 +54,10 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Kept apart from ROOT: ROOT is rebound by the battery suite to a private world,
+# but the module that DEFINES "the CEO's latest artifact" always lives in the
+# real tree (AC-SXF13 imports it rather than repeating the definition).
+REAL_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATE = os.path.join(ROOT, "src", "os", "state.json")
 EXPORT = os.path.join(ROOT, "docs", "status-export.json")
 BACKLOG = os.path.join(ROOT, "src", "os", "backlog.md")
@@ -54,6 +69,11 @@ LEGACY_KEY = "results"
 ROUND_RE = re.compile(r"\bR(\d{4})\b")
 NEXT_ROW_RE = re.compile(r"\[R(\d{4})\] next window")
 NARRATIVE_SKIP = ("tokens:", "log items", "honest disclosures")
+# AC-SXF11: a line that opens "R#### <UPPERCASE>" IS a round headline, whatever
+# it goes on to discuss. This is the detector src/os/export_round.py already
+# ships as ROUND_HEAD_RE; the same shape is used here rather than a second rule.
+HEADLINE_RE = re.compile(r"^(?:\d{4}-\d{2}-\d{2} )?R(\d{4}) [A-Z][A-Z0-9 /_-]{2,}")
+FOLD_MARK = "fold of log items"
 
 
 def now_local():
@@ -73,48 +93,110 @@ def load_state(path):
     return json.loads(read_text(path))
 
 
+def round_of(line):
+    """Newest round number a line mentions, or None."""
+    hits = ROUND_RE.findall(line or "")
+    return max(int(value) for value in hits) if hits else None
+
+
+def is_headline(line):
+    """True when the line opens as a round headline (AC-SXF11)."""
+    return bool(HEADLINE_RE.match(line or ""))
+
+
+def is_fold_summary(line):
+    """True for a fold summary, which is never a round narrative.
+
+    The phrase alone is not enough to identify one: R2822's own HEADLINE says
+    "the round-aligned fold ... finally ran" and mentions "log items" while
+    describing the budget, and the old substring skip demoted that headline to
+    a mid-sentence continuation line - which is exactly the fragment the CEO
+    then had to read. Structure decides: a summary carries the phrase and does
+    NOT open with the headline shape.
+    """
+    text = line or ""
+    if FOLD_MARK not in text.lower():
+        return False
+    return not is_headline(text)
+
+
+def headline_body(narrative):
+    """The headline with its round label stripped, for cross-writer comparison."""
+    return re.sub(r"^(?:\d{4}-\d{2}-\d{2} )?R\d{4}\s+", "", narrative or "")[:80]
+
+
 def newest_round(state):
-    """Return (round_int, narrative_line) from the live state log tail."""
+    """Return (round_int, narrative_line) from the live state log tail.
+
+    AC-SXF11: the round HEADLINE wins outright. The previous rule skipped any
+    line carrying the substring "log items", which was meant to drop the fold
+    summary but also dropped every headline that merely mentioned the phrase -
+    so the rounds that ran a fold (the ones that matter most) published a
+    mid-sentence fragment instead of what the round did.
+    """
+    log = [line for line in (state.get("log") or []) if isinstance(line, str)]
     best_round = None
-    best_line = None
-    for line in state.get("log") or []:
-        if not isinstance(line, str):
+    for line in log:
+        value = round_of(line)
+        if value is None:
             continue
-        hits = ROUND_RE.findall(line)
-        if not hits:
-            continue
-        round_int = max(int(value) for value in hits)
-        if best_round is None or round_int > best_round:
-            best_round = round_int
-            best_line = None
-        if round_int != best_round:
-            continue
+        if best_round is None or value > best_round:
+            best_round = value
+    if best_round is None:
+        return None, None
+    candidates = [line for line in log if round_of(line) == best_round]
+    for line in candidates:
+        if is_headline(line) and not is_fold_summary(line):
+            return best_round, line
+    for line in candidates:
+        if is_headline(line):
+            return best_round, line
+    for line in candidates:
         lowered = line.lower()
         if any(marker in lowered for marker in NARRATIVE_SKIP):
             continue
-        if best_line is None:
-            best_line = line
-    return best_round, best_line
+        return best_round, line
+    return best_round, (candidates[0] if candidates else None)
+
+
+def export_round_module():
+    """The shipped module that owns what counts as the CEO's latest artifact."""
+    import importlib.util
+
+    path = os.path.join(REAL_ROOT, "src", "os", "export_round.py")
+    spec = importlib.util.spec_from_file_location("export_round_shared", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def newest_artifact(preview_dir):
-    """Newest on-disk file in preview/ as the CEO can actually open it."""
-    best = None
-    for name in os.listdir(preview_dir):
-        path = os.path.join(preview_dir, name)
-        if not os.path.isfile(path):
-            continue
-        stat = os.stat(path)
-        if best is None or stat.st_mtime_ns > best[0]:
-            best = (stat.st_mtime_ns, name, stat.st_size)
-    if best is None:
+    """Newest on-disk file in preview/ as the CEO can actually open it.
+
+    AC-SXF13: the previous version took the newest file of ANY kind, so it named
+    meta census boards as the CEO's latest artifact while `src/os/export_round.py`
+    excluded them - the two faces graded the same field against different rules
+    and disagreed on a healthy tree. The exclusion and the published format are
+    now IMPORTED from that one shipped definition instead of repeated here, and
+    the boards passed over are named rather than dropped silently.
+    """
+    shared = export_round_module()
+    root = os.path.dirname(os.path.abspath(preview_dir))
+    pair, skipped, newest_is_board = shared.newest_artifact(root)
+    if pair is None:
         return None
-    stamps = dt.datetime.fromtimestamp(best[0] / 1e9).astimezone()
+    html_rel, json_rel, html_bytes, json_bytes = pair
+    html_abs = os.path.join(root, html_rel.replace("/", os.sep))
+    stamps = dt.datetime.fromtimestamp(
+        os.stat(html_abs).st_mtime).astimezone()
     return {
-        "line": "preview/%s (%dB, %s)" % (best[1], best[2], iso(stamps)),
-        "abs": os.path.join(preview_dir, best[1]),
-        "bytes": best[2],
+        "line": "%s (%dB) + %s (%dB)" % (html_rel, html_bytes,
+                                         json_rel, json_bytes),
+        "abs": html_abs,
+        "bytes": html_bytes,
         "mtime": iso(stamps),
+        "skipped": list(skipped),
+        "newest_is_board": bool(newest_is_board),
     }
 
 
@@ -166,6 +248,16 @@ def check(export_path, state_path):
         if found != tag:
             problems.append(("E_SXF_STALE",
                              "%s leads with %s, expected %s" % (label, found, tag)))
+            continue
+        # AC-SXF12: carrying the right round tag is not enough. A mid-sentence
+        # continuation also leads with the round number, which is how the CEO
+        # came to read "how the change was held to its own criteria" as the
+        # current line. The published value must carry the round's HEADLINE.
+        body = headline_body(narrative)
+        if body and body[:60] not in value:
+            problems.append(("E_SXF_FRAGMENT",
+                             "%s does not carry the round headline (expected %r, got %r)"
+                             % (label, body[:60], value[:60])))
     # AC-SXF7: a field that claims to be derived must agree with its source.
     real_bytes = os.path.getsize(state_path)
     if doc.get("state_bytes") != real_bytes:

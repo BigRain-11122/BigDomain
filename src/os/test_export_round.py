@@ -1,13 +1,19 @@
-﻿"""Battery suite for src/os/export_round.py - criteria AC-EXPW1..AC-EXPW10.
+﻿"""Battery suite for src/os/export_round.py - criteria AC-EXPW1..AC-EXPW14.
 
 AC-EXPW1..AC-EXPW6 were pinned in src/os/backlog.md at R2780 BEFORE this suite or
 the tool existed. AC-EXPW7..AC-EXPW10 were pinned at R2805 BEFORE the board-page
-exclusion existed. The tool is read against a PRIVATE world built by copying the
-few real inputs it needs, so a test run never rewrites the CEO-visible face.
+exclusion existed. AC-EXPW11/AC-EXPW12 already stood here (pinned at R2822 for
+the fold-summary/narrative reading) when the R2823 pin reused those ids for the
+archived-results criteria; the archived-results criteria are therefore landed as
+AC-EXPW13/AC-EXPW14, and the R2823 board row carries a correction note rather
+than being quietly rewritten. The tool is read against a PRIVATE world built by
+copying the few real inputs it needs, so a test run never rewrites the
+CEO-visible face.
 
 Source discipline: pure ASCII, stdlib only, no clock, no network, no shell.
 """
 import ast
+import hashlib
 import importlib.util
 import io
 import json
@@ -375,6 +381,64 @@ def main():
               mod.is_fold_summary(range_only),
               mod.is_fold_summary(summary_line)))
 
+        # ---- AC-EXPW13: R2821 archived the results block, and the writer refuses
+        # ---- to notice. An archive that still resolves must not block the write,
+        # ---- and must not be re-grown a row at a time.
+        w13 = build_pair_world([('zz-face', 0)], tick=9013)
+        worlds.append(w13)
+        exp13 = os.path.join(w13, 'docs', 'status-export.json')
+        doc13 = json.loads(read(exp13))
+        logs13 = os.path.join(w13, 'logs')
+        if not os.path.isdir(logs13):
+            os.makedirs(logs13)
+        arc_body = json.dumps({'results': doc13['results']},
+                              ensure_ascii=False, indent=2) + '\n'
+        arc_rel = 'logs/status-export-legacy-9999-01.json'
+        write(os.path.join(w13, arc_rel.replace('/', os.sep)), arc_body)
+        digest13 = hashlib.sha256(arc_body.encode('utf-8')).hexdigest()
+        with_results = json.loads(json.dumps(doc13))
+        doc13.pop('results')
+        doc13['results_archive'] = {'path': arc_rel, 'sha256': digest13,
+                                    'count': 1,
+                                    'bytes': len(arc_body.encode('utf-8'))}
+        s13 = json.loads(read(os.path.join(w13, 'src', 'os', 'state.json')))
+        write(exp13, json.dumps(doc13, ensure_ascii=False, indent=2) + '\n')
+        data13, d13 = mod.payload(w13, s13, 'T13')
+        ok('AC-EXPW13 an intact archive does not block the write and is not re-grown',
+           'results' not in data13 and bool(data13.get('tick_row_skipped')),
+           'skip=%r' % (str(data13.get('tick_row_skipped'))[:44],))
+        write(exp13, json.dumps(with_results, ensure_ascii=False, indent=2) + '\n')
+        data13b, d13b = mod.payload(w13, s13, 'T13b')
+        ok('AC-EXPW13 a live results list still moves the tick slot',
+           data13b.get('results')
+           and str(data13b['results'][0][0]) == str(s13['tick'])
+           and data13b.get('tick_row_skipped') is None,
+           'tick_row=%r skipped=%r'
+           % (data13b.get('results', [[None]])[0][:1],
+              data13b.get('tick_row_skipped')))
+
+        # ---- AC-EXPW14: 'it was archived' cannot be claimed over a lost archive
+        def refusal(base, label):
+            write(exp13, json.dumps(base, ensure_ascii=False, indent=2) + '\n')
+            try:
+                mod.payload(w13, s13, label)
+            except ValueError as exc:
+                return str(exc)
+            return ''
+
+        no_pointer = json.loads(json.dumps(doc13))
+        no_pointer.pop('results_archive')
+        bad_sha = json.loads(json.dumps(doc13))
+        bad_sha['results_archive']['sha256'] = '0' * 64
+        gone = json.loads(json.dumps(doc13))
+        gone['results_archive']['path'] = 'logs/not-there-9999.json'
+        said = [refusal(no_pointer, 'T14a'), refusal(bad_sha, 'T14b'),
+                refusal(gone, 'T14c')]
+        ok('AC-EXPW14 a missing, mismatched or dangling archive is refused by name',
+           all('E_EXP_NO_ARCHIVE' in text for text in said),
+           'refusals=%r' % [text[:34] for text in said])
+        write(exp13, json.dumps(with_results, ensure_ascii=False, indent=2) + '\n')
+
         # ---- AC-EXPW6: hygiene, one battery row, eleven criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')
@@ -388,8 +452,8 @@ def main():
             found = re.search(r'test_export_round\.py"\)\s*,\s*(\d+)', window)
             if found:
                 rows.append(found.group(1))
-        ok('AC-EXPW6 exactly one battery row declares eleven criteria',
-           rows == ['11'], 'rows=%s' % rows)
+        ok('AC-EXPW6 exactly one battery row declares thirteen criteria',
+           rows == ['13'], 'rows=%s' % rows)
     finally:
         for w in worlds:
             shutil.rmtree(w, ignore_errors=True)

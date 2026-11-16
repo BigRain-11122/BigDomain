@@ -1,14 +1,14 @@
 {
-  "export_ts": "2026-11-16T08:56:52+08:00",
-  "do": "R2822 how the change was held to its own criteria: AC-FTOK1..AC-FTOK6 were pinned in src/os/backlog.md and committed as 0e3e9d23 BEFORE state_fold.py was touched. The negative control ran on production bytes twice - a summary naming no ids was REFUSED token-missing at end=49 (23 real ids), and after the summary carried those 23 ids the same call returned verdict=CLEAR with missing=0 and bytes_after=35552. Regression: src/os/test_state_fold.py SUITE PASS 6/6 and src/os/test_state_fold_run.py CRITERIA 6/6 passes=6 fails=0 after the edit, so no existing expectation was loosened to make the new predicate green.",
+  "export_ts": "2026-11-16T09:58:26+08:00",
+  "do": "R2823 PRODUCT: the CEO's three-line process face was publishing a mid-sentence fragment as what the round did, and the two gates that grade that same face disagreed on a healthy tree. Both defects were measured at open rather than guessed: the shipped line reader returned log index 31 'R2822 how the change was held to its own criteria' while index 30 carried the real headline 'R2822 PRODUCT: the round-aligned fold ... finally ran', dropped because NARRATIVE_SKIP holds the substring 'log items' - a marker written to skip the FOLD SUMMARY that also skips any headline merely mentioning the phrase, so exactly the rounds that run a fold publish a fragment. Separately status_export_fresh --check read PASS while export_round --check read FAIL 1 on the same file and the landed latest_artifact named preview/face-sweep.json, a meta census page. Fixed at both birth sites.",
   "ceo_face": {
-    "current": "R2822 how the change was held to its own criteria: AC-FTOK1..AC-FTOK6 were pinned in src/os/backlog.md and committed as 0e3e9d23 BEFORE state_fold.py was touched. The negative control ran on production bytes twice - a summary naming no ids was REFUSED token-missing at end=49 (23 real ids), and after the summary carried those 23 ids the same call returned verdict=CLEAR with missing=0 and bytes_after=35552. Regression: src/os/test_state_fold.py SUITE PASS 6/6 and src/os/test_state_fold_run.py CRITERIA 6/6 passes=6 fails=0 after the edit, so no existing expectation was loosened to make the new predicate green.",
-    "latest_artifact": "preview/face-sweep.json (4741B, 2026-11-16T08:26:58+08:00)",
-    "last_artifact": "preview/face-sweep.json (4741B, 2026-11-16T08:26:58+08:00)",
-    "next_milestone": "[R2821] next window (<=12h): (1) `src/os/state.json` closed at **85049B** against the 78500B waterline (+6549) — round-aligned fold owed, and the fold must not swallow the round being closed; (2) full battery still owes **698/5238**, no leg started for many windows; (3) 8 tool faces still carry their own criteria with no battery row (lobby_ws 8 / journey_demo 8 / city_face 8 / membership_benefit 8",
-    "next_milestone_due": "2026-11-16T20:56:52+08:00",
-    "updated_at": "2026-11-16T08:56:52+08:00",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\face-sweep.json",
+    "current": "R2823 PRODUCT: the CEO's three-line process face was publishing a mid-sentence fragment as what the round did, and the two gates that grade that same face disagreed on a healthy tree. Both defects were measured at open rather than guessed: the shipped line reader returned log index 31 'R2822 how the change was held to its own criteria' while index 30 carried the real headline 'R2822 PRODUCT: the round-aligned fold ... finally ran', dropped because NARRATIVE_SKIP holds the substring 'log items' - a marker written to skip the FOLD SUMMARY that also skips any headline merely mentioning the phrase, so exactly the rounds that run a fold publish a fragment. Separately status_export_fresh --check read PASS while export_round --check read FAIL 1 on the same file and the landed latest_artifact named preview/face-sweep.json, a meta census page. Fixed at both birth sites.",
+    "latest_artifact": "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
+    "last_artifact": "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
+    "next_milestone": "[R2823] next window (<=12h): (1) `outs` is a 37-entry list no round maintains - `results` got archived at R2821 and now has a pointer law, `outs` got nothing; decide the same way (archive + pointer) rather than letting it grow unwatched; (2) full battery still owes 698/5243 and no leg was started for many windows - the task book says a supervised window must launch early, so treat this as the next",
+    "next_milestone_due": "2026-11-16T21:58:26+08:00",
+    "updated_at": "2026-11-16T09:58:26+08:00",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\membership-face.html",
     "board_pages_skipped": [
       "preview/face-sweep.html (5325B)"
     ],
@@ -93,10 +93,10 @@
     "queue_tech_open": 11,
     "queue_explore_open": 10
   },
-  "current": "R2822 how the change was held to its own criteria: AC-FTOK1..AC-FTOK6 were pinned in src/os/backlog.md and committed as 0e3e9d23 BEFORE state_fold.py was touched. The negative control ran on production bytes twice - a summary naming no ids was REFUSED token-missing at end=49 (23 real ids), and after the summary carried those 23 ids the same call returned verdict=CLEAR with missing=0 and bytes_after=35552. Regression: src/os/test_state_fold.py SUITE PASS 6/6 and src/os/test_state_fold_run.py CRITERIA 6/6 passes=6 fails=0 after the edit, so no existing expectation was loosened to make the new predicate green.",
+  "current": "R2823 PRODUCT: the CEO's three-line process face was publishing a mid-sentence fragment as what the round did, and the two gates that grade that same face disagreed on a healthy tree. Both defects were measured at open rather than guessed: the shipped line reader returned log index 31 'R2822 how the change was held to its own criteria' while index 30 carried the real headline 'R2822 PRODUCT: the round-aligned fold ... finally ran', dropped because NARRATIVE_SKIP holds the substring 'log items' - a marker written to skip the FOLD SUMMARY that also skips any headline merely mentioning the phrase, so exactly the rounds that run a fold publish a fragment. Separately status_export_fresh --check read PASS while export_round --check read FAIL 1 on the same file and the landed latest_artifact named preview/face-sweep.json, a meta census page. Fixed at both birth sites.",
   "latest_artifact": "qa/ugc-gate-suite-R2814.log (835B, sha256 676bd87df8c9250c) + docs/sandbox-suite-matrix.md (73180B, 695 rows)",
   "next_milestone": "next window (<=12h): src/os/test_lobby_ws_report.py lands the lobby_ws battery row (8 shipped criteria, one-to-one with tamper proof) and the registry moves to 696; the full battery (695 suites / 5207 criteria) still needs a supervised leg and is not claimed green.",
-  "state_bytes": 39057,
+  "state_bytes": 43229,
   "queue": {
     "floors": {
       "main": 5,

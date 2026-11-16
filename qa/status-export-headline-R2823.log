@@ -1,0 +1,64 @@
+R2823 evidence - the CEO three-line face published a fragment, and two faces disagreed on a healthy tree
+captured 2026-11-16, repo domain/BigDomain, all readings taken on production bytes
+
+[1] DEFECT A, measured before the fix (log index and the line actually published)
+shipped newest_round(log) -> round=2822
+picked index 31: R2822 how the change was held to its own criteria: AC-FTOK1..AC-FTOK6 were pinned...
+index 30 (the real headline, skipped): R2822 PRODUCT: the round-aligned fold that had been carried as owed...
+index 30 skip markers matched: ['log items']
+root: NARRATIVE_SKIP contains the substring 'log items', meant to skip the FOLD SUMMARY at index 0,
+      but it also drops any headline that merely mentions the phrase
+
+[2] DEFECT B, measured before the fix (two gates, same file, different verdicts)
+python tools/status_export_fresh.py --check  -> VERDICT R2822 PASS (rc=0)
+python src/os/export_round.py --check        -> VERDICT FAIL 1 (rc=2)
+   - AC-EXPW1 latest_artifact is not the newest product pair on disk
+landed ceo_face.latest_artifact was: preview/face-sweep.json (4741B, ...)  <- a meta census page
+write path: E_EXP expected exactly 1 tick row, found 0   (since R2821 archived the results block)
+
+[3] NEGATIVE CONTROL, taken on production bytes rather than on a fixture
+after the code change, before any --apply:
+python tools/status_export_fresh.py --check -> VERDICT R2822 FAIL (rc=2)
+   E_SXF_FRAGMENT: do does not carry the round headline
+      (expected 'PRODUCT: the round-aligned fold that had been carried as owe',
+       got 'R2822 how the change was held to its own criteria: AC-FTOK1.')
+   E_SXF_FRAGMENT: ceo_face.current ... (same)
+   E_SXF_FRAGMENT: current ... (same)
+
+[4] POSITIVE CONTROL, after one --apply
+APPLIED R2822 bytes=36303 lf_only=True bom=False
+do->R2822 PRODUCT: the round-aligned fold that had been carried as owed for many rounds finally ran
+latest_artifact->preview/membership-face.html (10881B) + preview/membership-face.json (7051B)
+python tools/status_export_fresh.py --check -> VERDICT R2822 PASS (rc=0)
+python src/os/export_round.py --check        -> VERDICT PASS tick=R2822 PRODUCT: the round-ali (rc=0)
+the two gates agree for the first time; the published artifact is a product page, not a census
+
+[5] PRE-REGISTRATION CONTROL, both suites, before the registry counts moved
+python src/os/test_export_round.py        -> SUITE FAIL 37/38
+   only red: AC-EXPW6 exactly one battery row declares thirteen criteria rows=['11']
+   new green: AC-EXPW13 archive does not block the write and is not re-grown
+              AC-EXPW13 a live results list still moves the tick slot
+              AC-EXPW14 missing / mismatched / dangling archive refused by name
+python src/os/test_status_export_fresh.py -> SUITE FAIL 12/13
+   only red: AC-SXFB10 matrix_row=True declared=10
+   new green: AC-SXFB11 headline picked over the summary and the continuation
+              AC-SXFB12 fragment=2 named=True applied=0
+              AC-SXFB13 published fixture pair, skipped=1 board, repeated=none
+
+[6] AFTER the registry rows moved (10->13 and 11->13)
+python src/os/test_export_round.py        -> SUITE PASS 38/38
+python src/os/test_status_export_fresh.py -> SUITE PASS 13/13
+python src/sandbox/suite_matrix.py        -> 73472 bytes, registry suites=698 criteria=5243
+python src/os/suite_matrix_reconcile.py --check -> DOC-CURRENT
+
+[7] MY OWN DEFECT, disclosed rather than quietly fixed
+first newest_artifact() joined os.path.dirname(preview_dir) with os.path.basename(html_rel),
+which dropped the 'preview' segment and raised FileNotFoundError on membership-face.html;
+repaired at the birth site by joining the REL path, no assertion loosened.
+second: the R2823 pin reused AC-EXPW11/12, which this suite already used for the fold-summary
+reading at R2822; the archived-results criteria landed as AC-EXPW13/AC-EXPW14 and the board row
+carries a correction note.
+
+honest ceiling: no new capability and a buyer still cannot pay. What changed is that the CEO's
+downloadable process face states what the round actually did, names a real product page, and the
+two faces that grade it can no longer disagree.

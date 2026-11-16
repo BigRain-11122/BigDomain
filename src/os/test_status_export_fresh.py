@@ -1,4 +1,4 @@
-"""Battery suite for tools/status_export_fresh.py - criteria AC-SXFB1..AC-SXFB10.
+"""Battery suite for tools/status_export_fresh.py - criteria AC-SXFB1..AC-SXFB13.
 
 WHY THIS SUITE EXISTS (measured at R2821, not hypothesised): the CEO three-line
 face read VERDICT R2820 PASS while the same document carried two provable
@@ -23,13 +23,16 @@ The real docs/status-export.json and src/os/state.json are snapshotted by size
 and mtime_ns before and after and must be identical.
 """
 
+import contextlib
 import hashlib
 import io
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
+import time
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(BASE))
@@ -77,6 +80,12 @@ def build_world(root):
     with io.open(os.path.join(root, "preview", "fixture.html"), "w",
                  encoding="utf-8", newline="\n") as handle:
         handle.write("<html>fixture</html>\n")
+    # AC-SXF13 derives the published pair from src/os/export_round.py, which only
+    # accepts a preview/X.html that HAS a sibling X.json - so the fixture world
+    # carries the pair, not a lone html (the shape moved with the definition).
+    with io.open(os.path.join(root, "preview", "fixture.json"), "w",
+                 encoding="utf-8", newline="\n") as handle:
+        handle.write("{}\n")
     with io.open(os.path.join(root, "src", "os", "backlog.md"), "w",
                  encoding="utf-8", newline="\n") as handle:
         handle.write("- [ ] [R2821] next window (<=12h): fixture milestone row\n")
@@ -203,7 +212,74 @@ def run(root):
     record("AC-SXFB9", rc_none == 5 and snapshot(export) == before,
            "no-round rc=%d writes=0" % rc_none)
 
-    # AC-SXFB10 (AC-SXF10): the registry row exists and declares this many criteria.
+    # AC-SXFB11 (AC-SXF11): the headline wins over a skip marker that merely
+    # MENTIONS the phrase. Driven with the exact shape R2822 produced - a fold
+    # summary, then the real headline that discusses the fold, then a
+    # continuation line - because the old rule demoted the headline to the
+    # continuation and the CEO read "how the change was held to its own criteria"
+    # as the current line.
+    fold_state = {"tick": 3, "log": [
+        "2026-11-16 R2821 fold of log items 1..9 (rounds R2820..R2820), moved "
+        "verbatim into logs/archive.md; ids carried forward",
+        "R2821 ENGINEERING: the round-aligned fold finally ran and the log items "
+        "budget moved",
+        "R2821 how the change was held to its own criteria: AC-XYZ1..3",
+    ]}
+    picked_round, picked = sx.newest_round(fold_state)
+    record("AC-SXFB11", picked_round == 2821 and picked == fold_state["log"][1],
+           "picked=%r" % ((picked or "")[:56],))
+
+    # AC-SXFB12 (AC-SXF12): a continuation line carries the right round tag and
+    # used to read PASS. It must redden, and --apply must repair it.
+    write_json(sx.STATE, fold_state)
+    frag = json.loads(json.dumps(doc))
+    fragment = fold_state["log"][2]
+    frag["do"] = fragment
+    frag["current"] = fragment
+    frag["ceo_face"]["current"] = fragment
+    write_json(export, frag)
+    # The verdict must red FOR THE FRAGMENT, not merely be non-zero for some
+    # other reason on the same document, so the printed code is captured.
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer):
+        rc_frag = sx.check(export, sx.STATE)
+    said = buffer.getvalue()
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    rc_frag_fixed = sx.check(export, sx.STATE)
+    record("AC-SXFB12", rc_frag == 2 and "E_SXF_FRAGMENT" in said
+           and rc_frag_fixed == 0,
+           "fragment=%d named=%s applied=%d"
+           % (rc_frag, "E_SXF_FRAGMENT" in said, rc_frag_fixed))
+
+    # AC-SXFB13 (AC-SXF13): a meta board page must not be published as the CEO's
+    # latest artifact, and the exclusion must be IMPORTED from the one shipped
+    # definition rather than repeated as names here or in the tool.
+    import export_round as er
+    for ext in (".html", ".json"):
+        path = os.path.join(root, "preview", "face-sweep" + ext)
+        with io.open(path, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write("<html>board</html>\n" if ext == ".html" else "{}\n")
+        future = time.time() + 120
+        os.utime(path, (future, future))
+    art = sx.newest_artifact(sx.PREVIEW)
+    published = (art or {}).get("line") or ""
+    skipped = (art or {}).get("skipped") or []
+    source = io.open(os.path.join(REPO, "tools", "status_export_fresh.py"),
+                     encoding="utf-8", errors="replace").read()
+    repeated = [name for name in er.BOARD_PAGES if '"%s"' % name in source]
+    record("AC-SXFB13",
+           "face-sweep" not in published and "fixture" in published
+           and any("face-sweep" in item for item in skipped) and not repeated,
+           "published=%r skipped=%r repeated=%r"
+           % (published[:40], len(skipped), repeated or "none"))
+
+    # AC-SXFB10 (AC-SXF10): the registry row exists AND declares this many
+    # criteria, so adding a criterion without moving the count is red instead of
+    # silently uncounted.
+    registry = io.open(os.path.join(REPO, "src", "sandbox", "reconcile_all.py"),
+                       encoding="utf-8", errors="replace").read()
+    found = re.search(r'test_status_export_fresh\.py"\)\s*,\s*(\d+)', registry)
+    declared = int(found.group(1)) if found else -1
     row = None
     if os.path.isfile(MATRIX):
         text = io.open(MATRIX, encoding="utf-8", errors="replace").read()
@@ -211,7 +287,8 @@ def run(root):
             if "test_status_export_fresh.py" in line:
                 row = line
                 break
-    record("AC-SXFB10", row is not None, "registry row=%s" % (row or "MISSING"))
+    record("AC-SXFB10", row is not None and declared == 13,
+           "matrix_row=%s declared=%d" % (bool(row), declared))
 
 
 def main():

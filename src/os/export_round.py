@@ -33,6 +33,7 @@ Usage:
   python src/os/export_round.py --root DIR      # operate on a private world
 """
 import datetime
+import hashlib
 import io
 import json
 import os
@@ -226,6 +227,36 @@ def derive(repo, state, stamp):
     }
 
 
+def archive_state(data, repo):
+    """Is the results block legitimately archived, or merely missing?
+
+    AC-EXPW11/AC-EXPW12: R2821 moved the frozen per-round narratives out of the
+    document the CEO downloads and left a pointer. A pointer is only an excuse
+    while it still resolves - so this returns (True, note) when the archive is
+    on disk and its sha256 still matches, and (False, reason) otherwise, which
+    keeps "it was archived" from being claimed over a lost archive.
+    """
+    arch = data.get('results_archive')
+    if not isinstance(arch, dict):
+        return False, 'results_archive absent'
+    rel = arch.get('path') or ''
+    if not rel:
+        return False, 'results_archive.path is empty'
+    path = os.path.join(repo, rel.replace('/', os.sep))
+    if not os.path.isfile(path):
+        return False, 'results_archive.path %r is not on disk' % rel
+    digest = hashlib.sha256()
+    with open(path, 'rb') as handle:
+        for block in iter(lambda: handle.read(1 << 16), b''):
+            digest.update(block)
+    actual = digest.hexdigest()
+    if actual != (arch.get('sha256') or ''):
+        return False, ('archive sha256 %s != disk %s'
+                       % ((arch.get('sha256') or '')[:16], actual[:16]))
+    return True, ('results archived to %s (count=%s); tick slot not re-grown'
+                  % (rel, arch.get('count')))
+
+
 def payload(repo, state, stamp):
     """Build the new face WITHOUT writing it (AC-EXPW4 needs a pure path)."""
     import check_export_consistency as cec
@@ -235,15 +266,26 @@ def payload(repo, state, stamp):
         raise ValueError('E_EXP no face at ' + exp)
     data = json.loads(_read(exp))
     d = derive(repo, state, stamp)
-    rows = data.get('results') or []
     # the tick slot is named by the shipped pattern table, never by a literal
     label = cec._load_patterns().get('tick_row_label')
-    stamped = [r for r in rows if isinstance(r, list) and len(r) >= 2
-               and label and r[1] == label]
-    if len(stamped) != 1:
-        raise ValueError('E_EXP expected exactly 1 tick row, found %d'
-                         % len(stamped))
-    stamped[0][0] = d['tick']
+    rows = data.get('results')
+    d['tick_row_skipped'] = None
+    if isinstance(rows, list):
+        stamped = [r for r in rows if isinstance(r, list) and len(r) >= 2
+                   and label and r[1] == label]
+        if len(stamped) != 1:
+            raise ValueError('E_EXP expected exactly 1 tick row, found %d'
+                             % len(stamped))
+        stamped[0][0] = d['tick']
+    else:
+        # AC-EXPW11: the block is gone on purpose. Re-creating it a row at a
+        # time would refill the document R2821 emptied, so the write proceeds
+        # and the skip is published instead of raising E_EXP every round.
+        ok, note = archive_state(data, repo)
+        if not ok:
+            raise ValueError('E_EXP_NO_ARCHIVE ' + note)
+        d['tick_row_skipped'] = note
+        data['tick_row_skipped'] = note
     outs = data.get('outs') or []
     if not outs or outs[0] != d['latest']:
         outs.insert(0, d['latest'])
