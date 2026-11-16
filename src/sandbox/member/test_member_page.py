@@ -168,6 +168,9 @@ def main():
         shutil.rmtree(data_dir, ignore_errors=True)
 
     fails = [ac for ac, ok in RESULTS if not ok]
+    law_verdict = "SUITE PASS" if not fails else "SUITE FAIL"
+    print("%s %d/%d" % (law_verdict, len(RESULTS) - len(fails),
+                        len(RESULTS)), flush=True)
     print("SUITE %d/%d green" % (len(RESULTS) - len(fails), len(RESULTS)),
           flush=True)
     if fails:

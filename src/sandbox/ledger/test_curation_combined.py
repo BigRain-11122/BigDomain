@@ -245,6 +245,9 @@ def main():
     cu2.close()
     sh2.close()
     failed = [ac for ac, ok in RESULTS if not ok]
+    law_verdict = "SUITE PASS" if not failed else "SUITE FAIL"
+    print("%s %d/%d" % (law_verdict, len(RESULTS) - len(failed),
+                        len(RESULTS)), flush=True)
     if failed:
         print("SUITE FAIL %d checks (%s)"
               % (len(failed), ",".join(failed)), flush=True)

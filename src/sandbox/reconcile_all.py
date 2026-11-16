@@ -7035,8 +7035,11 @@ SUITES = [
     # copies inside one private temp world, so the landed pair never moves.
     # Measured at R2814: the pre-registration control read exactly one red
     # (AC-UGRB11, this row absent) and 11/12 after the row landed.
+    # R2852 correction: the suite really carries twelve criteria
+    # (AC-UGRB0..AC-UGRB11), so the row said 11 while the suite ran 12 and its
+    # own AC-UGRB11 asserted the wrong number - both sides now say twelve.
     ("os-ugc-gate-report",
-     os.path.join("..", "os", "test_ugc_gate_report.py"), 11),
+     os.path.join("..", "os", "test_ugc_gate_report.py"), 12),
     ]
 
 FAILS = 0

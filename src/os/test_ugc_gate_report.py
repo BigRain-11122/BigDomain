@@ -1,4 +1,4 @@
-"""Battery suite for tools/ugc_gate_report.py - criteria AC-UGRB1..AC-UGRB11.
+"""Battery suite for tools/ugc_gate_report.py - criteria AC-UGRB0..AC-UGRB11.
 
 WHY THIS SUITE EXISTS (measured at R2814, not hypothesised):
 tools/ugc_gate_report.py renders preview/ugc-gate-report.html + .json, the face
@@ -250,10 +250,11 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 11,
+    ok('AC-UGRB11', bool(row) and declared == 12,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
-    print('SUITE %s %d/%d' % ('PASS' if not FAILS else 'FAIL', len(CHECKS) - len(FAILS), len(CHECKS)))
+    law_verdict = "PASS" if not FAILS else "FAIL"
+    print('SUITE %s %d/%d' % (law_verdict, len(CHECKS) - len(FAILS), len(CHECKS)))
     return 0 if not FAILS else 2
 
 

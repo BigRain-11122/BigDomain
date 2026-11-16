@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 705 | 5374 | 675/675 | R2739 |
+| 705 | 5375 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -741,8 +741,8 @@
 | 702 | os-battery-shard | ../os/test_battery_shard.py | 16 | no-evidence | - |
 | 703 | os-suite-output-audit | ../os/test_suite_output_audit.py | 6 | no-evidence | - |
 | 704 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
-| 705 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 11 | no-evidence | - |
-|  | 合计 |  | 5374 | green 675 / FAIL 0 / no-evidence 30 |  |
+| 705 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 12 | no-evidence | - |
+|  | 合计 |  | 5375 | green 675 / FAIL 0 / no-evidence 30 |  |
 
 ## 证据出处
 

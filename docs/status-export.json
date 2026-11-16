@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T05:33:15+08:00",
-  "do": "2026-11-17 R2851 PRODUCT+ENGINEERING: the four remaining closing-row skins are law at their owners now, not by editing 134 files - a 133-label leg reads every one of them green with a number.",
+  "export_ts": "2026-11-17T05:51:11+08:00",
+  "do": "2026-11-17 R2852 PRODUCT+ENGINEERING: the four closing rows the law still refused are law at their owners now, and suite_closing_row_census reads law=705 non_law=0 missing=0 - the first zero this line has ever measured.",
   "ceo_face": {
-    "current": "2026-11-17 R2851 PRODUCT+ENGINEERING: the four remaining closing-row skins are law at their owners now, not by editing 134 files - a 133-label leg reads every one of them green with a number.",
+    "current": "2026-11-17 R2852 PRODUCT+ENGINEERING: the four closing rows the law still refused are law at their owners now, and suite_closing_row_census reads law=705 non_law=0 missing=0 - the first zero this line has ever measured.",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2851] next window (<=12h): (1) MAIN - the four residual rows the law still refuses, decided ONE at a time at its birth site: `member-face` (`SUITE %d/%d green`, the only `no_status` left - either decide that `green` is a verdict word or change the row to say PASS/FAIL); `ledger-curation-combined` (`SUITE PASS 7 checks` - a verdict and ONE count with no fail counter, so add the count at the birth site or declare the row unreadable on purpose); `os-residue-batch-status-face` (`SUITE %s/%s` - a census FALSE NEGATIVE that prints `SUITE 6/6` through a helper; teach the census a bound two-slot pair or declare the class); `os-ugc-gate-report` (`SUITE %s %d/%d` - the status slot is not provably bound, so bind it or declare it); (2) the per-family output legs for the five new law families (`law_punct=37`, `law_label_pt=24`, `law_counters=31`, `law_status_punct=41`, `law_status_colon=0`) were NOT run one family at a time - the aggregate 133-label leg is the only output proof, so `tools/suite_output_audit.py --family law_punct` (and the other four) should be measured next window and their `law_emit` recorded (truncated)",
-    "next_milestone_due": "2026-11-17T17:33:15+08:00",
-    "updated_at": "2026-11-17T05:33:15+08:00",
+    "next_milestone": "[R2852] next window (<=12h): (1) MAIN - the five new law families were never asked at OUTPUT level one at a time (`law_punct=37`, `law_label_pt=24`, `law_counters=31`, `law_status_punct=41`), so run `tools/suite_output_audit.py --family <name>` for each, FULL not sampled, and record every `law_emit`; (2) the `pass=0 fail=0` gap: 130 of R2851's 133 rows print a real `suite=PASS n/n` beside `pass=0 fail=0` because those suites emit no per-criterion `  | PASS <name>` lines, so a reader that trusts the pass count sees a suite of nothing - decide whether the runner should derive that count or declare the gap; (3) register a suite for `tools/suite_closing_row_census.py` (ninth window carrying) or declare the debt with a reason; (4) the census' status-binding detector accepts only double-quoted verdicts - either teach it single quotes with a red control or declare the limitation as law; (5) 572+ of 705 registry suites still never run in any slice, and shard offset/resume remains the named carrier blocker (truncated)",
+    "next_milestone_due": "2026-11-17T17:51:11+08:00",
+    "updated_at": "2026-11-17T05:51:11+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 63,
+    "log_lines_in_window": 69,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2851 PRODUCT+ENGINEERING: the four remaining closing-row skins are law at their owners now, not by editing 134 files - a 133-label leg reads every one of them green with a number.",
+  "current": "2026-11-17 R2852 PRODUCT+ENGINEERING: the four closing rows the law still refused are law at their owners now, and suite_closing_row_census reads law=705 non_law=0 missing=0 - the first zero this line has ever measured.",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2851] next window (<=12h): (1) MAIN - the four residual rows the law still refuses, decided ONE at a time at its birth site: `member-face` (`SUITE %d/%d green`, the only `no_status` left - either decide that `green` is a verdict word or change the row to say PASS/FAIL); `ledger-curation-combined` (`SUITE PASS 7 checks` - a verdict and ONE count with no fail counter, so add the count at the birth site or declare the row unreadable on purpose); `os-residue-batch-status-face` (`SUITE %s/%s` - a census FALSE NEGATIVE that prints `SUITE 6/6` through a helper; teach the census a bound two-slot pair or declare the class); `os-ugc-gate-report` (`SUITE %s %d/%d` - the status slot is not provably bound, so bind it or declare it); (2) the per-family output legs for the five new law families (`law_punct=37`, `law_label_pt=24`, `law_counters=31`, `law_status_punct=41`, `law_status_colon=0`) were NOT run one family at a time - the aggregate 133-label leg is the only output proof, so `tools/suite_output_audit.py --family law_punct` (and the other four) should be measured next window and their `law_emit` recorded (truncated)",
-  "state_bytes": 52562,
+  "next_milestone": "[R2852] next window (<=12h): (1) MAIN - the five new law families were never asked at OUTPUT level one at a time (`law_punct=37`, `law_label_pt=24`, `law_counters=31`, `law_status_punct=41`), so run `tools/suite_output_audit.py --family <name>` for each, FULL not sampled, and record every `law_emit`; (2) the `pass=0 fail=0` gap: 130 of R2851's 133 rows print a real `suite=PASS n/n` beside `pass=0 fail=0` because those suites emit no per-criterion `  | PASS <name>` lines, so a reader that trusts the pass count sees a suite of nothing - decide whether the runner should derive that count or declare the gap; (3) register a suite for `tools/suite_closing_row_census.py` (ninth window carrying) or declare the debt with a reason; (4) the census' status-binding detector accepts only double-quoted verdicts - either teach it single quotes with a red control or declare the limitation as law; (5) 572+ of 705 registry suites still never run in any slice, and shard offset/resume remains the named carrier blocker (truncated)",
+  "state_bytes": 57141,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2851",
+      "2852",
       "OSLoop 执行 tick"
     ]
   ],

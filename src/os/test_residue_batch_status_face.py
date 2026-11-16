@@ -320,7 +320,7 @@ def main():
     ac_rsbf5()
     ac_rsbf6()
     total = PASSES + FAILS
-    print("SUITE %s/%s" % (PASSES, EXPECTED_CRITERIA), flush=True)
+    print("SUITE %d/%d" % (PASSES, EXPECTED_CRITERIA), flush=True)
     if total != EXPECTED_CRITERIA:
         print("E_RSBF_SUITE_COUNT: %d criteria ran, %d expected"
               % (total, EXPECTED_CRITERIA), flush=True)
