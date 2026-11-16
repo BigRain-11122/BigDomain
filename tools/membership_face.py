@@ -34,7 +34,17 @@ import re
 import sys
 
 # D-20261116-13: value-domain assertion imported from the one shared module.
-import value_domain as VD
+# R2826: the directory is added to sys.path BEFORE the import so the file stays
+# loadable by the battery (which imports it by path with no tools/ on sys.path).
+_MODDIR = os.path.dirname(os.path.abspath(__file__))
+if _MODDIR not in sys.path:
+    sys.path.insert(0, _MODDIR)
+import value_domain as VD  # noqa: E402
+
+# The catalog is the REPO's shipped config, not the render target: a test world
+# repoints ROOT at a temp dir, and reading the catalog through it emptied the
+# catalog and made every row read "not in the catalog" (R2826).
+CATALOG_ROOT = os.path.dirname(_MODDIR)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPEC = os.path.join(ROOT, "docs", "spec", "membership-spec.md")
@@ -477,7 +487,7 @@ def write_atomic(path, data):
     os.replace(tmp, path)
 
 
-def gate(conf, payload, html_text, json_bytes):
+def gate(conf, payload, html_text, json_bytes, diag=None):
     reasons = []
     if any(not n["found"] for n in payload["needles"]):
         missing = [n["needle"] for n in payload["needles"] if not n["found"]]
@@ -512,10 +522,12 @@ def gate(conf, payload, html_text, json_bytes):
     # AC-VD2/AC-VD4/AC-VD5 (D-20261116-13): the landed catalogue is compared to
     # the LIVE catalog by value (price, entitlement, period, privileges), not
     # merely re-derived and compared to itself.
-    _vdcat = VD.catalog(ROOT)
-    reasons.extend(VD.product_failures(cat, _vdcat, ("price_cent", "entitlement")))
+    _vdcat = VD.catalog(CATALOG_ROOT)
+    _vdstats = {}
+    reasons.extend(VD.product_failures(cat, _vdcat, ("price_cent", "entitlement"),
+                                       stats=_vdstats))
     reasons.extend(VD.tier_failures(cat, _vdcat, ("period_days", "privileges"),
-                                    require_one=True))
+                                    require_one=True, stats=_vdstats))
     prices = {}
     for r in cat:
         if r.get("price_cent") is not None:
@@ -543,6 +555,12 @@ def gate(conf, payload, html_text, json_bytes):
         src.decode("ascii")
     except UnicodeDecodeError:
         reasons.append("E_ASCII source carries non-ASCII bytes")
+    # AC-VD9/AC-VD11 (R2826): printed line and exit code read ONE list.
+    reasons = VD.teeth(_vdstats.get("products", 0), _vdstats.get("tiers", 0),
+                       reasons)
+    if diag is not None:
+        diag["line"] = VD.line(_vdstats.get("products", 0),
+                               _vdstats.get("tiers", 0), reasons)
     return reasons
 
 
@@ -555,7 +573,8 @@ def main(argv):
         before = {}
         for p in (OUT_HTML, OUT_JSON):
             before[p] = (os.path.getsize(p), os.path.getmtime(p)) if os.path.exists(p) else None
-        reasons = gate(conf, payload, html_text, json_bytes)
+        diag = {}
+        reasons = gate(conf, payload, html_text, json_bytes, diag)
         after = {}
         for p in (OUT_HTML, OUT_JSON):
             after[p] = (os.path.getsize(p), os.path.getmtime(p)) if os.path.exists(p) else None
@@ -565,6 +584,7 @@ def main(argv):
         print(head % ("PASS" if not reasons and stable else "FAIL",
                       c["tiers"], c["paid"], c["pending"], c["matched"],
                       c["blocked"], c["privileges"]))
+        print(diag.get("line", ""))
         if not stable:
             print("E_WROTE --check changed an artifact size or mtime")
         for r in reasons:

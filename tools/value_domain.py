@@ -91,12 +91,16 @@ def _same(a, b):
     return a == b
 
 
-def product_failures(rows, cat, fields=FIELDS_PRODUCT, require_one=True):
+def product_failures(rows, cat, fields=FIELDS_PRODUCT, require_one=True,
+                     stats=None):
     """Compare landed product rows against the catalog, by value.
 
     rows: any sequence of dicts carrying an "id". Extra keys in the row are
     ignored; only `fields` are compared. A row whose id is absent from the
     catalog is red (the row is selling something the catalog does not have).
+
+    stats: optional dict filled with {"products": <rows actually compared>} so
+    a face can print how much value work it did without counting twice.
     """
     fails = []
     catalog_products = cat.get("products") or {}
@@ -122,6 +126,8 @@ def product_failures(rows, cat, fields=FIELDS_PRODUCT, require_one=True):
     if require_one and seen == 0:
         fails.append("%s no product row was compared against the catalog "
                      "(structural green is not a value-domain pass)" % ERR)
+    if stats is not None:
+        stats["products"] = seen
     return fails
 
 
@@ -133,7 +139,8 @@ def tier_key_from_entitlement(entitlement):
     return None
 
 
-def tier_failures(rows, cat, fields=FIELDS_TIER, require_one=True):
+def tier_failures(rows, cat, fields=FIELDS_TIER, require_one=True,
+                  stats=None):
     """Compare tier rows (period / quota / privileges) against the catalog.
 
     rows: a dict keyed by tier name, OR a sequence of dicts carrying "tier"
@@ -168,6 +175,8 @@ def tier_failures(rows, cat, fields=FIELDS_TIER, require_one=True):
         seen += 1
     if require_one and seen == 0:
         fails.append("%s no tier row was compared against the catalog" % ERR)
+    if stats is not None:
+        stats["tiers"] = seen
     return fails
 
 
@@ -180,10 +189,31 @@ def config_drift(landed_sha, cat, key="pay_sha256"):
     return []
 
 
+NO_COMPARISON = (ERR + " no row was compared against the catalog, so the "
+                       "formatter refuses to print PASS")
+
+
+def teeth(rows_checked, tier_rows_checked, failures):
+    """Fold the no-comparison refusal into the caller's OWN failure list.
+
+    A face that prints `line()` and exits on a different list could print FAIL
+    and still exit 0, so both sides read this one list (AC-VD11).
+    """
+    fails = list(failures or [])
+    if not rows_checked and not tier_rows_checked and not fails:
+        fails.append(NO_COMPARISON)
+    return fails
+
+
 def line(rows_checked, tier_rows_checked, failures):
-    """One printable line so a green face says its value-domain work out loud."""
-    if failures:
-        return "value-domain: FAIL %d (products=%d tiers=%d)" % (
-            len(failures), rows_checked, tier_rows_checked)
+    """One printable line so a green face says its value-domain work out loud.
+
+    The formatter itself refuses to certify an empty comparison (AC-VD11): the
+    count of what was compared is part of the claim, not decoration.
+    """
+    fails = teeth(rows_checked, tier_rows_checked, failures)
+    if fails:
+        return "value-domain: FAIL %d (products=%d tiers=%d) %s" % (
+            len(fails), rows_checked, tier_rows_checked, fails[0])
     return "value-domain: PASS products=%d tiers=%d" % (rows_checked,
                                                         tier_rows_checked)

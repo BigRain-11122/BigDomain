@@ -2,7 +2,7 @@
  "generated_by": "tools/membership_benefit_report.py",
  "p47_item": 5,
  "title": "会员权益验收报告",
- "generated_utc": "2026-11-15T22:38:56Z",
+ "generated_utc": "2026-11-16T07:49:16Z",
  "facts": {
   "tiers": {
    "cocreator": {
@@ -193,8 +193,8 @@
   "47991d8b6a83ead3"
  ],
  "expires": [
-  "2026-12-15T22:38:56Z",
-  "2026-12-15T22:38:56Z"
+  "2026-12-16T07:49:16Z",
+  "2026-12-16T07:49:16Z"
  ],
  "fingerprint": "918674b2db958676",
  "criteria": [

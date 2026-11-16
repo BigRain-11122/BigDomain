@@ -1,0 +1,34 @@
+R2826 evidence - the value-domain assertion is now SAID OUT LOUD
+criterion AC-VD9: one 'value-domain:' line per face, parsed from
+that face's own stdout; AC-VD10: the literal lives only in
+tools/value_domain.py; AC-VD11: the formatter refuses PASS over an
+empty comparison and each face folds the same reason into its own
+failure list, so the printed line and the exit code cannot disagree.
+
+payment_gate_report          rc=0 lines=1
+    value-domain: PASS products=5 tiers=0
+money_path_demo              rc=0 lines=1
+    value-domain: PASS products=5 tiers=0
+membership_face              rc=0 lines=1
+    value-domain: PASS products=5 tiers=1
+membership_benefit_report    rc=0 lines=1
+    value-domain: PASS products=0 tiers=4
+
+formatter negative control (AC-VD11):
+    line(0, 0, [])          -> value-domain: FAIL 1 (products=0 tiers=0) E_VALUE_DOMAIN no row was compared against the catalog, so the formatter refuses to print PASS
+    line(2, 0, [])          -> value-domain: PASS products=2 tiers=0
+    line(0, 2, [])          -> value-domain: PASS products=0 tiers=2
+    line(1, 0, ['E_VALUE_DOMAIN x']) -> value-domain: FAIL 1 (products=1 tiers=0) E_VALUE_DOMAIN x
+
+the regression this window found while verifying (disclosed, fixed):
+    three adjacent suites (payment_gate_report / money_path_demo /
+    membership_face) imported the face tools by path with no tools/ on
+    sys.path, so the R2825 sibling import died with ModuleNotFoundError
+    and test_payment_gate_report was additionally red on its own import
+    allowlist; both were repaired at their birth sites and the three
+    suites plus this one now read PASS 13/13, 18/18 and 28/28.
+    money_path_demo's AC-MPD6 then caught a REAL defect of the R2825
+    wiring: faces called VD.catalog(ROOT), and the suite repoints ROOT
+    at a temp world, so the catalog read empty and every product read
+    'not in the catalog'. The catalog root is now derived from the
+    tool's own path (CATALOG_ROOT) and cannot be repointed.

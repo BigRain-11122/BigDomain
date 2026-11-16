@@ -1,10 +1,15 @@
-"""Battery suite for tools/value_domain.py - criteria AC-VDB1..AC-VDB8.
+"""Battery suite for tools/value_domain.py - criteria AC-VDB1..AC-VDB11.
 
 WHY (D-20261116-13, deadline 2026-11-17 12:00): every --check that reads green
 must carry at least one VALUE-DOMAIN assertion - a price, entitlement, period or
 quota compared against the catalog - and the four price faces must get it from
 ONE reusable module rather than four copies. R2816 measured three faces printing
 PASS over a landed price_cent=1990 against a config reading 990.
+
+R2826 adds AC-VDB9..AC-VDB11: the comparison must be SAID OUT LOUD by each face
+(one "value-domain:" line, parsed from that face's own subprocess stdout), the
+formatting must live in the one module (no face may carry the literal), and the
+formatter must refuse to print PASS when no row was compared.
 
 WHAT IS PROVED HERE, and how: each criterion is driven in this process against
 the REAL catalog (read-only) and against TAMPERED copies held in memory, so a
@@ -18,7 +23,9 @@ import hashlib
 import io
 import json
 import os
+import re
 import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -30,7 +37,7 @@ sys.path.insert(0, TOOLS)
 
 import value_domain as VD  # noqa: E402
 
-DECLARED = 9
+DECLARED = 12
 
 FACES = [
     ("payment_gate_report.py", os.path.join(ROOT, "preview", "payment-gate-report.json")),
@@ -198,8 +205,70 @@ def run():
             if "test_value_domain.py" in line:
                 row = line
                 break
-    record("AC-VDB8", row is not None and DECLARED == len(results) + 2,
+    record("AC-VDB8", row is not None and DECLARED == len(results) + 5,
            "matrix_row=%s declared=%d" % (bool(row), DECLARED))
+
+
+    # AC-VDB9 (AC-VD9): each face SAYS ITS VALUE-DOMAIN WORK OUT LOUD, parsed
+    # from that face's own subprocess stdout - not inferred from its source.
+    shapes = []
+    for name, _ in FACES:
+        proc = subprocess.run([sys.executable, os.path.join(TOOLS, name),
+                               "--check"],
+                              cwd=ROOT, capture_output=True, text=True)
+        out = (proc.stdout or "") + (proc.stderr or "")
+        said = [l for l in out.splitlines() if l.startswith("value-domain: ")]
+        prod = tier = None
+        ok = len(said) == 1
+        if ok:
+            m = re.search(r"products=(\d+)", said[0])
+            prod = int(m.group(1)) if m else None
+            m2 = re.search(r"tiers=(\d+)", said[0])
+            tier = int(m2.group(1)) if m2 else None
+            ok = (said[0].startswith("value-domain: PASS")
+                  and prod is not None and tier is not None
+                  and (prod >= 1 or tier >= 1))
+        shapes.append("%s:%s" % (name.replace("_report", "").replace(".py", ""),
+                                 "OK" if ok else "NO(lines=%d rc=%d p=%s t=%s)"
+                                 % (len(said), proc.returncode, prod, tier)))
+    record("AC-VDB9", all(s.endswith(":OK") for s in shapes), ",".join(shapes))
+
+    # AC-VDB10 (AC-VD10): the literal lives in ONE file; the faces carry the CALL.
+    owner = io.open(os.path.join(TOOLS, "value_domain.py"),
+                    encoding="utf-8").read()
+    lit = "value-domain: "
+    wiring = ["owner=%d" % owner.count(lit)]
+    for name, _ in FACES:
+        text = io.open(os.path.join(TOOLS, name), encoding="utf-8",
+                       errors="replace").read()
+        wiring.append("%s:%d/%s" % (
+            name.replace("_report", "").replace(".py", ""), text.count(lit),
+            "CALL" if "VD.line(" in text else "NOCALL"))
+    record("AC-VDB10",
+           owner.count(lit) >= 1
+           and all(w.split(":")[1].startswith("0/") for w in wiring[1:])
+           and all(w.endswith("/CALL") for w in wiring[1:]),
+           ",".join(wiring))
+
+    # AC-VDB11 (AC-VD11): the formatter cannot certify a comparison that never
+    # happened, and each face folds the same reason into its own failure list so
+    # the printed line and the exit code cannot disagree.
+    empty = VD.line(0, 0, [])
+    two = VD.line(2, 0, [])
+    tier_only = VD.line(0, 2, [])
+    teeth = []
+    for name, _ in FACES:
+        text = io.open(os.path.join(TOOLS, name), encoding="utf-8",
+                       errors="replace").read()
+        teeth.append("%s:%s" % (name.replace("_report", "").replace(".py", ""),
+                                "TEETH" if "VD.teeth(" in text else "NOTEETH"))
+    record("AC-VDB11",
+           not empty.startswith("value-domain: PASS") and "E_VALUE_DOMAIN" in empty
+           and two == "value-domain: PASS products=2 tiers=0"
+           and tier_only == "value-domain: PASS products=0 tiers=2"
+           and all(t.endswith(":TEETH") for t in teeth),
+           "empty=%r two=%r tier=%r teeth=%s"
+           % (empty, two, tier_only, ",".join(teeth)))
 
 
 def main():

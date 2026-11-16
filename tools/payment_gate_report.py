@@ -61,7 +61,19 @@ import datetime
 
 # D-20261116-13: the value-domain assertion is ONE module shared by the four
 # price faces, not four copies. This file historically carried its own version.
-import value_domain as VD
+# R2826: the module directory joins sys.path BEFORE the sibling import, because
+# the battery loads this file by path with no tools/ on sys.path - importing a
+# sibling that only resolves under `python tools/x.py` turned three battery
+# suites red the moment the import landed.
+_MODDIR = os.path.dirname(os.path.abspath(__file__))
+if _MODDIR not in sys.path:
+    sys.path.insert(0, _MODDIR)
+import value_domain as VD  # noqa: E402
+
+# The catalog is the REPO's shipped config, not the render target: a test world
+# repoints ROOT at a temp dir, and reading the catalog through it emptied the
+# catalog and made every row read "not in the catalog" (R2826).
+CATALOG_ROOT = os.path.dirname(_MODDIR)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAY_DIR = os.path.join(ROOT, "src", "sandbox", "pay")
@@ -465,7 +477,7 @@ def render_html(meas):
     return "".join(parts)
 
 
-def check(meas, out, jout):
+def check(meas, out, jout, diag=None):
     fails = []
     if not os.path.isfile(out) or not os.path.isfile(jout):
         return ["missing artifact"]
@@ -495,10 +507,12 @@ def check(meas, out, jout):
     # tools/value_domain.py, which the other three price faces import too. The
     # criteria TEXT and the artifact SIZES can agree while the landed price
     # table belongs to an older config, which is exactly what R2816 measured.
-    cat = VD.catalog(ROOT)
+    cat = VD.catalog(CATALOG_ROOT)
+    stats = {}
     landed_shas = (landed.get("config") or {}).get("sha256")
     fails.extend(VD.config_drift(landed_shas, cat, "pay_sha256"))
-    fails.extend(VD.product_failures(landed.get("products") or [], cat))
+    fails.extend(VD.product_failures(landed.get("products") or [], cat,
+                                     stats=stats))
     sizes = landed.get("sizes") or {}
     if sizes.get("html") != os.path.getsize(out):
         fails.append("sizes html %s != %d on disk" % (sizes.get("html"),
@@ -506,6 +520,11 @@ def check(meas, out, jout):
     if sizes.get("json") != os.path.getsize(jout):
         fails.append("sizes json %s != %d on disk" % (sizes.get("json"),
                                                       os.path.getsize(jout)))
+    # AC-VD9/AC-VD11 (R2826): the printed line and the exit code read ONE list.
+    fails = VD.teeth(stats.get("products", 0), stats.get("tiers", 0), fails)
+    if diag is not None:
+        diag["line"] = VD.line(stats.get("products", 0), stats.get("tiers", 0),
+                               fails)
     return fails
 
 
@@ -518,9 +537,11 @@ def main(argv):
 
     meas = collect()
     if args.check:
-        fails = check(meas, args.out, args.json)
+        diag = {}
+        fails = check(meas, args.out, args.json, diag)
         print("PAYMENT GATE CHECK %s fails=%d" % (
             "PASS" if not fails else "FAIL", len(fails)))
+        print(diag.get("line", ""))
         for f in fails:
             print("  - %s" % f)
         return 0 if not fails else 2

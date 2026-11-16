@@ -23,10 +23,18 @@ import os
 import sys
 
 # D-20261116-13: value-domain assertion imported from the one shared module.
-import value_domain as VD
-
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
+# The catalog is the REPO's shipped config, not the render target. A test world
+# repoints ROOT/PREVIEW at a temp dir; reading the catalog through ROOT then
+# emptied it and every product read "not in the catalog" (R2826). CATALOG_ROOT
+# is computed from this file's location, so repointing ROOT cannot move it.
+CATALOG_ROOT = os.path.dirname(HERE)
+# R2826: the sibling import must survive every loader (the battery loads this
+# file by path with no tools/ on sys.path), so the directory is added first.
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
+import value_domain as VD  # noqa: E402
 PREVIEW = os.path.join(ROOT, "preview")
 
 SOURCE_NAMES = {
@@ -284,7 +292,7 @@ def write_all():
     return html_path, json_path, len(html.encode("utf-8")), os.path.getsize(json_path)
 
 
-def check():
+def check(diag=None):
     problems = []
     html_path = os.path.join(PREVIEW, HTML_NAME)
     json_path = os.path.join(PREVIEW, JSON_NAME)
@@ -326,21 +334,29 @@ def check():
         problems.append("product list diverges from source")
     # AC-VD2/AC-VD5 (D-20261116-13): a fresh derivation is not a value-domain
     # assertion by itself - the landed price rows are compared to the catalog.
-    cat = VD.catalog(ROOT)
+    cat = VD.catalog(CATALOG_ROOT)
+    stats = {}
     problems.extend(VD.product_failures(landed_json["products"], cat,
-                                       ("price_cent",)))
+                                       ("price_cent",), stats=stats))
     if any(("price" in k and "cent" not in k and isinstance(v, str) and "." in v and k != "price_yuan") for k, v in payload.items()):
         problems.append("unexpected price field")
     if landed_json["counts"]["products"] != len(landed_json["products"]):
         problems.append("product count is not derived")
     if landed_json["counts"]["steps"] != len(landed_json["steps"]):
         problems.append("step count is not derived")
+    # AC-VD9/AC-VD11 (R2826): printed line and exit code read ONE list.
+    problems = VD.teeth(stats.get("products", 0), stats.get("tiers", 0), problems)
+    if diag is not None:
+        diag["line"] = VD.line(stats.get("products", 0), stats.get("tiers", 0),
+                               problems)
     return problems
 
 
 def main(argv):
     if "--check" in argv:
-        problems = check()
+        diag = {}
+        problems = check(diag)
+        print(diag.get("line", ""))
         if problems:
             print("VERDICT FAIL %d" % len(problems))
             for item in problems:
@@ -362,7 +378,9 @@ def main(argv):
     html_path, json_path, html_bytes, json_bytes = write_all()
     print("WROTE %s %dB" % (os.path.basename(html_path), html_bytes))
     print("WROTE %s %dB" % (os.path.basename(json_path), json_bytes))
-    problems = check()
+    diag = {}
+    problems = check(diag)
+    print(diag.get("line", ""))
     if problems:
         print("VERDICT FAIL %d" % len(problems))
         for item in problems:

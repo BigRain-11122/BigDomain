@@ -6884,7 +6884,7 @@ SUITES = [
     # catalog instead of structural self-consistency. R2816 measured three faces
     # printing PASS over a landed price_cent=1990 against a config reading 990.
     ("os-value-domain",
-     os.path.join("..", "os", "test_value_domain.py"), 9),
+     os.path.join("..", "os", "test_value_domain.py"), 12),
     # R2819: tools/face_sweep.py carried eleven criteria and NO battery row while
     # driving the read-only --check of EIGHT CEO-openable faces, so the only thing
     # guarding the eight-panel board was the board's own gate and nothing scheduled

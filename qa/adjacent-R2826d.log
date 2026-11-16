@@ -1,0 +1,85 @@
+=== test_value_domain rc=0 ===
+SUITE PASS 12/12
+
+=== test_payment_gate_report rc=0 ===
+PAYMENT GATE REPORT html=6991B json=6959B channels=standard,virtual accepted=3 refused=7 verdict=PASS
+  | PASS AC-PAYGB1 both artifacts land non-empty with eight named criteria rc=0 html=6991B json=6959B ids=AC-PAYG1,AC-PAYG2,AC-PAYG3,AC-PAYG4,AC-PAYG5,AC-PAYG6,AC-PAYG7,AC-PAYG8
+  | PASS AC-PAYGB2 two shipped channels accept a signed callback (2/2) built=standard,virtual accepted=2/2 tool_rows=2
+  | PASS AC-PAYGB3 three legacy negatives are refused as AdapterError (3/3) refused=3/3 classes=AdapterError,AdapterError,AdapterError
+  | PASS AC-PAYGB4 one V3 callback with four headers verifies (1/1, 4/4) ok=True headers=4/4 tool=True
+  | PASS AC-PAYGB5 four V3 negatives refused, NOTPAY by trade_state (4/4) refused=4/4 notpay_named=True
+  | PASS AC-PAYGB6 config price, tool constant and landed row agree cfg=1990 const=1990 landed=1990 needs_ceo=True
+  | PASS AC-PAYGB7 disclaimer is byte-equal to config and AIGC note rides along disc=372B note=146B verbatim=True
+  | PASS AC-PAYGB8 both sources ASCII, whitelisted imports, zero network tool_imp=adapters,argparse,copy,datetime,hashlib,html,json,os,sys,v3,value_domain suite_extra= net=[] ascii=True/True
+PAYMENT GATE CHECK PASS fails=0
+value-domain: PASS products=5 tiers=0
+PAYMENT GATE CHECK FAIL fails=1
+value-domain: FAIL 1 (products=5 tiers=0) sizes html 6992 != 6991 on disk
+  - sizes html 6992 != 6991 on disk
+PAYMENT GATE CHECK PASS fails=0
+value-domain: PASS products=5 tiers=0
+  | PASS AC-PAYGB9 --check is read-only, a tamper reddens, one row declares 10 clean=0 bad=2 restored=0 stat_stable=True rows=['10']
+  | PASS AC-PAYGB9b repo preview faces and pay config unchanged preview=6a3786d16b480f9e->6a3786d16b480f9e cfg=True
+PAYMENT GATE CHECK FAIL fails=1
+value-domain: FAIL 1 (products=5 tiers=0) E_VALUE_DOMAIN stale product row on birthright_entry: landed price_cent=1990 != catalog 990
+  - E_VALUE_DOMAIN stale product row on birthright_entry: landed price_cent=1990 != catalog 990
+  | PASS AC-PAYGB10 a stale price row reddens --check and names the product rc=2 fails=['E_VALUE_DOMAIN stale product row on birthright_entry: landed price_cent=1990 != catalog 990']
+PAYMENT GATE CHECK FAIL fails=1
+value-domain: FAIL 1 (products=5 tiers=0) E_VALUE_DOMAIN config drift: landed sha256 0000000000000000 != current 1f3dd9233a82b565
+  - E_VALUE_DOMAIN config drift: landed sha256 0000000000000000 != current 1f3dd9233a82b565
+  | PASS AC-PAYGB11 a document rendered against another config reddens alone rc=2 fails=['E_VALUE_DOMAIN config drift: landed sha256 0000000000000000 != current 1f3dd9233a82b565']
+  | PASS AC-PAYGB9c temp world removed (a leak is loud, not silent) removed=True
+SUITE PASS 13/13 in 1.0s
+
+=== test_money_path_demo rc=0 ===
+  | PASS AC-MPD1 product and step counts are derived from the lists counts={'decision': 5, 'physical': 3, 'products': 5, 'steps': 8, 'steps_pass': 6}
+  | PASS AC-MPD1 every price is the source price_cent, id for id products=5 drift=[]
+  | PASS AC-MPD2 product ids equal the source list id for id ids=['birthright_entry', 'pack_compute_19_9', 'report_data_b', 'share_observation', 'tier_patron_30d']
+  | PASS AC-MPD2 every CEO-blocked product carries a visible CEO gate ceo_products=3
+  | PASS AC-MPD2 every product reaches the page missing=[]
+  | PASS AC-MPD3 the page states it is a mock surface label=本页为演示面
+  | PASS AC-MPD3 the page holds no absolute url 
+  | PASS AC-MPD4 every step verdict string reaches the page unaltered steps=8 missing=[]
+  | PASS AC-MPD4 every step id reaches the page missing=[]
+  | PASS AC-MPD4 every product entitlement and channel is rendered missing=[]
+  | PASS AC-MPD5 recorded source sizes equal the bytes on disk sources=3 drift=[]
+  | PASS AC-MPD5 a second render is byte identical on both artifacts html=10161B json=4705B
+  | PASS AC-MPD6 --check exits 0 and writes nothing (bytes and mtime) rc=0
+  | PASS AC-MPD6 one flipped byte is caught by check() problems=1
+  | PASS AC-MPD6 restoring the byte returns check() to clean 
+  | PASS AC-MPD6 exactly one inline script and one namespace declaration script=1 ns=1 storage=2
+  | PASS AC-MPD6 suite source is pure ASCII non_ascii=0
+  | PASS AC-MPD6 suite has no network and no shell import found=[]
+SUITE PASS 18/18
+
+=== test_membership_face rc=0 ===
+  | PASS AC-MEMF1 counts equal a recomputation from the tier rows counts={'tiers': 4, 'paid': 3, 'pending': 2, 'matched': 1, 'blocked': 4, 'privileges': 11, 'products': 5, 'no_cycle_products': 4}
+  | PASS AC-MEMF1 every tier name is parsed from the spec text rows=4 stray=[]
+  | PASS AC-MEMF1 the tool source carries no price literal found=[]
+  | PASS AC-MEMF2 tier product matches equal the price cross-check bad=[]
+  | PASS AC-MEMF2 every tier is rendered on the page missing=[]
+  | PASS AC-MEMF2 every matched product id reaches the page unsigned=[]
+  | PASS AC-MEMF3 every needle and compliance marker is found needles=4 compliance=4
+  | PASS AC-MEMF3 stripping a needle turns the gate red naming E_NEEDLE lost=['ai_generated'] reasons=['E_NEEDLE spec lost needle(s) ai_generated', 'E_STALE html is not the fresh derivation']
+  | PASS AC-MEMF4 the page holds no http literal links=5
+  | PASS AC-MEMF4 every relative link target exists on disk dead=[]
+  | PASS AC-MEMF5 recorded sizes equal the bytes on disk sizes={'spec_bytes': 29184, 'pay_bytes': 6959, 'config_bytes': 3233, 'payconf_bytes': 4769, 'mconf_bytes': 7890}
+  | PASS AC-MEMF5 a second render is byte identical on both artifacts 
+  | PASS AC-MEMF6 --check exits 0 and writes nothing (bytes and mtime) rc=0
+  | PASS AC-MEMF6 one flipped byte on disk is caught as E_STALE reasons=['E_STALE html is not the fresh derivation']
+  | PASS AC-MEMF6 restoring the byte returns the gate to clean 
+  | PASS AC-MEMF7 the page lists every shipped pay-config product page=5 config=5
+  | PASS AC-MEMF7 every shipped product reaches the landed page off_page=[]
+  | PASS AC-MEMF7 a product added to the config appears with no module edit rows=6
+  | PASS AC-MEMF8 the permanent ticket carries no cycle and no privileges perm={'period_days': None, 'privileges': [], 'no_cycle': True}
+  | PASS AC-MEMF8 the monthly card carries its period and its privileges month={'period_days': 30, 'privileges': ['cocreation_block_seat', 'growth_archive_slot'], 'no_cycle': False}
+  | PASS AC-MEMF8 both names and both prices reach the landed page perm=9.9 month=29.9
+  | PASS AC-MEMF8 swapping the two cycle shapes reddens E_PRODUCT_SHAPE reasons=['E_PRODUCT_SHAPE tier_patron_30d has no period yet carries privileges', 'E_VALUE_DOMAIN stale tier row on patron: landed period_days=None != catalog 30']
+  | PASS AC-MEMF9 the shipped config bytes are recorded at render time recorded={'payconf_bytes': 4769, 'mconf_bytes': 7890} disk={'payconf_bytes': 4769, 'mconf_bytes': 7890}
+  | PASS AC-MEMF9 a config that moved under the page reddens E_PAYCONF_STALE reasons=['E_SIZE recorded payconf_bytes does not equal disk', 'E_PAYCONF_STALE landed page was rendered against another pay config (recorded 1f3dd9233a82b565 current a4ac276f53ee93c4)']
+  | PASS AC-MEMF9 restoring the config returns the gate to clean 
+  | PASS AC-MEMF10 a one-cent-scale move changes the printed yuan on the page yuan=12.9 moved=True
+  | PASS AC-MEMF6 suite source is pure ASCII non_ascii=0
+  | PASS AC-MEMF6 suite has no network and no shell import found=[]
+SUITE PASS 28/28
+

@@ -81,7 +81,7 @@
       "text": "tool source ASCII, stdlib+shipped imports (incl. the shared value_domain module), zero network refs"
     }
   ],
-  "generated_utc": "2026-11-16T07:23:11Z",
+  "generated_utc": "2026-11-16T07:49:15Z",
   "legacy_negative": [
     {
       "case": "tampered signature",
@@ -173,7 +173,7 @@
       "value_domain"
     ],
     "network_refs": 0,
-    "sha256": "87aa07a0e720111e17be07993c91b0c224ba26b04e21f5ec877933b7eff51695"
+    "sha256": "52efc7d777c5b4c2b9b7fe3d8db163f050927f4d82f3cad81d438e1518417296"
   },
   "v3_negative": [
     {

@@ -107,6 +107,11 @@ import store as LOBBY_STORE                # noqa: E402
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import value_domain as VD                  # noqa: E402
 
+# The catalog is the REPO's shipped config, not the render target: a test world
+# repoints ROOT at a temp dir, and reading the catalog through it emptied the
+# catalog and made every row read "not in the catalog" (R2826).
+CATALOG_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 MEMBER_CFG = os.path.join(MEMBER_DIR, "config.json")
 LOBBY_CFG = os.path.join(LOBBY_DIR, "config.json")
 PAY_CFG = os.path.join(PAY_DIR, "config.json")
@@ -472,7 +477,7 @@ def measure():
         shutil.rmtree(data_dir, ignore_errors=True)
 
 
-def verify(facts, sizes):
+def verify(facts, sizes, diag=None):
     """Every criterion, evaluated against the measured facts."""
     rows = []
 
@@ -482,9 +487,14 @@ def verify(facts, sizes):
     tiers = facts["tiers"]
     # AC-VD4 (D-20261116-13): the cycle/quota is compared against the LIVE
     # catalog, so "facts == the derivation that made them" is no longer enough.
-    _vd_cat = VD.catalog(ROOT)
+    _vd_cat = VD.catalog(CATALOG_ROOT)
+    _vdstats = {}
     _vdcat = (_vd_cat.get("tiers") or {}).get(MEMBER_TIER) or {}
-    _vdfails = VD.tier_failures(tiers, _vd_cat)
+    _vdfails = VD.tier_failures(tiers, _vd_cat, stats=_vdstats)
+    # A comparison that never happened must redden AC-MBG2 below, not merely
+    # print differently: both sides read this one list (AC-VD11).
+    _vdfails = VD.teeth(_vdstats.get("products", 0), _vdstats.get("tiers", 0),
+                        _vdfails)
     members = facts["members"]
     base = members[0]
     co = members[1]
@@ -553,6 +563,11 @@ def verify(facts, sizes):
 
     source_ok, source_detail = source_face()
     add("AC-MBG8", source_ok, source_detail)
+    # AC-VD9/AC-VD11 (R2826): this face compares TIER rows, so its line counts
+    # tiers; the formatter still refuses a PASS over zero comparisons.
+    if diag is not None:
+        diag["line"] = VD.line(_vdstats.get("products", 0),
+                               _vdstats.get("tiers", 0), _vdfails)
     return rows
 
 
@@ -842,7 +857,9 @@ def main(argv=None):
         html_size = (os.path.getsize(args.out)
                      if os.path.isfile(args.out) else 0)
         json_size = os.path.getsize(args.json)
-        rows = verify(landed["facts"], {"html": html_size, "json": json_size})
+        diag = {}
+        rows = verify(landed["facts"], {"html": html_size, "json": json_size},
+                      diag)
         drift = fingerprint(facts) != landed.get("fingerprint")
         passed = sum(1 for r in rows if r["pass"])
         print("MEMBERSHIP BENEFIT --check files=%s/%s facts_drift=%s"
@@ -854,6 +871,7 @@ def main(argv=None):
               % ("PASS" if (passed == len(rows) and not drift) else "FAIL",
                  passed, len(rows), fingerprint(facts),
                  landed.get("fingerprint")))
+        print(diag.get("line", ""))
         return 0 if (passed == len(rows) and not drift) else 2
 
     sizes = {"html": 0, "json": 0}
@@ -882,7 +900,8 @@ def main(argv=None):
     with open(args.json, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(payload)
 
-    rows = verify(facts, sizes)
+    diag = {}
+    rows = verify(facts, sizes, diag)
     passed = sum(1 for r in rows if r["pass"])
     print("MEMBERSHIP BENEFIT html=%s (%dB) json=%s (%dB)"
           % (args.out, sizes["html"], args.json, sizes["json"]))
@@ -895,6 +914,7 @@ def main(argv=None):
     print("VERDICT %s checks=%d/%d fingerprint=%s"
           % ("PASS" if passed == len(rows) else "FAIL", passed, len(rows),
              fingerprint(facts)))
+    print(diag.get("line", ""))
     return 0 if passed == len(rows) else 2
 
 

@@ -248,7 +248,7 @@ def main():
         # ---- AC-PAYGB8: source purity on both files ----
         suite_src = read(os.path.abspath(__file__))
         allowed = {'argparse', 'copy', 'datetime', 'hashlib', 'html', 'json',
-                   'os', 'sys', 'adapters', 'v3'}
+                   'os', 'sys', 'adapters', 'v3', 'value_domain'}
         suite_allowed = {'ast', 'hashlib', 'importlib', 'io', 'json', 'os',
                          're', 'shutil', 'sys', 'tempfile', 'time',
                          'datetime', 'adapters', 'v3'}
