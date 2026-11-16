@@ -5746,6 +5746,16 @@ SUITES = [
     # R2393 seed row BEFORE the code.)
     ("os-ledger-line-shape-guard",
      os.path.join("..", "os", "test_ledger_line_shape_guard.py"), 6),
+    # R2832: the export window hangs on the max ^YYYY-MM-DD prefix of the
+    # live log, and the only thing that asked that shape was a ValueError
+    # raised at READ time - so it detected by crashing, and three queue-face
+    # suites went red on a traceback instead of a verdict (R2831 measured
+    # 14 live lines, none anchored). The law is now a library function with
+    # its own gate, and an unanchored log fails as E_EC_NO_DATE_ANCHOR.
+    # (AC-RMS1..AC-RMS6 were pinned in the R2832 row of src/os/backlog.md
+    # BEFORE this code.)
+    ("os-ledger-round-main-shape",
+     os.path.join("..", "os", "test_ledger_round_main_shape.py"), 6),
     # R2597: the R2596 closeout appended 'tokens: local=...' with no round
     # label, so seven ledger suites read that round as having no ledger line.
     # The write path still has no door asking the law, so the repair face is

@@ -76,6 +76,17 @@ NARRATIVE_RE = re.compile(r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s")
 # remain narratives.
 FOLD_SUMMARY_RE = re.compile(
     r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s+(?i:fold(?:s|ed)?)\b")
+# R2832 AC-RMS1..AC-RMS3: the window derivation in
+# check_export_consistency hangs on the max ^YYYY-MM-DD prefix of the live
+# log, and R2828/R2829/R2830 wrote their round main lines as "R28xx ...".
+# Nothing asked that shape before the line was appended, so the only
+# detector was a ValueError raised at read time - and it detected by
+# crashing, which reddened three queue-face suites with a traceback
+# instead of a verdict. This regex is the law, and check_round_main_shape
+# asks it of the NEWEST round only: older history may predate the law,
+# the live round may not.
+ROUND_MAIN_RE = re.compile(r"^\d{4}-\d{2}-\d{2} R(\d{3,5}) ")
+ROUND_MAIN_SAMPLE = 40
 LOCAL_NUM_RE = re.compile(r"^(\d+(?:\.\d+)?)([kKmM]?)$")
 API_NUM_RE = re.compile(r"^\d+$")
 UNITS = {"": 1, "k": 1000, "m": 1000000}
@@ -104,6 +115,113 @@ def classify(line):
     if NARRATIVE_RE.match(text):
         return "round"
     return "other"
+
+
+def check_round_main_shape(lines):
+    """Ask the round-main shape law of the NEWEST round (R2832).
+
+    Two laws, both fail-closed and neither of them a crash:
+
+    - the window must hold at least one round narrative at all, or there
+      is nothing for the export window to anchor on (E_RMS_NO_ROUND);
+    - the newest round - newest by ROUND NUMBER, never by position - must
+      carry at least one dated main line, because a round's later lines
+      (disclosures, group scans, notes) legitimately carry no date of
+      their own and belong to the main line they follow (E_RMS_NO_DATE).
+
+    Older rounds are deliberately not asked: history may predate the law,
+    and a live round may not. The refinement against the pinned wording
+    is disclosed in the R2832 board row - requiring the newest round's
+    EVERY line to be dated would redden a healthy tree, while requiring
+    its dated-main count to be at least one still catches the measured
+    R2831 failure (14 live lines, none anchored).
+    """
+    newest = None
+    per_round = {}
+    for raw in lines:
+        line = raw if isinstance(raw, str) else str(raw)
+        if classify(line) != "round":
+            continue
+        round_no = int(NARRATIVE_RE.match(line).group(1))
+        bucket = per_round.setdefault(round_no, {"lines": 0, "dated": 0})
+        bucket["lines"] += 1
+        if ROUND_MAIN_RE.match(line):
+            bucket["dated"] += 1
+            if newest is None or round_no > newest:
+                newest = round_no
+        elif newest is None or round_no > newest:
+            newest = round_no
+    if newest is None:
+        return {
+            "round": None,
+            "ok": False,
+            "code": "E_RMS_NO_ROUND",
+            "detail": "the window holds no round narrative to anchor on",
+            "round_lines": 0,
+            "dated_lines": 0,
+            "sample": "",
+        }
+    bucket = per_round[newest]
+    if bucket["dated"] >= 1:
+        return {
+            "round": newest,
+            "ok": True,
+            "code": "",
+            "detail": "",
+            "round_lines": bucket["lines"],
+            "dated_lines": bucket["dated"],
+            "sample": "",
+        }
+    sample = ""
+    for raw in lines:
+        line = raw if isinstance(raw, str) else str(raw)
+        if classify(line) == "round" and int(
+                NARRATIVE_RE.match(line).group(1)) == newest:
+            sample = line[:ROUND_MAIN_SAMPLE]
+            break
+    return {
+        "round": newest,
+        "ok": False,
+        "code": "E_RMS_NO_DATE",
+        "detail": "newest round %d has %d round line(s) and none starts "
+                  "with a YYYY-MM-DD prefix" % (newest, bucket["lines"]),
+        "round_lines": bucket["lines"],
+        "dated_lines": 0,
+        "sample": sample,
+    }
+
+
+def format_round_main(report):
+    """Render the round-main verdict as exactly one printable ASCII line."""
+    if report["ok"]:
+        return "ROUND-MAIN OK %d" % report["round"]
+    return "ROUND-MAIN FAIL %s round=%s" % (
+        report["code"],
+        "none" if report["round"] is None else str(report["round"]))
+
+
+def parse_round_main_line(line):
+    """Parse one rendered round-main verdict or raise LedgerLineError.
+
+    The suite reads the CLI face through this parser so that the printed
+    shape and the asserted shape cannot drift apart.
+    """
+    text = line if isinstance(line, str) else str(line)
+    ok_match = re.match(r"^ROUND-MAIN OK (\d+)$", text)
+    if ok_match is not None:
+        return {"ok": True, "round": int(ok_match.group(1)), "code": ""}
+    fail_match = re.match(r"^ROUND-MAIN FAIL (E_RMS_[A-Z_]+) "
+                          r"round=(?:(\d+)|none)$", text)
+    if fail_match is None:
+        raise LedgerLineError("E_RMS_BAD_VERDICT",
+                              "not a round-main verdict line: %r"
+                              % text[:60])
+    return {
+        "ok": False,
+        "round": None if fail_match.group(2) is None
+        else int(fail_match.group(2)),
+        "code": fail_match.group(1),
+    }
 
 
 def parse_ledger_line(line):
@@ -618,6 +736,7 @@ def main(argv=None):
     baseline_path = default_baseline_path()
     use_baseline = True
     closeout = False
+    round_main = False
     round_no = None
     archives_dir = None
     index = 0
@@ -633,6 +752,11 @@ def main(argv=None):
             index += 1
         elif arg == "--closeout":
             closeout = True
+            index += 1
+        elif arg == "--round-main":
+            # R2832 AC-RMS2: the write path's shape law, asked as its own
+            # gate so a window can redden BEFORE it appends.
+            round_main = True
             index += 1
         elif arg == "--round":
             if index + 1 >= len(args) or not args[index + 1].isdigit():
@@ -681,6 +805,8 @@ def main(argv=None):
         log = load_state_log(path)
         if closeout:
             report = check_closeout(log, round_no)
+        elif round_main:
+            report = check_round_main_shape(log)
         else:
             if archives_dir is not None:
                 report = audit_scope(
@@ -707,6 +833,16 @@ def main(argv=None):
             for line in format_closeout(report):
                 sys.stdout.write(line + "\n")
         return 0 if report["verdict"] == "OK" else 2
+    if round_main:
+        if as_json:
+            sys.stdout.write(json.dumps(report, sort_keys=True) + "\n")
+        else:
+            sys.stdout.write(format_round_main(report) + "\n")
+            if not report["ok"] and report["sample"]:
+                _stderr("%s: %s (first line: %r)"
+                        % (report["code"], report["detail"],
+                           report["sample"]))
+        return 0 if report["ok"] else 2
     if as_json:
         sys.stdout.write(json.dumps(report, sort_keys=True) + "\n")
     else:

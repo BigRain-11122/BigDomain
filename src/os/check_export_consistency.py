@@ -72,6 +72,43 @@ MARKER_IDLE = "idle-fast"
 MARKER_NOP = "no-pullable"
 TOKENS_LINE = " tokens: "
 
+# R2832 AC-RMS5: R2831 measured this checker raising a bare
+# ValueError("no date prefixes found in state log") when the live log had
+# lost its ^YYYY-MM-DD prefixes, and three suites that import recompute()
+# died on that traceback instead of reading a verdict. An unanchored log
+# is a SHAPE failure of the log, not a crash of the reader, so it is now a
+# named error carrying the newest round main line as the sample.
+RE_ROUND_ANY = re.compile(r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s")
+RE_FOLD_SUMMARY_ANY = re.compile(
+    r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s+(?i:fold(?:s|ed)?)\b")
+SAMPLE_CHARS = 40
+
+
+class AnchorError(ValueError):
+    """The live log holds no date anchor for the export window."""
+
+    def __init__(self, code, detail):
+        ValueError.__init__(self, "%s: %s" % (code, detail))
+        self.code = code
+        self.detail = detail
+
+
+def _newest_round_sample(log):
+    """The newest round main line, as a short readable sample."""
+    newest = None
+    chosen = ""
+    for ln in log:
+        if TOKENS_LINE in ln or RE_FOLD_SUMMARY_ANY.match(ln):
+            continue
+        m = RE_ROUND_ANY.match(ln)
+        if m is None:
+            continue
+        round_no = int(m.group(1))
+        if newest is None or round_no > newest:
+            newest = round_no
+            chosen = ln[:SAMPLE_CHARS]
+    return newest, chosen
+
 
 def _read_text(path):
     with open(path, "rb") as fh:
@@ -102,7 +139,15 @@ def recompute():
         if m:
             dates.append(_dt.date.fromisoformat(m.group(1)))
     if not dates:
-        raise ValueError("no date prefixes found in state log")
+        round_no, sample = _newest_round_sample(log)
+        raise AnchorError(
+            "E_EC_NO_DATE_ANCHOR",
+            "the live log holds %d line(s) and none carries a YYYY-MM-DD "
+            "prefix, so the window has no anchor; newest round=%s first "
+            "line=%r - a round main line must start with "
+            "'YYYY-MM-DD R<n> '" % (len(log),
+                                    "none" if round_no is None else round_no,
+                                    sample))
     d_max = max(dates)
     d_min = d_max - _dt.timedelta(days=6)
 
@@ -174,7 +219,15 @@ def check():
             n_fail += 1
             out.append("FAIL %s stored=%r recomputed=%r" % (field, stored, recomputed))
 
-    derived, state, export, pat = recompute()
+    try:
+        derived, state, export, pat = recompute()
+    except AnchorError as exc:
+        # AC-RMS5: a shape failure of the log is reported as one FAIL row
+        # naming its code, never as an uncaught traceback at the caller.
+        out.append("FAIL anchor %s: %s" % (exc.code, exc.detail))
+        n_fail += 1
+        out.append("SUMMARY pass=%d fail=%d" % (n_pass, n_fail))
+        return out, n_pass, n_fail
     sd = export.get("self_drive")
     if not isinstance(sd, dict):
         out.append("FAIL self_drive missing (not an object)")
