@@ -38,6 +38,29 @@ REGISTRY_REL = os.path.join("src", "sandbox", "reconcile_all.py")
 QA_LOG_REL = os.path.join("tools", "qa_log.py")
 QA_DIR = os.path.join(ROOT, "qa")
 SUITE_LINE = re.compile(r"(?m)^SUITE\s+(PASS|FAIL)\s+(\d+)\s*/\s*(\d+)")
+# A row may state its numbers without a verdict word ("SUITE 8/8"). The runner
+# derives the verdict from p==t; "green" is NOT accepted, because it is not the
+# law's vocabulary and guessing it would invent a word the suite never said.
+SUITE_LINE_NUM = re.compile(
+    r"(?m)^SUITE\s+(\d+)\s*/\s*(\d+)(?:\s+(PASS|FAIL))?\s*$")
+
+
+def parse_suite_row(text):
+    """(verdict, passed, total) from a suite body, or None.
+
+    An explicit verdict word always wins; a numbers-only row derives PASS when
+    passed == total and FAIL otherwise.
+    """
+    match = SUITE_LINE.search(text)
+    if match:
+        return match.group(1), int(match.group(2)), int(match.group(3))
+    rows = SUITE_LINE_NUM.findall(text)
+    if not rows:
+        return None
+    passed, total, word = rows[-1]
+    if word:
+        return word, int(passed), int(total)
+    return ("PASS" if passed == total else "FAIL"), int(passed), int(total)
 
 
 class Refuse(Exception):
@@ -252,10 +275,10 @@ def _round(args):
         code, out, secs = run_one(base, label, rel, cap, overrides)
         passes = len(re.findall(r"(?m)^PASS\b", out))
         fails = len(re.findall(r"(?m)^FAIL\b", out))
-        m = SUITE_LINE.search(out)
-        suite = ("%s %s/%s" % (m.group(1), m.group(2), m.group(3))) if m else "none"
-        if m and int(m.group(3)) != int(crit):
-            mismatch.append("%s:%s!=%d" % (label, m.group(3), crit))
+        parsed = parse_suite_row(out)
+        suite = ("%s %d/%d" % parsed) if parsed else "none"
+        if parsed and parsed[2] != int(crit):
+            mismatch.append("%s:%d!=%d" % (label, parsed[2], crit))
         executed += 1
         crit_run += int(crit)
         if code == 0:

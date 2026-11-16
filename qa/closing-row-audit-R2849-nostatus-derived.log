@@ -1,0 +1,3 @@
+AUDIT row label=member-face family=no_status rc=0 law=no row=SUITE 6/6 green crit=6 0.9s
+AUDIT family=no_status total=1 selected=1 law_emit=0 non_law=1 red=0
+AUDIT TOTAL selected=1 law_emit=0 non_law=1 red=0 families=1

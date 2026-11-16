@@ -1,0 +1,6 @@
+AUDIT row label=ledger-apimarket-marketfeed family=law_numeric_slot rc=0 law=yes row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-feedlisting family=law_numeric_slot rc=0 law=yes row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-feeddev family=law_numeric_slot rc=0 law=yes row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=os-decwatermark family=law_numeric_slot rc=0 law=yes row=SUITE 8/8 crit=8 9.9s
+AUDIT family=law_numeric_slot total=4 selected=4 law_emit=4 non_law=0 red=0
+AUDIT TOTAL selected=4 law_emit=4 non_law=0 red=0 families=1

@@ -1,0 +1,12 @@
+SHARD scope=SHARD registry_suites=705 registry_criteria=5368 selected=10 selected_criteria=78 cap=600s exact=10
+SHARD row ledger-apimarket-pricerev rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-search rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-marketfeed rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-apimarket-buyerquestions rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-selleranswers rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.3s
+SHARD row os-decwatermark rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 10.7s
+SHARD row os-run-identity rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.8s
+SHARD row os-suite-matrix-reconcile rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD row os-battery-shard rc=0 pass=0 fail=0 suite=PASS 10/10 crit=10 1.7s
+SHARD row os-suite-output-audit rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 2.8s
+SHARD rc=0 scope=SHARD selected=10 executed=10 green=10 criteria=78 crit_mismatch=0 elapsed=18.9s

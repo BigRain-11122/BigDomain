@@ -37,6 +37,10 @@ SPLIT_BIND = re.compile(r'(\w+)\s*=\s*"SUITE (?:PASS|FAIL)"\s+if\b[^\n]*\belse\s
                         r'"SUITE (?:PASS|FAIL)"')
 SPLIT_ROW = re.compile(r'"([^"\n]*%s[^"\n]*)"\s*%\s*\(\s*(\w+)')
 SPLIT_NUM = re.compile(r"%d\s*/\s*%d")
+# The runner derives a verdict from numbers-only rows, so a source literal of
+# "SUITE %d/%d" (or the same with a PASS/FAIL word or a %s slot) is law there.
+LAW_NUMERIC = re.compile(r"^SUITE " + NUM + r"\s*/\s*" + NUM + r"(\s+(PASS|FAIL))?$")
+LAW_NUMERIC_SLOT = re.compile(r"^SUITE " + NUM + r"\s*/\s*" + NUM + r"\s+%s$")
 
 
 def normalise(lit):
@@ -75,6 +79,12 @@ def classify(src):
             # the status word is injected: the law holds only if PASS/FAIL is bound
             binds = re.search(r'"PASS"|"FAIL"|PASS if|FAIL if|if not fail|if fail == 0', src)
             shapes.append("law_status" if binds else "suspect_status")
+        elif LAW_NUMERIC.match(lit):
+            # the runner derives PASS/FAIL from p==t for this shape
+            shapes.append("law_numeric")
+        elif LAW_NUMERIC_SLOT.match(lit):
+            binds = ('"PASS"' in src and '"FAIL"' in src)
+            shapes.append("law_numeric_slot" if binds else "no_status")
         elif NO_STATUS.match(lit):
             shapes.append("no_status")
         elif LEGACY_PAREN.match(lit):
@@ -89,7 +99,8 @@ def classify(src):
             shapes.append("legacy_lower")
         else:
             shapes.append("other")
-    for name in ("law_direct", "law_status", "law_split", "suspect_status", "no_status",
+    for name in ("law_direct", "law_status", "law_split", "law_numeric",
+                 "law_numeric_slot", "suspect_status", "no_status",
                  "legacy_paren", "legacy_label", "legacy_status_colon",
                  "no_numbers", "legacy_lower", "other"):
         if name in shapes:
@@ -134,14 +145,17 @@ def main(argv=None):
         with open(path, "r", encoding="utf-8", errors="replace") as fh:
             shape = classify(fh.read())
         counts[shape] = counts.get(shape, 0) + 1
-        if shape not in ("law_direct", "law_status", "law_split"):
+        if shape not in ("law_direct", "law_status", "law_split", "law_numeric",
+                         "law_numeric_slot"):
             non_law.append((label, shape))
 
     law = (counts.get("law_direct", 0) + counts.get("law_status", 0)
-           + counts.get("law_split", 0))
+           + counts.get("law_split", 0) + counts.get("law_numeric", 0)
+           + counts.get("law_numeric_slot", 0))
     print("CENSUS registry=%d law=%d non_law=%d missing=%d"
           % (len(rows), law, len(non_law), len(missing)))
-    for name in ("law_direct", "law_status", "law_split", "suspect_status", "no_status",
+    for name in ("law_direct", "law_status", "law_split", "law_numeric",
+                 "law_numeric_slot", "suspect_status", "no_status",
                  "legacy_paren", "legacy_label", "legacy_status_colon",
                  "no_numbers", "legacy_lower", "other", "no_row", "missing_file"):
         if counts.get(name):

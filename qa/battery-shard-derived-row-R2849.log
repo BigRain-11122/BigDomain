@@ -1,0 +1,23 @@
+SHARD scope=SHARD registry_suites=705 registry_criteria=5368 selected=10 selected_criteria=78 cap=600s exact=10
+SHARD row ledger-apimarket-pricerev rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-search rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-marketfeed rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-buyerquestions rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-selleranswers rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.5s
+SHARD row os-decwatermark rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 12.1s
+SHARD row os-run-identity rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.0s
+SHARD row os-suite-matrix-reconcile rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 1.0s
+SHARD row os-battery-shard rc=0 pass=0 fail=0 suite=PASS 10/10 crit=10 1.6s
+SHARD row os-suite-output-audit rc=1 pass=4 fail=2 suite=FAIL 4/6 crit=6 3.0s
+SHARD detail os-suite-output-audit suite output audit suite (expected criteria 6)
+SHARD detail os-suite-output-audit PASS AC-SOA1 law and invocation come from the runner, not a copy
+SHARD detail os-suite-output-audit   measured rc=0 out='_law family=law_direct rc=0 law=yes row=SUITE PASS 2/2 crit=2 0.1s\nAUDIT family=law_direct total=1 selected=1 law_emit=1 non_law=0 red=0\nAUDIT family=no_status total=0 selected=0 law_emit=0 non_law=0 red=0\nAUDIT row label=probe_nonumbers family=no_numbers rc=0 law=no row=SUITE PASS crit=2 0.1s\nAUDIT family=no_numbers total=1 selected=1 law_emit=0 non_law=1 red=0\nAUDIT row label=probe_other family=other rc=0 law=no row=SUITE civic: 3 criteria, 3 pass, 0 fail crit=2 0.1s\nAUDIT family=other total=1 selected=1 law_emit=0 non_law=1 red=0\nAUDIT TOTAL selected=3 law_emit=1 non_law=2 red=0 families=4\n'
+SHARD detail os-suite-output-audit FAIL AC-SOA2 private world reads law_emit=1 non_law=3 with rows
+SHARD detail os-suite-output-audit PASS AC-SOA3 two runs of one world read identical totals
+SHARD detail os-suite-output-audit PASS AC-SOA4 audit leaves the world bytes and mtimes untouched
+SHARD detail os-suite-output-audit   measured rc=0 head_missing='AUDIT family=no_status total=2 selected=1 law_emit=0 non_law=1 red=0'
+SHARD detail os-suite-output-audit FAIL AC-SOA5 a per-family bound is honoured and printed
+SHARD detail os-suite-output-audit PASS AC-SOA6 boundary printed and the registry declares 6 criteria
+SHARD detail os-suite-output-audit SUITE FAIL 4/6
+SHARD rc=2 scope=SHARD selected=10 executed=10 green=9 criteria=78 crit_mismatch=0 elapsed=21.0s
+SHARD red os-suite-output-audit:rc=1

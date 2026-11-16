@@ -31,7 +31,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FAMILIES = ("law_direct", "law_status", "suspect_status", "no_status",
+FAMILIES = ("law_direct", "law_status", "law_split", "law_numeric",
+            "law_numeric_slot", "suspect_status", "no_status",
             "legacy_paren", "legacy_label", "legacy_status_colon",
             "no_numbers", "legacy_lower", "other", "no_row")
 ROW_RE = re.compile(r"(?m)^SUITE\b.*$")
@@ -54,10 +55,18 @@ def shipped(root):
 
 
 def closing_row(runner, out):
-    """The real SUITE line this suite printed, or None. Law, not a copy."""
+    """The real SUITE line this suite printed, or None. Law, not a copy.
+
+    The law is the runner's own reader: parse_suite_row, which accepts an
+    explicit verdict word and derives one from a numbers-only row. Asking
+    SUITE_LINE alone would report a row the runner honours as debt.
+    """
     m = runner.SUITE_LINE.search(out or "")
     if m:
         return m.group(0).strip()
+    rows = runner.SUITE_LINE_NUM.findall(out or "")
+    if rows:
+        return ("SUITE " + rows[-1][0] + "/" + rows[-1][1]).strip()
     tail = [ln.strip() for ln in (out or "").splitlines() if ROW_RE.match(ln.strip())]
     return tail[-1] if tail else "none"
 
@@ -104,7 +113,7 @@ def main(argv=None):
         for label, rel, crit in picked:
             code, out, secs = runner.run_one(base, label, rel, cap, overrides)
             row = closing_row(runner, out)
-            is_law = bool(runner.SUITE_LINE.search(out or ""))
+            is_law = runner.parse_suite_row(out or "") is not None
             law_emit += 1 if is_law else 0
             red += 1 if code != 0 else 0
             line = ("AUDIT row label=%s family=%s rc=%d law=%s row=%s crit=%d %.1fs"

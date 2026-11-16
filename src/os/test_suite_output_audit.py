@@ -40,8 +40,8 @@ FAILS = 0
 
 PROBES = {
     "probe_law.py": ('print("SUITE PASS 2/2")\n', 'print("PASS a")\nprint("PASS b")\n'),
-    "probe_nostatus.py": ('print("SUITE 2/2")\n', 'print("PASS a")\n'),
-    "probe_nostatus2.py": ('print("SUITE 3/3")\n', 'print("PASS a")\n'),
+    "probe_nostatus.py": ('print("SUITE 2/2 green")\n', 'print("PASS a")\n'),
+    "probe_nostatus2.py": ('print("SUITE 3/3 green")\n', 'print("PASS a")\n'),
     "probe_nonumbers.py": ('print("SUITE PASS")\n', 'print("PASS a")\n'),
     "probe_other.py": ('print("SUITE civic: 3 criteria, 3 pass, 0 fail")\n',
                        'print("PASS a")\n'),
