@@ -385,6 +385,46 @@ def run(root):
            "short_whole=%s clause_cut=%s long_rc=%d shared_def=%s restored=%d"
            % (short_text == short_row, clause_cut, rc_long, same_definition, rc_restored))
 
+    # AC-SXF17 (R2835): the expected round is the round the newest HEADLINE
+    # labels, never the largest number a sentence happens to contain. Measured
+    # on the real tree: a round narrative that named a private-world fixture
+    # round (R9101) rewrote the expected round for every copy of the face, so a
+    # healthy closeout read E_SXF_STALE three times over. The criterion carries
+    # weight because the OLD rule reddens this world: it would pick 9101, find no
+    # headline for it, fall back to the mentioning line, and compare the CEO's
+    # `do` against a sub-line instead of the headline.
+    # A pristine world for this criterion: earlier records tamper with the same
+    # export on purpose, and a criterion must be judged on its own tamper only.
+    export, doc = build_world(root)
+    original_state = json.loads(io.open(sx.STATE, encoding="utf-8").read())
+    noisy = json.loads(json.dumps(original_state))
+    noisy["log"] = list(noisy["log"]) + [
+        "R2821 landed: the same round also names R9101 inside a sentence"]
+    write_json(sx.STATE, noisy)
+    # A tampered fixture must stay a HEALTHY document apart from the one thing
+    # under test, so the graded size follows the state this criterion wrote.
+    noisy_doc = json.loads(json.dumps(doc))
+    noisy_doc["state_bytes"] = os.path.getsize(sx.STATE)
+    write_json(export, noisy_doc)
+    rc_noisy = sx.check(export, sx.STATE)
+    derived_round, derived_line = sx.newest_round(noisy)
+    write_json(sx.STATE, original_state)
+    write_json(export, doc)
+    record("AC-SXF17", rc_noisy == 0 and derived_round == 2821
+           and derived_line == NARRATIVE,
+           "rc=%d round=%r headline=%s" % (rc_noisy, derived_round,
+                                           derived_line == NARRATIVE))
+
+    # AC-SXF18 (R2835): the mention fallback is preserved for a window that
+    # wrote no headline at all - the fix narrows WHICH lines may name the
+    # window, it does not delete the only anchor such a window has.
+    fallback_round, fallback_line = sx.newest_round(
+        {"log": ["a note that mentions R2814 in passing",
+                 "another note that mentions R2812 in passing"]})
+    record("AC-SXF18", fallback_round == 2814
+           and "R2814" in str(fallback_line or ""),
+           "round=%r line=%r" % (fallback_round, str(fallback_line or "")[:40]))
+
     # AC-SXFB10 (AC-SXF10): the registry row exists AND declares this many
     # criteria, so adding a criterion without moving the count is red instead of
     # silently uncounted.
@@ -399,7 +439,7 @@ def run(root):
             if "test_status_export_fresh.py" in line:
                 row = line
                 break
-    record("AC-SXFB10", row is not None and declared == 16,
+    record("AC-SXFB10", row is not None and declared == 18,
            "matrix_row=%s declared=%d" % (bool(row), declared))
 
 

@@ -155,13 +155,32 @@ def newest_round(state):
     mid-sentence fragment instead of what the round did.
     """
     log = [line for line in (state.get("log") or []) if isinstance(line, str)]
-    best_round = None
+    # R2835: the window is the round the newest HEADLINE labels, not the largest
+    # number any sentence happens to contain. Measured on the real tree: a round
+    # narrative that named a private-world fixture round (R9101) rewrote the
+    # expected round for every copy of the face, and a healthy closeout then read
+    # E_SXF_STALE three times over. A headline's own label is its first token, so
+    # it is read from HEADLINE_RE's capture rather than from the maximum mention
+    # inside the line, which a body may also inflate.
+    label_round = None
     for line in log:
-        value = round_of(line)
-        if value is None:
+        match = HEADLINE_RE.match(line)
+        if not match or is_fold_summary(line):
             continue
-        if best_round is None or value > best_round:
-            best_round = value
+        value = int(match.group(1))
+        if label_round is None or value > label_round:
+            label_round = value
+    best_round = label_round
+    if best_round is None:
+        # No headline at all: fall back to the mention rule so a window that
+        # wrote only sub-lines is still anchored somewhere rather than silently
+        # reading "no round".
+        for line in log:
+            value = round_of(line)
+            if value is None:
+                continue
+            if best_round is None or value > best_round:
+                best_round = value
     if best_round is None:
         return None, None
     candidates = [line for line in log if round_of(line) == best_round]

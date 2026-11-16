@@ -5733,8 +5733,11 @@ SUITES = [
     # check() graded do/current only. Both copies must now equal the derivation,
     # a strict prefix reddens as a fragment, and one milestone_text() serves the
     # writer and the grader (AC-SXF14..AC-SXF16, pinned BEFORE the code).
+    # R2835 adds AC-SXF17/18: the expected round is the newest HEADLINE's label,
+    # not the largest number a sentence happens to carry, while the mention
+    # fallback survives for a window that wrote no headline at all (16 -> 18).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 16),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 18),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives
