@@ -4578,7 +4578,7 @@ SUITES = [
     # the state step a hard, re-read precondition for the face step and owns
     # no write path of its own (AC-COUT1..AC-COUT7).
     ("os-closeout",
-     os.path.join("..", "os", "test_closeout.py"), 7),
+     os.path.join("..", "os", "test_closeout.py"), 12),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with

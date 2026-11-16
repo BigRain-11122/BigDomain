@@ -1,0 +1,14 @@
+closeout suite (expected criteria 12)
+PASS AC-COUT1 the closeout delegates both writes to state_append and export_round, owns no serialisation of its own, is ASCII with no net, and answers --help
+PASS AC-COUT2 an undated round line reads E_CO_NO_STATE with rc=2, the face keeps its exact bytes and mtime, and the state did not move - so a face describing a round the state never got is unreachable
+PASS AC-COUT3 a face that cannot be derived reads E_CO_NO_FACE, names the face step, states face=state was already WRITTEN, and the state on disk really carries the new tick and line
+PASS AC-COUT4 one closeout call moves the state by one tick and two lines and publishes a face whose current line and tick row both name the new tick
+PASS AC-COUT5 --check writes zero bytes to the state AND the face, prints the state dry-run verdict, and does not invent a face verdict it cannot derive
+PASS AC-COUT6 replaying the same closeout reads E_CO_DUPLICATE with rc=0, leaves the face byte-identical and the state untouched, so a no-op cannot pass for a refresh
+PASS AC-COUT7 the registry declares this suite at 12 criteria
+PASS AC-COUTB1 E_CO_FACE_BEHIND fires only on a measured face round below the live state tick; level, ahead and unparseable faces stay silent, and the module carries no round literal
+PASS AC-COUTB2 --check on a lagging face exits 2 with E_CO_FACE_BEHIND, names the repair, and leaves both files' sha256 AND mtime untouched
+PASS AC-COUTB3 a duplicate replay over a level face keeps the R2835 no-op at rc=0, and over a lagging face reads E_CO_FACE_BEHIND at rc=2 - so the half-close can no longer pass for a no-op
+PASS AC-COUTB4 re-deriving the face clears E_CO_FACE_BEHIND and the same --check turns green - the refusal names a repair that works
+PASS AC-COUTB5 the registry and the suite matrix both declare this suite at 12 criteria
+SUITE PASS 12/12

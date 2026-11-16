@@ -3,6 +3,7 @@
 
 - 生成时间: generated: 2026-11-16 22:24 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
+- 印章来源: --stamp-from docs/sandbox-suite-matrix.md
 - 状态证据: reconcile-all-R2739.log (RUNNER PASS 675/675 suites green, reconcile controls 7/7, 4986.4s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
 
@@ -10,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 702 | 5332 | 675/675 | R2739 |
+| 702 | 5337 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -488,7 +489,7 @@
 | 449 | os-fold-round-block-boundary | ../os/test_fold_round_block_boundary.py | 6 | green | 0.4 |
 | 450 | os-state-io | ../os/test_state_io.py | 8 | green | 1.5 |
 | 451 | os-state-append | ../os/test_state_append.py | 7 | no-evidence | - |
-| 452 | os-closeout | ../os/test_closeout.py | 7 | no-evidence | - |
+| 452 | os-closeout | ../os/test_closeout.py | 12 | no-evidence | - |
 | 453 | os-debt-register | ../os/test_debt_register.py | 8 | green | 1.3 |
 | 454 | os-export-freshness | ../os/test_export_freshness.py | 6 | green | 0.9 |
 | 455 | os-debt-append | ../os/test_debt_append.py | 6 | green | 0.2 |
@@ -739,7 +740,7 @@
 | 700 | os-battery-shard | ../os/test_battery_shard.py | 8 | no-evidence | - |
 | 701 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
 | 702 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 11 | no-evidence | - |
-|  | 合计 |  | 5332 | green 675 / FAIL 0 / no-evidence 27 |  |
+|  | 合计 |  | 5337 | green 675 / FAIL 0 / no-evidence 27 |  |
 
 ## 证据出处
 

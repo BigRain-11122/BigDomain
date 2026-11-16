@@ -28,6 +28,14 @@ grader. This file only decides WHEN each one runs and what a failure is called.
 Criteria AC-COUT1..AC-COUT7 were pinned in src/os/backlog.md at R2835 BEFORE
 this file existed.
 
+R2836 adds the one hole R2835 disclosed: a crash BETWEEN the two writes leaves
+the state written and the face narrating the previous round, and a duplicate
+replay of the same closeout deliberately does not rewrite the face - so the
+half-close used to exit 0. `E_CO_FACE_BEHIND` now names it, from a measurement
+of the two files on disk (state tick vs the round in ceo_face.current), both in
+--check and on the duplicate path. Criteria AC-COUTB1..AC-COUTB5 were pinned in
+src/os/backlog.md at R2836 BEFORE this change.
+
 Usage
 -----
     python src/os/closeout.py --round 2835 \
@@ -50,7 +58,10 @@ Stdlib only, ASCII source, zero network.
 from __future__ import annotations
 
 import argparse
+import io
+import json
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -61,9 +72,58 @@ import export_round as ER  # noqa: E402
 import state_append as SA  # noqa: E402
 import state_io  # noqa: E402
 
+# The shape export_round writes into ceo_face.current, and nothing else: an
+# optional date anchor, then the round. A face string that does not match this
+# is NOT graded by the detector below - it is another named defect's business.
+FACE_ROUND_RE = re.compile(r"^\s*(?:\d{4}-\d{2}-\d{2}\s+)?R(\d+)\b")
+
 
 def state_path(root):
     return os.path.join(root, "src", "os", "state.json")
+
+
+def face_path(root):
+    return os.path.join(root, "docs", "status-export.json")
+
+
+def measure_face(root):
+    """(state tick, face round) read from the two files, or None if unreadable.
+
+    The half-close disclosed last round is a state that moved while the face
+    did not. It is a MEASUREMENT, so it is taken from disk every time and never
+    inferred from an argument. None means "not measurable", which is not the
+    same as "behind" - an unreadable face or a `current` that carries no round
+    keeps whatever verdict its own gate gives it.
+    """
+    try:
+        data = state_io.parse(state_io.decode(state_io.read_raw(
+            state_path(root))))
+        tick = int(data.get("tick"))
+    except (OSError, state_io.StateIOError, TypeError, ValueError):
+        return None
+    try:
+        with io.open(face_path(root), "r", encoding="utf-8") as handle:
+            face = json.loads(handle.read())
+    except (OSError, ValueError):
+        return None
+    current = str(((face.get("ceo_face") or {}).get("current")) or "")
+    match = FACE_ROUND_RE.match(current)
+    if not match:
+        return None
+    return tick, int(match.group(1))
+
+
+def face_behind(root, state_word):
+    """The named half-close, or "" when the face is level with the state."""
+    measured = measure_face(root)
+    if not measured:
+        return ""
+    tick, face_round = measured
+    if face_round >= tick:
+        return ""
+    return ("E_CO_FACE_BEHIND step=face state=%s state_tick=%d face=R%d "
+            "behind_by=%d repair=\"python src/os/export_round.py\""
+            % (state_word, tick, face_round, tick - face_round))
 
 
 def _state_args(args, root):
@@ -114,6 +174,16 @@ def run(args):
             # The window's line is already on disk: the state did not move, so
             # the face has nothing new to publish. Refreshing it here would be
             # a write that claims a change which never happened.
+            #
+            # R2836: "nothing new to publish" is only true when the face is
+            # ALREADY level with the state. If it lags, this replay is a
+            # half-close - an earlier attempt wrote state and died before the
+            # face - and exiting 0 would hide it. Name it instead.
+            behind = face_behind(root, "WRITTEN")
+            if behind:
+                return 2, ["CLOSEOUT FAIL %s face_lagging=1 "
+                           "(state moved in an earlier attempt; the face was "
+                           "NOT rewritten here by design)" % behind]
             return 0, ["CLOSEOUT NOOP E_CO_DUPLICATE %s face=NOT-WRITTEN "
                        "(state did not move, so the face was left alone)"
                        % detail]
@@ -125,6 +195,16 @@ def run(args):
         # A face verdict can only be asked AFTER the state write, so --check
         # measures the state step and says so instead of inventing a face
         # verdict from a state that has not moved.
+        #
+        # R2836: the one face verdict that IS available without writing is the
+        # comparison of the state already on disk with the face already on
+        # disk. When the face lags, that is the half-close and it is named here
+        # at the moment it is visible - read-only, no bytes, no mtime.
+        behind = face_behind(root, "HELD")
+        if behind:
+            return 2, ["CLOSEOUT FAIL %s face_lagging=1 "
+                       "(step 1 left the state untouched; the face cannot "
+                       "describe a round it never got)" % behind]
         return 0, ["CLOSEOUT CHECK step=state tick=%d log=%d bytes=%d "
                    "fold_margin=%d %s face=NOT-MEASURED"
                    % (result["tick"], result["log"], result["bytes"],

@@ -30,7 +30,7 @@ sys.path.insert(0, BASE)
 
 import closeout as CO  # noqa: E402
 
-EXPECTED_CRITERIA = 7
+EXPECTED_CRITERIA = 12
 MODULE = os.path.join(BASE, "closeout.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout"
@@ -336,6 +336,180 @@ def ac_cout7():
           % EXPECTED_CRITERIA)
 
 
+def set_face_current(folder, text):
+    """Rewrite only ceo_face.current, leaving every other byte of the face."""
+    path = os.path.join(folder, "docs", "status-export.json")
+    data = json.loads(read(path))
+    data.setdefault("ceo_face", {})["current"] = text
+    write(path, json.dumps(data, ensure_ascii=False, indent=2) + "\n")
+
+
+def face_round(folder):
+    cur = str((face(folder).get("ceo_face") or {}).get("current") or "")
+    match = re.match(r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d+)\b", cur)
+    return int(match.group(1)) if match else None
+
+
+def ac_coutb1():
+    """AC-COUTB1: the detector fires on M < N only, measured, never assumed."""
+    folder = world()
+    try:
+        tick = ticks(folder)[0]
+        cases = []
+
+        set_face_current(folder, "R%d PRODUCT: level" % tick)
+        cases.append(("level", CO.face_behind(folder, "HELD")))
+
+        set_face_current(folder, "R%d PRODUCT: ahead" % (tick + 1))
+        cases.append(("ahead", CO.face_behind(folder, "HELD")))
+
+        set_face_current(folder, "x")
+        cases.append(("unparseable", CO.face_behind(folder, "HELD")))
+
+        set_face_current(folder, "2026-11-16 R%d PRODUCT: anchored behind"
+                         % (tick - 2))
+        cases.append(("behind", CO.face_behind(folder, "HELD")))
+
+        source = io.open(MODULE, encoding="utf-8").read()
+        # Prose may cite rounds; the DETECTOR may not carry one as data.
+        start = source.index("def measure_face")
+        end = source.index("def _state_args")
+        no_round_literal = not re.search(r"R\d{4}\b", source[start:end])
+        quiet = [name for name, msg in cases[:3]]
+        fires = [name for name, msg in cases[3:]]
+        ok = (not any(cases[i][1] for i in range(3))
+              and len(fires) == 1 and "E_CO_FACE_BEHIND" in cases[3][1]
+              and "state_tick=%d" % tick in cases[3][1]
+              and "face=R%d" % (tick - 2) in cases[3][1]
+              and "behind_by=2" in cases[3][1]
+              and no_round_literal)
+        if not ok:
+            print("  measured: quiet=%r fires=%r behind=%r literal=%r"
+                  % (quiet, fires, cases[3][1], no_round_literal), flush=True)
+    finally:
+        cleanup(folder)
+    check(ok, "AC-COUTB1 E_CO_FACE_BEHIND fires only on a measured face round "
+          "below the live state tick; level, ahead and unparseable faces stay "
+          "silent, and the module carries no round literal")
+
+
+def ac_coutb2():
+    """AC-COUTB2: --check names the half-close and writes nothing at all."""
+    folder = world()
+    state_path = os.path.join(folder, "src", "os", "state.json")
+    face_path = os.path.join(folder, "docs", "status-export.json")
+    try:
+        tick = ticks(folder)[0]
+        set_face_current(folder, "R%d PRODUCT: still the previous round"
+                         % (tick - 1))
+        before = (fingerprint(state_path), fingerprint(face_path))
+        code, out, _ = run_cli(["--root", folder, "--round", str(ROUND),
+                                "--line",
+                                "2026-11-16 R%d PRODUCT: half close" % ROUND,
+                                "--tick", "--check"])
+        after = (fingerprint(state_path), fingerprint(face_path))
+        ok = (code == 2 and "E_CO_FACE_BEHIND" in out and "step=face" in out
+              and "state=HELD" in out and "face_lagging=1" in out
+              and "python src/os/export_round.py" in out
+              and before == after)
+        if not ok:
+            print("  measured: code=%r out=%r same=%r"
+                  % (code, out.strip()[:220], before == after), flush=True)
+    finally:
+        cleanup(folder)
+    check(ok, "AC-COUTB2 --check on a lagging face exits 2 with "
+          "E_CO_FACE_BEHIND, names the repair, and leaves both files' sha256 "
+          "AND mtime untouched")
+
+
+def ac_coutb3():
+    """AC-COUTB3: the duplicate replay names the half-close instead of rc=0."""
+    folder = world()
+    line = "2026-11-16 R%d PRODUCT: written exactly once" % ROUND
+    try:
+        first_code, _, _ = run_cli(["--root", folder, "--round", str(ROUND),
+                                    "--line", line, "--tick"])
+        level_code, level_out, _ = run_cli(["--root", folder, "--round",
+                                            str(ROUND), "--line", line,
+                                            "--tick"])
+        tick = ticks(folder)[0]
+        set_face_current(folder, "R%d PRODUCT: the face step died" % (tick - 1))
+        behind_code, behind_out, _ = run_cli(["--root", folder, "--round",
+                                              str(ROUND), "--line", line,
+                                              "--tick"])
+        ok = (first_code == 0
+              and level_code == 0
+              and "E_CO_DUPLICATE" in level_out
+              and "face=NOT-WRITTEN" in level_out
+              and "E_CO_FACE_BEHIND" not in level_out
+              and behind_code == 2
+              and "E_CO_FACE_BEHIND" in behind_out
+              and "face_lagging=1" in behind_out)
+        if not ok:
+            print("  measured: codes=%r/%r/%r level=%r behind=%r"
+                  % (first_code, level_code, behind_code,
+                     level_out.strip()[:140], behind_out.strip()[:140]),
+                  flush=True)
+    finally:
+        cleanup(folder)
+    check(ok, "AC-COUTB3 a duplicate replay over a level face keeps the R2835 "
+          "no-op at rc=0, and over a lagging face reads E_CO_FACE_BEHIND at "
+          "rc=2 - so the half-close can no longer pass for a no-op")
+
+
+def ac_coutb4():
+    """AC-COUTB4: the repair the refusal names actually clears it."""
+    folder = world()
+    try:
+        tick = ticks(folder)[0]
+        set_face_current(folder, "R%d PRODUCT: stale" % (tick - 1))
+        stale_code, stale_out, _ = run_cli(["--root", folder, "--round",
+                                           str(ROUND), "--line",
+                                           "2026-11-16 R%d PRODUCT: reopen"
+                                           % ROUND, "--check"])
+        import export_round as ER
+        ok_write, _, proof = ER.write(
+            folder, "2026-11-16T23:59:00+08:00")
+        code, out, _ = run_cli(["--root", folder, "--round", str(ROUND),
+                                "--line",
+                                "2026-11-16 R%d PRODUCT: reopened" % ROUND,
+                                "--check"])
+        ok = (stale_code == 2 and "E_CO_FACE_BEHIND" in stale_out
+              and ok_write and proof.get("gate") == "CURRENT"
+              and code == 0 and "CLOSEOUT CHECK" in out
+              and "E_CO_FACE_BEHIND" not in out
+              and face_round(folder) == ticks(folder)[0])
+        if not ok:
+            print("  measured: stale=%r/%r write=%r/%r after=%r/%r face=%r"
+                  % (stale_code, stale_out.strip()[:80], ok_write,
+                     proof.get("gate"), code, out.strip()[:120],
+                     face_round(folder)), flush=True)
+    finally:
+        cleanup(folder)
+    check(ok, "AC-COUTB4 re-deriving the face clears E_CO_FACE_BEHIND and the "
+          "same --check turns green - the refusal names a repair that works")
+
+
+def ac_coutb5():
+    """AC-COUTB5: registry and matrix both carry the grown criteria count."""
+    runner_text = io.open(RUNNER, encoding="utf-8").read()
+    pattern = re.compile(
+        r"\(" + json.dumps(LABEL) + r",\s*\n\s*os\.path\.join\([^)]*\),\s*"
+        r"(\d+)\)")
+    match = pattern.search(runner_text)
+    registered = int(match.group(1)) if match else -1
+    matrix_path = os.path.join(ROOT, "docs", "sandbox-suite-matrix.md")
+    row = re.search(r"^\|\s*\d+\s*\|\s*%s\s*\|\s*[^|]*\|\s*(\d+)\s*\|"
+                    % re.escape(LABEL), read(matrix_path), re.MULTILINE)
+    declared = int(row.group(1)) if row else -1
+    ok = registered == EXPECTED_CRITERIA and declared == EXPECTED_CRITERIA
+    if not ok:
+        print("  measured: registry=%r matrix=%r expected=%r"
+              % (registered, declared, EXPECTED_CRITERIA), flush=True)
+    check(ok, "AC-COUTB5 the registry and the suite matrix both declare this "
+          "suite at %d criteria" % EXPECTED_CRITERIA)
+
+
 def main():
     print("closeout suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -346,6 +520,11 @@ def main():
     ac_cout5()
     ac_cout6()
     ac_cout7()
+    ac_coutb1()
+    ac_coutb2()
+    ac_coutb3()
+    ac_coutb4()
+    ac_coutb5()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

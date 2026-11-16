@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-16T22:25:09+08:00",
-  "do": "2026-11-16 R2835 ENGINEERING: closing a round is now ONE command whose state step is a hard precondition for the face step, so a CEO face describing a round the state never got (the R2831 shape) is unreachable",
+  "export_ts": "2026-11-16T23:51:37+08:00",
+  "do": "2026-11-16 R2836 ENGINEERING: the half-close R2835 disclosed is now a code instead of a disclosure - closeout --check and the duplicate replay both read E_CO_FACE_BEHIND from a measurement of the two files on disk (state tick N vs the round in ceo_face.current), fire only when the face round is BELOW N, name their own repair, and stay silent on a healthy repo (live --check rc=0 at tick 2835 / face R2835).",
   "ceo_face": {
-    "current": "2026-11-16 R2835 ENGINEERING: closing a round is now ONE command whose state step is a hard precondition for the face step, so a CEO face describing a round the state never got (the R2831 shape) is unreachable",
+    "current": "2026-11-16 R2836 ENGINEERING: the half-close R2835 disclosed is now a code instead of a disclosure - closeout --check and the duplicate replay both read E_CO_FACE_BEHIND from a measurement of the two files on disk (state tick N vs the round in ceo_face.current), fire only when the face round is BELOW N, name their own repair, and stay silent on a healthy repo (live --check rc=0 at tick 2835 / face R2835).",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2835] next window (<=12h): (1) MAIN - retire the next one-off family the same way the 226 appenders were retired: `src/os/export_R*.py` and `src/os/closeout_R*.py` still sit on disk with no measured caller sweep; per family prove zero live import/call, record the count, delete, and re-read the suites that touch them; (2) carry the R2835 disclosure (b) into a detector: a crash between the two writes leaves state written and the face stale, and today only `tools/status_export_fresh.py` reddens it a window later - make `closeout --check` name it (`E_CO_FACE_BEHIND`) so the half-close is visible at the moment it happens; (3) os- family leg still 160/274 (114 unrun), full ledger ~540/702 unrun, shard offset/resume remains the named blocker (a 160 leg measures ~488s) (truncated)",
-    "next_milestone_due": "2026-11-17T10:25:09+08:00",
-    "updated_at": "2026-11-16T22:25:09+08:00",
+    "next_milestone": "[R2836] next window (<=12h): (1) MAIN - retire the ONE-OFF APPENDER class' successors: `src/os/export_R*.py` (**280** files on disk) and `src/os/closeout_R*.py` (**402** files on disk) are the largest unmaintained body left in `src/os/` after the 226 appenders went; per family prove zero live import/call, record the count, delete, and re-read the suites that touch them; (2) `E_CO_FACE_BEHIND` compares COMMITTED state to COMMITTED face, so a window that dies between the two writes is still discovered by the NEXT window's `--check` - it is named now, not silent; whether closeout should also repair on that path is a design decision to pin, not an amendment to make quietly; (3) os- family leg still 160/274 (114 unrun), full ledger ~540/702 unrun, shard offset/resume remains the named blocker (truncated)",
+    "next_milestone_due": "2026-11-17T11:51:37+08:00",
+    "updated_at": "2026-11-16T23:51:37+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-10..2026-11-16",
     "window_days": 7,
-    "log_lines_in_window": 38,
+    "log_lines_in_window": 41,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 11,
     "queue_explore_open": 10
   },
-  "current": "2026-11-16 R2835 ENGINEERING: closing a round is now ONE command whose state step is a hard precondition for the face step, so a CEO face describing a round the state never got (the R2831 shape) is unreachable",
+  "current": "2026-11-16 R2836 ENGINEERING: the half-close R2835 disclosed is now a code instead of a disclosure - closeout --check and the duplicate replay both read E_CO_FACE_BEHIND from a measurement of the two files on disk (state tick N vs the round in ceo_face.current), fire only when the face round is BELOW N, name their own repair, and stay silent on a healthy repo (live --check rc=0 at tick 2835 / face R2835).",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2835] next window (<=12h): (1) MAIN - retire the next one-off family the same way the 226 appenders were retired: `src/os/export_R*.py` and `src/os/closeout_R*.py` still sit on disk with no measured caller sweep; per family prove zero live import/call, record the count, delete, and re-read the suites that touch them; (2) carry the R2835 disclosure (b) into a detector: a crash between the two writes leaves state written and the face stale, and today only `tools/status_export_fresh.py` reddens it a window later - make `closeout --check` name it (`E_CO_FACE_BEHIND`) so the half-close is visible at the moment it happens; (3) os- family leg still 160/274 (114 unrun), full ledger ~540/702 unrun, shard offset/resume remains the named blocker (a 160 leg measures ~488s) (truncated)",
-  "state_bytes": 38466,
+  "next_milestone": "[R2836] next window (<=12h): (1) MAIN - retire the ONE-OFF APPENDER class' successors: `src/os/export_R*.py` (**280** files on disk) and `src/os/closeout_R*.py` (**402** files on disk) are the largest unmaintained body left in `src/os/` after the 226 appenders went; per family prove zero live import/call, record the count, delete, and re-read the suites that touch them; (2) `E_CO_FACE_BEHIND` compares COMMITTED state to COMMITTED face, so a window that dies between the two writes is still discovered by the NEXT window's `--check` - it is named now, not silent; whether closeout should also repair on that path is a design decision to pin, not an amendment to make quietly; (3) os- family leg still 160/274 (114 unrun), full ledger ~540/702 unrun, shard offset/resume remains the named blocker (truncated)",
+  "state_bytes": 40376,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2835",
+      "2836",
       "OSLoop 执行 tick"
     ]
   ],
