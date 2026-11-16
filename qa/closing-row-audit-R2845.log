@@ -1,0 +1,64 @@
+AUDIT row label=member-face family=no_status rc=0 law=no row=SUITE 6/6 green crit=6 1.0s
+AUDIT row label=ledger-apimarket-pricerev family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-buyerlibrary family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-search family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-searchpaging family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-searchsort family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-devprofile family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-metadata family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-watchlist family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-supply family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.7s
+AUDIT row label=ledger-apimarket-refund family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-marketdaily family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.7s
+AUDIT row label=ledger-apimarket-refundlatency family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-refundreasons family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.7s
+AUDIT row label=ledger-apimarket-sellerrefundreasons family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.5s
+AUDIT row label=ledger-apimarket-buyerwatchcategorymix family=no_status rc=0 law=no row=SUITE 8/8 crit=8 1.4s
+AUDIT row label=ledger-apimarket-marketwatchmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.7s
+AUDIT row label=ledger-apimarket-categorywatchmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-categorywatchconversionmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT row label=ledger-apimarket-sellerwatchmonths family=no_status rc=0 law=no row=SUITE 8/8 crit=8 0.4s
+AUDIT family=no_status total=66 selected=20 law_emit=0 non_law=20 red=0
+AUDIT row label=ledger-apimarket-answerrev family=no_numbers rc=0 law=yes row=SUITE PASS 8/8 crit=8 0.3s
+AUDIT row label=ledger-apimarket-categoryrev family=no_numbers rc=0 law=yes row=SUITE PASS 8/8 crit=8 0.3s
+AUDIT row label=os-state-append family=no_numbers rc=0 law=yes row=SUITE PASS 7/7 crit=7 0.2s
+AUDIT row label=os-one-off-round-scripts family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 0.2s
+AUDIT row label=os-closeout family=no_numbers rc=0 law=yes row=SUITE PASS 19/19 crit=19 2.3s
+AUDIT row label=os-queue-row family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 1.8s
+AUDIT row label=os-round-evidence family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 0.9s
+AUDIT row label=os-state-seq family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 1.9s
+AUDIT row label=os-seed-anchor family=no_numbers rc=0 law=yes row=SUITE PASS 5/5 crit=5 12.2s
+AUDIT row label=os-queue-head family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 1.1s
+AUDIT row label=os-battery-followup family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 8.8s
+AUDIT row label=os-battery-followup-help-wire family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 5.6s
+AUDIT row label=os-queue-row-exempt family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 0.7s
+AUDIT row label=os-queue-done-stamp family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 0.6s
+AUDIT row label=os-stamp-locator family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 0.9s
+AUDIT row label=os-stamp-residue family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 1.0s
+AUDIT row label=os-machine-gate family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 1.0s
+AUDIT row label=os-gate-drift family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 1.3s
+AUDIT row label=os-gate-decl-identity family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 1.0s
+AUDIT row label=os-gate-decl-identity-wire family=no_numbers rc=0 law=yes row=SUITE PASS 6/6 crit=6 0.9s
+AUDIT family=no_numbers total=56 selected=20 law_emit=20 non_law=0 red=0
+AUDIT row label=ledger-incentive family=other rc=0 law=no row=SUITE PASS (7/7) crit=7 0.2s
+AUDIT row label=pay-notify-bannerlimit family=other rc=0 law=no row=none crit=8 0.4s
+AUDIT row label=pay-notify-bannerwin family=other rc=0 law=no row=none crit=7 0.3s
+AUDIT row label=member-entry family=other rc=0 law=no row=SUITE PASS: 7/7 crit=7 0.1s
+AUDIT row label=opsreview family=other rc=0 law=no row=none crit=7 1.1s
+AUDIT row label=minors family=other rc=0 law=no row=SUITE PASS - 19/19 green crit=19 0.1s
+AUDIT row label=minors-persist family=other rc=0 law=no row=SUITE PASS - 7/7 green crit=7 0.2s
+AUDIT row label=ledger-curation-hotpersist family=other rc=0 law=no row=SUITE PASS (6/6 criteria green) crit=6 0.2s
+AUDIT row label=ledger-curation-coldpersist family=other rc=0 law=no row=SUITE PASS (6/6 criteria green) crit=6 0.2s
+AUDIT row label=ledger-curation-combined family=other rc=0 law=no row=SUITE PASS 7 checks crit=7 0.3s
+AUDIT row label=ledger-curation-combinedpersist family=other rc=0 law=no row=SUITE PASS (6/6 criteria green) crit=6 0.3s
+AUDIT row label=ledger-curation-combinedboundary family=other rc=0 law=no row=SUITE PASS (6/6 criteria green) crit=6 0.2s
+AUDIT row label=ledger-curation-combinedmonth family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=ledger-curation-regpersist family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.9s
+AUDIT row label=ledger-civicpersist family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.2s
+AUDIT row label=ledger-eventtickets-roll family=other rc=0 law=no row=SUITE PASS (7/7) crit=7 0.2s
+AUDIT row label=ledger-eventtickets-telescope family=other rc=0 law=no row=SUITE PASS (6/6) crit=6 0.3s
+AUDIT row label=ugc-pool-waterpersist family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.4s
+AUDIT row label=ledger-apimarket-devsalespersist family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.4s
+AUDIT row label=ledger-apimarket-devboardwindow family=other rc=0 law=no row=SUITE PASS (7/7 criteria green) crit=7 0.4s
+AUDIT family=other total=63 selected=20 law_emit=0 non_law=20 red=0
+AUDIT TOTAL selected=60 law_emit=20 non_law=40 red=0 families=3

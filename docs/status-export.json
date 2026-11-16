@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T03:32:33+08:00",
-  "do": "2026-11-17 R2844 PRODUCT+ENGINEERING: the three bare legacy suites ledger/pay/member now emit the battery's own closing row, so their green carries a number instead of suite=none - and the census that found them measured the dialect problem across the whole registry",
+  "export_ts": "2026-11-17T03:48:56+08:00",
+  "do": "2026-11-17 R2845 PRODUCT+ENGINEERING: the census' 286 source-level non-law suites were re-asked at OUTPUT level by a new audit face, and the number splits - 54 of 57 no_numbers suites DO emit the battery row (a false-negative class the source reading cannot see), while no_status and other read 0/20 each (real debt)",
   "ceo_face": {
-    "current": "2026-11-17 R2844 PRODUCT+ENGINEERING: the three bare legacy suites ledger/pay/member now emit the battery's own closing row, so their green carries a number instead of suite=none - and the census that found them measured the dialect problem across the whole registry",
+    "current": "2026-11-17 R2845 PRODUCT+ENGINEERING: the census' 286 source-level non-law suites were re-asked at OUTPUT level by a new audit face, and the number splits - 54 of 57 no_numbers suites DO emit the battery row (a false-negative class the source reading cannot see), while no_status and other read 0/20 each (real debt)",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2844] next window (<=12h): (1) MAIN - the census says 286 of 704 registered suites still cannot emit the battery-law closing row, and `crit_mismatch=0` is vacuous for every one of them; the biggest single family is `no_status=66` (a `SUITE %d/%d` line with no PASS/FAIL token), then `other=63` and `no_numbers=55` which the census cannot place from source alone, so the honest next step is ONE measured leg over a bounded slice that reads the real output of those three families and replaces this source-level number with an output-level one; (2) `os-ugc-gate-report` is the only `suspect_status` row - read it and either it binds PASS/FAIL or it joins the owe list; (3) the new `tools/suite_closing_row_census.py` carries no registered suite, so its two-run stability and its law-from-the-runner rule are proven by this window only - register a suite or declare the debt; (4) 674 of 704 registry suites still never run in any slice; the shard offset/resume slice remains the named carrier blocker (30 suites 87s, 89 suites 298s, 160 suites 488s) (truncated)",
-    "next_milestone_due": "2026-11-17T15:32:33+08:00",
-    "updated_at": "2026-11-17T03:32:33+08:00",
+    "next_milestone": "[R2845] next window (<=12h): (1) MAIN - close the two REAL no_numbers rows at their birth site (`os-review-window-guard-parity-consumer-wire`, `os-relative-module-existence-face` both print a bare `SUITE PASS`) and teach the census the `\"%s %d/%d\" % (verdict, ...)` shape so the 55 false negatives stop being counted as debt; (2) run the no_status (66) and other (63) families FULL, not sampled - the 20/20 sample says they are real debt, and only a full count turns 232 from a projection into a number; (3) register a suite for `tools/suite_closing_row_census.py`, which still carries none while deciding 705 rows; (4) 649 of 705 registry suites still never run in any slice; a 60-suite audit leg measures ~90s, so family legs fit a carrier window while the full ledger does not - the shard offset/resume slice remains the named blocker; (5) carried unchanged: 904 sub-freeze one-offs, `outs` 37 unmaintained entries, 8 tool faces with no battery row, AC-VAC1..6, AC-LKNF1 queue head, the R2778 stand, 11 BOM-less UTF-16 evidence files, 18 BOM-carrying scripts, BigDomain-OSLoop S4U re-registration (needs an ELEVATED shell), Docker absent.",
+    "next_milestone_due": "2026-11-17T15:48:56+08:00",
+    "updated_at": "2026-11-17T03:48:56+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 82,
+    "log_lines_in_window": 89,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 21,
+    "substantive_non_idle_mention_lines": 22,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2844 PRODUCT+ENGINEERING: the three bare legacy suites ledger/pay/member now emit the battery's own closing row, so their green carries a number instead of suite=none - and the census that found them measured the dialect problem across the whole registry",
+  "current": "2026-11-17 R2845 PRODUCT+ENGINEERING: the census' 286 source-level non-law suites were re-asked at OUTPUT level by a new audit face, and the number splits - 54 of 57 no_numbers suites DO emit the battery row (a false-negative class the source reading cannot see), while no_status and other read 0/20 each (real debt)",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2844] next window (<=12h): (1) MAIN - the census says 286 of 704 registered suites still cannot emit the battery-law closing row, and `crit_mismatch=0` is vacuous for every one of them; the biggest single family is `no_status=66` (a `SUITE %d/%d` line with no PASS/FAIL token), then `other=63` and `no_numbers=55` which the census cannot place from source alone, so the honest next step is ONE measured leg over a bounded slice that reads the real output of those three families and replaces this source-level number with an output-level one; (2) `os-ugc-gate-report` is the only `suspect_status` row - read it and either it binds PASS/FAIL or it joins the owe list; (3) the new `tools/suite_closing_row_census.py` carries no registered suite, so its two-run stability and its law-from-the-runner rule are proven by this window only - register a suite or declare the debt; (4) 674 of 704 registry suites still never run in any slice; the shard offset/resume slice remains the named carrier blocker (30 suites 87s, 89 suites 298s, 160 suites 488s) (truncated)",
-  "state_bytes": 71124,
+  "next_milestone": "[R2845] next window (<=12h): (1) MAIN - close the two REAL no_numbers rows at their birth site (`os-review-window-guard-parity-consumer-wire`, `os-relative-module-existence-face` both print a bare `SUITE PASS`) and teach the census the `\"%s %d/%d\" % (verdict, ...)` shape so the 55 false negatives stop being counted as debt; (2) run the no_status (66) and other (63) families FULL, not sampled - the 20/20 sample says they are real debt, and only a full count turns 232 from a projection into a number; (3) register a suite for `tools/suite_closing_row_census.py`, which still carries none while deciding 705 rows; (4) 649 of 705 registry suites still never run in any slice; a 60-suite audit leg measures ~90s, so family legs fit a carrier window while the full ledger does not - the shard offset/resume slice remains the named blocker; (5) carried unchanged: 904 sub-freeze one-offs, `outs` 37 unmaintained entries, 8 tool faces with no battery row, AC-VAC1..6, AC-LKNF1 queue head, the R2778 stand, 11 BOM-less UTF-16 evidence files, 18 BOM-carrying scripts, BigDomain-OSLoop S4U re-registration (needs an ELEVATED shell), Docker absent.",
+  "state_bytes": 75926,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2844",
+      "2845",
       "OSLoop 执行 tick"
     ]
   ],

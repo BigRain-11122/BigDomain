@@ -7007,6 +7007,12 @@ SUITES = [
     # in src/os/backlog.md before the code: 8 -> 10 criteria.
     ("os-battery-shard",
      os.path.join("..", "os", "test_battery_shard.py"), 10),
+    # R2845: the OUTPUT-level face of the same question the census asks from
+    # source. Four probe suites in a private world classify by the row they
+    # really printed, the law and the invocation are imported from the runner,
+    # and the world's bytes are unchanged after the audit (AC-SOA1..AC-SOA6).
+    ("os-suite-output-audit",
+     os.path.join("..", "os", "test_suite_output_audit.py"), 6),
     # R2801. tools/battery_shard_report.py - the face that decides whether six
     # FAMILIES are green - shipped with eight criteria and no row, so for two
     # windows it was graded only by the run that rendered it. AC-BSR1..AC-BSR8
