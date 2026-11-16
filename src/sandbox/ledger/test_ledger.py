@@ -258,6 +258,8 @@ def main():
     led.close()
     fails = [ac for ac, ok in RESULTS if not ok]
     total = len(RESULTS)
+    print("SUITE %s %d/%d" % ("PASS" if not fails else "FAIL",
+                              total - len(fails), total), flush=True)
     print("SUITE %s (%d/%d criteria pass)" % ("PASS" if not fails else "FAIL",
                                               total - len(fails), total), flush=True)
     return 1 if fails else 0

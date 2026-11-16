@@ -444,6 +444,8 @@ def main():
     shutil.rmtree(tmp_cli, ignore_errors=True)
 
     fails = [ac for ac, ok in RESULTS if not ok]
+    print("SUITE %s %d/%d" % ("PASS" if not fails else "FAIL",
+                              len(RESULTS) - len(fails), len(RESULTS)), flush=True)
     print("---- pay acceptance: %d/%d passed" % (len(RESULTS) - len(fails), len(RESULTS)))
     if fails:
         print("FAILED: %s" % ", ".join(fails))

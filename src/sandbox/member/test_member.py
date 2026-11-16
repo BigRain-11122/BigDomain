@@ -674,6 +674,8 @@ def main():
     counts = {}
     for ac, _ in RESULTS:
         counts[ac] = counts.get(ac, 0) + 1
+    print("SUITE %s %d/%d" % ("PASS" if not failed else "FAIL",
+                              len(counts) - len(set(failed)), len(counts)), flush=True)
     print("suite: %d assertions over %d criteria; failed=%s"
           % (len(RESULTS), len(counts), failed or "none"), flush=True)
     return 1 if failed else 0

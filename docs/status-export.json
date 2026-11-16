@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T03:20:39+08:00",
-  "do": "2026-11-17 R2843 PRODUCT+ENGINEERING: the three bare legacy labels ledger/member/pay (43 criteria) that no slice could reach now run as one named leg - selected=3 executed=3 green=3 criteria=43 crit_mismatch=0 3.9s rc=0 - because the runner gained an exact-label face instead of a wider prefix",
+  "export_ts": "2026-11-17T03:32:33+08:00",
+  "do": "2026-11-17 R2844 PRODUCT+ENGINEERING: the three bare legacy suites ledger/pay/member now emit the battery's own closing row, so their green carries a number instead of suite=none - and the census that found them measured the dialect problem across the whole registry",
   "ceo_face": {
-    "current": "2026-11-17 R2843 PRODUCT+ENGINEERING: the three bare legacy labels ledger/member/pay (43 criteria) that no slice could reach now run as one named leg - selected=3 executed=3 green=3 criteria=43 crit_mismatch=0 3.9s rc=0 - because the runner gained an exact-label face instead of a wider prefix",
+    "current": "2026-11-17 R2844 PRODUCT+ENGINEERING: the three bare legacy suites ledger/pay/member now emit the battery's own closing row, so their green carries a number instead of suite=none - and the census that found them measured the dialect problem across the whole registry",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2843] next window (<=12h): (1) MAIN - the three legacy suites the R2843 leg just ran emit NO battery-law SUITE closing row (`ledger` = `SUITE PASS (11/11 criteria pass)`, `pay` = none at all, `member` = `suite: 25 assertions over 16 criteria` in lower case), so the runner reports `suite=none` and `crit_mismatch=0` is vacuous for them - either give each a law-shaped closing row (and check what else reads the old shapes) or declare each with a reason, then re-run the leg and record a real parity number; (2) the 11 remaining BOM-less UTF-16 evidence files are the same defect family healed twice already - normalize in one measured batch or declare each; (3) `closeout.py --check` with no `--line` still reads `E_CO_NO_STATE / E_RSA_NO_INPUT` rc=3 rather than a face verdict - pin the honest `--check` shape; (4) 674 of 704 registry suites (roughly 5110 criteria) still never run; a 30-suite leg measures 87s, a 89-suite leg 298s and a 160-suite leg 488s, so the shard offset/resume slice remains the named carrier blocker (truncated)",
-    "next_milestone_due": "2026-11-17T15:20:39+08:00",
-    "updated_at": "2026-11-17T03:20:39+08:00",
+    "next_milestone": "[R2844] next window (<=12h): (1) MAIN - the census says 286 of 704 registered suites still cannot emit the battery-law closing row, and `crit_mismatch=0` is vacuous for every one of them; the biggest single family is `no_status=66` (a `SUITE %d/%d` line with no PASS/FAIL token), then `other=63` and `no_numbers=55` which the census cannot place from source alone, so the honest next step is ONE measured leg over a bounded slice that reads the real output of those three families and replaces this source-level number with an output-level one; (2) `os-ugc-gate-report` is the only `suspect_status` row - read it and either it binds PASS/FAIL or it joins the owe list; (3) the new `tools/suite_closing_row_census.py` carries no registered suite, so its two-run stability and its law-from-the-runner rule are proven by this window only - register a suite or declare the debt; (4) 674 of 704 registry suites still never run in any slice; the shard offset/resume slice remains the named carrier blocker (30 suites 87s, 89 suites 298s, 160 suites 488s) (truncated)",
+    "next_milestone_due": "2026-11-17T15:32:33+08:00",
+    "updated_at": "2026-11-17T03:32:33+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 76,
+    "log_lines_in_window": 82,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 20,
+    "substantive_non_idle_mention_lines": 21,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2843 PRODUCT+ENGINEERING: the three bare legacy labels ledger/member/pay (43 criteria) that no slice could reach now run as one named leg - selected=3 executed=3 green=3 criteria=43 crit_mismatch=0 3.9s rc=0 - because the runner gained an exact-label face instead of a wider prefix",
+  "current": "2026-11-17 R2844 PRODUCT+ENGINEERING: the three bare legacy suites ledger/pay/member now emit the battery's own closing row, so their green carries a number instead of suite=none - and the census that found them measured the dialect problem across the whole registry",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2843] next window (<=12h): (1) MAIN - the three legacy suites the R2843 leg just ran emit NO battery-law SUITE closing row (`ledger` = `SUITE PASS (11/11 criteria pass)`, `pay` = none at all, `member` = `suite: 25 assertions over 16 criteria` in lower case), so the runner reports `suite=none` and `crit_mismatch=0` is vacuous for them - either give each a law-shaped closing row (and check what else reads the old shapes) or declare each with a reason, then re-run the leg and record a real parity number; (2) the 11 remaining BOM-less UTF-16 evidence files are the same defect family healed twice already - normalize in one measured batch or declare each; (3) `closeout.py --check` with no `--line` still reads `E_CO_NO_STATE / E_RSA_NO_INPUT` rc=3 rather than a face verdict - pin the honest `--check` shape; (4) 674 of 704 registry suites (roughly 5110 criteria) still never run; a 30-suite leg measures 87s, a 89-suite leg 298s and a 160-suite leg 488s, so the shard offset/resume slice remains the named carrier blocker (truncated)",
-  "state_bytes": 66666,
+  "next_milestone": "[R2844] next window (<=12h): (1) MAIN - the census says 286 of 704 registered suites still cannot emit the battery-law closing row, and `crit_mismatch=0` is vacuous for every one of them; the biggest single family is `no_status=66` (a `SUITE %d/%d` line with no PASS/FAIL token), then `other=63` and `no_numbers=55` which the census cannot place from source alone, so the honest next step is ONE measured leg over a bounded slice that reads the real output of those three families and replaces this source-level number with an output-level one; (2) `os-ugc-gate-report` is the only `suspect_status` row - read it and either it binds PASS/FAIL or it joins the owe list; (3) the new `tools/suite_closing_row_census.py` carries no registered suite, so its two-run stability and its law-from-the-runner rule are proven by this window only - register a suite or declare the debt; (4) 674 of 704 registry suites still never run in any slice; the shard offset/resume slice remains the named carrier blocker (30 suites 87s, 89 suites 298s, 160 suites 488s) (truncated)",
+  "state_bytes": 71124,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2843",
+      "2844",
       "OSLoop 执行 tick"
     ]
   ],

@@ -1,0 +1,5 @@
+SHARD scope=SHARD registry_suites=704 registry_criteria=5362 selected=3 selected_criteria=43 cap=600s exact=3
+SHARD row ledger rc=0 pass=11 fail=0 suite=PASS 11/11 crit=11 0.5s
+SHARD row pay rc=0 pass=16 fail=0 suite=PASS 16/16 crit=16 2.1s
+SHARD row member rc=0 pass=25 fail=0 suite=PASS 16/16 crit=16 1.4s
+SHARD rc=0 scope=SHARD selected=3 executed=3 green=3 criteria=43 crit_mismatch=0 elapsed=4.0s
