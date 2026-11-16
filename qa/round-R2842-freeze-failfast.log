@@ -1,0 +1,9 @@
+REFUSAL WORLD C:\Users\sjs20\AppData\Local\Temp\flc-world-77oej7yn
+[refusal/runner] rc=1 lines=3 suite_rows=0 reconcile_rows=0
+    FREEZE LAW REFUSE refused=1 freeze=2838 files=src/os/foo_R2838.py
+    RUNNER FAIL (freeze law refused a per-round one-off): aborted before the first suite
+[refusal/direct-law] rc=0 FREEZE LAW REFUSE refused=1 freeze=2838 files=src/os/foo_R2838.py | DIRECT phase_freeze_law = False
+HEALTHY WORLD C:\Users\sjs20\AppData\Local\Temp\flc-world-0q2z9dqv (no suite files either)
+[healthy/direct-law] rc=0 FREEZE LAW OK scanned=1 one_offs=0 max_round=0 freeze=2838 | DIRECT phase_freeze_law = True
+FREEZE LAW OK scanned=1452 one_offs=904 max_round=2781 freeze=2838
+[live/direct-law] phase_freeze_law = True

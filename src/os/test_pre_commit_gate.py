@@ -32,7 +32,7 @@ sys.path.insert(0, BASE)
 
 import one_off_round_scripts as OOS  # noqa: E402
 
-EXPECTED_CRITERIA = 8
+EXPECTED_CRITERIA = 10
 HOOKS = os.path.join(ROOT, "tools", "hooks")
 GATE = os.path.join(HOOKS, "pre_commit_gate.py")
 ENABLE = os.path.join(HOOKS, "enable.py")
@@ -186,7 +186,7 @@ check(law_code == 0 and report["verdict"] in ("OK", "NONE")
 
 # AC-HK7 - registration.
 runner_src = text(RUNNER)
-check('"%s"' % LABEL in runner_src and ", 8)" in runner_src,
+check('"%s"' % LABEL in runner_src and ", 10)" in runner_src,
       "AC-HK7 %s registered with its criterion count" % LABEL)
 
 # AC-HK8 - the battery leg asks the law BEFORE any suite runs.
@@ -197,6 +197,55 @@ check("import one_off_round_scripts as _oor" in runner_src
       and main_at != -1 and law_row > main_at
       and suite_at != -1 and law_row < suite_at,
       "AC-HK8 the freeze law is asked before the first suite")
+
+# AC-HK9 - R2842: asking the law before the suites was not enough - the runner
+# still burned the whole leg and only said FAIL at the end. The refusal is now
+# the battery's FIRST exit. Measured in a world that carries NO suite files at
+# all, so any 'SUITE ' row would prove the runner walked past the law.
+_world = tempfile.mkdtemp(prefix="hk9-world-")
+try:
+    os.makedirs(os.path.join(_world, "src", "sandbox"))
+    os.makedirs(os.path.join(_world, "src", "os"))
+    shutil.copy2(RUNNER, os.path.join(_world, "src", "sandbox",
+                                     "reconcile_all.py"))
+    shutil.copy2(os.path.join(BASE, "one_off_round_scripts.py"),
+                 os.path.join(_world, "src", "os", "one_off_round_scripts.py"))
+    with open(os.path.join(_world, "src", "os", "foo_R2838.py"), "w") as fh:
+        fh.write("# deliberate one-off at the freeze round\n")
+    rc_r, out_r, err_r = run(
+        [sys.executable, os.path.join(_world, "src", "sandbox",
+                                      "reconcile_all.py")], _world)
+    rows = out_r.splitlines()
+    suite_rows = [ln for ln in rows if ln.startswith("SUITE ")]
+    rec_rows = [ln for ln in rows if "RECONCILE" in ln]
+    check(rc_r == 1 and "FREEZE LAW REFUSE" in out_r
+          and "foo_R2838.py" in out_r
+          and "RUNNER FAIL (freeze law refused" in out_r
+          and not suite_rows and not rec_rows,
+          "AC-HK9 refused tree aborts before the first suite "
+          "(rc=%d suites=%d reconcile=%d)" % (rc_r, len(suite_rows),
+                                              len(rec_rows)))
+
+    # AC-HK10 - the answer is read from the world, not from prose: the same
+    # world's own runner module must return False, the live tree must not, and
+    # the verdict branch must no longer re-judge a law that already returned.
+    code = ("import sys\n"
+            "sys.path.insert(0, %r)\n"
+            "import reconcile_all as R\n"
+            "print('LAW', R.phase_freeze_law())\n"
+            % os.path.join(_world, "src", "sandbox"))
+    rc_d, out_d, _ = run([sys.executable, "-c", code], _world)
+    live_report, live_code = OOS.audit(ROOT)
+    main_src = runner_src[runner_src.find("def main(argv):"):]
+    check("LAW False" in out_d and rc_d == 0
+          and live_code == 0 and not live_report["refused"]
+          and main_src.count("freeze law refused") == 1
+          and "if FAILS == 0 and suites_ok:" in main_src
+          and "and law_ok" not in main_src,
+          "AC-HK10 law read from the world (refused=False, live=clean), "
+          "one refusal site, verdict independent")
+finally:
+    shutil.rmtree(_world, ignore_errors=True)
 
 print("SUITE %s %d/%d criteria"
       % ("PASS" if FAILS == 0 else "FAIL", PASSES, EXPECTED_CRITERIA))

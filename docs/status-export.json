@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T02:32:13+08:00",
-  "do": "2026-11-17 R2841 PRODUCT+ENGINEERING: the product-face leg ran for the first time (89 suites / 879 criteria) and its own first execution caught a LIVE drift the tree had carried unseen - two historical evidence files were written in dialects no reader shares, and the census drift detector reddened on cd7-live-real-tree.",
+  "export_ts": "2026-11-17T03:01:22+08:00",
+  "do": "2026-11-17 R2842 ENGINEERING: the freeze-law refusal is now the battery's FIRST exit, so a tree carrying a per-round one-off no longer burns a whole leg before saying FAIL - and that is measured in a world with NO suite files at all, not read off the source",
   "ceo_face": {
-    "current": "2026-11-17 R2841 PRODUCT+ENGINEERING: the product-face leg ran for the first time (89 suites / 879 criteria) and its own first execution caught a LIVE drift the tree had carried unseen - two historical evidence files were written in dialects no reader shares, and the census drift detector reddened on cd7-live-real-tree.",
+    "current": "2026-11-17 R2842 ENGINEERING: the freeze-law refusal is now the battery's FIRST exit, so a tree carrying a per-round one-off no longer burns a whole leg before saying FAIL - and that is measured in a world with NO suite files at all, not read off the source",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "next_milestone": "[R2841] next window (<=12h): (1) MAIN - the R2840 head item is still owed: AC-HK8 is proven statically and by parse only, so a private world with `foo_R2838.py` must show `phase_freeze_law()` returning False and RUNNER failing closed, then one real battery leg on this tree; (2) the 11 remaining UTF-16/BOM-less evidence files are the same defect family this window healed twice - either normalize them in one measured batch or declare them with a reason, but stop rediscovering them one leg at a time; (3) the three bare legacy labels `ledger`/`member`/`pay` (43 criteria) never run in any slice because their names collide with the family prefixes - add one explicit leg for them; (4) 615 of 704 suites / 4479 criteria still unrun, and a 89-suite leg measures ~298s so a family leg fits a carrier window while the full ledger does not (truncated)",
-    "next_milestone_due": "2026-11-17T14:32:13+08:00",
-    "updated_at": "2026-11-17T02:32:13+08:00",
+    "next_milestone_due": "2026-11-17T15:01:22+08:00",
+    "updated_at": "2026-11-17T03:01:22+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 66,
+    "log_lines_in_window": 72,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 19,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2841 PRODUCT+ENGINEERING: the product-face leg ran for the first time (89 suites / 879 criteria) and its own first execution caught a LIVE drift the tree had carried unseen - two historical evidence files were written in dialects no reader shares, and the census drift detector reddened on cd7-live-real-tree.",
+  "current": "2026-11-17 R2842 ENGINEERING: the freeze-law refusal is now the battery's FIRST exit, so a tree carrying a per-round one-off no longer burns a whole leg before saying FAIL - and that is measured in a world with NO suite files at all, not read off the source",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
   "next_milestone": "[R2841] next window (<=12h): (1) MAIN - the R2840 head item is still owed: AC-HK8 is proven statically and by parse only, so a private world with `foo_R2838.py` must show `phase_freeze_law()` returning False and RUNNER failing closed, then one real battery leg on this tree; (2) the 11 remaining UTF-16/BOM-less evidence files are the same defect family this window healed twice - either normalize them in one measured batch or declare them with a reason, but stop rediscovering them one leg at a time; (3) the three bare legacy labels `ledger`/`member`/`pay` (43 criteria) never run in any slice because their names collide with the family prefixes - add one explicit leg for them; (4) 615 of 704 suites / 4479 criteria still unrun, and a 89-suite leg measures ~298s so a family leg fits a carrier window while the full ledger does not (truncated)",
-  "state_bytes": 59674,
+  "state_bytes": 63689,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2841",
+      "2842",
       "OSLoop 执行 tick"
     ]
   ],

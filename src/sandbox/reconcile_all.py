@@ -4582,7 +4582,7 @@ SUITES = [
      os.path.join("..", "os", "test_one_off_round_scripts.py"), 6),
     # R2840 AC-HK7: the commit-side call site of the same freeze law.
     ("os-pre-commit-gate",
-     os.path.join("..", "os", "test_pre_commit_gate.py"), 8),
+     os.path.join("..", "os", "test_pre_commit_gate.py"), 10),
     # R2835: closing a round used to be two commands in two processes, so a
     # face (derived FROM state) could be published while the state write
     # failed - the R2831 defect with a different trigger. closeout.py makes
@@ -7449,6 +7449,18 @@ def main(argv):
         sys.stdout = tee
     t0 = time.time()
     law_ok = phase_freeze_law()
+    # R2842 AC-FLC2/AC-FLC5: a refused tree stops HERE. Asking the law before
+    # the suites was not enough - it still burned the whole leg and only said
+    # FAIL at the end, so a contaminated tree paid for hundreds of readings
+    # nobody can use. The refusal is now the battery's first exit, and the
+    # verdict branch below no longer re-judges a law that already returned.
+    if not law_ok:
+        print("RUNNER FAIL (freeze law refused a per-round one-off): "
+              "aborted before the first suite", flush=True)
+        if tee is not None:
+            sys.stdout = tee.stdout
+            tee.close()
+        return 1
     suites_ok = phase_suites()
     tmp = tempfile.mkdtemp(prefix="reconcile-all-")
     try:
@@ -7464,14 +7476,10 @@ def main(argv):
               % (reclaim["candidates"], reclaim["removed"],
                  reclaim["busy_skipped"], reclaim["failed"],
                  reclaim["mib"]), flush=True)
-    if FAILS == 0 and suites_ok and law_ok:
+    if FAILS == 0 and suites_ok:
         print("RUNNER PASS (%d/%d suites green, reconcile controls 7/7, %.1fs)"
               % (len(SUITES), len(SUITES), time.time() - t0), flush=True)
         code = 0
-    elif not law_ok:
-        print("RUNNER FAIL (freeze law refused a per-round one-off)",
-              flush=True)
-        code = 1
     else:
         print("RUNNER FAIL (%d failed assertions)" % FAILS, flush=True)
         code = 1

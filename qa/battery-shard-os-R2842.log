@@ -1,0 +1,32 @@
+SHARD scope=SHARD registry_suites=704 registry_criteria=5360 selected=30 selected_criteria=250 cap=600s
+SHARD row os-lobby-city-view rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 1.4s
+SHARD row os-lobby-checkout-demo rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-lobby-lobby-page rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.7s
+SHARD row os-sandbox-hub rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.6s
+SHARD row os-lobby-room-picker rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 43.8s
+SHARD row os-content-gate-console rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.6s
+SHARD row os-ledger-page rc=0 pass=0 fail=0 suite=PASS 6/6 crit=6 1.6s
+SHARD row os-decwatermark rc=0 pass=8 fail=0 suite=none crit=8 11.8s
+SHARD row os-evidence-writer rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.8s
+SHARD row os-evidence-writer-dir rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.2s
+SHARD row os-ledger-lines rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.4s
+SHARD row os-ledger-archive rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.9s
+SHARD row os-ledger-baseline rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.4s
+SHARD row os-ledger-fold-kind rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.1s
+SHARD row os-ledger-fold-kind-dateprefix rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-ledger-fold-kind-inflection rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.5s
+SHARD row os-run-identity rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.3s
+SHARD row os-retry-naming rc=0 pass=9 fail=0 suite=PASS 9/9 crit=9 0.6s
+SHARD row os-ledger-closeout rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 0.6s
+SHARD row os-logs-inventory rc=0 pass=31 fail=0 suite=PASS 31/31 crit=31 1.9s
+SHARD row os-queue-floor rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.0s
+SHARD row os-state-fold rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.8s
+SHARD row os-state-fold-run rc=0 pass=6 fail=0 suite=none crit=6 0.2s
+SHARD row os-fold-round-block-boundary rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.1s
+SHARD row os-state-io rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.0s
+SHARD row os-state-append rc=0 pass=7 fail=0 suite=PASS 7/7 crit=7 0.2s
+SHARD row os-one-off-round-scripts rc=0 pass=6 fail=0 suite=PASS 6/6 crit=6 0.2s
+SHARD row os-pre-commit-gate rc=0 pass=10 fail=0 suite=PASS 10/10 crit=10 7.7s
+SHARD row os-closeout rc=0 pass=19 fail=0 suite=PASS 19/19 crit=19 2.4s
+SHARD row os-debt-register rc=0 pass=8 fail=0 suite=PASS 8/8 crit=8 1.2s
+SHARD rc=0 scope=SHARD selected=30 executed=30 green=30 criteria=250 crit_mismatch=0 elapsed=87.0s
