@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-18 07:06 +08:00
+- 生成时间: generated: 2026-11-18 07:47 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
 - 状态证据: reconcile-all-R2739.log (RUNNER PASS 675/675 suites green, reconcile controls 7/7, 4986.4s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 716 | 5493 | 675/675 | R2739 |
+| 716 | 5496 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -750,10 +750,10 @@
 | 711 | os-tree-snapshot | ../os/test_tree_snapshot.py | 6 | no-evidence | - |
 | 712 | os-lobby-ws-report-face | ../os/test_lobby_ws_report.py | 7 | no-evidence | - |
 | 713 | os-journey-demo-face | ../os/test_journey_demo.py | 6 | no-evidence | - |
-| 714 | os-leg-audit | ../os/test_leg_audit.py | 6 | no-evidence | - |
+| 714 | os-leg-audit | ../os/test_leg_audit.py | 9 | no-evidence | - |
 | 715 | os-leg-watch | ../os/test_leg_watch.py | 6 | no-evidence | - |
 | 716 | os-leg-header-check | ../os/test_leg_header_check.py | 6 | no-evidence | - |
-|  | 合计 |  | 5493 | green 675 / FAIL 0 / no-evidence 41 |  |
+|  | 合计 |  | 5496 | green 675 / FAIL 0 / no-evidence 41 |  |
 
 ## 证据出处
 

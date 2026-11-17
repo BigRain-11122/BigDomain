@@ -7174,11 +7174,14 @@ SUITES = [
     # pinned in src/os/backlog.md BEFORE the tool; its first two drafts were
     # refuted by their own arms (a pair-equals-pass-plus-fail law reddened 70
     # legitimate rows, then two shipped `suite=PASS 8/6` rows) and narrowed on
-    # the record rather than by bending a criterion. Appended at the END for the
+    # the record rather than by bending a criterion. R2913 added AC-LGA7..AC-LGA9
+    # (the FAILED-LAUNCH class, its 89-row fixture, and this row's own count
+    # derived from what the suite asserts) with those criteria pinned in
+    # src/os/backlog.md in the same window as the edit. Appended at the END for the
     # same reason as every row above: a mid-list insert shifts each later suite's
     # shard, and the 27 unmeasured deep shard-6 rows are tracked by that mapping.
     ("os-leg-audit",
-     os.path.join("..", "os", "test_leg_audit.py"), 6),
+     os.path.join("..", "os", "test_leg_audit.py"), 9),
     # R2893: the two siblings that R2891 and R2892 built both waited on a live
     # family leg because the edit-race law forbids a registry edit while a leg of
     # family `os-` is in flight. That leg closed this window with

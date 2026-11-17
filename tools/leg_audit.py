@@ -182,15 +182,35 @@ def audit_text(text):
         'registry_suites': _int(header, 'registry_suites') if header else None,
         'stray': p['stray'],
     }
+    # R2913 AC-LGA7: "unfinished" and "inconsistent" are two different facts and
+    # a reader deciding whether to quote a number needs to tell them apart. A leg
+    # that never wrote its closing row has no aggregate at all - every row it did
+    # print can be green and the run is still not a measurement (the killed R2912
+    # launch: 89 rows, 89 green, no closing row). A leg that DID close but whose
+    # counts disagree is a different failure: it measured, and the arithmetic is
+    # broken. `verdict` keeps its old two values so every pre-R2913 consumer reads
+    # the same thing; `cls` is the new discriminator.
+    if not reasons:
+        cls = 'ADOPT'
+    elif closing is None:
+        cls = 'FAILED-LAUNCH'
+    else:
+        cls = 'REJECT'
     return {
         'verdict': 'REJECT' if reasons else 'ADOPT',
+        'cls': cls,
         'reasons': reasons,
         'facts': facts,
     }
 
 
 def render(path, result):
-    """One line, in the same shape the leg itself prints."""
+    """One line, in the same shape the leg itself prints.
+
+    R2913: the leading token is the CLASS (ADOPT / REJECT / FAILED-LAUNCH), so a
+    killed launch can no longer be skim-read as a green one. `LEG-AUDIT ADOPT`
+    and `LEG-AUDIT REJECT` keep their exact pre-R2913 spelling.
+    """
     f = result['facts']
     reasons = result['reasons']
     named = ','.join(reasons[:6])
@@ -198,9 +218,9 @@ def render(path, result):
         named += ',+%d-more' % (len(reasons) - 6)
     return ('LEG-AUDIT %s file=%s rows=%d unique=%d selected=%s executed=%s '
             'green=%d crit=%d mismatch=%s elapsed=%s reds=%d reasons=%s'
-            % (result['verdict'], path, f['rows'], f['unique'], f['selected'],
-               f['executed'], f['green'], f['criteria'], f['crit_mismatch'],
-               f['elapsed'], len(f['reds']), named or 'none'))
+            % (result.get('cls', result['verdict']), path, f['rows'], f['unique'],
+               f['selected'], f['executed'], f['green'], f['criteria'],
+               f['crit_mismatch'], f['elapsed'], len(f['reds']), named or 'none'))
 
 
 def main(argv):

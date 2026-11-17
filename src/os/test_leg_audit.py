@@ -1,4 +1,4 @@
-"""Battery suite for tools/leg_audit.py - criteria AC-LGA1..AC-LGA6.
+"""Battery suite for tools/leg_audit.py - criteria AC-LGA1..AC-LGA9.
 
 WHY: R2886 pinned the law that a leg without a closing `SHARD rc=` row is not a
 family measurement, and every window since applied it by reading logs by eye. A
@@ -10,7 +10,9 @@ lost a row, or ran a suite twice must be REJECTED by name.
 PINNED BEFORE THE CODE: these six criteria were written into src/os/backlog.md in
 the same window, BEFORE tools/leg_audit.py existed; the tool's first two drafts
 were refuted by their own arms and narrowed on the record (see the tool's
-comments) rather than by bending a criterion.
+comments) rather than by bending a criterion. AC-LGA7..AC-LGA9 were pinned in
+src/os/backlog.md in the SAME window as this edit (R2913) and that is disclosed
+as in-window pre-registration, not as pre-registration.
 
 Every fixture is built in-process from three rows, so the suite never depends on
 a log file that could be cleaned out from under it.
@@ -124,9 +126,68 @@ def main():
        'forged=%s timeout=%s' % (r_forged['reasons'][:2], r_to['reasons']))
 
     # AC-LGA6: a header that says it is still running cannot attest a finished
-    # leg; and hygiene - pure ASCII source, exactly one registry row, six criteria.
+    # leg; and hygiene - pure ASCII source. (R2913: the registry row moved out of
+    # this arm into AC-LGA9, because asserting a typed 6 here meant every new
+    # criterion had to edit a second number in the same file - the drift the
+    # R2901 round deleted a hand-moved count for.)
     hdr_run = hdr(state='RUNNING')
     r = audit(leg(header=hdr_run))
+    ok('AC-LGA6 a RUNNING header is REJECTED and the source is pure ASCII',
+       r['verdict'] == 'REJECT' and any(x.startswith('E_NOT_COMPLETE') for x in r['reasons'])
+       and all(ord(c) < 128 for c in src),
+       'reasons=%s' % (r['reasons'],))
+
+    # AC-LGA7 (R2913): the CLASS law. "Unfinished" and "inconsistent" must be
+    # distinguishable, and the discriminator must be the closing row itself -
+    # measured by flipping it on ONE set of rows rather than by trusting a code
+    # path. The verdict keeps its pre-R2913 value in every arm.
+    r_noclose = audit(leg(closing=False))
+    r_closed = audit(leg())
+    r_tampered = audit(leg(close_line=(
+        'SHARD rc=0 scope=SHARD selected=3 executed=3 green=2 criteria=17 '
+        'crit_mismatch=0 elapsed=1.2s')))
+    ok('AC-LGA7 the class separates FAILED-LAUNCH from REJECT on the same rows',
+       r_noclose['cls'] == 'FAILED-LAUNCH' and r_noclose['verdict'] == 'REJECT'
+       and r_closed['cls'] == 'ADOPT' and r_closed['verdict'] == 'ADOPT'
+       and r_tampered['cls'] == 'REJECT' and r_tampered['verdict'] == 'REJECT',
+       'noclose=%s closed=%s tampered=%s' % (r_noclose['cls'], r_closed['cls'],
+                                             r_tampered['cls']))
+
+    # AC-LGA8 (R2913): the shape that produced the law. 89 green rows and no
+    # closing row is exactly the killed R2912 launch - row-by-row it looks
+    # healthy, and it is still not a measurement. Built in-process so the arm
+    # cannot be broken by a qa/ cleanup; the real logs are then measured on top
+    # and an absent file is DISCLOSED rather than silently passed.
+    many = ['SHARD row probe-%02d rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.0s'
+            % i for i in range(89)]
+    r_many = audit('\n'.join(many) + '\n')
+    mf = r_many['facts']
+    real_killed = os.path.join(ROOT, 'qa', 'family-leg-long-R2912.log')
+    real_good = os.path.join(ROOT, 'qa', 'family-leg-supervised-R2912.log')
+    real_arm = True
+    real_detail = 'absent'
+    if os.path.isfile(real_killed) and os.path.isfile(real_good):
+        killed = audit(io.open(real_killed, 'r', encoding='utf-8-sig',
+                               errors='replace').read())
+        good = audit(io.open(real_good, 'r', encoding='utf-8-sig',
+                             errors='replace').read())
+        real_arm = (killed['cls'] == 'FAILED-LAUNCH'
+                    and 'E_NO_CLOSING_ROW' in killed['reasons']
+                    and good['cls'] == 'ADOPT')
+        real_detail = 'killed=%s rows=%d good=%s' % (
+            killed['cls'], killed['facts']['rows'], good['cls'])
+    else:
+        print('  | DISCLOSE real R2912 logs not on disk - arm measured '
+              'on the in-process fixture only')
+    ok('AC-LGA8 eighty-nine green rows without a closing row is FAILED-LAUNCH',
+       r_many['cls'] == 'FAILED-LAUNCH'
+       and (mf['rows'], mf['green'], len(mf['reds'])) == (89, 89, 0)
+       and real_arm, 'rows=%d green=%d reds=%d real=%s'
+       % (mf['rows'], mf['green'], len(mf['reds']), real_detail))
+
+    # AC-LGA9 (R2913): the registry is the ONE place a criteria count is typed.
+    # Exactly one row may name this suite, and the number it declares must equal
+    # the distinct criteria this run asserted - derived from CHECKS, never typed.
     reg = io.open(os.path.join(ROOT, 'src', 'sandbox', 'reconcile_all.py'),
                   'r', encoding='utf-8').read()
     rows = []
@@ -134,10 +195,16 @@ def main():
         found = re.search(r'test_leg_audit\.py"\)\s*,\s*(\d+)', reg[pos:pos + 160])
         if found:
             rows.append(found.group(1))
-    ok('AC-LGA6 a RUNNING header is REJECTED and exactly one registry row exists',
-       r['verdict'] == 'REJECT' and any(x.startswith('E_NOT_COMPLETE') for x in r['reasons'])
-       and all(ord(c) < 128 for c in src) and rows == ['6'],
-       'reasons=%s rows=%s' % (r['reasons'], rows))
+    ids = set()
+    for name in CHECKS:
+        token = name.split(' ', 1)[0]
+        for cut in range(len(token), 0, -1):
+            if token[cut - 1].isdigit():
+                ids.add(token[:cut])
+                break
+    ok('AC-LGA9 exactly one registry row declares the criteria this run asserted',
+       len(rows) == 1 and int(rows[0]) == len(ids) + 1,
+       'rows=%s asserted=%d (+this arm)' % (rows, len(ids)))
 
     total = len(CHECKS)
     acs = set()
