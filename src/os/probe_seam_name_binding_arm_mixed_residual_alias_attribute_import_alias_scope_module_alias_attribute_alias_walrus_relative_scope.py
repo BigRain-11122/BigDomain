@@ -1,3 +1,4 @@
+from functools import partial
 """A module alias HEAD bound by a WALRUS, and RELATIVE FROM-imports at the
 call site and at the module alias head.
 
@@ -41,6 +42,7 @@ import re
 import sys
 import threading
 
+from probe_seam_lazy_base import LazyRow, Once  # noqa: E402
 BASE = os.path.dirname(os.path.abspath(__file__))
 if BASE not in sys.path:
     sys.path.insert(0, BASE)
@@ -725,20 +727,27 @@ def extended_readers():
              MAA2.resolve_expr, MAA2._module_of_head) = _SHIPPED_MAA2_READERS
 
 
+def _base_pnaa(name, text, scope, line, tables, root, src_path):
+    """ONE untended parent call, made only when a base key is read."""
+    return _BASE_MAA2_ENTRY(name, text, scope, line, tables, root, src_path)
+
+
 def module_alias_entry(name, text, scope, line, tables=None, root=None,
                        src_path=None):
     """The shipped two-level answer, re-read through this face own readers."""
-    base = _BASE_MAA2_ENTRY(name, text, scope, line, tables, root, src_path)
     with extended_readers():
         got = _BASE_MAA2_ENTRY(name, text, scope, line, tables, root,
                                src_path)
-    out = dict(got)
+    out = LazyRow(got)
     for key in sorted(got):
         out.setdefault(key, got[key])
-    out["base_pnaa_state"] = base.get("state")
-    out["base_pnaa_value"] = base.get("value")
-    out["base_pnaa_reason"] = base.get("reason")
-    out["base_pnaa_hop"] = base.get("pnam_hop") or base.get("ma_hop")
+    once = Once(partial(_base_pnaa, name, text, scope, line, tables, root,
+                        src_path))
+    out.defer("base_pnaa_state", lambda: once().get("state"))
+    out.defer("base_pnaa_value", lambda: once().get("value"))
+    out.defer("base_pnaa_reason", lambda: once().get("reason"))
+    out.defer("base_pnaa_hop",
+              lambda: once().get("pnam_hop") or once().get("ma_hop"))
     reason = out.get("reason") or ""
     match = _relative_not_callable_wrapped.match(reason)
     if match:

@@ -10,7 +10,7 @@
     "next_milestone_due": "2026-11-18T01:38:27+08:00",
     "updated_at": "2026-11-17T13:38:27+08:00"
   },
-  "current": "2026-11-17 R2871 PRODUCT+ENGINEERING: the R2867 fan-out PIN was opened before any edit and its own two load-bearing criteria were found to be in tension by reading all six named entry bodies - AC-FO1 demands exactly one parent call per entry body while AC-FO4 demands base_pnX* still equal a DIRECT parent call - so NO code was edited and the row is carried with the measured proof instead of being half-satisfied.",
+  "current": "2026-11-17 R2872 PRODUCT+ENGINEERING: the probe-seam 2^depth fan-out is REMOVED, not hidden - the six entries that asked their parent twice now ask it once (FANOUT_LAYERS 6 -> 0, all six CALLS 1) and the SAME deep row R2866 measured at 245.4s now reads 115.0s with pass=67 and SUITE PASS 6/6 unchanged. Six registered suites green, 45/45 lazy-base keys identical to a direct parent call.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -39,9 +39,9 @@
     }
   ],
   "do": "2026-11-17 R2871 PRODUCT+ENGINEERING: the R2867 fan-out PIN was opened before any edit and its own two load-bearing criteria were found to be in tension by reading all six named entry bodies - AC-FO1 demands exactly one parent call per entry body while AC-FO4 demands base_pnX* still equal a DIRECT parent call - so NO code was edited and the row is carried with the measured proof instead of being half-satisfied.",
-  "export_ts": "2026-11-17T13:38:27+08:00",
-  "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
-  "next_milestone": "[R2871] next window (<=12h), two resolutions that actually remove the fan-out (pick ONE, pin it BEFORE editing): **(a) LAZY COUNTERFACTUAL** - the row returns a dict subclass whose `base_pnX_*` keys are filled by one DIRECT parent call only when read, which keeps AC-FO4 literal and makes an unread diagnostic free; the trap to pin first is that `dict(got)` in each parent must preserve the fill or every deeper `base_*` key silently disappears. **(b) READER-STACK COMPOSITION** - install every face's readers once at the top and run the shipped bottom walk, so no entry body calls a parent ENTRY at all (truncated)",
+  "export_ts": "2026-11-17T14:22:23+08:00",
+  "latest_artifact": "qa/battery-shard-lazy-deep-R2871.log (480B, rc=0 pass=67 suite=PASS 6/6 115.0s) + qa/probe-seam-fanout-map-R2871-after.log (3359B, FANOUT_LAYERS=0) + qa/lazy-base-equality-R2871.log (MISMATCHES=0) - 2026-11-17",
+  "next_milestone": "R2872 next window (<=12h): say by number whether the remaining 115.0s is the chain per call or the 12-fixture AC-PNAF5, PIN a criterion before editing; then decide the fan-out map DEPTH column (fix or declare). No payment capability is claimed: a buyer still cannot pay until merchant id, server, domain, filing+ICP and miniprogram appid+secret arrive.",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",

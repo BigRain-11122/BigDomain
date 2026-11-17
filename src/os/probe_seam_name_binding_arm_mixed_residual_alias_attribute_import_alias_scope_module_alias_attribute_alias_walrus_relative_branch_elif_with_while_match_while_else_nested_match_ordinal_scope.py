@@ -1,3 +1,5 @@
+from functools import partial
+from probe_seam_lazy_base import LazyRow, Once  # noqa: E402
 """A module alias HEAD bound by a WALRUS in a nested `match` with an ORDINAL.
 
 The shipped while-else/nested-case face (R2592) follows a walrus bound in a
@@ -182,22 +184,28 @@ def extended_branch_bindings():
         PNAE.branch_bindings = saved
 
 
+def _base_pnaf(name, text, scope, line, tables, root, src_path):
+    """ONE untended parent call, made only when a base key is read."""
+    return _BASE_PNAE_ENTRY(name, text, scope, line, tables, root, src_path)
+
+
 def module_alias_entry(name, text, scope, line, tables=None, root=None,
                        src_path=None):
     """The R2592 answer, re-read with per-match ordinals and else-section
     matches."""
-    parent = _BASE_PNAE_ENTRY(name, text, scope, line, tables, root, src_path)
     with extended_branch_bindings():
         got = _BASE_PNAE_ENTRY(name, text, scope, line, tables, root,
                                src_path)
-    out = dict(got)
+    out = LazyRow(got)
     for key in sorted(got):
         out.setdefault(key, got[key])
-    out["base_pnaf_state"] = parent.get("state")
-    out["base_pnaf_value"] = parent.get("value")
-    out["base_pnaf_reason"] = parent.get("reason")
-    out["base_pnaf_chain"] = parent.get("ma_chain")
-    out["base_pnaf_branch_reads"] = parent.get("branch_reads")
+    once = Once(partial(_base_pnaf, name, text, scope, line, tables, root,
+                        src_path))
+    out.defer("base_pnaf_state", lambda: once().get("state"))
+    out.defer("base_pnaf_value", lambda: once().get("value"))
+    out.defer("base_pnaf_reason", lambda: once().get("reason"))
+    out.defer("base_pnaf_chain", lambda: once().get("ma_chain"))
+    out.defer("base_pnaf_branch_reads", lambda: once().get("branch_reads"))
     return out
 
 

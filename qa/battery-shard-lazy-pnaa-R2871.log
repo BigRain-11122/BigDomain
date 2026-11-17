@@ -1,0 +1,5 @@
+SHARD scope=SHARD registry_suites=707 registry_criteria=5397 selected=1 selected_criteria=6 cap=600s leg_cap=60s exact=1
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-scope rc=124 pass=0 fail=0 detail=none suite=none crit=6 60.0s timeout=yes
+SHARD detail os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-scope TIMEOUT suite exceeded the 60s per-suite cap
+SHARD rc=2 scope=SHARD selected=1 executed=1 green=0 criteria=6 crit_mismatch=0 elapsed=60.0s
+SHARD red os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-scope:rc=124

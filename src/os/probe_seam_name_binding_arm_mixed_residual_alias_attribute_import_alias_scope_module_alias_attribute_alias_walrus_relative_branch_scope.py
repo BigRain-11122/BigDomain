@@ -1,3 +1,4 @@
+from functools import partial
 """A module alias HEAD bound by a WALRUS inside a MODULE-LEVEL BRANCH.
 
 The shipped walrus-relative face (R2585) reads a walrus only when it is bound at
@@ -35,6 +36,7 @@ import re
 import sys
 import threading
 
+from probe_seam_lazy_base import LazyRow, Once  # noqa: E402
 BASE = os.path.dirname(os.path.abspath(__file__))
 if BASE not in sys.path:
     sys.path.insert(0, BASE)
@@ -235,22 +237,38 @@ def _patched_readers():
                 setattr(module, attribute, original)
 
 
+def _base_pnab(name, text, scope, line, tables, root, src_path):
+    """ONE untended parent call, made only when a base key is read.
+
+    The shipped face accumulates branch reads in a module global, so the walk
+    is fenced: what it writes is restored before the caller ever sees it.
+    """
+    saved = list(_BRANCH_READS)
+    del _BRANCH_READS[:]
+    try:
+        return _BASE_PNT_ENTRY(name, text, scope, line, tables, root, src_path)
+    finally:
+        _BRANCH_READS[:] = saved
+
+
 def module_alias_entry(name, text, scope, line, tables=None, root=None,
                        src_path=None):
     """The shipped walrus-relative answer, re-read with branch bindings."""
-    base = _BASE_PNT_ENTRY(name, text, scope, line, tables, root, src_path)
     del _BRANCH_READS[:]
     with extended_readers():
         got = _BASE_PNT_ENTRY(name, text, scope, line, tables, root, src_path)
     branch_reads = sorted(set(_BRANCH_READS))
-    out = dict(got)
+    out = LazyRow(got)
     for key in sorted(got):
         out.setdefault(key, got[key])
-    out["base_pnab_state"] = base.get("state")
-    out["base_pnab_value"] = base.get("value")
-    out["base_pnab_reason"] = base.get("reason")
-    out["base_pnab_hop"] = base.get("pnaa_hop") or base.get("pnam_hop") or \
-        base.get("ma_hop")
+    once = Once(partial(_base_pnab, name, text, scope, line, tables, root,
+                        src_path))
+    out.defer("base_pnab_state", lambda: once().get("state"))
+    out.defer("base_pnab_value", lambda: once().get("value"))
+    out.defer("base_pnab_reason", lambda: once().get("reason"))
+    out.defer("base_pnab_hop",
+              lambda: once().get("pnaa_hop") or once().get("pnam_hop")
+              or once().get("ma_hop"))
     out["branch_reads"] = branch_reads
     reason = out.get("reason") or ""
     match = _AMBIGUOUS_UNBOUND.match(reason)

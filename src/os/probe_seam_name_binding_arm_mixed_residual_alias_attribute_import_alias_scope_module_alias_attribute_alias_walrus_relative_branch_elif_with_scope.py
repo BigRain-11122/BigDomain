@@ -1,3 +1,5 @@
+from functools import partial
+from probe_seam_lazy_base import LazyRow, Once  # noqa: E402
 """A module alias HEAD bound by a WALRUS inside a module-level ELIF or WITH.
 
 The shipped branch face (R2587) follows a walrus bound in a module-level `if`
@@ -142,20 +144,26 @@ def extended_branch_bindings():
         PNAB._branch_bindings = saved
 
 
+def _base_pnac(name, text, scope, line, tables, root, src_path):
+    """ONE untended parent call, made only when a base key is read."""
+    return _BASE_PNAB_ENTRY(name, text, scope, line, tables, root, src_path)
+
+
 def module_alias_entry(name, text, scope, line, tables=None, root=None,
                        src_path=None):
     """The R2587 answer, re-read with elif and with bindings."""
-    parent = _BASE_PNAB_ENTRY(name, text, scope, line, tables, root, src_path)
     with extended_branch_bindings():
         got = _BASE_PNAB_ENTRY(name, text, scope, line, tables, root, src_path)
-    out = dict(got)
+    out = LazyRow(got)
     for key in sorted(got):
         out.setdefault(key, got[key])
-    out["base_pnac_state"] = parent.get("state")
-    out["base_pnac_value"] = parent.get("value")
-    out["base_pnac_reason"] = parent.get("reason")
-    out["base_pnac_chain"] = parent.get("ma_chain")
-    out["base_pnac_branch_reads"] = parent.get("branch_reads")
+    once = Once(partial(_base_pnac, name, text, scope, line, tables, root,
+                        src_path))
+    out.defer("base_pnac_state", lambda: once().get("state"))
+    out.defer("base_pnac_value", lambda: once().get("value"))
+    out.defer("base_pnac_reason", lambda: once().get("reason"))
+    out.defer("base_pnac_chain", lambda: once().get("ma_chain"))
+    out.defer("base_pnac_branch_reads", lambda: once().get("branch_reads"))
     return out
 
 
