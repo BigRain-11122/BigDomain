@@ -6145,6 +6145,17 @@ SUITES = [
     ("os-probe-seam-registry",
      os.path.join("..", "os",
                   "test_probe_seam_registry.py"), 6),
+    # R2870 claim, AC-PSFM1..AC-PSFM6 (pinned in state/queue/tech.md at
+    # R2870 BEFORE the code): the fan-out map shipped at R2867 without a
+    # suite of its own, so its own law was unguarded - a miscount, a cycle
+    # that recursed instead of refusing, or a write smuggled into a
+    # read-only tool would have been read by a human or by nobody. Six
+    # criteria pin the two shapes it must distinguish (CALLS 2 and CALLS 1),
+    # the cycle refusal (depth -1), the live partition, the pure-read CLI
+    # and the source hygiene.
+    ("os-probe-seam-fanout-map",
+     os.path.join("..", "os",
+                  "test_probe_seam_fanout_map.py"), 6),
     # R2515 claim, AC-PSF1..AC-PSF6 (pinned in state/queue/tech.md:552 at
     # R2513 BEFORE the code): MEASURED at R2513 that a probe forwarding its
     # seam quieting through a shared helper names no seam itself, so the
