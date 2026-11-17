@@ -60,7 +60,11 @@ try {
   $gt = Get-GroupFile 'cph4/evolution-ledger.md'
   $L = @(($gt.raw.TrimEnd("`r", "`n")) -split "\r?\n")
   $atbd = @($L | Select-String -SimpleMatch '@BigDomain')
-  $conf = @($L | Select-String -Pattern '<<<<<<<|>>>>>>>')
+  # R2907: anchor the merge-marker test to the START of a line. The unanchored form
+  # matched prose that DESCRIBES an old cleanup ("(`<<<<<<< HEAD` / ... / `>>>>>>>`)"),
+  # which kept this face red for rounds against a file with no conflict in it, and once
+  # sent a false escalation to HQ-FEEDBACK. A real marker is the whole leading token.
+  $conf = @($L | Select-String -Pattern '^(<<<<<<<|>>>>>>>|\|\|\|\|\|\|\|)( |$)')
   $pnums = @($L | Select-String -Pattern 'P-\d{4}-\d{2}-\d{2}-\d{2}' -AllMatches | ForEach-Object { $_.Matches } | ForEach-Object { $_.Value })
   $lastp = (@($pnums | Select-Object -Last 3) -join ',')
   if ($conf.Count -gt 0) {

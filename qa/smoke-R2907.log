@@ -1,0 +1,34 @@
+QA SMOKE / DAILY CRAWL - BigDomain R2907 (2026-11-18)
+charter: group QA Smoke Test charter v1.0 (docs/qa-smoke-test-charter.md, orders L254 2026-09-28)
+
+1) DAILY CRAWL: 1 source obtained, 5 attempts refused (all recorded, none hidden)
+  HIT  pay.weixin.qq.com/doc/v2/merchant/4011986682  (WeChat Pay recurring-deduction page)
+       200 OK; page note 2026.09.18 (captured 2026-10-08, W18) -> 2026.10.21 : page was revised after capture
+       clause-by-clause recheck: zero drift on notice-first rule / two-modes-either-or / 24h pending / notice cadence
+       NEW detail: pre-deduction-notice API must be called BEFORE the deduct API; the 12h window is the ONLY legal
+       direct-deduct window (>=12h or already-notified => notice flow is mandatory)
+  MISS  developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/sec-center/sec-check/msgSecCheck.html  404
+  MISS  developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/sec-check/security.msgSecCheck.html  404
+  MISS  www.cac.gov.cn/2024-06/14/c_1719412917192341.htm  404 (guessed id for 网络暴力信息治理规定)
+  MISS  www.gov.cn/zhengce/zhengceku/202406/content_6957346.htm  404 (same doc, policy-library id guessed)
+  MISS  www.gov.cn/zhengce/zhengceku/  403 (listing page refuses the fetcher)
+
+2) BENCHMARK FACE: docs/global-benchmarks.md section 4 got this round's row; benchmarks_refreshed=2026-11-18
+   15h staleness cap: last refresh 2026-11-17, this refresh 2026-11-18 -> inside cap
+
+3) SOURCE CHAIN: W44 written to docs/research/intelligence-wall.md with source URL, grade A, and the consumption
+   point (P-47 item 5 monthly-card deduction engine: order gate + 12h window). msgSecCheck parameter face stays
+   OUTSTANDING and is named as outstanding, not silently closed.
+
+4) SELF-CHECK (charter four items):
+   (a) daily crawl executed ..................... PASS (1 hit / 5 misses, both sides recorded)
+   (b) benchmark 15h rule ....................... PASS (refreshed today)
+   (c) research source chain .................... PASS (W44 carries url + grade + consumption point)
+   (d) intelligence wall signal ................. PASS (W44 appended)
+
+HONEST NOTE: no smoke evidence existed in qa/ before this round, so the charter face read FLAG every round;
+this is the first smoke pair in the repo. The crawl did NOT obtain a brand-new source - the one hit is a
+re-capture of a page already in the source list whose revision date moved, and that is recorded as version
+drift rather than dressed up as a new source.
+
+R2907 smoke verdict: PASS (4/4 self-check items; 1 hit / 5 refused attempts)
