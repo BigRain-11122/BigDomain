@@ -275,16 +275,22 @@ def _pairs(repo):
             j_c, j_src = j_m, 'mtime'
         if h_c >= j_c:
             stamp, src = h_c, h_src
+            win = 'html'
         else:
             stamp, src = j_c, j_src
+            win = 'json'
         # R2899 AC-EXPD10/AC-EXPD11: the stamp above belongs to the half that
         # won, so a pair whose halves carry different (date, clock) would publish
         # one half and stay silent about the other. The note names both halves
         # and is EMPTY when they agree, so it can never become chatter.
+        # R2900 AC-EXPD13: the note also names WHICH half the bracket describes,
+        # because two halves sharing a date and differing only in clock render as
+        # the same date twice and the winner is not readable from the note.
         h_lab = '%s %s' % (pair_date(h_c), h_src)
         j_lab = '%s %s' % (pair_date(j_c), j_src)
         note = '' if h_lab == j_lab else (
-            'halves differ: html [%s] + json [%s]' % (h_lab, j_lab))
+            'halves differ: html [%s] + json [%s]; newer=%s'
+            % (h_lab, j_lab, win))
         rows.append((stamp, max(h_m, j_m), html_rel, json_rel,
                      os.path.getsize(html), os.path.getsize(doc), src, note))
     rows.sort(key=lambda r: (-r[0], -r[1], r[2]))
@@ -403,7 +409,7 @@ PAIR_LINE_RE = re.compile(
     r'^preview/\S+\.html \(\d+B\) \+ preview/\S+\.json \(\d+B\) '
     r'\[(\d{4}-\d{2}-\d{2}) (commit|mtime)\]'
     r'(?: \(halves differ: html \[\d{4}-\d{2}-\d{2} (?:commit|mtime)\] '
-    r'\+ json \[\d{4}-\d{2}-\d{2} (?:commit|mtime)\]\))?$')
+    r'\+ json \[\d{4}-\d{2}-\d{2} (?:commit|mtime)\]; newer=(?:html|json)\))?$')
 
 
 def pair_date(mtime):

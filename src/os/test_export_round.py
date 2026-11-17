@@ -1109,6 +1109,57 @@ def main():
            'fails=%s' % mod.check(wd)[:2])
         write(face_d, json.dumps(built_d, ensure_ascii=False, indent=2) + '\n')
 
+        # ---- AC-EXPD13..AC-EXPD15 (R2900 pin): the note names WHICH half won ----
+        # R2899 made a split pair speak, but two halves that share a DATE and
+        # differ only in CLOCK render as the same date twice, so the bracket
+        # could describe either half and only a character diff told them apart.
+        wn = build_pair_world([('split-face', 0)], tick=9091)
+        worlds.append(wn)
+        sn = json.loads(read(os.path.join(wn, 'src', 'os', 'state.json')))
+        h_n = os.path.join(wn, 'preview', 'split-face.html')
+        j_n = os.path.join(wn, 'preview', 'split-face.json')
+        t_n = 1767225600
+        os.utime(h_n, (t_n, t_n))
+        os.utime(j_n, (t_n + 86400, t_n + 86400))
+        m_n = mod.PAIR_LINE_RE.match(mod.fmt_pair(mod._pairs(wn)[0]))
+        line_n = mod.fmt_pair(mod._pairs(wn)[0])
+        ok('AC-EXPD13 a pair whose JSON half is newer names json',
+           bool(m_n) and '; newer=json' in line_n, line_n[-50:])
+        os.utime(h_n, (t_n + 172800, t_n + 172800))
+        line_n2 = mod.fmt_pair(mod._pairs(wn)[0])
+        m_n2 = mod.PAIR_LINE_RE.match(line_n2)
+        ok('AC-EXPD13 the MIRRORED pair names html',
+           '; newer=html' in line_n2, line_n2[-50:])
+        face_nw = os.path.join(wn, 'docs', 'status-export.json')
+        built_nw, _ = mod.payload(wn, sn, 'TN2')
+        write(face_nw, json.dumps(built_nw, ensure_ascii=False, indent=2) + '\n')
+        ok('AC-EXPD14 the line carrying a newer tag grades clean',
+           mod.check(wn) == [], 'fails=%s' % mod.check(wn)[:2])
+        stripped_nw = json.loads(json.dumps(built_nw))
+        stripped_nw['ceo_face']['latest_artifact'] = re.sub(
+            r'; newer=(?:html|json)',
+            '', built_nw['ceo_face']['latest_artifact'])
+        write(face_nw, json.dumps(stripped_nw, ensure_ascii=False, indent=2)
+              + '\n')
+        ok('AC-EXPD14 stripping the newer tag reddens --check',
+           any('AC-EXPW1' in f for f in mod.check(wn)),
+           'fails=%s' % mod.check(wn)[:2])
+        wrong_nw = json.loads(json.dumps(built_nw))
+        wrong_nw['ceo_face']['latest_artifact'] = built_nw['ceo_face'][
+            'latest_artifact'].replace('; newer=html', '; newer=json')
+        write(face_nw, json.dumps(wrong_nw, ensure_ascii=False, indent=2) + '\n')
+        ok('AC-EXPD14 claiming the WRONG half reddens too',
+           any('AC-EXPW1' in f for f in mod.check(wn)),
+           'fails=%s' % mod.check(wn)[:2])
+        write(face_nw, json.dumps(built_nw, ensure_ascii=False, indent=2) + '\n')
+        ok('AC-EXPD15 an agreeing pair publishes neither note nor newer tag',
+           'halves differ' not in line_a and 'newer=' not in line_a,
+           line_a[-40:])
+        ok('AC-EXPD15 groups on a noted line are still date and clock',
+           bool(m_n2) and m_n2.group(1) == mod.pair_date(float(t_n + 172800))
+           and m_n2.group(2) == 'mtime',
+           'groups=%s' % repr(m_n2.groups() if m_n2 else None))
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')
@@ -1151,7 +1202,7 @@ def main():
             declared.append(int(found.group(1)))
     will_print = crit_set(CHECKS + ['AC-EXPE4-registry-units'])
     ok('AC-EXPE4-registry-units',
-       declared == [len(will_print)] and len(will_print) == 36,
+       declared == [len(will_print)] and len(will_print) == 39,
        'declared=%s printed=%d' % (declared, len(will_print)))
 
     total = len(CHECKS)
