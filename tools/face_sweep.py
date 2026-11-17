@@ -36,7 +36,13 @@ OUT_JSON = os.path.join(ROOT, "preview", "face-sweep.json")
 SCHEMA = "face-sweep-v1"
 
 # id, label, driver, html, json.  The driver is invoked as: python <driver> --check
+# R2903: the row order is a READING order, not a shelf order. The money proof leads because
+# it is the only row whose failure is a revenue fact rather than housekeeping; AC-FSW13
+# grades the declared order against the landed rows so a later append cannot bury it again.
 FACES = [
+    ("first-yuan-chain", "first-yuan chain / one purchase, three modules",
+     "tools/first_yuan_chain.py",
+     "preview/first-yuan-chain.html", "preview/first-yuan-chain.json"),
     ("six-gate-live", "\u516d\u95e8\u5b9e\u51b5 / six gates live",
      "tools/platform_live_report.py",
      "preview/platform-live-report.html", "preview/platform-live-report.json"),
@@ -58,16 +64,6 @@ FACES = [
     ("ledger-business", "\u4ee3\u5e01\u8d26\u672c\u9762 / P-47 \u7b2c 2 \u9879",
      "tools/ledger_business_report.py",
      "preview/ledger-business-report.html", "preview/ledger-business-report.json"),
-    # R2902: the money proof was missing from the board. Every other row proves a shelf
-    # exists; this one proves a single purchase crosses pay -> member -> ledger and that
-    # the money invariant holds, which is the only row a buyer or an investor would ask
-    # for first. It is DATA on the board, not a new law: AC-FSW2 keeps the row count equal
-    # to this table, AC-FSW7 quotes its verdict, AC-FSW9 forbids it authoring its own
-    # evidence under --check, and AC-FSW10 reddens the moment its pair is re-rendered
-    # after a sweep instead of before it.
-    ("first-yuan-chain", "first-yuan chain / one purchase, three modules",
-     "tools/first_yuan_chain.py",
-     "preview/first-yuan-chain.html", "preview/first-yuan-chain.json"),
     ("entry-index", "\u5165\u53e3\u9875\u5b9e\u7269\u53f0\u8d26 / index",
      "tools/deliverable_index.py",
      "preview/index.html", "preview/deliverable-index.json"),
@@ -79,6 +75,39 @@ FACES = [
 EXCLUDED_NOTE = ("API \u5e02\u573a\u9762\u4e0d\u5728\u672c\u677f\u5b9e\u6d4b\u9762\u5185\uff1a"
                  "src/sandbox/ledger/apimarket_report.py \u65e0\u53ea\u8bfb --check\uff0c"
                  "\u5f3a\u884c\u5165\u677f\u53ea\u80fd\u5f15\u7528\u58f0\u660e\u3002")
+
+# R2903: what a FAIL of each row costs. A board of green ticks answers "is it green" and
+# leaves "does a red row cost money or is it housekeeping" to the reader's guess, which is
+# the question a CEO actually opens this page to answer. One line per row, stated beside
+# the verdict, is DATA derived from nothing - AC-FSW12 refuses a blank entry rather than
+# letting an empty cell read as "no consequence".
+MEANING = {
+    "first-yuan-chain": "\u4e00\u7b14\u4ed8\u6b3e\u8de8\u4e0d\u8fc7\u652f\u4ed8\u3001\u4f1a\u5458\u3001\u8d26\u672c\u4e09\u6bb5\uff0c\u6536\u5165\u4e3a\u96f6\u3002",
+    "payment-gate": "19.9 \u5b9a\u4ef7\u9762\u4e0e\u5546\u6237\u53f7\u63a5\u7ebf\u4e0d\u53ef\u7528\uff0c\u6536\u4e0d\u5230\u7b2c\u4e00\u7b14\u94b1\u3002",
+    "membership": "\u6708\u5361\u6743\u76ca\u4e0d\u53ef\u5151\u73b0\uff0c\u590d\u8d2d\u4e3a\u96f6\u3002",
+    "ledger-business": "\u4ee3\u5e01\u4e24\u5f0f\u8d26\u672c\u5bf9\u4e0d\u4e0a\uff0c\u6536\u5165\u4e0d\u53ef\u5ba1\u8ba1\u3002",
+    "ugc-gate": "UGC \u5b89\u5168\u95f8\u672a\u63a5\u901a\uff0c\u5f00\u95e8\u5373\u4e0b\u67b6\uff0c\u6536\u5165\u5f52\u96f6\u3002",
+    "lobby-ws": "\u5927\u5385\u8fde\u4e0d\u4e0a\uff0c\u7528\u6237\u8fdb\u4e0d\u6765\uff0c\u4efb\u4f55\u6536\u5165\u90fd\u65e0\u4ece\u53d1\u751f\u3002",
+    "city-face": "\u57ce\u5e02\u89c2\u6d4b\u9762\u8bfb\u4e0d\u51fa\u771f\u5b9e\u72b6\u6001\uff0c\u8fd0\u8425\u5224\u65ad\u5931\u53bb\u4f9d\u636e\u3002",
+    "six-gate-live": "\u516d\u95e8\u5b9e\u51b5\u4e0d\u53ef\u4fe1\u65f6\uff0c\u4e0a\u6e38\u6570\u636e\u5df2\u504f\u79bb\uff0c\u6240\u6709\u9762\u8bfb\u6570\u90fd\u8981\u91cd\u770b\u3002",
+    "entry-index": "\u4ea4\u4ed8\u76ee\u5f55\u4e0e\u76d8\u4e0a\u4e0d\u4e00\u81f4\uff0c\u8bfb\u8005\u627e\u4e0d\u5230\u5b9e\u7269\u3002",
+}
+MONEY_ID = "first-yuan-chain"
+# A row this table has not declared is published as UNDECLARED rather than blanked or
+# given an invented consequence: a blank cell reads as "no consequence", and a made-up
+# sentence is a claim nobody measured. AC-FSW12 still refuses the undeclared marker on any
+# row the LIVE table owns, so the fallback cannot become a quiet bypass.
+UNDECLARED = "\u672c\u884c\u672a\u58f0\u660e\u5bf9\u6536\u5165\u7684\u5f71\u54cd\u3002"
+ORDER_LINE = "\u9605\u8bfb\u987a\u5e8f\uff1a\u4ece\u4e0a\u5230\u4e0b\u3002\u7b2c\u4e00\u884c\u662f\u94b1\u7684\u8bc1\u636e\u3002"
+COL_MEANING = "\u8fd9\u4e00\u884c FAIL \u5bf9\u6536\u5165\u610f\u5473\u7740\u4ec0\u4e48"
+
+# One declaration of what this gate claims to enforce; the printed total is len(CRITERIA),
+# never a typed number. R2901 deleted a hand-moved count literal for the same reason: a
+# count that lives in two places drifts, and a drift the gate prints is a gate lying about
+# its own coverage.
+CRITERIA = ["AC-FSW0", "AC-FSW1", "AC-FSW2", "AC-FSW3", "AC-FSW3b", "AC-FSW4",
+            "AC-FSW5", "AC-FSW6", "AC-FSW7", "AC-FSW8", "AC-FSW9", "AC-FSW10",
+            "AC-FSW11", "AC-FSW12", "AC-FSW13"]
 
 # AC-FSW9: the per-face byte counts are a snapshot of the sweep that wrote them, never a
 # live equality claim. Any face re-rendered afterwards changes its own bytes, so asserting
@@ -120,14 +149,22 @@ def _read_args(argv):
     return opts
 
 
+FACE_KEYS = ("id", "label", "driver", "html", "json", "meaning")
+
+
 def load_faces(path):
     if not path:
-        return [dict(zip(("id", "label", "driver", "html", "json"), row)) for row in FACES]
+        return [dict(zip(FACE_KEYS, row)) for row in FACES]
     with open(path, "r", encoding="utf-8") as fh:
         rows = json.load(fh)
     out = []
     for r in rows:
-        out.append({k: r[k] for k in ("id", "label", "driver", "html", "json")})
+        d = {k: r[k] for k in FACE_KEYS[:5]}
+        # R2903: the consequence sentence travels with the row. A fixture may declare it
+        # inline; a row that declares none inherits the shipped table, and only a row in
+        # neither place falls back to the marker check() refuses.
+        d["meaning"] = r.get("meaning") or MEANING.get(r["id"], "")
+        out.append(d)
     return out
 
 
@@ -147,6 +184,7 @@ def run_face(face, timeout):
         "driver": face["driver"],
         "html": face["html"],
         "json": face["json"],
+        "meaning": face.get("meaning") or MEANING.get(face["id"], UNDECLARED),
     }
     if not os.path.exists(driver):
         row.update({"exit": 127, "verdict": "MISSING-DRIVER", "duration_s": 0.0,
@@ -235,6 +273,7 @@ def build_json(rows, sizes, stamp, swept_ns):
             "verdict": "PASS" if all(_passing(r) for r in rows) else "FAIL",
         },
         "fingerprint": fingerprint(rows),
+        "reading_order": [r["id"] for r in rows],
         "faces": rows,
         "notes": [
             "Every row is a subprocess execution of that face's own read-only --check.",
@@ -272,16 +311,19 @@ def build_html(rows, sizes, stamp):
     cls = "ok" if allpass else "bad"
     body = []
     body.append('<div class="wrap">')
-    body.append("<h1>\u516b\u9762\u5b9e\u51b5\u677f / face sweep board</h1>")
+    body.append("<h1>%d \u9762\u5b9e\u51b5\u677f / face sweep board</h1>" % total)
     body.append('<div class="sub">%s \u2014 \u4e00\u6761\u547d\u4ee4\u628a\u6bcf\u9762\u9875\u81ea\u5df1\u7684\u95f8\u5b9e\u8dd1\u4e00\u904d\uff0c'
                 '\u7ed3\u679c\u6c47\u5230\u8fd9\u4e00\u9875\u3002' % stamp)
     body.append("</div>")
+    body.append('<div class="sub">%s (%s)</div>'
+                % (_esc(ORDER_LINE), _esc(rows[0]["id"] if rows else "-")))
     body.append('<div class="big %s">%d / %d</div>' % (cls, passing, total))
     body.append('<div class="sub">VERDICT <span class="tag %s">%s</span> \u00b7 fingerprint <code>%s</code>'
                 ' \u00b7 \u672c\u9875 %d \u5b57\u8282 \u00b7 json %d \u5b57\u8282</div>'
                 % (cls, "PASS" if allpass else "FAIL", fingerprint(rows), sizes["html"], sizes["json"]))
     body.append("<table><thead><tr><th>\u9762</th><th>\u95f8\u7ed3\u679c</th><th>\u9000\u51fa\u7801</th>"
-                "<th>\u8017\u65f6</th><th>\u4ea7\u7269\u5b57\u8282</th></tr></thead><tbody>")
+                "<th>\u8017\u65f6</th><th>\u4ea7\u7269\u5b57\u8282</th><th>%s</th>"
+                "</tr></thead><tbody>" % _esc(COL_MEANING))
     for r in rows:
         ok = _passing(r)
         tag = "ok" if ok else "bad"
@@ -290,27 +332,29 @@ def build_html(rows, sizes, stamp):
         body.append(
             '<tr><td><a href="%s">%s</a><br><span style="color:#7b8595;font-size:12px">%s</span>%s</td>'
             '<td><span class="tag %s">%s</span></td><td class="n">%d</td><td class="n">%.2fs</td>'
-            '<td class="n">%s / %s</td></tr>'
+            '<td class="n">%s / %s</td><td>%s</td></tr>'
             % (r["html"], r["label"], r["driver"],
                (' <span class="tag bad">MUTATED %s</span>' % ",".join(r.get("mutated_files") or []))
                if r.get("mutated") else "",
                tag, _esc(r["verdict"]), r["exit"],
-               r["duration_s"], hb, jb)
+               r["duration_s"], hb, jb, _esc(r.get("meaning") or UNDECLARED))
         )
     body.append("</tbody></table>")
     body.append('<div class="note">')
-    body.append('<div><code>python tools/face_sweep.py</code> \u91cd\u6d4b\u5168\u90e8\u516b\u9762\uff1b'
+    body.append('<div><code>python tools/face_sweep.py</code> \u91cd\u6d4b\u5168\u90e8 %d \u9762\uff1b'
                 '<code>python tools/face_sweep.py --check</code> \u53ea\u6838\u5bf9\u672c\u9875\u81ea\u8eab'
-                '\u4e0e\u76d8\u4e0a\u4e00\u81f4\u3002</div>')
+                '\u4e0e\u76d8\u4e0a\u4e00\u81f4\u3002</div>' % total)
     for line in STANDING:
         body.append("<div>%s</div>" % _esc(line))
     body.append("<div>%s</div>" % _esc(EXCLUDED_NOTE))
     body.append("<div>%s</div>" % _esc(SNAPSHOT_NOTE))
     body.append("</div>")
     body.append("</div>")
+    title = "%d \u9762\u5b9e\u51b5\u677f / face sweep board" % total
     return ("<!doctype html>\n<html lang=\"zh-CN\"><head><meta charset=\"utf-8\">"
-            "<title>\u516b\u9762\u5b9e\u51b5\u677f / face sweep board</title>"
-            "<style>%s</style></head><body>\n%s\n</body></html>\n" % (CSS, "\n".join(body)))
+            "<title>%s</title>"
+            "<style>%s</style></head><body>\n%s\n</body></html>\n"
+            % (title, CSS, "\n".join(body)))
 
 
 def _esc(s):
@@ -456,7 +500,31 @@ def check():
                     fails.append("AC-FSW10 E_FACE_STALE %s %s written %dns after the sweep"
                                  % (r.get("id"), r.get(key), mtime_ns - swept_ns))
 
-    total = 11
+    # AC-FSW12 (R2903) every row must say what its FAIL costs, and the page must quote it.
+    # A board of PASS/FAIL alone leaves the reader to guess whether a red row is a revenue
+    # fact or housekeeping - the question a CEO opens the page to answer. A blank cell is
+    # refused (it reads as "no consequence") AND so is the undeclared marker on any row the
+    # LIVE table owns, so the fallback cannot become a quiet bypass.
+    for r in rows:
+        meaning = str(r.get("meaning") or "").strip()
+        if not meaning or meaning == UNDECLARED:
+            fails.append("AC-FSW12 %s carries no declared consequence" % r.get("id"))
+            continue
+        if _esc(meaning) not in html_text:
+            fails.append("AC-FSW12 %s meaning not on the page" % r.get("id"))
+
+    # AC-FSW13 (R2903) the row order is a READING order, declared in the document and
+    # equal to the rows it landed, with the money proof first: a page and its own data
+    # cannot disagree about which row a reader should trust first.
+    order = doc.get("reading_order")
+    if order != ids:
+        fails.append("AC-FSW13 reading_order %r != rows %r" % (order, ids))
+    # Scoped to the table this run loaded: a fixture world that owns no money row cannot be
+    # asked to lead with one, so the rule bites exactly where the shipped table does.
+    if MONEY_ID in [f[0] for f in FACES] and (not ids or ids[0] != MONEY_ID):
+        fails.append("AC-FSW13 E_MONEY_NOT_FIRST first=%r" % (ids[0] if ids else None,))
+
+    total = len(CRITERIA)
     for f in fails:
         print("FAIL " + f)
     print("VERDICT %s %d/%d" % ("PASS" if not fails else "FAIL", total - len(fails), total))

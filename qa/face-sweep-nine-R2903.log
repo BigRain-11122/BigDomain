@@ -1,0 +1,12 @@
+﻿face first-yuan-chain exit=0   verdict=VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=3715B read_only=True (0.38s)
+face six-gate-live    exit=0   verdict=VERDICT PASS 8/8 fingerprint=44ec8b5a60f4d1f3 landed=44ec8b5a60f4d1f3 sizes={'html': 6889, 'json': 5292} (5.87s)
+face lobby-ws         exit=0   verdict=VERDICT PASS 8/8 fingerprint=fbdb7f517fb06222 landed=fbdb7f517fb06222 sizes={'html': 5952, 'json': 3070} (1.51s)
+face city-face        exit=0   verdict=VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f (0.88s)
+face ugc-gate         exit=0   verdict=VERDICT PASS checks=9/9 failed=(none) (0.87s)
+face payment-gate     exit=0   verdict=value-domain: PASS products=5 tiers=0 (0.29s)
+face membership       exit=0   verdict=value-domain: PASS products=0 tiers=4 (0.33s)
+face ledger-business  exit=0   verdict=LEDGER BUSINESS CHECK PASS fails=0 (0.14s)
+face entry-index      exit=0   verdict=VERDICT PASS 15/15 fingerprint=f71676dfe551605c (0.16s)
+landed C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/preview/face-sweep.html 6447B / C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/preview/face-sweep.json 6102B
+VERDICT PASS 9/9 fingerprint=b8414244f481ba8a
+

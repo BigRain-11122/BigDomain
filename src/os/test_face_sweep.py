@@ -1,7 +1,10 @@
-"""Battery suite for tools/face_sweep.py - criteria AC-FSWB1..AC-FSWB10.
+"""Battery suite for tools/face_sweep.py - criteria AC-FSWB1..AC-FSWB13.
 
 AC-FSWB1..AC-FSWB10 were pinned in src/os/backlog.md at R2819 BEFORE this suite
-existed. The reason is measured, not argued: the tool carries eleven criteria in
+existed; AC-FSWB11..AC-FSWB13 were pinned at R2903 BEFORE their legs were written.
+R2903's three legs grade the reading order (money proof first), the per-row
+consequence sentence, and the fact that the rule bites only on the table that owns
+the money row. The reason is measured, not argued: the tool carries eleven criteria in
 AC_FSW (AC-FSW0..AC-FSW9 printed by check(), plus AC-FSW10/AC-FSW11 added this
 window) and ONE battery row driving EIGHT CEO-openable faces, and a full-text
 search of the shipped registry found ZERO AC-FSW* tokens in any row - so the only
@@ -102,11 +105,14 @@ def world_setup(tool):
     write(os.path.join(tools, 'stub-fail.py'), FAIL_DRIVER)
     faces = [
         dict(id='stub-a', label='stub a', driver='tools/stub-pass.py',
-             html='preview/stub-a.html', json='preview/stub-a.json'),
+             html='preview/stub-a.html', json='preview/stub-a.json',
+             meaning='a red stub-a costs nothing, it is a fixture'),
         dict(id='stub-b', label='stub b', driver='tools/stub-pass.py',
-             html='preview/stub-b.html', json='preview/stub-b.json'),
+             html='preview/stub-b.html', json='preview/stub-b.json',
+             meaning='a red stub-b costs nothing, it is a fixture'),
         dict(id='stub-c', label='stub c', driver='tools/stub-pass.py',
-             html='preview/stub-c.html', json='preview/stub-c.json'),
+             html='preview/stub-c.html', json='preview/stub-c.json',
+             meaning='a red stub-c costs nothing, it is a fixture'),
     ]
     for f in faces:
         write(os.path.join(world, f['html']), '<html>%s</html>\n' % f['id'])
@@ -114,7 +120,7 @@ def world_setup(tool):
     tool.ROOT = world
     tool.OUT_HTML = os.path.join(world, 'preview', 'face-sweep.html')
     tool.OUT_JSON = os.path.join(world, 'preview', 'face-sweep.json')
-    tool.FACES = [(f['id'], f['label'], f['driver'], f['html'], f['json']) for f in faces]
+    tool.FACES = [(f['id'], f['label'], f['driver'], f['html'], f['json'], f.get('meaning', '')) for f in faces]
     return world, prev, tools, faces
 
 
@@ -143,8 +149,12 @@ def main():
            isinstance(swept_ns, int) and all(m <= swept_ns for _i, _k, m in mtimes),
            'swept_ns=%r newest_delta=%r'
            % (swept_ns, max(m for _i, _k, m in mtimes) - swept_ns if isinstance(swept_ns, int) else None))
+        # R2903: the expected total is DERIVED from the tool's one declared criteria list,
+        # never typed here. A second copy of the number would move independently of the
+        # first, which is the drift R2901 deleted a literal to stop.
+        expect = 'VERDICT PASS %d/%d' % (len(tool.CRITERIA), len(tool.CRITERIA))
         rc, out = run_quiet(lambda: tool.check())
-        ok('AC-FSWB3c a fresh board reads PASS', rc == 0 and 'VERDICT PASS 11/11' in out,
+        ok('AC-FSWB3c a fresh board reads PASS', rc == 0 and expect in out,
            out.strip().splitlines()[-1] if out.strip() else 'no output')
 
         # ---- AC-FSWB1 the landed board is self-consistent, and the criteria CARRY weight:
@@ -219,7 +229,8 @@ def main():
         mut_faces = [dict(faces[0], driver='tools/stub-mutate.py'),
                      dict(faces[1]),
                      dict(faces[2])]
-        tool.FACES = [(f['id'], f['label'], f['driver'], f['html'], f['json']) for f in mut_faces]
+        tool.FACES = [(f['id'], f['label'], f['driver'], f['html'], f['json'], f.get('meaning', ''))
+                      for f in mut_faces]
         rc, out = run_quiet(lambda: tool.sweep(face_opts()))
         doc_mut = json.load(io.open(tool.OUT_JSON, encoding='utf-8'))
         row_m = [r for r in doc_mut['faces'] if r['id'] == 'stub-a'][0]
@@ -231,7 +242,7 @@ def main():
            rc == 2 and 'AC-FSW9' in out, 'rc=%d' % rc)
 
         # ---- AC-FSWB8 the sweep is read-only toward every face artifact it measures.
-        tool.FACES = [(f['id'], f['label'], f['driver'], f['html'], f['json']) for f in faces]
+        tool.FACES = [(f['id'], f['label'], f['driver'], f['html'], f['json'], f.get('meaning', '')) for f in faces]
         write(os.path.join(world, faces[0]['html']), '<html>stub-a</html>\n')
         pre_pair = snapshot(prev, ('.html', '.json'))
         pre_faces = {f['id']: (os.stat(os.path.join(world, f['html'])).st_mtime_ns,
@@ -269,9 +280,69 @@ def main():
         text = io.open(REGISTRY, encoding='utf-8').read()
         hits = [ln for ln in text.splitlines() if 'test_face_sweep.py' in ln]
         declared = re.findall(r'test_face_sweep\.py"\)\s*,\s*(\d+)', text)
-        ok('AC-FSWB10 the battery registry declares exactly one row for this suite, ten',
-           declared == ['10'] and len(hits) == 1,
+        ok('AC-FSWB10 the battery registry declares exactly one row for this suite, thirteen',
+           declared == ['13'] and len(hits) == 1,
            'rows=%s hits=%d' % (declared, len(hits)))
+
+        # ---- AC-FSWB11 (R2903) every row must say what its FAIL costs, and the page must
+        # quote it. A blank consequence reads as "no consequence", so it is REFUSED rather
+        # than rendered as an empty cell. Both directions on one world: the lawful board is
+        # green, and the same board with one row's sentence deleted reddens naming that row.
+        tool.FACES = [(f['id'], f['label'], f['driver'], f['html'], f['json'], f['meaning'])
+                      for f in faces]
+        rc, out = run_quiet(lambda: tool.sweep(face_opts()))
+        doc11 = json.load(io.open(tool.OUT_JSON, encoding='utf-8'))
+        page11 = io.open(tool.OUT_HTML, encoding='utf-8').read()
+        ok('AC-FSWB11 every row carries its consequence and the page quotes it',
+           rc == 0 and all(r.get('meaning') and tool._esc(r['meaning']) in page11
+                           for r in doc11['faces']) and tool.COL_MEANING in page11,
+           'rows=%d' % len(doc11['faces']))
+        blanked = json.loads(json.dumps(doc11))
+        blanked['faces'][0]['meaning'] = ''
+        io.open(tool.OUT_JSON, 'w', encoding='utf-8', newline='\n').write(
+            json.dumps(blanked, ensure_ascii=False, indent=1) + '\n')
+        rc, out = run_quiet(lambda: tool.check())
+        ok('AC-FSWB11b a row with no declared consequence reddens and is named',
+           rc == 2 and ('AC-FSW12 %s' % doc11['faces'][0]['id']) in out, 'rc=%d' % rc)
+
+        # ---- AC-FSWB12 (R2903) the row order is a READING order declared in the document
+        # and equal to the rows it landed; reversing the rows makes page and data disagree
+        # about which row a reader should trust first, so it must redden.
+        rc, out = run_quiet(lambda: tool.sweep(face_opts()))
+        doc12 = json.load(io.open(tool.OUT_JSON, encoding='utf-8'))
+        ok('AC-FSWB12 the landed order equals the rows it landed',
+           doc12.get('reading_order') == [r['id'] for r in doc12['faces']],
+           'order=%r' % (doc12.get('reading_order'),))
+        shuffled = json.loads(json.dumps(doc12))
+        shuffled['faces'] = list(reversed(shuffled['faces']))
+        io.open(tool.OUT_JSON, 'w', encoding='utf-8', newline='\n').write(
+            json.dumps(shuffled, ensure_ascii=False, indent=1) + '\n')
+        rc, out = run_quiet(lambda: tool.check())
+        ok('AC-FSWB12b a reversed document reddens on AC-FSW13', rc == 2 and 'AC-FSW13' in out,
+           'rc=%d' % rc)
+
+        # ---- AC-FSWB13 (R2903) the money-first rule BITES where it applies and cannot bite
+        # where it does not: a table that owns the money row must land it first (green), and
+        # the same table with the money row moved last is refused by name. The rule is scoped
+        # to the loaded table, so a fixture world owning no money row is not forced.
+        write(os.path.join(world, 'preview', 'money.html'), '<html>money</html>\n')
+        write(os.path.join(world, 'preview', 'money.json'), '{"id": "money"}\n')
+        money_row = (tool.MONEY_ID, 'money proof stub', 'tools/stub-pass.py',
+                     'preview/money.html', 'preview/money.json',
+                     'a red money row is zero revenue')
+        rest = [(f['id'], f['label'], f['driver'], f['html'], f['json'], f['meaning'])
+                for f in faces]
+        tool.FACES = [money_row] + rest
+        rc, out = run_quiet(lambda: tool.sweep(face_opts()))
+        rc2, out2 = run_quiet(lambda: tool.check())
+        ok('AC-FSWB13 a table that owns the money row lands it first and reads PASS',
+           rc == 0 and rc2 == 0,
+           'sweep=%d check=%d' % (rc, rc2))
+        tool.FACES = rest + [money_row]
+        rc, out = run_quiet(lambda: tool.sweep(face_opts()))
+        rc2, out2 = run_quiet(lambda: tool.check())
+        ok('AC-FSWB13b the same table with the money row last is refused E_MONEY_NOT_FIRST',
+           rc2 == 2 and 'E_MONEY_NOT_FIRST' in out2, 'rc=%d' % rc2)
     finally:
         shutil.rmtree(world, ignore_errors=True)
 

@@ -6985,8 +6985,12 @@ SUITES = [
     # weight. (AC-FSWB1..AC-FSWB10 pinned in src/os/backlog.md at R2819 BEFORE the
     # suite; the pre-registration run read SUITE FAIL 18/19 with exactly AC-FSWB10
     # red, which is the proof this registry criterion carries weight.)
+    # R2903 grew this row from ten criteria to thirteen: the money proof must lead the
+    # board (its FAIL is a revenue fact), every row must state what its FAIL costs, and
+    # the order law is scoped to the table that owns the money row so a fixture world is
+    # not forced. The three new legs carry their own red controls.
     ("os-face-sweep",
-     os.path.join("..", "os", "test_face_sweep.py"), 10),
+     os.path.join("..", "os", "test_face_sweep.py"), 13),
     # R2782 shipped tools/money_path_demo.py with the same hole - the 19.9 money
     # path page was guarded only by its own --check, which cannot catch a page
     # whose derivation changed under it.
