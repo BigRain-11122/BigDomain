@@ -15,6 +15,17 @@ This module derives all three lines from live files at write time:
 Nothing about a particular round is typed in, so the face cannot describe a
 past window without the files disagreeing.
 
+R2895: the `latest` slot only ever looks at `preview/`, so a round whose product
+is a tool plus `qa/` evidence left the CEO face naming an OLDER preview - the
+face was honest about the newest product page and silent about the newest thing
+the round actually produced. The product slot is NOT redefined (a `.log` is not
+a product page); instead a second derived line `latest_evidence` names the newest
+top-level `qa/*.log` with its bytes and date, and `latest_artifact_note` appears
+IFF that evidence is strictly newer than the newest non-board pair, naming it
+verbatim. Both lines are derived by the same reader that grades them, so the
+face cannot disagree with the disk without `--check` saying so. AC-EXPE1..
+AC-EXPE4 were pinned in src/os/backlog.md at R2895 BEFORE this change.
+
 Criteria AC-EXPW1..AC-EXPW6 were pinned in src/os/backlog.md at R2780 BEFORE
 this file existed.
 
@@ -160,6 +171,62 @@ def newest_pair(repo):
     return rows[0][1:]
 
 
+# R2895 AC-EXPE1: evidence is a top-level `qa/*.log` only. Recursing would make
+# the line name a shard log nested under a driver's own output directory, and a
+# `.json`/`.html` next to it is a fixture, not a receipt of a measured run.
+EVIDENCE_DIR = 'qa'
+EVIDENCE_EXT = '.log'
+NO_EVIDENCE = '(no qa evidence on disk)'
+# The line this module writes, read back by --check so a published name can be
+# verified against the file instead of trusted.
+EVIDENCE_LINE_RE = re.compile(
+    r'^(qa/[^\s]+\.log) \((\d+)B, (\d{4}-\d{2}-\d{2})\)$')
+
+
+def _evidence_rows(repo):
+    """Every top-level qa/*.log, newest first: (mtime, rel, bytes)."""
+    qa = os.path.join(repo, EVIDENCE_DIR)
+    rows = []
+    if not os.path.isdir(qa):
+        return rows
+    for name in os.listdir(qa):
+        if not name.endswith(EVIDENCE_EXT):
+            continue
+        path = os.path.join(qa, name)
+        if not os.path.isfile(path):
+            continue
+        rows.append((os.path.getmtime(path), EVIDENCE_DIR + '/' + name,
+                     os.path.getsize(path)))
+    rows.sort(key=lambda r: (-r[0], r[1]))
+    return rows
+
+
+def newest_evidence(repo):
+    """The newest top-level qa/*.log as (rel, bytes, date, mtime), or None.
+
+    The date is rendered from the file's OWN mtime rather than from a clock, so
+    a private world with fixed stamps reads the same line every run.
+    """
+    rows = _evidence_rows(repo)
+    if not rows:
+        return None
+    mtime, rel, size = rows[0]
+    stamp = datetime.datetime.fromtimestamp(mtime, TZ).strftime('%Y-%m-%d')
+    return (rel, size, stamp, mtime)
+
+
+def newest_product_mtime(repo):
+    """The birth stamp of the newest NON-board preview pair, or None."""
+    for row in _pairs(repo):
+        if os.path.basename(row[1])[:-5] not in BOARD_PAGES:
+            return row[0]
+    return None
+
+
+def _fmt_evidence(ev):
+    return '%s (%dB, %s)' % (ev[0], ev[1], ev[2])
+
+
 def newest_artifact(repo):
     """The newest pair that is NOT a meta board page, plus what was skipped.
 
@@ -227,6 +294,16 @@ def derive(repo, state, stamp):
         nxt = nxt[:SHORT].rstrip() + '...'
     if not nxt:
         nxt = 'see the top open row of src/os/backlog.md'
+    # AC-EXPE1/AC-EXPE2: the evidence line stands on its own, and the note says
+    # out loud which of the two is newer. The product slot keeps its own law -
+    # a log is never promoted into `latest` (AC-EXPE4).
+    ev = newest_evidence(repo)
+    evidence = _fmt_evidence(ev) if ev else NO_EVIDENCE
+    prod_m = newest_product_mtime(repo)
+    note = ''
+    if ev and (prod_m is None or ev[3] > prod_m):
+        note = ('newest artifact this window is EVIDENCE, not a product page: '
+                + _fmt_evidence(ev))
     due = (datetime.datetime.now(TZ) + datetime.timedelta(hours=48)) \
         .replace(microsecond=0).isoformat()
     return {
@@ -238,6 +315,8 @@ def derive(repo, state, stamp):
         'tick': str(state.get('tick')),
         'board_skipped': skipped,
         'newest_is_board': newest_is_board,
+        'evidence': evidence,
+        'note': note,
     }
 
 
@@ -314,6 +393,12 @@ def payload(repo, state, stamp):
     ceo['newest_pair_on_disk_is_board'] = d['newest_is_board']
     ceo['next_milestone'] = d['next']
     ceo['next_milestone_due'] = d['next_due']
+    # AC-EXPE1/AC-EXPE2: both copies of the evidence line move together, for the
+    # same reason AC-SXF15 pins two copies of latest_artifact - one writer, one
+    # value, so a reader cannot find two opinions in one document.
+    ceo['latest_evidence'] = d['evidence']
+    ceo['latest_artifact_note'] = d['note']
+    data['latest_evidence'] = d['evidence']
     ceo['updated_at'] = stamp
     data['ceo_face'] = ceo
     # AC-EXPW3: the self_drive block is not a second derivation, it IS the
@@ -408,6 +493,9 @@ def write(repo, stamp):
           and back['ceo_face']['board_pages_skipped'] == d['board_skipped']
           and back['ceo_face']['newest_pair_on_disk_is_board']
           == d['newest_is_board']
+          and back['ceo_face'].get('latest_evidence') == d['evidence']
+          and back['ceo_face'].get('latest_artifact_note') == d['note']
+          and back.get('latest_evidence') == d['evidence']
           # R2834 measured: this used to read `back['export_ts'] == stamp`, which
           # compares TWO clocks. The grader that publishes the stamp takes its own
           # `now()` after this function's stamp exists, so a one-second boundary
@@ -452,6 +540,54 @@ def check(repo):
     if newest_is_board and not cur.get('board_pages_skipped'):
         fails.append('AC-EXPW9 newest pair on disk is a board page but the '
                      'skipped audit is empty')
+    # AC-EXPE1/AC-EXPE2: the evidence line and its note are graded against the
+    # file the line NAMES, not against "whatever is newest right now". Measured
+    # at R2895 under the runner: a battery leg writes its own qa/*.log while the
+    # suite runs, so a "must equal the newest on disk" law reddens every leg
+    # that produces evidence - the same shape as the R2890 stale-derived-value
+    # defect. The face is a SNAPSHOT at export_ts: what it may assert is that
+    # the file it names exists and that its bytes and date are true.
+    ev_all = _evidence_rows(repo)
+    named = str(cur.get('latest_evidence') or '')
+    ev_ref = None
+    if named == NO_EVIDENCE:
+        if ev_all:
+            fails.append('AC-EXPE1 the face states no qa evidence exists while '
+                         '%d qa/*.log file(s) are on disk' % len(ev_all))
+    else:
+        m = EVIDENCE_LINE_RE.match(named)
+        if not m:
+            fails.append('AC-EXPE1 latest_evidence is not in the derived line '
+                         'shape: %r' % named[:60])
+        else:
+            rel, size, date = m.group(1), int(m.group(2)), m.group(3)
+            path = os.path.join(repo, rel.replace('/', os.sep))
+            if not os.path.isfile(path):
+                fails.append('AC-EXPE1 latest_evidence names a file that is not '
+                             'on disk: %s' % rel)
+            else:
+                real_m = os.path.getmtime(path)
+                real_date = datetime.datetime.fromtimestamp(real_m, TZ) \
+                    .strftime('%Y-%m-%d')
+                real_size = os.path.getsize(path)
+                if real_size != size or real_date != date:
+                    fails.append('AC-EXPE1 latest_evidence lies about %s '
+                                 '(claims %dB/%s, disk %dB/%s)'
+                                 % (rel, size, date, real_size, real_date))
+                else:
+                    ev_ref = (rel, real_size, real_date, real_m)
+    prod_m = newest_product_mtime(repo)
+    want_note = bool(ev_ref and (prod_m is None or ev_ref[3] > prod_m))
+    have_note = str(cur.get('latest_artifact_note') or '').strip()
+    if want_note and not have_note:
+        fails.append('AC-EXPE2 evidence is newer than the product pair but no '
+                     'note is published')
+    if want_note and have_note and (ev_ref[0] not in have_note):
+        fails.append('AC-EXPE2 the note does not name the evidence file %r'
+                     % ev_ref[0])
+    if not want_note and have_note:
+        fails.append('AC-EXPE2 a note is published although no evidence file '
+                     'is newer than the product pair')
     if not re.match(r'^(?:\d{4}-\d{2}-\d{2}\s+)?R%s\b'
                     % state.get('tick'), str(cur.get('current') or '')):
         fails.append('AC-EXPW1 current does not start with the live tick R%s'

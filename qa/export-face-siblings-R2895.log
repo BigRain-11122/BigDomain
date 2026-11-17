@@ -1,0 +1,12 @@
+SIBLINGS R2895 - six suites that read docs/status-export.json, run through the battery runner after the evidence-line change
+WHY: the new derived lines live in the same document these suites grade, so the change had to be measured against them and not only against its own suite.
+os-status-export-fresh rc=0 pass=18 fail=0 crit=18 0.2s
+os-export-freshness rc=0 pass=6 fail=0 crit=6 1.1s
+os-export-consistency-queue-face rc=0 pass=15 fail=0 crit=6 0.5s
+os-status-export-writer-dialect-wire rc=0 pass=6 fail=0 crit=6 11.2s
+os-queue-floor-export-face rc=0 pass=6 fail=0 crit=6 0.3s
+os-export-driver-queue-face rc=0 pass=6 fail=0 crit=6 0.4s
+SUITE ALL 6 green, zero reds
+PRIMARY EVIDENCE for the changed suite: qa/export-evidence-line-R2895.log - SHARD row os-export-round rc=0 pass=62 fail=0 suite=PASS 62/62 crit=24
+REGISTRY: src/sandbox/suite_matrix.py regenerated 74741 bytes, --check byte-identical, 713 suites / 5450 criteria (was 5446; +4 exactly as pinned)
+NOTE: the two reds this round found were found by the runner arm, not by the direct run - see the state log R2895 disclosure line.

@@ -6853,8 +6853,11 @@ SUITES = [
     # R2878 added AC-EXPA1/AC-EXPA2: the argument guard is a criterion instead of
     # a hand measurement (renamed from the R2877 pin's AC-EXPW11/AC-EXPW12, which
     # were already taken). The row therefore declares twenty.
+    # R2895: twenty-four - AC-EXPE1..AC-EXPE4 pin the CEO face's evidence line
+    # and its note, and the suite now grades its own registry unit count so this
+    # number cannot drift from what is printed.
     ("os-export-round",
-     os.path.join("..", "os", "test_export_round.py"), 20),
+     os.path.join("..", "os", "test_export_round.py"), 24),
     # R2806: tools/payment_gate_report.py renders the face that decides whether
     # the 19.9 channel may be connected, and all 690 registered suites were
     # measured to mention ZERO of its AC-PAYG1..AC-PAYG8 tokens, so it was

@@ -1,6 +1,13 @@
-﻿"""Battery suite for src/os/export_round.py - twenty criteria: AC-EXPW1..AC-EXPW11
-plus AC-EXPW13 and AC-EXPW14 (AC-EXPW12 is a DECLARED numbering hole, see the
-R2823 paragraph below), AC-EXPG1..AC-EXPG5, and AC-EXPA1/AC-EXPA2.
+﻿"""Battery suite for src/os/export_round.py - twenty-four criteria:
+AC-EXPW1..AC-EXPW11 plus AC-EXPW13 and AC-EXPW14 (AC-EXPW12 is a DECLARED
+numbering hole, see the R2823 paragraph below), AC-EXPG1..AC-EXPG5,
+AC-EXPA1/AC-EXPA2, and AC-EXPE1..AC-EXPE4.
+
+R2895: AC-EXPE1..AC-EXPE4 pin the second derived CEO line (`latest_evidence`,
+the newest top-level qa/*.log) and the one-line note that says which of the
+evidence file and the product pair is newer. The product slot is NOT redefined -
+a log is not a product page - and AC-EXPE4 holds the pair law and the registry
+unit count in place while the new lines land.
 
 R2878: AC-EXPA1/AC-EXPA2 are the R2877-pinned argument guard, landed under a
 fresh prefix because that pin reused AC-EXPW11 (already printed here by the
@@ -104,6 +111,18 @@ def build_world(tick, drop_tick_row=False, dupe_tick_row=False):
             copy(os.path.join(prev, name), os.path.join(d, 'preview', name))
     write(os.path.join(d, 'preview', 'zz-late-face.html'), '<!DOCTYPE html>\n')
     write(os.path.join(d, 'preview', 'zz-late-face.json'), '{}\n')
+    # R2895 measured: copy() does not preserve mtimes, so every copied pair lands
+    # inside the same clock tick and the newest-pair sort fell through to the
+    # NAME - the runner read ugc-gate-report as newest while a direct run read
+    # zz-late-face. The fixture now stamps its late pair strictly above the
+    # copies instead of relying on write order.
+    prev_dir = os.path.join(d, 'preview')
+    newest = max(os.path.getmtime(os.path.join(prev_dir, n))
+                 for n in os.listdir(prev_dir))
+    late = newest + 10
+    for ext in ('.html', '.json'):
+        p = os.path.join(prev_dir, 'zz-late-face' + ext)
+        os.utime(p, (late, late))
     rows = [['1', 'a past row'], ['2', 'another past row']]
     if not drop_tick_row:
         rows.append([tick, label])
@@ -571,6 +590,100 @@ def main():
                'rc=%s,%s face_moved=%s' % (rc_typo, rc_root,
                                            state0 != state2 or state0 != state3))
 
+        # ---- AC-EXPE1..AC-EXPE4 (R2895 pin): the evidence line and its note ----
+        # The product slot only ever looked at preview/, so a round whose product
+        # is qa/ evidence left the face naming an older preview. These four
+        # criteria pin the second derived line and the one-line note that says
+        # which of the two is newer - with both arms measured, not assumed.
+        wv = build_pair_world([('first-yuan-chain', 500)], tick=9051)
+        worlds.append(wv)
+        qa_dir = os.path.join(wv, 'qa')
+        if not os.path.isdir(qa_dir):
+            os.makedirs(qa_dir)
+        now_v = time.time()
+        ev_age = 60
+        for name, age, body in (('older-run.log', 900, 'a\n'),
+                                ('zz-evidence-new.log', ev_age, 'b' * 40)):
+            p = os.path.join(qa_dir, name)
+            write(p, body)
+            os.utime(p, (now_v - age, now_v - age))
+        # a NEWER non-.log file is a fixture, not a receipt of a measured run
+        pj = os.path.join(qa_dir, 'zz-newer-fixture.json')
+        write(pj, '{}\n')
+        os.utime(pj, (now_v - 5, now_v - 5))
+        sv = json.loads(read(os.path.join(wv, 'src', 'os', 'state.json')))
+        dv = mod.derive(wv, sv, 'TV')
+        ev_line = 'qa/zz-evidence-new.log (40B, %s)' % time.strftime(
+            '%Y-%m-%d', time.localtime(now_v - ev_age))
+        ok('AC-EXPE1 the evidence line names the newest qa/*.log with its own '
+           'bytes and date', dv['evidence'] == ev_line, dv['evidence'][:48])
+        ok('AC-EXPE1 a newer non-log fixture and an older log do not move it',
+           'zz-newer-fixture' not in dv['evidence']
+           and 'older-run' not in dv['evidence'], dv['evidence'][:48])
+        ok('AC-EXPE1 evidence never leaks into the product slot',
+           'zz-evidence-new' not in dv['latest']
+           and 'first-yuan-chain.html' in dv['latest'], dv['latest'][:40])
+
+        built_v, _ = mod.payload(wv, sv, 'TV')
+        write(os.path.join(wv, 'docs', 'status-export.json'),
+              json.dumps(built_v, ensure_ascii=False, indent=2) + '\n')
+        ok('AC-EXPE2 evidence newer than the pair publishes a note naming it',
+           'EVIDENCE' in built_v['ceo_face']['latest_artifact_note']
+           and 'zz-evidence-new.log'
+           in built_v['ceo_face']['latest_artifact_note'],
+           str(built_v['ceo_face']['latest_artifact_note'])[:52])
+        for ext in ('.html', '.json'):
+            p = os.path.join(wv, 'preview', 'first-yuan-chain' + ext)
+            os.utime(p, (now_v, now_v))
+        dv2 = mod.derive(wv, sv, 'TV2')
+        ok('AC-EXPE2 the note empties when the product pair is newer',
+           dv2['note'] == '' and dv2['evidence'] == ev_line,
+           repr(dv2['note'])[:40])
+        for ext in ('.html', '.json'):
+            p = os.path.join(wv, 'preview', 'first-yuan-chain' + ext)
+            t = now_v - 500
+            os.utime(p, (t, t))
+
+        wq = build_pair_world([('first-yuan-chain', 0)], tick=9052)
+        worlds.append(wq)
+        sq = json.loads(read(os.path.join(wq, 'src', 'os', 'state.json')))
+        dq = mod.derive(wq, sq, 'TQ')
+        face_q = os.path.join(wq, 'docs', 'status-export.json')
+        built_q, _ = mod.payload(wq, sq, 'TQ')
+        write(face_q, json.dumps(built_q, ensure_ascii=False, indent=2) + '\n')
+        ok('AC-EXPE3 an absent qa/ is a stated fact and publishes no note',
+           dq['evidence'] == '(no qa evidence on disk)' and dq['note'] == '',
+           dq['evidence'][:40])
+        ok('AC-EXPE3 a correct evidence-free face reads clean',
+           mod.check(wq) == [], 'fails=%s' % mod.check(wq)[:2])
+        tampered_q = json.loads(read(face_q))
+        tampered_q['ceo_face']['latest_evidence'] = \
+            'qa/invented-9999.log (1B, 1999-01-01)'
+        write(face_q, json.dumps(tampered_q, ensure_ascii=False, indent=2) + '\n')
+        fails_q = mod.check(wq)
+        ok('AC-EXPE3 a fabricated evidence line reddens AC-EXPE1',
+           any('AC-EXPE1' in f for f in fails_q), 'fails=%s' % fails_q[:2])
+        tampered_n = json.loads(json.dumps(built_q))
+        tampered_n['ceo_face']['latest_artifact_note'] = 'an invented note'
+        write(face_q, json.dumps(tampered_n, ensure_ascii=False, indent=2) + '\n')
+        fails_n = mod.check(wq)
+        ok('AC-EXPE3 a note over an evidence-free tree reddens AC-EXPE2',
+           any('AC-EXPE2' in f for f in fails_n), 'fails=%s' % fails_n[:2])
+        write(face_q, json.dumps(built_q, ensure_ascii=False, indent=2) + '\n')
+        ok('AC-EXPE3 restoring the derived face reads clean again',
+           mod.check(wq) == [], 'fails=%s' % mod.check(wq)[:2])
+
+        ok('AC-EXPE4 the product slot still derives from the pair law alone',
+           dv['latest'] == mod._fmt_pair(mod.newest_artifact(wv)[0]),
+           dv['latest'][:40])
+        live_face = json.loads(read(os.path.join(ROOT, 'docs',
+                                                 'status-export.json')))
+        ok('AC-EXPE4 the live face carries the evidence line after its refresh',
+           bool((live_face.get('ceo_face') or {}).get('latest_evidence'))
+           and live_face.get('latest_evidence')
+           == live_face['ceo_face']['latest_evidence'],
+           str((live_face.get('ceo_face') or {}).get('latest_evidence'))[:44])
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')
@@ -590,17 +703,37 @@ def main():
         for w in worlds:
             shutil.rmtree(w, ignore_errors=True)
 
+    # AC-EXPE4-registry-units (R2895): a pin that adds an id must move the
+    # registry in the same window, so the declared count can never drift from
+    # what this suite actually prints - the R2860 both-unit lesson, mechanised
+    # in the direction that used to be checked by eye only.
+    def crit_set(names):
+        found = set()
+        for name in names:
+            token = name.split(' ', 1)[0]
+            for cut in range(len(token), 0, -1):
+                if token[cut - 1].isdigit():
+                    found.add(token[:cut])
+                    break
+        return found
+
+    reg_src = read(os.path.join(ROOT, 'src', 'sandbox', 'reconcile_all.py'))
+    declared = []
+    for pos in [m.start() for m in re.finditer(r'"os-export-round"', reg_src)]:
+        found = re.search(r'test_export_round\.py"\)\s*,\s*(\d+)',
+                          reg_src[pos:pos + 160])
+        if found:
+            declared.append(int(found.group(1)))
+    will_print = crit_set(CHECKS + ['AC-EXPE4-registry-units'])
+    ok('AC-EXPE4-registry-units',
+       declared == [len(will_print)] and len(will_print) == 24,
+       'declared=%s printed=%d' % (declared, len(will_print)))
+
     total = len(CHECKS)
     # Declared units (R2860): the AC inventory below is derived from CHECKS,
     # never echoed from the registry - a declaration copied out of the
     # registry could never disagree with it.
-    acs = set()
-    for name in CHECKS:
-        token = name.split(' ', 1)[0]
-        for cut in range(len(token), 0, -1):
-            if token[cut - 1].isdigit():
-                acs.add(token[:cut])
-                break
+    acs = crit_set(CHECKS)
     print('suite: %d assertions over %d criteria' % (total, len(acs)))
     if FAILS:
         print('SUITE FAIL %d/%d failed=%s' % (total - len(FAILS), total, FAILS))

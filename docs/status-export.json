@@ -1,16 +1,18 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2894 PRODUCT+ENGINEERING: R2893 item (1) is CLOSED, and by MEASUREMENT rather than by a cap: the probe-seam cliff was never a slow suite, it was an operator-chosen leg cap, and the SAME suite proves both halves this window. Under the registry own cap qa/probe-seam-budget-R2893.log reads SHARD rc=0 selected=1 green=1 criteria=6 elapsed=133.1s with cap=600s leg_cap=0s and suite=PASS 6/6, so the slowest measured probe-seam row leaves 466.9s (77.8%) of headroom inside the declared 600s cap; under a 45s leg cap qa/probe-seam-budget-R2893-cap45.log reads rc=124 timeout=yes at 45.0s, reproducing the whole rc=124 cohort on demand. DECISION: option (c) DECLINED as unnecessary today, options (a) memoize/bound the ancestor chain and (b) bound the live leg NOT taken, no shipped reader edited and the 600s battery cap untouched; instead a TRIGGER is declared in the board (tech.md R2894) so the decision has an exit - any os-probe-seam row at or above 420s (70% of cap) opens option (a) with its own red control, and a leg cap below the family measured max may not be used over that family again without naming which rows it will time out.",
+    "current": "2026-11-18 R2895 PRODUCT+ENGINEERING: R2894 item (1) is CLOSED - docs/status-export.json no longer leaves the CEO face silent about what the round produced. The product slot deliberately keeps its own law (a qa log is not a product page), and a SECOND derived line latest_evidence names the newest top-level qa/*.log with its bytes and mtime date, plus latest_artifact_note which appears IFF that evidence is strictly newer than the newest non-board preview pair. Suite src/os/test_export_round.py reads SUITE PASS 62/62 over 24 criteria (the 20 existing plus AC-EXPE1..AC-EXPE4), the battery runner row reads rc=0 pass=62 fail=0 crit=24 crit_mismatch=0, the registry moved 713 suites / 5446 -> 5450 criteria (+4 exactly) with suite_matrix.py --check byte-identical at 74741B, and six sibling face suites are green (os-status-export-fresh 18/18, os-export-freshness 6/6, os-export-consistency-queue-face 6/6, os-status-export-writer-dialect-wire 6/6, os-queue-floor-export-face 6/6, os-export-driver-queue-face 6/6).",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2894] next window (<=12h): (1) MAIN - `docs/status-export.json`'s `latest_artifact` still derives from the newest `preview/` pair, so this round's two `qa/` legs leave the CEO face pointing at an older preview (`preview/apimarket-report.*`) (truncated)",
-    "next_milestone_due": "2026-11-18T15:00:45+08:00",
-    "updated_at": "2026-11-18T03:00:45+08:00"
+    "next_milestone": "[R2895] next window (<=12h): (1) MAIN - the CEO face now names evidence, but its `latest_artifact` line still carries NO TIMESTAMP: `_fmt_pair` publishes `path (NB) + path (NB)` and the round book requires the newest artifact line to carry a timestamp, so a date-less pair cannot be told apart from a two-day-old one at a glance - add the pair's own mtime date to the line, keep `--check` grading it from the same reader, give the change its own red control in `src/os/test_export_round.py`, and repair the two tamper fixtures that type the old line shape by hand (AC-EXPW10 board tamper and the AC-EXPA2 arm) rather than loosening them. (2) the evidence line's freshness is deliberately NOT graded by `export_round --check` (a battery leg writes its own `qa/*.log` mid-run) (truncated)",
+    "next_milestone_due": "2026-11-18T15:10:59+08:00",
+    "updated_at": "2026-11-18T03:10:59+08:00",
+    "latest_evidence": "qa/export-face-siblings-R2895.log (1092B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/export-face-siblings-R2895.log (1092B, 2026-11-18)"
   },
-  "current": "2026-11-18 R2894 PRODUCT+ENGINEERING: R2893 item (1) is CLOSED, and by MEASUREMENT rather than by a cap: the probe-seam cliff was never a slow suite, it was an operator-chosen leg cap, and the SAME suite proves both halves this window. Under the registry own cap qa/probe-seam-budget-R2893.log reads SHARD rc=0 selected=1 green=1 criteria=6 elapsed=133.1s with cap=600s leg_cap=0s and suite=PASS 6/6, so the slowest measured probe-seam row leaves 466.9s (77.8%) of headroom inside the declared 600s cap; under a 45s leg cap qa/probe-seam-budget-R2893-cap45.log reads rc=124 timeout=yes at 45.0s, reproducing the whole rc=124 cohort on demand. DECISION: option (c) DECLINED as unnecessary today, options (a) memoize/bound the ancestor chain and (b) bound the live leg NOT taken, no shipped reader edited and the 600s battery cap untouched; instead a TRIGGER is declared in the board (tech.md R2894) so the decision has an exit - any os-probe-seam row at or above 420s (70% of cap) opens option (a) with its own red control, and a leg cap below the family measured max may not be used over that family again without naming which rows it will time out.",
+  "current": "2026-11-18 R2895 PRODUCT+ENGINEERING: R2894 item (1) is CLOSED - docs/status-export.json no longer leaves the CEO face silent about what the round produced. The product slot deliberately keeps its own law (a qa log is not a product page), and a SECOND derived line latest_evidence names the newest top-level qa/*.log with its bytes and mtime date, plus latest_artifact_note which appears IFF that evidence is strictly newer than the newest non-board preview pair. Suite src/os/test_export_round.py reads SUITE PASS 62/62 over 24 criteria (the 20 existing plus AC-EXPE1..AC-EXPE4), the battery runner row reads rc=0 pass=62 fail=0 crit=24 crit_mismatch=0, the registry moved 713 suites / 5446 -> 5450 criteria (+4 exactly) with suite_matrix.py --check byte-identical at 74741B, and six sibling face suites are green (os-status-export-fresh 18/18, os-export-freshness 6/6, os-export-consistency-queue-face 6/6, os-status-export-writer-dialect-wire 6/6, os-queue-floor-export-face 6/6, os-export-driver-queue-face 6/6).",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -38,10 +40,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2894 PRODUCT+ENGINEERING: R2893 item (1) is CLOSED, and by MEASUREMENT rather than by a cap: the probe-seam cliff was never a slow suite, it was an operator-chosen leg cap, and the SAME suite proves both halves this window. Under the registry own cap qa/probe-seam-budget-R2893.log reads SHARD rc=0 selected=1 green=1 criteria=6 elapsed=133.1s with cap=600s leg_cap=0s and suite=PASS 6/6, so the slowest measured probe-seam row leaves 466.9s (77.8%) of headroom inside the declared 600s cap; under a 45s leg cap qa/probe-seam-budget-R2893-cap45.log reads rc=124 timeout=yes at 45.0s, reproducing the whole rc=124 cohort on demand. DECISION: option (c) DECLINED as unnecessary today, options (a) memoize/bound the ancestor chain and (b) bound the live leg NOT taken, no shipped reader edited and the 600s battery cap untouched; instead a TRIGGER is declared in the board (tech.md R2894) so the decision has an exit - any os-probe-seam row at or above 420s (70% of cap) opens option (a) with its own red control, and a leg cap below the family measured max may not be used over that family again without naming which rows it will time out.",
-  "export_ts": "2026-11-18T03:00:45+08:00",
+  "do": "2026-11-18 R2895 PRODUCT+ENGINEERING: R2894 item (1) is CLOSED - docs/status-export.json no longer leaves the CEO face silent about what the round produced. The product slot deliberately keeps its own law (a qa log is not a product page), and a SECOND derived line latest_evidence names the newest top-level qa/*.log with its bytes and mtime date, plus latest_artifact_note which appears IFF that evidence is strictly newer than the newest non-board preview pair. Suite src/os/test_export_round.py reads SUITE PASS 62/62 over 24 criteria (the 20 existing plus AC-EXPE1..AC-EXPE4), the battery runner row reads rc=0 pass=62 fail=0 crit=24 crit_mismatch=0, the registry moved 713 suites / 5446 -> 5450 criteria (+4 exactly) with suite_matrix.py --check byte-identical at 74741B, and six sibling face suites are green (os-status-export-fresh 18/18, os-export-freshness 6/6, os-export-consistency-queue-face 6/6, os-status-export-writer-dialect-wire 6/6, os-queue-floor-export-face 6/6, os-export-driver-queue-face 6/6).",
+  "export_ts": "2026-11-18T03:10:59+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
-  "next_milestone": "[R2894] next window (<=12h): (1) MAIN - `docs/status-export.json`'s `latest_artifact` still derives from the newest `preview/` pair, so this round's two `qa/` legs leave the CEO face pointing at an older preview (`preview/apimarket-report.*`) (truncated)",
+  "next_milestone": "[R2895] next window (<=12h): (1) MAIN - the CEO face now names evidence, but its `latest_artifact` line still carries NO TIMESTAMP: `_fmt_pair` publishes `path (NB) + path (NB)` and the round book requires the newest artifact line to carry a timestamp, so a date-less pair cannot be told apart from a two-day-old one at a glance - add the pair's own mtime date to the line, keep `--check` grading it from the same reader, give the change its own red control in `src/os/test_export_round.py`, and repair the two tamper fixtures that type the old line shape by hand (AC-EXPW10 board tamper and the AC-EXPA2 arm) rather than loosening them. (2) the evidence line's freshness is deliberately NOT graded by `export_round --check` (a battery leg writes its own `qa/*.log` mid-run) (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
@@ -150,7 +152,7 @@
   },
   "results": [
     [
-      "2894",
+      "2895",
       "OSLoop 执行 tick"
     ]
   ],
@@ -163,15 +165,16 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 41,
+    "log_lines_in_window": 46,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "state_bytes": 37138
+  "state_bytes": 41370,
+  "latest_evidence": "qa/export-face-siblings-R2895.log (1092B, 2026-11-18)"
 }
