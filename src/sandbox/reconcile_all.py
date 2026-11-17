@@ -6993,8 +6993,11 @@ SUITES = [
     # reading (a money row whose gate prints no measurement is refused rather than
     # published with an empty bracket), and the consequence must be authored in the row's
     # own tuple so a renamed row cannot keep its meaning by luck.
+    # R2906 grew it to seventeen: the other two REVENUE rows (19.9 payment, membership)
+    # must quote their own products=/tiers= reading, and the page must state WHY only the
+    # revenue rows carry a bracket, with the declared set equal to the rows that carry one.
     ("os-face-sweep",
-     os.path.join("..", "os", "test_face_sweep.py"), 15),
+     os.path.join("..", "os", "test_face_sweep.py"), 17),
     # R2782 shipped tools/money_path_demo.py with the same hole - the 19.9 money
     # path page was guarded only by its own --check, which cannot catch a page
     # whose derivation changed under it.

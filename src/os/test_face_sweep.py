@@ -1,8 +1,8 @@
-"""Battery suite for tools/face_sweep.py - criteria AC-FSWB1..AC-FSWB15.
+"""Battery suite for tools/face_sweep.py - criteria AC-FSWB1..AC-FSWB17.
 
 AC-FSWB1..AC-FSWB10 were pinned in src/os/backlog.md at R2819 BEFORE this suite
-existed; AC-FSWB11..AC-FSWB13 were pinned at R2903 and AC-FSWB14..AC-FSWB15 at
-R2905 BEFORE their legs were written.
+existed; AC-FSWB11..AC-FSWB13 were pinned at R2903, AC-FSWB14..AC-FSWB15 at
+R2905 and AC-FSWB16..AC-FSWB17 at R2906, each BEFORE their legs were written.
 R2903's three legs grade the reading order (money proof first), the per-row
 consequence sentence, and the fact that the rule bites only on the table that owns
 the money row. R2905's legs grade that the money row's sentence QUOTES its own
@@ -284,9 +284,16 @@ def main():
         text = io.open(REGISTRY, encoding='utf-8').read()
         hits = [ln for ln in text.splitlines() if 'test_face_sweep.py' in ln]
         declared = re.findall(r'test_face_sweep\.py"\)\s*,\s*(\d+)', text)
-        ok('AC-FSWB10 the battery registry declares exactly one row for this suite, fifteen',
-           declared == ['15'] and len(hits) == 1,
-           'rows=%s hits=%d' % (declared, len(hits)))
+        # R2906: the expected count was a typed literal ("15") and went stale the moment this
+        # window grew the suite - the same two-places defect R2901 deleted a hand-moved count
+        # for. It is now DERIVED from this file's own AC-FSWB inventory (the same quantity the
+        # registry row records), not from the tool's AC-FSW list, which is a different count.
+        src10 = io.open(__file__, encoding='utf-8').read()
+        want = [str(len(set(re.findall(r'AC-FSWB\d+', src10))))]
+        ok('AC-FSWB10 the battery registry declares one row for this suite at its own count %s'
+           % want[0],
+           declared == want and len(hits) == 1,
+           'rows=%s hits=%d expected=%s' % (declared, len(hits), want))
 
         # ---- AC-FSWB11 (R2903) every row must say what its FAIL costs, and the page must
         # quote it. A blank consequence reads as "no consequence", so it is REFUSED rather
@@ -418,6 +425,78 @@ def main():
            loaded[0]['meaning'] == money_row[5], 'inherited=%r' % (loaded[0]['meaning'],))
         ok('AC-FSWB15d a face the table does not carry inherits NOTHING, never a leftover',
            loaded[1]['meaning'] == '', 'inherited=%r' % (loaded[1]['meaning'],))
+
+        # ---- AC-FSWB16 (R2906) the OTHER TWO REVENUE ROWS quote their own reading, so the
+        # one refutable claim on the board is no longer an exception a reader has to notice.
+        # Positive: a payment row whose gate prints products=/tiers= publishes both. Negative:
+        # a sentence claiming tiers=9 over a row reading tiers=0 reddens naming that row. The
+        # fail-closed arm: a revenue gate printing no such token is refused, not published bare.
+        write(os.path.join(tools, 'stub-value.py'),
+              "import sys\nprint('value-domain: PASS products=5 tiers=0')\nsys.exit(0)\n")
+        write(os.path.join(prev, 'pay.html'), '<html>pay</html>\n')
+        write(os.path.join(prev, 'pay.json'), '{"id": "pay"}\n')
+        write(os.path.join(prev, 'memb.html'), '<html>memb</html>\n')
+        write(os.path.join(prev, 'memb.json'), '{"id": "memb"}\n')
+        pay_row = ('payment-gate', 'payment stub', 'tools/stub-value.py',
+                   'preview/pay.html', 'preview/pay.json',
+                   'a red payment row is lost revenue')
+        mem_row = ('membership', 'membership stub', 'tools/stub-value.py',
+                   'preview/memb.html', 'preview/memb.json',
+                   'a red membership row is zero repeat purchase')
+        tool.FACES = [money_row, pay_row, mem_row] + rest
+        rc, out = run_quiet(lambda: tool.sweep(face_opts()))
+        doc16 = json.load(io.open(tool.OUT_JSON, encoding='utf-8'))
+        pay16 = [r for r in doc16['faces'] if r['id'] == 'payment-gate'][0]
+        mem16 = [r for r in doc16['faces'] if r['id'] == 'membership'][0]
+        ok('AC-FSWB16 the payment row carries products=/tiers= from its own verdict',
+           rc == 0 and 'products=5' in pay16['meaning'] and 'tiers=0' in pay16['meaning'],
+           'meaning=%r' % (pay16['meaning'],))
+        ok('AC-FSWB16b the membership row carries its own reading too',
+           'products=5' in mem16['meaning'] and 'tiers=0' in mem16['meaning'],
+           'meaning=%r' % (mem16['meaning'],))
+        rc, out = run_quiet(lambda: tool.check())
+        ok('AC-FSWB16c the lawful three-revenue-row board reads PASS', rc == 0, 'rc=%d' % rc)
+        doctored = json.loads(json.dumps(doc16))
+        for r in doctored['faces']:
+            if r['id'] == 'payment-gate':
+                r['meaning'] = r['meaning'].replace('tiers=0', 'tiers=9')
+        io.open(tool.OUT_JSON, 'w', encoding='utf-8', newline='\n').write(
+            json.dumps(doctored, ensure_ascii=False, indent=1) + '\n')
+        rc, out = run_quiet(lambda: tool.check())
+        ok('AC-FSWB16d a payment sentence claiming tiers=9 over a row reading tiers=0 reddens',
+           rc == 2 and 'AC-FSW16' in out and 'payment-gate' in out, 'rc=%d' % rc)
+        bare_pay = ('payment-gate', 'payment stub', 'tools/stub-pass.py',
+                    'preview/pay.html', 'preview/pay.json',
+                    'a red payment row is lost revenue')
+        tool.FACES = [money_row, bare_pay, mem_row] + rest
+        rc, out = run_quiet(lambda: tool.sweep(face_opts()))
+        rc2, out2 = run_quiet(lambda: tool.check())
+        bare_doc = json.load(io.open(tool.OUT_JSON, encoding='utf-8'))
+        bare_pay_meaning = [r for r in bare_doc['faces'] if r['id'] == 'payment-gate'][0]['meaning']
+        ok('AC-FSWB16e a revenue row with no reading is REFUSED, not published bare',
+           tool.MONEY_UNMEASURED in bare_pay_meaning and rc2 == 2
+           and 'E_FSW_REVENUE_UNMEASURED' in out2, 'rc=%d' % rc2)
+
+        # ---- AC-FSWB17 (R2906) THE DOCUMENT SAYS WHY only some rows carry a bracket: the
+        # scope sentence is on the page, and the rows that actually carry a bracket must be
+        # exactly the revenue rows whose verdict supplied one - so prose and data cannot
+        # disagree about the scope, and a non-revenue row cannot quietly grow a bracket.
+        tool.FACES = [money_row, pay_row, mem_row] + rest
+        rc, out = run_quiet(lambda: tool.sweep(face_opts()))
+        html17 = io.open(tool.OUT_HTML, encoding='utf-8').read()
+        rc, out = run_quiet(lambda: tool.check())
+        ok('AC-FSWB17 the scope sentence is on the landed page',
+           tool.SCOPE_LINE in html17 and rc == 0, 'rc=%d' % rc)
+        doc17 = json.load(io.open(tool.OUT_JSON, encoding='utf-8'))
+        doctored = json.loads(json.dumps(doc17))
+        for r in doctored['faces']:
+            if r['id'] == 'stub-a':
+                r['meaning'] = r['meaning'] + tool.ROW_MEASURED % 'products=1 tiers=1'
+        io.open(tool.OUT_JSON, 'w', encoding='utf-8', newline='\n').write(
+            json.dumps(doctored, ensure_ascii=False, indent=1) + '\n')
+        rc, out = run_quiet(lambda: tool.check())
+        ok('AC-FSWB17b a non-revenue row that grows a bracket reddens E_FSW_SCOPE_DRIFT',
+           rc == 2 and 'E_FSW_SCOPE_DRIFT' in out, 'rc=%d' % rc)
     finally:
         shutil.rmtree(world, ignore_errors=True)
 

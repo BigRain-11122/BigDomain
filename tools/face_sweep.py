@@ -7,7 +7,7 @@ runs each shipped tool's read-only --check as a subprocess, records its exit cod
 VERDICT line and the landed artifact bytes, and renders a single board.
 
 Laws honoured:
-- criteria are pre-registered in --check (AC-FSW0..AC-FSW15, see check()).
+- criteria are pre-registered in --check (AC-FSW0..AC-FSW17, see check()).
 - nothing is hardcoded: verdicts, sizes and timestamps are measured from the subprocess
   and from disk.
 - the board never counts a face as passing unless its own gate exited zero AND printed a
@@ -109,6 +109,25 @@ MONEY_ID = "first-yuan-chain"
 MONEY_MEASURED = "\uff08\u672c\u884c\u5b9e\u6d4b legs=%s tx=%s\uff09"
 MONEY_UNMEASURED = "\uff08\u672c\u884c\u8bfb\u6570\u7f3a\u5931\uff09"
 MONEY_TOKEN_RE = re.compile(r"\b(legs|tx)=(\d+)\b")
+
+# R2906: the money row was not the only REVENUE row. The 19.9 payment face and the
+# membership face also fail into lost revenue rather than housekeeping, so they quote
+# their own reading too. This dict is the ONE declaration of which rows carry a
+# measurement and which keys they report; every other row stays declared prose and the
+# page states that scope in one line (AC-FSW17), so a reader never has to infer why a
+# sentence has a bracket beside it or not.
+REVENUE_TOKENS = {
+    "first-yuan-chain": ("legs", "tx"),
+    "payment-gate": ("products", "tiers"),
+    "membership": ("products", "tiers"),
+}
+ROW_MEASURED = "\uff08\u672c\u884c\u5b9e\u6d4b %s\uff09"
+BRACKET_MARK = "\u672c\u884c\u5b9e\u6d4b"
+SCOPE_LINE = ("\u5b9e\u6d4b\u8303\u56f4\uff1a\u4e09\u884c\u8425\u6536\u9762\uff08"
+              "\u94b1\u7684\u8bc1\u636e\u300119.9 \u652f\u4ed8\u3001\u6708\u5361\u6743\u76ca\uff09"
+              "\u5404\u5f15\u7528\u672c\u884c\u81ea\u5df1\u7684\u8bfb\u6570\uff1b"
+              "\u5176\u4f59\u884c\u53ea\u6709\u58f0\u660e\u53e5\uff0c"
+              "\u56e0\u4e3a\u5b83\u4eec\u7684 FAIL \u662f\u5185\u90e8\u8bb0\u8d26\u800c\u975e\u6536\u5165\u4e8b\u5b9e\u3002")
 # A row this table has not declared is published as UNDECLARED rather than blanked or
 # given an invented consequence: a blank cell reads as "no consequence", and a made-up
 # sentence is a claim nobody measured. AC-FSW12 still refuses the undeclared marker on any
@@ -123,7 +142,8 @@ COL_MEANING = "\u8fd9\u4e00\u884c FAIL \u5bf9\u6536\u5165\u610f\u5473\u7740\u4ec
 # its own coverage.
 CRITERIA = ["AC-FSW0", "AC-FSW1", "AC-FSW2", "AC-FSW3", "AC-FSW3b", "AC-FSW4",
             "AC-FSW5", "AC-FSW6", "AC-FSW7", "AC-FSW8", "AC-FSW9", "AC-FSW10",
-            "AC-FSW11", "AC-FSW12", "AC-FSW13", "AC-FSW14", "AC-FSW15"]
+            "AC-FSW11", "AC-FSW12", "AC-FSW13", "AC-FSW14", "AC-FSW15",
+            "AC-FSW16", "AC-FSW17"]
 
 # AC-FSW9: the per-face byte counts are a snapshot of the sweep that wrote them, never a
 # live equality claim. Any face re-rendered afterwards changes its own bytes, so asserting
@@ -206,9 +226,7 @@ def run_face(face, timeout):
         row.update({"exit": 127, "verdict": "MISSING-DRIVER", "duration_s": 0.0,
                     "html_bytes": None, "json_bytes": None, "tail": "",
                     "mutated": False, "mutated_files": []})
-        if row["id"] == MONEY_ID:
-            row["meaning"] = money_meaning(row["meaning"], row["verdict"])
-        return row
+        return _fill_meaning(row)
     before = {"html": _stat(face["html"]), "json": _stat(face["json"])}
     t0 = time.time()
     try:
@@ -248,12 +266,10 @@ def run_face(face, timeout):
         "mutated": bool(mutated_files),
         "mutated_files": mutated_files,
     })
-    # R2905: the money row's sentence carries its own reading, filled HERE from the verdict
-    # this run just captured - so the published claim and the published measurement come out
-    # of one variable rather than two documents that are supposed to agree.
-    if row["id"] == MONEY_ID:
-        row["meaning"] = money_meaning(row["meaning"], row["verdict"])
-    return row
+    # R2905/R2906: a revenue row's sentence carries its own reading, filled HERE from the
+    # verdict this run just captured - so the published claim and the published measurement
+    # come out of one variable rather than two documents that are supposed to agree.
+    return _fill_meaning(row)
 
 
 def money_tokens(verdict):
@@ -262,12 +278,34 @@ def money_tokens(verdict):
     return got.get("legs"), got.get("tx")
 
 
-def money_meaning(base, verdict):
-    """Declared prose plus the row's own reading; a row with no reading says so."""
-    legs, tx = money_tokens(verdict)
-    if legs is None or tx is None:
+TOKEN_RE = re.compile(r"\b([a-z_]+)=(\d+)\b")
+
+
+def verdict_tokens(verdict, keys):
+    """Read only the named keys out of a row's own verdict, never from anywhere else."""
+    got = dict(TOKEN_RE.findall(str(verdict or "")))
+    return {k: got.get(k) for k in keys}
+
+
+def row_meaning(face_id, base, verdict):
+    """Declared prose plus the reading this row reported, for revenue rows only."""
+    keys = REVENUE_TOKENS.get(face_id)
+    if not keys:
+        return base or ""
+    got = verdict_tokens(verdict, keys)
+    if any(got.get(k) is None for k in keys):
         return (base or "") + MONEY_UNMEASURED
-    return (base or "") + MONEY_MEASURED % (legs, tx)
+    return (base or "") + ROW_MEASURED % " ".join("%s=%s" % (k, got[k]) for k in keys)
+
+
+def money_meaning(base, verdict):
+    """Kept as the money-shaped entry point; the derivation itself is shared."""
+    return row_meaning(MONEY_ID, base, verdict)
+
+
+def _fill_meaning(row):
+    row["meaning"] = row_meaning(row["id"], row.get("meaning"), row.get("verdict"))
+    return row
 
 
 def _size(rel):
@@ -384,6 +422,7 @@ def build_html(rows, sizes, stamp):
     for line in STANDING:
         body.append("<div>%s</div>" % _esc(line))
     body.append("<div>%s</div>" % _esc(EXCLUDED_NOTE))
+    body.append("<div>%s</div>" % _esc(SCOPE_LINE))
     body.append("<div>%s</div>" % _esc(SNAPSHOT_NOTE))
     body.append("</div>")
     body.append("</div>")
@@ -588,6 +627,47 @@ def check():
     for f in FACES:
         if len(f) != 6 or not str(f[5]).strip():
             fails.append("AC-FSW15 row %r declares no consequence in its own tuple" % (f[0],))
+
+    # AC-FSW16 (R2906) THE OTHER TWO REVENUE ROWS QUOTE THEIR OWN READING TOO. The money
+    # criterion above covered one row; the 19.9 payment face and the membership face are
+    # revenue facts as well, so their sentences must carry the products=/tiers= pairs the
+    # row ITSELF reported. A revenue row whose gate prints no such token is REFUSED with
+    # E_FSW_REVENUE_UNMEASURED rather than published with no number to refute. Scoped to the
+    # loaded table, so a fixture world that declares neither row is not forced.
+    live_ids = [f[0] for f in FACES]
+    for r in rows:
+        rid = r.get("id")
+        if rid == MONEY_ID or rid not in REVENUE_TOKENS or rid not in live_ids:
+            continue
+        keys = REVENUE_TOKENS[rid]
+        got = verdict_tokens(r.get("verdict"), keys)
+        if any(got.get(k) is None for k in keys):
+            fails.append("AC-FSW16 E_FSW_REVENUE_UNMEASURED %s verdict=%r"
+                         % (rid, r.get("verdict")))
+            continue
+        said = str(r.get("meaning") or "")
+        for k in keys:
+            if "%s=%s" % (k, got[k]) not in said:
+                fails.append("AC-FSW16 %s consequence does not quote %s=%s"
+                             % (rid, k, got[k]))
+
+    # AC-FSW17 (R2906) THE DOCUMENT SAYS WHY. Only some rows carry a bracket, and a reader
+    # should not have to infer the rule from the shape: the scope sentence must be on the
+    # page, and the rows that actually carry a bracket must be exactly the revenue rows
+    # whose verdict supplied one - prose and data cannot disagree about the scope.
+    if _esc(SCOPE_LINE) not in html_text:
+        fails.append("AC-FSW17 scope sentence absent from the page")
+    bracket = [r.get("id") for r in rows if BRACKET_MARK in str(r.get("meaning") or "")]
+    expect = []
+    for r in rows:
+        rid = r.get("id")
+        if rid not in REVENUE_TOKENS or rid not in live_ids:
+            continue
+        got = verdict_tokens(r.get("verdict"), REVENUE_TOKENS[rid])
+        if all(got.get(k) is not None for k in REVENUE_TOKENS[rid]):
+            expect.append(rid)
+    if bracket != expect:
+        fails.append("AC-FSW17 E_FSW_SCOPE_DRIFT measured=%r declared=%r" % (bracket, expect))
 
     total = len(CRITERIA)
     for f in fails:
