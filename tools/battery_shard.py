@@ -225,15 +225,25 @@ def select(rows, prefixes, limit, exacts=()):
 DETAIL_LINE = re.compile(r"(?m)^[ \t]*(?:\|[ \t]*)?(PASS|FAIL)\b")
 
 
-def run_one(base, label, rel, cap, overrides):
+def run_one(base, label, rel, cap, overrides, leg_cap=None):
     """AC-BSH3: the battery's own invocation, byte for byte in behaviour.
 
     The cap law is the battery's own suite_timeout(): one declared override per
     suite LABEL, else the named constant. Override keys are labels, measured on
     the registry (one key today: ledger-apimarket-refundregister -> 900).
+
+    AC-BTG1 (R2865): leg_cap is a LEG-level ceiling that can only LOWER the
+    effective per-suite duration, never raise it - an override of 900 under a
+    leg cap of 90 still runs 90. It exists because the deep os-probe-seam rows
+    measured 160.1s and 257.3s inside a 600s cap (R2864), so a leg over them
+    cannot fit a window while every row is allowed the full battery budget;
+    a bounded leg grades a slow row as a NAMED timeout instead of leaving the
+    family unmeasured.
     """
     path = os.path.join(base, rel)
     duration = int(overrides.get(label, cap))
+    if leg_cap:
+        duration = min(duration, int(leg_cap))
     env = dict(os.environ)
     env["PYTHONIOENCODING"] = "utf-8"
     started = time.time()
@@ -319,7 +329,7 @@ def do_check(name):
 
 
 def do_declared_only(rows, base, cap=600, overrides=None,
-                     registry_total=None):
+                     registry_total=None, leg_cap=None):
     """AC-BSGB13: grade every DECLARING suite without paying for a battery.
 
     Measured fact this mode exists for: a declaration is printed through a
@@ -352,7 +362,7 @@ def do_declared_only(rows, base, cap=600, overrides=None,
     reds = []
     started = time.time()
     for label, rel, crit in carriers:
-        code, out, secs = run_one(base, label, rel, cap, overrides)
+        code, out, secs = run_one(base, label, rel, cap, overrides, leg_cap)
         declared = parse_criteria_unit(out)
         if declared is None:
             silent.append(label)
@@ -404,6 +414,7 @@ def main(argv=None):
     ap.add_argument("--match", action="append", default=[])
     ap.add_argument("--exact", action="append", default=[])
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--cap", type=int, default=0)
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--declared-only", dest="declared_only",
@@ -436,9 +447,18 @@ def _round(args):
         return do_check(evidence_name(args.evidence))
 
     rows, base, cap, overrides = registry()
+    # AC-BTG2: a leg cap may only lower the battery's own cap; asking for a
+    # RAISE is not an error but a no-op, and the header prints the number
+    # actually in force so a reader never has to trust the flag.
+    leg_cap = 0
+    if args.cap:
+        if int(args.cap) < 1:
+            raise Refuse("E_CAP --cap needs a positive second count")
+        leg_cap = min(int(args.cap), cap)
     if args.declared_only:
         picked = select(rows, args.match, args.limit, args.exact)
-        rc, text = do_declared_only(picked, base, cap, overrides, len(rows))
+        rc, text = do_declared_only(picked, base, cap, overrides, len(rows),
+                                    leg_cap)
         if args.evidence:
             proof = write_evidence(evidence_name(args.evidence), text)
             print("DECL evidence name=%s bytes=%d lines=%d sha256=%s "
@@ -449,9 +469,9 @@ def _round(args):
     picked = select(rows, args.match, args.limit, args.exact)
     total_crit = sum(int(r[2]) for r in picked)
     print("SHARD scope=SHARD registry_suites=%d registry_criteria=%d "
-          "selected=%d selected_criteria=%d cap=%ds overrides=%d exact=%d"
+          "selected=%d selected_criteria=%d cap=%ds leg_cap=%ds overrides=%d exact=%d"
           % (len(rows), sum(int(r[2]) for r in rows), len(picked),
-             total_crit, cap, len(overrides), len(args.exact)))
+             total_crit, cap, leg_cap, len(overrides), len(args.exact)))
     for label, rel, crit in picked:
         print("SHARD selected %s crit=%d path=%s" % (label, crit, rel))
     if args.dry:
@@ -466,7 +486,7 @@ def _round(args):
     reds = []
     started = time.time()
     for label, rel, crit in picked:
-        code, out, secs = run_one(base, label, rel, cap, overrides)
+        code, out, secs = run_one(base, label, rel, cap, overrides, leg_cap)
         tokens = DETAIL_LINE.findall(out)
         passes = tokens.count("PASS")
         fails = tokens.count("FAIL")
@@ -488,8 +508,9 @@ def _round(args):
             green += 1
         else:
             reds.append("%s:rc=%d" % (label, code))
-        line = ("SHARD row %s rc=%d pass=%d fail=%d detail=%s suite=%s crit=%d %.1fs"
-                % (label, code, passes, fails, detail, suite, crit, secs))
+        line = ("SHARD row %s rc=%d pass=%d fail=%d detail=%s suite=%s crit=%d %.1fs%s"
+                % (label, code, passes, fails, detail, suite, crit, secs,
+                   " timeout=yes" if code == 124 else ""))
         print(line)
         lines.append(line)
         if code != 0:
@@ -502,9 +523,9 @@ def _round(args):
                % (rc, len(picked), executed, green, crit_run, len(mismatch), elapsed))
     print(closing)
     lines.insert(0, "SHARD scope=SHARD registry_suites=%d registry_criteria=%d "
-                    "selected=%d selected_criteria=%d cap=%ds exact=%d"
+                    "selected=%d selected_criteria=%d cap=%ds leg_cap=%ds exact=%d"
                  % (len(rows), sum(int(r[2]) for r in rows), len(picked),
-                    total_crit, cap, len(args.exact)))
+                    total_crit, cap, leg_cap, len(args.exact)))
     lines.append(closing)
     if mismatch:
         print("SHARD disclosure crit_mismatch=%s" % ",".join(mismatch))

@@ -490,6 +490,65 @@ def main():
     finally:
         shutil.rmtree(world, ignore_errors=True)
 
+    # AC-BTG1..AC-BTG4 (R2865) - the LEG-LEVEL cap. Measured fact this exists
+    # for: the deep os-probe-seam rows cost 160.1s and 257.3s INSIDE a 600s cap
+    # (R2864), so a leg over them cannot fit a window while every row is allowed
+    # the full battery budget. A leg cap may only LOWER the effective duration;
+    # a slow row then reads as a NAMED timeout (rc=124) instead of leaving its
+    # family unmeasured.
+    world = tempfile.mkdtemp(prefix="battery_shard_cap_")
+    try:
+        write_probes(world)
+        # AC-BTG1 - the cap bounds wall clock, and the marker names the cap in
+        # force, not the battery's default.
+        code_lc, out_lc, secs_lc = shard.run_one(
+            world, "probe-slow", "probe_slow.py", 600, {}, 1)
+        lc_named = "TIMEOUT suite exceeded the 1s per-suite cap" in out_lc
+        ok("AC-BTG1", code_lc == 124 and lc_named and secs_lc < 5.0,
+           "rc=%d named=%s elapsed=%.1fs" % (code_lc, lc_named, secs_lc))
+        # AC-BTG2 - no raise: a leg cap above the registry cap leaves the
+        # registry number in force, read off the header rather than asserted.
+        dry_code, dry_out = run_cli(shard, ["--dry", "--match", "probe",
+                                            "--cap", "3600"])
+        header = [l for l in dry_out.splitlines()
+                  if l.startswith("SHARD scope=SHARD")]
+        effective = -1
+        if header:
+            for piece in header[0].split():
+                if piece.startswith("leg_cap="):
+                    effective = int(piece.split("=", 1)[1].rstrip("s"))
+        raised = dry_out.count("leg_cap=3600")
+        ok("AC-BTG2", dry_code == 0 and effective == 600 and raised == 0,
+           "effective=%d raised=%d" % (effective, raised))
+        # AC-BTG3 - a per-label override is clamped by the leg cap, never
+        # allowed to spend more than the leg means to spend.
+        code_ov, out_ov, _ = shard.run_one(
+            world, "probe-slow", "probe_slow.py", 600, {"probe-slow": 900}, 1)
+        ov_clamped = ("TIMEOUT suite exceeded the 1s per-suite cap" in out_ov
+                      and "900s" not in out_ov)
+        ok("AC-BTG3", code_ov == 124 and ov_clamped,
+           "rc=%d clamp_kept=%s" % (code_ov, ov_clamped))
+        # AC-BTG4 - a timeout is RED in the leg and named, and it is never
+        # counted green: one good row + one timed-out row reads green=1 of 2.
+        patch_registry(shard, [("probe-good", "probe_good.py", 1),
+                               ("probe-slow", "probe_slow.py", 1)], world)
+        code_cap, out_cap = run_cli(shard, ["--match", "probe", "--cap", "1"])
+        slow_row = [l for l in out_cap.splitlines()
+                    if l.startswith("SHARD row ") and " probe-slow " in l]
+        closing_cap = [l for l in out_cap.splitlines()
+                       if l.startswith("SHARD rc=")]
+        red_named = "probe-slow:rc=124" in out_cap
+        cap_ok = (code_cap == 2 and red_named
+                  and bool(slow_row) and "timeout=yes" in slow_row[0]
+                  and bool(closing_cap) and "green=1" in closing_cap[0]
+                  and "executed=2" in closing_cap[0])
+        ok("AC-BTG4", cap_ok,
+           "rc=%d named=%s row=%s" % (code_cap, red_named,
+                                      "timeout=yes" in slow_row[0]
+                                      if slow_row else "-"))
+    finally:
+        shutil.rmtree(world, ignore_errors=True)
+
     total = len(CHECKS)
     passed = total - len(FAILS)
     if FAILS:

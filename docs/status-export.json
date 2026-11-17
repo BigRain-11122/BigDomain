@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T10:41:57+08:00",
-  "do": "2026-11-17 R2864 PRODUCT+ENGINEERING: law_status shard 4 is measured at output level - 45 of 45 rows green with detail=yes on every row and crit_mismatch=0 in 22.0s - and the shard that was stopped answered the pace question by NAME: the deep os-probe-seam suites cost 160.1s and 257.3s each and one outran the runners own 600s header cap, which is a report and not a guard.",
+  "export_ts": "2026-11-17T11:05:59+08:00",
+  "do": "2026-11-17 R2865 PRODUCT+ENGINEERING: the runner gained a leg-level cap (--cap, lower only) and a timeout row is painted timeout=yes, which finished law_status shard 5 inside one window as three bounded legs - 45 of 45 rows graded, 44 green and one named TIMEOUT at exactly 150.0s.",
   "ceo_face": {
-    "current": "2026-11-17 R2864 PRODUCT+ENGINEERING: law_status shard 4 is measured at output level - 45 of 45 rows green with detail=yes on every row and crit_mismatch=0 in 22.0s - and the shard that was stopped answered the pace question by NAME: the deep os-probe-seam suites cost 160.1s and 257.3s each and one outran the runners own 600s header cap, which is a report and not a guard.",
+    "current": "2026-11-17 R2865 PRODUCT+ENGINEERING: the runner gained a leg-level cap (--cap, lower only) and a timeout row is painted timeout=yes, which finished law_status shard 5 inside one window as three bounded legs - 45 of 45 rows graded, 44 green and one named TIMEOUT at exactly 150.0s.",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2864] next window (<=12h): (1) MAIN - give `tools/battery_shard.py` a REAL per-suite timeout (PIN criteria first; red control = a probe suite that sleeps past the limit and must be reported as a timeout at rc!=0 instead of hanging the leg), because `cap=600s` in the header is a report, not a guard; (2) once the guard exists, finish `law_status` shard 5 (the ten unmeasured deep `os-probe-seam` rows) and then shards 6 and 7 by import from the plan, never retyped; (3) one cheap measurement of the named slow class - the same assertions under a short suite name - so the cost is proved to be the name-binding clause count and not interpreter startup; (4) `--declared-only` stays a closeout habit beside `ledger_lines.audit` (truncated)",
-    "next_milestone_due": "2026-11-17T22:41:57+08:00",
-    "updated_at": "2026-11-17T10:41:57+08:00",
+    "next_milestone": "[R2865] next window (<=12h): (1) MAIN - `law_status` shards 6 and 7 by IMPORT from `.codely-cli/tmp/law_status_plan.json` (45 + 45 labels, never retyped), run as bounded legs with `--cap 90` so both fit one window, reporting `detail=` and naming every `timeout=yes` row instead of smoothing it; (2) replace the shard-5 tail's \">150s\" with a number: a single-row leg at `--cap 400`, and if it finishes, upgrade that row from TIMEOUT to its real grade; (3) the R2864 item (5) stays OPEN - `state_append`'s shape gate accepted a lowercase label after the round number while the export grader wants UPPERCASE, so a closeout can name the PREVIOUS round on the CEO face while every check reads PASS; pin the choice (stricter gate vs grader fallback) BEFORE editing either; (4) `--declared-only` stays a closeout habit beside `ledger_lines.audit` (truncated)",
+    "next_milestone_due": "2026-11-17T23:05:59+08:00",
+    "updated_at": "2026-11-17T11:05:59+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -92,10 +92,10 @@
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2864 PRODUCT+ENGINEERING: law_status shard 4 is measured at output level - 45 of 45 rows green with detail=yes on every row and crit_mismatch=0 in 22.0s - and the shard that was stopped answered the pace question by NAME: the deep os-probe-seam suites cost 160.1s and 257.3s each and one outran the runners own 600s header cap, which is a report and not a guard.",
+  "current": "2026-11-17 R2865 PRODUCT+ENGINEERING: the runner gained a leg-level cap (--cap, lower only) and a timeout row is painted timeout=yes, which finished law_status shard 5 inside one window as three bounded legs - 45 of 45 rows graded, 44 green and one named TIMEOUT at exactly 150.0s.",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2864] next window (<=12h): (1) MAIN - give `tools/battery_shard.py` a REAL per-suite timeout (PIN criteria first; red control = a probe suite that sleeps past the limit and must be reported as a timeout at rc!=0 instead of hanging the leg), because `cap=600s` in the header is a report, not a guard; (2) once the guard exists, finish `law_status` shard 5 (the ten unmeasured deep `os-probe-seam` rows) and then shards 6 and 7 by import from the plan, never retyped; (3) one cheap measurement of the named slow class - the same assertions under a short suite name - so the cost is proved to be the name-binding clause count and not interpreter startup; (4) `--declared-only` stays a closeout habit beside `ledger_lines.audit` (truncated)",
-  "state_bytes": 73031,
+  "next_milestone": "[R2865] next window (<=12h): (1) MAIN - `law_status` shards 6 and 7 by IMPORT from `.codely-cli/tmp/law_status_plan.json` (45 + 45 labels, never retyped), run as bounded legs with `--cap 90` so both fit one window, reporting `detail=` and naming every `timeout=yes` row instead of smoothing it; (2) replace the shard-5 tail's \">150s\" with a number: a single-row leg at `--cap 400`, and if it finishes, upgrade that row from TIMEOUT to its real grade; (3) the R2864 item (5) stays OPEN - `state_append`'s shape gate accepted a lowercase label after the round number while the export grader wants UPPERCASE, so a closeout can name the PREVIOUS round on the CEO face while every check reads PASS; pin the choice (stricter gate vs grader fallback) BEFORE editing either; (4) `--declared-only` stays a closeout habit beside `ledger_lines.audit` (truncated)",
+  "state_bytes": 78830,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
