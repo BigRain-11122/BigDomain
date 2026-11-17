@@ -1,0 +1,350 @@
+SHARD scope=SHARD registry_suites=710 registry_criteria=5422 selected=292 selected_criteria=2275 cap=600s leg_cap=60s exact=0
+SHARD row ledger-props rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-props-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-identity-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-incentive rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-settlement rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.1s
+SHARD row ledger-settlement-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-venue rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-venue-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-collectibles rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-expedite rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-expedite-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-ads rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-ads-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-observation rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-observation-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-identity rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-studio rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-metered rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-metered-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-reports rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-reports-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ledger-effects rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-growth-archive rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-companion rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-companion-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-tmarket rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-festival rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-showroom rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-sistercity rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-apidev rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ledger-apidev-lifecycle rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apidev-rate rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ledger-apidev-reject rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-apidev-usagelog rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 1.0s
+SHARD row ledger-apidev-rejectwin rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-apidev-usagewin rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apidev-usagekind rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apidev-lifecycletrace rc=0 pass=14 fail=0 detail=yes suite=PASS 14/14 crit=14 0.3s
+SHARD row ledger-clawback rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 2.1s
+SHARD row ledger-clawback-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-showcase rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-curation rc=0 pass=24 fail=0 detail=yes suite=PASS 24/24 crit=24 0.4s
+SHARD row ledger-curation-hotpersist rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.7s
+SHARD row ledger-curation-coldpersist rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.3s
+SHARD row ledger-curation-combined rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-curation-combinedpersist rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.3s
+SHARD row ledger-curation-combinedboundary rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.4s
+SHARD row ledger-curation-combinedmonth rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-curation-regpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-civicpoints rc=0 pass=20 fail=0 detail=yes suite=PASS 20/20 crit=20 0.3s
+SHARD row ledger-honorcert rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.7s
+SHARD row ledger-honorcert-yearbook rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-civicpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-devshare rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-apimarket rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ledger-datasub rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.9s
+SHARD row ledger-proposal rc=0 pass=12 fail=0 detail=yes suite=PASS 12/12 crit=12 0.7s
+SHARD row ledger-proposal-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-incentive-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-eventtickets rc=0 pass=14 fail=0 detail=yes suite=PASS 14/14 crit=14 0.4s
+SHARD row ledger-eventtickets-boardwin rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-eventtickets-boardlimit rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-eventtickets-roll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-eventtickets-telescope rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.4s
+SHARD row ledger-freetrial rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-freetrial-funnel rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-freetrial-funnelwin rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-freetrial-callmonth rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-freetrial-callkind rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-freetrial-callplan rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-freetrial-callengine rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-freetrial-callaccount rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-freetrial-capusage rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.3s
+SHARD row ledger-freetrial-caplimit rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-freetrial-caproll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-freetrial-callroll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-freetrial-funnelroll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-freetrial-funnelcap rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ledger-freetrial-funnelpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-freetrial-cappersist rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-freetrial-fivepersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-apidev-lineage rc=0 pass=22 fail=0 detail=yes suite=PASS 22/22 crit=22 0.3s
+SHARD row ledger-apidev-chainusage rc=0 pass=14 fail=0 detail=yes suite=PASS 14/14 crit=14 1.2s
+SHARD row ledger-apidev-devboard-roll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-apidev-devboard-limit rc=0 pass=14 fail=0 detail=yes suite=PASS 14/14 crit=14 0.4s
+SHARD row ledger-apidev-devboard-ancestry rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-apidev-keyviewwin rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-apidev-lineagepersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-apidev-chainusagepersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ledger-apidev-devboardpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-eventtickets-boardpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.8s
+SHARD row ledger-eventtickets-sessionpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-apidev-usagelogpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.8s
+SHARD row ledger-apidev-keyviewpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-apidev-rejecttallpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-apidev-lifecycletracepersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-apidev-usagekindpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-showcaseview-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-collectibles-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-datasub-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-datasub-coverage rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-devshare-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-apimarket-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ledger-apimarket-devboard rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.8s
+SHARD row ledger-apimarket-devsalespersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-apimarket-devboardwindow rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.9s
+SHARD row ledger-apimarket-devboardmonthpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-apimarket-devboardboundary rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-apimarket-devboardgatepersist rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-devboardmonthboundary rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-apimarket-devboardmonthstraddle rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-apimarket-ratingagg rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-delist rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-pricerev rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-buyerlibrary rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-search rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.1s
+SHARD row ledger-apimarket-searchpaging rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-searchsort rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-searchstock rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-replyrev rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-listingposition rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-similar rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-devprofile rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-metadata rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-watchlist rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-supply rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+SHARD row ledger-apimarket-refund rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-relist rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-marketstats rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-categorydemand rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-buyercategoryspend rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-buyersellerspend rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.3s
+SHARD row ledger-apimarket-repeatpurchase rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.1s
+SHARD row ledger-apimarket-watchconversion rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+SHARD row ledger-apimarket-buyerratingpattern rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.3s
+SHARD row ledger-apimarket-hourheatmap rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.6s
+SHARD row ledger-apimarket-refundpropensity rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.1s
+SHARD row ledger-apimarket-listingvelocity rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-sellercohort rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-relistgap rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-concentration rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-buyerconcentration rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.1s
+SHARD row ledger-apimarket-sellercategorymix rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-pricevolatility rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-pricesteps rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-buyercohort rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+SHARD row ledger-apimarket-buyerretention rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.2s
+SHARD row ledger-apimarket-categorypricemonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.6s
+SHARD row ledger-apimarket-categoryvelocitymonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-sellersupply rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-categorysupplymonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-marketdaily rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-refundlatency rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-refundreasons rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.4s
+SHARD row ledger-apimarket-sellerrefundreasons rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-buyerwatchcategorymix rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-marketwatchmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+SHARD row ledger-apimarket-categorywatchmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-categorywatchconversionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+SHARD row ledger-apimarket-sellerwatchmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 2.6s
+SHARD row ledger-apimarket-sellerwatchconversionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-buyerwatchmonths rc=0 pass=9 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-marketsupplymonths rc=0 pass=9 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+SHARD row ledger-apimarket-categoryquestionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-categoryclaimmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.2s
+SHARD row ledger-apimarket-ratingmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-sellerratingmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-categoryratingmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-questionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-feedmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-sellermonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.5s
+SHARD row ledger-apimarket-sellerquestionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-buyeranswerwait rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+SHARD row ledger-apimarket-backlogmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-marketrelistmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.2s
+SHARD row ledger-apimarket-sellerpricecadencemonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.6s
+SHARD row ledger-apimarket-sellerpricedemandmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-buyerrefundmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-buyerclaimmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-ratingreplylatency rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-sellerreplymonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-sellerrestockmonths rc=0 pass=9 fail=0 detail=yes suite=PASS 9/9 crit=9 0.9s
+SHARD row ledger-apimarket-marketconversionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.6s
+SHARD row ledger-apimarket-buyerpricereaction rc=0 pass=9 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-sellerrepeatmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-categoryrefundmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-pricepercentiles rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 3.0s
+SHARD row ledger-apimarket-ticketsize rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 3.9s
+SHARD row ledger-apimarket-claimlatency rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.2s
+SHARD row ledger-apimarket-buyergapmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-claimmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-marketprovidermonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-buyerprofile rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-ratreply rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-ratingrev rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-restock rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-sellerinbox rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-listingdemand rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-refundexposure rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-sellerledger rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-buyerledger rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-claims rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-claims-respond rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-claims-withdraw rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-claimnote rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-category rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.1s
+SHARD row ledger-apimarket-reviewcycle rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.7s
+SHARD row ledger-apimarket-revenuemonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-marketmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-buyermonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-report rc=0 pass=9 fail=0 detail=yes suite=PASS 9/9 crit=9 1.9s
+SHARD row ledger-apimarket-attention rc=0 pass=9 fail=0 detail=yes suite=PASS 9/9 crit=9 2.4s
+SHARD row ledger-apimarket-reportjson rc=0 pass=10 fail=1 detail=yes suite=PASS 10/10 crit=8 2.7s
+SHARD row ledger-apimarket-reportworkbench rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 9.8s
+SHARD row ledger-apimarket-watchalerts rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-watchbudget rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-marketfeed rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-feedlisting rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-apimarket-feeddev rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-apimarket-activity rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 15.9s
+SHARD row ledger-apimarket-reportdossier rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 43.7s
+SHARD row ledger-apimarket-buyerhistory rc=124 pass=9 fail=0 detail=yes suite=none crit=8 60.0s timeout=yes
+SHARD detail ledger-apimarket-buyerhistory PASS AC-AMBD1 buyers=['usr:bob', 'usr:carol', 'usr:erin'] keys_ok=True
+SHARD detail ledger-apimarket-buyerhistory report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-main-rv57tsb9\bh.html (37052 bytes, sha256 6f3e02f62374a623)
+SHARD detail ledger-apimarket-buyerhistory attention findings: 5 (severity {"warn": 5})
+SHARD detail ledger-apimarket-buyerhistory report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-main-rv57tsb9\bh.json (61151 bytes, schema 17)
+SHARD detail ledger-apimarket-buyerhistory PASS AC-AMBD5 schema=17 top=True buyer=True old=True env=True json_same=True
+SHARD detail ledger-apimarket-buyerhistory PASS AC-AMBD2 same_source=True watch_count 0->1 grew=True
+SHARD detail ledger-apimarket-buyerhistory PASS AC-AMBD3 counts=usr:bob:1/1,usr:carol:0/0,usr:erin:1/1 order/live/absent/direct=True
+SHARD detail ledger-apimarket-buyerhistory PASS AC-AMBD4 rating_id_key=True owner=True effective=True flat=True base=1 rev=1
+SHARD detail ledger-apimarket-buyerhistory PASS AC-AMBD6 heads=True blocks=True empty_states=True cols=True
+SHARD detail ledger-apimarket-buyerhistory report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-main-rv57tsb9\esc.html (43143 bytes, sha256 eee64e4d2f5f1890)
+SHARD detail ledger-apimarket-buyerhistory attention findings: 6 (severity {"warn": 6})
+SHARD detail ledger-apimarket-buyerhistory PASS AC-AMBD6-esc raw_absent=True escaped=True markers=True
+SHARD detail ledger-apimarket-buyerhistory PASS AC-AMBD7-read digest_same=True tx=18 buyers=3
+SHARD detail ledger-apimarket-buyerhistory report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-d1-7jipgpta\d.html (37052 bytes, sha256 6f3e02f62374a623)
+SHARD detail ledger-apimarket-buyerhistory attention findings: 5 (severity {"warn": 5})
+SHARD detail ledger-apimarket-buyerhistory report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-d1-7jipgpta\d.json (61151 bytes, schema 17)
+SHARD detail ledger-apimarket-buyerhistory report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-d2-r4pym373\d.html (37052 bytes, sha256 6f3e02f62374a623)
+SHARD detail ledger-apimarket-buyerhistory attention findings: 5 (severity {"warn": 5})
+SHARD detail ledger-apimarket-buyerhistory report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-buyerhistory-d2-r4pym373\d.json (61151 bytes, schema 17)
+SHARD detail ledger-apimarket-buyerhistory PASS AC-AMBD7-det html_sha16=6f3e02f62374a623 json_same=True
+SHARD detail ledger-apimarket-buyerhistory   child test_apimarket_report.py rc=0
+SHARD detail ledger-apimarket-buyerhistory   child test_apimarket_report_attention.py rc=0
+SHARD detail ledger-apimarket-buyerhistory   child test_apimarket_report_json.py rc=0
+SHARD detail ledger-apimarket-buyerhistory   child test_apimarket_report_workbench.py rc=0
+SHARD detail ledger-apimarket-buyerhistory   child test_apimarket_report_activity.py rc=0
+SHARD detail ledger-apimarket-buyerhistory TIMEOUT suite exceeded the 60s per-suite cap
+SHARD row ledger-apimarket-refundregister rc=124 pass=12 fail=0 detail=yes suite=none crit=8 60.0s timeout=yes
+SHARD detail ledger-apimarket-refundregister PASS AC-AMRR1 keys=True count=2 rows=2 rows_ok=True
+SHARD detail ledger-apimarket-refundregister PASS AC-AMRR1-empty count=0 sums=0/0/0 empty_text=True
+SHARD detail ledger-apimarket-refundregister PASS AC-AMRR2 same=True dev=True/1 listing=True/1 grew=True
+SHARD detail ledger-apimarket-refundregister PASS AC-AMRR3 half_open=True/['2026-10-02T00:00:00Z'] empty=True inverted=E_AM_BAD_WINDOW inter=True/1
+SHARD detail ledger-apimarket-refundregister PASS AC-AMRR4 per_row=True split=True totals=True months=True dev=True order=True
+SHARD detail ledger-apimarket-refundregister report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-refundreg-main-rt1lu_ww\c.html (37563 bytes, sha256 a107ea973c886414)
+SHARD detail ledger-apimarket-refundregister attention findings: 6 (severity {"warn": 6})
+SHARD detail ledger-apimarket-refundregister report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-refundreg-main-rt1lu_ww\c.json (62057 bytes, schema 17)
+SHARD detail ledger-apimarket-refundregister PASS AC-AMRR5 schema=17 keys=True buyers=True old=True env=True json_same=True
+SHARD detail ledger-apimarket-refundregister PASS AC-AMRR6 forms=11 bad=[] digests_same=True
+SHARD detail ledger-apimarket-refundregister PASS AC-AMRR7-read digest=07635bbaeaa7e673 tx=17
+SHARD detail ledger-apimarket-refundregister report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-refundreg-d1-yp08a_kd\d.html (36146 bytes, sha256 9d6dd297c01bb656)
+SHARD detail ledger-apimarket-refundregister attention findings: 5 (severity {"warn": 5})
+SHARD detail ledger-apimarket-refundregister report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-refundreg-d1-yp08a_kd\d.json (59515 bytes, schema 17)
+SHARD detail ledger-apimarket-refundregister report written: C:\Users\sjs20\AppData\Local\Temp\apimarket-refundreg-d2-sbfnwhqu\d.html (36146 bytes, sha256 9d6dd297c01bb656)
+SHARD detail ledger-apimarket-refundregister attention findings: 5 (severity {"warn": 5})
+SHARD detail ledger-apimarket-refundregister report json written: C:\Users\sjs20\AppData\Local\Temp\apimarket-refundreg-d2-sbfnwhqu\d.json (59515 bytes, schema 17)
+SHARD detail ledger-apimarket-refundregister PASS AC-AMRR7-det html_sha16=9d6dd297c01bb656 json_same=True
+SHARD detail ledger-apimarket-refundregister PASS AC-AMRR8-html heads=True marker=True section_len=1235
+SHARD detail ledger-apimarket-refundregister PASS AC-AMRR8-degrade empty=no refunds in this market
+SHARD detail ledger-apimarket-refundregister PASS AC-AMRR8-escape escaped=True
+SHARD detail ledger-apimarket-refundregister   child test_apimarket_report.py rc=0
+SHARD detail ledger-apimarket-refundregister   child test_apimarket_report_attention.py rc=0
+SHARD detail ledger-apimarket-refundregister   child test_apimarket_report_json.py rc=0
+SHARD detail ledger-apimarket-refundregister   child test_apimarket_report_workbench.py rc=0
+SHARD detail ledger-apimarket-refundregister   child test_apimarket_report_activity.py rc=0
+SHARD detail ledger-apimarket-refundregister TIMEOUT suite exceeded the 60s per-suite cap
+SHARD row ledger-apimarket-buyertodo rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.3s
+SHARD row ledger-apimarket-reportdemand rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 14.1s
+SHARD row ledger-apimarket-reportduty rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 10.4s
+SHARD row ledger-apimarket-reportclaims rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 8.7s
+SHARD row ledger-apimarket-reportclaims-nesting rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.3s
+SHARD row ledger-apimarket-purchasedossier rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-sellertodo rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-buyerclaimtodo rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-providerrev rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-sellerquality rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.1s
+SHARD row ledger-apimarket-qna rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.2s
+SHARD row ledger-apimarket-buyerquestions rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+SHARD row ledger-apimarket-selleranswers rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-answerrev rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.2s
+SHARD row ledger-apimarket-categoryrev rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-provideridentity rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-reportslowanswer rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row ledger-apimarket-settlementcsv rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+SHARD row ledger-effects-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-honorcert-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ledger-honorcert-yearbookpersist rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.6s
+SHARD row ledger-honorcert-multiyear rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-honorcert-yearbookspersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ledger-honorcert-yearbooksubsetaxis rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-honorcert-yearbook-zeroboundary rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-honorcert-yearbook-zeroboundarygate rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ledger-honorcert-grantwidthworld rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-honorcert-grantgate-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.7s
+SHARD row ledger-studio-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-showroom-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.7s
+SHARD row ledger-tmarket-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-festival-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.7s
+SHARD row ledger-sistercity-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.7s
+SHARD row ledger-growth-archive-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-showcase-stats rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-coverageboard-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.7s
+SHARD row ledger-coverageboard-window rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-datasub-coveragedual rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.7s
+SHARD row ledger-datasub-coveragedualpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ledger-datasub-coveragemonthroll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-datasub-coveragegatepersist rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-statsboard-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-showcase-statslimit rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-showcase-statsdual rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-showcase-statsdual-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.9s
+SHARD row ledger-showcase-statscap-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-showcase-statsboundary-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-showcase-statsgatepersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-showcase-viewwindow-gatepersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-showcase-viewwindow-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-showcase-viewwindow-replacepersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-proposal-progresspersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-proposal-progressboundary-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-showcase-statsmonth rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-showcase-statsmonth-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-showcase-statsmonthboundary-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-showcase-statsmonthretract-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-showcase-statsmonthreplace-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-showcase-statsmonth-rere-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-showcase-statsmonth-straddle-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-showcase-statsmonth-straddle2-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-showcase-statsmonth-straddle3-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-proposal-gatepersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-proposal-gateboundary-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-proposal-signbadargs-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-proposal-signbadargs-loadedpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-tmp-sweep rc=0 pass=18 fail=0 detail=yes suite=PASS 18/18 crit=18 0.4s
+SHARD row ledger-census-negative rc=0 pass=12 fail=0 detail=yes suite=PASS 12/12 crit=12 0.2s
+SHARD row ledger-census-baseline-add rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD rc=2 scope=SHARD selected=292 executed=292 green=290 criteria=2275 crit_mismatch=1 elapsed=404.5s
+SHARD red-unit undeclared=ledger-apimarket-reportjson:10!=8
+SHARD disclosure crit_mismatch=ledger-apimarket-reportjson:10!=8
+SHARD red ledger-apimarket-buyerhistory:rc=124,ledger-apimarket-refundregister:rc=124

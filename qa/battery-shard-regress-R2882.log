@@ -1,0 +1,46 @@
+SHARD scope=SHARD registry_suites=710 registry_criteria=5424 selected=3 selected_criteria=36 cap=600s leg_cap=0s exact=3
+SHARD row ledger-apimarket-reportjson rc=0 pass=10 fail=1 detail=yes suite=PASS 10/10 crit=10 2.2s
+SHARD row os-suite-matrix-reconcile rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.2s
+SHARD row os-export-round rc=1 pass=48 fail=1 detail=yes suite=FAIL 48/49 crit=20 1.6s
+SHARD detail os-export-round   | PASS AC-EXPW1 current follows the live tick R9001 - SOMETHING 
+SHARD detail os-export-round   | PASS AC-EXPW1 the ledger line is never mistaken for the narrative R9001 - SOMETHING MEASURED IN THIS WINDO
+SHARD detail os-export-round   | FAIL AC-EXPW1 latest follows the newest pair on disk preview/ugc-gate-report.html (9576
+SHARD detail os-export-round   | PASS AC-EXPW1 next follows the open board row MAIN - the R2881 law was verified 
+SHARD detail os-export-round   | PASS AC-EXPW1 no round-number literal survives in the code strings bad=[]
+SHARD detail os-export-round   | PASS AC-EXPW2 the built face carries the derived three lines tick=9001
+SHARD detail os-export-round   | PASS AC-EXPW2 the tick row slot equals the live tick rows=1
+SHARD detail os-export-round   | PASS AC-EXPW2 the newest pair heads the outs band preview/ugc-gate-report.html (
+SHARD detail os-export-round   | PASS AC-EXPW3 every self_drive key comes from the shipped recompute keys=7
+SHARD detail os-export-round   | PASS AC-EXPW3 a private world never invents a second derivation 
+SHARD detail os-export-round   | PASS AC-EXPW4 --check writes nothing and both bytes and mtime hold fails=[]
+SHARD detail os-export-round   | PASS AC-EXPW5 a missing tick row refuses with E_EXP and zero write E_EXP expected exactly 1 tick row,
+SHARD detail os-export-round   | PASS AC-EXPW5 a duplicated tick row refuses with E_EXP and zero write E_EXP expected exactly 1 tick row,
+SHARD detail os-export-round   | PASS AC-EXPW7 the board set is an explicit constant, not a guess board=('ceo-blockers', 'face-sweep', 'battery-shard-report', 'index')
+SHARD detail os-export-round   | PASS AC-EXPW7 the newest pair on disk being a board page does not move the line preview/first-yuan-chain.html (16B) + pr
+SHARD detail os-export-round   | PASS AC-EXPW7 every skipped name is a member of the same constant skipped=3
+SHARD detail os-export-round   | PASS AC-EXPW7 a product pair on top needs no exclusion preview/first-yuan-chain.html (16B) + pr
+SHARD detail os-export-round   | PASS AC-EXPW7 the live tree picks a non-board face picked=apimarket-report
+SHARD detail os-export-round   | PASS AC-EXPW8 an all-board tree yields a stated fact, not a board name (no product pair on disk - every pair is a meta boar
+SHARD detail os-export-round   | PASS AC-EXPW8 the stated fact is not a pair receipt (no product pair on disk - every pair is
+SHARD detail os-export-round   | PASS AC-EXPW8 adding one product pair replaces the fact with its name preview/first-yuan-chain.html (16B) + pr
+SHARD detail os-export-round   | PASS AC-EXPW8 an empty preview keeps the existing empty-tree sentence (no preview pair on disk)
+SHARD detail os-export-round   | PASS AC-EXPW9 the face carries the skipped audit and the board flag skipped=3
+SHARD detail os-export-round   | PASS AC-EXPW9 the audit empties when no board pair is newer skipped=0
+SHARD detail os-export-round   | PASS AC-EXPW9 the audit names bytes so it cannot be typed in s.html (16B)
+SHARD detail os-export-round   | PASS AC-EXPW10 a correct private face reads clean fails=[]
+SHARD detail os-export-round   | PASS AC-EXPW10 naming a board page reddens AC-EXPW7 fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk', 'AC-EXPW7 latest_artifact names a meta board page (ceo-blockers)']
+SHARD detail os-export-round   | PASS AC-EXPW10 a silent exclusion reddens AC-EXPW9 fails=['AC-EXPW9 newest pair on disk is a board page but the skipped audit is empty']
+SHARD detail os-export-round   | PASS AC-EXPW10 restoring the derived face reads clean again fails=[]
+SHARD detail os-export-round   | PASS AC-EXPW11 a summary line above the headline never becomes current R9011 - ENGINEERING: the round did one measu
+SHARD detail os-export-round   | PASS AC-EXPW11 removing the summary leaves current unchanged R9011 - ENGINEERING: the round did one measu
+SHARD detail os-export-round   | PASS AC-EXPW11 a narrative about a fold stays a narrative, a bare range too, and the summary shape is excluded about=False range=False summary=True
+SHARD detail os-export-round   | PASS AC-EXPW13 an intact archive does not block the write and is not re-grown skip='results archived to logs/status-export-legac'
+SHARD detail os-export-round   | PASS AC-EXPW13 a live results list still moves the tick slot tick_row=['9013'] skipped=None
+SHARD detail os-export-round   | PASS AC-EXPW14 a missing, mismatched or dangling archive is refused by name refusals=['E_EXP_NO_ARCHIVE results_archive a', 'E_EXP_NO_ARCHIVE archive sha256 00', 'E_EXP_NO_ARCHIVE results_archive.p']
+SHARD detail os-export-round   | PASS AC-EXPG1 a dated round main line passes the law 
+SHARD detail os-export-round   | PASS AC-EXPG4 an anchored private world grades clean (positive control) fails=[]
+SHARD detail os-export-round   | PASS AC-EXPG1 an unanchored newest round refuses the write, zero bytes E_EXP_ROUND_SHAPE E_RMS_NO_DATE round=9031 n
+SHARD detail os-export-round   | PASS AC-EXPG1 the refusal carries the law code it came from E_EXP_ROUND_SHAPE E_RMS_NO_DATE round=9031 newest round 9031
+SHARD detail os-export-round   | PASS AC-EXPG2 the gate is the law module, not a second local regex law_calls=1 local_codes=0
+SHARD rc=2 scope=SHARD selected=3 executed=3 green=2 criteria=36 crit_mismatch=0 elapsed=5.0s
+SHARD red os-export-round:rc=1

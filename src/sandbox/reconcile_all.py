@@ -3171,8 +3171,11 @@ SUITES = [
     # versioned ASCII envelope (schema_version/report/attention) wraps
     # the same collect() dict the page consumes and lands atomically, so
     # automation gets a stable shape instead of scraping HTML.
+    # R2882 wide-leg finding: AC-AMJ9/AC-AMJ10 landed at R2869 but this row
+    # still said 8, so the battery under-reported this suite by two criteria
+    # until the ledger- family leg named the undeclared 10!=8 by name.
     ("ledger-apimarket-reportjson", os.path.join(
-        "ledger", "test_apimarket_report_json.py"), 8),
+        "ledger", "test_apimarket_report_json.py"), 10),
     # R2106 resident workbench on the same report generator: every buyer
     # block now reads the two newest resident faces (rating-debt queue
     # and watch alert feed) on every collect, with the additive schema
