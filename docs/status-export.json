@@ -1,18 +1,18 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2896 PRODUCT+ENGINEERING: R2895 item (1) is CLOSED - the CEO face's product line now carries the PAIR'S OWN DATE, so a two-day-old preview can no longer read as this window's artifact: fmt_pair() publishes preview/X.html (NB) + preview/X.json (NB) [YYYY-MM-DD] rendered from the pair's own max mtime, and BOTH derivations call that one formatter (export_round.fmt_pair and status_export_fresh.newest_artifact().line), so AC-SXF15 can no longer be satisfied by two formaters that merely happen to agree today.",
+    "current": "2026-11-18 R2897 PRODUCT+ENGINEERING: R2896 item (1) is CLOSED - the artifact line now ORDERS by the committer time of the pair last committed content change, so a touched-but-unchanged page can no longer outrank a genuinely newer one; both laws are measured on the SAME git fixture (the mtime law picks the touched page at old=1769904000 new=1767312000, the content law picks preview/genuinely-new.html with stamp exactly T2), and the dirty/untracked/non-git fallbacks are measured rather than assumed.",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2896] next window (<=12h): (1) MAIN - `latest_artifact` now carries the pair's own date, but the pair is still chosen by MTIME ALONE, so a re-touched old page outranks a genuinely newer one: decide whether the derivation should read the page's own content (or a declared build stamp) rather than the filesystem clock, pinned with a red control and without hand-editing the face. (2) the evidence line's freshness stays deliberately ungraded by `export_round --check` (a battery leg writes its own `qa/*.log` mid-run); if a staleness signal is wanted it belongs in `tools/status_export_fresh.py` with its own control. (3) carried unchanged: 425 non-`os-` registry suites never run in any slice, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 106 UTF-16 + 39 BOM-carrying qa evidence files, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability has arrived), Docker absent, and `BigDomain-OSLoop` still reading InteractiveToken with an ELEVATED shell needed for its S4U re-registration.",
-    "next_milestone_due": "2026-11-18T15:19:17+08:00",
-    "updated_at": "2026-11-18T03:19:17+08:00",
-    "latest_evidence": "qa/export-pair-date-R2896.log (329B, 2026-11-18)",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/export-pair-date-R2896.log (329B, 2026-11-18)"
+    "next_milestone": "[R2897] next window (<=12h): (1) MAIN - the line now orders by content time, but a reader cannot TELL the two stamps apart: a pair committed at T2 reads `[T2-date]` and an uncommitted pair reads `[mtime-date]` with no marker, so the same shape means two different clocks - decide whether the face should publish the provenance (committed vs uncommitted) once, pinned with a red control and without hand-editing the face. (2) `src/os/test_tree_snapshot.py` was repaired because it had never run in a slice (truncated)",
+    "next_milestone_due": "2026-11-18T15:35:55+08:00",
+    "updated_at": "2026-11-18T03:35:55+08:00",
+    "latest_evidence": "qa/tree-snapshot-R2897.log (324B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/tree-snapshot-R2897.log (324B, 2026-11-18)"
   },
-  "current": "2026-11-18 R2896 PRODUCT+ENGINEERING: R2895 item (1) is CLOSED - the CEO face's product line now carries the PAIR'S OWN DATE, so a two-day-old preview can no longer read as this window's artifact: fmt_pair() publishes preview/X.html (NB) + preview/X.json (NB) [YYYY-MM-DD] rendered from the pair's own max mtime, and BOTH derivations call that one formatter (export_round.fmt_pair and status_export_fresh.newest_artifact().line), so AC-SXF15 can no longer be satisfied by two formaters that merely happen to agree today.",
+  "current": "2026-11-18 R2897 PRODUCT+ENGINEERING: R2896 item (1) is CLOSED - the artifact line now ORDERS by the committer time of the pair last committed content change, so a touched-but-unchanged page can no longer outrank a genuinely newer one; both laws are measured on the SAME git fixture (the mtime law picks the touched page at old=1769904000 new=1767312000, the content law picks preview/genuinely-new.html with stamp exactly T2), and the dirty/untracked/non-git fallbacks are measured rather than assumed.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -40,10 +40,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2896 PRODUCT+ENGINEERING: R2895 item (1) is CLOSED - the CEO face's product line now carries the PAIR'S OWN DATE, so a two-day-old preview can no longer read as this window's artifact: fmt_pair() publishes preview/X.html (NB) + preview/X.json (NB) [YYYY-MM-DD] rendered from the pair's own max mtime, and BOTH derivations call that one formatter (export_round.fmt_pair and status_export_fresh.newest_artifact().line), so AC-SXF15 can no longer be satisfied by two formaters that merely happen to agree today.",
-  "export_ts": "2026-11-18T03:19:17+08:00",
+  "do": "2026-11-18 R2897 PRODUCT+ENGINEERING: R2896 item (1) is CLOSED - the artifact line now ORDERS by the committer time of the pair last committed content change, so a touched-but-unchanged page can no longer outrank a genuinely newer one; both laws are measured on the SAME git fixture (the mtime law picks the touched page at old=1769904000 new=1767312000, the content law picks preview/genuinely-new.html with stamp exactly T2), and the dirty/untracked/non-git fallbacks are measured rather than assumed.",
+  "export_ts": "2026-11-18T03:35:55+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
-  "next_milestone": "[R2896] next window (<=12h): (1) MAIN - `latest_artifact` now carries the pair's own date, but the pair is still chosen by MTIME ALONE, so a re-touched old page outranks a genuinely newer one: decide whether the derivation should read the page's own content (or a declared build stamp) rather than the filesystem clock, pinned with a red control and without hand-editing the face. (2) the evidence line's freshness stays deliberately ungraded by `export_round --check` (a battery leg writes its own `qa/*.log` mid-run); if a staleness signal is wanted it belongs in `tools/status_export_fresh.py` with its own control. (3) carried unchanged: 425 non-`os-` registry suites never run in any slice, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 106 UTF-16 + 39 BOM-carrying qa evidence files, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability has arrived), Docker absent, and `BigDomain-OSLoop` still reading InteractiveToken with an ELEVATED shell needed for its S4U re-registration.",
+  "next_milestone": "[R2897] next window (<=12h): (1) MAIN - the line now orders by content time, but a reader cannot TELL the two stamps apart: a pair committed at T2 reads `[T2-date]` and an uncommitted pair reads `[mtime-date]` with no marker, so the same shape means two different clocks - decide whether the face should publish the provenance (committed vs uncommitted) once, pinned with a red control and without hand-editing the face. (2) `src/os/test_tree_snapshot.py` was repaired because it had never run in a slice (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
@@ -153,7 +153,7 @@
   },
   "results": [
     [
-      "2896",
+      "2897",
       "OSLoop 执行 tick"
     ]
   ],
@@ -166,16 +166,16 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 52,
+    "log_lines_in_window": 59,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "state_bytes": 45457,
-  "latest_evidence": "qa/export-pair-date-R2896.log (329B, 2026-11-18)"
+  "state_bytes": 50026,
+  "latest_evidence": "qa/tree-snapshot-R2897.log (324B, 2026-11-18)"
 }

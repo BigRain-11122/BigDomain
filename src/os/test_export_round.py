@@ -189,6 +189,76 @@ def build_pair_world(rows, tick=9100):
     return d
 
 
+def _git_fixture(world, args, when=None):
+    """Run one git command inside a fixture, with fixed identity and date."""
+    env = dict(os.environ)
+    if when is not None:
+        stamp = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(when))
+        env['GIT_AUTHOR_DATE'] = stamp
+        env['GIT_COMMITTER_DATE'] = stamp
+    env['GIT_AUTHOR_NAME'] = 'fixture'
+    env['GIT_AUTHOR_EMAIL'] = 'fixture@example.invalid'
+    env['GIT_COMMITTER_NAME'] = 'fixture'
+    env['GIT_COMMITTER_EMAIL'] = 'fixture@example.invalid'
+    return subprocess.run(['git', '-C', world] + args, env=env,
+                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+
+def build_git_pair_world(tick=9200):
+    """A private world carrying a REAL git history with two controlled ages.
+
+    R2897 AC-EXPD4 fixture: `touched-old` is committed at T1 and then touched to
+    T3, while `genuinely-new` is committed at T2 with T1 < T2 < T3, so the mtime
+    law and the content law MUST disagree about which pair is newest. Returns
+    (world, t1, t2, t3), or (None, ...) when git itself is unavailable - the
+    caller reports that instead of fabricating a green.
+    """
+    d = tempfile.mkdtemp(prefix='expw-git-')
+    write(os.path.join(d, 'src', 'os', 'state.json'),
+          json.dumps({'tick': tick,
+                      'log': ['2026-11-16 R%s SOMETHING MEASURED IN THIS WINDOW'
+                              % tick]}, ensure_ascii=False))
+    copy(os.path.join(ROOT, 'src', 'os', 'backlog.md'),
+         os.path.join(d, 'src', 'os', 'backlog.md'))
+    prev = os.path.join(d, 'preview')
+    os.makedirs(prev)
+    label = 'TICK-ROW-LABEL'
+    try:
+        import check_export_consistency as cec
+        label = cec._load_patterns().get('tick_row_label') or label
+    except Exception:
+        pass
+    face = {'results': [[str(tick), label]], 'outs': ['x'], 'do': 'x',
+            'ceo_face': {'current': 'x', 'latest_artifact': 'x',
+                         'next_milestone': 'x'},
+            'self_drive': {}}
+    write(os.path.join(d, 'docs', 'status-export.json'),
+          json.dumps(face, ensure_ascii=False, indent=2) + '\n')
+    t1 = 1767225600
+    t2 = t1 + 86400
+    t3 = t2 + 30 * 86400
+    try:
+        _git_fixture(d, ['init'])
+        for stem, when, message in (('touched-old', t1, 'one'),
+                                    ('genuinely-new', t2, 'two')):
+            for ext, body in (('.html', '<!DOCTYPE html>\n'), ('.json', '{}\n')):
+                path = os.path.join(prev, stem + ext)
+                write(path, body)
+                os.utime(path, (when, when))
+            _git_fixture(d, ['add', '--', 'preview/' + stem + '.html',
+                             'preview/' + stem + '.json'], when)
+            _git_fixture(d, ['-c', 'user.name=fixture',
+                             '-c', 'user.email=fixture@example.invalid',
+                             'commit', '-m', message], when)
+        for ext in ('.html', '.json'):
+            path = os.path.join(prev, 'touched-old' + ext)
+            os.utime(path, (t3, t3))
+    except OSError:
+        shutil.rmtree(d, ignore_errors=True)
+        return None, t1, t2, t3
+    return d, t1, t2, t3
+
+
 def main():
     if not os.path.isfile(TOOL):
         print('SUITE FAIL 0/%d tool missing' % 6)
@@ -755,6 +825,115 @@ def main():
            and dv['evidence'].startswith('qa/zz-evidence-new.log'),
            db['latest'][:32])
 
+        # ---- AC-EXPD4..AC-EXPD6 (R2897 pin): the ordering stamp is CONTENT time ----
+        # R2896 made the line carry a date but the pair was still CHOSEN by the
+        # filesystem clock, so an unchanged page that was touched outranked a
+        # genuinely newer one and re-dated itself. Both laws are measured on the
+        # SAME world, so the refutation is on the record rather than asserted.
+        wg, t1, t2, t3 = build_git_pair_world()
+        if wg is not None:
+            worlds.append(wg)
+        ok('AC-EXPD4 the fixture built a real git work tree',
+           bool(wg) and os.path.isdir(os.path.join(wg, '.git')), str(wg))
+        if wg is None:
+            for name in (
+                    'AC-EXPD4 the red control: the mtime law picks the touched page',
+                    'AC-EXPD4 the content law picks the genuinely newer page',
+                    'AC-EXPD4 the ordering stamp is the committed change time',
+                    'AC-EXPD4 the touched page keeps its own commit date'):
+                ok(name, False, 'git unavailable in this environment')
+        else:
+            prev_g = os.path.join(wg, 'preview')
+            old_m = max(os.path.getmtime(os.path.join(prev_g,
+                                                      'touched-old.html')),
+                        os.path.getmtime(os.path.join(prev_g,
+                                                      'touched-old.json')))
+            new_m = max(os.path.getmtime(os.path.join(prev_g,
+                                                      'genuinely-new.html')),
+                        os.path.getmtime(os.path.join(prev_g,
+                                                      'genuinely-new.json')))
+            ok('AC-EXPD4 the red control: the mtime law picks the touched page',
+               old_m > new_m, 'old=%.0f new=%.0f' % (old_m, new_m))
+            pairs_g = mod._pairs(wg)
+            ok('AC-EXPD4 the content law picks the genuinely newer page',
+               bool(pairs_g)
+               and pairs_g[0][1] == 'preview/genuinely-new.html',
+               pairs_g[0][1] if pairs_g else 'none')
+            ok('AC-EXPD4 the ordering stamp is the committed change time',
+               bool(pairs_g) and int(pairs_g[0][0]) == t2,
+               '%d vs t2=%d' % (int(pairs_g[0][0]) if pairs_g else -1, t2))
+            ok('AC-EXPD4 the touched page keeps its own commit date',
+               len(pairs_g) > 1 and mod.pair_date(pairs_g[1][0])
+               == mod.pair_date(float(t1)),
+               mod.pair_date(pairs_g[1][0]) if len(pairs_g) > 1 else 'none')
+
+            # AC-EXPD5: a file whose bytes changed AFTER its commit is newer
+            # than that commit and must say so; an untracked page participates
+            # by its mtime; a git failure answers None rather than raising.
+            path_edit = os.path.join(prev_g, 'genuinely-new.html')
+            write(path_edit, '<!DOCTYPE html>\n<p>edited after the commit</p>\n')
+            t4 = t3 + 86400
+            os.utime(path_edit, (t4, t4))
+            pairs_edit = mod._pairs(wg)
+            ok('AC-EXPD5 uncommitted bytes use their own mtime',
+               bool(pairs_edit) and int(pairs_edit[0][0]) == t4
+               and pairs_edit[0][1] == 'preview/genuinely-new.html',
+               'stamp=%d t4=%d' % (int(pairs_edit[0][0]) if pairs_edit else -1,
+                                   t4))
+            t5 = t4 + 86400
+            for ext, body in (('.html', '<!DOCTYPE html>\n'), ('.json', '{}\n')):
+                p_new = os.path.join(prev_g, 'untracked-new' + ext)
+                write(p_new, body)
+                os.utime(p_new, (t5, t5))
+            pairs_new = mod._pairs(wg)
+            ok('AC-EXPD5 an untracked page participates by its mtime',
+               bool(pairs_new) and int(pairs_new[0][0]) == t5
+               and pairs_new[0][1] == 'preview/untracked-new.html',
+               'stamp=%d t5=%d' % (int(pairs_new[0][0]) if pairs_new else -1,
+                                   t5))
+        ok('AC-EXPD5 a non-git world still orders by pure mtime',
+           not os.path.isdir(os.path.join(wd, '.git'))
+           and int(mod._pairs(wd)[0][0]) == int(os.path.getmtime(html_d)),
+           'stamp=%s' % (int(mod._pairs(wd)[0][0]) if mod._pairs(wd) else -1))
+        ok('AC-EXPD5 an unreadable repository answers None instead of raising',
+           mod._git(os.path.join(wd, 'not-a-repo'), ['status']) is None,
+           'no exception')
+
+        # AC-EXPD6: the new ordering clock must leave the published shape, the
+        # two-face identity and the --check date control exactly as they were.
+        wc2, s1, s2, s3 = build_git_pair_world(tick=9201)
+        if wc2 is not None:
+            worlds.append(wc2)
+        ok('AC-EXPD6 the second git world built', wc2 is not None, str(wc2))
+        if wc2 is None:
+            for name in ('AC-EXPD6 the published line still matches PAIR_LINE_RE',
+                         'AC-EXPD6 a face graded on a git world reads clean',
+                         'AC-EXPD6 the date red control still bites'):
+                ok(name, False, 'git unavailable in this environment')
+        else:
+            sc2 = json.loads(read(os.path.join(wc2, 'src', 'os',
+                                               'state.json')))
+            dc2 = mod.derive(wc2, sc2, 'TC2')
+            ok('AC-EXPD6 the published line still matches PAIR_LINE_RE',
+               bool(mod.PAIR_LINE_RE.match(dc2['latest']))
+               and 'genuinely-new' in dc2['latest'], dc2['latest'][:44])
+            face_c2 = os.path.join(wc2, 'docs', 'status-export.json')
+            built_c2, _ = mod.payload(wc2, sc2, 'TC2')
+            write(face_c2, json.dumps(built_c2, ensure_ascii=False,
+                                      indent=2) + '\n')
+            ok('AC-EXPD6 a face graded on a git world reads clean',
+               mod.check(wc2) == [], 'fails=%s' % mod.check(wc2)[:2])
+            wrong_c2 = json.loads(read(face_c2))
+            wrong_c2['ceo_face']['latest_artifact'] = re.sub(
+                r'\[\d{4}-\d{2}-\d{2}\]$', '[1999-01-01]', dc2['latest'])
+            write(face_c2, json.dumps(wrong_c2, ensure_ascii=False,
+                                      indent=2) + '\n')
+            ok('AC-EXPD6 the date red control still bites',
+               any('AC-EXPW1' in f for f in mod.check(wc2)),
+               'fails=%s' % mod.check(wc2)[:2])
+            write(face_c2, json.dumps(built_c2, ensure_ascii=False,
+                                      indent=2) + '\n')
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')
@@ -797,7 +976,7 @@ def main():
             declared.append(int(found.group(1)))
     will_print = crit_set(CHECKS + ['AC-EXPE4-registry-units'])
     ok('AC-EXPE4-registry-units',
-       declared == [len(will_print)] and len(will_print) == 27,
+       declared == [len(will_print)] and len(will_print) == 30,
        'declared=%s printed=%d' % (declared, len(will_print)))
 
     total = len(CHECKS)

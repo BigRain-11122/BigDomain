@@ -138,12 +138,20 @@ def build_world():
     write_bytes(os.path.join(d, "src", "os", "state.json"),
                 json.dumps(state, ensure_ascii=False, indent=2).encode("utf-8"))
     pair = (os.path.getsize(beta_html), os.path.getsize(beta_json))
+    derived = ER.derive(d, state, "TS")
     face = {"ceo_face": {
         "current": "R9100 a fixture round",
-        "latest_artifact": ER._fmt_pair(
-            ("preview/beta.html", "preview/beta.json", pair[0], pair[1])),
+        # R2897: the pair line is asked of the shipped derivation instead of
+        # being hand-assembled. The hand-built tuple was already one field short
+        # of the row `fmt_pair` reads, and the R2895 evidence fields were never
+        # added at all, so this fixture graded an OLDER face than the shipped one
+        # and only stayed silent because it never ran in a slice; a fixture must
+        # satisfy the law it is graded under.
+        "latest_artifact": derived["latest"],
         "next_milestone": "next fixture milestone",
-        "next_milestone_due": "2026-11-18"}}
+        "next_milestone_due": "2026-11-18",
+        "latest_evidence": derived["evidence"],
+        "latest_artifact_note": derived["note"]}}
     write_bytes(os.path.join(d, "docs", "status-export.json"),
                 json.dumps(face, ensure_ascii=False, indent=2).encode("utf-8"))
     return d, alpha_html, alpha_json

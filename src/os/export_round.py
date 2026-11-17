@@ -26,6 +26,14 @@ verbatim. Both lines are derived by the same reader that grades them, so the
 face cannot disagree with the disk without `--check` saying so. AC-EXPE1..
 AC-EXPE4 were pinned in src/os/backlog.md at R2895 BEFORE this change.
 
+R2897: the `latest` pair was ordered by filesystem mtime alone, so an unchanged
+page that was touched, copied or restored outranked a genuinely newer one - the
+line dated it "today" while its content could be days old. The ordering stamp is
+now the committer time of the file's last committed CONTENT change, with mtime
+kept only as the fallback for uncommitted/untracked files and for trees with no
+git at all. AC-EXPD4..AC-EXPD6 were pinned in src/os/backlog.md at R2897 BEFORE
+this change.
+
 Criteria AC-EXPW1..AC-EXPW6 were pinned in src/os/backlog.md at R2780 BEFORE
 this file existed.
 
@@ -57,6 +65,7 @@ import io
 import json
 import os
 import re
+import subprocess
 import sys
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -66,6 +75,7 @@ sys.path.insert(0, BASE)
 import ledger_lines as LL  # noqa: E402
 
 TZ = datetime.timezone(datetime.timedelta(hours=8))
+GIT_TIMEOUT = 20
 ROUND_RE = re.compile(r'^(?:\d{4}-\d{2}-\d{2} )?R(\d{4})')
 NEXT_ROW_RE = re.compile(r'^- \[ \] \[R\d{4}\] next window')
 LEDGER_RE = re.compile(r'^R\d{4} tokens:')
@@ -138,16 +148,97 @@ def last_round_line(state):
     return log[-1]
 
 
+def _git(repo, args):
+    """Run one read-only git command; None means "no answer", never a raise.
+
+    R2897: the export face must keep working on a tree that has no git at all
+    (every private test world does), so every git question here is answered
+    with None rather than an exception and the caller falls back to mtime.
+    """
+    try:
+        proc = subprocess.run(['git', '-C', repo] + args,
+                              stdout=subprocess.PIPE,
+                              stderr=subprocess.DEVNULL,
+                              timeout=GIT_TIMEOUT)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if proc.returncode != 0:
+        return None
+    return proc.stdout.decode('utf-8', 'replace')
+
+
+def _git_content_times(repo):
+    """preview/ path -> committer time of the last commit that changed it.
+
+    R2897 AC-EXPD4: git records WHEN THE CONTENT changed, which is the question
+    the artifact line claims to answer; a filesystem clock moves when a file is
+    merely touched, copied or restored. One `git log` is asked for the whole
+    preview/ tree, newest commit first, so the first time a path appears is its
+    most recent content change.
+    """
+    if not os.path.exists(os.path.join(repo, '.git')):
+        return {}
+    text = _git(repo, ['log', '--format=%x00%ct', '--name-only', '--', 'preview'])
+    if text is None:
+        return {}
+    times = {}
+    stamp = None
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        if line.startswith('\x00'):
+            try:
+                stamp = float(line[1:])
+            except ValueError:
+                stamp = None
+            continue
+        if stamp is not None and line not in times:
+            times[line.replace('\\', '/')] = stamp
+    return times
+
+
+def _git_uncommitted(repo):
+    """preview/ paths whose committed bytes are NOT what is on disk.
+
+    R2897 AC-EXPD5: a file written after the commit that git would name must use
+    its own mtime, because its content really is newer than that commit - and an
+    untracked file is uncommitted by definition.
+    """
+    if not os.path.exists(os.path.join(repo, '.git')):
+        return set()
+    text = _git(repo, ['status', '--porcelain', '--', 'preview'])
+    if text is None:
+        return set()
+    dirty = set()
+    for line in text.splitlines():
+        if len(line) < 4:
+            continue
+        rel = line[3:].strip()
+        if ' -> ' in rel:
+            rel = rel.split(' -> ', 1)[1]
+        dirty.add(rel.replace('\\', '/'))
+    return dirty
+
+
 def _pairs(repo):
     """Every preview/X.html with a sibling X.json, newest first.
 
-    Returns tuples of (mtime, html_rel, json_rel, html_bytes, json_bytes) so a
-    caller can filter without re-statting the tree.
+    Returns tuples of (content_time, html_rel, json_rel, html_bytes,
+    json_bytes) so a caller can filter without re-statting the tree.
+
+    R2897 AC-EXPD4: the ordering stamp is the pair's CONTENT time - the
+    committer time of the file's last committed change - because an unchanged
+    page whose mtime was touched must not outrank a genuinely newer one. The
+    disk clock is kept only to break a tie inside one commit, where the writing
+    order is the only remaining evidence.
     """
     prev = os.path.join(repo, 'preview')
     rows = []
     if not os.path.isdir(prev):
         return rows
+    times = _git_content_times(repo)
+    dirty = _git_uncommitted(repo)
     for name in os.listdir(prev):
         if not name.endswith('.html'):
             continue
@@ -156,11 +247,19 @@ def _pairs(repo):
         doc = os.path.join(prev, stem + '.json')
         if not os.path.isfile(doc):
             continue
-        m = max(os.path.getmtime(html), os.path.getmtime(doc))
-        rows.append((m, 'preview/' + name, 'preview/' + stem + '.json',
+        html_rel = 'preview/' + name
+        json_rel = 'preview/' + stem + '.json'
+        h_m = os.path.getmtime(html)
+        j_m = os.path.getmtime(doc)
+        # AC-EXPD5: committed and clean uses git's content time; dirty,
+        # untracked and non-git fall back to the file's own mtime.
+        h_c = h_m if html_rel in dirty else times.get(html_rel, h_m)
+        j_c = j_m if json_rel in dirty else times.get(json_rel, j_m)
+        rows.append((max(h_c, j_c), max(h_m, j_m), html_rel, json_rel,
                      os.path.getsize(html), os.path.getsize(doc)))
-    rows.sort(key=lambda r: (-r[0], r[1]))
-    return rows
+    rows.sort(key=lambda r: (-r[0], -r[1], r[2]))
+    return [(r[0], r[2], r[3], r[4], r[5]) for r in rows]
+
 
 
 def newest_pair(repo):
@@ -267,7 +366,12 @@ PAIR_LINE_RE = re.compile(
 
 
 def pair_date(mtime):
-    """The pair's OWN date, rendered from its mtime rather than from a clock."""
+    """The pair's OWN date, rendered from its content stamp, not from a clock.
+
+    R2897: the stamp is the committer time of the pair's last committed content
+    change (or its mtime while uncommitted), so touching an old page no longer
+    re-dates it.
+    """
     return datetime.datetime.fromtimestamp(mtime, TZ).strftime('%Y-%m-%d')
 
 
@@ -276,8 +380,8 @@ def fmt_pair(pair):
 
     R2896 AC-EXPD1: the line carried bytes only, so this window's artifact and a
     two-day-old one read identically at a glance - the same blindness the R2895
-    evidence line removed from the other slot. The date is the max mtime of the
-    pair, so a private world with fixed stamps reads the same line every run, and
+    evidence line removed from the other slot. The date is the pair's content
+    stamp, so a private world with fixed stamps reads the same line every run, and
     tools/status_export_fresh.py calls THIS function rather than re-formatting the
     field a second time (AC-SXF15: one field, one formatter).
     """
