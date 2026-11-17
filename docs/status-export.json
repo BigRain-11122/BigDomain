@@ -1,16 +1,16 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-17 R2874 PRODUCT+ENGINEERING: the R2864 label mismatch is closed at the birth site - a newest-round dated main line without an UPPERCASE label is refused by name (E_RMS_NO_LABEL) instead of being silently skipped, one constant now defines the label shape for the gate and both CEO-face readers, and the stale face the previous two closeouts left behind (R2871 naming while the log carried R2873) was re-derived by the shipped writer",
+    "current": "2026-11-17 R2875 PRODUCT+ENGINEERING: the mtime coupling R2874 could only DESCRIBE is now a law with an executable red control - tree_snapshot ships restore-what-you-found (bytes AND mtime, plus deleting a file the body created) and AC-TSNAP3 drives export_round's own AC-EXPW1 red on an unguarded touch and green again once the guard exits",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2874] next window (<=12h): (1) MAIN - the cross-suite coupling measured this window: `test_export_consistency_queue_face` re-renders TRACKED preview pairs, and `export_round` derives `latest_artifact` from mtime, so the two in one shard read AC-EXPW1 red WHEN the fixture re-render changes bytes (measured twice: red in the first mixed leg, green in `qa/battery-order-coupling-R2874.log` once the writer skipped an identical write) even though both pass alone - pin the choice BEFORE either edit (fixture suites restore the mtime they found, or the shard re-derives the face as its closing step), because a battery that can only be green in one order is a battery that will be read wrong; (2) the pnaa 112.0s versus deepest 115.0s split is still unmeasured - the named question is fixtures versus the bounded live leg inside ONE suite, pinned before editing; (3) the fan-out map's DEPTH column keys on the alias name rather than the module (declared in R2870) - decide fix versus keep, one criterion either way (truncated)",
-    "next_milestone_due": "2026-11-18T03:03:25+08:00",
-    "updated_at": "2026-11-17T15:03:25+08:00"
+    "next_milestone": "[R2875] next window (<=12h): (1) MAIN - the helper this window shipped has NO production consumer yet, and that is stated rather than dressed up: a search over `src/os/test_*.py` found the suites that re-render tracked pairs already isolate into temp worlds or assert stat stability, so nothing reddened. The obvious blanket wiring (snapshot every preview pair around each shard leg in `tools/battery_shard.py`) was REJECTED on inspection because a legitimate publisher inside a leg (e.g. `test_battery_shard_report` writing `preview/battery-shard-report.html`) would have its own product reverted - so pin the narrower law first: which files may a leg restore, and what happens when bytes CHANGED rather than only mtime. (2) the fold is owed: `state_append` printed `fold_margin=-25735` at this closeout, and R2857's recipe is the working one - read the window boundaries OUT of the log (never assume 1..N) and name every displaced id in the summary, or the vehicle refuses both ways (token-missing / round-split) (truncated)",
+    "next_milestone_due": "2026-11-18T03:23:36+08:00",
+    "updated_at": "2026-11-17T15:23:36+08:00"
   },
-  "current": "2026-11-17 R2874 PRODUCT+ENGINEERING: the R2864 label mismatch is closed at the birth site - a newest-round dated main line without an UPPERCASE label is refused by name (E_RMS_NO_LABEL) instead of being silently skipped, one constant now defines the label shape for the gate and both CEO-face readers, and the stale face the previous two closeouts left behind (R2871 naming while the log carried R2873) was re-derived by the shipped writer",
+  "current": "2026-11-17 R2875 PRODUCT+ENGINEERING: the mtime coupling R2874 could only DESCRIBE is now a law with an executable red control - tree_snapshot ships restore-what-you-found (bytes AND mtime, plus deleting a file the body created) and AC-TSNAP3 drives export_round's own AC-EXPW1 red on an unguarded touch and green again once the guard exits",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -38,10 +38,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-17 R2874 PRODUCT+ENGINEERING: the R2864 label mismatch is closed at the birth site - a newest-round dated main line without an UPPERCASE label is refused by name (E_RMS_NO_LABEL) instead of being silently skipped, one constant now defines the label shape for the gate and both CEO-face readers, and the stale face the previous two closeouts left behind (R2871 naming while the log carried R2873) was re-derived by the shipped writer",
-  "export_ts": "2026-11-17T15:03:25+08:00",
+  "do": "2026-11-17 R2875 PRODUCT+ENGINEERING: the mtime coupling R2874 could only DESCRIBE is now a law with an executable red control - tree_snapshot ships restore-what-you-found (bytes AND mtime, plus deleting a file the body created) and AC-TSNAP3 drives export_round's own AC-EXPW1 red on an unguarded touch and green again once the guard exits",
+  "export_ts": "2026-11-17T15:23:36+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
-  "next_milestone": "[R2874] next window (<=12h): (1) MAIN - the cross-suite coupling measured this window: `test_export_consistency_queue_face` re-renders TRACKED preview pairs, and `export_round` derives `latest_artifact` from mtime, so the two in one shard read AC-EXPW1 red WHEN the fixture re-render changes bytes (measured twice: red in the first mixed leg, green in `qa/battery-order-coupling-R2874.log` once the writer skipped an identical write) even though both pass alone - pin the choice BEFORE either edit (fixture suites restore the mtime they found, or the shard re-derives the face as its closing step), because a battery that can only be green in one order is a battery that will be read wrong; (2) the pnaa 112.0s versus deepest 115.0s split is still unmeasured - the named question is fixtures versus the bounded live leg inside ONE suite, pinned before editing; (3) the fan-out map's DEPTH column keys on the alias name rather than the module (declared in R2870) - decide fix versus keep, one criterion either way (truncated)",
+  "next_milestone": "[R2875] next window (<=12h): (1) MAIN - the helper this window shipped has NO production consumer yet, and that is stated rather than dressed up: a search over `src/os/test_*.py` found the suites that re-render tracked pairs already isolate into temp worlds or assert stat stability, so nothing reddened. The obvious blanket wiring (snapshot every preview pair around each shard leg in `tools/battery_shard.py`) was REJECTED on inspection because a legitimate publisher inside a leg (e.g. `test_battery_shard_report` writing `preview/battery-shard-report.html`) would have its own product reverted - so pin the narrower law first: which files may a leg restore, and what happens when bytes CHANGED rather than only mtime. (2) the fold is owed: `state_append` printed `fold_margin=-25735` at this closeout, and R2857's recipe is the working one - read the window boundaries OUT of the log (never assume 1..N) and name every displaced id in the summary, or the vehicle refuses both ways (token-missing / round-split) (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
@@ -150,7 +150,7 @@
   },
   "results": [
     [
-      "2874",
+      "2875",
       "OSLoop 执行 tick"
     ]
   ],
@@ -163,15 +163,15 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 150,
+    "log_lines_in_window": 158,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 23,
+    "substantive_non_idle_mention_lines": 24,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "state_bytes": 100399
+  "state_bytes": 104235
 }

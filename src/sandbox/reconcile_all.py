@@ -7077,6 +7077,19 @@ SUITES = [
     # own AC-UGRB11 asserted the wrong number - both sides now say twelve.
     ("os-ugc-gate-report",
      os.path.join("..", "os", "test_ugc_gate_report.py"), 12),
+    # R2875. docs/status-export.json's latest_artifact follows the NEWEST preview
+    # pair by mtime, so a fixture that re-renders a tracked pair moves the world
+    # another suite measures - measured in the real tree at R2875 as
+    # "AC-EXPW1 red on touch, PASS on restore". The choice was pinned in
+    # src/os/backlog.md BEFORE this module: restore what you found (bytes AND
+    # mtime), not "let the shard re-derive the face", because greening a face by
+    # writing the document it measures cannot tell stale from fresh. The suite
+    # EXECUTES that coupling in a private world (AC-TSNAP3) rather than
+    # narrating it. Appended at the END of the list on purpose: a row inserted
+    # mid-list would shift every later suite's shard, and the 27 unmeasured
+    # deep shard-6 rows are tracked BY that mapping.
+    ("os-tree-snapshot",
+     os.path.join("..", "os", "test_tree_snapshot.py"), 6),
     ]
 
 FAILS = 0
