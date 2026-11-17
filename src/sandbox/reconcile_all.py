@@ -7090,6 +7090,11 @@ SUITES = [
     # deep shard-6 rows are tracked BY that mapping.
     ("os-tree-snapshot",
      os.path.join("..", "os", "test_tree_snapshot.py"), 6),
+    # R2876: the lobby WebSocket report face printed eight readings and nothing
+    # re-derived them (tech R2840 seed). Appended at the END for the same reason
+    # as the row above: a mid-list insert shifts every later suite's shard.
+    ("os-lobby-ws-report-face",
+     os.path.join("..", "os", "test_lobby_ws_report.py"), 6),
     ]
 
 FAILS = 0

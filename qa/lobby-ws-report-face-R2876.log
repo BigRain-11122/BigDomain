@@ -1,0 +1,73 @@
+ROUND R2876 - lobby WebSocket report face gets a battery row (tech seed R2840 a)
+=================================================================================
+WHY: tools/lobby_ws_report.py printed eight readings and nothing re-derived
+them, so a wrong face read exactly like a right one. AC-LWR1..AC-LWR6 were
+pinned in state/queue/tech.md (the R2840 a seed row) BEFORE this code existed.
+
+RED FIRST (before the registry row existed)
+-------------------------------------------
+python src/os/test_lobby_ws_report.py
+  PASS AC-LWR1 contract: 8 ids True, intents non-empty, rendered ids derived
+       from the one list (shrink->2), artifact name pinned
+  PASS AC-LWR2 recount: recomputed 8==8 PASS and one flipped flag reads 7/8 FAIL
+  PASS AC-LWR3 honest zero: all-red reads 0/8 FAIL with 8 rows, absent evidence
+       refused (KeyError) rather than 0/0 PASS
+  PASS AC-LWR4 fail-closed: absent pair rc=2 FAIL, fresh publish rc=0 PASS,
+       re-check rc=0 PASS, tampered fingerprint rc=2 FAIL
+  PASS AC-LWR5 purity: tracked pair unchanged (2 files, bytes+mtime), guarded
+       re-render restores the tmp pair it rewrote
+  FAIL AC-LWR6 wiring: os-lobby-ws-report-face registered with 6 criteria in the
+       battery and named in the matrix
+  SUITE FAIL 5/6   rc=1
+
+GREEN (after the registry row and a matrix regeneration)
+--------------------------------------------------------
+python src/os/test_lobby_ws_report.py      run1 rc=0 digest=0597DBBFA640747F
+python src/os/test_lobby_ws_report.py      run2 rc=0 digest=0597DBBFA640747F
+IDENTICAL=True
+  PASS AC-LWR1..AC-LWR6, SUITE PASS 6/6
+
+REGISTRATION AND MATRIX
+-----------------------
+src/sandbox/reconcile_all.py  ("os-lobby-ws-report-face",
+                               os.path.join("..", "os", "test_lobby_ws_report.py"), 6),
+  appended at the END on purpose: a mid-list insert shifts every later suite's
+  shard, and the 27 unmeasured deep shard-6 rows are tracked by that mapping.
+python src/sandbox/suite_matrix.py
+  PASS generated docs/sandbox-suite-matrix.md (74431 bytes) - registry
+  suites=709 criteria=5412
+python src/sandbox/suite_matrix.py --check
+  PASS check: docs/sandbox-suite-matrix.md byte-identical (74431 bytes,
+  709 suites, 5412 criteria)
+  (was 708 suites / 5406 criteria before this round: +1 suite, +6 criteria)
+
+ADJACENT SUITES (regression)
+----------------------------
+python src/os/test_tree_snapshot.py   rc=0  SUMMARY pass=9 fail=0
+python src/os/test_export_round.py    rc=0  SUITE PASS 47/47
+
+WHAT AC-LWR5 BOUGHT (the R2875 orphan)
+--------------------------------------
+tree_snapshot shipped in R2875 with no production consumer. This suite consumes
+it: the tool re-publishes a TRACKED preview pair, so the guard is exercised on a
+real re-rendering body (rewrite bytes + os.utime forward), and the real tracked
+pair preview/lobby-ws-report.html+.json is asserted byte- AND mtime-identical
+after the whole suite runs.
+
+HONEST BOUNDARIES
+-----------------
+1. This round did NOT run the socket walk: AC-LWR1..AC-LWR4 exercise the
+   shipped render()/main() through synthetic evidence and a tmp publish, so the
+   wire behaviour itself is still guarded only by the tool's own --check run,
+   which this round did not perform. The eight LIVE readings remain unmeasured
+   by the battery.
+2. "Re-derive" here means the face's verdict is recomputed from its own evidence
+   flags and the rendered JSON is re-counted - it is not an independent
+   re-measurement of the lobby over a socket.
+3. AC-LWR6 reads the matrix text and the registry source; it does not execute
+   the full battery, so a future mid-list insert that shifts shards will not be
+   caught by this suite.
+4. Zero new payment capability: a buyer still cannot pay (no merchant id,
+   server, domain, filing+ICP, miniprogram appid+secret).
+5. Two more tool faces still carry no battery row this window (journey_demo and
+   the rest of the carried 7 -> 6 list).
