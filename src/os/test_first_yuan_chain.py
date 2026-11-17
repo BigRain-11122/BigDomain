@@ -305,6 +305,28 @@ def main():
        % (payload["scope"]["network"], "Honest scope" in html_text,
           "msgSecCheck" in html_text, "CEO physical pieces" in html_text))
 
+    # AC-FYCF1 (R2903): the tool's own docstring must agree with the relation
+    # it measures. The heading comes from the ONE shipped definition, so the
+    # sentence cannot drift away from the page it describes; the same
+    # predicate is applied to DOCTORED copies so the criterion is measured
+    # instead of being a constant that happens to match today.
+    doc = tool.__doc__ or ""
+    heading = tool.price_section(payload)["heading"]
+    equality_claim = re.compile(r"\bsame price\b", re.I)
+
+    def doc_agrees(text):
+        if cmp_row["same_price"]:
+            return bool(equality_claim.search(text))
+        return not equality_claim.search(text) and heading in text
+
+    arms = [doc_agrees(doc.replace(heading, "the price statement"))]
+    if not cmp_row["same_price"]:
+        arms.append(doc_agrees("It buys two products at the same price.\n" + doc))
+    ok("fycf1-docstring",
+       doc_agrees(doc) and not any(arms),
+       "same_price=%s heading=%r live=%s doctored=%s"
+       % (cmp_row["same_price"], heading, doc_agrees(doc), arms))
+
     total = len(CHECKS)
     if FAILS:
         print("SUITE FAIL %d/%d %s"

@@ -3,18 +3,18 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (5662B)"
     ],
-    "current": "2026-11-18 R2902 PRODUCT+ENGINEERING: the CEO board now carries the MONEY PROOF - face_sweep's FACES table gains a ninth row (first-yuan-chain) that re-executes tools/first_yuan_chain.py --check, so a regression inside the one-purchase-through-pay-member-ledger walk turns the board red instead of shortening a log nobody compares. The addition is DATA, not new law: no fifth criterion was invented, and the pin row names the four existing gates that cover it (AC-FSW2 row-equals-table, AC-FSW7 link+verdict quoted, AC-FSW9 no self-authored evidence, AC-FSW10 artifact older than the sweep).",
+    "current": "2026-11-18 R2903 PRODUCT+ENGINEERING: R2902 item (2) is CLOSED at the half that was actually wrong - the chain driver own docstring said it buys two products at the same price while the SAME run reads same_price=False value_differs=True, so the PROSE was repaired (the measurement follows D-20261116-05, which forbids the two rows sharing a price) and the sentence was given a LAW instead of a one-off edit: AC-FYCF1 grades the docstring against the heading price_section() derives at render time, in BOTH directions and on doctored copies.",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R2902] next window (<=12h): (1) MAIN - the board now EXECUTES nine gates but nothing on it says WHICH row a reader should trust first or what a FAIL would mean for revenue: the money row sits as flat data among eight shelves, so decide whether the board should carry a declared reading order (money proof first) or stay flat, pinned with its own red control BEFORE the edit and without hand-editing the board. (2) the chain driver's docstring claims 'two products at the same price' while RENDER reads `same_price=False value_differs=True`: repair whichever half is wrong, with the criterion that catches the next drift instead of a one-off edit. (3) two sweeps this window produced fingerprints 0696a52912edb148 -> 9add6de934b8cadc with no visible size move: find which row token moved (or prove the fingerprint inputs are not what the doc says), because a fingerprint nobody can explain cannot serve as a regression baseline (truncated)",
-    "next_milestone_due": "2026-11-18T16:41:09+08:00",
-    "updated_at": "2026-11-18T04:41:09+08:00",
-    "latest_evidence": "qa/face-sweep-nine-check-R2902.log (42B, 2026-11-18)",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/face-sweep-nine-check-R2902.log (42B, 2026-11-18)"
+    "next_milestone": "[R2903] next window (<=12h): (1) MAIN - the board follows the money proof but does not RANK it: nine rows execute, and nothing on the page says which row a reader should trust first or what a FAIL in each would mean for revenue, so decide whether `face_sweep` should carry a declared reading order (money proof first) or stay flat - pinned with its own red control BEFORE the edit and without hand-editing the rendered board. (2) two sweeps in R2902 produced `fingerprint=0696a52912edb148` then `9add6de934b8cadc` with no visible size move: name which row token moved, or prove the fingerprint inputs are not what the docstring says, because a fingerprint nobody can explain cannot serve as a regression baseline (truncated)",
+    "next_milestone_due": "2026-11-18T16:48:40+08:00",
+    "updated_at": "2026-11-18T04:48:40+08:00",
+    "latest_evidence": "qa/first-yuan-regress-R2903.log (136B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/first-yuan-regress-R2903.log (136B, 2026-11-18)"
   },
-  "current": "2026-11-18 R2902 PRODUCT+ENGINEERING: the CEO board now carries the MONEY PROOF - face_sweep's FACES table gains a ninth row (first-yuan-chain) that re-executes tools/first_yuan_chain.py --check, so a regression inside the one-purchase-through-pay-member-ledger walk turns the board red instead of shortening a log nobody compares. The addition is DATA, not new law: no fifth criterion was invented, and the pin row names the four existing gates that cover it (AC-FSW2 row-equals-table, AC-FSW7 link+verdict quoted, AC-FSW9 no self-authored evidence, AC-FSW10 artifact older than the sweep).",
+  "current": "2026-11-18 R2903 PRODUCT+ENGINEERING: R2902 item (2) is CLOSED at the half that was actually wrong - the chain driver own docstring said it buys two products at the same price while the SAME run reads same_price=False value_differs=True, so the PROSE was repaired (the measurement follows D-20261116-05, which forbids the two rows sharing a price) and the sentence was given a LAW instead of a one-off edit: AC-FYCF1 grades the docstring against the heading price_section() derives at render time, in BOTH directions and on doctored copies.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -42,10 +42,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2902 PRODUCT+ENGINEERING: the CEO board now carries the MONEY PROOF - face_sweep's FACES table gains a ninth row (first-yuan-chain) that re-executes tools/first_yuan_chain.py --check, so a regression inside the one-purchase-through-pay-member-ledger walk turns the board red instead of shortening a log nobody compares. The addition is DATA, not new law: no fifth criterion was invented, and the pin row names the four existing gates that cover it (AC-FSW2 row-equals-table, AC-FSW7 link+verdict quoted, AC-FSW9 no self-authored evidence, AC-FSW10 artifact older than the sweep).",
-  "export_ts": "2026-11-18T04:41:09+08:00",
+  "do": "2026-11-18 R2903 PRODUCT+ENGINEERING: R2902 item (2) is CLOSED at the half that was actually wrong - the chain driver own docstring said it buys two products at the same price while the SAME run reads same_price=False value_differs=True, so the PROSE was repaired (the measurement follows D-20261116-05, which forbids the two rows sharing a price) and the sentence was given a LAW instead of a one-off edit: AC-FYCF1 grades the docstring against the heading price_section() derives at render time, in BOTH directions and on doctored copies.",
+  "export_ts": "2026-11-18T04:48:40+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
-  "next_milestone": "[R2902] next window (<=12h): (1) MAIN - the board now EXECUTES nine gates but nothing on it says WHICH row a reader should trust first or what a FAIL would mean for revenue: the money row sits as flat data among eight shelves, so decide whether the board should carry a declared reading order (money proof first) or stay flat, pinned with its own red control BEFORE the edit and without hand-editing the board. (2) the chain driver's docstring claims 'two products at the same price' while RENDER reads `same_price=False value_differs=True`: repair whichever half is wrong, with the criterion that catches the next drift instead of a one-off edit. (3) two sweeps this window produced fingerprints 0696a52912edb148 -> 9add6de934b8cadc with no visible size move: find which row token moved (or prove the fingerprint inputs are not what the doc says), because a fingerprint nobody can explain cannot serve as a regression baseline (truncated)",
+  "next_milestone": "[R2903] next window (<=12h): (1) MAIN - the board follows the money proof but does not RANK it: nine rows execute, and nothing on the page says which row a reader should trust first or what a FAIL in each would mean for revenue, so decide whether `face_sweep` should carry a declared reading order (money proof first) or stay flat - pinned with its own red control BEFORE the edit and without hand-editing the rendered board. (2) two sweeps in R2902 produced `fingerprint=0696a52912edb148` then `9add6de934b8cadc` with no visible size move: name which row token moved, or prove the fingerprint inputs are not what the docstring says, because a fingerprint nobody can explain cannot serve as a regression baseline (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
@@ -156,7 +156,7 @@
   },
   "results": [
     [
-      "2902",
+      "2903",
       "OSLoop 执行 tick"
     ]
   ],
@@ -169,16 +169,16 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 93,
+    "log_lines_in_window": 98,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 17,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "state_bytes": 74944,
-  "latest_evidence": "qa/face-sweep-nine-check-R2902.log (42B, 2026-11-18)"
+  "state_bytes": 78626,
+  "latest_evidence": "qa/first-yuan-regress-R2903.log (136B, 2026-11-18)"
 }

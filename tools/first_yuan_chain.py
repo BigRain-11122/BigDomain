@@ -4,9 +4,11 @@ Why this exists: each of the five P-47 sandboxes has been proven on its own
 shelf, but no window had ever driven a single purchase through the real pay,
 member and ledger modules in sequence and shown what a buyer receives for the
 first-yuan product. This tool builds a throwaway world under the system temp
-dir, buys two products at the same price, activates the grant in the member
-store, reads the privileges back and then checks the money invariant by SQL
-and by the shipped reconcile script. Nothing about a particular round is
+dir and buys one permanent ticket and one monthly card, whose price relation
+the page states as "Two prices, two products" - a heading derived from config
+at render time and graded against this very sentence by AC-FYCF1 - then
+activates the grant in the member store, reads the privileges back and checks
+the money invariant by SQL and by the shipped reconcile script. Nothing about a particular round is
 typed in: every price, entitlement, tier, credit count and privilege name on
 the page comes from a module response or a config file read at render time.
 

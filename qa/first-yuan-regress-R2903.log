@@ -1,0 +1,3 @@
+os-first-yuan-path rc=0 SUITE PASS 14/14
+os-first-yuan-chain rc=0 SUITE PASS 13/13 criteria=13
+face-sweep-check rc=0 VERDICT PASS 11/11

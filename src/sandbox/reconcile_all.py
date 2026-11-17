@@ -7016,8 +7016,10 @@ SUITES = [
     # real pay/member/ledger modules inside throwaway temp worlds and recomputes
     # the ledger invariant with its own SQL. AC-FYC1..8 were pinned at R2802
     # (before the tool) and AC-FYCB1..8 at R2803 (before this suite).
+    # R2903 added AC-FYCF1: the tool's docstring must agree with the measured
+    # price relation, graded on doctored copies so it cannot be a constant.
     ("os-first-yuan-chain",
-     os.path.join("..", "os", "test_first_yuan_chain.py"), 12),
+     os.path.join("..", "os", "test_first_yuan_chain.py"), 13),
     ("os-lobby-protocol-map",
      os.path.join("..", "os", "test_lobby_protocol_map.py"), 6),
     # R2794 shipped tools/ledger_reconcile_face.py (the double-entry self-check
