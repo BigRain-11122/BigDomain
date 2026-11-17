@@ -58,6 +58,16 @@ FACES = [
     ("ledger-business", "\u4ee3\u5e01\u8d26\u672c\u9762 / P-47 \u7b2c 2 \u9879",
      "tools/ledger_business_report.py",
      "preview/ledger-business-report.html", "preview/ledger-business-report.json"),
+    # R2902: the money proof was missing from the board. Every other row proves a shelf
+    # exists; this one proves a single purchase crosses pay -> member -> ledger and that
+    # the money invariant holds, which is the only row a buyer or an investor would ask
+    # for first. It is DATA on the board, not a new law: AC-FSW2 keeps the row count equal
+    # to this table, AC-FSW7 quotes its verdict, AC-FSW9 forbids it authoring its own
+    # evidence under --check, and AC-FSW10 reddens the moment its pair is re-rendered
+    # after a sweep instead of before it.
+    ("first-yuan-chain", "first-yuan chain / one purchase, three modules",
+     "tools/first_yuan_chain.py",
+     "preview/first-yuan-chain.html", "preview/first-yuan-chain.json"),
     ("entry-index", "\u5165\u53e3\u9875\u5b9e\u7269\u53f0\u8d26 / index",
      "tools/deliverable_index.py",
      "preview/index.html", "preview/deliverable-index.json"),
@@ -156,8 +166,9 @@ def run_face(face, timeout):
     except subprocess.TimeoutExpired:
         text, rc = "", 124
     dur = round(time.time() - t0, 2)
-    # The eight gates do not share one summary dialect: four print a VERDICT line, two
-    # print "<NAME> CHECK PASS fails=N". So the verdict is the LAST line carrying a PASS
+    # The gates do not share one summary dialect: most print a VERDICT line, one prints
+    # "<NAME> CHECK PASS fails=N", and the chain driver prints "VERDICT PASS legs=2 ...".
+    # So the verdict is the LAST line carrying a PASS
     # or FAIL word, read from the output rather than assumed from a fixed prefix.
     lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
     verdict = ""

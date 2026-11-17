@@ -1,18 +1,20 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [],
-    "current": "2026-11-18 R2901 PRODUCT+ENGINEERING: R2900 item (1) is CLOSED as BOTH a decision and a measured word change - the pair note's tag now reads '; later=<half>' because what it measures is the later STAMP, and the overclaim is measured rather than argued: a pair whose json is re-saved with IDENTICAL bytes and a later clock publishes the SAME json byte count while the tag flips to later=json (AC-EXPD17), so no number on the line can tell 're-saved' from 'changed'.",
+    "board_pages_skipped": [
+      "preview/face-sweep.html (5662B)"
+    ],
+    "current": "2026-11-18 R2902 PRODUCT+ENGINEERING: the CEO board now carries the MONEY PROOF - face_sweep's FACES table gains a ninth row (first-yuan-chain) that re-executes tools/first_yuan_chain.py --check, so a regression inside the one-purchase-through-pay-member-ledger walk turns the board red instead of shortening a log nobody compares. The addition is DATA, not new law: no fifth criterion was invented, and the pin row names the four existing gates that cover it (AC-FSW2 row-equals-table, AC-FSW7 link+verdict quoted, AC-FSW9 no self-authored evidence, AC-FSW10 artifact older than the sweep).",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
-    "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2901] next window (<=12h): (1) MAIN - the note now says LATER instead of NEWER, which removes the false inference but leaves a reader unable to answer \"did this page change since I last looked\": both halves' byte counts are published and neither is a change detector, so decide ONCE whether the face should publish a digest and, if yes, NAME ITS CONSUMER (a digest with no stored prior is a number nobody can compare - the honest candidates are a stored prior digest inside status-export.json, which makes the face self-comparing, or none at all). (2) the AC-EXPD17 arm proved size stability on a re-save of the SAME string (truncated)",
-    "next_milestone_due": "2026-11-18T16:32:45+08:00",
-    "updated_at": "2026-11-18T04:32:45+08:00",
-    "latest_evidence": "qa/queue-floor-export-R2901.log (334B, 2026-11-18)",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/queue-floor-export-R2901.log (334B, 2026-11-18)"
+    "newest_pair_on_disk_is_board": true,
+    "next_milestone": "[R2902] next window (<=12h): (1) MAIN - the board now EXECUTES nine gates but nothing on it says WHICH row a reader should trust first or what a FAIL would mean for revenue: the money row sits as flat data among eight shelves, so decide whether the board should carry a declared reading order (money proof first) or stay flat, pinned with its own red control BEFORE the edit and without hand-editing the board. (2) the chain driver's docstring claims 'two products at the same price' while RENDER reads `same_price=False value_differs=True`: repair whichever half is wrong, with the criterion that catches the next drift instead of a one-off edit. (3) two sweeps this window produced fingerprints 0696a52912edb148 -> 9add6de934b8cadc with no visible size move: find which row token moved (or prove the fingerprint inputs are not what the doc says), because a fingerprint nobody can explain cannot serve as a regression baseline (truncated)",
+    "next_milestone_due": "2026-11-18T16:41:09+08:00",
+    "updated_at": "2026-11-18T04:41:09+08:00",
+    "latest_evidence": "qa/face-sweep-nine-check-R2902.log (42B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/face-sweep-nine-check-R2902.log (42B, 2026-11-18)"
   },
-  "current": "2026-11-18 R2901 PRODUCT+ENGINEERING: R2900 item (1) is CLOSED as BOTH a decision and a measured word change - the pair note's tag now reads '; later=<half>' because what it measures is the later STAMP, and the overclaim is measured rather than argued: a pair whose json is re-saved with IDENTICAL bytes and a later clock publishes the SAME json byte count while the tag flips to later=json (AC-EXPD17), so no number on the line can tell 're-saved' from 'changed'.",
+  "current": "2026-11-18 R2902 PRODUCT+ENGINEERING: the CEO board now carries the MONEY PROOF - face_sweep's FACES table gains a ninth row (first-yuan-chain) that re-executes tools/first_yuan_chain.py --check, so a regression inside the one-purchase-through-pay-member-ledger walk turns the board red instead of shortening a log nobody compares. The addition is DATA, not new law: no fifth criterion was invented, and the pin row names the four existing gates that cover it (AC-FSW2 row-equals-table, AC-FSW7 link+verdict quoted, AC-FSW9 no self-authored evidence, AC-FSW10 artifact older than the sweep).",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -40,10 +42,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2901 PRODUCT+ENGINEERING: R2900 item (1) is CLOSED as BOTH a decision and a measured word change - the pair note's tag now reads '; later=<half>' because what it measures is the later STAMP, and the overclaim is measured rather than argued: a pair whose json is re-saved with IDENTICAL bytes and a later clock publishes the SAME json byte count while the tag flips to later=json (AC-EXPD17), so no number on the line can tell 're-saved' from 'changed'.",
-  "export_ts": "2026-11-18T04:32:45+08:00",
+  "do": "2026-11-18 R2902 PRODUCT+ENGINEERING: the CEO board now carries the MONEY PROOF - face_sweep's FACES table gains a ninth row (first-yuan-chain) that re-executes tools/first_yuan_chain.py --check, so a regression inside the one-purchase-through-pay-member-ledger walk turns the board red instead of shortening a log nobody compares. The addition is DATA, not new law: no fifth criterion was invented, and the pin row names the four existing gates that cover it (AC-FSW2 row-equals-table, AC-FSW7 link+verdict quoted, AC-FSW9 no self-authored evidence, AC-FSW10 artifact older than the sweep).",
+  "export_ts": "2026-11-18T04:41:09+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
-  "next_milestone": "[R2901] next window (<=12h): (1) MAIN - the note now says LATER instead of NEWER, which removes the false inference but leaves a reader unable to answer \"did this page change since I last looked\": both halves' byte counts are published and neither is a change detector, so decide ONCE whether the face should publish a digest and, if yes, NAME ITS CONSUMER (a digest with no stored prior is a number nobody can compare - the honest candidates are a stored prior digest inside status-export.json, which makes the face self-comparing, or none at all). (2) the AC-EXPD17 arm proved size stability on a re-save of the SAME string (truncated)",
+  "next_milestone": "[R2902] next window (<=12h): (1) MAIN - the board now EXECUTES nine gates but nothing on it says WHICH row a reader should trust first or what a FAIL would mean for revenue: the money row sits as flat data among eight shelves, so decide whether the board should carry a declared reading order (money proof first) or stay flat, pinned with its own red control BEFORE the edit and without hand-editing the board. (2) the chain driver's docstring claims 'two products at the same price' while RENDER reads `same_price=False value_differs=True`: repair whichever half is wrong, with the criterion that catches the next drift instead of a one-off edit. (3) two sweeps this window produced fingerprints 0696a52912edb148 -> 9add6de934b8cadc with no visible size move: find which row token moved (or prove the fingerprint inputs are not what the doc says), because a fingerprint nobody can explain cannot serve as a regression baseline (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
@@ -154,7 +156,7 @@
   },
   "results": [
     [
-      "2901",
+      "2902",
       "OSLoop 执行 tick"
     ]
   ],
@@ -167,16 +169,16 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 87,
+    "log_lines_in_window": 93,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 15,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "state_bytes": 70363,
-  "latest_evidence": "qa/queue-floor-export-R2901.log (334B, 2026-11-18)"
+  "state_bytes": 74944,
+  "latest_evidence": "qa/face-sweep-nine-check-R2902.log (42B, 2026-11-18)"
 }
