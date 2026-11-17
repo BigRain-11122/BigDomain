@@ -1,0 +1,13 @@
+LEG-WATCH leg=qa/wide-os-full-R2890.log samples=11 span=300.0s interval=30.0s min_window=300s
+LEG-WATCH sample t=0.0 bytes=2495 rows=27 running=True closing=False torn=False readable=True
+LEG-WATCH sample t=30.0 bytes=3962 rows=42 running=True closing=False torn=False readable=True
+LEG-WATCH sample t=60.0 bytes=5491 rows=57 running=True closing=False torn=False readable=True
+LEG-WATCH sample t=90.0 bytes=7120 rows=76 running=True closing=False torn=False readable=True
+LEG-WATCH sample t=120.0 bytes=8299 rows=89 running=True closing=False torn=False readable=True
+LEG-WATCH sample t=150.0 bytes=9418 rows=101 running=True closing=False torn=False readable=True
+LEG-WATCH sample t=180.0 bytes=11276 rows=121 running=True closing=False torn=False readable=True
+LEG-WATCH sample t=210.0 bytes=13274 rows=142 running=True closing=False torn=False readable=True
+LEG-WATCH sample t=240.0 bytes=13654 rows=146 running=True closing=False torn=False readable=True
+LEG-WATCH sample t=270.0 bytes=13754 rows=147 running=True closing=False torn=False readable=True
+LEG-WATCH sample t=300.0 bytes=14057 rows=150 running=True closing=False torn=False readable=True
+LEG-WATCH verdict MID-RUN CONFIRMED readable=11 midrun=11 torn=0 monotone=True rows=27..150 reasons=-

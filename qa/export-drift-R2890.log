@@ -1,0 +1,4 @@
+﻿EXPORT-DRIFT R2890 three suites after the export refresh: check_export_consistency reads 21/21 (was 20/1 on stored=92 recomputed=93)
+SUITE test_status_export_writer_dialect_wire.py rc=0 :: SUITE PASS 6/6
+SUITE test_queue_floor_export_face.py rc=0 :: SUITE PASS 6/6
+SUITE test_export_consistency_queue_face.py rc=0 :: SUITE PASS 6/6
