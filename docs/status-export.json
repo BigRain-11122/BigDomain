@@ -1,16 +1,16 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2885 PRODUCT+ENGINEERING: the three suites my own leg caps had been calling red are measured ALONE at the battery cap and all three are green, so the seconds now exist for choosing caps instead of guessing - buyerhistory 47.2s, refundregister 131.9s, os-lobby-room-picker 43.7s - and a bounded 60-suite os- slice publishes crit_mismatch=0 over 430 criteria",
+    "current": "2026-11-18 R2886 PRODUCT+ENGINEERING: the R2885 metric blocker is CLOSED by option (a) - tools/battery_shard.py now STREAMS, so a long leg is readable while it runs instead of all-or-nothing at the end: the evidence file is created with state=RUNNING before the first suite, one row is appended per finished suite with flush+fsync, and every printed line is flushed; the shipped artifact still goes through the qa_log birth site carrying state=COMPLETE",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2884] next window (<=12h): (1) MAIN - the 418-of-710 never-run registry suites are now the largest measured-gap number on this board: pick the NEXT family (e.g. `--match os-`) and measure it the same way, publishing `crit_mismatch`, and do NOT sweep all 710 in one leg (R2882/R2884's 60s cap artifacts show what a too-wide leg does). (2) `buyerhistory` / `refundregister`: both truncate at ANY 60s cap, so measure each ALONE at the battery own 600s cap inside a deliberately loaded leg and publish the real seconds, or declare a runner override - decide which BEFORE editing, and keep the battery cap at 600s. (3) stale prose sweep: the matrix now reads 710 suites / 5426 criteria and the band reads 39 html faces, so any prose still quoting 37 pairs or 5424/5422 criteria is stale by two (truncated)",
-    "next_milestone_due": "2026-11-18T12:13:44+08:00",
-    "updated_at": "2026-11-18T00:13:44+08:00"
+    "next_milestone": "[R2886] next window (<=12h): (1) MAIN - `os-census-nul-class` is rc=1 printing `FAIL 7/9` in the detached 285-suite leg (`qa/wide-os-R2885.log`) and no cap explains it: run it alone at the battery 600s cap, read WHICH two criteria fail, and fix or pin it - it is the only red in that leg that is neither a cap artifact nor the BAD-STAMP defect already repaired. (2) the 15 `os-probe-seam-*` rc=124 rows all died at a 45s leg cap: measure the slowest one alone, then either declare a runner override or split the family - do NOT raise the battery 600s cap. (3) FULL-family publishing is now possible (the detached leg proved 285/285 in 1382.4s) but it ran the PRE-fix tool: re-run it on the STREAMING tool so the evidence file is valid mid-run, and do NOT edit a registry row that a detached leg may still be reading - R2886 ate `crit_mismatch=os-battery-shard:26!=24` exactly that way (truncated)",
+    "next_milestone_due": "2026-11-18T12:33:08+08:00",
+    "updated_at": "2026-11-18T00:33:08+08:00"
   },
-  "current": "2026-11-18 R2885 PRODUCT+ENGINEERING: the three suites my own leg caps had been calling red are measured ALONE at the battery cap and all three are green, so the seconds now exist for choosing caps instead of guessing - buyerhistory 47.2s, refundregister 131.9s, os-lobby-room-picker 43.7s - and a bounded 60-suite os- slice publishes crit_mismatch=0 over 430 criteria",
+  "current": "2026-11-18 R2886 PRODUCT+ENGINEERING: the R2885 metric blocker is CLOSED by option (a) - tools/battery_shard.py now STREAMS, so a long leg is readable while it runs instead of all-or-nothing at the end: the evidence file is created with state=RUNNING before the first suite, one row is appended per finished suite with flush+fsync, and every printed line is flushed; the shipped artifact still goes through the qa_log birth site carrying state=COMPLETE",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -38,10 +38,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2885 PRODUCT+ENGINEERING: the three suites my own leg caps had been calling red are measured ALONE at the battery cap and all three are green, so the seconds now exist for choosing caps instead of guessing - buyerhistory 47.2s, refundregister 131.9s, os-lobby-room-picker 43.7s - and a bounded 60-suite os- slice publishes crit_mismatch=0 over 430 criteria",
-  "export_ts": "2026-11-18T00:13:44+08:00",
+  "do": "2026-11-18 R2886 PRODUCT+ENGINEERING: the R2885 metric blocker is CLOSED by option (a) - tools/battery_shard.py now STREAMS, so a long leg is readable while it runs instead of all-or-nothing at the end: the evidence file is created with state=RUNNING before the first suite, one row is appended per finished suite with flush+fsync, and every printed line is flushed; the shipped artifact still goes through the qa_log birth site carrying state=COMPLETE",
+  "export_ts": "2026-11-18T00:33:08+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
-  "next_milestone": "[R2884] next window (<=12h): (1) MAIN - the 418-of-710 never-run registry suites are now the largest measured-gap number on this board: pick the NEXT family (e.g. `--match os-`) and measure it the same way, publishing `crit_mismatch`, and do NOT sweep all 710 in one leg (R2882/R2884's 60s cap artifacts show what a too-wide leg does). (2) `buyerhistory` / `refundregister`: both truncate at ANY 60s cap, so measure each ALONE at the battery own 600s cap inside a deliberately loaded leg and publish the real seconds, or declare a runner override - decide which BEFORE editing, and keep the battery cap at 600s. (3) stale prose sweep: the matrix now reads 710 suites / 5426 criteria and the band reads 39 html faces, so any prose still quoting 37 pairs or 5424/5422 criteria is stale by two (truncated)",
+  "next_milestone": "[R2886] next window (<=12h): (1) MAIN - `os-census-nul-class` is rc=1 printing `FAIL 7/9` in the detached 285-suite leg (`qa/wide-os-R2885.log`) and no cap explains it: run it alone at the battery 600s cap, read WHICH two criteria fail, and fix or pin it - it is the only red in that leg that is neither a cap artifact nor the BAD-STAMP defect already repaired. (2) the 15 `os-probe-seam-*` rc=124 rows all died at a 45s leg cap: measure the slowest one alone, then either declare a runner override or split the family - do NOT raise the battery 600s cap. (3) FULL-family publishing is now possible (the detached leg proved 285/285 in 1382.4s) but it ran the PRE-fix tool: re-run it on the STREAMING tool so the evidence file is valid mid-run, and do NOT edit a registry row that a detached leg may still be reading - R2886 ate `crit_mismatch=os-battery-shard:26!=24` exactly that way (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
@@ -150,7 +150,7 @@
   },
   "results": [
     [
-      "2885",
+      "2886",
       "OSLoop 执行 tick"
     ]
   ],
@@ -163,15 +163,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 62,
+    "log_lines_in_window": 72,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 12,
     "queue_explore_open": 10
   },
-  "state_bytes": 46198
+  "state_bytes": 54500
 }

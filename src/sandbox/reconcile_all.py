@@ -7045,8 +7045,10 @@ SUITES = [
     # of a footnote - the exact shape of the thirteen labels that sat as carried
     # debt for twenty-three windows. 23 -> 24 criteria, and the suite's own
     # declaration line reads 24 assertions over 24 criteria after the change.
+    # R2886: 24 -> 26 (AC-BSGB15/16, the streaming law and the partial-file
+    # refusal); the suite declaration line reads 26 assertions over 26.
     ("os-battery-shard",
-     os.path.join("..", "os", "test_battery_shard.py"), 24),
+     os.path.join("..", "os", "test_battery_shard.py"), 26),
     # R2845: the OUTPUT-level face of the same question the census asks from
     # source. Four probe suites in a private world classify by the row they
     # really printed, the law and the invocation are imported from the runner,

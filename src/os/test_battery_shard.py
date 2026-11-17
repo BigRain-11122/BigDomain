@@ -33,8 +33,11 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
+import threading
+import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TOOL = os.path.join(ROOT, "tools", "battery_shard.py")
@@ -90,6 +93,40 @@ print("SUITE PASS 21/21")
 PROBE_DECL_BAD = """print("  | PASS probe-decl-bad")
 print("suite: 21 assertions over 7 criteria")
 print("SUITE PASS 21/21")
+"""
+
+# AC-BSGB15 (R2886): a probe that is slow enough for a poll window to land
+# between the first finished row and the end of the leg.
+PROBE_TICK = """import time
+time.sleep(1.2)
+print("  | PASS probe-tick")
+print("SUITE PASS 1/1")
+"""
+
+# AC-BSGB15 (R2886): drives the TOOL as a real SUBPROCESS so its stdout is a
+# pipe (block-buffered, exactly the shape the executor kills for silence)
+# instead of the in-process StringIO the other criteria use, and points the
+# evidence directory into the private world so nothing lands in the repo.
+PROBE_STREAM_DRIVER = """import importlib.util
+import os
+import sys
+
+spec = importlib.util.spec_from_file_location("bsh_stream_driver", sys.argv[1])
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+world = os.path.dirname(os.path.abspath(__file__))
+mod.QA_DIR = os.path.join(world, "qa")
+os.makedirs(mod.QA_DIR, exist_ok=True)
+rows = [("probe-tick-a", "probe_tick.py", 1),
+        ("probe-tick-b", "probe_tick.py", 1)]
+
+
+def registry():
+    return (list(rows), world, 600, {})
+
+
+mod.registry = registry
+sys.exit(mod.main(["--match", "probe", "--evidence", "leg.log"]))
 """
 
 
@@ -595,6 +632,94 @@ def main():
         ok("AC-BSGB14", code_all == 2 and bare_named and lawful_kept,
            "rc=%d bare_named=%s declared_rc=%d" % (code_all, bare_named,
                                                    code_decl))
+    finally:
+        shutil.rmtree(world, ignore_errors=True)
+
+    # AC-BSGB15 (R2886) - progress is STREAMED, measured on a real subprocess
+    # whose stdout is a PIPE. The evidence file must already read state=RUNNING
+    # and carry a finished row while the process is ALIVE, and the pipe must
+    # already deliver a row before it exits - neither is reachable by a tool
+    # that writes once at the leg's end, which is exactly what died twice at
+    # R2885 with zero evidence. A clock appears here only as a bounded poll
+    # window, never as a verdict on how long anything took.
+    world = tempfile.mkdtemp(prefix="battery_shard_stream_")
+    try:
+        for name, body in (("probe_tick.py", PROBE_TICK),
+                           ("probe_driver.py", PROBE_STREAM_DRIVER)):
+            with open(os.path.join(world, name), "w", encoding="utf-8",
+                      newline="\n") as handle:
+                handle.write(body)
+        ev = os.path.join(world, "qa", "leg.log")
+        seen_running = False
+        seen_stdout_row = False
+        pushed = []
+        proc = subprocess.Popen(
+            [sys.executable, os.path.join(world, "probe_driver.py"), TOOL],
+            cwd=world, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        pump = threading.Thread(
+            target=lambda: [pushed.append(line) for line in proc.stdout],
+            daemon=True)
+        pump.start()
+        deadline = time.time() + 3.4
+        while time.time() < deadline and proc.poll() is None:
+            time.sleep(0.15)
+            try:
+                text = open(ev, encoding="utf-8", errors="replace").read()
+            except OSError:
+                text = ""
+            if (not seen_running and "state=RUNNING" in text
+                    and "SHARD row " in text and proc.poll() is None):
+                seen_running = True
+            if (not seen_stdout_row and proc.poll() is None
+                    and not any(b"SHARD rc=" in line for line in list(pushed))
+                    and any(b"SHARD row " in line for line in list(pushed))):
+                # The closing-line guard is what makes this race-free: a tool
+                # that buffers to the end flushes rows AND the closing row in
+                # one burst at exit, so a row seen beside a closing row proves
+                # nothing about streaming and is refused here.
+                seen_stdout_row = True
+            if seen_running and seen_stdout_row:
+                break
+        rc_proc = proc.wait(timeout=90)
+        pump.join(5)
+        try:
+            final = open(ev, encoding="utf-8", errors="replace").read()
+        except OSError:
+            final = ""
+        final_rows = [l for l in final.splitlines() if l.startswith("SHARD row ")]
+        complete = "state=COMPLETE" in final and len(final_rows) == 2
+        ok("AC-BSGB15",
+           rc_proc == 0 and seen_running and seen_stdout_row and complete,
+           "rc=%d running_seen=%s pipe_row=%s final_rows=%d complete=%s"
+           % (rc_proc, seen_running, seen_stdout_row, len(final_rows), complete))
+
+        # AC-BSGB16 (R2886) - a partial file is REFUSED, not adopted: the same
+        # recomputation that grades a finished leg must reject a RUNNING file
+        # with no closing row, or a killed leg could pass --check by simply
+        # holding fewer rows than it meant to run.
+        with open(os.path.join(world, "qa", "partial.log"), "w",
+                  encoding="utf-8", newline="\n") as handle:
+            handle.write("SHARD scope=SHARD registry_suites=2 "
+                         "registry_criteria=2 selected=2 state=RUNNING\n")
+            handle.write("SHARD row probe-tick-a rc=0 pass=1 fail=0 "
+                         "detail=yes suite=PASS 1/1 crit=1 1.2s\n")
+        buf_partial = io.StringIO()
+        buf_complete = io.StringIO()
+        saved_dir = shard.QA_DIR
+        try:
+            shard.QA_DIR = os.path.join(world, "qa")
+            with contextlib.redirect_stdout(buf_partial):
+                code_partial = shard.do_check("partial.log")
+            with contextlib.redirect_stdout(buf_complete):
+                code_complete = shard.do_check("leg.log")
+        finally:
+            shard.QA_DIR = saved_dir
+        partial_named = "E_CLOSING_ROWS" in buf_partial.getvalue()
+        ok("AC-BSGB16",
+           code_partial == 2 and partial_named and code_complete == 0
+           and "VERDICT PASS" in buf_complete.getvalue(),
+           "partial_rc=%d named=%s complete_rc=%d"
+           % (code_partial, partial_named, code_complete))
     finally:
         shutil.rmtree(world, ignore_errors=True)
 

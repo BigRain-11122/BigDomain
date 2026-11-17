@@ -284,6 +284,22 @@ def write_evidence(name, text):
     return proof
 
 
+def stream_evidence(path, text):
+    """AC-BSGB15 (R2886): progress lands on disk while the leg is still running.
+
+    Measured fact this exists for: the evidence file used to be written ONCE,
+    after the last suite, so a leg killed for silence left ZERO evidence - two
+    285-suite attempts died that way at R2885 with the file never created. This
+    writes the partial form in place (header state=RUNNING plus every finished
+    row) and fsyncs it; the final artifact still goes through write_evidence so
+    the qa_log birth site keeps owning the shipped file.
+    """
+    with open(path, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(text)
+        handle.flush()
+        os.fsync(handle.fileno())
+
+
 def do_check(name):
     """Read the evidence back and recompute its counts from its own rows."""
     path = os.path.join(QA_DIR, name)
@@ -468,12 +484,24 @@ def _round(args):
         return rc
     picked = select(rows, args.match, args.limit, args.exact)
     total_crit = sum(int(r[2]) for r in picked)
-    print("SHARD scope=SHARD registry_suites=%d registry_criteria=%d "
-          "selected=%d selected_criteria=%d cap=%ds leg_cap=%ds overrides=%d exact=%d"
-          % (len(rows), sum(int(r[2]) for r in rows), len(picked),
-             total_crit, cap, leg_cap, len(overrides), len(args.exact)))
+    ev_path = (os.path.join(QA_DIR, evidence_name(args.evidence))
+               if args.evidence else "")
+    # AC-BSGB15 (R2886): the header is printed BEFORE the first suite and it
+    # carries the leg STATE, so a reader of a partial file can tell a running
+    # leg from a finished one. `state` is appended LAST so every field-order
+    # reader written before this round keeps parsing the fields it knows.
+    header = ("SHARD scope=SHARD registry_suites=%d registry_criteria=%d "
+              "selected=%d selected_criteria=%d cap=%ds leg_cap=%ds "
+              "overrides=%d exact=%d state="
+              % (len(rows), sum(int(r[2]) for r in rows), len(picked),
+                 total_crit, cap, leg_cap, len(overrides), len(args.exact)))
+    print(header + "RUNNING", flush=True)
     for label, rel, crit in picked:
-        print("SHARD selected %s crit=%d path=%s" % (label, crit, rel))
+        print("SHARD selected %s crit=%d path=%s" % (label, crit, rel),
+              flush=True)
+    stream = [header + "RUNNING"]
+    if ev_path:
+        stream_evidence(ev_path, "\n".join(stream) + "\n")
     if args.dry:
         print("SHARD rc=0 scope=SHARD dry=True executed=0 selected=%d" % len(picked))
         return 0
@@ -520,8 +548,12 @@ def _round(args):
         line = ("SHARD row %s rc=%d pass=%d fail=%d detail=%s suite=%s crit=%d %.1fs%s"
                 % (label, code, passes, fails, detail, suite, crit, secs,
                    " timeout=yes" if code == 124 else ""))
-        print(line)
+        print(line, flush=True)
         lines.append(line)
+        # AC-BSGB15: the row reaches disk as it lands, not at the leg's end.
+        stream.append(line)
+        if ev_path:
+            stream_evidence(ev_path, "\n".join(stream) + "\n")
         if code != 0:
             for chunk in out.splitlines()[:40]:
                 lines.append("SHARD detail %s %s" % (label, chunk))
@@ -539,26 +571,28 @@ def _round(args):
     closing = ("SHARD rc=%d scope=SHARD selected=%d executed=%d green=%d "
                "criteria=%d crit_mismatch=%d elapsed=%.1fs"
                % (rc, len(picked), executed, green, crit_run, len(mismatch), elapsed))
-    print(closing)
-    lines.insert(0, "SHARD scope=SHARD registry_suites=%d registry_criteria=%d "
-                    "selected=%d selected_criteria=%d cap=%ds leg_cap=%ds exact=%d"
-                 % (len(rows), sum(int(r[2]) for r in rows), len(picked),
-                    total_crit, cap, leg_cap, len(args.exact)))
+    print(closing, flush=True)
+    # AC-BSGB15: the closing row plus a COMPLETE header are what separate an
+    # artifact from a progress note, so a killed leg keeps a truthful RUNNING
+    # file and do_check can refuse it without a new field.
     lines.append(closing)
     if undeclared:
         # AC-BSGB14: named as a red, not only as a footnote, because rc=2 above
         # already refuses the leg and a reader must see WHY without diffing the
         # closing line's two numbers.
-        print("SHARD red-unit undeclared=%s" % ",".join(undeclared))
+        print("SHARD red-unit undeclared=%s" % ",".join(undeclared), flush=True)
         lines.append("SHARD red-unit undeclared=%s" % ",".join(undeclared))
     if mismatch:
-        print("SHARD disclosure crit_mismatch=%s" % ",".join(mismatch))
+        print("SHARD disclosure crit_mismatch=%s" % ",".join(mismatch), flush=True)
         lines.append("SHARD disclosure crit_mismatch=%s" % ",".join(mismatch))
     if reds:
-        print("SHARD red %s" % ",".join(reds))
+        print("SHARD red %s" % ",".join(reds), flush=True)
         lines.append("SHARD red %s" % ",".join(reds))
     if args.evidence:
-        proof = write_evidence(evidence_name(args.evidence), "\n".join(lines) + "\n")
+        # AC-BSGB15: the shipped artifact still goes through the qa_log birth
+        # site, now carrying the COMPLETE header that supersedes the RUNNING one.
+        proof = write_evidence(evidence_name(args.evidence),
+                               "\n".join([header + "COMPLETE"] + lines) + "\n")
         print("SHARD evidence name=%s bytes=%d lines=%d sha256=%s dialect=utf-8/lf"
               % (evidence_name(args.evidence), proof["bytes"], proof["lines"],
                  proof["sha256"]))
