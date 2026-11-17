@@ -498,6 +498,16 @@ def main():
     check_html(tmp, db)
     check_regression()
     failed = [ac for ac, ok, _ in RESULTS if not ok]
+    # R2861: this suite owns two units - the assertions above and the AC ids the
+    # registry counts - so it states both in the corpus's lowercase dialect. The
+    # count is derived from RESULTS itself, never copied from the registry: a
+    # declaration that echoed the registry could never disagree with it.
+    acs = set()
+    for ac, _, _ in RESULTS:
+        head = ac.split(" ", 1)[0].split("-")
+        if len(head) >= 2 and head[0] == "AC" and head[1][-1:].isdigit():
+            acs.add("%s-%s" % (head[0], head[1]))
+    print("suite: %d assertions over %d criteria" % (len(RESULTS), len(acs)))
     print("SUITE %s %d/%d" % ("PASS" if not failed else "FAIL",
                               len(RESULTS) - len(failed), len(RESULTS)))
     if failed:

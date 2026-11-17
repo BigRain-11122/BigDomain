@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T08:19:45+08:00",
-  "do": "2026-11-17 R2860 PRODUCT+ENGINEERING: the three registry disagreements are decided ONE ROW AT A TIME and the class stops being able to reappear - two rows were one short, one row was right all along, and thirteen suites now declare their own units, so crit_mismatch is a measured 0 instead of an inherited 13.",
+  "export_ts": "2026-11-17T08:57:20+08:00",
+  "do": "2026-11-17 R2861 PRODUCT+ENGINEERING: the last unread law family now has a NAMED seven-shard plan committed before any row ran, and shard 1 measured 46 of 46 rows green with 46 of 46 detail=yes - then the two rows whose declared units disagreed were repaired at their own birth sites and re-read crit_mismatch=0.",
   "ceo_face": {
-    "current": "2026-11-17 R2860 PRODUCT+ENGINEERING: the three registry disagreements are decided ONE ROW AT A TIME and the class stops being able to reappear - two rows were one short, one row was right all along, and thirteen suites now declare their own units, so crit_mismatch is a measured 0 instead of an inherited 13.",
+    "current": "2026-11-17 R2861 PRODUCT+ENGINEERING: the last unread law family now has a NAMED seven-shard plan committed before any row ran, and shard 1 measured 46 of 46 rows green with 46 of 46 detail=yes - then the two rows whose declared units disagreed were repaired at their own birth sites and re-read crit_mismatch=0.",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2861] next window (<=12h): (1) MAIN - `law_status=316` is the LAST family with no detail reading and its NAMED split plan must be committed BEFORE any leg: seven shards of ~45 by label prefix, shard 1 only this window, members derived by import (never hand-listed), and the plan names what each shard is before the first row runs; (2) `law_direct=103` now carries the same unit class the thirteen rows just closed: most of its rows print no declaration, so `crit_mismatch` can return there - decide whether the family's fix is per-suite declarations or a registry unit field, and pin the decision before editing any row; (3) the runner grades a declaration ONCE for all rows in a leg, so a suite that falls out of the registry is caught only when it sits in a leg - the cheap answer is a `--declared-only` sweep over every suite that prints a declaration (13 today, and it grows), so the number is never graded by absence; (4) `ledger_lines.audit` stays in closeout and paid for itself this window by catching a tokens line without ` local=` at line 72 - keep it as a habit, and note that the same shape was R2854's (truncated)",
-    "next_milestone_due": "2026-11-17T20:19:45+08:00",
-    "updated_at": "2026-11-17T08:19:45+08:00",
+    "next_milestone": "[R2862] next window (<=12h): (1) MAIN - `law_status` shard 2 through the shipped runner: S2 is 45 suites / 373 declared criteria, `ledger-apimarket-report` .. `ledger-freetrial-callkind`, members read from `.codely-cli/tmp/law_status_plan.json` (never retyped), and the S1 throughput measured 177.9s for 46 suites / 365 criteria, so one shard per window is the pace that fits; report `detail=yes`/`detail=none` per row and the aggregate `crit_mismatch` as a number; (2) the per-suite declaration the two S1 rows just gained is the corpus's ninth and tenth of this class, so the carried question from the R2861 queue head - per-suite declarations vs a registry unit field for `law_direct=103` - now has ten data points and should be DECIDED and pinned before that family grows the same debt; (3) the `--declared-only` sweep so a declaration is never graded by absence - today ten suites print one and none of them is asked outside a leg; (4) `ledger_lines.audit` stays in closeout (ran clean this window: 11 ledger lines, 68 round lines, zero errors) (truncated)",
+    "next_milestone_due": "2026-11-17T20:57:20+08:00",
+    "updated_at": "2026-11-17T08:57:20+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 72,
+    "log_lines_in_window": 81,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2860 PRODUCT+ENGINEERING: the three registry disagreements are decided ONE ROW AT A TIME and the class stops being able to reappear - two rows were one short, one row was right all along, and thirteen suites now declare their own units, so crit_mismatch is a measured 0 instead of an inherited 13.",
+  "current": "2026-11-17 R2861 PRODUCT+ENGINEERING: the last unread law family now has a NAMED seven-shard plan committed before any row ran, and shard 1 measured 46 of 46 rows green with 46 of 46 detail=yes - then the two rows whose declared units disagreed were repaired at their own birth sites and re-read crit_mismatch=0.",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2861] next window (<=12h): (1) MAIN - `law_status=316` is the LAST family with no detail reading and its NAMED split plan must be committed BEFORE any leg: seven shards of ~45 by label prefix, shard 1 only this window, members derived by import (never hand-listed), and the plan names what each shard is before the first row runs; (2) `law_direct=103` now carries the same unit class the thirteen rows just closed: most of its rows print no declaration, so `crit_mismatch` can return there - decide whether the family's fix is per-suite declarations or a registry unit field, and pin the decision before editing any row; (3) the runner grades a declaration ONCE for all rows in a leg, so a suite that falls out of the registry is caught only when it sits in a leg - the cheap answer is a `--declared-only` sweep over every suite that prints a declaration (13 today, and it grows), so the number is never graded by absence; (4) `ledger_lines.audit` stays in closeout and paid for itself this window by catching a tokens line without ` local=` at line 72 - keep it as a habit, and note that the same shape was R2854's (truncated)",
-  "state_bytes": 55054,
+  "next_milestone": "[R2862] next window (<=12h): (1) MAIN - `law_status` shard 2 through the shipped runner: S2 is 45 suites / 373 declared criteria, `ledger-apimarket-report` .. `ledger-freetrial-callkind`, members read from `.codely-cli/tmp/law_status_plan.json` (never retyped), and the S1 throughput measured 177.9s for 46 suites / 365 criteria, so one shard per window is the pace that fits; report `detail=yes`/`detail=none` per row and the aggregate `crit_mismatch` as a number; (2) the per-suite declaration the two S1 rows just gained is the corpus's ninth and tenth of this class, so the carried question from the R2861 queue head - per-suite declarations vs a registry unit field for `law_direct=103` - now has ten data points and should be DECIDED and pinned before that family grows the same debt; (3) the `--declared-only` sweep so a declaration is never graded by absence - today ten suites print one and none of them is asked outside a leg; (4) `ledger_lines.audit` stays in closeout (ran clean this window: 11 ledger lines, 68 round lines, zero errors) (truncated)",
+  "state_bytes": 60241,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2860",
+      "2861",
       "OSLoop 执行 tick"
     ]
   ],

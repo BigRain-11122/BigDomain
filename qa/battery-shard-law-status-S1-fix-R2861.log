@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=706 registry_criteria=5386 selected=2 selected_criteria=16 cap=600s exact=2
+SHARD row ledger-apimarket-buyerhistory rc=0 pass=10 fail=0 detail=yes suite=PASS 10/10 crit=8 46.1s
+SHARD row ledger-apimarket-refundregister rc=0 pass=13 fail=0 detail=yes suite=PASS 13/13 crit=8 136.8s
+SHARD rc=0 scope=SHARD selected=2 executed=2 green=2 criteria=16 crit_mismatch=0 elapsed=182.9s
