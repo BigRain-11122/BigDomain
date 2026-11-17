@@ -6,9 +6,9 @@
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2889] next window (<=12h): (1) MAIN - the streaming path (R2886) and a >5-minute leg have still never been measured TOGETHER: the 2541.9s leg was launched by the R2888 round and this window only adjudicated it, so run ONE family leg on the current streaming tool with `--evidence` and confirm the partial file is readable mid-run past 300s - the mechanism is what R2886 claims, and a finished file proves the output, not the streaming. (2) the probe-seam cliff decision is still open (R2888 item 2): memoize/bound the transitive ancestor chain, drop the live leg to a fixed small ancestor set, or declare a per-suite override ABOVE 300s - and do NOT raise the battery 600s cap. (3) `leg_audit` grades exactly three shapes of drift (counts, duplicates, row coherence) (truncated)",
-    "next_milestone_due": "2026-11-18T14:05:26+08:00",
-    "updated_at": "2026-11-18T02:05:26+08:00"
+    "next_milestone": "[R2890] next window (<=12h): (1) MAIN - the family leg `qa/wide-os-full-R2890.log` is STILL IN FLIGHT (181 rows at 02:03:00, three reds since repaired in the tree but NOT in that leg's own rows); when it closes read `SHARD rc=` and adjudicate it with `tools/leg_audit.py` before publishing a family number, and state plainly that its reds are historical rather than re-run. (2) `tools/leg_watch.py` has NO battery row on purpose - registering it edits `src/sandbox/reconcile_all.py` while a leg of that same family is mid-flight, which is the R2886 edit-race law and would also make the in-flight header disagree with the file (truncated)",
+    "next_milestone_due": "2026-11-18T14:08:29+08:00",
+    "updated_at": "2026-11-18T02:08:29+08:00"
   },
   "current": "2026-11-18 R2890 PRODUCT+ENGINEERING: R2889 item (1) is CLOSED - the streaming path and a leg longer than five minutes were measured TOGETHER for the first time, and the observer is a TOOL instead of an eyeball: tools/leg_watch.py ships (read-only sampler, refuses any path outside qa/, counts torn reads rather than dropping them) and on the live 285-suite os- leg it read MID-RUN CONFIRMED over 11 samples spanning 300.0s with zero torn reads, rows monotone 27..150, state=RUNNING on every sample and no closing row (qa/leg-watch-R2890.log)",
   "depts": [
@@ -39,9 +39,9 @@
     }
   ],
   "do": "2026-11-18 R2890 PRODUCT+ENGINEERING: R2889 item (1) is CLOSED - the streaming path and a leg longer than five minutes were measured TOGETHER for the first time, and the observer is a TOOL instead of an eyeball: tools/leg_watch.py ships (read-only sampler, refuses any path outside qa/, counts torn reads rather than dropping them) and on the live 285-suite os- leg it read MID-RUN CONFIRMED over 11 samples spanning 300.0s with zero torn reads, rows monotone 27..150, state=RUNNING on every sample and no closing row (qa/leg-watch-R2890.log)",
-  "export_ts": "2026-11-18T02:05:26+08:00",
+  "export_ts": "2026-11-18T02:08:29+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
-  "next_milestone": "[R2889] next window (<=12h): (1) MAIN - the streaming path (R2886) and a >5-minute leg have still never been measured TOGETHER: the 2541.9s leg was launched by the R2888 round and this window only adjudicated it, so run ONE family leg on the current streaming tool with `--evidence` and confirm the partial file is readable mid-run past 300s - the mechanism is what R2886 claims, and a finished file proves the output, not the streaming. (2) the probe-seam cliff decision is still open (R2888 item 2): memoize/bound the transitive ancestor chain, drop the live leg to a fixed small ancestor set, or declare a per-suite override ABOVE 300s - and do NOT raise the battery 600s cap. (3) `leg_audit` grades exactly three shapes of drift (counts, duplicates, row coherence) (truncated)",
+  "next_milestone": "[R2890] next window (<=12h): (1) MAIN - the family leg `qa/wide-os-full-R2890.log` is STILL IN FLIGHT (181 rows at 02:03:00, three reds since repaired in the tree but NOT in that leg's own rows); when it closes read `SHARD rc=` and adjudicate it with `tools/leg_audit.py` before publishing a family number, and state plainly that its reds are historical rather than re-run. (2) `tools/leg_watch.py` has NO battery row on purpose - registering it edits `src/sandbox/reconcile_all.py` while a leg of that same family is mid-flight, which is the R2886 edit-race law and would also make the in-flight header disagree with the file (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
@@ -163,7 +163,7 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 97,
+    "log_lines_in_window": 98,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 16,
@@ -173,5 +173,5 @@
     "queue_tech_open": 12,
     "queue_explore_open": 10
   },
-  "state_bytes": 69467
+  "state_bytes": 69922
 }
