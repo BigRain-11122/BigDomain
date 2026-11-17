@@ -7117,6 +7117,19 @@ SUITES = [
     # both repaired at their birth sites rather than around them.
     ("os-journey-demo-face",
      os.path.join("..", "os", "test_journey_demo.py"), 6),
+    # R2888: R2886 pinned the law that a leg with no closing `SHARD rc=` row is
+    # not a family measurement, and every window since applied it by reading the
+    # log by eye. tools/leg_audit.py turns that law into an exit code: it
+    # re-derives every aggregate from the per-row lines and refuses the leg when
+    # the closing row, the header and the rows disagree. AC-LGA1..AC-LGA6 were
+    # pinned in src/os/backlog.md BEFORE the tool; its first two drafts were
+    # refuted by their own arms (a pair-equals-pass-plus-fail law reddened 70
+    # legitimate rows, then two shipped `suite=PASS 8/6` rows) and narrowed on
+    # the record rather than by bending a criterion. Appended at the END for the
+    # same reason as every row above: a mid-list insert shifts each later suite's
+    # shard, and the 27 unmeasured deep shard-6 rows are tracked by that mapping.
+    ("os-leg-audit",
+     os.path.join("..", "os", "test_leg_audit.py"), 6),
     ]
 
 FAILS = 0

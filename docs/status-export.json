@@ -1,16 +1,16 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2888 PRODUCT+ENGINEERING: backlog item (2) is MEASURED and the measurement REFUTES the premise it was handed - the slowest os-probe-seam suite is not a slow suite, it is a suite with ONE slow criterion, so a 45s leg cap could never have fit it and the 15 rc=124 rows were never defects",
+    "current": "2026-11-18 R2889 PRODUCT+ENGINEERING: the 285-suite os- family leg that R2888 left in flight CLOSED on its own at 01:37:59 and is ADOPTED as the first whole-family measurement with ZERO reds: selected=285 executed=285 green=285 criteria=1924 crit_mismatch=0 elapsed=2541.9s. Read honestly, the 42.3-minute crossing itself was already known from the R2885 detached leg (1382.4s); what is new is that a COMPLETE family leg now finished GREEN with no unit mismatch, and that the R2886 law gained an exit code.",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2888] next window (<=12h): (1) MAIN - the 285-suite `os-` leg launched at 00:55:36 by the round that was silence-killed at 01:20:37 is STILL RUNNING (`qa/wide-os-full-R2888.log`, 242 of 285 rows, reds=0, NO closing row -> not publishable); when it ends, read `SHARD rc=` and publish the number, and do NOT add its three untracked qa files until it holds a closing row. (2) the probe-seam cliff is now LOCALIZED: pass 140-185s of the suite sits in AC-PNAA5 alone (AC-PNAA1..4 read 0.09/0.11/0.08/0.18s), inside its live leg `module_alias_report(text, BASE, path)` over 4 REAL modules whose import chains are the family's own ancestors - so the cost scales with the ancestor chain, not with the fixture (truncated)",
-    "next_milestone_due": "2026-11-18T13:33:03+08:00",
-    "updated_at": "2026-11-18T01:33:03+08:00"
+    "next_milestone": "[R2889] next window (<=12h): (1) MAIN - the streaming path (R2886) and a >5-minute leg have still never been measured TOGETHER: the 2541.9s leg was launched by the R2888 round and this window only adjudicated it, so run ONE family leg on the current streaming tool with `--evidence` and confirm the partial file is readable mid-run past 300s - the mechanism is what R2886 claims, and a finished file proves the output, not the streaming. (2) the probe-seam cliff decision is still open (R2888 item 2): memoize/bound the transitive ancestor chain, drop the live leg to a fixed small ancestor set, or declare a per-suite override ABOVE 300s - and do NOT raise the battery 600s cap. (3) `leg_audit` grades exactly three shapes of drift (counts, duplicates, row coherence) (truncated)",
+    "next_milestone_due": "2026-11-18T13:47:28+08:00",
+    "updated_at": "2026-11-18T01:47:28+08:00"
   },
-  "current": "2026-11-18 R2888 PRODUCT+ENGINEERING: backlog item (2) is MEASURED and the measurement REFUTES the premise it was handed - the slowest os-probe-seam suite is not a slow suite, it is a suite with ONE slow criterion, so a 45s leg cap could never have fit it and the 15 rc=124 rows were never defects",
+  "current": "2026-11-18 R2889 PRODUCT+ENGINEERING: the 285-suite os- family leg that R2888 left in flight CLOSED on its own at 01:37:59 and is ADOPTED as the first whole-family measurement with ZERO reds: selected=285 executed=285 green=285 criteria=1924 crit_mismatch=0 elapsed=2541.9s. Read honestly, the 42.3-minute crossing itself was already known from the R2885 detached leg (1382.4s); what is new is that a COMPLETE family leg now finished GREEN with no unit mismatch, and that the R2886 law gained an exit code.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -38,10 +38,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2888 PRODUCT+ENGINEERING: backlog item (2) is MEASURED and the measurement REFUTES the premise it was handed - the slowest os-probe-seam suite is not a slow suite, it is a suite with ONE slow criterion, so a 45s leg cap could never have fit it and the 15 rc=124 rows were never defects",
-  "export_ts": "2026-11-18T01:33:03+08:00",
+  "do": "2026-11-18 R2889 PRODUCT+ENGINEERING: the 285-suite os- family leg that R2888 left in flight CLOSED on its own at 01:37:59 and is ADOPTED as the first whole-family measurement with ZERO reds: selected=285 executed=285 green=285 criteria=1924 crit_mismatch=0 elapsed=2541.9s. Read honestly, the 42.3-minute crossing itself was already known from the R2885 detached leg (1382.4s); what is new is that a COMPLETE family leg now finished GREEN with no unit mismatch, and that the R2886 law gained an exit code.",
+  "export_ts": "2026-11-18T01:47:28+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
-  "next_milestone": "[R2888] next window (<=12h): (1) MAIN - the 285-suite `os-` leg launched at 00:55:36 by the round that was silence-killed at 01:20:37 is STILL RUNNING (`qa/wide-os-full-R2888.log`, 242 of 285 rows, reds=0, NO closing row -> not publishable); when it ends, read `SHARD rc=` and publish the number, and do NOT add its three untracked qa files until it holds a closing row. (2) the probe-seam cliff is now LOCALIZED: pass 140-185s of the suite sits in AC-PNAA5 alone (AC-PNAA1..4 read 0.09/0.11/0.08/0.18s), inside its live leg `module_alias_report(text, BASE, path)` over 4 REAL modules whose import chains are the family's own ancestors - so the cost scales with the ancestor chain, not with the fixture (truncated)",
+  "next_milestone": "[R2889] next window (<=12h): (1) MAIN - the streaming path (R2886) and a >5-minute leg have still never been measured TOGETHER: the 2541.9s leg was launched by the R2888 round and this window only adjudicated it, so run ONE family leg on the current streaming tool with `--evidence` and confirm the partial file is readable mid-run past 300s - the mechanism is what R2886 claims, and a finished file proves the output, not the streaming. (2) the probe-seam cliff decision is still open (R2888 item 2): memoize/bound the transitive ancestor chain, drop the live leg to a fixed small ancestor set, or declare a per-suite override ABOVE 300s - and do NOT raise the battery 600s cap. (3) `leg_audit` grades exactly three shapes of drift (counts, duplicates, row coherence) (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
@@ -150,7 +150,7 @@
   },
   "results": [
     [
-      "2888",
+      "2889",
       "OSLoop 执行 tick"
     ]
   ],
@@ -163,15 +163,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 84,
+    "log_lines_in_window": 92,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 12,
     "queue_explore_open": 10
   },
-  "state_bytes": 61794
+  "state_bytes": 67820
 }

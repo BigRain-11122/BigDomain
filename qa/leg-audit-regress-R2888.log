@@ -1,0 +1,7 @@
+SHARD scope=SHARD registry_suites=711 registry_criteria=5434 selected=5 selected_criteria=54 cap=600s leg_cap=180s overrides=1 exact=5 state=COMPLETE
+SHARD row os-scan-five-still rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=6 0.1s
+SHARD row os-battery-shard rc=0 pass=26 fail=0 detail=yes suite=PASS 26/26 crit=26 8.7s
+SHARD row os-suite-output-audit rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 2.9s
+SHARD row os-battery-shard-report rc=0 pass=10 fail=0 detail=yes suite=PASS 10/10 crit=10 0.2s
+SHARD row os-leg-audit rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD rc=0 scope=SHARD selected=5 executed=5 green=5 criteria=54 crit_mismatch=0 elapsed=12.1s

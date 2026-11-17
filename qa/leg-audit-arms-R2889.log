@@ -1,0 +1,6 @@
+﻿=== LEG AUDIT ARMS R2889 (tools/leg_audit.py) ===
+[ARM1 full R2888] rc=0 LEG-AUDIT ADOPT file=qa/wide-os-full-R2888.log rows=285 unique=285 selected=285 executed=285 green=285 crit=1924 mismatch=0 elapsed=2541.9s reds=0 reasons=none
+[ARM2 red-but-complete R2885] rc=0 LEG-AUDIT ADOPT file=qa/wide-os-R2885.log rows=285 unique=285 selected=285 executed=285 green=267 crit=1922 mismatch=1 elapsed=1382.4s reds=18 reasons=none
+[ARM3 no closing row] rc=2 LEG-AUDIT REJECT file=.codely-cli/tmp/legs/armC-noclose.log rows=285 unique=285 selected=None executed=None green=285 crit=1924 mismatch=None elapsed=None reds=0 reasons=E_NO_CLOSING_ROW
+[ARM4 torn one row lost] rc=2 LEG-AUDIT REJECT file=.codely-cli/tmp/legs/armD-torn.log rows=284 unique=284 selected=285 executed=285 green=284 crit=1918 mismatch=0 elapsed=2541.9s reds=0 reasons=E_ROW_COUNT:285!=284,E_GREEN_COUNT:285!=284,E_CRITERIA_SUM:1924!=1918
+[ARM5 duplicated suite row] rc=2 LEG-AUDIT REJECT file=.codely-cli/tmp/legs/armE-dupe.log rows=286 unique=285 selected=285 executed=285 green=286 crit=1930 mismatch=0 elapsed=2541.9s reds=0 reasons=E_DUPLICATE_SUITE:os-content-gate-console,E_ROW_COUNT:285!=286,E_GREEN_COUNT:285!=286,E_CRITERIA_SUM:1924!=1930
