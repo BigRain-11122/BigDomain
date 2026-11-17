@@ -7095,6 +7095,13 @@ SUITES = [
     # as the row above: a mid-list insert shifts every later suite's shard.
     ("os-lobby-ws-report-face",
      os.path.join("..", "os", "test_lobby_ws_report.py"), 6),
+    # R2877: tools/journey_demo.py walked the 19.9 CNY journey and its pass line
+    # was read only by a human (tech R2840 seed b, AC-JDN1..AC-JDN6 pinned there
+    # before this suite existed). Appended at the END so no later suite's shard
+    # shifts; reading it also found two real defects in the walk's own guards,
+    # both repaired at their birth sites rather than around them.
+    ("os-journey-demo-face",
+     os.path.join("..", "os", "test_journey_demo.py"), 6),
     ]
 
 FAILS = 0

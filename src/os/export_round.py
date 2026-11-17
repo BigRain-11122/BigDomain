@@ -466,9 +466,47 @@ def check(repo):
     return fails
 
 
+USAGE = (
+    'usage: export_round.py [-h] [--check] [--root DIR]\n'
+    '  (no flag)     rewrite docs/status-export.json from live files\n'
+    '  --check       read-only verdict, writes nothing\n'
+    '  --root DIR    repo root to act on (a private world is fine)\n'
+)
+
+
+def unknown_flags(argv):
+    """Flags this tool does not define, so a read-intent typo cannot write."""
+    known = ('--check', '-h', '--help')
+    found, skip = [], False
+    for arg in argv:
+        if skip:
+            skip = False
+            continue
+        if arg == '--root':
+            skip = True
+            continue
+        if arg in known:
+            continue
+        if arg.startswith('-'):
+            found.append(arg)
+    return found
+
+
 def main(argv):
+    if '-h' in argv or '--help' in argv:
+        sys.stdout.write(USAGE)
+        return 0
+    bad = unknown_flags(argv)
+    if bad:
+        sys.stdout.write('E_EXP_ARG unknown flag refused, nothing written: %s\n'
+                         % ', '.join(bad))
+        return 2
     repo = REPO
     if '--root' in argv:
+        if argv.index('--root') + 1 >= len(argv):
+            sys.stdout.write('E_EXP_ARG --root needs a directory, nothing '
+                             'written\n')
+            return 2
         repo = argv[argv.index('--root') + 1]
     stamp = datetime.datetime.now(TZ).replace(microsecond=0).isoformat()
     if '--check' in argv:

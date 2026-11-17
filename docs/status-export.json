@@ -1,16 +1,16 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-17 R2876 PRODUCT+ENGINEERING: the R2840 a seed is closed - the lobby WebSocket report face finally has a battery row, and its rendered verdict is now recomputed from its own evidence instead of being read by a human",
+    "current": "2026-11-17 R2877 PRODUCT+ENGINEERING: the R2876 item (2) is CLOSED - tools/journey_demo.py now has a battery row (os-journey-demo-face, AC-JDN1..AC-JDN6) that re-derives the 19.9 CNY walk from the shipped spec, re-reads six step carriers from disk, re-does the money arithmetic in integer cents (1990 -> 19.90, ladder 1990/2990), drives the abort paths in a private world and leaves the tracked preview pair byte- and mtime-identical; re-run this window reads SUITE PASS 6/6 and the matrix reconcile suite reads DOC-CURRENT at 710 rows and 5418 criteria",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2876] next window (<=12h): (1) MAIN - the lobby report face eight LIVE readings are still unmeasured: run the tool's own socket walk once inside a guarded leg (`python tools/lobby_ws_report.py` under tree_snapshot, then `--check`) and record whether the live 8/8 agrees with the landed fingerprint, so the wire behaviour stops being guarded only by the tool grading itself. (2) `tools/journey_demo.py` is the next face with no battery row (tech seed R2840 b, AC-JDN1..6 already pinned) - same shape, same red-first discipline. (3) the carried `crit_mismatch=13` unit class (assertion count vs criteria count) still needs a declared pair or a registry unit field. (4) the fold: state log is past the waterline again - read the window boundaries OUT of the log and name every displaced id, or the vehicle refuses both ways (truncated)",
-    "next_milestone_due": "2026-11-18T04:15:33+08:00",
-    "updated_at": "2026-11-17T16:15:33+08:00"
+    "next_milestone": "[R2877] next window (<=12h): (1) MAIN - the export vehicle argument guard is measured by hand only: add AC-EXPW11 (`-h`/`--help` prints usage, rc=0, `docs/status-export.json` sha256+mtime unchanged) and AC-EXPW12 (an unknown flag is refused rc=2 writing nothing, a dangling `--root` is refused instead of raising IndexError) to `src/os/test_export_round.py`, then move its registry row 18 -> 20 criteria and regenerate the matrix (5418 -> 5420) - pinned HERE before the edit, and the red-first form is the pre-fix binary, which is still recoverable from git. (2) the lobby report face eight LIVE readings are still unmeasured for a third window (R2876 item 1): run the tool own socket walk once inside a guarded leg and record whether live 8/8 agrees with the landed fingerprint. (3) the `crit_mismatch=13` unit class (assertion count vs criteria count) still needs a declared pair or a registry unit field. (4) the fold is owed - `state.json` 112539B with `fold_margin=-34039` at this closeout, and the working recipe is R2857: read the window boundaries OUT of the log and name every displaced id (truncated)",
+    "next_milestone_due": "2026-11-18T09:44:19+08:00",
+    "updated_at": "2026-11-17T21:44:19+08:00"
   },
-  "current": "2026-11-17 R2876 PRODUCT+ENGINEERING: the R2840 a seed is closed - the lobby WebSocket report face finally has a battery row, and its rendered verdict is now recomputed from its own evidence instead of being read by a human",
+  "current": "2026-11-17 R2877 PRODUCT+ENGINEERING: the R2876 item (2) is CLOSED - tools/journey_demo.py now has a battery row (os-journey-demo-face, AC-JDN1..AC-JDN6) that re-derives the 19.9 CNY walk from the shipped spec, re-reads six step carriers from disk, re-does the money arithmetic in integer cents (1990 -> 19.90, ladder 1990/2990), drives the abort paths in a private world and leaves the tracked preview pair byte- and mtime-identical; re-run this window reads SUITE PASS 6/6 and the matrix reconcile suite reads DOC-CURRENT at 710 rows and 5418 criteria",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -38,10 +38,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-17 R2876 PRODUCT+ENGINEERING: the R2840 a seed is closed - the lobby WebSocket report face finally has a battery row, and its rendered verdict is now recomputed from its own evidence instead of being read by a human",
-  "export_ts": "2026-11-17T16:15:33+08:00",
+  "do": "2026-11-17 R2877 PRODUCT+ENGINEERING: the R2876 item (2) is CLOSED - tools/journey_demo.py now has a battery row (os-journey-demo-face, AC-JDN1..AC-JDN6) that re-derives the 19.9 CNY walk from the shipped spec, re-reads six step carriers from disk, re-does the money arithmetic in integer cents (1990 -> 19.90, ladder 1990/2990), drives the abort paths in a private world and leaves the tracked preview pair byte- and mtime-identical; re-run this window reads SUITE PASS 6/6 and the matrix reconcile suite reads DOC-CURRENT at 710 rows and 5418 criteria",
+  "export_ts": "2026-11-17T21:44:19+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
-  "next_milestone": "[R2876] next window (<=12h): (1) MAIN - the lobby report face eight LIVE readings are still unmeasured: run the tool's own socket walk once inside a guarded leg (`python tools/lobby_ws_report.py` under tree_snapshot, then `--check`) and record whether the live 8/8 agrees with the landed fingerprint, so the wire behaviour stops being guarded only by the tool grading itself. (2) `tools/journey_demo.py` is the next face with no battery row (tech seed R2840 b, AC-JDN1..6 already pinned) - same shape, same red-first discipline. (3) the carried `crit_mismatch=13` unit class (assertion count vs criteria count) still needs a declared pair or a registry unit field. (4) the fold: state log is past the waterline again - read the window boundaries OUT of the log and name every displaced id, or the vehicle refuses both ways (truncated)",
+  "next_milestone": "[R2877] next window (<=12h): (1) MAIN - the export vehicle argument guard is measured by hand only: add AC-EXPW11 (`-h`/`--help` prints usage, rc=0, `docs/status-export.json` sha256+mtime unchanged) and AC-EXPW12 (an unknown flag is refused rc=2 writing nothing, a dangling `--root` is refused instead of raising IndexError) to `src/os/test_export_round.py`, then move its registry row 18 -> 20 criteria and regenerate the matrix (5418 -> 5420) - pinned HERE before the edit, and the red-first form is the pre-fix binary, which is still recoverable from git. (2) the lobby report face eight LIVE readings are still unmeasured for a third window (R2876 item 1): run the tool own socket walk once inside a guarded leg and record whether live 8/8 agrees with the landed fingerprint. (3) the `crit_mismatch=13` unit class (assertion count vs criteria count) still needs a declared pair or a registry unit field. (4) the fold is owed - `state.json` 112539B with `fold_margin=-34039` at this closeout, and the working recipe is R2857: read the window boundaries OUT of the log and name every displaced id (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
@@ -150,7 +150,7 @@
   },
   "results": [
     [
-      "2876",
+      "2877",
       "OSLoop 执行 tick"
     ]
   ],
@@ -163,15 +163,15 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 165,
+    "log_lines_in_window": 170,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 25,
+    "substantive_non_idle_mention_lines": 26,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 12,
     "queue_explore_open": 10
   },
-  "state_bytes": 108843
+  "state_bytes": 112539
 }
