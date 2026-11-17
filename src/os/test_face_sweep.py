@@ -1,8 +1,9 @@
-"""Battery suite for tools/face_sweep.py - criteria AC-FSWB1..AC-FSWB17.
+"""Battery suite for tools/face_sweep.py - criteria AC-FSWB1..AC-FSWB18.
 
 AC-FSWB1..AC-FSWB10 were pinned in src/os/backlog.md at R2819 BEFORE this suite
 existed; AC-FSWB11..AC-FSWB13 were pinned at R2903, AC-FSWB14..AC-FSWB15 at
-R2905 and AC-FSWB16..AC-FSWB17 at R2906, each BEFORE their legs were written.
+R2905, AC-FSWB16..AC-FSWB17 at R2906 and AC-FSWB18 at R2907, each BEFORE their
+legs were written.
 R2903's three legs grade the reading order (money proof first), the per-row
 consequence sentence, and the fact that the rule bites only on the table that owns
 the money row. R2905's legs grade that the money row's sentence QUOTES its own
@@ -486,7 +487,7 @@ def main():
         html17 = io.open(tool.OUT_HTML, encoding='utf-8').read()
         rc, out = run_quiet(lambda: tool.check())
         ok('AC-FSWB17 the scope sentence is on the landed page',
-           tool.SCOPE_LINE in html17 and rc == 0, 'rc=%d' % rc)
+           tool.scope_line() in html17 and rc == 0, 'rc=%d' % rc)
         doc17 = json.load(io.open(tool.OUT_JSON, encoding='utf-8'))
         doctored = json.loads(json.dumps(doc17))
         for r in doctored['faces']:
@@ -497,6 +498,42 @@ def main():
         rc, out = run_quiet(lambda: tool.check())
         ok('AC-FSWB17b a non-revenue row that grows a bracket reddens E_FSW_SCOPE_DRIFT',
            rc == 2 and 'E_FSW_SCOPE_DRIFT' in out, 'rc=%d' % rc)
+
+        # ---- AC-FSWB18 (R2907) THE SCOPE SENTENCE IS DERIVED, NOT TYPED. R2906 wrote the
+        # sentence by hand, a second copy of the declared set that no criterion compared, so
+        # a row added to or moved out of REVENUE_TOKENS left it stating the old scope. The
+        # published sentence must EQUAL the derivation for the loaded table, a sentence that
+        # only a hand edit could produce must redden, and moving one row out of the table
+        # must move the sentence by itself.
+        tool.FACES = [money_row, pay_row, mem_row] + rest
+        rc, out = run_quiet(lambda: tool.sweep(face_opts()))
+        html18 = io.open(tool.OUT_HTML, encoding='utf-8').read()
+        derived18 = tool.scope_line()
+        rc, out = run_quiet(lambda: tool.check())
+        ok('AC-FSWB18 the published scope sentence equals the derivation',
+           rc == 0 and derived18 in html18
+           and derived18.startswith(tool.SCOPE_PREFIX + '3 '), 'rc=%d' % rc)
+        ok('AC-FSWB18b the sentence names the declared rows and no others',
+           'money proof stub' in derived18 and 'membership stub' in derived18
+           and 'stub a' not in derived18, 'derived=%r' % derived18)
+        write(tool.OUT_HTML, html18.replace(derived18, derived18 + ' extra-row'))
+        rc, out = run_quiet(lambda: tool.check())
+        ok('AC-FSWB18c a typed scope sentence reddens E_FSW_SCOPE_TYPED',
+           rc == 2 and 'E_FSW_SCOPE_TYPED' in out, 'rc=%d' % rc)
+        saved18 = dict(tool.REVENUE_TOKENS)
+        try:
+            tool.REVENUE_TOKENS.pop('membership', None)
+            rc, out = run_quiet(lambda: tool.sweep(face_opts()))
+            html18d = io.open(tool.OUT_HTML, encoding='utf-8').read()
+            moved = tool.scope_line()
+            rc2, out2 = run_quiet(lambda: tool.check())
+            ok('AC-FSWB18d a row moved out of the table moves the sentence by itself',
+               rc2 == 0 and moved in html18d
+               and moved.startswith(tool.SCOPE_PREFIX + '2 ')
+               and 'membership stub' not in moved, 'rc=%d' % rc2)
+        finally:
+            tool.REVENUE_TOKENS.clear()
+            tool.REVENUE_TOKENS.update(saved18)
     finally:
         shutil.rmtree(world, ignore_errors=True)
 

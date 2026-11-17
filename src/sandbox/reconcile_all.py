@@ -6996,8 +6996,11 @@ SUITES = [
     # R2906 grew it to seventeen: the other two REVENUE rows (19.9 payment, membership)
     # must quote their own products=/tiers= reading, and the page must state WHY only the
     # revenue rows carry a bracket, with the declared set equal to the rows that carry one.
+    # R2907 grew it to eighteen: that sentence was typed, a second authored copy of the
+    # declared set that nothing compared - it is now DERIVED from the table and the row
+    # labels, and a sentence only a hand edit could produce reddens E_FSW_SCOPE_TYPED.
     ("os-face-sweep",
-     os.path.join("..", "os", "test_face_sweep.py"), 17),
+     os.path.join("..", "os", "test_face_sweep.py"), 18),
     # R2782 shipped tools/money_path_demo.py with the same hole - the 19.9 money
     # path page was guarded only by its own --check, which cannot catch a page
     # whose derivation changed under it.

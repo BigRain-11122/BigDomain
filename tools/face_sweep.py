@@ -7,7 +7,7 @@ runs each shipped tool's read-only --check as a subprocess, records its exit cod
 VERDICT line and the landed artifact bytes, and renders a single board.
 
 Laws honoured:
-- criteria are pre-registered in --check (AC-FSW0..AC-FSW17, see check()).
+- criteria are pre-registered in --check (AC-FSW0..AC-FSW18, see check()).
 - nothing is hardcoded: verdicts, sizes and timestamps are measured from the subprocess
   and from disk.
 - the board never counts a face as passing unless its own gate exited zero AND printed a
@@ -123,11 +123,24 @@ REVENUE_TOKENS = {
 }
 ROW_MEASURED = "\uff08\u672c\u884c\u5b9e\u6d4b %s\uff09"
 BRACKET_MARK = "\u672c\u884c\u5b9e\u6d4b"
-SCOPE_LINE = ("\u5b9e\u6d4b\u8303\u56f4\uff1a\u4e09\u884c\u8425\u6536\u9762\uff08"
-              "\u94b1\u7684\u8bc1\u636e\u300119.9 \u652f\u4ed8\u3001\u6708\u5361\u6743\u76ca\uff09"
-              "\u5404\u5f15\u7528\u672c\u884c\u81ea\u5df1\u7684\u8bfb\u6570\uff1b"
-              "\u5176\u4f59\u884c\u53ea\u6709\u58f0\u660e\u53e5\uff0c"
-              "\u56e0\u4e3a\u5b83\u4eec\u7684 FAIL \u662f\u5185\u90e8\u8bb0\u8d26\u800c\u975e\u6536\u5165\u4e8b\u5b9e\u3002")
+# R2907: the sentence that explains the scope is DERIVED from this table plus the row
+# labels, never typed. R2906 authored it by hand ("three revenue rows: the money proof,
+# 19.9 payment, membership") - a second copy of the set that AC-FSW17 never compared, so a
+# fourth revenue row would have kept the sentence claiming three and stayed green. Naming
+# the rows from FACES and counting them from the table removes the second copy.
+SCOPE_PREFIX = "\u5b9e\u6d4b\u8303\u56f4\uff1a"
+SCOPE_FMT = ("\u5b9e\u6d4b\u8303\u56f4\uff1a%d \u884c\u8425\u6536\u9762\uff08%s\uff09"
+             "\u5404\u5f15\u7528\u672c\u884c\u81ea\u5df1\u7684\u8bfb\u6570\uff1b"
+             "\u5176\u4f59\u884c\u53ea\u6709\u58f0\u660e\u53e5\uff0c"
+             "\u56e0\u4e3a\u5b83\u4eec\u7684 FAIL \u662f\u5185\u90e8\u8bb0\u8d26\u800c\u975e\u6536\u5165\u4e8b\u5b9e\u3002")
+
+
+def scope_line(faces=None):
+    """The scope sentence for the loaded table: count and row names are both derived."""
+    table = FACES if faces is None else faces
+    declared = [(str(r[0]), str(r[1])) for r in table if r[0] in REVENUE_TOKENS]
+    names = [(label.split(" / ")[0].strip() or fid) for fid, label in declared]
+    return SCOPE_FMT % (len(declared), "\u3001".join(names))
 # A row this table has not declared is published as UNDECLARED rather than blanked or
 # given an invented consequence: a blank cell reads as "no consequence", and a made-up
 # sentence is a claim nobody measured. AC-FSW12 still refuses the undeclared marker on any
@@ -143,7 +156,7 @@ COL_MEANING = "\u8fd9\u4e00\u884c FAIL \u5bf9\u6536\u5165\u610f\u5473\u7740\u4ec
 CRITERIA = ["AC-FSW0", "AC-FSW1", "AC-FSW2", "AC-FSW3", "AC-FSW3b", "AC-FSW4",
             "AC-FSW5", "AC-FSW6", "AC-FSW7", "AC-FSW8", "AC-FSW9", "AC-FSW10",
             "AC-FSW11", "AC-FSW12", "AC-FSW13", "AC-FSW14", "AC-FSW15",
-            "AC-FSW16", "AC-FSW17"]
+            "AC-FSW16", "AC-FSW17", "AC-FSW18"]
 
 # AC-FSW9: the per-face byte counts are a snapshot of the sweep that wrote them, never a
 # live equality claim. Any face re-rendered afterwards changes its own bytes, so asserting
@@ -422,7 +435,7 @@ def build_html(rows, sizes, stamp):
     for line in STANDING:
         body.append("<div>%s</div>" % _esc(line))
     body.append("<div>%s</div>" % _esc(EXCLUDED_NOTE))
-    body.append("<div>%s</div>" % _esc(SCOPE_LINE))
+    body.append("<div>%s</div>" % _esc(scope_line()))
     body.append("<div>%s</div>" % _esc(SNAPSHOT_NOTE))
     body.append("</div>")
     body.append("</div>")
@@ -655,7 +668,8 @@ def check():
     # should not have to infer the rule from the shape: the scope sentence must be on the
     # page, and the rows that actually carry a bracket must be exactly the revenue rows
     # whose verdict supplied one - prose and data cannot disagree about the scope.
-    if _esc(SCOPE_LINE) not in html_text:
+    expect_scope = scope_line()
+    if _esc(expect_scope) not in html_text:
         fails.append("AC-FSW17 scope sentence absent from the page")
     bracket = [r.get("id") for r in rows if BRACKET_MARK in str(r.get("meaning") or "")]
     expect = []
@@ -668,6 +682,26 @@ def check():
             expect.append(rid)
     if bracket != expect:
         fails.append("AC-FSW17 E_FSW_SCOPE_DRIFT measured=%r declared=%r" % (bracket, expect))
+
+    # AC-FSW18 (R2907) THE SCOPE SENTENCE IS DERIVED, NOT TYPED. R2906 wrote it by hand -
+    # "three revenue rows: the money proof, 19.9 payment, membership" - a second authored
+    # copy of the declared set, so a row added to (or moved out of) REVENUE_TOKENS left the
+    # sentence stating the old scope while every criterion above stayed green. The
+    # published sentence must EQUAL the derivation for the loaded table, and the count it
+    # states must equal the rows that actually carry a bracket on this page, so the prose
+    # cannot claim three measurements beside two.
+    mscope = re.search(re.escape(SCOPE_PREFIX) + "[^<]*", html_text)
+    if not mscope:
+        fails.append("AC-FSW18 E_FSW_SCOPE_TYPED no scope sentence")
+    elif mscope.group(0) != expect_scope:
+        fails.append("AC-FSW18 E_FSW_SCOPE_TYPED published=%r derived=%r"
+                     % (mscope.group(0), expect_scope))
+    else:
+        stated = re.match(re.escape(SCOPE_PREFIX) + r"(\d+)", mscope.group(0))
+        got_n = int(stated.group(1)) if stated else -1
+        if got_n != len(bracket):
+            fails.append("AC-FSW18 E_FSW_SCOPE_TYPED says %d rows, %d carry a bracket"
+                         % (got_n, len(bracket)))
 
     total = len(CRITERIA)
     for f in fails:
