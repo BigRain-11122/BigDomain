@@ -223,7 +223,7 @@ def check_contract(tmp, db):
     js = os.path.join(tmp, "wb.json")
     R.main(["--db", db, "--out", out, "--json-out", js])
     doc = json.loads(io.open(js, "r", encoding="utf-8").read())
-    env_ok = sorted(doc) == ["attention", "report", "schema_version"]
+    env_ok = sorted(doc) == ["attention", "report", "schema_version", "sizes"]
     # R2108 erratum: this assertion was born hardcoded to 2. The R2108
     # activity block is another ADDITIVE bump (3) that keeps every v2
     # key in place, so the version check follows the module while the

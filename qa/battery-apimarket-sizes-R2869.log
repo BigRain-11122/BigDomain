@@ -1,0 +1,72 @@
+R2869 BD-PROP-010 face 8 of 8 - apimarket sizes block + read-only --check
+generated: 2026-11-17 (BigDomain OSLoop window R2869)
+
+1. WHAT WAS MISSING (measured at open, not narrated)
+   preview/*.json measured in one pass: 7 of the 8 named faces carried a
+   sizes block; preview/apimarket-report.json did not, and its renderer
+   src/sandbox/ledger/apimarket_report.py had no read-only --check at all
+   (tools/face_sweep.py:67-70 recorded that gap in a comment).
+
+2. WHAT LANDED (src/sandbox/ledger/apimarket_report.py)
+   - api_report_payload(report, sizes=None): sizes is an additive fourth
+     top-level member (attention/report/schema_version unchanged).
+   - json_text_with_sizes(report, html_size): fixed-point iteration, the
+     json member counts the file that carries the number itself; a
+     non-converging run exits naming E_APIM_SIZES_FIXPOINT.
+   - check_sizes(html, json): read-only; compares recorded numbers with the
+     bytes on disk and names label / recorded / disk bytes on failure.
+   - --check flag: needs --out and --json-out, opens no database
+     (_Parser keeps --db mandatory for a render, so AC-AMRPT1 still passes).
+
+3. CRITERIA MOVED BY THE ADDITIVE MEMBER (disclosed, not silent)
+   tests whose envelope assertion read exactly three members were moved to
+   exactly four with sizes named: test_apimarket_report_json (AC-AMJ1),
+   report_activity (AC-AMAF2), report_dossier, report_buyerhistory,
+   report_refundregister, report_workbench, feeddev (AC-AMSF7),
+   marketfeed_listing (AC-AMFL7).
+
+4. SUITE LEGS (rc printed per suite, full output not kept in this file)
+   test_apimarket_report.py                       rc=0  SUITE PASS 9/9
+   test_apimarket_report_attention.py             rc=0  SUITE PASS 9/9
+   test_apimarket_report_json.py                  rc=0  SUITE PASS 10/10 (8 existing + AC-AMJ9 sizes + AC-AMJ10 red control)
+   test_apimarket_report_workbench.py             rc=0  SUITE PASS 8/8
+   test_apimarket_report_activity.py              rc=0  SUITE PASS 8/8
+   test_apimarket_report_dossier.py               rc=0  SUITE PASS 8/8
+   test_apimarket_report_buyerhistory.py          rc=0  SUITE PASS 10/10
+   test_apimarket_report_refundregister.py        rc=0  SUITE PASS 13/13
+   test_apimarket_feeddev.py                      rc=0  SUITE 8/8 PASS
+   test_apimarket_marketfeed_listing.py           rc=0  SUITE 8/8 PASS
+
+5. RED CONTROL (proposal criterion 2, AC-AMS2)
+   copy of the html with ONE byte appended -> --check prints
+   FAIL sizes html 36146 != 36147 on disk (bad.html) and exits 2;
+   the shipped artifact restored -> PASS again. Both artifacts kept their
+   bytes and mtimes across every check (AC-AMS3 untouched=True).
+
+6. THE SHIPPED FACE (CEO-openable artifacts, in-repo)
+   preview/apimarket-report.html  36146 bytes  sha256 9d6dd297c01bb656
+   preview/apimarket-report.json  59515 bytes  sha256 67b45cae9c117faa
+   python src/sandbox/ledger/apimarket_report.py --out preview/apimarket-report.html
+     --json-out preview/apimarket-report.json --check
+   -> APIMARKET SIZES CHECK PASS fails=0 sizes={'html': 36146, 'json': 59515}
+   The committed sample pair was still the schema-1 artefact (json 15736B);
+   it is regenerated here at schema 17, so the sample now matches the code.
+
+7. IDEMPOTENCE (proposal criterion 2 second half, AC-AMS5)
+   render twice against the same seeded world: html_same=True json_same=True
+   (sha256 9d6dd297c01bb656 / 67b45cae9c117faa both runs). This face carries
+   no wall-clock stamp, which is why criterion 2 FAILED for payment at R2765
+   and PASSES here - the difference is a property of the face, not of the
+   sizes technique.
+
+8. HONEST DISCLOSURES
+   (a) the sizes block proves the json knows how big the two files are; it
+       proves nothing about whether the report content is right.
+   (b) eight sibling envelope assertions had to move from three members to
+       four - mechanical, but it is a contract change, disclosed in 3 above.
+   (c) --db stopped being an argparse-required flag and became a parser
+       policy (required unless --check); AC-AMRPT1 caught the naive version
+       of that change in this same window (missing_db_exit2=False) and the
+       subclass restored it before the round closed.
+   (d) no payment capability moved: merchant id, server, domain, filing+ICP
+       and miniprogram appid/secret are still CEO physical items.

@@ -389,8 +389,7 @@ def main():
                and len(R.DOSSIER_KEYS) == 9
                and same
                and "recent activity (" in page
-               and sorted(doc) == ["attention", "report",
-                                   "schema_version"]
+               and sorted(doc) == ["attention", "report", "schema_version", "sizes"]
                and doc.get("schema_version") == R.REPORT_SCHEMA)
         record("AC-AMSF7", ok7,
                "schema=%d keys=%d dossier_feed_same=%s env=%s"

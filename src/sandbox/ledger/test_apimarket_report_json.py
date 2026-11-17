@@ -12,8 +12,10 @@ consumes, written atomically.
 
 Criteria:
   AC-AMJ1 Contract shape: the envelope carries exactly
-    schema_version/report/attention, schema_version == REPORT_SCHEMA,
-    and the file is pure ASCII with LF endings and no BOM.
+    schema_version/report/attention/sizes (the fourth member landed at
+    R2869 for BD-PROP-010 AC-AMS4, disclosed rather than silent),
+    schema_version == REPORT_SCHEMA, and the file is pure ASCII with LF
+    endings and no BOM.
   AC-AMJ2 Same source: the JSON report equals a fresh collect() dict
     (same read pass, no second derivation) and the attention member is
     byte-identical to the --attention-out sidecar of the same run.
@@ -29,6 +31,12 @@ Criteria:
   AC-AMJ8 Regression: the HTML page is byte-identical whether or not
     --json-out is passed (a purely additive surface) and the runner
     wiring is registered.
+  AC-AMJ9 Sizes self-consistency (R2869, AC-AMS1): the sizes block equals
+    the on-disk bytes of both artifacts and --check reads PASS on them.
+  AC-AMJ10 Check is read-only and red on drift (R2869, AC-AMS2/AC-AMS3):
+    one byte added to a COPY of the html makes --check FAIL naming the
+    label and both numbers; restoring it returns PASS, and both artifacts
+    keep their bytes and mtimes across the checks.
 
 Usage: python test_apimarket_report_json.py
 """
@@ -121,7 +129,8 @@ def check_contract(tmp, db):
         text = ""
     ok_lf = b"\r" not in raw and not raw.startswith(b"\xef\xbb\xbf")
     doc = json.loads(text) if ok_ascii else {}
-    ok_shape = sorted(doc) == ["attention", "report", "schema_version"]
+    ok_shape = sorted(doc) == ["attention", "report", "schema_version",
+                               "sizes"]
     ok_schema = doc.get("schema_version") == R.REPORT_SCHEMA
     record("AC-AMJ1", code == 0 and ok_ascii and ok_lf and ok_shape
            and ok_schema,
@@ -246,6 +255,44 @@ def check_regression():
            "html_identical=%s wired=%s" % (pages[0] == pages[1], wired))
 
 
+def check_sizes_block():
+    tmp, db = fresh_world("sizes")
+    out = os.path.join(tmp, "s.html")
+    js = os.path.join(tmp, "s.json")
+    code = run_cli(db, out, ["--json-out", js])
+    doc = read_json(js)
+    sizes = doc.get("sizes") or {}
+    disk_html = os.path.getsize(out)
+    disk_json = os.path.getsize(js)
+    check_code = R.main(["--out", out, "--json-out", js, "--check"])
+    ok = (code == 0 and sizes.get("html") == disk_html
+          and sizes.get("json") == disk_json and check_code == 0)
+    record("AC-AMJ9", ok, "sizes=%s disk=%d/%d render=%d check=%d"
+           % (sizes, disk_html, disk_json, code, check_code))
+
+
+def check_sizes_red_control():
+    tmp, db = fresh_world("redsizes")
+    out = os.path.join(tmp, "r.html")
+    js = os.path.join(tmp, "r.json")
+    run_cli(db, out, ["--json-out", js])
+    before = (io.open(out, "rb").read(), io.open(js, "rb").read(),
+              os.path.getmtime(out), os.path.getmtime(js))
+    green = R.main(["--out", out, "--json-out", js, "--check"])
+    after = (io.open(out, "rb").read(), io.open(js, "rb").read(),
+             os.path.getmtime(out), os.path.getmtime(js))
+    # red control runs on a COPY so the shipped artifacts stay untouched
+    bad_html = os.path.join(tmp, "bad.html")
+    with io.open(bad_html, "wb") as handle:
+        handle.write(before[0] + b"x")
+    red = R.main(["--out", bad_html, "--json-out", js, "--check"])
+    restored = R.main(["--out", out, "--json-out", js, "--check"])
+    ok = (green == 0 and red == 2 and restored == 0 and before == after)
+    record("AC-AMJ10", ok,
+           "green=%d red=%d restored=%d untouched=%s"
+           % (green, red, restored, before == after))
+
+
 def main():
     tmp, db = fresh_world("main")
     js = check_contract(tmp, db)
@@ -256,6 +303,8 @@ def main():
     check_pure_read(tmp, db)
     check_atomic(tmp, db)
     check_regression()
+    check_sizes_block()
+    check_sizes_red_control()
     failed = [ac for ac, ok, _ in RESULTS if not ok]
     print("SUITE %s %d/%d" % ("PASS" if not failed else "FAIL",
                               len(RESULTS) - len(failed), len(RESULTS)))

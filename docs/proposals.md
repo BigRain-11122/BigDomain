@@ -85,3 +85,32 @@
 - 判据（先立 ≤3 问）：① 新增源行 100% 带取全度标记（自本提案转正起连续两窗核查，缺标=判负）；② 人为把某条 PARTIAL 改成 FULL 后，引用该源的设计件复查必须点名"条文覆盖不足"（证明该列**有消费者**，不是装饰）；③ PARTIAL 源补采成 FULL 时，原行只增补采日期与章节范围、不改写既有判据文字（可追溯）。
 
 - 收口锚：①不过=撤回该列（不做只有格式没有消费者的台账）；②不过=把该列降级为记录行内注记；③不过=改为新起一行而非就地升级。
+
+## BD-PROP-010 试点实测 b: apimarket face (2026-11-17 R2869, criteria pinned BEFORE code)
+
+- Measured gap in this window (measured, not narrated): of the eight face jsons,
+  platform-live / lobby-ws / city-face / membership / payment (R2765) / ugc (R2768) /
+  ledger carry a `sizes` block and their own `--check` reads PASS; apimarket-report.json
+  has no `sizes`, and its renderer src/sandbox/ledger/apimarket_report.py has no
+  read-only `--check` at all (tools/face_sweep.py:67-70 already records this gap).
+  So the count is 7 of 8.
+- Pre-registered criteria (this block is the register; it exists BEFORE any edit):
+  - AC-AMS1 sizes self-consistency: the --json-out envelope carries sizes={html,json}
+    and the two numbers equal the on-disk bytes of the two artifacts; the numbers are
+    reached by fixed-point iteration (render html -> measure -> fill -> serialize ->
+    converge) and a non-converging run must exit non-zero naming E_APIM_SIZES_FIXPOINT.
+  - AC-AMS2 red control: after adding one byte to a COPY of the html, --check must read
+    FAIL and name the label, the recorded number and the on-disk byte count; restored,
+    it reads PASS again.
+  - AC-AMS3 a check must not author: both artifacts keep their bytes and mtimes across
+    one --check run (no silent re-render).
+  - AC-AMS4 additive envelope: the three existing members (attention/report/schema_version)
+    keep their meaning and sizes becomes a fourth top-level member; AC-AMJ1's member-set
+    assertion moves from three to four and that change is disclosed here, not silent.
+  - AC-AMS5 idempotence: re-rendering without touching the html leaves sizes unchanged
+    and produces byte-identical html and json (this face seeds deterministically, which
+    AC-AMJ5 already proves).
+- Closeout anchors (unchanged): 1/2/3 all pass = promote; 2 fails = read-only recompute
+  instead of writing; 3 fails = do the missing faces first and continue next window.
+
+- 试点实测 c（2026-11-17 R2869·第八份 apimarket 面，收口）：判据①过——单字节红控如实判 `FAIL sizes html 36146 != 36147 on disk` rc=2，还原回 PASS；判据②**过**（本面首次全过）——同种子世界两次渲染 html/json 逐字节同一（sha256 9d6dd297c01bb656 / 67b45cae9c117faa），因为 apimarket 面不带 `generated_utc`，这正是 R2765 payment 面判负的原因，差异在面不在尺寸技法；判据③**过**——带 `sizes` 的面页由实测 7/8 变 8/8，八个面的 `--check` 在该树全绿（qa/battery-apimarket-sizes-R2869.log，10 个套件 rc=0）。附带实物：`preview/apimarket-report.html` 36146B + `.json` 59515B 由 schema 1 旧样本重渲至 schema 17，样本与代码重新对齐。诚实边界：sizes 只证「文件知道自己多大」，不证报表内容正确；八个兄弟套件的信封断言由三成员改四成员是契约改动，已在提案面与套件 docstring 双向披露。**BD-PROP-010 转正。**

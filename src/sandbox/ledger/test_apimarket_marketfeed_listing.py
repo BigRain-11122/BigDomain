@@ -353,8 +353,7 @@ def main():
                and len(R.DOSSIER_KEYS) == 9
                and "feed" in R.DOSSIER_KEYS
                and same and heads
-               and sorted(doc) == ["attention", "report",
-                                   "schema_version"]
+               and sorted(doc) == ["attention", "report", "schema_version", "sizes"]
                and doc.get("schema_version") == R.REPORT_SCHEMA
                and doc["report"]["dossiers"] == dossiers)
         record("AC-AMFL7", ok7,

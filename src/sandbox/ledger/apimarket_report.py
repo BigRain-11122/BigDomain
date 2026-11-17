@@ -1130,24 +1130,58 @@ def render_html(report):
     return "\n".join(parts) + "\n"
 
 
-def api_report_payload(report):
+def api_report_payload(report, sizes=None):
     """Wrap an already collected report in the versioned JSON envelope.
 
     The payload is a pure projection of the same collect() dict the
-    HTML renderer consumes, so the two artifacts can never disagree."""
-    return {"schema_version": REPORT_SCHEMA,
-            "report": report,
-            "attention": report.get("attention") or {}}
+    HTML renderer consumes, so the two artifacts can never disagree.
+
+    R2869 / BD-PROP-010 AC-AMS4: sizes is an additive FOURTH top-level
+    member stating the byte size of the two artifacts this envelope
+    belongs to; the three existing members keep their meaning."""
+    payload = {"schema_version": REPORT_SCHEMA,
+               "report": report,
+               "attention": report.get("attention") or {}}
+    if sizes is not None:
+        payload["sizes"] = {"html": int(sizes["html"]),
+                            "json": int(sizes["json"])}
+    return payload
 
 
-def write_report_json(path, report):
+def dump_payload(payload):
+    """Serialize one envelope exactly as it lands on disk (ASCII + LF)."""
+    return json.dumps(payload, sort_keys=True, indent=1,
+                      ensure_ascii=True) + "\n"
+
+
+def json_text_with_sizes(report, html_size):
+    """Iterate the sizes block to a fixed point (AC-AMS1).
+
+    The json member counts the file that carries the number itself, so
+    the number is measured, never predicted: serialize, measure, refill,
+    and stop only when a pass reproduces the bytes it just measured. A
+    non-converging run exits non-zero naming the failure instead of
+    writing a document that lies about its own size."""
+    sizes = {"html": int(html_size), "json": 0}
+    for _ in range(8):
+        text = dump_payload(api_report_payload(report, sizes))
+        measured = len(text.encode("utf-8"))
+        if measured == sizes["json"]:
+            return text, sizes
+        sizes = {"html": sizes["html"], "json": measured}
+    raise SystemExit("E_APIM_SIZES_FIXPOINT: sizes block did not converge")
+
+
+def write_report_json(path, report, html_size=None):
     """Write the machine-readable report atomically.
 
     Serialization happens in full before anything touches disk, and the
     file is published with temp+os.replace, so a failure leaves no
     half-written artifact behind."""
-    payload = json.dumps(api_report_payload(report), sort_keys=True,
-                         indent=1, ensure_ascii=True) + "\n"
+    if html_size is None:
+        payload = dump_payload(api_report_payload(report))
+    else:
+        payload, _sizes = json_text_with_sizes(report, html_size)
     target = os.path.abspath(path)
     if not path or os.path.isdir(target):
         raise ValueError("--json-out needs a file path, got: %r" % (path,))
@@ -1237,13 +1271,27 @@ def write_report_csv(out_dir, report):
                 for name in CSV_FILES)
 
 
+class _Parser(argparse.ArgumentParser):
+    """Parser that keeps --db mandatory for a render and optional for
+    --check (R2869): a check reads two artifacts on disk and must not
+    need a database it never opens. The error path stays argparse's own,
+    so a missing --db still exits 2 with an ASCII message."""
+
+    def parse_args(self, args=None, namespace=None):
+        parsed = super(_Parser, self).parse_args(args, namespace)
+        if not parsed.check and not parsed.db:
+            self.error("--db is required unless --check is passed")
+        return parsed
+
+
 def build_parser():
-    parser = argparse.ArgumentParser(
+    parser = _Parser(
         prog="apimarket_report.py",
         description="Render the BigDomain API market settlement ledger"
                     " as a self-contained HTML report (read faces only).")
-    parser.add_argument("--db", required=True,
-                        help="path to the ledger sqlite file")
+    parser.add_argument("--db", required=False,
+                        help="path to the ledger sqlite file (required to"
+                             " render; --check reads the artifacts only)")
     parser.add_argument("--out", required=True,
                         help="path of the HTML report to write")
     parser.add_argument("--seed", action="store_true",
@@ -1258,7 +1306,54 @@ def build_parser():
     parser.add_argument("--csv-out", default=None,
                         help="optional directory for the settlement CSV"
                              " bundle (three month tables, LF endings)")
+    parser.add_argument("--check", action="store_true",
+                        help="read-only verification of the sizes block in"
+                             " --json-out against the bytes on disk; renders"
+                             " nothing and writes nothing")
     return parser
+
+
+def check_sizes(html_path, json_path):
+    """Read-only verification of the sizes block (AC-AMS2 / AC-AMS3).
+
+    Nothing is rendered and nothing is written: the recorded numbers are
+    compared with the bytes actually on disk, so a stale or hand-edited
+    artifact stays visibly wrong instead of being refreshed into a pass.
+    A check reports the label, the recorded number and the disk bytes."""
+    if not json_path:
+        sys.stderr.write("check failed: --check needs --json-out\n")
+        return 2
+    fails = []
+    for label, path in (("html", html_path), ("json", json_path)):
+        if not os.path.isfile(path):
+            fails.append("missing %s %s" % (label, path))
+    sizes = None
+    if not fails:
+        try:
+            with io.open(json_path, "r", encoding="utf-8") as handle:
+                doc = json.loads(handle.read())
+        except (OSError, ValueError) as exc:
+            fails.append("json unreadable: %s" % exc)
+            doc = {}
+        sizes = doc.get("sizes") if isinstance(doc, dict) else None
+        if not isinstance(sizes, dict):
+            fails.append("json carries no sizes block")
+        else:
+            for label, path in (("html", html_path), ("json", json_path)):
+                recorded = sizes.get(label)
+                disk = os.path.getsize(path)
+                if recorded != disk:
+                    fails.append("sizes %s %s != %d on disk (%s)"
+                                 % (label, recorded, disk,
+                                    os.path.basename(path)))
+    if fails:
+        for line in fails:
+            print("FAIL %s" % line)
+        print("APIMARKET SIZES CHECK FAIL fails=%d" % len(fails))
+        return 2
+    print("APIMARKET SIZES CHECK PASS fails=0 sizes=%s disk=%d/%d"
+          % (sizes, os.path.getsize(html_path), os.path.getsize(json_path)))
+    return 0
 
 
 def write_attention_json(path, attention):
@@ -1274,6 +1369,11 @@ def write_attention_json(path, attention):
 
 def main(argv=None):
     args = build_parser().parse_args(argv)
+    if args.check:
+        return check_sizes(args.out, args.json_out)
+    if not args.db:
+        sys.stderr.write("db is required unless --check is passed\n")
+        return 2
     led = mtr = dk = am = None
     try:
         led, mtr, dk, am = build_stack(args.db)
@@ -1300,7 +1400,8 @@ def main(argv=None):
                   % (args.attention_out, size))
         if args.json_out is not None:
             try:
-                size = write_report_json(args.json_out, report)
+                size = write_report_json(args.json_out, report,
+                                         len(page.encode("utf-8")))
             except (OSError, ValueError) as exc:
                 sys.stderr.write("json-out failed: %s\n" % exc)
                 return 2

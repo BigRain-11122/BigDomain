@@ -193,7 +193,7 @@ def check_contract(tmp, db):
     js = os.path.join(tmp, "act.json")
     R.main(["--db", db, "--out", out, "--json-out", js])
     doc = json.loads(io.open(js, "r", encoding="utf-8").read())
-    env_ok = sorted(doc) == ["attention", "report", "schema_version"]
+    env_ok = sorted(doc) == ["attention", "report", "schema_version", "sizes"]
     record("AC-AMAF2",
            R.REPORT_SCHEMA >= 3 and keys_ok and old_ok and buyer_ok
            and env_ok and doc.get("schema_version") == R.REPORT_SCHEMA
