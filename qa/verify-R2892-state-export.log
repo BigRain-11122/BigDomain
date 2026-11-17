@@ -1,0 +1,79 @@
+﻿
+=== test_state_fold rc=0 ===
+PASS AC-SF1 waterline verdict from the disk size, margin exact, closed verdict set and pinned report keys
+PASS AC-SF2 window moves verbatim with byte sum, tokens covered, prefix and suffix intact and the plan keys pinned
+PASS AC-SF3 verbatim appendix, old bytes a strict prefix, second append stacks, create only on demand, missing fails closed
+PASS AC-SF4 --check is byte-for-byte read-only with exit 0 clear / 2 due or bad flags / 3 unreadable
+PASS AC-SF5 plan idempotent, bounds/token/gate refusals write nothing, one execute lands on its prediction and re-checks clear
+PASS AC-SF6 source ASCII, stdlib only, no network, predicate single owned and wired as os-state-fold(6)
+SUITE PASS 6/6
+=== test_state_fold_run rc=0 ===
+PASS AC-SFOLD1 verbatim archive copy for all 12 moved lines, live block 33 >= 30, verdict CLEAR
+PASS AC-SFOLD2 ledger coverage unchanged through the archive: ledger_lines 11 -> 11, rounds 44 -> 44 (R1001 still found)
+PASS AC-SFOLD3 round-trip: field set preserved, re-run reads ALREADY-FOLDED with zero bytes written
+PASS AC-SFOLD4 the reader derives the file own indent: a 2-space real-style file folds in its own layout (header bytes and prefix intact), and items disagreeing with each other refused with the shipped code and no byte written [agree=True other=CLEAR layout=True header=True prefix=True refused=True untouched=True]
+PASS AC-SFOLD5 gate honest: a fold that would leave 2340 bytes over 100 refused E_SFOLD_GATE, the real fold cleared at 2340 <= 78500
+PASS AC-SFOLD6 dry run wrote zero bytes (digest 1e7c2fce4b1ea799), source ASCII and clockless, wired as os-state-fold-run(6)
+CRITERIA 6/6 passes=6 fails=0
+SUITE PASS 6/6
+=== test_export_round rc=0 ===
+  | PASS AC-EXPW1 current follows the live tick R9001 - SOMETHING 
+  | PASS AC-EXPW1 the ledger line is never mistaken for the narrative R9001 - SOMETHING MEASURED IN THIS WINDO
+  | PASS AC-EXPW1 latest follows the newest pair on disk preview/zz-late-face.html (16B) + 
+  | PASS AC-EXPW1 next follows the open board row MAIN - the family leg `qa/wide-os-
+  | PASS AC-EXPW1 no round-number literal survives in the code strings bad=[]
+  | PASS AC-EXPW2 the built face carries the derived three lines tick=9001
+  | PASS AC-EXPW2 the tick row slot equals the live tick rows=1
+  | PASS AC-EXPW2 the newest pair heads the outs band preview/zz-late-face.html (16B
+  | PASS AC-EXPW3 every self_drive key comes from the shipped recompute keys=7
+  | PASS AC-EXPW3 a private world never invents a second derivation 
+  | PASS AC-EXPW4 --check writes nothing and both bytes and mtime hold fails=[]
+  | PASS AC-EXPW5 a missing tick row refuses with E_EXP and zero write E_EXP expected exactly 1 tick row,
+  | PASS AC-EXPW5 a duplicated tick row refuses with E_EXP and zero write E_EXP expected exactly 1 tick row,
+  | PASS AC-EXPW7 the board set is an explicit constant, not a guess board=('ceo-blockers', 'face-sweep', 'battery-shard-report', 'index')
+  | PASS AC-EXPW7 the newest pair on disk being a board page does not move the line preview/first-yuan-chain.html (16B) + pr
+  | PASS AC-EXPW7 every skipped name is a member of the same constant skipped=3
+  | PASS AC-EXPW7 a product pair on top needs no exclusion preview/first-yuan-chain.html (16B) + pr
+  | PASS AC-EXPW7 the live tree picks a non-board face picked=apimarket-report
+  | PASS AC-EXPW8 an all-board tree yields a stated fact, not a board name (no product pair on disk - every pair is a meta boar
+  | PASS AC-EXPW8 the stated fact is not a pair receipt (no product pair on disk - every pair is
+  | PASS AC-EXPW8 adding one product pair replaces the fact with its name preview/first-yuan-chain.html (16B) + pr
+  | PASS AC-EXPW8 an empty preview keeps the existing empty-tree sentence (no preview pair on disk)
+  | PASS AC-EXPW9 the face carries the skipped audit and the board flag skipped=3
+  | PASS AC-EXPW9 the audit empties when no board pair is newer skipped=0
+  | PASS AC-EXPW9 the audit names bytes so it cannot be typed in s.html (16B)
+  | PASS AC-EXPW10 a correct private face reads clean fails=[]
+  | PASS AC-EXPW10 naming a board page reddens AC-EXPW7 fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk', 'AC-EXPW7 latest_artifact names a meta board page (ceo-blockers)']
+  | PASS AC-EXPW10 a silent exclusion reddens AC-EXPW9 fails=['AC-EXPW9 newest pair on disk is a board page but the skipped audit is empty']
+  | PASS AC-EXPW10 restoring the derived face reads clean again fails=[]
+  | PASS AC-EXPW11 a summary line above the headline never becomes current R9011 - ENGINEERING: the round did one measu
+  | PASS AC-EXPW11 removing the summary leaves current unchanged R9011 - ENGINEERING: the round did one measu
+  | PASS AC-EXPW11 a narrative about a fold stays a narrative, a bare range too, and the summary shape is excluded about=False range=False summary=True
+  | PASS AC-EXPW13 an intact archive does not block the write and is not re-grown skip='results archived to logs/status-export-legac'
+  | PASS AC-EXPW13 a live results list still moves the tick slot tick_row=['9013'] skipped=None
+  | PASS AC-EXPW14 a missing, mismatched or dangling archive is refused by name refusals=['E_EXP_NO_ARCHIVE results_archive a', 'E_EXP_NO_ARCHIVE archive sha256 00', 'E_EXP_NO_ARCHIVE results_archive.p']
+  | PASS AC-EXPG1 a dated round main line passes the law 
+  | PASS AC-EXPG4 an anchored private world grades clean (positive control) fails=[]
+  | PASS AC-EXPG1 an unanchored newest round refuses the write, zero bytes E_EXP_ROUND_SHAPE E_RMS_NO_DATE round=9031 n
+  | PASS AC-EXPG1 the refusal carries the law code it came from E_EXP_ROUND_SHAPE E_RMS_NO_DATE round=9031 newest round 9031
+  | PASS AC-EXPG2 the gate is the law module, not a second local regex law_calls=1 local_codes=0
+  | PASS AC-EXPG3 --check reddens on the unanchored tree, read-only fails=['E_EXP_ROUND_SHAPE E_RMS_NO_DATE round=9031 newest round 9031 has 1 round line(s) and none starts with a YYYY-MM-DD prefix']
+  | PASS AC-EXPG4 restoring the anchor clears the refusal again fails=[]
+  | PASS AC-EXPG4 the live tree still grades clean fails=[]
+  | PASS AC-EXPG5 the one-off state appenders are retired and the single vehicle remains leftovers=0
+  | PASS AC-EXPA1 --help and -h print usage at rc=0 and write nothing rc=0,0 face_moved=False
+  | PASS AC-EXPA2 an undefined flag and a dangling --root fail closed at rc=2 with the face untouched rc=2,2 face_moved=False
+  | PASS AC-EXPW6 module source is pure ASCII 
+  | PASS AC-EXPW6 no network import found=[]
+  | PASS AC-EXPW6 exactly one battery row for this suite rows=['20']
+suite: 49 assertions over 20 criteria
+SUITE PASS 49/49
+=== test_leg_audit rc=0 ===
+  | PASS AC-LGA1 a complete green leg is ADOPTED with its declared aggregate verdict=ADOPT facts=17
+  | PASS AC-LGA2 a leg with no closing row is REJECTED naming E_NO_CLOSING_ROW reasons=['E_NO_CLOSING_ROW']
+  | PASS AC-LGA3 a torn leg is REJECTED by row, green and criteria disagreement med=['E_CRITERIA_SUM', 'E_GREEN_COUNT', 'E_ROW_COUNT']
+  | PASS AC-LGA4 a duplicated suite row is REJECTED and the label is named dupes=['E_DUPLICATE_SUITE:probe-a']
+  | PASS AC-LGA5 a forged row is REJECTED while a declared timeout is not forged=['E_ROW_VERDICT:probe-x', 'E_GREEN_COUNT:0!=1'] timeout=[]
+  | PASS AC-LGA6 a RUNNING header is REJECTED and exactly one registry row exists reasons=['E_NOT_COMPLETE:RUNNING'] rows=['6']
+suite: 6 assertions over 6 criteria
+SUITE PASS 6/6

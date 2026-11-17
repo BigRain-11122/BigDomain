@@ -1,0 +1,37 @@
+﻿
+=== test_status_export_writer_dialect_wire rc=0 ===
+SUITE status_export_writer_dialect_wire (R2450) criteria=6
+PASS AC-SEWD1 the writer set is derived from the audit reading at CALL time, never a fixed list of three names
+PASS AC-SEWD2 a CRLF docs/status-export.json keeps CRLF through a real writer call with zero lone LF
+PASS AC-SEWD3 an LF export keeps exactly today's bytes
+PASS AC-SEWD4 every one of the three writers keeps its existing refusal code, exit code and printed line
+PASS AC-SEWD5 the audit reads AUDIT-CLEAN with routed == keeps after the wire
+PASS AC-SEWD6 pure ASCII, stdlib only, no clock, zero network, own reconcile label and suite
+SUITE PASS 6/6
+=== test_queue_floor_export_face rc=0 ===
+SUITE queue_floor_export_face (R2374) criteria=6
+PASS AC-QFE1 the section IS queue_floor_reading_wire.published (patching its reading moves the export)
+PASS AC-QFE2 publishes the discounted claimable plus every discounted row (line+prefix), never the gross alone
+PASS AC-QFE3 check_export_consistency reads 21/21 with the new field, and the field is not a second derivation
+PASS AC-QFE4 one stable key order plus one trailing LF, byte-stable across two runs
+PASS AC-QFE5 the value is derived at write time (a changed queue moves it, no canned copy)
+PASS AC-QFE6 pure ASCII, stdlib only, no clock, no network, one runner entry at 6 criteria
+SUITE PASS 6/6
+=== test_export_consistency_queue_face rc=0 ===
+PASS AC-ECQF1 queue reading asked at CALL time (patched gate moves it)
+PASS AC-ECQF1 base checks asked at CALL time (patched face moves them)
+PASS AC-ECQF2 twenty-one base lines identical and counted
+PASS AC-ECQF3 fixture built from the real export
+PASS AC-ECQF3 stale block reads DRIFT naming queue and sections
+PASS AC-ECQF3 queue drift is never folded into the twenty-one
+PASS AC-ECQF4 CURRENT document reads AGREE at exit 0 with base intact
+PASS AC-ECQF4 CLI prints the base lines then exactly one queue line
+PASS AC-ECQF4 the reading left the export byte-identical
+PASS AC-ECQF5 source carries no clock and no file write call
+PASS AC-ECQF5 two readings left the export byte-identical
+PASS AC-ECQF6 module source is pure ASCII
+PASS AC-ECQF6 imports are stdlib plus the two shipped faces only
+PASS AC-ECQF6 exactly one registry row wires this suite with 6 criteria
+PASS AC-ECQF6 six criteria declared
+SUITE PASS 6/6
+SUMMARY pass=15 fail=0
