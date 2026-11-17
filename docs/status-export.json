@@ -1,16 +1,16 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2890 PRODUCT+ENGINEERING: R2889 item (1) is CLOSED - the streaming path and a leg longer than five minutes were measured TOGETHER for the first time, and the observer is a TOOL instead of an eyeball: tools/leg_watch.py ships (read-only sampler, refuses any path outside qa/, counts torn reads rather than dropping them) and on the live 285-suite os- leg it read MID-RUN CONFIRMED over 11 samples spanning 300.0s with zero torn reads, rows monotone 27..150, state=RUNNING on every sample and no closing row (qa/leg-watch-R2890.log)",
+    "current": "2026-11-18 R2891 PRODUCT+ENGINEERING: R2890 item (2) is HALF-CLOSED the honest way - the observer now HAS a battery row in code (src/os/test_leg_watch.py, AC-LGW1..AC-LGW6, SUITE PASS 14/14 twice byte-identical sha16 FBA62BF489EE7742, evidence qa/leg-watch-suite-R2891-a.log and -b.log) and its registration in src/sandbox/reconcile_all.py is deliberately NOT done, because the same-family 285-suite os- leg is still in flight at closeout (233 of 286 rows) and the R2886 edit-race law forbids moving a registry row under a live leg.",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2890] next window (<=12h): (1) MAIN - the family leg `qa/wide-os-full-R2890.log` is STILL IN FLIGHT (181 rows at 02:03:00, three reds since repaired in the tree but NOT in that leg's own rows); when it closes read `SHARD rc=` and adjudicate it with `tools/leg_audit.py` before publishing a family number, and state plainly that its reds are historical rather than re-run. (2) `tools/leg_watch.py` has NO battery row on purpose - registering it edits `src/sandbox/reconcile_all.py` while a leg of that same family is mid-flight, which is the R2886 edit-race law and would also make the in-flight header disagree with the file (truncated)",
-    "next_milestone_due": "2026-11-18T14:08:29+08:00",
-    "updated_at": "2026-11-18T02:08:29+08:00"
+    "next_milestone": "[R2891] next window (<=12h): (1) MAIN - the family leg `qa/wide-os-full-R2890.log` is STILL IN FLIGHT for a second window (233 of 286 rows at 02:3x, three reds that are the already-repaired stale-export class); when it closes read `SHARD rc=` and adjudicate it with `tools/leg_audit.py` before publishing a family number, and say plainly that its three reds are historical rather than re-run. (2) register `os-leg-watch` in `src/sandbox/reconcile_all.py` with exactly +1 row / +6 criteria and regenerate the matrix `--check` byte-identical - it was deliberately NOT done this window because a same-family leg was live (the R2886 edit-race law) (truncated)",
+    "next_milestone_due": "2026-11-18T14:20:32+08:00",
+    "updated_at": "2026-11-18T02:20:32+08:00"
   },
-  "current": "2026-11-18 R2890 PRODUCT+ENGINEERING: R2889 item (1) is CLOSED - the streaming path and a leg longer than five minutes were measured TOGETHER for the first time, and the observer is a TOOL instead of an eyeball: tools/leg_watch.py ships (read-only sampler, refuses any path outside qa/, counts torn reads rather than dropping them) and on the live 285-suite os- leg it read MID-RUN CONFIRMED over 11 samples spanning 300.0s with zero torn reads, rows monotone 27..150, state=RUNNING on every sample and no closing row (qa/leg-watch-R2890.log)",
+  "current": "2026-11-18 R2891 PRODUCT+ENGINEERING: R2890 item (2) is HALF-CLOSED the honest way - the observer now HAS a battery row in code (src/os/test_leg_watch.py, AC-LGW1..AC-LGW6, SUITE PASS 14/14 twice byte-identical sha16 FBA62BF489EE7742, evidence qa/leg-watch-suite-R2891-a.log and -b.log) and its registration in src/sandbox/reconcile_all.py is deliberately NOT done, because the same-family 285-suite os- leg is still in flight at closeout (233 of 286 rows) and the R2886 edit-race law forbids moving a registry row under a live leg.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -38,10 +38,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2890 PRODUCT+ENGINEERING: R2889 item (1) is CLOSED - the streaming path and a leg longer than five minutes were measured TOGETHER for the first time, and the observer is a TOOL instead of an eyeball: tools/leg_watch.py ships (read-only sampler, refuses any path outside qa/, counts torn reads rather than dropping them) and on the live 285-suite os- leg it read MID-RUN CONFIRMED over 11 samples spanning 300.0s with zero torn reads, rows monotone 27..150, state=RUNNING on every sample and no closing row (qa/leg-watch-R2890.log)",
-  "export_ts": "2026-11-18T02:08:29+08:00",
+  "do": "2026-11-18 R2891 PRODUCT+ENGINEERING: R2890 item (2) is HALF-CLOSED the honest way - the observer now HAS a battery row in code (src/os/test_leg_watch.py, AC-LGW1..AC-LGW6, SUITE PASS 14/14 twice byte-identical sha16 FBA62BF489EE7742, evidence qa/leg-watch-suite-R2891-a.log and -b.log) and its registration in src/sandbox/reconcile_all.py is deliberately NOT done, because the same-family 285-suite os- leg is still in flight at closeout (233 of 286 rows) and the R2886 edit-race law forbids moving a registry row under a live leg.",
+  "export_ts": "2026-11-18T02:20:32+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
-  "next_milestone": "[R2890] next window (<=12h): (1) MAIN - the family leg `qa/wide-os-full-R2890.log` is STILL IN FLIGHT (181 rows at 02:03:00, three reds since repaired in the tree but NOT in that leg's own rows); when it closes read `SHARD rc=` and adjudicate it with `tools/leg_audit.py` before publishing a family number, and state plainly that its reds are historical rather than re-run. (2) `tools/leg_watch.py` has NO battery row on purpose - registering it edits `src/sandbox/reconcile_all.py` while a leg of that same family is mid-flight, which is the R2886 edit-race law and would also make the in-flight header disagree with the file (truncated)",
+  "next_milestone": "[R2891] next window (<=12h): (1) MAIN - the family leg `qa/wide-os-full-R2890.log` is STILL IN FLIGHT for a second window (233 of 286 rows at 02:3x, three reds that are the already-repaired stale-export class); when it closes read `SHARD rc=` and adjudicate it with `tools/leg_audit.py` before publishing a family number, and say plainly that its three reds are historical rather than re-run. (2) register `os-leg-watch` in `src/sandbox/reconcile_all.py` with exactly +1 row / +6 criteria and regenerate the matrix `--check` byte-identical - it was deliberately NOT done this window because a same-family leg was live (the R2886 edit-race law) (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
@@ -108,14 +108,14 @@
         "status": "MET"
       },
       {
-        "claimable": 9,
+        "claimable": 10,
         "delivered": [
           {
-            "line": 723,
+            "line": 725,
             "prefix": "AC-SEQAF1"
           },
           {
-            "line": 725,
+            "line": 727,
             "prefix": "AC-EDMK1"
           }
         ],
@@ -123,12 +123,12 @@
         "done_rows": 516,
         "floor": 10,
         "gated_rows": 1,
-        "open_rows": 12,
+        "open_rows": 13,
         "path": "state/queue/tech.md",
         "present": true,
         "queue": "tech",
-        "shortfall": 1,
-        "status": "SHORT"
+        "shortfall": 0,
+        "status": "MET"
       },
       {
         "claimable": 10,
@@ -145,12 +145,12 @@
         "status": "MET"
       }
     ],
-    "shortfall_total": 1,
-    "verdict": "FLOOR-DEBT"
+    "shortfall_total": 0,
+    "verdict": "FLOOR-MET"
   },
   "results": [
     [
-      "2890",
+      "2891",
       "OSLoop 执行 tick"
     ]
   ],
@@ -163,15 +163,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 98,
+    "log_lines_in_window": 104,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 17,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
-    "queue_tech_open": 12,
+    "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "state_bytes": 69922
+  "state_bytes": 74823
 }
