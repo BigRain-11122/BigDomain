@@ -1,0 +1,14 @@
+SHARD scope=SHARD registry_suites=713 registry_criteria=5474 selected=1 selected_criteria=8 cap=600s leg_cap=0s overrides=1 exact=1 state=COMPLETE
+SHARD row os-ledger-lines rc=2 pass=7 fail=1 detail=yes suite=FAIL 7/8 crit=8 1.0s
+SHARD detail os-ledger-lines suite: round ledger line checker (R2152 AC-LGR1..AC-LGR8)
+SHARD detail os-ledger-lines PASS AC-LGR1 canonical parse, units and approx marker resolved
+SHARD detail os-ledger-lines PASS AC-LGR2 nine bad forms named, gate order round/local/api/reason
+SHARD detail os-ledger-lines PASS AC-LGR3 coverage law derives missing and orphan rounds
+SHARD detail os-ledger-lines PASS AC-LGR4 tail window scopes the audit and echoes its arithmetic
+SHARD detail os-ledger-lines PASS AC-LGR5 zero false positives, typo caught by coverage law
+SHARD detail os-ledger-lines PASS AC-LGR6 api is a pure integer and always carries a reason
+SHARD detail os-ledger-lines PASS AC-LGR7 CLI exit 0/2/3, stable JSON, zero file writes
+SHARD detail os-ledger-lines FAIL AC-LGR8 live gate clean on the coverage scope, folded gaps proven healed by the archive, exemption list empty, hygiene
+SHARD detail os-ledger-lines SUITE FAIL 7/8 criteria
+SHARD rc=2 scope=SHARD selected=1 executed=1 green=0 criteria=8 crit_mismatch=0 elapsed=1.0s
+SHARD red os-ledger-lines:rc=2
