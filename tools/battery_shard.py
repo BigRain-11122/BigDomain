@@ -483,6 +483,7 @@ def _round(args):
     green = 0
     crit_run = 0
     mismatch = []
+    undeclared = []
     reds = []
     started = time.time()
     for label, rel, crit in picked:
@@ -498,10 +499,18 @@ def _round(args):
         # the registry's unit; a suite that does not keeps the old reading.
         declared = parse_criteria_unit(out)
         if declared is not None:
+            # AC-BSGB12 (R2859) pins this case deliberately: a suite that STATES
+            # its criteria count is compared like-for-like, and a disagreement
+            # there is graded by --declared-only. The shard keeps it a footnote
+            # and does not move rc, exactly as that criterion requires.
             if declared != int(crit):
                 mismatch.append("%s:%d!=%d" % (label, declared, crit))
         elif parsed and parsed[2] != int(crit):
+            # AC-BSGB14 (R2881): an UNDECLARED suite whose printed total
+            # disagrees with its registry row is the true blind spot - no reader
+            # can say which number counts what, and no other mode reddens it.
             mismatch.append("%s:%d!=%d" % (label, parsed[2], crit))
+            undeclared.append("%s:%d!=%d" % (label, parsed[2], crit))
         executed += 1
         crit_run += int(crit)
         if code == 0:
@@ -517,7 +526,16 @@ def _round(args):
             for chunk in out.splitlines()[:40]:
                 lines.append("SHARD detail %s %s" % (label, chunk))
     elapsed = time.time() - started
-    rc = 0 if (green == executed == len(picked)) else 2
+    # AC-BSGB14 (R2881): an UNDECLARED unit disagreement is a RED. It used to be
+    # a disclosure only, so a suite whose printed total counts assertions read
+    # exactly like a green leg with a footnote when its registry row counts
+    # criteria - which is how thirteen labels sat as "carried debt" for
+    # twenty-three windows while every one of them already declared the right
+    # number. The DECLARED case is NOT touched here: AC-BSGB12 (R2859) pins it
+    # to a footnote and --declared-only is the mode that reddens it, so the
+    # first draft of this law, which reddened every mismatch, was narrowed on
+    # that criterion rather than the criterion being adjusted to it.
+    rc = 0 if (green == executed == len(picked)) and not undeclared else 2
     closing = ("SHARD rc=%d scope=SHARD selected=%d executed=%d green=%d "
                "criteria=%d crit_mismatch=%d elapsed=%.1fs"
                % (rc, len(picked), executed, green, crit_run, len(mismatch), elapsed))
@@ -527,6 +545,12 @@ def _round(args):
                  % (len(rows), sum(int(r[2]) for r in rows), len(picked),
                     total_crit, cap, leg_cap, len(args.exact)))
     lines.append(closing)
+    if undeclared:
+        # AC-BSGB14: named as a red, not only as a footnote, because rc=2 above
+        # already refuses the leg and a reader must see WHY without diffing the
+        # closing line's two numbers.
+        print("SHARD red-unit undeclared=%s" % ",".join(undeclared))
+        lines.append("SHARD red-unit undeclared=%s" % ",".join(undeclared))
     if mismatch:
         print("SHARD disclosure crit_mismatch=%s" % ",".join(mismatch))
         lines.append("SHARD disclosure crit_mismatch=%s" % ",".join(mismatch))

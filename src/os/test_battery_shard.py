@@ -68,6 +68,18 @@ print("SUITE PASS 1/1")
 PROBE_BARE = """print("SUITE PASS 1/1")
 """
 
+# AC-BSGB14 (R2881): the SAME verdict row counts assertions; only the
+# declaration differs. A registry row of 8 criteria beside a bare 21/21 is the
+# under-declared unit class this criterion refuses by name.
+PROBE_UNIT_BARE = """print("  | PASS probe-unit-bare")
+print("SUITE PASS 21/21")
+"""
+
+PROBE_UNIT_DECL = """print("  | PASS probe-unit-decl")
+print("suite: 21 assertions over 8 criteria")
+print("SUITE PASS 21/21")
+"""
+
 # R2859: the declared-units pair. Both probes print the SAME verdict row; only
 # the declaration differs, so a mismatch can only come from the declaration.
 PROBE_DECL_OK = """print("  | PASS probe-decl-ok")
@@ -546,6 +558,43 @@ def main():
            "rc=%d named=%s row=%s" % (code_cap, red_named,
                                       "timeout=yes" in slow_row[0]
                                       if slow_row else "-"))
+    finally:
+        shutil.rmtree(world, ignore_errors=True)
+
+    # AC-BSGB14 (R2881) - a unit disagreement is a RED in every mode. Measured
+    # fact this exists for: the shard left rc untouched when a suite printed 21
+    # assertions beside a registry row of 8 criteria, so the same thirteen
+    # labels read as "carried debt" for twenty-three windows while every one of
+    # them already declared the right number (R2881 measured all thirteen green
+    # in qa/critunits-measure-R2881.log, and the pre-fix tool read the defect as
+    # rc=0 in qa/red-first-unitlaw-R2881.log). --declared-only already reddened
+    # the condition; the shard now asks it the same way. Both directions run
+    # here in ONE private world, so the gate is proved to bite and proved not to
+    # bite the lawful case instead of being assumed either way.
+    world = tempfile.mkdtemp(prefix="battery_shard_unit_")
+    try:
+        for name, body in (("probe_unit_bare.py", PROBE_UNIT_BARE),
+                           ("probe_unit_decl.py", PROBE_UNIT_DECL)):
+            with open(os.path.join(world, name), "w", encoding="utf-8",
+                      newline="\n") as handle:
+                handle.write(body)
+        saved = shard.registry
+        try:
+            patch_registry(shard, [("probe-unit-bare", "probe_unit_bare.py", 8),
+                                   ("probe-unit-decl", "probe_unit_decl.py", 8)],
+                           world)
+            code_all, out_all = run_cli(shard, ["--match", "probe"])
+            patch_registry(shard, [("probe-unit-decl", "probe_unit_decl.py", 8)],
+                           world)
+            code_decl, out_declared = run_cli(shard, ["--match", "probe"])
+        finally:
+            shard.registry = saved
+        bare_named = ("SHARD red-unit undeclared=probe-unit-bare:21!=8"
+                      in out_all)
+        lawful_kept = code_decl == 0 and "crit_mismatch=0" in out_declared
+        ok("AC-BSGB14", code_all == 2 and bare_named and lawful_kept,
+           "rc=%d bare_named=%s declared_rc=%d" % (code_all, bare_named,
+                                                   code_decl))
     finally:
         shutil.rmtree(world, ignore_errors=True)
 

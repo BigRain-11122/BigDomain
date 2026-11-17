@@ -1,0 +1,15 @@
+SHARD scope=SHARD registry_suites=710 registry_criteria=5422 selected=13 selected_criteria=121 cap=600s leg_cap=120s exact=13
+SHARD row os-ship-checklist rc=0 pass=21 fail=0 detail=yes suite=PASS 21/21 crit=8 0.2s
+SHARD row os-export-round rc=0 pass=49 fail=0 detail=yes suite=PASS 49/49 crit=20 1.6s
+SHARD row os-payment-gate-report rc=0 pass=13 fail=0 detail=yes suite=PASS 13/13 crit=11 0.3s
+SHARD row os-qa-log rc=0 pass=12 fail=0 detail=yes suite=PASS 12/12 crit=10 0.3s
+SHARD row os-census-nul-class rc=0 pass=9 fail=0 detail=yes suite=PASS 9/9 crit=7 0.3s
+SHARD row os-ceo-blockers rc=0 pass=12 fail=0 detail=yes suite=PASS 12/12 crit=12 0.2s
+SHARD row os-scan-five-still rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=6 0.1s
+SHARD row os-filing-checklist rc=0 pass=20 fail=0 detail=yes suite=PASS 20/20 crit=8 0.1s
+SHARD row os-membership-face rc=0 pass=28 fail=0 detail=yes suite=PASS 28/28 crit=10 0.3s
+SHARD row os-face-sweep rc=0 pass=19 fail=0 detail=yes suite=PASS 19/19 crit=10 1.6s
+SHARD row os-money-path-demo rc=0 pass=18 fail=0 detail=yes suite=PASS 18/18 crit=6 0.2s
+SHARD row os-first-yuan-path rc=0 pass=14 fail=0 detail=yes suite=PASS 14/14 crit=7 0.3s
+SHARD row os-lobby-protocol-map rc=0 pass=17 fail=0 detail=yes suite=PASS 17/17 crit=6 0.5s
+SHARD rc=0 scope=SHARD selected=13 executed=13 green=13 criteria=121 crit_mismatch=0 elapsed=5.9s
