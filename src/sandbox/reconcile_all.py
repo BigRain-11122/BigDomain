@@ -6851,8 +6851,13 @@ SUITES = [
     # assertion - which is the proof that sub-check carries weight. R2817 added
     # AC-PAYGB10/11 for the stale-price false green measured at R2816, so the
     # row moves 9 -> 10 and its own pre-registration run read exactly that row.)
+    # R2860: that move was ONE short. R2817 added TWO criteria (PAYGB10 and
+    # PAYGB11) and the row went 9 -> 10, so the row and the suite's own literal
+    # "declares 10" agreed with each other and with nothing else. The suite's
+    # own inventory is AC-PAYGB1..11 (PAYGB9b/9c are sub-assertions of 9), so
+    # the row moves 10 -> 11 and the literal left the suite (AC-PER1/AC-PER3).
     ("os-payment-gate-report",
-     os.path.join("..", "os", "test_payment_gate_report.py"), 10),
+     os.path.join("..", "os", "test_payment_gate_report.py"), 11),
     # R2807: tools/qa_log.py writes every window's evidence (tools/battery_shard.py
     # calls its do_write directly) yet all 691 registered suites covered zero
     # AC-QAL* tokens, so its seven criteria were guarded only by its own
@@ -6892,8 +6897,12 @@ SUITES = [
     # suite existed. The pre-registration run read exactly one red - the
     # registry assertion, AC-CBXB11 - which is the proof that sub-check
     # carries weight.)
+    # R2860: AC-CBXB0 is a criterion of its own, not a sub-assertion - it is
+    # numbered B0 (its own id) and it grades isolation, the same class as
+    # AC-PAYGB9c and AC-EXPW6, so the suite's own inventory is CBXB0..CBXB11 =
+    # 12 and the row, which had echoed the suite's literal, moves 11 -> 12.
     ("os-ceo-blockers",
-     os.path.join("..", "os", "test_ceo_blockers.py"), 11),
+     os.path.join("..", "os", "test_ceo_blockers.py"), 12),
     # R2780: the group ledger writes wildcard forms ("no reply cites
     # D-20261114-0x") and a token regex without a right-hand boundary harvests
     # D-20261114-0 out of them, inventing a decision that never existed. Every

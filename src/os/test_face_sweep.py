@@ -282,6 +282,17 @@ def main():
        'entries=%d' % len(pre_preview))
 
     total = len(CHECKS)
+    # Declared units (R2860): the AC inventory below is derived from CHECKS,
+    # never echoed from the registry - a declaration copied out of the
+    # registry could never disagree with it.
+    acs = set()
+    for name in CHECKS:
+        token = name.split(' ', 1)[0]
+        for cut in range(len(token), 0, -1):
+            if token[cut - 1].isdigit():
+                acs.add(token[:cut])
+                break
+    print('suite: %d assertions over %d criteria' % (total, len(acs)))
     if FAILS:
         print('SUITE FAIL %d/%d failed=%s' % (total - len(FAILS), total, FAILS))
         return 1

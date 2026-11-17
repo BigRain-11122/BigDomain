@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 706 | 5384 | 675/675 | R2739 |
+| 706 | 5386 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -722,10 +722,10 @@
 | 683 | os-export-parity-difference-order-field | ../os/test_export_parity_difference_order_field.py | 6 | no-evidence | - |
 | 684 | os-ship-checklist | ../os/test_ship_checklist.py | 8 | no-evidence | - |
 | 685 | os-export-round | ../os/test_export_round.py | 18 | no-evidence | - |
-| 686 | os-payment-gate-report | ../os/test_payment_gate_report.py | 10 | no-evidence | - |
+| 686 | os-payment-gate-report | ../os/test_payment_gate_report.py | 11 | no-evidence | - |
 | 687 | os-qa-log | ../os/test_qa_log.py | 10 | no-evidence | - |
 | 688 | os-census-nul-class | ../os/test_census_nul_class.py | 7 | no-evidence | - |
-| 689 | os-ceo-blockers | ../os/test_ceo_blockers.py | 11 | no-evidence | - |
+| 689 | os-ceo-blockers | ../os/test_ceo_blockers.py | 12 | no-evidence | - |
 | 690 | os-scan-five-still | ../os/test_scan_five_still.py | 6 | no-evidence | - |
 | 691 | os-filing-checklist | ../os/test_filing_checklist.py | 8 | no-evidence | - |
 | 692 | os-membership-face | ../os/test_membership_face.py | 10 | no-evidence | - |
@@ -743,7 +743,7 @@
 | 704 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 6 | no-evidence | - |
 | 705 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
 | 706 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 12 | no-evidence | - |
-|  | 合计 |  | 5384 | green 675 / FAIL 0 / no-evidence 31 |  |
+|  | 合计 |  | 5386 | green 675 / FAIL 0 / no-evidence 31 |  |
 
 ## 证据出处
 

@@ -1,4 +1,11 @@
-"""Battery suite for tools/payment_gate_report.py - criteria AC-PAYGB1..AC-PAYGB9.
+"""Battery suite for tools/payment_gate_report.py - criteria AC-PAYGB1..AC-PAYGB11.
+
+R2860: the pinned range above grew twice (AC-PAYGB10/11 at R2817) while the
+registry row moved only 9 -> 10, and this suite's own literal "declares 10"
+agreed with the stale row rather than with its own inventory. The row now reads
+eleven, which is what AC-PAYGB1..AC-PAYGB11 are (PAYGB9b/9c are sub-assertions
+of 9, not criteria of their own), and the number is compared by the runner from
+the declaration this suite prints at closeout, not echoed here.
 
 AC-PAYGB1..AC-PAYGB9 were pinned in src/os/backlog.md at R2806 BEFORE this suite
 existed, mapping one-to-one onto AC-PAYG1..AC-PAYG8 that the tool prints, plus
@@ -310,9 +317,9 @@ def main():
                               reg[pos:pos + 200])
             if found:
                 declared_rows.append(found.group(1))
-        ok('AC-PAYGB9 --check is read-only, a tamper reddens, one row declares 10',
+        ok('AC-PAYGB9 --check is read-only, a tamper reddens, one row exists',
            before == after and rc_clean == 0 and rc_bad == 2
-           and rc_restored == 0 and declared_rows == ['10'],
+           and rc_restored == 0 and len(declared_rows) == 1,
            'clean=%d bad=%d restored=%d stat_stable=%s rows=%s' % (
                rc_clean, rc_bad, rc_restored, before == after,
                declared_rows))
@@ -379,6 +386,17 @@ def main():
        'removed=%s' % (not leak))
 
     total = len(CHECKS)
+    # Declared units (R2860): the AC inventory below is derived from CHECKS,
+    # never echoed from the registry - a declaration copied out of the
+    # registry could never disagree with it.
+    acs = set()
+    for name in CHECKS:
+        token = name.split(' ', 1)[0]
+        for cut in range(len(token), 0, -1):
+            if token[cut - 1].isdigit():
+                acs.add(token[:cut])
+                break
+    print('suite: %d assertions over %d criteria' % (total, len(acs)))
     if FAILS:
         print('SUITE FAIL %d/%d failed=%s' % (total - len(FAILS), total, FAILS))
         return 1

@@ -1,4 +1,10 @@
-"""Battery suite for tools/ceo_blockers.py - criteria AC-CBXB1..AC-CBXB11.
+"""Battery suite for tools/ceo_blockers.py - criteria AC-CBXB0..AC-CBXB11.
+
+R2860: AC-CBXB0 (isolation - the real preview pair and the temp world are left
+untouched) is a criterion of its own, numbered as B0 rather than as a suffix of
+another id, so this suite's inventory is twelve and the registry row moves
+11 -> 12. The number is compared by the runner from the declaration printed at
+closeout, not echoed from the row inside this file.
 
 WHY THIS SUITE EXISTS (measured at R2811, not hypothesised):
 tools/ceo_blockers.py renders preview/ceo-blockers.html + .json, the one page
@@ -19,8 +25,9 @@ decoration, and this suite would report that instead of hiding it.
 
 The defect AC-CBXB10 holds is the one measured at open: a rendered page whose
 tick is one behind the live state reads FAIL AC-CBX9, and re-rendering it reads
-PASS. AC-CBXB11 asserts the registry row exists and declares eleven, which is
-the only hook that makes this suite run at all.
+PASS. AC-CBXB11 asserts the registry row exists, which is the only hook that
+makes this suite run at all; the row's NUMBER is the runner's to compare from
+this suite's own declaration (R2860) instead of being echoed here.
 
 Isolation: the tool's REPO / HTML_PATH / JSON_PATH / STATE_PATH globals are
 rebound to a fresh temp directory, its BLOCKERS list is replaced by three
@@ -293,8 +300,8 @@ def main():
                               reg[hit.start():hit.start() + 200])
             if found:
                 declared.append(found.group(1))
-        ok('AC-CBXB11 registry declares exactly one row for this suite, eleven',
-           declared == ['11'], 'rows=%s' % (declared,))
+        ok('AC-CBXB11 registry declares exactly one row for this suite',
+           len(declared) == 1, 'rows=%s' % (declared,))
     finally:
         (mod.REPO, mod.HTML_PATH, mod.JSON_PATH, mod.STATE_PATH,
          blocklist, mod.QUOTE_CHARS) = original
@@ -308,6 +315,17 @@ def main():
                                               not os.path.isdir(world)))
 
     total = len(CHECKS)
+    # Declared units (R2860): the AC inventory below is derived from CHECKS,
+    # never echoed from the registry - a declaration copied out of the
+    # registry could never disagree with it.
+    acs = set()
+    for name in CHECKS:
+        token = name.split(' ', 1)[0]
+        for cut in range(len(token), 0, -1):
+            if token[cut - 1].isdigit():
+                acs.add(token[:cut])
+                break
+    print('suite: %d assertions over %d criteria' % (total, len(acs)))
     if FAILS:
         print('SUITE FAIL %d/%d failed=%s' % (total - len(FAILS), total, FAILS))
         return 1

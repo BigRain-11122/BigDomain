@@ -1,5 +1,13 @@
-﻿"""Battery suite for src/os/export_round.py - criteria AC-EXPW1..AC-EXPW14
-plus AC-EXPG1..AC-EXPG5.
+﻿"""Battery suite for src/os/export_round.py - eighteen criteria: AC-EXPW1..AC-EXPW11
+plus AC-EXPW13 and AC-EXPW14 (AC-EXPW12 is a DECLARED numbering hole, see the
+R2823 paragraph below) and AC-EXPG1..AC-EXPG5.
+
+R2860: the header above used to say AC-EXPW1..AC-EXPW14, which reads as fourteen
+criteria although AC-EXPW12 has never printed, so R2859's both-unit measurement
+counted thirteen EXPW ids while the registry counted eighteen - the missing five
+were the EXPG family, omitted because only one prefix was counted. The registry
+row was right and is unchanged; the header now names the hole and this suite
+prints its own count at closeout.
 
 AC-EXPG1..AC-EXPG5 were pinned in src/os/backlog.md at R2834 BEFORE the gate
 existed: the exporter must ask the round-main shape law itself, so the face the
@@ -520,13 +528,24 @@ def main():
             found = re.search(r'test_export_round\.py"\)\s*,\s*(\d+)', window)
             if found:
                 rows.append(found.group(1))
-        ok('AC-EXPW6 exactly one battery row declares eighteen criteria',
-           rows == ['18'], 'rows=%s' % rows)
+        ok('AC-EXPW6 exactly one battery row for this suite',
+           len(rows) == 1, 'rows=%s' % rows)
     finally:
         for w in worlds:
             shutil.rmtree(w, ignore_errors=True)
 
     total = len(CHECKS)
+    # Declared units (R2860): the AC inventory below is derived from CHECKS,
+    # never echoed from the registry - a declaration copied out of the
+    # registry could never disagree with it.
+    acs = set()
+    for name in CHECKS:
+        token = name.split(' ', 1)[0]
+        for cut in range(len(token), 0, -1):
+            if token[cut - 1].isdigit():
+                acs.add(token[:cut])
+                break
+    print('suite: %d assertions over %d criteria' % (total, len(acs)))
     if FAILS:
         print('SUITE FAIL %d/%d failed=%s' % (total - len(FAILS), total, FAILS))
         return 1
