@@ -1,11 +1,11 @@
 {
-  "export_ts": "2026-11-17T12:39:40+08:00",
-  "do": "2026-11-17 R2867 ENGINEERING+PRODUCT: the 2^depth fan-out R2866 named from one cProfile is now an enumerable source map - tools/probe_seam_fanout_map.py resolves every probe-seam entry alias chain and reports depth, parent calls per level and the 2^d estimate, reading 21 entries / 0 unreadable / MAXDEPTH=6 / FANOUT_LAYERS=6 in qa/probe-seam-fanout-map-R2867.log (3359B / 25 lines).",
+  "export_ts": "2026-11-17T12:49:02+08:00",
+  "do": "2026-11-17 R2868 QA CHARTER DAILY CRAWL: the two-round gap on State Council Decree 790 is closed - articles 19/20/21/22/23/35-41 and penalty tiers 55-57 are now on file from two official sources, and only four of them (21/22/23/40) are promoted to design-gate anchors; coverage stays PARTIAL because the important-data chapter (24-34) and supervision chapter (42-54) are still missing, so no existing design judgement was rewritten. Evidence qa/smoke-R2868.log + qa/smoke-R2868.png (rendered from it).",
   "ceo_face": {
-    "current": "2026-11-17 R2867 ENGINEERING+PRODUCT: the 2^depth fan-out R2866 named from one cProfile is now an enumerable source map - tools/probe_seam_fanout_map.py resolves every probe-seam entry alias chain and reports depth, parent calls per level and the 2^d estimate, reading 21 entries / 0 unreadable / MAXDEPTH=6 / FANOUT_LAYERS=6 in qa/probe-seam-fanout-map-R2867.log (3359B / 25 lines).",
-    "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2867] next window (<=12h): (1) MAIN - kill the fan-out under the PIN above, using `tools/probe_seam_fanout_map.py` as the worklist (six modules, `CALLS 2` each), and re-run the SAME deep row R2866 measured at 245.4s; (2) the map gained no suite of its own this window, so its own law is unguarded - give it one registered suite with criteria that pin the two shapes it must distinguish (a doubled alias reads `CALLS 2`, a single one reads `CALLS 1`) and one pinned refusal (a cycle reads depth -1 rather than recursing); (3) the R2864 item (5) stays OPEN - `state_append`'s shape gate accepts a lowercase label after the round number while the export grader wants UPPERCASE, so a closeout can name the PREVIOUS round on the CEO face while every check reads PASS; pin the choice (stricter gate vs grader fallback) BEFORE editing either; (4) `--declared-only` and `ledger_lines.audit` stay closeout habits (truncated)",
+    "current": "2026-11-17 R2868 QA CHARTER DAILY CRAWL: the two-round gap on State Council Decree 790 is closed - articles 19/20/21/22/23/35-41 and penalty tiers 55-57 are now on file from two official sources, and only four of them (21/22/23/40) are promoted to design-gate anchors; coverage stays PARTIAL because the important-data chapter (24-34) and supervision chapter (42-54) are still missing, so no existing design judgement was rewritten. Evidence qa/smoke-R2868.log + qa/smoke-R2868.png (rendered from it).",
+    "latest_artifact": "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
+    "last_artifact": "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
+    "next_milestone": "[R2868] next window (<=12h): (1) MAIN and still unclaimed - give tools/battery_shard.py a REAL per-suite timeout with PIN criteria first and a red control (a probe suite that sleeps past the limit must be reported as a timeout at rc!=0 instead of hanging the leg), because cap=600s in the header is a report and not a guard; (2) then finish law_status shard 5 (ten unmeasured deep os-probe-seam rows) and shards 6-7 by import from the plan, never retyped; (3) the second补采 for Decree 790 articles 24-34 and 42-54 stays open with the working channel already recorded (/zhengce/zhengceku/202409/content_6977767.htm), so the source can move PARTIAL -> FULL; (4) carried unchanged: AC-VAC1..6, the AC-LKNF1 queue head, 11 BOM-less UTF-16 evidence files, 18 BOM-carrying scripts, Docker absent, BigDomain-OSLoop S4U re-registration (needs an ELEVATED shell).",
     "next_milestone_due": "2026-11-18T00:39:40+08:00",
     "updated_at": "2026-11-17T12:39:40+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
@@ -40,6 +40,7 @@
     }
   ],
   "outs": [
+    "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
     "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
     "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（72516B·687 行）",
@@ -82,20 +83,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 107,
+    "log_lines_in_window": 110,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 20,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2867 ENGINEERING+PRODUCT: the 2^depth fan-out R2866 named from one cProfile is now an enumerable source map - tools/probe_seam_fanout_map.py resolves every probe-seam entry alias chain and reports depth, parent calls per level and the 2^d estimate, reading 21 entries / 0 unreadable / MAXDEPTH=6 / FANOUT_LAYERS=6 in qa/probe-seam-fanout-map-R2867.log (3359B / 25 lines).",
-  "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2867] next window (<=12h): (1) MAIN - kill the fan-out under the PIN above, using `tools/probe_seam_fanout_map.py` as the worklist (six modules, `CALLS 2` each), and re-run the SAME deep row R2866 measured at 245.4s; (2) the map gained no suite of its own this window, so its own law is unguarded - give it one registered suite with criteria that pin the two shapes it must distinguish (a doubled alias reads `CALLS 2`, a single one reads `CALLS 1`) and one pinned refusal (a cycle reads depth -1 rather than recursing); (3) the R2864 item (5) stays OPEN - `state_append`'s shape gate accepts a lowercase label after the round number while the export grader wants UPPERCASE, so a closeout can name the PREVIOUS round on the CEO face while every check reads PASS; pin the choice (stricter gate vs grader fallback) BEFORE editing either; (4) `--declared-only` and `ledger_lines.audit` stay closeout habits (truncated)",
-  "state_bytes": 74415,
+  "current": "2026-11-17 R2868 QA CHARTER DAILY CRAWL: the two-round gap on State Council Decree 790 is closed - articles 19/20/21/22/23/35-41 and penalty tiers 55-57 are now on file from two official sources, and only four of them (21/22/23/40) are promoted to design-gate anchors; coverage stays PARTIAL because the important-data chapter (24-34) and supervision chapter (42-54) are still missing, so no existing design judgement was rewritten. Evidence qa/smoke-R2868.log + qa/smoke-R2868.png (rendered from it).",
+  "latest_artifact": "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
+  "next_milestone": "[R2868] next window (<=12h): (1) MAIN and still unclaimed - give tools/battery_shard.py a REAL per-suite timeout with PIN criteria first and a red control (a probe suite that sleeps past the limit must be reported as a timeout at rc!=0 instead of hanging the leg), because cap=600s in the header is a report and not a guard; (2) then finish law_status shard 5 (ten unmeasured deep os-probe-seam rows) and shards 6-7 by import from the plan, never retyped; (3) the second补采 for Decree 790 articles 24-34 and 42-54 stays open with the working channel already recorded (/zhengce/zhengceku/202409/content_6977767.htm), so the source can move PARTIAL -> FULL; (4) carried unchanged: AC-VAC1..6, the AC-LKNF1 queue head, 11 BOM-less UTF-16 evidence files, 18 BOM-carrying scripts, Docker absent, BigDomain-OSLoop S4U re-registration (needs an ELEVATED shell).",
+  "state_bytes": 79090,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +105,7 @@
   },
   "results": [
     [
-      "2867",
+      "2868",
       "OSLoop 执行 tick"
     ]
   ],

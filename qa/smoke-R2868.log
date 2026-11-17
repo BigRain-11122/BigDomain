@@ -1,0 +1,90 @@
+BigDomain OSLoop R2868 - QA charter daily crawl round (orders L254 2026-09-28)
+run_at: 2026-11-17 13:0x +08:00   host: bm-a   repo: domain/BigDomain
+
+[1] FIVE-STILL SCAN (shipped scanner, tools/skills/bigdomain-loop-scan/scripts/scan_five_still.ps1)
+    STATE   FLAG eol_bare_lf=119  -> FIXED (python src/os/logs_toolkit.py eol --fix --execute
+                                        total_lf=119 bare_lf=119 written=true post_bare_lf=0 json_eq=true)
+    LEDGER  FLAG conflict=1        -> FALSE POSITIVE: single hit is PROSE on ledger L284 that
+                                        *describes* a previously cleared conflict block
+                                        (markers quoted inside a narrative sentence). atbd_rows=0,
+                                        so no @BigDomain dispatch row is owed. Read-only record only;
+                                        group repo is outside this repo write boundary.
+    DEC     PASS rows=320 known_tokens=115; no new row-owner token vs baseline
+    GORD    INFO gord_new_rows=0; tail line = 2026-11-17 12:0x T3 browser-operation authorization
+                                        (control seat, not a BigDomain execution line) -> knowledge only
+    ORD     INFO baseline ahead (last_order 2026-11-16 23:05, own tail 2026-09-28 22:1x) no new order
+    BENCH   PASS days=2 (refreshed 2026-11-16) -> refreshed again this round
+    QA      FLAG today_png=0 today_log=0 -> THIS ROUND
+    HB      FLAG heartbeat_missing_or_unparsed (file held a date, law wants "tick N") -> FIXED in closeout
+    TASKS   INFO tasks_unchecked=3 backlog_open=188 claimable=185
+    EXPORT  PASS age_h=0.1
+    TREE    PASS clean=1 lock=0
+
+[2] WEB DIRECT CRAWL (QA charter: >=1 new source, official full text preferred, zero key)
+    target = 《网络数据安全管理条例》 (State Council Decree 790) chapters that R2778/W41 and
+             R2806 both reported as UNOBTAINED (2 channels had failed on 2026-11-16)
+    attempt 1  https://www.gov.cn/zhengce/content/202409/content_6977276.htm   -> HTTP 404
+    attempt 2  search locate -> official policy-library path
+               https://www.gov.cn/zhengce/zhengceku/202409/content_6977767.htm -> HTTP 200  (A grade)
+               NOTE: R2806 tried ...content_6977766.htm (404). The working id is 6977767 under
+               /zhengce/zhengceku/. This is a reusable channel fact, recorded for later rounds.
+    attempt 3  official reprint https://www.mee.gov.cn/zcwj/gwywj/202410/t20241003_1087417.shtml
+               -> HTTP 200 (A grade, same Decree 790 text) used to fill the personal-information
+               and penalty chapters that the gov.cn render truncated
+
+[3] COVERAGE OBTAINED (quote by ARTICLE NUMBER only; chapter labels differ between mirrors,
+    so no chapter number is cited as authority)
+    19  generative-AI service providers: secure training data and training-data processing
+    20  public-facing products/services: accept social supervision, publish a complaint/report
+        channel and handle reports in time
+    21  privacy notice must be a single public, easily reachable, prominent, itemised rule that
+        states (a) operator name+contact (b) purpose/means/categories, sensitive-info necessity,
+        (c) retention period or the method to determine it, (d) how to access/copy/port/correct/
+        delete/restrict and how to cancel the account or withdraw consent; a LIST form is required
+        when data is shared with other processors; under-14 personal data needs a SEPARATE rule
+    22  consent rules: minimum necessary, no misleading/coercing consent, SEPARATE consent for
+        sensitive categories, guardian consent for under-14, no re-processing beyond consent,
+        no repeated nagging after refusal, RE-CONSENT on any change of purpose/means/categories
+    23  access/copy/correct/delete/restrict/account-cancellation/consent-withdrawal requests must
+        be handled promptly with convenient channels; no unreasonable conditions may be imposed
+    35-36  cross-border conditions list + treaty override
+    37  important data leaving the country requires the CAC security assessment
+    38  after assessment, no exceeding the assessed purpose/means/scope/type/volume
+    39  no tools dedicated to breaking or bypassing technical measures
+    40  PLATFORM OPERATOR: platform rules or contracts must set the network-data-security duties of
+        third-party products/services on the platform, and must supervise them; device makers with
+        preinstalled apps are covered; where a third party causes user damage, platform, third party
+        and device maker each bear corresponding liability; insurance for such liability encouraged
+    41  app-distribution platforms must run verification rules and may warn / refuse / suspend /
+        terminate distribution of non-compliant apps
+    55  violation of 12, 16-20, 22, 40(1)(2), 41, 42: order to correct + warning + confiscation;
+        refusal or serious -> fine up to CNY 1,000,000, suspend business / revoke licence,
+        responsible persons CNY 10,000-100,000
+    56  violation of 13: CNY 100,000-1,000,000; refusal or serious -> CNY 1,000,000-10,000,000,
+        responsible persons CNY 100,000-1,000,000
+    57  violation of 29(2), 30(2)(3), 31, 32: CNY 50,000-500,000; serious or mass data leak ->
+        CNY 500,000-2,000,000
+
+[4] STILL UNOBTAINED (honest boundary, so the source stays PARTIAL, not FULL)
+    24-34   important-data chapter body (classification, processor duties, incident reporting clock)
+    42-54   remaining platform-obligation tail and supervision chapter
+    => source grade for this Decree remains A, coverage tag PARTIAL(19-23,35-41,55-58).
+       No design file is rewritten on the strength of a partial read; what IS usable this round is
+       the 21/22/23 + 40 clause set, and only those four are quoted in the wall row.
+
+[5] CONSUMPTION LANDING (BD-PROP-005 is exercised here, not just cited)
+    proposal BD-PROP-005 asks for a FULL/PARTIAL coverage dimension and for in-place upgrade with
+    history kept. This round adds a NEW row carrying its own coverage tag and does NOT restate the
+    2026-11-15/11-16 rows as FULL, because the important-data chapter is still missing.
+    design gates that gain a clause-level anchor: privacy-notice itemisation (21), separate consent
+    for sensitive categories (22), account cancellation / deletion SLA (23), third-party provider
+    duties + joint liability on the platform (40).
+
+[6] VERDICT
+    official sources fetched this round : 2 (gov.cn policy library 200, mee.gov.cn reprint 200)
+    failed connections                   : 1 (404 on a guessed path, disclosed)
+    new A-grade clause set usable        : 第21/22/23/40 条 (+ penalty tiers 55-57)
+    files written                        : qa/smoke-R2868.log, qa/smoke-R2868.png,
+                                           docs/global-benchmarks.md (new row),
+                                           docs/research/intelligence-wall.md (W43 + conclusion)
+    zero cloud calls, zero external API keys, zero writes outside domain/BigDomain.
