@@ -230,12 +230,16 @@ def _fmt_evidence(ev):
 def newest_artifact(repo):
     """The newest pair that is NOT a meta board page, plus what was skipped.
 
-    Returns (pair, skipped, newest_is_board) where pair is
-    (html_rel, json_rel, html_bytes, json_bytes) or None when every pair on disk
-    is a meta page, skipped is the list of meta pairs passed over (newest first,
-    formatted "path (NB)"), and newest_is_board says whether the newest pair on
-    disk at all was one of them (AC-EXPW9: the exclusion is published, not
-    silent).
+    Returns (pair, skipped, newest_is_board) where pair is the whole _pairs row
+    (mtime, html_rel, json_rel, html_bytes, json_bytes) or None when every pair
+    on disk is a meta page, skipped is the list of meta pairs passed over (newest
+    first, formatted "path (NB)"), and newest_is_board says whether the newest
+    pair on disk at all was one of them (AC-EXPW9: the exclusion is published,
+    not silent).
+
+    R2896 AC-EXPD1: the row is returned WHOLE rather than sliced, because the
+    pair's mtime is now part of the published line and dropping it here would
+    make the date unrenderable at the one call site that publishes it.
     """
     rows = _pairs(repo)
     if not rows:
@@ -247,14 +251,41 @@ def newest_artifact(repo):
             # over; an older meta page is not evidence of an exclusion
             skipped = ['%s (%dB)' % (b[1], b[3]) for b in rows[:idx]
                        if os.path.basename(b[1])[:-5] in BOARD_PAGES]
-            return r[1:], skipped, newest_is_board
+            return r, skipped, newest_is_board
     skipped = ['%s (%dB)' % (r[1], r[3]) for r in rows
                if os.path.basename(r[1])[:-5] in BOARD_PAGES]
     return None, skipped, newest_is_board
 
 
-def _fmt_pair(pair):
-    return '%s (%dB) + %s (%dB)' % (pair[0], pair[2], pair[1], pair[3])
+# R2896 AC-EXPD1: the published pair line read back from a face. A date-less
+# line and a line with a wrong date are both shapes this regex accepts textually
+# - the DATE ITSELF is graded against the file by comparing against fmt_pair(),
+# never by trusting the string, so a stale face cannot read clean by shape.
+PAIR_LINE_RE = re.compile(
+    r'^preview/\S+\.html \(\d+B\) \+ preview/\S+\.json \(\d+B\) '
+    r'\[(\d{4}-\d{2}-\d{2})\]$')
+
+
+def pair_date(mtime):
+    """The pair's OWN date, rendered from its mtime rather than from a clock."""
+    return datetime.datetime.fromtimestamp(mtime, TZ).strftime('%Y-%m-%d')
+
+
+def fmt_pair(pair):
+    """The published pair line: both files' bytes AND the pair's own date.
+
+    R2896 AC-EXPD1: the line carried bytes only, so this window's artifact and a
+    two-day-old one read identically at a glance - the same blindness the R2895
+    evidence line removed from the other slot. The date is the max mtime of the
+    pair, so a private world with fixed stamps reads the same line every run, and
+    tools/status_export_fresh.py calls THIS function rather than re-formatting the
+    field a second time (AC-SXF15: one field, one formatter).
+    """
+    return '%s (%dB) + %s (%dB) [%s]' % (
+        pair[1], pair[3], pair[2], pair[4], pair_date(pair[0]))
+
+
+_fmt_pair = fmt_pair
 
 
 def next_window_row(repo):

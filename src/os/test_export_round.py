@@ -321,7 +321,11 @@ def main():
         ok('AC-EXPW7 a product pair on top needs no exclusion',
            'first-yuan-chain.html' in dp2['latest'] and dp2['board_skipped'] == []
            and dp2['newest_is_board'] is False, dp2['latest'][:40])
-        real_stem = os.path.basename(mod.newest_artifact(ROOT)[0][0])[:-5]
+        # R2896 AC-EXPD1: newest_artifact now returns the WHOLE _pairs row
+        # (mtime, html, json, html_bytes, json_bytes), so the stem lives at
+        # index 1 - the fixture follows the reader instead of the reader
+        # keeping a stale slice for the fixture's sake.
+        real_stem = os.path.basename(mod.newest_artifact(ROOT)[0][1])[:-5]
         ok('AC-EXPW7 the live tree picks a non-board face',
            real_stem not in board, 'picked=%s' % real_stem)
 
@@ -333,8 +337,11 @@ def main():
         ok('AC-EXPW8 an all-board tree yields a stated fact, not a board name',
            'no product pair on disk' in db['latest']
            and 'preview/ceo-blockers.html' in db['latest'], db['latest'][:52])
+        # R2896: the receipt shape now ends with the pair's own date, so the
+        # negative control tests THAT shape - a regex pinned to the old
+        # date-less form would pass this arm for the wrong reason.
         ok('AC-EXPW8 the stated fact is not a pair receipt',
-           not re.match(r'^preview/[^ ]+\.html \(\d+B\) \+ ', db['latest']),
+           not mod.PAIR_LINE_RE.match(db['latest']),
            db['latest'][:40])
         wb2 = build_pair_world([('ceo-blockers', 0), ('index', 10),
                                 ('first-yuan-chain', 20)])
@@ -376,8 +383,13 @@ def main():
         ok('AC-EXPW10 a correct private face reads clean',
            mod.check(wc) == [], 'fails=%s' % mod.check(wc)[:2])
         tampered = json.loads(read(face_c))
+        # R2896: this arm used to type the OLD date-less line by hand, which the
+        # new law would redden for the wrong reason (a stale shape, not a board
+        # page in the product slot). It now renders the newest pair on disk - the
+        # board page - through the shipped formatter, so the ONLY reason left to
+        # fail is the exclusion law this arm exists to prove.
         tampered['ceo_face']['latest_artifact'] = \
-            'preview/ceo-blockers.html (10B) + preview/ceo-blockers.json (3B)'
+            mod.fmt_pair(mod._pairs(wc)[0])
         write(face_c, json.dumps(tampered, ensure_ascii=False, indent=2) + '\n')
         fails_c = mod.check(wc)
         ok('AC-EXPW10 naming a board page reddens AC-EXPW7',
@@ -684,6 +696,65 @@ def main():
            == live_face['ceo_face']['latest_evidence'],
            str((live_face.get('ceo_face') or {}).get('latest_evidence'))[:44])
 
+        # ---- AC-EXPD1..AC-EXPD3 (R2896 pin): the pair line carries its own date ----
+        # R2895 left the CEO face naming evidence but still publishing the
+        # product pair with NO timestamp, so this window's artifact and a
+        # two-day-old one read identically. The date is rendered from the pair's
+        # own mtime, and both derivations of the field call ONE formatter.
+        wd = build_pair_world([('dated-face', 0)], tick=9061)
+        worlds.append(wd)
+        sd = json.loads(read(os.path.join(wd, 'src', 'os', 'state.json')))
+        dd = mod.derive(wd, sd, 'TD')
+        html_d = os.path.join(wd, 'preview', 'dated-face.html')
+        json_d = os.path.join(wd, 'preview', 'dated-face.json')
+        stamp_want = time.strftime('%Y-%m-%d',
+                                   time.localtime(os.path.getmtime(html_d)))
+        ok('AC-EXPD1 the pair line ends with the pair own mtime date',
+           dd['latest'].endswith(' [%s]' % stamp_want)
+           and 'preview/dated-face.html' in dd['latest'], dd['latest'][-28:])
+        ok('AC-EXPD1 the published shape is the graded shape',
+           bool(mod.PAIR_LINE_RE.match(dd['latest']))
+           and mod.PAIR_LINE_RE.match(dd['latest']).group(1) == stamp_want,
+           dd['latest'][-26:])
+        sys.path.insert(0, os.path.join(ROOT, 'tools'))
+        import status_export_fresh as sx
+        sx_line = sx.newest_artifact(os.path.join(wd, 'preview'))['line']
+        ok('AC-EXPD1 both derivations publish the identical line',
+           sx_line == dd['latest'] == mod.fmt_pair(mod.newest_artifact(wd)[0]),
+           'sx=%s' % sx_line[-28:])
+
+        face_d = os.path.join(wd, 'docs', 'status-export.json')
+        built_d, _ = mod.payload(wd, sd, 'TD')
+        write(face_d, json.dumps(built_d, ensure_ascii=False, indent=2) + '\n')
+        ok('AC-EXPD2 the derived dated line grades clean',
+           mod.check(wd) == [], 'fails=%s' % mod.check(wd)[:2])
+        old_shape = json.loads(read(face_d))
+        old_shape['ceo_face']['latest_artifact'] = \
+            'preview/dated-face.html (%dB) + preview/dated-face.json (%dB)' % (
+                os.path.getsize(html_d), os.path.getsize(json_d))
+        write(face_d, json.dumps(old_shape, ensure_ascii=False, indent=2) + '\n')
+        fails_old = mod.check(wd)
+        ok('AC-EXPD2 the OLD date-less shape reddens the check',
+           any('AC-EXPW1' in f for f in fails_old), 'fails=%s' % fails_old[:2])
+        wrong = json.loads(read(face_d))
+        wrong['ceo_face']['latest_artifact'] = re.sub(
+            r'\[\d{4}-\d{2}-\d{2}\]$', '[1999-01-01]', dd['latest'])
+        write(face_d, json.dumps(wrong, ensure_ascii=False, indent=2) + '\n')
+        fails_wrong = mod.check(wd)
+        ok('AC-EXPD2 a WRONG date reddens it too',
+           any('AC-EXPW1' in f for f in fails_wrong), 'fails=%s' % fails_wrong[:2])
+        write(face_d, json.dumps(built_d, ensure_ascii=False, indent=2) + '\n')
+        ok('AC-EXPD2 restoring the derived line reads clean again',
+           mod.check(wd) == [], 'fails=%s' % mod.check(wd)[:2])
+
+        ok('AC-EXPD3 the board exclusion still holds on the dated line',
+           bool(mod.PAIR_LINE_RE.match(dp['latest']))
+           and 'ceo-blockers' not in dp['latest'], dp['latest'][:44])
+        ok('AC-EXPD3 the all-board fact and the evidence line are unchanged',
+           db['latest'].startswith('(no product pair on disk')
+           and dv['evidence'].startswith('qa/zz-evidence-new.log'),
+           db['latest'][:32])
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')
@@ -726,7 +797,7 @@ def main():
             declared.append(int(found.group(1)))
     will_print = crit_set(CHECKS + ['AC-EXPE4-registry-units'])
     ok('AC-EXPE4-registry-units',
-       declared == [len(will_print)] and len(will_print) == 24,
+       declared == [len(will_print)] and len(will_print) == 27,
        'declared=%s printed=%d' % (declared, len(will_print)))
 
     total = len(CHECKS)

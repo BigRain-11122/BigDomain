@@ -246,13 +246,15 @@ def newest_artifact(preview_dir):
     pair, skipped, newest_is_board = shared.newest_artifact(root)
     if pair is None:
         return None
-    html_rel, json_rel, html_bytes, json_bytes = pair
+    mtime, html_rel, json_rel, html_bytes, json_bytes = pair
     html_abs = os.path.join(root, html_rel.replace("/", os.sep))
-    stamps = dt.datetime.fromtimestamp(
-        os.stat(html_abs).st_mtime).astimezone()
+    stamps = dt.datetime.fromtimestamp(mtime).astimezone()
     return {
-        "line": "%s (%dB) + %s (%dB)" % (html_rel, html_bytes,
-                                         json_rel, json_bytes),
+        # R2896 AC-EXPD1: the line is formatted by the ONE shipped formatter, so
+        # the pair's own date is published by both faces from the same bytes and
+        # AC-SXF15 can no longer be satisfied by two formaters that happen to
+        # agree today.
+        "line": shared.fmt_pair(pair),
         "abs": html_abs,
         "bytes": html_bytes,
         "mtime": iso(stamps),
