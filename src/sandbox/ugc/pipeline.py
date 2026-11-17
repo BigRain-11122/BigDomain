@@ -56,6 +56,10 @@ from review import ReviewDesk
 from wordlist import PreFilter  # L1 local pre-filter (OH-20261002 wiring)
 from sec_batch import SecBatchFace, ST_DRAINED_PASS  # batch + degraded queue (R1681)
 from water_journal import WaterJournalFace  # completed-window ledger (R1800)
+try:  # R2909: the documented msgSecCheck dialect must be readable at import
+    import msgsec_face as MSF  # documented face + fail-closed adjudicator
+except Exception:  # noqa: BLE001 - any load failure = gate offline (AC-MSW4)
+    MSF = None
 
 REPO_ROOT = os.path.realpath(os.path.join(BASE, "..", "..", ".."))
 SOURCES = ("direct", "lobby_idea", "avatar_intake", "live_danmaku")
@@ -71,6 +75,32 @@ def compute_evt_id(source, actor, content):
 
 def _iso(dt):
     return dt.strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z"
+
+
+SEC_SCENE_COMMENT = 2  # declared sandbox scene: the docs' 2 = comment
+SANDBOX_OPENID_PREFIX = "sandbox:"  # placeholder; production openid = CEO item
+SEC_BLOCK_LABEL = 20012  # docs' 20012 = vulgar (a gate-1 wordlist hit)
+SEC_ADVISORY_LABEL = 20008  # docs' 20008 = fraud (a gate-2 profitability hit)
+
+
+def build_sec_request(text, actor):
+    """The documented request (AC-MSW1): the four required fields and nothing
+    invented. openid is a declared sandbox placeholder because a real channel
+    openid only exists after the WeChat login (CEO physical item)."""
+    return {"content": text,
+            "version": MSF.VERSION_FIXED,
+            "scene": SEC_SCENE_COMMENT,
+            "openid": SANDBOX_OPENID_PREFIX + (str(actor or "").strip()
+                                               or "anon")}
+
+
+def sec_response_from_verdict(kind, gate_no=0):
+    """Sandbox responder: the wordlist verdict expressed in the documented
+    response shape, so the FACE - not the mock - is the decision point."""
+    if kind == "pass":
+        return {"errcode": 0, "result": {"suggest": "pass", "label": 100}}
+    label = SEC_ADVISORY_LABEL if gate_no == 2 else SEC_BLOCK_LABEL
+    return {"errcode": 0, "result": {"suggest": "risky", "label": label}}
 
 
 class UGCPipeline:
@@ -93,6 +123,10 @@ class UGCPipeline:
         self._last_water = None
         self.desk = ReviewDesk(self.store)
         self._rate = defaultdict(deque)
+        # R2909 documented-dialect wiring: the last request the face saw and
+        # the problems it named. Recording only - the face decides the verdict.
+        self.sec_last_request = None
+        self.sec_last_problems = []
         # batch face wraps the SAME gate instance (referenced, not
         # copied); the degraded queue rides next to ugc.db so every
         # instance shares one recovery namespace (AC-PW1). Built last:
@@ -149,6 +183,20 @@ class UGCPipeline:
         self.draft_risk_note = str(comp.get("draft_risk_note", ""))
         self.chronicle_note = str(comp.get("chronicle_note", ""))
         self.max_len = int(config.get("max_content_len", 2000))
+        # R2909: the documented face is read at STARTUP (AC-MSW4) and the
+        # documented content ceiling is a construction limit (AC-MSW3b) - a
+        # gate may not send text the interface would refuse, and a drifted
+        # table may not stay a decoration.
+        if MSF is None:
+            raise GateOfflineError("msgSecCheck face module unreadable (AC-MSW4)")
+        face_fails = MSF.check(MSF.load_face())
+        if face_fails:
+            raise GateOfflineError(
+                "msgSecCheck face drifted: %s" % " ".join(face_fails))
+        if self.max_len > MSF.CONTENT_MAX:
+            raise GateOfflineError(
+                "max_content_len %d above the documented %d (AC-MSW3)"
+                % (self.max_len, MSF.CONTENT_MAX))
         # ingest window watermark cap (AC-WC1): 0 = uncapped, the
         # full-window behavior ships unchanged; negative refuses to
         # serve (same family as the other startup self-checks)
@@ -333,6 +381,7 @@ class UGCPipeline:
             # order, the degraded qids cover the suffix in order
             for j, (kind, gate_no, _word, _text) in enumerate(verdicts):
                 i = piece[j]
+                kind = self._sec_verdict(kind, gate_no, cleaned[i], actor)
                 if kind == "rejected":
                     receipts[i] = {"received": False, "queued": False,
                                    "code": UGC.E_CONTENT_REJECTED,
@@ -480,7 +529,9 @@ class UGCPipeline:
                 verdicts, degraded = out["verdicts"], out["degraded"]
                 # in-chunk mapping law: verdicts cover the piece prefix
                 # in order, the degraded qids cover the suffix in order
-                for j, (kind, _gate_no, _word, _text) in enumerate(verdicts):
+                for j, (kind, gate_no, _word, _text) in enumerate(verdicts):
+                    kind = self._sec_verdict(kind, gate_no,
+                                             parsed[piece[j]][3], actor)
                     parsed[piece[j]][4] = "rejected" if kind == "rejected" else "pass"
                 for k, (qid, _landed) in enumerate(degraded):
                     target = parsed[piece[len(verdicts) + k]]
@@ -536,6 +587,28 @@ class UGCPipeline:
 
     # ---- core pipeline -----------------------------------------------------
 
+    # ---- documented msgSecCheck dialect (R2909) ---------------------------
+
+    def _sec_verdict(self, kind, gate_no, text, actor):
+        """Send the wordlist verdict through the DOCUMENTED interface shape and
+        let msgsec_face decide (AC-MSW1..AC-MSW3). Fail-closed by construction:
+        a refusal, an unreadable face, or a response that contradicts the
+        wordlist all become 'rejected' - a gate that guesses is not a gate."""
+        if MSF is None:  # unreachable after startup, kept fail-closed anyway
+            return "rejected"
+        request = build_sec_request(text, actor)
+        response = sec_response_from_verdict(kind, gate_no)
+        self.sec_last_request = request
+        try:
+            decision, problems = MSF.adjudicate(request, response)
+        except Exception as exc:  # noqa: BLE001 - no answer = no pass
+            decision = MSF.BLOCK
+            problems = ["E_MSF_WIRE_%s" % type(exc).__name__.upper()]
+        self.sec_last_problems = list(problems)
+        if decision != MSF.ALLOW or kind != "pass":
+            return "rejected"
+        return "pass"
+
     def _process(self, source, actor, content, origin_evt_id=None):
         text = str(content or "").strip()[: self.max_len]
         if not text:
@@ -559,6 +632,7 @@ class UGCPipeline:
             return {"received": False, "queued": True, "qid": qid,
                     "gate": None, "origin_evt_id": origin_evt_id}
         kind, gate_no, _word, _text = out["verdicts"][0]
+        kind = self._sec_verdict(kind, gate_no, text, actor)
         if kind == "rejected":
             raise UGC.PipelineError(
                 UGC.E_CONTENT_REJECTED, "gate %d wordlist hit" % gate_no)
