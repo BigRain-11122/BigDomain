@@ -6989,8 +6989,12 @@ SUITES = [
     # board (its FAIL is a revenue fact), every row must state what its FAIL costs, and
     # the order law is scoped to the table that owns the money row so a fixture world is
     # not forced. The three new legs carry their own red controls.
+    # R2905 grew it to fifteen: the money row's sentence must QUOTE its own legs=/tx=
+    # reading (a money row whose gate prints no measurement is refused rather than
+    # published with an empty bracket), and the consequence must be authored in the row's
+    # own tuple so a renamed row cannot keep its meaning by luck.
     ("os-face-sweep",
-     os.path.join("..", "os", "test_face_sweep.py"), 13),
+     os.path.join("..", "os", "test_face_sweep.py"), 15),
     # R2782 shipped tools/money_path_demo.py with the same hole - the 19.9 money
     # path page was guarded only by its own --check, which cannot catch a page
     # whose derivation changed under it.

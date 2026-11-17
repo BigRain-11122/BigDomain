@@ -1,10 +1,13 @@
-"""Battery suite for tools/face_sweep.py - criteria AC-FSWB1..AC-FSWB13.
+"""Battery suite for tools/face_sweep.py - criteria AC-FSWB1..AC-FSWB15.
 
 AC-FSWB1..AC-FSWB10 were pinned in src/os/backlog.md at R2819 BEFORE this suite
-existed; AC-FSWB11..AC-FSWB13 were pinned at R2903 BEFORE their legs were written.
+existed; AC-FSWB11..AC-FSWB13 were pinned at R2903 and AC-FSWB14..AC-FSWB15 at
+R2905 BEFORE their legs were written.
 R2903's three legs grade the reading order (money proof first), the per-row
 consequence sentence, and the fact that the rule bites only on the table that owns
-the money row. The reason is measured, not argued: the tool carries eleven criteria in
+the money row. R2905's legs grade that the money row's sentence QUOTES its own
+measurement (so a reader can refute it) and that the consequence is authored in one
+place rather than two - both measured with red controls on this private world. The reason is measured, not argued: the tool carries eleven criteria in
 AC_FSW (AC-FSW0..AC-FSW9 printed by check(), plus AC-FSW10/AC-FSW11 added this
 window) and ONE battery row driving EIGHT CEO-openable faces, and a full-text
 search of the shipped registry found ZERO AC-FSW* tokens in any row - so the only
@@ -47,6 +50,7 @@ CHECKS = []
 
 PASS_DRIVER = "import sys\nprint('VERDICT PASS 1/1')\nsys.exit(0)\n"
 FAIL_DRIVER = "import sys\nprint('VERDICT FAIL 0/1')\nsys.exit(2)\n"
+MONEY_DRIVER = "import sys\nprint('VERDICT PASS legs=2 tx=1 reconcile_rc=0')\nsys.exit(0)\n"
 MUTATE_DRIVER = ("import sys\n"
                  "open(%r, 'w', encoding='utf-8', newline='\\n').write('rewritten by its own gate')\n"
                  "print('VERDICT PASS 1/1')\n"
@@ -280,8 +284,8 @@ def main():
         text = io.open(REGISTRY, encoding='utf-8').read()
         hits = [ln for ln in text.splitlines() if 'test_face_sweep.py' in ln]
         declared = re.findall(r'test_face_sweep\.py"\)\s*,\s*(\d+)', text)
-        ok('AC-FSWB10 the battery registry declares exactly one row for this suite, thirteen',
-           declared == ['13'] and len(hits) == 1,
+        ok('AC-FSWB10 the battery registry declares exactly one row for this suite, fifteen',
+           declared == ['15'] and len(hits) == 1,
            'rows=%s hits=%d' % (declared, len(hits)))
 
         # ---- AC-FSWB11 (R2903) every row must say what its FAIL costs, and the page must
@@ -325,9 +329,13 @@ def main():
         # where it does not: a table that owns the money row must land it first (green), and
         # the same table with the money row moved last is refused by name. The rule is scoped
         # to the loaded table, so a fixture world owning no money row is not forced.
+        # R2905: the fixture money row now runs a driver that prints a MEASUREMENT, because
+        # AC-FSW14 refuses a money row whose verdict carries no legs=/tx= reading - the same
+        # dialect the shipped first-yuan-chain gate prints.
         write(os.path.join(world, 'preview', 'money.html'), '<html>money</html>\n')
         write(os.path.join(world, 'preview', 'money.json'), '{"id": "money"}\n')
-        money_row = (tool.MONEY_ID, 'money proof stub', 'tools/stub-pass.py',
+        write(os.path.join(tools, 'stub-money.py'), MONEY_DRIVER)
+        money_row = (tool.MONEY_ID, 'money proof stub', 'tools/stub-money.py',
                      'preview/money.html', 'preview/money.json',
                      'a red money row is zero revenue')
         rest = [(f['id'], f['label'], f['driver'], f['html'], f['json'], f['meaning'])
@@ -343,6 +351,73 @@ def main():
         rc2, out2 = run_quiet(lambda: tool.check())
         ok('AC-FSWB13b the same table with the money row last is refused E_MONEY_NOT_FIRST',
            rc2 == 2 and 'E_MONEY_NOT_FIRST' in out2, 'rc=%d' % rc2)
+
+        # ---- AC-FSWB14 (R2905) the money sentence QUOTES ITS OWN MEASUREMENT, so a reader
+        # can refute it without opening another page. Positive: the shipped derivation puts
+        # the row's own legs=/tx= into the sentence. Negative: the same landed page with the
+        # sentence claiming a number its row did not report reddens naming the row, and a
+        # money row whose gate prints no measurement is refused rather than published blank.
+        tool.FACES = [money_row] + rest
+        rc, out = run_quiet(lambda: tool.sweep(face_opts()))
+        doc14 = json.load(io.open(tool.OUT_JSON, encoding='utf-8'))
+        row14 = [r for r in doc14['faces'] if r['id'] == tool.MONEY_ID][0]
+        legs14, tx14 = tool.money_tokens(row14['verdict'])
+        ok('AC-FSWB14 the money sentence carries the reading its own row reported',
+           rc == 0 and legs14 is not None and tx14 is not None
+           and ('legs=%s' % legs14) in row14['meaning'] and ('tx=%s' % tx14) in row14['meaning'],
+           'legs=%r tx=%r' % (legs14, tx14))
+        rc, out = run_quiet(lambda: tool.check())
+        ok('AC-FSWB14b the lawful measured board reads PASS', rc == 0, 'rc=%d' % rc)
+        doctored = json.loads(json.dumps(doc14))
+        for r in doctored['faces']:
+            if r['id'] == tool.MONEY_ID:
+                r['meaning'] = r['meaning'].replace('tx=%s' % tx14, 'tx=9')
+        io.open(tool.OUT_JSON, 'w', encoding='utf-8', newline='\n').write(
+            json.dumps(doctored, ensure_ascii=False, indent=1) + '\n')
+        rc, out = run_quiet(lambda: tool.check())
+        ok('AC-FSWB14c a sentence claiming tx=9 over a row reading tx=%s reddens' % tx14,
+           rc == 2 and 'AC-FSW14' in out and tool.MONEY_ID in out, 'rc=%d' % rc)
+        # the fail-closed arm: a money gate that prints no measurement cannot be published
+        write(os.path.join(tools, 'stub-money-bare.py'), PASS_DRIVER)
+        bare_row = (tool.MONEY_ID, 'money proof stub', 'tools/stub-money-bare.py',
+                    'preview/money.html', 'preview/money.json',
+                    'a red money row is zero revenue')
+        tool.FACES = [bare_row] + rest
+        rc, out = run_quiet(lambda: tool.sweep(face_opts()))
+        rc2, out2 = run_quiet(lambda: tool.check())
+        bare_doc = json.load(io.open(tool.OUT_JSON, encoding='utf-8'))
+        bare_meaning = [r for r in bare_doc['faces'] if r['id'] == tool.MONEY_ID][0]['meaning']
+        ok('AC-FSWB14d a money row with no reading is REFUSED, not published bare',
+           tool.MONEY_UNMEASURED in bare_meaning and rc2 == 2
+           and 'E_FSW_MONEY_UNMEASURED' in out2, 'rc=%d' % rc2)
+
+        # ---- AC-FSWB15 (R2905) ONE AUTHORED PLACE: a row that loses its sentence from its
+        # own tuple reddens by id, and the inherited copy is read from the CURRENT table at
+        # call time rather than from a stored index - so a spec that declares no sentence for
+        # a face the table no longer carries inherits nothing instead of a stale leftover.
+        tool.FACES = [money_row] + rest
+        rc, out = run_quiet(lambda: tool.sweep(face_opts()))
+        rc, out = run_quiet(lambda: tool.check())
+        ok('AC-FSWB15 the shipped-shape table reads PASS with every row declaring its own',
+           rc == 0, 'rc=%d' % rc)
+        short = [(f[0], f[1], f[2], f[3], f[4]) for f in ([money_row] + rest)]
+        tool.FACES = short
+        rc, out = run_quiet(lambda: tool.check())
+        ok('AC-FSWB15b a five-field row reddens and is named',
+           rc == 2 and 'AC-FSW15' in out and tool.MONEY_ID in out, 'rc=%d' % rc)
+        tool.FACES = [money_row] + rest
+        spec = os.path.join(world, 'spec-inherit.json')
+        write(spec, json.dumps([
+            dict(id=tool.MONEY_ID, label='m', driver='tools/stub-money.py',
+                 html='preview/money.html', json='preview/money.json'),
+            dict(id='stub-absent-from-table', label='x', driver='tools/stub-money.py',
+                 html='preview/money.html', json='preview/money.json'),
+        ]))
+        loaded = tool.load_faces(spec)
+        ok('AC-FSWB15c an undeclared sentence inherits the CURRENT row tuple',
+           loaded[0]['meaning'] == money_row[5], 'inherited=%r' % (loaded[0]['meaning'],))
+        ok('AC-FSWB15d a face the table does not carry inherits NOTHING, never a leftover',
+           loaded[1]['meaning'] == '', 'inherited=%r' % (loaded[1]['meaning'],))
     finally:
         shutil.rmtree(world, ignore_errors=True)
 

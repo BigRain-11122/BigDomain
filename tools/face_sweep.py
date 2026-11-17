@@ -7,7 +7,7 @@ runs each shipped tool's read-only --check as a subprocess, records its exit cod
 VERDICT line and the landed artifact bytes, and renders a single board.
 
 Laws honoured:
-- criteria are pre-registered in --check (AC-FSW1..AC-FSW9, see check()).
+- criteria are pre-registered in --check (AC-FSW0..AC-FSW15, see check()).
 - nothing is hardcoded: verdicts, sizes and timestamps are measured from the subprocess
   and from disk.
 - the board never counts a face as passing unless its own gate exited zero AND printed a
@@ -35,38 +35,50 @@ OUT_JSON = os.path.join(ROOT, "preview", "face-sweep.json")
 
 SCHEMA = "face-sweep-v1"
 
-# id, label, driver, html, json.  The driver is invoked as: python <driver> --check
+# id, label, driver, html, json, meaning.  The driver is invoked as: python <driver> --check
 # R2903: the row order is a READING order, not a shelf order. The money proof leads because
 # it is the only row whose failure is a revenue fact rather than housekeeping; AC-FSW13
 # grades the declared order against the landed rows so a later append cannot bury it again.
+# R2905: the consequence sentence moved INTO the row tuple. It used to live in a separate
+# dict keyed by id while the id and label lived here, so a renamed row kept its meaning only
+# by luck; AC-FSW15 now grades that one authored place is the only place.
 FACES = [
     ("first-yuan-chain", "first-yuan chain / one purchase, three modules",
      "tools/first_yuan_chain.py",
-     "preview/first-yuan-chain.html", "preview/first-yuan-chain.json"),
+     "preview/first-yuan-chain.html", "preview/first-yuan-chain.json",
+     "\u4e00\u7b14\u4ed8\u6b3e\u8de8\u4e0d\u8fc7\u652f\u4ed8\u3001\u4f1a\u5458\u3001\u8d26\u672c\u4e09\u6bb5\uff0c\u6536\u5165\u4e3a\u96f6\u3002"),
     ("six-gate-live", "\u516d\u95e8\u5b9e\u51b5 / six gates live",
      "tools/platform_live_report.py",
-     "preview/platform-live-report.html", "preview/platform-live-report.json"),
+     "preview/platform-live-report.html", "preview/platform-live-report.json",
+     "\u516d\u95e8\u5b9e\u51b5\u4e0d\u53ef\u4fe1\u65f6\uff0c\u4e0a\u6e38\u6570\u636e\u5df2\u504f\u79bb\uff0c\u6240\u6709\u9762\u8bfb\u6570\u90fd\u8981\u91cd\u770b\u3002"),
     ("lobby-ws", "\u5927\u5385 WebSocket / P-47 \u7b2c 1 \u9879",
      "tools/lobby_ws_report.py",
-     "preview/lobby-ws-report.html", "preview/lobby-ws-report.json"),
+     "preview/lobby-ws-report.html", "preview/lobby-ws-report.json",
+     "\u5927\u5385\u8fde\u4e0d\u4e0a\uff0c\u7528\u6237\u8fdb\u4e0d\u6765\uff0c\u4efb\u4f55\u6536\u5165\u90fd\u65e0\u4ece\u53d1\u751f\u3002"),
     ("city-face", "\u57ce\u5e02\u89c2\u6d4b\u9762 / P-47 \u7b2c 1 \u9879",
      "tools/city_face_report.py",
-     "preview/city-face-report.html", "preview/city-face-report.json"),
+     "preview/city-face-report.html", "preview/city-face-report.json",
+     "\u57ce\u5e02\u89c2\u6d4b\u9762\u8bfb\u4e0d\u51fa\u771f\u5b9e\u72b6\u6001\uff0c\u8fd0\u8425\u5224\u65ad\u5931\u53bb\u4f9d\u636e\u3002"),
     ("ugc-gate", "UGC \u5b89\u5168\u9762 / P-47 \u7b2c 3 \u9879",
      "tools/ugc_gate_report.py",
-     "preview/ugc-gate-report.html", "preview/ugc-gate-report.json"),
+     "preview/ugc-gate-report.html", "preview/ugc-gate-report.json",
+     "UGC \u5b89\u5168\u95f8\u672a\u63a5\u901a\uff0c\u5f00\u95e8\u5373\u4e0b\u67b6\uff0c\u6536\u5165\u5f52\u96f6\u3002"),
     ("payment-gate", "19.9 \u652f\u4ed8\u9762 / P-47 \u7b2c 4 \u9879",
      "tools/payment_gate_report.py",
-     "preview/payment-gate-report.html", "preview/payment-gate-report.json"),
+     "preview/payment-gate-report.html", "preview/payment-gate-report.json",
+     "19.9 \u5b9a\u4ef7\u9762\u4e0e\u5546\u6237\u53f7\u63a5\u7ebf\u4e0d\u53ef\u7528\uff0c\u6536\u4e0d\u5230\u7b2c\u4e00\u7b14\u94b1\u3002"),
     ("membership", "\u6743\u76ca\u6708\u5361\u9762 / P-47 \u7b2c 5 \u9879",
      "tools/membership_benefit_report.py",
-     "preview/membership-benefit-report.html", "preview/membership-benefit-report.json"),
+     "preview/membership-benefit-report.html", "preview/membership-benefit-report.json",
+     "\u6708\u5361\u6743\u76ca\u4e0d\u53ef\u5151\u73b0\uff0c\u590d\u8d2d\u4e3a\u96f6\u3002"),
     ("ledger-business", "\u4ee3\u5e01\u8d26\u672c\u9762 / P-47 \u7b2c 2 \u9879",
      "tools/ledger_business_report.py",
-     "preview/ledger-business-report.html", "preview/ledger-business-report.json"),
+     "preview/ledger-business-report.html", "preview/ledger-business-report.json",
+     "\u4ee3\u5e01\u4e24\u5f0f\u8d26\u672c\u5bf9\u4e0d\u4e0a\uff0c\u6536\u5165\u4e0d\u53ef\u5ba1\u8ba1\u3002"),
     ("entry-index", "\u5165\u53e3\u9875\u5b9e\u7269\u53f0\u8d26 / index",
      "tools/deliverable_index.py",
-     "preview/index.html", "preview/deliverable-index.json"),
+     "preview/index.html", "preview/deliverable-index.json",
+     "\u4ea4\u4ed8\u76ee\u5f55\u4e0e\u76d8\u4e0a\u4e0d\u4e00\u81f4\uff0c\u8bfb\u8005\u627e\u4e0d\u5230\u5b9e\u7269\u3002"),
 ]
 
 # Deliberately excluded, and named instead of silently dropped: the API-market face
@@ -78,21 +90,25 @@ EXCLUDED_NOTE = ("API \u5e02\u573a\u9762\u4e0d\u5728\u672c\u677f\u5b9e\u6d4b\u97
 
 # R2903: what a FAIL of each row costs. A board of green ticks answers "is it green" and
 # leaves "does a red row cost money or is it housekeeping" to the reader's guess, which is
-# the question a CEO actually opens this page to answer. One line per row, stated beside
-# the verdict, is DATA derived from nothing - AC-FSW12 refuses a blank entry rather than
-# letting an empty cell read as "no consequence".
-MEANING = {
-    "first-yuan-chain": "\u4e00\u7b14\u4ed8\u6b3e\u8de8\u4e0d\u8fc7\u652f\u4ed8\u3001\u4f1a\u5458\u3001\u8d26\u672c\u4e09\u6bb5\uff0c\u6536\u5165\u4e3a\u96f6\u3002",
-    "payment-gate": "19.9 \u5b9a\u4ef7\u9762\u4e0e\u5546\u6237\u53f7\u63a5\u7ebf\u4e0d\u53ef\u7528\uff0c\u6536\u4e0d\u5230\u7b2c\u4e00\u7b14\u94b1\u3002",
-    "membership": "\u6708\u5361\u6743\u76ca\u4e0d\u53ef\u5151\u73b0\uff0c\u590d\u8d2d\u4e3a\u96f6\u3002",
-    "ledger-business": "\u4ee3\u5e01\u4e24\u5f0f\u8d26\u672c\u5bf9\u4e0d\u4e0a\uff0c\u6536\u5165\u4e0d\u53ef\u5ba1\u8ba1\u3002",
-    "ugc-gate": "UGC \u5b89\u5168\u95f8\u672a\u63a5\u901a\uff0c\u5f00\u95e8\u5373\u4e0b\u67b6\uff0c\u6536\u5165\u5f52\u96f6\u3002",
-    "lobby-ws": "\u5927\u5385\u8fde\u4e0d\u4e0a\uff0c\u7528\u6237\u8fdb\u4e0d\u6765\uff0c\u4efb\u4f55\u6536\u5165\u90fd\u65e0\u4ece\u53d1\u751f\u3002",
-    "city-face": "\u57ce\u5e02\u89c2\u6d4b\u9762\u8bfb\u4e0d\u51fa\u771f\u5b9e\u72b6\u6001\uff0c\u8fd0\u8425\u5224\u65ad\u5931\u53bb\u4f9d\u636e\u3002",
-    "six-gate-live": "\u516d\u95e8\u5b9e\u51b5\u4e0d\u53ef\u4fe1\u65f6\uff0c\u4e0a\u6e38\u6570\u636e\u5df2\u504f\u79bb\uff0c\u6240\u6709\u9762\u8bfb\u6570\u90fd\u8981\u91cd\u770b\u3002",
-    "entry-index": "\u4ea4\u4ed8\u76ee\u5f55\u4e0e\u76d8\u4e0a\u4e0d\u4e00\u81f4\uff0c\u8bfb\u8005\u627e\u4e0d\u5230\u5b9e\u7269\u3002",
-}
+# the question a CEO actually opens this page to answer. AC-FSW12 refuses a blank entry
+# rather than letting an empty cell read as "no consequence".
+# R2905: this is no longer an authored table and not even a stored index - the consequence
+# lives in the row tuple, and this reads it back at CALL time, so a fixture spec that
+# declares no sentence inherits from the CURRENT table and there is no second copy to fork.
+def declared_meaning(face_id):
+    for row in FACES:
+        if len(row) > 5 and row[0] == face_id:
+            return row[5]
+    return ""
 MONEY_ID = "first-yuan-chain"
+# R2905: the money row's sentence is not allowed to be pure prose. The number a reader would
+# use to falsify "revenue is zero" is the row's own measurement, so it is filled from the
+# verdict line at render time and AC-FSW14 compares it back. A row whose verdict carries no
+# measurement publishes this marker instead, which the same criterion REFUSES: a bracket
+# with no reading in it would read as a measurement that happened.
+MONEY_MEASURED = "\uff08\u672c\u884c\u5b9e\u6d4b legs=%s tx=%s\uff09"
+MONEY_UNMEASURED = "\uff08\u672c\u884c\u8bfb\u6570\u7f3a\u5931\uff09"
+MONEY_TOKEN_RE = re.compile(r"\b(legs|tx)=(\d+)\b")
 # A row this table has not declared is published as UNDECLARED rather than blanked or
 # given an invented consequence: a blank cell reads as "no consequence", and a made-up
 # sentence is a claim nobody measured. AC-FSW12 still refuses the undeclared marker on any
@@ -107,7 +123,7 @@ COL_MEANING = "\u8fd9\u4e00\u884c FAIL \u5bf9\u6536\u5165\u610f\u5473\u7740\u4ec
 # its own coverage.
 CRITERIA = ["AC-FSW0", "AC-FSW1", "AC-FSW2", "AC-FSW3", "AC-FSW3b", "AC-FSW4",
             "AC-FSW5", "AC-FSW6", "AC-FSW7", "AC-FSW8", "AC-FSW9", "AC-FSW10",
-            "AC-FSW11", "AC-FSW12", "AC-FSW13"]
+            "AC-FSW11", "AC-FSW12", "AC-FSW13", "AC-FSW14", "AC-FSW15"]
 
 # AC-FSW9: the per-face byte counts are a snapshot of the sweep that wrote them, never a
 # live equality claim. Any face re-rendered afterwards changes its own bytes, so asserting
@@ -163,7 +179,7 @@ def load_faces(path):
         # R2903: the consequence sentence travels with the row. A fixture may declare it
         # inline; a row that declares none inherits the shipped table, and only a row in
         # neither place falls back to the marker check() refuses.
-        d["meaning"] = r.get("meaning") or MEANING.get(r["id"], "")
+        d["meaning"] = r.get("meaning") or declared_meaning(r["id"])
         out.append(d)
     return out
 
@@ -184,12 +200,14 @@ def run_face(face, timeout):
         "driver": face["driver"],
         "html": face["html"],
         "json": face["json"],
-        "meaning": face.get("meaning") or MEANING.get(face["id"], UNDECLARED),
+        "meaning": face.get("meaning") or declared_meaning(face["id"]) or UNDECLARED,
     }
     if not os.path.exists(driver):
         row.update({"exit": 127, "verdict": "MISSING-DRIVER", "duration_s": 0.0,
                     "html_bytes": None, "json_bytes": None, "tail": "",
                     "mutated": False, "mutated_files": []})
+        if row["id"] == MONEY_ID:
+            row["meaning"] = money_meaning(row["meaning"], row["verdict"])
         return row
     before = {"html": _stat(face["html"]), "json": _stat(face["json"])}
     t0 = time.time()
@@ -230,7 +248,26 @@ def run_face(face, timeout):
         "mutated": bool(mutated_files),
         "mutated_files": mutated_files,
     })
+    # R2905: the money row's sentence carries its own reading, filled HERE from the verdict
+    # this run just captured - so the published claim and the published measurement come out
+    # of one variable rather than two documents that are supposed to agree.
+    if row["id"] == MONEY_ID:
+        row["meaning"] = money_meaning(row["meaning"], row["verdict"])
     return row
+
+
+def money_tokens(verdict):
+    """The measurement a money row's consequence must quote, taken from its own verdict."""
+    got = dict(MONEY_TOKEN_RE.findall(str(verdict or "")))
+    return got.get("legs"), got.get("tx")
+
+
+def money_meaning(base, verdict):
+    """Declared prose plus the row's own reading; a row with no reading says so."""
+    legs, tx = money_tokens(verdict)
+    if legs is None or tx is None:
+        return (base or "") + MONEY_UNMEASURED
+    return (base or "") + MONEY_MEASURED % (legs, tx)
 
 
 def _size(rel):
@@ -523,6 +560,34 @@ def check():
     # asked to lead with one, so the rule bites exactly where the shipped table does.
     if MONEY_ID in [f[0] for f in FACES] and (not ids or ids[0] != MONEY_ID):
         fails.append("AC-FSW13 E_MONEY_NOT_FIRST first=%r" % (ids[0] if ids else None,))
+
+    # AC-FSW14 (R2905) THE SENTENCE MUST BE FALSIFIABLE: the money row's consequence is not
+    # allowed to be prose alone. The numbers a reader would use to refute "revenue is zero"
+    # are legs= and tx=, so the published sentence has to carry the ones THIS ROW reported -
+    # re-read from the landed verdict, not trusted from the sentence. A row whose verdict
+    # carries neither token is refused: an empty bracket would read as a measurement.
+    if MONEY_ID in [f[0] for f in FACES]:
+        for r in rows:
+            if r.get("id") != MONEY_ID:
+                continue
+            legs, tx = money_tokens(r.get("verdict"))
+            if legs is None or tx is None:
+                fails.append("AC-FSW14 E_FSW_MONEY_UNMEASURED %s verdict=%r"
+                             % (MONEY_ID, r.get("verdict")))
+                continue
+            said = str(r.get("meaning") or "")
+            for token in ("legs=" + legs, "tx=" + tx):
+                if token not in said:
+                    fails.append("AC-FSW14 %s consequence does not quote %s"
+                                 % (MONEY_ID, token))
+
+    # AC-FSW15 (R2905) ONE AUTHORED PLACE: the consequence belongs to the row, not to a
+    # parallel dict keyed by the same id - a renamed row would otherwise keep its sentence
+    # only by luck. Every declared row carries its sentence in its own tuple; the inherited
+    # copy is read from this table at call time, so there is no stored index left to fork.
+    for f in FACES:
+        if len(f) != 6 or not str(f[5]).strip():
+            fails.append("AC-FSW15 row %r declares no consequence in its own tuple" % (f[0],))
 
     total = len(CRITERIA)
     for f in fails:
