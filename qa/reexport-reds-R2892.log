@@ -1,4 +1,4 @@
-﻿
+
 === test_status_export_writer_dialect_wire rc=0 ===
 SUITE status_export_writer_dialect_wire (R2450) criteria=6
 PASS AC-SEWD1 the writer set is derived from the audit reading at CALL time, never a fixed list of three names

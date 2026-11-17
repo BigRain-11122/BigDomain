@@ -1,4 +1,4 @@
-﻿
+
 === test_state_fold rc=0 ===
 PASS AC-SF1 waterline verdict from the disk size, margin exact, closed verdict set and pinned report keys
 PASS AC-SF2 window moves verbatim with byte sum, tokens covered, prefix and suffix intact and the plan keys pinned
