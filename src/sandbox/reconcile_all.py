@@ -582,6 +582,12 @@ SUITES = [
     # adjudicator), with a doctored-response red control, a contradiction
     # guard, a construction ceiling, a startup face read and non-regression.
     ("ugc-msgsec-wire", os.path.join("ugc", "test_msgsec_wire.py"), 5),
+    # R2911: five - AC-MSFG1..AC-MSFG5 close the two decision-chain gaps R2910
+    # named. Degraded branch DECLINED with the reason measured (no gate
+    # response -> adjudicate(request, None) reads BLOCK), recovery branch
+    # WIRED (a drained row re-enters the face before the post-gate flow) with
+    # a doctored-BLOCK red control, plus receipt-shape and sibling regressions.
+    ("ugc-msgsec-gaps", os.path.join("ugc", "test_msf_gaps.py"), 5),
     # R1681 sec-gate batch + degradation face: p95 profile, persistent
     # degraded banner queue (own sqlite file, R1254 precedent);
     # R1850 banner_queue read-cap (AC-SB8..SB12) 7 -> 12;

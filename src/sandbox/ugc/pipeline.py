@@ -420,6 +420,17 @@ class UGCPipeline:
         SOURCES); rows whose event already exists are skipped - the
         recovery is idempotent across restarts.
 
+        R2911 documented-dialect wire: every row drain passed is also
+        adjudicated by msgSecCheck face before it enters the post-gate
+        flow, so an outage cannot route the same text down a weaker
+        decision chain than a clean submit. A face refusal publishes
+        nothing and counts in failed_publish; the row keeps its
+        terminal drained_pass verdict, so it is refused, not lost.
+        The degraded branch of _process deliberately does NOT ask the
+        face - with no gate response there is nothing to adjudicate
+        (MSF.adjudicate(request, None) answers BLOCK/E_MSF_RES_NOT_OBJECT),
+        and asking would relabel an unavailable gate as a content verdict.
+
         Recovery water wiring (R1797, AC-DR1): two live snapshots
         around the recovery window - the start snapshot is a pure
         read at method entry (before the face drain; an exception
@@ -442,6 +453,14 @@ class UGCPipeline:
             evt_id = compute_evt_id(q_source, q_actor, q_content)
             if self.store.event_row(evt_id) is not None:
                 skipped += 1
+                continue
+            # R2911 documented-dialect wire: a recovered row re-enters the
+            # face BEFORE the post-gate flow, so an outage cannot route the
+            # same text down a weaker decision chain than a clean submit.
+            # Refused = not published; the queue row keeps its terminal
+            # drained_pass verdict, so nothing is lost by the refusal.
+            if self._sec_verdict("pass", 0, q_content, q_actor) != "pass":
+                failed += 1
                 continue
             try:
                 self._after_gate(q_source, q_actor, q_content)
@@ -642,7 +661,9 @@ class UGCPipeline:
         """Post-gate flow (gray zone -> accept). Shared by submit,
         submit_batch and drain_recover; the recovery resume point is
         the gate: entrance and rate already passed on the original
-        submit (AC-PW5)."""
+        submit (AC-PW5). R2911: recovery reaches this point only after
+        the documented msgSecCheck face has confirmed the drained
+        verdict, so the resume point is no longer a bypass."""
         evt_id = compute_evt_id(source, actor, text)
         ts = UGC.utc_now_iso()
         gray_hit = next((w for w in self.gray_words if w and w in text), None)
