@@ -1035,6 +1035,80 @@ def main():
            and db['latest'].startswith('(no product pair on disk'),
            dp['latest'][:40])
 
+        # ---- AC-EXPD10..AC-EXPD12 (R2899 pin): halves that disagree say so ----
+        # R2898 named the clock of the half that WON the max and stayed silent
+        # about the other half, so a pair whose html is committed and whose json
+        # was written after that commit published one clock for two clocks.
+        wa = tempfile.mkdtemp(prefix='expw-agree-')
+        worlds.append(wa)
+        os.makedirs(os.path.join(wa, 'preview'))
+        t_same = 1767225600
+        for ext, body in (('.html', '<!DOCTYPE html>\n'), ('.json', '{}\n')):
+            path = os.path.join(wa, 'preview', 'agreeing' + ext)
+            write(path, body)
+            os.utime(path, (t_same, t_same))
+        row_a = mod._pairs(wa)[0]
+        line_a = mod.fmt_pair(row_a)
+        ok('AC-EXPD10 an agreeing pair publishes NO disagreement note',
+           bool(mod.PAIR_LINE_RE.match(line_a)) and 'halves differ' not in line_a,
+           line_a[-40:])
+        row_p = mod._pairs(wp)[0] if wp is not None else None
+        line_p = mod.fmt_pair(row_p) if row_p else ''
+        m_noted = mod.PAIR_LINE_RE.match(line_p)
+        ok('AC-EXPD11 a split pair names BOTH halves beside the winner bracket',
+           bool(m_noted) and 'halves differ: html [' in line_p
+           and '+ json [' in line_p
+           and m_noted.group(1) == mod.pair_date(float(p4)),
+           line_p[-90:])
+        if wp is not None:
+            face_n = os.path.join(wp, 'docs', 'status-export.json')
+            built_n, _ = mod.payload(wp, sp, 'TN')
+            write(face_n, json.dumps(built_n, ensure_ascii=False, indent=2)
+                  + '\n')
+            ok('AC-EXPD11 the noted line grades clean', mod.check(wp) == [],
+               'fails=%s' % mod.check(wp)[:2])
+            stripped = json.loads(json.dumps(built_n))
+            stripped['ceo_face']['latest_artifact'] = re.sub(
+                r' \(halves differ:.*\)$', '', line_p)
+            write(face_n, json.dumps(stripped, ensure_ascii=False,
+                                     indent=2) + '\n')
+            ok('AC-EXPD11 a face that drops the note reddens --check',
+               any('AC-EXPW1' in f for f in mod.check(wp)),
+               'fails=%s' % mod.check(wp)[:2])
+            write(face_n, json.dumps(built_n, ensure_ascii=False, indent=2)
+                  + '\n')
+            sx_noted = sx.newest_artifact(os.path.join(wp, 'preview'))['line']
+            ok('AC-EXPD12 both derivations publish the identical noted line',
+               sx_noted == line_p, 'sx=%s' % sx_noted[-40:])
+            ok('AC-EXPD12 the noted line still yields date and clock in groups',
+               bool(m_noted) and m_noted.group(1) == mod.pair_date(float(p4))
+               and m_noted.group(2) == 'mtime',
+               'groups=%s' % repr(m_noted.groups() if m_noted else None))
+        else:
+            for name in ('AC-EXPD11 a split pair names BOTH halves beside the '
+                         'winner bracket',
+                         'AC-EXPD11 the noted line grades clean',
+                         'AC-EXPD11 a face that drops the note reddens --check',
+                         'AC-EXPD12 both derivations publish the identical '
+                         'noted line',
+                         'AC-EXPD12 the noted line still yields date and clock '
+                         'in groups'):
+                ok(name, False, 'git unavailable in this environment')
+        face_d = os.path.join(wd, 'docs', 'status-export.json')
+        built_d, _ = mod.payload(wd, sd, 'TD')
+        write(face_d, json.dumps(built_d, ensure_ascii=False, indent=2) + '\n')
+        dd_line = mod.derive(wd, sd, 'TD')['latest']
+        ok('AC-EXPD10 the agreeing control line publishes no note either',
+           'halves differ' not in dd_line, dd_line[-40:])
+        faked = json.loads(json.dumps(built_d))
+        faked['ceo_face']['latest_artifact'] = dd_line + (
+            ' (halves differ: html [1999-01-01 commit] + json [1999-01-01 commit])')
+        write(face_d, json.dumps(faked, ensure_ascii=False, indent=2) + '\n')
+        ok('AC-EXPD12 appending the note to an AGREEING pair reddens',
+           any('AC-EXPW1' in f for f in mod.check(wd)),
+           'fails=%s' % mod.check(wd)[:2])
+        write(face_d, json.dumps(built_d, ensure_ascii=False, indent=2) + '\n')
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')
@@ -1077,7 +1151,7 @@ def main():
             declared.append(int(found.group(1)))
     will_print = crit_set(CHECKS + ['AC-EXPE4-registry-units'])
     ok('AC-EXPE4-registry-units',
-       declared == [len(will_print)] and len(will_print) == 33,
+       declared == [len(will_print)] and len(will_print) == 36,
        'declared=%s printed=%d' % (declared, len(will_print)))
 
     total = len(CHECKS)

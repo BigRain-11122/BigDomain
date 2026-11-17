@@ -6865,8 +6865,11 @@ SUITES = [
     # R2898: thirty-three - AC-EXPD7..AC-EXPD9 publish WHICH clock the date came
     # from ('commit' / 'mtime'), grade that marker in both directions, and hold
     # the date group, the board exclusion and the evidence line in place.
+    # R2899: thirty-six (+3) - AC-EXPD10..AC-EXPD12 make the line state when its
+    # two halves carry different (date, clock), with an agreeing-pair negative
+    # control and a red control that strips the note from the face.
     ("os-export-round",
-     os.path.join("..", "os", "test_export_round.py"), 33),
+     os.path.join("..", "os", "test_export_round.py"), 36),
     # R2806: tools/payment_gate_report.py renders the face that decides whether
     # the 19.9 channel may be connected, and all 690 registered suites were
     # measured to mention ZERO of its AC-PAYG1..AC-PAYG8 tokens, so it was

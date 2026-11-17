@@ -277,10 +277,18 @@ def _pairs(repo):
             stamp, src = h_c, h_src
         else:
             stamp, src = j_c, j_src
+        # R2899 AC-EXPD10/AC-EXPD11: the stamp above belongs to the half that
+        # won, so a pair whose halves carry different (date, clock) would publish
+        # one half and stay silent about the other. The note names both halves
+        # and is EMPTY when they agree, so it can never become chatter.
+        h_lab = '%s %s' % (pair_date(h_c), h_src)
+        j_lab = '%s %s' % (pair_date(j_c), j_src)
+        note = '' if h_lab == j_lab else (
+            'halves differ: html [%s] + json [%s]' % (h_lab, j_lab))
         rows.append((stamp, max(h_m, j_m), html_rel, json_rel,
-                     os.path.getsize(html), os.path.getsize(doc), src))
+                     os.path.getsize(html), os.path.getsize(doc), src, note))
     rows.sort(key=lambda r: (-r[0], -r[1], r[2]))
-    return [(r[0], r[2], r[3], r[4], r[5], r[6]) for r in rows]
+    return [(r[0], r[2], r[3], r[4], r[5], r[6], r[7]) for r in rows]
 
 
 
@@ -393,7 +401,9 @@ def newest_artifact(repo):
 # still the DATE, which every pre-R2898 consumer reads; group 2 is the marker.
 PAIR_LINE_RE = re.compile(
     r'^preview/\S+\.html \(\d+B\) \+ preview/\S+\.json \(\d+B\) '
-    r'\[(\d{4}-\d{2}-\d{2}) (commit|mtime)\]$')
+    r'\[(\d{4}-\d{2}-\d{2}) (commit|mtime)\]'
+    r'(?: \(halves differ: html \[\d{4}-\d{2}-\d{2} (?:commit|mtime)\] '
+    r'\+ json \[\d{4}-\d{2}-\d{2} (?:commit|mtime)\]\))?$')
 
 
 def pair_date(mtime):
@@ -419,10 +429,17 @@ def fmt_pair(pair):
     R2898 AC-EXPD7: the date is followed by the clock it came from - 'commit' or
     'mtime'. A 5-tuple (a caller still holding a pre-R2898 row) reads 'mtime',
     which is what that row's date always meant.
+
+    R2899 AC-EXPD11: when the two halves carry different (date, clock) the line
+    says so in a trailing note naming BOTH halves, because the bracket above
+    describes only the half that won the max. The note is empty when they agree,
+    so an agreeing pair publishes exactly the R2898 shape.
     """
     prov = pair[5] if len(pair) > 5 else 'mtime'
-    return '%s (%dB) + %s (%dB) [%s %s]' % (
+    line = '%s (%dB) + %s (%dB) [%s %s]' % (
         pair[1], pair[3], pair[2], pair[4], pair_date(pair[0]), prov)
+    note = pair[6] if len(pair) > 6 else ''
+    return line + (' (%s)' % note if note else '')
 
 
 _fmt_pair = fmt_pair
