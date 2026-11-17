@@ -22,9 +22,15 @@ bytes, so if the NUL branch ever moves above the BOM branch the ps-utf16 name -
 and with it the R2775 refusal face - would be swallowed.
 
 Isolation: every fixture, baseline and check runs inside one system temp dir.
-The real qa/ directory is snapshotted by name, size and mtime_ns before and
-after and must be identical; no repo byte is written by this suite.
-
+R2887 replaced the earlier "the real qa/ directory is snapshotted by name, size
+and mtime_ns before and after" law, which measured the SHARED directory rather
+than this suite: a concurrent writer - another window's evidence, a detached
+leg still in flight - reddened it while this suite leaked nothing (measured at
+entries=3251 in a 285-suite leg and reproduced at entries=3256 with a foreign
+writer, then green with the same writer pointed outside qa/). The criterion now
+names the writes THIS process made (builtins.open / io.open / os.open /
+os.replace armed for the whole body) and requires none of them under qa/, plus
+a negative control that a deliberate write into qa/ is caught and cleaned up.
 Source discipline: pure ASCII, stdlib only, no network, no shell, no clock in
 any assertion.
 """
@@ -78,17 +84,73 @@ def stamp(path):
     return (st.st_size, st.st_mtime_ns)
 
 
-def qa_snapshot():
-    """Name+size+mtime of every entry in the real qa/ dir (no recursion)."""
-    rows = []
-    for name in sorted(os.listdir(QA_DIR)):
-        path = os.path.join(QA_DIR, name)
+_WRITE_LOG = []
+_RECORDER_ON = [False]
+
+
+def under(path, root):
+    try:
+        p = os.path.abspath(path)
+        r = os.path.abspath(root)
+    except Exception:
+        return False
+    return p == r or p.startswith(r + os.sep)
+
+
+def record(path):
+    if _RECORDER_ON[0] and isinstance(path, str) and path.strip():
         try:
-            st = os.stat(path)
-            rows.append((name, st.st_size, st.st_mtime_ns))
-        except OSError:
-            rows.append((name, -1, -1))
-    return rows
+            _WRITE_LOG.append(os.path.abspath(path))
+        except Exception:
+            pass
+
+
+def arm_writer_recorder():
+    """Record every path THIS process opens for writing.
+
+    R2887 replaced the whole-directory qa/ snapshot with attribution: the old
+    AC-NULC6/6c read the shared directory's name+size+mtime before and after,
+    so any FOREIGN writer - another window's evidence, a detached leg still in
+    flight - reddened them while this suite leaked nothing. Measured: the same
+    suite reads 9/9 alone, and reads FAIL 7/9 with entries=3256 the moment a
+    concurrent writer appends inside qa/, then 9/9 again when the identical
+    writer is pointed outside qa/. A criterion that reddens on someone else's
+    legitimate write cannot be a gate for this suite; naming the writes this
+    process made is immune to it and is stronger for the leak class, because it
+    also sees a write into a name the snapshot never listed.
+    """
+    if _RECORDER_ON[0]:
+        return
+    import builtins
+
+    def wrap(orig):
+        def inner(file, mode='r', *a, **kw):
+            try:
+                flags = set(str(mode))
+            except Exception:
+                flags = set()
+            if flags & set('wax+'):
+                record(file)
+            return orig(file, mode, *a, **kw)
+        return inner
+
+    real_os_open = os.open
+    real_replace = os.replace
+
+    def os_open_inner(path, flags, *a, **kw):
+        if flags & (os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_APPEND):
+            record(path)
+        return real_os_open(path, flags, *a, **kw)
+
+    def replace_inner(src, dst):
+        record(dst)
+        return real_replace(src, dst)
+
+    builtins.open = wrap(builtins.open)
+    io.open = wrap(io.open)
+    os.open = os_open_inner
+    os.replace = replace_inner
+    _RECORDER_ON[0] = True
 
 
 def quiet(fn, *a, **kw):
@@ -138,8 +200,8 @@ def legacy_class(raw, bom_of):
 
 def main():
     started = time.time()
+    arm_writer_recorder()
     world = tempfile.mkdtemp(prefix='nulc-')
-    pre_qa = qa_snapshot()
     mod = load_tool()
     qdp = mod.QDP
     try:
@@ -240,15 +302,17 @@ def main():
                r5_code, read_bytes(old_path) == before,
                stamp(old_path) == before_stat))
 
-        # ---- AC-NULC6: everything private, the real qa/ is untouched --------
-        post_qa = qa_snapshot()
+        # ---- AC-NULC6: everything private, no write into the real qa/ ------
         inside = os.path.abspath(world)
         outside = [n for n in os.listdir(world)
                    if not os.path.abspath(os.path.join(world, n)).startswith(inside)]
-        ok('AC-NULC6 all work inside temp dir, real qa/ byte- and mtime-identical',
-           pre_qa == post_qa and outside == [],
-           'entries=%d stable=%s escapes=%d' % (
-               len(post_qa), pre_qa == post_qa, len(outside)))
+        qa_writes = [p for p in _WRITE_LOG if under(p, QA_DIR)]
+        ok('AC-NULC6 no write this suite made landed in the real qa/',
+           _RECORDER_ON[0] and len(_WRITE_LOG) > 0
+           and qa_writes == [] and outside == [],
+           'armed=%s writes=%d qa_writes=%d escapes=%d' % (
+               _RECORDER_ON[0], len(_WRITE_LOG), len(qa_writes),
+               len(outside)))
 
         # ---- AC-NULC7: the registry declares exactly one row, seven ---------
         reg = read_text(REGISTRY)
@@ -267,10 +331,30 @@ def main():
     leak = os.path.isdir(world)
     ok('AC-NULC6b temp world removed (a leak is loud, not silent)', not leak,
        'removed=%s' % (not leak))
-    post_qa2 = qa_snapshot()
-    ok('AC-NULC6c the real qa/ directory is unchanged by the whole suite',
-       pre_qa == post_qa2, 'entries=%d stable=%s' % (len(post_qa2),
-                                                     pre_qa == post_qa2))
+
+    # ---- AC-NULC6c: the recorder is not a rubber stamp ---------------------
+    # A green that can never redden is the failure mode this battery exists to
+    # catch, so the same predicate is pointed at a deliberate write INTO qa/:
+    # it must catch exactly that name, and the probe must leave nothing behind.
+    probe = os.path.join(QA_DIR, '_nulc6c_escape_probe.tmp')
+    probe_name = os.path.basename(probe)
+    pre_names = [n for n in os.listdir(QA_DIR) if n == probe_name]
+    pre_writes = len(_WRITE_LOG)
+    with io.open(probe, 'wb') as fh:
+        fh.write(b'probe\n')
+    caught = [p for p in _WRITE_LOG[pre_writes:] if under(p, QA_DIR)]
+    if os.path.exists(probe):
+        os.remove(probe)
+    confined = [p for p in _WRITE_LOG[:pre_writes]
+                if not (under(p, world) or under(p, tempfile.gettempdir())
+                        or p.endswith('.pyc'))]
+    ok('AC-NULC6c negative control: a real write into qa/ IS caught, and no '
+       'data write escapes temp (interpreter .pyc caching excluded)',
+       len(caught) == 1 and not os.path.exists(probe) and pre_names == []
+       and confined == [],
+       'caught=%d probe_gone=%s confined=%d writes=%d' % (
+           len(caught), not os.path.exists(probe), len(confined),
+           len(_WRITE_LOG)))
 
     total = len(CHECKS)
     # Declared units (R2860): the AC inventory below is derived from CHECKS,
