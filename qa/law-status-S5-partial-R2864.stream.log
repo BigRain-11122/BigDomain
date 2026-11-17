@@ -1,0 +1,40 @@
+# PARTIAL EVIDENCE - NOT A VERDICT: law_status shard 5 was aborted by the OS loop at R2864 after the leg passed the window budget.
+# Cause measured, not guessed: the deep-named os-probe-seam family scales with name depth. Cumulative elapsed deltas read from column 1:
+#   88.0s -> 248.1s (one suite 160.1s), 248.1s -> 505.4s (one suite 257.3s), then the next suite ran >5min without returning.
+# Honest limit: master lines were captured with a 200-char prefix cut, so a trailing per-suite seconds field is missing on long rows;
+#   the cumulative first column is intact and is what the deltas above are read from. Evidence written by battery_shard only on a finished leg, so none exists.
+   1.1s SHARD row os-ledger-lines rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+   2.0s SHARD row os-ledger-archive rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+   3.5s SHARD row os-ledger-baseline rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.4s
+   4.0s SHARD row os-ledger-closeout rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+   4.2s SHARD row os-fold-round-block-boundary rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+  10.8s SHARD row os-pre-commit-gate rc=0 pass=10 fail=0 detail=yes suite=PASS 10/10 crit=10 6.7s
+  11.6s SHARD row os-export-freshness rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.8s
+  11.8s SHARD row os-export-composed-landed-face rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  11.9s SHARD row os-export-composed-landed-wordspace rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  12.1s SHARD row os-export-composed-landed-bom-precedence rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  12.3s SHARD row os-export-composed-landed-bom-precedence-second-wave rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  12.5s SHARD row os-export-composed-landed-bom-precedence-third-wave rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  12.6s SHARD row os-export-composed-landed-bom-precedence-fourth-wave rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  13.9s SHARD row os-log-floor rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.2s
+  14.5s SHARD row os-evidence-parity rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.6s
+  15.3s SHARD row os-evidence-output-map rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.8s
+  16.8s SHARD row os-followup-section-foreign rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.5s
+  17.9s SHARD row os-exempt-review rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.2s
+  18.9s SHARD row os-evidence-output-audit rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.0s
+  20.1s SHARD row os-orphan-promotion-ledger rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.2s
+  21.3s SHARD row os-followup-incomplete-cause rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.1s
+  21.5s SHARD row os-probe-seam-constant-binding-scope rc=0 pass=34 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  21.7s SHARD row os-probe-seam-local-constant-scope rc=0 pass=37 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  21.9s SHARD row os-probe-seam-annotated-constant-scope rc=0 pass=43 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  22.2s SHARD row os-probe-seam-constant-alias-scope rc=0 pass=39 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  85.4s SHARD row os-probe-seam-alias-expression-scope rc=0 pass=40 fail=0 detail=yes suite=PASS 6/6 crit=6 63.2s
+  85.5s SHARD row os-probe-seam-for-container-name rc=0 pass=36 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  85.8s SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope rc=0 pass=33 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  86.0s SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-from-scope rc=0 pass=34 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+  86.3s SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-call-target-scope rc=0 pass=35 fail=0 detail=yes suite=PASS 6/6 crit=6 0.3s
+  86.7s SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-class-base-scope rc=0 pass=41 fail=0 detail=yes suite=PASS 6/6 crit=6 0.4s
+  87.3s SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-class-source-scope rc=0 pass=42 fail=0 detail=yes suite=PASS 6/6 crit=6 0.6s
+  88.0s SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-scope rc=0 pass=28 fail=0 detail=yes suite=PASS 6/6 crit=6 0.6s
+  248.1s SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-scope rc=0 pass=28 fail=0 detail=yes suite=PASS
+  505.4s SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-scope rc=0 pass=32 fail=0 detail=ye

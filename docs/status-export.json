@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T09:54:14+08:00",
-  "do": "2026-11-17 R2863 PRODUCT+ENGINEERING: law_status shard 3 is measured at output level - 45 of 45 rows green with detail=yes on every row and crit_mismatch=0 - and the pace question is answered by a THIRD number instead of an average: this shard cost 10.9s where shard 2 cost 47.3s and shard 1 cost 177.9s.",
+  "export_ts": "2026-11-17T10:41:57+08:00",
+  "do": "2026-11-17 R2864 PRODUCT+ENGINEERING: law_status shard 4 is measured at output level - 45 of 45 rows green with detail=yes on every row and crit_mismatch=0 in 22.0s - and the shard that was stopped answered the pace question by NAME: the deep os-probe-seam suites cost 160.1s and 257.3s each and one outran the runners own 600s header cap, which is a report and not a guard.",
   "ceo_face": {
-    "current": "2026-11-17 R2863 PRODUCT+ENGINEERING: law_status shard 3 is measured at output level - 45 of 45 rows green with detail=yes on every row and crit_mismatch=0 - and the pace question is answered by a THIRD number instead of an average: this shard cost 10.9s where shard 2 cost 47.3s and shard 1 cost 177.9s.",
+    "current": "2026-11-17 R2864 PRODUCT+ENGINEERING: law_status shard 4 is measured at output level - 45 of 45 rows green with detail=yes on every row and crit_mismatch=0 in 22.0s - and the shard that was stopped answered the pace question by NAME: the deep os-probe-seam suites cost 160.1s and 257.3s each and one outran the runners own 600s header cap, which is a report and not a guard.",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2863] next window (<=12h): (1) MAIN - `law_status` shard 3 through the shipped runner (45 suites / 323 declared criteria, `ledger-freetrial-callmonth` .. `ledger-showcase-statsdual`, members read from `.codely-cli/tmp/law_status_plan.json`, never retyped), reporting `detail=yes`/`detail=none` per row and `crit_mismatch` as a number; do NOT plan pace from shard 2's 47.3s - shard 1 cost 177.9s for the same size class and the slow suites have not been located; (2) `--declared-only` becomes a closeout habit beside `ledger_lines.audit` (this window: carriers=17 declared=17 mismatched=0 silent=0, 117.5s) and the sweep's own limit is named: its selector is the source marker `assertions over`, so a suite that builds the string another way is skipped, never failed - if `carriers` stops growing while suites gain declarations, the marker is the suspect; (3) the R2862 finding that `crit_mismatch` is a NUMBER only where a declaration exists still leaves `law_status` shards 4..7 plus every never-run suite ungraded, so the shard offset/resume blocker keeps its name (truncated)",
-    "next_milestone_due": "2026-11-17T21:54:14+08:00",
-    "updated_at": "2026-11-17T09:54:14+08:00",
+    "next_milestone": "[R2864] next window (<=12h): (1) MAIN - give `tools/battery_shard.py` a REAL per-suite timeout (PIN criteria first; red control = a probe suite that sleeps past the limit and must be reported as a timeout at rc!=0 instead of hanging the leg), because `cap=600s` in the header is a report, not a guard; (2) once the guard exists, finish `law_status` shard 5 (the ten unmeasured deep `os-probe-seam` rows) and then shards 6 and 7 by import from the plan, never retyped; (3) one cheap measurement of the named slow class - the same assertions under a short suite name - so the cost is proved to be the name-binding clause count and not interpreter startup; (4) `--declared-only` stays a closeout habit beside `ledger_lines.audit` (truncated)",
+    "next_milestone_due": "2026-11-17T22:41:57+08:00",
+    "updated_at": "2026-11-17T10:41:57+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,20 +82,20 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 98,
+    "log_lines_in_window": 102,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2863 PRODUCT+ENGINEERING: law_status shard 3 is measured at output level - 45 of 45 rows green with detail=yes on every row and crit_mismatch=0 - and the pace question is answered by a THIRD number instead of an average: this shard cost 10.9s where shard 2 cost 47.3s and shard 1 cost 177.9s.",
+  "current": "2026-11-17 R2864 PRODUCT+ENGINEERING: law_status shard 4 is measured at output level - 45 of 45 rows green with detail=yes on every row and crit_mismatch=0 in 22.0s - and the shard that was stopped answered the pace question by NAME: the deep os-probe-seam suites cost 160.1s and 257.3s each and one outran the runners own 600s header cap, which is a report and not a guard.",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2863] next window (<=12h): (1) MAIN - `law_status` shard 3 through the shipped runner (45 suites / 323 declared criteria, `ledger-freetrial-callmonth` .. `ledger-showcase-statsdual`, members read from `.codely-cli/tmp/law_status_plan.json`, never retyped), reporting `detail=yes`/`detail=none` per row and `crit_mismatch` as a number; do NOT plan pace from shard 2's 47.3s - shard 1 cost 177.9s for the same size class and the slow suites have not been located; (2) `--declared-only` becomes a closeout habit beside `ledger_lines.audit` (this window: carriers=17 declared=17 mismatched=0 silent=0, 117.5s) and the sweep's own limit is named: its selector is the source marker `assertions over`, so a suite that builds the string another way is skipped, never failed - if `carriers` stops growing while suites gain declarations, the marker is the suspect; (3) the R2862 finding that `crit_mismatch` is a NUMBER only where a declaration exists still leaves `law_status` shards 4..7 plus every never-run suite ungraded, so the shard offset/resume blocker keeps its name (truncated)",
-  "state_bytes": 72404,
+  "next_milestone": "[R2864] next window (<=12h): (1) MAIN - give `tools/battery_shard.py` a REAL per-suite timeout (PIN criteria first; red control = a probe suite that sleeps past the limit and must be reported as a timeout at rc!=0 instead of hanging the leg), because `cap=600s` in the header is a report, not a guard; (2) once the guard exists, finish `law_status` shard 5 (the ten unmeasured deep `os-probe-seam` rows) and then shards 6 and 7 by import from the plan, never retyped; (3) one cheap measurement of the named slow class - the same assertions under a short suite name - so the cost is proved to be the name-binding clause count and not interpreter startup; (4) `--declared-only` stays a closeout habit beside `ledger_lines.audit` (truncated)",
+  "state_bytes": 73031,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2863",
+      "2864",
       "OSLoop 执行 tick"
     ]
   ],
