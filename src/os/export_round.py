@@ -52,6 +52,8 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(BASE))
 sys.path.insert(0, BASE)
 
+import ledger_lines as LL  # noqa: E402
+
 TZ = datetime.timezone(datetime.timedelta(hours=8))
 ROUND_RE = re.compile(r'^(?:\d{4}-\d{2}-\d{2} )?R(\d{4})')
 NEXT_ROW_RE = re.compile(r'^- \[ \] \[R\d{4}\] next window')
@@ -59,7 +61,11 @@ LEDGER_RE = re.compile(r'^R\d{4} tokens:')
 FOLD_RE = re.compile(r'fold of log items')
 FOLD_RANGE_RE = re.compile(r'log items \d+\.\.\d+')
 ARCHIVE_RE = re.compile(r'state-log-archive')
-ROUND_HEAD_RE = re.compile(r'^(?:\d{4}-\d{2}-\d{2} )?R\d{4} [A-Z][A-Z0-9 /_-]{2,}')
+# R2874 AC-RLBL3: the label shape is not repeated here - it is the write gate's
+# own string, so a gate that refuses a label can never disagree with a reader
+# that silently skips it.
+ROUND_HEAD_RE = re.compile(
+    r'^(?:\d{4}-\d{2}-\d{2} )?R\d{4} ' + LL.ROUND_LABEL_SRC)
 SHORT = 300
 
 

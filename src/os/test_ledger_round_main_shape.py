@@ -9,10 +9,13 @@ detector was a ValueError raised at READ time - and it detected by
 crashing, which reddened three queue-face suites with a traceback instead
 of a verdict (measured at R2831: 14 live lines, zero anchored).
 
-Two laws, both fail-closed, neither of them a crash:
+Three laws, all fail-closed, none of them a crash:
   - the newest round narrative must carry at least one dated main line
     (a round's later lines - disclosures, group scans, notes - carry no
     date of their own and belong to the main line they follow);
+  - that dated main line must carry an UPPERCASE label after the round
+    number, because both CEO-face readers require one and a line they skip
+    publishes the PREVIOUS round while every check reads PASS (R2864);
   - a window with no round narrative at all cannot anchor anything.
 
 Stdlib only, ASCII source, zero network, no clock, no writes.
@@ -24,6 +27,8 @@ import io
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -34,11 +39,13 @@ sys.path.insert(0, BASE)
 import ledger_lines as LL  # noqa: E402
 import check_export_consistency as CEC  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 9
 MODULE = os.path.join(BASE, "ledger_lines.py")
 CONSISTENCY = os.path.join(BASE, "check_export_consistency.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 STATE = os.path.join(BASE, "state.json")
+APPEND = os.path.join(BASE, "state_append.py")
+TOOLS = os.path.join(os.path.dirname(SRC), "tools")
 LABEL = "os-ledger-round-main-shape"
 
 PASSES = 0
@@ -73,6 +80,24 @@ def run_cli(argv):
         with contextlib.redirect_stderr(err):
             code = LL.main(argv)
     return code, buf.getvalue(), err.getvalue()
+
+
+def _load(name, path):
+    """Load one shipped module by path (the readers are not on this sys.path)."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def load_sxf():
+    return _load("sxf_rms", os.path.join(TOOLS, "status_export_fresh.py"))
+
+
+def load_export_round():
+    return _load("er_rms", os.path.join(BASE, "export_round.py"))
 
 
 def ac_rms1():
@@ -282,6 +307,121 @@ def ac_rms6():
           % EXPECTED_CRITERIA)
 
 
+def ac_rms7():
+    """AC-RMS7: the write/read disagreement is MEASURED, and the gate is the fix.
+
+    The R2864 defect, reproduced in one private fixture: the gate used to accept
+    a dated main line whose label is lowercase, while the CEO-face reader that
+    publishes the headline skipped it and returned the PREVIOUS round - a face
+    naming last window with every check green. Both sides are read in the same
+    assertion so the coupling is proved rather than described.
+    """
+    log = [
+        "2026-11-17 R9001 PRODUCT: an older round whose label is accepted",
+        "2026-11-17 R9002 law_status: the newest round lost its label",
+        "R9002 tokens: local=~1k api=0 api_reason=a closed round line",
+    ]
+    report = LL.check_round_main_shape(log)
+    sxf = load_sxf()
+    seen_round, seen_line = sxf.newest_round({"log": log})
+    fixed = list(log)
+    fixed[1] = ("2026-11-17 R9002 PRODUCT+ENGINEERING: the newest round "
+                "declares its kind")
+    fixed_report = LL.check_round_main_shape(fixed)
+    fixed_round, _ = sxf.newest_round({"log": fixed})
+    ok = (report["ok"] is False
+          and report["code"] == "E_RMS_NO_LABEL"
+          and report["round"] == 9002
+          and report["sample"].startswith("2026-11-17 R9002 law_status")
+          and seen_round == 9001
+          and seen_line.startswith("2026-11-17 R9001 PRODUCT")
+          and fixed_report["ok"] is True
+          and fixed_round == 9002)
+    if not ok:
+        print("  measured: report=%r seen=%r/%r fixed=%r/%r"
+              % (report, seen_round, seen_line, fixed_report["ok"],
+                 fixed_round), flush=True)
+    check(ok, "AC-RMS7 a lowercase-label newest round is refused by name "
+          "E_RMS_NO_LABEL while the reader behind it would have published the "
+          "OLDER round 9001, and the same line with a label passes both")
+
+
+def ac_rms8():
+    """AC-RMS8: one law, three readers, six label shapes."""
+    er = load_export_round()
+    sxf = load_sxf()
+    src = LL.ROUND_LABEL_SRC
+    in_er = src in er.ROUND_HEAD_RE.pattern
+    in_sxf = src in sxf.HEADLINE_RE.pattern
+    shapes = [
+        ("2026-11-17 R9002 PRODUCT: x", True),
+        ("2026-11-17 R9002 law_status: x", False),
+        ("2026-11-17 R9002 Product: x", False),
+        ("2026-11-17 R9002 A1: x", False),
+        ("2026-11-17 R9002 ABC: x", True),
+        ("2026-11-17 R9002 PRODUCT+ENGINEERING: x", True),
+    ]
+    rows = []
+    agree = True
+    for line, want in shapes:
+        gate = bool(LL.ROUND_LABEL_RE.match(line))
+        head = bool(er.ROUND_HEAD_RE.match(line))
+        face = bool(sxf.HEADLINE_RE.match(line))
+        rows.append((line[24:], gate, head, face, want))
+        agree = agree and gate == head == face == want
+    ok = in_er and in_sxf and agree
+    if not ok:
+        print("  measured: in_er=%r in_sxf=%r rows=%r"
+              % (in_er, in_sxf, rows), flush=True)
+    check(ok, "AC-RMS8 ROUND_LABEL_SRC is the only definition - both readers "
+          "carry it verbatim and all three agree on six label shapes")
+
+
+def ac_rms9():
+    """AC-RMS9: the live tree still passes, the vehicle refuses at birth, and
+    the registry declares this suite at nine criteria."""
+    live = json.loads(io.open(STATE, encoding="utf-8").read())
+    report = LL.check_round_main_shape(live.get("log") or [])
+    private_dir = tempfile.mkdtemp(prefix="rms9-")
+    copy = os.path.join(private_dir, "state.json")
+    shutil.copyfile(STATE, copy)
+    try:
+        bad = subprocess.run(
+            [sys.executable, APPEND, "--state", copy, "--check",
+             "--round", "9002",
+             "--line", "2026-11-17 R9002 law_status: born with no label"],
+            capture_output=True, text=True, timeout=120)
+        # the same bytes, one label added: the vehicle accepts it unread
+        good = subprocess.run(
+            [sys.executable, APPEND, "--state", copy, "--check",
+             "--round", "9003",
+             "--line", "2026-11-17 R9003 PRODUCT: born with its label"],
+            capture_output=True, text=True, timeout=120)
+        untouched = io.open(copy, "rb").read() == io.open(STATE, "rb").read()
+    finally:
+        shutil.rmtree(private_dir, ignore_errors=True)
+    runner_text = io.open(RUNNER, encoding="utf-8").read()
+    pattern = re.compile(
+        r"\(" + json.dumps(LABEL) + r",\s*\n\s*os\.path\.join\([^)]*\),\s*"
+        r"(\d+)\)")
+    match = pattern.search(runner_text)
+    declared = int(match.group(1)) if match else -1
+    ok = (report["ok"] is True
+          and bad.returncode == 2
+          and "E_RMS_NO_LABEL" in (bad.stdout + bad.stderr)
+          and good.returncode == 0
+          and untouched
+          and declared == EXPECTED_CRITERIA)
+    if not ok:
+        print("  measured: live=%r bad=%r/%r good=%r untouched=%r declared=%r"
+              % (report, bad.returncode, (bad.stdout + bad.stderr)[:160],
+                 good.returncode, untouched, declared), flush=True)
+    check(ok, "AC-RMS9 the live tree passes, the shipped vehicle refuses a "
+          "label-less line at rc=2 with E_RMS_NO_LABEL and accepts the "
+          "labelled one without writing, registry declares %d"
+          % EXPECTED_CRITERIA)
+
+
 def main():
     print("round main line shape suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -291,6 +431,9 @@ def main():
     ac_rms4()
     ac_rms5()
     ac_rms6()
+    ac_rms7()
+    ac_rms8()
+    ac_rms9()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

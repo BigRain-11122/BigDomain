@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 707 | 5397 | 675/675 | R2739 |
+| 707 | 5400 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -614,7 +614,7 @@
 | 575 | os-status-export-writer-dialect-wire | ../os/test_status_export_writer_dialect_wire.py | 6 | green | 13.3 |
 | 576 | os-status-export-writer-transport-scope | ../os/test_status_export_writer_transport_scope.py | 6 | green | 31.6 |
 | 577 | os-ledger-line-shape-guard | ../os/test_ledger_line_shape_guard.py | 6 | green | 1.0 |
-| 578 | os-ledger-round-main-shape | ../os/test_ledger_round_main_shape.py | 6 | no-evidence | - |
+| 578 | os-ledger-round-main-shape | ../os/test_ledger_round_main_shape.py | 9 | no-evidence | - |
 | 579 | os-ledger-tokens-prefix-repair | ../os/test_repair_tokens_prefix.py | 6 | green | 0.8 |
 | 580 | os-own-usage-block-renderer | ../os/test_own_usage_block_renderer.py | 6 | green | 1.5 |
 | 581 | os-contract-usage-renderer | ../os/test_contract_usage_renderer.py | 6 | green | 1.8 |
@@ -744,7 +744,7 @@
 | 705 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 6 | no-evidence | - |
 | 706 | os-battery-shard-report | ../os/test_battery_shard_report.py | 10 | no-evidence | - |
 | 707 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 12 | no-evidence | - |
-|  | 合计 |  | 5397 | green 675 / FAIL 0 / no-evidence 32 |  |
+|  | 合计 |  | 5400 | green 675 / FAIL 0 / no-evidence 32 |  |
 
 ## 证据出处
 

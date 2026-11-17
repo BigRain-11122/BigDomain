@@ -86,6 +86,19 @@ FOLD_SUMMARY_RE = re.compile(
 # asks it of the NEWEST round only: older history may predate the law,
 # the live round may not.
 ROUND_MAIN_RE = re.compile(r"^\d{4}-\d{2}-\d{2} R(\d{3,5}) ")
+# R2874 AC-RLBL1..AC-RLBL5: the LABEL law, and the only definition of it.
+# The two readers of the CEO face (src/os/export_round.py ROUND_HEAD_RE and
+# tools/status_export_fresh.py HEADLINE_RE) both open a headline with an
+# UPPERCASE word after the round number; the write gate asked only for the
+# date. Measured at R2864: a window that wrote "2026-11-17 R2864 law_status
+# ..." passed state_append, both readers skipped it, and the CEO face went on
+# naming the PREVIOUS round while every check read PASS. The law is therefore
+# made stricter at the BIRTH site (nothing that no reader accepts should land)
+# and both readers compose their pattern from this one string instead of
+# keeping a second copy that can drift.
+ROUND_LABEL_SRC = r"[A-Z][A-Z0-9 /_-]{2,}"
+ROUND_LABEL_RE = re.compile(
+    r"^(?:\d{4}-\d{2}-\d{2}\s+)?R\d{3,5}\s+" + ROUND_LABEL_SRC)
 ROUND_MAIN_SAMPLE = 40
 LOCAL_NUM_RE = re.compile(r"^(\d+(?:\.\d+)?)([kKmM]?)$")
 API_NUM_RE = re.compile(r"^\d+$")
@@ -126,8 +139,13 @@ def check_round_main_shape(lines):
       is nothing for the export window to anchor on (E_RMS_NO_ROUND);
     - the newest round - newest by ROUND NUMBER, never by position - must
       carry at least one dated main line, because a round's later lines
-      (disclosures, group scans, notes) legitimately carry no date of
-      their own and belong to the main line they follow (E_RMS_NO_DATE).
+      (disclosures, group scans, notes) legitimately carry no date of their
+      own and belong to the main line they follow (E_RMS_NO_DATE);
+    - that dated main line must also carry an UPPERCASE label after the
+      round number (E_RMS_NO_LABEL), because both CEO-face readers
+      (export_round.ROUND_HEAD_RE, status_export_fresh.HEADLINE_RE) require
+      one and a line they skip makes the published face name the PREVIOUS
+      round while the checks still read PASS (measured at R2864).
 
     Older rounds are deliberately not asked: history may predate the law,
     and a live round may not. The refinement against the pinned wording
@@ -143,10 +161,13 @@ def check_round_main_shape(lines):
         if classify(line) != "round":
             continue
         round_no = int(NARRATIVE_RE.match(line).group(1))
-        bucket = per_round.setdefault(round_no, {"lines": 0, "dated": 0})
+        bucket = per_round.setdefault(round_no, {"lines": 0, "dated": 0,
+                                                "labelled": 0})
         bucket["lines"] += 1
         if ROUND_MAIN_RE.match(line):
             bucket["dated"] += 1
+            if ROUND_LABEL_RE.match(line):
+                bucket["labelled"] += 1
             if newest is None or round_no > newest:
                 newest = round_no
         elif newest is None or round_no > newest:
@@ -159,10 +180,11 @@ def check_round_main_shape(lines):
             "detail": "the window holds no round narrative to anchor on",
             "round_lines": 0,
             "dated_lines": 0,
+            "labelled_lines": 0,
             "sample": "",
         }
     bucket = per_round[newest]
-    if bucket["dated"] >= 1:
+    if bucket["dated"] >= 1 and bucket["labelled"] >= 1:
         return {
             "round": newest,
             "ok": True,
@@ -170,7 +192,28 @@ def check_round_main_shape(lines):
             "detail": "",
             "round_lines": bucket["lines"],
             "dated_lines": bucket["dated"],
+            "labelled_lines": bucket["labelled"],
             "sample": "",
+        }
+    if bucket["dated"] >= 1:
+        sample = ""
+        for raw in lines:
+            line = raw if isinstance(raw, str) else str(raw)
+            if ROUND_MAIN_RE.match(line) and not ROUND_LABEL_RE.match(line) \
+                    and int(NARRATIVE_RE.match(line).group(1)) == newest:
+                sample = line[:ROUND_MAIN_SAMPLE]
+                break
+        return {
+            "round": newest,
+            "ok": False,
+            "code": "E_RMS_NO_LABEL",
+            "detail": "newest round %d has %d dated line(s) and none carries "
+                      "an UPPERCASE label after the round number, so no "
+                      "CEO-face reader accepts it" % (newest, bucket["dated"]),
+            "round_lines": bucket["lines"],
+            "dated_lines": bucket["dated"],
+            "labelled_lines": 0,
+            "sample": sample,
         }
     sample = ""
     for raw in lines:
@@ -187,6 +230,7 @@ def check_round_main_shape(lines):
                   "with a YYYY-MM-DD prefix" % (newest, bucket["lines"]),
         "round_lines": bucket["lines"],
         "dated_lines": 0,
+        "labelled_lines": 0,
         "sample": sample,
     }
 

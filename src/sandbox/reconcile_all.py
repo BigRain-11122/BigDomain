@@ -5785,7 +5785,7 @@ SUITES = [
     # (AC-RMS1..AC-RMS6 were pinned in the R2832 row of src/os/backlog.md
     # BEFORE this code.)
     ("os-ledger-round-main-shape",
-     os.path.join("..", "os", "test_ledger_round_main_shape.py"), 6),
+     os.path.join("..", "os", "test_ledger_round_main_shape.py"), 9),
     # R2597: the R2596 closeout appended 'tokens: local=...' with no round
     # label, so seven ledger suites read that round as having no ledger line.
     # The write path still has no door asking the law, so the repair face is

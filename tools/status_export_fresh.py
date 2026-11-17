@@ -89,10 +89,32 @@ LEGACY_KEY = "results"
 ROUND_RE = re.compile(r"\bR(\d{4})\b")
 NEXT_ROW_RE = re.compile(r"\[R(\d{4})\] next window")
 NARRATIVE_SKIP = ("tokens:", "log items", "honest disclosures")
+
+
+def _round_label_src():
+    """The UPPERCASE-label shape, borrowed from the shipped write gate (R2874).
+
+    AC-RLBL3: this face, src/os/export_round.py and src/os/ledger_lines.py must
+    answer the SAME question about what a headline is. Reading the constant out
+    of that module instead of retyping it is what makes a gate that refuses a
+    label and a reader that skips one impossible to drift apart. The module
+    lives in the real tree and is stdlib-only; if it cannot be loaded the
+    grader refuses loudly rather than grading against a private opinion.
+    """
+    import importlib.util
+
+    path = os.path.join(REAL_ROOT, "src", "os", "ledger_lines.py")
+    spec = importlib.util.spec_from_file_location("ledger_lines_shared", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.ROUND_LABEL_SRC
+
+
 # AC-SXF11: a line that opens "R#### <UPPERCASE>" IS a round headline, whatever
 # it goes on to discuss. This is the detector src/os/export_round.py already
-# ships as ROUND_HEAD_RE; the same shape is used here rather than a second rule.
-HEADLINE_RE = re.compile(r"^(?:\d{4}-\d{2}-\d{2} )?R(\d{4}) [A-Z][A-Z0-9 /_-]{2,}")
+# ships as ROUND_HEAD_RE; the label half is the write gate's own string.
+HEADLINE_RE = re.compile(
+    r"^(?:\d{4}-\d{2}-\d{2} )?R(\d{4}) " + _round_label_src())
 FOLD_MARK = "fold of log items"
 
 
