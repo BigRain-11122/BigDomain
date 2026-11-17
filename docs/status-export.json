@@ -1,18 +1,20 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [],
-    "current": "2026-11-18 R2907 (two windows, both verified): the CEO board's scope sentence is now DERIVED from the declared revenue table (AC-FSW18, sweep 9/9, --check 20/20, suite 44/44 over 18 criteria, registry 5476 -> 5477); state.json folded through the shipped vehicle (79858B -> 64091B, FOLD-CLEAR, archive appended, backup written) after the layout question was settled by measuring both readers; the charter daily crawl produced the FIRST smoke pair this repo has ever had (qa/smoke-R2907.log + .png, benchmarks row, W44 on the wall, benchmarks_refreshed=2026-11-18); five new decision rows judged and cited; and a false positive in this loop's own scanner was found and fixed at birth - its merge-marker test matched prose that quotes the markers, which had kept the face red for rounds and produced one wrong HQ escalation (annotated, not deleted).",
+    "board_pages_skipped": [
+      "preview/face-sweep.html (6766B)"
+    ],
+    "current": "2026-11-18 R2908 PRODUCT+ENGINEERING: the msgSecCheck parameter face - an M item open since R419 - is CLOSED from the official document, and it lands as data plus a runnable gate rather than as prose. The two earlier attempts failed because they GUESSED paths against a doc that had moved shape; this window went through a discovery channel: pay.weixin.qq.com/doc/llms.txt confirmed the llms.txt convention exists (three pay merchant indexes, no mini-program security entries), the search index located the current shape /miniprogram/dev/server/API/sec-center/, that section index is server-rendered and links a .md/llm.txt form, and the page's .md variant returned the whole table verbatim. src/sandbox/ugc/msgsec_face.json now carries that face (POST /wxa/msg_sec_check, cloud method security.msgSecCheck, third-party permission set id 18, required content/version=2/scene/openid, optional title/nickname/signature-only-in-scene-1, result{suggest,label}, suggests risky/pass/review, ten labels 100 normal to 21000 other, detail rows valid only when their own errcode is 0, 4000/min + 2000000/day, 100/day while unpublished) and src/sandbox/ugc/msgsec_face.py is the gate that reads it: pass->ALLOW only with label 100, review->QUEUE, risky->BLOCK, and anything unknown or non-zero->BLOCK.",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-matrix-check-R2906.log (98B, 2026-11-18)",
-    "latest_evidence": "qa/suite-matrix-check-R2906.log (98B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/msgsec-face-R2908.log (214B, 2026-11-18)",
+    "latest_evidence": "qa/msgsec-face-R2908.log (214B, 2026-11-18)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R2906] next window (<=12h): (1) MAIN - the money row's sentence is now falsifiable against its OWN row, but the eight other rows are still declared prose, and the board's `latest_evidence`/reading order are the only derived parts of it: decide whether the payment and membership rows (the two remaining revenue rows) should also quote a token from their own verdict, or state in the document WHY only the money row carries a measurement - named once, not inferred by a reader. (2) BOOKKEEPING DISCHARGED IN THIS WINDOW: `state_fold.py --check` read FOLD-DUE at closeout (88716B vs the 78500B gate), so fold 4 was run through the shipped runner on whole rounds R2888..R2891 (log items 11..36, 26 lines): verdict CLEAR, 88716B -> 71068B (margin +7432), live lines 113 -> 88, tokens 11/11 named in the summary, archive VERIFIED, `layout=AGREE` on the live file - and that last reading matters, because it retires the E_SF_BAD_LAYOUT carrier that earlier windows disclosed: the shipped layout reader now agrees with the json.dump (4-space, LF) shape this state file actually has, even though the module comment still claims \"16 spaces, CRLF\". The comment is stale, the reader is not (truncated)",
-    "next_milestone_due": "2026-11-18T17:43:04+08:00",
-    "updated_at": "2026-11-18T05:43:04+08:00"
+    "next_milestone": "[R2908] next window (<=12h): (1) MAIN - the gate now REFUSES a bad request and a bad response, but nothing calls it: `src/sandbox/ugc/pipeline.py` still runs its wordlist mock and never asks `msgsec_face.adjudicate`. Wire the face into the pipeline's gate-1 path behind a declared switch so the sandbox exercises the DOCUMENTED envelope instead of a mock, and pin the criterion (the mock path must stay reachable, because appid/secret are still CEO physical items) BEFORE the edit. (2) the two boundary values that decide a pass are `content <= 2500 characters` and `label == 100` (truncated)",
+    "next_milestone_due": "2026-11-18T18:21:43+08:00",
+    "updated_at": "2026-11-18T06:21:43+08:00"
   },
-  "current": "2026-11-18 R2907 (two windows, both verified): the CEO board's scope sentence is now DERIVED from the declared revenue table (AC-FSW18, sweep 9/9, --check 20/20, suite 44/44 over 18 criteria, registry 5476 -> 5477); state.json folded through the shipped vehicle (79858B -> 64091B, FOLD-CLEAR, archive appended, backup written) after the layout question was settled by measuring both readers; the charter daily crawl produced the FIRST smoke pair this repo has ever had (qa/smoke-R2907.log + .png, benchmarks row, W44 on the wall, benchmarks_refreshed=2026-11-18); five new decision rows judged and cited; and a false positive in this loop's own scanner was found and fixed at birth - its merge-marker test matched prose that quotes the markers, which had kept the face red for rounds and produced one wrong HQ escalation (annotated, not deleted).",
+  "current": "2026-11-18 R2908 PRODUCT+ENGINEERING: the msgSecCheck parameter face - an M item open since R419 - is CLOSED from the official document, and it lands as data plus a runnable gate rather than as prose. The two earlier attempts failed because they GUESSED paths against a doc that had moved shape; this window went through a discovery channel: pay.weixin.qq.com/doc/llms.txt confirmed the llms.txt convention exists (three pay merchant indexes, no mini-program security entries), the search index located the current shape /miniprogram/dev/server/API/sec-center/, that section index is server-rendered and links a .md/llm.txt form, and the page's .md variant returned the whole table verbatim. src/sandbox/ugc/msgsec_face.json now carries that face (POST /wxa/msg_sec_check, cloud method security.msgSecCheck, third-party permission set id 18, required content/version=2/scene/openid, optional title/nickname/signature-only-in-scene-1, result{suggest,label}, suggests risky/pass/review, ten labels 100 normal to 21000 other, detail rows valid only when their own errcode is 0, 4000/min + 2000000/day, 100/day while unpublished) and src/sandbox/ugc/msgsec_face.py is the gate that reads it: pass->ALLOW only with label 100, review->QUEUE, risky->BLOCK, and anything unknown or non-zero->BLOCK.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -40,11 +42,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2907 (two windows, both verified): the CEO board's scope sentence is now DERIVED from the declared revenue table (AC-FSW18, sweep 9/9, --check 20/20, suite 44/44 over 18 criteria, registry 5476 -> 5477); state.json folded through the shipped vehicle (79858B -> 64091B, FOLD-CLEAR, archive appended, backup written) after the layout question was settled by measuring both readers; the charter daily crawl produced the FIRST smoke pair this repo has ever had (qa/smoke-R2907.log + .png, benchmarks row, W44 on the wall, benchmarks_refreshed=2026-11-18); five new decision rows judged and cited; and a false positive in this loop's own scanner was found and fixed at birth - its merge-marker test matched prose that quotes the markers, which had kept the face red for rounds and produced one wrong HQ escalation (annotated, not deleted).",
-  "export_ts": "2026-11-18T06:10:51+08:00",
-  "latest_artifact": "preview/face-sweep.html (6766B) + preview/face-sweep.json (6206B)",
-  "latest_evidence": "qa/smoke-R2907.log (2603B)",
-  "next_milestone": "[R2907] next window: (1) msgSecCheck parameter face is still an M item opened at R419 - two new doc paths 404'd again this round, so the next attempt must go through a discovery channel (official doc index or the page's own llms.txt) instead of guessed paths. (2) the R2905/R2906 crawls recorded clauses from pages whose revision dates were never re-read: apply this round's lesson and re-read the page note on the three most load-bearing sources before quoting them again. (3) the group ledger on origin/main still carries a merge-marker line, escalated in HQ-FEEDBACK, not repairable from this repo.",
+  "do": "2026-11-18 R2908 PRODUCT+ENGINEERING: the msgSecCheck parameter face - an M item open since R419 - is CLOSED from the official document, and it lands as data plus a runnable gate rather than as prose. The two earlier attempts failed because they GUESSED paths against a doc that had moved shape; this window went through a discovery channel: pay.weixin.qq.com/doc/llms.txt confirmed the llms.txt convention exists (three pay merchant indexes, no mini-program security entries), the search index located the current shape /miniprogram/dev/server/API/sec-center/, that section index is server-rendered and links a .md/llm.txt form, and the page's .md variant returned the whole table verbatim. src/sandbox/ugc/msgsec_face.json now carries that face (POST /wxa/msg_sec_check, cloud method security.msgSecCheck, third-party permission set id 18, required content/version=2/scene/openid, optional title/nickname/signature-only-in-scene-1, result{suggest,label}, suggests risky/pass/review, ten labels 100 normal to 21000 other, detail rows valid only when their own errcode is 0, 4000/min + 2000000/day, 100/day while unpublished) and src/sandbox/ugc/msgsec_face.py is the gate that reads it: pass->ALLOW only with label 100, review->QUEUE, risky->BLOCK, and anything unknown or non-zero->BLOCK.",
+  "export_ts": "2026-11-18T06:21:43+08:00",
+  "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
+  "latest_evidence": "qa/msgsec-face-R2908.log (214B, 2026-11-18)",
+  "next_milestone": "[R2908] next window (<=12h): (1) MAIN - the gate now REFUSES a bad request and a bad response, but nothing calls it: `src/sandbox/ugc/pipeline.py` still runs its wordlist mock and never asks `msgsec_face.adjudicate`. Wire the face into the pipeline's gate-1 path behind a declared switch so the sandbox exercises the DOCUMENTED envelope instead of a mock, and pin the criterion (the mock path must stay reachable, because appid/secret are still CEO physical items) BEFORE the edit. (2) the two boundary values that decide a pass are `content <= 2500 characters` and `label == 100` (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
@@ -92,9 +94,9 @@
   "queue": {
     "delivered_total": 2,
     "floors": {
-      "explore": 10,
       "main": 5,
-      "tech": 10
+      "tech": 10,
+      "explore": 10
     },
     "missing": [],
     "queues": [
@@ -155,7 +157,7 @@
   },
   "results": [
     [
-      "2907",
+      "2908",
       "OSLoop 执行 tick"
     ]
   ],
@@ -166,17 +168,17 @@
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
   "self_drive": {
+    "window": "2026-11-12..2026-11-18",
+    "window_days": 7,
+    "log_lines_in_window": 81,
     "idle_fast_mention_lines": 0,
-    "log_lines_in_window": 76,
     "no_pullable_mention_lines": 0,
-    "proposals_open": 8,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 10,
-    "queue_explore_open": 10,
+    "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
-    "substantive_non_idle_mention_lines": 10,
-    "window": "2026-11-12..2026-11-18",
-    "window_days": 7
+    "queue_explore_open": 10
   },
-  "state_bytes": 67185
+  "state_bytes": 72277
 }

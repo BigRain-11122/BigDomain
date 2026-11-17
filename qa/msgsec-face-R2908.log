@@ -1,0 +1,4 @@
+SUITE PASS 55/55 criteria=6
+--- check ---
+msgSecCheck face: path=/wxa/msg_sec_check cloud=security.msgSecCheck permission_set=18 content_max=2500 scenes=4 labels=10 suggests=3
+VERDICT PASS checks=16 read_only=True

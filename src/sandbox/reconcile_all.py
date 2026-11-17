@@ -573,6 +573,10 @@ SUITES = [
     # intake reader, deterministic cap slicing under ts ties
     # (AC-OS1..OS5 pre-registered in state/queue/tech.md)
     ("ugc", os.path.join("ugc", "test_ugc.py"), 37),
+    # R2908 msgSecCheck parameter face: the documented request/response table
+    # (official .md channel) as data plus the fail-closed gate that reads it
+    # (AC-MSF1..AC-MSF6 pinned in src/os/backlog.md R2908, landed same window)
+    ("ugc-msgsec-face", os.path.join("ugc", "test_msgsec_face.py"), 6),
     # R1681 sec-gate batch + degradation face: p95 profile, persistent
     # degraded banner queue (own sqlite file, R1254 precedent);
     # R1850 banner_queue read-cap (AC-SB8..SB12) 7 -> 12;

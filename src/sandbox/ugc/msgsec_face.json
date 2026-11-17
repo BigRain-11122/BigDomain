@@ -1,0 +1,85 @@
+{
+  "source": {
+    "url": "https://developers.weixin.qq.com/miniprogram/dev/server/API/sec-center/sec-check/api_msgseccheck.md",
+    "channel": "official .md variant of the developer doc page (the HTML page body is client-rendered; the section index links this llm.txt/md form)",
+    "section_index": "https://developers.weixin.qq.com/miniprogram/dev/server/API/sec-center/",
+    "captured": "2026-11-18",
+    "section_last_edited": "2025-12-21",
+    "verbatim": true
+  },
+  "call": {
+    "method": "POST",
+    "host": "https://api.weixin.qq.com",
+    "path": "/wxa/msg_sec_check",
+    "query": ["access_token"],
+    "cloud_method": "security.msgSecCheck",
+    "server_side_only": true,
+    "third_party_permission_set_id": 18,
+    "applies_to": ["miniprogram", "minigame"]
+  },
+  "request": {
+    "required": ["content", "version", "scene", "openid"],
+    "optional": ["title", "nickname", "signature"],
+    "fields": {
+      "content": {"type": "string", "note": "UTF-8, at most 2500 characters"},
+      "version": {"type": "number", "fixed": 2},
+      "scene": {"type": "number", "enum": {"1": "profile", "2": "comment", "3": "forum", "4": "social_log"}},
+      "openid": {"type": "string", "note": "the user must have visited the mini program within the last two hours"},
+      "title": {"type": "string", "note": "UTF-8"},
+      "nickname": {"type": "string", "note": "UTF-8"},
+      "signature": {"type": "string", "note": "UTF-8, only meaningful in the profile scene (scene=1)"}
+    }
+  },
+  "response": {
+    "fields": {
+      "errcode": {"type": "number"},
+      "errmsg": {"type": "string"},
+      "detail": {"type": "objarray"},
+      "trace_id": {"type": "string"},
+      "result": {"type": "object"}
+    },
+    "result_fields": ["suggest", "label"],
+    "detail_fields": ["strategy", "errcode", "suggest", "label", "keyword", "prob"],
+    "detail_row_active_only_when": "errcode == 0"
+  },
+  "suggest": ["risky", "pass", "review"],
+  "labels": {
+    "100": "normal",
+    "10001": "advertisement",
+    "20001": "politics",
+    "20002": "pornography",
+    "20003": "abuse",
+    "20006": "illegal_crime",
+    "20008": "fraud",
+    "20012": "vulgar",
+    "20013": "copyright",
+    "21000": "other"
+  },
+  "limits": {
+    "content_max_chars": 2500,
+    "per_minute": 4000,
+    "per_day": 2000000,
+    "unpublished_per_day": 100,
+    "openid_recent_hours": 2,
+    "prob_min": 0,
+    "prob_max": 100
+  },
+  "errors": {
+    "-1": "system error",
+    "40001": "invalid credential access_token",
+    "40003": "invalid openid",
+    "40129": "invalid scene",
+    "43002": "require POST method",
+    "43104": "openid does not match appid",
+    "44002": "empty post data",
+    "44991": "reach max api minute frequence",
+    "45009": "reach max api daily quota limit",
+    "47001": "data format error",
+    "61010": "code is expired"
+  },
+  "compliance": {
+    "gate_role": "BLUEPRINT section 5 life-or-death line: no gate, no door. This face is the parameter-level definition of the pre-publication content gate.",
+    "fail_closed_rule": "an unknown suggest, an unknown label, a non-zero errcode or a missing result blocks publication; it never allows it",
+    "credentials": "appid and secret are CEO physical items; this module holds no key and performs no network call"
+  }
+}
