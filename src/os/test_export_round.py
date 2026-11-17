@@ -1,7 +1,10 @@
-﻿"""Battery suite for src/os/export_round.py - thirty-three criteria:
-AC-EXPW1..AC-EXPW11 plus AC-EXPW13 and AC-EXPW14 (AC-EXPW12 is a DECLARED
-numbering hole, see the R2823 paragraph below), AC-EXPG1..AC-EXPG5,
-AC-EXPA1/AC-EXPA2, AC-EXPE1..AC-EXPE4 and AC-EXPD1..AC-EXPD9.
+﻿"""Battery suite for src/os/export_round.py.
+
+R2901: this header no longer enumerates the criteria. The inventory used to be
+typed here in prose and drifted silently (it still said "thirty-three criteria"
+when the suite printed thirty-nine), so the ONE place the count is declared is
+the `os-export-round` row in src/sandbox/reconcile_all.py, which
+AC-EXPE4-registry-units grades against what this suite actually prints.
 
 R2898: AC-EXPD7..AC-EXPD9 publish WHICH CLOCK the pair line's date came from
 ('commit' for the committer time of the last committed content change, 'mtime'
@@ -1123,42 +1126,88 @@ def main():
         os.utime(j_n, (t_n + 86400, t_n + 86400))
         m_n = mod.PAIR_LINE_RE.match(mod.fmt_pair(mod._pairs(wn)[0]))
         line_n = mod.fmt_pair(mod._pairs(wn)[0])
-        ok('AC-EXPD13 a pair whose JSON half is newer names json',
-           bool(m_n) and '; newer=json' in line_n, line_n[-50:])
+        ok('AC-EXPD13 a pair whose JSON half is later names json',
+           bool(m_n) and '; later=json' in line_n, line_n[-50:])
         os.utime(h_n, (t_n + 172800, t_n + 172800))
         line_n2 = mod.fmt_pair(mod._pairs(wn)[0])
         m_n2 = mod.PAIR_LINE_RE.match(line_n2)
         ok('AC-EXPD13 the MIRRORED pair names html',
-           '; newer=html' in line_n2, line_n2[-50:])
+           '; later=html' in line_n2, line_n2[-50:])
         face_nw = os.path.join(wn, 'docs', 'status-export.json')
         built_nw, _ = mod.payload(wn, sn, 'TN2')
         write(face_nw, json.dumps(built_nw, ensure_ascii=False, indent=2) + '\n')
-        ok('AC-EXPD14 the line carrying a newer tag grades clean',
+        ok('AC-EXPD14 the line carrying a later tag grades clean',
            mod.check(wn) == [], 'fails=%s' % mod.check(wn)[:2])
         stripped_nw = json.loads(json.dumps(built_nw))
         stripped_nw['ceo_face']['latest_artifact'] = re.sub(
-            r'; newer=(?:html|json)',
+            r'; later=(?:html|json)',
             '', built_nw['ceo_face']['latest_artifact'])
         write(face_nw, json.dumps(stripped_nw, ensure_ascii=False, indent=2)
               + '\n')
-        ok('AC-EXPD14 stripping the newer tag reddens --check',
+        ok('AC-EXPD14 stripping the later tag reddens --check',
            any('AC-EXPW1' in f for f in mod.check(wn)),
            'fails=%s' % mod.check(wn)[:2])
         wrong_nw = json.loads(json.dumps(built_nw))
         wrong_nw['ceo_face']['latest_artifact'] = built_nw['ceo_face'][
-            'latest_artifact'].replace('; newer=html', '; newer=json')
+            'latest_artifact'].replace('; later=html', '; later=json')
         write(face_nw, json.dumps(wrong_nw, ensure_ascii=False, indent=2) + '\n')
         ok('AC-EXPD14 claiming the WRONG half reddens too',
            any('AC-EXPW1' in f for f in mod.check(wn)),
            'fails=%s' % mod.check(wn)[:2])
         write(face_nw, json.dumps(built_nw, ensure_ascii=False, indent=2) + '\n')
-        ok('AC-EXPD15 an agreeing pair publishes neither note nor newer tag',
-           'halves differ' not in line_a and 'newer=' not in line_a,
+        ok('AC-EXPD15 an agreeing pair publishes neither note nor later tag',
+           'halves differ' not in line_a and 'later=' not in line_a,
            line_a[-40:])
         ok('AC-EXPD15 groups on a noted line are still date and clock',
            bool(m_n2) and m_n2.group(1) == mod.pair_date(float(t_n + 172800))
            and m_n2.group(2) == 'mtime',
            'groups=%s' % repr(m_n2.groups() if m_n2 else None))
+
+        # ---- AC-EXPD16..AC-EXPD18 (R2901 pin): the tag says LATER, not CHANGED ----
+        # R2900 measured which half carries the later stamp and published it as
+        # `newer=`, so a reader infers that half CHANGED. The next block proves
+        # that inference is false on the line's own numbers, and the word moves.
+        ok('AC-EXPD16 the retired newer= shape is refused by PAIR_LINE_RE',
+           bool(line_n2) and not mod.PAIR_LINE_RE.match(
+               line_n2.replace('; later=', '; newer=')), line_n2[-40:])
+        retired_nw = json.loads(json.dumps(built_nw))
+        retired_nw['ceo_face']['latest_artifact'] = built_nw['ceo_face'][
+            'latest_artifact'].replace('; later=', '; newer=')
+        write(face_nw, json.dumps(retired_nw, ensure_ascii=False,
+                                  indent=2) + '\n')
+        ok('AC-EXPD16 a face still carrying newer= reddens --check',
+           any('AC-EXPW1' in f for f in mod.check(wn)),
+           'fails=%s' % mod.check(wn)[:2])
+        write(face_nw, json.dumps(built_nw, ensure_ascii=False, indent=2) + '\n')
+        # AC-EXPD17: the overclaim measured, not argued. The json half is
+        # re-saved with IDENTICAL bytes and a later clock, so the tag flips to
+        # later=json while the published json byte count does not move - which is
+        # exactly why the tag may not say the half changed.
+        json_bytes = read(j_n)
+        disk_before = len(json_bytes.encode('utf-8'))
+        stamp_size = re.compile(r'preview/split-face\.json \((\d+)B\)')
+        size_before = stamp_size.search(line_n2).group(1)
+        write(j_n, json_bytes)
+        disk_after = os.path.getsize(j_n)
+        os.utime(j_n, (t_n + 259200, t_n + 259200))
+        line_n3 = mod.fmt_pair(mod._pairs(wn)[0])
+        size_after = stamp_size.search(line_n3).group(1)
+        ok('AC-EXPD17 identical bytes keep the published size unchanged',
+           disk_before == disk_after and size_before == size_after
+           and size_after == str(disk_after),
+           'before=%s after=%s disk=%d/%d'
+           % (size_before, size_after, disk_before, disk_after))
+        ok('AC-EXPD17 the tag still flips, so it measures the STAMP only',
+           '; later=json' in line_n3
+           and mod.PAIR_LINE_RE.match(line_n3) is not None, line_n3[-60:])
+        # AC-EXPD18: the retired word cannot live in the module's note format,
+        # and the ONE formatter still serves both derivations on a NOTED line.
+        ok('AC-EXPD18 the note format carries later= and not newer=',
+           '; later=%s' in src and '; newer=%s' not in src,
+           'later=%s newer=%s' % ('; later=%s' in src, '; newer=%s' in src))
+        sx_n3 = sx.newest_artifact(os.path.join(wn, 'preview'))['line']
+        ok('AC-EXPD18 both derivations agree on the noted line',
+           sx_n3 == line_n3, 'sx=%s' % sx_n3[-40:])
 
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
@@ -1201,8 +1250,14 @@ def main():
         if found:
             declared.append(int(found.group(1)))
     will_print = crit_set(CHECKS + ['AC-EXPE4-registry-units'])
+    # R2901: the absolute count used to be typed a THIRD time here (36, then 39)
+    # and had to be moved by hand whenever a criterion landed. The registry row is
+    # the one declaration, so this compares the two units and nothing else. The
+    # loss is named: an edit that deletes a criterion AND decrements the registry
+    # is silent, and a second typed number would not have caught it either - it
+    # would have been a copy that the same edit could move.
     ok('AC-EXPE4-registry-units',
-       declared == [len(will_print)] and len(will_print) == 39,
+       declared == [len(will_print)],
        'declared=%s printed=%d' % (declared, len(will_print)))
 
     total = len(CHECKS)

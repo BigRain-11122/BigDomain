@@ -286,10 +286,15 @@ def _pairs(repo):
         # R2900 AC-EXPD13: the note also names WHICH half the bracket describes,
         # because two halves sharing a date and differing only in clock render as
         # the same date twice and the winner is not readable from the note.
+        # R2901 AC-EXPD16: that tag reads `later=`, not `newer=`. What is
+        # measured is which half carries the later STAMP; whether the bytes
+        # CHANGED is not measurable from one snapshot (a re-save with identical
+        # bytes moves the stamp and no number on this line moves with it), so the
+        # word that asserts change is the defect rather than a missing digest.
         h_lab = '%s %s' % (pair_date(h_c), h_src)
         j_lab = '%s %s' % (pair_date(j_c), j_src)
         note = '' if h_lab == j_lab else (
-            'halves differ: html [%s] + json [%s]; newer=%s'
+            'halves differ: html [%s] + json [%s]; later=%s'
             % (h_lab, j_lab, win))
         rows.append((stamp, max(h_m, j_m), html_rel, json_rel,
                      os.path.getsize(html), os.path.getsize(doc), src, note))
@@ -405,11 +410,14 @@ def newest_artifact(repo):
 # R2898 AC-EXPD7: the date is followed by the clock it was rendered from, so a
 # committed stamp and a touched-file stamp can no longer read alike. Group 1 is
 # still the DATE, which every pre-R2898 consumer reads; group 2 is the marker.
+# R2901 AC-EXPD16: the tail tag is `later=` and the retired `newer=` shape is not
+# accepted, so a face that claims the older word is refused at the shape level
+# instead of merely disagreeing with the derived line.
 PAIR_LINE_RE = re.compile(
     r'^preview/\S+\.html \(\d+B\) \+ preview/\S+\.json \(\d+B\) '
     r'\[(\d{4}-\d{2}-\d{2}) (commit|mtime)\]'
     r'(?: \(halves differ: html \[\d{4}-\d{2}-\d{2} (?:commit|mtime)\] '
-    r'\+ json \[\d{4}-\d{2}-\d{2} (?:commit|mtime)\]; newer=(?:html|json)\))?$')
+    r'\+ json \[\d{4}-\d{2}-\d{2} (?:commit|mtime)\]; later=(?:html|json)\))?$')
 
 
 def pair_date(mtime):
@@ -440,6 +448,10 @@ def fmt_pair(pair):
     says so in a trailing note naming BOTH halves, because the bracket above
     describes only the half that won the max. The note is empty when they agree,
     so an agreeing pair publishes exactly the R2898 shape.
+
+    R2901 AC-EXPD16: the note's tag reads 'later=<half>' and means the half whose
+    STAMP is later, never the half whose bytes changed - a re-save with identical
+    bytes moves the stamp while no number on the line moves with it.
     """
     prov = pair[5] if len(pair) > 5 else 'mtime'
     line = '%s (%dB) + %s (%dB) [%s %s]' % (

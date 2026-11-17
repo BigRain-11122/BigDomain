@@ -1,18 +1,18 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2900 PRODUCT+ENGINEERING: R2899 item (1) is CLOSED as BOTH a decision and a measurable line change - the note now names WHICH half the winner bracket describes, and carrying the differing half's SIZE was DECLINED with a reason rather than deferred, because fmt_pair already publishes both halves' bytes in the same line so a size inside the note would repeat a number the line already shows; what the note genuinely could not say is which half is current.",
+    "current": "2026-11-18 R2901 PRODUCT+ENGINEERING: R2900 item (1) is CLOSED as BOTH a decision and a measured word change - the pair note's tag now reads '; later=<half>' because what it measures is the later STAMP, and the overclaim is measured rather than argued: a pair whose json is re-saved with IDENTICAL bytes and a later clock publishes the SAME json byte count while the tag flips to later=json (AC-EXPD17), so no number on the line can tell 're-saved' from 'changed'.",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2900] next window (<=12h): (1) MAIN - the tag names the newer STAMP, not the changed HALF, so a pair whose json was re-saved with identical bytes still reads `newer=json`; decide whether the line should carry a content digest (or a declared byte-equality claim) so \"newer\" stops standing in for \"changed\", pinned with a red control BEFORE the edit. (2) the hand-moved pin literal `len(will_print)` was moved 36 -> 39 this window and is still NOT derived from one declared constant - the same drift `AC-EXPE4-registry-units` exists to catch, in the one place it must be typed twice. (3) carried unchanged: 425 non-`os-` registry suites never run in any slice, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 106 UTF-16 + 39 BOM-carrying qa evidence files, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability has arrived), Docker absent, and `BigDomain-OSLoop` S4U re-registration needing an ELEVATED shell.",
-    "next_milestone_due": "2026-11-18T16:18:10+08:00",
-    "updated_at": "2026-11-18T04:18:10+08:00",
-    "latest_evidence": "qa/status-export-regress-R2900.log (550B, 2026-11-18)",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/status-export-regress-R2900.log (550B, 2026-11-18)"
+    "next_milestone": "[R2901] next window (<=12h): (1) MAIN - the note now says LATER instead of NEWER, which removes the false inference but leaves a reader unable to answer \"did this page change since I last looked\": both halves' byte counts are published and neither is a change detector, so decide ONCE whether the face should publish a digest and, if yes, NAME ITS CONSUMER (a digest with no stored prior is a number nobody can compare - the honest candidates are a stored prior digest inside status-export.json, which makes the face self-comparing, or none at all). (2) the AC-EXPD17 arm proved size stability on a re-save of the SAME string (truncated)",
+    "next_milestone_due": "2026-11-18T16:32:45+08:00",
+    "updated_at": "2026-11-18T04:32:45+08:00",
+    "latest_evidence": "qa/queue-floor-export-R2901.log (334B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/queue-floor-export-R2901.log (334B, 2026-11-18)"
   },
-  "current": "2026-11-18 R2900 PRODUCT+ENGINEERING: R2899 item (1) is CLOSED as BOTH a decision and a measurable line change - the note now names WHICH half the winner bracket describes, and carrying the differing half's SIZE was DECLINED with a reason rather than deferred, because fmt_pair already publishes both halves' bytes in the same line so a size inside the note would repeat a number the line already shows; what the note genuinely could not say is which half is current.",
+  "current": "2026-11-18 R2901 PRODUCT+ENGINEERING: R2900 item (1) is CLOSED as BOTH a decision and a measured word change - the pair note's tag now reads '; later=<half>' because what it measures is the later STAMP, and the overclaim is measured rather than argued: a pair whose json is re-saved with IDENTICAL bytes and a later clock publishes the SAME json byte count while the tag flips to later=json (AC-EXPD17), so no number on the line can tell 're-saved' from 'changed'.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -40,10 +40,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2900 PRODUCT+ENGINEERING: R2899 item (1) is CLOSED as BOTH a decision and a measurable line change - the note now names WHICH half the winner bracket describes, and carrying the differing half's SIZE was DECLINED with a reason rather than deferred, because fmt_pair already publishes both halves' bytes in the same line so a size inside the note would repeat a number the line already shows; what the note genuinely could not say is which half is current.",
-  "export_ts": "2026-11-18T04:18:10+08:00",
+  "do": "2026-11-18 R2901 PRODUCT+ENGINEERING: R2900 item (1) is CLOSED as BOTH a decision and a measured word change - the pair note's tag now reads '; later=<half>' because what it measures is the later STAMP, and the overclaim is measured rather than argued: a pair whose json is re-saved with IDENTICAL bytes and a later clock publishes the SAME json byte count while the tag flips to later=json (AC-EXPD17), so no number on the line can tell 're-saved' from 'changed'.",
+  "export_ts": "2026-11-18T04:32:45+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
-  "next_milestone": "[R2900] next window (<=12h): (1) MAIN - the tag names the newer STAMP, not the changed HALF, so a pair whose json was re-saved with identical bytes still reads `newer=json`; decide whether the line should carry a content digest (or a declared byte-equality claim) so \"newer\" stops standing in for \"changed\", pinned with a red control BEFORE the edit. (2) the hand-moved pin literal `len(will_print)` was moved 36 -> 39 this window and is still NOT derived from one declared constant - the same drift `AC-EXPE4-registry-units` exists to catch, in the one place it must be typed twice. (3) carried unchanged: 425 non-`os-` registry suites never run in any slice, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 106 UTF-16 + 39 BOM-carrying qa evidence files, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability has arrived), Docker absent, and `BigDomain-OSLoop` S4U re-registration needing an ELEVATED shell.",
+  "next_milestone": "[R2901] next window (<=12h): (1) MAIN - the note now says LATER instead of NEWER, which removes the false inference but leaves a reader unable to answer \"did this page change since I last looked\": both halves' byte counts are published and neither is a change detector, so decide ONCE whether the face should publish a digest and, if yes, NAME ITS CONSUMER (a digest with no stored prior is a number nobody can compare - the honest candidates are a stored prior digest inside status-export.json, which makes the face self-comparing, or none at all). (2) the AC-EXPD17 arm proved size stability on a re-save of the SAME string (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
@@ -154,7 +154,7 @@
   },
   "results": [
     [
-      "2900",
+      "2901",
       "OSLoop 执行 tick"
     ]
   ],
@@ -167,16 +167,16 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 79,
+    "log_lines_in_window": 87,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "state_bytes": 63439,
-  "latest_evidence": "qa/status-export-regress-R2900.log (550B, 2026-11-18)"
+  "state_bytes": 70363,
+  "latest_evidence": "qa/queue-floor-export-R2901.log (334B, 2026-11-18)"
 }
