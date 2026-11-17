@@ -7,8 +7,8 @@
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R2880] next window (<=12h): (1) MAIN - the crit_mismatch=13 unit class (assertion count vs criteria count) still needs a declared pair or a registry unit field - a law change with its own red control, not thirteen silent edits, and it is the oldest carried engineering debt now that the fold is clear. (2) AC-LWR7 makes its suite depend on the websockets package: decide NAMED red (today) versus declared skip, one criterion either way, pinned before the edit, and do NOT let that become blanket - a skip that silently greens is the failure mode the battery exists to catch. (3) the lobby walk remains loopback-only: a real remote client, backpressure and multi-room fan-out stay unmeasured and named as such. (4) the state log is 28653B with margin +49847 so no fold is owed next window - do not re-fold to look busy (truncated)",
-    "next_milestone_due": "2026-11-18T10:19:38+08:00",
-    "updated_at": "2026-11-17T22:19:38+08:00"
+    "next_milestone_due": "2026-11-18T10:23:30+08:00",
+    "updated_at": "2026-11-17T22:23:30+08:00"
   },
   "current": "2026-11-17 R2880 PRODUCT+ENGINEERING: the carried fold debt is discharged through the shipped vehicle rather than by hand - src/os/state.json 121591B -> 25778B and log_lines 186 -> 31, verdict FOLD-CLEAR with margin 52722, window 1..156 (whole rounds through R2874) appended verbatim to logs/state-log-archive-2026-11.md with archive_verified=true and appendix 96015 bytes",
   "depts": [
@@ -39,7 +39,7 @@
     }
   ],
   "do": "2026-11-17 R2880 PRODUCT+ENGINEERING: the carried fold debt is discharged through the shipped vehicle rather than by hand - src/os/state.json 121591B -> 25778B and log_lines 186 -> 31, verdict FOLD-CLEAR with margin 52722, window 1..156 (whole rounds through R2874) appended verbatim to logs/state-log-archive-2026-11.md with archive_verified=true and appendix 96015 bytes",
-  "export_ts": "2026-11-17T22:19:38+08:00",
+  "export_ts": "2026-11-17T22:23:30+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
   "next_milestone": "[R2880] next window (<=12h): (1) MAIN - the crit_mismatch=13 unit class (assertion count vs criteria count) still needs a declared pair or a registry unit field - a law change with its own red control, not thirteen silent edits, and it is the oldest carried engineering debt now that the fold is clear. (2) AC-LWR7 makes its suite depend on the websockets package: decide NAMED red (today) versus declared skip, one criterion either way, pinned before the edit, and do NOT let that become blanket - a skip that silently greens is the failure mode the battery exists to catch. (3) the lobby walk remains loopback-only: a real remote client, backpressure and multi-room fan-out stay unmeasured and named as such. (4) the state log is 28653B with margin +49847 so no fold is owed next window - do not re-fold to look busy (truncated)",
   "outs": [
@@ -163,7 +163,7 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 31,
+    "log_lines_in_window": 32,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 5,
@@ -173,5 +173,5 @@
     "queue_tech_open": 12,
     "queue_explore_open": 10
   },
-  "state_bytes": 28653
+  "state_bytes": 27579
 }
