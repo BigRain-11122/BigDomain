@@ -1,13 +1,13 @@
 {
-  "export_ts": "2026-11-17T11:05:59+08:00",
-  "do": "2026-11-17 R2865 PRODUCT+ENGINEERING: the runner gained a leg-level cap (--cap, lower only) and a timeout row is painted timeout=yes, which finished law_status shard 5 inside one window as three bounded legs - 45 of 45 rows graded, 44 green and one named TIMEOUT at exactly 150.0s.",
+  "export_ts": "2026-11-17T11:53:34+08:00",
+  "do": "2026-11-17 R2866 PRODUCT+ENGINEERING: law_status shard 7 is measured whole (45/45 green, 329 criteria, crit_mismatch=0, 63.3s, detail_yes=45 detail_none=0, evidence --check PASS) and shard 6 is measured on its 18 light rows (18/18 green, 110 criteria, 18.0s) after the only detail=none row in shard 7 was repaired at its birth site; the R2865 timeout row now reads PASS 6/6 at 245.4s through the shipped runner at --cap 400, so the old '>150s' is a number; and the deep os-probe-seam cost is NAMED as a 2^depth fan-out - each layer of the chain calls its parent entry twice, so one entry() over a 6-criterion fixture issues 258 module_alias_entry calls at the chain layer and 260/262 at the class_source/class_base leaves, which is why the deep rows cost 50-250s while the light rows cost 0.2-1s.",
   "ceo_face": {
-    "current": "2026-11-17 R2865 PRODUCT+ENGINEERING: the runner gained a leg-level cap (--cap, lower only) and a timeout row is painted timeout=yes, which finished law_status shard 5 inside one window as three bounded legs - 45 of 45 rows graded, 44 green and one named TIMEOUT at exactly 150.0s.",
+    "current": "2026-11-17 R2866 PRODUCT+ENGINEERING: law_status shard 7 is measured whole (45/45 green, 329 criteria, crit_mismatch=0, 63.3s, detail_yes=45 detail_none=0, evidence --check PASS) and shard 6 is measured on its 18 light rows (18/18 green, 110 criteria, 18.0s) after the only detail=none row in shard 7 was repaired at its birth site; the R2865 timeout row now reads PASS 6/6 at 245.4s through the shipped runner at --cap 400, so the old '>150s' is a number; and the deep os-probe-seam cost is NAMED as a 2^depth fan-out - each layer of the chain calls its parent entry twice, so one entry() over a 6-criterion fixture issues 258 module_alias_entry calls at the chain layer and 260/262 at the class_source/class_base leaves, which is why the deep rows cost 50-250s while the light rows cost 0.2-1s.",
     "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "last_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-    "next_milestone": "[R2865] next window (<=12h): (1) MAIN - `law_status` shards 6 and 7 by IMPORT from `.codely-cli/tmp/law_status_plan.json` (45 + 45 labels, never retyped), run as bounded legs with `--cap 90` so both fit one window, reporting `detail=` and naming every `timeout=yes` row instead of smoothing it; (2) replace the shard-5 tail's \">150s\" with a number: a single-row leg at `--cap 400`, and if it finishes, upgrade that row from TIMEOUT to its real grade; (3) the R2864 item (5) stays OPEN - `state_append`'s shape gate accepted a lowercase label after the round number while the export grader wants UPPERCASE, so a closeout can name the PREVIOUS round on the CEO face while every check reads PASS; pin the choice (stricter gate vs grader fallback) BEFORE editing either; (4) `--declared-only` stays a closeout habit beside `ledger_lines.audit` (truncated)",
-    "next_milestone_due": "2026-11-17T23:05:59+08:00",
-    "updated_at": "2026-11-17T11:05:59+08:00",
+    "next_milestone": "[R2866] next window (<=12h): (1) MAIN - kill the deep `os-probe-seam` fan-out with PINNED criteria BEFORE any edit: each layer of the chain calls its parent `module_alias_entry` twice (once for the shipped answer, once inside its own patch block), so depth d costs ~2^d; one `entry()` over a 6-criterion fixture issues 258 calls at `module_alias_chain_scope`, 260 at `class_source_entry`, 262 at `class_base_entry` and returns in 2.08s of CPU for a fixture whose own reading is trivial. Target: the same answers at depth-independent cost. Red controls that must stay green: `SUITE PASS 6/6` on the 12-case fixture, the live leg `modules=2 loops=49 unreadable=0 mismatched=[]`, and the pinned refusals (`attr-module-alias-unbound:M.HW`). Measure BEFORE (245.4s, `qa/battery-shard-law-status-S5-row-R2866.log`) and AFTER on the same row; a cache keyed by arguments is NOT the fix unless it is proven not to serve a pre-patch answer to a post-patch caller. (2) only after (1), measure shard 6's 27 deep rows in one window (truncated)",
+    "next_milestone_due": "2026-11-17T23:53:34+08:00",
+    "updated_at": "2026-11-17T11:53:34+08:00",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "board_pages_skipped": [],
     "newest_pair_on_disk_is_board": false
@@ -82,7 +82,7 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 102,
+    "log_lines_in_window": 101,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 16,
@@ -92,10 +92,10 @@
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "current": "2026-11-17 R2865 PRODUCT+ENGINEERING: the runner gained a leg-level cap (--cap, lower only) and a timeout row is painted timeout=yes, which finished law_status shard 5 inside one window as three bounded legs - 45 of 45 rows graded, 44 green and one named TIMEOUT at exactly 150.0s.",
+  "current": "2026-11-17 R2866 PRODUCT+ENGINEERING: law_status shard 7 is measured whole (45/45 green, 329 criteria, crit_mismatch=0, 63.3s, detail_yes=45 detail_none=0, evidence --check PASS) and shard 6 is measured on its 18 light rows (18/18 green, 110 criteria, 18.0s) after the only detail=none row in shard 7 was repaired at its birth site; the R2865 timeout row now reads PASS 6/6 at 245.4s through the shipped runner at --cap 400, so the old '>150s' is a number; and the deep os-probe-seam cost is NAMED as a 2^depth fan-out - each layer of the chain calls its parent entry twice, so one entry() over a 6-criterion fixture issues 258 module_alias_entry calls at the chain layer and 260/262 at the class_source/class_base leaves, which is why the deep rows cost 50-250s while the light rows cost 0.2-1s.",
   "latest_artifact": "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
-  "next_milestone": "[R2865] next window (<=12h): (1) MAIN - `law_status` shards 6 and 7 by IMPORT from `.codely-cli/tmp/law_status_plan.json` (45 + 45 labels, never retyped), run as bounded legs with `--cap 90` so both fit one window, reporting `detail=` and naming every `timeout=yes` row instead of smoothing it; (2) replace the shard-5 tail's \">150s\" with a number: a single-row leg at `--cap 400`, and if it finishes, upgrade that row from TIMEOUT to its real grade; (3) the R2864 item (5) stays OPEN - `state_append`'s shape gate accepted a lowercase label after the round number while the export grader wants UPPERCASE, so a closeout can name the PREVIOUS round on the CEO face while every check reads PASS; pin the choice (stricter gate vs grader fallback) BEFORE editing either; (4) `--declared-only` stays a closeout habit beside `ledger_lines.audit` (truncated)",
-  "state_bytes": 78830,
+  "next_milestone": "[R2866] next window (<=12h): (1) MAIN - kill the deep `os-probe-seam` fan-out with PINNED criteria BEFORE any edit: each layer of the chain calls its parent `module_alias_entry` twice (once for the shipped answer, once inside its own patch block), so depth d costs ~2^d; one `entry()` over a 6-criterion fixture issues 258 calls at `module_alias_chain_scope`, 260 at `class_source_entry`, 262 at `class_base_entry` and returns in 2.08s of CPU for a fixture whose own reading is trivial. Target: the same answers at depth-independent cost. Red controls that must stay green: `SUITE PASS 6/6` on the 12-case fixture, the live leg `modules=2 loops=49 unreadable=0 mismatched=[]`, and the pinned refusals (`attr-module-alias-unbound:M.HW`). Measure BEFORE (245.4s, `qa/battery-shard-law-status-S5-row-R2866.log`) and AFTER on the same row; a cache keyed by arguments is NOT the fix unless it is proven not to serve a pre-patch answer to a post-patch caller. (2) only after (1), measure shard 6's 27 deep rows in one window (truncated)",
+  "state_bytes": 70513,
   "results_archive": {
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7",
@@ -104,7 +104,7 @@
   },
   "results": [
     [
-      "2864",
+      "2866",
       "OSLoop 执行 tick"
     ]
   ],

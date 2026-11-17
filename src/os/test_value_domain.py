@@ -286,6 +286,8 @@ def main():
     for name, ok, detail in results:
         if not ok:
             print("  RED %s %s" % (name, detail))
+        else:
+            print("PASS %s" % name)
     return 0 if not bad else 1
 
 

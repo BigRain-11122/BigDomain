@@ -1,0 +1,20 @@
+SHARD scope=SHARD registry_suites=706 registry_criteria=5391 selected=18 selected_criteria=110 cap=600s leg_cap=90s exact=18
+SHARD row os-queue-floor rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+SHARD row os-queue-only rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.0s
+SHARD row os-queue-floor-decl rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.8s
+SHARD row os-queue-only-floor-wire rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.2s
+SHARD row os-queue-done-stamp-exempt rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.4s
+SHARD row os-retire-apply rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.0s
+SHARD row os-residue-triage-decl-reason rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.0s
+SHARD row os-residue-triage-head-renew rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.2s
+SHARD row os-residue-triage-entry-retire rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.3s
+SHARD row os-review-window-guard-parity rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-queue-occupancy rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.0s
+SHARD row os-queue-head-delivered rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.7s
+SHARD row os-queue-floor-delivered-wire rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.8s
+SHARD row os-queue-floor-reading-wire rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.8s
+SHARD row os-residue-triage-repin rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.4s
+SHARD row os-residue-triage-repin-idempotent rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.4s
+SHARD row os-repin-noop-parity rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 1.8s
+SHARD row os-review-window-guard-parity-blind-agreement rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD rc=0 scope=SHARD selected=18 executed=18 green=18 criteria=110 crit_mismatch=0 elapsed=18.0s
