@@ -1,0 +1,19 @@
+DECL scope=SWEEP registry_suites=706 carriers=17
+DECL row member rc=0 declared=16 registry=16 ok 1.4s
+DECL row ledger-apimarket-buyerhistory rc=0 declared=8 registry=8 ok 33.3s
+DECL row ledger-apimarket-refundregister rc=0 declared=8 registry=8 ok 75.0s
+DECL row os-ship-checklist rc=0 declared=8 registry=8 ok 0.1s
+DECL row os-export-round rc=0 declared=18 registry=18 ok 1.3s
+DECL row os-payment-gate-report rc=0 declared=11 registry=11 ok 0.2s
+DECL row os-qa-log rc=0 declared=10 registry=10 ok 0.3s
+DECL row os-census-nul-class rc=0 declared=7 registry=7 ok 0.2s
+DECL row os-ceo-blockers rc=0 declared=12 registry=12 ok 0.2s
+DECL row os-scan-five-still rc=0 declared=6 registry=6 ok 0.1s
+DECL row os-filing-checklist rc=0 declared=8 registry=8 ok 0.1s
+DECL row os-membership-face rc=0 declared=10 registry=10 ok 0.3s
+DECL row os-face-sweep rc=0 declared=10 registry=10 ok 1.4s
+DECL row os-money-path-demo rc=0 declared=6 registry=6 ok 0.6s
+DECL row os-first-yuan-path rc=0 declared=7 registry=7 ok 0.3s
+DECL row os-lobby-protocol-map rc=0 declared=6 registry=6 ok 0.6s
+DECL row os-battery-shard rc=0 declared=19 registry=19 ok 2.2s
+DECL-SWEEP rc=0 swept=17 registry_suites=706 carriers=17 declared=17 silent=0 mismatched=0 unreadable=0 red=0 elapsed=117.5s

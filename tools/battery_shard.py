@@ -73,6 +73,9 @@ COUNTER_WORD_FAIL = re.compile(r"(\d+)\s+fail\b")
 # pair's total otherwise. A declaration may never move a verdict or an rc.
 CRITERIA_UNIT = re.compile(
     r"(?m)^suite:\s*(\d+)\s+assertions over\s*(\d+)\s+criteria")
+# AC-BSGB13: the declaration is normally printed through a format string, so
+# this marker selects WHICH suites declare; the numbers are read at runtime.
+DECL_PRINTER = re.compile(r"assertions over")
 SUITE_ROW = re.compile(r"(?m)^SUITE\b[^\n]*$")
 VERDICT_WORD = re.compile(r"^SUITE\s+(PASS|FAIL)\b")
 
@@ -315,6 +318,87 @@ def do_check(name):
     return 0
 
 
+def do_declared_only(rows, base, cap=600, overrides=None,
+                     registry_total=None):
+    """AC-BSGB13: grade every DECLARING suite without paying for a battery.
+
+    Measured fact this mode exists for: a declaration is printed through a
+    format string ("suite: %d assertions over %d criteria"), so no static scan
+    can read its NUMBERS. What a static scan can read is which suites carry the
+    printer at all, so that is the selector: the sweep runs exactly those
+    suites and compares each one's own declared criteria against its registry
+    row. A suite that carries the printer but prints no declaration is named as
+    no-declaration rather than counted as agreeing; absence is never a pass.
+    """
+    overrides = overrides or {}
+    carriers = []
+    unreadable = []
+    for label, rel, crit in rows:
+        path = os.path.join(base, rel)
+        try:
+            with open(path, "r", encoding="utf-8", errors="replace") as handle:
+                text = handle.read()
+        except OSError:
+            unreadable.append(label)
+            continue
+        if DECL_PRINTER.search(text):
+            carriers.append((label, rel, crit))
+    lines = []
+    print("DECL scope=SWEEP registry_suites=%d carriers=%d unreadable=%d"
+          % (len(rows), len(carriers), len(unreadable)))
+    checked = 0
+    silent = []
+    mismixed = []
+    reds = []
+    started = time.time()
+    for label, rel, crit in carriers:
+        code, out, secs = run_one(base, label, rel, cap, overrides)
+        declared = parse_criteria_unit(out)
+        if declared is None:
+            silent.append(label)
+            row = ("DECL row %s rc=%d suite=none declared=none registry=%d "
+                   "no-declaration %.1fs" % (label, code, int(crit), secs))
+            flex = "no-declaration"
+        else:
+            checked += 1
+            ok = (declared == int(crit))
+            flex = "ok" if ok else "mismatch"
+            if not ok:
+                mismixed.append("%s:%d!=%d" % (label, declared, int(crit)))
+            row = ("DECL row %s rc=%d declared=%d registry=%d %s %.1fs"
+                   % (label, code, declared, int(crit), flex, secs))
+        if code != 0:
+            reds.append("%s:rc=%d" % (label, code))
+        print(row)
+        lines.append(row)
+    elapsed = time.time() - started
+    rc = 1 if (mismixed or silent or reds) else 0
+    total = len(rows) if registry_total is None else int(registry_total)
+    closing = ("DECL-SWEEP rc=%d swept=%d registry_suites=%d carriers=%d "
+               "declared=%d silent=%d mismatched=%d unreadable=%d red=%d "
+               "elapsed=%.1fs"
+               % (rc, len(carriers), total, len(carriers), checked,
+                  len(silent), len(mismixed), len(unreadable), len(reds),
+                  elapsed))
+    print(closing)
+    lines.insert(0, "DECL scope=SWEEP registry_suites=%d carriers=%d"
+                 % (total, len(carriers)))
+    lines.append(closing)
+    if mismixed:
+        print("DECL disclosure mismatched=%s" % ",".join(mismixed))
+        lines.append("DECL disclosure mismatched=%s" % ",".join(mismixed))
+    if silent:
+        print("DECL disclosure no-declaration=%s" % ",".join(silent))
+        lines.append("DECL disclosure no-declaration=%s" % ",".join(silent))
+    if reds:
+        print("DECL disclosure red=%s" % ",".join(reds))
+        lines.append("DECL disclosure red=%s" % ",".join(reds))
+    if unreadable:
+        print("DECL disclosure unreadable=%s" % ",".join(unreadable))
+        lines.append("DECL disclosure unreadable=%s" % ",".join(unreadable))
+    return rc, "\n".join(lines) + "\n"
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(add_help=True)
     ap.add_argument("--match", action="append", default=[])
@@ -322,6 +406,8 @@ def main(argv=None):
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--declared-only", dest="declared_only",
+                    action="store_true")
     ap.add_argument("--claim", default="")
     ap.add_argument("--evidence", default="")
     args = ap.parse_args(argv)
@@ -350,6 +436,16 @@ def _round(args):
         return do_check(evidence_name(args.evidence))
 
     rows, base, cap, overrides = registry()
+    if args.declared_only:
+        picked = select(rows, args.match, args.limit, args.exact)
+        rc, text = do_declared_only(picked, base, cap, overrides, len(rows))
+        if args.evidence:
+            proof = write_evidence(evidence_name(args.evidence), text)
+            print("DECL evidence name=%s bytes=%d lines=%d sha256=%s "
+                  "dialect=utf-8/lf"
+                  % (evidence_name(args.evidence), proof["bytes"],
+                     proof["lines"], proof["sha256"]))
+        return rc
     picked = select(rows, args.match, args.limit, args.exact)
     total_crit = sum(int(r[2]) for r in picked)
     print("SHARD scope=SHARD registry_suites=%d registry_criteria=%d "

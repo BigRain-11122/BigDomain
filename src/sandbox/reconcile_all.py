@@ -7022,7 +7022,7 @@ SUITES = [
     # (indented line, optional "| " separator) and declares absent detail:
     # 16 -> 17 criteria.
     ("os-battery-shard",
-     os.path.join("..", "os", "test_battery_shard.py"), 18),
+     os.path.join("..", "os", "test_battery_shard.py"), 19),
     # R2845: the OUTPUT-level face of the same question the census asks from
     # source. Four probe suites in a private world classify by the row they
     # really printed, the law and the invocation are imported from the runner,

@@ -31,6 +31,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -458,11 +459,45 @@ def main():
     ok("AC-BSGB7", untouched and not banned,
        "untouched=%s banned=%d" % (untouched, len(banned)))
 
+    # AC-BSGB13 - a declaration is graded OUTSIDE a leg: the sweep runs only the
+    # suites that carry the declaration printer, so one that declares a count
+    # the registry disagrees with is named without paying for a battery. Both
+    # directions run here in a private world, and a suite with no printer is
+    # proved absent from the selection rather than counted as agreeing.
+    world = tempfile.mkdtemp(prefix="battery_shard_decl_")
+    try:
+        write_probes(world)
+        saved = shard.registry
+        patch_registry(shard, [("probe-decl-ok", "probe_decl_ok.py", 8),
+                               ("probe-decl-bad", "probe_decl_bad.py", 8),
+                               ("probe-bare", "probe_bare.py", 1)], world)
+        try:
+            code_decl, out_decl = run_cli(shard, ["--declared-only"])
+        finally:
+            shard.registry = saved
+        carriers = re.search(r"carriers=(\d+)", out_decl)
+        decl_rows = [l for l in out_decl.splitlines() if l.startswith("DECL row")]
+        by_label = dict((l.split()[2], l) for l in decl_rows)
+        ok("AC-BSGB13",
+           code_decl == 1 and carriers and int(carriers.group(1)) == 2
+           and "declared=8 registry=8 ok" in by_label.get("probe-decl-ok", "")
+           and ("declared=7 registry=8 mismatch"
+                in by_label.get("probe-decl-bad", ""))
+           and "probe-bare" not in by_label,
+           "rc=%d carriers=%s rows=%d"
+           % (code_decl, carriers.group(1) if carriers else "-",
+              len(decl_rows)))
+    finally:
+        shutil.rmtree(world, ignore_errors=True)
+
     total = len(CHECKS)
     passed = total - len(FAILS)
     if FAILS:
         print("SUITE FAIL %d/%d" % (passed, total))
         return 1
+    acs = sorted({m.group(0) for m in
+                  (re.match(r"AC-[A-Z]+[0-9]*", str(c)) for c in CHECKS) if m})
+    print("suite: %d assertions over %d criteria" % (total, len(acs)))
     print("SUITE PASS %d/%d" % (passed, total))
     return 0
 
