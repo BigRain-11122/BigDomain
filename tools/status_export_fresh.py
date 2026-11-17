@@ -246,7 +246,10 @@ def newest_artifact(preview_dir):
     pair, skipped, newest_is_board = shared.newest_artifact(root)
     if pair is None:
         return None
-    mtime, html_rel, json_rel, html_bytes, json_bytes = pair
+    # R2898 AC-EXPD7: the shared row carries a sixth field (the clock the stamp
+    # came from); the fields this face publishes are the first five, and the
+    # line itself is still formatted by the one shipped formatter below.
+    mtime, html_rel, json_rel, html_bytes, json_bytes = pair[:5]
     html_abs = os.path.join(root, html_rel.replace("/", os.sep))
     stamps = dt.datetime.fromtimestamp(mtime).astimezone()
     return {

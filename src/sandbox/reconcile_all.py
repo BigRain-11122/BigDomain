@@ -6862,8 +6862,11 @@ SUITES = [
     # R2897: thirty - AC-EXPD4..AC-EXPD6 move the ORDERING stamp from the
     # filesystem clock to the committer time of the last committed content
     # change, with uncommitted/untracked/non-git falling back to mtime.
+    # R2898: thirty-three - AC-EXPD7..AC-EXPD9 publish WHICH clock the date came
+    # from ('commit' / 'mtime'), grade that marker in both directions, and hold
+    # the date group, the board exclusion and the evidence line in place.
     ("os-export-round",
-     os.path.join("..", "os", "test_export_round.py"), 30),
+     os.path.join("..", "os", "test_export_round.py"), 33),
     # R2806: tools/payment_gate_report.py renders the face that decides whether
     # the 19.9 channel may be connected, and all 690 registered suites were
     # measured to mention ZERO of its AC-PAYG1..AC-PAYG8 tokens, so it was

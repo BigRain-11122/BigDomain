@@ -1,18 +1,18 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2897 PRODUCT+ENGINEERING: R2896 item (1) is CLOSED - the artifact line now ORDERS by the committer time of the pair last committed content change, so a touched-but-unchanged page can no longer outrank a genuinely newer one; both laws are measured on the SAME git fixture (the mtime law picks the touched page at old=1769904000 new=1767312000, the content law picks preview/genuinely-new.html with stamp exactly T2), and the dirty/untracked/non-git fallbacks are measured rather than assumed.",
-    "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
-    "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
+    "current": "2026-11-18 R2898 PRODUCT+ENGINEERING: R2897 item (1) is CLOSED - the CEO face now publishes WHICH CLOCK its artifact date came from, so a committed stamp and a touched-file stamp stop reading alike. fmt_pair renders '[YYYY-MM-DD commit]' when the winning stamp is the committer time of the pair last committed content change and '[YYYY-MM-DD mtime]' when the file that won is dirty, untracked, or sitting in a tree with no git, and _pairs remembers which branch produced the stamp instead of discarding it after the comparison.",
+    "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
+    "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2897] next window (<=12h): (1) MAIN - the line now orders by content time, but a reader cannot TELL the two stamps apart: a pair committed at T2 reads `[T2-date]` and an uncommitted pair reads `[mtime-date]` with no marker, so the same shape means two different clocks - decide whether the face should publish the provenance (committed vs uncommitted) once, pinned with a red control and without hand-editing the face. (2) `src/os/test_tree_snapshot.py` was repaired because it had never run in a slice (truncated)",
-    "next_milestone_due": "2026-11-18T15:35:55+08:00",
-    "updated_at": "2026-11-18T03:35:55+08:00",
-    "latest_evidence": "qa/tree-snapshot-R2897.log (324B, 2026-11-18)",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/tree-snapshot-R2897.log (324B, 2026-11-18)"
+    "next_milestone": "[R2898] next window (<=12h): (1) MAIN - the line now names its clock, but it still publishes ONE date for a PAIR whose two halves can come from two different clocks (html committed at T1, json dirty at T2): decide whether the line should publish the halves separately or at least state when they disagree, pinned with a red control BEFORE the edit and without hand-editing the face. (2) R2897 item (2) is still unrun: `src/os/test_tree_snapshot.py` was repaired because it had never executed in a slice, so a targeted dry list of any other face fixture that hand-assembles a pair line or omits the R2895 evidence fields is cheap and unexamined - the same class can hide in the 425 non-`os-` suites and in unrun `os-` rows (truncated)",
+    "next_milestone_due": "2026-11-18T15:49:48+08:00",
+    "updated_at": "2026-11-18T03:49:48+08:00",
+    "latest_evidence": "qa/tree-snapshot-R2898.log (324B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/tree-snapshot-R2898.log (324B, 2026-11-18)"
   },
-  "current": "2026-11-18 R2897 PRODUCT+ENGINEERING: R2896 item (1) is CLOSED - the artifact line now ORDERS by the committer time of the pair last committed content change, so a touched-but-unchanged page can no longer outrank a genuinely newer one; both laws are measured on the SAME git fixture (the mtime law picks the touched page at old=1769904000 new=1767312000, the content law picks preview/genuinely-new.html with stamp exactly T2), and the dirty/untracked/non-git fallbacks are measured rather than assumed.",
+  "current": "2026-11-18 R2898 PRODUCT+ENGINEERING: R2897 item (1) is CLOSED - the CEO face now publishes WHICH CLOCK its artifact date came from, so a committed stamp and a touched-file stamp stop reading alike. fmt_pair renders '[YYYY-MM-DD commit]' when the winning stamp is the committer time of the pair last committed content change and '[YYYY-MM-DD mtime]' when the file that won is dirty, untracked, or sitting in a tree with no git, and _pairs remembers which branch produced the stamp instead of discarding it after the comparison.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -40,11 +40,12 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2897 PRODUCT+ENGINEERING: R2896 item (1) is CLOSED - the artifact line now ORDERS by the committer time of the pair last committed content change, so a touched-but-unchanged page can no longer outrank a genuinely newer one; both laws are measured on the SAME git fixture (the mtime law picks the touched page at old=1769904000 new=1767312000, the content law picks preview/genuinely-new.html with stamp exactly T2), and the dirty/untracked/non-git fallbacks are measured rather than assumed.",
-  "export_ts": "2026-11-18T03:35:55+08:00",
-  "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
-  "next_milestone": "[R2897] next window (<=12h): (1) MAIN - the line now orders by content time, but a reader cannot TELL the two stamps apart: a pair committed at T2 reads `[T2-date]` and an uncommitted pair reads `[mtime-date]` with no marker, so the same shape means two different clocks - decide whether the face should publish the provenance (committed vs uncommitted) once, pinned with a red control and without hand-editing the face. (2) `src/os/test_tree_snapshot.py` was repaired because it had never run in a slice (truncated)",
+  "do": "2026-11-18 R2898 PRODUCT+ENGINEERING: R2897 item (1) is CLOSED - the CEO face now publishes WHICH CLOCK its artifact date came from, so a committed stamp and a touched-file stamp stop reading alike. fmt_pair renders '[YYYY-MM-DD commit]' when the winning stamp is the committer time of the pair last committed content change and '[YYYY-MM-DD mtime]' when the file that won is dirty, untracked, or sitting in a tree with no git, and _pairs remembers which branch produced the stamp instead of discarding it after the comparison.",
+  "export_ts": "2026-11-18T03:49:48+08:00",
+  "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
+  "next_milestone": "[R2898] next window (<=12h): (1) MAIN - the line now names its clock, but it still publishes ONE date for a PAIR whose two halves can come from two different clocks (html committed at T1, json dirty at T2): decide whether the line should publish the halves separately or at least state when they disagree, pinned with a red control BEFORE the edit and without hand-editing the face. (2) R2897 item (2) is still unrun: `src/os/test_tree_snapshot.py` was repaired because it had never executed in a slice, so a targeted dry list of any other face fixture that hand-assembles a pair line or omits the R2895 evidence fields is cheap and unexamined - the same class can hide in the 425 non-`os-` suites and in unrun `os-` rows (truncated)",
   "outs": [
+    "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
@@ -153,7 +154,7 @@
   },
   "results": [
     [
-      "2897",
+      "2898",
       "OSLoop 执行 tick"
     ]
   ],
@@ -166,16 +167,16 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 59,
+    "log_lines_in_window": 65,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "state_bytes": 50026,
-  "latest_evidence": "qa/tree-snapshot-R2897.log (324B, 2026-11-18)"
+  "state_bytes": 54191,
+  "latest_evidence": "qa/tree-snapshot-R2898.log (324B, 2026-11-18)"
 }

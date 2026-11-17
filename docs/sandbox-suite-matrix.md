@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-18 03:30 +08:00
+- 生成时间: generated: 2026-11-18 03:44 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
 - 印章来源: --stamp-from docs/sandbox-suite-matrix.md
 - 状态证据: reconcile-all-R2739.log (RUNNER PASS 675/675 suites green, reconcile controls 7/7, 4986.4s)
@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 713 | 5456 | 675/675 | R2739 |
+| 713 | 5459 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -723,7 +723,7 @@
 | 683 | os-closeout-export-parity-wire-binding-consumer | ../os/test_closeout_export_parity_wire_binding_consumer.py | 6 | green | 14.6 |
 | 684 | os-export-parity-difference-order-field | ../os/test_export_parity_difference_order_field.py | 6 | no-evidence | - |
 | 685 | os-ship-checklist | ../os/test_ship_checklist.py | 8 | no-evidence | - |
-| 686 | os-export-round | ../os/test_export_round.py | 30 | no-evidence | - |
+| 686 | os-export-round | ../os/test_export_round.py | 33 | no-evidence | - |
 | 687 | os-payment-gate-report | ../os/test_payment_gate_report.py | 11 | no-evidence | - |
 | 688 | os-qa-log | ../os/test_qa_log.py | 10 | no-evidence | - |
 | 689 | os-census-nul-class | ../os/test_census_nul_class.py | 7 | no-evidence | - |
@@ -751,7 +751,7 @@
 | 711 | os-leg-audit | ../os/test_leg_audit.py | 6 | no-evidence | - |
 | 712 | os-leg-watch | ../os/test_leg_watch.py | 6 | no-evidence | - |
 | 713 | os-leg-header-check | ../os/test_leg_header_check.py | 6 | no-evidence | - |
-|  | 合计 |  | 5456 | green 675 / FAIL 0 / no-evidence 38 |  |
+|  | 合计 |  | 5459 | green 675 / FAIL 0 / no-evidence 38 |  |
 
 ## 证据出处
 

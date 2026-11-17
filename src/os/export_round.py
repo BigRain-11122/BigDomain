@@ -225,13 +225,19 @@ def _pairs(repo):
     """Every preview/X.html with a sibling X.json, newest first.
 
     Returns tuples of (content_time, html_rel, json_rel, html_bytes,
-    json_bytes) so a caller can filter without re-statting the tree.
+    json_bytes, provenance) so a caller can filter without re-statting the tree.
 
     R2897 AC-EXPD4: the ordering stamp is the pair's CONTENT time - the
     committer time of the file's last committed change - because an unchanged
     page whose mtime was touched must not outrank a genuinely newer one. The
     disk clock is kept only to break a tie inside one commit, where the writing
     order is the only remaining evidence.
+
+    R2898 AC-EXPD7: provenance names WHICH clock the winning stamp came from -
+    'commit' when it is the committer time of that file's last committed
+    content change, 'mtime' when the file that won is dirty, untracked or sits
+    in a tree with no git. It is reported for the file whose stamp won, so the
+    marker always describes the date next to it rather than the pair in general.
     """
     prev = os.path.join(repo, 'preview')
     rows = []
@@ -253,17 +259,39 @@ def _pairs(repo):
         j_m = os.path.getmtime(doc)
         # AC-EXPD5: committed and clean uses git's content time; dirty,
         # untracked and non-git fall back to the file's own mtime.
-        h_c = h_m if html_rel in dirty else times.get(html_rel, h_m)
-        j_c = j_m if json_rel in dirty else times.get(json_rel, j_m)
-        rows.append((max(h_c, j_c), max(h_m, j_m), html_rel, json_rel,
-                     os.path.getsize(html), os.path.getsize(doc)))
+        # AC-EXPD7: the branch taken is remembered, because the published date
+        # must say which of the two clocks it is.
+        if html_rel in dirty:
+            h_c, h_src = h_m, 'mtime'
+        elif html_rel in times:
+            h_c, h_src = times[html_rel], 'commit'
+        else:
+            h_c, h_src = h_m, 'mtime'
+        if json_rel in dirty:
+            j_c, j_src = j_m, 'mtime'
+        elif json_rel in times:
+            j_c, j_src = times[json_rel], 'commit'
+        else:
+            j_c, j_src = j_m, 'mtime'
+        if h_c >= j_c:
+            stamp, src = h_c, h_src
+        else:
+            stamp, src = j_c, j_src
+        rows.append((stamp, max(h_m, j_m), html_rel, json_rel,
+                     os.path.getsize(html), os.path.getsize(doc), src))
     rows.sort(key=lambda r: (-r[0], -r[1], r[2]))
-    return [(r[0], r[2], r[3], r[4], r[5]) for r in rows]
+    return [(r[0], r[2], r[3], r[4], r[5], r[6]) for r in rows]
 
 
 
 def newest_pair(repo):
-    """The newest preview/X.html that has a sibling X.json, by mtime."""
+    """The newest preview/X.html that has a sibling X.json, by content time.
+
+    Returns the whole _pairs row minus its ordering stamp, i.e. (html_rel,
+    json_rel, html_bytes, json_bytes, provenance) - R2898 kept provenance in
+    the row, so a caller that drops it here would lose the clock the published
+    date came from.
+    """
     rows = _pairs(repo)
     if not rows:
         return None
@@ -360,9 +388,12 @@ def newest_artifact(repo):
 # line and a line with a wrong date are both shapes this regex accepts textually
 # - the DATE ITSELF is graded against the file by comparing against fmt_pair(),
 # never by trusting the string, so a stale face cannot read clean by shape.
+# R2898 AC-EXPD7: the date is followed by the clock it was rendered from, so a
+# committed stamp and a touched-file stamp can no longer read alike. Group 1 is
+# still the DATE, which every pre-R2898 consumer reads; group 2 is the marker.
 PAIR_LINE_RE = re.compile(
     r'^preview/\S+\.html \(\d+B\) \+ preview/\S+\.json \(\d+B\) '
-    r'\[(\d{4}-\d{2}-\d{2})\]$')
+    r'\[(\d{4}-\d{2}-\d{2}) (commit|mtime)\]$')
 
 
 def pair_date(mtime):
@@ -376,7 +407,7 @@ def pair_date(mtime):
 
 
 def fmt_pair(pair):
-    """The published pair line: both files' bytes AND the pair's own date.
+    """The published pair line: both files' bytes, the pair's own date, its clock.
 
     R2896 AC-EXPD1: the line carried bytes only, so this window's artifact and a
     two-day-old one read identically at a glance - the same blindness the R2895
@@ -384,9 +415,14 @@ def fmt_pair(pair):
     stamp, so a private world with fixed stamps reads the same line every run, and
     tools/status_export_fresh.py calls THIS function rather than re-formatting the
     field a second time (AC-SXF15: one field, one formatter).
+
+    R2898 AC-EXPD7: the date is followed by the clock it came from - 'commit' or
+    'mtime'. A 5-tuple (a caller still holding a pre-R2898 row) reads 'mtime',
+    which is what that row's date always meant.
     """
-    return '%s (%dB) + %s (%dB) [%s]' % (
-        pair[1], pair[3], pair[2], pair[4], pair_date(pair[0]))
+    prov = pair[5] if len(pair) > 5 else 'mtime'
+    return '%s (%dB) + %s (%dB) [%s %s]' % (
+        pair[1], pair[3], pair[2], pair[4], pair_date(pair[0]), prov)
 
 
 _fmt_pair = fmt_pair

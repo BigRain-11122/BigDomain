@@ -1,7 +1,16 @@
-﻿"""Battery suite for src/os/export_round.py - twenty-four criteria:
+﻿"""Battery suite for src/os/export_round.py - thirty-three criteria:
 AC-EXPW1..AC-EXPW11 plus AC-EXPW13 and AC-EXPW14 (AC-EXPW12 is a DECLARED
 numbering hole, see the R2823 paragraph below), AC-EXPG1..AC-EXPG5,
-AC-EXPA1/AC-EXPA2, and AC-EXPE1..AC-EXPE4.
+AC-EXPA1/AC-EXPA2, AC-EXPE1..AC-EXPE4 and AC-EXPD1..AC-EXPD9.
+
+R2898: AC-EXPD7..AC-EXPD9 publish WHICH CLOCK the pair line's date came from
+('commit' for the committer time of the last committed content change, 'mtime'
+for a dirty, untracked or non-git file), grade that marker in both directions,
+and hold the date group and the board-page/evidence faces in place while it
+lands.
+
+R2897: AC-EXPD4..AC-EXPD6 move the ORDERING stamp from the filesystem clock to
+the committer time of the last committed content change.
 
 R2895: AC-EXPE1..AC-EXPE4 pin the second derived CEO line (`latest_evidence`,
 the newest top-level qa/*.log) and the one-line note that says which of the
@@ -780,7 +789,7 @@ def main():
         stamp_want = time.strftime('%Y-%m-%d',
                                    time.localtime(os.path.getmtime(html_d)))
         ok('AC-EXPD1 the pair line ends with the pair own mtime date',
-           dd['latest'].endswith(' [%s]' % stamp_want)
+           dd['latest'].endswith(' [%s mtime]' % stamp_want)
            and 'preview/dated-face.html' in dd['latest'], dd['latest'][-28:])
         ok('AC-EXPD1 the published shape is the graded shape',
            bool(mod.PAIR_LINE_RE.match(dd['latest']))
@@ -808,7 +817,8 @@ def main():
            any('AC-EXPW1' in f for f in fails_old), 'fails=%s' % fails_old[:2])
         wrong = json.loads(read(face_d))
         wrong['ceo_face']['latest_artifact'] = re.sub(
-            r'\[\d{4}-\d{2}-\d{2}\]$', '[1999-01-01]', dd['latest'])
+            r'\[\d{4}-\d{2}-\d{2} (?:commit|mtime)\]$', '[1999-01-01 mtime]',
+            dd['latest'])
         write(face_d, json.dumps(wrong, ensure_ascii=False, indent=2) + '\n')
         fails_wrong = mod.check(wd)
         ok('AC-EXPD2 a WRONG date reddens it too',
@@ -925,7 +935,8 @@ def main():
                mod.check(wc2) == [], 'fails=%s' % mod.check(wc2)[:2])
             wrong_c2 = json.loads(read(face_c2))
             wrong_c2['ceo_face']['latest_artifact'] = re.sub(
-                r'\[\d{4}-\d{2}-\d{2}\]$', '[1999-01-01]', dc2['latest'])
+                r'\[\d{4}-\d{2}-\d{2} (?:commit|mtime)\]$',
+                '[1999-01-01 mtime]', dc2['latest'])
             write(face_c2, json.dumps(wrong_c2, ensure_ascii=False,
                                       indent=2) + '\n')
             ok('AC-EXPD6 the date red control still bites',
@@ -933,6 +944,96 @@ def main():
                'fails=%s' % mod.check(wc2)[:2])
             write(face_c2, json.dumps(built_c2, ensure_ascii=False,
                                       indent=2) + '\n')
+
+        # ---- AC-EXPD7..AC-EXPD9 (R2898 pin): the line names its own clock ----
+        # R2897 chose the right stamp but published no way to TELL a committed
+        # date from a touched-file date: the same shape meant two different
+        # clocks. The marker is measured on ONE git world in both states, and on
+        # a non-git world, so 'commit' cannot be faked by a tree with no git.
+        wp, p1, p2, p3 = build_git_pair_world(tick=9202)
+        if wp is not None:
+            worlds.append(wp)
+        ok('AC-EXPD7 the provenance fixture built', wp is not None, str(wp))
+        markers = []
+        if wp is None:
+            for name in ('AC-EXPD7 a committed pair publishes the commit clock',
+                         'AC-EXPD7 the same pair edited after its commit '
+                         'publishes the mtime clock',
+                         'AC-EXPD8 the derived line grades clean',
+                         'AC-EXPD8 the marker-less pre-R2898 line reddens the '
+                         'check',
+                         'AC-EXPD8 a face claiming the WRONG clock reddens it too',
+                         'AC-EXPD9 both derivations publish the identical line',
+                         'AC-EXPD9 group 1 of the line is still the DATE'):
+                ok(name, False, 'git unavailable in this environment')
+        else:
+            sp = json.loads(read(os.path.join(wp, 'src', 'os', 'state.json')))
+            d_clean = mod.derive(wp, sp, 'TP1')
+            m_clean = mod.PAIR_LINE_RE.match(d_clean['latest'])
+            markers.append(m_clean.group(2) if m_clean else 'none')
+            ok('AC-EXPD7 a committed pair publishes the commit clock',
+               bool(m_clean) and m_clean.group(2) == 'commit'
+               and 'genuinely-new' in d_clean['latest'],
+               d_clean['latest'][-40:])
+
+            face_p = os.path.join(wp, 'docs', 'status-export.json')
+            built_p, _ = mod.payload(wp, sp, 'TP1')
+            write(face_p, json.dumps(built_p, ensure_ascii=False, indent=2)
+                  + '\n')
+            ok('AC-EXPD8 the derived line grades clean',
+               mod.check(wp) == [], 'fails=%s' % mod.check(wp)[:2])
+            old_p = json.loads(json.dumps(built_p))
+            old_p['ceo_face']['latest_artifact'] = re.sub(
+                r' (?:commit|mtime)\]$', ']', d_clean['latest'])
+            write(face_p, json.dumps(old_p, ensure_ascii=False, indent=2)
+                  + '\n')
+            ok('AC-EXPD8 the marker-less pre-R2898 line reddens the check',
+               any('AC-EXPW1' in f for f in mod.check(wp)),
+               'fails=%s' % mod.check(wp)[:2])
+            wrong_clock = json.loads(json.dumps(built_p))
+            wrong_clock['ceo_face']['latest_artifact'] = re.sub(
+                r'commit\]$', 'mtime]', d_clean['latest'])
+            write(face_p, json.dumps(wrong_clock, ensure_ascii=False,
+                                     indent=2) + '\n')
+            ok('AC-EXPD8 a face claiming the WRONG clock reddens it too',
+               any('AC-EXPW1' in f for f in mod.check(wp)),
+               'fails=%s' % mod.check(wp)[:2])
+            write(face_p, json.dumps(built_p, ensure_ascii=False, indent=2)
+                  + '\n')
+
+            sx_line_p = sx.newest_artifact(os.path.join(wp, 'preview'))['line']
+            ok('AC-EXPD9 both derivations publish the identical line',
+               sx_line_p == d_clean['latest']
+               == mod.fmt_pair(mod.newest_artifact(wp)[0]),
+               'sx=%s' % sx_line_p[-30:])
+
+            path_p = os.path.join(wp, 'preview', 'genuinely-new.html')
+            write(path_p, '<!DOCTYPE html>\n<p>edited after the commit</p>\n')
+            p4 = p3 + 86400
+            os.utime(path_p, (p4, p4))
+            d_dirty = mod.derive(wp, sp, 'TP2')
+            m_dirty = mod.PAIR_LINE_RE.match(d_dirty['latest'])
+            markers.append(m_dirty.group(2) if m_dirty else 'none')
+            ok('AC-EXPD7 the same pair edited after its commit publishes the '
+               'mtime clock',
+               bool(m_dirty) and m_dirty.group(2) == 'mtime'
+               and m_dirty.group(1) == mod.pair_date(float(p4)),
+               d_dirty['latest'][-40:])
+            ok('AC-EXPD9 group 1 of the line is still the DATE',
+               bool(m_clean) and m_clean.group(1) == mod.pair_date(float(p2))
+               and bool(m_dirty) and m_dirty.group(1) == mod.pair_date(float(p4)),
+               'clean=%s dirty=%s' % (
+                   m_clean.group(1) if m_clean else 'none',
+                   m_dirty.group(1) if m_dirty else 'none'))
+        m_nogit = mod.PAIR_LINE_RE.match(mod.derive(wd, sd, 'TP3')['latest'])
+        markers.append(m_nogit.group(2) if m_nogit else 'none')
+        ok('AC-EXPD7 a non-git world publishes the mtime clock',
+           markers[-1] == 'mtime', 'markers=%s' % '/'.join(markers))
+        ok('AC-EXPD9 the board exclusion and the all-board fact are unchanged',
+           bool(mod.PAIR_LINE_RE.match(dp['latest']))
+           and 'ceo-blockers' not in dp['latest']
+           and db['latest'].startswith('(no product pair on disk'),
+           dp['latest'][:40])
 
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
@@ -976,7 +1077,7 @@ def main():
             declared.append(int(found.group(1)))
     will_print = crit_set(CHECKS + ['AC-EXPE4-registry-units'])
     ok('AC-EXPE4-registry-units',
-       declared == [len(will_print)] and len(will_print) == 30,
+       declared == [len(will_print)] and len(will_print) == 33,
        'declared=%s printed=%d' % (declared, len(will_print)))
 
     total = len(CHECKS)
