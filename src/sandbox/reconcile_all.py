@@ -7022,8 +7022,11 @@ SUITES = [
     # the ownership of the snapshot contract moved into this suite (AC-DIX3 now
     # names AC-DIX7 as the row the verdict tamper reddens, and AC-DIX3b is the
     # label-removal control). Counted from the suite's own announcement.
+    # R2883: 16 -> 18. AC-DIX17 (an html-only face is listed and labelled, not
+    # dropped) and AC-DIX18 (its negative control) joined the suite when the
+    # band universe moved from "every pair" to "every html face".
     ("os-deliverable-index",
-     os.path.join("..", "os", "test_deliverable_index.py"), 16),
+     os.path.join("..", "os", "test_deliverable_index.py"), 18),
     # R2798. tools/battery_shard.py decides whether a FAMILY of suites is green
     # and carried no battery row, so a tool that grades suites was graded only
     # by the run that graded them. AC-BSH1..AC-BSH8 pinned in src/os/backlog.md

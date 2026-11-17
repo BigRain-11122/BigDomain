@@ -28,7 +28,7 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TOOL = os.path.join(ROOT, "tools", "deliverable_index.py")
-N = 16  # AC-DIX1..AC-DIX14 plus the two R2804 controls that own the new snapshot contract
+N = 18  # AC-DIX1..14, the two R2804 snapshot controls, and the R2883 html-only controls
 
 FAILS = []
 CHECKS = []
@@ -166,6 +166,7 @@ def main():
     world = build_world()
     world2 = None
     world3 = None
+    world4 = None
     cwd = os.getcwd()
     try:
         os.chdir(world)
@@ -220,8 +221,8 @@ def main():
         rc_t, out_t = call(mod, ["--check"])
         rows_t = rows_of(out_t)
         point_to(mod, world)
-        ok("AC-DIX3 two writer runs byte identical and the gate reads 14/14",
-           first == second and rc_c == 0 and "VERDICT PASS 14/14" in out_c
+        ok("AC-DIX3 two writer runs byte identical and the gate reads 15/15",
+           first == second and rc_c == 0 and "VERDICT PASS 15/15" in out_c
            and "VERDICT FAIL" in out_t and rc_t == 2
            and rows_t.get("AC-DIX7") == "FAIL"
            and rows_t.get("AC-DIX1") in (None, "PASS"),
@@ -328,14 +329,53 @@ def main():
         ok("AC-DIX14 no gate page listed as an artifact", not gate,
            "gate-pages-listed=%s" % gate)
 
-        # suite hygiene, scored inside AC-DIX3..AC-DIX14 by design: none of the
-        # fourteen criteria above may import network or shell, and this file
+        # ---- AC-DIX17/AC-DIX18 (pinned 2026-11-17 R2883 BEFORE the tool edit):
+        # an html-only face is still a face. The band universe is re-measured
+        # from raw html names, so a page without a json sibling is LISTED and
+        # LABELLED instead of silently dropping out of the CEO entry page.
+        world4 = os.path.join(tempfile.mkdtemp(prefix="dix4-"), "w")
+        shutil.copytree(world, world4)
+        pv4 = os.path.join(world4, "preview")
+        write(os.path.join(pv4, "delta-face.html"),
+              "<!DOCTYPE html>\n<html><head><title>Delta</title></head>"
+              "<body><p>landed without a json sibling</p></body></html>\n")
+        point_to(mod, world4)
+        call(mod, [])
+        block4 = block_of(read(os.path.join(pv4, "index.html")))
+        rc_4, out_4 = call(mod, ["--check"])
+        rows_4 = rows_of(out_4)
+        delta_at = block4.find('href="delta-face.html"')
+        delta_label = (delta_at >= 0
+                       and "json=missing" in block4[delta_at:delta_at + 400])
+        beta_at = block4.find('href="beta-face.html"')
+        beta_clean = (beta_at >= 0
+                      and "json=missing" not in block4[beta_at:beta_at + 400])
+        os.remove(os.path.join(pv4, "delta-face.html"))
+        call(mod, [])
+        block4b = block_of(read(os.path.join(pv4, "index.html")))
+        rc_4b, out_4b = call(mod, ["--check"])
+        rows_4b = rows_of(out_4b)
+        point_to(mod, world)
+        ok("AC-DIX17 an html-only face is listed and labelled incomplete by the gate",
+           delta_at >= 0 and delta_label and rows_4.get("AC-DIX17") == "PASS"
+           and rc_4 == 0,
+           "listed=%s label=%s gate=%s rc=%s"
+           % (delta_at >= 0, delta_label, rows_4.get("AC-DIX17"), rc_4))
+        ok("AC-DIX18 negative control: the label is load-bearing, the row leaves with its html",
+           beta_clean and 'href="delta-face.html"' not in block4b
+           and rows_4b.get("AC-DIX17") == "PASS" and rc_4b == 0,
+           "paired-unlabelled=%s gone=%s gate=%s"
+           % (beta_clean, 'href="delta-face.html"' not in block4b,
+              rows_4b.get("AC-DIX17")))
+
+        # suite hygiene, scored inside AC-DIX3..AC-DIX18 by design: none of the
+        # criteria above may import network or shell, and this file
         # itself must stay ASCII (the parser reads it back below).
         bad_bytes = [i for i, ch in enumerate(src) if ord(ch) > 127]
         assert not bad_bytes, "suite source is not ASCII at %s" % bad_bytes[:5]
     finally:
         os.chdir(cwd)
-        for d in (world, world2, world3):
+        for d in (world, world2, world3, world4):
             if d and os.path.isdir(d):
                 shutil.rmtree(d, ignore_errors=True)
 

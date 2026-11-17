@@ -158,14 +158,14 @@ NEWEST_SNAPSHOT = ("Snapshot: the size and stamp above were measured when this p
 
 
 def artifact_pairs():
-    """Every shipped preview face (X.html + X.json), newest first (R2777).
+    """Every shipped preview face (X.html, paired or not), newest first (R2777).
 
     R2775's band carries only the single newest pair, so a face that shipped
     two windows ago is unreachable from the CEO entry page once a newer one
     lands (measured: ceo-blockers, face-sweep and city-observatory all read
     zero links in index.html). This derives the FULL list from the directory
-    instead of a name convention: a pair exists when both files are on disk,
-    and the gate page plus the editorial registry are never product faces.
+    instead of a name convention: a face exists when its html is on disk, and
+    the gate page plus the editorial registry are never product faces.
     """
     pairs = []
     for name in sorted(os.listdir(PREVIEW)):
@@ -177,15 +177,22 @@ def artifact_pairs():
         json_name = stem + ".json"
         hpath = os.path.join(PREVIEW, name)
         jpath = os.path.join(PREVIEW, json_name)
-        if not (os.path.exists(hpath) and os.path.exists(jpath)):
+        # AC-DIX17 (pinned 2026-11-17 R2883 before this code): the universe is
+        # every html FACE, not every pair. A page whose json sibling is absent
+        # is still on disk and still CEO-openable; skipping it here made the
+        # entry page's own claim ("every shipped face stays reachable") false
+        # for two measured faces without reddening any criterion.
+        paired = os.path.exists(jpath)
+        if not os.path.exists(hpath):
             continue
         try:
             nbytes = os.path.getsize(hpath)
             mtime = os.path.getmtime(hpath)
         except OSError:
             continue
-        pairs.append({"stem": stem, "html": name, "json": json_name,
-                      "bytes": nbytes, "mtime": mtime})
+        pairs.append({"stem": stem, "html": name,
+                      "json": json_name if paired else "",
+                      "paired": paired, "bytes": nbytes, "mtime": mtime})
     pairs.sort(key=lambda p: (-p["mtime"], p["stem"]))
     return pairs
 
@@ -206,11 +213,14 @@ def render_pairs(pairs):
     for p in pairs:
         import datetime
         stamp = datetime.datetime.fromtimestamp(p["mtime"]).strftime("%Y-%m-%d %H:%M")
+        paired = p.get("paired", True)
+        label = ("json=%s" % p["json"]) if paired else "json=missing"
         out.append(
             '<li><a href="%s">%s</a> <span class="tag">%dB</span> '
-            '<span class="tag">%s</span> <span class="tag">json=%s</span></li>'
+            '<span class="tag">%s</span> <span class="tag%s">%s</span></li>'
             % (html.escape(p["html"]), html.escape(p["stem"]), p["bytes"],
-               html.escape(stamp), html.escape(p["json"]))
+               html.escape(stamp), "" if paired else " warn",
+               html.escape(label))
         )
     out.append("</ul>")
     return "\n".join(out)
@@ -430,7 +440,7 @@ def main(argv):
 
     missing = [p["html"] for p in pairs
                if not os.path.exists(os.path.join(PREVIEW, p["html"]))
-               or not os.path.exists(os.path.join(PREVIEW, p["json"]))]
+               or (p["paired"] and not os.path.exists(os.path.join(PREVIEW, p["json"])))]
     record("AC-DIX10", not missing, "pairs=%d missing-targets=%s"
            % (len(pairs), missing))
 
@@ -453,6 +463,26 @@ def main(argv):
 
     gate = [p["stem"] for p in pairs if p["stem"] in GATE_PAGES]
     record("AC-DIX14", not gate, "gate-pages-listed=%s" % gate)
+
+    # AC-DIX17 (pinned 2026-11-17 R2883 before this code): the universe is
+    # re-measured from RAW html names, never through artifact_pairs(), so an
+    # html-only face cannot fall off the CEO entry page unnoticed - an unpaired
+    # face must be listed and labelled, not quietly dropped.
+    raw_faces = sorted(n for n in os.listdir(PREVIEW)
+                       if n.endswith(".html")
+                       and os.path.splitext(n)[0] not in GATE_PAGES)
+    unlisted = [n for n in raw_faces
+                if ('href="%s"' % html.escape(n)) not in landed_block]
+    unlabelled = []
+    for p in pairs:
+        if p["paired"]:
+            continue
+        at = landed_block.find('href="%s"' % html.escape(p["html"]))
+        if at < 0 or "json=missing" not in landed_block[at:at + 400]:
+            unlabelled.append(p["html"])
+    record("AC-DIX17", not unlisted and not unlabelled,
+           "html-faces=%d unlisted=%s unlabelled-incomplete=%s"
+           % (len(raw_faces), unlisted, unlabelled))
 
     if check:
         for code, ok, detail in checks:
