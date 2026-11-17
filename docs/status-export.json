@@ -1,16 +1,16 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2891 PRODUCT+ENGINEERING: R2890 item (2) is HALF-CLOSED the honest way - the observer now HAS a battery row in code (src/os/test_leg_watch.py, AC-LGW1..AC-LGW6, SUITE PASS 14/14 twice byte-identical sha16 FBA62BF489EE7742, evidence qa/leg-watch-suite-R2891-a.log and -b.log) and its registration in src/sandbox/reconcile_all.py is deliberately NOT done, because the same-family 285-suite os- leg is still in flight at closeout (233 of 286 rows) and the R2886 edit-race law forbids moving a registry row under a live leg.",
+    "current": "2026-11-18 R2892 PRODUCT+ENGINEERING: the R2891 item (5) gap is CLOSED - a leg's header registry pair can now be adjudicated instead of eyeballed, and the discriminator is TIME rather than equality: tools/leg_header_check.py reads the leg's registry_suites/registry_criteria, re-derives the live pair from src/sandbox/reconcile_all.py, and answers AGREE (rc 0), DRIFT-DATED (rc 0 - the registry file was modified AFTER the leg was born, so the header is truthfully stale and the numbers must be quoted as at-launch), HEADER-LIES (rc 2) or UNDECIDABLE (rc 3, never a guess)",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2891] next window (<=12h): (1) MAIN - the family leg `qa/wide-os-full-R2890.log` is STILL IN FLIGHT for a second window (233 of 286 rows at 02:3x, three reds that are the already-repaired stale-export class); when it closes read `SHARD rc=` and adjudicate it with `tools/leg_audit.py` before publishing a family number, and say plainly that its three reds are historical rather than re-run. (2) register `os-leg-watch` in `src/sandbox/reconcile_all.py` with exactly +1 row / +6 criteria and regenerate the matrix `--check` byte-identical - it was deliberately NOT done this window because a same-family leg was live (the R2886 edit-race law) (truncated)",
-    "next_milestone_due": "2026-11-18T14:20:32+08:00",
-    "updated_at": "2026-11-18T02:20:32+08:00"
+    "next_milestone": "[R2892] next window (<=12h): (1) MAIN - the family leg `qa/wide-os-full-R2890.log` is STILL IN FLIGHT and this window MEASURED its remaining cost instead of guessing: 236 of 286 rows at 02:2x with **50 suites left, 45 of them `os-probe-seam-*` rows measuring 140-280s each**, so the honest ETA is roughly **2.5 further hours** - do NOT read it as \"about to close\" a third time; when it closes read `SHARD rc=` and adjudicate with `tools/leg_audit.py` **and** `tools/leg_header_check.py` (the new pair decides whether the header's 711/5434 is still truthful at that moment). (2) TWO registry rows now wait on that close, each pinned at exactly +1 row / +6 criteria: `os-leg-watch` (R2891, suite already reads 14/14) and `os-leg-header-check` (this window, suite already reads 6/6 twice byte-identical) - together they move 711/5434 -> **713/5446**, and either must be landed only when no leg of family `os-` is in flight (R2886 edit-race law) (truncated)",
+    "next_milestone_due": "2026-11-18T14:30:52+08:00",
+    "updated_at": "2026-11-18T02:30:52+08:00"
   },
-  "current": "2026-11-18 R2891 PRODUCT+ENGINEERING: R2890 item (2) is HALF-CLOSED the honest way - the observer now HAS a battery row in code (src/os/test_leg_watch.py, AC-LGW1..AC-LGW6, SUITE PASS 14/14 twice byte-identical sha16 FBA62BF489EE7742, evidence qa/leg-watch-suite-R2891-a.log and -b.log) and its registration in src/sandbox/reconcile_all.py is deliberately NOT done, because the same-family 285-suite os- leg is still in flight at closeout (233 of 286 rows) and the R2886 edit-race law forbids moving a registry row under a live leg.",
+  "current": "2026-11-18 R2892 PRODUCT+ENGINEERING: the R2891 item (5) gap is CLOSED - a leg's header registry pair can now be adjudicated instead of eyeballed, and the discriminator is TIME rather than equality: tools/leg_header_check.py reads the leg's registry_suites/registry_criteria, re-derives the live pair from src/sandbox/reconcile_all.py, and answers AGREE (rc 0), DRIFT-DATED (rc 0 - the registry file was modified AFTER the leg was born, so the header is truthfully stale and the numbers must be quoted as at-launch), HEADER-LIES (rc 2) or UNDECIDABLE (rc 3, never a guess)",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -38,10 +38,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2891 PRODUCT+ENGINEERING: R2890 item (2) is HALF-CLOSED the honest way - the observer now HAS a battery row in code (src/os/test_leg_watch.py, AC-LGW1..AC-LGW6, SUITE PASS 14/14 twice byte-identical sha16 FBA62BF489EE7742, evidence qa/leg-watch-suite-R2891-a.log and -b.log) and its registration in src/sandbox/reconcile_all.py is deliberately NOT done, because the same-family 285-suite os- leg is still in flight at closeout (233 of 286 rows) and the R2886 edit-race law forbids moving a registry row under a live leg.",
-  "export_ts": "2026-11-18T02:20:32+08:00",
+  "do": "2026-11-18 R2892 PRODUCT+ENGINEERING: the R2891 item (5) gap is CLOSED - a leg's header registry pair can now be adjudicated instead of eyeballed, and the discriminator is TIME rather than equality: tools/leg_header_check.py reads the leg's registry_suites/registry_criteria, re-derives the live pair from src/sandbox/reconcile_all.py, and answers AGREE (rc 0), DRIFT-DATED (rc 0 - the registry file was modified AFTER the leg was born, so the header is truthfully stale and the numbers must be quoted as at-launch), HEADER-LIES (rc 2) or UNDECIDABLE (rc 3, never a guess)",
+  "export_ts": "2026-11-18T02:30:52+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
-  "next_milestone": "[R2891] next window (<=12h): (1) MAIN - the family leg `qa/wide-os-full-R2890.log` is STILL IN FLIGHT for a second window (233 of 286 rows at 02:3x, three reds that are the already-repaired stale-export class); when it closes read `SHARD rc=` and adjudicate it with `tools/leg_audit.py` before publishing a family number, and say plainly that its three reds are historical rather than re-run. (2) register `os-leg-watch` in `src/sandbox/reconcile_all.py` with exactly +1 row / +6 criteria and regenerate the matrix `--check` byte-identical - it was deliberately NOT done this window because a same-family leg was live (the R2886 edit-race law) (truncated)",
+  "next_milestone": "[R2892] next window (<=12h): (1) MAIN - the family leg `qa/wide-os-full-R2890.log` is STILL IN FLIGHT and this window MEASURED its remaining cost instead of guessing: 236 of 286 rows at 02:2x with **50 suites left, 45 of them `os-probe-seam-*` rows measuring 140-280s each**, so the honest ETA is roughly **2.5 further hours** - do NOT read it as \"about to close\" a third time; when it closes read `SHARD rc=` and adjudicate with `tools/leg_audit.py` **and** `tools/leg_header_check.py` (the new pair decides whether the header's 711/5434 is still truthful at that moment). (2) TWO registry rows now wait on that close, each pinned at exactly +1 row / +6 criteria: `os-leg-watch` (R2891, suite already reads 14/14) and `os-leg-header-check` (this window, suite already reads 6/6 twice byte-identical) - together they move 711/5434 -> **713/5446**, and either must be landed only when no leg of family `os-` is in flight (R2886 edit-race law) (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
@@ -150,7 +150,7 @@
   },
   "results": [
     [
-      "2891",
+      "2892",
       "OSLoop 执行 tick"
     ]
   ],
@@ -163,15 +163,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 104,
+    "log_lines_in_window": 110,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 18,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "state_bytes": 74823
+  "state_bytes": 81166
 }
