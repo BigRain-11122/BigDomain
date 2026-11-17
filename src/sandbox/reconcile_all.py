@@ -7130,6 +7130,21 @@ SUITES = [
     # shard, and the 27 unmeasured deep shard-6 rows are tracked by that mapping.
     ("os-leg-audit",
      os.path.join("..", "os", "test_leg_audit.py"), 6),
+    # R2893: the two siblings that R2891 and R2892 built both waited on a live
+    # family leg because the edit-race law forbids a registry edit while a leg of
+    # family `os-` is in flight. That leg closed this window with
+    # `SHARD rc=2 selected=286 executed=286 green=282 criteria=1930`, and both
+    # rows are landed only now that no `os-` leg is running - the deferral is
+    # discharged rather than forgotten. Neither row claims a family number of its
+    # own: they guard the two tools that adjudicate legs (tools/leg_watch.py,
+    # tools/leg_header_check.py), so a future window reads their verdicts through
+    # the battery instead of trusting a hand reading. Appended at the END for the
+    # same reason as every row above: a mid-list insert shifts each later suite's
+    # shard, and the 27 unmeasured deep shard-6 rows are tracked by that mapping.
+    ("os-leg-watch",
+     os.path.join("..", "os", "test_leg_watch.py"), 6),
+    ("os-leg-header-check",
+     os.path.join("..", "os", "test_leg_header_check.py"), 6),
     ]
 
 FAILS = 0

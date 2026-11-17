@@ -1,16 +1,16 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2892 PRODUCT+ENGINEERING: the R2891 item (5) gap is CLOSED - a leg's header registry pair can now be adjudicated instead of eyeballed, and the discriminator is TIME rather than equality: tools/leg_header_check.py reads the leg's registry_suites/registry_criteria, re-derives the live pair from src/sandbox/reconcile_all.py, and answers AGREE (rc 0), DRIFT-DATED (rc 0 - the registry file was modified AFTER the leg was born, so the header is truthfully stale and the numbers must be quoted as at-launch), HEADER-LIES (rc 2) or UNDECIDABLE (rc 3, never a guess)",
+    "current": "2026-11-18 R2893 LEG CLOSED AND ADJUDICATED, TWO REGISTRY ROWS LANDED: the R2890 family leg closed at 02:37 (286/286 rows, rc=2, 4 reds) and the two tools this board built gave the verdict instead of an eyeball - leg_audit=ADOPT (rows=286 unique=286 green=282 crit=1930 mismatch=0 reasons=none) and leg_header_check=AGREE header=711/5434 registry=711/5434; its four reds (the three carried plus a new os-export-round) were re-run on the CURRENT tree and all four read green 4/4 criteria=38 crit_mismatch=0 in 13.8s (qa/reexport-reds-R2893.log, sha256 7af1db710d1f2299), so the class is historical by measurement and the named explanation is that all four measure the TRACKED export face while a closeout rewrote it inside the leg window; the two rows that waited two windows on the edit-race law are landed at the END of the registry - os-leg-watch (14 assertions over 6 criteria) and os-leg-header-check (6 over 6) - moving 711/5434 to 713/5446 with docs/sandbox-suite-matrix.md at 74741B and --check byte-identical, and both then ran THROUGH the battery 2/2 green criteria=12 crit_mismatch=0 (qa/battery-shard-legrows-R2893.log, sha256 ab11e31269c304ec); regression 5/5 green criteria=52 (os-battery-shard 26/26, os-run-identity 8/8, os-suite-matrix-reconcile 6/6, os-suite-output-audit 6/6, os-leg-audit 6/6; qa/battery-shard-regress-R2893.log, sha256 e04cab47698b3e54)",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2892] next window (<=12h): (1) MAIN - the family leg `qa/wide-os-full-R2890.log` is STILL IN FLIGHT and this window MEASURED its remaining cost instead of guessing: 236 of 286 rows at 02:2x with **50 suites left, 45 of them `os-probe-seam-*` rows measuring 140-280s each**, so the honest ETA is roughly **2.5 further hours** - do NOT read it as \"about to close\" a third time. Its three reds are now **MEASURED historical rather than inherited**: all three were re-run on the CURRENT tree and read green (6/6, 6/6, 15/15 `fail=0`, `qa/reexport-reds-R2892.log`), and its 243 completed rows already census **CLEAN** against the registry with no closing row (duplicates=0 unknown=0 `crit_mismatch=0`, `qa/early-census-R2892.log`, repeatable via `.codely-cli/tmp/legs/leg_early_census_R2892.py`) - that mid-leg census is the part no window had run before, and it is what turns a 2.5-hour blind wait into a live check. When it closes read `SHARD rc=` and adjudicate with `tools/leg_audit.py` **and** `tools/leg_header_check.py` (the new pair decides whether the header's 711/5434 is still truthful at that moment) (truncated)",
-    "next_milestone_due": "2026-11-18T14:40:04+08:00",
-    "updated_at": "2026-11-18T02:40:04+08:00"
+    "next_milestone": "[R2893] next window (<=12h): (1) MAIN - the probe-seam cliff decision is the oldest open engineering choice (carried from R2888 item 2 through R2892 item 4): the leg now MEASURED its own cost profile, and 45 of its 286 rows are `os-probe-seam-*` at 140-280s each, so pick ONE of (a) memoize/bound the ancestor chain, (b) bound the live leg, (c) a declared per-suite override ABOVE 300s - pinned with a red control BEFORE the edit, and do NOT raise the 600s battery cap. (2) `docs/status-export.json`'s `latest_artifact` still derives from the newest `preview/` pair, so this round's leg adjudication and two battery rows leave the CEO face pointing elsewhere (R2889 item 5) - fix the derivation, never hand-edit the face. (3) the leg's four reds are historical BY MEASUREMENT now, so the next family leg should carry the refresh-window note in its header: all four red suites measure the TRACKED export face, which means any closeout that rewrites that face inside a leg reddens them - either the leg writes its red triage itself or the closeout waits for the leg (truncated)",
+    "next_milestone_due": "2026-11-18T14:49:47+08:00",
+    "updated_at": "2026-11-18T02:49:47+08:00"
   },
-  "current": "2026-11-18 R2892 PRODUCT+ENGINEERING: the R2891 item (5) gap is CLOSED - a leg's header registry pair can now be adjudicated instead of eyeballed, and the discriminator is TIME rather than equality: tools/leg_header_check.py reads the leg's registry_suites/registry_criteria, re-derives the live pair from src/sandbox/reconcile_all.py, and answers AGREE (rc 0), DRIFT-DATED (rc 0 - the registry file was modified AFTER the leg was born, so the header is truthfully stale and the numbers must be quoted as at-launch), HEADER-LIES (rc 2) or UNDECIDABLE (rc 3, never a guess)",
+  "current": "2026-11-18 R2893 LEG CLOSED AND ADJUDICATED, TWO REGISTRY ROWS LANDED: the R2890 family leg closed at 02:37 (286/286 rows, rc=2, 4 reds) and the two tools this board built gave the verdict instead of an eyeball - leg_audit=ADOPT (rows=286 unique=286 green=282 crit=1930 mismatch=0 reasons=none) and leg_header_check=AGREE header=711/5434 registry=711/5434; its four reds (the three carried plus a new os-export-round) were re-run on the CURRENT tree and all four read green 4/4 criteria=38 crit_mismatch=0 in 13.8s (qa/reexport-reds-R2893.log, sha256 7af1db710d1f2299), so the class is historical by measurement and the named explanation is that all four measure the TRACKED export face while a closeout rewrote it inside the leg window; the two rows that waited two windows on the edit-race law are landed at the END of the registry - os-leg-watch (14 assertions over 6 criteria) and os-leg-header-check (6 over 6) - moving 711/5434 to 713/5446 with docs/sandbox-suite-matrix.md at 74741B and --check byte-identical, and both then ran THROUGH the battery 2/2 green criteria=12 crit_mismatch=0 (qa/battery-shard-legrows-R2893.log, sha256 ab11e31269c304ec); regression 5/5 green criteria=52 (os-battery-shard 26/26, os-run-identity 8/8, os-suite-matrix-reconcile 6/6, os-suite-output-audit 6/6, os-leg-audit 6/6; qa/battery-shard-regress-R2893.log, sha256 e04cab47698b3e54)",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -38,10 +38,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2892 PRODUCT+ENGINEERING: the R2891 item (5) gap is CLOSED - a leg's header registry pair can now be adjudicated instead of eyeballed, and the discriminator is TIME rather than equality: tools/leg_header_check.py reads the leg's registry_suites/registry_criteria, re-derives the live pair from src/sandbox/reconcile_all.py, and answers AGREE (rc 0), DRIFT-DATED (rc 0 - the registry file was modified AFTER the leg was born, so the header is truthfully stale and the numbers must be quoted as at-launch), HEADER-LIES (rc 2) or UNDECIDABLE (rc 3, never a guess)",
-  "export_ts": "2026-11-18T02:40:04+08:00",
+  "do": "2026-11-18 R2893 LEG CLOSED AND ADJUDICATED, TWO REGISTRY ROWS LANDED: the R2890 family leg closed at 02:37 (286/286 rows, rc=2, 4 reds) and the two tools this board built gave the verdict instead of an eyeball - leg_audit=ADOPT (rows=286 unique=286 green=282 crit=1930 mismatch=0 reasons=none) and leg_header_check=AGREE header=711/5434 registry=711/5434; its four reds (the three carried plus a new os-export-round) were re-run on the CURRENT tree and all four read green 4/4 criteria=38 crit_mismatch=0 in 13.8s (qa/reexport-reds-R2893.log, sha256 7af1db710d1f2299), so the class is historical by measurement and the named explanation is that all four measure the TRACKED export face while a closeout rewrote it inside the leg window; the two rows that waited two windows on the edit-race law are landed at the END of the registry - os-leg-watch (14 assertions over 6 criteria) and os-leg-header-check (6 over 6) - moving 711/5434 to 713/5446 with docs/sandbox-suite-matrix.md at 74741B and --check byte-identical, and both then ran THROUGH the battery 2/2 green criteria=12 crit_mismatch=0 (qa/battery-shard-legrows-R2893.log, sha256 ab11e31269c304ec); regression 5/5 green criteria=52 (os-battery-shard 26/26, os-run-identity 8/8, os-suite-matrix-reconcile 6/6, os-suite-output-audit 6/6, os-leg-audit 6/6; qa/battery-shard-regress-R2893.log, sha256 e04cab47698b3e54)",
+  "export_ts": "2026-11-18T02:49:47+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
-  "next_milestone": "[R2892] next window (<=12h): (1) MAIN - the family leg `qa/wide-os-full-R2890.log` is STILL IN FLIGHT and this window MEASURED its remaining cost instead of guessing: 236 of 286 rows at 02:2x with **50 suites left, 45 of them `os-probe-seam-*` rows measuring 140-280s each**, so the honest ETA is roughly **2.5 further hours** - do NOT read it as \"about to close\" a third time. Its three reds are now **MEASURED historical rather than inherited**: all three were re-run on the CURRENT tree and read green (6/6, 6/6, 15/15 `fail=0`, `qa/reexport-reds-R2892.log`), and its 243 completed rows already census **CLEAN** against the registry with no closing row (duplicates=0 unknown=0 `crit_mismatch=0`, `qa/early-census-R2892.log`, repeatable via `.codely-cli/tmp/legs/leg_early_census_R2892.py`) - that mid-leg census is the part no window had run before, and it is what turns a 2.5-hour blind wait into a live check. When it closes read `SHARD rc=` and adjudicate with `tools/leg_audit.py` **and** `tools/leg_header_check.py` (the new pair decides whether the header's 711/5434 is still truthful at that moment) (truncated)",
+  "next_milestone": "[R2893] next window (<=12h): (1) MAIN - the probe-seam cliff decision is the oldest open engineering choice (carried from R2888 item 2 through R2892 item 4): the leg now MEASURED its own cost profile, and 45 of its 286 rows are `os-probe-seam-*` at 140-280s each, so pick ONE of (a) memoize/bound the ancestor chain, (b) bound the live leg, (c) a declared per-suite override ABOVE 300s - pinned with a red control BEFORE the edit, and do NOT raise the 600s battery cap. (2) `docs/status-export.json`'s `latest_artifact` still derives from the newest `preview/` pair, so this round's leg adjudication and two battery rows leave the CEO face pointing elsewhere (R2889 item 5) - fix the derivation, never hand-edit the face. (3) the leg's four reds are historical BY MEASUREMENT now, so the next family leg should carry the refresh-window note in its header: all four red suites measure the TRACKED export face, which means any closeout that rewrites that face inside a leg reddens them - either the leg writes its red triage itself or the closeout waits for the leg (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
@@ -150,7 +150,7 @@
   },
   "results": [
     [
-      "2892",
+      "2893",
       "OSLoop 执行 tick"
     ]
   ],
@@ -163,15 +163,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 34,
+    "log_lines_in_window": 36,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 5,
+    "substantive_non_idle_mention_lines": 6,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 13,
     "queue_explore_open": 10
   },
-  "state_bytes": 33067
+  "state_bytes": 33620
 }
