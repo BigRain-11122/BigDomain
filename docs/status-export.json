@@ -1,16 +1,16 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-17 R2878 PRODUCT+ENGINEERING: the export vehicle argument guard stopped being a hand measurement - AC-EXPA1/AC-EXPA2 now print through the shipped runner at 49 assertions over 20 criteria - and the R2877 pin id collision is renamed on the record instead of being landed as a duplicate",
+    "current": "2026-11-17 R2879 PRODUCT+ENGINEERING: the lobby WebSocket report face eight LIVE readings are measured ON THE WIRE for the first time - AC-LWR7 runs the shipped socket walk inside the suite under tree_snapshot and reads 8/8 in 1.3s with the rendered fingerprint equal to the landed one, so the reading carried three windows as prose is now a red control.",
     "last_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2878] next window (<=12h): (1) MAIN - the lobby report face eight LIVE readings are still unmeasured for a third window (R2876 item 1): run the tool own socket walk once inside a guarded leg and record whether live 8/8 agrees with the landed fingerprint, so wire behaviour stops being guarded only by the tool grading itself. (2) the fold is owed and now measured: `state.json` 117140B with `fold_margin=-38640` at this closeout - working recipe is R2857, read the window boundaries OUT of the log and name every displaced id, or the vehicle refuses both ways (token-missing / round-split). (3) the `crit_mismatch=13` unit class (assertion count vs criteria count) still needs a declared pair or a registry unit field - a law change with its own red control. (4) note for whoever writes the next suite: `.codely-cli/tmp` carries a stale `inspect.py` that shadows the stdlib for any script run from that directory - run from a subdirectory or the repo root (truncated)",
-    "next_milestone_due": "2026-11-18T09:57:32+08:00",
-    "updated_at": "2026-11-17T21:57:32+08:00"
+    "next_milestone": "[R2879] next window (<=12h): (1) MAIN - the fold is owed and measured: `src/os/state.json` is 117140B with `fold_margin` around -38.6k at this closeout - the working recipe is R2857, read the window boundaries OUT of the log and name every displaced id in the summary, or the vehicle refuses both ways (token-missing / round-split). (2) the `crit_mismatch=13` unit class (assertion count vs criteria count) still needs a declared pair or a registry unit field - a law change with its own red control, not thirteen silent edits. (3) AC-LWR7 makes its suite depend on the `websockets` package: decide whether a missing dependency should stay a NAMED red (today) or become a declared skip, one criterion either way, pinned before the edit (truncated)",
+    "next_milestone_due": "2026-11-18T10:11:20+08:00",
+    "updated_at": "2026-11-17T22:11:20+08:00"
   },
-  "current": "2026-11-17 R2878 PRODUCT+ENGINEERING: the export vehicle argument guard stopped being a hand measurement - AC-EXPA1/AC-EXPA2 now print through the shipped runner at 49 assertions over 20 criteria - and the R2877 pin id collision is renamed on the record instead of being landed as a duplicate",
+  "current": "2026-11-17 R2879 PRODUCT+ENGINEERING: the lobby WebSocket report face eight LIVE readings are measured ON THE WIRE for the first time - AC-LWR7 runs the shipped socket walk inside the suite under tree_snapshot and reads 8/8 in 1.3s with the rendered fingerprint equal to the landed one, so the reading carried three windows as prose is now a red control.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -38,10 +38,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-17 R2878 PRODUCT+ENGINEERING: the export vehicle argument guard stopped being a hand measurement - AC-EXPA1/AC-EXPA2 now print through the shipped runner at 49 assertions over 20 criteria - and the R2877 pin id collision is renamed on the record instead of being landed as a duplicate",
-  "export_ts": "2026-11-17T21:57:32+08:00",
+  "do": "2026-11-17 R2879 PRODUCT+ENGINEERING: the lobby WebSocket report face eight LIVE readings are measured ON THE WIRE for the first time - AC-LWR7 runs the shipped socket walk inside the suite under tree_snapshot and reads 8/8 in 1.3s with the rendered fingerprint equal to the landed one, so the reading carried three windows as prose is now a red control.",
+  "export_ts": "2026-11-17T22:11:20+08:00",
   "latest_artifact": "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
-  "next_milestone": "[R2878] next window (<=12h): (1) MAIN - the lobby report face eight LIVE readings are still unmeasured for a third window (R2876 item 1): run the tool own socket walk once inside a guarded leg and record whether live 8/8 agrees with the landed fingerprint, so wire behaviour stops being guarded only by the tool grading itself. (2) the fold is owed and now measured: `state.json` 117140B with `fold_margin=-38640` at this closeout - working recipe is R2857, read the window boundaries OUT of the log and name every displaced id, or the vehicle refuses both ways (token-missing / round-split). (3) the `crit_mismatch=13` unit class (assertion count vs criteria count) still needs a declared pair or a registry unit field - a law change with its own red control. (4) note for whoever writes the next suite: `.codely-cli/tmp` carries a stale `inspect.py` that shadows the stdlib for any script run from that directory - run from a subdirectory or the repo root (truncated)",
+  "next_milestone": "[R2879] next window (<=12h): (1) MAIN - the fold is owed and measured: `src/os/state.json` is 117140B with `fold_margin` around -38.6k at this closeout - the working recipe is R2857, read the window boundaries OUT of the log and name every displaced id in the summary, or the vehicle refuses both ways (token-missing / round-split). (2) the `crit_mismatch=13` unit class (assertion count vs criteria count) still needs a declared pair or a registry unit field - a law change with its own red control, not thirteen silent edits. (3) AC-LWR7 makes its suite depend on the `websockets` package: decide whether a missing dependency should stay a NAMED red (today) or become a declared skip, one criterion either way, pinned before the edit (truncated)",
   "outs": [
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)",
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
@@ -150,7 +150,7 @@
   },
   "results": [
     [
-      "2878",
+      "2879",
       "OSLoop 执行 tick"
     ]
   ],
@@ -163,15 +163,15 @@
   "self_drive": {
     "window": "2026-11-11..2026-11-17",
     "window_days": 7,
-    "log_lines_in_window": 177,
+    "log_lines_in_window": 184,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 27,
+    "substantive_non_idle_mention_lines": 28,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 12,
     "queue_explore_open": 10
   },
-  "state_bytes": 117140
+  "state_bytes": 121591
 }

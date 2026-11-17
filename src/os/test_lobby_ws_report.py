@@ -1,15 +1,18 @@
-"""lobby WebSocket report face suite (R2876; criteria AC-LWR1..AC-LWR6 were
-pinned in state/queue/tech.md as the R2840 seed row BEFORE this code existed).
+"""lobby WebSocket report face suite (R2876; criteria AC-LWR1..AC-LWR7 were
+pinned before the code: AC-LWR1..AC-LWR6 in state/queue/tech.md as the R2840
+seed row, AC-LWR7 in src/os/backlog.md as the R2879 pin).
 
 What this proves: tools/lobby_ws_report.py prints eight readings and, until
-now, nothing re-derived them, so a wrong face read exactly like a right one.
+R2876, nothing re-derived them, so a wrong face read exactly like a right one.
 This suite re-derives the rendered face from the evidence the tool itself
 carries, drives the shipped --check gate through its own fail-closed branches,
-and leaves the tracked preview pair byte- and mtime-identical (the tool
-re-publishes a tracked pair, which is the production consumer tree_snapshot
-was shipped for in R2875).
+EXECUTES the shipped socket walk once under the guard so the eight readings are
+measured on the wire rather than only recomputed, and leaves the tracked
+preview pair byte- and mtime-identical (the tool re-publishes a tracked pair,
+which is the production consumer tree_snapshot was shipped for in R2875).
 
-Stdlib only, ASCII source, zero network. Exit 0 = all green.
+Stdlib plus the tool's own `websockets` dependency, ASCII source, loopback
+only. Exit 0 = all green.
 """
 
 import contextlib
@@ -20,6 +23,7 @@ import json
 import os
 import sys
 import tempfile
+import time
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.dirname(BASE)
@@ -28,7 +32,7 @@ TOOL = os.path.join(REPO, "tools", "lobby_ws_report.py")
 MATRIX = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-lobby-ws-report-face"
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 7
 
 sys.path.insert(0, BASE)
 import tree_snapshot as TS  # noqa: E402
@@ -210,6 +214,48 @@ def main():
         after == before and guarded_after == guarded_before,
         "AC-LWR5 purity: tracked pair unchanged (2 files, bytes+mtime), guarded re-render "
         "restores the tmp pair it rewrote" % (),
+    )
+
+    # AC-LWR7 the live walk, measured ON THE WIRE instead of re-derived: the
+    # R2876 suite proved the verdict is a function of the evidence but never
+    # executed the walk, so the eight readings stayed unmeasured for three
+    # windows. Here the shipped build_evidence() runs exactly once under the
+    # guard, and the criterion demands all eight flags true, the rendered
+    # fingerprint equal to the LANDED one, and the tracked pair untouched.
+    # A walk that raises (including a missing `websockets`) is a named red.
+    live_error = ""
+    live_flags = []
+    live_data = {}
+    walk_before = {path: sig(path) for path in tracked}
+    started = time.time()
+    try:
+        with TS.Snapshot(tracked):
+            live_ev, live_facts = lob.build_evidence()
+            _live_doc, live_data = lob.render(live_ev, live_facts)
+        live_flags = [live_ev[cid]["pass"] for cid, _intent in lob.CRITERIA]
+    except Exception as exc:  # a refused walk is a named red, not a skip
+        live_error = "%s: %s" % (type(exc).__name__, exc)
+    elapsed = time.time() - started
+    walk_after = {path: sig(path) for path in tracked}
+    landed_pair = {}
+    landed_json = os.path.join(REPO, "preview", "lobby-ws-report.json")
+    if os.path.exists(landed_json):
+        with open(landed_json, encoding="utf-8") as handle:
+            landed_pair = json.load(handle)
+    live_green = sum(1 for flag in live_flags if flag)
+    check(
+        not live_error
+        and len(live_flags) == n
+        and live_green == n
+        and live_data.get("passed") == n
+        and live_data.get("fingerprint") == landed_pair.get("fingerprint")
+        and landed_pair.get("verdict") == "PASS"
+        and walk_after == walk_before,
+        "AC-LWR7 live walk: %d/%d flags on the wire, fingerprint %s vs landed %s, "
+        "tracked pair unchanged=%s, %.1fs%s"
+        % (live_green, n, live_data.get("fingerprint"), landed_pair.get("fingerprint"),
+           walk_after == walk_before, elapsed,
+           (" error=" + live_error) if live_error else ""),
     )
 
     # AC-LWR6 wiring: the suite is registered in the battery and the matrix

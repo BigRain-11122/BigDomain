@@ -7097,7 +7097,7 @@ SUITES = [
     # re-derived them (tech R2840 seed). Appended at the END for the same reason
     # as the row above: a mid-list insert shifts every later suite's shard.
     ("os-lobby-ws-report-face",
-     os.path.join("..", "os", "test_lobby_ws_report.py"), 6),
+     os.path.join("..", "os", "test_lobby_ws_report.py"), 7),
     # R2877: tools/journey_demo.py walked the 19.9 CNY journey and its pass line
     # was read only by a human (tech R2840 seed b, AC-JDN1..AC-JDN6 pinned there
     # before this suite existed). Appended at the END so no later suite's shard
