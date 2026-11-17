@@ -1,6 +1,11 @@
-﻿"""Battery suite for src/os/export_round.py - eighteen criteria: AC-EXPW1..AC-EXPW11
+﻿"""Battery suite for src/os/export_round.py - twenty criteria: AC-EXPW1..AC-EXPW11
 plus AC-EXPW13 and AC-EXPW14 (AC-EXPW12 is a DECLARED numbering hole, see the
-R2823 paragraph below) and AC-EXPG1..AC-EXPG5.
+R2823 paragraph below), AC-EXPG1..AC-EXPG5, and AC-EXPA1/AC-EXPA2.
+
+R2878: AC-EXPA1/AC-EXPA2 are the R2877-pinned argument guard, landed under a
+fresh prefix because that pin reused AC-EXPW11 (already printed here by the
+fold-summary law) and AC-EXPW12 (the declared hole). The rename is recorded in
+src/os/backlog.md at R2878; the meaning of the two criteria is unchanged.
 
 R2860: the header above used to say AC-EXPW1..AC-EXPW14, which reads as fourteen
 criteria although AC-EXPW12 has never printed, so R2859's both-unit measurement
@@ -35,6 +40,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 import time
@@ -515,7 +521,57 @@ def main():
                                            'state_append.py')),
            'leftovers=%d' % len(one_offs))
 
-        # ---- AC-EXPW6: hygiene, one battery row, eighteen criteria ----
+        # ---- AC-EXPA1/AC-EXPA2: the argument guard is measured here, not by
+        # ---- hand (R2877 pin; ids renamed at R2878 because AC-EXPW11 already
+        # ---- prints a fold-summary law and AC-EXPW12 is the declared hole).
+        # ---- The TRACKED face is snapshotted through the shipped helper, so a
+        # ---- broken guard reddens the criterion instead of leaving the world
+        # ---- changed for the next suite that measures mtime.
+        from tree_snapshot import restored as _restored
+        face_live = os.path.join(ROOT, 'docs', 'status-export.json')
+
+        def run_tool(args):
+            proc = subprocess.Popen([sys.executable, TOOL] + args, cwd=ROOT,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE)
+            out, err = proc.communicate()
+            return (proc.returncode, out.decode('utf-8', 'replace'),
+                    err.decode('utf-8', 'replace'))
+
+        def face_state():
+            with open(face_live, 'rb') as handle:
+                body = handle.read()
+            return (hashlib.sha256(body).hexdigest(),
+                    os.stat(face_live).st_mtime_ns)
+
+        with _restored([face_live]):
+            state0 = face_state()
+            rc_h, out_h, err_h = run_tool(['--help'])
+            rc_h2, out_h2, err_h2 = run_tool(['-h'])
+            state1 = face_state()
+            ok('AC-EXPA1 --help and -h print usage at rc=0 and write nothing',
+               rc_h == 0 and 'usage: export_round.py' in out_h
+               and '--check' in out_h and '--root' in out_h
+               and rc_h2 == 0 and 'usage: export_round.py' in out_h2
+               and state0 == state1
+               and 'Traceback' not in (err_h + err_h2),
+               'rc=%s,%s face_moved=%s' % (rc_h, rc_h2, state0 != state1))
+            rc_typo, out_typo, err_typo = run_tool(['--chek'])
+            state2 = face_state()
+            rc_root, out_root, err_root = run_tool(['--root'])
+            state3 = face_state()
+            ok('AC-EXPA2 an undefined flag and a dangling --root fail closed at '
+               'rc=2 with the face untouched',
+               rc_typo == 2 and out_typo.startswith('E_EXP_ARG')
+               and '--chek' in out_typo
+               and rc_root == 2 and out_root.startswith('E_EXP_ARG')
+               and '--root' in out_root
+               and state0 == state2 and state0 == state3
+               and 'Traceback' not in (err_typo + err_root),
+               'rc=%s,%s face_moved=%s' % (rc_typo, rc_root,
+                                           state0 != state2 or state0 != state3))
+
+        # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')
                if ('import ' + m) in src]
