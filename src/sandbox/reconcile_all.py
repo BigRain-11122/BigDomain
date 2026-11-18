@@ -7224,7 +7224,7 @@ SUITES = [
     # the same reason as every row above: a mid-list insert shifts each later
     # suite's shard.
     ("os-registry-counter-census",
-     os.path.join("..", "os", "test_registry_counter_census.py"), 5),
+     os.path.join("..", "os", "test_registry_counter_census.py"), 7),
     ]
 
 FAILS = 0

@@ -1,4 +1,4 @@
-"""Battery suite for src/os/registry_counter_census.py - AC-RCC1..AC-RCC5.
+"""Battery suite for src/os/registry_counter_census.py - AC-RCC1..AC-RCC7.
 
 AC-RCC1..AC-RCC4 were pre-registered in src/os/backlog.md (R2918 row) BEFORE
 this file existed. The census answers one board question with a measured list
@@ -67,6 +67,43 @@ def build_world():
         'read.py': 'print("SUITE PASS %d/%d" % (3, 3))\n',
         'asm.py': 'print("SUITE PASS", 4, "/", 4)\n',
         'sil.py': 'print("PASS only")\n',
+    }
+    for name, body in files.items():
+        with io.open(os.path.join(sandbox, 'probe', name), 'w',
+                     encoding='utf-8', newline='\n') as handle:
+            handle.write(body)
+    return root, sandbox, reg
+
+
+def build_var_world():
+    """A private world where SUITE rows are printed THROUGH a constant.
+
+    This is the shape the shipped tree actually uses (62 rows) and the shape a
+    literal-only line scan read as SILENT. One probe formats a constant, one
+    binds it through an if/else, one mentions no SUITE at all, and one names a
+    constant the print line does NOT reference, so a word-boundary overreach is
+    measured rather than trusted.
+    """
+    root = tempfile.mkdtemp(prefix='bd-rcc-var-')
+    sandbox = os.path.join(root, 'sandbox')
+    os.makedirs(os.path.join(sandbox, 'probe'))
+    reg = os.path.join(sandbox, 'reconcile_all.py')
+    with io.open(reg, 'w', encoding='utf-8', newline='\n') as handle:
+        handle.write(
+            'import os\n'
+            'SUITES = [\n'
+            '    ("probe-viaformat", os.path.join("probe", "vf.py"), 2),\n'
+            '    ("probe-viaifelse", os.path.join("probe", "vi.py"), 1),\n'
+            '    ("probe-nosuite", os.path.join("probe", "ns.py"), 1),\n'
+            '    ("probe-lookalike", os.path.join("probe", "lk.py"), 1),\n'
+            ']\n')
+    files = {
+        'vf.py': 'V = "SUITE PASS %d/%d" % (2, 2)\nprint(V)\n',
+        'vi.py': 'OK = True\n'
+                 'V = "SUITE PASS" if OK else "SUITE FAIL"\n'
+                 'print(V)\n',
+        'ns.py': 'print("PASS only")\nX = "hello"\n',
+        'lk.py': 'Y = "SUITE PASS %d/%d"\nprint("Yy", 1)\n',
     }
     for name, body in files.items():
         with io.open(os.path.join(sandbox, 'probe', name), 'w',
@@ -154,6 +191,37 @@ def main():
        'AC-RCC5-R2 the same reader reads a missing declaration as None')
     ok(module.parse_suite_row('SUITE PASS %d checks\n' % CHECKS) is None,
        'AC-RCC5-R3 a checks-only leaf stays refused rather than guessed')
+
+    # AC-RCC6/7 (R2921): the SILENT class was measured as a hundred-percent
+    # false positive on the shipped tree (all 62 rows print their SUITE row
+    # through a module constant), so the extractor now reads those names and
+    # the class is held to a negative control and a lookalike control.
+    root2, sandbox2, reg2 = build_var_world()
+    try:
+        world = RCC.census(registry=reg2, sandbox=sandbox2)
+        ok('probe-viaformat' in world['READABLE'],
+           'AC-RCC6-R1 a SUITE row printed through a formatted constant reads '
+           'readable, not silent')
+        ok('probe-viaifelse' in world['UNPARSED'],
+           'AC-RCC6-R2 an if/else constant carrying no numbers reads unparsed, '
+           'not silent')
+        ok(sorted(world['SILENT']) == ['probe-lookalike', 'probe-nosuite'],
+           'AC-RCC6-R3 the via-constant world leaves only the two real silent '
+           'probes: %s' % ','.join(world['SILENT']))
+    finally:
+        shutil.rmtree(root2, ignore_errors=True)
+
+    ok('probe-nosuite' in world['SILENT'],
+       'AC-RCC7-R1 the negative control stays silent: a file with no SUITE '
+       'literal and no SUITE constant')
+    ok('probe-lookalike' not in world['READABLE'] +
+       world['UNPARSED'],
+       'AC-RCC7-R2 a constant the print line does not name is not borrowed by '
+       'a substring match')
+    ok(report['SILENT'] == pinned.get('silent', []) and
+       len(report['SILENT']) < 62,
+       'AC-RCC7-R3 the shipped silent class matches its pin and is smaller '
+       'than the retired literal-only reading: %d' % len(report['SILENT']))
 
     # Both numbers are DERIVED from this run, so the registry row stays the only
     # typed count and a new criterion demands a row edit instead of a hand edit.

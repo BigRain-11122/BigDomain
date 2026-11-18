@@ -17,8 +17,10 @@ tools/battery_shard.py reader parses? Three classes, total and disjoint:
   UNPARSED - the file prints a SUITE row, but no printed leaf is parseable
              (e.g. "SUITE PASS 163 checks" states no FAIL count, so the
              shipped reader refuses it by design).
-  SILENT   - the file prints no SUITE row at all; the row's number is typed
-             and nothing on the run path compares it.
+  SILENT   - the file prints no SUITE row at all, counting both the literals
+             on a print line and the module constants that line references
+             (a row printed through `V = "SUITE PASS"` is not silent); the
+             row's number is typed and nothing on the run path compares it.
 
 The parser is IMPORTED from the tool, not copied: a second regex family here
 would be a second opinion instead of the battery's own one.
@@ -87,7 +89,49 @@ def registry_rows(path):
     return out
 
 
-def leaf_lines(text):
+def _suite_literals(node):
+    """String literals containing SUITE reachable from an assignment value.
+
+    ast.walk reaches both arms of an if/else expression, the left operand of a
+    `%` format and the literal parts of an f-string, which are the three shapes
+    the shipped suites use to name their SUITE row once and print it later.
+    """
+    out = []
+    for sub in ast.walk(node):
+        if not isinstance(sub, ast.Constant):
+            continue
+        if isinstance(sub.value, str) and 'SUITE' in sub.value:
+            out.append(sub.value)
+    return out
+
+
+def suite_constants(text):
+    """Names bound to a string literal that contains SUITE (simple propagation).
+
+    leaf_lines reads one line at a time, so a suite that prints its row through
+    a constant (`V = "SUITE PASS"` ... `print("%s %d/%d" % (V, ...))`) looked
+    SILENT - a statement about this reader, not about the suite. Collecting the
+    constant assignments (both arms of an if/else) is the smallest propagation
+    that makes the class name mean what it says.
+    """
+    out = {}
+    try:
+        tree = ast.parse(text)
+    except SyntaxError:
+        return out
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign):
+            continue
+        literals = _suite_literals(node.value)
+        if not literals:
+            continue
+        for target in node.targets:
+            if isinstance(target, ast.Name):
+                out.setdefault(target.id, []).extend(literals)
+    return out
+
+
+def leaf_lines(text, consts=None):
     """Every printed leaf that starts with SUITE, placeholders neutralised.
 
     Returns (leaves, assembled). `assembled` counts print lines whose SUITE row
@@ -95,14 +139,23 @@ def leaf_lines(text):
     rows THIS READER cannot see whole even though the runtime line may be
     parseable - the extractor's own limit, counted rather than hidden in the
     unparsed bucket.
+
+    A print line whose own literals carry no SUITE still counts when it
+    references a name from suite_constants(): the row exists in the source even
+    though this one line does not spell it.
     """
     out = []
     assembled = 0
+    consts = consts or {}
     for line in text.split('\n'):
-        if 'SUITE' not in line or not PRINT_LINE.search(line):
+        if not PRINT_LINE.search(line):
             continue
         literals = [a if a else b for a, b in STRING_LIT.findall(line)]
         hits = [lit for lit in literals if 'SUITE' in lit]
+        if not hits:
+            for name, values in consts.items():
+                if re.search(r'\b%s\b' % re.escape(name), line):
+                    hits.extend(values)
         if not hits:
             continue
         if len(literals) > 1:
@@ -112,14 +165,14 @@ def leaf_lines(text):
     return out, assembled
 
 
-def classify(text, module):
-    leaves, assembled = leaf_lines(text)
+def classify(text, module, consts=None):
+    leaves, assembled = leaf_lines(text, consts)
     if not leaves:
-        return 'SILENT', leaves
+        return 'SILENT', assembled
     for leaf in leaves:
         if module.parse_suite_row(leaf + '\n') is not None:
-            return 'READABLE', leaves
-    return 'UNPARSED', leaves
+            return 'READABLE', assembled
+    return 'UNPARSED', assembled
 
 
 def census(registry=REGISTRY, sandbox=None):
@@ -133,9 +186,7 @@ def census(registry=REGISTRY, sandbox=None):
         if not os.path.exists(path):
             raise CensusError('E_RCC_MISSING_SUITE', '%s %s' % (label, rel))
         text = io.open(path, encoding='utf-8', errors='replace').read()
-        _kind, leaves = classify(text, module)
-        kind = _kind
-        _l, assembled = leaf_lines(text)
+        kind, assembled = classify(text, module, suite_constants(text))
         report['assembled'] += assembled
         report[kind].append(label)
     total = sum(len(report[kind])
