@@ -38,6 +38,8 @@ import time
 import urllib.error
 import urllib.request
 
+import job_object
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 LOBBY = os.path.join(HERE, "lobby")
 
@@ -158,9 +160,36 @@ def fetch_json(url, timeout=10.0):
         return json.loads(res.read().decode("utf-8"))
 
 
-def start(commands):
-    """Start every vector quietly and return the live children."""
-    children = []
+class ChildGroup(list):
+    """The live children plus the job they were placed in, if any.
+
+    A list subclass so ``teardown`` keeps taking the same argument it always
+    took, while the report can say truthfully whether the kill-on-close
+    guarantee is actually armed - and name every child it could not place.
+    """
+
+    def __init__(self, items=(), job=None, job_enabled=False):
+        list.__init__(self, items)
+        self.job = job
+        self.job_enabled = job_enabled
+        self.assigned = 0
+        self.job_errors = []
+
+
+def start(commands, use_job=True):
+    """Start every vector quietly, inside a kill-on-close job when possible.
+
+    Order matters: the job is created FIRST so a child can be placed in it the
+    moment it exists, and a child that cannot be placed is named in
+    ``job_errors`` rather than silently left outside the guarantee.
+    """
+    group = ChildGroup()
+    if use_job and job_object.available():
+        try:
+            group.job = job_object.create()
+            group.job_enabled = True
+        except job_object.JobError as exc:
+            group.job_errors.append(str(exc))
     for name, argv in commands:
         proc = subprocess.Popen(
             argv,
@@ -169,12 +198,24 @@ def start(commands):
             stderr=subprocess.DEVNULL,
             creationflags=NO_WINDOW,
         )
-        children.append((name, proc))
-    return children
+        group.append((name, proc))
+        if group.job:
+            try:
+                job_object.assign(group.job, proc.pid)
+                group.assigned += 1
+            except job_object.JobError as exc:
+                group.job_errors.append("%s %s" % (name, exc))
+    return group
 
 
 def teardown(children):
-    """Stop every child this process started; no orphan keeps a sandbox port."""
+    """Stop every child this process started; no orphan keeps a sandbox port.
+
+    The polite terminate runs first and stays the normal path; the job is
+    closed afterwards as the backstop, so whatever ignored the terminate dies
+    with it. Closing the job is also what makes a HARD-killed launcher safe,
+    because the kernel closes that handle for us.
+    """
     for _name, proc in children:
         if proc.poll() is None:
             try:
@@ -190,6 +231,10 @@ def teardown(children):
                 proc.kill()
             except OSError:
                 pass
+    job = getattr(children, "job", None)
+    if job:
+        job_object.close(job)
+        children.job = None
 
 
 def verify(host, ports, timeout):
@@ -221,7 +266,8 @@ def verify(host, ports, timeout):
     return ready, hub_url, faces, live, errors
 
 
-def report_of(host, ports, hub_url, faces, live, errors):
+def report_of(host, ports, hub_url, faces, live, errors, group=None):
+    group = group if group is not None else ChildGroup()
     return {
         "ok": not errors,
         "host": host,
@@ -233,6 +279,11 @@ def report_of(host, ports, hub_url, faces, live, errors):
         "live": live,
         "children": [[name, os.path.relpath(argv[1], os.path.dirname(HERE))]
                      for name, argv in build_commands(host, ports)],
+        "pids": dict((name, proc.pid) for name, proc in group),
+        "job": {"available": job_object.available(),
+                "enabled": bool(group.job_enabled),
+                "assigned": group.assigned,
+                "errors": list(group.job_errors)},
         "errors": errors,
         "mock": True,
         "chargeable": False,
@@ -265,16 +316,28 @@ def main(argv=None):
     parser.add_argument("--stop-file", default=None,
                         help="serve mode watches this path and tears down "
                              "when it appears")
+    parser.add_argument("--no-job", action="store_true",
+                        help="start WITHOUT a kill-on-close job object (red "
+                             "control: a hard-killed launcher then leaves its "
+                             "children holding ports)")
     args = parser.parse_args(argv)
 
     overrides = dict((key, getattr(args, "%s_port" % key)) for key in PLAN_KEYS)
     ports = plan(args.host, overrides)
-    children = start(build_commands(args.host, ports))
+    commands = build_commands(args.host, ports)
+    group = start(commands, use_job=not args.no_job)
     code = 2
     try:
         ready, hub_url, faces, live, errors = verify(
             args.host, ports, args.timeout)
-        report = report_of(args.host, ports, hub_url, faces, live, errors)
+        # A child that could not be placed in the job is not a cosmetic
+        # warning: the kill-on-close guarantee simply does not cover it, so
+        # the round refuses instead of advertising a safety it does not have.
+        for item in group.job_errors:
+            errors.append("E_JOB_UNASSIGNED: " + item)
+        ready = ready and not group.job_errors
+        report = report_of(args.host, ports, hub_url, faces, live, errors,
+                           group)
         if args.report_json:
             write_report(args.report_json, report)
         print(json.dumps(report, ensure_ascii=False, sort_keys=True), flush=True)
@@ -287,7 +350,7 @@ def main(argv=None):
     except KeyboardInterrupt:
         code = 0
     finally:
-        teardown(children)
+        teardown(group)
     return code
 
 

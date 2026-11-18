@@ -267,6 +267,11 @@ SUITES = [
     # pre-registered at R2477; AC-STL7..AC-STL9 pinned at R2936 BEFORE the
     # launcher grew the panel and membership faces).
     ("start-all", os.path.join("test_start_all.py"), 9),
+    # kill-on-close job object (R2937): the defect R2934 MEASURED - a launcher
+    # killed hard leaves its children holding sandbox ports - answered by the
+    # kernel instead of by a `finally`. AC-KOC1..AC-KOC5 were pinned in
+    # src/os/backlog.md BEFORE the job wiring and this suite existed.
+    ("kill-on-close", os.path.join("test_kill_on_close.py"), 5),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the
