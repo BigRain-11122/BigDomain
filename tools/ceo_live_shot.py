@@ -150,6 +150,55 @@ def published_collisions(record_path, report):
     return tuple(sorted(pairs))
 
 
+REFUSAL_CODE = "E_LAUNCHER_ALREADY_RUNNING"
+
+
+def refusal_of(report):
+    """Name a launch that was TURNED AWAY before any child existed.
+
+    R2986 measured three real launches: a kernel-claim refusal, a machine-
+    record refusal and a real failure all reached this driver as the same
+    printed line (`why: sandbox never proved ready`, empty collisions), with
+    the difference buried in the nested report. A person running this to see
+    the sandbox could not tell "another launcher is already serving" from
+    "this sandbox is broken" - two situations that need opposite reactions.
+
+    The launcher publishes the distinction itself: both refusal doors put
+    E_LAUNCHER_ALREADY_RUNNING in `errors` and leave `registry.claimed` False
+    (nothing was claimed, no child was started), while a real failure claims
+    the record (claimed True) and reports faces that never came up. Missing
+    keys answer None rather than raising: a note must never replace the
+    failure it is attached to.
+    """
+    report = report or {}
+    errors = report.get("errors") or []
+    detail = None
+    for item in errors:
+        if str(item).startswith(REFUSAL_CODE):
+            detail = str(item)
+            break
+    if detail is None:
+        return None
+    registry = report.get("registry")
+    if not isinstance(registry, dict) or registry.get("claimed") is not False:
+        return None
+    fields = {}
+    for part in detail.split():
+        if "=" in part:
+            key, value = part.split("=", 1)
+            fields.setdefault(key, value)
+    if fields.get("source") == "mutex":
+        door = "kernel-mutex"
+    elif fields.get("reason"):
+        door = "machine-record"
+    else:
+        door = "unnamed-door"
+    return {"code": REFUSAL_CODE, "door": door,
+            "source": fields.get("source"),
+            "reason": fields.get("reason"),
+            "detail": detail}
+
+
 def launcher_record_path():
     """Ask the launcher registry where it writes, without importing at load.
 
@@ -402,8 +451,12 @@ def main(argv=None):
         report = wait_json(report_path, args.timeout)
         if not report or not report.get("ok"):
             collisions = published_collisions(launcher_record_path(), report)
+            # R2986: the two refusal doors and a real failure used to print
+            # one identical line. `refusal` names the first two (nothing was
+            # started); null means the sandbox itself failed.
             print(json.dumps({"ok": False,
                               "why": "sandbox never proved ready",
+                              "refusal": refusal_of(report),
                               "record_collisions": [list(item)
                                                     for item in collisions],
                               "report": report}, ensure_ascii=False))

@@ -7484,7 +7484,7 @@ SUITES = [
     # code existed, in the same window (disclosed). AC-LIVE7 was pinned the
     # same way in R2983, before recorded_collisions existed.
     ("os-live-proof",
-     os.path.join("..", "os", "test_live_proof.py"), 9),
+     os.path.join("..", "os", "test_live_proof.py"), 10),
     ]
 
 FAILS = 0

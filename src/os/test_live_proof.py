@@ -249,7 +249,11 @@ def main():
     with open(os.path.join(ROOT, 'tools', 'ceo_live_shot.py'), 'rb') as handle:
         shot_src = handle.read().decode('utf-8', 'replace')
     blocks = shot_src.split('if not report or not report.get("ok")', 1)
-    branch = blocks[1][:600] if len(blocks) == 2 else ''
+    # R2986: the window was 600 chars; naming the refusal added a few comment
+    # lines and pushed `return 3` past it, so the arm read red although every
+    # anchor was still in the branch. Widened, not weakened: all three
+    # anchors are still required.
+    branch = blocks[1][:1200] if len(blocks) == 2 else ''
     ok('AC-LIVE7 the shipped failure branch reads the merged collision field',
        len(blocks) == 2 and 'published_collisions(' in branch
        and '"record_collisions"' in branch and 'return 3' in branch,
@@ -312,6 +316,85 @@ def main():
        LS.published_collisions(holding, {'ok': True}) == ((7000,
                                                           ('city', 'ws')),),
        'read=%s' % (LS.published_collisions(holding, {'ok': True}),))
+
+    # AC-LIVE10 (R2986): the driver could not tell a REFUSED launch from a
+    # BROKEN sandbox. The probe ran three real launches first: both refusal
+    # doors answered E_LAUNCHER_ALREADY_RUNNING with registry.claimed False,
+    # a real failure answered E_NOT_UP with claimed True - and today's driver
+    # printed the same `why` for all three, leaving the difference nested.
+    # This criterion pins the reader, including the honest direction: a real
+    # failure must NOT be renamed a refusal.
+    mutex_refusal = {'ok': False,
+                     'errors': ['E_LAUNCHER_ALREADY_RUNNING source=mutex '
+                                'pid=- name=Local\\BigDomainSandboxLauncher'],
+                     'registry': {'path': 'x', 'claimed': False,
+                                  'held_by': {'pid': 4242}}}
+    seen = LS.refusal_of(mutex_refusal)
+    ok('AC-LIVE10 a kernel-claim refusal names its door',
+       isinstance(seen, dict)
+       and seen.get('code') == 'E_LAUNCHER_ALREADY_RUNNING'
+       and seen.get('door') == 'kernel-mutex'
+       and seen.get('source') == 'mutex'
+       and seen.get('detail') == mutex_refusal['errors'][0],
+       'seen=%s' % (seen,))
+    record_refusal = {'ok': False,
+                      'errors': ['E_LAUNCHER_ALREADY_RUNNING pid=4242 '
+                                 'hub_url=- reason=still-starting'],
+                      'registry': {'path': 'x', 'claimed': False,
+                                   'verdict': {'reason': 'still-starting'}}}
+    seen = LS.refusal_of(record_refusal)
+    ok('AC-LIVE10 a record refusal names its door and reason',
+       isinstance(seen, dict) and seen.get('door') == 'machine-record'
+       and seen.get('reason') == 'still-starting'
+       and seen.get('source') is None, 'seen=%s' % (seen,))
+    real_failure = {'ok': False, 'errors': ['E_NOT_UP: ws,city,gate,web,hub'],
+                    'registry': {'path': 'x', 'claimed': True,
+                                 'pid': 1, 'state': 'starting'}}
+    ok('AC-LIVE10 a real failure is NOT renamed a refusal',
+       LS.refusal_of(real_failure) is None,
+       'seen=%r' % (LS.refusal_of(real_failure),))
+    ok('AC-LIVE10 an absent or malformed report answers None without raising',
+       LS.refusal_of(None) is None and LS.refusal_of({}) is None
+       and LS.refusal_of({'errors': []}) is None
+       and LS.refusal_of({'errors': ['E_LAUNCHER_ALREADY_RUNNING '
+                                     'source=mutex']}) is None,
+       'none=4')
+    import socket
+    import subprocess
+    import launcher_mutex as LM  # noqa: E402  (sandbox path wired above)
+    sock = socket.socket()
+    sock.bind(('127.0.0.1', 0))
+    clash = sock.getsockname()[1]
+    sock.close()
+    real_box = tempfile.mkdtemp(prefix='live10-')
+    real_registry = os.path.join(real_box, 'registry.json')
+    real_report = os.path.join(real_box, 'report.json')
+    real_stop = os.path.join(real_box, 'stop')
+    lane = LM.acquire(LM.name_for(real_registry))
+    try:
+        proc = subprocess.run(
+            [sys.executable, LS.START_ALL, '--registry', real_registry,
+             '--report-json', real_report, '--stop-file', real_stop,
+             '--timeout', '2', '--check',
+             '--mutex-name', LM.name_for(real_registry),
+             '--ws-port', str(clash), '--city-port', str(clash)],
+            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL, timeout=60)
+    finally:
+        LM.release(lane.get('handle'))
+    with open(real_report, 'r', encoding='utf-8') as handle:
+        fresh = _json.load(handle)
+    read = LS.refusal_of(fresh)
+    ok('AC-LIVE10 a REAL refusal reads its door through the shipped reader',
+       proc.returncode != 0 and isinstance(read, dict)
+       and read.get('door') == 'kernel-mutex'
+       and read.get('code') == 'E_LAUNCHER_ALREADY_RUNNING',
+       'read=%s rc=%s' % (read, proc.returncode))
+    blocks = shot_src.split('if not report or not report.get("ok")', 1)
+    wired = blocks[1][:900] if len(blocks) == 2 else ''
+    ok('AC-LIVE10 the shipped failure branch publishes the refusal key',
+       len(blocks) == 2 and '"refusal": refusal_of(' in wired
+       and 'return 3' in wired, 'wired=%d' % (len(blocks) - 1))
 
     total = len(CHECKS)
     acs = set()
