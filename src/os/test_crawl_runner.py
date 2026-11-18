@@ -144,6 +144,94 @@ def main():
        and src.index('urlopen(') < src.index('def run('),
        'the one network call sits inside fetch(), above run()')
 
+    # AC-RUN5: a failed retrieval leaves EVIDENCE and still lands no crawl.
+    root3 = world(); roots.append(root3)
+    fpath = RUN.failure_path(root3)
+    ok('AC-RUN5', fpath != CR.record_path(root3)
+       and os.path.basename(fpath) == 'crawl-failures.jsonl',
+       'the side channel is its own path, not the record file')
+    fail2 = RUN.run(dead, root3, fetched_at=TODAY + 'T13:00:00+08:00',
+                    timeout=3, write=True)
+    frows, fbad = RUN.read_failures(fpath)
+    ok('AC-RUN5', fail2['ok'] is False and fail2['trace'] == fpath
+       and len(frows) == 1 and fbad == 0
+       and frows[0]['source_url'] == dead and frows[0]['failed_at'][:10] == TODAY
+       and 'E_FETCH' in frows[0]['error'],
+       'one traced line with url, day and a named E_FETCH error')
+    rrows, rbad = CR.read_records(CR.record_path(root3))
+    ok('AC-RUN5', rrows == [] and rbad == 0 and CR.today_summary(
+        CR.record_path(root3), TODAY)['today'] == 0
+       and not os.path.isfile(RUN.baseline_path(root3)),
+       'the same failure writes nothing to the record file, not even a bad row')
+    good = RUN.run(URL, root3, body=PAGE_A, fetched_at=TODAY + 'T14:00:00+08:00',
+                   write=True)
+    frows2, fbad2 = RUN.read_failures(fpath)
+    ok('AC-RUN5', good['ok'] and good['verdict'] == 'new-source'
+       and len(frows2) == 1 and fbad2 == 0,
+       'a successful crawl writes nothing to the side channel')
+    with open(fpath, 'a', encoding='utf-8', newline='\n') as fh:
+        fh.write('{not json\n')
+        fh.write('{"source_url":"https://x","failed_at":"2026-11-19T00:00:00"}\n')
+    frows3, fbad3 = RUN.read_failures(fpath)
+    ok('AC-RUN5', len(frows3) == 1 and fbad3 == 2,
+       'bad lines are counted, usable rows still readable')
+    with open(os.path.join(ROOT, 'tools', 'skills', 'bigdomain-loop-scan',
+                           'scripts', 'scan_five_still.ps1'), 'r',
+              encoding='utf-8', errors='replace') as fh:
+        scan_src = fh.read()
+    ok('AC-RUN5', 'crawl-failures' not in scan_src
+       and 'crawl-log.jsonl' in scan_src,
+       'the scanner reads the record and never the failure side channel')
+    root4 = world(); roots.append(root4)
+    with open(os.path.join(root4, 'qa'), 'w', encoding='utf-8') as fh:
+        fh.write('not a directory')
+    blind = RUN.run(dead, root4, fetched_at=TODAY + 'T15:00:00+08:00',
+                    timeout=3, write=True)
+    ok('AC-RUN5', blind['ok'] is False and blind['trace'] is None
+       and 'E_FETCH' in blind['error'],
+       'an unwritable trace leaves the failure answer intact, never raises')
+
+    # AC-RUN6: the day gate makes a repeating beat idempotent.
+    root5 = world(); roots.append(root5)
+    CR.append_record(CR.record_path(root5), URL, TODAY + 'T06:00:00+08:00',
+                     'no-drift', note='seeded')
+    real_socket = socket.socket
+
+    def refuse2(*_a, **_k):
+        raise AssertionError('E_SOCKET the day gate opened a socket')
+
+    socket.socket = refuse2
+    try:
+        due1 = RUN.run(URL, root5, fetched_at=TODAY + 'T16:00:00+08:00',
+                       write=True, if_due=True)
+    finally:
+        socket.socket = real_socket
+    rows5, _ = CR.read_records(CR.record_path(root5))
+    ok('AC-RUN6', due1['ok'] and due1.get('skipped') is True
+       and len(rows5) == 1 and not os.path.isfile(RUN.baseline_path(root5)),
+       'a day already crawled answers skipped with no socket and no write')
+    root6 = world(); roots.append(root6)
+    fresh = RUN.run(URL, root6, body=PAGE_A, fetched_at=TODAY + 'T17:00:00+08:00',
+                    write=True, if_due=True)
+    ok('AC-RUN6', fresh.get('skipped') is False and fresh['verdict'] == 'new-source',
+       'an empty day is due and is judged normally')
+    root7 = world(); roots.append(root7)
+    CR.append_record(CR.record_path(root7), URL, '2026-11-18T23:00:00+08:00',
+                     'no-drift', note='yesterday')
+    yday = RUN.run(URL, root7, body=PAGE_A, fetched_at=TODAY + 'T18:00:00+08:00',
+                   write=True, if_due=True)
+    ok('AC-RUN6', yday.get('skipped') is False,
+       'yesterday\'s record does not cover today')
+    root8 = world(); roots.append(root8)
+    os.makedirs(os.path.join(root8, 'qa'))
+    with open(CR.record_path(root8), 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"source_url":"%s","fetched_at":"%sT05:00:00+08:00"}\n'
+                 % (URL, TODAY))
+    badrow = RUN.run(URL, root8, body=PAGE_A, fetched_at=TODAY + 'T19:00:00+08:00',
+                     write=True, if_due=True)
+    ok('AC-RUN6', badrow.get('skipped') is False,
+       'a row with no verdict cannot stand in for a crawl')
+
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
 

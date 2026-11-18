@@ -1,0 +1,5 @@
+honest: A=True B=True C=True
+mutant A day-gate removed -> RED(expected) (its own arm)
+mutant B failure into record path -> RED(expected) (its own arm)
+mutant C trace raises -> RED(expected) (its own arm)
+NEGCTL reds=3/3 honest_green=3/3

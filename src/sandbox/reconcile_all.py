@@ -4643,8 +4643,11 @@ SUITES = [
     # grades the two ways a crawl executor lies: a judgement that cannot tell a
     # changed page from an unchanged one, and a failed retrieval that lands a
     # record anyway. (AC-RUN1..AC-RUN4 pre-registered in src/os/backlog.md R2991.)
+    # R2992 adds the two faces a repeating beat needs: a failure side channel no
+    # judgement face reads, and a day gate that makes the beat idempotent.
+    # (AC-RUN5..AC-RUN6 pre-registered in src/os/backlog.md R2992 PIN row.)
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 4),
+     os.path.join("..", "os", "test_crawl_runner.py"), 6),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

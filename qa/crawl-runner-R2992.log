@@ -1,0 +1,28 @@
+  | PASS AC-RUN1 noise blocks never reach the body
+  | PASS AC-RUN1 indentation, blank lines and CRLF collapse to one digest
+  | PASS AC-RUN1 one real sentence change moves the digest
+  | PASS AC-RUN2 an empty store reads new-source, never no-drift
+  | PASS AC-RUN2 the same page reads no-drift against its own digest
+  | PASS AC-RUN2 a changed page reads drift
+  | PASS AC-RUN2 an entry with no digest cannot mean nothing changed
+  | PASS AC-RUN3 one usable record, three fields, the caller's own day
+  | PASS AC-RUN3 the baseline store holds this url and its digest
+  | PASS AC-RUN3 a second pass reads the stored baseline back as no-drift
+  | PASS AC-RUN3 a failed retrieval answers ok=False with a named error
+  | PASS AC-RUN3 a failed fetch writes no record and no baseline
+  | PASS AC-RUN3 the record carries the same verdict the judgement produced
+  | PASS AC-RUN4 a fixture judgement answers with sockets refused
+  | PASS AC-RUN4 the one network call sits inside fetch(), above run()
+  | PASS AC-RUN5 the side channel is its own path, not the record file
+  | PASS AC-RUN5 one traced line with url, day and a named E_FETCH error
+  | PASS AC-RUN5 the same failure writes nothing to the record file, not even a bad row
+  | PASS AC-RUN5 a successful crawl writes nothing to the side channel
+  | PASS AC-RUN5 bad lines are counted, usable rows still readable
+  | PASS AC-RUN5 the scanner reads the record and never the failure side channel
+  | PASS AC-RUN5 an unwritable trace leaves the failure answer intact, never raises
+  | PASS AC-RUN6 a day already crawled answers skipped with no socket and no write
+  | PASS AC-RUN6 an empty day is due and is judged normally
+  | PASS AC-RUN6 yesterday's record does not cover today
+  | PASS AC-RUN6 a row with no verdict cannot stand in for a crawl
+suite: 26 assertions over 6 criteria
+SUITE PASS 26/26
