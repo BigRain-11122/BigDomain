@@ -35,17 +35,25 @@
 #   AC-SC7  ahead-1 divergence (bare remote + one unpushed commit)
 #           -> "[TREE] FLAG clean=1 lock=0 diverged=..[ahead 1]" + the
 #           "note: remote moved" line (not a local other-writer).
-#   AC-SC8  today-dated qa/smoke-*.png + smoke-*.log AND
-#           state.benchmarks_refreshed inside the 7-day canon gate -> "[QA] PASS
-#           today_png=1 today_log=1 bench_age_d=0 bench_fresh7=True" (R2989: the
-#           limb reads the same gate as [BENCH]; bench_today is gone).
-#   AC-SC9  no qa evidence + stale benchmarks -> "[QA] FLAG today_png=0
-#           today_log=0 ... bench_fresh7=False" + "(charter daily crawl round due)".
+#   AC-SC8  a qa/crawl-log.jsonl record naming today (source_url + fetched_at +
+#           verdict) AND state.benchmarks_refreshed inside the 7-day canon gate
+#           -> "[QA] PASS crawl_today=1 crawl_rows=1 crawl_bad=0 today_png=0
+#           today_log=0 bench_age_d=... bench_fresh7=True" - written WITHOUT any
+#           smoke file, so a limb that still gated on png/log would read FLAG
+#           here (R2990: the crawl limb reads a record, not a filename).
+#   AC-SC9  no record + stale benchmarks -> "[QA] FLAG crawl_today=0
+#           crawl_rows=0 crawl_bad=0 ... bench_fresh7=False" + "(charter daily
+#           crawl round due)".
 #   AC-SC20 benchmark limb is a RANGE law, not a same-day law: (a) refreshed
-#           3 days ago + today evidence -> QA PASS with bench_age_d=3 and
-#           bench_fresh7=True; (b) refreshed 8 days ago + today evidence ->
+#           3 days ago + today record -> QA PASS with bench_age_d=3 and
+#           bench_fresh7=True; (b) refreshed 8 days ago + today record ->
 #           QA FLAG with bench_fresh7=False (widening to always-green goes red);
 #           (c) the emitted line carries no bench_today token at all.
+#   AC-SC21 smoke artifacts can no longer stand in for a crawl: (a) today's
+#           png+log with no record -> FLAG (the measured R2988 false green);
+#           (b) a record missing verdict -> FLAG crawl_bad=1, today=0;
+#           (c) a truncated line beside a good record -> PASS, crawl_bad=1;
+#           (d) a record naming yesterday -> crawl_rows=1 but crawl_today=0.
 #   AC-SC11 GORD multi-row batch (4 table rows, 3-row batch at the tail)
 #           -> all three "gord_tbl_last3[-1..-3]" lines present naming the
 #           batch rows (R709 blind-spot face: no manual tail re-read needed);
@@ -95,6 +103,7 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repo = (Resolve-Path (Join-Path $here '..\..')).Path
 $realScan = Join-Path $repo '.codely-cli\skills\bigdomain-loop-scan\scripts\scan_five_still.ps1'
 $today = (Get-Date).ToString('yyyy-MM-dd')
+$yesterday = (Get-Date).AddDays(-1).ToString('yyyy-MM-dd')
 $script:fail = 0
 $script:pass = 0
 
@@ -252,19 +261,32 @@ try {
     Assert ($r.text -match 'note: remote moved') 'AC-SC7' 'not-a-local-other-writer note present'
 
     # --- [QA] face --------------------------------------------------------
-    # AC-SC8: today-dated png+log evidence + benchmarks inside the 7-day gate -> PASS.
+    # R2990: the crawl limb reads qa/crawl-log.jsonl (source_url / fetched_at /
+    # verdict) instead of a smoke file's mtime, so every arm writes records and
+    # the png/log counts are asserted as DISPLAY ONLY.
+    function New-CrawlLine([string]$url, [string]$fetchedAt, [string]$verdict) {
+        return ('{"source_url":"' + $url + '","fetched_at":"' + $fetchedAt + '","verdict":"' + $verdict + '"}')
+    }
+    function Write-CrawlRecord([string[]]$lines) {
+        Write-All 'qa\crawl-log.jsonl' $lines
+    }
+
+    # AC-SC8: a record naming today + benchmarks inside the 7-day gate -> PASS.
+    # NO png and NO log are written here on purpose: if a smoke file still gated
+    # the limb, this arm would read FLAG.
     Reset-Sandbox
-    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $true
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    Write-CrawlRecord @((New-CrawlLine 'https://www.gov.cn/zhengce/x.htm' ($today + 'T09:10:00+08:00') 'new-source'))
     Git-Baseline
     $r = Invoke-Scan
-    Assert ($r.text -match '\[QA\] PASS today_png=1 today_log=1 bench_age_d=[0-9.]+ bench_fresh7=True') 'AC-SC8' 'today evidence + fresh benchmarks -> QA PASS'
+    Assert ($r.text -match '\[QA\] PASS crawl_today=1 crawl_rows=1 crawl_bad=0 today_png=0 today_log=0 bench_age_d=[0-9.]+ bench_fresh7=True') 'AC-SC8' 'today record + fresh benchmarks -> QA PASS with no smoke file at all'
 
-    # AC-SC9: no evidence + stale benchmarks -> FLAG with charter-due note.
+    # AC-SC9: no record + stale benchmarks -> FLAG with charter-due note.
     Reset-Sandbox
     Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' '2026-09-01') $false
     Git-Baseline
     $r = Invoke-Scan
-    Assert ($r.text -match '\[QA\] FLAG today_png=0 today_log=0 bench_age_d=[0-9.]+ bench_fresh7=False') 'AC-SC9' 'missing evidence + stale benchmarks -> QA FLAG'
+    Assert ($r.text -match '\[QA\] FLAG crawl_today=0 crawl_rows=0 crawl_bad=0 today_png=0 today_log=0 bench_age_d=[0-9.]+ bench_fresh7=False') 'AC-SC9' 'no record + stale benchmarks -> QA FLAG'
     Assert ($r.text -match '\(charter daily crawl round due\)') 'AC-SC9' 'charter due note present'
 
     # AC-SC20: the benchmark limb is a range law (R2989). (a) three days old
@@ -272,21 +294,58 @@ try {
     # (c) the old bench_today token is gone from the emitted line.
     $d3 = (Get-Date).AddDays(-3).ToString('yyyy-MM-dd')
     Reset-Sandbox
-    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $d3) $true
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $d3) $false
+    Write-CrawlRecord @((New-CrawlLine 'https://pay.weixin.qq.com/doc/v2/merchant/4011986682' ($today + 'T07:20:00+08:00') 'no-drift'))
     Git-Baseline
     $r = Invoke-Scan
-    Assert ($r.text -match '\[QA\] PASS today_png=1 today_log=1 bench_age_d=3\.[0-9]+ bench_fresh7=True') 'AC-SC20' '3-day-old benchmarks inside the gate -> QA PASS with a named age'
+    Assert ($r.text -match '\[QA\] PASS crawl_today=1 crawl_rows=1 crawl_bad=0 today_png=0 today_log=0 bench_age_d=3\.[0-9]+ bench_fresh7=True') 'AC-SC20' '3-day-old benchmarks inside the gate -> QA PASS with a named age'
     Assert ($r.text -notmatch 'bench_today') 'AC-SC20' 'the retired bench_today token no longer reaches the emitted line'
 
-    # AC-SC20 (b): eight days old is OUTSIDE the gate even with today's
-    # evidence -> FLAG (a limb widened to always-green would go red here).
+    # AC-SC20 (b): eight days old is OUTSIDE the gate even with a today record
+    # -> FLAG (a limb widened to always-green would go red here).
     $d8 = (Get-Date).AddDays(-8).ToString('yyyy-MM-dd')
     Reset-Sandbox
-    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $d8) $true
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $d8) $false
+    Write-CrawlRecord @((New-CrawlLine 'https://pay.weixin.qq.com/doc/v2/merchant/4011986682' ($today + 'T07:20:00+08:00') 'no-drift'))
     Git-Baseline
     $r = Invoke-Scan
-    Assert ($r.text -match '\[QA\] FLAG today_png=1 today_log=1 bench_age_d=8\.[0-9]+ bench_fresh7=False') 'AC-SC20' '8-day-old benchmarks outside the gate -> QA FLAG'
+    Assert ($r.text -match '\[QA\] FLAG crawl_today=1 crawl_rows=1 crawl_bad=0 today_png=0 today_log=0 bench_age_d=8\.[0-9]+ bench_fresh7=False') 'AC-SC20' '8-day-old benchmarks outside the gate -> QA FLAG'
     Assert ($r.code -eq 0) 'AC-SC20' 'scan child exits 0 on the QA FLAG face (detection only)'
+
+    # AC-SC21 (R2990): today's smoke artifacts can no longer stand in for a
+    # crawl. (a) png+log today with NO record -> FLAG (the measured false green
+    # of R2988); (b) a record missing a field -> FLAG with bad=1 and not today;
+    # (c) a truncated line beside a good one -> PASS, bad=1, the good row kept;
+    # (d) a record naming YESTERDAY -> today=0, so the day filter is real.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $true
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[QA\] FLAG crawl_today=0 crawl_rows=0 crawl_bad=0 today_png=1 today_log=1') 'AC-SC21' 'smoke png+log without a crawl record -> FLAG (false green closed)'
+
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    Write-CrawlRecord @('{"source_url":"https://a.example/x","fetched_at":"' + $today + 'T09:00:00+08:00"}')
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[QA\] FLAG crawl_today=0 crawl_rows=0 crawl_bad=1') 'AC-SC21' 'a record with no verdict reads bad=1 and never today'
+
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    Write-CrawlRecord @(
+        (New-CrawlLine 'https://www.gov.cn/zhengce/x.htm' ($today + 'T09:10:00+08:00') 'new-source'),
+        '{"source_url": "https://a.example/broken",'
+    )
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[QA\] PASS crawl_today=1 crawl_rows=1 crawl_bad=1') 'AC-SC21' 'a truncated line reads bad=1 while the good record still answers today'
+
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    Write-CrawlRecord @((New-CrawlLine 'https://www.gov.cn/zhengce/x.htm' ($yesterday + 'T23:50:00+08:00') 'no-drift'))
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[QA\] FLAG crawl_today=0 crawl_rows=1 crawl_bad=0') 'AC-SC21' 'a yesterday record is counted as a row but not as today'
 
     # --- [GORD] face (R763 extension) -------------------------------------
     # AC-SC11: a 3-row order batch at the tail must be fully visible in the
@@ -397,6 +456,6 @@ finally {
     Remove-Item -LiteralPath $sbxRoot -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC20, " + $script:pass + " checks)"); exit 0 }
+if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC21, " + $script:pass + " checks)"); exit 0 }
 Write-Output ("FAILURES=" + $script:fail)
 exit 2

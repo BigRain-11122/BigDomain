@@ -242,7 +242,7 @@ try {
   }
 } catch { Write-Output '[BENCH] INFO refresh_age_unmeasured' }
 
-# --- [QA] daily smoke evidence (group QA Smoke Test charter v1.0, orders L254 2026-09-28: daily crawl + qa/ evidence; R2989: the benchmark limb reads the same 7-day canon gate as [BENCH] because the charter's "not stale 15h" cannot coexist with a 7-day refresh cycle - escalated in HQ-FEEDBACK, see the block below) ---
+# --- [QA] daily crawl record + smoke evidence (group QA Smoke Test charter v1.0, orders L254 2026-09-28: daily crawl + qa/ evidence; R2989: the benchmark limb reads the same 7-day canon gate as [BENCH] because the charter's "not stale 15h" cannot coexist with a 7-day refresh cycle - escalated in HQ-FEEDBACK; R2990: the crawl limb reads a RECORD with three fields instead of a filename, because an mtime cannot tell a crawl apart from any other artifact written the same day) ---
 try {
   $today = (Get-Date).ToString('yyyy-MM-dd')
   $qaDir = Join-Path $repo 'qa'
@@ -250,6 +250,26 @@ try {
   if (Test-Path $qaDir) {
     $qaPng = @(Get-ChildItem -LiteralPath $qaDir -Filter 'smoke-*.png' | Where-Object { $_.LastWriteTime.ToString('yyyy-MM-dd') -eq $today }).Count
     $qaLog = @(Get-ChildItem -LiteralPath $qaDir -Filter 'smoke-*.log' | Where-Object { $_.LastWriteTime.ToString('yyyy-MM-dd') -eq $today }).Count
+  }
+  # R2990: a smoke artifact's mtime says "something was written", not "a source
+  # was crawled" - measured, one round's PASS came from a gallery screenshot plus
+  # a suite payload. A crawl is now a record in qa/crawl-log.jsonl carrying
+  # source_url, fetched_at and verdict; its day is the first ten characters of
+  # fetched_at taken literally, the same law as tools/crawl_record.py. The
+  # png/log counts stay on the line as DISPLAY fields only - they gate nothing.
+  $crawlToday = 0; $crawlRows = 0; $crawlBad = 0
+  $crawlPath = Join-Path $qaDir 'crawl-log.jsonl'
+  if (Test-Path -LiteralPath $crawlPath) {
+    foreach ($ln in [System.IO.File]::ReadAllLines($crawlPath, $utf8)) {
+      if ([string]::IsNullOrWhiteSpace($ln)) { continue }
+      try { $o = $ln | ConvertFrom-Json } catch { $crawlBad++; continue }
+      $u = [string]$o.source_url
+      $ft = [string]$o.fetched_at
+      $v = [string]$o.verdict
+      if (-not ($u.StartsWith('http://') -or $u.StartsWith('https://')) -or ($ft -notmatch '^\d{4}-\d{2}-\d{2}') -or [string]::IsNullOrWhiteSpace($v)) { $crawlBad++; continue }
+      $crawlRows++
+      if ($ft.Substring(0, 10) -eq $today) { $crawlToday++ }
+    }
   }
   # R2989: the charter limb "not stale 15h" was coded as "refreshed today", which
   # can only be true on a refresh day while the canon cycle is 7 days - the face
@@ -261,10 +281,10 @@ try {
   $benchFresh7 = ($null -ne $benchAgeD -and $benchAgeD -le 7)
   $benchAgeTxt = 'unmeasured'
   if ($null -ne $benchAgeD) { $benchAgeTxt = [string][math]::Round([double]$benchAgeD, 2) }
-  if ($qaPng -ge 1 -and $qaLog -ge 1 -and $benchFresh7) {
-    Write-Output "[QA] PASS today_png=$qaPng today_log=$qaLog bench_age_d=$benchAgeTxt bench_fresh7=$benchFresh7"
+  if ($crawlToday -ge 1 -and $benchFresh7) {
+    Write-Output "[QA] PASS crawl_today=$crawlToday crawl_rows=$crawlRows crawl_bad=$crawlBad today_png=$qaPng today_log=$qaLog bench_age_d=$benchAgeTxt bench_fresh7=$benchFresh7"
   } else {
-    Write-Output "[QA] FLAG today_png=$qaPng today_log=$qaLog bench_age_d=$benchAgeTxt bench_fresh7=$benchFresh7 (charter daily crawl round due)"
+    Write-Output "[QA] FLAG crawl_today=$crawlToday crawl_rows=$crawlRows crawl_bad=$crawlBad today_png=$qaPng today_log=$qaLog bench_age_d=$benchAgeTxt bench_fresh7=$benchFresh7 (charter daily crawl round due)"
   }
 } catch { Write-Output '[QA] FLAG check_failed' }
 

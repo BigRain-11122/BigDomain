@@ -4630,6 +4630,13 @@ SUITES = [
     # (AC-EVDB1..AC-EVDB8 pre-registered in state/queue/tech.md R2172.)
     ("os-evidence-writer-dir",
      os.path.join("..", "os", "test_evidence_writer_dir.py"), 8),
+    # R2990: the crawl record reader/writer behind the scanner's [QA] crawl
+    # limb (qa/crawl-log.jsonl, three fields: source_url / fetched_at /
+    # verdict). The limb used to judge a crawl by a smoke file's mtime, which
+    # measured one day's PASS from a gallery screenshot plus a suite payload.
+    # (AC-CR1..AC-CR4 pre-registered in src/os/backlog.md R2990 PIN row.)
+    ("os-crawl-record",
+     os.path.join("..", "os", "test_crawl_record.py"), 4),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

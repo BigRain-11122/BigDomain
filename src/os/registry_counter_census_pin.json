@@ -187,6 +187,7 @@
     "os-comma-binding-wire",
     "os-content-gate-console",
     "os-contract-usage-renderer",
+    "os-crawl-record",
     "os-declaration-writer-noop-parity",
     "os-deliverable-index",
     "os-evidence-name-text-coverage",

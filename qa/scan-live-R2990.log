@@ -1,0 +1,25 @@
+[STATE] PASS tick=2989 last_order=2026-11-18 15:3x last_decision_rows=438 benchmarks_refreshed=2026-11-18 log_lines=44 state_bytes=52474 eol_ok=1
+[LEDGER] PASS lines=437 atbd_rows=0 conflict=0 lastp=P-2026-11-08-01,P-2026-10-25-08,P-2026-11-01-04
+[DEC] PASS rows=438 known_tokens=143 row_owner_tokens=131 (content-addressed row-owner; row baseline=438 secondary)
+  dec_ref_missing_base D-20261119-09 (inline reference token absent from baseline; not a new row)
+[GORD] INFO lines=280 tbl_rows=4 atbd=0 sha16=954BB7C2A2776F7B gord_new_rows=0
+  gord_tbl_last3[-3]: | 10-16 11:2x | CEO 浠や笁杩烇細銆屾満闃熸弧璐熻嵎璺?涓嶅彲鑳戒骇鍑鸿繖涔堟參锛屼綘鑲畾鏈哄埗鍑洪棶棰樹簡锛併€嶃€屼负浠€涔堝張鏄竴澶╋紝浣犵洿鎺ヨC鏈哄共濂戒笉灏卞ソ浜嗭紝涓轰粈涔堟病鏈夋満鍒跺幓鍚屾瑕佹眰鍛紵浣犱滑涓嶆槸宸茬粡鎼ソ铏氭嫙灞€鍩熺綉鍚楋紵鍋氫笉鍒板氨璧剁揣鍘绘妸搴曞眰寮勫ソ銆嶏紙**鐩磋繛鍚屾鎸囨尌寰嬄穓ayredo 18h 闈欓粯闂矗**路O-20261016-1120路鏈獥璁よ矗+褰撳満鎵ф硶锛?| 鈶?*鐥呮牴瀹氳俺锛堟湰绐楄璐ｏ級**锛?7:1x 娲?b...
+  gord_tbl_last3[-2]: | 10-16 12:41 | CEO 浠わ細銆岃蛋涓€娆″叏闈㈡竻鐞嗐€?杩藉姞浠ゃ€屽偓 涓嶈闂垜 鎴戣杩囪嚜宸辫繍杞?绉戝鍐崇瓥銆嶏紙**鍏ㄩ潰娓呯悊鎵ц+鍌姙浠?*路bm-a 濮斿憳浼氱獥鏀跺彛锛?| **鈶犻泦鍥㈤潰宸叉竻姣?*锛圕lass-A 鐩存竻+鍥炴墽鍙拌处锛夛細atmpush 宕╂簝娈嬩欢脳12锛?TEMP%路澶氱獥閬楃墿锛?浼氳瘽 tmp>7澶╃洰褰暶?+FluxVerse 杩囨湡鏃ュ織 1 浠讹紙64B路**瓒婄晫鎶湶**锛氭浠跺睘浜у搧浠?ow...
+  gord_tbl_last3[-1]: | 10-16 21:4x | CEO 浠わ紙鍘熻瘽锛夛細銆屾父鎴忓叕鍙稿叏闈㈠紑宸ワ紝鎵€鏈夌殑椤圭洰锛屾垜璧嬩簣浣犱滑浜戠绠楀姏浣跨敤鏉冮檺锛屼絾鏄鎺у埗涓€涓嬪苟鍙戞暟閲忋€傘€嶏紙**娓告垙鍏徃鍏ㄩ潰寮€宸?浜戠绠楀姏鎺堟潈浠ぢ峰苟鍙戝彈鎺?*路O-20261016-2145锛?| 鈶?*浜戦亾鎺堟潈闈紙涓ョ浠?v3.0 娓告垙闈㈠畾鍚戜慨璁⒙稢EO 鎸囦护=鍞竴鍙樻洿閫氶亾鎵ф硶锛?*=Biggame 鍏ㄩ」鐩紙缁勫悎娓呭崟姝ｈ韩=MiniGame Design 缁勫悎鐧昏绨?..
+  gord_last_line: - **2026-11-18 16:0x锛坆m-a 鏈獥锝滄満闃熼厤鍚堜綋妫€路CEO 闂€屾満闃熼厤鍚堣繕鏈変粈涔堥棶棰樸€嶏級**锛氬疄娴嬩笁椤瑰苟淇涓€椤广€傗憼**鏈満鑷┍鍋滄憜 37h 鏃犱汉鎭㈠**锛歚FluxGroup-StationDrive-Delivery`/`StationAgent-Delivery` 鐘舵€?Disabled锛堟湯娆?11-17 05:58/06:01 rc=0锛夛紝鑰?`machine-stat...
+[GROUPSRC] cph4/evolution-ledger.md=origin-main docs/decisions.md=origin-main docs/orders.md=origin-main | canon D-20261001-03: git fetch + git show origin/main:<path>; worktree read = fallback only
+[ORD] INFO last=2026-09-28 22:1x baseline=2026-11-18 15:3x (baseline ahead: last_order tracks group-orders tail since R1998; own tail older, no new order)
+[BENCH] PASS days=1 refreshed=2026-11-18
+[QA] FLAG crawl_today=0 crawl_rows=0 crawl_bad=0 today_png=1 today_log=1 bench_age_d=1.3 bench_fresh7=True (charter daily crawl round due)
+[HB] PASS hb_tick=2989 state_tick=2989 lag=0
+[TASKS] INFO tasks_unchecked=2 backlog_open=271 blocked_on_ceo=3 claimable=268
+[EXPORT] PASS age_h=0.2 export_ts=2026-11-19T06:57:56+08:00
+[TREE] FLAG dirty=10
+  git:  M docs/sandbox-suite-matrix.md
+  git:  M src/os/backlog.md
+  git:  M src/os/test_scan_faces.ps1
+  git:  M src/sandbox/reconcile_all.py
+  git:  M tools/skills/bigdomain-loop-scan/scripts/scan_five_still.ps1
+  git: ?? qa/leg-crawl-record-R2990.log
+  git: ?? qa/negctl-R2990.log
+  git: ?? qa/scan-faces-R2990.log

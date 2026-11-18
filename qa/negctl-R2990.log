@@ -1,0 +1,10 @@
+HONEST-A: [QA] PASS crawl_today=1 crawl_rows=1 crawl_bad=0 today_png=0 today_log=0 bench_age_d=0.3 bench_fresh7=True
+MUTANT-A: [QA] FLAG crawl_today=1 crawl_rows=1 crawl_bad=0 today_png=0 today_log=0 bench_age_d=0.3 bench_fresh7=True (charter daily crawl round due)
+RED-AS-EXPECTED A-gate-back-to-png-log (honest PASS vs mutant FLAG on a record with no smoke file)
+HONEST-B: [QA] FLAG crawl_today=0 crawl_rows=0 crawl_bad=1 today_png=0 today_log=0 bench_age_d=0.3 bench_fresh7=True (charter daily crawl round due)
+MUTANT-B: [QA] PASS crawl_today=1 crawl_rows=1 crawl_bad=0 today_png=0 today_log=0 bench_age_d=0.3 bench_fresh7=True
+RED-AS-EXPECTED B-verdict-guard-dropped (honest FLAG bad=1 vs mutant PASS)
+HONEST-C: [QA] FLAG crawl_today=0 crawl_rows=1 crawl_bad=0 today_png=0 today_log=0 bench_age_d=0.3 bench_fresh7=True (charter daily crawl round due)
+MUTANT-C: [QA] PASS crawl_today=1 crawl_rows=1 crawl_bad=0 today_png=0 today_log=0 bench_age_d=0.3 bench_fresh7=True
+RED-AS-EXPECTED C-day-filter-always-true (honest FLAG today=0 vs mutant PASS today=1)
+NEGCTL PASS all three mutants red, honest green
