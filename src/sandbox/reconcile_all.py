@@ -7482,9 +7482,12 @@ SUITES = [
     # 'agreements + disagreements == faces' an identity the payload is checked
     # against. AC-LIVE1..AC-LIVE5 were pinned in src/os/backlog.md before the
     # code existed, in the same window (disclosed). AC-LIVE7 was pinned the
-    # same way in R2983, before recorded_collisions existed.
+    # same way in R2983, before recorded_collisions existed. AC-LIVE11 was
+    # pinned in R2987 before write_failure existed: the failure payload now
+    # lands in the gitignored scratch file instead of the published product
+    # path, whose byte count the CEO latest-artifact line quotes.
     ("os-live-proof",
-     os.path.join("..", "os", "test_live_proof.py"), 10),
+     os.path.join("..", "os", "test_live_proof.py"), 11),
     ]
 
 FAILS = 0

@@ -21,6 +21,12 @@ same faces TWICE against the SAME sandbox instance - the second pass starts
 after the first pass's lobby action - and refuses when the two passes disagree
 on any face's HTTP status or error set. Agreement is compared, never asserted.
 
+A failed launch is kept on disk: the printed line dies with the process, so the
+last refusal or real failure is written to the gitignored scratch file
+tmp/live-sandbox-failed.json and its path is published as `artifact`. It is NOT
+written to preview/live-sandbox.json - that path is a published product whose
+byte count the CEO latest-artifact line quotes (measured at R2987).
+
 Usage:
   python tools/ceo_live_shot.py                  # shoot into preview/live/
   python tools/ceo_live_shot.py --check          # shoot, then exit non-zero on
@@ -199,12 +205,143 @@ def refusal_of(report):
             "detail": detail}
 
 
-def launcher_record_path():
-    """Ask the launcher registry where it writes, without importing at load.
+# R2987: the failure line is printed and then lost with the process. The
 
-    The suite imports this module with nothing but the standard library on the
-    path (AC-LIVE5), so the sandbox package is reached lazily, inside the
-    failure branch that needs it.
+
+# launcher's own --report-json is the SUCCESS product, and it is published:
+
+
+# export_round._pairs puts that file's on-disk byte count straight onto the CEO
+
+
+# latest-artifact line and tools/deliverable_index.py derives the newest
+
+
+# preview artifact from a fresh mtime scan of preview/*.json. Measured in a
+
+
+# throwaway world (tmp/probe_R2987.py): rewriting that one file with a failure
+
+
+# payload moved both published numbers 126B -> 199B, i.e. the failure would be
+
+
+# named and sized as the newest product while its gallery half still shows a
+
+
+# healthy run - and the tracked file would sit dirty in git. A json with no
+
+
+# sibling html is invisible to both derivers, so the payload goes to the
+
+
+# gitignored scratch dir under ONE stable name: the last failure is always at
+
+
+# the same path, and nothing derives from it.
+
+
+FAILURE_NAME = "live-sandbox-failed.json"
+
+
+SCRATCH = os.path.join(REPO, "tmp")
+
+
+
+
+def failure_artifact_path():
+
+
+    """Where the LAST failed launch is kept, for a person re-reading it."""
+
+
+    return os.path.join(SCRATCH, FAILURE_NAME)
+
+
+
+
+def write_failure(record_path, report, path=None):
+
+
+    """Publish the failure payload on disk and name the file it went to.
+
+
+
+    Same body the driver prints, minus the `artifact` key that points here.
+
+
+    Atomic (write beside, then replace), and it never raises: this note is
+
+
+    attached to a failure and a note must never replace the failure. A target
+
+
+    whose directory does not exist answers None rather than creating a tree -
+
+
+    the caller decides where its artifacts may live, not this writer.
+
+
+    """
+
+
+    payload = {"ok": False,
+
+
+               "why": "sandbox never proved ready",
+
+
+               "refusal": refusal_of(report),
+
+
+               "record_collisions": [list(item) for item in
+
+
+                                     published_collisions(record_path, report)],
+
+
+               "report": report}
+
+
+    target = path or failure_artifact_path()
+
+
+    holder = target + ".tmp"
+
+
+    try:
+
+
+        with open(holder, "w", encoding="utf-8", newline="\n") as handle:
+
+
+            json.dump(payload, handle, ensure_ascii=False, sort_keys=True,
+
+
+                      indent=2)
+
+
+            handle.write("\n")
+
+
+        os.replace(holder, target)
+
+
+    except OSError:
+
+
+        return None
+
+
+    return os.path.relpath(target, REPO).replace("\\", "/")
+
+
+
+
+def launcher_record_path():
+
+
+    """Ask the launcher registry where it writes, without importing at load.
     """
     sandbox = os.path.join(REPO, "src", "sandbox")
     if sandbox not in sys.path:
@@ -450,15 +587,19 @@ def main(argv=None):
     try:
         report = wait_json(report_path, args.timeout)
         if not report or not report.get("ok"):
-            collisions = published_collisions(launcher_record_path(), report)
+            record_path = launcher_record_path()
+            collisions = published_collisions(record_path, report)
+            artifact = write_failure(record_path, report)
             # R2986: the two refusal doors and a real failure used to print
             # one identical line. `refusal` names the first two (nothing was
             # started); null means the sandbox itself failed.
+            # R2987: artifact = where to re-read.
             print(json.dumps({"ok": False,
                               "why": "sandbox never proved ready",
                               "refusal": refusal_of(report),
                               "record_collisions": [list(item)
                                                     for item in collisions],
+                              "artifact": artifact,
                               "report": report}, ensure_ascii=False))
             return 3
         first = shoot(args.browser, report, args.settle_ms, args.width,

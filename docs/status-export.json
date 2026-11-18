@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-19 R2986 PRODUCT+ENGINEERING: a refused launch and a broken sandbox now read differently on the one line a person sees. The R2986 probe ran three real launchers before any pin: a kernel-claim refusal and a machine-record refusal both answer E_LAUNCHER_ALREADY_RUNNING with registry.claimed False (nothing was started), while a real failure claims the record and answers E_NOT_UP - and the shipped driver printed the same why='sandbox never proved ready' for all three, leaving the difference nested one level down. tools/ceo_live_shot.py now publishes a top-level refusal object (code, door, source, reason, detail) from refusal_of(report); null means the sandbox itself failed. why, record_collisions, the report and the success path are untouched.",
+    "current": "2026-11-19 R2987 PRODUCT+ENGINEERING: the failure line a person reads survived only as long as the process; it is now a file. `--report-json` (default preview/live-sandbox.json) is written ONLY after a successful shoot, so a refused or broken launch left zero bytes on disk and the only way to look again was to run it again. The obvious fix - write the failure to that same path - was measured and REFUSED: `export_round._pairs` puts that file's on-disk byte count straight onto the CEO latest-artifact line and `tools/deliverable_index.py::newest_artifact()` derives the newest preview artifact from a fresh mtime scan of preview/*.json, so a failure payload there would be named and sized as the newest product while its gallery half still showed a healthy run (measured in a throwaway world: both published numbers moved 126B -> 199B), and the tracked file would sit dirty in git. A json with no sibling html is invisible to both derivers, so `tools/ceo_live_shot.py` now ships `failure_artifact_path()` and `write_failure()` and the failure branch publishes `artifact`: the LAST failure lands at the gitignored tmp/live-sandbox-failed.json, atomically, with the same body the driver prints.",
     "do": "2026-11-19 R2973 PRODUCT+ENGINEERING: the shape R2972 named out of range is now judged. A bare 'import a.b' (no as) binds the PACKAGE, and 'a.b.Name(...)' reaches a repo module's export through a three-part attribute chain. _dotted_chain() spells a Name/Attribute chain; _dotted_bare_imports() records the exact dotted paths a module imports without an alias; _repo_reexport_context() carries that licence set as its fourth element; _server_class_shape() and _class_bases() judge a chain whose receiver spells a licensed path, placed AFTER the receiver-blind http rule so no existing row changes its kind; and _module_carried_classes() follows a module-level 'Maker = a.b.UDPServer' one level up, so the same chain re-exported to a borrowing module resolves.",
     "last_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-stl-siblings-R2986.log (755B, 2026-11-19)",
-    "latest_evidence": "qa/leg-stl-siblings-R2986.log (755B, 2026-11-19)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-start-all-R2987.log (340B, 2026-11-19)",
+    "latest_evidence": "qa/leg-start-all-R2987.log (340B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2987] next window (<=12h): (0) MAIN — 拒绝现在在**打印出来的那一行**里说得清，但**落盘面仍然只有成功件**：`--report-json`（默认 `preview/live-sandbox.json`）只在拍照成功后才写，一次被拒绝或被真实失败打断的运行在盘上**零文件**，人回头想复看只得重跑。下一轮**先量**：①今天谁读 `preview/live-sandbox.json`（画廊/驱动/判据有没有按字段集严格比对、有没有「文件存在」即判成功的断言）；②把失败载荷写到同一路径是否纯增量（顶层仍是 `ok=False` + `refusal` + `record_collisions` + `report`，成功件一行不动）；③若量出 `status-export` 或画廊把该文件当「最近实物」即会被失败件污染，则改写到旁路文件名（或只在拒绝时写并让读者按 `ok` 判）并写清理由。纯增量则实现并配一条判据（拒绝→盘上具名件可读、真实失败→盘上也具名 `refusal=null`、成功→键集不变）。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder (pid=- measured), and the QA charter daily-crawl face still red (today_png=0 today_log=0 bench_today=False — no fake refresh was made).",
-    "next_milestone_due": "2026-11-19T18:02:19+08:00",
-    "updated_at": "2026-11-19T06:02:19+08:00"
+    "next_milestone": "[R2988] next window (<=12h): (0) MAIN — 失败面现在**能落盘**（R2987），但**退出码的文档契约与代码不一致**：`tools/ceo_live_shot.py` 文档头写着「Exit: 0 = every face photographed (truncated)",
+    "next_milestone_due": "2026-11-19T18:18:49+08:00",
+    "updated_at": "2026-11-19T06:18:49+08:00"
   },
-  "current": "2026-11-19 R2986 PRODUCT+ENGINEERING: a refused launch and a broken sandbox now read differently on the one line a person sees. The R2986 probe ran three real launchers before any pin: a kernel-claim refusal and a machine-record refusal both answer E_LAUNCHER_ALREADY_RUNNING with registry.claimed False (nothing was started), while a real failure claims the record and answers E_NOT_UP - and the shipped driver printed the same why='sandbox never proved ready' for all three, leaving the difference nested one level down. tools/ceo_live_shot.py now publishes a top-level refusal object (code, door, source, reason, detail) from refusal_of(report); null means the sandbox itself failed. why, record_collisions, the report and the success path are untouched.",
+  "current": "2026-11-19 R2987 PRODUCT+ENGINEERING: the failure line a person reads survived only as long as the process; it is now a file. `--report-json` (default preview/live-sandbox.json) is written ONLY after a successful shoot, so a refused or broken launch left zero bytes on disk and the only way to look again was to run it again. The obvious fix - write the failure to that same path - was measured and REFUSED: `export_round._pairs` puts that file's on-disk byte count straight onto the CEO latest-artifact line and `tools/deliverable_index.py::newest_artifact()` derives the newest preview artifact from a fresh mtime scan of preview/*.json, so a failure payload there would be named and sized as the newest product while its gallery half still showed a healthy run (measured in a throwaway world: both published numbers moved 126B -> 199B), and the tracked file would sit dirty in git. A json with no sibling html is invisible to both derivers, so `tools/ceo_live_shot.py` now ships `failure_artifact_path()` and `write_failure()` and the failure branch publishes `artifact`: the LAST failure lands at the gitignored tmp/live-sandbox-failed.json, atomically, with the same body the driver prints.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-19 R2986 PRODUCT+ENGINEERING: a refused launch and a broken sandbox now read differently on the one line a person sees. The R2986 probe ran three real launchers before any pin: a kernel-claim refusal and a machine-record refusal both answer E_LAUNCHER_ALREADY_RUNNING with registry.claimed False (nothing was started), while a real failure claims the record and answers E_NOT_UP - and the shipped driver printed the same why='sandbox never proved ready' for all three, leaving the difference nested one level down. tools/ceo_live_shot.py now publishes a top-level refusal object (code, door, source, reason, detail) from refusal_of(report); null means the sandbox itself failed. why, record_collisions, the report and the success path are untouched.",
-  "export_ts": "2026-11-19T06:02:19+08:00",
+  "do": "2026-11-19 R2987 PRODUCT+ENGINEERING: the failure line a person reads survived only as long as the process; it is now a file. `--report-json` (default preview/live-sandbox.json) is written ONLY after a successful shoot, so a refused or broken launch left zero bytes on disk and the only way to look again was to run it again. The obvious fix - write the failure to that same path - was measured and REFUSED: `export_round._pairs` puts that file's on-disk byte count straight onto the CEO latest-artifact line and `tools/deliverable_index.py::newest_artifact()` derives the newest preview artifact from a fresh mtime scan of preview/*.json, so a failure payload there would be named and sized as the newest product while its gallery half still showed a healthy run (measured in a throwaway world: both published numbers moved 126B -> 199B), and the tracked file would sit dirty in git. A json with no sibling html is invisible to both derivers, so `tools/ceo_live_shot.py` now ships `failure_artifact_path()` and `write_failure()` and the failure branch publishes `artifact`: the LAST failure lands at the gitignored tmp/live-sandbox-failed.json, atomically, with the same body the driver prints.",
+  "export_ts": "2026-11-19T06:18:49+08:00",
   "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
-  "latest_evidence": "qa/leg-stl-siblings-R2986.log (755B, 2026-11-19)",
-  "next_milestone": "[R2987] next window (<=12h): (0) MAIN — 拒绝现在在**打印出来的那一行**里说得清，但**落盘面仍然只有成功件**：`--report-json`（默认 `preview/live-sandbox.json`）只在拍照成功后才写，一次被拒绝或被真实失败打断的运行在盘上**零文件**，人回头想复看只得重跑。下一轮**先量**：①今天谁读 `preview/live-sandbox.json`（画廊/驱动/判据有没有按字段集严格比对、有没有「文件存在」即判成功的断言）；②把失败载荷写到同一路径是否纯增量（顶层仍是 `ok=False` + `refusal` + `record_collisions` + `report`，成功件一行不动）；③若量出 `status-export` 或画廊把该文件当「最近实物」即会被失败件污染，则改写到旁路文件名（或只在拒绝时写并让读者按 `ok` 判）并写清理由。纯增量则实现并配一条判据（拒绝→盘上具名件可读、真实失败→盘上也具名 `refusal=null`、成功→键集不变）。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder (pid=- measured), and the QA charter daily-crawl face still red (today_png=0 today_log=0 bench_today=False — no fake refresh was made).",
+  "latest_evidence": "qa/leg-start-all-R2987.log (340B, 2026-11-19)",
+  "next_milestone": "[R2988] next window (<=12h): (0) MAIN — 失败面现在**能落盘**（R2987），但**退出码的文档契约与代码不一致**：`tools/ceo_live_shot.py` 文档头写着「Exit: 0 = every face photographed (truncated)",
   "outs": [
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "qa/live-proof-R2984.log (3046B) + AC-LIVE8 six arms [2026-11-19 R2984]",
@@ -166,7 +166,7 @@
   },
   "results": [
     [
-      "2986",
+      "2987",
       "OSLoop 执行 tick"
     ]
   ],
@@ -179,15 +179,15 @@
   "self_drive": {
     "window": "2026-11-13..2026-11-19",
     "window_days": 7,
-    "log_lines_in_window": 60,
+    "log_lines_in_window": 30,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 20,
+    "substantive_non_idle_mention_lines": 6,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 72849
+  "state_bytes": 36331
 }

@@ -396,6 +396,69 @@ def main():
        len(blocks) == 2 and '"refusal": refusal_of(' in wired
        and 'return 3' in wired, 'wired=%d' % (len(blocks) - 1))
 
+    # AC-LIVE11 (R2987): the failure line was printed and then lost with the
+    # process. The launcher's own --report-json belongs to the SUCCESS product
+    # and it is published - the probe rewrote that one path in a throwaway
+    # world and both derivers moved together, 126B -> 199B, i.e. the failure
+    # would have been named and sized as the newest product while its gallery
+    # half still showed a healthy run. So the payload goes to the gitignored
+    # scratch file. This criterion pins the PLACE, the payload shape and the
+    # honest direction: a real failure must never be written down as a
+    # refusal.
+    default_place = LS.failure_artifact_path()
+    scratch = os.path.join(ROOT, 'tmp')
+    ok('AC-LIVE11 the failure artifact lives in the scratch dir, not preview/',
+       os.path.dirname(default_place) == scratch
+       and os.path.basename(default_place) != 'live-sandbox.json'
+       and not default_place.startswith(os.path.join(ROOT, 'preview') + os.sep),
+       'place=%s' % os.path.relpath(default_place, ROOT).replace('\\', '/'))
+
+    refused_path = os.path.join(scratch, 'live11-refused.json')
+    written = LS.write_failure(absent, mutex_refusal, path=refused_path)
+    with open(refused_path, 'r', encoding='utf-8') as handle:
+        landed = _json.load(handle)
+    ok('AC-LIVE11 a refusal lands on disk with its door named',
+       bool(written) and os.path.exists(refused_path)
+       and sorted(landed) == ['ok', 'record_collisions', 'refusal', 'report',
+                              'why']
+       and landed['ok'] is False
+       and (landed['refusal'] or {}).get('door') == 'kernel-mutex',
+       'keys=%s door=%s' % (sorted(landed),
+                            (landed['refusal'] or {}).get('door')))
+
+    failed_path = os.path.join(scratch, 'live11-failed.json')
+    LS.write_failure(absent, real_failure, path=failed_path)
+    with open(failed_path, 'r', encoding='utf-8') as handle:
+        landed_fail = _json.load(handle)
+    ok('AC-LIVE11 a real failure is NOT written down as a refusal',
+       landed_fail['refusal'] is None and landed_fail['ok'] is False,
+       'refusal=%r' % (landed_fail['refusal'],))
+
+    collided_path = os.path.join(scratch, 'live11-collided.json')
+    LS.write_failure(collided, {'ok': False, 'errors': ['E_NOT_UP: ws,city']},
+                     path=collided_path)
+    with open(collided_path, 'r', encoding='utf-8') as handle:
+        landed_coll = _json.load(handle)
+    ok('AC-LIVE11 a collision survives onto the failure artifact',
+       landed_coll['record_collisions'] == [[7000, ['city', 'ws']]],
+       'rows=%s' % (landed_coll['record_collisions'],))
+
+    missing_dir = os.path.join(scratch, 'live11-absent-dir', 'x.json')
+    ok('AC-LIVE11 a target it cannot write answers None without raising',
+       LS.write_failure(absent, real_failure, path=missing_dir) is None
+       and not os.path.isdir(os.path.dirname(missing_dir)), 'none=1')
+
+    branch2 = shot_src.split('if not report or not report.get("ok")', 1)
+    wired2 = branch2[1][:900] if len(branch2) == 2 else ''
+    ok('AC-LIVE11 the shipped failure branch writes the artifact before exit',
+       len(branch2) == 2 and 'write_failure(' in wired2
+       and '"artifact"' in wired2
+       and wired2.find('write_failure(') < wired2.find('return 3'),
+       'wired=%d' % (len(branch2) - 1))
+    for path in (refused_path, failed_path, collided_path):
+        if os.path.exists(path):
+            os.remove(path)
+
     total = len(CHECKS)
     acs = set()
     for name in CHECKS:
