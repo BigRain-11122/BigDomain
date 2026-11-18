@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2959 PRODUCT+ENGINEERING: the namespace rule's exemption moved off the basename and onto the path relative to the scanned root. R2956 exempted any file called panel.py, any test_*.py and the scanner itself, so a module named panel.py anywhere in the tree was read as the owner and any test module anywhere was read as scaffolding - the rule's one blind spot, and a name-shaped blind spot does not narrow when the code moves. panel_log_ns_scan.py now exempts exactly sandbox/panel.py (owner), sandbox/panel_log_ns_scan.py (judge) and the DIRECT children sandbox/test_*.py (fixture). The key stays relative, so a copy of the tree under another absolute path keeps the same verdicts instead of refusing its own owner.",
+    "current": "2026-11-18 R2960 PRODUCT+ENGINEERING: the namespace rule stopped reading the stem as a WORD in the file text and started reading it as a VALUE. R2956 shipped a candidate prefilter (the whole stem must appear in the source before the file is parsed) and a literal test, so a path built as two halves - the ordinary shape, \"bigdomain-panel-\" + \"child-x.txt\" - never reached the AST at all, and a path RETURNED from a function walked straight past the one-hop name follow. A string is now evaluated statically first (Constant, BinOp(+) with two evaluable sides, and a JoinedStr whose every part is a constant), so a composed literal IS the stem; the prefilter widened from the whole stem to the WORD bigdomain, so any split that keeps that word whole in one literal is parsed and judged; and a return whose value carries the stem is refused as FOREIGN_NAME detail=return, because a returned path is the same licence a module-level binding is - one frame up from the write it enables. Two shipped modules carry a BOM and the widened prefilter brings them to the parser, so the read is utf-8-sig: that removes a false unparseable row, it does not loosen a judgement.",
     "do": "2026-11-18 R2936 PRODUCT: the last two faces the hub publishes stopped reading NOT STARTED. src/sandbox/start_all.py now plans ten ports for eight faces, starts the shipped control panel and membership page as its own children, and hands their MEASURED ports to the lobby on its command line instead of letting the hub advertise built-in 8099/8096 guesses. Live: start_all.py --check rc=0 with all eight faces live; ceo_live_shot.py --prove --check rc=0 faces=9 shots_total=18 with_errors=0 proof{passes:2, agreements:9, disagreed:[]} in 30.4s - nine faces shot twice on one sandbox, no drift.",
     "last_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-panel-R2958.log (336B, 2026-11-18)",
-    "latest_evidence": "qa/leg-panel-R2958.log (336B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-panel-log-ns-R2960.log (335B, 2026-11-18)",
+    "latest_evidence": "qa/leg-panel-log-ns-R2960.log (335B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2960] next window (<=12h): (0) MAIN — the namespace scanner's candidate prefilter reads each file for the whole stem, so a path assembled from two halves (`\"bigdomain-panel-\" + \"child-\"`) escapes it entirely, and a path RETURNED from another function escapes the one-hop name follow: decide and prove one composed-stem shape is judged (red control = the same module with the halves joined by a non-stem value stays green), or declare composed stems out of range by name with the shapes listed. (1) carried from R2958: `root=None` still tolerates a temp dir that cannot be listed and answers with an empty report — decide whether the default scope should be named/counted (`E_PANEL_SCOPE_UNLISTABLE`) or declared out of range by name, since a panel start must not crash over a folder it did not choose. (2) carried from R2950/R2953: `wait_port` early-exits when the child dies, which reads a DAEMONIZING face as a failure — decide whether the shipped launcher/panel should support that shape at all, or declare the shape out of range by name (truncated)",
-    "next_milestone_due": "2026-11-19T08:56:02+08:00",
-    "updated_at": "2026-11-18T20:56:02+08:00"
+    "next_milestone": "[R2961] next window (<=12h): (0) MAIN — carried from R2958/R2959: the window functions still tolerate `root=None` resolving to a temp directory that cannot be listed, and answer with an EMPTY report that is field-for-field a clean folder. Decide and prove either a named refusal (`E_PANEL_SCOPE_UNLISTABLE`) for the DEFAULT scope too (red control = a readable temp dir still returns a report, and a panel start over an unreadable temp dir is measured rather than asserted), or declare the default scope out of range by name with the reason a panel start must not crash over a folder it did not choose. (1) carried from R2950/R2953: `wait_port` early-exits when the child dies, which reads a DAEMONIZING face (parent forks and exits, grandchild serves) as a failure — decide whether the shipped launcher/panel should support that shape at all, or declare the shape out of range by name. (2) carried from R2947: `is_in_job` is shipped but a child that ESCAPES cannot be produced without breakaway privilege — measure a real escape or declare it unmeasurable here (truncated)",
+    "next_milestone_due": "2026-11-19T09:10:35+08:00",
+    "updated_at": "2026-11-18T21:10:35+08:00"
   },
-  "current": "2026-11-18 R2959 PRODUCT+ENGINEERING: the namespace rule's exemption moved off the basename and onto the path relative to the scanned root. R2956 exempted any file called panel.py, any test_*.py and the scanner itself, so a module named panel.py anywhere in the tree was read as the owner and any test module anywhere was read as scaffolding - the rule's one blind spot, and a name-shaped blind spot does not narrow when the code moves. panel_log_ns_scan.py now exempts exactly sandbox/panel.py (owner), sandbox/panel_log_ns_scan.py (judge) and the DIRECT children sandbox/test_*.py (fixture). The key stays relative, so a copy of the tree under another absolute path keeps the same verdicts instead of refusing its own owner.",
+  "current": "2026-11-18 R2960 PRODUCT+ENGINEERING: the namespace rule stopped reading the stem as a WORD in the file text and started reading it as a VALUE. R2956 shipped a candidate prefilter (the whole stem must appear in the source before the file is parsed) and a literal test, so a path built as two halves - the ordinary shape, \"bigdomain-panel-\" + \"child-x.txt\" - never reached the AST at all, and a path RETURNED from a function walked straight past the one-hop name follow. A string is now evaluated statically first (Constant, BinOp(+) with two evaluable sides, and a JoinedStr whose every part is a constant), so a composed literal IS the stem; the prefilter widened from the whole stem to the WORD bigdomain, so any split that keeps that word whole in one literal is parsed and judged; and a return whose value carries the stem is refused as FOREIGN_NAME detail=return, because a returned path is the same licence a module-level binding is - one frame up from the write it enables. Two shipped modules carry a BOM and the widened prefilter brings them to the parser, so the read is utf-8-sig: that removes a false unparseable row, it does not loosen a judgement.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2959 PRODUCT+ENGINEERING: the namespace rule's exemption moved off the basename and onto the path relative to the scanned root. R2956 exempted any file called panel.py, any test_*.py and the scanner itself, so a module named panel.py anywhere in the tree was read as the owner and any test module anywhere was read as scaffolding - the rule's one blind spot, and a name-shaped blind spot does not narrow when the code moves. panel_log_ns_scan.py now exempts exactly sandbox/panel.py (owner), sandbox/panel_log_ns_scan.py (judge) and the DIRECT children sandbox/test_*.py (fixture). The key stays relative, so a copy of the tree under another absolute path keeps the same verdicts instead of refusing its own owner.",
-  "export_ts": "2026-11-18T20:56:02+08:00",
+  "do": "2026-11-18 R2960 PRODUCT+ENGINEERING: the namespace rule stopped reading the stem as a WORD in the file text and started reading it as a VALUE. R2956 shipped a candidate prefilter (the whole stem must appear in the source before the file is parsed) and a literal test, so a path built as two halves - the ordinary shape, \"bigdomain-panel-\" + \"child-x.txt\" - never reached the AST at all, and a path RETURNED from a function walked straight past the one-hop name follow. A string is now evaluated statically first (Constant, BinOp(+) with two evaluable sides, and a JoinedStr whose every part is a constant), so a composed literal IS the stem; the prefilter widened from the whole stem to the WORD bigdomain, so any split that keeps that word whole in one literal is parsed and judged; and a return whose value carries the stem is refused as FOREIGN_NAME detail=return, because a returned path is the same licence a module-level binding is - one frame up from the write it enables. Two shipped modules carry a BOM and the widened prefilter brings them to the parser, so the read is utf-8-sig: that removes a false unparseable row, it does not loosen a judgement.",
+  "export_ts": "2026-11-18T21:10:35+08:00",
   "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
-  "latest_evidence": "qa/leg-panel-R2958.log (336B, 2026-11-18)",
-  "next_milestone": "[R2960] next window (<=12h): (0) MAIN — the namespace scanner's candidate prefilter reads each file for the whole stem, so a path assembled from two halves (`\"bigdomain-panel-\" + \"child-\"`) escapes it entirely, and a path RETURNED from another function escapes the one-hop name follow: decide and prove one composed-stem shape is judged (red control = the same module with the halves joined by a non-stem value stays green), or declare composed stems out of range by name with the shapes listed. (1) carried from R2958: `root=None` still tolerates a temp dir that cannot be listed and answers with an empty report — decide whether the default scope should be named/counted (`E_PANEL_SCOPE_UNLISTABLE`) or declared out of range by name, since a panel start must not crash over a folder it did not choose. (2) carried from R2950/R2953: `wait_port` early-exits when the child dies, which reads a DAEMONIZING face as a failure — decide whether the shipped launcher/panel should support that shape at all, or declare the shape out of range by name (truncated)",
+  "latest_evidence": "qa/leg-panel-log-ns-R2960.log (335B, 2026-11-18)",
+  "next_milestone": "[R2961] next window (<=12h): (0) MAIN — carried from R2958/R2959: the window functions still tolerate `root=None` resolving to a temp directory that cannot be listed, and answer with an EMPTY report that is field-for-field a clean folder. Decide and prove either a named refusal (`E_PANEL_SCOPE_UNLISTABLE`) for the DEFAULT scope too (red control = a readable temp dir still returns a report, and a panel start over an unreadable temp dir is measured rather than asserted), or declare the default scope out of range by name with the reason a panel start must not crash over a folder it did not choose. (1) carried from R2950/R2953: `wait_port` early-exits when the child dies, which reads a DAEMONIZING face (parent forks and exits, grandchild serves) as a failure — decide whether the shipped launcher/panel should support that shape at all, or declare the shape out of range by name. (2) carried from R2947: `is_in_job` is shipped but a child that ESCAPES cannot be produced without breakaway privilege — measure a real escape or declare it unmeasurable here (truncated)",
   "outs": [
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "qa/bind-scan-R2946.log (546B) + qa/bind-site-scan-suite-R2946.log (176B) + qa/leg-lobby-regress-R2946.log (413B) [2026-11-18 R2946]",
@@ -164,7 +164,7 @@
   },
   "results": [
     [
-      "2958",
+      "2960",
       "OSLoop 执行 tick"
     ]
   ],
@@ -177,15 +177,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 47,
+    "log_lines_in_window": 59,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 64827
+  "state_bytes": 72672
 }

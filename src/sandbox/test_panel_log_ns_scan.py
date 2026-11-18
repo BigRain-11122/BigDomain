@@ -4,7 +4,9 @@ Criteria AC-PAN27..AC-PAN29 were pinned in src/os/backlog.md BEFORE this file
 and src/sandbox/panel_log_ns_scan.py existed (in-window pre-registration,
 disclosed); AC-PAN35..AC-PAN36 were pinned the same way before R2959's change,
 which moved the exemption key off the basename and onto the path relative to
-the scanned root.
+the scanned root, and AC-PAN37..AC-PAN38 the same way again before R2960's
+change, which made a COMPOSED literal the stem and replaced the whole-stem
+candidate prefilter with a word prefilter.
 
 Nothing here is read off the scanner's own prose: each criterion builds a
 private world on disk, runs the SHIPPED ``scan()`` over it, and requires a named
@@ -283,6 +285,129 @@ def main():
     if stray:
         bad.append("exempt-outside-sandbox=%s" % ",".join(stray))
     report("AC-PAN36", bool(bad), ",".join(bad))
+
+    # ---- AC-PAN37: a COMPOSED literal is the stem -------------------------
+    bad = []
+    root = fresh_world("pan37")
+    halves = (
+        "import os\n"
+        "\n"
+        "def leak(root):\n"
+        "    path = os.path.join(root, \"bigdomain-panel-\" + \"child-x.txt\")\n"
+        "    with open(path, \"w\") as handle:\n"
+        "        handle.write(\"x\")\n"
+    )
+    write(root, "pkg.py", halves)
+    composed = panel_log_ns_scan.scan(root=root)
+    row = named(composed).get("pkg.py")
+    if composed["ok"]:
+        bad.append("composed-halves-passed")
+    elif row is None:
+        bad.append("composed-halves-not-named")
+    elif row["code"] != panel_log_ns_scan.FOREIGN_WRITE:
+        bad.append("composed-halves-code=" + str(row["code"]))
+    # red control: the SAME module, the two halves joined by a non-stem value
+    write(root, "pkg.py", halves.replace(
+        '"bigdomain-panel-" + "child-x.txt"',
+        '"bigdomain-panel-" + "zz-child-x.txt"'))
+    joined = panel_log_ns_scan.scan(root=root)
+    if not joined["ok"]:
+        bad.append("nonstem-join-refused=%s"
+                   % ",".join(r["path"] for r in joined["refused"]))
+    if joined["sites"]:
+        bad.append("nonstem-join-sites=%d" % joined["sites"])
+    # three-part composition is the same string once evaluated
+    write(root, "pkg.py", halves.replace(
+        '"bigdomain-panel-" + "child-x.txt"',
+        '"bigdomain-" + "panel-" + "child-x.txt"'))
+    three = panel_log_ns_scan.scan(root=root)
+    if "pkg.py" not in named(three):
+        bad.append("three-part-not-named")
+    # an f-string of constants is a literal; one holding a value is not
+    write(root, "pkg.py", halves.replace(
+        'os.path.join(root, "bigdomain-panel-" + "child-x.txt")',
+        'f"bigdomain-panel-child-x.txt"'))
+    fstring = panel_log_ns_scan.scan(root=root)
+    if "pkg.py" not in named(fstring):
+        bad.append("constant-fstring-not-named")
+    write(root, "pkg.py", halves.replace(
+        'os.path.join(root, "bigdomain-panel-" + "child-x.txt")',
+        'f"bigdomain-panel-{root}child-x.txt"'))
+    dynamic = panel_log_ns_scan.scan(root=root)
+    if not dynamic["ok"]:
+        bad.append("dynamic-fstring-refused")
+    report("AC-PAN37", bool(bad), ",".join(bad))
+
+    # ---- AC-PAN38: a RETURN is the licence, and the boundary is measured --
+    bad = []
+    root = fresh_world("pan38a")
+    write(root, "vendor.py",
+          "import os\n"
+          "\n"
+          "def stem_path(root):\n"
+          "    return os.path.join(root, \"bigdomain-panel-\" + \"child-y.txt\")\n")
+    returned = panel_log_ns_scan.scan(root=root)
+    row = named(returned).get("vendor.py")
+    if returned["ok"]:
+        bad.append("returned-stem-passed")
+    elif row is None:
+        bad.append("returned-stem-not-named")
+    elif row["code"] != panel_log_ns_scan.FOREIGN_NAME:
+        bad.append("returned-stem-code=" + str(row["code"]))
+    elif row["detail"] != "return":
+        bad.append("returned-stem-detail=" + str(row["detail"]))
+    # the same module holding the stem in a LOCAL and returning no string
+    write(root, "vendor.py",
+          "import os\n"
+          "\n"
+          "def peek(root):\n"
+          "    local = os.path.join(root, \"bigdomain-panel-child-y.txt\")\n"
+          "    return len(local)\n")
+    quiet = panel_log_ns_scan.scan(root=root)
+    if not quiet["ok"]:
+        bad.append("local-only-refused=%s"
+                   % ",".join(r["path"] for r in quiet["refused"]))
+    if quiet["sites"]:
+        bad.append("local-only-sites=%d" % quiet["sites"])
+    # the declared boundary, measured rather than asserted: a stem split
+    # INSIDE the prefilter word never reaches the parser, the same shape split
+    # outside the word does.
+    root = fresh_world("pan38b")
+    inside = (
+        "import os\n"
+        "\n"
+        "def leak(root):\n"
+        "    path = os.path.join(root, \"bigdom\" + \"ain-panel-child-x.txt\")\n"
+        "    with open(path, \"w\") as handle:\n"
+        "        handle.write(\"x\")\n"
+    )
+    write(root, "split_in_word.py", inside)
+    skipped = panel_log_ns_scan.scan(root=root)
+    if "split_in_word.py" in named(skipped):
+        bad.append("in-word-split-suddenly-judged")
+    if skipped["parsed"]:
+        bad.append("in-word-split-parsed=%d" % skipped["parsed"])
+    write(root, "split_in_word.py", inside.replace(
+        '"bigdom" + "ain-panel-child-x.txt"',
+        '"bigdomain-panel-chi" + "ld-x.txt"'))
+    outside = panel_log_ns_scan.scan(root=root)
+    if "split_in_word.py" not in named(outside):
+        bad.append("out-of-word-split-not-named")
+    # shipped tree: the widened prefilter is counted, not assumed
+    shipped = panel_log_ns_scan.scan()
+    if not shipped["ok"]:
+        bad.append("shipped-tree-refused")
+    if shipped["parsed"] < 100:
+        bad.append("prefilter-not-widened=%d" % shipped["parsed"])
+    kinds = [row["kind"] for row in shipped["refused"]]
+    if "unparseable" in kinds:
+        bad.append("unparseable-in-shipped-tree")
+    whys = shipped["by_why"]
+    if whys.get("owner", 0) != 1 or whys.get("judge", 0) != 1:
+        bad.append("shipped-owner-judge=%s" % whys)
+    if whys.get("fixture", 0) < 1:
+        bad.append("shipped-fixtures=%s" % whys)
+    report("AC-PAN38", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

@@ -24,14 +24,17 @@ Two codes, one question each:
 
 ``E_PANEL_LOG_NS_FOREIGN_NAME``
     a module other than the owner holds the namespace NAME without writing it
-    yet: a literal containing the stem bound at MODULE level, or a borrow of
-    ``<anything>.LOG_STEM`` / ``.LOG_SUFFIX`` at any level.  Refused because a
-    module-level constant is the licence for a write elsewhere in that module,
-    and because a rule that only watched ``open`` would be one refactor away
-    from blind.  A FUNCTION-LOCAL assignment of the stem is deliberately NOT a
-    name row - it is a step toward a call, and the call is where the write is
-    judged; refusing the local variable would redden ordinary code (the first
-    draft of this rule did exactly that and AC-PAN27 caught it).
+    yet: a literal containing the stem bound at MODULE level, a ``return`` whose
+    value statically carries the stem, or a borrow of ``<anything>.LOG_STEM`` /
+    ``.LOG_SUFFIX`` at any level.  Refused because a module-level constant is
+    the licence for a write elsewhere in that module, a returned path is the
+    same licence one frame up (R2960: the one-hop follow never saw the caller's
+    ``open``), and because a rule that only watched ``open`` would be one
+    refactor away from blind.  A FUNCTION-LOCAL assignment of the stem is
+    deliberately NOT a name row - it is a step toward a call, and the call is
+    where the write is judged; refusing the local variable would redden
+    ordinary code (the first draft of this rule did exactly that and AC-PAN27
+    caught it).
     A read-only BORROW is refused with the writes, because the same import is
     one line from a write; the owner and the fixtures are the named exceptions.
 
@@ -50,10 +53,20 @@ while quietly walking past the places that hold the name; the suite also
 measures that no exempt row lives outside ``sandbox/``.
 
 Not recognised, named rather than implied closed: a path assembled without any
-literal (built from an imported variable, or a stem split across variables),
-``shutil`` / copy based creation, and a write performed by a child process from
-a string it received at run time.  The candidate prefilter reads each file for
-the stem before parsing, so a stem assembled from two halves escapes it.
+literal (built from an imported variable, or a stem split across variables at
+run time), ``shutil`` / copy based creation, and a write performed by a child
+process from a string it received at run time.
+
+R2960 widened two things.  A literal is no longer compared alone: a string is
+evaluated statically first (``Constant``, ``BinOp(Add)`` of two evaluable
+sides, and a ``JoinedStr`` whose every part is a constant), so
+``"bigdomain-panel-" + "child-"`` is the stem and the OLD candidate prefilter -
+which read each file for the whole stem before parsing - is replaced by one
+that reads for the WORD ``bigdomain``.  Any split that keeps that word whole in
+one literal is therefore both parsed and judged.  The boundary that is left is
+named and measured by AC-PAN38: a stem split INSIDE that word
+(``"bigdom" + "ain-panel-child-"``) keeps the word out of the source text, so
+the file is never parsed.
 
 Stdlib only (ast/os/sys), no shell, no network, no writes.
 """
@@ -67,6 +80,10 @@ REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 DEFAULT_ROOT = os.path.join(REPO, "src")
 
 STEM = "bigdomain-panel-child-"
+# The candidate prefilter word: every split of STEM that keeps this word whole
+# inside one literal still puts it in the source text, so such a file is
+# parsed. A split inside the word itself is out of range by name (AC-PAN38).
+STEM_WORD = "bigdomain"
 OWNER_REL = "sandbox/panel.py"
 JUDGE_REL = "sandbox/panel_log_ns_scan.py"
 FIXTURE_DIR = "sandbox"
@@ -128,12 +145,41 @@ def _call_shape(call):
     return "", None
 
 
+def _static_string(node):
+    """The exact string ``node`` evaluates to, or None when it is not static.
+
+    ``Binary +`` of two evaluable sides and a ``JoinedStr`` made only of
+    constants are evaluated, so ``"bigdomain-panel-" + "child-"`` is the stem
+    rather than two harmless halves. A ``JoinedStr`` holding ANY
+    ``FormattedValue`` answers None: joining the constant pieces there would
+    invent a word the program never builds, and a judge that fabricates its
+    own evidence is worse than a blind one.
+    """
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return node.value
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+        left = _static_string(node.left)
+        right = _static_string(node.right)
+        if left is None or right is None:
+            return None
+        return left + right
+    if isinstance(node, ast.JoinedStr):
+        parts = []
+        for part in node.values:
+            if not isinstance(part, ast.Constant) or not isinstance(part.value,
+                                                                  str):
+                return None
+            parts.append(part.value)
+        return "".join(parts)
+    return None
+
+
 def _has_stem(node):
-    """True when any string literal under ``node`` contains the stem."""
+    """True when any statically evaluable string under ``node`` has the stem."""
     for child in ast.walk(node):
-        if isinstance(child, ast.Constant) and isinstance(child.value, str):
-            if STEM in child.value:
-                return True
+        value = _static_string(child)
+        if value is not None and STEM in value:
+            return True
     return False
 
 
@@ -262,6 +308,12 @@ def scan_source(path, text):
                                  "function": name, "kind": KIND_NAME,
                                  "code": FOREIGN_NAME,
                                  "detail": "binding"})
+            elif isinstance(child, ast.Return):
+                if child.value is not None and _has_stem(child.value):
+                    rows.append({"path": rel, "line": child.lineno,
+                                 "function": name, "kind": KIND_NAME,
+                                 "code": FOREIGN_NAME,
+                                 "detail": "return"})
             elif isinstance(child, ast.Attribute):
                 if child.attr in BORROW_ATTRS:
                     rows.append({"path": rel, "line": child.lineno,
@@ -291,9 +343,13 @@ def scan(root=None):
     parsed = 0
     for rel, full in iter_modules(root):
         modules += 1
-        with open(full, "r", encoding="utf-8", errors="replace") as handle:
+        # utf-8-sig: two shipped modules carry a BOM, and after the prefilter
+        # was widened they reach the parser - a BOM refusal would read as a
+        # namespace refusal on a tree that has none (measured at R2960).
+        with open(full, "r", encoding="utf-8-sig", errors="replace") as handle:
             text = handle.read()
-        if STEM not in text and "LOG_STEM" not in text and "LOG_SUFFIX" not in text:
+        if (STEM_WORD not in text and "LOG_STEM" not in text
+                and "LOG_SUFFIX" not in text):
             continue
         parsed += 1
         rows.extend(scan_source(rel, text))
