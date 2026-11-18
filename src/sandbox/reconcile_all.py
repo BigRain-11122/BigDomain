@@ -4637,6 +4637,14 @@ SUITES = [
     # (AC-CR1..AC-CR4 pre-registered in src/os/backlog.md R2990 PIN row.)
     ("os-crawl-record",
      os.path.join("..", "os", "test_crawl_record.py"), 4),
+    # R2991: the executor the record face never had. R2990 shipped a writer and
+    # a reader, and nothing but that writer's own suite ever called it, so the
+    # daily-crawl limb stayed an honest red no round could fill. This suite
+    # grades the two ways a crawl executor lies: a judgement that cannot tell a
+    # changed page from an unchanged one, and a failed retrieval that lands a
+    # record anyway. (AC-RUN1..AC-RUN4 pre-registered in src/os/backlog.md R2991.)
+    ("os-crawl-runner",
+     os.path.join("..", "os", "test_crawl_runner.py"), 4),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep
