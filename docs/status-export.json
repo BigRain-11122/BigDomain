@@ -8,9 +8,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/non-os-ledger-slice-R2923.log (1292B, 2026-11-18)",
     "latest_evidence": "qa/non-os-ledger-slice-R2923.log (1292B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2923] next window (<=12h): (0) FOLD OWED — state closed at 77313B against the 78500B waterline (margin 1187), so fold a whole round through the shipped runner BEFORE any surgery. (1) MAIN — 429 rows are still UNPARSED (truncated)",
-    "next_milestone_due": "2026-11-18T21:54:18+08:00",
-    "updated_at": "2026-11-18T09:54:18+08:00"
+    "next_milestone": "[R2924] next window (<=12h): (0) FOLD — state closed at 77112B against the 78500B waterline (margin 1388), so fold a whole round through the shipped runner BEFORE any surgery; note `state_fold_run --start/--end` are **1-BASED** (the R2923 dry-run was REFUSED with round-split for passing 0-based indices, which straddled the R2904 tokens line). (1) MAIN — 403 non-os registry suites are still unmeasured after this window measured 22 (truncated)",
+    "next_milestone_due": "2026-11-18T21:56:12+08:00",
+    "updated_at": "2026-11-18T09:56:12+08:00"
   },
   "current": "2026-11-18 R2923 PRODUCT: the half of this repository that no slice has ever run now has a measured baseline on its revenue-critical rows. 22 non-os product suites (pay-* 10 + ledger-* 12) ran green over 176 declared criteria in 7.7s total, and all 22 rows had their printed criteria compared against their own registry row (crit_checked=22, crit_mismatch=0). The carried debt \"425 non-os suites never run in any slice\" is therefore 22 MEASURED / 403 unmeasured, instead of an untested whole.",
   "depts": [
@@ -41,10 +41,10 @@
     }
   ],
   "do": "2026-11-18 R2923 PRODUCT: the half of this repository that no slice has ever run now has a measured baseline on its revenue-critical rows. 22 non-os product suites (pay-* 10 + ledger-* 12) ran green over 176 declared criteria in 7.7s total, and all 22 rows had their printed criteria compared against their own registry row (crit_checked=22, crit_mismatch=0). The carried debt \"425 non-os suites never run in any slice\" is therefore 22 MEASURED / 403 unmeasured, instead of an untested whole.",
-  "export_ts": "2026-11-18T09:54:18+08:00",
+  "export_ts": "2026-11-18T09:56:12+08:00",
   "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
   "latest_evidence": "qa/non-os-ledger-slice-R2923.log (1292B, 2026-11-18)",
-  "next_milestone": "[R2923] next window (<=12h): (0) FOLD OWED — state closed at 77313B against the 78500B waterline (margin 1187), so fold a whole round through the shipped runner BEFORE any surgery. (1) MAIN — 429 rows are still UNPARSED (truncated)",
+  "next_milestone": "[R2924] next window (<=12h): (0) FOLD — state closed at 77112B against the 78500B waterline (margin 1388), so fold a whole round through the shipped runner BEFORE any surgery; note `state_fold_run --start/--end` are **1-BASED** (the R2923 dry-run was REFUSED with round-split for passing 0-based indices, which straddled the R2904 tokens line). (1) MAIN — 403 non-os registry suites are still unmeasured after this window measured 22 (truncated)",
   "outs": [
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 mtime]",
