@@ -184,6 +184,35 @@ class ChildGroup(list):
         self.job_enabled = job_enabled
         self.assigned = 0
         self.job_errors = []
+        # R2948: assign() returning without raising only says the CALL worked.
+        # Whether the child is really a member is a question for the kernel,
+        # asked again below, so the report can stop implying it from a count.
+        self.members = {}
+        self.escaped = []
+        self.verified = False
+
+
+def verify_members(group, pids=None):
+    """Ask the kernel which of these pids are inside the group's job.
+
+    R2948: this is the shipped consumer of ``job_object.is_in_job``. A pid the
+    kernel reports outside the job is named in ``escaped`` rather than folded
+    into a boolean, because "one child is outside the kill-on-close guarantee"
+    is the only part of this that matters after a crash.
+
+    ``pids`` lets a suite ask the same question about a process this launcher
+    did not start (the red control: a pid that was never assigned must read
+    False, or this verification would be measuring nothing).
+    """
+    if not group.job:
+        return {"checked": False, "members": {}, "escaped": []}
+    members = {}
+    for name, proc in group:
+        members[name] = job_object.is_in_job(group.job, proc.pid)
+    for name, pid in (pids or {}).items():
+        members[name] = job_object.is_in_job(group.job, int(pid))
+    escaped = [name for name, inside in members.items() if not inside]
+    return {"checked": True, "members": members, "escaped": escaped}
 
 
 def start(commands, use_job=True):
@@ -196,7 +225,13 @@ def start(commands, use_job=True):
     group = ChildGroup()
     if use_job and job_object.available():
         try:
-            group.job = job_object.create()
+            # R2948: an ANONYMOUS job per launcher. A named job is machine-wide,
+            # so two launchers (or a launcher and a suite) that both created
+            # the default name shared one object: children of one run were
+            # members of the other's job, and "this launcher owns these
+            # children" stopped being true. Anonymous keeps kill-on-close
+            # exactly as strong and local to the process that armed it.
+            group.job = job_object.create(None)
             group.job_enabled = True
         except job_object.JobError as exc:
             group.job_errors.append(str(exc))
@@ -215,6 +250,17 @@ def start(commands, use_job=True):
                 group.assigned += 1
             except job_object.JobError as exc:
                 group.job_errors.append("%s %s" % (name, exc))
+    # R2948: a second, kernel-side read. assign() said the call succeeded; this
+    # says the child IS a member, and a child that is not is named and refused
+    # instead of being counted as protected.
+    if group.job:
+        check = verify_members(group)
+        group.verified = bool(check["checked"])
+        group.members = check["members"]
+        group.escaped = list(check["escaped"])
+        if group.escaped:
+            group.job_errors.append("E_JOB_MEMBER_ESCAPED: "
+                                    + ",".join(group.escaped))
     return group
 
 
@@ -294,6 +340,9 @@ def report_of(host, ports, hub_url, faces, live, errors, group=None,
         "job": {"available": job_object.available(),
                 "enabled": bool(group.job_enabled),
                 "assigned": group.assigned,
+                "verified": bool(group.verified),
+                "members": dict(group.members),
+                "escaped": list(group.escaped),
                 "errors": list(group.job_errors)},
         "mutex": dict(mutex or {}),
         "errors": errors,
@@ -369,7 +418,8 @@ def main(argv=None):
                 "ports": {}, "face_ports": {}, "faces": {}, "live": {},
                 "children": [], "pids": {},
                 "job": {"available": job_object.available(), "enabled": False,
-                        "assigned": 0, "errors": []},
+                        "assigned": 0, "verified": False, "members": {},
+                        "escaped": [], "errors": []},
                 "mutex": claim_mutex,
                 "registry": {"path": registry_path, "claimed": False,
                              "held_by": holder or None},
@@ -403,7 +453,8 @@ def main(argv=None):
             "ports": {}, "face_ports": {}, "faces": {}, "live": {},
             "children": [], "pids": {},
             "job": {"available": job_object.available(), "enabled": False,
-                    "assigned": 0, "errors": []},
+                    "assigned": 0, "verified": False, "members": {},
+                    "escaped": [], "errors": []},
             "mutex": claim_mutex,
             "registry": {"path": registry_path, "claimed": False,
                          "held_by": holder, "verdict": verdict},

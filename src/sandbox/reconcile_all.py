@@ -266,7 +266,7 @@ SUITES = [
     # probe map, and a teardown that leaves no port open (AC-STL1..AC-STL6
     # pre-registered at R2477; AC-STL7..AC-STL9 pinned at R2936 BEFORE the
     # launcher grew the panel and membership faces).
-    ("start-all", os.path.join("test_start_all.py"), 9),
+    ("start-all", os.path.join("test_start_all.py"), 11),
     # kill-on-close job object (R2937): the defect R2934 MEASURED - a launcher
     # killed hard leaves its children holding sandbox ports - answered by the
     # kernel instead of by a `finally`. AC-KOC1..AC-KOC5 were pinned in
@@ -293,7 +293,7 @@ SUITES = [
     # AC-HSG1..AC-HSG5 were pinned in src/os/backlog.md BEFORE this suite,
     # src/sandbox/birth_gate.py and the six entry wires existed; AC-HSG6..8
     # (R2942) moved the gate into the nine shipped starters.
-    ("birth-gate", os.path.join("test_birth_gate.py"), 10),
+    ("birth-gate", os.path.join("test_birth_gate.py"), 11),
     # R2943: birth_gate judges every face that is started through a shipped
     # starter, so a script that builds a server class ITSELF was outside the
     # range with nothing bounding it (R2942 disclosure). src/sandbox/

@@ -36,6 +36,7 @@ import os
 import socket
 import subprocess
 import sys
+import tempfile
 import threading
 import time
 import urllib.parse
@@ -136,13 +137,40 @@ def can_connect(host, port, timeout=0.35):
         return False
 
 
-def wait_port(host, port, timeout):
+def wait_port(host, port, timeout, proc=None):
+    """Wait for a socket; stop early if the child we are waiting for has died.
+
+    R2948: a face refused at birth exits in well under a second, and waiting
+    the full timeout for a process that is already gone both wastes the click
+    and hides the reason. ``proc`` is optional so existing callers are
+    unchanged.
+    """
     deadline = time.time() + float(timeout)
     while time.time() < deadline:
         if can_connect(host, port):
             return True
+        if proc is not None and proc.poll() is not None:
+            return can_connect(host, port)
         time.sleep(0.15)
     return False
+
+
+def read_tail(path, limit=1200):
+    """The last bytes a child said, decoded for a refusal body.
+
+    R2948: a face that is refused at birth names its code on stderr
+    (``E_FACE_NOT_LAUNCHED_BY_HOLDER``) and exits before binding, so the panel
+    can only report WHY a start failed if it kept those bytes. Missing or
+    unreadable reads as empty rather than raising inside a route.
+    """
+    if not path:
+        return ""
+    try:
+        with open(path, "rb") as handle:
+            data = handle.read()
+    except OSError:
+        return ""
+    return data.decode("utf-8", "replace")[-limit:]
 
 
 def read_notices(path=LEDGER_CONFIG):
@@ -285,19 +313,37 @@ class Panel(object):
                 port = free_port(self.host)
                 argv = [sys.executable, FACE_MODULES[face_id][0],
                         "--host", self.host, "--port", str(port)]
-            proc = subprocess.Popen(
-                argv,
-                stdin=subprocess.DEVNULL,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                creationflags=NO_WINDOW,
-            )
+            # R2948: the child's own stderr is the only place a named refusal
+            # can come from (a grandchild of the launcher is refused at birth,
+            # by name, before it binds), so it is captured to a file instead of
+            # being thrown away - DEVNULL made every failure read the same.
+            log_path = os.path.join(tempfile.gettempdir(),
+                                    "bigdomain-panel-child-%s.txt" % face_id)
+            log_handle = open(log_path, "wb")
+            try:
+                proc = subprocess.Popen(
+                    argv,
+                    stdin=subprocess.DEVNULL,
+                    stdout=subprocess.DEVNULL,
+                    stderr=log_handle,
+                    creationflags=NO_WINDOW,
+                )
+            finally:
+                log_handle.close()
             self.children[face_id] = {"port": port, "proc": proc,
-                                      "ports": ports}
-        if not wait_port(self.host, port, self.timeout):
+                                      "ports": ports, "log": log_path}
+        if not wait_port(self.host, port, self.timeout,
+                         (self.children.get(face_id) or {}).get("proc")):
+            child_log = read_tail(self.children.get(face_id, {}).get("log"))
+            exit_code = None
+            entry = self.children.get(face_id) or {}
+            if entry.get("proc") is not None:
+                exit_code = entry["proc"].poll()
             self._kill(face_id)
             return 500, {"error": "E_PANEL_NOT_UP", "face": face_id,
                          "port": port,
+                         "child_exit": exit_code,
+                         "child_log": child_log,
                          "detail": "the module was launched but its port never "
                                    "accepted a connection"}
         body = {

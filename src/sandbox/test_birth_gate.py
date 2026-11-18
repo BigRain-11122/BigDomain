@@ -1,6 +1,6 @@
 """Suite for the birth-site gate that closes R2940's measured hand-start hole.
 
-Ten criteria AC-HSG1..AC-HSG10. AC-HSG1..AC-HSG5 were pre-registered in
+Eleven criteria AC-HSG1..AC-HSG11. AC-HSG1..AC-HSG5 were pre-registered in
 src/os/backlog.md BEFORE this file, src/sandbox/birth_gate.py and the six entry
 wires existed; AC-HSG6..AC-HSG8 were pinned in the same board in the R2942
 window before the gate moved into the nine shipped starters; AC-HSG9 and
@@ -32,11 +32,16 @@ import os
 import socket
 import subprocess
 import sys
+import tempfile
 import time
+import urllib.error
+import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 LOBBY = os.path.join(HERE, "lobby", "server.py")
+PANEL = os.path.join(HERE, "panel.py")
+CHECKOUT = os.path.join(HERE, "lobby", "checkout_demo.py")
 LEAF = os.path.join(HERE, "birth_gate.py")
 REGISTRY = os.path.join(HERE, "reconcile_all.py")
 ROW = "birth-gate"
@@ -210,6 +215,29 @@ def face_argv(port):
     for flag in ("--city-http-port", "--gate-port", "--web-port", "--hub-port"):
         argv += [flag, str(free_port())]
     return argv
+
+
+def checkout_argv(port):
+    """The shipped checkout entry - the exact shape the panel spawns."""
+    return [sys.executable, CHECKOUT, "--host", "127.0.0.1",
+            "--port", str(port)]
+
+
+def post_json(port, path, payload, timeout=20.0):
+    """(status, body) for one panel route; a refusal is a result, not a raise."""
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        "http://127.0.0.1:%d%s" % (int(port), path), data=data, method="POST",
+        headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as res:
+            return res.status, json.loads(res.read().decode("utf-8") or "{}")
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", "replace")
+        try:
+            return exc.code, json.loads(body or "{}")
+        except ValueError:
+            return exc.code, {"raw": body}
 
 
 def write_holder():
@@ -611,6 +639,72 @@ def main():
             except OSError:
                 pass
     report("AC-HSG10", bool(bad), ",".join(bad))
+
+    # ---- AC-HSG11: launcher -> panel -> face, on the SHIPPED panel --------
+    # R2948: the grandchild path had never been driven through the shipped
+    # panel. The holder starts the real panel as its OWN child (no
+    # --owned-face, so the panel believes it may start faces), the panel then
+    # spawns the shipped checkout module - and that child is a grandchild of
+    # the claim holder, so the birth gate refuses it by name. The panel reports
+    # the child's own words because R2948 made it keep the child's stderr; the
+    # control runs the SAME vector one layer up, where the holder is the parent
+    # and the face therefore comes up.
+    bad = []
+    panel_port = free_port()
+    child_log = os.path.join(tempfile.gettempdir(),
+                             "bigdomain-panel-child-checkout.txt")
+    if os.path.exists(child_log):
+        os.remove(child_log)
+    holder = Holder(record, mutex, name="hsg11",
+                    child_argv=[sys.executable, PANEL, "--host", "127.0.0.1",
+                                "--port", str(panel_port)])
+    if not holder.start():
+        bad.append("holder-never-claimed")
+    try:
+        if not wait_port(panel_port, 40):
+            bad.append("panel-never-came-up")
+        else:
+            code, obj = post_json(panel_port, "/panel/api/start",
+                                  {"face": "checkout"})
+            if code != 500:
+                bad.append("start-code-%s" % code)
+            if obj.get("error") != "E_PANEL_NOT_UP":
+                bad.append("start-err-%s" % obj.get("error"))
+            if birth_gate.REFUSED not in (obj.get("child_log") or ""):
+                bad.append("child-log-hides-code")
+            if obj.get("child_exit") != 3:
+                bad.append("child-exit-%s" % obj.get("child_exit"))
+            if can_connect(int(obj.get("port") or 0)):
+                bad.append("grandchild-bound-anyway")
+    finally:
+        holder.stop()
+        if os.path.exists(record):
+            try:
+                os.remove(record)
+            except OSError:
+                pass
+        if os.path.exists(child_log):
+            try:
+                os.remove(child_log)
+            except OSError:
+                pass
+    # control: the same vector, started by the HOLDER itself, must come up.
+    port = free_port()
+    holder = Holder(record, mutex, name="hsg11c",
+                    child_argv=checkout_argv(port))
+    if not holder.start():
+        bad.append("control-holder-never-claimed")
+    try:
+        if not wait_port(port, 40):
+            bad.append("holder-child-never-came-up")
+    finally:
+        holder.stop()
+        if os.path.exists(record):
+            try:
+                os.remove(record)
+            except OSError:
+                pass
+    report("AC-HSG11", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

@@ -1,9 +1,12 @@
 """Suite for the one-command sandbox launcher (BigDomain R2477).
 
-Nine criteria AC-STL1..AC-STL9. AC-STL1..AC-STL6 were pre-registered in the
+Eleven criteria AC-STL1..AC-STL11. AC-STL1..AC-STL6 were pre-registered in the
 R2477 backlog row BEFORE this file, src/sandbox/start_all.py and its registry
 row existed; AC-STL7..AC-STL9 were pinned in the R2936 backlog row BEFORE the
 launcher grew its last two faces (in-window pre-registration, disclosed).
+AC-STL10..AC-STL11 were pinned in the R2948 row BEFORE the launcher verified
+its own job members and before the grandson path was measured on the shipped
+panel.
 
 Nothing here is read off a canned string: the launcher is really started in
 serve mode, the report it writes is compared against the hub's own probe
@@ -13,7 +16,7 @@ page file carries, a blocked port is proved to make the launcher REFUSE, and
 the teardown leg proves the ports are gone after the stop file appears.
 
 Usage: python test_start_all.py
-Exit: 0 = SUITE PASS 9/9, 2 = FAIL.
+Exit: 0 = SUITE PASS 11/11, 2 = FAIL.
 """
 
 import json
@@ -81,6 +84,42 @@ def can_connect(port, timeout=0.35):
 def fetch_json(url, timeout=15.0):
     with urllib.request.urlopen(url, timeout=timeout) as res:
         return json.loads(res.read().decode("utf-8"))
+
+
+def panel_face_ids():
+    """The faces the SHIPPED panel exposes, read from its own module."""
+    import panel as panel_module
+    return tuple(panel_module.FACE_IDS)
+
+
+STATE_ERROR = ""
+
+
+def panel_state(port):
+    """The panel's own state, or None with the reason kept for the report."""
+    global STATE_ERROR
+    try:
+        return fetch_json("http://127.0.0.1:%d/panel/api/state" % int(port))
+    except (OSError, ValueError, urllib.error.URLError) as exc:
+        STATE_ERROR = "%r" % (exc,)
+        return None
+
+
+def panel_post(port, path, payload):
+    """(status, body) even when the status is a refusal, never an exception."""
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        "http://127.0.0.1:%d%s" % (int(port), path), data=data, method="POST",
+        headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=15) as res:
+            return res.status, json.loads(res.read().decode("utf-8") or "{}")
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", "replace")
+        try:
+            return exc.code, json.loads(body or "{}")
+        except ValueError:
+            return exc.code, {"raw": body}
 
 
 def fetch_text(url, timeout=15.0):
@@ -181,6 +220,8 @@ def main():
         report("AC-STL7", True, "no report")
         report("AC-STL8", True, "no report")
         report("AC-STL9", True, "no report")
+        report("AC-STL10", True, "no report")
+        report("AC-STL11", True, "no report")
         box.stop()
         return 2
     ports = rep.get("ports") or {}
@@ -405,6 +446,145 @@ def main():
     finally:
         blocker.close()
     report("AC-STL9", bool(bad), ",".join(bad))
+
+    # AC-STL10 (R2948): the launcher verifies its OWN members against the
+    # kernel. A report that says "assigned=6" only says the call returned; the
+    # question that survives a crash is whether each child is really inside
+    # the job. Both directions run here: the live run must read every member
+    # True, and a pid that was never placed must read False and be named.
+    bad = []
+    job = rep.get("job") or {}
+    children = [name for name, _rel in (rep.get("children") or [])]
+    if job.get("available"):
+        if not job.get("enabled"):
+            bad.append("job-not-enabled")
+        if not job.get("verified"):
+            bad.append("members-never-verified")
+        members = job.get("members") or {}
+        for name in children:
+            if members.get(name) is not True:
+                bad.append("member-%s-%s" % (name, members.get(name)))
+        if job.get("escaped"):
+            bad.append("escaped-" + ",".join(job["escaped"]))
+    elif job.get("verified"):
+        bad.append("claimed-verification-without-kernel")
+    # red control, in-process: the same helper, asked about a process that was
+    # never placed, must name it instead of folding it into a count.
+    import job_object
+    import start_all
+
+    outsider = subprocess.Popen([sys.executable, "-c",
+                                 "import time; time.sleep(20)"],
+                                stdin=subprocess.DEVNULL,
+                                stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+    probe = subprocess.Popen([sys.executable, "-c",
+                              "import time; time.sleep(20)"],
+                             stdin=subprocess.DEVNULL,
+                             stdout=subprocess.DEVNULL,
+                             stderr=subprocess.DEVNULL)
+    group = start_all.ChildGroup()
+    try:
+        if job_object.available():
+            group.job = job_object.create("bigdomain-stl10")
+            group.job_enabled = True
+            group.append(("probe", probe))
+            job_object.assign(group.job, probe.pid)
+            check = start_all.verify_members(group, {"outsider": outsider.pid})
+            if check.get("checked") is not True:
+                bad.append("in-process-not-checked")
+            if check["members"].get("outsider") is not False:
+                bad.append("outsider-read-%s" % check["members"].get("outsider"))
+            if "outsider" not in check.get("escaped", []):
+                bad.append("outsider-not-named-escaped")
+            # and a placed pid reads True, so the arm is not refusing all
+            placed = start_all.verify_members(group)
+            if placed["members"].get("probe") is not True:
+                bad.append("placed-read-%s" % placed["members"].get("probe"))
+            if placed.get("escaped"):
+                bad.append("placed-named-escaped")
+        # --no-job must not pretend to have verified anything
+        nojob = start_all.start([("probe", [sys.executable, "-c",
+                                            "import time; time.sleep(5)"])],
+                                use_job=False)
+        try:
+            if nojob.verified:
+                bad.append("nojob-claims-verified")
+            if nojob.escaped:
+                bad.append("nojob-claims-escaped")
+        finally:
+            start_all.teardown(nojob)
+    finally:
+        if group.job:
+            job_object.close(group.job)
+            group.job = None
+        for proc in (probe, outsider):
+            if proc.poll() is None:
+                proc.terminate()
+            try:
+                proc.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+    report("AC-STL10", bool(bad), ",".join(bad))
+
+    # AC-STL11 (R2948): the launcher -> panel -> face path is not merely
+    # refused at the face, it is not OFFERED by the shipped door. The panel the
+    # real launcher started owns every face it serves, so each startable verb
+    # must answer 409 by name and spawn nothing. A launcher is started HERE
+    # because AC-STL5 already proved the first one tears down on its stop file.
+    bad = []
+    box = Sandbox(tmpdir, name="owner-report.json")
+    rep = box.start()
+    try:
+        if not rep:
+            bad.append("no-report")
+        else:
+            panel_port = (rep.get("face_ports") or {}).get("panel")
+            ports = rep.get("face_ports") or {}
+            if not panel_port:
+                bad.append("no-panel-port")
+            else:
+                face_ids = panel_face_ids()
+                before = panel_state(panel_port)
+                if not before:
+                    bad.append("panel-state-unreadable:" + STATE_ERROR)
+                else:
+                    rows = dict((row.get("id"), row)
+                                for row in before.get("faces") or [])
+                    for face_id in face_ids:
+                        row = rows.get(face_id) or {}
+                        if row.get("owner") != "launcher":
+                            bad.append("row-%s-owner-%s"
+                                       % (face_id, row.get("owner")))
+                    for face_id in face_ids:
+                        code, obj = panel_post(panel_port, "/panel/api/start",
+                                               {"face": face_id})
+                        if code != 409:
+                            bad.append("start-%s-code-%s" % (face_id, code))
+                            continue
+                        if obj.get("error") != "E_PANEL_OWNED_BY_LAUNCHER":
+                            bad.append("start-%s-err-%s"
+                                       % (face_id, obj.get("error")))
+                        if obj.get("owner") != "launcher":
+                            bad.append("start-%s-owner-%s"
+                                       % (face_id, obj.get("owner")))
+                        want = ports.get(face_id)
+                        if want is not None and int(obj.get("port") or 0) != int(want):
+                            bad.append("start-%s-port-%s"
+                                       % (face_id, obj.get("port")))
+                    after = panel_state(panel_port)
+                    if after:
+                        if (after.get("faces") or []) != (before.get("faces") or []):
+                            bad.append("panel-rows-moved-after-refusals")
+                        for row in after.get("faces") or []:
+                            if row.get("owner") != "launcher":
+                                bad.append("after-%s-owner-%s"
+                                           % (row.get("id"), row.get("owner")))
+                    else:
+                        bad.append("panel-state-unreadable-after")
+    finally:
+        box.stop()
+    report("AC-STL11", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
