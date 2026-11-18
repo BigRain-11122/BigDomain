@@ -14,13 +14,56 @@ Usage:
 Exit codes: 0 = ADOPT, 2 = REJECT, 3 = unreadable input.
 Source discipline: pure ASCII, stdlib only, no clock, no network.
 """
+import hashlib
 import io
 import json
+import os
 import re
 import sys
 
 ROW_RE = re.compile(r'^SHARD row (\S+)\s+(.*)$')
 SUITE_RE = re.compile(r'suite=(PASS|FAIL) (\d+)/(\d+)')
+
+# R2927: a killed leg is not a family measurement, and two lived in qa/ for three
+# windows as an undecided board item. Re-running 444 rows does not fit a window
+# (the R2912 rate was 192.2s/60 rows), so the answer is a DECLARATION that lets
+# the rows it did print be cited one at a time - and only that. The declaration
+# is bound to the leg's exact bytes, so it can never be widened to a log written
+# later, and it is never consulted for a leg that closed.
+DECL_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                         'src', 'os', 'leg_granularity.json')
+NO_CLOSING = 'E_NO_CLOSING_ROW'
+NOT_COMPLETE = 'E_NOT_COMPLETE'
+
+
+def load_declarations(path=None):
+    """Read the row-granularity declarations; absent or broken reads as none."""
+    target = path or DECL_PATH
+    try:
+        doc = json.load(io.open(target, 'r', encoding='utf-8'))
+    except (OSError, ValueError):
+        return {}
+    out = {}
+    for entry in doc.get('declarations') or []:
+        leg = entry.get('leg')
+        digest = entry.get('sha256')
+        if isinstance(leg, str) and isinstance(digest, str):
+            out[leg.replace('\\', '/')] = entry
+    return out
+
+
+def declaration_for(path, raw, decl):
+    """The declaration matching BOTH this path and these bytes, or None."""
+    if not decl or raw is None or not path:
+        return None
+    entry = decl.get(path.replace('\\', '/').lstrip('./'))
+    if entry is None:
+        return None
+    if entry.get('granularity') != 'row':
+        return None
+    if hashlib.sha256(raw).hexdigest() != str(entry.get('sha256', '')).lower():
+        return None
+    return entry
 
 
 def _kv(rest):
@@ -79,8 +122,18 @@ def parse(text):
     return {'header': header, 'rows': rows, 'closing': closing, 'stray': stray}
 
 
-def audit_text(text):
-    """Return {'verdict', 'reasons', 'facts'} for one leg log's text."""
+ROW_REASON_PREFIXES = ('E_ROW_UNPARSED', 'E_ROW_VERDICT', 'E_ROW_RC_VERDICT',
+                       'E_ROW_PAIR_ABSENT', 'E_ROW_PAIR_SHAPE')
+
+
+def audit_text(text, path=None, raw=None, decl=None):
+    """Return {'verdict', 'reasons', 'facts'} for one leg log's text.
+
+    `path`/`raw` are optional and only widen the question: with the exact bytes
+    and a matching declaration, an unfinished leg may be labelled ROW-GRANULAR
+    (its rows are citable one at a time) instead of FAILED-LAUNCH. The verdict
+    never becomes ADOPT by that route.
+    """
     p = parse(text)
     header, rows, closing = p['header'], p['rows'], p['closing']
     reasons = []
@@ -169,12 +222,32 @@ def audit_text(text):
             if (not clean) and c_rc == 0 and c_exec == len(rows):
                 reasons.append('E_CLOSING_RC_GREEN')
 
+    bad_rows = set()
+    for reason in reasons:
+        for prefix in ROW_REASON_PREFIXES:
+            if reason.startswith(prefix + ':'):
+                bad_rows.add(reason.split(':', 1)[1])
+
+    entry = None
+    if closing is None and header is not None:
+        entry = declaration_for(path, raw, decl)
+    if entry is not None:
+        # The declaration answers exactly the two reasons it names - the missing
+        # closing row and the header that never said COMPLETE - and nothing else.
+        # A row defect is not excused: it stays in reasons and costs its row.
+        kept = [r for r in reasons
+                if r != NO_CLOSING and not r.startswith(NOT_COMPLETE)]
+        reasons = kept
+
     facts = {
         'rows': len(rows),
         'unique': len(set(names)),
         'green': green,
         'reds': reds,
         'criteria': crit_sum,
+        'rows_citable': len(rows) - len(bad_rows),
+        'declared': entry.get('leg') if entry else None,
+        'granularity': 'row' if entry else None,
         'selected': _int(closing, 'selected') if closing else None,
         'executed': _int(closing, 'executed') if closing else None,
         'crit_mismatch': _int(closing, 'crit_mismatch') if closing else None,
@@ -190,16 +263,26 @@ def audit_text(text):
     # counts disagree is a different failure: it measured, and the arithmetic is
     # broken. `verdict` keeps its old two values so every pre-R2913 consumer reads
     # the same thing; `cls` is the new discriminator.
-    if not reasons:
+    # Caught by running, not by reading: once the declaration drops the two
+    # reasons it answers, an all-green unfinished leg leaves reasons EMPTY, and
+    # the first draft then fell into `if not reasons` and published ADOPT - the
+    # exact false green this law exists to stop. ADOPT therefore requires a
+    # closing row, not merely a short reason list.
+    if not reasons and closing is not None:
         cls = 'ADOPT'
+    elif entry is not None:
+        # R2927: never ADOPT. A declared leg is citable row by row and is still
+        # not a family measurement, so `verdict` stays REJECT and family is 0.
+        cls = 'ROW-GRANULAR'
     elif closing is None:
         cls = 'FAILED-LAUNCH'
     else:
         cls = 'REJECT'
     return {
-        'verdict': 'REJECT' if reasons else 'ADOPT',
+        'verdict': 'ADOPT' if (not reasons and closing is not None) else 'REJECT',
         'cls': cls,
         'reasons': reasons,
+        'family': 0 if entry is not None else (1 if cls == 'ADOPT' else 0),
         'facts': facts,
     }
 
@@ -216,30 +299,44 @@ def render(path, result):
     named = ','.join(reasons[:6])
     if len(reasons) > 6:
         named += ',+%d-more' % (len(reasons) - 6)
+    # R2927: `family` and `citable` are appended LAST so every pre-R2927 reader
+    # of this line keeps its field positions.
     return ('LEG-AUDIT %s file=%s rows=%d unique=%d selected=%s executed=%s '
-            'green=%d crit=%d mismatch=%s elapsed=%s reds=%d reasons=%s'
+            'green=%d crit=%d mismatch=%s elapsed=%s reds=%d reasons=%s '
+            'family=%d gran=%s citable=%d'
             % (result.get('cls', result['verdict']), path, f['rows'], f['unique'],
                f['selected'], f['executed'], f['green'], f['criteria'],
-               f['crit_mismatch'], f['elapsed'], len(f['reds']), named or 'none'))
+               f['crit_mismatch'], f['elapsed'], len(f['reds']), named or 'none',
+               result.get('family', 1 if result['verdict'] == 'ADOPT' else 0),
+               f.get('granularity') or '-', f['rows_citable']))
 
 
 def main(argv):
     paths = [a for a in argv if not a.startswith('-')]
     as_json = '--json' in argv
+    decl = {} if '--no-decl' in argv else load_declarations()
+    if '--decl' in argv:
+        at = argv.index('--decl')
+        if at + 1 >= len(argv):
+            print('usage: leg_audit.py <leg.log> [...] [--json] [--decl PATH] [--no-decl]')
+            return 5
+        decl = load_declarations(argv[at + 1])
+        paths = [p for p in paths if p != argv[at + 1]]
     if not paths:
-        print('usage: leg_audit.py <leg.log> [...] [--json]')
+        print('usage: leg_audit.py <leg.log> [...] [--json] [--decl PATH] [--no-decl]')
         return 3
     report = []
     worst = 0
     for path in paths:
         try:
-            text = io.open(path, 'r', encoding='utf-8-sig', errors='replace').read()
+            raw = io.open(path, 'rb').read()
+            text = raw.decode('utf-8-sig', 'replace')
         except OSError as exc:
             report.append({'file': path, 'verdict': 'REJECT',
                            'reasons': ['E_UNREADABLE:%s' % exc]})
             worst = max(worst, 3)
             continue
-        result = audit_text(text)
+        result = audit_text(text, path=path, raw=raw, decl=decl)
         result['file'] = path
         report.append(result)
         if result['verdict'] != 'ADOPT':

@@ -1,0 +1,14 @@
+  | PASS AC-LGA1 a complete green leg is ADOPTED with its declared aggregate verdict=ADOPT facts=17
+  | PASS AC-LGA2 a leg with no closing row is REJECTED naming E_NO_CLOSING_ROW reasons=['E_NO_CLOSING_ROW']
+  | PASS AC-LGA3 a torn leg is REJECTED by row, green and criteria disagreement med=['E_CRITERIA_SUM', 'E_GREEN_COUNT', 'E_ROW_COUNT']
+  | PASS AC-LGA4 a duplicated suite row is REJECTED and the label is named dupes=['E_DUPLICATE_SUITE:probe-a']
+  | PASS AC-LGA5 a forged row is REJECTED while a declared timeout is not forged=['E_ROW_VERDICT:probe-x', 'E_GREEN_COUNT:0!=1'] timeout=[]
+  | PASS AC-LGA6 a RUNNING header is REJECTED and the source is pure ASCII reasons=['E_NOT_COMPLETE:RUNNING']
+  | PASS AC-LGA7 the class separates FAILED-LAUNCH from REJECT on the same rows noclose=FAILED-LAUNCH closed=ADOPT tampered=REJECT
+  | PASS AC-LGA8 eighty-nine green rows without a closing row is FAILED-LAUNCH rows=89 green=89 reds=0 real=killed=FAILED-LAUNCH rows=89 good=ADOPT
+  | PASS AC-LGR10 a declared unfinished leg reads ROW-GRANULAR and is never ADOPT decl=ROW-GRANULAR/REJECT family=0 citable=3 nodecl=FAILED-LAUNCH
+  | PASS AC-LGR11 a declaration binds to bytes and can never upgrade a closed leg byte=FAILED-LAUNCH digest=FAILED-LAUNCH closed=ADOPT/ADOPT family=1
+  | PASS AC-LGR12 a declared leg keeps its defective row red and out of citable rows=334 citable=333 reds=1
+  | PASS AC-LGA9 exactly one registry row declares the criteria this run asserted rows=['12'] asserted=11 (+this arm)
+suite: 12 assertions over 12 criteria
+SUITE PASS 12/12

@@ -1,18 +1,18 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2926 PRODUCT+ENGINEERING: shell-captured evidence can no longer reach a commit. tools/hooks/pre_commit_gate.py now refuses (exit 1, E_HOOK_EVIDENCE) any staged qa/*.log whose STAGED BYTES classify non-tee, naming every path with its class, and the dialect rule moved to src/os/evidence_dialect.py as a LEAF module (stdlib only, no sandbox import) so the commit face can ask it before the registry is loadable; src/os/qa_writer_census.py now DELEGATES to it instead of keeping a copy of the branches, and qa_decode_probe._bom_of imports the leaf too.",
+    "current": "2026-11-18 R2927 PRODUCT+ENGINEERING: the two PARTIAL legs stopped being an undecided board item and became a measured, refutable classification. tools/leg_audit.py gains the class ROW-GRANULAR - a leg with NO closing SHARD rc= row may still have its printed rows cited ONE AT A TIME, but only when src/os/leg_granularity.json declares that leg AND the declared sha256 equals the hash of the bytes actually read; verdict stays REJECT, family=0, and the render line publishes family/gran/citable after the pre-R2927 fields. Measured on the shipped files: qa/non-os-sweep-R2924.log rows=110 citable=110 and qa/non-os-sweep-R2924-chunk3b.log rows=334 citable=333 reds=1 both read ROW-GRANULAR family=0 rc=2, while the SAME bytes under --no-decl read FAILED-LAUNCH with E_NO_CLOSING_ROW,E_NOT_COMPLETE:RUNNING (qa/leg-granular-R2927.log). The one row that is not citable is ledger-apimarket-reportjson (rc=0 pass=10 fail=1 suite=PASS), kept red as E_ROW_VERDICT so the declaration cannot launder a defect.",
     "last_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\journey-19.9.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/census-check-R2926.log (411B, 2026-11-18)",
-    "latest_evidence": "qa/census-check-R2926.log (411B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-granular-R2927.log (1504B, 2026-11-18)",
+    "latest_evidence": "qa/leg-granular-R2927.log (1504B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2926] next window (<=12h): (0) MAIN — the re-freeze hid nothing this time (`590 = 545 + 45` with `disappeared=0`, an identity a reader can check), but the WRITER discipline is still unenforced at birth: the census names a shell-captured file AFTER it lands, and the 45 it just accounted were produced by rounds that believed they were writing evidence correctly. Decide whether the loop's own closeout refuses a label-less evidence file (`tools/qa_log.py` already self-announces through `SHELL_CAPTURE_LABEL` — MEASURE how many of the 45 carry it, and whether \"label absent\" is a refusal or only a census flag), with a red control on whichever wins. (1) the two PARTIAL legs (`qa/non-os-sweep-R2924.log` 110 rows, `qa/non-os-sweep-R2924-chunk3b.log` 334 rows) still have NO closing row and the R2925 board item (2) was NOT decided — pin ONE answer (re-run them through `tmp/run_sweep_labels_R2924.py` so they acquire a closing row, or declare per-row lines the accepted granularity) instead of carrying it a third time (truncated)",
-    "next_milestone_due": "2026-11-18T22:56:34+08:00",
-    "updated_at": "2026-11-18T10:56:34+08:00"
+    "next_milestone": "[R2928] next window (<=12h): (0) MAIN — the two PARTIAL legs are CLOSED (R2927), so the next undecided item is the 45 accounted UTF-16/BOM evidence files (baseline 545 -> 590): decide whether they stay baselined known debt forever or are re-encoded to utf-8/LF through the R2151 `--accept` face, because a baselined UTF-16 file is still mojibake-prone for any reader that opens it — \"counted\" is not \"usable\", and the R2926 commit gate only refuses NEW ones. Measure first: how many of the 579 unlabeled baselined files would `qa_log.py --check` still refuse today, and does a re-encode change any byte a suite asserts on. (1) the commit gate refuses STAGED bytes only, so an uncommitted write still reaches disk — decide whether the closeout runs `qa_writer_census --check` as a hard precondition (a red would then refuse the closeout, not just the commit), with a red control (truncated)",
+    "next_milestone_due": "2026-11-18T23:08:18+08:00",
+    "updated_at": "2026-11-18T11:08:18+08:00"
   },
-  "current": "2026-11-18 R2926 PRODUCT+ENGINEERING: shell-captured evidence can no longer reach a commit. tools/hooks/pre_commit_gate.py now refuses (exit 1, E_HOOK_EVIDENCE) any staged qa/*.log whose STAGED BYTES classify non-tee, naming every path with its class, and the dialect rule moved to src/os/evidence_dialect.py as a LEAF module (stdlib only, no sandbox import) so the commit face can ask it before the registry is loadable; src/os/qa_writer_census.py now DELEGATES to it instead of keeping a copy of the branches, and qa_decode_probe._bom_of imports the leaf too.",
+  "current": "2026-11-18 R2927 PRODUCT+ENGINEERING: the two PARTIAL legs stopped being an undecided board item and became a measured, refutable classification. tools/leg_audit.py gains the class ROW-GRANULAR - a leg with NO closing SHARD rc= row may still have its printed rows cited ONE AT A TIME, but only when src/os/leg_granularity.json declares that leg AND the declared sha256 equals the hash of the bytes actually read; verdict stays REJECT, family=0, and the render line publishes family/gran/citable after the pre-R2927 fields. Measured on the shipped files: qa/non-os-sweep-R2924.log rows=110 citable=110 and qa/non-os-sweep-R2924-chunk3b.log rows=334 citable=333 reds=1 both read ROW-GRANULAR family=0 rc=2, while the SAME bytes under --no-decl read FAILED-LAUNCH with E_NO_CLOSING_ROW,E_NOT_COMPLETE:RUNNING (qa/leg-granular-R2927.log). The one row that is not citable is ledger-apimarket-reportjson (rc=0 pass=10 fail=1 suite=PASS), kept red as E_ROW_VERDICT so the declaration cannot launder a defect.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -40,11 +40,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2926 PRODUCT+ENGINEERING: shell-captured evidence can no longer reach a commit. tools/hooks/pre_commit_gate.py now refuses (exit 1, E_HOOK_EVIDENCE) any staged qa/*.log whose STAGED BYTES classify non-tee, naming every path with its class, and the dialect rule moved to src/os/evidence_dialect.py as a LEAF module (stdlib only, no sandbox import) so the commit face can ask it before the registry is loadable; src/os/qa_writer_census.py now DELEGATES to it instead of keeping a copy of the branches, and qa_decode_probe._bom_of imports the leaf too.",
-  "export_ts": "2026-11-18T10:56:34+08:00",
+  "do": "2026-11-18 R2927 PRODUCT+ENGINEERING: the two PARTIAL legs stopped being an undecided board item and became a measured, refutable classification. tools/leg_audit.py gains the class ROW-GRANULAR - a leg with NO closing SHARD rc= row may still have its printed rows cited ONE AT A TIME, but only when src/os/leg_granularity.json declares that leg AND the declared sha256 equals the hash of the bytes actually read; verdict stays REJECT, family=0, and the render line publishes family/gran/citable after the pre-R2927 fields. Measured on the shipped files: qa/non-os-sweep-R2924.log rows=110 citable=110 and qa/non-os-sweep-R2924-chunk3b.log rows=334 citable=333 reds=1 both read ROW-GRANULAR family=0 rc=2, while the SAME bytes under --no-decl read FAILED-LAUNCH with E_NO_CLOSING_ROW,E_NOT_COMPLETE:RUNNING (qa/leg-granular-R2927.log). The one row that is not citable is ledger-apimarket-reportjson (rc=0 pass=10 fail=1 suite=PASS), kept red as E_ROW_VERDICT so the declaration cannot launder a defect.",
+  "export_ts": "2026-11-18T11:08:18+08:00",
   "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
-  "latest_evidence": "qa/census-check-R2926.log (411B, 2026-11-18)",
-  "next_milestone": "[R2926] next window (<=12h): (0) MAIN — the re-freeze hid nothing this time (`590 = 545 + 45` with `disappeared=0`, an identity a reader can check), but the WRITER discipline is still unenforced at birth: the census names a shell-captured file AFTER it lands, and the 45 it just accounted were produced by rounds that believed they were writing evidence correctly. Decide whether the loop's own closeout refuses a label-less evidence file (`tools/qa_log.py` already self-announces through `SHELL_CAPTURE_LABEL` — MEASURE how many of the 45 carry it, and whether \"label absent\" is a refusal or only a census flag), with a red control on whichever wins. (1) the two PARTIAL legs (`qa/non-os-sweep-R2924.log` 110 rows, `qa/non-os-sweep-R2924-chunk3b.log` 334 rows) still have NO closing row and the R2925 board item (2) was NOT decided — pin ONE answer (re-run them through `tmp/run_sweep_labels_R2924.py` so they acquire a closing row, or declare per-row lines the accepted granularity) instead of carrying it a third time (truncated)",
+  "latest_evidence": "qa/leg-granular-R2927.log (1504B, 2026-11-18)",
+  "next_milestone": "[R2928] next window (<=12h): (0) MAIN — the two PARTIAL legs are CLOSED (R2927), so the next undecided item is the 45 accounted UTF-16/BOM evidence files (baseline 545 -> 590): decide whether they stay baselined known debt forever or are re-encoded to utf-8/LF through the R2151 `--accept` face, because a baselined UTF-16 file is still mojibake-prone for any reader that opens it — \"counted\" is not \"usable\", and the R2926 commit gate only refuses NEW ones. Measure first: how many of the 579 unlabeled baselined files would `qa_log.py --check` still refuse today, and does a re-encode change any byte a suite asserts on. (1) the commit gate refuses STAGED bytes only, so an uncommitted write still reaches disk — decide whether the closeout runs `qa_writer_census --check` as a hard precondition (a red would then refuse the closeout, not just the commit), with a red control (truncated)",
   "outs": [
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 mtime]",
@@ -157,7 +157,7 @@
   },
   "results": [
     [
-      "2926",
+      "2927",
       "OSLoop 执行 tick"
     ]
   ],
@@ -170,15 +170,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 83,
+    "log_lines_in_window": 76,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 79100
+  "state_bytes": 72595
 }

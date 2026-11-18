@@ -1,0 +1,11 @@
+\$ python tools/leg_audit.py qa/non-os-sweep-R2924.log qa/non-os-sweep-R2924-chunk3b.log
+LEG-AUDIT ROW-GRANULAR file=qa/non-os-sweep-R2924.log rows=110 unique=110 selected=None executed=None green=110 crit=1026 mismatch=None elapsed=None reds=0 reasons=none family=0 gran=row citable=110
+LEG-AUDIT ROW-GRANULAR file=qa/non-os-sweep-R2924-chunk3b.log rows=334 unique=334 selected=None executed=None green=333 crit=2805 mismatch=None elapsed=None reds=1 reasons=E_ROW_VERDICT:ledger-apimarket-reportjson family=0 gran=row citable=333
+rc=2
+\$ python tools/leg_audit.py qa/non-os-sweep-R2924.log qa/non-os-sweep-R2924-chunk3b.log --no-decl
+LEG-AUDIT FAILED-LAUNCH file=qa/non-os-sweep-R2924.log rows=110 unique=110 selected=None executed=None green=110 crit=1026 mismatch=None elapsed=None reds=0 reasons=E_NO_CLOSING_ROW,E_NOT_COMPLETE:RUNNING family=0 gran=- citable=110
+LEG-AUDIT FAILED-LAUNCH file=qa/non-os-sweep-R2924-chunk3b.log rows=334 unique=334 selected=None executed=None green=333 crit=2805 mismatch=None elapsed=None reds=1 reasons=E_NO_CLOSING_ROW,E_NOT_COMPLETE:RUNNING,E_ROW_VERDICT:ledger-apimarket-reportjson family=0 gran=- citable=333
+rc=2
+\$ python tools/leg_audit.py qa/non-os-sweep-R2924-chunk3b.log --decl src/os/leg_granularity.json
+LEG-AUDIT ROW-GRANULAR file=qa/non-os-sweep-R2924-chunk3b.log rows=334 unique=334 selected=None executed=None green=333 crit=2805 mismatch=None elapsed=None reds=1 reasons=E_ROW_VERDICT:ledger-apimarket-reportjson family=0 gran=row citable=333
+rc=2

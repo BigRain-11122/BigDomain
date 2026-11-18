@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "what": "Declarations that a killed or truncated battery leg may be cited ROW BY ROW, and never as a family measurement. Read by tools/leg_audit.py; a declaration binds to the leg's exact bytes (sha256), so it cannot be widened to a different log later.",
+  "rules": [
+    "A declaration is only consulted when the leg has NO closing SHARD rc= row; a closed leg is audited exactly as before.",
+    "The declared sha256 must equal the hash of the bytes actually read, or the leg reads FAILED-LAUNCH.",
+    "ROW-GRANULAR is never ADOPT: family=0, and no aggregate in the declaration may be quoted as a family number.",
+    "Row-shape checks still apply. A declared leg with a defective row stays red on that row and loses it from rows_citable."
+  ],
+  "declarations": [
+    {
+      "leg": "qa/non-os-sweep-R2924.log",
+      "sha256": "3256969a0cb3cf8bc5294c3612c9f2584d59cd62bf3785605f39567936f9d1d7",
+      "bytes": 9538,
+      "granularity": "row",
+      "scope": "rows only; no family aggregate; population was selected=428, the leg stopped after 110 rows",
+      "round": "R2927",
+      "reason": "Killed mid-run (header state=RUNNING, no closing row). Re-running 428 rows does not fit a window at the measured 192.2s/60 rows; the 110 lines it did print each carry their own rc/pass/fail/crit and are citable one row at a time."
+    },
+    {
+      "leg": "qa/non-os-sweep-R2924-chunk3b.log",
+      "sha256": "8c2513e57ea08c9bf9902e80712113c53025ef875dc187bb64f495ffae6b6960",
+      "bytes": 30930,
+      "granularity": "row",
+      "scope": "rows only; no family aggregate; the leg carries one defective row that stays red",
+      "round": "R2927",
+      "reason": "Killed mid-run (header state=RUNNING, no closing row). Same cost argument as the sibling; row ledger-apimarket-reportjson reads rc=0 pass=10 fail=1 with suite=PASS, which is a real row-level defect and is deliberately NOT excused here."
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-"""Battery suite for tools/leg_audit.py - criteria AC-LGA1..AC-LGA9.
+"""Battery suite for tools/leg_audit.py - criteria AC-LGA1..AC-LGA9, AC-LGR10..AC-LGR12.
 
 WHY: R2886 pinned the law that a leg without a closing `SHARD rc=` row is not a
 family measurement, and every window since applied it by reading logs by eye. A
@@ -18,6 +18,7 @@ Every fixture is built in-process from three rows, so the suite never depends on
 a log file that could be cleaned out from under it.
 Source discipline: pure ASCII, stdlib only, no clock, no network.
 """
+import hashlib
 import io
 import os
 import re
@@ -185,9 +186,84 @@ def main():
        and real_arm, 'rows=%d green=%d reds=%d real=%s'
        % (mf['rows'], mf['green'], len(mf['reds']), real_detail))
 
+    # AC-LGR10 (R2927): the row-granularity declaration, and the arm that keeps
+    # it honest. The board carried two killed legs for three windows because
+    # neither answer was written down: a re-run does not fit a window, and
+    # "quote the rows anyway" was prose. A declaration now says the rows are the
+    # granularity - and the SAME bytes without it must still read FAILED-LAUNCH.
+    base = leg(closing=False)
+    rawb = base.encode('utf-8')
+    decl = {'qa/probe.log': {'leg': 'qa/probe.log', 'granularity': 'row',
+                             'sha256': hashlib.sha256(rawb).hexdigest()}}
+    r_decl = audit(base, path='qa/probe.log', raw=rawb, decl=decl)
+    r_nodecl = audit(base, path='qa/probe.log', raw=rawb, decl=None)
+    ok('AC-LGR10 a declared unfinished leg reads ROW-GRANULAR and is never ADOPT',
+       r_decl['cls'] == 'ROW-GRANULAR' and r_decl['verdict'] == 'REJECT'
+       and r_decl['family'] == 0 and r_decl['facts']['rows_citable'] == 3
+       and r_nodecl['cls'] == 'FAILED-LAUNCH'
+       and 'E_NO_CLOSING_ROW' in r_nodecl['reasons'],
+       'decl=%s/%s family=%s citable=%s nodecl=%s'
+       % (r_decl['cls'], r_decl['verdict'], r_decl['family'],
+          r_decl['facts']['rows_citable'], r_nodecl['cls']))
+
+    # AC-LGR11 (R2927): the declaration is bound to BYTES and to UNFINISHED
+    # legs, measured in both directions on the same declaration: one changed
+    # byte or a wrong digest restores FAILED-LAUNCH, and a leg that CLOSED is
+    # audited exactly as before whether or not a declaration names it - a
+    # declaration can never upgrade a closed leg, nor launder a REJECT.
+    doctored = base.replace('0.1s', '0.2s', 1)
+    dr = doctored.encode('utf-8')
+    wrong = {'qa/probe.log': {'leg': 'qa/probe.log', 'granularity': 'row',
+                              'sha256': '0' * 64}}
+    r_byte = audit(doctored, path='qa/probe.log', raw=dr, decl=decl)
+    r_digest = audit(base, path='qa/probe.log', raw=rawb, decl=wrong)
+    closed_txt = leg()
+    closed_raw = closed_txt.encode('utf-8')
+    decl_closed = {'qa/probe.log': {'leg': 'qa/probe.log', 'granularity': 'row',
+                                    'sha256': hashlib.sha256(closed_raw).hexdigest()}}
+    r_closed_decl = audit(closed_txt, path='qa/probe.log', raw=closed_raw,
+                          decl=decl_closed)
+    ok('AC-LGR11 a declaration binds to bytes and can never upgrade a closed leg',
+       r_byte['cls'] == 'FAILED-LAUNCH' and r_digest['cls'] == 'FAILED-LAUNCH'
+       and r_closed_decl['cls'] == 'ADOPT'
+       and r_closed_decl['verdict'] == 'ADOPT'
+       and r_closed_decl['family'] == 1,
+       'byte=%s digest=%s closed=%s/%s family=%s'
+       % (r_byte['cls'], r_digest['cls'], r_closed_decl['cls'],
+          r_closed_decl['verdict'], r_closed_decl['family']))
+
+    # AC-LGR12 (R2927): the declaration must not wash a defective row. The live
+    # chunk3b leg carries exactly one such row (rc=0, pass=10, fail=1, suite=PASS
+    # prints all three at once), so the arm is measured on the shipped bytes and
+    # an absent file is DISCLOSED rather than passed: rows_citable + reds = rows.
+    live = os.path.join(ROOT, 'qa', 'non-os-sweep-R2924-chunk3b.log')
+    if os.path.isfile(live):
+        lraw = io.open(live, 'rb').read()
+        lres = audit(lraw.decode('utf-8-sig', 'replace'),
+                     path='qa/non-os-sweep-R2924-chunk3b.log', raw=lraw,
+                     decl=ns['load_declarations']())
+        lf = lres['facts']
+        live_ok = (lres['cls'] == 'ROW-GRANULAR' and lres['family'] == 0
+                   and 'E_ROW_VERDICT:ledger-apimarket-reportjson' in lres['reasons']
+                   and lf['rows_citable'] + len(lf['reds']) == lf['rows'])
+        live_detail = 'rows=%d citable=%d reds=%d' % (
+            lf['rows'], lf['rows_citable'], len(lf['reds']))
+    else:
+        live_ok = True
+        live_detail = 'absent'
+        print('  | DISCLOSE qa/non-os-sweep-R2924-chunk3b.log not on disk - this '
+               'arm measured nothing')
+    ok('AC-LGR12 a declared leg keeps its defective row red and out of citable',
+       live_ok, live_detail)
+
     # AC-LGA9 (R2913): the registry is the ONE place a criteria count is typed.
     # Exactly one row may name this suite, and the number it declares must equal
     # the distinct criteria this run asserted - derived from CHECKS, never typed.
+    # R2927: this arm now runs LAST. It derives "asserted" from the arms that
+    # preceded it, so appending arms above it silently made the derivation count
+    # 8 while the run asserted 9 - the same hand-moved-count drift AC-LGA9 was
+    # written to delete, reintroduced by position. Position is the fix: the
+    # derivation must see every arm, so the arm that compares it is the last one.
     reg = io.open(os.path.join(ROOT, 'src', 'sandbox', 'reconcile_all.py'),
                   'r', encoding='utf-8').read()
     rows = []

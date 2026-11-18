@@ -7184,8 +7184,21 @@ SUITES = [
     # src/os/backlog.md in the same window as the edit. Appended at the END for the
     # same reason as every row above: a mid-list insert shifts each later suite's
     # shard, and the 27 unmeasured deep shard-6 rows are tracked by that mapping.
+    # R2927: two killed legs (qa/non-os-sweep-R2924.log 110 rows and
+    # ...-chunk3b.log 334 rows) sat in the backlog for three windows as an
+    # undecided question, because neither answer was written down. Re-running
+    # their 444 rows does not fit a window (R2912 measured 192.2s per 60 rows),
+    # so the rows themselves became the granularity - but only through a
+    # declaration bound to the leg's exact bytes, only for a leg with no closing
+    # row, and never as an ADOPT: tools/leg_audit.py grows the class
+    # ROW-GRANULAR with family=0 and a citable count. AC-LGR10..AC-LGR12 were
+    # pinned in src/os/backlog.md BEFORE this edit; AC-LGR12 keeps a defective
+    # live row (ledger-apimarket-reportjson, rc=0 pass=10 fail=1 suite=PASS) red,
+    # so the declaration cannot launder a bad row. AC-LGA9 was moved to run LAST
+    # in the suite, because it derives the criteria count from the arms above it
+    # and appending arms above it silently undercounted them.
     ("os-leg-audit",
-     os.path.join("..", "os", "test_leg_audit.py"), 9),
+     os.path.join("..", "os", "test_leg_audit.py"), 12),
     # R2893: the two siblings that R2891 and R2892 built both waited on a live
     # family leg because the edit-race law forbids a registry edit while a leg of
     # family `os-` is in flight. That leg closed this window with
