@@ -1,0 +1,47 @@
+PANEL-CLEANUP removed=0 kept=0 missing=0
+PASS AC-PAN1 page real and standing surfaces  byte-identical on both slash forms
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PASS AC-PAN2 state measured  listener on/off moved one face only
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PASS AC-PAN3 start really starts  spawned port accepts and serves the shipped page
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PASS AC-PAN4 refusals honest  400/409/404 with their own codes
+PANEL-CLEANUP removed=0 kept=0 missing=0
+PASS AC-PAN6 hygiene and registration  405/404 coded, module ASCII stdlib only, one registry row
+PANEL-CLEANUP removed=2 kept=0 missing=0
+PASS AC-PAN5 teardown leaves nothing  stopped port refused and the server took its child down
+PASS AC-PAN7 launcher declares owned faces  8 faces derived from FACE_KEYS/FACE_PORT_KEY
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PASS AC-PAN8 owned face refused, unowned still starts  409 E_PANEL_OWNED_BY_LAUNCHER and zero children
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PASS AC-PAN9 owned stop refused, local stop works  409 named refusal and the owner's port stayed open
+PANEL-CLEANUP removed=0 kept=0 missing=0
+PASS AC-PAN10 owned face measured, never assumed  live moved with the socket, owner stayed named
+PASS AC-PAN11 declaration wired through the CLI  parse_owned both ways and a real --owned-face process
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PASS AC-PAN12 two panels in one process keep separate logs  distinct names, both on disk, no cross-write
+PASS AC-PAN13 two panel processes name their own writer  distinct paths carrying each pid; A's stop left B serving
+PANEL-CLEANUP removed=0 kept=1 missing=0
+PANEL-CLEANUP removed=0 kept=0 missing=0
+PANEL-CLEANUP removed=0 kept=0 missing=0
+PASS AC-PAN14 empty logs removed, evidence kept  clean teardown bounded, hard kill preserved, foreign files untouched
+PASS AC-PAN15 pid reuse cannot reuse a log name  same pid and same clock still differ; names stay traceable
+PASS AC-PAN16 aged-out refusals collected, writers kept  dead pid collected, live writer and own path kept, decoys untouched, wired on the CLI; pid_arms=measured
+PASS AC-PAN17 wall clock step cannot reuse a name  a corrected wall clock moves one field; the monotonic field still separates; the default is a real reading
+PASS AC-PAN18 a count bound bounds the recent pile  newest cap slots kept, older ones named in over, live writer and own path kept, decoys untouched, wide-cap red control removed nothing; pid_arms=measured
+PASS AC-PAN19 the prune runs with no panel at all  rc=0, PANEL-PRUNE first, no address line, aged file gone, decoy unchanged, exited in 0.4s
+PASS AC-PAN20 marker decides attribution  lookalike kept, same file collected once marked, borrowed and shifted markers refused, decoys untouched
+PANEL-CLEANUP removed=0 kept=0 missing=0
+PASS AC-PAN21 shipped writer marked, lookalike survives  first line equals the marker, marker-only log removed, lookalike kept while the marked file went
+PASS AC-PAN22 legacy residue counted, not collected  aged markerless file counted and kept, the same file collected once marked, fresh file outside the bucket, shipped line carries legacy/legacy_bytes
+PASS AC-PAN23 purge-legacy is operator-gated  plain prune reports and keeps, one flag collects it, flag alone refused rc=2, fresh/live-writer/foreign/malformed all keep
+PASS AC-PAN24 impersonation out of scope, gain measured  copied marker honoured both ways, decoy untouched beside it, same file removable by plain os.remove
+PASS AC-PAN25 birth lays the marker or refuses by name
+PASS AC-PAN26 one birth path, marker before the child
+PASS AC-PAN30 the prune window can be aimed  default scope measured as %TEMP%, aimed run collected both kinds in A, B byte-identical, unaimed line carries no root=
+PASS AC-PAN31 an unusable scope is refused  absent folder, a file and a scope without --prune-only all exit 2, print no window line and delete nothing
+PASS AC-PAN32 an aimed window stays inside its folder  the %TEMP% residue survived the aimed run and went on the unaimed one; a stranger's file unchanged
+PASS AC-PAN33 an absent explicit scope is refused, the default one still answers  missing folder and file both raise E_PANEL_SCOPE_NOT_DIR, a real folder and the default scope still report
+PASS AC-PAN34 the purge face refuses, the CLI is unchanged and the old binary returned a report  absent scope raises on both functions, the shipped CLI still exits 2 without a window line, and the HEAD module measurably answered with an empty report
+SUITE PASS 31/31

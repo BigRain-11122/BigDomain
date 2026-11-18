@@ -2457,6 +2457,210 @@ def ac_pan32():
                   "unaimed one; a stranger's file unchanged")
 
 
+def ac_pan33():
+    """An explicit scope that cannot be listed is refused, not reported clean.
+
+    R2958: the CLI has refused a bad --root since R2957, but the function
+    behind it answered with an empty report, and an empty report is field for
+    field what a clean folder produces. The arm that matters is therefore not
+    "an error appeared" but "the same call with a real folder still answers",
+    so the refusal cannot be a blanket one, and the DEFAULT scope must still
+    answer because root=None is this box's temp dir rather than a caller's
+    claim - a panel start must never crash over a folder it did not choose.
+    """
+    bad = 0
+    root = tempfile.mkdtemp(prefix="bd-pan33-")
+    gone = os.path.join(root, "not-here")
+    handle_file = os.path.join(root, "a-file")
+    try:
+        with open(handle_file, "wb") as handle:
+            handle.write(b"R2958: a path that is a file, not a folder\n")
+        # (1) an absent folder is refused, by name and by code
+        try:
+            panel_module.prune_logs(root=gone)
+        except panel_module.PanelScopeError as exc:
+            if exc.code != "E_PANEL_SCOPE_NOT_DIR":
+                bad += 1
+                print("  AC-PAN33 the refusal carries code %r" % (exc.code,))
+            if os.path.abspath(gone) not in str(exc):
+                bad += 1
+                print("  AC-PAN33 the refusal does not name the folder: %s"
+                      % (exc,))
+        else:
+            bad += 1
+            print("  AC-PAN33 an absent scope returned a report (the R2957 "
+                  "hole): an empty window reads as clean")
+        # (2) the SAME call shape with a real folder answers
+        try:
+            report_real = panel_module.prune_logs(root=root, now=0,
+                                                 keep_n=10 ** 6)
+        except panel_module.PanelScopeError:
+            bad += 1
+            print("  AC-PAN33 a real folder was refused too, so the rule is "
+                  "not about the folder")
+            report_real = None
+        if report_real is not None and "removed" not in report_real:
+            bad += 1
+            print("  AC-PAN33 the real folder did not return a report")
+        # (3) a path that is a FILE is refused just as well
+        try:
+            panel_module.prune_logs(root=handle_file)
+        except panel_module.PanelScopeError:
+            pass
+        else:
+            bad += 1
+            print("  AC-PAN33 a file was accepted as a folder")
+        # (4) the DEFAULT scope is untouched: both calls answer and agree
+        plain = panel_module.prune_logs(now=0, keep_n=10 ** 6)
+        named = panel_module.prune_logs(root=tempfile.gettempdir(), now=0,
+                                       keep_n=10 ** 6)
+        for key in ("removed", "kept", "fresh", "unknown", "over", "unattrib",
+                    "legacy"):
+            if sorted(plain[key]) != sorted(named[key]):
+                bad += 1
+                print("  AC-PAN33 the default scope moved on key %r" % (key,))
+                break
+    finally:
+        for name in sorted(os.listdir(root)):
+            try:
+                os.remove(os.path.join(root, name))
+            except OSError:
+                pass
+        try:
+            os.rmdir(root)
+        except OSError:
+            pass
+    return report("AC-PAN33 an absent explicit scope is refused, the default "
+                  "one still answers", bad,
+                  "missing folder and file both raise E_PANEL_SCOPE_NOT_DIR, "
+                  "a real folder and the default scope still report")
+
+
+def ac_pan34():
+    """The purge face refuses too, the CLI is unchanged, and the old binary
+    demonstrably answered with an empty report. R2958.
+
+    The second half is the arm that keeps this honest: if the pre-R2958 module
+    also refused, the criterion would be measuring argparse rather than the
+    change, so the HEAD bytes are copied beside their import and asked the
+    same question.
+    """
+    bad = 0
+    root = tempfile.mkdtemp(prefix="bd-pan34-")
+    gone = os.path.join(root, "absent")
+    old_dir = tempfile.mkdtemp(prefix="bd-pan34-old-")
+    planted = write_log(root, "%d-34-1-1" % DEAD_PID, "ugc", 9 * 86400,
+                        body=b"R2958 purge face control\n", marker=False)
+    decoy = os.path.join(root, "bd-pan34-stranger.txt")
+    try:
+        with open(decoy, "wb") as handle:
+            handle.write(b"R2958: a stranger's file\n")
+        # (1) purge_legacy refuses the same way, and a real folder answers
+        try:
+            panel_module.purge_legacy(root=gone)
+        except panel_module.PanelScopeError as exc:
+            if exc.code != "E_PANEL_SCOPE_NOT_DIR":
+                bad += 1
+                print("  AC-PAN34 the purge refusal carries code %r"
+                      % (exc.code,))
+        else:
+            bad += 1
+            print("  AC-PAN34 purge_legacy returned a report for an absent "
+                  "scope")
+        try:
+            real = panel_module.purge_legacy(root=root, now=0)
+        except panel_module.PanelScopeError:
+            bad += 1
+            print("  AC-PAN34 purge_legacy refused a real folder")
+            real = None
+        if real is not None and "removed" not in real:
+            bad += 1
+            print("  AC-PAN34 the real purge face did not return a report")
+        # (2) the shipped CLI is unchanged: rc=2, no window line, nothing
+        # deleted in the folder that was planted beside the absent scope
+        refused = subprocess.run(
+            [sys.executable, MODULE, "--prune-only", "--purge-legacy",
+             "--root", gone], stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=REPO,
+            timeout=180)
+        out = refused.stdout.decode("utf-8", "replace")
+        if refused.returncode != 2:
+            bad += 1
+            print("  AC-PAN34 the refused CLI exited %d" % (refused.returncode,))
+        if "PANEL-PRUNE" in out or "PANEL-PURGE-LEGACY" in out:
+            bad += 1
+            print("  AC-PAN34 a refused scope still printed a window line")
+        if not os.path.exists(planted) or not os.path.exists(decoy):
+            bad += 1
+            print("  AC-PAN34 a refused scope deleted files")
+        aimed = subprocess.run(
+            [sys.executable, MODULE, "--prune-only", "--root", root],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, cwd=REPO, timeout=180)
+        aimed_out = aimed.stdout.decode("utf-8", "replace")
+        if aimed.returncode != 0 or not aimed_out.startswith("PANEL-PRUNE"):
+            bad += 1
+            print("  AC-PAN34 a real scope no longer prints the window line "
+                  "(rc=%d first=%r)" % (aimed.returncode,
+                                        aimed_out.splitlines()[:1]))
+        # (3) the old binary answered with an empty report: the refusal is
+        # what this round bought, not what argparse already did
+        head = subprocess.run(["git", "show", "HEAD:src/sandbox/panel.py"],
+                              cwd=REPO, stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE)
+        gate = subprocess.run(["git", "show", "HEAD:src/sandbox/birth_gate.py"],
+                              cwd=REPO, stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE)
+        if head.returncode != 0 or not head.stdout or not gate.stdout:
+            bad += 1
+            print("  AC-PAN34 could not read the HEAD bytes for the red "
+                  "control")
+        else:
+            old_panel = os.path.join(old_dir, "panel.py")
+            with open(old_panel, "wb") as handle:
+                handle.write(head.stdout)
+            with open(os.path.join(old_dir, "birth_gate.py"), "wb") as handle:
+                handle.write(gate.stdout)
+            probe = (
+                "import importlib.util, sys\n"
+                "sys.path.insert(0, r'%s')\n"
+                "spec = importlib.util.spec_from_file_location('oldpanel', "
+                "r'%s')\n"
+                "mod = importlib.util.module_from_spec(spec)\n"
+                "sys.modules['oldpanel'] = mod\n"
+                "spec.loader.exec_module(mod)\n"
+                "rep = mod.prune_logs(root=r'%s')\n"
+                "print('OLD-report', len(rep['removed']), len(rep['kept']))\n"
+                % (HERE, old_panel, gone))
+            old_run = subprocess.run([sys.executable, "-c", probe],
+                                     stdin=subprocess.DEVNULL,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE, timeout=180)
+            old_out = old_run.stdout.decode("utf-8", "replace")
+            if old_run.returncode != 0 or not old_out.startswith("OLD-report"):
+                bad += 1
+                print("  AC-PAN34 the pre-R2958 module also refused, so this "
+                      "arm measures argparse: rc=%d err=%r"
+                      % (old_run.returncode,
+                         old_run.stderr.decode("utf-8", "replace")[-200:]))
+    finally:
+        for name in sorted(os.listdir(root)):
+            try:
+                os.remove(os.path.join(root, name))
+            except OSError:
+                pass
+        try:
+            os.rmdir(root)
+        except OSError:
+            pass
+        _clean_folder(old_dir)
+    return report("AC-PAN34 the purge face refuses, the CLI is unchanged and "
+                  "the old binary returned a report", bad,
+                  "absent scope raises on both functions, the shipped CLI "
+                  "still exits 2 without a window line, and the HEAD module "
+                  "measurably answered with an empty report")
+
+
 def main():
     ac_pan1()
     ac_pan2()
@@ -2487,6 +2691,8 @@ def main():
     ac_pan30()
     ac_pan31()
     ac_pan32()
+    ac_pan33()
+    ac_pan34()
     passed = sum(1 for _name, ok in RESULTS if ok)
     total = len(RESULTS)
     print("SUITE %s %d/%d" % ("PASS" if passed == total else "FAIL",

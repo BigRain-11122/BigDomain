@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2957 PRODUCT+ENGINEERING: the prune window can now be AIMED, so an operator who wants one folder cleaned no longer has to bet the whole box. panel.py gained --root DIR, which scopes BOTH halves of one --prune-only window at that folder (the prune and the legacy purge take the same scope, because a purge that cleans A while the prune still judges B is a half-aimed window nobody can reason about). Its absence is the old behaviour by construction: root=None still resolves to tempfile.gettempdir() and the two printed lines carry NO new token at all, so nothing that parsed them before moves. When it IS given, both lines name the folder in a trailing root=<abspath>. Two refusals keep the flag honest: --root without --prune-only exits 2 (a panel start always prunes the temp dir and will not silently accept a scope it does not execute), and a folder that is not there, or a path that is a file, exits 2 BEFORE anything is judged - an empty window prints removed=0 and is indistinguishable from a healthy answer, so a mistyped path must never reach the printer.",
+    "current": "2026-11-18 R2958 PRODUCT+ENGINEERING: the cleanup window's unusable scope is now refused by the FUNCTIONS and not only by the CLI. R2957 made --root able to aim a window, but prune_logs(root=<missing>) and purge_legacy(root=<missing>) listed nothing and returned an EMPTY report - field for field what a clean folder produces - so any Python caller read a typo as clean. panel.py now has resolve_scope() and PanelScopeError (code E_PANEL_SCOPE_NOT_DIR, message names the root): an explicit scope must exist and be a FOLDER before any file is judged, a path that is a file is refused just as well (otherwise listdir OSError would be swallowed into removed=0 again), and root=None is NOT narrowed - that is this box temp dir rather than a caller claim, so a panel start can never crash over a folder it did not choose. The CLI is byte-for-byte unchanged (both parser.error refusals still exit 2 and print no window line) and it translates the functions refusal back into the same rc=2, so a folder that vanishes between the flag check and the call reads as a refused window instead of a traceback.",
     "do": "2026-11-18 R2936 PRODUCT: the last two faces the hub publishes stopped reading NOT STARTED. src/sandbox/start_all.py now plans ten ports for eight faces, starts the shipped control panel and membership page as its own children, and hands their MEASURED ports to the lobby on its command line instead of letting the hub advertise built-in 8099/8096 guesses. Live: start_all.py --check rc=0 with all eight faces live; ceo_live_shot.py --prove --check rc=0 faces=9 shots_total=18 with_errors=0 proof{passes:2, agreements:9, disagreed:[]} in 30.4s - nine faces shot twice on one sandbox, no drift.",
     "last_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/panel-R2957.log (4127B, 2026-11-18)",
-    "latest_evidence": "qa/panel-R2957.log (4127B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-panel-R2958.log (336B, 2026-11-18)",
+    "latest_evidence": "qa/leg-panel-R2958.log (336B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2958] next window (<=12h): (0) MAIN — the CLI refuses an unusable `--root`, but the FUNCTIONS still tolerate it: `prune_logs(root=<missing>)` and `purge_legacy(root=<missing>)` list nothing and return an empty report, so a Python caller can still read a typo as \"clean\". Decide and prove either the two functions refuse a root that is not an existing folder (red control = the same call with a real folder still works, and the shipped CLI behaviour is unchanged), or declare CLI-only guarding official by name with the callers that could hit it listed. (1) the namespace rule's exemption is BY BASENAME (`panel.py`, `test_*.py`, the scanner), so a future module named `panel.py` anywhere is exempt and a fixture module shipped inside the tree would be exempt as a \"test\": decide whether the exemption should key on repo-relative PATH and prove a nested same-name module is refused, or declare basename-exemption official with its measured count (truncated)",
-    "next_milestone_due": "2026-11-19T08:23:34+08:00",
-    "updated_at": "2026-11-18T20:23:34+08:00"
+    "next_milestone": "[R2959] next window (<=12h): (0) MAIN — the namespace scanner's exemption is BY BASENAME (`panel.py`, `test_*.py`, the scanner itself), so a future module named `panel.py` anywhere in the tree is exempt and a fixture module shipped inside the tree is exempt as a \"test\". Decide and prove either an exemption keyed on repo-relative PATH (red control = a nested same-name module is refused while the owner still passes), or declare basename-exemption official by name with its measured count. (1) `root=None` still tolerates a temp dir that cannot be listed and answers with an empty report — decide whether the default scope should be named/counted (e.g. an `E_PANEL_SCOPE_UNLISTABLE` refusal) or declared out of range by name, since a panel start must not crash over a folder it did not choose. (2) carried from R2950/R2953: `wait_port` early-exits when the child dies, which reads a DAEMONIZING face (parent forks and exits, grandchild serves) as a failure — decide whether the shipped launcher/panel should support that shape at all, or declare the shape out of range by name (truncated)",
+    "next_milestone_due": "2026-11-19T08:39:26+08:00",
+    "updated_at": "2026-11-18T20:39:26+08:00"
   },
-  "current": "2026-11-18 R2957 PRODUCT+ENGINEERING: the prune window can now be AIMED, so an operator who wants one folder cleaned no longer has to bet the whole box. panel.py gained --root DIR, which scopes BOTH halves of one --prune-only window at that folder (the prune and the legacy purge take the same scope, because a purge that cleans A while the prune still judges B is a half-aimed window nobody can reason about). Its absence is the old behaviour by construction: root=None still resolves to tempfile.gettempdir() and the two printed lines carry NO new token at all, so nothing that parsed them before moves. When it IS given, both lines name the folder in a trailing root=<abspath>. Two refusals keep the flag honest: --root without --prune-only exits 2 (a panel start always prunes the temp dir and will not silently accept a scope it does not execute), and a folder that is not there, or a path that is a file, exits 2 BEFORE anything is judged - an empty window prints removed=0 and is indistinguishable from a healthy answer, so a mistyped path must never reach the printer.",
+  "current": "2026-11-18 R2958 PRODUCT+ENGINEERING: the cleanup window's unusable scope is now refused by the FUNCTIONS and not only by the CLI. R2957 made --root able to aim a window, but prune_logs(root=<missing>) and purge_legacy(root=<missing>) listed nothing and returned an EMPTY report - field for field what a clean folder produces - so any Python caller read a typo as clean. panel.py now has resolve_scope() and PanelScopeError (code E_PANEL_SCOPE_NOT_DIR, message names the root): an explicit scope must exist and be a FOLDER before any file is judged, a path that is a file is refused just as well (otherwise listdir OSError would be swallowed into removed=0 again), and root=None is NOT narrowed - that is this box temp dir rather than a caller claim, so a panel start can never crash over a folder it did not choose. The CLI is byte-for-byte unchanged (both parser.error refusals still exit 2 and print no window line) and it translates the functions refusal back into the same rc=2, so a folder that vanishes between the flag check and the call reads as a refused window instead of a traceback.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2957 PRODUCT+ENGINEERING: the prune window can now be AIMED, so an operator who wants one folder cleaned no longer has to bet the whole box. panel.py gained --root DIR, which scopes BOTH halves of one --prune-only window at that folder (the prune and the legacy purge take the same scope, because a purge that cleans A while the prune still judges B is a half-aimed window nobody can reason about). Its absence is the old behaviour by construction: root=None still resolves to tempfile.gettempdir() and the two printed lines carry NO new token at all, so nothing that parsed them before moves. When it IS given, both lines name the folder in a trailing root=<abspath>. Two refusals keep the flag honest: --root without --prune-only exits 2 (a panel start always prunes the temp dir and will not silently accept a scope it does not execute), and a folder that is not there, or a path that is a file, exits 2 BEFORE anything is judged - an empty window prints removed=0 and is indistinguishable from a healthy answer, so a mistyped path must never reach the printer.",
-  "export_ts": "2026-11-18T20:23:34+08:00",
+  "do": "2026-11-18 R2958 PRODUCT+ENGINEERING: the cleanup window's unusable scope is now refused by the FUNCTIONS and not only by the CLI. R2957 made --root able to aim a window, but prune_logs(root=<missing>) and purge_legacy(root=<missing>) listed nothing and returned an EMPTY report - field for field what a clean folder produces - so any Python caller read a typo as clean. panel.py now has resolve_scope() and PanelScopeError (code E_PANEL_SCOPE_NOT_DIR, message names the root): an explicit scope must exist and be a FOLDER before any file is judged, a path that is a file is refused just as well (otherwise listdir OSError would be swallowed into removed=0 again), and root=None is NOT narrowed - that is this box temp dir rather than a caller claim, so a panel start can never crash over a folder it did not choose. The CLI is byte-for-byte unchanged (both parser.error refusals still exit 2 and print no window line) and it translates the functions refusal back into the same rc=2, so a folder that vanishes between the flag check and the call reads as a refused window instead of a traceback.",
+  "export_ts": "2026-11-18T20:39:26+08:00",
   "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
-  "latest_evidence": "qa/panel-R2957.log (4127B, 2026-11-18)",
-  "next_milestone": "[R2958] next window (<=12h): (0) MAIN — the CLI refuses an unusable `--root`, but the FUNCTIONS still tolerate it: `prune_logs(root=<missing>)` and `purge_legacy(root=<missing>)` list nothing and return an empty report, so a Python caller can still read a typo as \"clean\". Decide and prove either the two functions refuse a root that is not an existing folder (red control = the same call with a real folder still works, and the shipped CLI behaviour is unchanged), or declare CLI-only guarding official by name with the callers that could hit it listed. (1) the namespace rule's exemption is BY BASENAME (`panel.py`, `test_*.py`, the scanner), so a future module named `panel.py` anywhere is exempt and a fixture module shipped inside the tree would be exempt as a \"test\": decide whether the exemption should key on repo-relative PATH and prove a nested same-name module is refused, or declare basename-exemption official with its measured count (truncated)",
+  "latest_evidence": "qa/leg-panel-R2958.log (336B, 2026-11-18)",
+  "next_milestone": "[R2959] next window (<=12h): (0) MAIN — the namespace scanner's exemption is BY BASENAME (`panel.py`, `test_*.py`, the scanner itself), so a future module named `panel.py` anywhere in the tree is exempt and a fixture module shipped inside the tree is exempt as a \"test\". Decide and prove either an exemption keyed on repo-relative PATH (red control = a nested same-name module is refused while the owner still passes), or declare basename-exemption official by name with its measured count. (1) `root=None` still tolerates a temp dir that cannot be listed and answers with an empty report — decide whether the default scope should be named/counted (e.g. an `E_PANEL_SCOPE_UNLISTABLE` refusal) or declared out of range by name, since a panel start must not crash over a folder it did not choose. (2) carried from R2950/R2953: `wait_port` early-exits when the child dies, which reads a DAEMONIZING face (parent forks and exits, grandchild serves) as a failure — decide whether the shipped launcher/panel should support that shape at all, or declare the shape out of range by name (truncated)",
   "outs": [
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "qa/bind-scan-R2946.log (546B) + qa/bind-site-scan-suite-R2946.log (176B) + qa/leg-lobby-regress-R2946.log (413B) [2026-11-18 R2946]",
@@ -164,7 +164,7 @@
   },
   "results": [
     [
-      "2957",
+      "2958",
       "OSLoop 执行 tick"
     ]
   ],
@@ -177,15 +177,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 40,
+    "log_lines_in_window": 47,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 51760
+  "state_bytes": 58849
 }

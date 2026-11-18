@@ -371,7 +371,17 @@ SUITES = [
     # unusable folder is refused rc=2 instead of printing an empty window that
     # reads as clean, and an aimed run provably does not fall back to the real
     # temp dir (pre-registered in src/os/backlog.md at R2957 BEFORE the edit).
-    ("panel", os.path.join("test_panel.py"), 29),
+    # R2958 added AC-PAN33..AC-PAN34 (the functions refuse too): the CLI has
+    # refused an unusable --root since R2957, but prune_logs/purge_legacy
+    # answered one with an EMPTY report - field for field what a clean folder
+    # produces - so a Python caller reading a typo saw "clean". An explicit
+    # scope now raises E_PANEL_SCOPE_NOT_DIR before any file is judged, a path
+    # that is a FILE is refused just as well, the default scope (root=None,
+    # this box's temp dir rather than a caller's claim) still answers, and the
+    # HEAD bytes are measured answering with a report so the arm cannot be
+    # argparse's rc=2 wearing a new name (pre-registered in src/os/backlog.md
+    # at R2958 BEFORE the edit).
+    ("panel", os.path.join("test_panel.py"), 31),
     # R2956: R2955 closed the WRITER, not the NAMESPACE - any other module
     # could still create bigdomain-panel-child-* and either forge the marker
     # or leave a markerless file the prune must later count as legacy, which

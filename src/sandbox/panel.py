@@ -259,6 +259,41 @@ class PanelLogBirthError(Exception):
         self.detail = detail
 
 
+class PanelScopeError(Exception):
+    """An explicit cleanup scope that cannot be listed, refused by name.
+
+    R2958: the CLI has refused a ``--root`` that is not a folder since R2957,
+    but the two functions behind it answered an unusable scope with an EMPTY
+    report - the same fields a clean folder produces - so a Python caller
+    reading a typo saw "clean". An explicit scope is a caller's claim and must
+    exist before anything is judged. ``root=None`` is not a claim: it resolves
+    to this box's temp dir, which a panel start does not choose and must never
+    crash over, so that path keeps the tolerant behaviour.
+    """
+
+    def __init__(self, code, root):
+        Exception.__init__(self, "%s root=%s" % (code, root))
+        self.code = code
+        self.root = root
+
+
+def resolve_scope(root):
+    """The one folder a cleanup window judges, refusing an absent claim.
+
+    R2958: a missing or non-folder explicit root used to fall through to
+    ``os.listdir`` and its OSError turned into ``removed=0`` - a mistyped path
+    indistinguishable from a healthy window. The refusal happens BEFORE any
+    file is judged, and it covers a path that is a FILE, which ``isdir`` names
+    just as well as absence.
+    """
+    if root is None:
+        return tempfile.gettempdir()
+    scope = os.path.abspath(root)
+    if not os.path.isdir(scope):
+        raise PanelScopeError("E_PANEL_SCOPE_NOT_DIR", scope)
+    return scope
+
+
 def _forget_new_log(path):
     """Best-effort removal of a file this process just created and rejected."""
     try:
@@ -422,7 +457,7 @@ def purge_legacy(root=None, age_s=None, now=None, own=()):
     the caller declares its own, a foreign name, a malformed name - and an
     attributed file is left to the prune, which already judges it.
     """
-    folder = tempfile.gettempdir() if root is None else root
+    folder = resolve_scope(root)
     bound_ns = int((LOG_PRUNE_AGE_S if age_s is None else float(age_s))
                    * 1000000000)
     clock_ns = int((time.time() if now is None else float(now)) * 1000000000)
@@ -482,7 +517,7 @@ def prune_logs(root=None, age_s=None, now=None, own=(), keep_n=None):
     bounds what nobody claims, and every exception is named in the report
     rather than silently widening the bound.
     """
-    folder = tempfile.gettempdir() if root is None else root
+    folder = resolve_scope(root)
     bound_ns = int((LOG_PRUNE_AGE_S if age_s is None else float(age_s))
                    * 1000000000)
     clock_ns = int((time.time() if now is None else float(now)) * 1000000000)
@@ -1176,13 +1211,28 @@ def main(argv=None):
     # exits. Nothing on this box schedules it yet - that is written down in
     # the round, not implied by the flag existing.
     if args.prune_only:
-        print_prune(prune_logs(root=scope), scope=scope)
+        # R2958: the two functions now refuse an explicit scope that cannot be
+        # listed, so the same rule holds for a caller that is not this CLI.
+        # The refusal is turned back into the CLI's own rc=2 so a scope that
+        # vanishes between the flag check above and this call still reads as
+        # a refused window instead of a traceback.
+        try:
+            prune_report = prune_logs(root=scope)
+        except PanelScopeError as exc:
+            parser.error("%s: %s is not an existing folder" % (exc.code,
+                                                               exc.root))
+        print_prune(prune_report, scope=scope)
         # R2954: collecting the markerless residue is an OPERATOR decision,
         # taken on the same call that would otherwise only report it. The
         # flag is refused without --prune-only (below), which is what keeps
         # a panel start from ever reaching this line.
         if args.purge_legacy:
-            print_purge_legacy(purge_legacy(root=scope), scope=scope)
+            try:
+                purge_report = purge_legacy(root=scope)
+            except PanelScopeError as exc:
+                parser.error("%s: %s is not an existing folder"
+                             % (exc.code, exc.root))
+            print_purge_legacy(purge_report, scope=scope)
         return 0
     if args.purge_legacy:
         parser.error("E_PANEL_PURGE_NEEDS_PRUNE: --purge-legacy is only "
