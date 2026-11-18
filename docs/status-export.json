@@ -1,18 +1,18 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2916 ENGINEERING: the 163 checks that guard every state.json surgery are now walked by the battery instead of by whoever remembers to run them. src/sandbox/reconcile_all.py SUITES gains exactly ONE row - ('os-logs-toolkit', ../os/test_logs_toolkit.py, 163) - appended at the END so no later shard shifts; the tech seed R2747 pinned AC-QREG1..AC-QREG6 in state/queue/tech.md BEFORE this edit, and this row is the product that seed named.",
-    "last_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 mtime]",
-    "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 mtime]",
+    "current": "2026-11-18 R2917 PRODUCT+ENGINEERING: the os-logs-toolkit registry row stopped being a number nobody refutes - the suite now reads that row itself (label-scoped text read of reconcile_all.py, never imported) and refuses a green total that disagrees, so editing either side alone reddens it. AC-QREG7/8/9 were pinned in src/os/backlog.md BEFORE the edit; the check is the LAST ok() so it reads the run total off CHECKS+itself, the red control is a doctored registry copy off by one, and the reader is measured to write nothing.",
+    "last_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
+    "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\journey-19.9.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/journey-face-R2916.log (451B, 2026-11-18)",
-    "latest_evidence": "qa/journey-face-R2916.log (451B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/battery-shard-regress-R2917.log (3180B, 2026-11-18)",
+    "latest_evidence": "qa/battery-shard-regress-R2917.log (3180B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2916] next window (<=12h): (0) FOLD OWED - this window closed at bytes=77677 against the 78500B waterline (margin 823), so the next window must fold a whole round through the shipped runner BEFORE any surgery, and the fold's own pre-flight is now the same question this window wired into the closeout. (1) DONE at R2915 - the canonical layout IS now enforced at the write path (see the done row above) (truncated)",
-    "next_milestone_due": "2026-11-18T20:36:32+08:00",
-    "updated_at": "2026-11-18T08:36:32+08:00"
+    "next_milestone": "[R2918] next window (<=12h): (0) FOLD OWED - state closed at 77773B against the 78500B waterline (margin 727), so the next window folds a whole round through the shipped runner BEFORE any surgery. (1) the binding landed for ONE row (truncated)",
+    "next_milestone_due": "2026-11-18T20:49:44+08:00",
+    "updated_at": "2026-11-18T08:49:44+08:00"
   },
-  "current": "2026-11-18 R2916 ENGINEERING: the 163 checks that guard every state.json surgery are now walked by the battery instead of by whoever remembers to run them. src/sandbox/reconcile_all.py SUITES gains exactly ONE row - ('os-logs-toolkit', ../os/test_logs_toolkit.py, 163) - appended at the END so no later shard shifts; the tech seed R2747 pinned AC-QREG1..AC-QREG6 in state/queue/tech.md BEFORE this edit, and this row is the product that seed named.",
+  "current": "2026-11-18 R2917 PRODUCT+ENGINEERING: the os-logs-toolkit registry row stopped being a number nobody refutes - the suite now reads that row itself (label-scoped text read of reconcile_all.py, never imported) and refuses a green total that disagrees, so editing either side alone reddens it. AC-QREG7/8/9 were pinned in src/os/backlog.md BEFORE the edit; the check is the LAST ok() so it reads the run total off CHECKS+itself, the red control is a doctored registry copy off by one, and the reader is measured to write nothing.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -40,12 +40,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2916 ENGINEERING: the 163 checks that guard every state.json surgery are now walked by the battery instead of by whoever remembers to run them. src/sandbox/reconcile_all.py SUITES gains exactly ONE row - ('os-logs-toolkit', ../os/test_logs_toolkit.py, 163) - appended at the END so no later shard shifts; the tech seed R2747 pinned AC-QREG1..AC-QREG6 in state/queue/tech.md BEFORE this edit, and this row is the product that seed named.",
-  "export_ts": "2026-11-18T08:36:32+08:00",
-  "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 mtime]",
-  "latest_evidence": "qa/journey-face-R2916.log (451B, 2026-11-18)",
-  "next_milestone": "[R2916] next window (<=12h): (0) FOLD OWED - this window closed at bytes=77677 against the 78500B waterline (margin 823), so the next window must fold a whole round through the shipped runner BEFORE any surgery, and the fold's own pre-flight is now the same question this window wired into the closeout. (1) DONE at R2915 - the canonical layout IS now enforced at the write path (see the done row above) (truncated)",
+  "do": "2026-11-18 R2917 PRODUCT+ENGINEERING: the os-logs-toolkit registry row stopped being a number nobody refutes - the suite now reads that row itself (label-scoped text read of reconcile_all.py, never imported) and refuses a green total that disagrees, so editing either side alone reddens it. AC-QREG7/8/9 were pinned in src/os/backlog.md BEFORE the edit; the check is the LAST ok() so it reads the run total off CHECKS+itself, the red control is a doctored registry copy off by one, and the reader is measured to write nothing.",
+  "export_ts": "2026-11-18T08:49:44+08:00",
+  "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
+  "latest_evidence": "qa/battery-shard-regress-R2917.log (3180B, 2026-11-18)",
+  "next_milestone": "[R2918] next window (<=12h): (0) FOLD OWED - state closed at 77773B against the 78500B waterline (margin 727), so the next window folds a whole round through the shipped runner BEFORE any surgery. (1) the binding landed for ONE row (truncated)",
   "outs": [
+    "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 mtime]",
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17]",
@@ -156,7 +157,7 @@
   },
   "results": [
     [
-      "2916",
+      "2917",
       "OSLoop 执行 tick"
     ]
   ],
@@ -169,15 +170,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 86,
+    "log_lines_in_window": 89,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 76186
+  "state_bytes": 77773
 }

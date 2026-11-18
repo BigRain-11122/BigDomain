@@ -23,7 +23,28 @@ import tempfile
 import time
 
 TOOL = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs_toolkit.py')
+REGISTRY = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        os.pardir, 'sandbox', 'reconcile_all.py')
+LABEL = 'os-logs-toolkit'
 CHECKS = 0
+
+
+def registry_crit(path, label):
+    """Read one registry row's declared count by text, not by import (AC-QREG7).
+
+    The SUITES table calls os.path.join in its rows, so it is not a literal that
+    can be evaluated; importing it would run whatever sits beside the table. A
+    scoped match on the label asks exactly the question this suite needs - one
+    row, one integer - and returns (None, hits) when the row is missing or
+    duplicated, which every caller treats as red rather than as zero.
+    """
+    with open(path, 'rb') as handle:
+        text = handle.read().decode('utf-8')
+    pattern = r'\("%s",\s*\n\s*[^\n]*?,\s*(\d+)\)' % re.escape(label)
+    hits = re.findall(pattern, text)
+    if len(hits) != 1:
+        return None, len(hits)
+    return int(hits[0]), 1
 
 
 def ok(cond, label):
@@ -841,10 +862,44 @@ def main():
     ok(rc == 0 and fin2['written'] is False and fin2['repaired_lines'] == 0,
        'fix-indent healthy state no-op zero write (AC-FI2)')
 
+    # AC-QREG7..AC-QREG9 (pinned in src/os/backlog.md R2917 BEFORE this edit):
+    # the registry row is the ONE typed count and this suite is what refutes it,
+    # so a registry edit that forgets this suite reddens HERE rather than being
+    # read by nobody.
+    reg_before = open(REGISTRY, 'rb').read()
+    declared, row_hits = registry_crit(REGISTRY, LABEL)
+    ok(open(REGISTRY, 'rb').read() == reg_before,
+       'registry reader wrote nothing AC-QREG9')
+    # AC-QREG8: the binding is measured on a DOCTORED copy, because a reader
+    # that always answered None would still pass the positive arm below.
+    anchor = 'os.path.join("..", "os", "test_logs_toolkit.py"), %d)' % declared
+    ddir = tempfile.mkdtemp(prefix='qreg8_')
+    dpath = os.path.join(ddir, 'reconcile_all.py')
+    try:
+        raw = reg_before.decode('utf-8')
+        ok(raw.count(anchor) == 1, 'registry anchor unique AC-QREG8')
+        grown = anchor[:-len(str(declared)) - 1] + str(declared + 1) + ')'
+        open(dpath, 'wb').write(raw.replace(anchor, grown).encode('utf-8'))
+        doctored = open(dpath, 'rb').read()
+        ddeclared, dhits = registry_crit(dpath, LABEL)
+        ok(doctored != reg_before and ddeclared == declared + 1 and dhits == 1,
+           'doctored registry reads the off-by-one AC-QREG8')
+        ok(open(dpath, 'rb').read() == doctored,
+           'reader wrote nothing to the doctored copy AC-QREG9')
+    finally:
+        for name in os.listdir(ddir):
+            os.remove(os.path.join(ddir, name))
+        os.rmdir(ddir)
     # ASCII hygiene self-scan (AC-LT6)
     for src in (TOOL, os.path.abspath(__file__)):
         b = open(src, 'rb').read()
         ok(all(byte < 128 for byte in b), 'ASCII-only source: ' + os.path.basename(src))
+    # AC-QREG7 is the LAST check on purpose: it is the only one that must know
+    # the final total, and being last it reads it off CHECKS + itself instead of
+    # predicting how many checks follow it (the R2901 lesson about positions).
+    ok(declared == CHECKS + 1 and row_hits == 1,
+       'registry row %s declares this run total=%d (read=%s rows=%d) AC-QREG7'
+       % (LABEL, CHECKS + 1, declared, row_hits))
 
     print('SUITE PASS %d checks' % CHECKS)
     return 0

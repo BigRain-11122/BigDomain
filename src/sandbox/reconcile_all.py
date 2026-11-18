@@ -7199,7 +7199,7 @@ SUITES = [
     ("os-leg-header-check",
      os.path.join("..", "os", "test_leg_header_check.py"), 6),
     # R2916: the tech seed R2747 measured that src/os/test_logs_toolkit.py had no
-    # row at all, so its 163 checks guarding every state.json surgery (fold, eol,
+    # row at all, so its checks guarding every state.json surgery (fold, eol,
     # census, prune) were walked only when a human ran them - and its own pinned
     # archive filename went RED the moment the calendar left 2026-10 without any
     # leg noticing. The criteria AC-QREG1..AC-QREG6 were pinned in
@@ -7208,7 +7208,7 @@ SUITES = [
     # suite's shard, and the 27 unmeasured deep shard-6 rows are tracked by that
     # mapping.
     ("os-logs-toolkit",
-     os.path.join("..", "os", "test_logs_toolkit.py"), 163),
+     os.path.join("..", "os", "test_logs_toolkit.py"), 168),
     ]
 
 FAILS = 0
