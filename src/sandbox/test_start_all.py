@@ -21,6 +21,13 @@ named instead of dropped in silence. The arms pass fully explicit maps, so no
 socket is bound; the one live call proves what plan() DOES today with a typo
 key, which is measured rather than asserted as permanent.
 
+R2981 adds AC-STL16..AC-STL17 (the report's override face), pinned in the
+R2981 row BEFORE that field existed: the launcher's report now publishes the
+override collision plan() already knows, on the same face that publishes
+face_ports. One arm is measured on the SHIPPED path - a real launcher given one
+number for two plan keys must name both keys in the report it writes and must
+not read ok.
+
 Nothing here is read off a canned string: the launcher is really started in
 serve mode, the report it writes is compared against the hub's own probe
 answer at call time, an independent TCP connect checks every published port,
@@ -29,7 +36,7 @@ page file carries, a blocked port is proved to make the launcher REFUSE, and
 the teardown leg proves the ports are gone after the stop file appears.
 
 Usage: python test_start_all.py
-Exit: 0 = SUITE PASS 15/15, 2 = FAIL.
+Exit: 0 = SUITE PASS 17/17, 2 = FAIL.
 """
 
 import json
@@ -235,6 +242,8 @@ def main():
         report("AC-STL9", True, "no report")
         report("AC-STL10", True, "no report")
         report("AC-STL11", True, "no report")
+        report("AC-STL16", True, "no report")
+        report("AC-STL17", True, "no report")
         box.stop()
         return 2
     ports = rep.get("ports") or {}
@@ -798,6 +807,77 @@ def main():
     if garbage["ok"] or garbage["bad"] != ("ws",):
         bad.append("garbage-%r/%r" % (garbage["ok"], garbage["bad"]))
     report("AC-STL15", bool(bad), ",".join(bad))
+
+    # AC-STL16 (R2981): the report PUBLISHES the override collision plan()
+    # already knows. Every arm here is in-process: one report_of call each, all
+    # zero ports, no socket bound and no process started.
+    bad = []
+    zero = dict((key, 0) for key in start_all.PLAN_KEYS)
+    healthy = start_all.report_of("127.0.0.1", zero, "", {}, {}, [])
+    if "override_duplicates" not in healthy:
+        bad.append("field-missing")
+    elif healthy["override_duplicates"] != ():
+        bad.append("healthy-%r" % (healthy["override_duplicates"],))
+    # the additive claim MEASURED rather than asserted in prose: every key the
+    # report carried before R2981 is still there, so an old reader is not
+    # broken by the new one
+    before = ("ok", "host", "hub_url", "ports", "face_ports", "faces", "live",
+              "children", "pids", "job", "mutex", "errors", "mock",
+              "chargeable")
+    gone = [key for key in before if key not in healthy]
+    if gone:
+        bad.append("dropped-" + ",".join(gone))
+    named = start_all.report_of(
+        "127.0.0.1", zero, "", {}, {}, [],
+        override_duplicates=plan_ports.override_collisions(
+            {"ws": 7000, "city": 7000}))
+    if named["override_duplicates"] != ((7000, ("city", "ws")),):
+        bad.append("collision-%r" % (named["override_duplicates"],))
+    single = start_all.report_of(
+        "127.0.0.1", zero, "", {}, {}, [],
+        override_duplicates=plan_ports.override_collisions({"ws": 7000}))
+    if single["override_duplicates"] != ():
+        bad.append("single-%r" % (single["override_duplicates"],))
+    empty_map = start_all.report_of(
+        "127.0.0.1", zero, "", {}, {}, [],
+        override_duplicates=plan_ports.override_collisions({}))
+    if empty_map["override_duplicates"] != ():
+        bad.append("empty-%r" % (empty_map["override_duplicates"],))
+    report("AC-STL16", bool(bad), ",".join(bad))
+
+    # AC-STL17 (R2981): the control, and the shipped half of it. Arm 1 reads the
+    # report the real launcher above wrote (no overrides, so the field must be
+    # empty). Arm 2 starts ONE more real launcher and gives ws and city the SAME
+    # number - the report it writes must name both keys and must not read ok.
+    # Arm 3 keeps the three-way shape in-process.
+    bad = []
+    shipped = rep.get("override_duplicates")
+    if shipped is None:
+        bad.append("live-report-field-missing")
+    elif list(shipped) != []:
+        bad.append("live-report-%r" % (shipped,))
+    clash_port = free_port()
+    red = Sandbox(tmpdir, ws_port=clash_port,
+                  extra=["--timeout", "6", "--city-port", str(clash_port)],
+                  name="clash-report.json")
+    red_report = red.start()
+    red_code = red.stop()
+    if not red_report:
+        bad.append("clash-no-report")
+    else:
+        got = [(int(port), tuple(keys))
+               for port, keys in (red_report.get("override_duplicates") or [])]
+        if got != [(clash_port, ("city", "ws"))]:
+            bad.append("clash-%r" % (got,))
+        if red_report.get("ok"):
+            bad.append("clash-read-ok")
+    if red_code == 0:
+        bad.append("clash-exit-0")
+    three = plan_ports.override_collisions(
+        {"ws": 7000, "city": 7000, "hub": 7000})
+    if three != ((7000, ("city", "hub", "ws")),):
+        bad.append("three-%r" % (three,))
+    report("AC-STL17", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

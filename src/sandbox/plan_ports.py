@@ -26,6 +26,13 @@ reads no request path, grants nothing and refuses nothing at run time; plan()
 does not import it and never consults it. Its only job is to make "two keys got
 one port" a red criterion on the day an edit produces it.
 
+R2981 amended exactly one line of that paragraph: start_all now imports
+override_collisions to PUBLISH the answer in the launcher's report, so the
+predicate's reading reaches the person holding the report instead of waiting for
+a red battery. plan() still never consults it and still hands a colliding
+override map its ports untouched - the collision is named in the report it also
+fails to prevent.
+
 TWO FACES ARE OUT OF THE ALLOCATOR PREDICATE'S RANGE, NAMED NOT IMPLIED
 
 port_plan_coverage judges a port MAP. It cannot know where the numbers came

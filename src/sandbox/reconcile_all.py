@@ -276,7 +276,10 @@ SUITES = [
     # face of the same question - overrides enter the used-set but are never
     # compared with each other, and a key the plan does not carry is dropped in
     # silence. Criterion-first, zero run-time change.
-    ("start-all", os.path.join("test_start_all.py"), 15),
+    # R2981 adds AC-STL16..AC-STL17 (the report's override face): the collision
+    # plan() already knows is published in the launcher's report, measured once
+    # on the shipped path by giving two plan keys one number.
+    ("start-all", os.path.join("test_start_all.py"), 17),
     # kill-on-close job object (R2937): the defect R2934 MEASURED - a launcher
     # killed hard leaves its children holding sandbox ports - answered by the
     # kernel instead of by a `finally`. AC-KOC1..AC-KOC5 were pinned in

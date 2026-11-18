@@ -41,6 +41,7 @@ import urllib.request
 import job_object
 import launcher_mutex
 import launcher_registry
+import plan_ports
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LOBBY = os.path.join(HERE, "lobby")
@@ -323,7 +324,13 @@ def verify(host, ports, timeout):
 
 
 def report_of(host, ports, hub_url, faces, live, errors, group=None,
-              mutex=None):
+              mutex=None, override_duplicates=None):
+    # R2981: plan() reads the whole override map and refuses nothing, so a
+    # caller that names one number twice learns about it only when the second
+    # process cannot bind. The report publishes the collision the plan already
+    # knows, on the same face that publishes face_ports. The value is computed
+    # by the caller through plan_ports.override_collisions(); this function
+    # publishes what it was handed and does not decide anything itself.
     group = group if group is not None else ChildGroup()
     return {
         "ok": not errors,
@@ -332,6 +339,7 @@ def report_of(host, ports, hub_url, faces, live, errors, group=None,
         "ports": dict(ports),
         "face_ports": dict((key, ports[FACE_PORT_KEY[key]])
                            for key in FACE_KEYS),
+        "override_duplicates": tuple(override_duplicates or ()),
         "faces": faces,
         "live": live,
         "children": [[name, os.path.relpath(argv[1], os.path.dirname(HERE))]
@@ -396,6 +404,11 @@ def main(argv=None):
 
     overrides = dict((key, getattr(args, "%s_port" % key)) for key in PLAN_KEYS)
     ports = plan(args.host, overrides)
+    # R2981: the collision a caller could not see. Only numbers that were
+    # really given are judged - a flag left out reads None, not a port.
+    collisions = plan_ports.override_collisions(
+        dict((key, value) for key, value in overrides.items()
+             if value is not None))
     registry_path = args.registry or launcher_registry.default_path()
     # R2940: the kernel claim comes FIRST, before the record and before any
     # child. A record is a file and a file can be deleted; the named mutex
@@ -415,7 +428,8 @@ def main(argv=None):
             holder = launcher_registry.read(registry_path) or {}
             refused = {
                 "ok": False, "host": args.host, "hub_url": "",
-                "ports": {}, "face_ports": {}, "faces": {}, "live": {},
+                "ports": {}, "face_ports": {}, "override_duplicates": collisions,
+                "faces": {}, "live": {},
                 "children": [], "pids": {},
                 "job": {"available": job_object.available(), "enabled": False,
                         "assigned": 0, "verified": False, "members": {},
@@ -454,7 +468,8 @@ def main(argv=None):
     if not claimed:
         refused = {
             "ok": False, "host": args.host, "hub_url": "",
-            "ports": {}, "face_ports": {}, "faces": {}, "live": {},
+            "ports": {}, "face_ports": {}, "override_duplicates": collisions,
+            "faces": {}, "live": {},
             "children": [], "pids": {},
             "job": {"available": job_object.available(), "enabled": False,
                     "assigned": 0, "verified": False, "members": {},
@@ -487,7 +502,8 @@ def main(argv=None):
             errors.append("E_JOB_UNASSIGNED: " + item)
         ready = ready and not group.job_errors
         report = report_of(args.host, ports, hub_url, faces, live, errors,
-                           group, claim_mutex)
+                           group, claim_mutex,
+                           override_duplicates=collisions)
         report["registry"] = {"path": registry_path, "claimed": True,
                               "pid": os.getpid(),
                               "state": "serving" if ready else "starting"}

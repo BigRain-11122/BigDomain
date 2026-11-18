@@ -1,0 +1,6 @@
+SHARD scope=SHARD registry_suites=728 registry_criteria=5839 selected=4 selected_criteria=81 cap=600s leg_cap=0s overrides=1 exact=4 state=COMPLETE
+SHARD row kill-on-close rc=0 pass=28 fail=0 detail=yes suite=PASS 26/26 crit=12 24.3s
+SHARD row launcher-registry rc=0 pass=9 fail=0 detail=yes suite=PASS 9/9 crit=9 13.8s
+SHARD row bind-site-scan rc=0 pass=27 fail=0 detail=yes suite=PASS 27/27 crit=27 56.5s
+SHARD row panel rc=0 pass=33 fail=0 detail=yes suite=PASS 33/33 crit=33 28.5s
+SHARD rc=0 scope=SHARD selected=4 executed=4 green=4 criteria=81 crit_mismatch=0 elapsed=123.0s crit_checked=4
