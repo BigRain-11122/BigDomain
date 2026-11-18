@@ -359,7 +359,13 @@ SUITES = [
     # cannot reach, and impersonation is out of scope by name with its gain
     # measured as zero (pre-registered in src/os/backlog.md at R2954 BEFORE
     # the edit).
-    ("panel", os.path.join("test_panel.py"), 24),
+    # R2955 added AC-PAN25..AC-PAN26 (the marker is the condition of birth):
+    # one funnel creates a child log, writes the marker, reads the first bytes
+    # back and compares them with the marker rebuilt from the NAME, refusing
+    # by name and removing what it just made; the file keeps exactly one
+    # write-open and the funnel runs before the handle reaches the child
+    # (pre-registered in src/os/backlog.md at R2955 BEFORE the edit).
+    ("panel", os.path.join("test_panel.py"), 26),
     # R2938 added AC-PAN7..AC-PAN11 (declared ownership): the launcher hands
     # the panel the faces it already serves with the ports it measured, and the
     # panel refuses to start or stop them by name instead of forking the

@@ -18,7 +18,10 @@ the wall clock moving forward cannot answer a corrected clock. AC-PAN18 and
 AC-PAN19 were pre-registered in the R2952 row BEFORE the count bound and the
 --prune-only entry existed: an age bound leaves the RECENT pile unbounded, and
 a prune whose only trigger is a human launching a panel is not scheduled at
-all.
+all. AC-PAN25 and AC-PAN26 were pre-registered in the R2955 row BEFORE the
+funnel existed: R2954 measured the residue a markerless file leaves, and the
+invariant "our writer never creates one" rested on the single call site that
+happened to write the header, not on the place where the file is born.
 
 Nothing here is read off a canned string: the panel is really started, the
 start route really spawns a shipped module, an independent TCP connect checks
@@ -26,9 +29,10 @@ the port it reports, the served URL is compared against the page bytes on
 disk, and the teardown leg proves the children are gone.
 
 Usage: python test_panel.py
-Exit: 0 = SUITE PASS 19/19, 2 = FAIL.
+Exit: 0 = SUITE PASS 26/26, 2 = FAIL.
 """
 
+import ast
 import hashlib
 import json
 import os
@@ -2023,6 +2027,188 @@ def ac_pan24():
                   "it, same file removable by plain os.remove")
 
 
+def ac_pan25():
+    """The marker is the condition of creation, not a habit of one caller.
+
+    R2955: AC-PAN21 arm 1 measured one happy path through the start route and
+    nothing measured what happens when a creation path skips the marker. Both
+    directions are driven here against the real funnel: the shipped writer
+    produces an attributable file, and a neutered writer is REFUSED BY NAME -
+    with no file left behind to become legacy residue - and the same name
+    goes green again once the real writer is back (so the red is caused by the
+    missing marker, not by the name).
+    """
+    bad = 0
+    folder = tempfile.mkdtemp(prefix="pan25-")
+    tag = panel_module.make_tag()
+
+    def path_for(face, extra=""):
+        name = "%s%s%s-%s%s" % (panel_module.LOG_STEM, tag, extra, face,
+                                panel_module.LOG_SUFFIX)
+        return os.path.join(folder, name)
+
+    real_writer = panel_module.log_marker_line
+    try:
+        # (a) shipped arm: born marked, attributable, writable at the end.
+        path = path_for("ugc")
+        handle = panel_module.birth_child_log(path)
+        handle.write(b"child said nothing\n")
+        handle.close()
+        name = os.path.basename(path)
+        expected = real_writer(name)
+        with open(path, "rb") as check:
+            first = check.readline()
+        if first != expected:
+            bad += 1
+            print("  AC-PAN25 the born file does not start with its marker: %r"
+                  % (first,))
+        if not panel_module.log_attributed(path, name):
+            bad += 1
+            print("  AC-PAN25 the born file is not attributable: %r" % (path,))
+
+        # (b) no-marker arm: the name is fine, the writer answers nothing.
+        path_b = path_for("ugc", "-b")
+        panel_module.log_marker_line = lambda _name: None
+        try:
+            panel_module.birth_child_log(path_b)
+            bad += 1
+            print("  AC-PAN25 an unmarked birth was allowed: %r" % (path_b,))
+        except panel_module.PanelLogBirthError as exc:
+            if exc.code != "E_PANEL_LOG_BIRTH_NOMARK":
+                bad += 1
+                print("  AC-PAN25 wrong code on a markerless name: %r"
+                      % (exc.code,))
+            if exc.name != os.path.basename(path_b):
+                bad += 1
+                print("  AC-PAN25 the refusal does not name the file: %r"
+                      % (exc.name,))
+        if os.path.exists(path_b):
+            bad += 1
+            print("  AC-PAN25 a refused birth left a file: %r" % (path_b,))
+
+        # (c) wrong-marker arm: bytes land, then the read-back refuses them.
+        path_c = path_for("ugc", "-c")
+        panel_module.log_marker_line = lambda _name: b"# not the marker\n"
+        try:
+            panel_module.birth_child_log(path_c)
+            bad += 1
+            print("  AC-PAN25 a wrong marker was accepted: %r" % (path_c,))
+        except panel_module.PanelLogBirthError as exc:
+            if exc.code != "E_PANEL_LOG_BIRTH_UNMARKED":
+                bad += 1
+                print("  AC-PAN25 wrong code on a wrong marker: %r"
+                      % (exc.code,))
+        if os.path.exists(path_c):
+            bad += 1
+            print("  AC-PAN25 a wrong-marked file was left on disk: %r"
+                  % (path_c,))
+
+        # (d) same name, real writer back: red was caused by the marker.
+        panel_module.log_marker_line = real_writer
+        handle = panel_module.birth_child_log(path_c)
+        handle.close()
+        if not panel_module.log_attributed(path_c, os.path.basename(path_c)):
+            bad += 1
+            print("  AC-PAN25 the same name stayed red after the writer came "
+                  "back: %r" % (path_c,))
+    finally:
+        panel_module.log_marker_line = real_writer
+        for entry in os.listdir(folder):
+            try:
+                os.remove(os.path.join(folder, entry))
+            except OSError:
+                pass
+        try:
+            os.rmdir(folder)
+        except OSError:
+            pass
+    return report("AC-PAN25 birth lays the marker or refuses by name", bad)
+
+
+def _write_opens(tree):
+    """Every open() call in this tree that can write, with its function."""
+    found = []
+
+    def mode_of(call):
+        if not isinstance(call.func, ast.Name) or call.func.id != "open":
+            return None
+        node = None
+        if len(call.args) >= 2:
+            node = call.args[1]
+        for keyword in call.keywords:
+            if keyword.arg == "mode":
+                node = keyword.value
+        if isinstance(node, ast.Constant) and isinstance(node.value, str):
+            return node.value
+        return None
+
+    def walk(node, func):
+        for child in ast.iter_child_nodes(node):
+            if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                walk(child, child.name)
+                continue
+            if isinstance(child, ast.Call):
+                mode = mode_of(child)
+                if mode and any(flag in mode for flag in "wax+"):
+                    found.append((func, child.lineno, mode))
+            walk(child, func)
+
+    walk(tree, "<module>")
+    return found
+
+
+def ac_pan26():
+    """One birth path: the only write-open in panel.py is the funnel.
+
+    A criterion cannot watch a future code path, but it can refuse the shape:
+    if a second write-mode ``open`` appears anywhere in panel.py outside
+    birth_child_log, the "our writer never creates a markerless file"
+    invariant is no longer enforced at the birth site and this fails. The
+    start function must also call the funnel STRICTLY BEFORE it hands a handle
+    to the child, so the marker is on disk before a byte of stderr can land.
+    """
+    bad = 0
+    with open(MODULE, encoding="utf-8") as handle:
+        tree = ast.parse(handle.read())
+    opens = _write_opens(tree)
+    if len(opens) != 1:
+        bad += 1
+        print("  AC-PAN26 panel.py has %d write-opens, not one: %r"
+              % (len(opens), opens))
+    elif opens[0][0] != "birth_child_log":
+        bad += 1
+        print("  AC-PAN26 the only write-open is in %r, not the funnel"
+              % (opens[0][0],))
+    starts = [node for node in ast.walk(tree)
+              if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+              and node.name == "start"]
+    if len(starts) != 1:
+        bad += 1
+        print("  AC-PAN26 expected one start function, found %d" % (len(starts),))
+    else:
+        birth_lines = []
+        popen_lines = []
+        for node in ast.walk(starts[0]):
+            if not isinstance(node, ast.Call):
+                continue
+            func = node.func
+            if isinstance(func, ast.Name) and func.id == "birth_child_log":
+                birth_lines.append(node.lineno)
+            if isinstance(func, ast.Attribute) and func.attr == "Popen":
+                popen_lines.append(node.lineno)
+        if not birth_lines:
+            bad += 1
+            print("  AC-PAN26 start does not call the funnel at all")
+        if not popen_lines:
+            bad += 1
+            print("  AC-PAN26 start has no Popen to order against")
+        if birth_lines and popen_lines and not min(birth_lines) < min(popen_lines):
+            bad += 1
+            print("  AC-PAN26 the handle reaches the child before the birth "
+                  "gate: birth=%r popen=%r" % (birth_lines, popen_lines))
+    return report("AC-PAN26 one birth path, marker before the child", bad)
+
+
 def main():
     ac_pan1()
     ac_pan2()
@@ -2048,6 +2234,8 @@ def main():
     ac_pan22()
     ac_pan23()
     ac_pan24()
+    ac_pan25()
+    ac_pan26()
     passed = sum(1 for _name, ok in RESULTS if ok)
     total = len(RESULTS)
     print("SUITE %s %d/%d" % ("PASS" if passed == total else "FAIL",

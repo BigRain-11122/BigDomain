@@ -228,6 +228,81 @@ def log_attributed(path, name):
     return head == expected
 
 
+def marker_for_name(name):
+    """The canonical marker line rebuilt from the NAME alone (R2955).
+
+    Deliberately separate from log_marker_line: birth compares what landed on
+    disk against THIS, so a writer that produced different bytes is caught by
+    two descriptions disagreeing rather than by a value checking itself.
+    """
+    parsed = parse_log_name(name)
+    if parsed is None:
+        return None
+    pid, wall, mono, seq, face = parsed
+    return ("%s tag=%d-%x-%x-%x face=%s\n"
+            % (LOG_MARKER, pid, wall, mono, seq, face)).encode("ascii")
+
+
+class PanelLogBirthError(Exception):
+    """A child log that could not be created WITH its marker, by name.
+
+    R2955: the marker used to be a step the one call site happened to take,
+    so the invariant "our writer never creates a markerless file" rested on
+    the call site rather than on creation. This error means the birth was
+    refused: no attributed log exists at that path.
+    """
+
+    def __init__(self, code, name, detail):
+        Exception.__init__(self, "%s name=%s %s" % (code, name, detail))
+        self.code = code
+        self.name = name
+        self.detail = detail
+
+
+def _forget_new_log(path):
+    """Best-effort removal of a file this process just created and rejected."""
+    try:
+        os.remove(path)
+    except OSError:
+        pass
+
+
+def birth_child_log(path):
+    """Create a panel child log and lay its marker before any other byte.
+
+    R2953's prune trusts the FIRST line and R2954 measured the residue a
+    missing first line leaves for ever, so the invariant has to hold where
+    the file is born, not only on the call path that used to write the
+    header. This is the ONE writer of child logs (AC-PAN26 asserts that
+    statically): it writes the marker, then READS the first bytes back and
+    refuses by name when they are not the marker the file name implies - the
+    check does not trust the write it just performed. A refused birth removes
+    the file it just made, so a failure cannot become tomorrow's residue.
+    """
+    name = os.path.basename(path)
+    header = log_marker_line(name)
+    canonical = marker_for_name(name)
+    if not header or not canonical:
+        raise PanelLogBirthError("E_PANEL_LOG_BIRTH_NOMARK", name,
+                                 "this name does not resolve to a marker")
+    handle = open(path, "wb")
+    try:
+        handle.write(header)
+        handle.flush()
+        with open(path, "rb") as check:
+            head = check.read(len(canonical))
+        if head != canonical:
+            raise PanelLogBirthError("E_PANEL_LOG_BIRTH_UNMARKED", name,
+                                     "first bytes %r are not the marker %r"
+                                     % (head, canonical))
+        handle.seek(0, os.SEEK_END)
+    except BaseException:
+        handle.close()
+        _forget_new_log(path)
+        raise
+    return handle
+
+
 FILETIME_EPOCH_OFFSET_NS = 116444736000000000 * 100
 _K32 = None
 _K32_LOADED = False
@@ -731,15 +806,17 @@ class Panel(object):
             # by name, before it binds), so it is captured to a file instead of
             # being thrown away - DEVNULL made every failure read the same.
             # R2949: that file is per panel, never per face id alone.
-            log_handle = open(log_path, "wb")
+            # R2955: the marker is no longer a step of this call site but the
+            # condition of creation - birth_child_log() writes it, reads the
+            # first bytes back, and refuses by name (removing what it made)
+            # when the file on disk does not carry it.
             try:
-                # R2953: the marker goes in BEFORE the child is given the
-                # handle, so the first line a reader sees names the panel that
-                # wrote this file and the prune can attribute it later.
-                header = log_marker_line(os.path.basename(log_path))
-                if header:
-                    log_handle.write(header)
-                    log_handle.flush()
+                log_handle = birth_child_log(log_path)
+            except PanelLogBirthError as exc:
+                return 500, {"error": exc.code, "face": face_id,
+                             "child_log_path": log_path,
+                             "detail": str(exc)}
+            try:
                 proc = subprocess.Popen(
                     argv,
                     stdin=subprocess.DEVNULL,
