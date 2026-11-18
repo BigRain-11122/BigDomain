@@ -57,7 +57,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.dirname(BASE)
 ROOT = os.path.dirname(SRC)
 
-EXPECTED_CRITERIA = 10
+EXPECTED_CRITERIA = 12
 LABEL = "os-suite-closing-row-census"
 TOOL = os.path.join(ROOT, "tools", "suite_closing_row_census.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
@@ -456,6 +456,118 @@ def ac_cen8():
           "AC-CEN8 shipped closing row reads PASS through the runner (%s)" % row)
 
 
+# R2964: a suite that WRITES a probe module into a string carries the split
+# shape as bytes, not as structure. The text reading matched it; the structural
+# reading must not. The same bytes as real code are the positive control, and
+# an unconditional binding stays non-law in both readings (measured, not
+# assumed) because it would print PASS over a red run.
+FIXTURE_ONLY_SRC = (
+    "FILES = {\n"
+    "    'vi.py': 'V = \"SUITE PASS\" if OK else \"SUITE FAIL\"\\n"
+    "print(\"%s %d/%d\" % (V, 2, 2))\\n',\n"
+    "}\n"
+    "print(\"done\")\n")
+REAL_SPLIT_SRC = ('V = "SUITE PASS" if OK else "SUITE FAIL"\n'
+                  'print("%s %d/%d" % (V, 2, 2))\n')
+UNCONDITIONAL_SRC = ('V = "SUITE PASS"\n'
+                     'print("%s %d/%d" % (V, 2, 2))\n')
+
+
+def ac_cen11():
+    """Fixture text cannot buy a split verdict; real code and the control split."""
+    folder, copy_tool = world("right", [("fixture", "fixture.py", 1),
+                                        ("real", "real.py", 1),
+                                        ("uncond", "uncond.py", 1)])
+    try:
+        sandbox = os.path.join(folder, "src", "sandbox")
+        write_text(os.path.join(sandbox, "fixture.py"), FIXTURE_ONLY_SRC)
+        write_text(os.path.join(sandbox, "real.py"), REAL_SPLIT_SRC)
+        write_text(os.path.join(sandbox, "uncond.py"), UNCONDITIONAL_SRC)
+        code, out = run_census(folder, copy_tool)
+        fixture = subprocess.run(
+            [sys.executable, os.path.join(sandbox, "fixture.py")],
+            capture_output=True, timeout=120)
+        fixture_out = fixture.stdout.decode("utf-8", "replace")
+        fixture_rows = [l for l in fixture_out.splitlines()
+                        if l.startswith("SUITE ")]
+    finally:
+        cleanup(folder)
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import suite_closing_row_census as census
+    shapes = {"fixture": census.classify(FIXTURE_ONLY_SRC),
+              "real": census.classify(REAL_SPLIT_SRC),
+              "uncond": census.classify(UNCONDITIONAL_SRC)}
+    split = {"fixture": census.split_law(FIXTURE_ONLY_SRC),
+             "real": census.split_law(REAL_SPLIT_SRC),
+             "uncond": census.split_law(UNCONDITIONAL_SRC)}
+    quiet = ("CENSUS registry=3 law=1 non_law=2 missing=0" in out
+             and "CENSUS shape law_split=1" in out
+             and "CENSUS non_law no_numbers: uncond" in out
+             and "CENSUS non_law other: fixture" in out)
+    ok = (code == 0 and quiet
+          and split["fixture"] is False and shapes["fixture"] == "other"
+          and split["real"] is True and shapes["real"] == "law_split"
+          and split["uncond"] is False
+          and shapes["uncond"] not in census_law_families()
+          and fixture.returncode == 0 and "done" in fixture_out
+          and fixture_rows == [])
+    if not ok:
+        print("  measured rc=%d quiet=%r split=%r shapes=%r fixture=(rc=%d "
+              "out=%r rows=%r)" % (code, quiet, split, shapes,
+                                   fixture.returncode, fixture_out,
+                                   fixture_rows), flush=True)
+    check(ok, "AC-CEN11 a fixture string buys no split verdict (%s)"
+          % ",".join("%s=%s" % (k, shapes[k]) for k in sorted(shapes)))
+
+
+def live_tree_closure():
+    """The live split and exec lines: law == registry, unexecuted == 0."""
+    proc = subprocess.run(
+        [sys.executable, TOOL, "--root", ROOT, "--quiet-list",
+         "--list-unexecuted"], capture_output=True)
+    out = proc.stdout.decode("utf-8", "replace")
+    fields = {}
+    for line in out.splitlines():
+        if line.startswith("CENSUS registry="):
+            fields = dict(re.findall(r"(\w+)=(\d+)", line))
+    n, m = exec_line(out)
+    listed = []
+    for line in out.splitlines():
+        if line.startswith("CENSUS unexecuted "):
+            listed += [x.strip() for x in line.split(":", 1)[1].split(",")]
+    good = (proc.returncode == 0
+            and fields.get("law") == fields.get("registry")
+            and fields.get("non_law") == "0"
+            and n is not None and m is not None and n + m == int(fields["law"])
+            and m == 0 and listed == [])
+    text = "registry=%r law=%r non_law=%r exec=%r unexecuted=%r named=%d" % (
+        fields.get("registry"), fields.get("law"), fields.get("non_law"),
+        n, m, len(listed))
+    return good, text
+
+
+def ac_cen12():
+    """The row that sat inside the gap prints a row the runner can read."""
+    suite = os.path.join(BASE, "test_registry_counter_census.py")
+    proc = subprocess.run([sys.executable, suite], capture_output=True,
+                          timeout=600)
+    text = proc.stdout.decode("utf-8", "replace")
+    rows = [l.strip() for l in text.splitlines() if l.startswith("SUITE ")]
+    row = rows[-1] if rows else "<no SUITE row>"
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import battery_shard
+    read = battery_shard.parse_suite_row(row + "\n")
+    red = battery_shard.parse_suite_row("SUITE PASS 26 checks")
+    green = (proc.returncode == 0 and read is not None and read[0] == "PASS"
+             and read[1] == read[2] and read[1] > 0)
+    closure, measured = live_tree_closure()
+    if not (green and red is None and closure):
+        print("  measured rc=%d row=%r read=%r red=%r %s"
+              % (proc.returncode, row, read, red, measured), flush=True)
+    check(green and red is None and closure,
+          "AC-CEN12 live gap closed: row reads %r and %s" % (read, measured))
+
+
 def main():
     print("suite closing-row census suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -469,6 +581,8 @@ def main():
     ac_cen8()
     ac_cen9()
     ac_cen10()
+    ac_cen11()
+    ac_cen12()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

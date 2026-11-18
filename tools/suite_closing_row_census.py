@@ -39,6 +39,23 @@ docstring-only law literal is still law on the verdict line, so the difference
 between the two lines IS the measured blind set. Out of range and named: a row
 whose string is built at run time, a law literal inside a lambda body, and a
 row that builds its row in a helper module are not judged by the position face.
+
+R2964 (AC-CEN11..AC-CEN12): the one live row inside that gap is out of it. Two
+defects met on src/os/test_registry_counter_census.py: it printed the
+single-count shape the battery refuses, and the census called it law_split
+because split_law() regexed the whole source text and matched the row-shaped
+FIXTURE STRINGS its private-world builders write (a row it stores as test data,
+not a row it prints). That reading is now structural - the binding must be an
+Assign whose value is an IfExp of two string constants and the row must be a
+%-format naming that binding - so a fixture string, being one constant, buys
+nothing; unparsable source falls back to the text reading so a parse failure can
+never demote a row. Split was the only family moved: `shape_of_literal` and the
+LITERAL text scan are untouched, which means fixture text can still buy a
+law_direct verdict and that residual blind spot is named here rather than
+implied closed. On the shipped tree the split repair demotes exactly one row
+os-registry-counter-census, and the closing-row repair promotes it back to
+law_direct by printing a real pair row, so the two lines now read law=728 and
+exec law=728 unexecuted=0.
 """
 
 import argparse
@@ -95,11 +112,12 @@ def normalise(lit):
     return lit.replace("\\n", "").replace("\\t", "").strip()
 
 
-def split_law(src):
-    """Does this source build the row as a conditional verdict name plus a format?
+def _legacy_split_law(src):
+    """The pre-R2964 reading of the raw text, kept for source that will not parse.
 
-    Both halves must hold, and the binding must be conditional: an unconditional
-    NAME = "SUITE PASS" would print PASS over a red run, so it stays non-law.
+    A text reading can only over-report law (a fixture string looks like code),
+    so it is the conservative fallback: a file the parser cannot read is never
+    demoted on the strength of a parse failure alone.
     """
     names = set()
     for m in SPLIT_BIND.finditer(src):
@@ -109,6 +127,69 @@ def split_law(src):
         return False
     for m in SPLIT_ROW.finditer(src):
         if m.group(2) in names and SPLIT_NUM.search(m.group(1)):
+            return True
+    return False
+
+
+def _conditional_verdict_names(tree):
+    """Names bound to a PASS/FAIL verdict by an if/else of two string constants."""
+    names = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign) or \
+                not isinstance(node.value, ast.IfExp):
+            continue
+        body, orelse = node.value.body, node.value.orelse
+        if not (isinstance(body, ast.Constant)
+                and isinstance(body.value, str)):
+            continue
+        if not (isinstance(orelse, ast.Constant)
+                and isinstance(orelse.value, str)):
+            continue
+        if "SUITE" not in body.value or "SUITE" not in orelse.value:
+            continue
+        if "PASS" not in body.value or "FAIL" not in orelse.value:
+            continue
+        for target in node.targets:
+            if isinstance(target, ast.Name):
+                names.add(target.id)
+    return names
+
+
+def split_law(src):
+    """Does this source build the row as a conditional verdict name plus a format?
+
+    Both halves must hold, and the binding must be conditional: an unconditional
+    NAME = "SUITE PASS" would print PASS over a red run, so it stays non-law.
+
+    R2964: read as STRUCTURE, not as text. A suite that writes a whole probe
+    module into a string - 'V = "SUITE PASS" if OK else "SUITE FAIL"' as the
+    VALUE of a fixture constant - carries those bytes in its source but never
+    builds the row itself, and the text reading could not tell the two apart.
+    Here the binding must be an Assign whose value is an IfExp of two string
+    constants, and the row must be a %-format whose left side is that format
+    literal and whose right side names the bound name; a fixture string is one
+    constant, so it matches neither. Source that will not parse falls back to
+    the text reading (conservative: it can only over-report).
+    """
+    try:
+        tree = ast.parse(src)
+    except SyntaxError:
+        return _legacy_split_law(src)
+    names = _conditional_verdict_names(tree)
+    if not names:
+        return False
+    for node in ast.walk(tree):
+        if not (isinstance(node, ast.BinOp) and isinstance(node.op, ast.Mod)):
+            continue
+        left = node.left
+        if not (isinstance(left, ast.Constant) and isinstance(left.value, str)):
+            continue
+        lit = normalise(left.value)
+        if "%s" not in lit or not SPLIT_NUM.search(lit):
+            continue
+        referenced = {n.id for n in ast.walk(node.right)
+                      if isinstance(n, ast.Name)}
+        if referenced & names:
             return True
     return False
 

@@ -283,7 +283,12 @@ def main():
     assert module.parse_criteria_unit(declared) == len(acs), \
         'FAIL: rendered declaration does not read back as %d' % len(acs)
     print(declared.rstrip('\n'))
-    print('SUITE PASS %d checks' % CHECKS)
+    # R2964: the closing row must be the PAIR the battery law reads. Every check
+    # is an assert, so a failure raises before this line and the two counts are
+    # equal by construction; the single-count shape this file printed until now
+    # is refused by parse_suite_row, which left these criteria invisible to the
+    # runner. AC-RCC5-R3 keeps that refusal pinned as a red control.
+    print('SUITE PASS %d/%d' % (CHECKS, CHECKS))
 
 
 if __name__ == '__main__':
