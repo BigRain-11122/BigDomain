@@ -57,7 +57,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.dirname(BASE)
 ROOT = os.path.dirname(SRC)
 
-EXPECTED_CRITERIA = 8
+EXPECTED_CRITERIA = 10
 LABEL = "os-suite-closing-row-census"
 TOOL = os.path.join(ROOT, "tools", "suite_closing_row_census.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
@@ -253,8 +253,128 @@ def ac_cen6():
           "AC-CEN6 the registry declares %d criteria" % EXPECTED_CRITERIA)
 
 
-# R2962: the two shapes this round is about. The single-count row is the one
-# src/os/test_logs_toolkit.py shipped until this round; the pair is what it
+# R2963: the SOURCE reading is not an output proof, and this round measures
+# how wide the gap is. DOC_ONLY is a suite whose only law literal sits in its
+# module docstring while the code that actually runs prints the single-count
+# shape the battery refuses - law by source, unreadable in fact.
+DOC_ONLY_SRC = ('"""SUITE PASS %d/%d"""\n'
+                'print("SUITE PASS %d checks" % 3)\n')
+# the same law literal, now in a slot that reaches the print
+MOVED_SRC = ('print("SUITE PASS %d/%d" % (3, 3))\n'
+             'print("SUITE PASS %d checks" % 3)\n')
+LIVE_PRINT_SRC = 'print("SUITE PASS %d/%d" % (3, 3))\n'
+UNCALLED_SRC = 'def worker():\n    print("SUITE PASS %d/%d" % (3, 3))\n'
+CALLED_SRC = UNCALLED_SRC + 'worker()\n'
+
+
+def run_suite(path):
+    """Run one private suite and return (rc, last SUITE row)."""
+    proc = subprocess.run([sys.executable, path], capture_output=True,
+                          timeout=120)
+    text = proc.stdout.decode("utf-8", "replace")
+    rows = [l.strip() for l in text.splitlines() if l.startswith("SUITE ")]
+    return proc.returncode, (rows[-1] if rows else "<no SUITE row>")
+
+
+def exec_line(out):
+    """The position face line, or (None, None)."""
+    for line in out.splitlines():
+        if line.startswith("CENSUS exec law="):
+            fields = dict(re.findall(r"(\w+)=(\d+)", line))
+            return int(fields.get("law", -1)), int(fields.get("unexecuted", -1))
+    return None, None
+
+
+def ac_cen9():
+    """The gap is real: law by source, unreadable when actually run."""
+    folder, copy_tool = world("right", [("doc", "doc.py", 3),
+                                        ("live", "live.py", 3)])
+    try:
+        write_text(os.path.join(folder, "src", "sandbox", "doc.py"),
+                   DOC_ONLY_SRC)
+        write_text(os.path.join(folder, "src", "sandbox", "live.py"),
+                   LIVE_PRINT_SRC)
+        code, out = run_census(folder, copy_tool)
+        doc_rc, doc_row = run_suite(os.path.join(folder, "src", "sandbox",
+                                                 "doc.py"))
+        live_rc, live_row = run_suite(os.path.join(folder, "src", "sandbox",
+                                                   "live.py"))
+    finally:
+        cleanup(folder)
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import battery_shard
+    doc_read = battery_shard.parse_suite_row(doc_row)
+    live_read = battery_shard.parse_suite_row(live_row)
+    cited = "CENSUS registry=2 law=2 non_law=0 missing=0" in out
+    escaped = doc_rc == 0 and doc_row == "SUITE PASS 3 checks" and doc_read is None
+    control = (live_rc == 0 and live_read == ("PASS", 3, 3)
+               and "CENSUS shape law_direct=2" in out)
+    if not (code == 0 and cited and escaped and control):
+        print("  measured rc=%d cited=%r doc=(rc=%d row=%r read=%r) "
+              "live=(rc=%d read=%r)"
+              % (code, cited, doc_rc, doc_row, doc_read, live_rc, live_read),
+              flush=True)
+    check(code == 0 and cited and escaped and control,
+          "AC-CEN9 law-by-source prints an unreadable row (run, not asserted)")
+
+
+def ac_cen10():
+    """The position face tells a live law literal from a dead one, on a tree."""
+    folder, copy_tool = world("right", [
+        ("doc", "doc.py", 3), ("moved", "moved.py", 3),
+        ("unc", "unc.py", 3), ("called", "called.py", 3)])
+    try:
+        sandbox = os.path.join(folder, "src", "sandbox")
+        write_text(os.path.join(sandbox, "doc.py"), DOC_ONLY_SRC)
+        write_text(os.path.join(sandbox, "moved.py"), MOVED_SRC)
+        write_text(os.path.join(sandbox, "unc.py"), UNCALLED_SRC)
+        write_text(os.path.join(sandbox, "called.py"), CALLED_SRC)
+        code, out = run_census(folder, copy_tool)
+        proc_l = subprocess.run(
+            [sys.executable, copy_tool, "--root", folder,
+             "--list-unexecuted"], capture_output=True)
+        code_l = proc_l.returncode
+        out_l = proc_l.stdout.decode("utf-8", "replace")
+    finally:
+        cleanup(folder)
+    n, m = exec_line(out)
+    town = (code == 0 and n == 2 and m == 2
+            and "CENSUS exec why docstring=1 uncalled=1" in out)
+    listed = []
+    for line in out_l.splitlines():
+        if line.startswith("CENSUS unexecuted "):
+            listed += [x.strip() for x in line.split(":", 1)[1].split(",")]
+    named = code_l == 0 and sorted(listed) == ["doc", "unc"]
+    live_tree_ok, blind = live_exec_face()
+    if not (town and named and live_tree_ok):
+        print("  measured exec=(n=%r m=%r) town=%r named=%r live=%r %s"
+              % (n, m, town, named, live_tree_ok, blind), flush=True)
+    check(town and named and live_tree_ok,
+          "AC-CEN10 position face partitions law (%s)" % blind)
+
+
+def live_exec_face():
+    """On the live tree n+u must equal law, and the listing must name u rows."""
+    proc = subprocess.run(
+        [sys.executable, TOOL, "--root", ROOT, "--quiet-list",
+         "--list-unexecuted"], capture_output=True)
+    out = proc.stdout.decode("utf-8", "replace")
+    law = None
+    for line in out.splitlines():
+        if line.startswith("CENSUS registry="):
+            law = int(re.findall(r"(\w+)=(\d+)", line)[0][1])
+    n, m = exec_line(out)
+    listed = []
+    for line in out.splitlines():
+        if line.startswith("CENSUS unexecuted "):
+            listed += [x.strip() for x in line.split(":", 1)[1].split(",")]
+    ok = (proc.returncode == 0 and law is not None and n is not None
+          and n + m == law and len(listed) == m)
+    return ok, "law=%r exec=%r unexecuted=%r named=%d" % (law, n, m, len(listed))
+
+
+# R2962: the two shapes that round was about. The single-count row is the one
+# src/os/test_logs_toolkit.py shipped until that round; the pair is what it
 # ships now. Both the source (what the census reads) and the printed row (what
 # the runner reads) are spelled out, so neither authority is fed a string the
 # other one built.
@@ -347,6 +467,8 @@ def main():
     ac_cen6()
     ac_cen7()
     ac_cen8()
+    ac_cen9()
+    ac_cen10()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

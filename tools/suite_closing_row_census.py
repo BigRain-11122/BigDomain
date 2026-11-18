@@ -23,9 +23,26 @@ quotes later is a deliberate criterion change and not a silent drift.
 
 Usage:
     python tools/suite_closing_row_census.py [--root .] [--quiet-list]
+                                             [--list-unexecuted]
+
+R2963 (AC-CEN9..AC-CEN10): the reading above is a SOURCE reading, and this
+header says so; what it did not say was HOW WIDE the gap is. The verdict line
+still counts a law literal anywhere in the file, so a suite whose only law row
+sits in its docstring is counted as law while it prints a row the battery
+cannot read (AC-CEN9 reproduces exactly that escape in a private world and
+proves it at output level). The second face below answers the narrower
+question with AST positions - is at least one law literal in a slot that can
+reach the print? - and prints 'CENSUS exec law=<n> unexecuted=<m>' with
+n + m == law, naming the reason families under --list-unexecuted (docstring,
+dead, uncalled, unreached). It does NOT change the law count: a row with a
+docstring-only law literal is still law on the verdict line, so the difference
+between the two lines IS the measured blind set. Out of range and named: a row
+whose string is built at run time, a law literal inside a lambda body, and a
+row that builds its row in a helper module are not judged by the position face.
 """
 
 import argparse
+import ast
 import os
 import re
 import sys
@@ -96,66 +113,185 @@ def split_law(src):
     return False
 
 
+BINDS = re.compile(r'"PASS"|"FAIL"|PASS if|FAIL if|if not fail|if fail == 0')
+
+FAMILIES = ("law_direct", "law_status", "law_split", "law_numeric",
+            "law_numeric_slot", "law_punct", "law_label_pt",
+            "law_counters", "law_status_colon", "law_status_punct",
+            "suspect_status", "no_status", "legacy_paren",
+            "legacy_label", "no_numbers", "legacy_lower", "other")
+
+LAW_FAMILIES = ("law_direct", "law_status", "law_split", "law_numeric",
+                "law_numeric_slot", "law_punct", "law_label_pt",
+                "law_counters", "law_status_colon", "law_status_punct")
+
+
+def shape_of_literal(lit, src):
+    """Shape family of ONE literal body, read with the same chain as classify.
+
+    Split out so the position face below asks the same questions of the same
+    text that the source face asks; a second copy of this chain would be a
+    second law.
+    """
+    lit = normalise(lit)
+    if LAW_DIRECT.match(lit):
+        return "law_direct"
+    if LAW_STATUS.match(lit):
+        # the status word is injected: the law holds only if PASS/FAIL is bound
+        return "law_status" if BINDS.search(src) else "suspect_status"
+    if LAW_NUMERIC.match(lit):
+        # the runner derives PASS/FAIL from p==t for this shape
+        return "law_numeric"
+    if LAW_NUMERIC_SLOT.match(lit):
+        return ("law_numeric_slot" if ('"PASS"' in src and '"FAIL"' in src)
+                else "no_status")
+    if LAW_PUNCT.match(lit):
+        # the verdict word is explicit here, so no binding question arises
+        return "law_punct"
+    if LAW_LABEL_PT.match(lit):
+        # verdict is derived from p==t, the same rule as law_numeric
+        return "law_label_pt"
+    if LAW_STATUS_PUNCT.match(lit):
+        return "law_status_punct" if BINDS.search(src) else "suspect_status"
+    if (COUNTER_TOTAL.search(lit) and COUNTER_PASS.search(lit)
+            and COUNTER_FAIL.search(lit)) or \
+            (COUNTER_WORD_TOTAL.search(lit) and COUNTER_WORD_PASS.search(lit)
+             and COUNTER_WORD_FAIL.search(lit)):
+        # a counter row carries total, passed and failed, so the verdict is
+        # the fail count; a row without all three is not law
+        return "law_counters"
+    if LEGACY_STATUS_COLON.match(lit):
+        # "SUITE %s: %d/%d": law only when the slot is bound to PASS/FAIL,
+        # otherwise the verdict is whatever the row happened to say
+        return "law_status_colon" if BINDS.search(src) else "suspect_status"
+    if NO_STATUS.match(lit):
+        return "no_status"
+    if LEGACY_PAREN.match(lit):
+        return "legacy_paren"
+    if LEGACY_LABEL.match(lit):
+        return "legacy_label"
+    if NO_NUMBERS.match(lit):
+        return "no_numbers"
+    if LEGACY_LOWER.match(lit):
+        return "legacy_lower"
+    return "other"
+
+
 def classify(src):
     """Return the strongest shape family found in this suite's source."""
     shapes = []
     if split_law(src):
         shapes.append("law_split")
     for m in LITERAL.finditer(src):
-        lit = normalise(m.group(1) or m.group(2) or "")
-        if LAW_DIRECT.match(lit):
-            shapes.append("law_direct")
-        elif LAW_STATUS.match(lit):
-            # the status word is injected: the law holds only if PASS/FAIL is bound
-            binds = re.search(r'"PASS"|"FAIL"|PASS if|FAIL if|if not fail|if fail == 0', src)
-            shapes.append("law_status" if binds else "suspect_status")
-        elif LAW_NUMERIC.match(lit):
-            # the runner derives PASS/FAIL from p==t for this shape
-            shapes.append("law_numeric")
-        elif LAW_NUMERIC_SLOT.match(lit):
-            binds = ('"PASS"' in src and '"FAIL"' in src)
-            shapes.append("law_numeric_slot" if binds else "no_status")
-        elif LAW_PUNCT.match(lit):
-            # the verdict word is explicit here, so no binding question arises
-            shapes.append("law_punct")
-        elif LAW_LABEL_PT.match(lit):
-            # verdict is derived from p==t, the same rule as law_numeric
-            shapes.append("law_label_pt")
-        elif LAW_STATUS_PUNCT.match(lit):
-            binds = re.search(r'"PASS"|"FAIL"|PASS if|FAIL if|if not fail|if fail == 0', src)
-            shapes.append("law_status_punct" if binds else "suspect_status")
-        elif (COUNTER_TOTAL.search(lit) and COUNTER_PASS.search(lit)
-              and COUNTER_FAIL.search(lit)) or \
-                (COUNTER_WORD_TOTAL.search(lit) and COUNTER_WORD_PASS.search(lit)
-                 and COUNTER_WORD_FAIL.search(lit)):
-            # a counter row carries total, passed and failed, so the verdict is
-            # the fail count; a row without all three is not law
-            shapes.append("law_counters")
-        elif LEGACY_STATUS_COLON.match(lit):
-            # "SUITE %s: %d/%d": law only when the slot is bound to PASS/FAIL,
-            # otherwise the verdict is whatever the row happened to say
-            binds = re.search(r'"PASS"|"FAIL"|PASS if|FAIL if|if not fail|if fail == 0', src)
-            shapes.append("law_status_colon" if binds else "suspect_status")
-        elif NO_STATUS.match(lit):
-            shapes.append("no_status")
-        elif LEGACY_PAREN.match(lit):
-            shapes.append("legacy_paren")
-        elif LEGACY_LABEL.match(lit):
-            shapes.append("legacy_label")
-        elif NO_NUMBERS.match(lit):
-            shapes.append("no_numbers")
-        elif LEGACY_LOWER.match(lit):
-            shapes.append("legacy_lower")
-        else:
-            shapes.append("other")
-    for name in ("law_direct", "law_status", "law_split", "law_numeric",
-                 "law_numeric_slot", "law_punct", "law_label_pt",
-                 "law_counters", "law_status_colon", "law_status_punct",
-                 "suspect_status", "no_status", "legacy_paren",
-                 "legacy_label", "no_numbers", "legacy_lower", "other"):
+        shapes.append(shape_of_literal(m.group(1) or m.group(2) or "", src))
+    for name in FAMILIES:
         if name in shapes:
             return name
     return "no_row"
+
+
+def _const_false(node):
+    """Is this test a constant that never runs the body? ('if False', 'while 0')"""
+    if isinstance(node, ast.Constant):
+        return not bool(node.value)
+    if isinstance(node, ast.Name) and node.id == "False":
+        return True
+    return False
+
+
+def _called_names(tree):
+    """Function names the module calls anywhere (Name or attribute call)."""
+    names = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call):
+            func = node.func
+            if isinstance(func, ast.Name):
+                names.add(func.id)
+            elif isinstance(func, ast.Attribute):
+                names.add(func.attr)
+    return names
+
+
+def _scan(node, position, called, out):
+    """Collect (string value, position) for every string constant.
+
+    position is 'live', 'docstring', 'dead' or 'uncalled'. Only a strand that
+    can reach the print at run time counts as live: a standalone string
+    expression is a docstring by shape, a constant-false test never runs, and a
+    function the module never calls does not run when the file is executed.
+    """
+    if isinstance(node, ast.Constant):
+        if isinstance(node.value, str):
+            out.append((node.value, position))
+        return
+    if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+        inner = position
+        if node.name not in called and position != "dead":
+            inner = "uncalled"
+        for stmt in node.body:
+            _scan(stmt, inner, called, out)
+        for extra in node.decorator_list:
+            _scan(extra, position, called, out)
+        for extra in node.args.defaults:
+            _scan(extra, position, called, out)
+        return
+    if isinstance(node, ast.If):
+        dead = _const_false(node.test)
+        for stmt in node.body:
+            _scan(stmt, "dead" if (dead and position == "live") else position,
+                  called, out)
+        for stmt in node.orelse:
+            _scan(stmt, position, called, out)
+        _scan(node.test, position, called, out)
+        return
+    if isinstance(node, ast.While):
+        dead = _const_false(node.test)
+        for stmt in node.body:
+            _scan(stmt, "dead" if (dead and position == "live") else position,
+                  called, out)
+        for stmt in node.orelse:
+            _scan(stmt, position, called, out)
+        _scan(node.test, position, called, out)
+        return
+    if isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant) \
+            and isinstance(node.value.value, str):
+        # a bare string statement never reaches a print
+        out.append((node.value.value,
+                    "docstring" if position == "live" else position))
+        return
+    for child in ast.iter_child_nodes(node):
+        _scan(child, position, called, out)
+
+
+def law_sites(src):
+    """Where do this source's law literals sit? None when it will not parse.
+
+    A row is EXECUTING only if at least one law literal sits in a live slot.
+    The reason of the first non-live site is reported back so a reader can see
+    whether the row is a docstring mention, dead code or an uncalled helper.
+    """
+    try:
+        tree = ast.parse(src)
+    except SyntaxError:
+        return None
+    called = _called_names(tree)
+    raw = []
+    for stmt in tree.body:
+        _scan(stmt, "live", called, raw)
+    live = [normalise(value) for value, pos in raw if pos == "live"]
+    sites = []
+    for value, pos in raw:
+        family = shape_of_literal(value, src)
+        if family in LAW_FAMILIES:
+            sites.append((family, pos))
+    if split_law(src):
+        for match in SPLIT_ROW.finditer(src):
+            body = normalise(match.group(1))
+            if body in live:
+                sites.append(("law_split", "live"))
+            else:
+                sites.append(("law_split", "unreached"))
+    return sites
 
 
 def law_pattern(root):
@@ -176,6 +312,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default=".")
     ap.add_argument("--quiet-list", action="store_true")
+    ap.add_argument("--list-unexecuted", action="store_true")
     args = ap.parse_args(argv)
 
     root = os.path.abspath(args.root)
@@ -186,6 +323,7 @@ def main(argv=None):
 
     rows = registry(root)
     counts, non_law, missing = {}, [], []
+    exec_live, unexecuted, why = 0, [], {}
     for label, rel, declared in rows:
         path = os.path.join(root, "src", "sandbox", rel)
         if not os.path.isfile(path):
@@ -193,21 +331,34 @@ def main(argv=None):
             counts["missing_file"] = counts.get("missing_file", 0) + 1
             continue
         with open(path, "r", encoding="utf-8", errors="replace") as fh:
-            shape = classify(fh.read())
+            text = fh.read()
+        shape = classify(text)
         counts[shape] = counts.get(shape, 0) + 1
-        if shape not in ("law_direct", "law_status", "law_split", "law_numeric",
-                         "law_numeric_slot", "law_punct", "law_label_pt",
-                         "law_counters", "law_status_colon",
-                         "law_status_punct"):
+        if shape not in LAW_FAMILIES:
             non_law.append((label, shape))
+            continue
+        sites = law_sites(text)
+        if sites is None or any(pos == "live" for _fam, pos in sites):
+            # unparsable source is counted as executing: it cannot be proven
+            # otherwise, and this face must never fake a narrowed blind set
+            exec_live += 1
+            continue
+        reasons = [pos for _fam, pos in sites]
+        reason = "docstring" if "docstring" in reasons else (
+            "dead" if "dead" in reasons else (
+                "uncalled" if "uncalled" in reasons else "unreached"))
+        why[reason] = why.get(reason, 0) + 1
+        unexecuted.append((label, shape, reason))
 
     law = 0
-    for name in ("law_direct", "law_status", "law_split", "law_numeric",
-                 "law_numeric_slot", "law_punct", "law_label_pt",
-                 "law_counters", "law_status_colon", "law_status_punct"):
+    for name in LAW_FAMILIES:
         law += counts.get(name, 0)
     print("CENSUS registry=%d law=%d non_law=%d missing=%d"
           % (len(rows), law, len(non_law), len(missing)))
+    print("CENSUS exec law=%d unexecuted=%d" % (exec_live, len(unexecuted)))
+    if unexecuted:
+        print("CENSUS exec why " + " ".join(
+            "%s=%d" % (name, why[name]) for name in sorted(why)))
     for name in ("law_direct", "law_status", "law_split", "law_numeric",
                  "law_numeric_slot", "law_punct", "law_label_pt",
                  "law_counters", "law_status_colon", "law_status_punct",
@@ -222,6 +373,13 @@ def main(argv=None):
             by_shape.setdefault(shape, []).append(label)
         for shape in sorted(by_shape):
             print("CENSUS non_law %s: %s" % (shape, ", ".join(sorted(by_shape[shape]))))
+    if args.list_unexecuted:
+        by_reason = {}
+        for label, shape, reason in unexecuted:
+            by_reason.setdefault(reason, []).append(label)
+        for reason in sorted(by_reason):
+            print("CENSUS unexecuted %s: %s"
+                  % (reason, ", ".join(sorted(by_reason[reason]))))
     return 0
 
 
