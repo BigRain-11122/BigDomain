@@ -279,7 +279,10 @@ SUITES = [
     # R2981 adds AC-STL16..AC-STL17 (the report's override face): the collision
     # plan() already knows is published in the launcher's report, measured once
     # on the shipped path by giving two plan keys one number.
-    ("start-all", os.path.join("test_start_all.py"), 17),
+    # R2982 adds AC-STL18..AC-STL19 (the record's override face): the same
+    # collision is published EARLIER, in the machine record claimed before the
+    # first child exists, measured while the report does not exist yet.
+    ("start-all", os.path.join("test_start_all.py"), 19),
     # kill-on-close job object (R2937): the defect R2934 MEASURED - a launcher
     # killed hard leaves its children holding sandbox ports - answered by the
     # kernel instead of by a `finally`. AC-KOC1..AC-KOC5 were pinned in

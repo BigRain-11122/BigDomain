@@ -463,6 +463,12 @@ def main(argv=None):
         "ports": dict(ports),
         "face_ports": dict((key, ports[FACE_PORT_KEY[key]])
                            for key in FACE_KEYS),
+        # R2982: the same collision the report publishes, on an EARLIER face.
+        # This record is written before the first child exists, so a plan that
+        # names one number twice is readable by every record reader without
+        # waiting for the process that will fail to bind - the report can only
+        # tell that story after verify() has already watched it fail.
+        "override_duplicates": collisions,
     }
     claimed, holder, verdict = launcher_registry.claim(registry_path, claim)
     if not claimed:

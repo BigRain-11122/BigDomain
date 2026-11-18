@@ -28,6 +28,14 @@ face_ports. One arm is measured on the SHIPPED path - a real launcher given one
 number for two plan keys must name both keys in the report it writes and must
 not read ok.
 
+R2982 adds AC-STL18..AC-STL19 (the record's override face), pinned in the R2982
+row BEFORE the record carried the field. The report can only speak after
+verify() has watched a bind fail, so the machine record - claimed before the
+first child exists - is the earlier publication. Arm 3 starts one real launcher
+whose plan names one number twice and reads that record while the report does
+not exist yet; arm 4 reads the shipped source order, so "before any child" is
+pinned rather than narrated.
+
 Nothing here is read off a canned string: the launcher is really started in
 serve mode, the report it writes is compared against the hub's own probe
 answer at call time, an independent TCP connect checks every published port,
@@ -36,7 +44,7 @@ page file carries, a blocked port is proved to make the launcher REFUSE, and
 the teardown leg proves the ports are gone after the stop file appears.
 
 Usage: python test_start_all.py
-Exit: 0 = SUITE PASS 17/17, 2 = FAIL.
+Exit: 0 = SUITE PASS 19/19, 2 = FAIL.
 """
 
 import json
@@ -81,6 +89,31 @@ def report(name, bad, detail=""):
     print("%s %s%s" % ("FAIL" if bad else "PASS", name,
                        ("  " + detail) if detail else ""))
     return bad
+
+
+def record_collisions(record):
+    """The override collision a launcher RECORD publishes, or why it cannot be read.
+
+    R2982: the report can only name a collision after verify() has watched it
+    fail, so the machine record - written before the first child exists - is
+    the earlier face. Returns ``(collisions, problem)``: the collisions as
+    ``(port, keys)`` pairs (JSON lists round-trip), and a problem string that
+    names ``field-missing`` or an unreadable item rather than folding to a
+    boolean. AC-STL18 and AC-STL19 judge through this one reader, so the red
+    control exercises the same expression the live arm does.
+    """
+    if not isinstance(record, dict):
+        return None, "not-a-record"
+    if "override_duplicates" not in record:
+        return None, "field-missing"
+    out = []
+    for item in record.get("override_duplicates") or []:
+        try:
+            port, keys = item
+            out.append((int(port), tuple(keys)))
+        except (TypeError, ValueError):
+            return None, "unreadable-%r" % (item,)
+    return tuple(out), ""
 
 
 def free_port():
@@ -244,6 +277,8 @@ def main():
         report("AC-STL11", True, "no report")
         report("AC-STL16", True, "no report")
         report("AC-STL17", True, "no report")
+        report("AC-STL18", True, "no report")
+        report("AC-STL19", True, "no report")
         box.stop()
         return 2
     ports = rep.get("ports") or {}
@@ -878,6 +913,123 @@ def main():
     if three != ((7000, ("city", "hub", "ws")),):
         bad.append("three-%r" % (three,))
     report("AC-STL17", bool(bad), ",".join(bad))
+
+    # AC-STL18 (R2982): the collision reaches a face EARLIER than the report.
+    # The machine record is claimed before the first child exists, so the three
+    # readers measured in the R2982 row (birth_gate, start_all itself and the
+    # suites) see the answer without waiting for verify() to watch a bind fail.
+    # Arms 1-2 read the record the live launcher above left on disk; arm 3
+    # starts ONE more launcher and reads its record while the report does not
+    # exist yet; arm 4 pins the ORDER in the shipped source, so "before any
+    # child" is an assertion instead of a paragraph.
+    bad = []
+
+    def first_record(harness, timeout=25.0):
+        """Start one launcher, capture its record BEFORE it finishes.
+
+        Returns ``(record, report_existed, returncode)``: the first readable
+        machine record, whether the launcher's report file already existed at
+        that instant, and how the launcher exited. The record is claimed before
+        the first child exists, so reading it this early is the whole point of
+        AC-STL18 arm 3.
+        """
+        for path in (harness.report_path, harness.stop_path,
+                     harness.registry_path):
+            if os.path.exists(path):
+                os.remove(path)
+        proc = subprocess.Popen(harness.argv, stdin=subprocess.DEVNULL,
+                                stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+        record = None
+        report_existed = None
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            try:
+                with open(harness.registry_path, encoding="utf-8") as handle:
+                    record = json.load(handle)
+                report_existed = os.path.exists(harness.report_path)
+                break
+            except (OSError, ValueError):
+                time.sleep(0.02)
+        try:
+            proc.wait(timeout=40.0)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            proc.wait(timeout=5.0)
+        return record, report_existed, proc.returncode
+
+    # Arm 1 and arm 2: a healthy plan. The record must carry the field and read
+    # empty, and every field it carried before R2982 must still be there so an
+    # existing reader is not displaced by the new one.
+    healthy_box = Sandbox(tmpdir, name="healthy-record.json",
+                          extra=["--check", "--timeout", "6"])
+    live_record, _live_report, _live_code = first_record(healthy_box)
+    got, problem = record_collisions(live_record)
+    if problem:
+        bad.append("healthy-" + problem)
+    elif got != ():
+        bad.append("healthy-%r" % (got,))
+    carried = ("pid", "pid_started", "ts", "host", "state", "hub_url",
+               "ports", "face_ports")
+    gone = [key for key in carried
+            if not isinstance(live_record, dict) or key not in live_record]
+    if gone:
+        bad.append("dropped-" + ",".join(gone))
+    # Arm 3: a real launcher whose plan names one number twice. The record must
+    # already name both keys at the first moment it is readable, and the report
+    # must not exist yet - that is the "earlier" claim measured, not typed.
+    clash = free_port()
+    early_box = Sandbox(tmpdir, name="early-record.json",
+                        extra=["--check", "--timeout", "6",
+                               "--ws-port", str(clash),
+                               "--city-port", str(clash)])
+    seen, report_existed, _early_code = first_record(early_box)
+    if seen is None:
+        bad.append("early-record-never-readable")
+    else:
+        got, problem = record_collisions(seen)
+        if problem:
+            bad.append("early-" + problem)
+        elif got != ((clash, ("city", "ws")),):
+            bad.append("early-%r" % (got,))
+        if report_existed:
+            bad.append("report-already-there")
+        if seen.get("state") != "starting":
+            bad.append("early-state-%r" % (seen.get("state"),))
+    # Arm 4: the shipped order. Read from the source so a future edit that
+    # starts children before claiming the record cannot pass by timing.
+    with open(MODULE, encoding="utf-8") as handle:
+        source = handle.readlines()
+    claim_line = [i for i, line in enumerate(source)
+                  if "launcher_registry.claim(" in line]
+    start_line = [i for i, line in enumerate(source) if "group = start(" in line]
+    if len(claim_line) != 1 or len(start_line) != 1:
+        bad.append("order-sites-%d/%d" % (len(claim_line), len(start_line)))
+    elif claim_line[0] > start_line[0]:
+        bad.append("claim-after-start")
+    report("AC-STL18", bool(bad), ",".join(bad))
+
+    # AC-STL19 (R2982): the control that proves AC-STL18 can say No. One
+    # expression judges four shapes: the honest collision record read off the
+    # real launcher reads green, and three mutations read red.
+    def judge_record(record, expected):
+        got, problem = record_collisions(record)
+        return (not problem) and got == expected
+
+    bad = []
+    expected = ((clash, ("city", "ws")),)
+    if not judge_record(seen or {}, expected):
+        bad.append("honest-read-red")
+    dropped = dict(seen or {})
+    dropped.pop("override_duplicates", None)
+    if judge_record(dropped, expected):
+        bad.append("dropped-read-green")
+    if judge_record(dict(seen or {}, override_duplicates=[]), expected):
+        bad.append("emptied-read-green")
+    if judge_record(dict(live_record or {},
+                         override_duplicates=[[7000, ["ghost", "ws"]]]), ()):
+        bad.append("invented-read-green")
+    report("AC-STL19", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
