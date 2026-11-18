@@ -282,7 +282,7 @@ SUITES = [
     # R2982 adds AC-STL18..AC-STL19 (the record's override face): the same
     # collision is published EARLIER, in the machine record claimed before the
     # first child exists, measured while the report does not exist yet.
-    ("start-all", os.path.join("test_start_all.py"), 19),
+    ("start-all", os.path.join("test_start_all.py"), 20),
     # kill-on-close job object (R2937): the defect R2934 MEASURED - a launcher
     # killed hard leaves its children holding sandbox ports - answered by the
     # kernel instead of by a `finally`. AC-KOC1..AC-KOC5 were pinned in
@@ -7484,7 +7484,7 @@ SUITES = [
     # code existed, in the same window (disclosed). AC-LIVE7 was pinned the
     # same way in R2983, before recorded_collisions existed.
     ("os-live-proof",
-     os.path.join("..", "os", "test_live_proof.py"), 8),
+     os.path.join("..", "os", "test_live_proof.py"), 9),
     ]
 
 FAILS = 0

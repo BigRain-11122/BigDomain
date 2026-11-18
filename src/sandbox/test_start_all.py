@@ -36,6 +36,14 @@ whose plan names one number twice and reads that record while the report does
 not exist yet; arm 4 reads the shipped source order, so "before any child" is
 pinned rather than narrated.
 
+R2985 adds AC-STL20 (the two pre-child refusal reports), pinned in the R2985
+row BEFORE these arms existed. Two doors refuse before any child exists - the
+kernel claim and the machine record - and both already published the same
+collision field with no criterion driving them. Three arms start real
+launchers through those doors (a mutex held by this process, and a live
+"starting" record), and arm 4 pins both refusal dicts in the shipped source so
+dropping the key from either goes red without waiting for a timing.
+
 Nothing here is read off a canned string: the launcher is really started in
 serve mode, the report it writes is compared against the hub's own probe
 answer at call time, an independent TCP connect checks every published port,
@@ -44,7 +52,7 @@ page file carries, a blocked port is proved to make the launcher REFUSE, and
 the teardown leg proves the ports are gone after the stop file appears.
 
 Usage: python test_start_all.py
-Exit: 0 = SUITE PASS 19/19, 2 = FAIL.
+Exit: 0 = SUITE PASS 20/20, 2 = FAIL.
 """
 
 import json
@@ -279,6 +287,7 @@ def main():
         report("AC-STL17", True, "no report")
         report("AC-STL18", True, "no report")
         report("AC-STL19", True, "no report")
+        report("AC-STL20", True, "no report")
         box.stop()
         return 2
     ports = rep.get("ports") or {}
@@ -1030,6 +1039,137 @@ def main():
                          override_duplicates=[[7000, ["ghost", "ws"]]]), ()):
         bad.append("invented-read-green")
     report("AC-STL19", bool(bad), ",".join(bad))
+
+    # AC-STL20 (R2985): the two reports written BEFORE any child exists - the
+    # kernel claim refused and the machine record held - publish the same
+    # collision field the later report publishes, and the driver's own reader
+    # sees it. The probe measured all four shapes BEFORE the pin; arm 4 pins
+    # both refusal dicts in the shipped source, so deleting the key from
+    # either one goes red without waiting for a lucky timing.
+    import launcher_mutex
+    import launcher_registry
+    tools_dir = os.path.join(REPO, "tools")
+    if tools_dir not in sys.path:
+        sys.path.insert(0, tools_dir)
+    import ceo_live_shot as LIVESHOT
+
+    bad = []
+
+    def run_refused(harness, extra, keep_registry=False):
+        """Start one launcher that must be refused before any child exists."""
+        for path in (harness.report_path, harness.stop_path):
+            if os.path.exists(path):
+                os.remove(path)
+        if not keep_registry and os.path.exists(harness.registry_path):
+            os.remove(harness.registry_path)
+        proc = subprocess.run(list(harness.argv) + list(extra),
+                              stdin=subprocess.DEVNULL,
+                              stdout=subprocess.DEVNULL,
+                              stderr=subprocess.DEVNULL, timeout=120)
+        return proc.returncode, wait_file(harness.report_path, timeout=20.0)
+
+    refused_clash = free_port()
+    # Arm 1: the kernel claim is held by this process, so the child's own
+    # acquire reads already-held and refuses with zero processes started.
+    mutex_box = Sandbox(tmpdir, name="refused-mutex-clash.json")
+    lane = launcher_mutex.acquire(
+        launcher_mutex.name_for(mutex_box.registry_path))
+    try:
+        code, refused = run_refused(
+            mutex_box, ["--check", "--ws-port", str(refused_clash),
+                        "--city-port", str(refused_clash)])
+    finally:
+        launcher_mutex.release(lane.get("handle"))
+    got = None if not isinstance(refused, dict) else [
+        (int(port), tuple(keys))
+        for port, keys in (refused.get("override_duplicates") or [])]
+    if refused is None:
+        bad.append("mutex-no-report")
+    else:
+        if got != [(refused_clash, ("city", "ws"))]:
+            bad.append("mutex-clash-%r" % (got,))
+        if refused.get("ok"):
+            bad.append("mutex-clash-read-ok")
+        if not any(launcher_mutex.REFUSED in str(item)
+                   for item in (refused.get("errors") or [])):
+            bad.append("mutex-errors-%r" % (refused.get("errors"),))
+        if [(int(p), tuple(k)) for p, k in
+                LIVESHOT.report_collisions(refused)] != [
+                    (refused_clash, ("city", "ws"))]:
+            bad.append("mutex-reader-blind")
+    if code == 0:
+        bad.append("mutex-exit-0")
+    # Arm 2: the same door with a healthy plan publishes an empty answer, so
+    # the field reports a collision and not "a refusal happened".
+    healthy_box = Sandbox(tmpdir, name="refused-mutex-healthy.json")
+    lane = launcher_mutex.acquire(
+        launcher_mutex.name_for(healthy_box.registry_path))
+    try:
+        code2, refused2 = run_refused(healthy_box, ["--check"])
+    finally:
+        launcher_mutex.release(lane.get("handle"))
+    if refused2 is None:
+        bad.append("healthy-no-report")
+    else:
+        if (refused2.get("override_duplicates") or []) != []:
+            bad.append("healthy-%r" % (refused2.get("override_duplicates"),))
+        if LIVESHOT.report_collisions(refused2) != ():
+            bad.append("healthy-reader-%r"
+                       % (LIVESHOT.report_collisions(refused2),))
+    if code2 == 0:
+        bad.append("healthy-exit-0")
+    # Arm 3: the SECOND door. A live record in the "starting" state makes the
+    # holder real (judge reason still-starting), so --no-mutex reaches the
+    # record claim refusal rather than starting children.
+    record_box = Sandbox(tmpdir, name="refused-record-clash.json")
+    holder = {
+        "pid": os.getpid(),
+        "pid_started": launcher_registry.process_started(os.getpid()),
+        "ts": launcher_registry.stamp(),
+        "host": "127.0.0.1",
+        "state": "starting",
+        "hub_url": "",
+        "ports": {},
+        "face_ports": {},
+        "override_duplicates": [],
+    }
+    with open(record_box.registry_path, "w", encoding="utf-8") as handle:
+        json.dump(holder, handle)
+    code3, refused3 = run_refused(
+        record_box, ["--no-mutex", "--check", "--ws-port", str(refused_clash),
+                     "--city-port", str(refused_clash)],
+        keep_registry=True)
+    if refused3 is None:
+        bad.append("record-no-report")
+    else:
+        got = [(int(port), tuple(keys))
+               for port, keys in (refused3.get("override_duplicates") or [])]
+        if got != [(refused_clash, ("city", "ws"))]:
+            bad.append("record-clash-%r" % (got,))
+        held = (refused3.get("registry") or {}).get("claimed")
+        if held is not False:
+            bad.append("record-claimed-%r" % (held,))
+        if [(int(p), tuple(k)) for p, k in
+                LIVESHOT.report_collisions(refused3)] != [
+                    (refused_clash, ("city", "ws"))]:
+            bad.append("record-reader-blind")
+        if not any(launcher_registry.REFUSED in str(item)
+                   for item in (refused3.get("errors") or [])):
+            bad.append("record-errors-%r" % (refused3.get("errors"),))
+    if code3 == 0:
+        bad.append("record-exit-0")
+    # Arm 4: both refusal dicts in the shipped source carry the key. A future
+    # edit that drops either one is refused here instead of decaying quietly.
+    with open(MODULE, encoding="utf-8") as handle:
+        source_text = handle.read()
+    blocks = source_text.split("refused = {")
+    if len(blocks) != 3:
+        bad.append("refusal-blocks-%d" % (len(blocks) - 1))
+    else:
+        for index, block in enumerate(blocks[1:], start=1):
+            if '"override_duplicates": collisions' not in block[:900]:
+                bad.append("refusal-%d-dropped" % index)
+    report("AC-STL20", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

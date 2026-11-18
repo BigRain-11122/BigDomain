@@ -288,6 +288,31 @@ def main():
        'recorded_collisions(' in inspect.getsource(LS.published_collisions),
        'wired=1')
 
+    # AC-LIVE9 (R2985): a REFUSED launch never claimed the record, so the file
+    # on disk is the holder's and must not be credited to this launch. The
+    # probe measured the defect before this criterion existed: a healthy
+    # refusal plus a holder record carrying a collision returned the holder's
+    # pair. Arms 2 and 3 keep the R2983/R2984 faces honest - the record is
+    # still read when the report is absent or says nothing about a record.
+    holding = record('holding.json', _json.dumps(
+        {'pid': 4242, 'state': 'serving',
+         'override_duplicates': [[7000, ['city', 'ws']]]}))
+    healthy_refusal = {'ok': False,
+                       'errors': ['E_LAUNCHER_ALREADY_RUNNING source=mutex'],
+                       'override_duplicates': [],
+                       'registry': {'path': holding, 'claimed': False,
+                                    'held_by': {'pid': 4242}}}
+    ok('AC-LIVE9 a refused launch does not inherit the holder record',
+       LS.published_collisions(holding, healthy_refusal) == (),
+       'read=%s' % (LS.published_collisions(holding, healthy_refusal),))
+    ok('AC-LIVE9 a report that never arrives still reads the record',
+       LS.published_collisions(holding, None) == ((7000, ('city', 'ws')),),
+       'read=%s' % (LS.published_collisions(holding, None),))
+    ok('AC-LIVE9 a report silent about its record still merges (no break)',
+       LS.published_collisions(holding, {'ok': True}) == ((7000,
+                                                          ('city', 'ws')),),
+       'read=%s' % (LS.published_collisions(holding, {'ok': True}),))
+
     total = len(CHECKS)
     acs = set()
     for name in CHECKS:

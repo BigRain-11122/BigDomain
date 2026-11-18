@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-19 R2984 PRODUCT+ENGINEERING: the report-arrived path now names the override collision in the same top-level record_collisions field, because a real colliding launcher showed the machine record deleted before the report was parseable (zero of thirteen five-millisecond samples had both), so tools/ceo_live_shot.py merges both survivors through published_collisions and AC-LIVE8 pins six arms.",
+    "current": "2026-11-19 R2985 PRODUCT+ENGINEERING: both reports written BEFORE any child exists now have a criterion, and a measured cross-attribution defect is repaired. The probe ran before the pin: a kernel-claim refusal with a colliding plan publishes [[X,[city,ws]]] with ok=False and errors carrying E_LAUNCHER_ALREADY_RUNNING source=mutex; a healthy refusal publishes []; a live 'starting' record produces the record-door refusal with registry.claimed=False and reason=still-starting. The driver's reader already saw every shape, but NOTHING pinned the refusal WRITERS, so a future edit could drop the key with 728 suites still green - so 'already covered by AC-LIVE8' would have been false. The same probe found the record on a refused launch is the HOLDER's file, and the merged reader credited the holder's collision to a launch that had none; published_collisions now skips the record when the report itself says claimed is False.",
     "do": "2026-11-19 R2973 PRODUCT+ENGINEERING: the shape R2972 named out of range is now judged. A bare 'import a.b' (no as) binds the PACKAGE, and 'a.b.Name(...)' reaches a repo module's export through a three-part attribute chain. _dotted_chain() spells a Name/Attribute chain; _dotted_bare_imports() records the exact dotted paths a module imports without an alias; _repo_reexport_context() carries that licence set as its fourth element; _server_class_shape() and _class_bases() judge a chain whose receiver spells a licensed path, placed AFTER the receiver-blind http rule so no existing row changes its kind; and _module_carried_classes() follows a module-level 'Maker = a.b.UDPServer' one level up, so the same chain re-exported to a borrowing module resolves.",
     "last_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-stl-siblings-R2982.log (596B, 2026-11-19)",
-    "latest_evidence": "qa/leg-stl-siblings-R2982.log (596B, 2026-11-19)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-stl-siblings-R2985.log (755B, 2026-11-19)",
+    "latest_evidence": "qa/leg-stl-siblings-R2985.log (755B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2985] next window (<=12h): (0) MAIN — 撞车现在在**人眼驱动**的两个时刻都具名（报告缺席=记录、报告到达=报告），而**起子进程前就拒绝**的两份报告（kernel-claim 被拒、记录被占）仍带 `override_duplicates` 却**无判据驱动**。下一轮先量：这两份拒绝报告今天有没有读者（`start_all` 在 claim 拒绝时先写报告再退出，故 `wait_json` 可能把这份当「到达」）、`report_collisions` 是否已覆盖它们的字段（若已覆盖则不新增字段）、健康拒绝（非撞车）下字段是否必须为空。量清后二选一：①由**一条**新判据钉住（撞车拒绝→具名两键、健康拒绝→空）；②量出它们与报告到达面重合 →如实记「已由 AC-LIVE8 覆盖，不重复造判据」并转下一件。不许两头都宣称。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), and the QA charter daily-crawl face still red (today_png=0 today_log=0 bench_today=False — no fake refresh was made).",
-    "next_milestone_due": "2026-11-19T17:28:02+08:00",
-    "updated_at": "2026-11-19T05:28:02+08:00"
+    "next_milestone": "[R2986] next window (<=12h): (0) MAIN — 两道拒绝门现在能说撞车，但**人看不出「另一种启动器正在跑」与「沙箱坏了」的区别**：驱动的失败分支对两者打同一句 `sandbox never proved ready`，只把整份报告嵌在 `report` 里。下一轮**先量**：①两份拒绝报告的 `errors`／`registry.reason` 今天有没有出现在人眼可见的输出里（`ceo_live_shot` 的失败 JSON 字段集、preview 里有没有落盘）；②把拒绝按 `E_LAUNCHER_ALREADY_RUNNING`（什么都没启动）与真实失败分开是否纯增量（既有读者：脚本/判据有没有按字段集比对这份失败 JSON）；③若量出已被覆盖则如实记「已覆盖、不造判据」并转下一件。纯增量则加一条顶层具名行（拒绝原因一行）并配一条判据（拒绝→具名原因、真实失败→不谎报为拒绝）；否则退回判据先行写清理由。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), and the QA charter daily-crawl face still red (today_png=0 today_log=0 bench_today=False — no fake refresh was made).",
+    "next_milestone_due": "2026-11-19T17:45:37+08:00",
+    "updated_at": "2026-11-19T05:45:37+08:00"
   },
-  "current": "2026-11-19 R2984 PRODUCT+ENGINEERING: the report-arrived path now names the override collision in the same top-level record_collisions field, because a real colliding launcher showed the machine record deleted before the report was parseable (zero of thirteen five-millisecond samples had both), so tools/ceo_live_shot.py merges both survivors through published_collisions and AC-LIVE8 pins six arms.",
+  "current": "2026-11-19 R2985 PRODUCT+ENGINEERING: both reports written BEFORE any child exists now have a criterion, and a measured cross-attribution defect is repaired. The probe ran before the pin: a kernel-claim refusal with a colliding plan publishes [[X,[city,ws]]] with ok=False and errors carrying E_LAUNCHER_ALREADY_RUNNING source=mutex; a healthy refusal publishes []; a live 'starting' record produces the record-door refusal with registry.claimed=False and reason=still-starting. The driver's reader already saw every shape, but NOTHING pinned the refusal WRITERS, so a future edit could drop the key with 728 suites still green - so 'already covered by AC-LIVE8' would have been false. The same probe found the record on a refused launch is the HOLDER's file, and the merged reader credited the holder's collision to a launch that had none; published_collisions now skips the record when the report itself says claimed is False.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,12 +41,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-19 R2984 PRODUCT+ENGINEERING: the report-arrived path now names the override collision in the same top-level record_collisions field, because a real colliding launcher showed the machine record deleted before the report was parseable (zero of thirteen five-millisecond samples had both), so tools/ceo_live_shot.py merges both survivors through published_collisions and AC-LIVE8 pins six arms.",
-  "export_ts": "2026-11-19T05:28:02+08:00",
+  "do": "2026-11-19 R2985 PRODUCT+ENGINEERING: both reports written BEFORE any child exists now have a criterion, and a measured cross-attribution defect is repaired. The probe ran before the pin: a kernel-claim refusal with a colliding plan publishes [[X,[city,ws]]] with ok=False and errors carrying E_LAUNCHER_ALREADY_RUNNING source=mutex; a healthy refusal publishes []; a live 'starting' record produces the record-door refusal with registry.claimed=False and reason=still-starting. The driver's reader already saw every shape, but NOTHING pinned the refusal WRITERS, so a future edit could drop the key with 728 suites still green - so 'already covered by AC-LIVE8' would have been false. The same probe found the record on a refused launch is the HOLDER's file, and the merged reader credited the holder's collision to a launch that had none; published_collisions now skips the record when the report itself says claimed is False.",
+  "export_ts": "2026-11-19T05:45:37+08:00",
   "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
-  "latest_evidence": "qa/leg-live-siblings-R2984.log (345B, 2026-11-19)",
-  "next_milestone": "[R2985] next window (<=12h): (0) MAIN — 撞车现在在**人眼驱动**的两个时刻都具名（报告缺席=记录、报告到达=报告），而**起子进程前就拒绝**的两份报告（kernel-claim 被拒、记录被占）仍带 `override_duplicates` 却**无判据驱动**。下一轮先量：这两份拒绝报告今天有没有读者（`start_all` 在 claim 拒绝时先写报告再退出，故 `wait_json` 可能把这份当「到达」）、`report_collisions` 是否已覆盖它们的字段（若已覆盖则不新增字段）、健康拒绝（非撞车）下字段是否必须为空。量清后二选一：①由**一条**新判据钉住（撞车拒绝→具名两键、健康拒绝→空）；②量出它们与报告到达面重合 →如实记「已由 AC-LIVE8 覆盖，不重复造判据」并转下一件。不许两头都宣称。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), and the QA charter daily-crawl face still red (today_png=0 today_log=0 bench_today=False — no fake refresh was made).",
+  "latest_evidence": "qa/leg-stl-siblings-R2985.log (755B, 2026-11-19)",
+  "next_milestone": "[R2986] next window (<=12h): (0) MAIN — 两道拒绝门现在能说撞车，但**人看不出「另一种启动器正在跑」与「沙箱坏了」的区别**：驱动的失败分支对两者打同一句 `sandbox never proved ready`，只把整份报告嵌在 `report` 里。下一轮**先量**：①两份拒绝报告的 `errors`／`registry.reason` 今天有没有出现在人眼可见的输出里（`ceo_live_shot` 的失败 JSON 字段集、preview 里有没有落盘）；②把拒绝按 `E_LAUNCHER_ALREADY_RUNNING`（什么都没启动）与真实失败分开是否纯增量（既有读者：脚本/判据有没有按字段集比对这份失败 JSON）；③若量出已被覆盖则如实记「已覆盖、不造判据」并转下一件。纯增量则加一条顶层具名行（拒绝原因一行）并配一条判据（拒绝→具名原因、真实失败→不谎报为拒绝）；否则退回判据先行写清理由。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), and the QA charter daily-crawl face still red (today_png=0 today_log=0 bench_today=False — no fake refresh was made).",
   "outs": [
+    "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "qa/live-proof-R2984.log (3046B) + AC-LIVE8 six arms [2026-11-19 R2984]",
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "qa/bind-scan-R2946.log (546B) + qa/bind-site-scan-suite-R2946.log (176B) + qa/leg-lobby-regress-R2946.log (413B) [2026-11-18 R2946]",
@@ -165,7 +166,7 @@
   },
   "results": [
     [
-      "2982",
+      "2985",
       "OSLoop 执行 tick"
     ]
   ],
@@ -178,7 +179,7 @@
   "self_drive": {
     "window": "2026-11-13..2026-11-19",
     "window_days": 7,
-    "log_lines_in_window": 56,
+    "log_lines_in_window": 54,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 19,
@@ -188,5 +189,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 75284
+  "state_bytes": 66030
 }

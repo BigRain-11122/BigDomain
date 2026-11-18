@@ -133,9 +133,20 @@ def published_collisions(record_path, report):
 
     The record speaks when the report never arrives (R2983); the report speaks
     when it does (R2984). One call site, one named field.
+
+    R2985: a REFUSED launch never claimed the record, so the file on disk
+    belongs to the launcher that turned it away. Merging that file into this
+    launch's answer credited a stranger's collision to a plan that had none
+    (measured: a healthy refusal plus a holder record carrying a collision
+    returned the holder's pair). When the report itself says it did not take
+    the record, the record is not this launch's to read.
     """
-    pairs = set(recorded_collisions(record_path))
-    pairs.update(report_collisions(report))
+    pairs = set(report_collisions(report))
+    registry = (report or {}).get("registry")
+    refused_the_record = (isinstance(registry, dict)
+                          and registry.get("claimed") is False)
+    if not refused_the_record:
+        pairs.update(recorded_collisions(record_path))
     return tuple(sorted(pairs))
 
 
