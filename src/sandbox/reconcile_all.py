@@ -275,7 +275,10 @@ SUITES = [
     # AC-KOC8's result rests on is asserted, with a red control that proves
     # the assertion can say no. An anti-decay assertion, not a security
     # boundary - it consults no request path.
-    ("kill-on-close", os.path.join("test_kill_on_close.py"), 10),
+    # R2977 adds AC-KOC11..AC-KOC12: the port keys behind those faces are
+    # DISTINCT, because a shared key satisfies "a socket per face" while
+    # plan() hands both faces one port and the second start fails E_NOT_UP.
+    ("kill-on-close", os.path.join("test_kill_on_close.py"), 12),
     # machine-wide launcher record (R2939): the ownership declaration R2938
     # shipped was ARGV - it travelled from the launcher to its own child and
     # nowhere else - so a second door on the same machine forked the sandbox

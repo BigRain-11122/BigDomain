@@ -35,6 +35,21 @@ to say no rather than merely able to report green. This is an anti-decay
 assertion and NOT a security boundary - it consults no request path and grants
 nothing; the module header says so in the same words.
 
+R2977 adds AC-KOC11..AC-KOC12, pre-registered in the R2977 board row before
+this code. R2976 pinned the first half of the second hop - every owned face has
+a port key drawn from the plan - and left the second half open: the keys need
+not be DISTINCT. Two faces on one plan key satisfy "a planned socket behind
+every face" while the launcher's plan() issues one port per key, so both faces
+are handed the same port, the first start wins it and the second fails loudly
+with E_NOT_UP. face_coverage.port_coverage() closes that half; AC-KOC11 asserts
+it on the live tree (eight faces, eight distinct keys, plus plan() handing each
+face a different port when its ports are given explicitly, so nothing is
+bound), and AC-KOC12 is the red control: a private world with two faces on one
+key must be refused, healing the key must turn it green, and injecting that
+collision into the REAL launcher constant must still be red. It is a
+"loud-failure" closure and not a security boundary, in the same words as the
+module header.
+
 The claim under test is not "the launcher tears down nicely" - AC-STL5 already
 covers that. It is the stronger one R2934 measured the absence of: a launcher
 killed HARD, with no chance to run its `finally` and no stop file, must leave
@@ -764,6 +779,74 @@ def main():
         bad10.append("live-constant-drift=%s" % (drift["unowned"],))
     ok("AC-KOC10 the coverage predicate can say NO to a panel-only face",
        not bad10, ",".join(bad10))
+
+    # AC-KOC11: the half of the second hop R2976 left unpinned - the port keys
+    # themselves. A shared key is not a missing key: "every face has a socket"
+    # stays true while two faces are handed one socket, the first start wins
+    # it and the second fails E_NOT_UP. These arms read constants and pure
+    # functions; arm 4 passes overrides for every plan key, so plan() does its
+    # arithmetic without assigning or binding a single port.
+    ports_verdict = coverage_module.port_coverage(start_all.FACE_PORT_KEY)
+    ok("AC-KOC11 no two faces share a plan key on the live tree",
+       ports_verdict["ok"] is True
+       and ports_verdict["shared"] == ()
+       and ports_verdict["faces"] == tuple(sorted(start_all.FACE_KEYS)),
+       "ok=%s shared=%s faces=%s"
+       % (ports_verdict["ok"], ports_verdict["shared"],
+          ports_verdict["faces"]))
+    face_key_values = list(start_all.FACE_PORT_KEY.values())
+    ok("AC-KOC11 the map is one-to-one between faces and keys",
+       len(set(face_key_values)) == len(start_all.FACE_PORT_KEY)
+       == len(start_all.FACE_KEYS),
+       "faces=%d keys=%d distinct=%d"
+       % (len(start_all.FACE_KEYS), len(start_all.FACE_PORT_KEY),
+          len(set(face_key_values))))
+    ok("AC-KOC11 those keys are still planned sockets",
+       set(face_key_values) <= set(start_all.PLAN_KEYS),
+       "keys=%s plan=%d" % (sorted(set(face_key_values)),
+                            len(start_all.PLAN_KEYS)))
+    explicit = dict((key, 7001 + index)
+                    for index, key in enumerate(start_all.PLAN_KEYS))
+    absent_ports = start_all.plan("127.0.0.1", explicit)
+    face_ports = [absent_ports[start_all.FACE_PORT_KEY[face]]
+                  for face in start_all.FACE_KEYS]
+    ok("AC-KOC11 the plan hands every face a different port",
+       len(set(face_ports)) == len(face_ports),
+       "ports=%s" % (sorted(face_ports),))
+
+    # AC-KOC12: the red control for the uniqueness predicate. A private world
+    # with two faces on one key must be REFUSED; naming a second key must turn
+    # it green, so the refusal is the collision and not the names. One arm
+    # injects that collision into the REAL launcher constant, which is the
+    # shape a future edit would produce, and one shows a three-way collision
+    # names every face instead of folding into a boolean.
+    bad12 = []
+    red_ports = coverage_module.port_coverage({"a": "web", "b": "web"})
+    if red_ports["ok"] is not False:
+        bad12.append("shared-key-read-as-covered")
+    if red_ports["shared"] != (("web", ("a", "b")),):
+        bad12.append("shared=%s" % (red_ports["shared"],))
+    healed_ports = coverage_module.port_coverage({"a": "web", "b": "ws"})
+    if healed_ports["ok"] is not True or healed_ports["shared"] != ():
+        bad12.append("healed-still-red=%s" % (healed_ports["shared"],))
+    drift_ports = dict(start_all.FACE_PORT_KEY)
+    drift_ports["ghost"] = "web"
+    drift_verdict = coverage_module.port_coverage(drift_ports)
+    if drift_verdict["ok"] is not False or drift_verdict["shared"] != (
+            ("web", ("ghost", "lobby")),):
+        bad12.append("live-constant-drift=%s" % (drift_verdict["shared"],))
+    three_way = coverage_module.shared_port_keys(
+        {"one": "hub", "two": "hub", "three": "hub", "four": "ugc"})
+    if three_way != (("hub", ("one", "three", "two")),):
+        bad12.append("three-way=%s" % (three_way,))
+    single = coverage_module.port_coverage({"only": "hub"})
+    if single["ok"] is not True or single["shared"] != ():
+        bad12.append("single-face=%s" % (single,))
+    empty_ports = coverage_module.port_coverage({})
+    if empty_ports["ok"] is not True or empty_ports["shared"] != ():
+        bad12.append("empty-world=%s" % (empty_ports,))
+    ok("AC-KOC12 the uniqueness predicate can say NO to a shared key",
+       not bad12, ",".join(bad12))
 
     total = len(CHECKS)
     acs = set()
