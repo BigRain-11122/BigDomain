@@ -1,0 +1,20 @@
+python : E_FACE_NOT_LAUNCHED_BY_HOLDER ppid=56556 holder=92420 mutex=Local\BigDomainSandboxLauncher-v1-dbea587e31b5e4d6
+ record=C:\Users\sjs20\AppData\Local\BigDomain\sandbox-launcher.json reason=claim-held-by-another-pid trust=record-pid
+所在位置 行:1 字符: 52
++ ... ate-R2949.raw"; python src/sandbox/test_birth_gate.py *> $out; Write- ...
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (E_FACE_NOT_LAUN...rust=record-pid:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+PASS AC-HSG1
+PASS AC-HSG2
+PASS AC-HSG3
+PASS AC-HSG4
+PASS AC-HSG5
+PASS AC-HSG6
+PASS AC-HSG7
+PASS AC-HSG8
+PASS AC-HSG9
+PASS AC-HSG10
+PASS AC-HSG11
+SUITE PASS 11/11

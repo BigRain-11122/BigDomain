@@ -651,10 +651,12 @@ def main():
     # and the face therefore comes up.
     bad = []
     panel_port = free_port()
-    child_log = os.path.join(tempfile.gettempdir(),
-                             "bigdomain-panel-child-checkout.txt")
-    if os.path.exists(child_log):
-        os.remove(child_log)
+    # R2949: the child log is per PANEL now, and its path is published in the
+    # start answer, so this leg deletes the path it was told about instead of
+    # guessing a machine-wide name (the old pre-clean existed only because the
+    # name was shared, and after R2949 a guessed name would leave the real file
+    # behind on every run).
+    child_log = None
     holder = Holder(record, mutex, name="hsg11",
                     child_argv=[sys.executable, PANEL, "--host", "127.0.0.1",
                                 "--port", str(panel_port)])
@@ -666,6 +668,7 @@ def main():
         else:
             code, obj = post_json(panel_port, "/panel/api/start",
                                   {"face": "checkout"})
+            child_log = obj.get("child_log_path")
             if code != 500:
                 bad.append("start-code-%s" % code)
             if obj.get("error") != "E_PANEL_NOT_UP":
@@ -674,6 +677,8 @@ def main():
                 bad.append("child-log-hides-code")
             if obj.get("child_exit") != 3:
                 bad.append("child-exit-%s" % obj.get("child_exit"))
+            if not child_log:
+                bad.append("child-log-path-unpublished")
             if can_connect(int(obj.get("port") or 0)):
                 bad.append("grandchild-bound-anyway")
     finally:
@@ -683,7 +688,7 @@ def main():
                 os.remove(record)
             except OSError:
                 pass
-        if os.path.exists(child_log):
+        if child_log and os.path.exists(child_log):
             try:
                 os.remove(child_log)
             except OSError:

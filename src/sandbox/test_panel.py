@@ -5,6 +5,10 @@ this file, src/sandbox/panel.py and its registry row existed. Five more -
 AC-PAN7..AC-PAN11 - were pre-registered in the R2938 backlog row BEFORE the
 ownership declaration existed, because the launcher used to leave the panel
 blind and a page click could start a SECOND lobby beside the running one.
+AC-PAN12..AC-PAN13 were pre-registered in the R2949 row BEFORE the per-panel
+log namespace existed: R2948 kept each child's stderr (the only place a named
+refusal can come from) in ONE machine-wide file per face id, so a second panel
+silently overwrote the first one's evidence.
 
 Nothing here is read off a canned string: the panel is really started, the
 start route really spawns a shipped module, an independent TCP connect checks
@@ -12,14 +16,16 @@ the port it reports, the served URL is compared against the page bytes on
 disk, and the teardown leg proves the children are gone.
 
 Usage: python test_panel.py
-Exit: 0 = SUITE PASS 11/11, 2 = FAIL.
+Exit: 0 = SUITE PASS 13/13, 2 = FAIL.
 """
 
+import hashlib
 import json
 import os
 import socket
 import subprocess
 import sys
+import tempfile
 import urllib.error
 import urllib.request
 
@@ -628,6 +634,225 @@ def ac_pan11():
                   "parse_owned both ways and a real --owned-face process")
 
 
+def digest(path):
+    """sha256 of a file on disk, so "unchanged" is bytes and not opinion."""
+    try:
+        with open(path, "rb") as handle:
+            return hashlib.sha256(handle.read()).hexdigest()
+    except OSError:
+        return None
+
+
+def spawn_panel():
+    """A real panel process on an OS-assigned port; returns (proc, base)."""
+    proc = subprocess.Popen(
+        [sys.executable, MODULE, "--host", "127.0.0.1", "--port", "0"],
+        stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL, cwd=REPO)
+    line = proc.stdout.readline().decode("utf-8", "replace").strip()
+    base = None
+    if "http://" in line:
+        tail = line.split("http://", 1)[1].split("/", 1)[0]
+        base = "http://" + tail
+    return proc, base
+
+
+def stop_panel(proc):
+    if proc is not None and proc.poll() is None:
+        proc.terminate()
+        try:
+            proc.wait(timeout=10)
+        except Exception:
+            proc.kill()
+
+
+def ac_pan12():
+    """Two panels in ONE process must not share a child log (R2949).
+
+    Same pid is the hardest case for a pid-only name: if the tag were the pid,
+    these two panels would collide. Both files must exist at the same moment,
+    and panel B starting the same face id must leave panel A's bytes alone.
+    """
+    bad = 0
+    a_httpd, a_panel = panel_module.start_panel("127.0.0.1", 0)
+    b_httpd, b_panel = panel_module.start_panel("127.0.0.1", 0)
+    a_base = "http://127.0.0.1:%d" % a_httpd.server_address[1]
+    b_base = "http://127.0.0.1:%d" % b_httpd.server_address[1]
+    path_a = a_panel.log_path_for("ugc")
+    path_b = b_panel.log_path_for("ugc")
+    shared = os.path.join(tempfile.gettempdir(),
+                          "bigdomain-panel-child-ugc.txt")
+    # Red control: the shared slot is not merely avoided by these two names, it
+    # is never opened. Under the R2948 name both starts would have truncated
+    # these bytes, so an unchanged digest is the measurement that the class is
+    # gone rather than dodged.
+    decoy_before = None
+    try:
+        with open(shared, "wb") as handle:
+            handle.write(b"R2949 decoy: no panel may write here\n")
+        decoy_before = digest(shared)
+    except OSError as exc:
+        print("  AC-PAN12 could not place the decoy: %r" % (exc,))
+    before = None
+    try:
+        if path_a == path_b:
+            bad += 1
+            print("  AC-PAN12 both panels picked the same file: %r" % (path_a,))
+        for path in (path_a, path_b):
+            name = os.path.basename(path)
+            if not name.startswith("bigdomain-panel-child-"):
+                bad += 1
+                print("  AC-PAN12 name lost its stem: %r" % (name,))
+            if "ugc" not in name:
+                bad += 1
+                print("  AC-PAN12 name lost the face id: %r" % (name,))
+            if os.path.normcase(path) == os.path.normcase(shared):
+                bad += 1
+                print("  AC-PAN12 still writes the machine-wide name: %r"
+                      % (path,))
+        code, started = jhttp(a_base + "/panel/api/start", "POST",
+                              {"face": "ugc"}, timeout=40.0)
+        if code != 200:
+            bad += 1
+            print("  AC-PAN12 panel A could not start ugc: %s %r"
+                  % (code, started))
+        else:
+            if started.get("child_log_path") != path_a:
+                bad += 1
+                print("  AC-PAN12 A published %r, not its own path %r"
+                      % (started.get("child_log_path"), path_a))
+            before = digest(path_a)
+            if before is None:
+                bad += 1
+                print("  AC-PAN12 A kept no log at %r" % (path_a,))
+        code, started_b = jhttp(b_base + "/panel/api/start", "POST",
+                                {"face": "ugc"}, timeout=40.0)
+        if code != 200:
+            bad += 1
+            print("  AC-PAN12 panel B could not start ugc: %s %r"
+                  % (code, started_b))
+        else:
+            if started_b.get("child_log_path") != path_b:
+                bad += 1
+                print("  AC-PAN12 B published %r, not its own path %r"
+                      % (started_b.get("child_log_path"), path_b))
+        if not (os.path.exists(path_a) and os.path.exists(path_b)):
+            bad += 1
+            print("  AC-PAN12 the two logs do not coexist: %r / %r"
+                  % ((os.path.exists(path_a), os.path.exists(path_b)),))
+        elif before is not None and digest(path_a) != before:
+            bad += 1
+            print("  AC-PAN12 panel B rewrote panel A's bytes")
+        if decoy_before is None:
+            bad += 1
+            print("  AC-PAN12 the shared-slot control could not be placed")
+        elif digest(shared) != decoy_before:
+            bad += 1
+            print("  AC-PAN12 a panel still writes the machine-wide slot")
+        # And the decoy is a LIVE control, not a file nothing could touch: the
+        # same "wb" open the panel uses truncates it on the next line, so the
+        # unchanged digest above meant "not opened" rather than "unchangeable".
+        if decoy_before is not None:
+            try:
+                with open(shared, "wb"):
+                    pass
+            except OSError:
+                pass
+            if digest(shared) == decoy_before:
+                bad += 1
+                print("  AC-PAN12 the shared-slot control cannot change at all")
+    finally:
+        a_httpd.shutdown()
+        a_httpd.server_close()
+        b_httpd.shutdown()
+        b_httpd.server_close()
+        for path in (path_a, path_b, shared):
+            if os.path.exists(path):
+                try:
+                    os.remove(path)
+                except OSError:
+                    pass
+    return report("AC-PAN12 two panels in one process keep separate logs", bad,
+                  "distinct names, both on disk, no cross-write")
+
+
+def ac_pan13():
+    """Two REAL panel processes: each log names the process that wrote it."""
+    bad = 0
+    a_proc = b_proc = None
+    path_a = path_b = None
+    a_port = b_port = None
+    before = None
+    try:
+        a_proc, a_base = spawn_panel()
+        b_proc, b_base = spawn_panel()
+        if not a_base or not b_base:
+            bad += 1
+            print("  AC-PAN13 a panel never printed its own address")
+        else:
+            code, started = jhttp(a_base + "/panel/api/start", "POST",
+                                  {"face": "ugc"}, timeout=40.0)
+            if code != 200:
+                bad += 1
+                print("  AC-PAN13 panel A answered %s %r" % (code, started))
+            else:
+                a_port = started.get("port")
+                path_a = started.get("child_log_path")
+                before = digest(path_a)
+            code, started_b = jhttp(b_base + "/panel/api/start", "POST",
+                                    {"face": "ugc"}, timeout=40.0)
+            if code != 200:
+                bad += 1
+                print("  AC-PAN13 panel B answered %s %r" % (code, started_b))
+            else:
+                b_port = started_b.get("port")
+                path_b = started_b.get("child_log_path")
+            if not path_a or not path_b:
+                bad += 1
+                print("  AC-PAN13 a start answer hid the log path: %r %r"
+                      % (path_a, path_b))
+            else:
+                if path_a == path_b:
+                    bad += 1
+                    print("  AC-PAN13 two processes share one file: %r"
+                          % (path_a,))
+                if str(a_proc.pid) not in os.path.basename(path_a):
+                    bad += 1
+                    print("  AC-PAN13 A's name hides A's pid (%d): %r"
+                          % (a_proc.pid, path_a))
+                if str(b_proc.pid) not in os.path.basename(path_b):
+                    bad += 1
+                    print("  AC-PAN13 B's name hides B's pid (%d): %r"
+                          % (b_proc.pid, path_b))
+                if not (os.path.exists(path_a) and os.path.exists(path_b)):
+                    bad += 1
+                    print("  AC-PAN13 the two logs do not coexist")
+                elif before is not None and digest(path_a) != before:
+                    bad += 1
+                    print("  AC-PAN13 panel B rewrote panel A's bytes")
+            if a_base and a_port and b_port:
+                code, body = jhttp(a_base + "/panel/api/stop", "POST",
+                                   {"face": "ugc"})
+                if code != 200:
+                    bad += 1
+                    print("  AC-PAN13 A could not stop its own face: %s %r"
+                          % (code, body))
+                if not can_connect(b_port):
+                    bad += 1
+                    print("  AC-PAN13 stopping A's face took B's down")
+    finally:
+        stop_panel(a_proc)
+        stop_panel(b_proc)
+        for path in (path_a, path_b):
+            if path and os.path.exists(path):
+                try:
+                    os.remove(path)
+                except OSError:
+                    pass
+    return report("AC-PAN13 two panel processes name their own writer", bad,
+                  "distinct paths carrying each pid; A's stop left B serving")
+
+
 def main():
     ac_pan1()
     ac_pan2()
@@ -640,6 +865,8 @@ def main():
     ac_pan9()
     ac_pan10()
     ac_pan11()
+    ac_pan12()
+    ac_pan13()
     passed = sum(1 for _name, ok in RESULTS if ok)
     total = len(RESULTS)
     print("SUITE %s %d/%d" % ("PASS" if passed == total else "FAIL",

@@ -322,7 +322,14 @@ SUITES = [
     # really spawns the shipped module on an OS-assigned port and reports the
     # URL only after that socket accepts (AC-PAN1..AC-PAN6 pre-registered in
     # src/os/backlog.md at R2481 BEFORE this suite and its module existed).
-    ("panel", os.path.join("test_panel.py"), 11),
+    # R2949 added AC-PAN12..AC-PAN13 (per-panel child-log namespace): the
+    # stderr file R2948 kept - the only place a named refusal can come from -
+    # was machine-wide per face id, so a second panel silently overwrote the
+    # first one's evidence. The name now carries the panel's own pid and a
+    # per-panel tag, the path is published in the start answer, and two panels
+    # in one process and two real panel processes are both measured to coexist
+    # (pre-registered in src/os/backlog.md at R2949 BEFORE the edit).
+    ("panel", os.path.join("test_panel.py"), 13),
     # R2938 added AC-PAN7..AC-PAN11 (declared ownership): the launcher hands
     # the panel the faces it already serves with the ports it measured, and the
     # panel refuses to start or stop them by name instead of forking the

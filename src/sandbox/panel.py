@@ -197,6 +197,24 @@ class Panel(object):
         self.children = {}  # face id -> {"port": int, "proc": Popen}
         # Faces a launcher serves beside this panel, with the ports it measured.
         self.owned = dict(owned or {})
+        # R2949: the child-log name was machine-wide per face id, so a second
+        # panel on the same box overwrote the first one's evidence. The tag
+        # carries this panel's own pid plus four random bytes, so two panels -
+        # even two inside ONE process - can never share a file, and a name on
+        # disk still says which process wrote it.
+        self.tag = "%d-%s" % (os.getpid(), os.urandom(4).hex())
+
+    def log_path_for(self, face_id):
+        """Where THIS panel keeps what a child says on stderr.
+
+        R2948 caught those bytes because a face refused at birth names its
+        code there and nowhere else; R2949 keeps each panel's copy apart, and
+        the path is published in the start answer so the evidence can still be
+        read after the panel is gone.
+        """
+        return os.path.join(
+            tempfile.gettempdir(),
+            "bigdomain-panel-child-%s-%s.txt" % (self.tag, face_id))
 
     def url_of(self, face_id, port):
         if face_id == "lobby":
@@ -277,6 +295,7 @@ class Panel(object):
         if face_id not in FACE_IDS:
             return 400, {"error": "E_PANEL_UNKNOWN_FACE",
                          "detail": "startable: " + ",".join(FACE_IDS)}
+        log_path = self.log_path_for(face_id)
         with self.lock:
             entry = self.children.get(face_id)
             if entry is not None and entry["proc"].poll() is None:
@@ -317,8 +336,7 @@ class Panel(object):
             # can come from (a grandchild of the launcher is refused at birth,
             # by name, before it binds), so it is captured to a file instead of
             # being thrown away - DEVNULL made every failure read the same.
-            log_path = os.path.join(tempfile.gettempdir(),
-                                    "bigdomain-panel-child-%s.txt" % face_id)
+            # R2949: that file is per panel, never per face id alone.
             log_handle = open(log_path, "wb")
             try:
                 proc = subprocess.Popen(
@@ -344,6 +362,7 @@ class Panel(object):
                          "port": port,
                          "child_exit": exit_code,
                          "child_log": child_log,
+                         "child_log_path": log_path,
                          "detail": "the module was launched but its port never "
                                    "accepted a connection"}
         body = {
@@ -353,6 +372,7 @@ class Panel(object):
             "live": True,
             "mock": True,
             "chargeable": False,
+            "child_log_path": log_path,
             "cmd": self.cmd_of(face_id, ports if face_id == "lobby" else port),
         }
         if ports:
