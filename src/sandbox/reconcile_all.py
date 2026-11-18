@@ -271,7 +271,11 @@ SUITES = [
     # killed hard leaves its children holding sandbox ports - answered by the
     # kernel instead of by a `finally`. AC-KOC1..AC-KOC5 were pinned in
     # src/os/backlog.md BEFORE the job wiring and this suite existed.
-    ("kill-on-close", os.path.join("test_kill_on_close.py"), 8),
+    # R2976 adds AC-KOC9..AC-KOC10 (face_coverage): the panel-startable subset
+    # AC-KOC8's result rests on is asserted, with a red control that proves
+    # the assertion can say no. An anti-decay assertion, not a security
+    # boundary - it consults no request path.
+    ("kill-on-close", os.path.join("test_kill_on_close.py"), 10),
     # machine-wide launcher record (R2939): the ownership declaration R2938
     # shipped was ARGV - it travelled from the launcher to its own child and
     # nowhere else - so a second door on the same machine forked the sandbox

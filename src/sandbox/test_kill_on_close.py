@@ -22,6 +22,19 @@ refuses by name and no grandchild process exists to be reached or missed.
 Neither criterion stands in for the other, and neither re-claims the membership
 AC-KOC6 already measured.
 
+R2976 adds AC-KOC9..AC-KOC10, pre-registered in the R2976 board row before this
+code. AC-KOC8's result rests on a relation between two constants that nothing
+pinned: panel.FACE_IDS was a subset of start_all.FACE_KEYS, they agreed by
+coincidence, and either file could be edited into disagreement with every suite
+still green. AC-KOC9 asserts the relation itself through the shipped predicate
+in face_coverage.py, including the second hop (every owned face has a port key,
+every port key is a planned socket) and the fact that the published face_ports
+are derived from the same constant. AC-KOC10 is the red control: a private
+world with a panel-only face must be REFUSED, so the criterion is proven able
+to say no rather than merely able to report green. This is an anti-decay
+assertion and NOT a security boundary - it consults no request path and grants
+nothing; the module header says so in the same words.
+
 The claim under test is not "the launcher tears down nicely" - AC-STL5 already
 covers that. It is the stronger one R2934 measured the absence of: a launcher
 killed HARD, with no chance to run its `finally` and no stop file, must leave
@@ -691,6 +704,66 @@ def main():
             os.remove(path)
     ok("AC-KOC8 under a serving launcher the panel starts nothing, so the "
        "shipped chain has no grandchild", not bad8, ",".join(bad8))
+
+    # AC-KOC9: the relation AC-KOC8 rests on, asserted instead of assumed.
+    # These arms read constants and pure functions only - no process starts,
+    # no socket binds, and the single report_of call passes all-zero ports so
+    # nothing is connected either.
+    import face_coverage as coverage_module  # noqa: E402  (path wired above)
+    verdict = coverage_module.coverage(panel_module.FACE_IDS,
+                                       start_all.FACE_KEYS)
+    ok("AC-KOC9 every panel-startable face is one the launcher owns",
+       verdict["ok"] is True and verdict["unowned"] == (),
+       "unowned=%s startable=%s owned=%s"
+       % (verdict["unowned"], verdict["startable"], verdict["owned"]))
+    ok("AC-KOC9 every owned face has a planned socket behind it",
+       set(start_all.FACE_PORT_KEY) == set(start_all.FACE_KEYS)
+       and set(start_all.FACE_PORT_KEY.values()) <= set(start_all.PLAN_KEYS),
+       "faces=%d port_keys=%d plan=%d"
+       % (len(start_all.FACE_KEYS), len(start_all.FACE_PORT_KEY),
+          len(start_all.PLAN_KEYS)))
+    zero = dict((key, 0) for key in start_all.PLAN_KEYS)
+    published = start_all.report_of("127.0.0.1", zero, "", {}, {}, [])
+    ok("AC-KOC9 the published face_ports are derived from FACE_KEYS",
+       set(published.get("face_ports") or {}) == set(start_all.FACE_KEYS),
+       "published=%s" % (sorted(published.get("face_ports") or {}),))
+    launcher_only = coverage_module.unowned_startable(start_all.FACE_KEYS,
+                                                      panel_module.FACE_IDS)
+    ok("AC-KOC9 the relation is one-directional, never an equality",
+       bool(launcher_only)
+       and set(launcher_only) == set(start_all.FACE_KEYS)
+       - set(panel_module.FACE_IDS),
+       "launcher_only=%s" % (launcher_only,))
+
+    # AC-KOC10: the red control. A private world holding one panel-only face
+    # must be refused, so this criterion is proven able to say no; handing the
+    # same world a matching owned set must turn it green, which shows the
+    # refusal came from the missing face rather than from the name itself.
+    bad10 = []
+    red = coverage_module.coverage(("checkout", "ghost"), ("checkout",))
+    if red["ok"] is not False:
+        bad10.append("panel-only-face-read-as-covered")
+    if red["unowned"] != ("ghost",):
+        bad10.append("unowned=%s" % (red["unowned"],))
+    healed = coverage_module.coverage(("checkout", "ghost"),
+                                      ("checkout", "ghost"))
+    if healed["ok"] is not True or healed["unowned"] != ():
+        bad10.append("healed-still-red=%s" % (healed["unowned"],))
+    repeated = coverage_module.unowned_startable(("b", "a", "b"), ("a",))
+    if repeated != ("b",):
+        bad10.append("order-or-repeat-sensitive=%s" % (repeated,))
+    empty = coverage_module.coverage((), ())
+    if empty["ok"] is not True or empty["unowned"] != ():
+        bad10.append("empty-world=%s" % (empty,))
+    # The decay this criterion exists for, spelled against the REAL launcher
+    # constant: one panel-only face added to today's startable set must be
+    # refused, so a future edit to either file cannot pass silently.
+    drift = coverage_module.coverage(
+        tuple(panel_module.FACE_IDS) + ("ghost",), start_all.FACE_KEYS)
+    if drift["ok"] is not False or drift["unowned"] != ("ghost",):
+        bad10.append("live-constant-drift=%s" % (drift["unowned"],))
+    ok("AC-KOC10 the coverage predicate can say NO to a panel-only face",
+       not bad10, ",".join(bad10))
 
     total = len(CHECKS)
     acs = set()
