@@ -1,0 +1,13 @@
+PASS AC-BSC1
+PASS AC-BSC2
+PASS AC-BSC3
+PASS AC-BSC4
+PASS AC-BSC5
+PASS AC-BSC6
+PASS AC-BSC7
+SUITE PASS 7/7
+PROBE clean ok=True sites=1 refused=0
+PROBE doctored ok=False refused=1
+PROBE refuse E_BIND_UNGUARDED_FACE frontdoor.py:8656 _grown_async_face kind=asyncio-server detail=asyncio.start_server
+PROBE expected-line=8656
+BIND-SCAN PASS modules=92 sites=14 refused=0 stale=0 http-server=8,server-subclass=2,ws-serve=1,socket-bind=3

@@ -303,7 +303,13 @@ SUITES = [
     # that never calls birth_gate.guard(), and refuses a .bind() site that is
     # not declared in bind_sites.json. AC-BSC1..AC-BSC5 were pinned in
     # src/os/backlog.md BEFORE the scanner, the baseline and this suite existed.
-    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 5),
+    # R2944 added the fifth kind: an asyncio server call (asyncio.start_server,
+    # <loop>.create_server, or bare start_server after a from-asyncio import)
+    # must have birth_gate.guard() in the SAME function body, because an
+    # asyncio server binds when the coroutine is awaited and checked_server
+    # only wraps synchronous factories. AC-BSC6..AC-BSC7 pinned in
+    # src/os/backlog.md BEFORE this row and the rule.
+    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 7),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the

@@ -7,7 +7,7 @@ ITSELF never reaches the gate, and nothing in the tree bounded that.  This
 module is that bound.  It is a static read over the sandbox sources, no
 processes, no sockets, no writes.
 
-Four kinds of site are recognised, and each has one rule:
+Five kinds of site are recognised, and each has one rule:
 
 ``http-server``
     a call that constructs an HTTP/TCP server (``ThreadingHTTPServer``,
@@ -28,6 +28,16 @@ Four kinds of site are recognised, and each has one rule:
     module that calls ``birth_gate.guard(``.  Otherwise
     ``E_BIND_UNGUARDED_FACE``.
 
+``asyncio-server``
+    an ``asyncio.start_server(...)`` / ``<loop>.create_server(...)`` /
+    (after ``from asyncio import start_server``) bare ``start_server(...)``
+    call must have a ``birth_gate.guard(...)`` call in the SAME function body,
+    because an asyncio server binds when the coroutine is awaited - the
+    ``checked_server`` shim calls its factory synchronously and therefore
+    cannot wrap a coroutine factory, which is why this rule is attached to
+    ``guard`` rather than to the gate's server shim.  Otherwise
+    ``E_BIND_UNGUARDED_FACE``.
+
 ``socket-bind``
     a ``.bind(...)`` call is a probe or a listening socket and the two cannot
     be told apart from syntax, so every such site must be listed, by path and
@@ -38,8 +48,9 @@ Four kinds of site are recognised, and each has one rule:
 Not scanned, by name: ``test_*.py`` (suite scaffolding binds ephemeral ports
 on purpose), ``vendor`` directories and ``pycrdt-poc`` (third-party code is
 not this repo's face), and bind forms this module does not recognise
-(``asyncio.start_server``, ``loop.create_server``, ``socketserver`` factories
-named something else) - a hole that is named rather than implied closed.
+(``socketserver`` factories named something else, ``serve_forever`` reached
+through an alias of an alias) - a hole that is named rather than implied
+closed.
 
 Stdlib only (ast/json/os/sys), no shell, no network, no writes.
 """
@@ -70,7 +81,8 @@ GUARD_TEXT = "birth_gate.guard("
 UNGUARDED = "E_BIND_UNGUARDED_FACE"
 UNAPPROVED = "E_BIND_SITE_UNAPPROVED"
 
-KINDS = ("http-server", "server-subclass", "ws-serve", "socket-bind")
+KINDS = ("http-server", "server-subclass", "ws-serve", "asyncio-server",
+         "socket-bind")
 
 
 def is_test_file(name):
@@ -89,6 +101,55 @@ def _callee(node):
 
 def _is_guarded_call(node):
     return isinstance(node, ast.Call) and _callee(node) == GUARD_CALL
+
+
+def _start_server_imported(tree):
+    """True when ``start_server`` came in BY NAME from asyncio."""
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.ImportFrom):
+            continue
+        if (node.module or "").split(".")[0] != "asyncio":
+            continue
+        for alias in node.names:
+            if alias.name == "start_server":
+                return True
+    return False
+
+
+def _asyncio_site(call, bare_start_imported):
+    """The asyncio server shape a Call opens, else None.
+
+    Three shapes only, and the bare one is recognised from the module's own import
+    facts rather than the name, because this repo has its own
+    synchronous ``start_server(host, port, ...)`` helpers in ledger and
+    checkout - guessing on the bare name would refuse them.
+    """
+    func = call.func
+    if isinstance(func, ast.Attribute):
+        if func.attr == "create_server":
+            return "create_server"
+        if func.attr == "start_server" and isinstance(func.value, ast.Name):
+            if func.value.id == "asyncio":
+                return "asyncio.start_server"
+        return None
+    if isinstance(func, ast.Name) and func.id == "start_server":
+        if bare_start_imported:
+            return "start_server(from asyncio)"
+    return None
+
+
+def _guard_lines(tree):
+    """Lines where ``guard(...)`` is called (bare or as an attribute)."""
+    lines = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        if isinstance(func, ast.Attribute) and func.attr == "guard":
+            lines.append(node.lineno)
+        elif isinstance(func, ast.Name) and func.id == "guard":
+            lines.append(node.lineno)
+    return lines
 
 
 def _class_bases(classdef):
@@ -116,13 +177,18 @@ def scan_source(path, text):
     has_checked = GUARD_CALL in text
     has_birth_guard = GUARD_TEXT in text
     imports_websockets = "websockets" in text
-    stack = [(tree, [], "<module>")]
+    bare_start = _start_server_imported(tree)
+    guard_lines = _guard_lines(tree)
+    stack = [(tree, [], None)]
     while stack:
-        node, ancestors, function = stack.pop()
+        node, ancestors, func_node = stack.pop()
+        function = func_node.name if func_node is not None else "<module>"
         for child in ast.iter_child_nodes(node):
             name = function
+            next_func = func_node
             if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 name = child.name
+                next_func = child
             here = ancestors + [node]
             if isinstance(child, ast.Call):
                 callee = _callee(child)
@@ -141,13 +207,28 @@ def scan_source(path, text):
                         "code": None if has_birth_guard else UNGUARDED,
                         "detail": callee,
                     })
-                elif callee == "bind":
-                    rows.append({
-                        "path": rel, "line": child.lineno,
-                        "function": name, "kind": "socket-bind",
-                        "code": None,  # the baseline decides
-                        "detail": callee,
-                    })
+                else:
+                    shape = _asyncio_site(child, bare_start)
+                    if shape:
+                        guarded = (
+                            any(_is_guarded_call(a) for a in here) or
+                            (func_node is not None and any(
+                                func_node.lineno <= line <=
+                                (func_node.end_lineno or func_node.lineno)
+                                for line in guard_lines)))
+                        rows.append({
+                            "path": rel, "line": child.lineno,
+                            "function": name, "kind": "asyncio-server",
+                            "code": None if guarded else UNGUARDED,
+                            "detail": shape,
+                        })
+                    elif callee == "bind":
+                        rows.append({
+                            "path": rel, "line": child.lineno,
+                            "function": name, "kind": "socket-bind",
+                            "code": None,  # the baseline decides
+                            "detail": callee,
+                        })
             elif isinstance(child, ast.ClassDef):
                 bases = _class_bases(child)
                 if bases:
@@ -157,7 +238,7 @@ def scan_source(path, text):
                         "code": None if has_checked else UNGUARDED,
                         "detail": ",".join(bases),
                     })
-            stack.append((child, here, name))
+            stack.append((child, here, next_func))
     return rows
 
 

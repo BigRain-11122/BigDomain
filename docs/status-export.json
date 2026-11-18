@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2943 PRODUCT+ENGINEERING: the hole R2942 disclosed - a script that builds a server class ITSELF never reaches the birth gate - is now bounded by a static read, and closing it also closed a REAL open door: src/sandbox/frontdoor.py, the shipped 8093 face a person starts from frontdoor_start.bat, was constructing ThreadingHTTPServer raw in main(), so it could be born beside a sandbox it does not belong to. It now routes through birth_gate.checked_server(lambda: ...), the same call the nine starters use, and src/sandbox/bind_site_scan.py refuses a NEW raw bind site by name before it can ship.",
+    "current": "2026-11-18 R2944 BIND-SCAN asyncio arm: the fifth site kind is live and costs nothing today - asyncio.start_server, <loop>.create_server and bare start_server (after a from-asyncio import) are refused by name unless birth_gate.guard() sits in the SAME function body; measured first HITS=0 over 92 shipped modules, suite 7/7, battery leg selected=1 green=1 criteria=7 crit_mismatch=0, matrix 727/5752 byte-identical, closeout files=3358 flags=0",
     "do": "2026-11-18 R2936 PRODUCT: the last two faces the hub publishes stopped reading NOT STARTED. src/sandbox/start_all.py now plans ten ports for eight faces, starts the shipped control panel and membership page as its own children, and hands their MEASURED ports to the lobby on its command line instead of letting the hub advertise built-in 8099/8096 guesses. Live: start_all.py --check rc=0 with all eight faces live; ceo_live_shot.py --prove --check rc=0 faces=9 shots_total=18 with_errors=0 proof{passes:2, agreements:9, disagreed:[]} in 30.4s - nine faces shot twice on one sandbox, no drift.",
     "last_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "",
-    "latest_evidence": "qa/leg-launcher-registry-R2939.log (340B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/bind-site-scan-R2944.log (337B, 2026-11-18)",
+    "latest_evidence": "qa/bind-site-scan-R2944.log (337B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2944] next window (<=12h): (0) MAIN — the scan refuses four shapes and names the rest (truncated)",
-    "next_milestone_due": "2026-11-19T03:21:55+08:00",
-    "updated_at": "2026-11-18T15:21:55+08:00"
+    "next_milestone": "[R2945] next window (<=12h): (0) MAIN — the fifth kind is a SOURCE rule, so statement ORDER is unjudged: a guard call placed after the await (or inside an `if False:`) passes the scan while the face would bind unguarded. Decide and prove: either judge order (guard line strictly before the site line within the same function, with a red control on the after-await shape and a pass on the before shape), or declare order out of scope by name with the reason in the same breath. (1) carried from R2941: `judge()` trusts the pid in the record and the record is a per-user writable file — decide whether the launcher writes a secret the face must echo back, or declare the trust official. (2) carried from R2937/R2938 and still undecided: the hard-kill proof covers the launcher's DIRECT children only — decide whether to measure grandchild inheritance or declare it out of scope by name (truncated)",
+    "next_milestone_due": "2026-11-19T03:40:54+08:00",
+    "updated_at": "2026-11-18T15:40:54+08:00"
   },
-  "current": "2026-11-18 R2943 PRODUCT+ENGINEERING: the hole R2942 disclosed - a script that builds a server class ITSELF never reaches the birth gate - is now bounded by a static read, and closing it also closed a REAL open door: src/sandbox/frontdoor.py, the shipped 8093 face a person starts from frontdoor_start.bat, was constructing ThreadingHTTPServer raw in main(), so it could be born beside a sandbox it does not belong to. It now routes through birth_gate.checked_server(lambda: ...), the same call the nine starters use, and src/sandbox/bind_site_scan.py refuses a NEW raw bind site by name before it can ship.",
+  "current": "2026-11-18 R2944 BIND-SCAN asyncio arm: the fifth site kind is live and costs nothing today - asyncio.start_server, <loop>.create_server and bare start_server (after a from-asyncio import) are refused by name unless birth_gate.guard() sits in the SAME function body; measured first HITS=0 over 92 shipped modules, suite 7/7, battery leg selected=1 green=1 criteria=7 crit_mismatch=0, matrix 727/5752 byte-identical, closeout files=3358 flags=0",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,12 +41,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2943 PRODUCT+ENGINEERING: the hole R2942 disclosed - a script that builds a server class ITSELF never reaches the birth gate - is now bounded by a static read, and closing it also closed a REAL open door: src/sandbox/frontdoor.py, the shipped 8093 face a person starts from frontdoor_start.bat, was constructing ThreadingHTTPServer raw in main(), so it could be born beside a sandbox it does not belong to. It now routes through birth_gate.checked_server(lambda: ...), the same call the nine starters use, and src/sandbox/bind_site_scan.py refuses a NEW raw bind site by name before it can ship.",
-  "export_ts": "2026-11-18T15:21:55+08:00",
+  "do": "2026-11-18 R2944 BIND-SCAN asyncio arm: the fifth site kind is live and costs nothing today - asyncio.start_server, <loop>.create_server and bare start_server (after a from-asyncio import) are refused by name unless birth_gate.guard() sits in the SAME function body; measured first HITS=0 over 92 shipped modules, suite 7/7, battery leg selected=1 green=1 criteria=7 crit_mismatch=0, matrix 727/5752 byte-identical, closeout files=3358 flags=0",
+  "export_ts": "2026-11-18T15:40:54+08:00",
   "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
-  "latest_evidence": "qa/leg-launcher-registry-R2939.log (340B, 2026-11-18)",
-  "next_milestone": "[R2944] next window (<=12h): (0) MAIN — the scan refuses four shapes and names the rest (truncated)",
+  "latest_evidence": "qa/bind-site-scan-R2944.log (337B, 2026-11-18)",
+  "next_milestone": "[R2945] next window (<=12h): (0) MAIN — the fifth kind is a SOURCE rule, so statement ORDER is unjudged: a guard call placed after the await (or inside an `if False:`) passes the scan while the face would bind unguarded. Decide and prove: either judge order (guard line strictly before the site line within the same function, with a red control on the after-await shape and a pass on the before shape), or declare order out of scope by name with the reason in the same breath. (1) carried from R2941: `judge()` trusts the pid in the record and the record is a per-user writable file — decide whether the launcher writes a secret the face must echo back, or declare the trust official. (2) carried from R2937/R2938 and still undecided: the hard-kill proof covers the launcher's DIRECT children only — decide whether to measure grandchild inheritance or declare it out of scope by name (truncated)",
   "outs": [
+    "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 mtime]",
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
@@ -161,7 +162,7 @@
   },
   "results": [
     [
-      "2939",
+      "2944",
       "OSLoop 执行 tick"
     ]
   ],
@@ -174,15 +175,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 75,
+    "log_lines_in_window": 81,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 15,
+    "substantive_non_idle_mention_lines": 18,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 73811
+  "state_bytes": 76144
 }

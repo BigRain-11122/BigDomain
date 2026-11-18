@@ -250,6 +250,116 @@ def main():
         bad.append("suite-dialect")
     report("AC-BSC5", bool(bad), ",".join(bad))
 
+    # ---- AC-BSC6: an asyncio server is refused until it is guarded ------
+    bad = []
+    root = fresh_world("bsc6")
+    asyncio_raw = (
+        "import asyncio\n"
+        "\n"
+        "async def boot(handler):\n"
+        "    return await asyncio.start_server(handler, \"127.0.0.1\", 0)\n"
+    )
+    loop_raw = (
+        "import asyncio\n"
+        "\n"
+        "async def boot(handler, loop):\n"
+        "    return await loop.create_server(handler, \"127.0.0.1\", 0)\n"
+    )
+    asyncio_gated = asyncio_raw.replace(
+        "async def boot(handler):\n",
+        "async def boot(handler):\n"
+        "    birth_gate.guard()\n")
+    write(root, "face_a.py", asyncio_raw)
+    write(root, "face_b.py", loop_raw)
+    loud = bind_site_scan.scan(root=root)
+    if loud["ok"]:
+        bad.append("asyncio-sites-passed")
+    rows = {r["path"]: r for r in loud["refused"]}
+    for rel, want in (("face_a.py", 4), ("face_b.py", 4)):
+        row = rows.get(rel)
+        if row is None:
+            bad.append("not-named-" + rel)
+            continue
+        if row["kind"] != "asyncio-server":
+            bad.append("kind-%s-%s" % (rel, row["kind"]))
+        if row["line"] != want:
+            bad.append("line-%s-%s" % (rel, row["line"]))
+        if row["function"] != "boot":
+            bad.append("function-%s-%s" % (rel, row["function"]))
+        if row["code"] != bind_site_scan.UNGUARDED:
+            bad.append("code-%s-%s" % (rel, row["code"]))
+    # red control: the SAME file with a guard line inside the same function
+    # must pass - the red was the missing door, not the word asyncio.
+    write(root, "face_a.py", asyncio_gated)
+    healed = bind_site_scan.scan(root=root)
+    if [r for r in healed["refused"] if r["path"] == "face_a.py"]:
+        bad.append("guarded-asyncio-still-refused")
+    if not [r for r in healed["refused"] if r["path"] == "face_b.py"]:
+        bad.append("guard-healed-both-files")
+    # a guard call in a DIFFERENT function does not heal the site
+    write(root, "face_a.py",
+          "import asyncio\n"
+          "\n"
+          "async def boot(handler):\n"
+          "    return await asyncio.start_server(handler, \"127.0.0.1\", 0)\n"
+          "\n"
+          "def elsewhere():\n"
+          "    birth_gate.guard()\n")
+    scoped = bind_site_scan.scan(root=root)
+    if scoped["ok"]:
+        bad.append("other-function-guard-healed")
+    report("AC-BSC6", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC7: the shapes are recognised, the lookalikes are not -----
+    bad = []
+    root = fresh_world("bsc7")
+    own_helper = (
+        "def start_server(host, port):\n"
+        "    return (host, port)\n"
+        "\n"
+        "def main():\n"
+        "    httpd = start_server(\"127.0.0.1\", 0)\n"
+        "    return httpd\n"
+    )
+    qualified = (
+        "import ledger_page\n"
+        "\n"
+        "def main():\n"
+        "    return ledger_page.start_server(\"127.0.0.1\", 0, None)\n"
+    )
+    mention_only = (
+        "NOTE = \"start_server is not called here\"\n"
+    )
+    write(root, "own_helper.py", own_helper)
+    write(root, "qualified.py", qualified)
+    write(root, "mention.py", mention_only)
+    quiet = bind_site_scan.scan(root=root)
+    if not quiet["ok"]:
+        bad.append("lookalikes-refused")
+    if quiet["sites"] != 0:
+        bad.append("lookalike-sites-%d" % quiet["sites"])
+    # and the bare name IS recognised once it is imported from asyncio
+    write(root, "imported.py",
+          "from asyncio import start_server\n"
+          "\n"
+          "async def boot(handler):\n"
+          "    return await start_server(handler, \"127.0.0.1\", 0)\n")
+    loud = bind_site_scan.scan(root=root)
+    if loud["ok"]:
+        bad.append("bare-imported-passed")
+    hits = [r for r in loud["refused"] if r["path"] == "imported.py"]
+    if not hits or hits[0]["kind"] != "asyncio-server":
+        bad.append("bare-imported-kind")
+    # live tree: the new rule costs nothing today and moves no count
+    live = bind_site_scan.scan(root=HERE)
+    if not live["ok"]:
+        bad.append("shipped-tree-refused")
+    if live["by_kind"].get("asyncio-server"):
+        bad.append("live-asyncio-%d" % live["by_kind"]["asyncio-server"])
+    if live["sites"] != 14:
+        bad.append("live-sites-%d" % live["sites"])
+    report("AC-BSC7", bool(bad), ",".join(bad))
+
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
         print("SUITE FAIL %d/%d failed=%s" % (len(failed), len(RESULTS),
