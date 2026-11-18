@@ -206,6 +206,20 @@ def newest_round(state):
     if best_round is None:
         return None, None
     candidates = [line for line in log if round_of(line) == best_round]
+    # R2969: a line that merely MENTIONS the round is not that round's
+    # narrative. Measured on the real tree: one round's closeout row ended with
+    # "the new R2969 board row", so it became a candidate for R2969 and - being
+    # earlier in the log - was published as the CEO's sentence while a real
+    # R2969 headline sat below it; a healthy closeout then wrote do=old and the
+    # gate it must satisfy read stale. The headline's own label is its round
+    # (the AC-SXF11/R2835 rule), so the label tier comes first and the mention
+    # tiers below are unchanged.
+    for line in candidates:
+        match = HEADLINE_RE.match(line or "")
+        if not match or is_fold_summary(line):
+            continue
+        if int(match.group(1)) == best_round:
+            return best_round, line
     for line in candidates:
         if is_headline(line) and not is_fold_summary(line):
             return best_round, line

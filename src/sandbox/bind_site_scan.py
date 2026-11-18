@@ -42,7 +42,11 @@ Five kinds of site are recognised, and each has one rule:
 ``asyncio-server``
     an ``asyncio.start_server(...)`` / ``<loop>.create_server(...)`` /
     (after ``from asyncio import start_server``) bare ``start_server(...)``
-    call must have a ``birth_gate.guard(...)`` call in the SAME function body,
+    call - and, since R2969, the unix-domain half of the same family:
+    ``asyncio.start_unix_server(...)`` / ``<loop>.create_unix_server(...)`` /
+    (after ``from asyncio import start_unix_server``) bare
+    ``start_unix_server(...)`` - must have a ``birth_gate.guard(...)`` call in
+    the SAME function body,
     because an asyncio server binds when the coroutine is awaited - the
     ``checked_server`` shim calls its factory synchronously and therefore
     cannot wrap a coroutine factory, which is why this rule is attached to
@@ -95,6 +99,10 @@ SERVER_NAMES = frozenset((
 SKIP_DIRS = frozenset(("vendor", "node_modules", "__pycache__", "pycrdt-poc",
                        ".git", ".venv", "venv"))
 
+# The asyncio server family this module judges (R2969 added the unix half).
+ASYNCIO_CREATE_NAMES = frozenset(("create_server", "create_unix_server"))
+ASYNCIO_SERVE_NAMES = frozenset(("start_server", "start_unix_server"))
+
 GUARD_CALL = "checked_server"
 
 UNGUARDED = "E_BIND_UNGUARDED_FACE"
@@ -122,38 +130,47 @@ def _is_guarded_call(node):
     return isinstance(node, ast.Call) and _callee(node) == GUARD_CALL
 
 
-def _start_server_imported(tree):
-    """True when ``start_server`` came in BY NAME from asyncio."""
+def _asyncio_imported(tree):
+    """Bare asyncio server names that came in BY NAME.
+
+    R2969 widened this from the single ``start_server`` fact to the set of
+    server constructors this module judges, because the unix-domain pair is the
+    same bind shape under a different suffix - and the bare names are still
+    recognised from the module's own import facts rather than the name, because
+    this repo has its own synchronous ``start_server(host, port, ...)`` helpers
+    in ledger and checkout (and could grow a ``start_unix_server`` helper).
+    """
+    names = set()
     for node in ast.walk(tree):
         if not isinstance(node, ast.ImportFrom):
             continue
         if (node.module or "").split(".")[0] != "asyncio":
             continue
         for alias in node.names:
-            if alias.name == "start_server":
-                return True
-    return False
+            if alias.name in ASYNCIO_SERVE_NAMES:
+                names.add(alias.name)
+    return names
 
 
-def _asyncio_site(call, bare_start_imported):
+def _asyncio_site(call, bare_imported):
     """The asyncio server shape a Call opens, else None.
 
-    Three shapes only, and the bare one is recognised from the module's own import
-    facts rather than the name, because this repo has its own
-    synchronous ``start_server(host, port, ...)`` helpers in ledger and
-    checkout - guessing on the bare name would refuse them.
+    Four attribute shapes and the bare ones the import facts license. The
+    unix-domain constructors bind a unix socket exactly where the TCP ones bind
+    a TCP socket, so they share this judgement instead of a kind of their own
+    (R2969); the attribute form stays receiver-blind for ``create_*``, matching
+    ``create_server`` as it shipped.
     """
     func = call.func
     if isinstance(func, ast.Attribute):
-        if func.attr == "create_server":
-            return "create_server"
-        if func.attr == "start_server" and isinstance(func.value, ast.Name):
+        if func.attr in ASYNCIO_CREATE_NAMES:
+            return func.attr
+        if func.attr in ASYNCIO_SERVE_NAMES and isinstance(func.value, ast.Name):
             if func.value.id == "asyncio":
-                return "asyncio.start_server"
+                return "asyncio." + func.attr
         return None
-    if isinstance(func, ast.Name) and func.id == "start_server":
-        if bare_start_imported:
-            return "start_server(from asyncio)"
+    if isinstance(func, ast.Name) and func.id in bare_imported:
+        return "%s(from asyncio)" % func.id
     return None
 
 
@@ -207,7 +224,7 @@ def scan_source(path, text):
         return rows
     has_checked = GUARD_CALL in text
     imports_websockets = "websockets" in text
-    bare_start = _start_server_imported(tree)
+    bare_start = _asyncio_imported(tree)
     stack = [(tree, [], None)]
     while stack:
         node, ancestors, func_node = stack.pop()

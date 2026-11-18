@@ -316,7 +316,12 @@ SUITES = [
     # kind (statement level, same body, strictly before the site line), so a
     # guard after serve(), in another function, or in a branch no longer
     # passes, and the shipped lobby is judged at its own bind site.
-    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 12),
+    # R2969: the unix half of the asyncio family joined the same kind and the
+    # same rule (asyncio.start_unix_server / <loop>.create_unix_server / the
+    # bare name when imported from asyncio), so those sites are no longer
+    # silent; AC-BSC13..AC-BSC14 pin the shape and the pinned-revision red
+    # control.
+    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 14),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the
@@ -5911,8 +5916,12 @@ SUITES = [
     # R2835 adds AC-SXF17/18: the expected round is the newest HEADLINE's label,
     # not the largest number a sentence happens to carry, while the mention
     # fallback survives for a window that wrote no headline at all (16 -> 18).
+    # R2969: the round a sentence is published FOR must be the round its own
+    # headline labels - a lower-round row that merely mentions the newest round
+    # had been published as that round's narrative, so a healthy closeout wrote
+    # the old sentence and read stale against its own gate (18 -> 20).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 18),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 20),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives

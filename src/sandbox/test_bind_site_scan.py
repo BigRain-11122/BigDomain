@@ -1,10 +1,11 @@
 """Suite for the static bind-site gate that bounds R2942's disclosed hole.
 
-Criteria AC-BSC1..AC-BSC12. AC-BSC1..AC-BSC5 were pinned in src/os/backlog.md
+Criteria AC-BSC1..AC-BSC14. AC-BSC1..AC-BSC5 were pinned in src/os/backlog.md
 BEFORE this file, src/sandbox/bind_site_scan.py and src/sandbox/bind_sites.json
 existed (in-window pre-registration, disclosed); AC-BSC6..AC-BSC7 came with the
-asyncio kind (R2944), AC-BSC8..AC-BSC9 with its order/level rule (R2945), and
-AC-BSC10..AC-BSC12 with the same rule applied to ws-serve (R2946).
+asyncio kind (R2944), AC-BSC8..AC-BSC9 with its order/level rule (R2945),
+AC-BSC10..AC-BSC12 with the same rule applied to ws-serve (R2946), and
+AC-BSC13..AC-BSC14 with the unix half of the asyncio family (R2969).
 
 Nothing here is read off the scanner's own prose: every criterion builds a
 private world on disk, runs the SHIPPED ``scan()`` over it, and requires a
@@ -18,6 +19,7 @@ Exit: 0 = SUITE PASS, 2 = FAIL.
 import ast
 import os
 import shutil
+import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -30,6 +32,10 @@ START_ALL = os.path.join(HERE, "start_all.py")
 REGISTRY = os.path.join(HERE, "reconcile_all.py")
 ROW = "bind-site-scan"
 WORLD = os.path.join(REPO, "logs", "bind-scan-suite")
+# The revision AC-BSC14 measures against. It is PINNED rather than "HEAD":
+# once this round is committed HEAD carries the new scanner, so a HEAD-pinned
+# red control would grade a tree against itself (the R2959 lesson).
+PRE_R2969_REV = "73a00b5d64290948c1b2972208f7d5096a29ce4c"
 
 sys.path.insert(0, HERE)
 import bind_site_scan  # noqa: E402
@@ -692,6 +698,167 @@ def main():
     if not healed["ok"]:
         bad.append("hoisted-still-refused")
     report("AC-BSC12", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC13: the unix half of the asyncio family is judged --------
+    bad = []
+    root = fresh_world("bsc13")
+    unix_attr = (
+        "import asyncio\n"
+        "\n"
+        "async def boot(handler):\n"
+        "    return await asyncio.start_unix_server(handler, path=\"/tmp/a.sock\")\n"
+    )
+    unix_loop = (
+        "import asyncio\n"
+        "\n"
+        "async def boot(handler, loop):\n"
+        "    return await loop.create_unix_server(handler, path=\"/tmp/b.sock\")\n"
+    )
+    unix_bare = (
+        "from asyncio import start_unix_server\n"
+        "\n"
+        "async def boot(handler):\n"
+        "    return await start_unix_server(handler, path=\"/tmp/c.sock\")\n"
+    )
+    write(root, "face_a.py", unix_attr)
+    write(root, "face_b.py", unix_loop)
+    write(root, "face_c.py", unix_bare)
+    loud = bind_site_scan.scan(root=root)
+    if loud["ok"]:
+        bad.append("unix-sites-passed")
+    got = {r["path"]: r for r in loud["refused"]}
+    want_detail = {
+        "face_a.py": "asyncio.start_unix_server",
+        "face_b.py": "create_unix_server",
+        "face_c.py": "start_unix_server(from asyncio)",
+    }
+    for rel, detail in want_detail.items():
+        row = got.get(rel)
+        if row is None:
+            bad.append("not-named-" + rel)
+            continue
+        if row["kind"] != "asyncio-server":
+            bad.append("kind-%s-%s" % (rel, row["kind"]))
+        if row["code"] != bind_site_scan.UNGUARDED:
+            bad.append("code-%s-%s" % (rel, row["code"]))
+        if row["line"] != 4:
+            bad.append("line-%s-%s" % (rel, row["line"]))
+        if row["function"] != "boot":
+            bad.append("function-%s-%s" % (rel, row["function"]))
+        if row["detail"] != detail:
+            bad.append("detail-%s-%s" % (rel, row["detail"]))
+    # red control: the same three files with a statement-level guard BEFORE
+    # the site must all turn green - the red is the missing door, not the
+    # word unix.
+    for rel, text in (("face_a.py", unix_attr), ("face_b.py", unix_loop),
+                      ("face_c.py", unix_bare)):
+        write(root, rel, text.replace(
+            "):\n    return await",
+            "):\n    birth_gate.guard()\n    return await", 1))
+    healed = bind_site_scan.scan(root=root)
+    if not healed["ok"]:
+        bad.append("guarded-unix-still-refused")
+    # and a guard AFTER the site is too late for the same shape
+    write(root, "face_a.py",
+          "import asyncio\n"
+          "\n"
+          "async def boot(handler):\n"
+          "    server = await asyncio.start_unix_server(handler, path=\"/tmp/a.sock\")\n"
+          "    birth_gate.guard()\n"
+          "    return server\n")
+    late = bind_site_scan.scan(root=root)
+    late_rows = [r for r in late["refused"] if r["path"] == "face_a.py"]
+    if not late_rows:
+        bad.append("late-unix-guard-passed")
+    elif late_rows[0]["detail"] != "asyncio.start_unix_server":
+        bad.append("late-unix-detail-%s" % late_rows[0]["detail"])
+    report("AC-BSC13", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC14: the boundary is named, the live tree does not move ----
+    bad = []
+    root = fresh_world("bsc14")
+    own_helper = (
+        "def start_unix_server(path):\n"
+        "    return path\n"
+        "\n"
+        "def main():\n"
+        "    return start_unix_server(\"/tmp/own.sock\")\n"
+    )
+    qualified = (
+        "import ledger_page\n"
+        "\n"
+        "def main():\n"
+        "    return ledger_page.start_unix_server(\"/tmp/q.sock\")\n"
+    )
+    write(root, "own_helper.py", own_helper)
+    write(root, "qualified.py", qualified)
+    quiet = bind_site_scan.scan(root=root)
+    if not quiet["ok"]:
+        bad.append("lookalikes-refused")
+    if quiet["sites"] != 0:
+        bad.append("lookalike-sites-%d" % quiet["sites"])
+    # the receiver-blind side of the SAME family, measured rather than denied:
+    # create_unix_server on a non-asyncio receiver is judged, exactly as
+    # create_server already was before this round.
+    write(root, "worker.py",
+          "import worker_pool\n"
+          "\n"
+          "async def boot(handler):\n"
+          "    return await worker_pool.create_unix_server(handler, path=\"/tmp/w.sock\")\n")
+    blind = bind_site_scan.scan(root=root)
+    rows = [r for r in blind["refused"] if r["path"] == "worker.py"]
+    if not rows:
+        bad.append("receiver-blind-not-judged")
+    elif rows[0]["detail"] != "create_unix_server":
+        bad.append("receiver-blind-detail-%s" % rows[0]["detail"])
+    os.remove(os.path.join(root, "worker.py"))
+    # live tree: no site moved, and the new shapes have no live bearer
+    live = bind_site_scan.scan(root=HERE)
+    if not live["ok"]:
+        bad.append("shipped-tree-refused")
+    if live["sites"] != 14:
+        bad.append("live-sites-%d" % live["sites"])
+    if live["by_kind"].get("asyncio-server"):
+        bad.append("live-asyncio-%d" % live["by_kind"]["asyncio-server"])
+    # red control against a PINNED revision: the pre-round bytes must read the
+    # unix world as clean, or this criterion would be measuring argparse
+    old = subprocess.run(["git", "show", PRE_R2969_REV
+                          + ":src/sandbox/bind_site_scan.py"],
+                         cwd=REPO, stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    if old.returncode != 0 or not old.stdout:
+        bad.append("no-old-bytes")
+    else:
+        after = fresh_world("bsc14-old")
+        write(after, "face_a.py", unix_attr)
+        write(after, "face_b.py", unix_loop)
+        write(after, "face_c.py", unix_bare)
+        old_leaf = os.path.join(WORLD, "bind_site_scan_prer2969.py")
+        with open(old_leaf, "wb") as handle:
+            handle.write(old.stdout)
+        ran = subprocess.run([sys.executable, old_leaf, "--root", after],
+                             stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE, timeout=120)
+        text = ran.stdout.decode("utf-8", "replace")
+        if ran.returncode != 0:
+            bad.append("old-binary-refused-rc-%d" % (ran.returncode,))
+        if "BIND-SCAN PASS" not in text:
+            bad.append("old-binary-not-clean")
+        if "asyncio-server=" in text:
+            bad.append("old-binary-already-counted")
+        fresh = subprocess.run([sys.executable, LEAF, "--root", after],
+                               stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE, timeout=120)
+        fresh_text = fresh.stdout.decode("utf-8", "replace")
+        if fresh.returncode != 2:
+            bad.append("new-binary-rc-%d" % (fresh.returncode,))
+        if "kind=asyncio-server" not in fresh_text:
+            bad.append("new-binary-did-not-name-kind")
+        if fresh_text.count("[refuse] " + bind_site_scan.UNGUARDED) != 3:
+            bad.append("new-binary-refusals-%d"
+                       % fresh_text.count("[refuse] "))
+        os.remove(old_leaf)
+    report("AC-BSC14", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

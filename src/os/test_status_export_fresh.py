@@ -425,6 +425,33 @@ def run(root):
            and "R2814" in str(fallback_line or ""),
            "round=%r line=%r" % (fallback_round, str(fallback_line or "")[:40]))
 
+    # AC-SXF19 (R2969): a line that merely MENTIONS the newest round is not its
+    # narrative. Measured on the real tree before this fix: a R2968 closeout row
+    # ended with "the new R2969 board row", round_of() read 2969 for it, and the
+    # old rule returned that earlier line - so --apply published the previous
+    # round's sentence and --check then called the same file stale. The world
+    # below is the same shape in miniature: the first row is a headline of 2901
+    # that mentions 2902, the second row IS the 2902 headline.
+    earlier = ("2026-11-19 R2901 CLOSEOUT: the next_milestone came from the "
+               "new R2902 board row")
+    newer = "2026-11-19 R2902 PRODUCT: the row that actually belongs to 2902"
+    picked_round, picked_line = sx.newest_round({"log": [earlier, newer]})
+    record("AC-SXF19",
+           picked_round == 2902 and picked_line == newer,
+           "round=%r picked_newer=%s" % (picked_round, picked_line == newer))
+
+    # AC-SXF20 (R2969): the live document obeys the same invariant - when the
+    # published sentence IS a headline, its own label is the round it is
+    # published for. A fallback row (no headline at all) is exempt by design.
+    live_round, live_line = sx.newest_round(
+        json.loads(io.open(sx.STATE, encoding="utf-8").read()))
+    live_match = sx.HEADLINE_RE.match(live_line or "")
+    live_ok = (live_round is not None and
+               (live_match is None or int(live_match.group(1)) == live_round))
+    record("AC-SXF20", live_ok,
+           "round=%r label=%r" % (live_round,
+                                  live_match.group(1) if live_match else None))
+
     # AC-SXFB10 (AC-SXF10): the registry row exists AND declares this many
     # criteria, so adding a criterion without moving the count is red instead of
     # silently uncounted.
@@ -439,7 +466,7 @@ def run(root):
             if "test_status_export_fresh.py" in line:
                 row = line
                 break
-    record("AC-SXFB10", row is not None and declared == 18,
+    record("AC-SXFB10", row is not None and declared == 20,
            "matrix_row=%s declared=%d" % (bool(row), declared))
 
 
