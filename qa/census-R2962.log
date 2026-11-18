@@ -1,0 +1,10 @@
+suite closing-row census suite (expected criteria 8)
+  PASS AC-CEN1 law imported from the runner and a wrong pattern REFUSED
+  PASS AC-CEN2 11 probe shapes classify as measured
+  PASS AC-CEN3 live tree: law families partition the registry
+  PASS AC-CEN4 two runs read byte-identical output
+  PASS AC-CEN5 quiet-list drops the naming and keeps the shapes
+  PASS AC-CEN6 the registry declares 8 criteria
+  PASS AC-CEN7 single-count row stays non-law in BOTH authorities
+  PASS AC-CEN8 shipped closing row reads PASS through the runner (SUITE PASS 168/168)
+SUITE PASS 8/8

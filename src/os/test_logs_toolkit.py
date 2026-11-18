@@ -901,7 +901,14 @@ def main():
        'registry row %s declares this run total=%d (read=%s rows=%d) AC-QREG7'
        % (LABEL, CHECKS + 1, declared, row_hits))
 
-    print('SUITE PASS %d checks' % CHECKS)
+    # R2962: the closing row used to read 'SUITE PASS %d checks', a shape the
+    # battery law REFUSES by design (battery_shard._counter_row needs a total
+    # and a fail count; its docstring names this very shape as the refused
+    # case), so this suite's 168 declared criteria were unreadable to every
+    # machine reader. The count is the assertion count, and every assertion
+    # passed, so the pair is equal by construction - main() never reaches this
+    # line otherwise.
+    print('SUITE PASS %d/%d' % (CHECKS, CHECKS))
     return 0
 
 

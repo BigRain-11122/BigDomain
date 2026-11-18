@@ -23,7 +23,16 @@ cited it.
     that is the intended pressure, not a flake;
   - two runs read byte-identical output (no clock, no randomness);
   - --quiet-list drops the per-family non_law listing and keeps the shapes;
-  - the registry declares this suite at six criteria.
+  - the registry declares this suite at eight criteria.
+
+R2962 (AC-CEN7..AC-CEN8, pinned in the R2962 row of src/os/backlog.md BEFORE
+this edit and before the row they grade): the live census read one non_law row,
+and that row was RIGHT - src/os/test_logs_toolkit.py printed
+'SUITE PASS %d checks', a shape the battery law refuses by design, so its 168
+declared criteria were unreadable to every machine reader. The temptation is to
+teach the census that shape; AC-CEN7 measures that both authorities refuse it
+together, and AC-CEN8 runs the shipped suite and feeds its real row to the
+runner's own parser.
 
 Each world is read through a SUBPROCESS, not an in-process import: the tool
 imports battery_shard and reconcile_all by bare module name, so two roots in
@@ -48,7 +57,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.dirname(BASE)
 ROOT = os.path.dirname(SRC)
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 8
 LABEL = "os-suite-closing-row-census"
 TOOL = os.path.join(ROOT, "tools", "suite_closing_row_census.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
@@ -244,6 +253,89 @@ def ac_cen6():
           "AC-CEN6 the registry declares %d criteria" % EXPECTED_CRITERIA)
 
 
+# R2962: the two shapes this round is about. The single-count row is the one
+# src/os/test_logs_toolkit.py shipped until this round; the pair is what it
+# ships now. Both the source (what the census reads) and the printed row (what
+# the runner reads) are spelled out, so neither authority is fed a string the
+# other one built.
+ROW_SINGLE_SRC = 'print("SUITE PASS %d checks" % 3)\n'
+ROW_SINGLE_OUT = "SUITE PASS 3 checks"
+ROW_PAIR_SRC = 'print("SUITE PASS %d/%d" % (3, 3))\n'
+ROW_PAIR_OUT = "SUITE PASS 3/3"
+# The exact row the shipped suite printed before this round (168 assertions).
+ROW_PRE_R2962 = "SUITE PASS 168 checks"
+
+
+def ac_cen7():
+    """The census refuses that shape AND the runner cannot read it either."""
+    folder, copy_tool = world("right", [("checks", "checks.py", 3),
+                                        ("pair", "pair.py", 3)])
+    try:
+        write_text(os.path.join(folder, "src", "sandbox", "checks.py"),
+                   ROW_SINGLE_SRC)
+        write_text(os.path.join(folder, "src", "sandbox", "pair.py"),
+                   ROW_PAIR_SRC)
+        code, out = run_census(folder, copy_tool)
+    finally:
+        cleanup(folder)
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import suite_closing_row_census as census
+    import battery_shard
+    old_shape = census.classify(ROW_SINGLE_SRC)
+    new_shape = census.classify(ROW_PAIR_SRC)
+    old_read = battery_shard.parse_suite_row(ROW_SINGLE_OUT)
+    new_read = battery_shard.parse_suite_row(ROW_PAIR_OUT)
+    town = ("CENSUS registry=2 law=1 non_law=1 missing=0" in out
+            and "CENSUS shape law_direct=1" in out
+            and "CENSUS shape other=1" in out
+            and "CENSUS non_law other: checks" in out)
+    agree = (old_shape not in census_law_families() and old_read is None
+             and new_shape == "law_direct" and new_read == ("PASS", 3, 3))
+    if not (town and agree):
+        print("  measured rc=%d town=%r old=(shape=%r read=%r) "
+              "new=(shape=%r read=%r)"
+              % (code, town, old_shape, old_read, new_shape, new_read),
+              flush=True)
+    check(code == 0 and town and agree,
+          "AC-CEN7 single-count row stays non-law in BOTH authorities")
+
+
+def census_law_families():
+    return ("law_direct", "law_status", "law_split", "law_numeric",
+            "law_numeric_slot", "law_punct", "law_label_pt", "law_counters",
+            "law_status_colon", "law_status_punct")
+
+
+def ac_cen8():
+    """Run the shipped suite and read its REAL closing row with the runner."""
+    suite = os.path.join(BASE, "test_logs_toolkit.py")
+    proc = subprocess.run([sys.executable, suite], capture_output=True,
+                          timeout=300)
+    text = proc.stdout.decode("utf-8", "replace")
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import battery_shard
+    rows = [l.strip() for l in text.splitlines() if l.startswith("SUITE ")]
+    row = rows[-1] if rows else "<no SUITE row>"
+    read = battery_shard.parse_suite_row(text)
+    red = battery_shard.parse_suite_row(ROW_PRE_R2962)
+    code, out = run_census(ROOT, quiet=True)
+    line = [l for l in out.splitlines() if l.startswith("CENSUS registry=")]
+    live = False
+    measured = "no CENSUS line"
+    if code == 0 and line:
+        fields = dict(re.findall(r"(\w+)=(\d+)", line[0]))
+        live = (int(fields.get("non_law", -1)) == 0
+                and int(fields.get("law", -1)) == int(fields.get("registry", -2)))
+        measured = line[0]
+    green = (proc.returncode == 0 and read is not None and read[0] == "PASS"
+             and read[1] == read[2] and read[1] > 0)
+    if not (green and red is None and live):
+        print("  measured rc=%d row=%r read=%r red=%r live=%r %s"
+              % (proc.returncode, row, read, red, live, measured), flush=True)
+    check(green and red is None and live,
+          "AC-CEN8 shipped closing row reads PASS through the runner (%s)" % row)
+
+
 def main():
     print("suite closing-row census suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -253,6 +345,8 @@ def main():
     ac_cen4()
     ac_cen5()
     ac_cen6()
+    ac_cen7()
+    ac_cen8()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:
