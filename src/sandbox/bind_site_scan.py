@@ -113,9 +113,19 @@ Six kinds of site are recognised, and each has one rule:
     dotted path is the only identity that stays unique when two directories
     carry the same stem - measured on this tree, 2 of 90 stems collide
     (``reconcile`` in three directories, ``store`` in two) while 0 of 93
-    dotted paths do - so this NARROWS a hole that was open before it and
+    dotted paths do -     so this NARROWS a hole that was open before it and
     widens no rule: a bare ``from helper import ...`` whose stem collides is
     still dropped, and only the dotted form answers.
+
+
+    R2973 judged the form that a bare ``import a.b`` (no ``as``) licenses: the
+    name ``a`` binds a PACKAGE, and ``a.b.Name(...)`` reaches the module's
+    export through a three-part attribute chain.  That chain is accepted only
+    when this module's OWN import statement names the exact dotted path - a
+    chain that would merely resolve is still refused - at any depth, and only
+    for names outside ``SERVER_NAMES``, so the older receiver-blind http rule
+    keeps every row it already had.  The same chain is followed one level up,
+    where a module-level ``Maker = a.b.UDPServer`` re-exports it onwards.
 
 
 ``socket-bind``
@@ -139,14 +149,19 @@ or a factory such as ``functools.partial`` (0 calls touch
 ``Server`` (0 such from-imports exist; a mixin or handler alone binds
 nothing), a constructor reached through a module OUTSIDE this repo (its
 exports cannot be read without importing it, and this module never imports
-what it judges), a name assembled at run time, a bare ``import a.b`` (no
-``as``) whose ``a.b.Name(...)`` triple-attribute chain would reach an export
-(all 15 dotted imports and 19 dotted from-imports in this tree name stdlib or
-third-party modules, and none of the 3280 triple-attribute calls touches the
-export face), and ``serve_forever`` reached through an object this read cannot
-trace back to a construction.  A ``serve_forever`` call is not itself a bind
-site: ``socketserver`` binds in ``__init__``, so the construction is where the
-judgement belongs.
+what it judges), a name assembled at run time, a bare ``import pkg`` that
+names only a PACKAGE whose ``pkg.sub.Name(...)`` chain relies on the package
+having imported the submodule for some other reason (R2973 judges the chain
+only where the dotted submodule is itself imported; 0 modules of this tree
+carry an export at all, so no such chain exists here), and ``serve_forever``
+reached through an object this read cannot trace back to a construction.  A
+``serve_forever`` call is not itself a bind site: ``socketserver`` binds in
+``__init__``, so the construction is where the judgement belongs.  The
+three-part chain itself is NO LONGER out of range as of R2973: measured on
+this tree, 15 bare dotted imports (1 with ``as``) and 3287 three-part calls
+exist, and NONE of them names a module under the root, so the new rule has no
+live instance today - what this round buys is that the shape can no longer
+pass unjudged, not that a live hole was closed.
 
 Stdlib only (ast/json/os/sys), no shell, no network, no writes.
 """
@@ -303,6 +318,43 @@ def _module_level_nodes(body):
                 stack.append(child)
 
 
+def _dotted_chain(node):
+    """The dotted spelling of a Name/Attribute chain, else None.
+
+    ``pkg.helper`` and ``pkg.deep.sub.helper`` are both just a chain of
+    attributes rooted at a bare name, and R2973 compares the whole spelling
+    literally against the imports a module makes - so the depth is not a
+    licence of its own.
+    """
+    parts = []
+    while isinstance(node, ast.Attribute):
+        parts.append(node.attr)
+        node = node.value
+    if not isinstance(node, ast.Name):
+        return None
+    parts.append(node.id)
+    return ".".join(reversed(parts))
+
+
+def _dotted_bare_imports(tree):
+    """Dotted module paths a module imports WITHOUT an ``as``.
+
+    ``import pkg.helper`` binds the name ``pkg`` at run time and makes
+    ``pkg.helper`` reachable as an attribute, which is the only reason a
+    three-part chain can address that module.  Recording the exact spelling
+    (rather than every prefix) keeps the licence as narrow as the statement
+    that issued it.
+    """
+    names = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Import):
+            continue
+        for alias in node.names:
+            if alias.asname is None and "." in alias.name:
+                names.add(alias.name)
+    return names
+
+
 def _module_carried_classes(tree):
     """What one module carries out at module level.
 
@@ -310,9 +362,13 @@ def _module_carried_classes(tree):
     ``socketserver`` class (a from-import or an attribute assignment), ``links``
     names bound to another module-local name (followed, so an alias of an alias
     resolves), and ``borrowed`` names taken from another module by name (which
-    only resolve if that module itself exports one).
+    only resolve if that module itself exports one).  Since R2973 a
+    module-level ``Maker = a.b.UDPServer`` is a borrow too, but only when THIS
+    module's own statement imports ``a.b`` - the re-export chain starts from a
+    licence, never from a name that merely looks resolvable.
     """
     ss_modules = _socketserver_module_names(tree)
+    licensed_dotted = _dotted_bare_imports(tree)
     direct = {}
     links = {}
     borrowed = {}
@@ -360,6 +416,11 @@ def _module_carried_classes(tree):
                     direct[target] = detail
                 elif isinstance(value, ast.Name):
                     links[target] = value.id
+                elif (isinstance(value, ast.Attribute)
+                      and isinstance(value.value, ast.Attribute)):
+                    composed = _dotted_chain(value.value)
+                    if composed is not None and composed in licensed_dotted:
+                        borrowed[target] = (composed, value.attr)
     return (direct, links, borrowed)
 
 
@@ -481,14 +542,15 @@ def _repo_reexport_context(tree, exports):
     Since R2972 the tracked identities include dotted paths: ``import
     pkg.helper as ph`` binds ``ph`` to ``pkg.helper`` and a dotted from-import
     borrows from it.  A bare dotted import with NO ``as`` binds the PACKAGE,
-    not this module, so it is deliberately not bound here - the three-part
-    attribute chain it makes reachable is named out of range in the module
-    docstring rather than guessed at.
+    not this module, so the alias map does not carry it - but since R2973 the
+    exact dotted path that statement names is recorded as a LICENCE, and only
+    a chain whose receiver spells that path is judged.
     """
     aliases = {}
     borrowed = {}
+    dotted = set()
     if not exports:
-        return (aliases, borrowed, {})
+        return (aliases, borrowed, {}, frozenset())
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
@@ -496,6 +558,8 @@ def _repo_reexport_context(tree, exports):
                 if "." in name:
                     if alias.asname and name in exports:
                         aliases[alias.asname] = name
+                    elif alias.asname is None and name in exports:
+                        dotted.add(name)
                     continue
                 if name in exports:
                     aliases[alias.asname or name] = name
@@ -506,7 +570,7 @@ def _repo_reexport_context(tree, exports):
             for alias in node.names:
                 if alias.name in exports[module]:
                     borrowed[alias.asname or alias.name] = (module, alias.name)
-    return (aliases, borrowed, exports)
+    return (aliases, borrowed, exports, frozenset(dotted))
 
 
 def _server_class_shape(node, module_names, class_names, aliases, repo=None):
@@ -541,6 +605,16 @@ def _server_class_shape(node, module_names, class_names, aliases, repo=None):
                                        repo[2][target][node.attr]))
         if node.attr in SERVER_NAMES:
             return ("http-server", node.attr)
+        # R2973: `a.b.Name` where this module's own `import a.b` licenses the
+        # exact dotted receiver. The http rule above keeps precedence, so no
+        # row that already existed changes its kind.
+        if repo is not None and isinstance(node.value, ast.Attribute):
+            composed = _dotted_chain(node.value)
+            if composed is not None and composed in repo[3]:
+                chain = repo[2].get(composed, {}).get(node.attr)
+                if chain is not None:
+                    return (SOCKETSERVER_KIND,
+                            "%s.%s->%s" % (composed, node.attr, chain))
     return None
 
 
@@ -641,6 +715,12 @@ def _class_bases(classdef, module_names, class_names, aliases, repo=None):
                 target = repo[0].get(base.value.id)
                 if target is not None and base.attr in repo[2].get(target, {}):
                     found.append("%s.%s" % (base.value.id, base.attr))
+            elif repo is not None and isinstance(base.value, ast.Attribute):
+                composed = _dotted_chain(base.value)
+                if composed is not None and composed in repo[3]:
+                    chain = repo[2].get(composed, {}).get(base.attr)
+                    if chain is not None:
+                        found.append("%s.%s->%s" % (composed, base.attr, chain))
     return found
 
 

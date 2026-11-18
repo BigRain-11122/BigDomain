@@ -1,6 +1,7 @@
 """Suite for the static bind-site gate that bounds R2942's disclosed hole.
 
-Criteria AC-BSC1..AC-BSC24. AC-BSC1..AC-BSC5 were pinned in src/os/backlog.md
+Criteria AC-BSC1..AC-BSC24 (27 checks). AC-BSC1..AC-BSC5 were pinned in
+src/os/backlog.md
 BEFORE this file, src/sandbox/bind_site_scan.py and src/sandbox/bind_sites.json
 existed (in-window pre-registration, disclosed); AC-BSC6..AC-BSC7 came with the
 asyncio kind (R2944), AC-BSC8..AC-BSC9 with its order/level rule (R2945),
@@ -12,7 +13,10 @@ AC-BSC20 with a server class re-exported by another repo module plus the
 measured declaration that the type()/partial class and the non-Server import
 name stay out of range (R2971), and AC-BSC21..AC-BSC22 with the same exports
 reached through a DOTTED module path plus the measured declaration that a bare
-``import a.b`` leaves the ``a.b.Name(...)`` chain out of range (R2972).
+``import a.b`` leaves the ``a.b.Name(...)`` chain out of range (R2972), and
+AC-BSC23..AC-BSC24 with that chain JUDGED once the module's own bare dotted
+import licenses it, plus the measured declaration that the shape has no live
+instance on this tree (R2973).
 
 Nothing here is read off the scanner's own prose: every criterion builds a
 private world on disk, runs the SHIPPED ``scan()`` over it, and requires a
@@ -52,6 +56,9 @@ PRE_R2971_REV = "979b34e662c54ade292ea9826be285f0a9a52a27"
 # The revision AC-BSC22 measures the live tree against: the R2971 bytes, i.e.
 # the scanner BEFORE a dotted module path could name an export.
 PRE_R2972_REV = "92d824d7c8e6fa1ec5cbcdaacac91c4388e2ffd8"
+# The revision AC-BSC24 measures the live tree against: the R2972 bytes, i.e.
+# the scanner BEFORE a bare `import a.b` licensed its three-part chain.
+PRE_R2973_REV = "33182971c6a2854a2ffabb32b7ce061e62454632"
 
 sys.path.insert(0, HERE)
 import bind_site_scan  # noqa: E402
@@ -332,6 +339,99 @@ def dotted_import_facts(root):
         "recovered": [rel for rel in ambiguous_files if rel in recovered],
         "imports": imports,
         "froms": froms,
+    }
+
+
+def triple_attr_facts(root):
+    """The three-part attribute chain measured independently of the reader.
+
+    AC-BSC24 grades the claim that R2973's new shape has no live instance, so
+    this walk rebuilds the facts from the sources themselves - module
+    identities from the file layout, import statements as written, and calls
+    whose callee is a three-deep attribute chain - rather than asking the
+    scanner what it thinks it saw.
+    """
+    identities = set()
+    files = []
+    for rel, full in bind_site_scan.iter_modules(root):
+        rel = rel.replace(os.sep, "/")
+        parts = rel.split("/")
+        base = parts[-1]
+        dirs = [part for part in parts[:-1] if part]
+        stem = dirs[-1] if base == "__init__.py" else os.path.splitext(base)[0]
+        name = ".".join(dirs) if base == "__init__.py" else (
+            ".".join(dirs + [stem]) if dirs else stem)
+        files.append((rel, full))
+        for label in (stem, name):
+            if label:
+                identities.add(label)
+    exports = bind_site_scan.repo_reexports(root)
+
+    def spelling(node):
+        parts = []
+        while isinstance(node, ast.Attribute):
+            parts.append(node.attr)
+            node = node.value
+        if not isinstance(node, ast.Name):
+            return None
+        parts.append(node.id)
+        return ".".join(reversed(parts))
+
+    bare = 0
+    aliased = 0
+    landing_imports = []
+    calls = 0
+    landing_calls = []
+    export_hits = []
+    bases = []
+    for rel, full in files:
+        with open(full, encoding="utf-8-sig", errors="replace") as handle:
+            try:
+                tree = ast.parse(handle.read())
+            except SyntaxError:
+                continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if "." not in alias.name:
+                        continue
+                    if alias.asname:
+                        aliased += 1
+                        continue
+                    bare += 1
+                    if alias.name in identities:
+                        landing_imports.append((rel, node.lineno, alias.name))
+            elif isinstance(node, ast.Call):
+                func = node.func
+                if not (isinstance(func, ast.Attribute)
+                        and isinstance(func.value, ast.Attribute)):
+                    continue
+                calls += 1
+                receiver = spelling(func.value)
+                if receiver in identities:
+                    landing_calls.append((rel, node.lineno, receiver,
+                                          func.attr))
+                    if func.attr in exports.get(receiver, {}):
+                        export_hits.append((rel, node.lineno, receiver,
+                                            func.attr))
+            elif isinstance(node, ast.ClassDef):
+                for base in node.bases:
+                    if not (isinstance(base, ast.Attribute)
+                            and isinstance(base.value, ast.Attribute)):
+                        continue
+                    receiver = spelling(base.value)
+                    if receiver in identities:
+                        bases.append((rel, node.lineno, receiver, base.attr))
+    return {
+        "modules": len(files),
+        "identities": len(identities),
+        "bare_dotted_imports": bare,
+        "aliased_dotted_imports": aliased,
+        "landing_imports": landing_imports,
+        "triple_calls": calls,
+        "landing_calls": landing_calls,
+        "export_hits": export_hits,
+        "triple_bases": bases,
     }
 
 
@@ -1609,6 +1709,208 @@ def main():
     if landed:
         bad.append("dotted-lands-on-repo-%s" % landed[:3])
     report("AC-BSC22", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC23: a bare `import a.b` licenses its three-part chain --------
+    bad = []
+    root = fresh_world("bsc23-bare")
+    write(root, "pkg/helper.py", "from socketserver import UDPServer\n")
+    raw_site = ("import pkg.helper\n"
+                "\n"
+                "def boot(host, port, handler):\n"
+                "    return pkg.helper.UDPServer((host, port), handler)\n")
+    write(root, "site.py", raw_site)
+    bare = bind_site_scan.scan(root=root)
+    if bare["ok"]:
+        bad.append("triple-passed")
+    rows = [r for r in bare["refused"] if r["path"] == "site.py"]
+    if not rows:
+        bad.append("triple-not-named")
+    else:
+        row = rows[0]
+        if row["kind"] != "socketserver-server":
+            bad.append("triple-kind-%s" % row["kind"])
+        if row["line"] != 4 or row["function"] != "boot":
+            bad.append("triple-place-%d/%s" % (row["line"], row["function"]))
+        if row["detail"] != "pkg.helper.UDPServer->socketserver.UDPServer":
+            bad.append("triple-detail-%s" % row["detail"])
+    # the same construction behind the shipped gate turns the world green:
+    # what was red is the missing door, not the dotted name.
+    write(root, "site.py",
+          "import birth_gate\n"
+          "import pkg.helper\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return birth_gate.checked_server(\n"
+          "        lambda: pkg.helper.UDPServer((host, port), handler))\n")
+    gated = bind_site_scan.scan(root=root)
+    if not gated["ok"]:
+        bad.append("triple-gated-refused")
+    # depth is not a licence of its own: the licence is the exact spelling.
+    deep = fresh_world("bsc23-deep")
+    write(deep, "pkg/deep/sub/helper.py",
+          "from socketserver import UDPServer\n")
+    write(deep, "site.py",
+          "import pkg.deep.sub.helper\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return pkg.deep.sub.helper.UDPServer((host, port), handler)\n")
+    dv = bind_site_scan.scan(root=deep)
+    if dv["ok"]:
+        bad.append("deep-passed")
+    drows = [r for r in dv["refused"] if r["path"] == "site.py"]
+    if not drows:
+        bad.append("deep-not-named")
+    elif "pkg.deep.sub.helper.UDPServer" not in drows[0]["detail"]:
+        bad.append("deep-detail-%s" % drows[0]["detail"])
+    # an export that merely RESOLVES is not a licence: pkg.other carries the
+    # same class but no import statement in this module names it.
+    write(deep, "pkg/other.py", "from socketserver import UDPServer\n")
+    write(deep, "site.py",
+          "import pkg.helper\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return pkg.other.UDPServer((host, port), handler)\n")
+    unlicensed = bind_site_scan.scan(root=deep)
+    if not unlicensed["ok"] or unlicensed["sites"] != 0:
+        bad.append("unlicensed-sites-%d" % unlicensed["sites"])
+    # a subclass through the chain is a server-subclass like any other.
+    sub = fresh_world("bsc23-sub")
+    write(sub, "pkg/helper.py", "from socketserver import UDPServer\n")
+    write(sub, "site.py",
+          "import pkg.helper\n"
+          "\n"
+          "class Face(pkg.helper.UDPServer):\n"
+          "    allow_reuse_address = True\n")
+    sv = bind_site_scan.scan(root=sub)
+    if sv["ok"]:
+        bad.append("triple-subclass-passed")
+    srows = [r for r in sv["refused"] if r["kind"] == "server-subclass"]
+    if not srows:
+        bad.append("triple-subclass-not-named")
+    elif not srows[0]["detail"].startswith("pkg.helper.UDPServer"):
+        bad.append("subclass-detail-%s" % srows[0]["detail"])
+    report("AC-BSC23", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC23b: the chain is followed through aliases and modules ------
+    bad = []
+    alias_root = fresh_world("bsc23b-alias")
+    write(alias_root, "pkg/helper.py", "from socketserver import UDPServer\n")
+    write(alias_root, "site.py",
+          "import pkg.helper\n"
+          "\n"
+          "Maker = pkg.helper.UDPServer\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return Maker((host, port), handler)\n")
+    av = bind_site_scan.scan(root=alias_root)
+    if av["ok"]:
+        bad.append("alias-passed")
+    arows = [r for r in av["refused"] if r["path"] == "site.py"]
+    if not arows:
+        bad.append("alias-not-named")
+    elif arows[0]["detail"] != (
+            "Maker->pkg.helper.UDPServer->socketserver.UDPServer"):
+        bad.append("alias-detail-%s" % arows[0]["detail"])
+    # the middle hop is measured on the map, not inferred from the detail text.
+    exports = bind_site_scan.repo_reexports(alias_root)
+    if exports.get("site", {}).get("Maker") != (
+            "pkg.helper.UDPServer->socketserver.UDPServer"):
+        bad.append("alias-map-%s" % exports.get("site"))
+    # a second module borrowing the alias resolves through the same chain.
+    write(alias_root, "borrow.py",
+          "from site import Maker\n"
+          "\n"
+          "def boot2(host, port, handler):\n"
+          "    return Maker((host, port), handler)\n")
+    bv = bind_site_scan.scan(root=alias_root)
+    brows = [r for r in bv["refused"] if r["path"] == "borrow.py"]
+    if not brows:
+        bad.append("borrow-not-named")
+    elif not brows[0]["detail"].startswith("Maker(from site)->"):
+        bad.append("borrow-detail-%s" % brows[0]["detail"])
+    # without the bare dotted import, the same assignment is not a licence.
+    bad_root = fresh_world("bsc23b-unlicensed")
+    write(bad_root, "pkg/helper.py", "from socketserver import UDPServer\n")
+    write(bad_root, "pkg/other.py", "from socketserver import UDPServer\n")
+    write(bad_root, "site.py",
+          "import pkg.helper\n"
+          "\n"
+          "Maker = pkg.other.UDPServer\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return Maker((host, port), handler)\n")
+    uv = bind_site_scan.scan(root=bad_root)
+    if not uv["ok"] or uv["sites"] != 0:
+        bad.append("alias-unlicensed-sites-%d" % uv["sites"])
+    report("AC-BSC23b", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC24: the live tree does not move a line, and the red control
+    # is the PRE-R2973 binary on the same private world ----------------------
+    bad = []
+    live = bind_site_scan.scan(root=HERE)
+    if not live["ok"]:
+        bad.append("shipped-tree-refused")
+    if live["sites"] != 14:
+        bad.append("live-sites-%d" % live["sites"])
+    if live["by_kind"] != {"http-server": 8, "server-subclass": 2,
+                           "socket-bind": 3, "ws-serve": 1}:
+        bad.append("live-kinds-%s" % sorted(live["by_kind"].items()))
+    old = subprocess.run(["git", "show", PRE_R2973_REV
+                          + ":src/sandbox/bind_site_scan.py"],
+                         cwd=REPO, stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    if old.returncode != 0 or not old.stdout:
+        bad.append("no-old-bytes")
+    else:
+        old_leaf = os.path.join(WORLD, "bind_site_scan_prer2973.py")
+        with open(old_leaf, "wb") as handle:
+            handle.write(old.stdout)
+        before = subprocess.run(
+            [sys.executable, old_leaf, "--list", "--root", HERE],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, timeout=120)
+        after = subprocess.run(
+            [sys.executable, LEAF, "--list", "--root", HERE],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, timeout=120)
+        if before.returncode != 0 or after.returncode != 0:
+            bad.append("list-rc-%d/%d" % (before.returncode, after.returncode))
+        if before.stdout != after.stdout:
+            bad.append("live-lines-moved")
+        # red control on the world AC-BSC23 built in its unguarded form.
+        red_world = fresh_world("bsc24-red")
+        write(red_world, "pkg/helper.py",
+              "from socketserver import UDPServer\n")
+        write(red_world, "site.py", raw_site)
+        old_world = subprocess.run(
+            [sys.executable, old_leaf, "--root", red_world],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, timeout=120)
+        new_world = subprocess.run(
+            [sys.executable, LEAF, "--root", red_world],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, timeout=120)
+        if b"sites=0" not in old_world.stdout:
+            bad.append("old-saw-the-shape")
+        if not (old_world.returncode == 0 and new_world.returncode != 0):
+            bad.append("red-rc-%d/%d" % (old_world.returncode,
+                                         new_world.returncode))
+        if b"E_BIND_UNGUARDED_FACE" not in new_world.stdout:
+            bad.append("new-not-refused")
+        os.remove(old_leaf)
+    # the declaration, measured independently: the new shape has no live
+    # instance, so what this round buys is a shape that can no longer pass
+    # unjudged - not a live hole that was closed.
+    facts = triple_attr_facts(HERE)
+    if facts["landing_imports"]:
+        bad.append("dotted-imports-land-%s" % facts["landing_imports"][:3])
+    if facts["landing_calls"]:
+        bad.append("triple-calls-land-%s" % facts["landing_calls"][:3])
+    if facts["export_hits"]:
+        bad.append("triple-export-hits-%s" % facts["export_hits"][:3])
+    if facts["triple_bases"]:
+        bad.append("triple-bases-%s" % facts["triple_bases"][:3])
+    report("AC-BSC24", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

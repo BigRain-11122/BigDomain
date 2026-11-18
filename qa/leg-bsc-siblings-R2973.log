@@ -1,0 +1,10 @@
+SHARD scope=SHARD registry_suites=728 registry_criteria=5823 selected=4 selected_criteria=57 cap=600s leg_cap=0s overrides=1 exact=4 state=RUNNING
+SHARD selected start-all crit=11 path=test_start_all.py
+SHARD selected panel crit=33 path=test_panel.py
+SHARD selected panel-log-ns crit=7 path=test_panel_log_ns_scan.py
+SHARD selected panel-lobby crit=6 path=test_panel_lobby.py
+SHARD row start-all rc=0 pass=11 fail=0 detail=yes suite=PASS 11/11 crit=11 11.3s
+SHARD row panel rc=0 pass=33 fail=0 detail=yes suite=PASS 33/33 crit=33 27.0s
+SHARD row panel-log-ns rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 5.5s
+SHARD row panel-lobby rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 8.6s
+SHARD rc=0 scope=SHARD selected=4 executed=4 green=4 criteria=57 crit_mismatch=0 elapsed=52.4s crit_checked=4

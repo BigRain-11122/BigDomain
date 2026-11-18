@@ -330,8 +330,10 @@ SUITES = [
     # measured range of the two shapes still unnamed. R2972 keys the export map
     # by the DOTTED module path as well as the stem, and AC-BSC21..AC-BSC22 pin
     # that plus the measured declaration that a bare dotted import leaves the
-    # three-part attribute chain out of range.
-    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 24),
+    # three-part attribute chain out of range. R2973 JUDGES that chain when the
+    # module's own bare `import a.b` licenses its exact spelling, and AC-BSC23..
+    # AC-BSC24 pin that plus the measured declaration that no live call uses it.
+    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 27),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the
