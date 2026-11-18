@@ -126,7 +126,7 @@
    "stem": "membership-benefit-report",
    "artifact": "preview/membership-benefit-report.json",
    "bytes": 9817,
-   "mtime_utc": "2026-11-14T23:55:47Z",
+   "mtime_utc": "2026-11-16T07:49:16Z",
    "verdict": "PASS",
    "ok": true,
    "detail": "declared verdict"
@@ -134,8 +134,8 @@
   {
    "stem": "payment-gate-report",
    "artifact": "preview/payment-gate-report.json",
-   "bytes": 6415,
-   "mtime_utc": "2026-11-15T01:00:38Z",
+   "bytes": 6959,
+   "mtime_utc": "2026-11-16T07:49:15Z",
    "verdict": "PASS",
    "ok": true,
    "detail": "declared verdict"
@@ -175,7 +175,7 @@
  },
  "blocked_on": "CEO physical item: real merchant id / appid / appkey / settlement (AC-YP1); platform public key for V3 rsa mode",
  "headline": "6 of 8 steps carry a declared PASS",
- "generated_utc": "2026-11-15T02:12:54Z",
+ "generated_utc": "2026-11-18T00:35:58Z",
  "sizes": {
   "html": 11115,
   "json": 6835

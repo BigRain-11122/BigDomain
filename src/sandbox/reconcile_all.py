@@ -7198,6 +7198,17 @@ SUITES = [
      os.path.join("..", "os", "test_leg_watch.py"), 6),
     ("os-leg-header-check",
      os.path.join("..", "os", "test_leg_header_check.py"), 6),
+    # R2916: the tech seed R2747 measured that src/os/test_logs_toolkit.py had no
+    # row at all, so its 163 checks guarding every state.json surgery (fold, eol,
+    # census, prune) were walked only when a human ran them - and its own pinned
+    # archive filename went RED the moment the calendar left 2026-10 without any
+    # leg noticing. The criteria AC-QREG1..AC-QREG6 were pinned in
+    # state/queue/tech.md at R2747, before this edit. Appended at the END for the
+    # same reason as every row above: a mid-list insert shifts each later
+    # suite's shard, and the 27 unmeasured deep shard-6 rows are tracked by that
+    # mapping.
+    ("os-logs-toolkit",
+     os.path.join("..", "os", "test_logs_toolkit.py"), 163),
     ]
 
 FAILS = 0

@@ -1,0 +1,9 @@
+PASS AC-JNY1 landed=8 fresh=8 match=True
+PASS AC-JNY2 carriers=6 mismatch=[]
+PASS AC-JNY3 self control entry==exit True (html=11115 json=6835)
+PASS AC-JNY4 shipped_len=115 doc_match=True page_match=True
+PASS AC-JNY5 explicit=True implicit=True
+PASS AC-JNY6 external_literals=none
+PASS AC-JNY7 recorded={'html': 11115, 'json': 6835} disk={'html': 11115, 'json': 6835}
+PASS AC-JNY8 p47_missing=none absent=none id_not_once=none steps=8
+VERDICT PASS 8/8

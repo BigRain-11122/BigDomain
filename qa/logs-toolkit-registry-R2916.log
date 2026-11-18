@@ -1,0 +1,8 @@
+PASS AC-QREG1 rows=1 os-logs-toolkit crit=163
+PASS AC-QREG2 suites=717 criteria=5663 delta=+1/+163
+PASS AC-QREG3 green row exit=0 printed=163 crit=163
+PASS AC-QREG3c doctored copy exit=2 fail_line=True
+PASS AC-QREG4 archive_name() derives the month from logs_toolkit.CST; no typed live month
+PASS AC-QREG5 matrix 75040B names logs-toolkit=True suites717=True
+PASS AC-QREG6 ascii=True net_imports=none modules=9
+VERDICT PASS 7/7
