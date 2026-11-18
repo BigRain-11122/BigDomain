@@ -82,6 +82,47 @@ def wait_json(path, timeout):
     return None
 
 
+def recorded_collisions(record_path):
+    """Name the override collision a launcher record publishes, if any.
+
+    R2983: the machine record is the EARLIEST artifact that carries a
+    collision, and this driver - the one a person actually runs - never looked
+    at it. When the launcher publishes a report, that report already names the
+    collision (R2981), so this helper earns its keep on the one moment nothing
+    else speaks: the report never arrives. Read-only, and a missing or
+    unreadable record answers () instead of raising, because this is a note
+    attached to a failure and a note must never replace the failure.
+    """
+    try:
+        with open(record_path, "r", encoding="utf-8") as handle:
+            record = json.load(handle)
+    except (OSError, ValueError):
+        return ()
+    raw = record.get("override_duplicates") or ()
+    out = []
+    for item in raw:
+        try:
+            port, keys = item
+            out.append((int(port), tuple(sorted(str(key) for key in keys))))
+        except (TypeError, ValueError):
+            continue
+    return tuple(sorted(out))
+
+
+def launcher_record_path():
+    """Ask the launcher registry where it writes, without importing at load.
+
+    The suite imports this module with nothing but the standard library on the
+    path (AC-LIVE5), so the sandbox package is reached lazily, inside the
+    failure branch that needs it.
+    """
+    sandbox = os.path.join(REPO, "src", "sandbox")
+    if sandbox not in sys.path:
+        sys.path.insert(0, sandbox)
+    import launcher_registry
+    return launcher_registry.default_path()
+
+
 def drive_lobby(page):
     """Walk the lobby through a real session before it is photographed.
 
@@ -319,8 +360,11 @@ def main(argv=None):
     try:
         report = wait_json(report_path, args.timeout)
         if not report or not report.get("ok"):
+            collisions = recorded_collisions(launcher_record_path())
             print(json.dumps({"ok": False,
                               "why": "sandbox never proved ready",
+                              "record_collisions": [list(item)
+                                                    for item in collisions],
                               "report": report}, ensure_ascii=False))
             return 3
         first = shoot(args.browser, report, args.settle_ms, args.width,

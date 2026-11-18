@@ -202,6 +202,59 @@ def main():
        'bare_panel=%s bare_member=%s'
        % (bare.get('panel'), bare.get('member')))
 
+    # AC-LIVE7: the record face finally has a reader on the path a PERSON
+    # runs. The report already names a collision when it is published (R2981),
+    # so the honest scope of this criterion is the moment nothing else speaks:
+    # the report never arrives and the record is the only carrier. Every arm
+    # below is a private file in a throwaway directory - no browser, no
+    # launcher, no network.
+    import json as _json
+    import tempfile
+    box = tempfile.mkdtemp(prefix='live7-')
+
+    def record(name, payload_text):
+        path = os.path.join(box, name)
+        with open(path, 'w', encoding='utf-8') as handle:
+            handle.write(payload_text)
+        return path
+
+    collided = record('collide.json', _json.dumps(
+        {'pid': 4242, 'state': 'starting',
+         'override_duplicates': [[7000, ['city', 'ws']]]}))
+    ok('AC-LIVE7 a collided record names both keys, not a boolean',
+       LS.recorded_collisions(collided) == ((7000, ('city', 'ws')),),
+       'read=%s' % (LS.recorded_collisions(collided),))
+
+    healthy = record('healthy.json', _json.dumps(
+        {'pid': 4242, 'state': 'serving', 'override_duplicates': []}))
+    ok('AC-LIVE7 a healthy record reads empty', LS.recorded_collisions(healthy)
+       == (), 'read=%s' % (LS.recorded_collisions(healthy),))
+
+    absent = os.path.join(box, 'never-written.json')
+    broken = record('broken.json', '{"override_duplicates": [[7000, [')
+    ok('AC-LIVE7 a missing or unreadable record answers empty, never raises',
+       LS.recorded_collisions(absent) == ()
+       and LS.recorded_collisions(broken) == (),
+       'absent=%s broken=%s' % (LS.recorded_collisions(absent),
+                                LS.recorded_collisions(broken)))
+
+    messy = record('messy.json', _json.dumps(
+        {'override_duplicates': [[7002, ['gate']], ['nope', ['x']],
+                                 ['7001', ['ugc', 'web']]]}))
+    ok('AC-LIVE7 order is not identity and a bad port is skipped, not fatal',
+       LS.recorded_collisions(messy)
+       == ((7001, ('ugc', 'web')), (7002, ('gate',))),
+       'read=%s' % (LS.recorded_collisions(messy),))
+
+    with open(os.path.join(ROOT, 'tools', 'ceo_live_shot.py'), 'rb') as handle:
+        shot_src = handle.read().decode('utf-8', 'replace')
+    blocks = shot_src.split('if not report or not report.get("ok")', 1)
+    branch = blocks[1][:600] if len(blocks) == 2 else ''
+    ok('AC-LIVE7 the shipped failure branch really calls the record reader',
+       len(blocks) == 2 and 'recorded_collisions(' in branch
+       and '"record_collisions"' in branch and 'return 3' in branch,
+       'wired=%d' % (len(blocks) - 1))
+
     total = len(CHECKS)
     acs = set()
     for name in CHECKS:

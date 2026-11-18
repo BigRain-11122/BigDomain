@@ -7481,9 +7481,10 @@ SUITES = [
     # unrun arm can never read as a pass. One row per face keeps
     # 'agreements + disagreements == faces' an identity the payload is checked
     # against. AC-LIVE1..AC-LIVE5 were pinned in src/os/backlog.md before the
-    # code existed, in the same window (disclosed).
+    # code existed, in the same window (disclosed). AC-LIVE7 was pinned the
+    # same way in R2983, before recorded_collisions existed.
     ("os-live-proof",
-     os.path.join("..", "os", "test_live_proof.py"), 6),
+     os.path.join("..", "os", "test_live_proof.py"), 7),
     ]
 
 FAILS = 0
