@@ -1,0 +1,5 @@
+SHARD scope=SHARD registry_suites=718 registry_criteria=5672 selected=1 selected_criteria=4 cap=600s leg_cap=0s overrides=1 exact=1 state=RUNNING
+SHARD selected os-registry-counter-census crit=4 path=..\os\test_registry_counter_census.py
+SHARD row os-registry-counter-census rc=1 pass=0 fail=0 detail=none suite=none crit=4 0.6s
+SHARD rc=2 scope=SHARD selected=1 executed=1 green=0 criteria=4 crit_mismatch=0 elapsed=0.6s
+SHARD red os-registry-counter-census:rc=1

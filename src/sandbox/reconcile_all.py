@@ -7209,6 +7209,17 @@ SUITES = [
     # mapping.
     ("os-logs-toolkit",
      os.path.join("..", "os", "test_logs_toolkit.py"), 168),
+    # R2918: the census that answers "which registry rows can the battery
+    # reader refute at run time" with a MEASURED list (readable / unparsed /
+    # silent, pinned in src/os/registry_counter_census_pin.json) instead of the
+    # carried number. Its own row is bound the way R2917 bound the one above:
+    # --check refuses a class that drifted in either direction, and the fixture
+    # world measures the extractor's own limit rather than assuming it away.
+    # (AC-RCC1..AC-RCC4 pre-registered in src/os/backlog.md at R2918, before
+    # the tool existed.) Appended at the END for the same reason as every row
+    # above: a mid-list insert shifts each later suite's shard.
+    ("os-registry-counter-census",
+     os.path.join("..", "os", "test_registry_counter_census.py"), 4),
     ]
 
 FAILS = 0
