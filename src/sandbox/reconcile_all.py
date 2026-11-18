@@ -393,8 +393,11 @@ SUITES = [
     # fixtures and the scanner itself are published as COUNTED exemptions
     # (why=owner|fixture|judge) instead of being skipped in silence.
     # AC-PAN27..AC-PAN29 were pinned in src/os/backlog.md BEFORE the scanner
-    # and this suite existed.
-    ("panel-log-ns", os.path.join("test_panel_log_ns_scan.py"), 3),
+    # and this suite existed. R2959 moved the exemption key off the basename
+    # and onto the path relative to the scanned root: a module named panel.py
+    # elsewhere, and a test_*.py outside sandbox/, were exempt under the old
+    # rule and are refused now (AC-PAN35..AC-PAN36 pinned BEFORE that edit).
+    ("panel-log-ns", os.path.join("test_panel_log_ns_scan.py"), 5),
     # R2938 added AC-PAN7..AC-PAN11 (declared ownership): the launcher hands
     # the panel the faces it already serves with the ports it measured, and the
     # panel refuses to start or stop them by name instead of forking the

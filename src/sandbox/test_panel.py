@@ -51,6 +51,13 @@ import urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 MODULE = os.path.join(HERE, "panel.py")
+# The revision AC-PAN34 measures against. It is PINNED rather than "HEAD":
+# R2958 wrote the arm while its own change was uncommitted, so HEAD was then
+# the pre-R2958 code - and the commit that landed the arm also moved HEAD onto
+# the new code, which turned the arm red on a tree where nothing was wrong
+# (measured at R2959). A fixed revision is the honest reference for "what the
+# older code did", and it never moves with this round's commit.
+OLD_PANEL_REV = "2e988f5058e06ae2ae36afee96e403956f533ef9"
 PAGE = os.path.join(HERE, "panel.html")
 REGISTRY = os.path.join(REPO, "src", "sandbox", "reconcile_all.py")
 LEDGER_HTML = os.path.join(HERE, "ledger", "ledger.html")
@@ -2542,8 +2549,8 @@ def ac_pan34():
 
     The second half is the arm that keeps this honest: if the pre-R2958 module
     also refused, the criterion would be measuring argparse rather than the
-    change, so the HEAD bytes are copied beside their import and asked the
-    same question.
+    change, so the bytes at OLD_PANEL_REV are copied beside their import and
+    asked the same question.
     """
     bad = 0
     root = tempfile.mkdtemp(prefix="bd-pan34-")
@@ -2605,10 +2612,12 @@ def ac_pan34():
                                         aimed_out.splitlines()[:1]))
         # (3) the old binary answered with an empty report: the refusal is
         # what this round bought, not what argparse already did
-        head = subprocess.run(["git", "show", "HEAD:src/sandbox/panel.py"],
+        head = subprocess.run(["git", "show", OLD_PANEL_REV
+                               + ":src/sandbox/panel.py"],
                               cwd=REPO, stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE)
-        gate = subprocess.run(["git", "show", "HEAD:src/sandbox/birth_gate.py"],
+        gate = subprocess.run(["git", "show", OLD_PANEL_REV
+                               + ":src/sandbox/birth_gate.py"],
                               cwd=REPO, stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE)
         if head.returncode != 0 or not head.stdout or not gate.stdout:
@@ -2657,8 +2666,8 @@ def ac_pan34():
     return report("AC-PAN34 the purge face refuses, the CLI is unchanged and "
                   "the old binary returned a report", bad,
                   "absent scope raises on both functions, the shipped CLI "
-                  "still exits 2 without a window line, and the HEAD module "
-                  "measurably answered with an empty report")
+                  "still exits 2 without a window line, and the pinned "
+                  "pre-R2958 module measurably answered with an empty report")
 
 
 def main():

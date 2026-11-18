@@ -35,12 +35,19 @@ Two codes, one question each:
     A read-only BORROW is refused with the writes, because the same import is
     one line from a write; the owner and the fixtures are the named exceptions.
 
-Exempt by name, and MEASURED rather than skipped: ``panel.py`` (the one owner),
-``test_*.py`` (suite scaffolding must be able to build a world that contains a
-real refusal log - the prune suite measures exactly that), and this scanner
-(it must hold the name in order to judge it).  Every exempt row is published in
-the verdict with ``why=owner|fixture|judge``, so a report cannot claim a clean
-tree while quietly walking past the three places that hold the name.
+Exempt BY PATH, and MEASURED rather than skipped: exactly ``sandbox/panel.py``
+(the one owner), exactly ``sandbox/panel_log_ns_scan.py`` (this scanner - it
+must hold the name in order to judge it), and ``sandbox/test_*.py`` (suite
+scaffolding must be able to build a world that contains a real refusal log -
+the prune suite measures exactly that).  R2959 moved the key off the basename:
+a module named ``panel.py`` anywhere else in the tree is not the owner, and a
+``test_*.py`` outside ``sandbox/`` is not this scaffolding, but the old rule
+exempted both.  The key is the path RELATIVE to the scanned root, so a copy of
+the tree under another absolute path still scans the same way - an absolute key
+would refuse a worktree's own owner.  Every exempt row is published in the
+verdict with ``why=owner|fixture|judge``, so a report cannot claim a clean tree
+while quietly walking past the places that hold the name; the suite also
+measures that no exempt row lives outside ``sandbox/``.
 
 Not recognised, named rather than implied closed: a path assembled without any
 literal (built from an imported variable, or a stem split across variables),
@@ -60,8 +67,9 @@ REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 DEFAULT_ROOT = os.path.join(REPO, "src")
 
 STEM = "bigdomain-panel-child-"
-OWNER = "panel.py"
-JUDGE = "panel_log_ns_scan.py"
+OWNER_REL = "sandbox/panel.py"
+JUDGE_REL = "sandbox/panel_log_ns_scan.py"
+FIXTURE_DIR = "sandbox"
 BORROW_ATTRS = frozenset(("LOG_STEM", "LOG_SUFFIX"))
 
 FOREIGN_WRITE = "E_PANEL_LOG_NS_FOREIGN_WRITE"
@@ -82,14 +90,28 @@ def is_test_file(name):
     return name.startswith("test_") and name.endswith(".py")
 
 
+def _norm_rel(rel):
+    rel = rel.replace("\\", "/")
+    while rel.startswith("./"):
+        rel = rel[2:]
+    return rel
+
+
 def _why_exempt(rel):
-    """The published reason a path may hold the namespace, else None."""
-    base = os.path.basename(rel)
-    if base == OWNER:
+    """The published reason a path may hold the namespace, else None.
+
+    Keyed on the path relative to the SCANNED ROOT (R2959): the basename was a
+    hole, because a module called ``panel.py`` elsewhere in the tree was read
+    as the owner and any ``test_*.py`` as scaffolding. The key stays relative
+    so a copied tree keeps the same verdicts on another absolute path.
+    """
+    rel = _norm_rel(rel)
+    if rel == OWNER_REL:
         return "owner"
-    if base == JUDGE:
+    if rel == JUDGE_REL:
         return "judge"
-    if is_test_file(base):
+    folder, _, base = rel.rpartition("/")
+    if folder == FIXTURE_DIR and is_test_file(base):
         return "fixture"
     return None
 
