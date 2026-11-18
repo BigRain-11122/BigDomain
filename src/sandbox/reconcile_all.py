@@ -7280,6 +7280,18 @@ SUITES = [
     # BY NAME and removing it returns the gate to PASS.
     ("os-closeout-gate",
      os.path.join("..", "os", "test_closeout_gate.py"), 5),
+    # R2935: R2934 photographed the sandbox for the first time, but one pass is
+    # a SNAPSHOT - it cannot tell "alive" from "painted cleanly this time". The
+    # ruling is not to run a browser under the registry law but to move the LAW
+    # of the repeatable proof into a pure function (compare_runs: one row per
+    # drifting face, kinds missing/status/errors/ok, error SETS not orders) and
+    # grade that, with the live two-pass arm printed as a SKIP BY NAME so an
+    # unrun arm can never read as a pass. One row per face keeps
+    # 'agreements + disagreements == faces' an identity the payload is checked
+    # against. AC-LIVE1..AC-LIVE5 were pinned in src/os/backlog.md before the
+    # code existed, in the same window (disclosed).
+    ("os-live-proof",
+     os.path.join("..", "os", "test_live_proof.py"), 5),
     ]
 
 FAILS = 0

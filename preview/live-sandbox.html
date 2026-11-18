@@ -11,33 +11,34 @@ ul{margin:6px 0;padding-left:18px;font-size:12px;color:#8b93a7}
 <header><h1>BigDomain sandbox - photographed live</h1>
 <p>Faces photographed: <span class='k'>7/7</span> - sandbox report <code>ok=True</code>, mock only, no charge, no merchant id needed.</p>
 <p>Run it yourself: <code>python src/sandbox/start_all.py</code> then open the URL it prints. This page is a snapshot, not a server.</p>
+<p>Repeatable proof: <span class='k'>two passes agree</span> - 7/7 faces agreed across two passes on the same sandbox (second pass shot after the lobby action; its images are <code>*-p2.png</code>).</p>
 </header>
 <section><h2>Hub - the one door - <span class='k'>ok</span></h2>
-<p>Every face the sandbox serves, with its own live probe</p><p><code>http://127.0.0.1:59675/hub/</code> - http 200</p>
+<p>Every face the sandbox serves, with its own live probe</p><p><code>http://127.0.0.1:62017/hub/</code> - http 200</p>
 <img src='hub.png' alt='Hub - the one door'>
 </section>
 <section><h2>Lobby - realtime rooms - <span class='k'>ok</span></h2>
-<p>WebSocket rooms, presence and chat</p><p><code>http://127.0.0.1:59674/lobby/</code> - http 200</p>
+<p>WebSocket rooms, presence and chat</p><p><code>http://127.0.0.1:62016/lobby/</code> - http 200</p>
 <img src='lobby.png' alt='Lobby - realtime rooms'>
 </section>
 <section><h2>City - world read API - <span class='k'>ok</span></h2>
-<p>The silicon-city data the lobby reads</p><p><code>http://127.0.0.1:59672/city/</code> - http 200</p>
+<p>The silicon-city data the lobby reads</p><p><code>http://127.0.0.1:62014/city/</code> - http 200</p>
 <img src='city.png' alt='City - world read API'>
 </section>
 <section><h2>Gate - content console - <span class='k'>ok</span></h2>
-<p>The msgSecCheck-style admission gate</p><p><code>http://127.0.0.1:59673/gate/</code> - http 200</p>
+<p>The msgSecCheck-style admission gate</p><p><code>http://127.0.0.1:62015/gate/</code> - http 200</p>
 <img src='gate.png' alt='Gate - content console'>
 </section>
 <section><h2>UGC - submission console - <span class='k'>ok</span></h2>
-<p>Creator submissions through the gate</p><p><code>http://127.0.0.1:59678/ugc/</code> - http 200</p>
+<p>Creator submissions through the gate</p><p><code>http://127.0.0.1:62020/ugc/</code> - http 200</p>
 <img src='ugc.png' alt='UGC - submission console'>
 </section>
 <section><h2>Ledger - token console - <span class='k'>ok</span></h2>
-<p>The two-form token ledger</p><p><code>http://127.0.0.1:59677/ledger/</code> - http 200</p>
+<p>The two-form token ledger</p><p><code>http://127.0.0.1:62019/ledger/</code> - http 200</p>
 <img src='ledger.png' alt='Ledger - token console'>
 </section>
 <section><h2>Checkout - 19.9 mock - <span class='k'>ok</span></h2>
-<p>The membership purchase demonstrable without a merchant id</p><p><code>http://127.0.0.1:59676/checkout/</code> - http 200</p>
+<p>The membership purchase demonstrable without a merchant id</p><p><code>http://127.0.0.1:62018/checkout/</code> - http 200</p>
 <img src='checkout.png' alt='Checkout - 19.9 mock'>
 </section>
 </body></html>

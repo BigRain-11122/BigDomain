@@ -1,0 +1,32 @@
+R2935 live two-pass proof - tools/ceo_live_shot.py --prove --check
+
+cmd     : python tools/ceo_live_shot.py --prove --check
+rc      : 0
+report  : preview/live-sandbox.json
+faces   : 7   shots_total: 14   photographed: 14   with_errors: 0
+proof   : agreements=7 faces=7 passes=2 disagreed=[] first_ok=True second_ok=True ok=True
+gallery : preview/live-sandbox.html (first pass images + proof banner)
+images  : preview/live/<face>.png (pass 1) and preview/live/<face>-p2.png (pass 2)
+lobby   : pass1 acted=connected,ticket,message ; pass2 acted=connected,ticket,message
+          (one line sent over the real socket in each pass)
+
+what this proves : two frames of the SAME sandbox instance, the second taken
+after the first drove a real lobby session, agree on every face's HTTP status
+and error set. A single-frame claim cannot say that.
+
+what it does NOT prove : that the pages' content is correct or current, that a
+buyer can pay (the checkout face is the mock form, chargeable=false, no
+merchant id / server / domain / filing+ICP / appid+secret), or that the two
+other published faces (panel, member) are up - start_all starts four processes
+and those two launch separately, so the cohort measured here is seven of nine.
+
+defect caught by RUNNING this window : the first --prove run read rc=2 with a
+perfect proof block, because the payload verdict still measured len(rows)
+against len(FACES) while --prove holds two passes (14 rows). Repaired to count
+DISTINCT faces, then the live arm was re-run and read rc=0.
+
+suite red controls (stdlib, qa/live-proof-R2935.log) : status drift refuses with
+both values, restoring the value restores agreement, an extra error refuses
+while a reordered error set does not, a face present in one pass only refuses as
+missing in both directions, and a face drifting in two ways is counted once so
+'agreements + disagreements == faces' stays an identity.
