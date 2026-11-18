@@ -21,6 +21,7 @@ JOB_OBJECT_EXTENDED_LIMIT_INFORMATION_CLASS = 9
 
 PROCESS_TERMINATE = 0x0001
 PROCESS_SET_QUOTA = 0x0100
+PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
 
 
 class JobError(RuntimeError):
@@ -78,6 +79,9 @@ def _kernel32():
     kernel32.OpenProcess.restype = ctypes.c_void_p
     kernel32.OpenProcess.argtypes = [ctypes.c_uint32, ctypes.c_int,
                                      ctypes.c_uint32]
+    kernel32.IsProcessInJob.restype = ctypes.c_int
+    kernel32.IsProcessInJob.argtypes = [ctypes.c_void_p, ctypes.c_void_p,
+                                        ctypes.POINTER(ctypes.c_int)]
     kernel32.CloseHandle.restype = ctypes.c_int
     kernel32.CloseHandle.argtypes = [ctypes.c_void_p]
     return kernel32
@@ -130,3 +134,27 @@ def close(handle):
     """Drop the handle; every process still in the job is terminated."""
     if _K32 is not None and handle:
         _K32.CloseHandle(handle)
+
+
+def is_in_job(handle, pid):
+    """Ask the KERNEL whether that process is inside this job right now.
+
+    Added in R2947 for the grandchild question: a child of a job member joins
+    the same job by inheritance, and that inheritance is a property no report
+    of ours can assert from the outside. IsProcessInJob answers it directly,
+    which is stronger evidence than "the port went quiet after a kill" - the
+    latter correlates, this one names membership. Returns False when the
+    question cannot be asked rather than guessing.
+    """
+    if _K32 is None or not handle:
+        return False
+    proc = _K32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, 0, int(pid))
+    if not proc:
+        return False
+    try:
+        inside = ctypes.c_int(0)
+        if not _K32.IsProcessInJob(proc, handle, ctypes.byref(inside)):
+            return False
+        return bool(inside.value)
+    finally:
+        _K32.CloseHandle(proc)

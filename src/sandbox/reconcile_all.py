@@ -271,7 +271,7 @@ SUITES = [
     # killed hard leaves its children holding sandbox ports - answered by the
     # kernel instead of by a `finally`. AC-KOC1..AC-KOC5 were pinned in
     # src/os/backlog.md BEFORE the job wiring and this suite existed.
-    ("kill-on-close", os.path.join("test_kill_on_close.py"), 5),
+    ("kill-on-close", os.path.join("test_kill_on_close.py"), 6),
     # machine-wide launcher record (R2939): the ownership declaration R2938
     # shipped was ARGV - it travelled from the launcher to its own child and
     # nowhere else - so a second door on the same machine forked the sandbox
@@ -293,7 +293,7 @@ SUITES = [
     # AC-HSG1..AC-HSG5 were pinned in src/os/backlog.md BEFORE this suite,
     # src/sandbox/birth_gate.py and the six entry wires existed; AC-HSG6..8
     # (R2942) moved the gate into the nine shipped starters.
-    ("birth-gate", os.path.join("test_birth_gate.py"), 8),
+    ("birth-gate", os.path.join("test_birth_gate.py"), 10),
     # R2943: birth_gate judges every face that is started through a shipped
     # starter, so a script that builds a server class ITSELF was outside the
     # range with nothing bounding it (R2942 disclosure). src/sandbox/

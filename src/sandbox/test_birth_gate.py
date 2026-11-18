@@ -1,9 +1,18 @@
 """Suite for the birth-site gate that closes R2940's measured hand-start hole.
 
-Eight criteria AC-HSG1..AC-HSG8. AC-HSG1..AC-HSG5 were pre-registered in
+Ten criteria AC-HSG1..AC-HSG10. AC-HSG1..AC-HSG5 were pre-registered in
 src/os/backlog.md BEFORE this file, src/sandbox/birth_gate.py and the six entry
 wires existed; AC-HSG6..AC-HSG8 were pinned in the same board in the R2942
-window before the gate moved into the nine shipped starters.
+window before the gate moved into the nine shipped starters; AC-HSG9 and
+AC-HSG10 were pinned there in R2947 before the trust surface was published.
+
+AC-HSG9 and AC-HSG10 are not defences, they are measurements of the boundary
+R2947 decided: the pid this gate compares against is read from a per-user
+WRITABLE record, so a process that rewrites that record to name its own parent
+is let through - driven here in both directions on the same shipped command.
+What the file cannot do is grant on its own: with no kernel claim held, judge()
+allows whatever the record says, because the gate is the mutex and the record
+is detail.
 
 Nothing here is read off a paragraph. A real holder process takes the kernel
 claim and writes the detail record naming ITSELF, and then the suite starts the
@@ -503,6 +512,105 @@ def main():
         if len(calls) != 1:
             bad.append("factory-calls-%d" % len(calls))
     report("AC-HSG8", bool(bad), ",".join(bad))
+
+    # ---- AC-HSG9: the writable record IS the identity, measured ----------
+    # This arm does not defend the gate, it sizes it: the pid the gate trusts
+    # lives in a per-user writable file, so a process that rewrites that file
+    # to name its own parent is let through. Both directions run here, on the
+    # SAME shipped command in the SAME world, with only that one field moved.
+    bad = []
+    port = free_port()
+    holder = Holder(record, mutex, name="hsg9")
+    if not holder.start():
+        bad.append("holder-never-claimed")
+    holder_pid = None
+    try:
+        original = launcher_registry.read(record) or {}
+        holder_pid = original.get("pid")
+        if not holder_pid:
+            bad.append("holder-record-has-no-pid")
+        # forgery: name THIS process, which is the face's real parent.
+        forged = dict(original)
+        forged["pid"] = os.getpid()
+        launcher_registry.write_serving(record, forged)
+        proc = subprocess.Popen(face_argv(port), stdin=subprocess.DEVNULL,
+                                stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL)
+        try:
+            if not wait_port(port, 40):
+                bad.append("forged-record-did-not-open-the-door")
+        finally:
+            if proc.poll() is None:
+                proc.terminate()
+            try:
+                proc.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+        # red control: put the TRUE holder back; same command, same world.
+        launcher_registry.write_serving(record, original)
+        rc, err = run_face(face_argv(port))
+        if rc != 3:
+            bad.append("true-record-rc-%s" % rc)
+        if birth_gate.REFUSED not in err:
+            bad.append("true-record-code-not-named")
+        if can_connect(port):
+            bad.append("true-record-bound-anyway")
+    finally:
+        holder.stop()
+        if os.path.exists(record):
+            try:
+                os.remove(record)
+            except OSError:
+                pass
+    report("AC-HSG9", bool(bad), ",".join(bad))
+
+    # ---- AC-HSG10: the file alone grants nothing; trust is published -----
+    bad = []
+    private_mutex = "Local\\bigdomain-hsg10-%d" % os.getpid()
+    nowhere = os.path.join(TEMPDIR, "hsg10-record.json")
+    launcher_registry.write_serving(nowhere, {"pid": os.getpid(),
+                                              "state": "starting"})
+    verdict = birth_gate.judge(record_path=nowhere, mutex_name=private_mutex)
+    if not verdict.get("allow"):
+        bad.append("record-alone-refused")
+    if verdict.get("reason") != "no-holder":
+        bad.append("reason-%s" % verdict.get("reason"))
+    if verdict.get("trust") != birth_gate.TRUST_NONE:
+        bad.append("trust-%s" % verdict.get("trust"))
+    # and when the kernel claim IS held, the trust surface says so and the
+    # named refusal carries it into evidence.
+    holder = Holder(record, mutex, name="hsg10")
+    if not holder.start():
+        bad.append("holder-never-claimed")
+    try:
+        held = birth_gate.judge(record_path=record, mutex_name=mutex,
+                                ppid=1)
+        if held.get("trust") != birth_gate.TRUST_RECORD_PID:
+            bad.append("held-trust-%s" % held.get("trust"))
+        if held.get("allow"):
+            bad.append("held-allowed")
+        captured = io.StringIO()
+        try:
+            birth_gate.guard(record_path=record, mutex_name=mutex, stream=captured)
+            bad.append("guard-did-not-exit")
+        except SystemExit as exc:
+            if exc.code != 3:
+                bad.append("guard-exit-%s" % exc.code)
+        if "trust=" not in captured.getvalue():
+            bad.append("refusal-line-hides-trust")
+    finally:
+        holder.stop()
+        if os.path.exists(record):
+            try:
+                os.remove(record)
+            except OSError:
+                pass
+        if os.path.exists(nowhere):
+            try:
+                os.remove(nowhere)
+            except OSError:
+                pass
+    report("AC-HSG10", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

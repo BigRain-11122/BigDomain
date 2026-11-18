@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2945 PRODUCT: the asyncio bind rule stopped being a text match. bind_site_scan now judges WHERE and WHEN the guard sits: an asyncio server site passes only when a statement-level birth_gate.guard(...) in the same body or module sits on a line strictly BEFORE the site line. A guard written after the await was green until this window although the socket already exists by then, and one under 'if False:' was green although it never runs; both are refused now, by name and line.",
+    "current": "2026-11-18 R2947 DECISION+PRODUCT: the question four rounds inherited - 'judge() trusts a pid read out of a per-user WRITABLE record' (R2941/R2943/R2944/R2946 all carried it) - is answered by declaring the record trusted input, and the declaration is carried by a MEASUREMENT instead of a paragraph. birth_gate now publishes the trust surface in every verdict (no-claim, claim-unavailable, record-pid) and every named refusal line ends with trust=, so what the gate rests on is evidence rather than a comment. The reason a secret cannot fix it is written in the leaf: a face has exactly two channels, the record and its own environment, and both are readable and writable by any process running as the same user, so any token the launcher writes into the record can be copied by the attacker at cryptographic gain of zero.",
     "do": "2026-11-18 R2936 PRODUCT: the last two faces the hub publishes stopped reading NOT STARTED. src/sandbox/start_all.py now plans ten ports for eight faces, starts the shipped control panel and membership page as its own children, and hands their MEASURED ports to the lobby on its command line instead of letting the hub advertise built-in 8099/8096 guesses. Live: start_all.py --check rc=0 with all eight faces live; ceo_live_shot.py --prove --check rc=0 faces=9 shots_total=18 with_errors=0 proof{passes:2, agreements:9, disagreed:[]} in 30.4s - nine faces shot twice on one sandbox, no drift.",
     "last_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/bind-site-scan-R2944.log (337B, 2026-11-18)",
-    "latest_evidence": "qa/bind-site-scan-R2944.log (337B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-gate-trust-R2947.log (425B, 2026-11-18)",
+    "latest_evidence": "qa/leg-gate-trust-R2947.log (425B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2946] next window (<=12h): (0) MAIN — this round closed the order/level hole for `asyncio-server`, and the SAME hole is still open one kind over: `ws-serve` is judged by `GUARD_TEXT in text`, i.e. a `birth_gate.guard(` anywhere in the MODULE (any function, after the `serve(...)`, or under `if False:`) passes. Decide and prove: either move ws-serve onto the same statement-order rule (guard statement in the same body, line strictly before the site line, with a red control on a guard after `serve(...)` and a pass when the same call is moved before), or declare module-level scope official with the reason in the same breath. (1) carried from R2941: `judge()` trusts the pid in the record and the record is a per-user writable file — decide whether the launcher writes a secret the face must echo back, or declare the trust official. (2) carried from R2937/R2938 and still undecided: the hard-kill proof covers the launcher's DIRECT children only — decide whether to measure grandchild inheritance or declare it out of scope by name (truncated)",
-    "next_milestone_due": "2026-11-19T04:00:13+08:00",
-    "updated_at": "2026-11-18T16:00:13+08:00"
+    "next_milestone": "[R2948] next window (<=12h): (0) MAIN — the trust question is closed, but the gate now DEPENDS on `os.getppid()` being the honest answer, and nothing bounds what happens when the holder is a MIDDLE process: R2938/R2941 already refuse a grandchild, yet no criterion drives \"launcher -> panel -> face\" on the SHIPPED panel now that panel ownership exists (R2938) and birth_gate publishes trust (R2947). Decide and prove: either a criterion starts the real panel under a real record and reads the grandchild refusal by name, or declare that path out of scope with the reason in the same breath. (1) carried from R2947: `is_in_job` was added for the suite and is not yet used by any shipped code — decide whether the launcher should verify its own members after start (and refuse a face that escaped the job) or declare the suite-only use official (truncated)",
+    "next_milestone_due": "2026-11-19T04:44:47+08:00",
+    "updated_at": "2026-11-18T16:44:47+08:00"
   },
-  "current": "2026-11-18 R2945 PRODUCT: the asyncio bind rule stopped being a text match. bind_site_scan now judges WHERE and WHEN the guard sits: an asyncio server site passes only when a statement-level birth_gate.guard(...) in the same body or module sits on a line strictly BEFORE the site line. A guard written after the await was green until this window although the socket already exists by then, and one under 'if False:' was green although it never runs; both are refused now, by name and line.",
+  "current": "2026-11-18 R2947 DECISION+PRODUCT: the question four rounds inherited - 'judge() trusts a pid read out of a per-user WRITABLE record' (R2941/R2943/R2944/R2946 all carried it) - is answered by declaring the record trusted input, and the declaration is carried by a MEASUREMENT instead of a paragraph. birth_gate now publishes the trust surface in every verdict (no-claim, claim-unavailable, record-pid) and every named refusal line ends with trust=, so what the gate rests on is evidence rather than a comment. The reason a secret cannot fix it is written in the leaf: a face has exactly two channels, the record and its own environment, and both are readable and writable by any process running as the same user, so any token the launcher writes into the record can be copied by the attacker at cryptographic gain of zero.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,12 +41,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2946 PRODUCT: the ws-serve bind rule stopped being a module-wide text match, and the first thing the new rule did was REFUSE the shipped lobby - correctly: lobby/server.py had no guard inside run_server, only one in main(), so any caller reaching that coroutine directly could bind beside a sandbox it does not belong to. ws-serve now uses the same judgement as the asyncio kind (statement-level guard, same body, strictly before the site line), and the shipped door carries its own guard immediately before serve().",
-  "export_ts": "2026-11-18T16:21:11+08:00",
-  "latest_artifact": "qa/bind-scan-R2946.log (546B) + qa/leg-lobby-regress-R2946.log (413B) [2026-11-18 R2946]",
-  "latest_evidence": "qa/bind-site-scan-suite-R2946.log (176B, SUITE PASS 12/12, 2026-11-18)",
-  "next_milestone": "[R2947] next window (<=12h): (0) MAIN - the two bind kinds now share one rule but the gate still trusts a name: judge() reads the pid from a per-user WRITABLE record, and R2943/R2944/R2946 all inherited that trust without deciding it. Decide and prove: either the launcher writes a secret the face must echo back (red control: a rewritten record naming the caller's parent is refused), or declare the trust official in the same breath. (1) the hard-kill proof still covers DIRECT children only. (2) carried: 27 deep shard-6 rows, shard offset/resume, outs unmaintained entries, AC-VAC1..6, AC-LNKF1, the R2778 stand, 18 BOM scripts, tasks.md (ZERO payment capability), Docker absent, OSLoop LogonType=Interactive.",
+  "do": "2026-11-18 R2947 DECISION+PRODUCT: the question four rounds inherited - 'judge() trusts a pid read out of a per-user WRITABLE record' (R2941/R2943/R2944/R2946 all carried it) - is answered by declaring the record trusted input, and the declaration is carried by a MEASUREMENT instead of a paragraph. birth_gate now publishes the trust surface in every verdict (no-claim, claim-unavailable, record-pid) and every named refusal line ends with trust=, so what the gate rests on is evidence rather than a comment. The reason a secret cannot fix it is written in the leaf: a face has exactly two channels, the record and its own environment, and both are readable and writable by any process running as the same user, so any token the launcher writes into the record can be copied by the attacker at cryptographic gain of zero.",
+  "export_ts": "2026-11-18T16:44:47+08:00",
+  "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
+  "latest_evidence": "qa/leg-gate-trust-R2947.log (425B, 2026-11-18)",
+  "next_milestone": "[R2948] next window (<=12h): (0) MAIN — the trust question is closed, but the gate now DEPENDS on `os.getppid()` being the honest answer, and nothing bounds what happens when the holder is a MIDDLE process: R2938/R2941 already refuse a grandchild, yet no criterion drives \"launcher -> panel -> face\" on the SHIPPED panel now that panel ownership exists (R2938) and birth_gate publishes trust (R2947). Decide and prove: either a criterion starts the real panel under a real record and reads the grandchild refusal by name, or declare that path out of scope with the reason in the same breath. (1) carried from R2947: `is_in_job` was added for the suite and is not yet used by any shipped code — decide whether the launcher should verify its own members after start (and refuse a face that escaped the job) or declare the suite-only use official (truncated)",
   "outs": [
+    "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "qa/bind-scan-R2946.log (546B) + qa/bind-site-scan-suite-R2946.log (176B) + qa/leg-lobby-regress-R2946.log (413B) [2026-11-18 R2946]",
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 mtime]",
@@ -163,8 +164,8 @@
   },
   "results": [
     [
-      "2946",
-      "OSLoop exec tick"
+      "2947",
+      "OSLoop 执行 tick"
     ]
   ],
   "results_archive": {
@@ -176,15 +177,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 81,
+    "log_lines_in_window": 68,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 58269
+  "state_bytes": 64952
 }

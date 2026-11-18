@@ -30,6 +30,28 @@ GRANDCHILD (a face started by a launcher-owned panel) is refused - which agrees
 with R2938, where a launcher-owned panel already refuses to start a face it
 does not own.
 
+THE RECORD IS TRUSTED INPUT (official, R2947). Asked four rounds running
+(R2941, R2943, R2944, R2946), decided here rather than carried again: the pid
+this gate compares against is read out of a per-user writable file, so a
+same-user process that rewrites that file to name its own parent is allowed
+through. That is measured, not feared - AC-HSG9 drives both directions.
+
+Why a secret in the record cannot fix it: a face has exactly two channels, the
+record and its own environment, and both are readable and writable by any
+process running as the same user (a plain file, and another process's
+environment block via PROCESS_VM_READ). Any token the launcher writes into the
+record can therefore be copied by the attacker, so a token would turn "edit one
+JSON field" into "read one JSON field and set one environment variable" at
+cryptographic gain of zero. The only identity a face can get from the kernel
+is its own parent pid - and the only statement of WHO holds the sandbox is the
+record. That is the shape of this seam, and it is written here instead of being
+implied closed.
+
+What IS proven, and matters: the record alone grants nothing. With no kernel
+claim held, judge() allows whatever the record says (AC-HSG10), because the
+gate is the mutex and the record is only detail. What the file can do is make
+the gate refuse - never make it allow on its own.
+
 Stdlib only, no shell, no network, no writes.
 """
 
@@ -46,14 +68,20 @@ import launcher_registry  # noqa: E402
 REFUSED = "E_FACE_NOT_LAUNCHED_BY_HOLDER"
 UNIDENTIFIED = "E_FACE_CLAIM_UNIDENTIFIED"
 EXIT_CODE = 3
+# Where the answer came from, published in every verdict so the reliance on a
+# writable record is visible in evidence instead of living in a comment.
+TRUST_NONE = "no-claim"
+TRUST_UNAVAILABLE = "claim-unavailable"
+TRUST_RECORD_PID = "record-pid"
 REASONS_ALLOW = ("claim-unavailable", "no-holder", "parent-holds-claim")
 
 
 def judge(record_path=None, mutex_name=None, ppid=None):
     """May this process become a sandbox face?
 
-    Returns ``{allow, reason, code, ppid, holder_pid, mutex, record_path}``.
-    ``code`` is None when allowed and the refusal code otherwise.
+    Returns ``{allow, reason, code, ppid, holder_pid, mutex, record_path,
+    trust}``. ``code`` is None when allowed and the refusal code otherwise;
+    ``trust`` names what the verdict rests on (see TRUST_* above).
     """
     record_path = record_path or launcher_registry.default_path()
     mutex_name = mutex_name or launcher_mutex.name_for(record_path)
@@ -66,12 +94,15 @@ def judge(record_path=None, mutex_name=None, ppid=None):
         "holder_pid": None,
         "mutex": mutex_name,
         "record_path": record_path,
+        "trust": TRUST_NONE,
     }
     if not launcher_mutex.available():
         verdict["reason"] = "claim-unavailable"
+        verdict["trust"] = TRUST_UNAVAILABLE
         return verdict
     if not launcher_mutex.exists(mutex_name):
         return verdict
+    verdict["trust"] = TRUST_RECORD_PID
     record = launcher_registry.read(record_path) or {}
     holder = record.get("pid")
     verdict["holder_pid"] = holder
@@ -99,10 +130,11 @@ def guard(record_path=None, mutex_name=None, stream=None):
         return verdict
     out = stream or sys.stderr
     out.write(
-        "%s ppid=%d holder=%s mutex=%s record=%s reason=%s\n"
+        "%s ppid=%d holder=%s mutex=%s record=%s reason=%s trust=%s\n"
         % (verdict["code"], verdict["ppid"],
            verdict["holder_pid"] if verdict["holder_pid"] is not None else "-",
-           verdict["mutex"], verdict["record_path"], verdict["reason"]))
+           verdict["mutex"], verdict["record_path"], verdict["reason"],
+           verdict["trust"]))
     out.flush()
     raise SystemExit(EXIT_CODE)
 

@@ -1,7 +1,10 @@
 """Suite for the kill-on-close job object that keeps children off dead ports.
 
-Five criteria AC-KOC1..AC-KOC5, pre-registered in the R2937 backlog row BEFORE
-this file and the job wiring existed (in-window pre-registration, disclosed).
+Six criteria AC-KOC1..AC-KOC6, pre-registered in the R2937 backlog row BEFORE
+this file and the job wiring existed (in-window pre-registration, disclosed);
+AC-KOC6 was pre-registered in the R2947 board row before it existed, and it
+answers the question R2937 disclosed rather than decided - whether the
+guarantee reaches a GRANDCHILD, not only the layer the launcher assigns.
 
 The claim under test is not "the launcher tears down nicely" - AC-STL5 already
 covers that. It is the stronger one R2934 measured the absence of: a launcher
@@ -34,6 +37,81 @@ REGISTRY = os.path.join(HERE, "reconcile_all.py")
 TMP = os.path.join(REPO, "logs", "kill-on-close-suite")
 
 CHECKS = []
+
+# AC-KOC6 scaffolding: two tiny processes, so the job is asked about a
+# GRANDCHILD. Only the middle layer is ever assigned; the layer below it is
+# inside the job because the kernel inherits job membership, which is the claim
+# under test. The middle layer waits for a go file before spawning, so the
+# grandchild can never win a race and be born outside the job.
+KOC6_PARENT = '''import os
+import subprocess
+import sys
+import time
+
+grand_src, port, pidfile, go = sys.argv[1:5]
+while not os.path.exists(go):
+    time.sleep(0.02)
+child = subprocess.Popen([sys.executable, grand_src, port],
+                         stdin=subprocess.DEVNULL,
+                         stdout=subprocess.DEVNULL,
+                         stderr=subprocess.DEVNULL)
+with open(pidfile, "w", encoding="utf-8") as handle:
+    handle.write("%d\\n" % child.pid)
+while True:
+    time.sleep(0.2)
+'''
+
+KOC6_GRAND = '''import socket
+import sys
+import time
+
+server = socket.socket()
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+server.bind(("127.0.0.1", int(sys.argv[1])))
+server.listen(8)
+while True:
+    time.sleep(0.2)
+'''
+
+
+def _write_temp(name, text):
+    if not os.path.isdir(TMP):
+        os.makedirs(TMP)
+    path = os.path.join(TMP, name)
+    with open(path, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(text)
+    return path
+
+
+def _kill_by_port(port):
+    """Last-resort cleanup: kill whatever still LISTENS on that port.
+
+    Two guards, both learned the hard way in this window: only a LISTENING row
+    counts (an ESTABLISHED reshape-time row names a different owner), and this
+    suite never kills itself or its own parent, because a TerminateProcess on
+    self exits silently with rc=1 and looks exactly like a crash.
+    """
+    mine = (os.getpid(), os.getppid())
+    try:
+        out = subprocess.run(
+            ["netstat", "-ano"], stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL, timeout=25).stdout.decode("utf-8",
+                                                                "replace")
+    except (OSError, subprocess.SubprocessError):
+        return
+    for line in out.splitlines():
+        if "LISTENING" not in line or ("127.0.0.1:%d" % int(port)) not in line:
+            continue
+        parts = line.split()
+        if not parts or not parts[-1].isdigit():
+            continue
+        pid = int(parts[-1])
+        if pid in mine:
+            continue
+        try:
+            terminate_pid(pid)
+        except OSError:
+            pass
 
 
 def ok(name, passed, detail=""):
@@ -257,6 +335,103 @@ def main():
     ok("AC-KOC5 exactly one registry row names this suite",
        registry_text.count('"kill-on-close"') == 1,
        "rows=%d" % registry_text.count('"kill-on-close"'))
+
+    # AC-KOC6: the guarantee reaches a GRANDCHILD (R2947 board item (1)).
+    # AC-KOC2 kills the launcher's direct children. Here only the FIRST layer
+    # is ever assigned and the kernel is asked whether the LAYER BELOW it is
+    # inside the same job - membership, not "the port went quiet afterwards",
+    # because a port can also go quiet for reasons that have nothing to do
+    # with this job (measured: the ambient shell reaped an unassigned tree in
+    # 1.6s, so a death-correlation control could not discriminate here).
+    bad = []
+    ports = []
+    for _ in (0, 1):
+        holder_probe = socket.socket()
+        holder_probe.bind(("127.0.0.1", 0))
+        ports.append(holder_probe.getsockname()[1])
+        holder_probe.close()
+    gc_port, out_port = ports
+    parent_src = _write_temp("koc6_parent.py", KOC6_PARENT)
+    grand_src = _write_temp("koc6_grand.py", KOC6_GRAND)
+    pidfile = os.path.join(TMP, "koc6.grand.pid")
+    go = os.path.join(TMP, "koc6.go")
+    for path in (pidfile, go):
+        if os.path.exists(path):
+            os.remove(path)
+    import job_object  # noqa: E402  (path wired above)
+    job = None
+    parent = None
+    outsider = None
+    grand_pid = None
+    try:
+        job = job_object.create()
+        parent = subprocess.Popen(
+            [sys.executable, parent_src, grand_src, str(gc_port), pidfile, go],
+            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL)
+        job_object.assign(job, parent.pid)
+        # the middle layer only spawns the grandchild once it is already in
+        # the job, so inheritance - not a race - decides membership.
+        with open(go, "w", encoding="utf-8") as handle:
+            handle.write("go\n")
+        deadline = time.time() + 40.0
+        while time.time() < deadline:
+            if os.path.exists(pidfile) and can_connect(gc_port):
+                break
+            time.sleep(0.05)
+        if os.path.exists(pidfile):
+            with open(pidfile, encoding="utf-8") as handle:
+                grand_pid = int(handle.read().strip() or 0)
+        if not grand_pid:
+            bad.append("grandchild-never-reported")
+        if not can_connect(gc_port):
+            bad.append("grandchild-never-listened")
+        if not job_object.is_in_job(job, parent.pid):
+            bad.append("assigned-parent-not-in-job")
+        if grand_pid and not job_object.is_in_job(job, grand_pid):
+            bad.append("grandchild-not-in-job")
+        # control: same program, never assigned, must read OUTSIDE the job and
+        # must survive the job being closed - so the probe can say "no".
+        outsider = subprocess.Popen(
+            [sys.executable, grand_src, str(out_port)],
+            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL)
+        deadline = time.time() + 30.0
+        while time.time() < deadline and not can_connect(out_port):
+            time.sleep(0.05)
+        if job_object.is_in_job(job, outsider.pid):
+            bad.append("unassigned-process-read-as-inside")
+        # closing the handle kills every member: the grandchild's port must go
+        # silent while the outsider keeps serving.
+        job_object.close(job)
+        job = None
+        silent = wait_all_silent([gc_port], 20)
+        if silent < 0:
+            bad.append("grandchild-outlived-the-job")
+        else:
+            print("PASS AC-KOC6 the grandchild's port went silent in %ss"
+                  % (silent,))
+        if not can_connect(out_port):
+            bad.append("outsider-was-killed-by-another-jobs-close")
+    finally:
+        if job is not None:
+            job_object.close(job)
+        for victim in (parent, outsider):
+            if victim is not None and victim.poll() is None:
+                victim.kill()
+                try:
+                    victim.wait(timeout=10)
+                except subprocess.TimeoutExpired:
+                    pass
+        if grand_pid:
+            try:
+                terminate_pid(grand_pid)
+            except OSError:
+                pass
+        for port in (gc_port, out_port):
+            _kill_by_port(port)
+    ok("AC-KOC6 a grandchild joins the job the kernel inherits", not bad,
+       ",".join(bad))
 
     total = len(CHECKS)
     acs = set()
