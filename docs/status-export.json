@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-19 R2987 PRODUCT+ENGINEERING: the failure line a person reads survived only as long as the process; it is now a file. `--report-json` (default preview/live-sandbox.json) is written ONLY after a successful shoot, so a refused or broken launch left zero bytes on disk and the only way to look again was to run it again. The obvious fix - write the failure to that same path - was measured and REFUSED: `export_round._pairs` puts that file's on-disk byte count straight onto the CEO latest-artifact line and `tools/deliverable_index.py::newest_artifact()` derives the newest preview artifact from a fresh mtime scan of preview/*.json, so a failure payload there would be named and sized as the newest product while its gallery half still showed a healthy run (measured in a throwaway world: both published numbers moved 126B -> 199B), and the tracked file would sit dirty in git. A json with no sibling html is invisible to both derivers, so `tools/ceo_live_shot.py` now ships `failure_artifact_path()` and `write_failure()` and the failure branch publishes `artifact`: the LAST failure lands at the gitignored tmp/live-sandbox-failed.json, atomically, with the same body the driver prints.",
+    "current": "2026-11-19 R2988 PRODUCT+ENGINEERING: the exit code a shell sees now tells the truth, and the page a person opens now shows its pictures. Two defects were MEASURED this window, not guessed. (1) tools/ceo_live_shot.py documented Exit 2 = at least one face failed to load or raised, and main() ended with a gate that returned 0 unless --check was passed: the probe drove the shipped main() with the photographic layer stubbed against a REAL launcher on a world where all nine faces failed and measured rc=0 with payload ok=False with_errors=9. A caller census found ZERO scripted or scheduled invocations of the driver (the four shell-call hits are the file's own usage lines, the two imports are function-level in suites, BigDomain-OSLoop runs iteration_loop.ps1), so the mapping moved into exit_status(payload) and main returns it unconditionally; --check stays accepted as a compatibility alias and no longer changes anything. (2) The round's own real run answered rc=0 with nine faces and eighteen shots, and the gallery it wrote to preview/live-sandbox.html pointed every img at preview/hub.png because gallery() used a bare basename while the shots live in preview/live/ - a person opening the published page saw empty frames. gallery() now resolves each picture from the page's own directory.",
     "do": "2026-11-19 R2973 PRODUCT+ENGINEERING: the shape R2972 named out of range is now judged. A bare 'import a.b' (no as) binds the PACKAGE, and 'a.b.Name(...)' reaches a repo module's export through a three-part attribute chain. _dotted_chain() spells a Name/Attribute chain; _dotted_bare_imports() records the exact dotted paths a module imports without an alias; _repo_reexport_context() carries that licence set as its fourth element; _server_class_shape() and _class_bases() judge a chain whose receiver spells a licensed path, placed AFTER the receiver-blind http rule so no existing row changes its kind; and _module_carried_classes() follows a module-level 'Maker = a.b.UDPServer' one level up, so the same chain re-exported to a borrowing module resolves.",
-    "last_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
-    "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
+    "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
+    "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-start-all-R2987.log (340B, 2026-11-19)",
-    "latest_evidence": "qa/leg-start-all-R2987.log (340B, 2026-11-19)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/smoke-R2988.log (3490B, 2026-11-19)",
+    "latest_evidence": "qa/smoke-R2988.log (3490B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2988] next window (<=12h): (0) MAIN — 失败面现在**能落盘**（R2987），但**退出码的文档契约与代码不一致**：`tools/ceo_live_shot.py` 文档头写着「Exit: 0 = every face photographed (truncated)",
-    "next_milestone_due": "2026-11-19T18:18:49+08:00",
-    "updated_at": "2026-11-19T06:18:49+08:00"
+    "next_milestone": "[R2989] next window (<=12h): (0) MAIN — 五静扫描的 QA 面有一条**自相矛盾**的判据：`scan_five_still.ps1` 要求 `bench_today=True`（即 `benchmarks_refreshed` 等于当天）才算 PASS，而正典的刷新周期是 **>7 天**才排刷新轮——除刷新日外这一面**永远**红，红着久了就没人再读它。下一轮**先量**：①`bench_today` 这条是谁在什么时候加进脚本的（git log -S）、有没有文档写着「日更 benchmark」；②若本意是「7 天内有刷新」，则把判据改成区间（读 `benchmarks_refreshed` 距今 ≤7 天）并为此写一条判据/自检；③若本意真是日更，则如实记下与 `docs/global-benchmarks.md` 周期律的冲突并上呈，不许两头都宣称。量清后二选一实现，不许改宽到「永远绿」。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder (pid=- measured), the failure artifact is a single slot with no history, and the gallery lists both passes of `--prove` without saying which frame is the current one.",
+    "next_milestone_due": "2026-11-19T18:43:09+08:00",
+    "updated_at": "2026-11-19T06:43:09+08:00"
   },
-  "current": "2026-11-19 R2987 PRODUCT+ENGINEERING: the failure line a person reads survived only as long as the process; it is now a file. `--report-json` (default preview/live-sandbox.json) is written ONLY after a successful shoot, so a refused or broken launch left zero bytes on disk and the only way to look again was to run it again. The obvious fix - write the failure to that same path - was measured and REFUSED: `export_round._pairs` puts that file's on-disk byte count straight onto the CEO latest-artifact line and `tools/deliverable_index.py::newest_artifact()` derives the newest preview artifact from a fresh mtime scan of preview/*.json, so a failure payload there would be named and sized as the newest product while its gallery half still showed a healthy run (measured in a throwaway world: both published numbers moved 126B -> 199B), and the tracked file would sit dirty in git. A json with no sibling html is invisible to both derivers, so `tools/ceo_live_shot.py` now ships `failure_artifact_path()` and `write_failure()` and the failure branch publishes `artifact`: the LAST failure lands at the gitignored tmp/live-sandbox-failed.json, atomically, with the same body the driver prints.",
+  "current": "2026-11-19 R2988 PRODUCT+ENGINEERING: the exit code a shell sees now tells the truth, and the page a person opens now shows its pictures. Two defects were MEASURED this window, not guessed. (1) tools/ceo_live_shot.py documented Exit 2 = at least one face failed to load or raised, and main() ended with a gate that returned 0 unless --check was passed: the probe drove the shipped main() with the photographic layer stubbed against a REAL launcher on a world where all nine faces failed and measured rc=0 with payload ok=False with_errors=9. A caller census found ZERO scripted or scheduled invocations of the driver (the four shell-call hits are the file's own usage lines, the two imports are function-level in suites, BigDomain-OSLoop runs iteration_loop.ps1), so the mapping moved into exit_status(payload) and main returns it unconditionally; --check stays accepted as a compatibility alias and no longer changes anything. (2) The round's own real run answered rc=0 with nine faces and eighteen shots, and the gallery it wrote to preview/live-sandbox.html pointed every img at preview/hub.png because gallery() used a bare basename while the shots live in preview/live/ - a person opening the published page saw empty frames. gallery() now resolves each picture from the page's own directory.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,12 +41,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-19 R2987 PRODUCT+ENGINEERING: the failure line a person reads survived only as long as the process; it is now a file. `--report-json` (default preview/live-sandbox.json) is written ONLY after a successful shoot, so a refused or broken launch left zero bytes on disk and the only way to look again was to run it again. The obvious fix - write the failure to that same path - was measured and REFUSED: `export_round._pairs` puts that file's on-disk byte count straight onto the CEO latest-artifact line and `tools/deliverable_index.py::newest_artifact()` derives the newest preview artifact from a fresh mtime scan of preview/*.json, so a failure payload there would be named and sized as the newest product while its gallery half still showed a healthy run (measured in a throwaway world: both published numbers moved 126B -> 199B), and the tracked file would sit dirty in git. A json with no sibling html is invisible to both derivers, so `tools/ceo_live_shot.py` now ships `failure_artifact_path()` and `write_failure()` and the failure branch publishes `artifact`: the LAST failure lands at the gitignored tmp/live-sandbox-failed.json, atomically, with the same body the driver prints.",
-  "export_ts": "2026-11-19T06:18:49+08:00",
-  "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
-  "latest_evidence": "qa/leg-start-all-R2987.log (340B, 2026-11-19)",
-  "next_milestone": "[R2988] next window (<=12h): (0) MAIN — 失败面现在**能落盘**（R2987），但**退出码的文档契约与代码不一致**：`tools/ceo_live_shot.py` 文档头写着「Exit: 0 = every face photographed (truncated)",
+  "do": "2026-11-19 R2988 PRODUCT+ENGINEERING: the exit code a shell sees now tells the truth, and the page a person opens now shows its pictures. Two defects were MEASURED this window, not guessed. (1) tools/ceo_live_shot.py documented Exit 2 = at least one face failed to load or raised, and main() ended with a gate that returned 0 unless --check was passed: the probe drove the shipped main() with the photographic layer stubbed against a REAL launcher on a world where all nine faces failed and measured rc=0 with payload ok=False with_errors=9. A caller census found ZERO scripted or scheduled invocations of the driver (the four shell-call hits are the file's own usage lines, the two imports are function-level in suites, BigDomain-OSLoop runs iteration_loop.ps1), so the mapping moved into exit_status(payload) and main returns it unconditionally; --check stays accepted as a compatibility alias and no longer changes anything. (2) The round's own real run answered rc=0 with nine faces and eighteen shots, and the gallery it wrote to preview/live-sandbox.html pointed every img at preview/hub.png because gallery() used a bare basename while the shots live in preview/live/ - a person opening the published page saw empty frames. gallery() now resolves each picture from the page's own directory.",
+  "export_ts": "2026-11-19T06:43:09+08:00",
+  "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
+  "latest_evidence": "qa/smoke-R2988.log (3490B, 2026-11-19)",
+  "next_milestone": "[R2989] next window (<=12h): (0) MAIN — 五静扫描的 QA 面有一条**自相矛盾**的判据：`scan_five_still.ps1` 要求 `bench_today=True`（即 `benchmarks_refreshed` 等于当天）才算 PASS，而正典的刷新周期是 **>7 天**才排刷新轮——除刷新日外这一面**永远**红，红着久了就没人再读它。下一轮**先量**：①`bench_today` 这条是谁在什么时候加进脚本的（git log -S）、有没有文档写着「日更 benchmark」；②若本意是「7 天内有刷新」，则把判据改成区间（读 `benchmarks_refreshed` 距今 ≤7 天）并为此写一条判据/自检；③若本意真是日更，则如实记下与 `docs/global-benchmarks.md` 周期律的冲突并上呈，不许两头都宣称。量清后二选一实现，不许改宽到「永远绿」。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder (pid=- measured), the failure artifact is a single slot with no history, and the gallery lists both passes of `--prove` without saying which frame is the current one.",
   "outs": [
+    "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "qa/live-proof-R2984.log (3046B) + AC-LIVE8 six arms [2026-11-19 R2984]",
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
@@ -166,7 +167,7 @@
   },
   "results": [
     [
-      "2987",
+      "2988",
       "OSLoop 执行 tick"
     ]
   ],
@@ -179,15 +180,15 @@
   "self_drive": {
     "window": "2026-11-13..2026-11-19",
     "window_days": 7,
-    "log_lines_in_window": 30,
+    "log_lines_in_window": 36,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 36331
+  "state_bytes": 44046
 }

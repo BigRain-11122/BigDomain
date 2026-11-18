@@ -1,0 +1,58 @@
+  | PASS AC-LIVE1 identical passes produce zero disagreements disagreements=[]
+  | PASS AC-LIVE1 the report identity holds on an agreeing world faces=7
+  | PASS AC-LIVE1 a doubly-drifting face yields exactly ONE row rows=1 faces=['gate']
+  | PASS AC-LIVE1 agreements + disagreements == faces on a drifting world agreements=6
+  | PASS AC-LIVE2 status drift refuses with kind=status rows=[{'face': 'lobby', 'kind': 'status', 'first': 200, 'second': 404}]
+  | PASS AC-LIVE2 the refusal names the face and both values row=[{'face': 'lobby', 'kind': 'status', 'first': 200, 'second': 404}]
+  | PASS AC-LIVE2 restoring the value restores agreement (red is the drift) restored=0
+  | PASS AC-LIVE3 the same errors in another order still agree rows=[]
+  | PASS AC-LIVE3 one extra error is drift, kind=errors rows=[{'face': 'gate', 'kind': 'errors', 'first': ['e1: a', 'e2: b'], 'second': ['e1: a', 'e2: b', 'e3: c']}]
+  | PASS AC-LIVE4 a face present in one pass only refuses as missing rows=[{'face': 'checkout', 'kind': 'missing', 'first': 'present', 'second': 'absent'}]
+  | PASS AC-LIVE4 missing is symmetric (the other direction also fires) rows=[{'face': 'checkout', 'kind': 'missing', 'first': 'absent', 'second': 'present'}]
+  | PASS AC-LIVE5 ceo_live_shot imports under stdlib (no top-level playwright) hits=[]
+  | PASS AC-LIVE5 the scanner REFUSES a top-level playwright import probe_hits=1
+  | PASS AC-LIVE5 compare_runs touches no disk and no browser pure=1
+  | PASS AC-LIVE5 the second pass writes <face>-p2.png, not over pass one pass_naming=1
+  | SKIP arm=live_two_pass_prove reason=live two-pass arm is on-demand by board decision (registry law)
+  | PASS AC-LIVE6 the shooter names hub plus every planned face shooter=9 planned=8 missing=[] extra=[]
+  | PASS AC-LIVE6 every shooter face is named exactly once dupes=0
+  | PASS AC-LIVE6 the hub really serves every planned face unserved=[]
+  | PASS AC-LIVE6 the hub publishes no face it was not handed a port for bare_panel=None bare_member=None
+  | PASS AC-LIVE7 a collided record names both keys, not a boolean read=((7000, ('city', 'ws')),)
+  | PASS AC-LIVE7 a healthy record reads empty read=()
+  | PASS AC-LIVE7 a missing or unreadable record answers empty, never raises absent=() broken=()
+  | PASS AC-LIVE7 order is not identity and a bad port is skipped, not fatal read=((7001, ('ugc', 'web')), (7002, ('gate',)))
+  | PASS AC-LIVE7 the shipped failure branch reads the merged collision field wired=1
+  | PASS AC-LIVE8 a report that arrived names the collision with the record gone read=((7000, ('city', 'ws')),)
+  | PASS AC-LIVE8 a record alone still names it (the R2983 face is not lost) read=((7000, ('city', 'ws')),)
+  | PASS AC-LIVE8 both survivors name one collision exactly once read=((7000, ('city', 'ws')),)
+  | PASS AC-LIVE8 healthy, empty or absent answers empty empty=1
+  | PASS AC-LIVE8 a malformed report row is skipped, not fatal skipped=1
+  | PASS AC-LIVE8 the merged reader really calls the record reader wired=1
+  | PASS AC-LIVE9 a refused launch does not inherit the holder record read=()
+  | PASS AC-LIVE9 a report that never arrives still reads the record read=((7000, ('city', 'ws')),)
+  | PASS AC-LIVE9 a report silent about its record still merges (no break) read=((7000, ('city', 'ws')),)
+  | PASS AC-LIVE10 a kernel-claim refusal names its door seen={'code': 'E_LAUNCHER_ALREADY_RUNNING', 'door': 'kernel-mutex', 'source': 'mutex', 'reason': None, 'detail': 'E_LAUNCHER_ALREADY_RUNNING source=mutex pid=- name=Local\\BigDomainSandboxLauncher'}
+  | PASS AC-LIVE10 a record refusal names its door and reason seen={'code': 'E_LAUNCHER_ALREADY_RUNNING', 'door': 'machine-record', 'source': None, 'reason': 'still-starting', 'detail': 'E_LAUNCHER_ALREADY_RUNNING pid=4242 hub_url=- reason=still-starting'}
+  | PASS AC-LIVE10 a real failure is NOT renamed a refusal seen=None
+  | PASS AC-LIVE10 an absent or malformed report answers None without raising none=4
+  | PASS AC-LIVE10 a REAL refusal reads its door through the shipped reader read={'code': 'E_LAUNCHER_ALREADY_RUNNING', 'door': 'kernel-mutex', 'source': 'mutex', 'reason': None, 'detail': 'E_LAUNCHER_ALREADY_RUNNING source=mutex pid=- name=Local\\BigDomainSandboxLauncher-v1-397910b40cb5f64b'} rc=2
+  | PASS AC-LIVE10 the shipped failure branch publishes the refusal key wired=1
+  | PASS AC-LIVE11 the failure artifact lives in the scratch dir, not preview/ place=tmp/live-sandbox-failed.json
+  | PASS AC-LIVE11 a refusal lands on disk with its door named keys=['ok', 'record_collisions', 'refusal', 'report', 'why'] door=kernel-mutex
+  | PASS AC-LIVE11 a real failure is NOT written down as a refusal refusal=None
+  | PASS AC-LIVE11 a collision survives onto the failure artifact rows=[[7000, ['city', 'ws']]]
+  | PASS AC-LIVE11 a target it cannot write answers None without raising none=1
+  | PASS AC-LIVE11 the shipped failure branch writes the artifact before exit wired=1
+  | PASS AC-LIVE12 the mapping matches the documented contract ok=0 faces=2 doc=1
+  | PASS AC-LIVE12 a missing or shapeless payload never reads as success none=2 empty=2 falsy=2
+  | PASS AC-LIVE12 the flag gate is gone from the shipped main gate=False
+  | PASS AC-LIVE12 the shipped main returns the mapped code maps=True
+  | PASS AC-LIVE12 --check is still accepted as a compatibility alias compat=1
+  | PASS AC-LIVE12 exit_status is pure (no disk, no browser, no subprocess) pure=1
+  | PASS AC-LIVE13 the reference is resolved from the page directory srcs=['../../../../../Desktop/FluxGroup/domain/BigDomain/preview/live/hub.png']
+  | PASS AC-LIVE13 every referenced picture really exists where it points resolved=['C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live\\hub.png']
+  | PASS AC-LIVE13 no backslash reaches the html srcs=['../../../../../Desktop/FluxGroup/domain/BigDomain/preview/live/hub.png']
+  | PASS AC-LIVE13 a row without a picture emits no img and does not raise imgs=1
+suite: 55 assertions over 13 criteria
+SUITE PASS 55/55

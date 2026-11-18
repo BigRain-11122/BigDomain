@@ -21,9 +21,10 @@ PINNED BEFORE THE CODE: AC-LIVE1..AC-LIVE5 were written into src/os/backlog.md
 earlier in this same window, BEFORE compare_runs existed - in-window
 pre-registration, disclosed as such. AC-LIVE6 was pinned in the R2936 board row
 BEFORE the shooter grew its last two faces, and it derives its coverage from
-the launcher and hub modules instead of counting a typed list. Source
-discipline: pure ASCII, stdlib only, no clock, no network, writes nothing into
-qa/.
+the launcher and hub modules instead of counting a typed list. AC-LIVE12 was
+pinned in the R2988 board row BEFORE exit_status existed (in-window
+pre-registration, disclosed). Source discipline: pure ASCII, stdlib only, no
+clock, no network, writes nothing into qa/.
 """
 import os
 import sys
@@ -458,6 +459,87 @@ def main():
     for path in (refused_path, failed_path, collided_path):
         if os.path.exists(path):
             os.remove(path)
+
+    # AC-LIVE12 (R2988): the docstring promised "2 = at least one face failed
+    # to load or raised", and main() ended with `return code if args.check
+    # else 0` - so a person running this to CHECK the sandbox got the exit code
+    # of a green run. The probe drove the shipped main() with the photographic
+    # layer stubbed against a real launcher on a world where every face failed
+    # and measured rc=0 with payload ok=False with_errors=9; the census found
+    # zero scripted callers, so making the code truthful by default breaks
+    # nobody. Pinned: the mapping, the honest direction on a shapeless
+    # payload, the gate's absence, and the shipped main() wiring.
+    main_src = inspect.getsource(LS.main)
+    ok('AC-LIVE12 the mapping matches the documented contract',
+       LS.EXIT_OK == 0 and LS.EXIT_FACES == 2
+       and '2 = at least one face failed' in (LS.__doc__ or '')
+       and LS.exit_status({'ok': True}) == 0
+       and LS.exit_status({'ok': False, 'with_errors': 3}) == 2,
+       'ok=%s faces=%s doc=1' % (LS.exit_status({'ok': True}),
+                                 LS.exit_status({'ok': False})))
+    ok('AC-LIVE12 a missing or shapeless payload never reads as success',
+       LS.exit_status(None) == 2 and LS.exit_status({}) == 2
+       and LS.exit_status({'ok': 0}) == 2,
+       'none=%s empty=%s falsy=%s' % (LS.exit_status(None), LS.exit_status({}),
+                                      LS.exit_status({'ok': 0})))
+    # The gate would live in main()'s return, so the absence is judged there:
+    # the module docstring may quote the old line as history without this arm
+    # reading red over a quotation.
+    ok('AC-LIVE12 the flag gate is gone from the shipped main',
+       'args.check else' not in main_src, 'gate=%s'
+       % ('args.check else' in main_src))
+    ok('AC-LIVE12 the shipped main returns the mapped code',
+       main_src.rstrip().endswith('return code')
+       and 'exit_status(payload)' in main_src,
+       'maps=%s' % ('exit_status(payload)' in main_src))
+    ok('AC-LIVE12 --check is still accepted as a compatibility alias',
+       '"--check"' in shot_src and 'compatibility' in shot_src,
+       'compat=1')
+    exit_src = inspect.getsource(LS.exit_status)
+    ok('AC-LIVE12 exit_status is pure (no disk, no browser, no subprocess)',
+       not any(word in exit_src for word in
+               ('open(', 'subprocess', 'sync_playwright', 'os.remove')),
+       'pure=1')
+
+    # AC-LIVE13 (R2988 second pin): the round's OWN real run answered rc=0 with
+    # eighteen shots, and the page a person opens showed nine empty frames -
+    # the gallery lives in preview/ while the shots live in preview/live/, so
+    # a bare basename pointed every <img> at preview/hub.png
+    # (measured: no such file). Pinned: the reference must RESOLVE from the
+    # page's own directory, and that is graded by touching a real file.
+    import re as _re
+    lane = tempfile.mkdtemp(prefix='live13-')
+    page_dir = os.path.join(lane, 'preview')
+    shots_dir = os.path.join(page_dir, 'live')
+    os.makedirs(shots_dir)
+    png_abs = os.path.join(shots_dir, 'hub.png')
+    with open(png_abs, 'wb') as handle:
+        handle.write(b'\x89PNG\r\n\x1a\n fake but present')
+    def lane_row(face, png, okflag=True, why=''):
+        base = row(face, okflag=okflag)
+        base.update({'title': face, 'blurb': 'blurb', 'url': 'u',
+                     'why': why, 'png': png})
+        return base
+
+    lane_rows = [lane_row('hub', os.path.join('preview', 'live', 'hub.png')),
+                 lane_row('lobby', None, okflag=False, why='no picture')]
+    page_path = os.path.join(page_dir, 'live-sandbox.html')
+    LS.gallery(lane_rows, {'ok': True}, page_path)
+    with open(page_path, 'r', encoding='utf-8') as handle:
+        html = handle.read()
+    srcs = _re.findall(r"<img src='([^']+)'", html)
+    want = os.path.abspath(os.path.join(ROOT, 'preview', 'live', 'hub.png'))
+    resolved = [os.path.normpath(os.path.join(page_dir, src)) for src in srcs]
+    ok('AC-LIVE13 the reference is resolved from the page directory',
+       srcs != ['hub.png'] and resolved == [want],
+       'srcs=%s' % (srcs,))
+    ok('AC-LIVE13 every referenced picture really exists where it points',
+       bool(srcs) and all(os.path.exists(path) for path in resolved),
+       'resolved=%s' % resolved)
+    ok('AC-LIVE13 no backslash reaches the html',
+       '\\' not in ''.join(srcs), 'srcs=%s' % (srcs,))
+    ok('AC-LIVE13 a row without a picture emits no img and does not raise',
+       len(srcs) == 1 and 'no picture' in html, 'imgs=%d' % len(srcs))
 
     total = len(CHECKS)
     acs = set()

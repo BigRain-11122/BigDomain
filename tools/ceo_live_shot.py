@@ -29,10 +29,11 @@ byte count the CEO latest-artifact line quotes (measured at R2987).
 
 Usage:
   python tools/ceo_live_shot.py                  # shoot into preview/live/
-  python tools/ceo_live_shot.py --check          # shoot, then exit non-zero on
-                                                 # any face that raised an error
   python tools/ceo_live_shot.py --prove          # two passes, refuse on drift
   python tools/ceo_live_shot.py --browser chromium
+  python tools/ceo_live_shot.py --check          # accepted for compatibility
+                                                 # only; a failing face already
+                                                 # exits 2 without it
 Exit: 0 = every face photographed; 2 = at least one face failed to load or
 raised an uncaught error, or the two --prove passes disagreed; 3 = the sandbox
 never came up.
@@ -157,6 +158,29 @@ def published_collisions(record_path, report):
 
 
 REFUSAL_CODE = "E_LAUNCHER_ALREADY_RUNNING"
+
+
+EXIT_OK = 0
+EXIT_FACES = 2
+
+
+def exit_status(payload):
+    """The code this run must leave behind, read from the payload alone.
+
+    R2988 measured the defect: the module docstring promised "2 = at least one
+    face failed to load or raised", but main() ended with
+    `return code if args.check else 0`, so a person running this to CHECK the
+    sandbox got the same exit code as a green run. The probe drove the shipped
+    main() with the photographic layer stubbed against a real launcher on a
+    world where every face failed and measured rc=0 with payload
+    ok=False with_errors=9. A missing or shapeless payload answers 2 as well:
+    the only value that may mean "everything photographed" is an explicit
+    truthy `ok`, never the absence of a verdict.
+
+    Kept as a function so the contract is something a suite can grade instead
+    of a sentence in a docstring.
+    """
+    return EXIT_OK if (payload or {}).get("ok") else EXIT_FACES
 
 
 def refusal_of(report):
@@ -535,8 +559,14 @@ def gallery(rows, report, path, proof=None):
         if row["why"]:
             parts.append("<p class='bad'>%s</p>" % row["why"])
         if row["png"]:
+            # R2988: the gallery sits in preview/ while the shots live in
+            # preview/live/, so a bare basename pointed every <img> at a file
+            # that does not exist (measured on the round's own real run: nine
+            # empty frames). Resolve from the page's own directory instead.
+            src = os.path.relpath(os.path.join(REPO, row["png"]),
+                                  os.path.dirname(path))
             parts.append("<img src='%s' alt='%s'>"
-                         % (os.path.basename(row["png"]), row["title"]))
+                         % (src.replace("\\", "/"), row["title"]))
         if row["errors"]:
             parts.append("<ul>" + "".join("<li>%s</li>" % e
                                           for e in row["errors"]) + "</ul>")
@@ -552,7 +582,9 @@ def main(argv=None):
     parser = argparse.ArgumentParser(
         description="photograph every live sandbox face and build a gallery")
     parser.add_argument("--check", action="store_true",
-                        help="exit 2 when any face failed to load or raised")
+                        help="accepted for compatibility only: a face that "
+                             "failed to load or raised already exits 2 "
+                             "without this flag")
     parser.add_argument("--prove", action="store_true",
                         help="shoot every face twice on the same sandbox and "
                              "refuse when the two passes disagree")
@@ -663,7 +695,10 @@ def main(argv=None):
             handle.write("\n")
         os.replace(tmp, args.report_json)
         print(json.dumps(payload, ensure_ascii=False, sort_keys=True))
-        code = 0 if payload["ok"] else 2
+        # R2988: the face verdict now reaches the exit code without a flag.
+        # `args.check` is still parsed so old command lines keep working, but
+        # it no longer decides whether a failure is told or swallowed.
+        code = exit_status(payload)
     finally:
         open(stop_path, "w", encoding="utf-8").close()
         deadline = time.time() + 15.0
@@ -677,7 +712,7 @@ def main(argv=None):
                     os.remove(path)
                 except OSError:
                     pass
-    return code if args.check else 0
+    return code
 
 
 if __name__ == "__main__":

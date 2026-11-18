@@ -7487,7 +7487,7 @@ SUITES = [
     # lands in the gitignored scratch file instead of the published product
     # path, whose byte count the CEO latest-artifact line quotes.
     ("os-live-proof",
-     os.path.join("..", "os", "test_live_proof.py"), 11),
+     os.path.join("..", "os", "test_live_proof.py"), 13),
     ]
 
 FAILS = 0
