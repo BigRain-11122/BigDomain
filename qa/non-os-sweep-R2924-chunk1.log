@@ -1,0 +1,92 @@
+SHARD scope=SHARD registry_suites=718 registry_criteria=5680 selected=80 selected_criteria=659 cap=600s leg_cap=0s overrides=1 exact=80 state=COMPLETE
+SHARD row fingerprint-regen rc=0 pass=16 fail=0 detail=yes suite=PASS 16/16 crit=16 3.1s
+SHARD row reconcile-daily-sentinel rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row suite-matrix-discovery rc=0 pass=16 fail=0 detail=yes suite=PASS 16/16 crit=16 1.7s
+SHARD row runner-profile-daily rc=0 pass=12 fail=0 detail=yes suite=PASS 12/12 crit=12 0.1s
+SHARD row reconcile-daily-profile rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row reconcile-daily-census rc=2 pass=7 fail=1 detail=yes suite=FAIL 7/8 crit=8 4.7s
+SHARD detail reconcile-daily-census PASS cd1-missing-baseline-info zero-subproc+INFO+not-gating exit=0
+SHARD detail reconcile-daily-census PASS cd2-argv-wiring src/os-path+--check/--dir+cwd=BASE +section+elapsed-tail exit=0
+SHARD detail reconcile-daily-census PASS cd3-aggregate-census-drift (0,0,2)->exit=2 FAIL
+SHARD detail reconcile-daily-census PASS cd4-aggregate-runner-fail (3,0,2)->exit=3 census kept
+SHARD detail reconcile-daily-census PASS cd5-sentinel-precedence (0,2,0)->exit=2 census still logged
+SHARD detail reconcile-daily-census PASS cd6-refusal-fail (0,0,3)->exit=3 refusal FAIL
+SHARD detail reconcile-daily-census FAIL cd7-live-real-tree exit=2 label=drift(exit=2) DRIFT-CLEAN (closed daily evidence untouched)
+SHARD detail reconcile-daily-census PASS cd8-hygiene ascii=True net-imports=0 shipped-clean=True
+SHARD detail reconcile-daily-census SUITE FAIL 7/8
+SHARD row ledger-showcase rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-curation rc=0 pass=24 fail=0 detail=yes suite=PASS 24/24 crit=24 0.4s
+SHARD row ledger-curation-hotpersist rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.6s
+SHARD row ledger-curation-coldpersist rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row ledger-curation-combined rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-curation-combinedpersist rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row ledger-curation-combinedboundary rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.4s
+SHARD row ledger-curation-combinedmonth rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-curation-regpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-civicpoints rc=0 pass=20 fail=0 detail=yes suite=PASS 20/20 crit=20 0.2s
+SHARD row ledger-honorcert rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.8s
+SHARD row ledger-honorcert-yearbook rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-civicpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.1s
+SHARD row ledger-devshare rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-apimarket rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-datasub rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-proposal rc=0 pass=12 fail=0 detail=yes suite=PASS 12/12 crit=12 0.3s
+SHARD row ledger-proposal-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-incentive-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-eventtickets rc=0 pass=14 fail=0 detail=yes suite=PASS 14/14 crit=14 0.2s
+SHARD row ledger-eventtickets-boardwin rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-eventtickets-boardlimit rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-eventtickets-roll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-eventtickets-telescope rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row ledger-freetrial rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-freetrial-funnel rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-freetrial-funnelwin rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row ledger-freetrial-callmonth rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-freetrial-callkind rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.2s
+SHARD row ledger-freetrial-callplan rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-freetrial-callengine rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.2s
+SHARD row ledger-freetrial-callaccount rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-freetrial-capusage rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.4s
+SHARD row ledger-freetrial-caplimit rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-freetrial-caproll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-freetrial-callroll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-freetrial-funnelroll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-freetrial-funnelcap rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-freetrial-funnelpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-freetrial-cappersist rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.2s
+SHARD row ledger-freetrial-fivepersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ugc-pool-water rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ugc-pool-delta rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ugc-ingest-waterwire rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.4s
+SHARD row ugc-batch-water rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.3s
+SHARD row ugc-drain-water rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.3s
+SHARD row ugc-submit-water rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ugc-verdict-water rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ugc-water-journal rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 1.1s
+SHARD row ugc-water-kindtally rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ugc-water-monthlyflow rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ugc-water-journalwin rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ugc-water-journalcap rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ugc-water-celltotals rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row member-expiring-dist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-apidev-lineage rc=0 pass=22 fail=0 detail=yes suite=PASS 22/22 crit=22 0.2s
+SHARD row ledger-apidev-chainusage rc=0 pass=14 fail=0 detail=yes suite=PASS 14/14 crit=14 0.4s
+SHARD row ledger-apidev-devboard-roll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-apidev-devboard-limit rc=0 pass=14 fail=0 detail=yes suite=PASS 14/14 crit=14 0.3s
+SHARD row ledger-apidev-devboard-ancestry rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-apidev-keyviewwin rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ugc-water-journalroll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.1s
+SHARD row ugc-sec-batch-rowsroll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-apidev-lineagepersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-apidev-chainusagepersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-apidev-devboardpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row ledger-eventtickets-boardpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-eventtickets-sessionpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row member-expiring-soon-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.6s
+SHARD row ledger-apidev-usagelogpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ugc-water-journalboardpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ugc-water-sisterpersist rc=0 pass=12 fail=0 detail=yes suite=PASS 12/12 crit=12 0.2s
+SHARD row ledger-apidev-keyviewpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-apidev-rejecttallpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD rc=2 scope=SHARD selected=80 executed=80 green=79 criteria=659 crit_mismatch=0 elapsed=32.5s crit_checked=80
+SHARD red reconcile-daily-census:rc=2
