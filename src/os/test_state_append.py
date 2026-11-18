@@ -12,7 +12,9 @@ is now the single vehicle and this suite pins its laws:
   - a duplicate line is refused, not doubled;
   - the payload moves exactly one log line and the tick, nothing else;
   - the tick never goes backwards;
-  - a refusal leaves no temp file behind.
+  - a refusal leaves no temp file behind;
+  - a document the FOLD reader cannot read is refused before the write, and
+    the question is asked of that reader rather than of a constant (R2915).
 
 Stdlib only, ASCII source, zero network, no clock. Exit 0 = all green.
 """
@@ -31,9 +33,10 @@ SRC = os.path.dirname(BASE)
 sys.path.insert(0, BASE)
 
 import state_append as SA  # noqa: E402
+import logs_toolkit as LT  # noqa: E402
 import state_io  # noqa: E402
 
-EXPECTED_CRITERIA = 7
+EXPECTED_CRITERIA = 10
 MODULE = os.path.join(BASE, "state_append.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-append"
@@ -232,6 +235,120 @@ def ac_rsa6():
           "state.json, with no .state_append_ temp file")
 
 
+def append_at_indent(path, round_no, line, indent):
+    """Append while the canonical writer is driven to another item indent."""
+    saved = state_io.ITEM_INDENT
+    state_io.ITEM_INDENT = indent
+    try:
+        return run_cli(["--state", path, "--round", str(round_no),
+                        "--tick", "--line", line])
+    finally:
+        state_io.ITEM_INDENT = saved
+
+
+def read_text(path):
+    with io.open(path, "rb") as handle:
+        return handle.read().decode("utf-8")
+
+
+def caliber_of(text):
+    """Return the log-item caliber the FOLD reader derives, or None."""
+    log = state_io.parse(text)["log"]
+    layout = LT.split_ps_layout(text, len(log))
+    return None if layout is None else layout[4]
+
+
+def would_be_text(path, extra_line, indent):
+    """The document the writer would emit at this indent, rebuilt its way."""
+    saved = state_io.ITEM_INDENT
+    state_io.ITEM_INDENT = indent
+    try:
+        data = state_io.parse(read_text(path))
+        data["log"] = list(data["log"]) + [extra_line]
+        return state_io.dump_canon(data)
+    finally:
+        state_io.ITEM_INDENT = saved
+
+
+def ac_rsa8():
+    """AC-RSA8: the fold-unreadable shape is refused BEFORE the write."""
+    folder, path = world(["2026-11-16 R9001 PRODUCT: a dated older round"])
+    line = "2026-11-16 R9002 PRODUCT: the four-space shape"
+    try:
+        before = fingerprint(path)
+        names_before = sorted(os.listdir(folder))
+        code, out, _ = append_at_indent(path, 9002, line, 4)
+        after = fingerprint(path)
+        names_after = sorted(os.listdir(folder))
+        ok = (code == 2 and "E_RSA_LAYOUT" in out and before == after
+              and names_before == names_after and "fix-indent" in out)
+        if not ok:
+            print("  measured: code=%r out=%r same=%r leftovers=%r"
+                  % (code, out.strip()[:160], before == after, names_after),
+                  flush=True)
+    finally:
+        cleanup(folder)
+    check(ok, "AC-RSA8 an append that would write 4-space log items reads "
+          "E_RSA_LAYOUT with rc=2, zero bytes moved, no temp file, and the "
+          "hint names the shipped repair")
+
+
+def ac_rsa9():
+    """AC-RSA9: both healthy calibers are written AND labelled right."""
+    rows = []
+    for indent in (2, 16):
+        folder, path = world(["2026-11-16 R9001 PRODUCT: a dated older round"])
+        try:
+            code, out, _ = append_at_indent(
+                path, 9002,
+                "2026-11-16 R9002 PRODUCT: written at %d" % indent, indent)
+            text = read_text(path)
+            profile = LT.eol_profile(text.encode("utf-8"))
+            rows.append((indent, code, caliber_of(text),
+                         profile["indent_ok"]))
+        finally:
+            cleanup(folder)
+    ok = all(code == 0 and caliber == indent and indent_ok
+             for indent, code, caliber, indent_ok in rows)
+    if not ok:
+        print("  measured: rows=%r" % (rows,), flush=True)
+    check(ok, "AC-RSA9 the shipped 2-space and a 16-space write both land, "
+          "each labelled by the fold reader at its own caliber and read "
+          "indent_ok by eol_profile")
+
+
+def ac_rsa10():
+    """AC-RSA10: the refusal is the fold's verdict, not a second opinion."""
+    rows = []
+    for indent in (4, 8):
+        folder, path = world(["2026-11-16 R9001 PRODUCT: a dated older round"])
+        line = "2026-11-16 R9002 PRODUCT: probe at %d" % indent
+        try:
+            code, out, _ = append_at_indent(path, 9002, line, indent)
+            probe = would_be_text(path, line, indent)
+            profile = LT.eol_profile(probe.encode("utf-8"))
+            rows.append((indent, code, "E_RSA_LAYOUT" in out,
+                         profile["indent_ok"], caliber_of(probe)))
+        finally:
+            cleanup(folder)
+    folder, path = world(["2026-11-16 R9001 PRODUCT: a dated older round"])
+    try:
+        code, out, _ = run_cli(["--state", path, "--round", "9002", "--tick",
+                                "--line", "2026-11-16 R9002 PRODUCT: canon"])
+        health = (code, LT.eol_profile(read_text(path).encode("utf-8"))
+                  ["indent_ok"])
+    finally:
+        cleanup(folder)
+    refused = all(code == 2 and named and not indent_ok and caliber is None
+                  for _, code, named, indent_ok, caliber in rows)
+    ok = refused and health == (0, True)
+    if not ok:
+        print("  measured: rows=%r health=%r" % (rows, health), flush=True)
+    check(ok, "AC-RSA10 eol_profile reads indent_ok=False with no caliber on "
+          "the very 4-space and 8-space documents state_append refuses, and "
+          "indent_ok=True on the canonical one it writes")
+
+
 def ac_rsa7():
     """AC-RSA7: registered with this exact criteria count."""
     runner_text = io.open(RUNNER, encoding="utf-8").read()
@@ -258,6 +375,9 @@ def main():
     ac_rsa4()
     ac_rsa5()
     ac_rsa6()
+    ac_rsa8()
+    ac_rsa9()
+    ac_rsa10()
     ac_rsa7()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)

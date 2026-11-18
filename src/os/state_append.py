@@ -47,11 +47,13 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 import ledger_lines  # noqa: E402
+import logs_toolkit  # noqa: E402
 import state_io  # noqa: E402
 
 STATE = os.path.join(HERE, "state.json")
 FOLD_WATERLINE = 78500
 TOKENS_FMT = "R%d tokens: %s"
+FOLD_HINT = ("hint: python src/os/logs_toolkit.py eol --fix-indent --execute")
 
 
 def _digest(raw):
@@ -128,6 +130,24 @@ def _settle_tick(data, args):
     return want, None
 
 
+def _layout_refusal(text, log_len):
+    """Ask the FOLD's own reader about the document about to be written (R2915).
+
+    Why: the R2913 closeout left 4-space log items - the shape a bare
+    json.dump(indent=2) produces - and the next window had to repair the
+    file through `eol --fix-indent --execute` before it could fold. A
+    layout a fold cannot read must be refused HERE, on the text that
+    would have been written, instead of being discovered a round later.
+    The question is asked of logs_toolkit.split_ps_layout, i.e. the very
+    reader the fold uses, so the two modules cannot drift apart.
+    """
+    if logs_toolkit.split_ps_layout(text, log_len) is None:
+        return _refuse("E_RSA_LAYOUT", 2,
+                       "the fold reader cannot read the document this append "
+                       "would write (%s)" % FOLD_HINT)
+    return None
+
+
 def run(args):
     try:
         raw_before = state_io.read_raw(args.state)
@@ -162,6 +182,12 @@ def run(args):
     data["log"] = new_lines
     data["tick"] = new_tick
     new_text = state_io.dump_canon(data)
+
+    # The layout gate runs on the FINISHED text and before any byte lands,
+    # so a writer that drifts off a readable caliber costs the tree nothing.
+    refusal = _layout_refusal(new_text, len(new_lines))
+    if refusal is not None:
+        return refusal
 
     # Payload proof: exactly the appended lines and the tick can differ.
     try:

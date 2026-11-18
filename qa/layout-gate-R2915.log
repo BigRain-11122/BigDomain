@@ -1,0 +1,19 @@
+== suite os-state-append rc=0
+   PASS AC-RSA10 eol_profile reads indent_ok=False with no caliber on the very 4-space and 8-space documents state_append refuses, and indent_ok=True on the canonical one it writes
+   PASS AC-RSA7 the registry declares this suite at 10 criteria
+   SUITE PASS 10/10
+
+== suite os-state-io rc=0
+   PASS AC-SIO7 CLI codes 0/2/3, pinned --json keys, second fix no-op
+   PASS AC-SIO8 ASCII, stdlib-only, offline, wired as os-state-io
+   SUITE PASS 8/8 criteria=8
+
+== suite os-state-fold rc=0
+   PASS AC-SF5 plan idempotent, bounds/token/gate refusals write nothing, one execute lands on its prediction and re-checks clear
+   PASS AC-SF6 source ASCII, stdlib only, no network, predicate single owned and wired as os-state-fold(6)
+   SUITE PASS 6/6
+
+== matrix --check rc=0
+   PASS check: docs/sandbox-suite-matrix.md byte-identical (74961 bytes, 716 suites, 5500 criteria)
+
+RC-ALL 0
