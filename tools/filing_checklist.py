@@ -281,8 +281,12 @@ def render_html(rows, sizes):
                 out.append('<div class="n">\u8bc1\u636e\u9762\uff1a\u672c\u9875 %s</div>'
                            % r["face"])
             elif os.path.isfile(r["face"]):
+                # href is page-relative (the browser's base is preview/), while
+                # the label stays the repo-relative path. ship_checklist.py has
+                # always done this; this page shipped a repo-relative href and
+                # every link 404'd for a reader who opened it from disk.
                 out.append('<div class="n">\u8bc1\u636e\u9762\uff1a<a href="%s">%s</a></div>'
-                           % (r["face"], r["face"]))
+                           % (os.path.basename(r["face"]), r["face"]))
             out.append("</span></label></div>")
     out.append("<h2>\u4e94\u73af\u6d41\u7a0b\u4e0e\u5b98\u65b9\u65f6\u9650</h2>")
     for no, name, window, who, state in FLOW:
@@ -386,8 +390,15 @@ def check():
     for bad in FORBIDDEN:
         if bad in html:
             fails.append("AC-FCL4 html carries %s" % bad)
+    page_base = os.path.dirname(HTML)
     for href in re.findall(r'href="([^"]+)"', html):
-        if not os.path.isfile(href):
+        # resolve the way a BROWSER resolves it - against the page's own dir.
+        # this check used to resolve against the repo root, which is exactly why
+        # a repo-relative href could ship broken and still read AC-FCL4 green.
+        target = href.split("#", 1)[0].split("?", 1)[0]
+        if "://" in target or target.startswith(("mailto:", "javascript:", "data:")):
+            continue
+        if not os.path.isfile(os.path.normpath(os.path.join(page_base, target))):
             fails.append("AC-FCL4 link target missing: %s" % href)
 
     # AC-FCL5 tick ids, one namespace, one inline script

@@ -1,18 +1,18 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2929 PRODUCT+MEASUREMENT: the known-debt headline that has been calling 590 evidence files unusable is now a measurement, and it says 151. src/os/qa_writer_census.py --check publishes plain_unusable= / reader_rescued= / reader_refused= over the baselined on-disk set, derived through the evidence leaf (plain_unusable + read_text) rather than typed: a plain utf-8 consumer loses 151 files, the shipped reader gets all 151 back with zero refusals, and the 439 files that are merely CRLF or BOM dialects are no longer counted as unreadable.",
-    "last_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
-    "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\journey-19.9.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-granular-R2927.log (1504B, 2026-11-18)",
-    "latest_evidence": "qa/leg-granular-R2927.log (1504B, 2026-11-18)",
+    "current": "2026-11-18 R2930 PRODUCT: for the first time in this repo a shipped preview face was opened in a REAL browser, and the first walk found a defect. tools/face_walk.py loads each named page from disk in headless Edge (no browser download needed), counts body text, console errors, pageerrors, failed requests and dead LOCAL links resolved from the DOM, writes one full-page PNG per page and refuses its own screenshot unless the bytes start with the PNG signature. Live cohort 5/5 green and the all-40-face census reads pages=40 ok=39 dead_links=9 (qa/face-walk-R2930.log, 5478B, qa_log --check PASS), with all 9 on ONE page.",
+    "last_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
+    "latest_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\filing-checklist.html",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/face-walk-R2930.log (5478B, 2026-11-18)",
+    "latest_evidence": "qa/face-walk-R2930.log (5478B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2930] next window (<=12h): (0) MAIN — the R2926 commit gate refuses STAGED bytes only, so an uncommitted non-tee write still reaches disk (truncated)",
-    "next_milestone_due": "2026-11-18T23:40:59+08:00",
-    "updated_at": "2026-11-18T11:40:59+08:00"
+    "next_milestone": "[R2931] next window (<=12h): (0) MAIN — `preview/face-sweep.html` still shows 9 dead links of the same birth-site class (repo-relative hrefs rendered verbatim by `tools/face_sweep.py`); repair to href=basename AND re-pin that page's own byte self-check (AC-FSW1) in the SAME commit, then re-walk the page to `dead=0` — a page a CEO clicks from `index.html` must not 404. (1) `tools/face_walk.py` ships with NO suite because playwright is not stdlib: either pin it with a stdlib-only arm that skips BY NAME when no browser is present, or declare the on-demand posture in the board — decide with a red control, not by silence. (2) ALSO carried: the R2926 commit gate refuses STAGED bytes only, so an uncommitted non-tee write still reaches disk (truncated)",
+    "next_milestone_due": "2026-11-18T23:55:14+08:00",
+    "updated_at": "2026-11-18T11:55:14+08:00"
   },
-  "current": "2026-11-18 R2929 PRODUCT+MEASUREMENT: the known-debt headline that has been calling 590 evidence files unusable is now a measurement, and it says 151. src/os/qa_writer_census.py --check publishes plain_unusable= / reader_rescued= / reader_refused= over the baselined on-disk set, derived through the evidence leaf (plain_unusable + read_text) rather than typed: a plain utf-8 consumer loses 151 files, the shipped reader gets all 151 back with zero refusals, and the 439 files that are merely CRLF or BOM dialects are no longer counted as unreadable.",
+  "current": "2026-11-18 R2930 PRODUCT: for the first time in this repo a shipped preview face was opened in a REAL browser, and the first walk found a defect. tools/face_walk.py loads each named page from disk in headless Edge (no browser download needed), counts body text, console errors, pageerrors, failed requests and dead LOCAL links resolved from the DOM, writes one full-page PNG per page and refuses its own screenshot unless the bytes start with the PNG signature. Live cohort 5/5 green and the all-40-face census reads pages=40 ok=39 dead_links=9 (qa/face-walk-R2930.log, 5478B, qa_log --check PASS), with all 9 on ONE page.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -40,12 +40,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2929 PRODUCT+MEASUREMENT: the known-debt headline that has been calling 590 evidence files unusable is now a measurement, and it says 151. src/os/qa_writer_census.py --check publishes plain_unusable= / reader_rescued= / reader_refused= over the baselined on-disk set, derived through the evidence leaf (plain_unusable + read_text) rather than typed: a plain utf-8 consumer loses 151 files, the shipped reader gets all 151 back with zero refusals, and the 439 files that are merely CRLF or BOM dialects are no longer counted as unreadable.",
-  "export_ts": "2026-11-18T11:40:59+08:00",
-  "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
-  "latest_evidence": "qa/leg-granular-R2927.log (1504B, 2026-11-18)",
-  "next_milestone": "[R2930] next window (<=12h): (0) MAIN — the R2926 commit gate refuses STAGED bytes only, so an uncommitted non-tee write still reaches disk (truncated)",
+  "do": "2026-11-18 R2930 PRODUCT: for the first time in this repo a shipped preview face was opened in a REAL browser, and the first walk found a defect. tools/face_walk.py loads each named page from disk in headless Edge (no browser download needed), counts body text, console errors, pageerrors, failed requests and dead LOCAL links resolved from the DOM, writes one full-page PNG per page and refuses its own screenshot unless the bytes start with the PNG signature. Live cohort 5/5 green and the all-40-face census reads pages=40 ok=39 dead_links=9 (qa/face-walk-R2930.log, 5478B, qa_log --check PASS), with all 9 on ONE page.",
+  "export_ts": "2026-11-18T11:55:14+08:00",
+  "latest_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
+  "latest_evidence": "qa/face-walk-R2930.log (5478B, 2026-11-18)",
+  "next_milestone": "[R2931] next window (<=12h): (0) MAIN — `preview/face-sweep.html` still shows 9 dead links of the same birth-site class (repo-relative hrefs rendered verbatim by `tools/face_sweep.py`); repair to href=basename AND re-pin that page's own byte self-check (AC-FSW1) in the SAME commit, then re-walk the page to `dead=0` — a page a CEO clicks from `index.html` must not 404. (1) `tools/face_walk.py` ships with NO suite because playwright is not stdlib: either pin it with a stdlib-only arm that skips BY NAME when no browser is present, or declare the on-demand posture in the board — decide with a red control, not by silence. (2) ALSO carried: the R2926 commit gate refuses STAGED bytes only, so an uncommitted non-tee write still reaches disk (truncated)",
   "outs": [
+    "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 mtime]",
     "preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-17 commit]",
@@ -157,7 +158,7 @@
   },
   "results": [
     [
-      "2927",
+      "2930",
       "OSLoop 执行 tick"
     ]
   ],
@@ -170,15 +171,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 76,
+    "log_lines_in_window": 87,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 18,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 69511
+  "state_bytes": 73684
 }

@@ -1,0 +1,54 @@
+WALK page=clean.html chars=557 errors=0 failed=0 dead=0 shot=C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/tmp/out-R2930/ctl-clean.png bytes=23881 OK
+WALK page=blank.html chars=0 errors=0 failed=0 dead=0 shot=C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/tmp/out-R2930/ctl-blank.png bytes=5289 FAIL see counts
+WALK page=boom.html chars=299 errors=1 failed=0 dead=0 shot=C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/tmp/out-R2930/ctl-boom.png bytes=10496 FAIL see counts
+WALK page=dead.html chars=227 errors=0 failed=0 dead=1 shot=C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/tmp/out-R2930/ctl-dead.png bytes=11184 FAIL see counts
+WALK-TOTAL pages=4 ok=1 blank=1 errors=1 failed=0 dead_links=1 shots=4 rc=2
+WALK page=index.html chars=10753 errors=0 failed=0 dead=0 shot=C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/qa/R2930-index.png bytes=926599 OK
+WALK page=journey-19.9.html chars=3818 errors=0 failed=0 dead=0 shot=C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/qa/R2930-journey-19.9.png bytes=311005 OK
+WALK page=money-path-demo.html chars=1255 errors=0 failed=0 dead=0 shot=C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/qa/R2930-money-path-demo.png bytes=121056 OK
+WALK page=membership-face.html chars=2320 errors=0 failed=0 dead=0 shot=C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/qa/R2930-membership-face.png bytes=384205 OK
+WALK page=filing-checklist.html chars=2478 errors=0 failed=0 dead=0 shot=C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/qa/R2930-filing-checklist.png bytes=298113 OK
+WALK-TOTAL pages=5 ok=5 blank=0 errors=0 failed=0 dead_links=0 shots=5 rc=0
+CENSUS-ALL-PREVIEW (failing rows + total only)
+
+WALK page=apimarket-report-activity.html chars=5770 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-attention.html chars=4635 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-buyerquestions.html chars=7761 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-buyers.html chars=10336 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-claims-demo.html chars=20781 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-claims.html chars=15931 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-csv.html chars=13710 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-demand.html chars=12439 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-dossiers.html chars=8279 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-duty.html chars=14395 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-json.html chars=4635 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-quality.html chars=16781 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-questions.html chars=13851 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-refunds.html chars=10883 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-selleranswers.html chars=8216 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-slowanswer.html chars=4664 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report-workbench.html chars=5344 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=apimarket-report.html chars=16144 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=battery-shard-report.html chars=3984 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=ceo-blockers.html chars=4046 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=city-face-report.html chars=3377 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=core-loop-walkthrough.html chars=2743 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=face-sweep.html chars=2269 errors=0 failed=0 dead=9 shot=none bytes=0 FAIL see counts
+WALK page=filing-checklist.html chars=2478 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=first-yuan-chain.html chars=1897 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=first-yuan.html chars=1216 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=index.html chars=10753 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=journey-19.9.html chars=3818 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=ledger-business-report.html chars=1336 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=ledger-reconcile-face.html chars=1750 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=lobby-protocol-map.html chars=11696 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=lobby-session-trace.html chars=3349 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=lobby-ws-report.html chars=3135 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=membership-benefit-report.html chars=4709 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=membership-face.html chars=2320 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=money-path-demo.html chars=1255 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=payment-gate-report.html chars=2710 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=platform-live-report.html chars=2848 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=ship-checklist.html chars=1725 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK page=ugc-gate-report.html chars=5746 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK-TOTAL pages=40 ok=39 blank=0 errors=0 failed=0 dead_links=9 shots=0 rc=2
