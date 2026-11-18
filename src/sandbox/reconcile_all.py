@@ -279,8 +279,11 @@ SUITES = [
     # per-user record exclusively and a second launcher re-measures it (pid
     # alive AND the recorded hub really answers) before refusing by name, with
     # zero children started. AC-LND1..AC-LND5 were pinned in src/os/backlog.md
-    # BEFORE this suite and the leaf module existed.
-    ("launcher-registry", os.path.join("test_launcher_registry.py"), 5),
+    # BEFORE this suite and the leaf module existed. AC-LND6..AC-LND7 (R2974)
+    # were pinned in the R2974 backlog PIN row BEFORE the pid_started wiring:
+    # the record now names a PROCESS (pid + its creation stamp) instead of a
+    # pid, so a number the system recycled cannot resurrect a dead holder.
+    ("launcher-registry", os.path.join("test_launcher_registry.py"), 7),
     # R2940: the record above is a FILE and a file can be deleted, so the gate
     # moved to a KERNEL NAMED MUTEX whose existence IS the holder and which the
     # kernel drops when the holder dies. AC-LMX1..AC-LMX5 were pinned in

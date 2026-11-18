@@ -10,7 +10,8 @@ claim, and one judgement that is RE-MEASURED rather than read off the file.
 
 Record shape (all values written by the launcher that owns it):
 
-    {"pid": 1234, "ts": "2026-11-18T15:01:02", "host": "127.0.0.1",
+    {"pid": 1234, "pid_started": 134395015449235587,
+     "ts": "2026-11-18T15:01:02", "host": "127.0.0.1",
      "state": "starting" | "serving", "hub_url": "http://.../hub/",
      "ports": {...}, "face_ports": {...}}
 
@@ -25,6 +26,30 @@ The three rules that matter, each one is a criterion in the suite:
    alive.
 3. release() removes the record only when it names OUR pid, so a launcher can
    never delete another process's claim.
+
+A PID ALONE IS NOT AN IDENTITY (R2974). Rule 2 re-measured ALIVENESS but not
+WHICH process: a record left behind by a launcher that died keeps its pid, the
+system hands that pid to an unrelated process, and the old record then reads as
+a holder again - a dead launcher resurrected by arithmetic. The record now also
+carries pid_started, the creation stamp of the process that wrote it, and judge
+compares the stamp of the pid CURRENTLY holding that number with the recorded
+one. Two live processes can never share a pid, so an equal stamp means the same
+process; a different stamp means the number was recycled and the record is
+stale for the same reason a dead pid is.
+
+The stamp is NOT a secret and is not treated as one. Any same-user process can
+read another process's creation time, so a deliberate forger writes pid plus
+that pid's real stamp and is believed. That residual is the same per-user trust
+already ruled official for this record by birth_gate (R2947, measured by
+AC-HSG9): the file is writable by anything running as this user, and a token in
+it would only turn "edit one field" into "read one field and write it back".
+What R2974 closes is the ACCIDENT, not the attacker.
+
+Two directions are deliberate. A record WITHOUT pid_started (one an older
+launcher wrote) is judged exactly as before, so an upgrade never declares a
+running launcher dead. And a stamp that cannot be MEASURED never demotes a live
+pid: judging a real holder stale is worse than judging a forger honest, because
+the first lets two launchers serve one box.
 
 Stdlib only, no shell, no network beyond a loopback connect probe.
 """
@@ -83,6 +108,57 @@ def pid_alive(pid):
         kernel32.CloseHandle(handle)
 
 
+def process_started(pid):
+    """That pid's creation stamp, or None when it cannot be measured.
+
+    Windows: the creation FILETIME from GetProcessTimes, in 100 ns units. The
+    value is only ever compared with another value from the SAME source, so the
+    epoch it counts from (1601) never has to be converted.
+
+    Elsewhere: field 22 of /proc/<pid>/stat, which is that process's start time
+    in clock ticks since boot - stable for the life of the process and distinct
+    between processes started in different ticks.
+
+    None means UNMEASURABLE, and judge() never treats it as a mismatch: the
+    caller cannot tell a missing stamp from a wrong one, and demoting a live
+    holder over an unreadable stamp would let a second launcher take a claim
+    that is really held.
+    """
+    try:
+        pid = int(pid)
+    except (TypeError, ValueError):
+        return None
+    if pid <= 0:
+        return None
+    if os.name == "nt":
+        kernel32 = ctypes.windll.kernel32
+        handle = kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, 0, pid)
+        if not handle:
+            return None
+        try:
+            # FILETIME is two DWORDs (low, high) and Windows is little-endian,
+            # so an unsigned 64-bit cell read by reference is the same 8 bytes.
+            created = ctypes.c_ulonglong(0)
+            exited = ctypes.c_ulonglong(0)
+            kernel = ctypes.c_ulonglong(0)
+            user = ctypes.c_ulonglong(0)
+            ok = kernel32.GetProcessTimes(handle, ctypes.byref(created),
+                                          ctypes.byref(exited),
+                                          ctypes.byref(kernel),
+                                          ctypes.byref(user))
+            return int(created.value) if ok else None
+        finally:
+            kernel32.CloseHandle(handle)
+    try:
+        with open("/proc/%d/stat" % pid, "rb") as handle:
+            # The comm field may hold spaces and parentheses, so the split is
+            # anchored on the LAST close paren; field 22 overall is index 19.
+            fields = handle.read().rsplit(b")", 1)[1].split()
+        return int(fields[19])
+    except (OSError, ValueError, IndexError):
+        return None
+
+
 def can_connect(url_or_host, port=None, timeout=0.4):
     """True when something really answers there right now."""
     host = url_or_host
@@ -117,26 +193,48 @@ def judge(record, connect=None, pinned_host=None):
     given, the probe is made against the record's PORT on that host instead of
     the host in the recorded URL, which is how a second launcher asked to bind
     a different interface still re-measures the same socket.
+
+    ``pid_started`` is re-measured the same way. ``pid_started_ok`` is True
+    when the record names a stamp and the process holding that pid answers with
+    the same one, False when it answers with a different one (the pid was
+    recycled), and None when the record carries no stamp or no stamp could be
+    read - both of which keep the pre-R2974 judgement rather than invent a
+    refusal.
     """
     record = record or {}
     pid = record.get("pid")
     alive = bool(pid) and pid_alive(pid)
+    recorded_started = record.get("pid_started")
+    started_ok = None
+    if alive and recorded_started is not None:
+        measured = process_started(pid)
+        if measured is not None:
+            try:
+                started_ok = int(recorded_started) == measured
+            except (TypeError, ValueError):
+                # A stamp that is not a number cannot be any process's
+                # creation time, so it is a measured mismatch, not a blind
+                # spot.
+                started_ok = False
+    same_process = bool(alive and started_ok is not False)
     hub_url = record.get("hub_url") or ""
     hub_port = None
     if hub_url:
         split = urllib.parse.urlsplit(hub_url)
         hub_port = split.port
     if connect is not None:
-        hub_live = bool(connect(record)) if alive else False
+        hub_live = bool(connect(record)) if same_process else False
     else:
-        hub_live = bool(alive and hub_port
+        hub_live = bool(same_process and hub_port
                         and can_connect(pinned_host or hub_url, hub_port))
     starting = record.get("state") == "starting"
-    holder = bool(alive and (starting or hub_live))
+    holder = bool(same_process and (starting or hub_live))
     if not pid:
         reason = "no-pid"
     elif not alive:
         reason = "pid-dead"
+    elif started_ok is False:
+        reason = "pid-reused"
     elif hub_live:
         reason = "hub-live"
     elif starting:
@@ -144,7 +242,10 @@ def judge(record, connect=None, pinned_host=None):
     else:
         reason = "pid-alive-but-nothing-serving"
     return {"holder": holder, "pid_alive": alive, "hub_live": hub_live,
-            "reason": reason, "pid": pid, "hub_url": hub_url}
+            "reason": reason, "pid": pid, "hub_url": hub_url,
+            "trust": "record-pid-start" if started_ok is not None
+                     else "record-pid",
+            "pid_started": recorded_started, "pid_started_ok": started_ok}
 
 
 def _create_exclusive(path, record):

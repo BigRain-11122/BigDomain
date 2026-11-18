@@ -438,6 +438,10 @@ def main(argv=None):
     # has already forked a sandbox beside the one it cannot see.
     claim = {
         "pid": os.getpid(),
+        # R2974: the pid alone is not an identity - a stale record whose pid
+        # was recycled by the system used to read as a live holder. The
+        # creation stamp lets judge tell "this process" from "this number".
+        "pid_started": launcher_registry.process_started(os.getpid()),
         "ts": launcher_registry.stamp(),
         "host": args.host,
         "state": "starting",

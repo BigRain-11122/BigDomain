@@ -2,6 +2,9 @@
 
 Five criteria AC-LND1..AC-LND5, pre-registered in the R2939 backlog row BEFORE
 this file, src/sandbox/launcher_registry.py and its registry row existed.
+AC-LND6 and AC-LND7 (R2974) were pre-registered in the R2974 backlog PIN row
+BEFORE the pid_started wiring: a record is now judged as PID PLUS THE PROCESS
+IT BELONGS TO, so a number the system recycled cannot resurrect a dead holder.
 
 Nothing is read off a paragraph: a real launcher is held open in serve mode and
 its record is compared with the report the SAME run wrote, a second door is
@@ -29,11 +32,42 @@ REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 MODULE = os.path.join(HERE, "start_all.py")
 LEAF = os.path.join(HERE, "launcher_registry.py")
 REGISTRY = os.path.join(REPO, "src", "sandbox", "reconcile_all.py")
+# The R2973 commit point: the bytes from BEFORE a record carried the creation
+# stamp of the process that wrote it. Pinned as a constant because after this
+# round's commit HEAD is already the new code (the R2959 lesson).
+PRE_R2974_REV = "2d33f1ebc4ee30f93547db1ff0e88ddc631b7c58"
 
 sys.path.insert(0, HERE)
 import launcher_registry  # noqa: E402  (path wired above)
 
 RESULTS = []
+
+# The fields judge() answered BEFORE R2974. AC-LND7 compares these field by
+# field on records an older launcher could have written, so "no decision this
+# tree already made moved" is measured rather than claimed.
+OLD_FIELDS = ("holder", "reason", "pid_alive", "hub_live", "pid", "hub_url")
+
+# Loads one leaf by path and prints a narrow verdict per record, so the same
+# driver can be pointed at the pinned bytes and at the working tree.
+DRIVER = '''import importlib.util, json, sys
+
+def load(path):
+    spec = importlib.util.spec_from_file_location("leaf_under_test", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+leaf = load(sys.argv[1])
+with open(sys.argv[2], encoding="utf-8") as handle:
+    records = json.load(handle)
+fields = %r
+out = []
+for rec in records:
+    verdict = leaf.judge(rec)
+    out.append(dict((name, verdict.get(name)) for name in fields))
+sys.stdout.write(json.dumps(out, sort_keys=True))
+''' % (OLD_FIELDS,)
+
 
 
 def report(name, bad, detail=""):
@@ -371,6 +405,169 @@ def main():
         bad.append("registry-rows-%d"
                    % registry_text.count('"launcher-registry"'))
     report("AC-LND5", bool(bad), ",".join(bad))
+
+    # ---- AC-LND6 (R2974): a record is a pid PLUS the process it belongs to --
+    bad = []
+    mine_started = launcher_registry.process_started(os.getpid())
+    if not mine_started:
+        bad.append("own-stamp-unreadable")
+    honest = {"pid": os.getpid(), "pid_started": mine_started,
+              "ts": launcher_registry.stamp(), "host": "127.0.0.1",
+              "state": "starting", "hub_url": None, "ports": {},
+              "face_ports": {}}
+    held = launcher_registry.judge(honest)
+    if not held["holder"] or held["reason"] != "still-starting":
+        bad.append("honest-record-%s/%s" % (held["holder"], held["reason"]))
+    if held.get("trust") != "record-pid-start":
+        bad.append("trust-" + str(held.get("trust")))
+    if held.get("pid_started_ok") is not True:
+        bad.append("stamp-check-" + str(held.get("pid_started_ok")))
+    # THE REWRITE: pid and aliveness untouched by the third party, only the
+    # stamp names a different process - exactly the shape a recycled pid leaves.
+    forged = dict(honest, pid_started=int(mine_started) + 1)
+    reused = launcher_registry.judge(forged)
+    if reused["holder"]:
+        bad.append("rewritten-record-still-held")
+    if reused["reason"] != "pid-reused":
+        bad.append("rewrite-reason-" + str(reused["reason"]))
+    if reused["pid_alive"] is not True:
+        bad.append("aliveness-not-measured")
+    if reused.get("pid_started_ok") is not False:
+        bad.append("rewrite-stamp-check-" + str(reused.get("pid_started_ok")))
+    # an older launcher's record carries no stamp: the old judgement is kept.
+    older = dict(honest)
+    older.pop("pid_started")
+    legacy = launcher_registry.judge(older)
+    if not legacy["holder"] or legacy.get("trust") != "record-pid":
+        bad.append("stampless-%s/%s" % (legacy["holder"],
+                                        legacy.get("trust")))
+    if legacy.get("pid_started_ok") is not None:
+        bad.append("stampless-claims-a-check")
+    # a stamp that cannot be measured never demotes a live pid.
+    real_started = launcher_registry.process_started
+    launcher_registry.process_started = lambda pid: None
+    try:
+        blind = launcher_registry.judge(honest)
+    finally:
+        launcher_registry.process_started = real_started
+    if not blind["holder"]:
+        bad.append("unmeasurable-stamp-demoted")
+    # a dead pid still loses to the older refusal, whatever stamp it claims.
+    gone = dead_pid()
+    stale_stamped = launcher_registry.judge(
+        {"pid": gone, "pid_started": mine_started, "state": "starting"})
+    if stale_stamped["holder"] or stale_stamped["reason"] != "pid-dead":
+        bad.append("dead-%s/%s" % (stale_stamped["holder"],
+                                   stale_stamped["reason"]))
+    report("AC-LND6", bool(bad), ",".join(bad))
+
+    # ---- AC-LND7 (R2974): the shipped path writes it, and no decision this
+    #      tree already made moves (measured against the pinned bytes) --------
+    bad = []
+    if os.path.exists(registry):
+        os.remove(registry)
+    box = Run(tmpdir, "stamped", registry)
+    rep = box.start() or {}
+    rec = launcher_registry.read(registry) or {}
+    wrote_stamp = rec.get("pid_started")
+    true_stamp = launcher_registry.process_started(box.proc.pid) if rep else None
+    if not rep:
+        bad.append("launcher-never-reported")
+    if wrote_stamp is None:
+        bad.append("record-carries-no-stamp")
+    elif true_stamp is None or int(wrote_stamp) != int(true_stamp):
+        bad.append("stamp-%s-not-%s" % (wrote_stamp, true_stamp))
+    if rep:
+        second = Run(tmpdir, "stamped-second", registry,
+                     extra=["--timeout", "6"], serve=False)
+        second.start()
+        code = second.stop()
+        payload = second.stdout_json()
+        errors = " ".join(payload.get("errors") or [])
+        if code != 2:
+            bad.append("second-exit-%s" % code)
+        if launcher_registry.REFUSED not in errors:
+            bad.append("no-named-refusal-against-stamped-record")
+        if box.proc.pid and ("pid=%d" % box.proc.pid) not in errors:
+            bad.append("refusal-does-not-name-holder")
+    box.stop()
+    # the pinned bytes and the working tree, one driver, the same records.
+    holder_sock = socket.socket()
+    holder_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    holder_sock.bind(("127.0.0.1", 0))
+    holder_sock.listen(4)
+    live_port = int(holder_sock.getsockname()[1])
+    own = launcher_registry.process_started(os.getpid())
+    records = [
+        # three shapes an older launcher could leave behind
+        {"pid": dead_pid(), "ts": launcher_registry.stamp(),
+         "host": "127.0.0.1", "state": "serving",
+         "hub_url": "http://127.0.0.1:%d/hub/" % free_port(), "ports": {},
+         "face_ports": {}},
+        {"pid": os.getpid(), "ts": launcher_registry.stamp(),
+         "host": "127.0.0.1", "state": "serving",
+         "hub_url": "http://127.0.0.1:%d/hub/" % free_port(), "ports": {},
+         "face_ports": {}},
+        {"pid": os.getpid(), "ts": launcher_registry.stamp(),
+         "host": "127.0.0.1", "state": "serving",
+         "hub_url": "http://127.0.0.1:%d/hub/" % live_port, "ports": {},
+         "face_ports": {}},
+        # the honest stamped record and the same record rewritten
+        {"pid": os.getpid(), "pid_started": own,
+         "ts": launcher_registry.stamp(), "host": "127.0.0.1",
+         "state": "starting", "hub_url": None, "ports": {}, "face_ports": {}},
+        {"pid": os.getpid(), "pid_started": (own or 0) + 1,
+         "ts": launcher_registry.stamp(), "host": "127.0.0.1",
+         "state": "starting", "hub_url": None, "ports": {}, "face_ports": {}},
+    ]
+    try:
+        driver = os.path.join(tmpdir, "judge-driver.py")
+        payload_path = os.path.join(tmpdir, "judge-records.json")
+        with open(driver, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(DRIVER)
+        with open(payload_path, "w", encoding="utf-8", newline="\n") as handle:
+            json.dump(records, handle, sort_keys=True)
+            handle.write("\n")
+        old = subprocess.run(["git", "show", PRE_R2974_REV
+                              + ":src/sandbox/launcher_registry.py"],
+                             cwd=REPO, stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+        if old.returncode != 0 or not old.stdout:
+            bad.append("no-old-bytes")
+        else:
+            old_leaf = os.path.join(tmpdir, "launcher_registry_prer2974.py")
+            with open(old_leaf, "wb") as handle:
+                handle.write(old.stdout)
+            before = subprocess.run(
+                [sys.executable, driver, old_leaf, payload_path],
+                stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE, timeout=120)
+            after = subprocess.run(
+                [sys.executable, driver, LEAF, payload_path],
+                stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE, timeout=120)
+            if before.returncode != 0 or after.returncode != 0:
+                bad.append("driver-rc-%d/%d" % (before.returncode,
+                                                after.returncode))
+            else:
+                old_rows = json.loads(before.stdout.decode("utf-8"))
+                new_rows = json.loads(after.stdout.decode("utf-8"))
+                # the three older shapes plus the honest stamped record keep
+                # every field the old judge answered, on all four.
+                moved = [i for i in (0, 1, 2, 3) if old_rows[i] != new_rows[i]]
+                if moved:
+                    bad.append("old-decisions-moved-%s" % moved)
+                # the rewritten record is the one that MOVED, and only it.
+                if old_rows[4]["holder"] is not True:
+                    bad.append("old-held-the-rewrite-anyway")
+                if new_rows[4]["holder"] is not False:
+                    bad.append("new-held-the-rewrite")
+                if new_rows[4]["reason"] != "pid-reused":
+                    bad.append("new-rewrite-reason-" + str(new_rows[4]["reason"]))
+            os.remove(old_leaf)
+    finally:
+        holder_sock.close()
+    report("AC-LND7", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
