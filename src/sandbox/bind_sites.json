@@ -1,0 +1,23 @@
+{
+  "note": "Every .bind(...) call in the shipped sandbox tree is listed here, by path and enclosing function, because syntax cannot tell an ephemeral free-port probe from a listening face. A site that is not listed is refused by name (E_BIND_SITE_UNAPPROVED) until a person writes down what it is. test_*.py, vendor/ and pycrdt-poc are not scanned.",
+  "sites": [
+    {
+      "path": "panel.py",
+      "function": "free_port",
+      "kind": "probe",
+      "reason": "binds 127.0.0.1:0 to let the OS hand out a free port, then closes it; never listens"
+    },
+    {
+      "path": "start_all.py",
+      "function": "free_port",
+      "kind": "probe",
+      "reason": "binds 127.0.0.1:0 to plan the launcher's ports, then closes it; never listens"
+    },
+    {
+      "path": "lobby/interop_demo.py",
+      "function": "free_port",
+      "kind": "probe",
+      "reason": "binds 127.0.0.1:0 to pick a private port for the demo, then closes it; never listens"
+    }
+  ]
+}

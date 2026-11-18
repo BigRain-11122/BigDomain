@@ -143,6 +143,9 @@ import reconcile_all  # suite inventory single source (reuse, no copy)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
+if HERE not in sys.path:  # R2943: the birth gate is a sibling leaf
+    sys.path.insert(0, HERE)
+import birth_gate  # noqa: E402  (born through the same gate as the nine starters)
 LOBBY_CFG = os.path.join(HERE, "lobby", "config.json")
 PAY_CFG = os.path.join(HERE, "pay", "config.json")
 MEMBER_CFG = os.path.join(HERE, "member", "config.json")
@@ -8630,7 +8633,12 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
-    srv = ThreadingHTTPServer((HOST, PORT), Handler)
+    # R2943: the front door is a face too. The birth gate judges BEFORE this
+    # factory binds, so a door started beside a sandbox it does not belong to
+    # exits 3 by name and leaves no listener behind (the nine starters already
+    # route through the same call).
+    srv = birth_gate.checked_server(
+        lambda: ThreadingHTTPServer((HOST, PORT), Handler))
     print("frontdoor serving http://%s:%d/ (journey_ok=%s)"
           % (HOST, PORT, JOURNEY_OK), flush=True)
     try:

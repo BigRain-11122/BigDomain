@@ -294,6 +294,16 @@ SUITES = [
     # src/sandbox/birth_gate.py and the six entry wires existed; AC-HSG6..8
     # (R2942) moved the gate into the nine shipped starters.
     ("birth-gate", os.path.join("test_birth_gate.py"), 8),
+    # R2943: birth_gate judges every face that is started through a shipped
+    # starter, so a script that builds a server class ITSELF was outside the
+    # range with nothing bounding it (R2942 disclosure). src/sandbox/
+    # bind_site_scan.py is that bound: a static AST read that refuses a new
+    # raw server construction by name, refuses a server subclass in a module
+    # that never calls checked_server, refuses a websockets serve() in a module
+    # that never calls birth_gate.guard(), and refuses a .bind() site that is
+    # not declared in bind_sites.json. AC-BSC1..AC-BSC5 were pinned in
+    # src/os/backlog.md BEFORE the scanner, the baseline and this suite existed.
+    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 5),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the

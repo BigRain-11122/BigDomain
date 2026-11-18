@@ -1,0 +1,22 @@
+R2943 bind-site static gate - shipped tree census (read only)
+[site] http-server      frontdoor.py:8641 main
+[site] server-subclass  panel.py:464 <module>
+[site] socket-bind      panel.py:122 free_port
+[site] socket-bind      start_all.py:80 free_port
+[site] http-server      ledger/ledger_page.py:319 start_server
+[site] http-server      lobby/checkout_demo.py:308 start_server
+[site] http-server      lobby/city.py:276 start_city_http
+[site] http-server      lobby/gate_page.py:180 start_gate_http
+[site] http-server      lobby/hub_page.py:225 start_hub_http
+[site] socket-bind      lobby/interop_demo.py:37 free_port
+[site] http-server      lobby/lobby_page.py:109 start_lobby_http
+[site] ws-serve         lobby/server.py:649 run_server
+[site] server-subclass  member/member_page.py:316 <module>
+[site] http-server      ugc/ugc_page.py:276 start_ugc_http
+SHIPPED modules=92 sites=14 refused=0 ok=True kinds={"http-server": 8, "server-subclass": 2, "socket-bind": 3, "ws-serve": 1}
+
+DOCTORED WORLD: the door's own bytes with the gate removed
+[refuse] E_BIND_UNGUARDED_FACE frontdoor.py:8640 main kind=http-server detail=ThreadingHTTPServer
+DOCTORED modules=1 sites=1 refused=1 ok=False
+
+CONTROL: the same scan on the shipped tree after the gate was wired reads ok=True refused=0

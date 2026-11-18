@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2942 PRODUCT+ENGINEERING: the birth-site gate is no longer only in main(). The R2942 board head item (0) said an imported and embedded face (a harness calling start_city_http/make_server/start_server/start_panel directly) never reaches the check, and this window closed it by moving the check to the bind site: birth_gate.checked_server(factory) judges BEFORE the factory runs, and the nine shipped starters (city, hub_page, lobby_page, gate_page, ugc_page, ledger_page, checkout_demo, panel, member_page) now construct their servers only through it. main() keeps its guard() as a second pure read.",
+    "current": "2026-11-18 R2943 PRODUCT+ENGINEERING: the hole R2942 disclosed - a script that builds a server class ITSELF never reaches the birth gate - is now bounded by a static read, and closing it also closed a REAL open door: src/sandbox/frontdoor.py, the shipped 8093 face a person starts from frontdoor_start.bat, was constructing ThreadingHTTPServer raw in main(), so it could be born beside a sandbox it does not belong to. It now routes through birth_gate.checked_server(lambda: ...), the same call the nine starters use, and src/sandbox/bind_site_scan.py refuses a NEW raw bind site by name before it can ship.",
     "do": "2026-11-18 R2936 PRODUCT: the last two faces the hub publishes stopped reading NOT STARTED. src/sandbox/start_all.py now plans ten ports for eight faces, starts the shipped control panel and membership page as its own children, and hands their MEASURED ports to the lobby on its command line instead of letting the hub advertise built-in 8099/8096 guesses. Live: start_all.py --check rc=0 with all eight faces live; ceo_live_shot.py --prove --check rc=0 faces=9 shots_total=18 with_errors=0 proof{passes:2, agreements:9, disagreed:[]} in 30.4s - nine faces shot twice on one sandbox, no drift.",
     "last_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
@@ -9,11 +9,11 @@
     "latest_artifact_note": "",
     "latest_evidence": "qa/leg-launcher-registry-R2939.log (340B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2943] next window (<=12h): (0) MAIN — the gate now sits in the nine shipped starters, and a script that builds `ThreadingHTTPServer` itself is still outside the range with nothing bounding it. Decide and prove: either a static scan over `src/sandbox` that refuses a NEW raw bind site (with a red control where a fixture raw bind is refused by name and removing it passes), or declare \"only shipped starters are gated\" official with the reason in the same breath. (1) carried from R2941: `judge()` trusts the pid in the record and the record is a per-user writable file — decide whether the launcher writes a secret the face must echo back, or declare the trust official. (2) carried from R2937/R2938 and still undecided: the hard-kill proof covers the launcher's DIRECT children only, and R2941/R2942 now refuse grandchildren — decide whether to measure grandchild inheritance or declare it out of scope by name (truncated)",
-    "next_milestone_due": "2026-11-19T03:04:17+08:00",
-    "updated_at": "2026-11-18T15:04:17+08:00"
+    "next_milestone": "[R2944] next window (<=12h): (0) MAIN — the scan refuses four shapes and names the rest (truncated)",
+    "next_milestone_due": "2026-11-19T03:21:55+08:00",
+    "updated_at": "2026-11-18T15:21:55+08:00"
   },
-  "current": "2026-11-18 R2942 PRODUCT+ENGINEERING: the birth-site gate is no longer only in main(). The R2942 board head item (0) said an imported and embedded face (a harness calling start_city_http/make_server/start_server/start_panel directly) never reaches the check, and this window closed it by moving the check to the bind site: birth_gate.checked_server(factory) judges BEFORE the factory runs, and the nine shipped starters (city, hub_page, lobby_page, gate_page, ugc_page, ledger_page, checkout_demo, panel, member_page) now construct their servers only through it. main() keeps its guard() as a second pure read.",
+  "current": "2026-11-18 R2943 PRODUCT+ENGINEERING: the hole R2942 disclosed - a script that builds a server class ITSELF never reaches the birth gate - is now bounded by a static read, and closing it also closed a REAL open door: src/sandbox/frontdoor.py, the shipped 8093 face a person starts from frontdoor_start.bat, was constructing ThreadingHTTPServer raw in main(), so it could be born beside a sandbox it does not belong to. It now routes through birth_gate.checked_server(lambda: ...), the same call the nine starters use, and src/sandbox/bind_site_scan.py refuses a NEW raw bind site by name before it can ship.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2942 PRODUCT+ENGINEERING: the birth-site gate is no longer only in main(). The R2942 board head item (0) said an imported and embedded face (a harness calling start_city_http/make_server/start_server/start_panel directly) never reaches the check, and this window closed it by moving the check to the bind site: birth_gate.checked_server(factory) judges BEFORE the factory runs, and the nine shipped starters (city, hub_page, lobby_page, gate_page, ugc_page, ledger_page, checkout_demo, panel, member_page) now construct their servers only through it. main() keeps its guard() as a second pure read.",
-  "export_ts": "2026-11-18T15:04:17+08:00",
+  "do": "2026-11-18 R2943 PRODUCT+ENGINEERING: the hole R2942 disclosed - a script that builds a server class ITSELF never reaches the birth gate - is now bounded by a static read, and closing it also closed a REAL open door: src/sandbox/frontdoor.py, the shipped 8093 face a person starts from frontdoor_start.bat, was constructing ThreadingHTTPServer raw in main(), so it could be born beside a sandbox it does not belong to. It now routes through birth_gate.checked_server(lambda: ...), the same call the nine starters use, and src/sandbox/bind_site_scan.py refuses a NEW raw bind site by name before it can ship.",
+  "export_ts": "2026-11-18T15:21:55+08:00",
   "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
   "latest_evidence": "qa/leg-launcher-registry-R2939.log (340B, 2026-11-18)",
-  "next_milestone": "[R2943] next window (<=12h): (0) MAIN — the gate now sits in the nine shipped starters, and a script that builds `ThreadingHTTPServer` itself is still outside the range with nothing bounding it. Decide and prove: either a static scan over `src/sandbox` that refuses a NEW raw bind site (with a red control where a fixture raw bind is refused by name and removing it passes), or declare \"only shipped starters are gated\" official with the reason in the same breath. (1) carried from R2941: `judge()` trusts the pid in the record and the record is a per-user writable file — decide whether the launcher writes a secret the face must echo back, or declare the trust official. (2) carried from R2937/R2938 and still undecided: the hard-kill proof covers the launcher's DIRECT children only, and R2941/R2942 now refuse grandchildren — decide whether to measure grandchild inheritance or declare it out of scope by name (truncated)",
+  "next_milestone": "[R2944] next window (<=12h): (0) MAIN — the scan refuses four shapes and names the rest (truncated)",
   "outs": [
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 mtime]",
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
@@ -184,5 +184,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 74771
+  "state_bytes": 73811
 }
