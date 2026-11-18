@@ -325,8 +325,10 @@ SUITES = [
     # alias chain, socketserver-based subclasses) is judged at the construction
     # site with the http-server rule; AC-BSC15..AC-BSC17 pin it, prove the
     # live tree lists the same rows before and after, and measure why
-    # serve_forever itself is not a bind site.
-    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 17),
+    # serve_forever itself is not a bind site. R2971 follows a server class
+    # another repo module re-exports, and AC-BSC18..AC-BSC20 pin that plus the
+    # measured range of the two shapes still unnamed.
+    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 21),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the

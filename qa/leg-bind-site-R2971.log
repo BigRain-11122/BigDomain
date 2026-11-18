@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=728 registry_criteria=5817 selected=1 selected_criteria=21 cap=600s leg_cap=600s overrides=1 exact=1 state=RUNNING
+SHARD selected bind-site-scan crit=21 path=test_bind_site_scan.py
+SHARD row bind-site-scan rc=0 pass=21 fail=0 detail=yes suite=PASS 21/21 crit=21 33.4s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=21 crit_mismatch=0 elapsed=33.4s crit_checked=1

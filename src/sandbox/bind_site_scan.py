@@ -91,7 +91,19 @@ Six kinds of site are recognised, and each has one rule:
     it sees.
 
 
-    R2970 added this kind.  What it still does NOT recognise is named below.
+    R2970 added this kind, and R2971 widened WHICH names reach it: a server
+    class that a module of THIS repo re-exports at module level is carried out
+    with it.  ``helper`` binding ``UDPServer`` (by from-import, by
+    ``Y = socketserver.UDPServer``, or by a module-level alias chain) is
+    followed, and a site reaching it as ``import helper as h`` then
+    ``h.UDPServer(...)`` or ``from helper import UDPServer`` then
+    ``UDPServer(...)`` is judged by the same gate rule.  The chains are resolved
+    to a fixpoint across modules, so a re-export of a re-export resolves and a
+    cycle contributes nothing.  An ambiguous module name (two files with the
+    same stem, or a stem that is not a module) is DROPPED rather than guessed,
+    and a name bound twice keeps every shape it was ever bound to - a static
+    read refuses what it cannot bound.  What it still does NOT recognise is
+    named below.
 
 
 ``socket-bind``
@@ -105,14 +117,19 @@ Not scanned, by name: ``test_*.py`` (suite scaffolding binds ephemeral ports
 on purpose), ``vendor`` directories and ``pycrdt-poc`` (third-party code is
 not this repo's face), and bind forms this module does not recognise - a hole
 that is named rather than implied closed.  Since R2970 the ``socketserver``
-family above IS judged when its shape is statically visible; what remains out
-of range, in the same breath: a constructor reached through another module
-(``import myservers as m`` then ``m.UDPServer(...)``), a class built with
-``type(...)`` or a factory such as ``functools.partial``, a class imported
-under a name that does not end in ``Server``, and ``serve_forever`` reached
-through an object this read cannot trace back to a construction.  A
-``serve_forever`` call is not itself a bind site: ``socketserver`` binds in
-``__init__``, so the construction is where the judgement belongs.
+family above IS judged when its shape is statically visible, and since R2971
+that includes a class re-exported by another module of this repo.  What remains
+out of range, in the same breath, MEASURED this window on the live tree (93
+modules, every one parseable): a class built with ``type(...)`` or a factory
+such as ``functools.partial`` (0 calls touch ``Server``/``socket``), a class
+imported under a name that does not end in ``Server`` (0 such from-imports
+exist; a mixin or handler alone binds nothing), a constructor reached through a
+module OUTSIDE this repo (its exports cannot be read without importing it, and
+this module never imports what it judges), a name assembled at run time, and
+``serve_forever`` reached through an object this read cannot trace back to a
+construction.  A ``serve_forever`` call is not itself a bind site:
+``socketserver`` binds in ``__init__``, so the construction is where the
+judgement belongs.
 
 Stdlib only (ast/json/os/sys), no shell, no network, no writes.
 """
@@ -250,7 +267,179 @@ def _socketserver_class_names(tree):
     return names
 
 
-def _server_class_shape(node, module_names, class_names, aliases):
+def _module_level_nodes(body):
+    """Every module-level statement, descending into blocks but never into a def.
+
+    A binding inside a function body is not a re-export - nobody can import it -
+    so reading one as an export would invent a surface that does not exist.
+    ``if`` / ``try`` / ``with`` bodies DO count, because that is where a person
+    puts a guarded import.
+    """
+    stack = list(body)
+    while stack:
+        node = stack.pop()
+        yield node
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            continue
+        for child in ast.iter_child_nodes(node):
+            if isinstance(child, ast.stmt):
+                stack.append(child)
+
+
+def _module_carried_classes(tree):
+    """What one module carries out at module level.
+
+    Three facts, all static: ``direct`` names bound straight to a
+    ``socketserver`` class (a from-import or an attribute assignment), ``links``
+    names bound to another module-local name (followed, so an alias of an alias
+    resolves), and ``borrowed`` names taken from another module by name (which
+    only resolve if that module itself exports one).
+    """
+    ss_modules = _socketserver_module_names(tree)
+    direct = {}
+    links = {}
+    borrowed = {}
+    nodes = sorted(_module_level_nodes(tree.body),
+                   key=lambda item: getattr(item, "lineno", 0))
+    for node in nodes:
+        if isinstance(node, ast.ImportFrom):
+            module = node.module or ""
+            head = module.split(".")[0]
+            if "." in module or not head:
+                continue
+            for alias in node.names:
+                local = alias.asname or alias.name
+                if (head == SOCKETSERVER_MODULE
+                        and alias.name.endswith(SOCKETSERVER_SUFFIX)):
+                    direct[local] = "%s.%s" % (SOCKETSERVER_MODULE, alias.name)
+                elif head != SOCKETSERVER_MODULE:
+                    borrowed[local] = (head, alias.name)
+            continue
+        if isinstance(node, (ast.Assign, ast.AnnAssign)):
+            if node.value is None:
+                continue
+            if isinstance(node, ast.Assign):
+                targets = [t.id for t in node.targets if isinstance(t, ast.Name)]
+            elif isinstance(node.target, ast.Name):
+                targets = [node.target.id]
+            else:
+                targets = []
+            if not targets:
+                continue
+            value = node.value
+            detail = None
+            if (isinstance(value, ast.Attribute)
+                    and isinstance(value.value, ast.Name)
+                    and value.value.id in ss_modules
+                    and value.attr.endswith(SOCKETSERVER_SUFFIX)):
+                detail = "%s.%s" % (value.value.id, value.attr)
+            for target in targets:
+                if detail:
+                    direct[target] = detail
+                elif isinstance(value, ast.Name):
+                    links[target] = value.id
+    return (direct, links, borrowed)
+
+
+def _resolve_carried(module, name, carried, seen=None):
+    """The chain from ``module.name`` to a ``socketserver`` class, else None."""
+    seen = set() if seen is None else seen
+    if (module, name) in seen or len(seen) > 8:
+        return None
+    seen.add((module, name))
+    entry = carried.get(module)
+    if entry is None:
+        return None
+    direct, links, borrowed = entry
+    if name in direct:
+        return direct[name]
+    if name in links:
+        inner = _resolve_carried(module, links[name], carried, seen)
+        if inner:
+            return "%s->%s" % (links[name], inner)
+        return None
+    if name in borrowed:
+        other, remote = borrowed[name]
+        inner = _resolve_carried(other, remote, carried, seen)
+        if inner:
+            return "%s.%s->%s" % (other, remote, inner)
+    return None
+
+
+def repo_reexports(root=None):
+    """Module name -> {exported name: chain to the socketserver class}.
+
+    A module RE-EXPORTS a server class when a module-level statement binds a
+    name to one.  The chains are followed across repo modules to a fixpoint, so
+    ``helper2`` re-exporting what ``helper1`` re-exports resolves, and a cycle
+    contributes nothing because the path set cuts it.
+
+    An AMBIGUOUS module name is dropped rather than guessed: two files with the
+    same stem under the root, or a stem that is not a module at all, names a
+    target this static read cannot bound, so the shape is refused instead of
+    the live one being picked.
+    """
+    root = root or HERE
+    trees = {}
+    ambiguous = set()
+    for rel, full in iter_modules(root):
+        base = os.path.basename(rel)
+        if base == "__init__.py":
+            name = os.path.basename(os.path.dirname(rel))
+        else:
+            name = os.path.splitext(base)[0]
+        if not name:
+            continue
+        if name in trees or name in ambiguous:
+            ambiguous.add(name)
+            trees.pop(name, None)
+            continue
+        try:
+            with open(full, "r", encoding="utf-8-sig", errors="replace") as handle:
+                trees[name] = ast.parse(handle.read())
+        except SyntaxError:
+            ambiguous.add(name)
+    carried = dict((name, _module_carried_classes(tree))
+                   for name, tree in trees.items())
+    exports = {}
+    for name in sorted(carried):
+        direct, links, borrowed = carried[name]
+        found = {}
+        for local in sorted(set(direct) | set(links) | set(borrowed)):
+            chain = _resolve_carried(name, local, carried)
+            if chain:
+                found[local] = chain
+        if found:
+            exports[name] = found
+    return exports
+
+
+def _repo_reexport_context(tree, exports):
+    """(module aliases, from-import names, exports) this module holds on the repo.
+
+    Only modules that actually export a server class are tracked, so a normal
+    ``import ledger`` costs nothing and cannot be mistaken for a constructor.
+    """
+    aliases = {}
+    borrowed = {}
+    if not exports:
+        return (aliases, borrowed, {})
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name in exports:
+                    aliases[alias.asname or alias.name] = alias.name
+        elif isinstance(node, ast.ImportFrom):
+            module = node.module or ""
+            if "." in module or module not in exports:
+                continue
+            for alias in node.names:
+                if alias.name in exports[module]:
+                    borrowed[alias.asname or alias.name] = (module, alias.name)
+    return (aliases, borrowed, exports)
+
+
+def _server_class_shape(node, module_names, class_names, aliases, repo=None):
     """(kind, detail) when ``node`` evaluates to a server CLASS, else None."""
     if isinstance(node, ast.Name):
         if node.id in aliases:
@@ -260,6 +449,13 @@ def _server_class_shape(node, module_names, class_names, aliases):
             return ("http-server", node.id)
         if node.id in class_names:
             return (SOCKETSERVER_KIND, "%s(from socketserver)" % node.id)
+        if repo is not None:
+            hit = repo[1].get(node.id)
+            if hit is not None:
+                module, remote = hit
+                return (SOCKETSERVER_KIND,
+                        "%s(from %s)->%s" % (node.id, module,
+                                             repo[2][module][remote]))
         return None
     if isinstance(node, ast.Attribute):
         if isinstance(node.value, ast.Name) and node.value.id in module_names:
@@ -267,20 +463,27 @@ def _server_class_shape(node, module_names, class_names, aliases):
                 return (SOCKETSERVER_KIND,
                         "%s.%s" % (node.value.id, node.attr))
             return None
+        if repo is not None and isinstance(node.value, ast.Name):
+            target = repo[0].get(node.value.id)
+            if target is not None and node.attr in repo[2].get(target, {}):
+                return (SOCKETSERVER_KIND,
+                        "%s.%s->%s" % (node.value.id, node.attr,
+                                       repo[2][target][node.attr]))
         if node.attr in SERVER_NAMES:
             return ("http-server", node.attr)
     return None
 
 
-def _server_aliases(tree, module_names, class_names):
+def _server_aliases(tree, module_names, class_names, repo=None):
     """Module-local names bound to a server class, followed to a fixpoint.
 
     One assignment is what a person writes; an alias OF an alias is the same
     fact one step further out, and both are static - the value is either a bare
-    server-class name or an attribute of the socketserver module.  A name
-    assigned twice keeps BOTH shapes, because a static read cannot prove which
-    assignment runs, and this module's standing rule is to refuse a shape it
-    cannot bound rather than guess the live one.
+    server-class name, an attribute of the socketserver module, or (since
+    R2971) a name another repo module re-exports.  A name assigned twice keeps
+    BOTH shapes, because a static read cannot prove which assignment runs, and
+    this module's standing rule is to refuse a shape it cannot bound rather
+    than guess the live one.
     """
     assigns = []
     for node in ast.walk(tree):
@@ -301,7 +504,7 @@ def _server_aliases(tree, module_names, class_names):
         changed = False
         for _, targets, value in assigns:
             shape = _server_class_shape(value, module_names, class_names,
-                                        aliases)
+                                        aliases, repo)
             if shape is None:
                 continue
             for target in targets:
@@ -313,9 +516,10 @@ def _server_aliases(tree, module_names, class_names):
     return aliases
 
 
-def _socketserver_site(call, module_names, class_names, aliases):
+def _socketserver_site(call, module_names, class_names, aliases, repo=None):
     """(kind, detail) when ``call`` constructs a server this read can trace."""
-    return _server_class_shape(call.func, module_names, class_names, aliases)
+    return _server_class_shape(call.func, module_names, class_names, aliases,
+                               repo)
 
 
 def _is_guard_call(node):
@@ -344,7 +548,7 @@ def _level_guard_lines(body):
     return lines
 
 
-def _class_bases(classdef, module_names, class_names, aliases):
+def _class_bases(classdef, module_names, class_names, aliases, repo=None):
     """Every server class appearing in a ClassDef's bases."""
     found = []
     for base in classdef.bases:
@@ -352,6 +556,10 @@ def _class_bases(classdef, module_names, class_names, aliases):
             if (base.id in SERVER_NAMES or base.id in class_names
                     or base.id in aliases):
                 found.append(base.id)
+            elif repo is not None and base.id in repo[1]:
+                module, remote = repo[1][base.id]
+                found.append("%s(from %s)->%s"
+                             % (base.id, module, repo[2][module][remote]))
         elif isinstance(base, ast.Attribute):
             if base.attr in SERVER_NAMES:
                 found.append(base.attr)
@@ -359,11 +567,20 @@ def _class_bases(classdef, module_names, class_names, aliases):
                   and base.value.id in module_names
                   and base.attr.endswith(SOCKETSERVER_SUFFIX)):
                 found.append("%s.%s" % (base.value.id, base.attr))
+            elif repo is not None and isinstance(base.value, ast.Name):
+                target = repo[0].get(base.value.id)
+                if target is not None and base.attr in repo[2].get(target, {}):
+                    found.append("%s.%s" % (base.value.id, base.attr))
     return found
 
 
-def scan_source(path, text):
-    """Every bind-shaped site in one module, with its rule verdict."""
+def scan_source(path, text, repo=None):
+    """Every bind-shaped site in one module, with its rule verdict.
+
+    ``repo`` is the map ``repo_reexports`` returns for the tree being scanned;
+    without it this read is exactly the R2970 one, so a caller that hands a bare
+    file to the judge gets the bare file's judgement.
+    """
     rel = path.replace(os.sep, "/")
     rows = []
     try:
@@ -378,7 +595,8 @@ def scan_source(path, text):
     bare_start = _asyncio_imported(tree)
     ss_modules = _socketserver_module_names(tree)
     ss_classes = _socketserver_class_names(tree)
-    ss_aliases = _server_aliases(tree, ss_modules, ss_classes)
+    ss_repo = _repo_reexport_context(tree, repo) if repo else None
+    ss_aliases = _server_aliases(tree, ss_modules, ss_classes, ss_repo)
     stack = [(tree, [], None)]
     while stack:
         node, ancestors, func_node = stack.pop()
@@ -428,7 +646,8 @@ def scan_source(path, text):
                         })
                     else:
                         traced = _socketserver_site(child, ss_modules,
-                                                    ss_classes, ss_aliases)
+                                                    ss_classes, ss_aliases,
+                                                    ss_repo)
                         if traced:
                             traced_kind, traced_detail = traced
                             guarded = any(_is_guarded_call(a) for a in here)
@@ -446,7 +665,8 @@ def scan_source(path, text):
                                 "detail": callee,
                             })
             elif isinstance(child, ast.ClassDef):
-                bases = _class_bases(child, ss_modules, ss_classes, ss_aliases)
+                bases = _class_bases(child, ss_modules, ss_classes,
+                                     ss_aliases, ss_repo)
                 if bases:
                     rows.append({
                         "path": rel, "line": child.lineno,
@@ -472,11 +692,12 @@ def iter_modules(root):
 def scan(root=None, baseline=None):
     """Scan ``root`` and judge it against the socket-bind baseline."""
     root = root or HERE
+    exports = repo_reexports(root)
     rows = []
     scanned = 0
     for rel, full in iter_modules(root):
         with open(full, "r", encoding="utf-8", errors="replace") as handle:
-            rows.extend(scan_source(rel, handle.read()))
+            rows.extend(scan_source(rel, handle.read(), exports))
         scanned += 1
     approved = load_baseline(baseline or os.path.join(root, BASELINE_NAME))
     keys = set((entry.get("path"), entry.get("function"))
@@ -559,10 +780,11 @@ def main(argv):
 
 def scan_rows(root=None):
     root = root or HERE
+    exports = repo_reexports(root)
     rows = []
     for rel, full in iter_modules(root):
         with open(full, "r", encoding="utf-8", errors="replace") as handle:
-            rows.extend(scan_source(rel, handle.read()))
+            rows.extend(scan_source(rel, handle.read(), exports))
     return rows
 
 

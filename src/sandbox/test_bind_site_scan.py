@@ -1,13 +1,16 @@
 """Suite for the static bind-site gate that bounds R2942's disclosed hole.
 
-Criteria AC-BSC1..AC-BSC17. AC-BSC1..AC-BSC5 were pinned in src/os/backlog.md
+Criteria AC-BSC1..AC-BSC20. AC-BSC1..AC-BSC5 were pinned in src/os/backlog.md
 BEFORE this file, src/sandbox/bind_site_scan.py and src/sandbox/bind_sites.json
 existed (in-window pre-registration, disclosed); AC-BSC6..AC-BSC7 came with the
 asyncio kind (R2944), AC-BSC8..AC-BSC9 with its order/level rule (R2945),
 AC-BSC10..AC-BSC12 with the same rule applied to ws-serve (R2946), AC-BSC13..
-AC-BSC14 with the unix half of the asyncio family (R2969), and AC-BSC15..
+AC-BSC14 with the unix half of the asyncio family (R2969), AC-BSC15..
 AC-BSC17 with the socketserver construction family plus the measured
-declaration that serve_forever is not a bind site (R2970).
+declaration that serve_forever is not a bind site (R2970), and AC-BSC18..
+AC-BSC20 with a server class re-exported by another repo module plus the
+measured declaration that the type()/partial class and the non-Server import
+name stay out of range (R2971).
 
 Nothing here is read off the scanner's own prose: every criterion builds a
 private world on disk, runs the SHIPPED ``scan()`` over it, and requires a
@@ -41,6 +44,9 @@ PRE_R2969_REV = "73a00b5d64290948c1b2972208f7d5096a29ce4c"
 # The revision AC-BSC16 measures the live tree against: the R2969 bytes, i.e.
 # the scanner BEFORE the socketserver family existed.
 PRE_R2970_REV = "c6bf93ea03476a43feb023dca735af3809448fb5"
+# The revision AC-BSC19 measures the live tree against: the R2970 bytes, i.e.
+# the scanner BEFORE a repo module's re-export was followed.
+PRE_R2971_REV = "979b34e662c54ade292ea9826be285f0a9a52a27"
 
 sys.path.insert(0, HERE)
 import bind_site_scan  # noqa: E402
@@ -193,6 +199,75 @@ def serve_forever_sites(root):
                             site["resolved"] = True
             sites.append(site)
     return sites
+
+
+def composed_class_sites(root):
+    """Live ``type(...)`` / ``functools.partial(...)`` calls that touch a server.
+
+    AC-BSC20 grades a DECLARATION the same way AC-BSC17 does: the answer "a
+    class composed at run time stays out of range" is only honest if the number
+    of places that would need it is measured on the tree that ships it.
+    """
+    found = []
+    for rel, full in bind_site_scan.iter_modules(root):
+        rel = rel.replace(os.sep, "/")
+        with open(full, encoding="utf-8", errors="replace") as handle:
+            text = handle.read()
+        try:
+            tree = ast.parse(text)
+        except SyntaxError:
+            continue
+        partial_names = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom) and node.module == "functools":
+                for alias in node.names:
+                    if alias.name == "partial":
+                        partial_names.add(alias.asname or alias.name)
+            elif isinstance(node, ast.Import):
+                for alias in node.names:
+                    if alias.name == "functools":
+                        partial_names.add(alias.asname or alias.name)
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call):
+                continue
+            func = node.func
+            is_type = isinstance(func, ast.Name) and func.id == "type"
+            is_partial = ((isinstance(func, ast.Name)
+                           and func.id in partial_names)
+                          or (isinstance(func, ast.Attribute)
+                              and func.attr == "partial"))
+            if not (is_type or is_partial):
+                continue
+            dumped = ast.dump(node)
+            if "Server" in dumped or "socket" in dumped:
+                found.append({"path": rel, "line": node.lineno})
+    return found
+
+
+def socketserver_facts(root):
+    """(modules importing socketserver, non-Server from-import names) live."""
+    modules = set()
+    non_server = []
+    for rel, full in bind_site_scan.iter_modules(root):
+        rel = rel.replace(os.sep, "/")
+        with open(full, encoding="utf-8", errors="replace") as handle:
+            text = handle.read()
+        try:
+            tree = ast.parse(text)
+        except SyntaxError:
+            continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if alias.name == "socketserver":
+                        modules.add(rel)
+            elif isinstance(node, ast.ImportFrom):
+                if (node.module or "").split(".")[0] != "socketserver":
+                    continue
+                for alias in node.names:
+                    if not alias.name.endswith("Server"):
+                        non_server.append((rel, node.lineno, alias.name))
+    return (modules, non_server)
 
 
 def main():
@@ -1080,6 +1155,190 @@ def main():
         bad.append("unresolved-%s"
                    % [(s["path"], s["line"]) for s in unresolved])
     report("AC-BSC17", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC18: a server class RE-EXPORTED by another repo module is
+    # judged where it is constructed ---------------------------------------
+    bad = []
+    root = fresh_world("bsc18")
+    helper_export = "from socketserver import UDPServer\n"
+    site_alias = (
+        "import helper as h\n"
+        "\n"
+        "def boot(host, port, handler):\n"
+        "    return h.UDPServer((host, port), handler)\n"
+    )
+    site_gated = (
+        "import birth_gate\n"
+        "import helper as h\n"
+        "\n"
+        "def boot(host, port, handler):\n"
+        "    return birth_gate.checked_server(\n"
+        "        lambda: h.UDPServer((host, port), handler))\n"
+    )
+    site_bare = (
+        "from helper import UDPServer\n"
+        "\n"
+        "def boot(host, port, handler):\n"
+        "    return UDPServer((host, port), handler)\n"
+    )
+    write(root, "helper.py", helper_export)
+    write(root, "site.py", site_alias)
+    loud = bind_site_scan.scan(root=root)
+    if loud["ok"]:
+        bad.append("reexport-site-passed")
+    row = [r for r in loud["refused"] if r["path"] == "site.py"]
+    if not row:
+        bad.append("reexport-not-named")
+    else:
+        row = row[0]
+        if row["kind"] != "socketserver-server":
+            bad.append("kind-%s" % row["kind"])
+        if row["code"] != bind_site_scan.UNGUARDED:
+            bad.append("code-%s" % row["code"])
+        if row["line"] != 4:
+            bad.append("line-%s" % row["line"])
+        if row["function"] != "boot":
+            bad.append("function-%s" % row["function"])
+        if row["detail"] != "h.UDPServer->socketserver.UDPServer":
+            bad.append("detail-%s" % row["detail"])
+    # red control: the SAME construction through the SAME re-export passes once
+    # it sits inside the gate - the red was the missing door, not the name.
+    write(root, "site.py", site_gated)
+    healed = bind_site_scan.scan(root=root)
+    if not healed["ok"]:
+        bad.append("gated-reexport-still-refused")
+    # the bare from-import form names where the class came from.
+    write(root, "site.py", site_bare)
+    bare_loud = bind_site_scan.scan(root=root)
+    if bare_loud["ok"]:
+        bad.append("bare-reexport-passed")
+    bare_rows = [r for r in bare_loud["refused"] if r["path"] == "site.py"]
+    if not bare_rows:
+        bad.append("bare-reexport-not-named")
+    elif bare_rows[0]["detail"] != "UDPServer(from helper)->socketserver.UDPServer":
+        bad.append("bare-detail-%s" % bare_rows[0]["detail"])
+    report("AC-BSC18", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC18b: the chain, the subclass base, and the boundary -------
+    bad = []
+    root = fresh_world("bsc18b")
+    write(root, "helper1.py", "from socketserver import UDPServer\n")
+    write(root, "helper2.py", "from helper1 import UDPServer\n")
+    write(root, "site.py",
+          "import helper2 as h2\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return h2.UDPServer((host, port), handler)\n")
+    chain = bind_site_scan.scan(root=root)
+    if chain["ok"]:
+        bad.append("chain-site-passed")
+    chain_rows = [r for r in chain["refused"] if r["path"] == "site.py"]
+    if not chain_rows:
+        bad.append("chain-not-named")
+    elif chain_rows[0]["detail"] != (
+            "h2.UDPServer->helper1.UDPServer->socketserver.UDPServer"):
+        bad.append("chain-detail-%s" % chain_rows[0]["detail"])
+    # a subclass of a re-exported class is a server-subclass, like any other.
+    sub_root = fresh_world("bsc18b-sub")
+    write(sub_root, "helper.py", "from socketserver import UDPServer\n")
+    write(sub_root, "site.py",
+          "import helper as h\n"
+          "\n"
+          "class Face(h.UDPServer):\n"
+          "    allow_reuse_address = True\n")
+    sub = bind_site_scan.scan(root=sub_root)
+    if sub["ok"]:
+        bad.append("reexport-subclass-passed")
+    sub_rows = [r for r in sub["refused"] if r["kind"] == "server-subclass"]
+    if not sub_rows:
+        bad.append("subclass-not-named")
+    elif not sub_rows[0]["detail"].startswith("h.UDPServer"):
+        bad.append("subclass-detail-%s" % sub_rows[0]["detail"])
+    # boundary: a module re-exporting a HANDLER exports no server class, so
+    # the same construction through it is not a site - the map carries server
+    # classes, not every name from socketserver.
+    bound_root = fresh_world("bsc18b-bound")
+    write(bound_root, "handlers.py",
+          "from socketserver import BaseRequestHandler\n")
+    write(bound_root, "site.py",
+          "import handlers as h\n"
+          "\n"
+          "def make(handler):\n"
+          "    return h.BaseRequestHandler(handler)\n")
+    quiet = bind_site_scan.scan(root=bound_root)
+    if not quiet["ok"]:
+        bad.append("handler-world-refused")
+    if quiet["sites"] != 0:
+        bad.append("handler-sites-%d" % quiet["sites"])
+    # and a name bound twice keeps the server shape: a static read cannot prove
+    # which assignment runs, so the shape is refused rather than guessed away.
+    twice_root = fresh_world("bsc18b-twice")
+    write(twice_root, "helper.py",
+          "class Fake(object):\n"
+          "    pass\n"
+          "\n"
+          "try:\n"
+          "    from socketserver import UDPServer\n"
+          "except ImportError:\n"
+          "    UDPServer = Fake\n")
+    write(twice_root, "site.py",
+          "import helper as h\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return h.UDPServer((host, port), handler)\n")
+    twice = bind_site_scan.scan(root=twice_root)
+    if twice["ok"]:
+        bad.append("twice-bound-passed")
+    report("AC-BSC18b", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC19: the live tree does not move a single line -------------
+    bad = []
+    live = bind_site_scan.scan(root=HERE)
+    if not live["ok"]:
+        bad.append("shipped-tree-refused")
+    if live["sites"] != 14:
+        bad.append("live-sites-%d" % live["sites"])
+    want_kinds = {"http-server": 8, "server-subclass": 2, "socket-bind": 3,
+                  "ws-serve": 1}
+    if live["by_kind"] != want_kinds:
+        bad.append("live-kinds-%s" % sorted(live["by_kind"].items()))
+    old = subprocess.run(["git", "show", PRE_R2971_REV
+                          + ":src/sandbox/bind_site_scan.py"],
+                         cwd=REPO, stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    if old.returncode != 0 or not old.stdout:
+        bad.append("no-old-bytes")
+    else:
+        old_leaf = os.path.join(WORLD, "bind_site_scan_prer2971.py")
+        with open(old_leaf, "wb") as handle:
+            handle.write(old.stdout)
+        before = subprocess.run(
+            [sys.executable, old_leaf, "--list", "--root", HERE],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, timeout=120)
+        after = subprocess.run(
+            [sys.executable, LEAF, "--list", "--root", HERE],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, timeout=120)
+        if before.returncode != 0 or after.returncode != 0:
+            bad.append("list-rc-%d/%d" % (before.returncode, after.returncode))
+        if before.stdout != after.stdout:
+            bad.append("live-lines-moved")
+        os.remove(old_leaf)
+    report("AC-BSC19", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC20: the two remaining shapes are declared out of range with
+    # the measurement that makes the declaration checkable ------------------
+    bad = []
+    composed = composed_class_sites(HERE)
+    if composed:
+        bad.append("composed-%s" % [(c["path"], c["line"]) for c in composed])
+    modules, non_server = socketserver_facts(HERE)
+    if modules:
+        bad.append("socketserver-importers-%s" % sorted(modules))
+    if non_server:
+        bad.append("non-server-names-%s" % non_server)
+    report("AC-BSC20", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
