@@ -5,12 +5,12 @@
     "last_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\journey-19.9.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/battery-shard-regress-R2917.log (3180B, 2026-11-18)",
-    "latest_evidence": "qa/battery-shard-regress-R2917.log (3180B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/logs-toolkit-qreg-R2917c.log (8511B, 2026-11-18)",
+    "latest_evidence": "qa/logs-toolkit-qreg-R2917c.log (8511B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2918] next window (<=12h): (0) FOLD OWED - state closed at 77773B against the 78500B waterline (margin 727), so the next window folds a whole round through the shipped runner BEFORE any surgery. (1) the binding landed for ONE row (truncated)",
-    "next_milestone_due": "2026-11-18T20:49:44+08:00",
-    "updated_at": "2026-11-18T08:49:44+08:00"
+    "next_milestone": "[R2918] next window (<=12h): (0) FOLD OWED - state closed at 78351B against the 78500B waterline (margin 149), so the next window folds a whole round through the shipped runner BEFORE any surgery. (1) the binding landed for ONE row (truncated)",
+    "next_milestone_due": "2026-11-18T20:52:02+08:00",
+    "updated_at": "2026-11-18T08:52:02+08:00"
   },
   "current": "2026-11-18 R2917 PRODUCT+ENGINEERING: the os-logs-toolkit registry row stopped being a number nobody refutes - the suite now reads that row itself (label-scoped text read of reconcile_all.py, never imported) and refuses a green total that disagrees, so editing either side alone reddens it. AC-QREG7/8/9 were pinned in src/os/backlog.md BEFORE the edit; the check is the LAST ok() so it reads the run total off CHECKS+itself, the red control is a doctored registry copy off by one, and the reader is measured to write nothing.",
   "depts": [
@@ -41,10 +41,10 @@
     }
   ],
   "do": "2026-11-18 R2917 PRODUCT+ENGINEERING: the os-logs-toolkit registry row stopped being a number nobody refutes - the suite now reads that row itself (label-scoped text read of reconcile_all.py, never imported) and refuses a green total that disagrees, so editing either side alone reddens it. AC-QREG7/8/9 were pinned in src/os/backlog.md BEFORE the edit; the check is the LAST ok() so it reads the run total off CHECKS+itself, the red control is a doctored registry copy off by one, and the reader is measured to write nothing.",
-  "export_ts": "2026-11-18T08:49:44+08:00",
+  "export_ts": "2026-11-18T08:52:02+08:00",
   "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
-  "latest_evidence": "qa/battery-shard-regress-R2917.log (3180B, 2026-11-18)",
-  "next_milestone": "[R2918] next window (<=12h): (0) FOLD OWED - state closed at 77773B against the 78500B waterline (margin 727), so the next window folds a whole round through the shipped runner BEFORE any surgery. (1) the binding landed for ONE row (truncated)",
+  "latest_evidence": "qa/logs-toolkit-qreg-R2917c.log (8511B, 2026-11-18)",
+  "next_milestone": "[R2918] next window (<=12h): (0) FOLD OWED - state closed at 78351B against the 78500B waterline (margin 149), so the next window folds a whole round through the shipped runner BEFORE any surgery. (1) the binding landed for ONE row (truncated)",
   "outs": [
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 mtime]",
@@ -170,7 +170,7 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 89,
+    "log_lines_in_window": 90,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 15,
@@ -180,5 +180,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 77773
+  "state_bytes": 78351
 }
