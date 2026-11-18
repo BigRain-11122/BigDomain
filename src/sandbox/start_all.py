@@ -122,6 +122,15 @@ def build_commands(host, ports):
         "--panel-port", str(ports["panel"]),
         "--member-port", str(ports["member"]),
     ]
+    # The panel is told every face this launcher already serves, with the port
+    # it measured for each, so a click in the page refuses by name instead of
+    # starting a second lobby beside the one the person is looking at. The
+    # declaration is derived from FACE_KEYS/FACE_PORT_KEY rather than typed, so
+    # a face added to the plan is declared without anyone remembering to.
+    panel = [sys.executable, PANEL, "--host", host,
+             "--port", str(ports["panel"])]
+    for key in FACE_KEYS:
+        panel.extend(["--owned-face", "%s:%d" % (key, ports[FACE_PORT_KEY[key]])])
     return [
         ("lobby", lobby),
         ("checkout", [sys.executable, CHECKOUT, "--host", host,
@@ -130,8 +139,7 @@ def build_commands(host, ports):
                     "--port", str(ports["ledger"])]),
         ("ugc", [sys.executable, UGC, "--host", host,
                  "--port", str(ports["ugc"])]),
-        ("panel", [sys.executable, PANEL, "--host", host,
-                   "--port", str(ports["panel"])]),
+        ("panel", panel),
         ("member", [sys.executable, MEMBER, "--host", host,
                     "--port", str(ports["member"])]),
     ]

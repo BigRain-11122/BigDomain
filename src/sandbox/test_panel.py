@@ -1,7 +1,10 @@
 """Suite for the sandbox control panel (BigDomain R2481).
 
 Six criteria AC-PAN1..AC-PAN6 pre-registered in the R2481 backlog row BEFORE
-this file, src/sandbox/panel.py and its registry row existed.
+this file, src/sandbox/panel.py and its registry row existed. Five more -
+AC-PAN7..AC-PAN11 - were pre-registered in the R2938 backlog row BEFORE the
+ownership declaration existed, because the launcher used to leave the panel
+blind and a page click could start a SECOND lobby beside the running one.
 
 Nothing here is read off a canned string: the panel is really started, the
 start route really spawns a shipped module, an independent TCP connect checks
@@ -9,12 +12,13 @@ the port it reports, the served URL is compared against the page bytes on
 disk, and the teardown leg proves the children are gone.
 
 Usage: python test_panel.py
-Exit: 0 = SUITE PASS 6/6, 2 = FAIL.
+Exit: 0 = SUITE PASS 11/11, 2 = FAIL.
 """
 
 import json
 import os
 import socket
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -377,6 +381,253 @@ def ac_pan5():
                   "stopped port refused and the server took its child down")
 
 
+class DummyListener(object):
+    """A real listening socket standing in for a face a launcher serves."""
+
+    def __init__(self):
+        self.sock = socket.socket()
+        try:
+            self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        except OSError:
+            pass
+        self.sock.bind(("127.0.0.1", 0))
+        self.sock.listen(16)
+        self.port = int(self.sock.getsockname()[1])
+
+    def close(self):
+        try:
+            self.sock.close()
+        except OSError:
+            pass
+
+
+def owned_pairs(argv):
+    """The --owned-face values a command vector really carries, in order."""
+    pairs = []
+    for index, token in enumerate(argv):
+        if token == "--owned-face" and index + 1 < len(argv):
+            pairs.append(argv[index + 1])
+    return pairs
+
+
+def ac_pan7():
+    """The launcher declares what it serves, derived from its own tables."""
+    import start_all as start_module
+
+    bad = 0
+    ports = dict((key, 24000 + index)
+                 for index, key in enumerate(start_module.PLAN_KEYS))
+    commands = dict(start_module.build_commands("127.0.0.1", ports))
+    got = owned_pairs(commands.get("panel") or [])
+    expected = ["%s:%d" % (key, ports[start_module.FACE_PORT_KEY[key]])
+                for key in start_module.FACE_KEYS]
+    if got != expected:
+        bad += 1
+        print("  AC-PAN7 panel vector declares %r, plan says %r"
+              % (got, expected))
+    # Neutral control: the same reader must SEE a declaration go missing.
+    trimmed = list(commands.get("panel") or [])
+    if "--owned-face" in trimmed:
+        at = trimmed.index("--owned-face")
+        del trimmed[at:at + 2]
+    if owned_pairs(trimmed) == expected:
+        bad += 1
+        print("  AC-PAN7 reader cannot see a removed declaration")
+    return report("AC-PAN7 launcher declares owned faces", bad,
+                  "%d faces derived from FACE_KEYS/FACE_PORT_KEY" % len(expected))
+
+
+def ac_pan8():
+    """An owned face is refused by name; an unowned face still starts."""
+    dummy = DummyListener()
+    httpd, panel = panel_module.start_panel("127.0.0.1", 0,
+                                            owned={"lobby": dummy.port})
+    base = "http://127.0.0.1:%d" % httpd.server_address[1]
+    bad = 0
+    started = None
+    try:
+        code, body = jhttp(base + "/panel/api/start", "POST", {"face": "lobby"},
+                           timeout=40.0)
+        if code != 409 or body.get("error") != "E_PANEL_OWNED_BY_LAUNCHER":
+            bad += 1
+            print("  AC-PAN8 owned lobby start answered %s %r" % (code, body))
+        if body.get("port") != dummy.port or body.get("owner") != "launcher":
+            bad += 1
+            print("  AC-PAN8 refusal does not name the owner: %r" % (body,))
+        if not str(body.get("url") or "").endswith("/hub/"):
+            bad += 1
+            print("  AC-PAN8 refusal url shape drifted: %r" % (body.get("url"),))
+        if panel.children:
+            bad += 1
+            print("  AC-PAN8 a refused start still spawned: %r"
+                  % (sorted(panel.children),))
+        # Neutral control: the same panel still starts a face nobody owns.
+        code, started = jhttp(base + "/panel/api/start", "POST",
+                              {"face": "checkout"}, timeout=40.0)
+        if code != 200:
+            bad += 1
+            print("  AC-PAN8 unowned face answered %s %r" % (code, started))
+        elif not can_connect(started.get("port")):
+            bad += 1
+            print("  AC-PAN8 unowned face port %r refuses a connect"
+                  % (started.get("port"),))
+    finally:
+        jhttp(base + "/panel/api/stop", "POST", {"face": "checkout"})
+        httpd.shutdown()
+        httpd.server_close()
+        dummy.close()
+    return report("AC-PAN8 owned face refused, unowned still starts", bad,
+                  "409 E_PANEL_OWNED_BY_LAUNCHER and zero children")
+
+
+def ac_pan9():
+    """The panel will not kill another process's child, and the port survives."""
+    dummy = DummyListener()
+    httpd, _panel = panel_module.start_panel("127.0.0.1", 0,
+                                             owned={"member": dummy.port})
+    base = "http://127.0.0.1:%d" % httpd.server_address[1]
+    bad = 0
+    started = None
+    try:
+        code, body = jhttp(base + "/panel/api/stop", "POST", {"face": "member"})
+        if code != 409 or body.get("error") != "E_PANEL_OWNER_NOT_THIS_PROCESS":
+            bad += 1
+            print("  AC-PAN9 owned stop answered %s %r" % (code, body))
+        if not can_connect(dummy.port):
+            bad += 1
+            print("  AC-PAN9 the owner's listener was taken down")
+        # Neutral control: a face this panel started still stops.
+        code, started = jhttp(base + "/panel/api/start", "POST", {"face": "ugc"},
+                              timeout=40.0)
+        if code != 200:
+            bad += 1
+            print("  AC-PAN9 could not start a local face: %s %r"
+                  % (code, started))
+        else:
+            code, body = jhttp(base + "/panel/api/stop", "POST", {"face": "ugc"})
+            if code != 200:
+                bad += 1
+                print("  AC-PAN9 local stop answered %s %r" % (code, body))
+            if can_connect(started.get("port")):
+                bad += 1
+                print("  AC-PAN9 local stop left %r listening"
+                      % (started.get("port"),))
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+        dummy.close()
+    return report("AC-PAN9 owned stop refused, local stop works", bad,
+                  "409 named refusal and the owner's port stayed open")
+
+
+def ac_pan10():
+    """An owned face reads started and LIVE only while its port answers."""
+    dummy = DummyListener()
+    httpd, _panel = panel_module.start_panel("127.0.0.1", 0,
+                                             owned={"member": dummy.port})
+    base = "http://127.0.0.1:%d" % httpd.server_address[1]
+    bad = 0
+    try:
+        code, payload = jhttp(base + "/panel/api/state")
+        row = face_row(payload, "member")
+        if code != 200:
+            bad += 1
+            print("  AC-PAN10 state answered %s" % code)
+        if row.get("owner") != "launcher" or row.get("started") is not True:
+            bad += 1
+            print("  AC-PAN10 owned row does not name its owner: %r" % (row,))
+        if row.get("port") != dummy.port:
+            bad += 1
+            print("  AC-PAN10 owned row port drifted: %r" % (row.get("port"),))
+        if not str(row.get("url") or "").endswith("/member/"):
+            bad += 1
+            print("  AC-PAN10 owned row url drifted: %r" % (row.get("url"),))
+        if row.get("live") is not True:
+            bad += 1
+            print("  AC-PAN10 a listener that accepts reads not live: %r"
+                  % (row,))
+        dummy.close()
+        code, payload = jhttp(base + "/panel/api/state")
+        row = face_row(payload, "member")
+        if row.get("live") is not False:
+            bad += 1
+            print("  AC-PAN10 a closed port still reads live: %r" % (row,))
+        if row.get("owner") != "launcher":
+            bad += 1
+            print("  AC-PAN10 the declaration vanished with the listener: %r"
+                  % (row,))
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+        dummy.close()
+    return report("AC-PAN10 owned face measured, never assumed", bad,
+                  "live moved with the socket, owner stayed named")
+
+
+def ac_pan11():
+    """The declaration is wired through the CLI, not only in source."""
+    bad = 0
+    try:
+        parsed = panel_module.parse_owned(["lobby:1234", "ugc:99"])
+        if parsed != {"lobby": 1234, "ugc": 99}:
+            bad += 1
+            print("  AC-PAN11 parse_owned returned %r" % (parsed,))
+    except (AttributeError, ValueError) as exc:
+        bad += 1
+        print("  AC-PAN11 parse_owned is not callable: %r" % (exc,))
+    for spec in ("lobby", "lobby:x", ":12", "lobby:12:3", ""):
+        try:
+            panel_module.parse_owned([spec])
+            bad += 1
+            print("  AC-PAN11 malformed pair %r was accepted" % (spec,))
+        except ValueError as exc:
+            if "E_PANEL_BAD_OWNED" not in str(exc):
+                bad += 1
+                print("  AC-PAN11 refusal is not named: %r" % (exc,))
+        except AttributeError:
+            bad += 1
+            print("  AC-PAN11 parse_owned is missing")
+            break
+    dummy = DummyListener()
+    proc = None
+    try:
+        proc = subprocess.Popen(
+            [sys.executable, MODULE, "--host", "127.0.0.1", "--port", "0",
+             "--owned-face", "lobby:%d" % dummy.port],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL, cwd=REPO)
+        line = proc.stdout.readline().decode("utf-8", "replace").strip()
+        port = None
+        if "http://" in line:
+            tail = line.split("http://", 1)[1].split("/", 1)[0]
+            port = int(tail.rsplit(":", 1)[1])
+        if not port:
+            bad += 1
+            print("  AC-PAN11 panel did not print its own address: %r" % (line,))
+        else:
+            code, payload = jhttp("http://127.0.0.1:%d/panel/api/state" % port)
+            row = face_row(payload, "lobby")
+            if row.get("owner") != "launcher" or row.get("port") != dummy.port:
+                bad += 1
+                print("  AC-PAN11 CLI declaration did not reach the state: %r"
+                      % (row,))
+            code, body = jhttp("http://127.0.0.1:%d/panel/api/start" % port,
+                               "POST", {"face": "lobby"}, timeout=40.0)
+            if code != 409 or body.get("error") != "E_PANEL_OWNED_BY_LAUNCHER":
+                bad += 1
+                print("  AC-PAN11 CLI panel answered %s %r" % (code, body))
+    finally:
+        if proc is not None and proc.poll() is None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=10)
+            except Exception:
+                proc.kill()
+        dummy.close()
+    return report("AC-PAN11 declaration wired through the CLI", bad,
+                  "parse_owned both ways and a real --owned-face process")
+
+
 def main():
     ac_pan1()
     ac_pan2()
@@ -384,6 +635,11 @@ def main():
     ac_pan4()
     ac_pan6()
     ac_pan5()
+    ac_pan7()
+    ac_pan8()
+    ac_pan9()
+    ac_pan10()
+    ac_pan11()
     passed = sum(1 for _name, ok in RESULTS if ok)
     total = len(RESULTS)
     print("SUITE %s %d/%d" % ("PASS" if passed == total else "FAIL",

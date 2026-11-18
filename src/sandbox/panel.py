@@ -18,6 +18,13 @@ proved by its hub port - the address a person actually opens. A panel that
 printed a lobby URL nobody had measured would be lying, so the lobby counts as
 live only when its hub socket accepts a connection at the moment of reading.
 
+Ownership: the launcher can bring this panel up beside the faces it already
+serves, so a page click here used to start a SECOND lobby next to the one the
+person was looking at. The launcher now hands over the faces it serves and the
+ports it measured (--owned-face), and this module publishes them as live by
+measurement while refusing to start or stop them by name: a control surface
+that forks the sandbox is not a control surface.
+
 Honesty law: nothing is reported live because it was launched. A face reads
 live only when its port accepts a connection at the moment of the reading, and
 a refusal names its own error code rather than pretending success.
@@ -81,6 +88,26 @@ MOCK_STATEMENT = (
 
 START_TIMEOUT_S = 25.0
 STOP_TIMEOUT_S = 3.0
+OWNER_LAUNCHER = "launcher"
+OWNER_PANEL = "panel"
+
+
+def parse_owned(specs):
+    """face:port pairs the launcher declared it already serves.
+
+    Raises ValueError with a named code so the CLI can refuse loudly instead
+    of silently publishing a face it does not understand.
+    """
+    owned = {}
+    for spec in specs or ():
+        face_id, sep, port = str(spec).partition(":")
+        face_id = face_id.strip()
+        port = port.strip()
+        if not sep or not face_id or not port.isdigit():
+            raise ValueError("E_PANEL_BAD_OWNED: expected face:port, got %r"
+                             % (spec,))
+        owned[face_id] = int(port)
+    return owned
 
 
 def free_port(host="127.0.0.1"):
@@ -130,11 +157,13 @@ def read_notices(path=LEDGER_CONFIG):
 class Panel(object):
     """The children this panel owns; nothing else is ever terminated."""
 
-    def __init__(self, host="127.0.0.1", timeout=START_TIMEOUT_S):
+    def __init__(self, host="127.0.0.1", timeout=START_TIMEOUT_S, owned=None):
         self.host = host
         self.timeout = float(timeout)
         self.lock = threading.Lock()
         self.children = {}  # face id -> {"port": int, "proc": Popen}
+        # Faces a launcher serves beside this panel, with the ports it measured.
+        self.owned = dict(owned or {})
 
     def url_of(self, face_id, port):
         if face_id == "lobby":
@@ -161,8 +190,22 @@ class Panel(object):
         rows = []
         with self.lock:
             snapshot = dict(self.children)
+            owned = dict(self.owned)
         for face_id in FACE_IDS:
             entry = snapshot.get(face_id)
+            if entry is None and face_id in owned:
+                owned_port = int(owned[face_id])
+                rows.append({
+                    "id": face_id,
+                    "port": owned_port,
+                    "url": self.url_of(face_id, owned_port),
+                    "live": can_connect(self.host, owned_port),
+                    "started": True,
+                    "owner": OWNER_LAUNCHER,
+                    "cmd": None,
+                    "module": self.module_of(face_id),
+                })
+                continue
             port = entry["port"] if entry else None
             ports = entry.get("ports") if entry else None
             cmd_ports = ports if face_id == "lobby" else port
@@ -174,6 +217,7 @@ class Panel(object):
                 "url": self.url_of(face_id, port) if port else None,
                 "live": bool(live),
                 "started": bool(entry),
+                "owner": OWNER_PANEL if entry else None,
                 "cmd": self.cmd_of(face_id, cmd_ports),
                 "module": self.module_of(face_id),
             })
@@ -205,6 +249,19 @@ class Panel(object):
             if entry is not None and entry["proc"].poll() is None:
                 return 409, {"error": "E_PANEL_ALREADY_RUNNING",
                              "face": face_id, "port": entry["port"]}
+            owned_port = self.owned.get(face_id)
+        if owned_port:
+            # Starting a second copy would fork the sandbox: the person would
+            # be looking at one lobby and writing into another.
+            return 409, {"error": "E_PANEL_OWNED_BY_LAUNCHER",
+                         "face": face_id,
+                         "owner": OWNER_LAUNCHER,
+                         "port": int(owned_port),
+                         "url": self.url_of(face_id, owned_port),
+                         "detail": "the launcher already serves this face; "
+                                   "open the url it reports instead of "
+                                   "starting a second copy"}
+        with self.lock:
             ports = None
             if face_id == "lobby":
                 ports = {}
@@ -254,7 +311,17 @@ class Panel(object):
     def stop(self, face_id):
         with self.lock:
             entry = self.children.get(face_id)
+            owned_port = self.owned.get(face_id)
         if entry is None:
+            if owned_port:
+                # The launcher's child is not this panel's to kill: it also
+                # serves every other face the person is looking at.
+                return 409, {"error": "E_PANEL_OWNER_NOT_THIS_PROCESS",
+                             "face": face_id,
+                             "owner": OWNER_LAUNCHER,
+                             "port": int(owned_port),
+                             "detail": "this panel did not start that face, so "
+                                       "it will not kill another process's child"}
             return 404, {"error": "E_PANEL_NOT_STARTED", "face": face_id}
         port = entry["port"]
         self._kill(face_id)
@@ -403,12 +470,13 @@ class PanelServer(ThreadingHTTPServer):
             ThreadingHTTPServer.shutdown(self)
 
 
-def start_panel(host, port, timeout=START_TIMEOUT_S):
+def start_panel(host, port, timeout=START_TIMEOUT_S, owned=None):
     """Start the panel on its own thread; returns (server, panel).
 
     Pass port 0 and read server.server_address[1] for the real bound port.
+    ``owned`` maps a face id to the port a launcher beside this panel serves.
     """
-    panel = Panel(host=host, timeout=timeout)
+    panel = Panel(host=host, timeout=timeout, owned=owned)
     handler = type("BoundPanelHandler", (PanelHandler,), {"panel": panel})
     httpd = PanelServer((host, port), handler, panel)
     threading.Thread(target=httpd.serve_forever, name="sandbox-panel",
@@ -422,8 +490,19 @@ def main(argv=None):
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8099)
     parser.add_argument("--timeout", type=float, default=START_TIMEOUT_S)
+    parser.add_argument("--owned-face", action="append", default=None,
+                        dest="owned_face", metavar="FACE:PORT",
+                        help="a face a launcher beside this panel already "
+                             "serves, with the port it measured; this panel "
+                             "publishes it as live and refuses to start or "
+                             "stop it (repeat for each face)")
     args = parser.parse_args(argv)
-    httpd, panel = start_panel(args.host, args.port, args.timeout)
+    try:
+        owned = parse_owned(args.owned_face)
+    except ValueError as exc:
+        parser.error(str(exc))
+    httpd, panel = start_panel(args.host, args.port, args.timeout, owned)
+
     print("PANEL http://%s:%d/panel/" % (args.host,
                                         httpd.server_address[1]), flush=True)
     try:

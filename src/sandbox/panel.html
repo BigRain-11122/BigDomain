@@ -53,7 +53,7 @@
 <div id="log">就绪。</div>
 
 <footer>
-  五个面都能在这里启动：checkout / ledger / member / ugc 各占一个端口；lobby 服务器在一个进程里同时持有 ws、city、web、hub、gate 五个端口，面板会先把这五个端口一次性分配好再拉起它，并以 hub 端口作为对外地址来测定存活 —— 只有 hub 端口当场连得上才会显示 LIVE。终端里的 <code>python src/sandbox/start_all.py</code> 仍可一次性拉起全部六个面（会员页不在其中，请在此页点一下或单独启动）。
+  终端里的 <code>python src/sandbox/start_all.py</code> 会一次性拉起全部八个面（含本页与会员页）。<b>本页由启动器托管时</b>，每行都显示「由启动器持有 · owner=launcher」、两个按钮禁用——同一个沙箱不能被起第二份，点下去也只会得到具名拒绝（409），因为地址必须是启动器实测出来的那个。单独启动本页时（<code>python src/sandbox/panel.py</code>），checkout / ledger / member / ugc 各占一个端口；lobby 服务器在一个进程里同时持有 ws、city、web、hub、gate 五个端口，面板会先把这五个端口一次性分配好再拉起它，并以 hub 端口作为对外地址来测定存活 —— 只有 hub 端口当场连得上才会显示 LIVE。
 </footer>
 
 <script>
@@ -118,19 +118,28 @@
       tr.appendChild(urlCell);
 
       var actCell = document.createElement("td");
+      var owned = face.owner === "launcher";
       var start = document.createElement("button");
       start.textContent = "启动";
-      start.disabled = !!face.live;
+      start.disabled = !!face.live || owned;
       start.onclick = function () { act("api/start", face.id, start); };
       actCell.appendChild(start);
       var stop = document.createElement("button");
       stop.className = "stop";
       stop.textContent = "停止";
-      stop.disabled = !face.started;
+      stop.disabled = !face.started || owned;
       stop.onclick = function () { act("api/stop", face.id, stop); };
       actCell.appendChild(document.createTextNode(" "));
       actCell.appendChild(stop);
+      if (owned) {
+        var owner = document.createElement("div");
+        var ownerCode = document.createElement("code");
+        ownerCode.textContent = "由启动器持有 · owner=launcher（此处不重复启动、也不越权停止）";
+        owner.appendChild(ownerCode);
+        actCell.appendChild(owner);
+      }
       tr.appendChild(actCell);
+
 
       rowsEl.appendChild(tr);
     });
