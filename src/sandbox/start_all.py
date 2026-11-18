@@ -39,6 +39,7 @@ import urllib.error
 import urllib.request
 
 import job_object
+import launcher_registry
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LOBBY = os.path.join(HERE, "lobby")
@@ -328,10 +329,50 @@ def main(argv=None):
                         help="start WITHOUT a kill-on-close job object (red "
                              "control: a hard-killed launcher then leaves its "
                              "children holding ports)")
+    parser.add_argument("--registry", default=None,
+                        help="path of the machine-wide launcher record "
+                             "(default: the per-user record, never in this "
+                             "repo). Suites pass a private path so two test "
+                             "runs never compete for the machine claim.")
     args = parser.parse_args(argv)
 
     overrides = dict((key, getattr(args, "%s_port" % key)) for key in PLAN_KEYS)
     ports = plan(args.host, overrides)
+    # R2939: the machine record is claimed BEFORE the first child exists, so a
+    # second door is refused with zero processes started rather than after it
+    # has already forked a sandbox beside the one it cannot see.
+    registry_path = args.registry or launcher_registry.default_path()
+    claim = {
+        "pid": os.getpid(),
+        "ts": launcher_registry.stamp(),
+        "host": args.host,
+        "state": "starting",
+        "hub_url": None,
+        "ports": dict(ports),
+        "face_ports": dict((key, ports[FACE_PORT_KEY[key]])
+                           for key in FACE_KEYS),
+    }
+    claimed, holder, verdict = launcher_registry.claim(registry_path, claim)
+    if not claimed:
+        refused = {
+            "ok": False, "host": args.host, "hub_url": "",
+            "ports": {}, "face_ports": {}, "faces": {}, "live": {},
+            "children": [], "pids": {},
+            "job": {"available": job_object.available(), "enabled": False,
+                    "assigned": 0, "errors": []},
+            "registry": {"path": registry_path, "claimed": False,
+                         "held_by": holder, "verdict": verdict},
+            "errors": ["%s pid=%s hub_url=%s reason=%s"
+                       % (launcher_registry.REFUSED, verdict.get("pid"),
+                          verdict.get("hub_url") or "-",
+                          verdict.get("reason"))],
+            "mock": True, "chargeable": False,
+        }
+        if args.report_json:
+            write_report(args.report_json, refused)
+        print(json.dumps(refused, ensure_ascii=False, sort_keys=True),
+              flush=True)
+        return 2
     commands = build_commands(args.host, ports)
     group = start(commands, use_job=not args.no_job)
     code = 2
@@ -346,6 +387,15 @@ def main(argv=None):
         ready = ready and not group.job_errors
         report = report_of(args.host, ports, hub_url, faces, live, errors,
                            group)
+        report["registry"] = {"path": registry_path, "claimed": True,
+                              "pid": os.getpid(),
+                              "state": "serving" if ready else "starting"}
+        if ready:
+            serving = dict(claim)
+            serving["state"] = "serving"
+            serving["hub_url"] = hub_url
+            launcher_registry.write_serving(registry_path, serving)
+            report["registry"]["published"] = True
         if args.report_json:
             write_report(args.report_json, report)
         print(json.dumps(report, ensure_ascii=False, sort_keys=True), flush=True)
@@ -358,6 +408,7 @@ def main(argv=None):
     except KeyboardInterrupt:
         code = 0
     finally:
+        launcher_registry.release(registry_path)
         teardown(group)
     return code
 

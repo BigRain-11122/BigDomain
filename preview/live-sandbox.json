@@ -2,7 +2,7 @@
   "chargeable": false,
   "faces": 9,
   "gallery": "preview/live-sandbox.html",
-  "hub_url": "http://127.0.0.1:62216/hub/",
+  "hub_url": "http://127.0.0.1:61495/hub/",
   "mock": true,
   "ok": true,
   "photographed": 18,
@@ -16,7 +16,7 @@
     "passes": 2,
     "second_ok": true
   },
-  "shoot_ts": "20261118-140604",
+  "shoot_ts": "20261118-141535",
   "shots": [
     {
       "acted": [],
@@ -26,7 +26,7 @@
       "pass": 1,
       "png": "preview/live/hub.png",
       "status": 200,
-      "url": "http://127.0.0.1:62216/hub/",
+      "url": "http://127.0.0.1:61495/hub/",
       "why": ""
     },
     {
@@ -41,7 +41,7 @@
       "pass": 1,
       "png": "preview/live/lobby.png",
       "status": 200,
-      "url": "http://127.0.0.1:62215/lobby/",
+      "url": "http://127.0.0.1:61494/lobby/",
       "why": ""
     },
     {
@@ -52,7 +52,7 @@
       "pass": 1,
       "png": "preview/live/city.png",
       "status": 200,
-      "url": "http://127.0.0.1:62213/city/",
+      "url": "http://127.0.0.1:61492/city/",
       "why": ""
     },
     {
@@ -63,7 +63,7 @@
       "pass": 1,
       "png": "preview/live/gate.png",
       "status": 200,
-      "url": "http://127.0.0.1:62214/gate/",
+      "url": "http://127.0.0.1:61493/gate/",
       "why": ""
     },
     {
@@ -74,7 +74,7 @@
       "pass": 1,
       "png": "preview/live/ugc.png",
       "status": 200,
-      "url": "http://127.0.0.1:62219/ugc/",
+      "url": "http://127.0.0.1:61498/ugc/",
       "why": ""
     },
     {
@@ -85,7 +85,7 @@
       "pass": 1,
       "png": "preview/live/ledger.png",
       "status": 200,
-      "url": "http://127.0.0.1:62218/ledger/",
+      "url": "http://127.0.0.1:61497/ledger/",
       "why": ""
     },
     {
@@ -96,7 +96,7 @@
       "pass": 1,
       "png": "preview/live/checkout.png",
       "status": 200,
-      "url": "http://127.0.0.1:62217/checkout/",
+      "url": "http://127.0.0.1:61496/checkout/",
       "why": ""
     },
     {
@@ -107,7 +107,7 @@
       "pass": 1,
       "png": "preview/live/member.png",
       "status": 200,
-      "url": "http://127.0.0.1:62221/member/",
+      "url": "http://127.0.0.1:61500/member/",
       "why": ""
     },
     {
@@ -118,7 +118,7 @@
       "pass": 1,
       "png": "preview/live/panel.png",
       "status": 200,
-      "url": "http://127.0.0.1:62220/panel/",
+      "url": "http://127.0.0.1:61499/panel/",
       "why": ""
     },
     {
@@ -129,7 +129,7 @@
       "pass": 2,
       "png": "preview/live/hub-p2.png",
       "status": 200,
-      "url": "http://127.0.0.1:62216/hub/",
+      "url": "http://127.0.0.1:61495/hub/",
       "why": ""
     },
     {
@@ -144,7 +144,7 @@
       "pass": 2,
       "png": "preview/live/lobby-p2.png",
       "status": 200,
-      "url": "http://127.0.0.1:62215/lobby/",
+      "url": "http://127.0.0.1:61494/lobby/",
       "why": ""
     },
     {
@@ -155,7 +155,7 @@
       "pass": 2,
       "png": "preview/live/city-p2.png",
       "status": 200,
-      "url": "http://127.0.0.1:62213/city/",
+      "url": "http://127.0.0.1:61492/city/",
       "why": ""
     },
     {
@@ -166,7 +166,7 @@
       "pass": 2,
       "png": "preview/live/gate-p2.png",
       "status": 200,
-      "url": "http://127.0.0.1:62214/gate/",
+      "url": "http://127.0.0.1:61493/gate/",
       "why": ""
     },
     {
@@ -177,7 +177,7 @@
       "pass": 2,
       "png": "preview/live/ugc-p2.png",
       "status": 200,
-      "url": "http://127.0.0.1:62219/ugc/",
+      "url": "http://127.0.0.1:61498/ugc/",
       "why": ""
     },
     {
@@ -188,7 +188,7 @@
       "pass": 2,
       "png": "preview/live/ledger-p2.png",
       "status": 200,
-      "url": "http://127.0.0.1:62218/ledger/",
+      "url": "http://127.0.0.1:61497/ledger/",
       "why": ""
     },
     {
@@ -199,7 +199,7 @@
       "pass": 2,
       "png": "preview/live/checkout-p2.png",
       "status": 200,
-      "url": "http://127.0.0.1:62217/checkout/",
+      "url": "http://127.0.0.1:61496/checkout/",
       "why": ""
     },
     {
@@ -210,7 +210,7 @@
       "pass": 2,
       "png": "preview/live/member-p2.png",
       "status": 200,
-      "url": "http://127.0.0.1:62221/member/",
+      "url": "http://127.0.0.1:61500/member/",
       "why": ""
     },
     {
@@ -221,7 +221,7 @@
       "pass": 2,
       "png": "preview/live/panel-p2.png",
       "status": 200,
-      "url": "http://127.0.0.1:62220/panel/",
+      "url": "http://127.0.0.1:61499/panel/",
       "why": ""
     }
   ],

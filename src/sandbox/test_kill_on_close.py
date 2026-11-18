@@ -87,7 +87,12 @@ class Box(object):
         self.report_path = os.path.join(TMP, name + ".json")
         self.stop_path = os.path.join(TMP, name + ".stop")
         self.stop_file = stop_file
+        # A private machine record per run: this suite hard-kills launchers on
+        # purpose, so it must never leave a claim in the per-user record that a
+        # real launcher would have to judge (R2939).
+        self.registry_path = os.path.join(TMP, name + ".registry.json")
         argv = [sys.executable, MODULE, "--timeout", "40",
+                "--registry", self.registry_path,
                 "--report-json", self.report_path]
         if stop_file:
             argv += ["--stop-file", self.stop_path]

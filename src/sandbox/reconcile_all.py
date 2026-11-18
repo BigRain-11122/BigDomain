@@ -272,6 +272,15 @@ SUITES = [
     # kernel instead of by a `finally`. AC-KOC1..AC-KOC5 were pinned in
     # src/os/backlog.md BEFORE the job wiring and this suite existed.
     ("kill-on-close", os.path.join("test_kill_on_close.py"), 5),
+    # machine-wide launcher record (R2939): the ownership declaration R2938
+    # shipped was ARGV - it travelled from the launcher to its own child and
+    # nowhere else - so a second door on the same machine forked the sandbox
+    # with no refusal anywhere. src/sandbox/launcher_registry.py claims one
+    # per-user record exclusively and a second launcher re-measures it (pid
+    # alive AND the recorded hub really answers) before refusing by name, with
+    # zero children started. AC-LND1..AC-LND5 were pinned in src/os/backlog.md
+    # BEFORE this suite and the leaf module existed.
+    ("launcher-registry", os.path.join("test_launcher_registry.py"), 5),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the

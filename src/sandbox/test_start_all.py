@@ -120,7 +120,11 @@ class Sandbox(object):
         self.dir = tmpdir
         self.report_path = os.path.join(tmpdir, name)
         self.stop_path = os.path.join(tmpdir, name + ".stop")
+        # A private machine record per run, so this suite neither competes for
+        # the per-user claim nor leaves one behind (R2939).
+        self.registry_path = os.path.join(tmpdir, name + ".registry.json")
         argv = [sys.executable, MODULE, "--timeout", "40",
+                "--registry", self.registry_path,
                 "--report-json", self.report_path,
                 "--stop-file", self.stop_path]
         if ws_port:

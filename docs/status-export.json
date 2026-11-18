@@ -1,21 +1,19 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [
-      "preview/face-sweep.html (7000B)"
-    ],
-    "current": "2026-11-18 R2938 PRODUCT: the control panel can no longer fork the sandbox. start_all now hands the panel it starts every face it already serves, with the port it measured for that face (--owned-face face:port, derived from FACE_KEYS/FACE_PORT_KEY rather than typed), and panel.py publishes those rows as started / owner=launcher / live-by-connect while refusing to start (409 E_PANEL_OWNED_BY_LAUNCHER, carrying owner, port and the url to open instead) and refusing to stop (409 E_PANEL_OWNER_NOT_THIS_PROCESS, because the launcher's child also serves every other face). The page disables both buttons on an owned row and names the owner, so the click that used to spawn a second lobby is no longer offered and, if forced past the page, is refused by name.",
+    "board_pages_skipped": [],
+    "current": "2026-11-18 R2939 PRODUCT+ENGINEERING: two sandbox doors on one machine can no longer both fork the sandbox. R2938 taught the panel which faces the launcher serves, but that knowledge was ARGV - it travelled from the launcher to its own child and nowhere else - so this round added the missing discovery face: src/sandbox/launcher_registry.py is a LEAF module that (1) CLAIMS one per-user record exclusively with O_CREAT|O_EXCL at %LOCALAPPDATA%\\BigDomain\\sandbox-launcher.json (never inside the repo), (2) JUDGES a record by RE-MEASURING it - pid alive AND (state=starting OR the recorded hub port accepts a connection right now) - and (3) releases only a record that names its own pid. start_all now claims BEFORE the first child exists, so a second door exits 2 with E_LAUNCHER_ALREADY_RUNNING naming the holder pid and hub_url and children=[] / pids={} - zero processes started - and publishes its own record as serving once every face is proved.",
     "do": "2026-11-18 R2936 PRODUCT: the last two faces the hub publishes stopped reading NOT STARTED. src/sandbox/start_all.py now plans ten ports for eight faces, starts the shipped control panel and membership page as its own children, and hands their MEASURED ports to the lobby on its command line instead of letting the hub advertise built-in 8099/8096 guesses. Live: start_all.py --check rc=0 with all eight faces live; ceo_live_shot.py --prove --check rc=0 faces=9 shots_total=18 with_errors=0 proof{passes:2, agreements:9, disagreed:[]} in 30.4s - nine faces shot twice on one sandbox, no drift.",
-    "last_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
-    "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
+    "last_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 mtime]",
+    "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifacts this window are nine faces photographed twice (18 PNGs) plus the gallery; the two faces that read NOT STARTED for as long as they existed are now served on measured ports",
-    "latest_evidence": "qa/live-prove-R2936.log (3490B) + qa/start-all-R2936.log (1183B) + qa/leg-nine-faces-R2936.log (418B)",
+    "latest_artifact_note": "",
+    "latest_evidence": "qa/leg-launcher-registry-R2939.log (340B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2938] next window (<=12h): (0) MAIN — the ownership declaration has NO discovery: it is argv the launcher builds for its own child, so two independently started launchers (or a panel started by hand) still fork the sandbox with no refusal anywhere, and this window disclosed that rather than solving it. Decide and prove: either a machine-wide record (a pid+ports file written when a launcher comes up, read and re-measured by a second one that then refuses by name), or declare concurrent launchers official with a stated reason — with a red control either way, and with the second launcher's refusal shown to fire only while the first is really alive. (1) carried from R2937: the hard-kill proof covers the launcher's DIRECT children only — decide whether to measure grandchild inheritance (a child that spawns a child) or declare it out of scope by name (truncated)",
-    "next_milestone_due": "2026-11-19T02:04:55+08:00",
-    "updated_at": "2026-11-18T14:04:55+08:00"
+    "next_milestone": "[R2940] next window (<=12h): (0) MAIN — the record is a FILE and this window said so: if anything deletes `%LOCALAPPDATA%\\BigDomain\\sandbox-launcher.json` while a launcher serves, a second door starts, and a face started by hand (`python lobby/server.py`) writes no record at all and is never refused. Decide and prove: either a discovery face that does not trust the file (a scan that finds the serving launcher by its own listening ports / child pids and refuses against that), or declare the file-deletion and hand-start holes official with a stated reason — with a red control either way, and with the refusal shown to fire only while the found launcher is really serving. (1) carried from R2937/R2938 and still undecided: the hard-kill proof covers the launcher's DIRECT children only — decide whether to measure grandchild inheritance (a child that spawns a child) or declare it out of scope by name (truncated)",
+    "next_milestone_due": "2026-11-19T02:18:55+08:00",
+    "updated_at": "2026-11-18T14:18:55+08:00"
   },
-  "current": "2026-11-18 R2938 PRODUCT: the control panel can no longer fork the sandbox. start_all now hands the panel it starts every face it already serves, with the port it measured for that face (--owned-face face:port, derived from FACE_KEYS/FACE_PORT_KEY rather than typed), and panel.py publishes those rows as started / owner=launcher / live-by-connect while refusing to start (409 E_PANEL_OWNED_BY_LAUNCHER, carrying owner, port and the url to open instead) and refusing to stop (409 E_PANEL_OWNER_NOT_THIS_PROCESS, because the launcher's child also serves every other face). The page disables both buttons on an owned row and names the owner, so the click that used to spawn a second lobby is no longer offered and, if forced past the page, is refused by name.",
+  "current": "2026-11-18 R2939 PRODUCT+ENGINEERING: two sandbox doors on one machine can no longer both fork the sandbox. R2938 taught the panel which faces the launcher serves, but that knowledge was ARGV - it travelled from the launcher to its own child and nowhere else - so this round added the missing discovery face: src/sandbox/launcher_registry.py is a LEAF module that (1) CLAIMS one per-user record exclusively with O_CREAT|O_EXCL at %LOCALAPPDATA%\\BigDomain\\sandbox-launcher.json (never inside the repo), (2) JUDGES a record by RE-MEASURING it - pid alive AND (state=starting OR the recorded hub port accepts a connection right now) - and (3) releases only a record that names its own pid. start_all now claims BEFORE the first child exists, so a second door exits 2 with E_LAUNCHER_ALREADY_RUNNING naming the holder pid and hub_url and children=[] / pids={} - zero processes started - and publishes its own record as serving once every face is proved.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -43,12 +41,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2938 PRODUCT: the control panel can no longer fork the sandbox. start_all now hands the panel it starts every face it already serves, with the port it measured for that face (--owned-face face:port, derived from FACE_KEYS/FACE_PORT_KEY rather than typed), and panel.py publishes those rows as started / owner=launcher / live-by-connect while refusing to start (409 E_PANEL_OWNED_BY_LAUNCHER, carrying owner, port and the url to open instead) and refusing to stop (409 E_PANEL_OWNER_NOT_THIS_PROCESS, because the launcher's child also serves every other face). The page disables both buttons on an owned row and names the owner, so the click that used to spawn a second lobby is no longer offered and, if forced past the page, is refused by name.",
-  "export_ts": "2026-11-18T14:04:55+08:00",
-  "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
-  "latest_evidence": "qa/live-prove-R2936.log (3490B) + qa/start-all-R2936.log (1183B) + qa/leg-nine-faces-R2936.log (418B)",
-  "next_milestone": "[R2938] next window (<=12h): (0) MAIN — the ownership declaration has NO discovery: it is argv the launcher builds for its own child, so two independently started launchers (or a panel started by hand) still fork the sandbox with no refusal anywhere, and this window disclosed that rather than solving it. Decide and prove: either a machine-wide record (a pid+ports file written when a launcher comes up, read and re-measured by a second one that then refuses by name), or declare concurrent launchers official with a stated reason — with a red control either way, and with the second launcher's refusal shown to fire only while the first is really alive. (1) carried from R2937: the hard-kill proof covers the launcher's DIRECT children only — decide whether to measure grandchild inheritance (a child that spawns a child) or declare it out of scope by name (truncated)",
+  "do": "2026-11-18 R2939 PRODUCT+ENGINEERING: two sandbox doors on one machine can no longer both fork the sandbox. R2938 taught the panel which faces the launcher serves, but that knowledge was ARGV - it travelled from the launcher to its own child and nowhere else - so this round added the missing discovery face: src/sandbox/launcher_registry.py is a LEAF module that (1) CLAIMS one per-user record exclusively with O_CREAT|O_EXCL at %LOCALAPPDATA%\\BigDomain\\sandbox-launcher.json (never inside the repo), (2) JUDGES a record by RE-MEASURING it - pid alive AND (state=starting OR the recorded hub port accepts a connection right now) - and (3) releases only a record that names its own pid. start_all now claims BEFORE the first child exists, so a second door exits 2 with E_LAUNCHER_ALREADY_RUNNING naming the holder pid and hub_url and children=[] / pids={} - zero processes started - and publishes its own record as serving once every face is proved.",
+  "export_ts": "2026-11-18T14:18:55+08:00",
+  "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 mtime]",
+  "latest_evidence": "qa/leg-launcher-registry-R2939.log (340B, 2026-11-18)",
+  "next_milestone": "[R2940] next window (<=12h): (0) MAIN — the record is a FILE and this window said so: if anything deletes `%LOCALAPPDATA%\\BigDomain\\sandbox-launcher.json` while a launcher serves, a second door starts, and a face started by hand (`python lobby/server.py`) writes no record at all and is never refused. Decide and prove: either a discovery face that does not trust the file (a scan that finds the serving launcher by its own listening ports / child pids and refuses against that), or declare the file-deletion and hand-start holes official with a stated reason — with a red control either way, and with the refusal shown to fire only while the found launcher is really serving. (1) carried from R2937/R2938 and still undecided: the hard-kill proof covers the launcher's DIRECT children only — decide whether to measure grandchild inheritance (a child that spawns a child) or declare it out of scope by name (truncated)",
   "outs": [
+    "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 mtime]",
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
@@ -99,9 +98,9 @@
   "queue": {
     "delivered_total": 2,
     "floors": {
-      "explore": 10,
       "main": 5,
-      "tech": 10
+      "tech": 10,
+      "explore": 10
     },
     "missing": [],
     "queues": [
@@ -162,7 +161,7 @@
   },
   "results": [
     [
-      "2932",
+      "2939",
       "OSLoop 执行 tick"
     ]
   ],
@@ -173,17 +172,17 @@
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
   "self_drive": {
+    "window": "2026-11-12..2026-11-18",
+    "window_days": 7,
+    "log_lines_in_window": 75,
     "idle_fast_mention_lines": 0,
-    "log_lines_in_window": 84,
     "no_pullable_mention_lines": 0,
-    "proposals_open": 8,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 10,
-    "queue_explore_open": 10,
+    "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
-    "substantive_non_idle_mention_lines": 16,
-    "window": "2026-11-12..2026-11-18",
-    "window_days": 7
+    "queue_explore_open": 10
   },
-  "state_bytes": 75748
+  "state_bytes": 75323
 }
