@@ -1,10 +1,26 @@
 """Suite for the kill-on-close job object that keeps children off dead ports.
 
-Six criteria AC-KOC1..AC-KOC6, pre-registered in the R2937 backlog row BEFORE
+Eight criteria AC-KOC1..AC-KOC8, pre-registered in the R2937 backlog row BEFORE
 this file and the job wiring existed (in-window pre-registration, disclosed);
 AC-KOC6 was pre-registered in the R2947 board row before it existed, and it
 answers the question R2937 disclosed rather than decided - whether the
 guarantee reaches a GRANDCHILD, not only the layer the launcher assigns.
+
+R2975 adds AC-KOC7..AC-KOC8, pre-registered in the R2975 board row before this
+code, because AC-KOC6 left one link unmeasured and the board carried it:
+AC-KOC6 asks the KERNEL whether a child of an assigned process is a member, and
+then CLOSES THE HANDLE ITSELF from this process. That is membership plus an
+explicit close - not the path a crash takes, where the holder is killed hard and
+the kernel closes its handles for it. AC-KOC7 measures that path: a holder built
+from the SHIPPED job_object law creates the job, spawns the middle layer,
+assigns it and then holds the handle until it is hard-killed; the grandchild
+below the middle layer must die with it, and an unassigned twin of the same
+program must keep serving so the probe is proven able to say no. AC-KOC8
+measures the same question in the shipped tree: with a real launcher serving,
+every face its panel could start is already owned by that launcher, so the panel
+refuses by name and no grandchild process exists to be reached or missed.
+Neither criterion stands in for the other, and neither re-claims the membership
+AC-KOC6 already measured.
 
 The claim under test is not "the launcher tears down nicely" - AC-STL5 already
 covers that. It is the stronger one R2934 measured the absence of: a launcher
@@ -22,12 +38,15 @@ Exit: 0 = SUITE PASS, 2 = FAIL.
 """
 
 import ctypes
+import hashlib
 import json
 import os
 import socket
 import subprocess
 import sys
 import time
+import urllib.error
+import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
@@ -69,6 +88,34 @@ server = socket.socket()
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind(("127.0.0.1", int(sys.argv[1])))
 server.listen(8)
+while True:
+    time.sleep(0.2)
+'''
+
+# AC-KOC7 scaffolding: a HOLDER that stands where the launcher stands. It is
+# built from the shipped job_object law rather than from its own win32 calls, so
+# what is measured is this repo's law and not a copy of it. It assigns the
+# middle layer and then holds the handle and does nothing - which is exactly the
+# launcher's relationship to its children, except that the launcher also serves.
+# Killing this process hard is the crash path: the kernel closes its handles.
+KOC7_HOLDER = '''import subprocess
+import sys
+import time
+
+sandbox_dir, middle_src, grand_src, port, pidfile, go = sys.argv[1:7]
+sys.path.insert(0, sandbox_dir)
+import job_object
+
+job = job_object.create(None)
+middle = subprocess.Popen(
+    [sys.executable, middle_src, grand_src, port, pidfile, go],
+    stdin=subprocess.DEVNULL,
+    stdout=subprocess.DEVNULL,
+    stderr=subprocess.DEVNULL,
+)
+job_object.assign(job, middle.pid)
+with open(pidfile + ".middle", "w", encoding="utf-8") as handle:
+    handle.write("%d\\n" % middle.pid)
 while True:
     time.sleep(0.2)
 '''
@@ -156,6 +203,59 @@ def terminate_pid(pid):
     finally:
         kernel32.CloseHandle(proc)
     return True
+
+
+def pid_alive(pid):
+    """True while that pid names a process the kernel has not reaped yet.
+
+    Asked with the synchronisation object rather than by name, so a pid whose
+    process is gone reads dead even when the number itself still appears in a
+    listing; a recycled pid could read alive, which is why this is sampled
+    immediately after the kill and is never the only arm.
+    """
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    kernel32.OpenProcess.restype = ctypes.c_void_p
+    wait_timeout = 0x102
+    proc = kernel32.OpenProcess(0x00100000, 0, int(pid))
+    if not proc:
+        return False
+    try:
+        return kernel32.WaitForSingleObject(proc, 0) == wait_timeout
+    finally:
+        kernel32.CloseHandle(proc)
+
+
+def spare_port():
+    """One free loopback port, taken then released for the child to bind."""
+    probe = socket.socket()
+    try:
+        probe.bind(("127.0.0.1", 0))
+        return int(probe.getsockname()[1])
+    finally:
+        probe.close()
+
+
+def http_json(port, path, payload=None, timeout=40.0):
+    """(status, object) from a loopback HTTP call; 4xx is data, not an error."""
+    url = "http://127.0.0.1:%d%s" % (int(port), path)
+    body = None if payload is None else json.dumps(payload).encode("utf-8")
+    request = urllib.request.Request(
+        url, data=body, method="POST" if body is not None else "GET",
+        headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as res:
+            return res.getcode(), json.loads(res.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        raw = exc.read().decode("utf-8", "replace")
+        try:
+            return exc.code, json.loads(raw)
+        except ValueError:
+            return exc.code, {"raw": raw}
+
+
+def file_digest(path):
+    with open(path, "rb") as handle:
+        return hashlib.sha256(handle.read()).hexdigest()
 
 
 class Box(object):
@@ -432,6 +532,165 @@ def main():
             _kill_by_port(port)
     ok("AC-KOC6 a grandchild joins the job the kernel inherits", not bad,
        ",".join(bad))
+
+    # AC-KOC7: the same layer, but through the path a CRASH takes. AC-KOC6
+    # closed the handle from this process; here the holder is hard-killed, so
+    # the kernel closes it, and nothing this suite does can help or hinder the
+    # grandchild afterwards.
+    bad7 = []
+    gc7_port = spare_port()
+    out7_port = spare_port()
+    holder_src = _write_temp("koc7_holder.py", KOC7_HOLDER)
+    middle7_src = _write_temp("koc7_middle.py", KOC6_PARENT)
+    grand7_src = _write_temp("koc7_grand.py", KOC6_GRAND)
+    gc7_pid_file = os.path.join(TMP, "koc7.grand.pid")
+    middle7_pid_file = gc7_pid_file + ".middle"
+    go7 = os.path.join(TMP, "koc7.go")
+    for path in (gc7_pid_file, middle7_pid_file, go7):
+        if os.path.exists(path):
+            os.remove(path)
+    holder = None
+    outsider7 = None
+    middle7_pid = 0
+    grand7_pid = 0
+    try:
+        holder = subprocess.Popen(
+            [sys.executable, holder_src, HERE, middle7_src, grand7_src,
+             str(gc7_port), gc7_pid_file, go7],
+            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL)
+        deadline = time.time() + 40.0
+        while time.time() < deadline and not os.path.exists(middle7_pid_file):
+            time.sleep(0.05)
+        if os.path.exists(middle7_pid_file):
+            with open(middle7_pid_file, encoding="utf-8") as handle:
+                middle7_pid = int(handle.read().strip() or 0)
+        if not middle7_pid:
+            bad7.append("holder-never-assigned-a-middle-layer")
+        elif not pid_alive(middle7_pid):
+            bad7.append("middle-layer-dead-before-the-kill")
+        with open(go7, "w", encoding="utf-8") as handle:
+            handle.write("go\n")
+        deadline = time.time() + 40.0
+        while time.time() < deadline:
+            if os.path.exists(gc7_pid_file) and can_connect(gc7_port):
+                break
+            time.sleep(0.05)
+        if os.path.exists(gc7_pid_file):
+            with open(gc7_pid_file, encoding="utf-8") as handle:
+                grand7_pid = int(handle.read().strip() or 0)
+        if not grand7_pid:
+            bad7.append("grandchild-never-reported")
+        if not can_connect(gc7_port):
+            bad7.append("grandchild-never-listened")
+        # The control that lets this arm say NO: the same program, never
+        # assigned, must still be serving after the kill.
+        outsider7 = subprocess.Popen(
+            [sys.executable, grand7_src, str(out7_port)],
+            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL)
+        deadline = time.time() + 30.0
+        while time.time() < deadline and not can_connect(out7_port):
+            time.sleep(0.05)
+        if not can_connect(out7_port):
+            bad7.append("outsider-never-listened")
+        # THE measurement: no finally, no stop file, the only handle to the job
+        # owned by a process that is about to stop existing.
+        terminate_pid(holder.pid)
+        holder.wait(timeout=10)
+        silent = wait_all_silent([gc7_port], 20.0)
+        if silent < 0:
+            bad7.append("grandchild-outlived-the-hard-killed-holder")
+        else:
+            print("PASS AC-KOC7 the grandchild's port went silent %ss after "
+                  "the holder was hard-killed" % (silent,))
+        if middle7_pid and pid_alive(middle7_pid):
+            bad7.append("middle-layer-outlived-the-hard-killed-holder")
+        if not can_connect(out7_port):
+            bad7.append("outsider-was-killed-by-a-job-it-never-joined")
+    finally:
+        for victim in (holder, outsider7):
+            if victim is not None and victim.poll() is None:
+                victim.kill()
+                try:
+                    victim.wait(timeout=10)
+                except subprocess.TimeoutExpired:
+                    pass
+        for pid in (grand7_pid, middle7_pid):
+            if pid:
+                try:
+                    terminate_pid(pid)
+                except OSError:
+                    pass
+        for port in (gc7_port, out7_port):
+            _kill_by_port(port)
+    ok("AC-KOC7 a grandchild of an assigned child dies when the HOLDER is "
+       "hard-killed", not bad7, ",".join(bad7))
+
+    # AC-KOC8: the other half of the same question, asked of the SHIPPED tree.
+    # A real launcher serves; every face its panel could start is asked for by
+    # name. If the panel started one, this round would have a grandchild to
+    # worry about; the arm measures what really happens instead of assuming.
+    # The private record is per PROCESS as well as per name: its kernel claim
+    # name is derived from that path, so a launcher left behind by a crashed
+    # earlier run can never make this arm red for a reason it is not asking
+    # about (measured: it did exactly that once during this window).
+    bad8 = []
+    chain = Box("realchain-%d" % os.getpid(), stop_file=True)
+    chain_rep = chain.start()
+    import panel as panel_module  # noqa: E402  (path wired above)
+    panel_port = (chain_rep.get("ports") or {}).get("panel")
+    chain_face_ports = chain_rep.get("face_ports") or {}
+    started_faces = []
+    if not panel_port:
+        bad8.append("launcher-published-no-panel-port")
+    else:
+        before = (file_digest(chain.report_path)
+                  if os.path.exists(chain.report_path) else "")
+        for face_id in panel_module.FACE_IDS:
+            code, body = http_json(panel_port, "/panel/api/start",
+                                   {"face": face_id})
+            if code != 409 or body.get("error") != "E_PANEL_OWNED_BY_LAUNCHER":
+                bad8.append("%s->%s/%s" % (face_id, code, body.get("error")))
+                continue
+            if body.get("owner") != panel_module.OWNER_LAUNCHER:
+                bad8.append("%s-owner=%s" % (face_id, body.get("owner")))
+            expected = int(chain_face_ports.get(face_id) or -1)
+            if int(body.get("port") or 0) != expected:
+                bad8.append("%s-port=%s-expected=%s"
+                            % (face_id, body.get("port"), expected))
+        state_code, state = http_json(panel_port, panel_module.STATE_ROUTE)
+        if state_code != 200:
+            bad8.append("state->%s" % (state_code,))
+        else:
+            # `started` in this payload means "a process serves it", and a face
+            # the launcher owns reads started=True with owner=launcher - so the
+            # discriminator for "a panel child was born" is the OWNER, not the
+            # flag. Judged by owner here, and the pinned wording is corrected
+            # in the board row rather than this criterion being loosened.
+            started_faces = [row.get("id")
+                             for row in state.get("faces") or []
+                             if row.get("owner") == panel_module.OWNER_PANEL]
+            if started_faces:
+                bad8.append("panel-started=" + ",".join(started_faces))
+            owners = set(row.get("owner") for row in state.get("faces") or [])
+            if owners != {panel_module.OWNER_LAUNCHER}:
+                bad8.append("owners=%s" % (sorted(map(str, owners)),))
+            if sorted(state.get("startable") or []) != sorted(
+                    panel_module.FACE_IDS):
+                bad8.append("startable-moved")
+        after = (file_digest(chain.report_path)
+                 if os.path.exists(chain.report_path) else "")
+        if before != after:
+            bad8.append("launcher-report-changed")
+    stop_code = chain.polite_stop()
+    if stop_code != 0:
+        bad8.append("launcher-stop-exit=%s" % (stop_code,))
+    for path in (chain.registry_path, chain.report_path):
+        if os.path.exists(path):
+            os.remove(path)
+    ok("AC-KOC8 under a serving launcher the panel starts nothing, so the "
+       "shipped chain has no grandchild", not bad8, ",".join(bad8))
 
     total = len(CHECKS)
     acs = set()

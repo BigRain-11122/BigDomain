@@ -1,0 +1,20 @@
+PASS AC-KOC1 report arms the job and counts every child  enabled=True assigned=6 expected=6 errors=[]
+PASS AC-KOC1 every child pid is published by name  pids=['checkout', 'ledger', 'lobby', 'member', 'panel', 'ugc']
+PASS AC-KOC1 the ten planned ports are all really listening before the kill  ports=10 listening=10
+PASS AC-KOC2 a HARD-killed launcher leaves zero listening ports  silent_after=5.83s ports=10
+PASS AC-KOC3 the control run really started WITHOUT a job  enabled=False ports=10
+PASS AC-KOC3 without the job the SAME hard kill leaves orphans listening  survivors=10 example=[57407, 57403, 57404]
+PASS AC-KOC3 the control's orphans are killed by published pid  silent_after=5.19s
+PASS AC-KOC4 the stop-file path still exits 0 and leaves no port open  exit=0 silent_after=3.1s ports=10
+PASS AC-KOC5 the job law is a leaf (ctypes and sys only, no BOM, no CRLF)  imports=['ctypes', 'sys']
+PASS AC-KOC5 the law names the flag it arms  flag=0x2000
+PASS AC-KOC5 the launcher delegates instead of holding its own win32 calls  delegates=True
+PASS AC-KOC5 availability is a real boolean, not a promise  available=True
+PASS AC-KOC5 exactly one registry row names this suite  rows=1
+PASS AC-KOC6 the grandchild's port went silent in 0.53s
+PASS AC-KOC6 a grandchild joins the job the kernel inherits
+PASS AC-KOC7 the grandchild's port went silent 0.51s after the holder was hard-killed
+PASS AC-KOC7 a grandchild of an assigned child dies when the HOLDER is hard-killed
+PASS AC-KOC8 under a serving launcher the panel starts nothing, so the shipped chain has no grandchild
+suite: 16 assertions over 8 criteria
+SUITE PASS 16/16
