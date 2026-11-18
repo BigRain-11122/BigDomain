@@ -8,6 +8,12 @@ AC-STL10..AC-STL11 were pinned in the R2948 row BEFORE the launcher verified
 its own job members and before the grandson path was measured on the shipped
 panel.
 
+R2979 adds AC-STL12..AC-STL13 (plan_ports.py), pinned in the R2979 backlog row
+BEFORE that module and these arms existed: one plan() call hands every plan key
+a DISTINCT port. The live arm really calls the shipped allocator, so it binds
+ten loopback ephemeral sockets for an instant and closes each - the red control
+wires in allocators that ignore the used-set and must be refused by name.
+
 Nothing here is read off a canned string: the launcher is really started in
 serve mode, the report it writes is compared against the hub's own probe
 answer at call time, an independent TCP connect checks every published port,
@@ -16,7 +22,7 @@ page file carries, a blocked port is proved to make the launcher REFUSE, and
 the teardown leg proves the ports are gone after the stop file appears.
 
 Usage: python test_start_all.py
-Exit: 0 = SUITE PASS 11/11, 2 = FAIL.
+Exit: 0 = SUITE PASS 13/13, 2 = FAIL.
 """
 
 import json
@@ -585,6 +591,142 @@ def main():
     finally:
         box.stop()
     report("AC-STL11", bool(bad), ",".join(bad))
+
+    # AC-STL12 (R2979): one plan() call hands every plan key a DISTINCT port.
+    # Pinned in the R2979 backlog row BEFORE this block and plan_ports.py
+    # existed. Unlike AC-KOC11, which passes a fully explicit override map so
+    # the allocator never runs, this arm really calls the shipped plan(), so it
+    # binds ten loopback ephemeral sockets and closes each immediately.
+    import plan_ports
+    import start_all
+
+    if HERE not in sys.path:
+        sys.path.insert(0, HERE)
+    bad = []
+    lived = start_all.plan("127.0.0.1")
+    verdict = plan_ports.port_plan_coverage(lived, start_all.PLAN_KEYS)
+    if not verdict["ok"]:
+        bad.append("not-ok")
+    if verdict["duplicates"]:
+        bad.append("dups-%r" % (verdict["duplicates"],))
+    if verdict["missing"]:
+        bad.append("missing-" + ",".join(verdict["missing"]))
+    if verdict["keys"] != tuple(sorted(start_all.PLAN_KEYS)):
+        bad.append("keys-not-plan")
+    if verdict["count"] != len(start_all.PLAN_KEYS):
+        bad.append("count-%d" % verdict["count"])
+    if verdict["distinct"] != len(start_all.PLAN_KEYS):
+        bad.append("distinct-%d" % verdict["distinct"])
+    # and the numbers themselves are usable ports, not placeholders
+    for key in start_all.PLAN_KEYS:
+        value = lived.get(key)
+        if not isinstance(value, int):
+            bad.append("%s-not-int" % key)
+        elif not 1 <= value <= 65535:
+            bad.append("%s-out-of-range" % key)
+    # an explicit override is fed into the used-set, so the nine auto keys must
+    # avoid the number the override took - the other direction of the same law
+    pinned = start_all.free_port("127.0.0.1")
+    seeded = start_all.plan("127.0.0.1", {"ws": pinned})
+    if seeded.get("ws") != pinned:
+        bad.append("override-not-honoured")
+    avoided = [k for k in start_all.PLAN_KEYS if k != "ws"]
+    if any(seeded.get(k) == pinned for k in avoided):
+        bad.append("override-not-fed-into-used-set")
+    # two calls in a row are each internally unique; comparing them to EACH
+    # OTHER would be wrong, because the OS may reuse a number after close()
+    for attempt in range(2):
+        again = plan_ports.port_plan_coverage(
+            start_all.plan("127.0.0.1"), start_all.PLAN_KEYS)
+        if not again["ok"]:
+            bad.append("call-%d-not-ok" % attempt)
+    report("AC-STL12", bool(bad), ",".join(bad))
+
+    # AC-STL13 (R2979): the control that proves the criterion above can say No.
+    # An allocator that ignores its used-set is wired in on purpose; the verdict
+    # must go red and NAME the colliding port with every key that took it.
+    class StuckSocket(object):
+        """A socket stand-in that always reports the same port."""
+
+        def __init__(self, port):
+            self.port = port
+
+        def bind(self, addr):
+            return None
+
+        def getsockname(self):
+            return ("127.0.0.1", self.port)
+
+        def close(self):
+            return None
+
+    bad = []
+    real_free_port = start_all.free_port
+    real_socket = start_all.socket
+    try:
+        start_all.free_port = lambda host="127.0.0.1", used=None: 7000
+        blind = plan_ports.port_plan_coverage(
+            start_all.plan("127.0.0.1"), start_all.PLAN_KEYS)
+        if blind["ok"]:
+            bad.append("blind-allocator-read-ok")
+        if blind["duplicates"] != ((7000, tuple(sorted(start_all.PLAN_KEYS))),):
+            bad.append("blind-dups-%r" % (blind["duplicates"],))
+
+        # a cycler that ignores used-set but still changes numbers - the same
+        # defect in another shape, so the red is about repetition and not about
+        # a constant return
+        cycle = [7000, 7001, 7000]
+        state = {"i": 0}
+
+        def cycling(host="127.0.0.1", used=None):
+            port = cycle[state["i"] % len(cycle)]
+            state["i"] += 1
+            return port
+
+        start_all.free_port = cycling
+        cycled = plan_ports.port_plan_coverage(
+            start_all.plan("127.0.0.1"), start_all.PLAN_KEYS)
+        if cycled["ok"]:
+            bad.append("cycling-read-ok")
+        if not any(port == 7000 for port, _keys in cycled["duplicates"]):
+            bad.append("cycling-dups-%r" % (cycled["duplicates"],))
+    finally:
+        start_all.free_port = real_free_port
+
+    # the mechanism itself: free_port refuses a number the run already holds,
+    # and the same stand-in is accepted when the set does not hold it - so the
+    # refusal is the used-set, not "that port is unavailable"
+    try:
+        start_all.socket = type("StubSocketModule", (), {
+            "socket": staticmethod(lambda: StuckSocket(7000))})()
+        try:
+            held = start_all.free_port("127.0.0.1", {7000})
+        except RuntimeError as exc:
+            if "E_NO_FREE_PORT" not in str(exc):
+                bad.append("stuck-wrong-error-%s" % exc)
+        else:
+            bad.append("stuck-returned-%r" % (held,))
+        try:
+            free = start_all.free_port("127.0.0.1", set())
+        except RuntimeError as exc:
+            bad.append("stuck-refused-when-free-%s" % exc)
+        else:
+            if free != 7000:
+                bad.append("stuck-free-read-%r" % (free,))
+    finally:
+        start_all.socket = real_socket
+
+    # healthy worlds stay green, and a plan that dropped a key is refused
+    if not plan_ports.port_plan_coverage({"a": 7000})["ok"]:
+        bad.append("single-key-not-ok")
+    if not plan_ports.port_plan_coverage({})["ok"]:
+        bad.append("empty-not-ok")
+    dropped = plan_ports.port_plan_coverage({"a": 7000}, ("a", "b"))
+    if dropped["ok"]:
+        bad.append("missing-key-read-ok")
+    if dropped["missing"] != ("b",):
+        bad.append("missing-named-%r" % (dropped["missing"],))
+    report("AC-STL13", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

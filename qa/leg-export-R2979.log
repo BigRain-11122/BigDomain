@@ -1,0 +1,6 @@
+SHARD scope=SHARD registry_suites=728 registry_criteria=5835 selected=4 selected_criteria=38 cap=600s leg_cap=0s overrides=1 exact=4 state=COMPLETE
+SHARD row os-status-export-fresh rc=0 pass=20 fail=0 detail=yes suite=PASS 20/20 crit=20 0.3s
+SHARD row os-status-export-writer-dialect-wire rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 9.6s
+SHARD row os-queue-floor-export-face rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-closeout-gate-parity rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.9s
+SHARD rc=0 scope=SHARD selected=4 executed=4 green=4 criteria=38 crit_mismatch=0 elapsed=11.1s crit_checked=4

@@ -266,7 +266,13 @@ SUITES = [
     # probe map, and a teardown that leaves no port open (AC-STL1..AC-STL6
     # pre-registered at R2477; AC-STL7..AC-STL9 pinned at R2936 BEFORE the
     # launcher grew the panel and membership faces).
-    ("start-all", os.path.join("test_start_all.py"), 11),
+    # R2979 adds AC-STL12..AC-STL13 (plan_ports.py): one plan() call hands
+    # every plan key a DISTINCT port - the used-set free_port keeps is what
+    # prevents a share, and R2977's mapping criterion deliberately passed a
+    # fully explicit map, so the allocator itself had never been judged. The
+    # live arm really binds (ten loopback sockets bound and closed at once);
+    # the red control wires in allocators that ignore the used-set.
+    ("start-all", os.path.join("test_start_all.py"), 13),
     # kill-on-close job object (R2937): the defect R2934 MEASURED - a launcher
     # killed hard leaves its children holding sandbox ports - answered by the
     # kernel instead of by a `finally`. AC-KOC1..AC-KOC5 were pinned in
