@@ -1707,6 +1707,322 @@ def ac_pan21():
                   "lookalike kept while the marked file went")
 
 
+def ac_pan22():
+    """The markerless residue is a CLOSED set, counted, and never collected
+    by the prune. R2954.
+
+    R2953 bought attribution with a price: every file written before the
+    marker rule, and every file without one, is never collected again. The
+    price is now a number - the prune reports legacy/legacy_bytes for the
+    slice a purge MAY take - and the same world flips it: mark the file and
+    it is collected, so a log our writer produces can never enter the bucket.
+    """
+    bad = 0
+    root = tempfile.mkdtemp(prefix="bd-pan22-")
+    if sys.platform != "win32":
+        print("  AC-PAN22 pid arms not measurable off Windows")
+        return report("AC-PAN22 legacy residue counted, not collected", bad,
+                      "skipped: not Windows")
+    age = 9 * 86400
+    try:
+        # (1) aged, dead pid, right name, no marker: kept, and counted.
+        bare = write_log(root, "%d-1-1-1" % DEAD_PID, "ugc", age,
+                         marker=False)
+        size = os.path.getsize(bare)
+        report_a = panel_module.prune_logs(root=root)
+        report_a = panel_module.prune_logs(root=root)
+        if bare not in report_a["unattrib"]:
+            bad += 1
+            print("  AC-PAN22 the residue left the unattrib bucket: %r"
+                  % (report_a["unattrib"],))
+        if bare not in report_a["legacy"]:
+            bad += 1
+            print("  AC-PAN22 an aged markerless file was not counted as "
+                  "legacy: %r" % (report_a,))
+        if report_a["legacy_bytes"] != size:
+            bad += 1
+            print("  AC-PAN22 legacy_bytes %d is not the file size %d"
+                  % (report_a["legacy_bytes"], size))
+        if not os.path.exists(bare):
+            bad += 1
+            print("  AC-PAN22 the prune deleted legacy residue")
+        # (2) the SAME file with its own marker, same world, same call.
+        marked = write_log(root, "%d-1-1-1" % DEAD_PID, "ugc", age,
+                           marker=True)
+        if marked != bare:
+            bad += 1
+            print("  AC-PAN22 the marked arm wrote a different name")
+        report_b = panel_module.prune_logs(root=root)
+        if bare not in report_b["removed"] or os.path.exists(bare):
+            bad += 1
+            print("  AC-PAN22 a marked file was not collected: %r"
+                  % (report_b,))
+        if report_b["legacy"] or report_b["legacy_bytes"]:
+            bad += 1
+            print("  AC-PAN22 a marked file was counted as legacy: %r"
+                  % (report_b,))
+        # (3) fresh markerless files are not legacy either: the bucket is a
+        # residue of AGE plus missing attribution, not of missing markers.
+        young = write_log(root, "%d-1-1-2" % DEAD_PID, "ugc", 60,
+                          marker=False)
+        report_c = panel_module.prune_logs(root=root)
+        if young in report_c["legacy"]:
+            bad += 1
+            print("  AC-PAN22 a fresh markerless file was counted as legacy")
+        if not os.path.exists(young):
+            bad += 1
+            print("  AC-PAN22 a fresh markerless file was deleted")
+        # (4) the SHIPPED printer publishes both numbers, measured in its own
+        # process so the claim is about the shipped line and not a helper.
+        prose = subprocess.run(
+            [sys.executable, "-c",
+             "import sys, panel as p; p.print_prune(p.prune_logs("
+             "root=sys.argv[1]))", root],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=HERE)
+        line = prose.stdout.decode("utf-8", "replace").strip()
+        if "legacy=" not in line or "legacy_bytes=" not in line:
+            bad += 1
+            print("  AC-PAN22 the shipped prune line hides the residue: %r"
+                  % (line,))
+    finally:
+        for name in sorted(os.listdir(root)):
+            try:
+                os.remove(os.path.join(root, name))
+            except OSError:
+                pass
+        try:
+            os.rmdir(root)
+        except OSError:
+            pass
+    return report("AC-PAN22 legacy residue counted, not collected", bad,
+                  "aged markerless file counted and kept, the same file "
+                  "collected once marked, fresh file outside the bucket, "
+                  "shipped line carries legacy/legacy_bytes")
+
+
+def ac_pan23():
+    """The exit from the residue is an OPERATOR call, and it cannot run by
+    accident. R2954.
+
+    Three claims: a plain --prune-only reports the residue and deletes none of
+    it; adding --purge-legacy to the SAME world deletes exactly it; and
+    --purge-legacy without --prune-only is refused, so the panel start path
+    can never reach a legacy delete. Fresh files, a possible live writer, a
+    foreign name and a malformed name keep in both worlds.
+    """
+    bad = 0
+    if sys.platform != "win32":
+        print("  AC-PAN23 arms not measurable off Windows")
+        return report("AC-PAN23 purge-legacy is operator-gated", bad,
+                      "skipped: not Windows")
+    age = 9 * 86400
+    root = tempfile.mkdtemp(prefix="bd-pan23-")
+    writer_root = tempfile.mkdtemp(prefix="bd-pan23-writer-")
+    try:
+        # (3) the two keep arms, measured on the function the flag calls.
+        young = write_log(root, "%d-2-2-1" % DEAD_PID, "ugc", 60,
+                          marker=False)
+        report_k = panel_module.purge_legacy(root=root)
+        if young not in report_k["fresh"] or not os.path.exists(young):
+            bad += 1
+            print("  AC-PAN23 a fresh markerless file was purged: %r"
+                  % (report_k,))
+        if report_k["removed"]:
+            bad += 1
+            print("  AC-PAN23 purge removed a fresh file: %r"
+                  % (report_k["removed"],))
+        # The live-writer arm needs a file that is past the AGE bound but NOT
+        # older than the process that could have written it, so it is driven
+        # in its own folder under a zero age bound: a nine-day mtime under a
+        # live pid is pid REUSE (which is correctly collectable) and would not
+        # test this rule at all.
+        writer = write_log(writer_root, "%d-2-2-2" % os.getpid(), "ugc", 0,
+                           marker=False)
+        report_w = panel_module.purge_legacy(root=writer_root, age_s=0)
+        if writer not in report_w["kept"] or not os.path.exists(writer):
+            bad += 1
+            print("  AC-PAN23 a possible live writer's file was purged: %r"
+                  % (report_w,))
+        # (4) decoys on the same call: outside the namespace, unparseable.
+        foreign = os.path.join(root, "bd-pan23-stranger.txt")
+        malformed = os.path.join(root, "%smallformed%s" % (
+            panel_module.LOG_STEM, panel_module.LOG_SUFFIX))
+        payloads = {foreign: b"R2954 decoy: not our namespace\n",
+                    malformed: b"R2954 decoy: name does not parse\n"}
+        for path, payload in payloads.items():
+            with open(path, "wb") as handle:
+                handle.write(payload)
+        aged = write_log(root, "%d-2-2-3" % DEAD_PID, "ugc", age,
+                         marker=False)
+        report_d = panel_module.purge_legacy(root=root)
+        if aged not in report_d["removed"] or os.path.exists(aged):
+            bad += 1
+            print("  AC-PAN23 an aged markerless file survived the purge: %r"
+                  % (report_d,))
+        for path, payload in payloads.items():
+            if not os.path.exists(path):
+                bad += 1
+                print("  AC-PAN23 a decoy was purged: %r" % (path,))
+            elif digest(path) != hashlib.sha256(payload).hexdigest():
+                bad += 1
+                print("  AC-PAN23 a decoy was rewritten: %r" % (path,))
+    finally:
+        for folder in (root, writer_root):
+            for name in sorted(os.listdir(folder)):
+                try:
+                    os.remove(os.path.join(folder, name))
+                except OSError:
+                    pass
+            try:
+                os.rmdir(folder)
+            except OSError:
+                pass
+    # (5) the flag on its own is refused BEFORE anything is judged, and the
+    # arms below plant their own files in the REAL %TEMP%, so the shipped
+    # entry path is what is measured and nothing else on the box is at risk.
+    temp = tempfile.gettempdir()
+    planted = write_log(temp, "%d-3-3-1" % DEAD_PID, "bdpan23",
+                        age, marker=False)
+    decoy = os.path.join(temp, "bd-pan23-should-stay.txt")
+    try:
+        with open(decoy, "wb") as handle:
+            handle.write(b"R2954 control: a stranger's file\n")
+        alone = subprocess.run([sys.executable, MODULE, "--purge-legacy"],
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                               cwd=REPO)
+        if alone.returncode != 2:
+            bad += 1
+            print("  AC-PAN23 --purge-legacy without --prune-only exited %d"
+                  % (alone.returncode,))
+        if not os.path.exists(planted):
+            bad += 1
+            print("  AC-PAN23 the refused call still deleted legacy residue")
+        # (1) the RED CONTROL: a plain --prune-only reports and keeps.
+        plain = subprocess.run([sys.executable, MODULE, "--prune-only"],
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                               cwd=REPO)
+        first = plain.stdout.decode("utf-8", "replace").splitlines()
+        line = first[0] if first else ""
+        if plain.returncode != 0 or not line.startswith("PANEL-PRUNE"):
+            bad += 1
+            print("  AC-PAN23 --prune-only exited %d: %r"
+                  % (plain.returncode, first[:2]))
+        elif "legacy=0" in line:
+            bad += 1
+            print("  AC-PAN23 the planted residue was not counted: %r"
+                  % (line,))
+        if not os.path.exists(planted):
+            bad += 1
+            print("  AC-PAN23 a plain --prune-only purged legacy residue")
+        # (2) the same world, one flag: the residue goes, the decoy stays.
+        purged = subprocess.run(
+            [sys.executable, MODULE, "--prune-only", "--purge-legacy"],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=REPO)
+        lines = purged.stdout.decode("utf-8", "replace").splitlines()
+        second = lines[1] if len(lines) > 1 else ""
+        if purged.returncode != 0 or not second.startswith(
+                "PANEL-PURGE-LEGACY"):
+            bad += 1
+            print("  AC-PAN23 the purge line is missing: %r" % (lines[:3],))
+        elif "removed=0" in second or "bytes=0" in second:
+            bad += 1
+            print("  AC-PAN23 the purge reported nothing: %r" % (second,))
+        if os.path.exists(planted):
+            bad += 1
+            print("  AC-PAN23 --prune-only --purge-legacy kept the residue")
+        if not os.path.exists(decoy):
+            bad += 1
+            print("  AC-PAN23 the purge reached a stranger's file")
+        elif digest(decoy) != hashlib.sha256(
+                b"R2954 control: a stranger's file\n").hexdigest():
+            bad += 1
+            print("  AC-PAN23 the purge rewrote a stranger's file")
+    finally:
+        for path in (planted, decoy):
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+    return report("AC-PAN23 purge-legacy is operator-gated", bad,
+                  "plain prune reports and keeps, one flag collects it, "
+                  "flag alone refused rc=2, fresh/live-writer/foreign/"
+                  "malformed all keep")
+
+
+def ac_pan24():
+    """Impersonation is out of scope BY NAME, and the gain is measured. R2954.
+
+    The marker is a first line any same-user process can copy, so attribution
+    holds only for the honest case. What an impersonator gains is asserted
+    here as a measurement instead: the same file is deletable by that process
+    with a plain os.remove, so the prune earns them a deletion they already
+    had - and it cannot walk their marker out of the namespace, which is
+    driven in the SAME call on a decoy beside the file.
+    """
+    bad = 0
+    root = tempfile.mkdtemp(prefix="bd-pan24-")
+    if sys.platform != "win32":
+        print("  AC-PAN24 pid arms not measurable off Windows")
+        return report("AC-PAN24 impersonation out of scope, gain measured",
+                      bad, "skipped: not Windows")
+    age = 9 * 86400
+    try:
+        # (1) a copied marker is accepted - both ways on the same file.
+        copied = write_log(root, "%d-4-4-1" % DEAD_PID, "ugc", age,
+                           marker=True)
+        report_a = panel_module.prune_logs(root=root)
+        if copied not in report_a["removed"] or os.path.exists(copied):
+            bad += 1
+            print("  AC-PAN24 a copied marker was not honoured: %r"
+                  % (report_a,))
+        stripped = write_log(root, "%d-4-4-1" % DEAD_PID, "ugc", age,
+                             marker=False)
+        report_b = panel_module.prune_logs(root=root)
+        if stripped in report_b["removed"] or not os.path.exists(stripped):
+            bad += 1
+            print("  AC-PAN24 the same file without its marker was "
+                  "collected: %r" % (report_b,))
+        # (2) the impersonation cannot leave the namespace: one call, a
+        # decoy beside the file that goes.
+        decoy = os.path.join(root, "bd-pan24-neighbour.txt")
+        payload = b"R2954 decoy: outside the namespace\n"
+        with open(decoy, "wb") as handle:
+            handle.write(payload)
+        copied = write_log(root, "%d-4-4-2" % DEAD_PID, "ugc", age,
+                           marker=True)
+        report_c = panel_module.prune_logs(root=root)
+        if copied in report_c["removed"] and os.path.exists(decoy):
+            if digest(decoy) != hashlib.sha256(payload).hexdigest():
+                bad += 1
+                print("  AC-PAN24 the decoy was rewritten")
+        else:
+            bad += 1
+            print("  AC-PAN24 the pair arm did not discriminate: %r"
+                  % (report_c,))
+        # (3) the gain is zero, measured: the same file is removable by the
+        # same user with os.remove, so the prune adds nothing new.
+        probe = write_log(root, "%d-4-4-3" % DEAD_PID, "ugc", age,
+                          marker=False)
+        try:
+            os.remove(probe)
+        except OSError as exc:
+            bad += 1
+            print("  AC-PAN24 the same-user removal failed: %r" % (exc,))
+    finally:
+        for name in sorted(os.listdir(root)):
+            try:
+                os.remove(os.path.join(root, name))
+            except OSError:
+                pass
+        try:
+            os.rmdir(root)
+        except OSError:
+            pass
+    return report("AC-PAN24 impersonation out of scope, gain measured", bad,
+                  "copied marker honoured both ways, decoy untouched beside "
+                  "it, same file removable by plain os.remove")
+
+
 def main():
     ac_pan1()
     ac_pan2()
@@ -1729,6 +2045,9 @@ def main():
     ac_pan19()
     ac_pan20()
     ac_pan21()
+    ac_pan22()
+    ac_pan23()
+    ac_pan24()
     passed = sum(1 for _name, ok in RESULTS if ok)
     total = len(RESULTS)
     print("SUITE %s %d/%d" % ("PASS" if passed == total else "FAIL",

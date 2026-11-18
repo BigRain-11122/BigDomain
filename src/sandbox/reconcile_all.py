@@ -353,7 +353,13 @@ SUITES = [
     # FIRST line is the marker its own name implies, so a hand-written
     # lookalike in the namespace is kept and our own logs are still bounded
     # (pre-registered in src/os/backlog.md at R2953 BEFORE the edit).
-    ("panel", os.path.join("test_panel.py"), 21),
+    # R2954 added AC-PAN22..AC-PAN24 (legacy residue): the markerless pile
+    # R2953 created is published with its byte size instead of denied, the
+    # only thing that deletes it is an operator flag the panel start path
+    # cannot reach, and impersonation is out of scope by name with its gain
+    # measured as zero (pre-registered in src/os/backlog.md at R2954 BEFORE
+    # the edit).
+    ("panel", os.path.join("test_panel.py"), 24),
     # R2938 added AC-PAN7..AC-PAN11 (declared ownership): the launcher hands
     # the panel the faces it already serves with the ports it measured, and the
     # panel refuses to start or stop them by name instead of forking the

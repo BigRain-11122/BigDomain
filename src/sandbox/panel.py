@@ -127,6 +127,17 @@ LOG_PRUNE_KEEP_N = 40
 # only - was this file written through our path - and a file that cannot answer
 # it is KEPT, not deleted.
 LOG_MARKER = "# bigdomain-panel-child"
+# R2954: R2953's marker rule has a price, and the price now has a NUMBER.
+# Every log written before that rule - and any file without a marker - is
+# never collected again. That residue is a CLOSED set rather than an
+# unbounded one: our writer lays the marker before anything else, so no new
+# markerless file can come from us, and the set can only shrink or stand
+# still. What remains legal to say about it is a measurement, so the prune
+# reports legacy=N legacy_bytes=B for the subset that is inside the
+# namespace, parses, carries no marker, is past the age bound AND whose pid
+# cannot be its writer. Deleting that subset is an OPERATOR decision
+# (--prune-only --purge-legacy) and never automatic, because a markerless
+# file and a stranger's hand-written lookalike are the same bytes here.
 
 # R2950: the per-panel tag carries pid + wall_ns + a process-local counter.
 # R2949 used pid + four random bytes, which no criterion can prove unique.
@@ -279,6 +290,102 @@ def process_started(pid):
         k32.CloseHandle(handle)
 
 
+def legacy_collectable(path, pid, bound_ns, clock_ns, own_paths=()):
+    """Size of a markerless file a purge MAY collect, else None.
+
+    R2954: the conditions are the prune's own - inside the namespace (the
+    caller already parsed the name), past the age bound, and a pid that
+    cannot be the writer - minus the one the prune insists on, which is the
+    marker. The absent marker is precisely what makes the file legacy, and
+    precisely why nothing automatic may delete it.
+    """
+    if os.path.abspath(path) in own_paths:
+        return None
+    try:
+        info = os.stat(path)
+    except OSError:
+        return None
+    mtime_ns = int(info.st_mtime_ns)
+    if clock_ns - mtime_ns < bound_ns:
+        return None
+    state, created = process_started(pid)
+    if state == "gone":
+        return info.st_size
+    if state == "live" and created is not None and created > mtime_ns:
+        return info.st_size
+    return None
+
+
+def _legacy_keep_bucket(path, pid, bound_ns, clock_ns):
+    """Which kept bucket a markerless file that is NOT collectable belongs to.
+
+    Reporting only: ``legacy_collectable`` stays the single authority on
+    whether a file may go, and this names WHY it stayed so the print line is
+    three facts instead of one number.
+    """
+    try:
+        mtime_ns = int(os.stat(path).st_mtime_ns)
+    except OSError:
+        return "kept"
+    if clock_ns - mtime_ns < bound_ns:
+        return "fresh"
+    state, _created = process_started(pid)
+    if state == "unknown":
+        return "unknown"
+    return "kept"
+
+
+def purge_legacy(root=None, age_s=None, now=None, own=()):
+    """Delete the markerless residue, only when a person asked for it.
+
+    R2954: this is the one exit from R2953's price, and it is reachable only
+    through an explicit CLI flag. The reason it cannot be automatic is the
+    same reason it exists: a markerless file and a stranger's hand-written
+    lookalike in the namespace are the same bytes, so the judgement belongs
+    to an operator rather than to a clock. Everything the prune keeps keeps
+    here too - a fresh file, a possible live writer, a kernel refusal, a path
+    the caller declares its own, a foreign name, a malformed name - and an
+    attributed file is left to the prune, which already judges it.
+    """
+    folder = tempfile.gettempdir() if root is None else root
+    bound_ns = int((LOG_PRUNE_AGE_S if age_s is None else float(age_s))
+                   * 1000000000)
+    clock_ns = int((time.time() if now is None else float(now)) * 1000000000)
+    own_paths = {os.path.abspath(path) for path in own or ()}
+    report = {"removed": [], "kept": [], "fresh": [], "unknown": [],
+              "bytes": 0}
+    try:
+        names = sorted(os.listdir(folder))
+    except OSError:
+        return report
+    for name in names:
+        parsed = parse_log_name(name)
+        if parsed is None:
+            continue
+        path = os.path.join(folder, name)
+        if os.path.abspath(path) in own_paths:
+            report["kept"].append(path)
+            continue
+        if log_attributed(path, name):
+            # Ours, and the prune owns it: the purge neither deletes nor
+            # counts it, so the two rules cannot double-delete one file.
+            continue
+        size = legacy_collectable(path, parsed[0], bound_ns, clock_ns,
+                                  own_paths)
+        if size is None:
+            report[_legacy_keep_bucket(path, parsed[0], bound_ns,
+                                       clock_ns)].append(path)
+            continue
+        try:
+            os.remove(path)
+        except OSError:
+            report["kept"].append(path)
+            continue
+        report["removed"].append(path)
+        report["bytes"] += size
+    return report
+
+
 def prune_logs(root=None, age_s=None, now=None, own=(), keep_n=None):
     """Remove panel logs past the age bound or beyond the per-face count cap.
 
@@ -307,7 +414,7 @@ def prune_logs(root=None, age_s=None, now=None, own=(), keep_n=None):
     cap = LOG_PRUNE_KEEP_N if keep_n is None else max(0, int(keep_n))
     own_paths = {os.path.abspath(path) for path in own or ()}
     report = {"removed": [], "kept": [], "fresh": [], "unknown": [],
-              "over": [], "unattrib": []}
+              "over": [], "unattrib": [], "legacy": [], "legacy_bytes": 0}
     try:
         names = sorted(os.listdir(folder))
     except OSError:
@@ -324,6 +431,14 @@ def prune_logs(root=None, age_s=None, now=None, own=(), keep_n=None):
         if not log_attributed(path, name):
             # R2953: a name we could have typed is not a file we wrote.
             report["unattrib"].append(path)
+            # R2954: the slice a purge MAY collect is counted here and
+            # removed nowhere here, so the residue is a number instead of an
+            # indefinite noun.
+            size = legacy_collectable(path, parsed[0], bound_ns, clock_ns,
+                                      own_paths)
+            if size is not None:
+                report["legacy"].append(path)
+                report["legacy_bytes"] += size
             continue
         try:
             mtime_ns = int(os.stat(path).st_mtime_ns)
@@ -758,12 +873,26 @@ class Panel(object):
 
 
 def print_prune(report):
-    """The one line both prune windows print, so the bound is visible."""
+    """The one line both prune windows print, so the bound is visible.
+
+    R2954: ``legacy``/``legacy_bytes`` publish the residue R2953 created, so a
+    reader sees the size of what no automatic rule will ever collect instead
+    of reading that it exists somewhere.
+    """
     print("PANEL-PRUNE removed=%d kept=%d fresh=%d unknown=%d over=%d "
-          "unattrib=%d"
+          "unattrib=%d legacy=%d legacy_bytes=%d"
           % (len(report["removed"]), len(report["kept"]),
              len(report["fresh"]), len(report["unknown"]),
-             len(report["over"]), len(report["unattrib"])), flush=True)
+             len(report["over"]), len(report["unattrib"]),
+             len(report["legacy"]), int(report["legacy_bytes"])), flush=True)
+
+
+def print_purge_legacy(report):
+    """The one line a legacy purge prints, so the exit is visible too."""
+    print("PANEL-PURGE-LEGACY removed=%d kept=%d fresh=%d unknown=%d bytes=%d"
+          % (len(report["removed"]), len(report["kept"]),
+             len(report["fresh"]), len(report["unknown"]),
+             int(report["bytes"])), flush=True)
 
 
 class PanelHandler(BaseHTTPRequestHandler):
@@ -917,6 +1046,12 @@ def main(argv=None):
                              "started and no port is bound, so any scheduler "
                              "can call this instead of waiting for a person "
                              "to open the panel")
+    parser.add_argument("--purge-legacy", action="store_true",
+                        dest="purge_legacy",
+                        help="with --prune-only: also delete the markerless "
+                             "residue (inside the namespace, past the age "
+                             "bound, writer impossible); refused on its own, "
+                             "so no panel start can ever reach it")
     args = parser.parse_args(argv)
     # R2952: the prune used to be coupled to a human launching a panel, so
     # "seven days" meant "seven days plus however long until the next launch".
@@ -926,7 +1061,17 @@ def main(argv=None):
     # the round, not implied by the flag existing.
     if args.prune_only:
         print_prune(prune_logs())
+        # R2954: collecting the markerless residue is an OPERATOR decision,
+        # taken on the same call that would otherwise only report it. The
+        # flag is refused without --prune-only (below), which is what keeps
+        # a panel start from ever reaching this line.
+        if args.purge_legacy:
+            print_purge_legacy(purge_legacy())
         return 0
+    if args.purge_legacy:
+        parser.error("E_PANEL_PURGE_NEEDS_PRUNE: --purge-legacy is only "
+                     "meaningful with --prune-only; a panel start never "
+                     "collects legacy residue")
     # R2941: a face may only be born under the door that holds the sandbox
     # claim. With no launcher serving there is no claim and this passes.
     birth_gate.guard()
