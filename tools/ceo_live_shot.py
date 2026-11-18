@@ -82,31 +82,61 @@ def wait_json(path, timeout):
     return None
 
 
+def _collision_pairs(raw):
+    """Normalize published override duplicates into (port, keys) rows."""
+    out = []
+    for item in raw or ():
+        try:
+            port, keys = item
+            out.append((int(port), tuple(sorted(str(key) for key in keys))))
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
 def recorded_collisions(record_path):
     """Name the override collision a launcher record publishes, if any.
 
     R2983: the machine record is the EARLIEST artifact that carries a
     collision, and this driver - the one a person actually runs - never looked
-    at it. When the launcher publishes a report, that report already names the
-    collision (R2981), so this helper earns its keep on the one moment nothing
-    else speaks: the report never arrives. Read-only, and a missing or
-    unreadable record answers () instead of raising, because this is a note
-    attached to a failure and a note must never replace the failure.
+    at it. R2984 measured the limit of this route: the launcher releases the
+    record inside the same finally block that writes the report, so once the
+    report is parseable the record is already gone. This reader therefore
+    speaks for the report-never-arrives case, and report_collisions speaks for
+    the other. Read-only, and a missing or unreadable record answers ()
+    instead of raising, because this is a note attached to a failure and a
+    note must never replace the failure.
     """
     try:
         with open(record_path, "r", encoding="utf-8") as handle:
             record = json.load(handle)
     except (OSError, ValueError):
         return ()
-    raw = record.get("override_duplicates") or ()
-    out = []
-    for item in raw:
-        try:
-            port, keys = item
-            out.append((int(port), tuple(sorted(str(key) for key in keys))))
-        except (TypeError, ValueError):
-            continue
-    return tuple(sorted(out))
+    return tuple(sorted(_collision_pairs(record.get("override_duplicates"))))
+
+
+def report_collisions(report):
+    """Name the override collision a launcher report publishes, if any.
+
+    R2984, measured with a real colliding launcher: of 13 five-millisecond
+    samples taken once the report was parseable, zero had the machine record
+    still on disk. The report is the only survivor on that path, so a reader
+    that only opens the record answers empty exactly when the report is there
+    to be read.
+    """
+    return tuple(sorted(_collision_pairs((report or {}).get(
+        "override_duplicates"))))
+
+
+def published_collisions(record_path, report):
+    """Both survivors, each collision named once.
+
+    The record speaks when the report never arrives (R2983); the report speaks
+    when it does (R2984). One call site, one named field.
+    """
+    pairs = set(recorded_collisions(record_path))
+    pairs.update(report_collisions(report))
+    return tuple(sorted(pairs))
 
 
 def launcher_record_path():
@@ -360,7 +390,7 @@ def main(argv=None):
     try:
         report = wait_json(report_path, args.timeout)
         if not report or not report.get("ok"):
-            collisions = recorded_collisions(launcher_record_path())
+            collisions = published_collisions(launcher_record_path(), report)
             print(json.dumps({"ok": False,
                               "why": "sandbox never proved ready",
                               "record_collisions": [list(item)

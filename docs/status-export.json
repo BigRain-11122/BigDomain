@@ -41,12 +41,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-19 R2983 PRODUCT+ENGINEERING: the machine record finally has a reader on the path a PERSON runs. R2982 published override_duplicates on the record claimed before any child exists, and R2983's own probe measured that nothing shipped ever read it: tools/ceo_live_shot.py never opened the record, birth_gate read only .get(\"pid\"), and panel's refusal is driven by the owned map the launcher hands it. The driver that a person actually runs now reads the record on its failure branch and prints a top-level record_collisions beside the report, so a launch whose report never arrives still names the collision instead of showing an empty failure.",
-  "export_ts": "2026-11-19T05:16:56+08:00",
-  "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
-  "latest_evidence": "qa/leg-stl-siblings-R2982.log (596B, 2026-11-19)",
-  "next_milestone": "[R2984] next window (<=12h): (0) MAIN — 本轮补上的是**报告缺席**时的读者，而**报告到达**时撞车仍只嵌在 `report.override_duplicates` 里，人要在多层 JSON 里翻。下一轮：**先量**「报告已到」那条路径上把撞车提到同一个顶层 `record_collisions` 面是否纯增量——量清 `wait_json` 的读者只有本驱动、失败 JSON 的读者（有无脚本/判据按字段集严格比对这份 print）、以及 AC-LIVE7 第⑤臂是否会因此变红；纯增量则把两路合成一条具名行并**扩 AC-LIVE7 一臂**（报告存在且带撞车 → 顶层同样具名）；若量出会破坏既有读者，则退回判据先行并写清理由。二选一，不许两头都宣称。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), 两处起子进程前的拒绝报告已带 `override_duplicates` 但**无判据驱动它们**, and the QA charter daily-crawl face still red (today_png=0 today_log=0 bench_today=False — no fake refresh was made).",
+  "do": "2026-11-19 R2984 PRODUCT+ENGINEERING: the report-arrived path named the collision nowhere at top level. R2983 read the machine record, but a measurement with a real colliding launcher showed the record deleted before the report is parseable (0 of 13 samples had both files), so the driver answered empty exactly when the report carried the answer. tools/ceo_live_shot.py now merges both survivors through published_collisions into the same record_collisions key, and AC-LIVE8 pins six arms including one collision named once when both routes speak.",
+  "export_ts": "2026-11-19T05:26:30+08:00",
+  "latest_artifact": "qa/live-proof-R2984.log (3046B) + qa/leg-live-proof-R2984.log (339B) [2026-11-19 R2984]",
+  "latest_evidence": "qa/leg-live-siblings-R2984.log (345B, 2026-11-19)",
+  "next_milestone": "[R2985] next window (<=12h): (0) MAIN - the two reports written before any child exists (kernel-claim refused, record already held) still carry override_duplicates with no criterion driving them. Measure their readers and whether report_collisions already covers the field, then either pin one criterion (collided refusal names both keys, healthy refusal empty) or record honest overlap with AC-LIVE8 and move on.",
   "outs": [
+    "qa/live-proof-R2984.log (3046B) + AC-LIVE8 six arms [2026-11-19 R2984]",
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "qa/bind-scan-R2946.log (546B) + qa/bind-site-scan-suite-R2946.log (176B) + qa/leg-lobby-regress-R2946.log (413B) [2026-11-18 R2946]",
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
@@ -163,6 +164,10 @@
     "verdict": "FLOOR-DEBT"
   },
   "results": [
+    [
+      "2983",
+      "OSLoop 执行 tick"
+    ],
     [
       "2982",
       "OSLoop 执行 tick"

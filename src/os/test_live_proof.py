@@ -250,10 +250,43 @@ def main():
         shot_src = handle.read().decode('utf-8', 'replace')
     blocks = shot_src.split('if not report or not report.get("ok")', 1)
     branch = blocks[1][:600] if len(blocks) == 2 else ''
-    ok('AC-LIVE7 the shipped failure branch really calls the record reader',
-       len(blocks) == 2 and 'recorded_collisions(' in branch
+    ok('AC-LIVE7 the shipped failure branch reads the merged collision field',
+       len(blocks) == 2 and 'published_collisions(' in branch
        and '"record_collisions"' in branch and 'return 3' in branch,
        'wired=%d' % (len(blocks) - 1))
+
+    # AC-LIVE8 (R2984): the record is deleted in the same finally block that
+    # writes the report - measured: zero of thirteen samples taken after the
+    # report was parseable still had a record. So the report is the survivor
+    # on the path where it arrives, and one named field must cover both.
+    collided_report = {'ok': False,
+                       'errors': ['E_NOT_UP: ws,city,gate,web,hub'],
+                       'override_duplicates': [[7000, ['city', 'ws']]]}
+    ok('AC-LIVE8 a report that arrived names the collision with the record gone',
+       LS.published_collisions(absent, collided_report)
+       == ((7000, ('city', 'ws')),),
+       'read=%s' % (LS.published_collisions(absent, collided_report),))
+    ok('AC-LIVE8 a record alone still names it (the R2983 face is not lost)',
+       LS.published_collisions(collided, None) == ((7000, ('city', 'ws')),),
+       'read=%s' % (LS.published_collisions(collided, None),))
+    ok('AC-LIVE8 both survivors name one collision exactly once',
+       LS.published_collisions(collided, collided_report)
+       == ((7000, ('city', 'ws')),),
+       'read=%s' % (LS.published_collisions(collided, collided_report),))
+    ok('AC-LIVE8 healthy, empty or absent answers empty',
+       LS.published_collisions(absent, {'ok': True,
+                                        'override_duplicates': []}) == ()
+       and LS.published_collisions(absent, None) == ()
+       and LS.published_collisions(healthy, {'ok': True}) == (),
+       'empty=1')
+    ok('AC-LIVE8 a malformed report row is skipped, not fatal',
+       LS.published_collisions(
+           absent, {'override_duplicates': [['nope', ['x']],
+                                            [7001, ['ugc', 'web']]]})
+       == ((7001, ('ugc', 'web')),), 'skipped=1')
+    ok('AC-LIVE8 the merged reader really calls the record reader',
+       'recorded_collisions(' in inspect.getsource(LS.published_collisions),
+       'wired=1')
 
     total = len(CHECKS)
     acs = set()
