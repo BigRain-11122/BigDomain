@@ -327,8 +327,11 @@ SUITES = [
     # live tree lists the same rows before and after, and measure why
     # serve_forever itself is not a bind site. R2971 follows a server class
     # another repo module re-exports, and AC-BSC18..AC-BSC20 pin that plus the
-    # measured range of the two shapes still unnamed.
-    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 21),
+    # measured range of the two shapes still unnamed. R2972 keys the export map
+    # by the DOTTED module path as well as the stem, and AC-BSC21..AC-BSC22 pin
+    # that plus the measured declaration that a bare dotted import leaves the
+    # three-part attribute chain out of range.
+    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 24),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the

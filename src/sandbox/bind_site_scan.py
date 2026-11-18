@@ -106,6 +106,18 @@ Six kinds of site are recognised, and each has one rule:
     named below.
 
 
+    R2972 widened the module IDENTITY those exports are keyed by: the map now
+    carries each file under its stem AND under its dotted path, so
+    ``from pkg.helper import UDPServer`` and ``import pkg.helper as ph`` then
+    ``ph.UDPServer(...)`` resolve exactly as the bare forms above do.  The
+    dotted path is the only identity that stays unique when two directories
+    carry the same stem - measured on this tree, 2 of 90 stems collide
+    (``reconcile`` in three directories, ``store`` in two) while 0 of 93
+    dotted paths do - so this NARROWS a hole that was open before it and
+    widens no rule: a bare ``from helper import ...`` whose stem collides is
+    still dropped, and only the dotted form answers.
+
+
 ``socket-bind``
 
     a ``.bind(...)`` call is a probe or a listening socket and the two cannot be told apart from syntax, so every such site must be listed, by path and
@@ -117,18 +129,23 @@ Not scanned, by name: ``test_*.py`` (suite scaffolding binds ephemeral ports
 on purpose), ``vendor`` directories and ``pycrdt-poc`` (third-party code is
 not this repo's face), and bind forms this module does not recognise - a hole
 that is named rather than implied closed.  Since R2970 the ``socketserver``
-family above IS judged when its shape is statically visible, and since R2971
-that includes a class re-exported by another module of this repo.  What remains
-out of range, in the same breath, MEASURED this window on the live tree (93
-modules, every one parseable): a class built with ``type(...)`` or a factory
-such as ``functools.partial`` (0 calls touch ``Server``/``socket``), a class
-imported under a name that does not end in ``Server`` (0 such from-imports
-exist; a mixin or handler alone binds nothing), a constructor reached through a
-module OUTSIDE this repo (its exports cannot be read without importing it, and
-this module never imports what it judges), a name assembled at run time, and
-``serve_forever`` reached through an object this read cannot trace back to a
-construction.  A ``serve_forever`` call is not itself a bind site:
-``socketserver`` binds in ``__init__``, so the construction is where the
+family above IS judged when its shape is statically visible; since R2971 that
+includes a class another module of this repo re-exports, and since R2972 a
+dotted module path (``pkg.helper``) names the same exports the bare stem does.
+What remains out of range, in the same breath, MEASURED this window on the
+live tree (93 modules, every one parseable): a class built with ``type(...)``
+or a factory such as ``functools.partial`` (0 calls touch
+``Server``/``socket``), a class imported under a name that does not end in
+``Server`` (0 such from-imports exist; a mixin or handler alone binds
+nothing), a constructor reached through a module OUTSIDE this repo (its
+exports cannot be read without importing it, and this module never imports
+what it judges), a name assembled at run time, a bare ``import a.b`` (no
+``as``) whose ``a.b.Name(...)`` triple-attribute chain would reach an export
+(all 15 dotted imports and 19 dotted from-imports in this tree name stdlib or
+third-party modules, and none of the 3280 triple-attribute calls touches the
+export face), and ``serve_forever`` reached through an object this read cannot
+trace back to a construction.  A ``serve_forever`` call is not itself a bind
+site: ``socketserver`` binds in ``__init__``, so the construction is where the
 judgement belongs.
 
 Stdlib only (ast/json/os/sys), no shell, no network, no writes.
@@ -304,16 +321,21 @@ def _module_carried_classes(tree):
     for node in nodes:
         if isinstance(node, ast.ImportFrom):
             module = node.module or ""
-            head = module.split(".")[0]
-            if "." in module or not head:
+            if not module:
                 continue
+            if module == SOCKETSERVER_MODULE:
+                for alias in node.names:
+                    local = alias.asname or alias.name
+                    if alias.name.endswith(SOCKETSERVER_SUFFIX):
+                        direct[local] = "%s.%s" % (SOCKETSERVER_MODULE,
+                                                   alias.name)
+                continue
+            # Since R2972 a DOTTED module path is carried verbatim, so the
+            # borrowing module names the same target the dotted import names
+            # and the resolve lands on the dotted entry of the carried map.
             for alias in node.names:
                 local = alias.asname or alias.name
-                if (head == SOCKETSERVER_MODULE
-                        and alias.name.endswith(SOCKETSERVER_SUFFIX)):
-                    direct[local] = "%s.%s" % (SOCKETSERVER_MODULE, alias.name)
-                elif head != SOCKETSERVER_MODULE:
-                    borrowed[local] = (head, alias.name)
+                borrowed[local] = (module, alias.name)
             continue
         if isinstance(node, (ast.Assign, ast.AnnAssign)):
             if node.value is None:
@@ -366,41 +388,78 @@ def _resolve_carried(module, name, carried, seen=None):
     return None
 
 
+def _module_names(rel):
+    """Module identities one file answers to: its stem, and its dotted path.
+
+    A stem is what a bare ``import helper`` names.  The dotted path is what
+    ``from pkg.helper import ...`` names, and it is the only identity that
+    stays unique when two directories carry the same stem - on this tree 2 of
+    90 stems collide (``reconcile``, ``store``) while 0 of 93 dotted paths do,
+    so the second identity narrows a hole instead of opening one.  A package's
+    ``__init__.py`` answers to the package name, and a file at the root has no
+    dotted form of its own.
+    """
+    parts = rel.replace(os.sep, "/").split("/")
+    base = parts[-1]
+    dirs = [part for part in parts[:-1] if part]
+    if base == "__init__.py":
+        stem = dirs[-1] if dirs else ""
+        dotted = ".".join(dirs)
+    else:
+        stem = os.path.splitext(base)[0]
+        dotted = ".".join(dirs + [stem]) if dirs else stem
+    names = []
+    if stem:
+        names.append(stem)
+    if dotted and dotted not in names:
+        names.append(dotted)
+    return names
+
+
 def repo_reexports(root=None):
-    """Module name -> {exported name: chain to the socketserver class}.
+    """Module identity -> {exported name: chain to the socketserver class}.
 
     A module RE-EXPORTS a server class when a module-level statement binds a
     name to one.  The chains are followed across repo modules to a fixpoint, so
     ``helper2`` re-exporting what ``helper1`` re-exports resolves, and a cycle
     contributes nothing because the path set cuts it.
 
-    An AMBIGUOUS module name is dropped rather than guessed: two files with the
-    same stem under the root, or a stem that is not a module at all, names a
-    target this static read cannot bound, so the shape is refused instead of
-    the live one being picked.
+    Every file is registered under BOTH identities ``_module_names`` returns,
+    and the two share one namespace: a name is DROPPED rather than guessed when
+    two files claim it (the R2971 rule), so a colliding stem stays dropped
+    while the dotted path of each file still answers - the direction that
+    narrows.  A file whose source will not parse is dropped the same way.
     """
     root = root or HERE
     trees = {}
+    owners = {}
+    facts = {}
     ambiguous = set()
     for rel, full in iter_modules(root):
-        base = os.path.basename(rel)
-        if base == "__init__.py":
-            name = os.path.basename(os.path.dirname(rel))
-        else:
-            name = os.path.splitext(base)[0]
-        if not name:
-            continue
-        if name in trees or name in ambiguous:
-            ambiguous.add(name)
-            trees.pop(name, None)
+        names = _module_names(rel)
+        if not names:
             continue
         try:
             with open(full, "r", encoding="utf-8-sig", errors="replace") as handle:
-                trees[name] = ast.parse(handle.read())
+                tree = ast.parse(handle.read())
         except SyntaxError:
-            ambiguous.add(name)
-    carried = dict((name, _module_carried_classes(tree))
-                   for name, tree in trees.items())
+            for name in names:
+                ambiguous.add(name)
+                trees.pop(name, None)
+                owners.pop(name, None)
+            continue
+        for name in names:
+            holder = owners.get(name)
+            if name in ambiguous or (holder is not None and holder != rel):
+                ambiguous.add(name)
+                trees.pop(name, None)
+                owners.pop(name, None)
+                continue
+            owners[name] = rel
+            trees[name] = tree
+        if rel not in facts:
+            facts[rel] = _module_carried_classes(tree)
+    carried = dict((name, facts[owners[name]]) for name in trees)
     exports = {}
     for name in sorted(carried):
         direct, links, borrowed = carried[name]
@@ -419,6 +478,12 @@ def _repo_reexport_context(tree, exports):
 
     Only modules that actually export a server class are tracked, so a normal
     ``import ledger`` costs nothing and cannot be mistaken for a constructor.
+    Since R2972 the tracked identities include dotted paths: ``import
+    pkg.helper as ph`` binds ``ph`` to ``pkg.helper`` and a dotted from-import
+    borrows from it.  A bare dotted import with NO ``as`` binds the PACKAGE,
+    not this module, so it is deliberately not bound here - the three-part
+    attribute chain it makes reachable is named out of range in the module
+    docstring rather than guessed at.
     """
     aliases = {}
     borrowed = {}
@@ -427,11 +492,16 @@ def _repo_reexport_context(tree, exports):
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
-                if alias.name in exports:
-                    aliases[alias.asname or alias.name] = alias.name
+                name = alias.name
+                if "." in name:
+                    if alias.asname and name in exports:
+                        aliases[alias.asname] = name
+                    continue
+                if name in exports:
+                    aliases[alias.asname or name] = name
         elif isinstance(node, ast.ImportFrom):
             module = node.module or ""
-            if "." in module or module not in exports:
+            if module not in exports:
                 continue
             for alias in node.names:
                 if alias.name in exports[module]:

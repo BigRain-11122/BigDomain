@@ -1,16 +1,18 @@
 """Suite for the static bind-site gate that bounds R2942's disclosed hole.
 
-Criteria AC-BSC1..AC-BSC20. AC-BSC1..AC-BSC5 were pinned in src/os/backlog.md
+Criteria AC-BSC1..AC-BSC24. AC-BSC1..AC-BSC5 were pinned in src/os/backlog.md
 BEFORE this file, src/sandbox/bind_site_scan.py and src/sandbox/bind_sites.json
 existed (in-window pre-registration, disclosed); AC-BSC6..AC-BSC7 came with the
 asyncio kind (R2944), AC-BSC8..AC-BSC9 with its order/level rule (R2945),
 AC-BSC10..AC-BSC12 with the same rule applied to ws-serve (R2946), AC-BSC13..
 AC-BSC14 with the unix half of the asyncio family (R2969), AC-BSC15..
 AC-BSC17 with the socketserver construction family plus the measured
-declaration that serve_forever is not a bind site (R2970), and AC-BSC18..
+declaration that serve_forever is not a bind site (R2970), AC-BSC18..
 AC-BSC20 with a server class re-exported by another repo module plus the
 measured declaration that the type()/partial class and the non-Server import
-name stay out of range (R2971).
+name stay out of range (R2971), and AC-BSC21..AC-BSC22 with the same exports
+reached through a DOTTED module path plus the measured declaration that a bare
+``import a.b`` leaves the ``a.b.Name(...)`` chain out of range (R2972).
 
 Nothing here is read off the scanner's own prose: every criterion builds a
 private world on disk, runs the SHIPPED ``scan()`` over it, and requires a
@@ -47,6 +49,9 @@ PRE_R2970_REV = "c6bf93ea03476a43feb023dca735af3809448fb5"
 # The revision AC-BSC19 measures the live tree against: the R2970 bytes, i.e.
 # the scanner BEFORE a repo module's re-export was followed.
 PRE_R2971_REV = "979b34e662c54ade292ea9826be285f0a9a52a27"
+# The revision AC-BSC22 measures the live tree against: the R2971 bytes, i.e.
+# the scanner BEFORE a dotted module path could name an export.
+PRE_R2972_REV = "92d824d7c8e6fa1ec5cbcdaacac91c4388e2ffd8"
 
 sys.path.insert(0, HERE)
 import bind_site_scan  # noqa: E402
@@ -268,6 +273,66 @@ def socketserver_facts(root):
                     if not alias.name.endswith("Server"):
                         non_server.append((rel, node.lineno, alias.name))
     return (modules, non_server)
+
+
+def dotted_import_facts(root):
+    """The dotted-import face of a tree, measured rather than assumed.
+
+    AC-BSC22 grades the declaration that a bare ``import a.b`` (no ``as``)
+    leaves the ``a.b.Name(...)`` chain out of range, so this walk reports the
+    facts that make the declaration checkable: which stems collide (a stem is
+    what the export map loses first), whether the dotted path of every such
+    file is unique (the identity that recovers it), and how many dotted
+    imports name a module under the scanned root at all.
+    """
+    stems = {}
+    dotted = {}
+    files = []
+    for rel, full in bind_site_scan.iter_modules(root):
+        rel = rel.replace(os.sep, "/")
+        parts = rel.split("/")
+        base = parts[-1]
+        dirs = [part for part in parts[:-1] if part]
+        stem = dirs[-1] if base == "__init__.py" else os.path.splitext(base)[0]
+        name = ".".join(dirs) if base == "__init__.py" else (
+            ".".join(dirs + [stem]) if dirs else stem)
+        files.append((rel, stem, name))
+        if stem:
+            stems.setdefault(stem, []).append(rel)
+        if name:
+            dotted.setdefault(name, []).append(rel)
+    ambiguous_files = [rel for rels in stems.values() if len(rels) > 1
+                       for rel in rels]
+    recovered = [rel for rel, _, name in files
+                 if len(dotted.get(name, ())) == 1]
+    imports = []
+    froms = []
+    for rel, full in bind_site_scan.iter_modules(root):
+        rel = rel.replace(os.sep, "/")
+        with open(full, encoding="utf-8-sig", errors="replace") as handle:
+            try:
+                tree = ast.parse(handle.read())
+            except SyntaxError:
+                continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if "." in alias.name:
+                        imports.append((rel, node.lineno, alias.name,
+                                        alias.name in dotted))
+            elif (isinstance(node, ast.ImportFrom) and node.module
+                  and "." in node.module):
+                froms.append((rel, node.lineno, node.module,
+                              node.module in dotted))
+    return {
+        "files": len(files),
+        "ambiguous_stems": sorted(k for k, v in stems.items() if len(v) > 1),
+        "ambiguous_dotted": sorted(k for k, v in dotted.items() if len(v) > 1),
+        "ambiguous_files": ambiguous_files,
+        "recovered": [rel for rel in ambiguous_files if rel in recovered],
+        "imports": imports,
+        "froms": froms,
+    }
 
 
 def main():
@@ -1339,6 +1404,211 @@ def main():
     if non_server:
         bad.append("non-server-names-%s" % non_server)
     report("AC-BSC20", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC21: the same exports reached through a DOTTED module path
+    # are judged where the construction sits -------------------------------
+    bad = []
+    root = fresh_world("bsc21")
+    write(root, "pkg/helper.py", "from socketserver import UDPServer\n")
+    write(root, "site.py",
+          "from pkg.helper import UDPServer\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return UDPServer((host, port), handler)\n")
+    loud = bind_site_scan.scan(root=root)
+    if loud["ok"]:
+        bad.append("dotted-from-passed")
+    rows = [r for r in loud["refused"] if r["path"] == "site.py"]
+    if not rows:
+        bad.append("dotted-from-not-named")
+    else:
+        row = rows[0]
+        if row["kind"] != "socketserver-server":
+            bad.append("kind-%s" % row["kind"])
+        if row["code"] != bind_site_scan.UNGUARDED:
+            bad.append("code-%s" % row["code"])
+        if row["line"] != 4:
+            bad.append("line-%s" % row["line"])
+        if row["function"] != "boot":
+            bad.append("function-%s" % row["function"])
+        if row["detail"] != "UDPServer(from pkg.helper)->socketserver.UDPServer":
+            bad.append("detail-%s" % row["detail"])
+    # the alias form names the dotted source too, and the SAME construction
+    # passes once it sits inside the gate - the red was the door, not the name.
+    write(root, "site.py",
+          "import pkg.helper as ph\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return ph.UDPServer((host, port), handler)\n")
+    alias = bind_site_scan.scan(root=root)
+    if alias["ok"]:
+        bad.append("dotted-alias-passed")
+    alias_rows = [r for r in alias["refused"] if r["path"] == "site.py"]
+    if not alias_rows:
+        bad.append("dotted-alias-not-named")
+    elif alias_rows[0]["detail"] != "ph.UDPServer->socketserver.UDPServer":
+        bad.append("alias-detail-%s" % alias_rows[0]["detail"])
+    write(root, "site.py",
+          "import birth_gate\n"
+          "import pkg.helper as ph\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return birth_gate.checked_server(\n"
+          "        lambda: ph.UDPServer((host, port), handler))\n")
+    healed = bind_site_scan.scan(root=root)
+    if not healed["ok"]:
+        bad.append("gated-dotted-still-refused")
+    # a dotted path that names nothing under the root is NOT a repo module, so
+    # it buys no export - the map reads files, not dotted-looking strings.
+    write(root, "site.py",
+          "from pkg.nosuch import UDPServer\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return UDPServer((host, port), handler)\n")
+    absent = bind_site_scan.scan(root=root)
+    if not absent["ok"] or absent["sites"] != 0:
+        bad.append("absent-dotted-sites-%d" % absent["sites"])
+    # positive control: a package that carries a HANDLER carries no server
+    # class, so the same call shape is not a site.
+    write(root, "pkg/helper.py", "from socketserver import BaseRequestHandler\n")
+    write(root, "site.py",
+          "import pkg.helper as ph\n"
+          "\n"
+          "def make(handler):\n"
+          "    return ph.BaseRequestHandler(handler)\n")
+    quiet = bind_site_scan.scan(root=root)
+    if not quiet["ok"]:
+        bad.append("dotted-handler-world-refused")
+    if quiet["sites"] != 0:
+        bad.append("dotted-handler-sites-%d" % quiet["sites"])
+    report("AC-BSC21", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC21b: the dotted chain, the subclass base, and the ambiguous
+    # stem the dotted path narrows -----------------------------------------
+    bad = []
+    root = fresh_world("bsc21b")
+    write(root, "pkg/helper1.py", "from socketserver import UDPServer\n")
+    write(root, "pkg/helper2.py", "from pkg.helper1 import UDPServer\n")
+    write(root, "site.py",
+          "import pkg.helper2 as ph2\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return ph2.UDPServer((host, port), handler)\n")
+    chain = bind_site_scan.scan(root=root)
+    if chain["ok"]:
+        bad.append("chain-site-passed")
+    chain_rows = [r for r in chain["refused"] if r["path"] == "site.py"]
+    if not chain_rows:
+        bad.append("chain-not-named")
+    elif chain_rows[0]["detail"] != (
+            "ph2.UDPServer->pkg.helper1.UDPServer->socketserver.UDPServer"):
+        bad.append("chain-detail-%s" % chain_rows[0]["detail"])
+    # both dotted modules are identities the export map carries, so the
+    # intermediate hop is measured rather than inferred from the detail text.
+    exports = bind_site_scan.repo_reexports(root)
+    for name in ("pkg.helper1", "pkg.helper2"):
+        if name not in exports:
+            bad.append("map-missing-%s" % name)
+    if exports.get("pkg.helper2", {}).get("UDPServer") != (
+            "pkg.helper1.UDPServer->socketserver.UDPServer"):
+        bad.append("map-chain-%s" % exports.get("pkg.helper2"))
+    # a subclass of a dotted re-export is a server-subclass like any other.
+    sub_root = fresh_world("bsc21b-sub")
+    write(sub_root, "pkg/helper.py", "from socketserver import UDPServer\n")
+    write(sub_root, "site.py",
+          "import pkg.helper as ph\n"
+          "\n"
+          "class Face(ph.UDPServer):\n"
+          "    allow_reuse_address = True\n")
+    sub = bind_site_scan.scan(root=sub_root)
+    if sub["ok"]:
+        bad.append("dotted-subclass-passed")
+    sub_rows = [r for r in sub["refused"] if r["kind"] == "server-subclass"]
+    if not sub_rows:
+        bad.append("dotted-subclass-not-named")
+    elif not sub_rows[0]["detail"].startswith("ph.UDPServer"):
+        bad.append("subclass-detail-%s" % sub_rows[0]["detail"])
+    # the ambiguous stem: two directories carry the same stem, so the STEM
+    # identity is dropped (the R2971 rule) while each dotted path still
+    # answers - the new dimension narrows, it does not loosen.
+    amb_root = fresh_world("bsc21b-amb")
+    write(amb_root, "pkg1/helper.py", "from socketserver import UDPServer\n")
+    write(amb_root, "pkg2/helper.py", "from socketserver import UDPServer\n")
+    write(amb_root, "site.py",
+          "from helper import UDPServer\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return UDPServer((host, port), handler)\n")
+    bare = bind_site_scan.scan(root=amb_root)
+    if not bare["ok"] or bare["sites"] != 0:
+        bad.append("ambiguous-bare-sites-%d" % bare["sites"])
+    write(amb_root, "site.py",
+          "from pkg1.helper import UDPServer\n"
+          "\n"
+          "def boot(host, port, handler):\n"
+          "    return UDPServer((host, port), handler)\n")
+    aimed = bind_site_scan.scan(root=amb_root)
+    if aimed["ok"]:
+        bad.append("ambiguous-dotted-passed")
+    aimed_rows = [r for r in aimed["refused"] if r["path"] == "site.py"]
+    if not aimed_rows:
+        bad.append("ambiguous-dotted-not-named")
+    elif "pkg1.helper" not in aimed_rows[0]["detail"]:
+        bad.append("ambiguous-detail-%s" % aimed_rows[0]["detail"])
+    report("AC-BSC21b", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC22: the live tree does not move a line, and the shape this
+    # round leaves out is declared with the measurement that bounds it ------
+    bad = []
+    live = bind_site_scan.scan(root=HERE)
+    if not live["ok"]:
+        bad.append("shipped-tree-refused")
+    if live["sites"] != 14:
+        bad.append("live-sites-%d" % live["sites"])
+    want_kinds = {"http-server": 8, "server-subclass": 2, "socket-bind": 3,
+                  "ws-serve": 1}
+    if live["by_kind"] != want_kinds:
+        bad.append("live-kinds-%s" % sorted(live["by_kind"].items()))
+    old = subprocess.run(["git", "show", PRE_R2972_REV
+                          + ":src/sandbox/bind_site_scan.py"],
+                         cwd=REPO, stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    if old.returncode != 0 or not old.stdout:
+        bad.append("no-old-bytes")
+    else:
+        old_leaf = os.path.join(WORLD, "bind_site_scan_prer2972.py")
+        with open(old_leaf, "wb") as handle:
+            handle.write(old.stdout)
+        before = subprocess.run(
+            [sys.executable, old_leaf, "--list", "--root", HERE],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, timeout=120)
+        after = subprocess.run(
+            [sys.executable, LEAF, "--list", "--root", HERE],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, timeout=120)
+        if before.returncode != 0 or after.returncode != 0:
+            bad.append("list-rc-%d/%d" % (before.returncode, after.returncode))
+        if before.stdout != after.stdout:
+            bad.append("live-lines-moved")
+        os.remove(old_leaf)
+    # the declared boundary, measured: dotted identities never collide, they
+    # recover every file whose stem collides, and no dotted import in this
+    # tree names a module under the root (so the triple-attribute chain this
+    # round leaves out has no live instance to misjudge).
+    facts = dotted_import_facts(HERE)
+    if facts["ambiguous_dotted"]:
+        bad.append("dotted-collides-%s" % facts["ambiguous_dotted"])
+    if not facts["ambiguous_files"]:
+        bad.append("no-ambiguous-stem")
+    if facts["recovered"] != facts["ambiguous_files"]:
+        bad.append("not-recovered-%s"
+                   % [rel for rel in facts["ambiguous_files"]
+                      if rel not in facts["recovered"]])
+    landed = [row for row in facts["imports"] + facts["froms"] if row[3]]
+    if landed:
+        bad.append("dotted-lands-on-repo-%s" % landed[:3])
+    report("AC-BSC22", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
