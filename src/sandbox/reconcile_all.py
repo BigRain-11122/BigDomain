@@ -281,6 +281,11 @@ SUITES = [
     # zero children started. AC-LND1..AC-LND5 were pinned in src/os/backlog.md
     # BEFORE this suite and the leaf module existed.
     ("launcher-registry", os.path.join("test_launcher_registry.py"), 5),
+    # R2940: the record above is a FILE and a file can be deleted, so the gate
+    # moved to a KERNEL NAMED MUTEX whose existence IS the holder and which the
+    # kernel drops when the holder dies. AC-LMX1..AC-LMX5 were pinned in
+    # src/os/backlog.md BEFORE this suite and the leaf module existed.
+    ("launcher-mutex", os.path.join("test_launcher_mutex.py"), 5),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the

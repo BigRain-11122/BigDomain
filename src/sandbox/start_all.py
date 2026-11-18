@@ -39,6 +39,7 @@ import urllib.error
 import urllib.request
 
 import job_object
+import launcher_mutex
 import launcher_registry
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -275,7 +276,8 @@ def verify(host, ports, timeout):
     return ready, hub_url, faces, live, errors
 
 
-def report_of(host, ports, hub_url, faces, live, errors, group=None):
+def report_of(host, ports, hub_url, faces, live, errors, group=None,
+              mutex=None):
     group = group if group is not None else ChildGroup()
     return {
         "ok": not errors,
@@ -293,6 +295,7 @@ def report_of(host, ports, hub_url, faces, live, errors, group=None):
                 "enabled": bool(group.job_enabled),
                 "assigned": group.assigned,
                 "errors": list(group.job_errors)},
+        "mutex": dict(mutex or {}),
         "errors": errors,
         "mock": True,
         "chargeable": False,
@@ -334,14 +337,55 @@ def main(argv=None):
                              "(default: the per-user record, never in this "
                              "repo). Suites pass a private path so two test "
                              "runs never compete for the machine claim.")
+    parser.add_argument("--mutex-name", default=None,
+                        help="kernel claim name; default is derived from the "
+                             "record path, so private registries stay private")
+    parser.add_argument("--no-mutex", action="store_true",
+                        help="start WITHOUT the kernel claim (red control: a "
+                             "deleted record then admits a second door)")
     args = parser.parse_args(argv)
 
     overrides = dict((key, getattr(args, "%s_port" % key)) for key in PLAN_KEYS)
     ports = plan(args.host, overrides)
+    registry_path = args.registry or launcher_registry.default_path()
+    # R2940: the kernel claim comes FIRST, before the record and before any
+    # child. A record is a file and a file can be deleted; the named mutex
+    # cannot be, and the kernel drops it when the holder dies.
+    mutex_name = args.mutex_name or launcher_mutex.name_for(registry_path)
+    claim_mutex = {"available": launcher_mutex.available(),
+                   "name": mutex_name, "held": False, "already": False,
+                   "enabled": not args.no_mutex}
+    mutex_handle = None
+    if not args.no_mutex:
+        lane = launcher_mutex.acquire(mutex_name)
+        claim_mutex.update({"held": bool(lane.get("held")),
+                            "already": bool(lane.get("already")),
+                            "source": lane.get("source")})
+        mutex_handle = lane.get("handle")
+        if not lane.get("held"):
+            holder = launcher_registry.read(registry_path) or {}
+            refused = {
+                "ok": False, "host": args.host, "hub_url": "",
+                "ports": {}, "face_ports": {}, "faces": {}, "live": {},
+                "children": [], "pids": {},
+                "job": {"available": job_object.available(), "enabled": False,
+                        "assigned": 0, "errors": []},
+                "mutex": claim_mutex,
+                "registry": {"path": registry_path, "claimed": False,
+                             "held_by": holder or None},
+                "errors": ["%s source=mutex pid=%s name=%s"
+                           % (launcher_mutex.REFUSED,
+                              holder.get("pid") or "-", mutex_name)],
+                "mock": True, "chargeable": False,
+            }
+            if args.report_json:
+                write_report(args.report_json, refused)
+            print(json.dumps(refused, ensure_ascii=False, sort_keys=True),
+                  flush=True)
+            return 2
     # R2939: the machine record is claimed BEFORE the first child exists, so a
     # second door is refused with zero processes started rather than after it
     # has already forked a sandbox beside the one it cannot see.
-    registry_path = args.registry or launcher_registry.default_path()
     claim = {
         "pid": os.getpid(),
         "ts": launcher_registry.stamp(),
@@ -360,6 +404,7 @@ def main(argv=None):
             "children": [], "pids": {},
             "job": {"available": job_object.available(), "enabled": False,
                     "assigned": 0, "errors": []},
+            "mutex": claim_mutex,
             "registry": {"path": registry_path, "claimed": False,
                          "held_by": holder, "verdict": verdict},
             "errors": ["%s pid=%s hub_url=%s reason=%s"
@@ -372,6 +417,7 @@ def main(argv=None):
             write_report(args.report_json, refused)
         print(json.dumps(refused, ensure_ascii=False, sort_keys=True),
               flush=True)
+        launcher_mutex.release(mutex_handle)
         return 2
     commands = build_commands(args.host, ports)
     group = start(commands, use_job=not args.no_job)
@@ -386,7 +432,7 @@ def main(argv=None):
             errors.append("E_JOB_UNASSIGNED: " + item)
         ready = ready and not group.job_errors
         report = report_of(args.host, ports, hub_url, faces, live, errors,
-                           group)
+                           group, claim_mutex)
         report["registry"] = {"path": registry_path, "claimed": True,
                               "pid": os.getpid(),
                               "state": "serving" if ready else "starting"}
@@ -409,6 +455,7 @@ def main(argv=None):
         code = 0
     finally:
         launcher_registry.release(registry_path)
+        launcher_mutex.release(mutex_handle)
         teardown(group)
     return code
 
