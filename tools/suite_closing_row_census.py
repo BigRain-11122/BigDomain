@@ -90,6 +90,35 @@ still counts as reaching a call (the question is 'does it reach a call', not
 'does it run'), the five registry rows whose source will not parse are not
 judged by this face at all, and a row that builds its text at run time is out
 of range exactly as the other faces say.
+
+R2967 (AC-CEN17..AC-CEN18): the two audit faces read DIFFERENT things until
+this round - the fixture line walked LITERAL text pieces while the nowhere line
+walked AST constants, and an implicit concatenation is exactly where they part
+(the parser makes 'SUITE %d/%d' ' tail' one constant; the text scan sees two
+pieces, one of which is law-shaped and one of which is not). The fixture face
+now walks the AST constants under the SAME candidate predicate the text scan
+already applies - a body that names SUITE - so the only remaining difference
+between the two readings is pieces versus constants, and stored-fixture law
+means one thing on both lines; unparsable source falls back to the text pieces
+(the conservative direction: text can only over-report). The predicate is not
+cosmetic and it was measured: without it, a suite whose remaining constants are
+'probe.py' and 'done' read 'other' instead of 'no_row' (the R2965 private world
+AC-CEN13 pins), and one live row appeared to earn law only through a merged
+constant that never names SUITE - both are candidate-set artefacts, not
+readings. classify()'s verdict path is unchanged - it still reads text pieces -
+so this is a read-only unification, not a widening: on the live tree
+law_literal_rows reads 1 both before and after, law_only stays 0, the fixture
+row is os-suite-closing-row-census, no row is demoted anywhere (measured: zero
+rows are law on the piece reading and non-law on the constant reading), and all
+18 printed CENSUS lines are byte-identical to the HEAD binary. The measured
+disagreement is named rather than implied away: exactly one live row's strongest
+family moves, and it moves INSIDE the law set - suite-matrix-discovery reads
+law_status_punct from pieces and law_counters from the joined constant, because
+the same bytes read whole carry a counter triple - while three further rows
+(runner-profile-daily, os-leg-watch, os-leg-header-check) gain law_counters as an
+extra family without changing their verdict. A fixture that a caller stores with
+no assignment line stays outside the fixture class, and a row whose text is
+built at run time is out of range on every face.
 """
 
 import argparse
@@ -114,7 +143,7 @@ LITERAL = re.compile(r'"([^"\n]*(?:SUITE|suite)[^"\n]*)"'
 # the live row 'SUITE %s %d/%d criteria=%d\n' (trailing escape plus an embedded
 # criteria=%d), so an assignment must start an embedded line and must not be a
 # comparison.
-ASSIGN_LINE = re.compile(r"(?:^|\\n)\s*[A-Za-z_]\w*\s*=(?!=)")
+ASSIGN_LINE = re.compile(r"(?:^|\\n|\n)\s*[A-Za-z_]\w*\s*=(?!=)")
 # The 54 no_numbers suites R2845 audited at output level build the row in two
 # halves: a conditionally bound verdict name, then a format that slots it in.
 SPLIT_BIND = re.compile(r'(\w+)\s*=\s*"SUITE (?:PASS|FAIL)"\s+if\b[^\n]*\belse\s+'
@@ -148,8 +177,16 @@ COUNTER_WORD_FAIL = re.compile(r"(?:%d|\{[^{}\n]*\}|\d+)\s+fail\b")
 
 
 def normalise(lit):
-    """Drop a literal leading newline escape so the law can be asked of the text."""
-    return lit.replace("\\n", "").replace("\\t", "").strip()
+    """Drop literal escapes and join real newlines so the law can be asked.
+
+    Text pieces never carry a real newline, so the R2967 additions (a real
+    newline and tab from an AST constant VALUE) leave the verdict reading of
+    this tree byte-identical; they exist so the AST-reading audit faces ask the
+    same question of a value as the text face asks of its source.
+    """
+    return (lit.replace("\\n", "").replace("\\t", "")
+               .replace("\n", " ").replace("\r", " ").replace("\t", " ")
+               .strip())
 
 
 def _legacy_split_law(src):
@@ -374,6 +411,29 @@ def is_fixture_text(body):
     return bool(ASSIGN_LINE.search(body))
 
 
+def _string_constants(src):
+    """Every SUITE-bearing string constant's VALUE, one entry per constant.
+
+    R2967: the fixture audit and the stored-row audit now read the same body
+    list. The text scan sees the pieces of an implicit concatenation while the
+    parser makes them one constant, so the two audits disagreed exactly at a
+    join. The candidate set stays the one LITERAL already applies - a body that
+    names SUITE - because a constant that never names it cannot be a law row
+    and would only relabel an empty reading as 'other' (measured: the R2965
+    fixture world read no_row from pieces and other from unfiltered constants,
+    which is a label drift, not a reading). Returns None when the source will
+    not parse; the caller then falls back to the text pieces, which can only
+    over-report law.
+    """
+    try:
+        tree = ast.parse(src)
+    except SyntaxError:
+        return None
+    return [node.value for node in ast.walk(tree)
+            if isinstance(node, ast.Constant) and isinstance(node.value, str)
+            and ("SUITE" in node.value or "suite" in node.value)]
+
+
 def classify(src, skip_fixture=False):
     """Return the strongest shape family found in this suite's source.
 
@@ -384,8 +444,10 @@ def classify(src, skip_fixture=False):
     shapes = []
     if split_law(src):
         shapes.append("law_split")
-    for m in LITERAL.finditer(src):
-        body = m.group(1) or m.group(2) or ""
+    bodies = _string_constants(src) if skip_fixture else None
+    if bodies is None:
+        bodies = [m.group(1) or m.group(2) or "" for m in LITERAL.finditer(src)]
+    for body in bodies:
         if skip_fixture and is_fixture_text(body):
             continue
         shapes.append(shape_of_literal(body, src))
@@ -546,13 +608,13 @@ def main(argv=None):
             non_law.append((label, shape))
             continue
         if args.fixture_audit:
-            hit = False
-            for m in LITERAL.finditer(text):
-                body = m.group(1) or m.group(2) or ""
-                if is_fixture_text(body) and \
-                        shape_of_literal(body, text) in LAW_FAMILIES:
-                    hit = True
-            if hit:
+            bodies = _string_constants(text)
+            if bodies is None:
+                bodies = [m.group(1) or m.group(2) or ""
+                          for m in LITERAL.finditer(text)]
+            if any(is_fixture_text(body) and
+                   shape_of_literal(body, text) in LAW_FAMILIES
+                   for body in bodies):
                 fixture_hit += 1
             alt = classify(text, skip_fixture=True)
             if alt not in LAW_FAMILIES:

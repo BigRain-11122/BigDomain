@@ -57,7 +57,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.dirname(BASE)
 ROOT = os.path.dirname(SRC)
 
-EXPECTED_CRITERIA = 16
+EXPECTED_CRITERIA = 18
 LABEL = "os-suite-closing-row-census"
 TOOL = os.path.join(ROOT, "tools", "suite_closing_row_census.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
@@ -769,6 +769,155 @@ def ac_cen16():
           "verdict lines unchanged" % len(NOWHERE_ROWS))
 
 
+# R2967: the join where the two audit readings part. The probe module is ONE
+# constant to the parser and three pieces to the text scan, and no single piece
+# carries both properties the fixture audit asks for (an embedded assignment
+# line AND a law-shaped body). The printed row keeps the suite a law row, so
+# the audit reaches it - the class size is what moves, not the verdict.
+JOINED_FIXTURE_SRC = (
+    "PROBE = ('SUITE PASS ' '%d/%d\\n' 'x = 1\\n')\n"
+    "print(\"SUITE PASS %d/%d\" % (1, 1), flush=True)\n"
+    "print(\"done\")\n")
+# measured at R2967 on the working tree, by content-addressed label.
+FIXTURE_ROWS = ("os-suite-closing-row-census",)
+AST_ONLY_LAW_ROWS = ("suite-matrix-discovery",)
+# one row moves INSIDE the law set because the same bytes read as one constant
+# carry a counter triple: law_status_punct -> law_counters. Both are law, so
+# what law MEANS did not move; the family name did, and it is named here.
+FAMILY_MOVES = (("suite-matrix-discovery", "law_status_punct", "law_counters"),)
+
+
+def _census():
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import suite_closing_row_census
+    return suite_closing_row_census
+
+
+def ast_fixture_hit(src):
+    census = _census()
+    consts = census._string_constants(src) or []
+    return any(census.is_fixture_text(b)
+               and census.shape_of_literal(b, src) in census.LAW_FAMILIES
+               for b in consts)
+
+
+def text_fixture_hit(src):
+    census = _census()
+    for m in census.LITERAL.finditer(src):
+        body = m.group(1) or m.group(2) or ""
+        if census.is_fixture_text(body) \
+                and census.shape_of_literal(body, src) in census.LAW_FAMILIES:
+            return True
+    return False
+
+
+def ast_classify(src):
+    """classify() over AST constants, the reading the audit faces now share."""
+    census = _census()
+    consts = census._string_constants(src)
+    if consts is None:
+        return None
+    shapes = []
+    if census.split_law(src):
+        shapes.append("law_split")
+    shapes.extend(census.shape_of_literal(b, src) for b in consts)
+    for name in census.FAMILIES:
+        if name in shapes:
+            return name
+    return "no_row"
+
+
+def ac_cen17():
+    """A fixture split at an implicit join: text blind, AST audit sees it."""
+    folder, copy_tool = world("right", [("joined", "joined.py", 3),
+                                        ("single", "single.py", 1)])
+    try:
+        sandbox = os.path.join(folder, "src", "sandbox")
+        write_text(os.path.join(sandbox, "joined.py"), JOINED_FIXTURE_SRC)
+        write_text(os.path.join(sandbox, "single.py"), STORED_ROW_SRC)
+        proc = subprocess.run(
+            [sys.executable, copy_tool, "--root", folder, "--quiet-list",
+             "--fixture-audit"], capture_output=True)
+        code = proc.returncode
+        out = proc.stdout.decode("utf-8", "replace")
+    finally:
+        cleanup(folder)
+    fields = audit_line(out, "CENSUS fixture law_literal_rows=")
+    joined = (ast_fixture_hit(JOINED_FIXTURE_SRC),
+              text_fixture_hit(JOINED_FIXTURE_SRC))
+    single = (ast_fixture_hit(STORED_ROW_SRC),
+              text_fixture_hit(STORED_ROW_SRC))
+    cited = ("CENSUS registry=2 law=2 non_law=0 missing=0" in out
+             and fields.get("law_literal_rows") == "2"
+             and fields.get("law_only") == "1"
+             and "CENSUS law-only single from=law_direct to=no_row" in out
+             and "CENSUS law-only joined " not in out)
+    ok = (code == 0 and cited and joined == (True, False)
+          and single == (True, True))
+    if not ok:
+        print("  measured rc=%d cited=%r joined(ast,text)=%r "
+              "single(ast,text)=%r out=%r" % (code, cited, joined, single, out),
+              flush=True)
+    check(ok, "AC-CEN17 a fixture split at an implicit join is counted by the "
+          "AST audit only (%r), and a one-piece fixture still is (%r)"
+          % (joined, single))
+
+
+def ac_cen18():
+    """Live: the join unification moves no verdict and names its disagreement."""
+    plain_code, plain_out = run_census(ROOT, quiet=True)
+    proc = subprocess.run([sys.executable, TOOL, "--root", ROOT,
+                           "--quiet-list", "--fixture-audit"],
+                          capture_output=True)
+    out = proc.stdout.decode("utf-8", "replace")
+    fields = audit_line(out, "CENSUS fixture law_literal_rows=")
+    census = _census()
+    ast_rows, text_rows, moves = [], [], []
+    text_law = ast_law = 0
+    for label, rel, declared in census.registry(ROOT):
+        path = os.path.join(ROOT, "src", "sandbox", rel)
+        if not os.path.isfile(path):
+            continue
+        with open(path, "r", encoding="utf-8", errors="replace") as fh:
+            src = fh.read()
+        ast_shape = ast_classify(src)
+        text_shape = census.classify(src)
+        if text_shape in census.LAW_FAMILIES:
+            text_law += 1
+        if ast_shape is None:
+            # a parse failure must never demote a row: the AST reading is
+            # unavailable here, so it cannot claim the row is not law
+            ast_law += 1
+            continue
+        if ast_shape in census.LAW_FAMILIES:
+            ast_law += 1
+        if ast_shape != text_shape:
+            moves.append((label, text_shape, ast_shape))
+        if ast_fixture_hit(src):
+            ast_rows.append(label)
+        if text_fixture_hit(src):
+            text_rows.append(label)
+    ok = (plain_code == 0 and proc.returncode == 0
+          and verdict_lines(out) == verdict_lines(plain_out)
+          and fields.get("law_literal_rows") == str(len(FIXTURE_ROWS))
+          and fields.get("law_only") == "0"
+          and tuple(sorted(set(ast_rows))) == FIXTURE_ROWS
+          and tuple(sorted(set(text_rows))) == FIXTURE_ROWS
+          and tuple(sorted(set(moves))) == FAMILY_MOVES
+          and tuple(sorted(set(l for l, _t, _a in moves))) == AST_ONLY_LAW_ROWS
+          and text_law == ast_law == 728)
+    if not ok:
+        print("  measured rc=%d/%d verdict_same=%r fields=%r ast_rows=%r "
+              "text_rows=%r moves=%r law text/ast=%d/%d"
+              % (plain_code, proc.returncode,
+                 verdict_lines(out) == verdict_lines(plain_out), fields,
+                 sorted(set(ast_rows)), sorted(set(text_rows)), sorted(set(moves)),
+                 text_law, ast_law), flush=True)
+    check(ok, "AC-CEN18 live fixture row(s) %r counted by both readings, "
+          "law_only 0, %d family move(s) inside the law set, law %d=%d"
+          % (FIXTURE_ROWS, len(FAMILY_MOVES), text_law, ast_law))
+
+
 def main():
     print("suite closing-row census suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -788,6 +937,8 @@ def main():
     ac_cen14()
     ac_cen15()
     ac_cen16()
+    ac_cen17()
+    ac_cen18()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:
