@@ -526,6 +526,141 @@ def load_archive_lines(logs_dir=None, state_path=None):
     return out
 
 
+# R2914 AC-LGA9: the FOLD-CARRY law, scoped because the unscoped form was
+# measured red before it was written. `--archives logs` reads
+# archived_missing=787 / archived_orphan=52 on the pre-law tree (R2913), so
+# "every archived round carries its ledger line" would install a gate that
+# no later round could ever satisfy, and a permanently red gate teaches the
+# next round to skip it. The law is therefore a FOLD-WINDOW law: it is asked
+# only of windows whose own marker round is at or after the round that
+# pinned it. Windows opened before the pin are frozen history this module
+# may only read (same reason archived_* never gates in audit_scope).
+#
+# FOLD_CARRY_PIN is the ONE place the pin is typed; a window's marker round
+# is read from the archive header line the fold itself writes.
+FOLD_CARRY_PIN = 2914
+FOLD_MARKER_RE = re.compile(r"^#\s*---\s*R(\d{3,5})\b")
+
+
+def load_archive_windows(path):
+    """Split ONE archive section file into its fold windows (R2914).
+
+    A window opens at a '# --- R<n>' marker line and runs until the next
+    marker of the same file; the marker's own round number is what the
+    FOLD-CARRY scope is asked about. Lines before the first marker belong
+    to no window and are dropped from the window view (they are still read
+    by load_archive for the coverage scope). Each window carries the log
+    lines verbatim, with '#' comment lines and blank lines dropped exactly
+    as load_archive does, so the two readers cannot disagree about what a
+    window holds.
+    """
+    windows = []
+    current = None
+    try:
+        handle = io.open(path, "r", encoding="utf-8")
+    except (IOError, OSError) as exc:
+        raise LedgerLineError("E_LGR_BAD_ARCHIVE",
+                              "%s is unreadable: %s" % (path, exc))
+    try:
+        for raw in handle:
+            text = raw.rstrip("\n").rstrip("\r")
+            if text.startswith(COMMENT_PREFIX):
+                match = FOLD_MARKER_RE.match(text)
+                if match is not None:
+                    current = {"round": int(match.group(1)), "lines": [],
+                               "path": path}
+                    windows.append(current)
+                continue
+            if not text.strip() or current is None:
+                continue
+            current["lines"].append(text)
+    except UnicodeDecodeError as exc:
+        raise LedgerLineError("E_LGR_BAD_ARCHIVE",
+                              "%s is not valid utf-8: %s" % (path, exc))
+    finally:
+        handle.close()
+    return windows
+
+
+def audit_fold_carry(paths, min_round=None):
+    """Ask the FOLD-CARRY law of every window opened at or after the pin.
+
+    For each such window, every round whose NARRATIVE sits inside it must
+    have its LEDGER line carried into the archive with it. The carry is
+    checked at ARCHIVE granularity rather than same-window granularity
+    because a fold is a contiguous line range: a round split across two
+    windows would otherwise redden a healthy tree. The defect this law
+    pins is the one R2912 measured - a narrative archived while its ledger
+    line stayed behind in the LIVE log (ledger_without_round=2893), which
+    is a lost pairing no reader can repair without the archive.
+
+    Windows opened before the pin are counted as skipped, never as clean:
+    with no post-pin window the gate reports itself VACUOUS rather than
+    passing on nothing, so a green reading cannot be confused with a
+    measured one.
+    """
+    if min_round is None:
+        min_round = FOLD_CARRY_PIN
+    if not isinstance(min_round, int) or min_round < 1:
+        raise LedgerLineError("E_LGR_BAD_ARGS",
+                              "min_round must be a positive integer")
+    examined = []
+    skipped = 0
+    archive_rounds = set()
+    for path in paths:
+        for window in load_archive_windows(path):
+            for line in window["lines"]:
+                # Presence read, never a shape read: the archive carries
+                # pre-law ledger lines whose payload is broken (measured:
+                # R2875 has no ' local=' field), and this law asks only
+                # whether the pairing survived the fold. Shape has its own
+                # gates, and they are live-only by design (audit_scope).
+                if classify(line) == "ledger":
+                    archive_rounds.add(
+                        int(LEDGER_PREFIX_RE.match(line).group(1)))
+            if window["round"] < min_round:
+                skipped += 1
+                continue
+            examined.append(window)
+    gaps = []
+    rounds = 0
+    for window in examined:
+        narratives = sorted(set(
+            int(NARRATIVE_RE.match(line).group(1))
+            for line in window["lines"] if classify(line) == "round"))
+        rounds += len(narratives)
+        for round_no in narratives:
+            if round_no not in archive_rounds:
+                gaps.append({"window": window["round"],
+                             "round": round_no,
+                             "path": window["path"]})
+    return {
+        "since": min_round,
+        "windows": len(examined),
+        "skipped_windows": skipped,
+        "rounds": rounds,
+        "gaps": gaps,
+        "clean": not gaps,
+        "vacuous": not examined,
+    }
+
+
+def format_fold_carry(report):
+    """Render the FOLD-CARRY verdict as exactly one printable ASCII line."""
+    if report["vacuous"]:
+        return ("FOLD-CARRY VACUOUS since=%d windows=0 skipped=%d "
+                "(no window opened at or after the pin yet)"
+                % (report["since"], report["skipped_windows"]))
+    if report["clean"]:
+        return ("FOLD-CARRY OK since=%d windows=%d rounds=%d skipped=%d"
+                % (report["since"], report["windows"], report["rounds"],
+                   report["skipped_windows"]))
+    gaps = ",".join("R%d(w%d)" % (item["round"], item["window"])
+                    for item in report["gaps"])
+    return ("FOLD-CARRY FAIL E_LFC_CARRY since=%d windows=%d gaps=%s"
+            % (report["since"], report["windows"], gaps))
+
+
 def coverage_floor(report, minimum=MIN_COVERAGE_LINES):
     """The coverage floor both live-gate suites pin (R2224)."""
     return (report["ledger_lines"] >= minimum
@@ -783,6 +918,8 @@ def main(argv=None):
     round_main = False
     round_no = None
     archives_dir = None
+    fold_carry = False
+    since_round = None
     index = 0
     while index < len(args):
         arg = args[index]
@@ -802,6 +939,20 @@ def main(argv=None):
             # gate so a window can redden BEFORE it appends.
             round_main = True
             index += 1
+        elif arg == "--fold-carry":
+            # R2914 AC-LGA9: the scoped fold-carry gate, asked beside
+            # --archives so a window can redden before it folds.
+            fold_carry = True
+            index += 1
+        elif arg == "--since":
+            if index + 1 >= len(args) or not args[index + 1].isdigit():
+                _stderr("E_LGR_BAD_ARGS: --since needs a positive integer")
+                return 2
+            since_round = int(args[index + 1])
+            if since_round < 1:
+                _stderr("E_LGR_BAD_ARGS: --since needs a positive integer")
+                return 2
+            index += 2
         elif arg == "--round":
             if index + 1 >= len(args) or not args[index + 1].isdigit():
                 _stderr("E_LGN_BAD_ARGS: --round needs a positive integer")
@@ -845,12 +996,22 @@ def main(argv=None):
     if path is None:
         path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                             "state.json")
+    if fold_carry and archives_dir is None:
+        # R2914: a missing companion flag is a usage error (exit 2), not a
+        # broken state file (exit 3) - the reader never got far enough to
+        # touch the tree.
+        _stderr("E_LGR_BAD_ARGS: --fold-carry needs --archives DIR to read "
+                "windows from")
+        return 2
     try:
         log = load_state_log(path)
         if closeout:
             report = check_closeout(log, round_no)
         elif round_main:
             report = check_round_main_shape(log)
+        elif fold_carry:
+            report = audit_fold_carry(archive_files(archives_dir),
+                                      since_round)
         else:
             if archives_dir is not None:
                 report = audit_scope(
@@ -887,6 +1048,12 @@ def main(argv=None):
                         % (report["code"], report["detail"],
                            report["sample"]))
         return 0 if report["ok"] else 2
+    if fold_carry:
+        if as_json:
+            sys.stdout.write(json.dumps(report, sort_keys=True) + "\n")
+        else:
+            sys.stdout.write(format_fold_carry(report) + "\n")
+        return 0 if report["clean"] else 2
     if as_json:
         sys.stdout.write(json.dumps(report, sort_keys=True) + "\n")
     else:

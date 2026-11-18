@@ -4478,9 +4478,10 @@ SUITES = [
     # the LIVE log" law are mutually unsatisfiable at current line sizes,
     # so the counts now come from the live window plus the folded archive
     # sections while the actionable drift set stays LIVE-only.
-    # (AC-LGA1..AC-LGA8 pre-registered in state/queue/tech.md R2224.)
+    # (AC-LGA1..AC-LGA9 pre-registered in state/queue/tech.md R2224; AC-LGA9
+    # added at R2914 - the scoped fold-carry law.)
     ("os-ledger-archive",
-     os.path.join("..", "os", "test_ledger_archive.py"), 8),
+     os.path.join("..", "os", "test_ledger_archive.py"), 9),
     # R2157: the baseline is the gate's only exemption channel, so its
     # semantics are pinned - one entry exempts one round only, a stale
     # entry is reported instead of rotting quietly, a broken baseline

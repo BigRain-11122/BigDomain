@@ -1,4 +1,4 @@
-"""Archive-aware ledger coverage suite (R2224; criteria AC-LGA1..AC-LGA8
+﻿"""Archive-aware ledger coverage suite (R2224; criteria AC-LGA1..AC-LGA8
 were pre-registered in state/queue/tech.md BEFORE this code existed -
 honesty law).
 
@@ -28,7 +28,7 @@ sys.path.insert(0, BASE)
 
 import ledger_lines as LL  # noqa: E402
 
-EXPECTED_CRITERIA = 8
+EXPECTED_CRITERIA = 9
 MODULE = os.path.join(BASE, "ledger_lines.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 STATE = os.path.join(BASE, "state.json")
@@ -284,10 +284,63 @@ def run():
               and real["archived_missing"] != []
               and real["new_missing"] == [] and real["new_orphan"] == []
               and real["clean"] is True
-              and not net and LABEL in runner_src
-              and EXPECTED_CRITERIA == 8,
+              and not net and LABEL in runner_src,
               "AC-LGA8 real tree floor met on the union, drift clean, "
               "hygiene")
+
+        # AC-LGA9 (R2914): the fold-carry law is SCOPED to windows opened
+        # at or after the pin, and the shape it reddens is the R2905 one -
+        # a narrative archived while its ledger line was left behind.
+        carry = os.path.join(world, "logs-carry")
+        os.makedirs(carry)
+        carried = os.path.join(carry, "state-log-archive-2026-11.md")
+        write_text(carried, archive_block([5001, 5002]))
+        good = LL.audit_fold_carry([carried], 5000)
+        write_text(carried, "# fixture header\n"
+                            "# --- R5003 fold append (fixture)\n"
+                            + narrative(5003) + "\n"
+                            + ledger(5004) + "\n")
+        bad = LL.audit_fold_carry([carried], 5000)
+        write_text(carried, archive_block([4998, 4999]))
+        pre_pin = LL.audit_fold_carry([carried], 5000)
+        write_text(carried, archive_block([5001, 5002]))
+        rc_ok, out_ok, _ = run_cli([state_path, "--check", "--archives", carry,
+                                    "--fold-carry", "--since", "5000"])
+        write_text(carried, "# fixture header\n"
+                            "# --- R5003 fold append (fixture)\n"
+                            + narrative(5003) + "\n")
+        rc_red, out_red, _ = run_cli([state_path, "--check", "--archives",
+                                      carry, "--fold-carry", "--since", "5000"])
+        rc_noarch, out_noarch, err_noarch = run_cli(
+            [state_path, "--check", "--fold-carry", "--since", "5000"])
+        real_carry = LL.audit_fold_carry(LL.archive_files(
+            LL.default_logs_dir(STATE)))
+        check(LL.FOLD_CARRY_PIN == 2914
+              and good["clean"] is True and good["vacuous"] is False
+              and good["windows"] == 1 and good["rounds"] == 2
+              and good["gaps"] == [] and good["skipped_windows"] == 0
+              and bad["clean"] is False and bad["vacuous"] is False
+              and [(item["round"], item["window"])
+                   for item in bad["gaps"]] == [(5003, 5003)]
+              and pre_pin["clean"] is True and pre_pin["vacuous"] is True
+              and pre_pin["windows"] == 0 and pre_pin["skipped_windows"] == 1
+              and LL.format_fold_carry(pre_pin).startswith("FOLD-CARRY VACUOUS")
+              and LL.format_fold_carry(good).startswith("FOLD-CARRY OK")
+              and "E_LFC_CARRY" in LL.format_fold_carry(bad)
+              and rc_ok == 0 and out_ok.startswith("FOLD-CARRY OK")
+              and rc_red == 2 and "E_LFC_CARRY" in out_red
+              and "R5003" in out_red
+              and rc_noarch == 2 and out_noarch == ""
+              and "E_LGR_BAD_ARGS" in err_noarch
+              and error_code(lambda: LL.audit_fold_carry([carried], 0))
+              == "E_LGR_BAD_ARGS"
+              and real_carry["clean"] is True
+              and real_carry["vacuous"] is False
+              and real_carry["windows"] >= 1
+              and real_carry["skipped_windows"] >= 1,
+              "AC-LGA9 fold-carried ledger pairing is scoped to post-pin "
+              "windows, reddens the left-behind shape, and is measured "
+              "non-vacuous on the shipped tree")
     finally:
         shutil.rmtree(world, ignore_errors=True)
 

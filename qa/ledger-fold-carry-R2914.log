@@ -1,0 +1,4 @@
+fold-carry rc=0 FOLD-CARRY OK since=2914 windows=1 rounds=2 skipped=720
+scoped rc=0 VERDICT CLEAN
+fold rc=0 STATE FOLD bytes=70513 gate=78500 margin=7987 log_lines=74 verdict=FOLD-CLEAR archive=present
+suite rc=0 SUITE PASS 9/9 criteria
