@@ -23,12 +23,31 @@ A retired one-off is a DELETE and is never refused: only added, copied,
 modified or renamed paths are read. The same filter means a deleted evidence
 file is never refused either.
 
-  exit 0 = HOOK OK, nothing staged at or above the freeze in a bad dialect
-  exit 1 = E_HOOK_REFUSE (one-off) and/or E_HOOK_EVIDENCE (dialect)
+R2933 second face (criteria AC-CGH1..AC-CGH5, pinned in src/os/backlog.md
+BEFORE this code): the staged face reads the INDEX, so a file that is `git
+add`-ed as healthy and then rewritten on disk in a shell dialect still commits
+clean, and a non-tee file that is written and never staged is invisible to it
+for the whole round. This gate now also runs the shipped writer census
+(src/os/qa_writer_census.py) over the WORKING TREE at root/qa and refuses on
+the same `flags` face the closeout gate gates on (R2932 decision: a baselined
+file no family decodes is PUBLISHED, never refused - it is history no round
+created). Both faces always run and report separately, so neither can mask the
+other. Chosen over wiring the closeout instead because the closeout is not a
+program in this repo - it is the round's own action sequence - and the only
+site that can refuse mechanically is git.
+
+  exit 0 = HOOK OK, nothing staged at or above the freeze in a bad dialect and
+           the working tree's evidence census is clean
+  exit 1 = E_HOOK_REFUSE (one-off) and/or E_HOOK_EVIDENCE (staged dialect)
+           and/or E_HOOK_TREE (working-tree census flags)
   exit 2 = E_HOOK_BAD_FLAGS
   exit 3 = E_HOOK_NO_GIT (the staged set could not be read)
          = E_HOOK_NO_LAW (the freeze law is not next to this gate)
          = E_HOOK_NO_EVIDENCE_LAW (the dialect law is not next to this gate)
+         = E_HOOK_NO_CENSUS_LAW (the census law is not in the tree it gates)
+         = E_HOOK_NO_CENSUS_BASELINE (the census baseline is missing/unreadable)
+         = E_HOOK_CENSUS_EMPTY (the evidence dir holds no log to classify)
+         = E_HOOK_CENSUS_ROW (a census row this gate cannot read)
 """
 
 import os
@@ -125,6 +144,71 @@ def evidence_refusals(root, paths, dialect):
     return out
 
 
+def load_census(root):
+    """The writer-census law, imported from the tree being committed.
+
+    AC-CGH3: a missing or broken census module is a NAMED refusal, never a
+    pass - the same law AC-EVB5 applies to the dialect module. The census
+    inserts its own sibling dirs on sys.path from its own __file__, so a
+    fixture world that ships src/os and src/sandbox needs nothing else.
+    """
+    law_dir = os.path.join(root, "src", "os")
+    if not os.path.isdir(law_dir):
+        raise GateError("E_HOOK_NO_CENSUS_LAW", law_dir)
+    if law_dir not in sys.path:
+        sys.path.insert(0, law_dir)
+    try:
+        import qa_writer_census as census
+    except Exception as exc:   # a broken law must not read as a clean commit
+        raise GateError("E_HOOK_NO_CENSUS_LAW",
+                        "%s: %s" % (type(exc).__name__, exc))
+    return census
+
+
+def tree_face(root):
+    """The census `flags` face over the WORKING TREE (R2933).
+
+    The staged face reads the index; this one reads the disk, and the two are
+    not mirrors: `git add` a healthy file and then rewrite it in a shell
+    dialect and the index stays clean while the disk does not. AC-CGH4 keeps
+    the R2932 decision intact - `reader_refused` is PUBLISHED on the row and
+    never gates, because it counts files baselined by name at freeze time.
+
+    Returns (kind, lines) with kind in PASS / REFUSED / SKIP, or raises
+    GateError for an input it cannot read.
+    """
+    target = os.path.join(root, "qa")
+    if not os.path.isdir(target):
+        # AC-EVB2's scope law: the verdict is scoped to the evidence dir. No
+        # dir means nothing is in scope, and the line says so instead of
+        # passing silently.
+        return "SKIP", ["HOOK TREE SKIP reason=no-evidence-dir dir=qa"]
+    census = load_census(root)
+    baseline = os.path.join(target, census.BASELINE_NAME)
+    if not os.path.exists(baseline):
+        raise GateError("E_HOOK_NO_CENSUS_BASELINE",
+                        os.path.basename(baseline))
+    lines, code = census.check_against_baseline(target, baseline)
+    if code == 3:
+        raise GateError("E_HOOK_CENSUS_EMPTY", target)
+    if code not in (0, 2) or any(ln.startswith("baseline") for ln in lines):
+        raise GateError("E_HOOK_NO_CENSUS_BASELINE",
+                        lines[0] if lines else os.path.basename(baseline))
+    try:
+        files = census.published_int(lines, "files")
+        flags = census.published_int(lines, "flags")
+        unreadable = census.published_int(lines, "reader_refused")
+    except ValueError as exc:
+        raise GateError("E_HOOK_CENSUS_ROW", str(exc))
+    named = [ln for ln in lines
+             if ln.startswith("[flag]") or ln.startswith("[refuse-read]")]
+    if flags == 0:
+        return "PASS", (["HOOK TREE PASS files=%d flags=0 reader_refused=%d "
+                         "gating=flags" % (files, unreadable)] + named)
+    return "REFUSED", (["E_HOOK_TREE flags=%d files=%d gating=flags"
+                        % (flags, files)] + named)
+
+
 def refusals(paths, law, freeze):
     """Staged paths whose basename is a one-off at or above the freeze."""
     out = []
@@ -201,10 +285,30 @@ def main(argv=None):
             "E_HOOK_EVIDENCE staged evidence is not in the healthy "
             "utf-8+LF dialect: rewrite it through tools/qa_log.py, or "
             "bypass deliberately with: git commit --no-verify\n")
-    if refused or bad_evidence:
+
+    # AC-CGH1/AC-CGH2: evaluated on every run, independently of the staged
+    # faces, so a clean index cannot be read as a clean tree and neither face
+    # can hide the other's refusal in one run.
+    try:
+        tree_kind, tree_lines = tree_face(root)
+    except GateError as exc:
+        sys.stderr.write("%s\n" % exc)
+        return 3
+    if tree_kind == "REFUSED":
+        for line in tree_lines:
+            sys.stderr.write("%s\n" % line)
+        sys.stderr.write(
+            "E_HOOK_TREE the working tree holds evidence a shell writer "
+            "produced: rewrite it through tools/qa_log.py (utf-8 + LF), or "
+            "bypass deliberately with: git commit --no-verify\n")
+    else:
+        for line in tree_lines:
+            sys.stdout.write("%s\n" % line)
+
+    if refused or bad_evidence or tree_kind == "REFUSED":
         return 1
-    sys.stdout.write("HOOK OK staged=%d freeze=%d evidence=clean rc=0\n"
-                     % (len(paths), freeze))
+    sys.stdout.write("HOOK OK staged=%d freeze=%d evidence=clean tree=%s "
+                     "rc=0\n" % (len(paths), freeze, tree_kind))
     return 0
 
 

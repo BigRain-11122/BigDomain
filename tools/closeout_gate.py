@@ -51,26 +51,17 @@ class GateRowError(Exception):
 
 
 def _token(lines, name):
-    """Read `name=<digits>` from the census's published lines.
+    """Read `name=<digits>` through the census's OWN scanner (R2933).
 
-    Searched as a TOKEN, not as a line prefix, because the census prints
-    `plain_unusable=151 reader_rescued=151 reader_refused=0` on one line.
-    Absent or malformed -> GateRowError (a gate that cannot read its own input
-    must refuse, never pass).
+    The token scanner moved into the census module because the commit-side
+    tree face reads the same row: two private scanners could drift and let
+    one gate accept a row the other refuses. Absent or malformed ->
+    GateRowError (a gate that cannot read its own input must refuse).
     """
-    prefix = name + "="
-    for line in lines:
-        start = line.find(prefix)
-        if start < 0:
-            continue
-        pos = start + len(prefix)
-        end = pos
-        while end < len(line) and line[end].isdigit():
-            end += 1
-        if end == pos:
-            raise GateRowError("%s= is not a number (%r)" % (name, line))
-        return int(line[pos:end])
-    raise GateRowError("census did not publish %s=" % name)
+    try:
+        return CENSUS.published_int(lines, name)
+    except ValueError as exc:
+        raise GateRowError(str(exc))
 
 
 def evaluate(target, baseline):

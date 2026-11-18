@@ -4603,8 +4603,10 @@ SUITES = [
      os.path.join("..", "os", "test_one_off_round_scripts.py"), 6),
     # R2840 AC-HK7: the commit-side call site of the same freeze law.
     # R2926: +5 AC-EVB criteria (evidence dialect refused at the commit).
+    # R2933: +5 AC-CGH criteria (the same census asked over the WORKING TREE,
+    # so an unstaged or index-disk-divergent shell capture is refused too).
     ("os-pre-commit-gate",
-     os.path.join("..", "os", "test_pre_commit_gate.py"), 15),
+     os.path.join("..", "os", "test_pre_commit_gate.py"), 20),
     # R2835: closing a round used to be two commands in two processes, so a
     # face (derived FROM state) could be published while the state write
     # failed - the R2831 defect with a different trigger. closeout.py makes

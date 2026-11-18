@@ -365,6 +365,36 @@ def check_against_baseline(target, path):
     return lines, (0 if flags == 0 else 2)
 
 
+def published_int(lines, name):
+    """Read `name=<digits>` out of a published census line (R2933).
+
+    ONE scanner for every gate that grades this census. The closeout gate
+    (tools/closeout_gate.py) and the commit-side tree face
+    (tools/hooks/pre_commit_gate.py) both read `flags=` and `reader_refused=`
+    out of the same rows; two private scanners that drifted would let one gate
+    accept a row the other refuses, which is the two-places defect this repo
+    has deleted before.
+
+    Searched as a TOKEN, not a line prefix, because the census prints
+    `plain_unusable=151 reader_rescued=151 reader_refused=0` on one line.
+    Raises ValueError when the token is absent or malformed: a gate that
+    cannot read its own input must refuse, never pass.
+    """
+    prefix = name + "="
+    for line in lines:
+        start = line.find(prefix)
+        if start < 0:
+            continue
+        pos = start + len(prefix)
+        end = pos
+        while end < len(line) and line[end].isdigit():
+            end += 1
+        if end == pos:
+            raise ValueError("%s= is not a number (%r)" % (name, line))
+        return int(line[pos:end])
+    raise ValueError("census did not publish %s=" % name)
+
+
 def _write_baseline_json(path, base):
     """Atomic deterministic baseline write (AC-WCB1 / AC-CDN6):
     full serialize first, tempfile + os.replace, zero timestamps."""

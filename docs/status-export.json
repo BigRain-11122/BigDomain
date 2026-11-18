@@ -3,18 +3,18 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (7000B)"
     ],
-    "current": "2026-11-18 R2932 PRODUCT: the closeout now has a precondition that has been SEEN to refuse, and its first live run refused a REAL write - my own evidence log. tools/closeout_gate.py runs the shipped writer-census check over the working tree before the round is closed and refuses on its flags face (a new non-tee file, or a baselined file whose class moved); reader_refused is PUBLISHED and stays informational, because it counts files baselined by name at freeze time and gating on it would redden every closeout for history no round created.",
+    "current": "2026-11-18 R2933 PRODUCT+ENGINEERING: the closeout precondition is now CALLED, not merely available. tools/hooks/pre_commit_gate.py gained a second face that runs the shipped writer census (src/os/qa_writer_census.py) over the WORKING TREE at root/qa and refuses on the same flags face the closeout gate gates on, so an UNSTAGED shell capture and a file whose INDEX bytes are healthy while its DISK bytes are not both refuse a REAL commit - neither of which the R2926 staged face could see. Chosen over wiring the closeout instead because the closeout is not a program in this repo (it is the round's own action sequence) and git is the only site that refuses mechanically.",
     "last_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
     "latest_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\filing-checklist.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/census-baseline-add-regress-R2932.log (463B, 2026-11-18)",
     "latest_evidence": "qa/census-baseline-add-regress-R2932.log (463B, 2026-11-18)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R2933] next window (<=12h): (0) MAIN — carried from R2932: make the precondition CALLED rather than available. `tools/closeout_gate.py` exists and has refused a real write, but nothing in the tree invokes it before a round closes, so a future window can skip it exactly as this one nearly did. Decide the wiring and prove it: either the shipped closeout path (whatever the loop actually runs at close) calls it and its non-zero exit refuses the close, or the pre-commit hook runs it against the WORKING TREE as a second face beside the staged-bytes face — and whichever wins gets a red control showing the close/commit refused end to end. (1) carried from R2931: the browser arm is still unrun by any automation — decide whether an on-demand `face_walk --no-shot` census writes a witness the loop reads and grades against the static census, or declare the on-demand posture with a named trigger and owner (truncated)",
-    "next_milestone_due": "2026-11-19T00:48:01+08:00",
-    "updated_at": "2026-11-18T12:48:01+08:00"
+    "next_milestone": "[R2934] next window (<=12h): (0) MAIN — the tree face now refuses drift, but the two faces disagree BY CONSTRUCTION and this window only disclosed it: the staged face refuses ANY non-tee `qa/*.log` whatever the baseline says, while the tree face refuses only NEW drift. Decide and prove which rule is the law for evidence that is deliberately kept in a legacy dialect (a baselined file re-saved, or a legitimately archived sample), with a red control either way (truncated)",
+    "next_milestone_due": "2026-11-19T01:06:26+08:00",
+    "updated_at": "2026-11-18T13:06:26+08:00"
   },
-  "current": "2026-11-18 R2932 PRODUCT: the closeout now has a precondition that has been SEEN to refuse, and its first live run refused a REAL write - my own evidence log. tools/closeout_gate.py runs the shipped writer-census check over the working tree before the round is closed and refuses on its flags face (a new non-tee file, or a baselined file whose class moved); reader_refused is PUBLISHED and stays informational, because it counts files baselined by name at freeze time and gating on it would redden every closeout for history no round created.",
+  "current": "2026-11-18 R2933 PRODUCT+ENGINEERING: the closeout precondition is now CALLED, not merely available. tools/hooks/pre_commit_gate.py gained a second face that runs the shipped writer census (src/os/qa_writer_census.py) over the WORKING TREE at root/qa and refuses on the same flags face the closeout gate gates on, so an UNSTAGED shell capture and a file whose INDEX bytes are healthy while its DISK bytes are not both refuse a REAL commit - neither of which the R2926 staged face could see. Chosen over wiring the closeout instead because the closeout is not a program in this repo (it is the round's own action sequence) and git is the only site that refuses mechanically.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -42,11 +42,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2932 PRODUCT: the closeout now has a precondition that has been SEEN to refuse, and its first live run refused a REAL write - my own evidence log. tools/closeout_gate.py runs the shipped writer-census check over the working tree before the round is closed and refuses on its flags face (a new non-tee file, or a baselined file whose class moved); reader_refused is PUBLISHED and stays informational, because it counts files baselined by name at freeze time and gating on it would redden every closeout for history no round created.",
-  "export_ts": "2026-11-18T12:48:01+08:00",
+  "do": "2026-11-18 R2933 PRODUCT+ENGINEERING: the closeout precondition is now CALLED, not merely available. tools/hooks/pre_commit_gate.py gained a second face that runs the shipped writer census (src/os/qa_writer_census.py) over the WORKING TREE at root/qa and refuses on the same flags face the closeout gate gates on, so an UNSTAGED shell capture and a file whose INDEX bytes are healthy while its DISK bytes are not both refuse a REAL commit - neither of which the R2926 staged face could see. Chosen over wiring the closeout instead because the closeout is not a program in this repo (it is the round's own action sequence) and git is the only site that refuses mechanically.",
+  "export_ts": "2026-11-18T13:06:26+08:00",
   "latest_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
   "latest_evidence": "qa/census-baseline-add-regress-R2932.log (463B, 2026-11-18)",
-  "next_milestone": "[R2933] next window (<=12h): (0) MAIN — carried from R2932: make the precondition CALLED rather than available. `tools/closeout_gate.py` exists and has refused a real write, but nothing in the tree invokes it before a round closes, so a future window can skip it exactly as this one nearly did. Decide the wiring and prove it: either the shipped closeout path (whatever the loop actually runs at close) calls it and its non-zero exit refuses the close, or the pre-commit hook runs it against the WORKING TREE as a second face beside the staged-bytes face — and whichever wins gets a red control showing the close/commit refused end to end. (1) carried from R2931: the browser arm is still unrun by any automation — decide whether an on-demand `face_walk --no-shot` census writes a witness the loop reads and grades against the static census, or declare the on-demand posture with a named trigger and owner (truncated)",
+  "next_milestone": "[R2934] next window (<=12h): (0) MAIN — the tree face now refuses drift, but the two faces disagree BY CONSTRUCTION and this window only disclosed it: the staged face refuses ANY non-tee `qa/*.log` whatever the baseline says, while the tree face refuses only NEW drift. Decide and prove which rule is the law for evidence that is deliberately kept in a legacy dialect (a baselined file re-saved, or a legitimately archived sample), with a red control either way (truncated)",
   "outs": [
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
@@ -184,5 +184,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 71900
+  "state_bytes": 76758
 }

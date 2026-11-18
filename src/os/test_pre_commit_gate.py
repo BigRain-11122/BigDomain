@@ -15,6 +15,18 @@ one-off on disk and in history. R2840 gives the law a commit-side call site:
   - the real tree reads clean and the readings never depend on this host
     having hooks enabled (a fresh clone must not redden).
 
+R2933 adds the tree face (AC-CGH1..AC-CGH5): the same shipped writer census,
+asked over the WORKING TREE, refuses an unstaged shell capture and a file whose
+INDEX bytes are healthy while its DISK bytes are not - neither of which the
+staged face can see. All five criteria are pinned in src/os/backlog.md BEFORE
+the code and measured here on real git worlds: two refusals fire in one run
+without masking each other, a missing census law or baseline is a NAMED
+refusal, reader_refused stays informational exactly as R2932 decided, and the
+live tree's file count agrees with the closeout gate because both ask one law.
+Honest boundary: the world carries the census's whole import chain by hand, so
+a new import inside that chain reddens this suite loudly instead of silently
+grading a census that is not the shipped one.
+
 Stdlib only, ASCII source, zero network, no clock. Exit 0 = all green.
 """
 
@@ -35,24 +47,49 @@ import one_off_round_scripts as OOS  # noqa: E402
 sys.path.insert(0, os.path.join(SRC, "sandbox"))
 import reconcile_all as RA  # SHELL_CAPTURE_LABEL, single source (AC-EVB3)
 
-EXPECTED_CRITERIA = 15
+EXPECTED_CRITERIA = 20
+EXPECTED_CHECKS = 27
 HOOKS = os.path.join(ROOT, "tools", "hooks")
 GATE = os.path.join(HOOKS, "pre_commit_gate.py")
 ENABLE = os.path.join(HOOKS, "enable.py")
 HOOK = os.path.join(HOOKS, "pre-commit")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
+RECONCILE = RUNNER
 CENSUS = os.path.join(BASE, "qa_writer_census.py")
 DIALECT = os.path.join(BASE, "evidence_dialect.py")
 PROBE = os.path.join(BASE, "qa_decode_probe.py")
 MATRIX = os.path.join(SRC, "sandbox", "suite_matrix.py")
 LABEL = "os-pre-commit-gate"
 
+# R2933 AC-CGH3: the tree face asks the shipped census, so a fixture world must
+# ship that law and the modules it asks - never a stub, because a stub would
+# grade the suite's idea of the census instead of the census.
+CHAIN_OS = ("qa_writer_census.py", "qa_decode_probe.py",
+            "matrix_stamp_provenance_line.py", "stamp_text_coverage.py",
+            "patterns_label_readability.py",
+            "patterns_label_readability_render_consumer.py",
+            "patterns_non_label_text_readability.py",
+            "artifact_disk_text_readability.py",
+            "evidence_name_text_coverage.py")
+CHAIN_SANDBOX = ("suite_matrix.py", "reconcile_all.py")
+FREEZE_CODE = (
+    "import os, sys\n"
+    "sys.path.insert(0, os.path.join('src', 'os'))\n"
+    "import qa_writer_census as C\n"
+    "lines, code, _base = C.write_baseline('qa', os.path.join('qa', "
+    "C.BASELINE_NAME))\n"
+    "print(lines[0])\n"
+    "sys.exit(code)\n"
+)
+
 PASSES = 0
 FAILS = 0
+LABELS = []
 
 
 def check(ok, label):
     global PASSES, FAILS
+    LABELS.append(label)
     if ok:
         PASSES += 1
         print("PASS %s" % label, flush=True)
@@ -86,8 +123,21 @@ def make_world(with_dialect=True):
         shutil.copy2(os.path.join(HOOKS, name),
                      os.path.join(world, "tools", "hooks", name))
     os.makedirs(os.path.join(world, "src", "os"))
+    os.makedirs(os.path.join(world, "src", "sandbox"))
     shutil.copy2(os.path.join(BASE, "one_off_round_scripts.py"),
                  os.path.join(world, "src", "os", "one_off_round_scripts.py"))
+    # R2933: the tree face reads the SHIPPED census, so the world carries it
+    # and the modules it asks. Measured chain (not guessed): the census asks
+    # qa_decode_probe, which asks suite_matrix, which asks the stamp/readability
+    # cluster - the same shape R2926 met on the dialect face. It is enumerated
+    # by hand on purpose: if the chain grows, the freeze below fails LOUDLY
+    # instead of letting the suite grade a census that is not the shipped one.
+    for name in CHAIN_OS:
+        shutil.copy2(os.path.join(BASE, name),
+                     os.path.join(world, "src", "os", name))
+    for name in CHAIN_SANDBOX:
+        shutil.copy2(os.path.join(SRC, "sandbox", name),
+                     os.path.join(world, "src", "sandbox", name))
     if with_dialect:
         # AC-EVB5: the dialect law travels with the gate. It is a LEAF
         # module by construction, so the world needs nothing else for it.
@@ -99,6 +149,16 @@ def make_world(with_dialect=True):
                        ("core.autocrlf", "false"),
                        ("core.hooksPath", "tools/hooks")):
         run(["git", "config", key, value], world)
+    # A frozen world: one healthy tee evidence file and the baseline the census
+    # derives from it, so the tree face is graded against a real baseline rather
+    # than an empty promise. Freezing in a subprocess keeps the world's law out
+    # of this suite's own imports.
+    write(os.path.join(world, "qa", "seed.log"), "PASS seed row\n")
+    if with_dialect:
+        code_f, out_f, err_f = run([sys.executable, "-c", FREEZE_CODE], world)
+        if code_f != 0:
+            raise RuntimeError("fixture baseline freeze failed rc=%d %s"
+                               % (code_f, (err_f or out_f).strip()[:200]))
     return world
 
 
@@ -123,6 +183,16 @@ def commits(world):
     return int(out.strip()) if code == 0 and out.strip().isdigit() else 0
 
 
+def snapshot(folder):
+    """Bytes and mtime per file: the read-only face measured, not asserted."""
+    rows = {}
+    for name in sorted(os.listdir(folder)):
+        path = os.path.join(folder, name)
+        with open(path, "rb") as fh:
+            rows[name] = (fh.read(), os.stat(path).st_mtime_ns)
+    return rows
+
+
 # AC-HK1 - one shape owner: the law's regex, never a second one here.
 gate_src = text(GATE)
 raw_gate = read(GATE)
@@ -135,6 +205,7 @@ check("import one_off_round_scripts" in gate_src
       and all(byte < 128 for byte in raw_gate),
       "AC-HK1 gate asks the law for shape and round, owns no regex or walk, ASCII")
 
+world = None
 try:
     world = make_world()
     write(os.path.join(world, "src", "os", "state_append.py"), "# baseline\n")
@@ -242,7 +313,8 @@ try:
           and code_after == 0 and "ENABLED" in out_after,
           "AC-HK4 enablement measured: DISABLED rc=2, APPLIED, ENABLED rc=0")
 finally:
-    shutil.rmtree(world, ignore_errors=True)
+    if world:
+        shutil.rmtree(world, ignore_errors=True)
 
 # AC-HK6 - real-tree readings a fresh clone can reproduce (never "enabled").
 report, law_code = OOS.audit(ROOT)
@@ -292,6 +364,156 @@ try:
           "AC-EVB5 missing dialect law refuses by name (rc=%d)" % code_nl)
 finally:
     shutil.rmtree(world2, ignore_errors=True)
+
+# AC-CGH1 - R2933: an UNSTAGED shell-capture file is refused by a REAL commit.
+# The staged face reads the index, so this file never reaches it - which is the
+# window R2926 could not see and the reason the tree face exists.
+world3 = make_world()
+try:
+    run(["git", "add", "-A"], world3)
+    code_b3, out_b3, err_b3 = commit(world3, "baseline")
+    base_n = commits(world3)
+    write_bytes(os.path.join(world3, "qa", "leak-R2933.log"),
+                u"AI \u5224\u5b9a".encode("utf-8") + b"\r\nPASS row\r\n")
+    write(os.path.join(world3, "src", "os", "state_append.py"), "# unrelated\n")
+    run(["git", "add", "src/os/state_append.py"], world3)
+    code_l1, out_l1, err_l1 = commit(world3, "a leak that was never staged")
+    check(code_b3 == 0 and code_l1 != 0
+          and "E_HOOK_TREE" in err_l1
+          and "leak-R2933.log" in err_l1
+          and "E_HOOK_EVIDENCE" not in err_l1
+          and commits(world3) == base_n,
+          "AC-CGH1 an UNSTAGED shell-capture file refuses the commit by name, "
+          "count unchanged (%d)" % base_n)
+    os.unlink(os.path.join(world3, "qa", "leak-R2933.log"))
+    run(["git", "add", "-A"], world3)
+    code_l2, out_l2, err_l2 = commit(world3, "the same world without the leak")
+    check(code_l2 == 0 and "HOOK OK" in (out_l2 + err_l2)
+          and commits(world3) == base_n + 1,
+          "AC-CGH1 removing the file returns the SAME world to a commit "
+          "(rc=%d count=%d)" % (code_l2, commits(world3)))
+finally:
+    shutil.rmtree(world3, ignore_errors=True)
+
+# AC-CGH2 - the two faces are independent and each names its own refusal, so
+# neither can mask the other in one run; and a healthy INDEX with a rewritten
+# disk file refuses on the tree face ALONE (the faces are not mirrors).
+world4 = make_world()
+try:
+    run(["git", "add", "-A"], world4)
+    commit(world4, "baseline")
+    write_bytes(os.path.join(world4, "qa", "staged-bad.log"),
+                u"AI \u5224\u5b9a".encode("gbk") + b"\r\nPASS row\r\n")
+    write_bytes(os.path.join(world4, "qa", "tree-bad.log"),
+                u"AI \u5224\u5b9a".encode("utf-8") + b"\r\nPASS row\r\n")
+    run(["git", "add", "qa/staged-bad.log"], world4)
+    before_t = commits(world4)
+    code_t, out_t, err_t = commit(world4, "both faces in one run")
+    check(code_t != 0
+          and "E_HOOK_EVIDENCE" in err_t and "E_HOOK_TREE" in err_t
+          and "staged-bad.log" in err_t and "tree-bad.log" in err_t
+          and commits(world4) == before_t,
+          "AC-CGH2 both faces fire in ONE run, each naming its own file "
+          "(count unchanged at %d)" % before_t)
+    run(["git", "reset", "-q"], world4)
+    os.unlink(os.path.join(world4, "qa", "staged-bad.log"))
+    os.unlink(os.path.join(world4, "qa", "tree-bad.log"))
+    write(os.path.join(world4, "qa", "rewritten.log"), "PASS healthy bytes\n")
+    run(["git", "add", "qa/rewritten.log"], world4)
+    write_bytes(os.path.join(world4, "qa", "rewritten.log"),
+                u"AI \u5224\u5b9a".encode("utf-8") + b"\r\nPASS row\r\n")
+    before_r = commits(world4)
+    code_r, out_r, err_r = commit(world4, "healthy index, unhealthy disk")
+    check(code_r != 0 and "E_HOOK_TREE" in err_r
+          and "E_HOOK_EVIDENCE" not in err_r
+          and "rewritten.log" in err_r
+          and commits(world4) == before_r,
+          "AC-CGH2 healthy INDEX bytes with a rewritten disk file refuse on "
+          "the tree face ALONE (rc=%d)" % code_r)
+finally:
+    shutil.rmtree(world4, ignore_errors=True)
+
+# AC-CGH3 - the tree face cannot pass blind (missing law, missing baseline) and
+# writes nothing. A world with no evidence dir is a NAMED skip, not a silent
+# pass, because the verdict is scoped to qa/ (AC-EVB2 law).
+world5 = make_world()
+try:
+    run(["git", "add", "-A"], world5)
+    commit(world5, "baseline")
+    gate5 = os.path.join(world5, "tools", "hooks", "pre_commit_gate.py")
+    qa5 = os.path.join(world5, "qa")
+    before_snap = snapshot(qa5)
+    code_p, out_p, err_p = run([sys.executable, gate5], world5)
+    after_snap = snapshot(qa5)
+    check(code_p == 0 and "HOOK TREE PASS" in out_p
+          and before_snap == after_snap,
+          "AC-CGH3 a clean frozen world passes and the tree face writes "
+          "nothing (rc=%d files=%d)" % (code_p, len(before_snap)))
+    os.unlink(os.path.join(world5, "src", "os", "qa_writer_census.py"))
+    code_law, out_law, err_law = run([sys.executable, gate5], world5)
+    check(code_law == 3 and "E_HOOK_NO_CENSUS_LAW" in err_law,
+          "AC-CGH3 a tree without the census law is a NAMED refusal (rc=%d)"
+          % code_law)
+    shutil.copy2(CENSUS, os.path.join(world5, "src", "os",
+                                     "qa_writer_census.py"))
+    os.unlink(os.path.join(qa5, "writer-census-baseline.json"))
+    code_base, out_base, err_base = run([sys.executable, gate5], world5)
+    check(code_base == 3 and "E_HOOK_NO_CENSUS_BASELINE" in err_base,
+          "AC-CGH3 a missing baseline is a NAMED refusal (rc=%d)" % code_base)
+    shutil.rmtree(qa5)
+    code_skip, out_skip, err_skip = run([sys.executable, gate5], world5)
+    check(code_skip == 0
+          and "HOOK TREE SKIP reason=no-evidence-dir" in out_skip,
+          "AC-CGH3 no evidence dir reads a NAMED skip, never a silent pass "
+          "(rc=%d)" % code_skip)
+finally:
+    shutil.rmtree(world5, ignore_errors=True)
+
+# AC-CGH4 - the R2932 decision holds on this face too: a baselined file no
+# writer family decodes is PUBLISHED, never gated. The blob is on disk and
+# baselined but NOT staged, because the STAGED face refuses any non-tee evidence
+# whatever the baseline says (that disagreement is measured under AC-CGH2 and is
+# why this criterion is about the tree face, not about the pair).
+world6 = make_world()
+try:
+    write_bytes(os.path.join(world6, "qa", "unreadable.log"),
+                b"\xef\xbb\xbf\xff\xff")
+    code_f, out_f, err_f = run([sys.executable, "-c", FREEZE_CODE], world6)
+    write(os.path.join(world6, "src", "os", "state_append.py"), "# unrelated\n")
+    run(["git", "add", "src/os/state_append.py"], world6)
+    code_u, out_u, err_u = commit(world6, "an unrelated file, blob untouched")
+    check(code_f == 0 and code_u == 0 and "HOOK OK" in (out_u + err_u)
+          and commits(world6) == 1,
+          "AC-CGH4 a baselined undecodable file does not refuse the round "
+          "(rc=%d count=%d)" % (code_u, commits(world6)))
+    gate6 = os.path.join(world6, "tools", "hooks", "pre_commit_gate.py")
+    code_g, out_g, err_g = run([sys.executable, gate6], world6)
+    check(code_g == 0 and "reader_refused=1" in out_g
+          and "gating=flags" in out_g
+          and "[refuse-read] unreadable.log" in out_g,
+          "AC-CGH4 the tree row PUBLISHES reader_refused=1 and gates on flags "
+          "only (rc=%d)" % code_g)
+finally:
+    shutil.rmtree(world6, ignore_errors=True)
+
+# AC-CGH5 - the live tree: the face is measured on the shipped repo, and its
+# file count agrees with the closeout gate because both ask one law.
+code_g5, out_g5, err_g5 = run([sys.executable, GATE], ROOT)
+qa_live = os.path.join(ROOT, "qa")
+disk_logs = len([n for n in os.listdir(qa_live) if n.endswith(".log")])
+check(code_g5 == 0
+      and ("HOOK TREE PASS files=%d flags=0 reader_refused=0 gating=flags"
+           % disk_logs) in out_g5,
+      "AC-CGH5 the live tree reads HOOK TREE PASS with a DERIVED count (%d)"
+      % disk_logs)
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+import closeout_gate as CG  # noqa: E402
+import qa_writer_census as CW  # noqa: E402
+_lines_cg, rc_cg, verdict_cg = CG.evaluate(
+    qa_live, CW.default_baseline_path(qa_live))
+check(rc_cg == 0 and verdict_cg.get("files") == disk_logs,
+      "AC-CGH5 the closeout gate and the commit tree face read the SAME count "
+      "(%s)" % verdict_cg.get("files"))
 
 # AC-HK7 - registration (the count is the suite's own, not a second number).
 runner_src = text(RUNNER)
@@ -357,10 +579,22 @@ try:
 finally:
     shutil.rmtree(_world, ignore_errors=True)
 
-print("SUITE %s %d/%d criteria"
-      % ("PASS" if FAILS == 0 else "FAIL", PASSES, EXPECTED_CRITERIA))
-if PASSES + FAILS != EXPECTED_CRITERIA:
-    print("SUITE COUNT MISMATCH ran=%d expected=%d"
-          % (PASSES + FAILS, EXPECTED_CRITERIA))
+total = PASSES + FAILS
+criteria = set()
+for name in LABELS:
+    token = name.split(" ", 1)[0]
+    for cut in range(len(token), 0, -1):
+        if token[cut - 1].isdigit():
+            criteria.add(token[:cut])
+            break
+print("suite: %d assertions over %d criteria" % (total, len(criteria)))
+# The pair states ASSERTIONS (what actually ran); the declared criteria count
+# above is what the battery compares against the registry, so the two numbers
+# never have to be the same number.
+print("SUITE %s %d/%d checks"
+      % ("PASS" if FAILS == 0 else "FAIL", total, total))
+if total != EXPECTED_CHECKS or len(criteria) != EXPECTED_CRITERIA:
+    print("SUITE COUNT MISMATCH ran=%d expected=%d criteria=%d expected=%d"
+          % (total, EXPECTED_CHECKS, len(criteria), EXPECTED_CRITERIA))
     FAILS += 1
 sys.exit(0 if FAILS == 0 else 1)
