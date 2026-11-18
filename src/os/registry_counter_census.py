@@ -50,6 +50,11 @@ LABEL = 'os-registry-counter-census'
 PLACEHOLDER = re.compile(r'%[dsrf]|\{[^}]*\}')
 PRINT_LINE = re.compile(r'(?:print|write)\s*\(')
 STRING_LIT = re.compile(r'"([^"\\]*(?:\\.[^"\\]*)*)"|\'([^\'\\]*(?:\\.[^\'\\]*)*)\'')
+# A same-line format application: print("%s %d/%d" % (V, p, t)). R2921 moved
+# these rows out of SILENT (the constant is seen) but they stayed UNPARSED,
+# because the words live in the constant and the numbers in the format string.
+FMT_APPLY = re.compile(r'("(?:[^"\\]|\\.)*")\s*%\s*\(([^()]*)\)')
+PLACE = re.compile(r'%[sdif]')
 
 
 class CensusError(Exception):
@@ -131,6 +136,46 @@ def suite_constants(text):
     return out
 
 
+def _joined(line, consts):
+    """Same-line join of a SUITE constant with the format string beside it.
+
+    Only ONE line is read. A constant on one line and the numbers on another
+    are not a printed row, and joining them would fabricate a leaf the runtime
+    never emits - that case is measured, not trusted (AC-RCC8-R2). The joined
+    text is handed to the SHIPPED reader unchanged, whose patterns are anchored
+    at a line start, so a join that puts SUITE anywhere but the head is refused
+    by that reader rather than by a rule invented here (AC-RCC8-R3).
+    """
+    out = []
+    for match in FMT_APPLY.finditer(line):
+        try:
+            fmt = ast.literal_eval(match.group(1))
+        except (ValueError, SyntaxError):
+            continue
+        args = [a.strip() for a in match.group(2).split(',') if a.strip()]
+        holes = list(PLACE.finditer(fmt))
+        if not holes or len(holes) != len(args):
+            continue
+        pieces = []
+        last = 0
+        usable = True
+        for hole, arg in zip(holes, args):
+            pieces.append(fmt[last:hole.start()])
+            last = hole.end()
+            if arg in consts:
+                pieces.append(consts[arg][0])
+            elif re.match(r'^[-0-9A-Za-z_.\'\"]+$', arg):
+                pieces.append('7' if hole.group(0) == '%d' else 'x')
+            else:
+                usable = False
+                break
+        if not usable:
+            continue
+        pieces.append(fmt[last:])
+        out.append(''.join(pieces))
+    return out
+
+
 def leaf_lines(text, consts=None):
     """Every printed leaf that starts with SUITE, placeholders neutralised.
 
@@ -142,7 +187,9 @@ def leaf_lines(text, consts=None):
 
     A print line whose own literals carry no SUITE still counts when it
     references a name from suite_constants(): the row exists in the source even
-    though this one line does not spell it.
+    though this one line does not spell it, and when the same line also applies
+    a format string to that name the two halves are joined before the shipped
+    reader sees them.
     """
     out = []
     assembled = 0
@@ -152,10 +199,15 @@ def leaf_lines(text, consts=None):
             continue
         literals = [a if a else b for a, b in STRING_LIT.findall(line)]
         hits = [lit for lit in literals if 'SUITE' in lit]
-        if not hits:
-            for name, values in consts.items():
-                if re.search(r'\b%s\b' % re.escape(name), line):
-                    hits.extend(values)
+        if consts:
+            named = any(re.search(r'\b%s\b' % re.escape(name), line)
+                        for name in consts)
+            if named:
+                hits.extend(_joined(line, consts))
+                if not hits:
+                    for name, values in consts.items():
+                        if re.search(r'\b%s\b' % re.escape(name), line):
+                            hits.extend(values)
         if not hits:
             continue
         if len(literals) > 1:

@@ -112,6 +112,39 @@ def build_var_world():
     return root, sandbox, reg
 
 
+def build_join_world():
+    """A private world for the SAME-LINE join, with a fabrication control.
+
+    probe-viajoin puts the words in a constant and the numbers in the format
+    string of the same print call - the shape 14 shipped rows actually use.
+    probe-viasplit keeps the same constant and the same numbers on two lines,
+    and probe-viaprefix puts text before the placeholder, so a join that reached
+    across lines or claimed a leaf the runtime never emits is measured RED.
+    """
+    root = tempfile.mkdtemp(prefix='bd-rcc-join-')
+    sandbox = os.path.join(root, 'sandbox')
+    os.makedirs(os.path.join(sandbox, 'probe'))
+    reg = os.path.join(sandbox, 'reconcile_all.py')
+    with io.open(reg, 'w', encoding='utf-8', newline='\n') as handle:
+        handle.write(
+            'import os\n'
+            'SUITES = [\n'
+            '    ("probe-viajoin", os.path.join("probe", "vj.py"), 2),\n'
+            '    ("probe-viasplit", os.path.join("probe", "vs.py"), 1),\n'
+            '    ("probe-viaprefix", os.path.join("probe", "vp.py"), 1),\n'
+            ']\n')
+    files = {
+        'vj.py': 'V = "SUITE PASS"\nprint("%s %d/%d" % (V, 2, 2))\n',
+        'vs.py': 'V = "SUITE PASS"\nprint(V)\nprint("%d/%d" % (1, 1))\n',
+        'vp.py': 'V = "SUITE PASS"\nprint("note %s %d/%d" % (V, 1, 1))\n',
+    }
+    for name, body in files.items():
+        with io.open(os.path.join(sandbox, 'probe', name), 'w',
+                     encoding='utf-8', newline='\n') as handle:
+            handle.write(body)
+    return root, sandbox, reg
+
+
 def main():
     before_reg = digest(REGISTRY)
     before_pin = digest(PIN)
@@ -218,10 +251,28 @@ def main():
        world['UNPARSED'],
        'AC-RCC7-R2 a constant the print line does not name is not borrowed by '
        'a substring match')
-    ok(report['SILENT'] == pinned.get('silent', []) and
-       len(report['SILENT']) < 62,
-       'AC-RCC7-R3 the shipped silent class matches its pin and is smaller '
-       'than the retired literal-only reading: %d' % len(report['SILENT']))
+    # The retired arm compared the live silent count against a typed 62 - a
+    # historical number nobody derives. The pin is the only typed population
+    # (AC-RCC2-R1 compares all three classes two-way), so the arm is dropped
+    # rather than restated: a second typed copy is the defect this file exists
+    # to refuse.
+
+    # AC-RCC8 (R2922): the SAME-LINE join, with the two ways it could fabricate
+    # measured on their own probes instead of argued about in prose.
+    root3, sandbox3, reg3 = build_join_world()
+    try:
+        joined = RCC.census(registry=reg3, sandbox=sandbox3)
+        ok(joined['READABLE'] == ['probe-viajoin'],
+           'AC-RCC8-R1 a constant joined with the format string on the SAME '
+           'print line reads readable: %s' % ','.join(joined['READABLE']))
+        ok('probe-viasplit' in joined['UNPARSED'],
+           'AC-RCC8-R2 the same constant and the same numbers on two lines '
+           'stay unparsed: a cross-line join would fabricate a leaf')
+        ok('probe-viaprefix' in joined['UNPARSED'],
+           'AC-RCC8-R3 text before the placeholder stays unparsed, so the '
+           'shipped reader anchor - not this join - decides the head')
+    finally:
+        shutil.rmtree(root3, ignore_errors=True)
 
     # Both numbers are DERIVED from this run, so the registry row stays the only
     # typed count and a new criterion demands a row edit instead of a hand edit.
