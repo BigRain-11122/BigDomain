@@ -242,7 +242,7 @@ try {
   }
 } catch { Write-Output '[BENCH] INFO refresh_age_unmeasured' }
 
-# --- [QA] daily smoke evidence (group QA Smoke Test charter v1.0, orders L254 2026-09-28: daily crawl + qa/ evidence + 15h benchmark staleness cap) ---
+# --- [QA] daily smoke evidence (group QA Smoke Test charter v1.0, orders L254 2026-09-28: daily crawl + qa/ evidence; R2989: the benchmark limb reads the same 7-day canon gate as [BENCH] because the charter's "not stale 15h" cannot coexist with a 7-day refresh cycle - escalated in HQ-FEEDBACK, see the block below) ---
 try {
   $today = (Get-Date).ToString('yyyy-MM-dd')
   $qaDir = Join-Path $repo 'qa'
@@ -251,11 +251,20 @@ try {
     $qaPng = @(Get-ChildItem -LiteralPath $qaDir -Filter 'smoke-*.png' | Where-Object { $_.LastWriteTime.ToString('yyyy-MM-dd') -eq $today }).Count
     $qaLog = @(Get-ChildItem -LiteralPath $qaDir -Filter 'smoke-*.log' | Where-Object { $_.LastWriteTime.ToString('yyyy-MM-dd') -eq $today }).Count
   }
-  $benchToday = ('' + $st.benchmarks_refreshed) -eq $today
-  if ($qaPng -ge 1 -and $qaLog -ge 1 -and $benchToday) {
-    Write-Output "[QA] PASS today_png=$qaPng today_log=$qaLog bench_today=$benchToday"
+  # R2989: the charter limb "not stale 15h" was coded as "refreshed today", which
+  # can only be true on a refresh day while the canon cycle is 7 days - the face
+  # was red by construction. This limb now reads the SAME 7-day gate as [BENCH],
+  # and the field names say so (bench_age_d / bench_fresh7), so the output cannot
+  # be misread as a daily refresh; the charter-vs-canon gap is escalated, not hidden.
+  $benchAgeD = $null
+  try { $benchAgeD = ((Get-Date) - (Get-Date ('' + $st.benchmarks_refreshed))).TotalDays } catch { }
+  $benchFresh7 = ($null -ne $benchAgeD -and $benchAgeD -le 7)
+  $benchAgeTxt = 'unmeasured'
+  if ($null -ne $benchAgeD) { $benchAgeTxt = [string][math]::Round([double]$benchAgeD, 2) }
+  if ($qaPng -ge 1 -and $qaLog -ge 1 -and $benchFresh7) {
+    Write-Output "[QA] PASS today_png=$qaPng today_log=$qaLog bench_age_d=$benchAgeTxt bench_fresh7=$benchFresh7"
   } else {
-    Write-Output "[QA] FLAG today_png=$qaPng today_log=$qaLog bench_today=$benchToday (charter daily crawl round due)"
+    Write-Output "[QA] FLAG today_png=$qaPng today_log=$qaLog bench_age_d=$benchAgeTxt bench_fresh7=$benchFresh7 (charter daily crawl round due)"
   }
 } catch { Write-Output '[QA] FLAG check_failed' }
 

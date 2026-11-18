@@ -5,7 +5,10 @@
 #          first-row + HH:MM read was blind to them).
 #   [TREE] single-writer check: index.lock / dirty / ahead-behind divergence
 #          with the "NOT a local other-writer" note.
-#   [QA]   daily smoke evidence charter face (png + log + benchmarks today).
+#   [QA]   daily smoke evidence charter face (today png + log; R2989: the
+#          benchmark limb reads the SAME 7-day canon gate as [BENCH] and names
+#          itself bench_age_d / bench_fresh7 - the old bench_today field could
+#          only be true on a refresh day, so the face was red by construction).
 #   [GORD] group orders multi-row batch face (R763: last-3 table rows visible
 #          + mechanical new-row count vs state.last_gord_tbl_rows; R709
 #          evidence: a 3-row batch hid two rows behind a single-last-row
@@ -33,10 +36,16 @@
 #           -> "[TREE] FLAG clean=1 lock=0 diverged=..[ahead 1]" + the
 #           "note: remote moved" line (not a local other-writer).
 #   AC-SC8  today-dated qa/smoke-*.png + smoke-*.log AND
-#           state.benchmarks_refreshed == today -> "[QA] PASS today_png=1
-#           today_log=1 bench_today=True".
+#           state.benchmarks_refreshed inside the 7-day canon gate -> "[QA] PASS
+#           today_png=1 today_log=1 bench_age_d=0 bench_fresh7=True" (R2989: the
+#           limb reads the same gate as [BENCH]; bench_today is gone).
 #   AC-SC9  no qa evidence + stale benchmarks -> "[QA] FLAG today_png=0
-#           today_log=0 bench_today=False" + "(charter daily crawl round due)".
+#           today_log=0 ... bench_fresh7=False" + "(charter daily crawl round due)".
+#   AC-SC20 benchmark limb is a RANGE law, not a same-day law: (a) refreshed
+#           3 days ago + today evidence -> QA PASS with bench_age_d=3 and
+#           bench_fresh7=True; (b) refreshed 8 days ago + today evidence ->
+#           QA FLAG with bench_fresh7=False (widening to always-green goes red);
+#           (c) the emitted line carries no bench_today token at all.
 #   AC-SC11 GORD multi-row batch (4 table rows, 3-row batch at the tail)
 #           -> all three "gord_tbl_last3[-1..-3]" lines present naming the
 #           batch rows (R709 blind-spot face: no manual tail re-read needed);
@@ -243,20 +252,41 @@ try {
     Assert ($r.text -match 'note: remote moved') 'AC-SC7' 'not-a-local-other-writer note present'
 
     # --- [QA] face --------------------------------------------------------
-    # AC-SC8: today-dated png+log evidence + today benchmarks -> PASS.
+    # AC-SC8: today-dated png+log evidence + benchmarks inside the 7-day gate -> PASS.
     Reset-Sandbox
     Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $true
     Git-Baseline
     $r = Invoke-Scan
-    Assert ($r.text -match '\[QA\] PASS today_png=1 today_log=1 bench_today=True') 'AC-SC8' 'today evidence + today benchmarks -> QA PASS'
+    Assert ($r.text -match '\[QA\] PASS today_png=1 today_log=1 bench_age_d=[0-9.]+ bench_fresh7=True') 'AC-SC8' 'today evidence + fresh benchmarks -> QA PASS'
 
     # AC-SC9: no evidence + stale benchmarks -> FLAG with charter-due note.
     Reset-Sandbox
     Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' '2026-09-01') $false
     Git-Baseline
     $r = Invoke-Scan
-    Assert ($r.text -match '\[QA\] FLAG today_png=0 today_log=0 bench_today=False') 'AC-SC9' 'missing evidence + stale benchmarks -> QA FLAG'
+    Assert ($r.text -match '\[QA\] FLAG today_png=0 today_log=0 bench_age_d=[0-9.]+ bench_fresh7=False') 'AC-SC9' 'missing evidence + stale benchmarks -> QA FLAG'
     Assert ($r.text -match '\(charter daily crawl round due\)') 'AC-SC9' 'charter due note present'
+
+    # AC-SC20: the benchmark limb is a range law (R2989). (a) three days old
+    # is INSIDE the 7-day gate -> PASS and the age is named, not "today";
+    # (c) the old bench_today token is gone from the emitted line.
+    $d3 = (Get-Date).AddDays(-3).ToString('yyyy-MM-dd')
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $d3) $true
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[QA\] PASS today_png=1 today_log=1 bench_age_d=3\.[0-9]+ bench_fresh7=True') 'AC-SC20' '3-day-old benchmarks inside the gate -> QA PASS with a named age'
+    Assert ($r.text -notmatch 'bench_today') 'AC-SC20' 'the retired bench_today token no longer reaches the emitted line'
+
+    # AC-SC20 (b): eight days old is OUTSIDE the gate even with today's
+    # evidence -> FLAG (a limb widened to always-green would go red here).
+    $d8 = (Get-Date).AddDays(-8).ToString('yyyy-MM-dd')
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $d8) $true
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[QA\] FLAG today_png=1 today_log=1 bench_age_d=8\.[0-9]+ bench_fresh7=False') 'AC-SC20' '8-day-old benchmarks outside the gate -> QA FLAG'
+    Assert ($r.code -eq 0) 'AC-SC20' 'scan child exits 0 on the QA FLAG face (detection only)'
 
     # --- [GORD] face (R763 extension) -------------------------------------
     # AC-SC11: a 3-row order batch at the tail must be fully visible in the
@@ -367,6 +397,6 @@ finally {
     Remove-Item -LiteralPath $sbxRoot -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC19, " + $script:pass + " checks)"); exit 0 }
+if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC20, " + $script:pass + " checks)"); exit 0 }
 Write-Output ("FAILURES=" + $script:fail)
 exit 2
