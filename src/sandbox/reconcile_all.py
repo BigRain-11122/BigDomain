@@ -342,7 +342,14 @@ SUITES = [
     # caller declares its own; the tag joined a boot-relative monotonic field,
     # so a wall clock stepped backwards still moves only one field
     # (pre-registered in src/os/backlog.md at R2951 BEFORE the edit).
-    ("panel", os.path.join("test_panel.py"), 17),
+    # R2952 added AC-PAN18..AC-PAN19 (a count bound joins the age bound, and
+    # the prune stops waiting for a person): per face the newest
+    # LOG_PRUNE_KEEP_N refusals survive and older ones past the cap go even
+    # when young, while a live writer, a kernel refusal and the caller's own
+    # path still keep; --prune-only runs one prune window with no panel
+    # started and no port bound, so a scheduler can call it
+    # (pre-registered in src/os/backlog.md at R2952 BEFORE the edit).
+    ("panel", os.path.join("test_panel.py"), 19),
     # R2938 added AC-PAN7..AC-PAN11 (declared ownership): the launcher hands
     # the panel the faces it already serves with the ports it measured, and the
     # panel refuses to start or stop them by name instead of forking the

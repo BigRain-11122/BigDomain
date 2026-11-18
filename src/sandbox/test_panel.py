@@ -14,7 +14,11 @@ that is never removed accumulates, and the tag's four random bytes could not
 prove that a reused pid never mints the same name again. AC-PAN16..AC-PAN17
 were pre-registered in the R2951 row BEFORE the prune and the monotonic tag
 existed: keeping every log with bytes bounded nothing, and a tag that leans on
-the wall clock moving forward cannot answer a corrected clock.
+the wall clock moving forward cannot answer a corrected clock. AC-PAN18 and
+AC-PAN19 were pre-registered in the R2952 row BEFORE the count bound and the
+--prune-only entry existed: an age bound leaves the RECENT pile unbounded, and
+a prune whose only trigger is a human launching a panel is not scheduled at
+all.
 
 Nothing here is read off a canned string: the panel is really started, the
 start route really spawns a shipped module, an independent TCP connect checks
@@ -22,7 +26,7 @@ the port it reports, the served URL is compared against the page bytes on
 disk, and the teardown leg proves the children are gone.
 
 Usage: python test_panel.py
-Exit: 0 = SUITE PASS 17/17, 2 = FAIL.
+Exit: 0 = SUITE PASS 19/19, 2 = FAIL.
 """
 
 import hashlib
@@ -1329,6 +1333,160 @@ def ac_pan17():
                   "field still separates; the default is a real reading")
 
 
+def ac_pan18():
+    """The count bound bounds the RECENT pile; the age bound cannot.
+
+    Seven days of failures is still seven days of files, so a cap per face
+    joins the age bound. The cap must not become a licence to delete a live
+    writer's file, a caller's own path, or a name the kernel refuses to answer
+    for - the three ways R2951 already bought. The red control matters as much
+    as the cap: the same world under a wide cap removes nothing, so the
+    removals above were caused by the slot count and not by age.
+    """
+    bad = 0
+    pid_law = sys.platform == "win32"
+    root = tempfile.mkdtemp(prefix="r2952-cap-")
+    ages = (300, 240, 180, 120, 60)
+    caps = [write_log(root, "%d-1-1-1%d" % (DEAD_PID, index), "ugc", age,
+                      body=b"R2952 cap %d\n" % index)
+            for index, age in enumerate(ages)]
+    held = write_log(root, "%d-1-1-40" % DEAD_PID, "ugc", 360,
+                     body=b"R2952 own\n")
+    # The live writer must be OLDER than the two fillers so it ranks past the
+    # cap, yet still newer than this process started - otherwise the R2951
+    # reuse rule (writer started AFTER the file, so the pid was reused) would
+    # be the rule under test instead of the writer guard.
+    live = write_log(root, "%d-1-1-30" % os.getpid(), "lobby", 5,
+                     body=b"R2952 live writer\n")
+    fillers = [write_log(root, "%d-1-1-5%d" % (DEAD_PID, index), "lobby", age,
+                         body=b"R2952 filler %d\n" % index)
+               for index, age in enumerate((2, 1))]
+    foreign = os.path.join(root, "notes.txt")
+    broken = os.path.join(root, panel_module.LOG_STEM + "garbage.txt")
+    for path in (foreign, broken):
+        with open(path, "wb") as handle:
+            handle.write(b"R2952 decoy: not this panel's log\n")
+        when = time.time() - 30
+        os.utime(path, (when, when))
+    decoy_before = {path: digest(path) for path in (foreign, broken)}
+    wide = panel_module.prune_logs(root, age_s=10 ** 9, keep_n=100,
+                                   own=(held,))
+    if wide["removed"] or wide["over"] or wide["unknown"]:
+        bad += 1
+        print("  AC-PAN18 a wide cap removed something: removed=%r over=%r "
+              "unknown=%r" % (wide["removed"], wide["over"],
+                              wide["unknown"]))
+    for path in caps + fillers + [held, live]:
+        if not os.path.exists(path):
+            bad += 1
+            print("  AC-PAN18 the red control world lost a file: %r" % (path,))
+    capped = panel_module.prune_logs(root, age_s=10 ** 9, keep_n=2,
+                                     own=(held,))
+    for path in (caps[4], caps[3]):
+        if not os.path.exists(path) or path not in capped["fresh"]:
+            bad += 1
+            print("  AC-PAN18 the cap did not keep the newest refusals: %r"
+                  % (path,))
+    if pid_law:
+        for path in caps[:3]:
+            if os.path.exists(path) or path not in capped["over"]:
+                bad += 1
+                print("  AC-PAN18 a file past the cap survived: %r" % (path,))
+        if len(capped["over"]) != 3:
+            bad += 1
+            print("  AC-PAN18 the cap removed %d files, expected 3: %r"
+                  % (len(capped["over"]), capped["over"]))
+    elif not capped["unknown"]:
+        bad += 1
+        print("  AC-PAN18 off Windows the cap neither removed nor named an "
+              "unknown writer")
+    if not os.path.exists(held) or held not in capped["kept"]:
+        bad += 1
+        print("  AC-PAN18 a declared own path spent a cap slot: %r" % (held,))
+    if not os.path.exists(live):
+        bad += 1
+        print("  AC-PAN18 the cap took a live writer's file: %r" % (live,))
+    for path in fillers:
+        if not os.path.exists(path):
+            bad += 1
+            print("  AC-PAN18 the cap removed a file inside its own slots: %r"
+                  % (path,))
+    for path, before in decoy_before.items():
+        if digest(path) != before:
+            bad += 1
+            print("  AC-PAN18 a decoy moved under the cap: %r" % (path,))
+    for path in caps + fillers + [held, live, foreign, broken]:
+        if os.path.exists(path):
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+    return report("AC-PAN18 a count bound bounds the recent pile", bad,
+                  "newest cap slots kept, older ones named in over, live "
+                  "writer and own path kept, decoys untouched, wide-cap red "
+                  "control removed nothing; pid_arms=%s"
+                  % ("measured" if pid_law else "unmeasured"))
+
+
+def ac_pan19():
+    """The prune runs with NO panel: a scheduler can call it, a person need not.
+
+    R2951's only trigger was a panel launch, so an aged-out refusal stayed on
+    disk until somebody happened to open the panel. This arm starts the
+    shipped CLI in --prune-only mode and reads what it actually did: the first
+    line is the prune line, no address line exists (no panel was born), the
+    aged file is gone, a foreign decoy beside it is byte-identical, and the
+    process exits instead of sleeping in the server loop.
+    """
+    bad = 0
+    temp = tempfile.gettempdir()
+    aged = write_log(temp, "%d-1-1-70" % DEAD_PID, "checkout", 9 * 86400,
+                     body=b"R2952 prune-only refusal\n")
+    decoy = os.path.join(temp, "r2952-prune-only-decoy.txt")
+    with open(decoy, "wb") as handle:
+        handle.write(b"R2952 prune-only decoy: not this panel's log\n")
+    when = time.time() - 9 * 86400
+    os.utime(decoy, (when, when))
+    before = digest(decoy)
+    started = time.time()
+    proc = subprocess.run([sys.executable, MODULE, "--prune-only"],
+                          stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                          stderr=subprocess.PIPE, cwd=REPO, timeout=180)
+    elapsed = time.time() - started
+    out = proc.stdout.decode("utf-8", "replace")
+    lines = [line.strip() for line in out.splitlines() if line.strip()]
+    if proc.returncode != 0:
+        bad += 1
+        print("  AC-PAN19 --prune-only exited %d: %r"
+              % (proc.returncode, proc.stderr.decode("utf-8", "replace")[-300:]))
+    if not lines or not lines[0].startswith("PANEL-PRUNE"):
+        bad += 1
+        print("  AC-PAN19 the prune-only run printed no prune line first: %r"
+              % (lines,))
+    if any(line.startswith("PANEL http") for line in lines):
+        bad += 1
+        print("  AC-PAN19 the prune-only run started a panel: %r" % (lines,))
+    if os.path.exists(aged):
+        bad += 1
+        print("  AC-PAN19 the prune-only run left an aged-out file")
+    if digest(decoy) != before:
+        bad += 1
+        print("  AC-PAN19 the prune-only run touched a foreign file")
+    if elapsed > 30:
+        bad += 1
+        print("  AC-PAN19 the prune-only run did not exit promptly: %.1fs"
+              % elapsed)
+    for path in (aged, decoy):
+        if os.path.exists(path):
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+    return report("AC-PAN19 the prune runs with no panel at all", bad,
+                  "rc=0, PANEL-PRUNE first, no address line, aged file gone, "
+                  "decoy unchanged, exited in %.1fs" % elapsed)
+
+
 def main():
     ac_pan1()
     ac_pan2()
@@ -1347,6 +1505,8 @@ def main():
     ac_pan15()
     ac_pan16()
     ac_pan17()
+    ac_pan18()
+    ac_pan19()
     passed = sum(1 for _name, ok in RESULTS if ok)
     total = len(RESULTS)
     print("SUITE %s %d/%d" % ("PASS" if passed == total else "FAIL",

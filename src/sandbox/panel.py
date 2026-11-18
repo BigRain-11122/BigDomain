@@ -106,6 +106,15 @@ LOG_SUFFIX = ".txt"
 # reading it and no longer answers for anyone else. The bound is an AGE and
 # the prune judges by evidence (see prune_logs), not by who owns the directory.
 LOG_PRUNE_AGE_S = 7 * 86400
+# R2952: an age bound alone leaves the RECENT pile unbounded - seven days of
+# failures is still seven days of files. A COUNT bound per face joins it: the
+# newest LOG_PRUNE_KEEP_N refusals of a face survive, the older ones past that
+# cap are removed even when they are young. Both bounds remove; the newest cap
+# entries are protected from the COUNT bound only, never from the age bound, so
+# the two rules cannot mask each other. What neither bound may delete is a file
+# whose writer may still be alive (the kernel is asked), the caller's own path,
+# and any kernel refusal to answer - those keep, exactly as in R2951.
+LOG_PRUNE_KEEP_N = 40
 
 # R2950: the per-panel tag carries pid + wall_ns + a process-local counter.
 # R2949 used pid + four random bytes, which no criterion can prove unique.
@@ -223,30 +232,39 @@ def process_started(pid):
         k32.CloseHandle(handle)
 
 
-def prune_logs(root=None, age_s=None, now=None, own=()):
-    """Remove panel logs past the age bound, never a live writer's own.
+def prune_logs(root=None, age_s=None, now=None, own=(), keep_n=None):
+    """Remove panel logs past the age bound or beyond the per-face count cap.
 
-    R2951: a log with bytes is evidence and is never deleted by teardown, so
-    the only honest way to bound the pile is to delete evidence that has aged
-    out - and to delete ONLY that. Four rules, each of which a criterion
-    drives: (1) a name outside this namespace, or one whose tag does not
-    parse, is never touched; (2) a file younger than the bound stays; (3) a
-    file whose pid still names a process that started no later than the file
-    was written may be that writer's own log and stays; (4) a path the caller
-    declares as its OWN stays even then. Everything else is removed. A failed
-    unlink keeps the file and names it, because Windows refuses to delete a
-    file a live process still holds.
+    R2951 deleted only evidence that had aged out, which bounded the pile by
+    SEVEN DAYS of failures - still unbounded inside that window. R2952 joins a
+    count bound: per face, the newest ``keep_n`` (LOG_PRUNE_KEEP_N) refusals
+    survive and the older ones past the cap go, young or not. Two independent
+    bounds, each of which a criterion drives, and neither can mask the other:
+    the age bound removes old files even when they are inside the cap, and the
+    count bound removes young files that sit past it.
+
+    Five rules guard both: (1) a name outside this namespace, or one whose tag
+    does not parse, is never touched; (2) a file whose pid still names a
+    process that started no later than the file was written may be that
+    writer's own log and stays; (3) a kernel refusal to answer keeps the file;
+    (4) a path the caller declares as its OWN stays and does not spend a cap
+    slot; (5) a failed unlink keeps the file and names it, because Windows
+    refuses to delete a file a live process still holds. The cap therefore
+    bounds what nobody claims, and every exception is named in the report
+    rather than silently widening the bound.
     """
     folder = tempfile.gettempdir() if root is None else root
     bound_ns = int((LOG_PRUNE_AGE_S if age_s is None else float(age_s))
                    * 1000000000)
     clock_ns = int((time.time() if now is None else float(now)) * 1000000000)
+    cap = LOG_PRUNE_KEEP_N if keep_n is None else max(0, int(keep_n))
     own_paths = {os.path.abspath(path) for path in own or ()}
-    report = {"removed": [], "kept": [], "fresh": [], "unknown": []}
+    report = {"removed": [], "kept": [], "fresh": [], "unknown": [], "over": []}
     try:
         names = sorted(os.listdir(folder))
     except OSError:
         return report
+    within_age = {}
     for name in names:
         parsed = parse_log_name(name)
         if parsed is None:
@@ -260,7 +278,10 @@ def prune_logs(root=None, age_s=None, now=None, own=()):
         except OSError:
             continue
         if clock_ns - mtime_ns < bound_ns:
-            report["fresh"].append(path)
+            # Still young: the age bound says nothing, and the count pass
+            # below decides. Reported only once its fate is known.
+            within_age.setdefault(parsed[4], []).append(
+                (mtime_ns, name, path, parsed[0]))
             continue
         state, created = process_started(parsed[0])
         if state == "unknown":
@@ -275,6 +296,27 @@ def prune_logs(root=None, age_s=None, now=None, own=()):
             report["kept"].append(path)
             continue
         report["removed"].append(path)
+    # The count bound. Newest first, so ``cap`` slots keep the refusals a
+    # person is most likely to be reading; everything past them is offered to
+    # the same kernel question before it is deleted.
+    for face in sorted(within_age):
+        rows = sorted(within_age[face], key=lambda row: (row[0], row[1]),
+                      reverse=True)
+        report["fresh"].extend(row[2] for row in rows[:cap])
+        for mtime_ns, _name, path, pid in rows[cap:]:
+            state, created = process_started(pid)
+            if state == "unknown":
+                report["unknown"].append(path)
+                continue
+            if state == "live" and created is not None and created <= mtime_ns:
+                report["kept"].append(path)
+                continue
+            try:
+                os.remove(path)
+            except OSError:
+                report["kept"].append(path)
+                continue
+            report["over"].append(path)
     return report
 
 
@@ -652,6 +694,14 @@ class Panel(object):
         return report
 
 
+def print_prune(report):
+    """The one line both prune windows print, so the bound is visible."""
+    print("PANEL-PRUNE removed=%d kept=%d fresh=%d unknown=%d over=%d"
+          % (len(report["removed"]), len(report["kept"]),
+             len(report["fresh"]), len(report["unknown"]),
+             len(report["over"])), flush=True)
+
+
 class PanelHandler(BaseHTTPRequestHandler):
     """One page plus three JSON routes: state, start, stop."""
 
@@ -797,7 +847,22 @@ def main(argv=None):
                              "serves, with the port it measured; this panel "
                              "publishes it as live and refuses to start or "
                              "stop it (repeat for each face)")
+    parser.add_argument("--prune-only", action="store_true",
+                        dest="prune_only",
+                        help="run one prune window and exit: no panel is "
+                             "started and no port is bound, so any scheduler "
+                             "can call this instead of waiting for a person "
+                             "to open the panel")
     args = parser.parse_args(argv)
+    # R2952: the prune used to be coupled to a human launching a panel, so
+    # "seven days" meant "seven days plus however long until the next launch".
+    # This entry point decouples the judgement from the launch: it binds no
+    # socket, takes no sandbox claim, prints the same PANEL-PRUNE line and
+    # exits. Nothing on this box schedules it yet - that is written down in
+    # the round, not implied by the flag existing.
+    if args.prune_only:
+        print_prune(prune_logs())
+        return 0
     # R2941: a face may only be born under the door that holds the sandbox
     # claim. With no launcher serving there is no claim and this passes.
     birth_gate.guard()
@@ -812,10 +877,7 @@ def main(argv=None):
     # R2951: every panel launch is one prune window, so the pile of aged-out
     # refusals is bounded without a scheduler. Printed after the address line
     # because the launcher and the suites read that line first.
-    pruned = prune_logs()
-    print("PANEL-PRUNE removed=%d kept=%d fresh=%d unknown=%d"
-          % (len(pruned["removed"]), len(pruned["kept"]),
-             len(pruned["fresh"]), len(pruned["unknown"])), flush=True)
+    print_prune(prune_logs())
     try:
         while True:
             time.sleep(0.3)
