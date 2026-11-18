@@ -1,7 +1,9 @@
 """Suite for the birth-site gate that closes R2940's measured hand-start hole.
 
-Five criteria AC-HSG1..AC-HSG5, pre-registered in src/os/backlog.md BEFORE this
-file, src/sandbox/birth_gate.py and the six entry wires existed.
+Eight criteria AC-HSG1..AC-HSG8. AC-HSG1..AC-HSG5 were pre-registered in
+src/os/backlog.md BEFORE this file, src/sandbox/birth_gate.py and the six entry
+wires existed; AC-HSG6..AC-HSG8 were pinned in the same board in the R2942
+window before the gate moved into the nine shipped starters.
 
 Nothing here is read off a paragraph. A real holder process takes the kernel
 claim and writes the detail record naming ITSELF, and then the suite starts the
@@ -14,6 +16,8 @@ Usage: python test_birth_gate.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
 """
 
+import inspect
+import io
 import json
 import os
 import socket
@@ -39,6 +43,10 @@ ENTRIES = (
 )
 
 sys.path.insert(0, HERE)
+for _sub in ("lobby", "ledger", "ugc", "member"):
+    _dir = os.path.join(HERE, _sub)
+    if _dir not in sys.path:
+        sys.path.append(_dir)
 import birth_gate  # noqa: E402
 import launcher_mutex  # noqa: E402
 import launcher_registry  # noqa: E402
@@ -124,6 +132,67 @@ def wait_port(port, timeout=30.0):
             return True
         time.sleep(0.1)
     return False
+
+
+STARTERS = (
+    (os.path.join("lobby", "city.py"), "start_city_http"),
+    (os.path.join("lobby", "hub_page.py"), "start_hub_http"),
+    (os.path.join("lobby", "lobby_page.py"), "start_lobby_http"),
+    (os.path.join("lobby", "gate_page.py"), "start_gate_http"),
+    (os.path.join("ugc", "ugc_page.py"), "start_ugc_http"),
+    (os.path.join("ledger", "ledger_page.py"), "start_server"),
+    (os.path.join("lobby", "checkout_demo.py"), "start_server"),
+    ("panel.py", "start_panel"),
+    (os.path.join("member", "member_page.py"), "make_server"),
+)
+
+
+def function_source(path, name):
+    """The text of one top-level function, by indentation; None if absent."""
+    with open(path, encoding="utf-8") as handle:
+        lines = handle.read().splitlines()
+    head = "def %s(" % name
+    start = None
+    for idx, line in enumerate(lines):
+        if line.startswith(head):
+            start = idx
+            break
+    if start is None:
+        return None
+    body = [lines[start]]
+    for line in lines[start + 1:]:
+        if line.strip() and not line.startswith((" ", "\t")):
+            break
+        body.append(line)
+    return "\n".join(body)
+
+
+def embedded_start(port, captured):
+    """Call the shipped ledger starter IN THIS PROCESS; never a subprocess.
+
+    Returns (exit_code_or_None, server_or_None, exception_or_None).
+    """
+    import contextlib
+    import ledger_page
+
+    with contextlib.redirect_stderr(captured):
+        try:
+            return None, ledger_page.start_server("127.0.0.1", port, None), None
+        except SystemExit as exc:
+            return exc.code, None, None
+        except BaseException as exc:  # noqa: BLE001 - reported, not swallowed
+            return None, None, exc
+
+
+def close_server(server):
+    try:
+        server.shutdown()
+    except Exception:
+        pass
+    try:
+        server.server_close()
+    except Exception:
+        pass
 
 
 def face_argv(port):
@@ -343,6 +412,97 @@ def main():
     if launcher_mutex.exists(mutex):
         bad.append("judge-created-a-claim")
     report("AC-HSG5", bool(bad), ",".join(bad))
+
+    # ---- AC-HSG6: the EMBEDDED path is refused too ----------------------
+    # R2941's gate sat in main(), so a harness calling the starter directly
+    # never reached it. This calls the shipped starter IN THIS PROCESS.
+    bad = []
+    port = free_port()
+    holder = Holder(record, mutex, name="hsg6")
+    if not holder.start():
+        bad.append("holder-never-claimed")
+    captured = io.StringIO()
+    code, server, raised = embedded_start(port, captured)
+    try:
+        if code != 3:
+            bad.append("rc-%s" % code)
+        if raised:
+            bad.append("raised-" + raised.__class__.__name__)
+        if birth_gate.REFUSED not in captured.getvalue():
+            bad.append("code-not-named")
+        if can_connect(port):
+            bad.append("embedded-face-bound-anyway")
+        if server is not None:
+            bad.append("embedded-server-returned")
+    finally:
+        if server is not None:
+            close_server(server)
+        holder.stop()
+    # red control: the SAME call in the SAME world after the holder leaves.
+    code, server, raised = embedded_start(port, io.StringIO())
+    try:
+        if code is not None or raised is not None:
+            bad.append("no-holder-embedded-refused")
+        if server is None:
+            bad.append("no-holder-embedded-no-server")
+        elif not wait_port(int(server.server_address[1]), 10):
+            bad.append("no-holder-embedded-port-dead")
+    finally:
+        if server is not None:
+            close_server(server)
+    report("AC-HSG6", bool(bad), ",".join(bad))
+
+    # ---- AC-HSG7: every shipped starter routes through the gate ---------
+    bad = []
+    for rel, func_name in STARTERS:
+        flag = rel.replace(os.sep, "/")
+        source = function_source(os.path.join(HERE, rel), func_name)
+        if source is None:
+            bad.append("missing-%s:%s" % (flag, func_name))
+            continue
+        if "birth_gate.checked_server(" not in source:
+            bad.append("ungated-%s:%s" % (flag, func_name))
+    report("AC-HSG7", bool(bad), ",".join(bad))
+
+    # ---- AC-HSG8: the judge runs BEFORE the factory (both ways) ---------
+    bad = []
+    port = free_port()
+    holder = Holder(record, mutex, name="hsg8")
+    if not holder.start():
+        bad.append("holder-never-claimed")
+    calls = []
+
+    def canary():
+        calls.append(1)
+        raise RuntimeError("FACTORY-RAN")
+
+    captured = io.StringIO()
+    try:
+        birth_gate.checked_server(canary)
+        bad.append("no-exit-with-holder")
+    except SystemExit as exc:
+        if exc.code != 3:
+            bad.append("exit-%s" % exc.code)
+    except RuntimeError:
+        bad.append("factory-ran-before-judge")
+    finally:
+        if calls:
+            bad.append("factory-called-with-holder")
+        holder.stop()
+    # red control: with no holder the factory IS called, so the arm is not
+    # busy refusing everything.
+    calls[:] = []
+    try:
+        birth_gate.checked_server(canary)
+        bad.append("no-error-without-holder")
+    except RuntimeError:
+        pass
+    except SystemExit as exc:
+        bad.append("refused-without-holder-%s" % exc.code)
+    finally:
+        if len(calls) != 1:
+            bad.append("factory-calls-%d" % len(calls))
+    report("AC-HSG8", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

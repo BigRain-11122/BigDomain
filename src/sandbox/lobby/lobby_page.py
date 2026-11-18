@@ -13,11 +13,17 @@ the single source of truth on disk - no template rendering, no build step.
 
 import json
 import os
+import sys
 import threading
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+_SANDBOX = os.path.dirname(HERE)
+if _SANDBOX not in sys.path:
+    sys.path.append(_SANDBOX)
+
+import birth_gate  # noqa: E402  (R2942: the gate sits at every bind site)
 PAGE_NAME = "lobby.html"
 ROUTES = ("/lobby", "/lobby/")
 CONFIG_ROUTE = "/lobby/api/config"
@@ -99,6 +105,7 @@ def start_lobby_http(host, port, ws_port, rooms=None):
     bound = {"ws_port": int(ws_port),
              "rooms": tuple(str(name) for name in (rooms or ()))}
     handler = type("BoundLobbyPageHandler", (LobbyPageHandler,), bound)
-    httpd = ThreadingHTTPServer((host, port), handler)
+    httpd = birth_gate.checked_server(
+        lambda: ThreadingHTTPServer((host, port), handler))
     threading.Thread(target=httpd.serve_forever, name="lobby-page", daemon=True).start()
     return httpd

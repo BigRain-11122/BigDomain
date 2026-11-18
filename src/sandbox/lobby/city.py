@@ -22,10 +22,17 @@ SQLite + query API). Zero new collection, zero LLM (server-city section 3).
 
 import json
 import os
+import sys
 import threading
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+_SANDBOX = os.path.dirname(HERE)
+if _SANDBOX not in sys.path:
+    sys.path.append(_SANDBOX)
+
+import birth_gate  # noqa: E402  (R2942: the gate sits at every bind site)
 from sec_gate import ContentRejectedError
 from store import utc_now_iso
 
@@ -265,6 +272,7 @@ def start_city_http(host, port, city):
     object (actual bound port at .server_address[1]). Daemon threads die
     with the process."""
     handler = type("BoundCityReadHandler", (CityReadHandler,), {"city": city})
-    httpd = ThreadingHTTPServer((host, port), handler)
+    httpd = birth_gate.checked_server(
+        lambda: ThreadingHTTPServer((host, port), handler))
     threading.Thread(target=httpd.serve_forever, name="city-read-api", daemon=True).start()
     return httpd

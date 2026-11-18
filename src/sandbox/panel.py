@@ -483,7 +483,8 @@ def start_panel(host, port, timeout=START_TIMEOUT_S, owned=None):
     """
     panel = Panel(host=host, timeout=timeout, owned=owned)
     handler = type("BoundPanelHandler", (PanelHandler,), {"panel": panel})
-    httpd = PanelServer((host, port), handler, panel)
+    httpd = birth_gate.checked_server(
+        lambda: PanelServer((host, port), handler, panel))
     threading.Thread(target=httpd.serve_forever, name="sandbox-panel",
                      daemon=True).start()
     return httpd, panel

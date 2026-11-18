@@ -304,7 +304,8 @@ def start_server(host, port, demo):
     port 0 and read back what the OS assigned.
     """
     handler = type("BoundCheckoutHandler", (CheckoutHandler,), {"demo": demo})
-    httpd = ThreadingHTTPServer((host, port), handler)
+    httpd = birth_gate.checked_server(
+        lambda: ThreadingHTTPServer((host, port), handler))
     threading.Thread(target=httpd.serve_forever, name="checkout-demo",
                      daemon=True).start()
     return httpd

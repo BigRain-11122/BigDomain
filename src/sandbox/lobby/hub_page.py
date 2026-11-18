@@ -21,11 +21,17 @@ a lie a reader can disprove in one click.
 import json
 import os
 import socket
+import sys
 import threading
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+_SANDBOX = os.path.dirname(HERE)
+if _SANDBOX not in sys.path:
+    sys.path.append(_SANDBOX)
+
+import birth_gate  # noqa: E402  (R2942: the gate sits at every bind site)
 PAGE_NAME = "hub.html"
 ROUTES = ("/hub", "/hub/")
 FACES_ROUTE = "/hub/api/faces"
@@ -215,6 +221,7 @@ def start_hub_http(host, port, faces):
     """
     handler = type("BoundHubPageHandler", (HubPageHandler,),
                    {"faces": dict(faces), "probe_host": host})
-    httpd = ThreadingHTTPServer((host, port), handler)
+    httpd = birth_gate.checked_server(
+        lambda: ThreadingHTTPServer((host, port), handler))
     threading.Thread(target=httpd.serve_forever, name="sandbox-hub", daemon=True).start()
     return httpd

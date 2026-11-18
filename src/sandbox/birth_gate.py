@@ -105,3 +105,16 @@ def guard(record_path=None, mutex_name=None, stream=None):
            verdict["mutex"], verdict["record_path"], verdict["reason"]))
     out.flush()
     raise SystemExit(EXIT_CODE)
+
+
+def checked_server(factory, record_path=None, mutex_name=None):
+    """Judge, then let ``factory`` build (and bind) a shipped face server.
+
+    ``factory`` is a zero-argument callable that constructs the server, which
+    is the step that binds the socket. Every shipped starter routes through
+    here, so a face imported and embedded by a harness is refused exactly like
+    one started from the command line - the refusal happens BEFORE the factory
+    runs, which is why a refused start leaves no listener behind.
+    """
+    guard(record_path=record_path, mutex_name=mutex_name)
+    return factory()

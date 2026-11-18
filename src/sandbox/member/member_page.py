@@ -321,7 +321,8 @@ class FaceServer(ThreadingHTTPServer):
 def make_server(host, port, data_dir, page_path=None):
     world = build_world(data_dir)
     page = page_path or os.path.join(HERE, PAGE_NAME)
-    httpd = FaceServer((host, int(port)), Handler)
+    httpd = birth_gate.checked_server(
+        lambda: FaceServer((host, int(port)), Handler))
     httpd.face = MemberFace(world, page, host)
     return httpd
 

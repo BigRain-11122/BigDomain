@@ -30,6 +30,7 @@ msgSecCheck waits on a CEO physical item (mini-program appid/secret).
 
 import json
 import os
+import sys
 import threading
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -37,6 +38,11 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import msgsec_stub
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+_SANDBOX = os.path.dirname(HERE)
+if _SANDBOX not in sys.path:
+    sys.path.append(_SANDBOX)
+
+import birth_gate  # noqa: E402  (R2942: the gate sits at every bind site)
 PAGE_NAME = "gate.html"
 ROUTES = ("/gate", "/gate/")
 CONTRACT_ROUTE = "/gate/api/contract"
@@ -170,7 +176,8 @@ def start_gate_http(host, port, stub, max_len=2000):
     """
     handler = type("BoundGatePageHandler", (GatePageHandler,),
                    {"stub": stub, "max_len": int(max_len)})
-    httpd = ThreadingHTTPServer((host, port), handler)
+    httpd = birth_gate.checked_server(
+        lambda: ThreadingHTTPServer((host, port), handler))
     threading.Thread(target=httpd.serve_forever, name="sandbox-gate-console",
                      daemon=True).start()
     return httpd

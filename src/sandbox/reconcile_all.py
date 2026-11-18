@@ -291,8 +291,9 @@ SUITES = [
     # birth-site check now lives in the shipped face entries: a face asks the
     # kernel claim whether its own parent is the holder before it binds.
     # AC-HSG1..AC-HSG5 were pinned in src/os/backlog.md BEFORE this suite,
-    # src/sandbox/birth_gate.py and the six entry wires existed.
-    ("birth-gate", os.path.join("test_birth_gate.py"), 5),
+    # src/sandbox/birth_gate.py and the six entry wires existed; AC-HSG6..8
+    # (R2942) moved the gate into the nine shipped starters.
+    ("birth-gate", os.path.join("test_birth_gate.py"), 8),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the

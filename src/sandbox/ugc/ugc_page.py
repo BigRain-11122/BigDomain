@@ -272,7 +272,8 @@ def start_ugc_http(host, port, pipe, config):
     """
     handler = type("BoundUgcPageHandler", (UgcPageHandler,),
                    {"pipe": pipe, "config": config})
-    httpd = ThreadingHTTPServer((host, port), handler)
+    httpd = birth_gate.checked_server(
+        lambda: ThreadingHTTPServer((host, port), handler))
     threading.Thread(target=httpd.serve_forever, name="sandbox-ugc-console",
                      daemon=True).start()
     return httpd
