@@ -22,6 +22,10 @@ all. AC-PAN25 and AC-PAN26 were pre-registered in the R2955 row BEFORE the
 funnel existed: R2954 measured the residue a markerless file leaves, and the
 invariant "our writer never creates one" rested on the single call site that
 happened to write the header, not on the place where the file is born.
+AC-PAN30..AC-PAN32 were pre-registered in the R2957 row BEFORE the --root
+scope existed: the purge could only sweep the real temp dir, so an operator
+who wanted one folder cleaned had to bet the whole box, and an empty window
+printed the same line a healthy one did.
 
 Nothing here is read off a canned string: the panel is really started, the
 start route really spawns a shipped module, an independent TCP connect checks
@@ -29,7 +33,7 @@ the port it reports, the served URL is compared against the page bytes on
 disk, and the teardown leg proves the children are gone.
 
 Usage: python test_panel.py
-Exit: 0 = SUITE PASS 26/26, 2 = FAIL.
+Exit: 0 = SUITE PASS 29/29, 2 = FAIL.
 """
 
 import ast
@@ -2209,6 +2213,250 @@ def ac_pan26():
     return report("AC-PAN26 one birth path, marker before the child", bad)
 
 
+def _clean_folder(folder):
+    for name in sorted(os.listdir(folder)):
+        try:
+            os.remove(os.path.join(folder, name))
+        except OSError:
+            pass
+    try:
+        os.rmdir(folder)
+    except OSError:
+        pass
+
+
+def ac_pan30():
+    """The window can be AIMED, and not aiming it changes nothing. R2957.
+
+    Three claims, each measured rather than described: the shipped default
+    scope IS the temp dir (two calls, one report); aiming the window at one
+    folder collects BOTH kinds of file there (an attributed one under the
+    prune, a markerless one under the purge) while an identically planted
+    folder beside it is byte-identical; and a run with no --root prints the
+    exact line every earlier round printed - no root= token at all.
+    """
+    bad = 0
+    # (1) the default scope is a measurement, not a sentence in a docstring.
+    # Both calls are made READ-ONLY on purpose: an impossible clock puts every
+    # file inside the age bound and a huge cap disables the count bound, so
+    # neither call can delete anything and the two reports describe the same
+    # world. Comparing two world-changing calls would prove nothing.
+    plain = panel_module.prune_logs(now=0, keep_n=10 ** 6)
+    named = panel_module.prune_logs(root=tempfile.gettempdir(), now=0,
+                                    keep_n=10 ** 6)
+    for key in ("removed", "kept", "fresh", "unknown", "over", "unattrib",
+                "legacy"):
+        if sorted(plain[key]) != sorted(named[key]):
+            bad += 1
+            print("  AC-PAN30 the default scope is not %TEMP% on key %r: "
+                  "plain=%r named=%r" % (key, plain[key], named[key]))
+            break
+    if int(plain["legacy_bytes"]) != int(named["legacy_bytes"]):
+        bad += 1
+        print("  AC-PAN30 the default scope reports different legacy bytes")
+    if plain["removed"]:
+        bad += 1
+        print("  AC-PAN30 the read-only comparison deleted something: %r"
+              % (plain["removed"],))
+    roots = [tempfile.mkdtemp(prefix="bd-pan30-a-"),
+             tempfile.mkdtemp(prefix="bd-pan30-b-")]
+    planted = {}
+    try:
+        for index, folder in enumerate(roots):
+            planted[folder] = (
+                write_log(folder, "%d-30-%d-1" % (DEAD_PID, index), "ugc",
+                          9 * 86400, body=b"R2957 aimed window\n"),
+                write_log(folder, "%d-30-%d-2" % (DEAD_PID, index), "ugc",
+                          9 * 86400, body=b"R2957 legacy residue\n",
+                          marker=False))
+        aimed, beside = roots
+        before_beside = [digest(path) for path in planted[beside]]
+        # (3) the RED CONTROL for the aim itself: no --root, no movement.
+        bare = subprocess.run([sys.executable, MODULE, "--prune-only"],
+                              stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE, cwd=REPO, timeout=180)
+        bare_lines = [line.strip() for line in
+                      bare.stdout.decode("utf-8", "replace").splitlines()
+                      if line.strip()]
+        bare_first = bare_lines[0] if bare_lines else ""
+        if bare.returncode != 0 or not bare_first.startswith("PANEL-PRUNE"):
+            bad += 1
+            print("  AC-PAN30 the unaimed run printed no prune line: %r"
+                  % (bare_lines[:2],))
+        elif "root=" in bare_first:
+            bad += 1
+            print("  AC-PAN30 an unaimed run named a scope: %r"
+                  % (bare_first,))
+        for folder, paths in planted.items():
+            for path in paths:
+                if not os.path.exists(path):
+                    bad += 1
+                    print("  AC-PAN30 an unaimed run reached a private "
+                          "folder: %r" % (path,))
+        # (2) the aimed window, both halves on one scope.
+        run = subprocess.run([sys.executable, MODULE, "--prune-only",
+                              "--purge-legacy", "--root", aimed],
+                             stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE, cwd=REPO, timeout=180)
+        lines = [line.strip() for line in
+                 run.stdout.decode("utf-8", "replace").splitlines()
+                 if line.strip()]
+        if run.returncode != 0 or len(lines) < 2:
+            bad += 1
+            print("  AC-PAN30 the aimed run exited %d with %r"
+                  % (run.returncode, lines[:3]))
+        else:
+            if not lines[0].startswith("PANEL-PRUNE"):
+                bad += 1
+                print("  AC-PAN30 the aimed prune line is missing: %r"
+                      % (lines[0],))
+            if not lines[1].startswith("PANEL-PURGE-LEGACY"):
+                bad += 1
+                print("  AC-PAN30 the aimed purge line is missing: %r"
+                      % (lines[1],))
+            wanted = " root=%s" % os.path.abspath(aimed)
+            for line in lines[:2]:
+                if wanted not in line:
+                    bad += 1
+                    print("  AC-PAN30 a line did not name the aimed folder: "
+                          "%r wanted %r" % (line, wanted))
+        for path in planted[aimed]:
+            if os.path.exists(path):
+                bad += 1
+                print("  AC-PAN30 an aimed window left a collectable file: %r"
+                      % (path,))
+        for path, before in zip(planted[beside], before_beside):
+            if not os.path.exists(path):
+                bad += 1
+                print("  AC-PAN30 the aimed window reached the OTHER folder: "
+                      "%r" % (path,))
+            elif digest(path) != before:
+                bad += 1
+                print("  AC-PAN30 the aimed window rewrote the other folder: "
+                      "%r" % (path,))
+    finally:
+        for folder in roots:
+            _clean_folder(folder)
+    return report("AC-PAN30 the prune window can be aimed", bad,
+                  "default scope measured as %TEMP%, aimed run collected both "
+                  "kinds in A, B byte-identical, unaimed line carries no root=")
+
+
+def ac_pan31():
+    """A scope that cannot be used is refused, not reported as clean. R2957.
+
+    An empty window prints removed=0 and looks exactly like a healthy answer,
+    so a mistyped path must not reach the printer at all. Three refusals: a
+    folder that is not there, a path that is a file, and a scope handed to a
+    panel start (which never prunes that folder).
+    """
+    bad = 0
+    root = tempfile.mkdtemp(prefix="bd-pan31-")
+    outsider = os.path.join(root, "not-a-folder.txt")
+    try:
+        with open(outsider, "wb") as handle:
+            handle.write(b"R2957 control: a file is not a scope\n")
+        aged = write_log(root, "%d-31-1-1" % DEAD_PID, "ugc", 9 * 86400,
+                         body=b"R2957 must survive a refused scope\n",
+                         marker=False)
+        missing = os.path.join(root, "no-such-folder")
+        cases = [
+            ("absent folder", [sys.executable, MODULE, "--prune-only",
+                               "--root", missing]),
+            ("a file", [sys.executable, MODULE, "--prune-only",
+                        "--root", outsider]),
+            ("without --prune-only", [sys.executable, MODULE, "--root", root]),
+        ]
+        for label, argv in cases:
+            proc = subprocess.run(argv, stdin=subprocess.DEVNULL,
+                                  stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE, cwd=REPO,
+                                  timeout=180)
+            out = proc.stdout.decode("utf-8", "replace")
+            err = proc.stderr.decode("utf-8", "replace")
+            if proc.returncode != 2:
+                bad += 1
+                print("  AC-PAN31 a %s scope exited %d instead of 2: %r"
+                      % (label, proc.returncode, err[-200:]))
+            if "PANEL-PRUNE" in out or "PANEL-PURGE-LEGACY" in out:
+                bad += 1
+                print("  AC-PAN31 a %s scope still printed a window: %r"
+                      % (label, out[:200]))
+            if not os.path.exists(aged):
+                bad += 1
+                print("  AC-PAN31 a %s scope deleted the planted file"
+                      % (label,))
+            if label == "absent folder" and missing not in err:
+                bad += 1
+                print("  AC-PAN31 the refusal did not name the path: %r"
+                      % (err[-200:],))
+    finally:
+        _clean_folder(root)
+    return report("AC-PAN31 an unusable scope is refused", bad,
+                  "absent folder, a file and a scope without --prune-only all "
+                  "exit 2, print no window line and delete nothing")
+
+
+def ac_pan32():
+    """Aiming the window does not fall back to the box. R2957.
+
+    The one place the aim can go wrong silently is the real temp dir: if the
+    flag were ignored, the run would still succeed and still print a line that
+    looks right, and the only visible difference would be a file that quietly
+    disappeared. So the same %TEMP% file is run twice: kept by the aimed
+    window, collected by the unaimed one - the flag is the only difference.
+    """
+    bad = 0
+    temp = tempfile.gettempdir()
+    root = tempfile.mkdtemp(prefix="bd-pan32-")
+    planted = write_log(temp, "%d-32-1-1" % DEAD_PID, "bdpan32",
+                        9 * 86400, body=b"R2957 aimed scope control\n",
+                        marker=False)
+    decoy = os.path.join(temp, "bd-pan32-stranger.txt")
+    try:
+        with open(decoy, "wb") as handle:
+            handle.write(b"R2957 control: a stranger's file\n")
+        before = digest(decoy)
+        aimed = subprocess.run([sys.executable, MODULE, "--prune-only",
+                               "--purge-legacy", "--root", root],
+                               stdin=subprocess.DEVNULL,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE, cwd=REPO, timeout=180)
+        if aimed.returncode != 0:
+            bad += 1
+            print("  AC-PAN32 the aimed run exited %d"
+                  % (aimed.returncode,))
+        if not os.path.exists(planted):
+            bad += 1
+            print("  AC-PAN32 an aimed window fell back to the real %TEMP%")
+        # The red control: the same file IS collectable, and only the scope
+        # was saving it.
+        box = subprocess.run([sys.executable, MODULE, "--prune-only",
+                              "--purge-legacy"],
+                             stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE, cwd=REPO, timeout=180)
+        if box.returncode != 0:
+            bad += 1
+            print("  AC-PAN32 the unaimed run exited %d" % (box.returncode,))
+        if os.path.exists(planted):
+            bad += 1
+            print("  AC-PAN32 the planted residue was never collectable, so "
+                  "the aim arm proves nothing")
+        if not os.path.exists(decoy) or digest(decoy) != before:
+            bad += 1
+            print("  AC-PAN32 a stranger's file in %TEMP% moved")
+    finally:
+        for path in (planted, decoy):
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+        _clean_folder(root)
+    return report("AC-PAN32 an aimed window stays inside its folder", bad,
+                  "the %TEMP% residue survived the aimed run and went on the "
+                  "unaimed one; a stranger's file unchanged")
+
+
 def main():
     ac_pan1()
     ac_pan2()
@@ -2236,6 +2484,9 @@ def main():
     ac_pan24()
     ac_pan25()
     ac_pan26()
+    ac_pan30()
+    ac_pan31()
+    ac_pan32()
     passed = sum(1 for _name, ok in RESULTS if ok)
     total = len(RESULTS)
     print("SUITE %s %d/%d" % ("PASS" if passed == total else "FAIL",

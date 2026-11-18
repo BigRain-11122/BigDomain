@@ -949,27 +949,41 @@ class Panel(object):
         return report
 
 
-def print_prune(report):
+def print_prune(report, scope=None):
     """The one line both prune windows print, so the bound is visible.
 
     R2954: ``legacy``/``legacy_bytes`` publish the residue R2953 created, so a
     reader sees the size of what no automatic rule will ever collect instead
     of reading that it exists somewhere.
+
+    R2957: ``scope`` is appended ONLY when an operator aimed the window, so a
+    call that names no folder prints the exact line every earlier round
+    printed - the new field cannot move an old reader.
     """
-    print("PANEL-PRUNE removed=%d kept=%d fresh=%d unknown=%d over=%d "
-          "unattrib=%d legacy=%d legacy_bytes=%d"
-          % (len(report["removed"]), len(report["kept"]),
-             len(report["fresh"]), len(report["unknown"]),
-             len(report["over"]), len(report["unattrib"]),
-             len(report["legacy"]), int(report["legacy_bytes"])), flush=True)
+    line = ("PANEL-PRUNE removed=%d kept=%d fresh=%d unknown=%d over=%d "
+            "unattrib=%d legacy=%d legacy_bytes=%d"
+            % (len(report["removed"]), len(report["kept"]),
+               len(report["fresh"]), len(report["unknown"]),
+               len(report["over"]), len(report["unattrib"]),
+               len(report["legacy"]), int(report["legacy_bytes"])))
+    if scope is not None:
+        line += " root=%s" % scope
+    print(line, flush=True)
 
 
-def print_purge_legacy(report):
-    """The one line a legacy purge prints, so the exit is visible too."""
-    print("PANEL-PURGE-LEGACY removed=%d kept=%d fresh=%d unknown=%d bytes=%d"
-          % (len(report["removed"]), len(report["kept"]),
-             len(report["fresh"]), len(report["unknown"]),
-             int(report["bytes"])), flush=True)
+def print_purge_legacy(report, scope=None):
+    """The one line a legacy purge prints, so the exit is visible too.
+
+    R2957: same rule as ``print_prune`` - the aimed folder is named, and an
+    unaimed call is byte-identical to what R2954 shipped.
+    """
+    line = ("PANEL-PURGE-LEGACY removed=%d kept=%d fresh=%d unknown=%d bytes=%d"
+            % (len(report["removed"]), len(report["kept"]),
+               len(report["fresh"]), len(report["unknown"]),
+               int(report["bytes"])))
+    if scope is not None:
+        line += " root=%s" % scope
+    print(line, flush=True)
 
 
 class PanelHandler(BaseHTTPRequestHandler):
@@ -1129,7 +1143,32 @@ def main(argv=None):
                              "residue (inside the namespace, past the age "
                              "bound, writer impossible); refused on its own, "
                              "so no panel start can ever reach it")
+    parser.add_argument("--root", default=None, metavar="DIR",
+                        help="with --prune-only: aim the whole window at one "
+                             "folder instead of the temp dir; omitted means "
+                             "the shipped behaviour is unchanged, and a "
+                             "folder that is not there is refused rather "
+                             "than reported as an empty window")
     args = parser.parse_args(argv)
+    # R2957: the prune and the purge may now be AIMED. Both halves of one
+    # window take the same scope, because a purge that cleans A while the
+    # prune still judges B would be a half-aimed window nobody could reason
+    # about. The scope is refused where it cannot apply, for the same reason
+    # --purge-legacy is: a flag silently ignored reads as if it acted.
+    scope = None
+    if args.root is not None:
+        if not args.prune_only:
+            parser.error("E_PANEL_ROOT_NEEDS_PRUNE: --root only scopes the "
+                         "--prune-only window; a panel start always prunes "
+                         "the temp dir")
+        scope = os.path.abspath(args.root)
+        # A folder that is not there would list as nothing and print
+        # removed=0 - a successful-looking answer to a mistyped path. The
+        # window is refused instead.
+        if not os.path.isdir(scope):
+            parser.error("E_PANEL_ROOT_NOT_DIR: --root %s is not an existing "
+                         "folder; refusing to report an empty window as clean"
+                         % args.root)
     # R2952: the prune used to be coupled to a human launching a panel, so
     # "seven days" meant "seven days plus however long until the next launch".
     # This entry point decouples the judgement from the launch: it binds no
@@ -1137,13 +1176,13 @@ def main(argv=None):
     # exits. Nothing on this box schedules it yet - that is written down in
     # the round, not implied by the flag existing.
     if args.prune_only:
-        print_prune(prune_logs())
+        print_prune(prune_logs(root=scope), scope=scope)
         # R2954: collecting the markerless residue is an OPERATOR decision,
         # taken on the same call that would otherwise only report it. The
         # flag is refused without --prune-only (below), which is what keeps
         # a panel start from ever reaching this line.
         if args.purge_legacy:
-            print_purge_legacy(purge_legacy())
+            print_purge_legacy(purge_legacy(root=scope), scope=scope)
         return 0
     if args.purge_legacy:
         parser.error("E_PANEL_PURGE_NEEDS_PRUNE: --purge-legacy is only "

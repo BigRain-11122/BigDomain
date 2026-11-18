@@ -272,6 +272,7 @@
     "os-status-export-writer-dialect-wire",
     "os-status-export-writer-transport-scope",
     "os-suite-matrix-reconcile-evidence-face",
+    "panel-log-ns",
     "pay-authorize-idem",
     "pay-authorize-persist",
     "pay-channel-matrix",

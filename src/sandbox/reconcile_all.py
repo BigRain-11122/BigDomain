@@ -365,7 +365,13 @@ SUITES = [
     # by name and removing what it just made; the file keeps exactly one
     # write-open and the funnel runs before the handle reaches the child
     # (pre-registered in src/os/backlog.md at R2955 BEFORE the edit).
-    ("panel", os.path.join("test_panel.py"), 26),
+    # R2957 added AC-PAN30..AC-PAN32 (the window can be aimed): --root DIR
+    # scopes BOTH halves of one --prune-only window at one folder, its absence
+    # keeps the shipped line byte-identical (no root= token at all), an
+    # unusable folder is refused rc=2 instead of printing an empty window that
+    # reads as clean, and an aimed run provably does not fall back to the real
+    # temp dir (pre-registered in src/os/backlog.md at R2957 BEFORE the edit).
+    ("panel", os.path.join("test_panel.py"), 29),
     # R2956: R2955 closed the WRITER, not the NAMESPACE - any other module
     # could still create bigdomain-panel-child-* and either forge the marker
     # or leave a markerless file the prune must later count as legacy, which
