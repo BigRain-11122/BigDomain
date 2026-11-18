@@ -1,0 +1,24 @@
+R2929 writer-census debt-headline measurement (AC-WCB8..AC-WCB10)
+
+--- selftest (shipped fixtures, incl. the three new arms) ---
+selftest_rc=0
+selftest: 31/31 checks pass
+  [ok] AC-WCB8 tee-only world reads plain_unusable=0 reader_rescued=0
+  [ok] AC-WCB8 utf-16 world reads plain_unusable=1 reader_rescued=1 reader_refused=0
+  [ok] AC-WCB9 undecodable blob: unusable=2 rescued=1 refused=1 and named
+  [ok] AC-WCB8 column moves with the bytes (bad->ascii: unusable=1 refused=0)
+  [ok] AC-WCB10 independent re-count agrees (1/1)
+self-ascii: PASS (41107 bytes)
+self-net-imports: NONE (PASS)
+
+--- live --check over the shipped qa/ tree ---
+check_rc=0
+census: files=3320 tee=2730 baselined=590
+labeled_baselined=11 unlabeled_baselined=579
+plain_unusable=151 reader_rescued=151 reader_refused=0
+nul_bytes=15
+disappeared=0
+flags=0
+verdict: DRIFT-CLEAN
+
+Reading: baselined=590 is the KNOWN-DEBT population by name; plain_unusable=151 is the subset a plain utf-8 consumer actually loses, and reader_rescued=151 says the shipped reader gets every one of them back with zero refusals. The 439 remaining baselined files are CRLF/BOM dialects a plain reader still reads - the headline was counting them as unusable.

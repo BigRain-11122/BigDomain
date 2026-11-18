@@ -1,18 +1,18 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2928 PRODUCT+ENGINEERING: the board question carried for three windows - 590 baselined non-tee evidence files: permanent known debt or re-encode to utf-8/LF? - is ANSWERED by measurement and closed by a READ face, never a rewrite. src/os/evidence_dialect.read_text decodes one evidence blob whatever family wrote it (utf-16 BOM, utf-8 BOM, BOM-less utf-16 through the arm that leaves no NUL and NAMES the assumed endianness, plain utf-8, cp936 body through gb18030) and REFUSES by name a blob no family decodes; src/os/test_evidence_read.py pins AC-EVR1..AC-EVR5, which were written into src/os/backlog.md BEFORE the code.",
+    "current": "2026-11-18 R2929 PRODUCT+MEASUREMENT: the known-debt headline that has been calling 590 evidence files unusable is now a measurement, and it says 151. src/os/qa_writer_census.py --check publishes plain_unusable= / reader_rescued= / reader_refused= over the baselined on-disk set, derived through the evidence leaf (plain_unusable + read_text) rather than typed: a plain utf-8 consumer loses 151 files, the shipped reader gets all 151 back with zero refusals, and the 439 files that are merely CRLF or BOM dialects are no longer counted as unreadable.",
     "last_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\journey-19.9.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-granular-R2927.log (1504B, 2026-11-18)",
     "latest_evidence": "qa/leg-granular-R2927.log (1504B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2929] next window (<=12h): (0) FOLD OWED — state closed at 78258B against the 78500B waterline (margin 242), so fold a whole round through the shipped runner BEFORE any surgery, and `state_fold_run --start/--end` are **1-BASED**. (1) MAIN — `evidence_dialect.read_text` now exists and its only consumer is its own suite (truncated)",
-    "next_milestone_due": "2026-11-18T23:25:44+08:00",
-    "updated_at": "2026-11-18T11:25:44+08:00"
+    "next_milestone": "[R2930] next window (<=12h): (0) MAIN — the R2926 commit gate refuses STAGED bytes only, so an uncommitted non-tee write still reaches disk (truncated)",
+    "next_milestone_due": "2026-11-18T23:40:59+08:00",
+    "updated_at": "2026-11-18T11:40:59+08:00"
   },
-  "current": "2026-11-18 R2928 PRODUCT+ENGINEERING: the board question carried for three windows - 590 baselined non-tee evidence files: permanent known debt or re-encode to utf-8/LF? - is ANSWERED by measurement and closed by a READ face, never a rewrite. src/os/evidence_dialect.read_text decodes one evidence blob whatever family wrote it (utf-16 BOM, utf-8 BOM, BOM-less utf-16 through the arm that leaves no NUL and NAMES the assumed endianness, plain utf-8, cp936 body through gb18030) and REFUSES by name a blob no family decodes; src/os/test_evidence_read.py pins AC-EVR1..AC-EVR5, which were written into src/os/backlog.md BEFORE the code.",
+  "current": "2026-11-18 R2929 PRODUCT+MEASUREMENT: the known-debt headline that has been calling 590 evidence files unusable is now a measurement, and it says 151. src/os/qa_writer_census.py --check publishes plain_unusable= / reader_rescued= / reader_refused= over the baselined on-disk set, derived through the evidence leaf (plain_unusable + read_text) rather than typed: a plain utf-8 consumer loses 151 files, the shipped reader gets all 151 back with zero refusals, and the 439 files that are merely CRLF or BOM dialects are no longer counted as unreadable.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -40,11 +40,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2928 PRODUCT+ENGINEERING: the board question carried for three windows - 590 baselined non-tee evidence files: permanent known debt or re-encode to utf-8/LF? - is ANSWERED by measurement and closed by a READ face, never a rewrite. src/os/evidence_dialect.read_text decodes one evidence blob whatever family wrote it (utf-16 BOM, utf-8 BOM, BOM-less utf-16 through the arm that leaves no NUL and NAMES the assumed endianness, plain utf-8, cp936 body through gb18030) and REFUSES by name a blob no family decodes; src/os/test_evidence_read.py pins AC-EVR1..AC-EVR5, which were written into src/os/backlog.md BEFORE the code.",
-  "export_ts": "2026-11-18T11:25:44+08:00",
+  "do": "2026-11-18 R2929 PRODUCT+MEASUREMENT: the known-debt headline that has been calling 590 evidence files unusable is now a measurement, and it says 151. src/os/qa_writer_census.py --check publishes plain_unusable= / reader_rescued= / reader_refused= over the baselined on-disk set, derived through the evidence leaf (plain_unusable + read_text) rather than typed: a plain utf-8 consumer loses 151 files, the shipped reader gets all 151 back with zero refusals, and the 439 files that are merely CRLF or BOM dialects are no longer counted as unreadable.",
+  "export_ts": "2026-11-18T11:40:59+08:00",
   "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
   "latest_evidence": "qa/leg-granular-R2927.log (1504B, 2026-11-18)",
-  "next_milestone": "[R2929] next window (<=12h): (0) FOLD OWED — state closed at 78258B against the 78500B waterline (margin 242), so fold a whole round through the shipped runner BEFORE any surgery, and `state_fold_run --start/--end` are **1-BASED**. (1) MAIN — `evidence_dialect.read_text` now exists and its only consumer is its own suite (truncated)",
+  "next_milestone": "[R2930] next window (<=12h): (0) MAIN — the R2926 commit gate refuses STAGED bytes only, so an uncommitted non-tee write still reaches disk (truncated)",
   "outs": [
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 mtime]",
@@ -180,5 +180,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 78258
+  "state_bytes": 69511
 }

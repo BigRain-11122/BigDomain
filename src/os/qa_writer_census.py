@@ -97,6 +97,19 @@ the census and check faces still write NOTHING inside any qa/ dir;
 --update-baseline writes exactly ONE file - the baseline itself -
 and only as an explicit operator re-freeze action.
 
+Debt-headline measurement (R2929, AC-WCB8..AC-WCB10): the check face
+also publishes `plain_unusable=`, `reader_rescued=` and
+`reader_refused=` over the baselined set. The debt is defined by
+BYTES, not by the class name: `plain_unusable` counts the baselined
+files a plain utf-8 consumer would lose (a decode that raises OR that
+"succeeds" into NUL-riddled text), `reader_rescued` counts those of
+them the shipped reader (`evidence_dialect.read_text`) gets back, and
+a file no writer family decodes is counted in `reader_refused` and
+NAMED on its own `[refuse-read]` line - so "rescued" can never mean
+"read as mojibake". Measured on the shipped tree at R2929:
+baselined=590, plain_unusable=151, reader_rescued=151,
+reader_refused=0.
+
 Per-file disposition (R2151 AC-CDN1..AC-CDN8, pre-registered in
 state/queue/tech.md BEFORE this code): a baselined non-tee file that
 was legitimately rebuilt in the healthy tee dialect otherwise flags
@@ -307,13 +320,39 @@ def check_against_baseline(target, path):
     # 579 unlabeled, i.e. the label names one writer family and never
     # the disease, which is why absence is a column and not a refusal.
     rows = []
+    unusable = 0
+    rescued = 0
+    refused = []
     for name in sorted(base_of):
         path = os.path.join(target, name)
-        if os.path.isfile(path):
-            rows.append((name, classify_file(path)))
+        if not os.path.isfile(path):
+            continue
+        rows.append((name, classify_file(path)))
+        # R2929 (AC-WCB8..AC-WCB10): the debt headline is a MEASUREMENT,
+        # not the class name. A plain utf-8 consumer loses only the files
+        # the leaf's plain_unusable() names, and the shipped reader is
+        # asked to read exactly those - so "rescued" can never be a count
+        # of files that decode into mojibake (that is AC-WCB9's arm).
+        try:
+            with open(path, "rb") as handle:
+                raw = handle.read()
+        except OSError:
+            continue
+        if not ED.plain_unusable(raw):
+            continue
+        unusable += 1
+        try:
+            ED.read_text(raw)
+            rescued += 1
+        except ED.EvidenceDecodeError as exc:
+            refused.append((name, str(exc)))
     split = ED.label_coverage(rows)
     lines.append("labeled_baselined=%d unlabeled_baselined=%d"
                  % (split["labeled"], split["unlabeled"]))
+    lines.append("plain_unusable=%d reader_rescued=%d reader_refused=%d"
+                 % (unusable, rescued, len(refused)))
+    for name, reason in refused:
+        lines.append("[refuse-read] %s: %s" % (name, reason))
     # R2808: the known-debt face is counted on EVERY run. Baselined
     # nul-bytes files never flag (they are recorded by name), so
     # without this line the debt would be invisible again - the very
@@ -665,6 +704,71 @@ def _selftest():
         # write-discipline: check face wrote nothing inside world dir
         check("AC-WCB6 check face zero writes (baseline only file)",
               BASELINE_NAME in os.listdir(bx))
+        # --- AC-WCB8..WCB10 debt headline is a measurement (R2929) ---
+        rw = os.path.join(tmp, "read-world")
+        os.mkdir(rw)
+        with open(os.path.join(rw, "r-tee.log"), "wb") as fh:
+            fh.write("PASS suite row\n".encode("utf-8"))
+        rpath = os.path.join(rw, BASELINE_NAME)
+        write_baseline(rw, rpath)
+        qlines, qcode = check_against_baseline(rw, rpath)
+        qblob = "\n".join(qlines)
+        check("AC-WCB8 tee-only world reads plain_unusable=0 "
+              "reader_rescued=0",
+              qcode == 0
+              and "plain_unusable=0 reader_rescued=0 reader_refused=0"
+              in qblob)
+        # one BOM utf-16le baselined file: a plain reader loses it, the
+        # shipped reader gets it back
+        with open(os.path.join(rw, "r-utf16.log"), "wb") as fh:
+            fh.write(b"\xff\xfe" + "SUITE PASS 1/1\n".encode("utf-16-le"))
+        write_baseline(rw, rpath)
+        ulines, ucode = check_against_baseline(rw, rpath)
+        ublob = "\n".join(ulines)
+        check("AC-WCB8 utf-16 world reads plain_unusable=1 "
+              "reader_rescued=1 reader_refused=0",
+              ucode == 0
+              and "plain_unusable=1 reader_rescued=1 reader_refused=0"
+              in ublob)
+        # a blob no family decodes: unusable, REFUSED BY NAME, never
+        # counted as rescued (the mojibake trap)
+        with open(os.path.join(rw, "r-bad.log"), "wb") as fh:
+            fh.write(b"\x80\xff\x80")
+        write_baseline(rw, rpath)
+        blines, _bcode = check_against_baseline(rw, rpath)
+        bblob = "\n".join(blines)
+        check("AC-WCB9 undecodable blob: unusable=2 rescued=1 "
+              "refused=1 and named",
+              "plain_unusable=2 reader_rescued=1 reader_refused=1"
+              in bblob
+              and "[refuse-read] r-bad.log: no known family decodes this "
+              "blob" in bblob)
+        # the column moves with the bytes: a one-byte change to the
+        # undecodable file can make it readable, and the count follows
+        with open(os.path.join(rw, "r-bad.log"), "wb") as fh:
+            fh.write(b"A")
+        mlines2, _mcode2 = check_against_baseline(rw, rpath)
+        check("AC-WCB8 column moves with the bytes (bad->ascii: "
+              "unusable=1 refused=0)",
+              "plain_unusable=1 reader_rescued=1 reader_refused=0"
+              in "\n".join(mlines2))
+        # AC-WCB10: an independent re-count over the same world agrees
+        names = sorted(n for n in os.listdir(rw) if n.endswith(".log"))
+        rec_u = rec_r = 0
+        for name in names:
+            with open(os.path.join(rw, name), "rb") as fh:
+                body = fh.read()
+            if ED.plain_unusable(body):
+                rec_u += 1
+                try:
+                    ED.read_text(body)
+                    rec_r += 1
+                except ED.EvidenceDecodeError:
+                    pass
+        check("AC-WCB10 independent re-count agrees (%d/%d)"
+              % (rec_u, rec_r),
+              ("plain_unusable=%d reader_rescued=%d" % (rec_u, rec_r))
+              in "\n".join(mlines2))
     finally:
         for sub in os.listdir(tmp):
             d = os.path.join(tmp, sub)
