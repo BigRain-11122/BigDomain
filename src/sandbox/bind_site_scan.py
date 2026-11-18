@@ -38,6 +38,15 @@ Five kinds of site are recognised, and each has one rule:
     ``guard`` rather than to the gate's server shim.  Otherwise
     ``E_BIND_UNGUARDED_FACE``.
 
+    R2945 tightened WHICH guard call counts, because a guard only gates what
+    runs after it: the guard must be a STATEMENT of the same body (a direct
+    ``guard(...)`` expression or assignment, not one nested in an ``if`` / ``try``
+    / ``while`` / ``with``) and its line must come strictly BEFORE the site
+    line.  A guard after the await is too late, and a guard inside ``if
+    False:`` never runs.  The price of this rule is stated rather than hidden:
+    a guard inside a real branch (``if ready: guard()``) is refused too,
+    because a static read cannot prove the branch runs.
+
 ``socket-bind``
     a ``.bind(...)`` call is a probe or a listening socket and the two cannot
     be told apart from syntax, so every such site must be listed, by path and
@@ -138,17 +147,29 @@ def _asyncio_site(call, bare_start_imported):
     return None
 
 
-def _guard_lines(tree):
-    """Lines where ``guard(...)`` is called (bare or as an attribute)."""
+def _is_guard_call(node):
+    """True when ``node`` is a Call through a ``guard`` name (bare or attribute)."""
+    if not isinstance(node, ast.Call):
+        return False
+    func = node.func
+    if isinstance(func, ast.Attribute):
+        return func.attr == "guard"
+    return isinstance(func, ast.Name) and func.id == "guard"
+
+
+def _level_guard_lines(body):
+    """Lines where ``guard(...)`` is a STATEMENT of ``body`` itself.
+
+    Only a statement-level call counts. A guard nested inside a branch is not a
+    gate this scanner can prove, and a guard that merely shares the function is
+    exactly the shape R2945 closed: written after the await it runs after the
+    socket exists, written under ``if False:`` it never runs.
+    """
     lines = []
-    for node in ast.walk(tree):
-        if not isinstance(node, ast.Call):
-            continue
-        func = node.func
-        if isinstance(func, ast.Attribute) and func.attr == "guard":
-            lines.append(node.lineno)
-        elif isinstance(func, ast.Name) and func.id == "guard":
-            lines.append(node.lineno)
+    for stmt in body:
+        value = getattr(stmt, "value", None)
+        if _is_guard_call(value):
+            lines.append(stmt.lineno)
     return lines
 
 
@@ -178,7 +199,6 @@ def scan_source(path, text):
     has_birth_guard = GUARD_TEXT in text
     imports_websockets = "websockets" in text
     bare_start = _start_server_imported(tree)
-    guard_lines = _guard_lines(tree)
     stack = [(tree, [], None)]
     while stack:
         node, ancestors, func_node = stack.pop()
@@ -210,12 +230,11 @@ def scan_source(path, text):
                 else:
                     shape = _asyncio_site(child, bare_start)
                     if shape:
+                        container = func_node if func_node is not None else tree
                         guarded = (
                             any(_is_guarded_call(a) for a in here) or
-                            (func_node is not None and any(
-                                func_node.lineno <= line <=
-                                (func_node.end_lineno or func_node.lineno)
-                                for line in guard_lines)))
+                            any(line < child.lineno
+                                for line in _level_guard_lines(container.body)))
                         rows.append({
                             "path": rel, "line": child.lineno,
                             "function": name, "kind": "asyncio-server",

@@ -308,8 +308,11 @@ SUITES = [
     # must have birth_gate.guard() in the SAME function body, because an
     # asyncio server binds when the coroutine is awaited and checked_server
     # only wraps synchronous factories. AC-BSC6..AC-BSC7 pinned in
-    # src/os/backlog.md BEFORE this row and the rule.
-    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 7),
+    # src/os/backlog.md BEFORE this row and the rule. R2945 added AC-BSC8..9:
+    # which guard CALL counts is now judged (statement level in the same body,
+    # strictly before the site line), so a guard after the await or one nested
+    # in a branch no longer passes.
+    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 9),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the

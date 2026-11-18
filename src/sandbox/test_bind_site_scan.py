@@ -360,6 +360,126 @@ def main():
         bad.append("live-sites-%d" % live["sites"])
     report("AC-BSC7", bool(bad), ",".join(bad))
 
+    # ---- AC-BSC8: a guard AFTER the await is too late -------------------
+    bad = []
+    root = fresh_world("bsc8")
+    late = (
+        "import asyncio\n"
+        "\n"
+        "async def boot(handler):\n"
+        "    server = await asyncio.start_server(handler, \"127.0.0.1\", 0)\n"
+        "    birth_gate.guard()\n"
+        "    return server\n"
+    )
+    early = (
+        "import asyncio\n"
+        "\n"
+        "async def boot(handler):\n"
+        "    birth_gate.guard()\n"
+        "    server = await asyncio.start_server(handler, \"127.0.0.1\", 0)\n"
+        "    return server\n"
+    )
+    write(root, "late.py", late)
+    loud = bind_site_scan.scan(root=root)
+    if loud["ok"]:
+        bad.append("late-guard-passed")
+    rows = [r for r in loud["refused"] if r["path"] == "late.py"]
+    if not rows:
+        bad.append("late-not-named")
+    else:
+        row = rows[0]
+        if row["line"] != 4:
+            bad.append("late-line-%s" % row["line"])
+        if row["function"] != "boot":
+            bad.append("late-function-%s" % row["function"])
+        if row["kind"] != "asyncio-server":
+            bad.append("late-kind-%s" % row["kind"])
+        if row["code"] != bind_site_scan.UNGUARDED:
+            bad.append("late-code-%s" % row["code"])
+    # red control: the SAME file with the SAME guard moved one line up passes
+    write(root, "late.py", early)
+    healed = bind_site_scan.scan(root=root)
+    if not healed["ok"]:
+        bad.append("early-guard-still-refused")
+    # the bare from-asyncio shape is judged the same way, both directions
+    bare_late = (
+        "from asyncio import start_server\n"
+        "\n"
+        "async def boot(handler):\n"
+        "    server = await start_server(handler, \"127.0.0.1\", 0)\n"
+        "    birth_gate.guard()\n"
+        "    return server\n"
+    )
+    bare_early = (
+        "from asyncio import start_server\n"
+        "\n"
+        "async def boot(handler):\n"
+        "    birth_gate.guard()\n"
+        "    server = await start_server(handler, \"127.0.0.1\", 0)\n"
+        "    return server\n"
+    )
+    write(root, "bare.py", bare_late)
+    bare_loud = bind_site_scan.scan(root=root)
+    if not [r for r in bare_loud["refused"] if r["path"] == "bare.py"]:
+        bad.append("bare-late-passed")
+    write(root, "bare.py", bare_early)
+    bare_healed = bind_site_scan.scan(root=root)
+    if not bare_healed["ok"]:
+        bad.append("bare-early-still-refused")
+    report("AC-BSC8", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC9: a guard inside a branch is not a gate -----------------
+    bad = []
+    root = fresh_world("bsc9")
+    nested_false = (
+        "import asyncio\n"
+        "\n"
+        "async def boot(handler, ready):\n"
+        "    if False:\n"
+        "        birth_gate.guard()\n"
+        "    return await asyncio.start_server(handler, \"127.0.0.1\", 0)\n"
+    )
+    nested_ready = (
+        "import asyncio\n"
+        "\n"
+        "async def boot(handler, ready):\n"
+        "    if ready:\n"
+        "        birth_gate.guard()\n"
+        "    return await asyncio.start_server(handler, \"127.0.0.1\", 0)\n"
+    )
+    hoisted = (
+        "import asyncio\n"
+        "\n"
+        "async def boot(handler, ready):\n"
+        "    birth_gate.guard()\n"
+        "    return await asyncio.start_server(handler, \"127.0.0.1\", 0)\n"
+    )
+    assigned = (
+        "import asyncio\n"
+        "\n"
+        "async def boot(handler, ready):\n"
+        "    ok = birth_gate.guard()\n"
+        "    return await asyncio.start_server(handler, \"127.0.0.1\", 0)\n"
+    )
+    write(root, "dead.py", nested_false)
+    write(root, "branch.py", nested_ready)
+    loud = bind_site_scan.scan(root=root)
+    if loud["ok"]:
+        bad.append("nested-guards-passed")
+    named = set(r["path"] for r in loud["refused"])
+    if "dead.py" not in named:
+        bad.append("if-false-guard-counted")
+    if "branch.py" not in named:
+        bad.append("branch-guard-counted")
+    # red control: hoisting the SAME call to statement level passes, and an
+    # assignment statement counts too (the rule is about nesting, not syntax)
+    write(root, "dead.py", hoisted)
+    write(root, "branch.py", assigned)
+    healed = bind_site_scan.scan(root=root)
+    if not healed["ok"]:
+        bad.append("hoisted-still-refused")
+    report("AC-BSC9", bool(bad), ",".join(bad))
+
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
         print("SUITE FAIL %d/%d failed=%s" % (len(failed), len(RESULTS),
