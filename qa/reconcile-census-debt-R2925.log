@@ -1,0 +1,87 @@
+R2925 reconcile-daily-census RED - measured cause
+census --check BEFORE (rc=2): flags=45
+  [flag] new-dialect: face-sweep-check-R2906.log (class=pwsh-capture)
+  [flag] new-dialect: face-sweep-check-R2907.log (class=pwsh-capture)
+  [flag] new-dialect: face-sweep-nine-R2906.log (class=pwsh-capture)
+  [flag] new-dialect: face-sweep-nine-R2907.log (class=pwsh-capture)
+  [flag] new-dialect: face-sweep-suite-R2906.log (class=pwsh-capture)
+  [flag] new-dialect: face-sweep-suite-R2907.log (class=pwsh-capture)
+  [flag] new-dialect: ledger-family-R2914.log (class=pwsh-capture)
+  [flag] new-dialect: leg-watch-suite-R2891-a.log (class=pwsh-capture)
+  [flag] new-dialect: leg-watch-suite-R2891-b.log (class=pwsh-capture)
+  [flag] new-dialect: probe-seam-cliff-alone-R2888.log (class=pwsh-capture)
+  [flag] new-dialect: probe-seam-cliff-profile-R2888.log (class=pwsh-capture)
+  [flag] new-dialect: registry-counter-census-R2918.log (class=pwsh-capture)
+  [flag] new-dialect: registry-counter-census-shard-R2918.log (class=pwsh-capture)
+  [flag] new-dialect: smoke-R2907.log (class=pwsh-capture)
+  [flag] new-dialect: suite-matrix-check-R2906.log (class=pwsh-capture)
+  [flag] new-dialect: wide-os-full-R2888.stdout.log (class=pwsh-capture)
+  [flag] new-dialect: battery-shard-self-R2881.log (class=ps-utf16)
+  [flag] new-dialect: critunits-measure-R2881.log (class=ps-utf16)
+  [flag] new-dialect: export-refresh-R2913.log (class=ps-utf16)
+  [flag] new-dialect: export-split-halves-R2899.log (class=ps-utf16)
+  [flag] new-dialect: face-sweep-nine-R2902.log (class=ps-utf16)
+  [flag] new-dialect: face-sweep-nine-check-R2902.log (class=ps-utf16)
+  [flag] new-dialect: face-sweep-suite-R2902.log (class=ps-utf16)
+  [flag] new-dialect: first-yuan-fresh-R2902.log (class=ps-utf16)
+  [flag] new-dialect: leg-class-R2913.log (class=ps-utf16)
+  [flag] new-dialect: leg-class-live-R2913.log (class=ps-utf16)
+  [flag] new-dialect: leg-header-regress-R2913.log (class=ps-utf16)
+  [flag] new-dialect: leg-watch-arms-R2890.log (class=ps-utf16)
+  [flag] new-dialect: live-socket-walk-R2879.log (class=ps-utf16)
+  [flag] new-dialect: lobby-ws-face-R2879-suite.log (class=ps-utf16)
+  [flag] new-dialect: matrix-check-R2913.log (class=ps-utf16)
+  [flag] new-dialect: matrix-write-R2913.log (class=ps-utf16)
+  [flag] new-dialect: msgsec-wire-R2909.log (class=ps-utf16)
+  [flag] new-dialect: red-first-argguard-R2878.log (class=ps-utf16)
+  [flag] new-dialect: red-first-stream-R2886.log (class=ps-utf16)
+  [flag] new-dialect: red-first-unitlaw-R2881.log (class=ps-utf16)
+  [flag] new-dialect: registry-counter-census-R2922.log (class=ps-utf16)
+  [flag] new-dialect: dix17-html-only-R2883.log (class=nul-bytes)
+  [flag] new-dialect: export-drift-R2890.log (class=other)
+  [flag] new-dialect: face-sweep-check-R2903.log (class=other)
+  [flag] new-dialect: face-sweep-fingerprint-probe-R2903.log (class=other)
+  [flag] new-dialect: face-sweep-nine-R2903.log (class=other)
+  [flag] new-dialect: face-sweep-suite-R2903.log (class=other)
+  [flag] new-dialect: face-sweep-suite-R2905.log (class=other)
+  [flag] new-dialect: leg-audit-arms-R2889.log (class=other)
+baseline BEFORE total=545 {"cmd-raw": 14, "nul-bytes": 14, "other": 103, "ps-utf16": 98, "pwsh-capture": 316}
+
+repair vehicle: the SHIPPED re-freeze face (R2808 known-debt
+precedent - accumulated non-tee evidence is baselined BY NAME,
+so it is counted every run instead of passing as healthy, and
+any NEW non-tee file still flags)
+
+--update-baseline rc=0
+  probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+  mode: update-baseline (re-freeze gate)
+  dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+  baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+  baseline written: writer-census-baseline.json
+    cmd-raw: 14 names
+    pwsh-capture: 332 names
+    ps-utf16: 119 names
+    nul-bytes: 15 names
+    other: 110 names
+    tee: 2720 files (healthy dialect, NOT baselined)
+  --- post-check (self-run after freeze) ---
+  census: files=3310 tee=2720 baselined=590
+  nul_bytes=15
+  disappeared=0
+  flags=0
+  verdict: DRIFT-CLEAN
+  post-check exit=0
+
+census --check AFTER (rc=0)
+  probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+  mode: check (drift detector)
+  dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+  baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+  census: files=3310 tee=2720 baselined=590
+  nul_bytes=15
+  disappeared=0
+  flags=0
+  verdict: DRIFT-CLEAN
+
+VERDICT before=rc2/flags=45 after=rc0/flags=0 baseline 545->590 delta=+45
+gate still armed: any NEW non-tee file flags (AC-WCB3 selftest)

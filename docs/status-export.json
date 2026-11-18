@@ -1,18 +1,18 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2924 MEASUREMENT: the half of the registry no slice had ever run is now mostly MEASURED instead of assumed, and it came back almost entirely green. The whole non-os population (428 rows, selected only by the 23 prefixes that exist and equal to 718 registry rows minus 290 os- rows, AC-NOSW1) was run through the shipped tools/battery_shard.py in four CLOSED legs - chunk1 selected=80 green=79 rc=2 crit=659, chunk2 selected=80 green=80 rc=0 crit=615, rest1 selected=50 green=50 rc=0 crit=367, rest2 selected=50 green=50 rc=0 crit=384, every leg crit_mismatch=0 and crit_checked=selected - plus two PARTIAL legs disclosed as partial (a 110-row leg and a 334-row leg both killed by the harness with no closing row).",
+    "current": "2026-11-18 R2925 PRODUCT+MEASUREMENT: the only red among 444 measured registry rows is GREEN, and the cause was MEASURED rather than assumed. qa/ holds 590 non-tee evidence files while the writer-census baseline held 545 names, so the census flagged 45 new-dialect files (16 pwsh-capture + 21 ps-utf16 + 1 nul-bytes + 7 other) with disappeared=0 - i.e. accumulated shell-captured evidence landed AFTER the last freeze, which means the board's 'fresh daily evidence round' could not have fixed it. Repair used the SHIPPED re-freeze face on the R2808 known-debt precedent (accumulated non-tee evidence is baselined BY NAME, so it is counted every run while any NEW non-tee file still flags): census --check before rc=2 flags=45, after rc=0 flags=0, baseline 545 -> 590 (+45 exactly, zero names typed by hand, and --update-baseline's own post-check read exit=0).",
     "last_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\journey-19.9.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/non-os-sweep-R2924-rest2.log (5006B, 2026-11-18)",
-    "latest_evidence": "qa/non-os-sweep-R2924-rest2.log (5006B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/refundregister-alone-R2925.log (361B, 2026-11-18)",
+    "latest_evidence": "qa/refundregister-alone-R2925.log (361B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2925] next window (<=12h): (0) MAIN — `reconcile-daily-census` is the ONLY red in 444 measured rows and its failing leg is `cd7-live-real-tree` reading `exit=2 label=drift`, while the same leg read `exit=0 label=ok` in `qa/reconcile-all-R1865..R1867`; the suite itself names the newest daily evidence as `reconcile-daily-20261012-3.log`, so MEASURE the cause (run the census against the live tree and diff its baseline against today's evidence) and decide whether the honest repair is a fresh daily evidence round or a criterion that stops asserting a clean tree it cannot keep. (1) `ledger-apimarket-refundregister` is the ONE unmeasured non-os row and the registry declares a 900s override for it — run it ALONE (it is the only row that cannot share a window with anything else) and report its closing row, so the non-os population closes at 428/428 instead of 427. (2) the two PARTIAL legs (`qa/non-os-sweep-R2924.log` 110 rows, `qa/non-os-sweep-R2924-chunk3b.log` 334 rows) have NO closing row (truncated)",
-    "next_milestone_due": "2026-11-18T22:31:59+08:00",
-    "updated_at": "2026-11-18T10:31:59+08:00"
+    "next_milestone": "[R2926] next window (<=12h): (0) MAIN — the re-freeze hid nothing this time (`590 = 545 + 45` with `disappeared=0`, an identity a reader can check), but the WRITER discipline is still unenforced at birth: the census names a shell-captured file AFTER it lands, and the 45 it just accounted were produced by rounds that believed they were writing evidence correctly. Decide whether the loop's own closeout refuses a label-less evidence file (`tools/qa_log.py` already self-announces through `SHELL_CAPTURE_LABEL` — MEASURE how many of the 45 carry it, and whether \"label absent\" is a refusal or only a census flag), with a red control on whichever wins. (1) the two PARTIAL legs (`qa/non-os-sweep-R2924.log` 110 rows, `qa/non-os-sweep-R2924-chunk3b.log` 334 rows) still have NO closing row and the R2925 board item (2) was NOT decided — pin ONE answer (re-run them through `tmp/run_sweep_labels_R2924.py` so they acquire a closing row, or declare per-row lines the accepted granularity) instead of carrying it a third time (truncated)",
+    "next_milestone_due": "2026-11-18T22:40:14+08:00",
+    "updated_at": "2026-11-18T10:40:14+08:00"
   },
-  "current": "2026-11-18 R2924 MEASUREMENT: the half of the registry no slice had ever run is now mostly MEASURED instead of assumed, and it came back almost entirely green. The whole non-os population (428 rows, selected only by the 23 prefixes that exist and equal to 718 registry rows minus 290 os- rows, AC-NOSW1) was run through the shipped tools/battery_shard.py in four CLOSED legs - chunk1 selected=80 green=79 rc=2 crit=659, chunk2 selected=80 green=80 rc=0 crit=615, rest1 selected=50 green=50 rc=0 crit=367, rest2 selected=50 green=50 rc=0 crit=384, every leg crit_mismatch=0 and crit_checked=selected - plus two PARTIAL legs disclosed as partial (a 110-row leg and a 334-row leg both killed by the harness with no closing row).",
+  "current": "2026-11-18 R2925 PRODUCT+MEASUREMENT: the only red among 444 measured registry rows is GREEN, and the cause was MEASURED rather than assumed. qa/ holds 590 non-tee evidence files while the writer-census baseline held 545 names, so the census flagged 45 new-dialect files (16 pwsh-capture + 21 ps-utf16 + 1 nul-bytes + 7 other) with disappeared=0 - i.e. accumulated shell-captured evidence landed AFTER the last freeze, which means the board's 'fresh daily evidence round' could not have fixed it. Repair used the SHIPPED re-freeze face on the R2808 known-debt precedent (accumulated non-tee evidence is baselined BY NAME, so it is counted every run while any NEW non-tee file still flags): census --check before rc=2 flags=45, after rc=0 flags=0, baseline 545 -> 590 (+45 exactly, zero names typed by hand, and --update-baseline's own post-check read exit=0).",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -40,11 +40,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2924 MEASUREMENT: the half of the registry no slice had ever run is now mostly MEASURED instead of assumed, and it came back almost entirely green. The whole non-os population (428 rows, selected only by the 23 prefixes that exist and equal to 718 registry rows minus 290 os- rows, AC-NOSW1) was run through the shipped tools/battery_shard.py in four CLOSED legs - chunk1 selected=80 green=79 rc=2 crit=659, chunk2 selected=80 green=80 rc=0 crit=615, rest1 selected=50 green=50 rc=0 crit=367, rest2 selected=50 green=50 rc=0 crit=384, every leg crit_mismatch=0 and crit_checked=selected - plus two PARTIAL legs disclosed as partial (a 110-row leg and a 334-row leg both killed by the harness with no closing row).",
-  "export_ts": "2026-11-18T10:31:59+08:00",
+  "do": "2026-11-18 R2925 PRODUCT+MEASUREMENT: the only red among 444 measured registry rows is GREEN, and the cause was MEASURED rather than assumed. qa/ holds 590 non-tee evidence files while the writer-census baseline held 545 names, so the census flagged 45 new-dialect files (16 pwsh-capture + 21 ps-utf16 + 1 nul-bytes + 7 other) with disappeared=0 - i.e. accumulated shell-captured evidence landed AFTER the last freeze, which means the board's 'fresh daily evidence round' could not have fixed it. Repair used the SHIPPED re-freeze face on the R2808 known-debt precedent (accumulated non-tee evidence is baselined BY NAME, so it is counted every run while any NEW non-tee file still flags): census --check before rc=2 flags=45, after rc=0 flags=0, baseline 545 -> 590 (+45 exactly, zero names typed by hand, and --update-baseline's own post-check read exit=0).",
+  "export_ts": "2026-11-18T10:40:14+08:00",
   "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
-  "latest_evidence": "qa/non-os-sweep-R2924-rest2.log (5006B, 2026-11-18)",
-  "next_milestone": "[R2925] next window (<=12h): (0) MAIN — `reconcile-daily-census` is the ONLY red in 444 measured rows and its failing leg is `cd7-live-real-tree` reading `exit=2 label=drift`, while the same leg read `exit=0 label=ok` in `qa/reconcile-all-R1865..R1867`; the suite itself names the newest daily evidence as `reconcile-daily-20261012-3.log`, so MEASURE the cause (run the census against the live tree and diff its baseline against today's evidence) and decide whether the honest repair is a fresh daily evidence round or a criterion that stops asserting a clean tree it cannot keep. (1) `ledger-apimarket-refundregister` is the ONE unmeasured non-os row and the registry declares a 900s override for it — run it ALONE (it is the only row that cannot share a window with anything else) and report its closing row, so the non-os population closes at 428/428 instead of 427. (2) the two PARTIAL legs (`qa/non-os-sweep-R2924.log` 110 rows, `qa/non-os-sweep-R2924-chunk3b.log` 334 rows) have NO closing row (truncated)",
+  "latest_evidence": "qa/refundregister-alone-R2925.log (361B, 2026-11-18)",
+  "next_milestone": "[R2926] next window (<=12h): (0) MAIN — the re-freeze hid nothing this time (`590 = 545 + 45` with `disappeared=0`, an identity a reader can check), but the WRITER discipline is still unenforced at birth: the census names a shell-captured file AFTER it lands, and the 45 it just accounted were produced by rounds that believed they were writing evidence correctly. Decide whether the loop's own closeout refuses a label-less evidence file (`tools/qa_log.py` already self-announces through `SHELL_CAPTURE_LABEL` — MEASURE how many of the 45 carry it, and whether \"label absent\" is a refusal or only a census flag), with a red control on whichever wins. (1) the two PARTIAL legs (`qa/non-os-sweep-R2924.log` 110 rows, `qa/non-os-sweep-R2924-chunk3b.log` 334 rows) still have NO closing row and the R2925 board item (2) was NOT decided — pin ONE answer (re-run them through `tmp/run_sweep_labels_R2924.py` so they acquire a closing row, or declare per-row lines the accepted granularity) instead of carrying it a third time (truncated)",
   "outs": [
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 mtime]",
@@ -157,7 +157,7 @@
   },
   "results": [
     [
-      "2924",
+      "2925",
       "OSLoop 执行 tick"
     ]
   ],
@@ -170,15 +170,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 74,
+    "log_lines_in_window": 78,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 15,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 70509
+  "state_bytes": 74338
 }

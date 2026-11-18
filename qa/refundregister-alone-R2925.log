@@ -1,0 +1,3 @@
+SHARD scope=SHARD registry_suites=718 registry_criteria=5680 selected=1 selected_criteria=8 cap=600s leg_cap=0s overrides=1 exact=1 state=COMPLETE
+SHARD row ledger-apimarket-refundregister rc=0 pass=13 fail=0 detail=yes suite=PASS 13/13 crit=8 100.2s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=8 crit_mismatch=0 elapsed=100.2s crit_checked=1

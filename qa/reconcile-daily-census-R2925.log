@@ -1,0 +1,9 @@
+PASS cd1-missing-baseline-info zero-subproc+INFO+not-gating exit=0
+PASS cd2-argv-wiring src/os-path+--check/--dir+cwd=BASE +section+elapsed-tail exit=0
+PASS cd3-aggregate-census-drift (0,0,2)->exit=2 FAIL
+PASS cd4-aggregate-runner-fail (3,0,2)->exit=3 census kept
+PASS cd5-sentinel-precedence (0,2,0)->exit=2 census still logged
+PASS cd6-refusal-fail (0,0,3)->exit=3 refusal FAIL
+PASS cd7-live-real-tree exit=0 label=ok DRIFT-CLEAN (closed daily evidence untouched)
+PASS cd8-hygiene ascii=True net-imports=0 shipped-clean=True
+SUITE PASS 8/8
