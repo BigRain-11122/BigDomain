@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-19 R2977 PRODUCT+ENGINEERING: the second hop of the face-to-port map had two halves and R2976 pinned only one. It asserted that every owned face carries a port key drawn from the plan, which stays true when two faces carry the SAME key - while start_all.plan() issues one port per plan key, so both faces are handed one port, the first start wins it and the second fails with E_NOT_UP. face_coverage ships shared_port_keys() and port_coverage(): the first names every plan key carried by more than one face together with those faces (sorted, a three-way collision naming all three rather than folding into a boolean), the second returns {ok, faces, shared}. No run-time behaviour changed, nothing binds a socket, and the header names this a loud-failure closure and not a security boundary in the same words R2976 used for its sibling.",
+    "current": "2026-11-19 R2978 PRODUCT+ENGINEERING: the creation stamp R2974 taught judge() to compare only protects anything if the WRITERS publish it, and that fact lived in a docstring with nothing pinning it. src/sandbox/record_writers.py ships the pin as a pure static read: writer_coverage(root) walks every module with ast, finds each call site that can write the machine record (claim / write_serving reached through a bare or aliased module import or a from-import), traces the record expression inside its own function scope - dict literals, dict(<expr>), name resolution to the most recent preceding assignment, name[key] = value adding a key, name.pop(key) and del name[key] removing one - and reports carries / missing / unproven per site. Test fixtures are published as COUNTED exemptions with their own keys, the scanner's own module is named judge, and an unparsable shipped module refuses while an unparsable fixture only names itself. No run-time behaviour changed: no process started, no socket bound, no record opened.",
     "do": "2026-11-19 R2973 PRODUCT+ENGINEERING: the shape R2972 named out of range is now judged. A bare 'import a.b' (no as) binds the PACKAGE, and 'a.b.Name(...)' reaches a repo module's export through a three-part attribute chain. _dotted_chain() spells a Name/Attribute chain; _dotted_bare_imports() records the exact dotted paths a module imports without an alias; _repo_reexport_context() carries that licence set as its fourth element; _server_class_shape() and _class_bases() judge a chain whose receiver spells a licensed path, placed AFTER the receiver-blind http rule so no existing row changes its kind; and _module_carried_classes() follows a module-level 'Maker = a.b.UDPServer' one level up, so the same chain re-exported to a borrowing module resolves.",
     "last_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
@@ -9,11 +9,11 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-os-closeout-R2977.log (5468B, 2026-11-19)",
     "latest_evidence": "qa/leg-os-closeout-R2977.log (5468B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2978] next window (<=12h): (0) MAIN — 收口 carry (1)：`pid_started` 只有一个出货写入者这件事**只写在文档头，没有任何判据钉住**。R2974 让 `judge()` 比对「当前持有该号码的进程」的创建戳与记录里的戳，靠的是记录里真有这个字段；今天该字段只由 `start_all` 写（claim 与 serving 两处）。若将来出现第二个写入者（新启动器、面板自起、测试夹具之外的任何路径）而不带字段，那个记录会被按「旧记录」判为持有者（`trust=record-pid`），R2974 量到的「pid 被回收就不再买单」在那条路径上**静默失效**——红只会说 holder=True，说不出「写入者漏了字段」。必须用测量：①用 AST/文本两面数出**仓内所有写该记录的出货路径**（`launcher_registry` 的写入口与它们的调用者），断言每个写入面都带 `pid_started`（或断言写入面集合恰为 `start_all` 的两处，红控=私造第三个不带字段的写入者必红）；②给出「旧记录仍按旧面判」的对照臂，证明判据收的是**新写入者漏字段**、不是把兼容方向关掉。禁只写注释。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability: no merchant id, server, domain, filing+ICP or miniprogram appid+secret), Docker absent, and `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell).",
-    "next_milestone_due": "2026-11-19T15:46:42+08:00",
-    "updated_at": "2026-11-19T03:46:42+08:00"
+    "next_milestone": "[R2979] next window (<=12h): (0) MAIN — 收口本轮披露出来的下一个未钉关系：`start_all.plan()` 给每个 plan 键发一个端口这件事**依赖 `free_port` 的 used-set**，而「同一次 `plan()` 调用里两个键绝不拿到同一端口」从未被判据钉住（R2977 第 4 臂刻意用全显式端口覆盖，正是为了绕开分配器）。必须用测量：写一条判据，使「同一次 `plan()` 的每个 plan 键得到互不相同的端口」被断言（红控=私造一个忽略 used-set 的分配器，判据必须变红），并如实记下这条判据真的绑定 ephemeral socket（与前几条只读常量的断言不同）。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability: no merchant id, server, domain, filing+ICP or miniprogram appid+secret), Docker absent, and `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell).",
+    "next_milestone_due": "2026-11-19T16:03:13+08:00",
+    "updated_at": "2026-11-19T04:03:13+08:00"
   },
-  "current": "2026-11-19 R2977 PRODUCT+ENGINEERING: the second hop of the face-to-port map had two halves and R2976 pinned only one. It asserted that every owned face carries a port key drawn from the plan, which stays true when two faces carry the SAME key - while start_all.plan() issues one port per plan key, so both faces are handed one port, the first start wins it and the second fails with E_NOT_UP. face_coverage ships shared_port_keys() and port_coverage(): the first names every plan key carried by more than one face together with those faces (sorted, a three-way collision naming all three rather than folding into a boolean), the second returns {ok, faces, shared}. No run-time behaviour changed, nothing binds a socket, and the header names this a loud-failure closure and not a security boundary in the same words R2976 used for its sibling.",
+  "current": "2026-11-19 R2978 PRODUCT+ENGINEERING: the creation stamp R2974 taught judge() to compare only protects anything if the WRITERS publish it, and that fact lived in a docstring with nothing pinning it. src/sandbox/record_writers.py ships the pin as a pure static read: writer_coverage(root) walks every module with ast, finds each call site that can write the machine record (claim / write_serving reached through a bare or aliased module import or a from-import), traces the record expression inside its own function scope - dict literals, dict(<expr>), name resolution to the most recent preceding assignment, name[key] = value adding a key, name.pop(key) and del name[key] removing one - and reports carries / missing / unproven per site. Test fixtures are published as COUNTED exemptions with their own keys, the scanner's own module is named judge, and an unparsable shipped module refuses while an unparsable fixture only names itself. No run-time behaviour changed: no process started, no socket bound, no record opened.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-19 R2977 PRODUCT+ENGINEERING: the second hop of the face-to-port map had two halves and R2976 pinned only one. It asserted that every owned face carries a port key drawn from the plan, which stays true when two faces carry the SAME key - while start_all.plan() issues one port per plan key, so both faces are handed one port, the first start wins it and the second fails with E_NOT_UP. face_coverage ships shared_port_keys() and port_coverage(): the first names every plan key carried by more than one face together with those faces (sorted, a three-way collision naming all three rather than folding into a boolean), the second returns {ok, faces, shared}. No run-time behaviour changed, nothing binds a socket, and the header names this a loud-failure closure and not a security boundary in the same words R2976 used for its sibling.",
-  "export_ts": "2026-11-19T03:46:42+08:00",
+  "do": "2026-11-19 R2978 PRODUCT+ENGINEERING: the creation stamp R2974 taught judge() to compare only protects anything if the WRITERS publish it, and that fact lived in a docstring with nothing pinning it. src/sandbox/record_writers.py ships the pin as a pure static read: writer_coverage(root) walks every module with ast, finds each call site that can write the machine record (claim / write_serving reached through a bare or aliased module import or a from-import), traces the record expression inside its own function scope - dict literals, dict(<expr>), name resolution to the most recent preceding assignment, name[key] = value adding a key, name.pop(key) and del name[key] removing one - and reports carries / missing / unproven per site. Test fixtures are published as COUNTED exemptions with their own keys, the scanner's own module is named judge, and an unparsable shipped module refuses while an unparsable fixture only names itself. No run-time behaviour changed: no process started, no socket bound, no record opened.",
+  "export_ts": "2026-11-19T04:03:13+08:00",
   "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
   "latest_evidence": "qa/leg-os-closeout-R2977.log (5468B, 2026-11-19)",
-  "next_milestone": "[R2978] next window (<=12h): (0) MAIN — 收口 carry (1)：`pid_started` 只有一个出货写入者这件事**只写在文档头，没有任何判据钉住**。R2974 让 `judge()` 比对「当前持有该号码的进程」的创建戳与记录里的戳，靠的是记录里真有这个字段；今天该字段只由 `start_all` 写（claim 与 serving 两处）。若将来出现第二个写入者（新启动器、面板自起、测试夹具之外的任何路径）而不带字段，那个记录会被按「旧记录」判为持有者（`trust=record-pid`），R2974 量到的「pid 被回收就不再买单」在那条路径上**静默失效**——红只会说 holder=True，说不出「写入者漏了字段」。必须用测量：①用 AST/文本两面数出**仓内所有写该记录的出货路径**（`launcher_registry` 的写入口与它们的调用者），断言每个写入面都带 `pid_started`（或断言写入面集合恰为 `start_all` 的两处，红控=私造第三个不带字段的写入者必红）；②给出「旧记录仍按旧面判」的对照臂，证明判据收的是**新写入者漏字段**、不是把兼容方向关掉。禁只写注释。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability: no merchant id, server, domain, filing+ICP or miniprogram appid+secret), Docker absent, and `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell).",
+  "next_milestone": "[R2979] next window (<=12h): (0) MAIN — 收口本轮披露出来的下一个未钉关系：`start_all.plan()` 给每个 plan 键发一个端口这件事**依赖 `free_port` 的 used-set**，而「同一次 `plan()` 调用里两个键绝不拿到同一端口」从未被判据钉住（R2977 第 4 臂刻意用全显式端口覆盖，正是为了绕开分配器）。必须用测量：写一条判据，使「同一次 `plan()` 的每个 plan 键得到互不相同的端口」被断言（红控=私造一个忽略 used-set 的分配器，判据必须变红），并如实记下这条判据真的绑定 ephemeral socket（与前几条只读常量的断言不同）。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability: no merchant id, server, domain, filing+ICP or miniprogram appid+secret), Docker absent, and `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell).",
   "outs": [
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "qa/bind-scan-R2946.log (546B) + qa/bind-site-scan-suite-R2946.log (176B) + qa/leg-lobby-regress-R2946.log (413B) [2026-11-18 R2946]",
@@ -167,7 +167,7 @@
   },
   "results": [
     [
-      "2977",
+      "2978",
       "OSLoop 执行 tick"
     ]
   ],
@@ -180,15 +180,15 @@
   "self_drive": {
     "window": "2026-11-13..2026-11-19",
     "window_days": 7,
-    "log_lines_in_window": 59,
+    "log_lines_in_window": 31,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 6,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 78579
+  "state_bytes": 47741
 }

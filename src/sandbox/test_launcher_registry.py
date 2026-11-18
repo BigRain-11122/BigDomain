@@ -5,6 +5,11 @@ this file, src/sandbox/launcher_registry.py and its registry row existed.
 AC-LND6 and AC-LND7 (R2974) were pre-registered in the R2974 backlog PIN row
 BEFORE the pid_started wiring: a record is now judged as PID PLUS THE PROCESS
 IT BELONGS TO, so a number the system recycled cannot resurrect a dead holder.
+AC-LND8 and AC-LND9 (R2978) were pre-registered in the R2978 backlog PIN row
+BEFORE src/sandbox/record_writers.py existed: the stamp only protects anything
+if the WRITERS publish it, so every shipped call site that writes the record is
+now judged statically, with test fixtures published as counted exemptions
+instead of skipped in silence.
 
 Nothing is read off a paragraph: a real launcher is held open in serve mode and
 its record is compared with the report the SAME run wrote, a second door is
@@ -39,6 +44,7 @@ PRE_R2974_REV = "2d33f1ebc4ee30f93547db1ff0e88ddc631b7c58"
 
 sys.path.insert(0, HERE)
 import launcher_registry  # noqa: E402  (path wired above)
+import record_writers  # noqa: E402  (path wired above)
 
 RESULTS = []
 
@@ -568,6 +574,166 @@ def main():
     finally:
         holder_sock.close()
     report("AC-LND7", bool(bad), ",".join(bad))
+
+    # ---- AC-LND8 (R2978): every SHIPPED writer publishes the stamp ----------
+    bad = []
+    coverage = record_writers.writer_coverage(HERE)
+    shipped = coverage["shipped"]
+    exempt = coverage["exempt"]
+    if coverage.get("ok") is not True:
+        bad.append("coverage-not-ok")
+    if sorted(site["path"] for site in shipped) != ["start_all.py", "start_all.py"]:
+        bad.append("shipped-paths-" + repr(sorted(site["path"]
+                                                  for site in shipped)))
+    if sorted(site["entry"] for site in shipped) != ["claim", "write_serving"]:
+        bad.append("shipped-entries-" + repr(sorted(site["entry"]
+                                                    for site in shipped)))
+    for site in shipped:
+        if site["status"] != record_writers.STATUS_CARRIES:
+            bad.append("site-%s-%s" % (site["line"], site["status"]))
+        if record_writers.STAMP_FIELD not in (site["keys"] or []):
+            bad.append("site-%s-keys" % site["line"])
+    # the exemptions are COUNTED, not silent: seven fixture sites, each in a
+    # test module, and the scanner does not exempt itself.
+    if len(exempt) != 7:
+        bad.append("exempt-%d" % len(exempt))
+    for site in exempt:
+        if not os.path.basename(site["path"]).startswith("test_"):
+            bad.append("exempt-not-a-fixture-" + site["path"])
+        if site["why"] != record_writers.WHY_FIXTURE:
+            bad.append("exempt-why-" + str(site["why"]))
+    # the reader cannot silently look at the wrong argument: the leaf's own
+    # second parameter name is compared with the one this scanner declares.
+    params = record_writers.record_parameters(LEAF)
+    expected = dict((name, record_writers.RECORD_PARAM)
+                    for name in record_writers.ENTRIES)
+    if params != expected:
+        bad.append("record-parameter-mismatch-" + repr(params))
+    if coverage["unproven"]:
+        bad.append("shipped-unproven-%d" % len(coverage["unproven"]))
+    if coverage["missing"]:
+        bad.append("shipped-missing-%d" % len(coverage["missing"]))
+    # one BOM fixture in the tree cannot be parsed; that is published and does
+    # NOT turn the verdict red, while an unreadable SHIPPED module would.
+    if len(coverage["unreadable"]) != 1:
+        bad.append("unreadable-%d" % len(coverage["unreadable"]))
+    for rel in coverage["unreadable"]:
+        if not os.path.basename(rel).startswith("test_"):
+            bad.append("unreadable-not-a-fixture-" + rel)
+    if coverage["unreadable_shipped"]:
+        bad.append("unreadable-shipped-%d" % len(coverage["unreadable_shipped"]))
+    report("AC-LND8", bool(bad), ",".join(bad))
+
+    # ---- AC-LND9 (R2978): the pin can say NO, and the READER stays kind -----
+    bad = []
+    world = os.path.join(tmpdir, "writers-world")
+
+    def build(files):
+        if os.path.isdir(world):
+            for name in os.listdir(world):
+                os.remove(os.path.join(world, name))
+        os.makedirs(world, exist_ok=True)
+        for name, text in files.items():
+            with open(os.path.join(world, name), "w", encoding="utf-8",
+                      newline="\n") as handle:
+                handle.write(text)
+        return record_writers.writer_coverage(world)
+
+    plain = ("import launcher_registry\n"
+             "\n"
+             "\n"
+             "def publish(path):\n"
+             "    rec = {\"pid\": 1, \"state\": \"serving\"}\n"
+             "    launcher_registry.write_serving(path, rec)\n")
+    stamped = plain.replace('"state": "serving"',
+                            '"state": "serving", "pid_started": 2')
+    stripped_pop = ("import launcher_registry\n"
+                    "\n"
+                    "\n"
+                    "def publish(path):\n"
+                    "    rec = {\"pid\": 1, \"pid_started\": 2}\n"
+                    "    rec.pop(\"pid_started\")\n"
+                    "    launcher_registry.write_serving(path, rec)\n")
+    stripped_del = ("import launcher_registry\n"
+                    "\n"
+                    "\n"
+                    "def publish(path):\n"
+                    "    rec = {\"pid\": 1, \"pid_started\": 2}\n"
+                    "    del rec[\"pid_started\"]\n"
+                    "    launcher_registry.write_serving(path, rec)\n")
+    untraced = ("import launcher_registry\n"
+                "\n"
+                "\n"
+                "def build(path):\n"
+                "    return {\"pid\": 1, \"pid_started\": 2}\n"
+                "\n"
+                "\n"
+                "def publish(path):\n"
+                "    rec = build(path)\n"
+                "    launcher_registry.write_serving(path, rec)\n")
+    aliased = ("import launcher_registry as lr\n"
+               "\n"
+               "\n"
+               "def publish(path):\n"
+               "    rec = {\"pid\": 1, \"pid_started\": 2}\n"
+               "    lr.claim(path, rec)\n")
+    from_bound = ("from launcher_registry import write_serving\n"
+                  "\n"
+                  "\n"
+                  "def publish(path):\n"
+                  "    rec = {\"pid\": 1, \"pid_started\": 2}\n"
+                  "    write_serving(path, rec)\n")
+    from_lean = from_bound.replace(', "pid_started": 2', "")
+
+    # arm 1: a THIRD writer that omits the field is refused, by file and line.
+    one = build({"helper.py": plain})
+    if one["ok"] is not False:
+        bad.append("third-writer-accepted")
+    if not one["missing"]:
+        bad.append("third-writer-not-named-missing")
+    elif (one["missing"][0]["path"] != "helper.py"
+          or one["missing"][0]["line"] != 6):
+        bad.append("missing-named-%s:%s" % (one["missing"][0]["path"],
+                                           one["missing"][0]["line"]))
+    # arm 2: the field added turns the same world green - the red was the
+    # missing field and not the file.
+    if build({"helper.py": stamped})["ok"] is not True:
+        bad.append("stamped-world-still-red")
+    # arm 3: both import faces are READ, so a future writer in either spelling
+    # is judged (alias form + from-import form, one carrying each entry).
+    both = build({"a.py": aliased, "b.py": from_bound})
+    if sorted(site["entry"] for site in both["shipped"]) != ["claim",
+                                                             "write_serving"]:
+        bad.append("import-faces-" + repr(sorted(site["entry"]
+                                                 for site in both["shipped"])))
+    if both["ok"] is not True:
+        bad.append("carrying-alias-world-red")
+    if build({"a.py": aliased, "b.py": from_lean})["ok"] is not False:
+        bad.append("from-import-face-unjudged")
+    # arm 4: a record that carries the field and then STRIPS it is a miss -
+    # pop and del are both measured, because a strip is the same defect.
+    if build({"helper.py": stripped_pop})["ok"] is not False:
+        bad.append("popped-field-accepted")
+    if build({"helper.py": stripped_del})["ok"] is not False:
+        bad.append("deleted-field-accepted")
+    # arm 5: an untraceable record fails CLOSED rather than passing quietly.
+    blind = build({"helper.py": untraced})
+    if blind["ok"] is not False or not blind["unproven"]:
+        bad.append("untraced-record-%s/%d" % (blind["ok"],
+                                              len(blind["unproven"])))
+    # arm 6: the compatibility direction the criterion must NOT close - the
+    # READER still treats a stampless record as an old one and holds it.
+    legacy = launcher_registry.judge({"pid": os.getpid(),
+                                      "state": "starting"})
+    if not legacy["holder"] or legacy.get("trust") != "record-pid":
+        bad.append("compat-%s/%s" % (legacy["holder"], legacy.get("trust")))
+    # ... and the live tree proves the exemption is doing work rather than
+    # covering nothing: fixtures really do write records without the stamp.
+    stampless_fixtures = [site for site in exempt
+                          if site["status"] != record_writers.STATUS_CARRIES]
+    if len(stampless_fixtures) < 1:
+        bad.append("fixture-exemption-covers-nothing")
+    report("AC-LND9", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

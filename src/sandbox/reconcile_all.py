@@ -290,7 +290,13 @@ SUITES = [
     # were pinned in the R2974 backlog PIN row BEFORE the pid_started wiring:
     # the record now names a PROCESS (pid + its creation stamp) instead of a
     # pid, so a number the system recycled cannot resurrect a dead holder.
-    ("launcher-registry", os.path.join("test_launcher_registry.py"), 7),
+    # R2978 adds AC-LND8..AC-LND9 (record_writers.py): the stamp only protects
+    # anything if the WRITERS publish it, so every shipped call site that can
+    # write the record is judged statically - a third writer that omits the
+    # field, or one that strips it, is refused by file and line, while test
+    # fixtures are published as COUNTED exemptions and the reader keeps
+    # judging an older stampless record the way R2974 left it.
+    ("launcher-registry", os.path.join("test_launcher_registry.py"), 9),
     # R2940: the record above is a FILE and a file can be deleted, so the gate
     # moved to a KERNEL NAMED MUTEX whose existence IS the holder and which the
     # kernel drops when the holder dies. AC-LMX1..AC-LMX5 were pinned in
