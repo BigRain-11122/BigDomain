@@ -1,0 +1,15 @@
+  | PASS AC-FWS1 repo-relative href on a page in preview/ is DEAD dead=['preview/x.html']
+  | PASS AC-FWS1 same href is ALIVE once the page-relative target exists dead=[]
+  | PASS AC-FWS1 walk_page delegates to dead_targets (no second copy) found=True
+  | PASS AC-FWS2 all eight non-file prefixes resolve to None leaked=[]
+  | PASS AC-FWS2 local href keeps its target and drops query+fragment local=ok
+  | PASS AC-FWS3 real signature passes, truncation/JPEG/zero fail png_ok=four-way
+  | PASS AC-FWS3 walk_page delegates to png_ok (no second copy) found=True
+  | PASS AC-FWS4 the census measured a non-empty page set pages=40
+  | PASS AC-FWS4 every live preview page has ZERO dead static links pages=40 hrefs=80 dead=0 sample=[]
+  | PASS AC-FWS4 the census FIRES on a doctored world (dead=1) hrefs=1 dead=[('bad.html', 'preview/gone.html')]
+  | PASS AC-FWS5 face_walk imports under stdlib (no top-level playwright) hits=[]
+  | PASS AC-FWS5 the scanner REFUSES a top-level playwright import probe_hits=1
+  | SKIP arm=face_walk_browser reason=browser arm is on-demand by board decision (registry law)
+suite: 12 assertions over 5 criteria
+SUITE PASS 12/12

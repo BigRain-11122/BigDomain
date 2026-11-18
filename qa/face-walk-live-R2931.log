@@ -1,0 +1,2 @@
+WALK page=index.html chars=10753 errors=0 failed=0 dead=0 shot=none bytes=0 OK
+WALK-TOTAL pages=1 ok=1 blank=0 errors=0 failed=0 dead_links=0 shots=0 rc=0

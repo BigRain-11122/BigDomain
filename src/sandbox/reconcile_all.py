@@ -7253,6 +7253,19 @@ SUITES = [
     # AC-EVR1..AC-EVR5 were pinned in src/os/backlog.md before the code.
     ("os-evidence-read",
      os.path.join("..", "os", "test_evidence_read.py"), 5),
+    # R2931: R2930 shipped the first real browser walk and it found a real
+    # defect, but face_walk needs playwright (not stdlib) so no SUITES row could
+    # grade it. The ruling is NOT to run a browser under the registry law, but
+    # to move the two laws the walk depends on into pure functions -
+    # page-relative link resolution (dead_targets) and the PNG signature check
+    # (png_ok) - grade those here, and print the browser arm as a SKIP BY NAME
+    # so an unrun arm can never read as a pass. Coverage boundary is stated in
+    # the suite: static href attributes only, never a link a page's JS injects
+    # at runtime. AC-FWS1..AC-FWS5 were pinned in src/os/backlog.md before the
+    # code existed; the live arm reads 40 preview pages with dead=0, matching
+    # the R2930 browser census.
+    ("os-face-walk-static",
+     os.path.join("..", "os", "test_face_walk_static.py"), 5),
     ]
 
 FAILS = 0

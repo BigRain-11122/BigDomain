@@ -42,6 +42,31 @@ def _die(msg, rc=3):
     raise SystemExit(rc)
 
 
+def png_ok(head, size):
+    """The screenshot law in one place, so a stdlib suite can grade it."""
+    return head == PNG_SIG and size > 0
+
+
+def dead_targets(page_path, hrefs):
+    """Resolve local links the way a BROWSER does: relative to the page dir.
+
+    The R2930 defect was a page inside preview/ linking 'preview/x.html', which
+    a browser resolves to preview/preview/x.html. Resolving against the repo
+    root instead made that page's own checker agree with its author and
+    disagree with its consumer, which is why this law lives here.
+    """
+    base = os.path.dirname(os.path.abspath(page_path))
+    dead = []
+    for href in hrefs:
+        target = _local_href(href)
+        if target is None:
+            continue
+        resolved = os.path.normpath(os.path.join(base, target.replace("/", os.sep)))
+        if not os.path.exists(resolved):
+            dead.append(href)
+    return dead
+
+
 def _local_href(href):
     if not href:
         return None
@@ -100,16 +125,10 @@ def walk_page(browser, page_path, dir_path, out_dir, tag, take_shot=True):
         hrefs = page.eval_on_selector_all(
             "a[href]", "els => els.map(e => e.getAttribute('href'))"
         )
-        base = os.path.dirname(os.path.abspath(page_path))
-        for href in hrefs:
-            target = _local_href(href)
-            if target is None:
-                continue
-            resolved = os.path.normpath(os.path.join(base, target.replace("/", os.sep)))
-            if not os.path.exists(resolved):
-                row["dead"] += 1
-                if len(row["dead_targets"]) < 12:
-                    row["dead_targets"].append(href)
+        dead = dead_targets(page_path, hrefs)
+        row["dead"] = len(dead)
+        if dead:
+            row["dead_targets"] = dead[:12]
         if take_shot:
             stem = os.path.splitext(os.path.basename(page_path))[0]
             shot = os.path.join(out_dir, "%s-%s.png" % (tag, stem))
@@ -119,7 +138,7 @@ def walk_page(browser, page_path, dir_path, out_dir, tag, take_shot=True):
                 with open(shot, "rb") as fh:
                     head = fh.read(8)
                 row["shot_bytes"] = os.path.getsize(shot)
-                row["png_ok"] = head == PNG_SIG and row["shot_bytes"] > 0
+                row["png_ok"] = png_ok(head, row["shot_bytes"])
     except Exception as exc:  # a page that will not even load is a finding
         row["load_error"] = "%s: %s" % (type(exc).__name__, exc)
     finally:
