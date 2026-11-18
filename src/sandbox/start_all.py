@@ -7,6 +7,11 @@ own port. A person who wanted to look at the whole thing had to remember five
 commands and five URLs, and the hub page could only describe them: it is a
 read-only face, so every card it publishes ended in "start this yourself".
 
+R2936 adds the last two published cards - the control panel and the membership
+page - to the same door, because the hub has named all eight faces since they
+shipped. Their measured ports are handed to the lobby on its own command line,
+so the URL the hub publishes is a measured port rather than a built-in guess.
+
 This launcher closes that last step. It picks OS-assigned ports so it never
 assumes 8091..8098 are free, starts the shipped entry modules unchanged, waits
 until every socket really accepts, and then asks the hub what it publishes -
@@ -40,16 +45,24 @@ SERVER = os.path.join(LOBBY, "server.py")
 CHECKOUT = os.path.join(LOBBY, "checkout_demo.py")
 LEDGER = os.path.join(HERE, "ledger", "ledger_page.py")
 UGC = os.path.join(HERE, "ugc", "ugc_page.py")
+PANEL = os.path.join(HERE, "panel.py")
+MEMBER = os.path.join(HERE, "member", "member_page.py")
 
-# The six faces the hub publishes with a real port behind them.
-FACE_KEYS = ("lobby", "city", "checkout", "gate", "ledger", "ugc")
+# Every face the hub publishes with a real port behind it. The panel and the
+# membership page are here for the same reason as the rest: the hub named them
+# from the day they shipped, so a launcher that skipped them left two cards
+# reading NOT STARTED behind a door that advertised them.
+FACE_KEYS = ("lobby", "city", "checkout", "gate", "ledger", "ugc",
+             "panel", "member")
 # Which planned socket carries each face (the lobby page and the WebSocket
 # share the lobby module but not a port).
 FACE_PORT_KEY = {"lobby": "web", "city": "city", "checkout": "checkout",
-                 "gate": "gate", "ledger": "ledger", "ugc": "ugc"}
-# Every socket this launcher must place: eight ports for six faces, because
+                 "gate": "gate", "ledger": "ledger", "ugc": "ugc",
+                 "panel": "panel", "member": "member"}
+# Every socket this launcher must place: ten ports for eight faces, because
 # the lobby module owns the ws socket and the gate/web sockets itself.
-PLAN_KEYS = ("ws", "city", "gate", "web", "hub", "checkout", "ledger", "ugc")
+PLAN_KEYS = ("ws", "city", "gate", "web", "hub", "checkout", "ledger", "ugc",
+             "panel", "member")
 
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 
@@ -102,6 +115,10 @@ def build_commands(host, ports):
         "--checkout-port", str(ports["checkout"]),
         "--ledger-port", str(ports["ledger"]),
         "--ugc-port", str(ports["ugc"]),
+        # The panel and the membership page are separate processes, so the
+        # lobby is TOLD their measured ports instead of its built-in guesses.
+        "--panel-port", str(ports["panel"]),
+        "--member-port", str(ports["member"]),
     ]
     return [
         ("lobby", lobby),
@@ -111,6 +128,10 @@ def build_commands(host, ports):
                     "--port", str(ports["ledger"])]),
         ("ugc", [sys.executable, UGC, "--host", host,
                  "--port", str(ports["ugc"])]),
+        ("panel", [sys.executable, PANEL, "--host", host,
+                   "--port", str(ports["panel"])]),
+        ("member", [sys.executable, MEMBER, "--host", host,
+                    "--port", str(ports["member"])]),
     ]
 
 

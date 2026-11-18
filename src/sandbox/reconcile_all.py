@@ -261,11 +261,12 @@ SUITES = [
     # R2487 and its own closeout disclosed that the registry was unmoved, so
     # no battery had ever walked it (AC-MFN1..AC-MFN6 live in that suite).
     ("member-face", os.path.join("member", "test_member_page.py"), 6),
-    # one-command sandbox launcher (R2477): six faces on OS-assigned ports,
-    # readiness proved by a real connect plus the hub's own probe map, and a
-    # teardown that leaves no port open (AC-STL1..AC-STL6 pre-registered in
-    # src/os/backlog.md at R2477 BEFORE this suite and its module existed).
-    ("start-all", os.path.join("test_start_all.py"), 6),
+    # one-command sandbox launcher (R2477): every face the hub publishes on
+    # OS-assigned ports, readiness proved by a real connect plus the hub's own
+    # probe map, and a teardown that leaves no port open (AC-STL1..AC-STL6
+    # pre-registered at R2477; AC-STL7..AC-STL9 pinned at R2936 BEFORE the
+    # launcher grew the panel and membership faces).
+    ("start-all", os.path.join("test_start_all.py"), 9),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the
@@ -7291,7 +7292,7 @@ SUITES = [
     # against. AC-LIVE1..AC-LIVE5 were pinned in src/os/backlog.md before the
     # code existed, in the same window (disclosed).
     ("os-live-proof",
-     os.path.join("..", "os", "test_live_proof.py"), 5),
+     os.path.join("..", "os", "test_live_proof.py"), 6),
     ]
 
 FAILS = 0

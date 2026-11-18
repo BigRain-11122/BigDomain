@@ -19,8 +19,11 @@ whose verdict is measured live and quoted in the round's evidence log.
 
 PINNED BEFORE THE CODE: AC-LIVE1..AC-LIVE5 were written into src/os/backlog.md
 earlier in this same window, BEFORE compare_runs existed - in-window
-pre-registration, disclosed as such. Source discipline: pure ASCII, stdlib
-only, no clock, no network, writes nothing into qa/.
+pre-registration, disclosed as such. AC-LIVE6 was pinned in the R2936 board row
+BEFORE the shooter grew its last two faces, and it derives its coverage from
+the launcher and hub modules instead of counting a typed list. Source
+discipline: pure ASCII, stdlib only, no clock, no network, writes nothing into
+qa/.
 """
 import os
 import sys
@@ -166,6 +169,38 @@ def main():
     reason = 'live two-pass arm is on-demand by board decision (registry law)' \
         if have_pw else 'playwright not installed'
     print('  | SKIP arm=live_two_pass_prove reason=%s' % reason)
+
+    # AC-LIVE6: the shooter covers every face the door serves, and that is
+    # DERIVED - both sides are read from the shipped modules, so a face added
+    # to the launcher or dropped from the shooter fails here instead of
+    # quietly shrinking a 9/9 claim into a 7/7 one (the exact drift R2935's
+    # board row was written to stop).
+    sys.path.insert(0, os.path.join(ROOT, 'src', 'sandbox'))
+    sys.path.insert(0, os.path.join(ROOT, 'src', 'sandbox', 'lobby'))
+    import start_all as SA  # noqa: E402  (path wired just above)
+    import hub_page as HP  # noqa: E402  (path wired just above)
+    planned = set(SA.FACE_KEYS)
+    shot = [row[0] for row in LS.FACES]
+    ok('AC-LIVE6 the shooter names hub plus every planned face',
+       set(shot) == planned | {'hub'},
+       'shooter=%d planned=%d missing=%s extra=%s'
+       % (len(shot), len(planned),
+          sorted((planned | {'hub'}) - set(shot)),
+          sorted(set(shot) - (planned | {'hub'}))))
+    ok('AC-LIVE6 every shooter face is named exactly once',
+       len(shot) == len(set(shot)), 'dupes=%d' % (len(shot) - len(set(shot))))
+    published = HP.build_faces(
+        '127.0.0.1', 8091, web_port=8094, city_port=8092, checkout_port=8093,
+        gate_port=8096, ledger_port=8097, ugc_port=8098, panel_port=8099,
+        member_port=8095)
+    unserved = [key for key in sorted(planned) if not published.get(key)]
+    ok('AC-LIVE6 the hub really serves every planned face', unserved == [],
+       'unserved=%s' % (unserved,))
+    bare = HP.build_faces('127.0.0.1', 8091, panel_port=None, member_port=None)
+    ok('AC-LIVE6 the hub publishes no face it was not handed a port for',
+       not bare.get('panel') and not bare.get('member'),
+       'bare_panel=%s bare_member=%s'
+       % (bare.get('panel'), bare.get('member')))
 
     total = len(CHECKS)
     acs = set()

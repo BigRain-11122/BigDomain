@@ -1,0 +1,22 @@
+  | PASS AC-LIVE1 identical passes produce zero disagreements disagreements=[]
+  | PASS AC-LIVE1 the report identity holds on an agreeing world faces=7
+  | PASS AC-LIVE1 a doubly-drifting face yields exactly ONE row rows=1 faces=['gate']
+  | PASS AC-LIVE1 agreements + disagreements == faces on a drifting world agreements=6
+  | PASS AC-LIVE2 status drift refuses with kind=status rows=[{'face': 'lobby', 'kind': 'status', 'first': 200, 'second': 404}]
+  | PASS AC-LIVE2 the refusal names the face and both values row=[{'face': 'lobby', 'kind': 'status', 'first': 200, 'second': 404}]
+  | PASS AC-LIVE2 restoring the value restores agreement (red is the drift) restored=0
+  | PASS AC-LIVE3 the same errors in another order still agree rows=[]
+  | PASS AC-LIVE3 one extra error is drift, kind=errors rows=[{'face': 'gate', 'kind': 'errors', 'first': ['e1: a', 'e2: b'], 'second': ['e1: a', 'e2: b', 'e3: c']}]
+  | PASS AC-LIVE4 a face present in one pass only refuses as missing rows=[{'face': 'checkout', 'kind': 'missing', 'first': 'present', 'second': 'absent'}]
+  | PASS AC-LIVE4 missing is symmetric (the other direction also fires) rows=[{'face': 'checkout', 'kind': 'missing', 'first': 'absent', 'second': 'present'}]
+  | PASS AC-LIVE5 ceo_live_shot imports under stdlib (no top-level playwright) hits=[]
+  | PASS AC-LIVE5 the scanner REFUSES a top-level playwright import probe_hits=1
+  | PASS AC-LIVE5 compare_runs touches no disk and no browser pure=1
+  | PASS AC-LIVE5 the second pass writes <face>-p2.png, not over pass one pass_naming=1
+  | SKIP arm=live_two_pass_prove reason=live two-pass arm is on-demand by board decision (registry law)
+  | PASS AC-LIVE6 the shooter names hub plus every planned face shooter=9 planned=8 missing=[] extra=[]
+  | PASS AC-LIVE6 every shooter face is named exactly once dupes=0
+  | PASS AC-LIVE6 the hub really serves every planned face unserved=[]
+  | PASS AC-LIVE6 the hub publishes no face it was not handed a port for bare_panel=None bare_member=None
+suite: 19 assertions over 6 criteria
+SUITE PASS 19/19

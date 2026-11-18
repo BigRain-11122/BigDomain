@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-18 13:25 +08:00
+- 生成时间: generated: 2026-11-18 13:39 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
 - 状态证据: reconcile-all-R2739.log (RUNNER PASS 675/675 suites green, reconcile controls 7/7, 4986.4s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 722 | 5713 | 675/675 | R2739 |
+| 722 | 5717 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -45,7 +45,7 @@
 | 6 | lobby-hub-panel | lobby/test_hub_panel.py | 6 | green | 44.1 |
 | 7 | lobby-hub-member | lobby/test_hub_member.py | 6 | green | 8.0 |
 | 8 | member-face | member/test_member_page.py | 6 | green | 1.4 |
-| 9 | start-all | test_start_all.py | 6 | green | 7.0 |
+| 9 | start-all | test_start_all.py | 9 | green | 7.0 |
 | 10 | panel | test_panel.py | 6 | green | 9.0 |
 | 11 | panel-lobby | test_panel_lobby.py | 6 | green | 9.1 |
 | 12 | os-lobby-lobby-page | lobby/test_lobby_page.py | 6 | green | 1.3 |
@@ -758,8 +758,8 @@
 | 719 | os-evidence-read | ../os/test_evidence_read.py | 5 | no-evidence | - |
 | 720 | os-face-walk-static | ../os/test_face_walk_static.py | 5 | no-evidence | - |
 | 721 | os-closeout-gate | ../os/test_closeout_gate.py | 5 | no-evidence | - |
-| 722 | os-live-proof | ../os/test_live_proof.py | 5 | no-evidence | - |
-|  | 合计 |  | 5713 | green 675 / FAIL 0 / no-evidence 47 |  |
+| 722 | os-live-proof | ../os/test_live_proof.py | 6 | no-evidence | - |
+|  | 合计 |  | 5717 | green 675 / FAIL 0 / no-evidence 47 |  |
 
 ## 证据出处
 

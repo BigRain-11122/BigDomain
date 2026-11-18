@@ -59,6 +59,10 @@ FACES = (
     ("ledger", "Ledger - token console", "The two-form token ledger"),
     ("checkout", "Checkout - 19.9 mock", "The membership purchase demonstrable "
                                          "without a merchant id"),
+    ("member", "Member - membership page", "Two-form token balance, tiers and "
+                                           "the expiring-reminder face"),
+    ("panel", "Panel - control surface", "Start and stop verbs per face, with "
+                                         "measured ports"),
 )
 
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
