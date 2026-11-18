@@ -335,7 +335,14 @@ SUITES = [
     # uses a monotonic stamp plus a counter so a reused pid cannot mint the
     # same name again (pre-registered in src/os/backlog.md at R2950 BEFORE the
     # edit).
-    ("panel", os.path.join("test_panel.py"), 15),
+    # R2951 added AC-PAN16..AC-PAN17 (bounded pile + a tag that survives a
+    # corrected clock): keeping every log with bytes bounded nothing, so an AGE
+    # prune now removes only names past the bound whose writer is provably gone
+    # or outlived by a reused pid, never a live writer's file and never one the
+    # caller declares its own; the tag joined a boot-relative monotonic field,
+    # so a wall clock stepped backwards still moves only one field
+    # (pre-registered in src/os/backlog.md at R2951 BEFORE the edit).
+    ("panel", os.path.join("test_panel.py"), 17),
     # R2938 added AC-PAN7..AC-PAN11 (declared ownership): the launcher hands
     # the panel the faces it already serves with the ports it measured, and the
     # panel refuses to start or stop them by name instead of forking the

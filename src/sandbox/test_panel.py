@@ -11,7 +11,10 @@ refusal can come from) in ONE machine-wide file per face id, so a second panel
 silently overwrote the first one's evidence. AC-PAN14..AC-PAN15 were
 pre-registered in the R2950 row BEFORE the teardown existed: a per-panel file
 that is never removed accumulates, and the tag's four random bytes could not
-prove that a reused pid never mints the same name again.
+prove that a reused pid never mints the same name again. AC-PAN16..AC-PAN17
+were pre-registered in the R2951 row BEFORE the prune and the monotonic tag
+existed: keeping every log with bytes bounded nothing, and a tag that leans on
+the wall clock moving forward cannot answer a corrected clock.
 
 Nothing here is read off a canned string: the panel is really started, the
 start route really spawns a shipped module, an independent TCP connect checks
@@ -19,7 +22,7 @@ the port it reports, the served URL is compared against the page bytes on
 disk, and the teardown leg proves the children are gone.
 
 Usage: python test_panel.py
-Exit: 0 = SUITE PASS 15/15, 2 = FAIL.
+Exit: 0 = SUITE PASS 17/17, 2 = FAIL.
 """
 
 import hashlib
@@ -29,6 +32,7 @@ import socket
 import subprocess
 import sys
 import tempfile
+import time
 import urllib.error
 import urllib.request
 
@@ -1072,9 +1076,9 @@ def ac_pan15():
               % ((first, second, reused),))
     for tag in (first, second, reused):
         parts = tag.split("-")
-        if parts[0] != "4242" or len(parts) != 3:
+        if parts[0] != "4242" or len(parts) != 4:
             bad += 1
-            print("  AC-PAN15 the tag does not read pid-stamp-seq: %r"
+            print("  AC-PAN15 the tag does not read pid-wall-mono-seq: %r"
                   % (tag,))
         else:
             for part in parts[1:]:
@@ -1123,6 +1127,208 @@ def ac_pan15():
                   "same pid and same clock still differ; names stay traceable")
 
 
+DEAD_PID = 999999999  # measured "gone" (the kernel refuses it) on this box
+
+
+def write_log(folder, tag, face, age_s, body=b"R2951 arm\n"):
+    """A panel log with a chosen tag and a chosen age, for the prune arms."""
+    path = os.path.join(folder, "%s%s-%s%s" % (
+        panel_module.LOG_STEM, tag, face, panel_module.LOG_SUFFIX))
+    with open(path, "wb") as handle:
+        handle.write(body)
+    when = time.time() - age_s
+    os.utime(path, (when, when))
+    return path
+
+
+def spawn_panel_prune():
+    """A real CLI panel and the two lines it prints: address, then PANEL-PRUNE.
+
+    The prune is measured on the SHIPPED entry path, not by calling the
+    function from the suite: a rule only the suite invokes bounds nothing.
+    """
+    proc = subprocess.Popen(
+        [sys.executable, MODULE, "--host", "127.0.0.1", "--port", "0"],
+        stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL, cwd=REPO)
+    first = proc.stdout.readline().decode("utf-8", "replace").strip()
+    second = proc.stdout.readline().decode("utf-8", "replace").strip()
+    base = None
+    if "http://" in first:
+        base = "http://" + first.split("http://", 1)[1].split("/", 1)[0]
+    return proc, base, second
+
+
+def ac_pan16():
+    """Aged-out refusals are pruned; a live writer, a fresh file and every
+    foreign or malformed name survive. R2951.
+
+    The file exists to answer "why did this click do nothing", so deleting the
+    ones that aged out bounds the pile without deleting evidence that is still
+    new. The hard half is the pid: a name alone does not say whether its writer
+    is still running, so the arm that matters is the one where a LIVE pid wrote
+    an OLD file - that pid was reused, and the file must still be collected.
+    """
+    bad = 0
+    pid_law = sys.platform == "win32"
+    root = tempfile.mkdtemp(prefix="r2951-prune-")
+    own_pid = os.getpid()
+    dead = write_log(root, "%d-1-1-1" % DEAD_PID, "ugc", 7200)
+    fresh = write_log(root, "%d-1-1-2" % DEAD_PID, "ugc", 60)
+    live = write_log(root, "%d-1-1-3" % own_pid, "ugc", 0)
+    reused = write_log(root, "%d-1-1-4" % own_pid, "ugc", 7200)
+    held = write_log(root, "%d-1-1-5" % DEAD_PID, "ledger", 7200)
+    foreign = os.path.join(root, "notes.txt")
+    broken = os.path.join(root, panel_module.LOG_STEM + "garbage.txt")
+    for path in (foreign, broken):
+        with open(path, "wb") as handle:
+            handle.write(b"R2951 decoy: not this panel's log\n")
+        when = time.time() - 7200
+        os.utime(path, (when, when))
+    decoy_before = {path: digest(path) for path in (foreign, broken)}
+    pruned = panel_module.prune_logs(root, age_s=3600, own=(held,))
+    if not pid_law:
+        print("  AC-PAN16 pid arms not measurable off Windows "
+              "(process_started answers unknown, so nothing is deleted)")
+    if os.path.exists(dead) or dead not in pruned["removed"]:
+        bad += 1
+        print("  AC-PAN16 an aged-out refusal with a gone pid survived: %r"
+              % (dead,))
+    if not os.path.exists(fresh) or fresh not in pruned["fresh"]:
+        bad += 1
+        print("  AC-PAN16 a file inside the age bound was touched: %r"
+              % (fresh,))
+    if not os.path.exists(held) or held not in pruned["kept"]:
+        bad += 1
+        print("  AC-PAN16 a declared own path was deleted: %r" % (held,))
+    if pid_law:
+        if not os.path.exists(live) or live not in pruned["fresh"]:
+            bad += 1
+            print("  AC-PAN16 a live writer's file inside the bound was "
+                  "touched: %r" % (live,))
+        if os.path.exists(reused) or reused not in pruned["removed"]:
+            bad += 1
+            print("  AC-PAN16 a reused pid kept an aged-out file for ever: %r"
+                  % (reused,))
+    for path, before in decoy_before.items():
+        if digest(path) != before:
+            bad += 1
+            print("  AC-PAN16 a decoy outside the namespace moved: %r"
+                  % (path,))
+    # Red control for the own rule: the same file is collected the moment it is
+    # NOT declared, so "kept" meant "declared" and not "the roster ignores it".
+    pruned_zero = panel_module.prune_logs(root, age_s=0)
+    if pid_law and os.path.exists(held):
+        bad += 1
+        print("  AC-PAN16 an undeclared aged-out file was not collected: %r"
+              % (held,))
+    if not os.path.exists(live):
+        bad += 1
+        print("  AC-PAN16 the zero bound took a live writer's file: %r"
+              % (live,))
+    if os.path.exists(fresh) and pid_law:
+        bad += 1
+        print("  AC-PAN16 the zero bound left a gone pid's file: %r" % (fresh,))
+    for path, before in decoy_before.items():
+        if digest(path) != before:
+            bad += 1
+            print("  AC-PAN16 a decoy moved under the zero bound: %r"
+                  % (path,))
+    # The shipped wire: a real CLI panel prunes on the real %TEMP%.
+    temp = tempfile.gettempdir()
+    wired = write_log(temp, "%d-1-1-6" % DEAD_PID, "member", 8 * 86400)
+    wire_decoy = os.path.join(temp, "r2951-wire-decoy.txt")
+    wire_before = None
+    with open(wire_decoy, "wb") as handle:
+        handle.write(b"R2951 wire decoy\n")
+    when = time.time() - 8 * 86400
+    os.utime(wire_decoy, (when, when))
+    wire_before = digest(wire_decoy)
+    proc, base, second = spawn_panel_prune()
+    stop_panel(proc)
+    if base is None:
+        bad += 1
+        print("  AC-PAN16 the CLI panel never published its address")
+    if not second.startswith("PANEL-PRUNE"):
+        bad += 1
+        print("  AC-PAN16 the CLI panel printed no prune line: %r" % (second,))
+    if os.path.exists(wired):
+        bad += 1
+        print("  AC-PAN16 the shipped prune left an aged-out file in %%TEMP%%")
+    if digest(wire_decoy) != wire_before:
+        bad += 1
+        print("  AC-PAN16 the shipped prune touched a foreign %%TEMP%% file")
+    for path in (wired, wire_decoy, foreign, broken, live):
+        if os.path.exists(path):
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+    return report("AC-PAN16 aged-out refusals collected, writers kept", bad,
+                  "dead pid collected, live writer and own path kept, "
+                  "decoys untouched, wired on the CLI; pid_arms=%s"
+                  % ("measured" if pid_law else "unmeasured"))
+
+
+def ac_pan17():
+    """A wall clock stepped backwards cannot mint a name that was used before.
+
+    R2950's tag rested on the wall clock moving forward. The monotonic field is
+    the join that answers that: it is boot-relative and comparable across
+    processes, so a corrected clock moves one field and not the other. The
+    fields are read back, so the claim is about the NAME and not about the
+    intent of the function.
+    """
+    bad = 0
+    wall = 10 ** 18
+    forward = panel_module.make_tag(pid=777, when_ns=wall, mono_ns=5000)
+    back = panel_module.make_tag(pid=777, when_ns=wall - 10 ** 9, mono_ns=6000)
+    later = panel_module.make_tag(pid=777, when_ns=wall, mono_ns=7000)
+    if forward == back or forward == later or back == later:
+        bad += 1
+        print("  AC-PAN17 two tags collided: %r"
+              % ((forward, back, later),))
+    for tag, want_wall, want_mono in ((forward, wall, 5000),
+                                      (back, wall - 10 ** 9, 6000),
+                                      (later, wall, 7000)):
+        parts = tag.split("-")
+        if len(parts) != 4 or parts[0] != "777":
+            bad += 1
+            print("  AC-PAN17 the tag shape is not pid-wall-mono-seq: %r"
+                  % (tag,))
+            continue
+        for field in parts[1:]:
+            try:
+                int(field, 16)
+            except ValueError:
+                bad += 1
+                print("  AC-PAN17 a tag field is not hex: %r" % (tag,))
+                break
+        if int(parts[1], 16) != want_wall:
+            bad += 1
+            print("  AC-PAN17 the wall field ignores the injected clock: %r"
+                  % (tag,))
+        if int(parts[2], 16) != want_mono:
+            bad += 1
+            print("  AC-PAN17 the monotonic field ignores the injected clock: "
+                  "%r" % (tag,))
+    before = time.monotonic_ns()
+    live_tag = panel_module.make_tag()
+    after = time.monotonic_ns()
+    mono = int(live_tag.split("-")[2], 16)
+    if not before <= mono <= after:
+        bad += 1
+        print("  AC-PAN17 the default monotonic field is not a real reading: "
+              "%r not in [%d, %d]" % (live_tag, before, after))
+    live = panel_module.Panel()
+    if live.tag.split("-")[0] != str(os.getpid()):
+        bad += 1
+        print("  AC-PAN17 the live tag hides its own pid: %r" % (live.tag,))
+    return report("AC-PAN17 wall clock step cannot reuse a name", bad,
+                  "a corrected wall clock moves one field; the monotonic "
+                  "field still separates; the default is a real reading")
+
+
 def main():
     ac_pan1()
     ac_pan2()
@@ -1139,6 +1345,8 @@ def main():
     ac_pan13()
     ac_pan14()
     ac_pan15()
+    ac_pan16()
+    ac_pan17()
     passed = sum(1 for _name, ok in RESULTS if ok)
     total = len(RESULTS)
     print("SUITE %s %d/%d" % ("PASS" if passed == total else "FAIL",

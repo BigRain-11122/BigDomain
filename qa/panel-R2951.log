@@ -1,0 +1,32 @@
+PANEL-CLEANUP removed=0 kept=0 missing=0
+PASS AC-PAN1 page real and standing surfaces  byte-identical on both slash forms
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PASS AC-PAN2 state measured  listener on/off moved one face only
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PASS AC-PAN3 start really starts  spawned port accepts and serves the shipped page
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PASS AC-PAN4 refusals honest  400/409/404 with their own codes
+PANEL-CLEANUP removed=0 kept=0 missing=0
+PASS AC-PAN6 hygiene and registration  405/404 coded, module ASCII stdlib only, one registry row
+PANEL-CLEANUP removed=2 kept=0 missing=0
+PASS AC-PAN5 teardown leaves nothing  stopped port refused and the server took its child down
+PASS AC-PAN7 launcher declares owned faces  8 faces derived from FACE_KEYS/FACE_PORT_KEY
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PASS AC-PAN8 owned face refused, unowned still starts  409 E_PANEL_OWNED_BY_LAUNCHER and zero children
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PASS AC-PAN9 owned stop refused, local stop works  409 named refusal and the owner's port stayed open
+PANEL-CLEANUP removed=0 kept=0 missing=0
+PASS AC-PAN10 owned face measured, never assumed  live moved with the socket, owner stayed named
+PASS AC-PAN11 declaration wired through the CLI  parse_owned both ways and a real --owned-face process
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PANEL-CLEANUP removed=1 kept=0 missing=0
+PASS AC-PAN12 two panels in one process keep separate logs  distinct names, both on disk, no cross-write
+PASS AC-PAN13 two panel processes name their own writer  distinct paths carrying each pid; A's stop left B serving
+PANEL-CLEANUP removed=0 kept=1 missing=0
+PANEL-CLEANUP removed=0 kept=0 missing=0
+PANEL-CLEANUP removed=0 kept=0 missing=0
+PASS AC-PAN14 empty logs removed, evidence kept  clean teardown bounded, hard kill preserved, foreign files untouched
+PASS AC-PAN15 pid reuse cannot reuse a log name  same pid and same clock still differ; names stay traceable
+PASS AC-PAN16 aged-out refusals collected, writers kept  dead pid collected, live writer and own path kept, decoys untouched, wired on the CLI; pid_arms=measured
+PASS AC-PAN17 wall clock step cannot reuse a name  a corrected wall clock moves one field; the monotonic field still separates; the default is a real reading
+SUITE PASS 17/17

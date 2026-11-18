@@ -98,27 +98,184 @@ STOP_TIMEOUT_S = 3.0
 OWNER_LAUNCHER = "launcher"
 OWNER_PANEL = "panel"
 
+LOG_STEM = "bigdomain-panel-child-"
+LOG_SUFFIX = ".txt"
+# R2951: R2950 kept every log that carries bytes, for ever, so a panel that
+# kept failing accumulated without bound. The file exists to answer "why did
+# this click do nothing", which a week-old refusal still answers for a person
+# reading it and no longer answers for anyone else. The bound is an AGE and
+# the prune judges by evidence (see prune_logs), not by who owns the directory.
+LOG_PRUNE_AGE_S = 7 * 86400
+
 # R2950: the per-panel tag carries pid + wall_ns + a process-local counter.
-# R2949 used pid + four random bytes, which no criterion can prove unique -
-# a pid REUSED by a later process could in principle mint the same name again.
-# Randomness buys nothing provable here, so it was replaced by a monotonic
-# quantity: the counter separates two panels inside ONE process (the hardest
-# case, identical pid), and wall_ns separates two processes that shared a pid
-# at different times. The residual overlap - a clock stepped back to the same
-# nanosecond as an old process with the same pid - is declared out of range.
+# R2949 used pid + four random bytes, which no criterion can prove unique.
+# R2951: wall_ns alone still rested on the wall clock moving forward, so a
+# BOOT-RELATIVE monotonic reading joined it (time.monotonic_ns is QPC on
+# Windows: comparable across processes, unaffected by a clock correction).
+# The tag is pid-wall-mono-seq: a wall clock stepped back still differs in the
+# monotonic field, a reboot with the same pid still differs in the wall field,
+# and the counter separates two panels inside ONE process (identical pid and,
+# with an injected clock, identical stamps). What remains out of range is a
+# reboot, a reused pid AND a wall clock stepped back to the same nanosecond.
 _TAG_SEQ = itertools.count(1)
 
 
-def make_tag(pid=None, when_ns=None):
+def make_tag(pid=None, when_ns=None, mono_ns=None):
     """The name fragment that makes a panel's child log its own.
 
     Kept a module function rather than an expression so the uniqueness claim
-    is measurable: a caller can pin the pid and the clock and still get names
-    that differ, which is exactly what pid reuse needs.
+    is measurable: a caller can pin the pid, the wall clock and the monotonic
+    clock and still get names that differ, which is exactly what pid reuse
+    needs. ``mono_ns`` is injectable for the same reason - a criterion has to
+    be able to drive a wall clock backwards without waiting for one.
     """
     pid_value = os.getpid() if pid is None else int(pid)
     stamp = time.time_ns() if when_ns is None else int(when_ns)
-    return "%d-%x-%x" % (pid_value, stamp, next(_TAG_SEQ))
+    mono = time.monotonic_ns() if mono_ns is None else int(mono_ns)
+    return "%d-%x-%x-%x" % (pid_value, stamp, mono, next(_TAG_SEQ))
+
+
+def parse_log_name(name):
+    """(pid, wall_ns, mono_ns, seq, face) for a panel log name, else None.
+
+    A name outside the namespace, or one whose tag does not parse, answers
+    None: prune_logs never touches such a file, because "it looked like ours"
+    is not evidence that it is ours.
+    """
+    if not name.startswith(LOG_STEM) or not name.endswith(LOG_SUFFIX):
+        return None
+    body = name[len(LOG_STEM):-len(LOG_SUFFIX)]
+    parts = body.split("-")
+    if len(parts) < 5:
+        return None
+    try:
+        pid = int(parts[0])
+        wall = int(parts[1], 16)
+        mono = int(parts[2], 16)
+        seq = int(parts[3], 16)
+    except ValueError:
+        return None
+    face = "-".join(parts[4:])
+    if not face:
+        return None
+    return pid, wall, mono, seq, face
+
+
+FILETIME_EPOCH_OFFSET_NS = 116444736000000000 * 100
+_K32 = None
+_K32_LOADED = False
+
+
+def _k32():
+    """OpenProcess/GetProcessTimes entry points, or None off Windows."""
+    global _K32, _K32_LOADED
+    if _K32_LOADED:
+        return _K32
+    _K32_LOADED = True
+    if sys.platform != "win32":
+        return None
+    import ctypes
+    try:
+        k32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    except (OSError, AttributeError):
+        return None
+    k32.OpenProcess.restype = ctypes.c_void_p
+    k32.OpenProcess.argtypes = [ctypes.c_uint32, ctypes.c_int,
+                                ctypes.c_uint32]
+    k32.GetProcessTimes.restype = ctypes.c_int
+    k32.GetProcessTimes.argtypes = [ctypes.c_void_p, ctypes.c_void_p,
+                                    ctypes.c_void_p, ctypes.c_void_p,
+                                    ctypes.c_void_p]
+    k32.CloseHandle.restype = ctypes.c_int
+    k32.CloseHandle.argtypes = [ctypes.c_void_p]
+    _K32 = k32
+    return _K32
+
+
+def process_started(pid):
+    """("live", created_ns) | ("gone", None) | ("unknown", None).
+
+    The single question the prune asks about a name: is the process that wrote
+    this file still able to be the one that wrote it? ``gone`` is a kernel
+    answer (ERROR_INVALID_PARAMETER = no such process), ``unknown`` is a
+    refusal to guess - an access-denied read keeps the file, because deleting
+    evidence on a question we could not ask is the wrong side to be wrong on.
+    Windows-only, like the rest of this box's process law.
+    """
+    k32 = _k32()
+    if k32 is None:
+        return "unknown", None
+    import ctypes
+    handle = k32.OpenProcess(0x1000, 0, int(pid))
+    if not handle:
+        return ("gone" if ctypes.get_last_error() == 87 else "unknown"), None
+    try:
+        created = ctypes.c_uint64()
+        exited = ctypes.c_uint64()
+        kernel = ctypes.c_uint64()
+        user = ctypes.c_uint64()
+        if not k32.GetProcessTimes(handle, ctypes.byref(created),
+                                   ctypes.byref(exited), ctypes.byref(kernel),
+                                   ctypes.byref(user)):
+            return "unknown", None
+        return "live", int(created.value) * 100 - FILETIME_EPOCH_OFFSET_NS
+    finally:
+        k32.CloseHandle(handle)
+
+
+def prune_logs(root=None, age_s=None, now=None, own=()):
+    """Remove panel logs past the age bound, never a live writer's own.
+
+    R2951: a log with bytes is evidence and is never deleted by teardown, so
+    the only honest way to bound the pile is to delete evidence that has aged
+    out - and to delete ONLY that. Four rules, each of which a criterion
+    drives: (1) a name outside this namespace, or one whose tag does not
+    parse, is never touched; (2) a file younger than the bound stays; (3) a
+    file whose pid still names a process that started no later than the file
+    was written may be that writer's own log and stays; (4) a path the caller
+    declares as its OWN stays even then. Everything else is removed. A failed
+    unlink keeps the file and names it, because Windows refuses to delete a
+    file a live process still holds.
+    """
+    folder = tempfile.gettempdir() if root is None else root
+    bound_ns = int((LOG_PRUNE_AGE_S if age_s is None else float(age_s))
+                   * 1000000000)
+    clock_ns = int((time.time() if now is None else float(now)) * 1000000000)
+    own_paths = {os.path.abspath(path) for path in own or ()}
+    report = {"removed": [], "kept": [], "fresh": [], "unknown": []}
+    try:
+        names = sorted(os.listdir(folder))
+    except OSError:
+        return report
+    for name in names:
+        parsed = parse_log_name(name)
+        if parsed is None:
+            continue
+        path = os.path.join(folder, name)
+        if os.path.abspath(path) in own_paths:
+            report["kept"].append(path)
+            continue
+        try:
+            mtime_ns = int(os.stat(path).st_mtime_ns)
+        except OSError:
+            continue
+        if clock_ns - mtime_ns < bound_ns:
+            report["fresh"].append(path)
+            continue
+        state, created = process_started(parsed[0])
+        if state == "unknown":
+            report["unknown"].append(path)
+            continue
+        if state == "live" and created is not None and created <= mtime_ns:
+            report["kept"].append(path)
+            continue
+        try:
+            os.remove(path)
+        except OSError:
+            report["kept"].append(path)
+            continue
+        report["removed"].append(path)
+    return report
 
 
 def parse_owned(specs):
@@ -242,7 +399,7 @@ class Panel(object):
         """
         return os.path.join(
             tempfile.gettempdir(),
-            "bigdomain-panel-child-%s-%s.txt" % (self.tag, face_id))
+            "%s%s-%s%s" % (LOG_STEM, self.tag, face_id, LOG_SUFFIX))
 
     def url_of(self, face_id, port):
         if face_id == "lobby":
@@ -652,6 +809,13 @@ def main(argv=None):
 
     print("PANEL http://%s:%d/panel/" % (args.host,
                                         httpd.server_address[1]), flush=True)
+    # R2951: every panel launch is one prune window, so the pile of aged-out
+    # refusals is bounded without a scheduler. Printed after the address line
+    # because the launcher and the suites read that line first.
+    pruned = prune_logs()
+    print("PANEL-PRUNE removed=%d kept=%d fresh=%d unknown=%d"
+          % (len(pruned["removed"]), len(pruned["kept"]),
+             len(pruned["fresh"]), len(pruned["unknown"])), flush=True)
     try:
         while True:
             time.sleep(0.3)
