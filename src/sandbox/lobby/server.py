@@ -645,6 +645,11 @@ def build_parser():
 
 
 async def run_server(host, port, ping_interval, ping_timeout):
+    # R2946: judge at the bind SITE, not only in main(). serve() binds when the
+    # async with below is entered, so a caller that reaches this coroutine
+    # without passing through main() must not be able to bind beside a sandbox
+    # it does not belong to. judge() is a read: no claim, no write.
+    birth_gate.guard()
     try:
         async with serve(
             _handler,

@@ -1,0 +1,8 @@
+R2946 probe: ws-serve judged at the bind site, shipped lobby included.
+shipped lobby/server.py: serve line=654 run_server guard line=652
+live tree: ok=True modules=92 sites=14 refused=0 by_kind=http-server=8,server-subclass=2,ws-serve=1,socket-bind=3
+doctored world (guard removed from the door's own bytes): ok=False sites=1 refused=1
+  [refuse] E_BIND_UNGUARDED_FACE lobby/server.py:653 run_server kind=ws-serve detail=serve
+  doctored serve line=653 (shipped was 654)
+restored world (the same bytes as shipped): ok=True refused=0
+VERDICT PASS

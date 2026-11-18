@@ -41,12 +41,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2945 PRODUCT: the asyncio bind rule stopped being a text match. bind_site_scan now judges WHERE and WHEN the guard sits: an asyncio server site passes only when a statement-level birth_gate.guard(...) in the same body or module sits on a line strictly BEFORE the site line. A guard written after the await was green until this window although the socket already exists by then, and one under 'if False:' was green although it never runs; both are refused now, by name and line.",
-  "export_ts": "2026-11-18T16:00:13+08:00",
-  "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
-  "latest_evidence": "qa/bind-site-scan-R2944.log (337B, 2026-11-18)",
-  "next_milestone": "[R2946] next window (<=12h): (0) MAIN — this round closed the order/level hole for `asyncio-server`, and the SAME hole is still open one kind over: `ws-serve` is judged by `GUARD_TEXT in text`, i.e. a `birth_gate.guard(` anywhere in the MODULE (any function, after the `serve(...)`, or under `if False:`) passes. Decide and prove: either move ws-serve onto the same statement-order rule (guard statement in the same body, line strictly before the site line, with a red control on a guard after `serve(...)` and a pass when the same call is moved before), or declare module-level scope official with the reason in the same breath. (1) carried from R2941: `judge()` trusts the pid in the record and the record is a per-user writable file — decide whether the launcher writes a secret the face must echo back, or declare the trust official. (2) carried from R2937/R2938 and still undecided: the hard-kill proof covers the launcher's DIRECT children only — decide whether to measure grandchild inheritance or declare it out of scope by name (truncated)",
+  "do": "2026-11-18 R2946 PRODUCT: the ws-serve bind rule stopped being a module-wide text match, and the first thing the new rule did was REFUSE the shipped lobby - correctly: lobby/server.py had no guard inside run_server, only one in main(), so any caller reaching that coroutine directly could bind beside a sandbox it does not belong to. ws-serve now uses the same judgement as the asyncio kind (statement-level guard, same body, strictly before the site line), and the shipped door carries its own guard immediately before serve().",
+  "export_ts": "2026-11-18T16:21:11+08:00",
+  "latest_artifact": "qa/bind-scan-R2946.log (546B) + qa/leg-lobby-regress-R2946.log (413B) [2026-11-18 R2946]",
+  "latest_evidence": "qa/bind-site-scan-suite-R2946.log (176B, SUITE PASS 12/12, 2026-11-18)",
+  "next_milestone": "[R2947] next window (<=12h): (0) MAIN - the two bind kinds now share one rule but the gate still trusts a name: judge() reads the pid from a per-user WRITABLE record, and R2943/R2944/R2946 all inherited that trust without deciding it. Decide and prove: either the launcher writes a secret the face must echo back (red control: a rewritten record naming the caller's parent is refused), or declare the trust official in the same breath. (1) the hard-kill proof still covers DIRECT children only. (2) carried: 27 deep shard-6 rows, shard offset/resume, outs unmaintained entries, AC-VAC1..6, AC-LNKF1, the R2778 stand, 18 BOM scripts, tasks.md (ZERO payment capability), Docker absent, OSLoop LogonType=Interactive.",
   "outs": [
+    "qa/bind-scan-R2946.log (546B) + qa/bind-site-scan-suite-R2946.log (176B) + qa/leg-lobby-regress-R2946.log (413B) [2026-11-18 R2946]",
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 mtime]",
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
@@ -162,8 +163,8 @@
   },
   "results": [
     [
-      "2944",
-      "OSLoop 执行 tick"
+      "2946",
+      "OSLoop exec tick"
     ]
   ],
   "results_archive": {
@@ -185,5 +186,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 73235
+  "state_bytes": 58269
 }

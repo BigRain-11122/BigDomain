@@ -1,8 +1,10 @@
 """Suite for the static bind-site gate that bounds R2942's disclosed hole.
 
-Five criteria AC-BSC1..AC-BSC5. They were pinned in src/os/backlog.md BEFORE
-this file, src/sandbox/bind_site_scan.py and src/sandbox/bind_sites.json
-existed (in-window pre-registration, disclosed).
+Criteria AC-BSC1..AC-BSC12. AC-BSC1..AC-BSC5 were pinned in src/os/backlog.md
+BEFORE this file, src/sandbox/bind_site_scan.py and src/sandbox/bind_sites.json
+existed (in-window pre-registration, disclosed); AC-BSC6..AC-BSC7 came with the
+asyncio kind (R2944), AC-BSC8..AC-BSC9 with its order/level rule (R2945), and
+AC-BSC10..AC-BSC12 with the same rule applied to ws-serve (R2946).
 
 Nothing here is read off the scanner's own prose: every criterion builds a
 private world on disk, runs the SHIPPED ``scan()`` over it, and requires a
@@ -23,6 +25,7 @@ REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 LEAF = os.path.join(HERE, "bind_site_scan.py")
 BASELINE = os.path.join(HERE, "bind_sites.json")
 FRONTDOOR = os.path.join(HERE, "frontdoor.py")
+LOBBY = os.path.join(HERE, "lobby", "server.py")
 START_ALL = os.path.join(HERE, "start_all.py")
 REGISTRY = os.path.join(HERE, "reconcile_all.py")
 ROW = "bind-site-scan"
@@ -88,6 +91,36 @@ def write(root, rel, text):
 
 def codes(verdict):
     return [row["code"] for row in verdict["refused"]]
+
+
+def serve_line(text):
+    """Line of the first ``serve(...)`` call in ``text`` (0 when there is none).
+
+    Written here rather than imported from the scanner so a criterion never
+    grades the scanner with the scanner's own notion of where the site is.
+    """
+    for node in ast.walk(ast.parse(text)):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        name = func.attr if isinstance(func, ast.Attribute) else getattr(func, "id", "")
+        if name == "serve":
+            return node.lineno
+    return 0
+
+
+def top_level_guard_lines(body):
+    """Lines where a ``guard(...)`` call is a STATEMENT of ``body`` itself."""
+    lines = []
+    for stmt in body:
+        value = getattr(stmt, "value", None)
+        if not isinstance(value, ast.Call):
+            continue
+        func = value.func
+        name = func.attr if isinstance(func, ast.Attribute) else getattr(func, "id", "")
+        if name == "guard":
+            lines.append(stmt.lineno)
+    return lines
 
 
 def main():
@@ -479,6 +512,186 @@ def main():
     if not healed["ok"]:
         bad.append("hoisted-still-refused")
     report("AC-BSC9", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC10: a ws guard AFTER serve is too late -------------------
+    bad = []
+    root = fresh_world("bsc10")
+    ws_late = (
+        "import websockets\n"
+        "\n"
+        "async def run(handler, host, port):\n"
+        "    async with websockets.serve(handler, host, port):\n"
+        "        await asyncio.sleep(0)\n"
+        "    birth_gate.guard()\n"
+    )
+    ws_early = (
+        "import websockets\n"
+        "\n"
+        "async def run(handler, host, port):\n"
+        "    birth_gate.guard()\n"
+        "    async with websockets.serve(handler, host, port):\n"
+        "        await asyncio.sleep(0)\n"
+    )
+    ws_elsewhere = (
+        "import websockets\n"
+        "\n"
+        "async def run(handler, host, port):\n"
+        "    async with websockets.serve(handler, host, port):\n"
+        "        await asyncio.sleep(0)\n"
+        "\n"
+        "def main():\n"
+        "    birth_gate.guard()\n"
+    )
+    write(root, "late.py", ws_late)
+    write(root, "elsewhere.py", ws_elsewhere)
+    loud = bind_site_scan.scan(root=root)
+    if loud["ok"]:
+        bad.append("late-guard-passed")
+    late_rows = [r for r in loud["refused"] if r["path"] == "late.py"]
+    if not late_rows:
+        bad.append("late-not-named")
+    else:
+        row = late_rows[0]
+        if row["kind"] != "ws-serve":
+            bad.append("late-kind-%s" % row["kind"])
+        if row["line"] != 4:
+            bad.append("late-line-%s" % row["line"])
+        if row["function"] != "run":
+            bad.append("late-function-%s" % row["function"])
+        if row["code"] != bind_site_scan.UNGUARDED:
+            bad.append("late-code-%s" % row["code"])
+    # the shape that passed until R2946: a guard in ANOTHER function
+    if not [r for r in loud["refused"] if r["path"] == "elsewhere.py"]:
+        bad.append("other-function-guard-healed")
+    # red control: the SAME file with the SAME guard moved one line up
+    write(root, "late.py", ws_early)
+    os.remove(os.path.join(root, "elsewhere.py"))
+    healed = bind_site_scan.scan(root=root)
+    if not healed["ok"]:
+        bad.append("early-guard-still-refused")
+    report("AC-BSC10", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC11: the shipped lobby is judged at the site --------------
+    bad = []
+    with open(LOBBY, encoding="utf-8") as handle:
+        shipped = handle.read()
+    tree = ast.parse(shipped)
+    run_node = None
+    for node in tree.body:
+        if isinstance(node, ast.AsyncFunctionDef) and node.name == "run_server":
+            run_node = node
+            break
+    if run_node is None:
+        bad.append("no-run_server")
+    else:
+        site = serve_line(shipped)
+        guards = top_level_guard_lines(run_node.body)
+        if not guards:
+            bad.append("no-site-guard")
+        elif not any(line < site for line in guards):
+            bad.append("site-guard-not-before-serve")
+    live = bind_site_scan.scan(root=HERE)
+    if not live["ok"]:
+        bad.append("shipped-tree-refused")
+    if live["sites"] != 14:
+        bad.append("live-sites-%d" % live["sites"])
+    if live["by_kind"].get("ws-serve") != 1:
+        bad.append("live-ws-%s" % live["by_kind"].get("ws-serve"))
+    if live["by_kind"].get("asyncio-server"):
+        bad.append("live-asyncio-%d" % live["by_kind"]["asyncio-server"])
+    # real-bytes red control: the door's OWN shipped source with the one guard
+    # statement removed must be refused by name, and restoring the same bytes
+    # must turn that world green.
+    root = fresh_world("bsc11")
+    doctored_lines = shipped.splitlines(True)
+    drop = None
+    for node in ast.walk(run_node):
+        if isinstance(node, ast.Expr) and isinstance(node.value, ast.Call):
+            func = node.value.func
+            name = (func.attr if isinstance(func, ast.Attribute)
+                    else getattr(func, "id", ""))
+            if name == "guard" and node.lineno <= serve_line(shipped):
+                drop = node.lineno
+                break
+    if drop is None:
+        bad.append("no-guard-statement-to-drop")
+    else:
+        doctored = "".join(doctored_lines[:drop - 1] + doctored_lines[drop:])
+        write(root, os.path.join("lobby", "server.py"), doctored)
+        loud = bind_site_scan.scan(root=root)
+        if loud["ok"]:
+            bad.append("doctored-lobby-passed")
+        rows = [r for r in loud["refused"] if r["path"] == "lobby/server.py"]
+        if not rows:
+            bad.append("doctored-not-named")
+        else:
+            row = rows[0]
+            if row["kind"] != "ws-serve":
+                bad.append("doctored-kind-%s" % row["kind"])
+            if row["function"] != "run_server":
+                bad.append("doctored-function-%s" % row["function"])
+            if row["line"] != serve_line(doctored):
+                bad.append("doctored-line-%s-%s" % (row["line"],
+                                                    serve_line(doctored)))
+        write(root, os.path.join("lobby", "server.py"), shipped)
+        restored = bind_site_scan.scan(root=root)
+        if not restored["ok"]:
+            bad.append("restored-lobby-refused")
+    report("AC-BSC11", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC12: a ws guard inside a branch is not a gate -------------
+    bad = []
+    root = fresh_world("bsc12")
+    ws_dead = (
+        "import websockets\n"
+        "\n"
+        "async def run(handler, host, port):\n"
+        "    if False:\n"
+        "        birth_gate.guard()\n"
+        "    async with websockets.serve(handler, host, port):\n"
+        "        await asyncio.sleep(0)\n"
+    )
+    ws_branch = (
+        "import websockets\n"
+        "\n"
+        "async def run(handler, host, port, ready):\n"
+        "    if ready:\n"
+        "        birth_gate.guard()\n"
+        "    async with websockets.serve(handler, host, port):\n"
+        "        await asyncio.sleep(0)\n"
+    )
+    ws_hoisted = (
+        "import websockets\n"
+        "\n"
+        "async def run(handler, host, port):\n"
+        "    birth_gate.guard()\n"
+        "    async with websockets.serve(handler, host, port):\n"
+        "        await asyncio.sleep(0)\n"
+    )
+    ws_assigned = (
+        "import websockets\n"
+        "\n"
+        "async def run(handler, host, port, ready):\n"
+        "    ok = birth_gate.guard()\n"
+        "    async with websockets.serve(handler, host, port):\n"
+        "        await asyncio.sleep(0)\n"
+    )
+    write(root, "dead.py", ws_dead)
+    write(root, "branch.py", ws_branch)
+    loud = bind_site_scan.scan(root=root)
+    if loud["ok"]:
+        bad.append("nested-ws-guards-passed")
+    named = set(r["path"] for r in loud["refused"])
+    if "dead.py" not in named:
+        bad.append("if-false-guard-counted")
+    if "branch.py" not in named:
+        bad.append("branch-guard-counted")
+    write(root, "dead.py", ws_hoisted)
+    write(root, "branch.py", ws_assigned)
+    healed = bind_site_scan.scan(root=root)
+    if not healed["ok"]:
+        bad.append("hoisted-still-refused")
+    report("AC-BSC12", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

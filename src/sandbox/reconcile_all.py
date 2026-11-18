@@ -312,7 +312,11 @@ SUITES = [
     # which guard CALL counts is now judged (statement level in the same body,
     # strictly before the site line), so a guard after the await or one nested
     # in a branch no longer passes.
-    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 9),
+    # R2946: the ws-serve kind moved onto the same judgement as the asyncio
+    # kind (statement level, same body, strictly before the site line), so a
+    # guard after serve(), in another function, or in a branch no longer
+    # passes, and the shipped lobby is judged at its own bind site.
+    ("bind-site-scan", os.path.join("test_bind_site_scan.py"), 12),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the

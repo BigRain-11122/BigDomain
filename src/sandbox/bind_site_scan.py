@@ -24,9 +24,20 @@ Five kinds of site are recognised, and each has one rule:
     through the gate.  Otherwise ``E_BIND_UNGUARDED_FACE``.
 
 ``ws-serve``
-    a ``serve(...)`` call in a module that imports websockets must live in a
-    module that calls ``birth_gate.guard(``.  Otherwise
-    ``E_BIND_UNGUARDED_FACE``.
+    a ``serve(...)`` call in a module that imports websockets binds when its
+    ``async with`` is entered, so it is judged exactly where the asyncio site
+    is judged: it must sit inside a ``*.checked_server(...)`` call, or an
+    ordinary statement-level ``birth_gate.guard(...)`` must stand in the SAME
+    body (function or module) on a line strictly BEFORE the site line.
+    Otherwise ``E_BIND_UNGUARDED_FACE``.
+
+    R2946 tightened this the way R2945 tightened the asyncio kind, because the
+    rule until then was ``birth_gate.guard(`` appearing ANYWHERE in the module
+    text - so a guard written AFTER ``serve(...)``, a guard in another
+    function, and a guard under ``if False:`` all passed.  The two kinds now
+    share one judgement rather than one strict rule and one text match.  The
+    price is stated, not hidden: a guard inside a real branch is refused too,
+    because a static read cannot prove the branch runs.
 
 ``asyncio-server``
     an ``asyncio.start_server(...)`` / ``<loop>.create_server(...)`` /
@@ -85,7 +96,6 @@ SKIP_DIRS = frozenset(("vendor", "node_modules", "__pycache__", "pycrdt-poc",
                        ".git", ".venv", "venv"))
 
 GUARD_CALL = "checked_server"
-GUARD_TEXT = "birth_gate.guard("
 
 UNGUARDED = "E_BIND_UNGUARDED_FACE"
 UNAPPROVED = "E_BIND_SITE_UNAPPROVED"
@@ -196,7 +206,6 @@ def scan_source(path, text):
                      "detail": str(exc)})
         return rows
     has_checked = GUARD_CALL in text
-    has_birth_guard = GUARD_TEXT in text
     imports_websockets = "websockets" in text
     bare_start = _start_server_imported(tree)
     stack = [(tree, [], None)]
@@ -221,10 +230,15 @@ def scan_source(path, text):
                         "detail": callee,
                     })
                 elif callee == "serve" and imports_websockets:
+                    container = func_node if func_node is not None else tree
+                    guarded = (
+                        any(_is_guarded_call(a) for a in here) or
+                        any(line < child.lineno
+                            for line in _level_guard_lines(container.body)))
                     rows.append({
                         "path": rel, "line": child.lineno,
                         "function": name, "kind": "ws-serve",
-                        "code": None if has_birth_guard else UNGUARDED,
+                        "code": None if guarded else UNGUARDED,
                         "detail": callee,
                     })
                 else:
