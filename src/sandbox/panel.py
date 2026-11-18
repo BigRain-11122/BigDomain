@@ -31,6 +31,7 @@ a refusal names its own error code rather than pretending success.
 """
 
 import argparse
+import itertools
 import json
 import os
 import socket
@@ -96,6 +97,28 @@ START_TIMEOUT_S = 25.0
 STOP_TIMEOUT_S = 3.0
 OWNER_LAUNCHER = "launcher"
 OWNER_PANEL = "panel"
+
+# R2950: the per-panel tag carries pid + wall_ns + a process-local counter.
+# R2949 used pid + four random bytes, which no criterion can prove unique -
+# a pid REUSED by a later process could in principle mint the same name again.
+# Randomness buys nothing provable here, so it was replaced by a monotonic
+# quantity: the counter separates two panels inside ONE process (the hardest
+# case, identical pid), and wall_ns separates two processes that shared a pid
+# at different times. The residual overlap - a clock stepped back to the same
+# nanosecond as an old process with the same pid - is declared out of range.
+_TAG_SEQ = itertools.count(1)
+
+
+def make_tag(pid=None, when_ns=None):
+    """The name fragment that makes a panel's child log its own.
+
+    Kept a module function rather than an expression so the uniqueness claim
+    is measurable: a caller can pin the pid and the clock and still get names
+    that differ, which is exactly what pid reuse needs.
+    """
+    pid_value = os.getpid() if pid is None else int(pid)
+    stamp = time.time_ns() if when_ns is None else int(when_ns)
+    return "%d-%x-%x" % (pid_value, stamp, next(_TAG_SEQ))
 
 
 def parse_owned(specs):
@@ -190,7 +213,8 @@ def read_notices(path=LEDGER_CONFIG):
 class Panel(object):
     """The children this panel owns; nothing else is ever terminated."""
 
-    def __init__(self, host="127.0.0.1", timeout=START_TIMEOUT_S, owned=None):
+    def __init__(self, host="127.0.0.1", timeout=START_TIMEOUT_S, owned=None,
+                 tag_pid=None, tag_ns=None):
         self.host = host
         self.timeout = float(timeout)
         self.lock = threading.Lock()
@@ -199,10 +223,14 @@ class Panel(object):
         self.owned = dict(owned or {})
         # R2949: the child-log name was machine-wide per face id, so a second
         # panel on the same box overwrote the first one's evidence. The tag
-        # carries this panel's own pid plus four random bytes, so two panels -
-        # even two inside ONE process - can never share a file, and a name on
-        # disk still says which process wrote it.
-        self.tag = "%d-%s" % (os.getpid(), os.urandom(4).hex())
+        # carries this panel's own pid, so a name on disk still says which
+        # process wrote it.
+        # R2950: the uniqueness half is a monotonic stamp + counter instead of
+        # four random bytes, so pid reuse cannot mint the same name again.
+        self.tag = make_tag(tag_pid, tag_ns)
+        # Every log THIS panel created, so teardown can never reach a file it
+        # did not write (the same-user writable temp dir is shared ground).
+        self.logs = set()
 
     def log_path_for(self, face_id):
         """Where THIS panel keeps what a child says on stderr.
@@ -350,6 +378,7 @@ class Panel(object):
                 log_handle.close()
             self.children[face_id] = {"port": port, "proc": proc,
                                       "ports": ports, "log": log_path}
+            self.logs.add(log_path)
         if not wait_port(self.host, port, self.timeout,
                          (self.children.get(face_id) or {}).get("proc")):
             child_log = read_tail(self.children.get(face_id, {}).get("log"))
@@ -427,6 +456,43 @@ class Panel(object):
             face_ids = list(self.children)
         for face_id in face_ids:
             self._kill(face_id)
+
+    def release_logs(self):
+        """Drop the logs this panel wrote that carry NOTHING; keep the rest.
+
+        R2950: R2949 made each panel's child log its own file, and the price
+        was accumulation - a panel that started five faces left five files in
+        %TEMP% for ever. The file exists to answer one question ("why did this
+        click do nothing?"), so an EMPTY file answers nothing and is removed,
+        while any file with bytes is exactly the named refusal a person needs
+        and is kept even after the panel is gone. A panel killed hard runs no
+        teardown, so its files survive untouched for post-mortem. Only paths
+        this panel created are ever touched, and the call belongs AFTER the
+        children are gone: Windows refuses to unlink a file a live child still
+        holds on its stderr, so a still-running face's empty log is removed by
+        that face's stop or the panel's shutdown rather than while it runs
+        (measured by AC-PAN14).
+        """
+        with self.lock:
+            paths = sorted(self.logs)
+            self.logs.clear()
+        report = {"removed": [], "kept": [], "missing": []}
+        for path in paths:
+            try:
+                size = os.path.getsize(path)
+            except OSError:
+                report["missing"].append(path)
+                continue
+            if size:
+                report["kept"].append(path)
+                continue
+            try:
+                os.remove(path)
+            except OSError:
+                report["kept"].append(path)
+                continue
+            report["removed"].append(path)
+        return report
 
 
 class PanelHandler(BaseHTTPRequestHandler):
@@ -537,6 +603,12 @@ class PanelServer(ThreadingHTTPServer):
     def shutdown(self):
         try:
             self.panel.stop_all()
+            # R2950: the clean path is the only one that may delete anything -
+            # empty logs only, and only files this panel wrote.
+            report = self.panel.release_logs()
+            print("PANEL-CLEANUP removed=%d kept=%d missing=%d"
+                  % (len(report["removed"]), len(report["kept"]),
+                     len(report["missing"])), flush=True)
         finally:
             ThreadingHTTPServer.shutdown(self)
 

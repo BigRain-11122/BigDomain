@@ -8,7 +8,10 @@ blind and a page click could start a SECOND lobby beside the running one.
 AC-PAN12..AC-PAN13 were pre-registered in the R2949 row BEFORE the per-panel
 log namespace existed: R2948 kept each child's stderr (the only place a named
 refusal can come from) in ONE machine-wide file per face id, so a second panel
-silently overwrote the first one's evidence.
+silently overwrote the first one's evidence. AC-PAN14..AC-PAN15 were
+pre-registered in the R2950 row BEFORE the teardown existed: a per-panel file
+that is never removed accumulates, and the tag's four random bytes could not
+prove that a reused pid never mints the same name again.
 
 Nothing here is read off a canned string: the panel is really started, the
 start route really spawns a shipped module, an independent TCP connect checks
@@ -16,7 +19,7 @@ the port it reports, the served URL is compared against the page bytes on
 disk, and the teardown leg proves the children are gone.
 
 Usage: python test_panel.py
-Exit: 0 = SUITE PASS 13/13, 2 = FAIL.
+Exit: 0 = SUITE PASS 15/15, 2 = FAIL.
 """
 
 import hashlib
@@ -853,6 +856,273 @@ def ac_pan13():
                   "distinct paths carrying each pid; A's stop left B serving")
 
 
+def terminate_pid(pid):
+    """Terminate one process by pid - used only to clean up an orphan face."""
+    import ctypes
+    PROCESS_TERMINATE = 0x0001
+    handle = ctypes.windll.kernel32.OpenProcess(PROCESS_TERMINATE, False,
+                                                int(pid))
+    if handle:
+        try:
+            ctypes.windll.kernel32.TerminateProcess(handle, 1)
+        finally:
+            ctypes.windll.kernel32.CloseHandle(handle)
+
+
+def kill_by_port(port):
+    """Last-resort cleanup for a face orphaned by a hard-killed panel.
+
+    Only a LISTENING row counts (an ESTABLISHED row names a different owner)
+    and this suite never kills itself or its own parent - a TerminateProcess
+    on self exits silently with rc=1 and looks exactly like a crash.
+    """
+    mine = (os.getpid(), os.getppid())
+    try:
+        out = subprocess.run(
+            ["netstat", "-ano"], stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL, timeout=25).stdout.decode(
+                "utf-8", "replace")
+    except (OSError, subprocess.SubprocessError):
+        return
+    needle = "127.0.0.1:%d" % int(port)
+    for line in out.splitlines():
+        if "LISTENING" not in line or needle not in line:
+            continue
+        parts = line.split()
+        if not parts or not parts[-1].isdigit():
+            continue
+        pid = int(parts[-1])
+        if pid in mine:
+            continue
+        try:
+            terminate_pid(pid)
+        except OSError:
+            pass
+
+
+def ac_pan14():
+    """A panel's child logs are BOUNDED: empty ones die, evidence survives.
+
+    The file exists to answer one question ("why did this click do nothing?"),
+    so an empty file answers nothing and a clean teardown removes it, while a
+    file with bytes is the named refusal a person needs and is kept even after
+    the panel is gone. A panel killed hard runs no teardown, so its files
+    survive untouched.
+    """
+    bad = 0
+    temp = tempfile.gettempdir()
+    shared = os.path.join(temp, "bigdomain-panel-child-ugc.txt")
+    foreign = os.path.join(temp, "bigdomain-panel-child-4242-1-1-ugc.txt")
+    decoys = {shared: b"R2950 decoy: the old machine-wide slot\n",
+              foreign: b"R2950 decoy: some other panel's log\n"}
+    path_a = path_b = path_c = hard_path = None
+    hard_port = None
+    proc = None
+    httpd_a = httpd_b = httpd_c = None
+    try:
+        # (1) the BOUNDARY, measured: while the child still holds the stderr
+        # handle, Windows refuses the unlink, so an empty log survives a
+        # release and is named in kept. The panel removes it once the child is
+        # gone, which is what (1b) drives.
+        httpd_a, panel_a = panel_module.start_panel("127.0.0.1", 0)
+        base_a = "http://127.0.0.1:%d" % httpd_a.server_address[1]
+        code, started = jhttp(base_a + "/panel/api/start", "POST",
+                              {"face": "ugc"}, timeout=40.0)
+        if code != 200:
+            bad += 1
+            print("  AC-PAN14 could not start ugc: %s %r" % (code, started))
+            path_a = panel_a.log_path_for("ugc")
+        else:
+            path_a = started.get("child_log_path")
+            size = os.path.getsize(path_a)
+            if size:
+                bad += 1
+                print("  AC-PAN14 a healthy face wrote %dB, so this arm "
+                      "cannot measure the empty-log rule" % size)
+        for path, payload in decoys.items():
+            try:
+                with open(path, "wb") as handle:
+                    handle.write(payload)
+            except OSError as exc:
+                bad += 1
+                print("  AC-PAN14 could not place a decoy: %r" % (exc,))
+        alive = panel_a.release_logs()
+        if path_a and path_a in alive["removed"]:
+            bad += 1
+            print("  AC-PAN14 a log was removed while its child held it")
+        elif path_a and path_a not in alive["kept"]:
+            bad += 1
+            print("  AC-PAN14 the live-child release did not name the file: %r"
+                  % (alive,))
+
+        # (1b) once the child is gone the same rule removes it by name.
+        httpd_b, panel_b = panel_module.start_panel("127.0.0.1", 0)
+        base_b = "http://127.0.0.1:%d" % httpd_b.server_address[1]
+        code, started_b = jhttp(base_b + "/panel/api/start", "POST",
+                                {"face": "ugc"}, timeout=40.0)
+        if code != 200:
+            bad += 1
+            print("  AC-PAN14 arm 1b answered %s %r" % (code, started_b))
+            path_b = panel_b.log_path_for("ugc")
+        else:
+            path_b = started_b.get("child_log_path")
+        panel_b.stop("ugc")
+        after_stop = panel_b.release_logs()
+        if path_b and path_b not in after_stop["removed"]:
+            bad += 1
+            print("  AC-PAN14 release_logs did not name the empty log: %r"
+                  % (after_stop,))
+        if path_b and os.path.exists(path_b):
+            bad += 1
+            print("  AC-PAN14 the empty log survived its child: %r"
+                  % (path_b,))
+
+        # (3) bytes are evidence: they survive the same clean teardown.
+        httpd_c, panel_c = panel_module.start_panel("127.0.0.1", 0)
+        base_c = "http://127.0.0.1:%d" % httpd_c.server_address[1]
+        code, started_c = jhttp(base_c + "/panel/api/start", "POST",
+                                {"face": "ugc"}, timeout=40.0)
+        if code != 200:
+            bad += 1
+            print("  AC-PAN14 arm 3 answered %s %r" % (code, started_c))
+            path_c = panel_c.log_path_for("ugc")
+        else:
+            path_c = started_c.get("child_log_path")
+            words = b"E_FACE_NOT_LAUNCHED_BY_HOLDER (R2950 kept arm)\n"
+            with open(path_c, "wb") as handle:
+                handle.write(words)
+            before = digest(path_c)
+            httpd_c.shutdown()
+            httpd_c.server_close()
+            httpd_c = None
+            if not os.path.exists(path_c):
+                bad += 1
+                print("  AC-PAN14 a clean teardown deleted the refusal bytes")
+            elif digest(path_c) != before:
+                bad += 1
+                print("  AC-PAN14 the kept log's bytes moved")
+
+        # (4) a panel killed HARD runs no teardown, so its file stays for
+        # post-mortem - and the orphan face it left is cleaned up by port.
+        proc, base_d = spawn_panel()
+        if not base_d:
+            bad += 1
+            print("  AC-PAN14 the hard-kill panel never printed its address")
+        else:
+            code, started_d = jhttp(base_d + "/panel/api/start", "POST",
+                                    {"face": "ugc"}, timeout=40.0)
+            if code != 200:
+                bad += 1
+                print("  AC-PAN14 hard-kill arm answered %s %r"
+                      % (code, started_d))
+            else:
+                hard_path = started_d.get("child_log_path")
+                hard_port = started_d.get("port")
+                proc.kill()
+                proc.wait(timeout=15)
+                proc = None
+                if not (hard_path and os.path.exists(hard_path)):
+                    bad += 1
+                    print("  AC-PAN14 a hard-killed panel took its log with it")
+
+        # (5) teardown only ever touches its own files.
+        for path, payload in decoys.items():
+            if not os.path.exists(path):
+                bad += 1
+                print("  AC-PAN14 a foreign file was deleted: %r" % (path,))
+            elif digest(path) != hashlib.sha256(payload).hexdigest():
+                bad += 1
+                print("  AC-PAN14 a foreign file was rewritten: %r" % (path,))
+    finally:
+        for httpd in (httpd_a, httpd_b, httpd_c):
+            if httpd is not None:
+                try:
+                    httpd.shutdown()
+                    httpd.server_close()
+                except Exception:
+                    pass
+        stop_panel(proc)
+        if hard_port:
+            kill_by_port(hard_port)
+        for path in (path_a, path_b, path_c, hard_path, shared, foreign):
+            if path and os.path.exists(path):
+                try:
+                    os.remove(path)
+                except OSError:
+                    pass
+    return report("AC-PAN14 empty logs removed, evidence kept", bad,
+                  "clean teardown bounded, hard kill preserved, foreign files "
+                  "untouched")
+
+
+def ac_pan15():
+    """A pid reused later cannot mint the same child-log name again."""
+    bad = 0
+    stamp = 10 ** 18
+    first = panel_module.make_tag(pid=4242, when_ns=stamp)
+    second = panel_module.make_tag(pid=4242, when_ns=stamp)
+    reused = panel_module.make_tag(pid=4242, when_ns=stamp + 1)
+    if first == second:
+        bad += 1
+        print("  AC-PAN15 the same pid and clock minted the same name: %r"
+              % (first,))
+    if len({first, second, reused}) != 3:
+        bad += 1
+        print("  AC-PAN15 pid reuse collided: %r"
+              % ((first, second, reused),))
+    for tag in (first, second, reused):
+        parts = tag.split("-")
+        if parts[0] != "4242" or len(parts) != 3:
+            bad += 1
+            print("  AC-PAN15 the tag does not read pid-stamp-seq: %r"
+                  % (tag,))
+        else:
+            for part in parts[1:]:
+                try:
+                    int(part, 16)
+                except ValueError:
+                    bad += 1
+                    print("  AC-PAN15 a tag field is not hex: %r" % (tag,))
+                    break
+    live = panel_module.Panel()
+    if live.tag.split("-")[0] != str(os.getpid()):
+        bad += 1
+        print("  AC-PAN15 the live tag hides its own pid: %r" % (live.tag,))
+    path_a = path_b = None
+    a_panel = panel_module.Panel(tag_pid=4242, tag_ns=stamp)
+    b_panel = panel_module.Panel(tag_pid=4242, tag_ns=stamp)
+    path_a = a_panel.log_path_for("ugc")
+    path_b = b_panel.log_path_for("ugc")
+    try:
+        if path_a == path_b:
+            bad += 1
+            print("  AC-PAN15 two panels on one pid shared a file: %r"
+                  % (path_a,))
+        for path in (path_a, path_b):
+            name = os.path.basename(path)
+            if not name.startswith("bigdomain-panel-child-"):
+                bad += 1
+                print("  AC-PAN15 name lost its stem: %r" % (name,))
+            if "ugc" not in name or "4242" not in name:
+                bad += 1
+                print("  AC-PAN15 name lost the face id or the pid: %r"
+                      % (name,))
+            with open(path, "wb") as handle:
+                handle.write(b"R2950 pid-reuse arm\n")
+        if not (os.path.exists(path_a) and os.path.exists(path_b)):
+            bad += 1
+            print("  AC-PAN15 the two reuse logs do not coexist")
+    finally:
+        for path in (path_a, path_b):
+            if path and os.path.exists(path):
+                try:
+                    os.remove(path)
+                except OSError:
+                    pass
+    return report("AC-PAN15 pid reuse cannot reuse a log name", bad,
+                  "same pid and same clock still differ; names stay traceable")
+
+
 def main():
     ac_pan1()
     ac_pan2()
@@ -867,6 +1137,8 @@ def main():
     ac_pan11()
     ac_pan12()
     ac_pan13()
+    ac_pan14()
+    ac_pan15()
     passed = sum(1 for _name, ok in RESULTS if ok)
     total = len(RESULTS)
     print("SUITE %s %d/%d" % ("PASS" if passed == total else "FAIL",

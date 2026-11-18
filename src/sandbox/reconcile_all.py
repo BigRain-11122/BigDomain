@@ -329,7 +329,13 @@ SUITES = [
     # per-panel tag, the path is published in the start answer, and two panels
     # in one process and two real panel processes are both measured to coexist
     # (pre-registered in src/os/backlog.md at R2949 BEFORE the edit).
-    ("panel", os.path.join("test_panel.py"), 13),
+    # R2950 added AC-PAN14..AC-PAN15 (bounded logs + provable tag): a clean
+    # teardown removes only the EMPTY log a panel wrote, a log with bytes
+    # survives as evidence, a hard-killed panel deletes nothing, and the tag
+    # uses a monotonic stamp plus a counter so a reused pid cannot mint the
+    # same name again (pre-registered in src/os/backlog.md at R2950 BEFORE the
+    # edit).
+    ("panel", os.path.join("test_panel.py"), 15),
     # R2938 added AC-PAN7..AC-PAN11 (declared ownership): the launcher hands
     # the panel the faces it already serves with the ports it measured, and the
     # panel refuses to start or stop them by name instead of forking the
