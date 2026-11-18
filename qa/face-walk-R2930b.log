@@ -1,0 +1,8 @@
+WALK page=face-sweep.html chars=2566 errors=0 failed=0 dead=0 shot=C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/qa/R2930c-face-sweep.png bytes=161330 OK
+WALK-TOTAL pages=1 ok=1 blank=0 errors=0 failed=0 dead_links=0 shots=1 rc=0
+POST-FIX CENSUS (all preview pages)
+
+WALK-TOTAL pages=40 ok=40 blank=0 errors=0 failed=0 dead_links=0 shots=0 rc=0
+
+
+FACE-SWEEP OWN GATE: VERDICT PASS 21/21 (AC-FSW19 added: links resolve page-relative)

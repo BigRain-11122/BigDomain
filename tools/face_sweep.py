@@ -156,7 +156,7 @@ COL_MEANING = "\u8fd9\u4e00\u884c FAIL \u5bf9\u6536\u5165\u610f\u5473\u7740\u4ec
 CRITERIA = ["AC-FSW0", "AC-FSW1", "AC-FSW2", "AC-FSW3", "AC-FSW3b", "AC-FSW4",
             "AC-FSW5", "AC-FSW6", "AC-FSW7", "AC-FSW8", "AC-FSW9", "AC-FSW10",
             "AC-FSW11", "AC-FSW12", "AC-FSW13", "AC-FSW14", "AC-FSW15",
-            "AC-FSW16", "AC-FSW17", "AC-FSW18"]
+            "AC-FSW16", "AC-FSW17", "AC-FSW18", "AC-FSW19"]
 
 # AC-FSW9: the per-face byte counts are a snapshot of the sweep that wrote them, never a
 # live equality claim. Any face re-rendered afterwards changes its own bytes, so asserting
@@ -421,7 +421,8 @@ def build_html(rows, sizes, stamp):
             '<tr><td><a href="%s">%s</a><br><span style="color:#7b8595;font-size:12px">%s</span>%s</td>'
             '<td><span class="tag %s">%s</span></td><td class="n">%d</td><td class="n">%.2fs</td>'
             '<td class="n">%s / %s</td><td>%s</td></tr>'
-            % (r["html"], r["label"], r["driver"],
+            % ((os.path.basename(r["html"]) if r["html"] else ""), r["label"],
+               "%s \u00b7 %s" % (r["driver"], r["html"]) if r["html"] else r["driver"],
                (' <span class="tag bad">MUTATED %s</span>' % ",".join(r.get("mutated_files") or []))
                if r.get("mutated") else "",
                tag, _esc(r["verdict"]), r["exit"],
@@ -506,6 +507,18 @@ def check():
     # AC-FSW1 the document states its own landed byte counts
     if doc.get("sizes") != {"html": dh, "json": dj}:
         fails.append("AC-FSW1 sizes %r != disk %r" % (doc.get("sizes"), {"html": dh, "json": dj}))
+
+    # AC-FSW19 (R2930) a link on this page must resolve the way a BROWSER
+    # resolves it - against the page's own directory. This board shipped
+    # repo-relative hrefs for its whole life, so every one of its links 404'd
+    # for a reader who opened it from disk, and nothing here graded links at all.
+    page_base = os.path.dirname(OUT_HTML)
+    for href in re.findall(r'href="([^"]+)"', html_text):
+        target = href.split("#", 1)[0].split("?", 1)[0]
+        if "://" in target or target.startswith(("mailto:", "javascript:", "data:")):
+            continue
+        if not os.path.isfile(os.path.normpath(os.path.join(page_base, target))):
+            fails.append("AC-FSW19 link target missing: %s" % href)
 
     # AC-FSW2 one row per registered face, ids unique
     rows = doc.get("faces") or []

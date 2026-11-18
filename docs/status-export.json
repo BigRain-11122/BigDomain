@@ -1,16 +1,18 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [],
+    "board_pages_skipped": [
+      "preview/face-sweep.html (7000B)"
+    ],
     "current": "2026-11-18 R2930 PRODUCT: for the first time in this repo a shipped preview face was opened in a REAL browser, and the first walk found a defect. tools/face_walk.py loads each named page from disk in headless Edge (no browser download needed), counts body text, console errors, pageerrors, failed requests and dead LOCAL links resolved from the DOM, writes one full-page PNG per page and refuses its own screenshot unless the bytes start with the PNG signature. Live cohort 5/5 green and the all-40-face census reads pages=40 ok=39 dead_links=9 (qa/face-walk-R2930.log, 5478B, qa_log --check PASS), with all 9 on ONE page.",
-    "last_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
-    "latest_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
+    "last_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
+    "latest_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\filing-checklist.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/face-walk-R2930.log (5478B, 2026-11-18)",
-    "latest_evidence": "qa/face-walk-R2930.log (5478B, 2026-11-18)",
-    "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2931] next window (<=12h): (0) MAIN — `preview/face-sweep.html` still shows 9 dead links of the same birth-site class (repo-relative hrefs rendered verbatim by `tools/face_sweep.py`); repair to href=basename AND re-pin that page's own byte self-check (AC-FSW1) in the SAME commit, then re-walk the page to `dead=0` — a page a CEO clicks from `index.html` must not 404. (1) `tools/face_walk.py` ships with NO suite because playwright is not stdlib: either pin it with a stdlib-only arm that skips BY NAME when no browser is present, or declare the on-demand posture in the board — decide with a red control, not by silence. (2) ALSO carried: the R2926 commit gate refuses STAGED bytes only, so an uncommitted non-tee write still reaches disk (truncated)",
-    "next_milestone_due": "2026-11-18T23:55:14+08:00",
-    "updated_at": "2026-11-18T11:55:14+08:00"
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/face-walk-R2930b.log (437B, 2026-11-18)",
+    "latest_evidence": "qa/face-walk-R2930b.log (437B, 2026-11-18)",
+    "newest_pair_on_disk_is_board": true,
+    "next_milestone": "[R2931] next window (<=12h): (0) CLOSED IN-WINDOW at R2930 second pass — `preview/face-sweep.html` rendered repo-relative hrefs like filing_checklist did, so its 9 links all 404'd; repaired to href=basename with the repo path kept as visible text, `AC-FSW19` added so its own gate resolves links page-relative, page regenerated 7000B and its gate reads PASS 21/21, its suite 44/44, and the FULL census now reads pages=40 ok=40 dead_links=0 rc=0 (qa/face-walk-R2930b.log). What remains open here is only the guard direction: neither link check yet fails on a page that names a path as plain text but links nowhere, and no suite drives face_walk. (1) `tools/face_walk.py` ships with NO suite because playwright is not stdlib: either pin it with a stdlib-only arm that skips BY NAME when no browser is present, or declare the on-demand posture in the board — decide with a red control, not by silence. (2) ALSO carried: the R2926 commit gate refuses STAGED bytes only, so an uncommitted non-tee write still reaches disk (truncated)",
+    "next_milestone_due": "2026-11-19T00:02:30+08:00",
+    "updated_at": "2026-11-18T12:02:30+08:00"
   },
   "current": "2026-11-18 R2930 PRODUCT: for the first time in this repo a shipped preview face was opened in a REAL browser, and the first walk found a defect. tools/face_walk.py loads each named page from disk in headless Edge (no browser download needed), counts body text, console errors, pageerrors, failed requests and dead LOCAL links resolved from the DOM, writes one full-page PNG per page and refuses its own screenshot unless the bytes start with the PNG signature. Live cohort 5/5 green and the all-40-face census reads pages=40 ok=39 dead_links=9 (qa/face-walk-R2930.log, 5478B, qa_log --check PASS), with all 9 on ONE page.",
   "depts": [
@@ -41,11 +43,12 @@
     }
   ],
   "do": "2026-11-18 R2930 PRODUCT: for the first time in this repo a shipped preview face was opened in a REAL browser, and the first walk found a defect. tools/face_walk.py loads each named page from disk in headless Edge (no browser download needed), counts body text, console errors, pageerrors, failed requests and dead LOCAL links resolved from the DOM, writes one full-page PNG per page and refuses its own screenshot unless the bytes start with the PNG signature. Live cohort 5/5 green and the all-40-face census reads pages=40 ok=39 dead_links=9 (qa/face-walk-R2930.log, 5478B, qa_log --check PASS), with all 9 on ONE page.",
-  "export_ts": "2026-11-18T11:55:14+08:00",
-  "latest_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
-  "latest_evidence": "qa/face-walk-R2930.log (5478B, 2026-11-18)",
-  "next_milestone": "[R2931] next window (<=12h): (0) MAIN — `preview/face-sweep.html` still shows 9 dead links of the same birth-site class (repo-relative hrefs rendered verbatim by `tools/face_sweep.py`); repair to href=basename AND re-pin that page's own byte self-check (AC-FSW1) in the SAME commit, then re-walk the page to `dead=0` — a page a CEO clicks from `index.html` must not 404. (1) `tools/face_walk.py` ships with NO suite because playwright is not stdlib: either pin it with a stdlib-only arm that skips BY NAME when no browser is present, or declare the on-demand posture in the board — decide with a red control, not by silence. (2) ALSO carried: the R2926 commit gate refuses STAGED bytes only, so an uncommitted non-tee write still reaches disk (truncated)",
+  "export_ts": "2026-11-18T12:02:30+08:00",
+  "latest_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
+  "latest_evidence": "qa/face-walk-R2930b.log (437B, 2026-11-18)",
+  "next_milestone": "[R2931] next window (<=12h): (0) CLOSED IN-WINDOW at R2930 second pass — `preview/face-sweep.html` rendered repo-relative hrefs like filing_checklist did, so its 9 links all 404'd; repaired to href=basename with the repo path kept as visible text, `AC-FSW19` added so its own gate resolves links page-relative, page regenerated 7000B and its gate reads PASS 21/21, its suite 44/44, and the FULL census now reads pages=40 ok=40 dead_links=0 rc=0 (qa/face-walk-R2930b.log). What remains open here is only the guard direction: neither link check yet fails on a page that names a path as plain text but links nowhere, and no suite drives face_walk. (1) `tools/face_walk.py` ships with NO suite because playwright is not stdlib: either pin it with a stdlib-only arm that skips BY NAME when no browser is present, or declare the on-demand posture in the board — decide with a red control, not by silence. (2) ALSO carried: the R2926 commit gate refuses STAGED bytes only, so an uncommitted non-tee write still reaches disk (truncated)",
   "outs": [
+    "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 mtime]",
@@ -171,7 +174,7 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 87,
+    "log_lines_in_window": 88,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 18,
@@ -181,5 +184,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 73684
+  "state_bytes": 74519
 }
