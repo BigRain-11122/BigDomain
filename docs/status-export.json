@@ -1,18 +1,18 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2922 PRODUCT+ENGINEERING: the census can now read a SUITE row whose words sit in a constant and whose numbers sit in the format string of the SAME print call, so readable 277->289 and unparsed 441->429 over the same 718 rows with silent still 0; suite 26 checks over 8 criteria, registry crit 7->8, matrix 718/5680 byte-identical at 75139B, battery leg rc=0 pass=26 crit=8 crit_mismatch=0 crit_checked=1.",
+    "current": "2026-11-18 R2923 PRODUCT: the half of this repository that no slice has ever run now has a measured baseline on its revenue-critical rows. 22 non-os product suites (pay-* 10 + ledger-* 12) ran green over 176 declared criteria in 7.7s total, and all 22 rows had their printed criteria compared against their own registry row (crit_checked=22, crit_mismatch=0). The carried debt \"425 non-os suites never run in any slice\" is therefore 22 MEASURED / 403 unmeasured, instead of an untested whole.",
     "last_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\journey-19.9.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/registry-counter-census-shard-R2922.log (346B, 2026-11-18)",
-    "latest_evidence": "qa/registry-counter-census-shard-R2922.log (346B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/non-os-ledger-slice-R2923.log (1292B, 2026-11-18)",
+    "latest_evidence": "qa/non-os-ledger-slice-R2923.log (1292B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R2923] next window (<=12h): (0) FOLD OWED — state closed at 77313B against the 78500B waterline (margin 1187), so fold a whole round through the shipped runner BEFORE any surgery. (1) MAIN — 429 rows are still UNPARSED (truncated)",
-    "next_milestone_due": "2026-11-18T21:45:30+08:00",
-    "updated_at": "2026-11-18T09:45:30+08:00"
+    "next_milestone_due": "2026-11-18T21:54:18+08:00",
+    "updated_at": "2026-11-18T09:54:18+08:00"
   },
-  "current": "2026-11-18 R2922 PRODUCT+ENGINEERING: the census can now read a SUITE row whose words sit in a constant and whose numbers sit in the format string of the SAME print call, so readable 277->289 and unparsed 441->429 over the same 718 rows with silent still 0; suite 26 checks over 8 criteria, registry crit 7->8, matrix 718/5680 byte-identical at 75139B, battery leg rc=0 pass=26 crit=8 crit_mismatch=0 crit_checked=1.",
+  "current": "2026-11-18 R2923 PRODUCT: the half of this repository that no slice has ever run now has a measured baseline on its revenue-critical rows. 22 non-os product suites (pay-* 10 + ledger-* 12) ran green over 176 declared criteria in 7.7s total, and all 22 rows had their printed criteria compared against their own registry row (crit_checked=22, crit_mismatch=0). The carried debt \"425 non-os suites never run in any slice\" is therefore 22 MEASURED / 403 unmeasured, instead of an untested whole.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -40,10 +40,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2922 PRODUCT+ENGINEERING: the census can now read a SUITE row whose words sit in a constant and whose numbers sit in the format string of the SAME print call, so readable 277->289 and unparsed 441->429 over the same 718 rows with silent still 0; suite 26 checks over 8 criteria, registry crit 7->8, matrix 718/5680 byte-identical at 75139B, battery leg rc=0 pass=26 crit=8 crit_mismatch=0 crit_checked=1.",
-  "export_ts": "2026-11-18T09:45:30+08:00",
+  "do": "2026-11-18 R2923 PRODUCT: the half of this repository that no slice has ever run now has a measured baseline on its revenue-critical rows. 22 non-os product suites (pay-* 10 + ledger-* 12) ran green over 176 declared criteria in 7.7s total, and all 22 rows had their printed criteria compared against their own registry row (crit_checked=22, crit_mismatch=0). The carried debt \"425 non-os suites never run in any slice\" is therefore 22 MEASURED / 403 unmeasured, instead of an untested whole.",
+  "export_ts": "2026-11-18T09:54:18+08:00",
   "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
-  "latest_evidence": "qa/registry-counter-census-shard-R2922.log (346B, 2026-11-18)",
+  "latest_evidence": "qa/non-os-ledger-slice-R2923.log (1292B, 2026-11-18)",
   "next_milestone": "[R2923] next window (<=12h): (0) FOLD OWED — state closed at 77313B against the 78500B waterline (margin 1187), so fold a whole round through the shipped runner BEFORE any surgery. (1) MAIN — 429 rows are still UNPARSED (truncated)",
   "outs": [
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
@@ -157,7 +157,7 @@
   },
   "results": [
     [
-      "2922",
+      "2923",
       "OSLoop 执行 tick"
     ]
   ],
@@ -170,7 +170,7 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 89,
+    "log_lines_in_window": 88,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 16,
@@ -180,5 +180,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 77313
+  "state_bytes": 77112
 }

@@ -1,0 +1,14 @@
+SHARD scope=SHARD registry_suites=718 registry_criteria=5680 selected=12 selected_criteria=88 cap=600s leg_cap=300s overrides=1 exact=0 state=COMPLETE
+SHARD row ledger rc=0 pass=11 fail=0 detail=yes suite=PASS 11/11 crit=11 0.5s
+SHARD row ledger-props rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.1s
+SHARD row ledger-props-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-identity-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-incentive rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-settlement rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.1s
+SHARD row ledger-settlement-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-venue rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-venue-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-collectibles rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row ledger-expedite rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row ledger-expedite-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD rc=0 scope=SHARD selected=12 executed=12 green=12 criteria=88 crit_mismatch=0 elapsed=2.9s crit_checked=12

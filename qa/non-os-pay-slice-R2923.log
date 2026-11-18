@@ -1,0 +1,12 @@
+SHARD scope=SHARD registry_suites=718 registry_criteria=5680 selected=10 selected_criteria=88 cap=600s leg_cap=300s overrides=1 exact=0 state=COMPLETE
+SHARD row pay rc=0 pass=16 fail=0 detail=yes suite=PASS 16/16 crit=16 1.7s
+SHARD row pay-v3 rc=0 pass=14 fail=0 detail=yes suite=PASS 14/14 crit=14 0.3s
+SHARD row pay-v3-real rc=0 pass=9 fail=0 detail=yes suite=PASS 9/9 crit=9 0.5s
+SHARD row pay-v3-window rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.4s
+SHARD row pay-notify rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.5s
+SHARD row pay-notify-bannerlimit rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.2s
+SHARD row pay-notify-bannerwin rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.3s
+SHARD row pay-notify-bannerroll rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.4s
+SHARD row pay-notify-bannerpersist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD row pay-authorize-persist rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.2s
+SHARD rc=0 scope=SHARD selected=10 executed=10 green=10 criteria=88 crit_mismatch=0 elapsed=4.8s crit_checked=10
