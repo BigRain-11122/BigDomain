@@ -115,6 +115,18 @@ LOG_PRUNE_AGE_S = 7 * 86400
 # whose writer may still be alive (the kernel is asked), the caller's own path,
 # and any kernel refusal to answer - those keep, exactly as in R2951.
 LOG_PRUNE_KEEP_N = 40
+# R2953: every rule above judges a NAME, and a name is something any
+# same-user process can type. The prune therefore collected a hand-written
+# lookalike in the namespace as readily as a real refusal. Attribution now
+# comes from the file's own FIRST LINE: the panel writes a marker when it
+# creates the log, and the prune removes a file only when that line names the
+# same tag and face the file name does. What this is NOT: a content test for
+# "does it look like a refusal" (a child's stderr may be a traceback or a bare
+# warning, so judging by content would delete real evidence), and not a gate
+# (a same-user process can copy the marker verbatim). It answers one question
+# only - was this file written through our path - and a file that cannot answer
+# it is KEPT, not deleted.
+LOG_MARKER = "# bigdomain-panel-child"
 
 # R2950: the per-panel tag carries pid + wall_ns + a process-local counter.
 # R2949 used pid + four random bytes, which no criterion can prove unique.
@@ -168,6 +180,41 @@ def parse_log_name(name):
     if not face:
         return None
     return pid, wall, mono, seq, face
+
+
+def log_marker_line(name):
+    """The exact first line a log with this name must start with, else None.
+
+    R2953: the marker repeats the tag and the face the FILE NAME already
+    carries, so attribution is judged by agreement between two things rather
+    than by one of them alone - a lookalike that copies another log's marker
+    names a different tag and is not attributed.
+    """
+    parsed = parse_log_name(name)
+    if parsed is None:
+        return None
+    pid, wall, mono, seq, face = parsed
+    return ("%s tag=%d-%x-%x-%x face=%s\n"
+            % (LOG_MARKER, pid, wall, mono, seq, face)).encode("ascii")
+
+
+def log_attributed(path, name):
+    """True only when the file's FIRST line is the marker its name implies.
+
+    A leading blank line, a truncated marker, a marker copied from another
+    name and a file with no marker at all are all False: the prune keeps every
+    file it cannot attribute, because deleting on "it was in our directory"
+    is how a cleanup becomes someone else's data loss.
+    """
+    expected = log_marker_line(name)
+    if not expected:
+        return False
+    try:
+        with open(path, "rb") as handle:
+            head = handle.read(len(expected))
+    except OSError:
+        return False
+    return head == expected
 
 
 FILETIME_EPOCH_OFFSET_NS = 116444736000000000 * 100
@@ -259,7 +306,8 @@ def prune_logs(root=None, age_s=None, now=None, own=(), keep_n=None):
     clock_ns = int((time.time() if now is None else float(now)) * 1000000000)
     cap = LOG_PRUNE_KEEP_N if keep_n is None else max(0, int(keep_n))
     own_paths = {os.path.abspath(path) for path in own or ()}
-    report = {"removed": [], "kept": [], "fresh": [], "unknown": [], "over": []}
+    report = {"removed": [], "kept": [], "fresh": [], "unknown": [],
+              "over": [], "unattrib": []}
     try:
         names = sorted(os.listdir(folder))
     except OSError:
@@ -272,6 +320,10 @@ def prune_logs(root=None, age_s=None, now=None, own=(), keep_n=None):
         path = os.path.join(folder, name)
         if os.path.abspath(path) in own_paths:
             report["kept"].append(path)
+            continue
+        if not log_attributed(path, name):
+            # R2953: a name we could have typed is not a file we wrote.
+            report["unattrib"].append(path)
             continue
         try:
             mtime_ns = int(os.stat(path).st_mtime_ns)
@@ -566,6 +618,13 @@ class Panel(object):
             # R2949: that file is per panel, never per face id alone.
             log_handle = open(log_path, "wb")
             try:
+                # R2953: the marker goes in BEFORE the child is given the
+                # handle, so the first line a reader sees names the panel that
+                # wrote this file and the prune can attribute it later.
+                header = log_marker_line(os.path.basename(log_path))
+                if header:
+                    log_handle.write(header)
+                    log_handle.flush()
                 proc = subprocess.Popen(
                     argv,
                     stdin=subprocess.DEVNULL,
@@ -682,7 +741,11 @@ class Panel(object):
             except OSError:
                 report["missing"].append(path)
                 continue
-            if size:
+            # R2953: this panel's own marker is not evidence of anything, so a
+            # log that never got past it answers no question and goes; a byte
+            # past the marker is a child's own words and stays.
+            header = log_marker_line(os.path.basename(path)) or b""
+            if size > len(header):
                 report["kept"].append(path)
                 continue
             try:
@@ -696,10 +759,11 @@ class Panel(object):
 
 def print_prune(report):
     """The one line both prune windows print, so the bound is visible."""
-    print("PANEL-PRUNE removed=%d kept=%d fresh=%d unknown=%d over=%d"
+    print("PANEL-PRUNE removed=%d kept=%d fresh=%d unknown=%d over=%d "
+          "unattrib=%d"
           % (len(report["removed"]), len(report["kept"]),
              len(report["fresh"]), len(report["unknown"]),
-             len(report["over"])), flush=True)
+             len(report["over"]), len(report["unattrib"])), flush=True)
 
 
 class PanelHandler(BaseHTTPRequestHandler):

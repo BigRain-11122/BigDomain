@@ -942,11 +942,20 @@ def ac_pan14():
             path_a = panel_a.log_path_for("ugc")
         else:
             path_a = started.get("child_log_path")
+            # R2953: the log now starts with this panel's marker, so the arm
+            # measures "nothing beyond the marker" rather than zero bytes.
+            header = panel_module.log_marker_line(
+                os.path.basename(path_a)) or b""
             size = os.path.getsize(path_a)
-            if size:
+            if size > len(header):
                 bad += 1
-                print("  AC-PAN14 a healthy face wrote %dB, so this arm "
-                      "cannot measure the empty-log rule" % size)
+                print("  AC-PAN14 a healthy face wrote %dB past the marker, "
+                      "so this arm cannot measure the empty-log rule" % size)
+            if not panel_module.log_attributed(path_a,
+                                               os.path.basename(path_a)):
+                bad += 1
+                print("  AC-PAN14 the panel's own log is not attributed: %r"
+                      % (path_a,))
         for path, payload in decoys.items():
             try:
                 with open(path, "wb") as handle:
@@ -997,7 +1006,10 @@ def ac_pan14():
         else:
             path_c = started_c.get("child_log_path")
             words = b"E_FACE_NOT_LAUNCHED_BY_HOLDER (R2950 kept arm)\n"
-            with open(path_c, "wb") as handle:
+            # R2953: the panel writes its marker before the child is given the
+            # handle, so a child's refusal APPENDS to it - truncating here
+            # would model a writer the shipped panel no longer is.
+            with open(path_c, "ab") as handle:
                 handle.write(words)
             before = digest(path_c)
             httpd_c.shutdown()
@@ -1134,11 +1146,26 @@ def ac_pan15():
 DEAD_PID = 999999999  # measured "gone" (the kernel refuses it) on this box
 
 
-def write_log(folder, tag, face, age_s, body=b"R2951 arm\n"):
-    """A panel log with a chosen tag and a chosen age, for the prune arms."""
+def write_log(folder, tag, face, age_s, body=b"R2951 arm\n", marker=True,
+              marker_name=None, lead=b""):
+    """A panel log with a chosen tag and a chosen age, for the prune arms.
+
+    R2953: a log the prune may collect must carry the marker its own name
+    implies, so the helper writes one by default. ``marker=False`` writes a
+    hand-made lookalike, ``marker_name`` copies ANOTHER name's marker, and
+    ``lead`` puts bytes before the marker - the three shapes that must not be
+    attributed.
+    """
     path = os.path.join(folder, "%s%s-%s%s" % (
         panel_module.LOG_STEM, tag, face, panel_module.LOG_SUFFIX))
     with open(path, "wb") as handle:
+        if lead:
+            handle.write(lead)
+        if marker:
+            header = panel_module.log_marker_line(
+                os.path.basename(marker_name or path))
+            if header:
+                handle.write(header)
         handle.write(body)
     when = time.time() - age_s
     os.utime(path, (when, when))
@@ -1487,6 +1514,199 @@ def ac_pan19():
                   "decoy unchanged, exited in %.1fs" % elapsed)
 
 
+def first_line(path):
+    with open(path, "rb") as handle:
+        return handle.readline()
+
+
+def ac_pan20():
+    """A file is collected only when its FIRST LINE names the file. R2953.
+
+    Every earlier bound judged a NAME, and any same-user process can type one,
+    so a hand-written lookalike was collected like a real refusal. The marker
+    the panel writes when it creates the log is now the licence: absent, not
+    first, or copied from another name all keep the file, and the same file is
+    collected the moment it carries its own marker - one line is the whole
+    difference between kept and removed.
+    """
+    bad = 0
+    root = tempfile.mkdtemp(prefix="bd-pan20-")
+    if sys.platform != "win32":
+        print("  AC-PAN20 pid arms not measurable off Windows")
+        return report("AC-PAN20 marker decides attribution", bad,
+                      "skipped: not Windows")
+    age = 9 * 86400
+    try:
+        # (1) a lookalike: right name, no marker, aged out, dead pid.
+        bare = write_log(root, "%d-1-1-1" % DEAD_PID, "ugc", age,
+                         marker=False)
+        report_a = panel_module.prune_logs(root=root)
+        if bare not in report_a["unattrib"]:
+            bad += 1
+            print("  AC-PAN20 a markerless lookalike was not named "
+                  "unattrib: %r" % (report_a["unattrib"],))
+        if not os.path.exists(bare):
+            bad += 1
+            print("  AC-PAN20 a lookalike we never wrote was deleted")
+        # (2) the SAME file, one marker line, same world, same call.
+        bare = write_log(root, "%d-1-1-1" % DEAD_PID, "ugc", age,
+                         marker=True)
+        report_b = panel_module.prune_logs(root=root)
+        if bare not in report_b["removed"]:
+            bad += 1
+            print("  AC-PAN20 an attributed aged file was not collected: %r"
+                  % (report_b,))
+        elif os.path.exists(bare):
+            bad += 1
+            print("  AC-PAN20 an attributed file was named removed but "
+                  "survived")
+        # (3) a marker copied from ANOTHER name is not this file's marker.
+        other = write_log(root, "%d-1-1-2" % DEAD_PID, "ledger", age)
+        copy = write_log(root, "%d-1-1-3" % DEAD_PID, "ugc", age,
+                         marker_name=other)
+        report_c = panel_module.prune_logs(root=root)
+        if copy not in report_c["unattrib"] or not os.path.exists(copy):
+            bad += 1
+            print("  AC-PAN20 a marker borrowed from another name was "
+                  "accepted: %r" % (report_c,))
+        if other in report_c["unattrib"]:
+            bad += 1
+            print("  AC-PAN20 its own marker was refused as borrowed")
+        # (4) a marker that is not the FIRST line (a leading blank line).
+        shifted = write_log(root, "%d-1-1-4" % DEAD_PID, "ugc", age,
+                            lead=b"\n")
+        report_d = panel_module.prune_logs(root=root)
+        if shifted not in report_d["unattrib"] or not os.path.exists(shifted):
+            bad += 1
+            print("  AC-PAN20 a marker on line 2 was accepted: %r"
+                  % (report_d,))
+        # (5) decoys: outside the namespace, and inside it but unparseable.
+        foreign = os.path.join(root, "bd-pan20-stranger.txt")
+        malformed = os.path.join(root, "%smallformed%s" % (
+            panel_module.LOG_STEM, panel_module.LOG_SUFFIX))
+        payloads = {foreign: b"R2953 decoy: not our namespace\n",
+                    malformed: b"R2953 decoy: name does not parse\n"}
+        for path, payload in payloads.items():
+            with open(path, "wb") as handle:
+                handle.write(payload)
+        panel_module.prune_logs(root=root)
+        panel_module.prune_logs(root=root)
+        for path, payload in payloads.items():
+            if not os.path.exists(path):
+                bad += 1
+                print("  AC-PAN20 a decoy was deleted: %r" % (path,))
+            elif digest(path) != hashlib.sha256(payload).hexdigest():
+                bad += 1
+                print("  AC-PAN20 a decoy was rewritten: %r" % (path,))
+    finally:
+        for name in sorted(os.listdir(root)):
+            try:
+                os.remove(os.path.join(root, name))
+            except OSError:
+                pass
+        try:
+            os.rmdir(root)
+        except OSError:
+            pass
+    return report("AC-PAN20 marker decides attribution", bad,
+                  "lookalike kept, same file collected once marked, borrowed "
+                  "and shifted markers refused, decoys untouched")
+
+
+def ac_pan21():
+    """The SHIPPED writer lays the marker, and a stranger's lookalike lives.
+
+    AC-PAN20 drives the rule from the suite's own files; this criterion reads
+    the FIRST LINE the real panel writes, then runs the real --prune-only over
+    the real %TEMP% carrying one lookalike and one attributed file, because a
+    rule only the suite invokes bounds nothing.
+    """
+    bad = 0
+    temp = tempfile.gettempdir()
+    httpd = panel = None
+    log_path = None
+    lookalike = attributed = None
+    try:
+        httpd, panel = panel_module.start_panel("127.0.0.1", 0)
+        base = "http://127.0.0.1:%d" % httpd.server_address[1]
+        code, started = jhttp(base + "/panel/api/start", "POST",
+                              {"face": "ugc"}, timeout=40.0)
+        if code != 200:
+            bad += 1
+            print("  AC-PAN21 could not start ugc: %s %r" % (code, started))
+        else:
+            log_path = started.get("child_log_path")
+            expected = panel_module.log_marker_line(
+                os.path.basename(log_path))
+            if not expected:
+                bad += 1
+                print("  AC-PAN21 the published path does not parse: %r"
+                      % (log_path,))
+            elif first_line(log_path) != expected:
+                bad += 1
+                print("  AC-PAN21 the shipped writer's first line is %r, "
+                      "expected %r" % (first_line(log_path), expected))
+            if not panel_module.log_attributed(log_path,
+                                               os.path.basename(log_path)):
+                bad += 1
+                print("  AC-PAN21 the panel's own log is not attributed")
+        # (3) a log that never got past the marker is not evidence.
+        if panel is not None:
+            panel.stop("ugc")
+            after_stop = panel.release_logs()
+            if log_path and os.path.exists(log_path):
+                bad += 1
+                print("  AC-PAN21 a marker-only log survived a clean "
+                      "teardown: %r" % (after_stop,))
+        if httpd is not None:
+            httpd.shutdown()
+            httpd.server_close()
+            httpd = None
+        # (2) one lookalike and one attributed file, same world, one run.
+        lookalike = write_log(temp, "%d-1-1-81" % DEAD_PID, "member",
+                              9 * 86400, marker=False)
+        attributed = write_log(temp, "%d-1-1-82" % DEAD_PID, "member",
+                               9 * 86400, marker=True)
+        proc = subprocess.run(
+            [sys.executable, MODULE, "--prune-only"],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL, cwd=REPO, timeout=120)
+        lines = proc.stdout.decode("utf-8", "replace").splitlines()
+        first = lines[0].strip() if lines else ""
+        if proc.returncode != 0:
+            bad += 1
+            print("  AC-PAN21 --prune-only exited %d" % proc.returncode)
+        if not first.startswith("PANEL-PRUNE"):
+            bad += 1
+            print("  AC-PAN21 --prune-only printed no prune line: %r" % (first,))
+        elif "unattrib=" not in first:
+            bad += 1
+            print("  AC-PAN21 the prune line hides the unattrib bucket: %r"
+                  % (first,))
+        if not os.path.exists(lookalike):
+            bad += 1
+            print("  AC-PAN21 the shipped prune deleted a file we never "
+                  "wrote")
+        if os.path.exists(attributed):
+            bad += 1
+            print("  AC-PAN21 the shipped prune left an attributed aged file")
+    finally:
+        if httpd is not None:
+            try:
+                httpd.shutdown()
+                httpd.server_close()
+            except Exception:
+                pass
+        for path in (lookalike, attributed):
+            if path and os.path.exists(path):
+                try:
+                    os.remove(path)
+                except OSError:
+                    pass
+    return report("AC-PAN21 shipped writer marked, lookalike survives", bad,                  "first line equals the marker, marker-only log removed, "
+                  "lookalike kept while the marked file went")
+
+
 def main():
     ac_pan1()
     ac_pan2()
@@ -1507,6 +1727,8 @@ def main():
     ac_pan17()
     ac_pan18()
     ac_pan19()
+    ac_pan20()
+    ac_pan21()
     passed = sum(1 for _name, ok in RESULTS if ok)
     total = len(RESULTS)
     print("SUITE %s %d/%d" % ("PASS" if passed == total else "FAIL",

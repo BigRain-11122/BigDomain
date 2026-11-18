@@ -349,7 +349,11 @@ SUITES = [
     # path still keep; --prune-only runs one prune window with no panel
     # started and no port bound, so a scheduler can call it
     # (pre-registered in src/os/backlog.md at R2952 BEFORE the edit).
-    ("panel", os.path.join("test_panel.py"), 19),
+    # R2953 added AC-PAN20..AC-PAN21: the prune removes a file only when its
+    # FIRST line is the marker its own name implies, so a hand-written
+    # lookalike in the namespace is kept and our own logs are still bounded
+    # (pre-registered in src/os/backlog.md at R2953 BEFORE the edit).
+    ("panel", os.path.join("test_panel.py"), 21),
     # R2938 added AC-PAN7..AC-PAN11 (declared ownership): the launcher hands
     # the panel the faces it already serves with the ports it measured, and the
     # panel refuses to start or stop them by name instead of forking the
