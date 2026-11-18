@@ -272,7 +272,11 @@ SUITES = [
     # fully explicit map, so the allocator itself had never been judged. The
     # live arm really binds (ten loopback sockets bound and closed at once);
     # the red control wires in allocators that ignore the used-set.
-    ("start-all", os.path.join("test_start_all.py"), 13),
+    # R2980 adds AC-STL14..AC-STL15 (plan_ports.override_coverage): the OVERRIDE
+    # face of the same question - overrides enter the used-set but are never
+    # compared with each other, and a key the plan does not carry is dropped in
+    # silence. Criterion-first, zero run-time change.
+    ("start-all", os.path.join("test_start_all.py"), 15),
     # kill-on-close job object (R2937): the defect R2934 MEASURED - a launcher
     # killed hard leaves its children holding sandbox ports - answered by the
     # kernel instead of by a `finally`. AC-KOC1..AC-KOC5 were pinned in

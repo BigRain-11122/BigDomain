@@ -14,6 +14,13 @@ a DISTINCT port. The live arm really calls the shipped allocator, so it binds
 ten loopback ephemeral sockets for an instant and closes each - the red control
 wires in allocators that ignore the used-set and must be refused by name.
 
+R2980 adds AC-STL14..AC-STL15 (plan_ports.override_coverage), pinned in the
+R2980 row BEFORE that predicate and these arms existed: two keys in ONE override
+map naming one port is refused by name, and a key the plan does not carry is
+named instead of dropped in silence. The arms pass fully explicit maps, so no
+socket is bound; the one live call proves what plan() DOES today with a typo
+key, which is measured rather than asserted as permanent.
+
 Nothing here is read off a canned string: the launcher is really started in
 serve mode, the report it writes is compared against the hub's own probe
 answer at call time, an independent TCP connect checks every published port,
@@ -22,7 +29,7 @@ page file carries, a blocked port is proved to make the launcher REFUSE, and
 the teardown leg proves the ports are gone after the stop file appears.
 
 Usage: python test_start_all.py
-Exit: 0 = SUITE PASS 13/13, 2 = FAIL.
+Exit: 0 = SUITE PASS 15/15, 2 = FAIL.
 """
 
 import json
@@ -727,6 +734,70 @@ def main():
     if dropped["missing"] != ("b",):
         bad.append("missing-named-%r" % (dropped["missing"],))
     report("AC-STL13", bool(bad), ",".join(bad))
+
+    # AC-STL14 (R2980): the OVERRIDE face of the same question. plan() adds an
+    # override to the used-set but never compares overrides with each other, so
+    # two keys naming one port is refused nowhere at run time. This arm judges
+    # the healthy shapes (single-key --ws-port style, empty, two distinct keys)
+    # and names the typo face: a key the plan does not carry is dropped by
+    # plan() without a word, measured here rather than asserted for all time.
+    bad = []
+    single = plan_ports.override_coverage({"ws": 7000}, start_all.PLAN_KEYS)
+    if not single["ok"]:
+        bad.append("single-not-ok")
+    if single["duplicates"]:
+        bad.append("single-dups-%r" % (single["duplicates"],))
+    if single["unknown"] or single["bad"]:
+        bad.append("single-named-%r/%r" % (single["unknown"], single["bad"]))
+    if single["keys"] != ("ws",):
+        bad.append("single-keys-%r" % (single["keys"],))
+    empty = plan_ports.override_coverage({}, start_all.PLAN_KEYS)
+    if not empty["ok"] or empty["count"]:
+        bad.append("empty-%r/%d" % (empty["ok"], empty["count"]))
+    pair = plan_ports.override_coverage({"ws": 7000, "hub": 7001},
+                                        start_all.PLAN_KEYS)
+    if not pair["ok"] or pair["distinct"] != 2:
+        bad.append("pair-%r/%d" % (pair["ok"], pair["distinct"]))
+    typo = plan_ports.override_coverage({"wss": 7000}, start_all.PLAN_KEYS)
+    if typo["ok"]:
+        bad.append("typo-read-ok")
+    if typo["unknown"] != ("wss",):
+        bad.append("typo-unknown-%r" % (typo["unknown"],))
+    # and the launcher really drops it: the plan's key set is exactly PLAN_KEYS
+    with_typo = start_all.plan("127.0.0.1", {"wss": 7000})
+    if tuple(sorted(with_typo)) != tuple(sorted(start_all.PLAN_KEYS)):
+        bad.append("typo-reached-plan-%r" % (tuple(sorted(with_typo)),))
+    report("AC-STL14", bool(bad), ",".join(bad))
+
+    # AC-STL15 (R2980): the control that proves AC-STL14's predicate says No.
+    # Everything here is a fully explicit map, so no socket is bound and no
+    # process starts. The reds must NAME both keys, not fold into a boolean.
+    bad = []
+    clash = plan_ports.override_coverage({"ws": 7000, "city": 7000},
+                                         start_all.PLAN_KEYS)
+    if clash["ok"]:
+        bad.append("clash-read-ok")
+    if clash["duplicates"] != ((7000, ("city", "ws")),):
+        bad.append("clash-dups-%r" % (clash["duplicates"],))
+    moved = plan_ports.override_coverage({"ws": 7000, "city": 7001},
+                                         start_all.PLAN_KEYS)
+    if not moved["ok"] or moved["duplicates"]:
+        bad.append("moved-%r/%r" % (moved["ok"], moved["duplicates"]))
+    three = plan_ports.override_coverage(
+        {"ws": 7000, "city": 7000, "hub": 7000}, start_all.PLAN_KEYS)
+    if three["duplicates"] != ((7000, ("city", "hub", "ws")),):
+        bad.append("three-dups-%r" % (three["duplicates"],))
+    # plan() stores int(given), so the predicate must compare numbers and not
+    # spellings; a value that is not a number is named instead of crashing
+    spelled = plan_ports.override_coverage({"ws": "7000", "city": 7000},
+                                           start_all.PLAN_KEYS)
+    if spelled["duplicates"] != ((7000, ("city", "ws")),):
+        bad.append("spelled-dups-%r" % (spelled["duplicates"],))
+    garbage = plan_ports.override_coverage({"ws": "nope"},
+                                           start_all.PLAN_KEYS)
+    if garbage["ok"] or garbage["bad"] != ("ws",):
+        bad.append("garbage-%r/%r" % (garbage["ok"], garbage["bad"]))
+    report("AC-STL15", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
