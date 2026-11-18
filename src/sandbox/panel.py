@@ -269,6 +269,14 @@ class PanelScopeError(Exception):
     exist before anything is judged. ``root=None`` is not a claim: it resolves
     to this box's temp dir, which a panel start does not choose and must never
     crash over, so that path keeps the tolerant behaviour.
+
+    R2961: that tolerant path was the last place an unusable folder still
+    answered with an EMPTY report - a temp dir that cannot be listed and a
+    clean temp dir printed the same fields. The functional face now refuses
+    BOTH kinds of scope by the same name, and the panel start keeps its
+    promise by catching that refusal and publishing it on its own line
+    (``print_prune_refused``), so a start cannot crash over a folder it did
+    not choose while an empty window can no longer be read as clean.
     """
 
     def __init__(self, code, root):
@@ -287,7 +295,13 @@ def resolve_scope(root):
     just as well as absence.
     """
     if root is None:
-        return tempfile.gettempdir()
+        scope = tempfile.gettempdir()
+        if not os.path.isdir(scope):
+            # R2961: the default scope is not a caller's claim, but it is
+            # still a claim about what was judged - an absent temp dir would
+            # list as nothing and print the line a clean folder prints.
+            raise PanelScopeError("E_PANEL_SCOPE_UNLISTABLE", scope)
+        return scope
     scope = os.path.abspath(root)
     if not os.path.isdir(scope):
         raise PanelScopeError("E_PANEL_SCOPE_NOT_DIR", scope)
@@ -467,7 +481,10 @@ def purge_legacy(root=None, age_s=None, now=None, own=()):
     try:
         names = sorted(os.listdir(folder))
     except OSError:
-        return report
+        # R2961: this used to answer with the report above - an empty window,
+        # field for field a clean one. A folder that cannot be listed is a
+        # fact about the window, so it is named and not swallowed.
+        raise PanelScopeError("E_PANEL_SCOPE_UNLISTABLE", folder)
     for name in names:
         parsed = parse_log_name(name)
         if parsed is None:
@@ -528,7 +545,9 @@ def prune_logs(root=None, age_s=None, now=None, own=(), keep_n=None):
     try:
         names = sorted(os.listdir(folder))
     except OSError:
-        return report
+        # R2961: same rule as the purge - a folder that cannot be listed is
+        # not a clean folder, and this report cannot say which one it is.
+        raise PanelScopeError("E_PANEL_SCOPE_UNLISTABLE", folder)
     within_age = {}
     for name in names:
         parsed = parse_log_name(name)
@@ -1006,6 +1025,41 @@ def print_prune(report, scope=None):
     print(line, flush=True)
 
 
+def print_prune_refused(exc):
+    """A prune window that could not even list its folder, named not hidden.
+
+    R2961: the refusal itself must not crash a panel start (the scope is a
+    folder this process did not choose), but it must not be dressed as a
+    healthy empty window either. Every field of ``print_prune``'s line is
+    still printed - so a reader that splits on ``removed=`` keeps working -
+    and two tokens are appended: ``unavailable=`` names the code and
+    ``scope=`` names the folder. ``unavailable=`` is what makes an empty
+    window distinguishable from a clean one.
+    """
+    print("PANEL-PRUNE removed=0 kept=0 fresh=0 unknown=0 over=0 unattrib=0 "
+          "legacy=0 legacy_bytes=0 unavailable=%s scope=%s"
+          % (exc.code, exc.root), flush=True)
+
+
+def prune_on_start():
+    """One prune window at panel birth; a refusal is published, not fatal.
+
+    R2961: the start path called ``print_prune(prune_logs())`` directly, so a
+    temp dir that cannot be listed would have raised through the launch and
+    taken the panel down over a folder it did not choose. Both halves of the
+    promise now hold at once: the window is judged by a function that refuses
+    by name, and the start catches that refusal, prints it and keeps serving.
+    Returns the report, or None when the window was refused.
+    """
+    try:
+        report = prune_logs()
+    except PanelScopeError as exc:
+        print_prune_refused(exc)
+        return None
+    print_prune(report)
+    return report
+
+
 def print_purge_legacy(report, scope=None):
     """The one line a legacy purge prints, so the exit is visible too.
 
@@ -1219,8 +1273,11 @@ def main(argv=None):
         try:
             prune_report = prune_logs(root=scope)
         except PanelScopeError as exc:
-            parser.error("%s: %s is not an existing folder" % (exc.code,
-                                                               exc.root))
+            # R2961: the same catch now also covers an unlistable DEFAULT
+            # scope, so the wording names what was refused rather than
+            # assuming absence.
+            parser.error("%s: %s cannot be judged as a folder"
+                         % (exc.code, exc.root))
         print_prune(prune_report, scope=scope)
         # R2954: collecting the markerless residue is an OPERATOR decision,
         # taken on the same call that would otherwise only report it. The
@@ -1230,7 +1287,7 @@ def main(argv=None):
             try:
                 purge_report = purge_legacy(root=scope)
             except PanelScopeError as exc:
-                parser.error("%s: %s is not an existing folder"
+                parser.error("%s: %s cannot be judged as a folder"
                              % (exc.code, exc.root))
             print_purge_legacy(purge_report, scope=scope)
         return 0
@@ -1252,7 +1309,10 @@ def main(argv=None):
     # R2951: every panel launch is one prune window, so the pile of aged-out
     # refusals is bounded without a scheduler. Printed after the address line
     # because the launcher and the suites read that line first.
-    print_prune(prune_logs())
+    # R2961: the window can now be REFUSED (a folder that cannot be listed),
+    # and that refusal is printed rather than raised - a panel start must not
+    # die over a temp dir it did not choose.
+    prune_on_start()
     try:
         while True:
             time.sleep(0.3)

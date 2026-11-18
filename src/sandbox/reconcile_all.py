@@ -381,7 +381,12 @@ SUITES = [
     # HEAD bytes are measured answering with a report so the arm cannot be
     # argparse's rc=2 wearing a new name (pre-registered in src/os/backlog.md
     # at R2958 BEFORE the edit).
-    ("panel", os.path.join("test_panel.py"), 31),
+    # R2961: AC-PAN39..AC-PAN40 name the last tolerant scope. The DEFAULT
+    # scope (root=None) still answered an unlistable temp dir with an empty
+    # report, and the start path called print_prune(prune_logs()) unguarded,
+    # so the two promises collided: an empty window had to stop reading as
+    # clean without a panel start dying over a folder it did not choose.
+    ("panel", os.path.join("test_panel.py"), 33),
     # R2956: R2955 closed the WRITER, not the NAMESPACE - any other module
     # could still create bigdomain-panel-child-* and either forge the marker
     # or leave a markerless file the prune must later count as legacy, which

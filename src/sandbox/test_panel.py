@@ -27,17 +27,26 @@ scope existed: the purge could only sweep the real temp dir, so an operator
 who wanted one folder cleaned had to bet the whole box, and an empty window
 printed the same line a healthy one did.
 
+AC-PAN39..AC-PAN40 were registered for R2961 in the R2961 PIN row: the
+DEFAULT scope was still tolerant, so a temp dir that could not be listed
+answered with an empty report while the start path called the prune without
+catching anything - both halves of that promise (an empty window must not
+read as clean; a start must not die over a folder it did not choose) had to
+hold at once.
+
 Nothing here is read off a canned string: the panel is really started, the
 start route really spawns a shipped module, an independent TCP connect checks
 the port it reports, the served URL is compared against the page bytes on
 disk, and the teardown leg proves the children are gone.
 
 Usage: python test_panel.py
-Exit: 0 = SUITE PASS 29/29, 2 = FAIL.
+Exit: 0 = SUITE PASS 33/33, 2 = FAIL.
 """
 
 import ast
+import contextlib
 import hashlib
+import io
 import json
 import os
 import socket
@@ -45,6 +54,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import types
 import urllib.error
 import urllib.request
 
@@ -58,6 +68,11 @@ MODULE = os.path.join(HERE, "panel.py")
 # (measured at R2959). A fixed revision is the honest reference for "what the
 # older code did", and it never moves with this round's commit.
 OLD_PANEL_REV = "2e988f5058e06ae2ae36afee96e403956f533ef9"
+# The revision AC-PAN40 measures against: the R2960 commit, i.e. the last
+# tree in which an unlistable DEFAULT scope still answered with an empty
+# report. Pinned for the same reason OLD_PANEL_REV is pinned - "HEAD" moves
+# onto the new code with this round's own commit.
+PRE_R2961_PANEL_REV = "68a850ea89c45ef67be1c388307f27b100365fe3"
 PAGE = os.path.join(HERE, "panel.html")
 REGISTRY = os.path.join(REPO, "src", "sandbox", "reconcile_all.py")
 LEDGER_HTML = os.path.join(HERE, "ledger", "ledger.html")
@@ -2232,6 +2247,22 @@ def _clean_folder(folder):
         pass
 
 
+class _ListdirFails(object):
+    """A stand-in for ``os`` whose listdir fails and everything else is real.
+
+    R2961: the arm needs the shape a folder takes when it is resolved and then
+    cannot be listed - vanished between the check and the walk, or denied. The
+    name is rebound in the panel module only, so the suite's own os is not
+    touched.
+    """
+
+    def __getattr__(self, name):
+        return getattr(os, name)
+
+    def listdir(self, path):
+        raise OSError("R2961 arm: a folder that cannot be listed")
+
+
 def ac_pan30():
     """The window can be AIMED, and not aiming it changes nothing. R2957.
 
@@ -2670,6 +2701,263 @@ def ac_pan34():
                   "pre-R2958 module measurably answered with an empty report")
 
 
+def ac_pan39():
+    """The DEFAULT scope is judged too: an unlistable folder is named. R2961.
+
+    R2958 refused an explicit scope and left root=None tolerant, so a temp dir
+    that could not be listed still produced an EMPTY report - the same fields
+    a clean folder produces, which is exactly the reading this whole prune
+    chain exists to stop. Four arms: the default scope that is not there is
+    refused by name; the SAME shim pointed at a real folder answers and
+    collects, so the refusal is about listability and not about the shim; a
+    folder that resolves and then cannot be listed is refused as well instead
+    of being swallowed by the listdir OSError; and the purge face refuses by
+    the same code.
+    """
+    bad = 0
+    root = tempfile.mkdtemp(prefix="bd-pan39-")
+    gone = os.path.join(root, "no-temp-here")
+    saved_tempfile = panel_module.tempfile
+    saved_os = panel_module.os
+    collected = None
+    try:
+        # (1) the default scope that is not there is NAMED, not answered with
+        # an empty report
+        panel_module.tempfile = types.SimpleNamespace(gettempdir=lambda: gone)
+        try:
+            panel_module.prune_logs()
+        except panel_module.PanelScopeError as exc:
+            if exc.code != "E_PANEL_SCOPE_UNLISTABLE":
+                bad += 1
+                print("  AC-PAN39 the default refusal carries code %r"
+                      % (exc.code,))
+            if os.path.abspath(gone) not in str(exc):
+                bad += 1
+                print("  AC-PAN39 the refusal does not name the folder: %s"
+                      % (exc,))
+        else:
+            bad += 1
+            print("  AC-PAN39 an unlistable default scope returned a report "
+                  "(the R2958 hole on the scope nobody chose)")
+        # (2) the SAME shim over a real folder answers and collects: the
+        # refusal is caused by listability, not by replacing tempfile
+        collected = write_log(root, "%d-39-1-1" % DEAD_PID, "ugc",
+                              9 * 86400, body=b"R2961 default-scope arm\n")
+        panel_module.tempfile = types.SimpleNamespace(gettempdir=lambda: root)
+        try:
+            real = panel_module.prune_logs()
+        except panel_module.PanelScopeError as exc:
+            bad += 1
+            print("  AC-PAN39 a listable default scope was refused too: %s"
+                  % (exc,))
+            real = None
+        if real is not None:
+            if collected in real["removed"] or not os.path.exists(collected):
+                pass
+            else:
+                bad += 1
+                print("  AC-PAN39 a listable default scope did not collect "
+                      "the aged file it named")
+        # (3) a folder that resolves and then cannot be listed is refused by
+        # the same name instead of being swallowed by the OSError branch
+        panel_module.tempfile = saved_tempfile
+        panel_module.os = _ListdirFails()
+        try:
+            panel_module.prune_logs(root=root)
+        except panel_module.PanelScopeError as exc:
+            if exc.code != "E_PANEL_SCOPE_UNLISTABLE":
+                bad += 1
+                print("  AC-PAN39 the listdir refusal carries code %r"
+                      % (exc.code,))
+            if os.path.abspath(root) not in str(exc):
+                bad += 1
+                print("  AC-PAN39 the listdir refusal does not name the "
+                      "folder: %s" % (exc,))
+        else:
+            bad += 1
+            print("  AC-PAN39 a folder that cannot be listed answered with a "
+                  "report (the OSError swallow)")
+        panel_module.os = saved_os
+        # (4) the purge face refuses on the default scope too
+        panel_module.tempfile = types.SimpleNamespace(gettempdir=lambda: gone)
+        try:
+            panel_module.purge_legacy()
+        except panel_module.PanelScopeError as exc:
+            if exc.code != "E_PANEL_SCOPE_UNLISTABLE":
+                bad += 1
+                print("  AC-PAN39 the purge refusal carries code %r"
+                      % (exc.code,))
+        else:
+            bad += 1
+            print("  AC-PAN39 the purge face answered on an unlistable "
+                  "default scope")
+    finally:
+        panel_module.tempfile = saved_tempfile
+        panel_module.os = saved_os
+        _clean_folder(root)
+    return report("AC-PAN39 an unlistable default scope is named, not reported "
+                  "clean", bad,
+                  "missing default raises E_PANEL_SCOPE_UNLISTABLE, the same "
+                  "shim over a real folder answers and collects, a folder "
+                  "that cannot be listed raises, and the purge face agrees")
+
+
+def ac_pan40():
+    """A start never dies over a scope it did not choose, and the line says
+    so. R2961.
+
+    The start path called ``print_prune(prune_logs())``, so the refusal
+    AC-PAN39 measures would have travelled through the launch and taken the
+    panel down over a temp dir it never picked. ``prune_on_start`` is the
+    shipped half that catches it: the arm reads the line it prints, checks
+    that every field of the old line is still there (a reader that splits on
+    removed= keeps working) and that ``unavailable=`` is what marks the empty
+    window as refused, with a green control showing the token appears only
+    when the window was refused. The CLI exit is measured in-process, and the
+    pinned pre-R2961 bytes are asked the same question to prove the arm
+    measures this round and not argparse.
+    """
+    bad = 0
+    root = tempfile.mkdtemp(prefix="bd-pan40-")
+    gone = os.path.join(root, "absent-temp")
+    old_dir = tempfile.mkdtemp(prefix="bd-pan40-old-")
+    saved_tempfile = panel_module.tempfile
+    head = ("PANEL-PRUNE removed=0 kept=0 fresh=0 unknown=0 over=0 "
+            "unattrib=0 legacy=0 legacy_bytes=0")
+    try:
+        # (1) the start's prune answers instead of raising, and names itself
+        panel_module.tempfile = types.SimpleNamespace(gettempdir=lambda: gone)
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            answer = panel_module.prune_on_start()
+        line = buf.getvalue().strip()
+        if answer is not None:
+            bad += 1
+            print("  AC-PAN40 a refused start window returned a report")
+        if not line.startswith(head):
+            bad += 1
+            print("  AC-PAN40 the refused line lost an old field: %r"
+                  % (line[:200],))
+        if "unavailable=E_PANEL_SCOPE_UNLISTABLE" not in line:
+            bad += 1
+            print("  AC-PAN40 the refused line does not name the code: %r"
+                  % (line[:200],))
+        if os.path.abspath(gone) not in line:
+            bad += 1
+            print("  AC-PAN40 the refused line does not name the folder: %r"
+                  % (line[:200],))
+        # (1b) the shipped source holds the funnel and no unguarded call -
+        # read as an AST so a mention in a docstring is not a call site
+        with open(MODULE, encoding="utf-8") as handle:
+            tree = ast.parse(handle.read())
+        calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call)]
+        funnel = [n for n in calls
+                  if isinstance(n.func, ast.Name)
+                  and n.func.id == "prune_on_start"]
+        unguarded = [n for n in calls
+                     if isinstance(n.func, ast.Name)
+                     and n.func.id == "print_prune"
+                     and n.args and isinstance(n.args[0], ast.Call)
+                     and isinstance(n.args[0].func, ast.Name)
+                     and n.args[0].func.id == "prune_logs"]
+        if not funnel:
+            bad += 1
+            print("  AC-PAN40 the start path does not go through the funnel")
+        if unguarded:
+            bad += 1
+            print("  AC-PAN40 the unguarded start call is still shipped at "
+                  "line %d" % (unguarded[0].lineno,))
+        # (2) the green control: a listable scope answers and prints the old
+        # line with NO unavailable token, so the token is caused by the
+        # refusal
+        panel_module.tempfile = types.SimpleNamespace(gettempdir=lambda: root)
+        buf2 = io.StringIO()
+        with contextlib.redirect_stdout(buf2):
+            answer2 = panel_module.prune_on_start()
+        line2 = buf2.getvalue().strip()
+        if not isinstance(answer2, dict):
+            bad += 1
+            print("  AC-PAN40 a listable start window did not return a report")
+        if not line2.startswith("PANEL-PRUNE removed="):
+            bad += 1
+            print("  AC-PAN40 the listable line is not the shipped shape: %r"
+                  % (line2[:200],))
+        if "unavailable=" in line2:
+            bad += 1
+            print("  AC-PAN40 the listable line carries unavailable=: %r"
+                  % (line2[:200],))
+        # (3) --prune-only with the same unlistable default: exit 2, code and
+        # path on stderr, no window line on stdout
+        panel_module.tempfile = types.SimpleNamespace(gettempdir=lambda: gone)
+        out, err = io.StringIO(), io.StringIO()
+        code = None
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            try:
+                panel_module.main(["--prune-only"])
+            except SystemExit as exc:
+                code = exc.code
+        if code != 2:
+            bad += 1
+            print("  AC-PAN40 the CLI exited %r instead of 2" % (code,))
+        if "E_PANEL_SCOPE_UNLISTABLE" not in err.getvalue():
+            bad += 1
+            print("  AC-PAN40 the CLI refusal does not name the code: %r"
+                  % (err.getvalue()[-200:],))
+        if os.path.abspath(gone) not in err.getvalue():
+            bad += 1
+            print("  AC-PAN40 the CLI refusal does not name the folder")
+        if "PANEL-PRUNE" in out.getvalue():
+            bad += 1
+            print("  AC-PAN40 the refused CLI still printed a window line")
+        panel_module.tempfile = saved_tempfile
+        # (4) the pinned pre-R2961 bytes answered with an empty report
+        head_bytes = subprocess.run(
+            ["git", "show", PRE_R2961_PANEL_REV + ":src/sandbox/panel.py"],
+            cwd=REPO, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if head_bytes.returncode != 0 or not head_bytes.stdout:
+            bad += 1
+            print("  AC-PAN40 could not read the pinned bytes for the red "
+                  "control")
+        else:
+            old_panel = os.path.join(old_dir, "panel.py")
+            with open(old_panel, "wb") as handle:
+                handle.write(head_bytes.stdout)
+            probe = (
+                "import importlib.util, sys, types\n"
+                "sys.path.insert(0, r'%s')\n"
+                "spec = importlib.util.spec_from_file_location('oldpanel', "
+                "r'%s')\n"
+                "mod = importlib.util.module_from_spec(spec)\n"
+                "sys.modules['oldpanel'] = mod\n"
+                "spec.loader.exec_module(mod)\n"
+                "mod.tempfile = types.SimpleNamespace(gettempdir=lambda: "
+                "r'%s')\n"
+                "rep = mod.prune_logs()\n"
+                "print('OLD-report', len(rep['removed']), len(rep['kept']))\n"
+                % (HERE, old_panel, gone))
+            old_run = subprocess.run([sys.executable, "-c", probe],
+                                     stdin=subprocess.DEVNULL,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE, timeout=180)
+            old_out = old_run.stdout.decode("utf-8", "replace")
+            if old_run.returncode != 0 or not old_out.startswith("OLD-report"):
+                bad += 1
+                print("  AC-PAN40 the pre-R2961 module also refused, so this "
+                      "arm measures argparse: rc=%d err=%r"
+                      % (old_run.returncode,
+                         old_run.stderr.decode("utf-8", "replace")[-200:]))
+    finally:
+        panel_module.tempfile = saved_tempfile
+        _clean_folder(root)
+        _clean_folder(old_dir)
+    return report("AC-PAN40 a start survives an unlistable scope and says so",
+                  bad,
+                  "prune_on_start returns None and prints the old fields plus "
+                  "unavailable=, a listable scope prints no such token, the "
+                  "CLI exits 2 naming the code, and the pinned bytes answered "
+                  "with an empty report")
+
+
 def main():
     ac_pan1()
     ac_pan2()
@@ -2702,6 +2990,8 @@ def main():
     ac_pan32()
     ac_pan33()
     ac_pan34()
+    ac_pan39()
+    ac_pan40()
     passed = sum(1 for _name, ok in RESULTS if ok)
     total = len(RESULTS)
     print("SUITE %s %d/%d" % ("PASS" if passed == total else "FAIL",
