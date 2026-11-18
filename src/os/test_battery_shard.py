@@ -829,6 +829,54 @@ def main():
     finally:
         shutil.rmtree(world, ignore_errors=True)
 
+    # ---- AC-BSGB20 (R2920): the row the R2919 field indicted now DECLARES its
+    # criteria in the dialect the shipped reader reads, and that declaration is
+    # bound to the REGISTRY instead of to prose. A bare "SUITE PASS 15 checks"
+    # states a CHECK count, so teaching the reader a third dialect would compare
+    # two different quantities - the refusal is already pinned, the missing half
+    # was the declaration. Read back through this reader AND against this
+    # registry row, with the declaration stripped as the red control so a pass
+    # is owed to the line rather than to a default.
+    census_label = "os-registry-counter-census"
+    census_suite = os.path.join(ROOT, "src", "os",
+                                "test_registry_counter_census.py")
+    fresh = load(TOOL, "bsh_census_binding")
+    fresh_registry = {row[0]: int(row[2]) for row in fresh.registry()[0]}
+    world = tempfile.mkdtemp(prefix="battery_shard_declare_")
+    saved_dir = fresh.QA_DIR
+    fresh.QA_DIR = os.path.join(world, "qa")
+    os.makedirs(fresh.QA_DIR, exist_ok=True)
+    try:
+        proc = subprocess.run([sys.executable, census_suite], cwd=ROOT,
+                              capture_output=True, text=True, errors="replace")
+        code_leg, out_leg = run_cli(fresh, ["--exact", census_label])
+    finally:
+        fresh.QA_DIR = saved_dir
+        shutil.rmtree(world, ignore_errors=True)
+
+    def closing_field(text, key):
+        for line in text.splitlines():
+            if line.startswith("SHARD rc="):
+                for piece in line.split():
+                    if piece.startswith(key + "="):
+                        return piece.split("=", 1)[1]
+        return None
+
+    declared = fresh.parse_criteria_unit(proc.stdout)
+    stripped = "\n".join(line for line in proc.stdout.splitlines()
+                         if not line.startswith("suite:")) + "\n"
+    ok("AC-BSGB20",
+       proc.returncode == 0 and declared is not None
+       and declared == fresh_registry.get(census_label)
+       and fresh.parse_criteria_unit(stripped) is None
+       and code_leg == 0
+       and closing_field(out_leg, "executed") == "1"
+       and closing_field(out_leg, "crit_checked") == "1",
+       "declared=%s registry=%s stripped=%s leg_rc=%d checked=%s"
+       % (declared, fresh_registry.get(census_label),
+          fresh.parse_criteria_unit(stripped), code_leg,
+          closing_field(out_leg, "crit_checked")))
+
     total = len(CHECKS)
     passed = total - len(FAILS)
     if FAILS:

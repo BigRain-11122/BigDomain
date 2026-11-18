@@ -1,4 +1,4 @@
-"""Battery suite for src/os/registry_counter_census.py - AC-RCC1..AC-RCC4.
+"""Battery suite for src/os/registry_counter_census.py - AC-RCC1..AC-RCC5.
 
 AC-RCC1..AC-RCC4 were pre-registered in src/os/backlog.md (R2918 row) BEFORE
 this file existed. The census answers one board question with a measured list
@@ -33,12 +33,14 @@ if HERE not in sys.path:
 import registry_counter_census as RCC  # noqa: E402
 
 CHECKS = 0
+LABELS = []
 
 
 def ok(cond, label):
     global CHECKS
     assert cond, 'FAIL: ' + label
     CHECKS += 1
+    LABELS.append(label)
     print('PASS ' + label)
 
 
@@ -138,6 +140,30 @@ def main():
     ok(imports <= allowed,
        'AC-RCC4-R2 stdlib only, no network module: %s'
        % ','.join(sorted(imports - allowed)))
+
+    # AC-RCC5 (R2920): this suite must SPEAK the dialect the battery reader can
+    # compare, because a bare 'SUITE PASS <n> checks' is refused by that reader
+    # (a check count is not a criteria count), which left this row's registry
+    # crit unrefuted for two rounds. The declaration is rendered from this run's
+    # own numbers and read BACK through the shipped reader, with the declaration
+    # stripped as the red control so a reader that always answers cannot pass.
+    module = RCC.reader()
+    ok(module.parse_criteria_unit('suite: 18 assertions over 5 criteria\n') == 5,
+       'AC-RCC5-R1 the shipped reader reads this declaration dialect')
+    ok(module.parse_criteria_unit('PASS only\n') is None,
+       'AC-RCC5-R2 the same reader reads a missing declaration as None')
+    ok(module.parse_suite_row('SUITE PASS %d checks\n' % CHECKS) is None,
+       'AC-RCC5-R3 a checks-only leaf stays refused rather than guessed')
+
+    # Both numbers are DERIVED from this run, so the registry row stays the only
+    # typed count and a new criterion demands a row edit instead of a hand edit.
+    acs = sorted({match.group(0) for match in
+                  (re.match(r'AC-[A-Z]+[0-9]*', label) for label in LABELS)
+                  if match})
+    declared = 'suite: %d assertions over %d criteria\n' % (CHECKS, len(acs))
+    assert module.parse_criteria_unit(declared) == len(acs), \
+        'FAIL: rendered declaration does not read back as %d' % len(acs)
+    print(declared.rstrip('\n'))
     print('SUITE PASS %d checks' % CHECKS)
 
 

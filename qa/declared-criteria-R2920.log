@@ -1,0 +1,34 @@
+  | PASS AC-BSGB1 suites=718 crit=5677 quoted=718/5677 leaked=0
+  | PASS AC-BSGB2 expected=12 picked=12 nomatch_rc=2 dry_exec=0
+  | PASS AC-BSGB9 bare=3 exact=3 crit=43 union=13 dup=False dry_sel=3 dry_crit=43
+  | PASS AC-BSGB10 cli_rc=2 named_cli=True named_fn=True
+  | PASS AC-SK1 canonical+numeric unchanged
+  | PASS AC-SK2 punct pair skin read
+  | PASS AC-SK3 label pair derives from p==t
+  | PASS AC-SK4 counter skin bound to fails
+  | PASS AC-SK5 8 red controls
+  | PASS AC-SK6 canonical wins, new skins take the last row
+  | PASS AC-BSGB3 parity=True cwd=probe-8btd7aqe env=utf-8 timeout_rc=124
+  | PASS AC-BSGB4 mixed_rc=2 named=True exec=2 green_rc=0 exec_g=1
+  | PASS AC-BSGB11 indented_detail=True bare_detail=True rc=0
+  | PASS AC-BSGB12 agree_row=True red_named=True rc=0
+SHARD-CHECK name=shard-probe-evidence.log rows=1 green=1 bytes=328B
+SHARD-CHECK VERDICT PASS
+  | PASS AC-BSGB5 exec=1 rows=1 green=1 clean=0 bad=2 named=True
+  | PASS AC-BSGB8 claim_rc=2 named=True shipped_clean=True
+  | PASS AC-BSGB6 refusals=3 dry_rc=2 shipped_check=0
+  | PASS AC-BSGB7 untouched=True banned=0
+  | PASS AC-BSGB13 rc=1 carriers=2 rows=2
+  | PASS AC-BTG1 rc=124 named=True elapsed=1.0s
+  | PASS AC-BTG2 effective=600 raised=0
+  | PASS AC-BTG3 rc=124 clamp_kept=True
+  | PASS AC-BTG4 rc=2 named=True row=True
+  | PASS AC-BSGB14 rc=2 bare_named=True declared_rc=0
+  | PASS AC-BSGB15 rc=0 running_seen=True pipe_row=True final_rows=2 complete=True
+  | PASS AC-BSGB16 partial_rc=2 named=True complete_rc=0
+  | PASS AC-BSGB17 executed=2 checked=1 mismatch=0 last=crit_checked=1
+  | PASS AC-BSGB18 all_checked=1 all_named=[] sil_checked=0 sil_named=['probe-silent']
+  | PASS AC-BSGB19 bad_rc=0 mismatch=1 checked=1 check_rc=0
+  | PASS AC-BSGB20 declared=5 registry=5 stripped=None leg_rc=0 checked=1
+suite: 30 assertions over 30 criteria
+SUITE PASS 30/30

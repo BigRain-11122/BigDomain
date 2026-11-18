@@ -7097,9 +7097,10 @@ SUITES = [
     # declaration line reads 24 assertions over 24 criteria after the change.
     # R2886: 24 -> 26 (AC-BSGB15/16, the streaming law and the partial-file
     # refusal); R2919: 26 -> 29 (AC-BSGB17/18/19, crit_checked plus the named
-    # unchecked population).
+    # unchecked population); R2920: 29 -> 30 (AC-BSGB20, the declaration bound
+    # to a registry row).
     ("os-battery-shard",
-     os.path.join("..", "os", "test_battery_shard.py"), 29),
+     os.path.join("..", "os", "test_battery_shard.py"), 30),
     # R2845: the OUTPUT-level face of the same question the census asks from
     # source. Four probe suites in a private world classify by the row they
     # really printed, the law and the invocation are imported from the runner,
@@ -7217,10 +7218,13 @@ SUITES = [
     # --check refuses a class that drifted in either direction, and the fixture
     # world measures the extractor's own limit rather than assuming it away.
     # (AC-RCC1..AC-RCC4 pre-registered in src/os/backlog.md at R2918, before
-    # the tool existed.) Appended at the END for the same reason as every row
-    # above: a mid-list insert shifts each later suite's shard.
+    # the tool existed. AC-RCC5 added at R2920 so the suite DECLARES its
+    # criteria in the dialect the battery reader compares - a bare checks leaf
+    # left this row's count unrefuted for two rounds.) Appended at the END for
+    # the same reason as every row above: a mid-list insert shifts each later
+    # suite's shard.
     ("os-registry-counter-census",
-     os.path.join("..", "os", "test_registry_counter_census.py"), 4),
+     os.path.join("..", "os", "test_registry_counter_census.py"), 5),
     ]
 
 FAILS = 0
