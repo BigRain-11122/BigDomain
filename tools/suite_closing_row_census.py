@@ -74,6 +74,22 @@ line) is outside this class by declaration, and a law literal that never
 reaches a call is measured separately - four rows carry one, none is law only
 through it. The audit reads the same LITERAL scan, so a row built at run time,
 in a helper module, or split across literals is out of range by construction.
+
+R2966 (AC-CEN15..AC-CEN16): the adjacent class R2965 measured with a throwaway
+probe is on the shipped audit face now. --fixture-audit prints a SECOND line,
+'CENSUS fixture nowhere=<n> law_only=<n>', plus one 'CENSUS nowhere <label>'
+row per suite that carries a law-shaped literal which never REACHES a call.
+Reach is one hop and AST-based: a literal reaches a call when it sits inside a
+call's arguments, or when it is part of a value expression assigned to a NAME
+that is used inside a call's arguments (bind-then-print, containers bound with
+their name). 'law_only' counts rows whose only law families are bought that way
+- measured zero here, so this face reports a class and claims no defect. The
+verdict line and classify() are byte-for-byte unchanged; the audit only adds
+lines. Declared boundaries: a literal inside a function the module never calls
+still counts as reaching a call (the question is 'does it reach a call', not
+'does it run'), the five registry rows whose source will not parse are not
+judged by this face at all, and a row that builds its text at run time is out
+of range exactly as the other faces say.
 """
 
 import argparse
@@ -216,6 +232,77 @@ def split_law(src):
         if referenced & names:
             return True
     return False
+
+
+def _call_args(tree):
+    """Every argument expression of every call in this module."""
+    out = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call):
+            out.extend(node.args)
+            out.extend(k.value for k in node.keywords)
+    return out
+
+
+def _reached_bodies(tree):
+    """Normalised string values that REACH a call, with one hop of binding.
+
+    A literal reaches a call when it sits inside a call's argument expression,
+    or when it is part of the value expression assigned to a NAME that is then
+    used inside a call's arguments - the ordinary bind-then-print shape
+    (`verdict = "SUITE PASS %d/%d" % (p, t)` then `print(verdict)`). A
+    container is bound with its name too, so a stored table that is printed
+    whole is out of this class instead of being called stored.
+
+    R2966: the reading is AST-based ON PURPOSE. The text scan sees the pieces
+    of an implicit concatenation while the parser makes them one constant, so a
+    text-piece reach test called a printed row stored (measured this window:
+    nowhere_hit=44 law_only=31 before this became AST-based).
+    """
+    reached, used = set(), set()
+    for arg in _call_args(tree):
+        for sub in ast.walk(arg):
+            if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
+                reached.add(normalise(sub.value))
+            elif isinstance(sub, ast.Name):
+                used.add(sub.id)
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign):
+            continue
+        if not any(isinstance(t, ast.Name) and t.id in used
+                   for t in node.targets):
+            continue
+        for sub in ast.walk(node.value):
+            if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
+                reached.add(normalise(sub.value))
+    return reached
+
+
+def nowhere_law(src):
+    """Law families carried ONLY by a literal that never reaches a call.
+
+    Returns (nowhere_families, reachable_law_families) - what the row carries
+    and never prints, and what it does print - or None when the source will not
+    parse: this face does not judge what it cannot read, so a parse failure can
+    never fake a class size.
+    """
+    try:
+        tree = ast.parse(src)
+    except SyntaxError:
+        return None
+    reached = _reached_bodies(tree)
+    have, reach = set(), set()
+    for node in ast.walk(tree):
+        if not (isinstance(node, ast.Constant)
+                and isinstance(node.value, str)):
+            continue
+        family = shape_of_literal(node.value, src)
+        if family not in LAW_FAMILIES:
+            continue
+        have.add(family)
+        if normalise(node.value) in reached:
+            reach.add(family)
+    return have - reach, reach
 
 
 BINDS = re.compile(r'"PASS"|"FAIL"|PASS if|FAIL if|if not fail|if fail == 0')
@@ -444,6 +531,7 @@ def main(argv=None):
     counts, non_law, missing = {}, [], []
     exec_live, unexecuted, why = 0, [], {}
     fixture_hit, law_only = 0, []
+    nowhere_hit, nowhere_rows, nowhere_only = 0, [], []
     for label, rel, declared in rows:
         path = os.path.join(root, "src", "sandbox", rel)
         if not os.path.isfile(path):
@@ -469,6 +557,15 @@ def main(argv=None):
             alt = classify(text, skip_fixture=True)
             if alt not in LAW_FAMILIES:
                 law_only.append((label, shape, alt))
+            got = nowhere_law(text)
+            if got is not None:
+                families, reachable = got
+                if families:
+                    nowhere_hit += 1
+                    nowhere_rows.append((label, ",".join(sorted(families))))
+                    if not reachable and not split_law(text):
+                        nowhere_only.append((label, shape,
+                                             ",".join(sorted(families))))
         sites = law_sites(text)
         if sites is None or any(pos == "live" for _fam, pos in sites):
             # unparsable source is counted as executing: it cannot be proven
@@ -504,6 +601,13 @@ def main(argv=None):
               % (fixture_hit, len(law_only)))
         for label, shape, alt in law_only:
             print("CENSUS law-only %s from=%s to=%s" % (label, shape, alt))
+        print("CENSUS fixture nowhere=%d law_only=%d"
+              % (nowhere_hit, len(nowhere_only)))
+        for label, families in nowhere_rows:
+            print("CENSUS nowhere %s nowhere=%s" % (label, families))
+        for label, shape, families in nowhere_only:
+            print("CENSUS nowhere-only %s shape=%s nowhere=%s"
+                  % (label, shape, families))
     if not args.quiet_list:
         by_shape = {}
         for label, shape in non_law:

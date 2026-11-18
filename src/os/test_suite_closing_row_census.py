@@ -57,7 +57,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.dirname(BASE)
 ROOT = os.path.dirname(SRC)
 
-EXPECTED_CRITERIA = 14
+EXPECTED_CRITERIA = 16
 LABEL = "os-suite-closing-row-census"
 TOOL = os.path.join(ROOT, "tools", "suite_closing_row_census.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
@@ -657,6 +657,118 @@ def ac_cen14():
           % (law_only, literal_rows))
 
 
+# R2966: the adjacent class - a law-shaped literal that never REACHES a call.
+# The control is a suite that stores the row as a DICT VALUE and prints only
+# "done": the value is law-shaped by source, unreadable in fact, and the audit
+# must count it. The other two arms are one-hop binding (bind then print) and a
+# direct print, which must stay OUT of the class - otherwise the audit would
+# just be reporting every mention as stored.
+STORED_ROW_SRC = (
+    "FILES = {\n"
+    "    'probe.py': 'SUITE PASS %d/%d\\neligible = 1\\n',\n"
+    "}\n"
+    "print(\"done\")\n")
+BOUND_ROW_SRC = ('verdict = "SUITE PASS %d/%d" % (2, 2)\n'
+                 'print(verdict, flush=True)\n')
+DIRECT_ROW_SRC = 'print("SUITE PASS %d/%d" % (2, 2))\n'
+# measured at R2966 with the shipped face, by content-addressed label: four rows
+# R2965 had already named plus os-leg-header-check, whose stored counters row
+# only the AST read can see. A new stored law literal must be counted HERE
+# deliberately - the same pressure AC-CEN3 puts on the live registry.
+NOWHERE_ROWS = ("os-leg-header-check", "os-runner-abort-face",
+                "os-runner-abort-history", "os-runner-suite-timeout-headroom",
+                "os-runner-suite-timeout-headroom-overrides")
+
+
+def audit_line(out, prefix):
+    """Fields of the first line starting with `prefix`, or {} when absent."""
+    for line in out.splitlines():
+        if line.startswith(prefix):
+            return dict(re.findall(r"(\w+)=(\S+)", line))
+    return {}
+
+
+def verdict_lines(out):
+    """Every census line that does NOT belong to the audit faces."""
+    return [l for l in out.splitlines()
+            if not l.startswith(("CENSUS fixture ", "CENSUS nowhere"))]
+
+
+def ac_cen15():
+    """A stored row is counted; bind-then-print and a direct print are not."""
+    folder, copy_tool = world("right", [("stored", "stored.py", 1),
+                                        ("bound", "bound.py", 1),
+                                        ("direct", "direct.py", 1)])
+    try:
+        sandbox = os.path.join(folder, "src", "sandbox")
+        write_text(os.path.join(sandbox, "stored.py"), STORED_ROW_SRC)
+        write_text(os.path.join(sandbox, "bound.py"), BOUND_ROW_SRC)
+        write_text(os.path.join(sandbox, "direct.py"), DIRECT_ROW_SRC)
+        proc = subprocess.run(
+            [sys.executable, copy_tool, "--root", folder, "--quiet-list",
+             "--fixture-audit"], capture_output=True)
+        code = proc.returncode
+        out = proc.stdout.decode("utf-8", "replace")
+        st_rc, st_row = run_suite(os.path.join(sandbox, "stored.py"))
+        bd_rc, bd_row = run_suite(os.path.join(sandbox, "bound.py"))
+    finally:
+        cleanup(folder)
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import suite_closing_row_census as census
+    families = (census.nowhere_law(STORED_ROW_SRC),
+                census.nowhere_law(BOUND_ROW_SRC),
+                census.nowhere_law(DIRECT_ROW_SRC))
+    cited = ("CENSUS registry=3 law=3 non_law=0 missing=0" in out
+             and "CENSUS fixture nowhere=1 law_only=1" in out
+             and "CENSUS nowhere stored nowhere=law_direct" in out
+             and "CENSUS nowhere-only stored shape=law_direct "
+                 "nowhere=law_direct" in out)
+    indexed = ("CENSUS nowhere bound " not in out
+               and "CENSUS nowhere direct " not in out)
+    never_printed = st_rc == 0 and st_row == "<no SUITE row>"
+    hop = bd_rc == 0 and bd_row == "SUITE PASS 2/2"
+    measured = (families[0] == ({"law_direct"}, set())
+                and families[1] == (set(), {"law_direct"})
+                and families[2] == (set(), {"law_direct"}))
+    ok = (code == 0 and cited and indexed and never_printed and hop
+          and measured)
+    if not ok:
+        print("  measured rc=%d cited=%r indexed=%r stored=(rc=%d row=%r) "
+              "bound=(rc=%d row=%r) families=%r"
+              % (code, cited, indexed, st_rc, st_row, bd_rc, bd_row,
+                 families), flush=True)
+    check(ok, "AC-CEN15 stored row counted; bind-then-print and a direct "
+          "print stay out (%s)" % (families,))
+
+
+def ac_cen16():
+    """The live class size is pinned and the audit moves no verdict line."""
+    plain_code, plain_out = run_census(ROOT, quiet=True)
+    argv = [sys.executable, TOOL, "--root", ROOT, "--quiet-list",
+            "--fixture-audit"]
+    proc_a = subprocess.run(argv, capture_output=True)
+    proc_b = subprocess.run(argv, capture_output=True)
+    out_a = proc_a.stdout.decode("utf-8", "replace")
+    out_b = proc_b.stdout.decode("utf-8", "replace")
+    fields = audit_line(out_a, "CENSUS fixture nowhere=")
+    rows = [line.split()[2] for line in out_a.splitlines()
+            if line.startswith("CENSUS nowhere ")]
+    unchanged = verdict_lines(out_a) == verdict_lines(plain_out)
+    ok = (plain_code == 0 and proc_a.returncode == 0
+          and proc_b.returncode == 0 and out_a == out_b
+          and unchanged
+          and fields.get("nowhere") == str(len(NOWHERE_ROWS))
+          and fields.get("law_only") == "0"
+          and tuple(sorted(rows)) == NOWHERE_ROWS)
+    if not ok:
+        print("  measured rc=%d/%d/%d identical=%r unchanged=%r rows=%r "
+              "fields=%r" % (plain_code, proc_a.returncode, proc_b.returncode,
+                             out_a == out_b, unchanged, sorted(rows), fields),
+              flush=True)
+    check(ok, "AC-CEN16 live nowhere class pinned at %d rows, law_only 0, "
+          "verdict lines unchanged" % len(NOWHERE_ROWS))
+
+
 def main():
     print("suite closing-row census suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -674,6 +786,8 @@ def main():
     ac_cen12()
     ac_cen13()
     ac_cen14()
+    ac_cen15()
+    ac_cen16()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:
