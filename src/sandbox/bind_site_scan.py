@@ -7,7 +7,7 @@ ITSELF never reaches the gate, and nothing in the tree bounded that.  This
 module is that bound.  It is a static read over the sandbox sources, no
 processes, no sockets, no writes.
 
-Five kinds of site are recognised, and each has one rule:
+Six kinds of site are recognised, and each has one rule:
 
 ``http-server``
     a call that constructs an HTTP/TCP server (``ThreadingHTTPServer``,
@@ -62,19 +62,57 @@ Five kinds of site are recognised, and each has one rule:
     a guard inside a real branch (``if ready: guard()``) is refused too,
     because a static read cannot prove the branch runs.
 
+``socketserver-server``
+
+    a construction that reaches ``socketserver`` - the module imported (bare or
+
+    under an alias) and then ``<alias>.<name ending in Server>(...)``, a name
+
+    brought in from it that ends in ``Server`` and then called bare, or a
+
+    module-local ALIAS CHAIN that starts at one of those
+
+    (``Base = socketserver.UDPServer`` then ``Maker = Base`` then
+
+    ``Maker(...)``) - must sit inside a ``*.checked_server(...)`` call, the same
+
+    rule the ``http-server`` kind carries.  ``socketserver`` servers bind inside
+
+    ``__init__`` (``server_bind``), so the gate's server shim can wrap them
+
+    exactly as it wraps an ``http.server`` class.  A
+
+    ``class X(socketserver.<...>Server)`` is a ``server-subclass`` like any
+
+    other, because a subclass is not a bind by itself.  This kind stays apart
+
+    (a UDP or unix server is not an HTTP server), and this module reports what
+
+    it sees.
+
+
+    R2970 added this kind.  What it still does NOT recognise is named below.
+
+
 ``socket-bind``
-    a ``.bind(...)`` call is a probe or a listening socket and the two cannot
-    be told apart from syntax, so every such site must be listed, by path and
+
+    a ``.bind(...)`` call is a probe or a listening socket and the two cannot be told apart from syntax, so every such site must be listed, by path and
     enclosing function, in ``bind_sites.json``.  An unlisted site is
     ``E_BIND_SITE_UNAPPROVED`` - a new one is refused by name until a person
     writes down what it is.
 
 Not scanned, by name: ``test_*.py`` (suite scaffolding binds ephemeral ports
 on purpose), ``vendor`` directories and ``pycrdt-poc`` (third-party code is
-not this repo's face), and bind forms this module does not recognise
-(``socketserver`` factories named something else, ``serve_forever`` reached
-through an alias of an alias) - a hole that is named rather than implied
-closed.
+not this repo's face), and bind forms this module does not recognise - a hole
+that is named rather than implied closed.  Since R2970 the ``socketserver``
+family above IS judged when its shape is statically visible; what remains out
+of range, in the same breath: a constructor reached through another module
+(``import myservers as m`` then ``m.UDPServer(...)``), a class built with
+``type(...)`` or a factory such as ``functools.partial``, a class imported
+under a name that does not end in ``Server``, and ``serve_forever`` reached
+through an object this read cannot trace back to a construction.  A
+``serve_forever`` call is not itself a bind site: ``socketserver`` binds in
+``__init__``, so the construction is where the judgement belongs.
 
 Stdlib only (ast/json/os/sys), no shell, no network, no writes.
 """
@@ -109,7 +147,15 @@ UNGUARDED = "E_BIND_UNGUARDED_FACE"
 UNAPPROVED = "E_BIND_SITE_UNAPPROVED"
 
 KINDS = ("http-server", "server-subclass", "ws-serve", "asyncio-server",
-         "socket-bind")
+         "socketserver-server", "socket-bind")
+
+# R2970: the socketserver family, recognised from import facts rather than from
+# a growing list of class names, because the module's own namespace is what the
+# import statement names. A server class in that namespace always ends in
+# "Server" (TCPServer, UDPServer, UnixStreamServer, ForkingTCPServer, ...).
+SOCKETSERVER_MODULE = "socketserver"
+SOCKETSERVER_SUFFIX = "Server"
+SOCKETSERVER_KIND = "socketserver-server"
 
 
 def is_test_file(name):
@@ -174,6 +220,104 @@ def _asyncio_site(call, bare_imported):
     return None
 
 
+def _socketserver_module_names(tree):
+    """Names bound to the ``socketserver`` module itself."""
+    names = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name == SOCKETSERVER_MODULE:
+                    names.add(alias.asname or alias.name)
+    return names
+
+
+def _socketserver_class_names(tree):
+    """Names imported BY NAME from ``socketserver`` that name a server class.
+
+    Only names ending in ``Server`` qualify.  ``from socketserver import
+    BaseRequestHandler`` is a handler and ``ThreadingMixIn`` is a mixin; a
+    mixin alone binds nothing, so neither is a construction shape.
+    """
+    names = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.ImportFrom):
+            continue
+        if (node.module or "").split(".")[0] != SOCKETSERVER_MODULE:
+            continue
+        for alias in node.names:
+            if alias.name.endswith(SOCKETSERVER_SUFFIX):
+                names.add(alias.asname or alias.name)
+    return names
+
+
+def _server_class_shape(node, module_names, class_names, aliases):
+    """(kind, detail) when ``node`` evaluates to a server CLASS, else None."""
+    if isinstance(node, ast.Name):
+        if node.id in aliases:
+            kind, detail = sorted(aliases[node.id])[0]
+            return (kind, "%s->%s" % (node.id, detail))
+        if node.id in SERVER_NAMES:
+            return ("http-server", node.id)
+        if node.id in class_names:
+            return (SOCKETSERVER_KIND, "%s(from socketserver)" % node.id)
+        return None
+    if isinstance(node, ast.Attribute):
+        if isinstance(node.value, ast.Name) and node.value.id in module_names:
+            if node.attr.endswith(SOCKETSERVER_SUFFIX):
+                return (SOCKETSERVER_KIND,
+                        "%s.%s" % (node.value.id, node.attr))
+            return None
+        if node.attr in SERVER_NAMES:
+            return ("http-server", node.attr)
+    return None
+
+
+def _server_aliases(tree, module_names, class_names):
+    """Module-local names bound to a server class, followed to a fixpoint.
+
+    One assignment is what a person writes; an alias OF an alias is the same
+    fact one step further out, and both are static - the value is either a bare
+    server-class name or an attribute of the socketserver module.  A name
+    assigned twice keeps BOTH shapes, because a static read cannot prove which
+    assignment runs, and this module's standing rule is to refuse a shape it
+    cannot bound rather than guess the live one.
+    """
+    assigns = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign):
+            targets = [t for t in node.targets if isinstance(t, ast.Name)]
+            value = node.value
+        elif isinstance(node, ast.AnnAssign) and node.value is not None:
+            targets = [node.target] if isinstance(node.target, ast.Name) else []
+            value = node.value
+        else:
+            continue
+        if targets:
+            assigns.append((node.lineno, targets, value))
+    assigns.sort(key=lambda item: item[0])
+    aliases = {}
+    changed = True
+    while changed:
+        changed = False
+        for _, targets, value in assigns:
+            shape = _server_class_shape(value, module_names, class_names,
+                                        aliases)
+            if shape is None:
+                continue
+            for target in targets:
+                before = aliases.get(target.id, frozenset())
+                after = before | frozenset((shape,))
+                if after != before:
+                    aliases[target.id] = after
+                    changed = True
+    return aliases
+
+
+def _socketserver_site(call, module_names, class_names, aliases):
+    """(kind, detail) when ``call`` constructs a server this read can trace."""
+    return _server_class_shape(call.func, module_names, class_names, aliases)
+
+
 def _is_guard_call(node):
     """True when ``node`` is a Call through a ``guard`` name (bare or attribute)."""
     if not isinstance(node, ast.Call):
@@ -200,14 +344,21 @@ def _level_guard_lines(body):
     return lines
 
 
-def _class_bases(classdef):
-    """Every server class name appearing in a ClassDef's bases."""
+def _class_bases(classdef, module_names, class_names, aliases):
+    """Every server class appearing in a ClassDef's bases."""
     found = []
     for base in classdef.bases:
-        if isinstance(base, ast.Name) and base.id in SERVER_NAMES:
-            found.append(base.id)
-        elif isinstance(base, ast.Attribute) and base.attr in SERVER_NAMES:
-            found.append(base.attr)
+        if isinstance(base, ast.Name):
+            if (base.id in SERVER_NAMES or base.id in class_names
+                    or base.id in aliases):
+                found.append(base.id)
+        elif isinstance(base, ast.Attribute):
+            if base.attr in SERVER_NAMES:
+                found.append(base.attr)
+            elif (isinstance(base.value, ast.Name)
+                  and base.value.id in module_names
+                  and base.attr.endswith(SOCKETSERVER_SUFFIX)):
+                found.append("%s.%s" % (base.value.id, base.attr))
     return found
 
 
@@ -225,6 +376,9 @@ def scan_source(path, text):
     has_checked = GUARD_CALL in text
     imports_websockets = "websockets" in text
     bare_start = _asyncio_imported(tree)
+    ss_modules = _socketserver_module_names(tree)
+    ss_classes = _socketserver_class_names(tree)
+    ss_aliases = _server_aliases(tree, ss_modules, ss_classes)
     stack = [(tree, [], None)]
     while stack:
         node, ancestors, func_node = stack.pop()
@@ -272,15 +426,27 @@ def scan_source(path, text):
                             "code": None if guarded else UNGUARDED,
                             "detail": shape,
                         })
-                    elif callee == "bind":
-                        rows.append({
-                            "path": rel, "line": child.lineno,
-                            "function": name, "kind": "socket-bind",
-                            "code": None,  # the baseline decides
-                            "detail": callee,
-                        })
+                    else:
+                        traced = _socketserver_site(child, ss_modules,
+                                                    ss_classes, ss_aliases)
+                        if traced:
+                            traced_kind, traced_detail = traced
+                            guarded = any(_is_guarded_call(a) for a in here)
+                            rows.append({
+                                "path": rel, "line": child.lineno,
+                                "function": name, "kind": traced_kind,
+                                "code": None if guarded else UNGUARDED,
+                                "detail": traced_detail,
+                            })
+                        elif callee == "bind":
+                            rows.append({
+                                "path": rel, "line": child.lineno,
+                                "function": name, "kind": "socket-bind",
+                                "code": None,  # the baseline decides
+                                "detail": callee,
+                            })
             elif isinstance(child, ast.ClassDef):
-                bases = _class_bases(child)
+                bases = _class_bases(child, ss_modules, ss_classes, ss_aliases)
                 if bases:
                     rows.append({
                         "path": rel, "line": child.lineno,

@@ -1,11 +1,13 @@
 """Suite for the static bind-site gate that bounds R2942's disclosed hole.
 
-Criteria AC-BSC1..AC-BSC14. AC-BSC1..AC-BSC5 were pinned in src/os/backlog.md
+Criteria AC-BSC1..AC-BSC17. AC-BSC1..AC-BSC5 were pinned in src/os/backlog.md
 BEFORE this file, src/sandbox/bind_site_scan.py and src/sandbox/bind_sites.json
 existed (in-window pre-registration, disclosed); AC-BSC6..AC-BSC7 came with the
 asyncio kind (R2944), AC-BSC8..AC-BSC9 with its order/level rule (R2945),
-AC-BSC10..AC-BSC12 with the same rule applied to ws-serve (R2946), and
-AC-BSC13..AC-BSC14 with the unix half of the asyncio family (R2969).
+AC-BSC10..AC-BSC12 with the same rule applied to ws-serve (R2946), AC-BSC13..
+AC-BSC14 with the unix half of the asyncio family (R2969), and AC-BSC15..
+AC-BSC17 with the socketserver construction family plus the measured
+declaration that serve_forever is not a bind site (R2970).
 
 Nothing here is read off the scanner's own prose: every criterion builds a
 private world on disk, runs the SHIPPED ``scan()`` over it, and requires a
@@ -36,6 +38,9 @@ WORLD = os.path.join(REPO, "logs", "bind-scan-suite")
 # once this round is committed HEAD carries the new scanner, so a HEAD-pinned
 # red control would grade a tree against itself (the R2959 lesson).
 PRE_R2969_REV = "73a00b5d64290948c1b2972208f7d5096a29ce4c"
+# The revision AC-BSC16 measures the live tree against: the R2969 bytes, i.e.
+# the scanner BEFORE the socketserver family existed.
+PRE_R2970_REV = "c6bf93ea03476a43feb023dca735af3809448fb5"
 
 sys.path.insert(0, HERE)
 import bind_site_scan  # noqa: E402
@@ -127,6 +132,67 @@ def top_level_guard_lines(body):
         if name == "guard":
             lines.append(stmt.lineno)
     return lines
+
+
+def serve_forever_sites(root):
+    """Every live ``serve_forever`` call, and whether its object came through
+    a ``checked_server(...)`` construction inside the same module.
+
+    Written here rather than imported from the scanner because AC-BSC17 grades
+    a DECLARATION with a measurement: the answer "serve_forever is not a bind
+    site" is only honest if the two live calls can be traced to the place where
+    the socket really binds.
+    """
+    sites = []
+    for rel, full in bind_site_scan.iter_modules(root):
+        rel = rel.replace(os.sep, "/")
+        with open(full, encoding="utf-8", errors="replace") as handle:
+            text = handle.read()
+        try:
+            tree = ast.parse(text)
+        except SyntaxError:
+            continue
+        factories = set()
+        for node in ast.walk(tree):
+            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            if any(isinstance(sub, ast.Call)
+                   and isinstance(sub.func, ast.Attribute)
+                   and sub.func.attr == "checked_server"
+                   for sub in ast.walk(node)):
+                factories.add(node.name)
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call):
+                continue
+            func = node.func
+            if not (isinstance(func, ast.Attribute)
+                    and func.attr == "serve_forever"):
+                continue
+            site = {"path": rel, "line": node.lineno, "resolved": False}
+            if isinstance(func.value, ast.Name):
+                want = func.value.id
+                for owner in ast.walk(tree):
+                    body = getattr(owner, "body", None)
+                    if not isinstance(body, list):
+                        continue
+                    for stmt in body:
+                        if not isinstance(stmt, ast.Assign):
+                            continue
+                        if not any(isinstance(t, ast.Name) and t.id == want
+                                   for t in stmt.targets):
+                            continue
+                        value = stmt.value
+                        if not isinstance(value, ast.Call):
+                            continue
+                        callee = value.func
+                        if (isinstance(callee, ast.Attribute)
+                                and callee.attr == "checked_server"):
+                            site["resolved"] = True
+                        elif (isinstance(callee, ast.Name)
+                              and callee.id in factories):
+                            site["resolved"] = True
+            sites.append(site)
+    return sites
 
 
 def main():
@@ -859,6 +925,161 @@ def main():
                        % fresh_text.count("[refuse] "))
         os.remove(old_leaf)
     report("AC-BSC14", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC15: the socketserver family is judged at construction -----
+    bad = []
+    root = fresh_world("bsc15")
+    ss_raw = (
+        "import socketserver\n"
+        "\n"
+        "class Handler(socketserver.BaseRequestHandler):\n"
+        "    def handle(self):\n"
+        "        pass\n"
+        "\n"
+        "def boot(host, port):\n"
+        "    return socketserver.UDPServer((host, port), Handler)\n"
+    )
+    ss_gated = (
+        "import socketserver\n"
+        "import birth_gate\n"
+        "\n"
+        "class Handler(socketserver.BaseRequestHandler):\n"
+        "    def handle(self):\n"
+        "        pass\n"
+        "\n"
+        "def boot(host, port):\n"
+        "    return birth_gate.checked_server(\n"
+        "        lambda: socketserver.UDPServer((host, port), Handler))\n"
+    )
+    ss_module_alias = (
+        "import socketserver as ss\n"
+        "\n"
+        "def boot(host, port, handler):\n"
+        "    return ss.ForkingTCPServer((host, port), handler)\n"
+    )
+    ss_by_name = (
+        "from socketserver import ThreadingUDPServer\n"
+        "\n"
+        "def boot(host, port, handler):\n"
+        "    return ThreadingUDPServer((host, port), handler)\n"
+    )
+    ss_chain = (
+        "import socketserver\n"
+        "\n"
+        "Base = socketserver.UDPServer\n"
+        "Maker = Base\n"
+        "\n"
+        "def boot(host, port, handler):\n"
+        "    return Maker((host, port), handler)\n"
+    )
+    write(root, "raw.py", ss_raw)
+    write(root, "module_alias.py", ss_module_alias)
+    write(root, "by_name.py", ss_by_name)
+    write(root, "chain.py", ss_chain)
+    loud = bind_site_scan.scan(root=root)
+    if loud["ok"]:
+        bad.append("socketserver-sites-passed")
+    got = {r["path"]: r for r in loud["refused"]}
+    want = {
+        "raw.py": ("socketserver-server", "socketserver.UDPServer", 8, "boot"),
+        "module_alias.py": ("socketserver-server", "ss.ForkingTCPServer",
+                            4, "boot"),
+        "by_name.py": ("socketserver-server",
+                       "ThreadingUDPServer(from socketserver)", 4, "boot"),
+        "chain.py": ("socketserver-server",
+                     "Maker->Base->socketserver.UDPServer", 7, "boot"),
+    }
+    for rel, (kind, detail, line, function) in want.items():
+        row = got.get(rel)
+        if row is None:
+            bad.append("not-named-" + rel)
+            continue
+        if row["kind"] != kind:
+            bad.append("kind-%s-%s" % (rel, row["kind"]))
+        if row["code"] != bind_site_scan.UNGUARDED:
+            bad.append("code-%s-%s" % (rel, row["code"]))
+        if row["detail"] != detail:
+            bad.append("detail-%s-%s" % (rel, row["detail"]))
+        if row["line"] != line:
+            bad.append("line-%s-%s" % (rel, row["line"]))
+        if row["function"] != function:
+            bad.append("function-%s-%s" % (rel, row["function"]))
+    # red control: gate the SAME construction and the same world passes - the
+    # red was the missing door, not the word socketserver.
+    write(root, "raw.py", ss_gated)
+    for rel in ("module_alias.py", "by_name.py", "chain.py"):
+        os.remove(os.path.join(root, rel))
+    healed = bind_site_scan.scan(root=root)
+    if not healed["ok"]:
+        bad.append("gated-socketserver-still-refused")
+    # positive controls: a handler is not a server, and a bare name nobody
+    # imported is not licensed by the word appearing in the file.
+    boundary = fresh_world("bsc15-boundary")
+    write(boundary, "handler.py",
+          "import socketserver\n"
+          "\n"
+          "def make(handler):\n"
+          "    return socketserver.BaseRequestHandler(handler)\n")
+    write(boundary, "bare.py",
+          "def boot(host, port, handler):\n"
+          "    return UDPServer((host, port), handler)\n")
+    quiet = bind_site_scan.scan(root=boundary)
+    if not quiet["ok"]:
+        bad.append("boundary-refused")
+    if quiet["sites"] != 0:
+        bad.append("boundary-sites-%d" % quiet["sites"])
+    report("AC-BSC15", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC16: the live tree does not move a single line -------------
+    bad = []
+    live = bind_site_scan.scan(root=HERE)
+    if not live["ok"]:
+        bad.append("shipped-tree-refused")
+    if live["sites"] != 14:
+        bad.append("live-sites-%d" % live["sites"])
+    want_kinds = {"http-server": 8, "server-subclass": 2, "socket-bind": 3,
+                  "ws-serve": 1}
+    if live["by_kind"] != want_kinds:
+        bad.append("live-kinds-%s" % sorted(live["by_kind"].items()))
+    old = subprocess.run(["git", "show", PRE_R2970_REV
+                          + ":src/sandbox/bind_site_scan.py"],
+                         cwd=REPO, stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    if old.returncode != 0 or not old.stdout:
+        bad.append("no-old-bytes")
+    else:
+        old_leaf = os.path.join(WORLD, "bind_site_scan_prer2970.py")
+        with open(old_leaf, "wb") as handle:
+            handle.write(old.stdout)
+        before = subprocess.run(
+            [sys.executable, old_leaf, "--list", "--root", HERE],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, timeout=120)
+        after = subprocess.run(
+            [sys.executable, LEAF, "--list", "--root", HERE],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, timeout=120)
+        if before.returncode != 0 or after.returncode != 0:
+            bad.append("list-rc-%d/%d" % (before.returncode, after.returncode))
+        if before.stdout != after.stdout:
+            bad.append("live-lines-moved")
+        os.remove(old_leaf)
+    report("AC-BSC16", bool(bad), ",".join(bad))
+
+    # ---- AC-BSC17: serve_forever is declared out of range, with the
+    # measurement that makes the declaration checkable ---------------------
+    bad = []
+    sites = serve_forever_sites(HERE)
+    if len(sites) != 2:
+        bad.append("serve-forever-%d" % len(sites))
+    paths = sorted(set(s["path"] for s in sites))
+    if paths != ["frontdoor.py", "member/member_page.py"]:
+        bad.append("paths-%s" % paths)
+    unresolved = [s for s in sites if not s["resolved"]]
+    if unresolved:
+        bad.append("unresolved-%s"
+                   % [(s["path"], s["line"]) for s in unresolved])
+    report("AC-BSC17", bool(bad), ",".join(bad))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
