@@ -510,6 +510,8 @@ def _round(args):
     executed = 0
     green = 0
     crit_run = 0
+    crit_checked = 0
+    unchecked = []
     mismatch = []
     undeclared = []
     reds = []
@@ -531,14 +533,22 @@ def _round(args):
             # its criteria count is compared like-for-like, and a disagreement
             # there is graded by --declared-only. The shard keeps it a footnote
             # and does not move rc, exactly as that criterion requires.
+            crit_checked += 1
             if declared != int(crit):
                 mismatch.append("%s:%d!=%d" % (label, declared, crit))
-        elif parsed and parsed[2] != int(crit):
+        elif parsed is not None:
             # AC-BSGB14 (R2881): an UNDECLARED suite whose printed total
             # disagrees with its registry row is the true blind spot - no reader
             # can say which number counts what, and no other mode reddens it.
-            mismatch.append("%s:%d!=%d" % (label, parsed[2], crit))
-            undeclared.append("%s:%d!=%d" % (label, parsed[2], crit))
+            crit_checked += 1
+            if parsed[2] != int(crit):
+                mismatch.append("%s:%d!=%d" % (label, parsed[2], crit))
+                undeclared.append("%s:%d!=%d" % (label, parsed[2], crit))
+        else:
+            # AC-BSGB17/18 (R2919): this row's registry criteria was never
+            # compared against anything the suite printed, so a zero mismatch
+            # count here is silence rather than agreement. Named, not counted.
+            unchecked.append(label)
         executed += 1
         crit_run += int(crit)
         if code == 0:
@@ -569,8 +579,9 @@ def _round(args):
     # that criterion rather than the criterion being adjusted to it.
     rc = 0 if (green == executed == len(picked)) and not undeclared else 2
     closing = ("SHARD rc=%d scope=SHARD selected=%d executed=%d green=%d "
-               "criteria=%d crit_mismatch=%d elapsed=%.1fs"
-               % (rc, len(picked), executed, green, crit_run, len(mismatch), elapsed))
+               "criteria=%d crit_mismatch=%d elapsed=%.1fs crit_checked=%d"
+               % (rc, len(picked), executed, green, crit_run, len(mismatch),
+                  elapsed, crit_checked))
     print(closing, flush=True)
     # AC-BSGB15: the closing row plus a COMPLETE header are what separate an
     # artifact from a progress note, so a killed leg keeps a truthful RUNNING
@@ -585,6 +596,14 @@ def _round(args):
     if mismatch:
         print("SHARD disclosure crit_mismatch=%s" % ",".join(mismatch), flush=True)
         lines.append("SHARD disclosure crit_mismatch=%s" % ",".join(mismatch))
+    if unchecked:
+        # AC-BSGB18 (R2919): a leg whose rows print no criteria has compared
+        # NOTHING, and "crit_mismatch=0" alone has been read as "all counts
+        # agreed" for rounds. The unrefutable rows are named so the two numbers
+        # cannot be read apart from the population they describe.
+        print("SHARD disclosure crit_unchecked=%s" % ",".join(unchecked),
+              flush=True)
+        lines.append("SHARD disclosure crit_unchecked=%s" % ",".join(unchecked))
     if reds:
         print("SHARD red %s" % ",".join(reds), flush=True)
         lines.append("SHARD red %s" % ",".join(reds))

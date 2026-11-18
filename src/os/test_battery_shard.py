@@ -71,6 +71,12 @@ print("SUITE PASS 1/1")
 PROBE_BARE = """print("SUITE PASS 1/1")
 """
 
+# AC-BSGB17/18 (R2919): a suite that prints NO verdict row at all. Its registry
+# criteria is never compared against anything, which is the population the
+# closing row used to hide behind a zero mismatch count.
+PROBE_SILENT = """print("  | PASS probe-silent")
+"""
+
 # AC-BSGB14 (R2881): the SAME verdict row counts assertions; only the
 # declaration differs. A registry row of 8 criteria beside a bare 21/21 is the
 # under-declared unit class this criterion refuses by name.
@@ -720,6 +726,106 @@ def main():
            and "VERDICT PASS" in buf_complete.getvalue(),
            "partial_rc=%d named=%s complete_rc=%d"
            % (code_partial, partial_named, code_complete))
+    finally:
+        shutil.rmtree(world, ignore_errors=True)
+
+    # ---- AC-BSGB17/18/19 (R2919 pin): the closing row says HOW MUCH of its
+    # zero it measured. One world holds a DECLARING probe and a SILENT probe, so
+    # the leg's own two numbers can be read against the population they describe
+    # instead of against each other.
+    world = tempfile.mkdtemp(prefix="battery_shard_checked_")
+    try:
+        for name, body in (("probe_decl_ok.py", PROBE_DECL_OK),
+                           ("probe_decl_bad.py", PROBE_DECL_BAD),
+                           ("probe_silent.py", PROBE_SILENT)):
+            with open(os.path.join(world, name), "w", encoding="utf-8",
+                      newline="\n") as handle:
+                handle.write(body)
+        qa_dir = os.path.join(world, "qa")
+        os.makedirs(qa_dir, exist_ok=True)
+
+        def closing_of(text):
+            for line in text.splitlines():
+                if line.startswith("SHARD rc="):
+                    return line
+            return ""
+
+        def field(text, key):
+            for piece in closing_of(text).split():
+                if piece.startswith(key + "="):
+                    return piece.split("=", 1)[1]
+            return None
+
+        def unchecked(text):
+            for line in text.splitlines():
+                if line.startswith("SHARD disclosure crit_unchecked="):
+                    return line.split("=", 1)[1].split(",")
+            return []
+
+        saved_dir = shard.QA_DIR
+        shard.QA_DIR = qa_dir
+        try:
+            patch_registry(shard, [("probe-decl-ok", "probe_decl_ok.py", 8),
+                                   ("probe-silent", "probe_silent.py", 4)],
+                           world)
+            code_mixed, out_mixed = run_cli(
+                shard, ["--match", "probe", "--evidence", "mixed.log"])
+            patch_registry(shard, [("probe-decl-ok", "probe_decl_ok.py", 8)],
+                           world)
+            code_all, out_all = run_cli(
+                shard, ["--match", "probe-decl-ok"])
+            patch_registry(shard, [("probe-silent", "probe_silent.py", 4)],
+                           world)
+            code_sil, out_sil = run_cli(
+                shard, ["--match", "probe-silent"])
+            patch_registry(shard, [("probe-decl-bad", "probe_decl_bad.py", 8)],
+                           world)
+            code_bad, out_bad = run_cli(
+                shard, ["--match", "probe-decl-bad"])
+            buf_chk = io.StringIO()
+            with contextlib.redirect_stdout(buf_chk):
+                code_chk = shard.do_check("mixed.log")
+        finally:
+            shard.QA_DIR = saved_dir
+
+        # AC-BSGB17 - the field exists, it counts only COMPARED rows, and it is
+        # appended LAST so every pre-R2919 field-order reader still parses.
+        mixed_line = closing_of(out_mixed)
+        ok("AC-BSGB17",
+           code_mixed == 0 and field(out_mixed, "executed") == "2"
+           and field(out_mixed, "crit_checked") == "1"
+           and field(out_mixed, "crit_mismatch") == "0"
+           and mixed_line.split()[-1].startswith("crit_checked="),
+           "executed=%s checked=%s mismatch=%s last=%s"
+           % (field(out_mixed, "executed"), field(out_mixed, "crit_checked"),
+              field(out_mixed, "crit_mismatch"),
+              mixed_line.split()[-1] if mixed_line else "none"))
+
+        # AC-BSGB18 - the unchecked population is PUBLISHED on both sides: a
+        # silent row is named, an all-declaring leg names nobody, and a leg of
+        # silent rows reads 0/0 WITH the disclosure rather than a bare zero.
+        ok("AC-BSGB18",
+           code_all == 0 and field(out_all, "crit_checked") == "1"
+           and field(out_all, "executed") == "1" and not unchecked(out_all)
+           and code_sil == 0 and field(out_sil, "crit_checked") == "0"
+           and field(out_sil, "crit_mismatch") == "0"
+           and unchecked(out_sil) == ["probe-silent"]
+           and unchecked(out_mixed) == ["probe-silent"],
+           "all_checked=%s all_named=%s sil_checked=%s sil_named=%s"
+           % (field(out_all, "crit_checked"), unchecked(out_all),
+              field(out_sil, "crit_checked"), unchecked(out_sil)))
+
+        # AC-BSGB19 - a reading, never a verdict: the declared mismatch stays a
+        # footnote on a green leg (AC-BSGB12), the shipped do_check still adopts
+        # the leg, and the new field is what counts that comparison.
+        ok("AC-BSGB19",
+           code_bad == 0 and field(out_bad, "crit_mismatch") == "1"
+           and field(out_bad, "crit_checked") == "1"
+           and code_chk == 0
+           and "VERDICT PASS" in buf_chk.getvalue(),
+           "bad_rc=%d mismatch=%s checked=%s check_rc=%d"
+           % (code_bad, field(out_bad, "crit_mismatch"),
+              field(out_bad, "crit_checked"), code_chk))
     finally:
         shutil.rmtree(world, ignore_errors=True)
 

@@ -1,18 +1,18 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-18 R2918 ENGINEERING+MEASUREMENT: the board's carried '236 rows print SUITE PASS' number is replaced by a MEASURED list. New read-only face src/os/registry_counter_census.py AST-parses the registry rows, reads each suite SOURCE, and classifies every row by whether a printed SUITE leaf is one the SHIPPED tools/battery_shard.py reader parses: readable=246, unparsed=410, silent=62 (assembled_print_lines=277). The pinned population lives in src/os/registry_counter_census_pin.json and --check refuses a class that drifted in EITHER direction, so a new registry row cannot slip in without refreshing the pin.",
+    "current": "2026-11-18 R2919 PRODUCT+ENGINEERING: the closing SHARD row now says how much of its zero it measured. tools/battery_shard.py appends crit_checked=<n> after elapsed= and prints SHARD disclosure crit_unchecked=<labels> naming every executed row whose registry criteria was never compared against anything its suite printed - because crit_mismatch=0 was being read as 'all counts verified' on legs where most rows print no parseable criteria at all.",
     "last_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\journey-19.9.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/registry-counter-census-shard-R2918.log (426B, 2026-11-18)",
-    "latest_evidence": "qa/registry-counter-census-shard-R2918.log (426B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/crit-checked-clean-R2919.log (437B, 2026-11-18)",
+    "latest_evidence": "qa/crit-checked-clean-R2919.log (437B, 2026-11-18)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2919] next window (<=12h): (0) MAIN — the census now names 246 readable / 410 unparsed / 62 silent, and the board question it was built for is still open: extend a per-suite self-check to the READABLE rows in batches, or keep the R2917 single-row binding plus this census as the accepted posture — pin the answer and give it a red control BEFORE the edit. (1) the UNPARSED class is inflated by the extractor's own blindness (277 assembled print lines): decide whether the census should neutralise multi-literal prints (`print(\"SUITE PASS\", n, \"/\", m)`) so the class means what its name says, with a fixture arm on each side. (2) CARRIED six windows: `docs/status-export.json` `latest_artifact` derives from the newest `preview/` pair, so a suite-plus-`qa/` round leaves the CEO face naming `preview/apimarket-report.*` — decide whether `qa/` joins the derivation or the face earns its own artifact line, with a red control on whichever wins (writer order: a `qa/` log written after `export_round.py` reddens AC-EXPE1) (truncated)",
-    "next_milestone_due": "2026-11-18T21:02:46+08:00",
-    "updated_at": "2026-11-18T09:02:46+08:00"
+    "next_milestone": "[R2920] next window (<=12h): (0) MAIN - `SHARD rc=` now publishes `crit_checked` and names the unchecked population, and the FIRST live measurement of the shipped registry found the shipped census suite itself in that population (`os-registry-counter-census` prints `SUITE PASS 15 checks`, no criteria leaf, so its registry crit=4 has never been compared - the same class its own census names for 410 other rows): decide whether a row that prints a `SUITE ... checks` leaf should be taught to the runner's reader (a 3rd dialect) or its suite should print the `suite: N assertions over M criteria` declaration, with a red control on whichever wins and `AC-BSGB17`'s `crit_checked` as the witness. (1) the R2919 head question (per-suite self-check over 246 READABLE rows vs the R2917 binding + this consumer field) is ANSWERED as \"consumer field wins\" - if a later window wants the per-suite batch, it must show what the field cannot already refute (truncated)",
+    "next_milestone_due": "2026-11-18T21:16:33+08:00",
+    "updated_at": "2026-11-18T09:16:33+08:00"
   },
-  "current": "2026-11-18 R2918 ENGINEERING+MEASUREMENT: the board's carried '236 rows print SUITE PASS' number is replaced by a MEASURED list. New read-only face src/os/registry_counter_census.py AST-parses the registry rows, reads each suite SOURCE, and classifies every row by whether a printed SUITE leaf is one the SHIPPED tools/battery_shard.py reader parses: readable=246, unparsed=410, silent=62 (assembled_print_lines=277). The pinned population lives in src/os/registry_counter_census_pin.json and --check refuses a class that drifted in EITHER direction, so a new registry row cannot slip in without refreshing the pin.",
+  "current": "2026-11-18 R2919 PRODUCT+ENGINEERING: the closing SHARD row now says how much of its zero it measured. tools/battery_shard.py appends crit_checked=<n> after elapsed= and prints SHARD disclosure crit_unchecked=<labels> naming every executed row whose registry criteria was never compared against anything its suite printed - because crit_mismatch=0 was being read as 'all counts verified' on legs where most rows print no parseable criteria at all.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -40,11 +40,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2918 ENGINEERING+MEASUREMENT: the board's carried '236 rows print SUITE PASS' number is replaced by a MEASURED list. New read-only face src/os/registry_counter_census.py AST-parses the registry rows, reads each suite SOURCE, and classifies every row by whether a printed SUITE leaf is one the SHIPPED tools/battery_shard.py reader parses: readable=246, unparsed=410, silent=62 (assembled_print_lines=277). The pinned population lives in src/os/registry_counter_census_pin.json and --check refuses a class that drifted in EITHER direction, so a new registry row cannot slip in without refreshing the pin.",
-  "export_ts": "2026-11-18T09:02:46+08:00",
+  "do": "2026-11-18 R2919 PRODUCT+ENGINEERING: the closing SHARD row now says how much of its zero it measured. tools/battery_shard.py appends crit_checked=<n> after elapsed= and prints SHARD disclosure crit_unchecked=<labels> naming every executed row whose registry criteria was never compared against anything its suite printed - because crit_mismatch=0 was being read as 'all counts verified' on legs where most rows print no parseable criteria at all.",
+  "export_ts": "2026-11-18T09:16:33+08:00",
   "latest_artifact": "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
-  "latest_evidence": "qa/registry-counter-census-shard-R2918.log (426B, 2026-11-18)",
-  "next_milestone": "[R2919] next window (<=12h): (0) MAIN — the census now names 246 readable / 410 unparsed / 62 silent, and the board question it was built for is still open: extend a per-suite self-check to the READABLE rows in batches, or keep the R2917 single-row binding plus this census as the accepted posture — pin the answer and give it a red control BEFORE the edit. (1) the UNPARSED class is inflated by the extractor's own blindness (277 assembled print lines): decide whether the census should neutralise multi-literal prints (`print(\"SUITE PASS\", n, \"/\", m)`) so the class means what its name says, with a fixture arm on each side. (2) CARRIED six windows: `docs/status-export.json` `latest_artifact` derives from the newest `preview/` pair, so a suite-plus-`qa/` round leaves the CEO face naming `preview/apimarket-report.*` — decide whether `qa/` joins the derivation or the face earns its own artifact line, with a red control on whichever wins (writer order: a `qa/` log written after `export_round.py` reddens AC-EXPE1) (truncated)",
+  "latest_evidence": "qa/crit-checked-clean-R2919.log (437B, 2026-11-18)",
+  "next_milestone": "[R2920] next window (<=12h): (0) MAIN - `SHARD rc=` now publishes `crit_checked` and names the unchecked population, and the FIRST live measurement of the shipped registry found the shipped census suite itself in that population (`os-registry-counter-census` prints `SUITE PASS 15 checks`, no criteria leaf, so its registry crit=4 has never been compared - the same class its own census names for 410 other rows): decide whether a row that prints a `SUITE ... checks` leaf should be taught to the runner's reader (a 3rd dialect) or its suite should print the `suite: N assertions over M criteria` declaration, with a red control on whichever wins and `AC-BSGB17`'s `crit_checked` as the witness. (1) the R2919 head question (per-suite self-check over 246 READABLE rows vs the R2917 binding + this consumer field) is ANSWERED as \"consumer field wins\" - if a later window wants the per-suite batch, it must show what the field cannot already refute (truncated)",
   "outs": [
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 commit]",
     "preview/journey-19.9.html (11115B) + preview/journey-19.9.json (6835B) [2026-11-18 mtime]",
@@ -157,7 +157,7 @@
   },
   "results": [
     [
-      "2918",
+      "2919",
       "OSLoop 执行 tick"
     ]
   ],
@@ -170,7 +170,7 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 86,
+    "log_lines_in_window": 84,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 14,
@@ -180,5 +180,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 75627
+  "state_bytes": 74661
 }

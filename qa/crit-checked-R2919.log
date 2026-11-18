@@ -1,0 +1,5 @@
+SHARD scope=SHARD registry_suites=718 registry_criteria=5675 selected=2 selected_criteria=33 cap=600s leg_cap=0s overrides=1 exact=2 state=COMPLETE
+SHARD row os-battery-shard rc=0 pass=29 fail=0 detail=yes suite=PASS 29/29 crit=29 8.5s
+SHARD row os-registry-counter-census rc=0 pass=15 fail=0 detail=yes suite=none crit=4 0.3s
+SHARD rc=0 scope=SHARD selected=2 executed=2 green=2 criteria=33 crit_mismatch=0 elapsed=8.8s crit_checked=1
+SHARD disclosure crit_unchecked=os-registry-counter-census
