@@ -1,0 +1,8 @@
+suite: writer-census additive disposition (R2712 AC-WCB7-1..6)
+PASS AC-WCB7-1 one named add returns DRIFT-CLEAN, others untouched
+PASS AC-WCB7-2 second add idempotent, baseline byte-equal
+PASS AC-WCB7-3 tee file refused, baseline byte-equal
+PASS AC-WCB7-4 missing and escaping names refused, no write
+PASS AC-WCB7-5 post-check reports remaining drift, no false green
+PASS AC-WCB7-6 hygiene, guard pair, accept face intact, no temp residue
+SUITE PASS 6/6 criteria

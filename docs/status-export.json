@@ -3,18 +3,18 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (7000B)"
     ],
-    "current": "2026-11-18 R2931 PRODUCT+ENGINEERING: tools/face_walk.py is no longer a shipped tool with no gate. The two laws the browser walk depends on moved into pure functions - page-relative link resolution (dead_targets) and the PNG signature check (png_ok) - so a stdlib suite can grade them, and walk_page now delegates to both (proven by reading walk_page's own source, not by intent). AC-FWS1..AC-FWS5 were pinned in src/os/backlog.md BEFORE the edit; the suite prints 'suite: 12 assertions over 5 criteria' / SUITE PASS 12/12 (qa/face-walk-static-R2931.log, 1153B, qa_log --check PASS); the live arm reads all 40 preview pages, 80 hrefs, dead=0 - the same value the R2930 browser census measured - and the same census FIRES dead=1 on a doctored world, so the arm has been seen refuse. The browser arm prints SKIP arm=face_walk_browser reason=on-demand-by-board every run, so an unrun arm cannot read as a pass. Regression: the real browser walk still runs after the refactor (qa/face-walk-live-R2931.log, index.html chars=10753 ok=1 rc=0). Registry 719 -> 720 suites / 5693 -> 5698 criteria (+1/+5 exactly), docs/sandbox-suite-matrix.md regenerated from its own header command and --check byte-identical at 75304B; battery leg os-face-walk-static rc=0 pass=12 crit=5 crit_mismatch=0 crit_checked=1 (qa/leg-face-walk-static-R2931.log); sibling os-evidence-read 17/17.",
+    "current": "2026-11-18 R2932 PRODUCT: the closeout now has a precondition that has been SEEN to refuse, and its first live run refused a REAL write - my own evidence log. tools/closeout_gate.py runs the shipped writer-census check over the working tree before the round is closed and refuses on its flags face (a new non-tee file, or a baselined file whose class moved); reader_refused is PUBLISHED and stays informational, because it counts files baselined by name at freeze time and gating on it would redden every closeout for history no round created.",
     "last_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
     "latest_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\filing-checklist.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/face-walk-R2930b.log (437B, 2026-11-18)",
-    "latest_evidence": "qa/face-walk-R2930b.log (437B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/census-baseline-add-regress-R2932.log (463B, 2026-11-18)",
+    "latest_evidence": "qa/census-baseline-add-regress-R2932.log (463B, 2026-11-18)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R2932] next window (<=12h): (0) MAIN — carried from R2931/R2926: the commit gate refuses STAGED bytes only, so an uncommitted non-tee write still reaches disk (truncated)",
-    "next_milestone_due": "2026-11-19T00:35:54+08:00",
-    "updated_at": "2026-11-18T12:35:54+08:00"
+    "next_milestone": "[R2933] next window (<=12h): (0) MAIN — carried from R2932: make the precondition CALLED rather than available. `tools/closeout_gate.py` exists and has refused a real write, but nothing in the tree invokes it before a round closes, so a future window can skip it exactly as this one nearly did. Decide the wiring and prove it: either the shipped closeout path (whatever the loop actually runs at close) calls it and its non-zero exit refuses the close, or the pre-commit hook runs it against the WORKING TREE as a second face beside the staged-bytes face — and whichever wins gets a red control showing the close/commit refused end to end. (1) carried from R2931: the browser arm is still unrun by any automation — decide whether an on-demand `face_walk --no-shot` census writes a witness the loop reads and grades against the static census, or declare the on-demand posture with a named trigger and owner (truncated)",
+    "next_milestone_due": "2026-11-19T00:48:01+08:00",
+    "updated_at": "2026-11-18T12:48:01+08:00"
   },
-  "current": "2026-11-18 R2931 PRODUCT+ENGINEERING: tools/face_walk.py is no longer a shipped tool with no gate. The two laws the browser walk depends on moved into pure functions - page-relative link resolution (dead_targets) and the PNG signature check (png_ok) - so a stdlib suite can grade them, and walk_page now delegates to both (proven by reading walk_page's own source, not by intent). AC-FWS1..AC-FWS5 were pinned in src/os/backlog.md BEFORE the edit; the suite prints 'suite: 12 assertions over 5 criteria' / SUITE PASS 12/12 (qa/face-walk-static-R2931.log, 1153B, qa_log --check PASS); the live arm reads all 40 preview pages, 80 hrefs, dead=0 - the same value the R2930 browser census measured - and the same census FIRES dead=1 on a doctored world, so the arm has been seen refuse. The browser arm prints SKIP arm=face_walk_browser reason=on-demand-by-board every run, so an unrun arm cannot read as a pass. Regression: the real browser walk still runs after the refactor (qa/face-walk-live-R2931.log, index.html chars=10753 ok=1 rc=0). Registry 719 -> 720 suites / 5693 -> 5698 criteria (+1/+5 exactly), docs/sandbox-suite-matrix.md regenerated from its own header command and --check byte-identical at 75304B; battery leg os-face-walk-static rc=0 pass=12 crit=5 crit_mismatch=0 crit_checked=1 (qa/leg-face-walk-static-R2931.log); sibling os-evidence-read 17/17.",
+  "current": "2026-11-18 R2932 PRODUCT: the closeout now has a precondition that has been SEEN to refuse, and its first live run refused a REAL write - my own evidence log. tools/closeout_gate.py runs the shipped writer-census check over the working tree before the round is closed and refuses on its flags face (a new non-tee file, or a baselined file whose class moved); reader_refused is PUBLISHED and stays informational, because it counts files baselined by name at freeze time and gating on it would redden every closeout for history no round created.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -42,11 +42,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-18 R2931 PRODUCT+ENGINEERING: tools/face_walk.py is no longer a shipped tool with no gate. The two laws the browser walk depends on moved into pure functions - page-relative link resolution (dead_targets) and the PNG signature check (png_ok) - so a stdlib suite can grade them, and walk_page now delegates to both (proven by reading walk_page's own source, not by intent). AC-FWS1..AC-FWS5 were pinned in src/os/backlog.md BEFORE the edit; the suite prints 'suite: 12 assertions over 5 criteria' / SUITE PASS 12/12 (qa/face-walk-static-R2931.log, 1153B, qa_log --check PASS); the live arm reads all 40 preview pages, 80 hrefs, dead=0 - the same value the R2930 browser census measured - and the same census FIRES dead=1 on a doctored world, so the arm has been seen refuse. The browser arm prints SKIP arm=face_walk_browser reason=on-demand-by-board every run, so an unrun arm cannot read as a pass. Regression: the real browser walk still runs after the refactor (qa/face-walk-live-R2931.log, index.html chars=10753 ok=1 rc=0). Registry 719 -> 720 suites / 5693 -> 5698 criteria (+1/+5 exactly), docs/sandbox-suite-matrix.md regenerated from its own header command and --check byte-identical at 75304B; battery leg os-face-walk-static rc=0 pass=12 crit=5 crit_mismatch=0 crit_checked=1 (qa/leg-face-walk-static-R2931.log); sibling os-evidence-read 17/17.",
-  "export_ts": "2026-11-18T12:35:54+08:00",
+  "do": "2026-11-18 R2932 PRODUCT: the closeout now has a precondition that has been SEEN to refuse, and its first live run refused a REAL write - my own evidence log. tools/closeout_gate.py runs the shipped writer-census check over the working tree before the round is closed and refuses on its flags face (a new non-tee file, or a baselined file whose class moved); reader_refused is PUBLISHED and stays informational, because it counts files baselined by name at freeze time and gating on it would redden every closeout for history no round created.",
+  "export_ts": "2026-11-18T12:48:01+08:00",
   "latest_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
-  "latest_evidence": "qa/face-walk-R2930b.log (437B, 2026-11-18)",
-  "next_milestone": "[R2932] next window (<=12h): (0) MAIN — carried from R2931/R2926: the commit gate refuses STAGED bytes only, so an uncommitted non-tee write still reaches disk (truncated)",
+  "latest_evidence": "qa/census-baseline-add-regress-R2932.log (463B, 2026-11-18)",
+  "next_milestone": "[R2933] next window (<=12h): (0) MAIN — carried from R2932: make the precondition CALLED rather than available. `tools/closeout_gate.py` exists and has refused a real write, but nothing in the tree invokes it before a round closes, so a future window can skip it exactly as this one nearly did. Decide the wiring and prove it: either the shipped closeout path (whatever the loop actually runs at close) calls it and its non-zero exit refuses the close, or the pre-commit hook runs it against the WORKING TREE as a second face beside the staged-bytes face — and whichever wins gets a red control showing the close/commit refused end to end. (1) carried from R2931: the browser arm is still unrun by any automation — decide whether an on-demand `face_walk --no-shot` census writes a witness the loop reads and grades against the static census, or declare the on-demand posture with a named trigger and owner (truncated)",
   "outs": [
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
@@ -161,7 +161,7 @@
   },
   "results": [
     [
-      "2930",
+      "2932",
       "OSLoop 执行 tick"
     ]
   ],
@@ -174,15 +174,15 @@
   "self_drive": {
     "window": "2026-11-12..2026-11-18",
     "window_days": 7,
-    "log_lines_in_window": 88,
+    "log_lines_in_window": 84,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 76828
+  "state_bytes": 71900
 }

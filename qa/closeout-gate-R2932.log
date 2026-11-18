@@ -1,0 +1,16 @@
+  | PASS AC-CLG1 live tree PASSES the closeout gate rc=0 line=CLOSEOUT-GATE PASS files=3328 flags=0 reader_refused=0 gating=flags
+  | PASS AC-CLG1 reported file count equals the directory, not a typed number reported=3328 disk=3328
+  | PASS AC-CLG1 gating face is flags gating=flags flags=0
+  | PASS AC-CLG2 frozen world passes before any leak rc=0 flags=0
+  | PASS AC-CLG2 a new non-tee write is REFUSED (the precondition fires) rc=2 reason=E_CLG_DRIFT
+  | PASS AC-CLG2 the refusal NAMES the leaking file named=['[flag] new-dialect: this-round-leak.log (class=cmd-raw)']
+  | PASS AC-CLG2 removing the leak returns the gate to PASS rc=0 line=CLOSEOUT-GATE PASS files=2 flags=0 reader_refused=0 gating=flags
+  | PASS AC-CLG3 an undecodable BASELINED file counts reader_refused=1 reader_refused=1
+  | PASS AC-CLG3 reader_refused ALONE does not refuse the closeout rc=0 verdict=PASS flags=0
+  | PASS AC-CLG4 the gate writes nothing (bytes and mtimes unchanged) files=3
+  | PASS AC-CLG4 two runs are byte-identical rc=0
+  | PASS AC-CLG5 a missing baseline is a NAMED refusal rc=2 line=CLOSEOUT-GATE REFUSED reason=E_CLG_NO_BASELINE baseline=no-such-baseline.json
+  | PASS AC-CLG5 an empty evidence dir is a NAMED refusal rc=2 line=CLOSEOUT-GATE REFUSED reason=E_CLG_EMPTY target=C:\Users\sjs20\AppData\Local\Temp\tmpcm8q5vgl\empty
+  | PASS AC-CLG5 a census row without flags= is REFUSED, not read as clean rc=2 line=CLOSEOUT-GATE REFUSED reason=E_CLG_ROW detail=census did not publish flags=
+suite: 14 assertions over 5 criteria
+SUITE PASS 14/14

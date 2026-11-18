@@ -7266,6 +7266,18 @@ SUITES = [
     # the R2930 browser census.
     ("os-face-walk-static",
      os.path.join("..", "os", "test_face_walk_static.py"), 5),
+    # R2932: the R2926 commit hook refuses STAGED evidence bytes only, so an
+    # uncommitted shell-captured write still reaches disk. The closeout gate
+    # runs the shipped census check over the working tree BEFORE the round is
+    # closed and refuses on its `flags` face (a new non-tee file, or a baselined
+    # file whose class moved) - the face that says "this round let a
+    # non-healthy write reach the tree". `reader_refused` is PUBLISHED and stays
+    # informational: it counts files baselined by name at freeze time, so
+    # refusing on it would redden every closeout for history no round created.
+    # The red control is a fixture world in which a new cmd-raw file is refused
+    # BY NAME and removing it returns the gate to PASS.
+    ("os-closeout-gate",
+     os.path.join("..", "os", "test_closeout_gate.py"), 5),
     ]
 
 FAILS = 0
