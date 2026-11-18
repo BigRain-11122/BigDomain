@@ -3,18 +3,18 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (7000B)"
     ],
-    "current": "2026-11-18 R2933 PRODUCT+ENGINEERING: the closeout precondition is now CALLED, not merely available. tools/hooks/pre_commit_gate.py gained a second face that runs the shipped writer census (src/os/qa_writer_census.py) over the WORKING TREE at root/qa and refuses on the same flags face the closeout gate gates on, so an UNSTAGED shell capture and a file whose INDEX bytes are healthy while its DISK bytes are not both refuse a REAL commit - neither of which the R2926 staged face could see. Chosen over wiring the closeout instead because the closeout is not a program in this repo (it is the round's own action sequence) and git is the only site that refuses mechanically.",
-    "last_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
-    "latest_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\filing-checklist.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/census-baseline-add-regress-R2932.log (463B, 2026-11-18)",
-    "latest_evidence": "qa/census-baseline-add-regress-R2932.log (463B, 2026-11-18)",
-    "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R2934] next window (<=12h): (0) MAIN — the tree face now refuses drift, but the two faces disagree BY CONSTRUCTION and this window only disclosed it: the staged face refuses ANY non-tee `qa/*.log` whatever the baseline says, while the tree face refuses only NEW drift. Decide and prove which rule is the law for evidence that is deliberately kept in a legacy dialect (a baselined file re-saved, or a legitimately archived sample), with a red control either way (truncated)",
-    "next_milestone_due": "2026-11-19T01:06:26+08:00",
-    "updated_at": "2026-11-18T13:06:26+08:00"
+    "current": "2026-11-18 R2934 PRODUCT: the sandbox was started and photographed, not described. start_all.py --check proved all six faces live (rc=0, zero errors) and the new shipped tools/ceo_live_shot.py drove it in serve mode, opened every face in the Edge already on this machine, and wrote seven full-page PNGs plus preview/live-sandbox.html. The lobby picture is a real session - guest admitted, sys.hello / sys.risk_warning / pay.grant_sandbox / chat.broadcast with evt_ids, one line typed and delivered over the socket - so the realtime loop is proven end to end for the first time in pixels.",
+    "last_artifact": "preview/live-sandbox.html + preview/live/{hub,lobby,city,gate,ledger,ugc,checkout}.png [2026-11-18 R2934]",
+    "latest_artifact": "preview/live-sandbox.html + preview/live/{hub,lobby,city,gate,ledger,ugc,checkout}.png [2026-11-18 R2934]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
+    "latest_artifact_note": "newest artifacts this window are the seven photographed faces and their gallery; qa/live-shot-R2934.log is the machine record of the same run",
+    "latest_evidence": "qa/live-shot-R2934.log (1346B, 2026-11-18) + qa/sandbox-six-faces-R2934.log (921B)",
+    "newest_pair_on_disk_is_board": false,
+    "next_milestone": "[R2935] next window (<=12h): (0) FOLD OWED - state closed at 79163B against the 78500B waterline (margin -663), so fold a whole round through the shipped runner BEFORE any surgery. (1) MAIN - the gallery is a snapshot of ONE run; make the shooter a repeatable proof instead: shoot the SAME faces twice (before/after a lobby action) and refuse when the two runs disagree on any face's status or error set, so 'live' stops being a single-frame claim. (2) the hub shows panel and member as NOT STARTED - decide whether start_all starts them too (seven of nine faces is the honest current number), with the launcher report extended rather than a second door invented. (3) carried: tasks.md untouched (P-47 board), the two PARTIAL legs declaration, 27 deep shard-6 rows unmeasured, outs 37 unmaintained, AC-VAC1..6, AC-LNKF1, the R2778 stand, 18 BOM scripts, BigDomain-OSLoop unregistered (S4W needs an elevated shell), and ZERO payment capability (no merchant id / server / domain / filing / appid).",
+    "next_milestone_due": "2026-11-19T01:20:00+08:00",
+    "updated_at": "2026-11-18T13:20:00+08:00"
   },
-  "current": "2026-11-18 R2933 PRODUCT+ENGINEERING: the closeout precondition is now CALLED, not merely available. tools/hooks/pre_commit_gate.py gained a second face that runs the shipped writer census (src/os/qa_writer_census.py) over the WORKING TREE at root/qa and refuses on the same flags face the closeout gate gates on, so an UNSTAGED shell capture and a file whose INDEX bytes are healthy while its DISK bytes are not both refuse a REAL commit - neither of which the R2926 staged face could see. Chosen over wiring the closeout instead because the closeout is not a program in this repo (it is the round's own action sequence) and git is the only site that refuses mechanically.",
+  "current": "2026-11-18 R2934 PRODUCT: the sandbox was started and photographed, not described. start_all.py --check proved all six faces live (rc=0, zero errors) and the new shipped tools/ceo_live_shot.py drove it in serve mode, opened every face in the Edge already on this machine, and wrote seven full-page PNGs plus preview/live-sandbox.html. The lobby picture is a real session - guest admitted, sys.hello / sys.risk_warning / pay.grant_sandbox / chat.broadcast with evt_ids, one line typed and delivered over the socket - so the realtime loop is proven end to end for the first time in pixels.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -43,10 +43,10 @@
     }
   ],
   "do": "2026-11-18 R2933 PRODUCT+ENGINEERING: the closeout precondition is now CALLED, not merely available. tools/hooks/pre_commit_gate.py gained a second face that runs the shipped writer census (src/os/qa_writer_census.py) over the WORKING TREE at root/qa and refuses on the same flags face the closeout gate gates on, so an UNSTAGED shell capture and a file whose INDEX bytes are healthy while its DISK bytes are not both refuse a REAL commit - neither of which the R2926 staged face could see. Chosen over wiring the closeout instead because the closeout is not a program in this repo (it is the round's own action sequence) and git is the only site that refuses mechanically.",
-  "export_ts": "2026-11-18T13:06:26+08:00",
-  "latest_artifact": "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
-  "latest_evidence": "qa/census-baseline-add-regress-R2932.log (463B, 2026-11-18)",
-  "next_milestone": "[R2934] next window (<=12h): (0) MAIN — the tree face now refuses drift, but the two faces disagree BY CONSTRUCTION and this window only disclosed it: the staged face refuses ANY non-tee `qa/*.log` whatever the baseline says, while the tree face refuses only NEW drift. Decide and prove which rule is the law for evidence that is deliberately kept in a legacy dialect (a baselined file re-saved, or a legitimately archived sample), with a red control either way (truncated)",
+  "export_ts": "2026-11-18T13:20:00+08:00",
+  "latest_artifact": "preview/live-sandbox.html (gallery, 7 faces) + preview/live/*.png [2026-11-18 R2934]",
+  "latest_evidence": "qa/live-shot-R2934.log + qa/six-faces-R2934 (see qa/sandbox-six-faces-R2934.log)",
+  "next_milestone": "[R2935] next window (<=12h): (0) FOLD OWED - state closed at 79163B against the 78500B waterline (margin -663), so fold a whole round through the shipped runner BEFORE any surgery. (1) MAIN - the gallery is a snapshot of ONE run; make the shooter a repeatable proof instead: shoot the SAME faces twice (before/after a lobby action) and refuse when the two runs disagree on any face's status or error set, so 'live' stops being a single-frame claim. (2) the hub shows panel and member as NOT STARTED - decide whether start_all starts them too (seven of nine faces is the honest current number), with the launcher report extended rather than a second door invented. (3) carried: tasks.md untouched (P-47 board), the two PARTIAL legs declaration, 27 deep shard-6 rows unmeasured, outs 37 unmaintained, AC-VAC1..6, AC-LNKF1, the R2778 stand, 18 BOM scripts, BigDomain-OSLoop unregistered (S4W needs an elevated shell), and ZERO payment capability (no merchant id / server / domain / filing / appid).",
   "outs": [
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 commit]",
     "preview/filing-checklist.html (12893B) + preview/filing-checklist.json (8138B) [2026-11-18 mtime]",
@@ -98,9 +98,9 @@
   "queue": {
     "delivered_total": 2,
     "floors": {
+      "explore": 10,
       "main": 5,
-      "tech": 10,
-      "explore": 10
+      "tech": 10
     },
     "missing": [],
     "queues": [
@@ -172,17 +172,17 @@
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
   "self_drive": {
-    "window": "2026-11-12..2026-11-18",
-    "window_days": 7,
-    "log_lines_in_window": 84,
     "idle_fast_mention_lines": 0,
+    "log_lines_in_window": 84,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
-    "proposals_total": 10,
     "proposals_open": 8,
+    "proposals_total": 10,
+    "queue_explore_open": 10,
     "queue_main_open": 6,
     "queue_tech_open": 10,
-    "queue_explore_open": 10
+    "substantive_non_idle_mention_lines": 16,
+    "window": "2026-11-12..2026-11-18",
+    "window_days": 7
   },
   "state_bytes": 76758
 }
