@@ -35,6 +35,14 @@ from sec_gate import ContentRejectedError, GateOfflineError, SecGate  # noqa: E4
 from store import EventStore, utc_now_iso  # noqa: E402
 import msgsec_stub  # noqa: E402
 
+# R2941: the birth-site check lives beside the other faces, so it is imported
+# by path rather than copied. Appended (not inserted) so the lobby's own
+# modules keep winning on this directory.
+_SANDBOX = os.path.dirname(BASE)
+if _SANDBOX not in sys.path:
+    sys.path.append(_SANDBOX)
+import birth_gate  # noqa: E402  (birth-site claim check)
+
 try:  # websockets >= 13 asyncio implementation
     from websockets.asyncio.server import serve
 
@@ -652,6 +660,9 @@ async def run_server(host, port, ping_interval, ping_timeout):
 
 def main():
     args = build_parser().parse_args()
+    # R2941: refuse to be born beside a sandbox this process does not belong
+    # to. No launcher serving means no claim, which is the hand-run world.
+    birth_gate.guard()
     try:
         with open(args.config, encoding="utf-8") as handle:
             cfg = json.load(handle)

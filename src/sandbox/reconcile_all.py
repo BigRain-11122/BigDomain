@@ -286,6 +286,13 @@ SUITES = [
     # kernel drops when the holder dies. AC-LMX1..AC-LMX5 were pinned in
     # src/os/backlog.md BEFORE this suite and the leaf module existed.
     ("launcher-mutex", os.path.join("test_launcher_mutex.py"), 5),
+    # R2941: the gate above guards the LAUNCHER, so a face started by hand
+    # beside a serving launcher was never refused (measured at R2940). The
+    # birth-site check now lives in the shipped face entries: a face asks the
+    # kernel claim whether its own parent is the holder before it binds.
+    # AC-HSG1..AC-HSG5 were pinned in src/os/backlog.md BEFORE this suite,
+    # src/sandbox/birth_gate.py and the six entry wires existed.
+    ("birth-gate", os.path.join("test_birth_gate.py"), 5),
     # sandbox control panel (R2481): the other half of what R2477 disclosed as
     # unmet - a browser can now START a face, because POST /panel/api/start
     # really spawns the shipped module on an OS-assigned port and reports the

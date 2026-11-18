@@ -26,14 +26,20 @@ the console, so what a reader sees is what the pipeline really decided.
 
 import json
 import os
+import sys
 import threading
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+_SANDBOX = os.path.dirname(HERE)
+if _SANDBOX not in sys.path:
+    sys.path.append(_SANDBOX)
+
+import birth_gate  # noqa: E402  (R2941 birth-site claim check)
 import pipeline as UGC_PIPELINE
 import store as UGC
 
-HERE = os.path.dirname(os.path.abspath(__file__))
 PAGE_NAME = "ugc_console.html"
 ROUTES = ("/ugc", "/ugc/")
 STATE_ROUTE = "/ugc/api/state"
@@ -281,6 +287,9 @@ def main(argv=None):
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8098)
     args = parser.parse_args(argv)
+    # R2941: refuse to be born beside a sandbox this process does not belong
+    # to (no claim = the hand-run world, which passes).
+    birth_gate.guard()
     try:
         with open(args.config, encoding="utf-8") as handle:
             cfg = json.load(handle)

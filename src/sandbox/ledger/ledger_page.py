@@ -48,6 +48,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
+_SANDBOX = os.path.dirname(HERE)
+if _SANDBOX not in sys.path:
+    sys.path.append(_SANDBOX)
+
+import birth_gate  # noqa: E402  (R2941 birth-site claim check)
 import reconcile as reconcile_script  # noqa: E402  (shipped check law)
 from ledger import Ledger, LedgerError  # noqa: E402  (shipped book law)
 
@@ -328,6 +333,9 @@ def main():
     parser.add_argument("--db", default=DEFAULT_DB)
     parser.add_argument("--config", default=DEFAULT_CONFIG)
     args = parser.parse_args()
+    # R2941: refuse to be born beside a sandbox this process does not belong
+    # to (no claim = the hand-run world, which passes).
+    birth_gate.guard()
 
     console = build_console(args.db, args.config)
     httpd = start_server(args.host, args.port, console)

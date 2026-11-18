@@ -48,7 +48,7 @@ _PAY = os.path.join(_SANDBOX, "pay")
 _LEDGER = os.path.join(_SANDBOX, "ledger")
 # BASE first, then the sibling faces: member modules win over same-named
 # pay modules, exactly as the shipped member suite resolves them.
-for _p in (HERE, _LEDGER, _PAY, _LOBBY):
+for _p in (HERE, _LEDGER, _PAY, _LOBBY, _SANDBOX):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
@@ -58,6 +58,7 @@ import ledger as LED           # noqa: E402
 import member as M             # noqa: E402
 import orders as PAY           # noqa: E402  (pay dock)
 import store as LOBBY_STORE    # noqa: E402  (lobby event store)
+import birth_gate              # noqa: E402  (R2941 birth-site claim check)
 
 PAGE_NAME = "member.html"
 MEMBER_CFG = os.path.join(HERE, "config.json")
@@ -332,6 +333,9 @@ def main(argv=None):
     parser.add_argument("--data-dir", default=None)
     parser.add_argument("--keep-data", action="store_true")
     args = parser.parse_args(argv)
+    # R2941: refuse to be born beside a sandbox this process does not belong
+    # to (no claim = the hand-run world, which passes).
+    birth_gate.guard()
 
     data_dir = args.data_dir
     temp_dir = None

@@ -35,6 +35,7 @@ Stdlib only. Source is pure ASCII; the page is the only non-ASCII file.
 import argparse
 import json
 import os
+import sys
 import threading
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -48,6 +49,12 @@ from msgsec_stub import (
 from pay_mock import PayMock, PayMockError, contract as pay_contract
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+_SANDBOX = os.path.dirname(HERE)
+if _SANDBOX not in sys.path:
+    sys.path.append(_SANDBOX)
+
+import birth_gate  # noqa: E402  (R2941 birth-site claim check)
+
 PAGE_NAME = "checkout.html"
 DEFAULT_CONFIG = os.path.join(HERE, "config.json")
 
@@ -324,6 +331,9 @@ def main():
                         help="serve the page with the content gate unwired (send reads 503)")
     args = parser.parse_args()
 
+    # R2941: refuse to be born beside a sandbox this process does not belong
+    # to (no claim = the hand-run world, which passes).
+    birth_gate.guard()
     demo = build_demo(args.config, with_gate=not args.no_gate)
     httpd = start_server(args.host, args.port, demo)
     port = httpd.server_address[1]

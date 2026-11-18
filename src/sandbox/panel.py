@@ -42,6 +42,11 @@ import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
+
+import birth_gate  # noqa: E402  (R2941: birth-site claim check)
+
 PAGE_NAME = "panel.html"
 ROUTES = ("/panel", "/panel/")
 STATE_ROUTE = "/panel/api/state"
@@ -497,6 +502,9 @@ def main(argv=None):
                              "publishes it as live and refuses to start or "
                              "stop it (repeat for each face)")
     args = parser.parse_args(argv)
+    # R2941: a face may only be born under the door that holds the sandbox
+    # claim. With no launcher serving there is no claim and this passes.
+    birth_gate.guard()
     try:
         owned = parse_owned(args.owned_face)
     except ValueError as exc:
