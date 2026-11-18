@@ -57,7 +57,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.dirname(BASE)
 ROOT = os.path.dirname(SRC)
 
-EXPECTED_CRITERIA = 12
+EXPECTED_CRITERIA = 14
 LABEL = "os-suite-closing-row-census"
 TOOL = os.path.join(ROOT, "tools", "suite_closing_row_census.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
@@ -568,6 +568,95 @@ def ac_cen12():
           "AC-CEN12 live gap closed: row reads %r and %s" % (read, measured))
 
 
+# R2965: the residual the R2964 header named by hand is measured now. A fixture
+# that stores a probe MODULE as data puts the row at the START of the stored
+# value (so the LITERAL scan reads it) and carries an embedded assignment line
+# (the declared fixture shape). The second constant is the LIVE row the crude
+# "\n and =" test fingered: it carries a trailing newline escape and an
+# embedded criteria=%d, which is why the discriminator needs an assignment
+# LINE, not just an equals sign.
+FIXTURE_ROW_SRC = (
+    "FILES = {\n"
+    "    'probe.py': 'SUITE PASS %d/%d\\neligible = 1\\n',\n"
+    "}\n"
+    "print(\"done\")\n")
+REAL_CRITERIA_ROW_SRC = (
+    'print("SUITE %s %d/%d criteria=%d\\n"\n'
+    '      % ("PASS", 2, 2, 2))\n')
+
+
+def ac_cen13():
+    """A stored probe module is measured; a live row is not mis-flagged."""
+    folder, copy_tool = world("right", [("fixture", "fixture.py", 1),
+                                        ("live", "live.py", 1)])
+    try:
+        sandbox = os.path.join(folder, "src", "sandbox")
+        write_text(os.path.join(sandbox, "fixture.py"), FIXTURE_ROW_SRC)
+        write_text(os.path.join(sandbox, "live.py"), REAL_CRITERIA_ROW_SRC)
+        proc = subprocess.run(
+            [sys.executable, copy_tool, "--root", folder, "--quiet-list",
+             "--fixture-audit"], capture_output=True)
+        code = proc.returncode
+        out = proc.stdout.decode("utf-8", "replace")
+        fx_rc, fx_row = run_suite(os.path.join(sandbox, "fixture.py"))
+    finally:
+        cleanup(folder)
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import suite_closing_row_census as census
+    shapes = (census.classify(FIXTURE_ROW_SRC),
+              census.classify(FIXTURE_ROW_SRC, skip_fixture=True),
+              census.classify(REAL_CRITERIA_ROW_SRC),
+              census.classify(REAL_CRITERIA_ROW_SRC, skip_fixture=True))
+    flag_fixture = census.is_fixture_text("SUITE PASS %d/%d\\neligible = 1\\n")
+    flag_live = census.is_fixture_text("SUITE %s %d/%d criteria=%d\\n")
+    cited = ("CENSUS registry=2 law=2 non_law=0 missing=0" in out
+             and "CENSUS fixture law_literal_rows=1 law_only=1" in out
+             and "CENSUS law-only fixture from=law_direct to=no_row" in out)
+    verdict = shapes == ("law_direct", "no_row", "law_status", "law_status")
+    never_printed = fx_rc == 0 and fx_row == "<no SUITE row>"
+    ok = (code == 0 and cited and verdict and never_printed
+          and flag_fixture is True and flag_live is False)
+    if not ok:
+        print("  measured rc=%d cited=%r shapes=%r printed=(rc=%d row=%r) "
+              "flags=(fixture=%r live=%r)"
+              % (code, cited, shapes, fx_rc, fx_row, flag_fixture,
+                 flag_live), flush=True)
+    check(ok, "AC-CEN13 stored probe module measured; a live row not flagged")
+
+
+def ac_cen14():
+    """The live class size is MEASURED and the flag moves no verdict."""
+    plain_code, plain_out = run_census(ROOT, quiet=True)
+    argv = [sys.executable, TOOL, "--root", ROOT, "--quiet-list",
+            "--fixture-audit"]
+    proc_a = subprocess.run(argv, capture_output=True)
+    proc_b = subprocess.run(argv, capture_output=True)
+    out_a = proc_a.stdout.decode("utf-8", "replace")
+    out_b = proc_b.stdout.decode("utf-8", "replace")
+    registry = [l for l in out_a.splitlines()
+                if l.startswith("CENSUS registry=")]
+    plain = [l for l in plain_out.splitlines()
+             if l.startswith("CENSUS registry=")]
+    fixture = [l for l in out_a.splitlines()
+               if l.startswith("CENSUS fixture ")]
+    fields = dict(re.findall(r"(\w+)=(\d+)", fixture[0])) if fixture else {}
+    law_only = fields.get("law_only")
+    literal_rows = fields.get("law_literal_rows")
+    same_verdict = bool(registry and plain and registry[0] == plain[0])
+    ok = (plain_code == 0 and proc_a.returncode == 0
+          and proc_b.returncode == 0 and out_a == out_b
+          and law_only == "0" and literal_rows is not None
+          and same_verdict)
+    if not ok:
+        print("  measured rc=%d/%d/%d identical=%r fixture=%r verdict=%r "
+              "plain=%r" % (plain_code, proc_a.returncode, proc_b.returncode,
+                            out_a == out_b, fixture, registry, plain),
+              flush=True)
+    check(ok, "AC-CEN14 live fixture class measured law_only=%r "
+          "law_literal_rows=%r, verdict unchanged"
+          % (law_only, literal_rows))
+
+
 def main():
     print("suite closing-row census suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -583,6 +672,8 @@ def main():
     ac_cen10()
     ac_cen11()
     ac_cen12()
+    ac_cen13()
+    ac_cen14()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

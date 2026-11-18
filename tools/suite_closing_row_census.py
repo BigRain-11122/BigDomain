@@ -24,6 +24,7 @@ quotes later is a deliberate criterion change and not a silent drift.
 Usage:
     python tools/suite_closing_row_census.py [--root .] [--quiet-list]
                                              [--list-unexecuted]
+                                             [--fixture-audit]
 
 R2963 (AC-CEN9..AC-CEN10): the reading above is a SOURCE reading, and this
 header says so; what it did not say was HOW WIDE the gap is. The verdict line
@@ -56,6 +57,23 @@ implied closed. On the shipped tree the split repair demotes exactly one row
 os-registry-counter-census, and the closing-row repair promotes it back to
 law_direct by printing a real pair row, so the two lines now read law=728 and
 exec law=728 unexecuted=0.
+
+R2965 (AC-CEN13..AC-CEN14): the residual above was MEASURED instead of assumed,
+and it is empty on this tree. --fixture-audit asks, for every law row, whether
+the family is bought by a literal whose OWN body is a probe MODULE stored as
+data (an embedded line of the shape `name = ...`), and whether the row would
+lose its last law family if such literals were excluded. Both counts are
+printed; the verdict line is NOT narrowed, so the audit measures without
+changing what law means (the same shape as the exec face). The discriminator is
+narrower than "carries a newline and an equals sign" and that narrowing is
+measured, not guessed: that crude test fingered the LIVE row
+'SUITE %s %d/%d criteria=%d\n' (trailing escape plus an embedded criteria=%d),
+so an assignment must START an embedded line and must not be a comparison.
+Declared boundary: a fixture that stores only the ROW text (no embedded module
+line) is outside this class by declaration, and a law literal that never
+reaches a call is measured separately - four rows carry one, none is law only
+through it. The audit reads the same LITERAL scan, so a row built at run time,
+in a helper module, or split across literals is out of range by construction.
 """
 
 import argparse
@@ -75,6 +93,12 @@ NO_NUMBERS = re.compile(r"^SUITE (PASS|FAIL)$")
 LEGACY_LOWER = re.compile(r"^suite: %d assertions over %d criteria")
 LITERAL = re.compile(r'"([^"\n]*(?:SUITE|suite)[^"\n]*)"'
                      r"|'([^'\n]*(?:SUITE|suite)[^'\n]*)'")
+# A probe MODULE stored as data carries embedded assignment LINES. Measured
+# R2965: the crude "carries a newline escape and an equals sign" test fingered
+# the live row 'SUITE %s %d/%d criteria=%d\n' (trailing escape plus an embedded
+# criteria=%d), so an assignment must start an embedded line and must not be a
+# comparison.
+ASSIGN_LINE = re.compile(r"(?:^|\\n)\s*[A-Za-z_]\w*\s*=(?!=)")
 # The 54 no_numbers suites R2845 audited at output level build the row in two
 # halves: a conditionally bound verdict name, then a format that slots it in.
 SPLIT_BIND = re.compile(r'(\w+)\s*=\s*"SUITE (?:PASS|FAIL)"\s+if\b[^\n]*\belse\s+'
@@ -258,13 +282,26 @@ def shape_of_literal(lit, src):
     return "other"
 
 
-def classify(src):
-    """Return the strongest shape family found in this suite's source."""
+def is_fixture_text(body):
+    """Does this literal body look like a probe MODULE stored as data?"""
+    return bool(ASSIGN_LINE.search(body))
+
+
+def classify(src, skip_fixture=False):
+    """Return the strongest shape family found in this suite's source.
+
+    skip_fixture drops every literal whose own body is a probe module stored as
+    data, so --fixture-audit can ask what the row would be without it. The
+    verdict line calls this with the default, so what law MEANS does not move.
+    """
     shapes = []
     if split_law(src):
         shapes.append("law_split")
     for m in LITERAL.finditer(src):
-        shapes.append(shape_of_literal(m.group(1) or m.group(2) or "", src))
+        body = m.group(1) or m.group(2) or ""
+        if skip_fixture and is_fixture_text(body):
+            continue
+        shapes.append(shape_of_literal(body, src))
     for name in FAMILIES:
         if name in shapes:
             return name
@@ -394,6 +431,7 @@ def main(argv=None):
     ap.add_argument("--root", default=".")
     ap.add_argument("--quiet-list", action="store_true")
     ap.add_argument("--list-unexecuted", action="store_true")
+    ap.add_argument("--fixture-audit", action="store_true")
     args = ap.parse_args(argv)
 
     root = os.path.abspath(args.root)
@@ -405,6 +443,7 @@ def main(argv=None):
     rows = registry(root)
     counts, non_law, missing = {}, [], []
     exec_live, unexecuted, why = 0, [], {}
+    fixture_hit, law_only = 0, []
     for label, rel, declared in rows:
         path = os.path.join(root, "src", "sandbox", rel)
         if not os.path.isfile(path):
@@ -418,6 +457,18 @@ def main(argv=None):
         if shape not in LAW_FAMILIES:
             non_law.append((label, shape))
             continue
+        if args.fixture_audit:
+            hit = False
+            for m in LITERAL.finditer(text):
+                body = m.group(1) or m.group(2) or ""
+                if is_fixture_text(body) and \
+                        shape_of_literal(body, text) in LAW_FAMILIES:
+                    hit = True
+            if hit:
+                fixture_hit += 1
+            alt = classify(text, skip_fixture=True)
+            if alt not in LAW_FAMILIES:
+                law_only.append((label, shape, alt))
         sites = law_sites(text)
         if sites is None or any(pos == "live" for _fam, pos in sites):
             # unparsable source is counted as executing: it cannot be proven
@@ -448,6 +499,11 @@ def main(argv=None):
                  "no_row", "missing_file"):
         if counts.get(name):
             print("CENSUS shape %s=%d" % (name, counts[name]))
+    if args.fixture_audit:
+        print("CENSUS fixture law_literal_rows=%d law_only=%d"
+              % (fixture_hit, len(law_only)))
+        for label, shape, alt in law_only:
+            print("CENSUS law-only %s from=%s to=%s" % (label, shape, alt))
     if not args.quiet_list:
         by_shape = {}
         for label, shape in non_law:
