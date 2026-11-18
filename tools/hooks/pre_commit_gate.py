@@ -1,21 +1,34 @@
-"""Commit-side call site of the freeze-round law (R2840, criteria AC-HK1..8).
+"""Commit-side call site of the freeze-round law (R2840, criteria AC-HK1..8)
+and of the evidence-dialect law (R2926, criteria AC-EVB1..5).
 
 The criteria were pinned in src/os/backlog.md BEFORE this file existed.
 
 What this owns: reading the STAGED set and naming any per-round one-off at or
-above the freeze. What it does not own: what counts as a one-off. That answer
-is asked of the law (src/os/one_off_round_scripts.py) through its own
-`round_of()` and `FREEZE_ROUND`, so the commit face, the closeout face and the
-battery face cannot disagree about the shape or about the round.
+above the freeze, and any staged qa/ evidence file whose STAGED BYTES are in a
+non-tee writer dialect. What it does not own: what counts as a one-off (that
+answer is asked of the law, src/os/one_off_round_scripts.py through its own
+`round_of()` and `FREEZE_ROUND`) or what counts as a non-tee dialect (asked of
+src/os/evidence_dialect.py, the same module the writer census delegates to) -
+so the commit face, the closeout face, the battery face and the census cannot
+disagree about either shape.
+
+R2926 measured why the second face exists and why the label is not it: 45
+shell-captured evidence files landed unnoticed in one window, and over the
+shipped tree 410 files carrying SHELL_CAPTURE_LABEL classify `tee` (healthy)
+while 579 of the 590 baselined debt files carry no label at all. The label
+names one writer family; the dialect names the disease. So this gate refuses by
+CLASS, at the only birth site the loop actually passes through.
 
 A retired one-off is a DELETE and is never refused: only added, copied,
-modified or renamed paths are read.
+modified or renamed paths are read. The same filter means a deleted evidence
+file is never refused either.
 
-  exit 0 = HOOK OK, nothing staged at or above the freeze
-  exit 1 = E_HOOK_REFUSE, every offending staged path named
+  exit 0 = HOOK OK, nothing staged at or above the freeze in a bad dialect
+  exit 1 = E_HOOK_REFUSE (one-off) and/or E_HOOK_EVIDENCE (dialect)
   exit 2 = E_HOOK_BAD_FLAGS
   exit 3 = E_HOOK_NO_GIT (the staged set could not be read)
-         = E_HOOK_NO_LAW (the law is not next to this gate)
+         = E_HOOK_NO_LAW (the freeze law is not next to this gate)
+         = E_HOOK_NO_EVIDENCE_LAW (the dialect law is not next to this gate)
 """
 
 import os
@@ -30,7 +43,8 @@ USAGE = (
     "  --root PATH  git work tree to read (default the tree above tools/)\n"
     "  --freeze N   round id at or above which a staged one-off is refused\n"
     "               (default comes from the law)\n"
-    "  exit 0 = HOOK OK, 1 = E_HOOK_REFUSE, 2 = bad flags, 3 = no git/law\n"
+    "  exit 0 = HOOK OK, 1 = E_HOOK_REFUSE/E_HOOK_EVIDENCE, 2 = bad flags,\n"
+    "           3 = no git/law/dialect\n"
 )
 
 
@@ -55,6 +69,21 @@ def load_law(root):
     return law
 
 
+def load_dialect(root):
+    """The evidence-dialect law (AC-EVB5: missing = named refusal)."""
+    law_dir = os.path.join(root, "src", "os")
+    if not os.path.isdir(law_dir):
+        raise GateError("E_HOOK_NO_EVIDENCE_LAW", law_dir)
+    if law_dir not in sys.path:
+        sys.path.insert(0, law_dir)
+    try:
+        import evidence_dialect as dialect
+    except Exception as exc:   # a broken law must not read as a clean commit
+        raise GateError("E_HOOK_NO_EVIDENCE_LAW",
+                        "%s: %s" % (type(exc).__name__, exc))
+    return dialect
+
+
 def staged(root):
     """Every staged path that would ADD bytes (deletions are retired files)."""
     proc = subprocess.run(
@@ -65,6 +94,35 @@ def staged(root):
         raise GateError("E_HOOK_NO_GIT",
                         proc.stderr.decode("utf-8", "replace").strip())
     return [p for p in proc.stdout.decode("utf-8", "replace").split("\0") if p]
+
+
+def staged_blob(root, rel):
+    """The staged BYTES of one path - the index, not the work tree."""
+    proc = subprocess.run(["git", "-C", root, "show", ":" + rel],
+                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if proc.returncode != 0:
+        raise GateError("E_HOOK_NO_GIT",
+                        "staged blob unreadable: %s (%s)"
+                        % (rel, proc.stderr.decode("utf-8", "replace").strip()))
+    return proc.stdout
+
+
+def evidence_refusals(root, paths, dialect):
+    """Staged qa/*.log paths whose staged bytes are not the healthy dialect.
+
+    AC-EVB2: scoped to the evidence directory, not to the dialect - a
+    non-tee sample filed anywhere else (logs/ archive copies) still commits.
+    """
+    out = []
+    for rel in paths:
+        norm = rel.replace("\\", "/")
+        if not (norm.startswith("qa/") and norm.endswith(".log")):
+            continue
+        row = dialect.classify_bytes(staged_blob(root, rel))
+        if row["class"] != dialect.HEALTHY:
+            out.append((rel, row["class"]))
+    out.sort()
+    return out
 
 
 def refusals(paths, law, freeze):
@@ -116,6 +174,8 @@ def main(argv=None):
             freeze = law.FREEZE_ROUND
         paths = staged(root)
         refused = refusals(paths, law, freeze)
+        dialect = load_dialect(root)
+        bad_evidence = evidence_refusals(root, paths, dialect)
     except GateError as exc:
         sys.stderr.write("%s\n" % exc)
         return 3
@@ -132,8 +192,18 @@ def main(argv=None):
         sys.stderr.write(
             "E_HOOK_REFUSE a per-round one-off is not committed: keep the "
             "behaviour in a permanent module and retire the one-off\n")
+    if bad_evidence:
+        names = ",".join("%s(%s)" % (rel, cls) for rel, cls in bad_evidence)
+        sys.stderr.write(
+            "E_HOOK_EVIDENCE refused=%d staged=%d files=%s\n"
+            % (len(bad_evidence), len(paths), names))
+        sys.stderr.write(
+            "E_HOOK_EVIDENCE staged evidence is not in the healthy "
+            "utf-8+LF dialect: rewrite it through tools/qa_log.py, or "
+            "bypass deliberately with: git commit --no-verify\n")
+    if refused or bad_evidence:
         return 1
-    sys.stdout.write("HOOK OK staged=%d freeze=%d rc=0\n"
+    sys.stdout.write("HOOK OK staged=%d freeze=%d evidence=clean rc=0\n"
                      % (len(paths), freeze))
     return 0
 

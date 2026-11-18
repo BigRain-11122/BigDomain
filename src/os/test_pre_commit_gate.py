@@ -32,12 +32,19 @@ sys.path.insert(0, BASE)
 
 import one_off_round_scripts as OOS  # noqa: E402
 
-EXPECTED_CRITERIA = 10
+sys.path.insert(0, os.path.join(SRC, "sandbox"))
+import reconcile_all as RA  # SHELL_CAPTURE_LABEL, single source (AC-EVB3)
+
+EXPECTED_CRITERIA = 15
 HOOKS = os.path.join(ROOT, "tools", "hooks")
 GATE = os.path.join(HOOKS, "pre_commit_gate.py")
 ENABLE = os.path.join(HOOKS, "enable.py")
 HOOK = os.path.join(HOOKS, "pre-commit")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
+CENSUS = os.path.join(BASE, "qa_writer_census.py")
+DIALECT = os.path.join(BASE, "evidence_dialect.py")
+PROBE = os.path.join(BASE, "qa_decode_probe.py")
+MATRIX = os.path.join(SRC, "sandbox", "suite_matrix.py")
 LABEL = "os-pre-commit-gate"
 
 PASSES = 0
@@ -71,8 +78,8 @@ def run(cmd, cwd):
             proc.stderr.decode("utf-8", "replace"))
 
 
-def make_world():
-    """A real git work tree holding only the gate, the law and a baseline."""
+def make_world(with_dialect=True):
+    """A real git work tree holding only the gate, the laws and a baseline."""
     world = tempfile.mkdtemp(prefix="hk-world-")
     os.makedirs(os.path.join(world, "tools", "hooks"))
     for name in ("pre-commit", "pre_commit_gate.py", "enable.py"):
@@ -81,6 +88,11 @@ def make_world():
     os.makedirs(os.path.join(world, "src", "os"))
     shutil.copy2(os.path.join(BASE, "one_off_round_scripts.py"),
                  os.path.join(world, "src", "os", "one_off_round_scripts.py"))
+    if with_dialect:
+        # AC-EVB5: the dialect law travels with the gate. It is a LEAF
+        # module by construction, so the world needs nothing else for it.
+        shutil.copy2(DIALECT, os.path.join(world, "src", "os",
+                                           "evidence_dialect.py"))
     run(["git", "init", "-q"], world)
     for key, value in (("user.email", "hook@example.invalid"),
                        ("user.name", "Hook World"),
@@ -94,6 +106,12 @@ def write(path, body):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(body)
+
+
+def write_bytes(path, payload):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "wb") as fh:
+        fh.write(payload)
 
 
 def commit(world, message):
@@ -148,6 +166,60 @@ try:
           "AC-HK2 a staged one-off is refused, named, count unchanged (%d)"
           % before)
 
+    # AC-EVB1 - R2926: a staged evidence file in a non-tee dialect is refused
+    # at the commit, named, and the commit count does not move.
+    # (The AC-HK2 one-off is still staged after its own refusal - a refused
+    # commit changes nothing - so clear it before the next commit is read.)
+    run(["git", "reset", "-q"], world)
+    os.unlink(os.path.join(world, "src", "os", "foo_R2838.py"))
+    write_bytes(os.path.join(world, "qa", "utf16-evidence.log"),
+                b"\xff\xfe" + "PASS row\n".encode("utf-16-le"))
+    run(["git", "add", "-A"], world)
+    before_e = commits(world)
+    code_e, out_e, err_e = commit(world, "shell-captured evidence must not land")
+    check(code_e != 0
+          and "E_HOOK_EVIDENCE" in err_e
+          and "qa/utf16-evidence.log(ps-utf16)" in err_e
+          and commits(world) == before_e,
+          "AC-EVB1 staged shell-captured evidence refused by a REAL commit, "
+          "named with its class, count unchanged (%d)" % before_e)
+
+    # AC-EVB2 - the gate is scoped to qa/, not to the dialect: the same bytes
+    # filed under logs/ commit, and a deleted evidence file is never refused.
+    run(["git", "reset", "-q"], world)
+    os.unlink(os.path.join(world, "qa", "utf16-evidence.log"))
+    write(os.path.join(world, "qa", "healthy.log"), "PASS healthy\n")
+    run(["git", "add", "-A"], world)
+    commit(world, "healthy tee evidence")
+    before_s = commits(world)
+    write_bytes(os.path.join(world, "logs", "archived-sample.log"),
+                b"\xff\xfe" + "archived\n".encode("utf-16-le"))
+    run(["git", "rm", "-q", "qa/healthy.log"], world)
+    run(["git", "add", "-A"], world)
+    code_s, out_s, err_s = commit(world, "archive sample plus evidence delete")
+    check(code_s == 0 and "HOOK OK" in (out_s + err_s)
+          and commits(world) == before_s + 1,
+          "AC-EVB2 non-qa/ sample and an evidence deletion both commit "
+          "(rc=%d %s)" % (code_s, (err_s + out_s).strip()[:160]))
+
+    # AC-EVB3 - the label is not the law, measured both ways.
+    write_bytes(os.path.join(world, "qa", "unlabeled-tee.log"),
+                "PASS no label here\n".encode("utf-8"))
+    run(["git", "add", "-A"], world)
+    before_l = commits(world)
+    code_l, out_l, err_l = commit(world, "unlabeled tee evidence")
+    label_bytes = RA.SHELL_CAPTURE_LABEL.encode("ascii")
+    write_bytes(os.path.join(world, "qa", "labeled-capture.log"),
+                label_bytes + b"\r\nPASS row\r\n")
+    run(["git", "add", "-A"], world)
+    code_lc, out_lc, err_lc = commit(world, "labeled non-tee evidence")
+    check(code_l == 0 and "HOOK OK" in (out_l + err_l)
+          and commits(world) == before_l + 1
+          and code_lc != 0 and "E_HOOK_EVIDENCE" in err_lc
+          and "labeled-capture.log(pwsh-capture)" in err_lc,
+          "AC-EVB3 label absent commits, label present in a bad dialect is "
+          "refused (rc=%d/%d)" % (code_l, code_lc))
+
     # AC-HK5 - the hook is LF-only and a missing interpreter is a named refusal.
     hook_raw = read(HOOK)
     hook_src = hook_raw.decode("utf-8", "replace")
@@ -184,10 +256,48 @@ check(law_code == 0 and report["verdict"] in ("OK", "NONE")
       "AC-HK6 real tree: law clean, enable --check honest (rc=%d), gate clean"
       % code_rt)
 
-# AC-HK7 - registration.
+# AC-EVB4 - one dialect law: the census delegates instead of keeping a copy,
+# and the baselined label split is published from that same module.
+census_src = text(CENSUS)
+dialect_src = text(DIALECT)
+code_split = ("import sys\n"
+              "sys.path.insert(0, %r)\n"
+              "import evidence_dialect as ED\n"
+              "rows = [('a.log', ED.classify_bytes(b'PASS\\n', b'LABEL')),"
+              " ('b.log', ED.classify_bytes(b'LABEL\\nPASS\\n', b'LABEL'))]\n"
+              "s = ED.label_coverage(rows)\n"
+              "print('SPLIT', s['labeled'], s['unlabeled'],"
+              " s['labeled_names'])\n" % BASE)
+rc_sp, out_sp, err_sp = run([sys.executable, "-c", code_split], ROOT)
+code_live, out_live, _ = run([sys.executable, CENSUS, "--check"], ROOT)
+check("ED.classify_bytes" in census_src
+      and "ED.label_coverage" in census_src
+      and 'row["class"] = "nul-bytes"' not in census_src
+      and 'row["class"] = "nul-bytes"' in dialect_src
+      and "SPLIT 1 1 ['b.log']" in out_sp
+      and ("labeled_baselined=" in out_live
+           and "unlabeled_baselined=" in out_live),
+      "AC-EVB4 one dialect law (census delegates, no branch copy), label "
+      "split published (rc=%d, split rc=%d)" % (code_live, rc_sp))
+
+# AC-EVB5 - a missing classifier is a NAMED refusal, never a clean commit.
+world2 = make_world(with_dialect=False)
+try:
+    write(os.path.join(world2, "qa", "anything.log"), "PASS row\n")
+    run(["git", "add", "-A"], world2)
+    code_nl, out_nl, err_nl = run(
+        [sys.executable, os.path.join(world2, "tools", "hooks",
+                                      "pre_commit_gate.py")], world2)
+    check(code_nl == 3 and "E_HOOK_NO_EVIDENCE_LAW" in err_nl,
+          "AC-EVB5 missing dialect law refuses by name (rc=%d)" % code_nl)
+finally:
+    shutil.rmtree(world2, ignore_errors=True)
+
+# AC-HK7 - registration (the count is the suite's own, not a second number).
 runner_src = text(RUNNER)
-check('"%s"' % LABEL in runner_src and ", 10)" in runner_src,
-      "AC-HK7 %s registered with its criterion count" % LABEL)
+check('"%s"' % LABEL in runner_src and ", %d)" % EXPECTED_CRITERIA in runner_src,
+      "AC-HK7 %s registered with its criterion count (%d)"
+      % (LABEL, EXPECTED_CRITERIA))
 
 # AC-HK8 - the battery leg asks the law BEFORE any suite runs.
 main_at = runner_src.find("def main(argv):")

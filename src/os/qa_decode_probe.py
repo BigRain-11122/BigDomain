@@ -50,17 +50,13 @@ NET_IMPORTS = ("urllib", "requests", "socket", "http", "ftplib",
                "xmlrpc", "smtplib", "asyncio")
 QA_DIR = os.path.join(ROOT, "qa")
 
-
-def _bom_of(raw):
-    """BOM dialect census (display face only; the decode face stays
-    inside suite_matrix.read_text - single source of truth)."""
-    if raw.startswith(b"\xff\xfe"):
-        return "utf-16le"
-    if raw.startswith(b"\xfe\xff"):
-        return "utf-16be"
-    if raw.startswith(b"\xef\xbb\xbf"):
-        return "utf-8-sig"
-    return "utf-8"  # presumed (no BOM on disk)
+if BASE not in sys.path:
+    sys.path.insert(0, BASE)
+# R2926 (AC-EVB4): the BOM-naming rule moved to src/os/evidence_dialect.py,
+# which is a LEAF module (stdlib only) so the commit gate can ask it before
+# the sandbox registry is loadable. The dependency points at the leaf; this
+# name stays as the probe's public face so existing callers keep working.
+from evidence_dialect import bom_of as _bom_of  # noqa: E402
 
 
 def probe_dir(target):

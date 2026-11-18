@@ -126,6 +126,7 @@ sys.path.insert(0, SANDBOX)
 sys.path.insert(0, BASE)
 
 import qa_decode_probe as QDP       # BOM face, single source
+import evidence_dialect as ED       # dialect law, single source (R2926)
 import reconcile_all as RA          # SHELL_CAPTURE_LABEL, single source
 
 NET_IMPORTS = ("urllib", "requests", "socket", "http", "ftplib",
@@ -142,7 +143,13 @@ BASELINE_NAME = "writer-census-baseline.json"
 def classify_file(path):
     """Read-only writer-signature census of one file. Returns a row
     dict; every number is measured or honestly absent - zero
-    fabrication."""
+    fabrication.
+
+    R2926 (AC-EVB4): the dialect rule itself moved to
+    src/os/evidence_dialect.py (ONE source, delegated here) because the
+    commit gate needs the same answer without loading this module's
+    reconcile_all import. The row shape is unchanged.
+    """
     row = {"name": os.path.basename(path), "bytes": -1, "bom": "?",
            "crlf": 0, "bare_lf": 0, "utf8": False, "label": False,
            "class": "other", "err": ""}
@@ -152,42 +159,8 @@ def classify_file(path):
     except OSError as exc:
         row["err"] = "OSError:%s" % exc.__class__.__name__
         return row
-    row["bytes"] = len(raw)
-    row["bom"] = QDP._bom_of(raw)
-    row["crlf"] = raw.count(b"\r\n")
-    row["bare_lf"] = raw.count(b"\n") - row["crlf"]
-    try:
-        raw.decode("utf-8", "strict")
-        row["utf8"] = True
-    except UnicodeDecodeError:
-        row["utf8"] = False
-    # label column: first physical line, trailing EOL tolerated
-    first = raw.split(b"\n", 1)[0]
-    if first.endswith(b"\r"):
-        first = first[:-1]
-    row["label"] = (first == LABEL.encode("ascii"))
-    # classification rule (pre-registered; mechanical and total)
-    if row["err"]:
-        row["class"] = "other"
-    elif row["bom"] in ("utf-16le", "utf-16be"):
-        row["class"] = "ps-utf16"
-    elif row["bom"] == "utf-8-sig":
-        row["class"] = "other"
-    elif b"\x00" in raw:
-        # R2808 (R2807 carry): BOM-less UTF-16 has no BOM to name it,
-        # and its every-other-byte NUL padding decodes as VALID utf-8,
-        # so the crlf==0 branch below called it tee - the healthy
-        # dialect - and 115 evidence logs carried the defect unseen.
-        # Endianness cannot be verified without a BOM, so the honest
-        # face is a named class, not a silent decode message.
-        row["class"] = "nul-bytes"
-    elif row["crlf"] == 0:
-        row["class"] = "tee" if row["utf8"] else "other"
-    elif row["crlf"] > row["bare_lf"]:
-        # CRLF-dominant: re-encoding capture vs raw redirect
-        row["class"] = "pwsh-capture" if row["utf8"] else "cmd-raw"
-    else:
-        row["class"] = "other"   # mixed EOL without CRLF majority
+    measured = ED.classify_bytes(raw, LABEL.encode("ascii"))
+    row.update(measured)
     return row
 
 
@@ -329,6 +302,18 @@ def check_against_baseline(target, path):
     lines.append("census: files=%d tee=%d baselined=%d"
                  % (sum(len(lists[c]) for c in CLASSES),
                     len(lists["tee"]), len(base_of)))
+    # R2926 (AC-EVB4): the baselined debt split by the self-announcing
+    # writer. Measured at R2926 over the shipped tree: 11 labeled /
+    # 579 unlabeled, i.e. the label names one writer family and never
+    # the disease, which is why absence is a column and not a refusal.
+    rows = []
+    for name in sorted(base_of):
+        path = os.path.join(target, name)
+        if os.path.isfile(path):
+            rows.append((name, classify_file(path)))
+    split = ED.label_coverage(rows)
+    lines.append("labeled_baselined=%d unlabeled_baselined=%d"
+                 % (split["labeled"], split["unlabeled"]))
     # R2808: the known-debt face is counted on EVERY run. Baselined
     # nul-bytes files never flag (they are recorded by name), so
     # without this line the debt would be invisible again - the very

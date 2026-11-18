@@ -1,0 +1,16 @@
+PASS AC-HK1 gate asks the law for shape and round, owns no regex or walk, ASCII
+PASS AC-HK3 permanent module and a sub-freeze one-off both commit (baseline rc=0, R2431 rc=0)
+PASS AC-HK2 a staged one-off is refused, named, count unchanged (2)
+PASS AC-EVB1 staged shell-captured evidence refused by a REAL commit, named with its class, count unchanged (2)
+PASS AC-EVB2 non-qa/ sample and an evidence deletion both commit (rc=0 HOOK OK staged=1 freeze=2838 evidence=clean rc=0)
+PASS AC-EVB3 label absent commits, label present in a bad dialect is refused (rc=0/1)
+PASS AC-HK5 hook is LF-only, names E_HOOK_NO_PYTHON and the bypass
+PASS AC-HK4 enablement measured: DISABLED rc=2, APPLIED, ENABLED rc=0
+PASS AC-HK6 real tree: law clean, enable --check honest (rc=0), gate clean
+PASS AC-EVB4 one dialect law (census delegates, no branch copy), label split published (rc=0, split rc=0)
+PASS AC-EVB5 missing dialect law refuses by name (rc=3)
+PASS AC-HK7 os-pre-commit-gate registered with its criterion count (15)
+PASS AC-HK8 the freeze law is asked before the first suite
+PASS AC-HK9 refused tree aborts before the first suite (rc=1 suites=0 reconcile=0)
+PASS AC-HK10 law read from the world (refused=False, live=clean), one refusal site, verdict independent
+SUITE PASS 15/15 criteria
