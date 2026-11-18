@@ -98,6 +98,113 @@ def classify_bytes(raw, label=None):
     return row
 
 
+class EvidenceDecodeError(Exception):
+    """A blob no known writer family decodes (R2928, AC-EVR2).
+
+    Refusing by name is the honest face: returning gb18030 mojibake for bytes
+    that were never cp936 would look like a successful read to every consumer.
+    """
+
+
+def _decode_lenient(raw, enc, allow_tail=False):
+    """(text, tail_bytes, damaged) or (None, b'', False).
+
+    R2928 measured 2 of the 119 baselined ps-utf16 files as odd-length, each a
+    utf-16le body with ONE stray byte appended (board-R935.log 1705B,
+    lobby-roomboard-R1773.log 7077B) - a truncated writer, not corruption of the
+    text. Dropping that byte and NAMING it in the returned row is the honest
+    read: decoding with errors="replace" would hide the loss inside U+FFFD, and
+    refusing the whole file would call 1704 readable bytes unusable.
+    """
+    try:
+        return raw.decode(enc), b"", False
+    except UnicodeDecodeError:
+        pass
+    if allow_tail and len(raw) % 2 == 1:
+        try:
+            return raw[:-1].decode(enc), raw[-1:], True
+        except UnicodeDecodeError:
+            pass
+    return None, b"", False
+
+
+def read_text(raw):
+    """Read one evidence blob, whatever dialect it was written in (R2928).
+
+    Why this exists: 590 files on this tree are baselined as non-tee debt and
+    only 148 of them are actually unreadable to a plain utf-8 reader. Rewriting
+    those bytes would rewrite the objects 16 shipped sha256 citations name, so
+    the debt is made USABLE instead: one read face, no writes, endianness and
+    codepage NAMED in the row it returns.
+
+    Returns {"text", "encoding", "assumed", "damaged", "tail_hex"}. `assumed`
+    is True when the answer rests on a guess the bytes cannot verify (BOM-less
+    utf-16 endianness, a cp936 body); `damaged` is True when a stray trailing
+    byte had to be named and dropped (see _decode_lenient).
+    """
+    row = {"text": None, "encoding": "", "assumed": False,
+           "damaged": False, "tail_hex": ""}
+
+    def done(enc, assumed, text, tail, damaged):
+        row.update({"text": text, "encoding": enc, "assumed": assumed,
+                    "damaged": damaged, "tail_hex": tail.hex()})
+        return row
+
+    if raw.startswith(BOM_16LE):
+        text, tail, damaged = _decode_lenient(raw, "utf-16", True)
+        if text is None:
+            raise EvidenceDecodeError("utf-16le BOM: body does not decode")
+        return done("utf-16le", False, text, tail, damaged)
+    if raw.startswith(BOM_16BE):
+        text, tail, damaged = _decode_lenient(raw, "utf-16", True)
+        if text is None:
+            raise EvidenceDecodeError("utf-16be BOM: body does not decode")
+        return done("utf-16be", False, text, tail, damaged)
+    body = raw
+    utf8_bom = raw.startswith(BOM_UTF8)
+    if utf8_bom:
+        body = raw[len(BOM_UTF8):]
+    if b"\x00" in body:
+        # NUL is never legitimate in an evidence log (R2807), even behind a
+        # utf-8 BOM: R2928 measured 3 such files (honorcert-R1755,
+        # load-S8b-R550, reorg-R1731) and a utf-8 arm would have returned
+        # 2520 / 1685 / 36 NULs as "text". The body is utf-16; name the guess.
+        for enc, name in (("utf-16-le", "utf-16le"), ("utf-16-be", "utf-16be")):
+            text, tail, damaged = _decode_lenient(body, enc, True)
+            if text is None or "\x00" in text:
+                continue
+            return done(name, True, text, tail, damaged)
+        raise EvidenceDecodeError("nul-bytes: no utf-16 arm decodes cleanly")
+    if utf8_bom:
+        try:
+            return done("utf-8", False, body.decode("utf-8"), b"", False)
+        except UnicodeDecodeError:
+            raise EvidenceDecodeError("utf-8 BOM: body does not decode")
+    try:
+        return done("utf-8", False, raw.decode("utf-8"), b"", False)
+    except UnicodeDecodeError:
+        pass
+    text, _tail, _damaged = _decode_lenient(raw, "gb18030")
+    if text is not None:
+        return done("gb18030", True, text, b"", False)
+    raise EvidenceDecodeError("no known family decodes this blob")
+
+
+def plain_unusable(raw):
+    """Would a naive consumer lose this file? (R2928, AC-EVR3)
+
+    A plain utf-8 read loses a blob in TWO ways, and the second is the R2807
+    trap: the decode can raise, or it can "succeed" and hand back NUL-riddled
+    text, which is BOM-less utf-16 read as utf-8. Measuring only the raise
+    would have called 14 of the 15 nul-bytes files usable.
+    """
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return True
+    return "\x00" in text
+
+
 def label_coverage(rows):
     """Split classified rows by the label column.
 

@@ -1,0 +1,21 @@
+  | PASS AC-EVR1 tee decoded enc=utf-8 assumed=False marker=['TEE']
+  | PASS AC-EVR1 pwsh-capture decoded enc=utf-8 assumed=False marker=['PWSH']
+  | PASS AC-EVR1 other-sig decoded enc=utf-8 assumed=False marker=['SIG']
+  | PASS AC-EVR1 ps-utf16le decoded enc=utf-16le assumed=False marker=['LE']
+  | PASS AC-EVR1 ps-utf16be decoded enc=utf-16be assumed=False marker=['BE']
+  | PASS AC-EVR1 nul-bytes decoded enc=utf-16le assumed=True marker=['NUL']
+  | PASS AC-EVR1 cmd-raw decoded enc=utf-8 assumed=False marker=['GBK']
+  | PASS AC-EVR1 all seven families decoded in one call decoded=['tee', 'pwsh-capture', 'other-sig', 'ps-utf16le', 'ps-utf16be', 'nul-bytes', 'cmd-raw']
+  | PASS AC-EVR1 a truncated utf-16 tail is named, not hidden in U+FFFD enc=utf-16le damaged=True tail=0a
+  | PASS AC-EVR2 undecodable refused reason=no known family decodes this blob
+  | PASS AC-EVR2 nul-odd-length refused reason=nul-bytes: no utf-16 arm decodes cleanly
+  | PASS AC-EVR2 refusal never returns text reasons=['no known family decodes this blob', 'nul-bytes: no utf-16 arm decodes cleanly']
+  | PASS AC-EVR3 fixture set: plain-unusable iff a non-utf-8 arm was needed mismatches=[]
+  | PASS AC-EVR3 the R2807 trap is MEASURED, not assumed nul-bytes decodes as utf-8 yet is lost; read_text recovers it
+  | PASS AC-EVR4 a live evidence file is byte-identical after a read file=BD-PROP-010-R2767.log sha16=fda7130ab6e13568
+  | PASS AC-EVR5 baselined population refuses ZERO files names=590 refused=0 bytes=22599498
+  | PASS AC-EVR5 rescued set EQUALS the plain-unusable set lost=151 rescued=151 symmetric_diff=0
+  | MEASURE live baselined=590 plain-unusable=151 rescued=151 damaged=13 bytes_read=22599498
+  | MEASURE truncated tails named: [('apimarket-claimlatency-R2159-a.log', '0a'), ('apimarket-claimlatency-R2159-b.log', '0a'), ('banner-queue-window-R1866.log', '0a'), ('board-R935.log', '0a'), ('clawback-persist-R1957.log', '0a'), ('dix17-html-only-R2883.log', '00'), ('freetrial-caplimit-R1849.log', '0a'), ('honorcert-R1755.log', '00'), ('ledger-reconcile-face-suite-R2795.log', '0a'), ('load-S8b-R550.log', '0a'), ('lobby-roomboard-R1773.log', '0a'), ('ugc-pooldelta-R1785.log', '0a'), ('ugc-verdictwater-R1799.log', '0a')]
+suite: 17 assertions over 5 criteria
+SUITE PASS 17/17

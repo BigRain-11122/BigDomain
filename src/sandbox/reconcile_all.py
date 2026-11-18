@@ -7239,6 +7239,20 @@ SUITES = [
     # suite's shard.
     ("os-registry-counter-census",
      os.path.join("..", "os", "test_registry_counter_census.py"), 8),
+    # R2928: the board carried "590 baselined non-tee evidence files: known debt
+    # forever or re-encode to utf-8/LF?" for three windows. Measured before the
+    # edit: qa_log --check refuses ALL 590 (a dialect test, not a usability
+    # test), a plain utf-8 reader loses 151 of them, and 63 baselined names are
+    # referenced by shipped code with 16 sha256 citations over qa/*.log - so a
+    # byte rewrite would rewrite the objects those fingerprints name. The ruling
+    # is a READ face (src/os/evidence_dialect.read_text), never a rewrite, and
+    # this row pins it: seven writer families decode in one call, an undecodable
+    # blob is refused by name, the reader is measured as the exact complement of
+    # the naive reader on the same bytes, it never writes, and on the live
+    # population refuse=0 with rescued == plain-unusable (151/151 at R2928).
+    # AC-EVR1..AC-EVR5 were pinned in src/os/backlog.md before the code.
+    ("os-evidence-read",
+     os.path.join("..", "os", "test_evidence_read.py"), 5),
     ]
 
 FAILS = 0
