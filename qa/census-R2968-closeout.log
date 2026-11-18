@@ -1,0 +1,22 @@
+suite closing-row census suite (expected criteria 20)
+  PASS AC-CEN1 law imported from the runner and a wrong pattern REFUSED
+  PASS AC-CEN2 11 probe shapes classify as measured
+  PASS AC-CEN3 live tree: law families partition the registry
+  PASS AC-CEN4 two runs read byte-identical output
+  PASS AC-CEN5 quiet-list drops the naming and keeps the shapes
+  PASS AC-CEN6 the registry declares 20 criteria
+  PASS AC-CEN7 single-count row stays non-law in BOTH authorities
+  PASS AC-CEN8 shipped closing row reads PASS through the runner (SUITE PASS 168/168)
+  PASS AC-CEN9 law-by-source prints an unreadable row (run, not asserted)
+  PASS AC-CEN10 position face partitions law (law=728 exec=728 unexecuted=0 named=0)
+  PASS AC-CEN11 a fixture string buys no split verdict (fixture=other,real=law_split,uncond=no_numbers)
+  PASS AC-CEN12 live gap closed: row reads ('PASS', 26, 26) and registry='728' law='728' non_law='0' exec=728 unexecuted=0 named=0
+  PASS AC-CEN13 stored probe module measured; a live row not flagged
+  PASS AC-CEN14 live fixture class measured law_only='0' law_literal_rows='1', verdict unchanged
+  PASS AC-CEN15 stored row counted; bind-then-print and a direct print stay out ((({'law_direct'}, set()), (set(), {'law_direct'}), (set(), {'law_direct'})))
+  PASS AC-CEN16 live nowhere class pinned at 5 rows, law_only 0, verdict lines unchanged
+  PASS AC-CEN17 a fixture split at an implicit join is counted by the AST audit only ((True, False)), and a one-piece fixture still is ((True, True))
+  PASS AC-CEN18 live fixture row(s) ('os-suite-closing-row-census',) counted by both readings, law_only 0, 1 family move(s) inside the law set, law 728=728
+  PASS AC-CEN19 both readings funnel through one loop (2 hits, two body lists), the local copy is gone, unparsable source falls back to the text pieces
+  PASS AC-CEN20 the pre-R2968 binary at 61d3db7a prints byte-identical lines on this tree
+SUITE PASS 20/20

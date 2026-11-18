@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-19 R2967 PRODUCT+ENGINEERING: the two audit faces now read the SAME bodies - the fixture line moved off raw text pieces onto AST constant VALUES, and both sides share one candidate predicate (a body that names SUITE), so the only difference left is pieces versus constants. classify()'s verdict path is untouched: all 18 printed CENSUS lines are byte-identical to the HEAD binary on the live tree (measured by running both against the same root), law=728, exec=728 unexecuted=0, law_literal_rows=1, law_only=0, nowhere=5 - not one count moved. The join is where the two readings parted and it is now reproduced in a private world: 'SUITE PASS ' '%d/%d\\n' 'x = 1\\n' is ONE constant to the parser (fixture-shaped AND law-shaped) and three pieces to the text scan (no single piece is both), so ast_fixture_hit=True while text_fixture_hit=False, while a one-piece fixture is hit by both. The price of the disunity was measured rather than assumed: unfiltered constants relabelled an empty reading as other (the R2965 private world read no_row from pieces and other from constants) and invented one live row that appeared to earn law only through a merged constant which never names SUITE - both are candidate-set artefacts, so the repair is the shared predicate, not a looser reading.",
+    "current": "2026-11-19 R2968 CLOSEOUT — 上一窗把 census 的两条读法合成唯一循环后被截断（写盘 00:35-00:48，无 done 行、tick 仍 2967、未 commit）；本窗不开新活，先把这摊复测到能自证再收口：AC-CEN20 亲测（`git cat-file blob HEAD:tools/suite_closing_row_census.py` 落私有件 vs 工作树，各跑 `--root . --quiet-list --fixture-audit`，rc 0/0、stdout 逐字节同一 760B、law=728 nowhere=5 law_only=0），套件经出货 writer 复跑 `SUITE PASS 20/20`（qa/census-R2968-closeout.log·1928B·utf-8/lf），矩阵 `--check` 逐字节同一 75890B / 728 suites / 5806 criteria，`CLOSEOUT-GATE PASS files=3420 flags=0 reader_refused=0`。产出形态=可跑的工具面（分类循环唯一化、套件不再自带副本、审计两面输出未动），零 payment 能力、零外网。",
     "do": "2026-11-18 R2963 PRODUCT+ENGINEERING: the gap between 'the source names the law' and 'the row is actually printed' is now measured, and one live row sits in it. tools/suite_closing_row_census.py gained an AST position face: a law literal counts as exec only in a slot that can reach the print (a docstring, a branch under a constant-false test and a function the module never calls are all non-exec), and --list-unexecuted names each such row by reason family. The verdict face is byte-for-byte unchanged (law=728, same shapes as R2962), so the difference between the two lines is the measured blind set. Live tree: CENSUS exec law=727 unexecuted=1 - os-registry-counter-census, which prints the single-count row the battery refuses ('SUITE PASS %d checks' -> parse_suite_row None) while the census calls it law_split on its own fixture strings. Name the defect, then fix the row.",
     "last_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-panel-log-ns-R2960.log (335B, 2026-11-18)",
-    "latest_evidence": "qa/leg-panel-log-ns-R2960.log (335B, 2026-11-18)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/census-R2968-closeout.log (1928B, 2026-11-19)",
+    "latest_evidence": "qa/census-R2968-closeout.log (1928B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R2968] next window (<=12h): (0) MAIN — AC-CEN18 measures a READING THIS SUITE REIMPLEMENTED, not the shipped one. Its helper `ast_classify()` rebuilds classify()'s body loop locally (split_law + shape_of_literal over `_string_constants` + the FAMILIES walk), so a later change to `classify()` would leave the criterion green while the shipped path drifted underneath it - and this round is exactly the kind of change that hides there (the candidate predicate moved into `_string_constants`, and the test re-derived it instead of calling it). Decide and prove ONE, by measurement: either give the tool one exported reading that both the audit and the suite call (e.g. classify(src, bodies=<list>) or a `classify_bodies()` helper) and show AC-CEN18 still passes with the reimplementation DELETED, or keep the copy and pin it - a criterion that compares `ast_classify` against the shipped path on all 728 rows, so the copy can only drift by turning red. Do not widen classify()'s verdict path (truncated)",
-    "next_milestone_due": "2026-11-19T12:24:40+08:00",
-    "updated_at": "2026-11-19T00:24:40+08:00"
+    "next_milestone": "[R2969] next window (<=12h): (0) MAIN — carried R2944 (0): `bind_site_scan` refuses four shapes and names the rest; decide and PROVE whether `asyncio.start_server` / `loop.create_server` enter the scan (a red control where the new shape is refused by name, then the same world turned green after the fix), or declare the four-shape range official with the reason in the same breath. (1) carried: `judge()` trusts the pid inside a per-user writable record — have the launcher write a secret the face must echo back, or declare the trust official; (2) carried: the hard-kill proof covers the launcher's DIRECT children only — measure grandchild inheritance or declare it out of scope by name; (3) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability: no merchant id, server, domain, filing+ICP or miniprogram appid+secret), Docker absent, and `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell).",
+    "next_milestone_due": "2026-11-19T13:17:17+08:00",
+    "updated_at": "2026-11-19T01:17:17+08:00"
   },
-  "current": "2026-11-19 R2967 PRODUCT+ENGINEERING: the two audit faces now read the SAME bodies - the fixture line moved off raw text pieces onto AST constant VALUES, and both sides share one candidate predicate (a body that names SUITE), so the only difference left is pieces versus constants. classify()'s verdict path is untouched: all 18 printed CENSUS lines are byte-identical to the HEAD binary on the live tree (measured by running both against the same root), law=728, exec=728 unexecuted=0, law_literal_rows=1, law_only=0, nowhere=5 - not one count moved. The join is where the two readings parted and it is now reproduced in a private world: 'SUITE PASS ' '%d/%d\\n' 'x = 1\\n' is ONE constant to the parser (fixture-shaped AND law-shaped) and three pieces to the text scan (no single piece is both), so ast_fixture_hit=True while text_fixture_hit=False, while a one-piece fixture is hit by both. The price of the disunity was measured rather than assumed: unfiltered constants relabelled an empty reading as other (the R2965 private world read no_row from pieces and other from constants) and invented one live row that appeared to earn law only through a merged constant which never names SUITE - both are candidate-set artefacts, so the repair is the shared predicate, not a looser reading.",
+  "current": "2026-11-19 R2968 CLOSEOUT — 上一窗把 census 的两条读法合成唯一循环后被截断（写盘 00:35-00:48，无 done 行、tick 仍 2967、未 commit）；本窗不开新活，先把这摊复测到能自证再收口：AC-CEN20 亲测（`git cat-file blob HEAD:tools/suite_closing_row_census.py` 落私有件 vs 工作树，各跑 `--root . --quiet-list --fixture-audit`，rc 0/0、stdout 逐字节同一 760B、law=728 nowhere=5 law_only=0），套件经出货 writer 复跑 `SUITE PASS 20/20`（qa/census-R2968-closeout.log·1928B·utf-8/lf），矩阵 `--check` 逐字节同一 75890B / 728 suites / 5806 criteria，`CLOSEOUT-GATE PASS files=3420 flags=0 reader_refused=0`。产出形态=可跑的工具面（分类循环唯一化、套件不再自带副本、审计两面输出未动），零 payment 能力、零外网。",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-19 R2967 PRODUCT+ENGINEERING: the two audit faces now read the SAME bodies - the fixture line moved off raw text pieces onto AST constant VALUES, and both sides share one candidate predicate (a body that names SUITE), so the only difference left is pieces versus constants. classify()'s verdict path is untouched: all 18 printed CENSUS lines are byte-identical to the HEAD binary on the live tree (measured by running both against the same root), law=728, exec=728 unexecuted=0, law_literal_rows=1, law_only=0, nowhere=5 - not one count moved. The join is where the two readings parted and it is now reproduced in a private world: 'SUITE PASS ' '%d/%d\\n' 'x = 1\\n' is ONE constant to the parser (fixture-shaped AND law-shaped) and three pieces to the text scan (no single piece is both), so ast_fixture_hit=True while text_fixture_hit=False, while a one-piece fixture is hit by both. The price of the disunity was measured rather than assumed: unfiltered constants relabelled an empty reading as other (the R2965 private world read no_row from pieces and other from constants) and invented one live row that appeared to earn law only through a merged constant which never names SUITE - both are candidate-set artefacts, so the repair is the shared predicate, not a looser reading.",
-  "export_ts": "2026-11-19T00:24:40+08:00",
+  "do": "2026-11-19 R2968 CLOSEOUT — 上一窗把 census 的两条读法合成唯一循环后被截断（写盘 00:35-00:48，无 done 行、tick 仍 2967、未 commit）；本窗不开新活，先把这摊复测到能自证再收口：AC-CEN20 亲测（`git cat-file blob HEAD:tools/suite_closing_row_census.py` 落私有件 vs 工作树，各跑 `--root . --quiet-list --fixture-audit`，rc 0/0、stdout 逐字节同一 760B、law=728 nowhere=5 law_only=0），套件经出货 writer 复跑 `SUITE PASS 20/20`（qa/census-R2968-closeout.log·1928B·utf-8/lf），矩阵 `--check` 逐字节同一 75890B / 728 suites / 5806 criteria，`CLOSEOUT-GATE PASS files=3420 flags=0 reader_refused=0`。产出形态=可跑的工具面（分类循环唯一化、套件不再自带副本、审计两面输出未动），零 payment 能力、零外网。",
+  "export_ts": "2026-11-19T01:17:17+08:00",
   "latest_artifact": "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
-  "latest_evidence": "qa/census-R2963.log (732B) + qa/leg-census-R2963.log (358B) [2026-11-18]",
-  "next_milestone": "[R2968] next window (<=12h): (0) MAIN — AC-CEN18 measures a READING THIS SUITE REIMPLEMENTED, not the shipped one. Its helper `ast_classify()` rebuilds classify()'s body loop locally (split_law + shape_of_literal over `_string_constants` + the FAMILIES walk), so a later change to `classify()` would leave the criterion green while the shipped path drifted underneath it - and this round is exactly the kind of change that hides there (the candidate predicate moved into `_string_constants`, and the test re-derived it instead of calling it). Decide and prove ONE, by measurement: either give the tool one exported reading that both the audit and the suite call (e.g. classify(src, bodies=<list>) or a `classify_bodies()` helper) and show AC-CEN18 still passes with the reimplementation DELETED, or keep the copy and pin it - a criterion that compares `ast_classify` against the shipped path on all 728 rows, so the copy can only drift by turning red. Do not widen classify()'s verdict path (truncated)",
+  "latest_evidence": "qa/census-R2968-closeout.log (1928B, 2026-11-19)",
+  "next_milestone": "[R2969] next window (<=12h): (0) MAIN — carried R2944 (0): `bind_site_scan` refuses four shapes and names the rest; decide and PROVE whether `asyncio.start_server` / `loop.create_server` enter the scan (a red control where the new shape is refused by name, then the same world turned green after the fix), or declare the four-shape range official with the reason in the same breath. (1) carried: `judge()` trusts the pid inside a per-user writable record — have the launcher write a secret the face must echo back, or declare the trust official; (2) carried: the hard-kill proof covers the launcher's DIRECT children only — measure grandchild inheritance or declare it out of scope by name; (3) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability: no merchant id, server, domain, filing+ICP or miniprogram appid+secret), Docker absent, and `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell).",
   "outs": [
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
     "qa/bind-scan-R2946.log (546B) + qa/bind-site-scan-suite-R2946.log (176B) + qa/leg-lobby-regress-R2946.log (413B) [2026-11-18 R2946]",
@@ -101,9 +101,9 @@
   "queue": {
     "delivered_total": 2,
     "floors": {
-      "explore": 10,
       "main": 5,
-      "tech": 10
+      "tech": 10,
+      "explore": 10
     },
     "missing": [],
     "queues": [
@@ -164,8 +164,8 @@
   },
   "results": [
     [
-      "2963",
-      "OSLoop ?? tick"
+      "2968",
+      "OSLoop 执行 tick"
     ]
   ],
   "results_archive": {
@@ -175,17 +175,17 @@
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
   "self_drive": {
+    "window": "2026-11-13..2026-11-19",
+    "window_days": 7,
+    "log_lines_in_window": 73,
     "idle_fast_mention_lines": 0,
-    "log_lines_in_window": 59,
     "no_pullable_mention_lines": 0,
-    "proposals_open": 8,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 10,
-    "queue_explore_open": 10,
+    "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
-    "substantive_non_idle_mention_lines": 9,
-    "window": "2026-11-12..2026-11-18",
-    "window_days": 7
+    "queue_explore_open": 10
   },
-  "state_bytes": 84257
+  "state_bytes": 88028
 }

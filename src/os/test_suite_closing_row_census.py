@@ -42,6 +42,7 @@ the right pattern read rc=2 because the wrong world was still cached).
 Stdlib only, ASCII source, zero network, no clock. Exit 0 = all green.
 """
 
+import ast
 import io
 import json
 import os
@@ -57,7 +58,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.dirname(BASE)
 ROOT = os.path.dirname(SRC)
 
-EXPECTED_CRITERIA = 18
+EXPECTED_CRITERIA = 20
 LABEL = "os-suite-closing-row-census"
 TOOL = os.path.join(ROOT, "tools", "suite_closing_row_census.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
@@ -811,22 +812,6 @@ def text_fixture_hit(src):
     return False
 
 
-def ast_classify(src):
-    """classify() over AST constants, the reading the audit faces now share."""
-    census = _census()
-    consts = census._string_constants(src)
-    if consts is None:
-        return None
-    shapes = []
-    if census.split_law(src):
-        shapes.append("law_split")
-    shapes.extend(census.shape_of_literal(b, src) for b in consts)
-    for name in census.FAMILIES:
-        if name in shapes:
-            return name
-    return "no_row"
-
-
 def ac_cen17():
     """A fixture split at an implicit join: text blind, AST audit sees it."""
     folder, copy_tool = world("right", [("joined", "joined.py", 3),
@@ -880,15 +865,12 @@ def ac_cen18():
             continue
         with open(path, "r", encoding="utf-8", errors="replace") as fh:
             src = fh.read()
-        ast_shape = ast_classify(src)
+        ast_shape = census.classify_bodies(src)
         text_shape = census.classify(src)
         if text_shape in census.LAW_FAMILIES:
             text_law += 1
-        if ast_shape is None:
-            # a parse failure must never demote a row: the AST reading is
-            # unavailable here, so it cannot claim the row is not law
-            ast_law += 1
-            continue
+        # classify_bodies() falls back to the text pieces when the source will
+        # not parse, so a parse failure can never demote a row here.
         if ast_shape in census.LAW_FAMILIES:
             ast_law += 1
         if ast_shape != text_shape:
@@ -918,6 +900,94 @@ def ac_cen18():
           % (FIXTURE_ROWS, len(FAMILY_MOVES), text_law, ast_law))
 
 
+# R2968: the reading AC-CEN18 compares against must be the SHIPPED one.
+# AC-CEN18 used to rebuild classify()'s body loop locally as ast_classify(), so
+# a later change to the shipped loop would have left the criterion green while
+# the verdict drifted. The copy is deleted; classify_bodies() is the exported
+# AST reading the audit faces already use. The old binary for the red control is
+# pinned to a REVISION, not to HEAD: after this round's commit HEAD becomes the
+# new code and a HEAD-based control would silently compare the new bytes to
+# themselves (the R2959 lesson, measured there and not repeated here).
+PRE_R2968 = "61d3db7a287eaf16ee0f70d46bc41258aea115ce"
+
+
+def ac_cen19():
+    """One loop: both entries hit it, the local copy is gone, parse falls back."""
+    census = _census()
+    src = JOINED_FIXTURE_SRC
+    seen = []
+    original = census._classify_bodies
+
+    def spy(text, bodies, skip):
+        seen.append((tuple(bodies), skip))
+        return original(text, bodies, skip)
+
+    census._classify_bodies = spy
+    try:
+        census.classify(src)
+        census.classify_bodies(src)
+    finally:
+        census._classify_bodies = original
+    funnel = (len(seen) == 2 and seen[0][1] is False and seen[1][1] is False
+              and bool(seen[0][0]) and bool(seen[1][0])
+              and seen[0][0] != seen[1][0])
+    suite_src = io.open(os.path.abspath(__file__), encoding="utf-8").read()
+    try:
+        tree = ast.parse(suite_src)
+    except SyntaxError:
+        tree = None
+    copies = []
+    if tree is not None:
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef) and node.name == "ast_classify":
+                copies.append("def")
+            if isinstance(node, ast.Assign) and any(
+                    isinstance(t, ast.Name) and t.id == "ast_classify"
+                    for t in node.targets):
+                copies.append("assign")
+    gone = not copies and "classify_bodies(" in suite_src
+    broken = 'print("SUITE PASS %d/%d" % (1, 1))\ndef (:\n'
+    fallback = census.classify_bodies(broken) in census.LAW_FAMILIES
+    ok = funnel and gone and fallback
+    if not ok:
+        print("  measured funnel=%r seen=%r copies=%r gone=%r fallback=%r"
+              % (funnel, seen, copies, gone, fallback), flush=True)
+    check(ok, "AC-CEN19 both readings funnel through one loop (%d hits, two "
+          "body lists), the local copy is gone, unparsable source falls back "
+          "to the text pieces" % len(seen))
+
+
+def ac_cen20():
+    """Nothing moved: the pre-R2968 binary prints the same bytes on this tree."""
+    old = subprocess.run(["git", "show",
+                          "%s:tools/suite_closing_row_census.py" % PRE_R2968],
+                         cwd=ROOT, capture_output=True)
+    folder = tempfile.mkdtemp(prefix="bd-cen-head-")
+    env = dict(os.environ)
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    argv = ["--root", ROOT, "--quiet-list", "--fixture-audit"]
+    try:
+        old_tool = os.path.join(folder, "suite_closing_row_census.py")
+        if old.returncode == 0:
+            with io.open(old_tool, "wb") as fh:
+                fh.write(old.stdout)
+        now = subprocess.run([sys.executable, TOOL] + argv,
+                             capture_output=True, env=env)
+        was = subprocess.run([sys.executable, old_tool] + argv,
+                             capture_output=True, env=env)
+    finally:
+        cleanup(folder)
+    ok = (old.returncode == 0 and now.returncode == 0 and was.returncode == 0
+          and now.stdout == was.stdout and now.stdout.strip() != b"")
+    if not ok:
+        print("  measured git=%d rc now/old=%d/%d identical=%r bytes=%d/%d"
+              % (old.returncode, now.returncode, was.returncode,
+                 now.stdout == was.stdout, len(now.stdout), len(was.stdout)),
+              flush=True)
+    check(ok, "AC-CEN20 the pre-R2968 binary at %s prints byte-identical lines "
+          "on this tree" % PRE_R2968[:8])
+
+
 def main():
     print("suite closing-row census suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -939,6 +1009,8 @@ def main():
     ac_cen16()
     ac_cen17()
     ac_cen18()
+    ac_cen19()
+    ac_cen20()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

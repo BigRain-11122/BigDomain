@@ -119,6 +119,21 @@ the same bytes read whole carry a counter triple - while three further rows
 extra family without changing their verdict. A fixture that a caller stores with
 no assignment line stays outside the fixture class, and a row whose text is
 built at run time is out of range on every face.
+
+R2968 (AC-CEN19..AC-CEN20): the two readings this round unified had been copied,
+and the copy was in the suite that grades them. AC-CEN18's helper ast_classify()
+rebuilt classify()'s body loop locally (split_law, then shape_of_literal over
+the AST constants, then the same FAMILIES walk), so a later change to the
+shipped loop would have left that criterion green while the verdict drifted. The
+loop now lives in exactly one place, _classify_bodies(src, bodies, skip), and
+two exported entries select the body list: classify() reads the LITERAL text
+pieces (unchanged verdict path, and skip_fixture still selects the AST constants
+as it has since R2967) and classify_bodies() reads the SUITE-bearing AST
+constants, falling back to the text pieces when the source will not parse so a
+parse failure can never demote a row. ast_bodies() also replaced the fallback
+that main() had inlined a second time. No output moved: on the live tree the
+pre-R2968 binary (pinned at 61d3db7a) and this one print byte-identical lines
+under --fixture-audit, which AC-CEN20 measures rather than asserts.
 """
 
 import argparse
@@ -434,19 +449,18 @@ def _string_constants(src):
             and ("SUITE" in node.value or "suite" in node.value)]
 
 
-def classify(src, skip_fixture=False):
-    """Return the strongest shape family found in this suite's source.
+def _classify_bodies(src, bodies, skip_fixture):
+    """The ONE classification loop; both readings funnel through it.
 
-    skip_fixture drops every literal whose own body is a probe module stored as
-    data, so --fixture-audit can ask what the row would be without it. The
-    verdict line calls this with the default, so what law MEANS does not move.
+    R2968: this body walk used to live inside classify() alone, so the suite
+    that grades the census rebuilt it locally as ast_classify() and would have
+    stayed green while the shipped path drifted underneath it. classify() (text
+    pieces) and classify_bodies() (AST constants) both call this loop, so there
+    is no second copy left to drift.
     """
     shapes = []
     if split_law(src):
         shapes.append("law_split")
-    bodies = _string_constants(src) if skip_fixture else None
-    if bodies is None:
-        bodies = [m.group(1) or m.group(2) or "" for m in LITERAL.finditer(src)]
     for body in bodies:
         if skip_fixture and is_fixture_text(body):
             continue
@@ -455,6 +469,42 @@ def classify(src, skip_fixture=False):
         if name in shapes:
             return name
     return "no_row"
+
+
+def text_bodies(src):
+    """The verdict reading: one body per quoted run in the source text."""
+    return [m.group(1) or m.group(2) or "" for m in LITERAL.finditer(src)]
+
+
+def ast_bodies(src):
+    """The audit reading: SUITE-bearing AST constants, or the text pieces.
+
+    A source that will not parse falls back to the text pieces, which can only
+    over-report law - so a parse failure never demotes a row and this function
+    never returns None.
+    """
+    consts = _string_constants(src)
+    return text_bodies(src) if consts is None else consts
+
+
+def classify(src, skip_fixture=False):
+    """Return the strongest shape family found in this suite's source.
+
+    skip_fixture drops every literal whose own body is a probe module stored as
+    data, so --fixture-audit can ask what the row would be without it. The
+    verdict line calls this with the default, so what law MEANS does not move.
+    Asking for the fixture filter also selects the AST reading, as it has since
+    R2967; the unfiltered AST reading is classify_bodies(), because a flag that
+    silently changes the body list is the kind of double meaning that let the
+    suite's copy drift.
+    """
+    bodies = ast_bodies(src) if skip_fixture else text_bodies(src)
+    return _classify_bodies(src, bodies, skip_fixture)
+
+
+def classify_bodies(src):
+    """The AST-constant reading the audit faces and this suite share (R2968)."""
+    return _classify_bodies(src, ast_bodies(src), False)
 
 
 def _const_false(node):
@@ -608,10 +658,7 @@ def main(argv=None):
             non_law.append((label, shape))
             continue
         if args.fixture_audit:
-            bodies = _string_constants(text)
-            if bodies is None:
-                bodies = [m.group(1) or m.group(2) or ""
-                          for m in LITERAL.finditer(text)]
+            bodies = ast_bodies(text)
             if any(is_fixture_text(body) and
                    shape_of_literal(body, text) in LAW_FAMILIES
                    for body in bodies):
