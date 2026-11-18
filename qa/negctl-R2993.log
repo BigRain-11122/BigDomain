@@ -1,0 +1,6 @@
+  | PASS honest-window total=3 recent=2 bad=1 urls=3
+  | PASS honest-cli rc=0 line='CRAWL-FAILURES total=3 recent7=2 bad=1 urls=3 newest=2026-11'
+  | PASS A-window-ignored recent=3 total=3 (AC-RUN7 window arm reads this as red)
+  | PASS B-cli-nonzero rc=9 (AC-RUN7 rc arm reads this as red)
+  | PASS C-no-day-gate call-line anchor absent after the swap (AC-RUN8 arm 1 red)
+NEGCTL PASS assertions=5 mutations_red=3

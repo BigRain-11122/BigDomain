@@ -4646,8 +4646,11 @@ SUITES = [
     # R2992 adds the two faces a repeating beat needs: a failure side channel no
     # judgement face reads, and a day gate that makes the beat idempotent.
     # (AC-RUN5..AC-RUN6 pre-registered in src/os/backlog.md R2992 PIN row.)
+    # R2993 gives that side channel its first READER (summarize_failures plus the
+    # --failures CLI) and the launcher block its first offline arm.
+    # (AC-RUN7..AC-RUN8 pre-registered in the R2993 PIN row.)
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 6),
+     os.path.join("..", "os", "test_crawl_runner.py"), 8),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

@@ -35,6 +35,14 @@ not read it, it never feeds a verdict, and it is physically separate from the
 record file, so it cannot turn any face green or red. A trace that cannot be
 written is reported as trace=None and never replaces the failure answer.
 
+R2993 gives that file its first product READER: summarize_failures() and the
+`--failures` command answer "how many, how recently, from which sources, and
+what was the last error" in ONE readable line. That is deliberately still not a
+gate: the scanner is untouched (AC-RUN5 pins that it never reads this file), a
+failure count can turn nothing green or red, and nothing here retries or pages.
+Evidence that nobody opens has the same weight as no evidence - this only makes
+it openable.
+
 DAY GATE (R2992): if_due=True makes a beat idempotent without a scheduler of
 its own - when a usable record already names today, run() answers skipped=True
 BEFORE any socket is opened and writes nothing. That is what makes it safe to
@@ -147,6 +155,49 @@ def read_failures(path):
                 continue
             rows.append(row)
     return rows, bad
+
+
+def summarize_failures(path, day, window_days=7):
+    """Readable answer to "did retrievals fail, and how recently?" (R2993).
+
+    WHY: the side channel had a writer and NO reader outside its own suite, so
+    evidence nobody opens is the same weight as no evidence. This turns the rows
+    read_failures already validates into the one line a person can act on: how
+    many failures in total, how many inside the window, how many unusable lines,
+    how many distinct sources, and the newest failure. An absent file is zeroes,
+    never an exception - "nothing failed" is an honest answer, not an error.
+
+    The window is inclusive of `day` and `window_days` long, compared on the
+    literal first ten characters of failed_at, the same day law the record face
+    uses, so the summary and the writer cannot drift apart. Nothing here gates,
+    retries or pages: this is a READER over evidence, not enforcement.
+    """
+    rows, bad = read_failures(path)
+    head_day = (day or '')[:10]
+    usable = _usable_day(head_day)
+    threshold = head_day
+    if usable:
+        try:
+            start = datetime.date.fromisoformat(head_day) - datetime.timedelta(
+                days=max(1, int(window_days)) - 1)
+            threshold = start.isoformat()
+        except ValueError:
+            usable = False
+    recent = 0
+    urls = set()
+    newest = None
+    for row in rows:
+        urls.add(row.get('source_url'))
+        row_day = str(row.get('failed_at') or '')[:10]
+        if usable and threshold <= row_day <= head_day:
+            recent += 1
+        if newest is None or str(row.get('failed_at') or '') > str(
+                newest.get('failed_at') or ''):
+            newest = row
+    return {'total': len(rows), 'recent': recent, 'bad': bad,
+            'urls': len(urls), 'window_days': window_days,
+            'newest_at': (newest or {}).get('failed_at'),
+            'newest_error': (newest or {}).get('error')}
 
 
 def crawled_today(repo_root, day):
@@ -306,7 +357,22 @@ def main(argv=None):
                     help='no-op when a usable record already names today '
                          '(safe to call from a repeating beat)')
     ap.add_argument('--timeout', type=int, default=20)
+    ap.add_argument('--failures', action='store_true',
+                    help='print the failure side channel summary and exit '
+                         '(a reader over evidence; gates nothing)')
+    ap.add_argument('--days', type=int, default=7,
+                    help='window length in days for --failures (default 7)')
     args = ap.parse_args(argv)
+    if args.failures:
+        stamp = datetime.datetime.now().astimezone().isoformat(
+            timespec='seconds')
+        summary = summarize_failures(failure_path(args.root), stamp, args.days)
+        print('CRAWL-FAILURES total=%d recent%d=%d bad=%d urls=%d newest=%s '
+              'error=%s' % (summary['total'], summary['window_days'],
+                            summary['recent'], summary['bad'],
+                            summary['urls'], summary['newest_at'] or 'none',
+                            summary['newest_error'] or 'none'))
+        return 0
     if not args.url and args.if_due:
         args.url = [DEFAULT_URL]
     if not args.url:
