@@ -366,6 +366,19 @@ SUITES = [
     # write-open and the funnel runs before the handle reaches the child
     # (pre-registered in src/os/backlog.md at R2955 BEFORE the edit).
     ("panel", os.path.join("test_panel.py"), 26),
+    # R2956: R2955 closed the WRITER, not the NAMESPACE - any other module
+    # could still create bigdomain-panel-child-* and either forge the marker
+    # or leave a markerless file the prune must later count as legacy, which
+    # is exactly the residue R2954 had to measure. src/sandbox/
+    # panel_log_ns_scan.py bounds that with a static AST read over the shipped
+    # tree: a write-capable creation site naming the stem outside the owner is
+    # refused by name (and so is a module-level constant or a LOG_STEM borrow,
+    # because that is the licence for the write), while the owner, the test
+    # fixtures and the scanner itself are published as COUNTED exemptions
+    # (why=owner|fixture|judge) instead of being skipped in silence.
+    # AC-PAN27..AC-PAN29 were pinned in src/os/backlog.md BEFORE the scanner
+    # and this suite existed.
+    ("panel-log-ns", os.path.join("test_panel_log_ns_scan.py"), 3),
     # R2938 added AC-PAN7..AC-PAN11 (declared ownership): the launcher hands
     # the panel the faces it already serves with the ports it measured, and the
     # panel refuses to start or stop them by name instead of forking the
