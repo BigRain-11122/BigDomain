@@ -627,6 +627,25 @@ faces use (empty history reads `none`). On a writer-produced file it equals
 `last=`, so like `outside=0` it asserts a law rather than adding a number; the
 day face does not print it because its sorted pairs already end on that day.
 
+THE DAY AN INSTANT NAMES (R3048, measured first - qa/probe-R3048.log): every
+clock face cut its day out of the stamp's first ten characters, so a day was
+whatever the TEXT said rather than what the moment was. One moment written
+`2026-11-20T04:00:00+08:00` and `2026-11-19T20:00:00+00:00` read as two
+different days - measured on one two-day world, the trend answered today=1 vs
+today=3, the summary recent7=3 vs 2, and a snapshot was written under 11-20 vs
+11-19. The frame is not a taste: every `day` on this disk is written by a
+writer that stamps `datetime.now().astimezone()` and keeps ten characters, so a
+day is a LOCAL calendar day and the reader must live in that frame. `_day_of()`
+is now the only place a stamp becomes a day (the window law, the snapshot
+writer, the day gate and the two CLI snapshot sites), a stamp with no offset is
+already local text, and an unparseable stamp falls back to its first ten
+characters so a display face never raises. Pinning the frame to a constant
+offset was refused: it would tie "which day" to a constant instead of to the
+writer, and nothing measured asked for it. The honest limit is named rather
+than implied - this is the MACHINE's local zone, the same frame the default
+clock face already reads, so two machines in different zones still name
+different days for one world.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1167,6 +1186,33 @@ def read_failure_bad_lines(path):
             if kind is not None]
 
 
+def _day_of(stamp):
+    """The calendar day a stamp names: the day of the INSTANT, in local terms.
+
+    R3048: every clock face used to cut its day out of the stamp's first ten
+    characters, which reads the day as WRITTEN rather than the day of the
+    instant, so one moment written
+    '2026-11-20T04:00:00+08:00' and '2026-11-19T20:00:00+00:00' read as two
+    different days (measured on one world: trend today=1 vs today=3, failures
+    recent7=3 vs 2, a snapshot written under 11-20 vs 11-19 -
+    qa/probe-R3048.log).
+
+    WHICH DAY IS RIGHT: every `day` on this disk is written by a writer that
+    stamps `datetime.now().astimezone()` and keeps ten characters, so a day is
+    a LOCAL calendar day. The reading faces must live in the writer's frame,
+    which is why the day of an instant is its local calendar day here. A stamp
+    with no offset is already local text (the truncation is unchanged), and a
+    text that will not parse falls back to its first ten characters so that a
+    display face never raises over a stamp. The frame is the machine's local
+    zone, the same frame the default clock face already reads.
+    """
+    text = str(stamp or '')
+    try:
+        return datetime.datetime.fromisoformat(text).astimezone().date().isoformat()
+    except (ValueError, OSError, OverflowError):
+        return text[:10]
+
+
 def _window_start(day, window_days=7):
     """(head_day, usable, threshold) - the ONE place the window law lives.
 
@@ -1174,8 +1220,12 @@ def _window_start(day, window_days=7):
     third face (the old-waiter listing) would have made three copies of the law.
     One function, three call sites, so a list and a row cannot disagree about
     which day the window opens.
+
+    R3048: the day is derived from the instant by `_day_of`, not by cutting the
+    text, so a caller may hand this either a stamp or a day string - a day
+    string is idempotent, and the rows loaded elsewhere are fed back here.
     """
-    head_day = (day or '')[:10]
+    head_day = _day_of(day)
     usable = _usable_day(head_day)
     threshold = head_day
     if usable:
@@ -1383,7 +1433,7 @@ def snapshot_failure_day(repo_root, day, window_days=7):
     per-rewrite number would be overwritten by the next ten-minute beat before
     it could be read. Old rows keep whatever they had - no backfill.
     """
-    head_day = (day or '')[:10]
+    head_day = _day_of(day)
     if not _usable_day(head_day):
         raise ValueError('crawl failure day refused, unusable day: %r' % (day,))
     rows, bad = read_failures(failure_path(repo_root))
@@ -3195,7 +3245,7 @@ def run(url, repo_root, body=None, fetched_at=None, timeout=20, write=False,
     dry = body is not None
     stamp = fetched_at or datetime.datetime.now().astimezone().isoformat(
         timespec='seconds')
-    if if_due and crawled_today(repo_root, stamp[:10]):
+    if if_due and crawled_today(repo_root, _day_of(stamp)):
         # Idempotent beat: the day is already covered, so this call is a no-op
         # rather than a second retrieval that would only re-write the baseline.
         return {'ok': True, 'error': None, 'verdict': 'skip', 'digest': None,
@@ -3274,9 +3324,13 @@ def main(argv=None):
                          '--failure-trend, --pending-old-list and '
                          '--snapshot-failures -- and each reads this value when '
                          'given, so a world recorded on one day can be read as '
-                         'that day instead of the day it is read. The pure '
-                         'series faces (--failure-days and the rest) never read '
-                         'a clock and ignore it (display only; gates nothing)')
+                         'that day instead of the day it is read. The DAY this '
+                         'names is the local calendar day of that instant, so '
+                         '2026-11-19T20:00:00+00:00 and '
+                         '2026-11-20T04:00:00+08:00 name the same day (R3048). '
+                         'The pure series faces (--failure-days and the rest) '
+                         'never read a clock and ignore it (display only; gates '
+                         'nothing)')
     ap.add_argument('--failures', action='store_true',
                     help='print the failure side channel summary and exit '
                          '(a reader over evidence; carries bytes/lines and a '
@@ -3600,7 +3654,7 @@ def main(argv=None):
     if standalone_snapshot:
         stamp = _stamp_of(args)
         try:
-            row = snapshot_failure_day(args.root, stamp[:10], args.days)
+            row = snapshot_failure_day(args.root, stamp, args.days)
         except Exception as exc:  # a display write must never look like a crawl
             print('CRAWL-FAILURE-DAY error=%s: %s' % (type(exc).__name__, exc))
             return 3
@@ -3644,7 +3698,7 @@ def main(argv=None):
         # in the row that names today, not in tomorrow's.
         now = _stamp_of(args)
         try:
-            row = snapshot_failure_day(args.root, now[:10], args.days)
+            row = snapshot_failure_day(args.root, now, args.days)
             print('CRAWL-FAILURE-DAY day=%s on_day=%d total=%d recent%d=%d '
                   'bad=%d urls=%d dropped=%d' % (row['day'], row['on_day'],
                                                  row['total'], row['recent'],

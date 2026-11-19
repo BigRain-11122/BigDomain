@@ -1,0 +1,44 @@
+local_zone                   中国标准时间
+local_now                    2026-11-20T00:38:23+08:00
+writer_stamp_day             2026-11-20
+instant_utc                  2026-11-19T20:00:00+00:00
+stamp10_of_each              ['2026-11-20', '2026-11-19', '2026-11-20']
+localdate_of_each            ['2026-11-20', '2026-11-20', '2026-11-20']
+--- B: five faces, one instant, three notations
+2026-11-20T04:00:00+08:00    
+    window_head_day                2026-11-20
+    failures_recent7               3
+    trend_today                    1
+    trend_wcov                     (2, 7)
+    pending_fcov                   ('2026-11-19', '2026-11-20')
+2026-11-19T20:00:00+00:00    
+    window_head_day                2026-11-19
+    failures_recent7               2
+    trend_today                    3
+    trend_wcov                     (1, 7)
+    pending_fcov                   ('2026-11-19', '2026-11-20')
+2026-11-20T04:00:00          
+    window_head_day                2026-11-20
+    failures_recent7               3
+    trend_today                    1
+    trend_wcov                     (2, 7)
+    pending_fcov                   ('2026-11-19', '2026-11-20')
+snapshot_day[+08:00]         2026-11-20
+snapshot_day[+00:00]         2026-11-19
+snapshot_day[:00:00]         2026-11-20
+--- C: collision census
+suite_at_sites               49
+suite_at_literals_distinct   ["'2026-11-22T23:59:00+08:00'", "'2026-11-29T10:00:00+08:00'", "'2026-12-31T00:00:00+08:00'", 'AT', 'real_at']
+suite_offsets                ['+08:00']
+suite_z_suffix_stamps        0
+suite_naive_iso_stamps       8
+files_with_stamp_truncation  ['tools\\crawl_record.py', 'tools\\crawl_runner.py', 'src\\os\\scan_five_still.py', 'src\\os\\test_crawl_runner.py', 'src\\sandbox\\ledger\\apimarket.py', 'src\\sandbox\\ledger\\test_apimarket_devboardmonth_straddlepersist.py', 'src\\sandbox\\member\\test_reminder_persist.py', 'src\\sandbox\\pay\\orders.py', 'src\\sandbox\\pay\\test_channel_migrate_persist.py', 'src\\sandbox\\pay\\test_channel_window.py']
+--- D: ISO parse + suite census (probe_R3048b)
+py 3.14.10
+'2026-11-19T20:00:00Z' -> 2026-11-19 20:00:00+00:00
+'2026-11-19T20:00:00+00:00' -> 2026-11-19 20:00:00+00:00
+'2026-11-19' -> 2026-11-19 00:00:00
+'2026-11-19T20:00:00' -> 2026-11-19 20:00:00
+'20261119T200000' -> 2026-11-19 20:00:00
+naive_literals 5 ["'2026-11-10T09:00:00'", "'2026-11-11T09:00:00'", "'2026-11-11T10:00:00'", "'2026-11-12T09:00:00'", "'2026-11-13T09:00:00'"]
+at_arg_tokens ["'2026-11-22T23:59:00+08:00'", "'2026-11-29T10:00:00+08:00'", "'2026-12-31T00:00:00+08:00'", 'AT', 'real_at']

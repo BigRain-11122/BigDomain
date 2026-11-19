@@ -7282,6 +7282,110 @@ def main():
        'every clock-face call in this suite names its day (unpinned lines: %s)'
        % (missing64 or 'none'))
 
+    # AC-RUN65 (R3048): a stamp names an INSTANT, but every clock face read its
+    # day by cutting the first ten characters of the text - so one moment
+    # written two legal ways was two different days (measured on one two-day
+    # world: trend today=1 vs 3, recent7=3 vs 2, a snapshot under 11-20 vs
+    # 11-19, qa/probe-R3048.log). The day is now the local calendar day of the
+    # instant, because every `day` on disk is written by a writer stamping
+    # datetime.now().astimezone(). The three notations below are ONE moment.
+    r65 = world()
+    roots.append(r65)
+    f65 = RUN.failure_path(r65)
+    RUN.append_failure(f65, 'https://a.example/1', '2026-11-19T09:00:00+08:00',
+                       'E_FETCH URLError: a')
+    RUN.append_failure(f65, 'https://b.example/2', '2026-11-19T10:00:00+08:00',
+                       'E_FETCH URLError: b')
+    RUN.append_failure(f65, 'https://a.example/1', '2026-11-20T02:00:00+08:00',
+                       'E_FETCH URLError: a')
+    RUN.snapshot_failure_day(r65, '2026-11-19T09:00:00+08:00')
+    RUN.snapshot_failure_day(r65, '2026-11-20T02:00:00+08:00')
+
+    ONE65 = ['2026-11-20T04:00:00+08:00', '2026-11-19T20:00:00+00:00',
+             '2026-11-20T04:00:00']
+
+    def face65(flag, at):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main([flag, '--root', r65, '--at', at])
+        return rc, buf.getvalue().strip()
+
+    trend65 = [face65('--failure-trend', at) for at in ONE65]
+    fails65 = [face65('--failures', at) for at in ONE65]
+    ok('AC-RUN65',
+       all(rc == 0 for rc, _l in trend65 + fails65)
+       and trend65[0][1] == trend65[1][1] == trend65[2][1]
+       and fails65[0][1] == fails65[1][1] == fails65[2][1]
+       and 'today=1' in trend65[0][1] and 'wcov=2/7' in trend65[0][1],
+       'one instant written as +08:00, as +00:00 and with no offset reads ONE '
+       'day on both faces: the three lines are byte-identical and the day they '
+       'name is the local one (11-20, today=1 wcov=2/7)')
+
+    days65 = [RUN._day_of(at) for at in ONE65] + [RUN._day_of('2026-11-20')]
+    ok('AC-RUN65', days65 == ['2026-11-20'] * 4,
+       'the day of a stamp is the instant\'s local day, and a day string is '
+       'already a day - the +08:00 and never-offset stamps the rest of this '
+       'suite passes keep the day they always had')
+
+    win65 = RUN._window_start('2026-11-20', 7)
+    win65b = RUN._window_start('2026-11-19T20:00:00+00:00', 7)
+    ok('AC-RUN65', win65 == win65b == ('2026-11-20', True, '2026-11-14'),
+       'rows carry day strings and are fed back into the window law, so the '
+       'day must be idempotent: the row day and the UTC stamp of the same '
+       'local day open the same seven-day window')
+
+    junk65 = [RUN._day_of(''), RUN._day_of('nope'), RUN._day_of('2026-13-45')]
+    head65, usable65, thr65 = RUN._window_start('nope', 7)
+    ok('AC-RUN65',
+       junk65 == ['', 'nope', '2026-13-45'] and usable65 is False
+       and head65 == 'nope' and thr65 == 'nope',
+       'a stamp that is not a timestamp falls back to its first ten characters '
+       'and answers an unusable window rather than raising - a display face '
+       'must never die over the value it was asked to display')
+
+    r65c = world()
+    roots.append(r65c)
+    page65 = b'<html><body><p>steady page for the day gate</p></body></html>'
+    first65 = RUN.run('https://c.example/1', r65c, body=page65,
+                      fetched_at='2026-11-20T03:00:00+08:00', write=True)
+    beat65 = RUN.run('https://c.example/1', r65c, body=page65,
+                     fetched_at='2026-11-19T20:00:00+00:00', if_due=True)
+    ok('AC-RUN65', first65.get('ok') and beat65.get('skipped') is True,
+       'the day gate lives in the same frame: a record written at 11-20 local '
+       'time and a beat arriving as the same moment in UTC agree the day is '
+       'covered, so the beat stays a no-op instead of crawling twice')
+
+    r65d = world()
+    roots.append(r65d)
+    buf65 = io.StringIO()
+    with contextlib.redirect_stdout(buf65):
+        rc65 = RUN.main(['--snapshot-failures', '--root', r65d,
+                         '--at', '2026-11-19T20:00:00+00:00'])
+    line65 = buf65.getvalue().strip()
+    rows65, _bad65 = RUN.read_failure_days(RUN.failure_day_path(r65d))
+    ok('AC-RUN65', rc65 == 0 and 'day=2026-11-20' in line65
+       and [r.get('day') for r in rows65] == ['2026-11-20'],
+       'the CLI snapshot takes a stamp and writes the day of that instant: a '
+       'UTC stamp of a 11-20 local moment lands a 11-20 history row')
+
+    with io.open(os.path.join(ROOT, 'tools', 'crawl_runner.py'),
+                 'r', encoding='utf-8') as fh:
+        src65 = fh.read()
+
+    def body65(name):
+        i65 = src65.find('def %s(' % name)
+        j65 = src65.find('\ndef ', i65 + 1)
+        return src65[i65:j65 if j65 > 0 else len(src65)]
+
+    ok('AC-RUN65',
+       '_day_of(' in body65('_window_start')
+       and '_day_of(' in body65('snapshot_failure_day')
+       and '_day_of(stamp)' in body65('run')
+       and 'stamp[:10]' not in src65 and 'now[:10]' not in src65,
+       'the stamp-to-day conversion is one helper used by the window law, the '
+       'snapshot writer and the day gate, and no face cuts a stamp by hand any '
+       'more (a future face that reintroduces the cut reads red here)')
+
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
 

@@ -4754,8 +4754,9 @@ SUITES = [
     # R3046 names the default face's window anchor, 62 -> 63.
     # R3047 makes the faces' clock an input (--at) so the suite cannot rot
     # at midnight, 63 -> 64.
+    # R3048 makes the day of a stamp the day of the INSTANT, 64 -> 65.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 64),
+     os.path.join("..", "os", "test_crawl_runner.py"), 65),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep
