@@ -294,6 +294,18 @@ name were both refused (a ratio is not a count, and "days" would put a second
 meaning on the word `days_present` already owns). Unusable head day answers
 none, never an invented zero (the absent-not-zero law, carried).
 
+R3030 (measured first - qa/probe-R3030.log): `repeat_rows=` counts same-day
+second-and-later rows and leaves WHAT THEY ARE as homework. `on_day` is the
+number of that day's failure rows at write time (a count, not a clock), so the
+same opt-in tail now also carries `retry_rows=<n|none>`: repeated rows whose
+on_day is not greater than the previous row of the same day - rows that carried
+no more failure evidence than the row before them. `retry_rows <= repeat_rows`
+holds by construction and the remainder grew between writes. It is an
+inference, not proof of an interrupted run, and a pruned side channel also
+fails to grow - stated in the function. A `reading_rows=` token was refused as
+a restatement of `repeat_rows - retry_rows` (the R3000 noise law), and an
+unusable head answers none rather than an invented zero.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1280,6 +1292,23 @@ def series_presence_counts(rows, window_days=7):
     token (the R3000 noise law refused `window_days=` because it would repeat
     `series_window=`; this number appears nowhere else).
 
+    A REPEAT IS NOT ONE THING (R3030, measured first - qa/probe-R3030.log):
+    `repeat` counts same-day second-and-later rows, but the history can hold
+    them for two different reasons - a re-recording of a day whose evidence had
+    not grown, and a later reading of a day that grew between writes. `on_day`
+    is the number of that day's failure rows at write time (it starts at 0 and
+    increments once per side-channel row dated that day - it is a count, not a
+    clock), so a repeated row whose on_day is NOT greater than the previous row
+    of the SAME day carried no more evidence than that row. `retry` counts
+    exactly those, and `retry <= repeat` holds by construction; the remainder
+    are rows that grew. An equal on_day counts as a re-recording.
+
+    HONEST BOUNDARY: `retry` is an INFERENCE, not proof - a non-increasing
+    on_day says this row did not carry more failure evidence than the row
+    before it, not that a process was interrupted, and a pruned side channel
+    also fails to grow. A `reading_rows=` token was refused as a restatement of
+    the difference between two printed numbers (the R3000 noise law).
+
     DISPLAY ONLY: writes nothing, gates nothing.
     """
     width = max(1, int(window_days))
@@ -1287,16 +1316,22 @@ def series_presence_counts(rows, window_days=7):
         (str(rows[-1].get('day') or '') if rows else ''), width)
     if not usable:
         return {'window': width, 'present': None, 'rows': 0, 'repeat': None,
-                'head': None}
+                'retry': None, 'head': None}
     days = set()
     count = 0
+    seen_on_day = {}
+    retry = 0
     for row in rows:
         row_day = str(row.get('day') or '')[:10]
         if threshold <= row_day <= head_day:
             count += 1
             days.add(row_day)
+            on_day = row.get('on_day')
+            if row_day in seen_on_day and on_day <= seen_on_day[row_day]:
+                retry += 1
+            seen_on_day[row_day] = on_day
     return {'window': width, 'present': len(days), 'rows': count,
-            'repeat': count - len(days), 'head': head_day}
+            'repeat': count - len(days), 'retry': retry, 'head': head_day}
 
 
 def list_failure_days_dropped(path, window_days=None):
@@ -2417,10 +2452,13 @@ def main(argv=None):
                     help='alongside --series-days N, name the calendar days in '
                          'that window with no history row at all; the header '
                          'gains series_absent=<n|none> absent=<day,...|none> '
-                         'days_present=<n|none> and repeat_rows=<n|none>, so a '
+                         'days_present=<n|none> repeat_rows=<n|none> and '
+                         'retry_rows=<n|none>, so a '
                          'silent day never reads like a measured zero, the '
-                         'present/gap split sums to series_window, and the '
-                         'present/repeat split sums to window_rows (read-only '
+                         'present/gap split sums to series_window, the '
+                         'present/repeat split sums to window_rows, and a '
+                         'same-day repeat names whether it carried more '
+                         'failure evidence than the row before it (read-only '
                          'display; gates nothing)')
     args = ap.parse_args(argv)
     if args.series_absent and (args.series_days is None
@@ -2457,13 +2495,15 @@ def main(argv=None):
             if args.series_absent:
                 gaps = series_absent_days(day_read[0], args.series_days)
                 presence = series_presence_counts(day_read[0], args.series_days)
-                tail_markers += ' series_absent=%s absent=%s days_present=%s repeat_rows=%s' % (
+                tail_markers += ' series_absent=%s absent=%s days_present=%s repeat_rows=%s retry_rows=%s' % (
                     'none' if gaps['count'] is None else gaps['count'],
                     ','.join(gaps['days']) or 'none',
                     'none' if presence['present'] is None
                     else presence['present'],
                     'none' if presence['repeat'] is None
-                    else presence['repeat'])
+                    else presence['repeat'],
+                    'none' if presence['retry'] is None
+                    else presence['retry'])
         print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
               'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB '
               'series_limit=%d series_shown=%d series_outside=%d '

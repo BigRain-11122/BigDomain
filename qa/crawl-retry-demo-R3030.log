@@ -1,0 +1,6 @@
+A falling-then-rising day | rc=0 | window_rows=4 series_absent=5 days_present=2 repeat_rows=2 retry_rows=1
+B equal on_day twice | rc=0 | window_rows=2 series_absent=6 days_present=1 repeat_rows=1 retry_rows=1
+C a day that grew | rc=0 | window_rows=2 series_absent=6 days_present=1 repeat_rows=1 retry_rows=0
+D two distinct days, no repeat | rc=0 | window_rows=2 series_absent=5 days_present=2 repeat_rows=0 retry_rows=0
+E a 2001 window (no clock) | rc=0 | window_rows=1 series_absent=1 days_present=1 repeat_rows=0 retry_rows=0
+F no history at all | rc=0 | window_rows=0 series_absent=none days_present=none repeat_rows=none retry_rows=none

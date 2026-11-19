@@ -1,0 +1,7 @@
+HONEST GREEN over 4 fixtures
+HONEST empty -> retry=None (want None)
+M1 equal on_day read as a grown reading -> CAUGHT (equal,empty)
+M2 first row of a day counted as a repeat -> CAUGHT (falling,equal,grown,cross,empty)
+M3 compared across days instead of within one -> CAUGHT (cross,empty)
+M4 empty history answered 0 instead of none -> CAUGHT (empty)
+RESULT caught=4/4

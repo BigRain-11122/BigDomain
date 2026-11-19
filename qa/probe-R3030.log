@@ -1,0 +1,22 @@
+P1a snapshot_failure_day source: on_day starts 0 and increments once per side-channel row whose failed_at day equals head_day (increments_per_failed_row=True)
+P1b on_day is a COUNT of that day's failure rows at write time, not a clock: the module never reads a time-of-day into it (the only time source is failed_at text)
+P1c live history: rows=1 bad=0 on_day=[0] duplicate_days=0
+P1d world A same-day steps=[('2026-11-19', 3, 1, 'retry'), ('2026-11-19', 1, 2, 'reading')] (non-increasing => looks like a repeat of the same reading, increasing => the day grew between writes)
+P1e world A: repeat_rows=2, retry candidates=1, reading candidates=1
+P2a retry        module_hits=1 suite_hits=0
+P2a reading_rows module_hits=0 suite_hits=0
+P2a same_day     module_hits=0 suite_hits=0
+P2a repeat_rows  module_hits=4 suite_hits=12
+P2a on_day       module_hits=23 suite_hits=39
+P2b functions reading on_day=['_failure_day_row_why', 'main', 'read_failure_day_bad_lines', 'series_absent_days', 'series_days_window', 'snapshot_failure_day', 'summarize_failure_days', 'summarize_failure_trend']
+P2c every on_day reader either prints the pair, takes int() for a trend number, or takes max() for the worst day - none compares one row of a day against an earlier row of the SAME day
+P3a suite arms passing --series-absent=19
+P3b exact default-face suffix pins containing series_limit=5
+P3c arms asserting count('absent=')=2 -> count_hits=3
+P3d arms asserting count('repeat_rows=')==1 -> hits=1
+P3e exact-equality assertions on a line carrying series_absent=15 (token-dict and count arms are additive; no full-line equality on the flagged face)
+P3f collision check: retry_rows module=0 suite=0, reading_rows module=0 suite=0
+P4a equal-then-growing world: classify=(1, 1) (retry, reading)
+P4b world A classify=(1, 1), repeat from series_presence_counts=2
+P4c invariant holds on both worlds: retry + reading == repeat (A: 1+1==2, B: 1+1==2)
+P4d empty history classify=(0, 0) and presence={'window': 7, 'present': None, 'rows': 0, 'repeat': None, 'head': None} (nothing to split; a zero here would be an invented reading)

@@ -327,6 +327,20 @@ survive (arm 6). Stated honestly: `repeat_rows` is a subtraction of two numbers
 already printed, not a new measurement; its only value is that the two
 invariants become checkable by eye.
 
+AC-RUN47 (R3030) grades WHAT a same-day repeat is. Measured before the change
+(qa/probe-R3030.log): `on_day` is the number of that day's failure rows at
+write time (a count, not a clock), no shipped face compares two rows of the
+same day, and every on_day reader either prints the pair or takes int()/max().
+So `series_presence_counts()` also returns `retry` - repeated rows whose on_day
+is not greater than the previous row of the SAME day - and the flagged tail
+prints `retry_rows=<n|none>` after `repeat_rows=`, giving `retry_rows <=
+repeat_rows` (arm 1). Equal on_day counts as a re-recording (arm 2), a growing
+day answers a measured zero (arm 3), an unusable head answers none (arm 4), a
+2001 history windows against itself (arm 5), the default face stays
+byte-identical (arm 6), and the refused names plus the older absent= count
+survive (arm 7). Stated honestly: retry is an INFERENCE from a counter that
+did not grow, not proof that a run was interrupted.
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -4839,6 +4853,126 @@ def main():
        'the difference appears once under its own name, the refused ratio and '
        'days names never appear, the older absent= pair still counts two, and '
        'no byte is written')
+
+    # ===== AC-RUN47 (R3030): a same-day repeat says what it is =====
+    # AC-RUN47 was pinned in src/os/backlog.md BEFORE the 'retry' key existed
+    # (qa/probe-R3030.log): on_day is a count that does not grow for a
+    # re-recording, no face compares two rows of one day, and the flagged tail
+    # is read through token dicts rather than full-line equality.
+    def days47(root, extra):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(list(extra) + ['--root', root])
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def toks47(line):
+        return dict(part.split('=', 1) for part in line.split()[1:])
+
+    r47 = world()
+    roots.append(r47)
+    p47 = hist37(r47)
+    put_days(p47, [plain_day('2026-09-20', 5), plain_day('2026-11-18', 1),
+                   plain_day('2026-11-19', 3), plain_day('2026-11-19', 1),
+                   plain_day('2026-11-19', 2)])
+    rc47, lines47 = days47(r47, ['--failure-days', '--series-days', '7',
+                                 '--series-absent'])
+    t47 = toks47(lines47[0]) if lines47 else {}
+    pure47 = RUN.series_presence_counts(RUN.read_failure_days(p47)[0], 7)
+
+    # arm 1: the 3 -> 1 step is a re-recording, the 1 -> 2 step grew
+    ok('AC-RUN47', rc47 == 0
+       and t47.get('retry_rows') == '1'
+       and t47.get('repeat_rows') == '2'
+       and t47.get('days_present') == '2'
+       and t47.get('window_rows') == '4'
+       and pure47['retry'] == 1
+       and int(pure47['retry']) <= int(pure47['repeat'])
+       and int(t47['retry_rows']) <= int(t47['repeat_rows']),
+       'a three-row day whose on_day falls then rises splits one re-recording '
+       'from one grown reading, and retry never exceeds repeat')
+
+    # arm 2: an equal on_day is also a re-recording
+    r47b = world()
+    roots.append(r47b)
+    p47b = hist37(r47b)
+    put_days(p47b, [plain_day('2026-11-18', 2), plain_day('2026-11-18', 2)])
+    rc47b, lines47b = days47(r47b, ['--failure-days', '--series-days', '7',
+                                    '--series-absent'])
+    t47b = toks47(lines47b[0]) if lines47b else {}
+    ok('AC-RUN47', rc47b == 0 and t47b.get('retry_rows') == '1'
+       and t47b.get('repeat_rows') == '1'
+       and t47b.get('days_present') == '1',
+       'two rows of one day carrying the same on_day read as one '
+       're-recording of the same evidence')
+
+    # arm 3: a day that grew carries a measured zero
+    r47c = world()
+    roots.append(r47c)
+    p47c = hist37(r47c)
+    put_days(p47c, [plain_day('2026-11-19', 1), plain_day('2026-11-19', 4)])
+    rc47c, lines47c = days47(r47c, ['--failure-days', '--series-days', '7',
+                                    '--series-absent'])
+    t47c = toks47(lines47c[0]) if lines47c else {}
+    ok('AC-RUN47', rc47c == 0 and t47c.get('retry_rows') == '0'
+       and t47c.get('repeat_rows') == '1',
+       'a repeat whose on_day grew answers retry_rows=0 - a measured zero, '
+       'not a missing reading')
+
+    # arm 4: not measurable is not zero
+    r47d = world()
+    roots.append(r47d)
+    os.makedirs(os.path.join(r47d, 'qa'), exist_ok=True)
+    rc47d, lines47d = days47(r47d, ['--failure-days', '--series-days', '7',
+                                    '--series-absent'])
+    t47d = toks47(lines47d[0]) if lines47d else {}
+    empty47 = RUN.series_presence_counts([], 7)
+    ok('AC-RUN47', rc47d == 0 and t47d.get('retry_rows') == 'none'
+       and t47d.get('repeat_rows') == 'none'
+       and empty47['retry'] is None,
+       'no history answers none for the split as well, and the pure function '
+       'invents no re-recording')
+
+    # arm 5: no clock - a 2001 history windows against itself
+    r47e = world()
+    roots.append(r47e)
+    p47e = hist37(r47e)
+    put_days(p47e, [plain_day('2001-01-01', 0), plain_day('2001-03-01', 1),
+                    plain_day('2001-03-05', 2)])
+    rc47e, lines47e = days47(r47e, ['--failure-days', '--series-days', '2',
+                                    '--series-absent'])
+    t47e = toks47(lines47e[0]) if lines47e else {}
+    pure47e = RUN.series_presence_counts(RUN.read_failure_days(p47e)[0], 2)
+    ok('AC-RUN47', rc47e == 0 and t47e.get('retry_rows') == '0'
+       and t47e.get('days_present') == '1'
+       and pure47e['head'] == '2001-03-05' and pure47e['retry'] == 0,
+       'a two-day window over a 2001 history holds one row on one day: no '
+       'repeat, no inferred retry, and the head is the file own last day')
+
+    # arm 6: the default face is byte-identical and carries no new token
+    rc47f, lines47f = days47(r47, ['--failure-days'])
+    ok('AC-RUN47', rc47f == 0 and lines47f
+       and lines47f[0].endswith(
+           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+       and 'retry_rows' not in lines47f[0],
+       'without the flag the tail is the same line R3026..R3029 shipped')
+
+    # arm 7: refused names, the counted absent= pair, and no byte written
+    before47 = tree_bytes(r47)
+    rc47g, lines47g = days47(r47, ['--failure-days', '--series-days', '7',
+                                   '--series-absent'])
+    after47 = tree_bytes(r47)
+    text47 = '\n'.join(lines47g)
+    ok('AC-RUN47', rc47g == 0 and before47 == after47 and lines47g
+       and lines47g[0].count('retry_rows=') == 1
+       and 'reading_rows=' not in lines47g[0]
+       and 'same_day=' not in lines47g[0]
+       and 'new_rows=' not in lines47g[0]
+       and lines47g[0].count('absent=') == 2
+       and 'PASS' not in text47 and 'FLAG' not in text47
+       and 'verdict' not in text47,
+       'the split appears once under its own name, the restatement and synonym '
+       'names never appear, the older absent= pair still counts two, and no '
+       'byte is written')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
