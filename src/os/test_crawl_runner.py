@@ -159,6 +159,21 @@ clean outside population and a waiter aged zero must not print the same digit.
 What R3010 refused stays refused (per-source naming, one line per source). Eleven
 existing key-set arms were widened by this key (the ten above plus AC-RUN28's
 own), disclosed as criteria moving with the field.
+AC-RUN30 (R3013) grades the OTHER END OF THE OLD TAIL: one age described only the
+longest old wait, so with two old waiters the other was invisible - measured, a
+second waiter that failed 90 days ago and one that failed 9 days ago read
+IDENTICAL on all 29 keys, including the same file span. The row now also carries
+pending_old_age_min_d=<days>, the YOUNGEST still-pending out-of-window source, on
+the same day law and the same None rules as the age beside it. A MIDDLE reading
+was measured and refused: with two waiters - the count the board itself named -
+the middle nearer the old end restates the longest age in both worlds, and at
+three or more reading the shape needs one line per source, which the contract
+refuses. Pointing a reader at the failure file was refused by measurement too:
+with the file byte-identical, one extra record row moved the old fraction from
+2/3 to 1/3. With one old waiter the two ages coincide, pinned as a truth rather
+than turned into none. Eleven existing key-set arms were widened by this key
+(the eleven above, each at its baseB set), disclosed as criteria moving with the
+field.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -1168,7 +1183,7 @@ def main():
        and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok', 'flips',
                                                'pending', 'pending_src',
                                                'pending_age_d',
-                                               'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'fcov', 'rcov'])
+                                               'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'pending_old_age_min_d', 'fcov', 'rcov'])
        and tA5['evidence'] == 'history' and tA5['today'] == 0,
        'a pruned side channel answers none/unmeasured and leaves every existing field where it was')
 
@@ -1287,7 +1302,7 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tB2.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'fcov', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'pending_old_age_min_d', 'fcov', 'rcov']),
        'one display row carries the stability count, adds exactly one key, and stays outside the scanner')
 
     # AC-RUN20 (R3003): the trend answered "was it seen working afterwards" but
@@ -1395,7 +1410,7 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tC1.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'fcov', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'pending_old_age_min_d', 'fcov', 'rcov']),
        'the row names the record span, or none, and adds exactly the one key it names')
 
     # AC-RUN21 (R3004): the verdict answered 'no' without ever having looked.
@@ -1471,7 +1486,7 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tD3.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'fcov', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'pending_old_age_min_d', 'fcov', 'rcov']),
        'a real repair still reads yes, the CLI carries all three readings, and R3004 adds NO key - the row shape is unchanged')
 
     # AC-RUN22 (R3005): newest_src/since_ok answer for ONE source - the latest
@@ -1587,7 +1602,7 @@ def main():
        and 'verdict' not in lineE7 and 'crawl-failure' not in scan_src18
        and set(tE1.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'fcov', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'pending_old_age_min_d', 'fcov', 'rcov']),
        'a multi-source window still prints ONE line carrying pending=, adds exactly one key, and stays outside the scanner - per-source lines were refused on purpose')
 
     # AC-RUN23 (R3006): pending=<n>/<judged> answers HOW MANY sources are still
@@ -1688,7 +1703,7 @@ def main():
     judged6 = tG6['pending'][1] if tG6['pending'] else 0
     ok('AC-RUN23', set(tG6.keys()) == baseB | set(['flips', 'pending',
                                                    'pending_src', 'pending_age_d',
-                                                   'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'fcov', 'rcov'])
+                                                   'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'pending_old_age_min_d', 'fcov', 'rcov'])
        and 'unjudged' not in tG6
        and tG6['sources'] - judged6 == 1,
        'the row grows by exactly one name and carries no unjudged field - the unjudged count is measurable as sources minus the denominator, so a field for it would only restate two keys')
@@ -1786,7 +1801,7 @@ def main():
                                                    'pending_age_d',
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
-                                                   'pending_old', 'pending_old_age_d', 'fcov', 'rcov'])
+                                                   'pending_old', 'pending_old_age_d', 'pending_old_age_min_d', 'fcov', 'rcov'])
        and 'pending_others' not in tH1 and 'unjudged' not in tH1,
        'the row grows by exactly one age key, and neither refused field (pending_others arithmetic, unjudged restatement) exists')
 
@@ -1884,7 +1899,7 @@ def main():
                                                    'pending_age_d',
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
-                                                   'pending_old', 'pending_old_age_d', 'fcov', 'rcov'])
+                                                   'pending_old', 'pending_old_age_d', 'pending_old_age_min_d', 'fcov', 'rcov'])
        and 'pending_age_max_d' not in tI1
        and 'pending_others' not in tI1 and 'unjudged' not in tI1,
        'the row grows by exactly one age key, and the refused max field (a restatement of pending_age_d, measured) plus the two older refusals never exist')
@@ -2002,7 +2017,7 @@ def main():
                                                    'pending_age_d',
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
-                                                   'pending_old', 'pending_old_age_d', 'fcov', 'rcov'])
+                                                   'pending_old', 'pending_old_age_d', 'pending_old_age_min_d', 'fcov', 'rcov'])
        and 'pending_age_max_d' not in tJ1
        and 'pending_hist' not in tJ1
        and 'pending_others' not in tJ1 and 'unjudged' not in tJ1,
@@ -2102,7 +2117,7 @@ def main():
                                                    'pending_age_d',
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
-                                                   'pending_old', 'pending_old_age_d', 'fcov', 'rcov'])
+                                                   'pending_old', 'pending_old_age_d', 'pending_old_age_min_d', 'fcov', 'rcov'])
        and 'pending_old_src' not in tK1,
        'the row grows by exactly one count key, and the refused per-source face (one line per source) never exists - R3012 later landed an AGGREGATE old age, which is the shape R3007 already allowed for the in-window population')
 
@@ -2214,7 +2229,7 @@ def main():
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
                                                    'pending_old',
-                                                   'pending_old_age_d', 'fcov',
+                                                   'pending_old_age_d', 'pending_old_age_min_d', 'fcov',
                                                    'rcov'])
        and 'fcov_src' not in tL1 and 'fcov_days' not in tL1,
        'the row grows by exactly one span key, and the refused per-source reach face never exists')
@@ -2307,12 +2322,11 @@ def main():
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
                                                    'pending_old',
-                                                   'pending_old_age_d',
+                                                   'pending_old_age_d', 'pending_old_age_min_d',
                                                    'fcov', 'rcov'])
        and 'pending_old_src' not in tM1
-       and 'pending_old_age_min_d' not in tM1
        and 'pending_old_age_med_d' not in tM1,
-       'the row grows by exactly one age key, and the refused per-source and multi-end old faces never exist')
+       'the row grows by exactly one age key, and the refused per-source and middle old faces never exist')
 
     # arm 7: the one-line contract and the scanner's zero-consumption premise
     bufM7 = io.StringIO()
@@ -2332,6 +2346,125 @@ def main():
        and 'PASS' not in lineM7 and 'FLAG' not in lineM7
        and 'verdict' not in lineM7 and 'crawl-failure' not in scan_src18,
        'one line carries pending_old_age_d= (a number, or none when nothing outside was pending), and the scanner still reads none of it')
+
+    # AC-RUN30 (R3013): one age described only the longest old wait, so with two
+    # old waiters the other was invisible. Measured before this was written
+    # (qa/probe-R3013.log): a second waiter that failed 90 days ago and one that
+    # failed 9 days ago read IDENTICAL on all 29 keys. A middle reading was
+    # measured and refused - with two waiters it restates the longest age in
+    # both worlds - so the row carries the YOUNGEST old waiter instead.
+    SRC30A = 'https://a.example/page'
+    SRC30B = 'https://b.example/page'
+    SRC30C = 'https://c.example/page'
+    SRC30E = 'https://e.example/page'
+    SRC30K = 'https://keep.example/page'
+    OLD30 = '2026-08-20T10:00:00+08:00'    # 91 days before TODAY
+    NXT30 = '2026-08-21T10:00:00+08:00'    # 90 days
+    MID30 = '2026-11-10T10:00:00+08:00'    # 9 days
+    FIX30 = '2026-11-11T09:00:00+08:00'
+    NEW30 = '2026-11-19T08:00:00+08:00'
+
+    def trend30(failure_rows, window=7, extra_records=()):
+        root = world()
+        roots.append(root)
+        rows = [(SRC30K, '2026-11-19T09:00:00+08:00', 'no-drift'),
+                (SRC30E, FIX30, 'no-drift')] + list(extra_records)
+        for url, when, verdict in rows:
+            CR.append_record(CR.record_path(root), url, when, verdict)
+        for url, when in failure_rows:
+            RUN.append_failure(RUN.failure_path(root), url, when,
+                               'TimeoutError: t')
+        write_days(RUN.failure_day_path(root), [])
+        return root, RUN.summarize_failure_trend(
+            RUN.failure_day_path(root), RUN.failure_path(root), TODAY,
+            window_days=window, record_path=CR.record_path(root))
+
+    # E is a repaired old row in both worlds, so fcov= is the same file span on
+    # both sides and only the second waiter's own stamp differs.
+    rN1, tN1 = trend30([(SRC30A, OLD30), (SRC30B, NXT30), (SRC30E, MID30)])
+    rN2, tN2 = trend30([(SRC30A, OLD30), (SRC30C, MID30), (SRC30E, MID30)])
+
+    # arm 1: the two worlds are identical except for the youngest old age
+    ok('AC-RUN30', tN1['pending_old'] == tN2['pending_old'] == (2, 3)
+       and tN1['pending_old_age_d'] == tN2['pending_old_age_d'] == 91
+       and tN1['fcov'] == tN2['fcov']
+       and tN1['pending_old_age_min_d'] == 90
+       and tN2['pending_old_age_min_d'] == 9,
+       'an old tail and an old tail plus a fresh dropout read the same fraction, the same longest age and the same file span - the youngest age is what separates them')
+
+    # arm 2: three waiters - the youngest is still 9 and the middle is not a key
+    rN3, tN3 = trend30([(SRC30A, OLD30), (SRC30B, NXT30), (SRC30C, MID30),
+                        (SRC30E, MID30)])
+    ok('AC-RUN30', tN3['pending_old'] == (3, 4)
+       and tN3['pending_old_age_d'] == 91
+       and tN3['pending_old_age_min_d'] == 9
+       and 'pending_old_age_med_d' not in tN3,
+       'with three old waiters the youngest reads the recent dropout while the middle would read 90 - and the refused middle key never exists')
+
+    # arm 3: one old waiter - the two ages coincide, pinned as a fact
+    rN4, tN4 = trend30([(SRC30A, OLD30)])
+    ok('AC-RUN30', tN4['pending_old'] == (1, 1)
+       and tN4['pending_old_age_d'] == 91
+       and tN4['pending_old_age_min_d'] == 91,
+       'with one pending old source both ages name the only waiter it can come from - pinned rather than turned into none')
+
+    # arm 4: every shape with nothing outside reads none, never 0
+    rN5, tN5 = trend30([(SRC30C, NEW30)])          # trimmed to the window
+    rN6, tN6 = trend30([(SRC30E, MID30)])          # all judged old came back
+    rN7 = world()
+    roots.append(rN7)
+    tN7 = RUN.summarize_failure_trend(
+        RUN.failure_day_path(rN7), RUN.failure_path(rN7), TODAY,
+        record_path=CR.record_path(rN7))
+    ok('AC-RUN30', tN5['pending_old'] is None
+       and tN5['pending_old_age_min_d'] is None
+       and tN6['pending_old'] == (0, 1)
+       and tN6['pending_old_age_min_d'] is None
+       and tN7['pending_old_age_min_d'] is None,
+       'a trimmed channel, a fully repaired old population and an absent channel all read none - nobody outside is pending is not a waiter aged zero')
+
+    # arm 5: the window is a parameter - the recent dropout moves back inside
+    rN8, tN8 = trend30([(SRC30A, OLD30), (SRC30C, MID30), (SRC30E, MID30)],
+                       window=14)
+    ok('AC-RUN30', tN8['pending_old'] == (1, 1)
+       and tN8['pending_old_age_d'] == 91
+       and tN8['pending_old_age_min_d'] == 91
+       and tN8['pending'] == (1, 2),
+       'at fourteen days the recent dropout is in-window pending while the outside population holds one waiter aged 91 - the two populations do not overlap')
+
+    # arm 6: exactly one new key, and none of the refused faces exist
+    ok('AC-RUN30', set(tN1.keys()) == baseB | set(['flips', 'pending',
+                                                   'pending_src',
+                                                   'pending_age_d',
+                                                   'pending_age_min_d',
+                                                   'pending_age_med_d',
+                                                   'pending_old',
+                                                   'pending_old_age_d',
+                                                   'pending_old_age_min_d',
+                                                   'fcov', 'rcov'])
+       and 'pending_old_age_med_d' not in tN1
+       and 'pending_old_src' not in tN1
+       and 'pending_old_hist' not in tN1,
+       'the row grows by exactly one age key, and the refused middle, per-source and histogram faces never exist')
+
+    # arm 7: the one-line contract and the scanner's zero-consumption premise
+    bufN7 = io.StringIO()
+    with contextlib.redirect_stdout(bufN7):
+        rcN7 = RUN.main(['--failure-trend', '--root', rN1])
+    linesN7 = [n for n in bufN7.getvalue().splitlines() if n.strip()]
+    lineN7 = linesN7[0] if linesN7 else ''
+    bufN7b = io.StringIO()
+    with contextlib.redirect_stdout(bufN7b):
+        rcN7b = RUN.main(['--failure-trend', '--root', rN7])
+    linesN7b = [n for n in bufN7b.getvalue().splitlines() if n.strip()]
+    lineN7b = linesN7b[0] if linesN7b else ''
+    ok('AC-RUN30', rcN7 == 0 and len(linesN7) == 1
+       and 'pending_old_age_min_d=90' in lineN7
+       and rcN7b == 0 and len(linesN7b) == 1
+       and 'pending_old_age_min_d=none' in lineN7b
+       and 'PASS' not in lineN7 and 'FLAG' not in lineN7
+       and 'verdict' not in lineN7 and 'crawl-failure' not in scan_src18,
+       'one line carries pending_old_age_min_d= (a number, or none when nothing outside is pending), and the scanner still reads none of it')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

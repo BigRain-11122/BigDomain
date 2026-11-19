@@ -1,0 +1,8 @@
+P1 cluster=((2, 3), 91) vs tail+dropout=((2, 3), 91) diff_keys=EMPTY fcov=('2026-08-20', '2026-11-10')
+P2 cluster ages=[91, 90] middle=91 youngest=90 | tail+dropout ages=[91, 9] middle=91 youngest=9 | middle_restates_oldest=True
+P3 N=3 ages=[91, 90, 9] middle=90 oldest=91 youngest=9 pending_old=(3, 4)
+P4 same_failure_file=True pending_old_without_record=(2, 3) pending_old_with_record=(1, 3) -> file_alone_answers=False
+P5 window=14 pending_old=(1, 1) pending=(1, 2) sources=2 fcov=('2026-08-20', '2026-11-10')
+P6 trimmed=(None, None) all_repaired=((0, 1), None) absent=(None, None)
+P7 keys=29 has_pending_old_age_min_d=False has_pending_old_age_med_d=False has_pending_old_src=False
+P8 live pending_old=None pending_old_age_d=None fcov=None pending=None

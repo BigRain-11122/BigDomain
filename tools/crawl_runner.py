@@ -373,6 +373,24 @@ naming an old source (pending_old_src) and one line per old source. This is a
 single aggregate over the old population, the same shape as pending_age_d= over
 the in-window population. Display only, no PASS/FLAG.
 
+THE OTHER END OF THE OLD TAIL (R3013): one age described only the longest old
+wait, so with two waiters the other was invisible - measured, a second waiter
+that failed 90 days ago and one that failed 9 days ago read IDENTICAL on all 29
+keys (qa/probe-R3013.log). The row now also carries
+pending_old_age_min_d=<days>: the whole-day age of the YOUNGEST still-pending
+out-of-window source, the second end of that population, on the same day law and
+the same None rules as the age beside it (None when pending_old= is none, and
+none - never 0 - when every judged old source came back). A MIDDLE reading was
+measured and REFUSED: with two waiters - the only count the board itself named -
+the middle nearer the old end IS the longest age in both worlds, so it would add
+a digit and no information (it diverges only at three or more, where reading the
+shape needs one line per source, which the contract refuses). Pointing a reader
+at the failure file was also measured and refused: with the failure file
+byte-identical, a single extra record row moved the old fraction from 2/3 to
+1/3, because "is it still gone" is answered by the record and not by the file.
+With one old waiter the two ages coincide - pinned as the truth it is, the same
+way the in-window pair pins its own coincidence. Display only, no PASS/FLAG.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -1036,6 +1054,22 @@ def _pending_out_of_window(record_path, rows, threshold):
     belonged to a REPAIRED source read fcov.first = 2026-08-20 while the source
     still gone had failed on 2026-11-10, so a single age over this population is
     NOT a restatement of fcov.first.
+
+    R3013 FOURTH VALUE: one age described only the longest wait, so with two old
+    waiters the other was invisible - measured (qa/probe-R3013.log), a world
+    whose second waiter failed 90 days ago and one whose second waiter failed 9
+    days ago read IDENTICAL on all 29 keys. A MIDDLE (nearer the old end) reading
+    was measured and REFUSED: with two waiters it equals the longest age by
+    construction in both worlds, so it would add a digit and no information at
+    exactly the count the board named; it only diverges at three or more, and
+    reading the shape at that size needs one line per source, which the
+    one-line contract refuses. The fourth value is the YOUNGEST still-pending old
+    stamp (largest own latest failure, ties broken by source url), the same
+    second end the in-window pair already carries in pending_age_min_d. Pointing
+    a reader at the failure file instead was measured and refused: with the
+    failure file byte-identical, one extra record row proving a source came back
+    moved the old fraction from (2,3) to (1,3), so the file cannot answer "is it
+    still gone" on its own.
     """
     latest = {}
     for row in rows or ():
@@ -1062,7 +1096,8 @@ def _pending_out_of_window(record_path, rows, threshold):
     if not judged:
         return None
     waiting.sort()
-    return (still, judged, waiting[0][0] if waiting else None)
+    return (still, judged, waiting[0][0] if waiting else None,
+            waiting[-1][0] if waiting else None)
 
 
 def summarize_failure_trend(history_path, failures_path, day, window_days=7,
@@ -1301,11 +1336,20 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # "nobody outside is pending" and "one broke today" must not read alike.
     pending_old = None
     pending_old_age_d = None
+    # R3013 THE OTHER END OF THE OLD TAIL: one age described only the longest
+    # wait - measured, two worlds with a 90-day and a 9-day second waiter read
+    # identical on all 29 keys. The middle was refused by that measurement (it
+    # equals the longest age when there are two waiters, which is the board's
+    # own example); this is the YOUNGEST old waiter, the end that separates an
+    # old tail from an old tail plus one that dropped out last week. Same None
+    # rules as the age beside it - never 0 for "nobody outside is pending".
+    pending_old_age_min_d = None
     if evidence == 'side' and usable:
         got = _pending_out_of_window(record_path, frows, threshold)
         if got is not None:
             pending_old = (got[0], got[1])
             pending_old_age_d = _day_age(day, got[2])
+            pending_old_age_min_d = _day_age(day, got[3])
     rcov = _record_coverage(record_path)
     # R3011 COVERAGE OF THE SIDE CHANNEL: pending_old= names a fraction but not
     # the reach of the evidence under it - measured, a one-day channel and a
@@ -1328,6 +1372,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'pending_age_med_d': pending_age_med_d,
             'pending_old': pending_old,
             'pending_old_age_d': pending_old_age_d,
+            'pending_old_age_min_d': pending_old_age_min_d,
             'fcov': fcov,
             'rcov': rcov, 'window_days': window_days}
 
@@ -1561,6 +1606,8 @@ def main(argv=None):
                    else '%d/%d' % trend['pending_old'])
         old_age_txt = ('none' if trend['pending_old_age_d'] is None
                        else '%d' % trend['pending_old_age_d'])
+        old_age_min_txt = ('none' if trend['pending_old_age_min_d'] is None
+                           else '%d' % trend['pending_old_age_min_d'])
         fcov_txt = ('none' if trend['fcov'] is None
                     else '%s..%s' % trend['fcov'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
@@ -1568,7 +1615,7 @@ def main(argv=None):
               'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
               'pending=%s pending_src=%s pending_age_d=%s '
               'pending_age_min_d=%s pending_age_med_d=%s pending_old=%s '
-              'pending_old_age_d=%s fcov=%s rcov=%s'
+              'pending_old_age_d=%s pending_old_age_min_d=%s fcov=%s rcov=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
@@ -1576,8 +1623,8 @@ def main(argv=None):
                  trend['newest_src'] or 'none', trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
                  pending_txt, trend['pending_src'] or 'none', age_txt,
-                 age_min_txt, age_med_txt, old_txt, old_age_txt, fcov_txt,
-                 rcov_txt))
+                 age_min_txt, age_med_txt, old_txt, old_age_txt,
+                 old_age_min_txt, fcov_txt, rcov_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)
