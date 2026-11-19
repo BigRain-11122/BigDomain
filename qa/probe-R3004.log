@@ -1,0 +1,15 @@
+PROBE R3004 (read-only; old=s shipped law, new= candidate law)
+static: assertions pinning since_ok=='no' = 5
+  line=1044 AC-RUN18
+  line=1147 AC-RUN19
+  line=1163 AC-RUN19
+  line=1169 AC-RUN19
+  line=1224 AC-RUN20
+S1 zero-byte record -> old=no new=unmeasured flips=0 rcov=None
+S2 record stops before failure -> old=no new=unmeasured flips=1 rcov=('2026-11-17', '2026-11-17')
+S3 other source after failure -> old=no new=no flips=0 rcov=('2026-11-19', '2026-11-19')
+S4 same second -> old=no new=unmeasured flips=0 rcov=('2026-11-19', '2026-11-19')
+S5 flip earlier, record stops before newest -> old=no new=unmeasured flips=1 rcov=('2026-11-19', '2026-11-19')
+S6 covered, source came back -> old=yes new=yes flips=1 rcov=('2026-11-19', '2026-11-19')
+dynamic: shapes moved by the candidate law = 4
+PROBE DONE

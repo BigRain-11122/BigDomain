@@ -202,12 +202,27 @@ characters the record writer already owns), so the literal cross-zone ordering
 weakness the two stamp comparisons carry cannot leak into it, and an absent file
 or a file with zero usable rows answers none rather than an invented span.
 Display only: nothing gates on rcov, no PASS/FLAG token is emitted, and the
-scanner still reads neither file. NOT changed this window, and measured rather
-than implied: a record that ends before the failure still reads since_ok=no and
-flips=0, so the ambiguity is now VISIBLE (rcov names the empty after-period) but
-NOT resolved - re-judging it unmeasured would rewrite two shipped arms
-(AC-RUN18 arm 3 and AC-RUN19 B7, both pinned on a success recorded before the
-failure), which is a contract change rather than an added face.
+scanner still reads neither file. That window left the verdict itself alone on
+purpose and named the cost: a record ending before the failure still read
+since_ok=no beside flips=0.
+
+LOOKED vs BROKEN (R3004): that named cost is paid here, and the probe measured
+a rewrite set LARGER than the previous window's own estimate - five shipped
+assertions pinned since_ok=='no' (one in AC-RUN18, three in AC-RUN19, one in
+AC-RUN20) and four of six probe worlds move. The rule now: before since_ok may
+answer 'no', the crawl record must be shown to reach STRICTLY past the failure
+stamp (through ANY source, because the pipeline fetching another page afterwards
+is what proves the pipeline ran). A zero-byte record, a record whose newest row
+predates the failure, a record of nothing but malformed lines, and a success
+stamped in the same second as the failure all answer unmeasured instead of
+claiming the source is still broken. Strictness mirrors flips' own tie rule. The
+row still carries rcov=, so a reader who sees unmeasured can see WHERE the
+record stops and why the question went unanswered.
+flips DOES NOT follow this and the split is deliberate: since_ok asks "is it
+fixed now" and needs an observation after the newest failure; every flip is a
+pair of events already on disk, so a record that stops before the newest failure
+still answers a measured count. since_ok=unmeasured beside flips=1 is therefore
+a truthful pair, not a contradiction. Neither field gates and no key was added.
 
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
@@ -565,6 +580,24 @@ def _since_ok(record_path, source_url, failed_at):
     this machine stamps astimezone().isoformat() (same clock, same zone). This
     is stated rather than parsed: a corpus written in a different zone is
     outside what this arm promises.
+
+    R3004 - 'no' NOW REQUIRES THE RECORD TO BE SHOWN LOOKING AFTER THE FAILURE.
+    Measured before this changed: a zero-byte record, a record whose newest row
+    predates the failure, and a success stamped in the same second as the
+    failure all answered 'no', so "we looked and it is still broken" and "we
+    never looked" printed the same verdict, with flips=0 (a count of zero
+    observations) sitting beside it as if it were evidence. The record must now
+    reach STRICTLY past the failure stamp - any source, because the pipeline
+    fetching another page afterwards is what proves the pipeline ran - before
+    'no' may be said. Until then the honest answer is 'unmeasured'. Strictness
+    is the rule flips already used: an equal stamp cannot be ordered by these
+    writers, so it does not count as looking afterwards.
+
+    flips deliberately does NOT follow this. Every flip it counts is a pair of
+    events already on disk, so a record that stops before the newest failure
+    still yields a measured count. since_ok asks "is it fixed now"; flips asks
+    "how often did it break after working" - different measurability, stated in
+    both docstrings rather than left to be inferred.
     """
     if not source_url or not record_path or not os.path.isfile(record_path):
         return 'unmeasured'
@@ -572,6 +605,13 @@ def _since_ok(record_path, source_url, failed_at):
     if not stamp:
         return 'unmeasured'
     rows, _bad = CR.read_records(record_path)
+    newest = ''
+    for row in rows:
+        got = str(row.get('fetched_at') or '')
+        if got > newest:
+            newest = got
+    if not newest or newest <= stamp:
+        return 'unmeasured'
     for row in rows:
         if row.get('source_url') != source_url:
             continue
@@ -589,11 +629,16 @@ def _flips(record_path, source_url, failures):
     counts the second question on the merged timeline of the two record faces
     that already exist; it never merges or rewrites them.
 
-    UNMEASURED, not zero, without a record file or a source identity - the same
-    law _since_ok follows. A record file that exists but carries no row for this
-    source answers 0: it was never seen working in between, which is measured
-    rather than missing. A trimmed record can undercount, the same honest
-    boundary since_ok='no' already carried.
+    UNMEASURED, not zero, without a record file or a source identity. R3004
+    splits this from _since_ok on purpose: since_ok asks "is it fixed NOW" and
+    therefore needs an observation AFTER the newest failure, while every flip
+    counted here is a pair of events already on disk - so a record that stops
+    before the newest failure still answers a measured count, and the two fields
+    may legitimately disagree (since_ok=unmeasured beside flips=1). A record
+    file that exists but carries no row for this source answers 0: it was never
+    seen working in between, which is measured rather than missing. A trimmed
+    record can undercount, the same honest boundary since_ok='no' already
+    carried.
 
     A transition needs the failure to be STRICTLY later than the success before
     it; an equal stamp cannot be ordered by these writers, so ties are not
@@ -802,7 +847,10 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # R3002 STABILITY: since_ok answers "was it seen working afterwards", which a
     # source that was fixed, broke again and was fixed again answers YES to -
     # measured, both shapes read yes. flips counts how often that happened, over
-    # the same two faces, and stays unmeasured wherever since_ok does.
+    # the same two faces. R3004: flips no longer tracks since_ok's
+    # measurability - since_ok needs an observation after the newest failure
+    # before it may say 'no', while a flip is built from events already on
+    # disk, so flips=1 beside since_ok=unmeasured is a truthful pair.
     flips = None
     if evidence == 'side' and in_window:
         newest = None

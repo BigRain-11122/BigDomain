@@ -52,12 +52,18 @@ recur=0:0 at once).
 AC-RUN20 (R3003) grades RECORD COVERAGE: rcov= names how far the crawl record
 itself reaches (first..last day of its usable rows), so since_ok=no standing on
 a record that stopped before the failure stops reading like a record that
-looked afterwards. The arm that pairs a pre-failure record with a visible span
-deliberately pins BOTH readings: the span makes the ambiguity visible, and
-since_ok staying "no" pins that this round did NOT re-judge the verdict - a
-future contract change must move that arm on purpose. It also pins that cov=
-(history face) and rcov= (record face) are read from different files in the
-same world, and that malformed rows can neither widen nor invent a span.
+looked afterwards. It also pins that cov= (history face) and rcov= (record face)
+are read from different files in the same world, and that malformed rows can
+neither widen nor invent a span.
+AC-RUN21 (R3004) grades the VERDICT SPLIT: since_ok may say 'no' only when the
+record is shown to reach strictly past the failure stamp, so a zero-byte file, a
+file whose newest row predates the failure, a file of only malformed rows and a
+success stamped in the same second all answer 'unmeasured' - "we never looked"
+is not "we looked and it is still broken". It also pins the deliberate split
+from flips: a flip is a pair of events already on disk, so since_ok=unmeasured
+may sit beside flips=1 without either field lying. AC-RUN20's pre-failure arm
+was rewritten to the new verdict on purpose - the contract moved, and an arm
+that keeps the old reading would hide it.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -1041,8 +1047,9 @@ def main():
     tA3 = RUN.summarize_failure_trend(RUN.failure_day_path(rootA3),
                                       RUN.failure_path(rootA3), TODAY,
                                       record_path=CR.record_path(rootA3))
-    ok('AC-RUN18', tA3['since_ok'] == 'no',
-       'a success only BEFORE the last failure does not count as a repair')
+    ok('AC-RUN18', tA3['since_ok'] == 'unmeasured'
+       and tA3['rcov'] == (TODAY, TODAY),
+       'a success only BEFORE the last failure is not a repair - and R3004 makes it UNMEASURED rather than "no", because the record never looked after that failure')
 
     rootA4 = world(); roots.append(rootA4)
     two_failures(rootA4, 'https://a.example/1', TODAY + 'T08:00:00+08:00',
@@ -1160,14 +1167,14 @@ def main():
        'a missing record file and a pruned side channel both answer UNMEASURED, never 0')
 
     _rB7, tB7 = flips_world(['10:00:00+08:00'], ['10:00:00+08:00'])
-    ok('AC-RUN19', tB7['flips'] == 0 and tB7['since_ok'] == 'no',
-       'a success and a failure on the same second are never ordered into an invented flip')
+    ok('AC-RUN19', tB7['flips'] == 0 and tB7['since_ok'] == 'unmeasured',
+       'a success and a failure on the same second are never ordered into an invented flip, and R3004 refuses to call the same second "looking afterwards" (unmeasured)')
 
     _rB8, tB8 = flips_world(['08:00:00+08:00', '10:00:00+08:00'],
                             ['09:00:00+08:00'])
     ok('AC-RUN19', tB8['flips'] == 1 and tB8['newest_src'] == SRC19
-       and tB8['since_ok'] == 'no',
-       'the newest failure is taken by time, so the flip before it still counts')
+       and tB8['since_ok'] == 'unmeasured',
+       'the newest failure is taken by time, so the flip before it still counts - and R3004 lets flips stay measured while the now-question is unmeasured')
 
     baseB = set(['days', 'in_window', 'bad', 'today', 'prev', 'mean', 'delta',
                  'worst', 'recurring', 'sources', 'recur', 'cov', 'wcov',
@@ -1214,15 +1221,15 @@ def main():
     ok('AC-RUN20', tC1['rcov'] == ('2026-11-18', '2026-11-19'),
        'the span names both days the record actually reaches, sorted by day')
 
-    # arm 2: the record STOPS before the failure - the span shows it, and the
-    # verdict is pinned as unchanged so a silent re-judge cannot pass
+    # arm 2: the record STOPS before the failure - the span shows it, and R3004
+    # makes the verdict unmeasured instead of claiming the source is still broken
     _rC2, tC2 = rcov_world(
         [(SRC20, '2026-11-17T10:00:00+08:00', 'no-drift')],
         [(SRC20, FAILED20, 'E_FETCH TimeoutError: x')],
         [day_row('2026-11-18', 1)])
     ok('AC-RUN20', tC2['rcov'] == ('2026-11-17', '2026-11-17')
-       and tC2['since_ok'] == 'no',
-       'a record ending before the failure shows a span that stops there, while the verdict is left as shipped')
+       and tC2['since_ok'] == 'unmeasured',
+       'a record ending before the failure shows a span that stops there, and since R3004 the verdict is unmeasured rather than a claim')
 
     # arm 3: no record file at all
     _rC3, tC3 = rcov_world(
@@ -1289,6 +1296,80 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tC1.keys()) == baseB | set(['flips', 'rcov']),
        'the row names the record span, or none, and adds exactly the one key it names')
+
+    # AC-RUN21 (R3004): the verdict answered 'no' without ever having looked.
+    # Measured before the code: a zero-byte record, a record whose newest row
+    # predates the failure and a success in the SAME second all answered 'no',
+    # so "we looked and it is still broken" and "we never looked" were one word.
+    # The law now: 'no' requires the record to reach STRICTLY past the failure
+    # stamp, through ANY source, because the pipeline fetching another page
+    # afterwards is what proves the pipeline ran.
+    SRC21 = 'https://pay.weixin.qq.com/doc/v2/merchant/4011986682'
+    OTHER21 = 'https://other.example/page'
+
+    def trend21(record_rows, failure_rows, empty_record=False, junk=None):
+        root = world()
+        roots.append(root)
+        for url, when, verdict in record_rows:
+            CR.append_record(CR.record_path(root), url, when, verdict)
+        for url, when, err in failure_rows:
+            RUN.append_failure(RUN.failure_path(root), url, when, err)
+        write_days(RUN.failure_day_path(root), [])
+        if empty_record:
+            open(CR.record_path(root), 'w').close()
+        if junk is not None:
+            with open(CR.record_path(root), 'w', encoding='utf-8',
+                      newline='\n') as fh:
+                fh.write(junk + '\n')
+        return root, RUN.summarize_failure_trend(
+            RUN.failure_day_path(root), RUN.failure_path(root), TODAY,
+            record_path=CR.record_path(root))
+
+    FAIL10 = [(SRC21, TODAY + 'T10:00:00+08:00', 'E_FETCH TimeoutError: x')]
+
+    _rD1, tD1 = trend21([], FAIL10, empty_record=True)
+    ok('AC-RUN21', tD1['since_ok'] == 'unmeasured' and tD1['rcov'] is None
+       and tD1['flips'] == 0 and os.path.getsize(CR.record_path(_rD1)) == 0,
+       'a zero-byte record cannot answer "still broken": zero observations read unmeasured, and flips=0 stays a count rather than a verdict')
+
+    _rD2, tD2 = trend21([(SRC21, TODAY + 'T08:00:00+08:00', 'no-drift')], FAIL10)
+    ok('AC-RUN21', tD2['since_ok'] == 'unmeasured' and tD2['flips'] == 1
+       and tD2['rcov'] == (TODAY, TODAY),
+       'a record stopping before the failure answers unmeasured while flips stays measured - one flip was already on disk')
+
+    _rD3, tD3 = trend21([(OTHER21, TODAY + 'T11:00:00+08:00', 'no-drift')],
+                        FAIL10)
+    ok('AC-RUN21', tD3['since_ok'] == 'no',
+       'a record that fetched ANOTHER page after the failure proves the pipeline looked, so the source not coming back is finally a real "no"')
+
+    _rD4, tD4 = trend21([(SRC21, TODAY + 'T10:00:00+08:00', 'no-drift')], FAIL10)
+    ok('AC-RUN21', tD4['since_ok'] == 'unmeasured',
+       'a success in the same second as the failure is not "looking afterwards" - unmeasured rather than an invented order')
+
+    _rD5, tD5 = trend21([], FAIL10, junk='not json at all')
+    ok('AC-RUN21', tD5['since_ok'] == 'unmeasured',
+       'a record of nothing but malformed rows has zero usable observations, so it cannot claim the source is broken')
+
+    # the split is a property of coverage, not of the outcome: the same world
+    # gains ONE row for another source and the verdict moves unmeasured -> no
+    _rD6, tD6 = trend21(
+        [(SRC21, TODAY + 'T08:00:00+08:00', 'no-drift'),
+         (OTHER21, TODAY + 'T11:00:00+08:00', 'no-drift')], FAIL10)
+    ok('AC-RUN21', tD6['since_ok'] == 'no' and tD2['since_ok'] == 'unmeasured',
+       'one extra row for another source moves the same source from unmeasured to no - measurability comes from the pipeline, not from luck')
+
+    _rD7, tD7 = trend21([(SRC21, TODAY + 'T11:00:00+08:00', 'no-drift')], FAIL10)
+    bufD7 = io.StringIO()
+    with contextlib.redirect_stdout(bufD7):
+        rcD7 = RUN.main(['--failure-trend', '--root', _rD3])
+    lineD7 = bufD7.getvalue().strip()
+    ok('AC-RUN21', tD7['since_ok'] == 'yes' and rcD7 == 0
+       and 'since_ok=no' in lineD7 and 'flips=' in lineD7
+       and 'rcov=' in lineD7 and 'PASS' not in lineD7
+       and 'FLAG' not in lineD7 and 'verdict' not in lineD7
+       and 'crawl-failure' not in scan_src18
+       and set(tD3.keys()) == baseB | set(['flips', 'rcov']),
+       'a real repair still reads yes, the CLI carries all three readings, and R3004 adds NO key - the row shape is unchanged')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

@@ -1,0 +1,10 @@
+NEGCTL R3004 (honest law expected: A=unmeasured B=unmeasured C=no D=unmeasured)
+  honest A zero-byte -> unmeasured
+  honest B before -> unmeasured
+  honest C other-after -> no
+  honest D same-second -> unmeasured
+  honest green = True
+  mutant nocoverage  on A zero-byte   -> no          (wanted unmeasured) CAUGHT
+  mutant nocoverage  on B before      -> no          (wanted unmeasured) CAUGHT
+  mutant lax         on D same-second -> no          (wanted unmeasured) CAUGHT
+  mutant selfonly    on C other-after -> unmeasured  (wanted no) CAUGHT
