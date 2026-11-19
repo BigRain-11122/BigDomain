@@ -6911,6 +6911,153 @@ def main():
        'the silent-day face still prices its own line to the byte and the new '
        'count appears exactly once on it')
 
+    # ===== AC-RUN62 (R3045): the day window opens from the newest day the
+    # record knows, and the line says when the file is not in day order =====
+    # AC-RUN62 was pinned in src/os/backlog.md BEFORE _day_face_head existed
+    # (in-window pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3045.log + qa/probe-R3045b.log): the day faces described their
+    # head as "the file's OWN newest usable row" and read rows[-1], which is
+    # that only for a writer-sorted file - on days 11-10,11-14,11-12,11-13,11-11
+    # the window anchored on the last row (11-11) and three newer days were
+    # filtered out as "outside" while series_outside=0 looked clean (576 of
+    # 1800 permuted cap/width runs never reached the newest day). The board's
+    # premise - a segment printing AFTER last= - measured FALSE (0 of 1800 runs,
+    # the <= head_day bound forbids it), and making first=/last= day-based was
+    # refused because the default face prints a file-order tail (measured: the
+    # contradiction would move there). So: one head for six day faces, plus one
+    # marker naming a file whose row order is not day order.
+
+    # arm 1: a day-ordered history keeps every byte it printed before
+    r62 = world()
+    roots.append(r62)
+    put_rows(hist37(r62), [('2026-11-10', 1), ('2026-11-11', 2),
+                           ('2026-11-12', 3), ('2026-11-13', 4),
+                           ('2026-11-14', 5)])
+    before62 = tree_bytes(r62)
+    rc62a, l62a, _ = sd57(r62, ['--series-days', '7', '--days', '2'])
+    after62 = tree_bytes(r62)
+    t62a = toks57(l62a[0]) if l62a else {}
+    ok('AC-RUN62', rc62a == 0 and l62a and before62 == after62
+       and t62a.get('series') == '2026-11-13:4,2026-11-14:5'
+       and t62a.get('window_rows') == '5'
+       and t62a.get('series_shown') == '2'
+       and t62a.get('series_dropped_from') == '2026-11-10'
+       and t62a.get('series_dropped_shared') == '0'
+       and t62a.get('series_file_order') == 'day',
+       'a writer-sorted history prints the same segment and counts it printed '
+       'before this round, and the marker asserts day order on it')
+
+    # arm 2: a hand-edited file whose LAST row is mid-history - the window now
+    # opens from the newest day, so no newer day vanishes as "outside"
+    r62b = world()
+    roots.append(r62b)
+    put_rows(hist37(r62b), [('2026-11-10', 1), ('2026-11-14', 5),
+                            ('2026-11-12', 3), ('2026-11-13', 4),
+                            ('2026-11-11', 2)])
+    rc62b, l62b, _ = sd57(r62b, ['--series-days', '7', '--days', '2'])
+    t62b = toks57(l62b[0]) if l62b else {}
+    ok('AC-RUN62', rc62b == 0 and l62b
+       and t62b.get('window_rows') == '5'
+       and t62b.get('series') == '2026-11-13:4,2026-11-14:5'
+       and t62b.get('series') == t62a.get('series')
+       and t62b.get('series_file_order') == 'mixed',
+       'on a file whose last row is 11-11 the seven-day window still holds all '
+       'five rows and reaches 11-14, and the marker names the file order as '
+       'mixed - the same days print as on the sorted file')
+
+    # arm 3: the refused rewrite stays refused - first=/last= are the FILE ends
+    # and the default face's pairs are still the file-order tail
+    rc62c, l62c, _ = sd57(r62b, [])
+    t62c = toks57(l62c[0]) if l62c else {}
+    seg62b = [p.split(':', 1)[0]
+              for p in str(t62b.get('series') or '').split(',')]
+    ok('AC-RUN62', rc62c == 0 and l62c
+       and t62c.get('first') == '2026-11-10'
+       and t62c.get('last') == '2026-11-11'
+       and t62b.get('first') == '2026-11-10'
+       and t62b.get('last') == '2026-11-11'
+       and seg62b[-1] > t62b.get('last')
+       and t62c.get('series') == ('2026-11-10:1,2026-11-14:5,2026-11-12:3,'
+                                  '2026-11-13:4,2026-11-11:2')
+       and 'series_file_order' not in t62c,
+       'first=/last= still name the file ends, the windowed segment may end '
+       'later than last= (which the marker makes readable), and the default '
+       'face still prints the file-order tail with no new token - the day-based '
+       'rewrite was measured to relocate the contradiction here and refused')
+
+    # arm 4: a same-day duplicate is still day order, and the marker appears
+    # exactly once on the windowed line
+    r62d = world()
+    roots.append(r62d)
+    put_rows(hist37(r62d), [('2026-11-10', 1), ('2026-11-11', 2),
+                            ('2026-11-11', 3), ('2026-11-12', 4)])
+    rc62d, l62d, _ = sd57(r62d, ['--series-days', '7', '--days', '2'])
+    t62d = toks57(l62d[0]) if l62d else {}
+    ok('AC-RUN62', rc62d == 0 and l62d
+       and t62d.get('series_file_order') == 'day'
+       and l62d[0].count('series_file_order=') == 1
+       and RUN.series_file_order(RUN.read_failure_days(
+           hist37(r62d))[0]) == 'day',
+       'a duplicate day is non-decreasing rather than mixed, the marker is on '
+       'the line exactly once, and the pure function agrees with the row')
+
+    # arm 5: an empty history answers none - never "ordered"
+    r62e = world()
+    roots.append(r62e)
+    os.makedirs(os.path.join(r62e, 'qa'), exist_ok=True)
+    rc62e, l62e, _ = sd57(r62e, ['--series-days', '7'])
+    t62e = toks57(l62e[0]) if l62e else {}
+    ok('AC-RUN62', rc62e == 0 and l62e
+       and t62e.get('series') == 'none'
+       and t62e.get('window_rows') == '0'
+       and t62e.get('series_file_order') == 'none'
+       and RUN.series_file_order([]) == 'none'
+       and RUN._day_face_head([]) == '',
+       'an absent history answers series_file_order=none rather than claiming '
+       'day order, and both pure functions answer empty without raising')
+
+    # arm 6: no clock, and the head is the newest DAY rather than the last row
+    r62f = world()
+    roots.append(r62f)
+    put_rows(hist37(r62f), [('2001-01-01', 0), ('2001-03-01', 1),
+                            ('2001-03-05', 2)])
+    rc62f, l62f, _ = sd57(r62f, ['--series-days', '2'])
+    rc62g, l62g, _ = sd57(r62f, ['--series-days', '2'])
+    t62f = toks57(l62f[0]) if l62f else {}
+    scrambled = [{'day': '2026-11-12'}, {'day': '2026-11-14'},
+                 {'day': '2026-11-11'}]
+    ok('AC-RUN62', rc62f == 0 and rc62g == 0 and l62f and l62f == l62g
+       and t62f.get('series') == '2001-03-05:2'
+       and t62f.get('window_rows') == '1'
+       and RUN._day_face_head(scrambled) == '2026-11-14'
+       and RUN.series_file_order(scrambled) == 'mixed',
+       'a 2001 history windows back from its own newest day (no wall clock), '
+       'two runs print identical bytes, and the pure head picks the newest day '
+       'out of a scrambled list instead of the last one')
+
+    # arm 7: the whole day family shares the one head - the silent-day face and
+    # the dropped listing follow it, and the joint fixed point still holds
+    before62h = tree_bytes(r62b)
+    rc62h, l62h, _ = sd57(r62b, ['--series-days', '7', '--days', '2',
+                                 '--series-absent'])
+    after62h = tree_bytes(r62b)
+    t62h = toks57(l62h[0]) if l62h else {}
+    real62 = len(l62h[0].encode('utf-8')) if l62h else -1
+    lst62 = RUN.list_failure_days_dropped(hist37(r62b), 7)
+    ok('AC-RUN62', rc62h == 0 and before62h == after62h
+       and t62h.get('line_bytes') == str(real62)
+       and t62h.get('output_bytes') == str(real62 + 1)
+       and l62h[0].count('series_window=') == 1
+       and l62h[0].count('absent=') == 2
+       and l62h[0].count('absent_named=') == 1
+       and l62h[0].count('series_file_order=') == 1
+       and t62h.get('window_from') == '2026-11-08'
+       and t62h.get('absent') == '2026-11-08,2026-11-09'
+       and lst62.get('head') == '2026-11-14',
+       'the silent-day window_from, the absent names and the dropped listing '
+       'head all open from 2026-11-14 (the newest day) instead of the file last '
+       'row, while the line still prices itself to the byte')
+
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
 

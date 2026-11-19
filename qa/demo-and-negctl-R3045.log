@@ -1,0 +1,12 @@
+--- demo: the same five days, two file orders, cap 2 width 7
+sorted   rc=0 window_rows=5 series=2026-11-13:4,2026-11-14:5 file_order=day first=2026-11-10 last=2026-11-14
+scrambled rc=0 window_rows=5 series=2026-11-13:4,2026-11-14:5 file_order=mixed first=2026-11-10 last=2026-11-11
+--- demo: the default face on the scrambled file is still the file tail
+default  rc=0 series=2026-11-10:1,2026-11-14:5,2026-11-12:3,2026-11-13:4,2026-11-11:2 file_order_token_present=False
+--- demo: the dropped listing head follows the same anchor
+dropped-list head=2026-11-14 (file last row day=2026-11-11)
+negctl honest                             GREEN window_rows=5 seg_last=2026-11-14 order=mixed/sorted=day
+negctl mut1 head=last-row (the old law)   CAUGHT window_rows=2 seg_last=2026-11-11 order=mixed/sorted=day
+negctl mut2 head=oldest-day               CAUGHT window_rows=1 seg_last=2026-11-10 order=mixed/sorted=day
+negctl mut3 marker always day (silence)   CAUGHT window_rows=5 seg_last=2026-11-14 order=day/sorted=day
+negctl mut4 marker always mixed           CAUGHT window_rows=5 seg_last=2026-11-14 order=mixed/sorted=mixed

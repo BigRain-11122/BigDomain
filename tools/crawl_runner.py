@@ -587,6 +587,29 @@ Still refused on this face: the dropped count (`window_rows - series_shown`)
 and the lift increment (`series_all_bytes - series_bytes`) - both derivable
 from tokens already printed (the R3000 noise law).
 
+WHERE THE DAY WINDOW OPENS FROM, AND WHEN THE FILE IS NOT IN DAY ORDER (R3045,
+measured first - qa/probe-R3045.log + qa/probe-R3045b.log): the day-window
+faces each described their head as "the file's OWN newest usable row" while
+each read `rows[-1]`, which is that only for a file the writer sorted. Measured
+on days 11-10,11-14,11-12,11-13,11-11: the window anchored on the last row
+(11-11), so 11-12/11-13/11-14 were filtered out as "outside", window_rows read
+2 of 5, and series_outside=0 still looked like a clean window (exhaustive over
+the 120 orders of five days: 576 of 1800 cap/width runs never reached the
+newest day). `_day_face_head()` is now the ONE head for all six day faces
+(including the dropped listing's `head=`), and every writer-produced file is
+byte-identical because the writer sorts. The board's premise - that a segment
+could print starting AFTER `last=` - was measured FALSE (0 of 1800 runs): the
+upper bound `<= head_day` makes it impossible. The repair that premise invited,
+making `first=`/`last=` day-based, was REFUSED by measurement: the default
+face prints a file-order tail, so the contradiction would move there instead of
+disappearing. What a hand-edited file now needs is a name, not a silence: the
+`--series-days` tail also prints `series_file_order=<day|mixed|none>` (the
+file's usable rows in non-decreasing day order, or not, or no usable row), so a
+`series=` segment ending later than `last=` is readable as "this file was
+edited by hand" rather than as a contradiction. `day` asserts a law holds, the
+same way `outside=0` asserts the window applied; the writer always sorts, so
+`mixed` is itself the signal.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1148,6 +1171,55 @@ def _window_start(day, window_days=7):
     return head_day, usable, threshold
 
 
+def _day_face_head(rows):
+    """The day the DAY window opens back from: the newest usable day (R3045).
+
+    WHY THIS EXISTS: five day-window faces each described their head as "the
+    file's OWN newest usable row" and each read `rows[-1]` - which is that only
+    for a file the writer sorted (snapshot_failure_day sorts by day, L1336).
+    Measured (qa/probe-R3045.log, W3 = days 11-10,11-14,11-12,11-13,11-11):
+    the window anchored on the arbitrary last row (11-11), so three NEWER days
+    were filtered out as "outside", window_rows read 2 of 5, and
+    series_outside=0 still looked like a clean window while the newest evidence
+    had silently vanished. Exhaustive over the 120 orders of five days
+    (qa/probe-R3045b.log): 576 of 1800 cap/width runs never reached the newest
+    day. One helper, so the five faces cannot drift back to two laws.
+
+    A writer-produced file is already sorted, so its head and its bytes do not
+    move; only a hand-edited file changes, and it changes towards the day its
+    own newest row names. No clock is read: the head comes from the rows.
+    """
+    days = [str(r.get('day') or '')[:10] for r in rows or ()]
+    usable = [d for d in days if _usable_day(d)]
+    return max(usable) if usable else ''
+
+
+def series_file_order(rows):
+    """'day' | 'mixed' | 'none' - is the FILE itself in day order (R3045)?
+
+    WHY: `first=`/`last=` are the FILE's ends and stay that way - making them
+    day-based was measured and refused because the DEFAULT face prints a
+    file-order tail, so the contradiction would simply move there
+    (qa/probe-R3045b.log). But once the day window opens from the newest day
+    (the law beside this one), a hand-edited file can print a segment that ends
+    LATER than `last=`, which reads as a contradiction unless the line says the
+    file is not in day order. The writer always sorts, so `mixed` is itself the
+    signal that a human edited the history by hand - a fact no other token on
+    the row carries (measured: zero hits for any file-order token in tools+src).
+
+    `day` asserts the law holds on this file, the same way `outside=0` asserts
+    the window applied; `none` means no usable row, never "ordered".
+    De-duplication is not applied: a same-day duplicate is still non-decreasing.
+
+    DISPLAY ONLY: reads rows, writes nothing, gates nothing.
+    """
+    days = [str(r.get('day') or '')[:10] for r in rows or ()]
+    days = [d for d in days if _usable_day(d)]
+    if not days:
+        return 'none'
+    return 'day' if days == sorted(days) else 'mixed'
+
+
 def _summary_from_rows(rows, bad, day, window_days=7):
     """Counts over already-validated rows; the one place the window law lives."""
     head_day, usable, threshold = _window_start(day, window_days)
@@ -1433,7 +1505,7 @@ def series_window_counts(rows, limit=7, window_days=7):
     size = max(1, int(limit))
     shown = len(rows[-size:])
     head_day, usable, threshold = _window_start(
-        (str(rows[-1].get('day') or '') if rows else ''), window_days)
+        _day_face_head(rows), window_days)
     outside = 0
     window_rows = 0
     if usable:
@@ -1478,7 +1550,7 @@ def series_days_window(rows, limit=7, window_days=7):
     size = max(1, int(limit))
     width = max(1, int(window_days))
     head_day, usable, threshold = _window_start(
-        (str(rows[-1].get('day') or '') if rows else ''), width)
+        _day_face_head(rows), width)
     if not usable:
         return {'rows': [], 'limit': size, 'shown': 0, 'outside': 0,
                 'window_rows': 0, 'window': width}
@@ -1580,7 +1652,7 @@ def series_absent_days(rows, window_days=7, limit=ABSENT_LIST_LIMIT):
     """
     width = max(1, int(window_days))
     head_day, usable, threshold = _window_start(
-        (str(rows[-1].get('day') or '') if rows else ''), width)
+        _day_face_head(rows), width)
     if not usable:
         return {'days': [], 'count': None, 'head': None, 'window': width,
                 'named': 0, 'truncated': False}
@@ -1686,8 +1758,7 @@ def series_full_pairs(rows, window_days=7):
     DISPLAY ONLY: builds pairs, writes nothing, gates nothing.
     """
     head_day, usable, threshold = _window_start(
-        (str(rows[-1].get('day') or '') if rows else ''),
-        max(1, int(window_days)))
+        _day_face_head(rows), max(1, int(window_days)))
     if not usable:
         return []
     # R3044: same day order as series_days_window, so the prefix this function
@@ -1918,7 +1989,7 @@ def series_presence_counts(rows, window_days=7):
     """
     width = max(1, int(window_days))
     head_day, usable, threshold = _window_start(
-        (str(rows[-1].get('day') or '') if rows else ''), width)
+        _day_face_head(rows), width)
     if not usable:
         return {'window': width, 'present': None, 'rows': 0, 'repeat': None,
                 'retry': None, 'head': None, 'start': None}
@@ -2134,7 +2205,9 @@ def list_failure_days_dropped(path, window_days=None):
     listing = {'days': len(rows), 'bad': bad, 'rows': all_rows}
     if window_days is None:
         return listing
-    head = str(rows[-1].get('day') or '') if rows else ''
+    # R3045: the same head as the day-window family - the newest usable day the
+    # file knows, not the day its last row happens to carry.
+    head = _day_face_head(rows)
     head_day, usable, threshold = _window_start(head, window_days)
     if usable:
         kept = [r for r in listing['rows']
@@ -3242,6 +3315,12 @@ def main(argv=None):
                          'a history that also dropped an older day; '
                          'the cap cuts in day order, so a same-day duplicate '
                          'never splits across the cut out of file order; '
+                         'series_file_order=<day|mixed|none> says whether the '
+                         'FILE itself is in day order, because first=/last= are '
+                         'the file ends and a hand-edited file can print a '
+                         'segment that ends later than last= (mixed is the '
+                         'signal that a human edited the history; day asserts '
+                         'the law holds); '
                          'read-only display; gates nothing)')
     ap.add_argument('--series-absent', dest='series_absent',
                     action='store_true',
@@ -3339,14 +3418,15 @@ def main(argv=None):
             tail_markers = (' series_window=%d series_bytes=%d'
                             ' series_day_bytes=%d series_on_bytes=%d'
                             ' series_all_bytes=%d series_dropped_from=%s'
-                            ' series_dropped_shared=%d'
+                            ' series_dropped_shared=%d series_file_order=%s'
                             % (args.series_days, series_segment_bytes(pairs),
                                day_bytes, on_bytes,
                                series_segment_bytes(full_text),
                                series_dropped_from(full_pairs,
                                                    counts['shown']),
                                series_dropped_shared(full_pairs,
-                                                     series['series'])))
+                                                     series['series']),
+                               series_file_order(day_read[0])))
             if args.series_absent:
                 series_marker = tail_markers
                 gaps = series_absent_days(day_read[0], args.series_days,

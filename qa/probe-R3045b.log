@@ -1,0 +1,5 @@
+(a) permutations=120 runs=1800 segments_after_last=0
+(b) window>=5 runs that never reach the newest day=576 of 1800 (120 perms x 3 caps x 1 width>=5); example=[(('2026-11-10', '2026-11-11', '2026-11-12', '2026-11-14', '2026-11-13'), 1, 5, ['2026-11-13'], '2026-11-13', '2026-11-14')]
+(c) permutations where the candidate law prints a different segment than today: 96 of 120
+(c2) marker over the 120 permutations: {'day': 1, 'mixed': 119} (writer files are always day)
+(d) put_days blocks read: ascending=38 descending=0 mixed=2 ; non-ascending heads=[(12, ['2026-11-17', '2026-11-17', '2026-11-16', '2026-11-17']), (59, ['2026-11-10', '2026-11-11', '2026-11-10', '2026-11-11'])]

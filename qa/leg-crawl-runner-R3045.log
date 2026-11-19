@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=730 registry_criteria=5915 selected=2 selected_criteria=66 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-crawl-record rc=0 pass=10 fail=0 detail=yes suite=PASS 10/10 crit=4 0.1s
+SHARD row os-crawl-runner rc=0 pass=413 fail=0 detail=yes suite=PASS 413/413 crit=62 7.6s
+SHARD rc=0 scope=SHARD selected=2 executed=2 green=2 criteria=66 crit_mismatch=0 elapsed=7.7s crit_checked=2

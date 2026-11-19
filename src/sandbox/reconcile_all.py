@@ -4752,7 +4752,7 @@ SUITES = [
     # series_dropped_from so the cap names the day it cut back to, 59 -> 60;
     # R3044 adds series_dropped_shared and cuts in day order, 60 -> 61.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 61),
+     os.path.join("..", "os", "test_crawl_runner.py"), 62),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

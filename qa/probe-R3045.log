@@ -1,0 +1,20 @@
+W1-sorted rc=0 first=2026-11-10 last=2026-11-14 series=2026-11-13:4,2026-11-14:5 shown=2 window_rows=5 seg_first=2026-11-13 seg_last=2026-11-14
+W2-scrambled rc=0 first=2026-11-12 last=2026-11-13 series=2026-11-12:3,2026-11-13:4 shown=2 window_rows=4 seg_first=2026-11-12 seg_last=2026-11-13
+W3-anchor-mid rc=0 first=2026-11-10 last=2026-11-11 series=2026-11-10:1,2026-11-11:2 shown=2 window_rows=2 seg_first=2026-11-10 seg_last=2026-11-11
+W4-dup rc=0 first=2026-11-10 last=2026-11-12 series=2026-11-11:3,2026-11-12:4 shown=2 window_rows=4 seg_first=2026-11-11 seg_last=2026-11-12
+W1-sorted gap: none ; seg_first!=first ; tokens that witness file order: NONE
+W2-scrambled gap: none ; equal ; tokens that witness file order: NONE
+W3-anchor-mid gap: none ; equal ; tokens that witness file order: NONE
+W1-sorted: file_days=2026-11-10,2026-11-11,2026-11-12,2026-11-13,2026-11-14 in_day_order=True sel_shown=2 sel_rows=['2026-11-13', '2026-11-14']
+W2-scrambled: file_days=2026-11-12,2026-11-10,2026-11-14,2026-11-11,2026-11-13 in_day_order=False sel_shown=2 sel_rows=['2026-11-12', '2026-11-13']
+W3-anchor-mid: file_days=2026-11-10,2026-11-14,2026-11-12,2026-11-13,2026-11-11 in_day_order=False sel_shown=2 sel_rows=['2026-11-10', '2026-11-11']
+W2-scrambled day-based first/last would read 2026-11-10..2026-11-14 while the DEFAULT face prints series=2026-11-12:3,2026-11-10:1,2026-11-14:5,2026-11-11:2,2026-11-13:4 (ends 2026-11-13) and file first/last are 2026-11-12..2026-11-13
+W3-anchor-mid day-based first/last would read 2026-11-10..2026-11-14 while the DEFAULT face prints series=2026-11-10:1,2026-11-14:5,2026-11-12:3,2026-11-13:4,2026-11-11:2 (ends 2026-11-11) and file first/last are 2026-11-10..2026-11-11
+surface "['first']": 3 hit(s)
+surface "['last']": 4 hit(s)
+surface 'first=%s last=%s': 2 hit(s)
+surface "'first'": 6 hit(s)
+surface "'last'": 8 hit(s)
+surface 'series_file_order': 0 hit(s)
+surface 'file_order': 0 hit(s)
+surface 'series_day_sorted': 0 hit(s)
