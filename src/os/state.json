@@ -306,6 +306,6 @@
   "R3026 closeout: tick set to 3026, heartbeat.txt moved to the same round, the board head carries the R3026 done row with its measured numbers, the R3026 PIN row keeps its pre-registration text verbatim, the R3026 next-window row is flipped to EXECUTED with its text kept verbatim, and a new R3027 next-window row names the missing-day question (a gap in the window is absent rather than zero, and the series cannot say which days were missing).",
   "R3026 correction, disclosed: the closeout gate was first read at files=3727 before the probe, demo, live-run and negative-control logs landed; the final run over the shipped tree reads CLOSEOUT-GATE PASS files=3731 flags=0 reader_refused=0, and the board row carries that number rather than the earlier one."
   ],
-  "state_bytes":316357,
+  "state_bytes":316981,
   "tick":3026
 }
