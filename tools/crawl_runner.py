@@ -991,15 +991,19 @@ WHICH LINES ARE UNUSABLE (R3018): `bad=<n>` said how many and never which, so
 finding one meant opening the side channel and trying lines by hand. Measured
 (qa/probe-R3018.log): the numbers were already recoverable in the one pass
 read_failures makes - a file with two usable and three unusable lines answers
-(2, 3) today, and enumerating the same file yields [(2,'json'),(4,'fields'),
+(2, 3) today, and enumerating the same file yields [(2,'json'),(4,'failed_at'),
 (5,'json')], len == bad; a blank line is skipped and takes no number; an
-append-only write never moves an earlier number. Naming lives on a SEPARATE
+append-only write never moves an earlier number. (R3018 measured that second
+word as `fields`, one word for four repairs; R3053 split it - see
+qa/probe-R3053.log.) Naming lives on a SEPARATE
 read-only subcommand (`--pending-old-bad`), never on the one-line contract
 (R3010/R3013) and never inside PENDING-OLD rows (R3014's boundary: those rows
 describe a source). The TEXT IS NOT ECHOED on purpose: a rejected line is
 untrusted bytes and can carry a url with a token (measured in the probe), so a
-line number plus the reason (json = the line did not parse, fields = it parsed
-but is not a usable failure row) is what a person needs to open it in an
+line number plus the reason (`json` = the line did not parse; `shape` = parsed
+but not an object; `failed_at` / `failed_at_fmt` = the day field is missing /
+present but unusable; `error` = the message field is missing or blank) is what a
+person needs to open it in an
 editor. `_failure_lines` is the one parse law: bad's count and the named lines
 cannot come from two parsers.
 
@@ -1012,9 +1016,12 @@ anyway (blank lines skip and take no number; the non-blank physical count equals
 rows+bad on an interleaved file), so the two loops were unified into
 _json_lines(path, kind_of_row) and each file supplies its own rejection
 taxonomy. They are NOT the same taxonomy and are not forced into one: the side
-channel answers json|fields, while the history has FOUR measured reject branches
-and now names each - shape (the line is not an object), day (day unusable),
-on_day (not an integer), json. Collapsing those to one word would have told a
+channel answers json|shape|failed_at|failed_at_fmt|error (R3053 split what
+R3018 had measured as one word, `fields`), while the history has FOUR measured
+reject branches
+and now names each - shape (the line is not an object), day (no day value at
+all), day_fmt (a day value that fails the law - R3053), on_day (not an
+integer), json. Collapsing those to one word would have told a
 reader to open a line without saying what to repair. The history's bad lines are
 ALSO TRANSIENT, measured in the probe: snapshot_failure_day rewrites the file
 from validated rows only, so days_bad went 1 -> 0 on the next snapshot, while an
@@ -1157,11 +1164,41 @@ def _json_lines(path, kind_of_row):
             yield n, None, row
 
 
+def _day_claim_present(value):
+    """True when a day field carries any value at all; a blank string carries none.
+
+    R3053: "the field is missing" and "the field holds something unusable" are
+    two different hands at the keyboard (add the key / fix the format), so the
+    readers name them separately. A blank or whitespace-only string is treated
+    as missing - it names nothing a repair could keep - while any other value
+    is present and is then judged by _usable_day like every other day stamp.
+    """
+    if value is None:
+        return False
+    if isinstance(value, str) and not value.strip():
+        return False
+    return True
+
+
 def _failure_row_why(row):
-    """Why a parsed side-channel line is not a usable row, or None if it is."""
-    if (not isinstance(row, dict) or not _usable_day(row.get('failed_at'))
-            or not str(row.get('error') or '').strip()):
-        return 'fields'
+    """Why a parsed side-channel line is not a usable row, or None if it is.
+
+    R3053: one word used to cover four different repairs. Measured before this
+    existed (qa/probe-R3053.log): four unusable channel rows all printed
+    `why=fields` while needing four different edits - add `failed_at`, fix
+    `failed_at`'s format, add `error` (a field that has nothing to do with the
+    day), or replace a non-object line. The word that names the repair is the
+    only thing a reader can act on, so the branch now names the FIELD it wants
+    (`shape`, `failed_at`, `failed_at_fmt`, `error`) and `fields` retires.
+    """
+    if not isinstance(row, dict):
+        return 'shape'
+    if not _day_claim_present(row.get('failed_at')):
+        return 'failed_at'
+    if not _usable_day(row.get('failed_at')):
+        return 'failed_at_fmt'
+    if not str(row.get('error') or '').strip():
+        return 'error'
     return None
 
 
@@ -1169,14 +1206,21 @@ def _failure_day_row_why(row):
     """Why a parsed history line is not a usable day row, or None if it is.
 
     R3019: four measured reject branches, each named rather than collapsed into
-    the side channel's 'fields'. A reader told only "fields" still has to open
-    the line and guess which of four repairs it needs; the reason is the point
-    of naming a line at all.
+    one word. A reader told only "fields" still has to open the line and guess
+    which repair it needs; the reason is the point of naming a line at all.
+
+    R3053 splits the fourth branch in two (`day` = no value at all, `day_fmt` =
+    a value that fails the day law), measured on the same probe: `why=day` on
+    `{"day": "2026/11/20"}` and on a row with no `day` key printed the same
+    words while asking for different edits. `on_day` is deliberately NOT split:
+    it has one law (an int) and its name already says which field to fix.
     """
     if not isinstance(row, dict):
         return 'shape'
-    if not _usable_day(row.get('day')):
+    if not _day_claim_present(row.get('day')):
         return 'day'
+    if not _usable_day(row.get('day')):
+        return 'day_fmt'
     if not isinstance(row.get('on_day'), int):
         return 'on_day'
     return None
@@ -1244,7 +1288,10 @@ def read_failures(path):
 
 
 def read_failure_bad_lines(path):
-    """[{'line': n, 'why': 'json'|'fields'}] for unusable lines, ascending.
+    """[{'line': n, 'why': <word>, 'day': <d|None>}] for unusable lines, ascending.
+
+    R3053: `why` names the repair, not a bucket - json|shape|failed_at|
+    failed_at_fmt|error (see _failure_row_why); `fields` is retired.
 
     WHY (R3018, measured before this existed - qa/probe-R3018.log): `bad=<n>`
     told a reader HOW MANY lines were unusable and never WHICH, so the only way
@@ -3070,6 +3117,17 @@ def list_pending_old(record_path, failures_path, day, window_days=7):
     "this line claims nothing" (a value that fails _usable_day is never named,
     and no line text is echoed: R3018 still holds). The day-side header now
     carries `bad_days=` too, from the same one read.
+
+    R3053 `why=` NAMES THE REPAIR, NOT A BUCKET. Measured before this existed
+    (qa/probe-R3053.log): four unusable channel rows all printed `why=fields`
+    while needing four different edits - add failed_at, fix failed_at's format,
+    add error (a field unrelated to the day), or replace a non-object line -
+    and the day file printed `why=day` for both "no day key" and
+    "day='2026/11/20'". The words are now shape|failed_at|failed_at_fmt|error
+    on this channel and shape|day|day_fmt|on_day on the day file, split by
+    _day_claim_present (missing/blank) versus _usable_day (present but wrong).
+    `json` keeps its one meaning (the line never parsed) and day= keeps its own
+    (which day this line claims), so no fact is printed twice.
     """
     rows, bad, bad_days = read_failures_ext(failures_path)
     head_day, usable, threshold = _window_start(day, window_days)
@@ -3587,14 +3645,18 @@ def main(argv=None):
     ap.add_argument('--pending-old-bad', dest='pending_old_bad',
                     action='store_true',
                     help='name the unusable lines on the failure channel by '
-                         'line number and reason, never by text; bad_days= '
+                         'line number and reason, never by text; the reason '
+                         'names the repair (json|shape|failed_at|'
+                         'failed_at_fmt|error, R3053); bad_days= '
                          'names the SET of days they claim and each row ends '
                          'with day=<d|none>, WHICH day that line claims (R3052; '
                          'read-only display; writes and gates nothing)')
     ap.add_argument('--failure-days-bad', dest='failure_days_bad',
                     action='store_true',
                     help='name the unusable lines on the daily failure history '
-                         'by line number and reason, never by text; bad_days= '
+                         'by line number and reason, never by text; the reason '
+                         'names the repair (json|shape|day|day_fmt|on_day, '
+                         'R3053); bad_days= '
                          'names the SET of days they claim and each row ends '
                          'with day=<d|none>, WHICH day that line claims (R3052; '
                          'read-only display; writes and gates nothing)')

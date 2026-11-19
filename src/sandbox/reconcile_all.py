@@ -4760,9 +4760,9 @@ SUITES = [
     # named on both faces as `bad_days=`), 66 -> 67.
     # R3051 gives the SIDE channel the same word on all three faces that print
     # bad=, 67 -> 68. R3052 makes each BAD-LINE row carry its own day on both
-    # faces, 68 -> 69.
+    # faces, 68 -> 69; R3053 gave the bad-line reason the repair word, 69 -> 70.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 69),
+     os.path.join("..", "os", "test_crawl_runner.py"), 70),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

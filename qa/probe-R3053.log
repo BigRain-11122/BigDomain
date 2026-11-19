@@ -1,0 +1,20 @@
+[SIDE --pending-old-bad]
+  CRAWL-PENDING-OLD-BAD bad=5 bad_days=2026-11-20
+  BAD-LINE n=1 why=json day=none
+  BAD-LINE n=2 why=fields day=none
+  BAD-LINE n=3 why=fields day=none
+  BAD-LINE n=4 why=fields day=2026-11-20
+  BAD-LINE n=5 why=fields day=none
+[DAY --failure-days-bad]
+  CRAWL-FAILURE-DAYS-BAD bad=5 bad_days=2026-11-20
+  BAD-LINE n=1 why=json day=none
+  BAD-LINE n=2 why=day day=none
+  BAD-LINE n=3 why=day day=none
+  BAD-LINE n=4 why=on_day day=2026-11-20
+  BAD-LINE n=5 why=shape day=none
+[SIDE items] [{"line": 1, "why": "json", "day": null}, {"line": 2, "why": "fields", "day": null}, {"line": 3, "why": "fields", "day": null}, {"line": 4, "why": "fields", "day": "2026-11-20"}, {"line": 5, "why": "fields", "day": null}]
+[DAY items] [{"line": 1, "why": "json", "day": null}, {"line": 2, "why": "day", "day": null}, {"line": 3, "why": "day", "day": null}, {"line": 4, "why": "on_day", "day": "2026-11-20"}, {"line": 5, "why": "shape", "day": null}]
+[compound] side why=fields covers: 4 lines with 4 different repairs (missing failed_at / malformed failed_at / missing error / not an object)
+[compound] day why=day covers: 2 lines with 2 different repairs (missing day / malformed day)
+[readback] side distinct why values: ['fields', 'json']
+[readback] day distinct why values: ['day', 'json', 'on_day', 'shape']

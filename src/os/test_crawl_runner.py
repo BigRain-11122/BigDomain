@@ -3609,11 +3609,13 @@ def main():
 
     # arm 2: the two kinds stay distinguishable at their own numbers
     kinds35 = {item['line']: item['why'] for item in named35}
-    ok('AC-RUN35', kinds35 == {2: 'json', 4: 'fields', 5: 'json'}
+    ok('AC-RUN35', kinds35 == {2: 'json', 4: 'failed_at_fmt', 5: 'json'}
        and 'BAD-LINE n=2 why=json day=none' in lines35
-       and 'BAD-LINE n=4 why=fields day=none' in lines35
+       and 'BAD-LINE n=4 why=failed_at_fmt day=none' in lines35
        and 'BAD-LINE n=5 why=json day=none' in lines35,
-       'a line that did not parse and a line that parsed but is not a usable row carry different reasons at their own numbers')
+       'a line that did not parse and a line whose day field is present but '
+       'unusable carry different reasons at their own numbers (R3053 named the '
+       'repair; R3018 had measured one word for it)')
 
     # arm 3: a blank line is skipped and takes no number
     ok('AC-RUN35', 3 not in nums35 and bad35n == 3
@@ -3750,12 +3752,15 @@ def main():
 
     # arm 2: four different repairs stay four different words
     kinds36 = {item['line']: item['why'] for item in named36}
-    ok('AC-RUN36', kinds36 == {2: 'json', 4: 'day', 5: 'on_day', 6: 'shape'}
+    ok('AC-RUN36', kinds36 == {2: 'json', 4: 'day_fmt', 5: 'on_day',
+                               6: 'shape'}
        and 'BAD-LINE n=2 why=json day=none' in lines36
-       and 'BAD-LINE n=4 why=day day=none' in lines36
+       and 'BAD-LINE n=4 why=day_fmt day=none' in lines36
        and 'BAD-LINE n=5 why=on_day day=2026-11-17' in lines36
        and 'BAD-LINE n=6 why=shape day=none' in lines36,
-       'a line that did not parse, a bad day, a non-integer on_day and a non-object line each carry their own reason at their own number')
+       'a line that did not parse, a day value that fails the law, a '
+       'non-integer on_day and a non-object line each carry their own reason '
+       'at their own number (R3053 split what R3019 had measured as one word)')
 
     # arm 3: a blank line takes no number, and an append never moves one
     with open(RUN.failure_day_path(r36), 'a', encoding='utf-8',
@@ -7755,7 +7760,7 @@ def main():
     bad_ext68 = RUN.read_failure_bad_lines_ext(p68)
     ok('AC-RUN68', len(pair68) == 2 and pair68[1] == ext68[1] == 1
        and list(ext68[2]) == ['2026-11-20']
-       and bad68 == [{'line': 2, 'why': 'fields',
+       and bad68 == [{'line': 2, 'why': 'error',
                       'day': '2026-11-20'}]
        and bad_ext68[0] == bad68 and list(bad_ext68[1]) == ['2026-11-20']
        and RUN.read_failures(os.path.join(r68a, 'nope.jsonl'))
@@ -7879,20 +7884,22 @@ def main():
     ok('AC-RUN69', rcS69 == 0
        and linesS69[0] == ('CRAWL-PENDING-OLD-BAD bad=4 '
                            'bad_days=2026-11-18,2026-11-19,2026-11-20')
-       and linesS69[1] == 'BAD-LINE n=1 why=fields day=2026-11-18'
-       and linesS69[2] == 'BAD-LINE n=2 why=fields day=2026-11-19'
-       and linesS69[3] == 'BAD-LINE n=3 why=fields day=2026-11-20'
+       and linesS69[1] == 'BAD-LINE n=1 why=error day=2026-11-18'
+       and linesS69[2] == 'BAD-LINE n=2 why=error day=2026-11-19'
+       and linesS69[3] == 'BAD-LINE n=3 why=error day=2026-11-20'
        and linesS69[4] == 'BAD-LINE n=4 why=json day=none',
        'three channel rows name three different days on their own rows while '
-       'the header still names the set, and a line that never parsed says none')
+       'the header still names the set, and a line that never parsed says none '
+       '(R3053: all three are repaired the same way - the message field is '
+       'what is missing - so the word is error, not fields)')
 
     # Arm 2: the reader items carry the same mapping the face prints.
     itemsS69 = RUN.read_failure_bad_lines(side69)
     ok('AC-RUN69', [sorted(i) for i in itemsS69]
        == [['day', 'line', 'why']] * 4
        and [(i['line'], i['why'], i['day']) for i in itemsS69]
-       == [(1, 'fields', '2026-11-18'), (2, 'fields', '2026-11-19'),
-           (3, 'fields', '2026-11-20'), (4, 'json', None)],
+       == [(1, 'error', '2026-11-18'), (2, 'error', '2026-11-19'),
+           (3, 'error', '2026-11-20'), (4, 'json', None)],
        'the shipped reader answers line, reason and day from one pass, and the '
        'claim that never parsed stays None rather than a guess')
 
@@ -7904,7 +7911,7 @@ def main():
        and linesD69[1] == 'BAD-LINE n=1 why=on_day day=2026-11-18'
        and linesD69[2] == 'BAD-LINE n=2 why=on_day day=2026-11-19'
        and linesD69[3] == 'BAD-LINE n=3 why=on_day day=2026-11-20'
-       and linesD69[4] == 'BAD-LINE n=4 why=day day=none'
+       and linesD69[4] == 'BAD-LINE n=4 why=day_fmt day=none'
        and linesD69[5] == 'BAD-LINE n=5 why=shape day=none',
        'the day-side face names the set on its header and the mapping on its '
        'rows, and neither an unusable day nor a non-object is invented into one')
@@ -7986,6 +7993,137 @@ def main():
        and "'why': why, 'day': day" in body69('read_failure_day_bad_lines_ext'),
        'both faces share one row renderer, the day-side reader names a claim '
        'only after _usable_day, and the header that printed no day word is gone')
+
+    # --- AC-RUN70: the reason names the repair, not a bucket -----------------
+    # Measured before any of this existed (qa/probe-R3053.log): four unusable
+    # channel rows printed one word (`fields`) while needing four different
+    # edits, and the day file printed `day` for both "no day key" and
+    # "day='2026/11/20'". Each line below is one repair.
+    S70 = world(); roots.append(S70)
+    side70 = RUN.failure_path(S70)
+    os.makedirs(os.path.dirname(side70), exist_ok=True)
+    with open(side70, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"source_url":"https://s70.example/a","error":"boom"}\n')
+        fh.write('{"source_url":"https://s70.example/b",'
+                 '"failed_at":"2026/11/20","error":"boom"}\n')
+        fh.write('{"source_url":"https://s70.example/c",'
+                 '"failed_at":"2026-11-20"}\n')
+        fh.write('["not","an","object"]\n')
+        fh.write('{"failed_at":"   ","error":"x"}\n')
+        fh.write('{never-parsed\n')
+        fh.write('{"failed_at":20261120,"error":"x"}\n')
+    rcS70, linesS70 = bad69(S70, '--pending-old-bad')
+    want70 = [(1, 'failed_at', None), (2, 'failed_at_fmt', None),
+              (3, 'error', '2026-11-20'), (4, 'shape', None),
+              (5, 'failed_at', None), (6, 'json', None),
+              (7, 'failed_at_fmt', None)]
+
+    # Arm 1: four different repairs now read as four different words, and the
+    # header's set/count are untouched by the naming.
+    ok('AC-RUN70', rcS70 == 0
+       and linesS70[0] == 'CRAWL-PENDING-OLD-BAD bad=7 bad_days=2026-11-20'
+       and [toks69(n).get('why') for n in linesS70[1:]]
+       == [w[1] for w in want70],
+       'each unusable channel row names the field it wants repaired - add the '
+       'day field, fix its format, add the message field, or fix the line - '
+       'while the header keeps its own count and set')
+
+    # Arm 2: the reader answers the same mapping, one pass, keys unchanged.
+    items70 = RUN.read_failure_bad_lines(side70)
+    ok('AC-RUN70', [sorted(i) for i in items70] == [['day', 'line', 'why']] * 7
+       and [(i['line'], i['why'], i['day']) for i in items70] == want70,
+       'the shipped reader carries the repair word and the claim together, and '
+       'a line that never parsed still answers day None')
+
+    # Arm 3: the day-side twin - missing value, unusable value, wrong type,
+    # wrong shape and a blank string, each at its own line.
+    D70 = world(); roots.append(D70)
+    day70 = RUN.failure_day_path(D70)
+    os.makedirs(os.path.dirname(day70), exist_ok=True)
+    with open(day70, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"on_day":1,"failed":1}\n')
+        fh.write('{"day":"2026/11/20","on_day":1,"failed":1}\n')
+        fh.write('{"day":"2026-11-20","on_day":"x","failed":1}\n')
+        fh.write('[1]\n')
+        fh.write('{"day":"","on_day":1,"failed":1}\n')
+        fh.write('{"day":20261120,"on_day":1,"failed":1}\n')
+    rcD70, linesD70 = bad69(D70, '--failure-days-bad')
+    ok('AC-RUN70', rcD70 == 0
+       and linesD70[0] == ('CRAWL-FAILURE-DAYS-BAD bad=6 '
+                           'bad_days=2026-11-20')
+       and [toks69(n).get('why') for n in linesD70[1:]]
+       == ['day', 'day_fmt', 'on_day', 'shape', 'day', 'day_fmt']
+       and [toks69(n).get('day') for n in linesD70[1:]]
+       == ['none', 'none', '2026-11-20', 'none', 'none', 'none'],
+       'the day file separates "no day value" from "a day value that fails the '
+       'law", keeps on_day and shape as they were, and still names a day only '
+       'when one passes the law')
+
+    # Arm 4: the retired word is gone from both faces, and neither face
+    # re-states what json already said.
+    text70 = '\n'.join(linesS70 + linesD70)
+    ok('AC-RUN70', 'why=fields' not in text70
+       and 'fields' not in text70
+       and sum(1 for n in linesS70[1:] + linesD70[1:] if ' n=6 ' in n) == 2,
+       'the one word that covered four repairs is retired on both faces, and '
+       'the two never-parsed rows still read json rather than a second word')
+
+    # Arm 5: counts and sets do not move because a word got sharper.
+    side_sum70 = RUN.summarize_failures(side70, AT)
+    day_sum70 = RUN.summarize_failure_days(day70)
+    ok('AC-RUN70', side_sum70['bad'] == 7 and side_sum70['total'] == 0
+       and side_sum70['bad_days'] == ['2026-11-20']
+       and day_sum70['bad'] == 6
+       and day_sum70['bad_days'] == ['2026-11-20']
+       and len(RUN.read_failures(side70)) == 2
+       and len(RUN.read_failure_days(day70)) == 2,
+       'naming the repair moves no count: bad stays the line count, total and '
+       'recent7 stay 0, and only a value that passes the day law is named')
+
+    # Arm 6: display only - two runs, same bytes, and the world does not move.
+    before70 = snap69(S70)
+    rcS70b, linesS70b = bad69(S70, '--pending-old-bad')
+    buf70 = io.StringIO()
+    with contextlib.redirect_stdout(buf70):
+        rcF70 = RUN.main(['--failures', '--root', S70, '--at', AT])
+    ok('AC-RUN70', rcS70b == 0 and linesS70b == linesS70
+       and snap69(S70) == before70 and rcF70 == 0
+       and not any('BAD-LINE' in n
+                   for n in buf70.getvalue().splitlines()),
+       'the sharper word writes nothing and prints the same bytes twice, and '
+       'the failure-summary face still carries no bad-line row')
+
+    # Arm 7: source - both reason functions share the one presence test and
+    # both name a format branch; the renderer literal is untouched.
+    with io.open(os.path.join(ROOT, 'tools', 'crawl_runner.py'),
+                 'r', encoding='utf-8') as fh:
+        src70 = fh.read()
+
+    def body70(name):
+        i70 = src70.find('def %s(' % name)
+        j70 = src70.find('\ndef ', i70 + 1)
+        return src70[i70:j70 if j70 > 0 else len(src70)]
+
+    ok('AC-RUN70', '_day_claim_present(row.get(\'failed_at\'))' in
+       body70('_failure_row_why')
+       and '_day_claim_present(row.get(\'day\'))' in body70('_failure_day_row_why')
+       and "'failed_at_fmt'" in body70('_failure_row_why')
+       and "'day_fmt'" in body70('_failure_day_row_why')
+       and "'fields'" not in body70('_failure_row_why')
+       and "'fields'" not in body70('_failure_day_row_why')
+       and src70.count("'BAD-LINE n=%d why=%s day=%s'") == 2,
+       'the presence test is one function used by both faces, each face has a '
+       'format branch, and the row renderer is unchanged')
+
+    # Arm 8: one word per repair across the whole vocabulary - a repair word
+    # that names a field never also stands for another field.
+    words70 = set(toks69(n).get('why') for n in linesS70[1:] + linesD70[1:])
+    ok('AC-RUN70', words70 == {'failed_at', 'failed_at_fmt', 'error', 'shape',
+                               'json', 'day', 'day_fmt', 'on_day'}
+       and len(words70) == 8
+       and 'field' not in ''.join(words70),
+       'the whole vocabulary is eight words for eight repairs, and no word is '
+       'a bucket that a person would have to open the line to disambiguate')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

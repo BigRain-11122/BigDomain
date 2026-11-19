@@ -1,0 +1,14 @@
+CRAWL-PENDING-OLD-BAD bad=5 bad_days=2026-11-20
+BAD-LINE n=1 why=json day=none
+BAD-LINE n=2 why=failed_at day=none
+BAD-LINE n=3 why=failed_at_fmt day=none
+BAD-LINE n=4 why=error day=2026-11-20
+BAD-LINE n=5 why=shape day=none
+CRAWL-FAILURE-DAYS-BAD bad=5 bad_days=2026-11-20
+BAD-LINE n=1 why=json day=none
+BAD-LINE n=2 why=day day=none
+BAD-LINE n=3 why=day_fmt day=none
+BAD-LINE n=4 why=on_day day=2026-11-20
+BAD-LINE n=5 why=shape day=none
+[one word per repair] side: failed_at (add) / failed_at_fmt (fix format) / error (add another field) / shape (fix the line)
+[one word per repair] day: day (add) / day_fmt (fix format) / on_day (make it an int, unchanged)

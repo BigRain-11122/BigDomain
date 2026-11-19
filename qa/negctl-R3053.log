@@ -1,0 +1,6 @@
+HONEST rc=0 words=failed_at_fmt|day_fmt|failed_at
+HONEST verdict=GREEN
+m1 the format branch returns the retired bucket word rc=0 words=fields|day_fmt|failed_at verdict=CAUGHT
+m2 the day-side format branch is folded back into day rc=0 words=failed_at_fmt|day|failed_at verdict=CAUGHT
+m3 every value counts as present, so a blank string is called a format error rc=0 words=failed_at_fmt|day_fmt|failed_at_fmt verdict=CAUGHT
+RESTORED rc=0 words=failed_at_fmt|day_fmt|failed_at verdict=GREEN
