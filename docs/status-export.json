@@ -10,8 +10,8 @@
     "latest_evidence": "qa/negctl-R3037.log (381B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3041] next window (<=48h): (0) MAIN — **pairs 段整体定了价，但哪一对最贵还没有面**：`series_bytes` 只报整段字节，读者无法知道宽度是被**长 day 字符串**还是**宽计数**吃掉（ISO day 世界同 2 对多 18B，而 4 位数计数同 2 对多 6B——两条来源压在同一个数里）。下一轮先量（只读）：①每个 pair 的分解是否可印而不重述（`day=` 长度、`on` 位数、逗号）且不撞 R3040 刚立的「含键名」口径；②仓内是否已有面（`pair_bytes`/`day_bytes`/`count_bytes` 类）给它定价；③新增记号会不会撞 AC-RUN57 七臂与 `line_bytes + 1 == output_bytes`。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, a day whose only row is malformed still reads silent on BOTH faces, and the cap of 31 is a chosen law rather than a measured optimum.",
-    "next_milestone_due": "2026-11-21T22:26:17+08:00",
-    "updated_at": "2026-11-19T22:26:17+08:00"
+    "next_milestone_due": "2026-11-21T22:29:02+08:00",
+    "updated_at": "2026-11-19T22:29:02+08:00"
   },
   "current": "2026-11-19 R3040 PRODUCT+ENGINEERING: the pairs segment now prices itself, so the answer on the line carries its own cost. Measured before the pin (qa/probe-R3040.log, six private worlds, no socket, no clock): the width of `series=<day:on,...>` is decided by three things at once - the stored day string (an ISO row printed `2026-11-10T09:00:00:1`, so \"a day is always ten characters\" is FALSE; _usable_day only checks a ten-character front), each on_day's digit count (same series_shown=2 measured 25B against 31B) and shown-1 commas - so a reader cannot rebuild it from the printed counts. Five candidate token names had zero hits across tools/ and src/ (series_bytes/pairs_bytes/segment_bytes/series_len/pair_bytes) and NONE of the line's thirteen integer keys equalled the segment on any world (equal_keys=NONE), the empty history included. tools/crawl_runner.py now ships series_segment_bytes() and appends ` series_bytes=<n>` after `series_window=` on the --series-days face: the UTF-8 bytes of the `series=` key and the pairs behind it, eleven rather than zero when the line prints `series=none`.",
   "depts": [
@@ -42,7 +42,7 @@
     }
   ],
   "do": "2026-11-19 R3040 PRODUCT+ENGINEERING: the pairs segment now prices itself, so the answer on the line carries its own cost. Measured before the pin (qa/probe-R3040.log, six private worlds, no socket, no clock): the width of `series=<day:on,...>` is decided by three things at once - the stored day string (an ISO row printed `2026-11-10T09:00:00:1`, so \"a day is always ten characters\" is FALSE; _usable_day only checks a ten-character front), each on_day's digit count (same series_shown=2 measured 25B against 31B) and shown-1 commas - so a reader cannot rebuild it from the printed counts. Five candidate token names had zero hits across tools/ and src/ (series_bytes/pairs_bytes/segment_bytes/series_len/pair_bytes) and NONE of the line's thirteen integer keys equalled the segment on any world (equal_keys=NONE), the empty history included. tools/crawl_runner.py now ships series_segment_bytes() and appends ` series_bytes=<n>` after `series_window=` on the --series-days face: the UTF-8 bytes of the `series=` key and the pairs behind it, eleven rather than zero when the line prints `series=none`.",
-  "export_ts": "2026-11-19T22:26:17+08:00",
+  "export_ts": "2026-11-19T22:29:02+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
   "latest_evidence": "qa/negctl-R3035.log (265B, 2026-11-19)",
   "next_milestone": "[R3041] next window (<=48h): (0) MAIN — **pairs 段整体定了价，但哪一对最贵还没有面**：`series_bytes` 只报整段字节，读者无法知道宽度是被**长 day 字符串**还是**宽计数**吃掉（ISO day 世界同 2 对多 18B，而 4 位数计数同 2 对多 6B——两条来源压在同一个数里）。下一轮先量（只读）：①每个 pair 的分解是否可印而不重述（`day=` 长度、`on` 位数、逗号）且不撞 R3040 刚立的「含键名」口径；②仓内是否已有面（`pair_bytes`/`day_bytes`/`count_bytes` 类）给它定价；③新增记号会不会撞 AC-RUN57 七臂与 `line_bytes + 1 == output_bytes`。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, a day whose only row is malformed still reads silent on BOTH faces, and the cap of 31 is a chosen law rather than a measured optimum.",
@@ -191,5 +191,5 @@
     "window": "2026-11-13..2026-11-19",
     "window_days": 7
   },
-  "state_bytes": 411776
+  "state_bytes": 412551
 }
