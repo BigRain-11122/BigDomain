@@ -12,7 +12,9 @@ disclosed as such). AC-RUN5/AC-RUN6 followed at R2992 and AC-RUN7/AC-RUN8 at
 R2993, each pinned in the same board file before the function or arm it grades.
 AC-RUN7 grades the failure side channel's first READER (summarize_failures and
 `--failures`); AC-RUN8 grades the launcher block offline, since R2992 disclosed
-that "the one part no arm covers" was exactly that block.
+that "the one part no arm covers" was exactly that block. AC-RUN9/AC-RUN10
+(R2994) grade the daily failure HISTORY (one row per day, rewritten in place)
+and its reader, plus the launcher's --root $Project anchor - all offline.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -316,6 +318,121 @@ def main():
        'the launcher stays pure ASCII with no CR bytes')
     ok('AC-RUN8', 'crawl-daily.log' in loop[try_at:catch_at],
        'the block logs its own evidence file')
+
+    # AC-RUN9 (R2994): the failure face gains a HISTORY - one row per day, so
+    # "is today worse than yesterday" has an answer instead of being re-typed.
+    # A DISPLAY face only: no arm here turns a judgement green, and arm 6 pins
+    # that the scanner never reads it.
+    root12 = world(); roots.append(root12)
+    empty_day = RUN.snapshot_failure_day(root12, TODAY + 'T20:00:00+08:00')
+    drows0, dbad0 = RUN.read_failure_days(RUN.failure_day_path(root12))
+    ok('AC-RUN9', empty_day['day'] == TODAY and empty_day['on_day'] == 0
+       and empty_day['total'] == 0 and empty_day['recent'] == 0
+       and empty_day['bad'] == 0 and empty_day['urls'] == 0
+       and len(drows0) == 1 and dbad0 == 0,
+       'an absent side channel still lands one honest zero row')
+    f12 = RUN.failure_path(root12)
+    RUN.append_failure(f12, 'https://a.example/1', TODAY + 'T01:00:00+08:00',
+                       'E_FETCH TimeoutError: today')
+    RUN.append_failure(f12, 'https://b.example/2', '2026-11-16T02:00:00+08:00',
+                       'E_FETCH URLError: three days ago')
+    RUN.append_failure(f12, 'https://b.example/2', '2026-11-16T03:00:00+08:00',
+                       'E_FETCH URLError: three days ago again')
+    row2 = RUN.snapshot_failure_day(root12, TODAY + 'T20:05:00+08:00')
+    ok('AC-RUN9', row2['on_day'] == 1 and row2['total'] == 3
+       and row2['recent'] == 3,
+       'three failures read on_day=1 total=3 recent7=3')
+    dpath12 = RUN.failure_day_path(root12)
+    seeded = {'day': '2026-11-18', 'on_day': 4, 'total': 9, 'recent': 4,
+              'bad': 0, 'urls': 2, 'newest_at': '2026-11-18T01:00:00+08:00',
+              'newest_error': 'E_FETCH URLError: seeded'}
+    with open(dpath12, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(json.dumps(seeded, sort_keys=True, separators=(',', ':')) + '\n')
+        fh.write(json.dumps(row2, sort_keys=True, separators=(',', ':')) + '\n')
+    RUN.append_failure(f12, 'https://c.example/3', TODAY + 'T04:00:00+08:00',
+                       'E_FETCH URLError: later today')
+    row3 = RUN.snapshot_failure_day(root12, TODAY + 'T21:00:00+08:00')
+    drows3, dbad3 = RUN.read_failure_days(dpath12)
+    ok('AC-RUN9', row3['on_day'] == 2 and len(drows3) == 2 and dbad3 == 0
+       and [r['day'] for r in drows3] == ['2026-11-18', TODAY]
+       and drows3[0]['on_day'] == 4,
+       'a same-day snap rewrites its own row and leaves the seeded day as it was')
+    with open(f12, 'a', encoding='utf-8', newline='\n') as fh:
+        fh.write('{oops\n')
+    with open(dpath12, 'a', encoding='utf-8', newline='\n') as fh:
+        fh.write('{nope\n')
+    drows_pre, dbad_pre = RUN.read_failure_days(dpath12)
+    ok('AC-RUN9', dbad_pre == 1 and len(drows_pre) == 2,
+       'a malformed history line is counted by the reader')
+    row4 = RUN.snapshot_failure_day(root12, TODAY + 'T22:00:00+08:00')
+    drows4, dbad4 = RUN.read_failure_days(dpath12)
+    ok('AC-RUN9', row4['bad'] == 1 and row4['total'] == 4
+       and len(drows4) == 2 and dbad4 == 0,
+       'a malformed failure line is counted while the rewrite drops only the '
+       'unusable history line')
+    root13 = world(); roots.append(root13)
+    RUN.append_failure(RUN.failure_path(root13), 'https://e.example/5',
+                       '2026-11-18T10:00:00+08:00', 'E_FETCH URLError: yesterday')
+    t_day = RUN.snapshot_failure_day(root13, TODAY + 'T20:00:00+08:00')
+    y_day = RUN.snapshot_failure_day(root13, '2026-11-18T20:00:00+08:00')
+    ok('AC-RUN9', t_day['on_day'] == 0 and y_day['on_day'] == 1,
+       'the day is the literal first ten characters, on both sides')
+    ok('AC-RUN9', RUN.failure_day_path(root13) != RUN.failure_path(root13)
+       and RUN.failure_day_path(root13) != CR.record_path(root13)
+       and 'crawl-failure-days' not in scan_src,
+       'the history is its own path and the scanner never reads it')
+
+    # AC-RUN10 (R2994): the history gets a READER and the launcher gets its
+    # root anchor pinned. Both are offline: no socket, no launcher started.
+    root14 = world(); roots.append(root14)
+    real_day = RUN.failure_day_path(ROOT)
+    real_before = (os.path.getmtime(real_day) if os.path.isfile(real_day)
+                   else None)
+    RUN.append_failure(RUN.failure_path(root14), 'https://f.example/6',
+                       TODAY + 'T09:00:00+08:00', 'E_FETCH URLError: solo')
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc14 = RUN.main(['--snapshot-failures', '--root', root14])
+    line14 = buf.getvalue().strip()
+    real_after = (os.path.getmtime(real_day) if os.path.isfile(real_day)
+                  else None)
+    ok('AC-RUN10', rc14 == 0 and 'CRAWL-FAILURE-DAY' in line14
+       and 'on_day=1' in line14 and os.path.isfile(RUN.failure_day_path(root14))
+       and real_before == real_after,
+       'the standalone snap answers on one line and writes in the world it '
+       'was given')
+    RUN.snapshot_failure_day(root14, '2026-11-18T20:00:00+08:00')
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc15 = RUN.main(['--failure-days', '--root', root14])
+    line15 = buf.getvalue().strip()
+    ok('AC-RUN10', rc15 == 0 and 'CRAWL-FAILURE-DAYS' in line15
+       and 'days=2' in line15 and ('2026-11-18:0' in line15)
+       and (TODAY + ':1') in line15,
+       'the reader names both days and their on_day counts')
+    root15 = world(); roots.append(root15)
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc16 = RUN.main(['--failure-days', '--root', root15])
+    line16 = buf.getvalue().strip()
+    ok('AC-RUN10', rc16 == 0 and 'days=0' in line16 and 'series=none' in line16,
+       'an empty history is an honest answer with rc=0')
+    snap_row14 = RUN.snapshot_failure_day(root14, TODAY + 'T23:00:00+08:00')
+    drows14, _ = RUN.read_failure_days(RUN.failure_day_path(root14))
+    last14 = drows14[-1]
+    ok('AC-RUN10', last14 == snap_row14 and last14.get('day') == TODAY,
+       'the last history row the reader sees is the row the writer returned')
+    call_at10 = loop.find(r"'tools\crawl_runner.py')")
+    line_end10 = loop.find('\n', call_at10)
+    call_line10 = loop[call_at10:line_end10]
+    ok('AC-RUN10', call_at10 > 0
+       and '--if-due' in call_line10 and '--write' in call_line10
+       and '--snapshot-failures' in call_line10
+       and '--root $Project' in call_line10,
+       'the launcher call line carries the day gate, the write, the snapshot '
+       'and the root anchor')
+    ok('AC-RUN10', try_at < call_at10 < spawn_at,
+       'the anchored call stays inside the try and before the spawn')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

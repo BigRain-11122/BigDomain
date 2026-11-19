@@ -167,14 +167,19 @@ if (-not $lockAcquired) { Log 'skip: lock grab not won after retries'; Beat 'ski
 # this repo carried that obligation: tools/crawl_runner.py existed and only a
 # human or a lucky round ever called it. --if-due makes the call idempotent on a
 # ten-minute grid (a day that already holds a usable record is a no-op that
-# opens no socket), so the cost is one bounded retrieval per day. EVERY fault
-# here is logged and swallowed: a dead network, a missing interpreter or a
-# refused trace must never block the round that follows.
+# opens no socket), so the cost is one bounded retrieval per day. R2994 adds
+# --snapshot-failures to the SAME invocation: it rewrites today's row in
+# qa/crawl-failure-days.jsonl after the retrieval, so two days can be compared
+# instead of re-typed, and it costs no extra interpreter start. --root $Project
+# is on the call line on purpose: without it the beat would read whatever qa/
+# the cwd happens to name. EVERY fault here is logged and swallowed: a dead
+# network, a missing interpreter or a refused trace must never block the round
+# that follows.
 try {
     $crawlLog = Join-Path $logDir 'crawl-daily.log'
     $py = (Get-Command python -ErrorAction SilentlyContinue).Source
     if ($py) {
-        $crawlOut = & $py (Join-Path $Project 'tools\crawl_runner.py') --if-due --write --root $Project --timeout 20 2>&1
+        $crawlOut = & $py (Join-Path $Project 'tools\crawl_runner.py') --if-due --write --snapshot-failures --root $Project --timeout 20 2>&1
         $crawlRc = $LASTEXITCODE
         $crawlTxt = (($crawlOut | ForEach-Object { "$_" }) -join ' | ')
         Add-Content -Path $crawlLog -Value ("$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') rc=$crawlRc $crawlTxt") -Encoding UTF8

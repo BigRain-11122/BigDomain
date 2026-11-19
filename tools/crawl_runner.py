@@ -48,6 +48,16 @@ its own - when a usable record already names today, run() answers skipped=True
 BEFORE any socket is opened and writes nothing. That is what makes it safe to
 call this from a ten-minute grid: at most one real retrieval per day.
 
+FAILURE HISTORY (R2994): --failures answers "what is on disk right now", so
+"is today worse than yesterday" had no answer and the same page failing three
+days straight read exactly like one bad afternoon. snapshot_failure_day()
+persists ONE row per day in qa/crawl-failure-days.jsonl (on_day, total, recent,
+bad, urls, newest), rewriting that day's row in place so a ten-minute beat does
+not append duplicates. It is a DISPLAY face only: the scanner never reads it
+(AC-RUN9 arm 6), the closeout census only classifies *.log, and nothing here
+gates, retries or pages. A history write that fails prints its own line and
+never changes the crawl's answer.
+
 BASELINE LAW: qa/crawl-baselines.json, one object keyed by url, holding digest /
 bytes / fetched_at / excerpt. It is a product file (a person can read what the
 page said last time), written atomically after the record is appended.
@@ -74,6 +84,8 @@ BASELINE_DIR = 'qa'
 BASELINE_NAME = 'crawl-baselines.json'
 FAILURE_DIR = 'qa'
 FAILURE_NAME = 'crawl-failures.jsonl'
+FAILURE_DAY_DIR = 'qa'
+FAILURE_DAY_NAME = 'crawl-failure-days.jsonl'
 EXCERPT_CHARS = 240
 DEFAULT_URL = 'https://pay.weixin.qq.com/doc/v2/merchant/4011986682'
 UA = 'Mozilla/5.0 (compatible; BigDomain-Crawl/1.0)'
@@ -91,6 +103,11 @@ def baseline_path(repo_root):
 def failure_path(repo_root):
     """Side channel for failed retrievals - deliberately NOT the record path."""
     return os.path.join(repo_root, FAILURE_DIR, FAILURE_NAME)
+
+
+def failure_day_path(repo_root):
+    """Daily failure-count history - a DISPLAY face, never a judgement input."""
+    return os.path.join(repo_root, FAILURE_DAY_DIR, FAILURE_DAY_NAME)
 
 
 def _usable_day(value):
@@ -157,22 +174,8 @@ def read_failures(path):
     return rows, bad
 
 
-def summarize_failures(path, day, window_days=7):
-    """Readable answer to "did retrievals fail, and how recently?" (R2993).
-
-    WHY: the side channel had a writer and NO reader outside its own suite, so
-    evidence nobody opens is the same weight as no evidence. This turns the rows
-    read_failures already validates into the one line a person can act on: how
-    many failures in total, how many inside the window, how many unusable lines,
-    how many distinct sources, and the newest failure. An absent file is zeroes,
-    never an exception - "nothing failed" is an honest answer, not an error.
-
-    The window is inclusive of `day` and `window_days` long, compared on the
-    literal first ten characters of failed_at, the same day law the record face
-    uses, so the summary and the writer cannot drift apart. Nothing here gates,
-    retries or pages: this is a READER over evidence, not enforcement.
-    """
-    rows, bad = read_failures(path)
+def _summary_from_rows(rows, bad, day, window_days=7):
+    """Counts over already-validated rows; the one place the window law lives."""
     head_day = (day or '')[:10]
     usable = _usable_day(head_day)
     threshold = head_day
@@ -198,6 +201,100 @@ def summarize_failures(path, day, window_days=7):
             'urls': len(urls), 'window_days': window_days,
             'newest_at': (newest or {}).get('failed_at'),
             'newest_error': (newest or {}).get('error')}
+
+
+def summarize_failures(path, day, window_days=7):
+    """Readable answer to "did retrievals fail, and how recently?" (R2993).
+
+    WHY: the side channel had a writer and NO reader outside its own suite, so
+    evidence nobody opens is the same weight as no evidence. This turns the rows
+    read_failures already validates into the one line a person can act on: how
+    many failures in total, how many inside the window, how many unusable lines,
+    how many distinct sources, and the newest failure. An absent file is zeroes,
+    never an exception - "nothing failed" is an honest answer, not an error.
+
+    The window is inclusive of `day` and `window_days` long, compared on the
+    literal first ten characters of failed_at, the same day law the record face
+    uses, so the summary and the writer cannot drift apart. Nothing here gates,
+    retries or pages: this is a READER over evidence, not enforcement.
+    """
+    rows, bad = read_failures(path)
+    return _summary_from_rows(rows, bad, day, window_days)
+
+
+def read_failure_days(path):
+    """(rows, bad) for the daily history; a missing file is zero rows."""
+    rows = []
+    bad = 0
+    if not os.path.isfile(path):
+        return rows, bad
+    with open(path, 'r', encoding='utf-8', errors='replace') as fh:
+        for line in fh:
+            text = line.strip()
+            if not text:
+                continue
+            try:
+                row = json.loads(text)
+            except ValueError:
+                bad += 1
+                continue
+            if (not isinstance(row, dict) or not _usable_day(row.get('day'))
+                    or not isinstance(row.get('on_day'), int)):
+                bad += 1
+                continue
+            rows.append(row)
+    return rows, bad
+
+
+def snapshot_failure_day(repo_root, day, window_days=7):
+    """Persist today's failure counts as ONE row, replacing that day's own row.
+
+    WHY (R2994): --failures answers "what is on disk now" and forgets the last
+    time it was asked, so a page failing three days straight and one bad
+    afternoon read the same. This writes the window counts down once per day so
+    two days can be compared. Same-day re-runs REWRITE the row rather than
+    appending: the beat fires every ten minutes, and a file that grows a row per
+    beat would be noise rather than history. Only the days somebody actually
+    snapshotted appear - a gap is an honest gap, not a zero.
+    """
+    head_day = (day or '')[:10]
+    if not _usable_day(head_day):
+        raise ValueError('crawl failure day refused, unusable day: %r' % (day,))
+    rows, bad = read_failures(failure_path(repo_root))
+    summary = _summary_from_rows(rows, bad, head_day, window_days)
+    on_day = 0
+    for row in rows:
+        if str(row.get('failed_at') or '')[:10] == head_day:
+            on_day += 1
+    row = {'day': head_day, 'on_day': on_day, 'total': summary['total'],
+           'recent': summary['recent'], 'bad': summary['bad'],
+           'urls': summary['urls'], 'newest_at': summary['newest_at'],
+           'newest_error': summary['newest_error']}
+    path = failure_day_path(repo_root)
+    history, _ignored = read_failure_days(path)
+    kept = [r for r in history if r.get('day') != head_day]
+    kept.append(row)
+    kept.sort(key=lambda r: str(r.get('day') or ''))
+    tmp = path + '.tmp'
+    parent = os.path.dirname(path)
+    if parent and not os.path.isdir(parent):
+        os.makedirs(parent)
+    with open(tmp, 'w', encoding='utf-8', newline='\n') as fh:
+        for item in kept:
+            fh.write(json.dumps(item, ensure_ascii=False, sort_keys=True,
+                                separators=(',', ':')) + '\n')
+    os.replace(tmp, path)
+    return row
+
+
+def summarize_failure_days(path, limit=7):
+    """Readable series over the daily history; zero rows is an honest answer."""
+    rows, bad = read_failure_days(path)
+    tail = rows[-max(1, int(limit)):]
+    return {'days': len(rows), 'bad': bad,
+            'first': (rows[0].get('day') if rows else None),
+            'last': (rows[-1].get('day') if rows else None),
+            'series': [(r.get('day'), r.get('on_day')) for r in tail]}
 
 
 def crawled_today(repo_root, day):
@@ -360,8 +457,15 @@ def main(argv=None):
     ap.add_argument('--failures', action='store_true',
                     help='print the failure side channel summary and exit '
                          '(a reader over evidence; gates nothing)')
+    ap.add_argument('--failure-days', dest='failure_days', action='store_true',
+                    help='print the daily failure-count history and exit '
+                         '(a display series; gates nothing)')
+    ap.add_argument('--snapshot-failures', dest='snapshot_failures',
+                    action='store_true',
+                    help='persist today\'s failure counts as one history row '
+                         '(same-day rows are rewritten, never duplicated)')
     ap.add_argument('--days', type=int, default=7,
-                    help='window length in days for --failures (default 7)')
+                    help='window length in days for the failure faces (default 7)')
     args = ap.parse_args(argv)
     if args.failures:
         stamp = datetime.datetime.now().astimezone().isoformat(
@@ -372,6 +476,28 @@ def main(argv=None):
                             summary['recent'], summary['bad'],
                             summary['urls'], summary['newest_at'] or 'none',
                             summary['newest_error'] or 'none'))
+        return 0
+    if args.failure_days:
+        series = summarize_failure_days(failure_day_path(args.root), args.days)
+        pairs = ','.join('%s:%s' % (d, n) for d, n in series['series'])
+        print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s series=%s'
+              % (series['days'], series['bad'], series['first'] or 'none',
+                 series['last'] or 'none', pairs or 'none'))
+        return 0
+    standalone_snapshot = (args.snapshot_failures and not args.url
+                           and not args.if_due)
+    if standalone_snapshot:
+        stamp = datetime.datetime.now().astimezone().isoformat(
+            timespec='seconds')
+        try:
+            row = snapshot_failure_day(args.root, stamp[:10], args.days)
+        except Exception as exc:  # a display write must never look like a crawl
+            print('CRAWL-FAILURE-DAY error=%s: %s' % (type(exc).__name__, exc))
+            return 3
+        print('CRAWL-FAILURE-DAY day=%s on_day=%d total=%d recent%d=%d bad=%d '
+              'urls=%d' % (row['day'], row['on_day'], row['total'],
+                           row['recent'], row['recent'], row['bad'],
+                           row['urls']))
         return 0
     if not args.url and args.if_due:
         args.url = [DEFAULT_URL]
@@ -403,6 +529,20 @@ def main(argv=None):
               'baseline=%s' % (url, out['dry'], out['verdict'],
                                out['digest'][:12], out['record'] or 'none',
                                out['baseline'] or 'none'))
+    if args.snapshot_failures:
+        # Runs AFTER the retrieval on purpose: a failure this very beat must be
+        # in the row that names today, not in tomorrow's.
+        now = datetime.datetime.now().astimezone().isoformat(timespec='seconds')
+        try:
+            row = snapshot_failure_day(args.root, now[:10], args.days)
+            print('CRAWL-FAILURE-DAY day=%s on_day=%d total=%d recent%d=%d '
+                  'bad=%d urls=%d' % (row['day'], row['on_day'], row['total'],
+                                      row['recent'], row['recent'], row['bad'],
+                                      row['urls']))
+        except Exception as exc:
+            # History is display: a broken display prints its own line and
+            # never rewrites the crawl's answer.
+            print('CRAWL-FAILURE-DAY error=%s: %s' % (type(exc).__name__, exc))
     return rc
 
 

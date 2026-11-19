@@ -4649,8 +4649,12 @@ SUITES = [
     # R2993 gives that side channel its first READER (summarize_failures plus the
     # --failures CLI) and the launcher block its first offline arm.
     # (AC-RUN7..AC-RUN8 pre-registered in the R2993 PIN row.)
+    # R2994 persists ONE failure-count row per day (rewritten in place, so a
+    # ten-minute beat cannot append duplicates), gives it a reader, and pins the
+    # launcher's --root $Project anchor. Display face only: the scanner never
+    # reads it. (AC-RUN9..AC-RUN10 pre-registered in the R2994 PIN row.)
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 8),
+     os.path.join("..", "os", "test_crawl_runner.py"), 10),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

@@ -1,0 +1,8 @@
+PASS honest-single-row rows=1 bad=0
+PASS honest-on-day on_day=1 total=2
+PASS honest-two-days rows=2
+PASS mutantA-duplicates today_rows=2 (the writer would append)
+PASS mutantB-on-day-equals-total on_day=2 total=2
+PASS mutantC-arm-predicate-reads-red the arm predicate (name absent) reads false on the mutant
+PASS mutantD-arm-predicate-reads-red the AC-RUN10 anchor reads false on the mutant
+NEGCTL PASS (0 red)
