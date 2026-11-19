@@ -1,0 +1,5 @@
+[HONEST] all three worlds match the expectations: YES
+[M1] min takes the oldest end -> CAUGHT span.pending_age_min_d=4(want 0)
+[M2] no-source min falls back to 0 -> CAUGHT repaired.pending_age_min_d=0(want None)
+[M3] one pending source collapses to None -> CAUGHT single.pending_age_min_d=None(want 4)
+[DONE] 4 readings

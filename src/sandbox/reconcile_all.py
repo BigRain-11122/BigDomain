@@ -4679,8 +4679,12 @@ SUITES = [
     # (AC-RUN23 pinned in the R3006 PIN row before the code.)
     # R3007: pending_age_d= answers how long the NAMED source has been gone;
     # AC-RUN24 pinned in the R3007 PIN row before the code.
+    # R3008: pending_age_min_d= answers how long the NEWEST pending source has
+    # been gone (the other end of the age span); pending_age_max_d was measured
+    # and refused as a restatement of pending_age_d. AC-RUN25 pinned in the
+    # R3008 PIN row before the code.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 24),
+     os.path.join("..", "os", "test_crawl_runner.py"), 25),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

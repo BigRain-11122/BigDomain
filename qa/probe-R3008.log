@@ -1,0 +1,10 @@
+[P1] three pending sources: raw pending set ages (ascending) = [0, 2, 4]; the row carries pending=(3, 3) pending_src='https://a.example/page' pending_age_d=4 and NOTHING else about B/C - keys=24
+[P1b] helper returns 4 values: (3, 3, 'https://a.example/page', '2026-11-15T09:00:00+08:00')
+[P2] named==oldest by raw recomputation: True (named='https://a.example/page' raw-oldest='https://a.example/page') - so a max-age field would restate pending_age_d
+[P3] youngest pending age=0; derivable from the row? pending=(3, 3) gives the COUNT 3, pending_age_d=4 gives the OLDEST only -> the youngest is absent from all 24 keys
+[P4] single pending source: pending=(1, 1) pending_age_d=4 -> a youngest-age field would read the SAME number here (4 vs 4)
+[P5] all-repaired world: pending=(0, 1) pending_age_d=None
+[P5b] unmeasured-only world: pending=None pending_age_d=None (R3004 split must not be aggregated back by a second age)
+[P6] two pending sources sharing a stamp: pending=(2, 2) pending_src='https://a.example/page' pending_age_d=2 -> oldest and youngest coincide again
+[P7] real repo: evidence='history' sources=0 pending=None pending_src=None pending_age_d=None
+[DONE] 9 readings

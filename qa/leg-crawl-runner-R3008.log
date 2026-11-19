@@ -1,0 +1,6 @@
+SHARD scope=SHARD registry_suites=730 registry_criteria=5878 selected=1 selected_criteria=25 cap=600s leg_cap=0s overrides=1 exact=1 state=RUNNING
+SHARD selected os-crawl-runner crit=25 path=..\os\test_crawl_runner.py
+SHARD row os-crawl-runner rc=0 pass=155 fail=0 detail=yes suite=PASS 155/155 crit=25 6.8s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=25 crit_mismatch=0 elapsed=6.8s crit_checked=1
+QA-LOG WROTE name=leg-crawl-runner-R3008.log bytes=347 lines=3 sha256=f0e1faf992114571 dialect=utf-8/lf VERDICT PASS
+SHARD evidence name=leg-crawl-runner-R3008.log bytes=347 lines=3 sha256=f0e1faf992114571 dialect=utf-8/lf

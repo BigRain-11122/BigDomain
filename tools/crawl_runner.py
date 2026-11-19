@@ -276,6 +276,21 @@ sources are still counts, not names: their number is pending[0]-1 (arithmetic,
 refused as a field) and their identities need one line per source (refused).
 Display only, no PASS/FLAG.
 
+AGE SPAN (R3008): one age described the source waiting LONGEST and said nothing
+about the rest, so with several pending sources a person could not tell a burst
+that just started from a long tail - measured, three pending sources aged 0/2/4
+days read pending_age_d=4 and the source that broke TODAY appeared in none of
+the 24 keys. The row now also carries pending_age_min_d= - whole days from the
+NEWEST pending source's own latest failure to the window day, the same ten-
+character day law and the same None rules as pending_age_d. Together the two
+numbers are the AGE SPAN of the pending set: pending= answers HOW MANY,
+pending_age_d= answers how long the OLDEST (the named one) has waited,
+pending_age_min_d= answers how long the YOUNGEST has. A pending_age_max_d field
+was measured and refused: the named source is by construction the oldest, so a
+max would restate pending_age_d rather than say anything new. With one pending
+source, or several sharing one stamp, the two ages coincide - that is the truth
+and is pinned as such, not turned into a None. Display only, no PASS/FLAG.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -779,7 +794,7 @@ def _day_age(day, stamp):
 
 
 def _pending_sources(record_path, in_window):
-    """(not back, judged, longest-waiting source, that source's stamp).
+    """(not back, judged, longest-waiting source, its stamp, newest-pending stamp).
 
     WHY (R3005): newest_src/since_ok answer for ONE source - the latest failure
     in the window - so a window with three failing pages said nothing about the
@@ -821,6 +836,18 @@ def _pending_sources(record_path, in_window):
     window day, so this module still reads no clock. The other pending sources
     are not returned: their count is already pending[0]-1 (arithmetic, refused
     as a field) and their names need the per-source lines the contract refuses.
+
+    R3008 KEEPS THE OTHER END: one age described the source waiting LONGEST and
+    said nothing about the rest, so with N>1 a person could not tell a burst
+    that just started from a long tail - measured, three pending sources aged
+    0/2/4 days read pending=(3,3) pending_age_d=4 with the 0-day one absent
+    from all 24 keys. The fifth value is the NEWEST pending stamp (the largest
+    one): the two ends together are the AGE SPAN of the pending set. A
+    pending_age_max_d field was measured and REFUSED - the named source is by
+    construction the oldest (raw recomputation agreed in every probe world), so
+    the max would restate pending_age_d. None when nothing is pending; when
+    every pending source shares one stamp the two ends coincide, which is
+    reported as it is rather than papered over.
     """
     latest = {}
     for row in in_window or ():
@@ -843,8 +870,8 @@ def _pending_sources(record_path, in_window):
             judged += 1
     waiting.sort()
     if not waiting:
-        return (pending, judged, None, None)
-    return (pending, judged, waiting[0][1], waiting[0][0])
+        return (pending, judged, None, None, None)
+    return (pending, judged, waiting[0][1], waiting[0][0], waiting[-1][0])
 
 
 def summarize_failure_trend(history_path, failures_path, day, window_days=7,
@@ -1033,6 +1060,17 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # different source's stamp). None when no source is named, so 0 can never
     # pass for "there is a named source and it just broke".
     pending_age_d = None
+    # R3008 AGE SPAN OF THE PENDING SET: one age named the source waiting
+    # LONGEST and left every other pending source with no age at all - measured,
+    # three pending sources aged 0/2/4 days read pending_age_d=4 and the source
+    # that broke TODAY appeared in none of the 24 keys, so a burst that just
+    # started read exactly like a long tail. The second age is the NEWEST
+    # pending source's own: the two ends are the span. A max field was refused
+    # by measurement (the named source is by construction the oldest, so it
+    # would restate pending_age_d); with one pending source, or with every
+    # pending source sharing a stamp, the two numbers coincide - reported as the
+    # truth it is, and pinned so nobody later 'fixes' the pair into one None.
+    pending_age_min_d = None
     if evidence == 'side' and in_window:
         got = _pending_sources(record_path, in_window)
         if got[1]:
@@ -1042,6 +1080,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             # because one line per source is what the contract refuses.
             pending_src = got[2]
             pending_age_d = _day_age(day, got[3])
+            pending_age_min_d = _day_age(day, got[4])
     rcov = _record_coverage(record_path)
     return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
@@ -1052,6 +1091,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'newest_src': newest_src, 'since_ok': since_ok,
             'flips': flips, 'pending': pending, 'pending_src': pending_src,
             'pending_age_d': pending_age_d,
+            'pending_age_min_d': pending_age_min_d,
             'rcov': rcov, 'window_days': window_days}
 
 
@@ -1276,10 +1316,13 @@ def main(argv=None):
                        else '%d/%d' % trend['pending'])
         age_txt = ('none' if trend['pending_age_d'] is None
                    else '%d' % trend['pending_age_d'])
+        age_min_txt = ('none' if trend['pending_age_min_d'] is None
+                       else '%d' % trend['pending_age_min_d'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
               'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
               'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
-              'pending=%s pending_src=%s pending_age_d=%s rcov=%s'
+              'pending=%s pending_src=%s pending_age_d=%s '
+              'pending_age_min_d=%s rcov=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
@@ -1287,7 +1330,7 @@ def main(argv=None):
                  trend['newest_src'] or 'none', trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
                  pending_txt, trend['pending_src'] or 'none', age_txt,
-                 rcov_txt))
+                 age_min_txt, rcov_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)
