@@ -1,0 +1,10 @@
+honest-differ GREEN
+honest-absent GREEN
+honest-always GREEN
+honest-same-read GREEN
+honest-reason GREEN
+M1-drop GREEN
+M2-conditional GREEN
+M3-second-read GREEN
+M4-reason GREEN
+NEGCTL PASS honest=5/5 mutations_caught=4/4

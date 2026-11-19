@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-19 R3016 PRODUCT+ENGINEERING: the old-waiter list now says WHEN its side channel was last written, and the round's first measurement killed the board's own example instead of confirming it. The board said a channel that stopped yesterday and one written this minute print the same header; measured (qa/probe-R3016.log), that pair had ALREADY been separated by fcov=, because the span is a pair of days - so the honest gain is inside ONE day: a last failure at 00:05 and one at 23:50 the same day read the same dictionary and the same header on all seven keys. tools/crawl_runner.py now publishes last_at on that list header - the newest usable failed_at echoed to the minute (YYYY-MM-DDTHH:MM) from the rows this call already loaded - and last_at=none when no usable row exists. It is not an age: a day age over that stamp was measured to equal the age of fcov's last day in all four probed worlds, so printing one would restate a digit already on the line, and an hour age would need a clock this module has never read.",
+    "current": "2026-11-19 R3017 PRODUCT+ENGINEERING: the old-waiter list header now says how many lines on its side channel are unusable, because two unusable lines and none read the same header. The board asked four questions before the pin and the probe answered all four: bad comes from the ONE read_failures call this face already makes (measured, one call per invocation), two malformed lines move bad 0 -> 2 while fcov, last_at and pending_old stay byte-identical (so the span was never distorted and nothing had to be repaired), zero exact header assertions and zero external readers exist (pure increment), and bad cannot live in reason because a populated table measured bad=2 with reason None. tools/crawl_runner.py now prints bad=<n> on CRAWL-PENDING-OLD-LIST, always including 0, positioned after days= and before fcov=.",
     "do": "R3005 measured, in order: the PIN row was written in src/os/backlog.md BEFORE any code byte moved, and the read-only probe tmp/probe_R3005.py -> qa/probe-R3005.log (682B, 12 lines, utf-8/lf, six private worlds, zero sockets) ran BEFORE the pin. It measured: (1) three-source window answers for one source only; (2) recur and the pending count are independent in BOTH directions - recur=(0,0) with one judged source still gone, and recur=(2,4) with nothing pending when both came back; (3) the queue head's own suggested numerator (since_ok != 'yes') counts a source whose newest failure is later than every record row as pending, reviving exactly the R3004 conflation at aggregate level, so the numerator counts 'no' only and unmeasured sits in neither number; (4) an absent record leaves every source unmeasured, so zero-of-zero had to print none rather than 0/0; (5) 13 arms read the trend line, three pin exact key sets, and a multi-source world still printed exactly one line, which is why per-source lines were refused. AC-RUN22 (seven arms) was pinned before the code; three existing key-set arms were widened by exactly the one new key, disclosed as a criterion following its field rather than a loosening.",
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3016.log (130B, 2026-11-19)",
-    "latest_evidence": "qa/negctl-R3016.log (130B, 2026-11-19)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-crawl-record-R3017.log (341B, 2026-11-19)",
+    "latest_evidence": "qa/leg-crawl-record-R3017.log (341B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3017] next window (<=48h): (0) MAIN — **表头从不印 `bad=`，于是「写坏了 N 行」与「一行都没写坏」在表头上同形**：`list_pending_old()` 的字典里有 `bad`（`read_failures` 的第二个返回值），从 R3015 到 R3016 的表头一直只用它算人口与跨度，一个有两行烂 JSON 的侧路件与一个干净的侧路件印出同一行（R3016 探针 P4 实测：坏件世界 `bad=2`，表头逐字与空件世界相同）。下一轮**先量**（只读）：①`bad` 是否与 `fcov`/`last_at` 出自**同一次** `read_failures`（同源律·不得第二次读盘）；②坏行会不会已经让 `fcov`/`last_at` 说谎（`read_failures` 丢坏行，故跨度应不受影响——须实测而不是假定）；③把 `bad=` 加进表头会不会撞任何既有判据（表头 token 断言、矩阵、日报消费者普查）；④「坏行非零」是否该进 `reason`（理由描述人口不描述通道质量——本轮的拒绝理由要先量是否仍成立）。量清后二选一实现并配判据，且**先落板再动代码**。",
-    "next_milestone_due": "2026-11-21T14:51:57+08:00",
-    "updated_at": "2026-11-19T14:51:57+08:00"
+    "next_milestone": "[R3018] next window (<=48h): (0) MAIN — **表头说出「有几行写坏了」，却说不出「是哪几行」**：R3017 让 `bad=<n>` 上了表头，但读者拿到一个数字后仍然无法点名坏行（它们在 `read_failures` 里被丢弃，`rows` 只含可用行，`bad` 只是计数）。下一轮**先量**（只读）：①坏行是否**已经**能从磁盘按行号/原文读出（逐行 `json.loads` 失败的位置是否可在不新增落盘件的前提下复原）；②若可以，逐行列表会不会撞「一行合同」与 R3014 立的「行描述源、不描述通道」两条既有边界（`PENDING-OLD` 行必须仍只描述源）；③「哪几行」是否该进独立子命令而不是同一张表（`--pending-old-list` 的表头+源行形态是 R3014/R3016/R3017 三轮钉住的）；④坏行原文是否可能含敏感内容（失败行里是 url 与 error 文本，须先量再决定是否回显原文还是只回显行号）。量清后二选一实现并配判据，且**先落板再动代码**。",
+    "next_milestone_due": "2026-11-21T15:24:52+08:00",
+    "updated_at": "2026-11-19T15:24:52+08:00"
   },
-  "current": "2026-11-19 R3016 PRODUCT+ENGINEERING: the old-waiter list now says WHEN its side channel was last written, and the round's first measurement killed the board's own example instead of confirming it. The board said a channel that stopped yesterday and one written this minute print the same header; measured (qa/probe-R3016.log), that pair had ALREADY been separated by fcov=, because the span is a pair of days - so the honest gain is inside ONE day: a last failure at 00:05 and one at 23:50 the same day read the same dictionary and the same header on all seven keys. tools/crawl_runner.py now publishes last_at on that list header - the newest usable failed_at echoed to the minute (YYYY-MM-DDTHH:MM) from the rows this call already loaded - and last_at=none when no usable row exists. It is not an age: a day age over that stamp was measured to equal the age of fcov's last day in all four probed worlds, so printing one would restate a digit already on the line, and an hour age would need a clock this module has never read.",
+  "current": "2026-11-19 R3017 PRODUCT+ENGINEERING: the old-waiter list header now says how many lines on its side channel are unusable, because two unusable lines and none read the same header. The board asked four questions before the pin and the probe answered all four: bad comes from the ONE read_failures call this face already makes (measured, one call per invocation), two malformed lines move bad 0 -> 2 while fcov, last_at and pending_old stay byte-identical (so the span was never distorted and nothing had to be repaired), zero exact header assertions and zero external readers exist (pure increment), and bad cannot live in reason because a populated table measured bad=2 with reason None. tools/crawl_runner.py now prints bad=<n> on CRAWL-PENDING-OLD-LIST, always including 0, positioned after days= and before fcov=.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-19 R3016 PRODUCT+ENGINEERING: the old-waiter list now says WHEN its side channel was last written, and the round's first measurement killed the board's own example instead of confirming it. The board said a channel that stopped yesterday and one written this minute print the same header; measured (qa/probe-R3016.log), that pair had ALREADY been separated by fcov=, because the span is a pair of days - so the honest gain is inside ONE day: a last failure at 00:05 and one at 23:50 the same day read the same dictionary and the same header on all seven keys. tools/crawl_runner.py now publishes last_at on that list header - the newest usable failed_at echoed to the minute (YYYY-MM-DDTHH:MM) from the rows this call already loaded - and last_at=none when no usable row exists. It is not an age: a day age over that stamp was measured to equal the age of fcov's last day in all four probed worlds, so printing one would restate a digit already on the line, and an hour age would need a clock this module has never read.",
-  "export_ts": "2026-11-19T14:51:57+08:00",
+  "do": "2026-11-19 R3017 PRODUCT+ENGINEERING: the old-waiter list header now says how many lines on its side channel are unusable, because two unusable lines and none read the same header. The board asked four questions before the pin and the probe answered all four: bad comes from the ONE read_failures call this face already makes (measured, one call per invocation), two malformed lines move bad 0 -> 2 while fcov, last_at and pending_old stay byte-identical (so the span was never distorted and nothing had to be repaired), zero exact header assertions and zero external readers exist (pure increment), and bad cannot live in reason because a populated table measured bad=2 with reason None. tools/crawl_runner.py now prints bad=<n> on CRAWL-PENDING-OLD-LIST, always including 0, positioned after days= and before fcov=.",
+  "export_ts": "2026-11-19T15:24:52+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
-  "latest_evidence": "qa/negctl-R3016.log (130B, 2026-11-19)",
-  "next_milestone": "[R3017] next window (<=48h): (0) MAIN — **表头从不印 `bad=`，于是「写坏了 N 行」与「一行都没写坏」在表头上同形**：`list_pending_old()` 的字典里有 `bad`（`read_failures` 的第二个返回值），从 R3015 到 R3016 的表头一直只用它算人口与跨度，一个有两行烂 JSON 的侧路件与一个干净的侧路件印出同一行（R3016 探针 P4 实测：坏件世界 `bad=2`，表头逐字与空件世界相同）。下一轮**先量**（只读）：①`bad` 是否与 `fcov`/`last_at` 出自**同一次** `read_failures`（同源律·不得第二次读盘）；②坏行会不会已经让 `fcov`/`last_at` 说谎（`read_failures` 丢坏行，故跨度应不受影响——须实测而不是假定）；③把 `bad=` 加进表头会不会撞任何既有判据（表头 token 断言、矩阵、日报消费者普查）；④「坏行非零」是否该进 `reason`（理由描述人口不描述通道质量——本轮的拒绝理由要先量是否仍成立）。量清后二选一实现并配判据，且**先落板再动代码**。",
+  "latest_evidence": "qa/leg-crawl-record-R3017.log (341B, 2026-11-19)",
+  "next_milestone": "[R3018] next window (<=48h): (0) MAIN — **表头说出「有几行写坏了」，却说不出「是哪几行」**：R3017 让 `bad=<n>` 上了表头，但读者拿到一个数字后仍然无法点名坏行（它们在 `read_failures` 里被丢弃，`rows` 只含可用行，`bad` 只是计数）。下一轮**先量**（只读）：①坏行是否**已经**能从磁盘按行号/原文读出（逐行 `json.loads` 失败的位置是否可在不新增落盘件的前提下复原）；②若可以，逐行列表会不会撞「一行合同」与 R3014 立的「行描述源、不描述通道」两条既有边界（`PENDING-OLD` 行必须仍只描述源）；③「哪几行」是否该进独立子命令而不是同一张表（`--pending-old-list` 的表头+源行形态是 R3014/R3016/R3017 三轮钉住的）；④坏行原文是否可能含敏感内容（失败行里是 url 与 error 文本，须先量再决定是否回显原文还是只回显行号）。量清后二选一实现并配判据，且**先落板再动代码**。",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
@@ -168,7 +168,7 @@
   },
   "results": [
     [
-      "3016",
+      "3017",
       "OSLoop 执行 tick"
     ]
   ],
@@ -181,15 +181,15 @@
   "self_drive": {
     "window": "2026-11-13..2026-11-19",
     "window_days": 7,
-    "log_lines_in_window": 229,
+    "log_lines_in_window": 235,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 34,
+    "substantive_non_idle_mention_lines": 35,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 250444
+  "state_bytes": 256676
 }

@@ -188,6 +188,17 @@ last_at=none with no usable row. No age is printed: a day age over that stamp
 was measured to equal the age of fcov's last day in every probed world, and an
 hour age would need a clock this module never reads.
 
+AC-RUN34 (R3017) grades EVIDENCE QUALITY on the same list: the dictionary
+carried `bad` (unusable lines on the side channel) and the header never printed
+it. Measured before the pin (qa/probe-R3017.log): the same usable rows plus two
+malformed lines moved bad 0 -> 2 while fcov, last_at and pending_old stayed
+byte-identical and the two headers were equal - and the strongest shape is the
+empty table, where a channel holding only broken lines read exactly like an
+absent channel. The header now carries bad=<n>, ALWAYS printed including 0,
+from the single read_failures call this face already makes. It is not folded
+into reason=: measured, a populated table carries bad=2 with reason None, so
+folding it in would put an excuse on a non-empty list.
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -2929,6 +2940,169 @@ def main():
        and 'verdict' not in text33
        and 'crawl-failure' not in scan_src18,
        'a date-only stamp stays a date, the face writes nothing, the trend row keeps its 30 keys, and the scanner reads none of it')
+
+    # AC-RUN34 (R3017): the header carried population, reach and liveness, never
+    # EVIDENCE QUALITY - `bad` sat in the dictionary from the start and the
+    # header never printed it. Measured before the pin (qa/probe-R3017.log): the
+    # same usable rows plus two malformed lines moved bad 0 -> 2 while fcov,
+    # last_at and pending_old stayed identical and the two headers were
+    # byte-equal; the strongest shape is the empty table, where a channel
+    # holding only unusable lines read exactly like an absent channel. bad is
+    # taken from the single read_failures call this face already makes and is
+    # NOT folded into reason: measured, a populated table carries bad=2 with
+    # reason None, so folding it in would force an excuse onto a non-empty list.
+    SRC34O = 'https://old34.example/page'
+    SRC34K = 'https://keep34.example/page'
+    OLD34 = '2026-08-20T10:00:00+08:00'
+    LATE34 = '2026-11-19T23:50:00+08:00'
+    JUNK34 = ['{oops\n', '{"failed_at":"not-a-day","error":"x"}\n']
+    BASE34 = [(SRC34K, TODAY + 'T09:00:00+08:00')]
+
+    def world34(failures, junk=None, records=BASE34):
+        root = world()
+        roots.append(root)
+        for url, when in records:
+            CR.append_record(CR.record_path(root), url, when, 'no-drift')
+        for url, when in failures:
+            RUN.append_failure(RUN.failure_path(root), url, when,
+                               'TimeoutError: t')
+        if junk:
+            with open(RUN.failure_path(root), 'a', encoding='utf-8',
+                      newline='\n') as fh:
+                fh.write(''.join(junk))
+        return root
+
+    def listing34(root, window=7, day=TODAY):
+        return RUN.list_pending_old(CR.record_path(root),
+                                    RUN.failure_path(root), day, window)
+
+    def head34(root, window=7):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--pending-old-list', '--root', root,
+                           '--days', str(window)])
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def snapshot34(root):
+        out = []
+        for base, _dirs, files in os.walk(root):
+            for name in files:
+                p = os.path.join(base, name)
+                out.append((os.path.relpath(p, root).replace('\\', '/'),
+                            os.path.getsize(p)))
+        out.sort()
+        return out
+
+    # arm 1: the same usable rows, plus two unusable ones - ONLY bad moves
+    rC34 = world34([(SRC34O, OLD34), ('https://c34.example/page', LATE34)])
+    rX34 = world34([(SRC34O, OLD34), ('https://c34.example/page', LATE34)],
+                   junk=JUNK34)
+    lC34, lX34 = listing34(rC34), listing34(rX34)
+    rcC34, linesC34 = head34(rC34)
+    rcX34, linesX34 = head34(rX34)
+    bareC34 = dict(lC34)
+    bareX34 = dict(lX34)
+    bareC34.pop('bad', None)
+    bareX34.pop('bad', None)
+    ok('AC-RUN34', lC34['bad'] == 0 and lX34['bad'] == 2
+       and json.dumps(bareC34, sort_keys=True) == json.dumps(bareX34,
+                                                             sort_keys=True)
+       and lC34['fcov'] == lX34['fcov'] and lC34['last_at'] == lX34['last_at']
+       and lC34['pending_old'] == lX34['pending_old']
+       and rcC34 == rcX34 == 0
+       and linesX34[0].replace('bad=2', 'bad=0') == linesC34[0]
+       and linesX34[0] != linesC34[0],
+       'two unusable lines move bad= alone on the header - span, stamp and population stay byte-identical')
+
+    # arm 2: the strongest shape - a channel holding ONLY unusable lines used to
+    # read exactly like an absent channel
+    rN34 = world34([])
+    rJ34 = world34([], junk=JUNK34)
+    lN34, lJ34 = listing34(rN34), listing34(rJ34)
+    rcN34, linesN34 = head34(rN34)
+    rcJ34, linesJ34 = head34(rJ34)
+    ok('AC-RUN34', lN34['bad'] == 0 and lJ34['bad'] == 2
+       and lN34['fcov'] is None and lJ34['fcov'] is None
+       and lN34['reason'] == lJ34['reason'] == 'no-coverage'
+       and rcN34 == rcJ34 == 0
+       and linesJ34[0].replace('bad=2', 'bad=0') == linesN34[0]
+       and linesJ34[0] != linesN34[0]
+       and 'reason=no-coverage' in linesJ34[0],
+       'an absent channel and a channel of only broken lines now differ by bad= while both still say reason=no-coverage')
+
+    # arm 3: ALWAYS printed, including zero - never an absence-to-zero inference
+    toks34 = linesC34[0].split()
+    ok('AC-RUN34', len(toks34) == 6 and 'bad=0' in toks34
+       and linesC34[0].index('bad=') < linesC34[0].index('fcov=')
+       and [t.split('=')[0] for t in toks34] ==
+       ['CRAWL-PENDING-OLD-LIST', 'pending_old', 'days', 'bad', 'fcov',
+        'last_at'],
+       'a clean channel prints bad=0 explicitly, and the count sits before the evidence it qualifies')
+
+    # arm 4: SAME read - a line appended on disk after the read is never claimed
+    rS34 = world34([(SRC34O, OLD34), ('https://s34.example/page', LATE34)])
+    kept34 = {'n': 0}
+    real_read34 = RUN.read_failures
+
+    def reading34(path):
+        rows = real_read34(path)
+        kept34['n'] += 1
+        if kept34['n'] == 1:
+            with open(path, 'a', encoding='utf-8', newline='\n') as fh:
+                fh.write('{appended\n')
+        return rows
+
+    RUN.read_failures = reading34
+    try:
+        _rcS34, linesS34 = head34(rS34)
+    finally:
+        RUN.read_failures = real_read34
+    on_disk34 = [n for n in open(RUN.failure_path(rS34), 'r',
+                                encoding='utf-8').read().splitlines()
+                 if n.strip()]
+    ok('AC-RUN34', kept34['n'] == 1 and 'bad=0' in linesS34[0]
+       and len(on_disk34) == 3,
+       'the count comes from the rows this call loaded - a broken line appended on disk is never claimed')
+
+    # arm 5: the reason law is untouched - populated tables still carry none
+    rP34 = world34([(SRC34O, OLD34), ('https://p34.example/page', LATE34)],
+                   junk=JUNK34)
+    lP34 = listing34(rP34)
+    rcP34, linesP34 = head34(rP34)
+    values34 = {lC34['reason'], lN34['reason'], lJ34['reason'],
+                lP34['reason']}
+    ok('AC-RUN34', lP34['bad'] == 2 and lP34['reason'] is None
+       and 'reason=' not in linesP34[0] and 'bad=2' in linesP34[0]
+       and values34 <= {None, 'no-coverage', 'unmeasured', 'all-repaired',
+                        'no-window'} and 'malformed' not in values34,
+       'a populated table names two broken lines and still prints no reason - evidence quality is not population')
+
+    # arm 6: the dictionary keeps its shape, and the trend row is untouched -
+    # measured, the trend's own `bad` counts the failure DAY history, a
+    # different file, so the header's count is not that number restated
+    tC34 = RUN.summarize_failure_trend(
+        RUN.failure_day_path(rC34), RUN.failure_path(rC34), TODAY, 7,
+        record_path=CR.record_path(rC34))
+    tX34 = RUN.summarize_failure_trend(
+        RUN.failure_day_path(rX34), RUN.failure_path(rX34), TODAY, 7,
+        record_path=CR.record_path(rX34))
+    ok('AC-RUN34', len(lC34) == 8 and len(lX34) == 8
+       and 'bad=0' in linesC34[0] and 'bad=2' in linesX34[0]
+       and len(tX34) == 30 and 'bad' in tX34 and tX34['bad'] == 0
+       and json.dumps(tX34, sort_keys=True) == json.dumps(tC34,
+                                                          sort_keys=True),
+       'the dictionary stays eight keys, and the trend row keeps its thirty untouched - its bad counts the day history, not this channel')
+
+    # arm 7: pure display - nothing written, no verdict, scanner reads none of it
+    before34 = snapshot34(rX34)
+    rcX34b, linesX34b = head34(rX34)
+    after34 = snapshot34(rX34)
+    text34 = ''.join(linesX34b)
+    ok('AC-RUN34', rcX34b == 0 and before34 == after34
+       and 'PASS' not in text34 and 'FLAG' not in text34
+       and 'verdict' not in text34
+       and 'crawl-failure' not in scan_src18,
+       'the count is display only: the world is untouched, no verdict is printed, and the scanner still reads none of it')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

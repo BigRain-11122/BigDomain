@@ -434,6 +434,25 @@ over that stamp equals the age of fcov's last day in every probed world (a
 restatement), and an hour age would need a clock this module never reads.
 Display only, no PASS/FLAG.
 
+HOW MANY LINES ON THE CHANNEL ARE UNUSABLE (R3017): the dictionary carried
+`bad` from the beginning and the header never printed it, so a channel holding
+two broken lines and a clean channel printed the same header - measured
+(qa/probe-R3017.log): the same usable rows plus two malformed lines moved `bad`
+0 -> 2 while fcov, last_at and pending_old stayed byte-identical, and the two
+headers were equal. The strongest shape is the EMPTY table: a channel holding
+only unusable lines read exactly like a channel that does not exist (both
+fcov=none, bad 0 vs 2, identical header). The header now carries bad=<n>,
+ALWAYS printed including 0, taken from the single read_failures call this face
+already makes (measured: one call per invocation, so no second read). Position
+is after days= and before fcov=, so the count sits with the evidence it
+qualifies. NOT folded into reason=: reason answers "why is the table empty",
+a broken line is evidence quality and unrelated to population - measured, a
+populated table carries bad=2 with reason=None, so folding it in would force an
+excuse onto a non-empty list and contradict AC-RUN32 arm 4 / AC-RUN33 arm 5.
+No per-row bad=: PENDING-OLD rows describe a source, not the channel. The
+CRAWL-FAILURES row in this same module already prints bad=, so this is one
+convention applied to a second face rather than a new field law.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -1295,6 +1314,18 @@ def list_pending_old(record_path, failures_path, day, window_days=7):
     measured to equal the age of `fcov`'s last day in every probed world, so it
     would restate a digit on the same line, and an hour age would need a clock
     this module does not read.
+
+    R3017 PRINTS `bad` - HOW MANY LINES ON THE CHANNEL ARE UNUSABLE. Measured
+    before this existed (qa/probe-R3017.log): two worlds with the same usable
+    rows, one of them carrying two malformed lines, moved `bad` 0 -> 2 while
+    fcov, last_at and pending_old stayed identical and the two headers were
+    byte-equal - and the strongest shape is the empty table, where a channel
+    holding only broken lines read exactly like an absent channel. `bad` comes
+    from the ONE read_failures call above (measured: one call per invocation),
+    so printing it claims nothing this call did not judge. It is NOT part of
+    `reason`: measured, a populated table carries bad=2 with reason None, and
+    `reason` answers "why is the table empty" - evidence quality is not
+    population, and folding it in would put an excuse on a non-empty list.
     """
     rows, bad = read_failures(failures_path)
     head_day, usable, threshold = _window_start(day, window_days)
@@ -1801,9 +1832,10 @@ def main(argv=None):
         po = lst['pending_old']
         fcov_txt = ('none' if lst['fcov'] is None
                     else '%s..%s' % lst['fcov'])
-        head = ('CRAWL-PENDING-OLD-LIST pending_old=%s days=%d fcov=%s '
+        head = ('CRAWL-PENDING-OLD-LIST pending_old=%s days=%d bad=%d fcov=%s '
                 'last_at=%s'
-                % ('none' if po is None else '%d/%d' % po, args.days, fcov_txt,
+                % ('none' if po is None else '%d/%d' % po, args.days,
+                   lst['bad'], fcov_txt,
                    'none' if lst['last_at'] is None else lst['last_at']))
         if not lst['waiting'] and lst['reason']:
             head += ' reason=%s' % lst['reason']

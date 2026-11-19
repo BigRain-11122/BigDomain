@@ -1,0 +1,8 @@
+ABSENT    CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=0 fcov=none last_at=none reason=no-coverage
+JUNKONLY  CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=2 fcov=none last_at=none reason=no-coverage
+INWIN     CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=0 fcov=2026-11-19..2026-11-19 last_at=2026-11-19T23:50 reason=no-coverage
+INWINJUNK CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=2 fcov=2026-11-19..2026-11-19 last_at=2026-11-19T23:50 reason=no-coverage
+ROWS      CRAWL-PENDING-OLD-LIST pending_old=1/1 days=7 bad=0 fcov=2026-08-20..2026-11-19 last_at=2026-11-19T23:50
+ROWS      PENDING-OLD url=https://old.example/page failed_at=2026-08-20T10:00:00+08:00 age_d=91
+ROWSJUNK  CRAWL-PENDING-OLD-LIST pending_old=1/1 days=7 bad=2 fcov=2026-08-20..2026-11-19 last_at=2026-11-19T23:50
+ROWSJUNK  PENDING-OLD url=https://old.example/page failed_at=2026-08-20T10:00:00+08:00 age_d=91

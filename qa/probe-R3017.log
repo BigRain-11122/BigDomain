@@ -1,0 +1,20 @@
+P1 keys=['bad', 'day', 'fcov', 'last_at', 'pending_old', 'reason', 'waiting', 'window_days']
+P1 bad=0 header=CRAWL-PENDING-OLD-LIST pending_old=1/1 days=7 fcov=2026-08-20..2026-11-19 last_at=2026-11-19T23:50
+P1 header_tokens=['CRAWL-PENDING-OLD-LIST', 'pending_old', 'days', 'fcov', 'last_at'] bad_in_header=False
+P2 listing_calls=1 bad_seen=[1] dict_bad=1
+P2 header_calls=1 bad_seen=[1] header=CRAWL-PENDING-OLD-LIST pending_old=1/1 days=7 fcov=2026-08-20..2026-11-19 last_at=2026-11-19T23:50
+P3 clean bad=0 fcov=('2026-08-20', '2026-11-19') last_at='2026-11-19T23:50' pending_old=(1, 1)
+P3 junk  bad=2 fcov=('2026-08-20', '2026-11-19') last_at='2026-11-19T23:50' pending_old=(1, 1)
+P3 same_span=True same_stamp=True same_population=True same_header=True
+P3 clean_header=CRAWL-PENDING-OLD-LIST pending_old=1/1 days=7 fcov=2026-08-20..2026-11-19 last_at=2026-11-19T23:50
+P3 junk_header =CRAWL-PENDING-OLD-LIST pending_old=1/1 days=7 fcov=2026-08-20..2026-11-19 last_at=2026-11-19T23:50
+P4 inwin_clean bad=0 reason='no-coverage' pending_old=None fcov=('2026-11-19', '2026-11-19') header=CRAWL-PENDING-OLD-LIST pending_old=none days=7 fcov=2026-11-19..2026-11-19 last_at=2026-11-19T23:50 reason=no-coverage
+P4 inwin_junk bad=2 reason='no-coverage' pending_old=None fcov=('2026-11-19', '2026-11-19') header=CRAWL-PENDING-OLD-LIST pending_old=none days=7 fcov=2026-11-19..2026-11-19 last_at=2026-11-19T23:50 reason=no-coverage
+P4 absent bad=0 reason='no-coverage' pending_old=None fcov=None header=CRAWL-PENDING-OLD-LIST pending_old=none days=7 fcov=none last_at=none reason=no-coverage
+P4 junk_only bad=2 reason='no-coverage' pending_old=None fcov=None header=CRAWL-PENDING-OLD-LIST pending_old=none days=7 fcov=none last_at=none reason=no-coverage
+P4 inwin_headers_identical=True absent_junk_headers_identical=True
+P5 exact_header_equalities=0 consumers=[]
+P6 rows_world bad=2 reason=None waiting=1 reason_in_header=False
+P6 trend_keys=30 trend_bad=0
+P7 CRAWL-FAILURES prints bad=True
+PROBE DONE worlds=9
