@@ -6768,6 +6768,149 @@ def main():
        'the silent-day face still prices its own line to the byte, the '
        'increment twin stays absent, and the new marker appears exactly once')
 
+    # ===== AC-RUN61 (R3044): the cap cuts in DAY order and names the day it
+    # cut INSIDE ==============================================================
+    # AC-RUN61 was pinned in src/os/backlog.md BEFORE either window function
+    # sorted and BEFORE series_dropped_shared existed (in-window
+    # pre-registration, disclosed here). Measured first (qa/probe-R3044.log and
+    # the S1/S2 supplement): on a day-ordered history that drops an older day
+    # AND a row of the boundary day, the same-day count is 1 while the row's own
+    # window_rows - series_shown subtraction answers 2 - so the count is NOT a
+    # restatement (the PIN's first ruling was amended in the same window after
+    # that measurement, and the amendment is kept verbatim on the board).
+    def put_rows(path, days):
+        put_days(path, [
+            {'bad': 0, 'day': d, 'newest_at': None, 'newest_error': None,
+             'on_day': n, 'recent': 0, 'total': 0, 'urls': 0}
+            for d, n in days])
+
+    def shared_from_file(root, cap, width=7):
+        rows61, _bad61 = RUN.read_failure_days(hist37(root))
+        full61 = RUN.series_full_pairs(rows61, width)
+        kept61 = RUN.series_days_window(rows61, cap, width)['rows']
+        return full61, kept61, RUN.series_dropped_shared(full61, kept61)
+
+    # arm 1: a day-ordered history prints the same segment, and a clean cut
+    # between days answers 0
+    r61 = world()
+    roots.append(r61)
+    put_rows(hist37(r61), [('2026-11-10', 1), ('2026-11-11', 2),
+                           ('2026-11-12', 3), ('2026-11-13', 4),
+                           ('2026-11-14', 5)])
+    rc61a, l61a, _ = sd57(r61, ['--series-days', '7', '--days', '2'])
+    t61a = toks57(l61a[0]) if l61a else {}
+    _f61a, _k61a, s61a = shared_from_file(r61, 2)
+    ok('AC-RUN61', rc61a == 0 and l61a
+       and t61a.get('series') == '2026-11-13:4,2026-11-14:5'
+       and t61a.get('window_rows') == '5' and t61a.get('series_shown') == '2'
+       and t61a.get('series_dropped_from') == '2026-11-10'
+       and t61a.get('series_dropped_shared') == '0' and s61a == 0,
+       'a day-ordered history keeps the segment it printed before the sort, and '
+       'a cap that cuts between days answers series_dropped_shared=0')
+
+    # arm 2: a hand-edited history whose days are out of order - the cap now
+    # drops the OLDEST day rather than the oldest file row
+    r61b = world()
+    roots.append(r61b)
+    put_rows(hist37(r61b), [('2026-11-11', 1), ('2026-11-10', 2),
+                            ('2026-11-12', 3)])
+    before61 = tree_bytes(r61b)
+    rc61b, l61b, _ = sd57(r61b, ['--series-days', '7', '--days', '2'])
+    after61 = tree_bytes(r61b)
+    t61b = toks57(l61b[0]) if l61b else {}
+    seg61b = [p.split(':', 1)[0]
+              for p in str(t61b.get('series') or '').split(',')]
+    ok('AC-RUN61', rc61b == 0 and l61b and before61 == after61
+       and seg61b == sorted(seg61b)
+       and t61b.get('series') == '2026-11-11:1,2026-11-12:3'
+       and t61b.get('series_dropped_from') == '2026-11-10'
+       and t61b.get('series_dropped_from') < seg61b[0]
+       and t61b.get('series_dropped_shared') == '0',
+       'on a history whose days are out of order the printed pairs are in day '
+       'order, dropped_from is strictly older than the first printed day, and '
+       'nothing is written - the cap no longer drops a day newer than one it '
+       'prints')
+
+    # arm 3: the straddle the PIN first got wrong - one row of the boundary day
+    # is cut while an older day is cut too, so the count is NOT the subtraction
+    r61c = world()
+    roots.append(r61c)
+    put_rows(hist37(r61c), [('2026-11-10', 1), ('2026-11-11', 2),
+                            ('2026-11-11', 3), ('2026-11-12', 4)])
+    rc61c, l61c, _ = sd57(r61c, ['--series-days', '7', '--days', '2'])
+    t61c = toks57(l61c[0]) if l61c else {}
+    _f61c, _k61c, s61c = shared_from_file(r61c, 2)
+    ok('AC-RUN61', rc61c == 0 and l61c
+       and t61c.get('series') == '2026-11-11:3,2026-11-12:4'
+       and t61c.get('series_dropped_shared') == '1' and s61c == 1
+       and int(t61c.get('window_rows') or 0)
+       - int(t61c.get('series_shown') or 0) == 2,
+       'a day that straddles the cap with an older day also dropped answers '
+       'series_dropped_shared=1 while window_rows - series_shown is 2 - the '
+       'count is not a restatement of the subtraction already on the row')
+
+    # arm 4: every dropped row on an older day - the coincidence that hid the
+    # difference above answers 0, not a count
+    r61d = world()
+    roots.append(r61d)
+    put_rows(hist37(r61d), [('2026-11-10', 1), ('2026-11-10', 2),
+                            ('2026-11-11', 3), ('2026-11-11', 4),
+                            ('2026-11-11', 5)])
+    rc61d, l61d, _ = sd57(r61d, ['--series-days', '7', '--days', '3'])
+    t61d = toks57(l61d[0]) if l61d else {}
+    _f61d, _k61d, s61d = shared_from_file(r61d, 3)
+    ok('AC-RUN61', rc61d == 0 and l61d
+       and t61d.get('series') == '2026-11-11:3,2026-11-11:4,2026-11-11:5'
+       and t61d.get('series_dropped_shared') == '0' and s61d == 0
+       and int(t61d.get('window_rows') or 0)
+       - int(t61d.get('series_shown') or 0) == 2,
+       'a window whose dropped rows all sit on an older day answers 0 even '
+       'though two rows were dropped - the subtraction answered 2, which is '
+       'exactly the coincidence the first PIN ruling rested on')
+
+    # arm 5: no cap - nothing was dropped, the count is 0, two runs agree
+    rc61e, l61e, _ = sd57(r61, ['--series-days', '7'])
+    rc61f, l61f, _ = sd57(r61, ['--series-days', '7'])
+    t61e = toks57(l61e[0]) if l61e else {}
+    ok('AC-RUN61', rc61e == 0 and rc61f == 0 and l61e and l61f
+       and t61e.get('window_rows') == t61e.get('series_shown')
+       and t61e.get('series_dropped_from') == 'none'
+       and t61e.get('series_dropped_shared') == '0'
+       and l61e[0] == l61f[0],
+       'without the cap window_rows equals series_shown, dropped_from answers '
+       'none, the count answers 0, and two runs print identical bytes')
+
+    # arm 6: an empty history answers zeros without raising
+    r61g = world()
+    roots.append(r61g)
+    os.makedirs(os.path.join(r61g, 'qa'), exist_ok=True)
+    rc61g, l61g, _ = sd57(r61g, ['--series-days', '7'])
+    t61g = toks57(l61g[0]) if l61g else {}
+    ok('AC-RUN61', rc61g == 0 and l61g
+       and t61g.get('series') == 'none'
+       and t61g.get('series_dropped_from') == 'none'
+       and t61g.get('series_dropped_shared') == '0',
+       'an empty history answers series=none, dropped_from=none and a zero '
+       'count, rc=0 and no exception')
+
+    # arm 7: with --series-absent the joint fixed point still holds and the new
+    # count appears exactly once
+    before61h = tree_bytes(r61c)
+    rc61h, l61h, _ = sd57(r61c, ['--series-days', '7', '--days', '2',
+                                 '--series-absent'])
+    after61h = tree_bytes(r61c)
+    t61h = toks57(l61h[0]) if l61h else {}
+    real61 = len(l61h[0].encode('utf-8')) if l61h else -1
+    ok('AC-RUN61', rc61h == 0 and before61h == after61h
+       and t61h.get('line_bytes') == str(real61)
+       and t61h.get('output_bytes') == str(real61 + 1)
+       and l61h[0].count('series_window=') == 1
+       and l61h[0].count('absent=') == 2
+       and l61h[0].count('absent_named=') == 1
+       and l61h[0].count('series_dropped_shared=') == 1,
+       'the silent-day face still prices its own line to the byte and the new '
+       'count appears exactly once on it')
+
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
 

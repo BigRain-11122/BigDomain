@@ -1466,10 +1466,12 @@ def series_days_window(rows, limit=7, window_days=7):
     window really applied.
 
     head is the file's OWN newest usable row (same law as series_window_counts),
-    so a 2001 history windows against itself and no clock is read. Rows keep
-    file order and duplicates. When the head day is unusable (empty or absent
-    history) nothing is measured: rows is empty and the three counts are 0
-    rather than an invented window.
+    so a 2001 history windows against itself and no clock is read. Duplicates
+    are kept, and since R3044 the selection is ordered by DAY (stable, so a
+    same-day duplicate keeps its file position) - the tail then means "the
+    newest days", which is what this face claims to answer. When the head day
+    is unusable (empty or absent history) nothing is measured: rows is empty
+    and the three counts are 0 rather than an invented window.
 
     DISPLAY ONLY: writes nothing, gates nothing.
     """
@@ -1482,6 +1484,14 @@ def series_days_window(rows, limit=7, window_days=7):
                 'window_rows': 0, 'window': width}
     inside = [r for r in rows
               if threshold <= str(r.get('day') or '')[:10] <= head_day]
+    # R3044: the cap cuts in DAY order, not file order. The face's own contract
+    # is "how bad was each of the last N days", but a history whose rows are not
+    # day-ordered (only a hand-edited file can be - the writer sorts, L1336)
+    # made the row tail drop a NEWER day while printing an older one, and made
+    # series_dropped_from name a day later than the oldest printed pair. Stable:
+    # a same-day duplicate keeps its file position. A writer-produced file is
+    # already sorted, so its bytes do not move (AC-RUN61 arm 1).
+    inside.sort(key=lambda r: str(r.get('day') or ''))
     tail = inside[-size:]
     return {'rows': [(r.get('day'), r.get('on_day')) for r in tail],
             'limit': size, 'shown': len(tail), 'outside': 0,
@@ -1680,8 +1690,13 @@ def series_full_pairs(rows, window_days=7):
         max(1, int(window_days)))
     if not usable:
         return []
-    return [(r.get('day'), r.get('on_day')) for r in rows
-            if threshold <= str(r.get('day') or '')[:10] <= head_day]
+    # R3044: same day order as series_days_window, so the prefix this function
+    # hands to series_dropped_from() is the OLD end and the two faces agree on
+    # which pairs the cap cut. Stable sort: same-day rows keep file order.
+    pairs = [(r.get('day'), r.get('on_day')) for r in rows
+             if threshold <= str(r.get('day') or '')[:10] <= head_day]
+    pairs.sort(key=lambda p: str(p[0] or ''))
+    return pairs
 
 
 def series_dropped_from(full_pairs, shown):
@@ -1711,6 +1726,31 @@ def series_dropped_from(full_pairs, shown):
         return 'none'
     day = str(dropped[0][0] or '')
     return day or 'none'
+
+
+def series_dropped_shared(full_pairs, kept_pairs):
+    """How many dropped pairs fall on a day the printed segment still shows (R3044).
+
+    WHY (measured before this existed - qa/probe-R3044.log plus the S1/S2
+    supplement): a day can straddle the cap, and then the row printed the same
+    day twice with no word for the rows of that day it cut. The first guess -
+    "it is window_rows - series_shown" - was measured FALSE on a day-ordered
+    history that also dropped an older day: rows 11-10,11-11,11-11,11-12 capped
+    at two drop 11-10 and one 11-11, so the subtraction answers 2 while the
+    true count is 1. On a world whose dropped rows all sit on the boundary day
+    the two agree, which is how the coincidence hid (S2). Hence one number, and
+    only one: the dropped COUNT and the lift cost stay derivable.
+
+    Pairs are cut in day order (series_full_pairs sorts), so the dropped set is
+    the older end and a shared day can only be the boundary day.
+
+    DISPLAY ONLY: counts, writes nothing, gates nothing.
+    """
+    pairs = list(full_pairs or [])
+    kept = list(kept_pairs or [])
+    kept_days = {str(d or '')[:10] for d, _n in kept}
+    dropped = pairs[:max(0, len(pairs) - len(kept))]
+    return sum(1 for d, _n in dropped if str(d or '')[:10] in kept_days)
 
 
 def absent_markers(gap_info, presence):
@@ -3194,6 +3234,14 @@ def main(argv=None):
                          'nothing), so which end the cap cut is printed rather '
                          'than known by heart - it is a day, not a claim that '
                          'every older row went; '
+                         'series_dropped_shared=N counts the dropped pairs '
+                         'that fall on a day the printed segment still shows, '
+                         'so a cap that cut INSIDE a day is visible (0 means '
+                         'a clean cut between days) - it is not the '
+                         'window_rows - series_shown subtraction, measured on '
+                         'a history that also dropped an older day; '
+                         'the cap cuts in day order, so a same-day duplicate '
+                         'never splits across the cut out of file order; '
                          'read-only display; gates nothing)')
     ap.add_argument('--series-absent', dest='series_absent',
                     action='store_true',
@@ -3291,11 +3339,14 @@ def main(argv=None):
             tail_markers = (' series_window=%d series_bytes=%d'
                             ' series_day_bytes=%d series_on_bytes=%d'
                             ' series_all_bytes=%d series_dropped_from=%s'
+                            ' series_dropped_shared=%d'
                             % (args.series_days, series_segment_bytes(pairs),
                                day_bytes, on_bytes,
                                series_segment_bytes(full_text),
                                series_dropped_from(full_pairs,
-                                                   counts['shown'])))
+                                                   counts['shown']),
+                               series_dropped_shared(full_pairs,
+                                                     series['series'])))
             if args.series_absent:
                 series_marker = tail_markers
                 gaps = series_absent_days(day_read[0], args.series_days,

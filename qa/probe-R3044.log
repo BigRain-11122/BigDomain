@@ -1,0 +1,37 @@
+== R3044 probe: same-day sibling under the --days cap ==
+WORLD W1_sorted_straddle rc=0
+  file_days=2026-11-10,2026-11-10,2026-11-11,2026-11-11 day_ordered=True
+  printed_series=2026-11-10:2,2026-11-11:3,2026-11-11:4
+  window_rows=4 series_shown=3 dropped_from=2026-11-10
+  kept_days=2026-11-10,2026-11-11,2026-11-11 kept_day_ordered=True
+  dropped_days=2026-11-10
+  first_kept=2026-11-10 n_actual=1 n_pred_from_row=1 derivable=True
+  dropped_newer_than_a_kept_day=False
+WORLD W2_sorted_clean_cut rc=0
+  file_days=2026-11-10,2026-11-11,2026-11-12,2026-11-13,2026-11-14 day_ordered=True
+  printed_series=2026-11-13:4,2026-11-14:5
+  window_rows=5 series_shown=2 dropped_from=2026-11-10
+  kept_days=2026-11-13,2026-11-14 kept_day_ordered=True
+  dropped_days=2026-11-10,2026-11-11,2026-11-12
+  first_kept=2026-11-13 n_actual=0 n_pred_from_row=0 derivable=True
+  dropped_newer_than_a_kept_day=False
+WORLD U1_handedited_cut_backwards rc=0
+  file_days=2026-11-11,2026-11-10,2026-11-12 day_ordered=False
+  printed_series=2026-11-10:2,2026-11-12:3
+  window_rows=3 series_shown=2 dropped_from=2026-11-11
+  kept_days=2026-11-10,2026-11-12 kept_day_ordered=True
+  dropped_days=2026-11-11
+  first_kept=2026-11-10 n_actual=0 n_pred_from_row=0 derivable=True
+  dropped_newer_than_a_kept_day=True
+WORLD U2_handedited_straddle rc=0
+  file_days=2026-11-10,2026-11-11,2026-11-13,2026-11-11,2026-11-12 day_ordered=False
+  printed_series=2026-11-11:4,2026-11-12:5
+  window_rows=4 series_shown=2 dropped_from=2026-11-10
+  kept_days=2026-11-11,2026-11-12 kept_day_ordered=True
+  dropped_days=2026-11-10,2026-11-11
+  first_kept=2026-11-11 n_actual=1 n_pred_from_row=0 derivable=False
+  dropped_newer_than_a_kept_day=False
+WORLD W5_empty rc=0
+  series=none dropped_from=none
+== candidate token census (tools + src) ==
+  series_dropped_shared=0 series_shared_day=0 series_cut_inside=0 series_boundary_rows=0 same_day_dropped=0

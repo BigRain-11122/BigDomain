@@ -1,0 +1,21 @@
+== R3044 demo: the --days cap, in day order, with the inside-day count ==
+WORLD clean cut between days (cap 2)
+  printed_series=2026-11-13:4,2026-11-14:5
+  dropped_from=2026-11-10 series_dropped_shared=0
+  window_rows=5 series_shown=2 subtraction=3 file_shared=0
+  marker_is_not_the_subtraction=True
+WORLD cap cut INSIDE a day (cap 2)
+  printed_series=2026-11-11:3,2026-11-12:4
+  dropped_from=2026-11-10 series_dropped_shared=1
+  window_rows=4 series_shown=2 subtraction=2 file_shared=1
+  marker_is_not_the_subtraction=True
+WORLD hand-edited days out of order (cap 2)
+  printed_series=2026-11-11:1,2026-11-12:3
+  dropped_from=2026-11-10 series_dropped_shared=0
+  window_rows=3 series_shown=2 subtraction=1 file_shared=0
+  marker_is_not_the_subtraction=True
+== suite-external negative control: three mutations ==
+NEGCTL honest agree=3/3 GREEN
+NEGCTL mutation_all_dropped agree=0/3 CAUGHT
+NEGCTL mutation_silent agree=2/3 CAUGHT
+NEGCTL mutation_kept_days agree=0/3 CAUGHT
