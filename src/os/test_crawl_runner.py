@@ -3272,11 +3272,11 @@ def main():
     ok('AC-RUN33', lC33['fcov'] == lD33['fcov'] == ('2026-08-20', '2026-11-19')
        and json.dumps(bareC, sort_keys=True) == json.dumps(bareD,
                                                            sort_keys=True)
-       and lC33['last_at'] == '2026-11-19T00:05'
-       and lD33['last_at'] == '2026-11-19T23:50'
+       and lC33['last_at'] == '2026-11-19T00:05:00+08:00'
+       and lD33['last_at'] == '2026-11-19T23:50:00+08:00'
        and rcC33 == rcD33 == 0 and linesC33[0] != linesD33[0]
-       and 'last_at=2026-11-19T23:50' in linesD33[0],
-       'two channels written 23h45m apart on the same day move last_at while every other key stays identical')
+       and 'last_at=2026-11-19T23:50:00+08:00' in linesD33[0],
+       'two channels written 23h45m apart on the same day move last_at while every other key stays identical (R3057: the echo is the writer\'s whole string, so the pin carries the offset too)')
 
     # arm 2: a DIFFERENT day was already separated by the span - the old
     # capability is measured, not claimed as this round's
@@ -3285,8 +3285,8 @@ def main():
     lA33, lB33 = listing33(rA33), listing33(rB33)
     ok('AC-RUN33', lA33['fcov'] != lB33['fcov']
        and head33(rA33)[1][0] != head33(rB33)[1][0]
-       and lA33['last_at'] == '2026-11-18T23:50'
-       and lB33['last_at'] == '2026-11-19T23:50',
+       and lA33['last_at'] == '2026-11-18T23:50:00+08:00'
+       and lB33['last_at'] == '2026-11-19T23:50:00+08:00',
        'the cross-day pair was ALREADY separated by fcov - this field does not take credit for it')
 
     # arm 3: no age was invented, and the refusal stays a measured fact
@@ -3349,7 +3349,7 @@ def main():
     late_on_disk33 = 'late33' in open(RUN.failure_path(rS33), 'r',
                                       encoding='utf-8').read()
     ok('AC-RUN33', kept33['n'] == 1 and late_on_disk33
-       and lS33['last_at'] == '2026-11-19T00:05',
+       and lS33['last_at'] == '2026-11-19T00:05:00+08:00',
        'the stamp comes from the rows this call loaded - a row appended on disk is never claimed')
 
     # arm 7: pure display, the row learns nothing, and a date-only stamp is
@@ -8234,7 +8234,7 @@ def main():
        and fm.get('bad') == '2'
        and fm.get('newest') == '2026-11-20T07:41:00+08:00'
        and pm.get('fcov') == '2026-11-20..2026-11-20'
-       and pm.get('last_at') == '2026-11-20T07:41'
+       and pm.get('last_at') == '2026-11-20T07:41:00+08:00'
        and not any('garbage' in n or 'T99' in n
                    for n in linesF71m + linesP71m),
        'the counts, the span and the last write come from the one real stamp, '
@@ -8540,7 +8540,7 @@ def main():
     # the day law.
     rcP73, linesP73 = face73(S73, '--pending-old-list', AT73)
     p73 = toks69(linesP73[0])
-    ok('AC-RUN73', rcP73 == 0 and p73.get('last_at') == '2026-11-19T20:00'
+    ok('AC-RUN73', rcP73 == 0 and p73.get('last_at') == '2026-11-19T20:00:00+00:00'
        and p73.get('fcov') == '2026-11-20..2026-11-20',
        'the last-write word echoes the later row as its author wrote it, and '
        'the day span stays the pair of local days it already printed')
@@ -8626,6 +8626,118 @@ def main():
        and 'newest <= stamp' not in body72('_since_ok'),
        'the ordering law is one function used by all seven faces while the '
        'echo and the day words stay where they were')
+
+    # AC-RUN74 (R3057): one fact, one string. The failures face and the pending
+    # list named the same "newest write" at two precisions - newest= echoed the
+    # whole stamp while last_at= cut it to the minute, so two rows 40 seconds
+    # apart in one minute read identically (qa/probe-R3057.log P3) and the
+    # offset vanished on one face. The echo is now the writer's whole string.
+    AT74 = '2026-11-20T12:00:00+08:00'
+
+    def face74(root, flag):
+        return face73(root, flag, AT74)
+
+    # Arm 1: the echo is literal and complete - it parses nothing and invents
+    # nothing, which is what keeps R3016's "no fabricated T00:00" law.
+    ok('AC-RUN74',
+       RUN._stamp_echo('2026-11-19T20:00:00+00:00')
+       == '2026-11-19T20:00:00+00:00'
+       and RUN._stamp_echo('2026-11-15') == '2026-11-15'
+       and 'T' not in RUN._stamp_echo('2026-11-15')
+       and RUN._stamp_echo('') == '' and RUN._stamp_echo(None) == ''
+       and RUN._stamp_echo('2026-13-40') == '2026-13-40',
+       'the echo returns the writer\'s own characters in full, gives a date-only '
+       'stamp no invented hour, and never raises on nothing')
+
+    # Arm 2: the two faces print the SAME string for the same row, offset and
+    # seconds included.
+    E74 = world(); roots.append(E74)
+    side73(E74, [('https://s74.example/a', '2026-11-19T20:00:00+00:00', 'boom-A'),
+                 ('https://s74.example/b', '2026-11-20T04:00:00+08:00', 'boom-B'),
+                 ('https://s74.example/c', '2026-11-20T07:41:50+08:00', 'boom-C')])
+    rcF74, linesF74 = face74(E74, '--failures')
+    rcP74, linesP74 = face74(E74, '--pending-old-list')
+    f74 = toks69(linesF74[0])
+    p74 = toks69(linesP74[0])
+    ok('AC-RUN74', rcF74 == 0 and rcP74 == 0
+       and f74.get('newest') == p74.get('last_at')
+       and p74.get('last_at') == '2026-11-20T07:41:50+08:00'
+       and len(p74.get('last_at')) == 25,
+       'newest= and last_at= print one string for one fact, so a reader can '
+       'compare the two faces without converting anything')
+
+    # Arm 3: two failures inside one minute are now distinguishable - the
+    # exact case the minute cut could not tell apart.
+    M74 = world(); roots.append(M74)
+    side73(M74, [('https://s74.example/m', '2026-11-20T07:41:10+08:00', 'boom')])
+    _, linesM1 = face74(M74, '--pending-old-list')
+    side73(M74, [('https://s74.example/m', '2026-11-20T07:41:10+08:00', 'boom'),
+                 ('https://s74.example/n', '2026-11-20T07:41:50+08:00', 'boom')])
+    _, linesM2 = face74(M74, '--pending-old-list')
+    m1 = toks69(linesM1[0])
+    m2 = toks69(linesM2[0])
+    ok('AC-RUN74', m1.get('last_at') == '2026-11-20T07:41:10+08:00'
+       and m2.get('last_at') == '2026-11-20T07:41:50+08:00'
+       and m1.get('last_at') != m2.get('last_at'),
+       'a second failure forty seconds later moves last_at, which a '
+       'minute-truncated echo could not show')
+
+    # Arm 4: two frames keep their own offsets, so the string can be traced
+    # back to the row that wrote it (R3055/R3056 established frames are real).
+    Z74 = world(); roots.append(Z74)
+    side73(Z74, [('https://s74.example/z', '2026-11-19T20:00:00+00:00', 'boom')])
+    _, linesZ74 = face74(Z74, '--pending-old-list')
+    z74 = toks69(linesZ74[0])
+    ok('AC-RUN74', z74.get('last_at') == '2026-11-19T20:00:00+00:00'
+       and z74.get('last_at') != '2026-11-20T04:00:00+08:00',
+       'each row\'s own offset survives the echo, so one instant written two '
+       'ways stays two distinguishable writings')
+
+    # Arm 5: no usable row still means none on both faces, and the count of
+    # broken lines is not restated by this round.
+    N74 = world(); roots.append(N74)
+    side73(N74, [('https://s74.example/n', '2026-11-20garbage', 'boom')])
+    _, linesFN = face74(N74, '--failures')
+    _, linesPN = face74(N74, '--pending-old-list')
+    fn74 = toks69(linesFN[0])
+    pn74 = toks69(linesPN[0])
+    ok('AC-RUN74', fn74.get('newest') == 'none'
+       and pn74.get('last_at') == 'none'
+       and fn74.get('bad') == '1' and pn74.get('bad') == '1',
+       'a channel holding only an unusable stamp names no write on either face '
+       'while the broken line is still counted')
+
+    # Arm 6: the ordering law it sits on is untouched - the later instant wins,
+    # and both faces name that same row.
+    O74 = world(); roots.append(O74)
+    side73(O74, [('https://s74.example/o1', '2026-11-20T03:00:00+08:00', 'boom'),
+                 ('https://s74.example/o2', '2026-11-19T20:00:00+00:00', 'boom')])
+    _, linesFO = face74(O74, '--failures')
+    _, linesPO = face74(O74, '--pending-old-list')
+    fo74 = toks69(linesFO[0])
+    po74 = toks69(linesPO[0])
+    ok('AC-RUN74', fo74.get('newest') == '2026-11-19T20:00:00+00:00'
+       and po74.get('last_at') == fo74.get('newest'),
+       'the row named is still the latest instant (R3056), and the pending '
+       'header now names that same row rather than a truncated version of it')
+
+    # Arm 7: display only - the face writes nothing and is stable across runs.
+    before74 = snap69(E74)
+    rcF74b, linesF74b = face74(E74, '--failures')
+    ok('AC-RUN74', rcF74b == 0 and linesF74b == linesF74
+       and snap69(E74) == before74,
+       'the string is display only: two runs are byte-identical and the world '
+       'on disk does not move')
+
+    # Arm 8: the slicing is gone from the echo body, the call site and the raw
+    # `newest=` writer are kept, and no new display word was added.
+    echo74 = body72('_stamp_echo')
+    ok('AC-RUN74', '[:16]' not in echo74 and '[:10]' not in echo74
+       and "return str(stamp or '')" in echo74
+       and '_stamp_echo(newest)' in body72('list_pending_old')
+       and "summary['newest_at']" in body72('main'),
+       'the echo body no longer slices while both faces keep their own '
+       'existing words and no new display word was introduced')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

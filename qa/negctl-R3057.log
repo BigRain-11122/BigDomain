@@ -1,0 +1,6 @@
+R3057 negative control: the honest reader must read GREEN, every mutation RED
+honest _stamp_echo -> GREEN  {'echo_full': True, 'faces_agree': True, 'minute_distinct': True}
+M1 minute truncation restored -> RED  {'echo_full': False, 'faces_agree': False, 'minute_distinct': False}
+M2 always cut to ten characters -> RED  {'echo_full': False, 'faces_agree': False, 'minute_distinct': False}
+M3 raises on an empty stamp -> RED  {'echo_full': False, 'faces_agree': True, 'minute_distinct': True}
+restored honest reader -> GREEN  {'echo_full': True, 'faces_agree': True, 'minute_distinct': True}

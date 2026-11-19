@@ -4764,9 +4764,10 @@ SUITES = [
     # R3054 makes the day law a whole-value test (a stamp that only starts with
     # a day is no day), 70 -> 71. R3055 makes every count and span take the day
     # of the INSTANT (the window head's own law), 71 -> 72; R3056 makes every
-    # ORDERING site compare the instant rather than the text, 72 -> 73.
+    # ORDERING site compare the instant rather than the text, 72 -> 73; R3057
+    # echoes one fact at one precision on every face, 73 -> 74.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 73),
+     os.path.join("..", "os", "test_crawl_runner.py"), 74),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

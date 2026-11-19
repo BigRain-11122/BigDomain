@@ -473,6 +473,26 @@ boundary: `header_bytes` is on the LF law like its siblings, so it is the
 header's slice of that total rather than the width of the visible glyph row;
 Windows text-mode stdout adds one more byte on top.
 
+WHEN THE CHANNEL WAS LAST WRITTEN, IN ONE STRING (R3057, measured first -
+qa/probe-R3057.log): R3056 unified which row is NEWEST but left the two faces
+echoing it at two lengths - `--failures newest=` printed the whole stamp
+(`2026-11-19T20:00:00+00:00`, 25 chars, offset included) while
+`--pending-old-list last_at=` cut it to the minute
+(`2026-11-19T20:00`), so the field that answers "when was this channel last
+written" could not distinguish two failures 40 seconds apart in one minute
+(measured P3: newest= moved, last_at= read identical both times) and the
+offset vanished on that one face. One law now: `_stamp_echo` echoes the
+writer's own characters IN FULL, so all three stamp sites (newest=, last_at=,
+the PENDING-OLD rows' failed_at=) print the same string for the same row. The
+R3016 law is untouched in substance - an echo cannot invent a `T00:00`, and a
+date-only stamp still prints as the date. Refused: cutting `newest=` down to
+the minute (that hides a frame R3055/R3056 just proved real, and moves
+AC-RUN66), any new display word, and answering "who wins a tie" on the line
+(R3056 disclosed file order; this round does not pretend it is answered).
+Honest boundary: no other code parses this string (11 non-test sites, all
+producers or printers, P5), and this machine's live channel holds no failure
+rows today (P1), so this closes a door rather than repairing a disk.
+
 WHICH ROW CAME FIRST (R3056, measured first - qa/probe-R3056.log): R3055
 unified the DAY a row belongs to, but every face that asks which row came
 FIRST still compared the stamp as TEXT. On private mixed-frame worlds this
@@ -1030,7 +1050,8 @@ failure landed 00:05 and one whose last failure landed 23:50 the SAME day read
 the same dictionary and the same header, because fcov= is a pair of days. The
 board's own pair - stopped yesterday versus written this minute - had ALREADY
 been separated by that span, so the measurement is kept beside the gain instead
-of being sold as one. The header now carries last_at=<YYYY-MM-DDTHH:MM>, the
+of being sold as one. The header now carries last_at=<the writer's own
+stamp, in full>, the
 newest usable stamp echoed from the rows this call already loaded, and
 last_at=none when there is no usable row. It is not an age: measured, a day age
 over that stamp equals the age of fcov's last day in every probed world (a
@@ -2914,23 +2935,29 @@ def _last_stamp_rows(rows):
 
 
 def _stamp_echo(stamp):
-    """The writer's own characters, to the minute when the stamp carries one.
+    """The writer's own characters, in full - one fact, one string (R3057).
 
-    R3016: a literal echo, not a parsed value - the writer stamps
-    isoformat(timespec='seconds'), so the first sixteen characters are
-    YYYY-MM-DDTHH:MM. A stamp that stops at the date is printed as the date: an
-    invented 'T00:00' would claim an hour nobody recorded, which is the same
-    family of lie as an invented span.
+    R3016: a literal echo, not a parsed value. A stamp that stops at the date
+    is printed as the date: an invented 'T00:00' would claim an hour nobody
+    recorded, which is the same family of lie as an invented span - and an echo
+    of the writer's own characters cannot invent one, which is why R3057 drops
+    the old 16- and 10-character slicing without reopening that law.
+
+    R3057 WHY THE SLICING IS GONE (measured, qa/probe-R3057.log): the same fact
+    printed at two precisions - `--failures newest=` echoed the whole stamp
+    (25 chars, offset included) while `last_at=` on the pending list cut it to
+    the minute (16 chars). Two failures 40 seconds apart in one minute therefore
+    read IDENTICAL last_at= ('2026-11-20T07:41' both times) while newest= moved,
+    so the field that answers "when was the channel last written" could not say
+    that it had changed; and the offset - which R3055/R3056 just established is
+    a real property of these rows - vanished on that one face. No other
+    consumer parses this string (11 non-test sites, all producers or printers).
 
     No clock is read and no age is subtracted: measured, a day age over this
     stamp is exactly the age of fcov.last day in every probed world, so printing
     it would restate a field already on the same line.
     """
-    text = str(stamp or '')
-    if (len(text) >= 16 and text[10] == 'T' and text[11:13].isdigit()
-            and text[14:16].isdigit()):
-        return text[:16]
-    return text[:10]
+    return str(stamp or '')
 
 
 def _side_coverage(failures_path):
@@ -3260,7 +3287,8 @@ def list_pending_old(record_path, failures_path, day, window_days=7):
     is a pair of days; the board's own "stopped yesterday versus written this
     minute" pair had already been separated by that span, which is recorded here
     rather than sold as a gain. `last_at` is the newest usable stamp among the
-    rows already loaded, echoed to the minute (never a second read), and None
+    rows already loaded, echoed in full (R3057: the same string `--failures
+    newest=` prints, so one fact has one precision), and None
     when there is no usable row. It is NOT an age: a day age over this stamp was
     measured to equal the age of `fcov`'s last day in every probed world, so it
     would restate a digit on the same line, and an hour age would need a clock

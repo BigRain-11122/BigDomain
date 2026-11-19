@@ -1,0 +1,39 @@
+P1 LIVE DISK - the newest failure on this machine, as each face prints it
+  failures rc=0 newest=none
+  pending  rc=0 last_at=none
+  same fact, same string? True
+P2 THE ECHO SITES - how many characters each face echoes of one stamp
+  --failures newest=newest=%s   <- summary["newest_at"]  (raw row value)
+  --pending-old-list last_at=%s <- _stamp_echo(newest)
+  PENDING-OLD row failed_at=%s <- raw row value
+  stamp=2026-11-19T20:00:00+00:00 len=25 | _stamp_echo=2026-11-19T20:00 len=16
+  date-only=2026-11-15 | _stamp_echo=2026-11-15 (no invented T00:00)
+P3 SAME MINUTE - can last_at= tell "the newest changed"?
+  one row   last_at=2026-11-20T07:41
+  two rows  last_at=2026-11-20T07:41  newest=2026-11-20T07:41:50+08:00
+  newest moved on the failures face, last_at= stayed identical? True
+P4 WHOLE ECHO - the strings the same rows would print
+  2026-11-19T20:00:00+00:00 -> now 2026-11-19T20:00 | whole 2026-11-19T20:00:00+00:00
+  2026-11-20T04:00:00+08:00 -> now 2026-11-20T04:00 | whole 2026-11-20T04:00:00+08:00
+  2026-11-20T07:41:50+08:00 -> now 2026-11-20T07:41 | whole 2026-11-20T07:41:50+08:00
+  2026-11-15 -> now 2026-11-15 | whole 2026-11-15
+P5 CONSUMERS - who else reads these strings (grep tools/ src/)
+  tools\crawl_runner.py:482 success that WAS later; _flips counted 0 for a real flip; last_at= named the
+  tools\crawl_runner.py:1033 of being sold as one. The header now carries last_at=<YYYY-MM-DDTHH:MM>, the
+  tools\crawl_runner.py:1035 last_at=none when there is no usable row. It is not an age: measured, a day age
+  tools\crawl_runner.py:1044 0 -> 2 while fcov, last_at and pending_old stayed byte-identical, and the two
+  tools\crawl_runner.py:1479 success that WAS later, _flips counted 0 for a real flip, last_at= and the
+  tools\crawl_runner.py:3257 R3016 ADDS `last_at` - WHEN the channel was last written. Measured before
+  tools\crawl_runner.py:3262 rather than sold as a gain. `last_at` is the newest usable stamp among the
+  tools\crawl_runner.py:3272 fcov, last_at and pending_old stayed identical and the two headers were
+  tools\crawl_runner.py:3317 'last_at': None if newest is None else _stamp_echo(newest),
+  tools\crawl_runner.py:4096 'bad_days=%s fcov=%s last_at=%s'
+  tools\crawl_runner.py:4100 'none' if lst['last_at'] is None else lst['last_at']))
+  total non-test last_at consumers=11
+P6 PINNED VALUES - what the existing arms assert vs what whole echo prints
+  AC-RUN33 asserts last_at == 2026-11-19T00:05 -> whole would read 2026-11-19T00:05:00+08:00
+  AC-RUN71 asserts last_at == 2026-11-20T07:41 -> whole would read 2026-11-20T07:41:00+08:00
+  AC-RUN73 arm5 asserts last_at == 2026-11-19T20:00 -> whole would read 2026-11-19T20:00:00+00:00
+  AC-RUN33 date-only arm asserts last_at == 2026-11-15 -> whole unchanged (echo of a 10-char stamp)
+  AC-RUN66 asserts newest=2026-11-17T09:00:00+08:00 -> unchanged (already raw)
+  AC-RUN72 arm8 asserts source contains _stamp_echo(newest) -> unchanged (the call site is kept, only the body changes)
