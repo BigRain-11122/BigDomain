@@ -36,6 +36,11 @@ half of the retention exemption the header argued for it. bytes only - `lines`
 was measured to equal days after any beat rewrite, so it would restate the row -
 and the above-reference print path is pinned as a pure function rather than by
 constructing a 100MB file, which this suite therefore never does.
+AC-RUN18 (R3001) grades the trend's FAILURE IDENTITY: newest_src names the last
+source by largest failed_at (not by file order) and since_ok answers
+yes/no/unmeasured by reading the crawl record for a LATER row of that source -
+UNMEASURED, not "no", once the side channel or the record face is gone. Every
+arm writes only inside a per-run temp directory; no socket and no clock.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -977,6 +982,101 @@ def main():
     ok('AC-RUN17', (RUN.failure_file_stats(h44)['lines']
                     == RUN.summarize_failure_days(h44)['days']),
        'after one beat rewrite the physical line count equals days - the measured reason lines= is not printed')
+
+    # AC-RUN18 (R3001): the trend could count failures and repeat them, but it
+    # could not NAME the last source nor say whether that source was seen
+    # succeeding since. Identity lives only in the side channel (the history row
+    # stores urls=<count> on purpose), so a pruned side channel answers
+    # UNMEASURED rather than "no page failed".
+    def two_failures(root, first_url, first_at, second_url, second_at):
+        fp = RUN.failure_path(root)
+        RUN.append_failure(fp, first_url, first_at, 'E_FETCH TimeoutError: a')
+        RUN.append_failure(fp, second_url, second_at, 'E_FETCH HTTPError: b')
+        return fp
+
+    rootA1 = world(); roots.append(rootA1)
+    two_failures(rootA1, 'https://a.example/1', TODAY + 'T08:00:00+08:00',
+                 'https://b.example/2', TODAY + 'T10:00:00+08:00')
+    tA1 = RUN.summarize_failure_trend(RUN.failure_day_path(rootA1),
+                                      RUN.failure_path(rootA1), TODAY,
+                                      record_path=CR.record_path(rootA1))
+    ok('AC-RUN18', tA1['newest_src'] == 'https://b.example/2'
+       and tA1['since_ok'] == 'unmeasured',
+       'the latest failure by time names its source; no record face means the repair question is UNMEASURED')
+
+    rootA2 = world(); roots.append(rootA2)
+    two_failures(rootA2, 'https://a.example/1', TODAY + 'T08:00:00+08:00',
+                 'https://b.example/2', TODAY + 'T10:00:00+08:00')
+    CR.append_record(CR.record_path(rootA2), 'https://b.example/2',
+                     TODAY + 'T11:00:00+08:00', 'no-drift')
+    tA2 = RUN.summarize_failure_trend(RUN.failure_day_path(rootA2),
+                                      RUN.failure_path(rootA2), TODAY,
+                                      record_path=CR.record_path(rootA2))
+    ok('AC-RUN18', tA2['newest_src'] == 'https://b.example/2'
+       and tA2['since_ok'] == 'yes',
+       'a later successful row for that source reads since_ok=yes')
+
+    rootA3 = world(); roots.append(rootA3)
+    two_failures(rootA3, 'https://a.example/1', TODAY + 'T08:00:00+08:00',
+                 'https://b.example/2', TODAY + 'T10:00:00+08:00')
+    CR.append_record(CR.record_path(rootA3), 'https://b.example/2',
+                     TODAY + 'T09:00:00+08:00', 'no-drift')
+    tA3 = RUN.summarize_failure_trend(RUN.failure_day_path(rootA3),
+                                      RUN.failure_path(rootA3), TODAY,
+                                      record_path=CR.record_path(rootA3))
+    ok('AC-RUN18', tA3['since_ok'] == 'no',
+       'a success only BEFORE the last failure does not count as a repair')
+
+    rootA4 = world(); roots.append(rootA4)
+    two_failures(rootA4, 'https://a.example/1', TODAY + 'T08:00:00+08:00',
+                 'https://b.example/2', TODAY + 'T10:00:00+08:00')
+    tA4 = RUN.summarize_failure_trend(
+        RUN.failure_day_path(rootA4), RUN.failure_path(rootA4), TODAY,
+        record_path=os.path.join(rootA4, 'nope.jsonl'))
+    ok('AC-RUN18', tA4['newest_src'] == 'https://b.example/2'
+       and tA4['since_ok'] == 'unmeasured',
+       'a missing record file answers UNMEASURED while identity still comes from the side channel')
+
+    rootA5 = world(); roots.append(rootA5)
+    write_days(RUN.failure_day_path(rootA5), [day_row('2026-11-19', 0)])
+    tA5 = RUN.summarize_failure_trend(RUN.failure_day_path(rootA5),
+                                      RUN.failure_path(rootA5), TODAY,
+                                      record_path=CR.record_path(rootA5))
+    base_keys = set(['days', 'in_window', 'bad', 'today', 'prev', 'mean',
+                     'delta', 'worst', 'recurring', 'sources', 'recur', 'cov',
+                     'wcov', 'evidence', 'kind', 'kind_count', 'window_days'])
+    ok('AC-RUN18', tA5['newest_src'] is None and tA5['since_ok'] == 'unmeasured'
+       and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok'])
+       and tA5['evidence'] == 'history' and tA5['today'] == 0,
+       'a pruned side channel answers none/unmeasured and leaves every existing field where it was')
+
+    rootA6 = world(); roots.append(rootA6)
+    fpA6 = RUN.failure_path(rootA6)
+    RUN.append_failure(fpA6, 'https://b.example/2', TODAY + 'T10:00:00+08:00',
+                       'E_FETCH HTTPError: new first in file')
+    RUN.append_failure(fpA6, 'https://a.example/1', TODAY + 'T08:00:00+08:00',
+                       'E_FETCH TimeoutError: old second in file')
+    tA6 = RUN.summarize_failure_trend(RUN.failure_day_path(rootA6), fpA6, TODAY,
+                                      record_path=CR.record_path(rootA6))
+    ok('AC-RUN18', tA6['newest_src'] == 'https://b.example/2',
+       'the latest failure is chosen by time, not by the order rows sit in the file')
+
+    bufA7 = io.StringIO()
+    with contextlib.redirect_stdout(bufA7):
+        rcA7 = RUN.main(['--failure-trend', '--root', rootA2])
+    lineA7 = bufA7.getvalue().strip()
+    scan_src18 = ''
+    scan_path18 = os.path.join(ROOT, 'tools', 'skills', 'bigdomain-loop-scan',
+                               'scripts', 'scan_five_still.ps1')
+    if os.path.isfile(scan_path18):
+        with open(scan_path18, 'r', encoding='utf-8', errors='replace') as fh:
+            scan_src18 = fh.read()
+    ok('AC-RUN18', rcA7 == 0 and 'newest_src=https://b.example/2' in lineA7
+       and 'since_ok=yes' in lineA7
+       and 'PASS' not in lineA7 and 'FLAG' not in lineA7
+       and 'verdict' not in lineA7
+       and 'crawl-failure' not in scan_src18,
+       'one display row carries identity and the repair reading, carries no verdict, and stays outside the scanner')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

@@ -1,0 +1,8 @@
+GREEN HONEST-order newest_src=https://b.example/2
+GREEN HONEST-repair since_ok=yes
+GREEN HONEST-unmeasured since_ok=unmeasured
+GREEN HONEST-before since_ok=no
+EXPECTED-RED MUT-order mutant names the older source https://a.example/1 (target arm expects https://b.example/2)
+EXPECTED-RED MUT-missing-no mutant claims since_ok=no where the honest answer is unmeasured
+EXPECTED-RED MUT-before-yes mutant calls an earlier success a repair (honest answer is no)
+NEGCTL PASS 6/6 (3 honest GREEN, 3 mutants RED on target arms)

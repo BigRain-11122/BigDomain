@@ -149,6 +149,28 @@ size_gate is rounded to four decimals, and 0.0001% of a 100MB reference is
 100.0000% - the number is a display, and 100.0000 does not mean "at the line".
 Nothing here gates, retries or pages.
 
+FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
+sources failed and how often, but never WHICH source failed last, nor whether
+that source had been seen succeeding since - so "same page again, and is it
+fixed?" still needed a person watching a terminal. The line now carries
+newest_src= (the source of the latest failure in the window, taken by largest
+failed_at rather than by file order) and since_ok= (yes when the crawl record
+holds a LATER row for that same source - a failed retrieval never reaches the
+record, so a later row is honest evidence that a retrieval succeeded; no when
+the record exists but holds no such row; unmeasured when there is no record
+file, no source identity, or no timestamp). Identity lives ONLY in the side
+channel because the history row stores urls=<count> on purpose - one fact in
+one place - which is also why a pruned side channel answers newest_src=none and
+since_ok=unmeasured rather than "no page failed". Both fields compare literal
+ISO text on both sides (every writer stamps astimezone().isoformat()), stated
+rather than parsed. NOT built, and named here so the answer is not implied: the
+sandbox failure slot stays a SINGLE slot (tmp/live-sandbox-failed.json, 1287B
+measured, gitignored, no reader outside its writer and its suite); keeping the
+last N failures would create a new append-only face, and group canon
+cph4/resource-chain.md section 4.1 requires a rotation design for every such
+face - machinery for a problem that has not occurred. Neither field gates: no
+PASS/FLAG token is emitted and the scanner still never reads these files.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -490,7 +512,38 @@ def failure_kind(error):
     return 'other'
 
 
-def summarize_failure_trend(history_path, failures_path, day, window_days=7):
+def _since_ok(record_path, source_url, failed_at):
+    """yes / no / unmeasured for "was this source seen succeeding afterwards?"
+
+    WHY (R3001): "did it ever come back" had no face. The crawl record is the
+    only file that stores a SUCCESS (a failed retrieval never reaches it), so a
+    row for the same source with a LATER stamp is the honest evidence that a
+    retrieval succeeded after the failure. UNMEASURED, not 'no': no record file,
+    no source identity, or no timestamp means the question was not answered -
+    answering 'no' there would claim the source is still broken from evidence
+    that never arrived.
+
+    The comparison is LITERAL ISO text on both sides, because every writer on
+    this machine stamps astimezone().isoformat() (same clock, same zone). This
+    is stated rather than parsed: a corpus written in a different zone is
+    outside what this arm promises.
+    """
+    if not source_url or not record_path or not os.path.isfile(record_path):
+        return 'unmeasured'
+    stamp = str(failed_at or '')
+    if not stamp:
+        return 'unmeasured'
+    rows, _bad = CR.read_records(record_path)
+    for row in rows:
+        if row.get('source_url') != source_url:
+            continue
+        if str(row.get('fetched_at') or '') > stamp:
+            return 'yes'
+    return 'no'
+
+
+def summarize_failure_trend(history_path, failures_path, day, window_days=7,
+                            record_path=None):
     """One line for "is today worse than the days before, and is it the same
     page each time?" (R2995).
 
@@ -628,12 +681,31 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7):
     if worst_row is not None:
         wday = str(worst_row.get('day') or '')[:10]
         wcount = int(worst_row.get('on_day') or 0)
+    # R3001 IDENTITY: the line could say HOW MANY sources failed and how often,
+    # never WHICH source failed last, nor whether that source was seen
+    # succeeding since - so "same page again, and is it fixed?" still needed a
+    # person at a terminal. Identity lives ONLY in the side channel (the history
+    # row stores urls=<count> on purpose: one fact in one place), so a missing
+    # side channel answers UNMEASURED rather than "no page failed".
+    newest_src = None
+    since_ok = 'unmeasured'
+    if evidence == 'side' and in_window:
+        newest = None
+        for row in in_window:
+            stamp = str(row.get('failed_at') or '')
+            if newest is None or stamp > str(newest.get('failed_at') or ''):
+                newest = row
+        if newest is not None:
+            newest_src = newest.get('source_url')
+            since_ok = _since_ok(record_path, newest_src,
+                                 newest.get('failed_at'))
     return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
             'worst': (None, None) if worst_row is None else (wday, wcount),
             'recurring': recurring, 'sources': len(days_by_source),
             'recur': recur, 'cov': cov, 'wcov': wcov,
             'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
+            'newest_src': newest_src, 'since_ok': since_ok,
             'window_days': window_days}
 
 
@@ -839,7 +911,8 @@ def main(argv=None):
             timespec='seconds')
         trend = summarize_failure_trend(failure_day_path(args.root),
                                         failure_path(args.root), stamp,
-                                        args.days)
+                                        args.days,
+                                        record_path=CR.record_path(args.root))
         wday, wcount = trend['worst']
         worst_txt = 'none' if wday is None else '%s:%d' % (wday, wcount)
         mean_txt = 'none' if trend['mean'] is None else ('%g' % trend['mean'])
@@ -853,11 +926,12 @@ def main(argv=None):
                     else '%d/%d' % trend['wcov'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
               'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
-              'recur=%s cov=%s wcov=%s'
+              'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
-                 recur_txt, cov_txt, wcov_txt))
+                 recur_txt, cov_txt, wcov_txt,
+                 trend['newest_src'] or 'none', trend['since_ok']))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)
