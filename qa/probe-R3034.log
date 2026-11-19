@@ -1,0 +1,27 @@
+P1  name cost law
+   cap default rc=0 line_bytes=769 named=31 total=50
+   list bytes=340 names=31 per_name=10.9677
+   cap all     rc=0 line_bytes=978 named=50 total=50 list=549 per_name=10.9800
+   name_len set=[10] all_10_chars=True
+   predicted delta=209 measured delta=209 agree=True
+   base without absent token: capped=422 all=422 (equal=True)
+   cap 5       rc=0 line_bytes=482 named=5 total stays=50
+   price token: capped=978 all=978 actual all line=978 predicted_ok=True
+   cap 5 price=978 (same price, the ask did not change the target)
+P2  is there a shipped face that estimates the OUTPUT line?
+   line_bytes     hits=2
+   expected_bytes hits=0
+   estimate       hits=5
+   projected      hits=0
+   absent_all     hits=8
+   output_len     hits=0
+   size_gate_pct doc says input-file percent: True
+P3  collision with the pinned arms
+   absent= counted twice: 9 arms at [4690, 4814, 4920, 5040, 5167, 5291, 5336, 5351, 5522]
+   absent_named= counted once: 3 arms at [5290, 5337, 5523]
+   endswith tails: 10 at [317, 403, 1253, 4592, 4755, 4905, 5024, 5150, 5275, 5458]
+   new token contains absent= : False
+   new token contains absent_named= : False
+P4  shapes an empty and a full window answer
+   complete window: cap=424 all=424 named 4/4 total=4
+   empty history: rc=0 named=none total=none absent=none

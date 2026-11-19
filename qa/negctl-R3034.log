@@ -1,0 +1,5 @@
+world: 60-day window, 59 silent days, 31 named
+honest  price=998 actual_all_line=998  VERDICT GREEN
+M1 ignores its own width         -> 996 (actual 998)  VERDICT CAUGHT
+M2 projects from the capped list -> 712 (actual 998)  VERDICT CAUGHT
+M3 forgets the separating space  -> 997 (actual 998)  VERDICT CAUGHT

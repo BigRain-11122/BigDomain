@@ -359,6 +359,29 @@ still 31, so no default line grows; `all` restores the full list (and the full
 365-day line, which is the price of asking). `series_absent=` keeps the FULL
 total under every setting.
 
+THE PRICE OF `all` IS READABLE BEFORE ASKING FOR IT (R3034, measured first -
+qa/probe-R3034.log): the opt-in flag from R3033 has no price tag - a reader who
+types `--series-absent-limit all` on a 365-day window gets a 4327-byte line and
+nothing on the face they were already reading says so. Measured: a silent-day
+name is exactly 10 characters, so the list costs 11n-1 bytes (31 names = 340B,
+50 = 549B), and everything else on the line is BYTE-IDENTICAL at every cap
+(base without the `absent=` token reads 401B under both 31 and all), so the
+whole line length is arithmetically exact in advance; no shipped face estimated
+an OUTPUT length (`size_gate_pct` measures the INPUT file against a 100MB
+water line), and a new token collides with nothing (8 arms count `absent=`
+twice and 2 count `absent_named=` once, all satisfied because
+`absent_all_bytes=` contains neither substring; the eight endswith() tails are
+all on the no-flag default face). The opt-in tail therefore also carries
+`absent_all_bytes=<n|none>`: the byte length of THIS line if every silent day
+were named, including the digits of this token itself, so it is a fixed point
+solved by iterating to a stable width rather than a hand-picked estimate. It is
+a fact about a line, not about readability: a wide window is still one long
+line, and the number only helps the reader who is about to ask for `all`.
+Refused: printing only the list bytes (the reader would still need the 11B law),
+a separate preview subcommand (another command to remember), writing the
+estimate to stderr, and any token on the default face (the eight byte-pinned
+tails would go red). An unusable head day answers none, never an invented zero.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1363,6 +1386,39 @@ def series_absent_days(rows, window_days=7, limit=ABSENT_LIST_LIMIT):
     return {'days': named, 'count': len(days), 'head': head_day,
             'window': width, 'named': len(named),
             'truncated': len(named) < len(days)}
+
+
+def absent_all_line_bytes(prefix):
+    """Bytes of the whole line if every silent day were named (R3034).
+
+    WHY (measured before this existed - qa/probe-R3034.log): `--series-absent`
+    names at most one month of silent days and `--series-absent-limit all`
+    removes the cap, but nothing on the face a reader already has says what
+    asking for `all` will cost - a 365-day window prints a 4327-byte line with
+    no warning. Measured: a name is exactly 10 characters so the list costs
+    11n-1 bytes, and every OTHER token on the line is byte-identical at any cap
+    (the base without the `absent=` token reads 401B under both 31 and all), so
+    the price is arithmetically exact in advance rather than estimated.
+
+    `prefix` is the line body plus the markers the full list would print,
+    WITHOUT this token. The answer counts the digits of the token that carries
+    it, so it is a fixed point: grow the token until its own width stops moving
+    the total. The loop is bounded by the digit count of the answer (three or
+    four passes on real windows) and cannot oscillate, because a longer value
+    never needs fewer digits.
+
+    It is a fact about ONE line under ONE command, not a readability verdict and
+    not a gate: nothing here refuses a long line, and a person who never asks
+    for `all` never needs the number.
+    """
+    head = len((prefix + ' absent_all_bytes=').encode('utf-8'))
+    total = head + 1
+    for _ in range(8):
+        grown = head + len(str(total))
+        if grown == total:
+            break
+        total = grown
+    return total
 
 
 def series_presence_counts(rows, window_days=7):
@@ -2573,7 +2629,9 @@ def main(argv=None):
                          'gains series_absent=<n|none> absent=<day,...|none> '
                          'absent_named=<n|none> days_present=<n|none> '
                          'repeat_rows=<n|none> '
-                         'retry_rows=<n|none> and window_from=<day|none>, so a '
+                         'retry_rows=<n|none> and '
+                         'window_from=<day|none> and '
+                         'absent_all_bytes=<n|none>, so a '
                          'silent day never reads like a measured zero, the '
                          'present/gap split sums to series_window, the '
                          'present/repeat split sums to window_rows, a '
@@ -2583,7 +2641,10 @@ def main(argv=None):
                          'counted backwards, and the named days stop at one '
                          'month (31) while series_absent keeps the full total, '
                          'so absent_named < series_absent is a visible '
-                         'truncation; pass --series-absent-limit to name more '
+                         'truncation; pass --series-absent-limit to name more, '
+                         'and read absent_all_bytes to know how many bytes this '
+                         'very line would take with the full list before '
+                         'asking for it '
                          '(read-only display; gates nothing)')
     ap.add_argument('--series-absent-limit', dest='series_absent_limit',
                     default=None, metavar='N|all',
@@ -2629,37 +2690,58 @@ def main(argv=None):
         if args.series_days is None:
             # Byte-identical to the shape AC-RUN42 arm 2 pins by equality.
             counts = series_window_counts(day_read[0], args.days, args.days)
-            tail_markers = ''
         else:
             counts = series['series_counts']
+
+        def absent_markers(gap_info, presence):
+            # One formatter for both the capped list and the full one, so the
+            # projection below cannot drift from the line actually printed.
+            return (' series_absent=%s absent=%s absent_named=%s'
+                    ' days_present=%s repeat_rows=%s retry_rows=%s'
+                    ' window_from=%s'
+                    % ('none' if gap_info['count'] is None
+                       else gap_info['count'],
+                       ','.join(gap_info['days']) or 'none',
+                       'none' if gap_info['count'] is None
+                       else gap_info['named'],
+                       'none' if presence['present'] is None
+                       else presence['present'],
+                       'none' if presence['repeat'] is None
+                       else presence['repeat'],
+                       'none' if presence['retry'] is None
+                       else presence['retry'],
+                       'none' if presence['start'] is None
+                       else presence['start']))
+
+        body = ('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
+                'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB '
+                'series_limit=%d series_shown=%d series_outside=%d '
+                'window_rows=%d'
+                % (series['days'], series['bad'], series['first'] or 'none',
+                   series['last'] or 'none',
+                   'none' if series['dropped'] is None else series['dropped'],
+                   pairs or 'none', series['bytes'],
+                   series['size_gate'], series['gate_ref_mb'],
+                   counts['limit'], counts['shown'], counts['outside'],
+                   counts['window_rows']))
+        tail_markers = ''
+        if args.series_days is None:
+            tail_markers = ''
+        else:
             tail_markers = ' series_window=%d' % args.series_days
             if args.series_absent:
                 gaps = series_absent_days(day_read[0], args.series_days,
                                           absent_limit)
                 presence = series_presence_counts(day_read[0], args.series_days)
-                tail_markers += ' series_absent=%s absent=%s absent_named=%s days_present=%s repeat_rows=%s retry_rows=%s window_from=%s' % (
-                    'none' if gaps['count'] is None else gaps['count'],
-                    ','.join(gaps['days']) or 'none',
-                    'none' if gaps['count'] is None else gaps['named'],
-                    'none' if presence['present'] is None
-                    else presence['present'],
-                    'none' if presence['repeat'] is None
-                    else presence['repeat'],
-                    'none' if presence['retry'] is None
-                    else presence['retry'],
-                    'none' if presence['start'] is None
-                    else presence['start'])
-        print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
-              'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB '
-              'series_limit=%d series_shown=%d series_outside=%d '
-              'window_rows=%d%s'
-              % (series['days'], series['bad'], series['first'] or 'none',
-                 series['last'] or 'none',
-                 'none' if series['dropped'] is None else series['dropped'],
-                 pairs or 'none', series['bytes'],
-                 series['size_gate'], series['gate_ref_mb'],
-                 counts['limit'], counts['shown'], counts['outside'],
-                 counts['window_rows'], tail_markers))
+                tail_markers += absent_markers(gaps, presence)
+                full_gaps = series_absent_days(day_read[0], args.series_days,
+                                               None)
+                tail_markers += ' absent_all_bytes=%s' % (
+                    'none' if full_gaps['count'] is None
+                    else absent_all_line_bytes(
+                        body + (' series_window=%d' % args.series_days)
+                        + absent_markers(full_gaps, presence)))
+        print(body + tail_markers)
         return 0
     if args.failure_days_dropped:
         listing = list_failure_days_dropped(failure_day_path(args.root),

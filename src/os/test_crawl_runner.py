@@ -391,6 +391,26 @@ invents no name (arm 4), zero/negative/non-numeric are refused with rc=2 (arm
 answers byte-identically under `all` and under the default (arm 7), and the
 default run writes no byte and prints no verdict (arm 1/8).
 
+AC-RUN51 (R3034) grades the PRICE TAG on that escape hatch. Measured before the
+change (qa/probe-R3034.log): a silent-day name is exactly 10 characters, so the
+list costs 11n-1 bytes (31 names 340B, 50 names 549B); everything else on the
+line is BYTE-IDENTICAL at every cap (base without the `absent=` token: 401B
+under both 31 and all), so the whole line length is arithmetically exact in
+advance; no shipped face estimated an OUTPUT length (`size_gate_pct` measures
+the INPUT file against a 100MB water line); and a new token named
+`absent_all_bytes=` contains neither `absent=` nor `absent_named=`, so the
+eight arms counting the former twice and the two counting the latter once stay
+green, while the eight endswith() tails are all on the no-flag default face.
+The opt-in tail now also prints `absent_all_bytes=<n|none>` - the byte length
+of this line if every silent day were named, counting its own digits as a fixed
+point. Arms: the default face carries no price token (arm 1); the price on the
+capped line equals the REAL byte length of the line an `all` run prints, and
+that run names its full total (arm 2); every cap quotes the same price because
+the number describes the full list, not the list in hand (arm 3); a window
+whose gaps all fit prices itself (arm 4); an unusable head answers none rather
+than a free zero (arm 5); and nothing is written, no verdict prints, the pinned
+counts survive, and a 2001 history prices its own window with no clock (arm 6).
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -5402,6 +5422,112 @@ def main():
        'the honest parser answers the default, all, a number and three '
        'refusals, the shown count never exceeds the total, no verdict prints '
        'and no byte is written')
+
+    # ===== AC-RUN51 (R3034): the price of all is readable before asking =====
+    # AC-RUN51 was pinned in src/os/backlog.md BEFORE absent_all_bytes existed
+    # (in-window pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3034.log): a name is exactly 10 characters, so the list costs
+    # 11n-1 bytes (31 names 340B, 50 names 549B); the base line without the
+    # absent= token is byte-identical at every cap (401B); the capped line was
+    # 748B and the all line 957B (delta 209, exactly the list delta); no shipped
+    # face estimated an OUTPUT length; and the new token contains neither
+    # pinned substring.
+
+    def price51(root, extra):
+        rc, lines, err = days50(root, extra)
+        return rc, (toks47(lines[0]) if lines else {}), lines
+
+    r51 = world()
+    roots.append(r51)
+    p51 = hist37(r51)
+    put_days(p51, [plain_day('2026-09-01', 1),
+                   plain_day('2026-10-25', 21), plain_day('2026-10-26', 22),
+                   plain_day('2026-10-27', 23)]
+             + [plain_day('2026-11-%02d' % d, d - 8) for d in range(13, 20)])
+    base51 = ['--failure-days', '--series-days', '60', '--series-absent']
+
+    # arm 1: the default face carries no price token at all
+    rc51a, lines51a, _e = days50(r51, ['--failure-days'])
+    plain51 = RUN.series_window_counts(RUN.read_failure_days(p51)[0], 7, 7)
+    tail51 = (' series_limit=%d series_shown=%d series_outside=%d '
+              'window_rows=%d' % (plain51['limit'], plain51['shown'],
+                                  plain51['outside'], plain51['window_rows']))
+    ok('AC-RUN51', rc51a == 0 and lines51a
+       and 'absent_all_bytes' not in lines51a[0]
+       and 'series_absent' not in lines51a[0]
+       and lines51a[0].endswith(tail51),
+       'without the flag the default tail keeps the unflagged four-count shape '
+       'and no price token appears')
+
+    # arm 2: the price printed by the CAPPED run equals the real all-run length
+    rc51b, t51b, _l = price51(r51, base51)
+    rc51c, t51c, lines51c = price51(r51, base51 + ['--series-absent-limit', 'all'])
+    ok('AC-RUN51', rc51b == 0 and rc51c == 0
+       and (t51b.get('absent_all_bytes') or '').isdigit()
+       and t51b.get('absent_all_bytes') == str(len(lines51c[0].encode('utf-8')))
+       and t51c.get('absent_named') == t51c.get('series_absent') == '50',
+       'the price read on the capped line equals the byte length of the line a '
+       'person gets by asking for all, and that line names its full total - a '
+       'real invariant, not self-assertion')
+
+    # arm 3: the ask does not move the target - every cap quotes one price
+    rc51d, t51d, _l = price51(r51, base51 + ['--series-absent-limit', '5'])
+    ok('AC-RUN51', rc51d == 0
+       and t51d.get('absent_all_bytes') == t51b.get('absent_all_bytes')
+       and t51d.get('absent_named') == '5'
+       and t51d.get('series_absent') == '50',
+       'a cap of five quotes the same price as the default cap - the number '
+       'describes the full list, not the list in hand')
+
+    # arm 4: on a complete window the price equals the line that prints
+    r51b = world()
+    roots.append(r51b)
+    p51b = hist37(r51b)
+    put_days(p51b, [plain_day('2026-11-%02d' % d, d - 8) for d in range(13, 20)]
+             + [plain_day('2026-11-15', 9)])
+    rc51e, lines51e, _e = days50(r51b, ['--failure-days', '--series-days', '7',
+                                       '--series-absent'])
+    t51e = toks47(lines51e[0]) if lines51e else {}
+    ok('AC-RUN51', rc51e == 0 and lines51e
+       and t51e.get('absent_all_bytes') == str(len(lines51e[0].encode('utf-8')))
+       and t51e.get('absent_named') == t51e.get('series_absent'),
+       'a window whose gaps all fit prices itself, so the number equals the '
+       'line the reader is already holding')
+
+    # arm 5: an unusable head answers none rather than an invented zero
+    r51c = world()
+    roots.append(r51c)
+    put_days(hist37(r51c), [])
+    rc51f, lines51f, _e = days50(r51c, ['--failure-days', '--series-days', '7',
+                                       '--series-absent'])
+    t51f = toks47(lines51f[0]) if lines51f else {}
+    ok('AC-RUN51', rc51f == 0 and t51f.get('absent_all_bytes') == 'none'
+       and t51f.get('absent_named') == 'none',
+       'an empty history prices nothing rather than a zero that would read as '
+       'a free line')
+
+    # arm 6: pure display, pinned counts intact, 2001 history, no clock
+    before51 = tree_bytes(r51)
+    rc51g, lines51g, _e = days50(r51, base51)
+    after51 = tree_bytes(r51)
+    text51 = '\n'.join(lines51g)
+    r51d = world()
+    roots.append(r51d)
+    p51d = hist37(r51d)
+    put_days(p51d, [plain_day('2001-03-04', 1), plain_day('2001-03-05', 2)])
+    rc51h, lines51h, _e = days50(r51d, ['--failure-days', '--series-days', '7',
+                                       '--series-absent'])
+    t51h = toks47(lines51h[0]) if lines51h else {}
+    ok('AC-RUN51', rc51g == 0 and before51 == after51 and lines51g
+       and lines51g[0].count('absent=') == 2
+       and lines51g[0].count('absent_named=') == 1
+       and 'PASS' not in text51 and 'FLAG' not in text51
+       and 'verdict' not in text51
+       and rc51h == 0 and lines51h
+       and t51h.get('absent_all_bytes') == str(len(lines51h[0].encode('utf-8')))
+       and t51h.get('window_from') == '2001-02-27',
+       'no byte is written, no verdict prints, the two pinned counts hold, and '
+       'a 2001 history prices its own window with no wall clock')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

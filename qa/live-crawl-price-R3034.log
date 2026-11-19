@@ -1,0 +1,5 @@
+real repo, 365-day window, one-row history (qa/crawl-failure-days.jsonl)
+default cap rc=0 bytes=685 absent_named=31 series_absent=364 absent_all_bytes=4349
+all        rc=0 bytes=4349 absent_named=364 series_absent=364 absent_all_bytes=4349
+price == actual all line: True (both runs quote the same number: True)
+default line tail: ...-12-19,2025-12-20 absent_named=31 days_present=1 repeat_rows=0 retry_rows=0 window_from=2025-11-20 absent_all_bytes=4349

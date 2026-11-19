@@ -4729,8 +4729,11 @@ SUITES = [
     # series_absent keeps the full total (48 -> 49, the same row).
     # R3033 adds AC-RUN50: --series-absent-limit names more of that list on
     # request, opt-in, with the default still one month (49 -> 50).
+    # R3034 adds AC-RUN51: the line now quotes its own byte length under the
+    # full list (absent_all_bytes), so the ask has a price before it is made
+    # (50 -> 51).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 50),
+     os.path.join("..", "os", "test_crawl_runner.py"), 51),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep
