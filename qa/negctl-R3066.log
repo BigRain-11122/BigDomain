@@ -1,0 +1,5 @@
+honest q1=True q2=True q3=True
+mut_last_row q1=True q2=False q3=True
+mut_silent q1=False q2=False q3=True
+mut_borrow_name q1=False q2=False q3=False
+NEGCTL PASS honest GREEN and three mutations CAUGHT

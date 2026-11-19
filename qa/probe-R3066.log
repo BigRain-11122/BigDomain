@@ -1,0 +1,10 @@
+P1 live_keys=36 kind_family=['kind', 'kind_count', 'twin_kind'] twin_words=['newest_twin', 'twin_kind', 'twin_ok']
+P2 two_rows_one_twin=[('https://a66.example/p', 'timeout'), ('https://a66.example/p', 'http')]
+P3 one_row_each newest_src=https://b66.example/p twin=https://a66.example/p twin_row_kind=http
+P4 trend_kind_words=['kind', 'twin_kind'] space_kind=1 substr_kind=2
+P5 with_record twin_ok=unmeasured twin_present=https://a66.example/p
+P6 out_of_window trend_newest_src=None trend_newest_srcs=0 fail_newest_kinds=2 fail_newest_rows=2
+P7 outside_consumers=8 [('docs/status-export.json', 'newest_twin'), ('docs/status-export.json', 'twin_ok'), ('src/os/backlog.md', 'newest_twin'), ('src/os/backlog.md', 'twin_ok'), ('src/os/state.json', 'newest_twin'), ('src/os/state.json', 'twin_ok')]
+P9 bucket_set_per_order=[(['http', 'timeout'], 'https://a66.example/p'), (['http', 'timeout'], 'https://a66.example/p'), (['http'], 'https://a66.example/p')]
+P10 fail_face_names=SA:False SB:True timeout_token:True
+P8 line_bytes=544 cost=" twin_kind=http"=15 pct=2.8

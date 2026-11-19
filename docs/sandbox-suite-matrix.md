@@ -3,6 +3,7 @@
 
 - 生成时间: generated: 2026-11-20 06:31 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
+- 印章来源: --stamp-from docs/sandbox-suite-matrix.md
 - 状态证据: reconcile-all-R2739.log (RUNNER PASS 675/675 suites green, reconcile controls 7/7, 4986.4s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
 
@@ -10,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 730 | 5935 | 675/675 | R2739 |
+| 730 | 5936 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -479,7 +480,7 @@
 | 440 | os-evidence-writer | ../os/test_evidence_writer.py | 8 | green | 0.8 |
 | 441 | os-evidence-writer-dir | ../os/test_evidence_writer_dir.py | 8 | green | 0.9 |
 | 442 | os-crawl-record | ../os/test_crawl_record.py | 4 | no-evidence | - |
-| 443 | os-crawl-runner | ../os/test_crawl_runner.py | 82 | no-evidence | - |
+| 443 | os-crawl-runner | ../os/test_crawl_runner.py | 83 | no-evidence | - |
 | 444 | ledger-tmp-sweep | ../os/test_tmp_sweep.py | 18 | green | 0.6 |
 | 445 | ledger-census-negative | ../os/test_census_negative.py | 12 | green | 0.2 |
 | 446 | ledger-census-baseline-add | ../os/test_census_baseline_add.py | 6 | green | 0.2 |
@@ -767,7 +768,7 @@
 | 728 | os-face-walk-static | ../os/test_face_walk_static.py | 5 | no-evidence | - |
 | 729 | os-closeout-gate | ../os/test_closeout_gate.py | 5 | no-evidence | - |
 | 730 | os-live-proof | ../os/test_live_proof.py | 13 | no-evidence | - |
-|  | 合计 |  | 5935 | green 675 / FAIL 0 / no-evidence 55 |  |
+|  | 合计 |  | 5936 | green 675 / FAIL 0 / no-evidence 55 |  |
 
 ## 证据出处
 

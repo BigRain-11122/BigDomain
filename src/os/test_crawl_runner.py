@@ -1632,7 +1632,8 @@ def main():
                      'day', 'bad_days'])
     ok('AC-RUN18', tA5['newest_src'] is None and tA5['since_ok'] == 'unmeasured'
        and set(tA5.keys()) == base_keys | set(['newest_src', 'newest_srcs',
-                                               'newest_twin', 'twin_ok',
+                                               'newest_twin', 'twin_kind',
+                                               'twin_ok',
                                                'since_ok', 'flips',
                                                'pending', 'pending_src',
                                                'pending_age_d',
@@ -1745,6 +1746,7 @@ def main():
                  'worst', 'recurring', 'sources', 'recur', 'cov', 'wcov',
                  'evidence', 'kind', 'kind_count', 'newest_src', 'newest_srcs',
                  'newest_twin',
+                 'twin_kind',
                  'twin_ok',
                  'since_ok',
                  'window_days', 'day', 'bad_days'])
@@ -3190,7 +3192,7 @@ def main():
     # R3059 added newest_srcs= and R3060 added newest_twin=, so the trend row
     # carries two more keys than the count these arms were written against
     # (32 -> 34).
-    ok('AC-RUN32', len(tZ5) == 35 and 'reason' not in tZ5
+    ok('AC-RUN32', len(tZ5) == 36 and 'reason' not in tZ5
        and 'pending_old_src' not in tZ5
        and tZ5['fcov'] == lZ4['fcov'],
        'the trend row keeps its keys (two more since R3059/R3060) and learns neither reason nor a per-source key, while both faces read one span')
@@ -3376,7 +3378,7 @@ def main():
     ok('AC-RUN33', lQ33['last_at'] == '2026-11-15'
        and 'T' not in lQ33['last_at']
        and rcZ33b == 0 and before33 == after33
-       and len(t33) == 35 and 'last_at' not in t33
+       and len(t33) == 36 and 'last_at' not in t33
        and 'PASS' not in text33 and 'FLAG' not in text33
        and 'verdict' not in text33
        and 'crawl-failure' not in scan_src18,
@@ -3538,7 +3540,7 @@ def main():
     ok('AC-RUN34', len(lC34) == 9 and len(lX34) == 9
        and 'bad=0' in linesC34[0] and 'bad=2' in linesX34[0]
        and lC34['bad_days'] == [] and lX34['bad_days'] == []
-       and len(tX34) == 35 and 'bad' in tX34 and tX34['bad'] == 0
+       and len(tX34) == 36 and 'bad' in tX34 and tX34['bad'] == 0
        and json.dumps(tX34, sort_keys=True) == json.dumps(tC34,
                                                           sort_keys=True),
        'the dictionary stays its eight keys plus R3051 bad_days, and the trend row keeps its thirty-two untouched (31 + R3050 bad_days) - its bad counts the day history, not this channel')
@@ -4089,7 +4091,7 @@ def main():
        and all(isinstance(p, tuple) and len(p) == 2
                and len(p) == 2 for p in RUN.summarize_failure_days(
                    p38d)['series'])
-       and len(trend38) == 35 and 'dropped' not in trend38,
+       and len(trend38) == 36 and 'dropped' not in trend38,
        'the dict grows by R3021 dropped and R3050 bad_days, series stays '
        '(day, on_day) pairs, and the 32-key trend row (31 + R3050 bad_days) '
        'gains nothing else here')
@@ -4196,7 +4198,7 @@ def main():
     ok('AC-RUN39', rc39d == 0 and lines39d[0].startswith('CRAWL-FAILURE-DAYS days=')
        and 'dropped=4' in lines39d[0]
        and all(isinstance(p, tuple) and len(p) == 2 for p in s39d['series'])
-       and len(trend39d) == 35 and 'dropped' not in trend39d,
+       and len(trend39d) == 36 and 'dropped' not in trend39d,
        'the day listing keeps its own header, its (day, on_day) pairs and the '
        '31-key trend row (30 + R3049 day=) - the new token lives only on the '
        'snapshot header')
@@ -4342,7 +4344,7 @@ def main():
        and lines40f[0].startswith('CRAWL-FAILURE-DAYS days=')
        and 'DAY-DROPPED' not in lines40f[0]
        and all(isinstance(p, tuple) and len(p) == 2 for p in s40f['series'])
-       and len(t40f) == 35 and 'dropped' not in t40f,
+       and len(t40f) == 36 and 'dropped' not in t40f,
        'the DAYS face keeps one line, (day, on_day) pairs and the 31-key trend '
        'row (30 + R3049 day=) while the per-day list lives in its own '
        'subcommand')
@@ -9654,6 +9656,151 @@ def main():
     ok('AC-RUN82', 'newest_rows' in block82 and 'newest_kinds' in block82
        and 'newest_kind=' in block82,
        'the --failures help names the tie family it prints')
+
+    # --- AC-RUN83: WHAT the other source's failures were (R3066) ------------
+    # Measured before this existed (qa/probe-R3066.log P2/P3/P9): R3060 named
+    # the twin and R3061 judged it, so who and came-back were answered and what
+    # broke was not. The probe also measured that the class is NOT a
+    # source-level fact - one source writing twice at ONE instant with two
+    # classes moved its bucket with file order - while the SET of its buckets
+    # did not. One word: twin_kind= names the bucket when the twin's rows
+    # agree, and 'mixed' when they do not.
+    AT83 = '2026-11-20T23:59:00+08:00'
+    A83 = '2026-11-20T04:00:00+08:00'
+    B83 = '2026-11-19T20:00:00+00:00'   # the SAME instant as A83
+    SA83 = 'https://a83.example/p'
+    SB83 = 'https://b83.example/p'
+    SC83 = 'https://c83.example/p'
+    EA83 = 'E_FETCH HTTPError: 503'
+    EB83 = 'E_FETCH TimeoutError: read timed out'
+    EC83 = 'E_FETCH HTTPError: 500'
+
+    def trend83(root):
+        _rc, lines = face73(root, '--failure-trend', AT83)
+        return toks69(lines[0]), lines[0]
+
+    # Arm 1: the ordinary tie - one row per source - names the twin's class,
+    # and that class is the bucket of the very row twin_ok= judges. Under both
+    # file orders the class moves WITH the name, so the pair stays consistent.
+    pair83 = []
+    for order83 in (((SA83, A83, EA83), (SB83, B83, EB83)),
+                    ((SB83, B83, EB83), (SA83, A83, EA83))):
+        W83 = world(); roots.append(W83)
+        side73(W83, list(order83))
+        t83, _l83 = trend83(W83)
+        pair83.append(t83)
+        want83 = EA83 if t83.get('newest_twin') == SA83 else EB83
+        ok('AC-RUN83', t83.get('twin_kind') == RUN.failure_kind(want83)
+           and t83.get('twin_kind') not in ('none', 'mixed'),
+           'the twin carries the class of its own row, the one twin_ok= judges')
+    ok('AC-RUN83', pair83[0].get('newest_src') != pair83[1].get('newest_src')
+       and {pair83[0].get('twin_kind'), pair83[1].get('twin_kind')}
+       == {RUN.failure_kind(EA83), RUN.failure_kind(EB83)},
+       'a file-order flip swaps the twin and its class together, so no name '
+       'keeps a stranger class')
+
+    # Arm 2: one source writing TWICE at one instant with two classes - the
+    # measured limit (P2). 'mixed' under BOTH orders, because the bucket SET
+    # does not move (P9) even though a single bucket would.
+    mixed83 = []
+    for order83 in (((SA83, A83, EA83), (SA83, A83, EB83), (SB83, B83, EC83)),
+                    ((SA83, A83, EB83), (SA83, A83, EA83), (SB83, B83, EC83))):
+        M83 = world(); roots.append(M83)
+        side73(M83, list(order83))
+        t83, _l83 = trend83(M83)
+        mixed83.append(t83)
+    ok('AC-RUN83', all(t.get('newest_twin') == SA83 for t in mixed83)
+       and all(t.get('twin_kind') == 'mixed' for t in mixed83),
+       'a twin whose own rows disagree reads mixed under either write order, '
+       'never a bucket picked by file order')
+
+    # Arm 3: the same source twice in ONE bucket - the class is named, so
+    # 'mixed' is not a blanket answer for any multi-row twin.
+    K83 = world(); roots.append(K83)
+    side73(K83, [(SA83, A83, EA83), (SA83, A83, EC83), (SB83, B83, EB83)])
+    t83k, _l83k = trend83(K83)
+    ok('AC-RUN83', t83k.get('newest_twin') == SA83
+       and t83k.get('twin_kind') == RUN.failure_kind(EA83)
+       and t83k.get('twin_kind') == RUN.failure_kind(EC83),
+       'two rows of one class read that class, not mixed')
+
+    # Arm 4: no second source - no class, on the same selection as the name.
+    U83 = world(); roots.append(U83)
+    side73(U83, [(SA83, A83, EA83)])
+    t83u, _l83u = trend83(U83)
+    ok('AC-RUN83', t83u.get('newest_twin') == 'none'
+       and t83u.get('twin_kind') == 'none',
+       'a single source reads twin=none twin_kind=none, never a borrowed class')
+
+    # Arm 5: three-way tie - there is no unique second source, so no class.
+    V83 = world(); roots.append(V83)
+    side73(V83, [(SA83, A83, EA83), (SB83, B83, EB83), (SC83, A83, EC83)])
+    t83v, _l83v = trend83(V83)
+    ok('AC-RUN83', t83v.get('newest_twin') == 'many'
+       and t83v.get('twin_kind') == 'none',
+       'three sources on one instant read twin=many twin_kind=none')
+
+    # Arm 6: no evidence at all - the word is absent with the rest and nothing
+    # rises.
+    X83 = world(); roots.append(X83)
+    rc83x, lines83x = face73(X83, '--failure-trend', AT83)
+    t83x = toks69(lines83x[0])
+    ok('AC-RUN83', rc83x == 0 and t83x.get('twin_kind') == 'none'
+       and t83x.get('newest_twin') == 'none',
+       'an empty channel reads twin_kind=none and raises nothing')
+
+    # Arm 7: independent of the record - the class lives in the failure row, so
+    # a record that stops BEFORE the failure reads twin_ok=unmeasured beside a
+    # named class, and no record at all reads the same class.
+    R83 = world(); roots.append(R83)
+    side73(R83, [(SA83, A83, EA83), (SB83, B83, EB83)])
+    CR.append_record(CR.record_path(R83), SA83,
+                     '2026-11-20T01:00:00+08:00', 'changed')
+    t83r, _l83r = trend83(R83)
+    N83 = world(); roots.append(N83)
+    side73(N83, [(SA83, A83, EA83), (SB83, B83, EB83)])
+    t83n, _l83n = trend83(N83)
+    ok('AC-RUN83', t83r.get('twin_ok') == 'unmeasured'
+       and t83r.get('twin_kind') == t83n.get('twin_kind')
+       and t83r.get('twin_kind') not in (None, 'none', 'mixed'),
+       'the class does not wait on the record: unmeasured health beside a '
+       'named class, and the same class with no record at all')
+
+    # Arm 8: the two denominators stay separate - a channel whose newest rows
+    # all fall OUTSIDE the window counts its classes on --failures while this
+    # face names no source and therefore no class (P6).
+    O83 = world(); roots.append(O83)
+    side73(O83, [(SA83, '2026-10-01T04:00:00+08:00', EA83),
+                 (SB83, '2026-10-01T04:00:00+08:00', EB83)])
+    t83o, _l83o = trend83(O83)
+    _rc83o, lines83f = face73(O83, '--failures', AT83)
+    f83o = toks69(lines83f[0])
+    ok('AC-RUN83', f83o.get('newest_kinds') == '2'
+       and t83o.get('newest_src') == 'none'
+       and t83o.get('twin_kind') == 'none',
+       'a whole-channel class count does not leak onto a windowed twin')
+
+    # Arm 9: wired rather than merely defined - the selection, the key and the
+    # printed word all have to be in the shipped source.
+    ok('AC-RUN83', '_twin_kind(newest_picked, newest_src)'
+       in body80('summarize_failure_trend')
+       and "'twin_kind': twin_kind" in body80('summarize_failure_trend')
+       and 'twin_kind=%s' in body80('main'),
+       'the trend selects the twin through one helper, publishes the key and '
+       'prints it on the line')
+
+    # Arm 10: one face only, and the substring trap is PINNED - the trend's own
+    # ` kind=` still appears exactly once, so a reader who searches that text
+    # cannot count twin_kind= as the window distribution (the R3065 arm-2 trap).
+    D83 = world(); roots.append(D83)
+    side73(D83, [(SA83, A83, EA83), (SB83, B83, EB83)])
+    _t83d, line83d = trend83(D83)
+    _rc83d, lines83df = face73(D83, '--failures', AT83)
+    ok('AC-RUN83', 'twin_kind=' in line83d
+       and line83d.count(' kind=') == 1
+       and 'twin_kind' not in lines83df[0],
+       'the trend prints the word, the failure face never does, and the '
+       'distribution keeps its one space-anchored name')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

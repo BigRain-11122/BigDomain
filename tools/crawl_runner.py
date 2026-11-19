@@ -703,6 +703,29 @@ compares the two faces no longer compares a single bucket against a
 distribution under one name; the second row's class stays unnameable here,
 named rather than implied.
 
+WHAT THE OTHER SOURCE'S FAILURES WERE (R3066, measured first -
+qa/probe-R3066.log): R3060 named the twin and R3061 judged it, so the trend
+line answered WHO and WHETHER THEY CAME BACK, and nothing about WHAT BROKE.
+The probe measured that the class is not a source-level fact: one source
+writing twice at ONE instant with two different classes moved its bucket when
+the two rows swapped places in the file (P2 - timeout under the same unchanged
+name, then http), while the SET of its buckets did not move at all (P9). So
+`twin_kind=` prints a bucket only when the twin's rows agree and 'mixed' when
+they do not - the discipline `series_file_order=` already uses for a file whose
+days are not in one order. The ordinary shape (one row per source) reads the
+one bucket (P3). It is INDEPENDENT of the record: the class lives in the
+failure row, so a record stopping before the failure reads twin_ok=unmeasured
+beside a named twin_kind= (P5). None - printed none - exactly when the twin
+itself is None (one source, or a three-way tie with no unique second source).
+REFUSED: a count word here (`newest_kinds=` already counts the channel's tie
+classes, and P6 measured the two denominators are necessarily different - a
+channel whose newest rows all fall outside the window answers newest_kinds=2
+while this face names no source); calling it "the source's class" (P2 measured
+false); the same word on --failures (P10: that face does not even name the
+twin); and borrowing `kind=`/`kind_count=` naming (this face's `kind=` is the
+WINDOW's distribution, and a second word containing it as a substring is the
+R3065 arm-2 trap, so an arm pins ` kind=` at exactly one occurrence).
+
 WHICH DAY A ROW COUNTS IN (R3055, measured first - qa/probe-R3055.log): R3048
 gave the clock faces one day law - the LOCAL day of the instant, `_day_of` -
 but only the window HEAD used it; every count and span still cut the first ten
@@ -1818,6 +1841,36 @@ def _twin_row(picked, named):
     if len({row.get('source_url') for row in rows}) != 1:
         return None
     return rows[-1]
+
+
+def _twin_kind(picked, named):
+    """The CLASS of the other source's rows at a tie, or 'mixed'.
+
+    WHY (R3066, measured qa/probe-R3066.log P2/P3/P9): R3060 named the twin and
+    R3061 judged it, so the trend line answered who and whether they came back -
+    and nothing about what broke. The same probe measured that the class is NOT
+    a source-level fact: one source writing twice at ONE instant with two
+    different classes moved its bucket when the two rows swapped places in the
+    file (P2, timeout then http under one unchanged name), while the SET of its
+    buckets did not move at all (P9). So a bucket may be printed only when the
+    twin's rows agree, and 'mixed' when they do not - the same discipline
+    `series_file_order=` uses for a file whose days are not in one order.
+
+    Same selection as `_twin_row`: no twin and a three-way tie both answer None,
+    because a name that does not exist has no class. The rows are classified by
+    the shipped `failure_kind`, so this adds a second SUBJECT (the twin's rows)
+    rather than a second taxonomy.
+
+    INDEPENDENT OF THE RECORD (P5): the class lives in the failure row, so this
+    takes no record path and answers the same when twin_ok= is unmeasured.
+    """
+    rows = _twin_rows(picked, named)
+    if len({row.get('source_url') for row in rows}) != 1:
+        return None
+    kinds = {failure_kind(row.get('error')) for row in rows}
+    if len(kinds) == 1:
+        return kinds.pop()
+    return 'mixed'
 
 
 def _window_start(day, window_days=7):
@@ -3870,6 +3923,13 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # fixed?" moved with file order. None when no single twin exists - a
     # three-way tie has no unique second source to judge.
     twin_ok = None
+    # R3066: the CLASS of that second source's rows, so the pair of names
+    # carries what broke as well as whether it came back. Measured
+    # (qa/probe-R3066.log P2/P9): the class is not a source-level fact - one
+    # source writing twice at one instant with two classes moved its bucket with
+    # file order - so it is printed only when the twin's rows agree, and
+    # 'mixed' when they do not. None when the twin itself is None.
+    twin_kind = None
     since_ok = 'unmeasured'
     # R3002 STABILITY: since_ok answers "was it seen working afterwards", which a
     # source that was fixed, broke again and was fixed again answers YES to -
@@ -3898,6 +3958,9 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             # R3060: the other source at the same instant, so the reader who
             # learned "there are two" from newest_srcs= gets the second name.
             newest_twin = _twin_name(newest_picked, newest_src)
+            # R3066: what the twin's failures were, from the same selection.
+            # No record is read: the class is a property of the failure rows.
+            twin_kind = _twin_kind(newest_picked, newest_src)
             since_ok = _since_ok(record_path, newest_src,
                                  newest.get('failed_at'))
             # R3061: the same question for the other source, so the pair of
@@ -4018,6 +4081,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
             'newest_src': newest_src, 'newest_srcs': newest_srcs,
             'newest_twin': newest_twin,
+            'twin_kind': twin_kind,
             'twin_ok': twin_ok,
             'since_ok': since_ok,
             'flips': flips, 'pending': pending, 'pending_src': pending_src,
@@ -4559,7 +4623,7 @@ def main(argv=None):
               'worst=%s recurring=%d sources=%d bad=%d bad_days=%s '
               'evidence=%s kind=%s '
               'recur=%s cov=%s wcov=%s newest_src=%s newest_srcs=%d '
-              'newest_twin=%s twin_ok=%s since_ok=%s flips=%s '
+              'newest_twin=%s twin_kind=%s twin_ok=%s since_ok=%s flips=%s '
               'pending=%s pending_src=%s pending_age_d=%s '
               'pending_age_min_d=%s pending_age_med_d=%s pending_old=%s '
               'pending_old_age_d=%s pending_old_age_min_d=%s fcov=%s rcov=%s '
@@ -4572,6 +4636,7 @@ def main(argv=None):
                  recur_txt, cov_txt, wcov_txt,
                  trend['newest_src'] or 'none', trend['newest_srcs'],
                  trend['newest_twin'] or 'none',
+                 trend['twin_kind'] or 'none',
                  trend['twin_ok'] or 'none',
                  trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
