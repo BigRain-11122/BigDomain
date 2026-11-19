@@ -255,8 +255,10 @@ order. A row written before the field carries no key at all (P2c), the same day
 can appear twice on disk (P2e), and the reader already yields file order (P2a),
 so the listing reports what is there: no sort, no de-duplication, no sum, no
 maximum, no backfill. `none` is the word for an unmeasured row; 0 means that
-day really ate nothing. The DAYS face, the (day, on_day) pairs and the 30-key
-trend row are untouched and arm 6 checks them in the same world.
+day really ate nothing. The DAYS face, the (day, on_day) pairs and the 31-key
+trend row are untouched and arm 6 checks them in the same world. (The trend row
+was 30 keys until R3049 added `day=` - the day the window opens at - so every
+count below reads 31 and the added key is named where it is asserted.)
 
 AC-RUN41 (R3024) grades the WINDOW that listing lacked. It printed every row
 with no bound, so its length grew with the file while the DAYS series had a
@@ -1623,7 +1625,8 @@ def main():
                                       record_path=CR.record_path(rootA5))
     base_keys = set(['days', 'in_window', 'bad', 'today', 'prev', 'mean',
                      'delta', 'worst', 'recurring', 'sources', 'recur', 'cov',
-                     'wcov', 'evidence', 'kind', 'kind_count', 'window_days'])
+                     'wcov', 'evidence', 'kind', 'kind_count', 'window_days',
+                     'day'])
     ok('AC-RUN18', tA5['newest_src'] is None and tA5['since_ok'] == 'unmeasured'
        and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok', 'flips',
                                                'pending', 'pending_src',
@@ -1736,7 +1739,7 @@ def main():
     baseB = set(['days', 'in_window', 'bad', 'today', 'prev', 'mean', 'delta',
                  'worst', 'recurring', 'sources', 'recur', 'cov', 'wcov',
                  'evidence', 'kind', 'kind_count', 'newest_src', 'since_ok',
-                 'window_days'])
+                 'window_days', 'day'])
     bufB9 = io.StringIO()
     with contextlib.redirect_stdout(bufB9):
         rcB9 = RUN.main(['--failure-trend', '--root', _rB2, '--at', AT])
@@ -2914,7 +2917,7 @@ def main():
     # AC-RUN31 (R3014): with three old waiters the row gave two ends and a
     # count - "which ones" had no face. Measured before the pin
     # (qa/probe-R3014.log): two worlds whose second-oldest waiter was a
-    # different source read IDENTICAL on all 30 keys, while the same computation
+    # different source read IDENTICAL on all 31 keys, while the same computation
     # held all three witnesses and returned only the first and last. The list is
     # a SEPARATE read-only face over the SAME predicate.
     SRC31A = 'https://a.example/page'
@@ -3172,10 +3175,10 @@ def main():
     tZ5 = RUN.summarize_failure_trend(RUN.failure_day_path(rZ4),
                                       RUN.failure_path(rZ4), TODAY,
                                       record_path=CR.record_path(rZ4))
-    ok('AC-RUN32', len(tZ5) == 30 and 'reason' not in tZ5
+    ok('AC-RUN32', len(tZ5) == 31 and 'reason' not in tZ5
        and 'pending_old_src' not in tZ5
        and tZ5['fcov'] == lZ4['fcov'],
-       'the trend row keeps its 30 keys and learns neither reason nor a per-source key, while both faces read one span')
+       'the trend row keeps its 31 keys (30 + R3049 day=) and learns neither reason nor a per-source key, while both faces read one span')
 
     # arm 6: still a pure display
     before32 = snapshot32(rZ4)
@@ -3356,11 +3359,11 @@ def main():
     ok('AC-RUN33', lQ33['last_at'] == '2026-11-15'
        and 'T' not in lQ33['last_at']
        and rcZ33b == 0 and before33 == after33
-       and len(t33) == 30 and 'last_at' not in t33
+       and len(t33) == 31 and 'last_at' not in t33
        and 'PASS' not in text33 and 'FLAG' not in text33
        and 'verdict' not in text33
        and 'crawl-failure' not in scan_src18,
-       'a date-only stamp stays a date, the face writes nothing, the trend row keeps its 30 keys, and the scanner reads none of it')
+       'a date-only stamp stays a date, the face writes nothing, the trend row keeps its 31 keys (30 + R3049 day=), and the scanner reads none of it')
 
     # AC-RUN34 (R3017): the header carried population, reach and liveness, never
     # EVIDENCE QUALITY - `bad` sat in the dictionary from the start and the
@@ -3509,10 +3512,10 @@ def main():
         record_path=CR.record_path(rX34))
     ok('AC-RUN34', len(lC34) == 8 and len(lX34) == 8
        and 'bad=0' in linesC34[0] and 'bad=2' in linesX34[0]
-       and len(tX34) == 30 and 'bad' in tX34 and tX34['bad'] == 0
+       and len(tX34) == 31 and 'bad' in tX34 and tX34['bad'] == 0
        and json.dumps(tX34, sort_keys=True) == json.dumps(tC34,
                                                           sort_keys=True),
-       'the dictionary stays eight keys, and the trend row keeps its thirty untouched - its bad counts the day history, not this channel')
+       'the dictionary stays eight keys, and the trend row keeps its thirty-one untouched (30 + R3049 day=) - its bad counts the day history, not this channel')
 
     # arm 7: pure display - nothing written, no verdict, scanner reads none of it
     before34 = snapshot34(rX34)
@@ -4052,9 +4055,9 @@ def main():
        and all(isinstance(p, tuple) and len(p) == 2
                and len(p) == 2 for p in RUN.summarize_failure_days(
                    p38d)['series'])
-       and len(trend38) == 30 and 'dropped' not in trend38,
+       and len(trend38) == 31 and 'dropped' not in trend38,
        'the dict grows by one named key, series stays (day, on_day) pairs, and '
-       'the 30-key trend row gains nothing')
+       'the 31-key trend row (30 + R3049 day=) gains nothing here')
 
     # arm 7: pure display - nothing written, no verdict, outside the scanner
     def tree_bytes(root):
@@ -4158,9 +4161,10 @@ def main():
     ok('AC-RUN39', rc39d == 0 and lines39d[0].startswith('CRAWL-FAILURE-DAYS days=')
        and 'dropped=4' in lines39d[0]
        and all(isinstance(p, tuple) and len(p) == 2 for p in s39d['series'])
-       and len(trend39d) == 30 and 'dropped' not in trend39d,
+       and len(trend39d) == 31 and 'dropped' not in trend39d,
        'the day listing keeps its own header, its (day, on_day) pairs and the '
-       '30-key trend row - the new token lives only on the snapshot header')
+       '31-key trend row (30 + R3049 day=) - the new token lives only on the '
+       'snapshot header')
 
     # arm 6: an older day's drops do not compete - today's own number is printed
     r39e = world()
@@ -4294,8 +4298,8 @@ def main():
        'number lands on a day the file does not contain')
 
     # arm 6: in the same world the DAYS face keeps its single line, its pairs
-    # and the 30-key trend row - the new face is a subcommand, not a token on
-    # somebody else's header
+    # and the 31-key trend row (30 + R3049 day=) - the new face is a subcommand,
+    # not a token on somebody else's header
     rc40f, lines40f = days_head37(r40)
     s40f = RUN.summarize_failure_days(p40)
     t40f = RUN.summarize_failure_trend(p40, RUN.failure_path(r40), TODAY)
@@ -4303,9 +4307,10 @@ def main():
        and lines40f[0].startswith('CRAWL-FAILURE-DAYS days=')
        and 'DAY-DROPPED' not in lines40f[0]
        and all(isinstance(p, tuple) and len(p) == 2 for p in s40f['series'])
-       and len(t40f) == 30 and 'dropped' not in t40f,
-       'the DAYS face keeps one line, (day, on_day) pairs and the 30-key trend '
-       'row while the per-day list lives in its own subcommand')
+       and len(t40f) == 31 and 'dropped' not in t40f,
+       'the DAYS face keeps one line, (day, on_day) pairs and the 31-key trend '
+       'row (30 + R3049 day=) while the per-day list lives in its own '
+       'subcommand')
 
     # arm 7: pure display - no byte written, no verdict, outside the scanner
     before40 = tree_bytes(r40)
@@ -7385,6 +7390,147 @@ def main():
        'the stamp-to-day conversion is one helper used by the window law, the '
        'snapshot writer and the day gate, and no face cuts a stamp by hand any '
        'more (a future face that reintroduces the cut reads red here)')
+
+    # AC-RUN66 (R3049): R3048 made every clock face resolve the RIGHT day, and
+    # the two faces that window by it still printed no day word - `today=` is a
+    # COUNT, `recent7=` counts over a head that was computed and dropped. Both
+    # now print `day=<window head>` at the end of the line, the same word
+    # --snapshot-failures already prints for the same fact.
+    def face66(root66, flag66, at66):
+        buf66 = io.StringIO()
+        with contextlib.redirect_stdout(buf66):
+            rc66 = RUN.main([flag66, '--root', root66, '--at', at66])
+        return rc66, buf66.getvalue().strip()
+
+    def days66(line66):
+        return [p for p in line66.split() if p.startswith('day=')]
+
+    # Arm 1: a history ending YESTERDAY asked about today - the day that is
+    # absent is now named, which was the decisive unreadable case.
+    r66a = world()
+    roots.append(r66a)
+    h66a = RUN.failure_day_path(r66a)
+    os.makedirs(os.path.dirname(h66a), exist_ok=True)
+    with open(h66a, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(json.dumps({'day': '2026-11-18', 'on_day': 2, 'total': 2,
+                             'recent': 2, 'bad': 0, 'urls': 1},
+                            sort_keys=True, separators=(',', ':')) + '\n')
+        fh.write(json.dumps({'day': '2026-11-19', 'on_day': 1, 'total': 3,
+                             'recent': 3, 'bad': 0, 'urls': 2},
+                            sort_keys=True, separators=(',', ':')) + '\n')
+    rc66a, t66a = face66(r66a, '--failure-trend', '2026-11-20T04:00:00+08:00')
+    ok('AC-RUN66', rc66a == 0 and 'today=absent' in t66a
+       and days66(t66a) == ['day=2026-11-20'],
+       'a history that ends yesterday and a question about today reads '
+       'today=absent AND day=2026-11-20: the absent day is named instead of '
+       'being missing from the whole line')
+
+    # Arm 2: one instant in three notations - the new token must be
+    # notation-invariant, and the three lines must stay byte-identical
+    # (AC-RUN65 arm 1 is not weakened).
+    r66b = world()
+    roots.append(r66b)
+    RUN.append_failure(RUN.failure_path(r66b), 'https://a.example/1',
+                       '2026-11-19T09:00:00+08:00', 'E_FETCH URLError: a')
+    RUN.append_failure(RUN.failure_path(r66b), 'https://a.example/1',
+                       '2026-11-20T02:00:00+08:00', 'E_FETCH URLError: a')
+    RUN.snapshot_failure_day(r66b, '2026-11-19T09:00:00+08:00')
+    RUN.snapshot_failure_day(r66b, '2026-11-20T02:00:00+08:00')
+    ONE66 = ['2026-11-20T04:00:00+08:00', '2026-11-19T20:00:00+00:00',
+             '2026-11-20T04:00:00']
+    trend66 = [face66(r66b, '--failure-trend', at)[1] for at in ONE66]
+    fails66 = [face66(r66b, '--failures', at)[1] for at in ONE66]
+    ok('AC-RUN66', len(set(trend66)) == 1 and len(set(fails66)) == 1
+       and [days66(ln) for ln in trend66] == [['day=2026-11-20']] * 3
+       and [days66(ln) for ln in fails66] == [['day=2026-11-20']] * 3,
+       'three notations of one instant print ONE day on both faces and the '
+       'lines stay byte-identical - the token is notation-invariant, so '
+       'AC-RUN65 arm 1 is strengthened rather than loosened')
+
+    # Arm 3: --failures windows BY the day, so an older newest= must not be
+    # readable as "today".
+    r66c = world()
+    roots.append(r66c)
+    RUN.append_failure(RUN.failure_path(r66c), 'https://c.example/9',
+                       '2026-11-17T09:00:00+08:00', 'E_FETCH URLError: old')
+    rc66c, f66c = face66(r66c, '--failures', '2026-11-20T04:00:00+08:00')
+    ok('AC-RUN66', rc66c == 0 and 'recent7=1' in f66c
+       and days66(f66c) == ['day=2026-11-20']
+       and 'newest=2026-11-17T09:00:00+08:00' in f66c,
+       'the failures face carries the day it windows by while newest= names an '
+       'older stamp - the two can no longer be confused')
+
+    # Arm 4: an empty world still says which day it is empty about.
+    r66d = world()
+    roots.append(r66d)
+    _, t66d = face66(r66d, '--failure-trend', '2026-11-20T04:00:00+08:00')
+    _, f66d = face66(r66d, '--failures', '2026-11-20T04:00:00+08:00')
+    ok('AC-RUN66', days66(t66d) == ['day=2026-11-20']
+       and days66(f66d) == ['day=2026-11-20']
+       and 'today=absent' in t66d,
+       'absence of history is not absence of a day: both faces name the day '
+       'they were asked about')
+
+    # Arm 5: ONE word for ONE fact - the day the two summaries carry is the
+    # day the snapshot writer persists for the same stamp.
+    rows66, _bad66 = RUN.read_failure_days(RUN.failure_day_path(r66b))
+    trend_v66 = RUN.summarize_failure_trend(RUN.failure_day_path(r66b),
+                                            RUN.failure_path(r66b),
+                                            '2026-11-20T04:00:00+08:00')
+    fails_v66 = RUN.summarize_failures(RUN.failure_path(r66b),
+                                       '2026-11-20T04:00:00+08:00')
+    ok('AC-RUN66', trend_v66.get('day') == fails_v66.get('day') == '2026-11-20'
+       and [r.get('day') for r in rows66][-1] == '2026-11-20',
+       'the trend, the summary and the snapshot row answer the same day for '
+       'the same stamp - one word, one fact, three faces')
+
+    # Arm 6: a stamp that is not a timestamp falls back, never raises.
+    t66j = RUN.summarize_failure_trend(RUN.failure_day_path(r66d),
+                                       RUN.failure_path(r66d), 'nope')
+    f66j = RUN.summarize_failures(RUN.failure_path(r66d), 'nope')
+    ok('AC-RUN66', t66j.get('day') == f66j.get('day') == RUN._day_of('nope')
+       == 'nope',
+       'an unparseable stamp answers its documented fallback on both faces '
+       'rather than raising - a display face never dies over its input')
+
+    # Arm 7: pure display - two runs are byte-identical and no byte of the
+    # world changes.
+    def tree66(path66):
+        got = {}
+        for base, _d, files in os.walk(path66):
+            for name in files:
+                full = os.path.join(base, name)
+                with open(full, 'rb') as fh:
+                    got[os.path.relpath(full, path66)] = fh.read()
+        return got
+
+    before66 = tree66(r66b)
+    a66 = face66(r66b, '--failure-trend', '2026-11-20T04:00:00+08:00')[1]
+    b66 = face66(r66b, '--failure-trend', '2026-11-20T04:00:00+08:00')[1]
+    af66 = face66(r66b, '--failures', '2026-11-20T04:00:00+08:00')[1]
+    bf66 = face66(r66b, '--failures', '2026-11-20T04:00:00+08:00')[1]
+    ok('AC-RUN66', a66 == b66 and af66 == bf66 and tree66(r66b) == before66,
+       'both faces are still pure displays: same answer twice, zero bytes '
+       'written to the world')
+
+    # Arm 8: source - the token is at the tail of each line exactly once and
+    # the day comes from the summaries rather than being hard-written twice.
+    with io.open(os.path.join(ROOT, 'tools', 'crawl_runner.py'),
+                 'r', encoding='utf-8') as fh:
+        src66 = fh.read()
+
+    def body66(name):
+        i66 = src66.find('def %s(' % name)
+        j66 = src66.find('\ndef ', i66 + 1)
+        return src66[i66:j66 if j66 > 0 else len(src66)]
+
+    ok('AC-RUN66', "'kind=%s day=%s'" in src66
+       and "fcov=%s rcov=%s '\n              'day=%s'" in src66
+       and "'day': head_day" in body66('_summary_from_rows')
+       and "'day': head_day" in body66('summarize_failure_trend'),
+       'each face appends day= exactly once at its tail and both read it from '
+       'the summary return, so a third face cannot print its own hard-written '
+       'day')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

@@ -1,0 +1,8 @@
+stamp=2026-11-20T01:13:56.530088+08:00
+--failures rc=0
+  CRAWL-FAILURES total=0 recent7=0 bad=0 urls=0 bytes=0 lines=0 size_gate=0.0000% gate_ref=100MB newest=none error=none kind=none day=2026-11-20
+  day-token: ['day=2026-11-20']
+--failure-trend rc=0
+  CRAWL-FAILURE-TREND days=2 today=0 prev=0 mean=0 delta=0 worst=2026-11-20:0 recurring=0 sources=0 bad=0 evidence=history kind=none recur=none cov=2026-11-19..2026-11-20 wcov=2/7 newest_src=none since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=none rcov=2026-11-19..2026-11-20 day=2026-11-20
+  day-token: ['day=2026-11-20']
+  count-token: ['today=0']

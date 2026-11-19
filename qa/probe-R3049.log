@@ -1,0 +1,22 @@
+== P1: can the resolved day be read off the lines? ==
+W1 trend (history ends 11-19, asked about 11-20): rc=0
+  line: CRAWL-FAILURE-TREND days=2 today=absent prev=1 mean=1.5 delta=none worst=2026-11-18:2 recurring=0 sources=0 bad=0 evidence=history kind=none recur=none cov=2026-11-18..2026-11-19 wcov=2/7 newest_src=none since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=none rcov=none
+  today=absent present=True  head-day 2026-11-20 on line=False
+W2 three notations identical=True  any line naming 2026-11-20=False
+W3 empty world: rc=0 today=absent=True head-day on line=False
+W4 --failures (newest failure 11-17, asked about 11-20): rc=0
+  line: CRAWL-FAILURES total=1 recent7=1 bad=0 urls=1 bytes=109 lines=1 size_gate=0.0001% gate_ref=100MB newest=2026-11-17T09:00:00+08:00 error=E_FETCH URLError: old kind=urlerror
+  recent7 present=True  head-day 2026-11-20 on line=False  newest=11-17 on line=True
+W5 asked at 11-20: cov=['cov=2026-11-19..2026-11-20'] today=['today=1']
+W5 asked at 11-21 (head 11-21): cov=['cov=2026-11-19..2026-11-20'] today=['today=absent']  cov-end == head? False
+  -> guessing head from cov's right end is RIGHT at 11-20 and WRONG at 11-21 (cov ends 11-20 while the window opens at 11-21)
+P1 day-valued tokens already on the trend line: ['worst=2026-11-18:2', 'cov=2026-11-18..2026-11-19', 'fcov=none', 'rcov=none']
+P1 day-valued tokens on the --failures line: ['newest=2026-11-17T09:00:00+08:00']
+P1 tokens between today= and the line end: 25
+== P2: which suite arms pin these two lines, and how? ==
+  arm at L879 kind=substring substring_pins=5
+  arm at L1058 kind=substring substring_pins=1
+P2 arms pinning either line: 2
+P2 whole-line equality over notations lives in AC-RUN65 (lines trend65[0][1] == trend65[1][1] == trend65[2][1] and the same for fails65) - an added day= that is notation-invariant keeps it green
+P2 exact token-count assertions (len(t...)) at lines: [7392, 5924, 5997, 6168, 6174, 6362, 6506, 6548, 6777, 6921]
+P2 python files naming either literal: ['src/os/test_crawl_runner.py', 'tmp/close_R2995.py', 'tmp/closeout_R2996.py', 'tmp/closeout_R2997.py', 'tmp/closeout_R3006.py', 'tmp/negctl_R2993.py', 'tmp/probe_R3005.py', 'tmp/probe_R3006.py', 'tmp/probe_R3017.py', 'tools/crawl_runner.py']

@@ -1,0 +1,5 @@
+NEGCTL honest reader GREEN 4/4 (day 3/3 + count 1/1)
+NEGCTL mutation absent reads none      CAUGHT  caught-by=['absent day still named', 'head is not cov end']
+NEGCTL mutation day cut from text      CAUGHT  caught-by=['one instant one day']
+NEGCTL mutation head taken from cov    CAUGHT  caught-by=['absent day still named', 'head is not cov end']
+NEGCTL mutation today becomes a day    CAUGHT  caught-by=['today stays a count']

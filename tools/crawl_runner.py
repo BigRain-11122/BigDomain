@@ -646,6 +646,25 @@ than implied - this is the MACHINE's local zone, the same frame the default
 clock face already reads, so two machines in different zones still name
 different days for one world.
 
+WHICH DAY THE COUNT TREND CALLS TODAY (R3049, measured first -
+qa/probe-R3049.log): R3048 made every clock face resolve the right day, and the
+two faces that window by it still printed no day word - `today=` answers HOW
+MANY failures a day had, never WHICH day it was, and `recent7=` is a count over
+a window whose head was computed and dropped. Measured on a history ending
+11-19 asked about 11-20: the trend read `today=absent` and the whole line named
+no day, so a reader could not tell which day was absent, nor confirm which day
+a UTC stamp normalised to (all three notations of one instant printed the same
+dayless line). Deriving the head from a neighbour was measured and is wrong:
+`worst=` names the worst day (not the head), `cov=`/`fcov=` name file spans, and
+guessing from `cov=`'s right end read right at 11-20 and wrong at 11-21.
+Both faces therefore print ` day=<window head>` at the END of the line - the
+SAME word `--snapshot-failures` already prints, for the same fact (the day the
+window opens at), so a person meets one word meaning one thing rather than a
+fifth day token meaning a fifth thing. `today=` stays a count and sits 25
+tokens away, so the pair cannot be read as two "todays". The failures face
+prints the head it windows by, so `newest=` (an older stamp, measured three
+days back) can no longer pass for "today".
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1304,6 +1323,10 @@ def _summary_from_rows(rows, bad, day, window_days=7):
     newest_error = (newest or {}).get('error')
     return {'total': len(rows), 'recent': recent, 'bad': bad,
             'urls': len(urls), 'window_days': window_days,
+            # R3049: the day the window opens at was computed here and thrown
+            # away, so `recent7=` was a count of days nobody could name. Same
+            # word the snapshot face already prints.
+            'day': head_day,
             'newest_at': (newest or {}).get('failed_at'),
             'newest_error': newest_error,
             # R2997: the same bucket function the trend line uses, so one
@@ -3132,6 +3155,10 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # empty or holds no usable row.
     fcov = _side_coverage(failures_path)
     return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
+            # R3049: `today=` answers HOW MANY, never WHICH DAY - measured on a
+            # history ending yesterday, the line read today=absent and named no
+            # day at all (qa/probe-R3049.log).
+            'day': head_day,
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
             'worst': (None, None) if worst_row is None else (wday, wcount),
             'recurring': recurring, 'sources': len(days_by_source),
@@ -3334,13 +3361,15 @@ def main(argv=None):
     ap.add_argument('--failures', action='store_true',
                     help='print the failure side channel summary and exit '
                          '(a reader over evidence; carries bytes/lines and a '
-                         'display-only size_gate percentage; gates nothing)')
+                         'display-only size_gate percentage, plus the day the '
+                         'window opens at as day=; gates nothing)')
     ap.add_argument('--failure-days', dest='failure_days', action='store_true',
                     help='print the daily failure-count history and exit '
                          '(a display series; gates nothing)')
     ap.add_argument('--failure-trend', dest='failure_trend', action='store_true',
                     help='print the count trend joined with per-day source '
-                         'recurrence and exit (a display line; gates nothing)')
+                         'recurrence and exit (a display line; today= is HOW '
+                         'MANY, day= is WHICH DAY; gates nothing)')
     ap.add_argument('--pending-old-list', dest='pending_old_list',
                     action='store_true',
                     help='print the out-of-window sources that never came '
@@ -3479,13 +3508,14 @@ def main(argv=None):
         summary = summarize_failures(failure_path(args.root), stamp, args.days)
         print('CRAWL-FAILURES total=%d recent%d=%d bad=%d urls=%d bytes=%d '
               'lines=%d size_gate=%.4f%% gate_ref=%dMB newest=%s error=%s '
-              'kind=%s' % (summary['total'], summary['window_days'],
+              'kind=%s day=%s'
+              % (summary['total'], summary['window_days'],
                            summary['recent'], summary['bad'], summary['urls'],
                            summary['bytes'], summary['lines'],
                            summary['size_gate'], summary['gate_ref_mb'],
                            summary['newest_at'] or 'none',
                            summary['newest_error'] or 'none',
-                           summary['newest_kind']))
+                           summary['newest_kind'], summary['day']))
         return 0
     if args.failure_days:
         day_read = read_failure_days(failure_day_path(args.root))
@@ -3638,7 +3668,8 @@ def main(argv=None):
               'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
               'pending=%s pending_src=%s pending_age_d=%s '
               'pending_age_min_d=%s pending_age_med_d=%s pending_old=%s '
-              'pending_old_age_d=%s pending_old_age_min_d=%s fcov=%s rcov=%s'
+              'pending_old_age_d=%s pending_old_age_min_d=%s fcov=%s rcov=%s '
+              'day=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
@@ -3647,7 +3678,7 @@ def main(argv=None):
                  'unmeasured' if trend['flips'] is None else trend['flips'],
                  pending_txt, trend['pending_src'] or 'none', age_txt,
                  age_min_txt, age_med_txt, old_txt, old_age_txt,
-                 old_age_min_txt, fcov_txt, rcov_txt))
+                 old_age_min_txt, fcov_txt, rcov_txt, trend['day']))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)
