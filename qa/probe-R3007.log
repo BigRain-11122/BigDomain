@@ -1,0 +1,9 @@
+[P1] helper returns 3 values (2, 2, 'https://a.example/page'); the named stamp is discarded, so an age cannot be derived from the returned pair alone
+[P1b] pending=(2, 2) pending_src='https://a.example/page' (two sources still gone)
+[P2] summarize_failures newest_at='2026-11-19T12:00:00+08:00' while pending_src='https://a.example/page' - the failure summary answers across ALL sources, so the named source's own stamp is not readable from it (DIFFERENT)
+[P3] pending=(2, 2) plus one name answers "how many" and "start here"; the other identity count is arithmetic (numerator-1=1) and their names would need one line per source - refused by the one-line contract
+[P4] cov=None wcov=(0, 7) rcov=('2026-11-19', '2026-11-19') are date RANGES (evidence span); an age in days is a scalar elapsed since the named failure - a different question, not a restatement
+[P4b] row keys=23 -> adding one age key would make 24
+[P5] all-repaired world: pending=(0, 1) pending_src=None -> an age must read None (none), never 0, because 0 would claim a named source
+[P6] real repo: evidence='history' sources=0 pending=None pending_src=None newest_src=None
+[DONE] 8 readings

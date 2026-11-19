@@ -1,0 +1,7 @@
+HONEST shape1 pending_src=https://a.example/page pending_age_d=4
+M1 newest_at-age=0 vs honest 4 -> CAUGHT
+HONEST shape2 pending_src=None pending_age_d=None
+M2 zero-instead-of-none=0 vs honest None -> CAUGHT
+M3 future-stamp age=2 vs honest None -> CAUGHT
+HONEST green=True True True
+[DONE] mutants caught=3/3

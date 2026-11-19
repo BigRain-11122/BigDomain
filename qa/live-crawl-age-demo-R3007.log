@@ -1,0 +1,3 @@
+DEMO pending  rc=0 CRAWL-FAILURE-TREND days=0 today=absent prev=none mean=none delta=none worst=none recurring=0 sources=2 bad=0 evidence=side kind=http:1 recur=0:0 cov=none wcov=0/7 newest_src=https://b.example/page since_ok=yes flips=0 pending=1/2 pending_src=https://a.example/page pending_age_d=4 rcov=2026-11-19..2026-11-19
+DEMO repaired rc=0 CRAWL-FAILURE-TREND days=0 today=absent prev=none mean=none delta=none worst=none recurring=0 sources=1 bad=0 evidence=side kind=timeout:1 recur=0:0 cov=none wcov=0/7 newest_src=https://a.example/page since_ok=yes flips=0 pending=0/1 pending_src=none pending_age_d=none rcov=2026-11-19..2026-11-19
+[DONE] first row names the source waiting since 2026-11-15 and its age; the second reads none because nothing is pending

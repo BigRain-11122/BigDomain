@@ -259,6 +259,23 @@ only the first is named, and an unmeasured source is never named (the R3004
 split holds - a source nobody looked after is not pending). Display only,
 no PASS/FLAG.
 
+HOW LONG (R3007): the name answered "start here", never "how long has this been
+gone", so a source broken five minutes ago and one broken a week read the same.
+The row now also carries pending_age_d= - whole days from the NAMED source's OWN
+latest failure date to the window day, both taken as the literal first ten
+characters of an ISO stamp (the record writer's day law). It is deliberately not
+derived from the failure summary's newest_at: measured in the probe world, that
+value is taken across ALL sources and named a different source's stamp than
+pending_src did. It reads none - never 0 - when no source is named, when either
+date is unusable, or when the stamp is LATER than the reference day (an age
+cannot be invented from a future failure). Three coverage readings already on
+the row answer different questions and are untouched: rcov= is how far the
+crawl record reaches, cov=/wcov= are how much of the failure-day history is
+covered, pending_age_d= is elapsed days for ONE named source. The other pending
+sources are still counts, not names: their number is pending[0]-1 (arithmetic,
+refused as a field) and their identities need one line per source (refused).
+Display only, no PASS/FLAG.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -732,8 +749,37 @@ def _record_coverage(record_path):
     return (days[0], days[-1]) if days else None
 
 
+def _day_age(day, stamp):
+    """Whole days from `stamp`'s date to `day`, or None.
+
+    WHY (R3007): the row could name WHICH source was still gone but not HOW
+    LONG, so a source broken five minutes ago and one broken a week read the
+    same. Measured before this existed: the pending source's own stamp was
+    computed inside _pending_sources and discarded, and the failure summary's
+    newest_at is taken across ALL sources (it named a different source's stamp
+    than pending_src in the probe world), so no existing field carried it.
+
+    DAY granularity on purpose, on the same ten-character ISO prefix the record
+    writer owns, and no clock: `day` is the caller's window day, so this module
+    still reads one. None rather than 0 or a negative number when nothing can
+    be said - no named source, an unusable date on either side, or a stamp LATER
+    than the reference day (an age cannot be invented from a future failure).
+    """
+    head = str(day or '')[:10]
+    tail = str(stamp or '')[:10]
+    if len(head) != 10 or len(tail) != 10:
+        return None
+    try:
+        first = datetime.date.fromisoformat(tail)
+        last = datetime.date.fromisoformat(head)
+    except ValueError:
+        return None
+    delta = (last - first).days
+    return delta if delta >= 0 else None
+
+
 def _pending_sources(record_path, in_window):
-    """(not back, judged, longest-waiting source) over the whole window.
+    """(not back, judged, longest-waiting source, that source's stamp).
 
     WHY (R3005): newest_src/since_ok answer for ONE source - the latest failure
     in the window - so a window with three failing pages said nothing about the
@@ -766,6 +812,15 @@ def _pending_sources(record_path, in_window):
     readers never disagree. None when nothing is pending. It is deliberately
     NOT every pending source: naming them all needs one line per source, which
     the one-line contract refuses. The count stays in pending=<n>/<judged>.
+
+    R3007 KEEPS THE STAMP: the name alone could not say HOW LONG, because the
+    stamp was computed here and thrown away, and the failure summary's
+    newest_at is taken across ALL sources (measured: it named another source's
+    stamp than pending_src's). The fourth value is the named source's OWN
+    latest failure stamp, or None - the caller turns it into an age against its
+    window day, so this module still reads no clock. The other pending sources
+    are not returned: their count is already pending[0]-1 (arithmetic, refused
+    as a field) and their names need the per-source lines the contract refuses.
     """
     latest = {}
     for row in in_window or ():
@@ -787,7 +842,9 @@ def _pending_sources(record_path, in_window):
         elif verdict == 'yes':
             judged += 1
     waiting.sort()
-    return (pending, judged, waiting[0][1] if waiting else None)
+    if not waiting:
+        return (pending, judged, None, None)
+    return (pending, judged, waiting[0][1], waiting[0][0])
 
 
 def summarize_failure_trend(history_path, failures_path, day, window_days=7,
@@ -968,6 +1025,14 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # 0/0) when nothing was judged: zero-of-zero would read as "nothing to fix".
     pending = None
     pending_src = None
+    # R3007 AGE OF THE NAMED SOURCE: the name answered "start here", never "how
+    # long has this been broken" - so a source gone five minutes and one gone a
+    # week read the same. The age is measured against the window day and the
+    # NAMED source's own latest failure, never against the failure summary's
+    # newest_at (measured: that one is taken across all sources and named a
+    # different source's stamp). None when no source is named, so 0 can never
+    # pass for "there is a named source and it just broke".
+    pending_age_d = None
     if evidence == 'side' and in_window:
         got = _pending_sources(record_path, in_window)
         if got[1]:
@@ -976,6 +1041,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             # One name, the pending source waiting longest - never all of them,
             # because one line per source is what the contract refuses.
             pending_src = got[2]
+            pending_age_d = _day_age(day, got[3])
     rcov = _record_coverage(record_path)
     return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
@@ -985,6 +1051,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
             'newest_src': newest_src, 'since_ok': since_ok,
             'flips': flips, 'pending': pending, 'pending_src': pending_src,
+            'pending_age_d': pending_age_d,
             'rcov': rcov, 'window_days': window_days}
 
 
@@ -1207,17 +1274,20 @@ def main(argv=None):
                     else '%s..%s' % trend['rcov'])
         pending_txt = ('none' if trend['pending'] is None
                        else '%d/%d' % trend['pending'])
+        age_txt = ('none' if trend['pending_age_d'] is None
+                   else '%d' % trend['pending_age_d'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
               'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
               'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
-              'pending=%s pending_src=%s rcov=%s'
+              'pending=%s pending_src=%s pending_age_d=%s rcov=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
                  recur_txt, cov_txt, wcov_txt,
                  trend['newest_src'] or 'none', trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
-                 pending_txt, trend['pending_src'] or 'none', rcov_txt))
+                 pending_txt, trend['pending_src'] or 'none', age_txt,
+                 rcov_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)

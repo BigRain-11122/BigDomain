@@ -4677,8 +4677,10 @@ SUITES = [
     # before the code.) R3006 names one pending source beside the count; an
     # unjudged= field was refused on measurement as pure arithmetic.
     # (AC-RUN23 pinned in the R3006 PIN row before the code.)
+    # R3007: pending_age_d= answers how long the NAMED source has been gone;
+    # AC-RUN24 pinned in the R3007 PIN row before the code.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 23),
+     os.path.join("..", "os", "test_crawl_runner.py"), 24),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep
