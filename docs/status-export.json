@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-20 R3061 PRODUCT+ENGINEERING: at an instant two sources share, --failure-trend now judges the OTHER source too. The R3061 probe ran before the pin (qa/probe-R3061.log) and measured the missing half: with A repaired (a record row strictly after the failure) and B still broken at one instant, the line named both and judged only whichever row was written last, so the repaired source's health sat on NO key in one order and the broken one's health on no key in the other; pending= already counted both and pending_src= can name a THIRD older source. summarize_failure_trend now publishes twin_ok: _since_ok for the twin's own row, None when no single twin exists (one source, or a three-way tie).",
+    "current": "2026-11-20 R3062 PRODUCT+ENGINEERING: the channel face now names WHOSE error it prints. The R3062 probe ran before the pin (qa/probe-R3062.log, 1966B, 15 lines, private worlds, zero socket, zero clock, zero network) and measured that the tie line carried 14 keys and no source at all: no key value was any source url, no key name mentions a source, swapping the two rows moved exactly newest= and error= while newest_rows=2 stayed put, and with two DIFFERENT errors the second one appeared nowhere. tools/crawl_runner.py now publishes newest_src= from the row the face already selected (the R3058 law, the writer's characters echoed whole), so 'newest_rows=2 error=E_B' is owned by a named site, and on one world --failures and --failure-trend print the SAME name (the R3057 law across faces). The tie words newest_twin=/twin_ok= stay on the trend face; the second error in a tie remains invisible, carried.",
     "do": "R3005 measured, in order: the PIN row was written in src/os/backlog.md BEFORE any code byte moved, and the read-only probe tmp/probe_R3005.py -> qa/probe-R3005.log (682B, 12 lines, utf-8/lf, six private worlds, zero sockets) ran BEFORE the pin. It measured: (1) three-source window answers for one source only; (2) recur and the pending count are independent in BOTH directions - recur=(0,0) with one judged source still gone, and recur=(2,4) with nothing pending when both came back; (3) the queue head's own suggested numerator (since_ok != 'yes') counts a source whose newest failure is later than every record row as pending, reviving exactly the R3004 conflation at aggregate level, so the numerator counts 'no' only and unmeasured sits in neither number; (4) an absent record leaves every source unmeasured, so zero-of-zero had to print none rather than 0/0; (5) 13 arms read the trend line, three pin exact key sets, and a multi-source world still printed exactly one line, which is why per-source lines were refused. AC-RUN22 (seven arms) was pinned before the code; three existing key-set arms were widened by exactly the one new key, disclosed as a criterion following its field rather than a loosening.",
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/crawl-runner-R3060.log (70041B, 2026-11-20)",
-    "latest_evidence": "qa/crawl-runner-R3060.log (70041B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3062.log (126B, 2026-11-20)",
+    "latest_evidence": "qa/negctl-R3062.log (126B, 2026-11-20)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3062] next window (<=48h): (0) MAIN — **另一源的健康只在趋势面上，`--failures` 那张面仍只印一行**。本轮给 `--failure-trend` 加了 `twin_ok=`，但一条通道的\"谁最后失败\"另有一张面（`--failures` 的 `newest=`/`newest_rows=`），并列世界里那张面只印被命名那一行的 error，第二个源的名字与健康在它上面都看不到——本轮没量那张面，所以这句话是待量假设而不是结论。下一轮先量（只读）：①并列世界（A 已修、B 仍坏，同一瞬间）`--failures` 全行印什么、`newest_rows=2` 与第二个源之间有没有任何键搭桥；②该面若要给第二源一个词，会不会与趋势面的 `newest_twin=`/`twin_ok=` 形成同一事实两个词（R3057 已判负的那类病）；③`--failures` 的契约为\"一行一条通道\"，加并列是否必须破约（若是则拒绝并写明）；④`--pending-old-list` 的 `last_at=` 与并列的关系是否已在 R3058/R3059 定谳（勿重开）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law rather than a measured optimum, (truncated)",
-    "next_milestone_due": "2026-11-22T05:24:31+08:00",
-    "updated_at": "2026-11-20T05:24:31+08:00"
+    "next_milestone": "[R3063] next window (<=48h): (0) MAIN — **并列时第二个错误仍然没有任何面印它**。R3062 给通道面补了\"这行 error 是谁的\"（`newest_src=`），但两行同瞬间而错误不同时，第二个错误在 `--failures` 与 `--failure-trend` 两张面上都不出现（R3062 探针 P2g 实测），读者只能去翻文件。本轮没量那张面之外的既有词能否说它，所以这是待量假设。下一轮先量（只读）：①并列世界里两张面的全键与第二个错误之间有没有任何词搭桥（量全键值，不只看 `error=`）；②若加词，会不会与 R3058 的 `newest_rows=`／R3059 的 `newest_srcs=`／R3060 的 `newest_twin=` 形成同一事实两个词；③\"两个错误\"这件事值不值得一个词——错误串是给人看的诊断，`kind=` 已为一类错误分类，是否该改成一类计数而不是再印一条串；④pending 面是否已能按源回答（R3058/R3059 已拒，勿重开）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law rather than a measured optimum, `series_file_order=day` is a constant on healthy lines, the (truncated)",
+    "next_milestone_due": "2026-11-22T05:41:11+08:00",
+    "updated_at": "2026-11-20T05:41:11+08:00"
   },
-  "current": "2026-11-20 R3061 PRODUCT+ENGINEERING: at an instant two sources share, --failure-trend now judges the OTHER source too. The R3061 probe ran before the pin (qa/probe-R3061.log) and measured the missing half: with A repaired (a record row strictly after the failure) and B still broken at one instant, the line named both and judged only whichever row was written last, so the repaired source's health sat on NO key in one order and the broken one's health on no key in the other; pending= already counted both and pending_src= can name a THIRD older source. summarize_failure_trend now publishes twin_ok: _since_ok for the twin's own row, None when no single twin exists (one source, or a three-way tie).",
+  "current": "2026-11-20 R3062 PRODUCT+ENGINEERING: the channel face now names WHOSE error it prints. The R3062 probe ran before the pin (qa/probe-R3062.log, 1966B, 15 lines, private worlds, zero socket, zero clock, zero network) and measured that the tie line carried 14 keys and no source at all: no key value was any source url, no key name mentions a source, swapping the two rows moved exactly newest= and error= while newest_rows=2 stayed put, and with two DIFFERENT errors the second one appeared nowhere. tools/crawl_runner.py now publishes newest_src= from the row the face already selected (the R3058 law, the writer's characters echoed whole), so 'newest_rows=2 error=E_B' is owned by a named site, and on one world --failures and --failure-trend print the SAME name (the R3057 law across faces). The tie words newest_twin=/twin_ok= stay on the trend face; the second error in a tie remains invisible, carried.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3061 PRODUCT+ENGINEERING: at an instant two sources share, --failure-trend now judges the OTHER source too. The R3061 probe ran before the pin (qa/probe-R3061.log) and measured the missing half: with A repaired (a record row strictly after the failure) and B still broken at one instant, the line named both and judged only whichever row was written last, so the repaired source's health sat on NO key in one order and the broken one's health on no key in the other; pending= already counted both and pending_src= can name a THIRD older source. summarize_failure_trend now publishes twin_ok: _since_ok for the twin's own row, None when no single twin exists (one source, or a three-way tie).",
-  "export_ts": "2026-11-20T05:24:31+08:00",
+  "do": "2026-11-20 R3062 PRODUCT+ENGINEERING: the channel face now names WHOSE error it prints. The R3062 probe ran before the pin (qa/probe-R3062.log, 1966B, 15 lines, private worlds, zero socket, zero clock, zero network) and measured that the tie line carried 14 keys and no source at all: no key value was any source url, no key name mentions a source, swapping the two rows moved exactly newest= and error= while newest_rows=2 stayed put, and with two DIFFERENT errors the second one appeared nowhere. tools/crawl_runner.py now publishes newest_src= from the row the face already selected (the R3058 law, the writer's characters echoed whole), so 'newest_rows=2 error=E_B' is owned by a named site, and on one world --failures and --failure-trend print the SAME name (the R3057 law across faces). The tie words newest_twin=/twin_ok= stay on the trend face; the second error in a tie remains invisible, carried.",
+  "export_ts": "2026-11-20T05:41:11+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
-  "latest_evidence": "qa/crawl-runner-R3061.log (71211B, 2026-11-20)",
-  "next_milestone": "[R3062] next window (<=48h): (0) MAIN — **另一源的健康只在趋势面上，`--failures` 那张面仍只印一行**。本轮给 `--failure-trend` 加了 `twin_ok=`，但一条通道的\"谁最后失败\"另有一张面（`--failures` 的 `newest=`/`newest_rows=`），并列世界里那张面只印被命名那一行的 error，第二个源的名字与健康在它上面都看不到——本轮没量那张面，所以这句话是待量假设而不是结论。下一轮先量（只读）：①并列世界（A 已修、B 仍坏，同一瞬间）`--failures` 全行印什么、`newest_rows=2` 与第二个源之间有没有任何键搭桥；②该面若要给第二源一个词，会不会与趋势面的 `newest_twin=`/`twin_ok=` 形成同一事实两个词（R3057 已判负的那类病）；③`--failures` 的契约为\"一行一条通道\"，加并列是否必须破约（若是则拒绝并写明）；④`--pending-old-list` 的 `last_at=` 与并列的关系是否已在 R3058/R3059 定谳（勿重开）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law rather than a measured optimum, (truncated)",
+  "latest_evidence": "qa/negctl-R3062.log (126B, 2026-11-20)",
+  "next_milestone": "[R3063] next window (<=48h): (0) MAIN — **并列时第二个错误仍然没有任何面印它**。R3062 给通道面补了\"这行 error 是谁的\"（`newest_src=`），但两行同瞬间而错误不同时，第二个错误在 `--failures` 与 `--failure-trend` 两张面上都不出现（R3062 探针 P2g 实测），读者只能去翻文件。本轮没量那张面之外的既有词能否说它，所以这是待量假设。下一轮先量（只读）：①并列世界里两张面的全键与第二个错误之间有没有任何词搭桥（量全键值，不只看 `error=`）；②若加词，会不会与 R3058 的 `newest_rows=`／R3059 的 `newest_srcs=`／R3060 的 `newest_twin=` 形成同一事实两个词；③\"两个错误\"这件事值不值得一个词——错误串是给人看的诊断，`kind=` 已为一类错误分类，是否该改成一类计数而不是再印一条串；④pending 面是否已能按源回答（R3058/R3059 已拒，勿重开）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law rather than a measured optimum, `series_file_order=day` is a constant on healthy lines, the (truncated)",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
@@ -105,9 +105,9 @@
   "queue": {
     "delivered_total": 2,
     "floors": {
-      "explore": 10,
       "main": 5,
-      "tech": 10
+      "tech": 10,
+      "explore": 10
     },
     "missing": [],
     "queues": [
@@ -168,7 +168,7 @@
   },
   "results": [
     [
-      "3061",
+      "3062",
       "OSLoop 执行 tick"
     ]
   ],
@@ -179,17 +179,17 @@
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
   "self_drive": {
+    "window": "2026-11-14..2026-11-20",
+    "window_days": 7,
+    "log_lines_in_window": 538,
     "idle_fast_mention_lines": 0,
-    "log_lines_in_window": 531,
     "no_pullable_mention_lines": 0,
-    "proposals_open": 8,
+    "substantive_non_idle_mention_lines": 78,
     "proposals_total": 10,
-    "queue_explore_open": 10,
+    "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
-    "substantive_non_idle_mention_lines": 77,
-    "window": "2026-11-14..2026-11-20",
-    "window_days": 7
+    "queue_explore_open": 10
   },
-  "state_bytes": 563988
+  "state_bytes": 570158
 }

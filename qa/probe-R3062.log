@@ -1,0 +1,15 @@
+P1 failure_exists=False rows=0 bad=0 | day_rows=2 bad=0 | record_rows=3 | same_instant_pairs=0
+P2 tie world --failures line (228 chars): CRAWL-FAILURES total=2 recent7=2 bad=0 bad_days=none urls=2 bytes=190 lines=2 size_gate=0.0002% gate_ref=100MB newest=2026-11-19T20:00:00+00:00 newest_src=https://b3062.example/p error=E_B newest_rows=2 kind=other day=2026-11-20
+P2b line_keys=bad,bad_days,bytes,day,error,gate_ref,kind,lines,newest,newest_rows,newest_src,recent7,size_gate,total,urls
+P2c keys whose value is a source url: newest_src=https://b3062.example/p
+P2d keys carrying "src"/"source": newest_src
+P2e swapped order: moved keys=error,newest,newest_src ; newest=2026-11-20T04:00:00+08:00 error=E_A newest_rows=2
+P2f same error twice -> newest_rows=2 error=E_SAME (one error, two subjects)
+P2g two different errors -> newest_rows=2 error=E_TWO ; E_ONE visible=False E_TWO visible=True (the second error appears nowhere on this face)
+P3 --pending-old-list in the same tie world: CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=0 bad_days=none fcov=2026-11-20..2026-11-20 last_at=2026-11-19T20:00:00+00:00 reason=no-coverage
+P4 trend newest_src=https://b3062.example/p twin=https://a3062.example/p ; --failures carries no source token, so the two faces cannot even disagree yet
+P5 failures line chars=228 ; " newest_src=https://a3062.example/p"=35 chars (+15.4%)
+P6 files outside the runner + suite naming newest_error/newest_rows/CRAWL-FAILURES: backlog.md:newest_error,backlog.md:newest_rows,backlog.md:CRAWL-FAILURES
+P7 empty channel -> newest=none newest_rows=0 error=none
+P8 a 62-char url is echoed whole on the row side: yes
+P8b what the failure face prints for that single row today: CRAWL-FAILURES total=1 recent7=1 bad=0 bad_days=none urls=1 bytes=134 lines=1 size_gate=0.0001% gate_ref=100MB newest=2026-11-20T04:00:00+08:00 newest_src=https://long3062.example/path/with/a/longer/query?a=1&b=2#frag error=E_L newest_rows=1 kind=other day=2026-11-20

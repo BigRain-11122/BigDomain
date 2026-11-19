@@ -601,6 +601,28 @@ per-source verdicts for a three-way tie (no unique second, and the line already
 carries 33 keys, P8); and the same word on --failures / --pending-old-list
 (those two faces answer about the channel, not about one source's repair).
 
+WHOSE ERROR IS IT (R3062, measured first - qa/probe-R3062.log): R3058 taught
+--failures to count the rows that share the newest instant, R3059/R3060/R3061
+named the sources on --failure-trend - and the channel face printed an error
+with no owner at all. Measured on a private tie world (A repaired, B broken at
+one instant): the whole 193-char line carried 14 keys, none of whose values was
+any source url and none of whose names mention a source (P2c/P2d); swapping the
+two rows in the file moved exactly `newest=` and `error=` while newest_rows=2
+stayed put (P2e); and with two DIFFERENT errors the second one appeared nowhere
+on the face (P2g), so "2 rows, one error" could not say whether the two agreed.
+One word: `newest_src=` on --failures is the source_url of the row this face
+already selected (the same `_newest_row` law, echoed whole). It is the SAME
+word the trend prints, and on one world the two faces must read the same
+string - the R3057 law that one fact prints one string, now across faces.
+REFUSED: `newest_twin=`/`twin_ok=` here (those two words belong to the trend
+face and printing one fact on two faces is the R3057 sin; the R3061 refusal
+stands), listing every row of a tie (the one-line-per-channel contract; the
+numbered family was refused in R3059/R3060), truncating the url to save line
+length (R3057 echo law: the writer's own characters, uncut), and a count of
+distinct errors within the tie (no reader asked, and it would give the line a
+second count). BOUNDARY: the second error in a tie stays invisible on this
+face; that gap is carried, not claimed solved.
+
 WHICH DAY A ROW COUNTS IN (R3055, measured first - qa/probe-R3055.log): R3048
 gave the clock faces one day law - the LOCAL day of the instant, `_day_of` -
 but only the window HEAD used it; every count and span still cut the first ten
@@ -1832,6 +1854,12 @@ def _summary_from_rows(rows, bad, day, window_days=7, bad_days=None):
             # word the snapshot face already prints.
             'day': head_day,
             'newest_at': (newest or {}).get('failed_at'),
+            # R3062: WHOSE error the line prints. newest_rows= already says how
+            # many rows share the instant, and the error is the last-written
+            # row's - but without a name a reader cannot ask that site about
+            # it, nor tell it apart from the other row in a tie (measured,
+            # qa/probe-R3062.log P2c/P2g: no key carried a source url).
+            'newest_src': (newest or {}).get('source_url'),
             'newest_error': newest_error,
             # R3058: HOW MANY rows name the newest instant. 1 is the healthy
             # reading, 2+ says the "newest failure" sentence has more than one
@@ -4239,8 +4267,8 @@ def main(argv=None):
         summary = summarize_failures(failure_path(args.root), stamp, args.days)
         print('CRAWL-FAILURES total=%d recent%d=%d bad=%d bad_days=%s '
               'urls=%d bytes=%d '
-              'lines=%d size_gate=%.4f%% gate_ref=%dMB newest=%s error=%s '
-              'newest_rows=%d kind=%s day=%s'
+              'lines=%d size_gate=%.4f%% gate_ref=%dMB newest=%s newest_src=%s '
+              'error=%s newest_rows=%d kind=%s day=%s'
               % (summary['total'], summary['window_days'],
                            summary['recent'], summary['bad'],
                            ','.join(summary['bad_days'] or []) or 'none',
@@ -4248,6 +4276,7 @@ def main(argv=None):
                            summary['bytes'], summary['lines'],
                            summary['size_gate'], summary['gate_ref_mb'],
                            summary['newest_at'] or 'none',
+                           summary['newest_src'] or 'none',
                            summary['newest_error'] or 'none',
                            summary['newest_rows'],
                            summary['newest_kind'], summary['day']))

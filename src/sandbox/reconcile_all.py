@@ -4771,8 +4771,10 @@ SUITES = [
     # name (newest_srcs=, AC-RUN76), 75 -> 76. R3060 names the OTHER source at
     # that instant (newest_twin=, AC-RUN77), 76 -> 77. R3061 judges that other
     # source's own health on the same R3004 law (twin_ok=, AC-RUN78), 77 -> 78.
+    # R3062 names the source whose error the channel face prints, so the two
+    # faces cannot disagree on one fact (newest_src=, AC-RUN79), 78 -> 79.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 78),
+     os.path.join("..", "os", "test_crawl_runner.py"), 79),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

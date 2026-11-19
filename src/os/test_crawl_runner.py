@@ -889,8 +889,10 @@ def main():
     with contextlib.redirect_stdout(buf):
         rc10 = RUN.main(['--failures', '--root', root10, '--at', AT])
     line10 = buf.getvalue().strip()
-    ok('AC-RUN7', rc10 == 0 and 'total=1' in line10 and 'd.example' not in line10,
-       '--root reads the world it is given, not the real checkout')
+    ok('AC-RUN7', rc10 == 0 and 'total=1' in line10
+       and 'newest_src=https://d.example/4' in line10,
+       '--root reads the world it is given: the count and the named source '
+       'both come from that world')
     root11 = world(); roots.append(root11)
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
@@ -7563,7 +7565,7 @@ def main():
         j66 = src66.find('\ndef ', i66 + 1)
         return src66[i66:j66 if j66 > 0 else len(src66)]
 
-    ok('AC-RUN66', "'newest_rows=%d kind=%s day=%s'" in src66
+    ok('AC-RUN66', "error=%s newest_rows=%d kind=%s day=%s'" in src66
        and "fcov=%s rcov=%s '\n              'day=%s'" in src66
        and "'day': head_day" in body66('_summary_from_rows')
        and "'day': head_day" in body66('summarize_failure_trend'),
@@ -9227,6 +9229,116 @@ def main():
        and 'twin_ok=' in lines78w[0],
        'the trend selects the twin row through one helper, publishes the key '
        'and prints it on the line')
+
+    # --- AC-RUN79: whose error does --failures print (R3062) -----------------
+    # Measured before this existed (qa/probe-R3062.log P2c/P2e/P2g): the tie
+    # line carried 14 keys and NO value was a source url, so '2 rows, error=E_B'
+    # could not say whose error it was, nor whether the second row agreed. One
+    # word: newest_src= names the row this face already selected, and it must
+    # read the same string the trend prints for that world (R3057 law).
+    AT79 = '2026-11-20T23:59:00+08:00'
+    A79 = '2026-11-20T04:00:00+08:00'
+    B79 = '2026-11-19T20:00:00+00:00'   # the SAME instant as A79
+    LATER79 = '2026-11-20T06:00:00+08:00'
+    SA79 = 'https://a79.example/p'
+    SB79 = 'https://b79.example/p'
+
+    def record79(root, rows):
+        for src, when in rows:
+            CR.append_record(CR.record_path(root), src, when, 'changed')
+        return CR.record_path(root)
+
+    # Arm 1: a healthy single row - the name is that row's own url, echoed
+    # whole, and the trend face prints the same string for the same world.
+    H79 = world(); roots.append(H79)
+    side73(H79, [(SA79, A79, 'E_A')])
+    record79(H79, [(SA79, LATER79)])
+    _, linesF79h = face73(H79, '--failures', AT79)
+    tF79h = toks69(linesF79h[0])
+    _, linesT79h = face73(H79, '--failure-trend', AT79)
+    tT79h = toks69(linesT79h[0])
+    ok('AC-RUN79', tF79h.get('newest_src') == SA79
+       and tT79h.get('newest_src') == SA79,
+       'a single row names its own source, and both faces print one string')
+
+    # Arm 2: the tie world under both file orders - the name follows the
+    # last-written row (the R3058 law) while the row count stays 2.
+    pairs79 = []
+    for order79 in (((SA79, A79, 'E_A'), (SB79, B79, 'E_B')),
+                    ((SB79, B79, 'E_B'), (SA79, A79, 'E_A'))):
+        W79 = world(); roots.append(W79)
+        side73(W79, list(order79))
+        record79(W79, [(SA79, LATER79)])
+        _, linesF79 = face73(W79, '--failures', AT79)
+        tF79 = toks69(linesF79[0])
+        _, linesT79 = face73(W79, '--failure-trend', AT79)
+        tT79 = toks69(linesT79[0])
+        pairs79.append((tF79, tT79))
+        expected79 = order79[-1][0]
+        ok('AC-RUN79', tF79.get('newest_src') == expected79
+           and tF79.get('newest_rows') == '2',
+           'a tie names the last-written row and still counts both rows')
+
+    # Arm 3: the same world read on both faces - one fact, one string.
+    ok('AC-RUN79', all(f.get('newest_src') == t.get('newest_src')
+                       for f, t in pairs79)
+       and pairs79[0][0].get('newest_src') != pairs79[1][0].get('newest_src'),
+       'the two faces never disagree on the name, and the name still follows '
+       'the write order rather than one fixed row')
+
+    # Arm 4: no evidence - the name is absent beside the absent stamp.
+    E79 = world(); roots.append(E79)
+    rc79e, linesF79e = face73(E79, '--failures', AT79)
+    tF79e = toks69(linesF79e[0])
+    ok('AC-RUN79', rc79e == 0 and tF79e.get('newest_src') == 'none'
+       and tF79e.get('newest') == 'none',
+       'an empty channel reads newest_src=none beside newest=none and raises '
+       'nothing')
+
+    # Arm 5: the writer's characters are echoed whole - no truncation, no
+    # ellipsis, even when the url is long enough to matter for line length.
+    LONG79 = 'https://long79.example/path/with/a/longer/query?a=1&b=2#frag'
+    L79 = world(); roots.append(L79)
+    side73(L79, [(LONG79, A79, 'E_L')])
+    record79(L79, [(LONG79, LATER79)])
+    _, linesF79L = face73(L79, '--failures', AT79)
+    tF79L = toks69(linesF79L[0])
+    ok('AC-RUN79', tF79L.get('newest_src') == LONG79
+       and '...' not in linesF79L[0] and 'none' != tF79L.get('newest_src'),
+       'a long url is echoed whole on the line, with no ellipsis')
+
+    # Arm 6: the refusals are assertions, not prose - the tie words stay on
+    # the trend face where they already live.
+    ok('AC-RUN79', 'newest_twin=' not in linesF79[0]
+       and 'twin_ok=' not in linesF79[0]
+       and 'newest_srcs=' not in linesF79[0],
+       'the channel face does not borrow the trend face tie words')
+
+    # Arm 7: display only - two runs byte-identical, the world unmoved, and
+    # every pre-existing word keeps its value on this exact shape.
+    W79b, _t79b = pairs79[0]
+    P79 = world(); roots.append(P79)
+    side73(P79, [(SA79, A79, 'E_A'), (SB79, B79, 'E_B')])
+    record79(P79, [(SA79, LATER79)])
+    before79 = snap69(P79)
+    _, linesF79p = face73(P79, '--failures', AT79)
+    _, linesF79p2 = face73(P79, '--failures', AT79)
+    tF79p = toks69(linesF79p[0])
+    ok('AC-RUN79', linesF79p2 == linesF79p and snap69(P79) == before79
+       and tF79p.get('total') == '2' and tF79p.get('recent7') == '2'
+       and tF79p.get('urls') == '2' and tF79p.get('newest_rows') == '2'
+       and tF79p.get('kind') == 'other' and tF79p.get('day') == '2026-11-20'
+       and tF79p.get('newest_src') == W79b.get('newest_src'),
+       'the word is display only, the world does not move, and every old word '
+       'keeps the value R3058 measured on this shape')
+
+    # Arm 8: wired rather than merely defined.
+    ok('AC-RUN79', "'newest_src': (newest or {}).get('source_url')"
+       in body75('_summary_from_rows')
+       and 'newest_src=%s' in body75('main')
+       and 'newest_src=' in linesF79[0],
+       'the summary publishes the source of its chosen row, main prints it, '
+       'and the shipped line carries the word')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
