@@ -1,0 +1,18 @@
+P1a HEAD_head_src_bytes=110421
+P1a HEAD days_uses_failure_lines=False has_enumerate=False has_line_number=False
+P1a HEAD def_read_failure_day_bad_lines=False def__json_lines=False
+P1b live days_uses_json_lines=True has_enumerate=False
+P1b live def_read_failure_day_bad_lines=True
+P1b live naming_symbols=['read_failure_bad_lines', 'read_failure_day_bad_lines']
+P2 days_rows=1 days_bad=4
+P2 nonblank_physical_numbers=[1, 2, 4, 5, 6]
+P2 nonblank_count=5 rows_plus_bad=5 same=True
+P2 blank_line_took_a_number=False
+P3a HEAD days_distinct_reject_branches=4 names_any_reason=False
+P3b live_days_why_branches=3 live_named=[(2, 'json'), (4, 'day'), (5, 'on_day'), (6, 'shape')]
+P4 days_bad_before_snapshot=1 after=0 dropped=True
+P4 side_bad_after_later_appends=1 named=[2]
+P5 CRAWL-FAILURE-DAYS_refs=['src/os/test_crawl_runner.py', 'tools/crawl_runner.py']
+P5 pending_old_bad_refs=['src/os/test_crawl_runner.py', 'tools/crawl_runner.py']
+P6 live days_present=True days=1 bad=0
+P6 live side_present=False rows=0 bad=0 named=0

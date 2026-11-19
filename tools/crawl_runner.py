@@ -469,6 +469,28 @@ but is not a usable failure row) is what a person needs to open it in an
 editor. `_failure_lines` is the one parse law: bad's count and the named lines
 cannot come from two parsers.
 
+THE SAME BLIND SPOT ON THE OTHER FILE (R3019): `CRAWL-FAILURE-DAYS` prints
+bad=<n> for the daily history, and nothing could name one. Measured
+(qa/probe-R3019.log) before changing anything: read_failure_days carried its OWN
+loop - it did not use _failure_lines, had no numbering, and no day-bad reader
+existed (day_bad_naming_symbols=[]). Numbering would have been the same law
+anyway (blank lines skip and take no number; the non-blank physical count equals
+rows+bad on an interleaved file), so the two loops were unified into
+_json_lines(path, kind_of_row) and each file supplies its own rejection
+taxonomy. They are NOT the same taxonomy and are not forced into one: the side
+channel answers json|fields, while the history has FOUR measured reject branches
+and now names each - shape (the line is not an object), day (day unusable),
+on_day (not an integer), json. Collapsing those to one word would have told a
+reader to open a line without saying what to repair. The history's bad lines are
+ALSO TRANSIENT, measured in the probe: snapshot_failure_day rewrites the file
+from validated rows only, so days_bad went 1 -> 0 on the next snapshot, while an
+appended side-channel line stays named across later appends (line 2 unchanged).
+That is why this face is read-only and prints no advice - naming is useful only
+until the next beat rewrites the file. `--pending-old-bad` keeps its shipped
+name and header (AC-RUN35 arm 1 pins the text and the name predates the face
+being per-file); the new subcommand is `--failure-days-bad`, so each flag names
+the file it reads.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -559,14 +581,20 @@ def append_failure(path, source_url, failed_at, error):
     return row
 
 
-def _failure_lines(path):
-    """(lineno, kind, row) for every non-blank physical line; kind None = usable.
+def _json_lines(path, kind_of_row):
+    """(lineno, why, row) for every non-blank physical line; why None = usable.
 
-    R3018: the count (`bad`) and the identities must come from ONE parse pass,
-    so a face that names bad lines cannot disagree with the header count. The
-    number is the physical 1-based line as read - blank lines are skipped and
-    take no number, and an append-only writer never moves an earlier number
-    (measured, qa/probe-R3018.log P3/P9).
+    R3019: both jsonl readers carried a copy of this loop, and the history's
+    copy had no numbering at all - so "how many lines are unusable" and "which
+    line" could only ever answer for the side channel. One generator now, with
+    the field check passed in, so blank-line skipping and the physical 1-based
+    number are the same law on both files by construction rather than by two
+    parsers agreeing today.
+
+    The number is the physical 1-based line as read - blank lines are skipped
+    and take no number, and an append-only writer never moves an earlier number
+    (measured, qa/probe-R3018.log P3/P9; the interleaved history shape measured
+    the same in qa/probe-R3019.log P2).
     """
     if not os.path.isfile(path):
         return
@@ -580,11 +608,47 @@ def _failure_lines(path):
             except ValueError:
                 yield n, 'json', None
                 continue
-            if (not isinstance(row, dict) or not _usable_day(row.get('failed_at'))
-                    or not str(row.get('error') or '').strip()):
-                yield n, 'fields', None
+            why = kind_of_row(row)
+            if why:
+                yield n, why, None
                 continue
             yield n, None, row
+
+
+def _failure_row_why(row):
+    """Why a parsed side-channel line is not a usable row, or None if it is."""
+    if (not isinstance(row, dict) or not _usable_day(row.get('failed_at'))
+            or not str(row.get('error') or '').strip()):
+        return 'fields'
+    return None
+
+
+def _failure_day_row_why(row):
+    """Why a parsed history line is not a usable day row, or None if it is.
+
+    R3019: four measured reject branches, each named rather than collapsed into
+    the side channel's 'fields'. A reader told only "fields" still has to open
+    the line and guess which of four repairs it needs; the reason is the point
+    of naming a line at all.
+    """
+    if not isinstance(row, dict):
+        return 'shape'
+    if not _usable_day(row.get('day')):
+        return 'day'
+    if not isinstance(row.get('on_day'), int):
+        return 'on_day'
+    return None
+
+
+def _failure_lines(path):
+    """(lineno, kind, row) for the failure side channel; kind None = usable.
+
+    R3018: the count (`bad`) and the identities must come from ONE parse pass,
+    so a face that names bad lines cannot disagree with the header count. The
+    pass itself is _json_lines (R3019), shared with the daily history so the two
+    files cannot drift about blank lines or numbering.
+    """
+    return _json_lines(path, _failure_row_why)
 
 
 def read_failures(path):
@@ -732,27 +796,45 @@ def summarize_failures(path, day, window_days=7):
 
 
 def read_failure_days(path):
-    """(rows, bad) for the daily history; a missing file is zero rows."""
+    """(rows, bad) for the daily history; a missing file is zero rows.
+
+    R3019: this used to carry its own loop. It now delegates to _json_lines with
+    the history's own field check, so its `bad` count and the lines named by
+    read_failure_day_bad_lines come from one pass (the same law the side channel
+    follows since R3018) instead of two parsers that could drift.
+    """
     rows = []
     bad = 0
-    if not os.path.isfile(path):
-        return rows, bad
-    with open(path, 'r', encoding='utf-8', errors='replace') as fh:
-        for line in fh:
-            text = line.strip()
-            if not text:
-                continue
-            try:
-                row = json.loads(text)
-            except ValueError:
-                bad += 1
-                continue
-            if (not isinstance(row, dict) or not _usable_day(row.get('day'))
-                    or not isinstance(row.get('on_day'), int)):
-                bad += 1
-                continue
+    for _n, why, row in _json_lines(path, _failure_day_row_why):
+        if why is None:
             rows.append(row)
+        else:
+            bad += 1
     return rows, bad
+
+
+def read_failure_day_bad_lines(path):
+    """[{'line': n, 'why': 'json'|'shape'|'day'|'on_day'}] ascending.
+
+    WHY (R3019, measured before this existed - qa/probe-R3019.log):
+    `CRAWL-FAILURE-DAYS` prints bad=<n> for this file and nothing could name one
+    - the same blind spot R3018 closed on the side channel, still open here.
+
+    NAMED, NOT ECHOED, for the same reason as the side channel: a rejected line
+    is text the reader already refused and may carry untrusted bytes. A line
+    number plus which field failed is what a person needs in an editor.
+
+    TRANSIENT BY NATURE, stated rather than implied: snapshot_failure_day
+    rewrites this file from validated rows only, so the next beat drops every
+    bad line (measured, qa/probe-R3019.log P4: bad 1 -> 0 across one snapshot).
+    The listing is therefore read-only with no advice and no retry - it does not
+    outlive the beat and does not pretend to.
+
+    DISPLAY ONLY: writes nothing, gates nothing. An absent file answers [].
+    """
+    return [{'line': n, 'why': why}
+            for n, why, _row in _json_lines(path, _failure_day_row_why)
+            if why is not None]
 
 
 def snapshot_failure_day(repo_root, day, window_days=7):
@@ -1853,6 +1935,11 @@ def main(argv=None):
                     help='name the unusable lines on the failure channel by '
                          'line number and reason, never by text (read-only '
                          'display; writes and gates nothing)')
+    ap.add_argument('--failure-days-bad', dest='failure_days_bad',
+                    action='store_true',
+                    help='name the unusable lines on the daily failure history '
+                         'by line number and reason, never by text (read-only '
+                         'display; writes and gates nothing)')
     ap.add_argument('--snapshot-failures', dest='snapshot_failures',
                     action='store_true',
                     help='persist today\'s failure counts as one history row '
@@ -1886,6 +1973,12 @@ def main(argv=None):
     if args.pending_old_bad:
         named = read_failure_bad_lines(failure_path(args.root))
         print('CRAWL-PENDING-OLD-BAD bad=%d' % len(named))
+        for item in named:
+            print('BAD-LINE n=%d why=%s' % (item['line'], item['why']))
+        return 0
+    if args.failure_days_bad:
+        named = read_failure_day_bad_lines(failure_day_path(args.root))
+        print('CRAWL-FAILURE-DAYS-BAD bad=%d' % len(named))
         for item in named:
             print('BAD-LINE n=%d why=%s' % (item['line'], item['why']))
         return 0

@@ -1,0 +1,6 @@
+HONEST GREEN
+M1 RED
+M2 RED
+M3 RED
+M4 RED
+NEGCTL PASS honest=green mutations=4 all_caught=True

@@ -199,6 +199,22 @@ from the single read_failures call this face already makes. It is not folded
 into reason=: measured, a populated table carries bad=2 with reason None, so
 folding it in would put an excuse on a non-empty list.
 
+AC-RUN36 (R3019) grades the SAME BLIND SPOT ON THE OTHER FILE: CRAWL-FAILURE-DAYS
+printed bad=<n> for the daily history and nothing could name one, because
+read_failure_days carried its own loop with no numbering. Measured before the
+change (qa/probe-R3019.log - the pre-change shape is read from the HEAD revision
+through git show rather than remembered): no shared parse law, no numbering, no
+day-bad reader, four reject branches and none of them named. The same numbering
+law would have applied anyway (non-blank physical lines, blank skipped, count ==
+rows + bad), so the loops were unified into _json_lines(path, kind_of_row) while
+each file keeps its OWN reject taxonomy - the history names json/shape/day/on_day
+instead of collapsing four different repairs into the side channel's one word.
+One further measured fact shapes the face: snapshot_failure_day rewrites the file
+from validated rows, so a history bad line is gone on the next beat, while an
+appended side-channel line keeps its number; the face is therefore read-only with
+no advice. --pending-old-bad keeps its shipped name and header (AC-RUN35 arm 1
+pins the text); the new subcommand is --failure-days-bad.
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -3230,6 +3246,162 @@ def main():
        and 'crawl-failure' not in scan_src18
        and later35[:3] == [2, 4, 5] and later35[-1] == 6,
        'the listing writes nothing and prints no verdict, and a line appended after the read leaves every earlier number where it was')
+
+    # AC-RUN36 (R3019): the daily history printed bad=<n> and could name
+    # nothing, because read_failure_days carried its own loop with no numbering.
+    # Measured before the change (qa/probe-R3019.log): the pre-change shape is
+    # read from the HEAD revision through git show rather than remembered -
+    # _failure_lines False, enumerate False, no day-bad reader, four reject
+    # branches and no reason named; numbering would have been the same law
+    # anyway (non-blank physical numbers, blank skipped, count == rows + bad).
+    # A second measured fact shapes the face: snapshot_failure_day rewrites the
+    # file from validated rows, so days bad 1 -> 0 on the next beat, while an
+    # appended side-channel line keeps its number. Hence read-only, no advice.
+    DAY_OK36 = json.dumps({'day': '2026-11-18', 'on_day': 2, 'total': 3,
+                           'recent': 1, 'bad': 0, 'urls': 1,
+                           'newest_at': '2026-11-18T09:00:00+08:00',
+                           'newest_error': 'TimeoutError: t'},
+                          ensure_ascii=False, sort_keys=True,
+                          separators=(',', ':'))
+    SRC36 = 'https://keep36.example/page'
+    JUNK36 = ['{"oops": 1\n',
+              '\n',
+              '{"day":"not-a-day","on_day":1}\n',
+              '{"day":"2026-11-17","on_day":"two"}\n',
+              '[1,2,3]\n']
+
+    def days36(junk=None, side38rows=(), side_junk=None):
+        root = world()
+        roots.append(root)
+        path = RUN.failure_day_path(root)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, 'w', encoding='utf-8', newline='\n') as fh:
+            fh.write(DAY_OK36 + '\n')
+            if junk:
+                fh.write(''.join(junk))
+        for url, when in side38rows:
+            RUN.append_failure(RUN.failure_path(root), url, when,
+                               'TimeoutError: t')
+        if side_junk:
+            with open(RUN.failure_path(root), 'a', encoding='utf-8',
+                      newline='\n') as fh:
+                fh.write(''.join(side_junk))
+        return root
+
+    def days_bad36(root):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--failure-days-bad', '--root', root])
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def side_bad36(root):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--pending-old-bad', '--root', root])
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def snap36(root):
+        out = []
+        for base, _dirs, files in os.walk(root):
+            for name in files:
+                p = os.path.join(base, name)
+                out.append((os.path.relpath(p, root).replace('\\', '/'),
+                            os.path.getsize(p)))
+        out.sort()
+        return out
+
+    r36 = days36(JUNK36)
+    rc36, lines36 = days_bad36(r36)
+    named36 = RUN.read_failure_day_bad_lines(RUN.failure_day_path(r36))
+    rows36, bad36 = RUN.read_failure_days(RUN.failure_day_path(r36))
+    nums36 = [item['line'] for item in named36]
+
+    # arm 1: every unusable line named in order, and the count is the same
+    # number read_failure_days reports (one pass, not two parsers)
+    ok('AC-RUN36', rc36 == 0 and bad36 == 4 and len(named36) == 4
+       and nums36 == [2, 4, 5, 6] and nums36 == sorted(nums36)
+       and lines36[0] == 'CRAWL-FAILURE-DAYS-BAD bad=4'
+       and len(rows36) == 1,
+       'four unusable history lines are named 2/4/5/6 in order and the named count is the same number read_failure_days reports')
+
+    # arm 2: four different repairs stay four different words
+    kinds36 = {item['line']: item['why'] for item in named36}
+    ok('AC-RUN36', kinds36 == {2: 'json', 4: 'day', 5: 'on_day', 6: 'shape'}
+       and 'BAD-LINE n=2 why=json' in lines36
+       and 'BAD-LINE n=4 why=day' in lines36
+       and 'BAD-LINE n=5 why=on_day' in lines36
+       and 'BAD-LINE n=6 why=shape' in lines36,
+       'a line that did not parse, a bad day, a non-integer on_day and a non-object line each carry their own reason at their own number')
+
+    # arm 3: a blank line takes no number, and an append never moves one
+    with open(RUN.failure_day_path(r36), 'a', encoding='utf-8',
+              newline='\n') as fh:
+        fh.write('{later\n')
+    later36 = [item['line'] for item in
+               RUN.read_failure_day_bad_lines(RUN.failure_day_path(r36))]
+    ok('AC-RUN36', 3 not in nums36 and later36[:4] == [2, 4, 5, 6]
+       and later36[-1] == 7,
+       'the blank line on line 3 takes no number, and a line appended later becomes 7 without moving 2/4/5/6')
+
+    # arm 4: the two files never cross - a dirty history leaves the side
+    # channel's shipped header byte-identical, and a dirty side channel does
+    # not inflate the history's count
+    rA36 = days36(JUNK36, side38rows=[(SRC36, TODAY + 'T08:00:00+08:00')])
+    rcSide36, linesSide36 = side_bad36(rA36)
+    rcDaysA36, linesDaysA36 = days_bad36(rA36)
+    rB36 = days36(None, side38rows=[(SRC36, TODAY + 'T08:00:00+08:00')],
+                  side_junk=['{oops\n'])
+    rcDaysB36, linesDaysB36 = days_bad36(rB36)
+    rcSideB36, linesSideB36 = side_bad36(rB36)
+    ok('AC-RUN36', rcSide36 == 0
+       and linesSide36 == ['CRAWL-PENDING-OLD-BAD bad=0']
+       and linesDaysA36[0] == 'CRAWL-FAILURE-DAYS-BAD bad=4'
+       and linesDaysB36 == ['CRAWL-FAILURE-DAYS-BAD bad=0']
+       and linesSideB36[0] == 'CRAWL-PENDING-OLD-BAD bad=1'
+       and len(linesSideB36) == 2
+       and 'BAD-LINE n=2 why=json' in linesSideB36
+       and not any('BAD-LINE' in n for n in linesDaysB36),
+       'a dirty history leaves the side-channel header text unchanged and a dirty side channel leaves the history at bad=0 - the two faces read their own files')
+
+    # arm 5: one parse law, and a file of blanks produces no number anywhere
+    src36 = open(RUN.__file__, 'r', encoding='utf-8').read()
+    seg36 = src36.split('def read_failure_days(')[1].split('\ndef ')[0]
+    rC36 = world()
+    roots.append(rC36)
+    blankPath36 = RUN.failure_day_path(rC36)
+    os.makedirs(os.path.dirname(blankPath36), exist_ok=True)
+    with open(blankPath36, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('\n\n   \n\n')
+    ok('AC-RUN36', '_json_lines(' in seg36 and 'enumerate(' not in seg36
+       and RUN.read_failure_days(blankPath36) == ([], 0)
+       and RUN.read_failure_day_bad_lines(blankPath36) == [],
+       'the history reader delegates to the shared parse law instead of iterating itself, and a file of only blank lines reads as zero rows and zero bad lines')
+
+    # arm 6: absent and clean both answer bad=0 and name nothing
+    rClean36 = days36()
+    rcClean36, linesClean36 = days_bad36(rClean36)
+    rAbsent36 = world()
+    roots.append(rAbsent36)
+    rcAbsent36, linesAbsent36 = days_bad36(rAbsent36)
+    ok('AC-RUN36', rcClean36 == rcAbsent36 == 0
+       and linesClean36 == ['CRAWL-FAILURE-DAYS-BAD bad=0']
+       and linesAbsent36 == ['CRAWL-FAILURE-DAYS-BAD bad=0']
+       and RUN.read_failure_day_bad_lines(
+           os.path.join(rAbsent36, 'no-such-history.jsonl')) == []
+       and RUN.read_failure_days(
+           os.path.join(rAbsent36, 'no-such-history.jsonl')) == ([], 0),
+       'a clean history and an absent one both answer bad=0 with no line named, and a missing file reads as an empty list rather than an error')
+
+    # arm 7: pure display - nothing written, no verdict, outside the scanner
+    before36 = snap36(r36)
+    rc36b, lines36b = days_bad36(r36)
+    after36 = snap36(r36)
+    text36 = '\n'.join(lines36b)
+    ok('AC-RUN36', rc36b == 0 and before36 == after36
+       and 'PASS' not in text36 and 'FLAG' not in text36
+       and 'verdict' not in text36
+       and 'crawl-failure' not in scan_src18,
+       'the listing writes nothing and prints no verdict, and the scanner still reads none of it')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

@@ -4694,9 +4694,10 @@ SUITES = [
     # AC-RUN32 (why an empty old table is empty, and how far it reaches) and
     # AC-RUN33 (when the channel was last written) pinned in the R3015/R3016
     # PIN rows before the code; AC-RUN35 (which lines are unusable) pinned in
-    # the R3018 PIN row before the reader existed.
+    # the R3018 PIN row before the reader existed; AC-RUN36 (the same blind
+    # spot on the daily history) pinned in the R3019 PIN row.
     ("os-crawl-runner",
-      os.path.join("..", "os", "test_crawl_runner.py"), 35),
+      os.path.join("..", "os", "test_crawl_runner.py"), 36),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

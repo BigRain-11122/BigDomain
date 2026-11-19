@@ -1,0 +1,15 @@
+== history with one usable row and four unusable lines ==
+CRAWL-FAILURE-DAYS-BAD bad=4
+BAD-LINE n=2 why=json
+BAD-LINE n=4 why=day
+BAD-LINE n=5 why=on_day
+BAD-LINE n=6 why=shape
+
+== the side channel of the same world (untouched face) ==
+CRAWL-PENDING-OLD-BAD bad=0
+
+== a clean history ==
+CRAWL-FAILURE-DAYS-BAD bad=0
+
+== after one snapshot beat rewrites the history ==
+before=4 named, then: CRAWL-FAILURE-DAYS-BAD bad=0
