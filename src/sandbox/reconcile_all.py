@@ -4716,8 +4716,11 @@ SUITES = [
     # R3026 added AC-RUN43: the pairs themselves can be asked for by day window
     # through --series-days, with the row limit still capping how many print
     # (42 -> 43, the same row).
+    # R3027 added AC-RUN44: a calendar day with no row is named by
+    # --series-absent instead of reading like a measured zero (43 -> 44, the
+    # same row).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 43),
+     os.path.join("..", "os", "test_crawl_runner.py"), 44),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

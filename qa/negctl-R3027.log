@@ -1,0 +1,7 @@
+R3027 NEGATIVE CONTROL (outside the suite)
+honest  PASS 
+zero-gaps        CAUGHT ['world A names five gaps', 'gaps are days, not rows', 'a 2001 history windows on itself']
+rows-not-days    CAUGHT ['world A names five gaps', 'gaps are days, not rows', 'a 2001 history windows on itself']
+empty-is-zero    CAUGHT ['nothing measurable is none, not zero']
+wall-clock-head  CAUGHT ['a 2001 history windows on itself', 'nothing measurable is none, not zero']
+done

@@ -1,0 +1,15 @@
+P1a window face | no token on the line names a day without a row
+P1b series-days 7 | CRAWL-FAILURE-DAYS days=5 bad=0 first=2026-09-20 last=2026-11-19 dropped=none series=2026-11-18:1,2026-11-19:3,2026-11-19:1,2026-11-19:2 bytes=470 size_gate=0.0004% gate_ref=100MB series_limit=7 series_shown=4 series_outside=0 window_rows=4 series_window=7
+P1c counts | window_rows=4 shown=4 distinct_days=2 window=7
+P1d gap arithmetic | window holds 7 calendar days, 2 have rows, 5 are silent and the line says nothing
+P2a measured zero | CRAWL-FAILURE-DAYS days=2 bad=0 first=2026-11-16 last=2026-11-17 dropped=none series=2026-11-16:0,2026-11-17:2 bytes=188 size_gate=0.0002% gate_ref=100MB series_limit=7 series_shown=2 series_outside=0 window_rows=2 series_window=7
+P2b word for a gap | a measured zero already prints :0, so a gap printed as 0 would be indistinguishable from 'nothing failed'
+P2c trend precedent | head day nobody snapshotted reads today='absent' prev=2 (R2994 law: absent, not zero)
+P2d trend on a named day | today=2 prev=1
+P3a pair shape arms | arms asserting a 2-tuple: 5
+P3b printer | the header joins pairs with '%%s:%%s', so a string in on_day would print as a word inside the same series= token
+P3c default pin | AC-RUN43 arm 2 pins the default tail by exact equality, so any token added unconditionally goes red
+P3d relation | window_rows counts ROWS in the window, shown counts printed pairs, and neither can say how many calendar days are silent
+P3e token census | series_absent=0 absent_days=0 series_absent hits=0
+P3f absent word | 'absent' appears 2 times in the module, all on the trend face
+P4a wide window | window=60 window_rows=4 shown=4 -> silent days would be 58

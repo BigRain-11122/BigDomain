@@ -253,6 +253,21 @@ meaning at once), re-shaping the series tail, and reusing the bare
 `shown/hidden/truncated` names R3024 built for a day window - one word, two
 laws, is exactly the confusion this paragraph exists to prevent.
 
+THE SERIES CAN BE ASKED FOR BY DAY (R3026/R3027): counting the tail only works
+when every day holds exactly one row, so `--series-days N` selects the pairs by
+the same inclusive day window the other faces use (`series_days_window`, head =
+the file's own newest row, no clock) while `--days` still caps how many pairs
+print - window first, then the tail of that selection, so `series_shown=`
+counts printed pairs and `window_rows=` counts rows in the window. A day with
+NO row used to be simply absent from the series, leaving "four quiet days" and
+"four unrecorded days" the same shape; `--series-absent` (opt-in, refused with
+rc=2 unless `--failure-days --series-days N` are both given) names them in a
+SEPARATE token - `series_absent=<n|none> absent=<day,...|none>` - because a
+measured zero already prints as :0 inside the pairs and five arms assert a
+2-tuple there. When the head day is unusable nothing is measurable, so the
+count answers none rather than a zero that would read like "every day was
+recorded" (the R2994 absent-not-zero law, carried).
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1152,6 +1167,55 @@ def series_days_window(rows, limit=7, window_days=7):
     return {'rows': [(r.get('day'), r.get('on_day')) for r in tail],
             'limit': size, 'shown': len(tail), 'outside': 0,
             'window_rows': len(inside), 'window': width}
+
+
+def series_absent_days(rows, window_days=7):
+    """{days, count, head, window} - calendar days the window never saw (R3027).
+
+    WHY (measured before this existed - qa/probe-R3027.log): a day window could
+    be asked for, but a day with NO row was simply missing from the series
+    rather than named, so "the last seven days" printing three pairs left the
+    reader unable to tell four quiet days from four unrecorded ones. The one
+    word the repo already uses for that is `absent` (the trend face reads a day
+    nobody snapshotted as today='absent'), so the gap gets a name instead of a
+    fabricated 0 - a measured zero already prints as :0 in the pairs and would
+    be indistinguishable (probe P2a).
+
+    TWO FACES, NOT ONE: the pairs keep their (day, on_day) shape untouched
+    (five arms assert a 2-tuple and the header joins pairs with %s:%s), so the
+    gaps travel as their OWN token rather than as pairs with a word where a
+    number belongs (probe P3a/P3b).
+
+    LAW: the window is the same inclusive literal-day range the other faces use
+    (`_window_start`), measured back from the file's OWN newest usable row, so a
+    2001 history windows against itself and no clock is read. `days` lists every
+    calendar day in that range that holds no row, ascending; duplicates on a day
+    that DOES have rows never create a gap (probe P1c). When the head day is
+    unusable nothing is measurable, so count is None and days is empty rather
+    than a zero that would read like "every day was recorded".
+
+    DISPLAY ONLY: writes nothing, gates nothing.
+    """
+    width = max(1, int(window_days))
+    head_day, usable, threshold = _window_start(
+        (str(rows[-1].get('day') or '') if rows else ''), width)
+    if not usable:
+        return {'days': [], 'count': None, 'head': None, 'window': width}
+    seen = set()
+    for row in rows:
+        row_day = str(row.get('day') or '')[:10]
+        if threshold <= row_day <= head_day:
+            seen.add(row_day)
+    days = []
+    cursor = datetime.date.fromisoformat(threshold)
+    last = datetime.date.fromisoformat(head_day)
+    while cursor <= last:
+        key = cursor.isoformat()
+        if key not in seen:
+            days.append(key)
+        cursor += datetime.timedelta(days=1)
+    return {'days': days, 'count': len(days), 'head': head_day,
+            'window': width}
 
 
 def list_failure_days_dropped(path, window_days=None):
@@ -2267,7 +2331,19 @@ def main(argv=None):
                          '--days still caps how many pairs print and the header '
                          'gains series_window=N (read-only display; gates '
                          'nothing)')
+    ap.add_argument('--series-absent', dest='series_absent',
+                    action='store_true',
+                    help='alongside --series-days N, name the calendar days in '
+                         'that window with no history row at all; the header '
+                         'gains series_absent=<n|none> absent=<day,...|none> '
+                         'so a silent day never reads like a measured zero '
+                         '(read-only display; gates nothing)')
     args = ap.parse_args(argv)
+    if args.series_absent and (args.series_days is None
+                               or not args.failure_days):
+        sys.stderr.write('series_absent applies only to --failure-days with '
+                         '--series-days N\n')
+        return 2
     if args.failures:
         stamp = datetime.datetime.now().astimezone().isoformat(
             timespec='seconds')
@@ -2294,6 +2370,11 @@ def main(argv=None):
         else:
             counts = series['series_counts']
             tail_markers = ' series_window=%d' % args.series_days
+            if args.series_absent:
+                gaps = series_absent_days(day_read[0], args.series_days)
+                tail_markers += ' series_absent=%s absent=%s' % (
+                    'none' if gaps['count'] is None else gaps['count'],
+                    ','.join(gaps['days']) or 'none')
         print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
               'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB '
               'series_limit=%d series_shown=%d series_outside=%d '

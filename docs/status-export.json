@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-19 R3026 PRODUCT+ENGINEERING: the failure series can now be asked for by DAY instead of by row tail. Measured before the change: a history whose newest day holds three rows plus one row sixty days back printed that old day inside series= under the default seven, and nothing on the line said the window and the tail were two different things - R3025 named them, this round lets a person choose the window. tools/crawl_runner.py now ships series_days_window() and the opt-in --series-days N prints only the pairs inside the last N days, measured back from the file own newest row, with --days still capping how many print and series_window=N naming the flag on the header.",
+    "current": "2026-11-19 R3027 PRODUCT+ENGINEERING: a calendar day with no row now has a name instead of being silently missing. The R3027 probe ran before the pin (qa/probe-R3027.log, 1691B, 15 lines): a seven-day window over world A (five rows on two distinct days) held four rows, so five calendar days were silent and the header said nothing; a MEASURED zero already prints as :0 in the pairs, so a gap printed as 0 would be indistinguishable; the trend face already reads a day nobody snapshotted as 'absent'; and five suite arms assert a 2-tuple in the pairs. tools/crawl_runner.py therefore ships series_absent_days(rows, window_days) plus an opt-in --series-absent that appends ' series_absent=<n|none> absent=<day,...|none>' AFTER series_window, refused with rc=2 unless --failure-days and --series-days N are both given. The pairs and the four counts are untouched.",
     "do": "R3005 measured, in order: the PIN row was written in src/os/backlog.md BEFORE any code byte moved, and the read-only probe tmp/probe_R3005.py -> qa/probe-R3005.log (682B, 12 lines, utf-8/lf, six private worlds, zero sockets) ran BEFORE the pin. It measured: (1) three-source window answers for one source only; (2) recur and the pending count are independent in BOTH directions - recur=(0,0) with one judged source still gone, and recur=(2,4) with nothing pending when both came back; (3) the queue head's own suggested numerator (since_ok != 'yes') counts a source whose newest failure is later than every record row as pending, reviving exactly the R3004 conflation at aggregate level, so the numerator counts 'no' only and unmeasured sits in neither number; (4) an absent record leaves every source unmeasured, so zero-of-zero had to print none rather than 0/0; (5) 13 arms read the trend line, three pin exact key sets, and a multi-source world still printed exactly one line, which is why per-source lines were refused. AC-RUN22 (seven arms) was pinned before the code; three existing key-set arms were widened by exactly the one new key, disclosed as a criterion following its field rather than a loosening.",
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-crawl-record-R3024.log (341B, 2026-11-19)",
-    "latest_evidence": "qa/leg-crawl-record-R3024.log (341B, 2026-11-19)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3027.log (458B, 2026-11-19)",
+    "latest_evidence": "qa/negctl-R3027.log (458B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3027] next window (<=48h): (0) MAIN — **窗口能按日子取了，但「哪天没有记录」仍然谁也说不出来**：`--series-days N` 只印有行的日子，缺口（缺席日）在系列里是**不存在**而不是 0——「最近 7 天」只有 3 行时，读者分不清另外 4 天是没失败还是没记录。下一轮先量（只读）：①仓内是否已有面区分「缺席」与「0」（趋势面的 today/prev 已用 `absent`，量清它能否被系列复用而不破二元组合同）；②若在窗口面补缺席日，该印 0 还是 `none`（R3017/R3020/R3022 已三次拒绝把未测量读成 0，量清缺席日的正确词面）；③量清补缺席日会不会把 `(day,on_day)` 二元组变成三元组、触碰既有形状臂与 `series_window` 四数（`shown` 与 `window_rows` 的关系会变，必须先在板上算清）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, and the single default crawl source is one page.",
-    "next_milestone_due": "2026-11-21T18:32:21+08:00",
-    "updated_at": "2026-11-19T18:32:21+08:00"
+    "next_milestone": "[R3028] next window (<=48h): (0) MAIN — **缺口有名字了，但它不进任何合计**：`--series-absent` 只把沉默的日子列出来，`window_rows=` 仍是「有几行」，趋势面的 `span` 只由有行的日子构成，逐日吃掉列表也只逐行——所以「最近 7 天有几天根本没记录」仍然只能自己数 `absent=` 的逗号。下一轮先量（只读）：①仓内是否已有任何面把「有记录的天数」与「窗内日历天数」并列（`series_window` 是窗宽、`window_rows` 是行数，量清哪一个才是天数，且同日多行会怎样）；②若把缺口计数进表头（如 `days_absent=` 或 `window_days=`），会不会触碰 R3027 刚刚钉住的九臂与 AC-RUN42/43 的精确等式（必须逐条量清）；③量清趋势面用 `absent` 表示「今天没人快照」与这里的「窗内某天没有行」是不是同一个语义，若是，能否让两处共用一条不变式而不改任何既有记号。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, and the single default crawl source is one page.",
+    "next_milestone_due": "2026-11-21T18:51:28+08:00",
+    "updated_at": "2026-11-19T18:51:28+08:00"
   },
-  "current": "2026-11-19 R3026 PRODUCT+ENGINEERING: the failure series can now be asked for by DAY instead of by row tail. Measured before the change: a history whose newest day holds three rows plus one row sixty days back printed that old day inside series= under the default seven, and nothing on the line said the window and the tail were two different things - R3025 named them, this round lets a person choose the window. tools/crawl_runner.py now ships series_days_window() and the opt-in --series-days N prints only the pairs inside the last N days, measured back from the file own newest row, with --days still capping how many print and series_window=N naming the flag on the header.",
+  "current": "2026-11-19 R3027 PRODUCT+ENGINEERING: a calendar day with no row now has a name instead of being silently missing. The R3027 probe ran before the pin (qa/probe-R3027.log, 1691B, 15 lines): a seven-day window over world A (five rows on two distinct days) held four rows, so five calendar days were silent and the header said nothing; a MEASURED zero already prints as :0 in the pairs, so a gap printed as 0 would be indistinguishable; the trend face already reads a day nobody snapshotted as 'absent'; and five suite arms assert a 2-tuple in the pairs. tools/crawl_runner.py therefore ships series_absent_days(rows, window_days) plus an opt-in --series-absent that appends ' series_absent=<n|none> absent=<day,...|none>' AFTER series_window, refused with rc=2 unless --failure-days and --series-days N are both given. The pairs and the four counts are untouched.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-19 R3026 PRODUCT+ENGINEERING: the failure series can now be asked for by DAY instead of by row tail. Measured before the change: a history whose newest day holds three rows plus one row sixty days back printed that old day inside series= under the default seven, and nothing on the line said the window and the tail were two different things - R3025 named them, this round lets a person choose the window. tools/crawl_runner.py now ships series_days_window() and the opt-in --series-days N prints only the pairs inside the last N days, measured back from the file own newest row, with --days still capping how many print and series_window=N naming the flag on the header.",
-  "export_ts": "2026-11-19T18:32:21+08:00",
+  "do": "2026-11-19 R3027 PRODUCT+ENGINEERING: a calendar day with no row now has a name instead of being silently missing. The R3027 probe ran before the pin (qa/probe-R3027.log, 1691B, 15 lines): a seven-day window over world A (five rows on two distinct days) held four rows, so five calendar days were silent and the header said nothing; a MEASURED zero already prints as :0 in the pairs, so a gap printed as 0 would be indistinguishable; the trend face already reads a day nobody snapshotted as 'absent'; and five suite arms assert a 2-tuple in the pairs. tools/crawl_runner.py therefore ships series_absent_days(rows, window_days) plus an opt-in --series-absent that appends ' series_absent=<n|none> absent=<day,...|none>' AFTER series_window, refused with rc=2 unless --failure-days and --series-days N are both given. The pairs and the four counts are untouched.",
+  "export_ts": "2026-11-19T18:51:28+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
-  "latest_evidence": "qa/leg-crawl-record-R3024.log (341B, 2026-11-19)",
-  "next_milestone": "[R3027] next window (<=48h): (0) MAIN — **窗口能按日子取了，但「哪天没有记录」仍然谁也说不出来**：`--series-days N` 只印有行的日子，缺口（缺席日）在系列里是**不存在**而不是 0——「最近 7 天」只有 3 行时，读者分不清另外 4 天是没失败还是没记录。下一轮先量（只读）：①仓内是否已有面区分「缺席」与「0」（趋势面的 today/prev 已用 `absent`，量清它能否被系列复用而不破二元组合同）；②若在窗口面补缺席日，该印 0 还是 `none`（R3017/R3020/R3022 已三次拒绝把未测量读成 0，量清缺席日的正确词面）；③量清补缺席日会不会把 `(day,on_day)` 二元组变成三元组、触碰既有形状臂与 `series_window` 四数（`shown` 与 `window_rows` 的关系会变，必须先在板上算清）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, and the single default crawl source is one page.",
+  "latest_evidence": "qa/negctl-R3027.log (458B, 2026-11-19)",
+  "next_milestone": "[R3028] next window (<=48h): (0) MAIN — **缺口有名字了，但它不进任何合计**：`--series-absent` 只把沉默的日子列出来，`window_rows=` 仍是「有几行」，趋势面的 `span` 只由有行的日子构成，逐日吃掉列表也只逐行——所以「最近 7 天有几天根本没记录」仍然只能自己数 `absent=` 的逗号。下一轮先量（只读）：①仓内是否已有任何面把「有记录的天数」与「窗内日历天数」并列（`series_window` 是窗宽、`window_rows` 是行数，量清哪一个才是天数，且同日多行会怎样）；②若把缺口计数进表头（如 `days_absent=` 或 `window_days=`），会不会触碰 R3027 刚刚钉住的九臂与 AC-RUN42/43 的精确等式（必须逐条量清）；③量清趋势面用 `absent` 表示「今天没人快照」与这里的「窗内某天没有行」是不是同一个语义，若是，能否让两处共用一条不变式而不改任何既有记号。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, and the single default crawl source is one page.",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
@@ -168,7 +168,7 @@
   },
   "results": [
     [
-      "3024",
+      "3027",
       "OSLoop 执行 tick"
     ]
   ],
@@ -181,15 +181,15 @@
   "self_drive": {
     "window": "2026-11-13..2026-11-19",
     "window_days": 7,
-    "log_lines_in_window": 286,
+    "log_lines_in_window": 306,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 42,
+    "substantive_non_idle_mention_lines": 45,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 316981
+  "state_bytes": 323357
 }

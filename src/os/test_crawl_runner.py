@@ -283,6 +283,19 @@ limit (--days) caps how many print, and the header now carries
 OWN newest row, so a 2001 history windows against itself (arm 6), and the three
 counts are 0 rather than an invented window when there is no history (arm 5).
 
+AC-RUN44 (R3027) grades the GAPS that window could not name. Measured before the
+change (qa/probe-R3027.log): a seven-day window over four rows on two distinct
+days left five calendar days silent and the line said nothing, a measured zero
+already prints as :0 in the pairs, the trend face already reads a day nobody
+snapshotted as 'absent', and five arms assert a 2-tuple in the pairs - so the
+gaps travel as their OWN opt-in token (`--series-absent`, refused with rc=2
+unless `--failure-days --series-days N` are both given). The pairs and the four
+counts keep their meanings; `series_absent=<n|none>` counts calendar days in
+the window with no row and `absent=<day,...|none>` names them ascending. A day
+holding three rows is one present day, not three (arm 4), an unusable head
+answers none rather than a zero that would read like "every day was recorded"
+(arm 7), and a 2001 history windows against itself (arm 6).
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -4412,6 +4425,157 @@ def main():
        and lines43g[0].count('series_window=') == 1,
        'the window flag writes no byte, prints no verdict, and names itself '
        'exactly once on the line')
+
+    # ===== AC-RUN44 (R3027): a day with NO row gets a name, not a zero =====
+    # AC-RUN44 was pinned in src/os/backlog.md BEFORE series_absent_days
+    # existed (in-window pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3027.log): a seven-day window over world A holds four rows on
+    # two distinct days, so five calendar days are silent and the line said
+    # nothing; a MEASURED zero already prints as :0 in the pairs, so a gap
+    # printed as 0 would be indistinguishable; the trend face already reads a
+    # day nobody snapshotted as 'absent'; and five arms assert a 2-tuple in the
+    # pairs, so the gaps travel as their own token.
+    def days44(root, extra, want_stderr=False):
+        buf = io.StringIO()
+        err = io.StringIO()
+        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(err):
+            rc = RUN.main(list(extra) + ['--root', root])
+        lines = [n for n in buf.getvalue().splitlines() if n.strip()]
+        if want_stderr:
+            return rc, lines, err.getvalue()
+        return rc, lines
+
+    def toks44(line):
+        return dict(part.split('=', 1) for part in line.split()[1:])
+
+    r44 = world()
+    roots.append(r44)
+    p44 = hist37(r44)
+    put_days(p44, [plain_day('2026-09-20', 5), plain_day('2026-11-18', 1),
+                   plain_day('2026-11-19', 3), plain_day('2026-11-19', 1),
+                   plain_day('2026-11-19', 2)])
+    gaps44 = '2026-11-13,2026-11-14,2026-11-15,2026-11-16,2026-11-17'
+
+    # arm 1: the five silent days are named, the pairs are untouched
+    rc44, lines44 = days44(r44, ['--failure-days', '--series-days', '7',
+                                 '--series-absent'])
+    t44 = toks44(lines44[0]) if lines44 else {}
+    ok('AC-RUN44', rc44 == 0
+       and t44.get('series_window') == '7'
+       and t44.get('series_absent') == '5'
+       and t44.get('absent') == gaps44
+       and t44.get('series')
+       == '2026-11-18:1,2026-11-19:3,2026-11-19:1,2026-11-19:2'
+       and t44.get('series_shown') == '4'
+       and t44.get('window_rows') == '4',
+       'a seven-day window prints its four pairs unchanged and names the five '
+       'calendar days that hold no row at all')
+
+    # arm 2: without the flag the tail is the same line R3026 shipped
+    rc44b, lines44b = days44(r44, ['--failure-days'])
+    ok('AC-RUN44', rc44b == 0 and lines44b
+       and lines44b[0].endswith(
+           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+       and 'series_absent' not in lines44b[0]
+       and 'absent=' not in lines44b[0],
+       'without the flag no absence token appears - the marker is opt-in only '
+       'and the default tail stays byte-identical')
+
+    # arm 3: a genuinely quiet week prints a measured zero, not 'none'
+    r44c = world()
+    roots.append(r44c)
+    p44c = hist37(r44c)
+    put_days(p44c, [plain_day('2026-11-%02d' % d, 1) for d in range(13, 20)])
+    rc44c, lines44c = days44(r44c, ['--failure-days', '--series-days', '7',
+                                    '--series-absent'])
+    t44c = toks44(lines44c[0]) if lines44c else {}
+    ok('AC-RUN44', rc44c == 0 and t44c.get('series_absent') == '0'
+       and t44c.get('absent') == 'none'
+       and t44c.get('window_rows') == '7',
+       'a window where every day has a row answers zero gaps - a zero that was '
+       'actually measured, which is why it may print as a number')
+
+    # arm 4: three rows on one day are one present day, not three
+    pure44 = RUN.series_absent_days(RUN.read_failure_days(p44)[0], 7)
+    ok('AC-RUN44', pure44['count'] == 5
+       and pure44['head'] == '2026-11-19'
+       and pure44['window'] == 7
+       and '2026-11-19' not in pure44['days']
+       and '2026-11-18' not in pure44['days']
+       and len(set(pure44['days'])) == 5,
+       'a day holding three rows counts as one present day: five gaps came '
+       'from seven days and two present days, not from seven minus four rows')
+
+    # arm 5: a wide window names its boundary and its 58 gaps
+    rc44d, lines44d = days44(r44, ['--failure-days', '--series-days', '60',
+                                   '--series-absent'])
+    t44d = toks44(lines44d[0]) if lines44d else {}
+    gaps44d = (t44d.get('absent') or '').split(',')
+    ok('AC-RUN44', rc44d == 0
+       and t44d.get('series_absent') == '58'
+       and '2026-09-21' in gaps44d
+       and '2026-09-20' not in gaps44d
+       and '2026-11-18' not in gaps44d,
+       'a sixty-day window opens at 2026-09-21 and names 58 silent days while '
+       'the two days that hold rows - including the old one - are not gaps')
+
+    # arm 6: no clock - a 2001 history names its own missing day
+    r44e = world()
+    roots.append(r44e)
+    p44e = hist37(r44e)
+    put_days(p44e, [plain_day('2001-01-01', 0), plain_day('2001-03-01', 1),
+                    plain_day('2001-03-05', 2)])
+    rc44e, lines44e = days44(r44e, ['--failure-days', '--series-days', '2',
+                                    '--series-absent'])
+    t44e = toks44(lines44e[0]) if lines44e else {}
+    ok('AC-RUN44', rc44e == 0 and t44e.get('absent') == '2001-03-04'
+       and t44e.get('series_absent') == '1'
+       and t44e.get('series') == '2001-03-05:2',
+       'a two-day window over a 2001 history opens at 2001-03-04 from the file '
+       'own last row, so the one silent day is named without a wall clock')
+
+    # arm 7: an absent history cannot report zero gaps
+    r44f = world()
+    roots.append(r44f)
+    os.makedirs(os.path.join(r44f, 'qa'), exist_ok=True)
+    rc44f, lines44f = days44(r44f, ['--failure-days', '--series-days', '7',
+                                    '--series-absent'])
+    t44f = toks44(lines44f[0]) if lines44f else {}
+    empty44 = RUN.series_absent_days([], 7)
+    ok('AC-RUN44', rc44f == 0 and t44f.get('series_absent') == 'none'
+       and t44f.get('absent') == 'none' and t44f.get('series') == 'none'
+       and empty44['count'] is None and empty44['days'] == []
+       and empty44['head'] is None,
+       'no history at all answers none rather than zero - not measurable is '
+       'never printed as no gaps, and it does not raise')
+
+    # arm 8: the flag alone is refused, and so is asking it of another face
+    rc44g, lines44g, err44g = days44(r44, ['--failure-days', '--series-absent'],
+                                     want_stderr=True)
+    rc44h, lines44h, err44h = days44(r44, ['--failures', '--series-days', '7',
+                                           '--series-absent'], want_stderr=True)
+    ok('AC-RUN44', rc44g == 2 and rc44h == 2
+       and not lines44g and not lines44h
+       and 'series_absent' in err44g and 'series_absent' in err44h,
+       'the flag without its day window, and the flag on a face that has no '
+       'series, both fail closed with rc=2 and print no header at all')
+
+    # arm 9: pure display - no byte written, no verdict, both tokens once
+    before44 = tree_bytes(r44)
+    rc44i, lines44i = days44(r44, ['--failure-days', '--series-days', '7',
+                                   '--series-absent'])
+    after44 = tree_bytes(r44)
+    text44 = '\n'.join(lines44i)
+    t44i = toks44(lines44i[0]) if lines44i else {}
+    named44 = (t44i.get('absent') or '').split(',')
+    ok('AC-RUN44', rc44i == 0 and before44 == after44
+       and 'PASS' not in text44 and 'FLAG' not in text44
+       and 'verdict' not in text44
+       and lines44i[0].count('series_absent=') == 1
+       and lines44i[0].count('absent=') == 2
+       and len(named44) == int(t44i.get('series_absent') or 0),
+       'the absence token writes no byte, prints no verdict, appears once, and '
+       'the number of named days equals the count printed beside it')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
