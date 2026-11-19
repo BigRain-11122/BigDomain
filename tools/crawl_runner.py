@@ -323,6 +323,20 @@ count backwards from the newest pair. The opt-in tail now also carries
 `window_from=2026-11-13 series_window=7` reads as 11-13..11-19 by eye. It is a
 date, never an invented one: an unusable head day answers none.
 
+THE SILENT-DAY LIST STOPS AT A MONTH, ITS COUNT DOES NOT (R3032, measured
+first - qa/probe-R3032.log): `absent=` printed one name per silent day, so the
+line grew with the window - 11.00 measured bytes per name, and this checkout's
+single-row history printed 364 names (4310 bytes) on one line at width 365. The
+cap is on NAMES, not bytes: a byte budget cannot be predicted from the window,
+while "the first 31 silent days" can, and 11.00 bytes/name is a constant. The
+opt-in tail now also prints `absent_named=<n|none>` beside the list;
+`series_absent=` keeps the FULL total, so `absent_named < series_absent` is a
+visible truncation rather than a list that reads short. Refused: a byte cap, a
+redefined `series_absent=` (its old meaning is the whole count), a boolean-only
+marker (the omission count is not otherwise printed but a boolean cannot say
+how many), and a `--series-absent-limit` flag (no measured demand, one more
+surface).
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1224,8 +1238,16 @@ def series_days_window(rows, limit=7, window_days=7):
             'window_rows': len(inside), 'window': width}
 
 
-def series_absent_days(rows, window_days=7):
-    """{days, count, head, window} - calendar days the window never saw (R3027).
+# One month of silent days is named; a wider window names its first month and
+# counts the rest. Measured (qa/probe-R3032.log): the name list costs exactly
+# 11.00 bytes per day, so an uncapped list grows linearly without bound (a
+# 365-day window over one real row printed 364 names on one 4310-byte line).
+ABSENT_LIST_LIMIT = 31
+
+
+def series_absent_days(rows, window_days=7, limit=ABSENT_LIST_LIMIT):
+    """{days, count, head, window, named, truncated} - calendar days the window
+    never saw (R3027).
 
     WHY (measured before this existed - qa/probe-R3027.log): a day window could
     be asked for, but a day with NO row was simply missing from the series
@@ -1243,19 +1265,33 @@ def series_absent_days(rows, window_days=7):
 
     LAW: the window is the same inclusive literal-day range the other faces use
     (`_window_start`), measured back from the file's OWN newest usable row, so a
-    2001 history windows against itself and no clock is read. `days` lists every
-    calendar day in that range that holds no row, ascending; duplicates on a day
-    that DOES have rows never create a gap (probe P1c). When the head day is
+    2001 history windows against itself and no clock is read. `days` lists the
+    first `limit` calendar days in that range that hold no row, ascending (the
+    cap is R3032, below); duplicates on a day that DOES have rows never create a
+    gap (probe P1c). When the head day is
     unusable nothing is measurable, so count is None and days is empty rather
     than a zero that would read like "every day was recorded".
 
     DISPLAY ONLY: writes nothing, gates nothing.
+
+    THE NAME LIST IS CAPPED, THE COUNT IS NOT (R3032, measured first -
+    qa/probe-R3032.log): the list used to grow with the window - one name per
+    silent day, 11.00 measured bytes each, so this checkout's one-row history
+    printed 364 day names on a single 4310-byte line at width 365. The cap is
+    on NAMES rather than whole-line bytes, because a byte budget is not a law a
+    reader can predict from the window while "the first N silent days" is.
+    `count` stays the FULL total under any truncation (a short list must never
+    read as few gaps, the R2994 absent-not-zero law); `named` is how many of
+    them this call returned and `truncated` says whether that is fewer. An
+    unusable head day answers count None and an empty list, never a fabricated
+    zero.
     """
     width = max(1, int(window_days))
     head_day, usable, threshold = _window_start(
         (str(rows[-1].get('day') or '') if rows else ''), width)
     if not usable:
-        return {'days': [], 'count': None, 'head': None, 'window': width}
+        return {'days': [], 'count': None, 'head': None, 'window': width,
+                'named': 0, 'truncated': False}
     seen = set()
     for row in rows:
         row_day = str(row.get('day') or '')[:10]
@@ -1269,8 +1305,10 @@ def series_absent_days(rows, window_days=7):
         if key not in seen:
             days.append(key)
         cursor += datetime.timedelta(days=1)
-    return {'days': days, 'count': len(days), 'head': head_day,
-            'window': width}
+    named = days if limit is None else days[:max(0, int(limit))]
+    return {'days': named, 'count': len(days), 'head': head_day,
+            'window': width, 'named': len(named),
+            'truncated': len(named) < len(days)}
 
 
 def series_presence_counts(rows, window_days=7):
@@ -2479,16 +2517,19 @@ def main(argv=None):
                     help='alongside --series-days N, name the calendar days in '
                          'that window with no history row at all; the header '
                          'gains series_absent=<n|none> absent=<day,...|none> '
-                         'days_present=<n|none> repeat_rows=<n|none> '
+                         'absent_named=<n|none> days_present=<n|none> '
+                         'repeat_rows=<n|none> '
                          'retry_rows=<n|none> and window_from=<day|none>, so a '
                          'silent day never reads like a measured zero, the '
                          'present/gap split sums to series_window, the '
                          'present/repeat split sums to window_rows, a '
                          'same-day repeat names whether it carried more '
-                         'failure evidence than the row before it, and the '
+                         'failure evidence than the row before it, the '
                          'first day of the window can be read instead of '
-                         'counted backwards (read-only display; gates '
-                         'nothing)')
+                         'counted backwards, and the named days stop at one '
+                         'month (31) while series_absent keeps the full total, '
+                         'so absent_named < series_absent is a visible '
+                         'truncation (read-only display; gates nothing)')
     args = ap.parse_args(argv)
     if args.series_absent and (args.series_days is None
                                or not args.failure_days):
@@ -2524,9 +2565,10 @@ def main(argv=None):
             if args.series_absent:
                 gaps = series_absent_days(day_read[0], args.series_days)
                 presence = series_presence_counts(day_read[0], args.series_days)
-                tail_markers += ' series_absent=%s absent=%s days_present=%s repeat_rows=%s retry_rows=%s window_from=%s' % (
+                tail_markers += ' series_absent=%s absent=%s absent_named=%s days_present=%s repeat_rows=%s retry_rows=%s window_from=%s' % (
                     'none' if gaps['count'] is None else gaps['count'],
                     ','.join(gaps['days']) or 'none',
+                    'none' if gaps['count'] is None else gaps['named'],
                     'none' if presence['present'] is None
                     else presence['present'],
                     'none' if presence['repeat'] is None

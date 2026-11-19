@@ -341,6 +341,25 @@ byte-identical (arm 6), and the refused names plus the older absent= count
 survive (arm 7). Stated honestly: retry is an INFERENCE from a counter that
 did not grow, not proof that a run was interrupted.
 
+AC-RUN49 (R3032) grades the SILENT-DAY LIST CAP. Measured before the change
+(qa/probe-R3032.log): `absent=` printed one name per silent day at exactly
+11.00 bytes each, so the line grew with the window - this checkout's one-row
+history printed 364 names (4310 bytes) at width 365 and 11296 bytes at 1000 -
+while `series_limit` caps only the series pairs, not this list; the name count
+always equalled `series_absent` (eight worlds), no arm pinned the whole line,
+and a byte budget is not a law a reader can predict from the window. So the
+pure function takes `limit` with a module constant `ABSENT_LIST_LIMIT = 31`,
+returns `named` and `truncated` beside the unchanged `count` (the FULL total),
+and the flagged tail prints `absent_named=<n|none>` (a name that does not
+contain the substring `absent=`, so the four arms counting it twice stay
+green). A seven-day window is complete and prints named=5 of 5 (arm 1); a
+sixty-day window names its first 31 silent days from the window start and
+stops while the total stays 58 (arm 2); 31 gaps fit and 32 print one short
+(arm 3); the total never shrinks to the printed count (arm 4); a 2001 history
+caps against its own last row with no clock (arm 5); the default face stays
+byte-identical (arm 6); and at width 1000 the line stays under 1000 bytes with
+the older absent= pair intact and no byte written (arm 7).
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -5102,6 +5121,130 @@ def main():
        'the window start appears once under its own name, the refused edge and '
        'function names never appear, the older absent= pair still counts two, '
        'retry still never exceeds repeat, and no byte is written')
+
+    # ===== AC-RUN49 (R3032): the name list is capped, the total is not =====
+    # AC-RUN49 was pinned in src/os/backlog.md BEFORE the cap existed
+    # (in-window pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3032.log): the absent= list cost exactly 11.00 bytes per name
+    # and grew with the window - this checkout's one-row history printed 364
+    # names (4310 bytes) on one line at width 365 and 11296 bytes at 1000. The
+    # name count always equalled series_absent (8 worlds), no arm pinned the
+    # whole line, and a byte budget is not predictable from the window the way
+    # "the first 31 silent days" is.
+    r49 = world()
+    roots.append(r49)
+    p49 = hist37(r49)
+    put_days(p49, [plain_day('2026-09-20', 5), plain_day('2026-11-18', 1),
+                   plain_day('2026-11-19', 3), plain_day('2026-11-19', 1),
+                   plain_day('2026-11-19', 2)])
+
+    # arm 1: a seven-day window is complete, so named equals the count
+    rc49, lines49 = days47(r49, ['--failure-days', '--series-days', '7',
+                                 '--series-absent'])
+    t49 = toks47(lines49[0]) if lines49 else {}
+    pure49 = RUN.series_absent_days(RUN.read_failure_days(p49)[0], 7)
+    ok('AC-RUN49', rc49 == 0 and t49.get('series_absent') == '5'
+       and t49.get('absent_named') == '5'
+       and len((t49.get('absent') or '').split(',')) == 5
+       and pure49['named'] == 5 and pure49['count'] == 5
+       and pure49['truncated'] is False,
+       'a seven-day window names all five silent days, and the printed named '
+       'count equals the printed total so no truncation is implied')
+
+    # arm 2: a sixty-day window names one month and counts the rest
+    rc49b, lines49b = days47(r49, ['--failure-days', '--series-days', '60',
+                                   '--series-absent'])
+    t49b = toks47(lines49b[0]) if lines49b else {}
+    named49b = (t49b.get('absent') or '').split(',')
+    pure49b = RUN.series_absent_days(RUN.read_failure_days(p49)[0], 60)
+    ok('AC-RUN49', rc49b == 0 and t49b.get('series_absent') == '58'
+       and t49b.get('absent_named') == '31'
+       and len(named49b) == 31
+       and named49b[0] == t49b.get('window_from')
+       and named49b[-1] == '2026-10-21'
+       and '2026-10-22' not in named49b
+       and pure49b['count'] == 58 and pure49b['named'] == 31
+       and pure49b['truncated'] is True,
+       'a sixty-day window names its first 31 silent days from the window '
+       'start and stops, while series_absent keeps the full 58')
+
+    # arm 3: the boundary is the 32nd day - 31 gaps fit, 32 do not
+    r49c = world()
+    roots.append(r49c)
+    p49c = hist37(r49c)
+    put_days(p49c, [plain_day('2026-11-19', 0)])
+    rc49c, lines49c = days47(r49c, ['--failure-days', '--series-days', '32',
+                                    '--series-absent'])
+    t49c = toks47(lines49c[0]) if lines49c else {}
+    rc49d, lines49d = days47(r49c, ['--failure-days', '--series-days', '33',
+                                    '--series-absent'])
+    t49d = toks47(lines49d[0]) if lines49d else {}
+    ok('AC-RUN49', rc49c == 0 and t49c.get('series_absent') == '31'
+       and t49c.get('absent_named') == '31'
+       and rc49d == 0 and t49d.get('series_absent') == '32'
+       and t49d.get('absent_named') == '31',
+       'thirty-one gaps print whole and thirty-two print one short - the cap '
+       'sits on the name count, not on the window width')
+
+    # arm 4: under truncation the total never shrinks to the printed count
+    rc49e, lines49e = days47(r49, ['--failure-days', '--series-days', '365',
+                                   '--series-absent'])
+    t49e = toks47(lines49e[0]) if lines49e else {}
+    named49e = (t49e.get('absent') or '').split(',')
+    ok('AC-RUN49', rc49e == 0
+       and int(t49e['series_absent']) == 362
+       and int(t49e.get('absent_named')) == 31
+       and len(named49e) == 31
+       and t49e['series_absent'] != t49e.get('absent_named'),
+       'a year-wide window keeps the full 362 gaps (365 days, three holding '
+       'rows) as the total and prints 31 names - a truncated list never reads '
+       'as few gaps')
+
+    # arm 5: no clock - a 2001 history is capped against its own last row
+    r49f = world()
+    roots.append(r49f)
+    p49f = hist37(r49f)
+    put_days(p49f, [plain_day('2001-01-01', 0), plain_day('2001-03-01', 1),
+                    plain_day('2001-03-05', 2)])
+    rc49f, lines49f = days47(r49f, ['--failure-days', '--series-days', '90',
+                                    '--series-absent'])
+    t49f = toks47(lines49f[0]) if lines49f else {}
+    pure49f = RUN.series_absent_days(RUN.read_failure_days(p49f)[0], 90)
+    ok('AC-RUN49', rc49f == 0 and t49f.get('window_from') == '2000-12-06'
+       and t49f.get('absent_named') == '31'
+       and int(t49f['series_absent']) == 87
+       and pure49f['head'] == '2001-03-05'
+       and t49f.get('absent').startswith('2000-12-06'),
+       'a ninety-day window over a 2001 history opens from the file own last '
+       'row and caps at 31 of its 87 names with no wall clock')
+
+    # arm 6: without the flag the tail is byte-identical and carries no token
+    rc49g, lines49g = days47(r49, ['--failure-days'])
+    ok('AC-RUN49', rc49g == 0 and lines49g
+       and lines49g[0].endswith(
+           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+       and 'absent_named' not in lines49g[0],
+       'without the flag the tail is the same line R3026..R3031 shipped and '
+       'the new token does not appear')
+
+    # arm 7: pure display, bounded width, and the older absent= pair intact
+    before49 = tree_bytes(r49)
+    rc49h, lines49h = days47(r49, ['--failure-days', '--series-days', '1000',
+                                   '--series-absent'])
+    after49 = tree_bytes(r49)
+    text49 = '\n'.join(lines49h)
+    t49h = toks47(lines49h[0]) if lines49h else {}
+    ok('AC-RUN49', rc49h == 0 and before49 == after49 and lines49h
+       and len(lines49h[0]) < 1000
+       and lines49h[0].count('absent_named=') == 1
+       and lines49h[0].count('absent=') == 2
+       and int(t49h.get('absent_named'))
+       <= int(t49h['series_absent'])
+       and 'PASS' not in text49 and 'FLAG' not in text49
+       and 'verdict' not in text49,
+       'a thousand-day window still prints under 1000 bytes, the new token '
+       'appears once and never exceeds the total, the older absent= pair '
+       'still counts two, no verdict prints, and no byte is written')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

@@ -1,0 +1,39 @@
+P1a: printed line grows with window width (private world, 1 row)
+width  bytes  absent_names  series_absent  todays_line_bytes
+    7      6           385              6                102
+   30     29           641             29                356
+   60     31           663             59                378
+   90     31           663             89                378
+  180     31           665            179                378
+  365     31           665            364                378
+ 1000     31           666            999                378
+
+P1b: measured growth rate, bytes per silent day
+  width    7 ->   30 : names    6 ->   29, bytes    385 ->    641, bytes/name 11.13
+  width   30 ->   60 : names   29 ->   31, bytes    641 ->    663, bytes/name 11.00
+
+P1c: this checkout real history
+  file exists=True rows=1 bytes=119
+  width   60 : line_bytes=  661 series_absent=59 named_len=340
+  width  365 : line_bytes=  663 series_absent=364 named_len=340
+  width 1000 : line_bytes=  664 series_absent=999 named_len=340
+
+P2a: does absent= name count always equal series_absent=?
+  one row          w7   named=6   count=6    agree=True
+  one row          w60  named=31  count=59   agree=False
+  two days         w7   named=5   count=5    agree=True
+  two days         w60  named=31  count=58   agree=False
+  same day twice   w7   named=6   count=6    agree=True
+  same day twice   w60  named=31  count=59   agree=False
+  all seven        w7   named=0   count=0    agree=True
+  all seven        w60  named=31  count=53   agree=False
+
+P2b: suite arms that pin the absent= face
+  occurrences of "absent=" in suite: 32
+  whole-string equality lines carrying absent=: 0
+  arms asserting list length via split: 1
+
+P3: what a cap can preserve
+  a list cap must not change series_absent= (it is the total);
+  a byte cap is not a law a reader can predict from the window;
+  entry cap N leaves the first N names and a marker for the rest.

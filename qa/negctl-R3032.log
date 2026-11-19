@@ -1,0 +1,8 @@
+honest-green-arm2          GREEN
+honest-green-arm3-fit      GREEN
+honest-green-arm3-short    GREEN
+mutant-no-cap              CAUGHT
+mutant-count-shrinks       CAUGHT
+mutant-byte-cap            CAUGHT
+mutant-truncated-false     CAUGHT
+NEGCTL honest=3/3 mutant=4/4 verdict=PASS

@@ -4725,8 +4725,10 @@ SUITES = [
     # so retry_rows <= repeat_rows (46 -> 47, the same row).
     # R3031 adds AC-RUN48: the window is day-keyed, so no width can split a
     # day, repeat/retry are exact, and window_from names the cut (47 -> 48).
+    # R3032 adds AC-RUN49: the silent-day list stops at one month while
+    # series_absent keeps the full total (48 -> 49, the same row).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 48),
+     os.path.join("..", "os", "test_crawl_runner.py"), 49),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep
