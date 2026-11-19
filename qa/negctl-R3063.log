@@ -1,0 +1,5 @@
+baseline honest=(1, 2, 1) green=True
+rows-not-texts got=(2, 2, 2) CAUGHT
+sources-not-texts got=(2, 2, 2) CAUGHT
+no-strip got=(1, 2, 2) CAUGHT
+restored=(1, 2, 1) GREEN

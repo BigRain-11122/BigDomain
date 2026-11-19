@@ -623,6 +623,32 @@ distinct errors within the tie (no reader asked, and it would give the line a
 second count). BOUNDARY: the second error in a tie stays invisible on this
 face; that gap is carried, not claimed solved.
 
+HOW MANY DIFFERENT ERRORS A TIE CARRIES (R3063, measured first -
+qa/probe-R3063.log): R3062 refused a distinct-error count because "no reader
+asked" - and its own arm P2g measured exactly the reader's question, two
+different errors at one instant with the second one on NO face. This round
+answers that gap with the smallest word that cannot lie: `newest_errors=` is
+HOW MANY distinct error texts the rows naming the newest instant carry. It is a
+COUNT on purpose - a second error STRING would break the one-line-per-channel
+contract (the numbered family was refused in R3059/R3060) and a count of KINDS
+would hide a second error that falls in the same `failure_kind` bucket (R2996:
+kind= is a display label, never a verdict). Measured (qa/probe-R3063.log): a
+tie of two DIFFERENT errors and a tie of the SAME error twice both read
+`newest_rows=2` plus one error and differed only in `bytes`/`kind`, so the line
+could not say whether a second error exists (P4/P4a); the token costs 18 chars
+on a 265-char line (+6.8%, P6); zero consumers read newest_error/newest_kind
+outside this module (P7); an empty channel reads newest=none newest_rows=0
+(P8), so 0 rides beside it rather than an invented 1. The text is compared
+after strip(): the writer already refuses a blank-after-strip error (see
+append_failure), so a whitespace-only difference is not a second error - the
+same vocabulary, not a new law. REFUSED: the word on --failure-trend (that face
+prints no error at all - P2 measured zero error keys there, and R3059 itself
+refused to copy newest_rows= across faces for the same scope reason);
+truncating the echoed error (R3057); counting kinds instead of texts (R2996).
+BOUNDARY: the line still prints ONE error, so 2+ tells a reader that another
+exists without naming it; the count is of TEXTS, not causes - two sources
+failing with the same message read 1.
+
 WHICH DAY A ROW COUNTS IN (R3055, measured first - qa/probe-R3055.log): R3048
 gave the clock faces one day law - the LOCAL day of the instant, `_day_of` -
 but only the window HEAD used it; every count and span still cut the first ten
@@ -1846,6 +1872,15 @@ def _summary_from_rows(rows, bad, day, window_days=7, bad_days=None):
     newest_picked = _newest_rows(rows)
     newest = newest_picked[-1] if newest_picked else None
     newest_error = (newest or {}).get('error')
+    # R3063: HOW MANY DIFFERENT errors name that instant. newest_rows= says how
+    # many rows share it and error= prints one of them, but measured
+    # (qa/probe-R3063.log P4/P4a) a tie of two DIFFERENT errors and a tie of the
+    # SAME error twice read identically - so "is there another error I cannot
+    # see?" had no answer on any face. Compared after strip(): the writer
+    # already refuses a blank-after-strip error, so whitespace alone is not a
+    # second error here.
+    newest_errors = len({str(row.get('error')).strip() for row in newest_picked
+                         if str(row.get('error') or '').strip()})
     return {'total': len(rows), 'recent': recent, 'bad': bad,
             'bad_days': bad_days,
             'urls': len(urls), 'window_days': window_days,
@@ -1866,6 +1901,11 @@ def _summary_from_rows(rows, bad, day, window_days=7, bad_days=None):
             # subject and only one of them can be printed; 0 rides beside
             # newest=none.
             'newest_rows': len(newest_picked),
+            # R3063: HOW MANY DISTINCT error texts those rows carry - 1 is the
+            # healthy reading and also the "two sources, one message" reading;
+            # 2+ says a second error exists that this one line cannot print; 0
+            # rides beside newest=none.
+            'newest_errors': newest_errors,
             # R2997: the same bucket function the trend line uses, so one
             # error string is classified in exactly one place.
             'newest_kind': failure_kind(newest_error) if newest_error else 'none'}
@@ -4268,7 +4308,7 @@ def main(argv=None):
         print('CRAWL-FAILURES total=%d recent%d=%d bad=%d bad_days=%s '
               'urls=%d bytes=%d '
               'lines=%d size_gate=%.4f%% gate_ref=%dMB newest=%s newest_src=%s '
-              'error=%s newest_rows=%d kind=%s day=%s'
+              'error=%s newest_rows=%d newest_errors=%d kind=%s day=%s'
               % (summary['total'], summary['window_days'],
                            summary['recent'], summary['bad'],
                            ','.join(summary['bad_days'] or []) or 'none',
@@ -4279,6 +4319,7 @@ def main(argv=None):
                            summary['newest_src'] or 'none',
                            summary['newest_error'] or 'none',
                            summary['newest_rows'],
+                           summary['newest_errors'],
                            summary['newest_kind'], summary['day']))
         return 0
     if args.failure_days:

@@ -1,0 +1,22 @@
+R3063 PROBE (read-only, private worlds, no socket, no clock)
+P1 live_rows=0 live_tie_instants=0
+P2 --failures rc=0 keys=15 len=265
+P2 --failures line: CRAWL-FAILURES total=2 recent7=2 bad=0 bad_days=none urls=2 bytes=246 lines=2 size_gate=0.0002% gate_ref=100MB newest=2026-11-19T20:00:00+00:00 newest_src=https://b.example/p error=E_FETCH TimeoutError: read timed out for B newest_rows=2 kind=timeout day=2026-11-20
+P2 --failure-trend rc=0 keys=32 len=525
+P2 --failure-trend line: CRAWL-FAILURE-TREND days=0 today=absent prev=none mean=none delta=none worst=none recurring=0 sources=2 bad=0 bad_days=none evidence=side kind=http:1 recur=0:0 cov=none wcov=0/7 newest_src=https://b.example/p newest_srcs=2 newest_twin=https://a.example/p twin_ok=unmeasured since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=2026-11-20..2026-11-20 rcov=none day=2026-11-20
+P2 --pending-old-list rc=0 keys=7
+P2 --pending-old-list line: CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=0 bad_days=none fcov=2026-11-20..2026-11-20 last_at=2026-11-19T20:00:00+00:00 reason=no-coverage
+P2a E_A visible on failures=False trend=False
+P2b E_B visible on failures=True trend=False
+P2c any key value equals A url on failures=False trend=True
+P2d keys whose name says src/source on failures=['newest_src']
+P3 kinds=('http', 'timeout') same_kind=False
+P3 words: newest_rows=2 newest_srcs=2 kind=timeout error=E_FETCH
+P3 counts naming errors on failures=['error'] trend=[]
+P4 same-error tie  newest_rows=2 error=E_FETCH
+P4 diff-error tie  newest_rows=2 error=E_FETCH
+P4a failures lines differ only where? ['bytes', 'kind']
+P5 pending last_at=2026-11-19T20:00:00+00:00 failures newest=2026-11-19T20:00:00+00:00 same=True
+P6 failures line len=265  token " newest_errors=2" adds 18 chars (6.8%)
+P7 consumers outside module: {'newest_error': 0, 'newest_kind': 0}
+P8 empty newest=none newest_rows=0 error=none kind=none

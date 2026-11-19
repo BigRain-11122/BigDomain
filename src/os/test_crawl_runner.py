@@ -7565,7 +7565,8 @@ def main():
         j66 = src66.find('\ndef ', i66 + 1)
         return src66[i66:j66 if j66 > 0 else len(src66)]
 
-    ok('AC-RUN66', "error=%s newest_rows=%d kind=%s day=%s'" in src66
+    ok('AC-RUN66', "error=%s newest_rows=%d newest_errors=%d kind=%s day=%s'"
+       in src66
        and "fcov=%s rcov=%s '\n              'day=%s'" in src66
        and "'day': head_day" in body66('_summary_from_rows')
        and "'day': head_day" in body66('summarize_failure_trend'),
@@ -9339,6 +9340,124 @@ def main():
        and 'newest_src=' in linesF79[0],
        'the summary publishes the source of its chosen row, main prints it, '
        'and the shipped line carries the word')
+
+    # --- AC-RUN80: how many different errors a tie carries (R3063) -----------
+    # Measured before this existed (qa/probe-R3063.log P2/P4/P4a): with two
+    # DIFFERENT errors at one instant the second one appeared on no face, and a
+    # tie of the SAME error twice read exactly like a tie of two different ones
+    # (newest_rows=2 plus one error). One word: newest_errors= counts the
+    # distinct error texts among the rows naming the newest instant.
+    AT80 = '2026-11-20T23:59:00+08:00'
+    A80 = '2026-11-20T04:00:00+08:00'
+    B80 = '2026-11-19T20:00:00+00:00'   # the SAME instant as A80
+    SA80 = 'https://a80.example/p'
+    SB80 = 'https://b80.example/p'
+    SC80 = 'https://c80.example/p'
+    EA80 = 'E_FETCH HTTPError: 503'
+    EB80 = 'E_FETCH TimeoutError: read timed out'
+
+    with io.open(os.path.join(ROOT, 'tools', 'crawl_runner.py'),
+                 'r', encoding='utf-8') as fh:
+        src80 = fh.read()
+
+    def body80(name):
+        i80 = src80.find('def %s(' % name)
+        j80 = src80.find('\ndef ', i80 + 1)
+        return src80[i80:j80 if j80 > 0 else len(src80)]
+
+    def fails80(root):
+        rc80, lines80 = face73(root, '--failures', AT80)
+        return rc80, toks69(lines80[0]), lines80[0]
+
+    # Arm 1: one healthy row - one text, so the count can never invent a
+    # second error on an ordinary channel.
+    H80 = world(); roots.append(H80)
+    side73(H80, [(SA80, A80, EA80)])
+    rc80h, t80h, line80h = fails80(H80)
+    ok('AC-RUN80', rc80h == 0 and t80h.get('newest_errors') == '1'
+       and t80h.get('newest_rows') == '1' and EA80 in line80h,
+       'a single row carries one error text, and the count says so')
+
+    # Arm 2: the same error twice - two rows, one text. This is the half of
+    # the question the line could not answer before this round.
+    S80 = world(); roots.append(S80)
+    side73(S80, [(SA80, A80, EA80), (SB80, B80, EA80)])
+    _rc80s, t80s, _line80s = fails80(S80)
+    ok('AC-RUN80', t80s.get('newest_rows') == '2'
+       and t80s.get('newest_errors') == '1',
+       'two rows with one message read newest_rows=2 newest_errors=1')
+
+    # Arm 3: two DIFFERENT errors - the count says a second error exists,
+    # and it does not follow the write order the way the printed row does.
+    counts80 = []
+    for order80 in (((SA80, A80, EA80), (SB80, B80, EB80)),
+                    ((SB80, B80, EB80), (SA80, A80, EA80))):
+        W80 = world(); roots.append(W80)
+        side73(W80, list(order80))
+        _rc80, t80, line80 = fails80(W80)
+        counts80.append((t80, line80))
+    ok('AC-RUN80', all(t.get('newest_errors') == '2' for t, _l in counts80)
+       and all(t.get('newest_rows') == '2' for t, _l in counts80)
+       and counts80[0][0].get('newest_src') != counts80[1][0].get('newest_src')
+       and EB80 in counts80[0][1] and EA80 not in counts80[0][1]
+       and EA80 in counts80[1][1] and EB80 not in counts80[1][1],
+       'a tie of two different errors counts 2 under both file orders, while '
+       'the printed row keeps following the write order')
+
+    # Arm 4: three rows, two texts - the count is of TEXT, not of rows and
+    # not of sources.
+    T80 = world(); roots.append(T80)
+    side73(T80, [(SA80, A80, EA80), (SB80, B80, EB80), (SC80, B80, EB80)])
+    _rc80t, t80t, _line80t = fails80(T80)
+    ok('AC-RUN80', t80t.get('newest_rows') == '3'
+       and t80t.get('urls') == '3' and t80t.get('newest_errors') == '2',
+       'three rows carrying two distinct texts read newest_errors=2, so the '
+       'word counts texts rather than rows or sources')
+
+    # Arm 5: whitespace alone is not a second error - the writer already
+    # treats a blank-after-strip error as no error at all, so strip is this
+    # module's existing vocabulary rather than a new law.
+    W80w = world(); roots.append(W80w)
+    side73(W80w, [(SA80, A80, 'E_X'), (SB80, B80, '  E_X  ')])
+    _rc80w, t80w, _line80w = fails80(W80w)
+    ok('AC-RUN80', t80w.get('newest_rows') == '2'
+       and t80w.get('newest_errors') == '1',
+       'one message written with surrounding spaces is still one error')
+
+    # Arm 6: no evidence - 0 beside the absent stamp, never an invented 1.
+    E80 = world(); roots.append(E80)
+    rc80e, t80e, _line80e = fails80(E80)
+    ok('AC-RUN80', rc80e == 0 and t80e.get('newest_errors') == '0'
+       and t80e.get('newest') == 'none'
+       and t80e.get('newest_rows') == '0',
+       'an empty channel reads newest_errors=0 beside newest=none')
+
+    # Arm 7: display only - two runs byte-identical, the world unmoved, and
+    # every pre-existing word keeps the value R3058/R3062 measured.
+    P80 = world(); roots.append(P80)
+    side73(P80, [(SA80, A80, EA80), (SB80, B80, EB80)])
+    before80 = snap69(P80)
+    _rc80p, t80p, _line80p = fails80(P80)
+    _rc80p2, t80p2, _line80p2 = fails80(P80)
+    ok('AC-RUN80', t80p2 == t80p and snap69(P80) == before80
+       and t80p.get('total') == '2' and t80p.get('recent7') == '2'
+       and t80p.get('urls') == '2' and t80p.get('newest_rows') == '2'
+       and t80p.get('kind') == 'timeout' and t80p.get('day') == '2026-11-20'
+       and t80p.get('newest_errors') == '2',
+       'the count is display only, the world does not move, and every old '
+       'word keeps its value on this exact shape')
+
+    # Arm 8: wired rather than merely defined, and the refusal is an
+    # assertion - the count belongs to the face that prints the error.
+    _rc80t2, lines80trend = face73(S80, '--failure-trend', AT80)
+    ok('AC-RUN80', "newest_errors = len(" in body80('_summary_from_rows')
+       and "for row in newest_picked" in body80('_summary_from_rows')
+       and "'newest_errors': newest_errors" in body80('_summary_from_rows')
+       and 'newest_errors=%d' in body80('main')
+       and 'newest_errors=' in line80h
+       and 'newest_errors=' not in lines80trend[0],
+       'the summary counts the chosen rows, main prints the word, the '
+       'channel line carries it and the trend face does not')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
