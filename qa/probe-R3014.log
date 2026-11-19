@@ -1,0 +1,21 @@
+P1 options=--days,--failure-days,--failure-trend,--failures,--fixture,--if-due,--root,--snapshot-failures,--timeout,--url,--write has_pending_old_list=False
+P2 refusal_lines=[276, 387, 955, 1034, 1035, 1065, 1324]
+P2 L276 refused as a field) and their identities need one line per source (refused).
+P2 L387 shape needs one line per source, which the contract refuses). Pointing a reader
+P2 L955 NOT every pending source: naming them all needs one line per source, which
+P2 L1034 over sources=1). Not a per-source face either: naming or aging an old
+P2 L1035 source needs one line per source, which the one-line contract refuses.
+P2 L1065 reading the shape at that size needs one line per source, which the
+P2 L1324 # because one line per source is what the contract refuses.
+P2 test_pending_old_src_lines=[2121, 2327, 2446] all_scoped_to_trend_dict=True
+P2 test_add_argument_count=0 (an arm enumerating the option surface would make a new subcommand a criterion breach)
+P2 test_failure_trend_invocations=29 (all one-line arms call --failure-trend, which keeps its own shape)
+P3 consumers=[('src\\os\\iteration_loop.ps1', False, True), ('src\\os\\test_crawl_runner.py', True, True), ('src\\sandbox\\reconcile_all.py', False, False)]
+P3 gate_mentions_crawl=0 census_classifies_log_only=3
+P5 keys=30 identical_between_worlds=True
+P5 w1 pending_old=(3, 3) age_d=91 age_min=9
+P4 tuple=(3, 3, '2026-08-20T10:00:00+08:00', '2026-11-10T10:00:00+08:00') tuple_len=4
+P4 waiting_rows=[('2026-08-20T10:00:00+08:00', 'https://a.example/page'), ('2026-08-21T10:00:00+08:00', 'https://b.example/page'), ('2026-11-10T10:00:00+08:00', 'https://c.example/page')] waiting_len=3
+P6 pending_old=(1, 2) (A only; B repaired, D unmeasured) age_d=91 age_min=91
+P7 nothing_outside=None absent_side=None
+P8 live pending_old=None age_d=None age_min=None keys=30

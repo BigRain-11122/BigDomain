@@ -391,6 +391,18 @@ byte-identical, a single extra record row moved the old fraction from 2/3 to
 With one old waiter the two ages coincide - pinned as the truth it is, the same
 way the in-window pair pins its own coincidence. Display only, no PASS/FLAG.
 
+OLD WAITERS BY NAME (R3014): the row gave two ends and a count, so with three
+old waiters the middle one had neither a name nor an age - measured
+(qa/probe-R3014.log), two worlds whose second-oldest waiter was a different
+source read IDENTICAL on all 30 keys. Naming them on this row is refused by the
+one-line contract (R3010/R3013), so the list is a SEPARATE read-only face:
+`--pending-old-list` prints one header line and then one line per still-pending
+out-of-window source. It calls the SAME predicate the row uses
+(_out_of_window_waiting), so the count, the two ends and the list cannot
+disagree; it writes nothing, gates nothing and names no verdict. The R3010
+sentence "Not a per-source face either" was scoped BY ITS OWN REASON to this
+row's one-line contract, and that scope is stated here rather than left wide.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -509,8 +521,14 @@ def read_failures(path):
     return rows, bad
 
 
-def _summary_from_rows(rows, bad, day, window_days=7):
-    """Counts over already-validated rows; the one place the window law lives."""
+def _window_start(day, window_days=7):
+    """(head_day, usable, threshold) - the ONE place the window law lives.
+
+    R3014: the summary and the trend builder each carried this arithmetic, and a
+    third face (the old-waiter listing) would have made three copies of the law.
+    One function, three call sites, so a list and a row cannot disagree about
+    which day the window opens.
+    """
     head_day = (day or '')[:10]
     usable = _usable_day(head_day)
     threshold = head_day
@@ -521,6 +539,12 @@ def _summary_from_rows(rows, bad, day, window_days=7):
             threshold = start.isoformat()
         except ValueError:
             usable = False
+    return head_day, usable, threshold
+
+
+def _summary_from_rows(rows, bad, day, window_days=7):
+    """Counts over already-validated rows; the one place the window law lives."""
+    head_day, usable, threshold = _window_start(day, window_days)
     recent = 0
     urls = set()
     newest = None
@@ -1015,6 +1039,43 @@ def _pending_sources(record_path, in_window):
             waiting[(len(waiting) - 1) // 2][0])
 
 
+def _out_of_window_waiting(record_path, rows, threshold):
+    """(still, judged, waiting) - the out-of-window population, computed ONCE.
+
+    waiting is [(stamp, src)] for the sources the record shows were never back,
+    sorted stamp ascending then url, which is the order the two end values have
+    always used. R3014 hoisted this out of _pending_out_of_window because that
+    function kept only the first and last witness and dropped everything
+    between - and a listing face built on its own copy of the predicate would
+    have been a second truth (the measured gap: three waiters, two stamps
+    returned, the middle one's identity gone).
+    """
+    latest = {}
+    for row in rows or ():
+        src = row.get('source_url')
+        stamp = str(row.get('failed_at') or '')
+        if not src or not stamp:
+            continue
+        if src not in latest or stamp > latest[src]:
+            latest[src] = stamp
+    still = 0
+    judged = 0
+    waiting = []
+    head = str(threshold or '')[:10]
+    for src, stamp in latest.items():
+        if str(stamp)[:10] >= head:
+            continue
+        verdict = _since_ok(record_path, src, stamp)
+        if verdict == 'no':
+            still += 1
+            judged += 1
+            waiting.append((str(stamp), str(src)))
+        elif verdict == 'yes':
+            judged += 1
+    waiting.sort()
+    return still, judged, waiting
+
+
 def _pending_out_of_window(record_path, rows, threshold):
     """(still gone, judged) outside the window - or None when nothing was judged.
 
@@ -1031,8 +1092,11 @@ def _pending_out_of_window(record_path, rows, threshold):
     the window and its denominator is the sources= the same line names; folding
     the old ones in would print more judged sources than that population
     contains (measured: one in-window source, one judged outside, so 2 judged
-    over sources=1). Not a per-source face either: naming or aging an old
-    source needs one line per source, which the one-line contract refuses.
+    over sources=1). Not a field on THIS ROW either: naming or aging every old
+    source here needs one line per source, which the one-line contract refuses.
+    R3014 later landed exactly that list as a SEPARATE read-only face
+    (--pending-old-list), after measuring that this reason - and every arm that
+    asserted a refusal - was scoped to this row; this row keeps its shape.
 
     Same split as pending=: only since_ok=='no' reaches the numerator, so an
     unmeasured source is in neither number (R3004's split is not aggregated
@@ -1071,33 +1135,48 @@ def _pending_out_of_window(record_path, rows, threshold):
     moved the old fraction from (2,3) to (1,3), so the file cannot answer "is it
     still gone" on its own.
     """
-    latest = {}
-    for row in rows or ():
-        src = row.get('source_url')
-        stamp = str(row.get('failed_at') or '')
-        if not src or not stamp:
-            continue
-        if src not in latest or stamp > latest[src]:
-            latest[src] = stamp
-    still = 0
-    judged = 0
-    waiting = []
-    head = str(threshold or '')[:10]
-    for src, stamp in latest.items():
-        if str(stamp)[:10] >= head:
-            continue
-        verdict = _since_ok(record_path, src, stamp)
-        if verdict == 'no':
-            still += 1
-            judged += 1
-            waiting.append((str(stamp), str(src)))
-        elif verdict == 'yes':
-            judged += 1
+    still, judged, waiting = _out_of_window_waiting(record_path, rows,
+                                                    threshold)
     if not judged:
         return None
-    waiting.sort()
     return (still, judged, waiting[0][0] if waiting else None,
             waiting[-1][0] if waiting else None)
+
+
+def list_pending_old(record_path, failures_path, day, window_days=7):
+    """The out-of-window still-gone sources BY NAME, one row each (R3014).
+
+    WHY: measured before this existed (qa/probe-R3014.log) - with three old
+    waiters the trend row reads pending_old=3/3 with the ends 91 and 9, and two
+    worlds whose second-oldest waiter was a DIFFERENT source were identical on
+    all 30 keys, so "which ones are hanging" had no face at all. The row keeps
+    its shape (R3010/R3013 refusals stand for the row); this is a separate
+    surface whose whole purpose is the list.
+
+    SAME SOURCE, NOT A SECOND TRUTH: it calls _out_of_window_waiting(), the
+    same predicate _pending_out_of_window uses, over the same loader - so the
+    count, the two ages on the row and this list cannot disagree. The suite
+    pins that agreement rather than this docstring promising it.
+
+    DISPLAY ONLY: writes nothing, gates nothing, retries nothing. No evidence
+    out there answers pending_old=None with an empty list - never (0, 0), which
+    would read as "nothing is pending".
+    """
+    rows, bad = read_failures(failures_path)
+    head_day, usable, threshold = _window_start(day, window_days)
+    out = {'day': head_day, 'window_days': window_days, 'bad': bad,
+           'pending_old': None, 'waiting': []}
+    if not usable:
+        return out
+    still, judged, waiting = _out_of_window_waiting(record_path, rows,
+                                                    threshold)
+    if not judged:
+        return out
+    out['pending_old'] = (still, judged)
+    out['waiting'] = [{'source_url': src, 'failed_at': stamp,
+                       'age_d': _day_age(head_day, stamp)}
+                      for stamp, src in waiting]
+    return out
 
 
 def summarize_failure_trend(history_path, failures_path, day, window_days=7,
@@ -1135,16 +1214,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     picks the most common exception bucket in the window; ties break on the
     bucket name so the answer is deterministic.
     """
-    head_day = (day or '')[:10]
-    usable = _usable_day(head_day)
-    threshold = head_day
-    if usable:
-        try:
-            start = datetime.date.fromisoformat(head_day) - datetime.timedelta(
-                days=max(1, int(window_days)) - 1)
-            threshold = start.isoformat()
-        except ValueError:
-            usable = False
+    head_day, usable, threshold = _window_start(day, window_days)
     rows, hbad = read_failure_days(history_path)
     span = [r for r in rows
             if not usable
@@ -1544,6 +1614,11 @@ def main(argv=None):
     ap.add_argument('--failure-trend', dest='failure_trend', action='store_true',
                     help='print the count trend joined with per-day source '
                          'recurrence and exit (a display line; gates nothing)')
+    ap.add_argument('--pending-old-list', dest='pending_old_list',
+                    action='store_true',
+                    help='print the out-of-window sources that never came '
+                         'back, one line each (read-only display; writes and '
+                         'gates nothing)')
     ap.add_argument('--snapshot-failures', dest='snapshot_failures',
                     action='store_true',
                     help='persist today\'s failure counts as one history row '
@@ -1573,6 +1648,19 @@ def main(argv=None):
               % (series['days'], series['bad'], series['first'] or 'none',
                  series['last'] or 'none', pairs or 'none', series['bytes'],
                  series['size_gate'], series['gate_ref_mb']))
+        return 0
+    if args.pending_old_list:
+        stamp = datetime.datetime.now().astimezone().isoformat(
+            timespec='seconds')
+        lst = list_pending_old(CR.record_path(args.root),
+                               failure_path(args.root), stamp, args.days)
+        po = lst['pending_old']
+        print('CRAWL-PENDING-OLD-LIST pending_old=%s days=%d'
+              % ('none' if po is None else '%d/%d' % po, args.days))
+        for row in lst['waiting']:
+            print('PENDING-OLD url=%s failed_at=%s age_d=%s'
+                  % (row['source_url'], row['failed_at'],
+                     'none' if row['age_d'] is None else row['age_d']))
         return 0
     if args.failure_trend:
         stamp = datetime.datetime.now().astimezone().isoformat(

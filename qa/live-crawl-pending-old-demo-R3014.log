@@ -1,0 +1,4 @@
+CRAWL-PENDING-OLD-LIST pending_old=3/3 days=7
+PENDING-OLD url=https://a.example/page failed_at=2026-08-20T10:00:00+08:00 age_d=91
+PENDING-OLD url=https://b.example/page failed_at=2026-08-21T10:00:00+08:00 age_d=90
+PENDING-OLD url=https://c.example/page failed_at=2026-11-10T10:00:00+08:00 age_d=9

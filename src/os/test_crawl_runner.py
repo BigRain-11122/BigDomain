@@ -2445,7 +2445,7 @@ def main():
        and 'pending_old_age_med_d' not in tN1
        and 'pending_old_src' not in tN1
        and 'pending_old_hist' not in tN1,
-       'the row grows by exactly one age key, and the refused middle, per-source and histogram faces never exist')
+       'the row grows by exactly one age key, and the refused middle, per-source and histogram faces never exist on the row')
 
     # arm 7: the one-line contract and the scanner's zero-consumption premise
     bufN7 = io.StringIO()
@@ -2465,6 +2465,147 @@ def main():
        and 'PASS' not in lineN7 and 'FLAG' not in lineN7
        and 'verdict' not in lineN7 and 'crawl-failure' not in scan_src18,
        'one line carries pending_old_age_min_d= (a number, or none when nothing outside is pending), and the scanner still reads none of it')
+
+    # AC-RUN31 (R3014): with three old waiters the row gave two ends and a
+    # count - "which ones" had no face. Measured before the pin
+    # (qa/probe-R3014.log): two worlds whose second-oldest waiter was a
+    # different source read IDENTICAL on all 30 keys, while the same computation
+    # held all three witnesses and returned only the first and last. The list is
+    # a SEPARATE read-only face over the SAME predicate.
+    SRC31A = 'https://a.example/page'
+    SRC31B = 'https://b.example/page'
+    SRC31B2 = 'https://b2.example/page'
+    SRC31C = 'https://c.example/page'
+    SRC31D = 'https://d.example/page'
+    SRC31K = 'https://keep.example/page'
+    SRC31E = 'https://e.example/page'
+    OLD31 = '2026-08-20T10:00:00+08:00'    # 91 days before TODAY
+    NXT31 = '2026-08-21T10:00:00+08:00'    # 90 days
+    MID31 = '2026-11-10T10:00:00+08:00'    # 9 days
+    FIX31 = '2026-11-11T09:00:00+08:00'
+    BASE31 = [(SRC31K, TODAY + 'T09:00:00+08:00', 'no-drift'),
+              (SRC31E, FIX31, 'no-drift')]
+
+    def world31(failures, records, window=7):
+        root = world()
+        roots.append(root)
+        for url, when, verdict in records:
+            CR.append_record(CR.record_path(root), url, when, verdict)
+        for url, when in failures:
+            RUN.append_failure(RUN.failure_path(root), url, when,
+                               'TimeoutError: t')
+        write_days(RUN.failure_day_path(root), [])
+        trend31 = RUN.summarize_failure_trend(
+            RUN.failure_day_path(root), RUN.failure_path(root), TODAY,
+            window_days=window, record_path=CR.record_path(root))
+        listed31 = RUN.list_pending_old(
+            CR.record_path(root), RUN.failure_path(root), TODAY, window)
+        return root, trend31, listed31
+
+    def ages31(listed):
+        return [w['age_d'] for w in listed['waiting']]
+
+    def urls31(listed):
+        return [w['source_url'] for w in listed['waiting']]
+
+    def snapshot31(root):
+        out = []
+        for base, _dirs, files in os.walk(root):
+            for name in files:
+                p = os.path.join(base, name)
+                out.append((os.path.relpath(p, root).replace('\\', '/'),
+                            os.path.getsize(p)))
+        out.sort()
+        return out
+
+    # arm 1: three waiters, all three named, oldest first - and the row keeps
+    # only its two ends (the blindness this round closes)
+    rW1, tW1, lW1 = world31([(SRC31A, OLD31), (SRC31B, NXT31), (SRC31C, MID31)],
+                            BASE31)
+    ok('AC-RUN31', urls31(lW1) == [SRC31A, SRC31B, SRC31C]
+       and ages31(lW1) == [91, 90, 9]
+       and tW1['pending_old'] == (3, 3)
+       and tW1['pending_old_age_d'] == 91
+       and tW1['pending_old_age_min_d'] == 9,
+       'three old waiters are all named with their ages, while the row still carries only the two ends')
+
+    # arm 2: the list and the row are ONE computation - same count, same ends
+    rW3, tW3, lW3 = world31(
+        [(SRC31A, OLD31), (SRC31B, NXT31),
+         (SRC31D, '2026-09-05T10:00:00+08:00')],
+        [(SRC31K, '2026-09-01T09:00:00+08:00', 'no-drift'),
+         (SRC31B, '2026-08-22T09:00:00+08:00', 'no-drift')])
+    ok('AC-RUN31', lW1['pending_old'] == tW1['pending_old']
+       and ages31(lW1)[0] == tW1['pending_old_age_d']
+       and ages31(lW1)[-1] == tW1['pending_old_age_min_d']
+       and tW3['pending_old'] == (1, 2)
+       and lW3['pending_old'] == (1, 2)
+       and urls31(lW3) == [SRC31A],
+       'the list reports the same fraction and the same two ends the row does - one predicate, not a second truth')
+
+    # arm 3: two worlds the row cannot tell apart, separated by the middle name
+    rW2, tW2, lW2 = world31([(SRC31A, OLD31), (SRC31B2, NXT31),
+                             (SRC31C, MID31)], BASE31)
+    ok('AC-RUN31', json.dumps(tW1, sort_keys=True) == json.dumps(
+        tW2, sort_keys=True)
+       and urls31(lW1)[1] == SRC31B and urls31(lW2)[1] == SRC31B2
+       and ages31(lW1) == ages31(lW2),
+       'two worlds identical on every row key are separated by which source the list names in the middle')
+
+    # arm 4: a repaired old source and an unmeasured one are never listed
+    rW4, tW4, lW4 = world31(
+        [(SRC31B, NXT31)],
+        [(SRC31K, TODAY + 'T09:00:00+08:00', 'no-drift'),
+         (SRC31B, '2026-08-22T09:00:00+08:00', 'no-drift')])
+    ok('AC-RUN31', tW4['pending_old'] == (0, 1)
+       and lW4['pending_old'] == (0, 1) and lW4['waiting'] == []
+       and SRC31B not in urls31(lW3) and SRC31D not in urls31(lW3),
+       'a source that came back, and one the record never looked after, are both absent - judged is not the same as listed')
+
+    # arm 5: no evidence out there answers none with ZERO rows, never 0/0
+    rW5, tW5, lW5 = world31([(SRC31C, '2026-11-18T08:00:00+08:00')], BASE31)
+    rW6 = world()
+    roots.append(rW6)
+    lW6 = RUN.list_pending_old(CR.record_path(rW6), RUN.failure_path(rW6),
+                               TODAY)
+    buf31b = io.StringIO()
+    with contextlib.redirect_stdout(buf31b):
+        rc31b = RUN.main(['--pending-old-list', '--root', rW6])
+    lines31b = [n for n in buf31b.getvalue().splitlines() if n.strip()]
+    ok('AC-RUN31', tW5['pending_old'] is None and lW5['waiting'] == []
+       and lW5['pending_old'] is None and lW6['waiting'] == []
+       and rc31b == 0 and len(lines31b) == 1
+       and 'pending_old=none' in lines31b[0],
+       'a channel trimmed to the window and an absent channel both answer none with zero rows - and the CLI prints one header line, not a fabricated 0/0')
+
+    # arm 6: deterministic order - same stamp breaks on url, two calls agree
+    rW7, _tW7, lW7 = world31([(SRC31B, NXT31), (SRC31A, NXT31)], BASE31)
+    lW7b = RUN.list_pending_old(CR.record_path(rW7),
+                                RUN.failure_path(rW7), TODAY)
+    ok('AC-RUN31', urls31(lW7) == [SRC31A, SRC31B]
+       and ages31(lW7) == [90, 90]
+       and json.dumps(lW7, sort_keys=True) == json.dumps(lW7b, sort_keys=True),
+       'two sources sharing a stamp are ordered by url, and two calls over the same world agree byte for byte')
+
+    # arm 7: a pure display - writes nothing, carries no verdict, and the row
+    # still refuses the per-source key
+    before31 = snapshot31(rW1)
+    buf31 = io.StringIO()
+    with contextlib.redirect_stdout(buf31):
+        rc31 = RUN.main(['--pending-old-list', '--root', rW1])
+    after31 = snapshot31(rW1)
+    lines31 = [n for n in buf31.getvalue().splitlines() if n.strip()]
+    text31 = ''.join(lines31)
+    ok('AC-RUN31', rc31 == 0 and before31 == after31
+       and len(lines31) == 4
+       and lines31[0].startswith('CRAWL-PENDING-OLD-LIST')
+       and 'pending_old=3/3' in lines31[0]
+       and all(n.startswith('PENDING-OLD ') for n in lines31[1:])
+       and 'pending_old_src' not in tW1
+       and 'PASS' not in text31 and 'FLAG' not in text31
+       and 'verdict' not in text31
+       and 'crawl-failure' not in scan_src18,
+       'the face leaves the world byte-identical, prints a header plus one line per waiter, and neither the row nor the scanner learns a per-source key')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

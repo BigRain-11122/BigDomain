@@ -1,0 +1,8 @@
+HONEST w1=['https://a.example/page', 'https://b.example/page', 'https://c.example/page'] ages=[91, 90, 9]
+HONEST w3=['https://a.example/page'] w5=None w7=['https://a.example/page', 'https://b.example/page']
+HONEST green=True
+M1_nothing_judged_prints_0_0 red=True (the empty face is printed as 0/0 instead of none)
+M2_middle_waiter_dropped red=True (only the two ends are listed and the middle witness is gone again)
+M3_repaired_source_listed red=True (a source that came back is listed as still hanging)
+M4_order_not_sorted red=True (a stamp tie keeps file order instead of breaking on url)
+VERDICT PASS caught=4/4
