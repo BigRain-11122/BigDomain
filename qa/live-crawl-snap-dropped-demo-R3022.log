@@ -1,0 +1,8 @@
+BEFORE (R3021, shipped header on this checkout): CRAWL-FAILURE-DAY day=2026-11-19 on_day=0 total=0 recent0=0 bad=0 urls=0 -- the row it wrote carried dropped=0 and the header said nothing
+CLEAN   rc=0 CRAWL-FAILURE-DAY day=2026-11-19 on_day=0 total=0 recent0=0 bad=0 urls=0 dropped=0
+DIRTY   rc=0 CRAWL-FAILURE-DAY day=2026-11-19 on_day=0 total=0 recent0=0 bad=0 urls=0 dropped=4
+CARRY   rc=0 CRAWL-FAILURE-DAY day=2026-11-19 on_day=0 total=0 recent0=0 bad=0 urls=0 dropped=4
+OLDROW_DAYS rc=0 CRAWL-FAILURE-DAYS days=1 bad=0 first=2026-11-17 last=2026-11-17 dropped=none series=2026-11-17:1 bytes=107 size_gate=0.0001% gate_ref=100MB  <- none belongs to the DAYS face for a row written before the field existed
+OLDROW  rc=0 CRAWL-FAILURE-DAY day=2026-11-19 on_day=0 total=0 recent0=0 bad=0 urls=0 dropped=0
+SIBLING rc=0 CRAWL-FAILURE-DAY day=2026-11-19 on_day=0 total=0 recent0=0 bad=0 urls=0 dropped=3  <- the older day's 5 neither shows nor adds (3 is what this beat ate)
+DEMO rc=0 worlds=5 sockets=0 writes=private-only

@@ -229,6 +229,22 @@ read was needed. Old rows are never backfilled (their drops were not measured),
 and neither the series nor the trend row gains the field (summing a key that
 older rows lack would print unmeasured as zero).
 
+AC-RUN39 (R3022) grades THE WRITER'S OWN HEADER. AC-RUN38 gave the eaten-lines
+count a reader, but the snapshot beat - the face a person watches every ten
+minutes - printed day/on_day/total/recent/bad/urls and said nothing about the
+lines its rewrite had just eaten; measured on this checkout (qa/probe-R3022.log
+P1f), the header printed bad=0 urls=0 while the row it wrote carried dropped=0.
+Both print sites now end with dropped=, the row's own value. Measured before the
+change: 0 exact-equality assertions on CRAWL-FAILURE-DAY (only substring arms),
+and a fresh row always carries the key as an int, so `none` never belongs on
+this face (it stays the DAYS word for a pre-field row). The token is appended so
+the five older positions keep working, and deliberately not put between bad=
+and urls= where two different facts would read as one; the per-day LIST of
+dropped values was measured as per-row rather than a sum (two .get sites, no
+cross-row addition) and is left for a later round. Arms 1/2/3/5/6/7 exercise the
+shipped standalone snapshot path, which stamps the machine's day - no assertion
+here depends on which day that is.
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -3688,6 +3704,122 @@ def main():
        and 'crawl-failure' not in scan_src18,
        'the listing writes no byte, prints no verdict, and the scanner still '
        'reads none of it')
+
+    # AC-RUN39 (R3022): the step that writes the eaten-lines count never said it
+    # on its own header - the snapshot beat printed day/on_day/total/recent/bad/
+    # urls while the row it had just written carried dropped= (measured,
+    # qa/probe-R3022.log P1f). Both print sites now end with dropped=, the row's
+    # own value. A fresh row always carries it (int, never none), so the token is
+    # always printed; `none` stays a DAYS-face word for a pre-field row. The
+    # per-day LIST was measured but not built: it is per-row, not a sum.
+    def snap39(root):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--snapshot-failures', '--root', root])
+        return rc, buf.getvalue().strip()
+
+    def tail39(head):
+        """dropped=<n> from the END of the header, or None when absent."""
+        tok = head.split()
+        if not tok or not tok[-1].startswith('dropped='):
+            return None
+        try:
+            return int(tok[-1].split('=', 1)[1])
+        except ValueError:
+            return None
+
+    # arm 1: a rewrite that eats four lines says so on the beat's own header,
+    # and the five older tokens keep their positions (the new one is appended)
+    r39 = world()
+    roots.append(r39)
+    p39 = hist37(r39)
+    with open(p39, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(DAY_OK36 + '\n' + ''.join(JUNK36))
+    rc39, head39 = snap39(r39)
+    tok39 = head39.split()
+    ok('AC-RUN39', rc39 == 0 and tail39(head39) == 4
+       and len(tok39) == 8
+       and tok39[0] == 'CRAWL-FAILURE-DAY'
+       and tok39[1].startswith('day=') and tok39[2].startswith('on_day=')
+       and tok39[3].startswith('total=') and tok39[4].startswith('recent')
+       and tok39[5].startswith('bad=') and tok39[6].startswith('urls='),
+       'the beat that ate four lines now ends its own header with dropped=4, '
+       'and the five older tokens sit in their original order')
+
+    # arm 2: a beat that ate nothing prints an explicit zero
+    r39b = world()
+    roots.append(r39b)
+    p39b = hist37(r39b)
+    put_days(p39b, [plain_day('2026-11-18', 1)])
+    rc39b, head39b = snap39(r39b)
+    ok('AC-RUN39', rc39b == 0 and tail39(head39b) == 0,
+       'a clean rewrite prints dropped=0 on the header - always printed, never '
+       'inferred from absence')
+
+    # arm 3: the carry is visible - a second beat with nothing left to eat still
+    # reports the day's accumulated number, and it equals the row on disk
+    r39c = world()
+    roots.append(r39c)
+    p39c = hist37(r39c)
+    put_days(p39c, [plain_day(TODAY, 0, dropped=4)])
+    rc39c, head39c = snap39(r39c)
+    rows39c, _ = RUN.read_failure_days(p39c)
+    onrow39c = rows39c[-1].get('dropped')
+    ok('AC-RUN39', rc39c == 0 and tail39(head39c) == 4 and onrow39c == 4,
+       'a beat with nothing to eat still says 4 (the day carry), and the number '
+       'on the header is the number on the row')
+
+    # arm 4: both print sites are the same face, and none is not a snapshot word
+    with open(RUN.__file__, 'r', encoding='utf-8') as fh:
+        mod_src39 = fh.read()
+    ok('AC-RUN39', mod_src39.count("urls=%d dropped=%d") == 2
+       and 'dropped=none' not in mod_src39,
+       'the standalone snapshot and the after-write snapshot share one header '
+       'shape (two sites), and none never appears on this face - a fresh row '
+       'always measures an int')
+
+    # arm 5: the DAYS face is untouched in the same world
+    rc39d, lines39d = days_head37(r39)
+    s39d = RUN.summarize_failure_days(p39)
+    trend39d = RUN.summarize_failure_trend(p39, RUN.failure_path(r39), TODAY)
+    ok('AC-RUN39', rc39d == 0 and lines39d[0].startswith('CRAWL-FAILURE-DAYS days=')
+       and 'dropped=4' in lines39d[0]
+       and all(isinstance(p, tuple) and len(p) == 2 for p in s39d['series'])
+       and len(trend39d) == 30 and 'dropped' not in trend39d,
+       'the day listing keeps its own header, its (day, on_day) pairs and the '
+       '30-key trend row - the new token lives only on the snapshot header')
+
+    # arm 6: an older day's drops do not compete - today's own number is printed
+    r39e = world()
+    roots.append(r39e)
+    p39e = hist37(r39e)
+    eaten39e = ['{"oops": 1\n',
+                '{"day":"not-a-day","on_day":1}\n',
+                '[1,2,3]\n']
+    put_days(p39e, [plain_day('2026-11-17', 0, dropped=5)])
+    with open(p39e, 'a', encoding='utf-8', newline='\n') as fh:
+        fh.write(''.join(eaten39e))
+    rc39e, head39e = snap39(r39e)
+    ok('AC-RUN39', rc39e == 0 and tail39(head39e) == 3,
+       "an older day's dropped=5 neither shows up nor adds in: the header "
+       'prints the three lines this beat ate (3, not 5 and not 8)')
+
+    # arm 7: the only byte this face moves is the history row it names, no
+    # verdict is printed, and the scanner still reads none of it
+    before39f = dict(tree_bytes(r39))
+    rc39f, head39f = snap39(r39)
+    after39f = dict(tree_bytes(r39))
+    moved39f = sorted(k for k in set(before39f) | set(after39f)
+                      if before39f.get(k) != after39f.get(k))
+    ok('AC-RUN39', rc39f == 0
+       and all(k == os.path.join('qa', 'crawl-failure-days.jsonl')
+               for k in moved39f)
+       and 'PASS' not in head39f and 'FLAG' not in head39f
+       and 'verdict' not in head39f
+       and 'crawl-failure' not in scan_src18,
+       'the beat moves no byte outside the history row it names (an unchanged '
+       'row moves none at all), prints no verdict, and the scanner still reads '
+       'none of it')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

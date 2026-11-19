@@ -178,6 +178,23 @@ was written before the field existed (NOT zero) and 0 means nothing was eaten.
 It is that one row's number, never a sum: older rows without the key must not
 be read as zero.
 
+THE WRITER DID NOT SAY WHAT IT WROTE (R3022): R3021 gave that count a reader,
+but the step that writes it - the snapshot beat, whose `CRAWL-FAILURE-DAY`
+header a person watches every ten minutes - printed day/on_day/total/recent/
+bad/urls and nothing about the lines its own rewrite had just eaten. Measured
+(qa/probe-R3022.log): on this checkout the standalone snapshot printed
+`bad=0 urls=0` while the row it wrote carried dropped=0, so the live face and
+the row disagreed by omission. BOTH print sites now end with dropped=, the
+value of the row just written, which always exists (snapshot_failure_day sets
+it; a fresh row measures int, never none - `none` belongs to the DAYS header
+reading a row written before the field). It is appended at the END so the five
+older tokens keep their positions and a positional reader keeps working - and
+deliberately NOT placed between bad= and urls=, where two different facts (the
+side channel's unusable count and this file's eaten count) would read as one.
+The per-day list of dropped values is still unbuilt: it is a per-row face, not
+a sum (only two `.get('dropped')` sites exist and neither adds rows), and
+R3017/R3020 refused sums, not lists.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -2141,9 +2158,9 @@ def main(argv=None):
             print('CRAWL-FAILURE-DAY error=%s: %s' % (type(exc).__name__, exc))
             return 3
         print('CRAWL-FAILURE-DAY day=%s on_day=%d total=%d recent%d=%d bad=%d '
-              'urls=%d' % (row['day'], row['on_day'], row['total'],
-                           row['recent'], row['recent'], row['bad'],
-                           row['urls']))
+              'urls=%d dropped=%d' % (row['day'], row['on_day'], row['total'],
+                                      row['recent'], row['recent'], row['bad'],
+                                      row['urls'], row['dropped']))
         return 0
     if not args.url and args.if_due:
         args.url = [DEFAULT_URL]
@@ -2182,9 +2199,10 @@ def main(argv=None):
         try:
             row = snapshot_failure_day(args.root, now[:10], args.days)
             print('CRAWL-FAILURE-DAY day=%s on_day=%d total=%d recent%d=%d '
-                  'bad=%d urls=%d' % (row['day'], row['on_day'], row['total'],
-                                      row['recent'], row['recent'], row['bad'],
-                                      row['urls']))
+                  'bad=%d urls=%d dropped=%d' % (row['day'], row['on_day'],
+                                                 row['total'], row['recent'],
+                                                 row['recent'], row['bad'],
+                                                 row['urls'], row['dropped']))
         except Exception as exc:
             # History is display: a broken display prints its own line and
             # never rewrites the crawl's answer.

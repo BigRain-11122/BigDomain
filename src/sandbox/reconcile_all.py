@@ -4701,8 +4701,11 @@ SUITES = [
     # R3021 added AC-RUN38: that number now has a header face, and a row
     # written before the field reads none rather than an invented zero
     # (37 -> 38, the same row).
+    # R3022 added AC-RUN39: the step that writes the eaten-lines count now
+    # says it on its own header, appended so the older tokens keep position
+    # (38 -> 39, the same row).
     ("os-crawl-runner",
-      os.path.join("..", "os", "test_crawl_runner.py"), 38),
+     os.path.join("..", "os", "test_crawl_runner.py"), 39),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

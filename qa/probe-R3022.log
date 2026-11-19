@@ -1,0 +1,69 @@
+P1a_snapshot_header_format_sites=2
+P1a_fmt=print('CRAWL-FAILURE-DAY day=%s on_day=%d total=%d recent%d=%d bad=%d '
+P1a_fmt=print('CRAWL-FAILURE-DAY day=%s on_day=%d total=%d recent%d=%d '
+P1b_exact_equality_assertions=0
+P1c_substring_assertions=2
+P1c_line=ok('AC-RUN10', rc14 == 0 and 'CRAWL-FAILURE-DAY' in line14
+P1c_line=ok('AC-RUN10', rc15 == 0 and 'CRAWL-FAILURE-DAYS' in line15
+P1d_snapshot_header_has_dropped_token=False
+P1e_fresh_row_keys=bad,day,dropped,newest_at,newest_error,on_day,recent,total,urls
+P1e_fresh_row_dropped=0 type=int
+P1f_standalone_snapshot_rc=0
+P1f_standalone_line=CRAWL-FAILURE-DAY day=2026-11-19 on_day=0 total=0 recent0=0 bad=0 urls=0
+P1f_standalone_line_has_dropped=False
+P2a_series_keys=bad,bytes,days,dropped,first,gate_ref_mb,last,present,series,size_gate
+P2a_series_payload=[('2026-11-17', 2), ('2026-11-18', 1), ('2026-11-19', 3)]
+P2a_series_dropped=0 (last row only)
+P2b_trend_has_dropped_key=False trend_keys=30
+P2c_reader_names=read_failure_bad_lines,read_failure_day_bad_lines,read_failure_days,read_failures,summarize_failure_days,summarize_failure_trend,summarize_failures
+P2c_bad_line_reader_speaks_dropped=False
+P3a_get_dropped_sites=2
+P3a_site=val = prior.get('dropped')
+P3a_site=last_dropped = rows[-1].get('dropped')
+P3c_dropped_accumulation_lines=0
+P3d_rows_dropped=[5, None, 0] (a list keeps 5/absent/0 apart; a sum would print 5)
+P4a_consumers_outside_qa=43
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-08-03-28-176.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-08-32-08-133.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-08-44-37-598.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-08-59-21-830.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-09-19-13-379.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-09-51-14-155.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-10-06-51-533.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-10-27-56-440.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-11-09-48-978.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-11-27-22-161.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-12-09-45-481.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-12-29-35-826.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-12-55-38-955.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-13-15-29-576.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-13-31-48-585.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-13-47-04-274.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-14-05-36-517.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-14-31-33-827.json
+P4a_file=.codely-cli/auto-saves/chat-auto-save-2026-11-19-16-52-47-448.json
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-08-03-28-176.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-08-32-08-133.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-08-44-37-598.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-08-59-21-830.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-09-19-13-379.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-09-51-14-155.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-10-06-51-533.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-10-27-56-440.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-11-09-48-978.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-11-27-22-161.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-12-09-45-481.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-12-29-35-826.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-12-55-38-955.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-13-15-29-576.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-13-31-48-585.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-13-47-04-274.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-14-05-36-517.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-14-31-33-827.md
+P4a_file=.codely-cli/auto-saves/chat-export-auto-save-2026-11-19-16-52-47-448.md
+P4a_file=src/os/state.json
+P4a_file=tmp/probe_R3022.py
+P4a_file=tmp/state-R3008-backup.json
+P4a_file=tmp/state_R3021.py
+P4a_file=tools/crawl_runner.py
+PROBE rc=0 worlds=1 sockets=0 clock=one day label read by the shipped CLI path under test writes=private-only

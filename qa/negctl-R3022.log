@@ -1,0 +1,6 @@
+HONEST arms={'arm1_shape_and_dirty': True, 'arm2_clean_zero': True, 'arm3_carry': True, 'arm6_older_day_not_added': True} verdict=GREEN
+M1_positive_only arms={'arm1_shape_and_dirty': True, 'arm2_clean_zero': False, 'arm3_carry': True, 'arm6_older_day_not_added': True} verdict=CAUGHT by arm2_clean_zero
+M2_sum_over_days arms={'arm1_shape_and_dirty': True, 'arm2_clean_zero': True, 'arm3_carry': True, 'arm6_older_day_not_added': False} verdict=CAUGHT by arm6_older_day_not_added
+M3_between_bad_and_urls arms={'arm1_shape_and_dirty': False, 'arm2_clean_zero': True, 'arm3_carry': True, 'arm6_older_day_not_added': True} verdict=CAUGHT by arm1_shape_and_dirty
+M4_per_rewrite_not_carried arms={'arm1_shape_and_dirty': True, 'arm2_clean_zero': True, 'arm3_carry': False, 'arm6_older_day_not_added': True} verdict=CAUGHT by arm3_carry
+NEGCTL honest=GREEN mutants=4 caught=4
