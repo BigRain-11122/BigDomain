@@ -268,6 +268,19 @@ measured zero already prints as :0 inside the pairs and five arms assert a
 count answers none rather than a zero that would read like "every day was
 recorded" (the R2994 absent-not-zero law, carried).
 
+THE GAP HAS A TOTAL (R3028): naming every silent day still left "how many of
+the last seven days hold a record at all" as a comma count, and `window_rows=`
+cannot answer it - a day with three rows prints three (measured: four rows on
+two days inside a seven-day window, qa/probe-R3028.log). So `--series-absent`
+now also prints `days_present=<n|none>` from `series_presence_counts()`:
+DISTINCT calendar days inside the window that hold at least one row, beside the
+gap count, with the invariant `days_present + series_absent = series_window`.
+A `window_days=` token was refused - it could only repeat `series_window=`,
+which is the noise law this module already carries (R3000), and a
+`days_absent=` name was refused because one arm counts the literal
+`absent=` twice on the line, so a third such token would read red while every
+number stayed right.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1216,6 +1229,47 @@ def series_absent_days(rows, window_days=7):
         cursor += datetime.timedelta(days=1)
     return {'days': days, 'count': len(days), 'head': head_day,
             'window': width}
+
+
+def series_presence_counts(rows, window_days=7):
+    """{window, present, rows, head} - how many of the window's DAYS hold a row
+    (R3028).
+
+    WHY (measured before this existed - qa/probe-R3028.log): R3027 named the
+    silent days one by one, but "how many of the last seven days have a record
+    at all" still had to be counted off the commas in `absent=`, and
+    `window_rows=` cannot answer it - a day holding three rows prints three
+    (measured: world A holds four rows on two days inside a seven-day window).
+
+    LAW: the window is the same inclusive literal-day range the other faces use
+    (`_window_start`), measured back from the file's OWN newest usable row, so a
+    2001 history windows against itself and no clock is read. `present` counts
+    DISTINCT calendar days that hold at least one row; `rows` counts rows, so
+    the two differ exactly when a day repeats. `present` plus the gap count from
+    series_absent_days() equals `window` - one invariant, two faces, and neither
+    restates the other's number (a `window_days=` token would only repeat
+    `series_window=`).
+
+    When the head day is unusable nothing is measurable: present is None and
+    rows is 0 rather than a zero that would read like "nothing was recorded"
+    (the R2994 absent-not-zero law, carried).
+
+    DISPLAY ONLY: writes nothing, gates nothing.
+    """
+    width = max(1, int(window_days))
+    head_day, usable, threshold = _window_start(
+        (str(rows[-1].get('day') or '') if rows else ''), width)
+    if not usable:
+        return {'window': width, 'present': None, 'rows': 0, 'head': None}
+    days = set()
+    count = 0
+    for row in rows:
+        row_day = str(row.get('day') or '')[:10]
+        if threshold <= row_day <= head_day:
+            count += 1
+            days.add(row_day)
+    return {'window': width, 'present': len(days), 'rows': count,
+            'head': head_day}
 
 
 def list_failure_days_dropped(path, window_days=None):
@@ -2336,8 +2390,10 @@ def main(argv=None):
                     help='alongside --series-days N, name the calendar days in '
                          'that window with no history row at all; the header '
                          'gains series_absent=<n|none> absent=<day,...|none> '
-                         'so a silent day never reads like a measured zero '
-                         '(read-only display; gates nothing)')
+                         'and days_present=<n|none>, so a silent day never '
+                         'reads like a measured zero and the present/gap split '
+                         'sums to series_window (read-only display; gates '
+                         'nothing)')
     args = ap.parse_args(argv)
     if args.series_absent and (args.series_days is None
                                or not args.failure_days):
@@ -2372,9 +2428,12 @@ def main(argv=None):
             tail_markers = ' series_window=%d' % args.series_days
             if args.series_absent:
                 gaps = series_absent_days(day_read[0], args.series_days)
-                tail_markers += ' series_absent=%s absent=%s' % (
+                presence = series_presence_counts(day_read[0], args.series_days)
+                tail_markers += ' series_absent=%s absent=%s days_present=%s' % (
                     'none' if gaps['count'] is None else gaps['count'],
-                    ','.join(gaps['days']) or 'none')
+                    ','.join(gaps['days']) or 'none',
+                    'none' if presence['present'] is None
+                    else presence['present'])
         print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
               'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB '
               'series_limit=%d series_shown=%d series_outside=%d '

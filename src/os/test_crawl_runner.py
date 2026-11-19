@@ -296,6 +296,19 @@ holding three rows is one present day, not three (arm 4), an unusable head
 answers none rather than a zero that would read like "every day was recorded"
 (arm 7), and a 2001 history windows against itself (arm 6).
 
+AC-RUN45 (R3028) grades the TOTAL that naming every gap still left as a comma
+count. Measured before the change (qa/probe-R3028.log): no face put "days that
+hold a row" beside the window width, `window_rows=` counts rows and not days
+(four rows on two days), and a `days_absent=` token would break the one arm
+counting the literal `absent=` twice. So `--series-absent` now also prints
+`days_present=<n|none>` from `series_presence_counts()`: DISTINCT calendar days
+inside the window holding at least one row, with the invariant present + gap =
+series_window (arms 1/3/7). A repeated day is one present day (arm 2), an
+unusable head answers none for both counts (arm 5), a 2001 history windows
+against itself (arm 6), and the default face stays byte-identical with no new
+token (arm 4). A `window_days=` token was refused because it could only repeat
+`series_window=` (arm 8 keeps the older absent= count intact).
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -4576,6 +4589,132 @@ def main():
        and len(named44) == int(t44i.get('series_absent') or 0),
        'the absence token writes no byte, prints no verdict, appears once, and '
        'the number of named days equals the count printed beside it')
+
+    # ===== AC-RUN45 (R3028): the gap gets a total =====
+    # AC-RUN45 was pinned in src/os/backlog.md BEFORE series_presence_counts
+    # existed (in-window pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3028.log): no face put "days that hold a row" beside the window
+    # width, window_rows counts ROWS (4) and not days (2) on world A, and a
+    # days_absent= token would break the one arm that counts 'absent=' twice.
+    def days45(root, extra):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(list(extra) + ['--root', root])
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def toks45(line):
+        return dict(part.split('=', 1) for part in line.split()[1:])
+
+    r45 = world()
+    roots.append(r45)
+    p45 = hist37(r45)
+    put_days(p45, [plain_day('2026-09-20', 5), plain_day('2026-11-18', 1),
+                   plain_day('2026-11-19', 3), plain_day('2026-11-19', 1),
+                   plain_day('2026-11-19', 2)])
+    rc45, lines45 = days45(r45, ['--failure-days', '--series-days', '7',
+                                 '--series-absent'])
+    t45 = toks45(lines45[0]) if lines45 else {}
+
+    # arm 1: two present days beside five silent days, summing to the window
+    ok('AC-RUN45', rc45 == 0
+       and t45.get('days_present') == '2'
+       and t45.get('series_absent') == '5'
+       and t45.get('series_window') == '7'
+       and int(t45['days_present']) + int(t45['series_absent']) == 7
+       and t45.get('series')
+       == '2026-11-18:1,2026-11-19:3,2026-11-19:1,2026-11-19:2',
+       'the header says two days hold a record beside five silent days, and '
+       'present plus gap lands on the seven-day window')
+
+    # arm 2: a repeated day is ONE present day but still counts as rows
+    ok('AC-RUN45', t45.get('days_present') == '2'
+       and t45.get('window_rows') == '4'
+       and t45.get('days_present') != t45.get('window_rows'),
+       'three rows on one day make window_rows 4 while days_present stays 2 - '
+       'the two numbers answer different questions and both stay visible')
+
+    # arm 3: a genuinely recorded week
+    r45c = world()
+    roots.append(r45c)
+    p45c = hist37(r45c)
+    put_days(p45c, [plain_day('2026-11-%02d' % d, 1) for d in range(13, 20)])
+    rc45c, lines45c = days45(r45c, ['--failure-days', '--series-days', '7',
+                                    '--series-absent'])
+    t45c = toks45(lines45c[0]) if lines45c else {}
+    ok('AC-RUN45', rc45c == 0 and t45c.get('days_present') == '7'
+       and t45c.get('series_absent') == '0'
+       and t45c.get('series_window') == '7',
+       'a week where every day holds a row answers present=7 gap=0, and the '
+       'sum still lands on the window width')
+
+    # arm 4: the default face is byte-identical and carries no new token
+    rc45d, lines45d = days45(r45, ['--failure-days'])
+    ok('AC-RUN45', rc45d == 0 and lines45d
+       and lines45d[0].endswith(
+           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+       and 'days_present' not in lines45d[0],
+       'without the flag the tail is the same line R3026/R3027 shipped and no '
+       'presence token appears')
+
+    # arm 5: not measurable is not zero
+    r45e = world()
+    roots.append(r45e)
+    os.makedirs(os.path.join(r45e, 'qa'), exist_ok=True)
+    rc45e, lines45e = days45(r45e, ['--failure-days', '--series-days', '7',
+                                    '--series-absent'])
+    t45e = toks45(lines45e[0]) if lines45e else {}
+    empty45 = RUN.series_presence_counts([], 7)
+    ok('AC-RUN45', rc45e == 0 and t45e.get('days_present') == 'none'
+       and t45e.get('series_absent') == 'none'
+       and t45e.get('series') == 'none'
+       and empty45['present'] is None and empty45['rows'] == 0
+       and empty45['head'] is None,
+       'no history answers none for both counts rather than an invented zero, '
+       'and nothing raises')
+
+    # arm 6: no clock - a 2001 history windows against itself
+    r45f = world()
+    roots.append(r45f)
+    p45f = hist37(r45f)
+    put_days(p45f, [plain_day('2001-01-01', 0), plain_day('2001-03-01', 1),
+                    plain_day('2001-03-05', 2)])
+    rc45f, lines45f = days45(r45f, ['--failure-days', '--series-days', '2',
+                                    '--series-absent'])
+    t45f = toks45(lines45f[0]) if lines45f else {}
+    pure45 = RUN.series_presence_counts(RUN.read_failure_days(p45f)[0], 2)
+    ok('AC-RUN45', rc45f == 0 and t45f.get('days_present') == '1'
+       and t45f.get('series_absent') == '1'
+       and pure45['head'] == '2001-03-05'
+       and pure45['present'] == 1 and pure45['rows'] == 1,
+       'a two-day window over a 2001 history holds one present day and one '
+       'gap, measured from the file own last row with no wall clock')
+
+    # arm 7: the wide-window boundary, where the old row falls outside
+    rc45g, lines45g = days45(r45, ['--failure-days', '--series-days', '60',
+                                   '--series-absent'])
+    t45g = toks45(lines45g[0]) if lines45g else {}
+    gaps45g = (t45g.get('absent') or '').split(',')
+    ok('AC-RUN45', rc45g == 0 and t45g.get('days_present') == '2'
+       and t45g.get('series_absent') == '58'
+       and int(t45g['days_present']) + int(t45g['series_absent']) == 60
+       and gaps45g[0] == '2026-09-21',
+       'a sixty-day window counts two present days and 58 gaps: the row one '
+       'day before the threshold is neither present nor a gap')
+
+    # arm 8: the refused name and the guard arms it would have broken
+    before45 = tree_bytes(r45)
+    rc45h, lines45h = days45(r45, ['--failure-days', '--series-days', '7',
+                                   '--series-absent'])
+    after45 = tree_bytes(r45)
+    text45 = '\n'.join(lines45h)
+    ok('AC-RUN45', rc45h == 0 and before45 == after45
+       and lines45h and 'days_absent=' not in lines45h[0]
+       and lines45h[0].count('absent=') == 2
+       and lines45h[0].count('days_present=') == 1
+       and 'PASS' not in text45 and 'FLAG' not in text45
+       and 'verdict' not in text45,
+       'the new token writes no byte, never uses the counted-out days_absent= '
+       'name, and keeps the two absent= occurrences the older arm counts')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

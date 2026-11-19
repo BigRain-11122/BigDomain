@@ -1,0 +1,8 @@
+honest {'window': 7, 'present': 2, 'rows': 4, 'head': '2026-11-19'}
+empties {'window': 7, 'present': None, 'rows': 0, 'head': None}
+rows-read-as-days                  CAUGHT got=4 want=2
+whole-file-instead-of-window       CAUGHT got=3 want=2
+empty-read-as-zero                 CAUGHT got=0 want=None
+clock-anchored-head                CAUGHT got=None want=2
+honest reads green: True
+NEGCTL 4/4 CAUGHT

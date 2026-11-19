@@ -1,0 +1,76 @@
+== Q1: which faces expose a DAY count beside the calendar width ==
+A.window_rows/series_window_counts keys = ['limit', 'outside', 'shown', 'window_rows'] {'limit': 7, 'shown': 5, 'outside': 1, 'window_rows': 4}
+A.series_days_window keys = ['limit', 'outside', 'rows', 'shown', 'window', 'window_rows'] {'rows': [('2026-11-18', 1), ('2026-11-19', 3), ('2026-11-19', 1), ('2026-11-19', 2)], 'limit': 7, 'shown': 4, 'outside': 0, 'window_rows': 4, 'window': 7}
+A.series_absent_days keys = ['count', 'days', 'head', 'window'] {'days': ['2026-11-13', '2026-11-14', '2026-11-15', '2026-11-16', '2026-11-17'], 'count': 5, 'head': '2026-11-19', 'window': 7}
+A.summarize_failure_days keys = ['bad', 'bytes', 'days', 'dropped', 'first', 'gate_ref_mb', 'last', 'present', 'series', 'series_counts', 'size_gate']
+A: rows-in-window=4, distinct-days-in-window=2, calendar-width=7
+A: same-day duplicates are COUNTED as rows but never as days -> window_rows=4 present_days=2 absent_days=5
+A.cli tokens = ['absent', 'bad', 'bytes', 'days', 'days_present', 'dropped', 'first', 'gate_ref', 'last', 'series', 'series_absent', 'series_limit', 'series_outside', 'series_shown', 'series_window', 'size_gate', 'window_rows']
+A.cli window_rows=4 series_shown=4 series_absent=5 present_days_derivable=by subtracting at the shell
+
+== Q2: every arm an added gap total could break ==
+needle "count('absent=')" hits 2
+   | and lines44i[0].count('absent=') == 2
+   | and lines45h[0].count('absent=') == 2
+needle "count('series_absent=')" hits 1
+   | and lines44i[0].count('series_absent=') == 1
+needle 'endswith(' hits 3
+   | and 'endswith(".log")' in census_src16,
+   | and lines44b[0].endswith(
+   | and lines45d[0].endswith(
+needle "'absent' not in" hits 0
+needle "series_absent' not in" hits 1
+   | and 'series_absent' not in lines44b[0]
+needle "window_rows=4'" hits 4
+   | == ' series_limit=7 series_shown=5 series_outside=1 window_rows=4',
+   | == ' series_limit=7 series_shown=5 series_outside=1 window_rows=4',
+   | ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+   | ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+needle 'token == ' hits 0
+needle 'keys() ==' hits 0
+
+-- exact-suffix / equality arms that mention the DAYS tail --
+   4214: == ' series_limit=7 series_shown=5 series_outside=1 window_rows=4',
+   4357: == ' series_limit=7 series_shown=5 series_outside=1 window_rows=4',
+   4491: ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+   4588: and lines44i[0].count('absent=') == 2
+   4654: ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+   4712: and lines45h[0].count('absent=') == 2
+
+-- does any arm pin the whole token SET rather than a key lookup? --
+   1319: and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok', 'flips',
+   1439: and set(tB2.keys()) == baseB | set(['flips', 'pending', 'pending_src',
+   1547: and set(tC1.keys()) == baseB | set(['flips', 'pending', 'pending_src',
+   1623: and set(tD3.keys()) == baseB | set(['flips', 'pending', 'pending_src',
+   1739: and set(tE1.keys()) == baseB | set(['flips', 'pending', 'pending_src',
+   1840: ok('AC-RUN23', set(tG6.keys()) == baseB | set(['flips', 'pending',
+   1935: ok('AC-RUN24', set(tH1.keys()) == baseB | set(['flips', 'pending',
+   2033: ok('AC-RUN25', set(tI1.keys()) == baseB | set(['flips', 'pending',
+   2151: ok('AC-RUN26', set(tJ1.keys()) == baseB | set(['flips', 'pending',
+   2251: ok('AC-RUN27', set(tK1.keys()) == baseB | set(['flips', 'pending',
+   2362: ok('AC-RUN28', set(tL1.keys()) == baseB | set(['flips', 'pending',
+   2455: ok('AC-RUN29', set(tM1.keys()) == baseB | set(['flips', 'pending',
+   2572: ok('AC-RUN30', set(tN1.keys()) == baseB | set(['flips', 'pending',
+   2866: ok('AC-RUN32', len(tZ5) == 30 and 'reason' not in tZ5
+   3050: and len(t33) == 30 and 'last_at' not in t33
+   3147: ok('AC-RUN34', len(toks34) == 6 and 'bad=0' in toks34
+   3203: and len(tX34) == 30 and 'bad' in tX34 and tX34['bad'] == 0
+   3312: and (len(toks35) == 6
+   3313: or (len(toks35) == 7 and toks35[6].startswith('reason=')))
+   3746: and len(trend38) == 30 and 'dropped' not in trend38,
+   3805: and len(tok39) == 8
+   3852: and len(trend39d) == 30 and 'dropped' not in trend39d,
+   3997: and len(t40f) == 30 and 'dropped' not in t40f,
+   4726: for cut in range(len(token), 0, -1):
+
+== Q3: is trend absent the same word as a window gap? ==
+crawl_runner.py lines carrying the literal 'absent': 3
+   | nobody snapshotted as today='absent'), so the gap gets a name instead of a
+   | today answers 'absent' rather than 0 when no row names it - and delta is
+   | 'absent' if usable else 'unmeasured')
+trend.today = 2 | gap face names 11-18 among []
+trend today-absent means: a row for the HEAD day is missing.
+window gap means: a calendar day inside [threshold..head] holds no row.
+SAME predicate (no row for that literal day), DIFFERENT faces: one day versus a set. A shared invariant is therefore expressible.
+
+PROBE DONE
