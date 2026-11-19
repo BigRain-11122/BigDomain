@@ -1,0 +1,9 @@
+DEMO one row, window 7        rc=0 real_stdout=168B lf_bytes=166B output_bytes=166 split=166B match_lf=yes split_match=yes
+  header: CRAWL-FAILURE-DAYS-DROPPED days=1 bad=0 window=7 shown=1 truncated=0 hidden=0 head=2026-11-01 rows_all_bytes=37 output_bytes=166
+DEMO four rows, window 2      rc=0 real_stdout=215B lf_bytes=212B output_bytes=212 split=212B match_lf=yes split_match=yes
+  header: CRAWL-FAILURE-DAYS-DROPPED days=4 bad=0 window=2 shown=2 truncated=1 hidden=2 head=2026-11-04 rows_all_bytes=156 output_bytes=212
+DEMO four rows, window 365    rc=0 real_stdout=293B lf_bytes=288B output_bytes=288 split=288B match_lf=yes split_match=yes
+  header: CRAWL-FAILURE-DAYS-DROPPED days=4 bad=0 window=365 shown=4 truncated=0 hidden=0 head=2026-11-04 rows_all_bytes=156 output_bytes=288
+DEMO empty history, window 5  rc=0 real_stdout=123B lf_bytes=122B output_bytes=122 split=122B match_lf=yes split_match=yes
+  header: CRAWL-FAILURE-DAYS-DROPPED days=0 bad=0 window=5 shown=0 truncated=0 hidden=0 head=none rows_all_bytes=0 output_bytes=122
+DEMO boundary, measured here rather than assumed: the price counts one LF per line, so on a Windows text-mode stdout (CRLF) the raw byte count is larger by two bytes per printed line

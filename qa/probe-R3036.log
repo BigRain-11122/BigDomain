@@ -1,0 +1,34 @@
+P1 header shape and width, one file, three windows
+  window=3   header=112B stdout=236B block=123B head=2026-11-06 headchars=10
+  window=30  header=113B stdout=354B block=240B head=2026-11-06 headchars=10
+  window=365 header=114B stdout=355B block=240B head=2026-11-06 headchars=10
+  head_chars set=[10] header_widths=[112, 113, 114]
+  P1 header_is_constant_width=False
+  wide_window_hides_nothing=True
+P2 whole-output forecast faces:
+  output_bytes     hits=1 ['src\\os\\backlog.md']
+  total_bytes      hits=3 ['tools\\generate_copyright_materials.py', 'src\\os\\test_evidence_read.py', 'src\\sandbox\\lobby\\.venv\\Lib\\site-packages\\pip\\_vendor\\rich\\progress.py']
+  stdout_bytes     hits=0 []
+  header_bytes     hits=0 []
+  line_bytes       hits=4 ['tools\\crawl_runner.py', 'src\\os\\backlog.md', 'src\\sandbox\\runner_profile.py']
+  expected_bytes   hits=2 ['src\\os\\backlog.md', 'src\\os\\test_state_fold.py']
+  projected_bytes  hits=0 []
+P3 suite collision surface:
+  count('absent=') == 2                  10
+  count('absent_named=') == 1            4
+  rows_all_bytes                         11
+  rows_all_bytes=                        2
+  AC-RUN41 arm 8 full-line equality      1
+  windowed header literal                0
+  L424   deleted. The windowed header therefore also prints `rows_all_bytes=<n>`: the
+  L4281  'rows_all_bytes=%d'
+  L4285  'run names window/shown/truncated/hidden/head/rows_all_bytes and prints '
+  L5561  # AC-RUN52 was pinned in src/os/backlog.md BEFORE rows_all_bytes existed
+  L5586  and t52b.get('rows_all_bytes') == str(full52)
+  L5595  and t52c.get('rows_all_bytes') == t52b.get('rows_all_bytes')
+  L5596  and t52c.get('rows_all_bytes') == str(full52),
+  L5612  and t52e.get('rows_all_bytes') == str(narrow52)
+  L5624  ok('AC-RUN52', rc52f == 0 and l52f and t52f.get('rows_all_bytes') == '0'
+  L5631  'days=4 bad=0' and 'rows_all_bytes' not in l52a[0]
+P4 empty history+window rc=0 bytes=106 head=none day_lines=0
+P4 has_header=True

@@ -4735,8 +4735,11 @@ SUITES = [
     # R3035 adds AC-RUN52: the windowed per-day header now quotes what the
     # whole block would cost (rows_all_bytes), so dropping the window has a
     # price on the line that truncates (51 -> 52).
+    # R3036 adds AC-RUN53: the windowed header now also quotes the total bytes
+    # the whole run prints (output_bytes), so choosing a window has a price on
+    # the line that describes it (52 -> 53).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 52),
+     os.path.join("..", "os", "test_crawl_runner.py"), 53),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

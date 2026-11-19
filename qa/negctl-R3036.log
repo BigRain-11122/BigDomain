@@ -1,0 +1,5 @@
+NEGCTL honest value=212 real_lf_bytes=212 match=GREEN
+NEGCTL omit own digits   value=225 equals_truth=no
+NEGCTL header only       value=144 equals_truth=no
+NEGCTL missing newline   value=226 equals_truth=no
+NEGCTL verdict: honest GREEN, mutations ALL CAUGHT
