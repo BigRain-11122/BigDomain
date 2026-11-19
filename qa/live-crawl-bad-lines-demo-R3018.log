@@ -1,0 +1,8 @@
+CLEAN world:
+CRAWL-PENDING-OLD-BAD bad=0
+
+BROKEN world:
+CRAWL-PENDING-OLD-BAD bad=3
+BAD-LINE n=2 why=json
+BAD-LINE n=4 why=fields
+BAD-LINE n=5 why=json

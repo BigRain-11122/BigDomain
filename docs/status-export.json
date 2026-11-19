@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-19 R3017 PRODUCT+ENGINEERING: the old-waiter list header now says how many lines on its side channel are unusable, because two unusable lines and none read the same header. The board asked four questions before the pin and the probe answered all four: bad comes from the ONE read_failures call this face already makes (measured, one call per invocation), two malformed lines move bad 0 -> 2 while fcov, last_at and pending_old stay byte-identical (so the span was never distorted and nothing had to be repaired), zero exact header assertions and zero external readers exist (pure increment), and bad cannot live in reason because a populated table measured bad=2 with reason None. tools/crawl_runner.py now prints bad=<n> on CRAWL-PENDING-OLD-LIST, always including 0, positioned after days= and before fcov=.",
+    "current": "2026-11-19 R3018 PRODUCT+ENGINEERING: the count of broken lines finally has names. bad=<n> said HOW MANY lines on the failure channel were unusable and never WHICH, and read_failures dropped every one of them, so finding one meant opening the side channel and trying lines by hand. tools/crawl_runner.py now ships _failure_lines (the single parse law both readers use), read_failure_bad_lines, and a separate read-only subcommand --pending-old-bad that prints BAD-LINE n=<lineno> why=<json|fields>; the rejected TEXT is never echoed, because a rejected line is untrusted bytes and can carry a url with a token (measured).",
     "do": "R3005 measured, in order: the PIN row was written in src/os/backlog.md BEFORE any code byte moved, and the read-only probe tmp/probe_R3005.py -> qa/probe-R3005.log (682B, 12 lines, utf-8/lf, six private worlds, zero sockets) ran BEFORE the pin. It measured: (1) three-source window answers for one source only; (2) recur and the pending count are independent in BOTH directions - recur=(0,0) with one judged source still gone, and recur=(2,4) with nothing pending when both came back; (3) the queue head's own suggested numerator (since_ok != 'yes') counts a source whose newest failure is later than every record row as pending, reviving exactly the R3004 conflation at aggregate level, so the numerator counts 'no' only and unmeasured sits in neither number; (4) an absent record leaves every source unmeasured, so zero-of-zero had to print none rather than 0/0; (5) 13 arms read the trend line, three pin exact key sets, and a multi-source world still printed exactly one line, which is why per-source lines were refused. AC-RUN22 (seven arms) was pinned before the code; three existing key-set arms were widened by exactly the one new key, disclosed as a criterion following its field rather than a loosening.",
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-crawl-record-R3017.log (341B, 2026-11-19)",
-    "latest_evidence": "qa/leg-crawl-record-R3017.log (341B, 2026-11-19)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-crawl-record-R3018.log (410B, 2026-11-19)",
+    "latest_evidence": "qa/leg-crawl-record-R3018.log (410B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3018] next window (<=48h): (0) MAIN — **表头说出「有几行写坏了」，却说不出「是哪几行」**：R3017 让 `bad=<n>` 上了表头，但读者拿到一个数字后仍然无法点名坏行（它们在 `read_failures` 里被丢弃，`rows` 只含可用行，`bad` 只是计数）。下一轮**先量**（只读）：①坏行是否**已经**能从磁盘按行号/原文读出（逐行 `json.loads` 失败的位置是否可在不新增落盘件的前提下复原）；②若可以，逐行列表会不会撞「一行合同」与 R3014 立的「行描述源、不描述通道」两条既有边界（`PENDING-OLD` 行必须仍只描述源）；③「哪几行」是否该进独立子命令而不是同一张表（`--pending-old-list` 的表头+源行形态是 R3014/R3016/R3017 三轮钉住的）；④坏行原文是否可能含敏感内容（失败行里是 url 与 error 文本，须先量再决定是否回显原文还是只回显行号）。量清后二选一实现并配判据，且**先落板再动代码**。",
-    "next_milestone_due": "2026-11-21T15:24:52+08:00",
-    "updated_at": "2026-11-19T15:24:52+08:00"
+    "next_milestone": "[R3019] next window (<=48h): (0) MAIN — **同一个盲区在另一份件上原样存在**：`CRAWL-FAILURE-DAYS` 行也印 `bad=%d`（失败**日历史**件 `crawl-failure-days.jsonl` 的坏行数），而 R3018 只给失败**侧路件**配了点名面；两份件的 `bad` 现在一个说得出行号、一个仍只会数。下一轮**先量**（只读）：①日历史件的坏行是否同源可复原（`read_failure_days` 是否与 `read_failures` 共用一遍解析、还是各自一套）；②两件的行号语义是否相同（同为空行跳过/物理 1 基），不同则同一子命令不能混用；③`--pending-old-bad` 的名字是否该收窄（它点名的是侧路件，不是「pending-old」）；④是否该合并成一个 `--bad-lines <file 选择>` 面，还是保持两个独立子命令（撞不撞「一行合同」与既有判据）。量清后二选一实现并配判据，且**先落板再动代码**。",
+    "next_milestone_due": "2026-11-21T15:44:55+08:00",
+    "updated_at": "2026-11-19T15:44:55+08:00"
   },
-  "current": "2026-11-19 R3017 PRODUCT+ENGINEERING: the old-waiter list header now says how many lines on its side channel are unusable, because two unusable lines and none read the same header. The board asked four questions before the pin and the probe answered all four: bad comes from the ONE read_failures call this face already makes (measured, one call per invocation), two malformed lines move bad 0 -> 2 while fcov, last_at and pending_old stay byte-identical (so the span was never distorted and nothing had to be repaired), zero exact header assertions and zero external readers exist (pure increment), and bad cannot live in reason because a populated table measured bad=2 with reason None. tools/crawl_runner.py now prints bad=<n> on CRAWL-PENDING-OLD-LIST, always including 0, positioned after days= and before fcov=.",
+  "current": "2026-11-19 R3018 PRODUCT+ENGINEERING: the count of broken lines finally has names. bad=<n> said HOW MANY lines on the failure channel were unusable and never WHICH, and read_failures dropped every one of them, so finding one meant opening the side channel and trying lines by hand. tools/crawl_runner.py now ships _failure_lines (the single parse law both readers use), read_failure_bad_lines, and a separate read-only subcommand --pending-old-bad that prints BAD-LINE n=<lineno> why=<json|fields>; the rejected TEXT is never echoed, because a rejected line is untrusted bytes and can carry a url with a token (measured).",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-19 R3017 PRODUCT+ENGINEERING: the old-waiter list header now says how many lines on its side channel are unusable, because two unusable lines and none read the same header. The board asked four questions before the pin and the probe answered all four: bad comes from the ONE read_failures call this face already makes (measured, one call per invocation), two malformed lines move bad 0 -> 2 while fcov, last_at and pending_old stay byte-identical (so the span was never distorted and nothing had to be repaired), zero exact header assertions and zero external readers exist (pure increment), and bad cannot live in reason because a populated table measured bad=2 with reason None. tools/crawl_runner.py now prints bad=<n> on CRAWL-PENDING-OLD-LIST, always including 0, positioned after days= and before fcov=.",
-  "export_ts": "2026-11-19T15:24:52+08:00",
+  "do": "2026-11-19 R3018 PRODUCT+ENGINEERING: the count of broken lines finally has names. bad=<n> said HOW MANY lines on the failure channel were unusable and never WHICH, and read_failures dropped every one of them, so finding one meant opening the side channel and trying lines by hand. tools/crawl_runner.py now ships _failure_lines (the single parse law both readers use), read_failure_bad_lines, and a separate read-only subcommand --pending-old-bad that prints BAD-LINE n=<lineno> why=<json|fields>; the rejected TEXT is never echoed, because a rejected line is untrusted bytes and can carry a url with a token (measured).",
+  "export_ts": "2026-11-19T15:44:55+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
-  "latest_evidence": "qa/leg-crawl-record-R3017.log (341B, 2026-11-19)",
-  "next_milestone": "[R3018] next window (<=48h): (0) MAIN — **表头说出「有几行写坏了」，却说不出「是哪几行」**：R3017 让 `bad=<n>` 上了表头，但读者拿到一个数字后仍然无法点名坏行（它们在 `read_failures` 里被丢弃，`rows` 只含可用行，`bad` 只是计数）。下一轮**先量**（只读）：①坏行是否**已经**能从磁盘按行号/原文读出（逐行 `json.loads` 失败的位置是否可在不新增落盘件的前提下复原）；②若可以，逐行列表会不会撞「一行合同」与 R3014 立的「行描述源、不描述通道」两条既有边界（`PENDING-OLD` 行必须仍只描述源）；③「哪几行」是否该进独立子命令而不是同一张表（`--pending-old-list` 的表头+源行形态是 R3014/R3016/R3017 三轮钉住的）；④坏行原文是否可能含敏感内容（失败行里是 url 与 error 文本，须先量再决定是否回显原文还是只回显行号）。量清后二选一实现并配判据，且**先落板再动代码**。",
+  "latest_evidence": "qa/leg-crawl-record-R3018.log (410B, 2026-11-19)",
+  "next_milestone": "[R3019] next window (<=48h): (0) MAIN — **同一个盲区在另一份件上原样存在**：`CRAWL-FAILURE-DAYS` 行也印 `bad=%d`（失败**日历史**件 `crawl-failure-days.jsonl` 的坏行数），而 R3018 只给失败**侧路件**配了点名面；两份件的 `bad` 现在一个说得出行号、一个仍只会数。下一轮**先量**（只读）：①日历史件的坏行是否同源可复原（`read_failure_days` 是否与 `read_failures` 共用一遍解析、还是各自一套）；②两件的行号语义是否相同（同为空行跳过/物理 1 基），不同则同一子命令不能混用；③`--pending-old-bad` 的名字是否该收窄（它点名的是侧路件，不是「pending-old」）；④是否该合并成一个 `--bad-lines <file 选择>` 面，还是保持两个独立子命令（撞不撞「一行合同」与既有判据）。量清后二选一实现并配判据，且**先落板再动代码**。",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
@@ -168,7 +168,7 @@
   },
   "results": [
     [
-      "3017",
+      "3018",
       "OSLoop 执行 tick"
     ]
   ],
@@ -181,15 +181,15 @@
   "self_drive": {
     "window": "2026-11-13..2026-11-19",
     "window_days": 7,
-    "log_lines_in_window": 235,
+    "log_lines_in_window": 242,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 35,
+    "substantive_non_idle_mention_lines": 36,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 256676
+  "state_bytes": 262978
 }

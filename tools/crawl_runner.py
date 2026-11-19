@@ -453,6 +453,22 @@ No per-row bad=: PENDING-OLD rows describe a source, not the channel. The
 CRAWL-FAILURES row in this same module already prints bad=, so this is one
 convention applied to a second face rather than a new field law.
 
+WHICH LINES ARE UNUSABLE (R3018): `bad=<n>` said how many and never which, so
+finding one meant opening the side channel and trying lines by hand. Measured
+(qa/probe-R3018.log): the numbers were already recoverable in the one pass
+read_failures makes - a file with two usable and three unusable lines answers
+(2, 3) today, and enumerating the same file yields [(2,'json'),(4,'fields'),
+(5,'json')], len == bad; a blank line is skipped and takes no number; an
+append-only write never moves an earlier number. Naming lives on a SEPARATE
+read-only subcommand (`--pending-old-bad`), never on the one-line contract
+(R3010/R3013) and never inside PENDING-OLD rows (R3014's boundary: those rows
+describe a source). The TEXT IS NOT ECHOED on purpose: a rejected line is
+untrusted bytes and can carry a url with a token (measured in the probe), so a
+line number plus the reason (json = the line did not parse, fields = it parsed
+but is not a usable failure row) is what a person needs to open it in an
+editor. `_failure_lines` is the one parse law: bad's count and the named lines
+cannot come from two parsers.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -543,32 +559,70 @@ def append_failure(path, source_url, failed_at, error):
     return row
 
 
-def read_failures(path):
-    """(rows, bad): usable failure rows, plus the count of unusable ones.
+def _failure_lines(path):
+    """(lineno, kind, row) for every non-blank physical line; kind None = usable.
 
-    Absence is zero rows, not an error - the same law as CR.read_records, so a
-    reader can ask "what failed?" without a prior write.
+    R3018: the count (`bad`) and the identities must come from ONE parse pass,
+    so a face that names bad lines cannot disagree with the header count. The
+    number is the physical 1-based line as read - blank lines are skipped and
+    take no number, and an append-only writer never moves an earlier number
+    (measured, qa/probe-R3018.log P3/P9).
     """
-    rows = []
-    bad = 0
     if not os.path.isfile(path):
-        return rows, bad
+        return
     with open(path, 'r', encoding='utf-8', errors='replace') as fh:
-        for line in fh:
+        for n, line in enumerate(fh, 1):
             text = line.strip()
             if not text:
                 continue
             try:
                 row = json.loads(text)
             except ValueError:
-                bad += 1
+                yield n, 'json', None
                 continue
             if (not isinstance(row, dict) or not _usable_day(row.get('failed_at'))
                     or not str(row.get('error') or '').strip()):
-                bad += 1
+                yield n, 'fields', None
                 continue
+            yield n, None, row
+
+
+def read_failures(path):
+    """(rows, bad): usable failure rows, plus the count of unusable ones.
+
+    Absence is zero rows, not an error - the same law as CR.read_records, so a
+    reader can ask "what failed?" without a prior write. Both numbers come from
+    _failure_lines, the one parse law (R3018).
+    """
+    rows = []
+    bad = 0
+    for _n, kind, row in _failure_lines(path):
+        if kind is None:
             rows.append(row)
+        else:
+            bad += 1
     return rows, bad
+
+
+def read_failure_bad_lines(path):
+    """[{'line': n, 'why': 'json'|'fields'}] for unusable lines, ascending.
+
+    WHY (R3018, measured before this existed - qa/probe-R3018.log): `bad=<n>`
+    told a reader HOW MANY lines were unusable and never WHICH, so the only way
+    to find one was to open the side channel and try each line by hand. The
+    numbers were already recoverable in the single pass read_failures makes.
+
+    TEXT IS NOT ECHOED, deliberately: an unusable line is text json.loads or the
+    field check already rejected, and it can carry query strings from a failed
+    fetch (measured: a probe line held a url with a token). Echoing it would put
+    untrusted bytes on a screen; a line number plus the reason is what a person
+    needs to look at it in an editor.
+
+    DISPLAY ONLY: writes nothing, gates nothing, retries nothing. An absent file
+    answers an empty list - the same "absence is zero" law as read_failures.
+    """
+    return [{'line': n, 'why': kind} for n, kind, _row in _failure_lines(path)
+            if kind is not None]
 
 
 def _window_start(day, window_days=7):
@@ -1794,6 +1848,11 @@ def main(argv=None):
                     help='print the out-of-window sources that never came '
                          'back, one line each (read-only display; writes and '
                          'gates nothing)')
+    ap.add_argument('--pending-old-bad', dest='pending_old_bad',
+                    action='store_true',
+                    help='name the unusable lines on the failure channel by '
+                         'line number and reason, never by text (read-only '
+                         'display; writes and gates nothing)')
     ap.add_argument('--snapshot-failures', dest='snapshot_failures',
                     action='store_true',
                     help='persist today\'s failure counts as one history row '
@@ -1823,6 +1882,12 @@ def main(argv=None):
               % (series['days'], series['bad'], series['first'] or 'none',
                  series['last'] or 'none', pairs or 'none', series['bytes'],
                  series['size_gate'], series['gate_ref_mb']))
+        return 0
+    if args.pending_old_bad:
+        named = read_failure_bad_lines(failure_path(args.root))
+        print('CRAWL-PENDING-OLD-BAD bad=%d' % len(named))
+        for item in named:
+            print('BAD-LINE n=%d why=%s' % (item['line'], item['why']))
         return 0
     if args.pending_old_list:
         stamp = datetime.datetime.now().astimezone().isoformat(

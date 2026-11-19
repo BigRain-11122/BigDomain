@@ -3104,6 +3104,133 @@ def main():
        and 'crawl-failure' not in scan_src18,
        'the count is display only: the world is untouched, no verdict is printed, and the scanner still reads none of it')
 
+    # AC-RUN35 (R3018): `bad=<n>` said how many lines were unusable and never
+    # WHICH, so finding one meant opening the side channel by hand. Measured
+    # before the pin (qa/probe-R3018.log): the numbers were already recoverable
+    # in the one pass read_failures makes; a blank line takes no number; an
+    # append never moves an earlier number; and a rejected line's TEXT can carry
+    # a url with a token, so the listing names line+reason and never echoes it.
+    SRC35 = 'https://keep35.example/page'
+    TOKEN35 = 'R3018TOKEN'
+    JUNK35 = ['{"source_url":"https://leak.example/%s","failed_at":\n' % TOKEN35,
+              '\n',
+              '{"failed_at":"not-a-day","error":"x"}\n',
+              '{"oops": 1\n']
+
+    def world35(failures, junk=None, records=None):
+        root = world()
+        roots.append(root)
+        for url, when in (records or [(SRC35, TODAY + 'T09:00:00+08:00')]):
+            CR.append_record(CR.record_path(root), url, when, 'no-drift')
+        for url, when in failures:
+            RUN.append_failure(RUN.failure_path(root), url, when,
+                               'TimeoutError: t')
+        if junk:
+            with open(RUN.failure_path(root), 'a', encoding='utf-8',
+                      newline='\n') as fh:
+                fh.write(''.join(junk))
+        return root
+
+    def bad35(root):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--pending-old-bad', '--root', root])
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def list35(root):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--pending-old-list', '--root', root])
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def snap35(root):
+        out = []
+        for base, _dirs, files in os.walk(root):
+            for name in files:
+                p = os.path.join(base, name)
+                out.append((os.path.relpath(p, root).replace('\\', '/'),
+                            os.path.getsize(p)))
+        out.sort()
+        return out
+
+    r35 = world35([(SRC35, TODAY + 'T08:00:00+08:00')], junk=JUNK35)
+    rc35, lines35 = bad35(r35)
+    named35 = RUN.read_failure_bad_lines(RUN.failure_path(r35))
+    rows35, bad35n = RUN.read_failures(RUN.failure_path(r35))
+    nums35 = [item['line'] for item in named35]
+
+    # arm 1: two good lines plus three unusable ones - every one is named, in
+    # ascending physical order, and the count agrees with the header's bad
+    ok('AC-RUN35', rc35 == 0 and bad35n == 3 and len(named35) == 3
+       and nums35 == [2, 4, 5] and nums35 == sorted(nums35)
+       and lines35[0] == 'CRAWL-PENDING-OLD-BAD bad=3'
+       and len(rows35) == 1,
+       'three unusable lines are named 2/4/5 in order, and the named count is the same number read_failures reports')
+
+    # arm 2: the two kinds stay distinguishable at their own numbers
+    kinds35 = {item['line']: item['why'] for item in named35}
+    ok('AC-RUN35', kinds35 == {2: 'json', 4: 'fields', 5: 'json'}
+       and 'BAD-LINE n=2 why=json' in lines35
+       and 'BAD-LINE n=4 why=fields' in lines35
+       and 'BAD-LINE n=5 why=json' in lines35,
+       'a line that did not parse and a line that parsed but is not a usable row carry different reasons at their own numbers')
+
+    # arm 3: a blank line is skipped and takes no number
+    ok('AC-RUN35', 3 not in nums35 and bad35n == 3
+       and all('n=3 ' not in n for n in lines35),
+       'the blank line on the channel is not a bad line and holds no number')
+
+    # arm 4: the TEXT of a rejected line is never echoed - only its number
+    text35 = '\n'.join(lines35)
+    ok('AC-RUN35', TOKEN35 not in text35
+       and 'leak.example' not in text35 and 'oops' not in text35
+       and text35.count('BAD-LINE') == 3,
+       'a rejected line can carry a url with a token in it - the listing names the line and never prints what it holds')
+
+    # arm 5: the list face is untouched - R3014's boundary still holds
+    rcL35, linesL35 = list35(r35)
+    lst35 = RUN.list_pending_old(CR.record_path(r35),
+                                 RUN.failure_path(r35),
+                                 TODAY + 'T12:00:00+08:00', 7)
+    toks35 = linesL35[0].split()
+    ok('AC-RUN35', rcL35 == 0 and len(lst35) == 8 and 'bad=3' in linesL35[0]
+       and [t.split('=')[0] for t in toks35[:6]] ==
+       ['CRAWL-PENDING-OLD-LIST', 'pending_old', 'days', 'bad', 'fcov',
+        'last_at']
+       and (len(toks35) == 6
+            or (len(toks35) == 7 and toks35[6].startswith('reason=')))
+       and not any('BAD-LINE' in n for n in linesL35),
+       'the old-waiter list still carries six header tokens and no BAD-LINE row - source rows describe sources, bad lines describe the channel')
+
+    # arm 6: no bad line means no number at all - a clean channel and an absent
+    # one both answer bad=0 and print no BAD-LINE row (never a fabricated one)
+    rClean35 = world35([(SRC35, TODAY + 'T08:00:00+08:00')])
+    rcC35, linesC35 = bad35(rClean35)
+    rcA35, linesA35 = bad35(world35([]))
+    emptyFile35 = os.path.join(rClean35, 'no-such-channel.jsonl')
+    ok('AC-RUN35', rcC35 == rcA35 == 0
+       and linesC35 == ['CRAWL-PENDING-OLD-BAD bad=0']
+       and linesA35 == ['CRAWL-PENDING-OLD-BAD bad=0']
+       and RUN.read_failure_bad_lines(emptyFile35) == [],
+       'a clean channel and an absent one both answer bad=0 with no line named, and a missing file reads as an empty list rather than an error')
+
+    # arm 7: pure display, and an append never moves an earlier number
+    before35 = snap35(r35)
+    rc35b, lines35b = bad35(r35)
+    after35 = snap35(r35)
+    with open(RUN.failure_path(r35), 'a', encoding='utf-8',
+              newline='\n') as fh:
+        fh.write('{later\n')
+    later35 = [item['line'] for item in
+               RUN.read_failure_bad_lines(RUN.failure_path(r35))]
+    text35b = '\n'.join(lines35b)
+    ok('AC-RUN35', rc35b == 0 and before35 == after35
+       and 'PASS' not in text35b and 'FLAG' not in text35b
+       and 'verdict' not in text35b
+       and 'crawl-failure' not in scan_src18
+       and later35[:3] == [2, 4, 5] and later35[-1] == 6,
+       'the listing writes nothing and prints no verdict, and a line appended after the read leaves every earlier number where it was')
+
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
 

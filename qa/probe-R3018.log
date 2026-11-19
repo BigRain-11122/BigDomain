@@ -1,0 +1,17 @@
+P1_rows=2
+P1_bad=3
+P1_keys_before_identify=0
+P2_numbers=[(2, 'json'), (4, 'fields'), (5, 'json')]
+P2_bad_agrees=True
+P3_blank_not_counted=True
+P4_raw_has_url_token=True
+P4_raw_unusable_as_data=True
+P5_list_keys=['bad', 'day', 'fcov', 'last_at', 'pending_old', 'reason', 'waiting', 'window_days']
+P5_list_bad=3
+P5_list_has_badline_field=False
+P6_flag_count=12
+P6_has_bad_flag=False
+P6_header_shape=False
+P7_consumers=['src\\os\\test_crawl_runner.py', 'tmp\\closeout_R3015.py', 'tmp\\demo_R3014.py', 'tmp\\demo_R3015.py', 'tmp\\demo_R3016.py', 'tmp\\demo_R3017.py', 'tmp\\negctl_R3016.py', 'tmp\\negctl_R3017.py', 'tmp\\probe_R3014.py', 'tmp\\probe_R3015.py', 'tmp\\probe_R3016.py', 'tmp\\probe_R3017.py', 'tmp\\probe_R3018.py', 'tools\\crawl_runner.py']
+P8_absent=(0, 0)
+P9_prefix_stable=True
