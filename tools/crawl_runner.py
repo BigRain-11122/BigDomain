@@ -473,6 +473,29 @@ boundary: `header_bytes` is on the LF law like its siblings, so it is the
 header's slice of that total rather than the width of the visible glyph row;
 Windows text-mode stdout adds one more byte on top.
 
+WHICH ROW CAME FIRST (R3056, measured first - qa/probe-R3056.log): R3055
+unified the DAY a row belongs to, but every face that asks which row came
+FIRST still compared the stamp as TEXT. On private mixed-frame worlds this
+read the wrong way round on all of them (P2..P8): the failure summary named
+`2026-11-20T03:00:00+08:00` (earlier instant) as newest over
+`2026-11-19T20:00:00+00:00` (02:00 later); _since_ok answered unmeasured for a
+success that WAS later; _flips counted 0 for a real flip; last_at= named the
+earlier row; the pending set's "waited longest" and "newest" ends swapped; and
+the trend named the wrong source. One law now: `_stamp_key(stamp)` is the
+INSTANT a stamp names and every ordering site uses it (the summary's newest
+row, _since_ok's three comparisons, _flips' event order, _last_stamp_rows'
+max, _pending_sources and _out_of_window_waiting's per-source latest and list
+order, and the trend's newest row). Ties stay ties: _flips still sorts a
+failure first at an equal instant, so one moment written two ways is never
+invented into a flip. Nothing visible is renamed: `_stamp_echo` still echoes
+the chosen row's own characters (R3016) and the day words `day=` `fcov=`
+`rcov=` `on_day=` keep R3055's semantics - this round only changes WHICH row is
+named and in WHICH order a list is printed. Refused: rewriting the echo,
+adding a display word, re-sorting the `day` FIELD faces (a claim, not a
+stamp), and touching `_usable_day` (R3054). Honest boundary: the three live
+files carry zero mixed-frame pairs today (P1), so this closes a door rather
+than repairing a disk.
+
 WHICH DAY A ROW COUNTS IN (R3055, measured first - qa/probe-R3055.log): R3048
 gave the clock faces one day law - the LOCAL day of the instant, `_day_of` -
 but only the window HEAD used it; every count and span still cut the first ten
@@ -1444,6 +1467,42 @@ def _day_of(stamp):
         return text[:10]
 
 
+def _stamp_key(stamp):
+    """The INSTANT a stamp names, for ordering (R3056). One law, one function.
+
+    R3056: the day a stamp belongs to was unified in R3055, but every face that
+    asks "which row came FIRST" still compared the literal text, so one moment
+    written '2026-11-19T20:00:00+00:00' and the same afternoon written
+    '2026-11-20T03:00:00+08:00' (earlier instant, larger text) read in the wrong
+    order: measured on private worlds (qa/probe-R3056.log), the failure summary
+    named the earlier row as newest, _since_ok answered 'unmeasured' for a
+    success that WAS later, _flips counted 0 for a real flip, last_at= and the
+    pending set's two ends swapped, and the trend named the wrong source.
+
+    The value is compared on the instant in this machine's frame, which is the
+    same frame `_day_of` reads and the frame every writer stamps in. Ties (one
+    instant, two writings) compare equal and leave the caller's own tie rule in
+    charge - _flips still sorts a failure first at a tie, so an equal stamp is
+    never invented into a flip.
+
+    An unparseable text sorts AFTER every parseable instant instead of raising:
+    this is an ordering key, not a door, and the readers that feed it already
+    drop unusable stamps (R3054). Two unparseable values compare equal, which
+    is what a caller that never expected one cannot get wrong.
+
+    The key carries NO text component: a tie is a tie. My own first version
+    appended the text as a last element to keep sorting total, and that made
+    one instant written two ways compare as two instants - the very defect this
+    round removes (measured: '2026-11-20T04:00:00+08:00' read later than the
+    same moment written '2026-11-19T20:00:00+00:00' because '20' > '19').
+    """
+    text = str(stamp or '')
+    try:
+        return (0, datetime.datetime.fromisoformat(text).timestamp())
+    except (ValueError, OSError, OverflowError):
+        return (1, 0.0)
+
+
 def _window_start(day, window_days=7):
     """(head_day, usable, threshold) - the ONE place the window law lives.
 
@@ -1542,8 +1601,12 @@ def _summary_from_rows(rows, bad, day, window_days=7, bad_days=None):
         row_day = _day_of(row.get('failed_at'))
         if usable and threshold <= row_day <= head_day:
             recent += 1
-        if newest is None or str(row.get('failed_at') or '') > str(
-                newest.get('failed_at') or ''):
+        # R3056: the NEWEST row is the latest instant, not the largest text -
+        # a mixed-frame stamp read '11-20T03:00+08' as later than the genuinely
+        # later '11-19T20:00Z' (measured, qa/probe-R3056.log P2).
+        got = str(row.get('failed_at') or '')
+        if got and (newest is None or _stamp_key(got) > _stamp_key(
+                newest.get('failed_at'))):
             newest = row
     newest_error = (newest or {}).get('error')
     return {'total': len(rows), 'recent': recent, 'bad': bad,
@@ -2674,10 +2737,10 @@ def _since_ok(record_path, source_url, failed_at):
     answering 'no' there would claim the source is still broken from evidence
     that never arrived.
 
-    The comparison is LITERAL ISO text on both sides, because every writer on
-    this machine stamps astimezone().isoformat() (same clock, same zone). This
-    is stated rather than parsed: a corpus written in a different zone is
-    outside what this arm promises.
+    The comparison is the INSTANT both sides name (`_stamp_key`, R3056): the
+    earlier law compared literal ISO text, which was right only while every
+    stamp on the disk shared one frame, and a mixed frame read a later success
+    as earlier (measured, qa/probe-R3056.log P3).
 
     R3004 - 'no' NOW REQUIRES THE RECORD TO BE SHOWN LOOKING AFTER THE FAILURE.
     Measured before this changed: a zero-byte record, a record whose newest row
@@ -2706,14 +2769,16 @@ def _since_ok(record_path, source_url, failed_at):
     newest = ''
     for row in rows:
         got = str(row.get('fetched_at') or '')
-        if got > newest:
+        if not got:
+            continue
+        if not newest or _stamp_key(got) > _stamp_key(newest):
             newest = got
-    if not newest or newest <= stamp:
+    if not newest or _stamp_key(newest) <= _stamp_key(stamp):
         return 'unmeasured'
     for row in rows:
         if row.get('source_url') != source_url:
             continue
-        if str(row.get('fetched_at') or '') > stamp:
+        if _stamp_key(row.get('fetched_at')) > _stamp_key(stamp):
             return 'yes'
     return 'no'
 
@@ -2760,7 +2825,12 @@ def _flips(record_path, source_url, failures):
         stamp = str(row.get('failed_at') or '')
         if stamp:
             events.append((stamp, 0))  # failures sort first at an equal stamp
-    events.sort()
+    # R3056: ordered by INSTANT, not by text (measured, qa/probe-R3056.log P4:
+    # a success at 20:00Z followed by a failure at 21:00Z counted 0 flips
+    # because the text of the failure sorted first). The kind is the second
+    # element so a failure still sorts first at an equal instant - ties are not
+    # invented into flips.
+    events.sort(key=lambda e: (_stamp_key(e[0])[:2], e[1]))
     flips = 0
     working = False
     for _stamp, kind in events:
@@ -2838,7 +2908,9 @@ def _last_stamp_rows(rows):
     """
     stamps = [str(row.get('failed_at') or '') for row in rows
               if str(row.get('failed_at') or '')]
-    return max(stamps) if stamps else None
+    # R3056: the newest by instant; the returned text is the chosen row's own
+    # characters, so _stamp_echo keeps echoing the writer, not a parse result.
+    return max(stamps, key=_stamp_key) if stamps else None
 
 
 def _stamp_echo(stamp):
@@ -3001,7 +3073,7 @@ def _pending_sources(record_path, in_window):
         stamp = str(row.get('failed_at') or '')
         if not src or not stamp:
             continue
-        if src not in latest or stamp > latest[src]:
+        if src not in latest or _stamp_key(stamp) > _stamp_key(latest[src]):
             latest[src] = stamp
     pending = 0
     judged = 0
@@ -3014,7 +3086,10 @@ def _pending_sources(record_path, in_window):
             waiting.append((stamp, str(src)))
         elif verdict == 'yes':
             judged += 1
-    waiting.sort()
+    # R3056: oldest by INSTANT first, then url - the order the two end values
+    # have always claimed (measured, qa/probe-R3056.log P7: a mixed-frame pair
+    # read the later instant as the older waiter).
+    waiting.sort(key=lambda w: (_stamp_key(w[0]), w[1]))
     if not waiting:
         return (pending, judged, None, None, None, None)
     return (pending, judged, waiting[0][1], waiting[0][0], waiting[-1][0],
@@ -3047,7 +3122,7 @@ def _out_of_window_waiting(record_path, rows, threshold):
         stamp = str(row.get('failed_at') or '')
         if not src or not stamp:
             continue
-        if src not in latest or stamp > latest[src]:
+        if src not in latest or _stamp_key(stamp) > _stamp_key(latest[src]):
             latest[src] = stamp
     still = 0
     judged = 0
@@ -3067,7 +3142,10 @@ def _out_of_window_waiting(record_path, rows, threshold):
             waiting.append((str(stamp), str(src)))
         elif verdict == 'yes':
             judged += 1
-    waiting.sort()
+    # R3056: oldest by INSTANT first, then url - the order the two end values
+    # have always claimed (measured, qa/probe-R3056.log P7: a mixed-frame pair
+    # read the later instant as the older waiter).
+    waiting.sort(key=lambda w: (_stamp_key(w[0]), w[1]))
     return still, judged, waiting, old
 
 
@@ -3415,7 +3493,13 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
         newest = None
         for row in in_window:
             stamp = str(row.get('failed_at') or '')
-            if newest is None or stamp > str(newest.get('failed_at') or ''):
+            if not stamp:
+                continue
+            # R3056: the newest failure is the latest INSTANT, not the largest
+            # text (measured, qa/probe-R3056.log P8: the wrong source was
+            # named when two frames disagreed).
+            if newest is None or _stamp_key(stamp) > _stamp_key(
+                    newest.get('failed_at')):
                 newest = row
         if newest is not None:
             newest_src = newest.get('source_url')

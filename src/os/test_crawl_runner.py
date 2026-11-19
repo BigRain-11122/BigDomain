@@ -8444,6 +8444,189 @@ def main():
        'every stamp-to-day site goes through the one law, while a `day` field '
        'keeps its literal reading because it is a claim rather than a stamp')
 
+    # --- AC-RUN73: the stamp ORDER is the instant, not the text (R3056) ------
+    # Measured before any of this existed (qa/probe-R3056.log): one moment
+    # written '2026-11-19T20:00:00+00:00' is 02:00 LATER than
+    # '2026-11-20T03:00:00+08:00' while sorting before it as text, so the
+    # failure summary named the earlier row as newest (P2), _since_ok answered
+    # 'unmeasured' for a success that WAS later (P3), _flips counted 0 for a
+    # real flip (P4), last_at= named the earlier stamp (P5), the pending set's
+    # two ends swapped (P6/P7) and the trend named the wrong source (P8).
+    K73A = '2026-11-19T20:00:00+00:00'   # local 11-20 04:00 - the LATER instant
+    K73B = '2026-11-20T03:00:00+08:00'   # local 11-20 03:00 - earlier, larger text
+    AT73 = '2026-11-20T23:59:00+08:00'
+
+    def face73(root, flag, at=None):
+        argv = [flag, '--root', root]
+        if at is not None:
+            argv += ['--at', at]
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(argv)
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def side73(root, pairs):
+        path = RUN.failure_path(root)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, 'w', encoding='utf-8', newline='\n') as fh:
+            for src, stamp, err in pairs:
+                fh.write('{"source_url":"%s","failed_at":"%s","error":"%s"}\n'
+                         % (src, stamp, err))
+        return path
+
+    # Arm 1: one ordering key. The later instant wins despite the smaller
+    # text; one moment in two writings is a tie; an unparseable text sorts
+    # after every instant instead of raising.
+    ok('AC-RUN73', RUN._stamp_key(K73A)[:2] > RUN._stamp_key(K73B)[:2]
+       and RUN._stamp_key('2026-11-19T20:00:00+00:00')[:2] == RUN._stamp_key(
+           '2026-11-20T04:00:00+08:00')[:2]
+       and RUN._stamp_key('not-a-stamp')[0] == 1
+       and RUN._stamp_key('not-a-stamp') > RUN._stamp_key(K73A),
+       'the key is the instant a stamp names, one moment in two writings ties, '
+       'and a text that names no instant sorts after every instant without '
+       'raising')
+
+    # Arm 2: the failure summary names the row of the LATER instant, and the
+    # day it windows by is unchanged.
+    S73 = world(); roots.append(S73)
+    side73(S73, [('https://s73.example/a', K73A, 'boom-A'),
+                 ('https://s73.example/b', K73B, 'boom-B')])
+    rcF73, linesF73 = face73(S73, '--failures', AT73)
+    f73 = toks69(linesF73[0])
+    ok('AC-RUN73', rcF73 == 0
+       and f73.get('newest') == '2026-11-19T20:00:00+00:00'
+       and f73.get('error') == 'boom-A' and f73.get('day') == '2026-11-20',
+       'the summary names the later instant instead of the larger text, and '
+       'the day word it prints does not move')
+
+    # Arm 3: a success after the failure is 'yes' across frames; an equal
+    # instant is not "looked after"; a later row of the same source is.
+    N73 = world(); roots.append(N73)
+    rec73 = CR.record_path(N73)
+    os.makedirs(os.path.dirname(rec73), exist_ok=True)
+    CR.append_record(rec73, 'https://s73.example/a',
+                     '2026-11-19T21:00:00+00:00', 'ok')
+    T73 = world(); roots.append(T73)
+    rec73t = CR.record_path(T73)
+    os.makedirs(os.path.dirname(rec73t), exist_ok=True)
+    CR.append_record(rec73t, 'https://s73.example/a',
+                     '2026-11-20T04:00:00+08:00', 'ok')
+    ok('AC-RUN73', RUN._since_ok(rec73, 'https://s73.example/a', K73B) == 'yes'
+       and RUN._since_ok(rec73, 'https://s73.example/a', K73A) == 'yes'
+       and RUN._since_ok(rec73t, 'https://s73.example/a', K73A) == 'unmeasured',
+       'a success one hour LATER in another frame reads yes, and a success at '
+       'the very same instant is still not proof of looking afterwards')
+
+    # Arm 4: a real flip is one, and an equal instant written two ways is not
+    # invented into a flip.
+    G73 = world(); roots.append(G73)
+    rec73g = CR.record_path(G73)
+    os.makedirs(os.path.dirname(rec73g), exist_ok=True)
+    CR.append_record(rec73g, 'https://s73.example/a', K73A, 'ok')
+    fails73g = [{'source_url': 'https://s73.example/a',
+                 'failed_at': '2026-11-19T21:00:00+00:00', 'error': 'boom'}]
+    Q73 = world(); roots.append(Q73)
+    rec73q = CR.record_path(Q73)
+    os.makedirs(os.path.dirname(rec73q), exist_ok=True)
+    CR.append_record(rec73q, 'https://s73.example/a', K73A, 'ok')
+    fails73q = [{'source_url': 'https://s73.example/a',
+                 'failed_at': '2026-11-20T04:00:00+08:00', 'error': 'boom'}]
+    ok('AC-RUN73', RUN._flips(rec73g, 'https://s73.example/a', fails73g) == 1
+       and RUN._flips(rec73q, 'https://s73.example/a', fails73q) == 0,
+       'a success then a later failure in another frame counts one flip, while '
+       'one instant written two ways invents none')
+
+    # Arm 5: last_at= names the later row's own characters, and the span keeps
+    # the day law.
+    rcP73, linesP73 = face73(S73, '--pending-old-list', AT73)
+    p73 = toks69(linesP73[0])
+    ok('AC-RUN73', rcP73 == 0 and p73.get('last_at') == '2026-11-19T20:00'
+       and p73.get('fcov') == '2026-11-20..2026-11-20',
+       'the last-write word echoes the later row as its author wrote it, and '
+       'the day span stays the pair of local days it already printed')
+
+    # Arm 6: the pending set's two ends follow the instant, and the returned
+    # stamps are still the rows' own text.
+    C73 = world(); roots.append(C73)
+    side73(C73, [('https://s73.example/a', K73A, 'boom-A'),
+                 ('https://s73.example/b', K73B, 'boom-B')])
+    rec73c = CR.record_path(C73)
+    os.makedirs(os.path.dirname(rec73c), exist_ok=True)
+    CR.append_record(rec73c, 'https://s73.example/other',
+                     '2026-11-20T06:00:00+08:00', 'ok')
+    rows73c, _bad73c = RUN.read_failures(RUN.failure_path(C73))
+    pend73 = RUN._pending_sources(rec73c, rows73c)
+    ok('AC-RUN73', pend73[0] == 2 and pend73[1] == 2
+       and pend73[2] == 'https://s73.example/b'
+       and pend73[3] == K73B and pend73[4] == K73A
+       and pend73[5] == K73B,
+       'the source waiting longest is the earliest instant, the newest stamp '
+       'is the latest instant, the middle stays the list centre, and both '
+       'stamps keep the characters their writers used')
+
+    # Arm 7: the out-of-window list is oldest-instant-first, and the row's two
+    # ends follow it.
+    L73 = world(); roots.append(L73)
+    A73o = '2026-11-13T20:00:00+00:00'   # 11-13 20:00Z - later
+    B73o = '2026-11-14T03:00:00+08:00'   # 11-13 19:00Z - older
+    side73(L73, [('https://s73.example/a', A73o, 'boom-A'),
+                 ('https://s73.example/b', B73o, 'boom-B')])
+    rec73l = CR.record_path(L73)
+    os.makedirs(os.path.dirname(rec73l), exist_ok=True)
+    CR.append_record(rec73l, 'https://s73.example/other',
+                     '2026-11-20T06:00:00+08:00', 'ok')
+    rows73l, _bad73l = RUN.read_failures(RUN.failure_path(L73))
+    still73, judged73, waiting73, old73 = RUN._out_of_window_waiting(
+        rec73l, rows73l, '2026-11-20')
+    ends73 = RUN._pending_out_of_window(rec73l, rows73l, '2026-11-20')
+    ok('AC-RUN73', still73 == 2 and judged73 == 2 and old73 == 2
+       and [w[0] for w in waiting73] == [B73o, A73o]
+       and ends73[2] == B73o and ends73[3] == A73o,
+       'the out-of-window list is ordered by the instant it names, so the '
+       'longest wait is the older writing rather than the smaller text')
+
+    # Arm 8: the trend names the later instant's source, and the pending name
+    # follows the same order.
+    hist73 = RUN.failure_day_path(S73)
+    with open(hist73, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('')
+    D73 = world(); roots.append(D73)
+    side73(D73, [('https://s73.example/a', K73A, 'boom-A'),
+                 ('https://s73.example/b', K73B, 'boom-B')])
+    rec73d = CR.record_path(D73)
+    os.makedirs(os.path.dirname(rec73d), exist_ok=True)
+    CR.append_record(rec73d, 'https://s73.example/other',
+                     '2026-11-20T06:00:00+08:00', 'ok')
+    trend73 = RUN.summarize_failure_trend(
+        RUN.failure_day_path(D73), RUN.failure_path(D73), AT73,
+        record_path=rec73d)
+    ok('AC-RUN73', trend73.get('newest_src') == 'https://s73.example/a'
+       and trend73.get('pending_src') == 'https://s73.example/b'
+       and trend73.get('pending') == (2, 2),
+       'the trend names the source of the later instant as newest and the '
+       'earlier instant as the one waiting longest')
+
+    # Arm 9: display only, and one ordering law on every site it replaced.
+    before73 = snap69(S73)
+    rcF73b, linesF73b = face73(S73, '--failures', AT73)
+    ok('AC-RUN73', rcF73b == 0 and linesF73b == linesF73
+       and snap69(S73) == before73
+       and '_stamp_key(got) > _stamp_key(newest)' in body72('_since_ok')
+       and 'events.sort(key=lambda e: (_stamp_key(e[0])[:2], e[1]))'
+       in body72('_flips')
+       and 'max(stamps, key=_stamp_key)' in body72('_last_stamp_rows')
+       and '_stamp_key(stamp) > _stamp_key(latest[src])'
+       in body72('_pending_sources')
+       and '_stamp_key(stamp) > _stamp_key(latest[src])'
+       in body72('_out_of_window_waiting')
+       and 'waiting.sort(key=lambda w: (_stamp_key(w[0]), w[1]))'
+       in body72('_pending_sources')
+       and 'stamp > str(newest.get' not in body72('summarize_failure_trend')
+       and '_stamp_echo(newest)' in body72('list_pending_old')
+       and 'newest <= stamp' not in body72('_since_ok'),
+       'the ordering law is one function used by all seven faces while the '
+       'echo and the day words stay where they were')
+
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
 

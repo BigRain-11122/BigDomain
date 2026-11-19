@@ -1,0 +1,14 @@
+HONEST readings: {'newest': '2026-11-19T20:00:00+00:00', 'last_at': '2026-11-19T20:00:00+00:00', 'since': 'yes', 'flips': 1, 'tie': 'unmeasured', 'flip_mixed': 1, 'garbage': 'numbered'}
+HONEST GREEN
+MUT1 text-order CAUGHT
+  flip_mixed: honest=1 mutated=0
+  last_at: honest='2026-11-19T20:00:00+00:00' mutated='2026-11-20T03:00:00+08:00'
+  newest: honest='2026-11-19T20:00:00+00:00' mutated='2026-11-20T03:00:00+08:00'
+  since: honest='yes' mutated='unmeasured'
+  tie: honest='unmeasured' mutated='yes'
+MUT2 text-tiebreak CAUGHT
+  tie: honest='unmeasured' mutated='yes'
+MUT3 raising-key CAUGHT
+  garbage: honest='numbered' mutated='raised'
+RESTORED GREEN
+VERDICT [True, True, True, True]

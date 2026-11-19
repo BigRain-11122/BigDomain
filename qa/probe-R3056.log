@@ -1,0 +1,30 @@
+P1 LIVE DISK - pairs whose TEXT order differs from their INSTANT order
+  failures: absent (C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\crawl-failures.jsonl)
+  day-history rows=2 day-field face (a claim, not a stamp) - left alone
+  record rows=3 parsed=3 text!=instant pairs=0 
+P2 summary newest row (A local 11-20 04:00 is the LATER instant):
+  newest_at=2026-11-19T20:00:00+00:00 newest_error=E_A refused day=2026-11-20
+P3 since_ok: failure 2026-11-20T04:00:00+08:00 (20:00Z), success 21:00Z (LATER):
+  since_ok=yes
+P4 flips: success 20:00Z then failure 21:00Z (one flip). Text sorts the failure first:
+  flips=1
+P5 last_at: A=2026-11-19T20:00:00+00:00 B=2026-11-20T03:00:00+08:00; A is the later instant
+  _last_stamp_rows=2026-11-19T20:00:00+00:00  last_at=2026-11-19T20:00
+P6 _pending_sources (A is later instant than B, so B is the OLDEST waiter):
+  (pending, judged, oldest_src, oldest_stamp, newest_stamp, middle)=(2, 2, 'https://b.example/p', '2026-11-20T03:00:00+08:00', '2026-11-19T20:00:00+00:00', '2026-11-20T03:00:00+08:00')
+P7 out-of-window waiting: A0=2026-11-13T20:00:00+00:00 (11-13 20:00Z) B0=2026-11-14T03:00:00+08:00 (11-13 19:00Z, OLDER)
+  still=2 judged=2 old=2 waiting=[('2026-11-14T03:00:00+08:00', 'https://b.example/p'), ('2026-11-13T20:00:00+00:00', 'https://a.example/p')]
+P8 trend newest_src (a.example/p is the later instant):
+  newest_src=https://a.example/p since_ok=unmeasured flips=None pending=None pending_src=None
+P9 TEXT-ORDER CENSUS over tools/crawl_runner.py
+  _summary_from_rows newest  hits=0
+  _since_ok record newest    hits=0
+  _since_ok strict reach     hits=0
+  _since_ok per-source       hits=0
+  _flips events.sort         hits=0
+  _last_stamp_rows max       hits=0
+  _pending_sources latest    hits=0
+  _pending_sources sort      hits=0
+  _out_of_window latest      hits=0
+  _out_of_window sort        hits=0
+  trend newest               hits=0
