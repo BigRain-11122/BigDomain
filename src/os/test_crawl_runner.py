@@ -64,6 +64,15 @@ from flips: a flip is a pair of events already on disk, so since_ok=unmeasured
 may sit beside flips=1 without either field lying. AC-RUN20's pre-failure arm
 was rewritten to the new verdict on purpose - the contract moved, and an arm
 that keeps the old reading would hide it.
+AC-RUN22 (R3005) grades WINDOW BREADTH: newest_src/since_ok answer for the one
+source that failed last, so three failing pages left two of them without a
+verdict. pending=<no>/<judged> counts, over the whole window and each source's
+own latest failure, the sources shown looked-at and never back over the sources
+that could be judged at all - an unmeasured source is in neither number, because
+a since_ok != 'yes' numerator was measured to count a source nobody ever looked
+after as pending. It also pins that recur= and pending= answer different
+questions in both directions, and that a multi-source window still prints one
+line (per-source lines were refused, not forgotten).
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -1071,7 +1080,7 @@ def main():
                      'wcov', 'evidence', 'kind', 'kind_count', 'window_days'])
     ok('AC-RUN18', tA5['newest_src'] is None and tA5['since_ok'] == 'unmeasured'
        and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok', 'flips',
-                                               'rcov'])
+                                               'pending', 'rcov'])
        and tA5['evidence'] == 'history' and tA5['today'] == 0,
        'a pruned side channel answers none/unmeasured and leaves every existing field where it was')
 
@@ -1188,7 +1197,7 @@ def main():
        and 'since_ok=yes' in lineB9 and 'PASS' not in lineB9
        and 'FLAG' not in lineB9 and 'verdict' not in lineB9
        and 'crawl-failure' not in scan_src18
-       and set(tB2.keys()) == baseB | set(['flips', 'rcov']),
+       and set(tB2.keys()) == baseB | set(['flips', 'pending', 'rcov']),
        'one display row carries the stability count, adds exactly one key, and stays outside the scanner')
 
     # AC-RUN20 (R3003): the trend answered "was it seen working afterwards" but
@@ -1294,7 +1303,7 @@ def main():
        and 'PASS' not in lineC7 and 'FLAG' not in lineC7
        and 'verdict' not in lineC7
        and 'crawl-failure' not in scan_src18
-       and set(tC1.keys()) == baseB | set(['flips', 'rcov']),
+       and set(tC1.keys()) == baseB | set(['flips', 'pending', 'rcov']),
        'the row names the record span, or none, and adds exactly the one key it names')
 
     # AC-RUN21 (R3004): the verdict answered 'no' without ever having looked.
@@ -1368,8 +1377,122 @@ def main():
        and 'rcov=' in lineD7 and 'PASS' not in lineD7
        and 'FLAG' not in lineD7 and 'verdict' not in lineD7
        and 'crawl-failure' not in scan_src18
-       and set(tD3.keys()) == baseB | set(['flips', 'rcov']),
+       and set(tD3.keys()) == baseB | set(['flips', 'pending', 'rcov']),
        'a real repair still reads yes, the CLI carries all three readings, and R3004 adds NO key - the row shape is unchanged')
+
+    # AC-RUN22 (R3005): newest_src/since_ok answer for ONE source - the latest
+    # failure in the window - so with three failing pages the other two were
+    # counts without a verdict (measured: A repaired, B and C gone, the row
+    # named only C). pending=<no>/<judged> answers for the whole window; it
+    # counts only sources the record shows were looked at and never came back,
+    # over only those that could be judged at all. Printing one line per source
+    # was refused: the one-line contract is what the CLI and its arms rest on.
+    SRC22A = 'https://a.example/page'
+    SRC22B = 'https://b.example/page'
+    SRC22C = 'https://c.example/page'
+    OTHER22 = 'https://other.example/page'
+
+    def trend22(record_rows, failure_rows):
+        root = world()
+        roots.append(root)
+        for url, when in record_rows:
+            CR.append_record(CR.record_path(root), url, when, 'no-drift')
+        for url, when, err in failure_rows:
+            RUN.append_failure(RUN.failure_path(root), url, when, err)
+        write_days(RUN.failure_day_path(root), [])
+        return root, RUN.summarize_failure_trend(
+            RUN.failure_day_path(root), RUN.failure_path(root), TODAY,
+            record_path=CR.record_path(root))
+
+    # arm 1: three sources, three different repair states
+    rE1, tE1 = trend22(
+        [(SRC22A, TODAY + 'T09:30:00+08:00'),
+         (OTHER22, TODAY + 'T11:30:00+08:00')],
+        [(SRC22A, TODAY + 'T09:00:00+08:00', 'E_FETCH TimeoutError: a'),
+         (SRC22B, TODAY + 'T10:00:00+08:00', 'E_FETCH HTTPError: b'),
+         (SRC22C, TODAY + 'T11:00:00+08:00', 'E_FETCH URLError: c')])
+    ok('AC-RUN22', tE1['pending'] == (2, 3) and tE1['newest_src'] == SRC22C
+       and tE1['since_ok'] == 'no' and tE1['sources'] == 3,
+       'three failing sources: pending counts the two shown looked-at and never back over the three judged, while newest_src still answers for one')
+
+    # arm 2: an UNMEASURED source is in neither number - the not-yes rule is
+    # measured to be wrong here, not argued about
+    rE2, tE2 = trend22(
+        [(SRC22A, TODAY + 'T10:00:00+08:00')],
+        [(SRC22A, TODAY + 'T09:00:00+08:00', 'E_FETCH TimeoutError: a'),
+         (SRC22B, TODAY + 'T12:00:00+08:00', 'E_FETCH HTTPError: b')])
+    notyes22 = [RUN._since_ok(CR.record_path(rE2), s, w) for s, w in
+                ((SRC22A, TODAY + 'T09:00:00+08:00'),
+                 (SRC22B, TODAY + 'T12:00:00+08:00'))]
+    notyes22 = sum(1 for v in notyes22 if v != 'yes')
+    ok('AC-RUN22', tE2['pending'] == (0, 1) and notyes22 == 1,
+       'a source whose newest failure is later than every record row is UNMEASURED, so it is neither pending nor judged - the since_ok != yes numerator would have counted it as 1 pending here')
+
+    # arm 3: recur and pending answer different questions (direction one)
+    rE3, tE3 = trend22(
+        [(OTHER22, TODAY + 'T11:00:00+08:00')],
+        [(SRC22A, TODAY + 'T09:00:00+08:00', 'E_FETCH TimeoutError: a')])
+    ok('AC-RUN22', tE3['recur'] == (0, 0) and tE3['pending'] == (1, 1),
+       'one source failing on one day is no recurrence (recur=(0,0)) yet it is one judged source that never came back - two readings, two answers')
+
+    # arm 4: and the other direction - recurrence without anything pending
+    rE4, tE4 = trend22(
+        [(SRC22A, TODAY + 'T09:30:00+08:00'),
+         (SRC22B, TODAY + 'T10:30:00+08:00'),
+         (OTHER22, TODAY + 'T11:00:00+08:00')],
+        [(SRC22A, '2026-11-18T09:00:00+08:00', 'E_FETCH TimeoutError: a'),
+         (SRC22A, TODAY + 'T09:00:00+08:00', 'E_FETCH TimeoutError: a'),
+         (SRC22B, '2026-11-18T10:00:00+08:00', 'E_FETCH HTTPError: b'),
+         (SRC22B, TODAY + 'T10:00:00+08:00', 'E_FETCH HTTPError: b')])
+    ok('AC-RUN22', tE4['recur'] == (2, 4) and tE4['pending'] == (0, 2),
+       'two sources failing on two days each is recur=(2,4), and with both seen working again nothing is pending - recurrence is not repair')
+
+    # arm 5: each source is judged on its OWN latest failure, so a repair
+    # before today failure cannot be reported as today repair
+    rE5, tE5 = trend22(
+        [(SRC22A, '2026-11-18T12:00:00+08:00')],
+        [(SRC22A, '2026-11-18T09:00:00+08:00', 'E_FETCH TimeoutError: a'),
+         (SRC22A, TODAY + 'T09:00:00+08:00', 'E_FETCH TimeoutError: a')])
+    ok('AC-RUN22', tE5['pending'] is None
+       and tE5['rcov'] == ('2026-11-18', '2026-11-18'),
+       'judging yesterday recovery as today answer would invent a repair: the record stops before the newest failure, so nothing is judged and pending=none')
+
+    # arm 6: no judgement anywhere reads none, never 0/0
+    rE6, tE6 = trend22([], [(SRC22A, TODAY + 'T09:00:00+08:00',
+                             'E_FETCH TimeoutError: a')])
+    junk_root = world()
+    roots.append(junk_root)
+    RUN.append_failure(RUN.failure_path(junk_root),
+                       SRC22A, TODAY + 'T09:00:00+08:00',
+                       'E_FETCH TimeoutError: a')
+    write_days(RUN.failure_day_path(junk_root), [])
+    with open(CR.record_path(junk_root), 'w', encoding='utf-8',
+              newline='\n') as fh:
+        fh.write('not json at all\n')
+    tE6b = RUN.summarize_failure_trend(
+        RUN.failure_day_path(junk_root), RUN.failure_path(junk_root), TODAY,
+        record_path=CR.record_path(junk_root))
+    empty_root = world()
+    roots.append(empty_root)
+    tE6s = RUN.summarize_failure_trend(
+        RUN.failure_day_path(empty_root), RUN.failure_path(empty_root), TODAY,
+        record_path=CR.record_path(empty_root))
+    ok('AC-RUN22', tE6['pending'] is None and tE6b['pending'] is None
+       and tE6s['pending'] is None and tE6s['evidence'] == 'none',
+       'an absent record, a record of nothing but malformed rows and a pruned side channel all answer none - a zero-of-zero would read like "nothing is pending"')
+
+    # arm 7: the one-line contract, the exact key set, and the scanner
+    bufE7 = io.StringIO()
+    with contextlib.redirect_stdout(bufE7):
+        rcE7 = RUN.main(['--failure-trend', '--root', rE1])
+    linesE7 = [n for n in bufE7.getvalue().splitlines() if n.strip()]
+    lineE7 = linesE7[0] if linesE7 else ''
+    ok('AC-RUN22', rcE7 == 0 and len(linesE7) == 1
+       and 'pending=2/3' in lineE7
+       and 'PASS' not in lineE7 and 'FLAG' not in lineE7
+       and 'verdict' not in lineE7 and 'crawl-failure' not in scan_src18
+       and set(tE1.keys()) == baseB | set(['flips', 'pending', 'rcov']),
+       'a multi-source window still prints ONE line carrying pending=, adds exactly one key, and stays outside the scanner - per-source lines were refused on purpose')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

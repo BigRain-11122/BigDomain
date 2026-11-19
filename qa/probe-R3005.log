@@ -1,0 +1,12 @@
+P1 sources=3 newest_src=page since_ok=no flips=0 keys=22
+P1 per-source since_ok: [('page', 'no'), ('page', 'no'), ('page', 'yes')]
+P1 row carries a per-source reading? False
+P2 W1 recur=(2, 4) recurring=2 sources=2 | pending-no=2/2 pending-notyes=2/2
+P3 W2 recur=(0, 0) recurring=0 sources=1 | per-source=['no']
+P3 W3 recur=(2, 4) recurring=2 | per-source=['yes', 'yes']
+P4 last-failure-newer-than-record per-source=[('page', 'unmeasured'), ('page', 'yes')] notyes=1 no=0 judged=1
+P4b no-record per-source=['unmeasured']
+P5 trend-line arms=1 CRAWL-FAILURE-TREND reads=13 key-set arms=3
+P5 scanner names crawl-failure=False crawl-log=False
+P5b rc=0 lines=1
+PROBE DONE worlds=6 0.01s

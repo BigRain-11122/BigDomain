@@ -1,0 +1,10 @@
+--- honest ---
+GREEN HONEST w1 got=(2, 3) want=(2, 3) ok
+GREEN HONEST w2 got=(0, 1) want=(0, 1) ok
+GREEN HONEST w3 got=None want=None ok
+--- mutants (each must read CAUGHT) ---
+CAUGHT M1 not-yes numerator got=(1, 2) want=(0, 1) ok
+CAUGHT M2 all-sources denominator got=(0, 2) want=(0, 1) ok
+CAUGHT M3 first-failure judge got=(0, 1) want=None ok
+CAUGHT M4 zero-of-zero got=(0, 0) want=None ok
+NEGCTL PASS fails=0

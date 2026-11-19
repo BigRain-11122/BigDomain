@@ -224,6 +224,26 @@ pair of events already on disk, so a record that stops before the newest failure
 still answers a measured count. since_ok=unmeasured beside flips=1 is therefore
 a truthful pair, not a contradiction. Neither field gates and no key was added.
 
+WINDOW BREADTH (R3005): newest_src/since_ok answer for ONE source - the latest
+failure in the window - so a window with three failing pages said nothing about
+the other two. Measured before this was written: with A repaired, B still gone
+and C still gone, the row named only C (since_ok=no) and A's yes / B's no
+appeared in none of its 22 keys. The line now also carries
+pending=<no>/<judged>: over the WHOLE window, each source judged on its OWN
+latest failure, the numerator counts sources the record shows were looked at
+afterwards and never came back (since_ok=='no'), the denominator counts sources
+where that judgement could be made at all (yes or no). An unmeasured source is
+in neither number - aggregating the verdict must not undo the R3004 split, and
+it was measured rather than assumed: a since_ok != 'yes' numerator counts a
+source whose newest failure is later than every record row as pending even
+though nobody looked after it. pending=none (not 0/0) when nothing was judged:
+zero-of-zero would read like "nothing is pending" when the truthful statement is
+"nothing was judged". It answers a THIRD question, distinct from recur= (sources
+failing on two or more distinct days - measured independent in both directions:
+recur=(0,0) with pending 1/1, and recur=(2,4) with pending 0/2). Printing one
+line per source was refused: the one-line contract is what the CLI, the arms and
+the scanner's zero-consumption premise rest on. Display only, no PASS/FLAG.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -697,6 +717,53 @@ def _record_coverage(record_path):
     return (days[0], days[-1]) if days else None
 
 
+def _pending_sources(record_path, in_window):
+    """(sources confirmed not back, sources judged) over the whole window.
+
+    WHY (R3005): newest_src/since_ok answer for ONE source - the latest failure
+    in the window - so a window with three failing pages said nothing about the
+    other two. Measured before this existed: with A repaired, B still gone and C
+    still gone, the row named only C (since_ok=no) and A's yes / B's no appeared
+    in none of its 22 keys.
+
+    WHAT IT IS NOT: this is not "how many sources are broken". The numerator
+    counts only sources whose OWN latest failure the record shows was looked at
+    afterwards and never succeeded again (since_ok == 'no'); the denominator
+    counts only sources where that judgement could be made at all (yes or no).
+    An unmeasured source is in NEITHER number - the R3004 split is a property of
+    the verdict, and aggregating it away would revive exactly the conflation
+    that round removed: measured, one source whose newest failure is later than
+    every record row would be counted as 'pending' by a since_ok != 'yes' rule
+    even though nobody ever looked after it.
+
+    Each source is judged on ITS OWN latest failure in the window, not on the
+    first one - a source that was repaired yesterday and failed again today is
+    today's question, and judging it on the earlier stamp would report a repair
+    that the record does not support.
+
+    The caller turns (0, 0) into None: "zero of zero judged" would read like
+    "nothing is pending" when the honest statement is "nothing was judged".
+    """
+    latest = {}
+    for row in in_window or ():
+        src = row.get('source_url')
+        stamp = str(row.get('failed_at') or '')
+        if not src or not stamp:
+            continue
+        if src not in latest or stamp > latest[src]:
+            latest[src] = stamp
+    pending = 0
+    judged = 0
+    for src, stamp in latest.items():
+        verdict = _since_ok(record_path, src, stamp)
+        if verdict == 'no':
+            pending += 1
+            judged += 1
+        elif verdict == 'yes':
+            judged += 1
+    return (pending, judged)
+
+
 def summarize_failure_trend(history_path, failures_path, day, window_days=7,
                             record_path=None):
     """One line for "is today worse than the days before, and is it the same
@@ -867,6 +934,17 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # crawl record itself reaches, so since_ok=no standing on one day of record
     # cannot pass for a record that looked after the failure. A different file
     # from cov/wcov (which describe the failure-day history).
+    # R3005 BREADTH OF THE REPAIR QUESTION: newest_src/since_ok answer for the
+    # ONE source that failed last, so a window with several failing pages left
+    # the others as counts without a verdict. pending=<n>/<judged> counts, over
+    # the whole window and each source's OWN latest failure, how many were shown
+    # looked-at and never back over how many could be judged at all. None (not
+    # 0/0) when nothing was judged: zero-of-zero would read as "nothing to fix".
+    pending = None
+    if evidence == 'side' and in_window:
+        got = _pending_sources(record_path, in_window)
+        if got[1]:
+            pending = got
     rcov = _record_coverage(record_path)
     return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
@@ -875,7 +953,8 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'recur': recur, 'cov': cov, 'wcov': wcov,
             'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
             'newest_src': newest_src, 'since_ok': since_ok,
-            'flips': flips, 'rcov': rcov, 'window_days': window_days}
+            'flips': flips, 'pending': pending, 'rcov': rcov,
+            'window_days': window_days}
 
 
 def crawled_today(repo_root, day):
@@ -1095,17 +1174,19 @@ def main(argv=None):
                     else '%d/%d' % trend['wcov'])
         rcov_txt = ('none' if trend['rcov'] is None
                     else '%s..%s' % trend['rcov'])
+        pending_txt = ('none' if trend['pending'] is None
+                       else '%d/%d' % trend['pending'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
               'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
               'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
-              'rcov=%s'
+              'pending=%s rcov=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
                  recur_txt, cov_txt, wcov_txt,
                  trend['newest_src'] or 'none', trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
-                 rcov_txt))
+                 pending_txt, rcov_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)
