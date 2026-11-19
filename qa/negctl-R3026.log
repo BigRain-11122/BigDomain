@@ -1,0 +1,7 @@
+=== R3026 NEGATIVE CONTROL (outside the suite) ===
+NEGCTL wallclock-head CAUGHT honest=[('2001-03-05', 2)] mutant=[]
+NEGCTL row-tail-not-day-window CAUGHT honest=[('2026-11-18', 1), ('2026-11-19', 3), ('2026-11-19', 1), ('2026-11-19', 2)] mutant=[('2026-09-20', 5), ('2026-11-18', 1), ('2026-11-19', 3), ('2026-11-19', 1), ('2026-11-19', 2)]
+NEGCTL invent CAUGHT honest=0 mutant=1
+NEGCTL dedupe-same-day CAUGHT honest=[('2026-11-19', 5), ('2026-11-19', 1)] mutant=[('2026-11-19', 5)]
+NEGCTL honest-reader PASS
+NEGCTL caught=4/4

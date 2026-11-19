@@ -1,0 +1,16 @@
+=== R3026 DEMO (private worlds, display only) ===
+WORLD A-default
+  CRAWL-FAILURE-DAYS days=5 bad=0 first=2026-09-20 last=2026-11-19 dropped=none series=2026-09-20:5,2026-11-18:1,2026-11-19:3,2026-11-19:1,2026-11-19:2 bytes=535 size_gate=0.0005% gate_ref=100MB series_limit=7 series_shown=5 series_outside=1 window_rows=4
+WORLD A-window7
+  CRAWL-FAILURE-DAYS days=5 bad=0 first=2026-09-20 last=2026-11-19 dropped=none series=2026-11-18:1,2026-11-19:3,2026-11-19:1,2026-11-19:2 bytes=535 size_gate=0.0005% gate_ref=100MB series_limit=7 series_shown=4 series_outside=0 window_rows=4 series_window=7
+WORLD A-window7-limit2
+  CRAWL-FAILURE-DAYS days=5 bad=0 first=2026-09-20 last=2026-11-19 dropped=none series=2026-11-19:1,2026-11-19:2 bytes=535 size_gate=0.0005% gate_ref=100MB series_limit=2 series_shown=2 series_outside=0 window_rows=4 series_window=7
+WORLD A-window60
+  CRAWL-FAILURE-DAYS days=5 bad=0 first=2026-09-20 last=2026-11-19 dropped=none series=2026-11-18:1,2026-11-19:3,2026-11-19:1,2026-11-19:2 bytes=535 size_gate=0.0005% gate_ref=100MB series_limit=7 series_shown=4 series_outside=0 window_rows=4 series_window=60
+WORLD B-window7
+  CRAWL-FAILURE-DAYS days=3 bad=0 first=2026-11-17 last=2026-11-19 dropped=none series=2026-11-17:0,2026-11-18:1,2026-11-19:2 bytes=321 size_gate=0.0003% gate_ref=100MB series_limit=7 series_shown=3 series_outside=0 window_rows=3 series_window=7
+WORLD C-2001-window2
+  CRAWL-FAILURE-DAYS days=3 bad=0 first=2001-01-01 last=2001-03-05 dropped=none series=2001-03-05:2 bytes=321 size_gate=0.0003% gate_ref=100MB series_limit=7 series_shown=1 series_outside=0 window_rows=1 series_window=2
+WORLD D-empty-window7
+  CRAWL-FAILURE-DAYS days=0 bad=0 first=none last=none dropped=none series=none bytes=0 size_gate=0.0000% gate_ref=100MB series_limit=7 series_shown=0 series_outside=0 window_rows=0 series_window=7
+=== DEMO DONE worlds=7 cleaned ===

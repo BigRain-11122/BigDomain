@@ -1,0 +1,20 @@
+=== R3026 PROBE (read-only) ===
+P1a flags=16 failure_flags=['--failures', '--failure-days', '--failure-trend', '--failure-days-bad', '--failure-days-dropped', '--failure-days-dropped-window', '--snapshot-failures', '--days']
+P1b series_days_hits src=0 test=0
+P1c trend_builds_span=True span_line=True
+P1d trend rc=0 keys=['bad', 'cov', 'days', 'delta', 'evidence', 'fcov', 'flips', 'kind', 'mean', 'newest_src', 'pending', 'pending_age_d'] carries_pairs=True
+P2a head=2026-11-19 usable=True threshold=2026-11-13 inside=4
+P2b default series=2026-09-20:5,2026-11-18:1,2026-11-19:3,2026-11-19:1,2026-11-19:2 outside=1 window_rows=4 shown=5
+P2c window7_limit7 shown=4 outside=0 window_rows=4
+P2d window7_limit2 shown=2 outside=0 window_rows=4 tail=[('2026-11-19', 1), ('2026-11-19', 2)]
+P2e old_day_inside_tail=True old_day_in_window=False
+P2f window60 inside=4 includes_old=False
+P2g empty rc=0 series=none shown=0 window_rows=0 days=0
+P2h 2001 head=2001-03-05 threshold=2001-03-04 inside=1
+P3a exact_suffix_arms=1
+P3b exact_days_header_arms=4
+P3c args_days_readers_in_main=9
+P3d series_window_hits src=3 test=2
+P3e days2 days=5 shown=2 window_rows=4 series=2026-11-19:1,2026-11-19:2
+P3f series_window_counts_contract=True
+=== PROBE DONE worlds=4 cleaned ===

@@ -1012,7 +1012,7 @@ def snapshot_failure_day(repo_root, day, window_days=7):
     return row
 
 
-def summarize_failure_days(path, limit=7, read=None):
+def summarize_failure_days(path, limit=7, read=None, series_days=None):
     """Readable series over the daily history; zero rows is an honest answer.
 
     R3000: the series answers "which days were how bad" and the retention
@@ -1042,14 +1042,30 @@ def summarize_failure_days(path, limit=7, read=None):
     R3025: `read` lets a caller that has already read the file hand the same
     `(rows, bad)` in, so the header and the series window counts cannot be
     computed from two reads that might see different files.
+
+    R3026: `series_days` selects the printed pairs by a DAY window instead of a
+    row tail, through series_days_window(). The row limit still caps how many
+    pairs print - two separate quantities, two separate words - and the
+    selection travels as `series_counts` so the header cannot recount it
+    differently. Left None (the default), the tail law is untouched.
     """
     rows, bad = read_failure_days(path) if read is None else read
-    tail = rows[-max(1, int(limit)):]
+    counts = None
+    if series_days is None:
+        tail = rows[-max(1, int(limit)):]
+        series = [(r.get('day'), r.get('on_day')) for r in tail]
+    else:
+        selection = series_days_window(rows, limit, series_days)
+        series = selection['rows']
+        counts = {key: selection[key] for key in
+                  ('limit', 'shown', 'outside', 'window_rows')}
     out = {'days': len(rows), 'bad': bad,
            'first': (rows[0].get('day') if rows else None),
            'last': (rows[-1].get('day') if rows else None),
            'dropped': None,
-           'series': [(r.get('day'), r.get('on_day')) for r in tail]}
+           'series': series}
+    if counts is not None:
+        out['series_counts'] = counts
     if rows:
         last_dropped = rows[-1].get('dropped')
         # type() not isinstance(): a JSON true would pass isinstance(x, int).
@@ -1096,6 +1112,46 @@ def series_window_counts(rows, limit=7, window_days=7):
                 window_rows += 1
     return {'limit': size, 'shown': shown, 'outside': outside,
             'window_rows': window_rows}
+
+
+def series_days_window(rows, limit=7, window_days=7):
+    """{rows, limit, shown, outside, window_rows, window} - series by DAY (R3026).
+
+    WHY: the DAYS series was a ROW tail, so "how bad was each of the last seven
+    days" had no answer a person could ask for; counting the tail only works
+    when every day has exactly one row (measured both failure directions in
+    qa/probe-R3025.log). R3025 named the two quantities on the line; this
+    function lets the caller CHOOSE the day window for the pairs themselves.
+
+    TWO QUANTITIES, NOT ONE: window_days picks which rows qualify, `limit` caps
+    how many of them print (the same --days limit the tail has always used).
+    The order of operations is fixed - window first, then the tail of that
+    selection - so `window_rows` counts the whole window while `shown` counts
+    what printed, and `outside` is 0 by construction: every printed row is
+    inside the window now, which is what makes outside=0 the marker that the
+    window really applied.
+
+    head is the file's OWN newest usable row (same law as series_window_counts),
+    so a 2001 history windows against itself and no clock is read. Rows keep
+    file order and duplicates. When the head day is unusable (empty or absent
+    history) nothing is measured: rows is empty and the three counts are 0
+    rather than an invented window.
+
+    DISPLAY ONLY: writes nothing, gates nothing.
+    """
+    size = max(1, int(limit))
+    width = max(1, int(window_days))
+    head_day, usable, threshold = _window_start(
+        (str(rows[-1].get('day') or '') if rows else ''), width)
+    if not usable:
+        return {'rows': [], 'limit': size, 'shown': 0, 'outside': 0,
+                'window_rows': 0, 'window': width}
+    inside = [r for r in rows
+              if threshold <= str(r.get('day') or '')[:10] <= head_day]
+    tail = inside[-size:]
+    return {'rows': [(r.get('day'), r.get('on_day')) for r in tail],
+            'limit': size, 'shown': len(tail), 'outside': 0,
+            'window_rows': len(inside), 'window': width}
 
 
 def list_failure_days_dropped(path, window_days=None):
@@ -2205,6 +2261,12 @@ def main(argv=None):
                          '(same-day rows are rewritten, never duplicated)')
     ap.add_argument('--days', type=int, default=7,
                     help='window length in days for the failure faces (default 7)')
+    ap.add_argument('--series-days', dest='series_days', type=int, default=None,
+                    help='print only the daily-history pairs inside the last N '
+                         'days, measured back from the file\'s own newest row; '
+                         '--days still caps how many pairs print and the header '
+                         'gains series_window=N (read-only display; gates '
+                         'nothing)')
     args = ap.parse_args(argv)
     if args.failures:
         stamp = datetime.datetime.now().astimezone().isoformat(
@@ -2223,20 +2285,26 @@ def main(argv=None):
     if args.failure_days:
         day_read = read_failure_days(failure_day_path(args.root))
         series = summarize_failure_days(failure_day_path(args.root), args.days,
-                                        day_read)
+                                        day_read, args.series_days)
         pairs = ','.join('%s:%s' % (d, n) for d, n in series['series'])
-        counts = series_window_counts(day_read[0], args.days, args.days)
+        if args.series_days is None:
+            # Byte-identical to the shape AC-RUN42 arm 2 pins by equality.
+            counts = series_window_counts(day_read[0], args.days, args.days)
+            tail_markers = ''
+        else:
+            counts = series['series_counts']
+            tail_markers = ' series_window=%d' % args.series_days
         print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
               'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB '
               'series_limit=%d series_shown=%d series_outside=%d '
-              'window_rows=%d'
+              'window_rows=%d%s'
               % (series['days'], series['bad'], series['first'] or 'none',
                  series['last'] or 'none',
                  'none' if series['dropped'] is None else series['dropped'],
                  pairs or 'none', series['bytes'],
                  series['size_gate'], series['gate_ref_mb'],
                  counts['limit'], counts['shown'], counts['outside'],
-                 counts['window_rows']))
+                 counts['window_rows'], tail_markers))
         return 0
     if args.failure_days_dropped:
         listing = list_failure_days_dropped(failure_day_path(args.root),

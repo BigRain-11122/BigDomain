@@ -4713,8 +4713,11 @@ SUITES = [
     # R3025 added AC-RUN42: --days is a ROW limit on this face while the same
     # number is a DAY window elsewhere, so the line now prints series_limit=,
     # series_shown=, series_outside= and window_rows= (41 -> 42, the same row).
+    # R3026 added AC-RUN43: the pairs themselves can be asked for by day window
+    # through --series-days, with the row limit still capping how many print
+    # (42 -> 43, the same row).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 42),
+     os.path.join("..", "os", "test_crawl_runner.py"), 43),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

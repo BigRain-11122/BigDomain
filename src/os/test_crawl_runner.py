@@ -272,6 +272,17 @@ truncated=<0|1>, because a shortened list with no token would read exactly like
 a file that never had those days. `days=` keeps its own meaning (usable rows in
 the file) and `shown=` is what this run printed; a same day twice stays twice.
 
+AC-RUN43 (R3026) grades the DAY WINDOW the series itself lacked. Measured before
+the change (qa/probe-R3026.log): the tail printed a day sixty days outside the
+window while saying nothing, one suite arm pins the header's tail by exact
+equality, and --days carries nine readers in main - so the window arrives as its
+own opt-in flag (`--series-days N`) and the default face is byte-identical.
+Two quantities stay two words: the window picks which rows qualify, the row
+limit (--days) caps how many print, and the header now carries
+`series_window=N` beside the four counts R3025 added. The head day is the file's
+OWN newest row, so a 2001 history windows against itself (arm 6), and the three
+counts are 0 rather than an invented window when there is no history (arm 5).
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -4266,6 +4277,141 @@ def main():
        and 'crawl-failure' not in scan_src18,
        'the header writes no byte, prints no verdict, and the scanner still '
        'reads none of the daily history')
+
+    # ===== AC-RUN43 (R3026): the series can be asked for by DAY WINDOW =====
+    # AC-RUN43 was pinned in src/os/backlog.md BEFORE series_days_window
+    # existed (in-window pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3026.log): world A holds five rows over three days, the
+    # default tail prints all five with one of them sixty days outside the
+    # window, --days carries nine readers in main, and one suite arm pins the
+    # header's tail by exact equality - so the window arrives as its own
+    # opt-in flag and the default face stays byte-identical.
+    def days43(root, extra):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--failure-days'] + list(extra) + ['--root', root])
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    r43 = world()
+    roots.append(r43)
+    p43 = hist37(r43)
+    put_days(p43, [plain_day('2026-09-20', 5), plain_day('2026-11-18', 1),
+                   plain_day('2026-11-19', 3), plain_day('2026-11-19', 1),
+                   plain_day('2026-11-19', 2)])
+
+    # arm 1: the window selects the pairs - the old day is simply not printed
+    rc43, lines43 = days43(r43, ['--series-days', '7'])
+    t43 = toks42(lines43[0]) if lines43 else {}
+    ok('AC-RUN43', rc43 == 0
+       and t43.get('series_window') == '7'
+       and t43.get('series_shown') == '4'
+       and t43.get('series_outside') == '0'
+       and t43.get('window_rows') == '4'
+       and t43.get('series')
+       == '2026-11-18:1,2026-11-19:3,2026-11-19:1,2026-11-19:2'
+       and '2026-09-20' not in t43.get('series', ''),
+       'a seven-day window prints the four rows inside it and drops the day '
+       'sixty days back, with outside=0 the marker that the window applied')
+
+    # arm 2: the default face is byte-identical - the marker is opt-in only
+    s43 = RUN.summarize_failure_days(p43, 7, RUN.read_failure_days(p43))
+    pairs43 = ','.join('%s:%s' % (d, n) for d, n in s43['series'])
+    old_prefix43 = ('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
+                    'dropped=%s series=%s bytes=%d size_gate=%.4f%% '
+                    'gate_ref=%dMB'
+                    % (s43['days'], s43['bad'], s43['first'] or 'none',
+                       s43['last'] or 'none',
+                       'none' if s43['dropped'] is None else s43['dropped'],
+                       pairs43 or 'none', s43['bytes'], s43['size_gate'],
+                       s43['gate_ref_mb']))
+    rc43b, lines43b = days43(r43, [])
+    ok('AC-RUN43', rc43b == 0 and lines43b
+       and lines43b[0].startswith(old_prefix43)
+       and lines43b[0][len(old_prefix43):]
+       == ' series_limit=7 series_shown=5 series_outside=1 window_rows=4',
+       'without the flag the header is the same line as before, marker and '
+       'all - the new token only appears when it is asked for')
+
+    # arm 3: the row limit still caps inside the window
+    rc43c, lines43c = days43(r43, ['--series-days', '7', '--days', '2'])
+    t43c = toks42(lines43c[0]) if lines43c else {}
+    ok('AC-RUN43', rc43c == 0
+       and t43c.get('series_shown') == '2'
+       and t43c.get('window_rows') == '4'
+       and t43c.get('series_outside') == '0'
+       and t43c.get('days') == '5'
+       and t43c.get('series') == '2026-11-19:1,2026-11-19:2',
+       'the row limit still caps how many pairs print while window_rows counts '
+       'the whole window - two quantities, two words, both visible')
+
+    # arm 4: the window boundary is named, not rounded
+    rc43d, lines43d = days43(r43, ['--series-days', '60'])
+    t43d = toks42(lines43d[0]) if lines43d else {}
+    ok('AC-RUN43', rc43d == 0
+       and t43d.get('series_window') == '60'
+       and t43d.get('series_shown') == '4'
+       and t43d.get('window_rows') == '4'
+       and '2026-09-20' not in t43d.get('series', ''),
+       'a sixty-day window opens at 2026-09-21 from a 2026-11-19 head, so the '
+       '2026-09-20 row stays out by exactly one day - the boundary is named '
+       'rather than rounded')
+
+    # arm 5: no history answers zeros and invents no window
+    r43e = world()
+    roots.append(r43e)
+    os.makedirs(os.path.join(r43e, 'qa'), exist_ok=True)
+    rc43e, lines43e = days43(r43e, ['--series-days', '7'])
+    t43e = toks42(lines43e[0]) if lines43e else {}
+    ok('AC-RUN43', rc43e == 0 and t43e.get('series') == 'none'
+       and t43e.get('series_shown') == '0'
+       and t43e.get('series_outside') == '0'
+       and t43e.get('window_rows') == '0'
+       and t43e.get('series_window') == '7'
+       and RUN.series_days_window([], 7, 7) == {
+           'rows': [], 'limit': 7, 'shown': 0, 'outside': 0,
+           'window_rows': 0, 'window': 7},
+       'an absent history answers series=none and four zeros without '
+       'inventing a window and without raising')
+
+    # arm 6: no clock - a 2001 history windows back from its own last row
+    r43f = world()
+    roots.append(r43f)
+    p43f = hist37(r43f)
+    put_days(p43f, [plain_day('2001-01-01', 0), plain_day('2001-03-01', 1),
+                    plain_day('2001-03-05', 2)])
+    rc43f, lines43f = days43(r43f, ['--series-days', '2'])
+    t43f = toks42(lines43f[0]) if lines43f else {}
+    ok('AC-RUN43', rc43f == 0
+       and t43f.get('series_window') == '2'
+       and t43f.get('series_shown') == '1'
+       and t43f.get('window_rows') == '1'
+       and t43f.get('series') == '2001-03-05:2',
+       'a two-day window over a 2001 history opens at 2001-03-04 from the '
+       'file own last row, so no wall clock is read')
+
+    # arm 7: the pure selection and the header speak from the same numbers
+    sel43 = RUN.series_days_window(RUN.read_failure_days(p43)[0], 7, 7)
+    ok('AC-RUN43', sel43['rows']
+       == [('2026-11-18', 1), ('2026-11-19', 3), ('2026-11-19', 1),
+           ('2026-11-19', 2)]
+       and sel43['limit'] == 7 and sel43['shown'] == 4
+       and sel43['outside'] == 0 and sel43['window_rows'] == 4
+       and sel43['window'] == 7
+       and t43.get('days') == '5' and t43.get('series_shown') == '4',
+       'the pure selection reports the same four counts the header prints, and '
+       'days= still means usable rows in the file rather than printed pairs')
+
+    # arm 8: pure display - no byte written, no verdict, marker exactly once
+    before43 = tree_bytes(r43)
+    rc43g, lines43g = days43(r43, ['--series-days', '7'])
+    after43 = tree_bytes(r43)
+    text43 = '\n'.join(lines43g)
+    ok('AC-RUN43', rc43g == 0 and before43 == after43
+       and 'PASS' not in text43 and 'FLAG' not in text43
+       and 'verdict' not in text43
+       and lines43g[0].count('series_window=') == 1,
+       'the window flag writes no byte, prints no verdict, and names itself '
+       'exactly once on the line')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
