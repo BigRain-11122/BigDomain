@@ -120,6 +120,19 @@ file was measured and refused as an alternative (that file carries a urls=
 COUNT and no per-source identity or age). Eight existing key-set arms were
 widened by this key (the seven above plus AC-RUN25's own), disclosed as criteria
 moving with the field.
+AC-RUN27 (R3010) grades the OUTSIDE of the window: the window decides who is
+counted, so a source whose own latest failure fell before the window start left
+every key - measured, a still-broken old source and a repaired one differed only
+through rcov, and a side channel trimmed to the window read identical to a
+healthy world on all 26 keys. The row now also carries pending_old=<n>/<judged>
+over sources whose own latest failure is strictly before the window start: a
+third count with its own denominator, so pending= keeps meaning what sources=
+names (rewriting pending= to count both was measured and refused - it would
+report more judged sources than that population contains). judged==0 answers
+None, never 0/0: a trimmed side channel, an empty outside face and a record that
+stops before the old failure all mean "nothing was looked at out there". Nine
+existing key-set arms were widened by this key (the eight above plus AC-RUN26's
+own), disclosed as criteria moving with the field.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -1129,7 +1142,7 @@ def main():
        and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok', 'flips',
                                                'pending', 'pending_src',
                                                'pending_age_d',
-                                               'pending_age_min_d', 'pending_age_med_d', 'rcov'])
+                                               'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'rcov'])
        and tA5['evidence'] == 'history' and tA5['today'] == 0,
        'a pruned side channel answers none/unmeasured and leaves every existing field where it was')
 
@@ -1248,7 +1261,7 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tB2.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'pending_age_med_d', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'rcov']),
        'one display row carries the stability count, adds exactly one key, and stays outside the scanner')
 
     # AC-RUN20 (R3003): the trend answered "was it seen working afterwards" but
@@ -1356,7 +1369,7 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tC1.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'pending_age_med_d', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'rcov']),
        'the row names the record span, or none, and adds exactly the one key it names')
 
     # AC-RUN21 (R3004): the verdict answered 'no' without ever having looked.
@@ -1432,7 +1445,7 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tD3.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'pending_age_med_d', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'rcov']),
        'a real repair still reads yes, the CLI carries all three readings, and R3004 adds NO key - the row shape is unchanged')
 
     # AC-RUN22 (R3005): newest_src/since_ok answer for ONE source - the latest
@@ -1548,7 +1561,7 @@ def main():
        and 'verdict' not in lineE7 and 'crawl-failure' not in scan_src18
        and set(tE1.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'pending_age_med_d', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'rcov']),
        'a multi-source window still prints ONE line carrying pending=, adds exactly one key, and stays outside the scanner - per-source lines were refused on purpose')
 
     # AC-RUN23 (R3006): pending=<n>/<judged> answers HOW MANY sources are still
@@ -1649,7 +1662,7 @@ def main():
     judged6 = tG6['pending'][1] if tG6['pending'] else 0
     ok('AC-RUN23', set(tG6.keys()) == baseB | set(['flips', 'pending',
                                                    'pending_src', 'pending_age_d',
-                                                   'pending_age_min_d', 'pending_age_med_d', 'rcov'])
+                                                   'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'rcov'])
        and 'unjudged' not in tG6
        and tG6['sources'] - judged6 == 1,
        'the row grows by exactly one name and carries no unjudged field - the unjudged count is measurable as sources minus the denominator, so a field for it would only restate two keys')
@@ -1747,7 +1760,7 @@ def main():
                                                    'pending_age_d',
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
-                                                   'rcov'])
+                                                   'pending_old', 'rcov'])
        and 'pending_others' not in tH1 and 'unjudged' not in tH1,
        'the row grows by exactly one age key, and neither refused field (pending_others arithmetic, unjudged restatement) exists')
 
@@ -1845,7 +1858,7 @@ def main():
                                                    'pending_age_d',
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
-                                                   'rcov'])
+                                                   'pending_old', 'rcov'])
        and 'pending_age_max_d' not in tI1
        and 'pending_others' not in tI1 and 'unjudged' not in tI1,
        'the row grows by exactly one age key, and the refused max field (a restatement of pending_age_d, measured) plus the two older refusals never exist')
@@ -1963,7 +1976,7 @@ def main():
                                                    'pending_age_d',
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
-                                                   'rcov'])
+                                                   'pending_old', 'rcov'])
        and 'pending_age_max_d' not in tJ1
        and 'pending_hist' not in tJ1
        and 'pending_others' not in tJ1 and 'unjudged' not in tJ1,
@@ -1988,6 +2001,103 @@ def main():
        and 'PASS' not in lineJ7 and 'FLAG' not in lineJ7
        and 'verdict' not in lineJ7 and 'crawl-failure' not in scan_src18,
        'one line carries the middle (a number, or none when nothing is pending), and the scanner still reads none of it')
+
+    # AC-RUN27 (R3010): the window decides who is counted, so a source whose
+    # OWN latest failure fell before the window start left every key. Measured
+    # before this was written (qa/probe-R3010.log): still-broken and repaired
+    # differed only through rcov, and a side channel trimmed to the window read
+    # identical to a healthy world on all 26 keys. pending_old=<n>/<judged>
+    # counts only that OUTSIDE population, with its own denominator, so
+    # pending= keeps meaning what sources= names; judged==0 answers None so a
+    # trimmed side channel cannot read like a clean bill of health.
+    SRC27A = 'https://a.example/page'
+    SRC27B = 'https://b.example/page'
+    SRC27K = 'https://keep.example/page'
+    OLD27 = '2026-11-10T10:00:00+08:00'   # 9 days before TODAY: outside a 7-day window
+    NEW27 = '2026-11-19T08:00:00+08:00'
+    KEEP27 = '2026-11-19T09:00:00+08:00'
+
+    def trend27(record_rows, failure_rows, window=7):
+        root = world()
+        roots.append(root)
+        for url, when in record_rows:
+            CR.append_record(CR.record_path(root), url, when, 'no-drift')
+        for url, when, err in failure_rows:
+            RUN.append_failure(RUN.failure_path(root), url, when, err)
+        write_days(RUN.failure_day_path(root), [])
+        return root, RUN.summarize_failure_trend(
+            RUN.failure_day_path(root), RUN.failure_path(root), TODAY,
+            window_days=window, record_path=CR.record_path(root))
+
+    # arm 1: a still-broken source OUTSIDE the window is counted, while the
+    # in-window fraction keeps its own population
+    rK1, tK1 = trend27(
+        [(SRC27K, KEEP27), (SRC27B, KEEP27)],
+        [(SRC27A, OLD27, 'TimeoutError: t'), (SRC27B, NEW27, 'TimeoutError: t')])
+    ok('AC-RUN27', tK1['pending_old'] == (1, 1)
+       and tK1['pending'] == (0, 1) and tK1['sources'] == 1,
+       'a source broken nine days ago and never fetched again is counted outside the window, and pending= still describes only the in-window population')
+
+    # arm 2: the same history with that source repaired -> 0 is a MEASURED zero
+    rK2, tK2 = trend27(
+        [(SRC27K, KEEP27), (SRC27B, KEEP27), (SRC27A, '2026-11-11T09:00:00+08:00')],
+        [(SRC27A, OLD27, 'TimeoutError: t'), (SRC27B, NEW27, 'TimeoutError: t')])
+    ok('AC-RUN27', tK2['pending_old'] == (0, 1),
+       'a repaired old source reads 0 of 1 judged - a measured zero, not None')
+
+    # arm 3: side channel trimmed to the window -> nothing was looked at out
+    # there, which must answer None rather than 0
+    rK3, tK3 = trend27(
+        [(SRC27K, KEEP27), (SRC27B, KEEP27)],
+        [(SRC27B, NEW27, 'TimeoutError: t')])
+    ok('AC-RUN27', tK3['pending_old'] is None,
+       'a side channel holding nothing outside the window answers None, so deleting the evidence cannot read like a repair')
+
+    # arm 4: the record stops before the old failure -> unmeasured, and the
+    # R3004 split is not aggregated back by this third count
+    rK4, tK4 = trend27(
+        [(SRC27K, '2026-11-10T09:00:00+08:00')],
+        [(SRC27A, OLD27, 'TimeoutError: t'), (SRC27B, NEW27, 'TimeoutError: t')])
+    ok('AC-RUN27', tK4['pending_old'] is None,
+       'an old failure nobody looked after is unmeasured, never pending, so it is in neither number')
+
+    # arm 5: the window length is a parameter, not a constant - at 14 days the
+    # same source is back INSIDE and the outside face is empty
+    rK5, tK5 = trend27(
+        [(SRC27K, KEEP27), (SRC27B, KEEP27)],
+        [(SRC27A, OLD27, 'TimeoutError: t'), (SRC27B, NEW27, 'TimeoutError: t')],
+        window=14)
+    ok('AC-RUN27', tK5['pending'] == (1, 2) and tK5['pending_old'] is None,
+       'with a 14-day window the same source is in-window (pending 1/2) and the outside count is None - the two fractions never overlap')
+
+    # arm 6: exactly one new key, and no per-source face for the outside set
+    ok('AC-RUN27', set(tK1.keys()) == baseB | set(['flips', 'pending',
+                                                   'pending_src',
+                                                   'pending_age_d',
+                                                   'pending_age_min_d',
+                                                   'pending_age_med_d',
+                                                   'pending_old', 'rcov'])
+       and 'pending_old_src' not in tK1 and 'pending_old_age_d' not in tK1,
+       'the row grows by exactly one count key, and the refused per-source face (one line per source) never exists')
+
+    # arm 7: the one-line contract and the scanner's zero-consumption premise
+    bufK7 = io.StringIO()
+    with contextlib.redirect_stdout(bufK7):
+        rcK7 = RUN.main(['--failure-trend', '--root', rK1])
+    linesK7 = [n for n in bufK7.getvalue().splitlines() if n.strip()]
+    lineK7 = linesK7[0] if linesK7 else ''
+    bufK7b = io.StringIO()
+    with contextlib.redirect_stdout(bufK7b):
+        rcK7b = RUN.main(['--failure-trend', '--root', rK3])
+    linesK7b = [n for n in bufK7b.getvalue().splitlines() if n.strip()]
+    lineK7b = linesK7b[0] if linesK7b else ''
+    ok('AC-RUN27', rcK7 == 0 and len(linesK7) == 1
+       and 'pending_old=1/1' in lineK7 and 'pending=0/1' in lineK7
+       and rcK7b == 0 and len(linesK7b) == 1
+       and 'pending_old=none' in lineK7b
+       and 'PASS' not in lineK7 and 'FLAG' not in lineK7
+       and 'verdict' not in lineK7 and 'crawl-failure' not in scan_src18,
+       'one line carries pending_old= (a fraction, or none when nothing was judged), and the scanner still reads none of it')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

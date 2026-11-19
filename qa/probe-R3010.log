@@ -1,0 +1,17 @@
+P0 row_keys=26
+P0 keys=bad,cov,days,delta,evidence,flips,in_window,kind,kind_count,mean,newest_src,pending,pending_age_d,pending_age_med_d,pending_age_min_d,pending_src,prev,rcov,recur,recurring,since_ok,sources,today,wcov,window_days,worst
+P1 side_keeps_old=True total_rows=2 bad=0 oldest=2026-11-10
+P2 verdict_old=no verdict_new=yes
+P3 w1_pending=(0, 1) w1_sources=1 w1_pending_src=None w1_age=None
+P3b w2_pending=(0, 1) w2_sources=1 w2_pending_src=None w2_age=None
+P4 broken_vs_repaired_diff_keys=['rcov']
+P4b broken_vs_trimmed_diff_keys=EMPTY
+P4c trimmed_vs_repaired_diff_keys=['rcov']
+P5 window14_pending=(1, 2) sources=2 age=9 src=https://a.example/page
+P6 unmeasured_old_verdict=unmeasured w4_pending=None w4_sources=1
+P7 distinct_old_sources=1
+P8 w1_broken proto_old=(1, 1)
+P8 w2_repaired proto_old=(0, 1)
+P8 w3_trimmed proto_old=(0, 0)
+P8 w4_unmeasured proto_old=(0, 0)
+P8 w1_window14 proto_old=(0, 0)

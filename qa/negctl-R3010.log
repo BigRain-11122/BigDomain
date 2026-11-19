@@ -1,0 +1,11 @@
+NEGCTL-R3010 suite-external, private worlds, no network
+  | OK   honest broken got=(1, 1) want=(1, 1)
+  | OK   honest repaired got=(0, 1) want=(0, 1)
+  | OK   honest trimmed got=None want=None
+  | OK   honest unmeasured got=None want=None
+  | CAUGHT M1 no-verdict got=(1, 1)
+  | CAUGHT M2 zero-for-empty got=(0, 0)
+  | CAUGHT M3 overlaps-inside got=(1, 2)
+  | CAUGHT M4 raises got='raised'
+  | CAUGHT M4 raise-on-missing (mutant raised, honest answers None)
+NEGCTL-R3010 PASS (0 problems)

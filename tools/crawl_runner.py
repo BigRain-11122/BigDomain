@@ -316,6 +316,26 @@ what any of these can say - with window_days=7 no age exceeds 6 and a failure
 older than the window is not pending at all (measured). Display only, no
 PASS/FLAG.
 
+OUTSIDE THE WINDOW (R3010): the window decides who is counted, so a source whose
+OWN latest failure fell before the window start left the row entirely - measured,
+the same side channel read identical on all 26 keys whether that source was still
+broken or had been repaired (only rcov moved, because the record gained a row),
+and a side channel trimmed to the window read identical to a healthy world on
+every key. "Still hanging" and "fixed long ago" must not be the same row. The
+row now also carries pending_old=<n>/<judged>: over sources whose OWN latest
+failure is STRICTLY before the window start, the numerator counts those the
+record shows were looked at afterwards and never came back (since_ok=='no'), the
+denominator counts those where that judgement could be made (yes or no). The two
+fractions do not overlap: pending= covers the population INSIDE the window
+(whose denominator is sources=), pending_old= covers the population outside it,
+each with its own denominator. Rewriting pending= to count both was measured and
+refused: the row would then report more judged sources than the sources= it
+names in the same breath. judged==0 reads none - never 0/0 - because a side
+channel trimmed to the window, a side channel that never recorded anything
+outside it, and a record that stops before the old failure all mean "nothing was
+looked at out there", not "nothing is pending out there". Display only,
+no PASS/FLAG.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -913,6 +933,61 @@ def _pending_sources(record_path, in_window):
             waiting[(len(waiting) - 1) // 2][0])
 
 
+def _pending_out_of_window(record_path, rows, threshold):
+    """(still gone, judged) outside the window - or None when nothing was judged.
+
+    WHY (R3010): the window decides who is counted, so a source whose OWN latest
+    failure fell before the window start left the row entirely. Measured before
+    this existed: the same side channel read identical on all 26 keys whether
+    that source was still broken or had been repaired (only rcov moved, because
+    the record gained a row), and a side channel trimmed to the window read
+    identical to a healthy world on every key - so "an old tail is still
+    hanging" and "it was fixed long ago" were the same row, and deleting the
+    evidence looked exactly like a repair.
+
+    WHAT IT IS NOT: not a widening of pending=. That fraction counts sources in
+    the window and its denominator is the sources= the same line names; folding
+    the old ones in would print more judged sources than that population
+    contains (measured: one in-window source, one judged outside, so 2 judged
+    over sources=1). Not a per-source face either: naming or aging an old
+    source needs one line per source, which the one-line contract refuses.
+
+    Same split as pending=: only since_ok=='no' reaches the numerator, so an
+    unmeasured source is in neither number (R3004's split is not aggregated
+    away). `threshold` is the window's first day, compared on the literal first
+    ten characters of the stamp; a source whose latest is inside the window is
+    skipped because pending= already owns it.
+
+    None - never (0, 0) - when nothing outside the window could be judged: a
+    side channel trimmed to the window, one that never recorded anything older,
+    or a record that stops before the old failure all mean "nothing was looked
+    at out there" rather than "nothing is pending out there".
+    """
+    latest = {}
+    for row in rows or ():
+        src = row.get('source_url')
+        stamp = str(row.get('failed_at') or '')
+        if not src or not stamp:
+            continue
+        if src not in latest or stamp > latest[src]:
+            latest[src] = stamp
+    still = 0
+    judged = 0
+    head = str(threshold or '')[:10]
+    for src, stamp in latest.items():
+        if str(stamp)[:10] >= head:
+            continue
+        verdict = _since_ok(record_path, src, stamp)
+        if verdict == 'no':
+            still += 1
+            judged += 1
+        elif verdict == 'yes':
+            judged += 1
+    if not judged:
+        return None
+    return (still, judged)
+
+
 def summarize_failure_trend(history_path, failures_path, day, window_days=7,
                             record_path=None):
     """One line for "is today worse than the days before, and is it the same
@@ -1120,6 +1195,14 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # and refused as an alternative: that file carries a urls= COUNT and no
     # per-source identity or age.
     pending_age_med_d = None
+    # R3010 OUTSIDE THE WINDOW: the window decides who is counted, so a source
+    # whose own latest failure fell before the window start vanished from every
+    # key - measured, still-broken and repaired differed only through rcov, and
+    # deleting the old failure row read identical to a healthy world. This third
+    # count covers only that outside population and keeps its own denominator,
+    # so pending= still means what sources= names. None (not 0/0) when nothing
+    # out there could be judged - a trimmed side channel is not a clean bill.
+    pending_old = None
     if evidence == 'side' and in_window:
         got = _pending_sources(record_path, in_window)
         if got[1]:
@@ -1131,6 +1214,8 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             pending_age_d = _day_age(day, got[3])
             pending_age_min_d = _day_age(day, got[4])
             pending_age_med_d = _day_age(day, got[5])
+    if evidence == 'side' and usable:
+        pending_old = _pending_out_of_window(record_path, frows, threshold)
     rcov = _record_coverage(record_path)
     return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
@@ -1143,6 +1228,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'pending_age_d': pending_age_d,
             'pending_age_min_d': pending_age_min_d,
             'pending_age_med_d': pending_age_med_d,
+            'pending_old': pending_old,
             'rcov': rcov, 'window_days': window_days}
 
 
@@ -1371,11 +1457,14 @@ def main(argv=None):
                        else '%d' % trend['pending_age_min_d'])
         age_med_txt = ('none' if trend['pending_age_med_d'] is None
                        else '%d' % trend['pending_age_med_d'])
+        old_txt = ('none' if trend['pending_old'] is None
+                   else '%d/%d' % trend['pending_old'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
               'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
               'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
               'pending=%s pending_src=%s pending_age_d=%s '
-              'pending_age_min_d=%s pending_age_med_d=%s rcov=%s'
+              'pending_age_min_d=%s pending_age_med_d=%s pending_old=%s '
+              'rcov=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
@@ -1383,7 +1472,7 @@ def main(argv=None):
                  trend['newest_src'] or 'none', trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
                  pending_txt, trend['pending_src'] or 'none', age_txt,
-                 age_min_txt, age_med_txt, rcov_txt))
+                 age_min_txt, age_med_txt, old_txt, rcov_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)
