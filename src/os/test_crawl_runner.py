@@ -19,6 +19,9 @@ AC-RUN11/AC-RUN12 (R2995) grade the TREND line that joins the history with the
 side channel (today / previous day / mean / delta / worst day / recurrence) and
 the launcher's flag ORDER (the snapshot must follow the write), both offline:
 nothing here writes a file outside a temp directory and no launcher is started.
+AC-RUN13 (R2996) grades the trend's EVIDENCE label (side / history / none) and
+the failure CLASS bucket it carries, so a pruned side channel cannot read like
+a source that never failed - also offline, temp directories only.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -545,6 +548,97 @@ def main():
     ok('AC-RUN12', try_at < call_at10 < spawn_at
        and all(byte < 128 for byte in loop_raw) and b'\r' not in loop_raw,
        'the ordered line stays inside the try, before the spawn, pure ASCII')
+
+    # AC-RUN13 (R2996): the trend line names its own EVIDENCE and the failure
+    # CLASS it saw. The defect being graded: after the side channel was pruned,
+    # 'recurring=0 sources=0' read exactly like a source that never failed.
+    buckets = [RUN.failure_kind(x) for x in (
+        'E_FETCH TimeoutError: slow', 'E_FETCH HTTPError: 403',
+        'E_FETCH URLError: <urlopen error>', 'E_FETCH gaierror: dns',
+        'E_FETCH ConnectionRefusedError: x', 'E_FETCH ValueError: x', '',
+        None, 'socket.timeout')]
+    ok('AC-RUN13',
+       buckets == ['timeout', 'http', 'urlerror', 'dns', 'refused', 'other',
+                   'other', 'other', 'timeout'],
+       'the class token buckets to timeout/http/urlerror/dns/refused/other')
+    root19 = world(); roots.append(root19)
+    h19 = RUN.failure_day_path(root19)
+    f19 = RUN.failure_path(root19)
+    RUN.snapshot_failure_day(root19, TODAY + 'T09:00:00+08:00')
+    RUN.append_failure(f19, 'https://d.example/4', TODAY + 'T10:00:00+08:00',
+                       'E_FETCH TimeoutError: one')
+    RUN.append_failure(f19, 'https://d.example/5', TODAY + 'T11:00:00+08:00',
+                       'E_FETCH TimeoutError: two')
+    RUN.append_failure(f19, 'https://d.example/6', TODAY + 'T12:00:00+08:00',
+                       'E_FETCH HTTPError: 403')
+    t19 = RUN.summarize_failure_trend(h19, f19, TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN13', t19['evidence'] == 'side' and t19['kind'] == 'timeout'
+       and t19['kind_count'] == 2,
+       'a side channel on disk reads evidence=side with the modal class')
+    root20 = world(); roots.append(root20)
+    h20 = RUN.failure_day_path(root20)
+    f20 = RUN.failure_path(root20)
+    RUN.append_failure(f20, 'https://e.example/7', TODAY + 'T01:00:00+08:00',
+                       'E_FETCH TimeoutError: x')
+    RUN.append_failure(f20, 'https://e.example/8', TODAY + 'T02:00:00+08:00',
+                       'E_FETCH HTTPError: 500')
+    t20 = RUN.summarize_failure_trend(h20, f20, TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN13', t20['kind'] == 'http' and t20['kind_count'] == 1,
+       'a tie breaks on the bucket name, so two readers cannot disagree')
+    root21 = world(); roots.append(root21)
+    h21 = RUN.failure_day_path(root21)
+    f21 = RUN.failure_path(root21)
+    for hour in range(5):
+        RUN.append_failure(f21, 'https://f.example/9',
+                           '2026-11-09T0%d:00:00+08:00' % hour,
+                           'E_FETCH HTTPError: old')
+    RUN.append_failure(f21, 'https://f.example/9', TODAY + 'T01:00:00+08:00',
+                       'E_FETCH TimeoutError: today')
+    t21 = RUN.summarize_failure_trend(h21, f21, TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN13', t21['kind'] == 'timeout' and t21['kind_count'] == 1,
+       'a day outside the window never sets the modal class')
+    root22 = world(); roots.append(root22)
+    h22 = RUN.failure_day_path(root22)
+    f22 = RUN.failure_path(root22)
+    os.makedirs(os.path.dirname(h22), exist_ok=True)
+    with open(h22, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(json.dumps({'day': '2026-11-18', 'on_day': 3, 'total': 3,
+                             'newest_at': '2026-11-18T05:00:00+08:00',
+                             'newest_error': 'E_FETCH TimeoutError: gone'},
+                            sort_keys=True, separators=(',', ':')) + '\n')
+    t22 = RUN.summarize_failure_trend(h22, f22, TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN13', t22['evidence'] == 'history' and t22['kind'] == 'timeout'
+       and t22['kind_count'] == 1 and t22['sources'] == 0
+       and t22['recurring'] == 0,
+       'a pruned side channel is NAMED and its zero sources stay zero')
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc22 = RUN.main(['--failure-trend', '--root', root22])
+    line22 = buf.getvalue().strip()
+    ok('AC-RUN13', rc22 == 0 and 'evidence=history' in line22
+       and 'kind=timeout:1' in line22,
+       'the printed line carries the degraded label and its one sample')
+    root23 = world(); roots.append(root23)
+    t23 = RUN.summarize_failure_trend(RUN.failure_day_path(root23),
+                                      RUN.failure_path(root23),
+                                      TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN13', t23['evidence'] == 'none' and t23['kind'] == 'none'
+       and t23['kind_count'] == 0,
+       'neither face answers none instead of raising')
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc23 = RUN.main(['--failure-trend', '--root', root23])
+    line23 = buf.getvalue().strip()
+    ok('AC-RUN13', rc23 == 0 and 'evidence=none kind=none' in line23,
+       'the CLI prints both faces on an empty world')
+    root24 = world(); roots.append(root24)
+    RUN.snapshot_failure_day(root24, TODAY + 'T09:00:00+08:00')
+    t24 = RUN.summarize_failure_trend(RUN.failure_day_path(root24),
+                                      RUN.failure_path(root24),
+                                      TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN13', t24['evidence'] == 'history' and t24['kind'] == 'none'
+       and t24['kind_count'] == 0 and t24['today'] == 0,
+       'a history that exists and records nothing is evidence, not silence')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

@@ -4653,8 +4653,11 @@ SUITES = [
     # ten-minute beat cannot append duplicates), gives it a reader, and pins the
     # launcher's --root $Project anchor. Display face only: the scanner never
     # reads it. (AC-RUN9..AC-RUN10 pre-registered in the R2994 PIN row.)
+    # R2996 adds the trend's EVIDENCE label (side / history / none) and the
+    # failure CLASS bucket, so a pruned side channel cannot read like a source
+    # that never failed. (AC-RUN13 pre-registered in the R2996 PIN row.)
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 12),
+     os.path.join("..", "os", "test_crawl_runner.py"), 13),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

@@ -67,6 +67,17 @@ before, the mean, the delta, the worst day, and how many sources recurred. The
 history row's schema is untouched on purpose - the same fact in two files is two
 places to drift - and the line gates nothing.
 
+EVIDENCE FACE (R2996): the trend counted, but it could not say WHICH file it
+counted from, so a pruned qa/crawl-failures.jsonl read exactly like a source
+that never failed (recurring=0 sources=0 both ways). The line now names its own
+evidence: evidence=side when the side channel is on disk, evidence=history when
+it is gone and only the day history's newest_error survives (ONE sample, a
+degraded read, labelled as such), evidence=none when neither face exists. It
+also carries kind=<bucket>:<n>, the most common exception CLASS in the window -
+only the class token of 'E_FETCH <ExceptionType>: <msg>' is read, never the
+message body, so this is a label and NOT a cause judgement. Ties break on the
+bucket name so two readers never disagree.
+
 BASELINE LAW: qa/crawl-baselines.json, one object keyed by url, holding digest /
 bytes / fetched_at / excerpt. It is a product file (a person can read what the
 page said last time), written atomically after the record is appended.
@@ -95,6 +106,7 @@ FAILURE_DIR = 'qa'
 FAILURE_NAME = 'crawl-failures.jsonl'
 FAILURE_DAY_DIR = 'qa'
 FAILURE_DAY_NAME = 'crawl-failure-days.jsonl'
+FAILURE_KINDS = ('timeout', 'http', 'urlerror', 'dns', 'refused', 'other')
 EXCERPT_CHARS = 240
 DEFAULT_URL = 'https://pay.weixin.qq.com/doc/v2/merchant/4011986682'
 UA = 'Mozilla/5.0 (compatible; BigDomain-Crawl/1.0)'
@@ -306,6 +318,37 @@ def summarize_failure_days(path, limit=7):
             'series': [(r.get('day'), r.get('on_day')) for r in tail]}
 
 
+def failure_kind(error):
+    """Coarse bucket for one failure's exception CLASS - a label, not a cause.
+
+    WHY (R2996): the trend could count failures but not say what KIND they
+    were, so "TimeoutError" and "HTTPError" were the same event on the line.
+    The writer's own shape is the input law - run() stores
+    'E_FETCH <ExceptionType>: <msg>' - so only the class token is read. The
+    message body is never inspected, which is what keeps this a DISPLAY label:
+    two sources failing with one class are still two unexplained failures, and
+    no reader may turn this into a verdict.
+    """
+    text = str(error or '').strip()
+    if not text:
+        return 'other'
+    head = text
+    if head.startswith('E_FETCH'):
+        head = head[len('E_FETCH'):].lstrip()
+    token = head.split(':', 1)[0].strip().lower()
+    if 'timeout' in token:
+        return 'timeout'
+    if 'http' in token:
+        return 'http'
+    if 'url' in token:
+        return 'urlerror'
+    if 'dns' in token or 'gaierror' in token:
+        return 'dns'
+    if 'refused' in token or 'connect' in token:
+        return 'refused'
+    return 'other'
+
+
 def summarize_failure_trend(history_path, failures_path, day, window_days=7):
     """One line for "is today worse than the days before, and is it the same
     page each time?" (R2995).
@@ -329,6 +372,16 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7):
     on two or more distinct days inside the window: one source failing many
     times on a single day is not a recurrence. The window is the same inclusive
     literal-day range the count summaries use.
+
+    EVIDENCE (R2996): the answer also names WHERE the recurrence/kind facts came
+    from, because 'recurring=0 sources=0' read the same whether the side channel
+    said so or was simply deleted. evidence=side (side channel on disk),
+    evidence=history (side channel gone but the day history is readable - its
+    newest_error, when it has one, is a ONE-sample kind; the live repo's own
+    shape is a history that exists and records nothing, which is evidence that
+    nothing failed rather than no evidence), evidence=none (neither file). kind
+    picks the most common exception bucket in the window; ties break on the
+    bucket name so the answer is deterministic.
     """
     head_day = (day or '')[:10]
     usable = _usable_day(head_day)
@@ -368,13 +421,41 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7):
         worst_row = max(span, key=lambda r: (int(r.get('on_day') or 0),
                                              str(r.get('day') or '')))
     frows, _fbad = read_failures(failures_path)
-    days_by_source = {}
+    in_window = []
     for row in frows:
         fday = str(row.get('failed_at') or '')[:10]
         if usable and not (threshold <= fday <= head_day):
             continue
-        days_by_source.setdefault(row.get('source_url'), set()).add(fday)
+        in_window.append(row)
+    days_by_source = {}
+    for row in in_window:
+        days_by_source.setdefault(row.get('source_url'), set()).add(
+            str(row.get('failed_at') or '')[:10])
     recurring = sum(1 for days in days_by_source.values() if len(days) >= 2)
+    kinds = {}
+    for row in in_window:
+        bucket = failure_kind(row.get('error'))
+        kinds[bucket] = kinds.get(bucket, 0) + 1
+    evidence = 'side' if os.path.isfile(failures_path) else 'none'
+    kind = 'none'
+    kind_count = 0
+    if kinds:
+        kind = sorted(kinds.items(), key=lambda kv: (-kv[1], kv[0]))[0][0]
+        kind_count = kinds[kind]
+    if evidence == 'none':
+        # Degraded read (R2996): the day history keeps the last error it saw, so
+        # a pruned side channel still answers. A history file that exists but
+        # records nothing is evidence too - it says "nothing failed here", which
+        # is a different statement from "no evidence at all" (the live repo's
+        # own shape on 2026-11-19, measured before this branch was written).
+        if os.path.isfile(history_path):
+            evidence = 'history'
+        for row in reversed(span):
+            last_error = row.get('newest_error')
+            if isinstance(last_error, str) and last_error.strip():
+                kind = failure_kind(last_error)
+                kind_count = 1
+                break
     wday, wcount = (None, None)
     if worst_row is not None:
         wday = str(worst_row.get('day') or '')[:10]
@@ -383,6 +464,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7):
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
             'worst': (None, None) if worst_row is None else (wday, wcount),
             'recurring': recurring, 'sources': len(days_by_source),
+            'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
             'window_days': window_days}
 
 
@@ -585,11 +667,13 @@ def main(argv=None):
         wday, wcount = trend['worst']
         worst_txt = 'none' if wday is None else '%s:%d' % (wday, wcount)
         mean_txt = 'none' if trend['mean'] is None else ('%g' % trend['mean'])
+        kind_txt = ('none' if trend['kind'] == 'none'
+                    else '%s:%d' % (trend['kind'], trend['kind_count']))
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
-              'worst=%s recurring=%d sources=%d bad=%d'
+              'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
-                 trend['sources'], trend['bad']))
+                 trend['sources'], trend['bad'], trend['evidence'], kind_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)

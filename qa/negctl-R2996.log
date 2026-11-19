@@ -1,0 +1,8 @@
+  | PASS HONEST arms ['history', 'none', 'side', 'silent', 'tie', 'window']
+  | PASS M1-mutated the mutation landed in the source text
+  | PASS M2-mutated the mutation landed in the source text
+  | PASS M3-mutated the mutation landed in the source text
+  | PASS M1 always-side reads a pruned channel as clean
+  | PASS M2 an unfiltered histogram lets the old day win
+  | PASS M3 a history that records nothing reads as no evidence at all
+NEGCTL PASS fails=0
