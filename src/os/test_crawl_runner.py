@@ -7565,8 +7565,9 @@ def main():
         j66 = src66.find('\ndef ', i66 + 1)
         return src66[i66:j66 if j66 > 0 else len(src66)]
 
-    ok('AC-RUN66', "error=%s newest_rows=%d newest_errors=%d kind=%s day=%s'"
+    ok('AC-RUN66', "error=%s newest_rows=%d newest_errors=%d newest_kinds=%d '"
        in src66
+       and "'kind=%s day=%s'" in src66
        and "fcov=%s rcov=%s '\n              'day=%s'" in src66
        and "'day': head_day" in body66('_summary_from_rows')
        and "'day': head_day" in body66('summarize_failure_trend'),
@@ -9458,6 +9459,106 @@ def main():
        and 'newest_errors=' not in lines80trend[0],
        'the summary counts the chosen rows, main prints the word, the '
        'channel line carries it and the trend face does not')
+
+    # --- AC-RUN81: how many CLASSES a tie carries (R3064) --------------------
+    # Measured before this existed (qa/probe-R3064.log P4/P5): with the window
+    # distribution pinned, a tie of http+timeout and a tie of timeout+timeout
+    # read identically on every key of both faces, and the same count on both
+    # faces would be two denominators (a stale channel answers 2 where the
+    # trend names no source). One word on the face that prints the error:
+    # newest_kinds= counts the distinct failure_kind buckets among the rows
+    # naming the newest instant.
+    INW81 = '2026-11-18T08:00:00+08:00'
+    SD81 = 'https://d81.example/p'
+    EB281 = 'E_FETCH TimeoutError: second attempt'
+    EA281 = 'E_FETCH HTTPError: 500'
+
+    # Arm 1: one healthy row - one text in one class.
+    H81 = world(); roots.append(H81)
+    side73(H81, [(SA80, A80, EA80)])
+    _rc81h, t81h, line81h = fails80(H81)
+    ok('AC-RUN81', t81h.get('newest_rows') == '1'
+       and t81h.get('newest_errors') == '1'
+       and t81h.get('newest_kinds') == '1',
+       'a single row carries one class, and the count says so')
+
+    # Arm 2: the same message twice - two rows, one text, one class.
+    S81 = world(); roots.append(S81)
+    side73(S81, [(SA80, A80, EA80), (SB80, B80, EA80)])
+    _rc81s, t81s, _l81s = fails80(S81)
+    ok('AC-RUN81', t81s.get('newest_rows') == '2'
+       and t81s.get('newest_errors') == '1'
+       and t81s.get('newest_kinds') == '1',
+       'two rows with one message read one text in one class')
+
+    # Arm 3: two TEXTS inside ONE class - the half R3063 could not answer:
+    # newest_errors= said "another error exists" and nothing said whether it
+    # is the same kind of failure.
+    D81 = world(); roots.append(D81)
+    side73(D81, [(SA80, A80, EA80), (SB80, B80, EA281)])
+    _rc81d, t81d, _l81d = fails80(D81)
+    ok('AC-RUN81', t81d.get('newest_errors') == '2'
+       and t81d.get('newest_kinds') == '1',
+       'two http messages read newest_errors=2 newest_kinds=1')
+
+    # Arm 4: two texts in two classes.
+    two81 = world(); roots.append(two81)
+    side73(two81, [(SA80, A80, EA80), (SB80, B80, EB80)])
+    _rc812, t812, _l812 = fails80(two81)
+    ok('AC-RUN81', t812.get('newest_errors') == '2'
+       and t812.get('newest_kinds') == '2',
+       'an http failure beside a timeout reads two classes')
+
+    # Arm 5: the P4 pair - the window distribution is identical, only the tie
+    # changes. Every key but newest_kinds (and the file's own bytes) must be
+    # equal, so the count answers the tie rather than the window.
+    X81 = world(); roots.append(X81)
+    side73(X81, [(SA80, A80, EA80), (SB80, B80, EB80),
+                 (SC80, INW81, EA80), (SD81, INW81, EB80)])
+    Y81 = world(); roots.append(Y81)
+    side73(Y81, [(SA80, A80, EB281), (SB80, B80, EB80),
+                 (SC80, INW81, EA80), (SD81, INW81, EA281)])
+    _rc81x, x81, xline81 = fails80(X81)
+    _rc81y, y81, yline81 = fails80(Y81)
+    diff81 = sorted(k for k in x81 if k != 'bytes' and x81[k] != y81.get(k))
+    ok('AC-RUN81', x81.get('newest_kinds') == '2'
+       and y81.get('newest_kinds') == '1'
+       and x81.get('kind') == y81.get('kind') == 'timeout'
+       and x81.get('newest_errors') == y81.get('newest_errors') == '2'
+       and diff81 == ['newest_kinds'],
+       'with the window at http2 timeout2 the two worlds differ only in '
+       'newest_kinds (2 vs 1), so the count names the tie and not the window')
+
+    # Arm 6: three rows, two classes - counts buckets, not rows or texts.
+    T81 = world(); roots.append(T81)
+    side73(T81, [(SA80, A80, EA80), (SB80, B80, EB80),
+                 (SC80, B80, EA281)])
+    _rc81t, t81t, _l81t = fails80(T81)
+    ok('AC-RUN81', t81t.get('newest_rows') == '3'
+       and t81t.get('newest_errors') == '3'
+       and t81t.get('newest_kinds') == '2',
+       'three rows carrying three texts in two classes read newest_kinds=2')
+
+    # Arm 7: no evidence - 0 beside the absent stamp, never an invented 1.
+    E81 = world(); roots.append(E81)
+    rc81e, t81e, _l81e = fails80(E81)
+    ok('AC-RUN81', rc81e == 0 and t81e.get('newest_kinds') == '0'
+       and t81e.get('newest') == 'none'
+       and t81e.get('newest_rows') == '0',
+       'an empty channel reads newest_kinds=0 beside newest=none')
+
+    # Arm 8: wired rather than merely defined, and the refusal is an
+    # assertion - the class count belongs to the face that prints the error.
+    _rc81tr, lines81trend = face73(two81, '--failure-trend', AT80)
+    body81 = body80('_summary_from_rows')
+    ok('AC-RUN81', 'newest_kinds = len(' in body81
+       and 'failure_kind(' in body81
+       and "'newest_kinds': newest_kinds" in body81
+       and 'newest_kinds=%d' in body80('main')
+       and 'newest_kinds=' in xline81
+       and 'newest_kinds=' not in lines81trend[0],
+       'the summary counts classes over the chosen rows, main prints the '
+       'word, the channel line carries it and the trend face does not')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

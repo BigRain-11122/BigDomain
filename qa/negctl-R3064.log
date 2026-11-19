@@ -1,0 +1,6 @@
+GREEN honest two texts in one class answers 1 (pinned 1)
+GREEN honest two texts in two classes answers 2 (pinned 2)
+CAUGHT count rows instead of classes mutant answers 2 where the pinned criterion says 1
+CAUGHT count texts instead of classes mutant answers 2 where the pinned criterion says 1
+CAUGHT judge only the printed row mutant answers 1 where the pinned criterion says 2
+CAUGHT put the refused word on the trend face (the arm asserts absence)

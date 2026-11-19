@@ -1,0 +1,9 @@
+$ python tools/crawl_runner.py --failures
+CRAWL-FAILURES total=0 recent7=0 bad=0 bad_days=none urls=0 bytes=0 lines=0 size_gate=0.0000% gate_ref=100MB newest=none newest_src=none error=none newest_rows=0 newest_errors=0 newest_kinds=0 kind=none day=2026-11-20
+$ python tools/crawl_runner.py --failure-trend
+CRAWL-FAILURE-TREND days=2 today=0 prev=0 mean=0 delta=0 worst=2026-11-20:0 recurring=0 sources=0 bad=0 bad_days=none evidence=history kind=none recur=none cov=2026-11-19..2026-11-20 wcov=2/7 newest_src=none newest_srcs=0 newest_twin=none twin_ok=none since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=none rcov=2026-11-19..2026-11-20 day=2026-11-20
+$ censorship of the trend line for the refused word: False
+world: two texts, ONE class (503 vs 500)
+CRAWL-FAILURES total=2 recent7=2 bad=0 bad_days=none urls=2 bytes=230 lines=2 size_gate=0.0002% gate_ref=100MB newest=2026-11-19T20:00:00+00:00 newest_src=https://b.example/p error=E_FETCH HTTPError: 500 newest_rows=2 newest_errors=2 newest_kinds=1 kind=http day=2026-11-20
+world: two texts, TWO classes (http vs timeout)
+CRAWL-FAILURES total=2 recent7=2 bad=0 bad_days=none urls=2 bytes=244 lines=2 size_gate=0.0002% gate_ref=100MB newest=2026-11-19T20:00:00+00:00 newest_src=https://b.example/p error=E_FETCH TimeoutError: read timed out newest_rows=2 newest_errors=2 newest_kinds=2 kind=timeout day=2026-11-20

@@ -4774,9 +4774,10 @@ SUITES = [
     # R3062 names the source whose error the channel face prints, so the two
     # faces cannot disagree on one fact (newest_src=, AC-RUN79), 78 -> 79;
     # R3063 counts the distinct error texts at the newest instant
-    # (newest_errors=, AC-RUN80), 79 -> 80.
+    # (newest_errors=, AC-RUN80), 79 -> 80; R3064 counts the distinct failure
+    # classes there (newest_kinds=, AC-RUN81), 80 -> 81.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 80),
+     os.path.join("..", "os", "test_crawl_runner.py"), 81),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

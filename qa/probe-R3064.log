@@ -1,0 +1,37 @@
+P1 live failures rc=0 CRAWL-FAILURES total=0 recent7=0 bad=0 bad_days=none urls=0 bytes=0 lines=0 size_gate=0.0000% gate_ref=100MB newest=none newest_src=none error=none newest_rows=0 newest_errors=0 kind=none day=2026-11-20
+P1 live trend rc=0 newest_src=none newest_srcs=0 newest_twin=none twin_ok=none since_ok=unmeasured
+PASS P1 the live channel carries no tie today (newest_rows=0 newest_errors=0)
+P2 trend tie line (529 chars, 32 keys): CRAWL-FAILURE-TREND days=0 today=absent prev=none mean=none delta=none worst=none recurring=0 sources=2 bad=0 bad_days=none evidence=side kind=http:1 recur=0:0 cov=none wcov=0/7 newest_src=https://b64.example/p newest_srcs=2 newest_twin=https://a64.example/p twin_ok=unmeasured since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=2026-11-20..2026-11-20 rcov=none day=2026-11-20
+P2 trend keys naming an error: none
+P2 trend values carrying an error text: none
+PASS P2 the trend face names the two sources and judges both, and carries no error text for either
+P3a same-error trend kind=http:2 | diff-error trend kind=http:1 | moved=['kind']
+PASS P3a the trend moves exactly one key here (kind=) because kind= is the WINDOW bucket distribution, not a statement about the tie
+P4 X (tie = http + timeout, 2 classes): CRAWL-FAILURES total=4 recent7=4 bad=0 bad_days=none urls=4 bytes=496 lines=4 size_gate=0.0005% gate_ref=100MB newest=2026-11-19T20:00:00+00:00 newest_src=https://b64.example/p error=E_FETCH TimeoutError: read timed out newest_rows=2 newest_errors=2 kind=timeout day=2026-11-20
+P4 Y (tie = timeout + timeout, 1 class): CRAWL-FAILURES total=4 recent7=4 bad=0 bad_days=none urls=4 bytes=496 lines=4 size_gate=0.0005% gate_ref=100MB newest=2026-11-19T20:00:00+00:00 newest_src=https://b64.example/p error=E_FETCH TimeoutError: read timed out newest_rows=2 newest_errors=2 kind=timeout day=2026-11-20
+P4 failures keys that differ: none | newest_* keys: none
+P4 trend keys that differ: none
+PASS P4 a tie holding two classes (http+timeout) and a tie holding one class (timeout+timeout) read identically on the trend line and on every channel key but bytes=, with the window distribution held at http2 timeout2
+P5 stale channel failures: newest_errors=2 newest_rows=2
+P5 stale channel trend: newest_src=none newest_srcs=0
+P5 mixed channel failures: newest_errors=2
+P5 mixed channel trend: newest_srcs=2
+PASS P5 the channel answers 2 where the trend names no source at all, so one word on both faces would answer 2 and none in the stale world
+P6 newest_errors mentions outside the module+suite: 9
+P6   src/os/backlog.md:4:- [x] [done 2026-11-20 R3063 — 板头 (0) 落地：**并列时的第二个错误说得出口了**。先量（只读 `tmp/probe_R3063.py` → `qa/probe-R3063.log`·
+P6   src/os/backlog.md:5:- [R3064] next window (<=48h): (0) MAIN — **计数说了"还有一个错误"，但趋势面（唯一同时命名两个源的那张面）连"两个错误不同"都说不出口**。本轮 `newest_errors
+P6   src/os/backlog.md:13:⑥成本可量：` newest_errors=2` 18 字符 ≈ 265 字符行长的 **+6.8%**（P6）；`newest_error`/`newest_kind` 在模块与套件之外**零消费者**（P7=0/0）
+P6   src/os/backlog.md:16:①`_summary_from_rows` 发 `newest_errors=`＝**命名最新瞬间的那些行里有几个不同的 error 文本**（按 `strip()` 后去重：写入端本就把「strip 后为空」判为不可用
+P6   src/os/backlog.md:23:- **AC-RUN80（并列时的第二个错误说得出口·八臂）** ①健康单行：`newest_errors=1` 且 `newest_rows=1`、`error=` 原文；②同错误并列（两行同一瞬间同一串）：`newe
+P6   src/os/state.json:880:"2026-11-20 R3063 PRODUCT+ENGINEERING: a tie can now say whether its second error is the SAME error. The R3063
+P6   src/os/state.json:881:"R3063 measured, in order: AC-RUN80 was pinned in src/os/backlog.md BEFORE newest_errors existed (in-window pr
+P6   src/os/state.json:883:"R3063 demo and negative control: on the real checkout both faces answer rc=0 and the channel prints newest_er
+P6   src/sandbox/reconcile_all.py:4777:# (newest_errors=, AC-RUN80), 79 -> 80.
+P6 --failures help mentions a newest_* word: False
+PASS P6 the only mentions outside the module are this round own board/state text and a criterion-name counter, and --help names none of the newest_* words
+P7 empty failures: newest=none newest_rows=0 newest_errors=0 kind=none
+P7 empty trend: newest_src=none newest_srcs=0 kind=none
+PASS P7 an empty channel invents neither a row nor an error count
+P8 cost of ' newest_kinds=2': 15 chars on a 277-char line = +5.4%
+P8 cost of ' twin_same=no': 13 chars on a 277-char line = +4.7%
+P8 line lengths today: failures=277 trend=529

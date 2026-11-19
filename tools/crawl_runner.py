@@ -649,6 +649,35 @@ BOUNDARY: the line still prints ONE error, so 2+ tells a reader that another
 exists without naming it; the count is of TEXTS, not causes - two sources
 failing with the same message read 1.
 
+HOW MANY DIFFERENT CLASSES A TIE CARRIES (R3064, measured first -
+qa/probe-R3064.log): R3063 left "is it one cause or two?" unanswered and R3064
+was asked to measure whether the TREND face could answer it. It cannot, and the
+measurement says why. The trend line carries no error word at all (P2: 32 keys,
+zero keys or values holding either error text), so its only class-shaped value
+is `kind=`, which is the WINDOW's bucket distribution - it moved http:2 -> http:1
+between a same-error tie and a different-error tie (P3a) because the tie rows
+are themselves counted in the window, not because it says anything about the
+tie. With the window distribution pinned (four in-window rows, buckets http2
+timeout2 in both worlds), a tie of http+timeout and a tie of timeout+timeout
+read IDENTICALLY on every key of both faces (P4, failures lines equal at 496
+bytes, trend lines equal key for key). And the same word on both faces would be
+two denominators: a channel whose rows all fall outside the window answers
+newest_errors=2 while the trend names no source at all (P5). So the count lands
+where the errors already are: `newest_kinds=` is HOW MANY distinct
+`failure_kind` buckets the rows naming the newest instant carry - the same row
+set and the same strip law as `newest_errors=`, so a reader gets "how many rows
+/ how many texts / how many classes" from one line. REFUSED: the word on the
+trend face (P5's two denominators, the same scope reason R3059 gave for
+newest_rows=); printing the class NAME beside the count (the count already
+answers one-versus-two, and `newest_kind` already names the printed row's
+bucket - one fact one word); defining it as "sources inside one kind" (that
+needs a single kind as its subject and a tie has none - P4's two worlds are
+exactly the one-class/two-class pair); re-cutting `newest_errors=` into a class
+count (texts and buckets are different questions: P4 shows two worlds with
+`newest_errors=2` whose `newest_kinds` differ by one). BOUNDARY: `failure_kind`
+is a display label, not a cause (R2996) - two classes mean two KINDS of
+failure, never two proven root causes.
+
 WHICH DAY A ROW COUNTS IN (R3055, measured first - qa/probe-R3055.log): R3048
 gave the clock faces one day law - the LOCAL day of the instant, `_day_of` -
 but only the window HEAD used it; every count and span still cut the first ten
@@ -1881,6 +1910,16 @@ def _summary_from_rows(rows, bad, day, window_days=7, bad_days=None):
     # second error here.
     newest_errors = len({str(row.get('error')).strip() for row in newest_picked
                          if str(row.get('error') or '').strip()})
+    # R3064: HOW MANY DIFFERENT failure CLASSES those rows carry. newest_errors=
+    # says how many error TEXTS share the instant, and measured
+    # (qa/probe-R3064.log P4) two worlds with the window distribution held
+    # constant - a tie of http+timeout and a tie of timeout+timeout - read
+    # identically on every key of this line and of the trend line, so "one
+    # cause or two?" had no answer anywhere. Same row set and same strip law as
+    # newest_errors=; the bucket is the existing failure_kind label, never a
+    # verdict.
+    newest_kinds = len({failure_kind(row.get('error')) for row in newest_picked
+                        if str(row.get('error') or '').strip()})
     return {'total': len(rows), 'recent': recent, 'bad': bad,
             'bad_days': bad_days,
             'urls': len(urls), 'window_days': window_days,
@@ -1906,6 +1945,12 @@ def _summary_from_rows(rows, bad, day, window_days=7, bad_days=None):
             # 2+ says a second error exists that this one line cannot print; 0
             # rides beside newest=none.
             'newest_errors': newest_errors,
+            # R3064: HOW MANY DISTINCT failure classes those rows carry - 1 is
+            # the healthy reading and also "two messages from one class"; 2+
+            # says the tie holds more than one class, which neither this line
+            # nor the trend line could say before (measured, qa/probe-R3064.log
+            # P4); 0 rides beside newest=none.
+            'newest_kinds': newest_kinds,
             # R2997: the same bucket function the trend line uses, so one
             # error string is classified in exactly one place.
             'newest_kind': failure_kind(newest_error) if newest_error else 'none'}
@@ -4308,7 +4353,8 @@ def main(argv=None):
         print('CRAWL-FAILURES total=%d recent%d=%d bad=%d bad_days=%s '
               'urls=%d bytes=%d '
               'lines=%d size_gate=%.4f%% gate_ref=%dMB newest=%s newest_src=%s '
-              'error=%s newest_rows=%d newest_errors=%d kind=%s day=%s'
+              'error=%s newest_rows=%d newest_errors=%d newest_kinds=%d '
+              'kind=%s day=%s'
               % (summary['total'], summary['window_days'],
                            summary['recent'], summary['bad'],
                            ','.join(summary['bad_days'] or []) or 'none',
@@ -4320,6 +4366,7 @@ def main(argv=None):
                            summary['newest_error'] or 'none',
                            summary['newest_rows'],
                            summary['newest_errors'],
+                           summary['newest_kinds'],
                            summary['newest_kind'], summary['day']))
         return 0
     if args.failure_days:
