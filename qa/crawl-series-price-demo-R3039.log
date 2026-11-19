@@ -1,0 +1,5 @@
+== R3039 demo: the silent-day line prices itself ==
+seven-day window, every gap named      line_bytes=439   real=439   out_bytes=440   real=440 match=True split=True all=439
+sixty-day window, capped at a month    line_bytes=718   real=718   out_bytes=719   real=719 match=True split=True all=1028
+empty history                          line_bytes=366   real=366   out_bytes=367   real=367 match=True split=True all=none
+read: line_bytes is this line, output_bytes is the run (line + its newline), absent_all_bytes is the same line with every gap named - equal when nothing was dropped, larger when it was.

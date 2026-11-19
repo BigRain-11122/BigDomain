@@ -473,6 +473,38 @@ boundary: `header_bytes` is on the LF law like its siblings, so it is the
 header's slice of that total rather than the width of the visible glyph row;
 Windows text-mode stdout adds one more byte on top.
 
+THE SILENT-DAY LINE PRICES ITSELF (R3039, measured first - qa/probe-R3039.log):
+the DAYS-DROPPED face learned to price its header and its block, but the
+sibling face on the SAME command (`--failure-days --series-days N
+--series-absent`) printed a 22-token line whose own width no number stated.
+`absent_all_bytes` prices the line that WOULD print if every silent day were
+named - it equals the real width only when nothing is truncated. Measured over
+20 runs (window 3/7/30/60/365 x cap default/5/31/all): the printed number
+equals the real line width in exactly the 8 runs that named every gap; on the
+wide-window DEFAULT (win=60: 685B now vs 993B all; win=365: 688B vs 4352B) and
+on every cap=5 run no integer key on the line equalled it. The width is a
+function of the printed values rather than of hidden history (two worlds with
+different histories printed the same 407B under one window), so pricing is
+deterministic and only the number was missing; `this_line_bytes` /
+`series_line_bytes` / `absent_line_bytes` / `stdout_bytes` had zero hits across
+2599 python files. The opt-in tail therefore appends `line_bytes=<n>
+output_bytes=<m>` BEFORE `absent_all_bytes=`: `line_bytes` is this line's own
+UTF-8 bytes WITHOUT its trailing newline (the width a reader sees), and
+`output_bytes` is the whole run's LF bytes - the same name and the same
+meaning as on the DAYS-DROPPED face - so `line_bytes + 1 == output_bytes`
+prints the newline instead of leaving it as an assumed constant (the defect
+R3038 fixed on its sibling). Both are solved in ONE fixed point because each
+token's digits move the other. They sit BEFORE the all-names projection so
+that projection keeps pricing a line that really exists: the projected line
+carries these two tokens at their all-named values, and their digits are
+inside its total.
+Refused: the total alone (the newline returns to being an unwritten constant),
+a `lines=` token (this face prints one line, so it would restate itself), and
+redefining `absent_all_bytes` (its old meaning is the all-names price and
+readers already subtract it). Honest boundary: both numbers follow the LF law
+like their siblings, so a Windows text-mode pipe still adds the CRLF delta,
+and `line_bytes` is the visible width rather than the run total.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1479,37 +1511,103 @@ def series_absent_days(rows, window_days=7, limit=ABSENT_LIST_LIMIT):
             'truncated': len(named) < len(days)}
 
 
-def absent_all_line_bytes(prefix):
-    """Bytes of the whole line if every silent day were named (R3034).
+def absent_markers(gap_info, presence):
+    """The opt-in silent-day markers, WITHOUT the two byte tokens (R3039).
 
-    WHY (measured before this existed - qa/probe-R3034.log): `--series-absent`
-    names at most one month of silent days and `--series-absent-limit all`
-    removes the cap, but nothing on the face a reader already has says what
-    asking for `all` will cost - a 365-day window prints a 4327-byte line with
-    no warning. Measured: a name is exactly 10 characters so the list costs
-    11n-1 bytes, and every OTHER token on the line is byte-identical at any cap
-    (the base without the `absent=` token reads 401B under both 31 and all), so
-    the price is arithmetically exact in advance rather than estimated.
+    WHY it lives here: the printer and the all-names projection both build this
+    string, and R3034 already refused to let two formatters drift apart. R3039
+    moved it out of main so the projection can span the whole tail - including
+    the byte tokens it now carries - from one renderer.
 
-    `prefix` is the line body plus the markers the full list would print,
-    WITHOUT this token. The answer counts the digits of the token that carries
-    it, so it is a fixed point: grow the token until its own width stops moving
-    the total. The loop is bounded by the digit count of the answer (three or
-    four passes on real windows) and cannot oscillate, because a longer value
-    never needs fewer digits.
-
-    It is a fact about ONE line under ONE command, not a readability verdict and
-    not a gate: nothing here refuses a long line, and a person who never asks
-    for `all` never needs the number.
+    DISPLAY ONLY: builds text, writes nothing.
     """
-    head = len((prefix + ' absent_all_bytes=').encode('utf-8'))
-    total = head + 1
-    for _ in range(8):
-        grown = head + len(str(total))
-        if grown == total:
+    return (' series_absent=%s absent=%s absent_named=%s'
+            ' days_present=%s repeat_rows=%s retry_rows=%s'
+            ' window_from=%s'
+            % ('none' if gap_info['count'] is None
+               else gap_info['count'],
+               ','.join(gap_info['days']) or 'none',
+               'none' if gap_info['count'] is None
+               else gap_info['named'],
+               'none' if presence['present'] is None
+               else presence['present'],
+               'none' if presence['repeat'] is None
+               else presence['repeat'],
+               'none' if presence['retry'] is None
+               else presence['retry'],
+               'none' if presence['start'] is None
+               else presence['start']))
+
+
+def absent_line_prices(body_prefix, full_prefix):
+    """(line_bytes, output_bytes, absent_all_bytes) for the silent-day line.
+
+    WHY (measured before this existed - qa/probe-R3039.log): the line carried 22
+    tokens and up to 14 integer keys, and on the wide-window default NONE of
+    them equalled the line's own width. `absent_all_bytes` answers a different
+    question - the price of the all-names line - and matched this line only when
+    nothing was truncated, which on a 60- or 365-day window is never the default
+    (685B now vs 993B all; 688B vs 4352B).
+
+    TWO LINES, ONE SOLVER. `body_prefix` is this call's body plus its markers,
+    `full_prefix` the same built from the all-names gap list - both WITHOUT the
+    three byte tokens. Each line prints ` line_bytes=<n> output_bytes=<m>
+    absent_all_bytes=<k>` after its prefix, so each number has to count the
+    digits the other two contribute: a joint fixed point rather than three
+    hand-rolled ones. `full_prefix` None means the head day is unusable: there
+    is no all-names line to project, the third answer is None (the token prints
+    `none`), and this line still prices itself.
+
+    `line_bytes` is that line's own UTF-8 width (the visible row, no trailing
+    newline), `output_bytes` is the whole run's LF bytes - for this face the
+    line plus its newline, the same name and meaning as on the DAYS-DROPPED face
+    - so `line_bytes + 1 == output_bytes` is printed rather than assumed (the
+    constant R3038 had to remove on its sibling face). `absent_all_bytes` is the
+    all-names line's width, which is why it is the identical number when nothing
+    is truncated: with equal prefixes the two lines ARE the same line, and the
+    solver returns them equal instead of merely close.
+
+    Arithmetic stays exact in advance (R3034): a silent-day name is ten
+    characters, so each list entry costs eleven bytes and every other token is
+    byte-identical at any cap - but that law is now only the reason the numbers
+    move predictably, not a substitute for printing them.
+
+    It is a fact about one line under one command, not a readability verdict and
+    not a gate: nothing here refuses a long line. The loop is bounded by the
+    digit counts (three or four passes on real windows) and cannot oscillate,
+    because a longer value never needs fewer digits. Honest boundary: all three
+    follow the LF law, so a Windows text-mode pipe still adds its CRLF delta.
+
+    DISPLAY ONLY: writes nothing, gates nothing.
+    """
+    head = len(body_prefix.encode('utf-8'))
+    if full_prefix is None:
+        # Nothing is measurable, so the all-names token prints `none`: four
+        # fixed bytes, and there is no second line to solve. The line still
+        # prices itself - an empty history is a line too.
+        line = head
+        for _ in range(8):
+            grown = (head + len(' line_bytes=') + len(str(line))
+                     + len(' output_bytes=') + len(str(line + 1))
+                     + len(' absent_all_bytes=') + len('none'))
+            if grown == line:
+                break
+            line = grown
+        return line, line + 1, None
+    full_head = len(full_prefix.encode('utf-8'))
+    line = head
+    all_bytes = full_head
+    for _ in range(12):
+        next_all = (full_head + len(' line_bytes=') + len(str(all_bytes))
+                    + len(' output_bytes=') + len(str(all_bytes + 1))
+                    + len(' absent_all_bytes=') + len(str(all_bytes)))
+        next_line = (head + len(' line_bytes=') + len(str(line))
+                     + len(' output_bytes=') + len(str(line + 1))
+                     + len(' absent_all_bytes=') + len(str(next_all)))
+        if next_line == line and next_all == all_bytes:
             break
-        total = grown
-    return total
+        line, all_bytes = next_line, next_all
+    return line, line + 1, all_bytes
 
 
 def series_presence_counts(rows, window_days=7):
@@ -2891,6 +2989,7 @@ def main(argv=None):
                          'repeat_rows=<n|none> '
                          'retry_rows=<n|none> and '
                          'window_from=<day|none> and '
+                         'line_bytes=<n> output_bytes=<n> and '
                          'absent_all_bytes=<n|none>, so a '
                          'silent day never reads like a measured zero, the '
                          'present/gap split sums to series_window, the '
@@ -2902,7 +3001,10 @@ def main(argv=None):
                          'month (31) while series_absent keeps the full total, '
                          'so absent_named < series_absent is a visible '
                          'truncation; pass --series-absent-limit to name more, '
-                         'and read absent_all_bytes to know how many bytes this '
+                         'read line_bytes for this very line\'s width (and '
+                         'output_bytes for the whole run, so the trailing '
+                         'newline is printed rather than assumed), and read '
+                         'absent_all_bytes to know how many bytes this '
                          'very line would take with the full list before '
                          'asking for it '
                          '(read-only display; gates nothing)')
@@ -2953,26 +3055,6 @@ def main(argv=None):
         else:
             counts = series['series_counts']
 
-        def absent_markers(gap_info, presence):
-            # One formatter for both the capped list and the full one, so the
-            # projection below cannot drift from the line actually printed.
-            return (' series_absent=%s absent=%s absent_named=%s'
-                    ' days_present=%s repeat_rows=%s retry_rows=%s'
-                    ' window_from=%s'
-                    % ('none' if gap_info['count'] is None
-                       else gap_info['count'],
-                       ','.join(gap_info['days']) or 'none',
-                       'none' if gap_info['count'] is None
-                       else gap_info['named'],
-                       'none' if presence['present'] is None
-                       else presence['present'],
-                       'none' if presence['repeat'] is None
-                       else presence['repeat'],
-                       'none' if presence['retry'] is None
-                       else presence['retry'],
-                       'none' if presence['start'] is None
-                       else presence['start']))
-
         body = ('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
                 'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB '
                 'series_limit=%d series_shown=%d series_outside=%d '
@@ -2990,17 +3072,23 @@ def main(argv=None):
         else:
             tail_markers = ' series_window=%d' % args.series_days
             if args.series_absent:
+                series_marker = ' series_window=%d' % args.series_days
                 gaps = series_absent_days(day_read[0], args.series_days,
                                           absent_limit)
                 presence = series_presence_counts(day_read[0], args.series_days)
-                tail_markers += absent_markers(gaps, presence)
                 full_gaps = series_absent_days(day_read[0], args.series_days,
                                                None)
-                tail_markers += ' absent_all_bytes=%s' % (
-                    'none' if full_gaps['count'] is None
-                    else absent_all_line_bytes(
-                        body + (' series_window=%d' % args.series_days)
-                        + absent_markers(full_gaps, presence)))
+                markers = absent_markers(gaps, presence)
+                line_bytes, out_bytes, all_bytes = absent_line_prices(
+                    body + series_marker + markers,
+                    None if full_gaps['count'] is None
+                    else body + series_marker
+                    + absent_markers(full_gaps, presence))
+                tail_markers = (series_marker + markers
+                                + ' line_bytes=%d output_bytes=%d'
+                                % (line_bytes, out_bytes)
+                                + ' absent_all_bytes=%s'
+                                % ('none' if all_bytes is None else all_bytes))
         print(body + tail_markers)
         return 0
     if args.failure_days_dropped:

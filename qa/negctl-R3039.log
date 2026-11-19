@@ -1,0 +1,6 @@
+== R3039 negative control: mutations must read red ==
+honest_prices              line=718   out=719   all=1028  (real 718/719/1028) GREEN
+mut_prefix_only            line=706   out=719   all=1028  (real 718/719/1028) CAUGHT
+mut_no_newline             line=718   out=718   all=1028  (real 718/719/1028) CAUGHT
+mut_projection_is_body     line=718   out=719   all=718   (real 718/719/1028) CAUGHT
+honest=GREEN mutations_caught=3/3

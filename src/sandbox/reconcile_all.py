@@ -4745,7 +4745,7 @@ SUITES = [
     # (header_bytes), so the total splits with no unwritten newline constant
     # (54 -> 55).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 55),
+     os.path.join("..", "os", "test_crawl_runner.py"), 56),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

@@ -1,0 +1,89 @@
+== R3039 probe: the series-absent line and its own width ==
+worlds: A rows=3 (2 days), B rows=1 (1 day)
+
+-- P1 width across window x cap (world A) --
+win=  3 cap=None line= 363B stdout= 364B series_absent=2 named=2 all_bytes=363 from=2026-11-15 present=1 rep=0 retry=0 sw=3 keys=22
+win=  3 cap=5    line= 363B stdout= 364B series_absent=2 named=2 all_bytes=363 from=2026-11-15 present=1 rep=0 retry=0 sw=3 keys=22
+win=  3 cap=31   line= 363B stdout= 364B series_absent=2 named=2 all_bytes=363 from=2026-11-15 present=1 rep=0 retry=0 sw=3 keys=22
+win=  3 cap=all  line= 363B stdout= 364B series_absent=2 named=2 all_bytes=363 from=2026-11-15 present=1 rep=0 retry=0 sw=3 keys=22
+win=  7 cap=None line= 407B stdout= 408B series_absent=6 named=6 all_bytes=407 from=2026-11-11 present=1 rep=0 retry=0 sw=7 keys=22
+win=  7 cap=5    line= 396B stdout= 397B series_absent=6 named=5 all_bytes=407 from=2026-11-11 present=1 rep=0 retry=0 sw=7 keys=22
+win=  7 cap=31   line= 407B stdout= 408B series_absent=6 named=6 all_bytes=407 from=2026-11-11 present=1 rep=0 retry=0 sw=7 keys=22
+win=  7 cap=all  line= 407B stdout= 408B series_absent=6 named=6 all_bytes=407 from=2026-11-11 present=1 rep=0 retry=0 sw=7 keys=22
+win= 30 cap=None line= 663B stdout= 664B series_absent=29 named=29 all_bytes=663 from=2026-10-19 present=1 rep=0 retry=0 sw=30 keys=22
+win= 30 cap=5    line= 398B stdout= 399B series_absent=29 named=5 all_bytes=663 from=2026-10-19 present=1 rep=0 retry=0 sw=30 keys=22
+win= 30 cap=31   line= 663B stdout= 664B series_absent=29 named=29 all_bytes=663 from=2026-10-19 present=1 rep=0 retry=0 sw=30 keys=22
+win= 30 cap=all  line= 663B stdout= 664B series_absent=29 named=29 all_bytes=663 from=2026-10-19 present=1 rep=0 retry=0 sw=30 keys=22
+win= 60 cap=None line= 685B stdout= 686B series_absent=59 named=31 all_bytes=993 from=2026-09-19 present=1 rep=0 retry=0 sw=60 keys=22
+win= 60 cap=5    line= 398B stdout= 399B series_absent=59 named=5 all_bytes=993 from=2026-09-19 present=1 rep=0 retry=0 sw=60 keys=22
+win= 60 cap=31   line= 685B stdout= 686B series_absent=59 named=31 all_bytes=993 from=2026-09-19 present=1 rep=0 retry=0 sw=60 keys=22
+win= 60 cap=all  line= 993B stdout= 994B series_absent=59 named=59 all_bytes=993 from=2026-09-19 present=1 rep=0 retry=0 sw=60 keys=22
+win=365 cap=None line= 688B stdout= 689B series_absent=364 named=31 all_bytes=4352 from=2025-11-18 present=1 rep=0 retry=0 sw=365 keys=22
+win=365 cap=5    line= 401B stdout= 402B series_absent=364 named=5 all_bytes=4352 from=2025-11-18 present=1 rep=0 retry=0 sw=365 keys=22
+win=365 cap=31   line= 688B stdout= 689B series_absent=364 named=31 all_bytes=4352 from=2025-11-18 present=1 rep=0 retry=0 sw=365 keys=22
+win=365 cap=all  line=4352B stdout=4353B series_absent=364 named=364 all_bytes=4352 from=2025-11-18 present=1 rep=0 retry=0 sw=365 keys=22
+
+-- P1b does any printed number equal the line width? --
+win=  3 cap=None width=363 stdout=364 equal_keys=['absent_all_bytes']
+win=  3 cap=5    width=363 stdout=364 equal_keys=['absent_all_bytes']
+win=  3 cap=31   width=363 stdout=364 equal_keys=['absent_all_bytes']
+win=  3 cap=all  width=363 stdout=364 equal_keys=['absent_all_bytes']
+win=  7 cap=None width=407 stdout=408 equal_keys=['absent_all_bytes']
+win=  7 cap=5    width=396 stdout=397 equal_keys=NONE
+win=  7 cap=31   width=407 stdout=408 equal_keys=['absent_all_bytes']
+win=  7 cap=all  width=407 stdout=408 equal_keys=['absent_all_bytes']
+win= 30 cap=None width=663 stdout=664 equal_keys=['absent_all_bytes']
+win= 30 cap=5    width=398 stdout=399 equal_keys=NONE
+win= 30 cap=31   width=663 stdout=664 equal_keys=['absent_all_bytes']
+win= 30 cap=all  width=663 stdout=664 equal_keys=['absent_all_bytes']
+win= 60 cap=None width=685 stdout=686 equal_keys=NONE
+win= 60 cap=5    width=398 stdout=399 equal_keys=NONE
+win= 60 cap=31   width=685 stdout=686 equal_keys=NONE
+win= 60 cap=all  width=993 stdout=994 equal_keys=['absent_all_bytes']
+win=365 cap=None width=688 stdout=689 equal_keys=NONE
+win=365 cap=5    width=401 stdout=402 equal_keys=NONE
+win=365 cap=31   width=688 stdout=689 equal_keys=NONE
+win=365 cap=all  width=4352 stdout=4353 equal_keys=['absent_all_bytes']
+any_equal = True
+numeric_key_count_max = 14
+
+-- P2 same printed counts, different width? --
+small width=407
+wide  width=407
+small_head: CRAWL-FAILURE-DAYS days=1 bad=0 first=2026-11-19 last=2026-11-19 dropped=none series=2026-11-19:0 bytes=107 size_gate=0.0001% gate_ref=100MB series_limit=7 series_shown=1 series_outside=0 window_rows=1 series_window=7 series_absent=6 absent=2026-11-13,2026-11-14,2026-11-15,2026-11-16,2026-11-17,2026-11-18 absent_named=6 days_present=1 repeat_rows=0 retry_rows=0 window_from=2026-11-13 absent_all_bytes=407
+wide_head : CRAWL-FAILURE-DAYS days=2 bad=0 first=2001-01-01 last=2026-11-19 dropped=none series=2026-11-19:1 bytes=214 size_gate=0.0002% gate_ref=100MB series_limit=7 series_shown=1 series_outside=0 window_rows=1 series_window=7 series_absent=6 absent=2026-11-13,2026-11-14,2026-11-15,2026-11-16,2026-11-17,2026-11-18 absent_named=6 days_present=1 repeat_rows=0 retry_rows=0 window_from=2026-11-13 absent_all_bytes=407
+width_differs = False
+
+-- P3 repo faces that could price this line --
+py files scanned = 2599
+line_bytes           hits=11 [('tools\\crawl_runner.py', 3), ('src\\os\\test_crawl_runner.py', 2), ('src\\sandbox\\runner_profile.py', 3), ('src\\sandbox\\test_runner_profile_daily.py', 3)]
+own_bytes            hits=120 [('tools\\crawl_runner.py', 16), ('src\\os\\live_R2389.py', 1), ('src\\os\\test_crawl_runner.py', 26), ('src\\sandbox\\reconcile_all.py', 1)]
+this_line_bytes      hits=0 []
+series_line_bytes    hits=0 []
+absent_line_bytes    hits=0 []
+output_bytes         hits=53 [('tools\\crawl_runner.py', 22), ('src\\os\\test_crawl_runner.py', 30), ('src\\sandbox\\reconcile_all.py', 1)]
+header_bytes         hits=37 [('tools\\crawl_runner.py', 14), ('src\\os\\test_crawl_runner.py', 22), ('src\\sandbox\\reconcile_all.py', 1)]
+stdout_bytes         hits=0 []
+absent_all_bytes     hits=18 [('tools\\crawl_runner.py', 6), ('src\\os\\test_crawl_runner.py', 11), ('src\\sandbox\\reconcile_all.py', 1)]
+
+-- P4 suite arms that could collide --
+count('absent=')           13
+count("absent=")           0
+count('absent_named=')     7
+absent_all_bytes           11
+series_absent=             4
+endswith(                  10
+'--series-absent'          50
+whole-line equality arms (== CRAWL-FAILURE-DAYS) = 9
+arms mentioning absent_all_bytes = 11
+arms reading endswith on the days line: []
+
+-- P5 is absent_all_bytes the real all-cap width? --
+cap=31   line=685B absent_all_bytes=993 match=False
+cap=all  line=993B absent_all_bytes=993 match=True
+
+-- P6 empty history through the same face --
+rc=0 lines=1 text='CRAWL-FAILURE-DAYS days=0 bad=0 first=none last=none dropped=none series=none bytes=0 size_gate=0.0000% gate_ref=100MB series_limit=7 series_shown=0 series_outside=0 window_rows=0 series_window=7 series_absent=none absent=none absent_named=none days_present=none repeat_rows=none retry_rows=none window_from=none absent_all_bytes=none\n'
+stdout_bytes=335
+
+PROBE DONE (read-only; nothing written outside temp dirs)

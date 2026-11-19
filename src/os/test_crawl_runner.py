@@ -6015,6 +6015,114 @@ def main():
        'no byte is written, no verdict prints, and the two counts the silent '
        'faces pin still hold on the same world')
 
+    # ===== AC-RUN56 (R3039): the silent-day line prices itself =====
+    # AC-RUN56 was pinned in src/os/backlog.md BEFORE absent_line_prices took
+    # its second prefix (in-window pre-registration, disclosed). Measured
+    # before the pin (qa/probe-R3039.log, 20 runs over window 3/7/30/60/365 x
+    # cap default/5/31/all): `absent_all_bytes` equalled the real line width in
+    # exactly the eight runs that named every gap, and on the wide-window
+    # DEFAULT (win=60: 685B vs 993B all; win=365: 688B vs 4352B) no printed
+    # integer key equalled it.
+    def sd56(root, extra):
+        buf, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(err):
+            rc = RUN.main(['--failure-days'] + list(extra) + ['--root', root])
+        text = buf.getvalue()
+        return rc, [n for n in text.splitlines() if n.strip()], text
+
+    r56 = world()
+    roots.append(r56)
+    p56 = hist37(r56)
+    put_days(p56, [plain_day('2026-11-19', 3), plain_day('2026-11-19', 1)])
+
+    def lf56(text):
+        return len(text.replace('\r\n', '\n').encode('utf-8'))
+
+    # arm 1: on the wide-window default the line prices itself, exactly
+    rc56a, l56a, raw56a = sd56(r56, ['--series-days', '60',
+                                     '--series-absent'])
+    t56a = toks42(l56a[0]) if l56a else {}
+    real56a = len(l56a[0].encode('utf-8')) if l56a else -1
+    ok('AC-RUN56', rc56a == 0 and t56a.get('line_bytes') == str(real56a)
+       and t56a.get('output_bytes') == str(lf56(raw56a))
+       and int(t56a.get('line_bytes') or -1) + 1
+       == int(t56a.get('output_bytes') or -2)
+       and t56a.get('absent_named') != t56a.get('series_absent'),
+       'line_bytes reads the real width of the line it sits on and '
+       'output_bytes the real stdout bytes, so the trailing newline is the '
+       'printed difference rather than an assumed 1 - on the truncated default '
+       'where no other key came close')
+
+    # arm 2: the pair of prices - all-names equal, truncated strictly larger
+    rc56b, l56b, _raw56b = sd56(r56, ['--series-days', '60',
+                                      '--series-absent',
+                                      '--series-absent-limit', 'all'])
+    t56b = toks42(l56b[0]) if l56b else {}
+    gap56 = (int(t56a.get('absent_all_bytes') or -1)
+             - int(t56a.get('line_bytes') or -1))
+    lost56 = (int(t56a.get('series_absent') or 0)
+              - int(t56a.get('absent_named') or 0))
+    ok('AC-RUN56', rc56b == 0
+       and t56b.get('absent_all_bytes') == t56b.get('line_bytes')
+       and int(t56a.get('absent_all_bytes') or -1)
+       > int(t56a.get('line_bytes') or -1)
+       and gap56 >= 11 * lost56,
+       'with every gap named the projection IS this line (equal), and on the '
+       'truncated run it is strictly larger by at least eleven bytes per '
+       'silently dropped name - a lower bound, since the wider numbers can add '
+       'digits of their own')
+
+    # arm 3: two windows, two different widths, both exact
+    rc56c, l56c, _raw56c = sd56(r56, ['--series-days', '7',
+                                      '--series-absent'])
+    t56c = toks42(l56c[0]) if l56c else {}
+    ok('AC-RUN56', rc56c == 0
+       and t56c.get('line_bytes') == str(len(l56c[0].encode('utf-8')))
+       and t56a.get('line_bytes') == str(real56a)
+       and t56c.get('line_bytes') != t56a.get('line_bytes'),
+       'the same file at window 7 and window 60 reports each own width and '
+       'they differ - the number is measured per run, not a constant copied '
+       'from one face')
+
+    # arm 4: an empty history still prices its own bare line
+    r56d = world()
+    roots.append(r56d)
+    os.makedirs(os.path.join(r56d, 'qa'), exist_ok=True)
+    rc56d, l56d, _raw56d = sd56(r56d, ['--series-days', '7',
+                                       '--series-absent'])
+    t56d = toks42(l56d[0]) if l56d else {}
+    ok('AC-RUN56', rc56d == 0 and len(l56d) == 1
+       and t56d.get('line_bytes') == str(len(l56d[0].encode('utf-8')))
+       and int(t56d.get('line_bytes') or -1) + 1
+       == int(t56d.get('output_bytes') or -2)
+       and t56d.get('absent_all_bytes') == 'none',
+       'no history names no gaps (absent_all_bytes=none) but the line still '
+       'says how wide it is, without raising')
+
+    # arm 5: the unwindowed default face gains no token and does not drift
+    rc56e, l56e, _raw56e = sd56(r56, [])
+    rc56f, l56f, _raw56f = sd56(r56, [])
+    ok('AC-RUN56', rc56e == 0 and l56e and l56f
+       and ' line_bytes=' not in l56e[0]
+       and ' output_bytes=' not in l56e[0]
+       and l56e[0] == l56f[0],
+       'without --series-absent the line carries neither new token and two '
+       'runs print the identical bytes')
+
+    # arm 6: pure display, no verdict, and the pinned absent= counts survive
+    before56 = tree_bytes(r56)
+    rc56g, l56g, _raw56g = sd56(r56, ['--series-days', '60',
+                                      '--series-absent'])
+    after56 = tree_bytes(r56)
+    text56 = '\n'.join(l56g)
+    ok('AC-RUN56', rc56g == 0 and before56 == after56
+       and 'PASS' not in text56 and 'FLAG' not in text56
+       and 'verdict' not in text56
+       and l56g[0].count('absent=') == 2
+       and l56g[0].count('absent_named=') == 1,
+       'the opt-in line writes no byte, prints no verdict, and both pinned '
+       'counts still hold with the two new numbers on it')
+
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
 
