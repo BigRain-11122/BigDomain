@@ -4727,8 +4727,10 @@ SUITES = [
     # day, repeat/retry are exact, and window_from names the cut (47 -> 48).
     # R3032 adds AC-RUN49: the silent-day list stops at one month while
     # series_absent keeps the full total (48 -> 49, the same row).
+    # R3033 adds AC-RUN50: --series-absent-limit names more of that list on
+    # request, opt-in, with the default still one month (49 -> 50).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 49),
+     os.path.join("..", "os", "test_crawl_runner.py"), 50),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

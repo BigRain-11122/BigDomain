@@ -1,0 +1,10 @@
+R3033 negative control (outside the suite)
+  rows: 11, window 60, gaps measured by the shipped function
+  honest gap count=50 named=31
+honest functions                   GREEN [True, True, True, True]
+M1 all read as the default cap     RED   [False, True, True, True]
+M2 zero/negative coerced to a cap  RED   [True, True, True, False]
+M3 -1 accepted as a cap            RED   [True, True, True, False]
+M4 limit argument ignored          RED   [False, False, False, True]
+honest GREEN=True ; mutations caught=4/4
+VERDICT PASS

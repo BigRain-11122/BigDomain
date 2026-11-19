@@ -331,11 +331,33 @@ cap is on NAMES, not bytes: a byte budget cannot be predicted from the window,
 while "the first 31 silent days" can, and 11.00 bytes/name is a constant. The
 opt-in tail now also prints `absent_named=<n|none>` beside the list;
 `series_absent=` keeps the FULL total, so `absent_named < series_absent` is a
-visible truncation rather than a list that reads short. Refused: a byte cap, a
-redefined `series_absent=` (its old meaning is the whole count), a boolean-only
-marker (the omission count is not otherwise printed but a boolean cannot say
-how many), and a `--series-absent-limit` flag (no measured demand, one more
-surface).
+visible truncation rather than a list that reads short. Refused there: a byte
+cap, a redefined `series_absent=` (its old meaning is the whole count), a
+boolean-only marker (the omission count is not otherwise printed but a boolean
+cannot say how many), and a `--series-absent-limit` flag - THAT refusal is
+superseded below on measured grounds, not reversed by preference.
+
+THE FULL LIST IS ONE OPT-IN FLAG AWAY (R3033, measured first -
+qa/probe-R3033.log): the board asked whether the silent days past the 31st are
+gone from the repo. Measured, in order. (1) From the ONE line they are not
+recoverable: two private worlds with the same window, the same days_present=10,
+series_absent=50 and absent_named=31, differing only in three HIDDEN row days
+(10-25..27 vs 10-28..30), printed BYTE-IDENTICAL lines - so the 19 unnamed
+silent days and the hidden row days are both unrecoverable from that line.
+(2) The premise "nowhere in the repo" is FALSE and is named here rather than
+quietly dropped: `--failure-days-dropped --failure-days-dropped-window N`
+prints `DAY-DROPPED day=<day> dropped=<n|none>` for every usable row, so the
+silent set is one invocation plus a set subtraction away (bad rows are excluded
+from both faces, so both share that blind spot). (3) An opt-in flag collides
+with nothing: measured 6 arms with count('absent=')==2 (none forbids a new
+flag), 1 with count('absent_named=')==1, ZERO whole-line equality arms carrying
+`absent=`, and the default face untouched at 214 bytes. What the flag buys is
+stated plainly: the face that asks "which days are silent" answers it itself,
+instead of the reader being taught to subtract a different subcommand's row
+listing. `--series-absent-limit <N|all>` is therefore OPT-IN with the default
+still 31, so no default line grows; `all` restores the full list (and the full
+365-day line, which is the price of asking). `series_absent=` keeps the FULL
+total under every setting.
 
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
@@ -1245,6 +1267,33 @@ def series_days_window(rows, limit=7, window_days=7):
 ABSENT_LIST_LIMIT = 31
 
 
+def parse_absent_limit(value):
+    """(limit, why) for --series-absent-limit; why is None when usable.
+
+    R3033: the cap answers "a month of silent days", and a reader who wants the
+    rest must be able to ASK for it on the same face. The accepted spellings are
+    `all` (no cap) and a positive integer (cap at N). Anything else is refused
+    with a reason instead of being coerced: a negative or zero cap would print
+    an empty list beside a non-zero `series_absent=`, which reads exactly like
+    "there are no silent days" - the absent-not-zero law this whole face exists
+    to keep. Unset (None) is not an error: the caller applies the default cap.
+
+    A pure function so the refusal branches are measurable without a process.
+    """
+    if value is None:
+        return ABSENT_LIST_LIMIT, None
+    text = str(value).strip().lower()
+    if text == 'all':
+        return None, None
+    try:
+        number = int(text)
+    except (TypeError, ValueError):
+        return None, 'expected all or a positive integer, got %r' % (value,)
+    if number <= 0:
+        return None, 'the cap must be positive (or all), got %d' % number
+    return number, None
+
+
 def series_absent_days(rows, window_days=7, limit=ABSENT_LIST_LIMIT):
     """{days, count, head, window, named, truncated} - calendar days the window
     never saw (R3027).
@@ -1285,6 +1334,11 @@ def series_absent_days(rows, window_days=7, limit=ABSENT_LIST_LIMIT):
     them this call returned and `truncated` says whether that is fewer. An
     unusable head day answers count None and an empty list, never a fabricated
     zero.
+
+    R3033: the caller may pass another cap, or None for the full list (the CLI
+    spellings are `<N>` and `all`, opt-in only, default ABSENT_LIST_LIMIT) -
+    measured qa/probe-R3033.log shows the truncated names are otherwise only
+    recoverable by subtracting a different subcommand's row listing.
     """
     width = max(1, int(window_days))
     head_day, usable, threshold = _window_start(
@@ -2529,12 +2583,29 @@ def main(argv=None):
                          'counted backwards, and the named days stop at one '
                          'month (31) while series_absent keeps the full total, '
                          'so absent_named < series_absent is a visible '
-                         'truncation (read-only display; gates nothing)')
+                         'truncation; pass --series-absent-limit to name more '
+                         '(read-only display; gates nothing)')
+    ap.add_argument('--series-absent-limit', dest='series_absent_limit',
+                    default=None, metavar='N|all',
+                    help='how many silent days the absent= list may name with '
+                         '--series-absent: a positive integer, or all for the '
+                         'full list. Omit for the one-month default (31). The '
+                         'count series_absent= stays the full total either way; '
+                         'zero, negative and non-numeric values are refused '
+                         '(read-only display; gates nothing)')
     args = ap.parse_args(argv)
     if args.series_absent and (args.series_days is None
                                or not args.failure_days):
         sys.stderr.write('series_absent applies only to --failure-days with '
                          '--series-days N\n')
+        return 2
+    if args.series_absent_limit is not None and not args.series_absent:
+        sys.stderr.write('--series-absent-limit applies only with '
+                         '--series-absent\n')
+        return 2
+    absent_limit, absent_why = parse_absent_limit(args.series_absent_limit)
+    if absent_why is not None:
+        sys.stderr.write('--series-absent-limit: %s\n' % absent_why)
         return 2
     if args.failures:
         stamp = datetime.datetime.now().astimezone().isoformat(
@@ -2563,7 +2634,8 @@ def main(argv=None):
             counts = series['series_counts']
             tail_markers = ' series_window=%d' % args.series_days
             if args.series_absent:
-                gaps = series_absent_days(day_read[0], args.series_days)
+                gaps = series_absent_days(day_read[0], args.series_days,
+                                          absent_limit)
                 presence = series_presence_counts(day_read[0], args.series_days)
                 tail_markers += ' series_absent=%s absent=%s absent_named=%s days_present=%s repeat_rows=%s retry_rows=%s window_from=%s' % (
                     'none' if gaps['count'] is None else gaps['count'],

@@ -1,0 +1,8 @@
+default (31)                 rc=0 series_absent=50 absent_named=31 first_name=2026-09-21 last_name=2026-10-21
+--series-absent-limit 5      rc=0 series_absent=50 absent_named=5 first_name=2026-09-21 last_name=2026-09-25
+--series-absent-limit 100    rc=0 series_absent=50 absent_named=50 first_name=2026-09-21 last_name=2026-11-12
+--series-absent-limit all    rc=0 series_absent=50 absent_named=50 first_name=2026-09-21 last_name=2026-11-12
+refused: 0                   rc=2 stdout='' stderr='--series-absent-limit: the cap must be positive (or all), got 0'
+refused: -1                  rc=2 stdout='' stderr='--series-absent-limit: the cap must be positive (or all), got -1'
+refused: abc                 rc=2 stdout='' stderr="--series-absent-limit: expected all or a positive integer, got 'abc'"
+world holds no extra names: yes

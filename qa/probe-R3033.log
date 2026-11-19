@@ -1,0 +1,30 @@
+=== P1: are silent-day names past the 31st recoverable? ===
+W1 rc=0 tail=series_window=60 series_absent=50 absent=2026-09-21,2026-09-22,2026-09-23,2026-09-24,2026-09-25,2026-09-26,2026-09-27,2026-09-28,2026-09-29,2026-09-30,2026-10-01,2026-10-02,2026-10-03,2026-10-04,2026-10-05,2026-10-06,2026-10-07,2026-10-08,2026-10-09,2026-10-10,2026-10-11,2026-10-12,2026-10-13,2026-10-14,2026-10-15,2026-10-16,2026-10-17,2026-10-18,2026-10-19,2026-10-20,2026-10-21 absent_named=31 days_present=10 repeat_rows=0 retry_rows=0 window_from=2026-09-21
+W2 rc=0 tail=series_window=60 series_absent=50 absent=2026-09-21,2026-09-22,2026-09-23,2026-09-24,2026-09-25,2026-09-26,2026-09-27,2026-09-28,2026-09-29,2026-09-30,2026-10-01,2026-10-02,2026-10-03,2026-10-04,2026-10-05,2026-10-06,2026-10-07,2026-10-08,2026-10-09,2026-10-10,2026-10-11,2026-10-12,2026-10-13,2026-10-14,2026-10-15,2026-10-16,2026-10-17,2026-10-18,2026-10-19,2026-10-20,2026-10-21 absent_named=31 days_present=10 repeat_rows=0 retry_rows=0 window_from=2026-09-21
+printed tails byte-identical = True
+printed LINES byte-identical = True
+W1 hidden row days=['2026-10-25', '2026-10-26', '2026-10-27'] ; W2 hidden row days=['2026-10-28', '2026-10-29', '2026-10-30']
+=> if identical, the same printed line comes from two different silent-day sets
+markers: window=60 from=2026-09-21 named=31 absent=50 present=10
+unnamed silent days = absent - named = 19
+days holding a row that the series pairs do NOT show = present - shown_days
+  present=10 shown_days=7 deficit=3
+
+=== P2: does another face already list days with NO row? ===
+w1 dropped-listing rc=0 lines=11 header=CRAWL-FAILURE-DAYS-DROPPED days=11 bad=0 window=60 shown=10 truncated=1 hidden=1 head=2026-11-19
+  row lines=10 days_listed=['2026-10-25', '2026-10-26', '2026-10-27', '2026-11-13', '2026-11-14', '2026-11-15', '2026-11-16', '2026-11-17', '2026-11-18', '2026-11-19']
+w2 dropped-listing rc=0 lines=11 header=CRAWL-FAILURE-DAYS-DROPPED days=11 bad=0 window=60 shown=10 truncated=1 hidden=1 head=2026-11-19
+  row lines=10 days_listed=['2026-10-28', '2026-10-29', '2026-10-30', '2026-11-13', '2026-11-14', '2026-11-15', '2026-11-16', '2026-11-17', '2026-11-18', '2026-11-19']
+module functions mentioning a day with no row: ['ABSENT_LIST_LIMIT', 'parse_absent_limit', 'series_absent_days']
+
+=== P3: would an opt-in --series-absent-limit flag collide? ===
+pre-change occurrences of the flag name in tool   = 1
+pre-change occurrences of the flag name in suite   = 0
+pre-change arms with count('absent=') == 2        = 6
+pre-change arms with count('absent_named=') == 1  = 1
+pre-change AC-RUN49 ok() arms                     = 7
+pre-change whole-line equality arms w/ absent=    = 0
+default face rc=0 bytes=214 has_absent_named=False
+explicit --days 7 identical to default = True
+
+private base= C:\Users\sjs20\AppData\Local\Temp\probeR3033_77igiiw9

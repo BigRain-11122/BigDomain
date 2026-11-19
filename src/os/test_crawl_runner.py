@@ -360,6 +360,37 @@ caps against its own last row with no clock (arm 5); the default face stays
 byte-identical (arm 6); and at width 1000 the line stays under 1000 bytes with
 the older absent= pair intact and no byte written (arm 7).
 
+AC-RUN48 (R3031) grades the WINDOW START. This paragraph was missing until
+R3033 disclosed and repaired it - the criterion shipped without a doc-head
+entry, so a reader of this header could not know it existed. Measured before
+that change (qa/probe-R3031.log): nine `_window_start` call sites share one
+literal-day string, membership is `threshold <= day <= head` (so a calendar day
+is wholly in or wholly out and `repeat`/`retry` are exact), and `window_from`
+had zero hits anywhere. The opt-in tail prints `window_from=<day|none>` and the
+arms pin: every width 1..10 splits no day (arm 1), the start equals the real
+threshold and moves a whole day when the window narrows (arm 2), a day at the
+edge stays out whole (arm 3), an unusable head answers none rather than an
+invented date (arm 4), a 2001 history opens from its own last row (arm 5), the
+default face stays byte-identical (arm 6), and no refused token appears (arm 7).
+
+AC-RUN50 (R3033) grades the OPT-IN ESCAPE HATCH from that cap. Measured before
+the change (qa/probe-R3033.log): two private worlds with the same window,
+`days_present=10`, `series_absent=50` and `absent_named=31` - differing only in
+three HIDDEN row days - printed BYTE-IDENTICAL lines, so the 19 unnamed silent
+days are not recoverable from the line; the premise that they are unprintable
+ANYWHERE in the repo measured FALSE (`--failure-days-dropped` prints every
+usable row's day, so a set subtraction gets them), and that correction is
+stated rather than dropped. An opt-in flag collided with nothing: six arms
+count `absent=` twice, one counts `absent_named=` once, zero whole-line
+equality arms carry `absent=`, and the default face is 214 bytes. So
+`--series-absent-limit <N|all>` is opt-in with the default still 31: `all`
+prints the full ascending list with `absent_named == series_absent` (arm 2), a
+small N caps and leaves the total full (arm 3), an N larger than the gap count
+invents no name (arm 4), zero/negative/non-numeric are refused with rc=2 (arm
+5), the flag without `--series-absent` is refused (arm 6), a complete window
+answers byte-identically under `all` and under the default (arm 7), and the
+default run writes no byte and prints no verdict (arm 1/8).
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -5245,6 +5276,132 @@ def main():
        'a thousand-day window still prints under 1000 bytes, the new token '
        'appears once and never exceeds the total, the older absent= pair '
        'still counts two, no verdict prints, and no byte is written')
+
+    # ===== AC-RUN50 (R3033): the silent-day list can be asked for in full =====
+    # AC-RUN50 was pinned in src/os/backlog.md BEFORE the flag existed
+    # (in-window pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3033.log): two private worlds that differ only in three HIDDEN
+    # row days printed BYTE-IDENTICAL lines (days_present=10, series_absent=50,
+    # absent_named=31), so the 19 unnamed silent days are not recoverable from
+    # the line; the premise "unprintable anywhere" measured FALSE because
+    # --failure-days-dropped prints every usable row's day (one invocation plus
+    # a set subtraction); and an opt-in flag collides with nothing (6 arms count
+    # absent= twice, 1 counts absent_named= once, 0 whole-line equality arms
+    # carry absent=, the default face is 214 bytes).
+
+    def days50(root, extra):
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            rc = RUN.main(list(extra) + ['--root', root])
+        return (rc, [n for n in out.getvalue().splitlines() if n.strip()],
+                err.getvalue())
+
+    r50 = world()
+    roots.append(r50)
+    p50 = hist37(r50)
+    put_days(p50, [plain_day('2026-09-01', 1),
+                   plain_day('2026-10-25', 21), plain_day('2026-10-26', 22),
+                   plain_day('2026-10-27', 23)]
+             + [plain_day('2026-11-%02d' % d, d - 8) for d in range(13, 20)])
+    base50 = ['--failure-days', '--series-days', '60', '--series-absent']
+
+    # arm 1: the default face is unchanged - one month of names, no new token
+    rc50, lines50, err50 = days50(r50, base50)
+    t50 = toks47(lines50[0]) if lines50 else {}
+    names50 = (t50.get('absent') or '').split(',')
+    ok('AC-RUN50', rc50 == 0 and lines50
+       and t50.get('series_absent') == '50'
+       and t50.get('absent_named') == '31'
+       and len(names50) == 31 and names50[-1] == '2026-10-21'
+       and lines50[0].count('absent=') == 2
+       and lines50[0].count('absent_named=') == 1
+       and 'limit=' not in lines50[0].replace('series_limit=', ''),
+       'without the flag a sixty-day window still names one month of its 50 '
+       'silent days and prints no new token')
+
+    # arm 2: all names the whole set, and the total is still the total
+    rc50b, lines50b, _e = days50(r50, base50 + ['--series-absent-limit', 'all'])
+    t50b = toks47(lines50b[0]) if lines50b else {}
+    names50b = (t50b.get('absent') or '').split(',')
+    ok('AC-RUN50', rc50b == 0 and t50b.get('absent_named') == '50'
+       and t50b.get('series_absent') == '50'
+       and len(names50b) == 50 and len(set(names50b)) == 50
+       and names50b[0] == t50b.get('window_from') == '2026-09-21'
+       and names50b[-1] == '2026-11-12'
+       and lines50b[0].count('absent=') == 2,
+       'all prints every one of the 50 silent days once, ascending, from the '
+       'window start, and named equals the full total')
+
+    # arm 3: a small cap names that many and never shrinks the total
+    rc50c, lines50c, _e = days50(r50, base50 + ['--series-absent-limit', '5'])
+    t50c = toks47(lines50c[0]) if lines50c else {}
+    ok('AC-RUN50', rc50c == 0 and t50c.get('absent_named') == '5'
+       and t50c.get('series_absent') == '50'
+       and len((t50c.get('absent') or '').split(',')) == 5,
+       'a cap of five names five days while series_absent stays 50 - the cap '
+       'never edits the count')
+
+    # arm 4: a cap wider than the gap count invents nothing
+    rc50d, lines50d, _e = days50(r50, base50 + ['--series-absent-limit', '100'])
+    t50d = toks47(lines50d[0]) if lines50d else {}
+    names50d = (t50d.get('absent') or '').split(',')
+    ok('AC-RUN50', rc50d == 0 and t50d.get('absent_named') == '50'
+       and len(names50d) == 50 and len(set(names50d)) == 50,
+       'asking for more names than there are gaps prints the 50 real days and '
+       'no invented ones')
+
+    # arm 5: zero, negative and non-numeric caps are refused, not coerced
+    refused50 = []
+    for bad in ('0', '-1', 'abc'):
+        rc50e, lines50e, err50e = days50(
+            r50, base50 + ['--series-absent-limit', bad])
+        refused50.append(rc50e == 2 and not lines50e
+                         and '--series-absent-limit' in err50e)
+    ok('AC-RUN50', all(refused50),
+       'a zero cap (which would read as "no silent days"), a negative one and '
+       'a word are all refused with rc=2 and nothing printed')
+
+    # arm 6: the flag alone is refused rather than silently ignored
+    rc50f, lines50f, err50f = days50(
+        r50, ['--failure-days', '--series-days', '60',
+              '--series-absent-limit', 'all'])
+    ok('AC-RUN50', rc50f == 2 and not lines50f
+       and '--series-absent' in err50f,
+       'the limit without --series-absent is refused, so a person cannot '
+       'believe a cap applied to a list that was not asked for')
+
+    # arm 7: on a complete window the flag changes nothing at all
+    r50b = world()
+    roots.append(r50b)
+    p50b = hist37(r50b)
+    put_days(p50b, [plain_day('2026-11-19', 0)])
+    short50 = ['--failure-days', '--series-days', '32', '--series-absent']
+    rc50g, lines50g, _e = days50(r50b, short50)
+    rc50h, lines50h, _e = days50(r50b, short50 + ['--series-absent-limit', 'all'])
+    ok('AC-RUN50', rc50g == 0 and rc50h == 0 and lines50g == lines50h
+       and toks47(lines50h[0]).get('absent_named') == '31',
+       'a window whose gaps all fit prints byte-identically with and without '
+       'all, so the cap only acts where it really truncates')
+
+    # arm 8: pure display, and the parser refuses without a process
+    before50 = tree_bytes(r50)
+    rc50i, lines50i, _e = days50(r50, base50)
+    after50 = tree_bytes(r50)
+    text50 = '\n'.join(lines50i)
+    t50i = toks47(lines50i[0]) if lines50i else {}
+    pure50 = [RUN.parse_absent_limit(None)[0] == RUN.ABSENT_LIST_LIMIT,
+              RUN.parse_absent_limit('all') == (None, None),
+              RUN.parse_absent_limit('7') == (7, None),
+              all(RUN.parse_absent_limit(b)[1] is not None
+                  for b in ('0', '-1', 'abc'))]
+    ok('AC-RUN50', rc50i == 0 and before50 == after50
+       and int(t50i.get('absent_named')) <= int(t50i['series_absent'])
+       and all(pure50)
+       and 'PASS' not in text50 and 'FLAG' not in text50
+       and 'verdict' not in text50,
+       'the honest parser answers the default, all, a number and three '
+       'refusals, the shown count never exceeds the total, no verdict prints '
+       'and no byte is written')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
