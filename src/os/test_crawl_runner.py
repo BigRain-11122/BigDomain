@@ -31,6 +31,11 @@ file, plus a DISPLAY-ONLY size_gate percentage whose denominator (100MB, the
 group water table's single-jsonl line) is printed on the same row. The arm that
 pins the absence of a verdict deliberately does NOT build a 100MB file; it reads
 the summary's key set and the emitted tokens instead, and says so.
+AC-RUN17 (R3000) grades the same size face on the HISTORY file, which is the
+half of the retention exemption the header argued for it. bytes only - `lines`
+was measured to equal days after any beat rewrite, so it would restate the row -
+and the above-reference print path is pinned as a pure function rather than by
+constructing a 100MB file, which this suite therefore never does.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -872,6 +877,106 @@ def main():
        and 'crawl-failure' not in census_src16
        and 'endswith(".log")' in census_src16,
        'neither the scanner nor the writer census reads either failure file')
+
+    # AC-RUN17 (R3000): the retention exemption's OTHER half - the history file's
+    # own body - finally has a face. bytes only; `lines` was measured to restate
+    # days after any beat rewrite, and the >100% path is pinned as a pure
+    # function instead of by building a 100MB file.
+    def day_row(day, n):
+        return {'day': day, 'on_day': n, 'total': n, 'recent': n, 'bad': 0,
+                'urls': 1, 'newest_at': None, 'newest_error': None}
+
+    def write_days(path, rows, junk=()):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, 'w', encoding='utf-8', newline='\n') as fh:
+            for row in rows:
+                fh.write(json.dumps(row, ensure_ascii=False, sort_keys=True,
+                                    separators=(',', ':')) + '\n')
+            for text in junk:
+                fh.write(text + '\n')
+
+    root39 = world(); roots.append(root39)
+    h39 = RUN.failure_day_path(root39)
+    write_days(h39, [day_row('2026-11-17', 2), day_row('2026-11-18', 0),
+                     day_row('2026-11-19', 1)], junk=['{broken', ''])
+    s39 = RUN.summarize_failure_days(h39)
+    ok('AC-RUN17', s39['bytes'] == os.path.getsize(h39)
+       and s39['days'] == 3 and s39['bad'] == 1 and s39['present'] is True,
+       'bytes equal the history file on disk while days counts only usable rows')
+
+    root40 = world(); roots.append(root40)
+    s40 = RUN.summarize_failure_days(RUN.failure_day_path(root40))
+    buf40 = io.StringIO()
+    with contextlib.redirect_stdout(buf40):
+        rc40 = RUN.main(['--failure-days', '--root', root40])
+    line40 = buf40.getvalue().strip()
+    ok('AC-RUN17', rc40 == 0 and s40['bytes'] == 0 and s40['days'] == 0
+       and s40['size_gate'] == 0.0 and s40['present'] is False
+       and 'bytes=0' in line40,
+       'a missing history answers zero bytes without raising, and the CLI prints it')
+
+    root41 = world(); roots.append(root41)
+    h41 = RUN.failure_day_path(root41)
+    target41 = RUN.SIZE_REFERENCE_BYTES // 100  # exactly one percent
+    head41 = json.dumps(day_row('2026-11-19', 0), sort_keys=True,
+                        separators=(',', ':')) + '\n'
+    write_days(h41, [day_row('2026-11-19', 0)])
+    with open(h41, 'a', encoding='utf-8', newline='\n') as fh:
+        fh.write('x' * (target41 - len(head41) - 1) + '\n')
+    s41 = RUN.summarize_failure_days(h41)
+    ok('AC-RUN17', os.path.getsize(h41) == target41
+       and s41['size_gate'] == 1.0
+       and s41['size_gate'] == RUN.size_gate_pct(os.path.getsize(h41)),
+       'the history percentage is the same helper the side channel uses, not a second formula')
+
+    ref42 = RUN.SIZE_REFERENCE_BYTES
+    ok('AC-RUN17', RUN.size_gate_pct(2 * ref42) == 200.0
+       and RUN.size_gate_pct(ref42) == 100.0
+       and RUN.size_gate_pct(ref42 - 2000) < 100.0
+       and RUN.size_gate_pct(ref42 // 1000) == 0.1,
+       'the above-reference print path is pinned by a pure function; no 100MB file is built')
+
+    root43 = world(); roots.append(root43)
+    h43 = RUN.failure_day_path(root43)
+    write_days(h43, [day_row('2026-11-13', 0), day_row('2026-11-14', 1),
+                     day_row('2026-11-15', 0), day_row('2026-11-16', 0),
+                     day_row('2026-11-17', 3), day_row('2026-11-18', 2),
+                     day_row('2026-11-19', 1)])
+    s43 = RUN.summarize_failure_days(h43, 3)
+    ok('AC-RUN17', set(s43.keys()) == set(['days', 'bad', 'first', 'last',
+                                           'series', 'present', 'bytes',
+                                           'size_gate', 'gate_ref_mb'])
+       and s43['days'] == 7 and s43['bad'] == 0
+       and s43['first'] == '2026-11-13' and s43['last'] == '2026-11-19'
+       and len(s43['series']) == 3
+       and s43['bytes'] == os.path.getsize(h43),
+       'the added fields are purely additive and bytes covers the whole file, not the printed tail')
+
+    scan_src17 = ''
+    scan_path17 = os.path.join(ROOT, 'tools', 'skills', 'bigdomain-loop-scan',
+                               'scripts', 'scan_five_still.ps1')
+    if os.path.isfile(scan_path17):
+        with open(scan_path17, 'r', encoding='utf-8', errors='replace') as fh:
+            scan_src17 = fh.read()
+    buf43 = io.StringIO()
+    with contextlib.redirect_stdout(buf43):
+        rc43 = RUN.main(['--failure-days', '--root', root43, '--days', '7'])
+    line43 = buf43.getvalue().strip()
+    ok('AC-RUN17', rc43 == 0 and 'bytes=' in line43 and 'size_gate=' in line43
+       and 'gate_ref=100MB' in line43 and 'lines=' not in line43
+       and 'PASS' not in line43 and 'FLAG' not in line43
+       and 'verdict' not in line43
+       and 'crawl-failure' not in scan_src17,
+       'one row carries body size and the named denominator, carries no physical line count, no verdict, and stays outside the scanner '
+       '(the CRAWL-FAILURE-DAYS label itself contains FAIL, so that token is not the anchor)')
+
+    root44 = world(); roots.append(root44)
+    h44 = RUN.failure_day_path(root44)
+    write_days(h44, [day_row('2026-11-18', 1)], junk=['{broken', ''])
+    RUN.snapshot_failure_day(root44, TODAY)
+    ok('AC-RUN17', (RUN.failure_file_stats(h44)['lines']
+                    == RUN.summarize_failure_days(h44)['days']),
+       'after one beat rewrite the physical line count equals days - the measured reason lines= is not printed')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

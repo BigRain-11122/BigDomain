@@ -133,6 +133,22 @@ a file above the reference line still prints a number rather than a judgement.
 The reference is the group canon's water table line for a single append-only
 jsonl, NOT a threshold this repo enforces.
 
+SIZE FACE ON THE HISTORY (R3000): the retention exemption above also argues
+about qa/crawl-failure-days.jsonl ("~38.1KB per year"), and that file's reader
+printed days / bad / first / last / series - no body size at all - so half the
+exemption still required a person to run Get-Item. --failure-days now carries
+bytes= (os.path.getsize of the WHOLE file, 0 when absent), size_gate= (the same
+pure helper, so history and side channel cannot disagree) and gate_ref=100MB.
+Deliberately NOT printed: lines=. Measured in the R3000 probe: a same-day beat
+rewrites this file through snapshot_failure_day, which keeps only validated
+rows, so malformed and blank rows are dropped and the physical line count
+equals days on every live checkout - the field could only restate days. bad=
+still reports the transient case. Also measured and stated rather than implied:
+size_gate is rounded to four decimals, and 0.0001% of a 100MB reference is
+~105B, so a file within about a hundred bytes BELOW the line also prints
+100.0000% - the number is a display, and 100.0000 does not mean "at the line".
+Nothing here gates, retries or pages.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -411,13 +427,36 @@ def snapshot_failure_day(repo_root, day, window_days=7):
 
 
 def summarize_failure_days(path, limit=7):
-    """Readable series over the daily history; zero rows is an honest answer."""
+    """Readable series over the daily history; zero rows is an honest answer.
+
+    R3000: the series answers "which days were how bad" and the retention
+    exemption answers "how big does this get", but the second had no product
+    face - the header's "~38.1KB per year" was arithmetic a reader had to take
+    on faith for THIS file (the side channel got its own size face at R2999).
+    bytes is therefore the file's own body, measured with the same helper the
+    side channel uses, so the two faces cannot disagree about a file's size.
+
+    WHY NO `lines`: measured (R3000 probe, disclosed in the board PIN) - a
+    same-day beat REWRITES the history through snapshot_failure_day, which
+    keeps only validated rows, so malformed and blank rows are dropped and the
+    physical line count equals days on every live checkout. A field whose value
+    can only restate another field on the same line is noise, so only bytes is
+    printed here; the reader can still see bad= for the transient case. The
+    retained tail (limit=) is a separate matter: bytes covers the WHOLE file,
+    not the printed tail, which is what makes it comparable to the water line.
+    """
     rows, bad = read_failure_days(path)
     tail = rows[-max(1, int(limit)):]
-    return {'days': len(rows), 'bad': bad,
-            'first': (rows[0].get('day') if rows else None),
-            'last': (rows[-1].get('day') if rows else None),
-            'series': [(r.get('day'), r.get('on_day')) for r in tail]}
+    out = {'days': len(rows), 'bad': bad,
+           'first': (rows[0].get('day') if rows else None),
+           'last': (rows[-1].get('day') if rows else None),
+           'series': [(r.get('day'), r.get('on_day')) for r in tail]}
+    stats = failure_file_stats(path)
+    out['present'] = stats['present']
+    out['bytes'] = stats['bytes']
+    out['size_gate'] = size_gate_pct(stats['bytes'])
+    out['gate_ref_mb'] = SIZE_REFERENCE_BYTES // (1024 * 1024)
+    return out
 
 
 def failure_kind(error):
@@ -789,9 +828,11 @@ def main(argv=None):
     if args.failure_days:
         series = summarize_failure_days(failure_day_path(args.root), args.days)
         pairs = ','.join('%s:%s' % (d, n) for d, n in series['series'])
-        print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s series=%s'
+        print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s series=%s '
+              'bytes=%d size_gate=%.4f%% gate_ref=%dMB'
               % (series['days'], series['bad'], series['first'] or 'none',
-                 series['last'] or 'none', pairs or 'none'))
+                 series['last'] or 'none', pairs or 'none', series['bytes'],
+                 series['size_gate'], series['gate_ref_mb']))
         return 0
     if args.failure_trend:
         stamp = datetime.datetime.now().astimezone().isoformat(

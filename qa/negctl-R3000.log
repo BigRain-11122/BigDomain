@@ -1,0 +1,7 @@
+honest: bytes == whole file, days == all rows              GREEN 
+honest: a missing history answers bytes=0 without raising  GREEN 
+honest: size_gate is the shared helper at one hundredth    GREEN 
+mutant A (tail bytes): AC-RUN17 arm 5 must read red        RED-AS-EXPECTED bytes=123 file=749
+mutant B (20MB denominator): AC-RUN17 arm 3 must read red  RED-AS-EXPECTED value=5.0
+mutant C (absence raises): AC-RUN17 arm 2 must read red    RED-AS-EXPECTED 
+NEGCTL PASS

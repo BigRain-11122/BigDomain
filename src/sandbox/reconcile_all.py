@@ -4663,8 +4663,12 @@ SUITES = [
     # display-only size_gate against the group water line) and corrects the
     # 20MB denominator that this checkout's hook never had. (AC-RUN16 pinned in
     # the R2999 PIN row before the code.)
+    # R3000 puts the same size face on the HISTORY line (bytes only - `lines`
+    # was measured to restate days after a beat rewrite) and pins the
+    # above-reference path as a pure function. (AC-RUN17 pinned in the R3000
+    # PIN row before the code.)
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 16),
+     os.path.join("..", "os", "test_crawl_runner.py"), 17),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep
