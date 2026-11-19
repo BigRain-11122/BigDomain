@@ -1,0 +1,6 @@
+R3054 NEGATIVE CONTROL - three mutants, swapped in place then restored
+HONEST verdict=GREEN
+m1 first-ten-characters law (the old law) -> CAUGHT (RED c1=False c2=True c3=False)
+m2 any non-blank string counts -> CAUGHT (RED c1=False c2=True c3=False)
+m3 a real date but not an instant -> CAUGHT (RED c1=True c2=False c3=False)
+RESTORED verdict=GREEN

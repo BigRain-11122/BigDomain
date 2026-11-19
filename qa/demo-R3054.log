@@ -1,0 +1,9 @@
+R3054 DEMO - the three faces on the real checkout, given --at 2026-11-20T23:00:00+08:00
+--failures rc=0
+  CRAWL-FAILURES total=0 recent7=0 bad=0 bad_days=none urls=0 bytes=0 lines=0 size_gate=0.0000% gate_ref=100MB newest=none error=none kind=none day=2026-11-20
+--pending-old-list rc=0
+  CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=0 bad_days=none fcov=none last_at=none reason=no-coverage
+--pending-old-bad rc=0
+  CRAWL-PENDING-OLD-BAD bad=0 bad_days=none
+--failure-days-bad rc=0
+  CRAWL-FAILURE-DAYS-BAD bad=0 bad_days=none

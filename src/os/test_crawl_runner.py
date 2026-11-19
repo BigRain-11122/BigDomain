@@ -7803,7 +7803,7 @@ def main():
         j54 = src68.find('\ndef ', i54 + 1)
         return src68[i54:j54 if j54 > 0 else len(src68)]
 
-    ok('AC-RUN68', '_usable_day(day)' in body68('read_failures_ext')
+    ok('AC-RUN68', '_usable_day(cand)' in body68('read_failures_ext')
        and '_usable_day(cand)' in body68('read_failure_bad_lines_ext')
        and 'read_failures_ext(' in body68('read_failures')
        and 'read_failure_bad_lines_ext(' in body68('read_failure_bad_lines')
@@ -8124,6 +8124,176 @@ def main():
        and 'field' not in ''.join(words70),
        'the whole vocabulary is eight words for eight repairs, and no word is '
        'a bucket that a person would have to open the line to disambiguate')
+
+    # --- AC-RUN71: a day that only LOOKS like a day is not a day -----------
+    # Measured before any of this existed (qa/probe-R3054.log P1/P3):
+    # `_usable_day` read the first ten characters, so two garbage-stamped rows
+    # and one clean row read as 3/3 usable evidence for ONE day - total=3
+    # recent7=3 newest=2026-11-20garbage day=2026-11-20 - and the pending list
+    # reported a span those stamps do not own.
+    JUNK71 = ['2026-11-20garbage', '2026-11-20T99:99', '2026-11-20xyzT08:00',
+              '2026-13-40', '2026-11-2', '', 'garbage']
+    AT71 = '2026-11-20T23:00:00+08:00'
+
+    def face71(root, flag, at=None):
+        argv = [flag, '--root', root]
+        if at is not None:
+            argv += ['--at', at]
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(argv)
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    # Arm 1: the whole-value truth table, both directions.
+    ok('AC-RUN71', not any(RUN._usable_day(v) for v in JUNK71)
+       and all(RUN._usable_day(v) for v in (
+           '2026-11-20', '2026-11-20T08:00:00+08:00',
+           '2026-11-20T04:00:00', ' 2026-11-20 ')),
+       'a value names a day only when the WHOLE value is a real date or a real '
+       'instant, so the first ten characters no longer count as a day')
+
+    # Arm 2: the side channel names the repair and claims no day.
+    S71 = world(); roots.append(S71)
+    side71 = RUN.failure_path(S71)
+    os.makedirs(os.path.dirname(side71), exist_ok=True)
+    with open(side71, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"source_url":"https://s71.example/a",'
+                 '"failed_at":"2026-11-20garbage","error":"boom"}\n')
+        fh.write('{"source_url":"https://s71.example/b",'
+                 '"failed_at":"2026-11-20T99:99","error":"boom"}\n')
+        fh.write('{"source_url":"https://s71.example/c",'
+                 '"failed_at":"2026-11-20xyzT08:00","error":"boom"}\n')
+        fh.write('{"source_url":"https://s71.example/d",'
+                 '"failed_at":"2026-13-40","error":"boom"}\n')
+    rcS71, linesS71 = bad69(S71, '--pending-old-bad')
+    ok('AC-RUN71', rcS71 == 0
+       and linesS71[0] == 'CRAWL-PENDING-OLD-BAD bad=4 bad_days=none'
+       and [toks69(n).get('why') for n in linesS71[1:]]
+       == ['failed_at_fmt'] * 4
+       and [toks69(n).get('day') for n in linesS71[1:]] == ['none'] * 4,
+       'four stamps that only look like days land on the repair word R3053 '
+       'already ships, and none of them claims a day')
+
+    # Arm 3: the day-history twin keeps its clean row and refuses the garbage.
+    D71 = world(); roots.append(D71)
+    day71 = RUN.failure_day_path(D71)
+    os.makedirs(os.path.dirname(day71), exist_ok=True)
+    with open(day71, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"day":"2026-11-20garbage","on_day":1,"failed":1}\n')
+        fh.write('{"day":"2026-11-20","on_day":1,"failed":1}\n')
+    rcD71, linesD71 = bad69(D71, '--failure-days-bad')
+    ok('AC-RUN71', rcD71 == 0
+       and linesD71[0] == 'CRAWL-FAILURE-DAYS-BAD bad=1 bad_days=none'
+       and linesD71[1] == 'BAD-LINE n=1 why=day_fmt day=none'
+       and [r.get('day') for r in RUN.read_failure_days(day71)[0]]
+       == ['2026-11-20'],
+       'the day file separates a real day from a value that merely starts with '
+       'one, and the real row still reads its own day')
+
+    # Arm 4: a channel of nothing but fake days supplies no evidence at all.
+    G71 = world(); roots.append(G71)
+    side71g = RUN.failure_path(G71)
+    os.makedirs(os.path.dirname(side71g), exist_ok=True)
+    with open(side71g, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"source_url":"https://s71.example/g1",'
+                 '"failed_at":"2026-11-20garbage","error":"boom"}\n')
+        fh.write('{"source_url":"https://s71.example/g2",'
+                 '"failed_at":"2026-11-20T99:99","error":"boom"}\n')
+        fh.write('{"source_url":"https://s71.example/g3",'
+                 '"failed_at":"2026-13-40","error":"boom"}\n')
+    rcF71, linesF71 = face71(G71, '--failures', AT71)
+    rcP71, linesP71 = face71(G71, '--pending-old-list', AT71)
+    f71 = toks69(linesF71[0])
+    p71 = toks69(linesP71[0])
+    ok('AC-RUN71', rcF71 == 0 and rcP71 == 0
+       and f71.get('total') == '0' and f71.get('recent7') == '0'
+       and f71.get('bad') == '3' and f71.get('bad_days') == 'none'
+       and f71.get('newest') == 'none' and f71.get('urls') == '0'
+       and p71.get('fcov') == 'none' and p71.get('last_at') == 'none'
+       and len(linesP71) == 1,
+       'a channel of nothing but fake days reads as no evidence: no row, no '
+       'span, no last write, while bad= still names all three lines')
+
+    # Arm 5: one real row stands alone - and no face echoes a fake day.
+    M71 = world(); roots.append(M71)
+    side71m = RUN.failure_path(M71)
+    os.makedirs(os.path.dirname(side71m), exist_ok=True)
+    with open(side71m, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"source_url":"https://s71.example/m1",'
+                 '"failed_at":"2026-11-20garbage","error":"boom"}\n')
+        fh.write('{"source_url":"https://s71.example/m2",'
+                 '"failed_at":"2026-11-20T07:41:00+08:00","error":"boom"}\n')
+        fh.write('{"source_url":"https://s71.example/m3",'
+                 '"failed_at":"2026-11-20T99:99","error":"boom"}\n')
+    rcF71m, linesF71m = face71(M71, '--failures', AT71)
+    rcP71m, linesP71m = face71(M71, '--pending-old-list', AT71)
+    fm = toks69(linesF71m[0])
+    pm = toks69(linesP71m[0])
+    ok('AC-RUN71', rcF71m == 0 and rcP71m == 0
+       and fm.get('total') == '1' and fm.get('recent7') == '1'
+       and fm.get('bad') == '2'
+       and fm.get('newest') == '2026-11-20T07:41:00+08:00'
+       and pm.get('fcov') == '2026-11-20..2026-11-20'
+       and pm.get('last_at') == '2026-11-20T07:41'
+       and not any('garbage' in n or 'T99' in n
+                   for n in linesF71m + linesP71m),
+       'the counts, the span and the last write come from the one real stamp, '
+       'and neither face prints a value that names no day')
+
+    # Arm 6: the writer refuses what the readers refuse.
+    W71 = world(); roots.append(W71)
+    wpath71 = RUN.failure_path(W71)
+    refused71 = None
+    try:
+        RUN.append_failure(wpath71, 'https://s71.example/w1',
+                           '2026-11-20garbage', 'boom')
+    except ValueError as exc:
+        refused71 = str(exc)
+    wrote71 = RUN.append_failure(wpath71, 'https://s71.example/w2',
+                                 '2026-11-20T08:00:00+08:00', 'boom')
+    rows71, bad71 = RUN.read_failures(wpath71)
+    ok('AC-RUN71', refused71 is not None and 'failed_at' in refused71
+       and wrote71.get('failed_at') == '2026-11-20T08:00:00+08:00'
+       and len(rows71) == 1 and bad71 == 0,
+       'the writer refuses the same value the readers refuse, so no row can be '
+       'written that every face would then have to guess about')
+
+    # Arm 7: display only - two runs, same bytes, and the world does not move.
+    before71 = snap69(M71)
+    rcF71b, linesF71b = face71(M71, '--failures', AT71)
+    ok('AC-RUN71', rcF71b == 0 and linesF71b == linesF71m
+       and snap69(M71) == before71,
+       'the stricter law writes nothing and prints the same bytes twice')
+
+    # Arm 8: one law in the source, and the clock input stays refused (R3047).
+    with io.open(os.path.join(ROOT, 'tools', 'crawl_runner.py'),
+                 'r', encoding='utf-8') as fh:
+        src71 = fh.read()
+
+    def body71(name):
+        i71 = src71.find('def %s(' % name)
+        j71 = src71.find('\ndef ', i71 + 1)
+        return src71[i71:j71 if j71 > 0 else len(src71)]
+
+    at_err = io.StringIO()
+    try:
+        with contextlib.redirect_stderr(at_err):
+            rc_at71 = RUN.main(['--failures', '--root', M71,
+                                '--at', '2026-11-20garbage'])
+    except SystemExit as exc:
+        rc_at71 = exc.code
+    ok('AC-RUN71', 'value[:10]' not in body71('_usable_day')
+       and 'date.fromisoformat' in body71('_usable_day')
+       and 'datetime.fromisoformat' in body71('_usable_day')
+       and '_usable_day(' in body71('_failure_row_why')
+       and '_usable_day(' in body71('_failure_day_row_why')
+       and '_usable_day(cand)' in body71('read_failures_ext')
+       and '_usable_day(cand)' in body71('read_failure_bad_lines_ext')
+       and '_usable_day(cand)' in body71('read_failure_day_bad_lines_ext')
+       and rc_at71 == 2 and 'not an ISO timestamp' in at_err.getvalue(),
+       'the whole-value law is one function used by both reason faces and all '
+       'three claim readers, and a garbage --at stamp is still refused instead '
+       'of being cut into a day')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

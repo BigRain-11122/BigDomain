@@ -473,6 +473,28 @@ boundary: `header_bytes` is on the LF law like its siblings, so it is the
 header's slice of that total rather than the width of the visible glyph row;
 Windows text-mode stdout adds one more byte on top.
 
+A DAY THAT LOOKS LIKE A DAY (R3054, measured first - qa/probe-R3054.log):
+`_usable_day` read the first ten characters and asked only whether they were
+digit groups, so `2026-11-20garbage` and `2026-11-20T99:99` counted as real
+days (P1). A side channel holding two such rows and one clean row was read as
+3/3 usable rows with bad=0, `--failures` answered total=3 recent7=3
+newest=2026-11-20garbage day=2026-11-20, and `--pending-old-list` reported
+fcov=2026-11-20..2026-11-20 - one real day printed as three rows of evidence,
+with the span supplied by stamps that name no day at all. The inconsistency was
+already visible in the code: `_usable_day(2026-13-40)` answered yes while
+`_window_start` refused the same value a line later. The law is now the whole
+value - a ten-character date fromisoformat accepts, or a string fromisoformat
+accepts as an instant - so a value that names no computable day is refused by
+the same test every reader already shares. No new word: such a row lands on
+R3053's failed_at_fmt / day_fmt (a value that fails the day law), and bad_days
+stops naming it because it never claimed a day. Refused: changing `_day_of`'s
+display fallback (AC-RUN65 pins that a display face must not die over the value
+it was asked to display) and touching `_stamp_echo` (it copies the writer's
+own characters, and a refused row never reaches it). The on-disk files were
+clean at probe time (record 3 rows, history 2 rows, side channel absent: zero
+loose stamps), so this closes a door rather than repairing a file, and that
+difference is stated rather than implied.
+
 THE SILENT-DAY LINE PRICES ITSELF (R3039, measured first - qa/probe-R3039.log):
 the DAYS-DROPPED face learned to price its header and its block, but the
 sibling face on the SAME command (`--failure-days --series-days N
@@ -1087,13 +1109,36 @@ def failure_day_path(repo_root):
 
 
 def _usable_day(value):
-    """True when value starts with a literal YYYY-MM-DD day (the record law)."""
-    if not isinstance(value, str) or len(value) < 10:
+    """True when the WHOLE value names a day anyone can compute (R3054).
+
+    R3054: the law used to read the first ten characters and nothing else, so
+    `2026-11-20garbage` and `2026-11-20T99:99` were usable days (measured,
+    qa/probe-R3054.log P1), a row carrying one of them was accepted as a real
+    failure (3/3 rows, bad=0), the faces named 2026-11-20 for it (a clean day
+    that appears nowhere in the file), and `_window_start` refused
+    `2026-13-40` while this function accepted it - one word, two meanings.
+    The law is now the whole value: a ten-character date that fromisoformat
+    accepts, or a string fromisoformat accepts as an instant. Every writer on
+    this disk stamps either the ten-character day or an ISO instant, so a value
+    that fails both names no day a reader could compute, and the repair words
+    R3053 already ships (failed_at_fmt / day_fmt) cover it without a new word.
+    """
+    if not isinstance(value, str):
         return False
-    head = value[:10]
-    if head[4] != '-' or head[7] != '-':
+    text = value.strip()
+    if not text:
         return False
-    return head[:4].isdigit() and head[5:7].isdigit() and head[8:10].isdigit()
+    if len(text) == 10:
+        try:
+            datetime.date.fromisoformat(text)
+            return True
+        except ValueError:
+            return False
+    try:
+        datetime.datetime.fromisoformat(text)
+        return True
+    except ValueError:
+        return False
 
 
 def append_failure(path, source_url, failed_at, error):
@@ -1266,9 +1311,12 @@ def read_failures_ext(path):
             continue
         bad += 1
         if isinstance(row, dict):
-            day = str(row.get('failed_at') or '')[:10]
-            if _usable_day(day):
-                claimed.add(day)
+            # R3054: the law is the WHOLE value - cutting to ten characters
+            # before the test would let "2026-11-20garbage" claim 2026-11-20
+            # on the very face that just refused it.
+            cand = row.get('failed_at')
+            if _usable_day(cand):
+                claimed.add(str(cand)[:10])
     return rows, bad, sorted(claimed)
 
 
@@ -1335,10 +1383,12 @@ def read_failure_bad_lines_ext(path):
             continue
         day = None
         if isinstance(row, dict):
-            cand = str(row.get('failed_at') or '')[:10]
+            # R3054: judge the whole failed_at, then name its day - a sliced
+            # value would pass the law its own text fails.
+            cand = row.get('failed_at')
             if _usable_day(cand):
-                day = cand
-                claimed.add(cand)
+                day = str(cand)[:10]
+                claimed.add(day)
         named.append({'line': n, 'why': kind, 'day': day})
     return named, sorted(claimed)
 
@@ -1643,10 +1693,11 @@ def read_failure_day_bad_lines_ext(path):
             continue
         day = None
         if isinstance(row, dict):
-            cand = str(row.get('day') or '')[:10]
+            # R3054: same law on this face - the whole value, then its day.
+            cand = row.get('day')
             if _usable_day(cand):
-                day = cand
-                claimed.add(cand)
+                day = str(cand)[:10]
+                claimed.add(day)
         named.append({'line': n, 'why': why, 'day': day})
     return named, sorted(claimed)
 

@@ -1,0 +1,36 @@
+R3054 PROBE - does "looks like a day" count as a day? (read-only)
+
+P0 live files on this disk (day-bearing rows only)
+  record       rows=3      passes_usable_day_but_not_a_real_day=0   []
+  day-history  rows=2      passes_usable_day_but_not_a_real_day=0   []
+  side-channel C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\crawl-failures.jsonl ABSENT
+
+P1 what _usable_day says versus what a real day is
+  '2026-11-20garbage'    usable=True  strict=False  day_of='2026-11-20'  window=('2026-11-20', True)
+  '2026-11-20T99:99'     usable=True  strict=False  day_of='2026-11-20'  window=('2026-11-20', True)
+  '2026-11-20xyzT08:00'  usable=True  strict=False  day_of='2026-11-20'  window=('2026-11-20', True)
+  '2026-13-40'           usable=True  strict=False  day_of='2026-13-40'  window=('2026-13-40', False)
+  '2026-11-20'           usable=True  strict=True   day_of='2026-11-20'  window=('2026-11-20', True)
+
+P2 who cuts to ten characters and who echoes the whole stamp
+  '2026-11-20garbage'
+    _side_coverage_rows -> ('2026-11-20', '2026-11-20')
+    _day_age(2026-11-20, stamp) -> 0
+    _last_stamp_rows -> '2026-11-20garbage'
+    _stamp_echo -> '2026-11-20'
+  '2026-11-20T99:99'
+    _side_coverage_rows -> ('2026-11-20', '2026-11-20')
+    _day_age(2026-11-20, stamp) -> 0
+    _last_stamp_rows -> '2026-11-20T99:99'
+    _stamp_echo -> '2026-11-20T99:99'
+
+P3 a private world with such rows, read by the shipped faces
+  read_failures keeps 3 of 3 rows, bad=0
+  --pending-old-list rc=0
+    CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=0 bad_days=none fcov=2026-11-20..2026-11-20 last_at=2026-11-20 reason=no-coverage
+  --failures rc=0
+    CRAWL-FAILURES total=3 recent7=3 bad=0 bad_days=none urls=3 bytes=244 lines=3 size_gate=0.0002% gate_ref=100MB newest=2026-11-20garbage error=boom kind=other day=2026-11-20
+  --pending-old-bad rc=0
+    CRAWL-PENDING-OLD-BAD bad=0 bad_days=none
+
+PROBE END
