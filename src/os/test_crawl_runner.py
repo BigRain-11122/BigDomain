@@ -22,6 +22,9 @@ nothing here writes a file outside a temp directory and no launcher is started.
 AC-RUN13 (R2996) grades the trend's EVIDENCE label (side / history / none) and
 the failure CLASS bucket it carries, so a pruned side channel cannot read like
 a source that never failed - also offline, temp directories only.
+AC-RUN14 (R2997) grades the recurrence WEIGHT (recur=<sources>:<failures>, and
+none rather than 0:0 once the side channel is gone) and the single shared
+failure_kind() bucket that both --failures and the trend line now read.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -639,6 +642,83 @@ def main():
     ok('AC-RUN13', t24['evidence'] == 'history' and t24['kind'] == 'none'
        and t24['kind_count'] == 0 and t24['today'] == 0,
        'a history that exists and records nothing is evidence, not silence')
+
+    # AC-RUN14 (R2997): the recurrence line carries WEIGHT, not just a source
+    # count, and an unmeasurable recurrence is named rather than reported as 0.
+    root25 = world(); roots.append(root25)
+    h25 = RUN.failure_day_path(root25)
+    f25 = RUN.failure_path(root25)
+    RUN.snapshot_failure_day(root25, TODAY + 'T09:00:00+08:00')
+    RUN.append_failure(f25, 'https://g.example/1', '2026-11-18T05:00:00+08:00',
+                       'E_FETCH TimeoutError: a')
+    RUN.append_failure(f25, 'https://g.example/1', TODAY + 'T01:00:00+08:00',
+                       'E_FETCH TimeoutError: b')
+    RUN.append_failure(f25, 'https://g.example/1', TODAY + 'T02:00:00+08:00',
+                       'E_FETCH TimeoutError: c')
+    RUN.append_failure(f25, 'https://h.example/2', TODAY + 'T03:00:00+08:00',
+                       'E_FETCH HTTPError: 403')
+    t25 = RUN.summarize_failure_trend(h25, f25, TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN14', t25['recur'] == (1, 3) and t25['recurring'] == 1
+       and t25['sources'] == 2,
+       'recur names the recurring source count AND its window failures')
+    root26 = world(); roots.append(root26)
+    h26 = RUN.failure_day_path(root26)
+    f26 = RUN.failure_path(root26)
+    for hour in range(3):
+        RUN.append_failure(f26, 'https://i.example/3',
+                           TODAY + 'T0%d:00:00+08:00' % hour,
+                           'E_FETCH TimeoutError: x')
+    t26 = RUN.summarize_failure_trend(h26, f26, TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN14', t26['recur'] == (0, 0) and t26['recurring'] == 0
+       and t26['sources'] == 1,
+       'three failures on ONE day are not a recurrence')
+    root27 = world(); roots.append(root27)
+    h27 = RUN.failure_day_path(root27)
+    os.makedirs(os.path.dirname(h27), exist_ok=True)
+    with open(h27, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(json.dumps({'day': '2026-11-18', 'on_day': 2, 'total': 2,
+                             'newest_at': '2026-11-18T05:00:00+08:00',
+                             'newest_error': 'E_FETCH TimeoutError: gone'},
+                            sort_keys=True, separators=(',', ':')) + '\n')
+    t27 = RUN.summarize_failure_trend(h27, RUN.failure_path(root27),
+                                      TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN14', t27['recur'] is None and t27['evidence'] == 'history',
+       'a pruned side channel answers recur=None, never a fabricated 0:0')
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc27 = RUN.main(['--failure-trend', '--root', root27])
+    line27 = buf.getvalue().strip()
+    ok('AC-RUN14', rc27 == 0 and 'recur=none' in line27,
+       'the printed line spells the unmeasured recurrence as none')
+    root28 = world(); roots.append(root28)
+    f28 = RUN.failure_path(root28)
+    RUN.append_failure(f28, 'https://j.example/4', TODAY + 'T01:00:00+08:00',
+                       'E_FETCH TimeoutError: slow')
+    s28 = RUN.summarize_failures(f28, TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN14', s28['newest_kind'] == RUN.failure_kind(s28['newest_error'])
+       and s28['newest_kind'] == 'timeout',
+       '--failures reads the SAME bucket function as the trend line')
+    root29 = world(); roots.append(root29)
+    f29 = RUN.failure_path(root29)
+    RUN.append_failure(f29, 'https://k.example/5', TODAY + 'T01:00:00+08:00',
+                       'E_FETCH HTTPError: old')
+    RUN.append_failure(f29, 'https://k.example/5', TODAY + 'T05:00:00+08:00',
+                       'E_FETCH TimeoutError: new')
+    s29 = RUN.summarize_failures(f29, TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN14', s29['newest_kind'] == 'timeout',
+       'the bucket follows the NEWEST failure, not the first one seen')
+    root30 = world(); roots.append(root30)
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc30a = RUN.main(['--failures', '--root', root30])
+    line30a = buf.getvalue().strip()
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc30b = RUN.main(['--failure-trend', '--root', root30])
+    line30b = buf.getvalue().strip()
+    ok('AC-RUN14', rc30a == 0 and rc30b == 0 and 'kind=none' in line30a
+       and 'recur=none' in line30b,
+       'an empty world answers none on both faces without raising')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

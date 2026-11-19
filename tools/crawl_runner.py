@@ -78,6 +78,15 @@ only the class token of 'E_FETCH <ExceptionType>: <msg>' is read, never the
 message body, so this is a label and NOT a cause judgement. Ties break on the
 bucket name so two readers never disagree.
 
+RECURRENCE WEIGHT + ONE BUCKET (R2997): recurring=<n> counted SOURCES, so a
+source failing twice and one failing twelve times read the same; the line now
+carries recur=<sources>:<failures> - the same recurring sources and how many
+failures the window attributes to them. When the side channel is gone the
+honest answer is recur=none (UNMEASURED), never 0:0, because 0:0 would claim
+"no recurrence" from evidence that never arrived. The same failure_kind() also
+classifies --failures' newest error (kind=<bucket>), so one error string has
+exactly one reader.
+
 BASELINE LAW: qa/crawl-baselines.json, one object keyed by url, holding digest /
 bytes / fetched_at / excerpt. It is a product file (a person can read what the
 page said last time), written atomically after the record is appended.
@@ -218,10 +227,14 @@ def _summary_from_rows(rows, bad, day, window_days=7):
         if newest is None or str(row.get('failed_at') or '') > str(
                 newest.get('failed_at') or ''):
             newest = row
+    newest_error = (newest or {}).get('error')
     return {'total': len(rows), 'recent': recent, 'bad': bad,
             'urls': len(urls), 'window_days': window_days,
             'newest_at': (newest or {}).get('failed_at'),
-            'newest_error': (newest or {}).get('error')}
+            'newest_error': newest_error,
+            # R2997: the same bucket function the trend line uses, so one
+            # error string is classified in exactly one place.
+            'newest_kind': failure_kind(newest_error) if newest_error else 'none'}
 
 
 def summarize_failures(path, day, window_days=7):
@@ -456,6 +469,20 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7):
                 kind = failure_kind(last_error)
                 kind_count = 1
                 break
+    # R2997: "how many times did the recurring sources fail" - one source
+    # failing 2 times and one failing 12 times read the same while the line
+    # carried only recurring=<source count>. UNMEASURED, not zero: when the
+    # side channel that carries per-source identity is gone, the honest answer
+    # is None ('' = cannot be computed), because 0:0 would claim "no
+    # recurrence" from evidence that never arrived.
+    recur = None
+    if evidence == 'side':
+        recur_fails = 0
+        for row in in_window:
+            days = days_by_source.get(row.get('source_url')) or set()
+            if len(days) >= 2:
+                recur_fails += 1
+        recur = (recurring, recur_fails)
     wday, wcount = (None, None)
     if worst_row is not None:
         wday = str(worst_row.get('day') or '')[:10]
@@ -464,6 +491,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7):
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
             'worst': (None, None) if worst_row is None else (wday, wcount),
             'recurring': recurring, 'sources': len(days_by_source),
+            'recur': recur,
             'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
             'window_days': window_days}
 
@@ -646,10 +674,12 @@ def main(argv=None):
             timespec='seconds')
         summary = summarize_failures(failure_path(args.root), stamp, args.days)
         print('CRAWL-FAILURES total=%d recent%d=%d bad=%d urls=%d newest=%s '
-              'error=%s' % (summary['total'], summary['window_days'],
-                            summary['recent'], summary['bad'],
-                            summary['urls'], summary['newest_at'] or 'none',
-                            summary['newest_error'] or 'none'))
+              'error=%s kind=%s' % (summary['total'], summary['window_days'],
+                                    summary['recent'], summary['bad'],
+                                    summary['urls'],
+                                    summary['newest_at'] or 'none',
+                                    summary['newest_error'] or 'none',
+                                    summary['newest_kind']))
         return 0
     if args.failure_days:
         series = summarize_failure_days(failure_day_path(args.root), args.days)
@@ -669,11 +699,15 @@ def main(argv=None):
         mean_txt = 'none' if trend['mean'] is None else ('%g' % trend['mean'])
         kind_txt = ('none' if trend['kind'] == 'none'
                     else '%s:%d' % (trend['kind'], trend['kind_count']))
+        recur_txt = ('none' if trend['recur'] is None
+                     else '%d:%d' % trend['recur'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
-              'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s'
+              'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
+              'recur=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
-                 trend['sources'], trend['bad'], trend['evidence'], kind_txt))
+                 trend['sources'], trend['bad'], trend['evidence'], kind_txt,
+                 recur_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)
