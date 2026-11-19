@@ -1,0 +1,11 @@
+R3043 PROBE - private worlds, read-only, no socket, no clock
+W1 full=5 kept=2 kept_is_suffix=True dropped_days=['2026-11-10', '2026-11-11', '2026-11-12']
+W1 dropped_from=2026-11-10 first_kept_day=2026-11-13 dropped_strictly_older=True
+W2 full=4 kept=3 kept_is_suffix=True dropped=[('2026-11-10', 1)]
+W2 dropped_from=2026-11-10 first_kept_day=2026-11-10 dropped_strictly_older=False
+W2 sibling_day_dropped=True
+W3 no_cap full=5 kept=5 nothing_dropped=True
+W4 empty full=0 kept=0
+W1 series_bytes=45 series_all_bytes=71 increment=26 derivable=True
+CENSUS [('count_series_window', 4), ('endswith_series_all', 0), ('series_dropped_bytes', 2), ('series_dropped_from', 0)]
+PRIVATE_TMP=r3043_v4scs3tt (left for the caller to inspect, nothing written outside)

@@ -592,6 +592,26 @@ on both (arm 5); the unwindowed default face gains no token and does not drift
 (arm 6); and nothing is written, no verdict prints, the new token appears once
 and no increment twin exists (arm 7).
 
+R3043 - the cap now says WHICH DAY it cut back to. Measured first
+(qa/probe-R3043.log): both prices were on the row but nothing named the dropped
+side, so the order of operations (window first, then the tail) had to be known
+by heart. The printed pairs are a suffix of the in-window set, so the cut lands
+on the older end - but on rows 11-10,11-10,11-11,11-11 capped at three, the
+dropped row shares its day with the first kept one, so a worded claim like
+"every older row was dropped" would be false. The `--series-days` tail
+therefore also prints `series_dropped_from=<day|none>`: the day of the OLDEST
+dropped pair, none when nothing was dropped (empty history included). The lift
+increment (`series_all_bytes - series_bytes`) and the dropped count
+(`window_rows - series_shown`) stay derivable and are still refused as tokens
+(the R3000 noise law). Arms: the day equals the file-side projection and is
+strictly older than the first kept pair (arm 1); a day straddling the cap still
+names that day and that day is the first kept pair's day, pinning the narrow
+reading (arm 2); an uncapped run answers none and two runs agree byte for byte
+(arm 3); an empty history answers none without raising (arm 4); the unwindowed
+default face gains nothing and does not drift (arm 5); and the silent-day face
+still prices its own line to the byte while the refused increment twin stays
+absent and the new marker appears exactly once (arm 6).
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -6638,6 +6658,115 @@ def main():
        and 'dropped_pair_bytes=' not in text59,
        'the priced line writes no byte, prints no verdict, every pinned count '
        'survives, the new token appears once and no increment twin was added')
+
+    # ===== AC-RUN60 (R3043): the cap says WHICH DAY it cut back to ==========
+    # Measured first (qa/probe-R3043.log, private worlds, no socket, no clock):
+    # on a five-day world capped at two the printed pairs are a suffix of the
+    # in-window set and the dropped end is the older one (dropped_from 11-10 <
+    # first kept 11-13); on rows 11-10,11-10,11-11,11-11 capped at three the
+    # dropped row shares its day with the first kept one, so "everything older
+    # was dropped" is FALSE and the criterion may only pin the oldest dropped
+    # DAY. The lift increment and the dropped count stay derivable, not tokens.
+    def dropped60(root, width=7, cap=2):
+        rows, _bad60 = RUN.read_failure_days(hist37(root))
+        full60 = RUN.series_full_pairs(rows, width)
+        win60 = RUN.series_days_window(rows, cap, width)
+        return full60, win60['rows']
+
+    r60 = world()
+    roots.append(r60)
+    p60 = hist37(r60)
+    put_days(p60, [plain_day('2026-11-10', 1), plain_day('2026-11-11', 2),
+                   plain_day('2026-11-12', 3), plain_day('2026-11-13', 4),
+                   plain_day('2026-11-14', 5)])
+
+    # arm 1: the day the cap cut back to, projected from the file itself
+    rc60a, l60a, _ = sd57(r60, ['--series-days', '7', '--days', '2'])
+    t60a = toks57(l60a[0]) if l60a else {}
+    full60a, kept60a = dropped60(r60)
+    oldest_dropped60 = full60a[:len(full60a) - len(kept60a)][0][0]
+    ok('AC-RUN60', rc60a == 0 and l60a and len(full60a) == 5
+       and t60a.get('series_dropped_from') == oldest_dropped60
+       and oldest_dropped60 < str(kept60a[0][0]),
+       'on a five-day window capped at two, series_dropped_from names the '
+       'oldest dropped day rebuilt from the file, and it is strictly older '
+       'than the first printed pair')
+
+    # arm 2: a day that straddles the cap - the token names the DAY, and that
+    # day also appears in the kept segment, so no "older" claim is printed
+    r60b = world()
+    roots.append(r60b)
+    put_days(hist37(r60b), [
+        {'bad': 0, 'day': '2026-11-10', 'newest_at': None, 'newest_error': None,
+         'on_day': 1, 'recent': 0, 'total': 0, 'urls': 0},
+        {'bad': 0, 'day': '2026-11-10', 'newest_at': None, 'newest_error': None,
+         'on_day': 2, 'recent': 0, 'total': 0, 'urls': 0},
+        {'bad': 0, 'day': '2026-11-11', 'newest_at': None, 'newest_error': None,
+         'on_day': 3, 'recent': 0, 'total': 0, 'urls': 0},
+        {'bad': 0, 'day': '2026-11-11', 'newest_at': None, 'newest_error': None,
+         'on_day': 4, 'recent': 0, 'total': 0, 'urls': 0}])
+    rc60b, l60b, _ = sd57(r60b, ['--series-days', '7', '--days', '3'])
+    t60b = toks57(l60b[0]) if l60b else {}
+    seg60b = str(t60b.get('series') or '')
+    ok('AC-RUN60', rc60b == 0 and l60b
+       and t60b.get('series_dropped_from') == '2026-11-10'
+       and t60b.get('series_shown') == '3'
+       and seg60b.split(':', 1)[0] == t60b.get('series_dropped_from'),
+       'a day straddling the cap still names the oldest dropped day, and that '
+       'same day is the first kept pair - the row says which day, never that '
+       'every older row went')
+
+    # arm 3: no cap - nothing was dropped and the marker says so
+    rc60c, l60c, _ = sd57(r60, ['--series-days', '7'])
+    rc60d, l60d, _ = sd57(r60, ['--series-days', '7'])
+    t60c = toks57(l60c[0]) if l60c else {}
+    ok('AC-RUN60', rc60c == 0 and rc60d == 0 and l60c and l60d
+       and t60c.get('window_rows') == t60c.get('series_shown')
+       and t60c.get('series_dropped_from') == 'none'
+       and l60c[0] == l60d[0],
+       'without the cap window_rows equals series_shown, the marker answers '
+       'none, and two runs print identical bytes')
+
+    # arm 4: an empty history answers none without raising
+    r60e = world()
+    roots.append(r60e)
+    os.makedirs(os.path.join(r60e, 'qa'), exist_ok=True)
+    rc60e, l60e, _ = sd57(r60e, ['--series-days', '7'])
+    t60e = toks57(l60e[0]) if l60e else {}
+    ok('AC-RUN60', rc60e == 0 and l60e
+       and t60e.get('series') == 'none'
+       and t60e.get('series_dropped_from') == 'none',
+       'an empty history answers series=none with series_dropped_from=none, '
+       'rc=0 and no exception')
+
+    # arm 5: the unwindowed default face gains nothing and does not drift
+    rc60f, l60f, _ = sd57(r60, [])
+    rc60g, l60g, _ = sd57(r60, [])
+    ok('AC-RUN60', rc60f == 0 and l60f and l60g
+       and ' series_dropped_from=' not in l60f[0]
+       and l60f[0] == l60g[0],
+       'without --series-days the marker is absent and two runs print '
+       'identical bytes - the default face did not move')
+
+    # arm 6: with --series-absent the joint fixed point still holds and the
+    # refused increment twin is still absent
+    before60 = tree_bytes(r60)
+    rc60h, l60h, _ = sd57(r60, ['--series-days', '7', '--days', '2',
+                                '--series-absent'])
+    after60 = tree_bytes(r60)
+    t60h = toks57(l60h[0]) if l60h else {}
+    text60 = '\n'.join(l60h)
+    real60 = len(l60h[0].encode('utf-8')) if l60h else -1
+    ok('AC-RUN60', rc60h == 0 and before60 == after60
+       and t60h.get('line_bytes') == str(real60)
+       and t60h.get('output_bytes') == str(real60 + 1)
+       and 'series_dropped_bytes=' not in text60
+       and l60h[0].count('series_window=') == 1
+       and l60h[0].count('absent=') == 2
+       and l60h[0].count('absent_named=') == 1
+       and l60h[0].count('series_dropped_from=') == 1,
+       'the silent-day face still prices its own line to the byte, the '
+       'increment twin stays absent, and the new marker appears exactly once')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

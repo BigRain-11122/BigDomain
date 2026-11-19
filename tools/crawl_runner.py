@@ -575,6 +575,18 @@ series_bytes`; printing it too would put one fact on the row twice), and
 `series_pair_max_bytes=` (the most expensive pair still answers a different
 question than "what does lifting the cap cost").
 
+WHICH END THE CAP CUT (R3043, measured first - qa/probe-R3043.log): both prices
+were on the row but nothing named the dropped side, so a reader needed the
+order-of-operations law (window first, then the tail) by heart. The
+`--series-days` tail therefore also prints `series_dropped_from=<day|none>`: the
+`day` of the OLDEST pair the cap dropped, `none` when it dropped nothing
+(empty history included). It is a DAY, not a claim that everything older was
+dropped: measured on rows 11-10,11-10,11-11,11-11 capped at three, the dropped
+row shares its day with the first kept one, so that wider claim would be false.
+Still refused on this face: the dropped count (`window_rows - series_shown`)
+and the lift increment (`series_all_bytes - series_bytes`) - both derivable
+from tokens already printed (the R3000 noise law).
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1670,6 +1682,35 @@ def series_full_pairs(rows, window_days=7):
         return []
     return [(r.get('day'), r.get('on_day')) for r in rows
             if threshold <= str(r.get('day') or '')[:10] <= head_day]
+
+
+def series_dropped_from(full_pairs, shown):
+    """The day of the OLDEST pair the --days cap dropped, or 'none' (R3043).
+
+    WHY (measured before this existed - qa/probe-R3043.log): the row priced the
+    capped segment and the whole window, but never said WHICH END the cap cut,
+    so a reader had to know the order-of-operations law by heart. On a five-day
+    world capped at two the printed pairs are a suffix of the in-window set, so
+    the cut lands on the older end - but a day worded as "everything older than
+    the first printed pair was dropped" is FALSE when one day straddles the cap
+    (measured: rows 11-10,11-10,11-11,11-11 capped at three dropped a 11-10 row
+    while keeping the other, so dropped_from equals the first kept day). This
+    function therefore answers with the DAY of the oldest dropped row and
+    nothing more.
+
+    The dropped COUNT and the lift cost are both already derivable from tokens
+    on the row (window_rows - series_shown, and series_all_bytes -
+    series_bytes), so neither is printed (the R3000 noise law).
+
+    DISPLAY ONLY: builds a day string, writes nothing, gates nothing.
+    """
+    pairs = list(full_pairs or [])
+    kept = max(0, int(shown))
+    dropped = pairs[:max(0, len(pairs) - kept)]
+    if not dropped:
+        return 'none'
+    day = str(dropped[0][0] or '')
+    return day or 'none'
 
 
 def absent_markers(gap_info, presence):
@@ -3148,6 +3189,11 @@ def main(argv=None):
                          'series_all_bytes=N prices the segment the day window '
                          'would print with no --days cap, so the cost of '
                          'lifting the cap is one subtraction; '
+                         'series_dropped_from=<day|none> names the day of the '
+                         'oldest pair the cap dropped (none when it dropped '
+                         'nothing), so which end the cap cut is printed rather '
+                         'than known by heart - it is a day, not a claim that '
+                         'every older row went; '
                          'read-only display; gates nothing)')
     ap.add_argument('--series-absent', dest='series_absent',
                     action='store_true',
@@ -3244,10 +3290,12 @@ def main(argv=None):
             full_text = ','.join('%s:%s' % (d, n) for d, n in full_pairs)
             tail_markers = (' series_window=%d series_bytes=%d'
                             ' series_day_bytes=%d series_on_bytes=%d'
-                            ' series_all_bytes=%d'
+                            ' series_all_bytes=%d series_dropped_from=%s'
                             % (args.series_days, series_segment_bytes(pairs),
                                day_bytes, on_bytes,
-                               series_segment_bytes(full_text)))
+                               series_segment_bytes(full_text),
+                               series_dropped_from(full_pairs,
+                                                   counts['shown'])))
             if args.series_absent:
                 series_marker = tail_markers
                 gaps = series_absent_days(day_read[0], args.series_days,

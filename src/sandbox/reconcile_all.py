@@ -4748,9 +4748,10 @@ SUITES = [
     # R3041 adds AC-RUN58: that segment also names which source ate the width
     # (series_day_bytes / series_on_bytes), 57 -> 58.
     # R3042 adds AC-RUN59: the pairs a --days cap drops have a price
-    # (series_all_bytes against series_bytes), 58 -> 59.
+    # (series_all_bytes against series_bytes), 58 -> 59; R3043 adds
+    # series_dropped_from so the cap names the day it cut back to, 59 -> 60.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 59),
+     os.path.join("..", "os", "test_crawl_runner.py"), 60),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

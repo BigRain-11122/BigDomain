@@ -1,0 +1,14 @@
+R3043 DEMO - three private worlds, the shipped CLI, read-only
+DEMO five days capped at two    series_shown=2 window_rows=5 series_bytes=32 series_all_bytes=71 series_dropped_from=2026-11-10
+DEMO five days uncapped         series_shown=5 window_rows=5 series_bytes=71 series_all_bytes=71 series_dropped_from=none
+DEMO one day straddles the cap  series_shown=3 window_rows=4 series_bytes=45 series_all_bytes=58 series_dropped_from=2026-11-10
+
+R3043 NEGCTL - outside the suite, three mutants of the reader
+GREEN honest five-days/cap2   2026-11-10
+GREEN honest straddle/cap3    2026-11-10
+GREEN honest five-days/nocap  none
+GREEN honest empty/cap7       none
+HONEST 4/4 GREEN
+MUTANT newest-dropped   caught=1/4 CAUGHT
+MUTANT silence          caught=2/4 CAUGHT
+MUTANT first-kept       caught=1/4 CAUGHT
