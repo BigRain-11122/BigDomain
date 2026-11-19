@@ -1,0 +1,4 @@
+GREEN HONEST got=(91, None, None) want=(91, None, None)
+CAUGHT M1-newest-as-oldest got=(9, None, None) honest=(91, None, None)
+CAUGHT M2-repaired-counted got=(91, 91, None) honest=(91, None, None)
+CAUGHT M3-none-as-zero got=(91, None, (0, 0)) honest=(91, None, None)

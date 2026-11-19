@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "R3011 PRODUCT+ENGINEERING: pending_old= now says how far back its own evidence reaches. The probe ran before the pin: two worlds that read the SAME pending_old=0/1 were identical on all 27 keys, because the extra row was an earlier failure of the SAME source - a one-day side channel and a ninety-one-day one were the same sentence. The row now also carries fcov=<first>..<last>, the failure side channel's own first and last usable failure day, following the FILE rather than the window (measured: byte-identical at 7 and 14 days while pending_old= changed), and none when the channel is absent, empty or holds no usable row. cov=/wcov=/rcov= keep their own files and the header now names all four.",
+    "current": "2026-11-19 R3012 PRODUCT+ENGINEERING: the out-of-window waiter finally has an age. pending_old= said HOW MANY sources outside the window never came back and never how long they had been gone, and fcov.first= is the oldest failure in the FILE - measured before any code moved (qa/probe-R3012.log), a world whose oldest failure belonged to a source repaired the next day read fcov 2026-08-20..2026-11-10 while the source still gone had failed on 2026-11-10, so a single age is not that span restated. tools/crawl_runner.py::_pending_out_of_window now returns the stamp of the still-pending old source that waited longest, the trend row carries pending_old_age_d=<days> on the same ten-character day law and the same None rules as the three in-window ages, and the CLI prints pending_old_age_d=. None when nothing outside was judged AND none - never 0 - when every judged old source came back.",
     "do": "R3005 measured, in order: the PIN row was written in src/os/backlog.md BEFORE any code byte moved, and the read-only probe tmp/probe_R3005.py -> qa/probe-R3005.log (682B, 12 lines, utf-8/lf, six private worlds, zero sockets) ran BEFORE the pin. It measured: (1) three-source window answers for one source only; (2) recur and the pending count are independent in BOTH directions - recur=(0,0) with one judged source still gone, and recur=(2,4) with nothing pending when both came back; (3) the queue head's own suggested numerator (since_ok != 'yes') counts a source whose newest failure is later than every record row as pending, reviving exactly the R3004 conflation at aggregate level, so the numerator counts 'no' only and unmeasured sits in neither number; (4) an absent record leaves every source unmeasured, so zero-of-zero had to print none rather than 0/0; (5) 13 arms read the trend line, three pin exact key sets, and a multi-source world still printed exactly one line, which is why per-source lines were refused. AC-RUN22 (seven arms) was pinned before the code; three existing key-set arms were widened by exactly the one new key, disclosed as a criterion following its field rather than a loosening.",
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3009.log (423B, 2026-11-19)",
-    "latest_evidence": "qa/negctl-R3009.log (423B, 2026-11-19)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/crawl-runner-R3012.log (19302B, 2026-11-19)",
+    "latest_evidence": "qa/crawl-runner-R3012.log (19302B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3012] next window (<=12h): (0) MAIN — **窗口外那一个还没回来的源，到底等于多久**：`pending_old=1/1` 配 `fcov=2026-08-20..2026-11-19` 时，人知道窗口外有一个源没回来，但不知道它挂了八天还是三个月——`fcov=` 给的是侧路件跨度，不是待修源自己的年龄。下一轮**先量**（只读）：①窗口外待修源的年龄能否在不破一行合同、不给逐源身份的前提下作为单个读数（与 R3010 拒绝 `pending_old_src`/`pending_old_age_d` 同一问法，须先量它是否只是 `fcov.first` 或窗口首日的复述）；②若印「最老的窗口外待修源等了多久」，侧路件被裁到窗内时该读 None 还是不可测；③窗口改 14 天会把这些源整体迁回窗内，判据须覆盖两种窗口。量清后二选一实现并配判据，且**先落板再动代码**。",
-    "next_milestone_due": "2026-11-20T01:13:43+08:00",
-    "updated_at": "2026-11-19T13:13:43+08:00"
+    "next_milestone": "[R3013] next window (<=12h): (0) MAIN — **窗外那一段现在只有一个「最久」和一个人数，第二老的与分布仍然空白**：`pending_old=2/2 pending_old_age_d=91` 时，人知道窗外挂了两个、最久的 91 天，却不知道另一个是 90 天还是 9 天——「一簇老尾巴」与「老尾巴＋新掉的一个」在这行上一字不分（与 R3009 对窗内集合量过的同一盲区，但窗外人口的分母是另一套）。下一轮**先量**（只读）：①窗外人口 N≥3 时，第二老/中位年龄能否作为单一标量给出（R3008 已拒窗外 `pending_old_age_min_d`/`med` 的**恒等复述**问法，须先量「多数窗外人口是否 N=1」——若 N=1 是常形，多印一个数字就是常态冗余）；②若给出中位，侧路件被裁到窗内/窗外全修好时须与 `pending_old_age_d` 同读 None，且 14 日窗下人口迁移后两账目不得互相污染；③改指路到 `qa/crawl-failures.jsonl` 直接把窗外行按 `failed_at` 排序是否本来就能看出分布——若能，则正解是改指路而不是再加第三个标量。量清后二选一实现并配判据，且**先落板再动代码**。",
+    "next_milestone_due": "2026-11-20T01:30:37+08:00",
+    "updated_at": "2026-11-19T13:30:37+08:00"
   },
-  "current": "R3011 PRODUCT+ENGINEERING: pending_old= now says how far back its own evidence reaches. The probe ran before the pin: two worlds that read the SAME pending_old=0/1 were identical on all 27 keys, because the extra row was an earlier failure of the SAME source - a one-day side channel and a ninety-one-day one were the same sentence. The row now also carries fcov=<first>..<last>, the failure side channel's own first and last usable failure day, following the FILE rather than the window (measured: byte-identical at 7 and 14 days while pending_old= changed), and none when the channel is absent, empty or holds no usable row. cov=/wcov=/rcov= keep their own files and the header now names all four.",
+  "current": "2026-11-19 R3012 PRODUCT+ENGINEERING: the out-of-window waiter finally has an age. pending_old= said HOW MANY sources outside the window never came back and never how long they had been gone, and fcov.first= is the oldest failure in the FILE - measured before any code moved (qa/probe-R3012.log), a world whose oldest failure belonged to a source repaired the next day read fcov 2026-08-20..2026-11-10 while the source still gone had failed on 2026-11-10, so a single age is not that span restated. tools/crawl_runner.py::_pending_out_of_window now returns the stamp of the still-pending old source that waited longest, the trend row carries pending_old_age_d=<days> on the same ten-character day law and the same None rules as the three in-window ages, and the CLI prints pending_old_age_d=. None when nothing outside was judged AND none - never 0 - when every judged old source came back.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "R3011 PRODUCT+ENGINEERING: pending_old= now says how far back its own evidence reaches. The probe ran before the pin: two worlds that read the SAME pending_old=0/1 were identical on all 27 keys, because the extra row was an earlier failure of the SAME source - a one-day side channel and a ninety-one-day one were the same sentence. The row now also carries fcov=<first>..<last>, the failure side channel's own first and last usable failure day, following the FILE rather than the window (measured: byte-identical at 7 and 14 days while pending_old= changed), and none when the channel is absent, empty or holds no usable row. cov=/wcov=/rcov= keep their own files and the header now names all four.",
-  "export_ts": "2026-11-19T13:13:43+08:00",
+  "do": "2026-11-19 R3012 PRODUCT+ENGINEERING: the out-of-window waiter finally has an age. pending_old= said HOW MANY sources outside the window never came back and never how long they had been gone, and fcov.first= is the oldest failure in the FILE - measured before any code moved (qa/probe-R3012.log), a world whose oldest failure belonged to a source repaired the next day read fcov 2026-08-20..2026-11-10 while the source still gone had failed on 2026-11-10, so a single age is not that span restated. tools/crawl_runner.py::_pending_out_of_window now returns the stamp of the still-pending old source that waited longest, the trend row carries pending_old_age_d=<days> on the same ten-character day law and the same None rules as the three in-window ages, and the CLI prints pending_old_age_d=. None when nothing outside was judged AND none - never 0 - when every judged old source came back.",
+  "export_ts": "2026-11-19T13:30:37+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
-  "latest_evidence": "qa/negctl-R3009.log (423B, 2026-11-19)",
-  "next_milestone": "[R3012] next window (<=12h): (0) MAIN — **窗口外那一个还没回来的源，到底等于多久**：`pending_old=1/1` 配 `fcov=2026-08-20..2026-11-19` 时，人知道窗口外有一个源没回来，但不知道它挂了八天还是三个月——`fcov=` 给的是侧路件跨度，不是待修源自己的年龄。下一轮**先量**（只读）：①窗口外待修源的年龄能否在不破一行合同、不给逐源身份的前提下作为单个读数（与 R3010 拒绝 `pending_old_src`/`pending_old_age_d` 同一问法，须先量它是否只是 `fcov.first` 或窗口首日的复述）；②若印「最老的窗口外待修源等了多久」，侧路件被裁到窗内时该读 None 还是不可测；③窗口改 14 天会把这些源整体迁回窗内，判据须覆盖两种窗口。量清后二选一实现并配判据，且**先落板再动代码**。",
+  "latest_evidence": "qa/crawl-runner-R3012.log (19302B, 2026-11-19)",
+  "next_milestone": "[R3013] next window (<=12h): (0) MAIN — **窗外那一段现在只有一个「最久」和一个人数，第二老的与分布仍然空白**：`pending_old=2/2 pending_old_age_d=91` 时，人知道窗外挂了两个、最久的 91 天，却不知道另一个是 90 天还是 9 天——「一簇老尾巴」与「老尾巴＋新掉的一个」在这行上一字不分（与 R3009 对窗内集合量过的同一盲区，但窗外人口的分母是另一套）。下一轮**先量**（只读）：①窗外人口 N≥3 时，第二老/中位年龄能否作为单一标量给出（R3008 已拒窗外 `pending_old_age_min_d`/`med` 的**恒等复述**问法，须先量「多数窗外人口是否 N=1」——若 N=1 是常形，多印一个数字就是常态冗余）；②若给出中位，侧路件被裁到窗内/窗外全修好时须与 `pending_old_age_d` 同读 None，且 14 日窗下人口迁移后两账目不得互相污染；③改指路到 `qa/crawl-failures.jsonl` 直接把窗外行按 `failed_at` 排序是否本来就能看出分布——若能，则正解是改指路而不是再加第三个标量。量清后二选一实现并配判据，且**先落板再动代码**。",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
@@ -168,7 +168,7 @@
   },
   "results": [
     [
-      "3009",
+      "3012",
       "OSLoop 执行 tick"
     ]
   ],
@@ -181,15 +181,15 @@
   "self_drive": {
     "window": "2026-11-13..2026-11-19",
     "window_days": 7,
-    "log_lines_in_window": 183,
+    "log_lines_in_window": 202,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 28,
+    "substantive_non_idle_mention_lines": 30,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 213003
+  "state_bytes": 221105
 }

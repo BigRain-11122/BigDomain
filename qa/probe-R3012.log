@@ -1,0 +1,8 @@
+P1 pending_old=(1, 1) fcov=('2026-08-20', '2026-08-20') age_fcov_first=91 oldest_old_stamp_visible=NO_FIELD
+P2 pending_old=(1, 2) fcov=('2026-08-20', '2026-11-10') age_fcov_first=91 (fcov.first belongs to a REPAIRED source)
+P3 window=14 pending_old=(0, 1) pending=(1, 1) fcov=('2026-08-20', '2026-11-10')
+P4 trimmed pending_old=None fcov=('2026-11-19', '2026-11-19')
+P5 absent=None empty=None allbad=None
+P6 edge pending_old=(1, 1) fcov=('2026-11-12', '2026-11-12') age_fcov_first=7
+P7 keys=28 has_pending_old_age_d=False has_pending_old_src=False
+P8 live pending_old=None fcov=None pending=None

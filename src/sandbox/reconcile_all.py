@@ -4689,7 +4689,7 @@ SUITES = [
     # AC-RUN27 pinned in the R3010 PIN row before the code.
     # AC-RUN28 (side-channel reach) pinned in the R3011 PIN row before the code.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 28),
+      os.path.join("..", "os", "test_crawl_runner.py"), 29),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

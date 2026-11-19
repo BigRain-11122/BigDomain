@@ -357,6 +357,22 @@ a non-JSON line and a 'nope' stamp left the span byte-identical while bad grew.
 It does NOT promise how far the channel reached BEFORE it was trimmed: fcov is
 how far it can be read NOW. Display only, no PASS/FLAG.
 
+AGE OF THE OLD WAITERS (R3012): pending_old= names a fraction, never how long the
+sources behind it have been gone - measured, a one-day channel and a one-day
+window edge read the same fraction, and fcov.first= is the oldest failure in the
+FILE, which may belong to a source that was repaired long ago (measured: fcov
+2026-08-20..2026-11-10 while the source still gone had failed on 2026-11-10 and
+fcov.first belonged to a repaired one). The row now also carries
+pending_old_age_d=<days>: the whole-day age of the still-pending out-of-window
+source that has waited longest, on the same ten-character day law and the same
+None rules as the three in-window ages. None when pending_old= is none (nothing
+was looked at outside, or the channel was trimmed) and none - never 0 - when
+every judged old source came back, because "nobody outside is pending" and "one
+broke today" must not print the same digit. What R3010 refused stays refused:
+naming an old source (pending_old_src) and one line per old source. This is a
+single aggregate over the old population, the same shape as pending_age_d= over
+the in-window population. Display only, no PASS/FLAG.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -1010,6 +1026,16 @@ def _pending_out_of_window(record_path, rows, threshold):
     side channel trimmed to the window, one that never recorded anything older,
     or a record that stops before the old failure all mean "nothing was looked
     at out there" rather than "nothing is pending out there".
+
+    R3012 THIRD VALUE: the third element is the stamp of the still-pending old
+    source that has waited LONGEST (earliest own latest failure, ties broken by
+    source url so two write orders agree), or None when every judged old source
+    came back. It is a stamp, not a name - the row only derives a day age from
+    it, and per-source naming stays refused by the one-line contract. Measured
+    before this existed (qa/probe-R3012.log): a world whose older failure
+    belonged to a REPAIRED source read fcov.first = 2026-08-20 while the source
+    still gone had failed on 2026-11-10, so a single age over this population is
+    NOT a restatement of fcov.first.
     """
     latest = {}
     for row in rows or ():
@@ -1021,6 +1047,7 @@ def _pending_out_of_window(record_path, rows, threshold):
             latest[src] = stamp
     still = 0
     judged = 0
+    waiting = []
     head = str(threshold or '')[:10]
     for src, stamp in latest.items():
         if str(stamp)[:10] >= head:
@@ -1029,11 +1056,13 @@ def _pending_out_of_window(record_path, rows, threshold):
         if verdict == 'no':
             still += 1
             judged += 1
+            waiting.append((str(stamp), str(src)))
         elif verdict == 'yes':
             judged += 1
     if not judged:
         return None
-    return (still, judged)
+    waiting.sort()
+    return (still, judged, waiting[0][0] if waiting else None)
 
 
 def summarize_failure_trend(history_path, failures_path, day, window_days=7,
@@ -1262,8 +1291,21 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             pending_age_d = _day_age(day, got[3])
             pending_age_min_d = _day_age(day, got[4])
             pending_age_med_d = _day_age(day, got[5])
+    # R3012 AGE OF THE OLD WAITERS: pending_old= says how many sources outside
+    # the window never came back, never how long they have been gone - measured,
+    # fcov.first= belongs to whichever failure is oldest in the FILE, including
+    # one repaired long ago (P2: fcov.first 2026-08-20 belonged to a repaired
+    # source while the one still gone had failed on 2026-11-10). This age is the
+    # still-pending old source that waited longest; None when nothing was judged
+    # outside, and None (never 0) when every judged old source came back -
+    # "nobody outside is pending" and "one broke today" must not read alike.
+    pending_old = None
+    pending_old_age_d = None
     if evidence == 'side' and usable:
-        pending_old = _pending_out_of_window(record_path, frows, threshold)
+        got = _pending_out_of_window(record_path, frows, threshold)
+        if got is not None:
+            pending_old = (got[0], got[1])
+            pending_old_age_d = _day_age(day, got[2])
     rcov = _record_coverage(record_path)
     # R3011 COVERAGE OF THE SIDE CHANNEL: pending_old= names a fraction but not
     # the reach of the evidence under it - measured, a one-day channel and a
@@ -1285,6 +1327,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'pending_age_min_d': pending_age_min_d,
             'pending_age_med_d': pending_age_med_d,
             'pending_old': pending_old,
+            'pending_old_age_d': pending_old_age_d,
             'fcov': fcov,
             'rcov': rcov, 'window_days': window_days}
 
@@ -1516,6 +1559,8 @@ def main(argv=None):
                        else '%d' % trend['pending_age_med_d'])
         old_txt = ('none' if trend['pending_old'] is None
                    else '%d/%d' % trend['pending_old'])
+        old_age_txt = ('none' if trend['pending_old_age_d'] is None
+                       else '%d' % trend['pending_old_age_d'])
         fcov_txt = ('none' if trend['fcov'] is None
                     else '%s..%s' % trend['fcov'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
@@ -1523,7 +1568,7 @@ def main(argv=None):
               'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
               'pending=%s pending_src=%s pending_age_d=%s '
               'pending_age_min_d=%s pending_age_med_d=%s pending_old=%s '
-              'fcov=%s rcov=%s'
+              'pending_old_age_d=%s fcov=%s rcov=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
@@ -1531,7 +1576,8 @@ def main(argv=None):
                  trend['newest_src'] or 'none', trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
                  pending_txt, trend['pending_src'] or 'none', age_txt,
-                 age_min_txt, age_med_txt, old_txt, fcov_txt, rcov_txt))
+                 age_min_txt, age_med_txt, old_txt, old_age_txt, fcov_txt,
+                 rcov_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)
