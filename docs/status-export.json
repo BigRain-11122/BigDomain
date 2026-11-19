@@ -10,8 +10,8 @@
     "latest_evidence": "qa/demo-R3048.log (1989B, 2026-11-20)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3049] next window (<=48h): (0) MAIN — **两张读面都不说它把哪天当成\"今天\"**：`--failures` 与 `--failure-trend` 现在能正确算出那一天，行上却一个日字都没有（`--snapshot-failures` 有 `day=`，另两张没有），所以读到 `today=1` 的人无法知道那是哪一天的 1，也无法在自己写了 UTC 戳时确认归一到哪一天。下一轮先量（只读）：①这两张面的行上，解析出的日能否从既有记号（`worst=2026-11-20:0`、`cov=..`、`recent7=`）推出来，还是完全不可导出；②若要加一个 `day=`，会撞哪些臂——AC-RUN64/65 有七处逐字比整行（三写法逐字节同），AC-RUN7/11/16/19 等按子串钉读数，`toks57` 家族按 token 读；③同一行上 `today=` 与 `day=` 并列会不会读成两个\"今天\"（R3000 噪声律：一条律只写一次）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, a day whose only row is malformed still reads silent on BOTH faces, the cap of 31 is a chosen law rather than a measured optimum, (truncated)",
-    "next_milestone_due": "2026-11-22T00:52:36+08:00",
-    "updated_at": "2026-11-20T00:52:36+08:00"
+    "next_milestone_due": "2026-11-22T00:54:29+08:00",
+    "updated_at": "2026-11-20T00:54:29+08:00"
   },
   "current": "2026-11-20 R3048 PRODUCT+ENGINEERING: a stamp now names the DAY of the instant, not the first ten characters of its text. Measured before anything moved (qa/probe-R3048.log, 2571B, 44 lines, utf-8/lf, qa_log --check PASS, private world, zero socket, zero clock): one moment written '2026-11-20T04:00:00+08:00' and '2026-11-19T20:00:00+00:00' read as two different days, so on one two-day world --failure-trend answered today=1 vs today=3, --failures answered recent7=3 vs 2, and --snapshot-failures wrote day=2026-11-20 vs 2026-11-19. The frame is not a taste: every 'day' on this disk is written by a writer stamping datetime.now().astimezone() and keeping ten characters, so a day is a LOCAL calendar day and the reader must live in that frame. tools/crawl_runner.py now ships _day_of() as the only stamp-to-day conversion (the window law, the snapshot writer, the day gate and both CLI snapshot sites use it), a stamp with no offset is unchanged, and an unparseable stamp falls back to its first ten characters so a display face never raises. Pinning the frame to a constant +08:00 was refused (it would tie the day to a constant instead of to the writer, and nothing measured asked for it).",
   "depts": [
@@ -42,7 +42,7 @@
     }
   ],
   "do": "2026-11-20 R3048 PRODUCT+ENGINEERING: a stamp now names the DAY of the instant, not the first ten characters of its text. Measured before anything moved (qa/probe-R3048.log, 2571B, 44 lines, utf-8/lf, qa_log --check PASS, private world, zero socket, zero clock): one moment written '2026-11-20T04:00:00+08:00' and '2026-11-19T20:00:00+00:00' read as two different days, so on one two-day world --failure-trend answered today=1 vs today=3, --failures answered recent7=3 vs 2, and --snapshot-failures wrote day=2026-11-20 vs 2026-11-19. The frame is not a taste: every 'day' on this disk is written by a writer stamping datetime.now().astimezone() and keeping ten characters, so a day is a LOCAL calendar day and the reader must live in that frame. tools/crawl_runner.py now ships _day_of() as the only stamp-to-day conversion (the window law, the snapshot writer, the day gate and both CLI snapshot sites use it), a stamp with no offset is unchanged, and an unparseable stamp falls back to its first ten characters so a display face never raises. Pinning the frame to a constant +08:00 was refused (it would tie the day to a constant instead of to the writer, and nothing measured asked for it).",
-  "export_ts": "2026-11-20T00:52:36+08:00",
+  "export_ts": "2026-11-20T00:54:29+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
   "latest_evidence": "qa/demo-R3048.log (1989B, 2026-11-20)",
   "next_milestone": "[R3049] next window (<=48h): (0) MAIN — **两张读面都不说它把哪天当成\"今天\"**：`--failures` 与 `--failure-trend` 现在能正确算出那一天，行上却一个日字都没有（`--snapshot-failures` 有 `day=`，另两张没有），所以读到 `today=1` 的人无法知道那是哪一天的 1，也无法在自己写了 UTC 戳时确认归一到哪一天。下一轮先量（只读）：①这两张面的行上，解析出的日能否从既有记号（`worst=2026-11-20:0`、`cov=..`、`recent7=`）推出来，还是完全不可导出；②若要加一个 `day=`，会撞哪些臂——AC-RUN64/65 有七处逐字比整行（三写法逐字节同），AC-RUN7/11/16/19 等按子串钉读数，`toks57` 家族按 token 读；③同一行上 `today=` 与 `day=` 并列会不会读成两个\"今天\"（R3000 噪声律：一条律只写一次）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, a day whose only row is malformed still reads silent on BOTH faces, the cap of 31 is a chosen law rather than a measured optimum, (truncated)",
@@ -181,7 +181,7 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 440,
+    "log_lines_in_window": 441,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 64,
@@ -191,5 +191,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 466398
+  "state_bytes": 466657
 }
