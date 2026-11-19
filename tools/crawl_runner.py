@@ -431,6 +431,23 @@ it, and the delta is stated instead of papered over. Second boundary: it
 prices THIS window's shape and does NOT predict a window that has not been
 run - run the other N and compare the two numbers.
 
+BOTH HALVES PRICE (R3037): the total was readable but neither half was. The
+only subtraction on the face `output_bytes - rows_all_bytes` prices a whole
+FILE, so on a truncated window it measured 13 and -24 against a 130-byte
+header (qa/probe-R3037.log) - the reader could not split the total by
+subtraction. A key that prices THIS run's block had zero hits under tools/ and
+src/ (six candidate tokens), and `shown_bytes` collides with zero suite arms.
+The windowed header therefore also carries `shown_bytes=<n>`: the UTF-8 bytes
+of the DAY-DROPPED block this run prints, each line with its newline, read off
+the same rows and the same renderer as the printer. Both halves are then
+readable as header = `output_bytes - 1 - shown_bytes`, which holds whether the
+window truncates or not. Refused: a CRLF face (the consuming end is unknowable
+here - the same number would be wrong for a file sink and right for a pipe),
+a header-only key (already derivable, and it would price the total twice), and
+renaming `rows_all_bytes` (it is the full-file block and its name is right).
+Honest boundary: both counts are on the LF law; Windows text-mode stdout adds
+one byte per printed line on top, and neither number claims to include it.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1584,20 +1601,27 @@ def dropped_block_bytes(rows):
 
 
 def dropped_header(listing, out_bytes=None):
-    """The windowed header line - the ONLY renderer (R3036).
+    """The windowed header line - the ONLY renderer (R3036/R3037).
 
     Shared by the printer and by `dropped_output_bytes` on purpose: a second
     copy of this format string would let the total drift from the line that
     carries it, which is the one thing the total promises not to do.
     `out_bytes` is None only while the fixed point is being solved.
+
+    R3037: `shown_bytes` prices the block THIS run prints, so both halves of
+    `output_bytes` are readable (header = output_bytes - 1 - shown_bytes).
+    Before it existed the only subtraction available was
+    `output_bytes - rows_all_bytes`, and that one prices a whole FILE, so on a
+    truncated window it measured 13 and -24 against a 130-byte header
+    (qa/probe-R3037.log) - noise, not a cost.
     """
     tail = '' if out_bytes is None else ' output_bytes=%d' % out_bytes
     return ('CRAWL-FAILURE-DAYS-DROPPED days=%d bad=%d window=%d shown=%d '
-            'truncated=%d hidden=%d head=%s rows_all_bytes=%d%s'
+            'truncated=%d hidden=%d head=%s rows_all_bytes=%d shown_bytes=%d%s'
             % (listing['days'], listing['bad'], listing['window'],
                listing['shown'], 1 if listing['truncated'] else 0,
                listing['hidden'], listing['head'] or 'none',
-               listing['all_bytes'], tail))
+               listing['all_bytes'], listing['shown_bytes'], tail))
 
 
 def dropped_output_bytes(listing):
@@ -1626,7 +1650,7 @@ def dropped_output_bytes(listing):
     bytes per printed line - the price is on the LF law because the sibling
     `rows_all_bytes` already is, and the delta is disclosed rather than hidden.
     """
-    block = dropped_block_bytes(listing['rows'])
+    block = listing.get('shown_bytes', dropped_block_bytes(listing['rows']))
     total = block + 1 + len(dropped_header(listing, 0).encode('utf-8'))
     for _ in range(8):
         grown = block + len((dropped_header(listing, total) + '\n')
@@ -1684,6 +1708,16 @@ def list_failure_days_dropped(path, window_days=None):
     receives rather than an estimate of them. It prices THIS window; a
     different N has a different shape and must be run to be priced.
 
+    R3037 BOTH HALVES: a windowed call also answers `shown_bytes` - the UTF-8
+    bytes of the block THIS run prints (each line with its newline), read off
+    the same rows and the same `dropped_line` renderer the printer uses. With
+    it the header's own cost is `output_bytes - 1 - shown_bytes`, which holds
+    whether the window truncates or not. The subtraction that predates it,
+    `output_bytes - rows_all_bytes`, prices a whole FILE rather than this run,
+    so on a truncated window it measured 13 and -24 against a 130-byte header
+    (qa/probe-R3037.log) - it is kept as an honest face for "what would the
+    full listing cost", not reused as a header price.
+
     DISPLAY ONLY: writes nothing, gates nothing. An absent file answers zero
     rows - the same "absence is zero" law as read_failure_days.
     """
@@ -1714,6 +1748,9 @@ def list_failure_days_dropped(path, window_days=None):
     # unwindowed call would print, so the number cannot disagree with a second
     # run over the same file.
     listing['all_bytes'] = dropped_block_bytes(all_rows)
+    # R3037: what this run's OWN block costs, so the header half is readable by
+    # subtraction even when the window truncates (all_bytes prices the file).
+    listing['shown_bytes'] = dropped_block_bytes(kept)
     # R3036: what this whole call prints, solved over the one header renderer
     # so the number and the output it describes cannot disagree.
     listing['output_bytes'] = dropped_output_bytes(listing)
@@ -2761,8 +2798,10 @@ def main(argv=None):
                          'back from the file\'s own newest row; the header '
                          'then carries window=/shown=/truncated=/hidden=/head= '
                          'and rows_all_bytes= (what the whole file\'s block '
-                         'would cost) plus output_bytes= (the bytes this run '
-                         'prints in total), so a shortened list never reads '
+                         'would cost) plus shown_bytes= (what this run\'s own '
+                         'block costs) plus output_bytes= (the bytes this run '
+                         'prints in total, so header = output - 1 - shown), '
+                         'so a shortened list never reads '
                          'like a short file (read-only display; gates nothing)')
     ap.add_argument('--snapshot-failures', dest='snapshot_failures',
                     action='store_true',

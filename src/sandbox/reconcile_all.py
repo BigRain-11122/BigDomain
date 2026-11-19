@@ -4738,8 +4738,11 @@ SUITES = [
     # R3036 adds AC-RUN53: the windowed header now also quotes the total bytes
     # the whole run prints (output_bytes), so choosing a window has a price on
     # the line that describes it (52 -> 53).
+    # R3037 adds AC-RUN54: the header now also quotes the block THIS run prints
+    # (shown_bytes), so both halves of that total are readable even when the
+    # window truncates (53 -> 54).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 53),
+     os.path.join("..", "os", "test_crawl_runner.py"), 54),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

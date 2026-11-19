@@ -1,0 +1,48 @@
+== question 1: can the header half be derived by subtraction? ==
+N=365 rc=0 truncated=0 shown=6 hidden=0
+  header=147B block_this_run=233B all_bytes=233B output_bytes=381 stdout_lf=381B
+  output - rows_all = 148  vs header+1 = 148  equal=True
+  rows_all == this run block ? True
+  output == header+1+block ? True
+N=3 rc=0 truncated=1 shown=3 hidden=3
+  header=145B block_this_run=116B all_bytes=233B output_bytes=262 stdout_lf=262B
+  output - rows_all = 29  vs header+1 = 146  equal=False
+  rows_all == this run block ? False
+  output == header+1+block ? True
+N=2 rc=0 truncated=1 shown=2 hidden=4
+  header=144B block_this_run=79B all_bytes=233B output_bytes=224 stdout_lf=224B
+  output - rows_all = -9  vs header+1 = 145  equal=False
+  rows_all == this run block ? False
+  output == header+1+block ? True
+
+== question 2: does any shipped face price the block this run prints? ==
+  shown_bytes        hits=3 ['tools\\crawl_runner.py', 'src\\os\\test_crawl_runner.py', 'src\\sandbox\\reconcile_all.py']
+  printed_bytes      hits=0 []
+  this_bytes         hits=0 []
+  block_bytes        hits=1 ['tools\\crawl_runner.py']
+  header_bytes       hits=0 []
+  crlf_bytes         hits=1 ['src\\os\\status_export_writer_dialect_wire.py']
+  lines_bytes        hits=0 []
+  rows_shown_bytes   hits=0 []
+
+== question 3: collision surface in the suite ==
+  rows_all_bytes     suite_occurrences=20
+  output_bytes       suite_occurrences=23
+  shown_bytes        suite_occurrences=19
+  printed_bytes      suite_occurrences=0
+  this_bytes         suite_occurrences=0
+  block_bytes        suite_occurrences=0
+  header_bytes       suite_occurrences=0
+  crlf_bytes         suite_occurrences=0
+  lines_bytes        suite_occurrences=0
+  rows_shown_bytes   suite_occurrences=0
+  count("absent=")==2 arms: 12
+  count("absent_named=")==1 arms: 6
+
+== question 4: what a real pipe receives (CRLF delta) ==
+  pipe bytes=227  lf bytes=224  delta=3  lines=3
+  output_bytes=224 equals pipe? False equals lf? True
+  delta == 1 per line ? True
+
+== question 5: boundaries ==
+  empty+w5 rc=0 lines=1 header=135B output=136 block=0B

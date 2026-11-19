@@ -1,0 +1,9 @@
+== visible demo: both halves of the total on one line ==
+
+visible demo verdict: GREEN
+
+== suite-external negative control ==
+honest: shown=79 block=79 header-half=144 real-header=144 -> GREEN
+mutation rows_all_bytes used as this block  value=233 -> CAUGHT
+mutation block minus one newline            value=78 -> CAUGHT
+mutation row count used as bytes            value=2 -> CAUGHT

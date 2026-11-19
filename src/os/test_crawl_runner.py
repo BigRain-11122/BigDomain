@@ -455,6 +455,28 @@ left on the LF law because `rows_all_bytes` already is, and the delta is
 stated instead of papered over. Second boundary: this prices THIS window -
 another N must be run to be priced.
 
+AC-RUN54 (R3037) grades BOTH HALVES of that total. Measured before the change
+(qa/probe-R3037.log): the only subtraction on the face,
+`output_bytes - rows_all_bytes`, read 132 (= header + 1) unwindowed but 13 at
+N=3 and -24 at N=2 against a 130-byte header, because `rows_all_bytes` prices
+the whole FILE rather than this run's block; no shipped key priced the block a
+windowed run prints (six candidate tokens, zero hits under tools/ and src/),
+and `shown_bytes` collides with zero suite arms. The windowed header therefore
+also prints `shown_bytes=<n>`: the UTF-8 bytes of the DAY-DROPPED block this
+run prints, each line with its newline, read off the same rows and the same
+renderer the printer uses. Both halves are then readable as
+`output_bytes - 1 - shown_bytes` = the header's own width, truncated or not.
+Arms: the block price equals that run's own printed block (arm 1); the
+subtraction above equals the real header width on a truncated window (arm 2);
+a narrow window prices a smaller block than a wide one while the full-file
+price is identical, and the old subtraction is pinned as unequal to the header
+(arm 3); an empty history prices a zero block with a bare-header total (arm
+4); the unwindowed face stays byte-identical and gains neither token (arm 5);
+and nothing is written, no verdict prints and the two pinned `absent=` counts
+survive (arm 6). Boundary: both counts are on the LF law, and Windows
+text-mode stdout adds one byte per printed line outside both numbers - a CRLF
+face was refused because the consuming end is unknowable here.
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -4268,14 +4290,18 @@ def main():
     # instead of hiding it: the rest of the dict is still pinned key-for-key,
     # and the new number's exact value is pinned against real stdout by
     # AC-RUN53 arm 4 rather than restated twice.
+    # R3037 adds the block price the same way: named here, pinned exactly by
+    # AC-RUN54 arm 4, so the rest of the dict stays key-for-key.
     out41f = lst41f.pop('output_bytes', None)
+    shown41f = lst41f.pop('shown_bytes', None)
     ok('AC-RUN41', lst41f == {'days': 0, 'bad': 0, 'rows': [], 'window': 5,
                               'head': None, 'shown': 0, 'truncated': False,
                               'hidden': 0, 'all_bytes': 0}
-       and isinstance(out41f, int) and out41f > 0,
+       and isinstance(out41f, int) and out41f > 0
+       and shown41f == 0,
        'an absent history under a window answers days=0 shown=0 head=None '
        'truncated=False without raising (R3035 added the price key, R3036 the '
-       'total, both stated)')
+       'total, R3037 the block price, all stated)')
 
     # arm 7: no clock - the head is the file's own newest row, so a 2001
     # history windows against itself instead of against today
@@ -4303,8 +4329,12 @@ def main():
     # R3036 extends it again: the header also carries output_bytes, and the
     # number must equal the real byte length of what this run printed - the
     # text below is the measured artifact, not a re-derivation of the law.
+    # R3037 extends it once more: shown_bytes prices the block THIS run prints,
+    # read off the same run's own output.
     blk41 = ''.join(n + '\n' for n in lines41h
                     if n.startswith('DAY-DROPPED '))
+    blk41i = ''.join(n + '\n' for n in lines41i
+                     if n.startswith('DAY-DROPPED '))
     raw41 = '\n'.join(lines41i) + '\n'
     ok('AC-RUN41', rc41h == 0
        and lines41h[0] == 'CRAWL-FAILURE-DAYS-DROPPED days=40 bad=0'
@@ -4312,14 +4342,15 @@ def main():
        and rc41i == 0
        and lines41i[0] == ('CRAWL-FAILURE-DAYS-DROPPED days=40 bad=0 window=3 '
                            'shown=3 truncated=1 hidden=37 head=%s '
-                           'rows_all_bytes=%d output_bytes=%d'
+                           'rows_all_bytes=%d shown_bytes=%d output_bytes=%d'
                            % (span41[-1], len(blk41.encode('utf-8')),
+                              len(blk41i.encode('utf-8')),
                               len(raw41.encode('utf-8'))))
        and day_rows_41(lines41i) == span41[-3:],
        'the unwindowed header is unchanged byte for byte while the windowed '
-       'run names window/shown/truncated/hidden/head/rows_all_bytes and prints '
-       'the last three rows in file order, with output_bytes equal to the real '
-       'byte length of that output')
+       'run names window/shown/truncated/hidden/head/rows_all_bytes/shown_bytes '
+       'and prints the last three rows in file order, with output_bytes equal '
+       'to the real byte length of that output')
 
     # AC-RUN42 (R3025): the same --days is a DAY window on the failure face and
     # a ROW tail on the DAYS face. Measured before this arm set existed
@@ -5778,6 +5809,93 @@ def main():
        and 'verdict' not in text53
        and rc53f == 0 and l53f and l53f[0].count('absent=') == 2
        and l53f[0].count('absent_named=') == 1,
+       'no byte is written, no verdict prints, and the two counts the silent '
+       'faces pin still hold on the same world')
+
+    for root in roots:
+        shutil.rmtree(root, ignore_errors=True)
+
+    # ===== AC-RUN54 (R3037): both halves of the total are on the header =======
+    # PINNED in src/os/backlog.md BEFORE shown_bytes existed (in-window
+    # pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3037.log): on one 6-row file `output_bytes - rows_all_bytes`
+    # read 132 (= header+1) unwindowed but 13 at N=3 and -24 at N=2 against a
+    # 130-byte header, because rows_all_bytes prices the whole FILE; no shipped
+    # key priced this run's own block (six candidate tokens, zero hits under
+    # tools/ and src/), and `shown_bytes` collides with zero suite arms.
+    r54 = world()
+    roots.append(r54)
+    put_days(hist37(r54), [plain_day('2026-11-05', 1),
+                           plain_day('2026-11-06', 1, dropped=0),
+                           plain_day('2026-11-07', 1, dropped=7),
+                           plain_day('2026-11-08', 1, dropped=123456)])
+
+    rc54a, l54a, _raw54a = dd53(r54, 2)
+    t54a = toks47(l54a[0]) if l54a else {}
+    head54 = len(l54a[0].encode('utf-8')) if l54a else 0
+
+    # arm 1: the block price equals the block this very run printed
+    ok('AC-RUN54', rc54a == 0 and l54a and t54a.get('shown_bytes') == str(
+        blk53(l54a)) and int(t54a.get('shown_bytes')) > 0,
+       'the windowed header prices the block this run prints, and the number is '
+       'measured off that run\'s own output rather than re-derived')
+
+    # arm 2: with both halves on the line, the header's own cost is subtraction
+    ok('AC-RUN54', rc54a == 0 and l54a
+       and int(t54a.get('output_bytes')) - 1 - int(t54a.get('shown_bytes'))
+       == head54,
+       'output_bytes minus one newline minus shown_bytes equals the real header '
+       'width, so a truncated window\'s two halves are readable without a '
+       'second run')
+
+    # arm 3: the two windows price different blocks while the full-file price
+    # stays put, and the old subtraction is pinned as WRONG on a truncation
+    rc54b, l54b, _raw54b = dd53(r54, 365)
+    t54b = toks47(l54b[0]) if l54b else {}
+    ok('AC-RUN54', rc54b == 0 and l54b and t54b.get('truncated') == '0'
+       and t54a.get('shown_bytes') and t54b.get('shown_bytes')
+       and int(t54a.get('shown_bytes')) < int(t54b.get('shown_bytes'))
+       and t54a.get('rows_all_bytes') == t54b.get('rows_all_bytes')
+       and int(t54a.get('output_bytes')) - int(t54a.get('rows_all_bytes'))
+       != head54,
+       'a narrow window prices a smaller block than a wide one while the '
+       'full-file price is identical in both, which is exactly why '
+       'output_bytes - rows_all_bytes cannot stand in for the header cost')
+
+    # arm 4: an empty history under a window prices a zero block
+    r54c = world()
+    roots.append(r54c)
+    put_days(hist37(r54c), [])
+    rc54c, l54c, _raw54c = dd53(r54c, 5)
+    t54c = toks47(l54c[0]) if l54c else {}
+    ok('AC-RUN54', rc54c == 0 and l54c and t54c.get('shown_bytes') == '0'
+       and int(t54c.get('output_bytes'))
+       == len(l54c[0].encode('utf-8')) + 1
+       and len(day_rows_41(l54c)) == 0,
+       'an empty history prices a zero block and its total is exactly the bare '
+       'header plus one newline - absence is still zero on both halves')
+
+    # arm 5: the default face keeps its bytes and gains neither new token
+    rc54d, l54d, _raw54d = dd53(r54)
+    ok('AC-RUN54', rc54d == 0 and l54d
+       and l54d[0] == 'CRAWL-FAILURE-DAYS-DROPPED days=4 bad=0'
+       and 'shown_bytes' not in l54d[0] and 'output_bytes' not in l54d[0]
+       and len(day_rows_41(l54d)) == 4,
+       'the unwindowed face is byte-identical and carries neither price token - '
+       'a full listing needs no forecast')
+
+    # arm 6: pure display, no verdict, and the pinned absent= counts survive
+    before54 = tree_bytes(r54)
+    rc54e, l54e, _raw54e = dd53(r54, 2)
+    after54 = tree_bytes(r54)
+    text54 = '\n'.join(l54e)
+    rc54f, l54f, _e54 = days50(r54, ['--failure-days', '--series-days', '7',
+                                     '--series-absent'])
+    ok('AC-RUN54', rc54e == 0 and before54 == after54
+       and 'PASS' not in text54 and 'FLAG' not in text54
+       and 'verdict' not in text54
+       and rc54f == 0 and l54f and l54f[0].count('absent=') == 2
+       and l54f[0].count('absent_named=') == 1,
        'no byte is written, no verdict prints, and the two counts the silent '
        'faces pin still hold on the same world')
 

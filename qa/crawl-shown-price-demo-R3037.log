@@ -1,0 +1,20 @@
+== visible demo: both halves of the total on one line ==
+six days, window=2 (truncates)
+  header: CRAWL-FAILURE-DAYS-DROPPED days=6 bad=0 window=2 shown=2 truncated=1 hidden=4 head=2026-11-08 rows_all_bytes=233 shown_bytes=79 output_bytes=224
+  printed block lines=2 bytes=79
+  total=224 shown=79 -> header half=144  real header=144  shown==block? True  half==header? True  total==stdout? True
+  row: GREEN
+six days, window=365 (keeps all)
+  header: CRAWL-FAILURE-DAYS-DROPPED days=6 bad=0 window=365 shown=6 truncated=0 hidden=0 head=2026-11-08 rows_all_bytes=233 shown_bytes=233 output_bytes=381
+  printed block lines=6 bytes=233
+  total=381 shown=233 -> header half=147  real header=147  shown==block? True  half==header? True  total==stdout? True
+  row: GREEN
+empty history, window=5
+  header: CRAWL-FAILURE-DAYS-DROPPED days=0 bad=0 window=5 shown=0 truncated=0 hidden=0 head=none rows_all_bytes=0 shown_bytes=0 output_bytes=136
+  printed block lines=0 bytes=0
+  total=136 shown=0 -> header half=135  real header=135  shown==block? True  half==header? True  total==stdout? True
+  row: GREEN
+
+visible demo verdict: GREEN
+
+== suite-external negative control ==
