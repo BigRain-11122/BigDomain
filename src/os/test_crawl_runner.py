@@ -15,6 +15,10 @@ AC-RUN7 grades the failure side channel's first READER (summarize_failures and
 that "the one part no arm covers" was exactly that block. AC-RUN9/AC-RUN10
 (R2994) grade the daily failure HISTORY (one row per day, rewritten in place)
 and its reader, plus the launcher's --root $Project anchor - all offline.
+AC-RUN11/AC-RUN12 (R2995) grade the TREND line that joins the history with the
+side channel (today / previous day / mean / delta / worst day / recurrence) and
+the launcher's flag ORDER (the snapshot must follow the write), both offline:
+nothing here writes a file outside a temp directory and no launcher is started.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -433,6 +437,114 @@ def main():
        'and the root anchor')
     ok('AC-RUN10', try_at < call_at10 < spawn_at,
        'the anchored call stays inside the try and before the spawn')
+
+    # AC-RUN11 (R2995): the history gains a TREND reader - two days side by side
+    # plus whether the same source recurred. Display only: it reads the two
+    # files that already exist and writes nothing.
+    root16 = world(); roots.append(root16)
+    h16 = RUN.failure_day_path(root16)
+    f16 = RUN.failure_path(root16)
+    empty_trend = RUN.summarize_failure_trend(h16, f16,
+                                              TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN11', empty_trend['days'] == 0 and empty_trend['today'] == 'absent'
+       and empty_trend['prev'] == 'none' and empty_trend['mean'] is None
+       and empty_trend['delta'] == 'none'
+       and empty_trend['worst'] == (None, None)
+       and empty_trend['recurring'] == 0 and empty_trend['sources'] == 0,
+       'two empty faces answer absent/none instead of raising')
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc17 = RUN.main(['--failure-trend', '--root', root16])
+    line17 = buf.getvalue().strip()
+    ok('AC-RUN11', rc17 == 0 and line17.startswith('CRAWL-FAILURE-TREND')
+       and 'days=0 today=absent prev=none mean=none delta=none worst=none'
+       in line17 and 'recurring=0 sources=0' in line17,
+       'the CLI answers one line with every count on an empty world')
+    os.makedirs(os.path.dirname(h16), exist_ok=True)
+    with open(h16, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(json.dumps({'day': '2026-11-18', 'on_day': 2, 'total': 2,
+                             'recent': 2, 'bad': 0, 'urls': 1},
+                            sort_keys=True, separators=(',', ':')) + '\n')
+        fh.write(json.dumps({'day': TODAY, 'on_day': 1, 'total': 3,
+                             'recent': 3, 'bad': 0, 'urls': 2},
+                            sort_keys=True, separators=(',', ':')) + '\n')
+    RUN.append_failure(f16, 'https://a.example/1',
+                       '2026-11-18T01:00:00+08:00', 'E_FETCH A: one')
+    RUN.append_failure(f16, 'https://a.example/1',
+                       '2026-11-18T02:00:00+08:00', 'E_FETCH A: again')
+    RUN.append_failure(f16, 'https://a.example/1', TODAY + 'T03:00:00+08:00',
+                       'E_FETCH A: today')
+    trend16 = RUN.summarize_failure_trend(h16, f16, TODAY + 'T20:00:00+08:00')
+    ok('AC-RUN11', trend16['today'] == 1 and trend16['prev'] == 2
+       and trend16['delta'] == -1 and trend16['mean'] == 1.5
+       and trend16['worst'] == ('2026-11-18', 2)
+       and trend16['recurring'] == 1 and trend16['sources'] == 1,
+       'two days read today=1 prev=2 delta=-1 mean=1.5, worst on the harder day')
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc18 = RUN.main(['--failure-trend', '--root', root16])
+    line18 = buf.getvalue().strip()
+    ok('AC-RUN11', rc18 == 0 and 'days=2' in line18 and 'mean=1.5' in line18
+       and 'worst=2026-11-18:2' in line18 and 'recurring=1 sources=1' in line18,
+       'the printed line names the harder day and the recurrence')
+    root17 = world(); roots.append(root17)
+    h17 = RUN.failure_day_path(root17)
+    f17 = RUN.failure_path(root17)
+    for hour in ('01', '02', '03'):
+        RUN.append_failure(f17, 'https://b.example/2',
+                           TODAY + 'T%s:00:00+08:00' % hour, 'E_FETCH B: same day')
+    RUN.snapshot_failure_day(root17, TODAY + 'T20:00:00+08:00')
+    t17 = RUN.summarize_failure_trend(h17, f17, TODAY + 'T21:00:00+08:00')
+    ok('AC-RUN11', t17['today'] == 3 and t17['recurring'] == 0
+       and t17['sources'] == 1 and t17['prev'] == 'none'
+       and t17['delta'] == 'none',
+       'three failures by one source on one day are no recurrence')
+    t17b = RUN.summarize_failure_trend(h17, f17, '2026-11-21T09:00:00+08:00')
+    ok('AC-RUN11', t17b['today'] == 'absent' and t17b['prev'] == 3
+       and t17b['delta'] == 'none',
+       'a day nobody snapshotted reads absent, never a fabricated zero')
+    root18 = world(); roots.append(root18)
+    h18 = RUN.failure_day_path(root18)
+    f18 = RUN.failure_path(root18)
+    os.makedirs(os.path.dirname(h18), exist_ok=True)
+    with open(h18, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(json.dumps({'day': '2026-11-09', 'on_day': 9},
+                            sort_keys=True, separators=(',', ':')) + '\n')
+        fh.write(json.dumps({'day': TODAY, 'on_day': 1},
+                            sort_keys=True, separators=(',', ':')) + '\n')
+    RUN.append_failure(f18, 'https://c.example/3', '2026-11-09T01:00:00+08:00',
+                       'E_FETCH C: old day')
+    RUN.append_failure(f18, 'https://c.example/3', TODAY + 'T01:00:00+08:00',
+                       'E_FETCH C: today')
+    wide = RUN.summarize_failure_trend(h18, f18, TODAY + 'T20:00:00+08:00', 14)
+    narrow = RUN.summarize_failure_trend(h18, f18, TODAY + 'T20:00:00+08:00', 7)
+    ok('AC-RUN11', wide['mean'] == 5.0
+       and wide['worst'] == ('2026-11-09', 9) and wide['recurring'] == 1
+       and narrow['mean'] == 1.0 and narrow['worst'] == (TODAY, 1)
+       and narrow['recurring'] == 0,
+       'the same bytes read two ways: a day outside the window leaves mean, '
+       'worst and recurrence alone')
+    with open(h18, 'a', encoding='utf-8', newline='\n') as fh:
+        fh.write('{oops\n')
+    bad_trend = RUN.summarize_failure_trend(h18, f18, TODAY + 'T20:00:00+08:00',
+                                            7)
+    ok('AC-RUN11', bad_trend['bad'] == 1 and bad_trend['in_window'] == 1
+       and bad_trend['days'] == 2,
+       'a malformed history line is counted and never becomes a day')
+
+    # AC-RUN12 (R2995): the snapshot must run AFTER the write on the same call
+    # line, so the row it lands can see the failure this very beat produced.
+    # Pure string order - no launcher started, no socket opened.
+    write_at12 = call_line10.find('--write')
+    snap_at12 = call_line10.find('--snapshot-failures')
+    ok('AC-RUN12', write_at12 > 0 and snap_at12 > write_at12,
+       'the snapshot flag sits after --write on the anchored call line')
+    ok('AC-RUN12', 0 < call_line10.find('--if-due') < write_at12 < snap_at12
+       and '--root $Project' in call_line10,
+       'the order is day gate, write, snapshot, root anchor')
+    ok('AC-RUN12', try_at < call_at10 < spawn_at
+       and all(byte < 128 for byte in loop_raw) and b'\r' not in loop_raw,
+       'the ordered line stays inside the try, before the spawn, pure ASCII')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

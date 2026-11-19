@@ -58,6 +58,15 @@ not append duplicates. It is a DISPLAY face only: the scanner never reads it
 gates, retries or pages. A history write that fails prints its own line and
 never changes the crawl's answer.
 
+FAILURE TREND (R2995): a history row alone answered "what was that day" and
+nothing compared two of them, and because a row carried only urls=<count> one
+page failing three days straight read like three different pages failing once
+each. summarize_failure_trend() joins the history (count series) with the side
+channel (which source failed which day) into ONE display line: today, the day
+before, the mean, the delta, the worst day, and how many sources recurred. The
+history row's schema is untouched on purpose - the same fact in two files is two
+places to drift - and the line gates nothing.
+
 BASELINE LAW: qa/crawl-baselines.json, one object keyed by url, holding digest /
 bytes / fetched_at / excerpt. It is a product file (a person can read what the
 page said last time), written atomically after the record is appended.
@@ -297,6 +306,86 @@ def summarize_failure_days(path, limit=7):
             'series': [(r.get('day'), r.get('on_day')) for r in tail]}
 
 
+def summarize_failure_trend(history_path, failures_path, day, window_days=7):
+    """One line for "is today worse than the days before, and is it the same
+    page each time?" (R2995).
+
+    WHY: R2994 persisted one row per day, so the numbers were ON DISK - but
+    nothing put two of them side by side, a person still compared rows by hand,
+    and every row carried only urls=<count>, so one page failing three days
+    straight read exactly like three different pages failing once each. This is
+    a READER that joins the two faces that already exist: the day history gives
+    the count series, the failure side channel gives per-failure source
+    identity. Refusing to copy source names into the history row is deliberate -
+    one fact stored twice is two places to drift, and the history would start
+    looking like a second record face.
+
+    DISPLAY ONLY: the five-still scanner never reads either file, nothing here
+    gates, retries or pages, and no verdict changes because of this line.
+
+    LAW: a day nobody snapshotted is ABSENT, not zero (carried from R2994), so
+    today answers 'absent' rather than 0 when no row names it - and delta is
+    'none' rather than a fabricated drop. recurring counts SOURCES that failed
+    on two or more distinct days inside the window: one source failing many
+    times on a single day is not a recurrence. The window is the same inclusive
+    literal-day range the count summaries use.
+    """
+    head_day = (day or '')[:10]
+    usable = _usable_day(head_day)
+    threshold = head_day
+    if usable:
+        try:
+            start = datetime.date.fromisoformat(head_day) - datetime.timedelta(
+                days=max(1, int(window_days)) - 1)
+            threshold = start.isoformat()
+        except ValueError:
+            usable = False
+    rows, hbad = read_failure_days(history_path)
+    span = [r for r in rows
+            if not usable
+            or threshold <= str(r.get('day') or '')[:10] <= head_day]
+    span.sort(key=lambda r: str(r.get('day') or ''))
+    counts = [int(r.get('on_day') or 0) for r in span]
+    today_row = None
+    prev_row = None
+    if usable:
+        for row in span:
+            row_day = str(row.get('day') or '')[:10]
+            if row_day == head_day:
+                today_row = row
+            elif row_day < head_day:
+                prev_row = row
+    mean = None
+    if counts:
+        mean = round(float(sum(counts)) / len(counts), 2)
+    today = int(today_row['on_day']) if today_row else (
+        'absent' if usable else 'unmeasured')
+    prev = int(prev_row['on_day']) if prev_row else (
+        'none' if usable else 'unmeasured')
+    delta = (today - prev) if (today_row and prev_row) else 'none'
+    worst_row = None
+    if span:
+        worst_row = max(span, key=lambda r: (int(r.get('on_day') or 0),
+                                             str(r.get('day') or '')))
+    frows, _fbad = read_failures(failures_path)
+    days_by_source = {}
+    for row in frows:
+        fday = str(row.get('failed_at') or '')[:10]
+        if usable and not (threshold <= fday <= head_day):
+            continue
+        days_by_source.setdefault(row.get('source_url'), set()).add(fday)
+    recurring = sum(1 for days in days_by_source.values() if len(days) >= 2)
+    wday, wcount = (None, None)
+    if worst_row is not None:
+        wday = str(worst_row.get('day') or '')[:10]
+        wcount = int(worst_row.get('on_day') or 0)
+    return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
+            'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
+            'worst': (None, None) if worst_row is None else (wday, wcount),
+            'recurring': recurring, 'sources': len(days_by_source),
+            'window_days': window_days}
+
+
 def crawled_today(repo_root, day):
     """True when a usable record already names `day` (the day gate's input)."""
     summary = CR.today_summary(CR.record_path(repo_root), day)
@@ -460,6 +549,9 @@ def main(argv=None):
     ap.add_argument('--failure-days', dest='failure_days', action='store_true',
                     help='print the daily failure-count history and exit '
                          '(a display series; gates nothing)')
+    ap.add_argument('--failure-trend', dest='failure_trend', action='store_true',
+                    help='print the count trend joined with per-day source '
+                         'recurrence and exit (a display line; gates nothing)')
     ap.add_argument('--snapshot-failures', dest='snapshot_failures',
                     action='store_true',
                     help='persist today\'s failure counts as one history row '
@@ -483,6 +575,21 @@ def main(argv=None):
         print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s series=%s'
               % (series['days'], series['bad'], series['first'] or 'none',
                  series['last'] or 'none', pairs or 'none'))
+        return 0
+    if args.failure_trend:
+        stamp = datetime.datetime.now().astimezone().isoformat(
+            timespec='seconds')
+        trend = summarize_failure_trend(failure_day_path(args.root),
+                                        failure_path(args.root), stamp,
+                                        args.days)
+        wday, wcount = trend['worst']
+        worst_txt = 'none' if wday is None else '%s:%d' % (wday, wcount)
+        mean_txt = 'none' if trend['mean'] is None else ('%g' % trend['mean'])
+        print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
+              'worst=%s recurring=%d sources=%d bad=%d'
+              % (trend['days'], trend['today'], trend['prev'], mean_txt,
+                 trend['delta'], worst_txt, trend['recurring'],
+                 trend['sources'], trend['bad']))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)

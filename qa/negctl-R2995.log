@@ -1,0 +1,9 @@
+NEGCTL R2995 honest green=3/3
+NEGCTL R2995 mutants red=3/3 (A absent-as-zero, B one-day recurrence, C window ignored)
+  HONEST-two-days          GREEN today=1 prev=2 delta=-1 mean=1.5 recurring=1 sources=1
+  HONEST-one-day           GREEN today=3 prev=none delta=none mean=3.0 recurring=0 sources=1
+  HONEST-absent            GREEN today=absent prev=3 delta=none mean=3.0 recurring=0 sources=1
+  MUT-A-zero-for-absent    RED today=0 prev=3 delta=none mean=3.0 recurring=0 sources=1
+  MUT-B-recur-on-one-day   RED today=3 prev=none delta=none mean=3.0 recurring=1 sources=1
+  MUT-C-window-ignored     RED today=1 prev=9 delta=-8 mean=5.0 recurring=0 sources=1
+NEGCTL VERDICT PASS
