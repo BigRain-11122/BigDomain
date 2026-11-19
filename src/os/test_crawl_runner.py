@@ -3610,9 +3610,9 @@ def main():
     # arm 2: the two kinds stay distinguishable at their own numbers
     kinds35 = {item['line']: item['why'] for item in named35}
     ok('AC-RUN35', kinds35 == {2: 'json', 4: 'fields', 5: 'json'}
-       and 'BAD-LINE n=2 why=json' in lines35
-       and 'BAD-LINE n=4 why=fields' in lines35
-       and 'BAD-LINE n=5 why=json' in lines35,
+       and 'BAD-LINE n=2 why=json day=none' in lines35
+       and 'BAD-LINE n=4 why=fields day=none' in lines35
+       and 'BAD-LINE n=5 why=json day=none' in lines35,
        'a line that did not parse and a line that parsed but is not a usable row carry different reasons at their own numbers')
 
     # arm 3: a blank line is skipped and takes no number
@@ -3744,17 +3744,17 @@ def main():
     # number read_failure_days reports (one pass, not two parsers)
     ok('AC-RUN36', rc36 == 0 and bad36 == 4 and len(named36) == 4
        and nums36 == [2, 4, 5, 6] and nums36 == sorted(nums36)
-       and lines36[0] == 'CRAWL-FAILURE-DAYS-BAD bad=4'
+       and lines36[0] == 'CRAWL-FAILURE-DAYS-BAD bad=4 bad_days=2026-11-17'
        and len(rows36) == 1,
        'four unusable history lines are named 2/4/5/6 in order and the named count is the same number read_failure_days reports')
 
     # arm 2: four different repairs stay four different words
     kinds36 = {item['line']: item['why'] for item in named36}
     ok('AC-RUN36', kinds36 == {2: 'json', 4: 'day', 5: 'on_day', 6: 'shape'}
-       and 'BAD-LINE n=2 why=json' in lines36
-       and 'BAD-LINE n=4 why=day' in lines36
-       and 'BAD-LINE n=5 why=on_day' in lines36
-       and 'BAD-LINE n=6 why=shape' in lines36,
+       and 'BAD-LINE n=2 why=json day=none' in lines36
+       and 'BAD-LINE n=4 why=day day=none' in lines36
+       and 'BAD-LINE n=5 why=on_day day=2026-11-17' in lines36
+       and 'BAD-LINE n=6 why=shape day=none' in lines36,
        'a line that did not parse, a bad day, a non-integer on_day and a non-object line each carry their own reason at their own number')
 
     # arm 3: a blank line takes no number, and an append never moves one
@@ -3779,11 +3779,11 @@ def main():
     rcSideB36, linesSideB36 = side_bad36(rB36)
     ok('AC-RUN36', rcSide36 == 0
        and linesSide36 == ['CRAWL-PENDING-OLD-BAD bad=0 bad_days=none']
-       and linesDaysA36[0] == 'CRAWL-FAILURE-DAYS-BAD bad=4'
-       and linesDaysB36 == ['CRAWL-FAILURE-DAYS-BAD bad=0']
+       and linesDaysA36[0] == 'CRAWL-FAILURE-DAYS-BAD bad=4 bad_days=2026-11-17'
+       and linesDaysB36 == ['CRAWL-FAILURE-DAYS-BAD bad=0 bad_days=none']
        and linesSideB36[0] == 'CRAWL-PENDING-OLD-BAD bad=1 bad_days=none'
        and len(linesSideB36) == 2
-       and 'BAD-LINE n=2 why=json' in linesSideB36
+       and 'BAD-LINE n=2 why=json day=none' in linesSideB36
        and not any('BAD-LINE' in n for n in linesDaysB36),
        'a dirty history leaves the side-channel header text unchanged and a dirty side channel leaves the history at bad=0 - the two faces read their own files')
 
@@ -3810,8 +3810,8 @@ def main():
     roots.append(rAbsent36)
     rcAbsent36, linesAbsent36 = days_bad36(rAbsent36)
     ok('AC-RUN36', rcClean36 == rcAbsent36 == 0
-       and linesClean36 == ['CRAWL-FAILURE-DAYS-BAD bad=0']
-       and linesAbsent36 == ['CRAWL-FAILURE-DAYS-BAD bad=0']
+       and linesClean36 == ['CRAWL-FAILURE-DAYS-BAD bad=0 bad_days=none']
+       and linesAbsent36 == ['CRAWL-FAILURE-DAYS-BAD bad=0 bad_days=none']
        and RUN.read_failure_day_bad_lines(
            os.path.join(rAbsent36, 'no-such-history.jsonl')) == []
        and RUN.read_failure_days(
@@ -7755,13 +7755,15 @@ def main():
     bad_ext68 = RUN.read_failure_bad_lines_ext(p68)
     ok('AC-RUN68', len(pair68) == 2 and pair68[1] == ext68[1] == 1
        and list(ext68[2]) == ['2026-11-20']
-       and bad68 == [{'line': 2, 'why': 'fields'}]
+       and bad68 == [{'line': 2, 'why': 'fields',
+                      'day': '2026-11-20'}]
        and bad_ext68[0] == bad68 and list(bad_ext68[1]) == ['2026-11-20']
        and RUN.read_failures(os.path.join(r68a, 'nope.jsonl'))
        == ([], 0)
        and RUN.read_failures_ext(os.path.join(r68a, 'nope.jsonl'))
        == ([], 0, []),
-       'the shipped readers still answer their shipped shapes, the extended '
+       'the shipped readers keep their shipped shapes (R3052 added the per-row '
+       'day, carried here as None for a row that claims nothing), the extended '
        'ones add the claim, and a missing file is zero of everything')
 
     # Arm 6: pure display - same line twice, zero bytes moved.
@@ -7784,7 +7786,9 @@ def main():
        'lines on two runs, zero bytes moved')
 
     # Arm 7: source - only a format-checked day is named, on one parse pass,
-    # and the BAD-LINE rows still carry line and reason only.
+    # and the BAD-LINE rows carry line, reason and their own day. R3052 changed
+    # the row shape this arm pinned when it was written in R3051, so the pin
+    # moves with the shipped renderer rather than being deleted.
     with io.open(os.path.join(ROOT, 'tools', 'crawl_runner.py'),
                  'r', encoding='utf-8') as fh:
         src68 = fh.read()
@@ -7795,16 +7799,16 @@ def main():
         return src68[i54:j54 if j54 > 0 else len(src68)]
 
     ok('AC-RUN68', '_usable_day(day)' in body68('read_failures_ext')
-       and '_usable_day(day)' in body68('read_failure_bad_lines_ext')
+       and '_usable_day(cand)' in body68('read_failure_bad_lines_ext')
        and 'read_failures_ext(' in body68('read_failures')
        and 'read_failure_bad_lines_ext(' in body68('read_failure_bad_lines')
        and 'read_failures_ext(path)' in body68('summarize_failures')
        and 'read_failures_ext(failures_path)' in body68('list_pending_old')
-       and "'BAD-LINE n=%d why=%s'" in src68
+       and "'BAD-LINE n=%d why=%s day=%s'" in src68
        and 'bad_days' in body68('_summary_from_rows'),
-       'every face names a day only after _usable_day, the name travels from '
-       'the one extended read, and the BAD-LINE rows still carry line and '
-       'reason rather than a second day channel')
+       'every face names a day only after _usable_day and the name travels '
+       'from the one extended read; since R3052 each BAD-LINE row also carries '
+       'day= - the header keeps the set, the row carries the mapping')
 
     # Arm 8: an empty channel still says which day word applies.
     r68f = world(); roots.append(r68f)
@@ -7815,6 +7819,173 @@ def main():
        and tok67(f68['--pending-old-list'][1]).get('reason') == 'no-coverage',
        'an empty channel prints bad=0 bad_days=none on every face and keeps '
        'its no-coverage reason')
+
+    # AC-RUN69 (R3052): the header names the SET of days unusable rows claim
+    # (R3050/R3051), and not one row said WHICH LINE claimed WHICH day -
+    # measured before the change (qa/probe-R3052.log): four broken channel rows
+    # claiming three days printed bad_days= with all three and day= ZERO times
+    # on the rows, and the day-side face printed no day word at all
+    # (CRAWL-FAILURE-DAYS-BAD bad=5 on five broken rows claiming three days).
+    # A set and a mapping are different facts once more than one line is broken.
+    def bad69(root, flag):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main([flag, '--root', root])
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def snap69(root):
+        out = []
+        for base, _dirs, files in os.walk(root):
+            for name in files:
+                p = os.path.join(base, name)
+                out.append((os.path.relpath(p, root).replace('\\', '/'),
+                            os.path.getsize(p)))
+        out.sort()
+        return out
+
+    def toks69(line):
+        out = {}
+        for tok in line.split(' ')[1:]:
+            if '=' in tok:
+                k, v = tok.split('=', 1)
+                out[k] = v
+        return out
+
+    # side channel world: three rows claiming three days, one that never parsed
+    S69 = world(); roots.append(S69)
+    side69 = RUN.failure_path(S69)
+    os.makedirs(os.path.dirname(side69), exist_ok=True)
+    with open(side69, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"failed_at":"2026-11-18T08:00:00+08:00"}\n')
+        fh.write('{"failed_at":"2026-11-19T08:00:00+08:00","error":"  "}\n')
+        fh.write('{"failed_at":"2026-11-20","error":""}\n')
+        fh.write('{never-parsed\n')
+    rcS69, linesS69 = bad69(S69, '--pending-old-bad')
+
+    # day history world: three rows whose `day` is usable, two that claim none
+    D69 = world(); roots.append(D69)
+    day69 = RUN.failure_day_path(D69)
+    os.makedirs(os.path.dirname(day69), exist_ok=True)
+    with open(day69, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"day":"2026-11-18","on_day":"x"}\n')
+        fh.write('{"day":"2026-11-19","on_day":null}\n')
+        fh.write('{"day":"2026-11-20"}\n')
+        fh.write('{"day":"2026/11/18","on_day":1}\n')
+        fh.write('[1,2]\n')
+    rcD69, linesD69 = bad69(D69, '--failure-days-bad')
+
+    # Arm 1: every channel row names its own day; the header keeps the set and
+    # the count stays where it was.
+    ok('AC-RUN69', rcS69 == 0
+       and linesS69[0] == ('CRAWL-PENDING-OLD-BAD bad=4 '
+                           'bad_days=2026-11-18,2026-11-19,2026-11-20')
+       and linesS69[1] == 'BAD-LINE n=1 why=fields day=2026-11-18'
+       and linesS69[2] == 'BAD-LINE n=2 why=fields day=2026-11-19'
+       and linesS69[3] == 'BAD-LINE n=3 why=fields day=2026-11-20'
+       and linesS69[4] == 'BAD-LINE n=4 why=json day=none',
+       'three channel rows name three different days on their own rows while '
+       'the header still names the set, and a line that never parsed says none')
+
+    # Arm 2: the reader items carry the same mapping the face prints.
+    itemsS69 = RUN.read_failure_bad_lines(side69)
+    ok('AC-RUN69', [sorted(i) for i in itemsS69]
+       == [['day', 'line', 'why']] * 4
+       and [(i['line'], i['why'], i['day']) for i in itemsS69]
+       == [(1, 'fields', '2026-11-18'), (2, 'fields', '2026-11-19'),
+           (3, 'fields', '2026-11-20'), (4, 'json', None)],
+       'the shipped reader answers line, reason and day from one pass, and the '
+       'claim that never parsed stays None rather than a guess')
+
+    # Arm 3: the day-side face - which printed no day word at all - names both
+    # the set and the line, and a bad `day` value / a non-object claim nothing.
+    ok('AC-RUN69', rcD69 == 0
+       and linesD69[0] == ('CRAWL-FAILURE-DAYS-BAD bad=5 '
+                           'bad_days=2026-11-18,2026-11-19,2026-11-20')
+       and linesD69[1] == 'BAD-LINE n=1 why=on_day day=2026-11-18'
+       and linesD69[2] == 'BAD-LINE n=2 why=on_day day=2026-11-19'
+       and linesD69[3] == 'BAD-LINE n=3 why=on_day day=2026-11-20'
+       and linesD69[4] == 'BAD-LINE n=4 why=day day=none'
+       and linesD69[5] == 'BAD-LINE n=5 why=shape day=none',
+       'the day-side face names the set on its header and the mapping on its '
+       'rows, and neither an unusable day nor a non-object is invented into one')
+
+    # Arm 4: one word, two faces - the same days ride the rows of both, and
+    # `none` is the one way of saying "no claim" on either.
+    daysS69 = [toks69(n).get('day') for n in linesS69[1:]]
+    daysD69 = [toks69(n).get('day') for n in linesD69[1:]]
+    ok('AC-RUN69', daysS69 == ['2026-11-18', '2026-11-19', '2026-11-20', 'none']
+       and daysD69 == ['2026-11-18', '2026-11-19', '2026-11-20', 'none',
+                       'none']
+       and toks69(linesS69[0]).get('bad_days')
+       == toks69(linesD69[0]).get('bad_days'),
+       'both faces print the same day word with the same meaning, and the two '
+       'headers name the same set for the same three days')
+
+    # Arm 5: set and mapping are different facts - the header names three days
+    # and cannot say which line is which, while the rows are a distinct
+    # line -> day mapping.
+    header69 = toks69(linesS69[0]).get('bad_days', '')
+    pairs69 = [(toks69(n).get('n'), toks69(n).get('day'))
+               for n in linesS69[1:]]
+    ok('AC-RUN69', header69.count(',') == 2
+       and not any(str(i) in header69.split(',') for i in (1, 2, 3))
+       and [p[1] for p in pairs69[:3]] == ['2026-11-18', '2026-11-19',
+                                          '2026-11-20']
+       and len({p[1] for p in pairs69[:3]}) == 3,
+       'the header carries membership only (three days, no line numbers) while '
+       'the rows carry a distinct line-to-day mapping')
+
+    # Arm 6: no contract broken and no count moved - the two-value readers
+    # still answer two values, the other faces' counts are what they were, and
+    # the named day is never added to any count.
+    side_sum69 = RUN.summarize_failures(side69, AT)
+    ok('AC-RUN69', len(RUN.read_failure_days(day69)) == 2
+       and len(RUN.read_failures(side69)) == 2
+       and isinstance(RUN.read_failure_bad_lines(side69), list)
+       and side_sum69['total'] == 0 and side_sum69['recent'] == 0
+       and side_sum69['bad'] == 4
+       and side_sum69['bad_days'] == ['2026-11-18', '2026-11-19',
+                                      '2026-11-20'],
+       'both two-value readers keep their shapes and naming a day moves no '
+       'count: total and recent7 stay 0 while bad=4 carries the names')
+
+    # Arm 7: display only - two runs print the same bytes, the world does not
+    # move, and a file with nothing broken prints the set as none with no row.
+    before69 = snap69(S69)
+    rcS69b, linesS69b = bad69(S69, '--pending-old-bad')
+    C69 = world(); roots.append(C69)
+    clean69 = RUN.failure_path(C69)
+    os.makedirs(os.path.dirname(clean69), exist_ok=True)
+    with open(clean69, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"failed_at":"2026-11-20T08:00:00+08:00","error":"x"}\n')
+    rcC69, linesC69 = bad69(C69, '--pending-old-bad')
+    ok('AC-RUN69', rcS69b == 0 and linesS69b == linesS69
+       and snap69(S69) == before69
+       and linesC69 == ['CRAWL-PENDING-OLD-BAD bad=0 bad_days=none'],
+       'naming a day writes nothing and prints the same bytes twice, and a '
+       'channel with nothing broken answers the set as none and prints no row')
+
+    # Arm 8: source - both renderers carry the row day, the day-side reader is
+    # an ext that names only after _usable_day, and the header that printed no
+    # day word is gone from the module.
+    with io.open(os.path.join(ROOT, 'tools', 'crawl_runner.py'),
+                 'r', encoding='utf-8') as fh:
+        src69 = fh.read()
+
+    def body69(name):
+        i54 = src69.find('def %s(' % name)
+        j54 = src69.find('\ndef ', i54 + 1)
+        return src69[i54:j54 if j54 > 0 else len(src69)]
+
+    ok('AC-RUN69', src69.count("'BAD-LINE n=%d why=%s day=%s'") == 2
+       and "'CRAWL-FAILURE-DAYS-BAD bad=%d bad_days=%s'" in src69
+       and '_usable_day(cand)' in body69('read_failure_bad_lines_ext')
+       and '_usable_day(cand)' in body69('read_failure_day_bad_lines_ext')
+       and 'read_failure_day_bad_lines_ext(' in
+       body69('read_failure_day_bad_lines')
+       and "'why': why, 'day': day" in body69('read_failure_day_bad_lines_ext'),
+       'both faces share one row renderer, the day-side reader names a claim '
+       'only after _usable_day, and the header that printed no day word is gone')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

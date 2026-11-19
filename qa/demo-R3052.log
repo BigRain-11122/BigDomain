@@ -1,0 +1,15 @@
+== REAL --pending-old-bad
+CRAWL-PENDING-OLD-BAD bad=0 bad_days=none
+== REAL --failure-days-bad
+CRAWL-FAILURE-DAYS-BAD bad=0 bad_days=none
+== SIDE --pending-old-bad
+CRAWL-PENDING-OLD-BAD bad=4 bad_days=2026-11-18,2026-11-19,2026-11-20
+BAD-LINE n=1 why=fields day=2026-11-18
+BAD-LINE n=2 why=fields day=2026-11-19
+BAD-LINE n=3 why=fields day=2026-11-20
+BAD-LINE n=4 why=fields day=none
+== DAYS --failure-days-bad
+CRAWL-FAILURE-DAYS-BAD bad=3 bad_days=2026-11-18,2026-11-19
+BAD-LINE n=1 why=on_day day=2026-11-18
+BAD-LINE n=2 why=on_day day=2026-11-19
+BAD-LINE n=4 why=day day=none

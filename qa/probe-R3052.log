@@ -1,0 +1,23 @@
+P1 side header='CRAWL-PENDING-OLD-BAD bad=4 bad_days=2026-11-18,2026-11-19,2026-11-20'
+P1 side row='BAD-LINE n=1 why=fields'
+P1 side row='BAD-LINE n=2 why=fields'
+P1 side row='BAD-LINE n=3 why=fields'
+P1 side row='BAD-LINE n=4 why=json'
+P1 side reader keys=[['line', 'why'], ['line', 'why'], ['line', 'why'], ['line', 'why']]
+P1 side day token on rows=0 of 4
+P2 day header='CRAWL-FAILURE-DAYS-BAD bad=5'
+P2 day row='BAD-LINE n=1 why=on_day'
+P2 day row='BAD-LINE n=2 why=on_day'
+P2 day row='BAD-LINE n=3 why=on_day'
+P2 day row='BAD-LINE n=4 why=day'
+P2 day row='BAD-LINE n=5 why=shape'
+P2 day reader keys=[['line', 'why'], ['line', 'why'], ['line', 'why'], ['line', 'why'], ['line', 'why']]
+P2 day header carries a day word=False
+P3 claimless header='CRAWL-PENDING-OLD-BAD bad=2 bad_days=none'
+P3 claimless row='BAD-LINE n=1 why=fields'
+P3 claimless row='BAD-LINE n=2 why=json'
+P4 renderer literal 'BAD-LINE n=%d why=%s' count=2
+P4 test substring pins of a BAD-LINE row=9
+P4 day-header equality pins bad=4=2 bad=0=3
+P4 side-header equality pins=3
+P4 side reader return-tuple pins=6

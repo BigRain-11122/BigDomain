@@ -1273,17 +1273,26 @@ def read_failure_bad_lines_ext(path):
     read `bad=1` with no day word). Same law as read_failures_ext: only a
     failed_at that passes _usable_day is named, and a line that never parsed
     claims nothing.
+
+    R3052: each item also carries `day` - WHICH DAY THIS LINE CLAIMS - because
+    the header answers only the set. Measured (qa/probe-R3052.log P1): four
+    broken lines claiming three days printed `bad_days=` with three days and
+    `day=` zero times on the rows, so a reader holding three days could not tell
+    which line was which. `None` says "this line claims nothing", which is a
+    different statement from "the file claims no day" and is printed as `none`.
     """
     named = []
     claimed = set()
     for n, kind, row in _failure_lines(path):
         if kind is None:
             continue
-        named.append({'line': n, 'why': kind})
+        day = None
         if isinstance(row, dict):
-            day = str(row.get('failed_at') or '')[:10]
-            if _usable_day(day):
-                claimed.add(day)
+            cand = str(row.get('failed_at') or '')[:10]
+            if _usable_day(cand):
+                day = cand
+                claimed.add(cand)
+        named.append({'line': n, 'why': kind, 'day': day})
     return named, sorted(claimed)
 
 
@@ -1545,7 +1554,7 @@ def read_failure_days(path):
 
 
 def read_failure_day_bad_lines(path):
-    """[{'line': n, 'why': 'json'|'shape'|'day'|'on_day'}] ascending.
+    """[{'line': n, 'why': ..., 'day': d|None}] ascending.
 
     WHY (R3019, measured before this existed - qa/probe-R3019.log):
     `CRAWL-FAILURE-DAYS` prints bad=<n> for this file and nothing could name one
@@ -1562,10 +1571,37 @@ def read_failure_day_bad_lines(path):
     outlive the beat and does not pretend to.
 
     DISPLAY ONLY: writes nothing, gates nothing. An absent file answers [].
+
+    R3052: this face printed no day word at all (measured, qa/probe-R3052.log
+    P2: `CRAWL-FAILURE-DAYS-BAD bad=5` on five broken rows claiming three days),
+    so each item now carries `day` and the header carries `bad_days=` - the
+    same word the side channel has used since R3051. One read serves both.
     """
-    return [{'line': n, 'why': why}
-            for n, why, _row in _json_lines(path, _failure_day_row_why)
-            if why is not None]
+    named, _bad_days = read_failure_day_bad_lines_ext(path)
+    return named
+
+
+def read_failure_day_bad_lines_ext(path):
+    """(named, bad_days) for unusable history lines - the one parse pass.
+
+    R3052: the day-side twin of read_failure_bad_lines_ext. `day` is which day
+    THIS line claims (only a value that passes _usable_day, else None), and
+    `bad_days` is the sorted set across the file - a set and a mapping, which
+    are different facts when more than one line is broken.
+    """
+    named = []
+    claimed = set()
+    for n, why, row in _json_lines(path, _failure_day_row_why):
+        if why is None:
+            continue
+        day = None
+        if isinstance(row, dict):
+            cand = str(row.get('day') or '')[:10]
+            if _usable_day(cand):
+                day = cand
+                claimed.add(cand)
+        named.append({'line': n, 'why': why, 'day': day})
+    return named, sorted(claimed)
 
 
 def snapshot_failure_day(repo_root, day, window_days=7):
@@ -3023,6 +3059,17 @@ def list_pending_old(record_path, failures_path, day, window_days=7):
     day file had carried the word since R3050. It comes from the SAME extended
     read that produced `bad` (one pass, one answer), and only failed_at values
     that pass _usable_day are named - a line that never parsed claims nothing.
+
+    R3052 EACH BAD-LINE ROW NAMES ITS OWN DAY. Measured before this existed
+    (qa/probe-R3052.log): three broken channel rows claiming 11-18/11-19/11-20
+    printed `bad_days=` with all three days and `day=` ZERO times on the rows,
+    so a reader holding a set could not tell which line was which; the day-side
+    face printed no day word at all (`CRAWL-FAILURE-DAYS-BAD bad=5`). A SET and
+    a MAPPING are different facts once more than one line is broken, so the
+    header keeps the set and each row ends with `day=<d|none>` - `none` says
+    "this line claims nothing" (a value that fails _usable_day is never named,
+    and no line text is echoed: R3018 still holds). The day-side header now
+    carries `bad_days=` too, from the same one read.
     """
     rows, bad, bad_days = read_failures_ext(failures_path)
     head_day, usable, threshold = _window_start(day, window_days)
@@ -3540,14 +3587,17 @@ def main(argv=None):
     ap.add_argument('--pending-old-bad', dest='pending_old_bad',
                     action='store_true',
                     help='name the unusable lines on the failure channel by '
-                         'line number and reason, never by text, and bad_days= '
-                         'names the days they claim (read-only display; writes '
-                         'and gates nothing)')
+                         'line number and reason, never by text; bad_days= '
+                         'names the SET of days they claim and each row ends '
+                         'with day=<d|none>, WHICH day that line claims (R3052; '
+                         'read-only display; writes and gates nothing)')
     ap.add_argument('--failure-days-bad', dest='failure_days_bad',
                     action='store_true',
                     help='name the unusable lines on the daily failure history '
-                         'by line number and reason, never by text (read-only '
-                         'display; writes and gates nothing)')
+                         'by line number and reason, never by text; bad_days= '
+                         'names the SET of days they claim and each row ends '
+                         'with day=<d|none>, WHICH day that line claims (R3052; '
+                         'read-only display; writes and gates nothing)')
     ap.add_argument('--failure-days-dropped', dest='failure_days_dropped',
                     action='store_true',
                     help='list each usable day row\'s own eaten-lines count, '
@@ -3771,13 +3821,17 @@ def main(argv=None):
         print('CRAWL-PENDING-OLD-BAD bad=%d bad_days=%s'
               % (len(named), ','.join(claimed) or 'none'))
         for item in named:
-            print('BAD-LINE n=%d why=%s' % (item['line'], item['why']))
+            print('BAD-LINE n=%d why=%s day=%s'
+                  % (item['line'], item['why'], item['day'] or 'none'))
         return 0
     if args.failure_days_bad:
-        named = read_failure_day_bad_lines(failure_day_path(args.root))
-        print('CRAWL-FAILURE-DAYS-BAD bad=%d' % len(named))
+        named, claimed = read_failure_day_bad_lines_ext(
+            failure_day_path(args.root))
+        print('CRAWL-FAILURE-DAYS-BAD bad=%d bad_days=%s'
+              % (len(named), ','.join(claimed) or 'none'))
         for item in named:
-            print('BAD-LINE n=%d why=%s' % (item['line'], item['why']))
+            print('BAD-LINE n=%d why=%s day=%s'
+                  % (item['line'], item['why'], item['day'] or 'none'))
         return 0
     if args.pending_old_list:
         stamp = _stamp_of(args)

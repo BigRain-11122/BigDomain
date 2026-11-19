@@ -1,0 +1,5 @@
+HONEST rc=0 GREEN
+m1 CAUGHT rc=0 RED side=['CRAWL-PENDING-OLD-BAD bad=4 bad_days=2026-11-18,2026-11-19,2026-11-20', 'BAD-LINE n=1 why=fields day=none', 'BAD-LINE n=2 why=fields day=none', 'BAD-LINE n=3 why=fields day=none', 'BAD-LINE
+m2 CAUGHT rc=0 RED side=['CRAWL-PENDING-OLD-BAD bad=4 bad_days=2026-11-18,2026-11-19,2026-11-20,2026/11/20', 'BAD-LINE n=1 why=fields day=2026-11-18', 'BAD-LINE n=2 why=fields day=2026-11-19', 'BAD-LINE n=3 why=fiel
+m3 CAUGHT rc=0 RED days=['CRAWL-FAILURE-DAYS-BAD bad=3', 'BAD-LINE n=1 why=on_day day=2026-11-18', 'BAD-LINE n=2 why=on_day day=2026-11-19', 'BAD-LINE n=3 why=day day=none']
+RESTORED rc=0 GREEN
