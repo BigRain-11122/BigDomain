@@ -411,6 +411,27 @@ whose gaps all fit prices itself (arm 4); an unusable head answers none rather
 than a free zero (arm 5); and nothing is written, no verdict prints, the pinned
 counts survive, and a 2001 history prices its own window with no clock (arm 6).
 
+AC-RUN52 (R3035) grades the PRICE OF THE MULTI-LINE BLOCK that the window
+truncates. Measured before the change (qa/probe-R3035.log): on one four-row
+world the four `DAY-DROPPED` lines measured 39/36/36/41 characters wide,
+because `day=` is a fixed 10 characters while `dropped=` changes width; two
+worlds with the SAME counts (days=4) printed 156B vs 148B, so the block size is
+not derivable from the header's numbers; the board's premise that the reader
+cannot tell how many LINES measured FALSE for this face (`days` is the whole
+file, `shown` is this run) and that correction is stated rather than dropped;
+no shipped face estimated a multi-line output total; and exactly one arm pinned
+the windowed header by whole-line equality, which is EXTENDED here rather than
+deleted. The windowed header therefore also prints `rows_all_bytes=<n>`: the
+UTF-8 bytes of the block for every usable row, newlines included - what
+dropping the window would cost. Arms: the price equals the block the
+unwindowed run really prints on the same file (arm 1, a cross-run invariant
+rather than self-arithmetic); the number does not move with the window because
+it prices the file, not the window (arm 2); two worlds with equal counts but
+different `dropped` widths price differently and each price is exact (arm 3);
+an empty history prices 0 with no rows and no raise (arm 4); the unwindowed
+face keeps its bytes and carries no token (arm 5); and nothing is written, no
+verdict prints and the two pinned `absent=` counts survive (arm 6).
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -4222,9 +4243,9 @@ def main():
     lst41f = RUN.list_failure_days_dropped(missing41, 5)
     ok('AC-RUN41', lst41f == {'days': 0, 'bad': 0, 'rows': [], 'window': 5,
                               'head': None, 'shown': 0, 'truncated': False,
-                              'hidden': 0},
+                              'hidden': 0, 'all_bytes': 0},
        'an absent history under a window answers days=0 shown=0 head=None '
-       'truncated=False without raising')
+       'truncated=False without raising (R3035 added the price key, stated)')
 
     # arm 7: no clock - the head is the file's own newest row, so a 2001
     # history windows against itself instead of against today
@@ -4246,16 +4267,23 @@ def main():
     # truncation tokens on the same single line
     rc41h, lines41h = dd41(r41)
     rc41i, lines41i = dd41(r41, 3)
+    # R3035 extended this arm instead of deleting it: the windowed header keeps
+    # every token it already carried and now also prices the block it truncates,
+    # read off the unwindowed run in this same arm (a cross-run invariant).
+    blk41 = ''.join(n + '\n' for n in lines41h
+                    if n.startswith('DAY-DROPPED '))
     ok('AC-RUN41', rc41h == 0
        and lines41h[0] == 'CRAWL-FAILURE-DAYS-DROPPED days=40 bad=0'
        and len(day_rows_41(lines41h)) == 40
        and rc41i == 0
        and lines41i[0] == ('CRAWL-FAILURE-DAYS-DROPPED days=40 bad=0 window=3 '
-                           'shown=3 truncated=1 hidden=37 head=%s' % span41[-1])
+                           'shown=3 truncated=1 hidden=37 head=%s '
+                           'rows_all_bytes=%d'
+                           % (span41[-1], len(blk41.encode('utf-8'))))
        and day_rows_41(lines41i) == span41[-3:],
        'the unwindowed header is unchanged byte for byte while the windowed '
-       'run names window/shown/truncated/hidden/head and prints the last three '
-       'rows in file order')
+       'run names window/shown/truncated/hidden/head/rows_all_bytes and prints '
+       'the last three rows in file order')
 
     # AC-RUN42 (R3025): the same --days is a DAY window on the failure face and
     # a ROW tail on the DAYS face. Measured before this arm set existed
@@ -5528,6 +5556,97 @@ def main():
        and t51h.get('window_from') == '2001-02-27',
        'no byte is written, no verdict prints, the two pinned counts hold, and '
        'a 2001 history prices its own window with no wall clock')
+
+    # ===== AC-RUN52 (R3035): the price of the full block is on the header =====
+    # AC-RUN52 was pinned in src/os/backlog.md BEFORE rows_all_bytes existed
+    # (in-window pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3035.log): day lines measured 39/36/36/41 characters on one
+    # four-row world (day= fixed 10, dropped= variable), two worlds with the
+    # same counts printed 156B vs 148B, no shipped face estimated a multi-line
+    # total, and one arm pinned the windowed header by equality (extended).
+    def blk52(lines):
+        return sum(len((n + '\n').encode('utf-8')) for n in lines
+                   if n.startswith('DAY-DROPPED '))
+
+    r52 = world()
+    roots.append(r52)
+    p52 = hist37(r52)
+    put_days(p52, [plain_day('2026-11-05', 1),
+                   plain_day('2026-11-06', 1, dropped=0),
+                   plain_day('2026-11-07', 1, dropped=7),
+                   plain_day('2026-11-08', 1, dropped=123456)])
+
+    # arm 1: the price equals the block an unwindowed run really prints
+    rc52a, l52a = dd41(r52)
+    rc52b, l52b = dd41(r52, 2)
+    t52b = toks47(l52b[0]) if l52b else {}
+    full52 = blk52(l52a)
+    ok('AC-RUN52', rc52a == 0 and rc52b == 0 and full52 > 0
+       and t52b.get('truncated') == '1' and t52b.get('shown') == '2'
+       and t52b.get('rows_all_bytes') == str(full52)
+       and blk52(l52b) < full52,
+       'the windowed header prices the whole block and that number equals the '
+       'bytes the unwindowed run of the same file really prints')
+
+    # arm 2: the price does not move with the window - it prices the file
+    rc52c, l52c = dd41(r52, 30)
+    t52c = toks47(l52c[0]) if l52c else {}
+    ok('AC-RUN52', rc52c == 0 and t52c.get('truncated') == '0'
+       and t52c.get('rows_all_bytes') == t52b.get('rows_all_bytes')
+       and t52c.get('rows_all_bytes') == str(full52),
+       'a window that truncates nothing quotes the same price, so the number '
+       'describes the file rather than the window in hand')
+
+    # arm 3: equal counts, different dropped widths - the price is not counts
+    r52d = world()
+    roots.append(r52d)
+    put_days(hist37(r52d), [plain_day('2026-11-05', 1, dropped=1),
+                            plain_day('2026-11-06', 1, dropped=1),
+                            plain_day('2026-11-07', 1, dropped=1),
+                            plain_day('2026-11-08', 1, dropped=1)])
+    rc52d, l52d = dd41(r52d)
+    rc52e, l52e = dd41(r52d, 2)
+    t52e = toks47(l52e[0]) if l52e else {}
+    narrow52 = blk52(l52d)
+    ok('AC-RUN52', rc52d == 0 and rc52e == 0
+       and t52e.get('rows_all_bytes') == str(narrow52)
+       and narrow52 != full52
+       and blk52(l52e) < narrow52,
+       'two files with the same counts but different dropped widths price '
+       'differently, and each price is exact - the number is bytes, not rows')
+
+    # arm 4: an empty history prices 0, prints no row and does not raise
+    r52f = world()
+    roots.append(r52f)
+    put_days(hist37(r52f), [])
+    rc52f, l52f = dd41(r52f, 5)
+    t52f = toks47(l52f[0]) if l52f else {}
+    ok('AC-RUN52', rc52f == 0 and l52f and t52f.get('rows_all_bytes') == '0'
+       and len(day_rows_41(l52f)) == 0,
+       'an empty history under a window prices zero bytes with no day line, '
+       'which is the same absence-is-zero law the reader already uses')
+
+    # arm 5: the unwindowed face keeps its bytes and carries no price token
+    ok('AC-RUN52', rc52a == 0 and l52a[0] == 'CRAWL-FAILURE-DAYS-DROPPED '
+       'days=4 bad=0' and 'rows_all_bytes' not in l52a[0]
+       and len(day_rows_41(l52a)) == 4,
+       'the default face is byte-identical to its two pinned arms and gains no '
+       'token - a full listing needs no forecast')
+
+    # arm 6: pure display, no verdict, and the pinned absent= counts survive
+    before52 = tree_bytes(r52)
+    rc52g, l52g = dd41(r52, 2)
+    after52 = tree_bytes(r52)
+    text52 = '\n'.join(l52g)
+    rc52h, l52h, _e = days50(r52, ['--failure-days', '--series-days', '7',
+                                   '--series-absent'])
+    ok('AC-RUN52', rc52g == 0 and before52 == after52
+       and 'PASS' not in text52 and 'FLAG' not in text52
+       and 'verdict' not in text52
+       and rc52h == 0 and l52h and l52h[0].count('absent=') == 2
+       and l52h[0].count('absent_named=') == 1,
+       'no byte is written, no verdict prints, and the two counts the silent '
+       'faces pin still hold on the same world')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

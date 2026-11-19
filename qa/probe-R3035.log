@@ -1,0 +1,16 @@
+P1a unwindowed header='CRAWL-FAILURE-DAYS-DROPPED days=4 bad=0'
+P1a day-lines=4 widths=[39, 36, 36, 41] block_bytes=156
+P1a dropped= width varies=True while day= is fixed 10=True
+P1b same days/shown counts, different block bytes: 156 vs 148  derivable=False
+P1c windowed header='CRAWL-FAILURE-DAYS-DROPPED days=4 bad=0 window=2 shown=2 truncated=1 hidden=2 head=2026-11-08'
+P1c printed block_bytes=79  full-file block_bytes=156  equal=False
+P1c header carries any byte token=False
+P1d empty history under a window rc=0 header='CRAWL-FAILURE-DAYS-DROPPED days=0 bad=0 window=5 shown=0 truncated=0 hidden=0 head=none' day_lines=0
+P2 estimator tokens: {'rows_bytes': 0, 'listing_bytes': 0, 'block_bytes': 0, 'output_bytes': 0, 'lines_bytes': 0, 'rows_all': 1, 'all_rows_bytes': 0}
+P3 count("count('absent=') == 2")=9  count("count('absent_named=') == 1")=3
+P3 full-equality arms on the UNWINDOWED header=3
+P3 full-equality arms on the WINDOWED header=1
+P3 arms reading DAY-DROPPED prefix=2
+P3 refs to rows_all_bytes=0
+P3 registry row criteria=['51']
+PROBE DONE rc=0

@@ -382,6 +382,34 @@ a separate preview subcommand (another command to remember), writing the
 estimate to stderr, and any token on the default face (the eight byte-pinned
 tails would go red). An unusable head day answers none, never an invented zero.
 
+THE FULL BLOCK HAS A PRICE ON THE HEADER THAT TRUNCATES IT (R3035, measured
+first - qa/probe-R3035.log): the per-day listing prints one line per row, and
+the windowed header named the ROW counts (days / shown) but nothing about the
+block's SIZE - a reader on `window=2` saw 79 bytes and had no way to read what
+dropping the window would cost (the same file's full block is 156 bytes).
+Measured, in order. (1) The block size is NOT derivable from those counts: a
+day line's `day=` is a fixed 10 characters while `dropped=` changes width, and
+two worlds with the same days=4 printed 156 vs 148 bytes. The board's premise
+"the reader cannot tell how many LINES" was measured FALSE for this face -
+`days` is the whole file and `shown` is this run - so only the byte face was
+open, and that is stated rather than quietly kept. (2) No shipped face
+estimates a multi-line output total (six candidate tokens, zero hits under
+tools/ and src/). (3) One new token on the windowed header collides with
+exactly one arm (AC-RUN41 arm 8's whole-line equality, extended rather than
+deleted); the unwindowed header keeps its three byte-equality arms untouched,
+so the default face does not move by a byte. The windowed tail therefore also
+carries `rows_all_bytes=<n>`: the UTF-8 byte length of the DAY-DROPPED block
+for EVERY usable row in the file, each line including its newline, i.e. the
+price of removing the window. Printing and pricing share one renderer
+(`dropped_line`) so the two cannot drift. Honest boundary: the count is
+characters-cast-to-UTF-8-bytes - equal for the ASCII day faces this reader can
+produce (`_usable_day` requires a 10-character ASCII front), but a non-ASCII
+suffix on a day value would make the estimate and a terminal's own encoding
+disagree. Refused: the token on the default face (three arms pin it byte for
+byte, and a full listing needs no forecast), pricing only the block this run
+prints (the reader is looking at it), a separate preview subcommand, and an
+extra line-count token (shown/days already answer that).
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1509,6 +1537,31 @@ def series_presence_counts(rows, window_days=7):
             'start': threshold}
 
 
+def dropped_line(row):
+    """One `DAY-DROPPED` line for a listing row - the ONLY renderer (R3035).
+
+    Shared by the printer and by the block-size estimator on purpose: two
+    copies of this format string would let the header's byte count drift from
+    the lines actually printed, which is exactly what the count promises.
+    `dropped` is the row's OWN value and `none` when it is not an int (type(),
+    not isinstance(): a JSON true passes isinstance).
+    """
+    return 'DAY-DROPPED day=%s dropped=%s' % (
+        row['day'],
+        'none' if row['dropped'] is None else row['dropped'])
+
+
+def dropped_block_bytes(rows):
+    """UTF-8 bytes of those lines as a pipe would carry them (R3035).
+
+    Each line plus its trailing newline. Inside one process the row text is
+    ASCII for every day row this reader accepts (`_usable_day` keeps a
+    10-character ASCII front), so this equals len(text); encoding is used so a
+    future non-ASCII day value is counted in bytes rather than characters.
+    """
+    return sum(len((dropped_line(r) + '\n').encode('utf-8')) for r in rows)
+
+
 def list_failure_days_dropped(path, window_days=None):
     """Per-day eaten-lines listing; each row speaks only for itself.
 
@@ -1539,15 +1592,25 @@ def list_failure_days_dropped(path, window_days=None):
     boolean and `hidden` an int, so a truncated listing can never read like a
     short file. No sort, no de-duplication: a same day twice stays twice.
 
+    R3035 PRICE OF DROPPING THE WINDOW: a windowed call also answers
+    `all_bytes` - the UTF-8 bytes of the DAY-DROPPED block for EVERY usable
+    row, each line with its newline, i.e. what the same file costs with no
+    window. It is computed from the pre-window rows by the one renderer
+    `dropped_line`, so it agrees with a second unwindowed run instead of being
+    a separate estimate. 0 for a file with no usable rows (absence is zero,
+    the same law as read_failure_days), never an invented number. Only the
+    windowed shape carries it: the unwindowed shape is pinned key-for-key by
+    AC-RUN41 arm 1.
+
     DISPLAY ONLY: writes nothing, gates nothing. An absent file answers zero
     rows - the same "absence is zero" law as read_failure_days.
     """
     rows, bad = read_failure_days(path)
-    listing = {'days': len(rows), 'bad': bad,
-               'rows': [{'day': r.get('day'),
-                         'dropped': (r.get('dropped')
-                                     if type(r.get('dropped')) is int else None)}
-                        for r in rows]}
+    all_rows = [{'day': r.get('day'),
+                 'dropped': (r.get('dropped')
+                             if type(r.get('dropped')) is int else None)}
+                for r in rows]
+    listing = {'days': len(rows), 'bad': bad, 'rows': all_rows}
     if window_days is None:
         return listing
     head = str(rows[-1].get('day') or '') if rows else ''
@@ -1565,6 +1628,10 @@ def list_failure_days_dropped(path, window_days=None):
     listing['truncated'] = len(kept) < len(listing['rows'])
     listing['hidden'] = len(listing['rows']) - len(kept)
     listing['rows'] = kept
+    # R3035: what dropping the window would cost, priced from the SAME rows the
+    # unwindowed call would print, so the number cannot disagree with a second
+    # run over the same file.
+    listing['all_bytes'] = dropped_block_bytes(all_rows)
     return listing
 
 
@@ -2608,8 +2675,9 @@ def main(argv=None):
                     help='keep only the last N days of that listing, measured '
                          'back from the file\'s own newest row; the header '
                          'then carries window=/shown=/truncated=/hidden=/head= '
-                         'so a shortened list never reads like a short file '
-                         '(read-only display; gates nothing)')
+                         'and rows_all_bytes= (what the whole file\'s block '
+                         'would cost), so a shortened list never reads like a '
+                         'short file (read-only display; gates nothing)')
     ap.add_argument('--snapshot-failures', dest='snapshot_failures',
                     action='store_true',
                     help='persist today\'s failure counts as one history row '
@@ -2752,14 +2820,13 @@ def main(argv=None):
                   % (listing['days'], listing['bad']))
         else:
             print('CRAWL-FAILURE-DAYS-DROPPED days=%d bad=%d window=%d '
-                  'shown=%d truncated=%d hidden=%d head=%s'
+                  'shown=%d truncated=%d hidden=%d head=%s rows_all_bytes=%d'
                   % (listing['days'], listing['bad'], listing['window'],
                      listing['shown'], 1 if listing['truncated'] else 0,
-                     listing['hidden'], listing['head'] or 'none'))
+                     listing['hidden'], listing['head'] or 'none',
+                     listing['all_bytes']))
         for item in listing['rows']:
-            print('DAY-DROPPED day=%s dropped=%s'
-                  % (item['day'],
-                     'none' if item['dropped'] is None else item['dropped']))
+            print(dropped_line(item))
         return 0
     if args.pending_old_bad:
         named = read_failure_bad_lines(failure_path(args.root))

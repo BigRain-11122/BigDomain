@@ -1,0 +1,6 @@
+GREEN honest all_bytes value=119 want=119
+CAUGHT mutation: count-derived (36/row) value=108 want=119
+CAUGHT mutation: no newlines value=116 want=119
+CAUGHT mutation: windowed rows only value=79 want=119
+CAUGHT mutation: day chars only value=30 want=119
+NEGCTL DONE

@@ -1,0 +1,9 @@
+[default, no token] rc=0 lines=12 header=CRAWL-FAILURE-DAYS-DROPPED days=11 bad=0
+      rows=['DAY-DROPPED day=2026-09-01 dropped=2', 'DAY-DROPPED day=2026-11-10 dropped=1234', 'DAY-DROPPED day=2026-11-11 dropped=0', 'DAY-DROPPED day=2026-11-12 dropped=1234', 'DAY-DROPPED day=2026-11-13 dropped=0', 'DAY-DROPPED day=2026-11-14 dropped=1234', 'DAY-DROPPED day=2026-11-15 dropped=0', 'DAY-DROPPED day=2026-11-16 dropped=1234', 'DAY-DROPPED day=2026-11-17 dropped=0', 'DAY-DROPPED day=2026-11-18 dropped=1234', 'DAY-DROPPED day=2026-11-19 dropped=0']
+[window=3, truncated] rc=0 lines=4 header=CRAWL-FAILURE-DAYS-DROPPED days=11 bad=0 window=3 shown=3 truncated=1 hidden=8 head=2026-11-19 rows_all_bytes=422
+      rows=['DAY-DROPPED day=2026-11-17 dropped=0', 'DAY-DROPPED day=2026-11-18 dropped=1234', 'DAY-DROPPED day=2026-11-19 dropped=0']
+[window=365, nothing truncated] rc=0 lines=12 header=CRAWL-FAILURE-DAYS-DROPPED days=11 bad=0 window=365 shown=11 truncated=0 hidden=0 head=2026-11-19 rows_all_bytes=422
+      rows=['DAY-DROPPED day=2026-09-01 dropped=2', 'DAY-DROPPED day=2026-11-10 dropped=1234', 'DAY-DROPPED day=2026-11-11 dropped=0', 'DAY-DROPPED day=2026-11-12 dropped=1234', 'DAY-DROPPED day=2026-11-13 dropped=0', 'DAY-DROPPED day=2026-11-14 dropped=1234', 'DAY-DROPPED day=2026-11-15 dropped=0', 'DAY-DROPPED day=2026-11-16 dropped=1234', 'DAY-DROPPED day=2026-11-17 dropped=0', 'DAY-DROPPED day=2026-11-18 dropped=1234', 'DAY-DROPPED day=2026-11-19 dropped=0']
+[empty history] rc=0 lines=1 header=CRAWL-FAILURE-DAYS-DROPPED days=0 bad=0 window=5 shown=0 truncated=0 hidden=0 head=none rows_all_bytes=0
+      rows=[]
+DEMO DONE rc=0
