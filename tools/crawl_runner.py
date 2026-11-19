@@ -610,6 +610,23 @@ edited by hand" rather than as a contradiction. `day` asserts a law holds, the
 same way `outside=0` asserts the window applied; the writer always sorts, so
 `mixed` is itself the signal.
 
+THE DEFAULT FACE'S WINDOW ANCHOR (R3046, measured first - qa/probe-R3046.log):
+on the default face `series=` is a FILE tail while `series_shown`,
+`series_outside` and `window_rows` are day-relative, and `dropped=` is the last
+row's own value - so a hand-edited history printed three numbers in three
+orders and named none of them. Two candidate repairs were measured and
+REFUSED: a "pairs are file order" marker restates what the printed pairs
+already show (R3000 noise law), and day-sorting the default pairs makes the
+segment end LATER than `last=` (measured 11-14 > 11-11), i.e. it moves the
+contradiction to `first=`/`last=` instead of removing it. The quantity that was
+genuinely not derivable is the ANCHOR the counts open at: with `--days 1` on a
+mixed history the line printed a pair outside a one-day window and never said
+which day the window opened at. The default face therefore prints
+` window_head=<day|none>` - the newest usable day, the same head the six day
+faces use (empty history reads `none`). On a writer-produced file it equals
+`last=`, so like `outside=0` it asserts a law rather than adding a number; the
+day face does not print it because its sorted pairs already end on that day.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -3288,7 +3305,11 @@ def main(argv=None):
                     help='persist today\'s failure counts as one history row '
                          '(same-day rows are rewritten, never duplicated)')
     ap.add_argument('--days', type=int, default=7,
-                    help='window length in days for the failure faces (default 7)')
+                    help='window length in days for the failure faces '
+                         '(default 7); the default daily face also carries '
+                         'window_head=<day|none> - the day its window counts '
+                         'open at - because the pairs there are a file tail '
+                         'and need not end on that day')
     ap.add_argument('--series-days', dest='series_days', type=int, default=None,
                     help='print only the daily-history pairs inside the last N '
                          'days, measured back from the file\'s own newest row; '
@@ -3410,7 +3431,12 @@ def main(argv=None):
                    counts['window_rows']))
         tail_markers = ''
         if args.series_days is None:
-            tail_markers = ''
+            # R3046: pairs are a FILE tail while the three counts are
+            # day-relative, so the day the window opens at was the one quantity
+            # on this line with no name (qa/probe-R3046.log). Same head law as
+            # the six day faces, so the two cannot drift apart.
+            tail_markers = (' window_head=%s'
+                            % (_day_face_head(day_read[0]) or 'none'))
         else:
             day_bytes, on_bytes = series_source_bytes(series['series'])
             full_pairs = series_full_pairs(day_read[0], args.series_days)

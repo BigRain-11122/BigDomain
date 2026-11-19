@@ -1,0 +1,5 @@
+LIVE rc=0
+CRAWL-FAILURE-DAYS days=2 bad=0 first=2026-11-19 last=2026-11-20 dropped=0 series=2026-11-19:0,2026-11-20:0 bytes=238 size_gate=0.0002% gate_ref=100MB series_limit=7 series_shown=2 series_outside=0 window_rows=2 window_head=2026-11-20
+DEMO SORTED rc=0 CRAWL-FAILURE-DAYS days=3 bad=0 first=2026-11-17 last=2026-11-19 dropped=none series=2026-11-17:0,2026-11-18:1,2026-11-19:3 bytes=321 size_gate=0.0003% gate_ref=100MB series_limit=7 series_shown=3 series_outside=0 window_rows=3 window_head=2026-11-19
+DEMO MIXED rc=0 CRAWL-FAILURE-DAYS days=4 bad=0 first=2026-11-10 last=2026-11-11 dropped=none series=2026-11-10:2,2026-11-14:4,2026-11-12:1,2026-11-11:6 bytes=428 size_gate=0.0004% gate_ref=100MB series_limit=7 series_shown=4 series_outside=0 window_rows=4 window_head=2026-11-14
+DEMO MIXED-days1 rc=0 CRAWL-FAILURE-DAYS days=4 bad=0 first=2026-11-10 last=2026-11-11 dropped=none series=2026-11-11:6 bytes=428 size_gate=0.0004% gate_ref=100MB series_limit=1 series_shown=1 series_outside=1 window_rows=1 window_head=2026-11-14

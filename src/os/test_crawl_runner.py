@@ -4552,9 +4552,11 @@ def main():
                        s42['gate_ref_mb']))
     ok('AC-RUN42', lines42 and lines42[0].startswith(old_prefix42)
        and lines42[0][len(old_prefix42):]
-       == ' series_limit=7 series_shown=5 series_outside=1 window_rows=4',
+       == (' series_limit=7 series_shown=5 series_outside=1 window_rows=4'
+           ' window_head=2026-11-19'),
        'the old nine tokens sit in the same order with the same values and the '
-       'four new markers follow gate_ref= - nothing was moved or redefined')
+       'four R3025 markers plus the R3046 window anchor follow gate_ref= - '
+       'nothing was moved or redefined')
 
     # arm 3: the other direction - the tail printed two of the four rows inside
     # the window, and days= still counts the file rather than the printed pairs
@@ -4695,9 +4697,11 @@ def main():
     ok('AC-RUN43', rc43b == 0 and lines43b
        and lines43b[0].startswith(old_prefix43)
        and lines43b[0][len(old_prefix43):]
-       == ' series_limit=7 series_shown=5 series_outside=1 window_rows=4',
-       'without the flag the header is the same line as before, marker and '
-       'all - the new token only appears when it is asked for')
+       == (' series_limit=7 series_shown=5 series_outside=1 window_rows=4'
+           ' window_head=2026-11-19'),
+       'without the flag the header keeps every old token and its only '
+       'addition is the R3046 window anchor - the opt-in markers still appear '
+       'only when they are asked for')
 
     # arm 3: the row limit still caps inside the window
     rc43c, lines43c = days43(r43, ['--series-days', '7', '--days', '2'])
@@ -4829,7 +4833,8 @@ def main():
     rc44b, lines44b = days44(r44, ['--failure-days'])
     ok('AC-RUN44', rc44b == 0 and lines44b
        and lines44b[0].endswith(
-           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4'
+           ' window_head=2026-11-19')
        and 'series_absent' not in lines44b[0]
        and 'absent=' not in lines44b[0],
        'without the flag no absence token appears - the marker is opt-in only '
@@ -4992,7 +4997,8 @@ def main():
     rc45d, lines45d = days45(r45, ['--failure-days'])
     ok('AC-RUN45', rc45d == 0 and lines45d
        and lines45d[0].endswith(
-           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4'
+           ' window_head=2026-11-19')
        and 'days_present' not in lines45d[0],
        'without the flag the tail is the same line R3026/R3027 shipped and no '
        'presence token appears')
@@ -5142,7 +5148,8 @@ def main():
     rc46e, lines46e = days46(r46, ['--failure-days'])
     ok('AC-RUN46', rc46e == 0 and lines46e
        and lines46e[0].endswith(
-           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4'
+           ' window_head=2026-11-19')
        and 'repeat_rows' not in lines46e[0],
        'without the flag the tail is the same line R3026/R3027/R3028 shipped')
 
@@ -5261,7 +5268,8 @@ def main():
     rc47f, lines47f = days47(r47, ['--failure-days'])
     ok('AC-RUN47', rc47f == 0 and lines47f
        and lines47f[0].endswith(
-           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4'
+           ' window_head=2026-11-19')
        and 'retry_rows' not in lines47f[0],
        'without the flag the tail is the same line R3026..R3029 shipped')
 
@@ -5387,7 +5395,8 @@ def main():
     rc48g, lines48g = days47(r47, ['--failure-days'])
     ok('AC-RUN48', rc48g == 0 and lines48g
        and lines48g[0].endswith(
-           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4'
+           ' window_head=2026-11-19')
        and 'window_from' not in lines48g[0],
        'without the flag the tail is the same line R3026..R3030 shipped')
 
@@ -5512,7 +5521,8 @@ def main():
     rc49g, lines49g = days47(r49, ['--failure-days'])
     ok('AC-RUN49', rc49g == 0 and lines49g
        and lines49g[0].endswith(
-           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4'
+           ' window_head=2026-11-19')
        and 'absent_named' not in lines49g[0],
        'without the flag the tail is the same line R3026..R3031 shipped and '
        'the new token does not appear')
@@ -5689,14 +5699,16 @@ def main():
     rc51a, lines51a, _e = days50(r51, ['--failure-days'])
     plain51 = RUN.series_window_counts(RUN.read_failure_days(p51)[0], 7, 7)
     tail51 = (' series_limit=%d series_shown=%d series_outside=%d '
-              'window_rows=%d' % (plain51['limit'], plain51['shown'],
-                                  plain51['outside'], plain51['window_rows']))
+              'window_rows=%d window_head=%s'
+              % (plain51['limit'], plain51['shown'], plain51['outside'],
+                 plain51['window_rows'],
+                 RUN._day_face_head(RUN.read_failure_days(p51)[0])))
     ok('AC-RUN51', rc51a == 0 and lines51a
        and 'absent_all_bytes' not in lines51a[0]
        and 'series_absent' not in lines51a[0]
        and lines51a[0].endswith(tail51),
        'without the flag the default tail keeps the unflagged four-count shape '
-       'and no price token appears')
+       'plus the R3046 window anchor, and no price token appears')
 
     # arm 2: the price printed by the CAPPED run equals the real all-run length
     rc51b, t51b, _l = price51(r51, base51)
@@ -7057,6 +7069,105 @@ def main():
        'the silent-day window_from, the absent names and the dropped listing '
        'head all open from 2026-11-14 (the newest day) instead of the file last '
        'row, while the line still prices itself to the byte')
+
+    # ===== AC-RUN63 (R3046): the DEFAULT face names the day its window opens
+    # AC-RUN63 was pinned in src/os/backlog.md BEFORE window_head existed
+    # (in-window pre-registration, disclosed), and the probe ran BEFORE the pin
+    # (qa/probe-R3046.log): on a hand-edited history
+    # (11-10,11-14,11-12,11-13,11-11) the printed pairs are the FILE order,
+    # window_rows counts by day from the NEWEST day (11-14), and nothing on the
+    # line named that anchor - with --days 1 the only printed pair sat outside a
+    # one-day window and the line still never said which day it opened at. Two
+    # candidate repairs were measured and refused: a "pairs are file order"
+    # marker restates what the printed pairs already show (R3000 noise law), and
+    # day-sorting the default pairs would end the segment at 11-14, i.e. AFTER
+    # last=11-11, moving the contradiction instead of removing it.
+    r63 = world()
+    roots.append(r63)
+    p63 = hist37(r63)
+    put_days(p63, [plain_day('2026-11-17', 0), plain_day('2026-11-18', 1),
+                   plain_day('2026-11-19', 3), plain_day('2026-11-19', 1),
+                   plain_day('2026-11-19', 2)])
+    before63 = tree_bytes(r63)
+    rc63, l63 = days42(r63)
+    t63 = toks42(l63[0]) if l63 else {}
+    ok('AC-RUN63', rc63 == 0 and t63.get('window_head') == '2026-11-19'
+       and t63.get('window_head') == t63.get('last')
+       and l63[0].count('window_head=') == 1
+       and tree_bytes(r63) == before63,
+       'a writer-shaped history names the day its window opens at, the token '
+       'equals last= there because the writer sorts, appears exactly once and '
+       'writes no byte')
+
+    r63b = world()
+    roots.append(r63b)
+    p63b = hist37(r63b)
+    mixed63 = [plain_day('2026-11-10', 2, dropped=7),
+               plain_day('2026-11-14', 4, dropped=2),
+               plain_day('2026-11-12', 1, dropped=5),
+               plain_day('2026-11-13', 3, dropped=1),
+               plain_day('2026-11-11', 6, dropped=9)]
+    put_days(p63b, mixed63)
+    rc63b, l63b = days42(r63b)
+    t63b = toks42(l63b[0]) if l63b else {}
+    file_order63 = ','.join('%s:%s' % (r['day'], r['on_day']) for r in mixed63)
+    day_sorted63 = ','.join('%s:%s' % (r['day'], r['on_day'])
+                            for r in sorted(mixed63, key=lambda x: x['day']))
+    ok('AC-RUN63', rc63b == 0
+       and t63b.get('window_head') == '2026-11-14'
+       and t63b.get('last') == '2026-11-11'
+       and t63b.get('window_rows') == '5'
+       and t63b.get('series_outside') == '0'
+       and t63b.get('series') == file_order63
+       and t63b.get('series') != day_sorted63,
+       'a hand-edited history names the newest day as the anchor while the '
+       'pairs stay in file order - the refused day-sort is pinned as a '
+       'reading, since its segment would end at 2026-11-14, after last=')
+
+    rc63c, l63c = days42(r63b, 1)
+    t63c = toks42(l63c[0]) if l63c else {}
+    ok('AC-RUN63', rc63c == 0 and t63c.get('series') == '2026-11-11:6'
+       and t63c.get('series_outside') == '1'
+       and t63c.get('window_rows') == '1'
+       and t63c.get('window_head') == '2026-11-14',
+       'with a one-row cap on a mixed history the printed pair sits outside '
+       'the one-day window and the line says where that window opened - the '
+       'case the pairs alone cannot state')
+
+    ok('AC-RUN63', t63b.get('dropped') == '9'
+       and [r['dropped'] for r in mixed63
+            if r['day'] == '2026-11-14'][-1] == 2
+       and t63b.get('dropped') != '2',
+       'dropped= still describes the row last= names (9 on 11-11), never the '
+       'newest day (2 on 11-14) - the third repair is refused with its '
+       'numbers on the line, because dropped and last are the same row')
+
+    r63e = world()
+    roots.append(r63e)
+    os.makedirs(os.path.join(r63e, 'qa'), exist_ok=True)
+    rc63e, l63e = days42(r63e)
+    rc63f, l63f = days42(r63e)
+    t63e = toks42(l63e[0]) if l63e else {}
+    ok('AC-RUN63', rc63e == 0 and rc63f == 0
+       and t63e.get('window_head') == 'none'
+       and t63e.get('series') == 'none'
+       and l63e == l63f,
+       'no history answers window_head=none with series=none, raises nothing '
+       'and prints identical bytes twice')
+
+    buf63 = io.StringIO()
+    with contextlib.redirect_stdout(buf63):
+        rc63g = RUN.main(['--failure-days', '--series-days', '7',
+                          '--root', r63b])
+    l63g = [n for n in buf63.getvalue().splitlines() if n.strip()]
+    t63g = toks42(l63g[0]) if l63g else {}
+    pairs63 = [p.split(':')[0] for p in (t63g.get('series') or '').split(',')
+               if p]
+    ok('AC-RUN63', rc63g == 0 and 'window_head' not in t63g
+       and bool(pairs63) and pairs63[-1] == '2026-11-14'
+       and t63g.get('series_file_order') == 'mixed',
+       'the day face does not carry the anchor because its sorted pairs '
+       'already end on it, and it still names the hand edit')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

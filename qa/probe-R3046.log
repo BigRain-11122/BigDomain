@@ -1,0 +1,9 @@
+W1 sorted rc=0 series=2026-11-17:0,2026-11-18:1,2026-11-19:3,2026-11-19:1,2026-11-19:2 first=2026-11-17 last=2026-11-19 window_rows=5 shown=5 outside=0 dropped=none
+W1 tokens=bad bytes days dropped first gate_ref last series series_limit series_outside series_shown size_gate window_head window_rows
+W2 mixed rc=0 series_days=['2026-11-10', '2026-11-14', '2026-11-12', '2026-11-13', '2026-11-11'] first=2026-11-10 last=2026-11-11 window_rows=5 shown=5 outside=0 dropped=9
+W2 head_from_rows=2026-11-14 derivable_from_last=False day_sorted_last=2026-11-14 sorted_would_exceed_last=True
+W2 dropped_row_is_last_row=True newest_day=2026-11-14 newest_dropped=2 last_dropped=9 same=False
+W2b days1 rc=0 series=2026-11-11:6 window_rows=1 shown=1 last=2026-11-11 outside=1
+W3 day_face rc=0 series_days=['2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13', '2026-11-14'] head=2026-11-14 last_pair_is_head=True file_order_token=mixed
+W4 default has_file_order=False has_window_head=True has_window_from=False
+W5 empty rc=0 series=none window_rows=0 last=none
