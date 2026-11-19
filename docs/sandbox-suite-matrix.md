@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 730 | 5880 | 675/675 | R2739 |
+| 730 | 5881 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -479,7 +479,7 @@
 | 440 | os-evidence-writer | ../os/test_evidence_writer.py | 8 | green | 0.8 |
 | 441 | os-evidence-writer-dir | ../os/test_evidence_writer_dir.py | 8 | green | 0.9 |
 | 442 | os-crawl-record | ../os/test_crawl_record.py | 4 | no-evidence | - |
-| 443 | os-crawl-runner | ../os/test_crawl_runner.py | 27 | no-evidence | - |
+| 443 | os-crawl-runner | ../os/test_crawl_runner.py | 28 | no-evidence | - |
 | 444 | ledger-tmp-sweep | ../os/test_tmp_sweep.py | 18 | green | 0.6 |
 | 445 | ledger-census-negative | ../os/test_census_negative.py | 12 | green | 0.2 |
 | 446 | ledger-census-baseline-add | ../os/test_census_baseline_add.py | 6 | green | 0.2 |
@@ -767,7 +767,7 @@
 | 728 | os-face-walk-static | ../os/test_face_walk_static.py | 5 | no-evidence | - |
 | 729 | os-closeout-gate | ../os/test_closeout_gate.py | 5 | no-evidence | - |
 | 730 | os-live-proof | ../os/test_live_proof.py | 13 | no-evidence | - |
-|  | 合计 |  | 5880 | green 675 / FAIL 0 / no-evidence 55 |  |
+|  | 合计 |  | 5881 | green 675 / FAIL 0 / no-evidence 55 |  |
 
 ## 证据出处
 

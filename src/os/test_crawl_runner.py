@@ -133,6 +133,20 @@ None, never 0/0: a trimmed side channel, an empty outside face and a record that
 stops before the old failure all mean "nothing was looked at out there". Nine
 existing key-set arms were widened by this key (the eight above plus AC-RUN26's
 own), disclosed as criteria moving with the field.
+AC-RUN28 (R3011) grades the COVERAGE OF THE SIDE CHANNEL: pending_old= counts
+over the failure side channel but never said how far back that channel reaches -
+measured, two worlds whose channels reached one day and ninety-one days were
+identical on all 27 keys (the extra row was an earlier failure of the SAME
+source, so every judged fact matched). The row now also carries
+fcov=<first>..<last>, the channel's own first and last usable failure day, on
+the same day law as cov= and rcov= and following the FILE rather than the window
+(measured: same span at 7 and 14 days while pending_old= changed). Every
+coverage reading now names its own file: cov= the failure-day history, wcov=
+that history's fill inside the window, rcov= the crawl record (success
+evidence), fcov= the failure side channel pending_old= judges on. Absent, empty
+and all-unusable channels read none, never an empty string; malformed rows never
+widen the span. Ten existing key-set arms were widened by this key (the nine
+above plus AC-RUN27's own), disclosed as criteria moving with the field.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -1142,7 +1156,7 @@ def main():
        and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok', 'flips',
                                                'pending', 'pending_src',
                                                'pending_age_d',
-                                               'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'rcov'])
+                                               'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'fcov', 'rcov'])
        and tA5['evidence'] == 'history' and tA5['today'] == 0,
        'a pruned side channel answers none/unmeasured and leaves every existing field where it was')
 
@@ -1261,7 +1275,7 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tB2.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'fcov', 'rcov']),
        'one display row carries the stability count, adds exactly one key, and stays outside the scanner')
 
     # AC-RUN20 (R3003): the trend answered "was it seen working afterwards" but
@@ -1369,7 +1383,7 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tC1.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'fcov', 'rcov']),
        'the row names the record span, or none, and adds exactly the one key it names')
 
     # AC-RUN21 (R3004): the verdict answered 'no' without ever having looked.
@@ -1445,7 +1459,7 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tD3.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'fcov', 'rcov']),
        'a real repair still reads yes, the CLI carries all three readings, and R3004 adds NO key - the row shape is unchanged')
 
     # AC-RUN22 (R3005): newest_src/since_ok answer for ONE source - the latest
@@ -1561,7 +1575,7 @@ def main():
        and 'verdict' not in lineE7 and 'crawl-failure' not in scan_src18
        and set(tE1.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'fcov', 'rcov']),
        'a multi-source window still prints ONE line carrying pending=, adds exactly one key, and stays outside the scanner - per-source lines were refused on purpose')
 
     # AC-RUN23 (R3006): pending=<n>/<judged> answers HOW MANY sources are still
@@ -1662,7 +1676,7 @@ def main():
     judged6 = tG6['pending'][1] if tG6['pending'] else 0
     ok('AC-RUN23', set(tG6.keys()) == baseB | set(['flips', 'pending',
                                                    'pending_src', 'pending_age_d',
-                                                   'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'rcov'])
+                                                   'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'fcov', 'rcov'])
        and 'unjudged' not in tG6
        and tG6['sources'] - judged6 == 1,
        'the row grows by exactly one name and carries no unjudged field - the unjudged count is measurable as sources minus the denominator, so a field for it would only restate two keys')
@@ -1760,7 +1774,7 @@ def main():
                                                    'pending_age_d',
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
-                                                   'pending_old', 'rcov'])
+                                                   'pending_old', 'fcov', 'rcov'])
        and 'pending_others' not in tH1 and 'unjudged' not in tH1,
        'the row grows by exactly one age key, and neither refused field (pending_others arithmetic, unjudged restatement) exists')
 
@@ -1858,7 +1872,7 @@ def main():
                                                    'pending_age_d',
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
-                                                   'pending_old', 'rcov'])
+                                                   'pending_old', 'fcov', 'rcov'])
        and 'pending_age_max_d' not in tI1
        and 'pending_others' not in tI1 and 'unjudged' not in tI1,
        'the row grows by exactly one age key, and the refused max field (a restatement of pending_age_d, measured) plus the two older refusals never exist')
@@ -1976,7 +1990,7 @@ def main():
                                                    'pending_age_d',
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
-                                                   'pending_old', 'rcov'])
+                                                   'pending_old', 'fcov', 'rcov'])
        and 'pending_age_max_d' not in tJ1
        and 'pending_hist' not in tJ1
        and 'pending_others' not in tJ1 and 'unjudged' not in tJ1,
@@ -2076,7 +2090,7 @@ def main():
                                                    'pending_age_d',
                                                    'pending_age_min_d',
                                                    'pending_age_med_d',
-                                                   'pending_old', 'rcov'])
+                                                   'pending_old', 'fcov', 'rcov'])
        and 'pending_old_src' not in tK1 and 'pending_old_age_d' not in tK1,
        'the row grows by exactly one count key, and the refused per-source face (one line per source) never exists')
 
@@ -2098,6 +2112,118 @@ def main():
        and 'PASS' not in lineK7 and 'FLAG' not in lineK7
        and 'verdict' not in lineK7 and 'crawl-failure' not in scan_src18,
        'one line carries pending_old= (a fraction, or none when nothing was judged), and the scanner still reads none of it')
+
+    # AC-RUN28 (R3011): pending_old= counts over the failure side channel but
+    # never said how far back that channel reaches. Measured before this was
+    # written (qa/probe-R3011.log): a one-day channel and a ninety-one-day
+    # channel were identical on all 27 keys - the extra row was an EARLIER
+    # failure of the SAME source, so every judged fact matched. fcov=<first>..
+    # <last> is the channel's own span, following the FILE and not the window.
+    SRC28A = 'https://a.example/page'
+    SRC28B = 'https://b.example/page'
+    SRC28K = 'https://keep.example/page'
+    FAR28 = '2026-08-20T10:00:00+08:00'    # 91 days before TODAY
+    EDGE28 = '2026-11-12T10:00:00+08:00'   # just outside a 7-day window
+    NEW28 = '2026-11-19T08:00:00+08:00'
+    REC28 = [(SRC28K, '2026-11-19T09:00:00+08:00'),
+             (SRC28B, '2026-11-19T09:00:00+08:00'),
+             (SRC28A, '2026-11-12T12:00:00+08:00')]
+    FAIL28 = [(SRC28B, NEW28, 'TimeoutError: t'),
+              (SRC28A, EDGE28, 'TimeoutError: t')]
+
+    def trend28(failure_rows, window=7, junk=()):
+        root = world()
+        roots.append(root)
+        for url, when in REC28:
+            CR.append_record(CR.record_path(root), url, when, 'no-drift')
+        for url, when, err in failure_rows:
+            RUN.append_failure(RUN.failure_path(root), url, when, err)
+        if junk:
+            with open(RUN.failure_path(root), 'a', encoding='utf-8',
+                      newline='\n') as fh:
+                for text in junk:
+                    fh.write(text + '\n')
+        write_days(RUN.failure_day_path(root), [])
+        return root, RUN.summarize_failure_trend(
+            RUN.failure_day_path(root), RUN.failure_path(root), TODAY,
+            window_days=window, record_path=CR.record_path(root))
+
+    # arm 1: same judged facts, different evidence length - only fcov= moves
+    rL1, tL1 = trend28(FAIL28)
+    rL2, tL2 = trend28(FAIL28 + [(SRC28A, FAR28, 'TimeoutError: t')])
+    ok('AC-RUN28', tL1['pending_old'] == tL2['pending_old'] == (0, 1)
+       and tL1['fcov'] == ('2026-11-12', '2026-11-19')
+       and tL2['fcov'] == ('2026-08-20', '2026-11-19'),
+       'two channels that read the same pending_old= are separated by how far back their evidence reaches')
+
+    # arm 2: the window is a parameter; fcov follows the file, not the window
+    rL2w, tL2w = trend28(FAIL28 + [(SRC28A, FAR28, 'TimeoutError: t')],
+                         window=14)
+    ok('AC-RUN28', tL2w['fcov'] == tL2['fcov']
+       and tL2w['pending_old'] is None and tL2w['pending'] == (0, 2),
+       'a 14-day window leaves fcov= byte-identical while pending_old= becomes none - it describes the file')
+
+    # arm 3: a channel trimmed to the window narrows fcov too
+    rL3, tL3 = trend28([(SRC28B, NEW28, 'TimeoutError: t')])
+    ok('AC-RUN28', tL3['fcov'] == ('2026-11-19', '2026-11-19')
+       and tL3['pending_old'] is None,
+       'trimming the channel to the window narrows fcov= and empties the outside count')
+
+    # arm 4: malformed rows never widen the span (they only raise the reader's
+    # own bad count, which the row does NOT restate for this file)
+    rL4, tL4 = trend28(
+        FAIL28 + [(SRC28A, FAR28, 'TimeoutError: t')],
+        junk=('garbage not json',
+              json.dumps({'source_url': SRC28A,
+                          'failed_at': '1999-01-01T00:00:00+08:00',
+                          'error': ''})))
+    bad4 = RUN.read_failures(RUN.failure_path(rL4))[1]
+    ok('AC-RUN28', tL4['fcov'] == ('2026-08-20', '2026-11-19') and bad4 == 2,
+       'a non-JSON line and an unusable stamp raise bad and leave the span untouched')
+
+    # arm 5: absent, empty and all-unusable channels all answer none
+    rL5 = world(); roots.append(rL5)                       # absent
+    tL5 = RUN.summarize_failure_trend(RUN.failure_day_path(rL5),
+                                      RUN.failure_path(rL5), TODAY,
+                                      record_path=CR.record_path(rL5))
+    rL6, tL6 = trend28([])                                 # empty
+    rL7, tL7 = trend28([], junk=('{not json}',
+                                 json.dumps({'source_url': SRC28A,
+                                             'failed_at': 'nope',
+                                             'error': 'x'})))
+    ok('AC-RUN28', tL5['fcov'] is None and tL6['fcov'] is None
+       and tL7['fcov'] is None,
+       'a channel that is absent, empty or holds no usable row reads none - never an empty string or a zero-day span')
+
+    # arm 6: exactly one new key, and no per-source reach face
+    ok('AC-RUN28', set(tL1.keys()) == baseB | set(['flips', 'pending',
+                                                   'pending_src',
+                                                   'pending_age_d',
+                                                   'pending_age_min_d',
+                                                   'pending_age_med_d',
+                                                   'pending_old', 'fcov',
+                                                   'rcov'])
+       and 'fcov_src' not in tL1 and 'fcov_days' not in tL1,
+       'the row grows by exactly one span key, and the refused per-source reach face never exists')
+
+    # arm 7: the one-line contract and the scanner's zero-consumption premise
+    bufL7 = io.StringIO()
+    with contextlib.redirect_stdout(bufL7):
+        rcL7 = RUN.main(['--failure-trend', '--root', rL2])
+    linesL7 = [n for n in bufL7.getvalue().splitlines() if n.strip()]
+    lineL7 = linesL7[0] if linesL7 else ''
+    bufL7b = io.StringIO()
+    with contextlib.redirect_stdout(bufL7b):
+        rcL7b = RUN.main(['--failure-trend', '--root', rL5])
+    linesL7b = [n for n in bufL7b.getvalue().splitlines() if n.strip()]
+    lineL7b = linesL7b[0] if linesL7b else ''
+    ok('AC-RUN28', rcL7 == 0 and len(linesL7) == 1
+       and 'fcov=2026-08-20..2026-11-19' in lineL7
+       and rcL7b == 0 and len(linesL7b) == 1
+       and 'fcov=none' in lineL7b
+       and 'PASS' not in lineL7 and 'FLAG' not in lineL7
+       and 'verdict' not in lineL7 and 'crawl-failure' not in scan_src18,
+       'one line carries fcov= (a span, or none when the channel has no usable row), and the scanner still reads none of it')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

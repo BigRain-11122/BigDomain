@@ -1,0 +1,6 @@
+SHORT-channel (one row, on the window edge):
+  CRAWL-FAILURE-TREND days=1 today=1 prev=none mean=1 delta=none worst=2026-11-19:1 recurring=0 sources=1 bad=0 evidence=side kind=timeout:1 recur=0:0 cov=2026-11-19..2026-11-19 wcov=1/7 newest_src=https://b.example/page since_ok=yes flips=0 pending=0/1 pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=0/1 fcov=2026-11-12..2026-11-19 rcov=2026-11-12..2026-11-19
+LONG-channel (same judged facts, one 91-day-old row):
+  CRAWL-FAILURE-TREND days=1 today=1 prev=none mean=1 delta=none worst=2026-11-19:1 recurring=0 sources=1 bad=0 evidence=side kind=timeout:1 recur=0:0 cov=2026-11-19..2026-11-19 wcov=1/7 newest_src=https://b.example/page since_ok=yes flips=0 pending=0/1 pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=0/1 fcov=2026-08-20..2026-11-19 rcov=2026-11-12..2026-11-19
+TRIMMED-channel (only the in-window row):
+  CRAWL-FAILURE-TREND days=1 today=1 prev=none mean=1 delta=none worst=2026-11-19:1 recurring=0 sources=1 bad=0 evidence=side kind=timeout:1 recur=0:0 cov=2026-11-19..2026-11-19 wcov=1/7 newest_src=https://b.example/page since_ok=yes flips=0 pending=0/1 pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none fcov=2026-11-19..2026-11-19 rcov=2026-11-12..2026-11-19

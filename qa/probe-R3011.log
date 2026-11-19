@@ -1,0 +1,19 @@
+P0 row_keys=27
+P0 keys=bad,cov,days,delta,evidence,flips,in_window,kind,kind_count,mean,newest_src,pending,pending_age_d,pending_age_med_d,pending_age_min_d,pending_old,pending_src,prev,rcov,recur,recurring,since_ok,sources,today,wcov,window_days,worst
+P1 short rows=2 bad=0 first=2026-11-12 last=2026-11-19
+P1 long rows=3 bad=0 first=2026-08-20 last=2026-11-19
+P2 pending_old_short=(0, 1) pending_old_long=(0, 1) pending_short=(0, 1)
+P2b diff_keys=EMPTY identifiable=False
+P3 cov=('2026-11-19', '2026-11-19')/('2026-11-19', '2026-11-19') wcov=(1, 7)/(1, 7) rcov=('2026-11-12', '2026-11-19')/('2026-11-12', '2026-11-19')
+P3b cov_is_history_span=True rcov_is_record_span=False
+P4 w14 pending_old=None pending=(0, 2) first=2026-08-20 unchanged=True
+P5 absent rows=0 bad=0 naive_first=None
+P5 empty rows=0 bad=0 naive_first=None
+P5 all_bad rows=0 bad=2 naive_first=None
+P6 before=['2026-08-20', '2026-11-19'] after=['2026-08-20', '2026-11-19'] bad=2 widened=False
+P7 live evidence=history side_rows=0 pending_old=None
+P8 w1_short proto_cov=('2026-11-12', '2026-11-19')
+P8 w2_long proto_cov=('2026-08-20', '2026-11-19')
+P8 w5_absent proto_cov=None
+P8 w6_empty proto_cov=None
+P8 w7_allbad proto_cov=None

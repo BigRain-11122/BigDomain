@@ -1,0 +1,8 @@
+PASS honest: short separates from long
+PASS honest: same judged facts
+PASS honest: junk does not widen
+PASS honest: absent is none
+PASS mutation 1 (window-bounded fcov) CAUGHT
+PASS mutation 2 (unfiltered rows widen) CAUGHT
+PASS mutation 3 (absent -> empty span) CAUGHT
+NEGCTL PASS 7/7

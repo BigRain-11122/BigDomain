@@ -336,6 +336,27 @@ outside it, and a record that stops before the old failure all mean "nothing was
 looked at out there", not "nothing is pending out there". Display only,
 no PASS/FLAG.
 
+COVERAGE OF THE SIDE CHANNEL (R3011): pending_old= counts over the side channel
+but never said how far back that channel reaches - measured, two worlds whose
+side channels reached one day and ninety-one days read IDENTICAL on all 27 keys
+(the only difference was one earlier failure row of the SAME source, whose own
+latest failure - and so every pending_old= number - was unchanged). The row now
+also carries fcov=<first>..<last>: the first and last usable failure day the
+side channel itself holds, on the same ten-character day law and the same
+de-duplicate-and-sort rule as cov= and rcov=. Every coverage reading now has its
+own file, stated in the header so none can be read as another: cov= is the
+FAILURE-DAY HISTORY file's span, wcov= is how many days inside the WINDOW have a
+history row, rcov= is the CRAWL RECORD's span (success evidence), fcov= is the
+FAILURE SIDE CHANNEL's span (the evidence pending_old= judges on). fcov= follows
+the FILE, not the window: measured, the same file read the same span at a 7-day
+and a 14-day window while pending_old= went from 0/1 to none. Absent, empty and
+all-unusable side channels all read none - never an empty string or ('','') -
+because a channel with no usable row is "no reach measured", not a span of zero
+days. Malformed rows and unusable stamps never widen the span: measured, adding
+a non-JSON line and a 'nope' stamp left the span byte-identical while bad grew.
+It does NOT promise how far the channel reached BEFORE it was trimmed: fcov is
+how far it can be read NOW. Display only, no PASS/FLAG.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -809,6 +830,33 @@ def _record_coverage(record_path):
     return (days[0], days[-1]) if days else None
 
 
+def _side_coverage(failures_path):
+    """(first_day, last_day) the failure side channel reaches, or None.
+
+    WHY (R3011): pending_old= counts over this side channel and never said how
+    far back the channel itself reaches - measured, a one-day channel and a
+    ninety-one-day channel read identical on all 27 keys when the judged facts
+    were the same, so "0 of 1" standing on the window's edge and the same 0 of 1
+    standing on three months of history were the same row.
+
+    A DIFFERENT FILE from cov= (the failure-day history), wcov= (that history's
+    fill inside the window) and rcov= (the crawl record - successes). This is
+    the failure side channel only, which is the evidence pending_old= reads.
+
+    Follows the FILE, not the window: measured, the same channel read the same
+    span at window_days 7 and 14 while pending_old= changed. DAY granularity on
+    the ten-character prefix the writer owns; read_failures already drops
+    malformed rows and unusable stamps, so they cannot widen the span. None -
+    never an empty string or ('','') - when the file is absent, empty, or holds
+    no usable row: "no reach measured", not a zero-day span.
+    """
+    if not failures_path or not os.path.isfile(failures_path):
+        return None
+    rows, _bad = read_failures(failures_path)
+    days = sorted({str(row.get('failed_at') or '')[:10] for row in rows})
+    return (days[0], days[-1]) if days else None
+
+
 def _day_age(day, stamp):
     """Whole days from `stamp`'s date to `day`, or None.
 
@@ -1217,6 +1265,14 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     if evidence == 'side' and usable:
         pending_old = _pending_out_of_window(record_path, frows, threshold)
     rcov = _record_coverage(record_path)
+    # R3011 COVERAGE OF THE SIDE CHANNEL: pending_old= names a fraction but not
+    # the reach of the evidence under it - measured, a one-day channel and a
+    # ninety-one-day channel read identical on all 27 keys when the judged
+    # facts matched. fcov= is this channel's own first..last usable failure day,
+    # following the FILE rather than the window (measured: same span at 7 and 14
+    # days while pending_old= changed), and None when the channel is absent,
+    # empty or holds no usable row.
+    fcov = _side_coverage(failures_path)
     return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
             'worst': (None, None) if worst_row is None else (wday, wcount),
@@ -1229,6 +1285,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'pending_age_min_d': pending_age_min_d,
             'pending_age_med_d': pending_age_med_d,
             'pending_old': pending_old,
+            'fcov': fcov,
             'rcov': rcov, 'window_days': window_days}
 
 
@@ -1459,12 +1516,14 @@ def main(argv=None):
                        else '%d' % trend['pending_age_med_d'])
         old_txt = ('none' if trend['pending_old'] is None
                    else '%d/%d' % trend['pending_old'])
+        fcov_txt = ('none' if trend['fcov'] is None
+                    else '%s..%s' % trend['fcov'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
               'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
               'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
               'pending=%s pending_src=%s pending_age_d=%s '
               'pending_age_min_d=%s pending_age_med_d=%s pending_old=%s '
-              'rcov=%s'
+              'fcov=%s rcov=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
@@ -1472,7 +1531,7 @@ def main(argv=None):
                  trend['newest_src'] or 'none', trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
                  pending_txt, trend['pending_src'] or 'none', age_txt,
-                 age_min_txt, age_med_txt, old_txt, rcov_txt))
+                 age_min_txt, age_med_txt, old_txt, fcov_txt, rcov_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)
