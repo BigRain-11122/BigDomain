@@ -509,6 +509,6 @@
     "R3007 tokens: local=~17k api=0 api_reason=one shipped five-still scan, one board/state read set, one read of the trend builder and the CLI row and the failure summary BEFORE the pin, one read-only probe over six private worlds BEFORE the pin, one PIN row written before the code, one pure day-age function plus one fourth return value plus one derived field plus one CLI fragment plus one header section, one criterion with seven arms, six key-set arms widened by one key, one suite run and one evidence log through the shipped writer, two battery legs, one registry row 23 -> 24, one matrix regeneration with a byte-identical check, one closeout gate, one registry census, one suite-external negative control with three mutants, one live run plus one private demo world, and the board/state/heartbeat/export closeout; zero cloud calls and zero external API touches.",
     "R3007 closeout: tick set to 3007, heartbeat.txt moved to the same round, the board head carries the R3007 done row with its measured numbers, the R3007 PIN row keeps its pre-registration text verbatim, the R3007 next-window row is flipped to EXECUTED with its text kept verbatim, a new R3008 next-window row names the second pending source whose age and order the row still cannot say, and docs/status-export.json refreshed from this round's evidence files."
   ],
-  "state_bytes": 186988,
+  "state_bytes": 186995,
   "tick": 3007
 }
