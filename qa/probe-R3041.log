@@ -1,0 +1,38 @@
+=== A. width source attribution (two pairs, shown=2) ===
+W1 ten-char days, 1-digit counts rc=0 shown=2 series_bytes=32 real_seg=32 days_bytes=20 ons_bytes=2 frame_bytes=10 sum_ok=True printed_ok=True equal_keys_days=NONE equal_keys_ons=days,series_shown,window_rows
+W2 ISO-stamped days, same counts rc=0 shown=2 series_bytes=50 real_seg=50 days_bytes=38 ons_bytes=2 frame_bytes=10 sum_ok=True printed_ok=True equal_keys_days=NONE equal_keys_ons=days,series_shown,window_rows
+W3 ten-char days, 4-digit counts rc=0 shown=2 series_bytes=38 real_seg=38 days_bytes=20 ons_bytes=8 frame_bytes=10 sum_ok=True printed_ok=True equal_keys_days=NONE equal_keys_ons=NONE
+W4 empty history rc=0 shown=0 series_bytes=11 real_seg=11 days_bytes=0 ons_bytes=0 frame_bytes=11 sum_ok=True printed_ok=True equal_keys_days=bad,bytes,days,series_outside,series_shown,window_rows equal_keys_ons=bad,bytes,days,series_outside,series_shown,window_rows
+
+delta ISO days - ten-char days = 18 (days side moved)
+delta 4-digit counts - 1-digit = 6 (counts side moved)
+both deltas land on ONE number: series_bytes=32 in every case => a reader cannot tell the sources apart from it alone
+empty: series_bytes=11 days=0 ons=0 frame=11
+
+=== B. does any face already price a source? (token census) ===
+series_day_bytes hits=0
+series_on_bytes hits=0
+series_frame_bytes hits=0
+pair_bytes hits=1
+pairs_bytes hits=2
+day_bytes hits=0
+on_bytes hits=66
+count_bytes hits=0
+pair_widest hits=0
+widest_bytes hits=0
+pair_max_bytes hits=0
+day_len hits=0
+on_len hits=1
+py files scanned=2599 total candidate hits=70
+
+=== C. collisions on the --series-days face (suite arms) ===
+count("series_bytes=")        suite=2
+count("series_window=")       suite=6
+count("series_shown=")        suite=13
+endswith(...) near series_bytes suite=0
+whole-line assertEqual on a series line suite=0
+AC-RUN57 arm anchors present: arm1=True arm6_line_fixpoint=True arm7_counts=True
+
+=== D. the shipped fixed point is the only width law on this line ===
+live repo: line_bytes=452 real=452 output_bytes=453 real_plus_lf=453 series_bytes=19
+adding tokens after series_bytes moves line_bytes/output_bytes together through absent_line_prices, not by hand: True

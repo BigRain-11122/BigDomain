@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-19 R3040 PRODUCT+ENGINEERING: the pairs segment now prices itself, so the answer on the line carries its own cost. Measured before the pin (qa/probe-R3040.log, six private worlds, no socket, no clock): the width of `series=<day:on,...>` is decided by three things at once - the stored day string (an ISO row printed `2026-11-10T09:00:00:1`, so \"a day is always ten characters\" is FALSE; _usable_day only checks a ten-character front), each on_day's digit count (same series_shown=2 measured 25B against 31B) and shown-1 commas - so a reader cannot rebuild it from the printed counts. Five candidate token names had zero hits across tools/ and src/ (series_bytes/pairs_bytes/segment_bytes/series_len/pair_bytes) and NONE of the line's thirteen integer keys equalled the segment on any world (equal_keys=NONE), the empty history included. tools/crawl_runner.py now ships series_segment_bytes() and appends ` series_bytes=<n>` after `series_window=` on the --series-days face: the UTF-8 bytes of the `series=` key and the pairs behind it, eleven rather than zero when the line prints `series=none`.",
+    "current": "2026-11-19 R3041 PRODUCT+ENGINEERING: the pairs segment now says WHICH source ate its width, not just how wide it is. R3040 put one price on `series=<day:on,...>` while three things write into that width at once, so a reader could not tell a long stored day from a wide count. Measured before the pin (qa/probe-R3041.log, four private worlds, no socket, no clock): swapping only the days for ISO stamps moved series_bytes 32 -> 50 (+18 = two days x nine extra characters) while swapping only the counts for four digits moved it 32 -> 38 (+6 = two counts x three extra digits); no printed key carried either side (equal_keys_days=NONE on every non-empty world, and the on total matched series_shown only where two one-digit pairs happened to equal it). tools/crawl_runner.py now ships series_source_bytes() and appends ` series_day_bytes=<n> series_on_bytes=<m>` after `series_bytes=` on the --series-days face; the unwindowed default face does not move by a byte.",
     "do": "R3005 measured, in order: the PIN row was written in src/os/backlog.md BEFORE any code byte moved, and the read-only probe tmp/probe_R3005.py -> qa/probe-R3005.log (682B, 12 lines, utf-8/lf, six private worlds, zero sockets) ran BEFORE the pin. It measured: (1) three-source window answers for one source only; (2) recur and the pending count are independent in BOTH directions - recur=(0,0) with one judged source still gone, and recur=(2,4) with nothing pending when both came back; (3) the queue head's own suggested numerator (since_ok != 'yes') counts a source whose newest failure is later than every record row as pending, reviving exactly the R3004 conflation at aggregate level, so the numerator counts 'no' only and unmeasured sits in neither number; (4) an absent record leaves every source unmeasured, so zero-of-zero had to print none rather than 0/0; (5) 13 arms read the trend line, three pin exact key sets, and a multi-source world still printed exactly one line, which is why per-source lines were refused. AC-RUN22 (seven arms) was pinned before the code; three existing key-set arms were widened by exactly the one new key, disclosed as a criterion following its field rather than a loosening.",
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3037.log (381B, 2026-11-19)",
-    "latest_evidence": "qa/negctl-R3037.log (381B, 2026-11-19)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/crawl-source-split-demo-R3041.log (509B, 2026-11-19)",
+    "latest_evidence": "qa/crawl-source-split-demo-R3041.log (509B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3041] next window (<=48h): (0) MAIN — **pairs 段整体定了价，但哪一对最贵还没有面**：`series_bytes` 只报整段字节，读者无法知道宽度是被**长 day 字符串**还是**宽计数**吃掉（ISO day 世界同 2 对多 18B，而 4 位数计数同 2 对多 6B——两条来源压在同一个数里）。下一轮先量（只读）：①每个 pair 的分解是否可印而不重述（`day=` 长度、`on` 位数、逗号）且不撞 R3040 刚立的「含键名」口径；②仓内是否已有面（`pair_bytes`/`day_bytes`/`count_bytes` 类）给它定价；③新增记号会不会撞 AC-RUN57 七臂与 `line_bytes + 1 == output_bytes`。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, a day whose only row is malformed still reads silent on BOTH faces, and the cap of 31 is a chosen law rather than a measured optimum.",
-    "next_milestone_due": "2026-11-21T22:29:02+08:00",
-    "updated_at": "2026-11-19T22:29:02+08:00"
+    "next_milestone": "[R3042] next window (<=48h): (0) MAIN — **被 `--days` 截掉的那些 pair 一个价都没有**：`series_outside` 只报个数，读者无法知道把 `--days` 放宽到全量要花多少字节（R3034 在沉默日名单上已立过同构面 `absent_all_bytes`，pairs 面还没有）。下一轮先量（只读）：①被截断的 pair 集合能否从同一个文件独立投影出来（不复用本行的 `series=` 段，否则自我循环）；②投影与 `series_bytes`/`series_day_bytes`/`series_on_bytes` 的关系（能否写成可校验的加数身份，还是需要新的 frame 项）；③新增记号会不会撞 AC-RUN58 七臂、AC-RUN57 六臂与 `line_bytes + 1 == output_bytes` 的联合不动点。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, a day whose only row is malformed still reads silent on BOTH faces, the cap of 31 is a chosen law rather than a measured optimum, and the pre-existing AC-LGA9 red carried since R3040.",
+    "next_milestone_due": "2026-11-21T22:43:18+08:00",
+    "updated_at": "2026-11-19T22:43:18+08:00"
   },
-  "current": "2026-11-19 R3040 PRODUCT+ENGINEERING: the pairs segment now prices itself, so the answer on the line carries its own cost. Measured before the pin (qa/probe-R3040.log, six private worlds, no socket, no clock): the width of `series=<day:on,...>` is decided by three things at once - the stored day string (an ISO row printed `2026-11-10T09:00:00:1`, so \"a day is always ten characters\" is FALSE; _usable_day only checks a ten-character front), each on_day's digit count (same series_shown=2 measured 25B against 31B) and shown-1 commas - so a reader cannot rebuild it from the printed counts. Five candidate token names had zero hits across tools/ and src/ (series_bytes/pairs_bytes/segment_bytes/series_len/pair_bytes) and NONE of the line's thirteen integer keys equalled the segment on any world (equal_keys=NONE), the empty history included. tools/crawl_runner.py now ships series_segment_bytes() and appends ` series_bytes=<n>` after `series_window=` on the --series-days face: the UTF-8 bytes of the `series=` key and the pairs behind it, eleven rather than zero when the line prints `series=none`.",
+  "current": "2026-11-19 R3041 PRODUCT+ENGINEERING: the pairs segment now says WHICH source ate its width, not just how wide it is. R3040 put one price on `series=<day:on,...>` while three things write into that width at once, so a reader could not tell a long stored day from a wide count. Measured before the pin (qa/probe-R3041.log, four private worlds, no socket, no clock): swapping only the days for ISO stamps moved series_bytes 32 -> 50 (+18 = two days x nine extra characters) while swapping only the counts for four digits moved it 32 -> 38 (+6 = two counts x three extra digits); no printed key carried either side (equal_keys_days=NONE on every non-empty world, and the on total matched series_shown only where two one-digit pairs happened to equal it). tools/crawl_runner.py now ships series_source_bytes() and appends ` series_day_bytes=<n> series_on_bytes=<m>` after `series_bytes=` on the --series-days face; the unwindowed default face does not move by a byte.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-19 R3040 PRODUCT+ENGINEERING: the pairs segment now prices itself, so the answer on the line carries its own cost. Measured before the pin (qa/probe-R3040.log, six private worlds, no socket, no clock): the width of `series=<day:on,...>` is decided by three things at once - the stored day string (an ISO row printed `2026-11-10T09:00:00:1`, so \"a day is always ten characters\" is FALSE; _usable_day only checks a ten-character front), each on_day's digit count (same series_shown=2 measured 25B against 31B) and shown-1 commas - so a reader cannot rebuild it from the printed counts. Five candidate token names had zero hits across tools/ and src/ (series_bytes/pairs_bytes/segment_bytes/series_len/pair_bytes) and NONE of the line's thirteen integer keys equalled the segment on any world (equal_keys=NONE), the empty history included. tools/crawl_runner.py now ships series_segment_bytes() and appends ` series_bytes=<n>` after `series_window=` on the --series-days face: the UTF-8 bytes of the `series=` key and the pairs behind it, eleven rather than zero when the line prints `series=none`.",
-  "export_ts": "2026-11-19T22:29:02+08:00",
+  "do": "2026-11-19 R3041 PRODUCT+ENGINEERING: the pairs segment now says WHICH source ate its width, not just how wide it is. R3040 put one price on `series=<day:on,...>` while three things write into that width at once, so a reader could not tell a long stored day from a wide count. Measured before the pin (qa/probe-R3041.log, four private worlds, no socket, no clock): swapping only the days for ISO stamps moved series_bytes 32 -> 50 (+18 = two days x nine extra characters) while swapping only the counts for four digits moved it 32 -> 38 (+6 = two counts x three extra digits); no printed key carried either side (equal_keys_days=NONE on every non-empty world, and the on total matched series_shown only where two one-digit pairs happened to equal it). tools/crawl_runner.py now ships series_source_bytes() and appends ` series_day_bytes=<n> series_on_bytes=<m>` after `series_bytes=` on the --series-days face; the unwindowed default face does not move by a byte.",
+  "export_ts": "2026-11-19T22:43:18+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
-  "latest_evidence": "qa/negctl-R3035.log (265B, 2026-11-19)",
-  "next_milestone": "[R3041] next window (<=48h): (0) MAIN — **pairs 段整体定了价，但哪一对最贵还没有面**：`series_bytes` 只报整段字节，读者无法知道宽度是被**长 day 字符串**还是**宽计数**吃掉（ISO day 世界同 2 对多 18B，而 4 位数计数同 2 对多 6B——两条来源压在同一个数里）。下一轮先量（只读）：①每个 pair 的分解是否可印而不重述（`day=` 长度、`on` 位数、逗号）且不撞 R3040 刚立的「含键名」口径；②仓内是否已有面（`pair_bytes`/`day_bytes`/`count_bytes` 类）给它定价；③新增记号会不会撞 AC-RUN57 七臂与 `line_bytes + 1 == output_bytes`。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, a day whose only row is malformed still reads silent on BOTH faces, and the cap of 31 is a chosen law rather than a measured optimum.",
+  "latest_evidence": "qa/crawl-source-split-demo-R3041.log (509B, 2026-11-19)",
+  "next_milestone": "[R3042] next window (<=48h): (0) MAIN — **被 `--days` 截掉的那些 pair 一个价都没有**：`series_outside` 只报个数，读者无法知道把 `--days` 放宽到全量要花多少字节（R3034 在沉默日名单上已立过同构面 `absent_all_bytes`，pairs 面还没有）。下一轮先量（只读）：①被截断的 pair 集合能否从同一个文件独立投影出来（不复用本行的 `series=` 段，否则自我循环）；②投影与 `series_bytes`/`series_day_bytes`/`series_on_bytes` 的关系（能否写成可校验的加数身份，还是需要新的 frame 项）；③新增记号会不会撞 AC-RUN58 七臂、AC-RUN57 六臂与 `line_bytes + 1 == output_bytes` 的联合不动点。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, a day whose only row is malformed still reads silent on BOTH faces, the cap of 31 is a chosen law rather than a measured optimum, and the pre-existing AC-LGA9 red carried since R3040.",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
@@ -105,9 +105,9 @@
   "queue": {
     "delivered_total": 2,
     "floors": {
-      "explore": 10,
       "main": 5,
-      "tech": 10
+      "tech": 10,
+      "explore": 10
     },
     "missing": [],
     "queues": [
@@ -168,7 +168,7 @@
   },
   "results": [
     [
-      "3035",
+      "3041",
       "OSLoop 执行 tick"
     ]
   ],
@@ -179,17 +179,17 @@
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
   "self_drive": {
+    "window": "2026-11-13..2026-11-19",
+    "window_days": 7,
+    "log_lines_in_window": 396,
     "idle_fast_mention_lines": 0,
-    "log_lines_in_window": 360,
     "no_pullable_mention_lines": 0,
-    "proposals_open": 8,
+    "substantive_non_idle_mention_lines": 57,
     "proposals_total": 10,
-    "queue_explore_open": 10,
+    "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
-    "substantive_non_idle_mention_lines": 53,
-    "window": "2026-11-13..2026-11-19",
-    "window_days": 7
+    "queue_explore_open": 10
   },
-  "state_bytes": 412551
+  "state_bytes": 419813
 }

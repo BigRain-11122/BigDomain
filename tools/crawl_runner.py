@@ -535,6 +535,28 @@ neighbours, so a Windows text-mode pipe still adds its CRLF delta, and it is a
 fact about this segment rather than a readability verdict - nothing refuses a
 long series.
 
+THE SEGMENT NOW SAYS WHICH SOURCE ATE IT (R3041, measured first -
+qa/probe-R3041.log): one price answers "how wide", never "why", and three
+things write into that width at once. Two private worlds with the same shown=2
+separated them: swapping ONLY the days for ISO stamps moved `series_bytes`
+32 -> 50 (+18 = two days x nine extra characters) while swapping ONLY the
+counts for four digits moved it 32 -> 38 (+6 = two counts x three extra digits)
+- the same number, two different causes. No printed key carried either side
+(`equal_keys_days=NONE` on every non-empty world; the on total matched
+`series_shown` only where two one-digit pairs happened to equal it). The
+`--series-days` tail therefore also prints `series_day_bytes=<n>` (the UTF-8
+bytes of every printed pair's stored day string) and `series_on_bytes=<m>`
+(the decimal digits of every printed on_day), and the arithmetic is pinned
+rather than implied: `series_bytes == series_day_bytes + series_on_bytes +
+2*series_shown + 6` while pairs exist (seven bytes of `series=` key, one colon
+per pair, shown-1 commas), and an empty history prints both zeros with
+`series=none` at eleven.
+Refused: `series_frame_bytes=` (that remainder is a pure function of
+`series_shown=` - the R3000 noise law - and every byte of it is visible on the
+row), `pair_widest_bytes=`/`pair_max_bytes=` (the widest pair still packs both
+sources into one number and needs an index token to name which pair, answering
+a different question), and redefining `series_bytes` itself (readers use it).
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1565,6 +1587,38 @@ def series_segment_bytes(pairs):
     DISPLAY ONLY: builds a number, writes nothing, gates nothing.
     """
     return len(('series=%s' % (pairs or 'none')).encode('utf-8'))
+
+
+def series_source_bytes(pairs_list):
+    """(day_bytes, on_bytes) - WHICH source ate the pairs segment (R3041).
+
+    WHY (measured before this existed - qa/probe-R3041.log): R3040 gave the
+    segment one price, and three things write into it at once, so the number
+    could not say whether a long stored day or a wide count was responsible.
+    Two private worlds with the same shown=2 measured it directly: swapping only
+    the days for ISO stamps (2026-11-10T09:00:00) moved series_bytes 32 -> 50
+    (+18 = two days x nine extra characters), and swapping only the counts for
+    four digits moved it 32 -> 38 (+6 = two counts x three extra digits). The
+    day total had no equal key anywhere on the row (equal_keys_days=NONE on
+    every non-empty world); the on total only matched series_shown by the
+    coincidence of two pairs on the one-digit world.
+
+    THE IDENTITY, PRINTED RATHER THAN IMPLIED: for one or more pairs,
+    series_bytes == series_day_bytes + series_on_bytes + 2*series_shown + 6 -
+    seven bytes of the `series=` key, one colon per pair, shown-1 commas (-1
+    because the key ends in `=` and the last pair has no comma). The empty
+    history prints `series=none`, so day and on are both zero and the segment is
+    eleven, the absent-not-zero law.
+
+    NOT BUILT, and named here so it is not implied: the structural remainder is
+    not printed as its own token - it is a pure function of series_shown (the
+    R3000 noise law), and every byte of it is visible on the row itself.
+
+    DISPLAY ONLY: two numbers, no writes, no gate.
+    """
+    days = sum(len(str(d).encode('utf-8')) for d, _n in pairs_list)
+    ons = sum(len(str(n)) for _d, n in pairs_list)
+    return days, ons
 
 
 def absent_markers(gap_info, presence):
@@ -3035,7 +3089,11 @@ def main(argv=None):
                          'days, measured back from the file\'s own newest row; '
                          '--days still caps how many pairs print and the header '
                          'gains series_window=N and series_bytes=N (the width '
-                         'of the series= segment itself, including its key; '
+                         'of the series= segment itself, including its key) '
+                         'and series_day_bytes=N series_on_bytes=N (how much '
+                         'of that width is the stored day strings and how much '
+                         'is the on_day digit counts, so a long day and a wide '
+                         'count no longer read the same); '
                          'read-only display; gates nothing)')
     ap.add_argument('--series-absent', dest='series_absent',
                     action='store_true',
@@ -3127,8 +3185,11 @@ def main(argv=None):
         if args.series_days is None:
             tail_markers = ''
         else:
-            tail_markers = ' series_window=%d series_bytes=%d' % (
-                args.series_days, series_segment_bytes(pairs))
+            day_bytes, on_bytes = series_source_bytes(series['series'])
+            tail_markers = (' series_window=%d series_bytes=%d'
+                            ' series_day_bytes=%d series_on_bytes=%d'
+                            % (args.series_days, series_segment_bytes(pairs),
+                               day_bytes, on_bytes))
             if args.series_absent:
                 series_marker = tail_markers
                 gaps = series_absent_days(day_read[0], args.series_days,

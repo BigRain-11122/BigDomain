@@ -1,0 +1,9 @@
+HONEST ten_char_one_digit seg=32 day=20 on=2 identity=GREEN
+HONEST iso_days seg=50 day=38 on=2 identity=GREEN
+HONEST four_digit_counts seg=38 day=20 on=8 identity=GREEN
+HONEST empty seg=11 day=0 on=0 identity=GREEN
+HONEST total GREEN 4/4
+M1_day_fixed10 caught 1/4 CAUGHT
+M2_on_fixed1 caught 1/4 CAUGHT
+M3_frame_plus7 caught 3/4 CAUGHT
+M4_empty_invents caught 1/1 CAUGHT

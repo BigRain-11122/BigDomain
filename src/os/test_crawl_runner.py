@@ -545,6 +545,33 @@ no verdict prints, and both pinned `absent=` counts and the single
 `series_window=` token survive (arm 7). Boundary: the count follows the LF law
 like its neighbours, and nothing here refuses a long series.
 
+AC-RUN58 (R3041) grades the pairs segment NAMING WHICH SOURCE ATE ITS WIDTH.
+Measured before the change (qa/probe-R3041.log, four private worlds, no
+socket, no clock): one price cannot say why the segment is wide - swapping only
+the days for ISO stamps moved `series_bytes` 32 -> 50 (+18 = two days x nine
+extra characters) while swapping only the counts for four digits moved it
+32 -> 38 (+6 = two counts x three extra digits). Neither side had a printed key
+(`equal_keys_days=NONE` on every non-empty world; the on total matched
+`series_shown` only where two one-digit pairs happened to equal it), and every
+candidate token name had zero hits across tools/ and src/. The `--series-days`
+tail therefore also prints `series_day_bytes=<n>` (the UTF-8 bytes of every
+printed pair's stored day string) and `series_on_bytes=<m>` (the decimal digits
+of every printed on_day), and the arithmetic is pinned rather than implied:
+`series_bytes == series_day_bytes + series_on_bytes + 2*series_shown + 6` while
+pairs exist, both zeros with `series=none` at eleven otherwise. The frame
+remainder is NOT printed because it is a pure function of `series_shown` (the
+R3000 noise law) and every byte of it is visible on the row. Arms: both sides
+equal what the row itself says and the identity holds (arm 1); ISO days leave
+the count side untouched and put the whole eighteen-byte delta on the day side
+(arm 2); four-digit counts do the same with six bytes on the count side (arm
+3); an empty history answers zero on both sides rather than a missing key (arm
+4); the unwindowed default face gains neither token and does not drift (arm 5);
+with `--series-absent` both totals ride the one fixed point while the line
+still prices itself and a fully named projection still equals it (arm 6); and
+nothing is written, no verdict prints, and every pinned count survives (arm 7).
+Boundary: these are measurements of printed text, not a verdict about a wide
+series, and nothing here refuses one.
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -6300,6 +6327,153 @@ def main():
        and l57j[0].count('absent_named=') == 1,
        'the priced line writes no byte, prints no verdict, and both pinned '
        'absent counts and the single series_window token still hold')
+
+    # ===== AC-RUN58 (R3041): the pairs segment names WHICH source ate it =====
+    # AC-RUN58 was pinned in src/os/backlog.md BEFORE series_source_bytes
+    # existed (in-window pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3041.log, four private worlds, no socket, no clock): one price
+    # cannot say why the segment is wide - swapping only the days for ISO
+    # stamps moved series_bytes 32 -> 50 (+18 = two days x nine extra chars)
+    # while swapping only the counts for four digits moved it 32 -> 38 (+6 =
+    # two counts x three extra digits). Neither side had a printed key
+    # (equal_keys_days=NONE on every non-empty world; on matched series_shown
+    # only by the two-pairs coincidence), and every candidate token name had
+    # zero hits across tools/ and src/. The frame remainder (7 key bytes, one
+    # colon per pair, shown-1 commas) is a pure function of series_shown, so it
+    # is NOT printed - the R3000 noise law - and the identity is pinned here.
+    def split58(series_text):
+        if not series_text or series_text == 'none':
+            return 0, 0, 0
+        days = ons = 0
+        parts = series_text.split(',')
+        for part in parts:
+            _d, n = part.rsplit(':', 1)
+            days += len(_d.encode('utf-8'))
+            ons += len(n)
+        return days, ons, len(parts)
+
+    def two58(rows):
+        root = world()
+        roots.append(root)
+        put_days(hist37(root), rows)
+        rc, lines, _raw = sd57(root, ['--series-days', '7', '--days', '2'])
+        return rc, lines, toks57(lines[0]) if lines else {}
+
+    def derived58(t):
+        return split58(t.get('series'))
+
+    r58 = world()
+    roots.append(r58)
+    put_days(hist37(r58), [plain_day('2026-11-10', 3),
+                           plain_day('2026-11-11', 4)])
+
+    # arm 1: both sides price themselves, and the identity holds on the row
+    rc58a, l58a, _ = sd57(r58, ['--series-days', '7', '--days', '5'])
+    t58a = toks57(l58a[0]) if l58a else {}
+    d58a, o58a, n58a = derived58(t58a)
+    ok('AC-RUN58', rc58a == 0 and l58a
+       and t58a.get('series_day_bytes') == str(d58a)
+       and t58a.get('series_on_bytes') == str(o58a)
+       and t58a.get('series_shown') == str(n58a)
+       and int(t58a.get('series_bytes') or -1)
+       == d58a + o58a + 2 * n58a + 6,
+       'on a ten-character day world both source totals equal what the row '
+       'itself says, and series_bytes equals them plus the frame the reader '
+       'can see (key, colons, commas) with no unwritten byte')
+
+    # arm 2: only the days grow - the delta lands entirely on the day side
+    iso58 = two58([{'bad': 0, 'day': '2026-11-10T09:00:00', 'newest_at': None,
+                    'newest_error': None, 'on_day': 3, 'recent': 0,
+                    'total': 0, 'urls': 0},
+                   {'bad': 0, 'day': '2026-11-11T09:00:00', 'newest_at': None,
+                    'newest_error': None, 'on_day': 4, 'recent': 0,
+                    'total': 0, 'urls': 0}])
+    base58 = two58([plain_day('2026-11-10', 3), plain_day('2026-11-11', 4)])
+    ti58 = iso58[2]
+    tb58 = base58[2]
+    ok('AC-RUN58', iso58[0] == 0 and base58[0] == 0 and iso58[1]
+       and tb58
+       and ti58.get('series_on_bytes') == tb58.get('series_on_bytes')
+       and int(ti58.get('series_day_bytes') or -1)
+       == int(tb58.get('series_day_bytes') or -2) + 2 * 9
+       and int(ti58.get('series_bytes') or -1)
+       - int(tb58.get('series_bytes') or -2) == 2 * 9,
+       'an ISO-stamped history leaves the count side untouched, adds exactly '
+       'two days times nine characters on the day side, and the whole segment '
+       'delta is that same eighteen bytes')
+
+    # arm 3: only the counts grow - the delta lands entirely on the count side
+    wide58 = two58([plain_day('2026-11-10', 3000),
+                    plain_day('2026-11-11', 4000)])
+    tw58 = wide58[2]
+    ok('AC-RUN58', wide58[0] == 0 and wide58[1] and tw58
+       and tw58.get('series_day_bytes') == tb58.get('series_day_bytes')
+       and int(tw58.get('series_on_bytes') or -1)
+       == int(tb58.get('series_on_bytes') or -2) + 2 * 3
+       and int(tw58.get('series_bytes') or -1)
+       - int(tb58.get('series_bytes') or -2) == 2 * 3,
+       'four-digit counts leave the day side untouched, add exactly two counts '
+       'times three digits on the count side, and account for the whole six-'
+       'byte segment delta - the two causes no longer read the same')
+
+    # arm 4: an empty history answers zero on both sides, not a missing key
+    r58e = world()
+    roots.append(r58e)
+    os.makedirs(os.path.join(r58e, 'qa'), exist_ok=True)
+    rc58d, l58d, _ = sd57(r58e, ['--series-days', '7'])
+    t58d = toks57(l58d[0]) if l58d else {}
+    ok('AC-RUN58', rc58d == 0 and l58d
+       and t58d.get('series') == 'none'
+       and t58d.get('series_day_bytes') == '0'
+       and t58d.get('series_on_bytes') == '0'
+       and t58d.get('series_bytes') == '11',
+       'an empty history prints both source totals as zero - an honest '
+       'measurement of nothing, not an absent key - and the segment stays '
+       'eleven for series=none without raising')
+
+    # arm 5: the unwindowed default face gains neither token and does not drift
+    rc58e, l58e, _ = sd57(r58, [])
+    rc58f, l58f, _ = sd57(r58, [])
+    ok('AC-RUN58', rc58e == 0 and l58e and l58f
+       and ' series_day_bytes=' not in l58e[0]
+       and ' series_on_bytes=' not in l58e[0]
+       and l58e[0] == l58f[0],
+       'without --series-days neither source token appears and two runs print '
+       'identical bytes - the default face did not move by a byte')
+
+    # arm 6: with --series-absent the new numbers ride the same fixed point
+    rc58g, l58g, _raw58g = sd57(r58, ['--series-days', '7',
+                                      '--series-absent'])
+    t58g = toks57(l58g[0]) if l58g else {}
+    real58g = len(l58g[0].encode('utf-8')) if l58g else -1
+    d58g, o58g, n58g = derived58(t58g)
+    ok('AC-RUN58', rc58g == 0 and l58g
+       and t58g.get('line_bytes') == str(real58g)
+       and int(t58g.get('line_bytes') or -1) + 1
+       == int(t58g.get('output_bytes') or -2)
+       and t58g.get('series_bytes') == str(real_seg57(l58g[0]))
+       and t58g.get('series_day_bytes') == str(d58g)
+       and t58g.get('series_on_bytes') == str(o58g)
+       and int(t58g.get('series_bytes') or -1)
+       == d58g + o58g + 2 * n58g + 6
+       and t58g.get('absent_all_bytes') == t58g.get('line_bytes'),
+       'with --series-absent both source totals sit inside the one fixed '
+       'point: the line still prices itself to the byte, the identity still '
+       'holds on the longer row, and a fully named projection still equals it')
+
+    # arm 7: pure display - no byte written, no verdict, pinned counts hold
+    before58 = tree_bytes(r58)
+    rc58h, l58h, _ = sd57(r58, ['--series-days', '7', '--series-absent'])
+    after58 = tree_bytes(r58)
+    text58 = '\n'.join(l58h)
+    ok('AC-RUN58', rc58h == 0 and before58 == after58
+       and 'PASS' not in text58 and 'FLAG' not in text58
+       and 'verdict' not in text58
+       and l58h[0].count('series_window=') == 1
+       and l58h[0].count('absent=') == 2
+       and l58h[0].count('absent_named=') == 1,
+       'the two new numbers write no byte, print no verdict, and every pinned '
+       'count on the opt-in line still holds')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

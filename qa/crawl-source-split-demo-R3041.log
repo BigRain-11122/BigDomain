@@ -1,0 +1,6 @@
+A ten-char days, 1-digit counts rc=0
+   series=2026-11-10:3,2026-11-11:4 series_shown=2 series_bytes=32 series_day_bytes=20 series_on_bytes=2
+B same counts, ISO-stamped days (only the +18 on the day side) rc=0
+   series=2026-11-10T09:00:00:3,2026-11-11T09:00:00:4 series_shown=2 series_bytes=50 series_day_bytes=38 series_on_bytes=2
+C same days, 4-digit counts (only the +6 on the count side) rc=0
+   series=2026-11-10:3000,2026-11-11:4000 series_shown=2 series_bytes=38 series_day_bytes=20 series_on_bytes=8
