@@ -171,6 +171,23 @@ cph4/resource-chain.md section 4.1 requires a rotation design for every such
 face - machinery for a problem that has not occurred. Neither field gates: no
 PASS/FLAG token is emitted and the scanner still never reads these files.
 
+REPAIR STABILITY (R3002): measured before this was written - a stable repair
+(fail, ok) and a source that was fixed, broke again and was fixed again
+(fail, ok, fail, ok) printed the SAME two readings, since_ok=yes and
+recur=(0,0). "Is it fixed now?" and "does it stay fixed?" are different
+questions, so the line also carries flips= - how many times THIS source was
+observed working and then failing again, counted as success -> failure
+transitions on the merged timeline of the two faces that already exist. recur=
+is unchanged and answers a third question (sources failing on two or more
+distinct days inside the window); flips uses every row on disk for that one
+source and is not window-trimmed, which cov= already reports. A failure must
+be STRICTLY later than the success it follows, so a same-second success and
+failure are never ordered into an invented flip. unmeasured follows since_ok's
+law (no record file, no identity, no side channel); a record that exists but
+holds no row for the source answers 0, meaning it was never seen working in
+between. A trimmed record can therefore undercount, exactly as since_ok=no
+already could - stated, not patched. flips gates nothing: no PASS/FLAG token.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -542,6 +559,55 @@ def _since_ok(record_path, source_url, failed_at):
     return 'no'
 
 
+def _flips(record_path, source_url, failures):
+    """success -> failure transitions for ONE source, or None when unmeasured.
+
+    WHY (R3002): measured before this existed - fail,ok (a stable repair) and
+    fail,ok,fail,ok (fixed, broken again, fixed again) both printed since_ok=yes
+    with recur=(0,0), so "fixed" and "fixed but flapping" were the same row. This
+    counts the second question on the merged timeline of the two record faces
+    that already exist; it never merges or rewrites them.
+
+    UNMEASURED, not zero, without a record file or a source identity - the same
+    law _since_ok follows. A record file that exists but carries no row for this
+    source answers 0: it was never seen working in between, which is measured
+    rather than missing. A trimmed record can undercount, the same honest
+    boundary since_ok='no' already carried.
+
+    A transition needs the failure to be STRICTLY later than the success before
+    it; an equal stamp cannot be ordered by these writers, so ties are not
+    invented into a flip (failures sort first at an equal stamp, which leaves
+    the state working). Counted over every row on disk for the source, not
+    window-trimmed - cov already reports how much history the answer rested on.
+    """
+    if not source_url or not record_path or not os.path.isfile(record_path):
+        return None
+    rows, _bad = CR.read_records(record_path)
+    events = []
+    for row in rows:
+        if row.get('source_url') != source_url:
+            continue
+        stamp = str(row.get('fetched_at') or '')
+        if stamp:
+            events.append((stamp, 1))  # a record row is a success
+    for row in failures or ():
+        if row.get('source_url') != source_url:
+            continue
+        stamp = str(row.get('failed_at') or '')
+        if stamp:
+            events.append((stamp, 0))  # failures sort first at an equal stamp
+    events.sort()
+    flips = 0
+    working = False
+    for _stamp, kind in events:
+        if kind == 1:
+            working = True
+        elif working:
+            flips += 1
+            working = False
+    return flips
+
+
 def summarize_failure_trend(history_path, failures_path, day, window_days=7,
                             record_path=None):
     """One line for "is today worse than the days before, and is it the same
@@ -689,6 +755,11 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # side channel answers UNMEASURED rather than "no page failed".
     newest_src = None
     since_ok = 'unmeasured'
+    # R3002 STABILITY: since_ok answers "was it seen working afterwards", which a
+    # source that was fixed, broke again and was fixed again answers YES to -
+    # measured, both shapes read yes. flips counts how often that happened, over
+    # the same two faces, and stays unmeasured wherever since_ok does.
+    flips = None
     if evidence == 'side' and in_window:
         newest = None
         for row in in_window:
@@ -699,6 +770,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             newest_src = newest.get('source_url')
             since_ok = _since_ok(record_path, newest_src,
                                  newest.get('failed_at'))
+            flips = _flips(record_path, newest_src, frows)
     return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
             'worst': (None, None) if worst_row is None else (wday, wcount),
@@ -706,7 +778,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'recur': recur, 'cov': cov, 'wcov': wcov,
             'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
             'newest_src': newest_src, 'since_ok': since_ok,
-            'window_days': window_days}
+            'flips': flips, 'window_days': window_days}
 
 
 def crawled_today(repo_root, day):
@@ -926,12 +998,13 @@ def main(argv=None):
                     else '%d/%d' % trend['wcov'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
               'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
-              'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s'
+              'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
                  recur_txt, cov_txt, wcov_txt,
-                 trend['newest_src'] or 'none', trend['since_ok']))
+                 trend['newest_src'] or 'none', trend['since_ok'],
+                 'unmeasured' if trend['flips'] is None else trend['flips']))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)

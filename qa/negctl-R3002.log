@@ -1,0 +1,8 @@
+PASS honest stable=0
+PASS honest flapping=1
+PASS honest missing=unmeasured
+PASS honest failure-before-success=0
+EXPECTED-RED mutation every-failure-counted
+EXPECTED-RED mutation file-order
+EXPECTED-RED mutation zero-on-missing
+NEGCTL honest_green=4/4 mutants_red=3/3

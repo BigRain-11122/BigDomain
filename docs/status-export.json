@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-19 R3001 PRODUCT+ENGINEERING: the failure line a person reads can now name WHICH source failed last and whether that source was seen succeeding since, instead of only how many failures there were. Measured before the pin: the sandbox slot tmp/live-sandbox-failed.json is 1287B and has no reader outside its own writer and suite; the crawl history row carries day/on_day/total/recent/bad/urls/newest_at/newest_error with urls=<count> and no source identity, while source_url exists only in the side channel qa/crawl-failures.jsonl (absent in this checkout); group canon cph4/resource-chain.md section 4.1 requires a rotation design for every append-only face. Ruling: do NOT build an N-slot failure history (a single 1287B gitignored slot with no readers, and a new append-only face would owe a rotation design), and instead put identity plus repair reading on the one line the daily beat already reads: --failure-trend now carries newest_src= (largest failed_at, not file order) and since_ok= (yes/no/unmeasured by looking for a LATER record of that same source).",
+    "current": "2026-11-19 R3002 PRODUCT+ENGINEERING: 'it is fixed now' and 'it stays fixed' were the same row - a stable repair (fail, ok) and a source fixed, broken again and fixed again (fail, ok, fail, ok) both printed since_ok=yes with recur=(0,0). tools/crawl_runner.py now publishes flips= for the newest source: success -> failure transitions on the merged timeline of the two faces that already exist, counted only when the failure is strictly later than the success it follows.",
     "do": "R3001 measured, in order: AC-RUN18 was pinned in src/os/backlog.md BEFORE _since_ok existed (in-window pre-registration, disclosed). Eight arms: identity comes from the latest failed_at while the success question stays unmeasured without a record face; since_ok=yes only for a LATER success; since_ok=no for a success that precedes the failure; a missing record file answers unmeasured while identity still comes from the side channel; a pruned side channel answers none/unmeasured with every existing field unchanged (the key set is the old set plus exactly two); the latest failure is chosen by time, not by file order; and the CLI row carries both fields with no PASS/FLAG/verdict token while the scanner still never reads these files. Gates: SUITE PASS 104/104 over 18 criteria (qa/crawl-runner-R3001.log, 8644B, 106 lines, utf-8/lf, qa_log --check PASS); battery leg leg-crawl-runner-R3001.log selected=1 green=1 criteria=18 crit_mismatch=0; sibling leg leg-crawl-record-R3001.log selected=1 green=1 criteria=4; the registry stays 730 suites with 5870 -> 5871 criteria (+1 exactly, the same row 17 -> 18); docs/sandbox-suite-matrix.md regenerated then --check byte-identical at 76047B (730/5871); registry census rows=730 silent=0; CLOSEOUT-GATE PASS files=3554 flags=0 reader_refused=0.",
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "no new product artifact this round; the newest evidence is qa/leg-crawl-runner-R3001.log (347B) and the published pair below is unchanged from the previous commit",
-    "latest_evidence": "qa/leg-crawl-runner-R3001.log (347B, 2026-11-19)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-crawl-record-R3002.log (341B, 2026-11-19)",
+    "latest_evidence": "qa/leg-crawl-record-R3002.log (341B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[ ] [R3002] next window (<=12h): (0) MAIN — **`since_ok=yes` 会把「修好又坏」读成「好了」**：本轮印的是「该源在最后一次失败之后至少有过一次成功抓取」，但一个源完全可以后成功、再度失败——那一行仍读 `yes`，于是 flapping 与真的修好逐字相同。下一轮**先量**（只读）：①用「失败→成功→再失败」三条时间轴构造私有世界，确认现有两字段在翻转情形下确实读 `yes`（这是队头的前提，不是断言）；②旁路件与记录面的时间戳都是本地 `astimezone().isoformat()` 字面量，跨面字面比较能否直接沿用本轮的法（不打补丁：实测两件真实写者的格式）；③若要印翻转次数，会不会与已落地的 `recur=<sources>:<failures>` 语义重叠——`recur` 数的是**窗口内跨日复发**，而「最后一次成功之后的反复」是另一个问题，须先确认两者不会读成同一件事。量清后实现并配判据。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder (pid=- measured), the failure artifact is a single slot with no history, the single default crawl source is one page, and SPEC-METADATA `state.json` sits at 137167B against the 78500B fold gate (FOLD-DUE margin=-58667B, 13 windows of unpaid folding carried here rather than paid inside a product window).",
-    "next_milestone_due": "2026-11-19T21:49:42+08:00",
-    "updated_at": "2026-11-19T09:49:42+08:00"
+    "next_milestone": "[R3003] next window (<=12h): (0) MAIN — **`since_ok=no` 与 `flips=0` 都不知道记录面自己覆盖到哪一天**：R3001 的 `since_ok` 与 R3002 的 `flips` 都读 `qa/crawl-log.jsonl`，但那一面**没有自己的覆盖读数**——记录件可能昨天才开始写、也可能被裁剪过，于是「记录里没有更晚的成功」会同时表示「还没修好」和「记录根本还没覆盖到失败之后」，与 R2998 给历史件补 `cov`/`wcov` 之前的病同型。下一轮**先量**（只读）：①记录面的首末 `fetched_at`、行数与源集合能否从 `CR.read_records` 已返回的行直接派生（不改 schema）；②真仓记录件的实际覆盖（首末日期／行数／是否有裁剪痕迹）；③若印 `rcov=<首>..<末>` 会不会与既有 `cov`（历史件）混读——两件是不同面，须先在文档头分工再实现。量清后实现并配判据。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder (pid=- measured), the failure artifact is a single slot with no history, the single default crawl source is one page, `flips` covers only the newest source (other sources' flapping is not surfaced), and SPEC-METADATA `state.json` sits at ~144KB against the 78500B fold gate (truncated)",
+    "next_milestone_due": "2026-11-19T22:03:42+08:00",
+    "updated_at": "2026-11-19T10:03:42+08:00"
   },
-  "current": "2026-11-19 R3001 PRODUCT+ENGINEERING: the failure line a person reads can now name WHICH source failed last and whether that source was seen succeeding since, instead of only how many failures there were. Measured before the pin: the sandbox slot tmp/live-sandbox-failed.json is 1287B and has no reader outside its own writer and suite; the crawl history row carries day/on_day/total/recent/bad/urls/newest_at/newest_error with urls=<count> and no source identity, while source_url exists only in the side channel qa/crawl-failures.jsonl (absent in this checkout); group canon cph4/resource-chain.md section 4.1 requires a rotation design for every append-only face. Ruling: do NOT build an N-slot failure history (a single 1287B gitignored slot with no readers, and a new append-only face would owe a rotation design), and instead put identity plus repair reading on the one line the daily beat already reads: --failure-trend now carries newest_src= (largest failed_at, not file order) and since_ok= (yes/no/unmeasured by looking for a LATER record of that same source).",
+  "current": "2026-11-19 R3002 PRODUCT+ENGINEERING: 'it is fixed now' and 'it stays fixed' were the same row - a stable repair (fail, ok) and a source fixed, broken again and fixed again (fail, ok, fail, ok) both printed since_ok=yes with recur=(0,0). tools/crawl_runner.py now publishes flips= for the newest source: success -> failure transitions on the merged timeline of the two faces that already exist, counted only when the failure is strictly later than the success it follows.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "R3001 measured, in order: AC-RUN18 was pinned in src/os/backlog.md BEFORE _since_ok existed (in-window pre-registration, disclosed). Eight arms: identity comes from the latest failed_at while the success question stays unmeasured without a record face; since_ok=yes only for a LATER success; since_ok=no for a success that precedes the failure; a missing record file answers unmeasured while identity still comes from the side channel; a pruned side channel answers none/unmeasured with every existing field unchanged (the key set is the old set plus exactly two); the latest failure is chosen by time, not by file order; and the CLI row carries both fields with no PASS/FLAG/verdict token while the scanner still never reads these files. Gates: SUITE PASS 104/104 over 18 criteria (qa/crawl-runner-R3001.log, 8644B, 106 lines, utf-8/lf, qa_log --check PASS); battery leg leg-crawl-runner-R3001.log selected=1 green=1 criteria=18 crit_mismatch=0; sibling leg leg-crawl-record-R3001.log selected=1 green=1 criteria=4; the registry stays 730 suites with 5870 -> 5871 criteria (+1 exactly, the same row 17 -> 18); docs/sandbox-suite-matrix.md regenerated then --check byte-identical at 76047B (730/5871); registry census rows=730 silent=0; CLOSEOUT-GATE PASS files=3554 flags=0 reader_refused=0.",
-  "export_ts": "2026-11-19T09:49:42+08:00",
+  "do": "2026-11-19 R3002 PRODUCT+ENGINEERING: 'it is fixed now' and 'it stays fixed' were the same row - a stable repair (fail, ok) and a source fixed, broken again and fixed again (fail, ok, fail, ok) both printed since_ok=yes with recur=(0,0). tools/crawl_runner.py now publishes flips= for the newest source: success -> failure transitions on the merged timeline of the two faces that already exist, counted only when the failure is strictly later than the success it follows.",
+  "export_ts": "2026-11-19T10:03:42+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
-  "latest_evidence": "qa/leg-crawl-runner-R3001.log (347B, 2026-11-19)",
-  "next_milestone": "[ ] [R3002] next window (<=12h): (0) MAIN — **`since_ok=yes` 会把「修好又坏」读成「好了」**：本轮印的是「该源在最后一次失败之后至少有过一次成功抓取」，但一个源完全可以后成功、再度失败——那一行仍读 `yes`，于是 flapping 与真的修好逐字相同。下一轮**先量**（只读）：①用「失败→成功→再失败」三条时间轴构造私有世界，确认现有两字段在翻转情形下确实读 `yes`（这是队头的前提，不是断言）；②旁路件与记录面的时间戳都是本地 `astimezone().isoformat()` 字面量，跨面字面比较能否直接沿用本轮的法（不打补丁：实测两件真实写者的格式）；③若要印翻转次数，会不会与已落地的 `recur=<sources>:<failures>` 语义重叠——`recur` 数的是**窗口内跨日复发**，而「最后一次成功之后的反复」是另一个问题，须先确认两者不会读成同一件事。量清后实现并配判据。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder (pid=- measured), the failure artifact is a single slot with no history, the single default crawl source is one page, and SPEC-METADATA `state.json` sits at 137167B against the 78500B fold gate (FOLD-DUE margin=-58667B, 13 windows of unpaid folding carried here rather than paid inside a product window).",
+  "latest_evidence": "qa/leg-crawl-record-R3002.log (341B, 2026-11-19)",
+  "next_milestone": "[R3003] next window (<=12h): (0) MAIN — **`since_ok=no` 与 `flips=0` 都不知道记录面自己覆盖到哪一天**：R3001 的 `since_ok` 与 R3002 的 `flips` 都读 `qa/crawl-log.jsonl`，但那一面**没有自己的覆盖读数**——记录件可能昨天才开始写、也可能被裁剪过，于是「记录里没有更晚的成功」会同时表示「还没修好」和「记录根本还没覆盖到失败之后」，与 R2998 给历史件补 `cov`/`wcov` 之前的病同型。下一轮**先量**（只读）：①记录面的首末 `fetched_at`、行数与源集合能否从 `CR.read_records` 已返回的行直接派生（不改 schema）；②真仓记录件的实际覆盖（首末日期／行数／是否有裁剪痕迹）；③若印 `rcov=<首>..<末>` 会不会与既有 `cov`（历史件）混读——两件是不同面，须先在文档头分工再实现。量清后实现并配判据。 (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder (pid=- measured), the failure artifact is a single slot with no history, the single default crawl source is one page, `flips` covers only the newest source (other sources' flapping is not surfaced), and SPEC-METADATA `state.json` sits at ~144KB against the 78500B fold gate (truncated)",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
@@ -105,9 +105,9 @@
   "queue": {
     "delivered_total": 2,
     "floors": {
-      "explore": 10,
       "main": 5,
-      "tech": 10
+      "tech": 10,
+      "explore": 10
     },
     "missing": [],
     "queues": [
@@ -168,7 +168,7 @@
   },
   "results": [
     [
-      "3000",
+      "3002",
       "OSLoop 执行 tick"
     ]
   ],
@@ -179,17 +179,17 @@
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
   "self_drive": {
+    "window": "2026-11-13..2026-11-19",
+    "window_days": 7,
+    "log_lines_in_window": 134,
     "idle_fast_mention_lines": 0,
-    "log_lines_in_window": 122,
     "no_pullable_mention_lines": 0,
-    "proposals_open": 8,
+    "substantive_non_idle_mention_lines": 21,
     "proposals_total": 10,
-    "queue_explore_open": 10,
+    "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
-    "substantive_non_idle_mention_lines": 19,
-    "window": "2026-11-13..2026-11-19",
-    "window_days": 7
+    "queue_explore_open": 10
   },
-  "state_bytes": 137167
+  "state_bytes": 148203
 }

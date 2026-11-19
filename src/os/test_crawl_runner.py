@@ -41,6 +41,14 @@ source by largest failed_at (not by file order) and since_ok answers
 yes/no/unmeasured by reading the crawl record for a LATER row of that source -
 UNMEASURED, not "no", once the side channel or the record face is gone. Every
 arm writes only inside a per-run temp directory; no socket and no clock.
+AC-RUN19 (R3002) grades REPAIR STABILITY: flips= counts success -> failure
+transitions for the newest source, so a stable repair (fail, ok) and a source
+fixed, broken again and fixed again (fail, ok, fail, ok) stop reading the same
+- both answer since_ok=yes, and only flips separates them. It also pins that
+flips is UNMEASURED (never 0) without a record file or a side channel, that a
+same-second success and failure are not ordered into an invented flip, and that
+recur keeps answering its own question (same-day flapping is one flip and
+recur=0:0 at once).
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -1046,7 +1054,7 @@ def main():
                      'delta', 'worst', 'recurring', 'sources', 'recur', 'cov',
                      'wcov', 'evidence', 'kind', 'kind_count', 'window_days'])
     ok('AC-RUN18', tA5['newest_src'] is None and tA5['since_ok'] == 'unmeasured'
-       and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok'])
+       and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok', 'flips'])
        and tA5['evidence'] == 'history' and tA5['today'] == 0,
        'a pruned side channel answers none/unmeasured and leaves every existing field where it was')
 
@@ -1077,6 +1085,94 @@ def main():
        and 'verdict' not in lineA7
        and 'crawl-failure' not in scan_src18,
        'one display row carries identity and the repair reading, carries no verdict, and stays outside the scanner')
+
+    # AC-RUN19 (R3002): "is it fixed now" and "does it stay fixed" read the same
+    # on the R3001 line - measured before the code: a stable repair (fail, ok)
+    # and a source fixed, broken and fixed again (fail, ok, fail, ok) BOTH print
+    # since_ok=yes with recur=(0,0). flips= counts success -> failure transitions
+    # for the newest source on the merged timeline of the two faces already on
+    # disk; it is display-only and unmeasured wherever since_ok is.
+    def flips_world(fail_times, ok_times):
+        root = world()
+        roots.append(root)
+        for when in fail_times:
+            RUN.append_failure(RUN.failure_path(root), SRC19, TODAY + 'T' + when,
+                               'E_FETCH TimeoutError: x')
+        for when in ok_times:
+            CR.append_record(CR.record_path(root), SRC19, TODAY + 'T' + when,
+                             'no-drift')
+        return root, RUN.summarize_failure_trend(
+            RUN.failure_day_path(root), RUN.failure_path(root), TODAY,
+            record_path=CR.record_path(root))
+
+    SRC19 = 'https://pay.weixin.qq.com/doc/v2/merchant/4011986682'
+
+    _rB1, tB1 = flips_world(['08:00:00+08:00'], ['09:00:00+08:00'])
+    ok('AC-RUN19', tB1['flips'] == 0 and tB1['since_ok'] == 'yes',
+       'a stable repair (fail, ok) answers flips=0, never read as flapping')
+
+    _rB2, tB2 = flips_world(['08:00:00+08:00', '10:00:00+08:00'],
+                            ['09:00:00+08:00', '11:00:00+08:00'])
+    ok('AC-RUN19', tB2['flips'] == 1 and tB2['since_ok'] == 'yes',
+       'fixed, broken again and fixed again reads since_ok=yes AND flips=1 - the pair this round separates')
+
+    _rB3, tB3 = flips_world(['08:00:00+08:00', '08:30:00+08:00'],
+                            ['09:00:00+08:00'])
+    ok('AC-RUN19', tB3['flips'] == 0 and tB3['since_ok'] == 'yes',
+       'two failures before the first success never worked in between, so no flip is invented')
+
+    _rB4, tB4 = flips_world(['08:00:00+08:00', '09:00:00+08:00'],
+                            ['08:30:00+08:00'])
+    ok('AC-RUN19', tB4['flips'] == 1 and tB4['recur'] == (0, 0)
+       and tB4['recurring'] == 0,
+       'same-day flapping is one flip while recur stays 0:0 - two different questions')
+
+    _rB5, _t = flips_world(['08:00:00+08:00'], [])
+    CR.append_record(CR.record_path(_rB5),
+                     'https://other.example/page',
+                     TODAY + 'T09:00:00+08:00', 'no-drift')
+    tB5 = RUN.summarize_failure_trend(
+        RUN.failure_day_path(_rB5), RUN.failure_path(_rB5), TODAY,
+        record_path=CR.record_path(_rB5))
+    ok('AC-RUN19', tB5['flips'] == 0 and tB5['since_ok'] == 'no'
+       and os.path.isfile(CR.record_path(_rB5)),
+       'a record file that holds no row for the source answers 0, measured rather than missing')
+
+    _rB6, tB6 = flips_world(['08:00:00+08:00', '10:00:00+08:00'], [])
+    tB6b = RUN.summarize_failure_trend(
+        RUN.failure_day_path(_rB6), RUN.failure_path(_rB6), TODAY,
+        record_path=os.path.join(_rB6, 'nope.jsonl'))
+    sideB6 = RUN.summarize_failure_trend(
+        RUN.failure_day_path(_rB6), os.path.join(_rB6, 'no-side.jsonl'), TODAY,
+        record_path=CR.record_path(_rB6))
+    ok('AC-RUN19', tB6b['flips'] is None and tB6b['since_ok'] == 'unmeasured'
+       and sideB6['flips'] is None and sideB6['since_ok'] == 'unmeasured',
+       'a missing record file and a pruned side channel both answer UNMEASURED, never 0')
+
+    _rB7, tB7 = flips_world(['10:00:00+08:00'], ['10:00:00+08:00'])
+    ok('AC-RUN19', tB7['flips'] == 0 and tB7['since_ok'] == 'no',
+       'a success and a failure on the same second are never ordered into an invented flip')
+
+    _rB8, tB8 = flips_world(['08:00:00+08:00', '10:00:00+08:00'],
+                            ['09:00:00+08:00'])
+    ok('AC-RUN19', tB8['flips'] == 1 and tB8['newest_src'] == SRC19
+       and tB8['since_ok'] == 'no',
+       'the newest failure is taken by time, so the flip before it still counts')
+
+    baseB = set(['days', 'in_window', 'bad', 'today', 'prev', 'mean', 'delta',
+                 'worst', 'recurring', 'sources', 'recur', 'cov', 'wcov',
+                 'evidence', 'kind', 'kind_count', 'newest_src', 'since_ok',
+                 'window_days'])
+    bufB9 = io.StringIO()
+    with contextlib.redirect_stdout(bufB9):
+        rcB9 = RUN.main(['--failure-trend', '--root', _rB2])
+    lineB9 = bufB9.getvalue().strip()
+    ok('AC-RUN19', rcB9 == 0 and 'flips=1' in lineB9
+       and 'since_ok=yes' in lineB9 and 'PASS' not in lineB9
+       and 'FLAG' not in lineB9 and 'verdict' not in lineB9
+       and 'crawl-failure' not in scan_src18
+       and set(tB2.keys()) == baseB | set(['flips']),
+       'one display row carries the stability count, adds exactly one key, and stays outside the scanner')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

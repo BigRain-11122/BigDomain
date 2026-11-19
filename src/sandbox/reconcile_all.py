@@ -4667,8 +4667,12 @@ SUITES = [
     # was measured to restate days after a beat rewrite) and pins the
     # above-reference path as a pure function. (AC-RUN17 pinned in the R3000
     # PIN row before the code.)
+    # R3002 adds the STABILITY face: flips= counts success -> failure
+    # transitions for the newest source, so a stable repair and a source fixed,
+    # broken and fixed again stop reading the same row. (AC-RUN19 pinned in the
+    # R3002 PIN row before the code.)
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 18),
+     os.path.join("..", "os", "test_crawl_runner.py"), 19),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

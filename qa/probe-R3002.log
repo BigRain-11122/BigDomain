@@ -1,0 +1,9 @@
+W1 fail,ok,fail(newest)            newest_src=https://pay.weixin.qq.com/doc/v2/merchant/4011 since_ok=no recur=(0, 0) recurring=0 sources=1
+W2 fail,ok (stable repair)         newest_src=https://pay.weixin.qq.com/doc/v2/merchant/4011 since_ok=yes recur=(0, 0) recurring=0 sources=1
+W3 fail,ok,fail,ok (flapping)      newest_src=https://pay.weixin.qq.com/doc/v2/merchant/4011 since_ok=yes recur=(0, 0) recurring=0 sources=1
+W4 fail,fail,ok                    newest_src=https://pay.weixin.qq.com/doc/v2/merchant/4011 since_ok=yes recur=(0, 0) recurring=0 sources=1
+W5 fail,ok,fail (same day)         newest_src=https://pay.weixin.qq.com/doc/v2/merchant/4011 since_ok=no recur=(0, 0) recurring=0 sources=1
+failure row bytes/stamp  = 143 | 2026-11-19T09:56:03+08:00
+record row  bytes/stamp  = 131 | 2026-11-19T09:56:03+08:00
+literal cmp same offset  = True
+literal cmp cross offset = True  (2026-11-19T09:00:00+08:00 vs 2026-11-19T08:30:00+00:00)
