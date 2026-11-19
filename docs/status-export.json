@@ -10,8 +10,8 @@
     "latest_evidence": "qa/negctl-R3020.log (324B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3021] next window (<=48h): (0) MAIN — **痕迹留下了，但它说不出是谁的、也没人看得到**。R3020 让重写吃掉的行有了 `dropped=<n>`，但仍有两个空洞，下一轮先量（只读）：①**归属**——同一个 `dropped` 把「被吃掉的坏行」记在**本次重写落款的那一天**，而那些坏行可能属于另一天的行（R3020 的诚实披露 (b) 已点名），量清「按被吃行自己的 `day` 归属」是否有可得的读数（`_json_lines` 交回的坏行是 `row=None`，原文不许回显也不许解析——先量能不能只靠行号旁证，量不出就**不要**硬造归属，落一条「不可归属已量清」的结论也算产出）；②**可见面**——命令行、系列面、趋势行都拒了这个键，于是人要看得打开 `qa/crawl-failure-days.jsonl`；量清「只印当日行的这个键」是否会撞一行合同/表头判据（AC-RUN17 精确键集、AC-RUN30..34 表头子串），若只加一个 `dropped=<n>` 记号要不要扩既有表头臂；③**旧行**——字段出现之前的行没有该键，任何聚合都必须显式跳过而不是读成 0，量清是否已有判据挡住这种误读。量清后二选一实现并配判据，且**先落板再动代码**。",
-    "next_milestone_due": "2026-11-21T16:27:51+08:00",
-    "updated_at": "2026-11-19T16:27:51+08:00"
+    "next_milestone_due": "2026-11-21T16:30:42+08:00",
+    "updated_at": "2026-11-19T16:30:42+08:00"
   },
   "current": "2026-11-19 R3020 PRODUCT+ENGINEERING: the beat that eats evidence now leaves a number behind. snapshot_failure_day keeps validated rows only, so a rewrite silently removes malformed history lines - and the row it writes carried bad=, which is the SIDE channel's unusable count, so a beat eating four lines still read bad=0. The day row now also carries dropped=: this file's own lines discarded by rewrites that stamped the same day, ACCUMULATED rather than per-rewrite (the ten-minute beat would overwrite a per-rewrite number with 0 before anyone could read it - the transience R3019 measured), never backfilled onto rows written before the field (their drops were never measured, and 0 would be invented).",
   "depts": [
@@ -42,7 +42,7 @@
     }
   ],
   "do": "2026-11-19 R3020 PRODUCT+ENGINEERING: the beat that eats evidence now leaves a number behind. snapshot_failure_day keeps validated rows only, so a rewrite silently removes malformed history lines - and the row it writes carried bad=, which is the SIDE channel's unusable count, so a beat eating four lines still read bad=0. The day row now also carries dropped=: this file's own lines discarded by rewrites that stamped the same day, ACCUMULATED rather than per-rewrite (the ten-minute beat would overwrite a per-rewrite number with 0 before anyone could read it - the transience R3019 measured), never backfilled onto rows written before the field (their drops were never measured, and 0 would be invented).",
-  "export_ts": "2026-11-19T16:27:51+08:00",
+  "export_ts": "2026-11-19T16:30:42+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
   "latest_evidence": "qa/negctl-R3020.log (324B, 2026-11-19)",
   "next_milestone": "[R3021] next window (<=48h): (0) MAIN — **痕迹留下了，但它说不出是谁的、也没人看得到**。R3020 让重写吃掉的行有了 `dropped=<n>`，但仍有两个空洞，下一轮先量（只读）：①**归属**——同一个 `dropped` 把「被吃掉的坏行」记在**本次重写落款的那一天**，而那些坏行可能属于另一天的行（R3020 的诚实披露 (b) 已点名），量清「按被吃行自己的 `day` 归属」是否有可得的读数（`_json_lines` 交回的坏行是 `row=None`，原文不许回显也不许解析——先量能不能只靠行号旁证，量不出就**不要**硬造归属，落一条「不可归属已量清」的结论也算产出）；②**可见面**——命令行、系列面、趋势行都拒了这个键，于是人要看得打开 `qa/crawl-failure-days.jsonl`；量清「只印当日行的这个键」是否会撞一行合同/表头判据（AC-RUN17 精确键集、AC-RUN30..34 表头子串），若只加一个 `dropped=<n>` 记号要不要扩既有表头臂；③**旧行**——字段出现之前的行没有该键，任何聚合都必须显式跳过而不是读成 0，量清是否已有判据挡住这种误读。量清后二选一实现并配判据，且**先落板再动代码**。",
@@ -191,5 +191,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 277850
+  "state_bytes": 277897
 }
