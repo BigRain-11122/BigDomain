@@ -1,0 +1,51 @@
+R3067 deliverable-index live check -- BEFORE the edit (transcribed verbatim from this window's own run, 2026-11-20 07:0x, on the tree at tick 3066)
+$ python tools/deliverable_index.py --check
+PASS AC-DIX1   registry=9 disk=9 missing=[] extra=[]
+PASS AC-DIX2   quoted-sizes=9 of 9, each equal to os.path.getsize
+FAIL AC-DIX3   landed-names-newest=False snapshot-label=True fingerprint=ec131c624edfe4ec
+PASS AC-DIX4   markers=True scheme_free=True fronts_before=5 fronts_after=5 bytes=36892
+PASS AC-DIX5   links=49 relative-and-present=49 bad=[]
+PASS AC-DIX6   compliance=3/3 blocker-named=9/9
+PASS AC-DIX7   verdicts-quoted=9/9 defect-rows=0
+FAIL AC-DIX8   newest=live-sandbox.json bytes=4772 names_fresh=False snapshot_label=True
+FAIL AC-DIX9   band-rows=40 fresh-scan=40 listed-in-landed=39
+PASS AC-DIX10  pairs=40 missing-targets=[]
+PASS AC-DIX11  check-left-size+mtime-unchanged=True
+PASS AC-DIX12  band-offline=True rows=40
+PASS AC-DIX13  self-referential-bytes-wrong=[]
+PASS AC-DIX14  gate-pages-listed=[]
+FAIL AC-DIX17  html-faces=40 unlisted=['live-sandbox.html'] unlabelled-incomplete=[]
+VERDICT FAIL 11/15 fingerprint=ec131c624edfe4ec
+{"failed": ["AC-DIX3", "AC-DIX8", "AC-DIX9", "AC-DIX17"], "fingerprint": "ec131c624edfe4ec", "passed": 11, "total": 15}
+rc=2
+
+Reader note: the page's own gate had already measured the drift (the newest face on disk,
+live-sandbox, was absent from the landed list, and the "newest artifact" band named an older
+page) while nothing in the loop ran this check. docs/status-export.json already carried
+preview/live-sandbox.html as latest_artifact, so the two CEO-visible faces disagreed.
+
+FIX: python tools/deliverable_index.py   (shipped renderer, no new tool, no editorial row added)
+$ python tools/deliverable_index.py
+DELIVERABLE INDEX faces=9 defects=0 fingerprint=ec131c624edfe4ec index=37062B
+rc=0
+
+R3067 deliverable-index live check -- AFTER the edit
+PASS AC-DIX1   registry=9 disk=9 missing=[] extra=[]
+PASS AC-DIX2   quoted-sizes=9 of 9, each equal to os.path.getsize
+PASS AC-DIX3   landed-names-newest=True snapshot-label=True fingerprint=ec131c624edfe4ec
+PASS AC-DIX4   markers=True scheme_free=True fronts_before=5 fronts_after=5 bytes=37062
+PASS AC-DIX5   links=49 relative-and-present=49 bad=[]
+PASS AC-DIX6   compliance=3/3 blocker-named=9/9
+PASS AC-DIX7   verdicts-quoted=9/9 defect-rows=0
+PASS AC-DIX8   newest=live-sandbox.json bytes=4772 names_fresh=True snapshot_label=True
+PASS AC-DIX9   band-rows=40 fresh-scan=40 listed-in-landed=40
+PASS AC-DIX10  pairs=40 missing-targets=[]
+PASS AC-DIX11  check-left-size+mtime-unchanged=True
+PASS AC-DIX12  band-offline=True rows=40
+PASS AC-DIX13  self-referential-bytes-wrong=[]
+PASS AC-DIX14  gate-pages-listed=[]
+PASS AC-DIX17  html-faces=40 unlisted=[] unlabelled-incomplete=[]
+VERDICT PASS 15/15 fingerprint=ec131c624edfe4ec
+{"failed": [], "fingerprint": "ec131c624edfe4ec", "passed": 15, "total": 15}
+
+rc=0
