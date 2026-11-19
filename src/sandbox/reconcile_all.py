@@ -4710,8 +4710,11 @@ SUITES = [
     # R3024 added AC-RUN41: that listing takes an OPT-IN day window measured
     # back from the file's own newest row, and a truncated list names itself on
     # the header instead of printing fewer rows (40 -> 41, the same row).
+    # R3025 added AC-RUN42: --days is a ROW limit on this face while the same
+    # number is a DAY window elsewhere, so the line now prints series_limit=,
+    # series_shown=, series_outside= and window_rows= (41 -> 42, the same row).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 41),
+     os.path.join("..", "os", "test_crawl_runner.py"), 42),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

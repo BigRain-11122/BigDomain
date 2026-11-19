@@ -1,0 +1,5 @@
+HONEST all-four-worlds PASS
+M1-wall-clock-head CAUGHT wrong=D
+M2-outside-over-whole-file CAUGHT wrong=F
+M3-empty-invents-a-window CAUGHT wrong=A,D,F
+M4-tail-redefined-as-window CAUGHT wrong=A,D,F

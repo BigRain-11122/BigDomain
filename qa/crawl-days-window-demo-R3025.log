@@ -1,0 +1,12 @@
+A-old-day-inside-tail rc=0
+CRAWL-FAILURE-DAYS days=5 bad=0 first=2026-09-20 last=2026-11-19 dropped=none series=2026-09-20:5,2026-11-18:1,2026-11-19:3,2026-11-19:1,2026-11-19:2 bytes=535 size_gate=0.0005% gate_ref=100MB series_limit=7 series_shown=5 series_outside=1 window_rows=4
+C-three-days-no-truncation rc=0
+CRAWL-FAILURE-DAYS days=3 bad=0 first=2026-11-17 last=2026-11-19 dropped=none series=2026-11-17:0,2026-11-18:1,2026-11-19:2 bytes=321 size_gate=0.0003% gate_ref=100MB series_limit=7 series_shown=3 series_outside=0 window_rows=3
+D-old-history-2001 rc=0
+CRAWL-FAILURE-DAYS days=3 bad=0 first=2001-01-01 last=2001-03-05 dropped=none series=2001-01-01:0,2001-03-01:1,2001-03-05:2 bytes=321 size_gate=0.0003% gate_ref=100MB series_limit=7 series_shown=3 series_outside=1 window_rows=2
+E-empty rc=0
+CRAWL-FAILURE-DAYS days=0 bad=0 first=none last=none dropped=none series=none bytes=0 size_gate=0.0000% gate_ref=100MB series_limit=7 series_shown=0 series_outside=0 window_rows=0
+F-old-row-outside-the-tail rc=0
+CRAWL-FAILURE-DAYS days=9 bad=0 first=2001-01-01 last=2026-11-19 dropped=none series=2026-11-19:1,2026-11-19:2,2026-11-19:0,2026-11-19:1,2026-11-19:2,2026-11-19:0,2026-11-19:1 bytes=963 size_gate=0.0009% gate_ref=100MB series_limit=7 series_shown=7 series_outside=0 window_rows=8
+B-tail-shorter-than-window --days 2 rc=0
+CRAWL-FAILURE-DAYS days=5 bad=0 first=2026-09-20 last=2026-11-19 dropped=none series=2026-11-19:1,2026-11-19:2 bytes=535 size_gate=0.0005% gate_ref=100MB series_limit=2 series_shown=2 series_outside=0 window_rows=4

@@ -1,0 +1,16 @@
+TEMP C:\Users\sjs20\AppData\Local\Temp\probe3025_bhvg2hoh
+A rows=5 head=2026-11-19 usable=True threshold=2026-11-13 in_window=4 tail=5
+A tail_days= ['2026-09-20', '2026-11-18', '2026-11-19', '2026-11-19', '2026-11-19']
+A outside_tail= 1
+A rc=0 line=CRAWL-FAILURE-DAYS days=5 bad=0 first=2026-09-20 last=2026-11-19 dropped=none series=2026-09-20:5,2026-11-18:1,2026-11-19:3,2026-11-19:1,2026-11-19:2 bytes=535 size_gate=0.0005% gate_ref=100MB
+A2 rc=0 threshold=2026-11-18 in_window=4 tail=2
+A2 line=CRAWL-FAILURE-DAYS days=5 bad=0 first=2026-09-20 last=2026-11-19 dropped=none series=2026-11-19:1,2026-11-19:2 bytes=535 size_gate=0.0005% gate_ref=100MB
+B rc=0 line=CRAWL-FAILURE-DAYS days=3 bad=0 first=2001-01-01 last=2001-03-05 dropped=none series=2001-01-01:0,2001-03-01:1,2001-03-05:2 bytes=321 size_gate=0.0003% gate_ref=100MB
+C rc=0 line=CRAWL-FAILURE-DAYS days=0 bad=0 first=none last=none dropped=none series=none bytes=0 size_gate=0.0000% gate_ref=100MB
+DAYS readers of args.days=7
+header_endswith_gate_ref=True
+series_token_consumers(tools,src)= crawl_runner.py:1,test_crawl_runner.py:5
+exact_equality_arms_on_DAYS_header=0
+startswith_arms_on_DAYS_header=3
+endswith_arms_on_DAYS_header=0
+probe done

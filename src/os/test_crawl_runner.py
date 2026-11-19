@@ -4118,6 +4118,155 @@ def main():
        'run names window/shown/truncated/hidden/head and prints the last three '
        'rows in file order')
 
+    # AC-RUN42 (R3025): the same --days is a DAY window on the failure face and
+    # a ROW tail on the DAYS face. Measured before this arm set existed
+    # (qa/probe-R3025.log): a history whose newest day holds three rows plus one
+    # sixty days back printed that old day in series= under the default seven
+    # while the window held four rows, and --days 2 printed two of the four rows
+    # inside the two-day window - the header said neither. --days has seven
+    # readers, so the tail keeps its shape and the two laws are named on the
+    # line: series_limit= (the row limit applied), series_shown= (the pairs
+    # printed), series_outside= (printed pairs before the window threshold) and
+    # window_rows= (usable rows the window holds).
+    def days42(root, extra=None):
+        argv = ['--failure-days', '--root', root]
+        if extra is not None:
+            argv = ['--failure-days', '--days', str(extra), '--root', root]
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(argv)
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def toks42(line):
+        return dict(part.split('=', 1) for part in line.split()[1:])
+
+    r42 = world()
+    roots.append(r42)
+    p42 = hist37(r42)
+    put_days(p42, [plain_day('2026-09-20', 5), plain_day('2026-11-18', 1),
+                   plain_day('2026-11-19', 3), plain_day('2026-11-19', 1),
+                   plain_day('2026-11-19', 2)])
+    rc42, lines42 = days42(r42)
+    t42 = toks42(lines42[0]) if lines42 else {}
+    ok('AC-RUN42', rc42 == 0
+       and t42.get('series_limit') == '7'
+       and t42.get('series_shown') == '5'
+       and t42.get('series_outside') == '1'
+       and t42.get('window_rows') == '4'
+       and '2026-09-20:5' in t42.get('series', '')
+       and RUN.series_window_counts(RUN.read_failure_days(p42)[0], 7, 7)
+       == {'limit': 7, 'shown': 5, 'outside': 1, 'window_rows': 4},
+       'a tail that prints a day sixty days outside the window now says so: '
+       'limit=7 shown=5 outside=1 window_rows=4, and the tail itself still '
+       'prints all five pairs including the old day')
+
+    # arm 2: the nine old tokens keep their order and meaning - the markers are
+    # appended after gate_ref=, and the prefix is byte-identical to the old line
+    s42 = RUN.summarize_failure_days(p42, 7, RUN.read_failure_days(p42))
+    pairs42 = ','.join('%s:%s' % (d, n) for d, n in s42['series'])
+    old_prefix42 = ('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
+                    'dropped=%s series=%s bytes=%d size_gate=%.4f%% '
+                    'gate_ref=%dMB'
+                    % (s42['days'], s42['bad'], s42['first'] or 'none',
+                       s42['last'] or 'none',
+                       'none' if s42['dropped'] is None else s42['dropped'],
+                       pairs42 or 'none', s42['bytes'], s42['size_gate'],
+                       s42['gate_ref_mb']))
+    ok('AC-RUN42', lines42 and lines42[0].startswith(old_prefix42)
+       and lines42[0][len(old_prefix42):]
+       == ' series_limit=7 series_shown=5 series_outside=1 window_rows=4',
+       'the old nine tokens sit in the same order with the same values and the '
+       'four new markers follow gate_ref= - nothing was moved or redefined')
+
+    # arm 3: the other direction - the tail printed two of the four rows inside
+    # the window, and days= still counts the file rather than the printed pairs
+    rc42b, lines42b = days42(r42, 2)
+    t42b = toks42(lines42b[0]) if lines42b else {}
+    ok('AC-RUN42', rc42b == 0
+       and t42b.get('series_limit') == '2'
+       and t42b.get('series_shown') == '2'
+       and t42b.get('series_outside') == '0'
+       and t42b.get('window_rows') == '4'
+       and t42b.get('days') == '5'
+       and t42b.get('series') == '2026-11-19:1,2026-11-19:2',
+       'under --days 2 the window holds four rows while the tail prints two '
+       'and days= still reads five - a short series no longer looks like a '
+       'short window')
+
+    # arm 4: a history shorter than the limit truncates nothing
+    r42c = world()
+    roots.append(r42c)
+    p42c = hist37(r42c)
+    put_days(p42c, [plain_day('2026-11-17', 0), plain_day('2026-11-18', 1),
+                    plain_day('2026-11-19', 2)])
+    rc42c, lines42c = days42(r42c)
+    t42c = toks42(lines42c[0]) if lines42c else {}
+    ok('AC-RUN42', rc42c == 0
+       and t42c.get('series_limit') == '7'
+       and t42c.get('series_shown') == '3'
+       and t42c.get('series_outside') == '0'
+       and t42c.get('window_rows') == '3'
+       and t42c.get('series')
+       == '2026-11-17:0,2026-11-18:1,2026-11-19:2',
+       'a file smaller than the limit reports shown=window_rows=3 outside=0 '
+       'and prints every pair')
+
+    # arm 5: an absent history answers honest zeros and invents no window
+    r42d = world()
+    roots.append(r42d)
+    os.makedirs(os.path.join(r42d, 'qa'), exist_ok=True)
+    rc42d, lines42d = days42(r42d)
+    t42d = toks42(lines42d[0]) if lines42d else {}
+    ok('AC-RUN42', rc42d == 0 and t42d.get('series') == 'none'
+       and t42d.get('days') == '0'
+       and t42d.get('series_limit') == '7'
+       and t42d.get('series_shown') == '0'
+       and t42d.get('series_outside') == '0'
+       and t42d.get('window_rows') == '0'
+       and RUN.series_window_counts([], 7, 7)
+       == {'limit': 7, 'shown': 0, 'outside': 0, 'window_rows': 0},
+       'no history answers series=none with shown=outside=window_rows=0 '
+       'without raising and without claiming a window opened')
+
+    # arm 6: no clock - a 2001 history windows back from its own last row
+    r42e = world()
+    roots.append(r42e)
+    p42e = hist37(r42e)
+    put_days(p42e, [plain_day('2001-01-01', 0), plain_day('2001-03-01', 1),
+                    plain_day('2001-03-05', 2)])
+    rc42e, lines42e = days42(r42e, 2)
+    t42e = toks42(lines42e[0]) if lines42e else {}
+    ok('AC-RUN42', rc42e == 0
+       and t42e.get('series_limit') == '2'
+       and t42e.get('series_shown') == '2'
+       and t42e.get('series_outside') == '1'
+       and t42e.get('window_rows') == '1'
+       and t42e.get('last') == '2001-03-05',
+       'a two-day window over a 2001 history opens at 2001-03-04, so the '
+       'printed 2001-03-01 counts as outside and the window holds one row - '
+       'reading the wall clock would report every row outside today')
+
+    # arm 7: days= is not redefined into the printed pair count
+    ok('AC-RUN42', t42b.get('days') == '5'
+       and t42b.get('series_shown') == '2'
+       and t42b.get('days') != t42b.get('series_shown')
+       and RUN.summarize_failure_days(p42, 2, RUN.read_failure_days(p42))['days']
+       == 5,
+       'days= still means usable rows in the file while series_shown= means '
+       'pairs printed; the two numbers are visible as different on one line')
+
+    # arm 8: pure display - no byte written, no verdict, outside the scanner
+    before42 = tree_bytes(r42)
+    rc42f, lines42f = days42(r42)
+    after42 = tree_bytes(r42)
+    text42 = '\n'.join(lines42f)
+    ok('AC-RUN42', rc42f == 0 and before42 == after42
+       and 'PASS' not in text42 and 'FLAG' not in text42
+       and 'verdict' not in text42
+       and 'crawl-failure' not in scan_src18,
+       'the header writes no byte, prints no verdict, and the scanner still '
+       'reads none of the daily history')
+
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
 

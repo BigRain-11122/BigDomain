@@ -232,6 +232,27 @@ stays twice, the R3023 law untouched), and rows below the threshold are counted
 into `hidden` instead of vanishing silently. An empty history answers
 head=none shown=0 truncated=0 - absence is still an honest zero.
 
+TWO MEANINGS OF ONE NUMBER, NAMED (R3025): `--days` reaches this face as a ROW
+limit (`rows[-limit:]`, since R3000) while the same number is a DAY window on
+the failure face - and the two only coincide when the history holds exactly one
+row per day. Measured (qa/probe-R3025.log): a history whose newest day holds
+three rows plus one row sixty days back printed that old row in `series=` under
+the default seven, while the seven-day window counted four rows and not five;
+with `--days 2` the tail printed two of the four rows inside the two-day
+window. The header said neither. The tail is NOT redefined (the printer and
+five suite arms read its shape, and `--days` has seven readers across the
+module), so `series_window_counts()` publishes what the line could not say:
+`series_limit=` the row limit applied, `series_shown=` the pairs printed,
+`series_outside=` how many of those fall before the window threshold, and
+`window_rows=` how many usable rows the window actually holds. Head is the
+file's OWN newest row, so an old history windows against itself and no clock
+is read (2001 rows pinned by AC-RUN42 arm 6). `days=` keeps its meaning (usable
+rows in the file) and can differ from `series_shown=` - which is the point.
+Refused: reading `--days` as a day window here (seven readers would change
+meaning at once), re-shaping the series tail, and reusing the bare
+`shown/hidden/truncated` names R3024 built for a day window - one word, two
+laws, is exactly the confusion this paragraph exists to prevent.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -991,7 +1012,7 @@ def snapshot_failure_day(repo_root, day, window_days=7):
     return row
 
 
-def summarize_failure_days(path, limit=7):
+def summarize_failure_days(path, limit=7, read=None):
     """Readable series over the daily history; zero rows is an honest answer.
 
     R3000: the series answers "which days were how bad" and the retention
@@ -1017,8 +1038,12 @@ def summarize_failure_days(path, limit=7):
     rows: older rows carry no key and summing would print unmeasured as zero.
     Attribution of an eaten line to its OWN day is not derivable without parsing
     refused text (module header, qa/probe-R3021.log).
+
+    R3025: `read` lets a caller that has already read the file hand the same
+    `(rows, bad)` in, so the header and the series window counts cannot be
+    computed from two reads that might see different files.
     """
-    rows, bad = read_failure_days(path)
+    rows, bad = read_failure_days(path) if read is None else read
     tail = rows[-max(1, int(limit)):]
     out = {'days': len(rows), 'bad': bad,
            'first': (rows[0].get('day') if rows else None),
@@ -1036,6 +1061,41 @@ def summarize_failure_days(path, limit=7):
     out['size_gate'] = size_gate_pct(stats['bytes'])
     out['gate_ref_mb'] = SIZE_REFERENCE_BYTES // (1024 * 1024)
     return out
+
+
+def series_window_counts(rows, limit=7, window_days=7):
+    """{limit, shown, outside, window_rows} for the printed DAYS series (R3025).
+
+    WHY: `--days` is a ROW limit here (`rows[-limit:]`) and a DAY window on the
+    failure face, so the header could print a day far outside the window while
+    saying nothing, and could print fewer rows than the window holds while
+    saying nothing either (measured both ways, qa/probe-R3025.log). The tail
+    itself is NOT changed - its shape has a printer and five shape arms - so
+    the two laws are named on the same line instead.
+
+    head is the file's OWN newest usable row, so an old history windows against
+    itself, two runs on one file agree, and no clock is read. When the head day
+    is unusable (empty history) nothing can be measured, so outside and
+    window_rows are 0 rather than an invented window.
+
+    DISPLAY ONLY: writes nothing, gates nothing.
+    """
+    size = max(1, int(limit))
+    shown = len(rows[-size:])
+    head_day, usable, threshold = _window_start(
+        (str(rows[-1].get('day') or '') if rows else ''), window_days)
+    outside = 0
+    window_rows = 0
+    if usable:
+        for row in rows[-size:]:
+            if str(row.get('day') or '')[:10] < threshold:
+                outside += 1
+        for row in rows:
+            row_day = str(row.get('day') or '')[:10]
+            if threshold <= row_day <= head_day:
+                window_rows += 1
+    return {'limit': size, 'shown': shown, 'outside': outside,
+            'window_rows': window_rows}
 
 
 def list_failure_days_dropped(path, window_days=None):
@@ -2161,15 +2221,22 @@ def main(argv=None):
                            summary['newest_kind']))
         return 0
     if args.failure_days:
-        series = summarize_failure_days(failure_day_path(args.root), args.days)
+        day_read = read_failure_days(failure_day_path(args.root))
+        series = summarize_failure_days(failure_day_path(args.root), args.days,
+                                        day_read)
         pairs = ','.join('%s:%s' % (d, n) for d, n in series['series'])
+        counts = series_window_counts(day_read[0], args.days, args.days)
         print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
-              'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB'
+              'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB '
+              'series_limit=%d series_shown=%d series_outside=%d '
+              'window_rows=%d'
               % (series['days'], series['bad'], series['first'] or 'none',
                  series['last'] or 'none',
                  'none' if series['dropped'] is None else series['dropped'],
                  pairs or 'none', series['bytes'],
-                 series['size_gate'], series['gate_ref_mb']))
+                 series['size_gate'], series['gate_ref_mb'],
+                 counts['limit'], counts['shown'], counts['outside'],
+                 counts['window_rows']))
         return 0
     if args.failure_days_dropped:
         listing = list_failure_days_dropped(failure_day_path(args.root),
