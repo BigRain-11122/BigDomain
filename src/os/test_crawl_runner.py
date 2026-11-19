@@ -175,6 +175,19 @@ than turned into none. Eleven existing key-set arms were widened by this key
 (the eleven above, each at its baseB set), disclosed as criteria moving with the
 field.
 
+AC-RUN33 (R3016) grades CHANNEL LIVENESS on the old-waiter list: the header
+said why the table was empty and how far the evidence reached, never WHEN the
+channel was last written. Measured before the pin (qa/probe-R3016.log): a last
+failure at 00:05 and one at 23:50 on the SAME day read the same dictionary and
+the same header, because fcov= is a pair of days - while the board's own pair
+(stopped yesterday versus written this minute) had ALREADY been separated by
+that span, which this criterion measures so the round does not take credit for
+an existing capability. The header now carries last_at=<YYYY-MM-DDTHH:MM>, the
+writer's own characters echoed from the rows this call already loaded, or
+last_at=none with no usable row. No age is printed: a day age over that stamp
+was measured to equal the age of fcov's last day in every probed world, and an
+hour age would need a clock this module never reads.
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -2755,6 +2768,167 @@ def main():
        and json.dumps(lZ7, sort_keys=True) == json.dumps(lZ7b,
                                                          sort_keys=True),
        'an unusable day says no-window over a still-readable file span, twice the same, and never 0/0')
+
+    # AC-RUN33 (R3016): the header described population and reach, never
+    # liveness. Measured before the pin (qa/probe-R3016.log): a last failure at
+    # 00:05 and one at 23:50 on the SAME day read the same dictionary and the
+    # same header - while the board's own pair (stopped yesterday versus
+    # written this minute) had ALREADY been separated by the day span, and a day
+    # age over the newest stamp measured as a restatement of fcov's last day in
+    # every probed world. So the header gains last_at (the writer's own
+    # characters, to the minute, from the rows this call already loaded) and no
+    # age at all.
+    SRC33O = 'https://old33.example/page'
+    SRC33K = 'https://keep33.example/page'
+    OLD33 = '2026-08-20T10:00:00+08:00'
+    PREV33 = '2026-11-18T23:50:00+08:00'
+    EARLY33 = '2026-11-19T00:05:00+08:00'
+    LATE33 = '2026-11-19T23:50:00+08:00'
+    BASE33 = [(SRC33K, TODAY + 'T09:00:00+08:00')]
+
+    def world33(failures, records=BASE33):
+        root = world()
+        roots.append(root)
+        for url, when in records:
+            CR.append_record(CR.record_path(root), url, when, 'no-drift')
+        for url, when in failures:
+            RUN.append_failure(RUN.failure_path(root), url, when,
+                               'TimeoutError: t')
+        return root
+
+    def listing33(root, window=7, day=TODAY):
+        return RUN.list_pending_old(CR.record_path(root),
+                                    RUN.failure_path(root), day, window)
+
+    def head33(root, window=7):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--pending-old-list', '--root', root,
+                           '--days', str(window)])
+        lines = [n for n in buf.getvalue().splitlines() if n.strip()]
+        return rc, lines
+
+    def snapshot33(root):
+        out = []
+        for base, _dirs, files in os.walk(root):
+            for name in files:
+                p = os.path.join(base, name)
+                out.append((os.path.relpath(p, root).replace('\\', '/'),
+                            os.path.getsize(p)))
+        out.sort()
+        return out
+
+    # arm 1: inside ONE day the two channels now read differently, and the
+    # whole dictionary was identical apart from the new field
+    rC33 = world33([(SRC33O, OLD33), ('https://c33.example/page', EARLY33)])
+    rD33 = world33([(SRC33O, OLD33), ('https://d33.example/page', LATE33)])
+    lC33, lD33 = listing33(rC33), listing33(rD33)
+    rcC33, linesC33 = head33(rC33)
+    rcD33, linesD33 = head33(rD33)
+    bareC = dict(lC33)
+    bareD = dict(lD33)
+    bareC.pop('last_at', None)
+    bareD.pop('last_at', None)
+    ok('AC-RUN33', lC33['fcov'] == lD33['fcov'] == ('2026-08-20', '2026-11-19')
+       and json.dumps(bareC, sort_keys=True) == json.dumps(bareD,
+                                                           sort_keys=True)
+       and lC33['last_at'] == '2026-11-19T00:05'
+       and lD33['last_at'] == '2026-11-19T23:50'
+       and rcC33 == rcD33 == 0 and linesC33[0] != linesD33[0]
+       and 'last_at=2026-11-19T23:50' in linesD33[0],
+       'two channels written 23h45m apart on the same day move last_at while every other key stays identical')
+
+    # arm 2: a DIFFERENT day was already separated by the span - the old
+    # capability is measured, not claimed as this round's
+    rA33 = world33([(SRC33O, OLD33), ('https://a33.example/page', PREV33)])
+    rB33 = world33([(SRC33O, OLD33), ('https://b33.example/page', LATE33)])
+    lA33, lB33 = listing33(rA33), listing33(rB33)
+    ok('AC-RUN33', lA33['fcov'] != lB33['fcov']
+       and head33(rA33)[1][0] != head33(rB33)[1][0]
+       and lA33['last_at'] == '2026-11-18T23:50'
+       and lB33['last_at'] == '2026-11-19T23:50',
+       'the cross-day pair was ALREADY separated by fcov - this field does not take credit for it')
+
+    # arm 3: no age was invented, and the refusal stays a measured fact
+    restated = all(
+        RUN._day_age(TODAY, x['last_at']) == RUN._day_age(TODAY, x['fcov'][1])
+        for x in (lA33, lB33, lC33, lD33))
+    ok('AC-RUN33', 'wage_d' not in lD33 and 'wage_h' not in lD33
+       and restated and all('wage' not in k for k in lD33),
+       'no day or hour age is printed, and a day age over last_at still equals fcov last day in all four worlds')
+
+    # arm 4: no usable row means none - never a fabricated day
+    rE33 = world33([])
+    rG33 = world()
+    roots.append(rG33)  # no side channel at all
+    rH33 = world33([])
+    with open(RUN.failure_path(rH33), 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{not json}\n')
+        fh.write('{"source_url": "", "failed_at": "x", "error": ""}\n')
+    lE33, lG33, lH33 = listing33(rE33), listing33(rG33), listing33(rH33)
+    rcH33, linesH33 = head33(rH33)
+    ok('AC-RUN33', lE33['last_at'] is None and lG33['last_at'] is None
+       and lH33['last_at'] is None
+       and lE33['reason'] == lG33['reason'] == lH33['reason'] == 'no-coverage'
+       and rcH33 == 0 and 'last_at=none' in linesH33[0],
+       'empty, absent and malformed-only channels name no timestamp, keep their own reason, and print last_at=none')
+
+    # arm 5: one header line, no excuse on a populated table, rows unchanged
+    rZ33 = world33([(SRC33O, OLD33), ('https://b33b.example/page',
+                                      '2026-08-21T10:00:00+08:00'),
+                    ('https://c33b.example/page',
+                     '2026-11-10T10:00:00+08:00')])
+    lZ33 = listing33(rZ33)
+    rcZ33, linesZ33 = head33(rZ33)
+    ok('AC-RUN33', len(linesZ33) == 4 and 'reason=' not in linesZ33[0]
+       and 'last_at=' in linesZ33[0] and lZ33['reason'] is None
+       and [w['age_d'] for w in lZ33['waiting']] == [91, 90, 9]
+       and lZ33['pending_old'] == (3, 3),
+       'a populated table still prints one header plus three rows, no reason, and the same three ages')
+
+    # arm 6: still ONE read per call - an append between reads is not claimed
+    rS33 = world33([(SRC33O, OLD33), ('https://s33.example/page', EARLY33)])
+    kept33 = {'n': 0}
+    real_read33 = RUN.read_failures
+
+    def reading33(path):
+        rows = real_read33(path)
+        kept33['n'] += 1
+        if kept33['n'] == 1:
+            RUN.append_failure(path, 'https://late33.example/page',
+                               TODAY + 'T23:00:00+08:00', 'TimeoutError: late')
+        return rows
+
+    RUN.read_failures = reading33
+    try:
+        lS33 = listing33(rS33)
+    finally:
+        RUN.read_failures = real_read33
+    late_on_disk33 = 'late33' in open(RUN.failure_path(rS33), 'r',
+                                      encoding='utf-8').read()
+    ok('AC-RUN33', kept33['n'] == 1 and late_on_disk33
+       and lS33['last_at'] == '2026-11-19T00:05',
+       'the stamp comes from the rows this call loaded - a row appended on disk is never claimed')
+
+    # arm 7: pure display, the row learns nothing, and a date-only stamp is
+    # echoed as a date rather than given an invented hour
+    rQ33 = world33([(SRC33O, '2026-11-15')])
+    lQ33 = listing33(rQ33)
+    before33 = snapshot33(rZ33)
+    rcZ33b, linesZ33b = head33(rZ33)
+    after33 = snapshot33(rZ33)
+    text33 = ''.join(linesZ33b)
+    t33 = RUN.summarize_failure_trend(RUN.failure_day_path(rZ33),
+                                      RUN.failure_path(rZ33), TODAY,
+                                      record_path=CR.record_path(rZ33))
+    ok('AC-RUN33', lQ33['last_at'] == '2026-11-15'
+       and 'T' not in lQ33['last_at']
+       and rcZ33b == 0 and before33 == after33
+       and len(t33) == 30 and 'last_at' not in t33
+       and 'PASS' not in text33 and 'FLAG' not in text33
+       and 'verdict' not in text33
+       and 'crawl-failure' not in scan_src18,
+       'a date-only stamp stays a date, the face writes nothing, the trend row keeps its 30 keys, and the scanner reads none of it')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

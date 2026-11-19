@@ -1,0 +1,4 @@
+DEMO written 00:05 today : CRAWL-PENDING-OLD-LIST pending_old=1/1 days=7 fcov=2026-08-20..2026-11-19 last_at=2026-11-19T00:05
+DEMO written 23:50 today : CRAWL-PENDING-OLD-LIST pending_old=1/1 days=7 fcov=2026-08-20..2026-11-19 last_at=2026-11-19T23:50
+DEMO written yesterday   : CRAWL-PENDING-OLD-LIST pending_old=1/1 days=7 fcov=2026-08-20..2026-11-18 last_at=2026-11-18T23:50
+DEMO no side channel     : CRAWL-PENDING-OLD-LIST pending_old=none days=7 fcov=none last_at=none reason=no-coverage

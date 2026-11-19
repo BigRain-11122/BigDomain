@@ -420,6 +420,18 @@ A NON-empty list carries no reason: it answers "why empty" only. No row cap
 was added: measured, a channel with thirty days of failures from three sources
 (90 rows, 9540B) still lists three lines, because the list is bounded by the
 DISTINCT SOURCES that ever failed - the configured crawl set - and not by days.
+
+WHEN THE CHANNEL WAS LAST WRITTEN (R3016): the header described population and
+reach, never liveness. Measured (qa/probe-R3016.log): a channel whose last
+failure landed 00:05 and one whose last failure landed 23:50 the SAME day read
+the same dictionary and the same header, because fcov= is a pair of days. The
+board's own pair - stopped yesterday versus written this minute - had ALREADY
+been separated by that span, so the measurement is kept beside the gain instead
+of being sold as one. The header now carries last_at=<YYYY-MM-DDTHH:MM>, the
+newest usable stamp echoed from the rows this call already loaded, and
+last_at=none when there is no usable row. It is not an age: measured, a day age
+over that stamp equals the age of fcov's last day in every probed world (a
+restatement), and an hour age would need a clock this module never reads.
 Display only, no PASS/FLAG.
 
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
@@ -924,6 +936,47 @@ def _side_coverage_rows(rows):
     return (days[0], days[-1]) if days else None
 
 
+def _last_stamp_rows(rows):
+    """The newest usable failure stamp among ALREADY-VALIDATED rows, or None.
+
+    R3016: the old-waiter list could say why its table was empty and how far the
+    channel reached, but not WHEN the channel was last written. Measured before
+    this existed (qa/probe-R3016.log): a channel whose last failure landed at
+    00:05 and one whose last failure landed at 23:50 the same day read the SAME
+    dictionary and the SAME header, because the span is a pair of DAYS. The
+    board's own example (stopped yesterday versus written this minute) had
+    already been separated by the day span, so it is measured here and recorded
+    rather than claimed as a gain.
+
+    Same rows the list already loaded - never a second read, on the R3015 law
+    that a header must not claim evidence this call never judged. None when
+    there is no usable row: "no write seen", never a fabricated day.
+    """
+    stamps = [str(row.get('failed_at') or '') for row in rows
+              if str(row.get('failed_at') or '')]
+    return max(stamps) if stamps else None
+
+
+def _stamp_echo(stamp):
+    """The writer's own characters, to the minute when the stamp carries one.
+
+    R3016: a literal echo, not a parsed value - the writer stamps
+    isoformat(timespec='seconds'), so the first sixteen characters are
+    YYYY-MM-DDTHH:MM. A stamp that stops at the date is printed as the date: an
+    invented 'T00:00' would claim an hour nobody recorded, which is the same
+    family of lie as an invented span.
+
+    No clock is read and no age is subtracted: measured, a day age over this
+    stamp is exactly the age of fcov.last day in every probed world, so printing
+    it would restate a field already on the same line.
+    """
+    text = str(stamp or '')
+    if (len(text) >= 16 and text[10] == 'T' and text[11:13].isdigit()
+            and text[14:16].isdigit()):
+        return text[:16]
+    return text[:10]
+
+
 def _side_coverage(failures_path):
     """(first_day, last_day) the failure side channel reaches, or None.
 
@@ -1230,12 +1283,27 @@ def list_pending_old(record_path, failures_path, day, window_days=7):
     already loaded (R3011's span, one function), so the header and the row
     describe the same file - and a concurrent append cannot make the header
     claim evidence this call never judged (measured: a second read drifted).
+
+    R3016 ADDS `last_at` - WHEN the channel was last written. Measured before
+    this existed (qa/probe-R3016.log): a last failure at 00:05 and one at 23:50
+    on the SAME day read the same dictionary and the same header, because a span
+    is a pair of days; the board's own "stopped yesterday versus written this
+    minute" pair had already been separated by that span, which is recorded here
+    rather than sold as a gain. `last_at` is the newest usable stamp among the
+    rows already loaded, echoed to the minute (never a second read), and None
+    when there is no usable row. It is NOT an age: a day age over this stamp was
+    measured to equal the age of `fcov`'s last day in every probed world, so it
+    would restate a digit on the same line, and an hour age would need a clock
+    this module does not read.
     """
     rows, bad = read_failures(failures_path)
     head_day, usable, threshold = _window_start(day, window_days)
+    newest = _last_stamp_rows(rows)
     out = {'day': head_day, 'window_days': window_days, 'bad': bad,
            'pending_old': None, 'waiting': [],
-           'fcov': _side_coverage_rows(rows), 'reason': None}
+           'fcov': _side_coverage_rows(rows),
+           'last_at': None if newest is None else _stamp_echo(newest),
+           'reason': None}
     if not usable:
         out['reason'] = 'no-window'
         return out
@@ -1733,8 +1801,10 @@ def main(argv=None):
         po = lst['pending_old']
         fcov_txt = ('none' if lst['fcov'] is None
                     else '%s..%s' % lst['fcov'])
-        head = ('CRAWL-PENDING-OLD-LIST pending_old=%s days=%d fcov=%s'
-                % ('none' if po is None else '%d/%d' % po, args.days, fcov_txt))
+        head = ('CRAWL-PENDING-OLD-LIST pending_old=%s days=%d fcov=%s '
+                'last_at=%s'
+                % ('none' if po is None else '%d/%d' % po, args.days, fcov_txt,
+                   'none' if lst['last_at'] is None else lst['last_at']))
         if not lst['waiting'] and lst['reason']:
             head += ' reason=%s' % lst['reason']
         print(head)

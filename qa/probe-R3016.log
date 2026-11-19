@@ -1,0 +1,21 @@
+P1 keys=['bad', 'day', 'fcov', 'pending_old', 'reason', 'waiting', 'window_days']
+P1 header=CRAWL-PENDING-OLD-LIST pending_old=1/1 days=7 fcov=2026-08-20..2026-11-18
+P1 has_write_age=False
+P1 header_tokens=['CRAWL-PENDING-OLD-LIST', 'pending_old', 'days', 'fcov']
+P2a fcov_A=('2026-08-20', '2026-11-18') fcov_B=('2026-08-20', '2026-11-19') same_dict=False same_header=False
+P2b fcov_C=('2026-08-20', '2026-11-19') fcov_D=('2026-08-20', '2026-11-19') same_dict=True same_header=True
+P2b header_C=CRAWL-PENDING-OLD-LIST pending_old=1/1 days=7 fcov=2026-08-20..2026-11-19
+P3 A_yesterday newest=2026-11-18T23:50:00+08:00 day_age=1 fcov_last_age=1 restates=True
+P3 A_yesterday minute_prefix=2026-11-18T23:50 has_minutes=True
+P3 B_today newest=2026-11-19T23:50:00+08:00 day_age=0 fcov_last_age=0 restates=True
+P3 B_today minute_prefix=2026-11-19T23:50 has_minutes=True
+P3 C_early newest=2026-11-19T00:05:00+08:00 day_age=0 fcov_last_age=0 restates=True
+P3 C_early minute_prefix=2026-11-19T00:05 has_minutes=True
+P3 D_late newest=2026-11-19T23:50:00+08:00 day_age=0 fcov_last_age=0 restates=True
+P3 D_late minute_prefix=2026-11-19T23:50 has_minutes=True
+P4 empty rows=0 bad=0 newest=None fcov=None reason=no-coverage
+P4 absent rows=0 bad=0 newest=None fcov=None reason=no-coverage
+P4 malformed rows=0 bad=2 newest=None fcov=None reason=no-coverage
+P5 write_stamp_consumers=['logs/probe_r938.py:last_at', 'src/os/test_crawl_runner.py:newest_at', 'tools/crawl_runner.py:newest_at']
+P6 trend_keys=30 has_write_stamp=False
+P7 real_repo_header=CRAWL-PENDING-OLD-LIST pending_old=none days=7 fcov=none reason=no-coverage

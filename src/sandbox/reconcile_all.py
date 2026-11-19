@@ -4691,8 +4691,11 @@ SUITES = [
     # AC-RUN30 (youngest old waiter) pinned in the R3013 PIN row before the code.
     # AC-RUN31 (per-source old-waiter list on its own read-only face) pinned in
     # the R3014 PIN row before the code; the row keeps its shape.
+    # AC-RUN32 (why an empty old table is empty, and how far it reaches) and
+    # AC-RUN33 (when the channel was last written) pinned in the R3015/R3016
+    # PIN rows before the code.
     ("os-crawl-runner",
-      os.path.join("..", "os", "test_crawl_runner.py"), 32),
+      os.path.join("..", "os", "test_crawl_runner.py"), 33),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep
