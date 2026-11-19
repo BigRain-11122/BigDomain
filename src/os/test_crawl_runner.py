@@ -237,6 +237,7 @@ into qa/ - every record lands in a per-run temp directory.
 Stdlib only, ASCII source, no clock of its own (fetched_at is passed in).
 """
 import contextlib
+import hashlib
 import io
 import json
 import os
@@ -1136,8 +1137,9 @@ def main():
                      day_row('2026-11-19', 1)])
     s43 = RUN.summarize_failure_days(h43, 3)
     ok('AC-RUN17', set(s43.keys()) == set(['days', 'bad', 'first', 'last',
-                                           'series', 'present', 'bytes',
-                                           'size_gate', 'gate_ref_mb'])
+                                           'dropped', 'series', 'present',
+                                           'bytes', 'size_gate', 'gate_ref_mb'])
+       and s43['dropped'] is None
        and s43['days'] == 7 and s43['bad'] == 0
        and s43['first'] == '2026-11-13' and s43['last'] == '2026-11-19'
        and len(s43['series']) == 3
@@ -3505,12 +3507,15 @@ def main():
     trend37 = RUN.summarize_failure_trend(p37, RUN.failure_path(r37), TODAY)
     ok('AC-RUN37', keys37 == base37 | set(['dropped'])
        and set(series37.keys()) == set(['bad', 'bytes', 'days', 'first',
-                                        'gate_ref_mb', 'last', 'present',
-                                        'series', 'size_gate'])
+                                        'dropped', 'gate_ref_mb', 'last',
+                                        'present', 'series', 'size_gate'])
        and all(isinstance(p, tuple) and len(p) == 2
                for p in series37['series'])
-       and 'dropped' not in trend37 and 'dropped' not in series37,
-       'the day row grows by exactly one named key, the series keys and payload shape are untouched, and neither the series nor the trend row gains the field')
+       and 'dropped' not in trend37
+       and series37['dropped'] == row37b.get('dropped'),
+       'the day row grows by exactly one named key, the series carries the '
+       'last row\'s own value (R3021 face; the R3020 absence pin is retired by '
+       'design, disclosed in the board PIN), and the trend row gains nothing')
 
     # arm 6: one history read per snapshot, and the written number is its count
     r37f = world()
@@ -3546,11 +3551,143 @@ def main():
     text37 = '\n'.join(lines37)
     ok('AC-RUN37', rc37 == 0 and before37 == after37
        and lines37 and lines37[0].startswith('CRAWL-FAILURE-DAYS days=')
-       and 'dropped' not in text37
+       and 'dropped=' in text37
        and 'PASS' not in text37 and 'FLAG' not in text37
        and 'verdict' not in text37
        and 'crawl-failure' not in scan_src18,
-       'the day listing prints the same header it printed before, writes nothing, and stays outside the scanner')
+       'the day listing writes nothing and prints no verdict; the header now '
+       'carries the R3021 dropped= token (this arm\'s R3020 absence pin is '
+       'retired by design), and the scanner still reads none of it')
+
+    # AC-RUN38 (R3021): the eaten-lines count R3020 wrote down had no face - a
+    # reader had to open the jsonl - and it cannot be attributed to the day an
+    # eaten line belonged to (measured, qa/probe-R3021.log: every rejected line
+    # is handed over as row=None even when its text carries a usable day, and a
+    # rewrite renumbers). So the ONE thing that can be shown without inventing a
+    # number is the LAST day row's own value, with none for a row that predates
+    # the field. Arms 5 and 7 of AC-RUN37 were retired by design (they pinned
+    # the field's absence from the series and the header); disclosed there.
+    def put_days(path, rows):
+        with open(path, 'w', encoding='utf-8', newline='\n') as fh:
+            for r in rows:
+                fh.write(json.dumps(r, sort_keys=True,
+                                    separators=(',', ':')) + '\n')
+
+    def plain_day(day, n, dropped=None):
+        out = {'bad': 0, 'day': day, 'newest_at': None, 'newest_error': None,
+               'on_day': n, 'recent': 0, 'total': 0, 'urls': 0}
+        if dropped is not None:
+            out['dropped'] = dropped
+        return out
+
+    # arm 1: a beat that ate lines now says so on the header a person reads
+    r38 = world()
+    roots.append(r38)
+    p38 = hist37(r38)
+    with open(p38, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(DAY_OK36 + '\n' + ''.join(JUNK36))
+    row38 = RUN.snapshot_failure_day(r38, TODAY + 'T11:00:00+08:00')
+    rc38, lines38 = days_head37(r38)
+    head38 = lines38[0]
+    ok('AC-RUN38', rc38 == 0 and row38.get('dropped') == 4
+       and ('last=%s dropped=4' % TODAY) in head38,
+       'four lines eaten by the rewrite now read dropped=4 on the header, right '
+       'after the last= row they belong to')
+
+    # arm 2: a beat that ate nothing prints an explicit zero
+    r38b = world()
+    roots.append(r38b)
+    p38b = hist37(r38b)
+    put_days(p38b, [plain_day('2026-11-18', 1)])
+    RUN.snapshot_failure_day(r38b, TODAY + 'T11:10:00+08:00')
+    rc38b, lines38b = days_head37(r38b)
+    ok('AC-RUN38', rc38b == 0 and 'dropped=0' in lines38b[0],
+       'a clean rewrite prints dropped=0 - the token is always printed rather '
+       'than inferred from its absence')
+
+    # arm 3: a row written before the field is none, never an invented zero
+    r38c = world()
+    roots.append(r38c)
+    p38c = hist37(r38c)
+    put_days(p38c, [plain_day('2026-11-18', 2)])
+    rc38c, lines38c = days_head37(r38c)
+    s38c = RUN.summarize_failure_days(p38c)
+    ok('AC-RUN38', rc38c == 0 and 'dropped=none' in lines38c[0]
+       and s38c['dropped'] is None and s38c['last'] == '2026-11-18',
+       'a pre-field row reads dropped=none and the dict answers None - never '
+       'zero, which would be an invented measurement')
+
+    # arm 4: it is that row's own number, not a sum over the file
+    r38d = world()
+    roots.append(r38d)
+    p38d = hist37(r38d)
+    put_days(p38d, [plain_day('2026-11-18', 0, dropped=5),
+                    plain_day(TODAY, 0, dropped=0)])
+    rc38d, lines38d = days_head37(r38d)
+    ok('AC-RUN38', rc38d == 0 and 'dropped=0' in lines38d[0]
+       and 'dropped=5' not in lines38d[0],
+       'a 5 on an older row and a 0 on the last row print 0 - no sum and no '
+       'maximum, so a day that ate nothing cannot inherit another day\'s loss')
+
+    # arm 5: one read per call, and the number comes from that read
+    r38e = world()
+    roots.append(r38e)
+    p38e = hist37(r38e)
+    put_days(p38e, [plain_day('2026-11-18', 0),
+                    plain_day(TODAY, 0, dropped=2)])
+    calls38 = []
+    real_read_days38 = RUN.read_failure_days
+
+    def counting_read_days38(path):
+        out = real_read_days38(path)
+        calls38.append(len(out[0]))
+        if len(calls38) == 1:
+            put_days(path, [plain_day('2026-11-18', 0),
+                            plain_day(TODAY, 0, dropped=9)])
+        return out
+
+    RUN.read_failure_days = counting_read_days38
+    try:
+        s38e = RUN.summarize_failure_days(p38e)
+    finally:
+        RUN.read_failure_days = real_read_days38
+    ok('AC-RUN38', calls38 == [2] and s38e['dropped'] == 2,
+       'the header value comes from the same single read as days/last - a '
+       'rewrite after that read moves neither the number nor the call count')
+
+    # arm 6: exactly one new key, payload shapes and the trend untouched
+    trend38 = RUN.summarize_failure_trend(p38d, RUN.failure_path(r38d), TODAY)
+    ok('AC-RUN38', set(RUN.summarize_failure_days(p38d).keys()) == set(
+        ['bad', 'bytes', 'days', 'dropped', 'first', 'gate_ref_mb', 'last',
+         'present', 'series', 'size_gate'])
+       and all(isinstance(p, tuple) and len(p) == 2
+               and len(p) == 2 for p in RUN.summarize_failure_days(
+                   p38d)['series'])
+       and len(trend38) == 30 and 'dropped' not in trend38,
+       'the dict grows by one named key, series stays (day, on_day) pairs, and '
+       'the 30-key trend row gains nothing')
+
+    # arm 7: pure display - nothing written, no verdict, outside the scanner
+    def tree_bytes(root):
+        out = []
+        for base, _dirs, files in os.walk(root):
+            for f in sorted(files):
+                full = os.path.join(base, f)
+                with open(full, 'rb') as fh:
+                    out.append((os.path.relpath(full, root),
+                                hashlib.sha256(fh.read()).hexdigest()))
+        return sorted(out)
+
+    before38 = tree_bytes(r38d)
+    rc38f, lines38f = days_head37(r38d)
+    after38 = tree_bytes(r38d)
+    text38 = '\n'.join(lines38f)
+    ok('AC-RUN38', rc38f == 0 and before38 == after38
+       and 'PASS' not in text38 and 'FLAG' not in text38
+       and 'verdict' not in text38
+       and 'crawl-failure' not in scan_src18,
+       'the listing writes no byte, prints no verdict, and the scanner still '
+       'reads none of it')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

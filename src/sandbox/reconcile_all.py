@@ -4698,8 +4698,11 @@ SUITES = [
     # spot on the daily history) pinned in the R3019 PIN row.
     # R3020 added AC-RUN37: the rewrite's own eaten lines leave a durable
     # dropped= on the day row (36 -> 37, the same row).
+    # R3021 added AC-RUN38: that number now has a header face, and a row
+    # written before the field reads none rather than an invented zero
+    # (37 -> 38, the same row).
     ("os-crawl-runner",
-      os.path.join("..", "os", "test_crawl_runner.py"), 37),
+      os.path.join("..", "os", "test_crawl_runner.py"), 38),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

@@ -1,0 +1,12 @@
+P1 yielded=[(1, None, False), (2, 'on_day', True), (3, 'day', True), (4, 'json', True), (5, None, False)]
+P1 raw_text_of_the_on_day_reject_carries_day='2026-11-16' row_returned_for_reject=[None, None, None]
+P2 stamped_day=2026-11-19 dropped=3 rows=['2026-11-17', '2026-11-19']
+P2 row_for_the_rejects_own_day_2026-11-16=[]
+P2 other_day_row_untouched=True
+P2 numbering_after_rewrite=[(1, None), (2, None)]
+P3 keys_of_an_old_row_has_dropped=False last_get=None
+P3 series_keys=['bad', 'bytes', 'days', 'first', 'gate_ref_mb', 'last', 'present', 'series', 'size_gate']
+P3 trend_keys=30 trend_has_dropped=False
+P4 rc=0 header='CRAWL-FAILURE-DAYS days=2 bad=0 first=2026-11-17 last=2026-11-19 series=2026-11-17:0,2026-11-19:0 bytes=226 size_gate=0.0002% gate_ref=100MB' dropped_in_header=False
+P5 exact_days_header_equality=0 exact_days_bad_equality=2 startswith_pin=1 dropped_absence_pin=2 dict_keyset_pins=1
+P5 module_places_reading_dropped=1

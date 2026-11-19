@@ -1,0 +1,5 @@
+OLD-ROW  CRAWL-FAILURE-DAYS days=1 bad=0 first=2026-11-18 last=2026-11-18 dropped=none series=2026-11-18:2 bytes=107 size_gate=0.0001% gate_ref=100MB
+CLEAN    CRAWL-FAILURE-DAYS days=2 bad=0 first=2026-11-18 last=2026-11-19 dropped=0 series=2026-11-18:1,2026-11-19:0 bytes=226 size_gate=0.0002% gate_ref=100MB
+DIRTY    bad-lines-before=[{'line': 2, 'why': 'json'}, {'line': 3, 'why': 'on_day'}, {'line': 4, 'why': 'day'}]
+DIRTY    CRAWL-FAILURE-DAYS days=2 bad=0 first=2026-11-18 last=2026-11-19 dropped=3 series=2026-11-18:1,2026-11-19:0 bytes=226 size_gate=0.0002% gate_ref=100MB
+AGGREG   CRAWL-FAILURE-DAYS days=2 bad=0 first=2026-11-18 last=2026-11-19 dropped=0 series=2026-11-18:0,2026-11-19:0 bytes=238 size_gate=0.0002% gate_ref=100MB

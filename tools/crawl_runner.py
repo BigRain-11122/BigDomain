@@ -164,6 +164,20 @@ field existed are not backfilled: their drops were never measured and 0 would be
 invented. NOT added to the series or the trend row: those aggregate many days,
 and summing a key that older rows do not carry would print unmeasured as zero.
 
+NOT VISIBLE, NOT ATTRIBUTABLE (R3021): that count was written down but no face
+printed it - a reader had to open the jsonl by hand - and it never says WHICH
+day's lines were eaten. Measured (qa/probe-R3021.log): _json_lines hands over
+row=None for every rejected line, even when the raw text carries a usable day
+(an on_day reject whose text reads day='2026-11-16'), so attribution would mean
+parsing or echoing text the readers already refused; line numbers cannot stand
+in either, because a rewrite renumbers (5 physical lines -> 2). Attribution is
+therefore NOT built, and this paragraph is the record rather than a guess. What
+can be shown without inventing a number is the LAST day row's own value:
+CRAWL-FAILURE-DAYS prints dropped= right after last=, where none means that row
+was written before the field existed (NOT zero) and 0 means nothing was eaten.
+It is that one row's number, never a sum: older rows without the key must not
+be read as zero.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -941,13 +955,27 @@ def summarize_failure_days(path, limit=7):
     printed here; the reader can still see bad= for the transient case. The
     retained tail (limit=) is a separate matter: bytes covers the WHOLE file,
     not the printed tail, which is what makes it comparable to the water line.
+
+    R3021: `dropped` is the LAST row's own value - the row `last` names - and
+    None when that row predates the field, so a reader can tell "nothing was
+    eaten" (0) from "never measured" (None). It is computed from the same single
+    read that produced `days`/`last`, and it is deliberately NOT a sum over
+    rows: older rows carry no key and summing would print unmeasured as zero.
+    Attribution of an eaten line to its OWN day is not derivable without parsing
+    refused text (module header, qa/probe-R3021.log).
     """
     rows, bad = read_failure_days(path)
     tail = rows[-max(1, int(limit)):]
     out = {'days': len(rows), 'bad': bad,
            'first': (rows[0].get('day') if rows else None),
            'last': (rows[-1].get('day') if rows else None),
+           'dropped': None,
            'series': [(r.get('day'), r.get('on_day')) for r in tail]}
+    if rows:
+        last_dropped = rows[-1].get('dropped')
+        # type() not isinstance(): a JSON true would pass isinstance(x, int).
+        if type(last_dropped) is int:
+            out['dropped'] = last_dropped
     stats = failure_file_stats(path)
     out['present'] = stats['present']
     out['bytes'] = stats['bytes']
@@ -2009,10 +2037,12 @@ def main(argv=None):
     if args.failure_days:
         series = summarize_failure_days(failure_day_path(args.root), args.days)
         pairs = ','.join('%s:%s' % (d, n) for d, n in series['series'])
-        print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s series=%s '
-              'bytes=%d size_gate=%.4f%% gate_ref=%dMB'
+        print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
+              'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB'
               % (series['days'], series['bad'], series['first'] or 'none',
-                 series['last'] or 'none', pairs or 'none', series['bytes'],
+                 series['last'] or 'none',
+                 'none' if series['dropped'] is None else series['dropped'],
+                 pairs or 'none', series['bytes'],
                  series['size_gate'], series['gate_ref_mb']))
         return 0
     if args.pending_old_bad:

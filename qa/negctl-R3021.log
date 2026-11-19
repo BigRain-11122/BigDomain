@@ -1,0 +1,5 @@
+honest-last-row got=0 want=0 GREEN
+M1-sum-vs-last-row got=5 want=0 CAUGHT (a sum would print 5 where the last row says 0)
+M2-missing-as-zero-vs-none got=0 want=None CAUGHT (none is not zero)
+M3-positive-only-vs-always got=None want=0 CAUGHT (a token printed only when positive)
+M4-second-read-vs-same-read got=9 want=2 CAUGHT (a second read drifts after a rewrite)
