@@ -1,0 +1,4 @@
+LIVE run 1 (default face, no flag):
+  rc=0 window_rows=1
+LIVE run 2 (--series-days 7 --series-absent):
+  rc=0 window_rows=1 series_window=7 series_absent=6 days_present=1 repeat_rows=0 retry_rows=0 window_from=2026-11-13

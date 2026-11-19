@@ -1,0 +1,6 @@
+A cut day, width 7 -> rc=0 window_rows=2 series_window=7 series_absent=5 days_present=2 repeat_rows=0 retry_rows=0 window_from=2026-11-13
+A cut day, width 6 -> rc=0 window_rows=1 series_window=6 series_absent=5 days_present=1 repeat_rows=0 retry_rows=0 window_from=2026-11-14
+B repeats, width 7 -> rc=0 window_rows=3 series_window=7 series_absent=5 days_present=2 repeat_rows=1 retry_rows=1 window_from=2026-11-13
+C one day, width 7 -> rc=0 window_rows=1 series_window=7 series_absent=6 days_present=1 repeat_rows=0 retry_rows=0 window_from=2026-11-13
+D 2001 history, width 2 -> rc=0 window_rows=1 series_window=2 series_absent=1 days_present=1 repeat_rows=0 retry_rows=0 window_from=2001-03-04
+E no history -> rc=0 window_rows=0 series_window=7 series_absent=none days_present=none repeat_rows=none retry_rows=none window_from=none

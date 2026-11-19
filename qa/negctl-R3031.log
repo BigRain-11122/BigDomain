@@ -1,0 +1,7 @@
+honest=2026-11-14 GREEN
+M1 clock head -> '2026-11-19' CAUGHT
+M2 head as start -> '2026-11-19' CAUGHT
+M3 width-1 -> '2026-11-15' CAUGHT
+M4 invented date -> '1970-01-01' CAUGHT
+M4 on empty history -> '1970-01-01' CAUGHT
+honest on empty -> None GREEN

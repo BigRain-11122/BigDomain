@@ -306,6 +306,23 @@ fails to grow - stated in the function. A `reading_rows=` token was refused as
 a restatement of `repeat_rows - retry_rows` (the R3000 noise law), and an
 unusable head answers none rather than an invented zero.
 
+R3031 (measured first - qa/probe-R3031.log): the board asked whether the window
+edge could cut a DAY in half, leaving an in-window first row that is really a
+continuation of rows outside the window (which would make `repeat_rows=` and
+`retry_rows=` undercount). Measured: it cannot. Window membership is decided by
+the row's OWN date (`str(day)[:10]` against one threshold), so a calendar day is
+wholly inside or wholly outside - the split set reads empty on every existing
+fixture and on every width 1..10. So `repeat` and `retry` are EXACT for the
+window, not lower bounds, and an `edge_rows=`/`split_rows=` token was refused
+rather than manufactured for a defect that cannot happen (and extending `retry`
+across the edge was refused because it reads retry=1 against repeat=0, breaking
+`retry_rows <= repeat_rows`). What WAS genuinely unprinted is the day the
+window starts on: `series_window=7` gives a width and leaves the reader to
+count backwards from the newest pair. The opt-in tail now also carries
+`window_from=<day|none>` - the threshold `_window_start` actually applied, so
+`window_from=2026-11-13 series_window=7` reads as 11-13..11-19 by eye. It is a
+date, never an invented one: an unusable head day answers none.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1309,6 +1326,15 @@ def series_presence_counts(rows, window_days=7):
     also fails to grow. A `reading_rows=` token was refused as a restatement of
     the difference between two printed numbers (the R3000 noise law).
 
+    WINDS NOTHING BY DAY (R3031): the window is a day-keyed filter - a row is
+    in or out by its own date - so a calendar day can never be split by the
+    edge, and `repeat`/`retry` are EXACT for the window rather than lower
+    bounds (measured over every width 1..10, qa/probe-R3031.log). `start` is the
+    threshold the one window law applied, so the printed `window_from=` lets a
+    reader name the first day of the window instead of counting backwards from
+    the newest pair; an unusable head day answers `start` None rather than a
+    date nobody measured (the absent-not-zero law, carried).
+
     DISPLAY ONLY: writes nothing, gates nothing.
     """
     width = max(1, int(window_days))
@@ -1316,7 +1342,7 @@ def series_presence_counts(rows, window_days=7):
         (str(rows[-1].get('day') or '') if rows else ''), width)
     if not usable:
         return {'window': width, 'present': None, 'rows': 0, 'repeat': None,
-                'retry': None, 'head': None}
+                'retry': None, 'head': None, 'start': None}
     days = set()
     count = 0
     seen_on_day = {}
@@ -1331,7 +1357,8 @@ def series_presence_counts(rows, window_days=7):
                 retry += 1
             seen_on_day[row_day] = on_day
     return {'window': width, 'present': len(days), 'rows': count,
-            'repeat': count - len(days), 'retry': retry, 'head': head_day}
+            'repeat': count - len(days), 'retry': retry, 'head': head_day,
+            'start': threshold}
 
 
 def list_failure_days_dropped(path, window_days=None):
@@ -2452,14 +2479,16 @@ def main(argv=None):
                     help='alongside --series-days N, name the calendar days in '
                          'that window with no history row at all; the header '
                          'gains series_absent=<n|none> absent=<day,...|none> '
-                         'days_present=<n|none> repeat_rows=<n|none> and '
-                         'retry_rows=<n|none>, so a '
+                         'days_present=<n|none> repeat_rows=<n|none> '
+                         'retry_rows=<n|none> and window_from=<day|none>, so a '
                          'silent day never reads like a measured zero, the '
                          'present/gap split sums to series_window, the '
-                         'present/repeat split sums to window_rows, and a '
+                         'present/repeat split sums to window_rows, a '
                          'same-day repeat names whether it carried more '
-                         'failure evidence than the row before it (read-only '
-                         'display; gates nothing)')
+                         'failure evidence than the row before it, and the '
+                         'first day of the window can be read instead of '
+                         'counted backwards (read-only display; gates '
+                         'nothing)')
     args = ap.parse_args(argv)
     if args.series_absent and (args.series_days is None
                                or not args.failure_days):
@@ -2495,7 +2524,7 @@ def main(argv=None):
             if args.series_absent:
                 gaps = series_absent_days(day_read[0], args.series_days)
                 presence = series_presence_counts(day_read[0], args.series_days)
-                tail_markers += ' series_absent=%s absent=%s days_present=%s repeat_rows=%s retry_rows=%s' % (
+                tail_markers += ' series_absent=%s absent=%s days_present=%s repeat_rows=%s retry_rows=%s window_from=%s' % (
                     'none' if gaps['count'] is None else gaps['count'],
                     ','.join(gaps['days']) or 'none',
                     'none' if presence['present'] is None
@@ -2503,7 +2532,9 @@ def main(argv=None):
                     'none' if presence['repeat'] is None
                     else presence['repeat'],
                     'none' if presence['retry'] is None
-                    else presence['retry'])
+                    else presence['retry'],
+                    'none' if presence['start'] is None
+                    else presence['start'])
         print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
               'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB '
               'series_limit=%d series_shown=%d series_outside=%d '

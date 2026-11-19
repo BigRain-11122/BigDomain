@@ -4974,6 +4974,135 @@ def main():
        'names never appear, the older absent= pair still counts two, and no '
        'byte is written')
 
+    # ===== AC-RUN48 (R3031): the window edge cannot cut a day in half =====
+    # AC-RUN48 was pinned in src/os/backlog.md BEFORE 'start' existed
+    # (qa/probe-R3031.log): membership is decided by the row's own date, so a
+    # calendar day is wholly inside or wholly outside, repeat/retry are exact,
+    # and what was genuinely unprinted is the day the window starts on.
+
+    def splits48(rows, width):
+        head, usable, threshold = RUN._window_start(
+            str(rows[-1].get('day') or ''), width)
+        if not usable:
+            return []
+        pre = set(str(r.get('day') or '')[:10] for r in rows
+                  if str(r.get('day') or '')[:10] < threshold)
+        inside = set(str(r.get('day') or '')[:10] for r in rows
+                     if threshold <= str(r.get('day') or '')[:10] <= head)
+        return sorted(pre & inside)
+
+    # arm 1: no width 1..10 splits a day, in order or with a stale append
+    split_rows48 = [plain_day('2026-11-13', 5), plain_day('2026-11-13', 5),
+                    plain_day('2026-11-19', 1), plain_day('2026-11-19', 2),
+                    plain_day('2026-11-20', 1)]
+    stale48 = [plain_day('2026-11-19', 1), plain_day('2026-11-13', 5),
+               plain_day('2026-11-19', 2)]
+    widths48 = [splits48(split_rows48, w) for w in range(1, 11)]
+    stale_splits48 = [splits48(stale48, w) for w in range(1, 11)]
+    ok('AC-RUN48', all(s == [] for s in widths48)
+       and all(s == [] for s in stale_splits48),
+       'no window width 1..10 can place one calendar day on both sides of the '
+       'threshold, in file order or with a stale row appended last')
+
+    # arm 2: the printed start IS the threshold the one window law applied
+    r48 = world()
+    roots.append(r48)
+    p48 = hist37(r48)
+    put_days(p48, [plain_day('2026-09-20', 5), plain_day('2026-11-18', 1),
+                   plain_day('2026-11-19', 3)])
+    rc48, lines48 = days47(r48, ['--failure-days', '--series-days', '7',
+                                 '--series-absent'])
+    t48 = toks47(lines48[0]) if lines48 else {}
+    rc48b, lines48b = days47(r48, ['--failure-days', '--series-days', '6',
+                                   '--series-absent'])
+    t48b = toks47(lines48b[0]) if lines48b else {}
+    pure48 = RUN.series_presence_counts(RUN.read_failure_days(p48)[0], 7)
+    head48, _u48, th48 = RUN._window_start('2026-11-19', 7)
+    ok('AC-RUN48', rc48 == 0 and rc48b == 0
+       and t48.get('window_from') == '2026-11-13'
+       and t48.get('window_from') == th48
+       and pure48['start'] == '2026-11-13'
+       and t48b.get('window_from') == '2026-11-14',
+       'the window start is printed and equals the threshold the window law '
+       'applied; widening the width moves it one whole day, not one row')
+
+    # arm 3: a day sitting exactly on the cut is wholly in, then wholly out
+    r48c = world()
+    roots.append(r48c)
+    p48c = hist37(r48c)
+    put_days(p48c, [plain_day('2026-11-13', 5), plain_day('2026-11-19', 1)])
+    rc48c, lines48c = days47(r48c, ['--failure-days', '--series-days', '7',
+                                    '--series-absent'])
+    rc48d, lines48d = days47(r48c, ['--failure-days', '--series-days', '6',
+                                    '--series-absent'])
+    t48c = toks47(lines48c[0]) if lines48c else {}
+    t48d = toks47(lines48d[0]) if lines48d else {}
+    ok('AC-RUN48', rc48c == 0 and rc48d == 0
+       and t48c.get('days_present') == '2'
+       and t48c.get('repeat_rows') == '0'
+       and t48d.get('days_present') == '1'
+       and t48d.get('repeat_rows') == '0',
+       'the day on the cut counts wholly inside at width 7 and wholly outside '
+       'at width 6, and it is never half-counted as a repeat')
+
+    # arm 4: not measurable is not a date
+    r48e = world()
+    roots.append(r48e)
+    os.makedirs(os.path.join(r48e, 'qa'), exist_ok=True)
+    rc48e, lines48e = days47(r48e, ['--failure-days', '--series-days', '7',
+                                    '--series-absent'])
+    t48e = toks47(lines48e[0]) if lines48e else {}
+    empty48 = RUN.series_presence_counts([], 7)
+    ok('AC-RUN48', rc48e == 0 and t48e.get('window_from') == 'none'
+       and t48e.get('days_present') == 'none'
+       and empty48['start'] is None,
+       'no history answers none for the window start too, and the pure '
+       'function invents no date')
+
+    # arm 5: no clock - a 2001 history windows against itself
+    r48f = world()
+    roots.append(r48f)
+    p48f = hist37(r48f)
+    put_days(p48f, [plain_day('2001-01-01', 0), plain_day('2001-03-01', 1),
+                    plain_day('2001-03-05', 2)])
+    rc48f, lines48f = days47(r48f, ['--failure-days', '--series-days', '2',
+                                    '--series-absent'])
+    t48f = toks47(lines48f[0]) if lines48f else {}
+    pure48f = RUN.series_presence_counts(RUN.read_failure_days(p48f)[0], 2)
+    ok('AC-RUN48', rc48f == 0 and t48f.get('window_from') == '2001-03-04'
+       and pure48f['head'] == '2001-03-05' and pure48f['start'] == '2001-03-04',
+       'a two-day window over a 2001 history starts on 2001-03-04 - the file '
+       'own last day minus one, no wall clock')
+
+    # arm 6: the default face is byte-identical and carries no new token
+    rc48g, lines48g = days47(r47, ['--failure-days'])
+    ok('AC-RUN48', rc48g == 0 and lines48g
+       and lines48g[0].endswith(
+           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+       and 'window_from' not in lines48g[0],
+       'without the flag the tail is the same line R3026..R3030 shipped')
+
+    # arm 7: refused names, the counted absent= pair, and no byte written
+    before48 = tree_bytes(r48)
+    rc48h, lines48h = days47(r48, ['--failure-days', '--series-days', '7',
+                                   '--series-absent'])
+    after48 = tree_bytes(r48)
+    text48 = '\n'.join(lines48h)
+    ok('AC-RUN48', rc48h == 0 and before48 == after48 and lines48h
+       and lines48h[0].count('window_from=') == 1
+       and 'edge_rows=' not in lines48h[0]
+       and 'split_rows=' not in lines48h[0]
+       and 'window_edge=' not in lines48h[0]
+       and 'window_start=' not in lines48h[0]
+       and lines48h[0].count('absent=') == 2
+       and int(toks47(lines48h[0])['retry_rows'])
+       <= int(toks47(lines48h[0])['repeat_rows'])
+       and 'PASS' not in text48 and 'FLAG' not in text48
+       and 'verdict' not in text48,
+       'the window start appears once under its own name, the refused edge and '
+       'function names never appear, the older absent= pair still counts two, '
+       'retry still never exceeds repeat, and no byte is written')
+
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
 

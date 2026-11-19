@@ -1,0 +1,60 @@
+== P1: who reads rows before the window threshold ==
+window_start_call_sites=9 at [227, 872, 1154, 1197, 1238, 1315, 1379, 1949, 2010]
+  L108 carry no byte threshold at all (they gate round-freeze and evidence dialect).
+  L134 jsonl, NOT a threshold this repo enforces.
+  L230 Only `day >= threshold` is kept: no sort, no de-duplication (a same day twice
+  L231 stays twice, the R3023 law untouched), and rows below the threshold are counted
+  L246 `series_outside=` how many of those fall before the window threshold, and
+  L678 # (cph4/resource-chain.md section 3.4: world/*.jsonl, 100MB), NOT a threshold
+  L850 """(head_day, usable, threshold) - the ONE place the window law lives.
+  L859 threshold = head_day
+  L864 threshold = start.isoformat()
+  L867 return head_day, usable, threshold
+  L872 head_day, usable, threshold = _window_start(day, window_days)
+  L879 if usable and threshold <= row_day <= head_day:
+  L1154 head_day, usable, threshold = _window_start(
+  L1160 if str(row.get('day') or '')[:10] < threshold:
+  L1164 if threshold <= row_day <= head_day:
+  L1197 head_day, usable, threshold = _window_start(
+  L1203 if threshold <= str(r.get('day') or '')[:10] <= head_day]
+  L1238 head_day, usable, threshold = _window_start(
+  L1245 if threshold <= row_day <= head_day:
+  L1248 cursor = datetime.date.fromisoformat(threshold)
+  L1315 head_day, usable, threshold = _window_start(
+  L1326 if threshold <= row_day <= head_day:
+  L1360 an old history windows against itself), the threshold comes from the one
+  L1379 head_day, usable, threshold = _window_start(head, window_days)
+  L1382 if str(r.get('day') or '')[:10] >= threshold]
+  L1771 def _out_of_window_waiting(record_path, rows, threshold):
+  L1803 head = str(threshold or '')[:10]
+  L1819 def _pending_out_of_window(record_path, rows, threshold):
+  L1843 away). `threshold` is the window's first day, compared on the literal first
+  L1879 threshold)
+  L1949 head_day, usable, threshold = _window_start(day, window_days)
+  L1960 threshold)
+  L2010 head_day, usable, threshold = _window_start(day, window_days)
+  L2014 or threshold <= str(r.get('day') or '')[:10] <= head_day]
+  L2042 if usable and not (threshold <= fday <= head_day):
+  L2211 got = _pending_out_of_window(record_path, frows, threshold)
+== P1b: live measurement of a day split by the window edge ==
+head=2026-11-19 usable=True threshold=2026-11-14 (window 6 -> 11-14..11-19)
+in_window_rows=1 of 4; day 11-13 in window=False
+presence={"head": "2026-11-19", "present": 1, "repeat": 0, "retry": 0, "rows": 1, "window": 6}
+read: the in-window 11-13 row is the 3rd row of that day on disk, yet repeat counts 0 and retry counts 0
+== P2: would looking outside move existing arms / invariants ==
+suite_exact_suffix_pins=6
+suite_token_dict_reads(t4_.get)=35
+suite_count_absent2=4
+  worldA(w7) pre_days=['2026-09-20'] in_days=['2026-11-18', '2026-11-19'] split=[]
+  single-day(w7) pre_days=[] in_days=['2026-11-19'] split=[]
+  y2001(w2) pre_days=['2001-01-01', '2001-03-01'] in_days=['2001-03-05'] split=[]
+  extended-retry demo: repeat=0 retry=0 -> extended retry would read 1 and break retry<=repeat
+== P3: name availability in module + suite ==
+  edge_rows     module=0 suite=0
+  edge_days     module=0 suite=0
+  split_rows    module=0 suite=0
+  split_days    module=0 suite=0
+  window_edge   module=0 suite=0
+  continuation  module=0 suite=0
+  edge          module=2 suite=0
+  flag_off_pins_hold=True
