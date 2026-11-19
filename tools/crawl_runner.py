@@ -210,6 +210,28 @@ passes isinstance). Refused here: putting the list on the DAYS header, adding
 the key to the series pairs or the 30-key trend row, reading a missing key as
 zero, summing or maxing across rows, and backfilling old rows.
 
+A WINDOW THAT SAYS IT TRUNCATED (R3024): that listing printed every row with no
+window, so its length grew with the file (one row per day, kept forever) while
+the DAYS series had taken a `--days` limit since R3000. Measured before this
+change (qa/probe-R3024.log): the unwindowed header is pinned by TWO
+exact-equality arms (P2a), `--days` already has seven readers elsewhere and
+this branch reads none of them (Q3b), and nothing anywhere reads `days=` as the
+printed-line count (Q2a/Q2c). So the window is OPT-IN and the default face is
+byte-identical: `--failure-days-dropped-window N` prints
+`CRAWL-FAILURE-DAYS-DROPPED days=<n> bad=<n> window=<N> shown=<n>
+truncated=<0|1> hidden=<n> head=<day|none>`, where `days` keeps its own meaning
+(usable rows in the file) and `shown` is what this run printed. Truncation is
+therefore a token on the same line rather than an absent row that a reader
+would take for "that day ate nothing".
+
+The window law is NOT re-derived here: `_window_start(head, N)` is the one
+place it lives (R3014), and head is the file's OWN newest row - data-derived,
+so no clock and no wall-day drift (AC-RUN41 arm 7 pins this with 2001 rows).
+Only `day >= threshold` is kept: no sort, no de-duplication (a same day twice
+stays twice, the R3023 law untouched), and rows below the threshold are counted
+into `hidden` instead of vanishing silently. An empty history answers
+head=none shown=0 truncated=0 - absence is still an honest zero.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1016,7 +1038,7 @@ def summarize_failure_days(path, limit=7):
     return out
 
 
-def list_failure_days_dropped(path):
+def list_failure_days_dropped(path, window_days=None):
     """Per-day eaten-lines listing; each row speaks only for itself.
 
     WHY (R3023, measured before this existed - qa/probe-R3023.log): R3021
@@ -1036,15 +1058,43 @@ def list_failure_days_dropped(path):
     isinstance(x, int). No sum, no maximum, no backfill: R3020/R3022 refused
     summing a key older rows do not carry, and 0 would be an invented number.
 
+    R3024 WINDOW (opt-in, default None): the listing had no window, so it grew
+    with the file. With `window_days` set, the head day is the file's OWN last
+    usable row (data-derived - no clock, so two runs on the same file agree and
+    an old history windows against itself), the threshold comes from the one
+    window law `_window_start`, and rows older than it are COUNTED into
+    `hidden` rather than dropped silently. `days` keeps its own meaning (usable
+    rows in the file); `shown` is what this call returns. `truncated` is a
+    boolean and `hidden` an int, so a truncated listing can never read like a
+    short file. No sort, no de-duplication: a same day twice stays twice.
+
     DISPLAY ONLY: writes nothing, gates nothing. An absent file answers zero
     rows - the same "absence is zero" law as read_failure_days.
     """
     rows, bad = read_failure_days(path)
-    return {'days': len(rows), 'bad': bad,
-            'rows': [{'day': r.get('day'),
-                      'dropped': (r.get('dropped')
-                                  if type(r.get('dropped')) is int else None)}
-                     for r in rows]}
+    listing = {'days': len(rows), 'bad': bad,
+               'rows': [{'day': r.get('day'),
+                         'dropped': (r.get('dropped')
+                                     if type(r.get('dropped')) is int else None)}
+                        for r in rows]}
+    if window_days is None:
+        return listing
+    head = str(rows[-1].get('day') or '') if rows else ''
+    head_day, usable, threshold = _window_start(head, window_days)
+    if usable:
+        kept = [r for r in listing['rows']
+                if str(r.get('day') or '')[:10] >= threshold]
+    else:
+        # No usable head day (empty file): nothing can be windowed, and
+        # claiming a window opened would invent a measurement.
+        kept = []
+    listing['window'] = window_days
+    listing['head'] = head_day or None
+    listing['shown'] = len(kept)
+    listing['truncated'] = len(kept) < len(listing['rows'])
+    listing['hidden'] = len(listing['rows']) - len(kept)
+    listing['rows'] = kept
+    return listing
 
 
 def failure_kind(error):
@@ -2082,6 +2132,13 @@ def main(argv=None):
                          'one line per row in file order, none for a row '
                          'written before the field (read-only display; writes '
                          'and gates nothing)')
+    ap.add_argument('--failure-days-dropped-window', dest='dropped_window',
+                    type=int, default=None,
+                    help='keep only the last N days of that listing, measured '
+                         'back from the file\'s own newest row; the header '
+                         'then carries window=/shown=/truncated=/hidden=/head= '
+                         'so a shortened list never reads like a short file '
+                         '(read-only display; gates nothing)')
     ap.add_argument('--snapshot-failures', dest='snapshot_failures',
                     action='store_true',
                     help='persist today\'s failure counts as one history row '
@@ -2115,9 +2172,18 @@ def main(argv=None):
                  series['size_gate'], series['gate_ref_mb']))
         return 0
     if args.failure_days_dropped:
-        listing = list_failure_days_dropped(failure_day_path(args.root))
-        print('CRAWL-FAILURE-DAYS-DROPPED days=%d bad=%d'
-              % (listing['days'], listing['bad']))
+        listing = list_failure_days_dropped(failure_day_path(args.root),
+                                            args.dropped_window)
+        if args.dropped_window is None:
+            # Byte-identical to the shape two suite arms pin by equality.
+            print('CRAWL-FAILURE-DAYS-DROPPED days=%d bad=%d'
+                  % (listing['days'], listing['bad']))
+        else:
+            print('CRAWL-FAILURE-DAYS-DROPPED days=%d bad=%d window=%d '
+                  'shown=%d truncated=%d hidden=%d head=%s'
+                  % (listing['days'], listing['bad'], listing['window'],
+                     listing['shown'], 1 if listing['truncated'] else 0,
+                     listing['hidden'], listing['head'] or 'none'))
         for item in listing['rows']:
             print('DAY-DROPPED day=%s dropped=%s'
                   % (item['day'],

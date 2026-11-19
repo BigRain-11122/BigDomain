@@ -1,0 +1,83 @@
+=== R3024 PROBE rev1 (tmp/probe_R3024.py) - read-only, temp words only, no socket, no clock ===
+P1 reuse of the one window law
+P1a _window_start call sites = 3
+   head_day, usable, threshold = _window_start(day, window_days)
+   head_day, usable, threshold = _window_start(day, window_days)
+   head_day, usable, threshold = _window_start(day, window_days)
+P1b window/threshold words in list_failure_days_dropped = 0
+P1c (rev1 predicate was wrong - see rev2 Q1)
+P1d _window_start("2026-11-19", 7) = ('2026-11-19', True, '2026-11-13')
+P1e _window_start("2026-11-19", 30) = ('2026-11-19', True, '2026-10-21')
+P1f _window_start("", 7) = ('', False, '')
+P1g _window_start("2026-11-19", 0) = ('2026-11-19', True, '2026-11-19')
+
+P2 the DROPPED header contract in the suite
+P2a exact-equality arms = 2
+   and lines40[0] == 'CRAWL-FAILURE-DAYS-DROPPED days=3 bad=0'
+   and lines40e[0] == 'CRAWL-FAILURE-DAYS-DROPPED days=2 bad=1'
+P2b startswith arms = 0
+P2c DAY-DROPPED token lines in suite = 4
+P2e suite lines naming the subcommand flag = 1
+
+P3 flag space
+P3a args.days uses in main = 7
+P3b failure-days-dropped-window in tree source/tests = 0
+P3c DROPPED branch reads args.days = False
+
+P4 data shapes
+P4a live history rows=1 bad=0 days=['2026-11-19']
+P4b _usable_day 2026-11-19=True 2026-1-9=False x=False 2026-11-19T00:00=True
+P4c 40-row listing days=40 rows=40 (no window option today)
+P4d listing keys today = ['bad', 'days', 'rows']
+P4e row keys today = ['day', 'dropped']
+P4f duplicate day rows kept = ['2026-11-17', '2026-11-17', '2026-11-19']
+P4g absent file with option candidate = {'days': 0, 'bad': 0, 'rows': []}
+
+P5 consumers of the listing name
+P5a tools/crawl_runner.py hits=2
+P5a src/os/test_crawl_runner.py hits=3
+P5a src/os/backlog.md hits=4
+P5a docs/status-export.json hits=2
+P5b scanner reads crawl-failure = False
+
+=== R3024 PROBE rev2 (tmp/probe_R3024b.py) - two rev1 predicates re-measured ===
+Q1 summarize_failure_days is a COUNT tail, not a date window
+Q1a tail expression present = True
+Q1b threshold/date window in that body = False
+Q1c days counts the whole file = True
+
+Q2 who reads days= as the printed line count
+Q2a days-vs-rows/lines arms = 0
+Q2b exact header arms = 2
+Q2c suite lines reading listing rows length = 0
+
+Q3 the DROPPED CLI branch, verbatim
+Q3a branch lines = 9
+Q3b branch reads args.days = False
+Q3c branch header print = ["print('CRAWL-FAILURE-DAYS-DROPPED days=%d bad=%d'"]
+Q3d help text of the flag names windows = False
+
+Q4 how many flag strings the module already owns
+Q4a add_argument count = 15
+Q4b names containing window = []
+
+=== WHAT THESE NUMBERS DECIDE ===
+A. The one window law is reusable as it stands: _window_start(head, N) answers
+   (head, usable, threshold) with threshold = head - (N-1) days, inclusive on
+   both ends (P1d/P1e), refuses an unusable head (P1f) and clamps N to 1 (P1g).
+   Nothing else in the module windows day rows by DATE: summarize_failure_days
+   keeps a COUNT tail (Q1a/Q1b) and counts the whole file (Q1c).
+B. The unwindowed header is pinned by TWO exact-equality arms (P2a), so the fix
+   may not grow that shape by default. A window therefore has to be OPT-IN, and
+   an explicit flag is the only shape that leaves both arms byte-identical
+   (P3c: the branch reads no --days today; Q4b: no name collision).
+C. days= means "usable rows in the file" and NOTHING in the suite reads it as
+   the printed-line count (Q2a/Q2c), so a windowed run can keep days= honest
+   and add shown=/hidden= beside it instead of redefining days=.
+D. Duplicates are real (P4f) and file order is what the reader yields, so a
+   window filters by day only - no sort, no de-duplication, head = the file's
+   own newest row (data-derived, no clock).
+E. self-correction, disclosed: rev1's P1c looked for rows[-limit:] while the
+   code writes rows[-max(1, int(limit)):], and its P3d label was swallowed by a
+   broken print string; both were re-measured in rev2 rather than quietly
+   dropped.

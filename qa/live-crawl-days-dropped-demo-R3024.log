@@ -1,0 +1,64 @@
+--- A no window: every row, header unchanged (rc=0)
+CRAWL-FAILURE-DAYS-DROPPED days=40 bad=0
+DAY-DROPPED day=2026-10-02 dropped=0
+DAY-DROPPED day=2026-10-03 dropped=0
+DAY-DROPPED day=2026-10-04 dropped=0
+DAY-DROPPED day=2026-10-05 dropped=0
+DAY-DROPPED day=2026-10-06 dropped=0
+DAY-DROPPED day=2026-10-07 dropped=0
+DAY-DROPPED day=2026-10-08 dropped=0
+DAY-DROPPED day=2026-10-09 dropped=0
+DAY-DROPPED day=2026-10-10 dropped=0
+DAY-DROPPED day=2026-10-11 dropped=0
+DAY-DROPPED day=2026-10-12 dropped=0
+DAY-DROPPED day=2026-10-13 dropped=0
+DAY-DROPPED day=2026-10-14 dropped=0
+DAY-DROPPED day=2026-10-15 dropped=0
+DAY-DROPPED day=2026-10-16 dropped=0
+DAY-DROPPED day=2026-10-17 dropped=0
+DAY-DROPPED day=2026-10-18 dropped=0
+DAY-DROPPED day=2026-10-19 dropped=0
+DAY-DROPPED day=2026-10-20 dropped=0
+DAY-DROPPED day=2026-10-21 dropped=0
+DAY-DROPPED day=2026-10-22 dropped=0
+DAY-DROPPED day=2026-10-23 dropped=0
+DAY-DROPPED day=2026-10-24 dropped=0
+DAY-DROPPED day=2026-10-25 dropped=0
+DAY-DROPPED day=2026-10-26 dropped=0
+DAY-DROPPED day=2026-10-27 dropped=0
+DAY-DROPPED day=2026-10-28 dropped=0
+DAY-DROPPED day=2026-10-29 dropped=0
+DAY-DROPPED day=2026-10-30 dropped=0
+DAY-DROPPED day=2026-10-31 dropped=0
+DAY-DROPPED day=2026-11-01 dropped=0
+DAY-DROPPED day=2026-11-02 dropped=0
+DAY-DROPPED day=2026-11-03 dropped=0
+DAY-DROPPED day=2026-11-04 dropped=0
+DAY-DROPPED day=2026-11-05 dropped=0
+DAY-DROPPED day=2026-11-06 dropped=0
+DAY-DROPPED day=2026-11-07 dropped=0
+DAY-DROPPED day=2026-11-08 dropped=0
+DAY-DROPPED day=2026-11-09 dropped=0
+DAY-DROPPED day=2026-11-10 dropped=0
+--- B window=7 over 40 days: truncated=1 hidden=33 (rc=0)
+CRAWL-FAILURE-DAYS-DROPPED days=40 bad=0 window=7 shown=7 truncated=1 hidden=33 head=2026-11-10
+DAY-DROPPED day=2026-11-04 dropped=0
+DAY-DROPPED day=2026-11-05 dropped=0
+DAY-DROPPED day=2026-11-06 dropped=0
+DAY-DROPPED day=2026-11-07 dropped=0
+DAY-DROPPED day=2026-11-08 dropped=0
+DAY-DROPPED day=2026-11-09 dropped=0
+DAY-DROPPED day=2026-11-10 dropped=0
+--- C window=3 with one day twice: both kept, no dedupe (rc=0)
+CRAWL-FAILURE-DAYS-DROPPED days=4 bad=0 window=3 shown=4 truncated=0 hidden=0 head=2026-11-10
+DAY-DROPPED day=2026-11-08 dropped=5
+DAY-DROPPED day=2026-11-09 dropped=1
+DAY-DROPPED day=2026-11-09 dropped=3
+DAY-DROPPED day=2026-11-10 dropped=0
+--- D window=7, threshold day kept, the day before hidden (rc=0)
+CRAWL-FAILURE-DAYS-DROPPED days=3 bad=0 window=7 shown=2 truncated=1 hidden=1 head=2026-11-10
+DAY-DROPPED day=2026-11-04 dropped=1
+DAY-DROPPED day=2026-11-10 dropped=0
+--- E 2001 history: head is the file, not the wall clock (rc=0)
+CRAWL-FAILURE-DAYS-DROPPED days=3 bad=0 window=3 shown=1 truncated=1 hidden=2 head=2001-03-05
+DAY-DROPPED day=2001-03-05 dropped=3

@@ -1,0 +1,7 @@
+# no window (default face, unchanged)
+CRAWL-FAILURE-DAYS-DROPPED days=1 bad=0
+DAY-DROPPED day=2026-11-19 dropped=0
+
+# window=7 on this checkout
+CRAWL-FAILURE-DAYS-DROPPED days=1 bad=0 window=7 shown=1 truncated=0 hidden=0 head=2026-11-19
+DAY-DROPPED day=2026-11-19 dropped=0

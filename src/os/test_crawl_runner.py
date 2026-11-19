@@ -258,6 +258,20 @@ maximum, no backfill. `none` is the word for an unmeasured row; 0 means that
 day really ate nothing. The DAYS face, the (day, on_day) pairs and the 30-key
 trend row are untouched and arm 6 checks them in the same world.
 
+AC-RUN41 (R3024) grades the WINDOW that listing lacked. It printed every row
+with no bound, so its length grew with the file while the DAYS series had a
+`--days` limit since R3000. Measured before the change (qa/probe-R3024.log): the
+unwindowed header is pinned by two exact-equality arms (P2a), `--days` already
+has seven other readers (Q3b), and nothing reads `days=` as the printed-line
+count (Q2a/Q2c) - so the window is OPT-IN (`--failure-days-dropped-window N`)
+and the default face keeps its exact shape. The head day is the file's OWN last
+usable row, and the threshold comes from the one window law `_window_start`
+(R3014): no clock, so a 2001 history windows against itself (arm 7). Rows older
+than the threshold are counted into `hidden` and the header says
+truncated=<0|1>, because a shortened list with no token would read exactly like
+a file that never had those days. `days=` keeps its own meaning (usable rows in
+the file) and `shown=` is what this run printed; a same day twice stays twice.
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -3958,6 +3972,151 @@ def main():
        and 'crawl-failure' not in scan_src18,
        'the listing writes no byte, prints no verdict, and the scanner still '
        'reads none of it')
+
+    # AC-RUN41 (R3024): the per-day list printed every row with no window, so
+    # its length grew with the file while the DAYS series had a --days limit
+    # since R3000. Measured before this arm set existed (qa/probe-R3024.log):
+    # the unwindowed header is pinned by two exact-equality arms (P2a), --days
+    # already has seven other readers (Q3b), nothing reads days= as the printed
+    # line count (Q2a/Q2c), and duplicates really sit on disk (P4f). So the
+    # window is opt-in, the default face stays byte-identical, and truncation is
+    # a token rather than a missing row.
+    def dd41(root, extra=None):
+        argv = ['--failure-days-dropped', '--root', root]
+        if extra is not None:
+            argv = ['--failure-days-dropped',
+                    '--failure-days-dropped-window', str(extra),
+                    '--root', root]
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(argv)
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def day_rows_41(lines):
+        out = []
+        for line in lines:
+            if not line.startswith('DAY-DROPPED '):
+                continue
+            tok = dict(part.split('=', 1) for part in line.split()[1:])
+            out.append(tok['day'])
+        return out
+
+    span41 = ['2026-10-%02d' % d for d in range(2, 32)] + \
+             ['2026-11-%02d' % d for d in range(1, 11)]
+
+    # arm 1: with no window asked for, the dict is exactly the old shape - the
+    # new keys never leak into the default face
+    r41 = world()
+    roots.append(r41)
+    p41 = hist37(r41)
+    put_days(p41, [plain_day(d, 0, dropped=0) for d in span41])
+    lst41 = RUN.list_failure_days_dropped(p41)
+    ok('AC-RUN41', sorted(lst41.keys()) == ['bad', 'days', 'rows']
+       and sorted(lst41['rows'][0].keys()) == ['day', 'dropped']
+       and lst41['days'] == 40 and len(lst41['rows']) == 40,
+       'an unwindowed call answers exactly {days,bad,rows} with {day,dropped} '
+       'rows - the window keys do not leak into the default shape')
+
+    # arm 2: 40 days asked for as 7 keeps the last 7 in file order and says so
+    lst41b = RUN.list_failure_days_dropped(p41, 7)
+    ok('AC-RUN41', lst41b['days'] == 40 and lst41b['window'] == 7
+       and lst41b['shown'] == 7 and lst41b['truncated'] is True
+       and lst41b['hidden'] == 33 and lst41b['head'] == span41[-1]
+       and [r['day'] for r in lst41b['rows']] == span41[-7:],
+       'a 7-day window over a 40-day history keeps the last seven rows in file '
+       'order and reports shown=7 truncated=True hidden=33 head=<last day>')
+
+    # arm 3: a same day twice inside the window stays twice - a window is a
+    # filter, never a de-duplicator
+    r41c = world()
+    roots.append(r41c)
+    p41c = hist37(r41c)
+    put_days(p41c, [plain_day('2026-11-08', 5, dropped=5),
+                    plain_day('2026-11-09', 1, dropped=1),
+                    plain_day('2026-11-09', 2, dropped=3),
+                    plain_day('2026-11-10', 0, dropped=0)])
+    lst41c = RUN.list_failure_days_dropped(p41c, 3)
+    ok('AC-RUN41', [r['day'] for r in lst41c['rows']] == ['2026-11-08',
+                                                         '2026-11-09',
+                                                         '2026-11-09',
+                                                         '2026-11-10']
+       and [r['dropped'] for r in lst41c['rows']] == [5, 1, 3, 0]
+       and lst41c['shown'] == 4 and lst41c['truncated'] is False,
+       'one day written twice inside the window is listed twice with its own '
+       'values - filtering by day never collapses rows')
+
+    # arm 4: the threshold is inclusive on both ends, the one window law's own
+    # arithmetic rather than a second copy
+    r41d = world()
+    roots.append(r41d)
+    p41d = hist37(r41d)
+    put_days(p41d, [plain_day('2026-11-03', 1, dropped=9),
+                    plain_day('2026-11-04', 1, dropped=1),
+                    plain_day('2026-11-10', 1, dropped=0)])
+    lst41d = RUN.list_failure_days_dropped(p41d, 7)
+    ok('AC-RUN41', [(r['day'], r['dropped']) for r in lst41d['rows']]
+       == [('2026-11-04', 1), ('2026-11-10', 0)]
+       and lst41d['hidden'] == 1
+       and lst41d['truncated'] is True,
+       'a row exactly on the threshold is kept and the day before it is '
+       'counted into hidden - the boundary is inclusive, and the dropped 9 '
+       'does not land on a day that stayed')
+
+    # arm 5: a window wider than the file truncates nothing
+    r41e = world()
+    roots.append(r41e)
+    p41e = hist37(r41e)
+    put_days(p41e, [plain_day('2026-11-08', 1, dropped=2),
+                    plain_day('2026-11-09', 1, dropped=1),
+                    plain_day('2026-11-10', 1, dropped=0)])
+    lst41e = RUN.list_failure_days_dropped(p41e, 30)
+    ok('AC-RUN41', lst41e['shown'] == 3 and lst41e['days'] == 3
+       and lst41e['truncated'] is False and lst41e['hidden'] == 0
+       and [r['day'] for r in lst41e['rows']]
+       == ['2026-11-08', '2026-11-09', '2026-11-10'],
+       'a window larger than the file reports shown=days truncated=False '
+       'hidden=0 and leaves the rows untouched')
+
+    # arm 6: an absent history with a window is still an honest zero, not a
+    # raise and not an invented head day
+    missing41 = os.path.join(world(), 'nope.jsonl')
+    lst41f = RUN.list_failure_days_dropped(missing41, 5)
+    ok('AC-RUN41', lst41f == {'days': 0, 'bad': 0, 'rows': [], 'window': 5,
+                              'head': None, 'shown': 0, 'truncated': False,
+                              'hidden': 0},
+       'an absent history under a window answers days=0 shown=0 head=None '
+       'truncated=False without raising')
+
+    # arm 7: no clock - the head is the file's own newest row, so a 2001
+    # history windows against itself instead of against today
+    r41g = world()
+    roots.append(r41g)
+    p41g = hist37(r41g)
+    put_days(p41g, [plain_day('2001-03-01', 1, dropped=1),
+                    plain_day('2001-03-02', 1, dropped=2),
+                    plain_day('2001-03-05', 1, dropped=3)])
+    lst41g = RUN.list_failure_days_dropped(p41g, 3)
+    ok('AC-RUN41', lst41g['head'] == '2001-03-05'
+       and lst41g['shown'] == 1 and lst41g['hidden'] == 2
+       and [r['day'] for r in lst41g['rows']] == ['2001-03-05'],
+       'a 2001 history windows back from its own last row, so the window never '
+       'reads the wall clock and an old file is not silently emptied')
+
+    # arm 8: two CLI runs over one world - the default header stays byte-equal
+    # to the shape two older arms pin, and the windowed header carries the
+    # truncation tokens on the same single line
+    rc41h, lines41h = dd41(r41)
+    rc41i, lines41i = dd41(r41, 3)
+    ok('AC-RUN41', rc41h == 0
+       and lines41h[0] == 'CRAWL-FAILURE-DAYS-DROPPED days=40 bad=0'
+       and len(day_rows_41(lines41h)) == 40
+       and rc41i == 0
+       and lines41i[0] == ('CRAWL-FAILURE-DAYS-DROPPED days=40 bad=0 window=3 '
+                           'shown=3 truncated=1 hidden=37 head=%s' % span41[-1])
+       and day_rows_41(lines41i) == span41[-3:],
+       'the unwindowed header is unchanged byte for byte while the windowed '
+       'run names window/shown/truncated/hidden/head and prints the last three '
+       'rows in file order')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

@@ -1,0 +1,5 @@
+HONEST P1-truncation-spoken=PASS P2-boundary-inclusive=PASS P3-no-dedupe=PASS P4-no-clock=PASS
+M1 off-by-one window (threshold = head - N) -> P2-boundary-inclusive CAUGHT (others: P1=FAIL,P3=PASS,P4=FAIL)
+M2 silent truncation (truncated never true) -> P1-truncation-spoken CAUGHT (others: P2=PASS,P3=PASS,P4=PASS)
+M3 wall-clock head instead of the file -> P4-no-clock CAUGHT (others: P1=FAIL,P2=FAIL,P3=FAIL)
+M4 de-duplicate days inside the window -> P3-no-dedupe CAUGHT (others: P1=PASS,P2=PASS,P4=PASS)

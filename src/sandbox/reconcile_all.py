@@ -4707,8 +4707,11 @@ SUITES = [
     # R3023 added AC-RUN40: every day row's own eaten count now has a listing
     # of its own - file order, none for a row written before the field, no sum
     # - because the DAYS header prints one line (39 -> 40, the same row).
+    # R3024 added AC-RUN41: that listing takes an OPT-IN day window measured
+    # back from the file's own newest row, and a truncated list names itself on
+    # the header instead of printing fewer rows (40 -> 41, the same row).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 40),
+     os.path.join("..", "os", "test_crawl_runner.py"), 41),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep
