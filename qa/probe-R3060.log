@@ -1,0 +1,15 @@
+R3060 probe (read-only, private worlds under tmp)
+P1 live files
+  failures: absent
+  day-history: rows=2 bad=0 tie_pairs=0
+  record: rows=3 bad=0 tie_pairs=0
+P2 A-first: newest_src=https://b.example/p since_ok=no flips=0 pending=(1, 2) newest_srcs=2 keys_naming_the_twin=['newest_src', 'pending_src']
+P2 A-first: since_ok_is_about=https://b.example/p (the named source only)
+P2 B-first: newest_src=https://a.example/p since_ok=yes flips=0 pending=(1, 2) newest_srcs=2 keys_naming_the_twin=['pending_src']
+P2 B-first: since_ok_is_about=https://a.example/p (the named source only)
+P3 same evidence, two file orders: since_ok no vs yes ; pending (1, 2) vs (1, 2) (pending already counts the tied second source)
+P3 counts that moved with the order: ['newest_src', 'since_ok']
+P4 three sources at one instant: newest_srcs=3 newest_src=https://c.example/p keys_naming_a_source=['newest_src', 'pending_src']
+P5 pending face last_at= 2026-11-19T20:00:00+00:00 vs 2026-11-20T04:00:00+08:00 (two writings of ONE instant; no word says two rows share it)
+P6 trend line=257 chars; a 24-char name token adds 9%
+P6 payload keys with a source name today: ['newest_src', 'newest_srcs', 'pending_src']

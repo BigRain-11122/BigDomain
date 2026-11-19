@@ -1,0 +1,7 @@
+HONEST world=pair verdict=GREEN twin='https://a60.example/p'
+HONEST world=single verdict=GREEN twin=None
+HONEST world=three verdict=GREEN twin='many'
+MUTANT twin-is-the-named-source trapped_by=pair,single,three verdict=CAUGHT
+MUTANT always-many trapped_by=pair,single verdict=CAUGHT
+MUTANT rows-instead-of-sources trapped_by=three verdict=CAUGHT
+RESTORE twin='https://a60.example/p'

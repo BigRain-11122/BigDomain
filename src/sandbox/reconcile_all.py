@@ -4768,9 +4768,10 @@ SUITES = [
     # echoes one fact at one precision on every face, 73 -> 74; R3058 names the
     # LAST-written row when two rows share the newest instant and publishes how
     # many share it, 74 -> 75. R3059 adds the trend's source count beside that
-    # name (newest_srcs=, AC-RUN76), 75 -> 76.
+    # name (newest_srcs=, AC-RUN76), 75 -> 76. R3060 names the OTHER source at
+    # that instant (newest_twin=, AC-RUN77), 76 -> 77.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 76),
+     os.path.join("..", "os", "test_crawl_runner.py"), 77),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

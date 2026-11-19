@@ -562,6 +562,25 @@ CRAWL-PENDING-OLD-LIST, whose `last_at=` is already covered by newest_rows= on
 --failures. SELECTION IS UNCHANGED: the trend still names the last-written row
 of the tie (`_newest_rows` then the last element, the R3058 law).
 
+THE SECOND SOURCE AT THAT INSTANT (R3060, measured first -
+qa/probe-R3060.log): R3059's count told a reader a second source was there and
+left it nameless, and the probe measured the sharper half - A repaired and B
+still broken at one instant read since_ok=no or since_ok=yes depending only on
+which row the file listed last, while B's (or A's) own health appeared in no
+key (P2/P3); pending= read (1,2) under BOTH orders, so the tied second source
+was already counted there (P3). One bounded word: `newest_twin=` on
+--failure-trend names the OTHER source at that instant when the tie has exactly
+two, reads `none` when there is only one, and `many` when more than two share
+the instant (newest_srcs= carries that number; no single name can answer a
+three-way tie, P4). REFUSED: a numbered family (newest_src2, newest_src3...),
+which would turn the one-line contract into one line per source and has no
+unique second member; a tie word on CRAWL-PENDING-OLD-LIST, whose last_at=
+answers "the channel's last write" and whose own tie is a per-source question
+that face does not ask (measured P5: the printed writing follows the last row);
+and folding the twin into pending= (P3 shows it is already inside that
+fraction). scope is a NAME, not a count: since_ok/flips still answer for the
+one named source, stated rather than implied.
+
 WHICH DAY A ROW COUNTS IN (R3055, measured first - qa/probe-R3055.log): R3048
 gave the clock faces one day law - the LOCAL day of the instant, `_day_of` -
 but only the window HEAD used it; every count and span still cut the first ten
@@ -1612,6 +1631,39 @@ def _newest_row(rows):
     """The LAST-WRITTEN row among those naming the newest instant (R3058)."""
     picked = _newest_rows(rows)
     return picked[-1] if picked else None
+
+
+def _twin_name(picked, named):
+    """The OTHER source at a tie - a name when there is exactly one, else a word.
+
+    WHY (R3060, measured qa/probe-R3060.log): R3059 published newest_srcs= on
+    --failure-trend, so a reader learned that a second source failed at the same
+    instant - and still could not get its name. The same probe measured a
+    sharper defect: with A repaired and B still broken at one instant, the line
+    read since_ok=no when the file listed A first and since_ok=yes when it
+    listed B first, i.e. the health verdict flipped with write order while the
+    other source's health was absent from every key. This names that other
+    source so a person can act on both failures.
+
+    BOUNDED ON PURPOSE: a name only when the tie has exactly two sources, 'many'
+    when it has more (newest_srcs= already carries the number, and no single
+    name can answer a three-way tie). A numbered family (newest_src2, src3...)
+    was refused - it turns the one-line contract into one line per source, and
+    there is no unique "second" to number. Rows without a source_url are
+    skipped, the same way newest_srcs= counts them.
+
+    This is a NAME, not a count: pending= already counts every judged source in
+    the window (measured: (1,2) under both file orders), so folding the twin
+    into that fraction would change what it means.
+    """
+    others = [row.get('source_url') for row in picked or ()
+              if row.get('source_url') and row.get('source_url') != named]
+    distinct = sorted(set(others))
+    if not distinct:
+        return None
+    if len(distinct) == 1:
+        return distinct[0]
+    return 'many'
 
 
 def _window_start(day, window_days=7):
@@ -3616,6 +3668,11 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # scope (--failures counts the whole channel, this face only its window),
     # so the word is deliberately different from newest_rows=.
     newest_srcs = 0
+    # R3060: the NAME of the other source at that instant (None when there is
+    # only one, 'many' when a name cannot answer), because newest_srcs= says a
+    # second source is there and measured (qa/probe-R3060.log P2) it appeared
+    # in no key - while since_ok= answered for whichever one was written last.
+    newest_twin = None
     since_ok = 'unmeasured'
     # R3002 STABILITY: since_ok answers "was it seen working afterwards", which a
     # source that was fixed, broke again and was fixed again answers YES to -
@@ -3641,6 +3698,9 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
                            if row.get('source_url')})
         if newest is not None:
             newest_src = newest.get('source_url')
+            # R3060: the other source at the same instant, so the reader who
+            # learned "there are two" from newest_srcs= gets the second name.
+            newest_twin = _twin_name(newest_picked, newest_src)
             since_ok = _since_ok(record_path, newest_src,
                                  newest.get('failed_at'))
             flips = _flips(record_path, newest_src, frows)
@@ -3754,6 +3814,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'recur': recur, 'cov': cov, 'wcov': wcov,
             'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
             'newest_src': newest_src, 'newest_srcs': newest_srcs,
+            'newest_twin': newest_twin,
             'since_ok': since_ok,
             'flips': flips, 'pending': pending, 'pending_src': pending_src,
             'pending_age_d': pending_age_d,
@@ -4285,7 +4346,7 @@ def main(argv=None):
               'worst=%s recurring=%d sources=%d bad=%d bad_days=%s '
               'evidence=%s kind=%s '
               'recur=%s cov=%s wcov=%s newest_src=%s newest_srcs=%d '
-              'since_ok=%s flips=%s '
+              'newest_twin=%s since_ok=%s flips=%s '
               'pending=%s pending_src=%s pending_age_d=%s '
               'pending_age_min_d=%s pending_age_med_d=%s pending_old=%s '
               'pending_old_age_d=%s pending_old_age_min_d=%s fcov=%s rcov=%s '
@@ -4297,6 +4358,7 @@ def main(argv=None):
                  trend['evidence'], kind_txt,
                  recur_txt, cov_txt, wcov_txt,
                  trend['newest_src'] or 'none', trend['newest_srcs'],
+                 trend['newest_twin'] or 'none',
                  trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
                  pending_txt, trend['pending_src'] or 'none', age_txt,
