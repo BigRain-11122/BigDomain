@@ -1,0 +1,25 @@
+honest           arm1-covers        GREEN
+honest           arm3-absent        GREEN
+honest           arm4-empty         GREEN
+honest           arm5-broken-line   GREEN
+honest           arm6-two-faces     GREEN
+honest reds=none
+M1-full-stamps   arm1-covers        RED
+M1-full-stamps   arm3-absent        GREEN
+M1-full-stamps   arm4-empty         GREEN
+M1-full-stamps   arm5-broken-line   RED
+M1-full-stamps   arm6-two-faces     RED
+M1-full-stamps expect-red=True got-red=['arm1-covers', 'arm5-broken-line', 'arm6-two-faces']
+M2-raw-regex     arm1-covers        GREEN
+M2-raw-regex     arm3-absent        GREEN
+M2-raw-regex     arm4-empty         GREEN
+M2-raw-regex     arm5-broken-line   RED
+M2-raw-regex     arm6-two-faces     GREEN
+M2-raw-regex expect-red=True got-red=['arm5-broken-line']
+M3-invented      arm1-covers        GREEN
+M3-invented      arm3-absent        RED
+M3-invented      arm4-empty         RED
+M3-invented      arm5-broken-line   GREEN
+M3-invented      arm6-two-faces     GREEN
+M3-invented expect-red=True got-red=['arm3-absent', 'arm4-empty']
+NEGCTL PASS

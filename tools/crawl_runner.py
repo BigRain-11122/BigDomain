@@ -188,6 +188,27 @@ holds no row for the source answers 0, meaning it was never seen working in
 between. A trimmed record can therefore undercount, exactly as since_ok=no
 already could - stated, not patched. flips gates nothing: no PASS/FLAG token.
 
+RECORD COVERAGE (R3003): measured before this was written - a record file that
+STOPS before the failure and one that COVERS the days after it (through another
+source) printed the SAME row, since_ok=no flips=1, so "we looked and it never
+came back" and "we never looked after the failure" were one line. The record
+face is the only file that can answer the repair question, so its own reach now
+prints as rcov=<first day>..<last day> beside the answer it supports. THREE
+SEPARATE FACES, named so they cannot be read as one: cov= and wcov= describe the
+DAILY FAILURE HISTORY file (qa/crawl-failure-days.jsonl), while rcov= describes
+the CRAWL RECORD file (qa/crawl-log.jsonl) - different files, and neither
+reading may be explained by the other. rcov is DAY-granular (the first ten
+characters the record writer already owns), so the literal cross-zone ordering
+weakness the two stamp comparisons carry cannot leak into it, and an absent file
+or a file with zero usable rows answers none rather than an invented span.
+Display only: nothing gates on rcov, no PASS/FLAG token is emitted, and the
+scanner still reads neither file. NOT changed this window, and measured rather
+than implied: a record that ends before the failure still reads since_ok=no and
+flips=0, so the ambiguity is now VISIBLE (rcov names the empty after-period) but
+NOT resolved - re-judging it unmeasured would rewrite two shipped arms
+(AC-RUN18 arm 3 and AC-RUN19 B7, both pinned on a success recorded before the
+failure), which is a contract change rather than an added face.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -608,6 +629,29 @@ def _flips(record_path, source_url, failures):
     return flips
 
 
+def _record_coverage(record_path):
+    """(first_day, last_day) the crawl record actually reaches, or None.
+
+    WHY (R3003): since_ok answers "was this source seen working afterwards?" by
+    finding no later row - but no later row is also what a record that stopped
+    being written yesterday produces, so "still broken" and "never observed"
+    printed the same verdict. This is the reach of the evidence, printed beside
+    the verdict it supports, not a new verdict.
+
+    DAY granularity on purpose: the first ten characters the record writer
+    already owns, deduplicated and sorted. An absent file and a file with zero
+    usable rows both answer None - "no coverage measured" - because a span built
+    from no rows would be invented. Malformed lines never widen the span:
+    read_records already drops them and counts them bad.
+    """
+    if not record_path or not os.path.isfile(record_path):
+        return None
+    rows, _bad = CR.read_records(record_path)
+    days = sorted({str(row.get('fetched_at') or '')[:10] for row in rows
+                   if str(row.get('fetched_at') or '')})
+    return (days[0], days[-1]) if days else None
+
+
 def summarize_failure_trend(history_path, failures_path, day, window_days=7,
                             record_path=None):
     """One line for "is today worse than the days before, and is it the same
@@ -771,6 +815,11 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             since_ok = _since_ok(record_path, newest_src,
                                  newest.get('failed_at'))
             flips = _flips(record_path, newest_src, frows)
+    # R3003 COVERAGE OF THE EVIDENCE FACE: the same row now names how far the
+    # crawl record itself reaches, so since_ok=no standing on one day of record
+    # cannot pass for a record that looked after the failure. A different file
+    # from cov/wcov (which describe the failure-day history).
+    rcov = _record_coverage(record_path)
     return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
             'worst': (None, None) if worst_row is None else (wday, wcount),
@@ -778,7 +827,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'recur': recur, 'cov': cov, 'wcov': wcov,
             'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
             'newest_src': newest_src, 'since_ok': since_ok,
-            'flips': flips, 'window_days': window_days}
+            'flips': flips, 'rcov': rcov, 'window_days': window_days}
 
 
 def crawled_today(repo_root, day):
@@ -996,15 +1045,19 @@ def main(argv=None):
                    else '%s..%s' % trend['cov'])
         wcov_txt = ('none' if trend['wcov'] is None
                     else '%d/%d' % trend['wcov'])
+        rcov_txt = ('none' if trend['rcov'] is None
+                    else '%s..%s' % trend['rcov'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
               'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
-              'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s'
+              'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
+              'rcov=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
                  recur_txt, cov_txt, wcov_txt,
                  trend['newest_src'] or 'none', trend['since_ok'],
-                 'unmeasured' if trend['flips'] is None else trend['flips']))
+                 'unmeasured' if trend['flips'] is None else trend['flips'],
+                 rcov_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)

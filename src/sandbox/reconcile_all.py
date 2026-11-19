@@ -4672,7 +4672,7 @@ SUITES = [
     # broken and fixed again stop reading the same row. (AC-RUN19 pinned in the
     # R3002 PIN row before the code.)
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 19),
+     os.path.join("..", "os", "test_crawl_runner.py"), 20),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

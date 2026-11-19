@@ -49,6 +49,15 @@ flips is UNMEASURED (never 0) without a record file or a side channel, that a
 same-second success and failure are not ordered into an invented flip, and that
 recur keeps answering its own question (same-day flapping is one flip and
 recur=0:0 at once).
+AC-RUN20 (R3003) grades RECORD COVERAGE: rcov= names how far the crawl record
+itself reaches (first..last day of its usable rows), so since_ok=no standing on
+a record that stopped before the failure stops reading like a record that
+looked afterwards. The arm that pairs a pre-failure record with a visible span
+deliberately pins BOTH readings: the span makes the ambiguity visible, and
+since_ok staying "no" pins that this round did NOT re-judge the verdict - a
+future contract change must move that arm on purpose. It also pins that cov=
+(history face) and rcov= (record face) are read from different files in the
+same world, and that malformed rows can neither widen nor invent a span.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -1054,7 +1063,8 @@ def main():
                      'delta', 'worst', 'recurring', 'sources', 'recur', 'cov',
                      'wcov', 'evidence', 'kind', 'kind_count', 'window_days'])
     ok('AC-RUN18', tA5['newest_src'] is None and tA5['since_ok'] == 'unmeasured'
-       and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok', 'flips'])
+       and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok', 'flips',
+                                               'rcov'])
        and tA5['evidence'] == 'history' and tA5['today'] == 0,
        'a pruned side channel answers none/unmeasured and leaves every existing field where it was')
 
@@ -1171,8 +1181,114 @@ def main():
        and 'since_ok=yes' in lineB9 and 'PASS' not in lineB9
        and 'FLAG' not in lineB9 and 'verdict' not in lineB9
        and 'crawl-failure' not in scan_src18
-       and set(tB2.keys()) == baseB | set(['flips']),
+       and set(tB2.keys()) == baseB | set(['flips', 'rcov']),
        'one display row carries the stability count, adds exactly one key, and stays outside the scanner')
+
+    # AC-RUN20 (R3003): the trend answered "was it seen working afterwards" but
+    # never "how far did the record it read actually reach" - measured before
+    # this existed: a record stopping BEFORE the failure and one covering the
+    # days after (through another source) printed the SAME row. rcov= names the
+    # span; the verdict itself is deliberately left where it was.
+    def rcov_world(record_rows, failure_rows, history_rows):
+        root = world()
+        roots.append(root)
+        for row in record_rows:
+            CR.append_record(CR.record_path(root), row[0], row[1], row[2])
+        for row in failure_rows:
+            RUN.append_failure(RUN.failure_path(root), row[0], row[1], row[2])
+        write_days(RUN.failure_day_path(root), history_rows)
+        return root, RUN.summarize_failure_trend(
+            RUN.failure_day_path(root), RUN.failure_path(root), TODAY,
+            record_path=CR.record_path(root))
+
+    SRC20 = 'https://pay.weixin.qq.com/doc/v2/merchant/4011986682'
+    OTHER20 = 'https://other.example/page'
+    FAILED20 = '2026-11-18T09:00:00+08:00'
+
+    # arm 1: a record covering the days after the failure
+    _rC1, tC1 = rcov_world(
+        [(SRC20, '2026-11-18T08:00:00+08:00', 'no-drift'),
+         (OTHER20, '2026-11-19T10:00:00+08:00', 'no-drift')],
+        [(SRC20, FAILED20, 'E_FETCH TimeoutError: x')],
+        [day_row('2026-11-18', 1)])
+    ok('AC-RUN20', tC1['rcov'] == ('2026-11-18', '2026-11-19'),
+       'the span names both days the record actually reaches, sorted by day')
+
+    # arm 2: the record STOPS before the failure - the span shows it, and the
+    # verdict is pinned as unchanged so a silent re-judge cannot pass
+    _rC2, tC2 = rcov_world(
+        [(SRC20, '2026-11-17T10:00:00+08:00', 'no-drift')],
+        [(SRC20, FAILED20, 'E_FETCH TimeoutError: x')],
+        [day_row('2026-11-18', 1)])
+    ok('AC-RUN20', tC2['rcov'] == ('2026-11-17', '2026-11-17')
+       and tC2['since_ok'] == 'no',
+       'a record ending before the failure shows a span that stops there, while the verdict is left as shipped')
+
+    # arm 3: no record file at all
+    _rC3, tC3 = rcov_world(
+        [],
+        [(SRC20, FAILED20, 'E_FETCH TimeoutError: x')],
+        [day_row('2026-11-18', 1)])
+    ok('AC-RUN20', tC3['rcov'] is None and tC3['since_ok'] == 'unmeasured',
+       'no record file answers none - a span from no rows would be invented')
+
+    # arm 4: a zero-byte record file is present and still answers none
+    _rC4, _tC4 = rcov_world([], [], [day_row('2026-11-18', 1)])
+    open(CR.record_path(_rC4), 'w').close()
+    tC4 = RUN.summarize_failure_trend(
+        RUN.failure_day_path(_rC4), RUN.failure_path(_rC4), TODAY,
+        record_path=CR.record_path(_rC4))
+    ok('AC-RUN20', tC4['rcov'] is None and os.path.isfile(CR.record_path(_rC4))
+       and os.path.getsize(CR.record_path(_rC4)) == 0,
+       'a present but empty record answers none - coverage is measured, not assumed from existence')
+
+    # arm 5: malformed rows neither widen nor invent a span
+    _rC5, _tC5 = rcov_world(
+        [(SRC20, '2026-11-18T08:00:00+08:00', 'no-drift'),
+         (OTHER20, '2026-11-19T10:00:00+08:00', 'no-drift')],
+        [], [day_row('2026-11-18', 0)])
+    with open(CR.record_path(_rC5), 'a', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"fetched_at":"2027-01-01T00:00:00+08:00",\n')
+    tC5 = RUN.summarize_failure_trend(
+        RUN.failure_day_path(_rC5), RUN.failure_path(_rC5), TODAY,
+        record_path=CR.record_path(_rC5))
+    _rC5b, _tC5b = rcov_world([], [], [day_row('2026-11-18', 0)])
+    with open(CR.record_path(_rC5b), 'w', encoding='utf-8',
+              newline='\n') as fh:
+        fh.write('not json at all\n')
+    tC5b = RUN.summarize_failure_trend(
+        RUN.failure_day_path(_rC5b), RUN.failure_path(_rC5b), TODAY,
+        record_path=CR.record_path(_rC5b))
+    ok('AC-RUN20', tC5['rcov'] == ('2026-11-18', '2026-11-19')
+       and tC5b['rcov'] is None,
+       'a broken line cannot stretch the span, and a file of nothing but broken lines has no span')
+
+    # arm 6: cov (history face) and rcov (record face) answer from different
+    # files in the same world - neither reading may explain the other
+    _rC6, tC6 = rcov_world(
+        [(SRC20, '2026-11-19T10:00:00+08:00', 'no-drift')],
+        [], [day_row('2026-11-13', 0), day_row('2026-11-19', 0)])
+    ok('AC-RUN20', tC6['cov'] == ('2026-11-13', '2026-11-19')
+       and tC6['rcov'] == ('2026-11-19', '2026-11-19'),
+       'the history spans six days while the record spans one - two faces, two answers')
+
+    # arm 7: one CLI row carries rcov=, adds exactly one key, stays outside the
+    # scanner; a missing record prints none rather than dropping the field
+    bufC7 = io.StringIO()
+    with contextlib.redirect_stdout(bufC7):
+        rcC7 = RUN.main(['--failure-trend', '--root', _rC1])
+    lineC7 = bufC7.getvalue().strip()
+    bufC8 = io.StringIO()
+    with contextlib.redirect_stdout(bufC8):
+        rcC8 = RUN.main(['--failure-trend', '--root', _rC3])
+    lineC8 = bufC8.getvalue().strip()
+    ok('AC-RUN20', rcC7 == 0 and 'rcov=2026-11-18..2026-11-19' in lineC7
+       and rcC8 == 0 and 'rcov=none' in lineC8
+       and 'PASS' not in lineC7 and 'FLAG' not in lineC7
+       and 'verdict' not in lineC7
+       and 'crawl-failure' not in scan_src18
+       and set(tC1.keys()) == baseB | set(['flips', 'rcov']),
+       'the row names the record span, or none, and adds exactly the one key it names')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

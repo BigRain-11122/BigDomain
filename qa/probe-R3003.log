@@ -1,0 +1,11 @@
+P1 record-ends-before-failure since_ok=no flips=1 rcov_derivable=('2026-11-17', '2026-11-17') rows=1 bad=0 last=2026-11-17T10:00:00+08:00
+P2 record-covers-after     since_ok=no flips=1 rcov_derivable=('2026-11-18', '2026-11-19') rows=2
+P12 same-row-without-the-new-key=True
+P3 record-absent           since_ok=unmeasured flips=None exists=False
+P4 record-empty            since_ok=no flips=0 present=True rows=0 bad=0 size=0
+P5 rows-equal=True dates-a=('2026-09-01', '2026-09-01') dates-b=('2026-11-19', '2026-11-19')
+P6 cross-zone literal a<b=False (true order: a earlier)
+P7 live-record rows=2 bad=0 bytes=350 first=2026-11-19 last=2026-11-19 sources=1
+P7 live-record every-stamp-same-day=True
+P8 trend-keys=['bad', 'cov', 'days', 'delta', 'evidence', 'flips', 'in_window', 'kind', 'kind_count', 'mean', 'newest_src', 'prev', 'rcov', 'recur', 'recurring', 'since_ok', 'sources', 'today', 'wcov', 'window_days', 'worst']
+P8 rcov-name-hits=['tools\\crawl_runner.py', 'src\\os\\backlog.md', 'src\\os\\test_crawl_runner.py', 'docs\\status-export.json']
