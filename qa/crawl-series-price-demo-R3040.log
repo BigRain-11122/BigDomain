@@ -1,0 +1,9 @@
+A five pairs, one-digit counts rc=0
+  line: CRAWL-FAILURE-DAYS days=5 bad=0 first=2026-11-10 last=2026-11-14 dropped=none series=2026-11-10:1,2026-11-11:2,2026-11-12:3,2026-11-13:4,2026-11-14:5 bytes=535 size_gate=0.0005% gate_ref=100MB series_limit=5 series_shown=5 series_outside=0 window_rows=5 series_window=7 series_bytes=71
+  CHECK series_bytes=71 real=71 equal=True
+B two pairs, four-digit counts rc=0
+  line: CRAWL-FAILURE-DAYS days=2 bad=0 first=2026-11-10 last=2026-11-11 dropped=none series=2026-11-10:3000,2026-11-11:4000 bytes=220 size_gate=0.0002% gate_ref=100MB series_limit=2 series_shown=2 series_outside=0 window_rows=2 series_window=7 series_bytes=38
+  CHECK series_bytes=38 real=38 equal=True
+C empty history rc=0
+  line: CRAWL-FAILURE-DAYS days=0 bad=0 first=none last=none dropped=none series=none bytes=0 size_gate=0.0000% gate_ref=100MB series_limit=7 series_shown=0 series_outside=0 window_rows=0 series_window=7 series_bytes=11
+  CHECK series_bytes=11 real=11 equal=True

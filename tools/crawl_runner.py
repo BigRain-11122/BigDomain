@@ -505,6 +505,36 @@ readers already subtract it). Honest boundary: both numbers follow the LF law
 like their siblings, so a Windows text-mode pipe still adds the CRLF delta,
 and `line_bytes` is the visible width rather than the run total.
 
+THE PAIRS SEGMENT HAS A PRICE (R3040, measured first - qa/probe-R3040.log):
+every neighbour on this line learned to price itself, but `series=<day:on,...>`
+- the segment that IS the answer - carried no number, and its width cannot be
+recomputed from the printed counts. Measured over six private worlds: the
+width is decided by three things at once, the stored day string (an ISO row
+prints `2026-11-10T09:00:00:1`, so "day is always ten characters" is FALSE -
+`_usable_day` only checks a ten-character front), the digit count of each
+on_day, and shown-1 commas; same shown=2 measured 25B with one-digit counts
+against 31B with four-digit ones; `series_bytes`/`pairs_bytes`/
+`segment_bytes`/`series_len`/`pair_bytes` had zero hits across tools/ and src/;
+and NONE of the line's thirteen integer keys equalled the segment on any world
+(`equal_keys=NONE`), the empty history included. The `--series-days` tail
+therefore appends `series_bytes=<n>` after `series_window=`: the UTF-8 bytes
+of the `series=` key and the pairs behind it (seven bytes of key included, the
+separating spaces excluded because they are line structure a reader can count
+on the row), eleven - not zero - when there are no pairs, because that line
+prints `series=none`. When `--series-absent` is also on, the value rides inside
+`absent_line_prices`' single fixed point with `line_bytes`/`output_bytes`/
+`absent_all_bytes`, since its digits move theirs.
+Refused: a `pairs_bytes=` twin (same meaning, two tokens), including the
+leading space (structure, not content), printing only the counts
+(`series_shown=` already prints and two worlds with equal shown differed by six
+bytes), the DEFAULT face (AC-RUN42 arm 2 pins its tail by equality and the
+default line has not moved by a byte since R3025), and deriving the width as
+`11*shown-1` (both day length and on_day digits are variables; the ISO world
+refutes it in one run). Honest boundary: it follows the LF law like its
+neighbours, so a Windows text-mode pipe still adds its CRLF delta, and it is a
+fact about this segment rather than a readability verdict - nothing refuses a
+long series.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1509,6 +1539,32 @@ def series_absent_days(rows, window_days=7, limit=ABSENT_LIST_LIMIT):
     return {'days': named, 'count': len(days), 'head': head_day,
             'window': width, 'named': len(named),
             'truncated': len(named) < len(days)}
+
+
+def series_segment_bytes(pairs):
+    """UTF-8 width of the `series=<pairs>` segment (R3040).
+
+    WHY (measured before this existed - qa/probe-R3040.log): the pairs segment
+    had no price on any face. Its width is decided by THREE things at once -
+    the stored day string (not a fixed ten characters: an ISO row prints
+    `2026-11-10T09:00:00:1`), the digit count of each on_day, and shown-1
+    commas - so a reader cannot reproduce it from `series_shown=` alone. Six
+    private runs measured `equal_keys=NONE`: none of the line's thirteen
+    integer keys equalled the segment, on every world including the empty one.
+    Same shown, different digits: 25B vs 31B.
+
+    THE COUNT INCLUDES `series=` (seven bytes) and NOT the separating spaces,
+    which are line structure the reader can count on the row itself. A world
+    with no pairs prints `series=none`, so eleven is the honest answer rather
+    than zero - the absent-not-zero law.
+
+    It is a fact about one segment under one command, not a readability verdict
+    and not a gate: nothing here refuses a long segment. Follows the LF law
+    like the neighbours, so a Windows text-mode pipe still adds its CRLF delta.
+
+    DISPLAY ONLY: builds a number, writes nothing, gates nothing.
+    """
+    return len(('series=%s' % (pairs or 'none')).encode('utf-8'))
 
 
 def absent_markers(gap_info, presence):
@@ -2978,8 +3034,9 @@ def main(argv=None):
                     help='print only the daily-history pairs inside the last N '
                          'days, measured back from the file\'s own newest row; '
                          '--days still caps how many pairs print and the header '
-                         'gains series_window=N (read-only display; gates '
-                         'nothing)')
+                         'gains series_window=N and series_bytes=N (the width '
+                         'of the series= segment itself, including its key; '
+                         'read-only display; gates nothing)')
     ap.add_argument('--series-absent', dest='series_absent',
                     action='store_true',
                     help='alongside --series-days N, name the calendar days in '
@@ -3070,9 +3127,10 @@ def main(argv=None):
         if args.series_days is None:
             tail_markers = ''
         else:
-            tail_markers = ' series_window=%d' % args.series_days
+            tail_markers = ' series_window=%d series_bytes=%d' % (
+                args.series_days, series_segment_bytes(pairs))
             if args.series_absent:
-                series_marker = ' series_window=%d' % args.series_days
+                series_marker = tail_markers
                 gaps = series_absent_days(day_read[0], args.series_days,
                                           absent_limit)
                 presence = series_presence_counts(day_read[0], args.series_days)

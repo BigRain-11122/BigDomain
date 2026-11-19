@@ -1,0 +1,55 @@
+R3040 probe: the pairs segment price (read-only, private worlds)
+
+== P1 width law ==
+--- P1a one-digit counts, 5 days, tail 5 rc=0 line_bytes_total=286
+    line: CRAWL-FAILURE-DAYS days=5 bad=0 first=2026-11-10 last=2026-11-14 dropped=none series=2026-11-10:1,2026-11-11:2,2026-11-12:3,2026-11-13:4,2026-11-14:5 bytes=175 size_gate=0.0002% gate_ref=100MB series_limit=5 series_shown=5 series_outside=0 window_rows=5 series_window=7 series_bytes=71
+    pairs_seg='2026-11-10:1,2026-11-11:2,2026-11-12:3,2026-11-13:4,2026-11-14:5' bytes=64
+    keys_equal_to_pairs_segment=NONE
+    printed_keys=bad=0,bytes=175,days=5,first=2026,gate_ref=100,last=2026,series=2026,series_bytes=71,series_limit=5,series_outside=0,series_shown=5,series_window=7,size_gate=0,window_rows=5
+--- P1b same days, wide counts rc=0 line_bytes_total=264
+    line: CRAWL-FAILURE-DAYS days=3 bad=0 first=2026-11-10 last=2026-11-12 dropped=none series=2026-11-10:7,2026-11-11:42,2026-11-12:4242 bytes=109 size_gate=0.0001% gate_ref=100MB series_limit=3 series_shown=3 series_outside=0 window_rows=3 series_window=7 series_bytes=49
+    pairs_seg='2026-11-10:7,2026-11-11:42,2026-11-12:4242' bytes=42
+    keys_equal_to_pairs_segment=NONE
+    printed_keys=bad=0,bytes=109,days=3,first=2026,gate_ref=100,last=2026,series=2026,series_bytes=49,series_limit=3,series_outside=0,series_shown=3,series_window=7,size_gate=0,window_rows=3
+--- P1c empty history rc=0 line_bytes_total=212
+    line: CRAWL-FAILURE-DAYS days=0 bad=0 first=none last=none dropped=none series=none bytes=0 size_gate=0.0000% gate_ref=100MB series_limit=7 series_shown=0 series_outside=0 window_rows=0 series_window=7 series_bytes=11
+    pairs_seg='none' bytes=4
+    keys_equal_to_pairs_segment=NONE
+    printed_keys=bad=0,bytes=0,days=0,gate_ref=100,series_bytes=11,series_limit=7,series_outside=0,series_shown=0,series_window=7,size_gate=0,window_rows=0
+--- P1d full ISO day stamps rc=0 line_bytes_total=282
+    line: CRAWL-FAILURE-DAYS days=2 bad=0 first=2026-11-10T09:00:00 last=2026-11-11T10:00:00 dropped=none series=2026-11-10T09:00:00:1,2026-11-11T10:00:00:2 bytes=88 size_gate=0.0001% gate_ref=100MB series_limit=2 series_shown=2 series_outside=0 window_rows=2 series_window=7 series_bytes=50
+    pairs_seg='2026-11-10T09:00:00:1,2026-11-11T10:00:00:2' bytes=43
+    keys_equal_to_pairs_segment=NONE
+    printed_keys=bad=0,bytes=88,days=2,first=2026,gate_ref=100,last=2026,series=2026,series_bytes=50,series_limit=2,series_outside=0,series_shown=2,series_window=7,size_gate=0,window_rows=2
+    P1c seg='none' (none is four chars)
+    P1d seg='2026-11-10T09:00:00:1,2026-11-11T10:00:00:2' -> day width follows the stored string, not a fixed 10
+    P1a parts=5 seg_bytes=64 sum(len(parts))=60 commas=4
+--- P1e shown=2 all one-digit rc=0 line_bytes_total=246
+    line: CRAWL-FAILURE-DAYS days=2 bad=0 first=2026-11-10 last=2026-11-11 dropped=none series=2026-11-10:3,2026-11-11:4 bytes=70 size_gate=0.0001% gate_ref=100MB series_limit=2 series_shown=2 series_outside=0 window_rows=2 series_window=7 series_bytes=32
+    pairs_seg='2026-11-10:3,2026-11-11:4' bytes=25
+    keys_equal_to_pairs_segment=NONE
+    printed_keys=bad=0,bytes=70,days=2,first=2026,gate_ref=100,last=2026,series=2026,series_bytes=32,series_limit=2,series_outside=0,series_shown=2,series_window=7,size_gate=0,window_rows=2
+--- P1f shown=2 four-digit rc=0 line_bytes_total=252
+    line: CRAWL-FAILURE-DAYS days=2 bad=0 first=2026-11-10 last=2026-11-11 dropped=none series=2026-11-10:3000,2026-11-11:4000 bytes=76 size_gate=0.0001% gate_ref=100MB series_limit=2 series_shown=2 series_outside=0 window_rows=2 series_window=7 series_bytes=38
+    pairs_seg='2026-11-10:3000,2026-11-11:4000' bytes=31
+    keys_equal_to_pairs_segment=NONE
+    printed_keys=bad=0,bytes=76,days=2,first=2026,gate_ref=100,last=2026,series=2026,series_bytes=38,series_limit=2,series_outside=0,series_shown=2,series_window=7,size_gate=0,window_rows=2
+    same shown: P1e= 25B P1f= 31B (digits of on_day move the width)
+    P1g: series_shown printed=2, segment bytes=31 -> a reader must know each on_day digit count to reproduce the width
+
+== P2 shipped faces ==
+    token hits: series_bytes=18, pairs_bytes=2, segment_bytes=4, series_len=1, pair_bytes=1, tail_bytes=1
+    printed integer keys on the wide world: bad,bytes,days,first,gate_ref,last,series,series_bytes,series_limit,series_outside,series_shown,series_window,size_gate,window_rows
+    series_limit/series_shown/series_outside/window_rows are COUNTS, none equals the segment width (see keys_equal_to_pairs_segment above)
+
+== P3 collision surface ==
+    suite count('series=')       x0
+    suite count("series=")       x0
+    suite endswith('series=      x0
+    suite series_window=         x6
+    suite series_shown=          x13
+    suite line_bytes=            x2
+    suite output_bytes=          x5
+    suite absent_all_bytes       x22
+    whole-line equality arms (assertEqual(out, ...)): 0
+    R3039 tokens live on the --series-absent face: line_bytes= x2 output_bytes= x5

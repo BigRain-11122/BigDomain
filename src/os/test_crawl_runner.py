@@ -501,6 +501,50 @@ the unwindowed face stays byte-identical and gains no token (arm 5); and
 nothing is written, no verdict prints and the two pinned `absent=` counts
 survive (arm 6).
 
+AC-RUN56 (R3039) grades THE SILENT-DAY LINE PRICING ITSELF. Measured before
+the change (qa/probe-R3039.log, 20 runs over window 3/7/30/60/365 x cap
+default/5/31/all): `absent_all_bytes` equalled the real line width in exactly
+the eight runs that named every gap, and on the wide-window default (win=60
+685B against 993B all; win=365 688B against 4352B) no printed integer key
+equalled it. The opt-in tail therefore appends `line_bytes=<n>
+output_bytes=<m>` before `absent_all_bytes=`, solved in one fixed point, so
+`line_bytes + 1 == output_bytes` prints the trailing newline instead of
+leaving it as an unwritten constant. Arms: the two numbers equal that run's
+real line width and real LF stdout bytes on a truncated wide window (arm 1);
+with every gap named the projection IS the line (equal), and on the truncated
+run it is strictly larger by at least eleven bytes per unnamed gap - a lower
+bound, since wider numbers add digits of their own (arm 2); two windows each
+price their own width and the two differ (arm 3); an empty history prices its
+bare line and answers `absent_all_bytes=none` (arm 4); the unwindowed default
+face carries neither token and two runs are byte-identical (arm 5); and
+nothing is written, no verdict prints, and both pinned `absent=` counts
+survive (arm 6).
+
+AC-RUN57 (R3040) grades THE PAIRS SEGMENT PRICING ITSELF. Measured before the
+change (qa/probe-R3040.log, six private worlds, no socket, no clock): every
+neighbour had learned to price itself but `series=<day:on,...>` carried no
+number, and its width is decided by three things at once - the stored day
+string (an ISO row prints `2026-11-10T09:00:00:1`, so "a day is always ten
+characters" is false), each on_day's digit count (same shown=2 measured 25B
+against 31B), and shown-1 commas - so a reader cannot reproduce it from
+`series_shown=`. Five candidate token names had zero hits across tools/ and
+src/, and NONE of the line's thirteen integer keys equalled the segment on any
+world (`equal_keys=NONE`), the empty history included. The `--series-days`
+tail therefore appends `series_bytes=<n>` after `series_window=`: the UTF-8
+bytes of the `series=` key and the pairs behind it, eleven - not zero - when
+the line prints `series=none`. With `--series-absent` on, the value rides
+inside the one fixed point with `line_bytes`/`output_bytes`/
+`absent_all_bytes`. Arms: a ten-character day world prices the real segment
+(arm 1); the same shown with wider counts prices differently, both exact (arm
+2); an ISO-stamped history prices its longer day strings (arm 3); an empty
+history answers eleven for `series=none` (arm 4); the unwindowed default face
+gains no token and does not drift (arm 5); with `--series-absent` the line
+still prices itself exactly while the segment is strictly smaller, and a
+fully named projection still equals the line (arm 6); and nothing is written,
+no verdict prints, and both pinned `absent=` counts and the single
+`series_window=` token survive (arm 7). Boundary: the count follows the LF law
+like its neighbours, and nothing here refuses a long series.
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -6122,6 +6166,140 @@ def main():
        and l56g[0].count('absent_named=') == 1,
        'the opt-in line writes no byte, prints no verdict, and both pinned '
        'counts still hold with the two new numbers on it')
+
+    # ===== AC-RUN57 (R3040): the pairs segment prices itself =====
+    # AC-RUN57 was pinned in src/os/backlog.md BEFORE series_segment_bytes
+    # existed (in-window pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3040.log, six private worlds, no socket, no clock): the width
+    # is decided by three things at once - the stored day string (an ISO row
+    # prints `2026-11-10T09:00:00:1`, so "a day is always ten characters" is
+    # false), each on_day's digit count (same shown=2 measured 25B against
+    # 31B) and shown-1 commas; five candidate token names had zero hits across
+    # tools/ and src/; and NONE of the line's thirteen integer keys equalled
+    # the segment on any world (equal_keys=NONE), the empty history included.
+    # The token lands on the --series-days face only, because AC-RUN42 arm 2
+    # pins the unwindowed tail by equality and that line has not moved by a
+    # byte since R3025.
+    def sd57(root, extra):
+        buf, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(err):
+            rc = RUN.main(['--failure-days'] + list(extra) + ['--root', root])
+        text = buf.getvalue()
+        return rc, [n for n in text.splitlines() if n.strip()], text
+
+    def toks57(line):
+        return dict(part.split('=', 1) for part in line.split()[1:])
+
+    def real_seg57(line):
+        for part in line.split():
+            if part.startswith('series='):
+                return len(part.encode('utf-8'))
+        return -1
+
+    r57 = world()
+    roots.append(r57)
+    p57 = hist37(r57)
+    put_days(p57, [plain_day('2026-11-10', 1), plain_day('2026-11-11', 2),
+                   plain_day('2026-11-12', 3), plain_day('2026-11-13', 4),
+                   plain_day('2026-11-14', 5)])
+
+    # arm 1: a ten-character day world - the number is the real segment width
+    rc57a, l57a, _raw57a = sd57(r57, ['--series-days', '7', '--days', '5'])
+    t57a = toks57(l57a[0]) if l57a else {}
+    ok('AC-RUN57', rc57a == 0 and l57a
+       and t57a.get('series_bytes') == str(real_seg57(l57a[0]))
+       and t57a.get('series_bytes') == str(
+           len(('series=%s' % t57a.get('series')).encode('utf-8'))),
+       'on a ten-character day world series_bytes reads the real UTF-8 width '
+       'of the series= segment on the row it sits on, its key included')
+
+    # arm 2: same shown, different on_day digits -> two prices, both exact
+    def two57(rows):
+        root = world()
+        roots.append(root)
+        put_days(hist37(root), rows)
+        return sd57(root, ['--series-days', '7', '--days', '2'])
+
+    rc57b, l57b, _ = two57([plain_day('2026-11-10', 3),
+                            plain_day('2026-11-11', 4)])
+    rc57c, l57c, _ = two57([plain_day('2026-11-10', 3000),
+                            plain_day('2026-11-11', 4000)])
+    t57b = toks57(l57b[0]) if l57b else {}
+    t57c = toks57(l57c[0]) if l57c else {}
+    ok('AC-RUN57', rc57b == 0 and rc57c == 0 and l57b and l57c
+       and t57b.get('series_shown') == t57c.get('series_shown') == '2'
+       and t57b.get('series_bytes') == str(real_seg57(l57b[0]))
+       and t57c.get('series_bytes') == str(real_seg57(l57c[0]))
+       and t57b.get('series_bytes') != t57c.get('series_bytes'),
+       'the same series_shown=2 prices differently when the counts grow '
+       'digits, so the width is not a constant a reader can assume from '
+       'the count')
+
+    # arm 3: the day string is not assumed to be ten characters
+    r57d = world()
+    roots.append(r57d)
+    put_days(hist37(r57d),
+             [{'day': '2026-11-10T09:00:00', 'on_day': 1},
+              {'day': '2026-11-11T10:00:00', 'on_day': 2}])
+    rc57d, l57d, _ = sd57(r57d, ['--series-days', '7', '--days', '2'])
+    t57d = toks57(l57d[0]) if l57d else {}
+    ok('AC-RUN57', rc57d == 0 and l57d
+       and 'T09:00:00' in (t57d.get('series') or '')
+       and t57d.get('series_bytes') == str(real_seg57(l57d[0])),
+       'an ISO-stamped history prices its own longer day strings instead of '
+       'a ten-character assumption')
+
+    # arm 4: no pairs still prices the segment it prints - series=none is 11
+    r57e = world()
+    roots.append(r57e)
+    os.makedirs(os.path.join(r57e, 'qa'), exist_ok=True)
+    rc57f, l57f, _ = sd57(r57e, ['--series-days', '7'])
+    t57f = toks57(l57f[0]) if l57f else {}
+    ok('AC-RUN57', rc57f == 0 and l57f
+       and t57f.get('series') == 'none'
+       and t57f.get('series_bytes') == '11'
+       and t57f.get('series_bytes') == str(real_seg57(l57f[0])),
+       'an empty history prints series=none and prices it at eleven bytes '
+       'rather than inventing a zero, without raising')
+
+    # arm 5: the unwindowed default face gains no token and does not drift
+    rc57g, l57g, _ = sd57(r57, [])
+    rc57h, l57h, _ = sd57(r57, [])
+    ok('AC-RUN57', rc57g == 0 and l57g and l57h
+       and ' series_bytes=' not in l57g[0]
+       and l57g[0] == l57h[0],
+       'without --series-days the line carries no new token and two runs '
+       'print identical bytes - the default face did not move')
+
+    # arm 6: with --series-absent the value rides the R3039 fixed point
+    rc57i, l57i, raw57i = sd57(r57, ['--series-days', '7', '--series-absent'])
+    t57i = toks57(l57i[0]) if l57i else {}
+    real57i = len(l57i[0].encode('utf-8')) if l57i else -1
+    ok('AC-RUN57', rc57i == 0 and l57i
+       and t57i.get('line_bytes') == str(real57i)
+       and int(t57i.get('line_bytes') or -1) + 1
+       == int(t57i.get('output_bytes') or -2)
+       and t57i.get('series_bytes') == str(real_seg57(l57i[0]))
+       and int(t57i.get('series_bytes') or -1)
+       < int(t57i.get('line_bytes') or -1)
+       and t57i.get('absent_all_bytes') == t57i.get('line_bytes'),
+       'with --series-absent the new number sits inside the one fixed point: '
+       'the line still prices itself exactly, the segment is strictly smaller '
+       'than the line, and a fully named projection still equals it')
+
+    # arm 7: pure display - no byte written, no verdict, pinned counts hold
+    before57 = tree_bytes(r57)
+    rc57j, l57j, _ = sd57(r57, ['--series-days', '7', '--series-absent'])
+    after57 = tree_bytes(r57)
+    text57 = '\n'.join(l57j)
+    ok('AC-RUN57', rc57j == 0 and before57 == after57
+       and 'PASS' not in text57 and 'FLAG' not in text57
+       and 'verdict' not in text57
+       and l57j[0].count('series_window=') == 1
+       and l57j[0].count('absent=') == 2
+       and l57j[0].count('absent_named=') == 1,
+       'the priced line writes no byte, prints no verdict, and both pinned '
+       'absent counts and the single series_window token still hold')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

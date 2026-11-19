@@ -4743,9 +4743,9 @@ SUITES = [
     # window truncates (53 -> 54).
     # R3038 adds AC-RUN55: the header now also prices its own width
     # (header_bytes), so the total splits with no unwritten newline constant
-    # (54 -> 55).
+    # (54 -> 55 -> 56 -> 57).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 56),
+     os.path.join("..", "os", "test_crawl_runner.py"), 57),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

@@ -1,0 +1,11 @@
+five one-digit printed=71 real=71 shown=5
+  MISSED absence-as-zero produced the honest number 71
+two four-digit printed=38 real=38 shown=2
+  MISSED absence-as-zero produced the honest number 38
+empty printed=11 real=11 shown=0
+
+HONEST 3/3 GREEN
+MUTANT segment-without-key    caught=3/3 CAUGHT
+MUTANT absence-as-zero        caught=1/3 CAUGHT
+MUTANT eleven-times-shown     caught=3/3 CAUGHT
+MUTANT leading-space          caught=3/3 CAUGHT
