@@ -3122,21 +3122,25 @@ def main():
     # be able to make the header claim evidence the list never judged
     rZ2 = world32([(SRC32A, OLD32), (SRC32B, EDGE32)])
     kept = {'n': 0}
-    real_read = RUN.read_failures
+    # R3051: the listing reads through read_failures_ext now (it needs the
+    # claimed days), so the one-read spy patches that entry and returns its
+    # three-value shape. The law being pinned is unchanged: ONE read per call,
+    # and a row appended after it is never claimed.
+    real_read = RUN.read_failures_ext
 
     def reading32(path):
-        rows = real_read(path)
+        rows, bad, bad_days = real_read(path)
         kept['n'] += 1
         if kept['n'] == 1:
             RUN.append_failure(path, SRC32L, TODAY + 'T08:00:00+08:00',
                                'TimeoutError: late')
-        return rows
+        return rows, bad, bad_days
 
-    RUN.read_failures = reading32
+    RUN.read_failures_ext = reading32
     try:
         lZ2 = listing32(rZ2)
     finally:
-        RUN.read_failures = real_read
+        RUN.read_failures_ext = real_read
     late_on_disk = os.path.isfile(RUN.failure_path(rZ2)) and 'late32' in open(
         RUN.failure_path(rZ2), 'r', encoding='utf-8').read()
     ok('AC-RUN32', kept['n'] == 1 and late_on_disk
@@ -3325,21 +3329,23 @@ def main():
     # arm 6: still ONE read per call - an append between reads is not claimed
     rS33 = world33([(SRC33O, OLD33), ('https://s33.example/page', EARLY33)])
     kept33 = {'n': 0}
-    real_read33 = RUN.read_failures
+    # R3051: same spy move as AC-RUN32 arm 2 - the one read is now the extended
+    # one, and the law (one read, later appends never claimed) is unchanged.
+    real_read33 = RUN.read_failures_ext
 
     def reading33(path):
-        rows = real_read33(path)
+        rows, bad, bad_days = real_read33(path)
         kept33['n'] += 1
         if kept33['n'] == 1:
             RUN.append_failure(path, 'https://late33.example/page',
                                TODAY + 'T23:00:00+08:00', 'TimeoutError: late')
-        return rows
+        return rows, bad, bad_days
 
-    RUN.read_failures = reading33
+    RUN.read_failures_ext = reading33
     try:
         lS33 = listing33(rS33)
     finally:
-        RUN.read_failures = real_read33
+        RUN.read_failures_ext = real_read33
     late_on_disk33 = 'late33' in open(RUN.failure_path(rS33), 'r',
                                       encoding='utf-8').read()
     ok('AC-RUN33', kept33['n'] == 1 and late_on_disk33
@@ -3457,31 +3463,39 @@ def main():
 
     # arm 3: ALWAYS printed, including zero - never an absence-to-zero inference
     toks34 = linesC34[0].split()
-    ok('AC-RUN34', len(toks34) == 6 and 'bad=0' in toks34
-       and linesC34[0].index('bad=') < linesC34[0].index('fcov=')
+    # R3051 appends bad_days= immediately after bad=: the name travels with the
+    # count it qualifies, and both still sit before fcov=.
+    ok('AC-RUN34', len(toks34) == 7 and 'bad=0' in toks34
+       and 'bad_days=none' in toks34
+       and linesC34[0].index('bad=') < linesC34[0].index('bad_days=')
+       and linesC34[0].index('bad_days=') < linesC34[0].index('fcov=')
        and [t.split('=')[0] for t in toks34] ==
-       ['CRAWL-PENDING-OLD-LIST', 'pending_old', 'days', 'bad', 'fcov',
-        'last_at'],
-       'a clean channel prints bad=0 explicitly, and the count sits before the evidence it qualifies')
+       ['CRAWL-PENDING-OLD-LIST', 'pending_old', 'days', 'bad', 'bad_days',
+        'fcov', 'last_at'],
+       'a clean channel prints bad=0 and bad_days=none explicitly, and the '
+       'claim sits beside the count it qualifies')
 
     # arm 4: SAME read - a line appended on disk after the read is never claimed
     rS34 = world34([(SRC34O, OLD34), ('https://s34.example/page', LATE34)])
     kept34 = {'n': 0}
-    real_read34 = RUN.read_failures
+    # R3051: the header's one read is now the extended reader; the spy follows
+    # it so the arm still proves a broken line appended after the read is never
+    # claimed by the count on the same header.
+    real_read34 = RUN.read_failures_ext
 
     def reading34(path):
-        rows = real_read34(path)
+        rows, bad, bad_days = real_read34(path)
         kept34['n'] += 1
         if kept34['n'] == 1:
             with open(path, 'a', encoding='utf-8', newline='\n') as fh:
                 fh.write('{appended\n')
-        return rows
+        return rows, bad, bad_days
 
-    RUN.read_failures = reading34
+    RUN.read_failures_ext = reading34
     try:
         _rcS34, linesS34 = head34(rS34)
     finally:
-        RUN.read_failures = real_read34
+        RUN.read_failures_ext = real_read34
     on_disk34 = [n for n in open(RUN.failure_path(rS34), 'r',
                                 encoding='utf-8').read().splitlines()
                  if n.strip()]
@@ -3511,12 +3525,13 @@ def main():
     tX34 = RUN.summarize_failure_trend(
         RUN.failure_day_path(rX34), RUN.failure_path(rX34), TODAY, 7,
         record_path=CR.record_path(rX34))
-    ok('AC-RUN34', len(lC34) == 8 and len(lX34) == 8
+    ok('AC-RUN34', len(lC34) == 9 and len(lX34) == 9
        and 'bad=0' in linesC34[0] and 'bad=2' in linesX34[0]
+       and lC34['bad_days'] == [] and lX34['bad_days'] == []
        and len(tX34) == 32 and 'bad' in tX34 and tX34['bad'] == 0
        and json.dumps(tX34, sort_keys=True) == json.dumps(tC34,
                                                           sort_keys=True),
-       'the dictionary stays eight keys, and the trend row keeps its thirty-one untouched (30 + R3049 day=) - its bad counts the day history, not this channel')
+       'the dictionary stays its eight keys plus R3051 bad_days, and the trend row keeps its thirty-two untouched (31 + R3050 bad_days) - its bad counts the day history, not this channel')
 
     # arm 7: pure display - nothing written, no verdict, scanner reads none of it
     before34 = snapshot34(rX34)
@@ -3588,7 +3603,7 @@ def main():
     # ascending physical order, and the count agrees with the header's bad
     ok('AC-RUN35', rc35 == 0 and bad35n == 3 and len(named35) == 3
        and nums35 == [2, 4, 5] and nums35 == sorted(nums35)
-       and lines35[0] == 'CRAWL-PENDING-OLD-BAD bad=3'
+       and lines35[0] == 'CRAWL-PENDING-OLD-BAD bad=3 bad_days=none'
        and len(rows35) == 1,
        'three unusable lines are named 2/4/5 in order, and the named count is the same number read_failures reports')
 
@@ -3618,14 +3633,14 @@ def main():
                                  RUN.failure_path(r35),
                                  TODAY + 'T12:00:00+08:00', 7)
     toks35 = linesL35[0].split()
-    ok('AC-RUN35', rcL35 == 0 and len(lst35) == 8 and 'bad=3' in linesL35[0]
-       and [t.split('=')[0] for t in toks35[:6]] ==
-       ['CRAWL-PENDING-OLD-LIST', 'pending_old', 'days', 'bad', 'fcov',
-        'last_at']
-       and (len(toks35) == 6
-            or (len(toks35) == 7 and toks35[6].startswith('reason=')))
+    ok('AC-RUN35', rcL35 == 0 and len(lst35) == 9 and 'bad=3' in linesL35[0]
+       and [t.split('=')[0] for t in toks35[:7]] ==
+       ['CRAWL-PENDING-OLD-LIST', 'pending_old', 'days', 'bad', 'bad_days',
+        'fcov', 'last_at']
+       and (len(toks35) == 7
+            or (len(toks35) == 8 and toks35[7].startswith('reason=')))
        and not any('BAD-LINE' in n for n in linesL35),
-       'the old-waiter list still carries six header tokens and no BAD-LINE row - source rows describe sources, bad lines describe the channel')
+       'the old-waiter list carries its header tokens (bad_days beside bad since R3051) and no BAD-LINE row - source rows describe sources, bad lines describe the channel')
 
     # arm 6: no bad line means no number at all - a clean channel and an absent
     # one both answer bad=0 and print no BAD-LINE row (never a fabricated one)
@@ -3634,8 +3649,8 @@ def main():
     rcA35, linesA35 = bad35(world35([]))
     emptyFile35 = os.path.join(rClean35, 'no-such-channel.jsonl')
     ok('AC-RUN35', rcC35 == rcA35 == 0
-       and linesC35 == ['CRAWL-PENDING-OLD-BAD bad=0']
-       and linesA35 == ['CRAWL-PENDING-OLD-BAD bad=0']
+       and linesC35 == ['CRAWL-PENDING-OLD-BAD bad=0 bad_days=none']
+       and linesA35 == ['CRAWL-PENDING-OLD-BAD bad=0 bad_days=none']
        and RUN.read_failure_bad_lines(emptyFile35) == [],
        'a clean channel and an absent one both answer bad=0 with no line named, and a missing file reads as an empty list rather than an error')
 
@@ -3763,10 +3778,10 @@ def main():
     rcDaysB36, linesDaysB36 = days_bad36(rB36)
     rcSideB36, linesSideB36 = side_bad36(rB36)
     ok('AC-RUN36', rcSide36 == 0
-       and linesSide36 == ['CRAWL-PENDING-OLD-BAD bad=0']
+       and linesSide36 == ['CRAWL-PENDING-OLD-BAD bad=0 bad_days=none']
        and linesDaysA36[0] == 'CRAWL-FAILURE-DAYS-BAD bad=4'
        and linesDaysB36 == ['CRAWL-FAILURE-DAYS-BAD bad=0']
-       and linesSideB36[0] == 'CRAWL-PENDING-OLD-BAD bad=1'
+       and linesSideB36[0] == 'CRAWL-PENDING-OLD-BAD bad=1 bad_days=none'
        and len(linesSideB36) == 2
        and 'BAD-LINE n=2 why=json' in linesSideB36
        and not any('BAD-LINE' in n for n in linesDaysB36),
@@ -7643,14 +7658,163 @@ def main():
         j67 = src67.find('\ndef ', i67 + 1)
         return src67[i67:j67 if j67 > 0 else len(src67)]
 
+    # R3051 SUPERSEDES the last clause of this arm: the side channel was left
+    # out on purpose in R3050 and its silence was then measured (probe-R3051),
+    # so the word now belongs on both files. What this arm still pins is the
+    # parse law underneath it.
     ok('AC-RUN67', '_usable_day(day)' in body67('read_failure_days_ext')
        and 'yield n, why, row' in body67('_json_lines')
-       and 'bad_days' not in body67('summarize_failures')
-       and 'bad_days' not in body67('_summary_from_rows')
+       and 'read_failure_days_ext(history_path)' in body67(
+           'summarize_failure_trend')
        and 'bad_days' in body67('summarize_failure_trend'),
        'the day is named only after _usable_day, the parse pass carries the '
-       'rejected row instead of dropping it, the trend reads the same extended '
-       'pass, and the side-channel face does not grow this word')
+       'rejected row instead of dropping it, and the trend reads the same '
+       'extended pass (R3051 later gave the side channel the same word)')
+
+    # AC-RUN68 (R3051): the side channel had the same silence R3050 closed on
+    # the day file - three faces printed bad= and none named the day an
+    # unusable row claims (measured, qa/probe-R3051.log P1/P3). Same word, same
+    # law, same one pass.
+    def side68(root54, rows54, junk54=()):
+        p68 = RUN.failure_path(root54)
+        os.makedirs(os.path.dirname(p68), exist_ok=True)
+        with open(p68, 'w', encoding='utf-8', newline='\n') as fh:
+            for row54 in rows54:
+                fh.write(json.dumps(row54, ensure_ascii=False, sort_keys=True,
+                                    separators=(',', ':')) + '\n')
+            for text54 in junk54:
+                fh.write(text54 + '\n')
+
+    GOOD68 = {'source_url': 'https://ok54.example/1',
+              'failed_at': '2026-11-19T09:00:00+08:00',
+              'error': 'E_FETCH URLError: a'}
+    AT68 = '2026-11-20T12:00:00+08:00'
+    FACES68 = ('--failures', '--pending-old-bad', '--pending-old-list')
+
+    def heads68(root54):
+        got = {}
+        for flag68 in FACES68:
+            rc54, body68 = face66(root54, flag68, AT68)
+            got[flag68] = (rc54, body68.splitlines()[0] if body68 else '')
+        return got
+
+    # Arm 1: the board's own case - a clean failed_at, missing error.
+    r68a = world(); roots.append(r68a)
+    side68(r68a, [GOOD68, {'source_url': 'https://x54.example/2',
+                           'failed_at': '2026-11-20'}])
+    h68a = heads68(r68a)
+    ok('AC-RUN68', all(v68[0] == 0 and tok67(v68[1]).get('bad') == '1'
+                       and tok67(v68[1]).get('bad_days') == '2026-11-20'
+                       and v68[1].count('bad_days=') == 1
+                       for v68 in h68a.values())
+       and tok67(h68a['--failures'][1]).get('total') == '1'
+       and tok67(h68a['--failures'][1]).get('recent7') == '1'
+       and tok67(h68a['--pending-old-list'][1]).get('pending_old') == 'none',
+       'the day an unusable channel row claims is named once on all three '
+       'faces while every count stays put (bad=1, total=1, recent7=1)')
+
+    # Arm 2: nothing to claim is said as nothing, never invented.
+    r68b = world(); roots.append(r68b)
+    side68(r68b, [GOOD68, {'source_url': 'https://x54.example/2',
+                           'failed_at': '2026/11/20', 'error': 'E'}])
+    r68c = world(); roots.append(r68c)
+    side68(r68c, [GOOD68, {'source_url': 'https://x54.example/2',
+                           'error': 'E'}])
+    r68d = world(); roots.append(r68d)
+    side68(r68d, [GOOD68], junk54=['{"failed_at": "2026-11-20"'])
+    none68 = [heads68(rw68)[flag68] for rw68 in (r68b, r68c, r68d)
+              for flag68 in ('--failures', '--pending-old-bad')]
+    ok('AC-RUN68', all(v68[0] == 0 and tok67(v68[1]).get('bad') == '1'
+                       and tok67(v68[1]).get('bad_days') == 'none'
+                       for v68 in none68),
+       'a day outside the format law, a row with no day and a line that is not '
+       'JSON claim no day at all: three worlds, bad=1, bad_days=none')
+
+    # Arm 3: the window head and the claimed day are two different facts.
+    r68e = world(); roots.append(r68e)
+    side68(r68e, [GOOD68, {'source_url': 'https://x54.example/2',
+                           'failed_at': '2026-11-19'}])
+    e68 = tok67(heads68(r68e)['--failures'][1])
+    ok('AC-RUN68', e68.get('day') == '2026-11-20'
+       and e68.get('bad_days') == '2026-11-19'
+       and e68.get('total') == '1',
+       'two day words, two facts on one header: day= is the window head and '
+       'bad_days= is what the broken row claims, and they may differ')
+
+    # Arm 4: one file, three faces, one word - no reader can disagree.
+    claims68 = [tok67(h68a[f68][1]).get('bad_days') for f68 in FACES68]
+    ok('AC-RUN68', claims68 == ['2026-11-20'] * 3,
+       'the same file answers the same claim on every face that prints bad=')
+
+    # Arm 5: the two-value contract is intact, and the ext readers add exactly
+    # the claim.
+    p68 = RUN.failure_path(r68a)
+    pair68 = RUN.read_failures(p68)
+    ext68 = RUN.read_failures_ext(p68)
+    bad68 = RUN.read_failure_bad_lines(p68)
+    bad_ext68 = RUN.read_failure_bad_lines_ext(p68)
+    ok('AC-RUN68', len(pair68) == 2 and pair68[1] == ext68[1] == 1
+       and list(ext68[2]) == ['2026-11-20']
+       and bad68 == [{'line': 2, 'why': 'fields'}]
+       and bad_ext68[0] == bad68 and list(bad_ext68[1]) == ['2026-11-20']
+       and RUN.read_failures(os.path.join(r68a, 'nope.jsonl'))
+       == ([], 0)
+       and RUN.read_failures_ext(os.path.join(r68a, 'nope.jsonl'))
+       == ([], 0, []),
+       'the shipped readers still answer their shipped shapes, the extended '
+       'ones add the claim, and a missing file is zero of everything')
+
+    # Arm 6: pure display - same line twice, zero bytes moved.
+    def tree68(path54):
+        got = {}
+        for base, _d, files in os.walk(path54):
+            for name in files:
+                full = os.path.join(base, name)
+                with open(full, 'rb') as fh:
+                    got[os.path.relpath(full, path54)] = fh.read()
+        return got
+
+    before68 = tree68(r68a)
+    twice68 = [heads68(r68a)[f68][1] for f68 in FACES68] * 2
+    again68 = [heads68(r68a)[f68][1] for f68 in FACES68]
+    ok('AC-RUN68', twice68 == again68 * 2 and tree68(r68a) == before68
+       and not any('PASS' in h or 'FLAG' in h or 'verdict' in h
+                   for h in again68),
+       'naming a claim writes nothing and prints no verdict: the same three '
+       'lines on two runs, zero bytes moved')
+
+    # Arm 7: source - only a format-checked day is named, on one parse pass,
+    # and the BAD-LINE rows still carry line and reason only.
+    with io.open(os.path.join(ROOT, 'tools', 'crawl_runner.py'),
+                 'r', encoding='utf-8') as fh:
+        src68 = fh.read()
+
+    def body68(name):
+        i54 = src68.find('def %s(' % name)
+        j54 = src68.find('\ndef ', i54 + 1)
+        return src68[i54:j54 if j54 > 0 else len(src68)]
+
+    ok('AC-RUN68', '_usable_day(day)' in body68('read_failures_ext')
+       and '_usable_day(day)' in body68('read_failure_bad_lines_ext')
+       and 'read_failures_ext(' in body68('read_failures')
+       and 'read_failure_bad_lines_ext(' in body68('read_failure_bad_lines')
+       and 'read_failures_ext(path)' in body68('summarize_failures')
+       and 'read_failures_ext(failures_path)' in body68('list_pending_old')
+       and "'BAD-LINE n=%d why=%s'" in src68
+       and 'bad_days' in body68('_summary_from_rows'),
+       'every face names a day only after _usable_day, the name travels from '
+       'the one extended read, and the BAD-LINE rows still carry line and '
+       'reason rather than a second day channel')
+
+    # Arm 8: an empty channel still says which day word applies.
+    r68f = world(); roots.append(r68f)
+    f68 = heads68(r68f)
+    ok('AC-RUN68', all(v68[0] == 0 and tok67(v68[1]).get('bad') == '0'
+                       and tok67(v68[1]).get('bad_days') == 'none'
+                       for v68 in f68.values())
+       and tok67(f68['--pending-old-list'][1]).get('reason') == 'no-coverage',
+       'an empty channel prints bad=0 bad_days=none on every face and keeps '
+       'its no-coverage reason')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

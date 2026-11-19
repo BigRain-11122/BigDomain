@@ -1,0 +1,5 @@
+NEGCTL R3051 suite-external mutations of tools/crawl_runner.py
+drop_the_claim           CAUGHT rc=1 arms_named=4
+no_format_check          CAUGHT rc=1 arms_named=1
+fold_name_into_count     CAUGHT rc=1 arms_named=2
+baseline_unmutated      SUITE PASS 455/455

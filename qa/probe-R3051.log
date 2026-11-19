@@ -1,0 +1,39 @@
+PROBE R3051 read-only private worlds dir=C:\Users\sjs20\AppData\Local\Temp\probe_R3051_i7wz39vm
+P1 S1_clean_day_no_error  usable=1 bad=1 rejected_carry_failed_at=[('fields', '2026-11-20')]
+P2 S1_clean_day_no_error  usable_days=['2026-11-19'] claim_days=['2026-11-20'] all_usable=True
+P3 S1_clean_day_no_error  --failures         rc=0 day_words=['bad=1', 'day=2026-11-20'] head=CRAWL-FAILURES total=1 recent7=1 bad=1 urls=1 bytes=170 lines=2 size_gate=0.0002% gate_ref=100MB newest=2026-11-19T09:00:00+08:00 error=E_FETCH URLError: a kind=urlerror day=2026-11-20
+P3 S1_clean_day_no_error  --pending-old-bad  rc=0 day_words=['bad=1'] head=CRAWL-PENDING-OLD-BAD bad=1
+P3 S1_clean_day_no_error  --pending-old-list rc=0 day_words=['days=7', 'bad=1'] head=CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=1 fcov=2026-11-19..2026-11-19 last_at=2026-11-19T09:00 reason=no-coverage
+P4 S1_clean_day_no_error  failures_day_tokens=['day=2026-11-20']
+P1 S2_bad_day             usable=1 bad=1 rejected_carry_failed_at=[('fields', '2026/11/20')]
+P2 S2_bad_day             usable_days=['2026-11-19'] claim_days=['2026/11/20'] all_usable=False
+P3 S2_bad_day             --failures         rc=0 day_words=['bad=1', 'day=2026-11-20'] head=CRAWL-FAILURES total=1 recent7=1 bad=1 urls=1 bytes=182 lines=2 size_gate=0.0002% gate_ref=100MB newest=2026-11-19T09:00:00+08:00 error=E_FETCH URLError: a kind=urlerror day=2026-11-20
+P3 S2_bad_day             --pending-old-bad  rc=0 day_words=['bad=1'] head=CRAWL-PENDING-OLD-BAD bad=1
+P3 S2_bad_day             --pending-old-list rc=0 day_words=['days=7', 'bad=1'] head=CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=1 fcov=2026-11-19..2026-11-19 last_at=2026-11-19T09:00 reason=no-coverage
+P4 S2_bad_day             failures_day_tokens=['day=2026-11-20']
+P1 S3_no_day              usable=1 bad=1 rejected_carry_failed_at=[('fields', None)]
+P2 S3_no_day              usable_days=['2026-11-19'] claim_days=[] all_usable=True
+P3 S3_no_day              --failures         rc=0 day_words=['bad=1', 'day=2026-11-20'] head=CRAWL-FAILURES total=1 recent7=1 bad=1 urls=1 bytes=157 lines=2 size_gate=0.0001% gate_ref=100MB newest=2026-11-19T09:00:00+08:00 error=E_FETCH URLError: a kind=urlerror day=2026-11-20
+P3 S3_no_day              --pending-old-bad  rc=0 day_words=['bad=1'] head=CRAWL-PENDING-OLD-BAD bad=1
+P3 S3_no_day              --pending-old-list rc=0 day_words=['days=7', 'bad=1'] head=CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=1 fcov=2026-11-19..2026-11-19 last_at=2026-11-19T09:00 reason=no-coverage
+P4 S3_no_day              failures_day_tokens=['day=2026-11-20']
+P1 S4_not_json            usable=1 bad=1 rejected_carry_failed_at=[('json', None)]
+P2 S4_not_json            usable_days=['2026-11-19'] claim_days=[] all_usable=True
+P3 S4_not_json            --failures         rc=0 day_words=['bad=1', 'day=2026-11-20'] head=CRAWL-FAILURES total=1 recent7=1 bad=1 urls=1 bytes=135 lines=2 size_gate=0.0001% gate_ref=100MB newest=2026-11-19T09:00:00+08:00 error=E_FETCH URLError: a kind=urlerror day=2026-11-20
+P3 S4_not_json            --pending-old-bad  rc=0 day_words=['bad=1'] head=CRAWL-PENDING-OLD-BAD bad=1
+P3 S4_not_json            --pending-old-list rc=0 day_words=['days=7', 'bad=1'] head=CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=1 fcov=2026-11-19..2026-11-19 last_at=2026-11-19T09:00 reason=no-coverage
+P4 S4_not_json            failures_day_tokens=['day=2026-11-20']
+P1 S5_claim_also_named    usable=1 bad=1 rejected_carry_failed_at=[('fields', '2026-11-19')]
+P2 S5_claim_also_named    usable_days=['2026-11-19'] claim_days=['2026-11-19'] all_usable=True
+P3 S5_claim_also_named    --failures         rc=0 day_words=['bad=1', 'day=2026-11-20'] head=CRAWL-FAILURES total=1 recent7=1 bad=1 urls=1 bytes=170 lines=2 size_gate=0.0002% gate_ref=100MB newest=2026-11-19T09:00:00+08:00 error=E_FETCH URLError: a kind=urlerror day=2026-11-20
+P3 S5_claim_also_named    --pending-old-bad  rc=0 day_words=['bad=1'] head=CRAWL-PENDING-OLD-BAD bad=1
+P3 S5_claim_also_named    --pending-old-list rc=0 day_words=['days=7', 'bad=1'] head=CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=1 fcov=2026-11-19..2026-11-19 last_at=2026-11-19T09:00 reason=no-coverage
+P4 S5_claim_also_named    failures_day_tokens=['day=2026-11-20']
+P1 S6_empty               usable=0 bad=0 rejected_carry_failed_at=[]
+P2 S6_empty               usable_days=[] claim_days=[] all_usable=True
+P3 S6_empty               --failures         rc=0 day_words=['bad=0', 'day=2026-11-20'] head=CRAWL-FAILURES total=0 recent7=0 bad=0 urls=0 bytes=0 lines=0 size_gate=0.0000% gate_ref=100MB newest=none error=none kind=none day=2026-11-20
+P3 S6_empty               --pending-old-bad  rc=0 day_words=['bad=0'] head=CRAWL-PENDING-OLD-BAD bad=0
+P3 S6_empty               --pending-old-list rc=0 day_words=['days=7', 'bad=0'] head=CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=0 fcov=none last_at=none reason=no-coverage
+P4 S6_empty               failures_day_tokens=['day=2026-11-20']
+P5 bad-lines face for S1: [{'line': 2, 'why': 'fields'}]
+P5 no ext variant exists: read_failure_bad_lines has 1 documented fields (line, why) and no day

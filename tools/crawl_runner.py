@@ -1193,20 +1193,53 @@ def _failure_lines(path):
     return _json_lines(path, _failure_row_why)
 
 
+def read_failures_ext(path):
+    """(rows, bad, bad_days) for the side channel - the one parse pass.
+
+    R3051 WHY (measured before this existed - qa/probe-R3051.log P1/P2): the
+    day file got this face in R3050 and the side channel was left with the same
+    silence - a row that parses, carries a clean failed_at and fails only on
+    `error` was counted in `bad` and its day reached no reader. `bad_days` is
+    the days those unusable rows claim, sorted and de-duplicated, and ONLY days
+    that pass _usable_day are named: a JSON decode failure or a row with no
+    usable failed_at claims nothing, because inventing a day from unreadable
+    text is the one thing a reader must never do.
+
+    A day that a usable row already names still appears here: the claim and the
+    count are different facts (the count comes from rows), so nothing here adds
+    a claimed day to total=/recent=/urls=.
+
+    The two-value contract is kept by read_failures, which delegates here
+    (R3025's one-read law: the ~30 callers that unpack two values are not
+    touched this round).
+    """
+    rows = []
+    bad = 0
+    claimed = set()
+    for _n, kind, row in _failure_lines(path):
+        if kind is None:
+            rows.append(row)
+            continue
+        bad += 1
+        if isinstance(row, dict):
+            day = str(row.get('failed_at') or '')[:10]
+            if _usable_day(day):
+                claimed.add(day)
+    return rows, bad, sorted(claimed)
+
+
 def read_failures(path):
     """(rows, bad): usable failure rows, plus the count of unusable ones.
 
     Absence is zero rows, not an error - the same law as CR.read_records, so a
     reader can ask "what failed?" without a prior write. Both numbers come from
     _failure_lines, the one parse law (R3018).
+
+    R3051: the pass itself lives in read_failures_ext, which also returns the
+    days unusable rows claim; this wrapper keeps the two-value contract every
+    existing caller unpacks.
     """
-    rows = []
-    bad = 0
-    for _n, kind, row in _failure_lines(path):
-        if kind is None:
-            rows.append(row)
-        else:
-            bad += 1
+    rows, bad, _bad_days = read_failures_ext(path)
     return rows, bad
 
 
@@ -1227,8 +1260,31 @@ def read_failure_bad_lines(path):
     DISPLAY ONLY: writes nothing, gates nothing, retries nothing. An absent file
     answers an empty list - the same "absence is zero" law as read_failures.
     """
-    return [{'line': n, 'why': kind} for n, kind, _row in _failure_lines(path)
-            if kind is not None]
+    named, _bad_days = read_failure_bad_lines_ext(path)
+    return named
+
+
+def read_failure_bad_lines_ext(path):
+    """(named, bad_days) for unusable side-channel lines - the one parse pass.
+
+    R3051: `--pending-old-bad` named a line and never the day that line claims,
+    while R3050 had already made `bad_days` the one word for "the days unusable
+    rows claim" on the day file (measured, qa/probe-R3051.log P3: the header
+    read `bad=1` with no day word). Same law as read_failures_ext: only a
+    failed_at that passes _usable_day is named, and a line that never parsed
+    claims nothing.
+    """
+    named = []
+    claimed = set()
+    for n, kind, row in _failure_lines(path):
+        if kind is None:
+            continue
+        named.append({'line': n, 'why': kind})
+        if isinstance(row, dict):
+            day = str(row.get('failed_at') or '')[:10]
+            if _usable_day(day):
+                claimed.add(day)
+    return named, sorted(claimed)
 
 
 def _day_of(stamp):
@@ -1332,8 +1388,15 @@ def series_file_order(rows):
     return 'day' if days == sorted(days) else 'mixed'
 
 
-def _summary_from_rows(rows, bad, day, window_days=7):
-    """Counts over already-validated rows; the one place the window law lives."""
+def _summary_from_rows(rows, bad, day, window_days=7, bad_days=None):
+    """Counts over already-validated rows; the one place the window law lives.
+
+    R3051: `bad_days` travels beside `bad` as a NAME, never a count - the days
+    unusable rows claim, as read by the same pass that counted them. It is
+    None only for a caller that never asked (the day-row writer does not
+    persist it), and a face that prints it must read it from this dict rather
+    than parse the file a second time.
+    """
     head_day, usable, threshold = _window_start(day, window_days)
     recent = 0
     urls = set()
@@ -1348,6 +1411,7 @@ def _summary_from_rows(rows, bad, day, window_days=7):
             newest = row
     newest_error = (newest or {}).get('error')
     return {'total': len(rows), 'recent': recent, 'bad': bad,
+            'bad_days': bad_days,
             'urls': len(urls), 'window_days': window_days,
             # R3049: the day the window opens at was computed here and thrown
             # away, so `recent7=` was a count of days nobody could name. Same
@@ -1407,9 +1471,13 @@ def summarize_failures(path, day, window_days=7):
     literal first ten characters of failed_at, the same day law the record face
     uses, so the summary and the writer cannot drift apart. Nothing here gates,
     retries or pages: this is a READER over evidence, not enforcement.
+
+    R3051: the same read also names the days unusable rows claim, so `bad_days`
+    and `bad` come from one pass over the same bytes (measured before this
+    existed, qa/probe-R3051.log: the header printed bad=1 and no day word).
     """
-    rows, bad = read_failures(path)
-    out = _summary_from_rows(rows, bad, day, window_days)
+    rows, bad, bad_days = read_failures_ext(path)
+    out = _summary_from_rows(rows, bad, day, window_days, bad_days)
     # R2999: the body of the file, so the retention exemption can be checked
     # from the product instead of from a number written in a header once.
     stats = failure_file_stats(path)
@@ -2948,11 +3016,19 @@ def list_pending_old(record_path, failures_path, day, window_days=7):
     `reason`: measured, a populated table carries bad=2 with reason None, and
     `reason` answers "why is the table empty" - evidence quality is not
     population, and folding it in would put an excuse on a non-empty list.
+
+    R3051 PRINTS `bad_days` BESIDE IT - WHICH DAYS THOSE LINES CLAIM. Measured
+    before this existed (qa/probe-R3051.log P3): this header and
+    `--pending-old-bad` both printed bad= and neither printed a day, while the
+    day file had carried the word since R3050. It comes from the SAME extended
+    read that produced `bad` (one pass, one answer), and only failed_at values
+    that pass _usable_day are named - a line that never parsed claims nothing.
     """
-    rows, bad = read_failures(failures_path)
+    rows, bad, bad_days = read_failures_ext(failures_path)
     head_day, usable, threshold = _window_start(day, window_days)
     newest = _last_stamp_rows(rows)
     out = {'day': head_day, 'window_days': window_days, 'bad': bad,
+           'bad_days': bad_days,
            'pending_old': None, 'waiting': [],
            'fcov': _side_coverage_rows(rows),
            'last_at': None if newest is None else _stamp_echo(newest),
@@ -3442,7 +3518,8 @@ def main(argv=None):
                     help='print the failure side channel summary and exit '
                          '(a reader over evidence; carries bytes/lines and a '
                          'display-only size_gate percentage, plus the day the '
-                         'window opens at as day=; gates nothing)')
+                         'window opens at as day= and bad_days=, the days '
+                         'unusable channel rows claim; gates nothing)')
     ap.add_argument('--failure-days', dest='failure_days', action='store_true',
                     help='print the daily failure-count history and exit '
                          '(a display series; bad= is HOW MANY rows are '
@@ -3457,13 +3534,15 @@ def main(argv=None):
     ap.add_argument('--pending-old-list', dest='pending_old_list',
                     action='store_true',
                     help='print the out-of-window sources that never came '
-                         'back, one line each (read-only display; writes and '
-                         'gates nothing)')
+                         'back, one line each (read-only display; bad_days= '
+                         'names the days unusable channel rows claim; writes '
+                         'and gates nothing)')
     ap.add_argument('--pending-old-bad', dest='pending_old_bad',
                     action='store_true',
                     help='name the unusable lines on the failure channel by '
-                         'line number and reason, never by text (read-only '
-                         'display; writes and gates nothing)')
+                         'line number and reason, never by text, and bad_days= '
+                         'names the days they claim (read-only display; writes '
+                         'and gates nothing)')
     ap.add_argument('--failure-days-bad', dest='failure_days_bad',
                     action='store_true',
                     help='name the unusable lines on the daily failure history '
@@ -3590,11 +3669,14 @@ def main(argv=None):
     if args.failures:
         stamp = _stamp_of(args)
         summary = summarize_failures(failure_path(args.root), stamp, args.days)
-        print('CRAWL-FAILURES total=%d recent%d=%d bad=%d urls=%d bytes=%d '
+        print('CRAWL-FAILURES total=%d recent%d=%d bad=%d bad_days=%s '
+              'urls=%d bytes=%d '
               'lines=%d size_gate=%.4f%% gate_ref=%dMB newest=%s error=%s '
               'kind=%s day=%s'
               % (summary['total'], summary['window_days'],
-                           summary['recent'], summary['bad'], summary['urls'],
+                           summary['recent'], summary['bad'],
+                           ','.join(summary['bad_days'] or []) or 'none',
+                           summary['urls'],
                            summary['bytes'], summary['lines'],
                            summary['size_gate'], summary['gate_ref_mb'],
                            summary['newest_at'] or 'none',
@@ -3685,8 +3767,9 @@ def main(argv=None):
             print(dropped_line(item))
         return 0
     if args.pending_old_bad:
-        named = read_failure_bad_lines(failure_path(args.root))
-        print('CRAWL-PENDING-OLD-BAD bad=%d' % len(named))
+        named, claimed = read_failure_bad_lines_ext(failure_path(args.root))
+        print('CRAWL-PENDING-OLD-BAD bad=%d bad_days=%s'
+              % (len(named), ','.join(claimed) or 'none'))
         for item in named:
             print('BAD-LINE n=%d why=%s' % (item['line'], item['why']))
         return 0
@@ -3703,10 +3786,11 @@ def main(argv=None):
         po = lst['pending_old']
         fcov_txt = ('none' if lst['fcov'] is None
                     else '%s..%s' % lst['fcov'])
-        head = ('CRAWL-PENDING-OLD-LIST pending_old=%s days=%d bad=%d fcov=%s '
-                'last_at=%s'
+        head = ('CRAWL-PENDING-OLD-LIST pending_old=%s days=%d bad=%d '
+                'bad_days=%s fcov=%s last_at=%s'
                 % ('none' if po is None else '%d/%d' % po, args.days,
-                   lst['bad'], fcov_txt,
+                   lst['bad'], ','.join(lst['bad_days'] or []) or 'none',
+                   fcov_txt,
                    'none' if lst['last_at'] is None else lst['last_at']))
         if not lst['waiting'] and lst['reason']:
             head += ' reason=%s' % lst['reason']
