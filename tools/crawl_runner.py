@@ -195,6 +195,21 @@ The per-day list of dropped values is still unbuilt: it is a per-row face, not
 a sum (only two `.get('dropped')` sites exist and neither adds rows), and
 R3017/R3020 refused sums, not lists.
 
+EVERY DAY, NOT JUST THE LAST (R3023): R3021 answered for `last=` only, so an
+earlier day's eaten count still meant opening the jsonl. Measured
+(qa/probe-R3023.log): the DAYS face prints exactly ONE line, so a per-day list
+cannot ride on its header without breaking that contract (P3a) - and the flag
+set carries no help/set arm, so a separate subcommand is free (P1a/P1b). This
+face is `--failure-days-dropped`: a header `CRAWL-FAILURE-DAYS-DROPPED days=<n>
+bad=<n>` then one `DAY-DROPPED day=<day> dropped=<n|none>` per usable row.
+Order is FILE order, never sorted and never de-duplicated - measured (P2e) a
+history can hold one day twice, and a de-duplicated listing would hide a row
+instead of reporting it. `dropped` is that row's own value and `none` when the
+row predates the field or carries a non-int (type() not isinstance(): JSON true
+passes isinstance). Refused here: putting the list on the DAYS header, adding
+the key to the series pairs or the 30-key trend row, reading a missing key as
+zero, summing or maxing across rows, and backfilling old rows.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -999,6 +1014,37 @@ def summarize_failure_days(path, limit=7):
     out['size_gate'] = size_gate_pct(stats['bytes'])
     out['gate_ref_mb'] = SIZE_REFERENCE_BYTES // (1024 * 1024)
     return out
+
+
+def list_failure_days_dropped(path):
+    """Per-day eaten-lines listing; each row speaks only for itself.
+
+    WHY (R3023, measured before this existed - qa/probe-R3023.log): R3021
+    handed the LAST row's value to the DAYS header, so any earlier day's count
+    could only be read by opening the jsonl. The DAYS face prints exactly one
+    line (P3a), so the list lives in its own subcommand instead of on that
+    header, and the series/trend shapes stay untouched (P3b/P3c).
+
+    ROWS KEEP FILE ORDER AND DUPLICATES: measured (P2e) a history can hold the
+    same day twice, and sorting or de-duplicating would hide one of them
+    rather than report it. `bad` comes from the same single read that produced
+    the rows, so the listing cannot disagree with the header about how many
+    lines were refused.
+
+    dropped is the row's OWN value; None when the row predates the field or
+    carries a non-int - type() not isinstance(), because a JSON true passes
+    isinstance(x, int). No sum, no maximum, no backfill: R3020/R3022 refused
+    summing a key older rows do not carry, and 0 would be an invented number.
+
+    DISPLAY ONLY: writes nothing, gates nothing. An absent file answers zero
+    rows - the same "absence is zero" law as read_failure_days.
+    """
+    rows, bad = read_failure_days(path)
+    return {'days': len(rows), 'bad': bad,
+            'rows': [{'day': r.get('day'),
+                      'dropped': (r.get('dropped')
+                                  if type(r.get('dropped')) is int else None)}
+                     for r in rows]}
 
 
 def failure_kind(error):
@@ -2030,6 +2076,12 @@ def main(argv=None):
                     help='name the unusable lines on the daily failure history '
                          'by line number and reason, never by text (read-only '
                          'display; writes and gates nothing)')
+    ap.add_argument('--failure-days-dropped', dest='failure_days_dropped',
+                    action='store_true',
+                    help='list each usable day row\'s own eaten-lines count, '
+                         'one line per row in file order, none for a row '
+                         'written before the field (read-only display; writes '
+                         'and gates nothing)')
     ap.add_argument('--snapshot-failures', dest='snapshot_failures',
                     action='store_true',
                     help='persist today\'s failure counts as one history row '
@@ -2061,6 +2113,15 @@ def main(argv=None):
                  'none' if series['dropped'] is None else series['dropped'],
                  pairs or 'none', series['bytes'],
                  series['size_gate'], series['gate_ref_mb']))
+        return 0
+    if args.failure_days_dropped:
+        listing = list_failure_days_dropped(failure_day_path(args.root))
+        print('CRAWL-FAILURE-DAYS-DROPPED days=%d bad=%d'
+              % (listing['days'], listing['bad']))
+        for item in listing['rows']:
+            print('DAY-DROPPED day=%s dropped=%s'
+                  % (item['day'],
+                     'none' if item['dropped'] is None else item['dropped']))
         return 0
     if args.pending_old_bad:
         named = read_failure_bad_lines(failure_path(args.root))

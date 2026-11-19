@@ -1,0 +1,5 @@
+HONEST green -> arm2=PASS, arm3=PASS, arm4=PASS, arm5=PASS
+M1 missing-read-as-zero: arm2 CAUGHT
+M2 cross-row-sum: arm3 CAUGHT
+M3 dedupe-by-day: arm4 CAUGHT
+M4 aggregate-on-header: arm3 CAUGHT

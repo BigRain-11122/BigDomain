@@ -1,0 +1,21 @@
+== THREE DAYS rc=0 (none / 0 / 5 in file order)
+   CRAWL-FAILURE-DAYS-DROPPED days=3 bad=0
+   DAY-DROPPED day=2026-11-15 dropped=none
+   DAY-DROPPED day=2026-11-16 dropped=0
+   DAY-DROPPED day=2026-11-17 dropped=5
+== PRE-FIELD ONLY rc=0 (never measured reads none)
+   CRAWL-FAILURE-DAYS-DROPPED days=1 bad=0
+   DAY-DROPPED day=2026-11-16 dropped=none
+== SAME DAY TWICE rc=0 (both rows visible, not summed)
+   CRAWL-FAILURE-DAYS-DROPPED days=2 bad=0
+   DAY-DROPPED day=2026-11-17 dropped=5
+   DAY-DROPPED day=2026-11-17 dropped=1
+== ONE BAD LINE rc=0 (bad=1, the two good rows still speak)
+   CRAWL-FAILURE-DAYS-DROPPED days=2 bad=1
+   DAY-DROPPED day=2026-11-16 dropped=2
+   DAY-DROPPED day=2026-11-17 dropped=none
+== NO SUM rc=0 (5 / none / 0 - the 0 row does not inherit 5)
+   CRAWL-FAILURE-DAYS-DROPPED days=3 bad=0
+   DAY-DROPPED day=2026-11-16 dropped=5
+   DAY-DROPPED day=2026-11-17 dropped=none
+   DAY-DROPPED day=2026-11-18 dropped=0

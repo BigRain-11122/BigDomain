@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-19 R3022 PRODUCT+ENGINEERING: the snapshot beat now prints the eaten-lines count it just wrote, so the live face and the row it names stop disagreeing by omission; the token is appended after the five older ones, a fresh row always measures an int (none stays a DAYS word for pre-field rows), and the per-day list was measured as per-row rather than the sum earlier rounds refused, so it is left to the next window.",
+    "current": "2026-11-19 R3023 PRODUCT+ENGINEERING: every day row's own eaten-lines count now has a face of its own. R3021 handed the DAYS header only the LAST row's dropped=, so an earlier day still meant opening the jsonl by hand. Measured before the pin (qa/probe-R3023.log): that header prints exactly one line, the flag set and help text are pinned nowhere, a row written before the field carries no key at all, and the same day can sit twice in one file - so tools/crawl_runner.py now ships list_failure_days_dropped plus a --failure-days-dropped subcommand printing one DAY-DROPPED line per usable row in FILE order, none for an unmeasured row, no sort, no de-duplication, no sum.",
     "do": "R3005 measured, in order: the PIN row was written in src/os/backlog.md BEFORE any code byte moved, and the read-only probe tmp/probe_R3005.py -> qa/probe-R3005.log (682B, 12 lines, utf-8/lf, six private worlds, zero sockets) ran BEFORE the pin. It measured: (1) three-source window answers for one source only; (2) recur and the pending count are independent in BOTH directions - recur=(0,0) with one judged source still gone, and recur=(2,4) with nothing pending when both came back; (3) the queue head's own suggested numerator (since_ok != 'yes') counts a source whose newest failure is later than every record row as pending, reviving exactly the R3004 conflation at aggregate level, so the numerator counts 'no' only and unmeasured sits in neither number; (4) an absent record leaves every source unmeasured, so zero-of-zero had to print none rather than 0/0; (5) 13 arms read the trend line, three pin exact key sets, and a multi-source world still printed exactly one line, which is why per-source lines were refused. AC-RUN22 (seven arms) was pinned before the code; three existing key-set arms were widened by exactly the one new key, disclosed as a criterion following its field rather than a loosening.",
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
@@ -9,11 +9,11 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3020.log (324B, 2026-11-19)",
     "latest_evidence": "qa/negctl-R3020.log (324B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3023] next window (<=48h): (0) MAIN — **逐日历史只有最后一行看得见**：R3021 已裁定「被吃行不可归属、不可求和」，R3022 把最后一行交给了写它的那一步，但前一天、前两天的 `dropped=` 仍只能开 jsonl。下一轮先量（只读）：①按日列出 `dropped` 是否已有现成表头契约或读器（本轮实测：无·`series` 只是 `(day,on_day)`）；②无键旧行在列表里必须是 `none` 而不是 0，量清现有 `_json_lines`/`plain_day` 形状能否直接支撑；③列表是逐行不是合计（R3022 P3d 已量`[5,None,0]` 可分立），量清加这个面会不会与 `CRAWL-FAILURE-DAYS` 的单行合同冲突（是则二选一：换子命令还是换记号）。量清后实现并配判据，且**先落板再动代码**。",
-    "next_milestone_due": "2026-11-21T17:13:57+08:00",
-    "updated_at": "2026-11-19T17:13:57+08:00"
+    "next_milestone": "[R3024] next window (<=48h): (0) MAIN — **这份列表把每一行都印出来，却没有窗**：`--failure-days-dropped` 现在逐行给值，但一天一行、文件无上限保留，于是它的长度随文件一起长（一年≈365 行），而 `--failure-days` 的系列面本来就有 `--days` 限制。下一轮先量（只读）：①仓内是否已有「按日窗口」的现成读器或表头契约可复用（`_window_start` 只服务失败侧路件与摘要，量清它能否直接约束日历史）；②若加窗，截断的列表必须**说出来**（缺省 `none` 会被读成「那天没吃掉过」），量清现有表头是否有位置放「截断」记号而不破单行/逐行合同；③是否与 `CRAWL-FAILURE-DAYS-DROPPED days=<n> bad=<n>` 的计数语义冲突（`days=` 是可用行数，截断后它会与印出行数不等，量清该改计数还是改记号）。量清后二选一实现并配判据，且**先落板再动代码**。",
+    "next_milestone_due": "2026-11-21T17:33:48+08:00",
+    "updated_at": "2026-11-19T17:33:48+08:00"
   },
-  "current": "2026-11-19 R3022 PRODUCT+ENGINEERING: the snapshot beat now prints the eaten-lines count it just wrote, so the live face and the row it names stop disagreeing by omission; the token is appended after the five older ones, a fresh row always measures an int (none stays a DAYS word for pre-field rows), and the per-day list was measured as per-row rather than the sum earlier rounds refused, so it is left to the next window.",
+  "current": "2026-11-19 R3023 PRODUCT+ENGINEERING: every day row's own eaten-lines count now has a face of its own. R3021 handed the DAYS header only the LAST row's dropped=, so an earlier day still meant opening the jsonl by hand. Measured before the pin (qa/probe-R3023.log): that header prints exactly one line, the flag set and help text are pinned nowhere, a row written before the field carries no key at all, and the same day can sit twice in one file - so tools/crawl_runner.py now ships list_failure_days_dropped plus a --failure-days-dropped subcommand printing one DAY-DROPPED line per usable row in FILE order, none for an unmeasured row, no sort, no de-duplication, no sum.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-19 R3022 PRODUCT+ENGINEERING: the snapshot beat now prints the eaten-lines count it just wrote, so the live face and the row it names stop disagreeing by omission; the token is appended after the five older ones, a fresh row always measures an int (none stays a DAYS word for pre-field rows), and the per-day list was measured as per-row rather than the sum earlier rounds refused, so it is left to the next window.",
-  "export_ts": "2026-11-19T17:13:57+08:00",
+  "do": "2026-11-19 R3023 PRODUCT+ENGINEERING: every day row's own eaten-lines count now has a face of its own. R3021 handed the DAYS header only the LAST row's dropped=, so an earlier day still meant opening the jsonl by hand. Measured before the pin (qa/probe-R3023.log): that header prints exactly one line, the flag set and help text are pinned nowhere, a row written before the field carries no key at all, and the same day can sit twice in one file - so tools/crawl_runner.py now ships list_failure_days_dropped plus a --failure-days-dropped subcommand printing one DAY-DROPPED line per usable row in FILE order, none for an unmeasured row, no sort, no de-duplication, no sum.",
+  "export_ts": "2026-11-19T17:33:48+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
   "latest_evidence": "qa/negctl-R3020.log (324B, 2026-11-19)",
-  "next_milestone": "[R3023] next window (<=48h): (0) MAIN — **逐日历史只有最后一行看得见**：R3021 已裁定「被吃行不可归属、不可求和」，R3022 把最后一行交给了写它的那一步，但前一天、前两天的 `dropped=` 仍只能开 jsonl。下一轮先量（只读）：①按日列出 `dropped` 是否已有现成表头契约或读器（本轮实测：无·`series` 只是 `(day,on_day)`）；②无键旧行在列表里必须是 `none` 而不是 0，量清现有 `_json_lines`/`plain_day` 形状能否直接支撑；③列表是逐行不是合计（R3022 P3d 已量`[5,None,0]` 可分立），量清加这个面会不会与 `CRAWL-FAILURE-DAYS` 的单行合同冲突（是则二选一：换子命令还是换记号）。量清后实现并配判据，且**先落板再动代码**。",
+  "next_milestone": "[R3024] next window (<=48h): (0) MAIN — **这份列表把每一行都印出来，却没有窗**：`--failure-days-dropped` 现在逐行给值，但一天一行、文件无上限保留，于是它的长度随文件一起长（一年≈365 行），而 `--failure-days` 的系列面本来就有 `--days` 限制。下一轮先量（只读）：①仓内是否已有「按日窗口」的现成读器或表头契约可复用（`_window_start` 只服务失败侧路件与摘要，量清它能否直接约束日历史）；②若加窗，截断的列表必须**说出来**（缺省 `none` 会被读成「那天没吃掉过」），量清现有表头是否有位置放「截断」记号而不破单行/逐行合同；③是否与 `CRAWL-FAILURE-DAYS-DROPPED days=<n> bad=<n>` 的计数语义冲突（`days=` 是可用行数，截断后它会与印出行数不等，量清该改计数还是改记号）。量清后二选一实现并配判据，且**先落板再动代码**。",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
@@ -191,5 +191,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 290072
+  "state_bytes": 295294
 }

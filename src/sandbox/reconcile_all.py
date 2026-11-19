@@ -4704,8 +4704,11 @@ SUITES = [
     # R3022 added AC-RUN39: the step that writes the eaten-lines count now
     # says it on its own header, appended so the older tokens keep position
     # (38 -> 39, the same row).
+    # R3023 added AC-RUN40: every day row's own eaten count now has a listing
+    # of its own - file order, none for a row written before the field, no sum
+    # - because the DAYS header prints one line (39 -> 40, the same row).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 39),
+     os.path.join("..", "os", "test_crawl_runner.py"), 40),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

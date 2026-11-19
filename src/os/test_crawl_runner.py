@@ -245,6 +245,19 @@ cross-row addition) and is left for a later round. Arms 1/2/3/5/6/7 exercise the
 shipped standalone snapshot path, which stamps the machine's day - no assertion
 here depends on which day that is.
 
+AC-RUN40 (R3023) grades EVERY DAY, NOT JUST THE LAST. R3021 gave the DAYS header
+the last row's eaten count, so any earlier day still meant opening the jsonl.
+Measured before the change (qa/probe-R3023.log): that header prints exactly one
+line (P3a) and nothing pins the flag set or the help text (P1a/P1b), so the list
+lives in its own subcommand `--failure-days-dropped` - header
+CRAWL-FAILURE-DAYS-DROPPED then one DAY-DROPPED line per usable row in FILE
+order. A row written before the field carries no key at all (P2c), the same day
+can appear twice on disk (P2e), and the reader already yields file order (P2a),
+so the listing reports what is there: no sort, no de-duplication, no sum, no
+maximum, no backfill. `none` is the word for an unmeasured row; 0 means that
+day really ate nothing. The DAYS face, the (day, on_day) pairs and the 30-key
+trend row are untouched and arm 6 checks them in the same world.
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -3820,6 +3833,131 @@ def main():
        'the beat moves no byte outside the history row it names (an unchanged '
        'row moves none at all), prints no verdict, and the scanner still reads '
        'none of it')
+
+    # AC-RUN40 (R3023): only the LAST day row's eaten count had a face (R3021),
+    # so any earlier day still meant opening the jsonl. Measured before this was
+    # written (qa/probe-R3023.log): the DAYS header prints exactly one line
+    # (P3a) and nothing pins the flag set or the help text (P1a/P1b), so the
+    # list is a SEPARATE subcommand. A pre-field row carries no key at all
+    # (P2c), duplicates are real on disk (P2e), and file order is what the
+    # reader already yields (P2a) - so the listing reports, never de-duplicates.
+    def dd40(root):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--failure-days-dropped', '--root', root])
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def rows40(lines):
+        out = []
+        for line in lines:
+            if not line.startswith('DAY-DROPPED '):
+                continue
+            tok = dict(part.split('=', 1) for part in line.split()[1:])
+            out.append((tok['day'], tok['dropped']))
+        return out
+
+    def day_line40(row):
+        return json.dumps(row, sort_keys=True, separators=(',', ':'))
+
+    # arm 1: three day rows print three lines in file order, and none/0/5 are
+    # three different answers rather than one inherited number
+    r40 = world()
+    roots.append(r40)
+    p40 = hist37(r40)
+    put_days(p40, [plain_day('2026-11-15', 1),
+                   plain_day('2026-11-16', 2, dropped=0),
+                   plain_day('2026-11-17', 3, dropped=5)])
+    rc40, lines40 = dd40(r40)
+    ok('AC-RUN40', rc40 == 0
+       and lines40[0] == 'CRAWL-FAILURE-DAYS-DROPPED days=3 bad=0'
+       and rows40(lines40) == [('2026-11-15', 'none'),
+                               ('2026-11-16', '0'),
+                               ('2026-11-17', '5')],
+       'three day rows print three DAY-DROPPED lines in file order - none, 0 '
+       'and 5 stay three different answers')
+
+    # arm 2: a row written before the field is none in the line AND in the dict
+    r40b = world()
+    roots.append(r40b)
+    p40b = hist37(r40b)
+    put_days(p40b, [plain_day('2026-11-16', 2)])
+    rc40b, lines40b = dd40(r40b)
+    lst40b = RUN.list_failure_days_dropped(p40b)
+    ok('AC-RUN40', rc40b == 0 and rows40(lines40b) == [('2026-11-16', 'none')]
+       and lst40b['rows'][0]['dropped'] is None,
+       'a row written before the field reads none in both the printed line and '
+       'the dict - zero would be an invented measurement')
+
+    # arm 3: per row, never a sum or a maximum, and no aggregate on the header
+    r40c = world()
+    roots.append(r40c)
+    p40c = hist37(r40c)
+    put_days(p40c, [plain_day('2026-11-16', 1, dropped=5),
+                    plain_day('2026-11-17', 2),
+                    plain_day(TODAY, 3, dropped=0)])
+    rc40c, lines40c = dd40(r40c)
+    ok('AC-RUN40', rc40c == 0
+       and [v for _d, v in rows40(lines40c)] == ['5', 'none', '0']
+       and 'dropped=' not in lines40c[0],
+       'a 5, an unmeasured row and a 0 print 5/none/0 - no sum, no maximum, '
+       'and the header carries no aggregate to inherit')
+
+    # arm 4: the same day twice is reported twice - a de-duplicated listing
+    # would hide a row that is really on disk
+    r40d = world()
+    roots.append(r40d)
+    p40d = hist37(r40d)
+    put_days(p40d, [plain_day('2026-11-17', 1, dropped=5),
+                    plain_day('2026-11-17', 2, dropped=1)])
+    rc40d, lines40d = dd40(r40d)
+    ok('AC-RUN40', rc40d == 0
+       and rows40(lines40d) == [('2026-11-17', '5'), ('2026-11-17', '1')]
+       and len(lines40d) == 3,
+       'one day written twice is reported twice (5 and 1) rather than summed '
+       'or collapsed into one row')
+
+    # arm 5: a malformed line is counted and never listed - no number shifts
+    # onto a day that does not exist
+    r40e = world()
+    roots.append(r40e)
+    p40e = hist37(r40e)
+    with open(p40e, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(day_line40(plain_day('2026-11-16', 1, dropped=2)) + '\n')
+        fh.write('{"oops": 1\n')
+        fh.write(day_line40(plain_day('2026-11-17', 2)) + '\n')
+    rc40e, lines40e = dd40(r40e)
+    ok('AC-RUN40', rc40e == 0
+       and lines40e[0] == 'CRAWL-FAILURE-DAYS-DROPPED days=2 bad=1'
+       and rows40(lines40e) == [('2026-11-16', '2'),
+                                ('2026-11-17', 'none')],
+       'the one unusable line is counted as bad=1 and listed nowhere, so no '
+       'number lands on a day the file does not contain')
+
+    # arm 6: in the same world the DAYS face keeps its single line, its pairs
+    # and the 30-key trend row - the new face is a subcommand, not a token on
+    # somebody else's header
+    rc40f, lines40f = days_head37(r40)
+    s40f = RUN.summarize_failure_days(p40)
+    t40f = RUN.summarize_failure_trend(p40, RUN.failure_path(r40), TODAY)
+    ok('AC-RUN40', rc40f == 0 and len(lines40f) == 1
+       and lines40f[0].startswith('CRAWL-FAILURE-DAYS days=')
+       and 'DAY-DROPPED' not in lines40f[0]
+       and all(isinstance(p, tuple) and len(p) == 2 for p in s40f['series'])
+       and len(t40f) == 30 and 'dropped' not in t40f,
+       'the DAYS face keeps one line, (day, on_day) pairs and the 30-key trend '
+       'row while the per-day list lives in its own subcommand')
+
+    # arm 7: pure display - no byte written, no verdict, outside the scanner
+    before40 = tree_bytes(r40)
+    rc40g, lines40g = dd40(r40)
+    after40 = tree_bytes(r40)
+    text40g = '\n'.join(lines40g)
+    ok('AC-RUN40', rc40g == 0 and before40 == after40
+       and 'PASS' not in text40g and 'FLAG' not in text40g
+       and 'verdict' not in text40g
+       and 'crawl-failure' not in scan_src18,
+       'the listing writes no byte, prints no verdict, and the scanner still '
+       'reads none of it')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

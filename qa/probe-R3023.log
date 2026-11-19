@@ -1,0 +1,16 @@
+P1a exact_equality_DAYS=0 exact_equality_DAYS_BAD=2 startswith_arms=2
+P1b flag_mentions failure-days=5 failure-days-bad=1 help=0
+P1c proposed_flag_already_present=0
+P2a json_lines order=[(1, None), (2, 'json'), (3, None), (4, None), (6, None)]
+P2b read_failure_days rows=4 bad=1 order=['2026-11-15', '2026-11-16', '2026-11-17', '2026-11-17']
+P2c prefield_has_key=False prefield_get=None other_values=[0, 5, 1]
+P2d per_day_pairs=[('2026-11-15', None), ('2026-11-16', 0), ('2026-11-17', 5), ('2026-11-17', 1)] cross_row_sum=3
+P2e duplicate_days=['2026-11-17'] (a listing that dedups would hide one)
+P3a days_face rc=0 lines=1 header='CRAWL-FAILURE-DAYS days=4 bad=1 first=2026-11-15 last=2026-11-17 dropped=1 series=2026-11-15:1,2'
+P3b series_pairs=4 dict_keys=['bad', 'bytes', 'days', 'dropped', 'first', 'gate_ref_mb', 'last', 'present', 'series', 'size_gate']
+P3c trend_keys=30 dropped_in_trend=False
+P3d functions_mentioning_dropped=['_out_of_window_waiting', 'main', 'normalize', 'snapshot_failure_day', 'summarize_failure_days', 'summarize_failure_trend']
+P3e incidental_dropped_hits=[('_out_of_window_waiting', 'function kept only the first and last witness and dropped ev'), ('normalize', '"""Visible text of a page: noise blocks dropped, tags stripp'), ('summarize_failure_trend', '# old tail from an old tail plus one that dropped out last w')] (prose, no field)
+P3f readers_of_row_dropped_by_variable=['snapshot_failure_day']
+P4 consumers=['docs\\status-export.json', 'src\\os\\backlog.md', 'src\\os\\state.json', 'src\\os\\test_crawl_runner.py', 'tools\\crawl_runner.py']
+P4b scanner_mentions=False
