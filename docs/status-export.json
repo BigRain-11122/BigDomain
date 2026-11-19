@@ -6,12 +6,12 @@
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/crawl-source-split-demo-R3041.log (509B, 2026-11-19)",
-    "latest_evidence": "qa/crawl-source-split-demo-R3041.log (509B, 2026-11-19)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/demo-and-negctl-R3044.log (970B, 2026-11-19)",
+    "latest_evidence": "qa/demo-and-negctl-R3044.log (970B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3045] next window (<=48h): (0) MAIN — **表头 `first=`/`last=` 仍按文件行，而 pairs 已按天**：本轮把 `--series-days` 的 pair 段改成按 day 稳定排序，可 `first=`/`last=` 仍取自文件首尾行，所以一份手改（日序乱）历史可以印出「`last=` 之后才开始」的 pair 段，两个面在同一行上互相矛盾，且读者无法知道哪个是窗口的边界。下一轮先量（只读）：①在日序乱的历史上，`last=` 与已印段最后一日、`first=` 与段首日各自的差值能被独立投影吗；②这个矛盾是否值得改口径（例如让 `first=/last=` 也按天取，或新增一个「文件顺序非日序」的记号），还是只该在 help 里说清；③改 `first=/last=` 会撞哪些臂（`days=` 面、`gen` 面、AC-RUN43 臂 7、AC-RUN60/61 的重建臂）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, a day whose only row is malformed still reads silent on BOTH faces, the cap of 31 is a chosen law rather than a measured optimum, and the pre-existing AC-LGA9 red (truncated)",
-    "next_milestone_due": "2026-11-21T23:37:28+08:00",
-    "updated_at": "2026-11-19T23:37:28+08:00"
+    "next_milestone_due": "2026-11-21T23:39:23+08:00",
+    "updated_at": "2026-11-19T23:39:23+08:00"
   },
   "current": "2026-11-19 R3044 PRODUCT+ENGINEERING: the --days cap now cuts in DAY order and names the day it cut INSIDE. R3043 named the oldest dropped day, but the cap cut FILE ROWS while the token spoke in DAYS: on a history whose days are out of order a NEWER day could be dropped while an older one printed (measured, qa/probe-R3044.log). series_days_window() and series_full_pairs() now order the in-window pairs by day (stable), and tools/crawl_runner.py ships series_dropped_shared(full_pairs, kept_pairs) printed on the --series-days face: the dropped pairs that fall on a day the printed segment still shows, so a cap that cut inside a day is visible (0 = a clean cut between days). The default face is untouched.",
   "depts": [
@@ -42,9 +42,9 @@
     }
   ],
   "do": "2026-11-19 R3044 PRODUCT+ENGINEERING: the --days cap now cuts in DAY order and names the day it cut INSIDE. R3043 named the oldest dropped day, but the cap cut FILE ROWS while the token spoke in DAYS: on a history whose days are out of order a NEWER day could be dropped while an older one printed (measured, qa/probe-R3044.log). series_days_window() and series_full_pairs() now order the in-window pairs by day (stable), and tools/crawl_runner.py ships series_dropped_shared(full_pairs, kept_pairs) printed on the --series-days face: the dropped pairs that fall on a day the printed segment still shows, so a cap that cut inside a day is visible (0 = a clean cut between days). The default face is untouched.",
-  "export_ts": "2026-11-19T23:37:28+08:00",
+  "export_ts": "2026-11-19T23:39:23+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
-  "latest_evidence": "qa/live-crawl-dropped-from-R3043.log (314B, 2026-11-19)",
+  "latest_evidence": "qa/demo-and-negctl-R3044.log (970B, 2026-11-19)",
   "next_milestone": "[R3045] next window (<=48h): (0) MAIN — **表头 `first=`/`last=` 仍按文件行，而 pairs 已按天**：本轮把 `--series-days` 的 pair 段改成按 day 稳定排序，可 `first=`/`last=` 仍取自文件首尾行，所以一份手改（日序乱）历史可以印出「`last=` 之后才开始」的 pair 段，两个面在同一行上互相矛盾，且读者无法知道哪个是窗口的边界。下一轮先量（只读）：①在日序乱的历史上，`last=` 与已印段最后一日、`first=` 与段首日各自的差值能被独立投影吗；②这个矛盾是否值得改口径（例如让 `first=/last=` 也按天取，或新增一个「文件顺序非日序」的记号），还是只该在 help 里说清；③改 `first=/last=` 会撞哪些臂（`days=` 面、`gen` 面、AC-RUN43 臂 7、AC-RUN60/61 的重建臂）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, a day whose only row is malformed still reads silent on BOTH faces, the cap of 31 is a chosen law rather than a measured optimum, and the pre-existing AC-LGA9 red (truncated)",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
@@ -168,7 +168,7 @@
   },
   "results": [
     [
-      "3041",
+      "3044",
       "OSLoop 执行 tick"
     ]
   ],
@@ -181,10 +181,10 @@
   "self_drive": {
     "window": "2026-11-13..2026-11-19",
     "window_days": 7,
-    "log_lines_in_window": 396,
+    "log_lines_in_window": 415,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 57,
+    "substantive_non_idle_mention_lines": 60,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
