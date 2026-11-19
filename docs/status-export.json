@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "R3068 ENGINEERING: the round-opening scan now runs the CEO entry page's own live --check (new [DELIV] face), so a landed page cannot stay behind disk for more than one round; cost 0.16 s/round, fail-soft, signal not enforcement.",
+    "current": "2026-11-20 R3069 PRODUCT+ENGINEERING: the round-opening scan now asks every one of the nine CEO face gates instead of one, and the two that were red are named on the scan line, because [DELIV] ran only the entry page while six-gate-live and ugc-gate read rc=2 with nothing in the loop asking.",
     "do": "R3068 ENGINEERING: the loop now runs the entry page's own live gate every round. MEASURED BEFORE ANY CODE: `python tools/deliverable_index.py --check` on the real tree = VERDICT PASS 15/15 in 0.16 s; the battery suite drives the tool in a private temp world (so it cannot see the landed page drift); the only executor of that tool outside its suite is tools/face_sweep.py, and nothing schedules face_sweep; `Get-ScheduledTask BigDomain*` = exactly one task (BigDomain-OSLoop -> iteration_loop.ps1: lock / crawl beat / git pull / spawn); preview pages are re-rendered by hand only. Change: one `[DELIV]` face in the shipped opening scanner (source + install copies byte-identical, PURE ASCII) that runs the tool with --check and answers PASS / FLAG(failed=<AC-DIX codes> rc=<n>) / SKIP, never aborting the scan. Verified: harness ALL CRITERIA PASS (AC-SC1..SC22, 51 checks) with four new arms; live scan `[DELIV] PASS entry_page_matches_disk=1 failed=none`; evidence qa/deliv-face-R3068.log (1438B utf-8/lf). Honest limits: no new CEO page this round; sandbox arms drive a stub (face contract, not tool behaviour); a RED line is a signal, not a refusal; it covers ONE of nine CEO faces (face_sweep still unscheduled); a buyer still cannot pay.",
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
@@ -9,11 +9,11 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3062.log (126B, 2026-11-20)",
     "latest_evidence": "qa/deliv-face-R3068.log (1438B, this round: AC-SC22 four arms + live [DELIV] PASS)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3069] next window (<=48h): (0) MAIN - the [DELIV] face runs every round but covers ONE of nine CEO faces, while face_sweep (the only executor of all nine --check gates) is still unscheduled. Next window measures (read-only): per-face timing of face_sweep's nine subprocesses vs inlining nine --check calls in the opening scan, including face_sweep's write side effect (it re-renders preview/face-sweep.html); whether [DELIV] can generalise into one face table without becoming a second face_sweep; and which of the 15 --check criteria are page-vs-disk (this face's job) versus tool-behaviour (the suite's). Decide and prove ONE option with pinned criteria; pin the row before touching code.",
-    "next_milestone_due": "2026-11-22T07:23:08+08:00",
-    "updated_at": "2026-11-20T07:23:08+08:00"
+    "next_milestone": "[R3070] next window (<=48h): (0) MAIN — **两张红面现在每轮都会被印出来，但本轮只量了它们红，没有量它们为什么红**。下一轮先量（只读）：①six-gate-live 的 `fingerprint=fa804043e736acf8` 对 `landed=44ec8b5a60f4d1f3`——是「落地报告旧了、重渲即绿」还是「重渲仍红（事实本身变了）」，用一次 tmp 渲染到私有路径（不改 preview/）分别验证两种可能；②ugc-gate 的 `AC-UGR5 found=True line=154` 与 `AC-UGR8 status=LIVE sites=4 first_carried=False` 各自钉的是什么事实、是驱动缺陷还是报告陈旧，逐条读判据原文（勿凭记忆）；③若两者都只是「落地件旧了」，那么本族缺的是**一个安全的就地重渲入口**（谁有权写 preview/、写前写后如何自证），若其中一条是真缺陷，则先修缺陷不给重渲开旁路；④这两条红在 730 套件/5937 判据里是否已有覆盖（若已覆盖而仍红，说明覆盖的是工具行为不是落地件）。量清后二选一实现并配判据，且**先落板再动代码**。",
+    "next_milestone_due": "2026-11-22T07:43:49+08:00",
+    "updated_at": "2026-11-20T07:43:49+08:00"
   },
-  "current": "R3068 ENGINEERING: the round-opening scan now runs the CEO entry page's own live --check (new [DELIV] face), so a landed page cannot stay behind disk for more than one round; cost 0.16 s/round, fail-soft, signal not enforcement.",
+  "current": "2026-11-20 R3069 PRODUCT+ENGINEERING: the round-opening scan now asks every one of the nine CEO face gates instead of one, and the two that were red are named on the scan line, because [DELIV] ran only the entry page while six-gate-live and ugc-gate read rc=2 with nothing in the loop asking.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "R3068 ENGINEERING: the loop now runs the entry page's own live gate every round. MEASURED BEFORE ANY CODE: `python tools/deliverable_index.py --check` on the real tree = VERDICT PASS 15/15 in 0.16 s; the battery suite drives the tool in a private temp world (so it cannot see the landed page drift); the only executor of that tool outside its suite is tools/face_sweep.py, and nothing schedules face_sweep; `Get-ScheduledTask BigDomain*` = exactly one task (BigDomain-OSLoop -> iteration_loop.ps1: lock / crawl beat / git pull / spawn); preview pages are re-rendered by hand only. Change: one `[DELIV]` face in the shipped opening scanner (source + install copies byte-identical, PURE ASCII) that runs the tool with --check and answers PASS / FLAG(failed=<AC-DIX codes> rc=<n>) / SKIP, never aborting the scan. Verified: harness ALL CRITERIA PASS (AC-SC1..SC22, 51 checks) with four new arms; live scan `[DELIV] PASS entry_page_matches_disk=1 failed=none`; evidence qa/deliv-face-R3068.log (1438B utf-8/lf). Honest limits: no new CEO page this round; sandbox arms drive a stub (face contract, not tool behaviour); a RED line is a signal, not a refusal; it covers ONE of nine CEO faces (face_sweep still unscheduled); a buyer still cannot pay.",
-  "export_ts": "2026-11-20T07:23:08+08:00",
+  "do": "2026-11-20 R3069 PRODUCT+ENGINEERING: the round-opening scan now asks every one of the nine CEO face gates instead of one, and the two that were red are named on the scan line, because [DELIV] ran only the entry page while six-gate-live and ugc-gate read rc=2 with nothing in the loop asking.",
+  "export_ts": "2026-11-20T07:43:49+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
   "latest_evidence": "qa/deliv-face-R3068.log (1438B, this round: AC-SC22 four arms + live [DELIV] PASS)",
-  "next_milestone": "[R3069] next window (<=48h): (0) MAIN - the [DELIV] face runs every round but covers ONE of nine CEO faces, while face_sweep (the only executor of all nine --check gates) is still unscheduled. Next window measures (read-only): per-face timing of face_sweep's nine subprocesses vs inlining nine --check calls in the opening scan, including face_sweep's write side effect (it re-renders preview/face-sweep.html); whether [DELIV] can generalise into one face table without becoming a second face_sweep; and which of the 15 --check criteria are page-vs-disk (this face's job) versus tool-behaviour (the suite's). Decide and prove ONE option with pinned criteria; pin the row before touching code.",
+  "next_milestone": "[R3070] next window (<=48h): (0) MAIN — **两张红面现在每轮都会被印出来，但本轮只量了它们红，没有量它们为什么红**。下一轮先量（只读）：①six-gate-live 的 `fingerprint=fa804043e736acf8` 对 `landed=44ec8b5a60f4d1f3`——是「落地报告旧了、重渲即绿」还是「重渲仍红（事实本身变了）」，用一次 tmp 渲染到私有路径（不改 preview/）分别验证两种可能；②ugc-gate 的 `AC-UGR5 found=True line=154` 与 `AC-UGR8 status=LIVE sites=4 first_carried=False` 各自钉的是什么事实、是驱动缺陷还是报告陈旧，逐条读判据原文（勿凭记忆）；③若两者都只是「落地件旧了」，那么本族缺的是**一个安全的就地重渲入口**（谁有权写 preview/、写前写后如何自证），若其中一条是真缺陷，则先修缺陷不给重渲开旁路；④这两条红在 730 套件/5937 判据里是否已有覆盖（若已覆盖而仍红，说明覆盖的是工具行为不是落地件）。量清后二选一实现并配判据，且**先落板再动代码**。",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
@@ -192,5 +192,5 @@
     "window": "2026-11-14..2026-11-20",
     "window_days": 7
   },
-  "state_bytes": 610685
+  "state_bytes": 614710
 }

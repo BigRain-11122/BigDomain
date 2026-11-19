@@ -17,7 +17,17 @@ Laws honoured:
 Usage:
     python tools/face_sweep.py                # run the sweep and render the board
     python tools/face_sweep.py --check        # verify the landed board, no sweep
+    python tools/face_sweep.py --gates        # run every face's --check, print rows, write nothing
     python tools/face_sweep.py --faces-json P # sweep an alternate face spec (controls)
+
+R3069: --gates exists because the round-opening scan ran only ONE of these nine
+gates while two of them were red and invisible (measured: six-gate-live and
+ugc-gate both read rc=2 and stable across runs). Scheduling this tool's render
+mode instead would write two CEO pages every round, and AC-FSW10 makes the board
+stale again the moment any face page is re-rendered - so the loop needs the
+GATES without the BOARD. --gates runs the same run_face per face, prints one row
+each plus one summary line, and refuses to write: the face table stays in one
+place (FACES) and there is still one executor.
 """
 
 import hashlib
@@ -180,12 +190,14 @@ def _rel(p):
 
 
 def _read_args(argv):
-    opts = {"check": False, "faces_json": None, "timeout": 120}
+    opts = {"check": False, "gates": False, "faces_json": None, "timeout": 120}
     i = 0
     while i < len(argv):
         a = argv[i]
         if a == "--check":
             opts["check"] = True
+        elif a == "--gates":
+            opts["gates"] = True
         elif a == "--faces-json":
             i += 1
             opts["faces_json"] = argv[i]
@@ -493,6 +505,39 @@ def sweep(opts):
     return 0 if passing == len(rows) else 2
 
 
+def gates(opts):
+    """Run every face's own --check and print the reading; render nothing, write nothing.
+
+    R3069: the opening scan needs "are the nine gates green right now?" without the
+    board, because rendering the board costs two page writes per round and goes stale
+    again on the next face re-render (AC-FSW10). One row per face, then one summary
+    whose counts are derived from the rows rather than from a second tally.
+    """
+    faces = load_faces(opts["faces_json"])
+    rows = [run_face(f, opts["timeout"]) for f in faces]
+    for r in rows:
+        # R3069 measured: ugc_gate_report ends on "VERDICT CHECK-MISMATCH ...", which carries
+        # neither PASS nor FAIL, so the shared extraction kept the last PASS line and this
+        # row printed "rc=2 ... PASS AC-UGR9" - a line that contradicts itself. For a red row
+        # the last line is the one that says why, so use it when it differs.
+        detail = r["verdict"]
+        if not _passing(r) and r.get("tail") and r["tail"] != detail:
+            detail = r["tail"]
+        print("gate %-16s rc=%-3d mutated=%d %s (%.2fs)"
+              % (r["id"], r["exit"], 1 if r.get("mutated") else 0,
+                 detail, r["duration_s"]))
+    passing = [r["id"] for r in rows if _passing(r)]
+    red = [r["id"] for r in rows if not _passing(r)]
+    # A gate that rewrites its own artifact is red for the read-only law even when it
+    # exits zero: the loop must never mutate a CEO page while reading it.
+    mut = [r["id"] for r in rows if r.get("mutated")]
+    bad = red + [i for i in mut if i not in red]
+    print("GATES %s gates=%d green=%d red=%d red_ids=%s mutated=%s"
+          % ("PASS" if not bad else "FLAG", len(rows), len(passing), len(red),
+             ",".join(red) or "none", ",".join(mut) or "none"))
+    return 0 if not bad else 2
+
+
 def check():
     fails = []
     if not os.path.exists(OUT_JSON) or not os.path.exists(OUT_HTML):
@@ -727,6 +772,8 @@ def main(argv):
     opts = _read_args(argv)
     if opts["check"]:
         return check()
+    if opts["gates"]:
+        return gates(opts)
     return sweep(opts)
 
 

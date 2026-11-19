@@ -360,6 +360,40 @@ try {
   }
 } catch { Write-Output '[DELIV] FLAG check_failed' }
 
+# --- [GATES] all nine CEO face gates (R3069, criteria AC-SC23) ---
+# [DELIV] above runs ONE of the nine gates (the entry page). Measured at R3069:
+# the nine --check runs together cost 8.68 s, none of them writes to its own
+# pair, and two of them (six-gate-live, ugc-gate) were RED with nothing in the
+# loop running them. face_sweep owns BOTH the face table and the executor, so
+# this face asks it for the reading (--gates: one row per face plus one summary,
+# no render, no write) instead of keeping a second list here. Scheduling
+# face_sweep's render mode was refused: it writes two CEO pages every round and
+# its own AC-FSW10 goes stale again on the next face re-render. Fail-soft.
+try {
+  $fsTool = Join-Path $repo 'tools\face_sweep.py'
+  $fsPy = (Get-Command python -ErrorAction SilentlyContinue).Source
+  if (-not (Test-Path -LiteralPath $fsTool)) {
+    Write-Output '[GATES] SKIP tool_absent'
+  } elseif (-not $fsPy) {
+    Write-Output '[GATES] SKIP python_absent'
+  } else {
+    $fsOut = & $fsPy $fsTool --gates 2>&1
+    $fsRc = $LASTEXITCODE
+    $fsTxt = (@($fsOut) | ForEach-Object { "$_" }) -join "`n"
+    $fsSum = @([regex]::Matches($fsTxt, 'GATES (PASS|FLAG) gates=(\d+) green=(\d+) red=(\d+) red_ids=(\S+)'))
+    if ($fsSum.Count -lt 1) {
+      Write-Output "[GATES] FLAG no_summary_line rc=$fsRc"
+    } else {
+      $fsM = $fsSum[$fsSum.Count - 1]
+      if ($fsRc -eq 0) {
+        Write-Output ("[GATES] PASS gates={0} green={1} red=0" -f $fsM.Groups[2].Value, $fsM.Groups[3].Value)
+      } else {
+        Write-Output ("[GATES] FLAG gates={0} green={1} red={2} red_ids={3} rc={4}" -f $fsM.Groups[2].Value, $fsM.Groups[3].Value, $fsM.Groups[4].Value, $fsM.Groups[5].Value, $fsRc)
+      }
+    }
+  }
+} catch { Write-Output '[GATES] FLAG check_failed' }
+
 # --- [TREE] git single-writer check ---
 $lockPath = Join-Path $repo '.git\index.lock'
 if (Test-Path $lockPath) {

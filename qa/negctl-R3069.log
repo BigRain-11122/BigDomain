@@ -1,0 +1,17 @@
+=== honest copy ===
+  Q1 red face named      GREEN (rc=2 wrote=False)
+  Q2 mutated face red    GREEN (rc=2 wrote=False)
+  Q3 writes nothing      GREEN (rc=2 wrote=False)
+=== mutations (each must die where it was mutated) ===
+  -- m1_no_red_never_flag
+     Q1 red face named      CAUGHT (rc=0 wrote=False)
+     Q2 mutated face red    CAUGHT (rc=0 wrote=False)
+     Q3 writes nothing      SURVIVED (rc=0 wrote=False)
+  -- m2_mutated_is_green
+     Q1 red face named      SURVIVED (rc=2 wrote=False)
+     Q2 mutated face red    CAUGHT (rc=2 wrote=False)
+     Q3 writes nothing      SURVIVED (rc=2 wrote=False)
+  -- m3_gates_writes_board
+     Q1 red face named      SURVIVED (rc=2 wrote=True)
+     Q2 mutated face red    SURVIVED (rc=2 wrote=True)
+     Q3 writes nothing      CAUGHT (rc=2 wrote=True)

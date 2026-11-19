@@ -139,9 +139,97 @@ def main():
     tool = load_tool()
     world, prev, tools, faces = world_setup(tool)
     try:
+        # ---- AC-FSWB19 the --gates reading (pinned at R3069 BEFORE this code):
+        # the opening scan needs "are the nine gates green right now?" without the
+        # board: rendering writes two CEO pages per round and AC-FSW10 goes stale on
+        # the next face re-render. These arms grade the reading, not the sweep.
+        GATES_WORLDS = []
+
+        def gates_world(faces):
+            world2 = tempfile.mkdtemp(prefix='face-sweep-gates-')
+            GATES_WORLDS.append(world2)
+            prev2 = os.path.join(world2, 'preview')
+            tl2 = os.path.join(world2, 'tools')
+            os.makedirs(prev2, exist_ok=True)
+            os.makedirs(tl2, exist_ok=True)
+            write(os.path.join(tl2, 'stub-pass.py'), PASS_DRIVER)
+            write(os.path.join(tl2, 'stub-fail.py'), FAIL_DRIVER)
+            write(os.path.join(tl2, 'stub-mutate.py'),
+                  MUTATE_DRIVER % os.path.join(world2, 'preview', 'stub-a.html'))
+            tool.ROOT = world2
+            tool.OUT_HTML = os.path.join(world2, 'preview', 'face-sweep.html')
+            tool.OUT_JSON = os.path.join(world2, 'preview', 'face-sweep.json')
+            for f in faces:
+                write(os.path.join(world2, f['html']), '<html>%s</html>\n' % f['id'])
+                write(os.path.join(world2, f['json']), '{"id": "%s"}\n' % f['id'])
+            tool.FACES = [(f['id'], f['label'], f['driver'], f['html'], f['json'],
+                           f.get('meaning', '')) for f in faces]
+            return world2
+
+        def face(idx, driver='tools/stub-pass.py'):
+            return dict(id='stub-%s' % idx, label='stub %s' % idx, driver=driver,
+                        html='preview/stub-%s.html' % idx,
+                        json='preview/stub-%s.json' % idx,
+                        meaning='a fixture face, it costs nothing')
+
+        green = [face('a'), face('b'), face('c')]
+        gates_world(green)
+        rc, out = run_quiet(lambda: tool.gates({'gates': True, 'faces_json': None, 'timeout': 30}))
+        rows = [ln for ln in out.splitlines() if ln.startswith('gate ')]
+        ok('AC-FSWB19a an all-green table exits zero and prints one row per face',
+           rc == 0 and len(rows) == 3, 'rc=%d rows=%d' % (rc, len(rows)))
+        ok('AC-FSWB19b the summary derives its counts from those rows',
+           'GATES PASS gates=3 green=3 red=0 red_ids=none mutated=none' in out,
+           out.strip().splitlines()[-1] if out.strip() else 'no output')
+
+        one_red = [face('a'), face('b', 'tools/stub-fail.py'), face('c')]
+        gates_world(one_red)
+        rc, out = run_quiet(lambda: tool.gates({'gates': True, 'faces_json': None, 'timeout': 30}))
+        rows = [ln for ln in out.splitlines() if ln.startswith('gate ')]
+        ok('AC-FSWB19c one red face flips the exit and is NAMED, with every face still read',
+           rc == 2 and len(rows) == 3 and 'GATES FLAG gates=3 green=2 red=1 red_ids=stub-b' in out,
+           out.strip().splitlines()[-1] if out.strip() else 'no output')
+
+        mutating = [face('a', 'tools/stub-mutate.py'), face('b')]
+        gates_world(mutating)
+        rc, out = run_quiet(lambda: tool.gates({'gates': True, 'faces_json': None, 'timeout': 30}))
+        ok('AC-FSWB19d a gate that rewrites its own page is FLAG even when it exits zero',
+           rc == 2 and 'mutated=stub-a' in out, out.strip().splitlines()[-1])
+
+        missing = [face('a', 'tools/no-such-driver.py'), face('b')]
+        gates_world(missing)
+        rc, out = run_quiet(lambda: tool.gates({'gates': True, 'faces_json': None, 'timeout': 30}))
+        ok('AC-FSWB19e a missing driver counts red (rc 127) and the other faces still run',
+           rc == 2 and 'rc=127' in out and 'GATES FLAG gates=2 green=1 red=1 red_ids=stub-a' in out,
+           out.strip().splitlines()[-1])
+
+        gates_world(green)
+        before_board = (os.path.exists(tool.OUT_HTML), os.path.exists(tool.OUT_JSON),
+                        snapshot(os.path.dirname(tool.OUT_HTML), ('.html', '.json')))
+        run_quiet(lambda: tool.gates({'gates': True, 'faces_json': None, 'timeout': 30}))
+        after_board = (os.path.exists(tool.OUT_HTML), os.path.exists(tool.OUT_JSON),
+                       snapshot(os.path.dirname(tool.OUT_HTML), ('.html', '.json')))
+        ok('AC-FSWB19f --gates renders nothing: the board pair is absent before and after',
+           before_board == after_board and not before_board[0] and not before_board[1],
+           'exists=%r/%r' % (before_board[0], before_board[1]))
+
+        rc, out = run_quiet(lambda: tool.main(['--gates']))
+        ok('AC-FSWB19g main() dispatches --gates rather than falling through to the sweep',
+           'GATES ' in out and not os.path.exists(tool.OUT_HTML),
+           out.strip().splitlines()[-1] if out.strip() else 'no output')
+
         # ---- AC-FSWB3 positive leg: a real sweep, then every artifact is OLDER than the
         # stamp it published under. Without this leg the new gate could be satisfied by
         # being permanently red, which would say nothing.
+        # AC-FSWB19 drove six throwaway worlds above; put the suite's own world back so the
+        # sweep legs below measure the world world_setup built, and drop the throwaways.
+        for _w in GATES_WORLDS:
+            shutil.rmtree(_w, ignore_errors=True)
+        tool.ROOT = world
+        tool.OUT_HTML = os.path.join(world, 'preview', 'face-sweep.html')
+        tool.OUT_JSON = os.path.join(world, 'preview', 'face-sweep.json')
+        tool.FACES = [(f['id'], f['label'], f['driver'], f['html'], f['json'],
+                       f.get('meaning', '')) for f in faces]
         rc, out = run_quiet(lambda: tool.sweep(face_opts()))
         doc = json.load(io.open(tool.OUT_JSON, encoding='utf-8'))
         swept_ns = doc.get('swept_ns')

@@ -97,6 +97,18 @@
 #           (d) read-only: preview/index.html bytes and mtime unchanged.
 #           The sandbox carries a STUB tool on purpose: these arms test the
 #           face's contract, not the tool (which has its own battery suite).
+#   AC-SC23 [GATES] face (R3069, pinned in src/os/backlog.md BEFORE this arm
+#           existed): [DELIV] runs one of the nine CEO gates, while the nine
+#           together cost 8.68 s, none of them writes, and two of them read RED
+#           with nothing in the loop running them. The scan asks the sweep tool
+#           that already owns the face table (--gates: rows plus one summary,
+#           no render, no write).
+#           (a) all green -> "[GATES] PASS gates=3 green=3 red=0", scan exits 0;
+#           (b) red table -> "[GATES] FLAG ... red_ids=six-gate-live,ugc-gate
+#               rc=2", scan still exits 0;
+#           (c) tool absent -> "[GATES] SKIP tool_absent", scan exits 0;
+#           (d) read-only: preview/face-sweep.html bytes and mtime unchanged.
+#           Stub tool again: the arms grade the face's contract, not the sweep.
 #   AC-SC10 harness laws: sandbox scan copy is byte-identical to the real
 #           script (copied at run time = single source of truth, zero drift);
 #           harness file is pure ASCII; exit 0 all-pass / 2 any-fail.
@@ -503,6 +515,60 @@ try {
     $after = '' + (Get-Item -LiteralPath $idxPath).Length + '/' + (Get-Item -LiteralPath $idxPath).LastWriteTimeUtc.Ticks
     Assert ($before -eq $after) 'AC-SC22d' 'preview/index.html bytes and mtime unchanged by the scan'
 
+    # --- [GATES] face (R3069, AC-SC23) ------------------------------------
+    # AC-SC23a: all nine green -> one PASS line with the counts the tool printed.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    New-Item -ItemType Directory -Path (Join-Path $sbxRepo 'tools') -Force | Out-Null
+    Write-All 'tools\face_sweep.py' @(
+        'import sys',
+        'print("gate stub-a rc=0   mutated=0 VERDICT PASS 1/1 (0.01s)")',
+        'print("GATES PASS gates=3 green=3 red=0 red_ids=none mutated=none")',
+        'sys.exit(0)'
+    )
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[GATES\] PASS gates=3 green=3 red=0') 'AC-SC23a' 'all-green sweep -> GATES PASS with the tool own counts'
+    Assert ($r.code -eq 0) 'AC-SC23a' 'scan exits 0 on a green gate table'
+
+    # AC-SC23b: a red table -> FLAG naming every red face, and the scan still exits 0.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    New-Item -ItemType Directory -Path (Join-Path $sbxRepo 'tools') -Force | Out-Null
+    Write-All 'tools\face_sweep.py' @(
+        'import sys',
+        'print("gate six-gate-live rc=2   mutated=0 VERDICT FAIL 8/8 fingerprint=x landed=y (4.67s)")',
+        'print("gate ugc-gate      rc=2   mutated=0 VERDICT CHECK-MISMATCH checks=7/9 failed=AC-UGR5,AC-UGR8 (0.35s)")',
+        'print("GATES FLAG gates=9 green=7 red=2 red_ids=six-gate-live,ugc-gate mutated=none")',
+        'sys.exit(2)'
+    )
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[GATES\] FLAG gates=9 green=7 red=2 red_ids=six-gate-live,ugc-gate rc=2') 'AC-SC23b' 'red table -> FLAG names both red faces and rc'
+    Assert ($r.code -eq 0) 'AC-SC23b' 'a red gate table never aborts the scan'
+
+    # AC-SC23c: tool absent -> SKIP, scan exits 0.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[GATES\] SKIP tool_absent') 'AC-SC23c' 'missing sweep tool -> GATES SKIP tool_absent'
+    Assert ($r.code -eq 0) 'AC-SC23c' 'scan exits 0 with no sweep tool'
+
+    # AC-SC23d: read-only - the landed sweep board survives the face untouched.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    New-Item -ItemType Directory -Path (Join-Path $sbxRepo 'tools') -Force | Out-Null
+    Write-All 'tools\face_sweep.py' @('import sys', 'print("GATES PASS gates=1 green=1 red=0 red_ids=none mutated=none")', 'sys.exit(0)')
+    $fsp = Join-Path $sbxRepo 'preview\face-sweep.html'
+    New-Item -ItemType Directory -Path (Split-Path -Parent $fsp) -Force | Out-Null
+    [System.IO.File]::WriteAllText($fsp, 'landed-sweep-board', $utf8NoBom)
+    $before = '' + (Get-Item -LiteralPath $fsp).Length + '/' + (Get-Item -LiteralPath $fsp).LastWriteTimeUtc.Ticks
+    Git-Baseline
+    $r = Invoke-Scan
+    $after = '' + (Get-Item -LiteralPath $fsp).Length + '/' + (Get-Item -LiteralPath $fsp).LastWriteTimeUtc.Ticks
+    Assert ($before -eq $after) 'AC-SC23d' 'preview/face-sweep.html bytes and mtime unchanged by the scan'
+
     # --- AC-SC10: harness laws ---------------------------------------------
     [System.IO.File]::Copy($realScan, $sbxScan, $true)
     $a = [System.IO.File]::ReadAllBytes($realScan)
@@ -521,6 +587,6 @@ finally {
     Remove-Item -LiteralPath $sbxRoot -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC22, " + $script:pass + " checks)"); exit 0 }
+if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC23, " + $script:pass + " checks)"); exit 0 }
 Write-Output ("FAILURES=" + $script:fail)
 exit 2

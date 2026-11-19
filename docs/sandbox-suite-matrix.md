@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 730 | 5936 | 675/675 | R2739 |
+| 730 | 5937 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -743,7 +743,7 @@
 | 703 | os-filing-checklist | ../os/test_filing_checklist.py | 8 | no-evidence | - |
 | 704 | os-membership-face | ../os/test_membership_face.py | 10 | no-evidence | - |
 | 705 | os-value-domain | ../os/test_value_domain.py | 12 | no-evidence | - |
-| 706 | os-face-sweep | ../os/test_face_sweep.py | 18 | no-evidence | - |
+| 706 | os-face-sweep | ../os/test_face_sweep.py | 19 | no-evidence | - |
 | 707 | os-money-path-demo | ../os/test_money_path_demo.py | 6 | no-evidence | - |
 | 708 | os-first-yuan-path | ../os/test_first_yuan_path.py | 7 | no-evidence | - |
 | 709 | os-lobby-session-trace | ../os/test_lobby_session_trace.py | 9 | no-evidence | - |
@@ -768,7 +768,7 @@
 | 728 | os-face-walk-static | ../os/test_face_walk_static.py | 5 | no-evidence | - |
 | 729 | os-closeout-gate | ../os/test_closeout_gate.py | 5 | no-evidence | - |
 | 730 | os-live-proof | ../os/test_live_proof.py | 13 | no-evidence | - |
-|  | 合计 |  | 5936 | green 675 / FAIL 0 / no-evidence 55 |  |
+|  | 合计 |  | 5937 | green 675 / FAIL 0 / no-evidence 55 |  |
 
 ## 证据出处
 

@@ -1,0 +1,38 @@
+=== P1 declared face table ===
+faces=9
+  id=first-yuan-chain driver=tools/first_yuan_chain.py
+  id=six-gate-live driver=tools/platform_live_report.py
+  id=lobby-ws driver=tools/lobby_ws_report.py
+  id=city-face driver=tools/city_face_report.py
+  id=ugc-gate driver=tools/ugc_gate_report.py
+  id=payment-gate driver=tools/payment_gate_report.py
+  id=membership driver=tools/membership_benefit_report.py
+  id=ledger-business driver=tools/ledger_business_report.py
+  id=entry-index driver=tools/deliverable_index.py
+
+=== P2/P3 per-face --check, timed, write check ===
+  first-yuan-chain  0.411s rc=0 moved=0 VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=3715B read_only=True
+  six-gate-live   4.715s rc=2 moved=0 VERDICT FAIL 8/8 fingerprint=fa804043e736acf8 landed=44ec8b5a60f4d1f3 sizes={'html': 6889, 'json': 5292}
+  lobby-ws        1.514s rc=0 moved=0 VERDICT PASS 8/8 fingerprint=fbdb7f517fb06222 landed=fbdb7f517fb06222 sizes={'html': 5952, 'json': 3070}
+  city-face       0.797s rc=0 moved=0 VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f
+  ugc-gate        0.415s rc=2 moved=0 VERDICT CHECK-MISMATCH checks=7/9 failed=AC-UGR5,AC-UGR8
+  payment-gate    0.244s rc=0 moved=0 value-domain: PASS products=5 tiers=0
+  membership      0.308s rc=0 moved=0 VERDICT PASS checks=8/8 fresh_fingerprint=918674b2db958676 landed=918674b2db958676
+  ledger-business  0.128s rc=0 moved=0 LEDGER BUSINESS CHECK PASS fails=0
+  entry-index     0.153s rc=0 moved=0 VERDICT PASS 15/15 fingerprint=ec131c624edfe4ec
+P2 nine_face_total_s=8.683
+P3 write_moves=0 (0 = every --check is read-only toward its own pair)
+
+=== P4 face_sweep --check itself ===
+  sec=0.110 rc=2 moved=0 verdict=VERDICT FAIL 20/21
+  stderr=none
+  html=(7000, 1794974449516121700) (7000, 1794974449516121700)
+
+=== P5 sweep rendered into tmp (paths monkeypatched) ===
+  sec=8.487 rc=2 html=7034 json=6255
+  overhead_over_nine=s=-0.196
+
+=== P6 live staleness ===
+  index.html mtime_ns=1795129621460860300
+  face-sweep.html mtime_ns=1794974449516121700
+  index_newer_than_sweep=True
