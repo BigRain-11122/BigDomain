@@ -1,0 +1,8 @@
+  GREEN honest-week wcov=(7, 7)
+  GREEN honest-trimmed wcov=(1, 7)
+  GREEN honest-window wcov=(3, 3)
+  GREEN honest-cov cov=('2026-11-13', '2026-11-19')
+  RED-AS-EXPECTED mutA-window-counts-file-total narrowed window reads (7, 3)
+  RED-AS-EXPECTED mutB-no-coverage-answer trimmed window reads None
+  RED-AS-EXPECTED mutC-cov-loses-first-day cov reads ('2026-11-19', '2026-11-19')
+NEGCTL-R2998 done

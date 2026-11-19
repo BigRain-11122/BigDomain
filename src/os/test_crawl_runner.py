@@ -720,6 +720,77 @@ def main():
        and 'recur=none' in line30b,
        'an empty world answers none on both faces without raising')
 
+    # AC-RUN15 (R2998): the trend names how much history it actually had. A
+    # trimmed file used to read exactly like a repo that had just started
+    # recording; the coverage fields are the only place the difference shows.
+    week = ['2026-11-13', '2026-11-14', '2026-11-15', '2026-11-16',
+            '2026-11-17', '2026-11-18', TODAY]
+    root31 = world(); roots.append(root31)
+    h31 = RUN.failure_day_path(root31)
+    os.makedirs(os.path.dirname(h31), exist_ok=True)
+    with open(h31, 'w', encoding='utf-8', newline='\n') as fh:
+        for day in week:
+            fh.write(json.dumps({'day': day, 'on_day': 1, 'total': 1},
+                                sort_keys=True,
+                                separators=(',', ':')) + '\n')
+    t31 = RUN.summarize_failure_trend(h31, RUN.failure_path(root31),
+                                      TODAY + 'T20:00:00+08:00', 7)
+    ok('AC-RUN15', t31['wcov'] == (7, 7) and t31['cov'] == (week[0], TODAY),
+       'a complete seven-day history reads wcov=7/7 with its own first day')
+
+    root32 = world(); roots.append(root32)
+    h32 = RUN.failure_day_path(root32)
+    os.makedirs(os.path.dirname(h32), exist_ok=True)
+    with open(h32, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(json.dumps({'day': TODAY, 'on_day': 1, 'total': 1},
+                            sort_keys=True, separators=(',', ':')) + '\n')
+    t32 = RUN.summarize_failure_trend(h32, RUN.failure_path(root32),
+                                      TODAY + 'T20:00:00+08:00', 7)
+    ok('AC-RUN15', t32['wcov'] == (1, 7) and t32['days'] == 1
+       and t32['today'] == 1 and t32['mean'] == 1.0,
+       'a trimmed history answers wcov=1/7 while today/mean stay unchanged')
+
+    t31b = RUN.summarize_failure_trend(h31, RUN.failure_path(root31),
+                                       TODAY + 'T20:00:00+08:00', 3)
+    ok('AC-RUN15', t31b['wcov'] == (3, 3),
+       'a three-day window over seven rows of history reads wcov=3/3')
+
+    root33 = world(); roots.append(root33)
+    h33 = RUN.failure_day_path(root33)
+    os.makedirs(os.path.dirname(h33), exist_ok=True)
+    with open(h33, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{not json\n')
+        fh.write(json.dumps({'day': TODAY, 'on_day': 0, 'total': 0},
+                            sort_keys=True, separators=(',', ':')) + '\n')
+    t33 = RUN.summarize_failure_trend(h33, RUN.failure_path(root33),
+                                      TODAY + 'T20:00:00+08:00', 7)
+    ok('AC-RUN15', t33['wcov'] == (1, 7) and t33['bad'] == 1,
+       'a malformed row is not a covered day')
+
+    root34 = world(); roots.append(root34)
+    buf34 = io.StringIO()
+    with contextlib.redirect_stdout(buf34):
+        rc34 = RUN.main(['--failure-trend', '--root', root34])
+    line34 = buf34.getvalue().strip()
+    ok('AC-RUN15', rc34 == 0 and 'cov=none' in line34 and 'wcov=0/7' in line34,
+       'a missing history answers cov=none wcov=0/7 without raising')
+
+    buf35 = io.StringIO()
+    with contextlib.redirect_stdout(buf35):
+        rc35 = RUN.main(['--failure-trend', '--root', root31, '--days', '7'])
+    line35 = buf35.getvalue().strip()
+    scan_src = ''
+    scan_path = os.path.join(ROOT, 'tools', 'skills', 'bigdomain-loop-scan',
+                             'scripts', 'scan_five_still.ps1')
+    if os.path.isfile(scan_path):
+        with open(scan_path, 'r', encoding='utf-8', errors='replace') as fh:
+            scan_src = fh.read()
+    ok('AC-RUN15', rc35 == 0
+       and ('cov=%s..%s' % (week[0], TODAY)) in line35
+       and 'wcov=7/7' in line35 and 'wcov' not in scan_src
+       and 'crawl-failure-days' not in scan_src,
+       'the CLI carries both coverage fields and stays outside the gate face')
+
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
 

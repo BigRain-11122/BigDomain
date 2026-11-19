@@ -91,6 +91,26 @@ BASELINE LAW: qa/crawl-baselines.json, one object keyed by url, holding digest /
 bytes / fetched_at / excerpt. It is a product file (a person can read what the
 page said last time), written atomically after the record is appended.
 
+COVERAGE + THE RETENTION ANSWER (R2998): the group canon
+cph4/resource-chain.md section 4.1 requires every append-only file to have a
+rotation design (current segment + archive segment + retention). The failure
+files are append-only, so that law covers them BY CATEGORY - and this repo has
+no rotation design for them, which is stated rather than implied. The measured
+reason it is not built here: qa/crawl-failure-days.jsonl is 107B per row, one
+row per day, rewritten in place on a same-day beat, so a full year is ~38.1KB
+(0.19% of the repository's 20MB per-file pre-commit gate); the side channel
+qa/crawl-failures.jsonl grows only when a crawl actually fails, and its worst
+bound at every beat failing for a year is ~9.07MB, still under that gate. With
+no reusable rotation tool in the tree and no size pressure, a second cleanup
+mechanism would be machinery without a problem - so the exemption is numeric
+and written down here instead of silently assumed. What IS fixed is the other
+half: a trimmed history used to read exactly like a repo that had just started
+recording, because the line reported rows in the file and never how much of the
+requested window was observed. The trend line now carries cov=<first>..<last>
+(the history's own usable coverage) and wcov=<covered>/<requested days>, so an
+under-observed window answers "1/7" instead of pretending to be complete.
+Neither field gates: nothing turns green or red because of them.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -483,6 +503,19 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7):
             if len(days) >= 2:
                 recur_fails += 1
         recur = (recurring, recur_fails)
+    # R2998 COVERAGE: how much history the answer actually rested on. Measured
+    # before this was written: a seven-day history trimmed down to today's one
+    # row and a repo that started recording yesterday printed the SAME line,
+    # because days= counts rows in the file, not the days a window was
+    # observed. cov is the file's own first/last usable day; wcov is the days
+    # inside the requested window that have a row over the days requested, so
+    # an under-observed window is visible instead of silent.
+    all_days = sorted({str(r.get('day') or '')[:10] for r in rows})
+    cov = (all_days[0], all_days[-1]) if all_days else None
+    win = max(1, int(window_days))
+    wcov = None
+    if usable:
+        wcov = (len({str(r.get('day') or '')[:10] for r in span}), win)
     wday, wcount = (None, None)
     if worst_row is not None:
         wday = str(worst_row.get('day') or '')[:10]
@@ -491,7 +524,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7):
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
             'worst': (None, None) if worst_row is None else (wday, wcount),
             'recurring': recurring, 'sources': len(days_by_source),
-            'recur': recur,
+            'recur': recur, 'cov': cov, 'wcov': wcov,
             'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
             'window_days': window_days}
 
@@ -701,13 +734,17 @@ def main(argv=None):
                     else '%s:%d' % (trend['kind'], trend['kind_count']))
         recur_txt = ('none' if trend['recur'] is None
                      else '%d:%d' % trend['recur'])
+        cov_txt = ('none' if trend['cov'] is None
+                   else '%s..%s' % trend['cov'])
+        wcov_txt = ('none' if trend['wcov'] is None
+                    else '%d/%d' % trend['wcov'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
               'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
-              'recur=%s'
+              'recur=%s cov=%s wcov=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
-                 recur_txt))
+                 recur_txt, cov_txt, wcov_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)

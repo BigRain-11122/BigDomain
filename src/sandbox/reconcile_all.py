@@ -4660,7 +4660,7 @@ SUITES = [
     # the side channel is gone) and the single failure_kind() bucket shared by
     # --failures and the trend line. (AC-RUN14 pre-registered in the R2997 PIN.)
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 14),
+     os.path.join("..", "os", "test_crawl_runner.py"), 15),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

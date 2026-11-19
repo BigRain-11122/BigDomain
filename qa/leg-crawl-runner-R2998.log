@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=730 registry_criteria=5868 selected=1 selected_criteria=15 cap=600s leg_cap=0s overrides=1 exact=1 state=RUNNING
+SHARD selected os-crawl-runner crit=15 path=..\os\test_crawl_runner.py
+SHARD row os-crawl-runner rc=0 pass=83 fail=0 detail=yes suite=PASS 83/83 crit=15 6.4s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=15 crit_mismatch=0 elapsed=6.4s crit_checked=1
