@@ -2607,6 +2607,155 @@ def main():
        and 'crawl-failure' not in scan_src18,
        'the face leaves the world byte-identical, prints a header plus one line per waiter, and neither the row nor the scanner learns a per-source key')
 
+    # AC-RUN32 (R3015): the empty old table could not say WHY it was empty, and
+    # the header could not say how far its evidence reached. Measured before the
+    # pin (qa/probe-R3015.log): an absent channel, a channel trimmed to the
+    # window and a channel holding an old row the record never looked after all
+    # printed pending_old=none with zero rows, while a second read of the same
+    # file drifted inside one call when a row was appended between reads. The
+    # header now carries fcov= (the R3011 span, derived from the rows this call
+    # already loaded) and, when the table is empty, reason=.
+    SRC32A = 'https://a32.example/page'
+    SRC32B = 'https://b32.example/page'
+    SRC32C = 'https://c32.example/page'
+    SRC32L = 'https://late32.example/page'
+    SRC32K = 'https://keep32.example/page'
+    OLD32 = '2026-08-20T10:00:00+08:00'   # 91 days
+    EDGE32 = '2026-11-08T10:00:00+08:00'  # inside a 14-day window, outside 7
+    MID32 = '2026-11-10T10:00:00+08:00'   # 9 days
+    BASE32 = [(SRC32K, TODAY + 'T09:00:00+08:00')]
+
+    def world32(failures, records=BASE32):
+        root = world()
+        roots.append(root)
+        for url, when in records:
+            CR.append_record(CR.record_path(root), url, when, 'no-drift')
+        for url, when in failures:
+            RUN.append_failure(RUN.failure_path(root), url, when,
+                               'TimeoutError: t')
+        return root
+
+    def listing32(root, window=7, day=TODAY):
+        return RUN.list_pending_old(CR.record_path(root),
+                                   RUN.failure_path(root), day, window)
+
+    def head32(root, window=7):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--pending-old-list', '--root', root,
+                           '--days', str(window)])
+        lines = [n for n in buf.getvalue().splitlines() if n.strip()]
+        return rc, lines
+
+    def snapshot32(root):
+        out = []
+        for base, _dirs, files in os.walk(root):
+            for name in files:
+                p = os.path.join(base, name)
+                out.append((os.path.relpath(p, root).replace('\\', '/'),
+                            os.path.getsize(p)))
+        out.sort()
+        return out
+
+    # arm 1: the header carries the channel's span - the same span a frozen
+    # second read of the same file gives, and the FILE's span, not the window's
+    rZ1 = world32([(SRC32A, OLD32), (SRC32B, EDGE32)])
+    lZ1 = listing32(rZ1, 7)
+    lZ1b = listing32(rZ1, 14)
+    rcZ1, linesZ1 = head32(rZ1)
+    ok('AC-RUN32', lZ1['fcov'] == lZ1b['fcov'] == ('2026-08-20', '2026-11-08')
+       and lZ1['fcov'] == RUN._side_coverage(RUN.failure_path(rZ1))
+       and lZ1['pending_old'] == (2, 2) and lZ1b['pending_old'] == (1, 1)
+       and rcZ1 == 0 and 'fcov=2026-08-20..2026-11-08' in linesZ1[0],
+       'the header names the side channel span, and that span follows the FILE (same at 7 and 14 days) while pending_old= moves')
+
+    # arm 2: ONE read per call - a reader that appended between reads used to
+    # be able to make the header claim evidence the list never judged
+    rZ2 = world32([(SRC32A, OLD32), (SRC32B, EDGE32)])
+    kept = {'n': 0}
+    real_read = RUN.read_failures
+
+    def reading32(path):
+        rows = real_read(path)
+        kept['n'] += 1
+        if kept['n'] == 1:
+            RUN.append_failure(path, SRC32L, TODAY + 'T08:00:00+08:00',
+                               'TimeoutError: late')
+        return rows
+
+    RUN.read_failures = reading32
+    try:
+        lZ2 = listing32(rZ2)
+    finally:
+        RUN.read_failures = real_read
+    late_on_disk = os.path.isfile(RUN.failure_path(rZ2)) and 'late32' in open(
+        RUN.failure_path(rZ2), 'r', encoding='utf-8').read()
+    ok('AC-RUN32', kept['n'] == 1 and late_on_disk
+       and lZ2['fcov'] == ('2026-08-20', '2026-11-08')
+       and SRC32L not in [w['source_url'] for w in lZ2['waiting']],
+       'the header span comes from the rows this call loaded - an appended row on disk is never claimed and never judged')
+
+    # arm 3: four empty shapes, each with its own name
+    rE1 = world32([])
+    rE2 = world32([(SRC32C, '2026-11-18T08:00:00+08:00')])
+    rE3 = world32([(SRC32A, OLD32)], [(SRC32K, '2026-07-01T09:00:00+08:00')])
+    rE4 = world32([(SRC32A, OLD32)],
+                  BASE32 + [(SRC32A, '2026-08-21T09:00:00+08:00')])
+    lE1, lE2 = listing32(rE1), listing32(rE2)
+    lE3, lE4 = listing32(rE3), listing32(rE4)
+    rcE4, linesE4 = head32(rE4)
+    ok('AC-RUN32', lE1['reason'] == lE2['reason'] == 'no-coverage'
+       and lE3['reason'] == 'unmeasured'
+       and lE4['reason'] == 'all-repaired'
+       and lE4['pending_old'] == (0, 1)
+       and all(x['waiting'] == [] for x in (lE1, lE2, lE3, lE4))
+       and rcE4 == 0 and 'reason=all-repaired' in linesE4[0],
+       'nothing recorded, only-in-window and old-but-never-looked read differently now, and all-repaired keeps its 0/1')
+
+    # arm 4: a NON-empty list carries no excuse - and its rows are unchanged
+    rZ4 = world32([(SRC32A, OLD32), (SRC32B, '2026-08-21T10:00:00+08:00'),
+                   (SRC32C, MID32)])
+    lZ4 = listing32(rZ4)
+    rcZ4, linesZ4 = head32(rZ4)
+    ok('AC-RUN32', lZ4['reason'] is None
+       and [w['age_d'] for w in lZ4['waiting']] == [91, 90, 9]
+       and len(linesZ4) == 4 and 'reason=' not in linesZ4[0]
+       and lZ4['pending_old'] == (3, 3),
+       'a list with rows prints no reason, and the three waiters keep their names and ages')
+
+    # arm 5: the row does not learn any of it
+    tZ5 = RUN.summarize_failure_trend(RUN.failure_day_path(rZ4),
+                                      RUN.failure_path(rZ4), TODAY,
+                                      record_path=CR.record_path(rZ4))
+    ok('AC-RUN32', len(tZ5) == 30 and 'reason' not in tZ5
+       and 'pending_old_src' not in tZ5
+       and tZ5['fcov'] == lZ4['fcov'],
+       'the trend row keeps its 30 keys and learns neither reason nor a per-source key, while both faces read one span')
+
+    # arm 6: still a pure display
+    before32 = snapshot32(rZ4)
+    rcZ6, linesZ6 = head32(rZ4)
+    after32 = snapshot32(rZ4)
+    textZ6 = ''.join(linesZ6)
+    ok('AC-RUN32', rcZ6 == 0 and before32 == after32
+       and 'PASS' not in textZ6 and 'FLAG' not in textZ6
+       and 'verdict' not in textZ6
+       and 'crawl-failure' not in scan_src18,
+       'the face writes nothing, names no verdict, and the scanner still reads none of it')
+
+    # arm 7: an unusable day is its own reason, never a fabricated 0/0
+    rZ7 = world32([(SRC32A, OLD32)])
+    lZ7 = RUN.list_pending_old(CR.record_path(rZ7), RUN.failure_path(rZ7),
+                               '2026-13-40')
+    lZ7b = RUN.list_pending_old(CR.record_path(rZ7), RUN.failure_path(rZ7),
+                                '2026-13-40')
+    ok('AC-RUN32', lZ7['reason'] == 'no-window'
+       and lZ7['pending_old'] is None and lZ7['waiting'] == []
+       and lZ7['fcov'] == ('2026-08-20', '2026-08-20')
+       and json.dumps(lZ7, sort_keys=True) == json.dumps(lZ7b,
+                                                         sort_keys=True),
+       'an unusable day says no-window over a still-readable file span, twice the same, and never 0/0')
+
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
 

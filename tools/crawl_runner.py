@@ -403,6 +403,25 @@ disagree; it writes nothing, gates nothing and names no verdict. The R3010
 sentence "Not a per-source face either" was scoped BY ITS OWN REASON to this
 row's one-line contract, and that scope is stated here rather than left wide.
 
+WHY AN EMPTY OLD TABLE IS EMPTY (R3015): the list could print
+pending_old=none with zero rows, and three different shapes read exactly that
+header - measured (qa/probe-R3015.log): an absent side channel, a channel
+trimmed to the window, and a channel holding an old row that the record never
+looked after. "Nothing outside was ever recorded" and "we recorded it and never
+looked again" were the same line, and neither said how far the evidence under
+them reached. The header now also carries fcov=<first>..<last> (R3011's span,
+derived from the rows this call already loaded - a SECOND read was measured to
+drift inside one call when a row was appended between reads, so the header
+would have claimed evidence the list never judged) and, when the table is
+empty, reason=<no-coverage|unmeasured|all-repaired|no-window>. The board named
+two shapes; the measurement found three under none (all-repaired was already
+readable as 0/n), so the third is named rather than folded into a false one.
+A NON-empty list carries no reason: it answers "why empty" only. No row cap
+was added: measured, a channel with thirty days of failures from three sources
+(90 rows, 9540B) still lists three lines, because the list is bounded by the
+DISTINCT SOURCES that ever failed - the configured crawl set - and not by days.
+Display only, no PASS/FLAG.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -888,12 +907,29 @@ def _record_coverage(record_path):
     return (days[0], days[-1]) if days else None
 
 
+def _side_coverage_rows(rows):
+    """(first_day, last_day) over ALREADY-VALIDATED failure rows, or None.
+
+    R3015: the span now has two callers - the trend row reads the file itself,
+    the old-waiter list has the rows in hand. Both go through this one function,
+    so a header and a row cannot describe the same file differently. MEASURED
+    why the list must NOT re-read: the file was read, a row was appended, and a
+    second read returned a later last day than the rows the list had judged -
+    within one call, the header would have claimed evidence the list never saw.
+
+    None - never an invented span - when there is no usable row.
+    """
+    days = sorted({str(row.get('failed_at') or '')[:10] for row in rows
+                   if str(row.get('failed_at') or '')})
+    return (days[0], days[-1]) if days else None
+
+
 def _side_coverage(failures_path):
     """(first_day, last_day) the failure side channel reaches, or None.
 
     WHY (R3011): pending_old= counts over this side channel and never said how
     far back the channel itself reaches - measured, a one-day channel and a
-    ninety-one-day channel read identical on all 27 keys when the judged facts
+    ninety-day channel read identical on all 27 keys when the judged facts
     were the same, so "0 of 1" standing on the window's edge and the same 0 of 1
     standing on three months of history were the same row.
 
@@ -907,12 +943,15 @@ def _side_coverage(failures_path):
     malformed rows and unusable stamps, so they cannot widen the span. None -
     never an empty string or ('','') - when the file is absent, empty, or holds
     no usable row: "no reach measured", not a zero-day span.
+
+    R3015: the arithmetic moved to _side_coverage_rows() so a reader holding
+    rows does not have to read the file a second time to answer the same
+    question.
     """
     if not failures_path or not os.path.isfile(failures_path):
         return None
     rows, _bad = read_failures(failures_path)
-    days = sorted({str(row.get('failed_at') or '')[:10] for row in rows})
-    return (days[0], days[-1]) if days else None
+    return _side_coverage_rows(rows)
 
 
 def _day_age(day, stamp):
@@ -1040,7 +1079,7 @@ def _pending_sources(record_path, in_window):
 
 
 def _out_of_window_waiting(record_path, rows, threshold):
-    """(still, judged, waiting) - the out-of-window population, computed ONCE.
+    """(still, judged, waiting, old) - the out-of-window population, computed ONCE.
 
     waiting is [(stamp, src)] for the sources the record shows were never back,
     sorted stamp ascending then url, which is the order the two end values have
@@ -1049,6 +1088,15 @@ def _out_of_window_waiting(record_path, rows, threshold):
     between - and a listing face built on its own copy of the predicate would
     have been a second truth (the measured gap: three waiters, two stamps
     returned, the middle one's identity gone).
+
+    R3015 FOURTH VALUE - `old` counts every distinct source whose OWN latest
+    failure fell before the window, judged or not. Measured (qa/probe-R3015.log):
+    three empty-table shapes read the same header - an absent channel, a channel
+    trimmed to the window, and a channel holding an old row the record never
+    looked after - so a reason needs to tell "nothing old was ever recorded"
+    from "old rows exist and could not be judged". Counting them here keeps that
+    fact on the same `latest` map the population already builds instead of
+    letting the list recompute it (a second truth by construction).
     """
     latest = {}
     for row in rows or ():
@@ -1060,11 +1108,13 @@ def _out_of_window_waiting(record_path, rows, threshold):
             latest[src] = stamp
     still = 0
     judged = 0
+    old = 0
     waiting = []
     head = str(threshold or '')[:10]
     for src, stamp in latest.items():
         if str(stamp)[:10] >= head:
             continue
+        old += 1
         verdict = _since_ok(record_path, src, stamp)
         if verdict == 'no':
             still += 1
@@ -1073,7 +1123,7 @@ def _out_of_window_waiting(record_path, rows, threshold):
         elif verdict == 'yes':
             judged += 1
     waiting.sort()
-    return still, judged, waiting
+    return still, judged, waiting, old
 
 
 def _pending_out_of_window(record_path, rows, threshold):
@@ -1135,8 +1185,8 @@ def _pending_out_of_window(record_path, rows, threshold):
     moved the old fraction from (2,3) to (1,3), so the file cannot answer "is it
     still gone" on its own.
     """
-    still, judged, waiting = _out_of_window_waiting(record_path, rows,
-                                                    threshold)
+    still, judged, waiting, _old = _out_of_window_waiting(record_path, rows,
+                                                          threshold)
     if not judged:
         return None
     return (still, judged, waiting[0][0] if waiting else None,
@@ -1161,21 +1211,47 @@ def list_pending_old(record_path, failures_path, day, window_days=7):
     DISPLAY ONLY: writes nothing, gates nothing, retries nothing. No evidence
     out there answers pending_old=None with an empty list - never (0, 0), which
     would read as "nothing is pending".
+
+    R3015 SAYS WHY THE TABLE IS EMPTY, AND HOW FAR THE EVIDENCE REACHES.
+    Measured before this existed (qa/probe-R3015.log): an absent channel, a
+    channel trimmed to the window, and a channel holding an old row the record
+    never looked after printed the SAME header (pending_old=none, zero rows); a
+    reader could not tell "nothing outside was ever recorded" from "we recorded
+    it and never looked again". The board guessed two shapes, the measurement
+    found three under none (all-repaired was already readable as 0/n), so four
+    reasons are named - each one a different human action:
+      no-coverage   nothing usable outside the window is on the channel at all
+                    (absent file, empty file, or rows that are all in-window)
+      unmeasured    old rows exist, but the record never reaches past them
+      all-repaired  every judged old source came back (pending_old=(0,n))
+      no-window     the day itself is unusable, so no window could be formed
+    `reason` is None on a NON-empty list: it answers "why empty", and a list
+    with rows needs no excuse. `fcov` is the channel's own span from the rows
+    already loaded (R3011's span, one function), so the header and the row
+    describe the same file - and a concurrent append cannot make the header
+    claim evidence this call never judged (measured: a second read drifted).
     """
     rows, bad = read_failures(failures_path)
     head_day, usable, threshold = _window_start(day, window_days)
     out = {'day': head_day, 'window_days': window_days, 'bad': bad,
-           'pending_old': None, 'waiting': []}
+           'pending_old': None, 'waiting': [],
+           'fcov': _side_coverage_rows(rows), 'reason': None}
     if not usable:
+        out['reason'] = 'no-window'
         return out
-    still, judged, waiting = _out_of_window_waiting(record_path, rows,
-                                                    threshold)
-    if not judged:
-        return out
-    out['pending_old'] = (still, judged)
-    out['waiting'] = [{'source_url': src, 'failed_at': stamp,
-                       'age_d': _day_age(head_day, stamp)}
-                      for stamp, src in waiting]
+    still, judged, waiting, old = _out_of_window_waiting(record_path, rows,
+                                                         threshold)
+    if judged:
+        out['pending_old'] = (still, judged)
+        out['waiting'] = [{'source_url': src, 'failed_at': stamp,
+                           'age_d': _day_age(head_day, stamp)}
+                          for stamp, src in waiting]
+        if not still:
+            out['reason'] = 'all-repaired'
+    elif old:
+        out['reason'] = 'unmeasured'
+    else:
+        out['reason'] = 'no-coverage'
     return out
 
 
@@ -1655,8 +1731,13 @@ def main(argv=None):
         lst = list_pending_old(CR.record_path(args.root),
                                failure_path(args.root), stamp, args.days)
         po = lst['pending_old']
-        print('CRAWL-PENDING-OLD-LIST pending_old=%s days=%d'
-              % ('none' if po is None else '%d/%d' % po, args.days))
+        fcov_txt = ('none' if lst['fcov'] is None
+                    else '%s..%s' % lst['fcov'])
+        head = ('CRAWL-PENDING-OLD-LIST pending_old=%s days=%d fcov=%s'
+                % ('none' if po is None else '%d/%d' % po, args.days, fcov_txt))
+        if not lst['waiting'] and lst['reason']:
+            head += ' reason=%s' % lst['reason']
+        print(head)
         for row in lst['waiting']:
             print('PENDING-OLD url=%s failed_at=%s age_d=%s'
                   % (row['source_url'], row['failed_at'],

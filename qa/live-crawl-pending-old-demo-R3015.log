@@ -1,0 +1,10 @@
+# absent channel (nothing outside was ever recorded)
+CRAWL-PENDING-OLD-LIST pending_old=none days=7 fcov=none reason=no-coverage
+# old row, record never looked after it (old-but-unmeasured)
+CRAWL-PENDING-OLD-LIST pending_old=none days=7 fcov=2026-08-20..2026-08-20 reason=unmeasured
+# old row, source came back (all-repaired)
+CRAWL-PENDING-OLD-LIST pending_old=0/1 days=7 fcov=2026-08-20..2026-08-20 reason=all-repaired
+# two waiters (a non-empty list prints no reason)
+CRAWL-PENDING-OLD-LIST pending_old=2/2 days=7 fcov=2026-08-20..2026-11-10
+PENDING-OLD url=https://a.example/page failed_at=2026-08-20T10:00:00+08:00 age_d=91
+PENDING-OLD url=https://b.example/page failed_at=2026-11-10T10:00:00+08:00 age_d=9

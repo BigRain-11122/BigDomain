@@ -1,0 +1,6 @@
+HONEST GREEN {'reason-shapes': True, 'one-read': True, 'nonempty-silent': True}
+MUTANT M1-empty-silent CAUGHT {'reason-shapes': False, 'one-read': True, 'nonempty-silent': True}
+MUTANT M2-second-read CAUGHT {'reason-shapes': True, 'one-read': False, 'nonempty-silent': True}
+MUTANT M3-unmeasured-folded CAUGHT {'reason-shapes': False, 'one-read': True, 'nonempty-silent': True}
+MUTANT M4-reason-on-rows CAUGHT {'reason-shapes': True, 'one-read': True, 'nonempty-silent': False}
+NEGCTL rc=0 honest_green=True undetected=0

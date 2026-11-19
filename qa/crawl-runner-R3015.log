@@ -1,0 +1,206 @@
+  | PASS AC-RUN1 noise blocks never reach the body
+  | PASS AC-RUN1 indentation, blank lines and CRLF collapse to one digest
+  | PASS AC-RUN1 one real sentence change moves the digest
+  | PASS AC-RUN2 an empty store reads new-source, never no-drift
+  | PASS AC-RUN2 the same page reads no-drift against its own digest
+  | PASS AC-RUN2 a changed page reads drift
+  | PASS AC-RUN2 an entry with no digest cannot mean nothing changed
+  | PASS AC-RUN3 one usable record, three fields, the caller's own day
+  | PASS AC-RUN3 the baseline store holds this url and its digest
+  | PASS AC-RUN3 a second pass reads the stored baseline back as no-drift
+  | PASS AC-RUN3 a failed retrieval answers ok=False with a named error
+  | PASS AC-RUN3 a failed fetch writes no record and no baseline
+  | PASS AC-RUN3 the record carries the same verdict the judgement produced
+  | PASS AC-RUN4 a fixture judgement answers with sockets refused
+  | PASS AC-RUN4 the one network call sits inside fetch(), above run()
+  | PASS AC-RUN5 the side channel is its own path, not the record file
+  | PASS AC-RUN5 one traced line with url, day and a named E_FETCH error
+  | PASS AC-RUN5 the same failure writes nothing to the record file, not even a bad row
+  | PASS AC-RUN5 a successful crawl writes nothing to the side channel
+  | PASS AC-RUN5 bad lines are counted, usable rows still readable
+  | PASS AC-RUN5 the scanner reads the record and never the failure side channel
+  | PASS AC-RUN5 an unwritable trace leaves the failure answer intact, never raises
+  | PASS AC-RUN6 a day already crawled answers skipped with no socket and no write
+  | PASS AC-RUN6 an empty day is due and is judged normally
+  | PASS AC-RUN6 yesterday's record does not cover today
+  | PASS AC-RUN6 a row with no verdict cannot stand in for a crawl
+  | PASS AC-RUN7 an absent side channel reads all zeroes, never an exception
+  | PASS AC-RUN7 three usable rows (one inside the window pair), one bad line, three sources, newest names today
+  | PASS AC-RUN7 the summary and read_failures name the same newest row
+  | PASS AC-RUN7 the CLI answers rc=0 with one line carrying every count
+  | PASS AC-RUN7 --root reads the world it is given, not the real checkout
+  | PASS AC-RUN7 zero failures is an honest answer with rc=0, not an error code
+  | PASS AC-RUN8 the launcher calls the runner with the day gate on the call line
+  | PASS AC-RUN8 the call sits inside a try/catch that neither exits nor throws
+  | PASS AC-RUN8 the crawl beat precedes the round spawn
+  | PASS AC-RUN8 the launcher stays pure ASCII with no CR bytes
+  | PASS AC-RUN8 the block logs its own evidence file
+  | PASS AC-RUN9 an absent side channel still lands one honest zero row
+  | PASS AC-RUN9 three failures read on_day=1 total=3 recent7=3
+  | PASS AC-RUN9 a same-day snap rewrites its own row and leaves the seeded day as it was
+  | PASS AC-RUN9 a malformed history line is counted by the reader
+  | PASS AC-RUN9 a malformed failure line is counted while the rewrite drops only the unusable history line
+  | PASS AC-RUN9 the day is the literal first ten characters, on both sides
+  | PASS AC-RUN9 the history is its own path and the scanner never reads it
+  | PASS AC-RUN10 the standalone snap answers on one line and writes in the world it was given
+  | PASS AC-RUN10 the reader names both days and their on_day counts
+  | PASS AC-RUN10 an empty history is an honest answer with rc=0
+  | PASS AC-RUN10 the last history row the reader sees is the row the writer returned
+  | PASS AC-RUN10 the launcher call line carries the day gate, the write, the snapshot and the root anchor
+  | PASS AC-RUN10 the anchored call stays inside the try and before the spawn
+  | PASS AC-RUN11 two empty faces answer absent/none instead of raising
+  | PASS AC-RUN11 the CLI answers one line with every count on an empty world
+  | PASS AC-RUN11 two days read today=1 prev=2 delta=-1 mean=1.5, worst on the harder day
+  | PASS AC-RUN11 the printed line names the harder day and the recurrence
+  | PASS AC-RUN11 three failures by one source on one day are no recurrence
+  | PASS AC-RUN11 a day nobody snapshotted reads absent, never a fabricated zero
+  | PASS AC-RUN11 the same bytes read two ways: a day outside the window leaves mean, worst and recurrence alone
+  | PASS AC-RUN11 a malformed history line is counted and never becomes a day
+  | PASS AC-RUN12 the snapshot flag sits after --write on the anchored call line
+  | PASS AC-RUN12 the order is day gate, write, snapshot, root anchor
+  | PASS AC-RUN12 the ordered line stays inside the try, before the spawn, pure ASCII
+  | PASS AC-RUN13 the class token buckets to timeout/http/urlerror/dns/refused/other
+  | PASS AC-RUN13 a side channel on disk reads evidence=side with the modal class
+  | PASS AC-RUN13 a tie breaks on the bucket name, so two readers cannot disagree
+  | PASS AC-RUN13 a day outside the window never sets the modal class
+  | PASS AC-RUN13 a pruned side channel is NAMED and its zero sources stay zero
+  | PASS AC-RUN13 the printed line carries the degraded label and its one sample
+  | PASS AC-RUN13 neither face answers none instead of raising
+  | PASS AC-RUN13 the CLI prints both faces on an empty world
+  | PASS AC-RUN13 a history that exists and records nothing is evidence, not silence
+  | PASS AC-RUN14 recur names the recurring source count AND its window failures
+  | PASS AC-RUN14 three failures on ONE day are not a recurrence
+  | PASS AC-RUN14 a pruned side channel answers recur=None, never a fabricated 0:0
+  | PASS AC-RUN14 the printed line spells the unmeasured recurrence as none
+  | PASS AC-RUN14 --failures reads the SAME bucket function as the trend line
+  | PASS AC-RUN14 the bucket follows the NEWEST failure, not the first one seen
+  | PASS AC-RUN14 an empty world answers none on both faces without raising
+  | PASS AC-RUN15 a complete seven-day history reads wcov=7/7 with its own first day
+  | PASS AC-RUN15 a trimmed history answers wcov=1/7 while today/mean stay unchanged
+  | PASS AC-RUN15 a three-day window over seven rows of history reads wcov=3/3
+  | PASS AC-RUN15 a malformed row is not a covered day
+  | PASS AC-RUN15 a missing history answers cov=none wcov=0/7 without raising
+  | PASS AC-RUN15 the CLI carries both coverage fields and stays outside the gate face
+  | PASS AC-RUN16 bytes equal the file on disk; lines count physical rows, malformed and blank included
+  | PASS AC-RUN16 lines minus (total+bad) is exactly the blank-row count, so the two counts are independent
+  | PASS AC-RUN16 a missing side channel answers zero bytes and zero lines without raising
+  | PASS AC-RUN16 the CLI answers rc=0 with zero size on a world that has no side channel
+  | PASS AC-RUN16 a file padded to one hundredth of the reference line reads size_gate=1.0 against gate_ref=100MB
+  | PASS AC-RUN16 one row carries size, row count and the named denominator, and carries no verdict (a file above the reference line was NOT built this arm)
+  | PASS AC-RUN16 neither the scanner nor the writer census reads either failure file
+  | PASS AC-RUN17 bytes equal the history file on disk while days counts only usable rows
+  | PASS AC-RUN17 a missing history answers zero bytes without raising, and the CLI prints it
+  | PASS AC-RUN17 the history percentage is the same helper the side channel uses, not a second formula
+  | PASS AC-RUN17 the above-reference print path is pinned by a pure function; no 100MB file is built
+  | PASS AC-RUN17 the added fields are purely additive and bytes covers the whole file, not the printed tail
+  | PASS AC-RUN17 one row carries body size and the named denominator, carries no physical line count, no verdict, and stays outside the scanner (the CRAWL-FAILURE-DAYS label itself contains FAIL, so that token is not the anchor)
+  | PASS AC-RUN17 after one beat rewrite the physical line count equals days - the measured reason lines= is not printed
+  | PASS AC-RUN18 the latest failure by time names its source; no record face means the repair question is UNMEASURED
+  | PASS AC-RUN18 a later successful row for that source reads since_ok=yes
+  | PASS AC-RUN18 a success only BEFORE the last failure is not a repair - and R3004 makes it UNMEASURED rather than "no", because the record never looked after that failure
+  | PASS AC-RUN18 a missing record file answers UNMEASURED while identity still comes from the side channel
+  | PASS AC-RUN18 a pruned side channel answers none/unmeasured and leaves every existing field where it was
+  | PASS AC-RUN18 the latest failure is chosen by time, not by the order rows sit in the file
+  | PASS AC-RUN18 one display row carries identity and the repair reading, carries no verdict, and stays outside the scanner
+  | PASS AC-RUN19 a stable repair (fail, ok) answers flips=0, never read as flapping
+  | PASS AC-RUN19 fixed, broken again and fixed again reads since_ok=yes AND flips=1 - the pair this round separates
+  | PASS AC-RUN19 two failures before the first success never worked in between, so no flip is invented
+  | PASS AC-RUN19 same-day flapping is one flip while recur stays 0:0 - two different questions
+  | PASS AC-RUN19 a record file that holds no row for the source answers 0, measured rather than missing
+  | PASS AC-RUN19 a missing record file and a pruned side channel both answer UNMEASURED, never 0
+  | PASS AC-RUN19 a success and a failure on the same second are never ordered into an invented flip, and R3004 refuses to call the same second "looking afterwards" (unmeasured)
+  | PASS AC-RUN19 the newest failure is taken by time, so the flip before it still counts - and R3004 lets flips stay measured while the now-question is unmeasured
+  | PASS AC-RUN19 one display row carries the stability count, adds exactly one key, and stays outside the scanner
+  | PASS AC-RUN20 the span names both days the record actually reaches, sorted by day
+  | PASS AC-RUN20 a record ending before the failure shows a span that stops there, and since R3004 the verdict is unmeasured rather than a claim
+  | PASS AC-RUN20 no record file answers none - a span from no rows would be invented
+  | PASS AC-RUN20 a present but empty record answers none - coverage is measured, not assumed from existence
+  | PASS AC-RUN20 a broken line cannot stretch the span, and a file of nothing but broken lines has no span
+  | PASS AC-RUN20 the history spans six days while the record spans one - two faces, two answers
+  | PASS AC-RUN20 the row names the record span, or none, and adds exactly the one key it names
+  | PASS AC-RUN21 a zero-byte record cannot answer "still broken": zero observations read unmeasured, and flips=0 stays a count rather than a verdict
+  | PASS AC-RUN21 a record stopping before the failure answers unmeasured while flips stays measured - one flip was already on disk
+  | PASS AC-RUN21 a record that fetched ANOTHER page after the failure proves the pipeline looked, so the source not coming back is finally a real "no"
+  | PASS AC-RUN21 a success in the same second as the failure is not "looking afterwards" - unmeasured rather than an invented order
+  | PASS AC-RUN21 a record of nothing but malformed rows has zero usable observations, so it cannot claim the source is broken
+  | PASS AC-RUN21 one extra row for another source moves the same source from unmeasured to no - measurability comes from the pipeline, not from luck
+  | PASS AC-RUN21 a real repair still reads yes, the CLI carries all three readings, and R3004 adds NO key - the row shape is unchanged
+  | PASS AC-RUN22 three failing sources: pending counts the two shown looked-at and never back over the three judged, while newest_src still answers for one
+  | PASS AC-RUN22 a source whose newest failure is later than every record row is UNMEASURED, so it is neither pending nor judged - the since_ok != yes numerator would have counted it as 1 pending here
+  | PASS AC-RUN22 one source failing on one day is no recurrence (recur=(0,0)) yet it is one judged source that never came back - two readings, two answers
+  | PASS AC-RUN22 two sources failing on two days each is recur=(2,4), and with both seen working again nothing is pending - recurrence is not repair
+  | PASS AC-RUN22 judging yesterday recovery as today answer would invent a repair: the record stops before the newest failure, so nothing is judged and pending=none
+  | PASS AC-RUN22 an absent record, a record of nothing but malformed rows and a pruned side channel all answer none - a zero-of-zero would read like "nothing is pending"
+  | PASS AC-RUN22 a multi-source window still prints ONE line carrying pending=, adds exactly one key, and stays outside the scanner - per-source lines were refused on purpose
+  | PASS AC-RUN23 the source that is still gone is named even though the newest failure was repaired - a name, not a side effect of newest_src
+  | PASS AC-RUN23 with two sources pending the one whose failure is oldest is named - start where the wait is longest
+  | PASS AC-RUN23 two sources stamped the same tick name the lexicographically smaller url on both write orders - no reader has to guess
+  | PASS AC-RUN23 all repaired, nothing judged and nothing but an unmeasured source all read none - an empty name is never printed as an empty string
+  | PASS AC-RUN23 a source nobody looked at after its failure is unmeasured, so it is neither counted nor named - naming it would revive the conflation R3004 removed
+  | PASS AC-RUN23 the row grows by exactly one name and carries no unjudged field - the unjudged count is measurable as sources minus the denominator, so a field for it would only restate two keys
+  | PASS AC-RUN23 a multi-source window still prints ONE line carrying pending_src=, and the scanner still reads none of it
+  | PASS AC-RUN24 the age is the named source's own (2026-11-15 -> 4 days) while newest_at is today - a reader taking newest_at would answer 0
+  | PASS AC-RUN24 two equal stamps name the same source and the same age whichever order the rows landed in
+  | PASS AC-RUN24 no pending source reads none rather than 0, because 0 would name a source that is not there
+  | PASS AC-RUN24 a source nobody looked after is neither pending nor aged - the verdict split is not aggregated away
+  | PASS AC-RUN24 a future stamp, a malformed day and an empty stamp all answer None; same day is 0 and a week is 7
+  | PASS AC-RUN24 the row grows by exactly one age key, and neither refused field (pending_others arithmetic, unjudged restatement) exists
+  | PASS AC-RUN24 one line carries pending_age_d= (a number, or none when nothing is pending), and the scanner still reads none of it
+  | PASS AC-RUN25 the oldest pending source reads 4 days and the youngest (broken today) reads 0 - the second end of the span is no longer blank
+  | PASS AC-RUN25 with one pending source both ends read 4 - the coincidence is pinned as a fact so it is never silently turned into None
+  | PASS AC-RUN25 no pending source reads none at both ends, because 0 would name a source that is not there
+  | PASS AC-RUN25 a source nobody looked after is neither pending nor aged at either end - the verdict split is not aggregated away by a second age
+  | PASS AC-RUN25 two pending sources that failed at the same moment read the same age at both ends
+  | PASS AC-RUN25 the row grows by exactly one age key, and the refused max field (a restatement of pending_age_d, measured) plus the two older refusals never exist
+  | PASS AC-RUN25 one line carries both ends of the age span (numbers, or none when nothing is pending), and the scanner still reads none of it
+  | PASS AC-RUN26 ages 5/3/0 read a middle of 3 while the ends read 5 and 0 - the middle is no longer blank and is neither end restated
+  | PASS AC-RUN26 mass at the old end and mass at the new end are indistinguishable on the count and both ends, and the middle is exactly what tells them apart
+  | PASS AC-RUN26 with two pending sources the middle is the older one (the even-count rule), so it equals pending_age_d - the coincidence is pinned rather than silently turned into None
+  | PASS AC-RUN26 one pending source reads the same age at both ends and in the middle
+  | PASS AC-RUN26 a repaired set and an unmeasured-only set read None in the middle too - the R3004 split is not aggregated away by a third age
+  | PASS AC-RUN26 the row grows by exactly one age key, and the refused max, histogram and the two older refusals never exist
+  | PASS AC-RUN26 one line carries the middle (a number, or none when nothing is pending), and the scanner still reads none of it
+  | PASS AC-RUN27 a source broken nine days ago and never fetched again is counted outside the window, and pending= still describes only the in-window population
+  | PASS AC-RUN27 a repaired old source reads 0 of 1 judged - a measured zero, not None
+  | PASS AC-RUN27 a side channel holding nothing outside the window answers None, so deleting the evidence cannot read like a repair
+  | PASS AC-RUN27 an old failure nobody looked after is unmeasured, never pending, so it is in neither number
+  | PASS AC-RUN27 with a 14-day window the same source is in-window (pending 1/2) and the outside count is None - the two fractions never overlap
+  | PASS AC-RUN27 the row grows by exactly one count key, and the refused per-source face (one line per source) never exists - R3012 later landed an AGGREGATE old age, which is the shape R3007 already allowed for the in-window population
+  | PASS AC-RUN27 one line carries pending_old= (a fraction, or none when nothing was judged), and the scanner still reads none of it
+  | PASS AC-RUN28 two channels that read the same pending_old= are separated by how far back their evidence reaches
+  | PASS AC-RUN28 a 14-day window leaves fcov= byte-identical while pending_old= becomes none - it describes the file
+  | PASS AC-RUN28 trimming the channel to the window narrows fcov= and empties the outside count
+  | PASS AC-RUN28 a non-JSON line and an unusable stamp raise bad and leave the span untouched
+  | PASS AC-RUN28 a channel that is absent, empty or holds no usable row reads none - never an empty string or a zero-day span
+  | PASS AC-RUN28 the row grows by exactly one span key, and the refused per-source reach face never exists
+  | PASS AC-RUN28 one line carries fcov= (a span, or none when the channel has no usable row), and the scanner still reads none of it
+  | PASS AC-RUN29 a repaired older failure leaves fcov.first at 91 days while the source still gone reads 9 - the age is not that span restated
+  | PASS AC-RUN29 with one pending old source the age equals the only stamp it can come from - pinned rather than turned into none
+  | PASS AC-RUN29 an old population that is entirely repaired reads a zero fraction with a none age - nobody outside is pending is not a waiter aged zero
+  | PASS AC-RUN29 a channel that never recorded anything outside the window reads none, because nothing was looked at out there
+  | PASS AC-RUN29 at fourteen days the newer old source is in-window pending while the outside population holds only a repaired one - the two populations do not overlap
+  | PASS AC-RUN29 the row grows by exactly one age key, and the refused per-source and middle old faces never exist
+  | PASS AC-RUN29 one line carries pending_old_age_d= (a number, or none when nothing outside was pending), and the scanner still reads none of it
+  | PASS AC-RUN30 an old tail and an old tail plus a fresh dropout read the same fraction, the same longest age and the same file span - the youngest age is what separates them
+  | PASS AC-RUN30 with three old waiters the youngest reads the recent dropout while the middle would read 90 - and the refused middle key never exists
+  | PASS AC-RUN30 with one pending old source both ages name the only waiter it can come from - pinned rather than turned into none
+  | PASS AC-RUN30 a trimmed channel, a fully repaired old population and an absent channel all read none - nobody outside is pending is not a waiter aged zero
+  | PASS AC-RUN30 at fourteen days the recent dropout is in-window pending while the outside population holds one waiter aged 91 - the two populations do not overlap
+  | PASS AC-RUN30 the row grows by exactly one age key, and the refused middle, per-source and histogram faces never exist on the row
+  | PASS AC-RUN30 one line carries pending_old_age_min_d= (a number, or none when nothing outside is pending), and the scanner still reads none of it
+  | PASS AC-RUN31 three old waiters are all named with their ages, while the row still carries only the two ends
+  | PASS AC-RUN31 the list reports the same fraction and the same two ends the row does - one predicate, not a second truth
+  | PASS AC-RUN31 two worlds identical on every row key are separated by which source the list names in the middle
+  | PASS AC-RUN31 a source that came back, and one the record never looked after, are both absent - judged is not the same as listed
+  | PASS AC-RUN31 a channel trimmed to the window and an absent channel both answer none with zero rows - and the CLI prints one header line, not a fabricated 0/0
+  | PASS AC-RUN31 two sources sharing a stamp are ordered by url, and two calls over the same world agree byte for byte
+  | PASS AC-RUN31 the face leaves the world byte-identical, prints a header plus one line per waiter, and neither the row nor the scanner learns a per-source key
+  | PASS AC-RUN32 the header names the side channel span, and that span follows the FILE (same at 7 and 14 days) while pending_old= moves
+  | PASS AC-RUN32 the header span comes from the rows this call loaded - an appended row on disk is never claimed and never judged
+  | PASS AC-RUN32 nothing recorded, only-in-window and old-but-never-looked read differently now, and all-repaired keeps its 0/1
+  | PASS AC-RUN32 a list with rows prints no reason, and the three waiters keep their names and ages
+  | PASS AC-RUN32 the trend row keeps its 30 keys and learns neither reason nor a per-source key, while both faces read one span
+  | PASS AC-RUN32 the face writes nothing, names no verdict, and the scanner still reads none of it
+  | PASS AC-RUN32 an unusable day says no-window over a still-readable file span, twice the same, and never 0/0
+suite: 204 assertions over 32 criteria
+SUITE PASS 204/204

@@ -1,0 +1,9 @@
+P1 list_keys=['bad', 'day', 'pending_old', 'waiting', 'window_days'] header='CRAWL-PENDING-OLD-LIST pending_old=1/1 days=7' flags=12 has_fcov=False has_reason=False
+P2 absent=('CRAWL-PENDING-OLD-LIST pending_old=none days=7', 0, None) win=('CRAWL-PENDING-OLD-LIST pending_old=none days=7', 0, None) unm=('CRAWL-PENDING-OLD-LIST pending_old=none days=7', 0, None) rep=('CRAWL-PENDING-OLD-LIST pending_old=0/1 days=7', 0, (0, 1)) identical_three=True
+P3 derived_from_loaded=('2026-08-20', '2026-11-10') frozen_second_read=('2026-08-20', '2026-11-10') after_append=('2026-08-20', '2026-11-19') same_file_agree=True second_read_can_drift=True
+P4 rows=90 distinct_sources=3 listed=3 row_bytes=9540
+P4b live_listed=0 live_pending_old=None live_file=False
+P5 consumers={"qa/qa_writer_census.py": "missing", "src/os/iteration_loop.ps1": [0, 0], "src/sandbox/reconcile_all.py": [0, 0], "tools/closeout_gate.py": [0, 5]}
+P6 list_keys=5 trend_keys=30 trend_fcov=('2026-10-01', '2026-10-30') pending_old_src_in_row=False
+P7 fcov_is_side_channel=True reads_failures=True
+P8 rc=0 header='CRAWL-PENDING-OLD-LIST pending_old=none days=7' rows=0
