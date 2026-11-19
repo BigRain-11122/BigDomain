@@ -542,6 +542,26 @@ still not proof that a fix came after a failure. Honest boundary: the three
 live files carry zero tie pairs today (P1), so this also closes a door rather
 than repairing a disk.
 
+HOW MANY SOURCES SHARE THAT INSTANT (R3059, measured first -
+qa/probe-R3059.log): R3058 taught --failures to say how many ROWS name the
+newest instant, and left the trend naming ONE source for the same instant. On a
+private world where a.example/p and b.example/p failed at one instant, the
+trend printed one name, flipped to the other name when the file order flipped,
+and nothing on the line said a second source was there (P2); the counts it
+carries (days/in_window/bad/recurring/sources/recur/wcov/kind_count/flips/
+window_days) each answer another question (P3). One new word: `newest_srcs=` on
+--failure-trend is HOW MANY DISTINCT SOURCES name that instant - 1 healthy,
+2+ says another source failed at the same moment and only one name fits, 0
+rides beside newest_src=none. It is a SOURCE count on purpose: `newest_rows=`
+counts rows over the whole channel, so moving that word here would give one
+word two scopes (the R3057 sin). Refused by measurement: a sortedness token
+(a `series_file_order=` analog) - reordering an equal-instant group leaves the
+file non-decreasing, so it printed the same verdict on the tampered and the
+honest file (P4/P4b), i.e. a false assurance; and a second tie word on
+CRAWL-PENDING-OLD-LIST, whose `last_at=` is already covered by newest_rows= on
+--failures. SELECTION IS UNCHANGED: the trend still names the last-written row
+of the tie (`_newest_rows` then the last element, the R3058 law).
+
 WHICH DAY A ROW COUNTS IN (R3055, measured first - qa/probe-R3055.log): R3048
 gave the clock faces one day law - the LOCAL day of the instant, `_day_of` -
 but only the window HEAD used it; every count and span still cut the first ten
@@ -3591,6 +3611,11 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # row stores urls=<count> on purpose: one fact in one place), so a missing
     # side channel answers UNMEASURED rather than "no page failed".
     newest_src = None
+    # R3059: the count of SOURCES naming that newest instant, 0 beside
+    # newest_src=none. A count of ROWS would be a second question with a second
+    # scope (--failures counts the whole channel, this face only its window),
+    # so the word is deliberately different from newest_rows=.
+    newest_srcs = 0
     since_ok = 'unmeasured'
     # R3002 STABILITY: since_ok answers "was it seen working afterwards", which a
     # source that was fixed, broke again and was fixed again answers YES to -
@@ -3607,7 +3632,13 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
         # R3058: at an equal instant the named source is the one whose row was
         # written LAST, so this face and --failures name the same row instead of
         # whichever the file listed first (measured, qa/probe-R3058.log P2d).
-        newest = _newest_row(in_window)
+        # R3059: `newest_srcs=` says HOW MANY sources share that instant, because
+        # this face names exactly one and measured (qa/probe-R3059.log P2) a tie
+        # between two sources printed one name and nothing else on the line.
+        newest_picked = _newest_rows(in_window)
+        newest = newest_picked[-1] if newest_picked else None
+        newest_srcs = len({row.get('source_url') for row in newest_picked
+                           if row.get('source_url')})
         if newest is not None:
             newest_src = newest.get('source_url')
             since_ok = _since_ok(record_path, newest_src,
@@ -3722,7 +3753,8 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'recurring': recurring, 'sources': len(days_by_source),
             'recur': recur, 'cov': cov, 'wcov': wcov,
             'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
-            'newest_src': newest_src, 'since_ok': since_ok,
+            'newest_src': newest_src, 'newest_srcs': newest_srcs,
+            'since_ok': since_ok,
             'flips': flips, 'pending': pending, 'pending_src': pending_src,
             'pending_age_d': pending_age_d,
             'pending_age_min_d': pending_age_min_d,
@@ -4252,7 +4284,8 @@ def main(argv=None):
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
               'worst=%s recurring=%d sources=%d bad=%d bad_days=%s '
               'evidence=%s kind=%s '
-              'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
+              'recur=%s cov=%s wcov=%s newest_src=%s newest_srcs=%d '
+              'since_ok=%s flips=%s '
               'pending=%s pending_src=%s pending_age_d=%s '
               'pending_age_min_d=%s pending_age_med_d=%s pending_old=%s '
               'pending_old_age_d=%s pending_old_age_min_d=%s fcov=%s rcov=%s '
@@ -4263,7 +4296,8 @@ def main(argv=None):
                  ','.join(trend['bad_days']) or 'none',
                  trend['evidence'], kind_txt,
                  recur_txt, cov_txt, wcov_txt,
-                 trend['newest_src'] or 'none', trend['since_ok'],
+                 trend['newest_src'] or 'none', trend['newest_srcs'],
+                 trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
                  pending_txt, trend['pending_src'] or 'none', age_txt,
                  age_min_txt, age_med_txt, old_txt, old_age_txt,

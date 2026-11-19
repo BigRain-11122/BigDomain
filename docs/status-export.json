@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-20 R3058 PRODUCT+ENGINEERING: when two failure rows name ONE instant, the face that says 'the newest failure' no longer hands the title to whichever row the file lists first. tools/crawl_runner.py gained _newest_rows (every row naming the newest instant, in file order) and _newest_row (the LAST of them, because the writer only appends), and six row-picking sites now go through them: the summary's newest, _last_stamp_rows, _pending_sources and _out_of_window_waiting per-source latest (greater-than -> greater-or-equal), and the trend's newest source. --failures publishes the one new word newest_rows= (how many rows name that instant: 1 healthy, 2+ says the sentence has more than one subject, 0 rides beside newest=none). _since_ok/_flips keep their strict comparison, so an equal instant is still not proof that a fix came afterwards.",
+    "current": "2026-11-20 R3059 PRODUCT+ENGINEERING: the trend face now says how many SOURCES share the newest instant. R3058 taught --failures to publish newest_rows= (how many ROWS name that instant) and left --failure-trend naming exactly one source, so two sources failing at one moment printed one name, flipped to the other name when the file order flipped, and nothing on the line said a second source was there (measured qa/probe-R3059.log P2). summarize_failure_trend now takes the group picker _newest_rows(in_window), names its last element (the R3058 law, unchanged) and publishes newest_srcs= - the count of DISTINCT SOURCES at that instant: 1 healthy, 2+ says another source failed at the same moment, 0 rides beside newest_src=none. It is a SOURCE count on purpose: newest_rows= counts rows over the whole channel, so reusing that word here would give one word two scopes (the R3057 sin).",
     "do": "R3005 measured, in order: the PIN row was written in src/os/backlog.md BEFORE any code byte moved, and the read-only probe tmp/probe_R3005.py -> qa/probe-R3005.log (682B, 12 lines, utf-8/lf, six private worlds, zero sockets) ran BEFORE the pin. It measured: (1) three-source window answers for one source only; (2) recur and the pending count are independent in BOTH directions - recur=(0,0) with one judged source still gone, and recur=(2,4) with nothing pending when both came back; (3) the queue head's own suggested numerator (since_ok != 'yes') counts a source whose newest failure is later than every record row as pending, reviving exactly the R3004 conflation at aggregate level, so the numerator counts 'no' only and unmeasured sits in neither number; (4) an absent record leaves every source unmeasured, so zero-of-zero had to print none rather than 0/0; (5) 13 arms read the trend line, three pin exact key sets, and a multi-source world still printed exactly one line, which is why per-source lines were refused. AC-RUN22 (seven arms) was pinned before the code; three existing key-set arms were widened by exactly the one new key, disclosed as a criterion following its field rather than a loosening.",
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-stl-siblings-R3058.log (755B, 2026-11-20)",
-    "latest_evidence": "qa/leg-stl-siblings-R3058.log (755B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3059.log (1240B, 2026-11-20)",
+    "latest_evidence": "qa/probe-R3059.log (1240B, 2026-11-20)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3059] next window (<=48h): (0) MAIN — **并列只剩一张面说得出，另一张面悄悄跟着它走**。本轮把\"同一瞬间\"这件事在 `--failures` 上说清了（`newest_rows=`），但 `--pending-old-list` 的 `last_at=` 与 `--failure-trend` 的 `newest_src=` 只是**跟着改了选谁**（AC-RUN75 臂 5/6 钉住同一律），没有任何词说\"这行其实和另一行并列\"——读者从那两张面看不出同一瞬间还有第二个源/第二条失败。而且 failure 通道没有 `series_file_order=` 的对应读数：并列的\"最后写入\"完全依赖文件是 append 序，手改/拼接过的文件一旦重排，本轮的新律会把重排后的顺序当成写入顺序（本轮裁定 ⑤ 已具名，未检测）。下一轮先量（只读）：①盘上活文件里并列行各几对、`last_at=`/`newest_src=` 在并列世界里读出什么；②两张面各自还能用**既有词**说出并列吗（`pending=` 是 x/y、`recur=` 是源数:失败数、`urls=` 是源数——逐个数一遍有没有位置）；③若要新增一个词，放哪张面才不把长行变噪声；④\"文件序是不是写入序\"要如何在不新增写入口的前提下被读出来（`_stamp_key` 单调？行数 vs 追加快照？）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl (truncated)",
-    "next_milestone_due": "2026-11-22T04:22:46+08:00",
-    "updated_at": "2026-11-20T04:22:46+08:00"
+    "next_milestone": "[R3060] next window (<=48h): (0) MAIN — **\"还有另一个源\"说出了，但那一个叫什么仍然说不出**。本轮让 `--failure-trend` 印 `newest_srcs=`（同一瞬间的不同源数），于是并列不再隐形；但 `newest_src=` 仍只命名**一个**源，读者知道\"还有另一个\"却拿不到它的名字（一个源名一行＝单行契约拒绝），而 pending 面 `last_at=` 同瞬间的并列仍无词。下一轮先量（只读）：①盘上并列世界里 `newest_srcs=2` 时 `since_ok=`/`flips=`/`pending=` 各自算的是哪个源（被命名那个，还是并列全体）——若只算一个，第二源的健康状况在整行上是否完全缺席；②若要在单行里给出第二个名字，最短的既有形状是什么（`pending_src=` 已有\"一个名字\"的先例；`newest_src2=` 这类编号词是否会开启无限编号）；③pending 面的 `last_at=` 该不该也带一个并列词，还是应明确写\"该面不回答并列\"（零新词路线）；④把并列的第二个源**计入** `pending=` 分母会不会改变\"还剩几个\"的语义（R3004 的 measured/verdict 分离会不会被破坏）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law (truncated)",
+    "next_milestone_due": "2026-11-22T04:43:48+08:00",
+    "updated_at": "2026-11-20T04:43:48+08:00"
   },
-  "current": "2026-11-20 R3058 PRODUCT+ENGINEERING: when two failure rows name ONE instant, the face that says 'the newest failure' no longer hands the title to whichever row the file lists first. tools/crawl_runner.py gained _newest_rows (every row naming the newest instant, in file order) and _newest_row (the LAST of them, because the writer only appends), and six row-picking sites now go through them: the summary's newest, _last_stamp_rows, _pending_sources and _out_of_window_waiting per-source latest (greater-than -> greater-or-equal), and the trend's newest source. --failures publishes the one new word newest_rows= (how many rows name that instant: 1 healthy, 2+ says the sentence has more than one subject, 0 rides beside newest=none). _since_ok/_flips keep their strict comparison, so an equal instant is still not proof that a fix came afterwards.",
+  "current": "2026-11-20 R3059 PRODUCT+ENGINEERING: the trend face now says how many SOURCES share the newest instant. R3058 taught --failures to publish newest_rows= (how many ROWS name that instant) and left --failure-trend naming exactly one source, so two sources failing at one moment printed one name, flipped to the other name when the file order flipped, and nothing on the line said a second source was there (measured qa/probe-R3059.log P2). summarize_failure_trend now takes the group picker _newest_rows(in_window), names its last element (the R3058 law, unchanged) and publishes newest_srcs= - the count of DISTINCT SOURCES at that instant: 1 healthy, 2+ says another source failed at the same moment, 0 rides beside newest_src=none. It is a SOURCE count on purpose: newest_rows= counts rows over the whole channel, so reusing that word here would give one word two scopes (the R3057 sin).",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3058 PRODUCT+ENGINEERING: when two failure rows name ONE instant, the face that says 'the newest failure' no longer hands the title to whichever row the file lists first. tools/crawl_runner.py gained _newest_rows (every row naming the newest instant, in file order) and _newest_row (the LAST of them, because the writer only appends), and six row-picking sites now go through them: the summary's newest, _last_stamp_rows, _pending_sources and _out_of_window_waiting per-source latest (greater-than -> greater-or-equal), and the trend's newest source. --failures publishes the one new word newest_rows= (how many rows name that instant: 1 healthy, 2+ says the sentence has more than one subject, 0 rides beside newest=none). _since_ok/_flips keep their strict comparison, so an equal instant is still not proof that a fix came afterwards.",
-  "export_ts": "2026-11-20T04:22:46+08:00",
+  "do": "2026-11-20 R3059 PRODUCT+ENGINEERING: the trend face now says how many SOURCES share the newest instant. R3058 taught --failures to publish newest_rows= (how many ROWS name that instant) and left --failure-trend naming exactly one source, so two sources failing at one moment printed one name, flipped to the other name when the file order flipped, and nothing on the line said a second source was there (measured qa/probe-R3059.log P2). summarize_failure_trend now takes the group picker _newest_rows(in_window), names its last element (the R3058 law, unchanged) and publishes newest_srcs= - the count of DISTINCT SOURCES at that instant: 1 healthy, 2+ says another source failed at the same moment, 0 rides beside newest_src=none. It is a SOURCE count on purpose: newest_rows= counts rows over the whole channel, so reusing that word here would give one word two scopes (the R3057 sin).",
+  "export_ts": "2026-11-20T04:43:48+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
-  "latest_evidence": "qa/leg-stl-siblings-R3058.log (755B, 2026-11-20)",
-  "next_milestone": "[R3059] next window (<=48h): (0) MAIN — **并列只剩一张面说得出，另一张面悄悄跟着它走**。本轮把\"同一瞬间\"这件事在 `--failures` 上说清了（`newest_rows=`），但 `--pending-old-list` 的 `last_at=` 与 `--failure-trend` 的 `newest_src=` 只是**跟着改了选谁**（AC-RUN75 臂 5/6 钉住同一律），没有任何词说\"这行其实和另一行并列\"——读者从那两张面看不出同一瞬间还有第二个源/第二条失败。而且 failure 通道没有 `series_file_order=` 的对应读数：并列的\"最后写入\"完全依赖文件是 append 序，手改/拼接过的文件一旦重排，本轮的新律会把重排后的顺序当成写入顺序（本轮裁定 ⑤ 已具名，未检测）。下一轮先量（只读）：①盘上活文件里并列行各几对、`last_at=`/`newest_src=` 在并列世界里读出什么；②两张面各自还能用**既有词**说出并列吗（`pending=` 是 x/y、`recur=` 是源数:失败数、`urls=` 是源数——逐个数一遍有没有位置）；③若要新增一个词，放哪张面才不把长行变噪声；④\"文件序是不是写入序\"要如何在不新增写入口的前提下被读出来（`_stamp_key` 单调？行数 vs 追加快照？）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl (truncated)",
+  "latest_evidence": "qa/probe-R3059.log (1240B, 2026-11-20)",
+  "next_milestone": "[R3060] next window (<=48h): (0) MAIN — **\"还有另一个源\"说出了，但那一个叫什么仍然说不出**。本轮让 `--failure-trend` 印 `newest_srcs=`（同一瞬间的不同源数），于是并列不再隐形；但 `newest_src=` 仍只命名**一个**源，读者知道\"还有另一个\"却拿不到它的名字（一个源名一行＝单行契约拒绝），而 pending 面 `last_at=` 同瞬间的并列仍无词。下一轮先量（只读）：①盘上并列世界里 `newest_srcs=2` 时 `since_ok=`/`flips=`/`pending=` 各自算的是哪个源（被命名那个，还是并列全体）——若只算一个，第二源的健康状况在整行上是否完全缺席；②若要在单行里给出第二个名字，最短的既有形状是什么（`pending_src=` 已有\"一个名字\"的先例；`newest_src2=` 这类编号词是否会开启无限编号）；③pending 面的 `last_at=` 该不该也带一个并列词，还是应明确写\"该面不回答并列\"（零新词路线）；④把并列的第二个源**计入** `pending=` 分母会不会改变\"还剩几个\"的语义（R3004 的 measured/verdict 分离会不会被破坏）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law (truncated)",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
@@ -168,7 +168,7 @@
   },
   "results": [
     [
-      "3058",
+      "3059",
       "OSLoop 执行 tick"
     ]
   ],
@@ -181,15 +181,15 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 511,
+    "log_lines_in_window": 517,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 74,
+    "substantive_non_idle_mention_lines": 75,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 542399
+  "state_bytes": 549924
 }

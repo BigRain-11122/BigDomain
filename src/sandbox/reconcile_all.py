@@ -4767,9 +4767,10 @@ SUITES = [
     # ORDERING site compare the instant rather than the text, 72 -> 73; R3057
     # echoes one fact at one precision on every face, 73 -> 74; R3058 names the
     # LAST-written row when two rows share the newest instant and publishes how
-    # many share it, 74 -> 75.
+    # many share it, 74 -> 75. R3059 adds the trend's source count beside that
+    # name (newest_srcs=, AC-RUN76), 75 -> 76.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 75),
+     os.path.join("..", "os", "test_crawl_runner.py"), 76),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

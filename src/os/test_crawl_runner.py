@@ -1629,7 +1629,8 @@ def main():
                      'wcov', 'evidence', 'kind', 'kind_count', 'window_days',
                      'day', 'bad_days'])
     ok('AC-RUN18', tA5['newest_src'] is None and tA5['since_ok'] == 'unmeasured'
-       and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok', 'flips',
+       and set(tA5.keys()) == base_keys | set(['newest_src', 'newest_srcs',
+                                               'since_ok', 'flips',
                                                'pending', 'pending_src',
                                                'pending_age_d',
                                                'pending_age_min_d', 'pending_age_med_d', 'pending_old', 'pending_old_age_d', 'pending_old_age_min_d', 'fcov', 'rcov'])
@@ -1739,7 +1740,8 @@ def main():
 
     baseB = set(['days', 'in_window', 'bad', 'today', 'prev', 'mean', 'delta',
                  'worst', 'recurring', 'sources', 'recur', 'cov', 'wcov',
-                 'evidence', 'kind', 'kind_count', 'newest_src', 'since_ok',
+                 'evidence', 'kind', 'kind_count', 'newest_src', 'newest_srcs',
+                 'since_ok',
                  'window_days', 'day', 'bad_days'])
     bufB9 = io.StringIO()
     with contextlib.redirect_stdout(bufB9):
@@ -3180,10 +3182,12 @@ def main():
     tZ5 = RUN.summarize_failure_trend(RUN.failure_day_path(rZ4),
                                       RUN.failure_path(rZ4), TODAY,
                                       record_path=CR.record_path(rZ4))
-    ok('AC-RUN32', len(tZ5) == 32 and 'reason' not in tZ5
+    # R3059 added newest_srcs=, so the trend row carries one more key than the
+    # count these arms were written against (32 -> 33).
+    ok('AC-RUN32', len(tZ5) == 33 and 'reason' not in tZ5
        and 'pending_old_src' not in tZ5
        and tZ5['fcov'] == lZ4['fcov'],
-       'the trend row keeps its 31 keys (30 + R3049 day=) and learns neither reason nor a per-source key, while both faces read one span')
+       'the trend row keeps its keys (one more since R3059 newest_srcs=) and learns neither reason nor a per-source key, while both faces read one span')
 
     # arm 6: still a pure display
     before32 = snapshot32(rZ4)
@@ -3366,11 +3370,11 @@ def main():
     ok('AC-RUN33', lQ33['last_at'] == '2026-11-15'
        and 'T' not in lQ33['last_at']
        and rcZ33b == 0 and before33 == after33
-       and len(t33) == 32 and 'last_at' not in t33
+       and len(t33) == 33 and 'last_at' not in t33
        and 'PASS' not in text33 and 'FLAG' not in text33
        and 'verdict' not in text33
        and 'crawl-failure' not in scan_src18,
-       'a date-only stamp stays a date, the face writes nothing, the trend row keeps its 31 keys (30 + R3049 day=), and the scanner reads none of it')
+       'a date-only stamp stays a date, the face writes nothing, the trend row keeps its keys (one more since R3059 newest_srcs=), and the scanner reads none of it')
 
     # AC-RUN34 (R3017): the header carried population, reach and liveness, never
     # EVIDENCE QUALITY - `bad` sat in the dictionary from the start and the
@@ -3528,7 +3532,7 @@ def main():
     ok('AC-RUN34', len(lC34) == 9 and len(lX34) == 9
        and 'bad=0' in linesC34[0] and 'bad=2' in linesX34[0]
        and lC34['bad_days'] == [] and lX34['bad_days'] == []
-       and len(tX34) == 32 and 'bad' in tX34 and tX34['bad'] == 0
+       and len(tX34) == 33 and 'bad' in tX34 and tX34['bad'] == 0
        and json.dumps(tX34, sort_keys=True) == json.dumps(tC34,
                                                           sort_keys=True),
        'the dictionary stays its eight keys plus R3051 bad_days, and the trend row keeps its thirty-two untouched (31 + R3050 bad_days) - its bad counts the day history, not this channel')
@@ -4079,7 +4083,7 @@ def main():
        and all(isinstance(p, tuple) and len(p) == 2
                and len(p) == 2 for p in RUN.summarize_failure_days(
                    p38d)['series'])
-       and len(trend38) == 32 and 'dropped' not in trend38,
+       and len(trend38) == 33 and 'dropped' not in trend38,
        'the dict grows by R3021 dropped and R3050 bad_days, series stays '
        '(day, on_day) pairs, and the 32-key trend row (31 + R3050 bad_days) '
        'gains nothing else here')
@@ -4186,7 +4190,7 @@ def main():
     ok('AC-RUN39', rc39d == 0 and lines39d[0].startswith('CRAWL-FAILURE-DAYS days=')
        and 'dropped=4' in lines39d[0]
        and all(isinstance(p, tuple) and len(p) == 2 for p in s39d['series'])
-       and len(trend39d) == 32 and 'dropped' not in trend39d,
+       and len(trend39d) == 33 and 'dropped' not in trend39d,
        'the day listing keeps its own header, its (day, on_day) pairs and the '
        '31-key trend row (30 + R3049 day=) - the new token lives only on the '
        'snapshot header')
@@ -4332,7 +4336,7 @@ def main():
        and lines40f[0].startswith('CRAWL-FAILURE-DAYS days=')
        and 'DAY-DROPPED' not in lines40f[0]
        and all(isinstance(p, tuple) and len(p) == 2 for p in s40f['series'])
-       and len(t40f) == 32 and 'dropped' not in t40f,
+       and len(t40f) == 33 and 'dropped' not in t40f,
        'the DAYS face keeps one line, (day, on_day) pairs and the 31-key trend '
        'row (30 + R3049 day=) while the per-day list lives in its own '
        'subcommand')
@@ -8624,7 +8628,9 @@ def main():
        and 'waiting.sort(key=lambda w: (_stamp_key(w[0]), w[1]))'
        in body72('_pending_sources')
        and 'stamp > str(newest.get' not in body72('summarize_failure_trend')
-       and '_newest_row(in_window)' in body72('summarize_failure_trend')
+       # R3059 moved this site to the group picker (same pick, plus the source
+       # count), so the shape pin follows the shipped line.
+       and '_newest_rows(in_window)' in body72('summarize_failure_trend')
        and '_stamp_echo(newest)' in body72('list_pending_old')
        and 'newest <= stamp' not in body72('_since_ok'),
        'the ordering law is one function used by all seven faces while the '
@@ -8867,12 +8873,115 @@ def main():
        and 'newest_picked[-1]' in body75('_summary_from_rows')
        and "'newest_rows': len(newest_picked)" in body75('_summary_from_rows')
        and '_newest_row(rows)' in body75('_last_stamp_rows')
-       and '_newest_row(in_window)' in body75('summarize_failure_trend')
+       # R3059 moved the trend's call site from the single-row picker to the
+       # group picker (same result, plus the source count), so this shape pin
+       # follows the shipped line rather than being dropped.
+       and '_newest_rows(in_window)' in body75('summarize_failure_trend')
        and '_stamp_key(got) > _stamp_key(newest)' in body75('_since_ok')
        and '_stamp_key(stamp) >= _stamp_key(latest[src])'
        in body75('_pending_sources'),
        'one picker is used by every row-naming face, two runs are byte-identical, '
        'the world does not move, and since_ok keeps its strict comparison')
+
+    # --- AC-RUN76: how many SOURCES share the newest instant (R3059) ---------
+    # Measured before any of this existed (qa/probe-R3059.log P2): two sources
+    # failing at ONE instant printed one newest_src=, flipped to the other name
+    # when the file order flipped, and nothing on the line said a second source
+    # was there; the counts it already carries answer other questions (P3).
+    # Refused by measurement (P4/P4b): a sortedness token - reordering an
+    # equal-instant group leaves the file non-decreasing, so it read the same
+    # on the tampered and the honest file. One new word, on the face that names
+    # the source: newest_srcs= is the number of DISTINCT SOURCES at that
+    # instant (not rows: newest_rows= counts rows over the whole channel).
+    AT76 = '2026-11-20T23:59:00+08:00'
+    A76 = '2026-11-20T04:00:00+08:00'
+    B76 = '2026-11-19T20:00:00+00:00'   # the SAME instant as A76
+    OLD76 = '2026-10-01T09:00:00+08:00'
+    SA76 = 'https://a76.example/p'
+    SB76 = 'https://b76.example/p'
+
+    # Arm 1: two sources at one instant read newest_srcs=2 and name the row
+    # written LAST (the R3058 law), in both file orders.
+    for order76 in (((SA76, A76, 'E_A'), (SB76, B76, 'E_B')),
+                    ((SB76, B76, 'E_B'), (SA76, A76, 'E_A'))):
+        T76 = world(); roots.append(T76)
+        side73(T76, list(order76))
+        _, lines76 = face73(T76, '--failure-trend', AT76)
+        t76 = toks69(lines76[0])
+        ok('AC-RUN76', t76.get('newest_srcs') == '2'
+           and t76.get('newest_src') == order76[-1][0],
+           'two sources on one instant read newest_srcs=2, and the name printed '
+           'is the row written last, in both file orders')
+
+    # Arm 2: the same source twice at one instant is ONE source, not two.
+    U76 = world(); roots.append(U76)
+    side73(U76, [(SA76, A76, 'E_1'), (SA76, B76, 'E_2')])
+    _, lines76u = face73(U76, '--failure-trend', AT76)
+    ok('AC-RUN76', toks69(lines76u[0]).get('newest_srcs') == '1',
+       'a source that wrote two rows at one instant is still one source')
+
+    # Arm 3: distinct instants keep R3056's law, and the count is 1 rather than
+    # a number invented into every healthy line.
+    V76 = world(); roots.append(V76)
+    side73(V76, [(SA76, '2026-11-18T04:00:00+08:00', 'E_OLD'),
+                 (SB76, A76, 'E_NEW')])
+    _, lines76v = face73(V76, '--failure-trend', AT76)
+    t76v = toks69(lines76v[0])
+    ok('AC-RUN76', t76v.get('newest_srcs') == '1'
+       and t76v.get('newest_src') == SB76,
+       'two instants name one source and read newest_srcs=1')
+
+    # Arm 4: a newest row OUTSIDE the window is not this face's evidence - the
+    # count rides beside newest_src=none instead of borrowing the channel's.
+    W76 = world(); roots.append(W76)
+    side73(W76, [(SA76, OLD76, 'E_STALE')])
+    _, lines76w = face73(W76, '--failure-trend', AT76)
+    t76w = toks69(lines76w[0])
+    ok('AC-RUN76', t76w.get('newest_src') == 'none'
+       and t76w.get('newest_srcs') == '0',
+       'no row in the window means newest_src=none with newest_srcs=0')
+
+    # Arm 5: an empty channel reads 0 as well, never a fabricated 1.
+    X76 = world(); roots.append(X76)
+    _, lines76x = face73(X76, '--failure-trend', AT76)
+    t76x = toks69(lines76x[0])
+    ok('AC-RUN76', t76x.get('newest_src') == 'none'
+       and t76x.get('newest_srcs') == '0',
+       'an empty channel reads newest_src=none with newest_srcs=0')
+
+    # Arm 6: the two faces agree on the same world - newest_rows= counts the
+    # rows on --failures, newest_srcs= counts the sources on the trend, and the
+    # row named by newest= is the one whose source the trend names.
+    Y76 = world(); roots.append(Y76)
+    side73(Y76, [(SA76, A76, 'E_A'), (SB76, B76, 'E_B')])
+    _, lines76f = face73(Y76, '--failures', AT76)
+    _, lines76t = face73(Y76, '--failure-trend', AT76)
+    f76 = toks69(lines76f[0])
+    t76t = toks69(lines76t[0])
+    named76 = [r for r in ((SA76, A76), (SB76, B76))
+               if r[0] == t76t.get('newest_src')]
+    ok('AC-RUN76', f76.get('newest_rows') == '2'
+       and t76t.get('newest_srcs') == '2'
+       and named76 and named76[0][1] == f76.get('newest'),
+       'rows are counted on --failures and sources on the trend, and the name '
+       'the trend prints is the source of the row newest= names')
+
+    # Arm 7: display only - the face writes nothing and is stable across runs.
+    before76 = snap69(Y76)
+    _, lines76t2 = face73(Y76, '--failure-trend', AT76)
+    ok('AC-RUN76', lines76t2 == lines76t and snap69(Y76) == before76,
+       'the word is display only: two runs are byte-identical and the world on '
+       'disk does not move')
+
+    # Arm 8: the selection still goes through the R3058 picker, the word is on
+    # the line, and since_ok keeps its strict comparison.
+    ok('AC-RUN76', '_newest_rows(in_window)' in body75('summarize_failure_trend')
+       and 'newest_picked[-1]' in body75('summarize_failure_trend')
+       and "'newest_srcs': newest_srcs" in body75('summarize_failure_trend')
+       and 'newest_srcs=%d' in body75('main')
+       and '_stamp_key(got) > _stamp_key(newest)' in body75('_since_ok'),
+       'the trend names the last-written row through the one picker, publishes '
+       'the source count, and since_ok still refuses to read a tie as proof')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

@@ -1,0 +1,14 @@
+R3059 probe (read-only, private worlds under tmp)
+P1 live files
+  failures: absent
+  day-history: rows=2 bad=0 tie_pairs=0
+  record: rows=3 bad=0 tie_pairs=0
+P2 A-first: newest_src=https://b.example/p  rows_at_instant=2  distinct_sources=2
+P3 A-first: keys naming sources=['newest_src', 'newest_srcs', 'pending_src'] ; keys that are counts=['days', 'in_window', 'bad', 'worst', 'recurring', 'sources', 'recur', 'wcov', 'kind_count', 'newest_srcs', 'flips', 'fcov', 'window_days']
+P4 A-first: stamp_order_readout=stamp (a sortedness token reads this)
+P2 B-first: newest_src=https://a.example/p  rows_at_instant=2  distinct_sources=2
+P3 B-first: keys naming sources=['newest_src', 'newest_srcs', 'pending_src'] ; keys that are counts=['days', 'in_window', 'bad', 'worst', 'recurring', 'sources', 'recur', 'wcov', 'kind_count', 'newest_srcs', 'flips', 'fcov', 'window_days']
+P4 B-first: stamp_order_readout=stamp (a sortedness token reads this)
+P4b old-row-appended world: stamp_order_readout=mixed (only a DECREASE is visible; an equal-group reorder is not)
+P5 line lengths: pending_header=128 chars; trend_line=113 chars (a token of 16 chars is 12% / 14%)
+P5 pending header ties at last_at=: newest_rows_equivalent=2026-11-19T20:00:00+00:00

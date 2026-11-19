@@ -1,0 +1,6 @@
+NEGCTL world=tie-two-sources honest=2 expected=2 GREEN
+NEGCTL world=tie-one-source honest=1 expected=1 GREEN
+NEGCTL world=three-sources honest=2 expected=2 GREEN
+NEGCTL mutation=rows-not-sources caught=1/3 CAUGHT
+NEGCTL mutation=whole-window caught=1/3 CAUGHT
+NEGCTL mutation=constant-one caught=2/3 CAUGHT
