@@ -1,0 +1,9 @@
+HONEST GREEN -> C1 two sources carry two verdicts
+HONEST GREEN -> C2 a record before the failure says unmeasured
+HONEST GREEN -> C3 a three-way tie invents no verdict
+MUTANT invent-a-twin-on-a-three-way-tie -> CAUGHT
+  red: C3 a three-way tie invents no verdict
+MUTANT judge-the-named-source-instead -> CAUGHT
+  red: C1 two sources carry two verdicts
+MUTANT never-say-unmeasured -> CAUGHT
+  red: C2 a record before the failure says unmeasured

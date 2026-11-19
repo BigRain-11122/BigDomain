@@ -1630,7 +1630,7 @@ def main():
                      'day', 'bad_days'])
     ok('AC-RUN18', tA5['newest_src'] is None and tA5['since_ok'] == 'unmeasured'
        and set(tA5.keys()) == base_keys | set(['newest_src', 'newest_srcs',
-                                               'newest_twin',
+                                               'newest_twin', 'twin_ok',
                                                'since_ok', 'flips',
                                                'pending', 'pending_src',
                                                'pending_age_d',
@@ -1743,6 +1743,7 @@ def main():
                  'worst', 'recurring', 'sources', 'recur', 'cov', 'wcov',
                  'evidence', 'kind', 'kind_count', 'newest_src', 'newest_srcs',
                  'newest_twin',
+                 'twin_ok',
                  'since_ok',
                  'window_days', 'day', 'bad_days'])
     bufB9 = io.StringIO()
@@ -3187,7 +3188,7 @@ def main():
     # R3059 added newest_srcs= and R3060 added newest_twin=, so the trend row
     # carries two more keys than the count these arms were written against
     # (32 -> 34).
-    ok('AC-RUN32', len(tZ5) == 34 and 'reason' not in tZ5
+    ok('AC-RUN32', len(tZ5) == 35 and 'reason' not in tZ5
        and 'pending_old_src' not in tZ5
        and tZ5['fcov'] == lZ4['fcov'],
        'the trend row keeps its keys (two more since R3059/R3060) and learns neither reason nor a per-source key, while both faces read one span')
@@ -3373,7 +3374,7 @@ def main():
     ok('AC-RUN33', lQ33['last_at'] == '2026-11-15'
        and 'T' not in lQ33['last_at']
        and rcZ33b == 0 and before33 == after33
-       and len(t33) == 34 and 'last_at' not in t33
+       and len(t33) == 35 and 'last_at' not in t33
        and 'PASS' not in text33 and 'FLAG' not in text33
        and 'verdict' not in text33
        and 'crawl-failure' not in scan_src18,
@@ -3535,7 +3536,7 @@ def main():
     ok('AC-RUN34', len(lC34) == 9 and len(lX34) == 9
        and 'bad=0' in linesC34[0] and 'bad=2' in linesX34[0]
        and lC34['bad_days'] == [] and lX34['bad_days'] == []
-       and len(tX34) == 34 and 'bad' in tX34 and tX34['bad'] == 0
+       and len(tX34) == 35 and 'bad' in tX34 and tX34['bad'] == 0
        and json.dumps(tX34, sort_keys=True) == json.dumps(tC34,
                                                           sort_keys=True),
        'the dictionary stays its eight keys plus R3051 bad_days, and the trend row keeps its thirty-two untouched (31 + R3050 bad_days) - its bad counts the day history, not this channel')
@@ -4086,7 +4087,7 @@ def main():
        and all(isinstance(p, tuple) and len(p) == 2
                and len(p) == 2 for p in RUN.summarize_failure_days(
                    p38d)['series'])
-       and len(trend38) == 34 and 'dropped' not in trend38,
+       and len(trend38) == 35 and 'dropped' not in trend38,
        'the dict grows by R3021 dropped and R3050 bad_days, series stays '
        '(day, on_day) pairs, and the 32-key trend row (31 + R3050 bad_days) '
        'gains nothing else here')
@@ -4193,7 +4194,7 @@ def main():
     ok('AC-RUN39', rc39d == 0 and lines39d[0].startswith('CRAWL-FAILURE-DAYS days=')
        and 'dropped=4' in lines39d[0]
        and all(isinstance(p, tuple) and len(p) == 2 for p in s39d['series'])
-       and len(trend39d) == 34 and 'dropped' not in trend39d,
+       and len(trend39d) == 35 and 'dropped' not in trend39d,
        'the day listing keeps its own header, its (day, on_day) pairs and the '
        '31-key trend row (30 + R3049 day=) - the new token lives only on the '
        'snapshot header')
@@ -4339,7 +4340,7 @@ def main():
        and lines40f[0].startswith('CRAWL-FAILURE-DAYS days=')
        and 'DAY-DROPPED' not in lines40f[0]
        and all(isinstance(p, tuple) and len(p) == 2 for p in s40f['series'])
-       and len(t40f) == 34 and 'dropped' not in t40f,
+       and len(t40f) == 35 and 'dropped' not in t40f,
        'the DAYS face keeps one line, (day, on_day) pairs and the 31-key trend '
        'row (30 + R3049 day=) while the per-day list lives in its own '
        'subcommand')
@@ -9090,6 +9091,142 @@ def main():
        and "'many'" in body75('_twin_name'),
        'the word is display only, two runs are byte-identical, the world on '
        'disk does not move, and the shipped line publishes it')
+
+    # --- AC-RUN78: the HEALTH of the other source at a tie (R3061) ----------
+    # Measured before this existed (qa/probe-R3061.log P2/P2c): with A repaired
+    # (a record row strictly after the failure) and B still broken at ONE
+    # instant, the row judged only whichever source was written last, so half
+    # the answer moved with file order. One word: twin_ok= is _since_ok for the
+    # twin's own row - the same R3004 law, not a second one (P5/P5b/P5c).
+    AT78 = '2026-11-20T23:59:00+08:00'
+    A78 = '2026-11-20T04:00:00+08:00'
+    B78 = '2026-11-19T20:00:00+00:00'   # the SAME instant as A78
+    C78 = '2026-11-20T04:00:00+08:00'
+    LATER78 = '2026-11-20T06:00:00+08:00'
+    EARLY78 = '2026-11-20T01:00:00+08:00'
+    SA78 = 'https://a78.example/p'
+    SB78 = 'https://b78.example/p'
+    SC78 = 'https://c78.example/p'
+
+    def record78(root, rows):
+        for src, when in rows:
+            CR.append_record(CR.record_path(root), src, when, 'changed')
+        return CR.record_path(root)
+
+    # Arm 1: A repaired, B still broken - the pair of names carries a pair of
+    # verdicts, and each verdict equals the helper's answer for THAT source.
+    pair78 = []
+    for order78 in (((SA78, A78, 'E_A'), (SB78, B78, 'E_B')),
+                    ((SB78, B78, 'E_B'), (SA78, A78, 'E_A'))):
+        W78 = world(); roots.append(W78)
+        side73(W78, list(order78))
+        recp78 = record78(W78, [(SA78, LATER78)])
+        _, lines78 = face73(W78, '--failure-trend', AT78)
+        t78 = toks69(lines78[0])
+        pair78.append(t78)
+        ok('AC-RUN78', t78.get('newest_twin') not in (None, 'none', 'many')
+           and t78.get('newest_twin') != t78.get('newest_src')
+           and {t78.get('since_ok'), t78.get('twin_ok')} == {'yes', 'no'}
+           and t78.get('since_ok') == RUN._since_ok(
+               recp78, t78.get('newest_src'), A78)
+           and t78.get('twin_ok') == RUN._since_ok(
+               recp78, t78.get('newest_twin'), A78),
+           'the named source and the twin each carry their own verdict, and '
+           'each equals the helper answer for that source')
+
+    # Arm 2: the same evidence under both file orders - every individual name
+    # moves, but the COMPLETE answer (who, and whether each came back) is the
+    # same set. That is the defect R3060 measured and this arm closes.
+    def answer78(t):
+        return frozenset(((t.get('newest_src'), t.get('since_ok')),
+                          (t.get('newest_twin'), t.get('twin_ok'))))
+    ok('AC-RUN78', answer78(pair78[0]) == answer78(pair78[1])
+       and pair78[0].get('newest_src') == pair78[1].get('newest_twin')
+       and pair78[0].get('since_ok') == pair78[1].get('twin_ok'),
+       'a file-order flip swaps the names and the verdicts together, so the '
+       'complete answer no longer depends on write order')
+
+    # Arm 3: one source at the instant - there is no twin, so no twin verdict.
+    U78 = world(); roots.append(U78)
+    side73(U78, [(SA78, A78, 'E_A')])
+    record78(U78, [(SA78, LATER78)])
+    _, lines78u = face73(U78, '--failure-trend', AT78)
+    t78u = toks69(lines78u[0])
+    ok('AC-RUN78', t78u.get('newest_twin') == 'none'
+       and t78u.get('twin_ok') == 'none' and t78u.get('since_ok') == 'yes',
+       'a single source reads twin=none and twin_ok=none, never a borrowed '
+       'verdict')
+
+    # Arm 4: a three-way tie has no unique second source - the word refuses to
+    # invent one instead of picking whichever row came last.
+    V78 = world(); roots.append(V78)
+    side73(V78, [(SA78, A78, 'E_A'), (SB78, B78, 'E_B'),
+                 (SC78, C78, 'E_C')])
+    record78(V78, [(SA78, LATER78), (SB78, LATER78), (SC78, LATER78)])
+    _, lines78v = face73(V78, '--failure-trend', AT78)
+    t78v = toks69(lines78v[0])
+    ok('AC-RUN78', t78v.get('newest_srcs') == '3'
+       and t78v.get('newest_twin') == 'many'
+       and t78v.get('twin_ok') == 'none',
+       'three sources on one instant read newest_twin=many with twin_ok=none, '
+       'not a verdict about one arbitrary row')
+
+    # Arm 5: no evidence at all - the pair is absent together and nothing rises.
+    X78 = world(); roots.append(X78)
+    rc78x, lines78x = face73(X78, '--failure-trend', AT78)
+    t78x = toks69(lines78x[0])
+    ok('AC-RUN78', rc78x == 0 and t78x.get('newest_twin') == 'none'
+       and t78x.get('twin_ok') == 'none' and t78x.get('newest_src') == 'none',
+       'an empty channel reads twin=none with twin_ok=none and raises nothing')
+
+    # Arm 6: R3004 is inherited, not re-invented - a record that stops BEFORE
+    # the failure, or reaches only to the SAME instant, cannot say 'no'.
+    for when78, tag78 in ((EARLY78, 'before'), (A78, 'equal')):
+        Q78 = world(); roots.append(Q78)
+        side73(Q78, [(SA78, A78, 'E_A'), (SB78, B78, 'E_B')])
+        record78(Q78, [(SA78, when78)])
+        _, lines78q = face73(Q78, '--failure-trend', AT78)
+        t78q = toks69(lines78q[0])
+        ok('AC-RUN78', t78q.get('twin_ok') == 'unmeasured'
+           and t78q.get('since_ok') == 'unmeasured',
+           'a record reaching %s the failure reads unmeasured on both sources, '
+           'never a claimed no' % tag78)
+
+    # Arm 7: the old words keep the values R3060 measured on this exact shape,
+    # and the row is stable across runs with no write. Disclosed: an earlier
+    # version of this arm compared two worlds that differed by a record row and
+    # read red, because pending= legitimately counts every judged source - so
+    # the shared values are pinned against the recorded measurement instead of
+    # against a second world that is not the same question.
+    P78 = world(); roots.append(P78)
+    side73(P78, [(SA78, A78, 'E_A'), (SB78, B78, 'E_B')])
+    record78(P78, [(SA78, LATER78)])
+    before78 = snap69(P78)
+    _, lines78p = face73(P78, '--failure-trend', AT78)
+    _, lines78p2 = face73(P78, '--failure-trend', AT78)
+    t78p = toks69(lines78p[0])
+    ok('AC-RUN78', lines78p2 == lines78p and snap69(P78) == before78
+       and t78p.get('newest_src') == SB78
+       and t78p.get('newest_twin') == SA78
+       and t78p.get('newest_srcs') == '2'
+       and t78p.get('pending') == '1/2'
+       and t78p.get('flips') == '0'
+       and t78p.get('since_ok') == 'no'
+       and t78p.get('twin_ok') == 'yes',
+       'the measured shape keeps every old word where R3060 read it, and the '
+       'one word this round adds names the half that was missing')
+
+    # Arm 8: wired rather than merely defined - the selection, the key and the
+    # printed word all have to be in the shipped source, and the CLI line has
+    # to carry the word for this very world.
+    _, lines78w = face73(W78, '--failure-trend', AT78)
+    ok('AC-RUN78', '_twin_row(newest_picked, newest_src)'
+       in body75('summarize_failure_trend')
+       and "'twin_ok': twin_ok" in body75('summarize_failure_trend')
+       and 'twin_ok=%s' in body75('main')
+       and 'twin_ok=' in lines78w[0],
+       'the trend selects the twin row through one helper, publishes the key '
+       'and prints it on the line')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

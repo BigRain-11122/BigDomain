@@ -581,6 +581,26 @@ and folding the twin into pending= (P3 shows it is already inside that
 fraction). scope is a NAME, not a count: since_ok/flips still answer for the
 one named source, stated rather than implied.
 
+IS THE OTHER SOURCE FIXED (R3061, measured first - qa/probe-R3061.log): R3060
+named the twin and the probe measured that its health was still nowhere on the
+line - with A repaired (a record row strictly after the failure) and B still
+broken at one instant, the row read newest_src=B newest_twin=A since_ok=no
+when A was written first, and since_ok=yes about A when B was written first,
+so HALF THE ANSWER moved with file order (P2/P2c). No existing word could say
+it: `pending=` is a whole-window fraction and `pending_src=` names the longest
+waiter, measured to be a THIRD older source when one exists (P3/P4). One word:
+`twin_ok=` on --failure-trend is `_since_ok` for the twin's own row, so it
+carries the R3004 rule unchanged (a record stopping before the failure, or at
+the SAME instant, reads unmeasured rather than no - measured P5/P5b/P5c).
+None - printed `none` - when no single twin exists (one source, or a three-way
+tie, where there is no unique second source to judge). REFUSED: a
+`twin_flips=` (a second flip count would turn the R3004 measured/verdict
+separation into a four-word matrix no reader asked for); folding the twin's
+health into pending=/pending_src= (their own denominators, P4b); numbered
+per-source verdicts for a three-way tie (no unique second, and the line already
+carries 33 keys, P8); and the same word on --failures / --pending-old-list
+(those two faces answer about the channel, not about one source's repair).
+
 WHICH DAY A ROW COUNTS IN (R3055, measured first - qa/probe-R3055.log): R3048
 gave the clock faces one day law - the LOCAL day of the instant, `_day_of` -
 but only the window HEAD used it; every count and span still cut the first ten
@@ -1655,15 +1675,47 @@ def _twin_name(picked, named):
     This is a NAME, not a count: pending= already counts every judged source in
     the window (measured: (1,2) under both file orders), so folding the twin
     into that fraction would change what it means.
+
+    R3061: the rows are selected in `_twin_rows` and the single-source case is
+    answered by `_twin_row`, so the name and the health verdict beside it are
+    built from ONE selection instead of two that could disagree.
     """
-    others = [row.get('source_url') for row in picked or ()
-              if row.get('source_url') and row.get('source_url') != named]
-    distinct = sorted(set(others))
+    rows = _twin_rows(picked, named)
+    distinct = sorted({row.get('source_url') for row in rows})
     if not distinct:
         return None
     if len(distinct) == 1:
         return distinct[0]
     return 'many'
+
+
+def _twin_rows(picked, named):
+    """Rows at the tie that belong to a source OTHER than the named one."""
+    return [row for row in picked or ()
+            if row.get('source_url') and row.get('source_url') != named]
+
+
+def _twin_row(picked, named):
+    """The last-written row of the ONE other source at a tie, else None.
+
+    WHY (R3061, measured qa/probe-R3061.log P2/P2c): R3060 named the second
+    source at a tie, and the probe measured that its HEALTH was on no key at
+    all - with A repaired and B still broken at one instant the line named both
+    and judged only whichever was written last, so the other half of the
+    answer moved with file order. It also measured `_since_ok` answering
+    correctly per source (yes for the repaired one, no for the broken one, and
+    unmeasured when the record stops before the failure), so the missing piece
+    was a ROW to hand it, not a new law.
+
+    None when the tie has no other source or more than one: a three-way tie has
+    no unique "the other one", and inventing one would print a verdict about a
+    source the line never named. `_twin_name` reports the same two cases as
+    none / many from the same selection.
+    """
+    rows = _twin_rows(picked, named)
+    if len({row.get('source_url') for row in rows}) != 1:
+        return None
+    return rows[-1]
 
 
 def _window_start(day, window_days=7):
@@ -3673,6 +3725,13 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # second source is there and measured (qa/probe-R3060.log P2) it appeared
     # in no key - while since_ok= answered for whichever one was written last.
     newest_twin = None
+    # R3061: the health of that second source, on the same law as since_ok=
+    # (same helper, its own row's stamp). Measured (qa/probe-R3061.log P2/P2c):
+    # with one source repaired and the other still broken at one instant, the
+    # row named both and judged only the last-written one, so "is the other one
+    # fixed?" moved with file order. None when no single twin exists - a
+    # three-way tie has no unique second source to judge.
+    twin_ok = None
     since_ok = 'unmeasured'
     # R3002 STABILITY: since_ok answers "was it seen working afterwards", which a
     # source that was fixed, broke again and was fixed again answers YES to -
@@ -3703,6 +3762,12 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             newest_twin = _twin_name(newest_picked, newest_src)
             since_ok = _since_ok(record_path, newest_src,
                                  newest.get('failed_at'))
+            # R3061: the same question for the other source, so the pair of
+            # names carries a pair of verdicts instead of half an answer.
+            twin_row = _twin_row(newest_picked, newest_src)
+            if twin_row is not None:
+                twin_ok = _since_ok(record_path, twin_row.get('source_url'),
+                                    twin_row.get('failed_at'))
             flips = _flips(record_path, newest_src, frows)
     # R3003 COVERAGE OF THE EVIDENCE FACE: the same row now names how far the
     # crawl record itself reaches, so since_ok=no standing on one day of record
@@ -3815,6 +3880,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
             'newest_src': newest_src, 'newest_srcs': newest_srcs,
             'newest_twin': newest_twin,
+            'twin_ok': twin_ok,
             'since_ok': since_ok,
             'flips': flips, 'pending': pending, 'pending_src': pending_src,
             'pending_age_d': pending_age_d,
@@ -4346,7 +4412,7 @@ def main(argv=None):
               'worst=%s recurring=%d sources=%d bad=%d bad_days=%s '
               'evidence=%s kind=%s '
               'recur=%s cov=%s wcov=%s newest_src=%s newest_srcs=%d '
-              'newest_twin=%s since_ok=%s flips=%s '
+              'newest_twin=%s twin_ok=%s since_ok=%s flips=%s '
               'pending=%s pending_src=%s pending_age_d=%s '
               'pending_age_min_d=%s pending_age_med_d=%s pending_old=%s '
               'pending_old_age_d=%s pending_old_age_min_d=%s fcov=%s rcov=%s '
@@ -4359,6 +4425,7 @@ def main(argv=None):
                  recur_txt, cov_txt, wcov_txt,
                  trend['newest_src'] or 'none', trend['newest_srcs'],
                  trend['newest_twin'] or 'none',
+                 trend['twin_ok'] or 'none',
                  trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
                  pending_txt, trend['pending_src'] or 'none', age_txt,

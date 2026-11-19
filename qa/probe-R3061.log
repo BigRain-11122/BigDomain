@@ -1,0 +1,16 @@
+P1 failure_exists=False rows=0 bad=0 | day_rows=2 bad=0 | record_rows=3 | same_instant_pairs=0
+P2 repaired=A broken=B -> newest_src=https://b3061.example/p newest_twin=https://a3061.example/p since_ok=no pending=1/2 pending_src=https://b3061.example/p flips=0
+P2b line_keys=bad,bad_days,cov,day,days,delta,evidence,fcov,flips,kind,mean,newest_src,newest_srcs,newest_twin,pending,pending_age_d,pending_age_med_d,pending_age_min_d,pending_old,pending_old_age_d,pending_old_age_min_d,pending_src,prev,rcov,recur,recurring,since_ok,sources,today,twin_ok,wcov,worst
+P2c swapped order -> newest_src=https://a3061.example/p newest_twin=https://b3061.example/p since_ok=yes (same evidence, different verdict)
+P2d repaired=B broken=A -> newest_src=https://b3061.example/p newest_twin=https://a3061.example/p since_ok=yes (the twin now carries the health the line omits)
+P3 keys whose value is a health word: since_ok=no,twin_ok=yes
+P3b keys carrying "twin": newest_twin,twin_ok
+P4 third older source -> pending=2/3 pending_src=https://c3061.example/p newest_src=https://b3061.example/p newest_twin=https://a3061.example/p since_ok=no
+P4b pending_src_names_twin=False (a coincidence when it holds, not a law)
+P5 _since_ok(A, tie)=yes  _since_ok(B, tie)=no  (record reaches strictly past: A yes, B no)
+P5b record stops before the failure -> _since_ok(A, tie)=unmeasured (R3004 preserved: no false "no")
+P5c record equal to the failure instant -> _since_ok(A, tie)=unmeasured
+P6 trend line chars=537 ; add " twin_ok=unmeasured"=19 chars (+3.5%)
+P7 files outside the runner + its suite naming newest_twin/twin_ok: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\backlog.md
+P8 three-way tie -> newest_srcs=3 newest_twin=many since_ok=no
+P8b single source -> newest_srcs=1 newest_twin=none since_ok=yes
