@@ -1,0 +1,3 @@
+ages 5/5/5/0/0 (tail still open) rc=0 evidence=side pending=5/5 pending_age_d=5 pending_age_min_d=0 pending_age_med_d=5
+ages 5/0/0/0/0 (burst just started) rc=0 evidence=side pending=5/5 pending_age_d=5 pending_age_min_d=0 pending_age_med_d=0
+everything repaired rc=0 evidence=side pending=0/1 pending_age_d=none pending_age_min_d=none pending_age_med_d=none

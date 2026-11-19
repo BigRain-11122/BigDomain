@@ -1,0 +1,1 @@
+CRAWL-FAILURE-TREND days=1 today=0 prev=none mean=0 delta=none worst=2026-11-19:0 recurring=0 sources=0 bad=0 evidence=history kind=none recur=none cov=2026-11-19..2026-11-19 wcov=1/7 newest_src=none since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none rcov=2026-11-19..2026-11-19

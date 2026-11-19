@@ -4684,7 +4684,7 @@ SUITES = [
     # and refused as a restatement of pending_age_d. AC-RUN25 pinned in the
     # R3008 PIN row before the code.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 25),
+     os.path.join("..", "os", "test_crawl_runner.py"), 26),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

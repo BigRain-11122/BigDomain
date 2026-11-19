@@ -107,6 +107,19 @@ pending_age_d. With one pending source, or several sharing one stamp, the two
 ages coincide - pinned as a fact so it is never silently 'fixed' into a None.
 Seven existing key-set arms were widened by this key (the six above plus
 AC-RUN24's own), disclosed as criteria moving with the field.
+AC-RUN26 (R3009) grades the MIDDLE: two ends described the span and left
+everything between them silent, so "a burst that just started" and "an old tail
+with one new arrival" printed the same row (measured: ages 5/3/0 and 5/1/0 were
+identical on all 25 keys, and so were 5/5/5/0/0 and 5/0/0/0/0). The row now also
+carries pending_age_med_d=, the middle element of the pending set sorted by age,
+taking the one nearer the OLD end when the count is even. This is not the max
+refused in R3008 - a max equalled pending_age_d by construction in every world,
+while the middle coincides with an end only at N<=2 or when the mass piles on
+one end, which is the reading it adds. Pointing the reader at the failure-day
+file was measured and refused as an alternative (that file carries a urls=
+COUNT and no per-source identity or age). Eight existing key-set arms were
+widened by this key (the seven above plus AC-RUN25's own), disclosed as criteria
+moving with the field.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -1116,7 +1129,7 @@ def main():
        and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok', 'flips',
                                                'pending', 'pending_src',
                                                'pending_age_d',
-                                               'pending_age_min_d', 'rcov'])
+                                               'pending_age_min_d', 'pending_age_med_d', 'rcov'])
        and tA5['evidence'] == 'history' and tA5['today'] == 0,
        'a pruned side channel answers none/unmeasured and leaves every existing field where it was')
 
@@ -1235,7 +1248,7 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tB2.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'rcov']),
        'one display row carries the stability count, adds exactly one key, and stays outside the scanner')
 
     # AC-RUN20 (R3003): the trend answered "was it seen working afterwards" but
@@ -1343,7 +1356,7 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tC1.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'rcov']),
        'the row names the record span, or none, and adds exactly the one key it names')
 
     # AC-RUN21 (R3004): the verdict answered 'no' without ever having looked.
@@ -1419,7 +1432,7 @@ def main():
        and 'crawl-failure' not in scan_src18
        and set(tD3.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'rcov']),
        'a real repair still reads yes, the CLI carries all three readings, and R3004 adds NO key - the row shape is unchanged')
 
     # AC-RUN22 (R3005): newest_src/since_ok answer for ONE source - the latest
@@ -1535,7 +1548,7 @@ def main():
        and 'verdict' not in lineE7 and 'crawl-failure' not in scan_src18
        and set(tE1.keys()) == baseB | set(['flips', 'pending', 'pending_src',
                                            'pending_age_d',
-                                           'pending_age_min_d', 'rcov']),
+                                           'pending_age_min_d', 'pending_age_med_d', 'rcov']),
        'a multi-source window still prints ONE line carrying pending=, adds exactly one key, and stays outside the scanner - per-source lines were refused on purpose')
 
     # AC-RUN23 (R3006): pending=<n>/<judged> answers HOW MANY sources are still
@@ -1636,7 +1649,7 @@ def main():
     judged6 = tG6['pending'][1] if tG6['pending'] else 0
     ok('AC-RUN23', set(tG6.keys()) == baseB | set(['flips', 'pending',
                                                    'pending_src', 'pending_age_d',
-                                                   'pending_age_min_d', 'rcov'])
+                                                   'pending_age_min_d', 'pending_age_med_d', 'rcov'])
        and 'unjudged' not in tG6
        and tG6['sources'] - judged6 == 1,
        'the row grows by exactly one name and carries no unjudged field - the unjudged count is measurable as sources minus the denominator, so a field for it would only restate two keys')
@@ -1733,6 +1746,7 @@ def main():
                                                    'pending_src',
                                                    'pending_age_d',
                                                    'pending_age_min_d',
+                                                   'pending_age_med_d',
                                                    'rcov'])
        and 'pending_others' not in tH1 and 'unjudged' not in tH1,
        'the row grows by exactly one age key, and neither refused field (pending_others arithmetic, unjudged restatement) exists')
@@ -1830,6 +1844,7 @@ def main():
                                                    'pending_src',
                                                    'pending_age_d',
                                                    'pending_age_min_d',
+                                                   'pending_age_med_d',
                                                    'rcov'])
        and 'pending_age_max_d' not in tI1
        and 'pending_others' not in tI1 and 'unjudged' not in tI1,
@@ -1854,6 +1869,125 @@ def main():
        and 'verdict' not in lineI7 and 'crawl-failure' not in scan_src18,
        'one line carries both ends of the age span (numbers, or none when nothing is pending), and the scanner still reads none of it')
 
+
+    # AC-RUN26 (R3009): the two ends described the span and left everything
+    # between them silent, so "a burst that just started" and "an old tail with
+    # one new arrival" printed the same row. Measured before this was written
+    # (qa/probe-R3009.log): worlds with the same ends but different middles
+    # (ages 5/3/0 versus 5/1/0) were identical on all 25 keys, and so were a
+    # world with the mass old (5/5/5/0/0) and one with it new (5/0/0/0/0). A
+    # pointer to the failure-day file was measured and REFUSED as the
+    # alternative: that file carries a urls= COUNT and no per-source identity
+    # or age. pending_age_med_d= is the middle of the pending set, nearer the
+    # old end when the count is even - not the max refused in R3008, which
+    # equalled pending_age_d by construction in every world.
+    SRC26A = 'https://a.example/page'
+    SRC26B = 'https://b.example/page'
+    SRC26C = 'https://c.example/page'
+    SRC26D = 'https://d.example/page'
+    SRC26E = 'https://e.example/page'
+
+    # arm 1: three pending sources - the middle is neither end's restatement
+    rJ1, tJ1 = trend25(
+        [('https://keep.example/page', TODAY + 'T13:00:00+08:00')],
+        [[(SRC26A, '2026-11-14T09:00:00+08:00', 'E_FETCH TimeoutError: a'),
+          (SRC26B, '2026-11-16T09:00:00+08:00', 'E_FETCH TimeoutError: b'),
+          (SRC26C, TODAY + 'T08:00:00+08:00', 'E_FETCH HTTPError: c')]])
+    ok('AC-RUN26', tJ1['pending'] == (3, 3) and tJ1['pending_age_d'] == 5
+       and tJ1['pending_age_min_d'] == 0
+       and tJ1['pending_age_med_d'] == 3,
+       'ages 5/3/0 read a middle of 3 while the ends read 5 and 0 - the middle is no longer blank and is neither end restated')
+
+    # arm 2: same ends, opposite mass - the middle is what separates them
+    rJ2a, tJ2a = trend25(
+        [('https://keep.example/page', TODAY + 'T13:00:00+08:00')],
+        [[(SRC26A, '2026-11-14T09:00:00+08:00', 'E_FETCH TimeoutError: a'),
+          (SRC26B, '2026-11-14T10:00:00+08:00', 'E_FETCH TimeoutError: b'),
+          (SRC26D, '2026-11-14T11:00:00+08:00', 'E_FETCH TimeoutError: d'),
+          (SRC26E, TODAY + 'T07:00:00+08:00', 'E_FETCH TimeoutError: e'),
+          (SRC26C, TODAY + 'T08:00:00+08:00', 'E_FETCH TimeoutError: c')]])
+    rJ2b, tJ2b = trend25(
+        [('https://keep.example/page', TODAY + 'T13:00:00+08:00')],
+        [[(SRC26A, '2026-11-14T09:00:00+08:00', 'E_FETCH TimeoutError: a'),
+          (SRC26B, TODAY + 'T05:00:00+08:00', 'E_FETCH TimeoutError: b'),
+          (SRC26D, TODAY + 'T06:00:00+08:00', 'E_FETCH TimeoutError: d'),
+          (SRC26E, TODAY + 'T07:00:00+08:00', 'E_FETCH TimeoutError: e'),
+          (SRC26C, TODAY + 'T08:00:00+08:00', 'E_FETCH TimeoutError: c')]])
+    ok('AC-RUN26', tJ2a['pending'] == tJ2b['pending'] == (5, 5)
+       and tJ2a['pending_age_d'] == tJ2b['pending_age_d'] == 5
+       and tJ2a['pending_age_min_d'] == tJ2b['pending_age_min_d'] == 0
+       and tJ2a['pending_age_med_d'] == 5
+       and tJ2b['pending_age_med_d'] == 0,
+       'mass at the old end and mass at the new end are indistinguishable on the count and both ends, and the middle is exactly what tells them apart')
+
+    # arm 3: two pending sources - the even count takes the one nearer the old
+    # end, so the middle coincides with pending_age_d. Pinned as a fact.
+    rJ3, tJ3 = trend25(
+        [('https://keep.example/page', TODAY + 'T13:00:00+08:00')],
+        [[(SRC26A, '2026-11-14T09:00:00+08:00', 'E_FETCH TimeoutError: a'),
+          (SRC26C, TODAY + 'T08:00:00+08:00', 'E_FETCH TimeoutError: c')]])
+    ok('AC-RUN26', tJ3['pending'] == (2, 2) and tJ3['pending_age_d'] == 5
+       and tJ3['pending_age_min_d'] == 0
+       and tJ3['pending_age_med_d'] == 5,
+       'with two pending sources the middle is the older one (the even-count rule), so it equals pending_age_d - the coincidence is pinned rather than silently turned into None')
+
+    # arm 4: one pending source - all three ages coincide, which is the truth
+    rJ4, tJ4 = trend25(
+        [('https://keep.example/page', TODAY + 'T13:00:00+08:00')],
+        [[(SRC26A, '2026-11-14T09:00:00+08:00', 'E_FETCH TimeoutError: a')]])
+    ok('AC-RUN26', tJ4['pending'] == (1, 1) and tJ4['pending_age_d'] == 5
+       and tJ4['pending_age_min_d'] == 5
+       and tJ4['pending_age_med_d'] == 5,
+       'one pending source reads the same age at both ends and in the middle')
+
+    # arm 5: nothing pending, and a source nobody looked after - all None
+    rJ5a, tJ5a = trend25(
+        [(SRC26A, TODAY + 'T09:30:00+08:00')],
+        [[(SRC26A, TODAY + 'T09:00:00+08:00', 'E_FETCH TimeoutError: a')]])
+    rJ5b, tJ5b = trend25(
+        [('https://seen.example/page', '2026-11-18T08:00:00+08:00')],
+        [[(SRC26A, TODAY + 'T12:00:00+08:00', 'E_FETCH TimeoutError: a')]])
+    ok('AC-RUN26', tJ5a['pending'] == (0, 1)
+       and tJ5a['pending_age_d'] is None
+       and tJ5a['pending_age_min_d'] is None
+       and tJ5a['pending_age_med_d'] is None
+       and tJ5b['pending'] is None
+       and tJ5b['pending_age_d'] is None
+       and tJ5b['pending_age_min_d'] is None
+       and tJ5b['pending_age_med_d'] is None,
+       'a repaired set and an unmeasured-only set read None in the middle too - the R3004 split is not aggregated away by a third age')
+
+    # arm 6: exactly one new key, and the refused shapes never grew
+    ok('AC-RUN26', set(tJ1.keys()) == baseB | set(['flips', 'pending',
+                                                   'pending_src',
+                                                   'pending_age_d',
+                                                   'pending_age_min_d',
+                                                   'pending_age_med_d',
+                                                   'rcov'])
+       and 'pending_age_max_d' not in tJ1
+       and 'pending_hist' not in tJ1
+       and 'pending_others' not in tJ1 and 'unjudged' not in tJ1,
+       'the row grows by exactly one age key, and the refused max, histogram and the two older refusals never exist')
+
+    # arm 7: the one-line contract and the scanner's zero-consumption premise
+    bufJ7 = io.StringIO()
+    with contextlib.redirect_stdout(bufJ7):
+        rcJ7 = RUN.main(['--failure-trend', '--root', rJ1])
+    linesJ7 = [n for n in bufJ7.getvalue().splitlines() if n.strip()]
+    lineJ7 = linesJ7[0] if linesJ7 else ''
+    bufJ7b = io.StringIO()
+    with contextlib.redirect_stdout(bufJ7b):
+        rcJ7b = RUN.main(['--failure-trend', '--root', rJ5a])
+    linesJ7b = [n for n in bufJ7b.getvalue().splitlines() if n.strip()]
+    lineJ7b = linesJ7b[0] if linesJ7b else ''
+    ok('AC-RUN26', rcJ7 == 0 and len(linesJ7) == 1
+       and 'pending_age_med_d=3' in lineJ7
+       and 'pending_age_d=5' in lineJ7 and 'pending_age_min_d=0' in lineJ7
+       and rcJ7b == 0 and len(linesJ7b) == 1
+       and 'pending_age_med_d=none' in lineJ7b
+       and 'PASS' not in lineJ7 and 'FLAG' not in lineJ7
+       and 'verdict' not in lineJ7 and 'crawl-failure' not in scan_src18,
+       'one line carries the middle (a number, or none when nothing is pending), and the scanner still reads none of it')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

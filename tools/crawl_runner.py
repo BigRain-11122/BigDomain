@@ -291,6 +291,31 @@ max would restate pending_age_d rather than say anything new. With one pending
 source, or several sharing one stamp, the two ages coincide - that is the truth
 and is pinned as such, not turned into a None. Display only, no PASS/FLAG.
 
+MIDDLE (R3009): two ends described the span and nothing described what sat
+between them, so the question a person actually asks - "is this a burst that
+just started, or an old tail with one new arrival" - had no reading. Measured
+before this changed: two worlds with the SAME ends but different middles (ages
+5/3/0 versus 5/1/0) were identical on all 25 keys, and so were a world with the
+mass at the old end (5/5/5/0/0) and one with it at the new end (5/0/0/0/0). The
+row now also carries pending_age_med_d= - the middle element of the pending set
+sorted by age, taking the one nearer the OLD end when the count is even (the
+"second oldest" at N=4), on the same ten-character day law and the same None
+rules as the other two ages. This is NOT the max field refused in R3008: a max
+equalled pending_age_d by construction in every world, while the middle only
+coincides with an end at N<=2 or when the mass piles on one end - which is
+precisely the reading it adds. Pointing a reader at the failure-day file
+instead was measured and refused: that file carries day-level counts with a
+urls= COUNT and no per-source identity or age, so it cannot answer which source
+waited how long. Four readings now divide the work: pending= is HOW MANY,
+pending_age_d= is how long the OLDEST (the named one) waited, pending_age_min_d=
+is how long the YOUNGEST waited, pending_age_med_d= is where the MIDDLE sits -
+near pending_age_d when the mass is old, near pending_age_min_d when it is new.
+Three scalars are still not a distribution: the per-source ages are not on this
+line and a histogram is refused by the one-line contract. The window bounds
+what any of these can say - with window_days=7 no age exceeds 6 and a failure
+older than the window is not pending at all (measured). Display only, no
+PASS/FLAG.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -794,7 +819,7 @@ def _day_age(day, stamp):
 
 
 def _pending_sources(record_path, in_window):
-    """(not back, judged, longest-waiting source, its stamp, newest-pending stamp).
+    """(not back, judged, longest, its stamp, newest stamp, middle stamp).
 
     WHY (R3005): newest_src/since_ok answer for ONE source - the latest failure
     in the window - so a window with three failing pages said nothing about the
@@ -845,10 +870,23 @@ def _pending_sources(record_path, in_window):
     one): the two ends together are the AGE SPAN of the pending set. A
     pending_age_max_d field was measured and REFUSED - the named source is by
     construction the oldest (raw recomputation agreed in every probe world), so
-    the max would restate pending_age_d. None when nothing is pending; when
+    the max would restate pending_age_d.     None when nothing is pending; when
     every pending source shares one stamp the two ends coincide, which is
     reported as it is rather than papered over.
+
+    R3009 KEEPS THE MIDDLE: the two ends described the span and left everything
+    between them silent - measured, ages 5/3/0 and 5/1/0 were identical on all
+    25 keys, and so were 5/5/5/0/0 (mass old) and 5/0/0/0/0 (mass new), which
+    is exactly the "burst or tail" question a person asks. The sixth value is
+    the MIDDLE pending stamp: the list below is already ordered oldest-first,
+    so the middle is index (n-1)//2 - the exact centre when n is odd, the one
+    nearer the OLD end when n is even. None when nothing is pending. It is not
+    the max refused in R3008: a max equalled the named stamp by construction,
+    while the middle only coincides with an end at n<=2 or when the mass piles
+    on one end - a coincidence reported as the truth, and the very reading that
+    separates the two worlds the ends cannot tell apart.
     """
+
     latest = {}
     for row in in_window or ():
         src = row.get('source_url')
@@ -870,8 +908,9 @@ def _pending_sources(record_path, in_window):
             judged += 1
     waiting.sort()
     if not waiting:
-        return (pending, judged, None, None, None)
-    return (pending, judged, waiting[0][1], waiting[0][0], waiting[-1][0])
+        return (pending, judged, None, None, None, None)
+    return (pending, judged, waiting[0][1], waiting[0][0], waiting[-1][0],
+            waiting[(len(waiting) - 1) // 2][0])
 
 
 def summarize_failure_trend(history_path, failures_path, day, window_days=7,
@@ -1071,6 +1110,16 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # pending source sharing a stamp, the two numbers coincide - reported as the
     # truth it is, and pinned so nobody later 'fixes' the pair into one None.
     pending_age_min_d = None
+    # R3009 WHERE THE MIDDLE SITS: the two ends left everything between them
+    # silent - measured, two worlds with the same ends but different middles
+    # (5/3/0 versus 5/1/0) were identical on all 25 keys, and so were a world
+    # with the mass old (5/5/5/0/0) and one with it new (5/0/0/0/0). The third
+    # age is the middle of the pending set, nearer the old end when the count is
+    # even; it is not the max refused in R3008 (that one equalled pending_age_d
+    # by construction in every world). A failure-day-file pointer was measured
+    # and refused as an alternative: that file carries a urls= COUNT and no
+    # per-source identity or age.
+    pending_age_med_d = None
     if evidence == 'side' and in_window:
         got = _pending_sources(record_path, in_window)
         if got[1]:
@@ -1081,6 +1130,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             pending_src = got[2]
             pending_age_d = _day_age(day, got[3])
             pending_age_min_d = _day_age(day, got[4])
+            pending_age_med_d = _day_age(day, got[5])
     rcov = _record_coverage(record_path)
     return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
@@ -1092,6 +1142,7 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'flips': flips, 'pending': pending, 'pending_src': pending_src,
             'pending_age_d': pending_age_d,
             'pending_age_min_d': pending_age_min_d,
+            'pending_age_med_d': pending_age_med_d,
             'rcov': rcov, 'window_days': window_days}
 
 
@@ -1318,11 +1369,13 @@ def main(argv=None):
                    else '%d' % trend['pending_age_d'])
         age_min_txt = ('none' if trend['pending_age_min_d'] is None
                        else '%d' % trend['pending_age_min_d'])
+        age_med_txt = ('none' if trend['pending_age_med_d'] is None
+                       else '%d' % trend['pending_age_med_d'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
               'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
               'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
               'pending=%s pending_src=%s pending_age_d=%s '
-              'pending_age_min_d=%s rcov=%s'
+              'pending_age_min_d=%s pending_age_med_d=%s rcov=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
@@ -1330,7 +1383,7 @@ def main(argv=None):
                  trend['newest_src'] or 'none', trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
                  pending_txt, trend['pending_src'] or 'none', age_txt,
-                 age_min_txt, rcov_txt))
+                 age_min_txt, age_med_txt, rcov_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)

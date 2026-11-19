@@ -1,0 +1,15 @@
+[P1] world1 ages 5/3/0 vs world2 ages 5/1/0 -> pending=(3, 3) ages 5..0 vs pending=(3, 3) ages 5..0 identical_on_both_ends=True
+[P1b] keys that differ between those two worlds: [] (age readings themselves are absent because both ends coincide)
+[P2] old-mass world ages 5/5/5/0/0 reads pending=(5, 5) 5..0 ; new-mass world ages 5/0/0/0/0 reads pending=(5, 5) 5..0 - differing keys=[]
+[P3] qa/crawl-failure-days.jsonl row keys=['bad', 'day', 'newest_at', 'newest_error', 'on_day', 'recent', 'total', 'urls']
+[P3b] source identity key present in the day file=False ("urls" is a COUNT, not a name) ; any per-source age field present=False
+[P4] N=1 ages_desc=[5] -> named_age=5 min_age=5 row_key_count=25 sixth_return='ABSENT'
+[P4] N=2 ages_desc=[5, 0] -> named_age=5 min_age=0 row_key_count=25 sixth_return='ABSENT'
+[P4] N=3 distinct ages_desc=[5, 3, 0] -> named_age=5 min_age=0 row_key_count=25 sixth_return='ABSENT'
+[P4] N=3 two share old ages_desc=[5, 5, 0] -> named_age=5 min_age=0 row_key_count=25 sixth_return='ABSENT'
+[P4] N=4 distinct ages_desc=[5, 4, 3, 0] -> named_age=5 min_age=0 row_key_count=25 sixth_return='ABSENT'
+[P5] no failure rows -> pending=None ages=None/None
+[P5b] repaired world -> pending=(0, 1) ages=None/None
+[P6] real repo evidence='history' sources=0 pending=None ages=None/None
+[P7] row key count=25 keys=['bad', 'cov', 'days', 'delta', 'evidence', 'flips', 'in_window', 'kind', 'kind_count', 'mean', 'newest_src', 'pending', 'pending_age_d', 'pending_age_min_d', 'pending_src', 'prev', 'rcov', 'recur', 'recurring', 'since_ok', 'sources', 'today', 'wcov', 'window_days', 'worst']
+[P8] ages 9 and 0 -> pending=(1, 1) sources_window=1 window_days=7 (the 9-day source is outside the window and cannot be aged)

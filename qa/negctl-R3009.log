@@ -1,0 +1,10 @@
+HONEST mid-3     pending_age_med_d=3
+HONEST mass-old  pending_age_med_d=5
+HONEST mass-new  pending_age_med_d=0
+HONEST two       pending_age_med_d=5
+HONEST repaired  pending_age_med_d=None
+CAUGHT M1 wrong end two=0!want 5
+CAUGHT M2 restates youngest mid-3=0!want 3; mass-old=0!want 5; two=0!want 5
+CAUGHT M3 restates named mid-3=5!want 3; mass-new=5!want 0
+CAUGHT M4 invents zero repaired=0!want None
+NEGCTL PASS 4/4 caught
