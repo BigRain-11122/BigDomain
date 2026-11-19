@@ -572,6 +572,26 @@ nothing is written, no verdict prints, and every pinned count survives (arm 7).
 Boundary: these are measurements of printed text, not a verdict about a wide
 series, and nothing here refuses one.
 
+R3042 - the pairs a `--days` cap drops now have a price. Measured before the
+token existed (qa/probe-R3042.log): `--days` caps how many pairs print and
+`series_outside=` is 0 by construction on this face, so the dropped pairs had
+no number anywhere; on a five-day world capped at two the printed pairs are a
+suffix of the in-window set and rebuilding the full segment from the FILE
+reproduced the printed price to the byte (32 == 32), which is what makes the
+projection non-circular. The `--series-days` tail therefore also prints
+`series_all_bytes=<n>`: the segment the day window would price with no cap, on
+the same law as `series_bytes` (so the two are equal exactly when the cap drops
+nothing - a measured equality). The dropped count stays derivable
+(`window_rows - series_shown`), so no count token was added (the R3000 noise
+law). Arms: a capped world prices the full segment rebuilt from the file (arm
+1); the increment decomposes into dropped day bytes, dropped digit bytes and
+two separators per dropped pair (arm 2); the uncapped run reads equal on both
+prices (arm 3); an ISO-stamped history prices the longer stored days and puts
+the lift cost mostly on the day side (arm 4); an empty history answers eleven
+on both (arm 5); the unwindowed default face gains no token and does not drift
+(arm 6); and nothing is written, no verdict prints, the new token appears once
+and no increment twin exists (arm 7).
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -6474,6 +6494,150 @@ def main():
        and l58h[0].count('absent_named=') == 1,
        'the two new numbers write no byte, print no verdict, and every pinned '
        'count on the opt-in line still holds')
+
+    # ===== AC-RUN59 (R3042): the pairs a --days cap drops now have a price =====
+    # AC-RUN59 was pinned in src/os/backlog.md BEFORE series_full_pairs existed
+    # (in-window pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3042.log, private worlds, no socket, no clock): on a five-day
+    # world capped at two, the printed pairs are a suffix of the in-window set,
+    # rebuilding the full segment from the FILE reproduced the printed price to
+    # the byte (32 == 32) so the projection is not self-circular, and with n
+    # pairs the segment is day bytes + on digits + 2*n + 6 - so the lift cost
+    # is (day_dropped + on_dropped + 2*(window_rows - shown)). The dropped
+    # COUNT is derivable from two printed tokens, so no count token is added.
+    def seg59(pairs):
+        text = ','.join('%s:%s' % (d, n) for d, n in pairs)
+        return len(('series=' + (text or 'none')).encode('utf-8'))
+
+    def full59(root, width=7):
+        rows, _bad59 = RUN.read_failure_days(hist37(root))
+        head59, usable59, thr59 = RUN._window_start(
+            str(rows[-1]['day']) if rows else '', width)
+        if not usable59:
+            return []
+        return [(r['day'], r['on_day']) for r in rows
+                if thr59 <= str(r['day'])[:10] <= head59]
+
+    def sides59(pairs):
+        return (sum(len(str(d).encode('utf-8')) for d, _n in pairs),
+                sum(len(str(n)) for _d, n in pairs))
+
+    r59 = world()
+    roots.append(r59)
+    p59 = hist37(r59)
+    five59 = [plain_day('2026-11-10', 1), plain_day('2026-11-11', 2),
+              plain_day('2026-11-12', 3), plain_day('2026-11-13', 4),
+              plain_day('2026-11-14', 5)]
+    put_days(p59, five59)
+
+    # arm 1: the capped world prices the whole day window from the file
+    rc59a, l59a, _ = sd57(r59, ['--series-days', '7', '--days', '2'])
+    t59a = toks57(l59a[0]) if l59a else {}
+    f59a = full59(r59)
+    ok('AC-RUN59', rc59a == 0 and l59a and len(f59a) == 5
+       and t59a.get('window_rows') == '5' and t59a.get('series_shown') == '2'
+       and t59a.get('series_all_bytes') == str(seg59(f59a))
+       and int(t59a.get('series_all_bytes') or -1)
+       > int(t59a.get('series_bytes') or -1),
+       'on a five-day window capped at two, series_all_bytes equals the full '
+       'segment rebuilt from the file itself and is strictly larger than the '
+       'capped segment - the dropped pairs are priced, not counted')
+
+    # arm 2: the increment is exactly the dropped day bytes, their digit bytes
+    # and two separators per dropped pair (sides from the file projection, the
+    # counts and prices read off the row)
+    _fday59, _fon59 = sides59(f59a)
+    _pday59, _pon59 = sides59(f59a[-2:])
+    k59 = 5 - int(t59a.get('series_shown') or 0)
+    ok('AC-RUN59', int(t59a.get('window_rows') or 0) - k59
+       == int(t59a.get('series_shown') or 0)
+       and int(t59a.get('series_all_bytes') or -1)
+       - int(t59a.get('series_bytes') or -2)
+       == (_fday59 - _pday59) + (_fon59 - _pon59) + 2 * k59,
+       'the lift cost decomposes exactly into the dropped day strings, the '
+       'dropped digit counts and two separators per dropped pair, and the '
+       'dropped count is window_rows minus series_shown rather than a token')
+
+    # arm 3: the same file with no cap - the cap costs nothing, measurably
+    rc59b, l59b, _ = sd57(r59, ['--series-days', '7'])
+    t59b = toks57(l59b[0]) if l59b else {}
+    ok('AC-RUN59', rc59b == 0 and l59b
+       and t59b.get('window_rows') == t59b.get('series_shown')
+       and t59b.get('series_all_bytes') == t59b.get('series_bytes')
+       and t59b.get('series_all_bytes') == str(seg59(full59(r59))),
+       'without the cap window_rows equals series_shown and series_all_bytes '
+       'equals series_bytes - the equality is measured, not a restatement')
+
+    # arm 4: an ISO-stamped world - the lift cost follows the stored day strings
+    r59i = world()
+    roots.append(r59i)
+    put_days(hist37(r59i), [
+        {'bad': 0, 'day': '2026-11-10T09:00:00', 'newest_at': None,
+         'newest_error': None, 'on_day': 3000, 'recent': 0, 'total': 0,
+         'urls': 0},
+        {'bad': 0, 'day': '2026-11-11T09:00:00', 'newest_at': None,
+         'newest_error': None, 'on_day': 4, 'recent': 0, 'total': 0,
+         'urls': 0},
+        {'bad': 0, 'day': '2026-11-12T09:00:00', 'newest_at': None,
+         'newest_error': None, 'on_day': 5, 'recent': 0, 'total': 0,
+         'urls': 0},
+        {'bad': 0, 'day': '2026-11-13T09:00:00', 'newest_at': None,
+         'newest_error': None, 'on_day': 6, 'recent': 0, 'total': 0,
+         'urls': 0}])
+    rc59c, l59c, _ = sd57(r59i, ['--series-days', '7', '--days', '2'])
+    t59c = toks57(l59c[0]) if l59c else {}
+    f59c = full59(r59i)
+    fd59, fo59 = sides59(f59c)
+    pd59, po59 = sides59(f59c[-2:])
+    ok('AC-RUN59', rc59c == 0 and l59c and len(f59c) == 4
+       and t59c.get('series_all_bytes') == str(seg59(f59c))
+       and int(t59c.get('series_all_bytes') or -1)
+       - int(t59c.get('series_bytes') or -2)
+       == (fd59 - pd59) + (fo59 - po59) + 2 * (4 - 2)
+       and (fd59 - pd59) > (fo59 - po59),
+       'an ISO-stamped history prices the longer stored days, and the lift '
+       'cost lands mostly on the day side - a ten-character assumption would '
+       'read short here')
+
+    # arm 5: an empty history prices the segment it actually prints
+    r59e = world()
+    roots.append(r59e)
+    os.makedirs(os.path.join(r59e, 'qa'), exist_ok=True)
+    rc59d, l59d, _ = sd57(r59e, ['--series-days', '7'])
+    t59d = toks57(l59d[0]) if l59d else {}
+    ok('AC-RUN59', rc59d == 0 and l59d
+       and t59d.get('series') == 'none'
+       and t59d.get('series_all_bytes') == '11'
+       and t59d.get('series_all_bytes') == t59d.get('series_bytes'),
+       'an empty history answers eleven on both prices, matching the '
+       'series=none segment it actually prints, without raising')
+
+    # arm 6: the unwindowed default face gains no token and does not drift
+    rc59e, l59e, _ = sd57(r59, [])
+    rc59f, l59f, _ = sd57(r59, [])
+    ok('AC-RUN59', rc59e == 0 and l59e and l59f
+       and ' series_all_bytes=' not in l59e[0]
+       and l59e[0] == l59f[0],
+       'without --series-days the token is absent and two runs print identical '
+       'bytes - the default face did not move')
+
+    # arm 7: pure display - no byte written, no verdict, pinned counts hold
+    before59 = tree_bytes(r59)
+    rc59g, l59g, _ = sd57(r59, ['--series-days', '7', '--days', '2',
+                                '--series-absent'])
+    after59 = tree_bytes(r59)
+    text59 = '\n'.join(l59g)
+    ok('AC-RUN59', rc59g == 0 and before59 == after59
+       and 'PASS' not in text59 and 'FLAG' not in text59
+       and 'verdict' not in text59
+       and l59g[0].count('series_window=') == 1
+       and l59g[0].count('absent=') == 2
+       and l59g[0].count('absent_named=') == 1
+       and l59g[0].count('series_all_bytes=') == 1
+       and 'series_dropped_bytes=' not in text59
+       and 'dropped_pair_bytes=' not in text59,
+       'the priced line writes no byte, prints no verdict, every pinned count '
+       'survives, the new token appears once and no increment twin was added')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

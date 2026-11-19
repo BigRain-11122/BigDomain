@@ -1,0 +1,16 @@
+W1 rc=0 bad=0 head=2026-11-14 thr=2026-11-08 in_window=5 printed=2
+W1 printed_is_suffix_of_full=True dropped=3
+W1 line: CRAWL-FAILURE-DAYS days=5 bad=0 first=2026-11-10 last=2026-11-14 dropped=none series=2026-11-13:4,2026-11-14:5 bytes=535 size_gate=0.0005% gate_ref=100MB series_limit=2 series_shown=2 series_outside=0 window_rows=5 series_window=7 series_bytes=32 series_day_bytes=20 series_on_bytes=2
+W1 counters: window_rows=5 series_shown=2 series_outside=0
+P1 file_projected_full_price=71 printed_price=32 equal_to_line=True
+P2 identity_full: 71 == 50 + 5 + 2*5 + 6 -> True
+P2 identity_delta: 39 == 30 + 3 + 2*6 -> True
+P2 count_derivable_from_line=True (window_rows - series_shown = 3)
+W2 rc=0 window_rows=5 shown=5 uncapped_full=71 printed=71
+W2 nothing_dropped: window_rows==shown -> True
+W3 rc=0 day_is_iso=True full=97 shown=50 delta=47 day_delta=38
+W4 rc=0 series=none window_rows=0 shown=0 full_price=11
+P3 candidate_token_hits=series_all_bytes:0, series_dropped_bytes:0, all_pairs_bytes:0, dropped_pair_bytes:0, series_full_bytes:0
+P3 suite_pins: count(series_window=)=3 count(absent=)=16 count(absent_named=)=10 exact_series_suffix_arms=0
+P3 fixed_point_sites: absent_line_prices=1 body_plus_series_marker=2
+P3 verdict: a token appended to series_marker is inside the one fixed point by construction (absent_line_prices spans body+series_marker).

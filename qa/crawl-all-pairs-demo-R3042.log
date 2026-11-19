@@ -1,0 +1,12 @@
+DEMO A (5 days in a 7-day window, --days 2) rc=0
+  series_bytes=32 series_all_bytes=71 window_rows=5 series_shown=2
+  lift_cost=39 == day_dropped+on_dropped+2*k ? True
+DEMO A2 (same file, no cap) rc=0 series_bytes=71 series_all_bytes=71 equal=True
+DEMO B (empty history) rc=0 series=none series_bytes=11 series_all_bytes=11
+DEMO C (ISO day strings, --days 2) rc=0 series_bytes=50 series_all_bytes=97 lift=47
+NEGCTL (suite-external, four mutations)
+  HONEST reference green on 4 fixtures ? True
+  M1 printed-pairs-only    values=[32, 71, 50, 11] CAUGHT=True
+  M2 count-as-bytes        values=[5, 5, 4, 0] CAUGHT=True
+  M3 assume-ten-char-day   values=[71, 71, 61, 6] CAUGHT=True
+  M4 empty-is-zero         values=[71, 71, 97, 0] CAUGHT=True

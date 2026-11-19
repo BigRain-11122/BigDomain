@@ -557,6 +557,24 @@ row), `pair_widest_bytes=`/`pair_max_bytes=` (the widest pair still packs both
 sources into one number and needs an index token to name which pair, answering
 a different question), and redefining `series_bytes` itself (readers use it).
 
+THE PAIRS THE CAP DROPS NOW HAVE A PRICE (R3042, measured first -
+qa/probe-R3042.log): `--days` caps how many pairs print, and on the windowed
+face `series_outside=` is 0 by construction, so the pairs the cap dropped had
+no number anywhere - a reader could not say what lifting the cap would cost.
+Measured on a five-day world capped at two: the printed pairs are a SUFFIX of
+the in-window set, and rebuilding the full segment from the FILE reproduced the
+printed price to the byte (32 == 32), so the projection is not self-circular.
+The `--series-days` tail therefore also prints `series_all_bytes=<n>`: the
+UTF-8 bytes the `series=` segment would take if every pair in the day window
+printed (same law as `series_bytes`, so `series_all_bytes == series_bytes`
+exactly when the cap drops nothing - a measured equality, not a restatement).
+The dropped COUNT is deliberately NOT a token: it is `window_rows -
+series_shown`, two numbers already on the row (the R3000 noise law).
+Refused: `series_dropped_bytes=` (the increment is `series_all_bytes -
+series_bytes`; printing it too would put one fact on the row twice), and
+`series_pair_max_bytes=` (the most expensive pair still answers a different
+question than "what does lifting the cap cost").
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1619,6 +1637,39 @@ def series_source_bytes(pairs_list):
     days = sum(len(str(d).encode('utf-8')) for d, _n in pairs_list)
     ons = sum(len(str(n)) for _d, n in pairs_list)
     return days, ons
+
+
+def series_full_pairs(rows, window_days=7):
+    """[(day, on_day)] the day window holds BEFORE the --days cap (R3042).
+
+    WHY (measured before this existed - qa/probe-R3042.log): `--days` caps how
+    many pairs print, and `series_outside=` is 0 by construction on this face,
+    so the pairs the cap drops had no price at all - a reader could not tell
+    what lifting the cap would cost. Measured on a five-day world capped at two:
+    the printed pairs are a SUFFIX of the in-window set, and rebuilding the full
+    segment from the FILE reproduced the printed price to the byte (so pricing
+    it is not self-circular).
+
+    THE IDENTITY, for the caller to pin rather than trust: with n pairs,
+    series_segment_bytes == sum(day bytes) + sum(on digits) + 2*n + 6, so
+    all - shown == day_dropped + on_dropped + 2*(window_rows - shown). The
+    dropped COUNT is derivable from two tokens already on the row
+    (window_rows - series_shown), which is why no count token is printed (the
+    R3000 noise law).
+
+    The head is the file's OWN newest usable row (the one window law), so a
+    2001 history windows on itself. An unusable head answers [] rather than an
+    invented window.
+
+    DISPLAY ONLY: builds pairs, writes nothing, gates nothing.
+    """
+    head_day, usable, threshold = _window_start(
+        (str(rows[-1].get('day') or '') if rows else ''),
+        max(1, int(window_days)))
+    if not usable:
+        return []
+    return [(r.get('day'), r.get('on_day')) for r in rows
+            if threshold <= str(r.get('day') or '')[:10] <= head_day]
 
 
 def absent_markers(gap_info, presence):
@@ -3094,6 +3145,9 @@ def main(argv=None):
                          'of that width is the stored day strings and how much '
                          'is the on_day digit counts, so a long day and a wide '
                          'count no longer read the same); '
+                         'series_all_bytes=N prices the segment the day window '
+                         'would print with no --days cap, so the cost of '
+                         'lifting the cap is one subtraction; '
                          'read-only display; gates nothing)')
     ap.add_argument('--series-absent', dest='series_absent',
                     action='store_true',
@@ -3186,10 +3240,14 @@ def main(argv=None):
             tail_markers = ''
         else:
             day_bytes, on_bytes = series_source_bytes(series['series'])
+            full_pairs = series_full_pairs(day_read[0], args.series_days)
+            full_text = ','.join('%s:%s' % (d, n) for d, n in full_pairs)
             tail_markers = (' series_window=%d series_bytes=%d'
                             ' series_day_bytes=%d series_on_bytes=%d'
+                            ' series_all_bytes=%d'
                             % (args.series_days, series_segment_bytes(pairs),
-                               day_bytes, on_bytes))
+                               day_bytes, on_bytes,
+                               series_segment_bytes(full_text)))
             if args.series_absent:
                 series_marker = tail_markers
                 gaps = series_absent_days(day_read[0], args.series_days,
