@@ -329,6 +329,37 @@ try {
   }
 } catch { Write-Output '[EXPORT] FLAG read_or_parse_failed' }
 
+# --- [DELIV] CEO entry page vs disk (R3068, criteria AC-SC22) ---
+# preview/index.html is rendered by tools/deliverable_index.py, and that tool's
+# own --check is the only face that can see the LANDED page fall behind disk:
+# the battery suite drives the tool inside a private temp world. Nothing in the
+# loop ran it - the launcher does lock/crawl/pull/spawn, and face_sweep (which
+# does run every face's --check) is not scheduled. This face runs it on every
+# opening scan for one read-only pass (measured 0.16 s). Fail-soft by
+# construction: a missing tool, a missing interpreter or a crashing tool reads
+# SKIP/FLAG and never aborts the scan.
+try {
+  $diTool = Join-Path $repo 'tools\deliverable_index.py'
+  $diPy = (Get-Command python -ErrorAction SilentlyContinue).Source
+  if (-not (Test-Path -LiteralPath $diTool)) {
+    Write-Output '[DELIV] SKIP tool_absent'
+  } elseif (-not $diPy) {
+    Write-Output '[DELIV] SKIP python_absent'
+  } else {
+    $diOut = & $diPy $diTool --check 2>&1
+    $diRc = $LASTEXITCODE
+    $diTxt = (@($diOut) | ForEach-Object { "$_" }) -join "`n"
+    $diFail = @([regex]::Matches($diTxt, 'FAIL (AC-DIX[0-9A-Za-z]+)') | ForEach-Object { $_.Groups[1].Value } | Select-Object -Unique)
+    $diFailTxt = 'none'
+    if ($diFail.Count -gt 0) { $diFailTxt = ($diFail -join ',') }
+    if ($diRc -eq 0) {
+      Write-Output '[DELIV] PASS entry_page_matches_disk=1 failed=none'
+    } else {
+      Write-Output "[DELIV] FLAG entry_page_matches_disk=0 failed=$diFailTxt rc=$diRc (re-render: python tools\deliverable_index.py)"
+    }
+  }
+} catch { Write-Output '[DELIV] FLAG check_failed' }
+
 # --- [TREE] git single-writer check ---
 $lockPath = Join-Path $repo '.git\index.lock'
 if (Test-Path $lockPath) {

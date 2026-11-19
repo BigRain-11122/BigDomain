@@ -86,6 +86,17 @@
 #   AC-SC19 [ORD] wildcard law: baseline x-digit vs concrete same-position
 #           token ("17:4x" vs "17:45") -> "[ORD] PASS" (same row, no
 #           false FLAG).
+#   AC-SC22 [DELIV] face (R3068, pinned in src/os/backlog.md BEFORE this arm
+#           existed): the opening scan runs the CEO entry page's own live
+#           --check, because nothing in the loop ran it and R3067's FAIL sat
+#           from 2026-11-19 06:38 until a round happened to type the command.
+#           (a) rc=0 -> "[DELIV] PASS entry_page_matches_disk=1 failed=none";
+#           (b) rc=2 with two FAIL rows -> "[DELIV] FLAG ... failed=AC-DIX9,
+#           AC-DIX3 rc=2" naming BOTH codes, and the scan still exits 0;
+#           (c) tool absent -> "[DELIV] SKIP tool_absent", scan exits 0;
+#           (d) read-only: preview/index.html bytes and mtime unchanged.
+#           The sandbox carries a STUB tool on purpose: these arms test the
+#           face's contract, not the tool (which has its own battery suite).
 #   AC-SC10 harness laws: sandbox scan copy is byte-identical to the real
 #           script (copied at run time = single source of truth, zero drift);
 #           harness file is pure ASCII; exit 0 all-pass / 2 any-fail.
@@ -438,6 +449,60 @@ try {
     $r = Invoke-Scan
     Assert ($r.text -match '\[ORD\] PASS last=10-15 17:45 baseline=2026-10-15 17:4x') 'AC-SC19' 'x-wildcard baseline vs concrete token -> PASS (same row)'
 
+    # --- [DELIV] face (R3068, AC-SC22) ------------------------------------
+    # AC-SC22a: a green tool -> PASS line, scan exits 0.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    New-Item -ItemType Directory -Path (Join-Path $sbxRepo 'tools') -Force | Out-Null
+    Write-All 'tools\deliverable_index.py' @(
+        'import sys',
+        'print("PASS AC-DIX1 registry=9 disk=9")',
+        'print("VERDICT PASS 15/15")',
+        'sys.exit(0)'
+    )
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[DELIV\] PASS entry_page_matches_disk=1 failed=none') 'AC-SC22a' 'green tool -> DELIV PASS'
+    Assert ($r.code -eq 0) 'AC-SC22a' 'scan exits 0 on the green face'
+
+    # AC-SC22b: rc=2 with two FAIL rows -> both codes named, scan still exits 0.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    New-Item -ItemType Directory -Path (Join-Path $sbxRepo 'tools') -Force | Out-Null
+    Write-All 'tools\deliverable_index.py' @(
+        'import sys',
+        'print("FAIL AC-DIX9 band-rows=39 fresh-scan=40")',
+        'print("FAIL AC-DIX3 landed-names-newest=False")',
+        'print("VERDICT FAIL 2/15")',
+        'sys.exit(2)'
+    )
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[DELIV\] FLAG entry_page_matches_disk=0 failed=AC-DIX9,AC-DIX3 rc=2') 'AC-SC22b' 'red tool -> FLAG names both failing criteria and rc'
+    Assert ($r.code -eq 0) 'AC-SC22b' 'a red entry page never aborts the scan'
+
+    # AC-SC22c: tool absent -> SKIP, scan exits 0 (a world with no tools/).
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[DELIV\] SKIP tool_absent') 'AC-SC22c' 'missing tool -> DELIV SKIP tool_absent'
+    Assert ($r.code -eq 0) 'AC-SC22c' 'scan exits 0 with no tool'
+
+    # AC-SC22d: read-only - the landed page's bytes and mtime survive the scan.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    New-Item -ItemType Directory -Path (Join-Path $sbxRepo 'tools') -Force | Out-Null
+    Write-All 'tools\deliverable_index.py' @('import sys', 'print("VERDICT PASS 15/15")', 'sys.exit(0)')
+    $idxPath = Join-Path $sbxRepo 'preview\index.html'
+    New-Item -ItemType Directory -Path (Split-Path -Parent $idxPath) -Force | Out-Null
+    [System.IO.File]::WriteAllText($idxPath, 'landed-fixture', $utf8NoBom)
+    $before = '' + (Get-Item -LiteralPath $idxPath).Length + '/' + (Get-Item -LiteralPath $idxPath).LastWriteTimeUtc.Ticks
+    Git-Baseline
+    $r = Invoke-Scan
+    $after = '' + (Get-Item -LiteralPath $idxPath).Length + '/' + (Get-Item -LiteralPath $idxPath).LastWriteTimeUtc.Ticks
+    Assert ($before -eq $after) 'AC-SC22d' 'preview/index.html bytes and mtime unchanged by the scan'
+
     # --- AC-SC10: harness laws ---------------------------------------------
     [System.IO.File]::Copy($realScan, $sbxScan, $true)
     $a = [System.IO.File]::ReadAllBytes($realScan)
@@ -456,6 +521,6 @@ finally {
     Remove-Item -LiteralPath $sbxRoot -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC21, " + $script:pass + " checks)"); exit 0 }
+if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC22, " + $script:pass + " checks)"); exit 0 }
 Write-Output ("FAILURES=" + $script:fail)
 exit 2

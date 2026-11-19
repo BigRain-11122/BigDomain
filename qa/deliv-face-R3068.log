@@ -1,0 +1,17 @@
+DELIV FACE EVIDENCE R3068 (criteria AC-SC22 pinned in src/os/backlog.md BEFORE the code changed)
+harness: powershell -NoProfile -ExecutionPolicy Bypass -File src/os/test_scan_faces.ps1
+  PASS AC-SC22a (green tool -> DELIV PASS)
+  PASS AC-SC22a (scan exits 0 on the green face)
+  PASS AC-SC22b (red tool -> FLAG names both failing criteria and rc)
+  PASS AC-SC22b (a red entry page never aborts the scan)
+  PASS AC-SC22c (missing tool -> DELIV SKIP tool_absent)
+  PASS AC-SC22c (scan exits 0 with no tool)
+  PASS AC-SC22d (preview/index.html bytes and mtime unchanged by the scan)
+  ALL CRITERIA PASS (AC-SC1..SC22, 51 checks)
+live: powershell -NoProfile -ExecutionPolicy Bypass -File tools/skills/bigdomain-loop-scan/scripts/scan_five_still.ps1
+  [DELIV] PASS entry_page_matches_disk=1 failed=none
+tool: python tools/deliverable_index.py --check
+  VERDICT PASS 15/15 fingerprint=ec131c624edfe4ec
+cost: 0.16 s for one --check pass (measured with Measure-Command on the live tree)
+source/install: tools/skills/... and .codely-cli/skills/... byte-identical (copied in the same minute); both PURE ASCII, 0 CR
+boundary: the sandbox arms drive a STUB tool, so they prove the face's contract (parse the rc, name every failing AC-DIX code, fail soft, write nothing); the tool's own behaviour stays covered by src/os/test_deliverable_index.py (N=18). A RED line here is a signal for the round to re-render, not an enforcement that blocks a round.
