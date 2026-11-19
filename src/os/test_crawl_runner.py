@@ -8295,6 +8295,155 @@ def main():
        'three claim readers, and a garbage --at stamp is still refused instead '
        'of being cut into a day')
 
+    # --- AC-RUN72: a row counts in the day of its INSTANT, not its text ------
+    # Measured before any of this existed (qa/probe-R3055.log): R3048 gave the
+    # window HEAD the instant's local day but every count and span still cut the
+    # first ten characters, so one three-row channel read recent7=2 where the
+    # rows are 3 (P1), the day-history row stored on_day=1 for two rows of one
+    # local day while the trend on the same bytes printed day=2026-11-20 and
+    # fcov=2026-11-19.. (P2), one source failing twice in one local day read
+    # recurring=1 (P3), rcov started a day early (P4), and _day_age answered 1
+    # for two stamps of the same local day (P1).
+    AT72 = '2026-11-20T23:59:00+08:00'
+    Z_FRAME = '2026-11-19T20:00:00+00:00'       # local 2026-11-20
+    LOCAL_FRAME = '2026-11-20T04:00:00+08:00'   # same instant, written local
+    OLD_FRAME = '2026-11-13T20:00:00+00:00'     # local 2026-11-14
+
+    def face72(root, flag, at=None):
+        argv = [flag, '--root', root]
+        if at is not None:
+            argv += ['--at', at]
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(argv)
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    # Arm 1: one instant, two writings -> one day; a local text is not shifted
+    # a second time.
+    ok('AC-RUN72', RUN._day_of(Z_FRAME) == RUN._day_of(LOCAL_FRAME)
+       == '2026-11-20'
+       and RUN._day_of(OLD_FRAME) == '2026-11-14'
+       and RUN._day_of('2026-11-20T04:00:00') == '2026-11-20'
+       and RUN._day_of('2026-11-20') == '2026-11-20',
+       'a day is the LOCAL day of the instant, so two writings of one moment '
+       'name one day and a local text is not converted twice')
+
+    # Arm 2: the summary counts by that day.
+    S72 = world(); roots.append(S72)
+    side72 = RUN.failure_path(S72)
+    os.makedirs(os.path.dirname(side72), exist_ok=True)
+    with open(side72, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"source_url":"https://s72.example/a","failed_at":"%s",'
+                 '"error":"boom"}\n' % Z_FRAME)
+        fh.write('{"source_url":"https://s72.example/b","failed_at":"%s",'
+                 '"error":"boom"}\n' % LOCAL_FRAME)
+        fh.write('{"source_url":"https://s72.example/c","failed_at":"%s",'
+                 '"error":"boom"}\n' % OLD_FRAME)
+    rcF72, linesF72 = face72(S72, '--failures', AT72)
+    f72 = toks69(linesF72[0])
+    ok('AC-RUN72', rcF72 == 0 and f72.get('total') == '3'
+       and f72.get('recent7') == '3' and f72.get('bad') == '0'
+       and f72.get('day') == '2026-11-20',
+       'three rows inside one seven-day window count as three even though one '
+       'was written under another offset')
+
+    # Arm 3: both faces that print a span name the days the head names.
+    rcP72, linesP72 = face72(S72, '--pending-old-list', AT72)
+    rcT72, linesT72 = face72(S72, '--failure-trend', AT72)
+    p72 = toks69(linesP72[0])
+    t72 = toks69(linesT72[0])
+    ok('AC-RUN72', rcP72 == 0 and rcT72 == 0
+       and p72.get('fcov') == '2026-11-14..2026-11-20'
+       and t72.get('fcov') == '2026-11-14..2026-11-20'
+       and t72.get('day') == '2026-11-20',
+       'the span opens at the row own local day instead of one day earlier, so '
+       'a line can no longer contradict its own day=')
+
+    # Arm 4: the day-history row and the summary on it agree, and the trend
+    # reads the same number back.
+    D72 = world(); roots.append(D72)
+    side72d = RUN.failure_path(D72)
+    os.makedirs(os.path.dirname(side72d), exist_ok=True)
+    with open(side72d, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"source_url":"https://s72.example/d1","failed_at":"%s",'
+                 '"error":"boom"}\n' % Z_FRAME)
+        fh.write('{"source_url":"https://s72.example/d2","failed_at":"%s",'
+                 '"error":"boom"}\n' % LOCAL_FRAME)
+    row72 = RUN.snapshot_failure_day(D72, AT72)
+    rcT72d, linesT72d = face72(D72, '--failure-trend', AT72)
+    t72d = toks69(linesT72d[0])
+    ok('AC-RUN72', row72['day'] == '2026-11-20' and row72['on_day'] == 2
+       and row72['recent'] == 2 and rcT72d == 0 and t72d.get('today') == '2',
+       'the snapshot counts the local day twice and the summary on the same row '
+       'agrees, instead of 1 beside 2')
+
+    # Arm 5: ages are whole local days; a future stamp invents none.
+    ok('AC-RUN72', RUN._day_age('2026-11-20', Z_FRAME) == 0
+       and RUN._day_age('2026-11-20', '2026-11-19T04:00:00+08:00') == 1
+       and RUN._day_age('2026-11-20', '2026-11-21T04:00:00+08:00') is None
+       and RUN._day_age('2026-11-20', '2026-11-20') == 0,
+       'a failure in the same local day is zero days old, one local day earlier '
+       'is one, and a future stamp still invents no age')
+
+    # Arm 6: recurrence needs two LOCAL days - with a control world proving the
+    # counter still fires when they are really two.
+    R72 = world(); roots.append(R72)
+    side72r = RUN.failure_path(R72)
+    os.makedirs(os.path.dirname(side72r), exist_ok=True)
+    with open(side72r, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"source_url":"https://s72.example/same","failed_at":"%s",'
+                 '"error":"boom"}\n' % Z_FRAME)
+        fh.write('{"source_url":"https://s72.example/same","failed_at":"%s",'
+                 '"error":"boom"}\n' % LOCAL_FRAME)
+    rcT72r, linesT72r = face72(R72, '--failure-trend', AT72)
+    r72 = toks69(linesT72r[0])
+    C72 = world(); roots.append(C72)
+    side72c = RUN.failure_path(C72)
+    os.makedirs(os.path.dirname(side72c), exist_ok=True)
+    with open(side72c, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"source_url":"https://s72.example/same","failed_at":"%s",'
+                 '"error":"boom"}\n' % LOCAL_FRAME)
+        fh.write('{"source_url":"https://s72.example/same","failed_at":'
+                 '"2026-11-18T04:00:00+08:00","error":"boom"}\n')
+    rcT72c, linesT72c = face72(C72, '--failure-trend', AT72)
+    c72 = toks69(linesT72c[0])
+    ok('AC-RUN72', rcT72r == 0 and r72.get('recurring') == '0'
+       and r72.get('recur') == '0:0'
+       and rcT72c == 0 and c72.get('recurring') == '1',
+       'two failures of one source inside one local day are one bad day, while '
+       'two local days still read as a recurrence')
+
+    # Arm 7: display only - same bytes twice, and nothing on disk moves.
+    before72 = snap69(S72)
+    rcF72b, linesF72b = face72(S72, '--failures', AT72)
+    ok('AC-RUN72', rcF72b == 0 and linesF72b == linesF72
+       and snap69(S72) == before72,
+       'the same world prints the same bytes twice and writes nothing')
+
+    # Arm 8: one law on every stamp-to-day site, and the `day` FIELD - which is
+    # a claim the writer made, not a stamp - keeps its literal reading.
+    with io.open(os.path.join(ROOT, 'tools', 'crawl_runner.py'),
+                 'r', encoding='utf-8') as fh:
+        src72 = fh.read()
+
+    def body72(name):
+        i72 = src72.find('def %s(' % name)
+        j72 = src72.find('\ndef ', i72 + 1)
+        return src72[i72:j72 if j72 > 0 else len(src72)]
+
+    ok('AC-RUN72',
+       "_day_of(row.get('failed_at'))" in body72('_summary_from_rows')
+       and "_day_of(row.get('failed_at'))" in body72('snapshot_failure_day')
+       and "_day_of(row.get('fetched_at'))" in body72('_record_coverage')
+       and "_day_of(row.get('failed_at'))" in body72('_side_coverage_rows')
+       and 'head = _day_of(day)' in body72('_day_age')
+       and 'tail = _day_of(stamp)' in body72('_day_age')
+       and '_day_of(stamp) >= head' in body72('_out_of_window_waiting')
+       and "_day_of(row.get('failed_at'))" in body72('summarize_failure_trend')
+       and "str(r.get('day') or '')[:10]" in body72('series_file_order'),
+       'every stamp-to-day site goes through the one law, while a `day` field '
+       'keeps its literal reading because it is a claim rather than a stamp')
+
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
 

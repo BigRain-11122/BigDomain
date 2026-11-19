@@ -1,0 +1,11 @@
+HONEST {'recent7': '3', 'fcov': '2026-11-14..2026-11-20', 'recurr': '0', 'age': 0}
+HONEST GREEN (three rows in one window, one local-day pair, one age)
+M1 written-day law {'recent7': '2', 'fcov': '2026-11-13..2026-11-20', 'recurr': '1', 'age': 1}
+M2 local text shifted to UTC {'recent7': '2', 'fcov': '2026-11-13..2026-11-19', 'recurr': '0', 'age': 0}
+M3 span cut restored {'recent7': '3', 'fcov': '2026-11-13..2026-11-20', 'recurr': '0', 'age': 0}
+RESTORED {'recent7': '3', 'fcov': '2026-11-14..2026-11-20', 'recurr': '0', 'age': 0} GREEN
+NEGCTL PASS honest=GREEN m1=CAUGHT m2=CAUGHT m3=CAUGHT
+--- live repo faces (nothing mixed on this disk, P0) ---
+LIVE CRAWL-FAILURES total=0 recent7=0 bad=0 bad_days=none urls=0 bytes=0 lines=0 size_gate=0.0000% gate_ref=100MB newest=none error=none kind=none day=2026-11-20
+LIVE CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=0 bad_days=none fcov=none last_at=none reason=no-coverage
+LIVE CRAWL-FAILURE-TREND days=2 today=0 prev=0 mean=0 delta=0 worst=2026-11-20:0 recurring=0 sources=0 bad=0 bad_days=none evidence=history kind=none recur=none cov=2026-11-19..2026-11-20 wcov=2/7 newest_src=none since_ok=unm

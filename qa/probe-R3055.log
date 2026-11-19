@@ -1,0 +1,27 @@
+zone_off 8:00:00
+--- P0 live files ---
+live record rows=3 mixed_frame_stamps=0
+live side absent
+live daylog rows=2 mixed_frame_stamps=0
+--- P1 side channel ---
+stamp 2026-11-19T20:00:00+00:00 written_day 2026-11-19 instant_day 2026-11-20
+stamp 2026-11-20T04:00:00+08:00 written_day 2026-11-20 instant_day 2026-11-20
+stamp 2026-11-13T20:00:00+00:00 written_day 2026-11-13 instant_day 2026-11-14
+W1 failures rc=0 CRAWL-FAILURES total=3 recent7=2 bad=0 bad_days=none urls=3 bytes=258 lines=3 size_gate=0.0002% gate_ref=100MB newest=2026-11-20T04:00:00+08:00 error=boom kind=other day=2026-11-20
+W1 recent_written_law=2 recent_instant_law=3
+W1 pending-old rc=0 CRAWL-PENDING-OLD-LIST pending_old=none days=7 bad=0 bad_days=none fcov=2026-11-13..2026-11-20 last_at=2026-11-20T04:00 reason=unmeasured
+W1 pending-old rows 0
+W1 fcov_written ('2026-11-13', '2026-11-20') fcov_instant ('2026-11-14', '2026-11-20')
+W1 day_age written 1 instant 0
+--- P2 day history on_day ---
+W2 snapshot on_day 1 recent 2 day 2026-11-20
+W2 on_day_written_law=1 on_day_instant_law=2 (two rows, same instant, one local day)
+W2 trend rc=0 CRAWL-FAILURE-TREND days=1 today=1 prev=none mean=1 delta=none worst=2026-11-20:1 recurring=0 sources=2 bad=0 bad_days=none evidence=side kind=other:2 recur=0:0 cov=2026-11-20..2026-11-20 wcov=1/7 newest_src=https://p.a/y since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=2026-11-19..2026-11-20 rcov=none day=2026-11-20
+--- P3 recurring ---
+W3 trend rc=0 CRAWL-FAILURE-TREND days=0 today=absent prev=none mean=none delta=none worst=none recurring=1 sources=1 bad=0 bad_days=none evidence=side kind=other:2 recur=1:2 cov=none wcov=0/7 newest_src=https://p.a/same since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=2026-11-19..2026-11-20 rcov=none day=2026-11-20
+W3 recurring_written_law=1 recurring_instant_law=0 (one source, one local day)
+--- P4 record coverage ---
+W4 rcov ('2026-11-19', '2026-11-20') instant_law ('2026-11-20', '2026-11-20')
+--- P5 collision surface ---
+P5 stamp_cuts_at [1512, 1731, 2760, 2777, 2870, 3279, 3286]
+P5 suite_uses_day_of 9 suite_pins_mixed_frame 5

@@ -473,6 +473,28 @@ boundary: `header_bytes` is on the LF law like its siblings, so it is the
 header's slice of that total rather than the width of the visible glyph row;
 Windows text-mode stdout adds one more byte on top.
 
+WHICH DAY A ROW COUNTS IN (R3055, measured first - qa/probe-R3055.log): R3048
+gave the clock faces one day law - the LOCAL day of the instant, `_day_of` -
+but only the window HEAD used it; every count and span still cut the first ten
+characters, i.e. the day as WRITTEN. On one channel holding
+`2026-11-19T20:00:00+00:00` (local 11-20), `2026-11-20T04:00:00+08:00` and
+`2026-11-13T20:00:00+00:00` (local 11-14), a window headed at 11-20 read
+recent7=2 where the rows are 3 (P1); the day-history writer stored on_day=1 for
+two rows that are one local day (P2) while the trend line on the same bytes
+printed day=11-20 and fcov=2026-11-19..; a source failing twice inside one
+local day read recurring=1 recur=1:2 (P3); and _day_age answered 1 for two
+stamps of the same local day (P1). The same cut sat in rcov= (record), fcov=
+(side channel) and the out-of-window test (P4). One law now: a STAMP becomes a
+day through `_day_of` everywhere a day is computed - recent=, on_day=, rcov=,
+fcov=, the trend's window membership and its recurrence dayset, the
+out-of-window threshold and _day_age. A `day` FIELD keeps its literal reading:
+that is a claim the writer wrote, not a stamp to convert (R3052's `day=`). NOT
+fixed here, named: newest=/since_ok=/flips= still order stamps as TEXT, which a
+mixed frame can get wrong - that is instant ORDERING, a different law, carried
+to R3056. Honest boundary: the two frames only differ when a row was written
+under a non-local offset, and this repository's own three live files carry zero
+such stamps today (P0), so this round closes a door rather than repairing a disk.
+
 A DAY THAT LOOKS LIKE A DAY (R3054, measured first - qa/probe-R3054.log):
 `_usable_day` read the first ten characters and asked only whether they were
 digit groups, so `2026-11-20garbage` and `2026-11-20T99:99` counted as real
@@ -818,8 +840,10 @@ no PASS/FLAG.
 HOW LONG (R3007): the name answered "start here", never "how long has this been
 gone", so a source broken five minutes ago and one broken a week read the same.
 The row now also carries pending_age_d= - whole days from the NAMED source's OWN
-latest failure date to the window day, both taken as the literal first ten
-characters of an ISO stamp (the record writer's day law). It is deliberately not
+latest failure date to the window day, both taken as a day of the instant under
+`_day_of` (the R3048 day law; R3055 removed the literal ten-character cut that
+made the age one day too large for a stamp written under another offset). It is
+deliberately not
 derived from the failure summary's newest_at: measured in the probe world, that
 value is taken across ALL sources and named a different source's stamp than
 pending_src did. It reads none - never 0 - when no source is named, when either
@@ -1509,7 +1533,13 @@ def _summary_from_rows(rows, bad, day, window_days=7, bad_days=None):
     newest = None
     for row in rows:
         urls.add(row.get('source_url'))
-        row_day = str(row.get('failed_at') or '')[:10]
+        # R3055: the day a row counts in is the day of its INSTANT, the same
+        # law the window head already used (_window_start -> _day_of). Cutting
+        # the first ten characters counted the day as WRITTEN, so a row stamped
+        # '2026-11-19T20:00:00+00:00' (local 11-20) fell out of a window whose
+        # own head read 11-20 - measured, recent7=2 where the rows are 3
+        # (qa/probe-R3055.log P1).
+        row_day = _day_of(row.get('failed_at'))
         if usable and threshold <= row_day <= head_day:
             recent += 1
         if newest is None or str(row.get('failed_at') or '') > str(
@@ -1573,10 +1603,10 @@ def summarize_failures(path, day, window_days=7):
     how many distinct sources, and the newest failure. An absent file is zeroes,
     never an exception - "nothing failed" is an honest answer, not an error.
 
-    The window is inclusive of `day` and `window_days` long, compared on the
-    literal first ten characters of failed_at, the same day law the record face
-    uses, so the summary and the writer cannot drift apart. Nothing here gates,
-    retries or pages: this is a READER over evidence, not enforcement.
+    The window is inclusive of `day` and `window_days` long, compared on the DAY
+    OF THE INSTANT (`_day_of`, R3048/R3055) - the same law the window head uses,
+    so a row cannot fall out of a window that prints its own day. Nothing here
+    gates, retries or pages: this is a READER over evidence, not enforcement.
 
     R3051: the same read also names the days unusable rows claim, so `bad_days`
     and `bad` come from one pass over the same bytes (measured before this
@@ -1728,7 +1758,10 @@ def snapshot_failure_day(repo_root, day, window_days=7):
     summary = _summary_from_rows(rows, bad, head_day, window_days)
     on_day = 0
     for row in rows:
-        if str(row.get('failed_at') or '')[:10] == head_day:
+        # R3055: same law as the summary beside it - a row belongs to the local
+        # day of its instant. The written day made on_day and recent disagree
+        # on the SAME snapshot row (measured, 1 vs 2 on one local day).
+        if _day_of(row.get('failed_at')) == head_day:
             on_day += 1
     row = {'day': head_day, 'on_day': on_day, 'total': summary['total'],
            'recent': summary['recent'], 'bad': summary['bad'],
@@ -2748,8 +2781,9 @@ def _record_coverage(record_path):
     printed the same verdict. This is the reach of the evidence, printed beside
     the verdict it supports, not a new verdict.
 
-    DAY granularity on purpose: the first ten characters the record writer
-    already owns, deduplicated and sorted. An absent file and a file with zero
+    DAY granularity on purpose: the day of each row's instant (`_day_of`,
+    R3055 - the same law as the window head), deduplicated and sorted. An
+    absent file and a file with zero
     usable rows both answer None - "no coverage measured" - because a span built
     from no rows would be invented. Malformed lines never widen the span:
     read_records already drops them and counts them bad.
@@ -2757,7 +2791,10 @@ def _record_coverage(record_path):
     if not record_path or not os.path.isfile(record_path):
         return None
     rows, _bad = CR.read_records(record_path)
-    days = sorted({str(row.get('fetched_at') or '')[:10] for row in rows
+    # R3055: the record's reach is a set of DAYS, and a day is the day of the
+    # instant (the same law the failure side now follows), so rcov= cannot
+    # describe the same row differently from fcov= on the same line.
+    days = sorted({_day_of(row.get('fetched_at')) for row in rows
                    if str(row.get('fetched_at') or '')})
     return (days[0], days[-1]) if days else None
 
@@ -2774,7 +2811,11 @@ def _side_coverage_rows(rows):
 
     None - never an invented span - when there is no usable row.
     """
-    days = sorted({str(row.get('failed_at') or '')[:10] for row in rows
+    # R3055: the span is a pair of DAYS, and a day is the day of the instant -
+    # the same law as window head `day=`. Cutting the text made fcov= start a
+    # day earlier than the row's own local day (measured: 11-13 where the
+    # instant law says 11-14), i.e. one line contradicting itself.
+    days = sorted({_day_of(row.get('failed_at')) for row in rows
                    if str(row.get('failed_at') or '')})
     return (days[0], days[-1]) if days else None
 
@@ -2835,7 +2876,8 @@ def _side_coverage(failures_path):
 
     Follows the FILE, not the window: measured, the same channel read the same
     span at window_days 7 and 14 while pending_old= changed. DAY granularity on
-    the ten-character prefix the writer owns; read_failures already drops
+    the day of each row's instant (`_day_of`, R3055 - the same law as the window
+    head `day=` on the same line); read_failures already drops
     malformed rows and unusable stamps, so they cannot widen the span. None -
     never an empty string or ('','') - when the file is absent, empty, or holds
     no usable row: "no reach measured", not a zero-day span.
@@ -2860,14 +2902,19 @@ def _day_age(day, stamp):
     newest_at is taken across ALL sources (it named a different source's stamp
     than pending_src in the probe world), so no existing field carried it.
 
-    DAY granularity on purpose, on the same ten-character ISO prefix the record
-    writer owns, and no clock: `day` is the caller's window day, so this module
+    DAY granularity on purpose, on the day of each instant (`_day_of`, R3055),
+    and no clock: `day` is the caller's window day, so this module
     still reads one. None rather than 0 or a negative number when nothing can
     be said - no named source, an unusable date on either side, or a stamp LATER
     than the reference day (an age cannot be invented from a future failure).
     """
-    head = str(day or '')[:10]
-    tail = str(stamp or '')[:10]
+    # R3055: both ends are days under ONE law - the reference day is already a
+    # day (idempotent under _day_of) and the stamp becomes the day of its
+    # instant. Cutting the stamp counted the day as written, so a failure at
+    # 2026-11-19T20:00:00+00:00 read as one day old on the 20th when it is the
+    # same local day (measured: 1 where the honest age is 0).
+    head = _day_of(day)
+    tail = _day_of(stamp)
     if len(head) != 10 or len(tail) != 10:
         return None
     try:
@@ -3008,7 +3055,9 @@ def _out_of_window_waiting(record_path, rows, threshold):
     waiting = []
     head = str(threshold or '')[:10]
     for src, stamp in latest.items():
-        if str(stamp)[:10] >= head:
+        # R3055: "inside the window" is decided on the row's local day, the
+        # same law the window itself uses - not on its written text.
+        if _day_of(stamp) >= head:
             continue
         old += 1
         verdict = _since_ok(record_path, src, stamp)
@@ -3276,14 +3325,20 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     frows, _fbad = read_failures(failures_path)
     in_window = []
     for row in frows:
-        fday = str(row.get('failed_at') or '')[:10]
+        # R3055: window membership AND recurrence are decided on the local day
+        # of the instant, the same law as `day=` on this very line. Cutting the
+        # text made one source failing twice inside one local day read as a
+        # RECURRENCE on two days (measured: recurring=1 where the honest answer
+        # is 0, qa/probe-R3055.log P3) and dropped a 11-14 local row from a
+        # window opening at 11-14.
+        fday = _day_of(row.get('failed_at'))
         if usable and not (threshold <= fday <= head_day):
             continue
         in_window.append(row)
     days_by_source = {}
     for row in in_window:
         days_by_source.setdefault(row.get('source_url'), set()).add(
-            str(row.get('failed_at') or '')[:10])
+            _day_of(row.get('failed_at')))
     recurring = sum(1 for days in days_by_source.values() if len(days) >= 2)
     kinds = {}
     for row in in_window:

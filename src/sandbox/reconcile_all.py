@@ -4762,9 +4762,10 @@ SUITES = [
     # bad=, 67 -> 68. R3052 makes each BAD-LINE row carry its own day on both
     # faces, 68 -> 69; R3053 gave the bad-line reason the repair word, 69 -> 70;
     # R3054 makes the day law a whole-value test (a stamp that only starts with
-    # a day is no day), 70 -> 71.
+    # a day is no day), 70 -> 71. R3055 makes every count and span take the day
+    # of the INSTANT (the window head's own law), 71 -> 72.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 71),
+     os.path.join("..", "os", "test_crawl_runner.py"), 72),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep
