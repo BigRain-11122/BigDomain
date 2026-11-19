@@ -678,6 +678,31 @@ count (texts and buckets are different questions: P4 shows two worlds with
 is a display label, not a cause (R2996) - two classes mean two KINDS of
 failure, never two proven root causes.
 
+TWO SIBLING FACES, ONE WORD (R3065, measured first - qa/probe-R3065.log):
+The board asked this round to print `newest_kind`, on the premise that it was
+computed and never printed. The premise is false, and the measurement is what
+says so: on four worlds (empty, one row, a two-row tie, a three-row tie) the
+printed value equals summary['newest_kind'] character for character (P9), and no
+line has ever carried the text `newest_kind=` (P1) - the concept was already
+printed, under the name `kind=`. What the same pass found instead is one word
+doing two jobs: in a single run --failures printed `kind=timeout` (one bucket,
+no colon - P4) while --failure-trend printed `kind=http:1` (the WINDOW's bucket
+distribution, always a colon - P4/P10), one occurrence of the key on each face
+(P10). So the failure face's word now reads `newest_kind=`, beside
+newest_rows=/newest_errors=/newest_kinds=, and the trend's `kind=` is untouched.
+REFUSED: printing `newest_kind=` IN ADDITION to `kind=` (P9 says they are one
+fact - one fact, one word); naming the OTHER row's class on this face (P3: that
+row has no name here at all, its source url and its class token are both absent
+from the line, and importing the trend's twin family would pair that word with
+this face's denominator - the scope error R3059 refused); re-cutting
+newest_kinds= into a list of class names (R3064 stands: the count answers
+one-versus-two, and naming a tie's second class needs either a numbered family
+or the twin family, each refused for its own measured reason). BOUNDARY: this
+renames a display word and adds no information - the gain is that a reader who
+compares the two faces no longer compares a single bucket against a
+distribution under one name; the second row's class stays unnameable here,
+named rather than implied.
+
 WHICH DAY A ROW COUNTS IN (R3055, measured first - qa/probe-R3055.log): R3048
 gave the clock faces one day law - the LOCAL day of the instant, `_day_of` -
 but only the window HEAD used it; every count and span still cut the first ten
@@ -4193,7 +4218,12 @@ def main(argv=None):
                          '(a reader over evidence; carries bytes/lines and a '
                          'display-only size_gate percentage, plus the day the '
                          'window opens at as day= and bad_days=, the days '
-                         'unusable channel rows claim; gates nothing)')
+                         'unusable channel rows claim; a tie at the newest '
+                         'instant reads beside it as newest_rows=/newest_'
+                         'errors=/newest_kinds= plus newest_kind=, the class '
+                         'of the row whose error is printed and never the '
+                         'window distribution the trend face calls kind=; '
+                         'gates nothing)')
     ap.add_argument('--failure-days', dest='failure_days', action='store_true',
                     help='print the daily failure-count history and exit '
                          '(a display series; bad= is HOW MANY rows are '
@@ -4354,7 +4384,7 @@ def main(argv=None):
               'urls=%d bytes=%d '
               'lines=%d size_gate=%.4f%% gate_ref=%dMB newest=%s newest_src=%s '
               'error=%s newest_rows=%d newest_errors=%d newest_kinds=%d '
-              'kind=%s day=%s'
+              'newest_kind=%s day=%s'
               % (summary['total'], summary['window_days'],
                            summary['recent'], summary['bad'],
                            ','.join(summary['bad_days'] or []) or 'none',

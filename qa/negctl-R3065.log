@@ -1,0 +1,5 @@
+HONEST named=True nobare=True trend=True all_green=True
+MUT1(old-word) nobare=False caught=True
+MUT2(duplicate) nobare=False caught=True
+MUT3(trend-borrow) trend=False caught=True
+RESTORE honest still green=True

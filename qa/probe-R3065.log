@@ -1,0 +1,29 @@
+P1 live rc=0 linelen=217 keys=17
+P1 live has kind= yes newest_kind= no
+P1 summary newest_kind='none' newest_kinds=0 newest_rows=0
+P1 dict key newest_kind present=True
+P2 tie failures rc=0 len=285
+P2 tie kind= fields failures='timeout' trend='http:1'
+P2 tie failures states newest_kinds=2 newest_rows=2
+P3 printed kind=timeout
+P3 other class TOKEN HTTPError visible=False TimeoutError visible=True
+P3 other source name a.example visible=False
+P4 one-row world failures kind='http' trend kind='http:1'
+P4 single bucket contains colon=False space=False
+P4 trend distribution contains colon=True space=False
+P5 files outside module+suite naming CRAWL-FAILURES: 2
+P5   src/os/backlog.md refs=6 kind_eq=62
+P5   src/os/state.json refs=2 kind_eq=14
+P6 suite lines carrying kind=: 4
+P6   1219 and 'kind=timeout:1' in line22,
+P6   1232 ok('AC-RUN13', rc23 == 0 and 'evidence=none kind=none' in line23,
+P6   1316 ok('AC-RUN14', rc30a == 0 and rc30b == 0 and 'kind=none' in line30a
+P6   7570 and "'kind=%s day=%s'" in src66
+P7 help rc=0 newest words=2 failures words=25
+P8 rename cost: kind= (5 chars) -> newest_kind= (12 chars), +7
+P9 empty printed='none' dict='none' equal=True
+P9 single printed='http' dict='http' equal=True
+P9 tie printed='timeout' dict='timeout' equal=True
+P9 tie-3 printed='http' dict='http' equal=True
+P10 failures kind count of key=1 trend kind count=1
+P10 failures value has colon=False trend value has colon=True

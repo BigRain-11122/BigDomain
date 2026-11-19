@@ -1313,7 +1313,7 @@ def main():
     with contextlib.redirect_stdout(buf):
         rc30b = RUN.main(['--failure-trend', '--root', root30, '--at', AT])
     line30b = buf.getvalue().strip()
-    ok('AC-RUN14', rc30a == 0 and rc30b == 0 and 'kind=none' in line30a
+    ok('AC-RUN14', rc30a == 0 and rc30b == 0 and 'newest_kind=none' in line30a
        and 'recur=none' in line30b,
        'an empty world answers none on both faces without raising')
 
@@ -7567,7 +7567,7 @@ def main():
 
     ok('AC-RUN66', "error=%s newest_rows=%d newest_errors=%d newest_kinds=%d '"
        in src66
-       and "'kind=%s day=%s'" in src66
+       and "'newest_kind=%s day=%s'" in src66
        and "fcov=%s rcov=%s '\n              'day=%s'" in src66
        and "'day': head_day" in body66('_summary_from_rows')
        and "'day': head_day" in body66('summarize_failure_trend'),
@@ -9329,7 +9329,8 @@ def main():
     ok('AC-RUN79', linesF79p2 == linesF79p and snap69(P79) == before79
        and tF79p.get('total') == '2' and tF79p.get('recent7') == '2'
        and tF79p.get('urls') == '2' and tF79p.get('newest_rows') == '2'
-       and tF79p.get('kind') == 'other' and tF79p.get('day') == '2026-11-20'
+       and tF79p.get('newest_kind') == 'other'
+       and tF79p.get('day') == '2026-11-20'
        and tF79p.get('newest_src') == W79b.get('newest_src'),
        'the word is display only, the world does not move, and every old word '
        'keeps the value R3058 measured on this shape')
@@ -9443,7 +9444,8 @@ def main():
     ok('AC-RUN80', t80p2 == t80p and snap69(P80) == before80
        and t80p.get('total') == '2' and t80p.get('recent7') == '2'
        and t80p.get('urls') == '2' and t80p.get('newest_rows') == '2'
-       and t80p.get('kind') == 'timeout' and t80p.get('day') == '2026-11-20'
+       and t80p.get('newest_kind') == 'timeout'
+       and t80p.get('day') == '2026-11-20'
        and t80p.get('newest_errors') == '2',
        'the count is display only, the world does not move, and every old '
        'word keeps its value on this exact shape')
@@ -9523,7 +9525,7 @@ def main():
     diff81 = sorted(k for k in x81 if k != 'bytes' and x81[k] != y81.get(k))
     ok('AC-RUN81', x81.get('newest_kinds') == '2'
        and y81.get('newest_kinds') == '1'
-       and x81.get('kind') == y81.get('kind') == 'timeout'
+       and x81.get('newest_kind') == y81.get('newest_kind') == 'timeout'
        and x81.get('newest_errors') == y81.get('newest_errors') == '2'
        and diff81 == ['newest_kinds'],
        'with the window at http2 timeout2 the two worlds differ only in '
@@ -9559,6 +9561,99 @@ def main():
        and 'newest_kinds=' not in lines81trend[0],
        'the summary counts classes over the chosen rows, main prints the '
        'word, the channel line carries it and the trend face does not')
+
+    # --- AC-RUN82: the failure face stops sharing a word with the trend (R3065)
+    # Measured before this existed (qa/probe-R3065.log P1/P9/P10): the failure
+    # line already printed the newest row's class, under the name `kind=`, and
+    # on four worlds (empty, one row, two-row tie, three-row tie) that printed
+    # value equalled summary['newest_kind'] character for character - so the
+    # board's premise ("computed, never printed") was false. What the same pass
+    # found instead is one word doing two jobs: in one run --failures printed
+    # kind=timeout (one bucket, never a colon) while --failure-trend printed
+    # kind=http:1 (the WINDOW's bucket distribution, always a colon). The
+    # failure face's word now reads newest_kind=, beside newest_rows=/
+    # newest_errors=/newest_kinds=, and the trend's kind= is untouched.
+    two82 = world(); roots.append(two82)
+    side73(two82, [(SA80, A80, EA80), (SB80, B80, EB80)])
+
+    # Arm 1: a tie names the printed row's class, and no bare kind= survives.
+    rc82a, t82a, line82a = fails80(two82)
+    ok('AC-RUN82', rc82a == 0 and t82a.get('newest_kind') == 'timeout'
+       and t82a.get('kind') is None and ' kind=' not in line82a
+       and t82a.get('newest_rows') == '2'
+       and t82a.get('newest_errors') == '2'
+       and t82a.get('newest_kinds') == '2',
+       'a two-row tie prints newest_kind=timeout and no bare kind= token')
+
+    # Arm 2: one row - the same word, no tie needed.
+    one82 = world(); roots.append(one82)
+    side73(one82, [(SA80, A80, EA80)])
+    rc82b, t82b, _l82b = fails80(one82)
+    ok('AC-RUN82', rc82b == 0 and t82b.get('newest_kind') == 'http'
+       and t82b.get('kind') is None,
+       'a single row reads newest_kind=http')
+
+    # Arm 3: no evidence - none beside the absent stamp, never an invented
+    # class and never a raise.
+    E82 = world(); roots.append(E82)
+    rc82c, t82c, _l82c = fails80(E82)
+    ok('AC-RUN82', rc82c == 0 and t82c.get('newest_kind') == 'none'
+       and t82c.get('newest') == 'none',
+       'an empty channel reads newest_kind=none without raising')
+
+    # Arm 4: the trend face keeps its own word and its own shape - the
+    # distribution still carries a colon, and the failure word never does.
+    _rc82d, lines82trend = face73(two82, '--failure-trend', AT80)
+    trend82 = toks69(lines82trend[0])
+    ok('AC-RUN82', ':' in trend82.get('kind', '')
+       and 'newest_kind' not in lines82trend[0]
+       and ':' not in t82a.get('newest_kind', ''),
+       'the trend still prints a colon-bearing kind= and never newest_kind=')
+
+    # Arm 5: three rows in two classes - the printed row's class is named
+    # while the count still says two.
+    T82 = world(); roots.append(T82)
+    side73(T82, [(SA80, A80, EA80), (SB80, B80, EB80),
+                 (SC80, B80, EA281)])
+    rc82e, t82e, _l82e = fails80(T82)
+    ok('AC-RUN82', rc82e == 0 and t82e.get('newest_kind') == 'http'
+       and t82e.get('newest_kinds') == '2'
+       and t82e.get('newest_rows') == '3',
+       'three rows in two classes name the printed row class beside the count')
+
+    # Arm 6: the word names the SAME row whose error is printed - tied to the
+    # row's own error through the shipped bucket function, not restated here.
+    # The line's error= token is split at its first space, so the comparison
+    # reads the row this suite wrote rather than the truncated token.
+    ok('AC-RUN82', t82a.get('newest_kind') == RUN.failure_kind(EB80)
+       and t82b.get('newest_kind') == RUN.failure_kind(EA80),
+       'newest_kind is the class of the row whose error is printed')
+
+    # Arm 7: wired and unique - main prints the word, the summary still reads
+    # it from the chosen row, and kind=%s survives on exactly one face.
+    ok('AC-RUN82', 'newest_kind=%s' in body80('main')
+       and "'newest_kind': failure_kind(newest_error)" in body80(
+           '_summary_from_rows')
+       and src80.count(' kind=%s') == 1,
+       'main prints newest_kind=, the summary names the chosen row, and the '
+       'only remaining kind=%s is the trend distribution')
+
+    # Arm 8: the face documents its own tie family, so a reader who only runs
+    # --help can learn the words this line carries.
+    buf82 = io.StringIO()
+    with contextlib.redirect_stdout(buf82):
+        try:
+            RUN.main(['--help'])
+        except SystemExit:
+            pass
+    help82 = ' '.join(buf82.getvalue().split())
+    # The usage block also names the flag, so the options entry is the LAST
+    # occurrence rather than the first.
+    i82 = help82.rfind('--failures')
+    block82 = help82[i82:help82.find('--failure-days', i82)]
+    ok('AC-RUN82', 'newest_rows' in block82 and 'newest_kinds' in block82
+       and 'newest_kind=' in block82,
+       'the --failures help names the tie family it prints')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

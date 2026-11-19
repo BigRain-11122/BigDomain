@@ -4777,7 +4777,7 @@ SUITES = [
     # (newest_errors=, AC-RUN80), 79 -> 80; R3064 counts the distinct failure
     # classes there (newest_kinds=, AC-RUN81), 80 -> 81.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 81),
+     os.path.join("..", "os", "test_crawl_runner.py"), 82),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep
