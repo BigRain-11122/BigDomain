@@ -448,6 +448,31 @@ renaming `rows_all_bytes` (it is the full-file block and its name is right).
 Honest boundary: both counts are on the LF law; Windows text-mode stdout adds
 one byte per printed line on top, and neither number claims to include it.
 
+HEADER WIDTH ON THE HEADER (R3038): with both halves printed, splitting the
+total still required an unwritten constant - the header's own trailing
+newline. Measured before the change (qa/probe-R3038.log): on one six-day world
+the subtraction `output_bytes - c - shown_bytes` equals the real header width
+only at c=1 (223-1-78=144 and 379-1-231=147), no printed integer key equals
+that width (a reader assuming nothing reads 145 against a real 144), and
+`header_bytes`/`newline_bytes` had zero hits across 2599 python files. A
+`lines=` token was refused twice over: the block's newline bytes already equal
+`shown` (measured), and `lines=` was itself refused on the DAYS face by the
+R3000 noise law (AC-RUN17 still pins that reason). The windowed header
+therefore appends `header_bytes=<n>` after `output_bytes=`: the UTF-8 bytes of
+the header line TOGETHER WITH ITS OWN NEWLINE, solved with the total (each
+token's digits move the other) over the one renderer. Including the newline is
+the measured correction to this round's first ruling: excluding it made the
+split `header_bytes + shown_bytes + printed_lines`, which over-counts by exactly
+`shown` bytes (the block's newlines are already inside `shown_bytes`). With it
+included the total breaks into exactly two halves with no constant assumed:
+`header_bytes + shown_bytes == output_bytes`.
+Refused: a lines/newline token (restates shown), documentation-only wording
+(the R3037 constant lived in a docstring and was still invisible), and
+redefining `output_bytes` (it is the total and its name is right). Honest
+boundary: `header_bytes` is on the LF law like its siblings, so it is the
+header's slice of that total rather than the width of the visible glyph row;
+Windows text-mode stdout adds one more byte on top.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1600,28 +1625,59 @@ def dropped_block_bytes(rows):
     return sum(len((dropped_line(r) + '\n').encode('utf-8')) for r in rows)
 
 
-def dropped_header(listing, out_bytes=None):
-    """The windowed header line - the ONLY renderer (R3036/R3037).
+def dropped_header(listing, out_bytes=None, head_bytes=None):
+    """The windowed header line - the ONLY renderer (R3036/R3037/R3038).
 
-    Shared by the printer and by `dropped_output_bytes` on purpose: a second
-    copy of this format string would let the total drift from the line that
-    carries it, which is the one thing the total promises not to do.
-    `out_bytes` is None only while the fixed point is being solved.
+    Shared by the printer and by `dropped_prices` on purpose: a second copy of
+    this format string would let the totals drift from the line that carries
+    them, which is the one thing those numbers promise not to do.
+    `out_bytes`/`head_bytes` are None only while the fixed point is solved.
 
     R3037: `shown_bytes` prices the block THIS run prints, so both halves of
-    `output_bytes` are readable (header = output_bytes - 1 - shown_bytes).
-    Before it existed the only subtraction available was
-    `output_bytes - rows_all_bytes`, and that one prices a whole FILE, so on a
-    truncated window it measured 13 and -24 against a 130-byte header
-    (qa/probe-R3037.log) - noise, not a cost.
+    `output_bytes` are readable. Before it existed the only subtraction
+    available was `output_bytes - rows_all_bytes`, and that one prices a whole
+    FILE, so on a truncated window it measured 13 and -24 against a 130-byte
+    header (qa/probe-R3037.log) - noise, not a cost.
+
+    R3038: `header_bytes` prices this line INCLUDING its newline, so the total
+    splits into exactly two halves with no unwritten constant. Appended AFTER
+    `output_bytes` so every older token keeps its position.
     """
     tail = '' if out_bytes is None else ' output_bytes=%d' % out_bytes
+    if head_bytes is not None:
+        tail += ' header_bytes=%d' % head_bytes
     return ('CRAWL-FAILURE-DAYS-DROPPED days=%d bad=%d window=%d shown=%d '
             'truncated=%d hidden=%d head=%s rows_all_bytes=%d shown_bytes=%d%s'
             % (listing['days'], listing['bad'], listing['window'],
                listing['shown'], 1 if listing['truncated'] else 0,
                listing['hidden'], listing['head'] or 'none',
                listing['all_bytes'], listing['shown_bytes'], tail))
+
+
+def dropped_prices(listing):
+    """(header_bytes, output_bytes) for one windowed run - ONE fixed point.
+
+    R3038: the two numbers price each other, because each token's digit count
+    moves the other's width (`header_bytes=` sits inside the header that
+    `output_bytes` totals, and the total sits in that same header). Solving
+    them in one loop keeps the printed line, the printed total and the printed
+    header width from disagreeing - the property every one of these keys
+    promises. The loop starts from a zero-width guess (a lower bound) and only
+    grows, so it cannot oscillate; ten passes is more than the digit count of
+    any real window.
+    """
+    block = listing.get('shown_bytes', dropped_block_bytes(listing['rows']))
+    # The header's newline belongs to the header's half: without it the total
+    # would need a constant at the reader's end (measured by AC-RUN55 arm 2,
+    # which read red on this round's first, newline-excluded shape).
+    head = len(dropped_header(listing, 0, 0).encode('utf-8')) + 1
+    for _ in range(10):
+        total = head + block
+        grown = len(dropped_header(listing, total, head).encode('utf-8')) + 1
+        if grown == head:
+            return head, total
+        head = grown
+    return head, head + block
 
 
 def dropped_output_bytes(listing):
@@ -1640,6 +1696,10 @@ def dropped_output_bytes(listing):
     oscillate, because a longer value never needs fewer digits. Both halves go
     through their one renderer, so the number equals what a pipe really gets.
 
+    R3038: delegates to `dropped_prices`, which solves this total and the
+    header's own width in ONE fixed point - a separate solve could let one
+    token's digits move the other's answer.
+
     It is a fact about ONE window's shape, not a forecast of another N and not
     a gate: nothing here refuses a wide window, and pricing a different window
     means running it.
@@ -1650,15 +1710,7 @@ def dropped_output_bytes(listing):
     bytes per printed line - the price is on the LF law because the sibling
     `rows_all_bytes` already is, and the delta is disclosed rather than hidden.
     """
-    block = listing.get('shown_bytes', dropped_block_bytes(listing['rows']))
-    total = block + 1 + len(dropped_header(listing, 0).encode('utf-8'))
-    for _ in range(8):
-        grown = block + len((dropped_header(listing, total) + '\n')
-                            .encode('utf-8'))
-        if grown == total:
-            break
-        total = grown
-    return total
+    return dropped_prices(listing)[1]
 
 
 def list_failure_days_dropped(path, window_days=None):
@@ -1718,6 +1770,19 @@ def list_failure_days_dropped(path, window_days=None):
     (qa/probe-R3037.log) - it is kept as an honest face for "what would the
     full listing cost", not reused as a header price.
 
+    R3038 THE HEADER'S HALF: a windowed call also answers `header_bytes` - the
+    UTF-8 bytes of this header line TOGETHER WITH ITS NEWLINE, solved in the
+    same fixed point as `output_bytes`. Without it the total could only be
+    split by assuming one newline byte (measured on two windows: the
+    subtraction fits only at c=1, and no printed key equals the width), so the
+    face now says `header_bytes + shown_bytes == output_bytes` with no
+    constant assumed. The newline is inside this number rather than beside it
+    because the first, newline-excluded shape made the natural split
+    over-count by exactly `shown` bytes (its own arm read red before this
+    sentence was written). It is not a restatement of the total: the total
+    says how big the run is, this says how much of it is the line you are
+    reading.
+
     DISPLAY ONLY: writes nothing, gates nothing. An absent file answers zero
     rows - the same "absence is zero" law as read_failure_days.
     """
@@ -1751,9 +1816,9 @@ def list_failure_days_dropped(path, window_days=None):
     # R3037: what this run's OWN block costs, so the header half is readable by
     # subtraction even when the window truncates (all_bytes prices the file).
     listing['shown_bytes'] = dropped_block_bytes(kept)
-    # R3036: what this whole call prints, solved over the one header renderer
-    # so the number and the output it describes cannot disagree.
-    listing['output_bytes'] = dropped_output_bytes(listing)
+    # R3038/R3036: this line's own width and the whole-run total are solved in
+    # ONE fixed point, because each token's digits move the other's answer.
+    listing['header_bytes'], listing['output_bytes'] = dropped_prices(listing)
     return listing
 
 
@@ -2800,7 +2865,9 @@ def main(argv=None):
                          'and rows_all_bytes= (what the whole file\'s block '
                          'would cost) plus shown_bytes= (what this run\'s own '
                          'block costs) plus output_bytes= (the bytes this run '
-                         'prints in total, so header = output - 1 - shown), '
+                         'prints in total) plus header_bytes= (this header '
+                         'line including its newline, so header plus shown '
+                         'is the total with no constant assumed), '
                          'so a shortened list never reads '
                          'like a short file (read-only display; gates nothing)')
     ap.add_argument('--snapshot-failures', dest='snapshot_failures',
@@ -2944,7 +3011,8 @@ def main(argv=None):
             print('CRAWL-FAILURE-DAYS-DROPPED days=%d bad=%d'
                   % (listing['days'], listing['bad']))
         else:
-            print(dropped_header(listing, listing['output_bytes']))
+            print(dropped_header(listing, listing['output_bytes'],
+                                 listing['header_bytes']))
         for item in listing['rows']:
             print(dropped_line(item))
         return 0

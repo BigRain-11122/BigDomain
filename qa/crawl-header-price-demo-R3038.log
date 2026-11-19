@@ -1,0 +1,6 @@
+A truncated: CRAWL-FAILURE-DAYS-DROPPED days=4 bad=0 window=2 shown=2 truncated=1 hidden=2 head=2026-11-08 rows_all_bytes=153 shown_bytes=79 output_bytes=241 header_bytes=162
+A truncated: header=162 shown=79 output=241 real_stdout=241 halves_add=True total_is_real=True day_lines=2
+B full: CRAWL-FAILURE-DAYS-DROPPED days=4 bad=0 window=365 shown=4 truncated=0 hidden=0 head=2026-11-08 rows_all_bytes=153 shown_bytes=153 output_bytes=318 header_bytes=165
+B full: header=165 shown=153 output=318 real_stdout=318 halves_add=True total_is_real=True day_lines=4
+C empty: CRAWL-FAILURE-DAYS-DROPPED days=0 bad=0 window=5 shown=0 truncated=0 hidden=0 head=none rows_all_bytes=0 shown_bytes=0 output_bytes=153 header_bytes=153
+C empty: header=153 shown=0 output=153 real_stdout=153 halves_add=True total_is_real=True day_lines=0

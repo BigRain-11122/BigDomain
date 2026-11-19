@@ -477,6 +477,30 @@ survive (arm 6). Boundary: both counts are on the LF law, and Windows
 text-mode stdout adds one byte per printed line outside both numbers - a CRLF
 face was refused because the consuming end is unknowable here.
 
+AC-RUN55 (R3038) grades THE HEADER'S OWN WIDTH ON THE HEADER. Measured before
+the change (qa/probe-R3038.log): splitting the total still required an
+unwritten newline constant - on one six-day world `output_bytes - c -
+shown_bytes` equals the real header width only at c=1 (223-1-78=144 and
+379-1-231=147), no printed integer key equals that width (a reader assuming
+nothing reads 145 against a real 144), and `header_bytes`/`newline_bytes` had
+zero hits across 2599 python files while `lines=` on the DAYS face had already
+been refused by the R3000 noise law (pinned by AC-RUN17). The windowed header
+therefore appends `header_bytes=<n>` after `output_bytes=`, solved in ONE
+fixed point with the total because each token's digits move the other's width.
+The first shape of this ruling excluded the header's newline and its own arm 2
+read RED: `header_bytes + shown_bytes + printed_lines` over-counts by exactly
+`shown` bytes, because the block's newlines already sit inside `shown_bytes`.
+The shipped shape includes the newline in `header_bytes`, so the total breaks
+into exactly two halves with no constant assumed. Arms: the number equals that
+run's real header line width plus its newline (arm 1); the two halves add up
+exactly - `header_bytes + shown_bytes == output_bytes` (arm 2); two windows on
+one file each price their own header exactly while the full-file block price
+stays put (arm 3); an empty history prices its bare header, total = that same
+number, with no day line (arm 4);
+the unwindowed face stays byte-identical and gains no token (arm 5); and
+nothing is written, no verdict prints and the two pinned `absent=` counts
+survive (arm 6).
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -4294,14 +4318,18 @@ def main():
     # AC-RUN54 arm 4, so the rest of the dict stays key-for-key.
     out41f = lst41f.pop('output_bytes', None)
     shown41f = lst41f.pop('shown_bytes', None)
+    # R3038 adds this line's own width the same way: named here, pinned
+    # exactly by AC-RUN55 arm 4, so the rest of the dict stays key-for-key.
+    head41f = lst41f.pop('header_bytes', None)
     ok('AC-RUN41', lst41f == {'days': 0, 'bad': 0, 'rows': [], 'window': 5,
                               'head': None, 'shown': 0, 'truncated': False,
                               'hidden': 0, 'all_bytes': 0}
        and isinstance(out41f, int) and out41f > 0
-       and shown41f == 0,
+       and shown41f == 0
+       and isinstance(head41f, int) and head41f > 0,
        'an absent history under a window answers days=0 shown=0 head=None '
        'truncated=False without raising (R3035 added the price key, R3036 the '
-       'total, R3037 the block price, all stated)')
+       'total, R3037 the block price, R3038 the header width, all stated)')
 
     # arm 7: no clock - the head is the file's own newest row, so a 2001
     # history windows against itself instead of against today
@@ -4331,6 +4359,8 @@ def main():
     # text below is the measured artifact, not a re-derivation of the law.
     # R3037 extends it once more: shown_bytes prices the block THIS run prints,
     # read off the same run's own output.
+    # R3038 extends it again: header_bytes prices this very line, read off the
+    # line the run actually printed (the equality below is the artifact).
     blk41 = ''.join(n + '\n' for n in lines41h
                     if n.startswith('DAY-DROPPED '))
     blk41i = ''.join(n + '\n' for n in lines41i
@@ -4342,15 +4372,18 @@ def main():
        and rc41i == 0
        and lines41i[0] == ('CRAWL-FAILURE-DAYS-DROPPED days=40 bad=0 window=3 '
                            'shown=3 truncated=1 hidden=37 head=%s '
-                           'rows_all_bytes=%d shown_bytes=%d output_bytes=%d'
+                           'rows_all_bytes=%d shown_bytes=%d output_bytes=%d '
+                           'header_bytes=%d'
                            % (span41[-1], len(blk41.encode('utf-8')),
                               len(blk41i.encode('utf-8')),
-                              len(raw41.encode('utf-8'))))
+                              len(raw41.encode('utf-8')),
+                              len(lines41i[0].encode('utf-8')) + 1))
        and day_rows_41(lines41i) == span41[-3:],
        'the unwindowed header is unchanged byte for byte while the windowed '
        'run names window/shown/truncated/hidden/head/rows_all_bytes/shown_bytes '
        'and prints the last three rows in file order, with output_bytes equal '
-       'to the real byte length of that output')
+       'to the real byte length of that output and header_bytes equal to the '
+       'width of the very line that carries it')
 
     # AC-RUN42 (R3025): the same --days is a DAY window on the failure face and
     # a ROW tail on the DAYS face. Measured before this arm set existed
@@ -5896,6 +5929,89 @@ def main():
        and 'verdict' not in text54
        and rc54f == 0 and l54f and l54f[0].count('absent=') == 2
        and l54f[0].count('absent_named=') == 1,
+       'no byte is written, no verdict prints, and the two counts the silent '
+       'faces pin still hold on the same world')
+
+    for root in roots:
+        shutil.rmtree(root, ignore_errors=True)
+
+    # ===== AC-RUN55 (R3038): the header prices its own width =================
+    # PINNED in src/os/backlog.md BEFORE header_bytes existed (in-window
+    # pre-registration, disclosed). Measured before the pin
+    # (qa/probe-R3038.log): `output_bytes - c - shown_bytes` equals the real
+    # header width only at c=1 on two windows, no printed integer key equals
+    # that width, and header_bytes/newline_bytes had zero hits over 2599
+    # python files while `lines=` was already refused on the DAYS face (R3000).
+    r55 = world()
+    roots.append(r55)
+    put_days(hist37(r55), [plain_day('2026-11-05', 1, dropped=1),
+                           plain_day('2026-11-06', 1, dropped=0),
+                           plain_day('2026-11-07', 1, dropped=7),
+                           plain_day('2026-11-08', 1, dropped=123456)])
+
+    rc55a, l55a, _raw55a = dd53(r55, 2)
+    t55a = toks47(l55a[0]) if l55a else {}
+    head55 = (len(l55a[0].encode('utf-8')) + 1) if l55a else 0
+
+    # arm 1: the header's half equals the real line it came from, newline in
+    ok('AC-RUN55', rc55a == 0 and l55a
+       and t55a.get('header_bytes') == str(head55) and head55 > 1,
+       'the windowed header prices its own slice of the total - the line that '
+       'run actually printed plus its newline')
+
+    # arm 2: the two halves add up exactly, so no constant is assumed anywhere
+    ok('AC-RUN55', rc55a == 0 and l55a
+       and int(t55a.get('header_bytes')) + int(t55a.get('shown_bytes'))
+       == int(t55a.get('output_bytes')),
+       'header_bytes + shown_bytes equals output_bytes, so the reader splits '
+       'the total with no unwritten newline constant')
+
+    # arm 3: two windows price their own header exactly; the file price is fixed
+    rc55b, l55b, _raw55b = dd53(r55, 365)
+    t55b = toks47(l55b[0]) if l55b else {}
+    head55b = (len(l55b[0].encode('utf-8')) + 1) if l55b else 0
+    ok('AC-RUN55', rc55b == 0 and l55b and t55b.get('truncated') == '0'
+       and t55a.get('header_bytes') and t55b.get('header_bytes')
+       and t55b.get('header_bytes') == str(head55b)
+       and int(t55a.get('header_bytes')) != int(t55b.get('header_bytes'))
+       and t55a.get('rows_all_bytes') == t55b.get('rows_all_bytes'),
+       'each window prices its own header exactly - the widths differ because '
+       'the window token itself is wider - while the full-file block price '
+       'stays identical in both')
+
+    # arm 4: an empty history prices its bare header exactly
+    r55c = world()
+    roots.append(r55c)
+    put_days(hist37(r55c), [])
+    rc55c, l55c, _raw55c = dd53(r55c, 5)
+    t55c = toks47(l55c[0]) if l55c else {}
+    ok('AC-RUN55', rc55c == 0 and l55c
+       and t55c.get('header_bytes') == str(len(l55c[0].encode('utf-8')) + 1)
+       and int(t55c.get('output_bytes')) == int(t55c.get('header_bytes'))
+       and len(day_rows_41(l55c)) == 0,
+       'an empty history prices its bare header, and the total equals that '
+       'number exactly with no day line')
+
+    # arm 5: the default face keeps its bytes and gains no token
+    rc55d, l55d, _raw55d = dd53(r55)
+    ok('AC-RUN55', rc55d == 0 and l55d
+       and l55d[0] == 'CRAWL-FAILURE-DAYS-DROPPED days=4 bad=0'
+       and 'header_bytes' not in l55d[0]
+       and len(day_rows_41(l55d)) == 4,
+       'the unwindowed face is byte-identical and carries no header price')
+
+    # arm 6: pure display, no verdict, and the pinned absent= counts survive
+    before55 = tree_bytes(r55)
+    rc55e, l55e, _raw55e = dd53(r55, 2)
+    after55 = tree_bytes(r55)
+    text55 = '\n'.join(l55e)
+    rc55f, l55f, _e55 = days50(r55, ['--failure-days', '--series-days', '7',
+                                     '--series-absent'])
+    ok('AC-RUN55', rc55e == 0 and before55 == after55
+       and 'PASS' not in text55 and 'FLAG' not in text55
+       and 'verdict' not in text55
+       and rc55f == 0 and l55f and l55f[0].count('absent=') == 2
+       and l55f[0].count('absent_named=') == 1,
        'no byte is written, no verdict prints, and the two counts the silent '
        'faces pin still hold on the same world')
 

@@ -1,0 +1,2 @@
+CRAWL-FAILURE-DAYS-DROPPED days=1 bad=0 window=7 shown=1 truncated=0 hidden=0 head=2026-11-19 rows_all_bytes=37 shown_bytes=37 output_bytes=198 header_bytes=161
+DAY-DROPPED day=2026-11-19 dropped=0

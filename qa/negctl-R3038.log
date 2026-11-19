@@ -1,0 +1,7 @@
+NEGCTL R3038 header_bytes / shown_bytes / output_bytes
+real stdout=241 header field=162 shown=79 total=241 real line=161
+HONEST: halves=True total_is_real=True -> GREEN
+M1 newline dropped from the header half: halves=False total_is_real=True -> CAUGHT
+M2 header half restates the total: halves=False total_is_real=True -> CAUGHT
+M3 header width ignores its own token digits: halves=False total_is_real=True -> CAUGHT
+M4 block half over-counted by one byte: halves=False total_is_real=True -> CAUGHT

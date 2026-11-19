@@ -1,0 +1,19 @@
+PROBE R3038 hidden newline byte in the windowed price face
+Q1 token census over tools/ and src/ *.py (literal substring counts)
+Q1 files=2599 header_bytes=0 newline_bytes=0 lf_bytes=21 lines==267 per_line=4 newline=1867
+Q1 rev2 printed-token shapes: word_lines_eq=207 quoted_lines_eq=11 spaced_lines_eq=110 (a printed tail token would be spaced or quoted)
+Q1 windowed run: shown=2 day_lines=2 block_bytes=78 recomposed=78 newline_bytes_in_block=2 same=True
+Q2 suite arms that would notice a line-ending change
+Q2 arms hard-coding the literal 1: 2
+Q2 literal-one AC-RUN54 line=468 `output_bytes - 1 - shown_bytes` = the header's own width, truncated or not.
+Q2 literal-one AC-RUN54 line=5845 and int(t54a.get('output_bytes')) - 1 - int(t54a.get('shown_bytes'))
+Q2 arms measuring a REAL stdout byte length: 3
+Q2 real-stdout AC-RUN53 line=5756 and t53a.get('output_bytes') == str(len(raw53a.encode('utf-8')))
+Q2 real-stdout AC-RUN53 line=5774 and t53b.get('output_bytes') == str(len(raw53b.encode('utf-8')))
+Q2 real-stdout AC-RUN53 line=5786 and t53c.get('output_bytes') == str(len(raw53c.encode('utf-8')))
+Q3 is header_bytes a restatement? measure the derivation on two windows
+Q3 window=2 output_bytes=223 shown_bytes=78 header_width=144 consts_solving=[1] head_tail=output_bytes=223
+Q3 window=365 output_bytes=379 shown_bytes=231 header_width=147 consts_solving=[1] head_tail=output_bytes=379
+Q3 printed integer keys=['all_bytes', 'bad', 'days', 'hidden', 'output_bytes', 'shown', 'shown_bytes', 'truncated', 'window'] any_equals_header_width=False
+Q3 face line: CRAWL-FAILURE-DAYS-DROPPED days=6 bad=0 window=2 shown=2 truncated=1 hidden=4 head=2026-11-10 rows_all_bytes=231 shown_bytes=78 output_bytes=223
+Q3 reader with only printed numbers must still guess 1: output_bytes - shown_bytes = 145 while real header = 144
