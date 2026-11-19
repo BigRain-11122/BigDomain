@@ -1,0 +1,15 @@
+P1 exact_key_set_assertions_over_day_rows=0
+P1 series_exact_key_assertion_present=True
+P1 consumers_of_the_history_reader=0 []
+P2 rows_before=1 bad_before=4
+P2 snapshot_reads_history_with_a_name_it_ignores=True
+P2 snapshot_names_the_discard_count=False
+P3 row_keys=['bad', 'day', 'newest_at', 'newest_error', 'on_day', 'recent', 'total', 'urls']
+P3 row_bad=0 (side channel) vs discarded_history_lines=4
+P3 healthy_side_channel_with_dirty_history_writes_bad=0 and eats=4 lines
+P3 discarded_equals_history_bad=True after_snapshot bad=0 rows=2
+P4 series_keys=['bad', 'bytes', 'days', 'first', 'gate_ref_mb', 'last', 'present', 'series', 'size_gate']
+P4 series_series_shape=[('2026-11-18', 2)]
+P4 day_row_keys_feed_series=False
+P4 trend_reads_day_rows=True trend_mentions_dropped=True
+P5 live_history_present=True rows=1 bad=0

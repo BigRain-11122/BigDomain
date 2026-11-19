@@ -1,0 +1,11 @@
+CENSUS registry=730 law=730 non_law=0 missing=0
+CENSUS exec law=730 unexecuted=0
+CENSUS shape law_direct=122
+CENSUS shape law_status=319
+CENSUS shape law_split=88
+CENSUS shape law_numeric=62
+CENSUS shape law_numeric_slot=4
+CENSUS shape law_punct=37
+CENSUS shape law_label_pt=24
+CENSUS shape law_counters=31
+CENSUS shape law_status_punct=43

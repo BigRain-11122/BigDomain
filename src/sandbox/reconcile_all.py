@@ -4696,8 +4696,10 @@ SUITES = [
     # PIN rows before the code; AC-RUN35 (which lines are unusable) pinned in
     # the R3018 PIN row before the reader existed; AC-RUN36 (the same blind
     # spot on the daily history) pinned in the R3019 PIN row.
+    # R3020 added AC-RUN37: the rewrite's own eaten lines leave a durable
+    # dropped= on the day row (36 -> 37, the same row).
     ("os-crawl-runner",
-      os.path.join("..", "os", "test_crawl_runner.py"), 36),
+      os.path.join("..", "os", "test_crawl_runner.py"), 37),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

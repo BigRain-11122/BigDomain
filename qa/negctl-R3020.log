@@ -1,0 +1,6 @@
+HONEST {'A1': True, 'A2': True, 'A4': True, 'A6': True} GREEN
+MUTANT M1 per-rewrite number arm_2_reads=RED CAUGHT
+MUTANT M2 the side channel bad count arm_1_reads=RED CAUGHT
+MUTANT M3 backfill old rows arm_4_reads=RED CAUGHT
+MUTANT M4 read the history twice arm_6_reads=RED CAUGHT
+NC result: honest=GREEN mutants_caught=4/4

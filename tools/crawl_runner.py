@@ -52,8 +52,8 @@ FAILURE HISTORY (R2994): --failures answers "what is on disk right now", so
 "is today worse than yesterday" had no answer and the same page failing three
 days straight read exactly like one bad afternoon. snapshot_failure_day()
 persists ONE row per day in qa/crawl-failure-days.jsonl (on_day, total, recent,
-bad, urls, newest), rewriting that day's row in place so a ten-minute beat does
-not append duplicates. It is a DISPLAY face only: the scanner never reads it
+bad, urls, newest, dropped - R3020 added the last one), rewriting that day's row
+in place so a ten-minute beat does not append duplicates. It is a DISPLAY face only: the scanner never reads it
 (AC-RUN9 arm 6), the closeout census only classifies *.log, and nothing here
 gates, retries or pages. A history write that fails prints its own line and
 never changes the crawl's answer.
@@ -148,6 +148,21 @@ size_gate is rounded to four decimals, and 0.0001% of a 100MB reference is
 ~105B, so a file within about a hundred bytes BELOW the line also prints
 100.0000% - the number is a display, and 100.0000 does not mean "at the line".
 Nothing here gates, retries or pages.
+
+EVIDENCE THIS FILE ITSELF EATS (R3020): the same rewrite keeps validated rows
+only, so a beat that finds malformed rows silently removes them, and the row it
+writes carried bad= (the SIDE channel's unusable count) - a fact about the other
+file, never about its own loss. Measured before this was written
+(qa/probe-R3020.log): a healthy side channel over a four-line dirty history
+writes bad=0 while the rewrite eats 4 lines. The day row therefore also carries
+dropped= - unusable lines of THIS file discarded by rewrites that stamped the
+same day, accumulated rather than per-rewrite, because the ten-minute beat
+would overwrite a per-rewrite number with 0 before a person could read it (the
+transience R3019 measured for bad-line numbering). Blank lines are dropped too
+and are not counted, the same law _json_lines follows. Rows written before this
+field existed are not backfilled: their drops were never measured and 0 would be
+invented. NOT added to the series or the trend row: those aggregate many days,
+and summing a key that older rows do not carry would print unmeasured as zero.
 
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
@@ -847,6 +862,14 @@ def snapshot_failure_day(repo_root, day, window_days=7):
     appending: the beat fires every ten minutes, and a file that grows a row per
     beat would be noise rather than history. Only the days somebody actually
     snapshotted appear - a gap is an honest gap, not a zero.
+
+    R3020: the row now also carries `dropped=` - unusable lines of THIS file
+    that a rewrite discarded, accumulated over the same day's rewrites. It is a
+    different fact from `bad=`, which counts the SIDE channel's unusable lines
+    (measured: healthy side channel + dirty history writes bad=0 while four
+    lines are eaten), and it is accumulated rather than per-rewrite because a
+    per-rewrite number would be overwritten by the next ten-minute beat before
+    it could be read. Old rows keep whatever they had - no backfill.
     """
     head_day = (day or '')[:10]
     if not _usable_day(head_day):
@@ -862,7 +885,29 @@ def snapshot_failure_day(repo_root, day, window_days=7):
            'urls': summary['urls'], 'newest_at': summary['newest_at'],
            'newest_error': summary['newest_error']}
     path = failure_day_path(repo_root)
-    history, _ignored = read_failure_days(path)
+    history, eaten = read_failure_days(path)
+    # R3020: `eaten` is what this rewrite is about to discard, and until now it
+    # was assigned to a name that said so - `_ignored`. The trace of a beat
+    # eating evidence existed for one assignment and then vanished. It is NOT
+    # the row's `bad`: that number is the SIDE channel's unusable count
+    # (measured, qa/probe-R3020.log P3: a healthy side channel over a four-line
+    # dirty history writes bad=0 while the rewrite eats 4 lines), so the same
+    # word would have made two different facts read alike.
+    #
+    # ACCUMULATED into the day's own row, not reported per rewrite: the beat
+    # rewrites this row every ten minutes, so a per-rewrite number would be
+    # replaced by 0 before anyone could read it - the same transience R3019
+    # measured for bad-line numbering. A blank line is dropped too and takes no
+    # number here, the law _json_lines already follows. Rows written before
+    # this field existed are NEVER backfilled: their drops were not measured,
+    # and 0 would be an invented number rather than an answer.
+    carry = 0
+    for prior in history:
+        if prior.get('day') == head_day:
+            val = prior.get('dropped')
+            if isinstance(val, int) and val > carry:
+                carry = val
+    row['dropped'] = carry + eaten
     kept = [r for r in history if r.get('day') != head_day]
     kept.append(row)
     kept.sort(key=lambda r: str(r.get('day') or ''))

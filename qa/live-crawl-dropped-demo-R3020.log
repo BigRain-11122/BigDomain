@@ -1,0 +1,6 @@
+BEFORE bad_lines_named=4 dropped_key_present=False
+AFTER  row={"bad":0,"day":"2026-11-19","dropped":4,"newest_at":null,"newest_error":null,"on_day":0,"recent":0,"total":0,"urls":0}
+BEAT2  dropped=4 bad=0 (nothing left to eat)
+SIDE   bad=1 dropped=0 (different file, different number)
+OLD    seeded_row_untouched=True old_has_dropped=False new_row_dropped=0
+LIVE   rows=1 has_dropped=False (a pre-field row is not backfilled)

@@ -215,6 +215,20 @@ appended side-channel line keeps its number; the face is therefore read-only wit
 no advice. --pending-old-bad keeps its shipped name and header (AC-RUN35 arm 1
 pins the text); the new subcommand is --failure-days-bad.
 
+AC-RUN37 (R3020) grades WHAT THE REWRITE ITSELF EATS. The row written by
+snapshot_failure_day carried bad=, which is the SIDE channel's unusable count,
+so a beat silently removing four malformed history lines still read bad=0
+(measured, qa/probe-R3020.log). The day row now also carries dropped= - this
+file's own lines discarded by rewrites that stamped the same day - accumulated
+rather than per-rewrite, because the ten-minute beat would overwrite a
+per-rewrite number before it could be read (the transience AC-RUN36 pinned).
+Two further measured facts fixed the shape: the day row's key set was pinned
+verbatim nowhere (0 exact assertions) while the series dict IS pinned exactly,
+and the discard count was already in hand under the name `_ignored`, so no new
+read was needed. Old rows are never backfilled (their drops were not measured),
+and neither the series nor the trend row gains the field (summing a key that
+older rows lack would print unmeasured as zero).
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -3402,6 +3416,141 @@ def main():
        and 'verdict' not in text36
        and 'crawl-failure' not in scan_src18,
        'the listing writes nothing and prints no verdict, and the scanner still reads none of it')
+
+    # AC-RUN37 (R3020): a rewrite keeps validated rows only, so the beat ate
+    # malformed history lines and left no trace, while the row it wrote carried
+    # bad= - the SIDE channel's unusable count. Measured before this existed
+    # (qa/probe-R3020.log): a healthy side channel over a four-line dirty
+    # history writes bad=0 while the rewrite eats 4; the day row's key set was
+    # pinned verbatim NOWHERE (0 exact assertions) while the series dict is
+    # pinned exactly, and the count was already in hand under the name
+    # `_ignored`. Hence dropped= on the day row only, accumulated across the
+    # same day's rewrites (a per-rewrite number would be overwritten by the
+    # next ten-minute beat), never backfilled onto older rows.
+    def hist37(root):
+        path = RUN.failure_day_path(root)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        return path
+
+    def days_head37(root):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--failure-days', '--root', root])
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    r37 = world()
+    roots.append(r37)
+    p37 = hist37(r37)
+    with open(p37, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(DAY_OK36 + '\n' + ''.join(JUNK36))
+    named_before37 = RUN.read_failure_day_bad_lines(p37)
+    row37 = RUN.snapshot_failure_day(r37, TODAY + 'T10:00:00+08:00')
+    rows_after37, bad_after37 = RUN.read_failure_days(p37)
+
+    # arm 1: the eaten lines leave a number behind, attributable to this file
+    ok('AC-RUN37', len(named_before37) == 4 and row37.get('dropped') == 4
+       and row37.get('bad') == 0 and bad_after37 == 0
+       and len(rows_after37) == 2,
+       'four unusable history lines are eaten by the rewrite and the row it writes carries dropped=4 while bad=0 names the healthy side channel')
+
+    # arm 2: it survives the next beats instead of being rewritten to 0
+    row37b = RUN.snapshot_failure_day(r37, TODAY + 'T10:10:00+08:00')
+    row37c = RUN.snapshot_failure_day(r37, TODAY + 'T10:20:00+08:00')
+    ok('AC-RUN37', row37b.get('dropped') == 4 and row37c.get('dropped') == 4
+       and row37b.get('bad') == 0,
+       'the number is accumulated per day, so two later beats over a clean history keep dropped=4 instead of erasing it')
+
+    # arm 3: a dirty side channel moves bad= and leaves dropped= alone
+    r37d = world()
+    roots.append(r37d)
+    p37d = hist37(r37d)
+    with open(p37d, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(DAY_OK36 + '\n')
+    with open(RUN.failure_path(r37d), 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{oops\n')
+    row37d = RUN.snapshot_failure_day(r37d, TODAY + 'T11:00:00+08:00')
+    ok('AC-RUN37', row37d.get('bad') == 1 and row37d.get('dropped') == 0,
+       'one unusable side-channel line writes bad=1 and leaves dropped=0 - the two numbers describe different files')
+
+    # arm 4: rows written before this field are never backfilled
+    r37e = world()
+    roots.append(r37e)
+    p37e = hist37(r37e)
+    old_a = json.dumps({'day': '2026-11-17', 'on_day': 1, 'total': 1,
+                        'recent': 1, 'bad': 0, 'urls': 1,
+                        'newest_at': None, 'newest_error': None},
+                       ensure_ascii=False, sort_keys=True,
+                       separators=(',', ':'))
+    old_b = json.dumps({'day': '2026-11-18', 'on_day': 2, 'total': 2,
+                        'recent': 2, 'bad': 0, 'urls': 2,
+                        'newest_at': None, 'newest_error': None},
+                       ensure_ascii=False, sort_keys=True,
+                       separators=(',', ':'))
+    with open(p37e, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(old_a + '\n' + old_b + '\n')
+    RUN.snapshot_failure_day(r37e, TODAY + 'T12:00:00+08:00')
+    text37e = open(p37e, 'r', encoding='utf-8').read().splitlines()
+    old37e = [json.loads(ln) for ln in text37e[:2]]
+    new37e = json.loads(text37e[-1])
+    ok('AC-RUN37', text37e[0] == old_a and text37e[1] == old_b
+       and 'dropped' not in old37e[0] and 'dropped' not in old37e[1]
+       and new37e.get('dropped') == 0 and new37e.get('day') == TODAY,
+       'two rows written before the field stay byte-identical with no invented zero, and only the row this rewrite writes carries the key')
+
+    # arm 5: exactly one new key on the day row, and no aggregate face grew
+    keys37 = set(row37b.keys())
+    base37 = set(['bad', 'day', 'newest_at', 'newest_error', 'on_day', 'recent',
+                  'total', 'urls'])
+    series37 = RUN.summarize_failure_days(p37)
+    trend37 = RUN.summarize_failure_trend(p37, RUN.failure_path(r37), TODAY)
+    ok('AC-RUN37', keys37 == base37 | set(['dropped'])
+       and set(series37.keys()) == set(['bad', 'bytes', 'days', 'first',
+                                        'gate_ref_mb', 'last', 'present',
+                                        'series', 'size_gate'])
+       and all(isinstance(p, tuple) and len(p) == 2
+               for p in series37['series'])
+       and 'dropped' not in trend37 and 'dropped' not in series37,
+       'the day row grows by exactly one named key, the series keys and payload shape are untouched, and neither the series nor the trend row gains the field')
+
+    # arm 6: one history read per snapshot, and the written number is its count
+    r37f = world()
+    roots.append(r37f)
+    p37f = hist37(r37f)
+    with open(p37f, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(DAY_OK36 + '\n{"late": 1\n')
+    calls37 = []
+    real_read_days = RUN.read_failure_days
+
+    def counting_read_days(path):
+        out = real_read_days(path)
+        calls37.append(out[1])
+        if len(calls37) == 1:
+            with open(path, 'a', encoding='utf-8', newline='\n') as fh:
+                fh.write('{appended\n')
+        return out
+
+    RUN.read_failure_days = counting_read_days
+    try:
+        row37f = RUN.snapshot_failure_day(r37f, TODAY + 'T13:00:00+08:00')
+    finally:
+        RUN.read_failure_days = real_read_days
+    ok('AC-RUN37', len(calls37) == 1 and calls37[0] == 1
+       and row37f.get('dropped') == 1
+       and RUN.read_failure_days(p37f)[1] == 0,
+       'a snapshot reads the history exactly once and writes that read\'s count, so a line appended after the read neither inflates the number nor survives the rewrite')
+
+    # arm 7: pure display - the shipped header is unchanged, nothing is written
+    before37 = snap36(r37f)
+    rc37, lines37 = days_head37(r37f)
+    after37 = snap36(r37f)
+    text37 = '\n'.join(lines37)
+    ok('AC-RUN37', rc37 == 0 and before37 == after37
+       and lines37 and lines37[0].startswith('CRAWL-FAILURE-DAYS days=')
+       and 'dropped' not in text37
+       and 'PASS' not in text37 and 'FLAG' not in text37
+       and 'verdict' not in text37
+       and 'crawl-failure' not in scan_src18,
+       'the day listing prints the same header it printed before, writes nothing, and stays outside the scanner')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

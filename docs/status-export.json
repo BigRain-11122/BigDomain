@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-19 R3019 PRODUCT+ENGINEERING: the other jsonl face names its broken lines too, and both files now share one parse law. CRAWL-FAILURE-DAYS printed bad=<n> for the daily failure history and nothing could name one, because read_failure_days carried its own loop with no numbering (the side channel got that face at R3018). tools/crawl_runner.py now ships _json_lines(path, kind_of_row) as the one parse law both readers delegate to, _failure_day_row_why naming FOUR measured reject branches (json/shape/day/on_day instead of the side channel's single 'fields'), read_failure_day_bad_lines, and a read-only --failure-days-bad subcommand that prints BAD-LINE n=<lineno> why=<...>. Rejected text is never echoed, and the face carries no advice because a snapshot rewrites the file on the next beat.",
+    "current": "2026-11-19 R3020 PRODUCT+ENGINEERING: the beat that eats evidence now leaves a number behind. snapshot_failure_day keeps validated rows only, so a rewrite silently removes malformed history lines - and the row it writes carried bad=, which is the SIDE channel's unusable count, so a beat eating four lines still read bad=0. The day row now also carries dropped=: this file's own lines discarded by rewrites that stamped the same day, ACCUMULATED rather than per-rewrite (the ten-minute beat would overwrite a per-rewrite number with 0 before anyone could read it - the transience R3019 measured), never backfilled onto rows written before the field (their drops were never measured, and 0 would be invented).",
     "do": "R3005 measured, in order: the PIN row was written in src/os/backlog.md BEFORE any code byte moved, and the read-only probe tmp/probe_R3005.py -> qa/probe-R3005.log (682B, 12 lines, utf-8/lf, six private worlds, zero sockets) ran BEFORE the pin. It measured: (1) three-source window answers for one source only; (2) recur and the pending count are independent in BOTH directions - recur=(0,0) with one judged source still gone, and recur=(2,4) with nothing pending when both came back; (3) the queue head's own suggested numerator (since_ok != 'yes') counts a source whose newest failure is later than every record row as pending, reviving exactly the R3004 conflation at aggregate level, so the numerator counts 'no' only and unmeasured sits in neither number; (4) an absent record leaves every source unmeasured, so zero-of-zero had to print none rather than 0/0; (5) 13 arms read the trend line, three pin exact key sets, and a multi-source world still printed exactly one line, which is why per-source lines were refused. AC-RUN22 (seven arms) was pinned before the code; three existing key-set arms were widened by exactly the one new key, disclosed as a criterion following its field rather than a loosening.",
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3019.log (94B, 2026-11-19)",
-    "latest_evidence": "qa/negctl-R3019.log (94B, 2026-11-19)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3020.log (324B, 2026-11-19)",
+    "latest_evidence": "qa/negctl-R3020.log (324B, 2026-11-19)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3020] next window (<=48h): (0) MAIN — **节拍会把证据悄悄吃掉**：`snapshot_failure_day` 用「只保留校验通过的行」重写日历史，而它写进日行里的 `bad=` 是**失败侧路件**的坏行数；日历史自己丢掉的坏行**没有任何痕迹**（R3019 实测 bad 1→0，P4）。下一轮**先量**（只读）：①日行现有键集是否被既有判据逐字钉住（加一个 `dropped=` 会不会弄脏 key-set 臂，会则须按先例披露扩臂）；②`snapshot_failure_day` 写盘前手里是否已经拿到「丢了几行」（一次 `read_failure_days` 只给 bad，拿不到被丢的原文，也不应拿）；③`dropped=` 与日行现有 `bad=` 的语义边界（一个是本件自丢，一个是侧路件坏行）是否会读成同一件事，若是则该换一个不会被误读的名字；④趋势行/系列行是否该随之增键（一行合同 R3010/R3013 挡在前面，倾向只进日行）。量清后二选一实现并配判据，且**先落板再动代码**。",
-    "next_milestone_due": "2026-11-21T16:09:31+08:00",
-    "updated_at": "2026-11-19T16:09:31+08:00"
+    "next_milestone": "[R3021] next window (<=48h): (0) MAIN — **痕迹留下了，但它说不出是谁的、也没人看得到**。R3020 让重写吃掉的行有了 `dropped=<n>`，但仍有两个空洞，下一轮先量（只读）：①**归属**——同一个 `dropped` 把「被吃掉的坏行」记在**本次重写落款的那一天**，而那些坏行可能属于另一天的行（R3020 的诚实披露 (b) 已点名），量清「按被吃行自己的 `day` 归属」是否有可得的读数（`_json_lines` 交回的坏行是 `row=None`，原文不许回显也不许解析——先量能不能只靠行号旁证，量不出就**不要**硬造归属，落一条「不可归属已量清」的结论也算产出）；②**可见面**——命令行、系列面、趋势行都拒了这个键，于是人要看得打开 `qa/crawl-failure-days.jsonl`；量清「只印当日行的这个键」是否会撞一行合同/表头判据（AC-RUN17 精确键集、AC-RUN30..34 表头子串），若只加一个 `dropped=<n>` 记号要不要扩既有表头臂；③**旧行**——字段出现之前的行没有该键，任何聚合都必须显式跳过而不是读成 0，量清是否已有判据挡住这种误读。量清后二选一实现并配判据，且**先落板再动代码**。",
+    "next_milestone_due": "2026-11-21T16:27:51+08:00",
+    "updated_at": "2026-11-19T16:27:51+08:00"
   },
-  "current": "2026-11-19 R3019 PRODUCT+ENGINEERING: the other jsonl face names its broken lines too, and both files now share one parse law. CRAWL-FAILURE-DAYS printed bad=<n> for the daily failure history and nothing could name one, because read_failure_days carried its own loop with no numbering (the side channel got that face at R3018). tools/crawl_runner.py now ships _json_lines(path, kind_of_row) as the one parse law both readers delegate to, _failure_day_row_why naming FOUR measured reject branches (json/shape/day/on_day instead of the side channel's single 'fields'), read_failure_day_bad_lines, and a read-only --failure-days-bad subcommand that prints BAD-LINE n=<lineno> why=<...>. Rejected text is never echoed, and the face carries no advice because a snapshot rewrites the file on the next beat.",
+  "current": "2026-11-19 R3020 PRODUCT+ENGINEERING: the beat that eats evidence now leaves a number behind. snapshot_failure_day keeps validated rows only, so a rewrite silently removes malformed history lines - and the row it writes carried bad=, which is the SIDE channel's unusable count, so a beat eating four lines still read bad=0. The day row now also carries dropped=: this file's own lines discarded by rewrites that stamped the same day, ACCUMULATED rather than per-rewrite (the ten-minute beat would overwrite a per-rewrite number with 0 before anyone could read it - the transience R3019 measured), never backfilled onto rows written before the field (their drops were never measured, and 0 would be invented).",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-19 R3019 PRODUCT+ENGINEERING: the other jsonl face names its broken lines too, and both files now share one parse law. CRAWL-FAILURE-DAYS printed bad=<n> for the daily failure history and nothing could name one, because read_failure_days carried its own loop with no numbering (the side channel got that face at R3018). tools/crawl_runner.py now ships _json_lines(path, kind_of_row) as the one parse law both readers delegate to, _failure_day_row_why naming FOUR measured reject branches (json/shape/day/on_day instead of the side channel's single 'fields'), read_failure_day_bad_lines, and a read-only --failure-days-bad subcommand that prints BAD-LINE n=<lineno> why=<...>. Rejected text is never echoed, and the face carries no advice because a snapshot rewrites the file on the next beat.",
-  "export_ts": "2026-11-19T16:09:31+08:00",
+  "do": "2026-11-19 R3020 PRODUCT+ENGINEERING: the beat that eats evidence now leaves a number behind. snapshot_failure_day keeps validated rows only, so a rewrite silently removes malformed history lines - and the row it writes carried bad=, which is the SIDE channel's unusable count, so a beat eating four lines still read bad=0. The day row now also carries dropped=: this file's own lines discarded by rewrites that stamped the same day, ACCUMULATED rather than per-rewrite (the ten-minute beat would overwrite a per-rewrite number with 0 before anyone could read it - the transience R3019 measured), never backfilled onto rows written before the field (their drops were never measured, and 0 would be invented).",
+  "export_ts": "2026-11-19T16:27:51+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
-  "latest_evidence": "qa/negctl-R3019.log (94B, 2026-11-19)",
-  "next_milestone": "[R3020] next window (<=48h): (0) MAIN — **节拍会把证据悄悄吃掉**：`snapshot_failure_day` 用「只保留校验通过的行」重写日历史，而它写进日行里的 `bad=` 是**失败侧路件**的坏行数；日历史自己丢掉的坏行**没有任何痕迹**（R3019 实测 bad 1→0，P4）。下一轮**先量**（只读）：①日行现有键集是否被既有判据逐字钉住（加一个 `dropped=` 会不会弄脏 key-set 臂，会则须按先例披露扩臂）；②`snapshot_failure_day` 写盘前手里是否已经拿到「丢了几行」（一次 `read_failure_days` 只给 bad，拿不到被丢的原文，也不应拿）；③`dropped=` 与日行现有 `bad=` 的语义边界（一个是本件自丢，一个是侧路件坏行）是否会读成同一件事，若是则该换一个不会被误读的名字；④趋势行/系列行是否该随之增键（一行合同 R3010/R3013 挡在前面，倾向只进日行）。量清后二选一实现并配判据，且**先落板再动代码**。",
+  "latest_evidence": "qa/negctl-R3020.log (324B, 2026-11-19)",
+  "next_milestone": "[R3021] next window (<=48h): (0) MAIN — **痕迹留下了，但它说不出是谁的、也没人看得到**。R3020 让重写吃掉的行有了 `dropped=<n>`，但仍有两个空洞，下一轮先量（只读）：①**归属**——同一个 `dropped` 把「被吃掉的坏行」记在**本次重写落款的那一天**，而那些坏行可能属于另一天的行（R3020 的诚实披露 (b) 已点名），量清「按被吃行自己的 `day` 归属」是否有可得的读数（`_json_lines` 交回的坏行是 `row=None`，原文不许回显也不许解析——先量能不能只靠行号旁证，量不出就**不要**硬造归属，落一条「不可归属已量清」的结论也算产出）；②**可见面**——命令行、系列面、趋势行都拒了这个键，于是人要看得打开 `qa/crawl-failure-days.jsonl`；量清「只印当日行的这个键」是否会撞一行合同/表头判据（AC-RUN17 精确键集、AC-RUN30..34 表头子串），若只加一个 `dropped=<n>` 记号要不要扩既有表头臂；③**旧行**——字段出现之前的行没有该键，任何聚合都必须显式跳过而不是读成 0，量清是否已有判据挡住这种误读。量清后二选一实现并配判据，且**先落板再动代码**。",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
@@ -168,7 +168,7 @@
   },
   "results": [
     [
-      "3019",
+      "3020",
       "OSLoop 执行 tick"
     ]
   ],
@@ -181,15 +181,15 @@
   "self_drive": {
     "window": "2026-11-13..2026-11-19",
     "window_days": 7,
-    "log_lines_in_window": 249,
+    "log_lines_in_window": 258,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 37,
+    "substantive_non_idle_mention_lines": 38,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 271261
+  "state_bytes": 277850
 }
