@@ -1,0 +1,35 @@
+PROBE R3058 -- the newest row at an instant tie
+
+P1 live files
+  failures absent
+  day-log  rows=0 bad=2 stamps_with_tie=0
+  record   rows=3 bad=0 stamps_with_tie=0
+
+P2 order dependence (two rows naming ONE instant, writings swapped)
+  A-then-B newest_at=2026-11-20T04:00:00+08:00   newest_error=E_A refused  last_at=2026-11-20T04:00:00+08:00   total=2 day=2026-11-20
+  B-then-A newest_at=2026-11-19T20:00:00+00:00   newest_error=E_B timeout  last_at=2026-11-19T20:00:00+00:00   total=2 day=2026-11-20
+
+P2b tie with one error text, two sources
+  A-then-B newest_at=2026-11-20T04:00:00+08:00   newest_error=E_SAME
+  B-then-A newest_at=2026-11-19T20:00:00+00:00   newest_error=E_SAME
+
+P2c tie vs an older row
+  {'newest_at': '2026-11-20T04:00:00+08:00', 'newest_error': 'E_A refused', 'total': 3, 'day': '2026-11-20', 'last_at': '2026-11-20T04:00:00+08:00'}
+
+P2d trend newest_src at a tie
+  A-then-B newest_src=https://a.example/p since_ok=unmeasured flips=None pending_src=None
+  B-then-A newest_src=https://b.example/p since_ok=unmeasured flips=None pending_src=None
+
+P3 consumers (tools/ + src/, test modules excluded)
+  crawl_runner.py: {'newest_at': 8, 'newest_error': 11, 'newest_src': 13, 'last_at': 17, 'newest_kind': 2}
+
+P4 pin shape in src/os/test_crawl_runner.py
+  newest_at    30
+  newest_error 22
+  newest_src   18
+  last_at      48
+  newest_kind  3
+  literal CRAWL-FAILURES line pins: 1
+
+P5 writer shape
+  append_failure lines=24 mentions failed_at=True

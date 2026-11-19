@@ -516,6 +516,32 @@ stamp), and touching `_usable_day` (R3054). Honest boundary: the three live
 files carry zero mixed-frame pairs today (P1), so this closes a door rather
 than repairing a disk.
 
+WHICH ROW IS "THE NEWEST" WHEN TWO NAME ONE INSTANT (R3058, measured first -
+qa/probe-R3058.log): R3056 made the ordering an instant comparison, which is
+right, but it left the equal case to the caller - and every face that picks one
+row kept whichever the file listed FIRST. Measured on private worlds: the same
+two rows in two file orders (A=2026-11-20T04:00:00+08:00 E_A, B=2026-11-19T20:00:00+00:00
+E_B, one instant) read newest_at/newest_error/last_at and the trend's
+newest_src from DIFFERENT rows while total= and day= stayed byte-identical -
+so "the newest failure" named no particular row and nothing said there were
+two. One law now: `_newest_rows` keeps every row that names the newest instant
+in file order (the writer only appends, so file order is write order) and
+`_newest_row` takes the LAST of them - the most recent write, which is the
+question these faces ask. `_summary_from_rows`, `_last_stamp_rows`,
+`_pending_sources`, `_out_of_window_waiting` and the trend's newest row all go
+through it, so every face names the same row. ONE new word, because no existing
+word could say it (measured: total= counts the file, urls= counts sources,
+newest_kind= classifies one error): `newest_rows=` on --failures is HOW MANY
+rows name that instant - 1 healthy, 2+ says the sentence has more than one
+subject, 0 rides beside newest=none. Refused: giving the other two faces their
+own tie counts (they now name the same row; a long line gains no value), any
+content-based re-ranking of a tie (file order is information), changing the
+history row's key set (a claim, not a stamp), and touching `_stamp_key` (a tie
+is a tie). `_since_ok`/`_flips` keep their strict `>`: an equal instant is
+still not proof that a fix came after a failure. Honest boundary: the three
+live files carry zero tie pairs today (P1), so this also closes a door rather
+than repairing a disk.
+
 WHICH DAY A ROW COUNTS IN (R3055, measured first - qa/probe-R3055.log): R3048
 gave the clock faces one day law - the LOCAL day of the instant, `_day_of` -
 but only the window HEAD used it; every count and span still cut the first ten
@@ -1524,6 +1550,50 @@ def _stamp_key(stamp):
         return (1, 0.0)
 
 
+def _newest_rows(rows):
+    """Every row naming the NEWEST instant, in file order (R3058).
+
+    WHY THIS EXISTS: R3056 made "which row came first" an instant comparison,
+    which is right - but two rows can name ONE instant in two writings, and the
+    reader that picks "the newest row" then kept whichever one the file listed
+    first. Measured (qa/probe-R3058.log): the same two rows in two file orders
+    read newest_at/error/last_at and the trend's newest_src from DIFFERENT rows
+    (A=2026-11-20T04:00:00+08:00 E_A vs B=2026-11-19T20:00:00+00:00 E_B, one
+    instant), while total= and day= stayed byte-identical - so "the newest
+    failure" pointed at no particular row and nothing on any face said there
+    were two.
+
+    The writer only APPENDS, so file order is write order; the newest instant is
+    answered by `_stamp_key` and an equal instant keeps every row that names it,
+    in the order they were written. `_newest_row` then takes the last of them:
+    the most recent write, which is the question these faces ask. Rows with no
+    stamp are skipped (the readers that feed this already dropped unusable ones,
+    R3054), so a missing stamp can never be named as the newest fact.
+
+    This is a SELECTION helper, not a law change: `_stamp_key` still says a tie
+    is a tie, and `_since_ok` still answers "strictly later" with its own `>`,
+    so an equal instant is never read as proof that a fix came after a failure.
+    """
+    best_key = None
+    picked = []
+    for row in rows or ():
+        text = str(row.get('failed_at') or '')
+        if not text:
+            continue
+        key = _stamp_key(text)
+        if best_key is None or key > best_key:
+            best_key, picked = key, [row]
+        elif key == best_key:
+            picked.append(row)
+    return picked
+
+
+def _newest_row(rows):
+    """The LAST-WRITTEN row among those naming the newest instant (R3058)."""
+    picked = _newest_rows(rows)
+    return picked[-1] if picked else None
+
+
 def _window_start(day, window_days=7):
     """(head_day, usable, threshold) - the ONE place the window law lives.
 
@@ -1610,7 +1680,6 @@ def _summary_from_rows(rows, bad, day, window_days=7, bad_days=None):
     head_day, usable, threshold = _window_start(day, window_days)
     recent = 0
     urls = set()
-    newest = None
     for row in rows:
         urls.add(row.get('source_url'))
         # R3055: the day a row counts in is the day of its INSTANT, the same
@@ -1622,13 +1691,14 @@ def _summary_from_rows(rows, bad, day, window_days=7, bad_days=None):
         row_day = _day_of(row.get('failed_at'))
         if usable and threshold <= row_day <= head_day:
             recent += 1
-        # R3056: the NEWEST row is the latest instant, not the largest text -
-        # a mixed-frame stamp read '11-20T03:00+08' as later than the genuinely
-        # later '11-19T20:00Z' (measured, qa/probe-R3056.log P2).
-        got = str(row.get('failed_at') or '')
-        if got and (newest is None or _stamp_key(got) > _stamp_key(
-                newest.get('failed_at'))):
-            newest = row
+    # R3056: the NEWEST row is the latest instant, not the largest text - a
+    # mixed-frame stamp read '11-20T03:00+08' as later than the genuinely later
+    # '11-19T20:00Z' (measured, qa/probe-R3056.log P2).
+    # R3058: and when two rows name that one instant, the row named is the LAST
+    # written one, with the count of its sharers beside it, instead of whichever
+    # row the file happened to list first (measured, qa/probe-R3058.log P2).
+    newest_picked = _newest_rows(rows)
+    newest = newest_picked[-1] if newest_picked else None
     newest_error = (newest or {}).get('error')
     return {'total': len(rows), 'recent': recent, 'bad': bad,
             'bad_days': bad_days,
@@ -1639,6 +1709,11 @@ def _summary_from_rows(rows, bad, day, window_days=7, bad_days=None):
             'day': head_day,
             'newest_at': (newest or {}).get('failed_at'),
             'newest_error': newest_error,
+            # R3058: HOW MANY rows name the newest instant. 1 is the healthy
+            # reading, 2+ says the "newest failure" sentence has more than one
+            # subject and only one of them can be printed; 0 rides beside
+            # newest=none.
+            'newest_rows': len(newest_picked),
             # R2997: the same bucket function the trend line uses, so one
             # error string is classified in exactly one place.
             'newest_kind': failure_kind(newest_error) if newest_error else 'none'}
@@ -2931,7 +3006,11 @@ def _last_stamp_rows(rows):
               if str(row.get('failed_at') or '')]
     # R3056: the newest by instant; the returned text is the chosen row's own
     # characters, so _stamp_echo keeps echoing the writer, not a parse result.
-    return max(stamps, key=_stamp_key) if stamps else None
+    # R3058: at an equal instant the chosen row is the last one written, so this
+    # face and --failures name the same row (measured before the change: they
+    # swapped together, but only because both read the file's first row).
+    chosen = _newest_row(rows) if stamps else None
+    return None if chosen is None else str(chosen.get('failed_at') or '')
 
 
 def _stamp_echo(stamp):
@@ -3100,7 +3179,9 @@ def _pending_sources(record_path, in_window):
         stamp = str(row.get('failed_at') or '')
         if not src or not stamp:
             continue
-        if src not in latest or _stamp_key(stamp) > _stamp_key(latest[src]):
+        # R3058: `>=` so a source's OWN equal-instant pair keeps the last row
+        # written; `>` kept the first, which is the row "latest" must not mean.
+        if src not in latest or _stamp_key(stamp) >= _stamp_key(latest[src]):
             latest[src] = stamp
     pending = 0
     judged = 0
@@ -3149,7 +3230,9 @@ def _out_of_window_waiting(record_path, rows, threshold):
         stamp = str(row.get('failed_at') or '')
         if not src or not stamp:
             continue
-        if src not in latest or _stamp_key(stamp) > _stamp_key(latest[src]):
+        # R3058: same law as _pending_sources - an equal instant keeps the last
+        # row written, never the first one listed.
+        if src not in latest or _stamp_key(stamp) >= _stamp_key(latest[src]):
             latest[src] = stamp
     still = 0
     judged = 0
@@ -3518,17 +3601,13 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # disk, so flips=1 beside since_ok=unmeasured is a truthful pair.
     flips = None
     if evidence == 'side' and in_window:
-        newest = None
-        for row in in_window:
-            stamp = str(row.get('failed_at') or '')
-            if not stamp:
-                continue
-            # R3056: the newest failure is the latest INSTANT, not the largest
-            # text (measured, qa/probe-R3056.log P8: the wrong source was
-            # named when two frames disagreed).
-            if newest is None or _stamp_key(stamp) > _stamp_key(
-                    newest.get('failed_at')):
-                newest = row
+        # R3056: the newest failure is the latest INSTANT, not the largest
+        # text (measured, qa/probe-R3056.log P8: the wrong source was
+        # named when two frames disagreed).
+        # R3058: at an equal instant the named source is the one whose row was
+        # written LAST, so this face and --failures name the same row instead of
+        # whichever the file listed first (measured, qa/probe-R3058.log P2d).
+        newest = _newest_row(in_window)
         if newest is not None:
             newest_src = newest.get('source_url')
             since_ok = _since_ok(record_path, newest_src,
@@ -4002,7 +4081,7 @@ def main(argv=None):
         print('CRAWL-FAILURES total=%d recent%d=%d bad=%d bad_days=%s '
               'urls=%d bytes=%d '
               'lines=%d size_gate=%.4f%% gate_ref=%dMB newest=%s error=%s '
-              'kind=%s day=%s'
+              'newest_rows=%d kind=%s day=%s'
               % (summary['total'], summary['window_days'],
                            summary['recent'], summary['bad'],
                            ','.join(summary['bad_days'] or []) or 'none',
@@ -4011,6 +4090,7 @@ def main(argv=None):
                            summary['size_gate'], summary['gate_ref_mb'],
                            summary['newest_at'] or 'none',
                            summary['newest_error'] or 'none',
+                           summary['newest_rows'],
                            summary['newest_kind'], summary['day']))
         return 0
     if args.failure_days:

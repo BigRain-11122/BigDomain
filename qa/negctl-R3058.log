@@ -1,0 +1,7 @@
+NEGCTL R3058 -- honest shape GREEN, every mutation CAUGHT
+  honest: tie names the last write in both orders, newest_rows=2, distinct=1 -> GREEN
+  honest: per-source latest keeps the later write -> GREEN
+  mutation first-listed wins            -> CAUGHT
+  mutation content re-ranks a tie       -> CAUGHT
+  mutation per-source > keeps first     -> CAUGHT
+  restored module: tie names the last write again -> GREEN

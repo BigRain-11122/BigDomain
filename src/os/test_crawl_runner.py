@@ -7555,7 +7555,7 @@ def main():
         j66 = src66.find('\ndef ', i66 + 1)
         return src66[i66:j66 if j66 > 0 else len(src66)]
 
-    ok('AC-RUN66', "'kind=%s day=%s'" in src66
+    ok('AC-RUN66', "'newest_rows=%d kind=%s day=%s'" in src66
        and "fcov=%s rcov=%s '\n              'day=%s'" in src66
        and "'day': head_day" in body66('_summary_from_rows')
        and "'day': head_day" in body66('summarize_failure_trend'),
@@ -8614,14 +8614,17 @@ def main():
        and '_stamp_key(got) > _stamp_key(newest)' in body72('_since_ok')
        and 'events.sort(key=lambda e: (_stamp_key(e[0])[:2], e[1]))'
        in body72('_flips')
-       and 'max(stamps, key=_stamp_key)' in body72('_last_stamp_rows')
-       and '_stamp_key(stamp) > _stamp_key(latest[src])'
+       and '_newest_row(rows)' in body72('_last_stamp_rows')
+       # R3058: the per-source latest keeps the LAST row written at an equal
+       # instant, so the two source-latest sites read >= instead of >.
+       and '_stamp_key(stamp) >= _stamp_key(latest[src])'
        in body72('_pending_sources')
-       and '_stamp_key(stamp) > _stamp_key(latest[src])'
+       and '_stamp_key(stamp) >= _stamp_key(latest[src])'
        in body72('_out_of_window_waiting')
        and 'waiting.sort(key=lambda w: (_stamp_key(w[0]), w[1]))'
        in body72('_pending_sources')
        and 'stamp > str(newest.get' not in body72('summarize_failure_trend')
+       and '_newest_row(in_window)' in body72('summarize_failure_trend')
        and '_stamp_echo(newest)' in body72('list_pending_old')
        and 'newest <= stamp' not in body72('_since_ok'),
        'the ordering law is one function used by all seven faces while the '
@@ -8738,6 +8741,138 @@ def main():
        and "summary['newest_at']" in body72('main'),
        'the echo body no longer slices while both faces keep their own '
        'existing words and no new display word was introduced')
+
+    # AC-RUN75 (R3058): two rows naming ONE instant used to hand "the newest"
+    # to whichever row the file listed first - measured in qa/probe-R3058.log
+    # (P2: same two rows, two file orders, two different newest_at/error/
+    # last_at/newest_src while total= and day= stayed byte-identical). The
+    # criterion was pinned in src/os/backlog.md BEFORE the helper existed and
+    # the helper BEFORE these arms (in-window pre-registration, disclosed).
+    # Law: _newest_rows keeps every row naming the newest instant in file order
+    # (the writer only appends, so file order is write order), _newest_row takes
+    # the last of them, and --failures publishes how many share it as
+    # newest_rows= - the one new word, because no existing word could say it.
+    AT75 = '2026-11-20T23:59:00+08:00'
+    A75 = '2026-11-20T04:00:00+08:00'   # same instant as B75
+    B75 = '2026-11-19T20:00:00+00:00'
+    C75 = '2026-11-18T04:00:00+08:00'
+    rA75 = {'source_url': 'https://a75.example/p', 'failed_at': A75,
+            'error': 'E_A'}
+    rB75 = {'source_url': 'https://b75.example/p', 'failed_at': B75,
+            'error': 'E_B'}
+    rC75 = {'source_url': 'https://c75.example/p', 'failed_at': C75,
+            'error': 'E_C'}
+
+    # Arm 1: the helper's truth table, over rows rather than over faces.
+    ok('AC-RUN75',
+       RUN._newest_rows([rA75, rB75]) == [rA75, rB75]
+       and RUN._newest_row([rA75, rB75]) is rB75
+       and RUN._newest_row([rB75, rA75]) is rA75
+       and RUN._newest_rows([rC75, rA75]) == [rA75]
+       and RUN._newest_rows([]) == [] and RUN._newest_row([]) is None
+       and RUN._newest_rows([{'error': 'no stamp'}, rA75]) == [rA75],
+       'every row naming the newest instant is kept in file order, the last one '
+       'is the one named, and a row with no stamp is never named')
+
+    # Arm 2: the summary names the LAST-written row at a tie in BOTH file
+    # orders, and says how many rows share that instant.
+    for order75, named75, err75 in (([rA75, rB75], B75, 'E_B'),
+                                    ([rB75, rA75], A75, 'E_A')):
+        root75 = world(); roots.append(root75)
+        side73(root75, [(r['source_url'], r['failed_at'], r['error'])
+                        for r in order75])
+        rc75, lines75 = face73(root75, '--failures', AT75)
+        t75 = toks69(lines75[0])
+        ok('AC-RUN75', rc75 == 0 and t75.get('newest') == named75
+           and t75.get('error') == err75 and t75.get('newest_rows') == '2'
+           and t75.get('total') == '2' and t75.get('recent7') == '2'
+           and t75.get('day') == '2026-11-20',
+           'a same-instant pair names the last row written in both file '
+           'orders, carries newest_rows=2, and leaves total/day untouched')
+
+    # Arm 3: distinct instants keep R3056's law - the later instant wins, and
+    # the tie count is 1 rather than a number invented into every healthy line.
+    D75 = world(); roots.append(D75)
+    side73(D75, [(rC75['source_url'], C75, 'E_C'),
+                 (rA75['source_url'], A75, 'E_A')])
+    rcD75, linesD75 = face73(D75, '--failures', AT75)
+    tD75 = toks69(linesD75[0])
+    ok('AC-RUN75', rcD75 == 0 and tD75.get('newest') == A75
+       and tD75.get('newest_rows') == '1' and tD75.get('error') == 'E_A',
+       'an ordinary channel names the later instant and reads newest_rows=1')
+
+    # Arm 4: no row on disk is 0 beside newest=none, never a fabricated 1.
+    E75 = world(); roots.append(E75)
+    rcE75, linesE75 = face73(E75, '--failures', AT75)
+    tE75 = toks69(linesE75[0])
+    ok('AC-RUN75', rcE75 == 0 and tE75.get('newest') == 'none'
+       and tE75.get('newest_rows') == '0',
+       'an empty channel reads newest=none with newest_rows=0')
+
+    # Arm 5: the two faces that name the same write now name the same ROW -
+    # byte-identical strings, offset included (R3057's echo law, R3058's pick).
+    F75 = world(); roots.append(F75)
+    side73(F75, [(rA75['source_url'], A75, 'E_A'),
+                 (rB75['source_url'], B75, 'E_B')])
+    recF75 = CR.record_path(F75)
+    os.makedirs(os.path.dirname(recF75), exist_ok=True)
+    open(recF75, 'w', encoding='utf-8').close()
+    _, linesFF75 = face73(F75, '--failures', AT75)
+    _, linesPF75 = face73(F75, '--pending-old-list', AT75)
+    tFF75 = toks69(linesFF75[0])
+    tPF75 = toks69(linesPF75[0])
+    ok('AC-RUN75', tFF75.get('newest') == tPF75.get('last_at')
+       and tFF75.get('newest') == B75 and tPF75.get('last_at') == B75,
+       'newest= and the pending list\'s last_at= name the same row at a tie, '
+       'in that row\'s own characters')
+
+    # Arm 6: a source's OWN latest keeps the later write too - `>` kept the
+    # first row listed, which is the row "latest" must not mean. The record
+    # reaches past the failure through ANOTHER source, so this source is
+    # answered 'no' (still gone) and its waiting row is the one printed.
+    G75 = world(); roots.append(G75)
+    recG75 = CR.record_path(G75)
+    os.makedirs(os.path.dirname(recG75), exist_ok=True)
+    with open(recG75, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('{"source_url":"https://other75.example/q",'
+                 '"fetched_at":"2026-11-21T04:00:00+08:00",'
+                 '"verdict":"no-drift"}\n')
+    same75 = [{'source_url': 'https://s75.example/p', 'failed_at': B75,
+               'error': 'E_1'},
+              {'source_url': 'https://s75.example/p', 'failed_at': A75,
+               'error': 'E_2'}]
+    pend75 = RUN._pending_sources(recG75, same75)
+    ok('AC-RUN75', pend75[0] == 1 and pend75[1] == 1
+       and pend75[3] == A75 and pend75[3] != B75,
+       'the per-source latest keeps the last write at an equal instant, so the '
+       'waiting row is the one actually written last')
+
+    # Arm 7: display only, and the one law wired through the sites that pick a
+    # row - while the strict-comparison faces stay strict.
+    before75 = snap69(F75)
+    rcH75, linesH75 = face73(F75, '--failures', AT75)
+    with io.open(os.path.join(ROOT, 'tools', 'crawl_runner.py'),
+                 'r', encoding='utf-8') as fh:
+        src75 = fh.read()
+
+    def body75(name):
+        i75 = src75.find('def %s(' % name)
+        j75 = src75.find('\ndef ', i75 + 1)
+        return src75[i75:j75 if j75 > 0 else len(src75)]
+
+    ok('AC-RUN75', rcH75 == 0 and linesH75 == linesFF75
+       and snap69(F75) == before75
+       and '_newest_rows(rows)' in body75('_newest_row')
+       and '_newest_rows(rows)' in body75('_summary_from_rows')
+       and 'newest_picked[-1]' in body75('_summary_from_rows')
+       and "'newest_rows': len(newest_picked)" in body75('_summary_from_rows')
+       and '_newest_row(rows)' in body75('_last_stamp_rows')
+       and '_newest_row(in_window)' in body75('summarize_failure_trend')
+       and '_stamp_key(got) > _stamp_key(newest)' in body75('_since_ok')
+       and '_stamp_key(stamp) >= _stamp_key(latest[src])'
+       in body75('_pending_sources'),
+       'one picker is used by every row-naming face, two runs are byte-identical, '
+       'the world does not move, and since_ok keeps its strict comparison')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
