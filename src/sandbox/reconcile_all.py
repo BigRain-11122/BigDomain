@@ -4756,9 +4756,10 @@ SUITES = [
     # at midnight, 63 -> 64.
     # R3048 makes the day of a stamp the day of the INSTANT, 64 -> 65.
     # R3049 makes both failure read faces print the day they window by
-    # (`day=`), 65 -> 66.
+    # (`day=`), 65 -> 66, and R3050 (a day whose only row is malformed is now
+    # named on both faces as `bad_days=`), 66 -> 67.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 66),
+     os.path.join("..", "os", "test_crawl_runner.py"), 67),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

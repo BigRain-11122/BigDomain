@@ -1,0 +1,19 @@
+PROBE R3050 read-only private worlds dir=C:\Users\sjs20\AppData\Local\Temp\probe_R3050_09hb3ur6
+P1 W1_only_bad_today    usable=1 bad=1 rejected_rows_carry_day=[('on_day', None)]
+P2 W1_only_bad_today    usable_days=['2026-11-19'] same_domain=True
+P1 W2_wrong_type        usable=1 bad=1 rejected_rows_carry_day=[('on_day', None)]
+P2 W2_wrong_type        usable_days=['2026-11-19'] same_domain=True
+P1 W3_no_day            usable=1 bad=1 rejected_rows_carry_day=[('day', None)]
+P2 W3_no_day            usable_days=['2026-11-19'] same_domain=True
+P1 W4_not_json          usable=1 bad=1 rejected_rows_carry_day=[('json', None)]
+P2 W4_not_json          usable_days=['2026-11-19'] same_domain=True
+P1 W5_claim_also_named  usable=2 bad=1 rejected_rows_carry_day=[('on_day', None)]
+P2 W5_claim_also_named  usable_days=['2026-11-19', '2026-11-20'] same_domain=True
+P1 W6_empty             usable=0 bad=0 rejected_rows_carry_day=[]
+P2 W6_empty             usable_days=[] same_domain=True
+P3 W1_only_bad_today    days=1 bad=1 first=2026-11-19 last=2026-11-19 series=[('2026-11-19', 2)]
+P3 W1_only_bad_today    trend days=1 bad=1 today=absent prev=2 cov=('2026-11-19', '2026-11-19')
+P3 W5_claim_also_named  days=2 bad=1 first=2026-11-19 last=2026-11-20 series=[('2026-11-19', 2), ('2026-11-20', 0)]
+P3 W5_claim_also_named  trend days=2 bad=1 today=0 prev=2 cov=('2026-11-19', '2026-11-20')
+P4 bad_lines_named=[{'line': 2, 'why': 'on_day'}] (a line number and a reason, no day)
+P4 faces_now: no key on either line names the day a rejected row claims; a reader sees only bad=1 and days=0

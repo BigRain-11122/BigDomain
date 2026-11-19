@@ -1527,9 +1527,10 @@ def main():
                      day_row('2026-11-17', 3), day_row('2026-11-18', 2),
                      day_row('2026-11-19', 1)])
     s43 = RUN.summarize_failure_days(h43, 3)
-    ok('AC-RUN17', set(s43.keys()) == set(['days', 'bad', 'first', 'last',
-                                           'dropped', 'series', 'present',
-                                           'bytes', 'size_gate', 'gate_ref_mb'])
+    ok('AC-RUN17', set(s43.keys()) == set(['days', 'bad', 'bad_days', 'first',
+                                           'last', 'dropped', 'series',
+                                           'present', 'bytes', 'size_gate',
+                                           'gate_ref_mb'])
        and s43['dropped'] is None
        and s43['days'] == 7 and s43['bad'] == 0
        and s43['first'] == '2026-11-13' and s43['last'] == '2026-11-19'
@@ -1626,7 +1627,7 @@ def main():
     base_keys = set(['days', 'in_window', 'bad', 'today', 'prev', 'mean',
                      'delta', 'worst', 'recurring', 'sources', 'recur', 'cov',
                      'wcov', 'evidence', 'kind', 'kind_count', 'window_days',
-                     'day'])
+                     'day', 'bad_days'])
     ok('AC-RUN18', tA5['newest_src'] is None and tA5['since_ok'] == 'unmeasured'
        and set(tA5.keys()) == base_keys | set(['newest_src', 'since_ok', 'flips',
                                                'pending', 'pending_src',
@@ -1739,7 +1740,7 @@ def main():
     baseB = set(['days', 'in_window', 'bad', 'today', 'prev', 'mean', 'delta',
                  'worst', 'recurring', 'sources', 'recur', 'cov', 'wcov',
                  'evidence', 'kind', 'kind_count', 'newest_src', 'since_ok',
-                 'window_days', 'day'])
+                 'window_days', 'day', 'bad_days'])
     bufB9 = io.StringIO()
     with contextlib.redirect_stdout(bufB9):
         rcB9 = RUN.main(['--failure-trend', '--root', _rB2, '--at', AT])
@@ -3175,7 +3176,7 @@ def main():
     tZ5 = RUN.summarize_failure_trend(RUN.failure_day_path(rZ4),
                                       RUN.failure_path(rZ4), TODAY,
                                       record_path=CR.record_path(rZ4))
-    ok('AC-RUN32', len(tZ5) == 31 and 'reason' not in tZ5
+    ok('AC-RUN32', len(tZ5) == 32 and 'reason' not in tZ5
        and 'pending_old_src' not in tZ5
        and tZ5['fcov'] == lZ4['fcov'],
        'the trend row keeps its 31 keys (30 + R3049 day=) and learns neither reason nor a per-source key, while both faces read one span')
@@ -3359,7 +3360,7 @@ def main():
     ok('AC-RUN33', lQ33['last_at'] == '2026-11-15'
        and 'T' not in lQ33['last_at']
        and rcZ33b == 0 and before33 == after33
-       and len(t33) == 31 and 'last_at' not in t33
+       and len(t33) == 32 and 'last_at' not in t33
        and 'PASS' not in text33 and 'FLAG' not in text33
        and 'verdict' not in text33
        and 'crawl-failure' not in scan_src18,
@@ -3512,7 +3513,7 @@ def main():
         record_path=CR.record_path(rX34))
     ok('AC-RUN34', len(lC34) == 8 and len(lX34) == 8
        and 'bad=0' in linesC34[0] and 'bad=2' in linesX34[0]
-       and len(tX34) == 31 and 'bad' in tX34 and tX34['bad'] == 0
+       and len(tX34) == 32 and 'bad' in tX34 and tX34['bad'] == 0
        and json.dumps(tX34, sort_keys=True) == json.dumps(tC34,
                                                           sort_keys=True),
        'the dictionary stays eight keys, and the trend row keeps its thirty-one untouched (30 + R3049 day=) - its bad counts the day history, not this channel')
@@ -3774,13 +3775,15 @@ def main():
     # arm 5: one parse law, and a file of blanks produces no number anywhere
     src36 = open(RUN.__file__, 'r', encoding='utf-8').read()
     seg36 = src36.split('def read_failure_days(')[1].split('\ndef ')[0]
+    seg36b = src36.split('def read_failure_days_ext(')[1].split('\ndef ')[0]
     rC36 = world()
     roots.append(rC36)
     blankPath36 = RUN.failure_day_path(rC36)
     os.makedirs(os.path.dirname(blankPath36), exist_ok=True)
     with open(blankPath36, 'w', encoding='utf-8', newline='\n') as fh:
         fh.write('\n\n   \n\n')
-    ok('AC-RUN36', '_json_lines(' in seg36 and 'enumerate(' not in seg36
+    ok('AC-RUN36', 'read_failure_days_ext(' in seg36
+       and '_json_lines(' in seg36b and 'enumerate(' not in seg36b
        and RUN.read_failure_days(blankPath36) == ([], 0)
        and RUN.read_failure_day_bad_lines(blankPath36) == [],
        'the history reader delegates to the shared parse law instead of iterating itself, and a file of only blank lines reads as zero rows and zero bad lines')
@@ -3898,9 +3901,10 @@ def main():
     series37 = RUN.summarize_failure_days(p37)
     trend37 = RUN.summarize_failure_trend(p37, RUN.failure_path(r37), TODAY)
     ok('AC-RUN37', keys37 == base37 | set(['dropped'])
-       and set(series37.keys()) == set(['bad', 'bytes', 'days', 'first',
-                                        'dropped', 'gate_ref_mb', 'last',
-                                        'present', 'series', 'size_gate'])
+       and set(series37.keys()) == set(['bad', 'bad_days', 'bytes', 'days',
+                                        'first', 'dropped', 'gate_ref_mb',
+                                        'last', 'present', 'series',
+                                        'size_gate'])
        and all(isinstance(p, tuple) and len(p) == 2
                for p in series37['series'])
        and 'dropped' not in trend37
@@ -4028,7 +4032,7 @@ def main():
     put_days(p38e, [plain_day('2026-11-18', 0),
                     plain_day(TODAY, 0, dropped=2)])
     calls38 = []
-    real_read_days38 = RUN.read_failure_days
+    real_read_days38 = RUN.read_failure_days_ext
 
     def counting_read_days38(path):
         out = real_read_days38(path)
@@ -4038,11 +4042,11 @@ def main():
                             plain_day(TODAY, 0, dropped=9)])
         return out
 
-    RUN.read_failure_days = counting_read_days38
+    RUN.read_failure_days_ext = counting_read_days38
     try:
         s38e = RUN.summarize_failure_days(p38e)
     finally:
-        RUN.read_failure_days = real_read_days38
+        RUN.read_failure_days_ext = real_read_days38
     ok('AC-RUN38', calls38 == [2] and s38e['dropped'] == 2,
        'the header value comes from the same single read as days/last - a '
        'rewrite after that read moves neither the number nor the call count')
@@ -4050,14 +4054,15 @@ def main():
     # arm 6: exactly one new key, payload shapes and the trend untouched
     trend38 = RUN.summarize_failure_trend(p38d, RUN.failure_path(r38d), TODAY)
     ok('AC-RUN38', set(RUN.summarize_failure_days(p38d).keys()) == set(
-        ['bad', 'bytes', 'days', 'dropped', 'first', 'gate_ref_mb', 'last',
-         'present', 'series', 'size_gate'])
+        ['bad', 'bad_days', 'bytes', 'days', 'dropped', 'first', 'gate_ref_mb',
+         'last', 'present', 'series', 'size_gate'])
        and all(isinstance(p, tuple) and len(p) == 2
                and len(p) == 2 for p in RUN.summarize_failure_days(
                    p38d)['series'])
-       and len(trend38) == 31 and 'dropped' not in trend38,
-       'the dict grows by one named key, series stays (day, on_day) pairs, and '
-       'the 31-key trend row (30 + R3049 day=) gains nothing here')
+       and len(trend38) == 32 and 'dropped' not in trend38,
+       'the dict grows by R3021 dropped and R3050 bad_days, series stays '
+       '(day, on_day) pairs, and the 32-key trend row (31 + R3050 bad_days) '
+       'gains nothing else here')
 
     # arm 7: pure display - nothing written, no verdict, outside the scanner
     def tree_bytes(root):
@@ -4161,7 +4166,7 @@ def main():
     ok('AC-RUN39', rc39d == 0 and lines39d[0].startswith('CRAWL-FAILURE-DAYS days=')
        and 'dropped=4' in lines39d[0]
        and all(isinstance(p, tuple) and len(p) == 2 for p in s39d['series'])
-       and len(trend39d) == 31 and 'dropped' not in trend39d,
+       and len(trend39d) == 32 and 'dropped' not in trend39d,
        'the day listing keeps its own header, its (day, on_day) pairs and the '
        '31-key trend row (30 + R3049 day=) - the new token lives only on the '
        'snapshot header')
@@ -4307,7 +4312,7 @@ def main():
        and lines40f[0].startswith('CRAWL-FAILURE-DAYS days=')
        and 'DAY-DROPPED' not in lines40f[0]
        and all(isinstance(p, tuple) and len(p) == 2 for p in s40f['series'])
-       and len(t40f) == 31 and 'dropped' not in t40f,
+       and len(t40f) == 32 and 'dropped' not in t40f,
        'the DAYS face keeps one line, (day, on_day) pairs and the 31-key trend '
        'row (30 + R3049 day=) while the per-day list lives in its own '
        'subcommand')
@@ -4551,12 +4556,15 @@ def main():
 
     # arm 2: the nine old tokens keep their order and meaning - the markers are
     # appended after gate_ref=, and the prefix is byte-identical to the old line
-    s42 = RUN.summarize_failure_days(p42, 7, RUN.read_failure_days(p42))
+    s42 = RUN.summarize_failure_days(p42, 7, RUN.read_failure_days_ext(p42))
     pairs42 = ','.join('%s:%s' % (d, n) for d, n in s42['series'])
-    old_prefix42 = ('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
+    old_prefix42 = ('CRAWL-FAILURE-DAYS days=%d bad=%d bad_days=%s '
+                    'first=%s last=%s '
                     'dropped=%s series=%s bytes=%d size_gate=%.4f%% '
                     'gate_ref=%dMB'
-                    % (s42['days'], s42['bad'], s42['first'] or 'none',
+                    % (s42['days'], s42['bad'],
+                       ','.join(s42['bad_days']) or 'none',
+                       s42['first'] or 'none',
                        s42['last'] or 'none',
                        'none' if s42['dropped'] is None else s42['dropped'],
                        pairs42 or 'none', s42['bytes'], s42['size_gate'],
@@ -4694,12 +4702,15 @@ def main():
        'sixty days back, with outside=0 the marker that the window applied')
 
     # arm 2: the default face is byte-identical - the marker is opt-in only
-    s43 = RUN.summarize_failure_days(p43, 7, RUN.read_failure_days(p43))
+    s43 = RUN.summarize_failure_days(p43, 7, RUN.read_failure_days_ext(p43))
     pairs43 = ','.join('%s:%s' % (d, n) for d, n in s43['series'])
-    old_prefix43 = ('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
+    old_prefix43 = ('CRAWL-FAILURE-DAYS days=%d bad=%d bad_days=%s '
+                    'first=%s last=%s '
                     'dropped=%s series=%s bytes=%d size_gate=%.4f%% '
                     'gate_ref=%dMB'
-                    % (s43['days'], s43['bad'], s43['first'] or 'none',
+                    % (s43['days'], s43['bad'],
+                       ','.join(s43['bad_days']) or 'none',
+                       s43['first'] or 'none',
                        s43['last'] or 'none',
                        'none' if s43['dropped'] is None else s43['dropped'],
                        pairs43 or 'none', s43['bytes'], s43['size_gate'],
@@ -7531,6 +7542,115 @@ def main():
        'each face appends day= exactly once at its tail and both read it from '
        'the summary return, so a third face cannot print its own hard-written '
        'day')
+
+    # AC-RUN67 (R3050): a day whose only history row is malformed read silent on
+    # BOTH faces - the row named its own day and the parser dropped it at parse
+    # time (measured, qa/probe-R3050.log P1). Both faces now name the claim.
+    def tok67(line67):
+        return dict(p.split('=', 1) for p in line67.split() if '=' in p)
+
+    # Arm 1: the board's own case - a clean day on one field, broken on another.
+    r67a = world(); roots.append(r67a)
+    write_days(RUN.failure_day_path(r67a),
+               [day_row('2026-11-19', 2), {'day': '2026-11-20'}])
+    rc67a, l67a = face66(r67a, '--failure-days', '2026-11-20T12:00:00+08:00')
+    rc67b, l67b = face66(r67a, '--failure-trend', '2026-11-20T12:00:00+08:00')
+    t67a, t67b = tok67(l67a), tok67(l67b)
+    ok('AC-RUN67', rc67a == 0 and rc67b == 0
+       and t67a.get('bad_days') == '2026-11-20'
+       and t67b.get('bad_days') == '2026-11-20'
+       and t67a.get('days') == '1' and t67b.get('days') == '1'
+       and t67b.get('today') == 'absent'
+       and l67a.count('bad_days=') == 1 and l67b.count('bad_days=') == 1,
+       'the day an unusable row claims is named once on each face while every '
+       'count stays put (days=1, today=absent) - a name is not a count')
+
+    # Arm 2: the claim survives a rejection on a DIFFERENT field's type.
+    r67b = world(); roots.append(r67b)
+    write_days(RUN.failure_day_path(r67b),
+               [day_row('2026-11-19', 2),
+                {'day': '2026-11-20', 'on_day': '3'}])
+    _, l67c = face66(r67b, '--failure-days', '2026-11-20T12:00:00+08:00')
+    _, l67d = face66(r67b, '--failure-trend', '2026-11-20T12:00:00+08:00')
+    ok('AC-RUN67', tok67(l67c).get('bad_days') == '2026-11-20'
+       and tok67(l67d).get('bad_days') == '2026-11-20',
+       'a wrong-typed on_day no longer takes the readable day down with it')
+
+    # Arm 3: nothing to claim is said as nothing, never invented.
+    r67c = world(); roots.append(r67c)
+    write_days(RUN.failure_day_path(r67c),
+               [day_row('2026-11-19', 2), {'on_day': 3}],
+               junk=['{"day": "2026-11-20"'])
+    _, l67e = face66(r67c, '--failure-days', '2026-11-20T12:00:00+08:00')
+    _, l67f = face66(r67c, '--failure-trend', '2026-11-20T12:00:00+08:00')
+    t67e, t67f = tok67(l67e), tok67(l67f)
+    ok('AC-RUN67', t67e.get('bad_days') == 'none'
+       and t67f.get('bad_days') == 'none'
+       and t67e.get('bad') == '2' and t67f.get('bad') == '2',
+       'a row with no day and a line that is not JSON claim no day at all: two '
+       'unusable rows, bad_days=none - a broken line is never guessed into a day')
+
+    # Arm 4: a claim on a day that ALSO has a usable row is still named, and the
+    # good row's count is still the count.
+    r67d = world(); roots.append(r67d)
+    write_days(RUN.failure_day_path(r67d),
+               [day_row('2026-11-19', 2), {'day': '2026-11-20'},
+                day_row('2026-11-20', 0)])
+    _, l67g = face66(r67d, '--failure-days', '2026-11-20T12:00:00+08:00')
+    _, l67h = face66(r67d, '--failure-trend', '2026-11-20T12:00:00+08:00')
+    t67g, t67h = tok67(l67g), tok67(l67h)
+    ok('AC-RUN67', t67g.get('bad_days') == '2026-11-20'
+       and t67h.get('bad_days') == '2026-11-20'
+       and t67g.get('days') == '2' and '2026-11-20:0' in t67g.get('series', '')
+       and t67h.get('today') == '0',
+       'the claim and the count are separate facts on one line: the day is '
+       'named by the broken row AND counted from its good row')
+
+    # Arm 5: one file, two faces, one word.
+    ok('AC-RUN67', t67g.get('bad_days') == t67h.get('bad_days')
+       and t67a.get('bad_days') == t67b.get('bad_days'),
+       'both faces answer the same claim for the same file - a third reader '
+       'cannot disagree about who named which day')
+
+    # Arm 6: the two-value reader keeps its contract (about thirty callers
+    # unpack it and are not touched this round).
+    p67 = RUN.failure_day_path(r67a)
+    pair67 = RUN.read_failure_days(p67)
+    ext67 = RUN.read_failure_days_ext(p67)
+    ok('AC-RUN67', isinstance(pair67, tuple) and len(pair67) == 2
+       and pair67[1] == ext67[1] == 1 and list(ext67[2]) == ['2026-11-20']
+       and RUN.read_failure_days(os.path.join(r67a, 'nope.jsonl')) == ([], 0),
+       'the shipped reader still answers (rows, bad), the extended one adds the '
+       'claim, and a missing file is still zero of everything')
+
+    # Arm 7: pure display - two runs byte-identical, the world untouched.
+    before67 = tree66(r67a)
+    x67 = face66(r67a, '--failure-days', '2026-11-20T12:00:00+08:00')[1]
+    y67 = face66(r67a, '--failure-days', '2026-11-20T12:00:00+08:00')[1]
+    xt67 = face66(r67a, '--failure-trend', '2026-11-20T12:00:00+08:00')[1]
+    yt67 = face66(r67a, '--failure-trend', '2026-11-20T12:00:00+08:00')[1]
+    ok('AC-RUN67', x67 == y67 and xt67 == yt67 and tree66(r67a) == before67,
+       'naming a claim writes nothing: same line twice and zero bytes moved')
+
+    # Arm 8: source - only a format-checked day can be named, the rejected row
+    # is carried by the one parse pass, and the side channel stays out of it.
+    with io.open(os.path.join(ROOT, 'tools', 'crawl_runner.py'),
+                 'r', encoding='utf-8') as fh:
+        src67 = fh.read()
+
+    def body67(name):
+        i67 = src67.find('def %s(' % name)
+        j67 = src67.find('\ndef ', i67 + 1)
+        return src67[i67:j67 if j67 > 0 else len(src67)]
+
+    ok('AC-RUN67', '_usable_day(day)' in body67('read_failure_days_ext')
+       and 'yield n, why, row' in body67('_json_lines')
+       and 'bad_days' not in body67('summarize_failures')
+       and 'bad_days' not in body67('_summary_from_rows')
+       and 'bad_days' in body67('summarize_failure_trend'),
+       'the day is named only after _usable_day, the parse pass carries the '
+       'rejected row instead of dropping it, the trend reads the same extended '
+       'pass, and the side-channel face does not grow this word')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

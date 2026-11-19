@@ -1,0 +1,11 @@
+SUITE twice rc=0/0 identical=True lines=449
+QA-LOG crawl-runner-R3050.log rc=0 QA-LOG OK name=crawl-runner-R3050.log dialect=utf-8/lf bytes=58524
+QA-LOG probe-R3050.log rc=0 QA-LOG OK name=probe-R3050.log dialect=utf-8/lf bytes=1573
+QA-LOG demo-R3050.log rc=0 QA-LOG OK name=demo-R3050.log dialect=utf-8/lf bytes=5335
+QA-LOG negctl-and-gates-R3050.log rc=0 QA-LOG OK name=negctl-and-gates-R3050.log dialect=utf-8/lf bytes=1116
+QA-LOG leg-crawl-runner-R3050.log rc=0 QA-LOG OK name=leg-crawl-runner-R3050.log dialect=utf-8/lf bytes=347
+QA-LOG leg-stl-siblings-R3050.log rc=0 QA-LOG OK name=leg-stl-siblings-R3050.log dialect=utf-8/lf bytes=755
+NEG honest rc=0 answer={"W1_bad_only_day": {"bad_days": ["2026-11-20"], "days": 1, "face_bad_days": ["2026-11-20"], "usable": 1}, "W2_unusable_day": {"bad_days": [], "days": 1, "face_bad_days": [], "usable": 1}}
+NEG A_drop_rejected_row differs_on=['W1_bad_only_day'] caught=True answer={"W1_bad_only_day": {"bad_days": [], "days": 1, "face_bad_days": [], "usable": 1}, "W2_unusable_day": {"bad_days": [], "days": 1, "face_bad_days": [], "usable": 1}}
+NEG B_no_format_check differs_on=['W2_unusable_day'] caught=True answer={"W1_bad_only_day": {"bad_days": ["2026-11-20"], "days": 1, "face_bad_days": ["2026-11-20"], "usable": 1}, "W2_unusable_day": {"bad_days": ["2026/11/20"], "days": 1, "face_bad_days": ["2026/11/20"], "usable": 1}}
+NEG C_claim_into_count differs_on=['W1_bad_only_day'] caught=True answer={"W1_bad_only_day": {"bad_days": ["2026-11-20"], "days": 2, "face_bad_days": ["2026-11-20"], "usable": 2}, "W2_unusable_day": {"bad_days": [], "days": 1, "face_bad_days": [], "usable": 1}}

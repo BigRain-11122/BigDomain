@@ -1,0 +1,31 @@
+== W1_bad_only_day :: --failure-days rc=0
+CRAWL-FAILURE-DAYS days=1 bad=1 bad_days=2026-11-20 first=2026-11-19 last=2026-11-19 dropped=none series=2026-11-19:2 bytes=91 size_gate=0.0001% gate_ref=100MB series_limit=7 series_shown=1 series_outside=0 window_rows=1 window_head=2026-11-19
+== W1_bad_only_day :: --failure-trend rc=0
+CRAWL-FAILURE-TREND days=1 today=absent prev=2 mean=2 delta=none worst=2026-11-19:2 recurring=0 sources=0 bad=1 bad_days=2026-11-20 evidence=history kind=none recur=none cov=2026-11-19..2026-11-19 wcov=1/7 newest_src=none since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=none rcov=none day=2026-11-20
+CHECK W1_bad_only_day: days_bad_days='2026-11-20' trend_bad_days='2026-11-20' same=True failures_has_key=False
+== W2_wrong_type :: --failure-days rc=0
+CRAWL-FAILURE-DAYS days=1 bad=1 bad_days=2026-11-20 first=2026-11-19 last=2026-11-19 dropped=none series=2026-11-19:2 bytes=104 size_gate=0.0001% gate_ref=100MB series_limit=7 series_shown=1 series_outside=0 window_rows=1 window_head=2026-11-19
+== W2_wrong_type :: --failure-trend rc=0
+CRAWL-FAILURE-TREND days=1 today=absent prev=2 mean=2 delta=none worst=2026-11-19:2 recurring=0 sources=0 bad=1 bad_days=2026-11-20 evidence=history kind=none recur=none cov=2026-11-19..2026-11-19 wcov=1/7 newest_src=none since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=none rcov=none day=2026-11-20
+CHECK W2_wrong_type: days_bad_days='2026-11-20' trend_bad_days='2026-11-20' same=True failures_has_key=False
+== W3_no_day :: --failure-days rc=0
+CRAWL-FAILURE-DAYS days=1 bad=1 bad_days=none first=2026-11-19 last=2026-11-19 dropped=none series=2026-11-19:2 bytes=83 size_gate=0.0001% gate_ref=100MB series_limit=7 series_shown=1 series_outside=0 window_rows=1 window_head=2026-11-19
+== W3_no_day :: --failure-trend rc=0
+CRAWL-FAILURE-TREND days=1 today=absent prev=2 mean=2 delta=none worst=2026-11-19:2 recurring=0 sources=0 bad=1 bad_days=none evidence=history kind=none recur=none cov=2026-11-19..2026-11-19 wcov=1/7 newest_src=none since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=none rcov=none day=2026-11-20
+CHECK W3_no_day: days_bad_days='none' trend_bad_days='none' same=True failures_has_key=False
+== W4_not_json :: --failure-days rc=0
+CRAWL-FAILURE-DAYS days=1 bad=1 bad_days=none first=2026-11-19 last=2026-11-19 dropped=none series=2026-11-19:2 bytes=91 size_gate=0.0001% gate_ref=100MB series_limit=7 series_shown=1 series_outside=0 window_rows=1 window_head=2026-11-19
+== W4_not_json :: --failure-trend rc=0
+CRAWL-FAILURE-TREND days=1 today=absent prev=2 mean=2 delta=none worst=2026-11-19:2 recurring=0 sources=0 bad=1 bad_days=none evidence=history kind=none recur=none cov=2026-11-19..2026-11-19 wcov=1/7 newest_src=none since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=none rcov=none day=2026-11-20
+CHECK W4_not_json: days_bad_days='none' trend_bad_days='none' same=True failures_has_key=False
+== W5_claim_also_named :: --failure-days rc=0
+CRAWL-FAILURE-DAYS days=2 bad=1 bad_days=2026-11-20 first=2026-11-19 last=2026-11-20 dropped=none series=2026-11-19:2,2026-11-20:0 bytes=161 size_gate=0.0002% gate_ref=100MB series_limit=7 series_shown=2 series_outside=0 window_rows=2 window_head=2026-11-20
+== W5_claim_also_named :: --failure-trend rc=0
+CRAWL-FAILURE-TREND days=2 today=0 prev=2 mean=1 delta=-2 worst=2026-11-19:2 recurring=0 sources=0 bad=1 bad_days=2026-11-20 evidence=history kind=none recur=none cov=2026-11-19..2026-11-20 wcov=2/7 newest_src=none since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=none rcov=none day=2026-11-20
+CHECK W5_claim_also_named: days_bad_days='2026-11-20' trend_bad_days='2026-11-20' same=True failures_has_key=False
+== W6_healthy :: --failure-days rc=0
+CRAWL-FAILURE-DAYS days=2 bad=0 bad_days=none first=2026-11-19 last=2026-11-20 dropped=none series=2026-11-19:2,2026-11-20:0 bytes=140 size_gate=0.0001% gate_ref=100MB series_limit=7 series_shown=2 series_outside=0 window_rows=2 window_head=2026-11-20
+== W6_healthy :: --failure-trend rc=0
+CRAWL-FAILURE-TREND days=2 today=0 prev=2 mean=1 delta=-2 worst=2026-11-19:2 recurring=0 sources=0 bad=0 bad_days=none evidence=history kind=none recur=none cov=2026-11-19..2026-11-20 wcov=2/7 newest_src=none since_ok=unmeasured flips=unmeasured pending=none pending_src=none pending_age_d=none pending_age_min_d=none pending_age_med_d=none pending_old=none pending_old_age_d=none pending_old_age_min_d=none fcov=none rcov=none day=2026-11-20
+CHECK W6_healthy: days_bad_days='none' trend_bad_days='none' same=True failures_has_key=False
+PURE two_runs_identical=True tree_bytes_unchanged=True

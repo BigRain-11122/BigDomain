@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-20 R3049 PRODUCT+ENGINEERING: the two failure faces that window by a day now say which day. R3048 made every clock face resolve the right day, and both readers still printed NO day word - `today=` is a count, `recent7=` counts over a head that was computed and dropped - so a reader met `today=absent` with nothing on the line naming which day was absent. tools/crawl_runner.py now returns `day` from _summary_from_rows and summarize_failure_trend and prints ` day=<window head>` at the tail of both lines: the SAME word --snapshot-failures already prints, for the same fact (the day the window opens at), so a person meets one word meaning one thing instead of a fifth day token meaning a fifth thing. `today=` stays a count and sits 25 tokens away, so the pair cannot be read as two todays.",
+    "current": "2026-11-20 R3050 PRODUCT+ENGINEERING: the day a broken history row CLAIMS is now a name on the line instead of a byte the parser threw away. The probe measured it first: _json_lines answered None for a row that was valid JSON but failed a field check, so a history holding a clean 11-19 row and {\"day\": \"2026-11-20\"} read days=1 bad=1 on both faces with no day anywhere - --failure-days-bad named line 2 and the reason, never the day. tools/crawl_runner.py now carries the parsed row through the rejection, read_failure_days_ext answers (rows, bad, bad_days) from that single pass while read_failure_days keeps its two-value contract, and both faces print bad_days=<d1,d2|none> beside bad= - only days that pass _usable_day, never added to days=/today=/series=.",
     "do": "R3005 measured, in order: the PIN row was written in src/os/backlog.md BEFORE any code byte moved, and the read-only probe tmp/probe_R3005.py -> qa/probe-R3005.log (682B, 12 lines, utf-8/lf, six private worlds, zero sockets) ran BEFORE the pin. It measured: (1) three-source window answers for one source only; (2) recur and the pending count are independent in BOTH directions - recur=(0,0) with one judged source still gone, and recur=(2,4) with nothing pending when both came back; (3) the queue head's own suggested numerator (since_ok != 'yes') counts a source whose newest failure is later than every record row as pending, reviving exactly the R3004 conflation at aggregate level, so the numerator counts 'no' only and unmeasured sits in neither number; (4) an absent record leaves every source unmeasured, so zero-of-zero had to print none rather than 0/0; (5) 13 arms read the trend line, three pin exact key sets, and a multi-source world still printed exactly one line, which is why per-source lines were refused. AC-RUN22 (seven arms) was pinned before the code; three existing key-set arms were widened by exactly the one new key, disclosed as a criterion following its field rather than a loosening.",
     "last_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\live-sandbox.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/demo-R3048.log (1989B, 2026-11-20)",
-    "latest_evidence": "qa/demo-R3048.log (1989B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/crawl-runner-R3050.log (58524B, 2026-11-20)",
+    "latest_evidence": "qa/crawl-runner-R3050.log (58524B, 2026-11-20)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3050] next window (<=48h): (0) MAIN — **只有坏行的那一天，两张面都读成\"没有这一天\"**：`--failure-days` 印 `bad=1` 而 `days=0`，`--failure-trend` 也只会说这一天不存在——两个读者都看得见\"有一行坏了\"，却没有任何一个字说出**它自称是哪一天**（carried: a day whose only row is malformed still reads silent on BOTH faces）。下一轮先量（只读）：①坏行的 `day=` 字段在盘上是否仍可解析、是否与好行的日格式同域；②把它命名出来会不会让\"那一天没问题\"误读（合法性与计数必须分开说）；③要不要为此在日面加一个 `bad_days=` 名单，还是只在 `bad=` 旁印出所声称的日。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law rather than a measured optimum, `series_file_order=day` is a constant on healthy lines, the day law is the machine's local zone, rows written under another offset still truncate their (truncated)",
-    "next_milestone_due": "2026-11-22T01:16:23+08:00",
-    "updated_at": "2026-11-20T01:16:23+08:00"
+    "next_milestone": "[R3051] next window (<=48h): (0) MAIN — **侧通道的坏行同样沉默**：`--failures` 印 `bad=<n>`，`--pending-old-bad` 只给行号与理由——一条 JSON 能解析、`failed_at` 是干净 `2026-11-20` 却缺 `error` 的行，它自称的那一天在两张面上都没有名字（R3050 只修了日历史这一面）。下一轮先量（只读）：①侧通道坏行的 `failed_at` 是否与好行同域、过 `_usable_day` 后能否安全打印（与 `bad_days` 同一律）；②`--failures` 行已有 `recent7=`/`day=`，再加一个名字会不会与窗口日读混（R3000 噪声律）；③若加，是复用 `bad_days=` 还是另立一个词——同一个文件家族里两套词会不会让读者以为两者同源。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law rather than a measured optimum, `series_file_order=day` is a constant on healthy lines, the day law is the machine's local zone, rows written under another offset still (truncated)",
+    "next_milestone_due": "2026-11-22T01:37:13+08:00",
+    "updated_at": "2026-11-20T01:37:13+08:00"
   },
-  "current": "2026-11-20 R3049 PRODUCT+ENGINEERING: the two failure faces that window by a day now say which day. R3048 made every clock face resolve the right day, and both readers still printed NO day word - `today=` is a count, `recent7=` counts over a head that was computed and dropped - so a reader met `today=absent` with nothing on the line naming which day was absent. tools/crawl_runner.py now returns `day` from _summary_from_rows and summarize_failure_trend and prints ` day=<window head>` at the tail of both lines: the SAME word --snapshot-failures already prints, for the same fact (the day the window opens at), so a person meets one word meaning one thing instead of a fifth day token meaning a fifth thing. `today=` stays a count and sits 25 tokens away, so the pair cannot be read as two todays.",
+  "current": "2026-11-20 R3050 PRODUCT+ENGINEERING: the day a broken history row CLAIMS is now a name on the line instead of a byte the parser threw away. The probe measured it first: _json_lines answered None for a row that was valid JSON but failed a field check, so a history holding a clean 11-19 row and {\"day\": \"2026-11-20\"} read days=1 bad=1 on both faces with no day anywhere - --failure-days-bad named line 2 and the reason, never the day. tools/crawl_runner.py now carries the parsed row through the rejection, read_failure_days_ext answers (rows, bad, bad_days) from that single pass while read_failure_days keeps its two-value contract, and both faces print bad_days=<d1,d2|none> beside bad= - only days that pass _usable_day, never added to days=/today=/series=.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,11 +41,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3049 PRODUCT+ENGINEERING: the two failure faces that window by a day now say which day. R3048 made every clock face resolve the right day, and both readers still printed NO day word - `today=` is a count, `recent7=` counts over a head that was computed and dropped - so a reader met `today=absent` with nothing on the line naming which day was absent. tools/crawl_runner.py now returns `day` from _summary_from_rows and summarize_failure_trend and prints ` day=<window head>` at the tail of both lines: the SAME word --snapshot-failures already prints, for the same fact (the day the window opens at), so a person meets one word meaning one thing instead of a fifth day token meaning a fifth thing. `today=` stays a count and sits 25 tokens away, so the pair cannot be read as two todays.",
-  "export_ts": "2026-11-20T01:16:23+08:00",
+  "do": "2026-11-20 R3050 PRODUCT+ENGINEERING: the day a broken history row CLAIMS is now a name on the line instead of a byte the parser threw away. The probe measured it first: _json_lines answered None for a row that was valid JSON but failed a field check, so a history holding a clean 11-19 row and {\"day\": \"2026-11-20\"} read days=1 bad=1 on both faces with no day anywhere - --failure-days-bad named line 2 and the reason, never the day. tools/crawl_runner.py now carries the parsed row through the rejection, read_failure_days_ext answers (rows, bad, bad_days) from that single pass while read_failure_days keeps its two-value contract, and both faces print bad_days=<d1,d2|none> beside bad= - only days that pass _usable_day, never added to days=/today=/series=.",
+  "export_ts": "2026-11-20T01:37:13+08:00",
   "latest_artifact": "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
-  "latest_evidence": "qa/demo-R3048.log (1989B, 2026-11-20)",
-  "next_milestone": "[R3050] next window (<=48h): (0) MAIN — **只有坏行的那一天，两张面都读成\"没有这一天\"**：`--failure-days` 印 `bad=1` 而 `days=0`，`--failure-trend` 也只会说这一天不存在——两个读者都看得见\"有一行坏了\"，却没有任何一个字说出**它自称是哪一天**（carried: a day whose only row is malformed still reads silent on BOTH faces）。下一轮先量（只读）：①坏行的 `day=` 字段在盘上是否仍可解析、是否与好行的日格式同域；②把它命名出来会不会让\"那一天没问题\"误读（合法性与计数必须分开说）；③要不要为此在日面加一个 `bad_days=` 名单，还是只在 `bad=` 旁印出所声称的日。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law rather than a measured optimum, `series_file_order=day` is a constant on healthy lines, the day law is the machine's local zone, rows written under another offset still truncate their (truncated)",
+  "latest_evidence": "qa/crawl-runner-R3050.log (58524B, 2026-11-20)",
+  "next_milestone": "[R3051] next window (<=48h): (0) MAIN — **侧通道的坏行同样沉默**：`--failures` 印 `bad=<n>`，`--pending-old-bad` 只给行号与理由——一条 JSON 能解析、`failed_at` 是干净 `2026-11-20` 却缺 `error` 的行，它自称的那一天在两张面上都没有名字（R3050 只修了日历史这一面）。下一轮先量（只读）：①侧通道坏行的 `failed_at` 是否与好行同域、过 `_usable_day` 后能否安全打印（与 `bad_days` 同一律）；②`--failures` 行已有 `recent7=`/`day=`，再加一个名字会不会与窗口日读混（R3000 噪声律）；③若加，是复用 `bad_days=` 还是另立一个词——同一个文件家族里两套词会不会让读者以为两者同源。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law rather than a measured optimum, `series_file_order=day` is a constant on healthy lines, the day law is the machine's local zone, rows written under another offset still (truncated)",
   "outs": [
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
@@ -168,7 +168,7 @@
   },
   "results": [
     [
-      "3048",
+      "3050",
       "OSLoop 执行 tick"
     ]
   ],
@@ -181,15 +181,15 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 441,
+    "log_lines_in_window": 456,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 64,
+    "substantive_non_idle_mention_lines": 66,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 473635
+  "state_bytes": 481130
 }

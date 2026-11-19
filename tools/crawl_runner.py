@@ -665,6 +665,24 @@ tokens away, so the pair cannot be read as two "todays". The failures face
 prints the head it windows by, so `newest=` (an older stamp, measured three
 days back) can no longer pass for "today".
 
+THE DAY A BROKEN ROW CLAIMS (R3050, measured first - qa/probe-R3050.log): the
+history's unusable rows were counted (`bad=`) and, until this round, thrown
+away at parse time - `_json_lines` answered None for a row that was valid JSON
+but failed a field check. Measured: a history holding a clean 11-19 row and
+`{"day": "2026-11-20"}` (no on_day) read days=1 bad=1 on BOTH faces, and the
+day that row names appeared on no key at all; `--failure-days-bad` named line 2
+and the reason but never the day. Both faces now carry `bad_days=` beside
+`bad=`: the days unusable rows CLAIM, sorted and de-duplicated, printed only
+after `_usable_day` accepts them (a JSON decode failure or a row with no day
+claims nothing, because a broken line is never guessed into a day), and `none`
+when nothing is claimed. It is a NAME, not a count: a claimed day is never
+added to days=/in_window=/today=/series=, so a day whose only row is broken
+still reads today=absent, and a day that also has a good row is named by the
+broken row while the good row still supplies the count - the two facts sit on
+one line without either explaining the other. The same single read serves both
+faces (read_failure_days_ext; read_failure_days keeps its two-value contract),
+so a claim and a count can never come from two different snapshots of the file.
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1126,7 +1144,15 @@ def _json_lines(path, kind_of_row):
                 continue
             why = kind_of_row(row)
             if why:
-                yield n, why, None
+                # R3050: the PARSED row travels with the rejection. It used to
+                # be dropped here, so a row that named its own day
+                # ({"day": "2026-11-20"}) and failed only on another field
+                # reached no reader at all - measured, qa/probe-R3050.log P1:
+                # the day was gone before any face could print it. The dict is
+                # never echoed as text (the R3018/R3019 law); a reader may only
+                # print a value that passes a format check of its own
+                # (_usable_day).
+                yield n, why, row
                 continue
             yield n, None, row
 
@@ -1395,6 +1421,45 @@ def summarize_failures(path, day, window_days=7):
     return out
 
 
+def read_failure_days_ext(path):
+    """(rows, bad, bad_days) for the daily history - the one parse pass.
+
+    R3050 WHY (measured before this existed - qa/probe-R3050.log P1): a row
+    that failed on ONE field ("on_day" missing while "day" is a clean
+    "2026-11-20") was counted in `bad` and then dropped entirely, so the day it
+    claimed reached no face at all: `--failure-days` read days=0 and both
+    readers said the day did not exist. `bad_days` is that claim, sorted and
+    de-duplicated, and ONLY days that pass _usable_day are named - a JSON
+    decode failure or a row with no day contributes nothing, because inventing
+    a day from unparseable text is the one thing a reader must never do.
+
+    A day that also has a usable row still appears here, and that was decided by
+    measurement rather than taste: in that world the face reads days=2 beside
+    bad=1, and subtracting the named day would leave bad_days=none - so the
+    person repairing the file would learn that a line is broken but still not
+    which day it claims, which is the very defect this round closes. The claim
+    and the count are different facts (the day is counted from its good row in
+    `rows`); nothing here adds a claimed day to any count.
+
+    The `read` value that already comes from this file is shared, not re-read
+    (R3025): read_failure_days delegates here, so the ~30 callers that unpack
+    two values keep their contract and one read still serves every consumer.
+    """
+    rows = []
+    bad = 0
+    claimed = set()
+    for _n, why, row in _json_lines(path, _failure_day_row_why):
+        if why is None:
+            rows.append(row)
+            continue
+        bad += 1
+        if isinstance(row, dict):
+            day = row.get('day')
+            if _usable_day(day):
+                claimed.add(str(day)[:10])
+    return rows, bad, sorted(claimed)
+
+
 def read_failure_days(path):
     """(rows, bad) for the daily history; a missing file is zero rows.
 
@@ -1402,14 +1467,12 @@ def read_failure_days(path):
     the history's own field check, so its `bad` count and the lines named by
     read_failure_day_bad_lines come from one pass (the same law the side channel
     follows since R3018) instead of two parsers that could drift.
+
+    R3050: the pass itself lives in read_failure_days_ext, which also returns
+    the days unusable rows claim; this wrapper keeps the two-value contract
+    every existing caller unpacks.
     """
-    rows = []
-    bad = 0
-    for _n, why, row in _json_lines(path, _failure_day_row_why):
-        if why is None:
-            rows.append(row)
-        else:
-            bad += 1
+    rows, bad, _bad_days = read_failure_days_ext(path)
     return rows, bad
 
 
@@ -1544,8 +1607,17 @@ def summarize_failure_days(path, limit=7, read=None, series_days=None):
     pairs print - two separate quantities, two separate words - and the
     selection travels as `series_counts` so the header cannot recount it
     differently. Left None (the default), the tail law is untouched.
+
+    R3050: `read` may also be the three-value tuple read_failure_days_ext
+    returns, in which case `bad_days` (the days unusable rows claim) travels
+    into the summary. A two-value tuple leaves it None - unmeasured by THAT
+    read, never printed as "nothing claimed".
     """
-    rows, bad = read_failure_days(path) if read is None else read
+    if read is None:
+        rows, bad, bad_days = read_failure_days_ext(path)
+    else:
+        rows, bad = read[0], read[1]
+        bad_days = read[2] if len(read) > 2 else None
     counts = None
     if series_days is None:
         tail = rows[-max(1, int(limit)):]
@@ -1555,7 +1627,7 @@ def summarize_failure_days(path, limit=7, read=None, series_days=None):
         series = selection['rows']
         counts = {key: selection[key] for key in
                   ('limit', 'shown', 'outside', 'window_rows')}
-    out = {'days': len(rows), 'bad': bad,
+    out = {'days': len(rows), 'bad': bad, 'bad_days': bad_days,
            'first': (rows[0].get('day') if rows else None),
            'last': (rows[-1].get('day') if rows else None),
            'dropped': None,
@@ -2940,7 +3012,9 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     bucket name so the answer is deterministic.
     """
     head_day, usable, threshold = _window_start(day, window_days)
-    rows, hbad = read_failure_days(history_path)
+    # R3050: the same single pass also yields the days unusable rows claim, so
+    # this face and --failure-days name the same claim from the same read.
+    rows, hbad, bad_days = read_failure_days_ext(history_path)
     span = [r for r in rows
             if not usable
             or threshold <= str(r.get('day') or '')[:10] <= head_day]
@@ -3155,6 +3229,12 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # empty or holds no usable row.
     fcov = _side_coverage(failures_path)
     return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
+            # R3050: `bad=` answers HOW MANY history rows are unusable, never
+            # WHICH day they claim - measured, a history whose only row for a
+            # day failed on one field read days=0 and today=absent, and the day
+            # itself appeared on no key (qa/probe-R3050.log). These are NAMES,
+            # not counts: nothing is added to days=/in_window=/today=.
+            'bad_days': bad_days,
             # R3049: `today=` answers HOW MANY, never WHICH DAY - measured on a
             # history ending yesterday, the line read today=absent and named no
             # day at all (qa/probe-R3049.log).
@@ -3365,11 +3445,15 @@ def main(argv=None):
                          'window opens at as day=; gates nothing)')
     ap.add_argument('--failure-days', dest='failure_days', action='store_true',
                     help='print the daily failure-count history and exit '
-                         '(a display series; gates nothing)')
+                         '(a display series; bad= is HOW MANY rows are '
+                         'unusable and bad_days= is WHICH DAYS they claim, '
+                         'never added to days= or series=; gates nothing)')
     ap.add_argument('--failure-trend', dest='failure_trend', action='store_true',
                     help='print the count trend joined with per-day source '
                          'recurrence and exit (a display line; today= is HOW '
-                         'MANY, day= is WHICH DAY; gates nothing)')
+                         'MANY, day= is WHICH DAY, bad= is HOW MANY history '
+                         'rows are unusable and bad_days= is WHICH DAYS they '
+                         'claim; gates nothing)')
     ap.add_argument('--pending-old-list', dest='pending_old_list',
                     action='store_true',
                     help='print the out-of-window sources that never came '
@@ -3518,7 +3602,9 @@ def main(argv=None):
                            summary['newest_kind'], summary['day']))
         return 0
     if args.failure_days:
-        day_read = read_failure_days(failure_day_path(args.root))
+        # R3050: the one read also names the days unusable rows claim, so the
+        # name and the count come from the same bytes on disk.
+        day_read = read_failure_days_ext(failure_day_path(args.root))
         series = summarize_failure_days(failure_day_path(args.root), args.days,
                                         day_read, args.series_days)
         pairs = ','.join('%s:%s' % (d, n) for d, n in series['series'])
@@ -3528,11 +3614,13 @@ def main(argv=None):
         else:
             counts = series['series_counts']
 
-        body = ('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
-                'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB '
-                'series_limit=%d series_shown=%d series_outside=%d '
-                'window_rows=%d'
-                % (series['days'], series['bad'], series['first'] or 'none',
+        body = ('CRAWL-FAILURE-DAYS days=%d bad=%d bad_days=%s first=%s '
+                'last=%s dropped=%s series=%s bytes=%d size_gate=%.4f%% '
+                'gate_ref=%dMB series_limit=%d series_shown=%d '
+                'series_outside=%d window_rows=%d'
+                % (series['days'], series['bad'],
+                   ','.join(day_read[2]) or 'none',
+                   series['first'] or 'none',
                    series['last'] or 'none',
                    'none' if series['dropped'] is None else series['dropped'],
                    pairs or 'none', series['bytes'],
@@ -3664,7 +3752,8 @@ def main(argv=None):
         fcov_txt = ('none' if trend['fcov'] is None
                     else '%s..%s' % trend['fcov'])
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
-              'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
+              'worst=%s recurring=%d sources=%d bad=%d bad_days=%s '
+              'evidence=%s kind=%s '
               'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
               'pending=%s pending_src=%s pending_age_d=%s '
               'pending_age_min_d=%s pending_age_med_d=%s pending_old=%s '
@@ -3672,7 +3761,9 @@ def main(argv=None):
               'day=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
-                 trend['sources'], trend['bad'], trend['evidence'], kind_txt,
+                 trend['sources'], trend['bad'],
+                 ','.join(trend['bad_days']) or 'none',
+                 trend['evidence'], kind_txt,
                  recur_txt, cov_txt, wcov_txt,
                  trend['newest_src'] or 'none', trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
