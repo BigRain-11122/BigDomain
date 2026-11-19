@@ -4752,8 +4752,10 @@ SUITES = [
     # series_dropped_from so the cap names the day it cut back to, 59 -> 60;
     # R3044 adds series_dropped_shared and cuts in day order, 60 -> 61.
     # R3046 names the default face's window anchor, 62 -> 63.
+    # R3047 makes the faces' clock an input (--at) so the suite cannot rot
+    # at midnight, 63 -> 64.
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 63),
+     os.path.join("..", "os", "test_crawl_runner.py"), 64),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

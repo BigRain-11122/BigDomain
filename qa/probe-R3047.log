@@ -1,0 +1,11 @@
+1) absolute date literals in the suite: 580 on 452 lines
+   dates pinned before August (fixed worlds that must NOT move): 8 ['2000-12-06', '2001-01-01', '2001-02-27', '2001-03-01', '2001-03-02', '2001-03-04']
+   TODAY anchored lines: 280
+
+2) wall-clock reads in the shipped runner: 2
+   L3196  stamp = fetched_at or datetime.datetime.now().astimezone().isoformat(
+   L3251  return datetime.datetime.now().astimezone().isoformat(timespec='second
+
+3) the pure display faces:
+   --failure-days         reads a clock: False
+   the four clock faces are --failures, --failure-trend, --pending-old-list, --snapshot-failures

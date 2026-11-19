@@ -620,6 +620,7 @@ into qa/ - every record lands in a per-run temp directory.
 Stdlib only, ASCII source, no clock of its own (fetched_at is passed in).
 """
 import contextlib
+import datetime
 import hashlib
 import io
 import json
@@ -638,6 +639,11 @@ import crawl_runner as RUN
 FAILS = []
 CHECKS = []
 TODAY = '2026-11-19'
+# R3047: the faces that join a saved history to "today" do read a clock,
+# so every such call below names the day it runs at instead of inheriting
+# the wall clock. Without this ten arms went red at 2026-11-20 00:00 while
+# every one of them was still right about the world it built.
+AT = TODAY + 'T23:59:00+08:00'
 PAGE_A = ('<html><head><style>.x{color:red}</style>'
           '<script>var hidden="SCRIPTTEXT";</script></head>'
           '<body><h1>Period charge</h1><p>The merchant must notify the user '
@@ -868,7 +874,7 @@ def main():
        'the summary and read_failures name the same newest row')
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        rc9 = RUN.main(['--failures', '--root', root9])
+        rc9 = RUN.main(['--failures', '--root', root9, '--at', AT])
     line9 = buf.getvalue().strip()
     ok('AC-RUN7', rc9 == 0 and 'CRAWL-FAILURES' in line9
        and 'total=3' in line9 and 'recent7=2' in line9
@@ -879,14 +885,14 @@ def main():
                        TODAY + 'T04:00:00+08:00', 'E_FETCH URLError: solo')
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        rc10 = RUN.main(['--failures', '--root', root10])
+        rc10 = RUN.main(['--failures', '--root', root10, '--at', AT])
     line10 = buf.getvalue().strip()
     ok('AC-RUN7', rc10 == 0 and 'total=1' in line10 and 'd.example' not in line10,
        '--root reads the world it is given, not the real checkout')
     root11 = world(); roots.append(root11)
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        rc11 = RUN.main(['--failures', '--root', root11])
+        rc11 = RUN.main(['--failures', '--root', root11, '--at', AT])
     line11 = buf.getvalue().strip()
     ok('AC-RUN7', rc11 == 0 and 'total=0' in line11 and 'newest=none' in line11,
        'zero failures is an honest answer with rc=0, not an error code')
@@ -989,7 +995,7 @@ def main():
                        TODAY + 'T09:00:00+08:00', 'E_FETCH URLError: solo')
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        rc14 = RUN.main(['--snapshot-failures', '--root', root14])
+        rc14 = RUN.main(['--snapshot-failures', '--root', root14, '--at', AT])
     line14 = buf.getvalue().strip()
     real_after = (os.path.getmtime(real_day) if os.path.isfile(real_day)
                   else None)
@@ -1047,7 +1053,7 @@ def main():
        'two empty faces answer absent/none instead of raising')
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        rc17 = RUN.main(['--failure-trend', '--root', root16])
+        rc17 = RUN.main(['--failure-trend', '--root', root16, '--at', AT])
     line17 = buf.getvalue().strip()
     ok('AC-RUN11', rc17 == 0 and line17.startswith('CRAWL-FAILURE-TREND')
        and 'days=0 today=absent prev=none mean=none delta=none worst=none'
@@ -1075,7 +1081,7 @@ def main():
        'two days read today=1 prev=2 delta=-1 mean=1.5, worst on the harder day')
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        rc18 = RUN.main(['--failure-trend', '--root', root16])
+        rc18 = RUN.main(['--failure-trend', '--root', root16, '--at', AT])
     line18 = buf.getvalue().strip()
     ok('AC-RUN11', rc18 == 0 and 'days=2' in line18 and 'mean=1.5' in line18
        and 'worst=2026-11-18:2' in line18 and 'recurring=1 sources=1' in line18,
@@ -1203,7 +1209,7 @@ def main():
        'a pruned side channel is NAMED and its zero sources stay zero')
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        rc22 = RUN.main(['--failure-trend', '--root', root22])
+        rc22 = RUN.main(['--failure-trend', '--root', root22, '--at', AT])
     line22 = buf.getvalue().strip()
     ok('AC-RUN13', rc22 == 0 and 'evidence=history' in line22
        and 'kind=timeout:1' in line22,
@@ -1217,7 +1223,7 @@ def main():
        'neither face answers none instead of raising')
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        rc23 = RUN.main(['--failure-trend', '--root', root23])
+        rc23 = RUN.main(['--failure-trend', '--root', root23, '--at', AT])
     line23 = buf.getvalue().strip()
     ok('AC-RUN13', rc23 == 0 and 'evidence=none kind=none' in line23,
        'the CLI prints both faces on an empty world')
@@ -1273,7 +1279,7 @@ def main():
        'a pruned side channel answers recur=None, never a fabricated 0:0')
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        rc27 = RUN.main(['--failure-trend', '--root', root27])
+        rc27 = RUN.main(['--failure-trend', '--root', root27, '--at', AT])
     line27 = buf.getvalue().strip()
     ok('AC-RUN14', rc27 == 0 and 'recur=none' in line27,
        'the printed line spells the unmeasured recurrence as none')
@@ -1297,11 +1303,11 @@ def main():
     root30 = world(); roots.append(root30)
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        rc30a = RUN.main(['--failures', '--root', root30])
+        rc30a = RUN.main(['--failures', '--root', root30, '--at', AT])
     line30a = buf.getvalue().strip()
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
-        rc30b = RUN.main(['--failure-trend', '--root', root30])
+        rc30b = RUN.main(['--failure-trend', '--root', root30, '--at', AT])
     line30b = buf.getvalue().strip()
     ok('AC-RUN14', rc30a == 0 and rc30b == 0 and 'kind=none' in line30a
        and 'recur=none' in line30b,
@@ -1357,14 +1363,14 @@ def main():
     root34 = world(); roots.append(root34)
     buf34 = io.StringIO()
     with contextlib.redirect_stdout(buf34):
-        rc34 = RUN.main(['--failure-trend', '--root', root34])
+        rc34 = RUN.main(['--failure-trend', '--root', root34, '--at', AT])
     line34 = buf34.getvalue().strip()
     ok('AC-RUN15', rc34 == 0 and 'cov=none' in line34 and 'wcov=0/7' in line34,
        'a missing history answers cov=none wcov=0/7 without raising')
 
     buf35 = io.StringIO()
     with contextlib.redirect_stdout(buf35):
-        rc35 = RUN.main(['--failure-trend', '--root', root31, '--days', '7'])
+        rc35 = RUN.main(['--failure-trend', '--root', root31, '--days', '7', '--at', AT])
     line35 = buf35.getvalue().strip()
     scan_src = ''
     scan_path = os.path.join(ROOT, 'tools', 'skills', 'bigdomain-loop-scan',
@@ -1404,7 +1410,7 @@ def main():
        'a missing side channel answers zero bytes and zero lines without raising')
     buf37 = io.StringIO()
     with contextlib.redirect_stdout(buf37):
-        rc37 = RUN.main(['--failures', '--root', root37])
+        rc37 = RUN.main(['--failures', '--root', root37, '--at', AT])
     line37 = buf37.getvalue().strip()
     ok('AC-RUN16', rc37 == 0 and 'bytes=0' in line37 and 'lines=0' in line37,
        'the CLI answers rc=0 with zero size on a world that has no side channel')
@@ -1428,7 +1434,7 @@ def main():
     keys38 = set(s38.keys())
     buf38 = io.StringIO()
     with contextlib.redirect_stdout(buf38):
-        rc38 = RUN.main(['--failures', '--root', root38])
+        rc38 = RUN.main(['--failures', '--root', root38, '--at', AT])
     line38 = buf38.getvalue().strip()
     ok('AC-RUN16', rc38 == 0
        and 'bytes=' in line38 and 'lines=' in line38
@@ -1639,7 +1645,7 @@ def main():
 
     bufA7 = io.StringIO()
     with contextlib.redirect_stdout(bufA7):
-        rcA7 = RUN.main(['--failure-trend', '--root', rootA2])
+        rcA7 = RUN.main(['--failure-trend', '--root', rootA2, '--at', AT])
     lineA7 = bufA7.getvalue().strip()
     scan_src18 = ''
     scan_path18 = os.path.join(ROOT, 'tools', 'skills', 'bigdomain-loop-scan',
@@ -1733,7 +1739,7 @@ def main():
                  'window_days'])
     bufB9 = io.StringIO()
     with contextlib.redirect_stdout(bufB9):
-        rcB9 = RUN.main(['--failure-trend', '--root', _rB2])
+        rcB9 = RUN.main(['--failure-trend', '--root', _rB2, '--at', AT])
     lineB9 = bufB9.getvalue().strip()
     ok('AC-RUN19', rcB9 == 0 and 'flips=1' in lineB9
        and 'since_ok=yes' in lineB9 and 'PASS' not in lineB9
@@ -1836,11 +1842,11 @@ def main():
     # scanner; a missing record prints none rather than dropping the field
     bufC7 = io.StringIO()
     with contextlib.redirect_stdout(bufC7):
-        rcC7 = RUN.main(['--failure-trend', '--root', _rC1])
+        rcC7 = RUN.main(['--failure-trend', '--root', _rC1, '--at', AT])
     lineC7 = bufC7.getvalue().strip()
     bufC8 = io.StringIO()
     with contextlib.redirect_stdout(bufC8):
-        rcC8 = RUN.main(['--failure-trend', '--root', _rC3])
+        rcC8 = RUN.main(['--failure-trend', '--root', _rC3, '--at', AT])
     lineC8 = bufC8.getvalue().strip()
     ok('AC-RUN20', rcC7 == 0 and 'rcov=2026-11-18..2026-11-19' in lineC7
        and rcC8 == 0 and 'rcov=none' in lineC8
@@ -1916,7 +1922,7 @@ def main():
     _rD7, tD7 = trend21([(SRC21, TODAY + 'T11:00:00+08:00', 'no-drift')], FAIL10)
     bufD7 = io.StringIO()
     with contextlib.redirect_stdout(bufD7):
-        rcD7 = RUN.main(['--failure-trend', '--root', _rD3])
+        rcD7 = RUN.main(['--failure-trend', '--root', _rD3, '--at', AT])
     lineD7 = bufD7.getvalue().strip()
     ok('AC-RUN21', tD7['since_ok'] == 'yes' and rcD7 == 0
        and 'since_ok=no' in lineD7 and 'flips=' in lineD7
@@ -2032,7 +2038,7 @@ def main():
     # arm 7: the one-line contract, the exact key set, and the scanner
     bufE7 = io.StringIO()
     with contextlib.redirect_stdout(bufE7):
-        rcE7 = RUN.main(['--failure-trend', '--root', rE1])
+        rcE7 = RUN.main(['--failure-trend', '--root', rE1, '--at', AT])
     linesE7 = [n for n in bufE7.getvalue().splitlines() if n.strip()]
     lineE7 = linesE7[0] if linesE7 else ''
     ok('AC-RUN22', rcE7 == 0 and len(linesE7) == 1
@@ -2150,7 +2156,7 @@ def main():
     # arm 7: the one-line contract and the scanner's zero-consumption premise
     bufG7 = io.StringIO()
     with contextlib.redirect_stdout(bufG7):
-        rcG7 = RUN.main(['--failure-trend', '--root', rG1])
+        rcG7 = RUN.main(['--failure-trend', '--root', rG1, '--at', AT])
     linesG7 = [n for n in bufG7.getvalue().splitlines() if n.strip()]
     lineG7 = linesG7[0] if linesG7 else ''
     ok('AC-RUN23', rcG7 == 0 and len(linesG7) == 1
@@ -2247,12 +2253,12 @@ def main():
     # arm 7: the one-line contract and the scanner's zero-consumption premise
     bufH7 = io.StringIO()
     with contextlib.redirect_stdout(bufH7):
-        rcH7 = RUN.main(['--failure-trend', '--root', rH1])
+        rcH7 = RUN.main(['--failure-trend', '--root', rH1, '--at', AT])
     linesH7 = [n for n in bufH7.getvalue().splitlines() if n.strip()]
     lineH7 = linesH7[0] if linesH7 else ''
     bufH7b = io.StringIO()
     with contextlib.redirect_stdout(bufH7b):
-        rcH7b = RUN.main(['--failure-trend', '--root', rH3])
+        rcH7b = RUN.main(['--failure-trend', '--root', rH3, '--at', AT])
     linesH7b = [n for n in bufH7b.getvalue().splitlines() if n.strip()]
     lineH7b = linesH7b[0] if linesH7b else ''
     ok('AC-RUN24', rcH7 == 0 and len(linesH7) == 1 and 'pending_age_d=4' in lineH7
@@ -2346,12 +2352,12 @@ def main():
     # arm 7: the one-line contract and the scanner's zero-consumption premise
     bufI7 = io.StringIO()
     with contextlib.redirect_stdout(bufI7):
-        rcI7 = RUN.main(['--failure-trend', '--root', rI1])
+        rcI7 = RUN.main(['--failure-trend', '--root', rI1, '--at', AT])
     linesI7 = [n for n in bufI7.getvalue().splitlines() if n.strip()]
     lineI7 = linesI7[0] if linesI7 else ''
     bufI7b = io.StringIO()
     with contextlib.redirect_stdout(bufI7b):
-        rcI7b = RUN.main(['--failure-trend', '--root', rI3])
+        rcI7b = RUN.main(['--failure-trend', '--root', rI3, '--at', AT])
     linesI7b = [n for n in bufI7b.getvalue().splitlines() if n.strip()]
     lineI7b = linesI7b[0] if linesI7b else ''
     ok('AC-RUN25', rcI7 == 0 and len(linesI7) == 1
@@ -2465,12 +2471,12 @@ def main():
     # arm 7: the one-line contract and the scanner's zero-consumption premise
     bufJ7 = io.StringIO()
     with contextlib.redirect_stdout(bufJ7):
-        rcJ7 = RUN.main(['--failure-trend', '--root', rJ1])
+        rcJ7 = RUN.main(['--failure-trend', '--root', rJ1, '--at', AT])
     linesJ7 = [n for n in bufJ7.getvalue().splitlines() if n.strip()]
     lineJ7 = linesJ7[0] if linesJ7 else ''
     bufJ7b = io.StringIO()
     with contextlib.redirect_stdout(bufJ7b):
-        rcJ7b = RUN.main(['--failure-trend', '--root', rJ5a])
+        rcJ7b = RUN.main(['--failure-trend', '--root', rJ5a, '--at', AT])
     linesJ7b = [n for n in bufJ7b.getvalue().splitlines() if n.strip()]
     lineJ7b = linesJ7b[0] if linesJ7b else ''
     ok('AC-RUN26', rcJ7 == 0 and len(linesJ7) == 1
@@ -2563,12 +2569,12 @@ def main():
     # arm 7: the one-line contract and the scanner's zero-consumption premise
     bufK7 = io.StringIO()
     with contextlib.redirect_stdout(bufK7):
-        rcK7 = RUN.main(['--failure-trend', '--root', rK1])
+        rcK7 = RUN.main(['--failure-trend', '--root', rK1, '--at', AT])
     linesK7 = [n for n in bufK7.getvalue().splitlines() if n.strip()]
     lineK7 = linesK7[0] if linesK7 else ''
     bufK7b = io.StringIO()
     with contextlib.redirect_stdout(bufK7b):
-        rcK7b = RUN.main(['--failure-trend', '--root', rK3])
+        rcK7b = RUN.main(['--failure-trend', '--root', rK3, '--at', AT])
     linesK7b = [n for n in bufK7b.getvalue().splitlines() if n.strip()]
     lineK7b = linesK7b[0] if linesK7b else ''
     ok('AC-RUN27', rcK7 == 0 and len(linesK7) == 1
@@ -2676,12 +2682,12 @@ def main():
     # arm 7: the one-line contract and the scanner's zero-consumption premise
     bufL7 = io.StringIO()
     with contextlib.redirect_stdout(bufL7):
-        rcL7 = RUN.main(['--failure-trend', '--root', rL2])
+        rcL7 = RUN.main(['--failure-trend', '--root', rL2, '--at', AT])
     linesL7 = [n for n in bufL7.getvalue().splitlines() if n.strip()]
     lineL7 = linesL7[0] if linesL7 else ''
     bufL7b = io.StringIO()
     with contextlib.redirect_stdout(bufL7b):
-        rcL7b = RUN.main(['--failure-trend', '--root', rL5])
+        rcL7b = RUN.main(['--failure-trend', '--root', rL5, '--at', AT])
     linesL7b = [n for n in bufL7b.getvalue().splitlines() if n.strip()]
     lineL7b = linesL7b[0] if linesL7b else ''
     ok('AC-RUN28', rcL7 == 0 and len(linesL7) == 1
@@ -2770,12 +2776,12 @@ def main():
     # arm 7: the one-line contract and the scanner's zero-consumption premise
     bufM7 = io.StringIO()
     with contextlib.redirect_stdout(bufM7):
-        rcM7 = RUN.main(['--failure-trend', '--root', rM1])
+        rcM7 = RUN.main(['--failure-trend', '--root', rM1, '--at', AT])
     linesM7 = [n for n in bufM7.getvalue().splitlines() if n.strip()]
     lineM7 = linesM7[0] if linesM7 else ''
     bufM7b = io.StringIO()
     with contextlib.redirect_stdout(bufM7b):
-        rcM7b = RUN.main(['--failure-trend', '--root', rM4])
+        rcM7b = RUN.main(['--failure-trend', '--root', rM4, '--at', AT])
     linesM7b = [n for n in bufM7b.getvalue().splitlines() if n.strip()]
     lineM7b = linesM7b[0] if linesM7b else ''
     ok('AC-RUN29', rcM7 == 0 and len(linesM7) == 1
@@ -2889,12 +2895,12 @@ def main():
     # arm 7: the one-line contract and the scanner's zero-consumption premise
     bufN7 = io.StringIO()
     with contextlib.redirect_stdout(bufN7):
-        rcN7 = RUN.main(['--failure-trend', '--root', rN1])
+        rcN7 = RUN.main(['--failure-trend', '--root', rN1, '--at', AT])
     linesN7 = [n for n in bufN7.getvalue().splitlines() if n.strip()]
     lineN7 = linesN7[0] if linesN7 else ''
     bufN7b = io.StringIO()
     with contextlib.redirect_stdout(bufN7b):
-        rcN7b = RUN.main(['--failure-trend', '--root', rN7])
+        rcN7b = RUN.main(['--failure-trend', '--root', rN7, '--at', AT])
     linesN7b = [n for n in bufN7b.getvalue().splitlines() if n.strip()]
     lineN7b = linesN7b[0] if linesN7b else ''
     ok('AC-RUN30', rcN7 == 0 and len(linesN7) == 1
@@ -3009,7 +3015,7 @@ def main():
                                TODAY)
     buf31b = io.StringIO()
     with contextlib.redirect_stdout(buf31b):
-        rc31b = RUN.main(['--pending-old-list', '--root', rW6])
+        rc31b = RUN.main(['--pending-old-list', '--root', rW6, '--at', AT])
     lines31b = [n for n in buf31b.getvalue().splitlines() if n.strip()]
     ok('AC-RUN31', tW5['pending_old'] is None and lW5['waiting'] == []
        and lW5['pending_old'] is None and lW6['waiting'] == []
@@ -3031,7 +3037,7 @@ def main():
     before31 = snapshot31(rW1)
     buf31 = io.StringIO()
     with contextlib.redirect_stdout(buf31):
-        rc31 = RUN.main(['--pending-old-list', '--root', rW1])
+        rc31 = RUN.main(['--pending-old-list', '--root', rW1, '--at', AT])
     after31 = snapshot31(rW1)
     lines31 = [n for n in buf31.getvalue().splitlines() if n.strip()]
     text31 = ''.join(lines31)
@@ -3082,7 +3088,7 @@ def main():
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             rc = RUN.main(['--pending-old-list', '--root', root,
-                           '--days', str(window)])
+                           '--days', str(window), '--at', AT])
         lines = [n for n in buf.getvalue().splitlines() if n.strip()]
         return rc, lines
 
@@ -3230,7 +3236,7 @@ def main():
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             rc = RUN.main(['--pending-old-list', '--root', root,
-                           '--days', str(window)])
+                           '--days', str(window), '--at', AT])
         lines = [n for n in buf.getvalue().splitlines() if n.strip()]
         return rc, lines
 
@@ -3395,7 +3401,7 @@ def main():
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             rc = RUN.main(['--pending-old-list', '--root', root,
-                           '--days', str(window)])
+                           '--days', str(window), '--at', AT])
         return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
 
     def snapshot34(root):
@@ -3555,7 +3561,7 @@ def main():
     def list35(root):
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            rc = RUN.main(['--pending-old-list', '--root', root])
+            rc = RUN.main(['--pending-old-list', '--root', root, '--at', AT])
         return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
 
     def snap35(root):
@@ -4082,7 +4088,7 @@ def main():
     def snap39(root):
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            rc = RUN.main(['--snapshot-failures', '--root', root])
+            rc = RUN.main(['--snapshot-failures', '--root', root, '--at', AT])
         return rc, buf.getvalue().strip()
 
     def tail39(head):
@@ -7168,6 +7174,113 @@ def main():
        and t63g.get('series_file_order') == 'mixed',
        'the day face does not carry the anchor because its sorted pairs '
        'already end on it, and it still names the hand edit')
+
+    # AC-RUN64 (R3047): the four faces that join a saved history to "today"
+    # read a clock, and until now that clock was hidden state - which is why
+    # ten arms of this suite went red at 2026-11-20 00:00 while every one of
+    # them was still right about the world it built (measured: stashing the
+    # R3046 files and rerunning still read the same ten red). The day is now an
+    # input (--at), and this arm pins both halves: given a day the faces run at
+    # it, and the suite itself never inherits the wall clock.
+    r64 = world()
+    roots.append(r64)
+    f64 = RUN.failure_path(r64)
+    RUN.append_failure(f64, 'https://a.example/1', TODAY + 'T01:00:00+08:00',
+                       'E_FETCH URLError: today')
+    RUN.append_failure(f64, 'https://b.example/2', '2026-08-20T10:00:00+08:00',
+                       'E_FETCH URLError: old')
+
+    def trend64(extra):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--failure-trend', '--root', r64] + list(extra))
+        return rc, buf.getvalue().strip()
+
+    # Two usable days sit inside a seven-day window that ends on TODAY, and a
+    # third day sits ninety-one days back, so moving the stamp moves the window
+    # and nothing else.
+    RUN.snapshot_failure_day(r64, '2026-11-18T20:00:00+08:00')
+    RUN.snapshot_failure_day(r64, TODAY + 'T20:00:00+08:00')
+    rc64a, line64a = trend64(['--at', AT])
+    t64a = toks57(line64a) if line64a else {}
+    rc64b, line64b = trend64(['--at', '2026-11-22T23:59:00+08:00'])
+    t64b = toks57(line64b) if line64b else {}
+    rc64c0, line64c0 = trend64(['--at', '2026-11-29T10:00:00+08:00'])
+    t64c0 = toks57(line64c0) if line64c0 else {}
+    ok('AC-RUN64', rc64a == 0 and rc64b == 0 and rc64c0 == 0
+       and t64a.get('today') == '1' and t64a.get('wcov') == '2/7'
+       and t64b.get('today') == 'absent' and t64b.get('wcov') == '2/7'
+       and t64c0.get('wcov') == '0/7',
+       'the same world read at three named days moves one day at a time: the '
+       'stamped day carries its own count, three days later it no longer names '
+       'a today and ten days later the window is empty - the clock is an '
+       'input, not hidden state')
+
+    real_at = datetime.datetime.now().astimezone().isoformat(timespec='seconds')
+    rc64c, line64c = trend64([])
+    rc64c2, line64c2 = trend64(['--at', real_at])
+    ok('AC-RUN64', rc64c == 0 and rc64c2 == 0 and line64c == line64c2,
+       'with no stamp the face still reads the local clock - naming this very '
+       'moment explicitly prints the same line, so the default was never lost')
+
+    # The pure series faces never read a clock, so the new flag must change
+    # nothing there: a day history is written once at the stamped day, then the
+    # same face is read twice with and without it.
+    RUN.snapshot_failure_day(r64, AT)
+
+    def days64(extra):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(['--failure-days', '--root', r64] + list(extra))
+        return rc, buf.getvalue()
+
+    rc64d, text64d = days64([])
+    rc64e, text64e = days64(['--at', '2026-12-31T00:00:00+08:00'])
+    ok('AC-RUN64', rc64d == 0 and rc64e == 0 and text64d == text64e
+       and bool(text64d.strip()),
+       'the pure series face ignores the stamp: the same history prints the '
+       'same bytes whatever day it is asked about')
+
+    before64 = tree_bytes(r64)
+    rc64f, text64f = days64(['--at', AT])
+    after64 = tree_bytes(r64)
+    ok('AC-RUN64', rc64f == 0 and text64f == text64d and before64 == after64,
+       'reading it again at a named day is byte-identical and writes no byte')
+
+    # The rot itself, pinned at the source: no call in this suite may reach a
+    # clock face without naming the day. A future arm that forgets reads red
+    # here instead of on whatever night the wall clock happens to move.
+    with io.open(os.path.abspath(__file__), 'r', encoding='utf-8') as fh:
+        own = fh.read()
+    missing64 = []
+    pos64 = 0
+    faces64 = ("'--failures'", "'--failure-trend'", "'--snapshot-failures'",
+               "'--pending-old-list'")
+    while True:
+        j64 = own.find('RUN.main(', pos64)
+        if j64 < 0:
+            break
+        k64 = own.find('(', j64)
+        depth64 = 0
+        while k64 < len(own):
+            if own[k64] == '(':
+                depth64 += 1
+            elif own[k64] == ')':
+                depth64 -= 1
+                if depth64 == 0:
+                    break
+            k64 += 1
+        span64 = own[j64:k64]
+        # A helper that forwards list(extra) takes its stamp from its caller;
+        # arms 1-4 above are that caller and read green only when it is named.
+        if ('list(extra)' not in span64
+                and any(f in span64 for f in faces64)
+                and "'--at'" not in span64):
+            missing64.append(own.count('\n', 0, j64) + 1)
+        pos64 = k64
+    ok('AC-RUN64', not missing64,
+       'every clock-face call in this suite names its day (unpinned lines: %s)'
+       % (missing64 or 'none'))
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

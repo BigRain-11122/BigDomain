@@ -1,0 +1,7 @@
+DEMO  stamped 11-19      today=1 wcov=2/7
+DEMO  stamped 11-22      today=absent wcov=2/7
+DEMO  stamped 11-29      today=absent wcov=0/7
+DEMO  pure --failure-days identical with/without --at: True
+NEGCTL m1 ignores stamp        -> CAUGHT
+NEGCTL m2 window never empties -> CAUGHT
+NEGCTL m3 pure face honours it -> CAUGHT

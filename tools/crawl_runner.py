@@ -3240,6 +3240,17 @@ def run(url, repo_root, body=None, fetched_at=None, timeout=20, write=False,
             'skipped': False}
 
 
+def _stamp_of(args):
+    """The stamp a clock-reading face runs at: --at when given, else the clock.
+
+    Kept in one place so the five faces that join a history to "today" cannot
+    drift apart, and so the CLI's clock is an INPUT rather than hidden state.
+    """
+    if args.at:
+        return args.at
+    return datetime.datetime.now().astimezone().isoformat(timespec='seconds')
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(
         description='Fetch one source, judge it against the stored baseline, '
@@ -3256,6 +3267,16 @@ def main(argv=None):
                     help='no-op when a usable record already names today '
                          '(safe to call from a repeating beat)')
     ap.add_argument('--timeout', type=int, default=20)
+    ap.add_argument('--at', default=None, metavar='ISO',
+                    help='the stamp the clock-reading faces run at, instead of '
+                         'the local clock. Only the faces that join a saved '
+                         'history to "today" read a clock at all -- --failures, '
+                         '--failure-trend, --pending-old-list and '
+                         '--snapshot-failures -- and each reads this value when '
+                         'given, so a world recorded on one day can be read as '
+                         'that day instead of the day it is read. The pure '
+                         'series faces (--failure-days and the rest) never read '
+                         'a clock and ignore it (display only; gates nothing)')
     ap.add_argument('--failures', action='store_true',
                     help='print the failure side channel summary and exit '
                          '(a reader over evidence; carries bytes/lines and a '
@@ -3380,6 +3401,12 @@ def main(argv=None):
                          'zero, negative and non-numeric values are refused '
                          '(read-only display; gates nothing)')
     args = ap.parse_args(argv)
+    if args.at is not None:
+        try:
+            datetime.datetime.fromisoformat(args.at)
+        except ValueError:
+            sys.stderr.write('--at: not an ISO timestamp: %r\n' % args.at)
+            return 2
     if args.series_absent and (args.series_days is None
                                or not args.failure_days):
         sys.stderr.write('series_absent applies only to --failure-days with '
@@ -3394,8 +3421,7 @@ def main(argv=None):
         sys.stderr.write('--series-absent-limit: %s\n' % absent_why)
         return 2
     if args.failures:
-        stamp = datetime.datetime.now().astimezone().isoformat(
-            timespec='seconds')
+        stamp = _stamp_of(args)
         summary = summarize_failures(failure_path(args.root), stamp, args.days)
         print('CRAWL-FAILURES total=%d recent%d=%d bad=%d urls=%d bytes=%d '
               'lines=%d size_gate=%.4f%% gate_ref=%dMB newest=%s error=%s '
@@ -3499,8 +3525,7 @@ def main(argv=None):
             print('BAD-LINE n=%d why=%s' % (item['line'], item['why']))
         return 0
     if args.pending_old_list:
-        stamp = datetime.datetime.now().astimezone().isoformat(
-            timespec='seconds')
+        stamp = _stamp_of(args)
         lst = list_pending_old(CR.record_path(args.root),
                                failure_path(args.root), stamp, args.days)
         po = lst['pending_old']
@@ -3520,8 +3545,7 @@ def main(argv=None):
                      'none' if row['age_d'] is None else row['age_d']))
         return 0
     if args.failure_trend:
-        stamp = datetime.datetime.now().astimezone().isoformat(
-            timespec='seconds')
+        stamp = _stamp_of(args)
         trend = summarize_failure_trend(failure_day_path(args.root),
                                         failure_path(args.root), stamp,
                                         args.days,
@@ -3574,8 +3598,7 @@ def main(argv=None):
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)
     if standalone_snapshot:
-        stamp = datetime.datetime.now().astimezone().isoformat(
-            timespec='seconds')
+        stamp = _stamp_of(args)
         try:
             row = snapshot_failure_day(args.root, stamp[:10], args.days)
         except Exception as exc:  # a display write must never look like a crawl
@@ -3619,7 +3642,7 @@ def main(argv=None):
     if args.snapshot_failures:
         # Runs AFTER the retrieval on purpose: a failure this very beat must be
         # in the row that names today, not in tomorrow's.
-        now = datetime.datetime.now().astimezone().isoformat(timespec='seconds')
+        now = _stamp_of(args)
         try:
             row = snapshot_failure_day(args.root, now[:10], args.days)
             print('CRAWL-FAILURE-DAY day=%s on_day=%d total=%d recent%d=%d '
