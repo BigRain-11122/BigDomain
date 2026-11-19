@@ -4720,8 +4720,9 @@ SUITES = [
     # --series-absent instead of reading like a measured zero (43 -> 44, the
     # same row). R3028 added AC-RUN45: days_present beside the gap count, so
     # present + gap = series_window (44 -> 45, the same row).
+    # R3029 adds AC-RUN46: present + repeat = window_rows (45 -> 46).
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 45),
+     os.path.join("..", "os", "test_crawl_runner.py"), 46),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

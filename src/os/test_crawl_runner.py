@@ -309,6 +309,24 @@ against itself (arm 6), and the default face stays byte-identical with no new
 token (arm 4). A `window_days=` token was refused because it could only repeat
 `series_window=` (arm 8 keeps the older absent= count intact).
 
+AC-RUN46 (R3029) grades the DIFFERENCE those two numbers left as homework.
+Measured before the change (qa/probe-R3029.log): `window_rows=` counts rows and
+`days_present=` counts days, so four rows on two days print 4 beside 2 with
+nothing on the line saying the extra two are the same days again; no token in
+the module or the suite carried that difference, the three byte-pinned
+endswith() tails are all on the DEFAULT face, and the ten len(tokens)==N arms
+belong to the trend faces rather than this tail. So `series_presence_counts()`
+also returns `repeat` (= rows inside the window beyond the first on each day
+holding a row) and `--series-absent` prints `repeat_rows=<n|none>` after
+`days_present=`, giving `days_present + repeat_rows = window_rows` beside the
+older present+gap=window invariant (arm 1). One row per day answers a measured
+zero (arm 2), an unusable head answers none rather than zero (arm 3), a 2001
+history windows against itself (arm 4), the default face stays byte-identical
+with no new token (arm 5), and the refused names plus the older absent= count
+survive (arm 6). Stated honestly: `repeat_rows` is a subtraction of two numbers
+already printed, not a new measurement; its only value is that the two
+invariants become checkable by eye.
+
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
 fixtures, so this suite never depends on a network being up and never writes
@@ -4715,6 +4733,112 @@ def main():
        and 'verdict' not in text45,
        'the new token writes no byte, never uses the counted-out days_absent= '
        'name, and keeps the two absent= occurrences the older arm counts')
+
+    # ===== AC-RUN46 (R3029): the row/day difference gets its own name =====
+    # AC-RUN46 was pinned in src/os/backlog.md BEFORE the 'repeat' key existed
+    # (qa/probe-R3029.log): rows and days printed side by side, no token said
+    # why they differ, and every byte-pinned tail sits on the default face.
+    def days46(root, extra):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = RUN.main(list(extra) + ['--root', root])
+        return rc, [n for n in buf.getvalue().splitlines() if n.strip()]
+
+    def toks46(line):
+        return dict(part.split('=', 1) for part in line.split()[1:])
+
+    r46 = world()
+    roots.append(r46)
+    p46 = hist37(r46)
+    put_days(p46, [plain_day('2026-09-20', 5), plain_day('2026-11-18', 1),
+                   plain_day('2026-11-19', 3), plain_day('2026-11-19', 1),
+                   plain_day('2026-11-19', 2)])
+    rc46, lines46 = days46(r46, ['--failure-days', '--series-days', '7',
+                                 '--series-absent'])
+    t46 = toks46(lines46[0]) if lines46 else {}
+    pure46 = RUN.series_presence_counts(RUN.read_failure_days(p46)[0], 7)
+
+    # arm 1: two repeat rows on top of two present days, and the pairs untouched
+    ok('AC-RUN46', rc46 == 0
+       and t46.get('days_present') == '2'
+       and t46.get('repeat_rows') == '2'
+       and t46.get('window_rows') == '4'
+       and int(t46['days_present']) + int(t46['repeat_rows']) == 4
+       and pure46['repeat'] == 2 and pure46['repeat'] == pure46['rows'] - pure46['present']
+       and t46.get('series')
+       == '2026-11-18:1,2026-11-19:3,2026-11-19:1,2026-11-19:2',
+       'four window rows on two present days name two repeat rows, the rows '
+       'split sums to window_rows, and the pairs keep the shape R3028 shipped')
+
+    # arm 2: one row per day is a measured zero, not a missing reading
+    r46b = world()
+    roots.append(r46b)
+    p46b = hist37(r46b)
+    put_days(p46b, [plain_day('2026-11-%02d' % d, 1) for d in range(13, 20)])
+    rc46b, lines46b = days46(r46b, ['--failure-days', '--series-days', '7',
+                                    '--series-absent'])
+    t46b = toks46(lines46b[0]) if lines46b else {}
+    ok('AC-RUN46', rc46b == 0 and t46b.get('repeat_rows') == '0'
+       and t46b.get('days_present') == '7' and t46b.get('window_rows') == '7'
+       and int(t46b['days_present']) + int(t46b['repeat_rows']) == 7,
+       'a week of one row per day answers repeat_rows=0 beside present=7 - a '
+       'measured zero, and the split still lands on all seven rows')
+
+    # arm 3: not measurable is not zero
+    r46c = world()
+    roots.append(r46c)
+    os.makedirs(os.path.join(r46c, 'qa'), exist_ok=True)
+    rc46c, lines46c = days46(r46c, ['--failure-days', '--series-days', '7',
+                                    '--series-absent'])
+    t46c = toks46(lines46c[0]) if lines46c else {}
+    empty46 = RUN.series_presence_counts([], 7)
+    ok('AC-RUN46', rc46c == 0 and t46c.get('repeat_rows') == 'none'
+       and t46c.get('days_present') == 'none'
+       and empty46['repeat'] is None and empty46['rows'] == 0,
+       'no history answers none for the difference as well as for the counts, '
+       'and the pure function invents no zero')
+
+    # arm 4: no clock - a 2001 history windows against itself
+    r46d = world()
+    roots.append(r46d)
+    p46d = hist37(r46d)
+    put_days(p46d, [plain_day('2001-01-01', 0), plain_day('2001-03-01', 1),
+                    plain_day('2001-03-05', 2)])
+    rc46d, lines46d = days46(r46d, ['--failure-days', '--series-days', '2',
+                                    '--series-absent'])
+    t46d = toks46(lines46d[0]) if lines46d else {}
+    pure46d = RUN.series_presence_counts(RUN.read_failure_days(p46d)[0], 2)
+    ok('AC-RUN46', rc46d == 0 and t46d.get('repeat_rows') == '0'
+       and t46d.get('days_present') == '1'
+       and t46d.get('series_absent') == '1'
+       and pure46d['head'] == '2001-03-05' and pure46d['repeat'] == 0,
+       'a two-day window over a 2001 history holds one row on one day: the '
+       'difference is zero and the head is the file own last day')
+
+    # arm 5: the default face is byte-identical and carries no new token
+    rc46e, lines46e = days46(r46, ['--failure-days'])
+    ok('AC-RUN46', rc46e == 0 and lines46e
+       and lines46e[0].endswith(
+           ' series_limit=7 series_shown=5 series_outside=1 window_rows=4')
+       and 'repeat_rows' not in lines46e[0],
+       'without the flag the tail is the same line R3026/R3027/R3028 shipped')
+
+    # arm 6: refused names, the counted absent= pair, and no byte written
+    before46 = tree_bytes(r46)
+    rc46f, lines46f = days46(r46, ['--failure-days', '--series-days', '7',
+                                   '--series-absent'])
+    after46 = tree_bytes(r46)
+    text46 = '\n'.join(lines46f)
+    ok('AC-RUN46', rc46f == 0 and before46 == after46 and lines46f
+       and lines46f[0].count('repeat_rows=') == 1
+       and 'repeat_days=' not in lines46f[0]
+       and 'rows_per_day=' not in lines46f[0]
+       and lines46f[0].count('absent=') == 2
+       and 'PASS' not in text46 and 'FLAG' not in text46
+       and 'verdict' not in text46,
+       'the difference appears once under its own name, the refused ratio and '
+       'days names never appear, the older absent= pair still counts two, and '
+       'no byte is written')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)

@@ -1,0 +1,5 @@
+honest reader on 3 fixtures: PASS
+rows-minus-one: CAUGHT
+whole-file: CAUGHT
+empty-is-zero: CAUGHT
+wall-clock-head: CAUGHT

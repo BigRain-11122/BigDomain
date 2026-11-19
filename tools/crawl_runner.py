@@ -281,6 +281,19 @@ which is the noise law this module already carries (R3000), and a
 `absent=` twice on the line, so a third such token would read red while every
 number stayed right.
 
+THE DIFFERENCE HAS A NAME (R3029): present and rows printed side by side still
+left "who is bigger, and why" as a subtraction the reader performs - four rows
+on two days shows 4 beside 2 and never says the extra two are the same days
+again (measured: qa/probe-R3029.log). So the same opt-in tail now also carries
+`repeat_rows=<n|none>`: window rows beyond the first on each day that holds a
+row, so `days_present + repeat_rows = window_rows` sits beside the older
+`days_present + series_absent = series_window`. It is stated as a subtraction
+of two printed numbers rather than a new measurement, and it is not a
+restatement of any other token - a `rows_per_day=` ratio and a `repeat_days=`
+name were both refused (a ratio is not a count, and "days" would put a second
+meaning on the word `days_present` already owns). Unusable head day answers
+none, never an invented zero (the absent-not-zero law, carried).
+
 FAILURE IDENTITY + REPAIR READING (R3001): the trend could say how many
 sources failed and how often, but never WHICH source failed last, nor whether
 that source had been seen succeeding since - so "same page again, and is it
@@ -1232,8 +1245,8 @@ def series_absent_days(rows, window_days=7):
 
 
 def series_presence_counts(rows, window_days=7):
-    """{window, present, rows, head} - how many of the window's DAYS hold a row
-    (R3028).
+    """{window, present, rows, repeat, head} - how many of the window's DAYS
+    hold a row, and how many of its rows are repeats (R3028/R3029).
 
     WHY (measured before this existed - qa/probe-R3028.log): R3027 named the
     silent days one by one, but "how many of the last seven days have a record
@@ -1254,13 +1267,27 @@ def series_presence_counts(rows, window_days=7):
     rows is 0 rather than a zero that would read like "nothing was recorded"
     (the R2994 absent-not-zero law, carried).
 
+    THE DIFFERENCE HAS A NAME (R3029, measured first - qa/probe-R3029.log):
+    present and rows could be read side by side and still left "who is bigger,
+    and why" as a subtraction the reader performs - four rows on two days
+    prints 4 beside 2 with nothing saying the extra two are the SAME days
+    again. `repeat` is that difference: rows inside the window beyond the first
+    on each day that holds at least one, so `present + repeat = rows` and
+    `present + gap = window` are both checkable by eye. It is a subtraction of
+    two numbers already printed, stated as such: the value is not a new
+    measurement but the only printed face of "how many rows are second-and-
+    later on a day already counted", and it is not a restatement of any other
+    token (the R3000 noise law refused `window_days=` because it would repeat
+    `series_window=`; this number appears nowhere else).
+
     DISPLAY ONLY: writes nothing, gates nothing.
     """
     width = max(1, int(window_days))
     head_day, usable, threshold = _window_start(
         (str(rows[-1].get('day') or '') if rows else ''), width)
     if not usable:
-        return {'window': width, 'present': None, 'rows': 0, 'head': None}
+        return {'window': width, 'present': None, 'rows': 0, 'repeat': None,
+                'head': None}
     days = set()
     count = 0
     for row in rows:
@@ -1269,7 +1296,7 @@ def series_presence_counts(rows, window_days=7):
             count += 1
             days.add(row_day)
     return {'window': width, 'present': len(days), 'rows': count,
-            'head': head_day}
+            'repeat': count - len(days), 'head': head_day}
 
 
 def list_failure_days_dropped(path, window_days=None):
@@ -2390,10 +2417,11 @@ def main(argv=None):
                     help='alongside --series-days N, name the calendar days in '
                          'that window with no history row at all; the header '
                          'gains series_absent=<n|none> absent=<day,...|none> '
-                         'and days_present=<n|none>, so a silent day never '
-                         'reads like a measured zero and the present/gap split '
-                         'sums to series_window (read-only display; gates '
-                         'nothing)')
+                         'days_present=<n|none> and repeat_rows=<n|none>, so a '
+                         'silent day never reads like a measured zero, the '
+                         'present/gap split sums to series_window, and the '
+                         'present/repeat split sums to window_rows (read-only '
+                         'display; gates nothing)')
     args = ap.parse_args(argv)
     if args.series_absent and (args.series_days is None
                                or not args.failure_days):
@@ -2429,11 +2457,13 @@ def main(argv=None):
             if args.series_absent:
                 gaps = series_absent_days(day_read[0], args.series_days)
                 presence = series_presence_counts(day_read[0], args.series_days)
-                tail_markers += ' series_absent=%s absent=%s days_present=%s' % (
+                tail_markers += ' series_absent=%s absent=%s days_present=%s repeat_rows=%s' % (
                     'none' if gaps['count'] is None else gaps['count'],
                     ','.join(gaps['days']) or 'none',
                     'none' if presence['present'] is None
-                    else presence['present'])
+                    else presence['present'],
+                    'none' if presence['repeat'] is None
+                    else presence['repeat'])
         print('CRAWL-FAILURE-DAYS days=%d bad=%d first=%s last=%s '
               'dropped=%s series=%s bytes=%d size_gate=%.4f%% gate_ref=%dMB '
               'series_limit=%d series_shown=%d series_outside=%d '
