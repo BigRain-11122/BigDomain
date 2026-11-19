@@ -1,0 +1,9 @@
+P1 sources=3 pending=(2, 3) judged=3 unjudged_from_arithmetic=0
+P1b sources=3 pending=(1, 2) judged=2 unjudged=1 derivable=True
+P1c sources=3 pending=(1, 1) judged=1 unjudged=2
+P2 back_today_sources=2 token=0/2 | nothing_judged_sources=2 token=none same_token=False
+P3 pending=(1, 2) newest_src=https://b.example/page since_ok=yes pending_src_named=True
+P4 pending=(1, 1) sources=2 names_A=True names_B=True key_names_none=False
+P5 keys=23 scan_mentions_runner=False scan_mentions_trend=False
+P6 live evidence=history sources=0 pending=None rcov=('2026-11-19', '2026-11-19')
+PROBE DONE worlds=7

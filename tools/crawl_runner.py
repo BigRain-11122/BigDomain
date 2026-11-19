@@ -244,6 +244,21 @@ recur=(0,0) with pending 1/1, and recur=(2,4) with pending 0/2). Printing one
 line per source was refused: the one-line contract is what the CLI, the arms and
 the scanner's zero-consumption premise rest on. Display only, no PASS/FLAG.
 
+NAMING ONE (R3006): pending=<n>/<judged> answers HOW MANY sources are still gone
+and never WHICH one, so a person had to guess where to start. The row now also
+carries pending_src= - the pending source WAITING LONGEST (its own latest failure
+stamp smallest, ties broken by url ascending so two readers never disagree), or
+none when nothing is pending. Two candidate fixes were measured before this was
+written and one was REFUSED: an unjudged=<n> field is pure arithmetic, because
+unjudged always equals sources minus the pending denominator (measured in three
+worlds reading 0, 1 and 2), so it would only restate two fields already on the
+line. The earlier premise that pending=none and "all sources came back" read the
+same was also measured FALSE (the tokens read 'none' versus '0/2'), and is
+recorded rather than repeated. What is NOT claimed: with several pending sources
+only the first is named, and an unmeasured source is never named (the R3004
+split holds - a source nobody looked after is not pending). Display only,
+no PASS/FLAG.
+
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
 
@@ -718,7 +733,7 @@ def _record_coverage(record_path):
 
 
 def _pending_sources(record_path, in_window):
-    """(sources confirmed not back, sources judged) over the whole window.
+    """(not back, judged, longest-waiting source) over the whole window.
 
     WHY (R3005): newest_src/since_ok answer for ONE source - the latest failure
     in the window - so a window with three failing pages said nothing about the
@@ -743,6 +758,14 @@ def _pending_sources(record_path, in_window):
 
     The caller turns (0, 0) into None: "zero of zero judged" would read like
     "nothing is pending" when the honest statement is "nothing was judged".
+
+    R3006 NAMES ONE OF THEM: the count said how many were still gone, never
+    which one, so a person had to guess where to start. The third value is the
+    PENDING SOURCE WAITING LONGEST - its own latest failure stamp is the
+    smallest among the pending ones, ties broken by url ascending so two
+    readers never disagree. None when nothing is pending. It is deliberately
+    NOT every pending source: naming them all needs one line per source, which
+    the one-line contract refuses. The count stays in pending=<n>/<judged>.
     """
     latest = {}
     for row in in_window or ():
@@ -754,14 +777,17 @@ def _pending_sources(record_path, in_window):
             latest[src] = stamp
     pending = 0
     judged = 0
+    waiting = []
     for src, stamp in latest.items():
         verdict = _since_ok(record_path, src, stamp)
         if verdict == 'no':
             pending += 1
             judged += 1
+            waiting.append((stamp, str(src)))
         elif verdict == 'yes':
             judged += 1
-    return (pending, judged)
+    waiting.sort()
+    return (pending, judged, waiting[0][1] if waiting else None)
 
 
 def summarize_failure_trend(history_path, failures_path, day, window_days=7,
@@ -941,10 +967,15 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
     # looked-at and never back over how many could be judged at all. None (not
     # 0/0) when nothing was judged: zero-of-zero would read as "nothing to fix".
     pending = None
+    pending_src = None
     if evidence == 'side' and in_window:
         got = _pending_sources(record_path, in_window)
         if got[1]:
-            pending = got
+            pending = (got[0], got[1])
+            # R3006: the count answers "how many", this answers "start here".
+            # One name, the pending source waiting longest - never all of them,
+            # because one line per source is what the contract refuses.
+            pending_src = got[2]
     rcov = _record_coverage(record_path)
     return {'days': len(rows), 'in_window': len(span), 'bad': hbad,
             'today': today, 'prev': prev, 'mean': mean, 'delta': delta,
@@ -953,8 +984,8 @@ def summarize_failure_trend(history_path, failures_path, day, window_days=7,
             'recur': recur, 'cov': cov, 'wcov': wcov,
             'evidence': evidence, 'kind': kind, 'kind_count': kind_count,
             'newest_src': newest_src, 'since_ok': since_ok,
-            'flips': flips, 'pending': pending, 'rcov': rcov,
-            'window_days': window_days}
+            'flips': flips, 'pending': pending, 'pending_src': pending_src,
+            'rcov': rcov, 'window_days': window_days}
 
 
 def crawled_today(repo_root, day):
@@ -1179,14 +1210,14 @@ def main(argv=None):
         print('CRAWL-FAILURE-TREND days=%d today=%s prev=%s mean=%s delta=%s '
               'worst=%s recurring=%d sources=%d bad=%d evidence=%s kind=%s '
               'recur=%s cov=%s wcov=%s newest_src=%s since_ok=%s flips=%s '
-              'pending=%s rcov=%s'
+              'pending=%s pending_src=%s rcov=%s'
               % (trend['days'], trend['today'], trend['prev'], mean_txt,
                  trend['delta'], worst_txt, trend['recurring'],
                  trend['sources'], trend['bad'], trend['evidence'], kind_txt,
                  recur_txt, cov_txt, wcov_txt,
                  trend['newest_src'] or 'none', trend['since_ok'],
                  'unmeasured' if trend['flips'] is None else trend['flips'],
-                 pending_txt, rcov_txt))
+                 pending_txt, trend['pending_src'] or 'none', rcov_txt))
         return 0
     standalone_snapshot = (args.snapshot_failures and not args.url
                            and not args.if_due)

@@ -1,0 +1,6 @@
+HONEST oldest_pending=True unmeasured_named=True tie=True keys=23
+CAUGHT M1 newest-instead-of-oldest
+CAUGHT M2 unmeasured-counted-as-pending
+CAUGHT M3 no-tie-break
+CAUGHT M4 unjudged-key-added
+NEGCTL PASS 4/4 mutants red, honest 3/3 green

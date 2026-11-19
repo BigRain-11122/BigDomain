@@ -4674,9 +4674,11 @@ SUITES = [
     # R3005 adds the WINDOW BREADTH face: pending=<no>/<judged> answers for
     # every source in the window, not only the newest one, while unmeasured
     # sources stay outside both numbers. (AC-RUN22 pinned in the R3005 PIN row
-    # before the code.)
+    # before the code.) R3006 names one pending source beside the count; an
+    # unjudged= field was refused on measurement as pure arithmetic.
+    # (AC-RUN23 pinned in the R3006 PIN row before the code.)
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 22),
+     os.path.join("..", "os", "test_crawl_runner.py"), 23),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep
