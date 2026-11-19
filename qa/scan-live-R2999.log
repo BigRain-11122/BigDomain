@@ -1,0 +1,24 @@
+[STATE] PASS tick=2999 last_order=2026-11-18 15:3x last_decision_rows=438 benchmarks_refreshed=2026-11-18 log_lines=115 state_bytes=128455 eol_ok=1
+[LEDGER] PASS lines=437 atbd_rows=0 conflict=0 lastp=P-2026-11-08-01,P-2026-10-25-08,P-2026-11-01-04
+[DEC] PASS rows=438 known_tokens=143 row_owner_tokens=131 (content-addressed row-owner; row baseline=438 secondary)
+[GORD] INFO lines=280 tbl_rows=4 atbd=0 sha16=954BB7C2A2776F7B gord_new_rows=0
+  gord_tbl_last3[-3]: | 10-16 11:2x | CEO 令三连：「机队满负荷跑 不可能产出这么慢，你肯定机制出问题了！」「为什么又是一天，你直接让C机干好不就好了，为什么没有机制去同步要求呢？你们不是已经搭好虚拟局域网吗？做不到就赶紧去把底层弄好」（**直连同步指挥律·jayredo 18h 静默问责**·O-20261016-1120·本窗认责+当场执法） | ①**病根定谳（本窗认责）**：17:1x 派 b...
+  gord_tbl_last3[-2]: | 10-16 12:41 | CEO 令：「走一次全面清理」+追加令「催 不要问我 我说过自己运转 科学决策」（**全面清理执行+催办令**·bm-a 委员会窗收口） | **①集团面已清毕**（Class-A 直清+回执台账）：atmpush 崩溃残件×12（%TEMP%·多窗遗物）+会话 tmp>7天目录×3+FluxVerse 过期日志 1 件（64B·**越界披露**：此件属产品仓 ow...
+  gord_tbl_last3[-1]: | 10-16 21:4x | CEO 令（原话）：「游戏公司全面开工，所有的项目，我赋予你们云端算力使用权限，但是要控制一下并发数量。」（**游戏公司全面开工+云端算力授权令·并发受控**·O-20261016-2145） | ①**云道授权面（严管令 v3.0 游戏面定向修订·CEO 指令=唯一变更通道执法）**=Biggame 全项目（组合清单正身=MiniGame Design 组合登记簿...
+  gord_last_line: - **2026-11-18 16:0x（bm-a 本窗｜机队配合体检·CEO 问「机队配合还有什么问题」）**：实测三项并修复一项。①**本机自驱停摆 37h 无人恢复**：`FluxGroup-StationDrive-Delivery`/`StationAgent-Delivery` 状态 Disabled（末次 11-17 05:58/06:01 rc=0），而 `machine-stat...
+[GROUPSRC] cph4/evolution-ledger.md=origin-main docs/decisions.md=origin-main docs/orders.md=origin-main | canon D-20261001-03: git fetch + git show origin/main:<path>; worktree read = fallback only
+[ORD] INFO last=2026-09-28 22:1x baseline=2026-11-18 15:3x (baseline ahead: last_order tracks group-orders tail since R1998; own tail older, no new order)
+[BENCH] PASS days=1 refreshed=2026-11-18
+[QA] PASS crawl_today=2 crawl_rows=2 crawl_bad=0 today_png=1 today_log=1 bench_age_d=1.39 bench_fresh7=True
+[HB] PASS hb_tick=2999 state_tick=2999 lag=0
+[TASKS] INFO tasks_unchecked=2 backlog_open=272 blocked_on_ceo=3 claimable=269
+[EXPORT] PASS age_h=0 export_ts=2026-11-19T09:16:44+08:00
+[TREE] FLAG dirty=15
+  git:  M docs/sandbox-suite-matrix.md
+  git:  M docs/status-export.json
+  git:  M heartbeat.txt
+  git:  M src/os/backlog.md
+  git:  M src/os/state.json
+  git:  M src/os/test_crawl_runner.py
+  git:  M src/sandbox/reconcile_all.py
+  git:  M tools/crawl_runner.py

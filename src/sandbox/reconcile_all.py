@@ -4659,8 +4659,12 @@ SUITES = [
     # R2997 adds the recurrence WEIGHT (recur=<sources>:<failures>, none when
     # the side channel is gone) and the single failure_kind() bucket shared by
     # --failures and the trend line. (AC-RUN14 pre-registered in the R2997 PIN.)
+    # R2999 adds the SIZE face --failures gained (bytes / physical lines /
+    # display-only size_gate against the group water line) and corrects the
+    # 20MB denominator that this checkout's hook never had. (AC-RUN16 pinned in
+    # the R2999 PIN row before the code.)
     ("os-crawl-runner",
-     os.path.join("..", "os", "test_crawl_runner.py"), 15),
+     os.path.join("..", "os", "test_crawl_runner.py"), 16),
     # R2126 birth-place cleanup for the sandbox worlds themselves: the
     # battery reclaims only what it just created, behind the same name /
     # signature anchors and the same rename probe the standalone sweep

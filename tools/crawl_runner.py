@@ -97,19 +97,41 @@ rotation design (current segment + archive segment + retention). The failure
 files are append-only, so that law covers them BY CATEGORY - and this repo has
 no rotation design for them, which is stated rather than implied. The measured
 reason it is not built here: qa/crawl-failure-days.jsonl is 107B per row, one
-row per day, rewritten in place on a same-day beat, so a full year is ~38.1KB
-(0.19% of the repository's 20MB per-file pre-commit gate); the side channel
-qa/crawl-failures.jsonl grows only when a crawl actually fails, and its worst
-bound at every beat failing for a year is ~9.07MB, still under that gate. With
-no reusable rotation tool in the tree and no size pressure, a second cleanup
-mechanism would be machinery without a problem - so the exemption is numeric
-and written down here instead of silently assumed. What IS fixed is the other
+row per day, rewritten in place on a same-day beat, so a full year is ~38.1KB;
+the side channel qa/crawl-failures.jsonl grows only when a crawl actually
+fails, and its worst bound at every beat failing for a year is ~9.07MB - both
+two orders of magnitude below the only per-file jsonl water line the group canon
+actually states (cph4/resource-chain.md section 3.4, world/*.jsonl, 100MB).
+CORRECTION R2999: this header previously divided those numbers by "the
+repository's 20MB per-file pre-commit gate", and that gate does not exist in
+this checkout - measured, Tools/hooks/pre-commit and Tools/hooks/pre_commit_gate.py
+carry no byte threshold at all (they gate round-freeze and evidence dialect).
+With no reusable rotation tool in the tree and no size pressure, a second
+cleanup mechanism would be machinery without a problem - so the exemption is
+numeric, anchored on a line the group canon really states, and written down
+here instead of silently assumed. What IS fixed is the other
 half: a trimmed history used to read exactly like a repo that had just started
 recording, because the line reported rows in the file and never how much of the
 requested window was observed. The trend line now carries cov=<first>..<last>
 (the history's own usable coverage) and wcov=<covered>/<requested days>, so an
 under-observed window answers "1/7" instead of pretending to be complete.
 Neither field gates: nothing turns green or red because of them.
+
+SIZE FACE (R2999): the retention exemption above was arithmetic nobody could
+check from the product, because --failures printed counts and never the BODY of
+the file it counted. That line now carries bytes= (os.path.getsize, 0 when the
+file is absent - absence is an answer, never an exception), lines= (every
+physical row splitlines() sees, so it includes malformed rows and blank rows),
+size_gate= (bytes as a percentage of SIZE_REFERENCE_BYTES, printed with four
+decimals) and gate_ref=100MB (the denominator, on the line, so no reader has to
+guess which law the percentage divides by). lines - (total+bad) is the blank-row
+count, which is why the field is counted from the file and not from the reader:
+a reader that silently skips a row shape makes the two disagree.
+DISPLAY ONLY: the percentage is not a verdict. Nothing here refuses a write,
+pages anyone or turns the scanner - no PASS/FLAG token exists on this line, and
+a file above the reference line still prints a number rather than a judgement.
+The reference is the group canon's water table line for a single append-only
+jsonl, NOT a threshold this repo enforces.
 
 DATE LAW: the caller passes fetched_at; this module never invents a day for the
 record. qa/crawl_record.py owns validation and the literal-first-ten-chars day.
@@ -136,6 +158,11 @@ FAILURE_NAME = 'crawl-failures.jsonl'
 FAILURE_DAY_DIR = 'qa'
 FAILURE_DAY_NAME = 'crawl-failure-days.jsonl'
 FAILURE_KINDS = ('timeout', 'http', 'urlerror', 'dns', 'refused', 'other')
+# R2999: the denominator of the display-only size_gate percentage. It is the
+# group canon's water-table line for a single append-only jsonl
+# (cph4/resource-chain.md section 3.4: world/*.jsonl, 100MB), NOT a threshold
+# this repository enforces - this checkout's hook has no byte limb at all.
+SIZE_REFERENCE_BYTES = 100 * 1024 * 1024
 EXCERPT_CHARS = 240
 DEFAULT_URL = 'https://pay.weixin.qq.com/doc/v2/merchant/4011986682'
 UA = 'Mozilla/5.0 (compatible; BigDomain-Crawl/1.0)'
@@ -257,6 +284,39 @@ def _summary_from_rows(rows, bad, day, window_days=7):
             'newest_kind': failure_kind(newest_error) if newest_error else 'none'}
 
 
+def failure_file_stats(path):
+    """(present, bytes, lines) for one failure file; absence is 0/0, not a raise.
+
+    WHY (R2999): the retention exemption argued with numbers nobody could check
+    from the product. bytes is the file's own size on disk; lines counts every
+    physical row splitlines() sees, so a malformed row and a blank row are both
+    visible - which is what makes `lines - (total+bad)` a real cross-check of
+    the reader rather than a restatement of its own count. A file that exists
+    but cannot be opened keeps its measured bytes and answers lines=0: the size
+    is a fact either way, and this is a reader, not a gate.
+    """
+    try:
+        size = os.path.getsize(path)
+    except OSError:
+        return {'present': False, 'bytes': 0, 'lines': 0}
+    try:
+        with open(path, 'r', encoding='utf-8', errors='replace') as fh:
+            text = fh.read()
+    except OSError:
+        return {'present': True, 'bytes': size, 'lines': 0}
+    return {'present': True, 'bytes': size, 'lines': len(text.splitlines())}
+
+
+def size_gate_pct(nbytes):
+    """bytes as a percentage of SIZE_REFERENCE_BYTES - DISPLAY ONLY (R2999).
+
+    Nothing compares this number to 100 to decide anything: the value exists so
+    a reader of one line can see how far the file sits from the water line the
+    group canon states, instead of trusting a figure written in a header once.
+    """
+    return round(float(nbytes) * 100.0 / SIZE_REFERENCE_BYTES, 4)
+
+
 def summarize_failures(path, day, window_days=7):
     """Readable answer to "did retrievals fail, and how recently?" (R2993).
 
@@ -273,7 +333,16 @@ def summarize_failures(path, day, window_days=7):
     retries or pages: this is a READER over evidence, not enforcement.
     """
     rows, bad = read_failures(path)
-    return _summary_from_rows(rows, bad, day, window_days)
+    out = _summary_from_rows(rows, bad, day, window_days)
+    # R2999: the body of the file, so the retention exemption can be checked
+    # from the product instead of from a number written in a header once.
+    stats = failure_file_stats(path)
+    out['present'] = stats['present']
+    out['bytes'] = stats['bytes']
+    out['lines'] = stats['lines']
+    out['size_gate'] = size_gate_pct(stats['bytes'])
+    out['gate_ref_mb'] = SIZE_REFERENCE_BYTES // (1024 * 1024)
+    return out
 
 
 def read_failure_days(path):
@@ -688,7 +757,8 @@ def main(argv=None):
     ap.add_argument('--timeout', type=int, default=20)
     ap.add_argument('--failures', action='store_true',
                     help='print the failure side channel summary and exit '
-                         '(a reader over evidence; gates nothing)')
+                         '(a reader over evidence; carries bytes/lines and a '
+                         'display-only size_gate percentage; gates nothing)')
     ap.add_argument('--failure-days', dest='failure_days', action='store_true',
                     help='print the daily failure-count history and exit '
                          '(a display series; gates nothing)')
@@ -706,13 +776,15 @@ def main(argv=None):
         stamp = datetime.datetime.now().astimezone().isoformat(
             timespec='seconds')
         summary = summarize_failures(failure_path(args.root), stamp, args.days)
-        print('CRAWL-FAILURES total=%d recent%d=%d bad=%d urls=%d newest=%s '
-              'error=%s kind=%s' % (summary['total'], summary['window_days'],
-                                    summary['recent'], summary['bad'],
-                                    summary['urls'],
-                                    summary['newest_at'] or 'none',
-                                    summary['newest_error'] or 'none',
-                                    summary['newest_kind']))
+        print('CRAWL-FAILURES total=%d recent%d=%d bad=%d urls=%d bytes=%d '
+              'lines=%d size_gate=%.4f%% gate_ref=%dMB newest=%s error=%s '
+              'kind=%s' % (summary['total'], summary['window_days'],
+                           summary['recent'], summary['bad'], summary['urls'],
+                           summary['bytes'], summary['lines'],
+                           summary['size_gate'], summary['gate_ref_mb'],
+                           summary['newest_at'] or 'none',
+                           summary['newest_error'] or 'none',
+                           summary['newest_kind']))
         return 0
     if args.failure_days:
         series = summarize_failure_days(failure_day_path(args.root), args.days)

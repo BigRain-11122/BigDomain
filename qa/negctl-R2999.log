@@ -1,0 +1,10 @@
+honest module:
+  GREEN A1 body bytes equal the file
+  GREEN A2 lines-(total+bad) is the blank count
+  GREEN A3 an absent file answers zero, never an exception
+  GREEN A4 one hundredth of the reference reads 1.0
+honest verdict: GREEN (4/4)
+mutant [M1 bytes printed as the row count]: red on A1 body bytes equal the file
+mutant [M2 the denominator silently back to 20MB]: red on A4 one hundredth of the reference reads 1.0
+mutant [M3 a missing file raises instead of answering zero]: red on A3 an absent file answers zero, never an exception
+NEGCTL PASS every mutant read red on its target arm

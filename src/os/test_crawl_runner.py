@@ -25,6 +25,12 @@ a source that never failed - also offline, temp directories only.
 AC-RUN14 (R2997) grades the recurrence WEIGHT (recur=<sources>:<failures>, and
 none rather than 0:0 once the side channel is gone) and the single shared
 failure_kind() bucket that both --failures and the trend line now read.
+AC-RUN16 (R2999) grades the SIZE face --failures gained: the file's own bytes
+and physical line count, so `lines - (total+bad)` crosses the reader against the
+file, plus a DISPLAY-ONLY size_gate percentage whose denominator (100MB, the
+group water table's single-jsonl line) is printed on the same row. The arm that
+pins the absence of a verdict deliberately does NOT build a 100MB file; it reads
+the summary's key set and the emitted tokens instead, and says so.
 
 Scope, stated honestly: no arm here fetches a real page except the one failure
 arm against loopback, which is meant to fail. The judgement is graded on saved
@@ -790,6 +796,82 @@ def main():
        and 'wcov=7/7' in line35 and 'wcov' not in scan_src
        and 'crawl-failure-days' not in scan_src,
        'the CLI carries both coverage fields and stays outside the gate face')
+
+    # AC-RUN16 (R2999): the retention exemption argued with numbers nobody
+    # could check from the product. --failures now carries the file's own BODY
+    # (bytes / lines) plus a DISPLAY-ONLY percentage of the group water line.
+    root36 = world(); roots.append(root36)
+    f36 = RUN.failure_path(root36)
+    RUN.append_failure(f36, 'https://a.example/1', TODAY + 'T01:00:00+08:00',
+                       'E_FETCH TimeoutError: a')
+    RUN.append_failure(f36, 'https://b.example/2', TODAY + 'T02:00:00+08:00',
+                       'E_FETCH HTTPError: b')
+    with open(f36, 'a', encoding='utf-8', newline='\n') as fh:
+        fh.write('{broken\n')
+        fh.write('\n')
+    s36 = RUN.summarize_failures(f36, TODAY)
+    ok('AC-RUN16', s36['bytes'] == os.path.getsize(f36) and s36['lines'] == 4
+       and s36['total'] == 2 and s36['bad'] == 1,
+       'bytes equal the file on disk; lines count physical rows, malformed and blank included')
+    ok('AC-RUN16', s36['lines'] - (s36['total'] + s36['bad']) == 1,
+       'lines minus (total+bad) is exactly the blank-row count, so the two counts are independent')
+
+    root37 = world(); roots.append(root37)
+    s37 = RUN.summarize_failures(RUN.failure_path(root37), TODAY)
+    ok('AC-RUN16', s37['bytes'] == 0 and s37['lines'] == 0
+       and s37['size_gate'] == 0.0 and s37['present'] is False,
+       'a missing side channel answers zero bytes and zero lines without raising')
+    buf37 = io.StringIO()
+    with contextlib.redirect_stdout(buf37):
+        rc37 = RUN.main(['--failures', '--root', root37])
+    line37 = buf37.getvalue().strip()
+    ok('AC-RUN16', rc37 == 0 and 'bytes=0' in line37 and 'lines=0' in line37,
+       'the CLI answers rc=0 with zero size on a world that has no side channel')
+
+    root38 = world(); roots.append(root38)
+    f38 = RUN.failure_path(root38)
+    os.makedirs(os.path.dirname(f38), exist_ok=True)
+    target38 = RUN.SIZE_REFERENCE_BYTES // 100  # exactly one percent
+    head38 = json.dumps({'source_url': 'https://p.example/1',
+                         'failed_at': TODAY + 'T03:00:00+08:00',
+                         'error': 'E_FETCH TimeoutError: pad'},
+                        sort_keys=True, separators=(',', ':')) + '\n'
+    with open(f38, 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write(head38)
+        fh.write('x' * (target38 - len(head38) - 1) + '\n')
+    s38 = RUN.summarize_failures(f38, TODAY)
+    ok('AC-RUN16', s38['bytes'] == target38 and s38['size_gate'] == 1.0
+       and s38['gate_ref_mb'] == 100,
+       'a file padded to one hundredth of the reference line reads size_gate=1.0 against gate_ref=100MB')
+
+    keys38 = set(s38.keys())
+    buf38 = io.StringIO()
+    with contextlib.redirect_stdout(buf38):
+        rc38 = RUN.main(['--failures', '--root', root38])
+    line38 = buf38.getvalue().strip()
+    ok('AC-RUN16', rc38 == 0
+       and 'bytes=' in line38 and 'lines=' in line38
+       and 'size_gate=' in line38 and 'gate_ref=100MB' in line38
+       and not (keys38 & set(['pass', 'flag', 'verdict', 'ok', 'gate_ok']))
+       and 'PASS' not in line38 and 'FLAG' not in line38,
+       'one row carries size, row count and the named denominator, and carries no verdict '
+       '(a file above the reference line was NOT built this arm)')
+
+    scan_src16 = ''
+    scan_path16 = os.path.join(ROOT, 'tools', 'skills', 'bigdomain-loop-scan',
+                               'scripts', 'scan_five_still.ps1')
+    if os.path.isfile(scan_path16):
+        with open(scan_path16, 'r', encoding='utf-8', errors='replace') as fh:
+            scan_src16 = fh.read()
+    census_src16 = ''
+    census_path16 = os.path.join(ROOT, 'src', 'os', 'qa_writer_census.py')
+    if os.path.isfile(census_path16):
+        with open(census_path16, 'r', encoding='utf-8', errors='replace') as fh:
+            census_src16 = fh.read()
+    ok('AC-RUN16', 'crawl-failure' not in scan_src16
+       and 'crawl-failure' not in census_src16
+       and 'endswith(".log")' in census_src16,
+       'neither the scanner nor the writer census reads either failure file')
 
     for root in roots:
         shutil.rmtree(root, ignore_errors=True)
