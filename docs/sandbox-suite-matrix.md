@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 734 | 5982 | 675/675 | R2739 |
+| 734 | 5983 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -766,12 +766,12 @@
 | 727 | os-registry-counter-census | ../os/test_registry_counter_census.py | 12 | no-evidence | - |
 | 728 | os-evidence-read | ../os/test_evidence_read.py | 5 | no-evidence | - |
 | 729 | os-face-walk-static | ../os/test_face_walk_static.py | 5 | no-evidence | - |
-| 730 | os-closeout-gate | ../os/test_closeout_gate.py | 6 | no-evidence | - |
+| 730 | os-closeout-gate | ../os/test_closeout_gate.py | 7 | no-evidence | - |
 | 731 | os-live-proof | ../os/test_live_proof.py | 13 | no-evidence | - |
 | 732 | os-platform-live-report | ../os/test_platform_live_report.py | 8 | no-evidence | - |
 | 733 | os-ledger-business-report | ../os/test_ledger_business_report.py | 8 | no-evidence | - |
 | 734 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
-|  | 合计 |  | 5982 | green 675 / FAIL 0 / no-evidence 59 |  |
+|  | 合计 |  | 5983 | green 675 / FAIL 0 / no-evidence 59 |  |
 
 ## 证据出处
 

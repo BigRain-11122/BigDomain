@@ -1,4 +1,4 @@
-"""Closeout precondition gate (R2932, criteria AC-CLG1..AC-CLG5).
+"""Closeout precondition gate (R2932, criteria AC-CLG1..AC-CLG7).
 
 WHY: the R2926 commit hook refuses STAGED evidence bytes only. A round that
 writes a shell-captured file and never stages it still leaves the file on disk,
@@ -45,12 +45,33 @@ human closeout asks all three faces in one command.
 
 Ordering is part of the law: `flags` is asked FIRST, because it is the cheapest
 face and the only one about bytes this round wrote; a drifted tree is refused
-before either root face is read.
+before either root face is read. The root faces then run in cost order:
+round-main (one state read), census (one registry read), matrix (the derived
+document, measured at 331ms - the most expensive face of the three).
+
+R3094 - the derived document (AC-CLG7):
+
+`docs/sandbox-suite-matrix.md` is derived from the registry, and the law that
+the two agree already shipped as `src/os/suite_matrix_reconcile.py --check`.
+Measured at R3094: that law was asked only by the battery follow-up sections
+(a round that runs no battery leg never asks it) and by human habit - the
+round that closes carries its own `--check` in the board text, and nothing
+refused a stale document. `check_matrix(root)` now asks it as the third root
+face and refuses by name E_CLG_MATRIX; a missing document is E_EDM_NO_DOC,
+never a skip. A caller building a fixture world with no document MUST say so:
+`matrix=False` is the named opt-out, so "not asked" is always visible in code.
+
+Honest boundary, disclosed rather than implied: `src/os/closeout.py` - the ONE
+command that closes a round - does NOT call this gate (measured R3094: zero
+references). The gate is asked by its CLI and by the round's own habit, so it
+is still possible to close a round without asking. Wiring the vehicle is the
+next round's head, not this one's claim.
 
 Shape: a published line, never a silent pass.
 
     CLOSEOUT-GATE PASS files=<n> flags=0 reader_refused=<n> gating=flags
     CLOSEOUT-GATE PASS ... gating=flags round_main=OK census=PASS
+    CLOSEOUT-GATE PASS ... gating=flags round_main=OK census=PASS matrix=DOC-CURRENT
     CLOSEOUT-GATE REFUSED reason=<E_CLG_*> flags=<n> ... [flag] lines
 
 Exit codes: 0 PASS; 2 REFUSED. Read-only: the gate never writes the tree, the
@@ -141,7 +162,35 @@ def check_census(root, registry=None, pin=None):
         len(v) for v in pinned.values())
 
 
-def evaluate(target, baseline, root=None, registry=None, census_pin=None):
+def check_matrix(root, doc=None, qa_dir=None):
+    """Ask the suite-matrix doc law shipped at R3086/R3089 (AC-CLG7).
+
+    The document is DERIVED from the registry, so a round can move a registry
+    row and leave the doc behind while every other closeout face reads green.
+    The law itself already ships (`suite_matrix_reconcile.report`, measured at
+    331ms on the live tree and DOC-CURRENT); before R3094 only a battery leg or
+    a human habit asked it. Returns (ok, line), never a silent pass: a missing
+    document is a refusal by name, not a skip.
+    """
+    path = _src_os(root)
+    import suite_matrix_reconcile as SMR
+    doc = doc or os.path.join(root, "docs", "sandbox-suite-matrix.md")
+    qa_dir = qa_dir or os.path.join(root, "qa")
+    if not os.path.isfile(doc):
+        return False, "E_EDM_NO_DOC %s" % os.path.basename(doc)
+    try:
+        report = SMR.report(doc, None, qa_dir)
+    except (IOError, OSError, ValueError) as exc:
+        return False, "E_EDM_UNREADABLE %s: %s" % (type(exc).__name__, exc)
+    verdict = report.get("verdict")
+    return (verdict == SMR.WORD_CURRENT,
+            "%s %s rows=%s/%s" % (verdict, SMR.rel(doc),
+                                  report.get("doc_rows"),
+                                  report.get("registry_rows")))
+
+
+def evaluate(target, baseline, root=None, registry=None, census_pin=None,
+             matrix=None):
     """Run the census check and return (lines, exit_code, verdict dict).
 
     `root=None` -> the pre-R3093 question, byte for byte.
@@ -223,9 +272,33 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None):
                            "files": count, "flags": flags,
                            "round_main": "OK", "census": "FAIL"}
                 return out, 2, verdict
+            if matrix is not False:
+                # R3094: the derived document is asked LAST, after every face
+                # that reads this round's own bytes. `matrix=False` is the
+                # caller's named opt-out for a fixture world that constructs no
+                # document, so an unasked face can never happen silently.
+                doc = matrix if matrix else None
+                try:
+                    mx_ok, mx_line = check_matrix(root, doc=doc)
+                except (IOError, OSError, ValueError) as exc:
+                    mx_ok, mx_line = False, "E_EDM_UNREADABLE %s" % exc
+                if not mx_ok:
+                    out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_MATRIX "
+                               "files=%d flags=%d round_main=OK census=PASS "
+                               "matrix=FAIL" % (count, flags))
+                    out.append(mx_line)
+                    verdict = {"verdict": "REFUSED", "reason": "E_CLG_MATRIX",
+                               "files": count, "flags": flags,
+                               "round_main": "OK", "census": "PASS",
+                               "matrix": "FAIL"}
+                    return out, 2, verdict
+                verdict["matrix"] = "DOC-CURRENT"
+                tail_matrix = " matrix=DOC-CURRENT"
+            else:
+                tail_matrix = ""
             verdict["round_main"] = "OK"
             verdict["census"] = "PASS"
-            tail = " round_main=OK census=PASS"
+            tail = " round_main=OK census=PASS" + tail_matrix
         out.append("CLOSEOUT-GATE PASS files=%d flags=%d "
                    "reader_refused=%d gating=%s%s"
                    % (count, flags, refused, GATING_FACE, tail))

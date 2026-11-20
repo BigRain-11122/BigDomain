@@ -24,6 +24,7 @@ inside its own temp fixture worlds.
 """
 import json
 import os
+import re
 import sys
 import tempfile
 
@@ -49,6 +50,20 @@ def ok(name, cond, detail=""):
 def write_bytes(path, payload):
     with open(path, "wb") as fh:
         fh.write(payload)
+
+
+def MUTATE_FIRST_COUNT(text):
+    """(text, changed): decrement the first totals row by one.
+
+    The document is DERIVED, so its totals move every round; the arm derives
+    its mutation from today's document instead of typing 734/5982, which is
+    the stale-literal defect the R3093 census arms were repaired for.
+    """
+    match = re.search(r"^\| (\d+) \| (\d+) \|", text, re.M)
+    if not match:
+        return text, False
+    new = "| %d | %s |" % (int(match.group(1)) - 1, match.group(2))
+    return text.replace(match.group(0), new, 1), True
 
 
 def build_world(tmp):
@@ -212,12 +227,14 @@ def main():
        and "round_main" not in verdict,
        "line=%s" % lines[0])
     deep, deep_rc, deep_v = CG.evaluate(live, live_base, root=ROOT)
-    ok("AC-CLG6 arm b - root=ROOT asks both faces and PASS names them",
+    ok("AC-CLG6 arm b - root=ROOT asks all three faces and PASS names them",
        deep_rc == 0
        and deep[0] == ("CLOSEOUT-GATE PASS files=%d flags=0 reader_refused=0 "
-                       "gating=flags round_main=OK census=PASS" % disk_logs)
+                       "gating=flags round_main=OK census=PASS "
+                       "matrix=DOC-CURRENT" % disk_logs)
        and deep_v.get("round_main") == "OK"
-       and deep_v.get("census") == "PASS",
+       and deep_v.get("census") == "PASS"
+       and deep_v.get("matrix") == "DOC-CURRENT",
        "rc=%d line=%s" % (deep_rc, deep[0] if deep else ""))
 
     with tempfile.TemporaryDirectory() as tmp2:
@@ -226,9 +243,11 @@ def main():
         # arm e: the new faces are read-only and repeat byte-identically
         before2 = snapshot(world2)
         first2, first2_rc, first2_v = CG.evaluate(
-            world2, base2, root=root_ok, registry=reg_ok, census_pin=pin_ok)
+            world2, base2, root=root_ok, registry=reg_ok, census_pin=pin_ok,
+            matrix=False)
         second2, second2_rc, _s2v = CG.evaluate(
-            world2, base2, root=root_ok, registry=reg_ok, census_pin=pin_ok)
+            world2, base2, root=root_ok, registry=reg_ok, census_pin=pin_ok,
+            matrix=False)
         after2 = snapshot(world2)
         ok("AC-CLG6 arm e - the root faces write nothing and repeat exactly",
            before2 == after2 and (first2, first2_rc) == (second2, second2_rc)
@@ -262,6 +281,63 @@ def main():
            f_rc == 2 and f_v.get("reason") == "E_CLG_DRIFT"
            and not any("ROUND-MAIN" in l for l in f_lines),
            "rc=%d reason=%s" % (f_rc, f_v.get("reason")))
+
+    # AC-CLG7 (R3094): the DERIVED document is the third root face - the law
+    # already shipped, but a round could close without asking it.
+    ok("AC-CLG7 arm a - the default face carries no matrix token either",
+       "matrix=" not in lines[0] and "matrix" not in verdict,
+       "line=%s" % lines[0])
+    ok("AC-CLG7 arm b - the live matrix face is green and named LAST",
+       deep[0].endswith("matrix=DOC-CURRENT")
+       and deep_v.get("matrix") == "DOC-CURRENT",
+       "line=%s" % (deep[0] if deep else ""))
+
+    live_doc = os.path.join(ROOT, "docs", "sandbox-suite-matrix.md")
+    with open(live_doc, encoding="utf-8") as fh:
+        doc_text = fh.read()
+    stale_text, changed = MUTATE_FIRST_COUNT(doc_text)
+
+    with tempfile.TemporaryDirectory() as tmp3:
+        stale = os.path.join(tmp3, "stale.md")
+        with open(stale, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(stale_text)
+        w3, b3 = build_world(tmp3)
+        write_bytes(os.path.join(w3, "late-leak.log"),
+                    u"AI \u5224\u5b9a".encode("gbk") + b"\r\n")
+        s_lines, s_rc, s_v = CG.evaluate(live, live_base, root=ROOT,
+                                         matrix=stale)
+        ok("AC-CLG7 arm c - a document that drifted from the registry is "
+           "refused by E_CLG_MATRIX",
+           changed and s_rc == 2 and s_v.get("reason") == "E_CLG_MATRIX"
+           and any(("STALE" in l) or l.startswith("E_EDM") for l in s_lines),
+           "changed=%s rc=%d reason=%s lines=%s"
+           % (changed, s_rc, s_v.get("reason"), s_lines[:2]))
+        gone = os.path.join(tmp3, "absent.md")
+        a_lines, a_rc, a_v = CG.evaluate(live, live_base, root=ROOT,
+                                         matrix=gone)
+        ok("AC-CLG7 arm d - a missing document is a NAMED refusal, not a skip",
+           a_rc == 2 and a_v.get("reason") == "E_CLG_MATRIX"
+           and any(l.startswith("E_EDM_NO_DOC") for l in a_lines),
+           "rc=%d lines=%s" % (a_rc, a_lines[:2]))
+        # arm e: ordering - a census red is refused BEFORE the matrix is read,
+        # so the newest face never runs behind a face that already refused.
+        bad = os.path.join(tmp3, "pin.json")
+        with open(bad, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write('{"readable": [], "unparsed": [], "silent": []}\n')
+        o_lines, o_rc, o_v = CG.evaluate(w3, b3, root=ROOT, matrix=stale)
+        ok("AC-CLG7 arm e - the matrix face is asked only after the bytes face",
+           o_rc == 2 and o_v.get("reason") == "E_CLG_DRIFT"
+           and "matrix" not in o_v,
+           "rc=%d reason=%s" % (o_rc, o_v.get("reason")))
+        # arm f: the face is read-only and repeatable on the live document.
+        before_doc = (os.path.getsize(live_doc),
+                      os.path.getmtime(live_doc))
+        m1 = CG.check_matrix(ROOT)
+        m2 = CG.check_matrix(ROOT)
+        after_doc = (os.path.getsize(live_doc), os.path.getmtime(live_doc))
+        ok("AC-CLG7 arm f - the matrix face writes nothing and repeats",
+           m1 == m2 and m1[0] is True and before_doc == after_doc,
+           "m1=%s m2=%s" % (m1, m2))
 
     total = len(CHECKS)
     acs = set()

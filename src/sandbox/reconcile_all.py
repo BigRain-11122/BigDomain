@@ -7651,7 +7651,7 @@ SUITES = [
     # byte-identical to R2932, which is why the eleven shipped call sites keep
     # their meaning.
     ("os-closeout-gate",
-     os.path.join("..", "os", "test_closeout_gate.py"), 6),
+     os.path.join("..", "os", "test_closeout_gate.py"), 7),
     # R2935: R2934 photographed the sandbox for the first time, but one pass is
     # a SNAPSHOT - it cannot tell "alive" from "painted cleanly this time". The
     # ruling is not to run a browser under the registry law but to move the LAW
