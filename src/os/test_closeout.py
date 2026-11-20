@@ -13,6 +13,7 @@ which step failed.
 Stdlib only, ASCII source, zero network. Exit 0 = all green.
 """
 
+import ast
 import contextlib
 import hashlib
 import io
@@ -30,7 +31,7 @@ sys.path.insert(0, BASE)
 
 import closeout as CO  # noqa: E402
 
-EXPECTED_CRITERIA = 19
+EXPECTED_CRITERIA = 20
 MODULE = os.path.join(BASE, "closeout.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout"
@@ -678,6 +679,108 @@ def ac_oosw7():
           % EXPECTED_CRITERIA)
 
 
+def ac_cout8():
+    """AC-COUT8: the tree the CEO face speaks for is judged before it publishes.
+
+    Five arms, one criterion: a world with no tree closes and SAYS the gate was
+    not asked; a world with a drifted census baseline is refused at step tree
+    with the state already WRITTEN, the face byte-identical, and the gate's own
+    line printed; the replay of that refused round names the half-close instead
+    of exiting 0; --check asks the same tree face without writing; and the gate
+    module is not imported at closeout.py's module level.
+    """
+    bare = world()
+    drift = world()
+    dry = world()
+    try:
+        code_b, out_b, _ = run_cli([
+            "--root", bare, "--round", str(ROUND), "--line",
+            "2026-11-16 R%d PRODUCT: a world with no tree" % ROUND, "--tick"])
+        bare_ok = (code_b == 0 and "gate=NOT-ASKED" in out_b
+                   and "CLOSEOUT GATE NOT-ASKED" in out_b
+                   and "E_CO_GATE_NO_INPUTS" in out_b)
+
+        # A tree the gate can read and that has DRIFTED: one baselined defect
+        # dialect file, then a second one the baseline never saw.
+        import qa_writer_census as cwc
+        qa_dir = os.path.join(drift, "qa")
+        if not os.path.isdir(qa_dir):
+            os.makedirs(qa_dir)
+        with io.open(os.path.join(qa_dir, "a.log"), "wb") as handle:
+            handle.write(b"\xef\xbb\xbfA BOM PREFIXED LINE\r\n")
+        cwc.write_baseline(qa_dir, os.path.join(qa_dir, cwc.BASELINE_NAME))
+        with io.open(os.path.join(qa_dir, "b.log"), "wb") as handle:
+            handle.write(b"\xef\xbb\xbfANOTHER BOM LINE\r\n")
+        write(os.path.join(drift, "docs", "sandbox-suite-matrix.md"),
+              "| x |\n")
+        set_face_current(drift, "R%d a previous round" % (ROUND - 1))
+        face_before = fingerprint(os.path.join(drift, "docs",
+                                              "status-export.json"))
+        code_d, out_d, _ = run_cli([
+            "--root", drift, "--round", str(ROUND), "--line",
+            "2026-11-16 R%d PRODUCT: the tree is drifted" % ROUND, "--tick"])
+        face_after = fingerprint(os.path.join(drift, "docs",
+                                             "status-export.json"))
+        tick_d, _log_d = ticks(drift)
+        refuse_ok = (code_d == 2 and "E_CO_TREE_RED" in out_d
+                     and "step=tree" in out_d
+                     and "state=WRITTEN" in out_d
+                     and "face=NOT-WRITTEN" in out_d
+                     and "tick=%d" % tick_d in out_d
+                     and "repair=" in out_d
+                     and face_before == face_after)
+        if not refuse_ok:
+            print("  measured drift: code=%r out=%r face_same=%r"
+                  % (code_d, out_d.strip()[:300], face_before == face_after),
+                  flush=True)
+
+        code_p, out_p, _ = run_cli([
+            "--root", drift, "--round", str(ROUND), "--line",
+            "2026-11-16 R%d PRODUCT: the tree is drifted" % ROUND, "--tick"])
+        replay_ok = (code_p == 2 and "E_CO_FACE_BEHIND" in out_p
+                     and "repair=" in out_p and "face_lagging=1" in out_p)
+
+        code_c, out_c, _ = run_cli([
+            "--root", dry, "--round", str(ROUND), "--line",
+            "2026-11-16 R%d PRODUCT: dry run" % ROUND, "--check"])
+        state_fp = fingerprint(os.path.join(dry, "src", "os", "state.json"))
+        dry_ok = (code_c == 0 and "CLOSEOUT CHECK" in out_c
+                  and "gate=NOT-ASKED" in out_c
+                  and state_fp == fingerprint(os.path.join(
+                      dry, "src", "os", "state.json")))
+
+        source = io.open(MODULE, encoding="utf-8").read()
+        tree = ast.parse(source)
+        top = set()
+        for node in tree.body:
+            if isinstance(node, ast.Import):
+                top.update(a.name.split(".")[0] for a in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                top.add(node.module.split(".")[0])
+        lazy_ok = ("closeout_gate" not in top and "qa_writer_census" not in top
+                   and "gate_at" not in top)
+        order = source.find("tree_refusal(root)")
+        face_at = source.find("ER.write(root, stamp)")
+        lazy_ok = lazy_ok and order != -1 and face_at != -1 and order < face_at
+
+        ok = (bare_ok and refuse_ok and replay_ok and dry_ok and lazy_ok)
+        if not ok:
+            print("  measured: bare=%r refuse=%r replay=%r dry=%r lazy=%r "
+                  "code_b=%r out_b=%r"
+                  % (bare_ok, refuse_ok, replay_ok, dry_ok, lazy_ok, code_b,
+                     out_b.strip()[:220]), flush=True)
+    finally:
+        cleanup(bare)
+        cleanup(drift)
+        cleanup(dry)
+    check(ok, "AC-COUT8 the vehicle judges the tree it is about to speak for: "
+          "a world with no tree reads gate=NOT-ASKED with its reason printed, "
+          "a drifted census baseline is refused at step tree with the state "
+          "WRITTEN and the face byte-identical, the replay names the "
+          "half-close, --check asks the same face without writing, and the "
+          "gate stays lazily imported ahead of the face step")
+
+
 def main():
     print("closeout suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -700,6 +803,7 @@ def main():
     ac_oosw5()
     ac_oosw6()
     ac_oosw7()
+    ac_cout8()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

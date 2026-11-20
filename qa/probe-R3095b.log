@@ -1,0 +1,5 @@
+line='2026-11-16 R9100 a lowercase label with a date'     door=E_CO_NO_STATE rc=2 law_ok=True law=ROUND-MAIN OK 9099
+line='2026-11-16 R9100 lowercase only'                    door=E_CO_NO_STATE rc=2 law_ok=True law=ROUND-MAIN OK 9099
+line='2026-11-16 R9100 PRODUCT an uppercase label exists' door=E_CO_NO_FACE rc=2 law_ok=True law=ROUND-MAIN OK 9100
+line='R9100 PRODUCT no date at all'                       door=E_CO_NO_STATE rc=2 law_ok=True law=ROUND-MAIN OK 9099
+PROBE-B TOTAL 4

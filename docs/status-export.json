@@ -4,19 +4,19 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-20 R3094 PRODUCT+ENGINEERING: the closeout gate now also asks the derived suite-matrix document, so a round that moves a registry row and leaves docs/sandbox-suite-matrix.md behind is refused by E_CLG_MATRIX instead of passing on flags, round-main and census alone. The law already shipped (suite_matrix_reconcile --check, 331ms measured, DOC-CURRENT on the live tree); before this round only a battery leg or a human habit asked it, and the new face proved itself on this very tree: after the registry row moved 6 -> 7 the gate REFUSED the stale document once and read PASS only after the document was regenerated (76413B).",
+    "current": "2026-11-20 R3095 PRODUCT+ENGINEERING: the vehicle that closes a round now judges the tree it is about to speak for. Between the state write and the CEO face it asks the closeout gate's census and derived-document faces, and a world that builds no tree prints gate=NOT-ASKED with its reason on its own line instead of being silently unasked.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-closeout-gate-R3094.log (3663B, 2026-11-20)",
-    "latest_evidence": "qa/suite-closeout-gate-R3094.log (3663B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-closeout-R3095.log (3130B, 2026-11-20)",
+    "latest_evidence": "qa/suite-closeout-R3095.log (3130B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3095] next window (<=48h): (0) MAIN — **实测已证：收口车辆不问收口门。`src/os/closeout.py` 对 `closeout_gate` 的引用数=0，commit 侧只问 census 树面，全仓 `CG.evaluate(` 的调用点只有两处套件——于是「state 写了、CEO 面也写了、门却是红的」这种轮仍然可以发生，而本轮的第三个面只是让门更全，没有让门被问。** 下一轮先量（只读）：①`src/os/closeout.py` 的 state→face 顺序里，门该放在哪一步（写 state 之后/写 face 之前，红则拒发 CEO 面；还是两步之后只作附注）——逐条量既有 `test_closeout.py` 的断言与私有世界（无 qa baseline/无矩阵文档）会不会因此转红；②若放在 face 之前，state 已写而 face 未写=既有的半闭合 `E_CO_FACE_BEHIND` 语义，量它的恢复路径（duplicate replay → export_round）是否完备；③私有世界必须能按名退出（`matrix=False` 已有先例），量退出词与「未问」如何被印出来而不是静默；④接进车之后，量它是否会与 `--check` 干跑面冲突（干跑时 state 尚未移动，round-main 读的是上一轮）。量清后落一条判据或一条「只发布读数并写明必须靠人」。**先落板再动代码。**",
-    "next_milestone_due": "2026-11-22T20:29:42+08:00",
-    "updated_at": "2026-11-20T20:29:42+08:00"
+    "next_milestone": "[R3096] next window (<=48h): (0) MAIN — **车辆现在会拒一棵红的树，但它只在自己被调用时才拒；R3093/R3094 的两条具名载体（`reconcile_all.py` 的四段 follow-up 与 commit 侧 pre-commit 树面）仍然不问收口门。** 下一轮先量（只读）：①`reconcile_all.py` 的 follow-up 段里哪一段最靠近「一轮收口」，量把它接上门的成本与红面（私有世界会不会因此转红）；②`Tools/hooks/pre_commit_gate.py` 只问 qa_writer_census 树面，量「提交侧也问 census+矩阵」的增量与它会不会挡住合法提交；③`tree_refusal` 的 `NOT-ASKED` 会不会在真实工作流里成为逃生门——量全仓哪些调用方喂的是无 qa 世界，逐条列名；④`--check` 现在也问树面，量它与 `status_export_fresh --check` 的时间成本叠加是否让干跑变慢到没人跑（实测两处耗时）。量清后落一条判据或一条「只发布读数并写明必须靠人」。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board — ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source (truncated)",
+    "next_milestone_due": "2026-11-22T20:44:13+08:00",
+    "updated_at": "2026-11-20T20:44:13+08:00"
   },
-  "current": "2026-11-20 R3094 PRODUCT+ENGINEERING: the closeout gate now also asks the derived suite-matrix document, so a round that moves a registry row and leaves docs/sandbox-suite-matrix.md behind is refused by E_CLG_MATRIX instead of passing on flags, round-main and census alone. The law already shipped (suite_matrix_reconcile --check, 331ms measured, DOC-CURRENT on the live tree); before this round only a battery leg or a human habit asked it, and the new face proved itself on this very tree: after the registry row moved 6 -> 7 the gate REFUSED the stale document once and read PASS only after the document was regenerated (76413B).",
+  "current": "2026-11-20 R3095 PRODUCT+ENGINEERING: the vehicle that closes a round now judges the tree it is about to speak for. Between the state write and the CEO face it asks the closeout gate's census and derived-document faces, and a world that builds no tree prints gate=NOT-ASKED with its reason on its own line instead of being silently unasked.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -44,11 +44,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3094 PRODUCT+ENGINEERING: the closeout gate now also asks the derived suite-matrix document, so a round that moves a registry row and leaves docs/sandbox-suite-matrix.md behind is refused by E_CLG_MATRIX instead of passing on flags, round-main and census alone. The law already shipped (suite_matrix_reconcile --check, 331ms measured, DOC-CURRENT on the live tree); before this round only a battery leg or a human habit asked it, and the new face proved itself on this very tree: after the registry row moved 6 -> 7 the gate REFUSED the stale document once and read PASS only after the document was regenerated (76413B).",
-  "export_ts": "2026-11-20T20:29:42+08:00",
+  "do": "2026-11-20 R3095 PRODUCT+ENGINEERING: the vehicle that closes a round now judges the tree it is about to speak for. Between the state write and the CEO face it asks the closeout gate's census and derived-document faces, and a world that builds no tree prints gate=NOT-ASKED with its reason on its own line instead of being silently unasked.",
+  "export_ts": "2026-11-20T20:44:13+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/suite-closeout-gate-R3094.log (3663B, 2026-11-20)",
-  "next_milestone": "[R3095] next window (<=48h): (0) MAIN — **实测已证：收口车辆不问收口门。`src/os/closeout.py` 对 `closeout_gate` 的引用数=0，commit 侧只问 census 树面，全仓 `CG.evaluate(` 的调用点只有两处套件——于是「state 写了、CEO 面也写了、门却是红的」这种轮仍然可以发生，而本轮的第三个面只是让门更全，没有让门被问。** 下一轮先量（只读）：①`src/os/closeout.py` 的 state→face 顺序里，门该放在哪一步（写 state 之后/写 face 之前，红则拒发 CEO 面；还是两步之后只作附注）——逐条量既有 `test_closeout.py` 的断言与私有世界（无 qa baseline/无矩阵文档）会不会因此转红；②若放在 face 之前，state 已写而 face 未写=既有的半闭合 `E_CO_FACE_BEHIND` 语义，量它的恢复路径（duplicate replay → export_round）是否完备；③私有世界必须能按名退出（`matrix=False` 已有先例），量退出词与「未问」如何被印出来而不是静默；④接进车之后，量它是否会与 `--check` 干跑面冲突（干跑时 state 尚未移动，round-main 读的是上一轮）。量清后落一条判据或一条「只发布读数并写明必须靠人」。**先落板再动代码。**",
+  "latest_evidence": "qa/suite-closeout-R3095.log (3130B, 2026-11-20)",
+  "next_milestone": "[R3096] next window (<=48h): (0) MAIN — **车辆现在会拒一棵红的树，但它只在自己被调用时才拒；R3093/R3094 的两条具名载体（`reconcile_all.py` 的四段 follow-up 与 commit 侧 pre-commit 树面）仍然不问收口门。** 下一轮先量（只读）：①`reconcile_all.py` 的 follow-up 段里哪一段最靠近「一轮收口」，量把它接上门的成本与红面（私有世界会不会因此转红）；②`Tools/hooks/pre_commit_gate.py` 只问 qa_writer_census 树面，量「提交侧也问 census+矩阵」的增量与它会不会挡住合法提交；③`tree_refusal` 的 `NOT-ASKED` 会不会在真实工作流里成为逃生门——量全仓哪些调用方喂的是无 qa 世界，逐条列名；④`--check` 现在也问树面，量它与 `status_export_fresh --check` 的时间成本叠加是否让干跑变慢到没人跑（实测两处耗时）。量清后落一条判据或一条「只发布读数并写明必须靠人」。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board — ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source (truncated)",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -173,7 +173,7 @@
   },
   "results": [
     [
-      "3094",
+      "3095",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -187,16 +187,16 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 65,
+    "log_lines_in_window": 72,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 61224,
+  "state_bytes": 66945,
   "next_milestone_due": "2026-11-22T10:45:10+08:00"
 }

@@ -1,0 +1,19 @@
+Q1a closeout.py bytes=13194 refs_to_closeout_gate=0 refs_to_gate_any=0
+Q1b steps: # ---- step 0: the one-off law. A refused name costs zero bytes. -------- | # ---- step 1: state. A refusal here costs the face zero bytes. --------- | # ---- step 2: the face. Reachable only when the state really moved. -----
+Q1c evaluate() call sites in shipped code:
+     src/os/closeout.py               none
+     tools/closeout_gate.py           [192, 324]
+     tools/hooks/pre_commit_gate.py   none
+Q1d private world has qa=False matrix=False pin=False
+Q1e gate on a fixture world -> rc=2 reason=E_CLG_NO_BASELINE first=CLOSEOUT-GATE REFUSED reason=E_CLG_NO_BASELINE baseline=writer-census-baseline.json
+Q1f test_closeout.py world() calls=14 run_cli calls=21 criteria=19 qa_mentions=0
+Q2a existing face-step refusals (state=WRITTEN face=NOT-WRITTEN): 0
+Q2b half-close detector: present
+Q2c repair named in the message: ['python src/os/export_round.py']
+Q2d duplicate replay asks face_behind: yes
+Q3a gate opt-out precedents: matrix=False printed how? ['matrix=False` is the ', "matrix=False` is the\n                # caller's "]
+Q3b gate prints a NOT-ASKED word anywhere: no
+Q4a live gate now -> rc=0 CLOSEOUT-GATE PASS files=4092 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS matrix
+Q4b live tick=3094 (the round a --check gate would read is this one: a dry run has not moved it)
+Q4c round-main on the unmoved state: ok=True ROUND-MAIN OK 3094
+PROBE TOTAL 18 lines

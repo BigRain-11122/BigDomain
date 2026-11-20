@@ -4971,8 +4971,11 @@ SUITES = [
     # the state step a hard, re-read precondition for the face step and owns
     # no write path of its own (AC-COUT1..AC-COUT7). R2839 adds the one-off
     # gate call site (AC-OOSW1..AC-OOSW7).
+    # R3095: the vehicle now asks the closeout gate tree faces before it
+    # publishes the CEO face, and a world that builds no tree says so on
+    # its own line instead of being silently unasked.
     ("os-closeout",
-     os.path.join("..", "os", "test_closeout.py"), 19),
+     os.path.join("..", "os", "test_closeout.py"), 20),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with

@@ -26,6 +26,16 @@ It owns no serialisation and no write path of its own. Both writes stay in the
 two vehicles that already carry their suites, their shape gates and their
 grader. This file only decides WHEN each one runs and what a failure is called.
 
+R3095 adds the third reader of this order: the closeout gate's TREE faces, asked
+between the two writes. Measured at R3095, the ROUND face of that gate needs no
+help from here - the state door already refuses a newest round with no dated
+line (`E_RSA_NO_DATE`) and one with no uppercase label - while the census drift
+face and the derived document are tree-wide laws that no per-round vehicle was
+asking, which is how "state written, face written, gate red" happened. A world
+that builds no tree reads `gate=NOT-ASKED` with its reason on its own line; one
+that builds a drifted tree is refused by name and the face keeps its bytes.
+Criteria AC-COUT8 were pinned in src/os/backlog.md at R3095 BEFORE this change.
+
 Criteria AC-COUT1..AC-COUT7 were pinned in src/os/backlog.md at R2835 BEFORE
 this file existed.
 
@@ -190,6 +200,49 @@ def one_off_refusal(root):
     return ""
 
 
+def tree_refusal(root):
+    """The closeout gate's TREE faces, asked before the CEO face is published.
+
+    Returns (word, line): "PASS", "NOT-ASKED" or "RED".
+
+    R3095 measured that the round's own shape does not need this: the state
+    door refuses a newest round with no dated line (`E_RSA_NO_DATE`) and one
+    with no uppercase label long before the face is written, so the round-main
+    face of the gate is already enforced ahead of this vehicle. What is NOT
+    enforced here is the TREE: the census drift face and the derived document,
+    which is exactly how "state written, face written, gate red" was reachable.
+
+    Those faces need the tree's own inputs, so a world that builds none reads
+    NOT-ASKED - printed with its reason, never a silent skip. A world that
+    builds them and has drifted is refused by name, and the face keeps its
+    bytes.
+    """
+    tools = os.path.join(os.path.dirname(os.path.dirname(HERE)), "tools")
+    if tools not in sys.path:
+        sys.path.insert(0, tools)
+    try:
+        import closeout_gate as CG
+    except (ImportError, ValueError) as exc:
+        return "RED", ("E_CO_GATE_UNAVAILABLE %s: %s"
+                       % (type(exc).__name__, exc))
+    qa = os.path.join(root, "qa")
+    baseline = os.path.join(qa, CG.CENSUS.BASELINE_NAME)
+    doc = os.path.join(root, "docs", "sandbox-suite-matrix.md")
+    if not (os.path.isfile(baseline) and os.path.isfile(doc)):
+        return "NOT-ASKED", ("E_CO_GATE_NO_INPUTS qa=%d doc=%d (this world "
+                             "builds no tree for the gate to read)"
+                             % (int(os.path.isdir(qa)),
+                                int(os.path.isfile(doc))))
+    try:
+        lines, code, _verdict = CG.evaluate(qa, baseline, root=root)
+    except (IOError, OSError, ValueError) as exc:
+        return "RED", ("E_CO_GATE_UNREADABLE %s: %s"
+                       % (type(exc).__name__, exc))
+    if code == 0:
+        return "PASS", lines[0]
+    return "RED", lines[0]
+
+
 def run(args):
     """Return (rc, message lines). One command, two writes, named steps."""
     root = os.path.abspath(args.root)
@@ -241,14 +294,33 @@ def run(args):
             return 2, ["CLOSEOUT FAIL %s face_lagging=1 "
                        "(step 1 left the state untouched; the face cannot "
                        "describe a round it never got)" % behind]
+        # The tree faces are round-independent, so a dry run can and does ask
+        # them - that is the one verdict a --check can give without waiting for
+        # a write. A red tree is reported here, not invented.
+        gate_word, gate_line = tree_refusal(root)
+        if gate_word == "RED":
+            return 2, ["CLOSEOUT CHECK RED step=tree %s face=NOT-MEASURED"
+                       % gate_line]
         return 0, ["CLOSEOUT CHECK step=state tick=%d log=%d bytes=%d "
-                   "fold_margin=%d %s face=NOT-MEASURED"
+                   "fold_margin=%d %s face=NOT-MEASURED gate=%s"
                    % (result["tick"], result["log"], result["bytes"],
-                      result["fold_margin"], result.get("detail") or "")]
+                      result["fold_margin"], result.get("detail") or "",
+                      gate_word)]
 
     unproven = _confirm_state_moved(state_path(root), result)
     if unproven:
         return 2, ["CLOSEOUT FAIL %s step=state face=NOT-WRITTEN" % unproven]
+
+    # ---- step 1.5: the TREE this face is about to speak for. ---------------
+    # Asked after the state write (a refusal costs that write, which is the
+    # cheaper of the two and the one an operator can replay) and before the
+    # face (so a red tree never reaches the CEO face).
+    gate_word, gate_line = tree_refusal(root)
+    if gate_word == "RED":
+        return 2, ["CLOSEOUT FAIL E_CO_TREE_RED step=tree "
+                   "state=WRITTEN face=NOT-WRITTEN tick=%d %s "
+                   "repair=\"fix the tree, then python src/os/export_round.py\""
+                   % (result["tick"], gate_line)]
 
     # ---- step 2: the face. Reachable only when the state really moved. -----
     stamp = ER.datetime.datetime.now(ER.TZ).replace(microsecond=0).isoformat()
@@ -268,12 +340,16 @@ def run(args):
                    % (ok, proof.get("gate"), proof.get("bytes"),
                       derived.get("latest"))]
 
-    lines.append("CLOSEOUT OK tick=%d state=WRITTEN face=WRITTEN "
-                 "log=%d bytes=%d fold_margin=%d queue=%s queue_bytes=%s "
-                 "latest=%s"
-                 % (result["tick"], result["log"], result["bytes"],
-                    result["fold_margin"], proof.get("gate"),
-                    proof.get("bytes"), derived.get("latest")))
+    lines = ["CLOSEOUT OK tick=%d state=WRITTEN face=WRITTEN "
+             "log=%d bytes=%d fold_margin=%d queue=%s queue_bytes=%s "
+             "latest=%s gate=%s"
+             % (result["tick"], result["log"], result["bytes"],
+                result["fold_margin"], proof.get("gate"),
+                proof.get("bytes"), derived.get("latest"), gate_word)]
+    if gate_word == "NOT-ASKED":
+        # Printed, not silent: a round closed in a world that carries no tree
+        # says so on its own line, with the reason the gate was not asked.
+        lines.append("CLOSEOUT GATE NOT-ASKED %s" % gate_line)
     return 0, lines
 
 
