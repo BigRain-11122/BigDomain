@@ -28,7 +28,7 @@ sys.path.insert(0, BASE)
 
 import ledger_lines as LL  # noqa: E402
 
-EXPECTED_CRITERIA = 10
+EXPECTED_CRITERIA = 11
 MODULE = os.path.join(BASE, "ledger_lines.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 STATE = os.path.join(BASE, "state.json")
@@ -430,8 +430,97 @@ def run():
               and (2987, 2980) in shape_gaps,
               "AC-LGA10 presence sees a dated ledger line, shape still "
               "refuses it, and only the round set moved")
+
+        # AC-LGA11 (R3086): the archive COUNT face and the cross-window walk
+        # ask the PRESENCE law, while the shape law and classify() stay put.
+        # Measured before this block: 786 dated ledger lines over the three
+        # archives were counted as round narratives (archive_ledger_lines
+        # 1090 where presence reads 1876) and one split round could not be
+        # told from a whole one (4 split rounds and 3 same-window gaps over
+        # the 29 post-pin windows). Six arms: (a) a dated ledger line is
+        # counted as ledger by the archive face and still classified as a
+        # round by the shape face; (b) in a world without dated lines the
+        # two faces agree exactly; (c) a round whose narrative sits in two
+        # post-pin windows is NAMED and still clean; (d) a round whose
+        # narrative and ledger sit in different windows is NAMED by
+        # same_window_gaps, still clean, and the printed line carries both
+        # counts in pure ASCII; (e) every round the real tree names there
+        # really has its ledger line somewhere in the archives; (f) the
+        # real tree's archive_ledger_lines equals an independent presence
+        # count, and the old classify count plus the dated lines equals it.
+        mixed = os.path.join(world, "logs-lga11")
+        os.makedirs(mixed)
+        mixed_file = os.path.join(mixed, "state-log-archive-2026-12.md")
+        dated = "2026-11-19 " + ledger(6002)
+        write_text(mixed_file, "# fixture header\n"
+                          "# --- R6001 fold append (fixture)\n"
+                          + narrative(6001) + "\n"
+                          + ledger(6001) + "\n"
+                          + dated + "\n"
+                          + narrative(6002) + "\n"
+                          "# --- R6010 fold append (fixture)\n"
+                          + narrative(6001) + "\n"
+                          + ledger(6010) + "\n"
+                          + narrative(6011) + "\n"
+                          + narrative(6012) + "\n"
+                          "# --- R6020 fold append (fixture)\n"
+                          + ledger(6011) + "\n"
+                          + ledger(6012) + "\n")
+        mixed_lines = LL.load_archive(mixed_file)
+        scoped_mixed = LL.audit_scope(mixed_lines, live)
+        scoped_plain = LL.audit_scope(LL.load_archive_lines(logs), live)
+        mixed_carry = LL.audit_fold_carry(
+            [mixed_file], 6000)
+        plain_kinds = {"ledger": 0, "round": 0}
+        for line in LL.load_archive_lines(logs):
+            plain_kinds[LL.classify(line)] += 1
+        real_logs = LL.default_logs_dir(STATE)
+        real_archives = LL.load_archive_lines(real_logs)
+        real_scope = LL.audit_scope(real_archives, live)
+        real_carry = LL.audit_fold_carry(LL.archive_files(real_logs))
+        presence_rounds = set()
+        presence_count = 0
+        classify_count = 0
+        dated_count = 0
+        for line in real_archives:
+            if LL.LEDGER_PRESENCE_RE.match(line):
+                presence_count += 1
+                presence_rounds.add(
+                    int(LL.LEDGER_PRESENCE_RE.match(line).group(1)))
+                if LL.LEDGER_PREFIX_RE.match(line) is None:
+                    dated_count += 1
+            if LL.classify(line) == "ledger":
+                classify_count += 1
+        check(LL.classify(dated) == "round"
+              and scoped_mixed["archive_ledger_lines"] == 5
+              and scoped_mixed["archive_round_lines"] == 5
+              and scoped_plain["archive_ledger_lines"]
+              == plain_kinds["ledger"]
+              and scoped_plain["archive_round_lines"]
+              == plain_kinds["round"]
+              and [(item["round"], item["windows"])
+                   for item in mixed_carry["split_rounds"]]
+              == [(6001, [6001, 6010])]
+              and [(item["round"], item["window"])
+                   for item in mixed_carry["same_window_gaps"]]
+              == [(6001, 6010), (6011, 6010), (6012, 6010)]
+              and mixed_carry["clean"] is True
+              and mixed_carry["gaps"] == []
+              and "split=1" in LL.format_fold_carry(mixed_carry)
+              and "same_window=3" in LL.format_fold_carry(mixed_carry)
+              and LL.format_fold_carry(mixed_carry).isascii()
+              and all(item["round"] in presence_rounds
+                      for item in real_carry["same_window_gaps"])
+              and real_scope["archive_ledger_lines"] == presence_count
+              and classify_count + dated_count == presence_count
+              and dated_count > 0,
+              "AC-LGA11 archive counts and the cross-window walk read the "
+              "presence law; classify(), the shape law and the verdict "
+              "stay unchanged")
+
     finally:
         shutil.rmtree(world, ignore_errors=True)
+
 
 
 def main():

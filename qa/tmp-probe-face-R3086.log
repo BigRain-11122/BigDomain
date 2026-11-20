@@ -1,0 +1,31 @@
+SHARD scope=SHARD registry_suites=733 registry_criteria=5971 selected=2 selected_criteria=12 cap=600s leg_cap=0s overrides=1 exact=2 state=COMPLETE
+SHARD row os-queue-floor-export-face rc=1 pass=5 fail=1 detail=yes suite=FAIL 5/6 crit=6 0.3s
+SHARD detail os-queue-floor-export-face SUITE queue_floor_export_face (R2374) criteria=6
+SHARD detail os-queue-floor-export-face PASS AC-QFE1 the section IS queue_floor_reading_wire.published (patching its reading moves the export)
+SHARD detail os-queue-floor-export-face PASS AC-QFE2 publishes the discounted claimable plus every discounted row (line+prefix), never the gross alone
+SHARD detail os-queue-floor-export-face   measured: pass=18 fail=3 second=False
+SHARD detail os-queue-floor-export-face FAIL AC-QFE3 check_export_consistency reads 21/21 with the new field, and the field is not a second derivation
+SHARD detail os-queue-floor-export-face PASS AC-QFE4 one stable key order plus one trailing LF, byte-stable across two runs
+SHARD detail os-queue-floor-export-face PASS AC-QFE5 the value is derived at write time (a changed queue moves it, no canned copy)
+SHARD detail os-queue-floor-export-face PASS AC-QFE6 pure ASCII, stdlib only, no clock, no network, one runner entry at 6 criteria
+SHARD detail os-queue-floor-export-face SUITE FAIL 5/6
+SHARD row os-export-consistency-queue-face rc=2 pass=12 fail=3 detail=yes suite=FAIL 0/6 crit=6 0.4s
+SHARD detail os-export-consistency-queue-face PASS AC-ECQF1 queue reading asked at CALL time (patched gate moves it)
+SHARD detail os-export-consistency-queue-face PASS AC-ECQF1 base checks asked at CALL time (patched face moves them)
+SHARD detail os-export-consistency-queue-face PASS AC-ECQF2 twenty-one base lines identical and counted
+SHARD detail os-export-consistency-queue-face PASS AC-ECQF3 fixture built from the real export
+SHARD detail os-export-consistency-queue-face PASS AC-ECQF3 stale block reads DRIFT naming queue and sections
+SHARD detail os-export-consistency-queue-face FAIL AC-ECQF3 queue drift is never folded into the twenty-one
+SHARD detail os-export-consistency-queue-face FAIL AC-ECQF4 CURRENT document reads AGREE at exit 0 with base intact
+SHARD detail os-export-consistency-queue-face FAIL AC-ECQF4 CLI prints the base lines then exactly one queue line
+SHARD detail os-export-consistency-queue-face PASS AC-ECQF4 the reading left the export byte-identical
+SHARD detail os-export-consistency-queue-face PASS AC-ECQF5 source carries no clock and no file write call
+SHARD detail os-export-consistency-queue-face PASS AC-ECQF5 two readings left the export byte-identical
+SHARD detail os-export-consistency-queue-face PASS AC-ECQF6 module source is pure ASCII
+SHARD detail os-export-consistency-queue-face PASS AC-ECQF6 imports are stdlib plus the two shipped faces only
+SHARD detail os-export-consistency-queue-face PASS AC-ECQF6 exactly one registry row wires this suite with 6 criteria
+SHARD detail os-export-consistency-queue-face PASS AC-ECQF6 six criteria declared
+SHARD detail os-export-consistency-queue-face SUITE FAIL 0/6
+SHARD detail os-export-consistency-queue-face SUMMARY pass=12 fail=3
+SHARD rc=2 scope=SHARD selected=2 executed=2 green=0 criteria=12 crit_mismatch=0 elapsed=0.7s crit_checked=2 crit_unchecked=0
+SHARD red os-queue-floor-export-face:rc=1,os-export-consistency-queue-face:rc=2

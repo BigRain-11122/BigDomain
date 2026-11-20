@@ -144,6 +144,31 @@ def classify(line):
     return "other"
 
 
+def classify_archive(line):
+    """Return 'ledger', 'round' or 'other' for one ARCHIVE line (R3086).
+
+    The live face and the archive face ask different questions, and only
+    the archive face may tolerate a date prefix. classify() is the SHAPE
+    face: it reads LEDGER_PREFIX_RE, so a ledger line written before the
+    write door existed (measured: 786 dated lines over the three archives)
+    reads as a round narrative there, and that is correct for the place
+    the shape law is enforced. The archive is frozen history that no round
+    may rewrite, so its counts and its advisory gap sets must ask presence
+    instead - the same law audit_fold_carry already reads (R3084). This
+    classifier is used ONLY by audit_archive/audit_scope; classify(),
+    parse_ledger_line() and the write door never see it, so the shape law
+    keeps refusing a malformed line at birth.
+    """
+    text = line if isinstance(line, str) else str(line)
+    if LEDGER_PRESENCE_RE.match(text):
+        return "ledger"
+    if FOLD_SUMMARY_RE.match(text):
+        return "other"
+    if NARRATIVE_RE.match(text):
+        return "round"
+    return "other"
+
+
 def check_round_main_shape(lines):
     """Ask the round-main shape law of the NEWEST round (R2832).
 
@@ -401,6 +426,39 @@ def audit(lines, tail=None):
     }
 
 
+def audit_archive(lines):
+    """Audit frozen archive lines through the PRESENCE law (R3086).
+
+    Same shape of report as audit(), derived with classify_archive() so a
+    dated ledger line is a ledger line and not a round narrative. No parse
+    is attempted: archives hold pre-law payloads (measured: R2875 has no
+    ' local=' field) and a parse error there is frozen fact, not drift, so
+    the scope face never reported one.
+    """
+    kinds = {"ledger": 0, "round": 0, "other": 0}
+    ledger_rounds = []
+    round_rounds = []
+    for raw in lines:
+        line = raw if isinstance(raw, str) else str(raw)
+        kind = classify_archive(line)
+        kinds[kind] += 1
+        if kind == "ledger":
+            ledger_rounds.append(
+                int(LEDGER_PRESENCE_RE.match(line).group(1)))
+        elif kind == "round":
+            round_rounds.append(int(NARRATIVE_RE.match(line).group(1)))
+    return {
+        "total_lines": len(lines),
+        "ledger_lines": kinds["ledger"],
+        "round_lines": kinds["round"],
+        "other_lines": kinds["other"],
+        "rounds_without_ledger": sorted(set(round_rounds)
+                                        - set(ledger_rounds)),
+        "ledger_without_round": sorted(set(ledger_rounds)
+                                       - set(round_rounds)),
+    }
+
+
 def default_baseline_path():
     """The shipped baseline of known historical gaps."""
     here = os.path.dirname(os.path.abspath(__file__))
@@ -640,23 +698,52 @@ def audit_fold_carry(paths, min_round=None):
                 continue
             examined.append(window)
     gaps = []
+    same_window = []
     rounds = 0
-    for window in examined:
+    # R3086: two PUBLISHED diagnostics, neither of which may change the
+    # verdict. The carry law is archive-granular by design (a fold moves a
+    # contiguous line range, so a round can legitimately land in two
+    # windows), which left a reader unable to tell a whole round from a
+    # split one - measured: 3 split rounds across the 29 post-pin windows,
+    # and 48 across all 754 archive windows. Naming them is the smallest
+    # honest answer; gating on them would false-kill healthy history,
+    # measured before this line was written.
+    window_rounds = []
+    for index, window in enumerate(examined):
+        here = set()
+        for line in window["lines"]:
+            presence = LEDGER_PRESENCE_RE.match(line)
+            if presence is not None:
+                here.add(int(presence.group(1)))
         narratives = sorted(set(
             int(NARRATIVE_RE.match(line).group(1))
             for line in window["lines"] if classify(line) == "round"))
+        window_rounds.append(narratives)
         rounds += len(narratives)
         for round_no in narratives:
             if round_no not in archive_rounds:
                 gaps.append({"window": window["round"],
                              "round": round_no,
                              "path": window["path"]})
+            if round_no not in here:
+                same_window.append({"window": window["round"],
+                                    "round": round_no,
+                                    "path": window["path"]})
+    seen = {}
+    for index, narratives in enumerate(window_rounds):
+        for round_no in narratives:
+            seen.setdefault(round_no, []).append(examined[index]["round"])
+    split = [{"round": round_no, "windows": sorted(windows)}
+             for round_no, windows in sorted(seen.items())
+             if len(windows) > 1]
     return {
         "since": min_round,
         "windows": len(examined),
         "skipped_windows": skipped,
         "rounds": rounds,
         "gaps": gaps,
+        "split_rounds": split,
+        "same_window_gaps": same_window,
         "clean": not gaps,
         "vacuous": not examined,
     }
@@ -669,13 +756,18 @@ def format_fold_carry(report):
                 "(no window opened at or after the pin yet)"
                 % (report["since"], report["skipped_windows"]))
     if report["clean"]:
-        return ("FOLD-CARRY OK since=%d windows=%d rounds=%d skipped=%d"
+        return ("FOLD-CARRY OK since=%d windows=%d rounds=%d skipped=%d "
+                "split=%d same_window=%d"
                 % (report["since"], report["windows"], report["rounds"],
-                   report["skipped_windows"]))
+                   report["skipped_windows"], len(report["split_rounds"]),
+                   len(report["same_window_gaps"])))
     gaps = ",".join("R%d(w%d)" % (item["round"], item["window"])
                     for item in report["gaps"])
-    return ("FOLD-CARRY FAIL E_LFC_CARRY since=%d windows=%d gaps=%s"
-            % (report["since"], report["windows"], gaps))
+    return ("FOLD-CARRY FAIL E_LFC_CARRY since=%d windows=%d gaps=%s "
+            "split=%d same_window=%d"
+            % (report["since"], report["windows"], gaps,
+               len(report["split_rounds"]),
+               len(report["same_window_gaps"])))
 
 
 def coverage_floor(report, minimum=MIN_COVERAGE_LINES):
@@ -701,10 +793,20 @@ def audit_scope(archive_lines, live_lines, tail=None):
     exactly the conflict R2223 measured: the fold empties the live
     array, so a live-only floor can never be met again while the union
     floor keeps reading the whole history.
+
+    R3086: the archive half of every number here is derived through
+    audit_archive(), i.e. the presence law, not classify(). Measured
+    before the change: 786 dated ledger lines over the three archives
+    were counted as round narratives (archive_ledger_lines 1090 where
+    presence reads 1876) and inflated archived_missing by the same root.
+    The archive advisory sets move with the counts so the published face
+    cannot say "counted as round" and "missing a ledger" about one line.
+    The live half keeps classify() unchanged: that is where the shape law
+    is enforced and where a later round can still introduce drift.
     """
     live_report = audit(live_lines, tail)
     live_full = audit(live_lines)
-    archive_report = audit(archive_lines)
+    archive_report = audit_archive(archive_lines)
     out = dict(live_report)
     out["scope"] = "live+archive"
     out["archive_lines"] = archive_report["total_lines"]

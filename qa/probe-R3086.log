@@ -1,0 +1,35 @@
+R3086 probe - archives=3
+  archive state-log-archive-2026-09.md bytes=16565173
+  archive state-log-archive-2026-10.md bytes=4987837
+  archive state-log-archive-2026-11.md bytes=5040093
+Q1 windows_total=754 rounds_with_narrative=1803 split_rounds=48
+   split R1736 windows=[('state-log-archive-2026-10.md', 1743), ('state-log-archive-2026-10.md', 1746)]
+   split R2125 windows=[('state-log-archive-2026-10.md', 2125), ('state-log-archive-2026-10.md', 2140)]
+   split R2132 windows=[('state-log-archive-2026-10.md', 2132), ('state-log-archive-2026-10.md', 2140)]
+   split R2249 windows=[('state-log-archive-2026-10.md', 2260), ('state-log-archive-2026-10.md', 2268)]
+   split R2260 windows=[('state-log-archive-2026-10.md', 2271), ('state-log-archive-2026-10.md', 2282)]
+   split R2276 windows=[('state-log-archive-2026-10.md', 2277), ('state-log-archive-2026-10.md', 2292)]
+   split R2297 windows=[('state-log-archive-2026-11.md', 2309), ('state-log-archive-2026-11.md', 2311)]
+   split R2299 windows=[('state-log-archive-2026-11.md', 2311), ('state-log-archive-2026-11.md', 2313)]
+   split R2300 windows=[('state-log-archive-2026-11.md', 2313), ('state-log-archive-2026-11.md', 2313)]
+   split R2302 windows=[('state-log-archive-2026-11.md', 2313), ('state-log-archive-2026-11.md', 2317)]
+   split R2304 windows=[('state-log-archive-2026-11.md', 2318), ('state-log-archive-2026-11.md', 2319)]
+   split R2305 windows=[('state-log-archive-2026-11.md', 2319), ('state-log-archive-2026-11.md', 2320)]
+   split R2308 windows=[('state-log-archive-2026-11.md', 2321), ('state-log-archive-2026-11.md', 2322)]
+   split R2312 windows=[('state-log-archive-2026-11.md', 2325), ('state-log-archive-2026-11.md', 2326)]
+   split R2319 windows=[('state-log-archive-2026-11.md', 2331), ('state-log-archive-2026-11.md', 2333)]
+   split R2322 windows=[('state-log-archive-2026-11.md', 2335), ('state-log-archive-2026-11.md', 2336)]
+   split R2326 windows=[('state-log-archive-2026-11.md', 2338), ('state-log-archive-2026-11.md', 2338)]
+   split R2328 windows=[('state-log-archive-2026-11.md', 2341), ('state-log-archive-2026-11.md', 2342)]
+   split R2334 windows=[('state-log-archive-2026-11.md', 2345), ('state-log-archive-2026-11.md', 2345)]
+   split R2344 windows=[('state-log-archive-2026-11.md', 2354), ('state-log-archive-2026-11.md', 2354)]
+Q2 pin=2914 examined_windows=29 rounds=179 same_window_gaps=3
+   gap R2935(w2946) state-log-archive-2026-11.md
+   gap R2973(w2978) state-log-archive-2026-11.md
+   gap R3079(w3085) state-log-archive-2026-11.md
+Q3 archive_lines=23546 presence_ledger=1876 classify_ledger=1090 dated=786 undercount=786
+Q4 archive_ledger_lines consumers=2
+   src\os\ledger_lines.py: out["archive_ledger_lines"] = archive_report["ledger_lines"]
+   src\os\test_ledger_archive.py: and scoped["archive_ledger_lines"] == 40
+Q4 live_fold_carry clean=True windows=29 rounds=179 skipped=725 gaps=none
+Q4 live_log_lines=35
