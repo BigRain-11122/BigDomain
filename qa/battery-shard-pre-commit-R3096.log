@@ -1,0 +1,3 @@
+SHARD scope=SHARD registry_suites=734 registry_criteria=5985 selected=1 selected_criteria=21 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-pre-commit-gate rc=0 pass=32 fail=0 detail=yes suite=PASS 32/32 crit=21 41.2s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=21 crit_mismatch=0 elapsed=41.2s crit_checked=1 crit_unchecked=0

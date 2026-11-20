@@ -23,6 +23,16 @@ A retired one-off is a DELETE and is never refused: only added, copied,
 modified or renamed paths are read. The same filter means a deleted evidence
 file is never refused either.
 
+R3096 third face (criteria AC-CGH6, pinned in src/os/backlog.md BEFORE this
+code): the closeout gate asks the DERIVED suite-matrix document, but only when
+the closeout vehicle runs - so a commit that moves a registry row and leaves
+docs/sandbox-suite-matrix.md behind still reached history. Measured cost on the
+live tree at R3096: this face costs +313ms on top of the 1837.9ms census tree
+face (the registry census face is 5681.6ms and is deliberately NOT asked here;
+it stays the closeout's job). A world that builds no document prints
+`HOOK MATRIX SKIP reason=no-derived-doc` - never a silent pass - which keeps
+every existing 22-world fixture green.
+
 R2933 second face (criteria AC-CGH1..AC-CGH5, pinned in src/os/backlog.md
 BEFORE this code): the staged face reads the INDEX, so a file that is `git
 add`-ed as healthy and then rewritten on disk in a shell dialect still commits
@@ -48,6 +58,9 @@ site that can refuse mechanically is git.
          = E_HOOK_NO_CENSUS_BASELINE (the census baseline is missing/unreadable)
          = E_HOOK_CENSUS_EMPTY (the evidence dir holds no log to classify)
          = E_HOOK_CENSUS_ROW (a census row this gate cannot read)
+         = E_HOOK_NO_MATRIX_LAW (a derived document exists but the law that
+           judges it is not in the tree being committed)
+         = E_HOOK_MATRIX_UNREADABLE (the document or its law raised)
 """
 
 import os
@@ -209,6 +222,46 @@ def tree_face(root):
                         % (flags, files)] + named)
 
 
+def matrix_face(root):
+    """The derived suite-matrix document, asked over the WORKING TREE (R3096).
+
+    The document is DERIVED from the registry, so a commit can move a registry
+    row and leave docs/sandbox-suite-matrix.md behind while every face above
+    reads green; the closeout gate already refuses that at the close of a
+    round, and this asks the same law at the birth site.
+
+    The law is not re-implemented here: closeout_gate.check_matrix owns it.
+    A world that builds no document reads SKIP with its reason on the line -
+    the same shape tree_face uses for a world with no evidence dir - so neither
+    can pass in silence, and a world that carries a document but not the law
+    is a NAMED refusal (a document this gate cannot judge is not a pass).
+
+    Returns (kind, lines) with kind in PASS / REFUSED / SKIP, or raises
+    GateError for an input it cannot read.
+    """
+    doc_rel = "docs/sandbox-suite-matrix.md"
+    doc = os.path.join(root, "docs", "sandbox-suite-matrix.md")
+    if not os.path.isfile(doc):
+        return "SKIP", ["HOOK MATRIX SKIP reason=no-derived-doc doc=%s"
+                        % doc_rel]
+    tools = os.path.join(root, "tools")
+    if tools not in sys.path:
+        sys.path.insert(0, tools)
+    try:
+        import closeout_gate as CG
+    except Exception as exc:   # a document with no law must not read as clean
+        raise GateError("E_HOOK_NO_MATRIX_LAW",
+                        "%s: %s" % (type(exc).__name__, exc))
+    try:
+        ok, line = CG.check_matrix(root, doc=doc)
+    except (IOError, OSError, ValueError) as exc:
+        raise GateError("E_HOOK_MATRIX_UNREADABLE",
+                        "%s: %s" % (type(exc).__name__, exc))
+    if ok:
+        return "PASS", ["HOOK MATRIX PASS %s" % line]
+    return "REFUSED", ["E_HOOK_MATRIX %s" % line]
+
+
 def refusals(paths, law, freeze):
     """Staged paths whose basename is a one-off at or above the freeze."""
     out = []
@@ -305,10 +358,33 @@ def main(argv=None):
         for line in tree_lines:
             sys.stdout.write("%s\n" % line)
 
-    if refused or bad_evidence or tree_kind == "REFUSED":
+    # AC-CGH6 (R3096): the derived document is asked LAST, and only when the
+    # byte-drift face above did not already refuse - the same ordering reason
+    # the closeout gate uses. A red tree prints no matrix row at all, so a
+    # reader can never mistake one face's silence for its verdict.
+    matrix_kind = "SKIP"
+    if tree_kind != "REFUSED":
+        try:
+            matrix_kind, matrix_lines = matrix_face(root)
+        except GateError as exc:
+            sys.stderr.write("%s\n" % exc)
+            return 3
+        stream = sys.stderr if matrix_kind == "REFUSED" else sys.stdout
+        for line in matrix_lines:
+            stream.write("%s\n" % line)
+        if matrix_kind == "REFUSED":
+            sys.stderr.write(
+                "E_HOOK_MATRIX the derived suite-matrix document is stale "
+                "against the registry: regenerate it with "
+                "python src/sandbox/suite_matrix.py --write, or bypass "
+                "deliberately with: git commit --no-verify\n")
+
+    if (refused or bad_evidence or tree_kind == "REFUSED"
+            or matrix_kind == "REFUSED"):
         return 1
     sys.stdout.write("HOOK OK staged=%d freeze=%d evidence=clean tree=%s "
-                     "rc=0\n" % (len(paths), freeze, tree_kind))
+                     "matrix=%s rc=0\n"
+                     % (len(paths), freeze, tree_kind, matrix_kind))
     return 0
 
 

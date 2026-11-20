@@ -1,0 +1,38 @@
+PASS AC-HK1 gate asks the law for shape and round, owns no regex or walk, ASCII
+PASS AC-HK3 permanent module and a sub-freeze one-off both commit (baseline rc=0, R2431 rc=0)
+PASS AC-HK2 a staged one-off is refused, named, count unchanged (2)
+PASS AC-EVB1 staged shell-captured evidence refused by a REAL commit, named with its class, count unchanged (2)
+PASS AC-EVB2 non-qa/ sample and an evidence deletion both commit (rc=0 HOOK TREE PASS files=1 flags=0 reader_refused=0 gating=flags
+
+HOOK MATRIX SKIP reason=no-derived-doc doc=docs/sandbox-suite-matrix.md
+
+HOOK OK staged=1 freeze=2)
+PASS AC-EVB3 label absent commits, label present in a bad dialect is refused (rc=0/1)
+PASS AC-HK5 hook is LF-only, names E_HOOK_NO_PYTHON and the bypass
+PASS AC-HK4 enablement measured: DISABLED rc=2, APPLIED, ENABLED rc=0
+PASS AC-HK6 real tree: law clean, enable --check honest (rc=0), gate clean
+PASS AC-EVB4 one dialect law (census delegates, no branch copy), label split published (rc=0, split rc=0)
+PASS AC-EVB5 missing dialect law refuses by name (rc=3)
+PASS AC-CGH1 an UNSTAGED shell-capture file refuses the commit by name, count unchanged (1)
+PASS AC-CGH1 removing the file returns the SAME world to a commit (rc=0 count=2)
+PASS AC-CGH2 both faces fire in ONE run, each naming its own file (count unchanged at 1)
+PASS AC-CGH2 healthy INDEX bytes with a rewritten disk file refuse on the tree face ALONE (rc=1)
+PASS AC-CGH3 a clean frozen world passes and the tree face writes nothing (rc=0 files=2)
+PASS AC-CGH3 a tree without the census law is a NAMED refusal (rc=3)
+PASS AC-CGH3 a missing baseline is a NAMED refusal (rc=3)
+PASS AC-CGH3 no evidence dir reads a NAMED skip, never a silent pass (rc=0)
+PASS AC-CGH4 a baselined undecodable file does not refuse the round (rc=0 count=1)
+PASS AC-CGH4 the tree row PUBLISHES reader_refused=1 and gates on flags only (rc=0)
+PASS AC-CGH6a a world with no derived document prints its SKIP reason and commits (rc=0 commit=0)
+PASS AC-CGH6b a document with no judging law is a NAMED refusal (rc=3)
+PASS AC-CGH6c the live tree reads HOOK MATRIX PASS DOC-CURRENT and the document's bytes/mtime do not move
+PASS AC-CGH6d a red byte-drift face prints no matrix row (rc=1)
+PASS AC-CGH6e a red law becomes E_HOOK_MATRIX carrying the law's own line
+PASS AC-CGH5 the live tree reads HOOK TREE PASS with a DERIVED count (4096)
+PASS AC-CGH5 the closeout gate and the commit tree face read the SAME count (4096)
+PASS AC-HK7 os-pre-commit-gate registered with its criterion count (21)
+PASS AC-HK8 the freeze law is asked before the first suite
+PASS AC-HK9 refused tree aborts before the first suite (rc=1 suites=0 reconcile=0)
+PASS AC-HK10 law read from the world (refused=False, live=clean), one refusal site, verdict independent
+suite: 32 assertions over 21 criteria
+SUITE PASS 32/32 checks

@@ -47,8 +47,8 @@ import one_off_round_scripts as OOS  # noqa: E402
 sys.path.insert(0, os.path.join(SRC, "sandbox"))
 import reconcile_all as RA  # SHELL_CAPTURE_LABEL, single source (AC-EVB3)
 
-EXPECTED_CRITERIA = 20
-EXPECTED_CHECKS = 27
+EXPECTED_CRITERIA = 21
+EXPECTED_CHECKS = 32
 HOOKS = os.path.join(ROOT, "tools", "hooks")
 GATE = os.path.join(HOOKS, "pre_commit_gate.py")
 ENABLE = os.path.join(HOOKS, "enable.py")
@@ -495,6 +495,88 @@ try:
           "only (rc=%d)" % code_g)
 finally:
     shutil.rmtree(world6, ignore_errors=True)
+
+# AC-CGH6 - R3096: the DERIVED suite-matrix document is asked at the commit
+# site. Five arms, one criterion; the gate delegates to closeout_gate so this
+# measures the CALL SITE, not a second copy of the law.
+# a) a world that builds no document reads a NAMED skip and still commits.
+world7 = make_world()
+try:
+    write(os.path.join(world7, "notes.txt"), "healthy\n")
+    run(["git", "add", "notes.txt"], world7)
+    gate7 = os.path.join(world7, "tools", "hooks", "pre_commit_gate.py")
+    code_a, out_a, err_a = run([sys.executable, gate7], world7)
+    code_ac, _oc, _ec = commit(world7, "AC-CGH6a")
+    check(code_a == 0
+          and ("HOOK MATRIX SKIP reason=no-derived-doc "
+               "doc=docs/sandbox-suite-matrix.md") in out_a
+          and "matrix=SKIP" in out_a
+          and code_ac == 0 and commits(world7) == 1,
+          "AC-CGH6a a world with no derived document prints its SKIP reason "
+          "and commits (rc=%d commit=%d)" % (code_a, code_ac))
+finally:
+    shutil.rmtree(world7, ignore_errors=True)
+
+# b) a world that carries a document but not the law that judges it is a
+# NAMED refusal, never a pass (the same rule AC-CGH3 applies to the census).
+world8 = make_world()
+try:
+    write(os.path.join(world8, "docs", "sandbox-suite-matrix.md"),
+          "# a document no law in this world judges\n")
+    gate8 = os.path.join(world8, "tools", "hooks", "pre_commit_gate.py")
+    code_b, out_b, err_b = run([sys.executable, gate8], world8)
+    check(code_b == 3 and "E_HOOK_NO_MATRIX_LAW" in (out_b + err_b),
+          "AC-CGH6b a document with no judging law is a NAMED refusal "
+          "(rc=%d)" % code_b)
+finally:
+    shutil.rmtree(world8, ignore_errors=True)
+
+# c) the live tree reads DOC-CURRENT, and the face is READ-ONLY: the document's
+# bytes and mtime are measured before and after the run.
+doc_live = os.path.join(ROOT, "docs", "sandbox-suite-matrix.md")
+before = (read(doc_live), os.stat(doc_live).st_mtime_ns)
+code_c, out_c, err_c = run([sys.executable, GATE], ROOT)
+after = (read(doc_live), os.stat(doc_live).st_mtime_ns)
+check(code_c == 0 and "HOOK MATRIX PASS DOC-CURRENT" in out_c
+      and "matrix=PASS" in out_c and before == after,
+      "AC-CGH6c the live tree reads HOOK MATRIX PASS DOC-CURRENT and the "
+      "document's bytes/mtime do not move")
+
+# d) face order: a red tree prints no matrix row at all, so one face's silence
+# can never be read as its verdict.
+world9 = make_world()
+try:
+    write(os.path.join(world9, "docs", "sandbox-suite-matrix.md"),
+          "# present, but the byte-drift face refuses first\n")
+    write(os.path.join(world9, "qa", "unstaged_shell_capture.log"),
+          "ROW\r\nsecond line\r\n")
+    gate9 = os.path.join(world9, "tools", "hooks", "pre_commit_gate.py")
+    code_d, out_d, err_d = run([sys.executable, gate9], world9)
+    check(code_d == 1 and "E_HOOK_TREE" in (out_d + err_d)
+          and "HOOK MATRIX" not in (out_d + err_d),
+          "AC-CGH6d a red byte-drift face prints no matrix row (rc=%d)"
+          % code_d)
+finally:
+    shutil.rmtree(world9, ignore_errors=True)
+
+# e) the face owns no second law: a red answer from closeout_gate.check_matrix
+# becomes E_HOOK_MATRIX with the law's own line carried through verbatim.
+import importlib.util  # noqa: E402
+_spec = importlib.util.spec_from_file_location("gate_under_test_R3096", GATE)
+_gate = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_gate)
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+import closeout_gate as CG6  # noqa: E402
+_original = CG6.check_matrix
+CG6.check_matrix = lambda root, doc=None: (False, "RED-LEG rows=3/4")
+try:
+    kind_e, lines_e = _gate.matrix_face(ROOT)
+finally:
+    CG6.check_matrix = _original
+check(kind_e == "REFUSED" and lines_e
+      and lines_e[0].startswith("E_HOOK_MATRIX ")
+      and "RED-LEG rows=3/4" in lines_e[0],
+      "AC-CGH6e a red law becomes E_HOOK_MATRIX carrying the law's own line")
 
 # AC-CGH5 - the live tree: the face is measured on the shipped repo, and its
 # file count agrees with the closeout gate because both ask one law.
