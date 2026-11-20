@@ -4820,9 +4820,10 @@ SUITES = [
     # refusing a dated prefix at birth; AC-LGA11 added at R3086 - the
     # archive COUNT face reads the same presence law and the fold-carry
     # report names split rounds and same-window gaps without gating on
-    # either.)
+    # either. AC-LGA13 added at R3089: every published position also
+    # carries the archive's own file, in-file ordinal and marker line.)
     ("os-ledger-archive",
-     os.path.join("..", "os", "test_ledger_archive.py"), 12),
+     os.path.join("..", "os", "test_ledger_archive.py"), 13),
     # R2157: the baseline is the gate's only exemption channel, so its
     # semantics are pinned - one entry exempts one round only, a stale
     # entry is reported instead of rotting quietly, a broken baseline

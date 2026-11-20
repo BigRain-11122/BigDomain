@@ -1,0 +1,45 @@
+archives=3
+FILE state-log-archive-2026-09.md windows=192 first_line=438 last_line=15905 bytes=16565173
+  ordinals_dense=True unique_lines=True unique_offsets=True
+FILE state-log-archive-2026-10.md windows=331 first_line=20 last_line=3025 bytes=4987837
+  ordinals_dense=True unique_lines=True unique_offsets=True
+FILE state-log-archive-2026-11.md windows=231 first_line=2 last_line=5491 bytes=5040093
+  ordinals_dense=True unique_lines=True unique_offsets=True
+TOTAL windows=754
+report since=2914 windows=29 skipped=725 clean=True dup=4
+
+Q1/Q2 same_window_gaps (n=3)
+  round=2935 marker=2946 window_index=18 file=state-log-archive-2026-11.md candidates_at_marker=2 lines=[4511, 4532] ordinals=[220, 221]
+  round=2973 marker=2978 window_index=23 file=state-log-archive-2026-11.md candidates_at_marker=1 lines=[4742] ordinals=[225]
+  round=3079 marker=3085 window_index=27 file=state-log-archive-2026-11.md candidates_at_marker=3 lines=[4839, 5488, 5491] ordinals=[229, 230, 231]
+
+Q1/Q2 split_rounds (n=4)
+  round=2935 windows=[2946, 2946] window_indices=[18, 19]
+    idx=18 marker=2946 file=state-log-archive-2026-11.md lines=[4511, 4532] ordinals=[220, 221]
+    idx=19 marker=2946 file=state-log-archive-2026-11.md lines=[4511, 4532] ordinals=[220, 221]
+  round=2939 windows=[2939, 2950] window_indices=[15, 20]
+    idx=15 marker=2939 file=state-log-archive-2026-11.md lines=[4477] ordinals=[217]
+    idx=20 marker=2950 file=state-log-archive-2026-11.md lines=[4538] ordinals=[222]
+  round=2973 windows=[2978, 2983] window_indices=[23, 24]
+    idx=23 marker=2978 file=state-log-archive-2026-11.md lines=[4742] ordinals=[225]
+    idx=24 marker=2983 file=state-log-archive-2026-11.md lines=[4775] ordinals=[226]
+  round=3079 windows=[3085, 3085] window_indices=[27, 28]
+    idx=27 marker=3085 file=state-log-archive-2026-11.md lines=[4839, 5488, 5491] ordinals=[229, 230, 231]
+    idx=28 marker=3085 file=state-log-archive-2026-11.md lines=[4839, 5488, 5491] ordinals=[229, 230, 231]
+
+Q1 uniqueness: (file, ordinal) pairs across examined windows
+  examined=29
+  per-file ordinal sequence contiguous=True files=[29]
+
+Q3 consumers=9
+  .codely-cli\auto-saves\chat-auto-save-2026-11-20-18-46-09-639.json
+  .codely-cli\auto-saves\chat-auto-save-2026-11-20-19-07-09-114.json
+  .codely-cli\auto-saves\chat-export-auto-save-2026-11-20-18-46-09-639.md
+  .codely-cli\auto-saves\chat-export-auto-save-2026-11-20-19-07-09-114.md
+  docs\status-export.json
+  src\os\backlog.md
+  src\os\ledger_lines.py
+  src\os\state.json
+  src\os\test_ledger_archive.py
+  split entries whose marker list repeats (locator needed)=2
+  same_window entries whose marker is duplicated in its file=2

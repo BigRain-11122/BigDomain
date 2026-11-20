@@ -1,0 +1,15 @@
+suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA12)
+PASS AC-LGA1 archive loader keeps log lines in order, drops markers, rewrites nothing
+PASS AC-LGA2 union floor passes where the live-only floor fails
+PASS AC-LGA3 live drift still gates even with a full archive
+PASS AC-LGA4 archived gaps are informational, never gated
+PASS AC-LGA5 tail scopes the live window only
+PASS AC-LGA6 bad archive input fails closed with zero stdout
+PASS AC-LGA7 default face byte-identical, only the counts block and the two scope lines differ
+PASS AC-LGA8 real tree floor met on the union, drift clean, hygiene
+PASS AC-LGA9 fold-carried ledger pairing is scoped to post-pin windows, reddens the left-behind shape, and is measured non-vacuous on the shipped tree
+PASS AC-LGA10 presence sees a dated ledger line, shape still refuses it, and only the round set moved
+PASS AC-LGA11 archive counts and the cross-window walk read the presence law; classify(), the shape law and the verdict stay unchanged
+PASS AC-LGA12 the cross-window diagnostics locate their window, and the archive payload reading is published without gating
+PASS AC-LGA13 every published position is openable - file, in-file ordinal and marker line - while window_index keeps its measured meaning
+SUITE PASS 13/13 criteria

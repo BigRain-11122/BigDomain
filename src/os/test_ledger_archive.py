@@ -28,7 +28,7 @@ sys.path.insert(0, BASE)
 
 import ledger_lines as LL  # noqa: E402
 
-EXPECTED_CRITERIA = 12
+EXPECTED_CRITERIA = 13
 MODULE = os.path.join(BASE, "ledger_lines.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 STATE = os.path.join(BASE, "state.json")
@@ -628,6 +628,90 @@ def run():
               == len(real_carry3["same_window_gaps"]),
               "AC-LGA12 the cross-window diagnostics locate their window, "
               "and the archive payload reading is published without gating")
+
+        # AC-LGA13 (R3089): a published position a reader cannot open is a
+        # decoration. window_index starts at the pin, so the live report's
+        # 'window 18' is the file's 220th window at line 4511 - a 202-window
+        # offset no reader is told about. The archive's own coordinates
+        # (file, in-file ordinal, marker line) are measured unique, dense
+        # and append-stable, so they are published beside window_index.
+        two = os.path.join(world, "logs-lga13")
+        os.makedirs(two)
+        two_file = os.path.join(two, "state-log-archive-2026-12.md")
+        two_text = ("# fixture header\n"
+                    "# --- R7031 fold append (fixture)\n"
+                    + narrative(7032) + "\n"
+                    "# --- R7031 fold append again (fixture)\n"
+                    + narrative(7033) + "\n")
+        write_text(two_file, two_text)
+        two_carry = LL.audit_fold_carry([two_file], 7000)
+        two_lines = two_text.split("\n")
+        real_files = LL.archive_files(real_logs3)
+        real_layout = {}
+        raw_lines = {}
+        for path in real_files:
+            rows = LL.load_archive_windows(path)
+            real_layout[path] = rows
+            raw_lines[os.path.basename(path)] = io.open(
+                path, "r", encoding="utf-8").read().split("\n")
+        dense = True
+        lines_match = True
+        for path, rows in real_layout.items():
+            if [r["ordinal"] for r in rows] != list(range(1, len(rows) + 1)):
+                dense = False
+            raw = io.open(path, "r", encoding="utf-8").read().split("\n")
+            for row in rows:
+                head = raw[row["line"] - 1]
+                if not head.startswith("# --- R%d" % row["round"]):
+                    lines_match = False
+        opens = True
+        for item in real_carry3["same_window_gaps"]:
+            head = raw_lines[item["file"]][item["line"] - 1]
+            if not head.startswith("# --- R%d" % item["window"]):
+                opens = False
+        for item in real_carry3["split_rounds"]:
+            for loc in item["locators"]:
+                head = raw_lines[loc["file"]][loc["line"] - 1]
+                if not head.startswith("# --- R"):
+                    opens = False
+        check([(item["window_index"], item["file_ordinal"], item["line"])
+               for item in two_carry["same_window_gaps"]] == [(1, 1, 2),
+                                                             (2, 2, 4)]
+              and all(two_lines[item["line"] - 1].startswith("# --- R7031")
+                      for item in two_carry["same_window_gaps"])
+              and two_carry["duplicate_markers"] == [7031]
+              and len({item["file_ordinal"] for item
+                       in two_carry["same_window_gaps"]}) == 2
+              and [(item["file_ordinal"], item["line"])
+                   for item in two_carry["gaps"]] == [(1, 2), (2, 4)]
+              and all(item["file"] == "state-log-archive-2026-12.md"
+                      for item in two_carry["same_window_gaps"]
+                      + two_carry["gaps"])
+              and [(len(item["locators"]), item["window_indices"])
+                   for item in dist_carry["split_rounds"]] == [(2, [1, 2])]
+              and [loc["file_ordinal"] for loc
+                   in dist_carry["split_rounds"][0]["locators"]] == [1, 2]
+              and [loc["line"] for loc
+                   in dist_carry["split_rounds"][0]["locators"]] == [2, 4]
+              and real_carry3["clean"] is True
+              and opens
+              and dense
+              and lines_match
+              and real_carry3["windows"] == sum(
+                  len([r for r in rows if r["round"] >= real_carry3["since"]])
+                  for rows in real_layout.values())
+              and LL.format_fold_carry(two_carry).endswith("loc=file@line")
+              and LL.format_fold_carry(dist_carry).endswith("loc=file@line")
+              and LL.format_fold_carry(LL.audit_fold_carry([two_file],
+                                                           9000)
+                                       ).endswith("loc=file@line")
+              and LL.format_fold_carry(two_carry).isascii()
+              and [item["window_index"] for item
+                   in two_carry["same_window_gaps"]] == [1, 2]
+              and dist_carry["split_rounds"][0]["windows"] == [7001, 7010],
+              "AC-LGA13 every published position is openable - file, in-file "
+              "ordinal and marker line - while window_index keeps its "
+              "measured meaning")
 
     finally:
         shutil.rmtree(world, ignore_errors=True)

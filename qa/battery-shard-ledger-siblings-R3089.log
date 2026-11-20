@@ -1,0 +1,15 @@
+SHARD scope=SHARD registry_suites=733 registry_criteria=5974 selected=13 selected_criteria=98 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-ledger-page rc=0 pass=12 fail=0 detail=yes suite=PASS 6/6 crit=6 1.6s
+SHARD row os-ledger-lines rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+SHARD row os-ledger-archive rc=0 pass=13 fail=0 detail=yes suite=PASS 13/13 crit=13 2.4s
+SHARD row os-ledger-baseline rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.1s
+SHARD row os-ledger-fold-kind rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-ledger-fold-kind-dateprefix rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-ledger-fold-kind-inflection rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.4s
+SHARD row os-ledger-closeout rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row os-ledger-line-shape-guard rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.6s
+SHARD row os-ledger-round-main-shape rc=0 pass=9 fail=0 detail=yes suite=PASS 9/9 crit=9 0.4s
+SHARD row os-ledger-tokens-prefix-repair rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-ledger-reconcile-face rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row os-ledger-business-report rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.4s
+SHARD rc=0 scope=SHARD selected=13 executed=13 green=13 criteria=98 crit_mismatch=0 elapsed=11.0s crit_checked=13 crit_unchecked=0

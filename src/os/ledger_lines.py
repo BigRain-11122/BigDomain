@@ -654,19 +654,28 @@ def load_archive_windows(path):
     """
     windows = []
     current = None
+    ordinal = 0
     try:
         handle = io.open(path, "r", encoding="utf-8")
     except (IOError, OSError) as exc:
         raise LedgerLineError("E_LGR_BAD_ARCHIVE",
                               "%s is unreadable: %s" % (path, exc))
     try:
-        for raw in handle:
+        for line_no, raw in enumerate(handle, 1):
             text = raw.rstrip("\n").rstrip("\r")
             if text.startswith(COMMENT_PREFIX):
                 match = FOLD_MARKER_RE.match(text)
                 if match is not None:
+                    # R3089: a position among EXAMINED windows shifts when
+                    # the pin moves and cannot be opened in a file. The
+                    # in-file ordinal and the marker's own line number are
+                    # properties of the archive, measured unique and dense
+                    # across all 754 windows, so they are what a reader can
+                    # actually open. Both are read, never invented.
+                    ordinal += 1
                     current = {"round": int(match.group(1)), "lines": [],
-                               "path": path}
+                               "path": path, "ordinal": ordinal,
+                               "line": line_no}
                     windows.append(current)
                 continue
             if not text.strip() or current is None:
@@ -752,7 +761,10 @@ def audit_fold_carry(paths, min_round=None):
             if round_no not in archive_rounds:
                 gaps.append({"window": window["round"],
                              "round": round_no,
-                             "path": window["path"]})
+                             "path": window["path"],
+                             "file": os.path.basename(window["path"]),
+                             "file_ordinal": window["ordinal"],
+                             "line": window["line"]})
             if round_no not in here:
                 # R3087 AC-LGA12: the marker alone cannot locate a short
                 # window - two folds in one round write two windows with
@@ -760,18 +772,32 @@ def audit_fold_carry(paths, min_round=None):
                 # twice). window_index is the position among the examined
                 # windows, so two entries with one marker are still told
                 # apart by a reader. PUBLISHED, never a verdict input.
+                # R3089 AC-LGA13: window_index alone still cannot be
+                # opened - it starts at the pin, so a reader has to add the
+                # file's pre-pin window count (measured: 202 for the live
+                # 29). file/file_ordinal/line are the archive's own
+                # coordinates, read at this moment.
                 same_window.append({"window": window["round"],
                                     "window_index": index + 1,
                                     "round": round_no,
-                                    "path": window["path"]})
+                                    "path": window["path"],
+                                    "file": os.path.basename(window["path"]),
+                                    "file_ordinal": window["ordinal"],
+                                    "line": window["line"]})
     seen = {}
     for index, narratives in enumerate(window_rounds):
         for round_no in narratives:
             seen.setdefault(round_no, []).append(
-                (examined[index]["round"], window_indices[index]))
+                (examined[index]["round"], window_indices[index], index))
     split = [{"round": round_no,
-              "windows": sorted(marker for marker, _i in members),
-              "window_indices": sorted(idx for _m, idx in members)}
+              "windows": sorted(marker for marker, _i, _x in members),
+              "window_indices": sorted(idx for _m, idx, _x in members),
+              "locators": [{"file": os.path.basename(
+                                examined[x]["path"]),
+                            "file_ordinal": examined[x]["ordinal"],
+                            "line": examined[x]["line"]}
+                           for _m, _idx, x in sorted(
+                               members, key=lambda row: row[1])]}
              for round_no, members in sorted(seen.items())
              if len(members) > 1]
     marker_counts = {}
@@ -795,14 +821,23 @@ def audit_fold_carry(paths, min_round=None):
 
 
 def format_fold_carry(report):
-    """Render the FOLD-CARRY verdict as exactly one printable ASCII line."""
+    """Render the FOLD-CARRY verdict as exactly one printable ASCII line.
+
+    R3089: positions in this report are the ARCHIVE's own coordinates -
+    file name, in-file window ordinal, marker line number - so the trailing
+    token says so on every shape. They are true as of the read that
+    produced this line; the archives are append-only (measured: 137 commits
+    on the November file, 5498 lines added, 0 deleted), which is the only
+    reason a line number can be published at all.
+    """
     if report["vacuous"]:
         return ("FOLD-CARRY VACUOUS since=%d windows=0 skipped=%d "
-                "(no window opened at or after the pin yet) dup=0"
+                "(no window opened at or after the pin yet) dup=0 "
+                "loc=file@line"
                 % (report["since"], report["skipped_windows"]))
     if report["clean"]:
         return ("FOLD-CARRY OK since=%d windows=%d rounds=%d skipped=%d "
-                "split=%d same_window=%d dup=%d"
+                "split=%d same_window=%d dup=%d loc=file@line"
                 % (report["since"], report["windows"], report["rounds"],
                    report["skipped_windows"], len(report["split_rounds"]),
                    len(report["same_window_gaps"]),
@@ -810,7 +845,7 @@ def format_fold_carry(report):
     gaps = ",".join("R%d(w%d)" % (item["round"], item["window"])
                     for item in report["gaps"])
     return ("FOLD-CARRY FAIL E_LFC_CARRY since=%d windows=%d gaps=%s "
-            "split=%d same_window=%d dup=%d"
+            "split=%d same_window=%d dup=%d loc=file@line"
             % (report["since"], report["windows"], gaps,
                len(report["split_rounds"]),
                len(report["same_window_gaps"]),
