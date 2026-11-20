@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=739 registry_criteria=6011 selected=1 selected_criteria=28 cap=600s leg_cap=0s overrides=1 exact=1 state=RUNNING
+SHARD selected os-closeout crit=28 path=..\os\test_closeout.py
+SHARD row os-closeout rc=0 pass=28 fail=0 detail=yes suite=PASS 28/28 crit=28 20.2s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=28 crit_mismatch=0 elapsed=20.2s crit_checked=1 crit_unchecked=0

@@ -1,0 +1,162 @@
+[
+ {
+  "probe": "Q1 --check closeout",
+  "rc": 0,
+  "total_ms": 2810.5,
+  "enumeration": {
+   "walk": 1,
+   "scandir": 2,
+   "listdir": 3484
+  },
+  "tokens": {
+   "flags_ms": "1391.7",
+   "round_main_ms": "0.5",
+   "census_ms": "181.9",
+   "matrix_ms": "225.1",
+   "state_ms": "1.0",
+   "walk_ms": "994.5"
+  },
+  "headline": "CLOSEOUT CHECK step=state tick=3122 log=90 bytes=73661 fold_margin=4839 +1 line(s) face=NOT-MEASURED gate=PASS hb=3122 hb_verdict=PASS stage_residue=0 swept=0 walk_ms=994.5 flags_ms=1391.7 round_main_ms=0.5 census_ms=181"
+ },
+ {
+  "probe": "Q2 faces alone",
+  "faces": {
+   "gate": {
+    "ms": 1761.5,
+    "rc": 0,
+    "counts": {
+     "scandir": 1,
+     "listdir": 2
+    },
+    "face_ms": {
+     "flags": 1364.3,
+     "round_main": 0.5,
+     "census": 193.6,
+     "matrix": 202.6
+    },
+    "callers": [
+     [
+      [
+       "scandir",
+       "src/os/qa_writer_census.py:328:check_against_baseline"
+      ],
+      1
+     ],
+     [
+      [
+       "listdir",
+       "src/os/suite_matrix_reconcile.py:474:leg_candidate_names"
+      ],
+      1
+     ],
+     [
+      [
+       "listdir",
+       "src/os/suite_matrix_reconcile.py:446:newest_pass_leg_scanned"
+      ],
+      1
+     ]
+    ]
+   },
+   "stage_residue": {
+    "ms": 1151.5,
+    "counts": {
+     "listdir": 3482
+    },
+    "folders": 3482,
+    "callers": [
+     [
+      [
+       "listdir",
+       "src/os/stage_residue.py:81:_listing"
+      ],
+      3482
+     ]
+    ]
+   },
+   "export_round_check": {
+    "ms": 738.2,
+    "counts": {
+     "listdir": 3
+    },
+    "gate": null,
+    "callers": [
+     [
+      [
+       "listdir",
+       "src/os/export_round.py:248:_pairs"
+      ],
+      2
+     ],
+     [
+      [
+       "listdir",
+       "src/os/export_round.py:338:_evidence_rows"
+      ],
+      1
+     ]
+    ]
+   },
+   "one_off_audit": {
+    "ms": 14.8,
+    "counts": {
+     "walk": 1,
+     "scandir": 1
+    },
+    "refused": true,
+    "callers": [
+     [
+      [
+       "walk",
+       "src/os/one_off_round_scripts.py:96:walk_python"
+      ],
+      1
+     ],
+     [
+      [
+       "scandir",
+       "<frozen os>:377:walk"
+      ],
+      1
+     ]
+    ],
+    "scope": "src\\os"
+   }
+  }
+ },
+ {
+  "probe": "Q3 attribution",
+  "by_call_site": [
+   {
+    "kind": "walk",
+    "caller": "src/os/one_off_round_scripts.py:96:walk_python",
+    "n": 1
+   },
+   {
+    "kind": "scandir",
+    "caller": "<frozen os>:377:walk",
+    "n": 1
+   },
+   {
+    "kind": "scandir",
+    "caller": "src/os/qa_writer_census.py:328:check_against_baseline",
+    "n": 1
+   },
+   {
+    "kind": "listdir",
+    "caller": "src/os/suite_matrix_reconcile.py:474:leg_candidate_names",
+    "n": 1
+   },
+   {
+    "kind": "listdir",
+    "caller": "src/os/suite_matrix_reconcile.py:446:newest_pass_leg_scanned",
+    "n": 1
+   },
+   {
+    "kind": "listdir",
+    "caller": "src/os/stage_residue.py:81:_listing",
+    "n": 3482
+   }
+  ]
+ }
+]

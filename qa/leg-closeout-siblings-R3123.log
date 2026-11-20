@@ -1,0 +1,14 @@
+SHARD scope=SHARD registry_suites=739 registry_criteria=6011 selected=6 selected_criteria=86 cap=600s leg_cap=0s overrides=1 exact=0 state=RUNNING
+SHARD selected os-closeout crit=28 path=..\os\test_closeout.py
+SHARD selected os-closeout-export-parity-text-binding crit=6 path=..\os\test_closeout_export_parity_text_binding.py
+SHARD selected os-closeout-export-parity-wire crit=16 path=..\os\test_closeout_export_parity_wire.py
+SHARD selected os-closeout-export-parity-dialect-wire crit=20 path=..\os\test_closeout_export_parity_dialect_wire.py
+SHARD selected os-closeout-export-parity-wire-binding-consumer crit=6 path=..\os\test_closeout_export_parity_wire_binding_consumer.py
+SHARD selected os-closeout-gate crit=10 path=..\os\test_closeout_gate.py
+SHARD row os-closeout rc=0 pass=28 fail=0 detail=yes suite=PASS 28/28 crit=28 20.6s
+SHARD row os-closeout-export-parity-text-binding rc=0 pass=21 fail=0 detail=yes suite=PASS 6/6 crit=6 0.6s
+SHARD row os-closeout-export-parity-wire rc=0 pass=16 fail=0 detail=yes suite=PASS 16/16 crit=16 0.3s
+SHARD row os-closeout-export-parity-dialect-wire rc=0 pass=20 fail=0 detail=yes suite=PASS 20/20 crit=20 0.3s
+SHARD row os-closeout-export-parity-wire-binding-consumer rc=0 pass=37 fail=0 detail=yes suite=PASS 6/6 crit=6 3.2s
+SHARD row os-closeout-gate rc=0 pass=42 fail=0 detail=yes suite=PASS 42/42 crit=10 9.0s
+SHARD rc=0 scope=SHARD selected=6 executed=6 green=6 criteria=86 crit_mismatch=0 elapsed=33.9s crit_checked=6 crit_unchecked=0

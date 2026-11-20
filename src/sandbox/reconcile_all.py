@@ -4987,7 +4987,7 @@ SUITES = [
     # birth site (24 -> 25). R3120: the stage sweep line the vehicle prints has
     # zero readers and no arm, so AC-COUT15 pins its two shapes (26 -> 27).
     ("os-closeout",
-     os.path.join("..", "os", "test_closeout.py"), 27),
+     os.path.join("..", "os", "test_closeout.py"), 28),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with

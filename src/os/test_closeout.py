@@ -32,7 +32,7 @@ sys.path.insert(0, BASE)
 import closeout as CO  # noqa: E402
 import heartbeat as HB  # noqa: E402
 
-EXPECTED_CRITERIA = 27
+EXPECTED_CRITERIA = 28
 MODULE = os.path.join(BASE, "closeout.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout"
@@ -1483,6 +1483,106 @@ def ac_cout15():
           "printing its own walk_ms")
 
 
+def ac_cout16():
+    """AC-COUT16: every step of a closeout is paid for by a named reading.
+
+    MEASURED at R3123 on the live tree before this criterion existed: one
+    `--check` closeout made 3484 listdir calls (3482 of them the stage walk, 2
+    the matrix leg scan), 2 scandir calls and 1 os.walk, and the printed
+    readings summed to 2794.7ms against 2810.5ms of wall time. The WHOLE gap
+    was step 0 - the one-off audit's walk of src/os, 14.8ms - which no token
+    named on either path; the OK path additionally printed no reading for the
+    export write, its largest unnamed step. Both are now measured and named.
+    The arms pin the names, not the numbers: a millisecond can never be
+    byte-stable, and the derivation (not the value) is what a refactor drops.
+    """
+    def ms_tokens(line):
+        return dict(re.findall(r"\b([a-z_]+)_ms=(\d+(?:\.\d+)?)", line))
+
+    folder = world()
+    try:
+        check_code, check_out, _ = run_cli(
+            ["--root", folder, "--round", str(ROUND),
+             "--line", "2026-11-21 R%d PRODUCT: measured dry run" % ROUND,
+             "--check"])
+        ok_code, ok_out, _ = run_cli(
+            ["--root", folder, "--round", str(ROUND),
+             "--line", "2026-11-21 R%d PRODUCT: measured close" % ROUND,
+             "--tick"])
+        check_line = [row for row in check_out.splitlines()
+                      if row.startswith("CLOSEOUT CHECK")]
+        ok_line = [row for row in ok_out.splitlines()
+                   if row.startswith("CLOSEOUT OK")]
+        check_bits = ms_tokens(check_line[0]) if check_line else {}
+        ok_bits = ms_tokens(ok_line[0]) if ok_line else {}
+
+        dry_named = {"state", "walk", "oneoff"}
+        a_ok = (check_code == 0 and dry_named <= set(check_bits)
+                and "export" not in check_bits)
+        b_ok = (ok_code == 0 and {"oneoff", "export", "walk"} <= set(ok_bits))
+        c_ok = (all(float(v) >= 0.0 for v in check_bits.values())
+                and all(float(v) >= 0.0 for v in ok_bits.values()))
+        if not (a_ok and b_ok and c_ok):
+            print("  measured: codes=%r/%r check=%r ok=%r"
+                  % (check_code, ok_code, sorted(check_bits), sorted(ok_bits)),
+                  flush=True)
+
+        # e: the four gate-face readings exist only where the gate is ASKED,
+        # which the fixture world is not - so they are pinned on the live tree,
+        # read-only, the same way AC-COUT9 and AC-COUT10 pin their live arms.
+        live_code, live_out, _ = run_cli(
+            ["--round", str(int(ticks(ROOT)[0]) + 1),
+             "--line", "2026-11-21 R%d PRODUCT: live accounting arm"
+                       % (int(ticks(ROOT)[0]) + 1),
+             "--check"])
+        live_bits = {}
+        for row in live_out.splitlines():
+            if row.startswith("CLOSEOUT CHECK"):
+                live_bits = ms_tokens(row)
+                break
+        e_ok = (live_code == 0
+                and {"flags", "round_main", "census", "matrix", "state",
+                     "walk", "oneoff"} <= set(live_bits)
+                and "export" not in live_bits)
+        if not e_ok:
+            print("  measured e=%r code=%r bits=%r"
+                  % (e_ok, live_code, sorted(live_bits)), flush=True)
+
+        # d: both readings are DERIVED from the clock, never typed. The arm
+        # asks the source, because a hand-typed 0.0 passes every value test.
+        src = read(MODULE)
+        tree = ast.parse(src)
+        derived = {}
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Assign):
+                continue
+            for target in node.targets:
+                if not isinstance(target, ast.Name):
+                    continue
+                if target.id not in ("oneoff_ms", "export_ms"):
+                    continue
+                calls = [n for n in ast.walk(node.value)
+                         if isinstance(n, ast.Call)
+                         and isinstance(n.func, ast.Attribute)
+                         and n.func.attr == "perf_counter"]
+                subs = [n for n in ast.walk(node.value)
+                        if isinstance(n, ast.BinOp)
+                        and isinstance(n.op, ast.Sub)]
+                derived[target.id] = bool(calls) and bool(subs)
+        d_ok = (derived.get("oneoff_ms") and derived.get("export_ms")
+                and "time.perf_counter" not in json.dumps(derived))
+        if not d_ok:
+            print("  measured d=%r" % (derived,), flush=True)
+    finally:
+        cleanup(folder)
+    ok = a_ok and b_ok and c_ok and d_ok and e_ok
+    check(ok, "AC-COUT16 the dry run names all seven timed steps it asks and "
+          "no write step, the OK path names the export write it performed, "
+          "every reading is a non-negative decimal, both new readings are "
+          "derived from the clock rather than typed, and the live tree names "
+          "the four gate faces alongside them")
+
+
 def main():
     print("closeout suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -1513,6 +1613,7 @@ def main():
     ac_cout13()
     ac_cout14()
     ac_cout15()
+    ac_cout16()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

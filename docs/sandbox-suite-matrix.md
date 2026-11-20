@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 739 | 6010 | 675/675 | R2739 |
+| 739 | 6011 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -502,7 +502,7 @@
 | 463 | os-state-append | ../os/test_state_append.py | 10 | no-evidence | - |
 | 464 | os-one-off-round-scripts | ../os/test_one_off_round_scripts.py | 6 | no-evidence | - |
 | 465 | os-pre-commit-gate | ../os/test_pre_commit_gate.py | 21 | no-evidence | - |
-| 466 | os-closeout | ../os/test_closeout.py | 27 | no-evidence | - |
+| 466 | os-closeout | ../os/test_closeout.py | 28 | no-evidence | - |
 | 467 | os-debt-register | ../os/test_debt_register.py | 8 | green | 1.3 |
 | 468 | os-export-freshness | ../os/test_export_freshness.py | 6 | green | 0.9 |
 | 469 | os-debt-append | ../os/test_debt_append.py | 6 | green | 0.2 |
@@ -776,7 +776,7 @@
 | 737 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
 | 738 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
 | 739 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
-|  | 合计 |  | 6010 | green 675 / FAIL 0 / no-evidence 64 |  |
+|  | 合计 |  | 6011 | green 675 / FAIL 0 / no-evidence 64 |  |
 
 ## 证据出处
 

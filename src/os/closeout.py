@@ -467,7 +467,12 @@ def run(args):
     lines = []
 
     # ---- step 0: the one-off law. A refused name costs zero bytes. --------
+    # R3123: measured on the live tree, the printed readings summed to 2794.7ms
+    # against 2810.5ms of wall time and the WHOLE gap was this step - a walk of
+    # src/os (one os.walk, 14.8ms) that no token named, on both paths.
+    oneoff_start = time.perf_counter()
     one_off = one_off_refusal(root)
+    oneoff_ms = round((time.perf_counter() - oneoff_start) * 1000.0, 1)
     if one_off:
         return 2, ["CLOSEOUT FAIL %s step=one-off state=NOT-WRITTEN "
                    "face=NOT-WRITTEN" % one_off]
@@ -539,6 +544,10 @@ def run(args):
                 ("flags", "round_main", "census", "matrix") if key in face_ms]
         ms_tail = (" " + " ".join(bits) + " state_ms=%s" % state_ms
                    if bits else " face_ms=n/a state_ms=%s" % state_ms)
+        # R3123: the last unmeasured step on this path. Measured before the
+        # token existed: the readings summed to 2794.7ms against 2810.5ms, and
+        # this step held the whole gap.
+        ms_tail += " oneoff_ms=%s" % oneoff_ms
         return 0, (["CLOSEOUT CHECK step=state tick=%d log=%d bytes=%d "
                     "fold_margin=%d %s face=NOT-MEASURED gate=%s %s %s%s"
                     % (result["tick"], result["log"], result["bytes"],
@@ -580,6 +589,11 @@ def run(args):
 
     # ---- step 2: the face. Reachable only when the state really moved. -----
     stamp = ER.datetime.datetime.now(ER.TZ).replace(microsecond=0).isoformat()
+    # R3123: the OK path's largest unnamed step. Measured on a private world,
+    # the export write costs about as much as the tree walk (one grade pass
+    # over state, the archive dir and qa/), yet the dry run printed four face
+    # readings and this path printed none for the step that writes the face.
+    face_start = time.perf_counter()
     try:
         ok, derived, proof = ER.write(root, stamp)
     except ValueError as exc:
@@ -589,6 +603,8 @@ def run(args):
         return 2, ["CLOSEOUT FAIL E_CO_NO_FACE step=face state=WRITTEN "
                    "tick=%d %s: %s"
                    % (result["tick"], type(exc).__name__, exc)]
+
+    export_ms = round((time.perf_counter() - face_start) * 1000.0, 1)
 
     if not ok or proof.get("gate") != "CURRENT":
         return 2, ["CLOSEOUT FAIL E_CO_FACE_UNPROVEN step=face state=WRITTEN "
@@ -602,11 +618,11 @@ def run(args):
     hb_now = HB.verify(root, result["tick"])
     lines = ["CLOSEOUT OK tick=%d state=WRITTEN face=WRITTEN "
              "log=%d bytes=%d fold_margin=%d queue=%s queue_bytes=%s "
-             "latest=%s gate=%s %s %s"
+             "latest=%s gate=%s %s %s oneoff_ms=%s export_ms=%s"
              % (result["tick"], result["log"], result["bytes"],
                 result["fold_margin"], proof.get("gate"),
                 proof.get("bytes"), derived.get("latest"), gate_word,
-                _hb_bits(hb_now), stage_bits)]
+                _hb_bits(hb_now), stage_bits, oneoff_ms, export_ms)]
     if gate_word == "NOT-ASKED":
         # Printed, not silent: a round closed in a world whose gate inputs are
         # not all present says so on its own line, naming which are absent.
