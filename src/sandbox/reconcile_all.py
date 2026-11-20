@@ -7653,8 +7653,11 @@ SUITES = [
     # instead of only by its own suite. The default face (root=None) is
     # byte-identical to R2932, which is why the eleven shipped call sites keep
     # their meaning.
+    # R3097: a fifth criterion (AC-CLG8) pins the per-face timings the verdict
+    # publishes - diagnostic only, never on the PASS line - and the registry
+    # census reading one suite source once with the same result (7 -> 8).
     ("os-closeout-gate",
-     os.path.join("..", "os", "test_closeout_gate.py"), 7),
+     os.path.join("..", "os", "test_closeout_gate.py"), 8),
     # R2935: R2934 photographed the sandbox for the first time, but one pass is
     # a SNAPSHOT - it cannot tell "alive" from "painted cleanly this time". The
     # ruling is not to run a browser under the registry law but to move the LAW

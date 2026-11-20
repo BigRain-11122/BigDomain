@@ -74,6 +74,7 @@ import json
 import os
 import re
 import sys
+import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:
@@ -203,7 +204,8 @@ def one_off_refusal(root):
 def tree_refusal(root):
     """The closeout gate's TREE faces, asked before the CEO face is published.
 
-    Returns (word, line): "PASS", "NOT-ASKED" or "RED".
+    Returns (word, line, verdict): "PASS", "NOT-ASKED" or "RED", with the
+    gate's own per-face readings when it ran ({} when it was not asked).
 
     R3095 measured that the round's own shape does not need this: the state
     door refuses a newest round with no dated line (`E_RSA_NO_DATE`) and one
@@ -224,7 +226,7 @@ def tree_refusal(root):
         import closeout_gate as CG
     except (ImportError, ValueError) as exc:
         return "RED", ("E_CO_GATE_UNAVAILABLE %s: %s"
-                       % (type(exc).__name__, exc))
+                       % (type(exc).__name__, exc)), {}
     qa = os.path.join(root, "qa")
     baseline = os.path.join(qa, CG.CENSUS.BASELINE_NAME)
     doc = os.path.join(root, "docs", "sandbox-suite-matrix.md")
@@ -232,15 +234,15 @@ def tree_refusal(root):
         return "NOT-ASKED", ("E_CO_GATE_NO_INPUTS qa=%d doc=%d (this world "
                              "builds no tree for the gate to read)"
                              % (int(os.path.isdir(qa)),
-                                int(os.path.isfile(doc))))
+                                int(os.path.isfile(doc)))), {}
     try:
-        lines, code, _verdict = CG.evaluate(qa, baseline, root=root)
+        lines, code, verdict = CG.evaluate(qa, baseline, root=root)
     except (IOError, OSError, ValueError) as exc:
         return "RED", ("E_CO_GATE_UNREADABLE %s: %s"
-                       % (type(exc).__name__, exc))
+                       % (type(exc).__name__, exc)), {}
     if code == 0:
-        return "PASS", lines[0]
-    return "RED", lines[0]
+        return "PASS", lines[0], verdict
+    return "RED", lines[0], verdict
 
 
 def run(args):
@@ -255,7 +257,9 @@ def run(args):
                    "face=NOT-WRITTEN" % one_off]
 
     # ---- step 1: state. A refusal here costs the face zero bytes. ---------
+    state_start = time.perf_counter()
     result = SA.run(_state_args(args, root))
+    state_ms = round((time.perf_counter() - state_start) * 1000.0, 1)
     if not result.get("ok"):
         code = result.get("code") or "E_CO_NO_STATE"
         detail = result.get("detail") or ""
@@ -297,15 +301,24 @@ def run(args):
         # The tree faces are round-independent, so a dry run can and does ask
         # them - that is the one verdict a --check can give without waiting for
         # a write. A red tree is reported here, not invented.
-        gate_word, gate_line = tree_refusal(root)
+        gate_word, gate_line, gate_verdict = tree_refusal(root)
         if gate_word == "RED":
             return 2, ["CLOSEOUT CHECK RED step=tree %s face=NOT-MEASURED"
                        % gate_line]
+        # R3097: one total is not a name. Every face the dry run asked prints
+        # its own milliseconds, so "slow" points at a face instead of at the
+        # whole command. The reading is diagnostic and never gates: a slow
+        # face is still PASS, and a world that was not asked prints n/a.
+        face_ms = gate_verdict.get("face_ms") or {}
+        bits = ["%s_ms=%s" % (key, face_ms[key]) for key in
+                ("flags", "round_main", "census", "matrix") if key in face_ms]
+        ms_tail = (" " + " ".join(bits) + " state_ms=%s" % state_ms
+                   if bits else " face_ms=n/a state_ms=%s" % state_ms)
         return 0, ["CLOSEOUT CHECK step=state tick=%d log=%d bytes=%d "
-                   "fold_margin=%d %s face=NOT-MEASURED gate=%s"
+                   "fold_margin=%d %s face=NOT-MEASURED gate=%s%s"
                    % (result["tick"], result["log"], result["bytes"],
                       result["fold_margin"], result.get("detail") or "",
-                      gate_word)]
+                      gate_word, ms_tail)]
 
     unproven = _confirm_state_moved(state_path(root), result)
     if unproven:
@@ -315,7 +328,7 @@ def run(args):
     # Asked after the state write (a refusal costs that write, which is the
     # cheaper of the two and the one an operator can replay) and before the
     # face (so a red tree never reaches the CEO face).
-    gate_word, gate_line = tree_refusal(root)
+    gate_word, gate_line, _gate_verdict = tree_refusal(root)
     if gate_word == "RED":
         return 2, ["CLOSEOUT FAIL E_CO_TREE_RED step=tree "
                    "state=WRITTEN face=NOT-WRITTEN tick=%d %s "

@@ -78,6 +78,19 @@ their own SUITE row. Refused, with reasons: splitting the fix per label family
 (the missing reach is one read, not two dialects) and putting
 assembled_print_lines into the pin (it counts THIS reader's own limit, not a
 fact about a suite).
+
+R3097 - each suite source is parsed ONCE (equivalence, measured):
+
+The closeout dry run became slow enough that people stop running it: over 734
+registry rows `census()` measured 5699.0ms, of which 2390.4ms was AST work and
+1710.5ms of that was a SECOND parse of a file already parsed - `suite_constants`
+parsed the text, and `classify` reached `ast_leaves`, which parsed it again
+whenever the text pass found no readable leaf (443 of 734 rows). `census()` now
+parses once and passes the tree into `suite_constants`, `classify` and
+`ast_leaves`; a SyntaxError still takes the shipped text-only path, and every
+optional parameter defaults to None so an outside caller keeps its old
+behaviour. Nothing about the reading changed: the pin on disk was written by
+the pre-R3097 code, so a passing --check is the equivalence proof, not a claim.
 """
 import ast
 import importlib.util
@@ -166,7 +179,7 @@ def _suite_literals(node, alone=False):
     return out
 
 
-def suite_constants(text):
+def suite_constants(text, tree=None):
     """Names bound to a string literal that contains SUITE (simple propagation).
 
     leaf_lines reads one line at a time, so a suite that prints its row through
@@ -178,10 +191,11 @@ def suite_constants(text):
     word through a constant that carries no SUITE itself (R3079).
     """
     out = {}
-    try:
-        tree = ast.parse(text)
-    except SyntaxError:
-        return out
+    if tree is None:
+        try:
+            tree = ast.parse(text)
+        except SyntaxError:
+            return out
     for node in ast.walk(tree):
         if not isinstance(node, ast.Assign):
             continue
@@ -325,7 +339,7 @@ def _filled(fmt, args, consts):
     return ''.join(pieces)
 
 
-def ast_leaves(text, consts):
+def ast_leaves(text, consts, tree=None):
     """Rows reachable through the print CALL rather than through one line.
 
     This is the union the R3077 measurement justified: it is asked only after
@@ -335,10 +349,11 @@ def ast_leaves(text, consts):
     row either (AC-RCC10-R3).
     """
     out = []
-    try:
-        tree = ast.parse(text)
-    except SyntaxError:
-        return out
+    if tree is None:
+        try:
+            tree = ast.parse(text)
+        except SyntaxError:
+            return out
     for node in ast.walk(tree):
         if not isinstance(node, ast.Call):
             continue
@@ -380,14 +395,14 @@ def ast_leaves(text, consts):
     return out
 
 
-def classify(text, module, consts=None):
+def classify(text, module, consts=None, tree=None):
     leaves, assembled = leaf_lines(text, consts)
     if not leaves:
         return 'SILENT', assembled
     for leaf in leaves:
         if module.parse_suite_row(leaf + '\n') is not None:
             return 'READABLE', assembled
-    for leaf in ast_leaves(text, consts or {}):
+    for leaf in ast_leaves(text, consts or {}, tree):
         if module.parse_suite_row(PLACEHOLDER.sub('7', leaf) + '\n') is not None:
             return 'READABLE', assembled
     return 'UNPARSED', assembled
@@ -404,7 +419,12 @@ def census(registry=REGISTRY, sandbox=None):
         if not os.path.exists(path):
             raise CensusError('E_RCC_MISSING_SUITE', '%s %s' % (label, rel))
         text = io.open(path, encoding='utf-8-sig', errors='replace').read()
-        kind, assembled = classify(text, module, suite_constants(text))
+        try:
+            tree = ast.parse(text)
+        except SyntaxError:
+            tree = None
+        consts = suite_constants(text, tree)
+        kind, assembled = classify(text, module, consts, tree)
         report['assembled'] += assembled
         report[kind].append(label)
     total = sum(len(report[kind])

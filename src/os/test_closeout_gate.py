@@ -1,4 +1,4 @@
-"""Battery suite for tools/closeout_gate.py - criteria AC-CLG1..AC-CLG6 (R2932).
+"""Battery suite for tools/closeout_gate.py - criteria AC-CLG1..AC-CLG8.
 
 WHY: the R2926 commit hook refuses STAGED evidence bytes only, so an
 uncommitted shell-captured write still reaches disk and no gate has ever
@@ -22,6 +22,8 @@ hashes), and that is why the gate is a precondition, not a jail.
 Source discipline: pure ASCII, stdlib only, no clock, no network, writes only
 inside its own temp fixture worlds.
 """
+import ast
+import io
 import json
 import os
 import re
@@ -338,6 +340,53 @@ def main():
         ok("AC-CLG7 arm f - the matrix face writes nothing and repeats",
            m1 == m2 and m1[0] is True and before_doc == after_doc,
            "m1=%s m2=%s" % (m1, m2))
+
+    # AC-CLG8 (R3097): the dry run grows a name for its own seconds. Each face
+    # the gate asked publishes its wall time in the verdict (never on the line,
+    # so no decision moves with a machine's speed), and the registry census
+    # reads each suite source once instead of twice with the same result.
+    ok("AC-CLG8 arm a - the default face carries no timing key",
+       "face_ms" not in verdict, "keys=%s" % sorted(verdict))
+    ms8 = deep_v.get("face_ms") or {}
+    ok("AC-CLG8 arm b - root=ROOT publishes four named readings and the PASS "
+       "line is byte-identical",
+       sorted(ms8) == ["census", "flags", "matrix", "round_main"]
+       and all(isinstance(v, float) and v >= 0.0 for v in ms8.values())
+       and deep[0] == ("CLOSEOUT-GATE PASS files=%d flags=0 reader_refused=0 "
+                       "gating=flags round_main=OK census=PASS "
+                       "matrix=DOC-CURRENT" % disk_logs),
+       "face_ms=%s" % ms8)
+    ms2 = first2_v.get("face_ms") or {}
+    ok("AC-CLG8 arm c - a named opt-out still publishes a reading",
+       ms2.get("matrix") == 0.0
+       and all(ms2.get(k) is not None
+               for k in ("flags", "round_main", "census")),
+       "face_ms=%s" % ms2)
+    ok("AC-CLG8 arm d - a red census is still refused by the same name",
+       c_v.get("reason") == "E_CLG_CENSUS"
+       and (c_v.get("face_ms") or {}).get("census", 0.0) > 0.0,
+       "reason=%s face_ms=%s" % (c_v.get("reason"), c_v.get("face_ms")))
+
+    # arm e: one parse reads a real suite exactly as two parses did.
+    import registry_counter_census as RC
+    module8 = RC.reader()
+    sandbox8 = os.path.dirname(RC.REGISTRY)
+    rows8 = RC.registry_rows(RC.REGISTRY)[:5]
+    mism8 = []
+    for label8, rel8, _crit8 in rows8:
+        text8 = io.open(os.path.join(sandbox8, rel8), encoding="utf-8-sig",
+                        errors="replace").read()
+        try:
+            tree8 = ast.parse(text8)
+        except SyntaxError:
+            tree8 = None
+        old8 = RC.classify(text8, module8, RC.suite_constants(text8))[0]
+        new8 = RC.classify(text8, module8, RC.suite_constants(text8, tree8),
+                           tree8)[0]
+        if old8 != new8:
+            mism8.append((label8, old8, new8))
+    ok("AC-CLG8 arm e - one parse reads a suite exactly as two parses did",
+       not mism8, "rows=%d mismatch=%s" % (len(rows8), mism8))
 
     total = len(CHECKS)
     acs = set()

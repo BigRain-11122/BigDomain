@@ -1,0 +1,12 @@
+reader_ms=1.1
+registry_rows_ms=20.7 rows=734
+loop_ms=5226.5 read_ms=309.1 parse_ms=2661.6 rest_ms=2255.8
+files two_parse=443 one_parse=291 zero_parse=0 two_parse_ms=1895.5
+census_ms=5229.7 rows=734 readable=734 unparsed=0 silent=0
+pin_read_ms=0.5 compare_ms=0.2 fails=[]
+flags_face_ms=2266.9 rc=2 first=[flag] new-dialect: probe-R3097.log (class=ps-utf16)
+round_main_ms=2.1 ok=True line=ROUND-MAIN OK 3096
+gate_census_ms=5152.3 ok=True line=VERDICT PASS pinned=734
+matrix_ms=305.0 ok=True line=DOC-CURRENT docs/sandbox-suite-matrix.md rows=734/734
+Q3 battery_followup_registry_census_refs=0 qa_writer_census_refs=2
+Q4 test_worlds=22 qa_refs=2 doc_refs=5 registry_refs=1

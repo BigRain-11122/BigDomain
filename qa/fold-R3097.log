@@ -1,0 +1,1 @@
+STATE FOLD RUN round=R3097 fold=42 mode=execute verdict=CLEAR window=1..10 lines=10 live 80->71 bytes 72189->64781 margin=13719 tokens=12 ok=True archive=VERIFIED layout=AGREE

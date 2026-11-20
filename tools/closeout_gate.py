@@ -83,6 +83,7 @@ import io
 import json
 import os
 import sys
+import time
 
 BASE = os.path.dirname(os.path.abspath(__file__))          # .../tools
 ROOT = os.path.dirname(BASE)                                # repo root
@@ -124,6 +125,21 @@ def _src_os(root):
     if path not in sys.path:
         sys.path.insert(0, path)
     return path
+
+
+def _timed(box, key, fn, *args, **kwargs):
+    """Call fn, publishing its wall time into box[key].
+
+    R3097: the dry run grew to ~8s and nothing said which face owned the
+    seconds - one total is not a name. The reading is a DIAGNOSTIC and never
+    enters a verdict token or the PASS line, so no gate decision can move with
+    a machine's speed; a slow face is still PASS, it is only visible.
+    """
+    start = time.perf_counter()
+    try:
+        return fn(*args, **kwargs)
+    finally:
+        box[key] = round((time.perf_counter() - start) * 1000.0, 1)
 
 
 def check_round_main(root):
@@ -197,7 +213,15 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
     `root` given -> after a green `flags` face, also ask round-main and the
     registry census; either red refuses the closeout by name.
     """
-    census_lines, census_rc = CENSUS.check_against_baseline(target, baseline)
+    face_ms = {}
+    census_lines, census_rc = _timed(face_ms, "flags",
+                                     CENSUS.check_against_baseline,
+                                     target, baseline)
+
+    def _pub(verdict):
+        # R3097: the per-face readings ride in the verdict, never on the line.
+        verdict["face_ms"] = dict(face_ms)
+        return verdict
     out = []
     if census_lines and census_lines[0].startswith("baseline file missing"):
         out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_NO_BASELINE "
@@ -233,7 +257,8 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
             # R3093: the two laws a round could slip past. Read-only, cheap,
             # and asked only after the byte-drift face is green.
             try:
-                rm_ok, rm_line = check_round_main(root)
+                rm_ok, rm_line = _timed(face_ms, "round_main",
+                                        check_round_main, root)
             except (IOError, OSError, ValueError) as exc:
                 out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_ROUND_MAIN "
                            "files=%d flags=%d round_main=UNREADABLE"
@@ -242,7 +267,7 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 verdict = {"verdict": "REFUSED",
                            "reason": "E_CLG_ROUND_MAIN", "files": count,
                            "flags": flags, "round_main": "UNREADABLE"}
-                return out, 2, verdict
+                return out, 2, _pub(verdict)
             if not rm_ok:
                 out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_ROUND_MAIN "
                            "files=%d flags=%d round_main=FAIL" % (count, flags))
@@ -250,10 +275,11 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 verdict = {"verdict": "REFUSED",
                            "reason": "E_CLG_ROUND_MAIN", "files": count,
                            "flags": flags, "round_main": "FAIL"}
-                return out, 2, verdict
+                return out, 2, _pub(verdict)
             try:
-                cen_ok, cen_line = check_census(root, registry=registry,
-                                                pin=census_pin)
+                cen_ok, cen_line = _timed(face_ms, "census", check_census,
+                                          root, registry=registry,
+                                          pin=census_pin)
             except (IOError, OSError, ValueError) as exc:
                 out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS "
                            "files=%d flags=%d census=UNREADABLE"
@@ -262,7 +288,7 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 verdict = {"verdict": "REFUSED", "reason": "E_CLG_CENSUS",
                            "files": count, "flags": flags,
                            "round_main": "OK", "census": "UNREADABLE"}
-                return out, 2, verdict
+                return out, 2, _pub(verdict)
             if not cen_ok:
                 out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS "
                            "files=%d flags=%d round_main=OK census=FAIL"
@@ -271,7 +297,7 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 verdict = {"verdict": "REFUSED", "reason": "E_CLG_CENSUS",
                            "files": count, "flags": flags,
                            "round_main": "OK", "census": "FAIL"}
-                return out, 2, verdict
+                return out, 2, _pub(verdict)
             if matrix is not False:
                 # R3094: the derived document is asked LAST, after every face
                 # that reads this round's own bytes. `matrix=False` is the
@@ -279,8 +305,10 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 # document, so an unasked face can never happen silently.
                 doc = matrix if matrix else None
                 try:
-                    mx_ok, mx_line = check_matrix(root, doc=doc)
+                    mx_ok, mx_line = _timed(face_ms, "matrix", check_matrix,
+                                            root, doc=doc)
                 except (IOError, OSError, ValueError) as exc:
+                    face_ms.setdefault("matrix", 0.0)
                     mx_ok, mx_line = False, "E_EDM_UNREADABLE %s" % exc
                 if not mx_ok:
                     out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_MATRIX "
@@ -291,10 +319,13 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                                "files": count, "flags": flags,
                                "round_main": "OK", "census": "PASS",
                                "matrix": "FAIL"}
-                    return out, 2, verdict
+                    return out, 2, _pub(verdict)
                 verdict["matrix"] = "DOC-CURRENT"
                 tail_matrix = " matrix=DOC-CURRENT"
             else:
+                # A named opt-out still publishes a reading, so a reader can
+                # see that the face was skipped rather than slow.
+                face_ms["matrix"] = 0.0
                 tail_matrix = ""
             verdict["round_main"] = "OK"
             verdict["census"] = "PASS"
@@ -306,7 +337,7 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
         # decodes is still named on every closeout, it just does not refuse.
         out.extend(line for line in census_lines
                    if line.startswith("[refuse-read]"))
-        return out, 0, verdict
+        return out, 0, (_pub(verdict) if root is not None else verdict)
 
     out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_DRIFT files=%d flags=%d "
                "reader_refused=%d gating=%s"
@@ -314,9 +345,10 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
     for line in census_lines:
         if line.startswith("[flag]") or line.startswith("[refuse-read]"):
             out.append(line)
-    return out, 2, {"verdict": "REFUSED", "reason": "E_CLG_DRIFT",
-                    "files": count, "flags": flags,
-                    "reader_refused": refused, "gating": GATING_FACE}
+    drift = {"verdict": "REFUSED", "reason": "E_CLG_DRIFT",
+             "files": count, "flags": flags,
+             "reader_refused": refused, "gating": GATING_FACE}
+    return out, 2, (_pub(drift) if root is not None else drift)
 
 
 def main(argv=None):

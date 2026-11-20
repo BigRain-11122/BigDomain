@@ -4,19 +4,19 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-20 R3096 PRODUCT+ENGINEERING: the derived suite-matrix document is now asked at the commit site, so a commit that moves a registry row without regenerating docs/sandbox-suite-matrix.md is refused by E_HOOK_MATRIX in git itself instead of waiting for the closeout vehicle.",
+    "current": "2026-11-20 R3097 PRODUCT+ENGINEERING: the closeout dry run now names its own seconds per face, and the registry census reads each suite source once instead of twice - measured 5214.6ms -> 2417.4ms over the same 734 rows with identical classes, so the gate got ~2.8s cheaper without moving a single verdict.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/battery-shard-hook-siblings-R3096.log (453B, 2026-11-20)",
-    "latest_evidence": "qa/battery-shard-hook-siblings-R3096.log (453B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/fold-R3097.log (176B, 2026-11-20)",
+    "latest_evidence": "qa/fold-R3097.log (176B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3097] next window (<=48h): (0) MAIN — **矩阵面已在提交处，但收口车辆的干跑从 ~0.15s 变成 ~8.3s，其中 `closeout_gate.check_census` 实测 5.6816s、`qa_writer_census.check_against_baseline` 只有 1.8379s——同一个「普查」在两处用了两种问法，而干跑变慢会让人不再干跑。** 下一轮先量（只读）：①`check_census`（注册表普查+pin 比对）的 5.7s 花在哪一段（逐段计时：读套件行/读 pin/逐行比对），量一次遍历或缓存能否压到 1s 内且**不改变裁决**；②`closeout.py --check` 是否该把树面分级（便宜两面 vs 贵一面）并各自印耗时，让「慢」有名字而不是一个总数；③电池后续的 `census` 节与收口门 census 面是否重复劳动，量一次遍历两处复用的可行性（红面=能否两边同读一份读数）；④`test_battery_followup.py` 的 22 个私有世界若要接树面缺哪些输入（qa baseline/doc/注册表），逐条列名。量清后落一条判据或一条「只发布读数并写明必须靠人」。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board — ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no (truncated)",
-    "next_milestone_due": "2026-11-22T20:59:13+08:00",
-    "updated_at": "2026-11-20T20:59:13+08:00"
+    "next_milestone": "[R3098] next window (<=48h): (0) MAIN — **干跑仍要 ~4s，而进 1s 的唯一已测路径是缓存**：剩余成本实测＝文本行扫描 2070ms＋首次 AST（2390.4−1710.5≈680ms）＋读文件 287ms，缓存只能按 `(size, mtime_ns)` 作键，会新增一类「读旧值」的失效面。下一轮先量（只读）：①建缓存后 734 行冷跑/热跑各多少毫秒，NTFS 的 mtime 粒度能否分辨同一秒内的两次写；②缓存失效面能否被一条判据钉住（同 size/mtime 但内容已变时必须自证重读，否则明确声明该面不可证）；③若不建缓存，是否改为「贵面可跳过」并在干跑行上具名跳过者；④电池后续 22 个私有世界接树面所缺三输入（qa baseline/矩阵文档/注册表）逐条列名与最小构造。量清后落一条判据或一条「只发布读数并写明必须靠人」。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board, ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 as a chosen law, series_file_order=day, the machine local day law.",
+    "next_milestone_due": "2026-11-22T21:19:33+08:00",
+    "updated_at": "2026-11-20T21:19:33+08:00"
   },
-  "current": "2026-11-20 R3096 PRODUCT+ENGINEERING: the derived suite-matrix document is now asked at the commit site, so a commit that moves a registry row without regenerating docs/sandbox-suite-matrix.md is refused by E_HOOK_MATRIX in git itself instead of waiting for the closeout vehicle.",
+  "current": "2026-11-20 R3097 PRODUCT+ENGINEERING: the closeout dry run now names its own seconds per face, and the registry census reads each suite source once instead of twice - measured 5214.6ms -> 2417.4ms over the same 734 rows with identical classes, so the gate got ~2.8s cheaper without moving a single verdict.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -44,11 +44,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3096 PRODUCT+ENGINEERING: the derived suite-matrix document is now asked at the commit site, so a commit that moves a registry row without regenerating docs/sandbox-suite-matrix.md is refused by E_HOOK_MATRIX in git itself instead of waiting for the closeout vehicle.",
-  "export_ts": "2026-11-20T20:59:13+08:00",
+  "do": "2026-11-20 R3097 PRODUCT+ENGINEERING: the closeout dry run now names its own seconds per face, and the registry census reads each suite source once instead of twice - measured 5214.6ms -> 2417.4ms over the same 734 rows with identical classes, so the gate got ~2.8s cheaper without moving a single verdict.",
+  "export_ts": "2026-11-20T21:19:33+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/battery-shard-hook-siblings-R3096.log (453B, 2026-11-20)",
-  "next_milestone": "[R3097] next window (<=48h): (0) MAIN — **矩阵面已在提交处，但收口车辆的干跑从 ~0.15s 变成 ~8.3s，其中 `closeout_gate.check_census` 实测 5.6816s、`qa_writer_census.check_against_baseline` 只有 1.8379s——同一个「普查」在两处用了两种问法，而干跑变慢会让人不再干跑。** 下一轮先量（只读）：①`check_census`（注册表普查+pin 比对）的 5.7s 花在哪一段（逐段计时：读套件行/读 pin/逐行比对），量一次遍历或缓存能否压到 1s 内且**不改变裁决**；②`closeout.py --check` 是否该把树面分级（便宜两面 vs 贵一面）并各自印耗时，让「慢」有名字而不是一个总数；③电池后续的 `census` 节与收口门 census 面是否重复劳动，量一次遍历两处复用的可行性（红面=能否两边同读一份读数）；④`test_battery_followup.py` 的 22 个私有世界若要接树面缺哪些输入（qa baseline/doc/注册表），逐条列名。量清后落一条判据或一条「只发布读数并写明必须靠人」。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board — ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no (truncated)",
+  "latest_evidence": "qa/fold-R3097.log (176B, 2026-11-20)",
+  "next_milestone": "[R3098] next window (<=48h): (0) MAIN — **干跑仍要 ~4s，而进 1s 的唯一已测路径是缓存**：剩余成本实测＝文本行扫描 2070ms＋首次 AST（2390.4−1710.5≈680ms）＋读文件 287ms，缓存只能按 `(size, mtime_ns)` 作键，会新增一类「读旧值」的失效面。下一轮先量（只读）：①建缓存后 734 行冷跑/热跑各多少毫秒，NTFS 的 mtime 粒度能否分辨同一秒内的两次写；②缓存失效面能否被一条判据钉住（同 size/mtime 但内容已变时必须自证重读，否则明确声明该面不可证）；③若不建缓存，是否改为「贵面可跳过」并在干跑行上具名跳过者；④电池后续 22 个私有世界接树面所缺三输入（qa baseline/矩阵文档/注册表）逐条列名与最小构造。量清后落一条判据或一条「只发布读数并写明必须靠人」。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board, ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 as a chosen law, series_file_order=day, the machine local day law.",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -173,7 +173,7 @@
   },
   "results": [
     [
-      "3096",
+      "3097",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -187,7 +187,7 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 80,
+    "log_lines_in_window": 78,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 15,
@@ -197,6 +197,6 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 72186,
+  "state_bytes": 71265,
   "next_milestone_due": "2026-11-22T10:45:10+08:00"
 }
