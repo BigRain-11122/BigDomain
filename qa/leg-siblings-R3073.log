@@ -1,0 +1,6 @@
+SHARD scope=SHARD registry_suites=733 registry_criteria=5959 selected=4 selected_criteria=39 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-face-sweep rc=0 pass=51 fail=0 detail=yes suite=PASS 51/51 crit=19 7.8s
+SHARD row os-face-walk-static rc=0 pass=12 fail=0 detail=yes suite=PASS 12/12 crit=5 0.1s
+SHARD row os-platform-live-report rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 5.0s
+SHARD row os-ledger-business-report rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.9s
+SHARD rc=0 scope=SHARD selected=4 executed=4 green=4 criteria=39 crit_mismatch=0 elapsed=13.8s crit_checked=4

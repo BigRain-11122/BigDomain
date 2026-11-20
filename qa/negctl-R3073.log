@@ -1,0 +1,28 @@
+PASS AC-CFYB1 own_ids=1,2,3,4,5,6,7,8 offenders=none
+PASS AC-CFYB2 rc=0 VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f
+PASS AC-CFYB3 stamps_unchanged=True html_before=(7300, 1794701008334748700) html_after=(7300, 1794701008334748700)
+PASS AC-CFYB4 tampered=2 names_cfy2=True missing_json=3 missing_html=2 names_cfy1=True
+PASS AC-CFYB5 rc=0 numbers=(3, 9, 12, 15) leaked=[] sizes_match=True
+PASS AC-CFYB6 registry_rows=1 declared=7 own=7
+PASS AC-CFYB7 ascii=True socket_import=False external_host=False
+SUITE PASS 7/7
+Q1 honest rc=0 red=none GREEN
+PASS AC-CFYB1 own_ids=1,2,3,4,5,6,7,8 offenders=none
+PASS AC-CFYB2 rc=0 VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f
+PASS AC-CFYB3 stamps_unchanged=True html_before=(7300, 1794701008334748700) html_after=(7300, 1794701008334748700)
+FAIL AC-CFYB4 tampered=0 names_cfy2=True missing_json=3 missing_html=0 names_cfy1=True
+PASS AC-CFYB5 rc=0 numbers=(3, 9, 12, 15) leaked=[] sizes_match=True
+PASS AC-CFYB6 registry_rows=1 declared=7 own=7
+PASS AC-CFYB7 ascii=True socket_import=False external_host=False
+SUITE FAIL 6/7
+Q2 blind-driver rc=2 red=AC-CFYB4 CAUGHT
+PASS AC-CFYB1 own_ids=1,2,3,4,5,6,7,8 offenders=none
+PASS AC-CFYB2 rc=0 VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f
+PASS AC-CFYB3 stamps_unchanged=True html_before=(7300, 1794701008334748700) html_after=(7300, 1794701008334748700)
+PASS AC-CFYB4 tampered=2 names_cfy2=True missing_json=3 missing_html=2 names_cfy1=True
+PASS AC-CFYB5 rc=0 numbers=(3, 9, 12, 15) leaked=[] sizes_match=True
+FAIL AC-CFYB6 registry_rows=1 declared=8 own=7
+PASS AC-CFYB7 ascii=True socket_import=False external_host=False
+SUITE FAIL 6/7
+Q3 wrong-count rc=2 red=AC-CFYB6 CAUGHT
+NEGCTL PASS

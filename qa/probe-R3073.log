@@ -1,0 +1,9 @@
+P1 registry_rows=2
+P2 rc=0 verdict=VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f
+P3 writes_nothing=True before=((7300, 1794701008334748700), (5004, 1794701008335752500)) after=((7300, 1794701008334748700), (5004, 1794701008335752500))
+P4 tampered_rc=2 fails=FAIL AC-CFY2 names_cfy2=True
+P4 missing_json_rc=3 names_input=True
+P4 missing_html_rc=2 names_cfy1=True
+P5 rc=0 verdict=PASS sizes={'html': 7300, 'json': 5004} disk=(7300,5004) match=True
+P5 numbers rows=3 seats=9 served=12 source=15 leaked=[]
+P6 offenders=src\os/test_city_face_report.py

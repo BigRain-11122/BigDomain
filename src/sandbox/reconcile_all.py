@@ -7662,6 +7662,16 @@ SUITES = [
     # render); nothing here re-implements a ledger rule.
     ("os-ledger-business-report",
      os.path.join("..", "os", "test_ledger_business_report.py"), 7),
+    # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
+    # carries its own --check (AC-CFY1..8), but this registry had no row naming
+    # it, so the face was graded only by the fail-soft [GATES] sweep - the
+    # second of the two faces the R3072 census named. The suite drives the
+    # shipped driver only (its read-only --check, three private-copy arms and
+    # one temp-dir render); nothing here re-implements a city rule, and no new
+    # re-render entry point is created: the driver's own fingerprint compare is
+    # the only freshness proof this face has, which is why it is pinned here.
+    ("os-city-face-report",
+     os.path.join("..", "os", "test_city_face_report.py"), 7),
     ]
 
 FAILS = 0

@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 732 | 5952 | 675/675 | R2739 |
+| 733 | 5959 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -770,7 +770,8 @@
 | 730 | os-live-proof | ../os/test_live_proof.py | 13 | no-evidence | - |
 | 731 | os-platform-live-report | ../os/test_platform_live_report.py | 8 | no-evidence | - |
 | 732 | os-ledger-business-report | ../os/test_ledger_business_report.py | 7 | no-evidence | - |
-|  | 合计 |  | 5952 | green 675 / FAIL 0 / no-evidence 57 |  |
+| 733 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
+|  | 合计 |  | 5959 | green 675 / FAIL 0 / no-evidence 58 |  |
 
 ## 证据出处
 
