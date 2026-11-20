@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=741 registry_criteria=6019 selected=1 selected_criteria=2 cap=600s leg_cap=60s overrides=1 exact=1 state=RUNNING
+SHARD selected frontdoor-corpus-card crit=2 path=test_frontdoor_corpus_card.py
+SHARD row frontdoor-corpus-card rc=0 pass=2 fail=0 detail=yes suite=PASS 2/2 crit=2 2.4s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=2 crit_mismatch=0 elapsed=2.4s crit_checked=1 crit_unchecked=0

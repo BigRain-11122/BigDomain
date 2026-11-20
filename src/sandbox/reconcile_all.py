@@ -7777,9 +7777,11 @@ SUITES = [
     # face already pays to read) was derived in one place and printed on one
     # closeout stdout line; of 2307 shipped faces exactly one ever carried the
     # key and the live one carries none. AC-FDC3 (four arms, ONE criterion) was
-    # pinned in src/os/backlog.md BEFORE the card consumed it.
+    # pinned in src/os/backlog.md BEFORE the card consumed it. AC-FDC4 (five
+    # arms) was pinned at R3132 BEFORE the card stopped printing a malformed
+    # block as a reading.
     ("frontdoor-corpus-card",
-     os.path.join("test_frontdoor_corpus_card.py"), 1),
+     os.path.join("test_frontdoor_corpus_card.py"), 2),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files

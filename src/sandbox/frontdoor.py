@@ -5747,6 +5747,20 @@ def corpus_card(face):
         return ("<p class=kv>CORPUS absent from the export face "
                 "(honest absence, not a zero)</p>")
 
+    # R3132: the writer refuses a readable-less block (R3131), so a block that
+    # still reaches this card without an integer readable came from a hand
+    # edit, a restored copy or a repair script - not from the supply path.
+    # Measured: three shipped subscript stores touch the corpus key
+    # (export_round.py:714/715, tools/closeout_gate.py:339), so the reader
+    # cannot lean on "there is only one writer". Printing `readable=none` or
+    # `readable=x` would read as a measurement; name the shape defect instead
+    # and print no numbers at all.
+    try:
+        int(block.get("readable"))
+    except (TypeError, ValueError):
+        return ("<p class=kv>CORPUS block is malformed (readable missing) "
+                "- not a reading</p>")
+
     def show(value):
         return "none" if value is None else str(value)
 

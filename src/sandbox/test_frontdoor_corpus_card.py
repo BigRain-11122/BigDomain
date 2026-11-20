@@ -1,7 +1,8 @@
 """Suite for the corpus card: the tree-gate reading gets one live consumer.
 
-ONE criterion AC-FDC3 with four arms, pre-registered in the R3128 backlog row
-BEFORE this file and the code it grades.
+TWO criteria, each pre-registered on the src/os/backlog.md board BEFORE this
+file and the code it grades: AC-FDC3 (four arms, R3128) and AC-FDC4 (five arms,
+R3132).
 
 R3128 measured the hole: the corpus (files / readable / bytes that the flags
 face already pays to read, ~4219 files / 508.1MB) was derived in exactly one
@@ -131,6 +132,46 @@ def main():
         bad.append("live-card-not-on-page")
 
     report("AC-FDC3", bool(bad), ",".join(bad))
+
+    # ---- AC-FDC4: a malformed block is a named defect, not a reading. ----
+    # R3132 pre-registered this criterion on the board before the card changed:
+    # the writer refuses a readable-less block, but the card used to print
+    # `readable=none` (or a bare `x`) for any dict carrying `files`, which
+    # reads as a measurement. Three shipped subscript stores touch the corpus
+    # key, so the reader cannot rely on "one writer" and must judge shape.
+    malformed = []
+    for label, payload_ in (
+            ("bare", {"corpus": {"files": 5, "bytes": 100, "mb": 0.0}}),
+            ("unparseable", {"corpus": {"files": 5, "readable": "x",
+                                        "bytes": 100, "mb": 0.0}}),
+            ("null", {"corpus": {"files": 5, "readable": None,
+                                 "bytes": 100, "mb": 0.0}})):
+        html = frontdoor.corpus_card(payload_)
+        if "malformed" not in html:
+            malformed.append(label + "-not-named")
+        for token in ("readable=", "files="):
+            if token in html:
+                malformed.append(label + "-prints-" + token.replace("=", ""))
+        if "absent" in html:
+            malformed.append(label + "-reads-as-absent")
+    # negative control: a four-key block renders exactly as it did before
+    if frontdoor.corpus_card(clean) != a_html:
+        malformed.append("shaped-block-changed")
+    # absent stays absent, and never reads as a shape defect
+    for empty in (None, {}, {"corpus": None}, {"corpus": {}}):
+        html = frontdoor.corpus_card(empty)
+        if "absent" not in html or "malformed" in html:
+            malformed.append("absent-branch-changed")
+    # end to end: the writer refuses the bare block, so no key reaches the card
+    sys.path.insert(0, os.path.join(REPO, "src", "os"))
+    import export_round as ER
+    refused = ER.corpus_block({"files": 5, "bytes": 100})
+    if refused is not None:
+        malformed.append("writer-now-publishes-bare")
+    end_html = frontdoor.corpus_card({"corpus": refused})
+    if "absent" not in end_html or "malformed" in end_html:
+        malformed.append("end-to-end-not-absent")
+    report("AC-FDC4", bool(malformed), ",".join(malformed))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

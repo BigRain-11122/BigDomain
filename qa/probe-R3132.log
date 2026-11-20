@@ -1,0 +1,32 @@
+R3132 probe root=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain
+Q1 subscript stores of the corpus key in shipped non-test code: 3
+   src/os/export_round.py:714
+   src/os/export_round.py:715
+   tools/closeout_gate.py:339
+Q1 update()/setdefault() kwargs naming corpus: 0
+Q1 every 'corpus' literal in shipped non-test code: 15
+   src/os/closeout.py lines=[245, 639]
+   src/os/export_round.py lines=[714, 715, 717, 718]
+   src/os/relative_module_corpus_scope.py lines=[50, 172, 268]
+   src/os/relative_module_existence_face.py lines=[46, 142, 229]
+   src/os/relative_package_presence_refusal.py lines=[132]
+   src/sandbox/frontdoor.py lines=[5745]
+   tools/closeout_gate.py lines=[339]
+Q2 face revisions in history: 2313
+Q2 corpus blocks anywhere in history: 10  unparseable faces: 591
+Q2 distinct block locations: {"ceo_face.corpus": 5, "corpus": 5}
+Q2 files values seen: {"4230": 4, "4240": 2, "4248": 2, "4256": 2}
+Q2 blocks WITHOUT readable: 0
+Q3 current card(clean)         -> <p class=kv>CORPUS files=4219 readable=4219 mb=508.1</p>
+Q3 current card(dirty)         -> <p class=kv>CORPUS files=3 readable=2 mb=0.0 unread=1</p>
+Q3 current card(bare)          -> <p class=kv>CORPUS block is malformed (readable missing) - not a reading</p>
+Q3 current card(bad readable)  -> <p class=kv>CORPUS block is malformed (readable missing) - not a reading</p>
+Q3 current card(absent {})     -> <p class=kv>CORPUS absent from the export face (honest absence, not a zero)</p>
+Q3 corpus_block(bare raw)      -> null
+Q3 bare prints readable=none: False
+Q3 bare names a defect word: False
+Q3 bad-readable prints readable=none: False
+Q3 bad-readable names a defect word: False
+Q3 card suite literals: [["CORPUS files=4219", true], ["readable=4219", true], ["mb=508.1", true], ["absent", true], ["readable=none", true], ["unread=1", true]]
+Q3 live face top block now: {"bytes": 100, "files": 5}
+Q3 card(face with bare hand-edited block) -> <p class=kv>CORPUS block is malformed (readable missing) - not a reading</p>
