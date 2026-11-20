@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 739 | 6012 | 675/675 | R2739 |
+| 739 | 6013 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -481,7 +481,7 @@
 | 442 | os-crawl-record | ../os/test_crawl_record.py | 4 | no-evidence | - |
 | 443 | os-crawl-runner | ../os/test_crawl_runner.py | 83 | no-evidence | - |
 | 444 | ledger-tmp-sweep | ../os/test_tmp_sweep.py | 18 | green | 0.6 |
-| 445 | ledger-census-negative | ../os/test_census_negative.py | 12 | green | 0.2 |
+| 445 | ledger-census-negative | ../os/test_census_negative.py | 13 | green | 0.2 |
 | 446 | ledger-census-baseline-add | ../os/test_census_baseline_add.py | 6 | green | 0.2 |
 | 447 | os-ledger-lines | ../os/test_ledger_lines.py | 8 | green | 9.8 |
 | 448 | os-ledger-archive | ../os/test_ledger_archive.py | 14 | green | 1.0 |
@@ -776,7 +776,7 @@
 | 737 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
 | 738 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
 | 739 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
-|  | 合计 |  | 6012 | green 675 / FAIL 0 / no-evidence 64 |  |
+|  | 合计 |  | 6013 | green 675 / FAIL 0 / no-evidence 64 |  |
 
 ## 证据出处
 

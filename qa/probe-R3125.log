@@ -1,0 +1,59 @@
+== Q1 git history of qa/ (size-equal, bytes-changed) ==
+raw: A=4330 M=112 D=6 other=0 commits_pairs=112
+modified-pairs with EQUAL size but different blob=0
+== Q2 live corpus / cache-skippable split ==
+qa/*.log files=4216 bytes=508061503 (508.1MB)
+HEAD commit ct=1795204456 iso=2026-11-21T03:54:16
+dirty entries under qa/ =0 (a cache would also have to survive these)
+ref HEAD commit: would-read files=0 bytes=0 | skippable files=4216 bytes=508061503 (100.00% of bytes)
+ref now-24h  : would-read files=288 bytes=1237970 | skippable files=3928 bytes=506823533 (99.76% of bytes)
+newest qa mtime=2026-11-21T03:49:41
+== Q3 who can reach a file under qa/ ==
+non-.log files already living in qa/ =89
+  R2930-filing-checklist.png (298113 bytes)
+  R2930-index.png (926599 bytes)
+  R2930-journey-19.9.png (311005 bytes)
+  R2930-membership-face.png (384205 bytes)
+  R2930-money-path-demo.png (121056 bytes)
+  R2930c-face-sweep.png (161330 bytes)
+  apimarket-buyerquestions-R2119.log-run2 (879 bytes)
+  apimarket-refundregister-R2111.log-2 (2008 bytes)
+  apimarket-watchlist-R2086.log2 (978 bytes)
+  benchgate-R691.json (1245 bytes)
+  crawl-baselines.json (804 bytes)
+  crawl-failure-days.jsonl (357 bytes)
+enumeration call sites naming a qa/target dir =20
+  src/os/evidence_census_R2072.py:33: for name in sorted(os.listdir(target)):
+  src/os/export_round.py:338: for name in os.listdir(qa):
+  src/os/limits_matrix_reconcile_fence_table_next_R2621.py:34: paths = [os.path.join(QA_DIR, n) for n in os.listdir(QA_DIR)
+  src/os/limits_matrix_reconcile_fence_table_R2621.py:33: paths = [os.path.join(QA_DIR, n) for n in os.listdir(QA_DIR)
+  src/os/live_R2403.py:32: return [os.path.join(qa, name) for name in sorted(os.listdir(qa))
+  src/os/live_R2417.py:39: names = sorted(name for name in os.listdir(QA) if name.endswith(".log"))
+  src/os/qa_decode_probe.py:66: names = sorted(n for n in os.listdir(target) if n.endswith(".log"))
+  src/os/qa_mtime_probe.py:58: names = [n for n in os.listdir(qa_dir)
+  src/os/qa_mtime_probe.py:67: all_files = [n for n in os.listdir(qa_dir)
+  src/os/qa_writer_census.py:188: names = sorted(n for n in os.listdir(target) if n.endswith(".log"))
+  src/os/qa_writer_census.py:226: names = sorted(n for n in os.listdir(target) if n.endswith(".log"))
+  src/os/qa_writer_census.py:328: with os.scandir(target) as it:
+  src/os/round_evidence.py:141: names = sorted(os.listdir(qa_dir))
+  src/os/runner_suite_timeout_headroom.py:359: for name in sorted(os.listdir(qa)):
+  src/os/suite_matrix_reconcile.py:446: paths = [os.path.join(qa_dir, name) for name in os.listdir(qa_dir)
+  src/os/suite_matrix_reconcile.py:474: return sorted(name for name in os.listdir(qa_dir)
+  src/sandbox/frontdoor.py:261: for path in glob.glob(os.path.join(QA_DIR, "reconcile-all-*.log")):
+  src/sandbox/runner_profile.py:168: names = [n for n in os.listdir(QA_DIR)
+  src/sandbox/runner_profile.py:184: names = [n for n in os.listdir(QA_DIR)
+  src/sandbox/suite_matrix.py:174: names = [name for name in os.listdir(QA_DIR)
+shipped modules naming the census baseline file =58
+  src/os/battery_followup_R1999.py
+  src/os/battery_followup_R2010.py
+  src/os/battery_followup_R2016.py
+  src/os/battery_followup_R2017.py
+  src/os/battery_followup_R2027.py
+  src/os/battery_followup_R2160.py
+  src/os/battery_followup_R2168.py
+  src/os/battery_followup_R2171.py
+  src/os/battery_followup_R2174.py
+  src/os/battery_followup_R2177.py
+  src/os/battery_followup_R2183.py
+  src/os/battery_followup_R2184.py
+elapsed_ms=2407.0

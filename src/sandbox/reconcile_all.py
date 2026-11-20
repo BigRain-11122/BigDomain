@@ -4791,7 +4791,7 @@ SUITES = [
     # DRIFT-CLEAN without a whole-baseline re-freeze.
     # (AC-CDN1..AC-CDN8 pre-registered in state/queue/tech.md R2151.)
     ("ledger-census-negative",
-     os.path.join("..", "os", "test_census_negative.py"), 12),
+     os.path.join("..", "os", "test_census_negative.py"), 13),
     # R2712: the disposition face above was one-directional, so a
     # genuine one-off evidence file in a non-tee dialect flagged
     # new-dialect forever and the only exit was a whole-baseline

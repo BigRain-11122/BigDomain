@@ -282,6 +282,18 @@ def check_against_baseline(target, path, stats=None, shape=None, now=None):
     byte-identical. `now` is injectable because the recency boundary must
     be testable without a clock.
 
+    R3125: the whole corpus is re-read every round (4216 files / 508.1MB /
+    831.6ms, measured at R3124) and a cache keyed by (name, size, mtime)
+    would skip 99.76% of those bytes. That saving is REFUSED. Measured over
+    the git history of qa/: 112 modifications, 0 of them kept the size while
+    changing the blob, so the saving looks safe - but the key cannot PROVE
+    freshness. A rewrite that keeps the size and restores the mtime is
+    constructible (AC-CDN13 plants exactly that), and on such a key a cache
+    hit returns the OLD class, silently skipping the one thing this face
+    exists to catch. The face therefore reads every file every round, and
+    the growth (~6.75MB/day) stays a published reading (`stats`/`shape`) so
+    a future round decides on numbers instead of re-deriving them.
+
     R3100 (AC-WCB12): the same single pass that feeds the class lists now
     also counts the corpus it read (files and bytes). The count is DERIVED
     from the bytes actually read and published only through the optional

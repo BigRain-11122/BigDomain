@@ -1,5 +1,5 @@
 """Writer-census negative-family suite (R2151; criteria
-AC-CDN1..AC-CDN8 pre-registered in state/queue/tech.md BEFORE this
+AC-CDN1..AC-CDN13 pre-registered in state/queue/tech.md BEFORE this
 code existed - honesty law).
 
 What this proves: the R1841 drift detector really does catch the three
@@ -29,7 +29,7 @@ sys.path.insert(0, BASE)
 import qa_writer_census as CENSUS  # noqa: E402
 
 BASELINE_NAME = CENSUS.BASELINE_NAME
-EXPECTED_CRITERIA = 12
+EXPECTED_CRITERIA = 13
 TEE = b"PASS suite census negative\n"
 # cp936 bytes that are NOT valid utf-8 (a pure-ASCII payload would be
 # classified pwsh-capture, so the literal carries a Chinese sentinel).
@@ -206,6 +206,50 @@ def run():
               and read_bytes(bpath) == before2,
               "AC-CDN4 second accept idempotent and deterministic")
 
+        # AC-CDN13 (R3125): freshness comes from READING the bytes, not from
+        # the stat key. Measured at R3125 before this arm existed: 112
+        # modifications in the qa/ history, ZERO of them kept the size while
+        # changing the blob, and a (name,size,mtime) cache would skip 99.76%
+        # of the 508.1MB corpus per round. That saving is refused because the
+        # key cannot prove freshness - the case below is constructible, and a
+        # stat-keyed hit would return the OLD class and skip it silently.
+        w2 = tempfile.mkdtemp(prefix="census-neg-key-")
+        try:
+            w2p = lambda name: os.path.join(w2, name)  # noqa: E731
+            b2 = os.path.join(w2, BASELINE_NAME)
+            write(w2p("k-samesize.log"), CMD_RAW)
+            _fl, fcode, _fb = CENSUS.write_baseline(w2, b2)
+            before2 = read_bytes(b2)
+            st0 = os.stat(w2p("k-samesize.log"))
+            payload = b"\x00" * len(CMD_RAW)   # same size, class -> nul-bytes
+            write(w2p("k-samesize.log"), payload)
+            os.utime(w2p("k-samesize.log"),
+                     ns=(st0.st_atime_ns, st0.st_mtime_ns))
+            st1 = os.stat(w2p("k-samesize.log"))
+            box = {}
+            klines, kcode = CENSUS.check_against_baseline(
+                w2, b2, stats=box)
+            kblob = blob(klines)
+            cached_row = CENSUS.ED.classify_bytes(CMD_RAW, b"", counts=False)
+            live_row = CENSUS.ED.classify_bytes(payload, b"", counts=False)
+            logs = sorted(n for n in os.listdir(w2) if n.endswith(".log"))
+            check(fcode == 0
+                  and (st0.st_size, st0.st_mtime_ns)
+                  == (st1.st_size, st1.st_mtime_ns)
+                  and kcode == 2
+                  and "[flag] class-migrated: k-samesize.log "
+                      "(base=cmd-raw cur=nul-bytes)" in kblob
+                  and cached_row["class"] == "cmd-raw"
+                  and live_row["class"] == "nul-bytes"
+                  and box.get("files") == len(logs)
+                  and box.get("bytes") == sum(os.path.getsize(w2p(n))
+                                              for n in logs)
+                  and read_bytes(b2) == before2,
+                  "AC-CDN13 same size+mtime rewrite still caught by reading; "
+                  "a stat key would have flagged nothing")
+        finally:
+            shutil.rmtree(w2, ignore_errors=True)
+
         # AC-CDN8: hygiene, wiring label, criteria count, and the R1841
         # selftest must stay green (zero regression).
         with io.open(os.path.abspath(__file__), "r", encoding="ascii",
@@ -225,8 +269,8 @@ def run():
             rsrc = handle.read()
         check(not net and selftest_code == 0
               and "ledger-census-negative" in rsrc
-              and EXPECTED_CRITERIA == 12,
-              "AC-CDN8 hygiene, selftest green, wiring label, count 12")
+              and EXPECTED_CRITERIA == 13,
+              "AC-CDN8 hygiene, selftest green, wiring label, count 13")
     finally:
         shutil.rmtree(world, ignore_errors=True)
 
