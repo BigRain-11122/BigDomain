@@ -1,0 +1,17 @@
+Q1 write-shaped open() calls in tools/status_export_fresh.py = 3
+  line 572 mode='w' in apply()
+  line 649 mode='w' in archive_legacy()
+  line 667 mode='w' in archive_legacy()
+  reach apply() <- --apply
+  reach archive_legacy() <- --archive-legacy
+  reach archive_legacy() <- --archive-legacy
+Q1 os.replace calls = 3
+Q3 shipped non-test vehicles naming archive_legacy = 0
+Q2 naive-clock apply rc=8
+Q2 live name bytes before=1173 after=1149 changed=True
+Q2 survivor export_ts='2026-11-21T12:00:00'
+Q2 survivor judge code='E_EXP_BAD_TS' present=None
+Q2 staged residue in docs/ = []
+Q2b archive_legacy asks face_judgeable = False
+Q2b archive_legacy asks export_freshness = False
+PROBE done

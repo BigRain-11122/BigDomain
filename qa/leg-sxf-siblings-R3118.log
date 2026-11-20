@@ -1,0 +1,41 @@
+SHARD scope=SHARD registry_suites=738 registry_criteria=6005 selected=29 selected_criteria=277 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-closeout rc=0 pass=26 fail=0 detail=yes suite=PASS 26/26 crit=26 21.4s
+SHARD row os-export-freshness rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.7s
+SHARD row os-export-composed-landed-face rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-export-composed-landed-wordspace rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-export-composed-landed-bom-precedence rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-export-composed-landed-bom-precedence-second-wave rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-export-composed-landed-bom-precedence-third-wave rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-export-composed-landed-bom-precedence-fourth-wave rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-export-composed-landed-bom-precedence-fifth-wave rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-sixth-wave rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-composed-landed-bom-precedence-seventh-wave rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-publish-wire-identity rc=0 pass=9 fail=0 detail=yes suite=PASS 6/6 crit=6 1.0s
+SHARD row os-export-publish-from-import-law rc=0 pass=8 fail=0 detail=yes suite=PASS 8/6 crit=6 1.1s
+SHARD row os-status-export-fresh rc=0 pass=22 fail=0 detail=yes suite=PASS 22/22 crit=22 0.9s
+SHARD row os-status-export-writer-dialect-wire rc=1 pass=5 fail=1 detail=yes suite=FAIL 5/6 crit=6 8.1s
+SHARD detail os-status-export-writer-dialect-wire SUITE status_export_writer_dialect_wire (R2450) criteria=6
+SHARD detail os-status-export-writer-dialect-wire PASS AC-SEWD1 the writer set is derived from the audit reading at CALL time, never a fixed list of three names
+SHARD detail os-status-export-writer-dialect-wire PASS AC-SEWD2 a CRLF docs/status-export.json keeps CRLF through a real writer call with zero lone LF
+SHARD detail os-status-export-writer-dialect-wire PASS AC-SEWD3 an LF export keeps exactly today's bytes
+SHARD detail os-status-export-writer-dialect-wire PASS AC-SEWD4 every one of the three writers keeps its existing refusal code, exit code and printed line
+SHARD detail os-status-export-writer-dialect-wire   measured: verdict='AUDIT-DEBT' keeps=12 routed=11 unrouted=1 export=3 live='WIRED'/3
+SHARD detail os-status-export-writer-dialect-wire FAIL AC-SEWD5 the audit reads AUDIT-CLEAN with routed == keeps after the wire
+SHARD detail os-status-export-writer-dialect-wire PASS AC-SEWD6 pure ASCII, stdlib only, no clock, zero network, own reconcile label and suite
+SHARD detail os-status-export-writer-dialect-wire SUITE FAIL 5/6
+SHARD row os-status-export-writer-transport-scope rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 17.4s
+SHARD row os-export-driver-queue-face rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.3s
+SHARD row os-export-consistency-queue-face rc=0 pass=15 fail=0 detail=yes suite=PASS 6/6 crit=6 0.4s
+SHARD row os-closeout-export-parity-text-binding rc=0 pass=21 fail=0 detail=yes suite=PASS 6/6 crit=6 0.6s
+SHARD row os-export-closeout-gate-parity rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.8s
+SHARD row os-closeout-export-parity-wire rc=0 pass=16 fail=0 detail=yes suite=PASS 16/16 crit=16 0.3s
+SHARD row os-closeout-export-parity-dialect-wire rc=0 pass=20 fail=0 detail=yes suite=PASS 20/20 crit=20 0.3s
+SHARD row os-export-publish-path-guard rc=0 pass=8 fail=0 detail=yes suite=PASS 6/6 crit=6 0.8s
+SHARD row os-export-driver-self-drive-health rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.4s
+SHARD row os-export-driver-health-verdict rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-closeout-export-parity-wire-binding-consumer rc=0 pass=37 fail=0 detail=yes suite=PASS 6/6 crit=6 3.5s
+SHARD row os-export-parity-difference-order-field rc=0 pass=55 fail=0 detail=yes suite=PASS 6/6 crit=6 0.3s
+SHARD row os-export-round rc=0 pass=131 fail=0 detail=yes suite=PASS 131/131 crit=45 22.2s
+SHARD row os-closeout-gate rc=0 pass=42 fail=0 detail=yes suite=PASS 42/42 crit=10 11.1s
+SHARD rc=2 scope=SHARD selected=29 executed=29 green=28 criteria=277 crit_mismatch=0 elapsed=93.1s crit_checked=29 crit_unchecked=0
+SHARD red os-status-export-writer-dialect-wire:rc=1

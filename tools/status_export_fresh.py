@@ -336,6 +336,16 @@ def sha256_file(path):
     return digest.hexdigest()
 
 
+# AC-SXF22 (R3118): every write of the live face goes through a same-directory
+# stage that the judgeability gate reads BEFORE os.replace, so a refused face
+# leaves the live name byte-identical and no residue behind.
+STAGE_SUFFIX = ".sxf-stage"
+
+
+def _stage_path(target):
+    return target + STAGE_SUFFIX
+
+
 def leading_tag(value):
     match = ROUND_RE.search(value or "")
     return "R" + match.group(1) if match else "none"
@@ -569,20 +579,30 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
         print("DRY %s changed=%s round=R%d bytes_before=%d bytes_after=%d"
               % ("R%d" % round_int, changed, round_int, len(before.encode("utf-8")), len(text.encode("utf-8"))))
         return 0
-    with io.open(export_path, "w", encoding="utf-8", newline="") as handle:
+    # AC-SXF22 (R3118): the R3117 proof ran AFTER the bytes were on disk under
+    # the live name, so a refused face was still the face the CEO downloaded -
+    # measured on a private world with a naive clock: rc=8 and the live name grew
+    # 1173->1149 bytes carrying export_ts without an offset. The stage is judged
+    # FIRST, so "refused" and "did not land" are now the same fact.
+    stage = _stage_path(export_path)
+    with io.open(stage, "w", encoding="utf-8", newline="") as handle:
         handle.write(text)
-    after = read_text(export_path)
-    # AC-EXPR3 (R3117): this tool composes AND lands the face with its own
-    # io.open, so it is a birth site of its own - R3117 measured that it named
-    # the judgeability gate zero times. It now self-proves once after landing:
-    # a face this tool wrote that the CEO gate cannot read is named here rather
-    # than discovered later on the card.
     os_dir = os.path.join(REAL_ROOT, "src", "os")
     if os_dir not in sys.path:
         sys.path.insert(0, os_dir)
-    judge_code, _judge_report = export_round_module().face_judgeable(export_path)
+    judge_code, _judge_report = export_round_module().face_judgeable(stage)
     if judge_code:
-        print("E_SXF_UNPROVEN face=WRITTEN code=%s" % judge_code)
+        os.remove(stage)
+        print("E_SXF_UNPROVEN face=STAGED code=%s" % judge_code)
+        return 8
+    os.replace(stage, export_path)
+    after = read_text(export_path)
+    # The re-read is a live-name reading, not a second refusal surface: after
+    # os.replace the landed bytes ARE the judged bytes, so a code here would mean
+    # the judge or the disk moved between the two calls.
+    live_code, _live_report = export_round_module().face_judgeable(export_path)
+    if live_code:
+        print("E_SXF_UNPROVEN face=WRITTEN code=%s" % live_code)
         return 8
     print("APPLIED R%d changed=%s bytes=%d lf_only=%s bom=%s"
           % (round_int, changed, len(after.encode("utf-8")),
@@ -644,28 +664,49 @@ def archive_legacy(export_path, confirm=False, dry_run=False):
             print("E_SXF_CONFIRM: pass --confirm to write the archive")
             return 64
         return 0
-    if not os.path.isdir(ARCHIVE_DIR):
-        os.makedirs(ARCHIVE_DIR)
-    with io.open(abs_path, "w", encoding="utf-8", newline="\n") as handle:
-        handle.write(body)
-    digest = sha256_file(abs_path)
-    # AC-SXF9: prove the archive carries exactly what the live document held.
-    archived = json.loads(read_text(abs_path)).get(LEGACY_KEY) or []
-    if archived != legacy:
-        print("E_SXF_ARCHIVE_LOSS: archived %d entries do not equal live %d"
-              % (len(archived), len(legacy)))
-        return 8
+    # AC-SXF22 (R3118): this function rewrites the live face by hand and was
+    # judged by nobody (R3118 measured zero production callers, so it had never
+    # been exercised outside its own suite). The export rewrite is staged and
+    # proven FIRST - before the archive payload is created - so a refusal leaves
+    # both the face and logs/ untouched. The pointer digest is computed from the
+    # payload bytes, so it can be published before the archive is written, and
+    # the equality check below proves the two agree.
+    digest = hashlib.sha256(body.encode("utf-8")).hexdigest()
     rewritten = dict(doc)
     rewritten.pop(LEGACY_KEY, None)
     rewritten["results_archive"] = {
         "path": rel,
         "sha256": digest,
         "count": len(legacy),
-        "bytes": os.path.getsize(abs_path),
+        "bytes": len(body.encode("utf-8")),
     }
     text = json.dumps(rewritten, ensure_ascii=False, indent=2) + "\n"
-    with io.open(export_path, "w", encoding="utf-8", newline="\n") as handle:
+    os_dir = os.path.join(REAL_ROOT, "src", "os")
+    if os_dir not in sys.path:
+        sys.path.insert(0, os_dir)
+    stage = _stage_path(export_path)
+    with io.open(stage, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(text)
+    judge_code, _judge_report = export_round_module().face_judgeable(stage)
+    if judge_code:
+        os.remove(stage)
+        print("E_SXF_UNPROVEN face=STAGED code=%s" % judge_code)
+        return 8
+    if not os.path.isdir(ARCHIVE_DIR):
+        os.makedirs(ARCHIVE_DIR)
+    archive_stage = _stage_path(abs_path)
+    with io.open(archive_stage, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(body)
+    # AC-SXF9: prove the archive carries exactly what the live document held.
+    archived = json.loads(read_text(archive_stage)).get(LEGACY_KEY) or []
+    if archived != legacy or sha256_file(archive_stage) != digest:
+        os.remove(archive_stage)
+        os.remove(stage)
+        print("E_SXF_ARCHIVE_LOSS: staged archive %d entries do not equal live %d"
+              % (len(archived), len(legacy)))
+        return 8
+    os.replace(archive_stage, abs_path)
+    os.replace(stage, export_path)
     # Every key other than the moved one must survive untouched.
     after = json.loads(read_text(export_path))
     drift = [key for key in doc if key != LEGACY_KEY and doc[key] != after.get(key)]

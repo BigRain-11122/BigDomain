@@ -6151,8 +6151,12 @@ SUITES = [
     # headline labels - a lower-round row that merely mentions the newest round
     # had been published as that round's narrative, so a healthy closeout wrote
     # the old sentence and read stale against its own gate (18 -> 20).
+    # R3118: the two ungraded write points in this tool - the apply landing that
+    # refused AFTER its own io.open, and the archive rewrite that judged nothing
+    # while no production vehicle called it - now share one stage-then-prove
+    # door, and the zero-caller fact is asserted (20 -> 22).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 21),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 22),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives

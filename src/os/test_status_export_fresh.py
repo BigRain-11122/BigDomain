@@ -499,6 +499,106 @@ def run(root):
            "round=%r label=%r" % (live_round,
                                   live_match.group(1) if live_match else None))
 
+    # AC-SXF22 (R3118): "refused" and "did not land" must be the same fact. R3117
+    # proved AFTER the bytes were already under the live name (measured on a
+    # private world: rc=8 and the live name grew 1173->1149 bytes carrying a
+    # naive export_ts), and archive_legacy rewrote the same face by hand with no
+    # judgement at all while no production vehicle called it.
+    import export_round
+
+    def stage_residue():
+        return sorted(name for name in os.listdir(os.path.dirname(export))
+                      if name.endswith(sx.STAGE_SUFFIX))
+
+    real_clock = sx.now_local
+    try:
+        # Arm a: a naive clock must refuse BEFORE anything lands.
+        before_bytes = io.open(export, "rb").read()
+        sx.now_local = lambda: dt.datetime(2026, 11, 21, 12, 0, 0)
+        said = io.StringIO()
+        with contextlib.redirect_stdout(said):
+            rc_naive = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        text_naive = said.getvalue()
+        after_bytes = io.open(export, "rb").read()
+        arm_a = (rc_naive == 8 and after_bytes == before_bytes
+                 and "face=STAGED" in text_naive and not stage_residue())
+
+        # Arm b: a judgeable face lands, and a second run is byte-identical.
+        sx.now_local = lambda: dt.datetime(2026, 11, 21, 12, 0, 0,
+                                           tzinfo=dt.timezone(dt.timedelta(hours=8)))
+        with contextlib.redirect_stdout(io.StringIO()):
+            rc_first = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        first_bytes = io.open(export, "rb").read()
+        with contextlib.redirect_stdout(io.StringIO()):
+            rc_second = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        second_bytes = io.open(export, "rb").read()
+        code_landed, _ = export_round.face_judgeable(export)
+        arm_b = (rc_first == 0 and rc_second == 0
+                 and first_bytes == second_bytes
+                 and code_landed is None and not stage_residue())
+
+        # Arm c: the archive rewrite is judged too - a naive face leaves the
+        # export byte-identical AND creates no archive file.
+        naive_doc = json.loads(io.open(export, encoding="utf-8").read())
+        naive_doc["export_ts"] = "2026-11-21T12:00:00"
+        naive_doc["results"] = LEGACY
+        naive_doc.pop("results_archive", None)
+        write_json(export, naive_doc)
+        before_c = io.open(export, "rb").read()
+        logs = os.path.join(root, "logs")
+        logs_before = sorted(os.listdir(logs)) if os.path.isdir(logs) else []
+        said = io.StringIO()
+        with contextlib.redirect_stdout(said):
+            rc_arch_naive = sx.archive_legacy(export, confirm=True)
+        logs_after = sorted(os.listdir(logs)) if os.path.isdir(logs) else []
+        arm_c = (rc_arch_naive == 8
+                 and io.open(export, "rb").read() == before_c
+                 and logs_after == logs_before
+                 and "face=STAGED" in said.getvalue())
+
+        # Arm d: on a healthy face the same path still archives losslessly.
+        healthy_doc = json.loads(io.open(export, encoding="utf-8").read())
+        healthy_doc["export_ts"] = "2026-11-21T00:00:00+08:00"
+        write_json(export, healthy_doc)
+        with contextlib.redirect_stdout(io.StringIO()):
+            rc_arch_ok = sx.archive_legacy(export, confirm=True)
+        live_doc = json.loads(io.open(export, encoding="utf-8").read())
+        pointer = live_doc.get("results_archive") or {}
+        pointer_abs = os.path.join(root, str(pointer.get("path") or "").replace("/", os.sep))
+        archived_doc = (json.loads(io.open(pointer_abs, encoding="utf-8").read())
+                        if os.path.isfile(pointer_abs) else {})
+        code_after_archive, _ = export_round.face_judgeable(export)
+        arm_d = (rc_arch_ok == 0
+                 and archived_doc.get("results") == LEGACY
+                 and pointer.get("count") == len(LEGACY)
+                 and pointer.get("sha256") == hashlib.sha256(
+                     io.open(pointer_abs, "rb").read()).hexdigest()
+                 and "results" not in live_doc
+                 and code_after_archive is None and not stage_residue())
+
+        # Arm e: the zero-caller fact is asserted, so re-wiring a vehicle to this
+        # path without judging it is red instead of silent.
+        callers = []
+        for sub in ("src", "tools"):
+            for dirpath, _dirnames, filenames in os.walk(os.path.join(REPO, sub)):
+                for filename in filenames:
+                    if not filename.endswith(".py") or filename.startswith("test_"):
+                        continue
+                    if filename == "status_export_fresh.py":
+                        continue
+                    body = io.open(os.path.join(dirpath, filename), encoding="utf-8",
+                                   errors="replace").read()
+                    if "archive_legacy" in body or "--archive-legacy" in body:
+                        callers.append(filename)
+        arm_e = callers == []
+
+        record("AC-SXF22", arm_a and arm_b and arm_c and arm_d and arm_e,
+               "a=%s b=%s c=%s d=%s e=%s rc=%d/%d/%d/%d"
+               % (arm_a, arm_b, arm_c, arm_d, arm_e,
+                  rc_naive, rc_first, rc_arch_naive, rc_arch_ok))
+    finally:
+        sx.now_local = real_clock
+
     # AC-SXFB10 (AC-SXF10): the registry row exists AND declares this many
     # criteria, so adding a criterion without moving the count is red instead of
     # silently uncounted.
@@ -513,7 +613,7 @@ def run(root):
             if "test_status_export_fresh.py" in line:
                 row = line
                 break
-    record("AC-SXFB10", row is not None and declared == 21,
+    record("AC-SXFB10", row is not None and declared == 22,
            "matrix_row=%s declared=%d" % (bool(row), declared))
 
 

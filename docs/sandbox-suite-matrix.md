@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 738 | 6004 | 675/675 | R2739 |
+| 738 | 6005 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -622,7 +622,7 @@
 | 583 | os-bare-evidence-deep-pile | ../os/test_bare_evidence_deep_pile.py | 6 | green | 1.8 |
 | 584 | os-general-writer-dialect-audit | ../os/test_general_writer_dialect_audit.py | 6 | green | 31.8 |
 | 585 | os-parameter-destination-resolution | ../os/test_parameter_destination_resolution.py | 6 | green | 12.2 |
-| 586 | os-status-export-fresh | ../os/test_status_export_fresh.py | 21 | no-evidence | - |
+| 586 | os-status-export-fresh | ../os/test_status_export_fresh.py | 22 | no-evidence | - |
 | 587 | os-status-export-writer-dialect-wire | ../os/test_status_export_writer_dialect_wire.py | 6 | green | 13.3 |
 | 588 | os-status-export-writer-transport-scope | ../os/test_status_export_writer_transport_scope.py | 6 | green | 31.6 |
 | 589 | os-ledger-line-shape-guard | ../os/test_ledger_line_shape_guard.py | 6 | green | 1.0 |
@@ -775,7 +775,7 @@
 | 736 | os-heartbeat | ../os/test_heartbeat.py | 1 | no-evidence | - |
 | 737 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
 | 738 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
-|  | 合计 |  | 6004 | green 675 / FAIL 0 / no-evidence 63 |  |
+|  | 合计 |  | 6005 | green 675 / FAIL 0 / no-evidence 63 |  |
 
 ## 证据出处
 
