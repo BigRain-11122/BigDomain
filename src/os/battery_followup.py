@@ -18,6 +18,20 @@ with the shipped doc: a mismatch is a FAIL carrying BOTH byte counts and the
 doc is left untouched, never silently rewritten (AC-BFU2). Absent tools or an
 unreadable matrix FAIL with their own codes; nothing fails open (AC-BFU4).
 
+TREE-FACE EXEMPTION (R3103, measured - not a deferral). The four sections here
+do NOT ask the closeout gate's tree faces (round-main, registry census, derived
+matrix document). Measured on the fixture worlds this suite builds: 10/10 carry
+no qa baseline, 10/10 carry no registry (nor the census module), and the three
+inputs a tree face needs are therefore absent by construction. Pointing
+`closeout_gate.check_census` at such a world used to answer "VERDICT PASS
+pinned=735" in 161.9ms - a green verdict for a tree nobody asked about - and
+the face now refuses by name (E_CLG_FOREIGN_REGISTRY) instead. The tree faces
+are carried elsewhere and that is where they are asked: the closeout vehicle
+(src/os/closeout.py::tree_refusal) and the commit hook
+(Tools/hooks/pre_commit_gate.py::tree_face and ::matrix_face). This exemption
+replaces the earlier "next round" carry: it must not be reopened as a question
+unless one of those carriers stops asking the face.
+
 Disclosed boundary (AC-BFU3): the census section invokes qa_writer_census.py
 --update-baseline, so that TOOL owns a baseline file under qa/; this module
 never writes it, and no other path is written by this module at all.

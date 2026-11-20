@@ -24,7 +24,7 @@ sys.path.insert(0, BASE)
 import battery_followup as BF  # noqa: E402
 import matrix_stamp_compare as MSC  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 7
 MODULE = os.path.join(BASE, "battery_followup.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-battery-followup"
@@ -361,6 +361,91 @@ def ac_bfu6():
     check(ok, "AC-BFU6 ASCII, no network, wired, legacy pile byte-wider")
 
 
+def ac_bfu7():
+    """AC-BFU7 (R3103): the tree faces are NOT asked here, and now say so.
+
+    The exemption is proven on disk, not asserted in prose: every world this
+    suite builds is measured for the three tree inputs, the gate's faces are
+    asked OF a world and must refuse by name (before this round the census
+    face answered PASS pinned=735 about the live tree), and the carriers that
+    do ask them are read from the shipped sources.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    sys.path.insert(0, os.path.join(REPO, "tools"))
+    import closeout_gate as CG
+
+    worlds = []
+    try:
+        for shape in ({}, {"tools": False}, {"doc": False}):
+            worlds.append((shape, make_world(**shape)))
+        missing = []
+        for shape, world in worlds:
+            qa_base = os.path.join(world, "qa", "writer-census-baseline.json")
+            reg = os.path.join(world, "src", "sandbox", "reconcile_all.py")
+            cen = os.path.join(world, "src", "os", "registry_counter_census.py")
+            missing.append({
+                "qa_baseline": os.path.isfile(qa_base),
+                "registry": os.path.isfile(reg),
+                "census_module": os.path.isfile(cen),
+                "matrix_doc": os.path.isfile(
+                    os.path.join(world, "docs", "sandbox-suite-matrix.md")),
+            })
+        with io.open(MODULE, "rb") as handle:
+            callable_src = handle.read().decode("ascii", "replace")
+        with io.open(os.path.join(here, "test_battery_followup.py"), "rb") as fh:
+            suite_src = fh.read().decode("ascii", "replace")
+        import inspect
+        builder_src = inspect.getsource(make_world)
+        probe_world = make_world()
+        worlds.append(({}, probe_world))
+        census_ok, census_line = CG.check_census(probe_world)
+        round_ok, round_line = CG.check_round_main(probe_world)
+        live_c_ok, live_c_line = CG.check_census(REPO)
+        live_m_ok, live_m_line = CG.check_matrix(REPO)
+        live_r_ok, live_r_line = CG.check_round_main(REPO)
+    finally:
+        for _shape, world in worlds:
+            drop_world(world)
+
+    shapes = [row for row in missing]
+    none_carry = all(not row["qa_baseline"] and not row["registry"]
+                     and not row["census_module"] for row in shapes)
+    doc_only_when_built = (shapes[0]["matrix_doc"] and not shapes[2]["matrix_doc"])
+    # The BUILDER cannot make these inputs: neither name occurs in its body.
+    # (The suite mentions reconcile_all elsewhere - as the runner registry it
+    #  checks in AC-BFU6 - which is why the scan is scoped to make_world.)
+    unwired = ("reconcile_all" not in builder_src
+               and "writer-census-baseline" not in builder_src)
+    exemption_named = ("TREE-FACE EXEMPTION" in callable_src
+                       and "tree_refusal" in callable_src
+                       and "pre_commit_gate" in callable_src)
+    refused = (census_ok is False
+               and census_line.startswith(CG.E_CLG_FOREIGN_REGISTRY)
+               and round_ok is False
+               and round_line.startswith(CG.E_CLG_NO_STATE))
+    live_same = (live_c_ok and live_c_line.startswith("VERDICT PASS pinned=")
+                 and live_m_ok and live_m_line.startswith("DOC-CURRENT")
+                 and live_r_ok and live_r_line.startswith("ROUND-MAIN OK"))
+    with io.open(os.path.join(REPO, "src", "os", "closeout.py"), "r",
+                 encoding="utf-8") as fh:
+        vehicle = fh.read()
+    with io.open(os.path.join(REPO, "Tools", "hooks", "pre_commit_gate.py"),
+                 "r", encoding="utf-8") as fh:
+        hook = fh.read()
+    carriers = ("tree_refusal(root)" in vehicle
+                and "def tree_face" in hook and "def matrix_face" in hook)
+    print("  worlds=%d inputs=%r refused=%r/%r"
+          % (len(shapes), shapes[0], census_line, round_line), flush=True)
+    ok = (len(shapes) == 3 and none_carry and doc_only_when_built and unwired
+          and exemption_named and refused and live_same and carriers)
+    if not ok:
+        print("  measured: none_carry=%r doc=%r unwired=%r named=%r "
+              "refused=%r live=%r carriers=%r"
+              % (none_carry, doc_only_when_built, unwired, exemption_named,
+                 refused, live_same, carriers), flush=True)
+    check(ok, "AC-BFU7 tree faces refused on fixture worlds, exemption named")
+
+
 def main():
     print("battery_followup suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -370,6 +455,7 @@ def main():
     ac_bfu4()
     ac_bfu5()
     ac_bfu6()
+    ac_bfu7()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

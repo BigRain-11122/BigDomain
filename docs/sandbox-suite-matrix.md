@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 735 | 5988 | 675/675 | R2739 |
+| 735 | 5989 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -537,7 +537,7 @@
 | 498 | os-queue-only-floor-wire | ../os/test_queue_only_floor_wire.py | 6 | green | 2.3 |
 | 499 | os-debt-gate | ../os/test_debt_gate.py | 5 | green | 1.3 |
 | 500 | os-queue-head | ../os/test_queue_head.py | 6 | green | 1.6 |
-| 501 | os-battery-followup | ../os/test_battery_followup.py | 6 | green | 10.6 |
+| 501 | os-battery-followup | ../os/test_battery_followup.py | 7 | green | 10.6 |
 | 502 | os-battery-followup-help-wire | ../os/test_battery_followup_help_wire.py | 6 | green | 7.9 |
 | 503 | os-debt-close | ../os/test_debt_close.py | 6 | green | 0.5 |
 | 504 | os-debt-item-unique | ../os/test_debt_item_unique.py | 6 | green | 1.7 |
@@ -772,7 +772,7 @@
 | 733 | os-ledger-business-report | ../os/test_ledger_business_report.py | 8 | no-evidence | - |
 | 734 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
 | 735 | os-corpus-rewrite-audit | ../os/test_corpus_rewrite_audit.py | 1 | no-evidence | - |
-|  | 合计 |  | 5988 | green 675 / FAIL 0 / no-evidence 60 |  |
+|  | 合计 |  | 5989 | green 675 / FAIL 0 / no-evidence 60 |  |
 
 ## 证据出处
 

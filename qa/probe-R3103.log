@@ -1,0 +1,16 @@
+ROOT C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain
+SITES make_world_calls=10 lines=[157, 168, 188, 197, 220, 258, 263, 284, 285, 286]
+WORLDS built=10
+INPUTS qa_baseline_present=0/10 matrix_doc_present=9/10 registry_present=0/10
+QA_SHAPES [(), ('evidence.log',)]
+WORLD_HAS {'qa_baseline': False, 'matrix_doc_bytes': 58, 'registry': False, 'census_module': False}
+WORLD_FACE census ok=True ms=161.9 line='VERDICT PASS pinned=735'
+WORLD_FACE census_injected ok=None ms=0.7 line="RAISED FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\sjs20\\\\AppData\\\\Local\\\\Temp\\\\bigdomain-bfu-w-qqh84et6\\\\src\\\\sandbox\\\\reconcile_all.py'"
+WORLD_FACE matrix ok=False ms=0.5 line='TABLE-MISSING ../../../../AppData/Local/Temp/bigdomain-bfu-w-qqh84et6/docs/sandbox-suite-matrix.md rows=None/None'
+WORLD_FACE round_main ok=None ms=1.2 line="RAISED FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\sjs20\\\\AppData\\\\Local\\\\Temp\\\\bigdomain-bfu-w-qqh84et6\\\\src\\\\os\\\\state.json'"
+LIVE_FACE census ok=True ms=162.2 line='VERDICT PASS pinned=735'
+LIVE_FACE matrix ok=True ms=225.2 line='DOC-CURRENT docs/sandbox-suite-matrix.md rows=735/735'
+LIVE_FACE round_main ok=True ms=0.4 line='ROUND-MAIN OK 3102'
+PROJECTION per_world_ms=162.4 worlds=10 total_s=1.6
+CONSTANTS registry=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\reconcile_all.py pin=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\registry_counter_census_pin.json live=True
+SMR_ROOT_REF ['BASE', 'CODE_CEILING', 'CODE_FENCE', 'CODE_HEADER', 'CODE_NEST', 'CODE_SEP', 'CODE_STRAY', 'CODE_TABLE', 'CODE_TITLE', 'CODE_UNSEP', 'DATA_HEAD_RE', 'DOC', 'FENCE_CLOSE_RE', 'FENCE_MARK', 'FENCE_OPEN_RE', 'LEG_NAME_PREFIX', 'LEG_NAME_SUFFIX', 'MATRIX_CELLS', 'MSPL', 'QA_DIR', 'RA', 'REPO', 'ROW_RE', 'SANDBOX', 'SEPARATOR_CHARS', 'SM', 'SRC', 'WALK_CEILING', 'WORD_CEILING', 'WORD_CURRENT', 'WORD_EVID', 'WORD_FENCE', 'WORD_HEADER', 'WORD_NEST', 'WORD_NONE', 'WORD_RED', 'WORD_REFUSED', 'WORD_ROWS', 'WORD_SEP', 'WORD_STALE', 'WORD_STRAY', 'WORD_TABLE', 'WORD_TITLE', 'WORD_UNSEP', 'WORD_WRITTEN']

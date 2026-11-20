@@ -5300,7 +5300,10 @@ SUITES = [
     # (AC-BFU1..AC-BFU6 pinned in state/queue/tech.md as the R2250 seed row
     # BEFORE the code existed.)
     ("os-battery-followup",
-     os.path.join("..", "os", "test_battery_followup.py"), 6),
+     os.path.join("..", "os", "test_battery_followup.py"), 7),
+    # 6 -> 7 at R3103: AC-BFU7 pins the TREE-FACE EXEMPTION on disk (the worlds
+    # carry no tree input, the gate faces refuse them by name, the carriers are
+    # read from the shipped sources) instead of carrying it as "next round".
     # R2366: battery_followup answered a bare --help with E_BFU_BAD_ARGS at
     # exit 5 while this runner answers --help as a QUESTION at exit 0 under the
     # R2362 runner_arg_guard contract, so one CLI lied to an operator asking how

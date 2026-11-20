@@ -92,6 +92,10 @@ sys.path.insert(0, os.path.join(ROOT, "src", "os"))
 import qa_writer_census as CENSUS                           # noqa: E402
 
 GATING_FACE = "flags"
+# R3103: a face asked about a root it cannot address refuses by name instead of
+# judging the tree this module was imported from.
+E_CLG_FOREIGN_REGISTRY = "E_CLG_FOREIGN_REGISTRY"
+E_CLG_NO_STATE = "E_CLG_NO_STATE"
 INFORMATIONAL_FACES = ("reader_refused", "plain_unusable",
                        "reader_rescued", "flags")
 
@@ -143,8 +147,15 @@ def _timed(box, key, fn, *args, **kwargs):
 
 
 def check_round_main(root):
-    """Ask the round-main shape law of the live log. Returns (ok, line)."""
+    """Ask the round-main shape law of the live log. Returns (ok, line).
+
+    R3103: a root with no log is refused BY NAME. Before this, asking the face
+    of a fixture world raised a bare FileNotFoundError, which the vehicle
+    turned into UNREADABLE - a refusal, but not one a reader could act on.
+    """
     path = _src_os(root)
+    if not os.path.isfile(os.path.join(path, "state.json")):
+        return False, "%s src/os/state.json" % E_CLG_NO_STATE
     import ledger_lines as LEDGER
     log = LEDGER.load_state_log(os.path.join(path, "state.json"))
     report = LEDGER.check_round_main_shape(log)
@@ -162,6 +173,19 @@ def check_census(root, registry=None, pin=None):
     import registry_counter_census as RC
     registry = registry or RC.REGISTRY
     pin = pin or RC.PIN
+    # R3103: the two constants are bound to THIS module's import-time root, so
+    # a face asked about another root used to answer for this one - measured
+    # on a battery_followup fixture world: ok=True "VERDICT PASS pinned=735"
+    # at 161.9ms while the world carried no registry at all. A face that cannot
+    # address the world it was given now refuses by name instead of judging a
+    # tree nobody asked about.
+    base = os.path.normcase(os.path.abspath(root)) + os.sep
+    for name, path in (("registry", registry), ("pin", pin)):
+        if os.path.normcase(os.path.abspath(path)).startswith(base):
+            continue
+        return False, ("%s %s=%s root=%s"
+                       % (E_CLG_FOREIGN_REGISTRY, name, path,
+                          os.path.abspath(root)))
     # R3098: the live registry may use the shipped content-addressed cache, but
     # the gate only READS it (cache_write=False) - a gate that writes the tree
     # it is judging is not a gate. A fixture registry never touches the live
