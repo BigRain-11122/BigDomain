@@ -30,8 +30,26 @@ not proof that the runtime line carries the declared number - a suite may print
 a counter whose value is an assertion count rather than its criteria count.
 Read-only, ASCII source, stdlib only, zero network.
 
-Criteria AC-RCC1..AC-RCC11 are pre-registered in src/os/backlog.md (R2918 row,
-extended at R2921/R2922/R3076/R3077/R3078).
+Criteria AC-RCC1..AC-RCC12 are pre-registered in src/os/backlog.md (R2918 row,
+extended at R2921/R2922/R3076/R3077/R3078/R3079).
+
+R3079 split the last 89 UNPARSED rows by measurement instead of by label and
+found one read gap and one encoding artefact, not three buckets. (a) 76 rows
+print `"%s %d/%d" % (verdict, expr, expr)` with the SUITE word bound to a
+NAME: the text join refused any argument that was not a single token (so
+`len(...)` and `a - b` killed the whole line), and the AST pass demanded SUITE
+inside the format string. Taking the word from the argument, and accepting the
+filled leaf only when it carries SUITE, flips 77 rows with 0 regressions.
+(b) 9 rows print `"SUITE %s %d/%d"` with the verdict name bound to the bare
+`"PASS"/"FAIL"`, which the constant collector dropped because it filtered on
+SUITE; collecting the exact verdict words flips 8 more (85 total). (c) The 4
+rows left are all UTF-8 BOM files: ast.parse dies on U+FEFF, so the AST pass
+was blind to the whole file; reading with utf-8-sig flips them. Together: 89
+rows flipped, 0 regressed, 0 SILENT moved, assembled still 293. Refused, with
+reasons: reading `SUITE %d/%d green` as PASS (green is not the law's word),
+letting an unknown name become a PASS/FAIL candidate (that would invent a
+verdict), pinning assembled_print_lines (still this reader's own limit), and
+fixing one label family at a time (the missing reach is one read).
 
 R3078 closed two things the R3077 round left open, both by measurement. (a) The
 119-vs-122 gap was the PROBE, not the tree: that probe ran its AST pass on
@@ -123,18 +141,27 @@ def registry_rows(path):
     return out
 
 
-def _suite_literals(node):
+def _suite_literals(node, alone=False):
     """String literals containing SUITE reachable from an assignment value.
 
     ast.walk reaches both arms of an if/else expression, the left operand of a
     `%` format and the literal parts of an f-string, which are the three shapes
     the shipped suites use to name their SUITE row once and print it later.
+
+    With alone=True an exact "PASS"/"FAIL" literal is collected too: the R3079
+    measured family prints "SUITE %s %d/%d" % (verdict, ...) with the verdict
+    name bound to the bare word, and refusing it made the argument fall back to
+    the placeholder digit ("SUITE 7 7/7"). Only the exact verdict words are
+    added - "GREEN" or "PASS %s" stay refused, so no word the suite never said
+    can be invented (AC-RCC12-R7).
     """
     out = []
     for sub in ast.walk(node):
         if not isinstance(sub, ast.Constant):
             continue
-        if isinstance(sub.value, str) and 'SUITE' in sub.value:
+        if not isinstance(sub.value, str):
+            continue
+        if 'SUITE' in sub.value or (alone and sub.value in ('PASS', 'FAIL')):
             out.append(sub.value)
     return out
 
@@ -146,7 +173,9 @@ def suite_constants(text):
     a constant (`V = "SUITE PASS"` ... `print("%s %d/%d" % (V, ...))`) looked
     SILENT - a statement about this reader, not about the suite. Collecting the
     constant assignments (both arms of an if/else) is the smallest propagation
-    that makes the class name mean what it says.
+    that makes the class name mean what it says. The bare verdict words are
+    collected too, because print("SUITE %s %d/%d" % (verdict, ...)) names its
+    word through a constant that carries no SUITE itself (R3079).
     """
     out = {}
     try:
@@ -156,7 +185,7 @@ def suite_constants(text):
     for node in ast.walk(tree):
         if not isinstance(node, ast.Assign):
             continue
-        literals = _suite_literals(node.value)
+        literals = _suite_literals(node.value, alone=True)
         if not literals:
             continue
         for target in node.targets:
@@ -334,12 +363,17 @@ def ast_leaves(text, consts):
             elif isinstance(arg, ast.BinOp) and isinstance(arg.op, ast.Mod):
                 fmt = arg.left
                 if not (isinstance(fmt, ast.Constant)
-                        and isinstance(fmt.value, str)
-                        and 'SUITE' in fmt.value):
+                        and isinstance(fmt.value, str)):
                     continue
                 args = arg.right.elts if isinstance(arg.right, ast.Tuple) else [arg.right]
                 leaf = _filled(fmt.value, list(args), consts)
-                if leaf:
+                # The SUITE word may live in the ARGUMENTS rather than in the
+                # format string: print("%s %d/%d" % (verdict, a - b, c)) with
+                # verdict bound to a SUITE literal is the R3079 measured family
+                # (76 rows). The leaf is kept only when the FILLED text carries
+                # SUITE, so a format with no SUITE anywhere still yields
+                # nothing and no word is invented (AC-RCC12-R4).
+                if leaf and 'SUITE' in leaf:
                     out.append(leaf)
             elif isinstance(arg, ast.Name) and arg.id in consts:
                 out.extend(consts[arg.id])
@@ -369,7 +403,7 @@ def census(registry=REGISTRY, sandbox=None):
         path = os.path.join(sandbox, rel)
         if not os.path.exists(path):
             raise CensusError('E_RCC_MISSING_SUITE', '%s %s' % (label, rel))
-        text = io.open(path, encoding='utf-8', errors='replace').read()
+        text = io.open(path, encoding='utf-8-sig', errors='replace').read()
         kind, assembled = classify(text, module, suite_constants(text))
         report['assembled'] += assembled
         report[kind].append(label)

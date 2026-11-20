@@ -3,19 +3,19 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-20 R3078 PRODUCT+ENGINEERING: the census's remaining UNPARSED bucket was overstated by 215 rows for one reason - a format ARGUMENT that is a plain name (a runtime counter such as passed/total) was refused, while the same argument written as a call (len(...)) already took a placeholder digit. Measured before the pin: treating an unbound name as one placeholder digit flips 215 live rows with 0 regressions (other=131 ledger=57 funnel=17 face=4 live=2 panel=2 member=1 pay=1), and eight of them were RUN across eight families with their own SUITE rows read back 8/8.",
+    "current": "2026-11-20 R3079 GROUP SCAN (content-addressed, read before any work): five-still read atbd_lines=0 unreplied_groups=0; decisions rows=356 tokens=143 new=0; the orders face still ends at the 2026-11-18 15:3x bm-a fleet-archive row; benchmarks_refreshed 2026-11-18 sits inside the seven-day gate; git status was clean with no index.lock; and the board head WAS pullable (the R3079 next-window row), so this is a work round.",
     "do": "R3068 ENGINEERING: the loop now runs the entry page's own live gate every round. MEASURED BEFORE ANY CODE: `python tools/deliverable_index.py --check` on the real tree = VERDICT PASS 15/15 in 0.16 s; the battery suite drives the tool in a private temp world (so it cannot see the landed page drift); the only executor of that tool outside its suite is tools/face_sweep.py, and nothing schedules face_sweep; `Get-ScheduledTask BigDomain*` = exactly one task (BigDomain-OSLoop -> iteration_loop.ps1: lock / crawl beat / git pull / spawn); preview pages are re-rendered by hand only. Change: one `[DELIV]` face in the shipped opening scanner (source + install copies byte-identical, PURE ASCII) that runs the tool with --check and answers PASS / FLAG(failed=<AC-DIX codes> rc=<n>) / SKIP, never aborting the scan. Verified: harness ALL CRITERIA PASS (AC-SC1..SC22, 51 checks) with four new arms; live scan `[DELIV] PASS entry_page_matches_disk=1 failed=none`; evidence qa/deliv-face-R3068.log (1438B utf-8/lf). Honest limits: no new CEO page this round; sandbox arms drive a stub (face contract, not tool behaviour); a RED line is a signal, not a refusal; it covers ONE of nine CEO faces (face_sweep still unscheduled); a buyer still cannot pay.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3077.log (203B, 2026-11-20)",
-    "latest_evidence": "qa/negctl-R3077.log (203B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/sample-run-R3079.log (444B, 2026-11-20)",
+    "latest_evidence": "qa/sample-run-R3079.log (444B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3079] next window (<=48h): (0) MAIN — **剩 89 行 UNPARSED 里 9 行的 format 根本没有 verdict 词（`SUITE %d/%d green`），这不是读者该修的面；而 54 行「含名字」与 26 行「其他」还没逐一量清。** 下一轮先量（只读，勿改盘）：①9 行无 verdict 词逐行列出，判每行是不是「运行期本来就不可反驳」（若是=套件侧改字面 verdict，照 R3076 先例，一次一批）；②54 行「含名字」量清形状（名字在常量字典里没解析到？在嵌套表达式里？在 `%` 之外的 f-string？）——先分组再决定是否值得扩，禁一次性报总数；③26 行「其他」逐行看是否有共同的读者缺陷，还是真的是嵌套拼装/跨函数；④`assembled_print_lines=293` 仍不进 pin，理由行是否需要写进模块头（R3077 已写一次，本轮只确认）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, the pre-existing AC-LGA9 red carried since R3040, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a (truncated)",
-    "next_milestone_due": "2026-11-22T09:52:50+08:00",
-    "updated_at": "2026-11-20T09:52:50+08:00"
+    "next_milestone": "[R3080] next window (<=48h): (0) MAIN — **89 行刚翻转的件还没逐行量过「印出的总数是不是注册表声明的判据数」；抽样 6 行就有 1 行为假**（`ledger-apimarket-refundregister` 印 `13/13`、自述 `13 assertions over 8 criteria`、注册表声明 8）。下一轮先量（只读）：①把这 89 个标签逐行过 `battery_shard.py --match <label>`（或一次性小批），只收集 `crit_mismatch` 与失败行，禁一次性报总数；②把 mismatch 分型：`断言数当判据数`（套件侧改印 criteria=p/t）/`判据真的涨了`（注册表侧改数）/`其它`（逐行看）；③量当前注册表里有多少行自带 `suite: %d assertions over %d criteria` 这类双计数面，是否可作为套件侧修法的统一锚；④确认 `assembled` 口径里「读自己的套件」这一项要不要在模块头写明（只确认，不扩）；量清后按型修（先套件侧、再注册表侧，逐批配判据），且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, the pre-existing AC-LGA9 red carried since R3040, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts (4 of them now readable through the BOM-tolerant read, the 18 themselves not re-encoded), `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex (truncated)",
+    "next_milestone_due": "2026-11-22T10:13:56+08:00",
+    "updated_at": "2026-11-20T10:13:56+08:00"
   },
-  "current": "2026-11-20 R3078 PRODUCT+ENGINEERING: the census's remaining UNPARSED bucket was overstated by 215 rows for one reason - a format ARGUMENT that is a plain name (a runtime counter such as passed/total) was refused, while the same argument written as a call (len(...)) already took a placeholder digit. Measured before the pin: treating an unbound name as one placeholder digit flips 215 live rows with 0 regressions (other=131 ledger=57 funnel=17 face=4 live=2 panel=2 member=1 pay=1), and eight of them were RUN across eight families with their own SUITE rows read back 8/8.",
+  "current": "2026-11-20 R3079 GROUP SCAN (content-addressed, read before any work): five-still read atbd_lines=0 unreplied_groups=0; decisions rows=356 tokens=143 new=0; the orders face still ends at the 2026-11-18 15:3x bm-a fleet-archive row; benchmarks_refreshed 2026-11-18 sits inside the seven-day gate; git status was clean with no index.lock; and the board head WAS pullable (the R3079 next-window row), so this is a work round.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -43,11 +43,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3078 PRODUCT+ENGINEERING: the census's remaining UNPARSED bucket was overstated by 215 rows for one reason - a format ARGUMENT that is a plain name (a runtime counter such as passed/total) was refused, while the same argument written as a call (len(...)) already took a placeholder digit. Measured before the pin: treating an unbound name as one placeholder digit flips 215 live rows with 0 regressions (other=131 ledger=57 funnel=17 face=4 live=2 panel=2 member=1 pay=1), and eight of them were RUN across eight families with their own SUITE rows read back 8/8.",
-  "export_ts": "2026-11-20T09:52:50+08:00",
+  "do": "2026-11-20 R3079 GROUP SCAN (content-addressed, read before any work): five-still read atbd_lines=0 unreplied_groups=0; decisions rows=356 tokens=143 new=0; the orders face still ends at the 2026-11-18 15:3x bm-a fleet-archive row; benchmarks_refreshed 2026-11-18 sits inside the seven-day gate; git status was clean with no index.lock; and the board head WAS pullable (the R3079 next-window row), so this is a work round.",
+  "export_ts": "2026-11-20T10:13:56+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/negctl-R3077.log (203B, 2026-11-20)",
-  "next_milestone": "[R3079] next window (<=48h): (0) MAIN — **剩 89 行 UNPARSED 里 9 行的 format 根本没有 verdict 词（`SUITE %d/%d green`），这不是读者该修的面；而 54 行「含名字」与 26 行「其他」还没逐一量清。** 下一轮先量（只读，勿改盘）：①9 行无 verdict 词逐行列出，判每行是不是「运行期本来就不可反驳」（若是=套件侧改字面 verdict，照 R3076 先例，一次一批）；②54 行「含名字」量清形状（名字在常量字典里没解析到？在嵌套表达式里？在 `%` 之外的 f-string？）——先分组再决定是否值得扩，禁一次性报总数；③26 行「其他」逐行看是否有共同的读者缺陷，还是真的是嵌套拼装/跨函数；④`assembled_print_lines=293` 仍不进 pin，理由行是否需要写进模块头（R3077 已写一次，本轮只确认）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, the pre-existing AC-LGA9 red carried since R3040, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a (truncated)",
+  "latest_evidence": "qa/sample-run-R3079.log (444B, 2026-11-20)",
+  "next_milestone": "[R3080] next window (<=48h): (0) MAIN — **89 行刚翻转的件还没逐行量过「印出的总数是不是注册表声明的判据数」；抽样 6 行就有 1 行为假**（`ledger-apimarket-refundregister` 印 `13/13`、自述 `13 assertions over 8 criteria`、注册表声明 8）。下一轮先量（只读）：①把这 89 个标签逐行过 `battery_shard.py --match <label>`（或一次性小批），只收集 `crit_mismatch` 与失败行，禁一次性报总数；②把 mismatch 分型：`断言数当判据数`（套件侧改印 criteria=p/t）/`判据真的涨了`（注册表侧改数）/`其它`（逐行看）；③量当前注册表里有多少行自带 `suite: %d assertions over %d criteria` 这类双计数面，是否可作为套件侧修法的统一锚；④确认 `assembled` 口径里「读自己的套件」这一项要不要在模块头写明（只确认，不扩）；量清后按型修（先套件侧、再注册表侧，逐批配判据），且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, the pre-existing AC-LGA9 red carried since R3040, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts (4 of them now readable through the BOM-tolerant read, the 18 themselves not re-encoded), `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex (truncated)",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -172,7 +172,7 @@
   },
   "results": [
     [
-      "3077",
+      "3079",
       "OSLoop 执行 tick"
     ]
   ],
@@ -185,15 +185,15 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 636,
+    "log_lines_in_window": 649,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 91,
+    "substantive_non_idle_mention_lines": 96,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 673925
+  "state_bytes": 676224
 }

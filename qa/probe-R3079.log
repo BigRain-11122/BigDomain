@@ -1,0 +1,1676 @@
+{
+  "buckets": {
+    "A_NO_VERDICT": 9,
+    "D_OTHER": 80
+  },
+  "report": {
+    "assembled": 293,
+    "readable": 644,
+    "rows": 733,
+    "unparsed": 89
+  },
+  "rows": [
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 12,
+      "label": "benchgate",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "benchgate\\test_bench_gate.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 15,
+      "label": "compliance",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "compliance\\test_sku_compliance_map.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 1,
+      "ast_leaves": 0,
+      "bucket": "A_NO_VERDICT",
+      "crit": 8,
+      "label": "ledger-apimarket-refundregister",
+      "leaf_sample": [
+        "SUITE 7 7/7"
+      ],
+      "multi_lit_lines": 1,
+      "rel": "ledger\\test_apimarket_report_refundregister.py",
+      "text_leaves": 1,
+      "verdict_leaves": 0
+    },
+    {
+      "arg_shapes": [
+        "Call"
+      ],
+      "assembled": 0,
+      "ast_leaves": 2,
+      "bucket": "D_OTHER",
+      "crit": 7,
+      "label": "ledger-curation-combined",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL 7 checks (7)"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "ledger\\test_curation_combined.py",
+      "text_leaves": 4,
+      "verdict_leaves": 6
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 7,
+      "label": "lobby-persist",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "lobby\\test_lobby_persist.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Call"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "member-face",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE 7/7 green"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "member\\test_member_page.py",
+      "text_leaves": 3,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-append-check-status-precedence",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE PASS"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_append_check_status_precedence.py",
+      "text_leaves": 5,
+      "verdict_leaves": 6
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-bare-evidence-deep-pile",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_bare_evidence_deep_pile.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-bare-evidence-pile-refusal",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE PASS"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_bare_evidence_pile_refusal.py",
+      "text_leaves": 5,
+      "verdict_leaves": 6
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-battery-followup",
+      "leaf_sample": [
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_battery_followup.py",
+      "text_leaves": 1,
+      "verdict_leaves": 1
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-battery-followup-help-wire",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_battery_followup_help_wire.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 19,
+      "label": "os-closeout",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_closeout.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-closeout-export-parity-text-binding",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_closeout_export_parity_text_binding.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "A_NO_VERDICT",
+      "crit": 6,
+      "label": "os-debt-append",
+      "leaf_sample": [
+        "SUITE 7 7/7",
+        "SUITE 7 7/7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_debt_append.py",
+      "text_leaves": 1,
+      "verdict_leaves": 0
+    },
+    {
+      "arg_shapes": [
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "A_NO_VERDICT",
+      "crit": 6,
+      "label": "os-debt-note-append",
+      "leaf_sample": [
+        "SUITE 7 7/7",
+        "SUITE 7 7/7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_debt_note_append.py",
+      "text_leaves": 1,
+      "verdict_leaves": 0
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-declaration-writer-dialect-preservation",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_declaration_writer_dialect_preservation.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-evidence-capture",
+      "leaf_sample": [
+        "print('SUITE PASS 1/1')\\n",
+        "print('SUITE PASS 2/2')\\n",
+        "print('SUITE FAIL 1/2')\\n"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_evidence_capture.py",
+      "text_leaves": 6,
+      "verdict_leaves": 7
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-evidence-variants",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_evidence_variants.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-export-composed-landed-bom-precedence-fifth-wave",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_export_composed_landed_bom_precedence_fifth_wave.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-export-composed-landed-bom-precedence-seventh-wave",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_export_composed_landed_bom_precedence_seventh_wave.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-export-composed-landed-bom-precedence-sixth-wave",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_export_composed_landed_bom_precedence_sixth_wave.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-export-consistency-queue-face",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_export_consistency_queue_face.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-export-publish-path-guard",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_export_publish_path_guard.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-export-publish-wire-identity",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_export_publish_wire_identity.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-followup-bare-evidence-face",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_followup_bare_evidence_face.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 1,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-followup-guard-evidence-scope",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE PASS"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_followup_guard_evidence_scope.py",
+      "text_leaves": 5,
+      "verdict_leaves": 6
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-followup-history",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE PASS"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_followup_history.py",
+      "text_leaves": 5,
+      "verdict_leaves": 6
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-followup-retry-history",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_followup_retry_history.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-followup-retry-legs",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_followup_retry_legs.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-followup-section-foreign-wire",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_followup_section_foreign_wire.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-gate-decl-append",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_gate_decl_append.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-gate-decl-identity",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_gate_decl_identity.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-gate-decl-identity-wire",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE PASS"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_gate_decl_identity_wire.py",
+      "text_leaves": 5,
+      "verdict_leaves": 6
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-gate-decl-retire",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_gate_decl_retire.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-gate-decl-retire-scope",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE PASS"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_gate_decl_retire_scope.py",
+      "text_leaves": 5,
+      "verdict_leaves": 6
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-gate-decl-retire-wire",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE PASS"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_gate_decl_retire_wire.py",
+      "text_leaves": 5,
+      "verdict_leaves": 6
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-gate-drift",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_gate_drift.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "A_NO_VERDICT",
+      "crit": 9,
+      "label": "os-ledger-archive",
+      "leaf_sample": [
+        "SUITE 7 7/7 criteria"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_ledger_archive.py",
+      "text_leaves": 1,
+      "verdict_leaves": 0
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-ledger-line-shape-guard",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_ledger_line_shape_guard.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 9,
+      "label": "os-ledger-round-main-shape",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_ledger_round_main_shape.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-ledger-tokens-prefix-repair",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_repair_tokens_prefix.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-library-declaration-dialect-sweep",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_library_declaration_dialect_sweep.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-machine-gate",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_machine_gate.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-matrix-evidence-pile-consistency",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_matrix_evidence_pile_consistency.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 9,
+      "label": "os-matrix-stamp-compare",
+      "leaf_sample": [
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_matrix_stamp_compare.py",
+      "text_leaves": 1,
+      "verdict_leaves": 1
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-one-off-round-scripts",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE PASS"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_one_off_round_scripts.py",
+      "text_leaves": 5,
+      "verdict_leaves": 6
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-orphan-promote",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_orphan_promote.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-orphan-promotion-wire",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_orphan_promotion_wire.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-orphan-trace",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_orphan_trace.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-queue-done-stamp",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_queue_done_stamp.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-queue-head",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_queue_head.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-queue-row",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_queue_row.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-queue-row-exempt",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_queue_row_exempt.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-refused-check-declaration-face",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_refused_check_declaration_face.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-repin-dialect-preservation",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE PASS"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_repin_dialect_preservation.py",
+      "text_leaves": 5,
+      "verdict_leaves": 6
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-residue-triage",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_residue_triage.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-residue-triage-append",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_residue_triage_append.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "A_NO_VERDICT",
+      "crit": 6,
+      "label": "os-residue-triage-decl-reason",
+      "leaf_sample": [
+        "SUITE 7 7/7",
+        "SUITE 7 7/7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_residue_triage_decl_reason.py",
+      "text_leaves": 1,
+      "verdict_leaves": 0
+    },
+    {
+      "arg_shapes": [
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "A_NO_VERDICT",
+      "crit": 6,
+      "label": "os-residue-triage-entry-retire",
+      "leaf_sample": [
+        "SUITE 7 7/7",
+        "SUITE 7 7/7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_residue_triage_entry_retire.py",
+      "text_leaves": 1,
+      "verdict_leaves": 0
+    },
+    {
+      "arg_shapes": [
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "A_NO_VERDICT",
+      "crit": 6,
+      "label": "os-residue-triage-head-renew",
+      "leaf_sample": [
+        "SUITE 7 7/7",
+        "SUITE 7 7/7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_residue_triage_head_renew.py",
+      "text_leaves": 1,
+      "verdict_leaves": 0
+    },
+    {
+      "arg_shapes": [
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "A_NO_VERDICT",
+      "crit": 6,
+      "label": "os-residue-triage-repin",
+      "leaf_sample": [
+        "SUITE 7 7/7",
+        "SUITE 7 7/7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_residue_triage_repin.py",
+      "text_leaves": 1,
+      "verdict_leaves": 0
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-retire-accept",
+      "leaf_sample": [
+        "LEGS = 2\nimport hashlib\nimport subprocess\nADJACENT = \"qa/retire-world-9001.log\"\n\n\ndef run_",
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_retire_accept.py",
+      "text_leaves": 8,
+      "verdict_leaves": 9
+    },
+    {
+      "arg_shapes": [
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-retire-apply",
+      "leaf_sample": [
+        "LEGS = 2\nimport hashlib\nimport subprocess\nADJACENT = \"qa/retire-apply-world-9001.log\"\n\n\nde",
+        "SUITE 7 7/7",
+        "SUITE 7 7/7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_retire_apply.py",
+      "text_leaves": 2,
+      "verdict_leaves": 1
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-retire-candidate",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_retire_candidate.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-review-window",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_review_window.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-review-window-history",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_review_window_history.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-round-evidence",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_round_evidence.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-runner-abort-face",
+      "leaf_sample": [
+        "SUITE ",
+        "SUITE heavy (first registered suite with no suite line)",
+        "SUITE PASS"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_runner_abort_face.py",
+      "text_leaves": 5,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-runner-abort-history",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_runner_abort_history.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 2,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-runner-suite-timeout-cap",
+      "leaf_sample": [
+        "SUITES = []\\n7",
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_runner_suite_timeout_cap.py",
+      "text_leaves": 4,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-runner-suite-timeout-headroom",
+      "leaf_sample": [
+        "SUITES = [ not literal ]\n",
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_runner_suite_timeout_headroom.py",
+      "text_leaves": 4,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-runner-suite-timeout-headroom-overrides",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_runner_suite_timeout_headroom_overrides.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 5,
+      "label": "os-seed-anchor",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_seed_anchor.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-stamp-locator",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE PASS"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_stamp_locator.py",
+      "text_leaves": 5,
+      "verdict_leaves": 6
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-stamp-residue",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_stamp_residue.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 10,
+      "label": "os-state-append",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE FAIL criteria count 7 != 7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_state_append.py",
+      "text_leaves": 3,
+      "verdict_leaves": 4
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-state-seq",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL",
+        "SUITE PASS"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_state_seq.py",
+      "text_leaves": 7,
+      "verdict_leaves": 8
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Name"
+      ],
+      "assembled": 5,
+      "ast_leaves": 2,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-suite-output-audit",
+      "leaf_sample": [
+        "print(\"SUITE PASS 2/2\")\\n",
+        "print(\"SUITE 2/2 green\")\\n",
+        "print(\"SUITE 3/3 green\")\\n"
+      ],
+      "multi_lit_lines": 5,
+      "rel": "..\\os\\test_suite_output_audit.py",
+      "text_leaves": 11,
+      "verdict_leaves": 7
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 6,
+      "label": "os-tree-snapshot",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_tree_snapshot.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [
+        "BinOp",
+        "Call",
+        "Name"
+      ],
+      "assembled": 0,
+      "ast_leaves": 1,
+      "bucket": "A_NO_VERDICT",
+      "crit": 12,
+      "label": "os-ugc-gate-report",
+      "leaf_sample": [
+        "SUITE 7 7/7",
+        "SUITE 7 7/7"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "..\\os\\test_ugc_gate_report.py",
+      "text_leaves": 1,
+      "verdict_leaves": 0
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 7,
+      "label": "pay-authorize",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "pay\\test_authorize.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 7,
+      "label": "pay-notify",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "pay\\test_pay_notify.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 8,
+      "label": "pay-notify-bannerlimit",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "pay\\test_pay_notify_bannerlimit.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 7,
+      "label": "pay-notify-bannerwin",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "pay\\test_pay_notify_bannerwin.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 7,
+      "label": "pay-notify-revoke",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "pay\\test_notify_revoke.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 7,
+      "label": "pay-notify-wiring",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "pay\\test_pay_notify_wiring.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 7,
+      "label": "pay-reconcile-persist",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "pay\\test_pay_reconcile_persist.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 7,
+      "label": "pay-revoke-reconcile",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "pay\\test_pay_revoke_recon.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    },
+    {
+      "arg_shapes": [],
+      "assembled": 0,
+      "ast_leaves": 0,
+      "bucket": "D_OTHER",
+      "crit": 7,
+      "label": "pay-sweep-persist",
+      "leaf_sample": [
+        "SUITE PASS",
+        "SUITE FAIL"
+      ],
+      "multi_lit_lines": 0,
+      "rel": "pay\\test_pay_sweep_persist.py",
+      "text_leaves": 2,
+      "verdict_leaves": 2
+    }
+  ]
+}

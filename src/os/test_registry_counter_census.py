@@ -1,4 +1,4 @@
-"""Battery suite for src/os/registry_counter_census.py - AC-RCC1..AC-RCC11.
+"""Battery suite for src/os/registry_counter_census.py - AC-RCC1..AC-RCC12.
 
 AC-RCC1..AC-RCC4 were pre-registered in src/os/backlog.md (R2918 row) BEFORE
 this file existed. The census answers one board question with a measured list
@@ -488,6 +488,106 @@ def main():
            % (len(lost), len(live_after['READABLE'])))
     finally:
         shutil.rmtree(root6, ignore_errors=True)
+
+
+    # AC-RCC12 (R3079): the SUITE word may live in the ARGUMENTS, and a UTF-8
+    # BOM is an encoding artefact, not a source fact. Measured before the
+    # change: the args-only rule flips 77 rows, the bare-verdict constant adds
+    # 8 more (85 total), and the BOM-tolerant read adds the last 4 - 89 rows,
+    # 0 regressions, 0 silent movement, assembled unchanged at 293.
+    root7 = tempfile.mkdtemp(prefix='bd-rcc-args-')
+    try:
+        sandbox7 = os.path.join(root7, 'sandbox')
+        os.makedirs(os.path.join(sandbox7, 'probe'))
+        reg7 = os.path.join(sandbox7, 'reconcile_all.py')
+        with io.open(reg7, 'w', encoding='utf-8', newline='\n') as handle:
+            handle.write(
+                'import os\n'
+                'SUITES = [\n'
+                '    ("probe-args-only", os.path.join("probe", "ao.py"), 6),\n'
+                '    ("probe-bare-word", os.path.join("probe", "bw.py"), 6),\n'
+                '    ("probe-unknown-name", os.path.join("probe", "un.py"), 6),\n'
+                '    ("probe-no-suite", os.path.join("probe", "ns.py"), 6),\n'
+                '    ("probe-bom-args", os.path.join("probe", "ba.py"), 6),\n'
+                '    ("probe-bom-noverdict", os.path.join("probe", "bn.py"), 6),\n'
+                '    ("probe-green-word", os.path.join("probe", "gw.py"), 6),\n'
+                ']\n')
+        bodies = {
+            'ao.py': 'bad = 0\n'
+                     'passed = 6\n'
+                     'total = 6\n'
+                     'V = "SUITE PASS" if bad == 0 else "SUITE FAIL"\n'
+                     'print("%s %d/%d" % (V, passed - bad, total))\n',
+            'bw.py': 'ok = True\n'
+                     'passed = 6\n'
+                     'total = 6\n'
+                     'verdict = "PASS" if ok else "FAIL"\n'
+                     'print("SUITE %s %d/%d" % (verdict, passed, total))\n',
+            'un.py': 'label = "hello"\n'
+                     'passed = 6\n'
+                     'total = 6\n'
+                     'print("SUITE %s %d/%d" % (label, passed, total))\n',
+            'ns.py': 'label = "hello"\n'
+                     'passed = 6\n'
+                     'total = 6\n'
+                     'print("%s %d/%d" % (label, passed, total))\n',
+            'ba.py': 'bad = 0\n'
+                     'passed = 6\n'
+                     'total = 6\n'
+                     'V = "SUITE PASS" if bad == 0 else "SUITE FAIL"\n'
+                     'print("%s %d/%d" % (V, passed - bad, total))\n',
+            'bn.py': 'a = 6\nb = 6\nprint("SUITE %d/%d green" % (a, b))\n',
+            'gw.py': 'word = "GREEN"\n'
+                     'passed = 6\n'
+                     'total = 6\n'
+                     'print("SUITE %s %d/%d" % (word, passed, total))\n',
+        }
+        for name, body in bodies.items():
+            # ba.py and bn.py are written WITH the BOM the live four rows carry.
+            enc = 'utf-8-sig' if name in ('ba.py', 'bn.py') else 'utf-8'
+            with io.open(os.path.join(sandbox7, 'probe', name), 'w',
+                         encoding=enc, newline='\n') as handle:
+                handle.write(body)
+        world7 = RCC.census(registry=reg7, sandbox=sandbox7)
+        ao_src = io.open(os.path.join(sandbox7, 'probe', 'ao.py'),
+                         encoding='utf-8').read()
+        text_leaves7, _ = RCC.leaf_lines(ao_src, RCC.suite_constants(ao_src))
+        text_seen7 = any(RCC.reader().parse_suite_row(leaf + '\n') is not None
+                         for leaf in text_leaves7)
+        ok('probe-args-only' in world7['READABLE'] and not text_seen7,
+           'AC-RCC12-R1 a SUITE word carried only by a format ARGUMENT reads '
+           'readable, and the text pass alone still cannot see it')
+        ok('probe-bare-word' in world7['READABLE'],
+           'AC-RCC12-R2 a name bound to the bare word PASS/FAIL beside a '
+           'SUITE format reads readable')
+        ok('probe-unknown-name' in world7['UNPARSED'],
+           'AC-RCC12-R3 an unknown name argument stays a placeholder '
+           '(SUITE 7 7/7): the reader does not invent a verdict')
+        ok('probe-no-suite' in world7['SILENT'],
+           'AC-RCC12-R4 a format and arguments carrying no SUITE anywhere '
+           'stays non-readable: SILENT, not an invented row')
+        ok('probe-bom-args' in world7['READABLE'],
+           'AC-RCC12-R5 a BOM-prefixed file whose row is reachable only '
+           'through the AST pass reads readable')
+        ok('probe-bom-noverdict' in world7['UNPARSED'],
+           'AC-RCC12-R6 a BOM-prefixed row with no verdict word stays '
+           'unparsed: a BOM is an encoding artefact, not a verdict')
+        ok('probe-green-word' in world7['UNPARSED'],
+           'AC-RCC12-R7 a name bound to GREEN is not accepted as a verdict '
+           'word (the law vocabulary is PASS/FAIL)')
+        live7 = RCC.census()
+        pinned7 = json.loads(io.open(PIN, encoding='utf-8').read())
+        ok(len(live7['READABLE']) == 733 and not live7['UNPARSED']
+           and not live7['SILENT'] and live7['assembled'] == 294,
+           'AC-RCC12-R8 the live census reads 733 readable, 0 unparsed, '
+           '0 silent, assembled 294 (measured: 89 flipped, 0 regressed; the '
+           '294 is the 293 plus this suite\'s own new fixture line, which '
+           'this reader counts because it reads its own suite too)')
+        ok(RCC.compare(live7, pinned7) == [],
+           'AC-RCC12-R9 the re-written pin names the same 733 rows: the pin '
+           'was re-written because the reach changed, not to hide a defect')
+    finally:
+        shutil.rmtree(root7, ignore_errors=True)
 
 
     acs = sorted({match.group(0) for match in

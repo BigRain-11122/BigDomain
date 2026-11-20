@@ -1,0 +1,891 @@
+{
+  "groups": {
+    "A_CONST_VERDICT_PAIR": 76,
+    "B_PAIR_BARE_S": 9,
+    "D_OTHER": 2,
+    "F_CHECKS_ONLY": 1,
+    "G_GREEN": 1
+  },
+  "rows": [
+    {
+      "crit": 12,
+      "label": "benchgate",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, _law_total - _law_bad, _law_total))"
+      ],
+      "rel": "benchgate\\test_bench_gate.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 15,
+      "label": "compliance",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, _law_total - _law_bad, _law_total))"
+      ],
+      "rel": "compliance\\test_sku_compliance_map.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 8,
+      "label": "ledger-apimarket-refundregister",
+      "lines": [
+        "print(\"SUITE %s %d/%d\" % (\"PASS\" if not failed else \"FAIL\","
+      ],
+      "rel": "ledger\\test_apimarket_report_refundregister.py",
+      "sig": "B_PAIR_BARE_S"
+    },
+    {
+      "crit": 7,
+      "label": "ledger-curation-combined",
+      "lines": [
+        "print(\"%s %d/%d\" % (law_verdict, len(RESULTS) - len(failed),",
+        "print(\"SUITE FAIL %d checks (%s)\"",
+        "print(\"SUITE PASS %d checks\" % len(RESULTS), flush=True)"
+      ],
+      "rel": "ledger\\test_curation_combined.py",
+      "sig": "F_CHECKS_ONLY"
+    },
+    {
+      "crit": 7,
+      "label": "lobby-persist",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, len(RESULTS) - len(fails), len(RESULTS)))"
+      ],
+      "rel": "lobby\\test_lobby_persist.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "member-face",
+      "lines": [
+        "print(\"%s %d/%d\" % (law_verdict, len(RESULTS) - len(fails),",
+        "print(\"SUITE %d/%d green\" % (len(RESULTS) - len(fails), len(RESULTS)),"
+      ],
+      "rel": "member\\test_member_page.py",
+      "sig": "G_GREEN"
+    },
+    {
+      "crit": 6,
+      "label": "os-append-check-status-precedence",
+      "lines": [
+        "print(\"  measured: rcs=%r json_eq=%r keys=%r status=%r verdict=%r\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_append_check_status_precedence.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-bare-evidence-deep-pile",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_bare_evidence_deep_pile.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-bare-evidence-pile-refusal",
+      "lines": [
+        "print(\"  measured: dir=%r verdict=%r rc=%r out=%r entry=%r\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_bare_evidence_pile_refusal.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-battery-followup",
+      "lines": [
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_battery_followup.py",
+      "sig": "D_OTHER"
+    },
+    {
+      "crit": 6,
+      "label": "os-battery-followup-help-wire",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_battery_followup_help_wire.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 19,
+      "label": "os-closeout",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_closeout.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-closeout-export-parity-text-binding",
+      "lines": [
+        "print(\"%s %d/%d\" % (law_verdict,"
+      ],
+      "rel": "..\\os\\test_closeout_export_parity_text_binding.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-debt-append",
+      "lines": [
+        "print(\"SUITE %s %d/%d\" % (verdict, PASSES, EXPECTED_CRITERIA))"
+      ],
+      "rel": "..\\os\\test_debt_append.py",
+      "sig": "B_PAIR_BARE_S"
+    },
+    {
+      "crit": 6,
+      "label": "os-debt-note-append",
+      "lines": [
+        "print(\"SUITE %s %d/%d\" % (verdict, PASSES, EXPECTED_CRITERIA))"
+      ],
+      "rel": "..\\os\\test_debt_note_append.py",
+      "sig": "B_PAIR_BARE_S"
+    },
+    {
+      "crit": 6,
+      "label": "os-declaration-writer-dialect-preservation",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_declaration_writer_dialect_preservation.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-evidence-capture",
+      "lines": [
+        "\"print('SUITE PASS 2/2')\\n\"",
+        "\"print('SUITE FAIL 1/2')\\n\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_evidence_capture.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-evidence-variants",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_evidence_variants.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-export-composed-landed-bom-precedence-fifth-wave",
+      "lines": [
+        "print(\"%s %d/%d\" % (law_verdict, sum(1 for r in results if r),"
+      ],
+      "rel": "..\\os\\test_export_composed_landed_bom_precedence_fifth_wave.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-export-composed-landed-bom-precedence-seventh-wave",
+      "lines": [
+        "print(\"%s %d/%d\" % (law_verdict, sum(1 for r in results if r),"
+      ],
+      "rel": "..\\os\\test_export_composed_landed_bom_precedence_seventh_wave.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-export-composed-landed-bom-precedence-sixth-wave",
+      "lines": [
+        "print(\"%s %d/%d\" % (law_verdict, sum(1 for r in results if r),"
+      ],
+      "rel": "..\\os\\test_export_composed_landed_bom_precedence_sixth_wave.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-export-consistency-queue-face",
+      "lines": [
+        "print(\"%s %d/%d\" % (law_verdict,"
+      ],
+      "rel": "..\\os\\test_export_consistency_queue_face.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-export-publish-path-guard",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, EXPECTED_CRITERIA - FAILS, EXPECTED_CRITERIA))"
+      ],
+      "rel": "..\\os\\test_export_publish_path_guard.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-export-publish-wire-identity",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, EXPECTED_CRITERIA - FAILS, EXPECTED_CRITERIA))"
+      ],
+      "rel": "..\\os\\test_export_publish_wire_identity.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-followup-bare-evidence-face",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_followup_bare_evidence_face.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-followup-guard-evidence-scope",
+      "lines": [
+        "print(\"  measured: entry=%r qa=%r\" % (entry, qa_reading[\"verdict\"]))",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_followup_guard_evidence_scope.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-followup-history",
+      "lines": [
+        "print(\"  measured: readings=%r counts=%r verdict=%r code=%r\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_followup_history.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-followup-retry-history",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_followup_retry_history.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-followup-retry-legs",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_followup_retry_legs.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-followup-section-foreign-wire",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_followup_section_foreign_wire.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-gate-decl-append",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_gate_decl_append.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-gate-decl-identity",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_gate_decl_identity.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-gate-decl-identity-wire",
+      "lines": [
+        "print(\"  measured: verdict=%r wrote=%r entries=%d added=%d\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_gate_decl_identity_wire.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-gate-decl-retire",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_gate_decl_retire.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-gate-decl-retire-scope",
+      "lines": [
+        "print(\"  measured: bytes=%r verdict=%r counts=%r intact=%r\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_gate_decl_retire_scope.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-gate-decl-retire-wire",
+      "lines": [
+        "print(\"  measured: plan=%r bytes=%r verdict=%r counts=%r\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_gate_decl_retire_wire.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-gate-drift",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_gate_drift.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 9,
+      "label": "os-ledger-archive",
+      "lines": [
+        "print(\"SUITE %s %d/%d criteria\""
+      ],
+      "rel": "..\\os\\test_ledger_archive.py",
+      "sig": "B_PAIR_BARE_S"
+    },
+    {
+      "crit": 6,
+      "label": "os-ledger-line-shape-guard",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_ledger_line_shape_guard.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 9,
+      "label": "os-ledger-round-main-shape",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_ledger_round_main_shape.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-ledger-tokens-prefix-repair",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, _law_total - _law_bad, _law_total))"
+      ],
+      "rel": "..\\os\\test_repair_tokens_prefix.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-library-declaration-dialect-sweep",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, len(PASSES), len(PASSES) + len(FAILS)),",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_library_declaration_dialect_sweep.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-machine-gate",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_machine_gate.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-matrix-evidence-pile-consistency",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_matrix_evidence_pile_consistency.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 9,
+      "label": "os-matrix-stamp-compare",
+      "lines": [
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_matrix_stamp_compare.py",
+      "sig": "D_OTHER"
+    },
+    {
+      "crit": 6,
+      "label": "os-one-off-round-scripts",
+      "lines": [
+        "print(\"  measured: code=%r verdict=%r refused=%r one_offs=%r \"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_one_off_round_scripts.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-orphan-promote",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_orphan_promote.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-orphan-promotion-wire",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_orphan_promotion_wire.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-orphan-trace",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_orphan_trace.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-queue-done-stamp",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_queue_done_stamp.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-queue-head",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_queue_head.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-queue-row",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_queue_row.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-queue-row-exempt",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_queue_row_exempt.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-refused-check-declaration-face",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_refused_check_declaration_face.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-repin-dialect-preservation",
+      "lines": [
+        "print(\"  measured: verdict=%r executed=%r equal=%r temps=%r\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_repin_dialect_preservation.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-residue-triage",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_residue_triage.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-residue-triage-append",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_residue_triage_append.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-residue-triage-decl-reason",
+      "lines": [
+        "print(\"SUITE %s %d/%d\" % (verdict, PASSES, total))"
+      ],
+      "rel": "..\\os\\test_residue_triage_decl_reason.py",
+      "sig": "B_PAIR_BARE_S"
+    },
+    {
+      "crit": 6,
+      "label": "os-residue-triage-entry-retire",
+      "lines": [
+        "print(\"SUITE %s %d/%d\" % (verdict, PASSES, total))"
+      ],
+      "rel": "..\\os\\test_residue_triage_entry_retire.py",
+      "sig": "B_PAIR_BARE_S"
+    },
+    {
+      "crit": 6,
+      "label": "os-residue-triage-head-renew",
+      "lines": [
+        "print(\"SUITE %s %d/%d\" % (verdict, PASSES, total))"
+      ],
+      "rel": "..\\os\\test_residue_triage_head_renew.py",
+      "sig": "B_PAIR_BARE_S"
+    },
+    {
+      "crit": 6,
+      "label": "os-residue-triage-repin",
+      "lines": [
+        "print(\"SUITE %s %d/%d\" % (verdict, PASSES, total))"
+      ],
+      "rel": "..\\os\\test_residue_triage_repin.py",
+      "sig": "B_PAIR_BARE_S"
+    },
+    {
+      "crit": 6,
+      "label": "os-retire-accept",
+      "lines": [
+        "print(\"  measured: pinned=%r verdict=%r rc=%r pending=%r body=%r\"",
+        "print(\"  measured: rc=%r/%r/%r/%r/%r/%r keys=%r verdict=%r acc=%r\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_retire_accept.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-retire-apply",
+      "lines": [
+        "handle.write(RITUAL.encode(\"utf-8\"))",
+        "print(\"SUITE %s %d/%d\" % (verdict, PASSES, total))"
+      ],
+      "rel": "..\\os\\test_retire_apply.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-retire-candidate",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_retire_candidate.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-review-window",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_review_window.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-review-window-history",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_review_window_history.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-round-evidence",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_round_evidence.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-runner-abort-face",
+      "lines": [
+        "print(\"  measured: abort=%r/%r ok=%r/%r\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_runner_abort_face.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-runner-abort-history",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_runner_abort_history.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-runner-suite-timeout-cap",
+      "lines": [
+        "handle.write(\"SUITES = []\\n%s\" % declaration)",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_runner_suite_timeout_cap.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-runner-suite-timeout-headroom",
+      "lines": [
+        "print(\"  measured: rcs=%r stable=%r keys=%r broken=%r\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_runner_suite_timeout_headroom.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-runner-suite-timeout-headroom-overrides",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_runner_suite_timeout_headroom_overrides.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 5,
+      "label": "os-seed-anchor",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_seed_anchor.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-stamp-locator",
+      "lines": [
+        "print(\"  measured: verdict=%r code=%r out=%r\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_stamp_locator.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-stamp-residue",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_stamp_residue.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 10,
+      "label": "os-state-append",
+      "lines": [
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_state_append.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-state-seq",
+      "lines": [
+        "print(\"  measured: lead=%r verdict=%r good=%r bad=%r broken=%r\"",
+        "print(\"  measured gaps=%r verdict=%r rc=%r\"",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_state_seq.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-suite-output-audit",
+      "lines": [
+        "handle.write(stub)",
+        "print(\"  measured: own_law=%r uses_law=%r\" % (not no_own_law, uses_law),",
+        "print(\"%s %d/%d\" % (verdict, PASSES, PASSES + FAILS), flush=True)",
+        "print(\"SUITE FAIL criteria count %d != %d\""
+      ],
+      "rel": "..\\os\\test_suite_output_audit.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 6,
+      "label": "os-tree-snapshot",
+      "lines": [
+        "print(\"%s %d/%d\" % (law_verdict,"
+      ],
+      "rel": "..\\os\\test_tree_snapshot.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 12,
+      "label": "os-ugc-gate-report",
+      "lines": [
+        "print('SUITE %s %d/%d' % (law_verdict, len(CHECKS) - len(FAILS), len(CHECKS)))"
+      ],
+      "rel": "..\\os\\test_ugc_gate_report.py",
+      "sig": "B_PAIR_BARE_S"
+    },
+    {
+      "crit": 7,
+      "label": "pay-authorize",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, len(RESULTS) - len(fails), len(RESULTS)))"
+      ],
+      "rel": "pay\\test_authorize.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 7,
+      "label": "pay-notify",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, len(RESULTS) - len(fails), len(RESULTS)))"
+      ],
+      "rel": "pay\\test_pay_notify.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 8,
+      "label": "pay-notify-bannerlimit",
+      "lines": [
+        "print(\"%s %d/%d\" % (law_verdict, len(RESULTS) - len(fails),"
+      ],
+      "rel": "pay\\test_pay_notify_bannerlimit.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 7,
+      "label": "pay-notify-bannerwin",
+      "lines": [
+        "print(\"%s %d/%d\" % (law_verdict, len(RESULTS) - len(fails),"
+      ],
+      "rel": "pay\\test_pay_notify_bannerwin.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 7,
+      "label": "pay-notify-revoke",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, len(RESULTS) - len(fails), len(RESULTS)))"
+      ],
+      "rel": "pay\\test_notify_revoke.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 7,
+      "label": "pay-notify-wiring",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, len(RESULTS) - len(fails), len(RESULTS)))"
+      ],
+      "rel": "pay\\test_pay_notify_wiring.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 7,
+      "label": "pay-reconcile-persist",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, len(RESULTS) - len(fails), len(RESULTS)))"
+      ],
+      "rel": "pay\\test_pay_reconcile_persist.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 7,
+      "label": "pay-revoke-reconcile",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, len(RESULTS) - len(fails), len(RESULTS)))"
+      ],
+      "rel": "pay\\test_pay_revoke_recon.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    },
+    {
+      "crit": 7,
+      "label": "pay-sweep-persist",
+      "lines": [
+        "print(\"%s %d/%d\" % (_law_verdict, len(RESULTS) - len(fails), len(RESULTS)))"
+      ],
+      "rel": "pay\\test_pay_sweep_persist.py",
+      "sig": "A_CONST_VERDICT_PAIR"
+    }
+  ]
+}

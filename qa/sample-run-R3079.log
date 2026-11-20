@@ -1,0 +1,7 @@
+benchgate                        crit=12  rc=0 row=('PASS', 12, 12)
+compliance                       crit=15  rc=0 row=('PASS', 15, 15)
+os-debt-append                   crit=6   rc=0 row=('PASS', 6, 6)
+member-face                      crit=6   rc=0 row=('PASS', 6, 6)
+ledger-apimarket-refundregister  crit=8   rc=0 row=('PASS', 13, 13)
+lobby-persist                    crit=7   rc=0 row=('PASS', 7, 7)
+SAMPLE 5/6 read back with total==criteria
