@@ -1,0 +1,5 @@
+HONEST inline=True literal=True prefixed=True
+Q_HONEST GREEN
+Q1_REPLACEMENT CAUGHT replacement_readable=217 hon_st_readable=429
+Q2_NO_AST CAUGHT inline_read=False
+Q3_UNANCHORED CAUGHT prefixed_read=True

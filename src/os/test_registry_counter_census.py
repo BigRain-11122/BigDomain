@@ -325,16 +325,100 @@ def main():
                      encoding='utf-8', newline='\n') as handle:
             handle.write('FAILS = []\nprint("SUITE PASS %d/%d" % (1, 1))\n')
         world4 = RCC.census(registry=reg4, sandbox=sandbox4)
-        ok('probe-inline' in world4['UNPARSED']
+        # RE-JUDGED at R3077, disclosed rather than deleted: this arm used to
+        # pin that an inline-conditional verdict reads UNPARSED. R3077 widened
+        # the reader on purpose, so the fact that still holds - and still has
+        # to hold - is that the TEXT pass alone refuses it and only the AST pass
+        # reads it. Dropping the arm would have hidden which half does the work.
+        inline_src = io.open(os.path.join(sandbox4, 'probe', 'inline.py'),
+                             encoding='utf-8').read()
+        inline_leaves, _ = RCC.leaf_lines(inline_src, {})
+        text_seen = any(RCC.reader().parse_suite_row(leaf + '\n') is not None
+                        for leaf in inline_leaves)
+        ok(not text_seen and 'probe-inline' in world4['READABLE']
            and 'probe-literal' in world4['READABLE'],
-           'AC-RCC9-R3 the negative control refuses: an inline-conditional '
-           'verdict still reads unparsed while its literal twin reads readable')
+           'AC-RCC9-R3 (re-judged R3077) the inline-conditional fixture is '
+           'readable only through the AST pass, and its literal twin stays '
+           'readable')
     finally:
         shutil.rmtree(root4, ignore_errors=True)
     pinned_live = json.loads(io.open(PIN, encoding='utf-8').read())
     ok(all(label in pinned_live.get('readable', []) for label in three)
        and not any(label in pinned_live.get('unparsed', []) for label in three),
        'AC-RCC9-R4 the pin names the three rows readable and none unparsed')
+
+    # AC-RCC10 (R3077): the census could not see a row printed through the CALL
+    # (an inline-conditional argument, a len(...) argument, a constant named in
+    # the format tuple). Measured before the change: replacing the text pass
+    # regresses 220 rows, a text-level continuation join flips none and
+    # regresses one, and the UNION flips 122 live rows with zero regressions.
+    root5 = tempfile.mkdtemp(prefix='bd-rcc-ast-')
+    try:
+        sandbox5 = os.path.join(root5, 'sandbox')
+        os.makedirs(os.path.join(sandbox5, 'probe'))
+        reg5 = os.path.join(sandbox5, 'reconcile_all.py')
+        with io.open(reg5, 'w', encoding='utf-8', newline='\n') as handle:
+            handle.write(
+                'import os\n'
+                'SUITES = [\n'
+                '    ("probe-inline", os.path.join("probe", "inline.py"), 1),\n'
+                '    ("probe-literal", os.path.join("probe", "lit.py"), 1),\n'
+                '    ("probe-whole", os.path.join("probe", "whole.py"), 1),\n'
+                '    ("probe-prefixed", os.path.join("probe", "pre.py"), 1),\n'
+                ']\n')
+        bodies = {
+            'inline.py': 'FAILS = []\n'
+                         'print("SUITE %s %d/%d" % ("PASS" if not FAILS else '
+                         '"FAIL", len(FAILS), len(FAILS)))\n',
+            'lit.py': 'print("SUITE PASS %d/%d" % (1, 1))\n',
+            'whole.py': 'FAILS = []\n'
+                        'print("SUITE %s %d/%d"\n'
+                        '      % ("PASS" if not FAILS else "FAIL",\n'
+                        '         len(FAILS), len(FAILS)))\n',
+            'pre.py': 'FAILS = []\n'
+                      'print("note SUITE %s %d/%d" % ("PASS", 1, 1))\n',
+        }
+        for name, body in bodies.items():
+            with io.open(os.path.join(sandbox5, 'probe', name), 'w',
+                         encoding='utf-8', newline='\n') as handle:
+                handle.write(body)
+        world5 = RCC.census(registry=reg5, sandbox=sandbox5)
+        text_only = {}
+        for name in ('inline.py', 'lit.py', 'whole.py', 'pre.py'):
+            src = io.open(os.path.join(sandbox5, 'probe', name),
+                          encoding='utf-8').read()
+            leaves, _ = RCC.leaf_lines(src, RCC.suite_constants(src))
+            seen = any(RCC.reader().parse_suite_row(leaf + '\n') is not None
+                       for leaf in leaves)
+            text_only[name] = 'READABLE' if seen else 'UNPARSED'
+        ok(text_only['inline.py'] == 'UNPARSED'
+           and 'probe-inline' in world5['READABLE'],
+           'AC-RCC10-R1 the AST pass is what reads an inline-conditional row')
+        ok(text_only['lit.py'] == 'READABLE'
+           and 'probe-literal' in world5['READABLE'],
+           'AC-RCC10-R2 a row the text pass already read stays readable')
+        ok('probe-prefixed' in world5['UNPARSED'],
+           'AC-RCC10-R3 a word before SUITE is still refused by the anchored '
+           'reader')
+        whole_src = io.open(os.path.join(sandbox5, 'probe', 'whole.py'),
+                            encoding='utf-8').read()
+        split, asm5 = RCC.leaf_lines(whole_src, {})
+        split_seen = any(RCC.reader().parse_suite_row(leaf + '\n') is not None
+                         for leaf in split)
+        ok('probe-whole' in world5['READABLE'] and not split_seen,
+           'AC-RCC10-R4 a CALL spanning physical lines is readable only through '
+           'the AST pass (the text pass sees %d leaf/leaves, none parsing)'
+           % len(split))
+        live = json.loads(io.open(PIN, encoding='utf-8').read())
+        ok(len(live.get('unparsed', [])) < 426
+           and len(live.get('readable', [])) > 307
+           and len(live.get('readable', [])) + len(live.get('unparsed', []))
+           + len(live.get('silent', [])) == 733,
+           'AC-RCC10-R5 the pin moved two-way and stays total: readable=%d '
+           'unparsed=%d' % (len(live.get('readable', [])),
+                            len(live.get('unparsed', []))))
+    finally:
+        shutil.rmtree(root5, ignore_errors=True)
 
     # Both numbers are DERIVED from this run, so the registry row stays the only
     # typed count and a new criterion demands a row edit instead of a hand edit.

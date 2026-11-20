@@ -1,0 +1,21 @@
+BASE rows=733 readable=307 unparsed=426 silent=0 assembled=290
+A_JOIN flips=0 regressions=1
+A assembled=498
+B_TOTAL flips=119 regressions=220
+B_ARG_ONLY flips=119 (beyond A)
+B_BY_FAMILY face=2 funnel=7 ledger=92 liveroom=2 member=1 other=12 pay=3
+A_BY_FAMILY 
+C_UNION flips=119 regressions=0
+C_BY_FAMILY face=2 funnel=7 ledger=92 liveroom=2 member=1 other=12 pay=3
+SAMPLE_BEGIN
+RUN funnel-cli-env rc=0 row='SUITE PASS 8/8' parsed=('PASS', 8, 8)
+RUN ledger-apimarket-reportclaims-nesting rc=0 row='SUITE PASS 6/6' parsed=('PASS', 6, 6)
+RUN ledger-companion rc=0 row='SUITE PASS 7/7' parsed=('PASS', 7, 7)
+RUN ledger-devshare rc=0 row='SUITE PASS 7/7 criteria' parsed=('PASS', 7, 7)
+RUN ledger-freetrial-callaccount rc=0 row='SUITE PASS 8/8 exit=0' parsed=('PASS', 8, 8)
+RUN ledger-freetrial-funnelcap rc=0 row='SUITE PASS 7/7' parsed=('PASS', 7, 7)
+RUN ledger-honorcert-yearbook rc=0 row='SUITE PASS 7/7' parsed=('PASS', 7, 7)
+RUN ledger-observation-persist rc=0 row='SUITE PASS 7/7' parsed=('PASS', 7, 7)
+RUN ledger-showcase-statsdual rc=0 row='SUITE PASS 7/7' parsed=('PASS', 7, 7)
+RUN ledger-venue rc=0 row='SUITE PASS 7/7' parsed=('PASS', 7, 7)
+SAMPLE_END

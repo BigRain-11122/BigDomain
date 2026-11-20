@@ -30,7 +30,20 @@ not proof that the runtime line carries the declared number - a suite may print
 a counter whose value is an assertion count rather than its criteria count.
 Read-only, ASCII source, stdlib only, zero network.
 
-Criteria AC-RCC1..AC-RCC4 are pre-registered in src/os/backlog.md (R2918 row).
+Criteria AC-RCC1..AC-RCC10 are pre-registered in src/os/backlog.md (R2918 row,
+extended at R2921/R2922/R3076/R3077).
+
+R3077 widened the reach WITHOUT replacing the text pass: `ast_leaves()` resolves
+a printed row through the CALL (an inline conditional argument, a `len(...)`
+argument, a constant named inside the format tuple), and classify() only asks it
+when every text leaf failed. Measured before the change: a text-level
+continuation join flips 0 rows and regresses 1 (it swallows lines through an
+apostrophe in a comment), a replacement-style AST pass flips 119 but regresses
+220, and the UNION flips 119 with 0 regressions, ten of which were RUN and read
+their own SUITE row. Refused, with reasons: splitting the fix per label family
+(the missing reach is one read, not two dialects) and putting
+assembled_print_lines into the pin (it counts THIS reader's own limit, not a
+fact about a suite).
 """
 import ast
 import importlib.util
@@ -217,12 +230,110 @@ def leaf_lines(text, consts=None):
     return out, assembled
 
 
+def _arg_text(node, consts):
+    """One argument of a format tuple, as the text it contributes.
+
+    An inline conditional resolves to its FIRST arm: both arms of the shipped
+    dialects are verdict words, so the arm chosen never decides readability,
+    and inventing a rule that prefers PASS would be a guess. A call (len(...))
+    contributes one placeholder digit - its value is not a source fact.
+    """
+    if isinstance(node, ast.Constant):
+        if isinstance(node.value, str):
+            return node.value
+        return '7'
+    if isinstance(node, ast.IfExp):
+        return _arg_text(node.body, consts)
+    if isinstance(node, ast.Name):
+        values = consts.get(node.id)
+        return values[0] if values else None
+    if isinstance(node, (ast.Call, ast.BinOp, ast.Attribute, ast.Subscript,
+                         ast.Compare)):
+        return '7'
+    return None
+
+
+def _filled(fmt, args, consts):
+    holes = list(PLACE.finditer(fmt))
+    if not holes:
+        return None
+    values = []
+    for arg in args:
+        text = _arg_text(arg, consts)
+        if text is None:
+            return None
+        values.append(text)
+    if len(values) != len(holes):
+        return None
+    pieces = []
+    last = 0
+    for hole, value in zip(holes, values):
+        pieces.append(fmt[last:hole.start()])
+        pieces.append(value if hole.group(0) != '%d' else (re.sub(r'\D', '', value) or '7'))
+        last = hole.end()
+    pieces.append(fmt[last:])
+    return ''.join(pieces)
+
+
+def ast_leaves(text, consts):
+    """Rows reachable through the print CALL rather than through one line.
+
+    This is the union the R3077 measurement justified: it is asked only after
+    every text leaf failed, so a shape the text pass already reads keeps its
+    exact reading. A print whose literal puts any word before SUITE yields a
+    leaf the shipped anchored reader refuses, so this pass cannot fabricate a
+    row either (AC-RCC10-R3).
+    """
+    out = []
+    try:
+        tree = ast.parse(text)
+    except SyntaxError:
+        return out
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        name = getattr(func, 'id', None) or getattr(func, 'attr', None)
+        if name not in ('print', 'write'):
+            continue
+        for arg in node.args:
+            if isinstance(arg, ast.Constant) and isinstance(arg.value, str):
+                if 'SUITE' in arg.value:
+                    out.append(arg.value)
+            elif isinstance(arg, ast.JoinedStr):
+                parts = []
+                for part in arg.values:
+                    if isinstance(part, ast.Constant) and isinstance(part.value, str):
+                        parts.append(part.value)
+                    else:
+                        parts.append('7')
+                joined = ''.join(parts)
+                if 'SUITE' in joined:
+                    out.append(joined)
+            elif isinstance(arg, ast.BinOp) and isinstance(arg.op, ast.Mod):
+                fmt = arg.left
+                if not (isinstance(fmt, ast.Constant)
+                        and isinstance(fmt.value, str)
+                        and 'SUITE' in fmt.value):
+                    continue
+                args = arg.right.elts if isinstance(arg.right, ast.Tuple) else [arg.right]
+                leaf = _filled(fmt.value, list(args), consts)
+                if leaf:
+                    out.append(leaf)
+            elif isinstance(arg, ast.Name) and arg.id in consts:
+                out.extend(consts[arg.id])
+    return out
+
+
 def classify(text, module, consts=None):
     leaves, assembled = leaf_lines(text, consts)
     if not leaves:
         return 'SILENT', assembled
     for leaf in leaves:
         if module.parse_suite_row(leaf + '\n') is not None:
+            return 'READABLE', assembled
+    for leaf in ast_leaves(text, consts or {}):
+        if module.parse_suite_row(PLACEHOLDER.sub('7', leaf) + '\n') is not None:
             return 'READABLE', assembled
     return 'UNPARSED', assembled
 

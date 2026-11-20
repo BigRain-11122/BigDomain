@@ -3,19 +3,19 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-20 R3076 PRODUCT+ENGINEERING: three P-47 face suites were invisible to the registry counter census for ONE reason - the verdict word lived in an inline conditional ARGUMENT, so the static reader saw only 'SUITE 7 7/7' (placeholders neutralised to digits, no verdict word, refused by the shipped reader by design) and filed three rows the battery CAN refute under UNPARSED. Measured before the pin: all three print calls span two physical lines while leaf_lines splits on newline, all three files carry zero SUITE constants so the constant-join path never starts, and widening the extractor instead (continuation join plus inline-arg resolution) flips 231 of 733 rows (UNPARSED 426 -> ~198) - a reclassification no single window can account for line by line.",
+    "current": "2026-11-20 R3077 PRODUCT+ENGINEERING: the census's UNPARSED bucket was overstated for 122 rows, and the measurement killed the candidate fix the head proposed. A text-level continuation join flips ZERO rows and regresses one (joining brace-balanced lines through an apostrophe in a comment swallows the next statement), while an AST pass used as a REPLACEMENT flips 119 but regresses 220 - so tools-level widening is only sound as a UNION. registry_counter_census.py now carries _arg_text/_filled/ast_leaves (print/write call resolution: literal, f-string literal parts, %-applied argument tuple with an inline conditional taking its FIRST arm, len(...) as one placeholder digit, constants by name) and classify() asks it only after every text leaf failed, so a row the text pass already reads keeps its exact reading.",
     "do": "R3068 ENGINEERING: the loop now runs the entry page's own live gate every round. MEASURED BEFORE ANY CODE: `python tools/deliverable_index.py --check` on the real tree = VERDICT PASS 15/15 in 0.16 s; the battery suite drives the tool in a private temp world (so it cannot see the landed page drift); the only executor of that tool outside its suite is tools/face_sweep.py, and nothing schedules face_sweep; `Get-ScheduledTask BigDomain*` = exactly one task (BigDomain-OSLoop -> iteration_loop.ps1: lock / crawl beat / git pull / spawn); preview pages are re-rendered by hand only. Change: one `[DELIV]` face in the shipped opening scanner (source + install copies byte-identical, PURE ASCII) that runs the tool with --check and answers PASS / FLAG(failed=<AC-DIX codes> rc=<n>) / SKIP, never aborting the scan. Verified: harness ALL CRITERIA PASS (AC-SC1..SC22, 51 checks) with four new arms; live scan `[DELIV] PASS entry_page_matches_disk=1 failed=none`; evidence qa/deliv-face-R3068.log (1438B utf-8/lf). Honest limits: no new CEO page this round; sandbox arms drive a stub (face contract, not tool behaviour); a RED line is a signal, not a refusal; it covers ONE of nine CEO faces (face_sweep still unscheduled); a buyer still cannot pay.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-face-sweep-R3075.log (408B, 2026-11-20)",
-    "latest_evidence": "qa/leg-face-sweep-R3075.log (408B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3077.log (203B, 2026-11-20)",
+    "latest_evidence": "qa/negctl-R3077.log (203B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3077] next window (<=48h): (0) MAIN — **普查的 UNPARSED 桶高估了不可反驳面：426 行里约 231 行是「静态看不见、运行期读得动」，而这张桶是 pin 与套件门共用的唯一分类面**。下一轮先量（只读，勿改盘）：①把续行合并（括号平衡、闭引号外计数）单独加上，翻转多少行——量出它与实参解析各自的贡献，别再把两件事捆一起报一个 231；②实参解析（内联条件取首臂、`len(...)` 记占位）各自还能翻多少；③每类翻转里有多少行的运行期行真的被发布读者读得动（抽 10 行实跑，不靠静态推断）；④若扩解析器，pin 会一次性移动上百行——这是不是该拆成多轮按方言族分批（`funnel`/`liveroom`/`pay` 各一批），每批带自己的负控；⑤`assembled_print_lines` 这个数在扩解析后会怎么变，它是不是也该进 pin（今天不进）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, the pre-existing AC-LGA9 red carried since R3040, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law (truncated)",
-    "next_milestone_due": "2026-11-22T09:19:00+08:00",
-    "updated_at": "2026-11-20T09:19:00+08:00"
+    "next_milestone": "[R3078] next window (<=48h): (0) MAIN — **扩法落地后仍剩 304 行 UNPARSED，而「其中多少运行期其实读得动」这一问本轮没量；另有探针预测 119 与活盘落 122 的 3 行差未逐行交代**。下一轮先量（只读，勿改盘）：①把扩法应用到剩余 304 行的源码上，抽 10 行**实跑**看运行期行是否可读（不靠静态推断），量出这个桶还剩多少「静态看不见、运行期读得动」；②把探针 `tmp/probe_R3077.py` 与已落地实现逐行对账，点出那 3 行差异到底来自拼接过续行的文本还是别的（结论写进模块头，不许含糊）；③剩余桶里若仍有成族失真，先判它是不是又一处「读者只认一层」而非方言；④`assembled_print_lines=290` 仍不属 pin——这个判断要不要立一条理由行（今天只在模块头）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, the pre-existing AC-LGA9 red carried since R3040, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law rather than a measured optimum, (truncated)",
+    "next_milestone_due": "2026-11-22T09:34:10+08:00",
+    "updated_at": "2026-11-20T09:34:10+08:00"
   },
-  "current": "2026-11-20 R3076 PRODUCT+ENGINEERING: three P-47 face suites were invisible to the registry counter census for ONE reason - the verdict word lived in an inline conditional ARGUMENT, so the static reader saw only 'SUITE 7 7/7' (placeholders neutralised to digits, no verdict word, refused by the shipped reader by design) and filed three rows the battery CAN refute under UNPARSED. Measured before the pin: all three print calls span two physical lines while leaf_lines splits on newline, all three files carry zero SUITE constants so the constant-join path never starts, and widening the extractor instead (continuation join plus inline-arg resolution) flips 231 of 733 rows (UNPARSED 426 -> ~198) - a reclassification no single window can account for line by line.",
+  "current": "2026-11-20 R3077 PRODUCT+ENGINEERING: the census's UNPARSED bucket was overstated for 122 rows, and the measurement killed the candidate fix the head proposed. A text-level continuation join flips ZERO rows and regresses one (joining brace-balanced lines through an apostrophe in a comment swallows the next statement), while an AST pass used as a REPLACEMENT flips 119 but regresses 220 - so tools-level widening is only sound as a UNION. registry_counter_census.py now carries _arg_text/_filled/ast_leaves (print/write call resolution: literal, f-string literal parts, %-applied argument tuple with an inline conditional taking its FIRST arm, len(...) as one placeholder digit, constants by name) and classify() asks it only after every text leaf failed, so a row the text pass already reads keeps its exact reading.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -43,11 +43,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3076 PRODUCT+ENGINEERING: three P-47 face suites were invisible to the registry counter census for ONE reason - the verdict word lived in an inline conditional ARGUMENT, so the static reader saw only 'SUITE 7 7/7' (placeholders neutralised to digits, no verdict word, refused by the shipped reader by design) and filed three rows the battery CAN refute under UNPARSED. Measured before the pin: all three print calls span two physical lines while leaf_lines splits on newline, all three files carry zero SUITE constants so the constant-join path never starts, and widening the extractor instead (continuation join plus inline-arg resolution) flips 231 of 733 rows (UNPARSED 426 -> ~198) - a reclassification no single window can account for line by line.",
-  "export_ts": "2026-11-20T09:19:00+08:00",
+  "do": "2026-11-20 R3077 PRODUCT+ENGINEERING: the census's UNPARSED bucket was overstated for 122 rows, and the measurement killed the candidate fix the head proposed. A text-level continuation join flips ZERO rows and regresses one (joining brace-balanced lines through an apostrophe in a comment swallows the next statement), while an AST pass used as a REPLACEMENT flips 119 but regresses 220 - so tools-level widening is only sound as a UNION. registry_counter_census.py now carries _arg_text/_filled/ast_leaves (print/write call resolution: literal, f-string literal parts, %-applied argument tuple with an inline conditional taking its FIRST arm, len(...) as one placeholder digit, constants by name) and classify() asks it only after every text leaf failed, so a row the text pass already reads keeps its exact reading.",
+  "export_ts": "2026-11-20T09:34:10+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/leg-face-sweep-R3075.log (408B, 2026-11-20)",
-  "next_milestone": "[R3077] next window (<=48h): (0) MAIN — **普查的 UNPARSED 桶高估了不可反驳面：426 行里约 231 行是「静态看不见、运行期读得动」，而这张桶是 pin 与套件门共用的唯一分类面**。下一轮先量（只读，勿改盘）：①把续行合并（括号平衡、闭引号外计数）单独加上，翻转多少行——量出它与实参解析各自的贡献，别再把两件事捆一起报一个 231；②实参解析（内联条件取首臂、`len(...)` 记占位）各自还能翻多少；③每类翻转里有多少行的运行期行真的被发布读者读得动（抽 10 行实跑，不靠静态推断）；④若扩解析器，pin 会一次性移动上百行——这是不是该拆成多轮按方言族分批（`funnel`/`liveroom`/`pay` 各一批），每批带自己的负控；⑤`assembled_print_lines` 这个数在扩解析后会怎么变，它是不是也该进 pin（今天不进）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, the pre-existing AC-LGA9 red carried since R3040, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law (truncated)",
+  "latest_evidence": "qa/negctl-R3077.log (203B, 2026-11-20)",
+  "next_milestone": "[R3078] next window (<=48h): (0) MAIN — **扩法落地后仍剩 304 行 UNPARSED，而「其中多少运行期其实读得动」这一问本轮没量；另有探针预测 119 与活盘落 122 的 3 行差未逐行交代**。下一轮先量（只读，勿改盘）：①把扩法应用到剩余 304 行的源码上，抽 10 行**实跑**看运行期行是否可读（不靠静态推断），量出这个桶还剩多少「静态看不见、运行期读得动」；②把探针 `tmp/probe_R3077.py` 与已落地实现逐行对账，点出那 3 行差异到底来自拼接过续行的文本还是别的（结论写进模块头，不许含糊）；③剩余桶里若仍有成族失真，先判它是不是又一处「读者只认一层」而非方言；④`assembled_print_lines=290` 仍不属 pin——这个判断要不要立一条理由行（今天只在模块头）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, the pre-existing AC-LGA9 red carried since R3040, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law rather than a measured optimum, (truncated)",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -172,7 +172,7 @@
   },
   "results": [
     [
-      "3075",
+      "3077",
       "OSLoop 执行 tick"
     ]
   ],
@@ -185,15 +185,15 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 622,
+    "log_lines_in_window": 636,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 89,
+    "substantive_non_idle_mention_lines": 91,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 659139
+  "state_bytes": 665407
 }
