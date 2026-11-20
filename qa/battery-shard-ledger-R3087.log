@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=733 registry_criteria=5972 selected=1 selected_criteria=12 cap=600s leg_cap=0s overrides=1 exact=1 state=RUNNING
+SHARD selected os-ledger-archive crit=12 path=..\os\test_ledger_archive.py
+SHARD row os-ledger-archive rc=0 pass=12 fail=0 detail=yes suite=PASS 12/12 crit=12 2.2s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=12 crit_mismatch=0 elapsed=2.2s crit_checked=1 crit_unchecked=0

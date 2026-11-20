@@ -4822,7 +4822,7 @@ SUITES = [
     # report names split rounds and same-window gaps without gating on
     # either.)
     ("os-ledger-archive",
-     os.path.join("..", "os", "test_ledger_archive.py"), 11),
+     os.path.join("..", "os", "test_ledger_archive.py"), 12),
     # R2157: the baseline is the gate's only exemption channel, so its
     # semantics are pinned - one entry exempts one round only, a stale
     # entry is reported instead of rotting quietly, a broken baseline

@@ -4,19 +4,19 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-20 R3086 PRODUCT+ENGINEERING: the archive face stopped understating its own history and the fold-carry report stopped hiding how much of it is split. Measured first: 786 dated ledger lines over the three archives were counted as round narratives (archive_ledger_lines 1090 where presence reads 1876), and 48 rounds have their narrative in more than one window while the report could not say so.",
+    "current": "2026-11-20 R3087 PRODUCT+ENGINEERING: the cross-window diagnostics now say WHICH window they mean, and the archive publishes the payload reading it never made. Measured first: 2 of the 3 live same-window gaps had been naming a marker carried by TWO different windows (2946 and 3085, one fold pair each), so a reader could not locate the short one; and 787 archive ledger lines cannot be parsed - 785 from the pre-law 'local=unmeasured' era and 2 carrying a doubled prefix - a number no reader could see.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/state-fold-run-R3085.log (1748B, 2026-11-20)",
-    "latest_evidence": "qa/state-fold-run-R3085.log (1748B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/registry-counter-census-R3087.log (116B, 2026-11-20)",
+    "latest_evidence": "qa/registry-counter-census-R3087.log (116B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3087] next window (<=48h): (0) MAIN — **跨窗口诊断现在是可读的数了，但「同一窗口」这条更严的律只被量过、没有被证明可落地：它对今天的盘是 3 个误杀，对一个未来的新窗口则可能完全成立。** 下一轮先量（只读）：①今天的 29 个 post-pin 窗口里，`same_window_gaps` 的 3 条与 `split_rounds` 的 4 条各是哪一类（叙事重复落两窗 / 账本落在后一窗 / 折叠把一对拆开）——按 `# --- R<n>` 切分逐条归类，写成一张表；②若给「折叠后新开的窗口」加一条 scoped 律（与 `FOLD_CARRY_PIN` 同构：只问 pin 之后新写入的窗口，且只在折叠车辆运行时问），今天红几轮——预期 0，但必须实测而不是假设；③这条律的可证性在哪里：私有世界能否造出「新窗口内叙事有、账本不在本窗」而归档粒度仍判 carried 的形状，若能，判据就先落在私有世界，永不依赖今天的盘恰好出现缺陷；④`audit_archive()` 的保守面：它不做 parse，因此一条形状坏掉的账本行会被计为 ledger 却不报错——这是否需要一面只发布不判的读数（数出「在场但不合形状」的行数），量清楚再定。量清后落一条判据（scoped 律有私有世界证据 / 或只发布一条新读数）。**先落板再动代码。** (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen (truncated)",
-    "next_milestone_due": "2026-11-22T18:15:49+08:00",
-    "updated_at": "2026-11-20T18:15:49+08:00"
+    "next_milestone": "[R3088] next window (<=48h): (0) MAIN — **重复 marker 现在有了名字（2946、3085），但没有任何一条律问「下一次折叠会不会再开出第三个」；同一窗口律也仍未装上（老 pin 误杀 3 轮、新 pin 空转）。** 下一轮先量（只读）：①折叠车辆能否在写窗口之前就知道自己的 marker 与既有窗口撞车（marker 取自轮号，一轮两折必撞）；②若立一条「一轮一窗口」律，今天的 29 个窗口红几个（预期恰 2 个重复 marker，但必须实测）；③这条律会不会把 R3085 那种「fold 40 补折修复 fold 39」的操作挡死（如果会，律的形态必须是「拒绝悄悄撞车」而不是「禁止同轮再折」）；④能不能用「marker 唯一化」（轮号+序号）替代 `window_index`，让读数与折叠面同源。量清后落一条判据（要么给折叠车辆一道前置门，要么只发布一条新读数）。**先落板再动代码。** (1) carried unchanged: the same-window law remains uninstalled (measured false-kill vs vacuous), 787 archive payload lines, the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of (truncated)",
+    "next_milestone_due": "2026-11-22T18:38:21+08:00",
+    "updated_at": "2026-11-20T18:38:21+08:00"
   },
-  "current": "2026-11-20 R3086 PRODUCT+ENGINEERING: the archive face stopped understating its own history and the fold-carry report stopped hiding how much of it is split. Measured first: 786 dated ledger lines over the three archives were counted as round narratives (archive_ledger_lines 1090 where presence reads 1876), and 48 rounds have their narrative in more than one window while the report could not say so.",
+  "current": "2026-11-20 R3087 PRODUCT+ENGINEERING: the cross-window diagnostics now say WHICH window they mean, and the archive publishes the payload reading it never made. Measured first: 2 of the 3 live same-window gaps had been naming a marker carried by TWO different windows (2946 and 3085, one fold pair each), so a reader could not locate the short one; and 787 archive ledger lines cannot be parsed - 785 from the pre-law 'local=unmeasured' era and 2 carrying a doubled prefix - a number no reader could see.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -44,11 +44,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3086 PRODUCT+ENGINEERING: the archive face stopped understating its own history and the fold-carry report stopped hiding how much of it is split. Measured first: 786 dated ledger lines over the three archives were counted as round narratives (archive_ledger_lines 1090 where presence reads 1876), and 48 rounds have their narrative in more than one window while the report could not say so.",
-  "export_ts": "2026-11-20T18:15:49+08:00",
+  "do": "2026-11-20 R3087 PRODUCT+ENGINEERING: the cross-window diagnostics now say WHICH window they mean, and the archive publishes the payload reading it never made. Measured first: 2 of the 3 live same-window gaps had been naming a marker carried by TWO different windows (2946 and 3085, one fold pair each), so a reader could not locate the short one; and 787 archive ledger lines cannot be parsed - 785 from the pre-law 'local=unmeasured' era and 2 carrying a doubled prefix - a number no reader could see.",
+  "export_ts": "2026-11-20T18:38:21+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/state-fold-run-R3085.log (1748B, 2026-11-20)",
-  "next_milestone": "[R3087] next window (<=48h): (0) MAIN — **跨窗口诊断现在是可读的数了，但「同一窗口」这条更严的律只被量过、没有被证明可落地：它对今天的盘是 3 个误杀，对一个未来的新窗口则可能完全成立。** 下一轮先量（只读）：①今天的 29 个 post-pin 窗口里，`same_window_gaps` 的 3 条与 `split_rounds` 的 4 条各是哪一类（叙事重复落两窗 / 账本落在后一窗 / 折叠把一对拆开）——按 `# --- R<n>` 切分逐条归类，写成一张表；②若给「折叠后新开的窗口」加一条 scoped 律（与 `FOLD_CARRY_PIN` 同构：只问 pin 之后新写入的窗口，且只在折叠车辆运行时问），今天红几轮——预期 0，但必须实测而不是假设；③这条律的可证性在哪里：私有世界能否造出「新窗口内叙事有、账本不在本窗」而归档粒度仍判 carried 的形状，若能，判据就先落在私有世界，永不依赖今天的盘恰好出现缺陷；④`audit_archive()` 的保守面：它不做 parse，因此一条形状坏掉的账本行会被计为 ledger 却不报错——这是否需要一面只发布不判的读数（数出「在场但不合形状」的行数），量清楚再定。量清后落一条判据（scoped 律有私有世界证据 / 或只发布一条新读数）。**先落板再动代码。** (1) carried unchanged: 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen (truncated)",
+  "latest_evidence": "qa/registry-counter-census-R3087.log (116B, 2026-11-20)",
+  "next_milestone": "[R3088] next window (<=48h): (0) MAIN — **重复 marker 现在有了名字（2946、3085），但没有任何一条律问「下一次折叠会不会再开出第三个」；同一窗口律也仍未装上（老 pin 误杀 3 轮、新 pin 空转）。** 下一轮先量（只读）：①折叠车辆能否在写窗口之前就知道自己的 marker 与既有窗口撞车（marker 取自轮号，一轮两折必撞）；②若立一条「一轮一窗口」律，今天的 29 个窗口红几个（预期恰 2 个重复 marker，但必须实测）；③这条律会不会把 R3085 那种「fold 40 补折修复 fold 39」的操作挡死（如果会，律的形态必须是「拒绝悄悄撞车」而不是「禁止同轮再折」）；④能不能用「marker 唯一化」（轮号+序号）替代 `window_index`，让读数与折叠面同源。量清后落一条判据（要么给折叠车辆一道前置门，要么只发布一条新读数）。**先落板再动代码。** (1) carried unchanged: the same-window law remains uninstalled (measured false-kill vs vacuous), 787 archive payload lines, the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of (truncated)",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -173,7 +173,7 @@
   },
   "results": [
     [
-      "3086",
+      "3087",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -187,16 +187,16 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 43,
+    "log_lines_in_window": 51,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 42846,
+  "state_bytes": 50226,
   "next_milestone_due": "2026-11-22T10:45:10+08:00"
 }

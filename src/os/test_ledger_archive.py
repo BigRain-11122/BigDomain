@@ -28,7 +28,7 @@ sys.path.insert(0, BASE)
 
 import ledger_lines as LL  # noqa: E402
 
-EXPECTED_CRITERIA = 11
+EXPECTED_CRITERIA = 12
 MODULE = os.path.join(BASE, "ledger_lines.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 STATE = os.path.join(BASE, "state.json")
@@ -237,7 +237,12 @@ def run():
               "AC-LGA6 bad archive input fails closed with zero stdout")
 
         # AC-LGA7: the default face stays byte-identical, and --archives
-        # only inserts one scope line into the existing report.
+        # only inserts the counts block plus the two scope readings.
+        # R3087: the allowed-difference set gained 'archive_payload:' when
+        # AC-LGA12 published the payload reading - JUDGED CHANGE, not a
+        # deletion: the law ("only counts and scope lines may differ, and
+        # the verdict line must still be the last one") is unchanged, and
+        # the arm now also pins that exactly ONE payload line is printed.
         rc_def, out_def, _ = run_cli(["--check", STATE])
         rc_arc, out_arc, _ = run_cli(["--check", STATE, "--archives",
                                       LL.default_logs_dir(STATE)])
@@ -251,7 +256,7 @@ def run():
         expected = "\n".join(LL.format_report(scoped_real))
         default_lines = out_def.splitlines()
         scoped_lines = out_arc.splitlines()
-        counts = ("lines:", "kinds:", "scope: ")
+        counts = ("lines:", "kinds:", "scope: ", "archive_payload: ")
 
         def authority(lines):
             return [line for line in lines
@@ -263,10 +268,12 @@ def run():
               and scoped_lines == expected.splitlines()
               and len([line for line in scoped_lines
                        if line.startswith("scope: ")]) == 1
+              and len([line for line in scoped_lines
+                       if line.startswith("archive_payload: ")]) == 1
               and authority(scoped_lines) == authority(default_lines)
               and scoped_lines[-1] == default_lines[-1] == "VERDICT CLEAN",
               "AC-LGA7 default face byte-identical, only the counts block "
-              "and one scope line differ")
+              "and the two scope lines differ")
 
         # AC-LGA8: the real tree gate plus hygiene.
         with io.open(MODULE, "r", encoding="ascii", errors="strict") as handle:
@@ -518,13 +525,117 @@ def run():
               "presence law; classify(), the shape law and the verdict "
               "stay unchanged")
 
+        # AC-LGA12 (R3087): the cross-window diagnostics are only usable if
+        # a reader can LOCATE the window they name, and the archive payload
+        # reading the audit never made is published without gating. Measured
+        # before this block: 2 of the 3 live same_window gaps carried the
+        # same marker twice (2946 and 3085, one fold pair each), so a marker
+        # alone could not say which window is short; and 787 archive ledger
+        # lines cannot be parsed (785 from the pre-law 'local=unmeasured'
+        # era, 2 carrying a doubled prefix), a number no reader could see.
+        dup = os.path.join(world, "logs-lga12")
+        os.makedirs(dup)
+        dup_file = os.path.join(dup, "state-log-archive-2026-12.md")
+        write_text(dup_file, "# fixture header\n"
+                          "# --- R7001 fold append (fixture)\n"
+                          + narrative(7002) + "\n"
+                          + ledger(7011) + "\n"
+                          "# --- R7001 fold append again (fixture)\n"
+                          + ledger(7002) + "\n"
+                          + narrative(7005) + "\n"
+                          + ledger(7005) + "\n")
+        dup_carry = LL.audit_fold_carry([dup_file], 7000)
+        dist = os.path.join(world, "logs-lga12-distinct")
+        os.makedirs(dist)
+        dist_file = os.path.join(dist, "state-log-archive-2026-12.md")
+        write_text(dist_file, "# fixture header\n"
+                           "# --- R7001 fold append (fixture)\n"
+                           + narrative(7004) + "\n"
+                           "# --- R7010 fold append (fixture)\n"
+                           + ledger(7004) + "\n"
+                           + narrative(7004) + "\n")
+        dist_carry = LL.audit_fold_carry([dist_file], 7000)
+        pay = os.path.join(world, "logs-lga12-payload")
+        os.makedirs(pay)
+        pay_file = os.path.join(pay, "state-log-archive-2026-12.md")
+        healthy = ledger(7021)
+        dated_good = "2026-11-19 " + ledger(7022)
+        dated_bad = "2026-11-19 R7023 tokens: local=unmeasured api=0 " \
+                    "api_reason=pre-law unmeasured era fixture"
+        bare_bad = "R7024 tokens: R7024 tokens: local=1k api=0 " \
+                   "api_reason=doubled prefix fixture"
+        write_text(pay_file, "# fixture header\n"
+                          "# --- R7020 fold append (fixture)\n"
+                          + healthy + "\n" + dated_good + "\n"
+                          + dated_bad + "\n" + bare_bad + "\n")
+        pay_report = LL.audit_archive(LL.load_archive(pay_file))
+        good_only = os.path.join(pay, "state-log-archive-2026-12b.md")
+        write_text(good_only, "# fixture header\n"
+                          "# --- R7020 fold append (fixture)\n"
+                          + dated_good + "\n")
+        good_report = LL.audit_archive(LL.load_archive(good_only))
+        real_logs3 = LL.default_logs_dir(STATE)
+        real_payload = LL.audit_archive(LL.load_archive_lines(real_logs3))
+        real_carry3 = LL.audit_fold_carry(LL.archive_files(real_logs3))
+        real_scope3 = LL.audit_scope(
+            LL.load_archive_lines(real_logs3), live)
+        # AC-LGA12 is ONE criterion with six arms, as pinned: a..c the
+        # locatable cross-window diagnostics, d..e the published payload
+        # reading with its negative control, f the live identities.
+        check([item["window_index"] for item
+               in dup_carry["same_window_gaps"]] == [1]
+              and [item["round"] for item
+                   in dup_carry["same_window_gaps"]] == [7002]
+              and dup_carry["duplicate_markers"] == [7001]
+              and dup_carry["clean"] is True
+              and dist_carry["duplicate_markers"] == []
+              and [(item["round"], item["windows"],
+                    item["window_indices"])
+                   for item in dist_carry["split_rounds"]]
+              == [(7004, [7001, 7010], [1, 2])]
+              and [item["window_index"] for item
+                   in dist_carry["same_window_gaps"]] == [1]
+              and "dup=1" in LL.format_fold_carry(dup_carry)
+              and "dup=0" in LL.format_fold_carry(dist_carry)
+              and "dup=" in LL.format_fold_carry(real_carry3)
+              and LL.format_fold_carry(dup_carry).isascii()
+              and LL.format_fold_carry(real_carry3).isascii()
+              and pay_report["ledger_lines"] == 4
+              and pay_report["bare_ledger_lines"] == 2
+              and pay_report["dated_ledger_lines"] == 2
+              and pay_report["unshaped_ledger_lines"] == 2
+              and pay_report["unshaped_codes"] == {"E_LGR_BAD_LOCAL": 1,
+                                                   "E_LGR_NO_LOCAL": 1}
+              and good_report["dated_ledger_lines"] == 1
+              and good_report["unshaped_ledger_lines"] == 0
+              and good_report["unshaped_codes"] == {}
+              and sum(pay_report["unshaped_codes"].values())
+              == pay_report["unshaped_ledger_lines"]
+              and real_payload["ledger_lines"]
+              == real_payload["bare_ledger_lines"]
+              + real_payload["dated_ledger_lines"]
+              and real_payload["unshaped_ledger_lines"]
+              <= real_payload["ledger_lines"]
+              and real_payload["dated_ledger_lines"] > 0
+              and sum(real_payload["unshaped_codes"].values())
+              == real_payload["unshaped_ledger_lines"]
+              and real_scope3["archive_dated_ledger_lines"]
+              == real_payload["dated_ledger_lines"]
+              and real_scope3["archive_unshaped_ledger_lines"]
+              == real_payload["unshaped_ledger_lines"]
+              and len({item["window_index"] for item
+                       in real_carry3["same_window_gaps"]})
+              == len(real_carry3["same_window_gaps"]),
+              "AC-LGA12 the cross-window diagnostics locate their window, "
+              "and the archive payload reading is published without gating")
+
     finally:
         shutil.rmtree(world, ignore_errors=True)
 
 
 
 def main():
-    print("suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA10)")
+    print("suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA12)")
     run()
     total = PASSES + FAILS
     print("SUITE %s %d/%d criteria"

@@ -64,6 +64,10 @@ LEDGER_PREFIX_RE = re.compile(r"^R(\d{3,5}) tokens:")
 # and the write door never see it, so relaxing presence cannot accept a
 # malformed line at birth.
 LEDGER_PRESENCE_RE = re.compile(r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5}) tokens:")
+# R3087 AC-LGA12: the date prefix the presence law tolerates, as its own
+# constant so the payload reader can strip exactly what the presence law
+# forgives and nothing else. Used only by audit_archive().
+DATE_PREFIX_RE = re.compile(r"^\d{4}-\d{2}-\d{2}\s+")
 NARRATIVE_RE = re.compile(r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s")
 # R2580 AC-FCLS1..AC-FCLS3: the summary a fold leaves behind starts with
 # the round it folded ("R2568 fold of log lines 1..20 ..."). The kind
@@ -438,6 +442,10 @@ def audit_archive(lines):
     kinds = {"ledger": 0, "round": 0, "other": 0}
     ledger_rounds = []
     round_rounds = []
+    bare = 0
+    dated = 0
+    unshaped = 0
+    unshaped_codes = {}
     for raw in lines:
         line = raw if isinstance(raw, str) else str(raw)
         kind = classify_archive(line)
@@ -445,6 +453,20 @@ def audit_archive(lines):
         if kind == "ledger":
             ledger_rounds.append(
                 int(LEDGER_PRESENCE_RE.match(line).group(1)))
+            if LEDGER_PREFIX_RE.match(line) is not None:
+                bare += 1
+            else:
+                dated += 1
+            # R3087 AC-LGA12: presence counts a line, parse judges its
+            # payload. The date prefix is stripped first, so a dated line
+            # with an intact payload is dated and NOT unshaped - only a
+            # payload no reader can attribute is counted here. PUBLISHED
+            # only: the archives are frozen history, no gate reads this.
+            try:
+                parse_ledger_line(DATE_PREFIX_RE.sub("", line, count=1))
+            except LedgerLineError as exc:
+                unshaped += 1
+                unshaped_codes[exc.code] = unshaped_codes.get(exc.code, 0) + 1
         elif kind == "round":
             round_rounds.append(int(NARRATIVE_RE.match(line).group(1)))
     return {
@@ -452,6 +474,10 @@ def audit_archive(lines):
         "ledger_lines": kinds["ledger"],
         "round_lines": kinds["round"],
         "other_lines": kinds["other"],
+        "bare_ledger_lines": bare,
+        "dated_ledger_lines": dated,
+        "unshaped_ledger_lines": unshaped,
+        "unshaped_codes": unshaped_codes,
         "rounds_without_ledger": sorted(set(round_rounds)
                                         - set(ledger_rounds)),
         "ledger_without_round": sorted(set(ledger_rounds)
@@ -709,6 +735,7 @@ def audit_fold_carry(paths, min_round=None):
     # honest answer; gating on them would false-kill healthy history,
     # measured before this line was written.
     window_rounds = []
+    window_indices = []
     for index, window in enumerate(examined):
         here = set()
         for line in window["lines"]:
@@ -719,6 +746,7 @@ def audit_fold_carry(paths, min_round=None):
             int(NARRATIVE_RE.match(line).group(1))
             for line in window["lines"] if classify(line) == "round"))
         window_rounds.append(narratives)
+        window_indices.append(index + 1)
         rounds += len(narratives)
         for round_no in narratives:
             if round_no not in archive_rounds:
@@ -726,16 +754,32 @@ def audit_fold_carry(paths, min_round=None):
                              "round": round_no,
                              "path": window["path"]})
             if round_no not in here:
+                # R3087 AC-LGA12: the marker alone cannot locate a short
+                # window - two folds in one round write two windows with
+                # the same marker (measured: 2946 and 3085 each carried
+                # twice). window_index is the position among the examined
+                # windows, so two entries with one marker are still told
+                # apart by a reader. PUBLISHED, never a verdict input.
                 same_window.append({"window": window["round"],
+                                    "window_index": index + 1,
                                     "round": round_no,
                                     "path": window["path"]})
     seen = {}
     for index, narratives in enumerate(window_rounds):
         for round_no in narratives:
-            seen.setdefault(round_no, []).append(examined[index]["round"])
-    split = [{"round": round_no, "windows": sorted(windows)}
-             for round_no, windows in sorted(seen.items())
-             if len(windows) > 1]
+            seen.setdefault(round_no, []).append(
+                (examined[index]["round"], window_indices[index]))
+    split = [{"round": round_no,
+              "windows": sorted(marker for marker, _i in members),
+              "window_indices": sorted(idx for _m, idx in members)}
+             for round_no, members in sorted(seen.items())
+             if len(members) > 1]
+    marker_counts = {}
+    for window in examined:
+        marker_counts[window["round"]] = marker_counts.get(
+            window["round"], 0) + 1
+    duplicate_markers = sorted(marker for marker, count
+                               in marker_counts.items() if count > 1)
     return {
         "since": min_round,
         "windows": len(examined),
@@ -744,6 +788,7 @@ def audit_fold_carry(paths, min_round=None):
         "gaps": gaps,
         "split_rounds": split,
         "same_window_gaps": same_window,
+        "duplicate_markers": duplicate_markers,
         "clean": not gaps,
         "vacuous": not examined,
     }
@@ -753,21 +798,23 @@ def format_fold_carry(report):
     """Render the FOLD-CARRY verdict as exactly one printable ASCII line."""
     if report["vacuous"]:
         return ("FOLD-CARRY VACUOUS since=%d windows=0 skipped=%d "
-                "(no window opened at or after the pin yet)"
+                "(no window opened at or after the pin yet) dup=0"
                 % (report["since"], report["skipped_windows"]))
     if report["clean"]:
         return ("FOLD-CARRY OK since=%d windows=%d rounds=%d skipped=%d "
-                "split=%d same_window=%d"
+                "split=%d same_window=%d dup=%d"
                 % (report["since"], report["windows"], report["rounds"],
                    report["skipped_windows"], len(report["split_rounds"]),
-                   len(report["same_window_gaps"])))
+                   len(report["same_window_gaps"]),
+                   len(report["duplicate_markers"])))
     gaps = ",".join("R%d(w%d)" % (item["round"], item["window"])
                     for item in report["gaps"])
     return ("FOLD-CARRY FAIL E_LFC_CARRY since=%d windows=%d gaps=%s "
-            "split=%d same_window=%d"
+            "split=%d same_window=%d dup=%d"
             % (report["since"], report["windows"], gaps,
                len(report["split_rounds"]),
-               len(report["same_window_gaps"])))
+               len(report["same_window_gaps"]),
+               len(report["duplicate_markers"])))
 
 
 def coverage_floor(report, minimum=MIN_COVERAGE_LINES):
@@ -813,6 +860,15 @@ def audit_scope(archive_lines, live_lines, tail=None):
     out["live_lines"] = live_full["total_lines"]
     out["archive_ledger_lines"] = archive_report["ledger_lines"]
     out["archive_round_lines"] = archive_report["round_lines"]
+    # R3087 AC-LGA12: two PUBLISHED payload readings, derived from the same
+    # archive pass. audit_archive() counts a line by presence and never
+    # parsed it, so a frozen line whose payload no reader can attribute was
+    # invisible (measured: 2 bare archive ledger lines carry no ' local=').
+    # Neither number may gate: the archives are frozen history.
+    out["archive_dated_ledger_lines"] = archive_report["dated_ledger_lines"]
+    out["archive_unshaped_ledger_lines"] = archive_report[
+        "unshaped_ledger_lines"]
+    out["archive_unshaped_codes"] = archive_report["unshaped_codes"]
     out["live_ledger_lines"] = live_full["ledger_lines"]
     out["live_round_lines"] = live_full["round_lines"]
     out["total_lines"] = archive_report["total_lines"] + live_full["total_lines"]
@@ -869,6 +925,15 @@ def format_report(report):
                       report["live_lines"],
                       len(report["archived_missing"]),
                       len(report["archived_orphan"])))
+        # R3087 AC-LGA12: the payload reading a reader never had. Published
+        # only - the archives are frozen, so neither number may gate.
+        out.append("archive_payload: dated=%d unshaped=%d codes=%s"
+                   % (report["archive_dated_ledger_lines"],
+                      report["archive_unshaped_ledger_lines"],
+                      ",".join("%s:%d" % (code, count) for code, count
+                               in sorted(
+                                   report["archive_unshaped_codes"].items()))
+                      or "none"))
     for item in report["errors"]:
         out.append("error %s line %d: %s"
                    % (item["code"], item["line"], item["detail"]))
