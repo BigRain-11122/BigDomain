@@ -1336,6 +1336,18 @@ def ac_cout15():
         handle.write('{"export_ts": "2026-11-21T12:00:00+08:00"}\n')
     with open(face, "rb") as handle:
         before = handle.read()
+
+    # R3122: the step now prints its own cost, and a millisecond reading can
+    # never be byte-stable, so the count segment stays pinned EXACTLY while the
+    # tail must be a number. This amendment was recorded on the board before
+    # any evidence existed (R3122 PIN row).
+    def counts_of(line):
+        head, sep, tail = line.rpartition(" walk_ms=")
+        return head if sep else line
+
+    def walk_ms_ok(line):
+        head, sep, tail = line.rpartition(" walk_ms=")
+        return bool(sep) and tail.replace(".", "", 1).isdigit()
     planted = []
     for suffix in (".sxf-stage", ".parity-stage"):
         path = face + suffix
@@ -1344,15 +1356,17 @@ def ac_cout15():
         planted.append(path)
 
     dry = CO.stage_residue_face(world, dry_run=True)
-    a_ok = (dry == "stage_residue=%d swept=0" % len(planted)
+    a_ok = (counts_of(dry) == "stage_residue=%d swept=0" % len(planted)
+            and walk_ms_ok(dry)
             and all(os.path.isfile(p) for p in planted))
     if not a_ok:
         print("  measured dry=%r left=%r"
               % (dry, [os.path.isfile(p) for p in planted]), flush=True)
 
     done = CO.stage_residue_face(world)
-    b_ok = (done == "stage_residue=%d swept=%d skipped=0"
+    b_ok = (counts_of(done) == "stage_residue=%d swept=%d skipped=0"
             % (len(planted), len(planted))
+            and walk_ms_ok(done)
             and not any(os.path.exists(p) for p in planted)
             and open(face, "rb").read() == before)
     if not b_ok:
@@ -1362,7 +1376,8 @@ def ac_cout15():
     held = os.path.join(world, "docs", "held.gate-stage")
     os.makedirs(held)
     skipped_line = CO.stage_residue_face(world)
-    c_ok = (skipped_line == "stage_residue=1 swept=0 skipped=1"
+    c_ok = (counts_of(skipped_line) == "stage_residue=1 swept=0 skipped=1"
+            and walk_ms_ok(skipped_line)
             and os.path.isdir(held))
     if not c_ok:
         print("  measured skipped=%r held=%s"
@@ -1419,12 +1434,43 @@ def ac_cout15():
         "names=docs/status-export.json.sxf-stage:")
         and code in failed_line and os.path.isfile(stuck))
     shutil.rmtree(blind, ignore_errors=True)
-    if not (e_ok and f_ok):
-        print("  measured: e=%r unread=%r f=%r failed=%r"
-              % (e_ok, unread_line, f_ok, failed_line), flush=True)
+
+    # ---- R3122 arm g: the OK path walks the tree ONCE, not twice. -------
+    # Measured before the arm existed (tmp/probe_R3122.py -> qa/probe-R3122.log):
+    # one walk costs 910.9ms over 3482 directories and the step used to pay it
+    # twice (scan_report, then sweep which scanned again).
+    import stage_residue as SRG
+    once = tempfile.mkdtemp(prefix="cout15c-")
+    for name in ("docs", "logs", "state"):
+        os.makedirs(os.path.join(once, name))
+    with open(os.path.join(once, "docs", "status-export.json"), "w",
+              encoding="utf-8", newline="\n") as handle:
+        handle.write('{"export_ts": "2026-11-21T12:00:00+08:00"}\n')
+    with open(os.path.join(once, "docs", "status-export.json.sxf-stage"), "w",
+              encoding="utf-8", newline="\n") as handle:
+        handle.write('{"partial')
+    folders = SRG.scan_report(once)["folders"]
+    walked = []
+    plain_listdir = os.listdir
+
+    def counting_listdir(path, *args, **kwargs):
+        walked.append(path)
+        return plain_listdir(path, *args, **kwargs)
+
+    os.listdir = counting_listdir
+    try:
+        once_line = CO.stage_residue_face(once)
+    finally:
+        os.listdir = plain_listdir
+    g_ok = (len(walked) == folders and folders > 0
+            and counts_of(once_line) == "stage_residue=1 swept=1 skipped=0")
+    if not g_ok:
+        print("  measured g=%r walks=%d folders=%d line=%r"
+              % (g_ok, len(walked), folders, once_line), flush=True)
+    shutil.rmtree(once, ignore_errors=True)
 
     shutil.rmtree(world, ignore_errors=True)
-    ok = a_ok and b_ok and c_ok and d_ok and e_ok and f_ok
+    ok = a_ok and b_ok and c_ok and d_ok and e_ok and f_ok and g_ok
     if not ok:
         print("  measured: a=%r b=%r c=%r d=%r refusal=%r"
               % (a_ok, b_ok, c_ok, d_ok, refusal), flush=True)
@@ -1432,8 +1478,9 @@ def ac_cout15():
           "dry run counts and touches nothing, the OK path names swept and "
           "skipped, a suffix-named directory is skipped rather than swept, a "
           "missing module is a named refusal, an unlistable directory is "
-          "named rather than implied covered, and an OS refusal is named with "
-          "its own code")
+          "named rather than implied covered, an OS refusal is named with "
+          "its own code, and the OK path walks the tree exactly once while "
+          "printing its own walk_ms")
 
 
 def main():

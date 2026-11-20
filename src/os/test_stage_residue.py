@@ -240,9 +240,78 @@ def ac_sr3(worlds):
     ok("AC-SR3 arm f - the live tree walks every directory it can list "
        "(unreadable named, refuse count read, folder count derived)",
        live["unreadable"] == [] and live["folders"] > 0
-       and SR.sweep.__defaults__ == (None, None),
+       and SR.sweep.__defaults__ == (None, None, None),
        "live_unreadable=%r folders=%d live_found=%r"
        % (live["unreadable"], live["folders"], live["found"][:3]))
+
+
+def ac_sr4(worlds):
+    """AC-SR4: one walk serves the counts and the sweep (R3122).
+
+    Measured before the arms existed (`tmp/probe_R3122.py` ->
+    `qa/probe-R3122.log`): one whole-tree walk costs 910.9ms over 3482
+    directories, `__pycache__` is only 2.3% of that (so pruning buys 20ms and is
+    not done), and the closeout walked TWICE per round because `sweep` scanned
+    again after `scan_report` had already scanned. Four arms, one criterion.
+    """
+    # ---- a: a supplied report produces the same three readings. ----------
+    twin_a = wide_world()
+    twin_b = wide_world()
+    worlds.extend([twin_a, twin_b])
+    planted_a = wide_plant(twin_a)
+    planted_b = wide_plant(twin_b)
+    report_a = SR.scan_report(twin_a)
+    fed = SR.sweep(twin_a, report=report_a)
+    fresh = SR.sweep(twin_b)
+    ok("AC-SR4 arm a - sweep with the caller's report returns exactly the same "
+       "removed/skipped/failed as a sweep that scanned for itself",
+       fed == fresh and len(fed[0]) == planted_a == planted_b,
+       "fed=%r fresh=%r planted=%d" % (fed, fresh, planted_a))
+
+    # ---- b: the supplied path performs ZERO new walks. -------------------
+    counted_world = wide_world()
+    worlds.append(counted_world)
+    planted = wide_plant(counted_world)
+    report = SR.scan_report(counted_world)
+    calls = []
+    real_listdir = os.listdir
+
+    def counting_listdir(path, *args, **kwargs):
+        calls.append(path)
+        return real_listdir(path, *args, **kwargs)
+
+    os.listdir = counting_listdir
+    try:
+        removed, skipped, failed = SR.sweep(counted_world, report=report)
+    finally:
+        os.listdir = real_listdir
+    ok("AC-SR4 arm b - sweep given a report walks nothing (0 listdir calls) and "
+       "still removes every name that report found",
+       calls == [] and len(removed) == planted and not skipped and not failed
+       and SR.scan(counted_world) == [],
+       "listdir_calls=%d removed=%d planted=%d left=%r"
+       % (len(calls), len(removed), planted, SR.scan(counted_world)))
+
+    # ---- c: the report is the authority, not a hint to re-scan. ---------
+    authority = wide_world()
+    worlds.append(authority)
+    planted = wide_plant(authority)
+    empty = {"found": [], "folders": 0, "unreadable": []}
+    quiet = SR.sweep(authority, report=empty)
+    still = SR.scan(authority)
+    ok("AC-SR4 arm c - a report that found nothing removes nothing, even with "
+       "residue on disk, so what gets acted on is the reading and not a rewalk",
+       quiet == ([], [], []) and len(still) == planted,
+       "sweep=%r left=%d planted=%d" % (quiet, len(still), planted))
+
+    # ---- d: the module still owns no clock; timing belongs to the caller. -
+    source = open(SR.__file__, encoding="utf-8", errors="replace").read()
+    ok("AC-SR4 arm d - stage_residue reads no clock (no time import, no clock "
+       "attribute), so a walk cost can only come from its caller",
+       not hasattr(SR, "time") and "import time" not in source
+       and "perf_counter" not in source,
+       "module_time_attr=%s source_time_import=%s"
+       % (hasattr(SR, "time"), "import time" in source))
 
 
 def main():
@@ -404,6 +473,8 @@ def main():
        "live=%r dirs=%r elapsed=%.2fs" % (live, SR.DIRS, elapsed))
 
     ac_sr3(worlds)
+
+    ac_sr4(worlds)
 
     for path in worlds:
         shutil.rmtree(path, ignore_errors=True)

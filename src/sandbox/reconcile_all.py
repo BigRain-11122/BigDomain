@@ -7779,9 +7779,10 @@ SUITES = [
     # src/os/backlog.md BEFORE the module existed. R3120 added AC-SR2 (six
     # arms): the sweep's reach is the whole tree by suffix, because a named
     # --export can put the same residue anywhere and the old two-name list left
-    # 12 of 16 planted residues unseen.
+    # 12 of 16 planted residues unseen. R3122 added AC-SR4 (four arms): the
+    # closeout's two walks became one, which the probe priced at 910.9ms each.
     ("os-stage-residue",
-     os.path.join("..", "os", "test_stage_residue.py"), 3),
+     os.path.join("..", "os", "test_stage_residue.py"), 4),
     ]
 
 FAILS = 0

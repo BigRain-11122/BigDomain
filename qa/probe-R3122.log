@@ -1,0 +1,16 @@
+Q1 folders=3482 files=57347 whole_walk_ms=910.9 unreadable=0 stage_named=0
+Q1 bucket=src         dirs=2585  files=28335  files_pct=49.4 ms=459.4 ms_pct=52.0
+Q1 bucket=.codely-cli dirs=542   files=8770   files_pct=15.3 ms=151.7 ms_pct=17.2
+Q1 bucket=logs        dirs=68    files=9199   files_pct=16.0 ms=136.0 ms_pct=15.4
+Q1 bucket=tmp         dirs=164   files=5355   files_pct=9.3 ms=64.8 ms_pct=7.3
+Q1 bucket=qa          dirs=2     files=4312   files_pct=7.5 ms=47.2 ms_pct=5.3
+Q1 bucket=__pycache__ dirs=94    files=1102   files_pct=1.9 ms=20.2 ms_pct=2.3
+Q1 bucket=preview     dirs=3     files=117    files_pct=0.2 ms=1.4 ms_pct=0.2
+Q1 bucket=docs        dirs=9     files=54     files_pct=0.1 ms=1.1 ms_pct=0.1
+Q1 bucket=tools       dirs=5     files=55     files_pct=0.1 ms=1.0 ms_pct=0.1
+Q1 bucket=state       dirs=7     files=37     files_pct=0.1 ms=0.9 ms_pct=0.1
+Q1 bucket=(other)     dirs=3     files=11     files_pct=0.0 ms=0.5 ms_pct=0.1
+Q1 unlistable=0 live_stage_names=none
+Q2 history_stage_paths=0
+Q2 under_generated=0 names=none
+Q3 closeout prints walk cost: no (stage_residue_face returns counts only; flags/round_main/census/matrix ms are printed)

@@ -35,6 +35,15 @@ directory with 5, while errno is 13 for all three - so `skipped` (not a regular
 file) and `failed` (the OS refused) are now separate readings, and a directory
 that cannot be listed is named as `unreadable` instead of skipped in silence.
 
+WHY THE SWEEP ACCEPTS A REPORT (measured at R3122, not assumed):
+`tmp/probe_R3122.py` -> `qa/probe-R3122.log` walked the live tree in 910.9ms
+and attributed the cost: `src/` 52.0%, `.codely-cli/` 17.2%, `logs/` 15.4%,
+`tmp/` 7.3%, `qa/` 5.3%, `__pycache__` only 2.3% - so pruning generated
+subtrees would save 20ms and is not done. What the same probe DID find is that
+the closeout walked the tree twice per round (scan_report, then sweep which
+scanned again), so `sweep` now takes the report its caller already paid for.
+Timing stays with the caller: this module still reads no clock.
+
 ASCII only, stdlib only, no network, no clock.
 """
 import os
@@ -134,8 +143,16 @@ def scan(root=None, dirs=None):
     return scan_report(root, dirs)["found"]
 
 
-def sweep(root=None, dirs=None):
+def sweep(root=None, dirs=None, report=None):
     """Remove every scanned residue. Returns (removed, skipped, failed).
+
+    `report` is a `scan_report()` result the caller already paid for (R3122):
+    the closeout needs the counts AND the sweep in the same step, and passing
+    the report makes that one walk instead of two. It is the AUTHORITY on what
+    gets removed - a report that names nothing removes nothing, even when a
+    residue sits on disk - because re-walking there would silently disagree
+    with the counts the face is about to print. Callers must pass a report
+    produced for the same `root`/`dirs`; the default recomputes it.
 
     `skipped` holds names that carry a suffix but are NOT regular files (a
     directory or a link is named instead of followed). `failed` holds names the
@@ -145,10 +162,12 @@ def sweep(root=None, dirs=None):
     `skipped` would read exactly like "not a file".
     """
     base = os.path.abspath(root) if root else ROOT
+    if report is None:
+        report = scan_report(base, dirs)
     removed = []
     skipped = []
     failed = []
-    for rel in scan_report(base, dirs)["found"]:
+    for rel in report["found"]:
         path = os.path.join(base, rel.replace("/", os.sep))
         if not os.path.isfile(path) or os.path.islink(path):
             skipped.append(rel)
