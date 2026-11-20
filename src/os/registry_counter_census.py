@@ -30,8 +30,24 @@ not proof that the runtime line carries the declared number - a suite may print
 a counter whose value is an assertion count rather than its criteria count.
 Read-only, ASCII source, stdlib only, zero network.
 
-Criteria AC-RCC1..AC-RCC10 are pre-registered in src/os/backlog.md (R2918 row,
-extended at R2921/R2922/R3076/R3077).
+Criteria AC-RCC1..AC-RCC11 are pre-registered in src/os/backlog.md (R2918 row,
+extended at R2921/R2922/R3076/R3077/R3078).
+
+R3078 closed two things the R3077 round left open, both by measurement. (a) The
+119-vs-122 gap was the PROBE, not the tree: that probe ran its AST pass on
+continuation-joined text, and the join leaves 11 files syntactically invalid
+("'[' was never closed"), so those rows lost their AST reach; 8 of them were
+already text-READABLE (the loss was invisible as a flip) and exactly 3 were
+text-only UNPARSED - ledger-incentive-persist, ledger-eventtickets-boardlimit,
+ledger-freetrial-capusage - which is the 122-119=3. (b) The remaining bucket
+was over-counted for one reason: a format argument that is a NAME not bound to
+a literal (a runtime counter such as `passed`/`total`) was refused, while the
+same argument as a call (len(...)) already took a placeholder digit. Taking the
+digit for both flips 215 live rows with 0 regressions; eight were RUN across
+eight families and their own SUITE rows read back 8/8. The 89 rows left after
+that are named in the R3078 board row: 9 genuinely carry no verdict word and
+are a SUITE-side fix (the reader must not invent a verdict), 54 still carry
+names in a shape the pass does not resolve, 26 are other.
 
 R3077 widened the reach WITHOUT replacing the text pass: `ast_leaves()` resolves
 a printed row through the CALL (an inline conditional argument, a `len(...)`
@@ -245,8 +261,13 @@ def _arg_text(node, consts):
     if isinstance(node, ast.IfExp):
         return _arg_text(node.body, consts)
     if isinstance(node, ast.Name):
+        # A name bound to a SUITE literal is a source fact and is read verbatim.
+        # A name bound to anything else is a counter the runtime computes, which
+        # is the same thing len(...) is: not a source fact, so one placeholder
+        # digit. R3078 measured this branch as the single reason 215 rows stayed
+        # UNPARSED, with zero rows regressing when they were read.
         values = consts.get(node.id)
-        return values[0] if values else None
+        return values[0] if values else '7'
     if isinstance(node, (ast.Call, ast.BinOp, ast.Attribute, ast.Subscript,
                          ast.Compare)):
         return '7'

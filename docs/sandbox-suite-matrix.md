@@ -11,7 +11,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 733 | 5963 | 675/675 | R2739 |
+| 733 | 5964 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -763,7 +763,7 @@
 | 723 | os-leg-watch | ../os/test_leg_watch.py | 6 | no-evidence | - |
 | 724 | os-leg-header-check | ../os/test_leg_header_check.py | 6 | no-evidence | - |
 | 725 | os-logs-toolkit | ../os/test_logs_toolkit.py | 168 | no-evidence | - |
-| 726 | os-registry-counter-census | ../os/test_registry_counter_census.py | 10 | no-evidence | - |
+| 726 | os-registry-counter-census | ../os/test_registry_counter_census.py | 11 | no-evidence | - |
 | 727 | os-evidence-read | ../os/test_evidence_read.py | 5 | no-evidence | - |
 | 728 | os-face-walk-static | ../os/test_face_walk_static.py | 5 | no-evidence | - |
 | 729 | os-closeout-gate | ../os/test_closeout_gate.py | 5 | no-evidence | - |
@@ -771,7 +771,7 @@
 | 731 | os-platform-live-report | ../os/test_platform_live_report.py | 8 | no-evidence | - |
 | 732 | os-ledger-business-report | ../os/test_ledger_business_report.py | 8 | no-evidence | - |
 | 733 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
-|  | 合计 |  | 5963 | green 675 / FAIL 0 / no-evidence 58 |  |
+|  | 合计 |  | 5964 | green 675 / FAIL 0 / no-evidence 58 |  |
 
 ## 证据出处
 

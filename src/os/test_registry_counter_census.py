@@ -1,4 +1,4 @@
-"""Battery suite for src/os/registry_counter_census.py - AC-RCC1..AC-RCC9.
+"""Battery suite for src/os/registry_counter_census.py - AC-RCC1..AC-RCC11.
 
 AC-RCC1..AC-RCC4 were pre-registered in src/os/backlog.md (R2918 row) BEFORE
 this file existed. The census answers one board question with a measured list
@@ -14,6 +14,7 @@ deliberately rather than pretending the reader is exact.
 Read-only against the repo: the registry, the pin and the suite sources are
 byte-signed before and after. ASCII source, stdlib only, no clock, no network.
 """
+import ast
 import io
 import json
 import os
@@ -47,6 +48,11 @@ def ok(cond, label):
 def digest(path):
     with io.open(path, 'rb') as handle:
         return len(handle.read()), handle.read()
+
+
+def expr(text):
+    """One expression node, so the name rule is read directly, not inferred."""
+    return ast.parse(text, mode='eval').body
 
 
 def build_world():
@@ -420,8 +426,70 @@ def main():
     finally:
         shutil.rmtree(root5, ignore_errors=True)
 
-    # Both numbers are DERIVED from this run, so the registry row stays the only
-    # typed count and a new criterion demands a row edit instead of a hand edit.
+    # AC-RCC11 (R3078): a format ARGUMENT that is a NAME not bound to a literal
+    # is a runtime counter, the same thing len(...) is, and was refused while
+    # the call form was already read. Measured before the change: 215 live rows
+    # flip with 0 regressions and 8 sampled rows read their own SUITE row 8/8.
+    # The negative arms are the two ways this could start inventing rows: a
+    # format carrying no verdict word, and a word placed before SUITE.
+    root6 = tempfile.mkdtemp(prefix='bd-rcc-name-')
+    try:
+        sandbox6 = os.path.join(root6, 'sandbox')
+        os.makedirs(os.path.join(sandbox6, 'probe'))
+        reg6 = os.path.join(sandbox6, 'reconcile_all.py')
+        with io.open(reg6, 'w', encoding='utf-8', newline='\n') as handle:
+            handle.write(
+                'import os\n'
+                'SUITES = [\n'
+                '    ("probe-name", os.path.join("probe", "name.py"), 6),\n'
+                '    ("probe-noverdict", os.path.join("probe", "nv.py"), 6),\n'
+                '    ("probe-nameprefix", os.path.join("probe", "np.py"), 6),\n'
+                ']\n')
+        bodies = {
+            'name.py': 'fails = []\n'
+                       'passed = 6\n'
+                       'total = 6\n'
+                       'print("SUITE %s %d/%d" % ("PASS" if not fails else '
+                       '"FAIL", passed, total))\n',
+            'nv.py': 'a = 6\nb = 6\nprint("SUITE %d/%d green" % (a, b))\n',
+            'np.py': 'a = 6\nb = 6\nprint("note SUITE %s %d/%d" % ("PASS", a, b))\n',
+        }
+        for name, body in bodies.items():
+            with io.open(os.path.join(sandbox6, 'probe', name), 'w',
+                         encoding='utf-8', newline='\n') as handle:
+                handle.write(body)
+        world6 = RCC.census(registry=reg6, sandbox=sandbox6)
+        name_src = io.open(os.path.join(sandbox6, 'probe', 'name.py'),
+                           encoding='utf-8').read()
+        text_leaves, _ = RCC.leaf_lines(name_src, RCC.suite_constants(name_src))
+        text_seen = any(RCC.reader().parse_suite_row(leaf + '\n') is not None
+                        for leaf in text_leaves)
+        ok('probe-name' in world6['READABLE'] and not text_seen,
+           'AC-RCC11-R1 a row whose counters are plain names reads readable, '
+           'and the text pass alone still cannot see it')
+        ok('probe-noverdict' in world6['UNPARSED'],
+           'AC-RCC11-R2 a format carrying no verdict word stays unparsed: the '
+           'reader does not invent a verdict from the numbers')
+        consts = {'V': ['SUITE PASS']}
+        ok(RCC._arg_text(expr('V'), consts) == 'SUITE PASS'
+           and RCC._arg_text(expr('OTHER'), consts) == '7',
+           'AC-RCC11-R3 a name bound to a SUITE literal keeps its literal, a '
+           'name bound to anything else contributes one placeholder digit')
+        ok('probe-nameprefix' in world6['UNPARSED'],
+           'AC-RCC11-R4 a word before SUITE is still refused (the anchored '
+           'reader, not this pass, decides the head)')
+        live_after = RCC.census()
+        pinned_after = json.loads(io.open(PIN, encoding='utf-8').read())
+        lost = [label for label in pinned_after.get('readable', [])
+                if label not in live_after['READABLE']]
+        ok(not lost and len(live_after['READABLE']) >= 644,
+           'AC-RCC11-R5 no readable row left the class (%d lost) and the class '
+           'carries at least the measured R3078 floor: %d'
+           % (len(lost), len(live_after['READABLE'])))
+    finally:
+        shutil.rmtree(root6, ignore_errors=True)
+
+
     acs = sorted({match.group(0) for match in
                   (re.match(r'AC-[A-Z]+[0-9]*', label) for label in LABELS)
                   if match})
