@@ -392,6 +392,7 @@
     "os-content-gate-console",
     "os-contract-usage-renderer",
     "os-corpus-rewrite-audit",
+    "os-corpus-supply-chain",
     "os-crawl-record",
     "os-crawl-runner",
     "os-debt-append",

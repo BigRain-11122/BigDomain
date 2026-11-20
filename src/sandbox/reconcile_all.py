@@ -7793,6 +7793,21 @@ SUITES = [
     # closeout's two walks became one, which the probe priced at 910.9ms each.
     ("os-stage-residue",
      os.path.join("..", "os", "test_stage_residue.py"), 4),
+    # R3129: the corpus block's supply chain, measured before it was written.
+    # R3128 published the tree-gate corpus reading but named "the other two
+    # writers never supply it" as an open worry. The R3129 probe answered it by
+    # file: of 2310 historical faces (1719 parsable) exactly two carry a corpus
+    # block, the only absent->present transition is R3128's own landing commit,
+    # and present->absent flips are ZERO. So the risk was on paper, not live -
+    # and the way to keep it that way is an assertion, not a new refusal.
+    # AC-CSC1 (five arms): every shipped non-test export_round.write call passes
+    # corpus= and at least one exists; None publishes nothing while a measured
+    # zero publishes a block; a non-measuring writer removes BOTH copies; the
+    # grader's _set_line leaves both blocks verbatim; export_R2431 writes only
+    # behind its __main__ guard and no importer calls its main. Pinned in
+    # src/os/backlog.md at R3129 BEFORE the suite existed.
+    ("os-corpus-supply-chain",
+     os.path.join("..", "os", "test_corpus_supply_chain.py"), 1),
     ]
 
 FAILS = 0

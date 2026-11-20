@@ -1,0 +1,68 @@
+python : <unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. D
+id you mean "\\("? A raw string is also an option.
+所在位置 行:1 字符: 1
++ python tmp/probe_R3129.py 2>&1 | Tee-Object -FilePath qa/probe-R3129. ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (<unknown>:18: S...also an option.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+== Q1: corpus presence across every historical face ==
+versions=2310 parsed=1719 unparsable=591 present_top=2 present_ceo=2 heartbeat=17
+flips=17
+flip absent -> present at b4e10139 (prior c9cc6750)
+flip unparsable -> absent at aaf19be7 (prior 84fe0d3c)
+flip absent -> unparsable at f1217438 (prior 9eb08a22)
+flip unparsable -> absent at 2c725428 (prior f0fd7a50)
+flip absent -> unparsable at 0e783cb3 (prior f1e48248)
+flip unparsable -> absent at f1e48248 (prior 22b34465)
+flip absent -> unparsable at b778506c (prior 6c4562b9)
+flip unparsable -> absent at 9d47f480 (prior 5249b667)
+flip absent -> unparsable at 76faf865 (prior 477cabf5)
+flip unparsable -> absent at 2cde1856 (prior 2e3b8a2e)
+
+== Q2a: shipped call sites of write/apply/corpus_block ==
+src/os/closeout.py:638 ER.write kwargs=corpus
+src/os/export_round.py:740 SXF.apply kwargs=-
+src/os/test_closeout.py:473 ER.write kwargs=-
+total=3
+
+== Q2b: export_round.corpus_block edge inputs ==
+corpus_block(None)=None
+corpus_block({'files':0,'bytes':0})={'files': 0, 'bytes': 0, 'mb': 0.0}
+corpus_block({'files':3,'bytes':30,'readable':2})={'files': 3, 'bytes': 30, 'mb': 0.0, 'readable': 2, 'unread': 1}
+write params=('repo', 'stamp', 'corpus')
+
+== Q2c: does status_export_fresh.apply preserve an existing block? ==
+public names=44
+apply takes=('export_path', 'state_path', 'backlog_path', 'preview_dir', 'dry_run')
+
+== Q2d: who names export_R2431 ==
+naming export_R2431=28
+  src/os/append_R2522.py
+  src/os/board_backlog_R2742.py
+  src/os/export_driver_queue_face.py
+  src/os/export_round.py
+  src/os/launch_battery_R2755.py
+  src/os/launch_battery_R2757.py
+  src/os/launch_battery_R2762.py
+  src/os/launch_battery_R2767.py
+  src/os/limits_export_composed_landed_R2637.py
+  src/os/one_off_round_scripts.py
+  src/os/queue_close_R2596.py
+  src/os/queue_close_R2637.py
+  src/os/repair_R2433.py
+  src/os/seed_queue_R2595.py
+  src/os/stamp_queue_R2497.py
+  src/os/test_export_R2431_health_verdict.py
+  src/os/test_export_composed_landed_bom_precedence.py
+  src/os/test_export_composed_landed_bom_precedence_fourth_wave.py
+  src/os/test_export_composed_landed_bom_precedence_second_wave.py
+  src/os/test_export_composed_landed_bom_precedence_third_wave.py
+  src/os/test_export_composed_landed_face.py
+  src/os/test_export_composed_landed_wordspace.py
+  src/os/test_export_driver_queue_face.py
+  src/os/test_export_driver_self_drive_health.py
+  src/os/test_export_round.py
+  src/os/test_one_off_round_scripts.py

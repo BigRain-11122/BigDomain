@@ -1,0 +1,6 @@
+SHARD scope=SHARD registry_suites=741 registry_criteria=6016 selected=1 selected_criteria=46 cap=600s leg_cap=2s overrides=1 exact=0 state=COMPLETE
+SHARD row os-export-round rc=124 pass=0 fail=0 detail=none suite=none crit=46 2.0s timeout=yes
+SHARD detail os-export-round TIMEOUT suite exceeded the 2s per-suite cap
+SHARD rc=2 scope=SHARD selected=1 executed=1 green=0 criteria=46 crit_mismatch=0 elapsed=2.0s crit_checked=0 crit_unchecked=1
+SHARD disclosure crit_unchecked=os-export-round
+SHARD red os-export-round:rc=124
