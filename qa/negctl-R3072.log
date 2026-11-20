@@ -1,0 +1,5 @@
+honest               q1=GREEN q2=GREEN q3=GREEN
+m1-blind-check       q1=RED q2=GREEN q3=GREEN
+m2-no-fixed-point    q1=GREEN q2=RED q3=GREEN
+m3-registry-count    q1=GREEN q2=GREEN q3=RED
+NEGCTL PASS mutations_caught=3/3

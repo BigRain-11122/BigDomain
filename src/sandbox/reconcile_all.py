@@ -7652,6 +7652,16 @@ SUITES = [
     # suite's shard.
     ("os-platform-live-report",
      os.path.join("..", "os", "test_platform_live_report.py"), 8),
+    # R3072: tools/ledger_business_report.py renders the P-47 item 2 ledger
+    # face and carries its own AC-LBR9 sizes check, but a census of
+    # src/os/test_*.py found NO suite naming that module: of the nine faces in
+    # tools/face_sweep.py FACES this one and city-face have no battery row at
+    # all (membership is touched only by test_value_domain's price check), so a
+    # window could regress the face with no battery leg saying so. The suite
+    # drives the shipped driver only (its read-only --check and one temp-dir
+    # render); nothing here re-implements a ledger rule.
+    ("os-ledger-business-report",
+     os.path.join("..", "os", "test_ledger_business_report.py"), 7),
     ]
 
 FAILS = 0
