@@ -1,0 +1,23 @@
+R3131 probe root=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain
+Q1 corpus_block call sites in shipped (non-test) code: 1
+   src/os/export_round.py:703 args=1 kw=[]
+Q1 dict literals handed to corpus_block: 0
+Q1 census stats writes (files/readable/bytes): 3
+Q1 distinct write lines: [465, 466, 467]
+   files at lines [465]
+   readable at lines [466]
+   bytes at lines [467]
+Q1 all three keys written in ONE contiguous block: False
+Q2 face revisions in history: 2312
+Q2 corpus blocks across history: 8 (top=4 ceo_face=4) unparseable faces=591
+Q2 files values seen: {"4230": 4, "4240": 2, "4248": 2}
+Q2 blocks WITHOUT readable: 0
+Q3 corpus_block({'files':5,'bytes':100}) -> {"bytes": 100, "files": 5, "mb": 0.0}
+Q3 card(bare block) -> <p class=kv>CORPUS files=5 readable=none mb=0.0</p>
+Q3 card(absent)    -> <p class=kv>CORPUS absent from the export face (honest absence, not a zero)</p>
+Q3 live face carries a corpus block with keys=['bytes', 'files', 'mb', 'readable']
+Q3 assess(with bare corpus) -> ('FRESH', [])
+Q3 assess(without corpus)   -> ('FRESH', [])
+Q3 same verdict and error set: True
+Q3 face_judgeable(bare)  -> None
+Q3 face_judgeable(clean) -> None

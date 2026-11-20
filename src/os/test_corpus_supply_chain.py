@@ -42,6 +42,21 @@ and why that is not the same as "the tree is empty":
      corpus key at either level, and the card's absent sentence is what a
      reader of such a face gets.
 
+AC-CSC3 (five arms) - why a corpus that cannot state `readable` is
+unpublishable, measured at R3131:
+  k  a block dict carrying files/bytes but NO readable publishes nothing.
+  l  a readable that cannot be turned into an int publishes nothing either:
+     "could not state how many entries I read" is a caller error, not a
+     corpus of unknown readability.
+  m  the negative control still publishes: files/bytes/readable present with
+     bytes=0 keeps mb=0.0 and, because the two counts agree, no unread key.
+  n  the one supply path always carries all three keys: a REAL census reading
+     (derived, not written down) hands files/readable/bytes, and the shipped
+     corpus_block call-site census still finds exactly one call.
+  o  end to end: payload(corpus=<bare block>) publishes no corpus key at
+     either level, and the card prints its absent sentence rather than
+     "readable=none".
+
 Isolation: private worlds are temp dirs; the only live reads are shipped
 sources. Stdlib only. Exit 0 = all green, 2 = at least one red.
 """
@@ -153,8 +168,9 @@ def arm_b():
     """
     if ER.corpus_block(None) is not None:
         return False, "corpus_block(None) published a block"
-    for zero in ({"files": 0, "bytes": 0},
-                 {"files": 0, "bytes": 0, "readable": 0}):
+    # R3131: the zero arm states readable so it isolates the files<=0 law
+    # from the readable law (a bare zero would now be refused for both).
+    for zero in ({"files": 0, "bytes": 0, "readable": 0},):
         if ER.corpus_block(zero) is not None:
             return False, "a zero-file corpus published %r" % (zero,)
     empty_files = ER.corpus_block({"files": 3, "bytes": 0, "readable": 3})
@@ -382,6 +398,98 @@ def arm_j():
     return True, "no corpus key at either level; card prints the absent line"
 
 
+def _healthy_qa(world):
+    baseline = _empty_baseline(world)
+    qa = os.path.join(world, "qa")
+    write(os.path.join(qa, "x.log"), "PASS one\nPASS two\n")
+    return qa, baseline
+
+
+def arm_k():
+    """A bare files/bytes dict publishes nothing (R3131)."""
+    if ER.corpus_block({"files": 5, "bytes": 100}) is not None:
+        return False, "a readable-less corpus published a block"
+    return True, "bare {files,bytes} -> None"
+
+
+def arm_l():
+    """An unparseable readable publishes nothing either."""
+    for bad in ({"files": 5, "bytes": 100, "readable": "x"},
+                {"files": 5, "bytes": 100, "readable": None},
+                {"files": 5, "bytes": 100, "readable": ""}):
+        if ER.corpus_block(bad) is not None:
+            return False, "unparseable readable published %r" % (bad,)
+    return True, "unparseable readable -> None (3 shapes)"
+
+
+def arm_m():
+    """Negative control: the complete three-key dict still publishes."""
+    block = ER.corpus_block({"files": 5, "bytes": 0, "readable": 5})
+    if not isinstance(block, dict):
+        return False, "complete corpus stopped publishing: %r" % (block,)
+    want = {"files", "bytes", "mb", "readable"}
+    if set(block) != want:
+        return False, "block keys drifted: %r" % (sorted(block),)
+    if block.get("mb") != 0.0:
+        return False, "zero bytes lost its mb reading: %r" % (block,)
+    if "unread" in block:
+        return False, "a clean corpus grew a decorative unread key: %r" % (block,)
+    return True, "files/bytes/mb/readable, mb=0.0, no unread"
+
+
+def arm_n():
+    """The one supply path always states all three counts (derived)."""
+    stats, rc, _text = _census_reading(_healthy_qa)
+    if rc not in (0, 2):
+        return False, "healthy target read rc=%d (not a measurment)" % rc
+    missing = [k for k in ("files", "readable", "bytes") if k not in stats]
+    if missing:
+        return False, "census stats lack %r: %r" % (missing, stats)
+    if stats["files"] != 1 or stats["readable"] != 1:
+        return False, "healthy target read %r" % (stats,)
+    callers = []
+    for path in shipped_modules():
+        try:
+            tree = ast.parse(io.open(path, encoding="utf-8").read())
+        except Exception:
+            continue
+        for node in ast.walk(tree):
+            if (isinstance(node, ast.Call)
+                    and getattr(node.func, "attr", None) == "corpus_block"
+                    or isinstance(node, ast.Call)
+                    and getattr(node.func, "id", None) == "corpus_block"):
+                callers.append("%s:%d"
+                               % (os.path.relpath(path, ROOT).replace("\\", "/"),
+                                  node.lineno))
+    if len(callers) != 1:
+        return False, "shipped corpus_block callers=%d (%s)" % (
+            len(callers), ", ".join(callers) or "none")
+    return True, "census hands %r; corpus_block callers=1 (%s)" % (
+        {k: stats[k] for k in ("files", "readable", "bytes")}, callers[0])
+
+
+def arm_o():
+    """End to end: a bare block reaches no face and the card names it."""
+    world = build_world()
+    try:
+        state = json.loads(io.open(os.path.join(world, "src", "os", "state.json"),
+                                   encoding="utf-8").read())
+        data, _d = ER.payload(world, state, "2026-11-21T12:00:00+08:00",
+                              corpus={"files": 5, "bytes": 100})
+        if "corpus" in data:
+            return False, "readable-less corpus published at top level"
+        if "corpus" in (data.get("ceo_face") or {}):
+            return False, "readable-less corpus published under ceo_face"
+    finally:
+        shutil.rmtree(world, ignore_errors=True)
+    card = FD.corpus_card({"corpus": ER.corpus_block({"files": 5, "bytes": 100})})
+    if "CORPUS absent" not in card:
+        return False, "card did not name the absence: %r" % card
+    if "readable=none" in card:
+        return False, "card printed readable=none: %r" % card
+    return True, "no corpus key at either level; card prints the absent line"
+
+
 def main():
     criteria = [
         ("AC-CSC1", "os-corpus-supply-chain", [
@@ -396,6 +504,12 @@ def main():
             ("h", "only-unreadable", arm_h),
             ("i", "gate hand-off", arm_i),
             ("j", "payload + card", arm_j)]),
+        ("AC-CSC3", "os-corpus-readable",
+         [("k", "bare block", arm_k),
+          ("l", "unparseable readable", arm_l),
+          ("m", "negative control", arm_m),
+          ("n", "supply census", arm_n),
+          ("o", "payload + card", arm_o)]),
     ]
     arms_total = 0
     red = 0

@@ -7808,8 +7808,11 @@ SUITES = [
     # src/os/backlog.md at R3129 BEFORE the suite existed. R3130 added a second
     # criterion (AC-CSC2): a zero-file corpus is unpublishable because the
     # census refuses an empty/missing target with rc=3 before stats exists.
+    # R3131 added a third (AC-CSC3): a corpus that cannot state `readable` is
+    # also unpublishable - the one supply path writes all three counts in one
+    # block and all 8 historical blocks carry readable.
     ("os-corpus-supply-chain",
-     os.path.join("..", "os", "test_corpus_supply_chain.py"), 2),
+     os.path.join("..", "os", "test_corpus_supply_chain.py"), 3),
     ]
 
 FAILS = 0

@@ -620,17 +620,26 @@ def corpus_block(corpus):
         return None
     block = {'files': files, 'bytes': total, 'mb': round(total / 1e6, 1)}
     readable = corpus.get('readable')
-    if readable is not None:
-        try:
-            readable = int(readable)
-        except (TypeError, ValueError):
-            readable = None
-    if readable is not None:
-        block['readable'] = readable
-        # The token appears ONLY when the two disagree, so a clean corpus
-        # publishes no unread key instead of a decorative zero.
-        if readable != files:
-            block['unread'] = files - readable
+    try:
+        readable = int(readable)
+    except (TypeError, ValueError):
+        # R3131: a corpus that cannot state how many entries it could read is
+        # a caller error, not a corpus of unknown readability. Measured
+        # (qa/probe-R3131.log): the one shipped caller is inside this module's
+        # payload(), the census writes files/readable/bytes in ONE block
+        # (qa_writer_census.py:465-467), all 8 corpus blocks a published face
+        # has ever carried state readable (files 4230/4240/4248), and a
+        # readable-less block is invisible to the freshness gate (live face
+        # copy: same FRESH verdict and empty error set with or without it) -
+        # while the card prints "readable=none", which reads like "measured,
+        # could not read". So readable is mandatory: absent or unparseable
+        # publishes NOTHING.
+        return None
+    block['readable'] = readable
+    # The token appears ONLY when the two disagree, so a clean corpus
+    # publishes no unread key instead of a decorative zero.
+    if readable != files:
+        block['unread'] = files - readable
     if files <= 0:
         # R3130: refused AFTER the derivation above so the shape is visible to
         # a reader of this function, and refused at all because no shipped

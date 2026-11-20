@@ -4,32 +4,32 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3130 PRODUCT+ENGINEERING: an empty corpus is not a state that exists upstream - the census refuses an empty or missing qa/ with rc=3 BEFORE it writes stats, so a zero-file block is now unpublishable rather than printable.",
+    "current": "2026-11-21 R3131 MEASURED, in order (read-only; tmp/probe_R3131.py -> qa/probe-R3131.log; AST census plus git cat-file by file plus a copy of the live face, zero socket, zero network): (1) the shipped corpus_block has exactly ONE caller (export_round.py:703 inside payload) and zero dict-literal call sites, while the census writes files/readable/bytes in one block (qa_writer_census.py:465-467), so a readable-less dict cannot come from the supply path; (2) across 2312 historical face revisions (1721 parsable, 591 named unparsable) 8 corpus blocks exist and EVERY one states readable (files 4230/4240/4248); (3) a live-face copy carrying a bare block reads FRESH with an empty error set, exactly like the stripped copy, so refusing it changes no judge word - but the card prints 'readable=none' for it.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-corpus-supply-chain-R3130.log (800B, 2026-11-21)",
-    "latest_evidence": "qa/leg-corpus-supply-chain-R3130.log (800B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-corpus-supply-chain-R3131.log (482B, 2026-11-21)",
+    "latest_evidence": "qa/leg-corpus-supply-chain-R3131.log (482B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3131] next window (<=48h): (0) MAIN — **零文件现在不可发布，但 `corpus_block` 对「调用方少给了 `readable`」仍然沉默：`{'files': 5, 'bytes': 100}` 会发布一个没有 `readable` 的块，而卡片会印 `readable=none`。** 下一轮先量（只读＋私有世界＋按文件派生）：①装运链里是否有调用方可能不给 `readable`（`closeout_gate` 的 `stats` 是否恒带三键）；②发布面历史上是否出现过缺 `readable` 的块；③若把缺 `readable` 也定为不可发布，`AC-EXPR4` 各臂与卡片措辞是否仍逐字兼容。然后裁定：缺 `readable` 不可发布、`readable` 缺省等于 `files`、还是把「三键恒在」写成可验证断言。**先落板再动代码。**",
-    "next_milestone_due": "2026-11-23T06:04:33+08:00",
-    "updated_at": "2026-11-21T06:04:33+08:00",
+    "next_milestone": "[R3132] next window (<=48h): (0) MAIN — **写者侧已经把裸块堵死，但读者侧仍然信任任何带 `files` 的字典：`corpus_card` 对手改/修复脚本/测试塞进来的裸块照印 `readable=none`，而「写者只有一条」是本轮用 AST 数出来的、不是运行时保证。** 下一轮先量（只读＋私有世界＋按文件派生）：①装运非测试代码里还有谁**直接给 `face['corpus']` 赋值**或改写该键（AST 赋值/下标写入，逐点具名）；②历史 2312 个面里，是否有过「有 corpus 键但无 readable」的版本（本轮顶层/ceo_face 双侧已数 0，需把嵌套与非标准层一并覆盖）；③若让卡片对裸块改印一句具名缺陷行（而不是 `readable=none`），`AC-FDC3` 各臂与 `AC-CSC3` o 臂是否仍逐字兼容。**先落板再动代码。**",
+    "next_milestone_due": "2026-11-23T06:19:31+08:00",
+    "updated_at": "2026-11-21T06:19:31+08:00",
     "heartbeat": {
       "tick": 3130,
-      "state_tick": 3130,
-      "lag": 0,
-      "verdict": "PASS",
-      "reason": "fresh"
+      "state_tick": 3131,
+      "lag": 1,
+      "verdict": "FLAG",
+      "reason": "heartbeat_row_debt"
     },
     "corpus": {
-      "files": 4248,
-      "bytes": 508209452,
+      "files": 4256,
+      "bytes": 508248525,
       "mb": 508.2,
-      "readable": 4248
+      "readable": 4256
     }
   },
-  "current": "2026-11-21 R3130 PRODUCT+ENGINEERING: an empty corpus is not a state that exists upstream - the census refuses an empty or missing qa/ with rc=3 BEFORE it writes stats, so a zero-file block is now unpublishable rather than printable.",
+  "current": "2026-11-21 R3131 MEASURED, in order (read-only; tmp/probe_R3131.py -> qa/probe-R3131.log; AST census plus git cat-file by file plus a copy of the live face, zero socket, zero network): (1) the shipped corpus_block has exactly ONE caller (export_round.py:703 inside payload) and zero dict-literal call sites, while the census writes files/readable/bytes in one block (qa_writer_census.py:465-467), so a readable-less dict cannot come from the supply path; (2) across 2312 historical face revisions (1721 parsable, 591 named unparsable) 8 corpus blocks exist and EVERY one states readable (files 4230/4240/4248); (3) a live-face copy carrying a bare block reads FRESH with an empty error set, exactly like the stripped copy, so refusing it changes no judge word - but the card prints 'readable=none' for it.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -57,11 +57,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3130 PRODUCT+ENGINEERING: an empty corpus is not a state that exists upstream - the census refuses an empty or missing qa/ with rc=3 BEFORE it writes stats, so a zero-file block is now unpublishable rather than printable.",
-  "export_ts": "2026-11-21T06:04:33+08:00",
+  "do": "2026-11-21 R3131 MEASURED, in order (read-only; tmp/probe_R3131.py -> qa/probe-R3131.log; AST census plus git cat-file by file plus a copy of the live face, zero socket, zero network): (1) the shipped corpus_block has exactly ONE caller (export_round.py:703 inside payload) and zero dict-literal call sites, while the census writes files/readable/bytes in one block (qa_writer_census.py:465-467), so a readable-less dict cannot come from the supply path; (2) across 2312 historical face revisions (1721 parsable, 591 named unparsable) 8 corpus blocks exist and EVERY one states readable (files 4230/4240/4248); (3) a live-face copy carrying a bare block reads FRESH with an empty error set, exactly like the stripped copy, so refusing it changes no judge word - but the card prints 'readable=none' for it.",
+  "export_ts": "2026-11-21T06:19:31+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/leg-corpus-supply-chain-R3130.log (800B, 2026-11-21)",
-  "next_milestone": "[R3131] next window (<=48h): (0) MAIN — **零文件现在不可发布，但 `corpus_block` 对「调用方少给了 `readable`」仍然沉默：`{'files': 5, 'bytes': 100}` 会发布一个没有 `readable` 的块，而卡片会印 `readable=none`。** 下一轮先量（只读＋私有世界＋按文件派生）：①装运链里是否有调用方可能不给 `readable`（`closeout_gate` 的 `stats` 是否恒带三键）；②发布面历史上是否出现过缺 `readable` 的块；③若把缺 `readable` 也定为不可发布，`AC-EXPR4` 各臂与卡片措辞是否仍逐字兼容。然后裁定：缺 `readable` 不可发布、`readable` 缺省等于 `files`、还是把「三键恒在」写成可验证断言。**先落板再动代码。**",
+  "latest_evidence": "qa/leg-corpus-supply-chain-R3131.log (482B, 2026-11-21)",
+  "next_milestone": "[R3132] next window (<=48h): (0) MAIN — **写者侧已经把裸块堵死，但读者侧仍然信任任何带 `files` 的字典：`corpus_card` 对手改/修复脚本/测试塞进来的裸块照印 `readable=none`，而「写者只有一条」是本轮用 AST 数出来的、不是运行时保证。** 下一轮先量（只读＋私有世界＋按文件派生）：①装运非测试代码里还有谁**直接给 `face['corpus']` 赋值**或改写该键（AST 赋值/下标写入，逐点具名）；②历史 2312 个面里，是否有过「有 corpus 键但无 readable」的版本（本轮顶层/ceo_face 双侧已数 0，需把嵌套与非标准层一并覆盖）；③若让卡片对裸块改印一句具名缺陷行（而不是 `readable=none`），`AC-FDC3` 各臂与 `AC-CSC3` o 臂是否仍逐字兼容。**先落板再动代码。**",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -186,7 +186,7 @@
   },
   "results": [
     [
-      "3130",
+      "3131",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -200,29 +200,29 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 85,
+    "log_lines_in_window": 90,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 18,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 70472,
-  "next_milestone_due": "2026-11-23T06:04:33+08:00",
+  "state_bytes": 76188,
+  "next_milestone_due": "2026-11-23T06:19:31+08:00",
   "heartbeat": {
     "tick": 3130,
-    "state_tick": 3130,
-    "lag": 0,
-    "verdict": "PASS",
-    "reason": "fresh"
+    "state_tick": 3131,
+    "lag": 1,
+    "verdict": "FLAG",
+    "reason": "heartbeat_row_debt"
   },
   "corpus": {
-    "files": 4248,
-    "bytes": 508209452,
+    "files": 4256,
+    "bytes": 508248525,
     "mb": 508.2,
-    "readable": 4248
+    "readable": 4256
   }
 }
