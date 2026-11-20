@@ -12,8 +12,8 @@
     "latest_evidence": "qa/leg-face-sweep-R3075.log (408B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3077] next window (<=48h): (0) MAIN — **普查的 UNPARSED 桶高估了不可反驳面：426 行里约 231 行是「静态看不见、运行期读得动」，而这张桶是 pin 与套件门共用的唯一分类面**。下一轮先量（只读，勿改盘）：①把续行合并（括号平衡、闭引号外计数）单独加上，翻转多少行——量出它与实参解析各自的贡献，别再把两件事捆一起报一个 231；②实参解析（内联条件取首臂、`len(...)` 记占位）各自还能翻多少；③每类翻转里有多少行的运行期行真的被发布读者读得动（抽 10 行实跑，不靠静态推断）；④若扩解析器，pin 会一次性移动上百行——这是不是该拆成多轮按方言族分批（`funnel`/`liveroom`/`pay` 各一批），每批带自己的负控；⑤`assembled_print_lines` 这个数在扩解析后会怎么变，它是不是也该进 pin（今天不进）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, the pre-existing AC-LGA9 red carried since R3040, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law (truncated)",
-    "next_milestone_due": "2026-11-22T09:17:59+08:00",
-    "updated_at": "2026-11-20T09:17:59+08:00"
+    "next_milestone_due": "2026-11-22T09:19:00+08:00",
+    "updated_at": "2026-11-20T09:19:00+08:00"
   },
   "current": "2026-11-20 R3076 PRODUCT+ENGINEERING: three P-47 face suites were invisible to the registry counter census for ONE reason - the verdict word lived in an inline conditional ARGUMENT, so the static reader saw only 'SUITE 7 7/7' (placeholders neutralised to digits, no verdict word, refused by the shipped reader by design) and filed three rows the battery CAN refute under UNPARSED. Measured before the pin: all three print calls span two physical lines while leaf_lines splits on newline, all three files carry zero SUITE constants so the constant-join path never starts, and widening the extractor instead (continuation join plus inline-arg resolution) flips 231 of 733 rows (UNPARSED 426 -> ~198) - a reclassification no single window can account for line by line.",
   "depts": [
@@ -44,7 +44,7 @@
     }
   ],
   "do": "2026-11-20 R3076 PRODUCT+ENGINEERING: three P-47 face suites were invisible to the registry counter census for ONE reason - the verdict word lived in an inline conditional ARGUMENT, so the static reader saw only 'SUITE 7 7/7' (placeholders neutralised to digits, no verdict word, refused by the shipped reader by design) and filed three rows the battery CAN refute under UNPARSED. Measured before the pin: all three print calls span two physical lines while leaf_lines splits on newline, all three files carry zero SUITE constants so the constant-join path never starts, and widening the extractor instead (continuation join plus inline-arg resolution) flips 231 of 733 rows (UNPARSED 426 -> ~198) - a reclassification no single window can account for line by line.",
-  "export_ts": "2026-11-20T09:17:59+08:00",
+  "export_ts": "2026-11-20T09:19:00+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
   "latest_evidence": "qa/leg-face-sweep-R3075.log (408B, 2026-11-20)",
   "next_milestone": "[R3077] next window (<=48h): (0) MAIN — **普查的 UNPARSED 桶高估了不可反驳面：426 行里约 231 行是「静态看不见、运行期读得动」，而这张桶是 pin 与套件门共用的唯一分类面**。下一轮先量（只读，勿改盘）：①把续行合并（括号平衡、闭引号外计数）单独加上，翻转多少行——量出它与实参解析各自的贡献，别再把两件事捆一起报一个 231；②实参解析（内联条件取首臂、`len(...)` 记占位）各自还能翻多少；③每类翻转里有多少行的运行期行真的被发布读者读得动（抽 10 行实跑，不靠静态推断）；④若扩解析器，pin 会一次性移动上百行——这是不是该拆成多轮按方言族分批（`funnel`/`liveroom`/`pay` 各一批），每批带自己的负控；⑤`assembled_print_lines` 这个数在扩解析后会怎么变，它是不是也该进 pin（今天不进）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, the pre-existing AC-LGA9 red carried since R3040, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a chosen law (truncated)",
@@ -195,5 +195,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 658518
+  "state_bytes": 659139
 }
