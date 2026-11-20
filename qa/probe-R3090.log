@@ -1,0 +1,25 @@
+Q1 archive inventory and git provenance
+  state-log-archive-2026-09.md exists=True bytes=16565173 git_tracked=False commits=0 added=0 deleted=0
+  state-log-archive-2026-10.md exists=True bytes=4987837 git_tracked=False commits=0 added=0 deleted=0
+  state-log-archive-2026-11.md exists=True bytes=5040093 git_tracked=True commits=137 added=5498 deleted=0
+Q2 ignore rules
+  check-ignore rc=0 .gitignore:3:logs/	logs/state-log-archive-2026-09.md | .gitignore:3:logs/	logs/state-log-archive-2026-10.md
+  november first-add commits=1 f467891c Ship the fold face the waterline gate could only report on, and close the R2522 layout defect at its birth site
+Q3 FAIL shape today
+  live clean=True gaps=0
+  live line: FOLD-CARRY OK since=2914 windows=29 rounds=179 skipped=725 split=4 same_window=3 dup=4 loc=file@line
+  gap entry carries locator fields=no live gap to inspect (vacuous read)
+  E_LFC_CARRY mentions=9
+    logs/state-log-archive-2026-11.md:4601:R2946 fold amendment (measured this window, not dressed up): FOLD 29 (items 1..20) cut the R2935 round in half 
+    logs/state-log-archive-2026-11.md:5236:R3040 ledger check note (honest, PRE-EXISTING): the four log-ledger suites were re-run after this round's close
+    qa/probe-R3087.log:79:C ledger-nowhere: FOLD-CARRY FAIL E_LFC_CARRY since=3070 windows=1 gaps=R3002(w3070) split=0 same_window=1 | archive_granular cl
+    src/os/backlog.md:61:- [R3084 EXECUTED 2026-11-20 — 原文逐字保留] next window (<=48h): (0) MAIN — **页面上的 11 行红已经清到 1 行，而这 1 行的根因是一个正则的盲区：带日期前缀的账本行在 presence
+    src/os/backlog.md:62:- [x] [done 2026-11-20 R3083 — 板头 (0) 落地：**11 行红拆成 3 个根因、修掉 2 个，页面从 11 行红降到 1 行红；第 3 个根因被具名而不是被绕过。** **Landed（只动数据与页面，零判据改动）**：(a
+    src/os/ledger_lines.py:847:    return ("FOLD-CARRY FAIL E_LFC_CARRY since=%d windows=%d gaps=%s "
+    src/os/state.json:25:  "R3083 closeout, measured after the repairs and the closeout order was run correctly: ten of the eleven rows now read rc=0 thro
+    src/os/test_ledger_archive.py:336:              and "E_LFC_CARRY" in LL.format_fold_carry(bad)
+    src/os/test_ledger_archive.py:338:              and rc_red == 2 and "E_LFC_CARRY" in out_red
+Q4 private-world red line, two runs
+  run1: FOLD-CARRY FAIL E_LFC_CARRY since=5000 windows=1 gaps=R5003(w5003) split=0 same_window=1 dup=0 loc=file@line
+  run2 identical=True ascii=True
+  gap data: file=state-log-archive-2026-11.md ordinal=1 line=2 round=5003 window=5003

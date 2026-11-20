@@ -1,0 +1,5 @@
+R3090 FOLD-CARRY FAIL demo (private world, post-change)
+line: FOLD-CARRY FAIL E_LFC_CARRY since=5000 windows=1 gaps=R5003(w5003@state-log-archive-2026-11.md:1:2) split=0 same_window=1 dup=0 loc=file@line
+opens: line 2 of state-log-archive-2026-11.md = # --- R5003 fold append (fixture window marker)
+repeat identical: True
+live green: FOLD-CARRY OK since=2914 windows=29 rounds=179 skipped=725 split=4 same_window=3 dup=4 loc=file@line

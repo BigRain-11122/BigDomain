@@ -308,6 +308,13 @@ def run():
                             + narrative(5003) + "\n"
                             + ledger(5004) + "\n")
         bad = LL.audit_fold_carry([carried], 5000)
+        # AC-LGA9 arm f (R3090): the red line publishes the archive's own
+        # coordinates, and every published position opens to a real marker.
+        bad_line = LL.format_fold_carry(bad)
+        bad_gap = bad["gaps"][0]
+        with io.open(carried, "r", encoding="utf-8") as handle:
+            bad_head = handle.read().split("\n")[bad_gap["line"] - 1]
+        locator_open = bad_head.startswith("# --- R%d" % bad_gap["window"])
         write_text(carried, archive_block([4998, 4999]))
         pre_pin = LL.audit_fold_carry([carried], 5000)
         write_text(carried, archive_block([5001, 5002]))
@@ -331,9 +338,17 @@ def run():
                    for item in bad["gaps"]] == [(5003, 5003)]
               and pre_pin["clean"] is True and pre_pin["vacuous"] is True
               and pre_pin["windows"] == 0 and pre_pin["skipped_windows"] == 1
-              and LL.format_fold_carry(pre_pin).startswith("FOLD-CARRY VACUOUS")
-              and LL.format_fold_carry(good).startswith("FOLD-CARRY OK")
-              and "E_LFC_CARRY" in LL.format_fold_carry(bad)
+              and LL.format_fold_carry(pre_pin) ==
+              ("FOLD-CARRY VACUOUS since=5000 windows=0 skipped=1 "
+               "(no window opened at or after the pin yet) dup=0 "
+               "loc=file@line")
+              and LL.format_fold_carry(good) ==
+              ("FOLD-CARRY OK since=5000 windows=1 rounds=2 skipped=0 "
+               "split=0 same_window=0 dup=0 loc=file@line")
+              and "@state-log-archive-2026-11.md:1:2" in bad_line
+              and locator_open is True
+              and bad_line.isascii()
+              and "E_LFC_CARRY" in bad_line
               and rc_ok == 0 and out_ok.startswith("FOLD-CARRY OK")
               and rc_red == 2 and "E_LFC_CARRY" in out_red
               and "R5003" in out_red

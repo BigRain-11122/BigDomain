@@ -826,9 +826,16 @@ def format_fold_carry(report):
     R3089: positions in this report are the ARCHIVE's own coordinates -
     file name, in-file window ordinal, marker line number - so the trailing
     token says so on every shape. They are true as of the read that
-    produced this line; the archives are append-only (measured: 137 commits
-    on the November file, 5498 lines added, 0 deleted), which is the only
-    reason a line number can be published at all.
+    produced this line.
+
+    R3090: that claim is only as strong as the archive's provenance, and it
+    was measured per file: the November archive IS git-tracked (137 commits,
+    +5498/-0 lines), which is what makes a published line number stable; the
+    September and October archives are NOT tracked (0 commits, excluded by
+    the 'logs/' ignore rule), so for them the honest reading is 'no local
+    rewrite observed on this machine', not 'append-only proven'. The FAIL
+    shape now publishes those coordinates on every gap, because a red line
+    that names only the marker still sends the reader hunting by hand.
     """
     if report["vacuous"]:
         return ("FOLD-CARRY VACUOUS since=%d windows=0 skipped=%d "
@@ -842,8 +849,19 @@ def format_fold_carry(report):
                    report["skipped_windows"], len(report["split_rounds"]),
                    len(report["same_window_gaps"]),
                    len(report["duplicate_markers"])))
-    gaps = ",".join("R%d(w%d)" % (item["round"], item["window"])
-                    for item in report["gaps"])
+    # R3090: a gap entry already knows where its window opens; printing only
+    # the marker left the reader to search. The locator is appended INSIDE
+    # the per-gap token so every existing reader (which matches R<n>) keeps
+    # working, and it falls back to the old shape if a caller builds a report
+    # without the R3089 fields rather than printing a broken position.
+    def _gap_token(item):
+        head = "R%d(w%d" % (item["round"], item["window"])
+        if all(key in item for key in ("file", "file_ordinal", "line")):
+            return "%s@%s:%d:%d)" % (head, item["file"],
+                                     item["file_ordinal"], item["line"])
+        return head + ")"
+
+    gaps = ",".join(_gap_token(item) for item in report["gaps"])
     return ("FOLD-CARRY FAIL E_LFC_CARRY since=%d windows=%d gaps=%s "
             "split=%d same_window=%d dup=%d loc=file@line"
             % (report["since"], report["windows"], gaps,
