@@ -265,10 +265,19 @@ def write_baseline(target, path):
     return lines, 0, base
 
 
-def check_against_baseline(target, path):
+def check_against_baseline(target, path, stats=None):
     """AC-WCB2..WCB5 drift-detector face. Read-only against the target
     dir AND the baseline file. Three verdict faces: new-dialect FLAG,
     class-migrated FLAG, disappeared info. Deterministic output.
+
+    R3100 (AC-WCB12): the same single pass that feeds the class lists now
+    also counts the corpus it read (files and bytes). The count is DERIVED
+    from the bytes actually read and published only through the optional
+    `stats` out-parameter, so the returned lines stay byte-identical for
+    every existing caller (AC-WCB11-R5 pins them). The CLI gate prints it
+    as a guard reading: the round's elapsed_ms paired with the corpus size
+    is what makes "the face did not get slower" checkable instead of
+    assumed.
 
     R3099 (AC-WCB11): ONE read per file. Measured at R3099 over the live
     tree, the shipped face read every baselined file THREE times - once in
@@ -313,6 +322,8 @@ def check_against_baseline(target, path):
     rescued = 0
     refused = []
     label_bytes = LABEL.encode("ascii")
+    corpus_bytes = 0
+    corpus_readable = 0
     for name in names:
         fpath = os.path.join(target, name)
         try:
@@ -323,6 +334,8 @@ def check_against_baseline(target, path):
             # honest other bucket, and it never reaches the debt split
             lists["other"].append(name)
             continue
+        corpus_bytes += len(raw)
+        corpus_readable += 1
         row = ED.classify_bytes(raw, label_bytes, counts=False)
         lists[row["class"]].append(name)
         if name not in base_of or not os.path.isfile(fpath):
@@ -382,6 +395,13 @@ def check_against_baseline(target, path):
     lines.append("flags=%d" % flags)
     lines.append("verdict: %s" % ("DRIFT-CLEAN" if flags == 0
                                  else "DRIFT-FLAG"))
+    if stats is not None:
+        # AC-WCB12: published through an out-parameter, never through
+        # `lines`, because the returned lines are pinned line-for-line by
+        # AC-WCB11-R5 and a gate reading that moved would be a law change.
+        stats["files"] = len(names)
+        stats["readable"] = corpus_readable
+        stats["bytes"] = corpus_bytes
     return lines, (0 if flags == 0 else 2)
 
 
@@ -907,6 +927,38 @@ def _selftest():
         check("AC-WCB11-R6 probe_dir still measures crlf/bare_lf "
               "(no -1 leaks into the printed census)",
               "crlf=1" in pblob and "crlf=-1" not in pblob)
+        # --- AC-WCB12: the corpus reading is derived, not declared ---
+        # a: the out-parameter carries the bytes actually read; the arm
+        # recomputes the sum from disk so a hardcoded number cannot pass
+        disk_bytes = sum(os.path.getsize(os.path.join(lw, n))
+                         for n in os.listdir(lw) if n.endswith(".log"))
+        cst = {}
+        cw, cwcode = check_against_baseline(lw, lbase, cst)
+        check("AC-WCB12-R1 stats out-param is the bytes on disk "
+              "(files=%d bytes=%d)" % (cst.get("files", -1),
+                                       cst.get("bytes", -1)),
+              cwcode == 0 and cst == {"files": 5, "readable": 5,
+                                      "bytes": disk_bytes})
+        # b: passing the out-parameter must not move the published face
+        check("AC-WCB12-R2 returned lines byte-identical with and "
+              "without stats",
+              cw == ww)
+        # c: the CLI gate face prints the same derived number and the
+        # verdict/exit code are untouched by the new line
+        grab = io.StringIO()
+        keep = sys.stdout
+        sys.stdout = grab
+        try:
+            cli_code = main(["--dir", lw, "--check"])
+        finally:
+            sys.stdout = keep
+        cli_out = grab.getvalue()
+        check("AC-WCB12-R3 CLI --check prints corpus files=5 bytes=%d "
+              "rc=%d" % (disk_bytes, cli_code),
+              cli_code == 0
+              and ("corpus files=5 readable=5 bytes=%d" % disk_bytes)
+              in cli_out
+              and "verdict: DRIFT-CLEAN" in cli_out)
     finally:
         for sub in os.listdir(tmp):
             d = os.path.join(tmp, sub)
@@ -986,8 +1038,14 @@ def main(argv=None):
         print("dir: %s" % target)
         print("baseline: %s" % bpath)
         t0 = time.perf_counter()
-        lines, code = check_against_baseline(target, bpath)
+        cstats = {}
+        lines, code = check_against_baseline(target, bpath, cstats)
         print("elapsed_ms=%.1f" % ((time.perf_counter() - t0) * 1000.0))
+        # AC-WCB12 guard reading: the corpus the face read, derived from the
+        # same pass, so "did it get slower" is answerable without a probe.
+        print("corpus files=%d readable=%d bytes=%d"
+              % (cstats.get("files", 0), cstats.get("readable", 0),
+                 cstats.get("bytes", 0)))
         for line in lines:
             print(line)
         return code

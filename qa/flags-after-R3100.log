@@ -1,0 +1,16 @@
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+mode: check (drift detector)
+dir: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+baseline: C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa\writer-census-baseline.json
+elapsed_ms=1208.8
+corpus files=4117 readable=4117 bytes=507795056
+[flag] new-dialect: probe-R3100.log (class=ps-utf16)
+[flag] new-dialect: probe-R3100b.log (class=ps-utf16)
+[flag] new-dialect: suite-flags-R3100.log (class=ps-utf16)
+census: files=4117 tee=3524 baselined=590
+labeled_baselined=11 unlabeled_baselined=579
+plain_unusable=151 reader_rescued=151 reader_refused=0
+nul_bytes=15
+disappeared=0
+flags=3
+verdict: DRIFT-FLAG

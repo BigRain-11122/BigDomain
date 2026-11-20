@@ -1,0 +1,27 @@
+PROBE R3100 corpus=qa/*.log files=4114 bytes=507785552
+DIST over1MB=78 over10MB=0 median=2320 p90=626352 max=1408454
+DIST top10_bytes=12693745 share=2.50%
+TOP 01 reconcile-all-R2705.log bytes=1408454
+TOP 02 reconcile-all-R2781.log bytes=1260612
+TOP 03 reconcile-all-R2762.log bytes=1253395
+TOP 04 reconcile-all-R2755.log bytes=1253346
+TOP 05 reconcile-all-R2779.log bytes=1253309
+TOP 06 reconcile-all-R2768.log bytes=1253085
+TOP 07 reconcile-all-R2775.log bytes=1252998
+TOP 08 reconcile-all-R2767.log bytes=1252938
+TOP 09 reconcile-all-R2747.log bytes=1252909
+TOP 10 reconcile-all-R2742.log bytes=1252699
+READ all ms=654.9 bytes=507785552
+READ minus_top10 ms=705.7 bytes=495091807
+READ delta ms=-50.8 bytes=12693745
+TOP reconcile-all-R2705.log tracked=yes bytes=1408454
+TOP reconcile-all-R2781.log tracked=yes bytes=1260612
+TOP reconcile-all-R2762.log tracked=yes bytes=1253395
+TOP reconcile-all-R2755.log tracked=yes bytes=1253346
+TOP reconcile-all-R2779.log tracked=yes bytes=1253309
+TOP reconcile-all-R2768.log tracked=yes bytes=1253085
+TOP reconcile-all-R2775.log tracked=yes bytes=1252998
+TOP reconcile-all-R2767.log tracked=yes bytes=1252938
+TOP reconcile-all-R2747.log tracked=yes bytes=1252909
+TOP reconcile-all-R2742.log tracked=yes bytes=1252699
+PROVENANCE top10 tracked=10 untracked=0 index_entries=6711

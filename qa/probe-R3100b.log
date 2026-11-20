@@ -1,0 +1,5 @@
+PROBE R3100b corpus=qa/*.log files=4115 bytes=507788238
+PASS open_close ms=186.7
+PASS open_read ms=684.9 bytes=507788238
+SPLIT per_file_ms=186.7 byte_ms=498.2 per_file_us=45.4
+SPLIT file_share=27.3% byte_share=72.7%

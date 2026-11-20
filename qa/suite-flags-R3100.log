@@ -1,0 +1,55 @@
+python : usage: qa_writer_census.py [-h] [--dir DIR] [--selftest] [--check]
+所在位置 行:1 字符: 1
++ python src/os/qa_writer_census.py --selftest 2>&1 | Tee-Object -FileP ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (usage: qa_write...test] [--check]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+                           [--update-baseline] [--baseline BASELINE]
+                           [--accept NAME] [--baseline-add NAME]
+qa_writer_census.py: error: --check and --update-baseline are mutually exclusive (re-freeze only after drift dispositio
+n, R1713 AC-BF4 law)
+probe: qa writer-mode census (BigDomain R1836 AC-SL3; R1841 baseline+drift AC-WCB1..WCB6)
+selftest: 40/40 checks pass
+  [ok] refusal not triggered (8 fixtures)
+  [ok] tee dialect named
+  [ok] cmd-raw dialect named (utf8=no)
+  [ok] pwsh-capture dialect named
+  [ok] ps-utf16 named
+  [ok] labeled capture self-announces (label=yes)
+  [ok] utf-8-sig and mixed-EOL land in other bucket
+  [ok] empty degenerate honest row (bytes=0, tee-by-rule)
+  [ok] counts sum == file count
+  [ok] empty dir refusal exit 3
+  [ok] reprobe deterministic (identical census)
+  [ok] zero writes into probed dirs
+  [ok] hygiene ascii+net-imports clean
+  [ok] AC-WCB1 freeze exit 0 + keys exactly four non-tee
+  [ok] AC-WCB1 idempotent re-freeze byte-identical
+  [ok] AC-WCB1 baseline lists sorted per class
+  [ok] AC-WCB1 post-check green inside freeze
+  [ok] AC-WCB2 clean world DRIFT-CLEAN exit 0
+  [ok] AC-WCB2 new tee file = normal product, zero flag
+  [ok] AC-WCB3 four new dialects FLAG exit 2, each named
+  [ok] AC-WCB4 class-migrated flag named (base=cmd-raw cur=tee)
+  [ok] AC-WCB5 disappeared file = info face, exit 0
+  [ok] AC-WCB5 missing baseline honest refusal exit 2
+  [ok] AC-WCB6 double-check deterministic
+  [ok] AC-WCB6 mutex --check + --update-baseline refused
+  [ok] AC-WCB6 check face zero writes (baseline only file)
+  [ok] AC-WCB8 tee-only world reads plain_unusable=0 reader_rescued=0
+  [ok] AC-WCB8 utf-16 world reads plain_unusable=1 reader_rescued=1 reader_refused=0
+  [ok] AC-WCB9 undecodable blob: unusable=2 rescued=1 refused=1 and named
+  [ok] AC-WCB8 column moves with the bytes (bad->ascii: unusable=1 refused=0)
+  [ok] AC-WCB10 independent re-count agrees (1/1)
+  [ok] AC-WCB11-R1 counts=False decides the same six classes and publishes crlf=bare_lf=-1
+  [ok] AC-WCB11-R2 counts=True row pinned exactly
+  [ok] AC-WCB11-R3 counters from one pass: files=5 tee=1 baselined=4 unusable=3 rescued=2 refused=1
+  [ok] AC-WCB11-R4 every file read once (opens=[('l-bad.log', 1), ('l-cmdraw.log', 1), ('l-pwsh.log', 1), ('l-tee.log', 1), ('l-utf16.log', 1)])
+  [ok] AC-WCB11-R5 published lines pinned in order
+  [ok] AC-WCB11-R6 probe_dir still measures crlf/bare_lf (no -1 leaks into the printed census)
+  [ok] AC-WCB12-R1 stats out-param is the bytes on disk (files=5 bytes=52)
+  [ok] AC-WCB12-R2 returned lines byte-identical with and without stats
+  [ok] AC-WCB12-R3 CLI --check prints corpus files=5 bytes=52 rc=0
+self-ascii: PASS (51877 bytes)
+self-net-imports: NONE (PASS)
