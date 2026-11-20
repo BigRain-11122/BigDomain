@@ -1323,6 +1323,92 @@ def main():
            and rep_a.get('export_ts') == rep_b.get('export_ts'),
            'a=%s b=%s v=%s' % (code_a, code_b, rep_a.get('verdict')))
 
+        # ---- AC-EXPR3 (R3117 pin): the landing door asks, not one caller ----
+        # Measured before the pin: three birth sites compose and land the live
+        # face (export_round.write, tools/status_export_fresh.apply and
+        # export_R2431.main), only the first asked the gate, and
+        # E_EXPR_UNPROVEN had never fired on the live disk. The proof is now a
+        # property of the landing: publish judges the STAGED bytes before any
+        # replace, and the raw-open tool self-proves its own write.
+        import export_driver_queue_face as EDQF
+        wl = build_world(9313)
+        worlds.append(wl)
+        write(os.path.join(wl, 'heartbeat.txt'), 'tick 9313\n')
+        stampl = mod.datetime.datetime.now(mod.TZ).replace(
+            microsecond=0).isoformat()
+        mod.write(wl, stampl)
+        lexp = os.path.join(wl, 'docs', 'status-export.json')
+        good = read(lexp)
+        EDQF.publish(wl, lexp, good)
+        ok('AC-EXPR3 a judgeable face lands through the door',
+           read(lexp) == good)
+        naive = json.loads(good)
+        naive['export_ts'] = '2026-11-21T01:00:00'
+        naive_text = json.dumps(naive, ensure_ascii=False, indent=2) + '\n'
+        code_b = ''
+        try:
+            EDQF.publish(wl, lexp, naive_text)
+        except EDQF.ExportDriverQueueFaceError as exc:
+            code_b = '|'.join(str(a) for a in exc.args)
+        ok('AC-EXPR3 a naive stamp refuses at the door and lands nothing',
+           'E_EDQF_FACE_UNPROVEN' in code_b and 'E_EXP_BAD_TS' in code_b
+           and read(lexp) == good
+           and not os.path.exists(lexp + EDQF.STAGE_SUFFIX),
+           'code=%s' % code_b)
+        code_c = ''
+        try:
+            EDQF.publish(wl, lexp, 'not json at all\n')
+        except EDQF.ExportDriverQueueFaceError as exc:
+            code_c = '|'.join(str(a) for a in exc.args)
+        ok('AC-EXPR3 non-JSON refuses at the door and lands nothing',
+           'E_EDQF_FACE_UNPROVEN' in code_c and 'E_EXP_BAD_FILE' in code_c
+           and read(lexp) == good
+           and not os.path.exists(lexp + EDQF.STAGE_SUFFIX),
+           'code=%s' % code_c)
+        tools_dir = os.path.join(ROOT, 'tools')
+        if tools_dir not in sys.path:
+            sys.path.insert(0, tools_dir)
+        import status_export_fresh as SXF
+        wt = build_world(9314)
+        worlds.append(wt)
+        write(os.path.join(wt, 'heartbeat.txt'), 'tick 9314\n')
+        stampt = mod.datetime.datetime.now(mod.TZ).replace(
+            microsecond=0).isoformat()
+        mod.write(wt, stampt)
+        texp = os.path.join(wt, 'docs', 'status-export.json')
+        # R3117: the tool anchors its edits on top-level copies that the grader
+        # itself publishes (AC-SXF14/15), so the private world is seeded with
+        # those anchors the way a second-lived face carries them in production.
+        face_t = json.loads(read(texp))
+        face_t['latest_artifact'] = 'x'
+        face_t['next_milestone'] = 'x'
+        face_t['next_milestone_due'] = '2026-11-23T01:00:00+08:00'
+        face_t['current'] = 'x'
+        face_t['state_bytes'] = 1
+        face_t.setdefault('ceo_face', {})['latest_artifact_abs'] = '/tmp/x'
+        write(texp, json.dumps(face_t, ensure_ascii=False, indent=2) + '\n')
+        tst = os.path.join(wt, 'src', 'os', 'state.json')
+        tbl = os.path.join(wt, 'src', 'os', 'backlog.md')
+        tpv = os.path.join(wt, 'preview')
+        code_ok = SXF.apply(texp, tst, tbl, tpv)
+        real_now = SXF.now_local
+        SXF.now_local = lambda: mod.datetime.datetime(2026, 11, 21, 1, 0, 0)
+        try:
+            code_naive = SXF.apply(texp, tst, tbl, tpv)
+        finally:
+            SXF.now_local = real_now
+        ok('AC-EXPR3 the raw-open composer self-proves its own landing',
+           code_ok == 0 and code_naive == 8,
+           'ok=%s naive=%s' % (code_ok, code_naive))
+        live_face = os.path.join(ROOT, 'docs', 'status-export.json')
+        if os.path.isfile(live_face):
+            live_code, _live_rep = mod.face_judgeable(live_face)
+            ok('AC-EXPR3 the live face is still judgeable through the door',
+               live_code is None, 'code=%s' % live_code)
+        else:
+            ok('AC-EXPR3 the live face is still judgeable through the door',
+               True, 'absent-honest')
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')

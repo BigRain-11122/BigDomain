@@ -1,0 +1,193 @@
+== Q1 candidate writers ==
+
+-- src/os/export_round.py lines=972 write_like=1 face=2 round=6
+   face     1 """export_round - the generic per-round refresh hook for docs/status-export.json.
+   face   906 '  (no flag)     rewrite docs/status-export.json from live files\n'
+   rnd      1 """export_round - the generic per-round refresh hook for docs/status-export.json.
+   rnd     58 python src/os/export_round.py                 # write the face
+   rnd     59 python src/os/export_round.py --check         # read-only verdict
+   rnd     60 python src/os/export_round.py --root DIR      # operate on a private world
+   rnd    669 Measured twice (R2831, R2832): a clean `export_round` run refreshed only
+   rnd    905 'usage: export_round.py [-h] [--check] [--root DIR]\n'
+   wr     747 text = json.dumps(data, ensure_ascii=False, indent=2) + '\n'
+
+-- src/os/export_R2431.py lines=363 write_like=1 face=0 round=0
+   wr     315 text = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
+
+-- tools/status_export_fresh.py lines=691 write_like=7 face=2 round=8
+   face     1 """Keep the CEO three-line face in docs/status-export.json tied to the live round.
+   face   620 "source": "docs/status-export.json",
+   rnd     41 definition (export_round.BOARD_PAGES) instead of repeating the names.
+   rnd    109 AC-RLBL3: this face, src/os/export_round.py and src/os/ledger_lines.py must
+   rnd    126 # it goes on to discuss. This is the detector src/os/export_round.py already
+   rnd    249 def export_round_module():
+   rnd    253 path = os.path.join(REAL_ROOT, "src", "os", "export_round.py")
+   rnd    254 spec = importlib.util.spec_from_file_location("export_round_shared", path)
+   rnd    264 meta census boards as the CEO's latest artifact while `src/os/export_round.py`
+   rnd    270 shared = export_round_module()
+   wr     465 payload = json.dumps(value, ensure_ascii=False)
+   wr     496 row = "\n%s\"%s\": %s," % (indent, key, json.dumps(value, ensure_ascii=False))
+   wr     572 with io.open(export_path, "w", encoding="utf-8", newline="") as handle:
+   wr     626 body = json.dumps(record, ensure_ascii=False, indent=2) + "\n"
+   wr     637 with io.open(abs_path, "w", encoding="utf-8", newline="\n") as handle:
+   wr     654 text = json.dumps(rewritten, ensure_ascii=False, indent=2) + "\n"
+   wr     655 with io.open(export_path, "w", encoding="utf-8", newline="\n") as handle:
+
+-- src/os/closeout.py lines=596 write_like=0 face=1 round=6
+   face     9 python src/os/export_round.py          # write docs/status-export.json
+   rnd      9 python src/os/export_round.py          # write docs/status-export.json
+   rnd     24 face step   (export_round.write) <- only reachable when state really moved
+   rnd    108 import export_round as ER  # noqa: E402
+   rnd    114 # The shape export_round writes into ceo_face.current, and nothing else: an
+   rnd    170 "behind_by=%d repair=\"python src/os/export_round.py\""
+   rnd    525 "repair=\"fix the tree, then python src/os/export_round.py\""
+
+-- src/sandbox/reconcile_all.py lines=8231 write_like=6 face=4 round=2
+   face  6165 # writer only, while three writers land docs/status-export.json. This suite
+   face  6215 # docs/status-export.json carried no queue line at all, so the corrected
+   face  6221 # R2375: R2374 gave docs/status-export.json a queue section derived at
+   face  7533 # R2875. docs/status-export.json's latest_artifact follows the NEWEST preview
+   rnd   7243 # R2779). export_round.py derives all three lines from live files instead.
+   rnd   7273 os.path.join("..", "os", "test_export_round.py"), 44),
+   wr    5502 # executed apply is one os.replace whose per-file digest map shows exactly
+   wr    5650 # dry run by default with a predicted byte delta, one atomic os.replace,
+   wr    5917 # the only mutation on this path is orphan_promote's single os.replace.
+   wr    5956 # replace instead of one io.open(path, "w"). (AC-SGS1..AC-SGS6 were pinned
+   wr    6124 # each writer own os.replace destination and routed through the shared
+   wr    7777 self.file = open(path, "w", encoding="utf-8", newline="\n")
+
+-- src/os/check_export_consistency.py lines=320 write_like=1 face=1 round=0
+   face    33 tick row        = the unique docs/status-export.json#results row whose
+   wr     312 with open(args.out, "w", encoding="utf-8", newline="\n") as fh:
+
+-- src/os/export_closeout_gate_parity.py lines=269 write_like=4 face=1 round=0
+   face    62 "(default docs/status-export.json)\n"
+   wr      17 #     json.dumps(ensure_ascii=False, indent=2) + "\n" (the exact shape the
+   wr      91 This is the closeout's own shape: read, QFE.apply, json.dumps(indent=2)
+   wr     110 text = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
+   wr     259 sys.stdout.write(json.dumps(result, ensure_ascii=False) + "\n")
+
+-- src/sandbox/frontdoor.py lines=8771 write_like=6 face=3 round=1
+   face  7565 # read of docs/status-export.json; honest failure face --
+   face  7617 "render time from docs/status-export.json (ceo_face "
+   face  8346 interface (docs/status-export.json) by reading the file from disk
+   rnd   5709 them the writer (src/os/export_round.py), its checker or its test, and the
+   wr    4631 bad_gate = json.loads(json.dumps(pk))
+   wr    4643 bad_flag = json.loads(json.dumps(pk))
+   wr    4699 pk["states"][0] == json.loads(json.dumps(
+   wr    4908 bad_amount = json.loads(json.dumps(m1))
+   wr    4913 bad_party = json.loads(json.dumps(m1))
+   wr    5112 with open(path, "w", encoding="utf-8", newline="\n") as fh:
+
+== Q1b repo-wide direct face strings, excluding tests/one-shot evidence ==
+total hits=368; not-one-shot/not-test=100
+   src\sandbox\frontdoor.py:5761:    path = os.path.join(ROOT, "docs", "status-export.json")
+   src\sandbox\frontdoor.py:7565:    # read of docs/status-export.json; honest failure face --
+   src\sandbox\frontdoor.py:7567:        with open(os.path.join(ROOT, "docs", "status-export.json"),
+   src\sandbox\frontdoor.py:7617:            "render time from docs/status-export.json (ceo_face "
+   src\sandbox\frontdoor.py:8346:interface (docs/status-export.json) by reading the file from disk
+   tools\status_export_fresh.py:1:"""Keep the CEO three-line face in docs/status-export.json tied to the live round.
+   tools\status_export_fresh.py:89:EXPORT = os.path.join(ROOT, "docs", "status-export.json")
+   tools\status_export_fresh.py:620:        "source": "docs/status-export.json",
+   src\sandbox\reconcile_all.py:6165:    # writer only, while three writers land docs/status-export.json. This suite
+   src\sandbox\reconcile_all.py:6215:    # docs/status-export.json carried no queue line at all, so the corrected
+   src\sandbox\reconcile_all.py:6221:    # R2375: R2374 gave docs/status-export.json a queue section derived at
+   src\sandbox\reconcile_all.py:7533:    # R2875. docs/status-export.json's latest_artifact follows the NEWEST preview
+   src\os\check_export_consistency.py:33:  tick row        = the unique docs/status-export.json#results row whose
+   src\os\check_export_consistency.py:55:P_EXPORT = os.path.join(ROOT, "docs", "status-export.json")
+   src\os\closeout_export_parity_text_binding.py:46:DEFAULT_EXPORT = os.path.join("docs", "status-export.json")
+   src\os\closeout_export_parity_text_binding.py:60:    "(default docs/status-export.json)\n"
+   src\os\closeout_export_parity_dialect_wire.py:45:DEFAULT_EXPORT = os.path.join("docs", "status-export.json")
+   src\os\closeout_export_parity_dialect_wire.py:57:    "(default docs/status-export.json)\n"
+   src\os\closeout.py:9:    python src/os/export_round.py          # write docs/status-export.json
+   src\os\closeout.py:131:    return os.path.join(root, "docs", "status-export.json")
+   src\os\comma_binding_sibling_faces.py:52:DEFAULT_EXPORT_NAME = "status-export.json"
+   src\os\comma_binding_sibling_faces.py:79:    "  --export NAME  export document basename (default status-export.json)\n"
+   src\os\comma_binding_identity_face_compare.py:46:DEFAULT_EXPORT_NAME = "status-export.json"
+   src\os\comma_binding_identity_face_compare.py:75:    "  --export NAME  export document basename (default status-export.json)\n"
+   src\os\comma_binding_face_row_drift.py:53:DEFAULT_EXPORT_NAME = "status-export.json"
+   src\os\comma_binding_face_row_drift.py:78:    "  --export NAME  export document basename (default status-export.json)\n"
+   src\os\comma_binding_consumer_wire.py:47:DEFAULT_EXPORT_NAME = "status-export.json"
+   src\os\comma_binding_consumer_wire.py:70:    "  --export NAME   export document basename (default status-export.json)\n"
+   src\os\closeout_export_parity_wire_binding_consumer.py:46:DEFAULT_DOC = os.path.join("docs", "status-export.json")
+   src\os\closeout_export_parity_wire_binding_consumer.py:64:    "(default docs/status-export.json)\n"
+   src\os\closeout_export_parity_wire.py:48:DEFAULT_EXPORT = os.path.join("docs", "status-export.json")
+   src\os\closeout_export_parity_wire.py:59:    "(default docs/status-export.json)\n"
+   src\os\export_closeout_gate_parity.py:54:DEFAULT_EXPORT = os.path.join("docs", "status-export.json")
+   src\os\export_closeout_gate_parity.py:62:    "(default docs/status-export.json)\n"
+   src\os\export_freshness.py:5:# Why this exists: docs/status-export.json is the only surface the CEO
+   src\os\export_freshness.py:235:    export = os.path.join(_default_root(), "docs", "status-export.json")
+   src\os\export_driver_queue_face.py:52:DEFAULT_EXPORT = os.path.join("docs", "status-export.json")
+   src\os\export_driver_queue_face.py:60:    "(default docs/status-export.json)\n"
+   src\os\export_consistency_queue_face.py:48:    "(default docs/status-export.json)\n"
+   src\os\export_round.py:1:"""export_round - the generic per-round refresh hook for docs/status-export.json.
+   src\os\export_round.py:588:    exp = os.path.join(repo, 'docs', 'status-export.json')
+   src\os\export_round.py:683:    exp = os.path.join(repo, "docs", "status-export.json")
+   src\os\export_round.py:746:    exp = os.path.join(repo, 'docs', 'status-export.json')
+   src\os\export_round.py:795:    exp = os.path.join(repo, 'docs', 'status-export.json')
+   src\os\export_round.py:906:    '  (no flag)     rewrite docs/status-export.json from live files\n'
+   src\os\export_round.py:955:                                             'status-export.json')))
+   src\os\export_publish_wire_identity.py:72:DEFAULT_EXPORT_NAME = "status-export.json"
+   src\os\export_publish_wire_identity.py:100:    "  --export NAME   export document basename (default status-export.json)\n"
+   src\os\export_publish_path_guard.py:6:# Why this exists: R2378 made closeout_R2377.py publish docs/status-export.json
+   src\os\export_publish_path_guard.py:55:DEFAULT_EXPORT_NAME = "status-export.json"
+   src\os\export_publish_path_guard.py:78:    "  --export NAME   export document basename (default status-export.json)\n"
+   src\os\export_publish_from_import_law.py:64:DEFAULT_EXPORT_NAME = "status-export.json"
+   src\os\export_publish_from_import_law.py:94:    "  --export NAME   export document basename (default status-export.json)\n"
+   src\os\gate_drift.py:6:# state.json, status-export.json, state/debt.md, heartbeat.txt and the
+   src\os\parameter_destination_resolution.py:13:# docs/status-export.json - so the tier cannot say whether such a writer is
+   src\os\machine_gate.py:7:# board, state.json, status-export.json, state/debt.md), disclosed here.
+   src\os\publish_relative_package_identity.py:54:DEFAULT_EXPORT_NAME = "status-export.json"
+   src\os\publish_relative_package_identity.py:80:    "  --export NAME   export document basename (default status-export.json)\n"
+   src\os\r2143_closeout.py:21:EXPORT = os.path.join(ROOT, "docs", "status-export.json")
+   src\os\r2142_export.py:2:docs/status-export.json and recompute the self_drive derived face with
+   src\os\r2142_export.py:15:EXPORT = os.path.join(ROOT, "docs", "status-export.json")
+   src\os\r2141_export.py:2:docs/status-export.json and recompute the self_drive derived face with
+   src\os\r2141_export.py:15:EXPORT = os.path.join(ROOT, "docs", "status-export.json")
+   src\os\r2140_export.py:2:docs/status-export.json (F3: derived counters come from the checker).
+   src\os\r2140_export.py:13:EXPORT = os.path.join(ROOT, "docs", "status-export.json")
+   src\os\queue_floor_export_face.py:6:# floor reading had exactly one owner - but docs/status-export.json published
+   src\os\queue_floor_export_face.py:8:# floor / FLOOR over docs/status-export.json and check_export_consistency.py
+   src\os\queue_floor_export_face.py:53:    "(default docs/status-export.json)\n"
+   src\os\queue_floor_export_face.py:145:    export = os.path.join("docs", "status-export.json")
+   src\os\queue_row_exempt.py:7:# docs/status-export.json) - disclosed, with zero code occupancy.
+   src\os\queue_export_gate_wire.py:45:DEFAULT_EXPORT = os.path.join("docs", "status-export.json")
+   src\os\queue_export_gate_wire.py:54:    "(default docs/status-export.json)\n"
+   src\os\queue_export_freshness_gate.py:38:DEFAULT_EXPORT = os.path.join("docs", "status-export.json")
+   src\os\queue_export_freshness_gate.py:52:    "(default docs/status-export.json)\n"
+   src\os\queue_done_stamp.py:7:# docs/status-export.json) - disclosed, with zero code occupancy.
+   src\os\r2454_export.py:11:EXPORT = os.path.join(BASE, "docs", "status-export.json")
+   src\os\r2187_export.py:10:EXPORT = os.path.join(BASE, "docs", "status-export.json")
+   src\os\r2162_export.py:11:EXPORT = os.path.join(BASE, "docs", "status-export.json")
+   src\os\r2161_export.py:10:EXPORT = os.path.join(BASE, "docs", "status-export.json")
+   src\os\r2152_export.py:2:docs/status-export.json and recompute the self_drive derived face with
+   src\os\r2152_export.py:16:EXPORT = os.path.join(ROOT, "docs", "status-export.json")
+   src\os\r2148_export.py:2:docs/status-export.json and recompute the self_drive derived face with
+   src\os\r2148_export.py:16:EXPORT = os.path.join(ROOT, "docs", "status-export.json")
+   src\os\r2143_export.py:2:docs/status-export.json and recompute the self_drive derived face with
+   src\os\r2143_export.py:15:EXPORT = os.path.join(ROOT, "docs", "status-export.json")
+   src\os\relative_import_publish_binding.py:55:DEFAULT_EXPORT_NAME = "status-export.json"
+   src\os\relative_import_publish_binding.py:86:    "  --export NAME   export document basename (default status-export.json)\n"
+   src\os\row_key_carrier_scope.py:56:DEFAULT_EXPORT_NAME = "status-export.json"
+   src\os\row_key_carrier_scope.py:77:    "  --export NAME  export document basename (default status-export.json)\n"
+   src\os\review_window_guard_parity_consumer_wire.py:7:docs/status-export.json) with zero executable occupancy under src/.
+   src\os\review_window_guard_parity.py:8:src/os/backlog.md, docs/status-export.json, heartbeat.txt, state.json,
+   src\os\status_export_writer_transport_scope.py:10:# runs the QUEUE-FLOOR writer only. Three writers land docs/status-export.json;
+   src\os\status_export_writer_transport_scope.py:72:    "(default <root>/docs/status-export.json)\n"
+   src\os\status_export_writer_transport_scope.py:221:        sample = os.path.join(root, "docs", "status-export.json")
+   src\os\status_export_writer_dialect_wire.py:8:# that land docs/status-export.json - closeout_export_parity_wire,
+   src\os\status_export_writer_dialect_wire.py:18:# destination spells docs/status-export.json. A hardcoded list of three names
+   src\os\status_export_writer_dialect_wire.py:49:TARGET = "docs/status-export.json"
+   src\os\stamp_exempt_append.py:7:# status-export.json and three closeout helpers).
+   src\os\stamp_exempt_seed_guard_wire.py:7:-F hits ONLY in prose (docs/status-export.json, src/os/backlog.md,
+   src\os\tree_snapshot.py:3:WHY THIS EXISTS: docs/status-export.json's latest_artifact is derived by
+
+== Q2 E_EXPR_UNPROVEN in shipped history ==
+commits touching the token=1
+   6fff1630 R3116 the export-face birth site self-proves: export_round.write asks the shipped freshness gate whether the ju
+tree occurrences=5
+   src\os\backlog.md:2:- [R3116 PIN — 本轮回答队头 (0)·判据先立·**先落板再动代码**] 队头具名：**导出面的出生站写完只比对形状，从不问「这张面能不能被判定」——`export_freshness` 的拒绝规则只有 CEO 卡在读，写者不知道；一张朴素时间戳能过全部形状比对，却在卡上印 `unre
+   src\os\backlog.md:3:- [x] [done 2026-11-21 R3116 — 板头 (0) 落地：**导出面的出生站开始自证——写完先问船上闸「这张面读得动吗」，读不动就按名拒绝。**先量（`tmp/probe_R3116.py` → `qa/probe-R3116.log`）：四个写者（`closeout.py`
+   src\os\backlog.md:4:- [R3117] next window (<=48h): (0) MAIN — **这一轮只让一个写者自证，且它只证「读得动」，不证「读得好」**：`export_round.write` 现在会问闸，但 `docs/status-export.json` 并非只有它一个写出处，而活盘上 `E_
+   src\os\export_round.py:759:        raise ValueError('E_EXPR_UNPROVEN the face cannot be judged '
+   src\os\state.json:396:    "R3116 landed: src/os/export_round.py gained UNJUDGEABLE_CODES and face_judgeable(exp, now=None) - a lazy import of export_freshness that return

@@ -1,0 +1,5 @@
+R3117 sibling leg (five suites, run on the working tree after the landing-door change)
+test_closeout.py -> SUITE PASS 26/26 (rc=0)
+test_export_closeout_gate_parity.py -> SUITE PASS 6/6 (rc=0)
+test_status_export_fresh.py -> SUITE PASS 21/21 (rc=0)
+test_export_driver_queue_face.py -> SUITE PASS 6/6 (rc=0)

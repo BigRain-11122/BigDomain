@@ -572,6 +572,18 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     with io.open(export_path, "w", encoding="utf-8", newline="") as handle:
         handle.write(text)
     after = read_text(export_path)
+    # AC-EXPR3 (R3117): this tool composes AND lands the face with its own
+    # io.open, so it is a birth site of its own - R3117 measured that it named
+    # the judgeability gate zero times. It now self-proves once after landing:
+    # a face this tool wrote that the CEO gate cannot read is named here rather
+    # than discovered later on the card.
+    os_dir = os.path.join(REAL_ROOT, "src", "os")
+    if os_dir not in sys.path:
+        sys.path.insert(0, os_dir)
+    judge_code, _judge_report = export_round_module().face_judgeable(export_path)
+    if judge_code:
+        print("E_SXF_UNPROVEN face=WRITTEN code=%s" % judge_code)
+        return 8
     print("APPLIED R%d changed=%s bytes=%d lf_only=%s bom=%s"
           % (round_int, changed, len(after.encode("utf-8")),
              "\r" not in after, after.startswith("\ufeff")))

@@ -1,0 +1,121 @@
+{
+  "label": "os-status-export-writer-dialect-wire",
+  "verdict": "WIRED",
+  "derived": 3,
+  "routed": 3,
+  "unrouted": [],
+  "rows": [
+    {
+      "name": "closeout_export_parity_wire.py",
+      "target": "docs/status-export.json",
+      "asks": true
+    },
+    {
+      "name": "queue_export_gate_wire.py",
+      "target": "docs/status-export.json",
+      "asks": true
+    },
+    {
+      "name": "queue_floor_export_face.py",
+      "target": "docs/status-export.json",
+      "asks": true
+    }
+  ],
+  "transport": {
+    "lf_bytes": 38530,
+    "lf_today_exact": true,
+    "crlf_bytes": 38746,
+    "crlf_lone_lf": 0,
+    "crlf_kept": true
+  },
+  "audit_keeps": 12,
+  "audit_routed": 11,
+  "audit_verdict": "AUDIT-DEBT",
+  "scope_verdict": "SCOPED",
+  "scope_target": "docs/status-export.json",
+  "scope_proved": 3,
+  "scope_unprovable": [],
+  "scope": [
+    {
+      "name": "closeout_export_parity_wire.py",
+      "world": "export-copy",
+      "verdict": "PROVED",
+      "refusal": "",
+      "agree": true,
+      "lf": {
+        "status": "WRITTEN",
+        "kind": "WRITTEN",
+        "code": 0,
+        "detail": "AGREES",
+        "bytes": 38530,
+        "crlf": 0,
+        "lone_lf": 216,
+        "unchanged": false
+      },
+      "crlf": {
+        "status": "WRITTEN",
+        "kind": "WRITTEN",
+        "code": 0,
+        "detail": "AGREES",
+        "bytes": 38746,
+        "crlf": 216,
+        "lone_lf": 0,
+        "unchanged": false
+      }
+    },
+    {
+      "name": "queue_export_gate_wire.py",
+      "world": "export-copy",
+      "verdict": "PROVED",
+      "refusal": "",
+      "agree": true,
+      "lf": {
+        "status": "WRITTEN",
+        "kind": "WRITTEN",
+        "code": 0,
+        "detail": "CURRENT",
+        "bytes": 38530,
+        "crlf": 0,
+        "lone_lf": 216,
+        "unchanged": false
+      },
+      "crlf": {
+        "status": "WRITTEN",
+        "kind": "WRITTEN",
+        "code": 0,
+        "detail": "CURRENT",
+        "bytes": 38746,
+        "crlf": 216,
+        "lone_lf": 0,
+        "unchanged": false
+      }
+    },
+    {
+      "name": "queue_floor_export_face.py",
+      "world": "export-copy",
+      "verdict": "PROVED",
+      "refusal": "",
+      "agree": true,
+      "lf": {
+        "status": "WRITTEN",
+        "kind": "WRITTEN",
+        "code": 0,
+        "detail": "",
+        "bytes": 38530,
+        "crlf": 0,
+        "lone_lf": 216,
+        "unchanged": false
+      },
+      "crlf": {
+        "status": "WRITTEN",
+        "kind": "WRITTEN",
+        "code": 0,
+        "detail": "",
+        "bytes": 38746,
+        "crlf": 216,
+        "lone_lf": 0,
+        "unchanged": false
+      }
+    }
+  ]
+}

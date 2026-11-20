@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-21 01:41 +08:00
+- 生成时间: generated: 2026-11-21 01:57 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
 - 状态证据: reconcile-all-R2739.log (RUNNER PASS 675/675 suites green, reconcile controls 7/7, 4986.4s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 738 | 6003 | 675/675 | R2739 |
+| 738 | 6004 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -734,7 +734,7 @@
 | 695 | os-closeout-export-parity-wire-binding-consumer | ../os/test_closeout_export_parity_wire_binding_consumer.py | 6 | green | 14.6 |
 | 696 | os-export-parity-difference-order-field | ../os/test_export_parity_difference_order_field.py | 6 | no-evidence | - |
 | 697 | os-ship-checklist | ../os/test_ship_checklist.py | 8 | no-evidence | - |
-| 698 | os-export-round | ../os/test_export_round.py | 44 | no-evidence | - |
+| 698 | os-export-round | ../os/test_export_round.py | 45 | no-evidence | - |
 | 699 | os-payment-gate-report | ../os/test_payment_gate_report.py | 11 | no-evidence | - |
 | 700 | os-qa-log | ../os/test_qa_log.py | 10 | no-evidence | - |
 | 701 | os-census-nul-class | ../os/test_census_nul_class.py | 7 | no-evidence | - |
@@ -775,7 +775,7 @@
 | 736 | os-heartbeat | ../os/test_heartbeat.py | 1 | no-evidence | - |
 | 737 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
 | 738 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
-|  | 合计 |  | 6003 | green 675 / FAIL 0 / no-evidence 63 |  |
+|  | 合计 |  | 6004 | green 675 / FAIL 0 / no-evidence 63 |  |
 
 ## 证据出处
 

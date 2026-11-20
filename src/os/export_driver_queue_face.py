@@ -142,11 +142,35 @@ def _discard(staged):
         pass
 
 
+def _face_unjudgeable(staged):
+    """AC-EXPR3 (R3117): can the CEO gate read the bytes about to be landed?
+
+    R3117 measured three birth sites (compose + land) for the live face -
+    export_round.write, tools/status_export_fresh.apply and export_R2431.main -
+    and only the first one asked the gate. A proof owned by one caller is not a
+    property of the landing, so the judgement is asked HERE, on the staged
+    bytes, before any byte is replaced. Asking the staged copy means a refusal
+    costs no landed byte.
+
+    Only the CEO face is judged: any other document this door is asked to land
+    keeps its own contracts. Returns '' when the face is judgeable.
+    """
+    landed = staged[:-len(STAGE_SUFFIX)] if staged.endswith(STAGE_SUFFIX) \
+        else staged
+    if os.path.basename(landed) != 'status-export.json':
+        return ''
+    import export_round as ER
+    code, _report = ER.face_judgeable(staged)
+    return code or ''
+
+
 def publish(root, path, text):
     """Stage, prove with the gate, then replace. Returns the gate verdict.
 
     A queue that moved between the caller's reading and this proof refuses with
     the gate's own verdict word before any byte is replaced (AC-EDQF3).
+    AC-EXPR3 (R3117): an unjudgeable face refuses with E_EDQF_FACE_UNPROVEN
+    naming the gate's own refusal code, and the target stays byte-identical.
     """
     if not isinstance(text, str):
         raise ExportDriverQueueFaceError("E_EDQF_BAD_TEXT")
@@ -154,6 +178,10 @@ def publish(root, path, text):
     staged = path + STAGE_SUFFIX
     with io.open(staged, "wb") as handle:
         handle.write(payload)
+    unjudgeable = _face_unjudgeable(staged)
+    if unjudgeable:
+        _discard(staged)
+        raise ExportDriverQueueFaceError('E_EDQF_FACE_UNPROVEN', unjudgeable)
     try:
         verdict, code = GATE.check(root, staged)
     except GATE.QueueExportFreshnessGateError as exc:
