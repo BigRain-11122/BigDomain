@@ -4976,8 +4976,11 @@ SUITES = [
     # its own line instead of being silently unasked.
     # R3105: the vehicle prints the gate's own fine print, so a refusal that
     # read "census=FAIL" now also names the cause (AC-COUT9, six arms).
+    # R3106: the not-asked line spells all three gate inputs (qa/baseline/doc)
+    # and derives missing= from them - measured, one sentence covered three
+    # different defects and called a world with qa+doc treeless (AC-COUT10).
     ("os-closeout",
-     os.path.join("..", "os", "test_closeout.py"), 21),
+     os.path.join("..", "os", "test_closeout.py"), 22),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with

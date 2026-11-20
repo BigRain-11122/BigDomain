@@ -31,7 +31,7 @@ sys.path.insert(0, BASE)
 
 import closeout as CO  # noqa: E402
 
-EXPECTED_CRITERIA = 21
+EXPECTED_CRITERIA = 22
 MODULE = os.path.join(BASE, "closeout.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout"
@@ -897,6 +897,100 @@ def ac_cout9():
           "would fail) with a named cap")
 
 
+def ac_cout10():
+    """AC-COUT10: the not-asked line names all three inputs it did not find.
+
+    Six arms, one criterion: a world with a qa dir and a document but no census
+    baseline says baseline=0 instead of claiming the world has no tree; an
+    empty world names all three; a world with a baseline but no document names
+    the document; the missing set is DERIVED from the three printed readings
+    (a re-typed list would fail); the code stays ONE token so the shipped
+    substring arm still matches; and the live tree still reads PASS.
+    """
+    import re as _re
+    import qa_writer_census as cwc
+
+    def qa_doc(folder, baseline=None, doc=True):
+        qa_dir = os.path.join(folder, "qa")
+        if not os.path.isdir(qa_dir):
+            os.makedirs(qa_dir)
+        if baseline is not None:
+            with io.open(os.path.join(qa_dir, cwc.BASELINE_NAME), "wb") as fh:
+                fh.write(b'{"empty": true}\n')
+        if doc:
+            write(os.path.join(folder, "docs", "sandbox-suite-matrix.md"),
+                  "| x |\n")
+        return folder
+
+    bare = world()
+    with_qa_doc = qa_doc(world())
+    with_baseline = qa_doc(world(), baseline=True, doc=False)
+    tokens = _re.compile(r"qa=(\d) baseline=(\d) doc=(\d) missing=([a-z,]+)")
+
+
+    def parse(line):
+        found = tokens.search(line)
+        return tuple(found.groups()) if found else None
+
+
+    def derive(readings):
+        names = ("qa", "baseline", "doc")
+        return ",".join(name for name, bit in zip(names, readings)
+                        if bit == "0")
+
+    try:
+        word_a, line_a, verdict_a = CO.tree_refusal(with_qa_doc)
+        parsed_a = parse(line_a)
+        a_ok = (word_a == "NOT-ASKED" and verdict_a == {}
+                and parsed_a is not None and parsed_a[:3] == ("1", "0", "1")
+                and parsed_a[3] == "baseline"
+                and "builds no tree" not in line_a)
+
+        word_b, line_b, _v_b = CO.tree_refusal(bare)
+        parsed_b = parse(line_b)
+        b_ok = (word_b == "NOT-ASKED" and parsed_b is not None
+                and parsed_b[:3] == ("0", "0", "0")
+                and parsed_b[3] == "qa,baseline,doc")
+
+        word_c, line_c, _v_c = CO.tree_refusal(with_baseline)
+        parsed_c = parse(line_c)
+        c_ok = (word_c == "NOT-ASKED" and parsed_c is not None
+                and parsed_c[:3] == ("1", "1", "0")
+                and parsed_c[3] == "doc")
+
+        # DERIVATION: recompute the missing set from the three printed bits.
+        d_ok = all(parse(line)[3] == derive(parse(line)[:3])
+                   for line in (line_a, line_b, line_c))
+
+        code_e, out_e, _ = run_cli([
+            "--root", with_qa_doc, "--round", str(ROUND), "--line",
+            "2026-11-16 R%d PRODUCT: qa and doc but no baseline" % ROUND,
+            "--tick"])
+        e_ok = (code_e == 0 and "gate=NOT-ASKED" in out_e
+                and "CLOSEOUT GATE NOT-ASKED" in out_e
+                and "E_CO_GATE_NO_INPUTS qa=1 baseline=0 doc=1 missing=baseline"
+                in out_e)
+
+        live_word, live_line, _live_v = CO.tree_refusal(ROOT)
+        f_ok = live_word == "PASS" and "census=PASS" in live_line
+
+        ok = a_ok and b_ok and c_ok and d_ok and e_ok and f_ok
+        if not ok:
+            print("  measured: a=%r b=%r c=%r d=%r e=%r f=%r lines=%r"
+                  % (a_ok, b_ok, c_ok, d_ok, e_ok, f_ok,
+                     (line_a, line_b, line_c)), flush=True)
+    finally:
+        cleanup(bare)
+        cleanup(with_qa_doc)
+        cleanup(with_baseline)
+    check(ok, "AC-COUT10 the not-asked line names all three gate inputs: a "
+          "world with qa and a document but no baseline reads baseline=0 "
+          "with missing=baseline instead of claiming a treeless world, an "
+          "empty world names all three, a baseline without a document names "
+          "the document, the missing set is derived from the printed bits, "
+          "the code stays one token, and the live tree still reads PASS")
+
+
 def main():
     print("closeout suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -921,6 +1015,7 @@ def main():
     ac_oosw7()
     ac_cout8()
     ac_cout9()
+    ac_cout10()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

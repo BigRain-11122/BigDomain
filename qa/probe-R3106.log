@@ -1,0 +1,29 @@
+baseline_name='writer-census-baseline.json'
+vehicle_predicate=isfile(qa/<BASELINE_NAME>) and isfile(docs/sandbox-suite-matrix.md)
+printed_tokens=qa=<isdir(qa)> doc=<isfile(doc)> (baseline never printed)
+SHAPE nothing                      word=NOT-ASKED isdir(qa)=0 isfile(baseline)=0 isfile(doc)=0 verdict_keys=0 others=[]
+      line: E_CO_GATE_NO_INPUTS qa=0 doc=0 (this world builds no tree for the gate to read)
+SHAPE qa_dir_only                  word=NOT-ASKED isdir(qa)=1 isfile(baseline)=0 isfile(doc)=0 verdict_keys=0 others=[]
+      line: E_CO_GATE_NO_INPUTS qa=1 doc=0 (this world builds no tree for the gate to read)
+SHAPE qa_dir+doc                   word=NOT-ASKED isdir(qa)=1 isfile(baseline)=0 isfile(doc)=1 verdict_keys=0 others=[]
+      line: E_CO_GATE_NO_INPUTS qa=1 doc=1 (this world builds no tree for the gate to read)
+SHAPE baseline_only                word=NOT-ASKED isdir(qa)=1 isfile(baseline)=1 isfile(doc)=0 verdict_keys=0 others=['writer-census-baseline.json']
+      line: E_CO_GATE_NO_INPUTS qa=1 doc=0 (this world builds no tree for the gate to read)
+SHAPE baseline+doc                 word=RED       isdir(qa)=1 isfile(baseline)=1 isfile(doc)=1 verdict_keys=5 others=['writer-census-baseline.json']
+      line: CLOSEOUT-GATE REFUSED reason=E_CLG_ROW detail=census did not publish flags=
+SHAPE qa_is_a_file+doc             word=NOT-ASKED isdir(qa)=0 isfile(baseline)=0 isfile(doc)=1 verdict_keys=0 others=[]
+      line: E_CO_GATE_NO_INPUTS qa=0 doc=1 (this world builds no tree for the gate to read)
+SHAPE baseline_is_a_dir+doc        word=NOT-ASKED isdir(qa)=1 isfile(baseline)=0 isfile(doc)=1 verdict_keys=0 others=['writer-census-baseline.json']
+      line: E_CO_GATE_NO_INPUTS qa=1 doc=1 (this world builds no tree for the gate to read)
+SHAPE wrong_baseline_name+doc      word=NOT-ASKED isdir(qa)=1 isfile(baseline)=0 isfile(doc)=1 verdict_keys=0 others=['baseline.json']
+      line: E_CO_GATE_NO_INPUTS qa=1 doc=1 (this world builds no tree for the gate to read)
+SHAPE doc_is_a_dir+baseline        word=NOT-ASKED isdir(qa)=1 isfile(baseline)=1 isfile(doc)=0 verdict_keys=0 others=['writer-census-baseline.json']
+      line: E_CO_GATE_NO_INPUTS qa=1 doc=0 (this world builds no tree for the gate to read)
+--- substring assertion census (test_closeout.py) ---
+E_CO_GATE_NO_INPUTS_occurrences=1
+  L701: and "E_CO_GATE_NO_INPUTS" in out_b)
+--- same-sentence scan (vehicle + gate docs) ---
+  src/os/closeout.py:35: that builds no tree reads `gate=NOT-ASKED` with its reason on its own line; one
+  src/os/closeout.py:260: return "NOT-ASKED", ("E_CO_GATE_NO_INPUTS qa=%d doc=%d (this world "
+  src/os/closeout.py:261: "builds no tree for the gate to read)"
+  src/os/closeout.py:415: # Printed, not silent: a round closed in a world that carries no tree

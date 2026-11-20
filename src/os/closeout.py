@@ -32,8 +32,10 @@ help from here - the state door already refuses a newest round with no dated
 line (`E_RSA_NO_DATE`) and one with no uppercase label - while the census drift
 face and the derived document are tree-wide laws that no per-round vehicle was
 asking, which is how "state written, face written, gate red" happened. A world
-that builds no tree reads `gate=NOT-ASKED` with its reason on its own line; one
-that builds a drifted tree is refused by name and the face keeps its bytes.
+whose three gate inputs are not all present reads `gate=NOT-ASKED` with its
+reason on its own line (R3106: the line spells `qa`, `baseline` and `doc`, and
+derives `missing=` from them); one that builds a drifted tree is refused by
+name and the face keeps its bytes.
 Criteria AC-COUT8 were pinned in src/os/backlog.md at R3095 BEFORE this change.
 
 Criteria AC-COUT1..AC-COUT7 were pinned in src/os/backlog.md at R2835 BEFORE
@@ -256,11 +258,18 @@ def tree_refusal(root):
     qa = os.path.join(root, "qa")
     baseline = os.path.join(qa, CG.CENSUS.BASELINE_NAME)
     doc = os.path.join(root, "docs", "sandbox-suite-matrix.md")
-    if not (os.path.isfile(baseline) and os.path.isfile(doc)):
-        return "NOT-ASKED", ("E_CO_GATE_NO_INPUTS qa=%d doc=%d (this world "
-                             "builds no tree for the gate to read)"
-                             % (int(os.path.isdir(qa)),
-                                int(os.path.isfile(doc)))), {}
+    have = (os.path.isdir(qa), os.path.isfile(baseline), os.path.isfile(doc))
+    if not (have[1] and have[2]):
+        # R3106: print all THREE inputs the gate needs, and derive the missing
+        # set from those readings. Measured: an empty qa dir, a baseline path
+        # that is a directory, and a baseline carrying another name all printed
+        # the same `qa=1 doc=1 (this world builds no tree)` - one sentence for
+        # three defects, calling a world with a qa dir and a document treeless.
+        missing = ",".join(name for name, ok in
+                           zip(("qa", "baseline", "doc"), have) if not ok)
+        return "NOT-ASKED", ("E_CO_GATE_NO_INPUTS qa=%d baseline=%d doc=%d "
+                             "missing=%s (the gate was not asked: absent %s)"
+                             % (have[0], have[1], have[2], missing, missing)), {}
     try:
         lines, code, verdict = CG.evaluate(qa, baseline, root=root)
     except (IOError, OSError, ValueError) as exc:
@@ -412,8 +421,8 @@ def run(args):
                 result["fold_margin"], proof.get("gate"),
                 proof.get("bytes"), derived.get("latest"), gate_word)]
     if gate_word == "NOT-ASKED":
-        # Printed, not silent: a round closed in a world that carries no tree
-        # says so on its own line, with the reason the gate was not asked.
+        # Printed, not silent: a round closed in a world whose gate inputs are
+        # not all present says so on its own line, naming which are absent.
         lines.append("CLOSEOUT GATE NOT-ASKED %s" % gate_line)
     return 0, lines
 

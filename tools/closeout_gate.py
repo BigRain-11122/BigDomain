@@ -76,9 +76,10 @@ inside this repo (the shipped AC-CLG7c usage) still gets the document verdict.
 
 Honest boundary, disclosed rather than implied: the vehicle `src/os/closeout.py`
 asks this gate through `tree_refusal` (R3095), so `evaluate` is reached whenever
-a world builds both `qa/` and the derived document; a world that builds neither
-prints `gate=NOT-ASKED` with its reason, and that is the one shape still
-unjudged - printed, never silently skipped.
+a world carries all three inputs the gate reads (`qa/`, its census baseline file
+and the derived document); a world missing any of them prints `gate=NOT-ASKED`
+with its reason, and that is the one shape still unjudged - printed, never
+silently skipped.
 
 R3105 - the same address law spells which face refused:
 
