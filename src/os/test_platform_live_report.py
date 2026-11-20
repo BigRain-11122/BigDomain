@@ -182,8 +182,14 @@ def main():
        "ascii=%s socket_import=%s external_host=%s"
        % (ascii_ok, socket_needle in own, host_needle in own))
 
-    print("SUITE %s %d/%d" % ("PASS" if not FAILS else "FAIL",
-                              len(CHECKS) - len(FAILS), len(CHECKS)))
+    # R3076: the verdict word lives in the literal, not in an inline
+    # conditional argument, so the shipped static reader sees the row this
+    # suite actually prints (README dialect of test_face_sweep.py).
+    if FAILS:
+        print("SUITE FAIL %d/%d failed=%s"
+              % (len(CHECKS) - len(FAILS), len(CHECKS), FAILS))
+    else:
+        print("SUITE PASS %d/%d" % (len(CHECKS), len(CHECKS)))
     return 0 if not FAILS else 2
 
 

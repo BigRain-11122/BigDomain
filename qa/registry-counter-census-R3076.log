@@ -1,0 +1,32 @@
+PASS AC-RCC1-R1 the census walked every row its own AST read: 733 == 733
+PASS AC-RCC1-R2 the three classes are total: 733 == 733
+PASS AC-RCC1-R3 no label is counted twice across classes
+PASS AC-RCC2-R0 the pin still names every row (a new registry row must refresh the pin, which is the one place the population is written)
+PASS AC-RCC2-R1 the shipped tree matches its pin two-way
+PASS AC-RCC2-R2 the fixture world reads exactly one readable row
+PASS AC-RCC2-R3 a file that prints no SUITE row reads silent
+PASS AC-RCC2-R4 a SUITE row assembled from literals reads unparsed (the extractor limit, measured rather than assumed)
+PASS AC-RCC2-R5 a pin naming the wrong class is refused: readable +1 -1 unparsed +1 -0 silent +1 -0
+PASS AC-RCC3-R1 the registry is byte-identical after the census
+PASS AC-RCC3-R2 the pin is byte-identical after the census
+PASS AC-RCC3-R3 the parser is imported from the tool, not re-declared here
+PASS AC-RCC3-R4 the reader is loaded by path from tools/battery_shard.py
+PASS AC-RCC4-R1 the census source is pure ASCII
+PASS AC-RCC4-R2 stdlib only, no network module: 
+PASS AC-RCC5-R1 the shipped reader reads this declaration dialect
+PASS AC-RCC5-R2 the same reader reads a missing declaration as None
+PASS AC-RCC5-R3 a checks-only leaf stays refused rather than guessed
+PASS AC-RCC6-R1 a SUITE row printed through a formatted constant reads readable, not silent
+PASS AC-RCC6-R2 an if/else constant carrying no numbers reads unparsed, not silent
+PASS AC-RCC6-R3 the via-constant world leaves only the two real silent probes: probe-nosuite,probe-lookalike
+PASS AC-RCC7-R1 the negative control stays silent: a file with no SUITE literal and no SUITE constant
+PASS AC-RCC7-R2 a constant the print line does not name is not borrowed by a substring match
+PASS AC-RCC8-R1 a constant joined with the format string on the SAME print line reads readable: probe-viajoin
+PASS AC-RCC8-R2 the same constant and the same numbers on two lines stay unparsed: a cross-line join would fabricate a leaf
+PASS AC-RCC8-R3 text before the placeholder stays unparsed, so the shipped reader anchor - not this join - decides the head
+PASS AC-RCC9-R1 the three face rows read readable: none
+PASS AC-RCC9-R2 each face suite spells its verdict in the literal: none
+PASS AC-RCC9-R3 the negative control refuses: an inline-conditional verdict still reads unparsed while its literal twin reads readable
+PASS AC-RCC9-R4 the pin names the three rows readable and none unparsed
+suite: 30 assertions over 9 criteria
+SUITE PASS 30/30

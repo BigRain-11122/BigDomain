@@ -1,4 +1,4 @@
-"""Battery suite for src/os/registry_counter_census.py - AC-RCC1..AC-RCC7.
+"""Battery suite for src/os/registry_counter_census.py - AC-RCC1..AC-RCC9.
 
 AC-RCC1..AC-RCC4 were pre-registered in src/os/backlog.md (R2918 row) BEFORE
 this file existed. The census answers one board question with a measured list
@@ -273,6 +273,68 @@ def main():
            'shipped reader anchor - not this join - decides the head')
     finally:
         shutil.rmtree(root3, ignore_errors=True)
+
+    # AC-RCC9 (R3076): three P-47 face suites printed their verdict through an
+    # inline conditional ARGUMENT, so the census saw only "SUITE 7 7/7" and
+    # filed three rows the battery CAN refute under UNPARSED. The suites now
+    # spell the verdict in the literal (the shape every READABLE face uses);
+    # this criterion holds both halves plus the refusal that guards them.
+    live = RCC.census(registry=REGISTRY)
+    three = ('os-city-face-report', 'os-ledger-business-report',
+             'os-platform-live-report')
+    late = [label for label in three if label not in live['READABLE']]
+    ok(not late, 'AC-RCC9-R1 the three face rows read readable: %s'
+       % (','.join(late) if late else 'none'))
+    faces = {'os-city-face-report':
+             os.path.join('..', 'os', 'test_city_face_report.py'),
+             'os-ledger-business-report':
+             os.path.join('..', 'os', 'test_ledger_business_report.py'),
+             'os-platform-live-report':
+             os.path.join('..', 'os', 'test_platform_live_report.py')}
+    sandbox_live = os.path.dirname(REGISTRY)
+    unspelled = []
+    for name in sorted(faces):
+        body = io.open(os.path.join(sandbox_live, faces[name]),
+                       encoding='utf-8').read()
+        spelled = ('SUITE PASS %d/%d' in body
+                   or 'SUITE FAIL %d/%d' in body)
+        inline = 'SUITE %s %d/%d' in body
+        if not spelled or inline:
+            unspelled.append(name)
+    ok(not unspelled,
+       'AC-RCC9-R2 each face suite spells its verdict in the literal: %s'
+       % (','.join(unspelled) if unspelled else 'none'))
+    root4 = tempfile.mkdtemp(prefix='bd-rcc-')
+    try:
+        sandbox4 = os.path.join(root4, 'sandbox')
+        os.makedirs(os.path.join(sandbox4, 'probe'))
+        reg4 = os.path.join(sandbox4, 'reconcile_all.py')
+        with io.open(reg4, 'w', encoding='utf-8', newline='\n') as handle:
+            handle.write(
+                'import os\n'
+                'SUITES = [\n'
+                '    ("probe-inline", os.path.join("probe", "inline.py"), 1),\n'
+                '    ("probe-literal", os.path.join("probe", "literal.py"), 1),\n'
+                ']\n')
+        with io.open(os.path.join(sandbox4, 'probe', 'inline.py'), 'w',
+                     encoding='utf-8', newline='\n') as handle:
+            handle.write('FAILS = []\n'
+                         'print("SUITE %s %d/%d" % ("PASS" if not FAILS else '
+                         '"FAIL", 1, 1))\n')
+        with io.open(os.path.join(sandbox4, 'probe', 'literal.py'), 'w',
+                     encoding='utf-8', newline='\n') as handle:
+            handle.write('FAILS = []\nprint("SUITE PASS %d/%d" % (1, 1))\n')
+        world4 = RCC.census(registry=reg4, sandbox=sandbox4)
+        ok('probe-inline' in world4['UNPARSED']
+           and 'probe-literal' in world4['READABLE'],
+           'AC-RCC9-R3 the negative control refuses: an inline-conditional '
+           'verdict still reads unparsed while its literal twin reads readable')
+    finally:
+        shutil.rmtree(root4, ignore_errors=True)
+    pinned_live = json.loads(io.open(PIN, encoding='utf-8').read())
+    ok(all(label in pinned_live.get('readable', []) for label in three)
+       and not any(label in pinned_live.get('unparsed', []) for label in three),
+       'AC-RCC9-R4 the pin names the three rows readable and none unparsed')
 
     # Both numbers are DERIVED from this run, so the registry row stays the only
     # typed count and a new criterion demands a row edit instead of a hand edit.

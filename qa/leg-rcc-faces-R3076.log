@@ -1,0 +1,6 @@
+SHARD scope=SHARD registry_suites=733 registry_criteria=5962 selected=4 selected_criteria=32 cap=600s leg_cap=0s overrides=1 exact=4 state=COMPLETE
+SHARD row os-registry-counter-census rc=0 pass=30 fail=0 detail=yes suite=PASS 30/30 crit=9 8.6s
+SHARD row os-platform-live-report rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 5.0s
+SHARD row os-ledger-business-report rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.5s
+SHARD row os-city-face-report rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 4.1s
+SHARD rc=0 scope=SHARD selected=4 executed=4 green=4 criteria=32 crit_mismatch=0 elapsed=19.2s crit_checked=4
