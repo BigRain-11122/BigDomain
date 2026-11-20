@@ -136,7 +136,7 @@ import sqlite3
 import subprocess
 import sys
 import tempfile
-from datetime import datetime
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import reconcile_all  # suite inventory single source (reuse, no copy)
@@ -5730,6 +5730,83 @@ def heartbeat_card(face):
             % (esc(line), esc(show(face.get("reason")))))
 
 
+def _export_freshness():
+    """The shipped time gate, imported lazily so a thin tree stays honest.
+
+    R3115 measured that src/os/export_freshness.py had zero production
+    consumers: it ran only inside its own suite and its battery leg, while the
+    one face that keeps being rendered after the loop dies (this card) printed
+    export_ts as a bare string. The card consumes that module's reading instead
+    of growing a second age parser.
+    """
+    os_dir = os.path.join(ROOT, "src", "os")
+    if os_dir not in sys.path:
+        sys.path.insert(0, os_dir)
+    try:
+        import export_freshness
+        return export_freshness
+    except Exception:  # honest absence of the gate, named by the card below
+        return None
+
+
+def face_reading():
+    """Ask the shipped gate about the live face at render time.
+
+    Never fabricates a reading: a missing module or an unreadable face comes
+    back as an error the card prints as a failure, not as a green verdict.
+    """
+    module = _export_freshness()
+    if module is None:
+        return {"error": "export_freshness module unavailable"}
+    path = os.path.join(ROOT, "docs", "status-export.json")
+    try:
+        return module.assess(path, datetime.now(timezone.utc))
+    except Exception as exc:
+        return {"error": "%s" % exc}
+
+
+# Measured history (R3115, 160 commits touching the face) holds two stamps
+# written in the FUTURE: the shipped gate bounds age from above only, so a
+# negative age reads FRESH forever. Three minutes of clock skew is tolerated;
+# beyond that the card names it instead of printing it green.
+FUTURE_TOLERANCE_HOURS = 0.05
+
+
+def face_age_card(reading):
+    """Render the gate's own reading of the export face. Consumption only.
+
+    One input, no second parser, no new verdict word - the shipped four stay
+    the shipped four. The one addition is the lower bound: a future stamp is
+    named as an alert rather than rendered as FRESH.
+    """
+    if not isinstance(reading, dict) or not reading:
+        return ("<p class=kv>FACE age absent (honest absence, no fake "
+                "FRESH)</p>")
+    error = reading.get("error")
+    if error:
+        return ("<p class=fail>FACE age unreadable (honest failure, no fake "
+                "FRESH): %s</p>" % esc(str(error)[:200]))
+    age = reading.get("age_hours")
+    gate = reading.get("age_gate_hours")
+    verdict = str(reading.get("verdict") or "UNVERIFIABLE-WINDOW")
+    line = ("FACE age=%s gate=%s verdict=%s"
+            % ("none" if age is None else "%.2fh" % age,
+               "none" if gate is None else "%.0fh" % gate, verdict))
+    window = reading.get("milestone_window_hours")
+    if window is not None:
+        line += " milestone_window=%.1fh" % window
+    rows = ["<p class=kv>%s</p>" % esc(line)]
+    if verdict in ("STALE-FACE", "STALE-WINDOW"):
+        errors = ",".join(str(x) for x in (reading.get("errors") or []))
+        rows.append("<p class=fail>FACE ALERT verdict=%s errors=%s</p>"
+                    % (esc(verdict), esc(errors or "none")))
+    if age is not None and age < -FUTURE_TOLERANCE_HOURS:
+        rows.append("<p class=fail>FACE ALERT future_stamp age=%.2fh "
+                    "(an upper-bound-only gate reads this FRESH forever)</p>"
+                    % age)
+    return "".join(rows)
+
+
 def render():
     lobby = load_json(LOBBY_CFG)
     pay = load_json(PAY_CFG)
@@ -7528,6 +7605,10 @@ def render():
         # the data file's own block, never re-derived here.
         sd30_hb = heartbeat_card(_cf.get("heartbeat")
                                  if isinstance(_cf, dict) else None)
+        # R3115: the export face's own age gets its one live consumer, read
+        # from the shipped gate at render time (an age nobody renders is an
+        # age nobody sees).
+        sd30_age = face_age_card(face_reading())
         sd30_sd_html = esc(sd30_sd_txt)
         sd30_hard = esc(
             "structural law (R1223 pre-registered AC-FD30a..f): "
@@ -7546,7 +7627,7 @@ def render():
             "makes the CEO-visible process status live")
     else:
         sd30_kpis = sd30_do_html = sd30_ceolines = ""
-        sd30_hb = ""
+        sd30_hb = sd30_age = ""
         sd30_sd_html = sd30_hard = ""
     if sd30_err:
         sd30_kpis = ("<p class=fail>STATUS-EXPORT READ FAILED "
@@ -8279,6 +8360,7 @@ from export)</h3>
 <h3 style="margin:14px 0 8px">Heartbeat (the closeout's own tick row)
 </h3>
 __SD30_HB__
+__SD30_AGE__
 <p class=kv>__SD30_SD__</p>
 <p class=kv>__SD30_HARD__</p>
 </div>
@@ -8561,6 +8643,7 @@ __PAYWARN__</footer>
         "__SD30_DO__": sd30_do_html,
         "__SD30_CEOLINES__": sd30_ceolines,
         "__SD30_HB__": sd30_hb,
+        "__SD30_AGE__": sd30_age,
         "__SD30_SD__": sd30_sd_html,
         "__SD30_HARD__": sd30_hard,
         "__M1_TITLE__": esc(m1["card_title"]),

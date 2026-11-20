@@ -1,0 +1,10 @@
+SHARD scope=SHARD registry_suites=738 registry_criteria=6002 selected=8 selected_criteria=86 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-closeout rc=0 pass=26 fail=0 detail=yes suite=PASS 26/26 crit=26 20.0s
+SHARD row os-closeout-export-parity-text-binding rc=0 pass=21 fail=0 detail=yes suite=PASS 6/6 crit=6 0.7s
+SHARD row os-closeout-export-parity-wire rc=0 pass=16 fail=0 detail=yes suite=PASS 16/16 crit=16 0.3s
+SHARD row os-closeout-export-parity-dialect-wire rc=0 pass=20 fail=0 detail=yes suite=PASS 20/20 crit=20 0.3s
+SHARD row os-closeout-export-parity-wire-binding-consumer rc=0 pass=37 fail=0 detail=yes suite=PASS 6/6 crit=6 3.8s
+SHARD row os-closeout-gate rc=0 pass=42 fail=0 detail=yes suite=PASS 42/42 crit=10 9.4s
+SHARD row frontdoor-heartbeat-card rc=0 pass=1 fail=0 detail=yes suite=PASS 1/1 crit=1 2.3s
+SHARD row frontdoor-face-age rc=0 pass=1 fail=0 detail=yes suite=PASS 1/1 crit=1 2.3s
+SHARD rc=0 scope=SHARD selected=8 executed=8 green=8 criteria=86 crit_mismatch=0 elapsed=39.1s crit_checked=8 crit_unchecked=0

@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-21 00:15 +08:00
+- 生成时间: generated: 2026-11-21 01:27 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
 - 状态证据: reconcile-all-R2739.log (RUNNER PASS 675/675 suites green, reconcile controls 7/7, 4986.4s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 737 | 6001 | 675/675 | R2739 |
+| 738 | 6002 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -774,7 +774,8 @@
 | 735 | os-corpus-rewrite-audit | ../os/test_corpus_rewrite_audit.py | 1 | no-evidence | - |
 | 736 | os-heartbeat | ../os/test_heartbeat.py | 1 | no-evidence | - |
 | 737 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
-|  | 合计 |  | 6001 | green 675 / FAIL 0 / no-evidence 62 |  |
+| 738 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
+|  | 合计 |  | 6002 | green 675 / FAIL 0 / no-evidence 63 |  |
 
 ## 证据出处
 
