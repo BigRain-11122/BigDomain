@@ -50,6 +50,20 @@ import re
 import sys
 
 LEDGER_PREFIX_RE = re.compile(r"^R(\d{3,5}) tokens:")
+# R3084 AC-LGA10: the SHAPE law and the PRESENCE law are two laws, and only
+# the shape law may refuse. LEDGER_PREFIX_RE is asked at birth (the write
+# door, ledger_line_shape_guard) and by every shape reader, so it stays
+# anchored at the round marker: a ledger line may not carry a date prefix.
+# The history, however, holds 786 lines that DO carry one (measured over the
+# three archive files), written before that door existed; the fold-carry
+# law asks only whether a pairing survived the fold, and it read presence
+# through the shape regex, so a dated line was invisible and a pairing that
+# survived was reported lost (measured: R2980, window 2987). This regex is
+# the presence read and nothing else: it tolerates the same optional date
+# prefix NARRATIVE_RE already tolerates. classify(), parse_ledger_line()
+# and the write door never see it, so relaxing presence cannot accept a
+# malformed line at birth.
+LEDGER_PRESENCE_RE = re.compile(r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5}) tokens:")
 NARRATIVE_RE = re.compile(r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s")
 # R2580 AC-FCLS1..AC-FCLS3: the summary a fold leaves behind starts with
 # the round it folded ("R2568 fold of log lines 1..20 ..."). The kind
@@ -615,9 +629,12 @@ def audit_fold_carry(paths, min_round=None):
                 # R2875 has no ' local=' field), and this law asks only
                 # whether the pairing survived the fold. Shape has its own
                 # gates, and they are live-only by design (audit_scope).
-                if classify(line) == "ledger":
-                    archive_rounds.add(
-                        int(LEDGER_PREFIX_RE.match(line).group(1)))
+                # R3084: presence goes through LEDGER_PRESENCE_RE, not the
+                # shape regex - a dated line written before the write door
+                # existed is still a ledger line that survived the fold.
+                presence = LEDGER_PRESENCE_RE.match(line)
+                if presence is not None:
+                    archive_rounds.add(int(presence.group(1)))
             if window["round"] < min_round:
                 skipped += 1
                 continue

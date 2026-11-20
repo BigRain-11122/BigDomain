@@ -1,4 +1,4 @@
-﻿"""Archive-aware ledger coverage suite (R2224; criteria AC-LGA1..AC-LGA8
+"""Archive-aware ledger coverage suite (R2224; criteria AC-LGA1..AC-LGA8
 were pre-registered in state/queue/tech.md BEFORE this code existed -
 honesty law).
 
@@ -28,7 +28,7 @@ sys.path.insert(0, BASE)
 
 import ledger_lines as LL  # noqa: E402
 
-EXPECTED_CRITERIA = 9
+EXPECTED_CRITERIA = 10
 MODULE = os.path.join(BASE, "ledger_lines.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 STATE = os.path.join(BASE, "state.json")
@@ -341,12 +341,101 @@ def run():
               "AC-LGA9 fold-carried ledger pairing is scoped to post-pin "
               "windows, reddens the left-behind shape, and is measured "
               "non-vacuous on the shipped tree")
+
+        # AC-LGA10 (R3084): PRESENCE and SHAPE are two laws. The shape law
+        # (LEDGER_PREFIX_RE, parse_ledger_line, the write door) refuses a
+        # dated ledger line at birth; the presence law asks only whether a
+        # pairing survived a fold, and the history holds 786 dated lines
+        # written before that door existed. Reading presence through the
+        # shape regex made one of them invisible and reported a pairing
+        # that had survived as lost (measured: R2980, window 2987).
+        presence_dir = os.path.join(world, "logs-presence")
+        os.makedirs(presence_dir)
+        dated_path = os.path.join(presence_dir,
+                                  "state-log-archive-2026-11.md")
+        dated_line = ("2026-11-19 R5003 tokens: local=1k api=0 "
+                      "api_reason=dated ledger line written before the door")
+        write_text(dated_path,
+                   "# fixture header\n"
+                   "# --- R5003 fold append (fixture)\n"
+                   "2026-11-19 R5003 fixture narrative line\n"
+                   + dated_line + "\n")
+        closed = LL.audit_fold_carry([dated_path], 5000)
+        rc_dat, out_dat, _ = run_cli(
+            [state_path, "--check", "--archives", presence_dir,
+             "--fold-carry", "--since", "5000"])
+        write_text(dated_path,
+                   "# fixture header\n"
+                   "# --- R5003 fold append (fixture)\n"
+                   "2026-11-19 R5003 fixture narrative line\n"
+                   "2026-11-19 R5003 a dated narrative with no ledger\n")
+        still_red = LL.audit_fold_carry([dated_path], 5000)
+        write_text(dated_path, archive_block([5001, 5002]))
+        bare_ok = LL.audit_fold_carry([dated_path], 5000)
+
+        import ledger_line_shape_guard as LLSG
+        door = LLSG.check_candidate(dated_line)
+        with io.open(MODULE, "r", encoding="ascii") as handle:
+            presence_src = handle.read()
+        wired = ("LEDGER_PRESENCE_RE.match(line)" in presence_src
+                 and "archive_rounds.add(int(presence.group(1)))"
+                 in presence_src)
+
+        real_paths = LL.archive_files(LL.default_logs_dir(STATE))
+        shape_rounds = set()
+        windows_n = 0
+        rounds_n = 0
+        skipped_n = 0
+        shape_gaps = []
+        for path in real_paths:
+            for window in LL.load_archive_windows(path):
+                for line in window["lines"]:
+                    if LL.classify(line) == "ledger":
+                        shape_rounds.add(
+                            int(LL.LEDGER_PREFIX_RE.match(line).group(1)))
+                if window["round"] < LL.FOLD_CARRY_PIN:
+                    skipped_n += 1
+                    continue
+                windows_n += 1
+                for round_no in sorted(set(
+                        int(LL.NARRATIVE_RE.match(line).group(1))
+                        for line in window["lines"]
+                        if LL.classify(line) == "round")):
+                    rounds_n += 1
+                    if round_no not in shape_rounds:
+                        shape_gaps.append((window["round"], round_no))
+        real_carry2 = LL.audit_fold_carry(real_paths)
+        check(closed["clean"] is True and closed["gaps"] == []
+              and closed["windows"] == 1 and closed["rounds"] == 1
+              and rc_dat == 0 and out_dat.startswith("FOLD-CARRY OK")
+              and still_red["clean"] is False
+              and [(item["round"], item["window"])
+                   for item in still_red["gaps"]] == [(5003, 5003)]
+              and bare_ok["clean"] is True and bare_ok["windows"] == 1
+              and bare_ok["rounds"] == 2
+              and LL.classify(dated_line) == "round"
+              and error_code(lambda: LL.parse_ledger_line(dated_line))
+              == "E_LGR_NO_ROUND"
+              and LL.LEDGER_PREFIX_RE.pattern == r"^R(\d{3,5}) tokens:"
+              and door["verdict"] == "REFUSED"
+              and door["code"] == "E_LLSG_DATE_PREFIX"
+              and wired
+              and real_carry2["clean"] is True
+              and real_carry2["vacuous"] is False
+              and real_carry2["windows"] == windows_n
+              and real_carry2["rounds"] == rounds_n
+              and real_carry2["skipped_windows"] == skipped_n
+              and all(item["round"] != 2980
+                      for item in real_carry2["gaps"])
+              and (2987, 2980) in shape_gaps,
+              "AC-LGA10 presence sees a dated ledger line, shape still "
+              "refuses it, and only the round set moved")
     finally:
         shutil.rmtree(world, ignore_errors=True)
 
 
 def main():
-    print("suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA8)")
+    print("suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA10)")
     run()
     total = PASSES + FAILS
     print("SUITE %s %d/%d criteria"

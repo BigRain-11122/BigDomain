@@ -1,0 +1,25 @@
+P1 classify today: bare='ledger' dated='round' narrative='round' fold='other'
+P2 live log: lines=672 presence=101 classify_ledger=101 dated=0
+P3 archives: files=3 lines_with_dated_tokens=786
+P4 windows=751 examined=26 post_pin_dated=[(2980, 2987, 'state-log-archive-2026-11.md')]
+P5 gap window narratives for R2980: [(2987, '2026-11-19 R2980 PRODUCT+ENGINEERING: the OVERRI'), (2987, '2026-11-19 R2980 measured, in order: AC-STL14..A')]
+P6 fold-carry today: windows=26 skipped=725 rounds=80 gaps=[(2980, 2987)]
+P6 fold-carry with presence law (in memory): windows=26 rounds=80 gaps=[]
+P7 shape-law blast radius: 786 dated ledger lines would flip other/round -> ledger under a relaxed shape regex
+P8 write door on dated line: verdict=REFUSED code=E_LLSG_DATE_PREFIX token=2026-11-19
+P9 LEDGER_PREFIX_RE sites: 15 files, 24 mentions
+   logs\diag_lgn8_R2639.py x2
+   logs\diag_lgn8_R2639b.py x1
+   src\os\board_R2393.py x1
+   src\os\ledger_line_shape_guard.py x1
+   src\os\ledger_lines.py x5
+   src\os\repair_R2393.py x1
+   src\os\repair_tokens_prefix_R2597.py x3
+   src\os\test_ledger_closeout.py x2
+   src\os\test_ledger_line_shape_guard.py x1
+   src\os\wire_R2401.py x1
+   src\sandbox\reconcile_all.py x1
+   tmp\close_R2914.py x1
+   tmp\log4_R3083.py x1
+   tmp\note_fold_repair_R2905.py x1
+   tmp\probe_R3084.py x2

@@ -1,7 +1,7 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-20 10:43 +08:00
+- 生成时间: generated: 2026-11-20 16:48 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
 - 状态证据: reconcile-all-R2739.log (RUNNER PASS 675/675 suites green, reconcile controls 7/7, 4986.4s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 733 | 5968 | 675/675 | R2739 |
+| 733 | 5969 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -484,7 +484,7 @@
 | 445 | ledger-census-negative | ../os/test_census_negative.py | 12 | green | 0.2 |
 | 446 | ledger-census-baseline-add | ../os/test_census_baseline_add.py | 6 | green | 0.2 |
 | 447 | os-ledger-lines | ../os/test_ledger_lines.py | 8 | green | 9.8 |
-| 448 | os-ledger-archive | ../os/test_ledger_archive.py | 9 | green | 1.0 |
+| 448 | os-ledger-archive | ../os/test_ledger_archive.py | 10 | green | 1.0 |
 | 449 | os-ledger-baseline | ../os/test_ledger_baseline.py | 8 | green | 1.7 |
 | 450 | os-ledger-fold-kind | ../os/test_ledger_fold_kind.py | 6 | green | 0.3 |
 | 451 | os-ledger-fold-kind-dateprefix | ../os/test_ledger_fold_kind_dateprefix.py | 6 | green | 0.5 |
@@ -770,7 +770,7 @@
 | 731 | os-platform-live-report | ../os/test_platform_live_report.py | 8 | no-evidence | - |
 | 732 | os-ledger-business-report | ../os/test_ledger_business_report.py | 8 | no-evidence | - |
 | 733 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
-|  | 合计 |  | 5968 | green 675 / FAIL 0 / no-evidence 58 |  |
+|  | 合计 |  | 5969 | green 675 / FAIL 0 / no-evidence 58 |  |
 
 ## 证据出处
 
