@@ -1,0 +1,31 @@
+files_with_head_index=25 test_files=6
+.\src\os\test_export_round.py:595 idx=0 sg_bad['log'] = [re.sub(r'^\d{4}-\d{2}-\d{2} ', '', sg['log'][0])]
+.\src\os\test_logs_toolkit.py:313 idx=0 ok(pst['log'][0].count('<') == 1 and pst['log'][-1].count('<') == 1,
+.\src\os\test_repair_tokens_prefix.py:63 idx=1 self.assertEqual(payload['log'][1][:7], 'R2596 t')
+.\src\os\test_repair_tokens_prefix.py:64 idx=1 self.assertEqual(LL.classify(payload['log'][1]), 'ledger')
+.\src\os\test_repair_tokens_prefix.py:92 idx=1 after_text.replace(json.dumps(after['log'][1]), '', 1))
+.\src\os\test_state_fold.py:154 idx=0 and folded_state["log"][0] == keep[0]
+.\src\os\test_state_fold.py:155 idx=1 and folded_state["log"][1] == summary
+.\src\os\test_state_fold.py:156 idx=2 and folded_state["log"][2] == keep[1]
+.\src\os\test_state_fold_run.py:106 idx=0 moved = before_state["log"][0:12]
+.\src\os\test_status_export_fresh.py:237 idx=1 record("AC-SXFB11", picked_round == 2821 and picked == fold_state["log"][1],
+.\src\os\test_status_export_fresh.py:244 idx=2 fragment = fold_state["log"][2]
+--- non-test with idx < 30 (a fold cut would move these) ---
+.\src\os\close_R2318.py:231 idx=2 window = state["log"][2:end]
+.\src\os\fold2_R2472.py:22 idx=0 for line in log[0:END]:
+.\src\os\fold_R2331_topup.py:34 idx=1 window = state["log"][1:end]
+.\src\os\fold_R2335.py:31 idx=0 window = state["log"][0:end]
+.\src\os\fold_R2341.py:38 idx=0 window = state["log"][0:end]
+.\src\os\fold_R2350.py:37 idx=0 window = state["log"][0:end]
+.\src\os\fold_R2448.py:16 idx=0 for line in log[0:END]:
+.\src\os\fold_R2450.py:17 idx=0 for line in log[0:END]:
+.\src\os\fold_R2461.py:21 idx=0 for line in log[0:END]:
+.\src\os\fold_R2462.py:21 idx=0 for line in log[0:END]:
+.\src\os\fold_R2469.py:22 idx=0 for line in log[0:END]:
+.\src\os\fold_R2470.py:23 idx=0 for line in log[0:END]:
+.\src\os\fold_R2472.py:22 idx=0 for line in log[0:END]:
+.\src\os\fold_R2473.py:21 idx=0 for line in log[0:END]:
+.\src\os\fold_R2474.py:21 idx=0 for line in log[0:END]:
+.\src\os\fold_R2493.py:22 idx=0 for line in log[0:END]:
+.\src\os\fold_R2504.py:22 idx=0 for line in log[0:END]:
+.\src\os\fold_R2513.py:22 idx=0 for line in log[0:END]:

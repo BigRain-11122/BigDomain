@@ -1,0 +1,9 @@
+PASS AC-SFOLD1 verbatim archive copy for all 12 moved lines, live block 33 >= 30, verdict CLEAR
+PASS AC-SFOLD2 ledger coverage unchanged through the archive: ledger_lines 22 -> 22, rounds 22 -> 22 (R1001 still found)
+PASS AC-SFOLD3 round-trip: field set preserved, re-run reads ALREADY-FOLDED with zero bytes written
+PASS AC-SFOLD4 the reader derives the file own indent: a 2-space real-style file folds in its own layout (header bytes and prefix intact), and items disagreeing with each other refused with the shipped code and no byte written [agree=True other=CLEAR layout=True header=True prefix=True refused=True untouched=True]
+PASS AC-SFOLD5 gate honest: a fold that would leave 2396 bytes over 100 refused E_SFOLD_GATE, the real fold cleared at 2396 <= 78500
+PASS AC-SFOLD6 dry run wrote zero bytes (digest 383d61e5c7bbeb32), source ASCII and clockless, wired as os-state-fold-run(6)
+PASS AC-SFOLD7 a fold may not CREATE a live gap: a cut that would orphan the separated ledger line is REFUSED live-dirty with zero bytes written [a=True fails=['live-dirty', 'carry-gap'] untouched=True]; the same cut with the ledger inside its block is CLEAR and both R4000 lines reach the archive [b=True gaps={'missing': set(), 'orphan': set()}]; a PRE-EXISTING orphan inside the moved window is removed rather than refused, so the law is a SUBSET law [c=True before=[5000] after=[]]; a round the cut SPLITS reads clean on the live face while the fold-carry face names it, so the carry guard refuses it on its own [d=True fails=['carry-gap']]; and the shipped chooser, asked of the log that contains that split, steps off it and returns a window every law accepts with its missing tokens named [e=True end=85]
+CRITERIA 7/7 passes=7 fails=0
+SUITE PASS 7/7

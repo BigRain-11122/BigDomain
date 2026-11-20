@@ -1,0 +1,2 @@
+R3085 FOLD fold_no=40 start=2 end=3 summary_chars=109 tokens=4 missing=0
+STATE FOLD RUN round=R3085 fold=40 mode=execute verdict=CLEAR window=2..3 lines=2 live 32->31 bytes 35692->33347 margin=45153 tokens=4 ok=True archive=VERIFIED layout=AGREE

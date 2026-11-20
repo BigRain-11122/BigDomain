@@ -26,7 +26,7 @@ sys.path.insert(0, BASE)
 import state_fold_run as FR  # noqa: E402
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 7
 MODULE = os.path.join(BASE, "state_fold_run.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold-run"
@@ -51,21 +51,106 @@ def digest(data):
 
 
 def fixture_lines(count=44):
+    """Paired rounds: each narrative is followed by ITS OWN ledger line.
+
+    R3085 turned the old shape (narrative round N, ledger round N+1) into a
+    refusal, and correctly so: a round whose ledger line never travels with
+    its narrative is exactly the fold-carry gap AC-SFOLD8 now refuses.
+    """
     lines = []
     for index in range(count):
-        round_no = 1000 + index
-        if index % 4 == 0:
+        round_no = 1000 + index // 2
+        if index % 2 == 0:
             lines.append("R%d narrative line for the fixture round" % round_no)
-        elif index % 4 == 1:
-            lines.append("R%d tokens: local=1k api=0 api_reason=fixture"
-                         % round_no)
-        elif index % 4 == 2:
-            lines.append("R%d disclosure sentence about the fixture window"
-                         % round_no)
         else:
-            lines.append("R%d repair note kept verbatim in the archive"
+            lines.append("R%d tokens: local=1k api=0 api_reason=fixture reason"
                          % round_no)
     return lines
+
+
+def gap_lines(separated=True, orphan_ledger=False):
+    """A 115-line fixture whose R4000 ledger line may sit away from its block.
+
+    Shape: 10 clean pairs, the R4000 narrative block, 30 clean pairs, the
+    R4000 ledger line, 16 clean pairs. A cut at 60 moves the narrative block
+    and keeps the ledger - the exact shape measured on the live tree this
+    round (R3059 narrative 512..517, retro ledger at 666). `orphan_ledger`
+    adds a ledger line for a round with no narrative anywhere, which is a
+    PRE-EXISTING gap a fold may legitimately remove.
+    """
+    lines = []
+    for index in range(10):
+        round_no = 3000 + index
+        lines.append("R%d narrative line for the first block" % round_no)
+        lines.append("R%d tokens: local=1k api=0 api_reason=fixture reason"
+                     % round_no)
+    if orphan_ledger:
+        lines.append("R5000 tokens: local=1k api=0 api_reason=orphaned reason")
+    lines.append("R4000 narrative line for the separated round")
+    lines.append("R4000 disclosure sentence about the separated round")
+    if not separated:
+        lines.append("R4000 tokens: local=1k api=0 api_reason=fixture reason")
+    for index in range(30):
+        round_no = 3100 + index
+        lines.append("R%d narrative line for the middle block" % round_no)
+        lines.append("R%d tokens: local=1k api=0 api_reason=fixture reason"
+                     % round_no)
+    if separated:
+        lines.append("R4000 tokens: local=1k api=0 api_reason=fixture reason")
+    for index in range(16):
+        round_no = 3200 + index
+        lines.append("R%d narrative line for the last block" % round_no)
+        lines.append("R%d tokens: local=1k api=0 api_reason=fixture reason"
+                     % round_no)
+    return lines
+
+
+def carry_lines():
+    """A round the cut SPLITS: its first line moves, its ledger stays live.
+
+    This is the shape fold 39 opened on the live tree (R3079): the live
+    window still pairs the leftover narrative with the leftover ledger, so
+    the live-gap law reads clean - only the fold-carry question sees it.
+    """
+    lines = []
+    for index in range(10):
+        round_no = 3000 + index
+        lines.append("R%d narrative line for the first block" % round_no)
+        lines.append("R%d tokens: local=1k api=0 api_reason=fixture reason"
+                     % round_no)
+    lines.append("R4000 landed: the first half of a round the cut splits")
+    for index in range(30):
+        round_no = 3100 + index
+        lines.append("R%d narrative line for the middle block" % round_no)
+        lines.append("R%d tokens: local=1k api=0 api_reason=fixture reason"
+                     % round_no)
+    lines.append("R4000 honest disclosures: the second half stays live")
+    lines.append("R4000 tokens: local=1k api=0 api_reason=fixture reason")
+    for index in range(16):
+        round_no = 3200 + index
+        lines.append("R%d narrative line for the last block" % round_no)
+        lines.append("R%d tokens: local=1k api=0 api_reason=fixture reason"
+                     % round_no)
+    return lines
+
+
+def cut_after_ledger(lines, minimum=55):
+    """The first cut after `minimum` that splits no round.
+
+    The last moved line must be a ledger line and the first kept line must
+    open a DIFFERENT round's narrative, which is exactly the shape the
+    shipped round_split predicate accepts. Derived from the fixture instead
+    of hard-coded, because the three fixtures differ by one line and a
+    hard-coded index would silently land on a tokens line.
+    """
+    for end in range(minimum, len(lines) - 30):
+        last = lines[end - 1]
+        head = lines[end]
+        if " tokens:" not in last or " tokens:" in head:
+            continue
+        if last.split()[0] != head.split()[0]:
+            return end
+    raise AssertionError("fixture has no ledger-then-narrative cut")
 
 
 def state_text(lines, indent=INDENT):
@@ -204,7 +289,7 @@ def main():
         with io.open(RUNNER, "rb") as handle:
             runner = handle.read()
         wired = (LABEL.encode("ascii") in runner
-                 and EXPECTED_CRITERIA == 6)
+                 and EXPECTED_CRITERIA == 7)
         check(read(dry_path) == dry_before
               and dry["dry_run_digest_same"] is True
               and dry["verdict"] == "DRY-RUN" and ascii_ok and no_clock
@@ -212,6 +297,98 @@ def main():
               "AC-SFOLD6 dry run wrote zero bytes (digest %s), source ASCII "
               "and clockless, wired as %s(6)"
               % (digest(read(dry_path))[:16], LABEL))
+        # --- AC-SFOLD7: a fold may not CREATE a live gap -------------------
+        # R3085 measured the live shape this closes: R3059's narrative sat at
+        # 512..517 while its retro-written ledger line sat at 666, so a cut
+        # past 518 read as 'no round lost' by the set comparison above and
+        # would have landed a live orphan. The law is a SUBSET law.
+        split_root, split_path = make_world(os.path.join(base, "split"),
+                                            gap_lines(separated=True))
+        split_before = read(split_path)
+        split_end = cut_after_ledger(gap_lines(separated=True))
+        split_report = FR.run(split_root, "R9005", 1, 1, split_end,
+                              "separated pairing summary")
+        arm_a = (split_report["verdict"] == "REFUSED"
+                 and "live-dirty" in split_report["would_fail"]
+                 and read(split_path) == split_before
+                 and not os.path.exists(os.path.join(
+                     split_root, "logs",
+                     os.path.basename(split_report["archive_path"]))))
+
+        pair_root, pair_path = make_world(os.path.join(base, "pair"),
+                                          gap_lines(separated=False))
+        pair_report = FR.run(pair_root, "R9006", 1, 1,
+                             cut_after_ledger(gap_lines(separated=False)),
+                             "adjacent pairing summary")
+        pair_state = json.loads(read(pair_path).decode("utf-8"))
+        pair_gaps = FR.live_gaps(pair_root, pair_state["log"])
+        pair_archive = read(pair_report["archive_path"]).decode("utf-8")
+        arm_b = (pair_report["verdict"] == "CLEAR"
+                 and not pair_gaps["missing"] and not pair_gaps["orphan"]
+                 and "R4000 narrative line for the separated round"
+                 in pair_archive and "R4000 tokens:" in pair_archive)
+
+        subset_root, subset_path = make_world(
+            os.path.join(base, "subset"),
+            gap_lines(separated=False, orphan_ledger=True))
+        before_gaps = FR.live_gaps(
+            subset_root, json.loads(read(subset_path).decode("utf-8"))["log"])
+        subset_report = FR.run(
+            subset_root, "R9007", 1, 1,
+            cut_after_ledger(gap_lines(separated=False, orphan_ledger=True)),
+            "pre-existing gap summary")
+        subset_state = json.loads(read(subset_path).decode("utf-8"))
+        after_gaps = FR.live_gaps(subset_root, subset_state["log"])
+        arm_c = (before_gaps["orphan"] == {5000}
+                 and subset_report["verdict"] == "CLEAR"
+                 and not after_gaps["orphan"])
+        carry_root, carry_path = make_world(os.path.join(base, "carry"),
+                                           carry_lines())
+        carry_before = read(carry_path)
+        carry_report = FR.run(carry_root, "R9008", 1, 1,
+                              cut_after_ledger(carry_lines()),
+                              "split round summary")
+        arm_d = (carry_report["verdict"] == "REFUSED"
+                 and "carry-gap" in carry_report["would_fail"]
+                 and "live-dirty" not in carry_report["would_fail"]
+                 and read(carry_path) == carry_before)
+        choice_root, choice_path = make_world(os.path.join(base, "choice"),
+                                              gap_lines(separated=True))
+        choice_raw = read(choice_path)
+        choice_state = json.loads(choice_raw.decode("utf-8"))
+        end, summary, plan = FR.choose_window(
+            choice_root, choice_raw, choice_state, set(), label="R9009",
+            archive_name="state-log-archive-2026-11.md")
+        arm_e = False
+        if end is not None:
+            reuse, _ = SF.plan_fold(choice_raw, choice_state, 1, end, summary,
+                                    gate=SF.GATE, covered=set())
+            live_after = FR.live_gaps(choice_root, choice_state["log"][end:])
+            live_before = FR.live_gaps(choice_root, choice_state["log"])
+            arm_e = (reuse["token_ok"] and reuse["round_split"] is None
+                     and reuse["folded_log_len"] >= FR.MIN_LIVE_LINES
+                     and reuse["predicted_bytes"] <= SF.GATE
+                     and live_after["missing"] <= live_before["missing"]
+                     and live_after["orphan"] <= live_before["orphan"]
+                     and not FR.prospective_carry_gaps(
+                         choice_root, choice_state["log"][:end]))
+        check(arm_a and arm_b and arm_c and arm_d and arm_e,
+              "AC-SFOLD7 a fold may not CREATE a live gap: a cut that would "
+              "orphan the separated ledger line is REFUSED live-dirty with "
+              "zero bytes written [a=%s fails=%s untouched=%s]; the same cut "
+              "with the ledger inside its block is CLEAR and both R4000 lines "
+              "reach the archive [b=%s gaps=%s]; a PRE-EXISTING orphan inside "
+              "the moved window is removed rather than refused, so the law is "
+              "a SUBSET law [c=%s before=%s after=%s]; a round the cut SPLITS "
+              "reads clean on the live face while the fold-carry face names "
+              "it, so the carry guard refuses it on its own [d=%s fails=%s]; "
+              "and the shipped chooser, asked of the log that contains that "
+              "split, steps off it and returns a window every law accepts "
+              "with its missing tokens named [e=%s end=%s]"
+              % (arm_a, split_report["would_fail"],
+                 read(split_path) == split_before, arm_b, pair_gaps, arm_c,
+                 sorted(before_gaps["orphan"]), sorted(after_gaps["orphan"]),
+                 arm_d, carry_report["would_fail"], arm_e, end))
     finally:
         shutil.rmtree(base, ignore_errors=True)
 

@@ -1,0 +1,16 @@
+state_bytes=702457 log_lines=679 layout=ok
+log_content_bytes=691759 non_log_bytes=10698
+min_live_lines=30
+archive=state-log-archive-2026-11.md exists=True bytes=4367440
+archive_tokens=2037
+all_archive_tokens=4643
+best window=1..649 lines=649 folded_log_len=31 predicted=32172 margin=46328
+tokens_total=189 tokens_missing=143 round_split=None
+tokens_missing_sample=['AC-CFY', 'AC-CFY1', 'AC-CFY2', 'AC-CFY6', 'AC-CFYB1', 'AC-CFYB2', 'AC-CFYB4', 'AC-CFYB6', 'AC-CR1', 'AC-CR4']
+with_all_months tokens_missing=142
+with_all_months sample=['AC-CFY', 'AC-CFY1', 'AC-CFY2', 'AC-CFY6', 'AC-CFYB1', 'AC-CFYB2', 'AC-CFYB4', 'AC-CFYB6', 'AC-CR1', 'AC-CR4']
+after_fold live_lines=30 union_total=22919 ledger=998 round=5347 floor_ok=True live_clean=False
+after_fold new_missing=[] new_orphan=[3059] clean=False
+kept_round_main ok=True round=3084 code=
+fold_carry_clean=True windows=26 rounds=80 skipped=725 gaps=[]
+summary_classify=other fold_re=True round_main_re=False

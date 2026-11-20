@@ -1,0 +1,5 @@
+R3085 TOKENS FIX EVIDENCE
+log_lines=40
+tokens_line_prefix='R3085 tokens: local=~21k api=0 api_reason=one '
+double_prefix_present=False
+missing=[] orphan=[] errors=0 clean=True

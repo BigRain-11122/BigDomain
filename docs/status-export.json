@@ -4,19 +4,19 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-20 R3084 PRODUCT+ENGINEERING: the ledger face's last red row was a presence-law blind spot, not a lost pairing. Ledger lines have two laws and only one of them was asked: the SHAPE law (LEDGER_PREFIX_RE = ^R<n> tokens:, parse_ledger_line, the write door) refuses a date prefix at birth, while the PRESENCE law answers only whether a pairing survived a fold - and audit_fold_carry read presence through the shape regex, so 786 dated ledger lines in the archive were invisible and one of them (R2980, window 2987) was reported lost. ledger_lines.py gained LEDGER_PRESENCE_RE (the same optional date prefix NARRATIVE_RE already tolerates) as the ONE presence law, audit_fold_carry reads it, and classify(), parse_ledger_line and the write door are untouched.",
+    "current": "2026-11-20 R3085 PRODUCT+ENGINEERING: the waterline debt is discharged - state.json 702457B -> 33347B (margin +45153) - and the fold face gained the two guards whose absence let a fold fold itself into a defect. Fold 39 cut R3079 in half and the shipped fold-carry law named it on the window it had just written; fold 40 put those two lines back with their round, and all four faces read clean.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-ledger-siblings-R3084.log (1460B, 2026-11-20)",
-    "latest_evidence": "qa/leg-ledger-siblings-R3084.log (1460B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/fix-R3085-tokens.log (176B, 2026-11-20)",
+    "latest_evidence": "qa/fix-R3085-tokens.log (176B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3084] next window (<=48h): (0) MAIN — **页面上的 11 行红已经清到 1 行，而这 1 行的根因是一个正则的盲区：带日期前缀的账本行在 presence 读法里不存在。** 本轮实测：归档里恰有一条 `2026-11-19 R2980 tokens:`（`logs/state-log-archive-2026-11.md`，4367440B），而 `ledger_lines.LEDGER_PREFIX_RE = ^R(\\d{3,5}) tokens:` 只认行首、`NARRATIVE_RE` 却已容忍可选日期前缀，于是 `audit_fold_carry` 的 presence 读法看不见它，报 `E_LFC_CARRY windows=26 gaps=R2980(w2987)`——一条**没丢的配对被判丢**。下一轮先量（只读）：①`LEDGER_PREFIX_RE` 的消费面（本轮粗测 9 个文件：`ledger_lines.py` 5 处、`reconcile_all.py`、`board_R2393.py`、`repair_R2393.py`、`repair_tokens_prefix_R2597.py` 3 处、`ledger_line_shape_guard.py`、`test_ledger_closeout.py` 2 处、`test_ledger_line_shape_guard.py`、`wire_R2401.py`）逐处判「放宽后是变对还是变松」；②哪些套件把「带日期的 tokens 行 = other」钉死了（若有，就地改判并写明改 judged 非删）；③`parse_ledger_line` 是否应同时接受日期前缀（形状律加强而非放宽）；④确认修好后 `audit_fold_carry` 读 clean=True 且 windows/skipped 数不变。量清后改一行正则 + 一臂判据，且**先落板再动代码**。(1) carried unchanged: the AC-LGA9 regex blind spot above, the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data (truncated)",
-    "next_milestone_due": "2026-11-22T16:57:00+08:00",
-    "updated_at": "2026-11-20T16:57:00+08:00"
+    "next_milestone": "[R3086] next window (<=48h): (0) MAIN — **折叠欠账清零了，而 carry 律留下的那条盲区现在可以量了：一个轮被剪到两个归档窗口里，`audit_fold_carry` 仍读作完整（归档粒度是它的设计），而它的计数面 `archive_ledger_lines` 还走 `classify()`、少计带日期账本行且无门读它。** 下一轮先量（只读）：①在本月归档里数出「叙事跨两个窗口标记」的轮（按 `# --- R<n>` 窗口切分、按轮号取叙事所在窗口集合），量今天有几个、分别在哪些窗口；②同一个 --fold-carry 面上，把判据从「归档里存在某账本行」收紧到「本窗口内存在」会红几轮——只量不落；③`audit_scope` 的 `archive_ledger_lines` 与 `LEDGER_PRESENCE_RE` 口径差的实数（带日期账本行有多少条、被 `classify()` 少计多少），并确认今天有没有门读它；④若收紧会误杀历史窗口，就只给「折叠后新增窗口」加同一律（与 FOLD_CARRY_PIN 同构的 scoped 形态），先量 pin 后的红数再定。量清后落一条判据（cross-window split 可被命名 / 计数面口径对齐 / 无门读它则该面只发布不判）。**先落板再动代码。** (1) carried unchanged: the ledger archive COUNT face that reads `archive_ledger_lines` through `classify()` and understates the dated lines, the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (truncated)",
+    "next_milestone_due": "2026-11-22T17:40:14+08:00",
+    "updated_at": "2026-11-20T17:40:14+08:00"
   },
-  "current": "2026-11-20 R3084 PRODUCT+ENGINEERING: the ledger face's last red row was a presence-law blind spot, not a lost pairing. Ledger lines have two laws and only one of them was asked: the SHAPE law (LEDGER_PREFIX_RE = ^R<n> tokens:, parse_ledger_line, the write door) refuses a date prefix at birth, while the PRESENCE law answers only whether a pairing survived a fold - and audit_fold_carry read presence through the shape regex, so 786 dated ledger lines in the archive were invisible and one of them (R2980, window 2987) was reported lost. ledger_lines.py gained LEDGER_PRESENCE_RE (the same optional date prefix NARRATIVE_RE already tolerates) as the ONE presence law, audit_fold_carry reads it, and classify(), parse_ledger_line and the write door are untouched.",
+  "current": "2026-11-20 R3085 PRODUCT+ENGINEERING: the waterline debt is discharged - state.json 702457B -> 33347B (margin +45153) - and the fold face gained the two guards whose absence let a fold fold itself into a defect. Fold 39 cut R3079 in half and the shipped fold-carry law named it on the window it had just written; fold 40 put those two lines back with their round, and all four faces read clean.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -44,11 +44,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3084 PRODUCT+ENGINEERING: the ledger face's last red row was a presence-law blind spot, not a lost pairing. Ledger lines have two laws and only one of them was asked: the SHAPE law (LEDGER_PREFIX_RE = ^R<n> tokens:, parse_ledger_line, the write door) refuses a date prefix at birth, while the PRESENCE law answers only whether a pairing survived a fold - and audit_fold_carry read presence through the shape regex, so 786 dated ledger lines in the archive were invisible and one of them (R2980, window 2987) was reported lost. ledger_lines.py gained LEDGER_PRESENCE_RE (the same optional date prefix NARRATIVE_RE already tolerates) as the ONE presence law, audit_fold_carry reads it, and classify(), parse_ledger_line and the write door are untouched.",
-  "export_ts": "2026-11-20T16:57:00+08:00",
+  "do": "2026-11-20 R3085 PRODUCT+ENGINEERING: the waterline debt is discharged - state.json 702457B -> 33347B (margin +45153) - and the fold face gained the two guards whose absence let a fold fold itself into a defect. Fold 39 cut R3079 in half and the shipped fold-carry law named it on the window it had just written; fold 40 put those two lines back with their round, and all four faces read clean.",
+  "export_ts": "2026-11-20T17:40:14+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/leg-ledger-siblings-R3084.log (1460B, 2026-11-20)",
-  "next_milestone": "[R3084] next window (<=48h): (0) MAIN — **页面上的 11 行红已经清到 1 行，而这 1 行的根因是一个正则的盲区：带日期前缀的账本行在 presence 读法里不存在。** 本轮实测：归档里恰有一条 `2026-11-19 R2980 tokens:`（`logs/state-log-archive-2026-11.md`，4367440B），而 `ledger_lines.LEDGER_PREFIX_RE = ^R(\\d{3,5}) tokens:` 只认行首、`NARRATIVE_RE` 却已容忍可选日期前缀，于是 `audit_fold_carry` 的 presence 读法看不见它，报 `E_LFC_CARRY windows=26 gaps=R2980(w2987)`——一条**没丢的配对被判丢**。下一轮先量（只读）：①`LEDGER_PREFIX_RE` 的消费面（本轮粗测 9 个文件：`ledger_lines.py` 5 处、`reconcile_all.py`、`board_R2393.py`、`repair_R2393.py`、`repair_tokens_prefix_R2597.py` 3 处、`ledger_line_shape_guard.py`、`test_ledger_closeout.py` 2 处、`test_ledger_line_shape_guard.py`、`wire_R2401.py`）逐处判「放宽后是变对还是变松」；②哪些套件把「带日期的 tokens 行 = other」钉死了（若有，就地改判并写明改 judged 非删）；③`parse_ledger_line` 是否应同时接受日期前缀（形状律加强而非放宽）；④确认修好后 `audit_fold_carry` 读 clean=True 且 windows/skipped 数不变。量清后改一行正则 + 一臂判据，且**先落板再动代码**。(1) carried unchanged: the AC-LGA9 regex blind spot above, the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data (truncated)",
+  "latest_evidence": "qa/fix-R3085-tokens.log (176B, 2026-11-20)",
+  "next_milestone": "[R3086] next window (<=48h): (0) MAIN — **折叠欠账清零了，而 carry 律留下的那条盲区现在可以量了：一个轮被剪到两个归档窗口里，`audit_fold_carry` 仍读作完整（归档粒度是它的设计），而它的计数面 `archive_ledger_lines` 还走 `classify()`、少计带日期账本行且无门读它。** 下一轮先量（只读）：①在本月归档里数出「叙事跨两个窗口标记」的轮（按 `# --- R<n>` 窗口切分、按轮号取叙事所在窗口集合），量今天有几个、分别在哪些窗口；②同一个 --fold-carry 面上，把判据从「归档里存在某账本行」收紧到「本窗口内存在」会红几轮——只量不落；③`audit_scope` 的 `archive_ledger_lines` 与 `LEDGER_PRESENCE_RE` 口径差的实数（带日期账本行有多少条、被 `classify()` 少计多少），并确认今天有没有门读它；④若收紧会误杀历史窗口，就只给「折叠后新增窗口」加同一律（与 FOLD_CARRY_PIN 同构的 scoped 形态），先量 pin 后的红数再定。量清后落一条判据（cross-window split 可被命名 / 计数面口径对齐 / 无门读它则该面只发布不判）。**先落板再动代码。** (1) carried unchanged: the ledger archive COUNT face that reads `archive_ledger_lines` through `classify()` and understates the dated lines, the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (truncated)",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -173,7 +173,7 @@
   },
   "results": [
     [
-      "3084",
+      "3085",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -187,16 +187,16 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 679,
+    "log_lines_in_window": 34,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 100,
+    "substantive_non_idle_mention_lines": 5,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 702457,
+  "state_bytes": 35431,
   "next_milestone_due": "2026-11-22T10:45:10+08:00"
 }

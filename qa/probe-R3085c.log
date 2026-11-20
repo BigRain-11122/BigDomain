@@ -1,0 +1,24 @@
+moved_line_ok=True count_same=True
+after_repair live clean=True new_missing=[] new_orphan=[]
+union ledger=1094 round=5898 floor_ok=True
+round_main ok=True round=3084
+python : Traceback (most recent call last):
+所在位置 行:1 字符: 1
++ python tmp/probe_R3085c.py 2>&1 | Out-File -Encoding utf8 qa/probe-R3 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tmp\probe_R3085c.py", line 52, in <module>
+    __import__("json").loads(repaired_raw.decode("utf-8"))["log"] == moved))
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\json\__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\json\decoder.py", line 361, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ~~~~~~~~~~~~~~^^^^^^^^
+json.decoder.JSONDecodeError: Expecting ',' delimiter: line 526 column 3 (char 550144)

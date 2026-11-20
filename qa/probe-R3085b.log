@@ -1,0 +1,22 @@
+log_lines=679
+pos=512 kind=round head='2026-11-20 R3059 PRODUCT+ENGINEERING: the trend face now says how many SOURCES share the n'
+pos=513 kind=round head='R3059 measured, in order: AC-RUN76 was pinned in src/os/backlog.md BEFORE the word existed'
+pos=514 kind=round head='R3059 gates: SUITE PASS 521/521 over 76 criteria (qa/crawl-runner-R3059.log, 69087B, 523 l'
+pos=515 kind=round head='R3059 GROUP SCAN (content-addressed, read before any work): the ledger face carried zero @'
+pos=516 kind=round head='R3059 honest disclosures: (a) ZERO new payment capability and no network beyond loopback -'
+pos=517 kind=round head='R3059 closeout: tick set to 3059, heartbeat.txt moved to the same round, the board carries'
+pos=666 kind=ledger head='R3059 tokens: local=0 api=0 api_reason=this round never wrote a token line (measured at R3'
+pos=666 LEDGER 'R3059 tokens: local=0 api=0 api_reason=this round never wrote a token line (measured at R3'
+rounds_out_of_order=22
+  R2985 narrative=20..24 ledger=25..25
+  R2986 narrative=26..30 ledger=31..31
+  R3002 narrative=138..141 ledger=142..142
+  R3008 narrative=179..183 ledger=184..184
+  R3009 narrative=185..190 ledger=191..191
+  R3010 narrative=192..197 ledger=198..198
+  R3016 narrative=232..236 ledger=237..237
+  R3017 narrative=238..242 ledger=243..243
+  R3018 narrative=244..249 ledger=250..250
+  R3019 narrative=251..256 ledger=257..257
+  R3020 narrative=258..265 ledger=266..266
+  R3021 narrative=267..273 ledger=274..274

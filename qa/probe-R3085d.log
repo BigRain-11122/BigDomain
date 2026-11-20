@@ -1,0 +1,41 @@
+positional_log_readers=104
+.\src\os\append_log_R2250.py:44 assert payload["log"][-1] == LINE
+.\src\os\append_push_R2472.py:29 if state["log"] and state["log"][-1] == LINE:
+.\src\os\append_push_R2472.py:41 if back["log"][-1] != LINE:
+.\src\os\append_push_R2473.py:47 if back["log"][-1] != LINES[-1]:
+.\src\os\append_R2544.py:26 print('readback_last', back['log'][-1][:40])
+.\src\os\append_state_R2518.py:95 "ok" if back["log"][-1] == TOKENS else "MISMATCH"))
+.\src\os\append_state_R2540.py:101 "ok" if back["log"][-1] == TOKENS else "MISMATCH"))
+.\src\os\append_state_R2541.py:155 "ok" if back["log"][-1] == TOKENS else "MISMATCH",
+.\src\os\backlog_R2250.py:187 assert payload["log"][-1] == SELF_HEAL
+.\src\os\closeout2_R1955.py:48 assert parsed["log"][-2].startswith("2026-10-14 R1955 ledger reports")
+.\src\os\closeout2_R1955.py:49 assert parsed["log"][-1].startswith("2026-10-14 R1955 tokens:")
+.\src\os\closeout2_R1956.py:32 assert parsed["log"][-2].endswith("（R1955/R1953 承传先例）")
+.\src\os\closeout2_R1990.py:36 if not st["log"][-1].startswith("R1990 tokens"):
+.\src\os\closeout2_R1998.py:35 if not st["log"][-1].startswith("R1998 tokens"):
+.\src\os\closeout2_R2008.py:33 assert st["log"][-2].startswith("2026-10-17 R2008")
+.\src\os\closeout2_R2008.py:34 assert st["log"][-1].startswith("R2008 tokens:")
+.\src\os\closeout2_R2029.py:29 assert st["tick"] == 2029 and st["log"][-1].startswith(
+.\src\os\closeout2_R2030.py:34 assert st["tick"] == 2030 and st["log"][-1].startswith(
+.\src\os\closeout3_R1955.py:33 assert parsed["log"][-2].endswith("\uff08R1953/R1898 \u627f\u4f20\u5148\u4f8b\uff09")
+.\src\os\closeout_state_R2073.py:94 if doc["log"][-1] != TOKENS or doc["log"][-2] != ROUND:
+.\src\os\close_R2318.py:231 window = state["log"][2:end]
+.\src\os\correction_R2524.py:61 check["log"][-1] == ROW))
+.\src\os\declare_R2779.py:28 % (len(back["log"]), back["tick"], back["log"][-1] == LINE))
+.\src\os\export_R2431.py:117 if log and isinstance(log[-1], str):
+.\src\os\export_R2431.py:118 return log[-1][:400]
+.\src\os\export_round.py:141 return log[-1] if log else ''
+.\src\os\export_round.py:148 return log[-1]
+.\src\os\fix_comma_R2006.py:23 for l in st["log"][-3:]])
+.\src\os\fix_comma_R2007.py:24 for l in st["log"][-3:]])
+.\src\os\fix_comma_R2008.py:25 for l in st["log"][-3:]])
+.\src\os\fix_R2249_selfheal.py:35 assert NEW in data["log"][-1]
+.\src\os\fix_R2249_selfheal.py:40 assert reread["log"][-1].startswith(
+.\src\os\fold2_R2472.py:22 for line in log[0:END]:
+.\src\os\fold_R1985.py:91 assert st2["log"][-1].startswith("2026-10-15"), "tail line"
+.\src\os\fold_R1988.py:86 assert st2["log"][-1].startswith("2026-10-15"), "tail line"
+.\src\os\fold_R1990.py:85 assert st2["log"][-1].startswith("2026-10-15"), "tail line"
+.\src\os\fold_R2002.py:91 assert st2["log"][-1].startswith(u"2026-10-15（R2000..R2001")
+.\src\os\fold_R2331_topup.py:34 window = state["log"][1:end]
+.\src\os\fold_R2335.py:31 window = state["log"][0:end]
+.\src\os\fold_R2341.py:38 window = state["log"][0:end]

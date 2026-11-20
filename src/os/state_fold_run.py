@@ -95,6 +95,108 @@ def read_archive_text(path):
         return ""
 
 
+def live_gaps(root, lines):
+    """The actionable LIVE gap sets, baseline applied (AC-SFOLD7, R3085).
+
+    The baseline is read from THIS root, so the live tree is judged with the
+    shipped exemption list and a private world is judged with its own (or an
+    empty one) - the law is identical, the exemptions are not borrowed.
+    """
+    path = os.path.join(root, "state", LL.BASELINE_NAME)
+    report = LL.apply_baseline(LL.audit(list(lines)), LL.load_baseline(path))
+    return {"missing": set(report["new_missing"]),
+            "orphan": set(report["new_orphan"])}
+
+
+def prospective_carry_gaps(root, window_lines):
+    """Rounds whose narrative moves without their ledger (AC-SFOLD8, R3085).
+
+    The FOLD-CARRY law (R2914) is only asked AFTER the archive grew, so it
+    could report a gap the fold itself opened - measured this round: fold 39
+    cut R3079 in two (its early lines archived, its disclosures and ledger
+    line left live) and the law reddened the very window the fold had just
+    written. This asks the same question BEFORE any byte is written: every
+    round whose narrative moves must have its ledger line either in the
+    moved window or already standing in an archive window.
+    """
+    held = set()
+    logs_dir = os.path.join(root, "logs")
+    if os.path.isdir(logs_dir):
+        try:
+            for path in LL.archive_files(logs_dir):
+                for window in LL.load_archive_windows(path):
+                    for line in window["lines"]:
+                        match = LL.LEDGER_PRESENCE_RE.match(line)
+                        if match is not None:
+                            held.add(int(match.group(1)))
+        except Exception:
+            held = set()
+    for line in window_lines:
+        match = LL.LEDGER_PRESENCE_RE.match(line)
+        if match is not None:
+            held.add(int(match.group(1)))
+    gaps = set()
+    for line in window_lines:
+        if LL.classify(line) != "round":
+            continue
+        round_no = int(LL.NARRATIVE_RE.match(line).group(1))
+        if round_no not in held:
+            gaps.add(round_no)
+    return sorted(gaps)
+
+
+def base_summary(label, end, start=1, tag="", archive_name=None):
+    """The summary a fold leaves behind, in the shape FOLD_SUMMARY_RE reads."""
+    name = archive_name or os.path.basename(SF.default_archive(
+        os.path.dirname(os.path.dirname(BASE))))
+    return ("%s fold%s of log lines %d..%d into logs/%s"
+            % (label, tag, start, end, name))
+
+
+def choose_window(root, raw, state, covered, start=1, tag="", label=None,
+                  archive_name=None, gate=SF.GATE):
+    """The widest window every law of this face accepts, plus its summary.
+
+    R3085 measured why an operator needs this as a callable rather than a
+    fresh one-off script per round: the choice is a conjunction of five
+    refusals (gate, live floor, round split, live gap, carry gap) and one
+    requirement (every moved token named or already archived), and each hand
+    re-derivation is a fresh chance to miss one - the R3085 hand fold missed
+    the carry question and split a round in half. Returns
+    (end, summary, plan) or (None, None, None).
+    """
+    label = label or "fold"
+    log = state["log"]
+    count = len(log)
+    before = live_gaps(root, log)
+    for end in range(count + start - MIN_LIVE_LINES, start - 1, -1):
+        summary = base_summary(label, end, start, tag, archive_name)
+        plan, _ = SF.plan_fold(raw, state, start, end, summary, gate=gate,
+                               covered=covered)
+        if plan["predicted_bytes"] > gate:
+            continue
+        if plan["folded_log_len"] < MIN_LIVE_LINES:
+            continue
+        if plan["round_split"]:
+            continue
+        after = live_gaps(root, log[end:])
+        if not (after["missing"] <= before["missing"]
+                and after["orphan"] <= before["orphan"]):
+            continue
+        if prospective_carry_gaps(root, log[start - 1:end]):
+            continue
+        if plan["tokens_missing"]:
+            summary = (base_summary(label, end, start, tag, archive_name)
+                       + "; tokens carried: "
+                       + " ".join(plan["tokens_missing"]))
+            plan, _ = SF.plan_fold(raw, state, start, end, summary,
+                                   gate=gate, covered=covered)
+        if not plan["token_ok"]:
+            continue
+        return end, summary, plan
+    return None, None, None
+
+
 def already_folded(state, window_start, window_end, summary):
     """The fold already happened: its summary line is live.
 
@@ -158,6 +260,26 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
         fails.append("live-floor")
     if not layout_agree:
         fails.append("layout-disagree")
+    # AC-SFOLD7 (R3085): a fold may not CREATE a live gap. The post-check
+    # below compares round SETS (E_SFOLD_LEDGER_LOSS), so a narrative moved
+    # into the archive while its ledger line stays behind reads as 'no round
+    # lost' and lands as a live orphan - measured on the shipped tree this
+    # round: R3059's narrative sat at 512..517 and its retro-written ledger
+    # line at 666, so every cut past 518 orphaned it. The law is a SUBSET
+    # law, not 'any gap refuses': a pre-existing gap that the fold REMOVES
+    # (an orphan ledger inside the moved window) must stay foldable.
+    live_before_gaps = live_gaps(root, state["log"])
+    live_after_gaps = live_gaps(root, state["log"][int(window_end):])
+    if not (live_after_gaps["missing"] <= live_before_gaps["missing"]
+            and live_after_gaps["orphan"] <= live_before_gaps["orphan"]):
+        fails.append("live-dirty")
+    # AC-SFOLD8 (R3085): a fold may not open a FOLD-CARRY gap - a narrative
+    # whose ledger line stays behind reads as a lost pairing to every later
+    # reader, and the law that detects it runs only after the archive grew.
+    carry_gaps = prospective_carry_gaps(
+        root, state["log"][plan["window_start"] - 1:plan["window_end"]])
+    if carry_gaps:
+        fails.append("carry-gap")
     if plan["predicted_bytes"] > gate:
         # AC-SFOLD5: a fold that would leave the file over the waterline is
         # refused instead of claiming success - its own code, not the
