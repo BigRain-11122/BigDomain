@@ -212,7 +212,11 @@ def main():
     imports = set(re.findall(r'(?m)^import ([a-zA-Z_][\w.]*)', source))
     imports |= set(re.findall(r'(?m)^from ([a-zA-Z_][\w.]*) import', source))
     allowed = {'ast', 'importlib', 'io', 'json', 'os', 're', 'sys',
-               'importlib.util'}
+               'importlib.util', 'hashlib'}
+    # R3098 JUDGED-CHANGED (not loosened): 'hashlib' joins the whitelist because
+    # the cache key IS a content digest. It is stdlib, has no socket, and the
+    # arm still refuses every module outside this set - the law it states
+    # ("stdlib only, no network module") is unchanged.
     ok(imports <= allowed,
        'AC-RCC4-R2 stdlib only, no network module: %s'
        % ','.join(sorted(imports - allowed)))
@@ -602,6 +606,86 @@ def main():
     finally:
         shutil.rmtree(root7, ignore_errors=True)
 
+
+    # AC-RCC13 (R3098): a CONTENT-addressed cache for the census. The key is
+    # each suite file's own sha256, not (size, mtime): measured this round, two
+    # DIFFERENT 1KB writes inside one second carried the same st_mtime_ns, so an
+    # mtime-keyed cache would serve a stale class. The entry table is sealed, so
+    # a corrupted or hand-edited table is a NAMED refusal instead of a wrong
+    # reading. Cache entries never decide the pin comparison - the measured
+    # report does - and `cache_path=None` keeps the pre-R3098 path exactly.
+    world8_root, world8_sandbox, world8_reg = build_world()
+    try:
+        cache8 = os.path.join(world8_root, 'cache.json')
+        plain8 = RCC.census(registry=world8_reg)
+        cold8 = RCC.census(registry=world8_reg, cache_path=cache8)
+        warm8 = RCC.census(registry=world8_reg, cache_path=cache8)
+        ok(RCC.pin_shape(plain8) == RCC.pin_shape(cold8) == RCC.pin_shape(warm8)
+           and 'E_RCC_CACHE_ABSENT' in cold8['cache']
+           and warm8['cache_reused'] == 3,
+           'AC-RCC13-R1 a cold run writes the cache, a warm run reuses all 3 '
+           'rows, and all three readings name the same classes')
+        with io.open(cache8, encoding='utf-8') as handle:
+            table8 = json.load(handle)
+        ok(table8.get('version') == RCC.CACHE_VERSION
+           and isinstance(table8.get('reader'), str)
+           and table8.get('rows_digest') == RCC._rows_digest(table8['rows'])
+           and len(table8['rows']) == 3,
+           'AC-RCC13-R2 the cache is self-describing (version + reader digest '
+           '+ sealed table), so it can name its own validity')
+        read8 = os.path.join(world8_sandbox, 'probe', 'read.py')
+        with io.open(read8, 'rb') as handle:
+            old8 = handle.read()
+        st8 = os.stat(read8)
+        new8 = old8.replace(b'SUITE', b'XXXXX')
+        assert len(new8) == len(old8), 'the arm needs an equal-length rewrite'
+        with io.open(read8, 'wb') as handle:
+            handle.write(new8)
+        os.utime(read8, ns=(st8.st_atime_ns, st8.st_mtime_ns))
+        moved8 = RCC.census(registry=world8_reg, cache_path=cache8)
+        ok(('probe-readable' in moved8['SILENT']
+            and 'probe-readable' not in moved8['READABLE']
+            and moved8['cache_reused'] == 2),
+           'AC-RCC13-R3 an equal-size, equal-mtime_ns rewrite MOVES the class: '
+           'the content key proves what an mtime key could not')
+        with io.open(cache8, encoding='utf-8') as handle:
+            stale8 = json.load(handle)
+        stale8['reader'] = 'v1:bogus:bogus'
+        with io.open(cache8, 'w', encoding='utf-8', newline='\n') as handle:
+            handle.write(json.dumps(stale8, indent=1, sort_keys=True) + '\n')
+        by_reader8 = RCC.census(registry=world8_reg, cache_path=cache8,
+                                cache_write=False)
+        fresh8 = RCC.census(registry=world8_reg)
+        ok(by_reader8['cache_reused'] == 0
+           and by_reader8['cache'] == 'E_RCC_CACHE_STALE_READER'
+           and RCC.pin_shape(by_reader8) == RCC.pin_shape(fresh8),
+           'AC-RCC13-R4 a reader digest mismatch discards every entry and '
+           'falls back to a cold read with the same classes')
+        stale8['reader'] = RCC.reader_digest()
+        key8 = sorted(stale8['rows'])[0]
+        stale8['rows'][key8]['kind'] = (
+            'SILENT' if stale8['rows'][key8]['kind'] != 'SILENT' else 'READABLE')
+        with io.open(cache8, 'w', encoding='utf-8', newline='\n') as handle:
+            handle.write(json.dumps(stale8, indent=1, sort_keys=True) + '\n')
+        tampered8 = RCC.census(registry=world8_reg, cache_path=cache8,
+                               cache_write=False)
+        with io.open(cache8, 'w', encoding='utf-8', newline='\n') as handle:
+            handle.write('not a cache\n')
+        garbage8 = RCC.census(registry=world8_reg, cache_path=cache8,
+                              cache_write=False)
+        ok(tampered8['cache'] == 'E_RCC_CACHE_TAMPERED'
+           and garbage8['cache'].startswith('E_RCC_CACHE_UNREADABLE')
+           and RCC.pin_shape(tampered8) == RCC.pin_shape(fresh8)
+           and RCC.pin_shape(garbage8) == RCC.pin_shape(fresh8),
+           'AC-RCC13-R5 a corrupted or refused table is NAMED and the census '
+           'still reads the same classes: an unusable cache is never silent')
+        live8 = RCC.census(cache_path=RCC.CACHE)
+        pinned8 = json.loads(io.open(PIN, encoding='utf-8').read())
+        ok(RCC.compare(live8, pinned8) == [],
+           'AC-RCC13-R6 the live cached reading is judged by the PIN over the '
+           'measured report: the cache changes the cost, not the verdict')
+    finally:
+        shutil.rmtree(world8_root, ignore_errors=True)
 
     acs = sorted({match.group(0) for match in
                   (re.match(r'AC-[A-Z]+[0-9]*', label) for label in LABELS)

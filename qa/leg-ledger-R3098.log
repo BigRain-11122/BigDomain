@@ -1,0 +1,3 @@
+SHARD scope=SHARD registry_suites=734 registry_criteria=5987 selected=1 selected_criteria=14 cap=600s leg_cap=0s overrides=1 exact=1 state=COMPLETE
+SHARD row os-ledger-archive rc=0 pass=14 fail=0 detail=yes suite=PASS 14/14 crit=14 2.5s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=14 crit_mismatch=0 elapsed=2.5s crit_checked=1 crit_unchecked=0

@@ -93,6 +93,7 @@ behaviour. Nothing about the reading changed: the pin on disk was written by
 the pre-R3097 code, so a passing --check is the equivalence proof, not a claim.
 """
 import ast
+import hashlib
 import importlib.util
 import io
 import json
@@ -105,6 +106,8 @@ ROOT = os.path.dirname(os.path.dirname(BASE))
 REGISTRY = os.path.join(ROOT, 'src', 'sandbox', 'reconcile_all.py')
 TOOL = os.path.join(ROOT, 'tools', 'battery_shard.py')
 PIN = os.path.join(BASE, 'registry_counter_census_pin.json')
+CACHE = os.path.join(BASE, 'registry_counter_census_cache.json')
+CACHE_VERSION = 1
 LABEL = 'os-registry-counter-census'
 
 PLACEHOLDER = re.compile(r'%[dsrf]|\{[^}]*\}')
@@ -408,25 +411,127 @@ def classify(text, module, consts=None, tree=None):
     return 'UNPARSED', assembled
 
 
-def census(registry=REGISTRY, sandbox=None):
+def reader_digest():
+    """The identity a cache entry is only valid under (R3098).
+
+    A cached CLASS is a statement about one reader applied to one file, so the
+    reader belongs in the key: if `tools/battery_shard.py` or this module's
+    classifier changes, every old entry must be thrown away rather than reused
+    against a reader that no longer answers the same question.
+    """
+    with io.open(TOOL, 'rb') as handle:
+        tool = hashlib.sha256(handle.read()).hexdigest()
+    with io.open(os.path.abspath(__file__), 'rb') as handle:
+        own = hashlib.sha256(handle.read()).hexdigest()
+    return 'v%d:%s:%s' % (CACHE_VERSION, tool, own)
+
+
+def _rows_digest(rows):
+    """Content digest of the entry table itself (R3098).
+
+    A cache that pairs a content hash with a cached CLASS is only as trustworthy
+    as the file that carries the pair: one corrupted byte would serve a wrong
+    class under a right hash. Sealing the table makes any accidental edit a
+    NAMED refusal instead of a quiet wrong answer. Deliberately forging both
+    the entries and this seal is the same act as forging the pin, and is stated
+    as the unprovable face rather than claimed away.
+    """
+    blob = json.dumps(rows, sort_keys=True, separators=(',', ':'))
+    return hashlib.sha256(blob.encode('utf-8')).hexdigest()
+
+
+def load_cache(path, digest):
+    """(entries_by_rel, note). note names why the cache was refused, never ''."""
+    if not path or not os.path.isfile(path):
+        return {}, 'E_RCC_CACHE_ABSENT'
+    try:
+        with io.open(path, encoding='utf-8') as handle:
+            data = json.load(handle)
+    except (IOError, OSError, ValueError) as exc:
+        return {}, 'E_RCC_CACHE_UNREADABLE %s' % type(exc).__name__
+    if not isinstance(data, dict) or not isinstance(data.get('rows'), dict):
+        return {}, 'E_RCC_CACHE_SHAPE'
+    if data.get('reader') != digest:
+        return {}, 'E_RCC_CACHE_STALE_READER'
+    if data.get('rows_digest') != _rows_digest(data['rows']):
+        return {}, 'E_RCC_CACHE_TAMPERED'
+    return data['rows'], ''
+
+
+def write_cache(path, digest, rows):
+    """(note). A failed write is published, never raised into a verdict."""
+    try:
+        with io.open(path, 'w', encoding='utf-8', newline='\n') as handle:
+            handle.write(json.dumps({'version': CACHE_VERSION, 'reader': digest,
+                                     'rows_digest': _rows_digest(rows),
+                                     'rows': rows}, indent=1,
+                                    sort_keys=True) + '\n')
+        return ''
+    except (IOError, OSError) as exc:
+        return 'E_RCC_CACHE_WRITE %s' % type(exc).__name__
+
+
+def census(registry=REGISTRY, sandbox=None, cache_path=None, cache_write=True):
+    """Walk every registry row and classify its suite by reading its source.
+
+    R3098: with `cache_path` given, an entry is reused only when BOTH the file's
+    content digest and the reader digest match. The key is the content, not
+    (size, mtime): measured this round, two writes of different 1KB contents in
+    the same second carried the SAME st_mtime_ns (1795181163516169600), so an
+    mtime-keyed cache would have served a stale class. `cache_path=None` keeps
+    the pre-R3098 path byte for byte, and `cache_write=False` lets a read-only
+    caller (the closeout gate) read the cache without writing it.
+    """
     module = reader()
     rows = registry_rows(registry)
     sandbox = sandbox or os.path.dirname(registry)
+    digest = reader_digest() if cache_path else ''
+    cached, note = (load_cache(cache_path, digest) if cache_path
+                    else ({}, 'E_RCC_CACHE_OFF'))
+    reused = 0
     report = {'rows': len(rows), 'READABLE': [], 'UNPARSED': [],
-              'SILENT': [], 'assembled': 0}
+              'SILENT': [], 'assembled': 0, 'cache': note,
+              'cache_reused': 0}
+    fresh = {}
     for label, rel, crit in rows:
         path = os.path.join(sandbox, rel)
         if not os.path.exists(path):
             raise CensusError('E_RCC_MISSING_SUITE', '%s %s' % (label, rel))
-        text = io.open(path, encoding='utf-8-sig', errors='replace').read()
+        with io.open(path, 'rb') as handle:
+            raw = handle.read()
+        sha = hashlib.sha256(raw).hexdigest()
+        hit = cached.get(rel)
+        if hit is not None and hit.get('sha') == sha:
+            kind = hit.get('kind')
+            if kind in ('READABLE', 'UNPARSED', 'SILENT'):
+                report[kind].append(label)
+                report['assembled'] += int(hit.get('assembled') or 0)
+                fresh[rel] = hit
+                reused += 1
+                continue
+        # Text mode keeps universal-newline translation, which the shipped
+        # reading was measured under; reading the bytes once and decoding the
+        # same bytes keeps that behaviour without a second pass over the disk.
+        with io.TextIOWrapper(io.BytesIO(raw), encoding='utf-8-sig',
+                              errors='replace') as text_io:
+            text = text_io.read()
         try:
             tree = ast.parse(text)
         except SyntaxError:
             tree = None
         consts = suite_constants(text, tree)
         kind, assembled = classify(text, module, consts, tree)
-        report['assembled'] += assembled
         report[kind].append(label)
+        report['assembled'] += assembled
+        fresh[rel] = {'sha': sha, 'kind': kind, 'assembled': assembled}
+    if cache_path:
+        written = write_cache(cache_path, digest, fresh) if cache_write else ''
+        if written:
+            report['cache'] = written if not note else note + ' ' + written
+        elif not note:
+            report['cache'] = 'E_RCC_CACHE_HIT' if reused == len(rows) \
+                else 'E_RCC_CACHE_PARTIAL'
+    report['cache_reused'] = reused
     total = sum(len(report[kind])
                 for kind in ('READABLE', 'UNPARSED', 'SILENT'))
     if total != report['rows']:
@@ -468,6 +573,7 @@ def main(argv):
     as_json = False
     check = False
     write_pin = False
+    use_cache = True
     for arg in argv:
         if arg == '--json':
             as_json = True
@@ -475,18 +581,27 @@ def main(argv):
             check = True
         elif arg == '--write-pin':
             write_pin = True
+        elif arg == '--no-cache':
+            use_cache = False
         elif arg in ('--help', '-h'):
             sys.stdout.write('usage: registry_counter_census.py '
-                             '[--json] [--check] [--write-pin]\n')
+                             '[--json] [--check] [--write-pin] [--no-cache]\n')
             return 0
         else:
             sys.stdout.write('E_RCC_BAD_ARGS %s\n' % arg)
             return 5
+    cache_path = CACHE if use_cache else None
     try:
-        report = census()
+        report = census(cache_path=cache_path)
     except CensusError as exc:
         sys.stdout.write('%s %s\n' % (exc.code, exc.detail))
         return 2
+    if cache_path:
+        # Published, never silent: a reader must be able to see whether the
+        # numbers above came from a cache and whether it was usable at all.
+        sys.stdout.write('CACHE %s reused=%d/%d\n'
+                         % (report['cache'] or 'E_RCC_CACHE_HIT',
+                            report['cache_reused'], report['rows']))
     if write_pin:
         with io.open(PIN, 'w', encoding='utf-8', newline='\n') as handle:
             handle.write(json.dumps(pin_shape(report), indent=2,

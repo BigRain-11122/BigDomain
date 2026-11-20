@@ -49,3 +49,8 @@ state/funnel/*.db
 preview/*.db
 # scratch dir the shell tool leaves untracked; empty and never tracked (R2726)
 tmp/
+# R3098: the census cache is DERIVED from the 734 suite sources and the reader
+# digest. It is a local speed face, never a source of truth - a committed cache
+# would let a reviewer's tree run on another machine's reading, and a fresh
+# clone must cold-read anyway. Deleting it costs one cold run, nothing else.
+src/os/registry_counter_census_cache.json

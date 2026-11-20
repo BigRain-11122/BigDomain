@@ -162,8 +162,17 @@ def check_census(root, registry=None, pin=None):
     import registry_counter_census as RC
     registry = registry or RC.REGISTRY
     pin = pin or RC.PIN
+    # R3098: the live registry may use the shipped content-addressed cache, but
+    # the gate only READS it (cache_write=False) - a gate that writes the tree
+    # it is judging is not a gate. A fixture registry never touches the live
+    # cache file, so no private world can be served another world's classes.
+    cache = None
+    if os.path.normcase(os.path.abspath(registry)) == \
+            os.path.normcase(os.path.abspath(RC.REGISTRY)):
+        cache = RC.CACHE
     try:
-        report = RC.census(registry=registry)
+        report = RC.census(registry=registry, cache_path=cache,
+                           cache_write=False)
     except RC.CensusError as exc:
         return False, "%s %s" % (exc.code, exc.detail)
     try:

@@ -1,0 +1,6 @@
+Q1a rows=734
+Q1a split read_ms=195.2 ast_ms=6766.0 classify_ms=2911.5 total_ms=9872.7
+Q1b files=734 bytes=13206897 read_plus_hash_ms=203.2 lookup_ms=0.2 cold_est_ms=9880.7 warm_est_ms=203.4
+Q1c mtime_ns=[1795181163516169600, 1795181163516169600, 1795181163517675100] same_size=True same_mtime=False
+Q2 cache key = sha256(content) + reader digest; a changed byte moves the key by construction, so 'same size same mtime new bytes' cannot hit
+Q4 test_battery_followup.py bytes=14938 qa_mentions=2 doc_mentions=5 registry_mentions=1 world_defs=0

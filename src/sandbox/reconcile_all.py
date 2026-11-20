@@ -7609,7 +7609,10 @@ SUITES = [
     # the same reason as every row above: a mid-list insert shifts each later
     # suite's shard.
     ("os-registry-counter-census",
-     os.path.join("..", "os", "test_registry_counter_census.py"), 12),
+     os.path.join("..", "os", "test_registry_counter_census.py"), 13),
+    # R3098: 12 -> 13 for AC-RCC13 - the content-addressed cache and its six
+    # arms (key = the file's sha256, not size+mtime; sealed table; named
+    # refusals for a stale reader digest and a corrupted table).
     # R2928: the board carried "590 baselined non-tee evidence files: known debt
     # forever or re-encode to utf-8/LF?" for three windows. Measured before the
     # edit: qa_log --check refuses ALL 590 (a dialect test, not a usability
