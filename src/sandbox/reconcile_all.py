@@ -7805,9 +7805,11 @@ SUITES = [
     # zero publishes a block; a non-measuring writer removes BOTH copies; the
     # grader's _set_line leaves both blocks verbatim; export_R2431 writes only
     # behind its __main__ guard and no importer calls its main. Pinned in
-    # src/os/backlog.md at R3129 BEFORE the suite existed.
+    # src/os/backlog.md at R3129 BEFORE the suite existed. R3130 added a second
+    # criterion (AC-CSC2): a zero-file corpus is unpublishable because the
+    # census refuses an empty/missing target with rc=3 before stats exists.
     ("os-corpus-supply-chain",
-     os.path.join("..", "os", "test_corpus_supply_chain.py"), 1),
+     os.path.join("..", "os", "test_corpus_supply_chain.py"), 2),
     ]
 
 FAILS = 0

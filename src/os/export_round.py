@@ -594,6 +594,18 @@ def corpus_block(corpus):
     Absent input publishes NOTHING rather than a zero: a fabricated 0/0 would
     read as a measured empty corpus, which is the opposite of "not measured".
     The MB divisor is decimal because the label says MB (R3126).
+
+    R3130: a zero-file corpus is ALSO unpublishable, because the one supply
+    path can never produce one. Measured (qa/probe-R3130.log): an empty qa/
+    directory and a missing qa/ directory both make check_against_baseline
+    return rc=3 BEFORE it writes `stats`, so the gate refuses as E_CLG_EMPTY
+    with an empty corpus and the block is never built; only-unreadable
+    entries read files=1/readable=0, and zero-byte files read files=2. Across
+    the six corpus blocks a published face has ever carried (two historical
+    revisions x two levels, plus the live face x two) files is 4230 or 4240 -
+    never 0. So `files <= 0` is a caller error, not an empty corpus, and the
+    card would otherwise print "CORPUS files=0 readable=0 mb=0.0" as if the
+    tree had been read and found empty.
     """
     if not isinstance(corpus, dict):
         return None
@@ -619,6 +631,12 @@ def corpus_block(corpus):
         # publishes no unread key instead of a decorative zero.
         if readable != files:
             block['unread'] = files - readable
+    if files <= 0:
+        # R3130: refused AFTER the derivation above so the shape is visible to
+        # a reader of this function, and refused at all because no shipped
+        # caller can hand it a measured zero (the census refuses empty targets
+        # with rc=3 before stats exists).
+        return None
     return block
 
 

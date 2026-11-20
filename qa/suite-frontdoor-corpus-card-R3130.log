@@ -1,0 +1,16 @@
+python : [ WARN:0@0.317] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallback
+ed to CV_8U.
+所在位置 行:1 字符: 319
++ ... y','sxf'))){ $n=$s[1]; python $s[0] > "tmp\$n-R3130.raw" 2>&1; $rc=$L ...
++                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([ WARN:0@0.317]...acked to CV_8U.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-FDC3
+SUITE PASS 1/1

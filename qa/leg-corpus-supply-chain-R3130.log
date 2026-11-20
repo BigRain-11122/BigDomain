@@ -1,0 +1,8 @@
+SHARD scope=SHARD registry_suites=741 registry_criteria=6017 selected=1 selected_criteria=2 cap=600s leg_cap=0s overrides=1 exact=1 state=RUNNING
+SHARD selected os-corpus-supply-chain crit=2 path=..\os\test_corpus_supply_chain.py
+SHARD row os-corpus-supply-chain rc=0 pass=0 fail=0 detail=none suite=PASS 10/10 crit=2 8.4s
+SHARD rc=2 scope=SHARD selected=1 executed=1 green=1 criteria=2 crit_mismatch=1 elapsed=8.4s crit_checked=1 crit_unchecked=0
+SHARD red-unit undeclared=os-corpus-supply-chain:10!=2
+SHARD disclosure crit_mismatch=os-corpus-supply-chain:10!=2
+QA-LOG WROTE name=leg-corpus-supply-chain-R3130.log bytes=480 lines=5 sha256=fc8a00fdb4a96c36 dialect=utf-8/lf VERDICT PASS
+SHARD evidence name=leg-corpus-supply-chain-R3130.log bytes=480 lines=5 sha256=fc8a00fdb4a96c36 dialect=utf-8/lf

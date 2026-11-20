@@ -4,32 +4,32 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3129 PRODUCT+ENGINEERING: the corpus block's supply chain is now an assertion instead of a worry - the probe found ZERO present->absent flips across 1719 parsable faces, and the new suite pins that only the closeout path supplies it, that a non-measuring writer removes both copies, and that neither the grader's line rewrite nor the legacy writer can strip a block.",
+    "current": "2026-11-21 R3130 PRODUCT+ENGINEERING: an empty corpus is not a state that exists upstream - the census refuses an empty or missing qa/ with rc=3 BEFORE it writes stats, so a zero-file block is now unpublishable rather than printable.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-sxf-R3129.log (6526B, 2026-11-21)",
-    "latest_evidence": "qa/suite-sxf-R3129.log (6526B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-corpus-supply-chain-R3130.log (800B, 2026-11-21)",
+    "latest_evidence": "qa/leg-corpus-supply-chain-R3130.log (800B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3130] next window (<=48h): (0) MAIN — **本轮证明了 corpus 不会被现有三条写面剥离，但「量到 0」与「忘量」在块形状上仍只有一处差别（`files` 存在与否），且 `corpus_block({'files':0,'bytes':0})` 会发布一个看起来像「空语料」的块。** 下一轮先量（只读＋私有世界）：①`qa/` 真·空目录与「只含不可读件」两种世界下，census 的 `stats` 分别给出什么（`files=0/readable=0` 是否可区分）；②发布面历史上是否出现过 `files=0`（按文件派生）；③若把「空语料」显式写成 `state=EMPTY`、把「未测」保持为不出块，卡片与 `export_freshness` 是否仍然逐字兼容。然后裁定：给空语料加命名状态、维持 0 是 0、还是把「0 只可能来自真空树」写成可验证断言。**先落板再动代码。**",
-    "next_milestone_due": "2026-11-23T05:51:08+08:00",
-    "updated_at": "2026-11-21T05:51:08+08:00",
+    "next_milestone": "[R3131] next window (<=48h): (0) MAIN — **零文件现在不可发布，但 `corpus_block` 对「调用方少给了 `readable`」仍然沉默：`{'files': 5, 'bytes': 100}` 会发布一个没有 `readable` 的块，而卡片会印 `readable=none`。** 下一轮先量（只读＋私有世界＋按文件派生）：①装运链里是否有调用方可能不给 `readable`（`closeout_gate` 的 `stats` 是否恒带三键）；②发布面历史上是否出现过缺 `readable` 的块；③若把缺 `readable` 也定为不可发布，`AC-EXPR4` 各臂与卡片措辞是否仍逐字兼容。然后裁定：缺 `readable` 不可发布、`readable` 缺省等于 `files`、还是把「三键恒在」写成可验证断言。**先落板再动代码。**",
+    "next_milestone_due": "2026-11-23T06:04:33+08:00",
+    "updated_at": "2026-11-21T06:04:33+08:00",
     "heartbeat": {
-      "tick": 3129,
-      "state_tick": 3129,
+      "tick": 3130,
+      "state_tick": 3130,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
     },
     "corpus": {
-      "files": 4240,
-      "bytes": 508170054,
+      "files": 4248,
+      "bytes": 508209452,
       "mb": 508.2,
-      "readable": 4240
+      "readable": 4248
     }
   },
-  "current": "2026-11-21 R3129 PRODUCT+ENGINEERING: the corpus block's supply chain is now an assertion instead of a worry - the probe found ZERO present->absent flips across 1719 parsable faces, and the new suite pins that only the closeout path supplies it, that a non-measuring writer removes both copies, and that neither the grader's line rewrite nor the legacy writer can strip a block.",
+  "current": "2026-11-21 R3130 PRODUCT+ENGINEERING: an empty corpus is not a state that exists upstream - the census refuses an empty or missing qa/ with rc=3 BEFORE it writes stats, so a zero-file block is now unpublishable rather than printable.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -57,11 +57,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3129 PRODUCT+ENGINEERING: the corpus block's supply chain is now an assertion instead of a worry - the probe found ZERO present->absent flips across 1719 parsable faces, and the new suite pins that only the closeout path supplies it, that a non-measuring writer removes both copies, and that neither the grader's line rewrite nor the legacy writer can strip a block.",
-  "export_ts": "2026-11-21T05:51:08+08:00",
+  "do": "2026-11-21 R3130 PRODUCT+ENGINEERING: an empty corpus is not a state that exists upstream - the census refuses an empty or missing qa/ with rc=3 BEFORE it writes stats, so a zero-file block is now unpublishable rather than printable.",
+  "export_ts": "2026-11-21T06:04:33+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/suite-sxf-R3129.log (6526B, 2026-11-21)",
-  "next_milestone": "[R3130] next window (<=48h): (0) MAIN — **本轮证明了 corpus 不会被现有三条写面剥离，但「量到 0」与「忘量」在块形状上仍只有一处差别（`files` 存在与否），且 `corpus_block({'files':0,'bytes':0})` 会发布一个看起来像「空语料」的块。** 下一轮先量（只读＋私有世界）：①`qa/` 真·空目录与「只含不可读件」两种世界下，census 的 `stats` 分别给出什么（`files=0/readable=0` 是否可区分）；②发布面历史上是否出现过 `files=0`（按文件派生）；③若把「空语料」显式写成 `state=EMPTY`、把「未测」保持为不出块，卡片与 `export_freshness` 是否仍然逐字兼容。然后裁定：给空语料加命名状态、维持 0 是 0、还是把「0 只可能来自真空树」写成可验证断言。**先落板再动代码。**",
+  "latest_evidence": "qa/leg-corpus-supply-chain-R3130.log (800B, 2026-11-21)",
+  "next_milestone": "[R3131] next window (<=48h): (0) MAIN — **零文件现在不可发布，但 `corpus_block` 对「调用方少给了 `readable`」仍然沉默：`{'files': 5, 'bytes': 100}` 会发布一个没有 `readable` 的块，而卡片会印 `readable=none`。** 下一轮先量（只读＋私有世界＋按文件派生）：①装运链里是否有调用方可能不给 `readable`（`closeout_gate` 的 `stats` 是否恒带三键）；②发布面历史上是否出现过缺 `readable` 的块；③若把缺 `readable` 也定为不可发布，`AC-EXPR4` 各臂与卡片措辞是否仍逐字兼容。然后裁定：缺 `readable` 不可发布、`readable` 缺省等于 `files`、还是把「三键恒在」写成可验证断言。**先落板再动代码。**",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -186,7 +186,7 @@
   },
   "results": [
     [
-      "3129",
+      "3130",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -200,29 +200,29 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 78,
+    "log_lines_in_window": 85,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 17,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 64299,
-  "next_milestone_due": "2026-11-23T05:51:08+08:00",
+  "state_bytes": 70472,
+  "next_milestone_due": "2026-11-23T06:04:33+08:00",
   "heartbeat": {
-    "tick": 3129,
-    "state_tick": 3129,
+    "tick": 3130,
+    "state_tick": 3130,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
   },
   "corpus": {
-    "files": 4240,
-    "bytes": 508170054,
+    "files": 4248,
+    "bytes": 508209452,
     "mb": 508.2,
-    "readable": 4240
+    "readable": 4248
   }
 }
