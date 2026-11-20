@@ -4,19 +4,19 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3110 PRODUCT+ENGINEERING: the repo-root heartbeat row now has one birth site - src/os/heartbeat.py reads with the shipped reader rule (last non-blank of the last five lines, tick (\\d+)), refuses a str, a bool, a negative and a float BEFORE touching the file (E_HB_TICK), lands exactly one tick line in UTF-8/LF through a same-directory temp file plus os.replace, and derives PASS/FLAG with the measured lag from two live readings. This round own heartbeat write goes through it.",
+    "current": "2026-11-21 R3112 PRODUCT: round alignment after one disclosed slip - the R3111 window ran a replay probe with a NEW line, which the duplicate law correctly read as a new append, so the tick moved 3111 -> 3112; this closeout re-aligns the face and the tick at 3112 with no other change, and the R3111 lines above stand exactly as written.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-heartbeat-R3110.log (1081B, 2026-11-21)",
-    "latest_evidence": "qa/suite-heartbeat-R3110.log (1081B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-closeout-R3111.log (636B, 2026-11-21)",
+    "latest_evidence": "qa/leg-closeout-R3111.log (636B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3110] next window (<=48h): (0) MAIN — **身份行已经上屏，但它同样没有消费者，而且它把两件不同的东西印成同一个名字**。下一轮先量（只读）：①`CENSUS-BASELINE` 这行有没有任何读者（`docs/status-export.json`、`export_round`、`HQ-FEEDBACK.md`、任何解析或断言；量到 0 就如实写 0，别假装它在执法）；②`rows=` 现在是**被基线化的文件数**（590），而注册表与矩阵里的 `criteria` 是**判据数**（5996）——量这两个数字在文件里有没有同名混用（`rows=`/`criteria=`/`pinned=` 三处口径），是否该在行里把名字写死成 `files_baselined=` 以免读者误当判据数；③`written=` 取的是 mtime（秒级），而 R3098 已实测同一秒两次写入共享 `st_mtime_ns`——量这个时间戳在内容身份（sha256）已经上屏之后还有没有独立价值，若没有就如实写「装饰」并考虑撤掉；④`--check` 与 OK 两条打印路径共用 `_detail_lines`，但只有 `--check` 被臂直接覆盖——量 OK 路径能否用一个不写盘的私有 PASS 世界覆盖（需要 qa 基线+doc+注册表+state 四件，评估构造成本）；⑤`heartbeat.txt` 写者仍无出生级守卫，量收口车辆能否一并代写（一次写两处会不会破坏既有指纹臂）。**先量后裁，先落板再动代码。** (1) carried unchanged: `reconcile.py` as the uncovered fourth ledger input, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, 27 deep shard-6 rows unmeasured, shard offset/resume as the carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads (truncated)",
-    "next_milestone_due": "2026-11-23T00:20:18+08:00",
-    "updated_at": "2026-11-21T00:20:18+08:00"
+    "next_milestone": "[R3112] next window (<=48h): (0) MAIN — **出生站现在有了唯一消费者，但「消费者是否真的跑过」只能靠人眼读日志**：`heartbeat_face` 的失败臂只在私有世界里被证明过，活盘上从未失败过，所以「这条闸会在真实轮次里拦住一次坏写」仍是**未经验证**的。下一轮先量（只读）：①活盘 `heartbeat.txt` 的发送历史里，`read_tick` 与同轮 state tick 不等的版本有多少（若有，量它们各自是被哪个写者写成，以及当时的 closeout 输出是否已在盘上）；②`closeout.py` 的 `hb=` 读数有没有任何消费者（`docs/status-export.json`、`export_round`、`scan_five_still`、任何断言），量到 0 就如实写 0；③`src/os/heartbeat.py::verify` 的 FLAG 判定与 `scan_five_still.ps1` 的 `[HB]` 判定是否对同一文件给出同一结论（逐版本对照，别再靠人手对齐）；④若 ②=0，裁定是给 `hb=` 一个真消费者（例如 export 面发布心跳 lag，或五静的 HB 面改调 `verify`），还是把读数降级并写明「只有写后读回是执法面」。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board - ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot name its holder, the failure (truncated)",
+    "next_milestone_due": "2026-11-23T00:35:23+08:00",
+    "updated_at": "2026-11-21T00:35:23+08:00"
   },
-  "current": "2026-11-21 R3110 PRODUCT+ENGINEERING: the repo-root heartbeat row now has one birth site - src/os/heartbeat.py reads with the shipped reader rule (last non-blank of the last five lines, tick (\\d+)), refuses a str, a bool, a negative and a float BEFORE touching the file (E_HB_TICK), lands exactly one tick line in UTF-8/LF through a same-directory temp file plus os.replace, and derives PASS/FLAG with the measured lag from two live readings. This round own heartbeat write goes through it.",
+  "current": "2026-11-21 R3112 PRODUCT: round alignment after one disclosed slip - the R3111 window ran a replay probe with a NEW line, which the duplicate law correctly read as a new append, so the tick moved 3111 -> 3112; this closeout re-aligns the face and the tick at 3112 with no other change, and the R3111 lines above stand exactly as written.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -44,11 +44,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3110 PRODUCT+ENGINEERING: the repo-root heartbeat row now has one birth site - src/os/heartbeat.py reads with the shipped reader rule (last non-blank of the last five lines, tick (\\d+)), refuses a str, a bool, a negative and a float BEFORE touching the file (E_HB_TICK), lands exactly one tick line in UTF-8/LF through a same-directory temp file plus os.replace, and derives PASS/FLAG with the measured lag from two live readings. This round own heartbeat write goes through it.",
-  "export_ts": "2026-11-21T00:20:18+08:00",
+  "do": "2026-11-21 R3112 PRODUCT: round alignment after one disclosed slip - the R3111 window ran a replay probe with a NEW line, which the duplicate law correctly read as a new append, so the tick moved 3111 -> 3112; this closeout re-aligns the face and the tick at 3112 with no other change, and the R3111 lines above stand exactly as written.",
+  "export_ts": "2026-11-21T00:35:23+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/suite-heartbeat-R3110.log (1081B, 2026-11-21)",
-  "next_milestone": "[R3110] next window (<=48h): (0) MAIN — **身份行已经上屏，但它同样没有消费者，而且它把两件不同的东西印成同一个名字**。下一轮先量（只读）：①`CENSUS-BASELINE` 这行有没有任何读者（`docs/status-export.json`、`export_round`、`HQ-FEEDBACK.md`、任何解析或断言；量到 0 就如实写 0，别假装它在执法）；②`rows=` 现在是**被基线化的文件数**（590），而注册表与矩阵里的 `criteria` 是**判据数**（5996）——量这两个数字在文件里有没有同名混用（`rows=`/`criteria=`/`pinned=` 三处口径），是否该在行里把名字写死成 `files_baselined=` 以免读者误当判据数；③`written=` 取的是 mtime（秒级），而 R3098 已实测同一秒两次写入共享 `st_mtime_ns`——量这个时间戳在内容身份（sha256）已经上屏之后还有没有独立价值，若没有就如实写「装饰」并考虑撤掉；④`--check` 与 OK 两条打印路径共用 `_detail_lines`，但只有 `--check` 被臂直接覆盖——量 OK 路径能否用一个不写盘的私有 PASS 世界覆盖（需要 qa 基线+doc+注册表+state 四件，评估构造成本）；⑤`heartbeat.txt` 写者仍无出生级守卫，量收口车辆能否一并代写（一次写两处会不会破坏既有指纹臂）。**先量后裁，先落板再动代码。** (1) carried unchanged: `reconcile.py` as the uncovered fourth ledger input, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, 27 deep shard-6 rows unmeasured, shard offset/resume as the carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads (truncated)",
+  "latest_evidence": "qa/leg-closeout-R3111.log (636B, 2026-11-21)",
+  "next_milestone": "[R3112] next window (<=48h): (0) MAIN — **出生站现在有了唯一消费者，但「消费者是否真的跑过」只能靠人眼读日志**：`heartbeat_face` 的失败臂只在私有世界里被证明过，活盘上从未失败过，所以「这条闸会在真实轮次里拦住一次坏写」仍是**未经验证**的。下一轮先量（只读）：①活盘 `heartbeat.txt` 的发送历史里，`read_tick` 与同轮 state tick 不等的版本有多少（若有，量它们各自是被哪个写者写成，以及当时的 closeout 输出是否已在盘上）；②`closeout.py` 的 `hb=` 读数有没有任何消费者（`docs/status-export.json`、`export_round`、`scan_five_still`、任何断言），量到 0 就如实写 0；③`src/os/heartbeat.py::verify` 的 FLAG 判定与 `scan_five_still.ps1` 的 `[HB]` 判定是否对同一文件给出同一结论（逐版本对照，别再靠人手对齐）；④若 ②=0，裁定是给 `hb=` 一个真消费者（例如 export 面发布心跳 lag，或五静的 HB 面改调 `verify`），还是把读数降级并写明「只有写后读回是执法面」。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board - ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot name its holder, the failure (truncated)",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -173,7 +173,7 @@
   },
   "results": [
     [
-      "3110",
+      "3112",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -187,16 +187,16 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 98,
+    "log_lines_in_window": 97,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 82915,
-  "next_milestone_due": "2026-11-23T00:20:18+08:00"
+  "state_bytes": 79503,
+  "next_milestone_due": "2026-11-23T00:35:23+08:00"
 }

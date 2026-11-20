@@ -1,0 +1,15 @@
+PROBE R3111 root=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain
+closeout.py bytes=24164 heartbeat_hits=0 write_tick_hits=0
+iteration_loop.ps1 heartbeat_lines=3 root_heartbeat=0
+modules_naming_heartbeat=46 one_off_shaped=40 other=6
+  live-candidate src/os/gate_drift.py
+  live-candidate src/os/gen550.py
+  live-candidate src/os/heartbeat.py
+  live-candidate src/os/review_window_guard_parity.py
+  live-candidate src/os/test_heartbeat.py
+  live-candidate src/sandbox/reconcile_all.py
+registry_counts refused AttributeError: module 'reconcile_all' has no attribute 'registry_counts'
+registry_lines_naming_heartbeat=2
+  ("os-heartbeat",
+  os.path.join("..", "os", "test_heartbeat.py"), 1),
+live heartbeat_bytes=10 repr=b'tick 3110\n' read_tick=3110 state_tick=3110

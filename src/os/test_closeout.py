@@ -30,8 +30,9 @@ ROOT = os.path.dirname(SRC)
 sys.path.insert(0, BASE)
 
 import closeout as CO  # noqa: E402
+import heartbeat as HB  # noqa: E402
 
-EXPECTED_CRITERIA = 24
+EXPECTED_CRITERIA = 25
 MODULE = os.path.join(BASE, "closeout.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout"
@@ -1133,6 +1134,110 @@ def ac_cout12():
           "run prints it, and a world with no tree carries no detail")
 
 
+def ac_cout13():
+    """AC-COUT13: the closed round also aligns the heartbeat row.
+
+    Six arms, one criterion (R3111): the row is DERIVED from the tick the round
+    just proved on disk (a second closeout must write the new tick, not append
+    to the old one), a duplicate replay leaves it byte-identical, a world whose
+    heartbeat name is occupied is refused BY NAME with the face untouched, a
+    dry run writes nothing and only READS the row, and the live tree's row
+    equals its state tick.
+    """
+    folder = world()
+    hb_path = os.path.join(folder, "heartbeat.txt")
+    face_path = os.path.join(folder, "docs", "status-export.json")
+    try:
+        # a: from absent to the derived single line, with no temp file left.
+        a_ok = HB.read_tick(folder) is None
+        code_a, out_a, _ = run_cli(["--root", folder, "--round", str(ROUND),
+                                    "--line",
+                                    "2026-11-16 R%d PRODUCT: heartbeat lands"
+                                    % ROUND, "--tick"])
+        tick_a, _ = ticks(folder)
+        with io.open(hb_path, "rb") as handle:
+            raw_a = handle.read()
+        leftovers = [name for name in os.listdir(folder)
+                     if name.startswith(".heartbeat.tmp-")]
+        a_ok = (a_ok and code_a == 0 and "hb=%d" % tick_a in out_a
+                and raw_a == ("tick %d\n" % tick_a).encode("ascii")
+                and not leftovers)
+
+        # b: derivation - a second closeout writes the NEW tick, single line.
+        code_b, out_b, _ = run_cli(["--root", folder, "--round",
+                                    str(ROUND + 1), "--line",
+                                    "2026-11-16 R%d PRODUCT: heartbeat moves"
+                                    % (ROUND + 1), "--tick"])
+        tick_b, _ = ticks(folder)
+        with io.open(hb_path, "rb") as handle:
+            raw_b = handle.read()
+        b_ok = (code_b == 0 and tick_b == tick_a + 1
+                and raw_b == ("tick %d\n" % tick_b).encode("ascii"))
+
+        # c: a duplicate replay does not touch the row.
+        before_c = fingerprint(hb_path)
+        code_c, out_c, _ = run_cli(["--root", folder, "--round",
+                                    str(ROUND + 1), "--line",
+                                    "2026-11-16 R%d PRODUCT: heartbeat moves"
+                                    % (ROUND + 1), "--tick"])
+        c_ok = (code_c == 0 and "E_CO_DUPLICATE" in out_c
+                and fingerprint(hb_path) == before_c)
+
+        # d: an occupied name is refused by name, the face keeps its bytes.
+        blocked = world(ROUND + 10)
+        blocked_hb = os.path.join(blocked, "heartbeat.txt")
+        blocked_face = os.path.join(blocked, "docs", "status-export.json")
+        try:
+            os.makedirs(blocked_hb)
+            face_before = fingerprint(blocked_face)
+            code_d, out_d, _ = run_cli(
+                ["--root", blocked, "--round", str(ROUND + 10), "--line",
+                 "2026-11-16 R%d PRODUCT: heartbeat blocked" % (ROUND + 10),
+                 "--tick"])
+            tick_d, _ = ticks(blocked)
+            d_ok = (code_d == 2 and "E_CO_HB_UNPROVEN" in out_d
+                    and "face=NOT-WRITTEN" in out_d
+                    and fingerprint(blocked_face) == face_before
+                    and tick_d == ROUND + 11 and os.path.isdir(blocked_hb))
+        finally:
+            cleanup(blocked)
+
+        # e: a dry run writes nothing and only reads the row.
+        dry = world(ROUND + 20)
+        dry_hb = os.path.join(dry, "heartbeat.txt")
+        dry_state = os.path.join(dry, "src", "os", "state.json")
+        dry_face = os.path.join(dry, "docs", "status-export.json")
+        try:
+            before_e = (fingerprint(dry_state), fingerprint(dry_face))
+            code_e, out_e, _ = run_cli(
+                ["--root", dry, "--round", str(ROUND + 20), "--line",
+                 "2026-11-16 R%d PRODUCT: dry run reads only" % (ROUND + 20),
+                 "--tick", "--check"])
+            after_e = (fingerprint(dry_state), fingerprint(dry_face))
+            e_ok = (code_e == 0 and "hb=none" in out_e
+                    and not os.path.exists(dry_hb) and before_e == after_e)
+        finally:
+            cleanup(dry)
+
+        # f: the live tree's row equals its state tick.
+        live_tick, _ = ticks(ROOT)
+        f_ok = HB.read_tick(ROOT) == live_tick
+
+        ok = a_ok and b_ok and c_ok and d_ok and e_ok and f_ok
+        if not ok:
+            print("  measured: a=%r b=%r c=%r d=%r e=%r f=%r raw_a=%r "
+                  "raw_b=%r out_d=%r out_e=%r"
+                  % (a_ok, b_ok, c_ok, d_ok, e_ok, f_ok, raw_a[:40],
+                     raw_b[:40], out_d.strip()[:200], out_e.strip()[:160]),
+                  flush=True)
+    finally:
+        cleanup(folder)
+    check(ok, "AC-COUT13 the closed round derives the heartbeat row from the "
+          "tick it just proved, a replay leaves it untouched, an occupied "
+          "name is refused by name with the face intact, a dry run writes "
+          "nothing, and the live row equals the live tick")
+
+
 def main():
     print("closeout suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -1160,6 +1265,7 @@ def main():
     ac_cout10()
     ac_cout11()
     ac_cout12()
+    ac_cout13()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

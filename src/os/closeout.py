@@ -20,6 +20,7 @@ This module makes the order a law instead of a habit:
 
     step 0 one-off law (one_off_round_scripts.audit) <- REFUSES a new one-off
     state step  (state_append.run)   <- HARD PRECONDITION, and it is verified
+    heart step  (heartbeat.write_tick) <- the tick just proven, read back
     face step   (export_round.write) <- only reachable when state really moved
 
 It owns no serialisation and no write path of its own. Both writes stay in the
@@ -40,6 +41,15 @@ occupies the name" stop printing the same sentence); one that builds a drifted
 tree is refused by
 name and the face keeps its bytes.
 Criteria AC-COUT8 were pinned in src/os/backlog.md at R3095 BEFORE this change.
+
+R3111 closes the hole the R3110 birth site left: `heartbeat.txt` had exactly
+one reader and no consumer. Measured, this vehicle named the file zero times,
+the loop runner only touches logs/probe-heartbeat.txt, and 40 of the 46 modules
+that name it are one-off evidence scripts - so the tick was published by hand
+every round. Step 1.6 now derives the row from the tick just proven on disk,
+reads it back, and refuses by name (E_CO_HB_UNPROVEN) before the face may
+describe the round. Criteria AC-COUT13 were pinned in src/os/backlog.md at
+R3111 BEFORE this change.
 
 Criteria AC-COUT1..AC-COUT7 were pinned in src/os/backlog.md at R2835 BEFORE
 this file existed.
@@ -96,6 +106,7 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 import export_round as ER  # noqa: E402
+import heartbeat as HB  # noqa: E402
 import one_off_round_scripts as OOR  # noqa: E402
 import state_append as SA  # noqa: E402
 import state_io  # noqa: E402
@@ -191,6 +202,30 @@ def _confirm_state_moved(path, result):
     if len(log) != int(result["log"]):
         return ("E_CO_STATE_UNPROVEN log length on disk %d != reported %d"
                 % (len(log), int(result["log"])))
+    return ""
+
+
+def heartbeat_face(root, tick):
+    """Write the repo-root tick through the one birth site, then read it back.
+
+    R3111 measured the hole this closes: nothing in the closeout path named
+    `heartbeat.txt` at all (`src/os/closeout.py` 24,164B, zero hits), the loop
+    runner only touches `logs/probe-heartbeat.txt`, and of the 46 shipped
+    modules that name the file 40 are one-off `*_R<nnnn>.py` evidence scripts
+    - so every round published its tick by hand and the birth site shipped at
+    R3110 had no consumer. The reading is DERIVED (the state tick that was
+    just proven on disk), never typed, and a refusal is named.
+    """
+    try:
+        HB.write_tick(root, int(tick))
+    except ValueError as exc:
+        return "E_CO_HB_UNPROVEN write=%s tick=%s" % (exc, tick)
+    except (IOError, OSError) as exc:
+        return ("E_CO_HB_UNPROVEN write=%s: %s tick=%s"
+                % (type(exc).__name__, exc, tick))
+    measured = HB.read_tick(root)
+    if measured != int(tick):
+        return "E_CO_HB_UNPROVEN read=%r tick=%s" % (measured, tick)
     return ""
 
 
@@ -417,6 +452,11 @@ def run(args):
             return 2, ["CLOSEOUT FAIL %s face_lagging=1 "
                        "(step 1 left the state untouched; the face cannot "
                        "describe a round it never got)" % behind]
+        # R3111: a dry run writes NOTHING (AC-COUT5 pins that for state and
+        # face), so the heartbeat is only READ here - a private world with no
+        # heartbeat row legitimately reads `none`, and the writing face lives
+        # on the OK path after the state really moved.
+        held_hb = HB.read_tick(root)
         # The tree faces are round-independent, so a dry run can and does ask
         # them - that is the one verdict a --check can give without waiting for
         # a write. A red tree is reported here, not invented.
@@ -434,15 +474,24 @@ def run(args):
         ms_tail = (" " + " ".join(bits) + " state_ms=%s" % state_ms
                    if bits else " face_ms=n/a state_ms=%s" % state_ms)
         return 0, (["CLOSEOUT CHECK step=state tick=%d log=%d bytes=%d "
-                    "fold_margin=%d %s face=NOT-MEASURED gate=%s%s"
+                    "fold_margin=%d %s face=NOT-MEASURED gate=%s hb=%s%s"
                     % (result["tick"], result["log"], result["bytes"],
                        result["fold_margin"], result.get("detail") or "",
-                       gate_word, ms_tail)]
+                       gate_word,
+                       "none" if held_hb is None else str(held_hb), ms_tail)]
                    + _detail_lines(gate_verdict))
 
     unproven = _confirm_state_moved(state_path(root), result)
     if unproven:
         return 2, ["CLOSEOUT FAIL %s step=state face=NOT-WRITTEN" % unproven]
+
+    # ---- step 1.6: the heartbeat row, through its one birth site. ----------
+    # Derived from the tick just proven on disk (never typed), and read back
+    # before the face is allowed to describe the round.
+    heart = heartbeat_face(root, result["tick"])
+    if heart:
+        return 2, ["CLOSEOUT FAIL %s step=heartbeat state=WRITTEN "
+                   "face=NOT-WRITTEN tick=%d" % (heart, result["tick"])]
 
     # ---- step 1.5: the TREE this face is about to speak for. ---------------
     # Asked after the state write (a refusal costs that write, which is the
@@ -474,12 +523,14 @@ def run(args):
                    % (ok, proof.get("gate"), proof.get("bytes"),
                       derived.get("latest"))]
 
+    hb_now = HB.read_tick(root)
     lines = ["CLOSEOUT OK tick=%d state=WRITTEN face=WRITTEN "
              "log=%d bytes=%d fold_margin=%d queue=%s queue_bytes=%s "
-             "latest=%s gate=%s"
+             "latest=%s gate=%s hb=%s"
              % (result["tick"], result["log"], result["bytes"],
                 result["fold_margin"], proof.get("gate"),
-                proof.get("bytes"), derived.get("latest"), gate_word)]
+                proof.get("bytes"), derived.get("latest"), gate_word,
+                "none" if hb_now is None else str(hb_now))]
     if gate_word == "NOT-ASKED":
         # Printed, not silent: a round closed in a world whose gate inputs are
         # not all present says so on its own line, naming which are absent.

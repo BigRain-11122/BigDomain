@@ -4982,9 +4982,11 @@ SUITES = [
     # R3108: it also carries a derived hint - a file named qa no longer prints
     # what an absent qa prints, and a near-name baseline is named with its real
     # count (AC-COUT11). R3109: AC-COUT12 asks whether the round output names
-    # the baseline its census face judged (23 -> 24).
+    # the baseline its census face judged (23 -> 24). R3111: AC-COUT13 asks
+    # whether the closed round also aligns the heartbeat row through its one
+    # birth site (24 -> 25).
     ("os-closeout",
-     os.path.join("..", "os", "test_closeout.py"), 24),
+     os.path.join("..", "os", "test_closeout.py"), 25),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with
