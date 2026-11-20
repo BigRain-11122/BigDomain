@@ -1,0 +1,59 @@
+{
+ "Q1Q2": {
+  "current_face_keys": [],
+  "divergent": 0,
+  "export_revs": 2307,
+  "export_revs_keyed": 1,
+  "logs": 4223,
+  "paired_lines": 2,
+  "sample": [],
+  "unread_token_logs": 0,
+  "worst": null
+ },
+ "Q3": {
+  "baselined_other_unreadable": {
+   "code": 0,
+   "flag": [],
+   "stats": {
+    "bytes": 12,
+    "files": 2,
+    "readable": 1
+   },
+   "verdict": [
+    "verdict: DRIFT-CLEAN"
+   ]
+  },
+  "empty_then_dir": {
+   "dir_code": 0,
+   "dir_flag": [],
+   "dir_stats": {
+    "bytes": 0,
+    "files": 1,
+    "readable": 0
+   },
+   "dir_verdict": [
+    "verdict: DRIFT-CLEAN"
+   ],
+   "empty_code": 0,
+   "empty_stats": {
+    "bytes": 0,
+    "files": 1,
+    "readable": 1
+   }
+  },
+  "fresh_dir_log": {
+   "code": 2,
+   "flag": [
+    "[flag] new-dialect: x.log (class=other)"
+   ],
+   "stats": {
+    "bytes": 12,
+    "files": 2,
+    "readable": 1
+   },
+   "verdict": [
+    "verdict: DRIFT-FLAG"
+   ]
+  }
+ }
+}

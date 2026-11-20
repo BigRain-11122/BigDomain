@@ -1732,10 +1732,70 @@ def ac_cout17():
     finally:
         shutil.rmtree(f_world, ignore_errors=True)
 
-    ok = a_ok and b_ok and c_ok and d_ok and e_ok and f_ok
+    # g: R3127 - the token has to answer "is the gate already covering this?".
+    #    MEASURED before the pin (qa/probe-R3127.log): of 4222 shipped *.log
+    #    only 2 carry a machine `corpus files=N readable=M bytes=B` line, zero
+    #    of them diverge, the token appears in zero logs, and only 1 of 2307
+    #    export-face revisions carries any corpus key - so the reading has
+    #    never fired and is not on the published face. Driven against the
+    #    SHIPPED census: an unbaselined unreadable candidate already reddens
+    #    the flags face (new-dialect), and a name recorded in the baseline's
+    #    other bucket that becomes unreadable is DRIFT-CLEAN - which is the
+    #    one case only the token can witness.
+    fresh_world = tempfile.mkdtemp(prefix="cout17j-")
+    gone_world = tempfile.mkdtemp(prefix="cout17k-")
+    try:
+        os.makedirs(os.path.join(fresh_world, "klass.log"))
+        with open(os.path.join(fresh_world, "ok.log"), "wb") as handle:
+            handle.write(b"plain ascii\n")
+        blank = dict((name, []) for name in CENSUS.BASELINE_CLASSES)
+        fresh_base = os.path.join(tempfile.mkdtemp(prefix="cout17l-"),
+                                  CENSUS.BASELINE_NAME)
+        with open(fresh_base, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(json.dumps(blank, indent=1, sort_keys=True))
+        nbox = {}
+        nlines, ncode = CENSUS.check_against_baseline(fresh_world, fresh_base,
+                                                      stats=nbox)
+        n_line = CO._gate_bits({"face_ms": {}, "corpus": nbox})
+
+        # a readable file that classifies as other (a utf-8 BOM lands there),
+        # recorded by the shipped writer, then replaced by a directory of the
+        # SAME name - the name never migrates, so no flag can see it
+        with open(os.path.join(gone_world, "same.log"), "wb") as handle:
+            handle.write(b"\xef\xbb\xbfplain ascii\n")
+        with open(os.path.join(gone_world, "ok.log"), "wb") as handle:
+            handle.write(b"plain ascii\n")
+        gone_base = os.path.join(gone_world, CENSUS.BASELINE_NAME)
+        _glines, gbcode, _gbase = CENSUS.write_baseline(gone_world, gone_base)
+        with open(gone_base, "rb") as handle:
+            recorded = json.loads(handle.read().decode("utf-8"))
+        os.remove(os.path.join(gone_world, "same.log"))
+        os.makedirs(os.path.join(gone_world, "same.log"))
+        gbox = {}
+        glines2, gcode = CENSUS.check_against_baseline(gone_world, gone_base,
+                                                       stats=gbox)
+        g_line = CO._gate_bits({"face_ms": {}, "corpus": gbox})
+        g_ok = (gbcode == 0 and "same.log" in recorded.get("other", [])
+                and ncode == 2
+                and any("new-dialect" in row for row in nlines)
+                and nbox.get("readable", 0) < nbox.get("files", 0)
+                and "corpus_unread=1" in n_line
+                and gcode == 0
+                and not any(row.startswith("[flag]") for row in glines2)
+                and gbox.get("files") == 2 and gbox.get("readable") == 1
+                and "corpus_unread=1" in g_line)
+        if not g_ok:
+            print("  measured g fresh=%r/%r %r gone=%r/%r %r %r"
+                  % (ncode, nbox, n_line, gcode, gbox, glines2[-2:], g_line),
+                  flush=True)
+    finally:
+        shutil.rmtree(fresh_world, ignore_errors=True)
+        shutil.rmtree(gone_world, ignore_errors=True)
+
+    ok = a_ok and b_ok and c_ok and d_ok and e_ok and f_ok and g_ok
     if not ok:
-        print("  measured: a=%r b=%r c=%r d=%r e=%r f=%r head=%r check=%r"
-              % (a_ok, b_ok, c_ok, d_ok, e_ok, f_ok, head[:120],
+        print("  measured: a=%r b=%r c=%r d=%r e=%r f=%r g=%r head=%r check=%r"
+              % (a_ok, b_ok, c_ok, d_ok, e_ok, f_ok, g_ok, head[:120],
                  check_text[:200]), flush=True)
     check(ok, "AC-COUT17 the OK path prints the tree-gate ledger it paid for, "
           "the dry run publishes the corpus beside the milliseconds, a world "
@@ -1743,7 +1803,10 @@ def ac_cout17():
           "are derived from the gate's verdict rather than typed, the gate's "
           "published headline keeps its shipped shape, a byte change that "
           "moves the corpus does not move the verdict, and the published MB is "
-          "decimal with unread candidates named only when they exist")
+          "decimal with unread candidates named only when they exist, and the "
+          "one silent case is pinned: a new unreadable name already flags as "
+          "new-dialect while a baselined other name that turns unreadable "
+          "stays DRIFT-CLEAN and is witnessed by corpus_unread alone")
 
 
 def main():
