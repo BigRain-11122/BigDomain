@@ -4981,9 +4981,10 @@ SUITES = [
     # different defects and called a world with qa+doc treeless (AC-COUT10).
     # R3108: it also carries a derived hint - a file named qa no longer prints
     # what an absent qa prints, and a near-name baseline is named with its real
-    # count (AC-COUT11).
+    # count (AC-COUT11). R3109: AC-COUT12 asks whether the round output names
+    # the baseline its census face judged (23 -> 24).
     ("os-closeout",
-     os.path.join("..", "os", "test_closeout.py"), 23),
+     os.path.join("..", "os", "test_closeout.py"), 24),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with
@@ -7672,9 +7673,10 @@ SUITES = [
     # census reading one suite source once with the same result (7 -> 8).
     # R3104: a sixth criterion (AC-CLG9) pins the matrix face refusing a root
     # whose registry it cannot address, and gives the R3103 refusal codes arms
-    # in this suite instead of only in battery_followup (8 -> 9).
+    # in this suite instead of only in battery_followup (8 -> 9). R3109:
+    # AC-CLG10 asks whether a deep PASS names the baseline it judged (9 -> 10).
     ("os-closeout-gate",
-     os.path.join("..", "os", "test_closeout_gate.py"), 9),
+     os.path.join("..", "os", "test_closeout_gate.py"), 10),
     # R2935: R2934 photographed the sandbox for the first time, but one pass is
     # a SNAPSHOT - it cannot tell "alive" from "painted cleanly this time". The
     # ruling is not to run a browser under the registry law but to move the LAW

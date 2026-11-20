@@ -31,7 +31,7 @@ sys.path.insert(0, BASE)
 
 import closeout as CO  # noqa: E402
 
-EXPECTED_CRITERIA = 23
+EXPECTED_CRITERIA = 24
 MODULE = os.path.join(BASE, "closeout.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout"
@@ -851,8 +851,17 @@ def ac_cout9():
                     dry, "src", "os", "state.json")))
 
         live_word, live_line, live_verdict = CO.tree_refusal(ROOT)
+        # R3109 JUDGED-CHANGED: a green tree now carries READING rows (the
+        # baseline identity) in `detail`, so "no detail at all" is no longer
+        # the right assertion. The arm's intent is kept: a PASS may never carry
+        # the gate's REFUSAL fine print - no flag rows, no error codes, and no
+        # cause - and the green headline is unchanged.
+        live_detail = list(live_verdict.get("detail") or [])
         e_ok = (live_word == "PASS" and "census=PASS" in live_line
-                and not (live_verdict.get("detail") or [])
+                and not [row for row in live_detail
+                         if row.startswith("[flag]")]
+                and not [row for row in live_detail
+                         if row.split(" ", 1)[0].startswith("E_")]
                 and not live_verdict.get("cause"))
 
         code_f, out_f, _ = run_cli([
@@ -892,7 +901,8 @@ def ac_cout9():
     check(ok, "AC-COUT9 the vehicle carries the gate's own fine print: a root "
           "with no registry reads cause=E_CLG_FOREIGN_REGISTRY with the "
           "registry and root named, the flags face's rows arrive, --check asks "
-          "it without writing, the live tree stays PASS with no detail, and "
+          "it without writing, the live tree stays PASS with no refusal fine "
+          "print, and "
           "the lines are byte-identical to the gate's own (a re-typed copy "
           "would fail) with a named cap")
 
@@ -1077,6 +1087,52 @@ def ac_cout11():
           "still reads PASS")
 
 
+def ac_cout12():
+    """AC-COUT12: the closed round names the baseline its census face judged.
+
+    Three arms, one criterion (R3109): the live PASS verdict carries the gate's
+    derived identity row; the dry run PRINTS it (so an operator holding the
+    round output can re-check the file); and a world that builds no tree has an
+    empty detail, because nothing was judged and nothing may be implied.
+    """
+    live_word, live_line, live_verdict = CO.tree_refusal(ROOT)
+    detail = list(live_verdict.get("detail") or [])
+    ident = [row for row in detail if row.startswith("CENSUS-BASELINE ")]
+    live_base = os.path.join(ROOT, "qa", "writer-census-baseline.json")
+    want_sha = ""
+    if os.path.isfile(live_base):
+        with io.open(live_base, "rb") as handle:
+            want_sha = hashlib.sha256(handle.read()).hexdigest()[:12]
+    a_ok = (live_word == "PASS" and len(ident) == 1
+            and ("sha256=%s" % want_sha) in ident[0]
+            and "name=qa/writer-census-baseline.json" in ident[0])
+
+    tick = int(ticks(ROOT)[0])
+    code_b, out_b, _err_b = run_cli(
+        ["--check", "--round", str(tick + 1),
+         "--line", "2026-11-20 R%d SMOKE the dry run names the baseline it "
+                   "judged" % (tick + 1)])
+    b_ok = (code_b == 0 and "gate=PASS" in out_b
+            and any(row.startswith("CENSUS-BASELINE ")
+                    for row in out_b.splitlines()))
+
+    bare = world()
+    try:
+        word_c, _line_c, verdict_c = CO.tree_refusal(bare)
+        c_ok = (word_c in ("NOT-ASKED",)
+                and not (verdict_c.get("detail") or []))
+    finally:
+        cleanup(bare)
+
+    ok = a_ok and b_ok and c_ok
+    if not ok:
+        print("  measured: a=%r b=%r c=%r detail=%r out=%r"
+              % (a_ok, b_ok, c_ok, detail, out_b[:400]), flush=True)
+    check(ok, "AC-COUT12 the round output names the baseline its census face "
+          "judged: the PASS verdict carries the derived identity row, the dry "
+          "run prints it, and a world with no tree carries no detail")
+
+
 def main():
     print("closeout suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -1103,6 +1159,7 @@ def main():
     ac_cout9()
     ac_cout10()
     ac_cout11()
+    ac_cout12()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

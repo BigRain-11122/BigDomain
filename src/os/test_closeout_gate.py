@@ -23,6 +23,7 @@ Source discipline: pure ASCII, stdlib only, no clock, no network, writes only
 inside its own temp fixture worlds.
 """
 import ast
+import hashlib
 import io
 import json
 import os
@@ -483,6 +484,56 @@ def main():
            "refusal instead of a silent pass",
            f_word == "RED" and "E_CLG_CENSUS" in f_line,
            "word=%s line=%s" % (f_word, f_line))
+
+    # AC-CLG10 (R3109): the PASS line says census=PASS and never named the
+    # baseline it compared against - the name lived in a module constant bound
+    # at import time, so a reader quoting the line could not verify which file,
+    # how big, or how old. The gate publishes that identity on a row BELOW the
+    # verdict (the PASS token shape stays byte-identical, which AC-CLG6a/b pin)
+    # and every value on it is derived from the file the face was handed.
+    with tempfile.TemporaryDirectory() as tmp10:
+        live10 = os.path.join(ROOT, "qa")
+        live_base10 = os.path.join(live10, CENSUS.BASELINE_NAME)
+        deep10, deep10_rc, _dv10 = CG.evaluate(live10, live_base10, root=ROOT)
+        ident = [line for line in deep10 if line.startswith("CENSUS-BASELINE ")]
+        a_ok = (deep10_rc == 0 and len(ident) == 1
+                and ident[0].startswith("CENSUS-BASELINE name=qa/%s bytes="
+                                        % CENSUS.BASELINE_NAME))
+        ok("AC-CLG10 arm a - a deep PASS names the baseline it judged", a_ok,
+           "rc=%s ident=%s" % (deep10_rc, ident))
+
+        with open(live_base10, "rb") as fh:
+            live_raw = fh.read()
+        want_sha = hashlib.sha256(live_raw).hexdigest()[:12]
+        got_sha = re.search(r"sha256=(\w+)", ident[0]).group(1) if ident else ""
+        ok("AC-CLG10 arm b - the sha256 is of those exact bytes, not typed",
+           got_sha == want_sha, "got=%s want=%s" % (got_sha, want_sha))
+
+        live_obj = json.loads(live_raw.decode("utf-8"))
+        want_rows = sum(len(v) for v in live_obj.values() if isinstance(v, list))
+        got_rows = re.search(r"rows=(\d+)", ident[0]).group(1) if ident else ""
+        ok("AC-CLG10 arm c - rows is the sum of the baseline own class lists",
+           got_rows == str(want_rows), "got=%s want=%d" % (got_rows, want_rows))
+
+        world10, base10 = build_world(os.path.join(tmp10, "w10"))
+        f_lines, f_rc, _fv = CG.evaluate(world10, base10, root=ROOT)
+        f_ident = [line for line in f_lines
+                   if line.startswith("CENSUS-BASELINE ")]
+        ok("AC-CLG10 arm d - a fixture baseline prints ITS identity, not the "
+           "live one",
+           f_rc == 0 and len(f_ident) == 1 and f_ident[0] != ident[0],
+           "live=%s fixture=%s" % (ident, f_ident))
+
+        plain_lines, plain_rc, _pv = CG.evaluate(world10, base10)
+        ok("AC-CLG10 arm e - the default face (root=None) publishes no "
+           "identity row and keeps its shipped shape",
+           plain_rc == 0
+           and not any(line.startswith("CENSUS-BASELINE ")
+                       for line in plain_lines)
+           and plain_lines[0].startswith("CLOSEOUT-GATE PASS")
+           and "gating=flags" in plain_lines[0]
+           and "round_main=" not in plain_lines[0],
+           "rc=%s lines=%s" % (plain_rc, plain_lines))
 
     total = len(CHECKS)
     acs = set()

@@ -325,6 +325,16 @@ def tree_refusal(root):
         return "RED", ("E_CO_GATE_UNREADABLE %s: %s"
                        % (type(exc).__name__, exc)), {}
     if code == 0:
+        # R3109: the PASS headline names `census=PASS` but not the baseline it
+        # judged. The gate now publishes that identity on a row below the
+        # verdict; it rides in `detail` so the closeout output carries it too.
+        # Measured: no arm asserts a line COUNT (only whole-line equality on
+        # lines[0]), so an extra row collides with nothing.
+        rest = list(lines[1:])
+        shown = rest[:TREE_DETAIL_CAP]
+        if shown:
+            verdict["detail"] = shown
+            verdict["omitted"] = len(rest) - len(shown)
         return "PASS", lines[0], verdict
     rest = list(lines[1:])
     shown = rest[:TREE_DETAIL_CAP]
@@ -423,11 +433,12 @@ def run(args):
                 ("flags", "round_main", "census", "matrix") if key in face_ms]
         ms_tail = (" " + " ".join(bits) + " state_ms=%s" % state_ms
                    if bits else " face_ms=n/a state_ms=%s" % state_ms)
-        return 0, ["CLOSEOUT CHECK step=state tick=%d log=%d bytes=%d "
-                   "fold_margin=%d %s face=NOT-MEASURED gate=%s%s"
-                   % (result["tick"], result["log"], result["bytes"],
-                      result["fold_margin"], result.get("detail") or "",
-                      gate_word, ms_tail)]
+        return 0, (["CLOSEOUT CHECK step=state tick=%d log=%d bytes=%d "
+                    "fold_margin=%d %s face=NOT-MEASURED gate=%s%s"
+                    % (result["tick"], result["log"], result["bytes"],
+                       result["fold_margin"], result.get("detail") or "",
+                       gate_word, ms_tail)]
+                   + _detail_lines(gate_verdict))
 
     unproven = _confirm_state_moved(state_path(root), result)
     if unproven:
@@ -473,6 +484,11 @@ def run(args):
         # Printed, not silent: a round closed in a world whose gate inputs are
         # not all present says so on its own line, naming which are absent.
         lines.append("CLOSEOUT GATE NOT-ASKED %s" % gate_line)
+    if gate_word == "PASS":
+        # R3109: the gate's own reading rows (the baseline identity) are
+        # printed after the OK headline, so a closed round names what the
+        # census face actually judged instead of only that it passed.
+        lines.extend(_detail_lines(gate_verdict))
     return 0, lines
 
 

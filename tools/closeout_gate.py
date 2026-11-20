@@ -103,6 +103,7 @@ baseline, or any qa/ file. Stdlib only (plus the shipped census module), no
 network, no shell.
 """
 
+import hashlib
 import io
 import json
 import os
@@ -281,6 +282,35 @@ def check_matrix(root, doc=None, qa_dir=None):
                                   report.get("registry_rows")))
 
 
+def _baseline_identity(baseline, root):
+    """Which baseline the census face just judged, read off that file (R3109).
+
+    Measured: the PASS line says `census=PASS` and never names the file it
+    compared against - the name is a module constant bound at import time, so
+    a reader holding the line could not verify which baseline was judged, how
+    big it was, or when it was written. Every value below is derived from the
+    same file the face was handed (the SHA-256 is of those exact bytes); a
+    window that re-types instead of reading fails AC-CLG10.
+    """
+    try:
+        with io.open(baseline, "rb") as handle:
+            raw = handle.read()
+        base = json.loads(raw.decode("utf-8"))
+        written = os.stat(baseline).st_mtime
+    except (IOError, OSError, ValueError, UnicodeDecodeError):
+        return ""
+    if not isinstance(base, dict):
+        return ""
+    rows = 0
+    for value in base.values():
+        if isinstance(value, list):
+            rows += len(value)
+    name = os.path.relpath(baseline, root).replace("\\", "/")
+    return ("CENSUS-BASELINE name=%s bytes=%d rows=%d sha256=%s written=%s"
+            % (name, len(raw), rows, hashlib.sha256(raw).hexdigest()[:12],
+               time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(written))))
+
+
 def evaluate(target, baseline, root=None, registry=None, census_pin=None,
              matrix=None):
     """Run the census check and return (lines, exit_code, verdict dict).
@@ -409,6 +439,14 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
         out.append("CLOSEOUT-GATE PASS files=%d flags=%d "
                    "reader_refused=%d gating=%s%s"
                    % (count, flags, refused, GATING_FACE, tail))
+        if root is not None:
+            # R3109: a PASS that does not name the baseline it judged cannot
+            # be re-checked by the reader who quotes it. The identity row is a
+            # READING (no threshold, no gate) and rides below the verdict so
+            # the shipped PASS token shape stays byte-identical.
+            ident = _baseline_identity(baseline, root)
+            if ident:
+                out.append(ident)
         # The informational debt is never silent: a baselined file no family
         # decodes is still named on every closeout, it just does not refuse.
         out.extend(line for line in census_lines
