@@ -1,0 +1,9 @@
+PASS AC-LBRB1 own_ids=10,9 offenders=none
+PASS AC-LBRB2 rc=0 LEDGER BUSINESS CHECK PASS fails=0
+PASS AC-LBRB3 stamps_unchanged=True html_before=(5276, 1795135685634455400) html_after=(5276, 1795135685634455400)
+PASS AC-LBRB4 tampered_rc=2 names_sizes=True missing_rc=2 names_missing=True
+PASS AC-LBRB5 rc=0 numbers=(3, 6, 300, 0) rejected=['E_NEGATIVE_BALANCE', 'E_REF_DUPLICATE'] sizes_match=True
+PASS AC-LBRB6 registry_rows=1 declared=8 own=8
+PASS AC-LBRB7 ascii=True socket_import=False external_host=False
+PASS AC-LBRB8 sources=config,driver,ledger healthy_clean=True wired=True ledger_rc=2 names_ledger=True config_rc=2 names_config=True bare_rc=2 names_all=True
+SUITE PASS 8/8

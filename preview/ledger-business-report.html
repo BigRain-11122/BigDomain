@@ -27,7 +27,7 @@ pre{background:#0f1419;color:#dfe4ea;padding:12px 14px;border-radius:8px;overflo
 footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
 </style></head><body><main>
 <h1>代币双式账本业务报告</h1>
-<div class=meta>BigDomain · P-47 二·沙箱实测件 · 生成时间 2026-11-15 01:46:48Z · 数据库 <code>preview/ledger-demo.db</code> · 由库内分录现算·非手填</div>
+<div class=meta>BigDomain · P-47 二·沙箱实测件 · 生成时间 2026-11-20 00:48:05Z · 数据库 <code>preview/ledger-demo.db</code> · 由库内分录现算·非手填</div>
 
 <div class=card><div class=kpi>
 <div><span>已铸出</span><b>300</b></div>
@@ -49,9 +49,9 @@ footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
 <h2>三、交易与双式分录</h2>
 <div class=card><table>
 <tr><th>tx</th><th>类型</th><th>来源引用</th><th>分录</th><th class=n>AI</th></tr>
-<tr><td><code>803330595f1e</code></td><td>mint</td><td><code>seed-mint-001</code></td><td>debit <code>equity:auth</code> 300<br>credit <code>pool:share</code> 300</td><td class=n>-</td></tr>
-<tr><td><code>7dfff725059a</code></td><td>share</td><td><code>order-19001</code></td><td>debit <code>pool:share</code> 120<br>credit <code>usr:avatar-001</code> 120</td><td class=n>-</td></tr>
-<tr><td><code>7065fe11ea8e</code></td><td>spend</td><td><code>order-19002</code></td><td>debit <code>usr:avatar-001</code> 45<br>credit <code>pool:reserve</code> 45</td><td class=n>-</td></tr>
+<tr><td><code>f8ece7bcfc20</code></td><td>mint</td><td><code>seed-mint-001</code></td><td>debit <code>equity:auth</code> 300<br>credit <code>pool:share</code> 300</td><td class=n>-</td></tr>
+<tr><td><code>aaf487458534</code></td><td>share</td><td><code>order-19001</code></td><td>debit <code>pool:share</code> 120<br>credit <code>usr:avatar-001</code> 120</td><td class=n>-</td></tr>
+<tr><td><code>c60f997d03d9</code></td><td>spend</td><td><code>order-19002</code></td><td>debit <code>usr:avatar-001</code> 45<br>credit <code>pool:reserve</code> 45</td><td class=n>-</td></tr>
 </table></div>
 
 <h2>四、对账八查（直接调用现役 reconcile.py）</h2>
@@ -77,5 +77,5 @@ RECONCILE PASS (8/8 checks)</pre><div class=ok>RECONCILE PASS</div></div>
 
 <h2>七、复现</h2>
 <div class=card><code>python tools/ledger_business_report.py</code></div>
-<footer>BigDomain OSLoop · 2026-11-15 01:46:48Z · 本页由 tools/ledger_business_report.py 生成，不手改</footer>
+<footer>BigDomain OSLoop · 2026-11-20 00:48:05Z · 本页由 tools/ledger_business_report.py 生成，不手改</footer>
 </main></body></html>

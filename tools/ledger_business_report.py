@@ -26,10 +26,21 @@ AC-LBR9 (BD-PROP-010, pre-registered before the change): the rendered json
 carries a sizes block naming the byte count of both artifacts it belongs to,
 iterated to a fixed point, and --check refuses when either number disagrees
 with the bytes on disk.
+AC-LBR10 (R3074, pinned in src/os/backlog.md before this change): sizes alone
+cannot prove the page is FRESH - a page rendered before its inputs moved still
+matches its own sizes. The rendered json therefore records the sha16 of the
+three derivation inputs (this driver, ledger.py, config.json) in a sources
+block, and --check recomputes them and names every input that moved
+(E_SOURCE_STALE). Two inputs are deliberately NOT in that set and the
+exclusion is named rather than implied: the demo database is re-seeded on
+every render (so it is an output, not an input), and generated_utc is a clock
+(so it is fresh by definition). reconcile.py is a fourth input this round does
+not cover - carried, not claimed.
 ASCII source, stdlib only, no network. Chinese only appears in the rendered
 document, never in this file.
 """
 import argparse
+import hashlib
 import html
 import json
 import os
@@ -286,7 +297,7 @@ def main(argv):
     ap.add_argument("--out", default=os.path.join(ROOT, "preview", "ledger-business-report.html"))
     ap.add_argument("--json", default=os.path.join(ROOT, "preview", "ledger-business-report.json"))
     ap.add_argument("--check", action="store_true",
-                    help="verify the landed json sizes against the bytes on disk")
+                    help="verify the landed sizes AND that no recorded input moved")
     try:
         args = ap.parse_args(argv[1:])
     except SystemExit:
@@ -295,7 +306,7 @@ def main(argv):
         sys.stderr.write("E_NO_LEDGER: src/sandbox/ledger/ledger.py missing\n")
         return 3
     if args.check:
-        fails = check_sizes(args.out, args.json)
+        fails = check_sizes(args.out, args.json) + check_sources(args.json)
         print("LEDGER BUSINESS CHECK %s fails=%d" % (
             "PASS" if not fails else "FAIL", len(fails)))
         for f in fails:
@@ -343,6 +354,7 @@ def main(argv):
         "reconcile_rc": rc,
         "rejected": [{"case": c, "code": k, "detail": d, "blocked": b} for c, k, d, b in rejected],
         "report": os.path.relpath(args.out, ROOT).replace("\\", "/"),
+        "sources": source_fingerprints(),
     }
     with open(args.json, "w", encoding="utf-8", newline="\n") as fh:
         json.dump(payload, fh, ensure_ascii=False, indent=1)
@@ -386,6 +398,36 @@ def check_sizes(out, jout):
     if sizes.get("json") != os.path.getsize(jout):
         fails.append("sizes json %s != %d on disk" % (sizes.get("json"),
                                                       os.path.getsize(jout)))
+    return fails
+
+
+def sha16(path):
+    with open(path, "rb") as fh:
+        return hashlib.sha256(fh.read()).hexdigest()[:16]
+
+
+def source_fingerprints():
+    """AC-LBR10: the three inputs this page's facts are derived from."""
+    return {
+        "driver": sha16(os.path.abspath(__file__)),
+        "ledger": sha16(os.path.join(LEDGER_DIR, "ledger.py")),
+        "config": sha16(os.path.join(LEDGER_DIR, "config.json")),
+    }
+
+
+def check_sources(jout):
+    """AC-LBR10: name every recorded input whose bytes moved since the render."""
+    if not os.path.exists(jout):
+        return ["artifacts missing: %s" % jout]
+    with open(jout, "r", encoding="utf-8") as fh:
+        doc = json.load(fh)
+    recorded = doc.get("sources") or {}
+    live = source_fingerprints()
+    fails = []
+    for key in sorted(live):
+        if recorded.get(key) != live[key]:
+            fails.append("E_SOURCE_STALE %s recorded %s current %s"
+                         % (key, recorded.get(key), live[key]))
     return fails
 
 

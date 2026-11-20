@@ -7661,7 +7661,7 @@ SUITES = [
     # drives the shipped driver only (its read-only --check and one temp-dir
     # render); nothing here re-implements a ledger rule.
     ("os-ledger-business-report",
-     os.path.join("..", "os", "test_ledger_business_report.py"), 7),
+     os.path.join("..", "os", "test_ledger_business_report.py"), 8),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

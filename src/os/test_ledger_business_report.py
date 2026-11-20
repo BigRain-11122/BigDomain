@@ -1,4 +1,4 @@
-"""Battery suite for tools/ledger_business_report.py - criteria AC-LBRB1..AC-LBRB7.
+"""Battery suite for tools/ledger_business_report.py - criteria AC-LBRB1..AC-LBRB8.
 
 WHY THIS SUITE EXISTS (measured at R3072, not assumed):
 the P-47 item 2 business face is rendered by tools/ledger_business_report.py, and
@@ -20,8 +20,9 @@ Measured before the criteria were pinned (read-only or private-world):
 
 WHAT IS PROVED HERE:
   AC-LBRB1  the driver's family is uniquely named: the only ids it names are
-            AC-LBR9, and no other running file under tools/ or src/os/ names
-            AC-LBR at all (the R3071 collision lesson, applied before it bites).
+            AC-LBR9 and AC-LBR10, and no other running file under tools/ or
+            src/os/ names AC-LBR at all (the R3071 collision lesson, applied
+            before it bites).
   AC-LBRB2  the landed pair answers its own --check: rc=0 and PASS.
   AC-LBRB3  --check writes nothing: html, json and the demo database keep the
             same size and mtime_ns across the run.
@@ -37,6 +38,12 @@ WHAT IS PROVED HERE:
             criterion count.
   AC-LBRB7  source discipline: this file is pure ASCII, imports no network
             module, and names no external host.
+  AC-LBRB8  R3074 freshness: the landed json records the sha16 of its three
+            derivation inputs and --check names the one that moved. Proved on
+            private copies so preview/ is never edited: a ledger hash moved by
+            one hex digit answers rc=2 naming E_SOURCE_STALE ledger, a config
+            hash moved answers rc=2 naming config, a json with no sources block
+            names all three, and the healthy landed pair names none.
 
 Isolation: the only child processes are the driver itself (its --check is
 read-only, proved by AC-LBRB3; its render is aimed at a temp directory). The
@@ -119,7 +126,7 @@ def main():
             if re.search(r'"AC-LBR\d', text) or re.search(r"'AC-LBR\d", text):
                 offenders.append("%s/%s" % (base, name))
     ok("AC-LBRB1",
-       own_ids == ["9"] and not offenders,
+       own_ids == ["10", "9"] and not offenders,
        "own_ids=%s offenders=%s" % (",".join(own_ids) or "none",
                                     ",".join(offenders) or "none"))
 
@@ -197,9 +204,9 @@ def main():
         except ValueError:
             declared = None
     ok("AC-LBRB6",
-       len(rows) == 1 and declared == len(CHECKS) + 2,
+       len(rows) == 1 and declared == len(CHECKS) + 3,
        "registry_rows=%d declared=%s own=%d"
-       % (len(rows), declared, len(CHECKS) + 2))
+       % (len(rows), declared, len(CHECKS) + 3))
 
     # ---- B7: source discipline, recomputed rather than promised in prose.
     # The needles are assembled from parts so this check's own text cannot
@@ -216,6 +223,66 @@ def main():
        ascii_ok and socket_needle not in own and host_needle not in own,
        "ascii=%s socket_import=%s external_host=%s"
        % (ascii_ok, socket_needle in own, host_needle in own))
+
+    # ---- B8: R3074 freshness - the landed pair names its inputs, and a moved
+    # input is named back. Every mutation runs on a private copy in a temp dir.
+    doc = json.loads(read(JSONF))
+    sources = doc.get("sources") or {}
+    hex16 = re.compile(r"^[0-9a-f]{16}$")
+    three = sorted(sources)
+    three_ok = three == ["config", "driver", "ledger"] and all(
+        hex16.match(str(sources[k])) for k in three)
+    healthy_rc, healthy_out = run_tool(["--check"])
+    clean = healthy_rc == 0 and "E_SOURCE_STALE" not in healthy_out
+    tmp = tempfile.mkdtemp(prefix="lbrb-src-")
+    try:
+        def moved(key, value):
+            copy = os.path.join(tmp, "face-%s.json" % key)
+            with open(copy, "w", encoding="utf-8", newline="\n") as fh:
+                json.dump(value, fh, ensure_ascii=False, indent=1)
+                fh.write("\n")
+            return copy
+
+        ledger_doc = json.loads(read(JSONF))
+        ledger_hash = ledger_doc["sources"]["ledger"]
+        ledger_doc["sources"]["ledger"] = ("0" if ledger_hash[0] != "0" else "1") + ledger_hash[1:]
+        ledger_copy = moved("ledger", ledger_doc)
+        ledger_rc, ledger_out = run_tool(
+            ["--check", "--out", HTML, "--json", ledger_copy])
+
+        conf_doc = json.loads(read(JSONF))
+        cs = conf_doc["sources"]["config"]
+        conf_doc["sources"]["config"] = ("0" if cs[0] != "0" else "1") + cs[1:]
+        conf_copy = moved("config", conf_doc)
+        conf_rc, conf_out = run_tool(
+            ["--check", "--out", HTML, "--json", conf_copy])
+
+        bare_doc = json.loads(read(JSONF))
+        bare_doc.pop("sources", None)
+        bare_copy = moved("bare", bare_doc)
+        bare_rc, bare_out = run_tool(
+            ["--check", "--out", HTML, "--json", bare_copy])
+
+        # Both halves of the law live in the driver source: recording at render
+        # and comparing at check. Read as anchors so an edit dropping one is red.
+        wired = ("\"sources\": source_fingerprints()" in src
+                 and "check_sizes(args.out, args.json) + check_sources(args.json)" in src)
+
+        ok("AC-LBRB8",
+           three_ok and clean and wired
+           and ledger_rc == 2 and "E_SOURCE_STALE ledger" in ledger_out
+           and conf_rc == 2 and "E_SOURCE_STALE config" in conf_out
+           and bare_rc == 2 and all("E_SOURCE_STALE %s" % k in bare_out
+                                    for k in ("driver", "ledger", "config")),
+           "sources=%s healthy_clean=%s wired=%s ledger_rc=%d names_ledger=%s "
+           "config_rc=%d names_config=%s bare_rc=%d names_all=%s"
+           % (",".join(three), clean, wired, ledger_rc,
+              "E_SOURCE_STALE ledger" in ledger_out, conf_rc,
+              "E_SOURCE_STALE config" in conf_out, bare_rc,
+              all("E_SOURCE_STALE %s" % k in bare_out
+                  for k in ("driver", "ledger", "config"))))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
     print("SUITE %s %d/%d" % ("PASS" if not FAILS else "FAIL",
                               len(CHECKS) - len(FAILS), len(CHECKS)))

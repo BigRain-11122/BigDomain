@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-15 01:46:48Z",
+ "generated_utc": "2026-11-20 00:48:05Z",
  "db": "preview/ledger-demo.db",
  "accounts": [
   {
@@ -47,8 +47,13 @@
   }
  ],
  "report": "preview/ledger-business-report.html",
+ "sources": {
+  "driver": "2b1fc97ea1451c02",
+  "ledger": "4fcbe414fe9d7e5c",
+  "config": "32b018fad53fb8bc"
+ },
  "sizes": {
   "html": 5276,
-  "json": 1061
+  "json": 1174
  }
 }
