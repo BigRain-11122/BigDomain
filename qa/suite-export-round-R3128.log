@@ -8,7 +8,7 @@
   | PASS AC-EXPW2 the newest pair heads the outs band preview/zz-late-face.html (16B
   | PASS AC-EXPW3 every self_drive key comes from the shipped recompute keys=7
   | PASS AC-EXPW3 a private world never invents a second derivation 
-  | FAIL AC-EXPW4 --check writes nothing and both bytes and mtime hold fails=['AC-EXPW1 current does not start with the live tick R3127']
+  | PASS AC-EXPW4 --check writes nothing and both bytes and mtime hold fails=[]
   | PASS AC-EXPW5 a missing tick row refuses with E_EXP and zero write E_EXP expected exactly 1 tick row,
   | PASS AC-EXPW5 a duplicated tick row refuses with E_EXP and zero write E_EXP expected exactly 1 tick row,
   | PASS AC-EXPW7 the board set is an explicit constant, not a guess board=('ceo-blockers', 'face-sweep', 'battery-shard-report', 'index')
@@ -40,7 +40,7 @@
   | PASS AC-EXPG2 the gate is the law module, not a second local regex law_calls=1 local_codes=0
   | PASS AC-EXPG3 --check reddens on the unanchored tree, read-only fails=['E_EXP_ROUND_SHAPE E_RMS_NO_DATE round=9031 newest round 9031 has 1 round line(s) and none starts with a YYYY-MM-DD prefix']
   | PASS AC-EXPG4 restoring the anchor clears the refusal again fails=[]
-  | FAIL AC-EXPG4 the live tree still grades clean fails=['AC-EXPW1 current does not start with the live tick R3127']
+  | PASS AC-EXPG4 the live tree still grades clean fails=[]
   | PASS AC-EXPG5 the one-off state appenders are retired and the single vehicle remains leftovers=0
   | PASS AC-EXPA1 --help and -h print usage at rc=0 and write nothing rc=0,0 face_moved=False
   | PASS AC-EXPA2 an undefined flag and a dangling --root fail closed at rc=2 with the face untouched rc=2,2 face_moved=False
@@ -65,20 +65,20 @@
   | PASS AC-EXPD2 restoring the derived line reads clean again fails=[]
   | PASS AC-EXPD3 the board exclusion still holds on the dated line preview/first-yuan-chain.html (16B) + previe
   | PASS AC-EXPD3 the all-board fact and the evidence line are unchanged (no product pair on disk - every
-  | PASS AC-EXPD4 the fixture built a real git work tree C:\Users\sjs20\AppData\Local\Temp\expw-git-crnavgec
+  | PASS AC-EXPD4 the fixture built a real git work tree C:\Users\sjs20\AppData\Local\Temp\expw-git-vvnyavv9
   | PASS AC-EXPD4 the red control: the mtime law picks the touched page old=1769904000 new=1767312000
   | PASS AC-EXPD4 the content law picks the genuinely newer page preview/genuinely-new.html
   | PASS AC-EXPD4 the ordering stamp is the committed change time 1767312000 vs t2=1767312000
   | PASS AC-EXPD4 the touched page keeps its own commit date 2026-01-01
   | PASS AC-EXPD5 uncommitted bytes use their own mtime stamp=1769990400 t4=1769990400
   | PASS AC-EXPD5 an untracked page participates by its mtime stamp=1770076800 t5=1770076800
-  | PASS AC-EXPD5 a non-git world still orders by pure mtime stamp=1795208088
+  | PASS AC-EXPD5 a non-git world still orders by pure mtime stamp=1795208689
   | PASS AC-EXPD5 an unreadable repository answers None instead of raising no exception
-  | PASS AC-EXPD6 the second git world built C:\Users\sjs20\AppData\Local\Temp\expw-git-r44n1cjt
+  | PASS AC-EXPD6 the second git world built C:\Users\sjs20\AppData\Local\Temp\expw-git-gb7rdjl6
   | PASS AC-EXPD6 the published line still matches PAIR_LINE_RE preview/genuinely-new.html (16B) + preview/g
   | PASS AC-EXPD6 a face graded on a git world reads clean fails=[]
   | PASS AC-EXPD6 the date red control still bites fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk']
-  | PASS AC-EXPD7 the provenance fixture built C:\Users\sjs20\AppData\Local\Temp\expw-git-85a7talr
+  | PASS AC-EXPD7 the provenance fixture built C:\Users\sjs20\AppData\Local\Temp\expw-git-z6hu7dum
   | PASS AC-EXPD7 a committed pair publishes the commit clock uinely-new.json (3B) [2026-01-02 commit]
   | PASS AC-EXPD8 the derived line grades clean fails=[]
   | PASS AC-EXPD8 the marker-less pre-R2898 line reddens the check fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk']
@@ -114,7 +114,7 @@
   | PASS AC-EXPR1 a rewritten heartbeat moves lag and flips the verdict block={'tick': 9305, 'state_tick': 9310, 'lag': 5, 'verdict': 'FLAG', 'reason': 'heartbeat_row_debt'}
   | PASS AC-EXPR1 a missing heartbeat is a named FLAG, not a green block={'tick': None, 'state_tick': 9310, 'lag': None, 'verdict': 'FLAG', 'reason': 'heartbeat_missing_or_unparsed'}
   | PASS AC-EXPR1 the writer publishes it and --check reads the face clean fails=[]
-  | PASS AC-EXPR1 the live derivation equals the birth site reading live={'tick': 3127, 'state_tick': 3127, 'lag': 0, 'verdict': 'PASS', 'reason': 'fresh'} want={'status': 'PASS', 'tick': 3127, 'state': 3127, 'lag': 0, 'reason': 'fresh'}
+  | PASS AC-EXPR1 the live derivation equals the birth site reading live={'tick': 3128, 'state_tick': 3128, 'lag': 0, 'verdict': 'PASS', 'reason': 'fresh'} want={'status': 'PASS', 'tick': 3128, 'state': 3128, 'lag': 0, 'reason': 'fresh'}
   | PASS AC-EXPR2 a landed face is judgeable by the shipped gate code=None ok=True
   | PASS AC-EXPR2 a naive stamp is refused by name code=E_EXP_BAD_TS
   | PASS AC-EXPR2 an unparsable face is refused by name code=E_EXP_BAD_FILE
@@ -123,10 +123,10 @@
   | PASS AC-EXPR3 a judgeable face lands through the door 
   | PASS AC-EXPR3 a naive stamp refuses at the door and lands nothing code=E_EDQF_FACE_UNPROVEN: E_EXP_BAD_TS
   | PASS AC-EXPR3 non-JSON refuses at the door and lands nothing code=E_EDQF_FACE_UNPROVEN: E_EXP_BAD_FILE
-APPLIED R9314 changed=True bytes=5090 lf_only=True bom=False
+APPLIED R9314 changed=True bytes=5160 lf_only=True bom=False
 do->2026-11-15 R9314 SOMETHING MEASURED IN THIS WINDOW
 latest_artifact->preview/zz-late-face.html (16B) + preview/zz-late-face.json (3B) [2026-11-21 mtime]
-next_milestone->R3128 [R3128] next window (<=48h): (0) MAIN — **本轮把「未读」的静默面钉死了，同一份探针也量出这个读数根本不在 CEO 面上... due=2026-11-23T04:55:07+08:00
+next_milestone->R3129 [R3129] next window (<=48h): (0) MAIN — **corpus 现在上台了，但只有一条供数路径：`closeout` OK 路... due=2026-11-23T05:05:07+08:00
 E_SXF_UNPROVEN face=STAGED code=E_EXP_BAD_TS
   | PASS AC-EXPR3 the raw-open composer self-proves its own landing ok=0 naive=8
   | PASS AC-EXPR3 the live face is still judgeable through the door code=None
@@ -140,4 +140,4 @@ E_SXF_UNPROVEN face=STAGED code=E_EXP_BAD_TS
   | PASS AC-EXPW6 exactly one battery row for this suite rows=['46']
   | PASS AC-EXPE4-registry-units declared=[46] printed=46
 suite: 136 assertions over 46 criteria
-SUITE FAIL 134/136 failed=['AC-EXPW4 --check writes nothing and both bytes and mtime hold', 'AC-EXPG4 the live tree still grades clean']
+SUITE PASS 136/136
