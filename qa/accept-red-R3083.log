@@ -1,0 +1,51 @@
+PROBE R3083 rows=733 missing=none
+--- os-export-driver-queue-face crit=6 rc=0 0.4s lines=9
+    PASS AC-EDQF5 the driver prints the gate verdict and the byte count, so a refused or drifted run is visible rather than silent
+    PASS AC-EDQF6 pure ASCII, stdlib only, no clock, no network, one runner entry at 6 criteria and a help face of its own
+    SUITE PASS 6/6
+--- os-export-consistency-queue-face crit=6 rc=0 0.4s lines=17
+    PASS AC-ECQF6 six criteria declared
+    SUITE PASS 6/6
+    SUMMARY pass=15 fail=0
+--- os-export-driver-self-drive-health crit=6 rc=0 0.4s lines=7
+    PASS AC-EDSH5 every earlier health term survives beside the repaired one (tick row, outs, three ceo fields, stamp, fresh self_drive, gate; missing=none)
+    PASS AC-EDSH6 the driver stays pure ASCII stdlib with no network egress (datetime is legitimately used for the 48h due), and the runner carries this row at 6 criteria (ascii=True banned=none wired=True)
+    SUITE PASS 6/6
+--- os-export-round crit=42 rc=0 23.5s lines=117
+      | PASS AC-EXPW5 a missing tick row refuses with E_EXP and zero write E_EXP expected exactly 1 tick row,
+      | PASS AC-EXPW5 a duplicated tick row refuses with E_EXP and zero write E_EXP expected exactly 1 tick row,
+      | PASS AC-EXPW14 a missing, mismatched or dangling archive is refused by name refusals=['E_EXP_NO_ARCHIVE results_archive a', 'E_EXP_NO_ARCHIVE archive sha256 00', 'E_EXP_NO_ARCHIVE results_archive.p']
+      | PASS AC-EXPG1 an unanchored newest round refuses the write, zero bytes E_EXP_ROUND_SHAPE E_RMS_NO_DATE round=9031 n
+      | PASS AC-EXPG1 the refusal carries the law code it came from E_EXP_ROUND_SHAPE E_RMS_NO_DATE round=9031 newest round 9031
+      | PASS AC-EXPG3 --check reddens on the unanchored tree, read-only fails=['E_EXP_ROUND_SHAPE E_RMS_NO_DATE round=9031 newest round 9031 has 1 round line(s) and none starts with a YYYY-MM-DD prefix']
+      | PASS AC-EXPA2 an undefined flag and a dangling --root fail closed at rc=2 with the face untouched rc=2,2 face_moved=False
+      | PASS AC-EXPD6 the published line still matches PAIR_LINE_RE preview/genuinely-new.html (16B) + preview/g
+      | PASS AC-EXPD16 the retired newer= shape is refused by PAIR_LINE_RE ] + json [2026-01-02 mtime]; later=html)
+--- os-queue-floor-export-face crit=6 rc=0 0.3s lines=8
+    PASS AC-QFE5 the value is derived at write time (a changed queue moves it, no canned copy)
+    PASS AC-QFE6 pure ASCII, stdlib only, no clock, no network, one runner entry at 6 criteria
+    SUITE PASS 6/6
+--- os-ledger-lines crit=8 rc=0 0.9s lines=10
+    PASS AC-LGR7 CLI exit 0/2/3, stable JSON, zero file writes
+    PASS AC-LGR8 live gate clean on the coverage scope, folded gaps proven healed by the archive, exemption list empty, hygiene
+    SUITE PASS 8/8 criteria
+--- os-ledger-archive crit=9 rc=2 1.3s lines=11
+    FAIL AC-LGA9 fold-carried ledger pairing is scoped to post-pin windows, reddens the left-behind shape, and is measured non-vacuous on the shipped tree
+    SUITE FAIL 8/9 criteria
+--- os-ledger-baseline crit=8 rc=0 1.2s lines=10
+    PASS AC-LGB7 unknown keys ignored, absent keys empty, lists independent
+    PASS AC-LGB8 live gate clean on the coverage scope, shipped baseline fresh, hygiene, runner seat
+    SUITE PASS 8/8 criteria
+--- os-ledger-fold-kind crit=6 rc=0 0.1s lines=8
+    PASS AC-FCLS6 real state.json log reads clean, source is ASCII and network-free
+    suite: fold-summary line kind (R2580 AC-FCLS1..AC-FCLS6)
+    SUITE PASS 6/6 criteria
+--- os-ledger-fold-kind-dateprefix crit=6 rc=0 0.2s lines=8
+    PASS AC-LKND6 real log clean, R2580 suite still 6/6, ASCII, no network
+    suite: fold-summary date-prefix and inflection (R2581 AC-LKND1..AC-LKND6)
+    SUITE PASS 6/6 criteria
+--- os-ledger-fold-kind-inflection crit=6 rc=0 0.5s lines=8
+    PASS AC-LKNF6 real log clean, both siblings 6/6, ASCII, no network (test_ledger_fold_kind.py rc=0, test_ledger_fold_kind_dateprefix.py rc=0)
+    suite: fold-summary inflection (R2815 AC-LKNF1..AC-LKNF6)
+    SUITE PASS 6/6 criteria
+PROBE DONE

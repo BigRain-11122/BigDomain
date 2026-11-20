@@ -1,21 +1,22 @@
 {
   "ceo_face": {
     "board_pages_skipped": [
+      "preview/battery-shard-report.html (16412B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "R3082 WORK: the CEO page was four days behind and regenerating it put three live-red families in front of the reader. Measured first: --check on the old pair named only registry drift (4x E_REGISTRY_DRIFT + E_TOTALS_UNCOVERED + E_TOTALS_COVER), never 'refused'; six-family --dry said 61 rows / 539 criteria (old pair 58 / 452); the old render took 251.8s and this run 242s, inside one window. Landed: unchecked_cell() as the single source for page and gate; the totals line now prints 'unchecked criteria N (k/6 families declared)'; the family table gained an unchecked column; a leg that predates the field prints the word, never a measured 0; ROUND moved to R3082; AC-BSRB11 (six arms) added and reconcile_all 11->12. Measured: SUITE PASS 12/12, the leg green at criteria=12, the pair regenerated at registry 733/5968 with 61 selected / 539 criteria / 672 uncovered / 8.3% cover and verdict RED because eleven rows in three families failed live this round; --check PASS, --control CONFIRMED, matrix 76323B DOC-CURRENT, census VERDICT PASS pinned=733, CLOSEOUT-GATE PASS.",
+    "current": "2026-11-20 R3083 DATA+ENGINEERING: the eleven red rows the CEO page put in front of a reader were measured one by one and resolved to THREE roots, not eleven - two data gaps that had been sitting on the live disk since before this round, and one ordering effect. The page now re-renders PASS with zero red rows, and no criterion, regex or gate was weakened to get there.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/sample-run-R3079.log (444B, 2026-11-20)",
-    "latest_evidence": "qa/sample-run-R3079.log (444B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/bsr-generate-R3083.log (504B, 2026-11-20)",
+    "latest_evidence": "qa/bsr-generate-R3083.log (504B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3083] next window (<=48h): (0) MAIN — **页面第一次把现役红摆出来了，而 11 行红没有一行有主。** 本轮实测：os-export 4 行（driver-queue-face / consistency-queue-face / driver-self-drive-health / round）、os-queue 1 行（floor-export-face）、os-ledger 6 行（lines / archive / baseline / fold-kind / fold-kind-dateprefix / fold-kind-inflection）。下一轮先量（只读·逐行只取失败断言行，禁一次报总数）：①11 行各自 `--exact` 跑一遍，收集 rc / 失败断言原文；②分型：`判据过期`（期望值停在旧盘）/ `现役真红`（盘上事实坏了）/ `自身依赖另一红`（如 live gate 链）；③每型给最小修法与误杀面；④确认页面是否该印失败断言行（若印，先量它会落在哪一面、会不会与「逐套件行」重复）。量清后按型修最便宜的真红，配判据，且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, 27 deep shard-6 rows unmeasured, shard offset/resume as the carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap (truncated)",
-    "next_milestone_due": "2026-11-22T15:52:06+08:00",
-    "updated_at": "2026-11-20T15:52:06+08:00"
+    "next_milestone_due": "2026-11-22T16:29:45+08:00",
+    "updated_at": "2026-11-20T16:29:45+08:00"
   },
-  "current": "R3082 WORK: the CEO page was four days behind and regenerating it put three live-red families in front of the reader. Measured first: --check on the old pair named only registry drift (4x E_REGISTRY_DRIFT + E_TOTALS_UNCOVERED + E_TOTALS_COVER), never 'refused'; six-family --dry said 61 rows / 539 criteria (old pair 58 / 452); the old render took 251.8s and this run 242s, inside one window. Landed: unchecked_cell() as the single source for page and gate; the totals line now prints 'unchecked criteria N (k/6 families declared)'; the family table gained an unchecked column; a leg that predates the field prints the word, never a measured 0; ROUND moved to R3082; AC-BSRB11 (six arms) added and reconcile_all 11->12. Measured: SUITE PASS 12/12, the leg green at criteria=12, the pair regenerated at registry 733/5968 with 61 selected / 539 criteria / 672 uncovered / 8.3% cover and verdict RED because eleven rows in three families failed live this round; --check PASS, --control CONFIRMED, matrix 76323B DOC-CURRENT, census VERDICT PASS pinned=733, CLOSEOUT-GATE PASS.",
+  "current": "2026-11-20 R3083 DATA+ENGINEERING: the eleven red rows the CEO page put in front of a reader were measured one by one and resolved to THREE roots, not eleven - two data gaps that had been sitting on the live disk since before this round, and one ordering effect. The page now re-renders PASS with zero red rows, and no criterion, regex or gate was weakened to get there.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -43,10 +44,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "R3082 WORK: the CEO page was four days behind and regenerating it put three live-red families in front of the reader. Measured first: --check on the old pair named only registry drift (4x E_REGISTRY_DRIFT + E_TOTALS_UNCOVERED + E_TOTALS_COVER), never 'refused'; six-family --dry said 61 rows / 539 criteria (old pair 58 / 452); the old render took 251.8s and this run 242s, inside one window. Landed: unchecked_cell() as the single source for page and gate; the totals line now prints 'unchecked criteria N (k/6 families declared)'; the family table gained an unchecked column; a leg that predates the field prints the word, never a measured 0; ROUND moved to R3082; AC-BSRB11 (six arms) added and reconcile_all 11->12. Measured: SUITE PASS 12/12, the leg green at criteria=12, the pair regenerated at registry 733/5968 with 61 selected / 539 criteria / 672 uncovered / 8.3% cover and verdict RED because eleven rows in three families failed live this round; --check PASS, --control CONFIRMED, matrix 76323B DOC-CURRENT, census VERDICT PASS pinned=733, CLOSEOUT-GATE PASS.",
-  "export_ts": "2026-11-20T15:52:06+08:00",
+  "do": "2026-11-20 R3083 DATA+ENGINEERING: the eleven red rows the CEO page put in front of a reader were measured one by one and resolved to THREE roots, not eleven - two data gaps that had been sitting on the live disk since before this round, and one ordering effect. The page now re-renders PASS with zero red rows, and no criterion, regex or gate was weakened to get there.",
+  "export_ts": "2026-11-20T16:29:45+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/bsr-generate-R3082.log (522B, 2026-11-20)",
+  "latest_evidence": "qa/bsr-generate-R3083.log (504B, 2026-11-20)",
   "next_milestone": "[R3083] next window (<=48h): (0) MAIN — **页面第一次把现役红摆出来了，而 11 行红没有一行有主。** 本轮实测：os-export 4 行（driver-queue-face / consistency-queue-face / driver-self-drive-health / round）、os-queue 1 行（floor-export-face）、os-ledger 6 行（lines / archive / baseline / fold-kind / fold-kind-dateprefix / fold-kind-inflection）。下一轮先量（只读·逐行只取失败断言行，禁一次报总数）：①11 行各自 `--exact` 跑一遍，收集 rc / 失败断言原文；②分型：`判据过期`（期望值停在旧盘）/ `现役真红`（盘上事实坏了）/ `自身依赖另一红`（如 live gate 链）；③每型给最小修法与误杀面；④确认页面是否该印失败断言行（若印，先量它会落在哪一面、会不会与「逐套件行」重复）。量清后按型修最便宜的真红，配判据，且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, 27 deep shard-6 rows unmeasured, shard offset/resume as the carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap (truncated)",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -172,7 +173,7 @@
   },
   "results": [
     [
-      "3082",
+      "3083",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -186,16 +187,16 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 665,
+    "log_lines_in_window": 672,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 97,
+    "substantive_non_idle_mention_lines": 99,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 690825,
+  "state_bytes": 695515,
   "next_milestone_due": "2026-11-22T10:45:10+08:00"
 }

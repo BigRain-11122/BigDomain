@@ -1,0 +1,7 @@
+BSR family 大厅实时层 rc=0 selected=7 green=7 criteria=118 126.5s
+BSR family OS 导出面 rc=0 selected=20 green=20 criteria=156 30.6s
+BSR family OS 队列面 rc=0 selected=16 green=16 criteria=98 12.8s
+BSR family OS 台账面 rc=2 selected=13 green=12 criteria=94 10.0s
+BSR family OS 电池面 rc=0 selected=4 green=4 criteria=55 60.2s
+BSR family OS 交付面 rc=0 selected=1 green=1 criteria=18 0.2s
+BSR landed json=16270B html=16412B verdict=RED families=6 selected=61 criteria=539 uncovered=672
