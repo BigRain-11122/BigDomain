@@ -12,9 +12,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-status-export-fresh-R3128.log (6526B, 2026-11-21)",
     "latest_evidence": "qa/suite-status-export-fresh-R3128.log (6526B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3128] next window (<=48h): (0) MAIN — **本轮把「未读」的静默面钉死了，同一份探针也量出这个读数根本不在 CEO 面上：当前 `docs/status-export.json` 一个 corpus 键都没有，2307 个历史版本里只有 1 个带过，所以 `corpus_unread` 的唯一持久痕迹是 state log 里的散文。** 下一轮先量（只读＋git 历史＋私有世界）：①把 `corpus files/readable/bytes` 派生进发布面要几步——`closeout` 的 `gate_verdict[\"corpus\"]` 已经现成，而 `export_round.write` 自己并不跑普查，两条路径谁该供数、会不会多走一遍 508MB；②发布面加三个键会不会撞上 `frontdoor` 的既有校验元组或 `export_freshness` 的判决词（加键是增量还是新方言）；③另两种可构造的不可读形态（ACL 拒绝、被占用句柄）是否也静默落进 `other` 桶——本轮只驱动了「目录名 `*.log`」一种。然后裁定：把读数搬上发布面、只留 state log 散文并把「未上发布面」写成可验证断言、还是维持现状。**先落板再动代码。**",
-    "next_milestone_due": "2026-11-23T04:56:56+08:00",
-    "updated_at": "2026-11-21T04:56:56+08:00",
+    "next_milestone": "[R3129] next window (<=48h): (0) MAIN — **corpus 现在上台了，但只有一条供数路径：`closeout` OK 路径。而另外两个写面（`export_R2431.py`、`tools/status_export_fresh.py`）从不跑树闸，它们写出的面会**没有** corpus 块，与 closeout 写出的面在同一份文件上交替出现。**下一轮先量（只读＋私有世界＋git 历史）：①`docs/status-export.json` 的历史里，面在「有 corpus 块」与「无 corpus 块」之间翻转了几次、每次是哪条写路径落的地（按文件派生，禁手记）；②另两个写面若也供 corpus，是否必须各自再跑一遍树闸（⇒ 每轮多读 508MB），还是可以把「未测」显式发布成具名状态（例如 `corpus.state=NOT-MEASURED`）而不是缺键；③`frontdoor` 的缺席行与「未测」状态在读者眼里能否区分——即卡片会不会把「这条路径没量」读成「语料为空」。然后裁定：让另两个写面拒绝覆盖带 corpus 的面、给缺键补一个具名状态、还是把「只有 closeout 供数」写成可验证断言（AC）。**先落板再动代码。**",
+    "next_milestone_due": "2026-11-23T05:03:36+08:00",
+    "updated_at": "2026-11-21T05:03:36+08:00",
     "heartbeat": {
       "tick": 3128,
       "state_tick": 3128,
@@ -58,10 +58,10 @@
     }
   ],
   "do": "2026-11-21 R3128 PRODUCT+ENGINEERING: the tree-gate corpus reading now has a published face and one live consumer - files/readable/mb derived once in the gate, handed to the writer, mirrored under ceo_face and rendered by the CEO card, and an unmeasured corpus publishes no key at all instead of a fabricated zero.",
-  "export_ts": "2026-11-21T04:56:56+08:00",
+  "export_ts": "2026-11-21T05:03:36+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
   "latest_evidence": "qa/suite-status-export-fresh-R3128.log (6526B, 2026-11-21)",
-  "next_milestone": "[R3128] next window (<=48h): (0) MAIN — **本轮把「未读」的静默面钉死了，同一份探针也量出这个读数根本不在 CEO 面上：当前 `docs/status-export.json` 一个 corpus 键都没有，2307 个历史版本里只有 1 个带过，所以 `corpus_unread` 的唯一持久痕迹是 state log 里的散文。** 下一轮先量（只读＋git 历史＋私有世界）：①把 `corpus files/readable/bytes` 派生进发布面要几步——`closeout` 的 `gate_verdict[\"corpus\"]` 已经现成，而 `export_round.write` 自己并不跑普查，两条路径谁该供数、会不会多走一遍 508MB；②发布面加三个键会不会撞上 `frontdoor` 的既有校验元组或 `export_freshness` 的判决词（加键是增量还是新方言）；③另两种可构造的不可读形态（ACL 拒绝、被占用句柄）是否也静默落进 `other` 桶——本轮只驱动了「目录名 `*.log`」一种。然后裁定：把读数搬上发布面、只留 state log 散文并把「未上发布面」写成可验证断言、还是维持现状。**先落板再动代码。**",
+  "next_milestone": "[R3129] next window (<=48h): (0) MAIN — **corpus 现在上台了，但只有一条供数路径：`closeout` OK 路径。而另外两个写面（`export_R2431.py`、`tools/status_export_fresh.py`）从不跑树闸，它们写出的面会**没有** corpus 块，与 closeout 写出的面在同一份文件上交替出现。**下一轮先量（只读＋私有世界＋git 历史）：①`docs/status-export.json` 的历史里，面在「有 corpus 块」与「无 corpus 块」之间翻转了几次、每次是哪条写路径落的地（按文件派生，禁手记）；②另两个写面若也供 corpus，是否必须各自再跑一遍树闸（⇒ 每轮多读 508MB），还是可以把「未测」显式发布成具名状态（例如 `corpus.state=NOT-MEASURED`）而不是缺键；③`frontdoor` 的缺席行与「未测」状态在读者眼里能否区分——即卡片会不会把「这条路径没量」读成「语料为空」。然后裁定：让另两个写面拒绝覆盖带 corpus 的面、给缺键补一个具名状态、还是把「只有 closeout 供数」写成可验证断言（AC）。**先落板再动代码。**",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -200,18 +200,18 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 91,
+    "log_lines_in_window": 93,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 18,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 74390,
-  "next_milestone_due": "2026-11-23T04:56:56+08:00",
+  "state_bytes": 75460,
+  "next_milestone_due": "2026-11-23T05:03:36+08:00",
   "heartbeat": {
     "tick": 3128,
     "state_tick": 3128,
