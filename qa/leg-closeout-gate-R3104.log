@@ -1,0 +1,3 @@
+SHARD scope=SHARD registry_suites=735 registry_criteria=5990 selected=1 selected_criteria=9 cap=600s leg_cap=0s overrides=1 exact=1 state=COMPLETE
+SHARD row os-closeout-gate rc=0 pass=37 fail=0 detail=yes suite=PASS 37/37 crit=9 6.7s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=9 crit_mismatch=0 elapsed=6.7s crit_checked=1 crit_unchecked=0

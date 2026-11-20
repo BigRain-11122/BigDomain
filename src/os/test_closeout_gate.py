@@ -27,6 +27,7 @@ import io
 import json
 import os
 import re
+import shutil
 import sys
 import tempfile
 
@@ -387,6 +388,101 @@ def main():
             mism8.append((label8, old8, new8))
     ok("AC-CLG8 arm e - one parse reads a suite exactly as two parses did",
        not mism8, "rows=%d mismatch=%s" % (len(rows8), mism8))
+
+    # AC-CLG9 (R3104): the matrix face asked about a world it cannot address.
+    # Six arms, one criterion. The measurement this pins: a fixture world that
+    # carried a byte copy of the live document AND the leg that document
+    # records used to read EVIDENCE-FACE rows=735/735 - a refusal on the leg
+    # provenance string, publishing LIVE registry numbers about a tree with no
+    # registry. The face now refuses by name, the same way check_census does.
+    with open(os.path.join(ROOT, "docs", "sandbox-suite-matrix.md"),
+              encoding="utf-8") as fh:
+        doc_text9 = fh.read()
+    sys.path.insert(0, os.path.join(ROOT, "src", "os"))
+    import suite_matrix_reconcile as SMR9
+    try:
+        recorded9 = SMR9.SM.doc_evidence_face(doc_text9,
+                                             SMR9.SM.load_patterns())
+    except (IOError, OSError, ValueError):
+        recorded9 = None
+    with tempfile.TemporaryDirectory() as tmp9:
+        world9 = os.path.join(tmp9, "world")
+        os.makedirs(os.path.join(world9, "docs"))
+        os.makedirs(os.path.join(world9, "qa"))
+        with open(os.path.join(world9, "docs", "sandbox-suite-matrix.md"),
+                  "wb") as fh:
+            fh.write(doc_text9.encode("utf-8"))
+        leg9 = None
+        if recorded9:
+            candidate = os.path.join(ROOT, recorded9)
+            if os.path.isfile(candidate):
+                leg9 = os.path.join(world9, "qa",
+                                    os.path.basename(candidate))
+                shutil.copy2(candidate, leg9)
+        a_ok, a_line = CG.check_matrix(world9)
+        ok("AC-CLG9 arm a - a foreign world is refused by NAME, and the line "
+           "publishes no live row counts",
+           a_ok is False
+           and a_line.startswith(CG.E_CLG_FOREIGN_REGISTRY)
+           and "face=matrix" in a_line and "rows=" not in a_line,
+           "leg=%s line=%s" % (bool(leg9), a_line))
+
+        b_ok, b_line = CG.check_matrix(ROOT)
+        ok("AC-CLG9 arm b - the live tree stays green under the guard",
+           b_ok is True and b_line.startswith("DOC-CURRENT "),
+           "line=%s" % b_line)
+
+        stale9 = os.path.join(tmp9, "candidate.md")
+        stale_text9, changed9 = MUTATE_FIRST_COUNT(doc_text9)
+        with open(stale9, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(stale_text9)
+        c_ok, c_line = CG.check_matrix(ROOT, doc=stale9)
+        ok("AC-CLG9 arm c - the guard sits on root/registry, not on the "
+           "document path: a candidate document still gets the DOC verdict",
+           changed9 and c_ok is False
+           and not c_line.startswith(CG.E_CLG_FOREIGN_REGISTRY)
+           and c_line.split(" ")[0] in ("ROWS-MISMATCH", "STALE-CONTENT",
+                                        "EVIDENCE-FACE"),
+           "changed=%s line=%s" % (changed9, c_line))
+
+        d_ok, d_line = CG.check_round_main(world9)
+        ok("AC-CLG9 arm d - a world with no state is refused by E_CLG_NO_STATE "
+           "in this suite, not only in battery_followup",
+           d_ok is False and d_line.startswith(CG.E_CLG_NO_STATE),
+           "line=%s" % d_line)
+
+        gate9 = os.path.join(tmp9, "gateworld")
+        qa9 = os.path.join(gate9, "qa")
+        os.makedirs(qa9)
+        os.makedirs(os.path.join(gate9, "src", "os"))
+        os.makedirs(os.path.join(gate9, "docs"))
+        write_bytes(os.path.join(qa9, "healthy.log"), b"PASS suite row\n")
+        base9 = os.path.join(qa9, CENSUS.BASELINE_NAME)
+        _bl, _bcode, _bb = CENSUS.write_baseline(qa9, base9)
+        with open(os.path.join(gate9, "src", "os", "state.json"), "w",
+                  encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(
+                {"log": ["2026-11-20 R5009 PRODUCT: a fixture round main"]})
+                + "\n")
+        with open(os.path.join(gate9, "docs", "sandbox-suite-matrix.md"),
+                  "wb") as fh:
+            fh.write(doc_text9.encode("utf-8"))
+        e_lines, e_rc, e_v = CG.evaluate(qa9, base9, root=gate9)
+        ok("AC-CLG9 arm e - evaluate(root=world) wraps the new code in "
+           "E_CLG_CENSUS instead of judging the live registry",
+           _bcode == 0 and e_rc == 2
+           and e_v.get("reason") == "E_CLG_CENSUS"
+           and any(l.startswith(CG.E_CLG_FOREIGN_REGISTRY)
+                   for l in e_lines),
+           "rc=%s reason=%s lines=%s"
+           % (e_rc, e_v.get("reason"), e_lines[:2]))
+
+        import closeout as CO9
+        f_word, f_line, _f_v = CO9.tree_refusal(gate9)
+        ok("AC-CLG9 arm f - tree_refusal reads RED and carries the census "
+           "refusal instead of a silent pass",
+           f_word == "RED" and "E_CLG_CENSUS" in f_line,
+           "word=%s line=%s" % (f_word, f_line))
 
     total = len(CHECKS)
     acs = set()

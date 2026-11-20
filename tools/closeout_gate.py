@@ -1,4 +1,4 @@
-"""Closeout precondition gate (R2932, criteria AC-CLG1..AC-CLG7).
+"""Closeout precondition gate (R2932, criteria AC-CLG1..AC-CLG9).
 
 WHY: the R2926 commit hook refuses STAGED evidence bytes only. A round that
 writes a shell-captured file and never stages it still leaves the file on disk,
@@ -60,6 +60,19 @@ refused a stale document. `check_matrix(root)` now asks it as the third root
 face and refuses by name E_CLG_MATRIX; a missing document is E_EDM_NO_DOC,
 never a skip. A caller building a fixture world with no document MUST say so:
 `matrix=False` is the named opt-out, so "not asked" is always visible in code.
+
+R3104 - the matrix face asked about a world it cannot address (AC-CLG9):
+
+The document law compares a document against THIS module's registry, so `root`
+selects only the document and the qa/ pile. Measured on a fixture world that
+carried a byte copy of the live document: the face read EVIDENCE-FACE with
+rows=735/735 over a world holding no registry at all - it refused, but on the
+leg provenance string, while publishing live registry numbers as if they were
+the world's. `check_matrix` now applies the same guard as `check_census`: the
+registry file the law reads must live under `root`, or the face refuses by
+name E_CLG_FOREIGN_REGISTRY face=matrix. The guard sits on root and the
+registry, NOT on the document path, so a caller checking a CANDIDATE document
+inside this repo (the shipped AC-CLG7c usage) still gets the document verdict.
 
 Honest boundary, disclosed rather than implied: `src/os/closeout.py` - the ONE
 command that closes a round - does NOT call this gate (measured R3094: zero
@@ -221,6 +234,21 @@ def check_matrix(root, doc=None, qa_dir=None):
     a human habit asked it. Returns (ok, line), never a silent pass: a missing
     document is a refusal by name, not a skip.
     """
+    # R3104: the law compares a document against THIS module's registry
+    # (`suite_matrix_reconcile.registry_counts()` reads reconcile_all.SUITES of
+    # the repo it was imported from). Asked about another root it therefore
+    # published LIVE registry numbers about a world - measured on a fixture
+    # world carrying a byte copy of the live document: EVIDENCE-FACE rows=735/735
+    # over a world with no registry at all. The refusal came from the leg
+    # provenance string, not from addressability, so a reader could not tell
+    # which tree those numbers described. Same guard, same name as
+    # check_census: a face asked about a registry it cannot address refuses.
+    registry = os.path.join(ROOT, "src", "sandbox", "reconcile_all.py")
+    base = os.path.normcase(os.path.abspath(root)) + os.sep
+    if not os.path.normcase(os.path.abspath(registry)).startswith(base):
+        return False, ("%s face=matrix registry=%s root=%s"
+                       % (E_CLG_FOREIGN_REGISTRY, registry,
+                          os.path.abspath(root)))
     path = _src_os(root)
     import suite_matrix_reconcile as SMR
     doc = doc or os.path.join(root, "docs", "sandbox-suite-matrix.md")

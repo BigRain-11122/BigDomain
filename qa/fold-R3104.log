@@ -1,0 +1,6 @@
+FOLD R3104 no=46 window=1..10
+before bytes=81888 margin=-3388 log=95
+after  bytes=74031 margin=4469 log=86 verdict=FOLD-CLEAR
+summary R3104 fold 46: lines 1..10 to the November archive; AC-CLG6 and AC-RCC10-R5 are folded here and their laws stay in the shipped suites
+archive C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\logs\state-log-archive-2026-11.md
+predicted=74031

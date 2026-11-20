@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 735 | 5989 | 675/675 | R2739 |
+| 735 | 5990 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -766,13 +766,13 @@
 | 727 | os-registry-counter-census | ../os/test_registry_counter_census.py | 13 | no-evidence | - |
 | 728 | os-evidence-read | ../os/test_evidence_read.py | 5 | no-evidence | - |
 | 729 | os-face-walk-static | ../os/test_face_walk_static.py | 5 | no-evidence | - |
-| 730 | os-closeout-gate | ../os/test_closeout_gate.py | 8 | no-evidence | - |
+| 730 | os-closeout-gate | ../os/test_closeout_gate.py | 9 | no-evidence | - |
 | 731 | os-live-proof | ../os/test_live_proof.py | 13 | no-evidence | - |
 | 732 | os-platform-live-report | ../os/test_platform_live_report.py | 8 | no-evidence | - |
 | 733 | os-ledger-business-report | ../os/test_ledger_business_report.py | 8 | no-evidence | - |
 | 734 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
 | 735 | os-corpus-rewrite-audit | ../os/test_corpus_rewrite_audit.py | 1 | no-evidence | - |
-|  | 合计 |  | 5989 | green 675 / FAIL 0 / no-evidence 60 |  |
+|  | 合计 |  | 5990 | green 675 / FAIL 0 / no-evidence 60 |  |
 
 ## 证据出处
 

@@ -1,0 +1,17 @@
+Q1 a foreign world carrying a byte copy of the live document
+    ok=False line=RED-LEG tmp/probe-R3104-world/docs/sandbox-suite-matrix.md rows=None/None
+    took 2.9ms
+    world_has_registry=False world_has_src_os=False
+Q2 the same world, document with its first totals row decremented
+    rows_mutated=1 ok=False line=RED-LEG tmp/probe-R3104-world/docs/mutated.md rows=None/None (2.0ms)
+Q3 the live tree baseline (root=ROOT)
+    ok=True line=DOC-CURRENT docs/sandbox-suite-matrix.md rows=735/735 (202.3ms)
+Q4 tree_refusal's NOT-ASKED branch
+    NOT-ASKED present=True
+    E_CO_GATE_NO_INPUTS present=True
+    E_CO_TREE_RED present=False
+    gate=PASS present=False
+Q5 registry_counts reads the module's own tree
+    SMR.registry_counts()=(735, 5989) RA.SUITES rows=735
+    SMR.DOC=docs/sandbox-suite-matrix.md
+    probe done, files under tmp/probe-R3104-world only

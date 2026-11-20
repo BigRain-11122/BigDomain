@@ -7662,8 +7662,11 @@ SUITES = [
     # R3097: a fifth criterion (AC-CLG8) pins the per-face timings the verdict
     # publishes - diagnostic only, never on the PASS line - and the registry
     # census reading one suite source once with the same result (7 -> 8).
+    # R3104: a sixth criterion (AC-CLG9) pins the matrix face refusing a root
+    # whose registry it cannot address, and gives the R3103 refusal codes arms
+    # in this suite instead of only in battery_followup (8 -> 9).
     ("os-closeout-gate",
-     os.path.join("..", "os", "test_closeout_gate.py"), 8),
+     os.path.join("..", "os", "test_closeout_gate.py"), 9),
     # R2935: R2934 photographed the sandbox for the first time, but one pass is
     # a SNAPSHOT - it cannot tell "alive" from "painted cleanly this time". The
     # ruling is not to run a browser under the registry law but to move the LAW
