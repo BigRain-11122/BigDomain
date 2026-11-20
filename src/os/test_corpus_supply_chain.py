@@ -12,7 +12,7 @@ three: closeout.py passes corpus=, export_round.py calls the grader's line
 rewrite, and one test arm passes nothing. export_R2431.py names no corpus and
 its write lives behind the __main__ guard, so importing it lands nothing.
 
-WHAT IS PROVED HERE (two criteria):
+WHAT IS PROVED HERE (five criteria):
 AC-CSC1 (five arms):
   a  every call to export_round.write in a shipped NON-TEST module passes
      corpus=, and at least one such call exists (an empty census cannot pass).
@@ -67,6 +67,17 @@ AC-CSC4 (five arms) - why an over-count is unpublishable, measured at R3133:
      private world of four entries with two denied reads reads 4/2.
   s  a real census reading never yields a negative unread end to end.
   t  the card names a hand-made over-count instead of printing unread=-2.
+
+AC-CSC5 (five arms) - why the third number is derived instead of trusted,
+measured at R3134:
+  p  a dict carrying files=5 readable=3 unread=9 publishes unread=2: the
+     block is rebuilt from the two counts, so a forged key cannot leak.
+  q  agreeing counts (5/5) grow no unread key whatever the input claims.
+  r  a consistent input key is a no-op: the block is byte-identical to the
+     same input without the key.
+  s  the difference is derived from the two integers (7/4 -> unread=3).
+  t  an unparseable input key is dropped too (unread='x' -> 1), because the
+     published value comes from the counts, never from the face's claim.
 
 Isolation: private worlds are temp dirs; the only live reads are shipped
 sources. Stdlib only. Exit 0 = all green, 2 = at least one red.
@@ -613,6 +624,55 @@ def arm_t():
     return True, "named defect line, no numbers"
 
 
+def _publish_gap(files, readable, third=None):
+    corpus = {"files": files, "readable": readable, "bytes": 10}
+    if third is not None:
+        corpus["unread"] = third
+    return ER.corpus_block(corpus)
+
+
+def arm_u():
+    """A forged third number cannot leak into the published block."""
+    block = _publish_gap(5, 3, 9)
+    if not isinstance(block, dict) or block.get("unread") != 2:
+        return False, "forged unread leaked: %r" % (block,)
+    return True, "input unread=9 -> block unread=2"
+
+
+def arm_v():
+    """Agreeing counts grow no third number, whatever the input claims."""
+    block = _publish_gap(5, 5, 9)
+    if not isinstance(block, dict) or "unread" in block:
+        return False, "a clean corpus took the input key: %r" % (block,)
+    return True, "files=readable=5 -> no unread key"
+
+
+def arm_w():
+    """A consistent input key changes nothing, byte for byte."""
+    with_key = _publish_gap(3, 2, 1)
+    without = _publish_gap(3, 2)
+    if with_key != without:
+        return False, "the input key changed the block: %r vs %r" % (
+            with_key, without)
+    return True, "consistent key is a no-op"
+
+
+def arm_x():
+    """The writer derives the difference from the two integers."""
+    block = _publish_gap(7, 4)
+    if not isinstance(block, dict) or block.get("unread") != 3:
+        return False, "difference not derived: %r" % (block,)
+    return True, "7/4 -> unread=3"
+
+
+def arm_y():
+    """An unparseable third number is not carried either."""
+    block = _publish_gap(3, 2, "x")
+    if not isinstance(block, dict) or block.get("unread") != 1:
+        return False, "unparseable key changed the block: %r" % (block,)
+    return True, "unread='x' -> derived 1"
+
+
 def main():
     criteria = [
         ("AC-CSC1", "os-corpus-supply-chain", [
@@ -639,6 +699,12 @@ def main():
           ("r", "one enumeration", arm_r),
           ("s", "real reading", arm_s),
           ("t", "card defect line", arm_t)]),
+        ("AC-CSC5", "os-corpus-third-number",
+         [("p", "forged third number", arm_u),
+          ("q", "clean corpus", arm_v),
+          ("r", "consistent key", arm_w),
+          ("s", "derived difference", arm_x),
+          ("t", "unparseable third", arm_y)]),
     ]
     arms_total = 0
     red = 0

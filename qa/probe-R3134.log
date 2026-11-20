@@ -1,0 +1,33 @@
+R3134 probe root=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain
+
+Q2 unread writers in shipped code (AST):
+Q2 src/os/export_round.py:654 STORE
+Q2 total unread subscript/kwarg sites=1
+Q2 total dict-literal sites=0
+
+Q3 literal census:
+Q3 src/os/test_corpus_supply_chain.py: 'unread'=35
+Q3 src/os/test_corpus_supply_chain.py contains literal 'unread=1'
+Q3 src/os/test_corpus_supply_chain.py contains literal 'unread='
+Q3 src/os/test_corpus_supply_chain.py contains literal 'unread=-2'
+Q3 src/sandbox/test_frontdoor_corpus_card.py: 'unread'=15
+Q3 src/sandbox/test_frontdoor_corpus_card.py contains literal 'unread=1'
+Q3 src/sandbox/test_frontdoor_corpus_card.py contains literal 'unread=2'
+Q3 src/sandbox/test_frontdoor_corpus_card.py contains literal 'unread='
+Q3 src/sandbox/test_frontdoor_corpus_card.py contains literal 'unread=-2'
+Q3 src/sandbox/frontdoor.py: 'unread'=9
+Q3 src/sandbox/frontdoor.py contains literal 'unread='
+Q3 src/sandbox/frontdoor.py contains literal 'unread=-2'
+Q3 src/os/export_round.py: 'unread'=8
+Q3 src/os/export_round.py contains literal 'unread='
+Q3 src/os/export_round.py contains literal 'unread=-2'
+Q3 card agree-unequal -> 'CORPUS files=3 readable=2 mb=0.0 unread=1'
+Q3 card contradictory -> 'CORPUS files=5 readable=5 mb=0.0 unread=9'
+Q3 card nonint -> 'CORPUS files=5 readable=4 mb=0.0 unread=x'
+Q3 card missing-but-gap -> 'CORPUS files=5 readable=3 mb=0.0'
+Q3 card clean -> 'CORPUS files=4219 readable=4219 mb=508.1'
+
+Q1 face revisions in history: 2315
+Q1 corpus blocks anywhere in history: 10  unparseable faces: 591
+Q1 blocks carrying unread: 0 (agree=0 disagree=0 non-int=0 decorative-at-equal=0)
+Q1 blocks with a gap but NO unread key: 0

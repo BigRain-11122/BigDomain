@@ -1,8 +1,9 @@
 """Suite for the corpus card: the tree-gate reading gets one live consumer.
 
-THREE criteria, each pre-registered on the src/os/backlog.md board BEFORE this
+FOUR criteria, each pre-registered on the src/os/backlog.md board BEFORE this
 file and the code it grades: AC-FDC3 (four arms, R3128), AC-FDC4 (five arms,
-R3132) and AC-FDC5 (R3133: an over-count is named, not rendered).
+R3132), AC-FDC5 (R3133: an over-count is named, not rendered) and AC-FDC6
+(R3134: the third number is derived from the two on the line, not trusted).
 
 R3128 measured the hole: the corpus (files / readable / bytes that the flags
 face already pays to read, ~4219 files / 508.1MB) was derived in exactly one
@@ -197,6 +198,48 @@ def main():
     if ER.corpus_block({"files": 5, "readable": 7, "bytes": 100}) is not None:
         over.append("writer-now-publishes-over-count")
     report("AC-FDC5", bool(over), ",".join(over))
+
+    # ---- AC-FDC6: the third number is derived, not trusted. ----
+    # R3134 pre-registered this on the board before the card changed: the card
+    # printed any stored `unread` value, so a hand-made block like
+    # files=5 readable=5 unread=9 rendered three numbers that contradict each
+    # other on one line. Measured: 10 published blocks, none carrying the key
+    # (the counts agree on every one), one shipped store deriving it from the
+    # same two integers - so a disagreeing key is a shape defect, and an absent
+    # key over a real gap is stated from the two numbers the line already
+    # prints. The legal arm (3/2 with unread=1) stays byte for byte.
+    third = []
+    for label, bad_block in (
+            ("contradictory", {"files": 5, "readable": 5, "bytes": 10,
+                               "mb": 0.0, "unread": 9}),
+            ("unparseable", {"files": 5, "readable": 4, "bytes": 10,
+                             "mb": 0.0, "unread": "x"})):
+        html = frontdoor.corpus_card({"corpus": bad_block})
+        if "unread disagrees with files-readable" not in html:
+            third.append(label + "-not-named")
+        for token in ("files=", "readable=", "unread="):
+            if token in html:
+                third.append(label + "-prints-" + token.replace("=", ""))
+    legal_html = frontdoor.corpus_card({"corpus": {"files": 3, "readable": 2,
+                                                   "bytes": 10, "mb": 0.0,
+                                                   "unread": 1}})
+    if "CORPUS files=3 readable=2 mb=0.0 unread=1" not in legal_html:
+        third.append("legal-unread-changed")
+    if "malformed" in legal_html:
+        third.append("legal-read-as-defect")
+    # a gap with no key is stated from the two numbers on the same line
+    gap_html = frontdoor.corpus_card({"corpus": {"files": 5, "readable": 3,
+                                                 "bytes": 10, "mb": 0.0}})
+    if "unread=2" not in gap_html or "malformed" in gap_html:
+        third.append("absent-key-gap-not-stated")
+    # an unverifiable `files` means the difference cannot be cross-checked, so
+    # the third number is not printed at all
+    blind_html = frontdoor.corpus_card({"corpus": {"files": "x", "readable": 4,
+                                                   "bytes": 10, "mb": 0.0,
+                                                   "unread": 1}})
+    if "unread=" in blind_html:
+        third.append("unverifiable-files-printed-unread")
+    report("AC-FDC6", bool(third), ",".join(third))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

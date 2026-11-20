@@ -5774,17 +5774,37 @@ def corpus_card(face):
         return ("<p class=kv>CORPUS block is malformed (readable exceeds "
                 "files) - not a reading</p>")
 
+    # R3134: the third number is derived here, never copied from the face.
+    # Measured (qa/probe-R3134.log): of 10 published corpus blocks ZERO carry
+    # an unread key (the counts agree on every one), the only shipped store of
+    # that key derives it from the same two integers, yet three shipped
+    # subscript stores touch the corpus key - so a face can be hand-edited into
+    # files=5 readable=5 unread=9, which this card used to print verbatim as
+    # `unread=9`, three numbers contradicting each other on one line. Derived,
+    # the three agree by construction; a stored key that disagrees is a shape
+    # defect and prints no numbers at all.
+    gap = None
+    if files_int is not None:
+        gap = files_int - readable
+        if "unread" in block:
+            try:
+                stored = int(block.get("unread"))
+            except (TypeError, ValueError):
+                stored = None
+            if stored != gap:
+                return ("<p class=kv>CORPUS block is malformed (unread "
+                        "disagrees with files-readable) - not a reading</p>")
+
     def show(value):
         return "none" if value is None else str(value)
 
     line = ("CORPUS files=%s readable=%s mb=%s"
             % (show(block.get("files")), show(block.get("readable")),
                show(block.get("mb"))))
-    unread = block.get("unread")
     # A nonzero unread count is a READING, not a gate (R3127 adjudication): it
     # prints, and it does not borrow a verdict word from either judge.
-    if unread is not None:
-        line += " unread=%s" % show(unread)
+    if gap is not None and gap > 0:
+        line += " unread=%d" % gap
     return "<p class=kv>%s</p>" % esc(line)
 
 

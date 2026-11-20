@@ -7782,8 +7782,11 @@ SUITES = [
     # block as a reading. R3133 added AC-FDC5: a block claiming more readings
     # than files is named as a defect too, because printing it would show
     # unread=-2 - while a legal shortfall still prints its unread reading.
+    # R3134 added AC-FDC6: the third number is derived from the two counts on
+    # the line, never copied from the face; a stored key that disagrees with
+    # files-readable is a named defect and prints no numbers.
     ("frontdoor-corpus-card",
-     os.path.join("test_frontdoor_corpus_card.py"), 3),
+     os.path.join("test_frontdoor_corpus_card.py"), 4),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files
@@ -7821,8 +7824,12 @@ SUITES = [
     # denied reads reads 4/2, and all 10 historical blocks carry equal pairs -
     # so an over-count is a caller error, and refusing it keeps `unread`
     # non-negative by construction.
+    # R3134 added a fifth (AC-CSC5): the third number is rebuilt from the two
+    # counts, so a forged/unparseable/consistent input key can never leak into
+    # the published block. Measured: one shipped store of that key, and no
+    # published block has ever carried it.
     ("os-corpus-supply-chain",
-     os.path.join("..", "os", "test_corpus_supply_chain.py"), 4),
+     os.path.join("..", "os", "test_corpus_supply_chain.py"), 5),
     ]
 
 FAILS = 0
