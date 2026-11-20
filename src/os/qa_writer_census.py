@@ -130,6 +130,7 @@ import json
 import os
 import sys
 import tempfile
+import time
 
 BASE = os.path.dirname(os.path.abspath(__file__))   # .../src/os
 SRC = os.path.dirname(BASE)                          # .../src
@@ -153,7 +154,7 @@ BASELINE_CLASSES = ("cmd-raw", "pwsh-capture", "ps-utf16", "nul-bytes",
 BASELINE_NAME = "writer-census-baseline.json"
 
 
-def classify_file(path):
+def classify_file(path, counts=True):
     """Read-only writer-signature census of one file. Returns a row
     dict; every number is measured or honestly absent - zero
     fabrication.
@@ -162,6 +163,10 @@ def classify_file(path):
     src/os/evidence_dialect.py (ONE source, delegated here) because the
     commit gate needs the same answer without loading this module's
     reconcile_all import. The row shape is unchanged.
+
+    R3099 (AC-WCB11): `counts=False` is passed straight to the leaf, so a
+    caller that only needs the class (the name lists) does not pay the two
+    whole-blob count passes; `crlf`/`bare_lf` then read -1 (not measured).
     """
     row = {"name": os.path.basename(path), "bytes": -1, "bom": "?",
            "crlf": 0, "bare_lf": 0, "utf8": False, "label": False,
@@ -172,7 +177,7 @@ def classify_file(path):
     except OSError as exc:
         row["err"] = "OSError:%s" % exc.__class__.__name__
         return row
-    measured = ED.classify_bytes(raw, LABEL.encode("ascii"))
+    measured = ED.classify_bytes(raw, LABEL.encode("ascii"), counts=counts)
     row.update(measured)
     return row
 
@@ -223,7 +228,7 @@ def census_names(target):
         return None
     lists = dict((c, []) for c in CLASSES)
     for name in names:
-        row = classify_file(os.path.join(target, name))
+        row = classify_file(os.path.join(target, name), counts=False)
         lists[row["class"]].append(name)
     return dict((c, sorted(lists[c])) for c in CLASSES)
 
@@ -263,7 +268,17 @@ def write_baseline(target, path):
 def check_against_baseline(target, path):
     """AC-WCB2..WCB5 drift-detector face. Read-only against the target
     dir AND the baseline file. Three verdict faces: new-dialect FLAG,
-    class-migrated FLAG, disappeared info. Deterministic output."""
+    class-migrated FLAG, disappeared info. Deterministic output.
+
+    R3099 (AC-WCB11): ONE read per file. Measured at R3099 over the live
+    tree, the shipped face read every baselined file THREE times - once in
+    census_names, once for the label column, once for the debt split - and
+    that repetition was 1618.9ms of its 1626.4ms (the baseline comparison
+    itself costs 0.0ms). The bytes of a single read now feed all three
+    answers, classified with the leaf's `counts=False` cut of the same law,
+    which decides the class by short-circuit membership and leaves the two
+    count columns at -1 (not measured). The printed lines are unchanged.
+    """
     lines = []
     if not os.path.exists(path):
         lines.append("baseline file missing: %s" % os.path.basename(path))
@@ -282,14 +297,50 @@ def check_against_baseline(target, path):
         if c not in base:
             lines.append("baseline malformed: missing class key %s" % c)
             return lines, 2
-    lists = census_names(target)
-    if lists is None:
+    names = sorted(n for n in os.listdir(target) if n.endswith(".log"))
+    if not names:
         lines.append("no *.log candidates under target dir (refusal)")
         return lines, 3
     base_of = {}
     for c in BASELINE_CLASSES:
         for n in base[c]:
             base_of[n] = c
+    # the single read pass: class lists, the label column for baselined
+    # files, and the debt split all come out of these same bytes
+    lists = dict((c, []) for c in CLASSES)
+    rows = []
+    unusable = 0
+    rescued = 0
+    refused = []
+    label_bytes = LABEL.encode("ascii")
+    for name in names:
+        fpath = os.path.join(target, name)
+        try:
+            with open(fpath, "rb") as handle:
+                raw = handle.read()
+        except OSError as exc:
+            # unreadable file: the shipped census counted it in the
+            # honest other bucket, and it never reaches the debt split
+            lists["other"].append(name)
+            continue
+        row = ED.classify_bytes(raw, label_bytes, counts=False)
+        lists[row["class"]].append(name)
+        if name not in base_of or not os.path.isfile(fpath):
+            continue
+        rows.append((name, row))
+        # R2929 (AC-WCB8..AC-WCB10): the debt headline is a MEASUREMENT,
+        # not the class name. A plain utf-8 consumer loses only the files
+        # the leaf's plain_unusable() names, and the shipped reader is
+        # asked to read exactly those - so "rescued" can never be a count
+        # of files that decode into mojibake (that is AC-WCB9's arm).
+        if not ED.plain_unusable(raw):
+            continue
+        unusable += 1
+        try:
+            ED.read_text(raw)
+            rescued += 1
+        except ED.EvidenceDecodeError as exc:
+            refused.append((name, str(exc)))
     flags = 0
     for c in CLASSES:
         for n in lists[c]:
@@ -315,37 +366,6 @@ def check_against_baseline(target, path):
     lines.append("census: files=%d tee=%d baselined=%d"
                  % (sum(len(lists[c]) for c in CLASSES),
                     len(lists["tee"]), len(base_of)))
-    # R2926 (AC-EVB4): the baselined debt split by the self-announcing
-    # writer. Measured at R2926 over the shipped tree: 11 labeled /
-    # 579 unlabeled, i.e. the label names one writer family and never
-    # the disease, which is why absence is a column and not a refusal.
-    rows = []
-    unusable = 0
-    rescued = 0
-    refused = []
-    for name in sorted(base_of):
-        path = os.path.join(target, name)
-        if not os.path.isfile(path):
-            continue
-        rows.append((name, classify_file(path)))
-        # R2929 (AC-WCB8..AC-WCB10): the debt headline is a MEASUREMENT,
-        # not the class name. A plain utf-8 consumer loses only the files
-        # the leaf's plain_unusable() names, and the shipped reader is
-        # asked to read exactly those - so "rescued" can never be a count
-        # of files that decode into mojibake (that is AC-WCB9's arm).
-        try:
-            with open(path, "rb") as handle:
-                raw = handle.read()
-        except OSError:
-            continue
-        if not ED.plain_unusable(raw):
-            continue
-        unusable += 1
-        try:
-            ED.read_text(raw)
-            rescued += 1
-        except ED.EvidenceDecodeError as exc:
-            refused.append((name, str(exc)))
     split = ED.label_coverage(rows)
     lines.append("labeled_baselined=%d unlabeled_baselined=%d"
                  % (split["labeled"], split["unlabeled"]))
@@ -799,6 +819,94 @@ def _selftest():
               % (rec_u, rec_r),
               ("plain_unusable=%d reader_rescued=%d" % (rec_u, rec_r))
               in "\n".join(mlines2))
+        # --- AC-WCB11: one read per file, counts measured only if asked ---
+        # a: the counts=False cut of the law decides the SAME class on every
+        # fixture blob and publishes -1 rather than a zero it never read
+        lab = LABEL.encode("ascii")
+        lean_shapes = [
+            ("tee", b"PASS suite row\n"),
+            ("pwsh-capture", u"AI \u5224\u5b9a".encode("utf-8") + b"\r\n"),
+            ("cmd-raw", u"AI \u5224\u5b9a".encode("gbk") + b"\r\n"),
+            ("ps-utf16", b"\xff\xfe" + "hi\n".encode("utf-16-le")),
+            ("nul-bytes", b"a\x00b\x00"),
+            ("other", b"\xef\xbb\xbf" + "x\n".encode("utf-8")),
+        ]
+        lean_ok = True
+        lean_marks = True
+        for want, blob in lean_shapes:
+            full = ED.classify_bytes(blob, lab)
+            lean = ED.classify_bytes(blob, lab, counts=False)
+            lean_ok = lean_ok and full["class"] == want == lean["class"]
+            lean_marks = (lean_marks and lean["crlf"] == -1
+                          and lean["bare_lf"] == -1
+                          and full["crlf"] >= 0 and full["bare_lf"] >= 0)
+        check("AC-WCB11-R1 counts=False decides the same six classes and "
+              "publishes crlf=bare_lf=-1", lean_ok and lean_marks)
+        # b: the full row is unchanged - pinned literally, no drift
+        pinned = ED.classify_bytes(u"AI \u5224\u5b9a".encode("gbk") + b"\r\n",
+                                   lab)
+        check("AC-WCB11-R2 counts=True row pinned exactly",
+              pinned == {"bytes": 9, "bom": "utf-8", "crlf": 1,
+                         "bare_lf": 0, "utf8": False, "label": False,
+                         "class": "cmd-raw"})
+        # one private world touching all five published counter faces
+        lw = os.path.join(tmp, "one-read-world")
+        os.mkdir(lw)
+        with open(os.path.join(lw, "l-tee.log"), "wb") as fh:
+            fh.write(b"PASS suite row\n")
+        with open(os.path.join(lw, "l-pwsh.log"), "wb") as fh:
+            fh.write(u"AI \u5224\u5b9a".encode("utf-8") + b"\r\n")
+        with open(os.path.join(lw, "l-cmdraw.log"), "wb") as fh:
+            fh.write(u"AI \u5224\u5b9a".encode("gbk") + b"\r\n")
+        with open(os.path.join(lw, "l-utf16.log"), "wb") as fh:
+            fh.write(b"\xff\xfe" + "SUITE\n".encode("utf-16-le"))
+        with open(os.path.join(lw, "l-bad.log"), "wb") as fh:
+            fh.write(b"\x80\xff\x80")
+        lbase = os.path.join(lw, BASELINE_NAME)
+        write_baseline(lw, lbase)
+        import builtins
+        real_open = builtins.open
+        seen_opens = {}
+
+        def counting_open(handle, mode="r", *args, **kwargs):
+            if "rb" in str(mode):
+                key = os.path.basename(str(handle))
+                seen_opens[key] = seen_opens.get(key, 0) + 1
+            return real_open(handle, mode, *args, **kwargs)
+
+        builtins.open = counting_open
+        try:
+            ww, wcode = check_against_baseline(lw, lbase)
+        finally:
+            builtins.open = real_open
+        # c: the counters come out of one pass and agree with the bytes
+        check("AC-WCB11-R3 counters from one pass: files=5 tee=1 "
+              "baselined=4 unusable=3 rescued=2 refused=1",
+              wcode == 0
+              and "census: files=5 tee=1 baselined=4" in "\n".join(ww)
+              and "plain_unusable=3 reader_rescued=2 reader_refused=1"
+              in "\n".join(ww))
+        # d: every evidence file is opened exactly ONCE by the check face
+        logs = dict((k, v) for k, v in seen_opens.items()
+                    if k.endswith(".log"))
+        check("AC-WCB11-R4 every file read once (opens=%s)"
+              % sorted(logs.items()),
+              len(logs) == 5 and set(logs.values()) == set([1]))
+        # e: the printed line order is pinned, so a refactor cannot move it
+        check("AC-WCB11-R5 published lines pinned in order",
+              ww == ["census: files=5 tee=1 baselined=4",
+                     "labeled_baselined=0 unlabeled_baselined=4",
+                     "plain_unusable=3 reader_rescued=2 reader_refused=1",
+                     "[refuse-read] l-bad.log: no known family decodes "
+                     "this blob",
+                     "nul_bytes=0", "disappeared=0", "flags=0",
+                     "verdict: DRIFT-CLEAN"])
+        # f: the printed census face still measures its counts
+        plines, _pcode, _psum = probe_dir(lw)
+        pblob = "\n".join(plines)
+        check("AC-WCB11-R6 probe_dir still measures crlf/bare_lf "
+              "(no -1 leaks into the printed census)",
+              "crlf=1" in pblob and "crlf=-1" not in pblob)
     finally:
         for sub in os.listdir(tmp):
             d = os.path.join(tmp, sub)
@@ -877,7 +985,9 @@ def main(argv=None):
         print("mode: check (drift detector)")
         print("dir: %s" % target)
         print("baseline: %s" % bpath)
+        t0 = time.perf_counter()
         lines, code = check_against_baseline(target, bpath)
+        print("elapsed_ms=%.1f" % ((time.perf_counter() - t0) * 1000.0))
         for line in lines:
             print(line)
         return code

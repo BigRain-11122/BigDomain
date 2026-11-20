@@ -4,19 +4,19 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-20 R3098 PRODUCT+ENGINEERING: the registry census now remembers its own answers by CONTENT - the closeout dry run's census face fell from 4940.8ms to 175.7ms over the same 734 rows (734/734 reused) with the pin verdict untouched, because an entry is keyed by the suite source's sha256 plus the reader digest rather than by size and mtime.",
+    "current": "2026-11-20 R3099 PRODUCT+ENGINEERING: the drift face now reads every evidence file ONCE - measured 1626.4ms -> 1264.8ms over the same live corpus (files=4113) with the published lines byte-identical, because the shipped face read the 590 baselined files three times while the baseline comparison itself cost 0.0ms.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-ledger-R3098.log (363B, 2026-11-20)",
-    "latest_evidence": "qa/leg-ledger-R3098.log (363B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-flags-R3099.log (1713B, 2026-11-20)",
+    "latest_evidence": "qa/leg-flags-R3099.log (1713B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3099] next window (<=48h): (0) MAIN — **干跑从 4.05s 降到 ~2.0s，census 面已解决（175.7ms），剩下的大头是 flags 面 `qa_writer_census.check_against_baseline` 实测 1622.7ms（读 4108 个文件、每次重算方言）。** 下一轮先量（只读）：①flags 面的 1622.7ms 逐段花在哪（读文件/方言判定/基线对比），同一类内容 sha256 缓存能压到多少且不改裁决；②它与 R3098 缓存能否共一份键/一份自证层（两个模块、两种问法）；③`test_battery_followup.py` 22 个私有世界接树面所缺三输入（qa baseline/矩阵文档/注册表）逐条列名与最小构造；④缓存失效面在 flags 面是否与 census 面同样可证（同 size 同 mtime 改内容必重算）。量清后落一条判据或一条「只发布读数并写明必须靠人」。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board, ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 as a chosen law, (truncated)",
-    "next_milestone_due": "2026-11-22T21:33:56+08:00",
-    "updated_at": "2026-11-20T21:33:56+08:00"
+    "next_milestone": "[R3100] next window (<=48h): **PREREQ — 本轮收口报 `fold_margin=-5218`（水位已透支），下一轮第一件事是 fold 43 把水位补回正数，再做下面的活。** (0) MAIN — **flags 面已从 1626.4ms 降到 1264.8ms（活盘 1192.6ms），剩下的 1.19s 里几乎全是「把 507MB 证据读进来」这一件事，而缓存实测压不到读以下（read+sha256=986.5ms）——所以下一步该问的不是怎么写缓存，而是这份语料本身。** 下一轮先量（只读）：①4113 个 .log / 507MB 的**体量分布**（前 10 大文件占多少字节、>1MB 的有几个、中位数多少），确认「读」是否被少数巨型证据日志支配；②若被支配，那类文件是否本就该按 REPO-SLIM 口径轮转/归档（而不是让每轮收口都读它），并给出「归档后 flags 面实测多少 ms」的可复算读数；③`test_battery_followup.py` 22 个私有世界接树面所缺三输入（qa baseline/矩阵文档/注册表）逐条列名与最小构造（连续三轮未动，本轮仍未动）；④若体量分布不支持，则如实发布「1.19s 是这条律的读地板」并把目标从 <1s 改成「不再变慢」的守门读数。量清后落一条判据或一条「只发布读数并写明必须靠人」。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board, ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot (truncated)",
+    "next_milestone_due": "2026-11-22T21:46:53+08:00",
+    "updated_at": "2026-11-20T21:46:53+08:00"
   },
-  "current": "2026-11-20 R3098 PRODUCT+ENGINEERING: the registry census now remembers its own answers by CONTENT - the closeout dry run's census face fell from 4940.8ms to 175.7ms over the same 734 rows (734/734 reused) with the pin verdict untouched, because an entry is keyed by the suite source's sha256 plus the reader digest rather than by size and mtime.",
+  "current": "2026-11-20 R3099 PRODUCT+ENGINEERING: the drift face now reads every evidence file ONCE - measured 1626.4ms -> 1264.8ms over the same live corpus (files=4113) with the published lines byte-identical, because the shipped face read the 590 baselined files three times while the baseline comparison itself cost 0.0ms.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -44,11 +44,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3098 PRODUCT+ENGINEERING: the registry census now remembers its own answers by CONTENT - the closeout dry run's census face fell from 4940.8ms to 175.7ms over the same 734 rows (734/734 reused) with the pin verdict untouched, because an entry is keyed by the suite source's sha256 plus the reader digest rather than by size and mtime.",
-  "export_ts": "2026-11-20T21:33:56+08:00",
+  "do": "2026-11-20 R3099 PRODUCT+ENGINEERING: the drift face now reads every evidence file ONCE - measured 1626.4ms -> 1264.8ms over the same live corpus (files=4113) with the published lines byte-identical, because the shipped face read the 590 baselined files three times while the baseline comparison itself cost 0.0ms.",
+  "export_ts": "2026-11-20T21:46:53+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/leg-ledger-R3098.log (363B, 2026-11-20)",
-  "next_milestone": "[R3099] next window (<=48h): (0) MAIN — **干跑从 4.05s 降到 ~2.0s，census 面已解决（175.7ms），剩下的大头是 flags 面 `qa_writer_census.check_against_baseline` 实测 1622.7ms（读 4108 个文件、每次重算方言）。** 下一轮先量（只读）：①flags 面的 1622.7ms 逐段花在哪（读文件/方言判定/基线对比），同一类内容 sha256 缓存能压到多少且不改裁决；②它与 R3098 缓存能否共一份键/一份自证层（两个模块、两种问法）；③`test_battery_followup.py` 22 个私有世界接树面所缺三输入（qa baseline/矩阵文档/注册表）逐条列名与最小构造；④缓存失效面在 flags 面是否与 census 面同样可证（同 size 同 mtime 改内容必重算）。量清后落一条判据或一条「只发布读数并写明必须靠人」。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board, ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 as a chosen law, (truncated)",
+  "latest_evidence": "qa/leg-flags-R3099.log (1713B, 2026-11-20)",
+  "next_milestone": "[R3100] next window (<=48h): **PREREQ — 本轮收口报 `fold_margin=-5218`（水位已透支），下一轮第一件事是 fold 43 把水位补回正数，再做下面的活。** (0) MAIN — **flags 面已从 1626.4ms 降到 1264.8ms（活盘 1192.6ms），剩下的 1.19s 里几乎全是「把 507MB 证据读进来」这一件事，而缓存实测压不到读以下（read+sha256=986.5ms）——所以下一步该问的不是怎么写缓存，而是这份语料本身。** 下一轮先量（只读）：①4113 个 .log / 507MB 的**体量分布**（前 10 大文件占多少字节、>1MB 的有几个、中位数多少），确认「读」是否被少数巨型证据日志支配；②若被支配，那类文件是否本就该按 REPO-SLIM 口径轮转/归档（而不是让每轮收口都读它），并给出「归档后 flags 面实测多少 ms」的可复算读数；③`test_battery_followup.py` 22 个私有世界接树面所缺三输入（qa baseline/矩阵文档/注册表）逐条列名与最小构造（连续三轮未动，本轮仍未动）；④若体量分布不支持，则如实发布「1.19s 是这条律的读地板」并把目标从 <1s 改成「不再变慢」的守门读数。量清后落一条判据或一条「只发布读数并写明必须靠人」。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board, ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot (truncated)",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -173,7 +173,7 @@
   },
   "results": [
     [
-      "3098",
+      "3099",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -187,16 +187,16 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 86,
+    "log_lines_in_window": 94,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 17,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 77577,
+  "state_bytes": 83718,
   "next_milestone_due": "2026-11-22T10:45:10+08:00"
 }

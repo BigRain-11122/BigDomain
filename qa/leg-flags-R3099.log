@@ -1,0 +1,20 @@
+R3099 evidence: the flags face reads every evidence file ONCE
+date=2026-11-20 round=R3099 face=qa_writer_census.check_against_baseline
+selftest_rc=0
+  selftest: 37/37 checks pass
+  [ok] AC-WCB8 tee-only world reads plain_unusable=0 reader_rescued=0
+  [ok] AC-WCB8 utf-16 world reads plain_unusable=1 reader_rescued=1 reader_refused=0
+  [ok] AC-WCB8 column moves with the bytes (bad->ascii: unusable=1 refused=0)
+  [ok] AC-WCB11-R1 counts=False decides the same six classes and publishes crlf=bare_lf=-1
+  [ok] AC-WCB11-R2 counts=True row pinned exactly
+  [ok] AC-WCB11-R3 counters from one pass: files=5 tee=1 baselined=4 unusable=3 rescued=2 refused=1
+  [ok] AC-WCB11-R4 every file read once (opens=[('l-bad.log', 1), ('l-cmdraw.log', 1), ('l-pwsh.log', 1), ('l-tee.log', 1), ('l-utf16.log', 1)])
+  [ok] AC-WCB11-R5 published lines pinned in order
+  [ok] AC-WCB11-R6 probe_dir still measures crlf/bare_lf (no -1 leaks into the printed census)
+AB corpus SAME on both sides: files=4113 tee=3523 baselined=590 (read #1 4111/507783559B was the probe corpus)
+AB before_ms=1626.4 after_ms=1264.8 saved_ms=361.6 pct=22.2
+AB lines_identical=True
+AB published: census: files=4113 tee=3523 baselined=590 | plain_unusable=151 reader_rescued=151 reader_refused=0 | flags=0 | verdict: DRIFT-CLEAN
+SPLIT shipped: census_names=1358.6 reclassify=137.8 debt=122.5 label=0.0 json=0.3 (three reads of the baselined 590)
+SPLIT classify internals: read=737.4 count_crlf=128.8 count_lf=186.9 nul=11.8 decode=161.3 full=496.5 lean=318.5 (saved 178.0, classes equal on all 4112 probed blobs)
+CACHE decision: a content-keyed HIT still pays read+sha256=986.5ms, so no cache was installed (430ms would buy a new sealed-table failure mode)

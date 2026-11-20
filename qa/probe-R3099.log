@@ -1,0 +1,10 @@
+Q0 files=4111 baseline=writer-census-baseline.json
+Q1 shipped total_ms=1626.4 census_names_ms=1358.6 (all files, read #1) json_ms=0.3 reclassify_ms=137.8 (baselined, read #2) debt_ms=122.5 (baselined, read #3) label_ms=0.0 baselined=590
+Q1 shares census+reclassify+debt=1618.9 of 1626.4 (100%)
+Q2 one-read total_ms=1419.3 read_ms=895.4 classify_ms=545.2 plain_unusable_ms=3.8 read_text_ms=3.5 bytes=507782529 unusable=151 rescued=151
+Q2 saved_ms=207.1 (shipped 1626.4 -> one-read 1419.3)
+Q3 read+sha256 all files ms=986.5 (a content-keyed HIT still pays this; a cache cannot go below the read)
+Q4 counts shipped: flags=0 unusable=151 rescued=151 refused=0 gone=0
+Q4 shipped published: [('disappeared', '0'), ('flags', '0'), ('labeled_baselined', '11 unlabeled_baselined=579'), ('nul_bytes', '15'), ('plain_unusable', '151 reader_rescued=151 reader_refused=0')]
+Q4 one-read published: files=4111 tee=3521 baselined=590 plain_unusable=151 reader_rescued=151 reader_refused=0 flags=0 disappeared=0 nul_bytes=15
+Q4 agree=False exit=0
