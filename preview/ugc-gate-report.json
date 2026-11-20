@@ -1,11 +1,11 @@
 {
   "aigc": {
     "found": true,
-    "line": 146,
+    "line": 154,
     "token": "ai_generated"
   },
   "call_sites": [
-    "src/sandbox/frontdoor.py:626",
+    "src/sandbox/frontdoor.py:629",
     "src/sandbox/journey_demo.py:90",
     "src/sandbox/lobby/msgsec_stub.py:40",
     "src/sandbox/lobby/msgsec_stub.py:123"

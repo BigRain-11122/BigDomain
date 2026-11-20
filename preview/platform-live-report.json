@@ -1,31 +1,31 @@
 {
  "artifact": "platform-live-report",
- "face": "P-47 platform: six sandbox doors proved live over real sockets",
+ "face": "P-47 platform: every sandbox door proved live over real sockets",
  "verdict": "PASS",
- "passed": 8,
- "total": 8,
+ "passed": 9,
+ "total": 9,
  "criteria": [
   {
    "id": "AC-PLR1",
-   "intent": "shipped verifier ready with six faces, zero errors, eight distinct planned ports",
+   "intent": "shipped verifier ready with every shipped face, zero errors, one distinct port per plan key",
    "pass": true,
-   "measured": "ready=True faces=['checkout', 'city', 'gate', 'ledger', 'lobby', 'ugc'] errors=none ports_keys=8 distinct=True"
+   "measured": "ready=True faces=['checkout', 'city', 'gate', 'ledger', 'lobby', 'member', 'panel', 'ugc'] errors=none ports_keys=10 distinct=True"
   },
   {
    "id": "AC-PLR2",
-   "intent": "all six face URLs answer real HTTP 200 with a non-empty body",
+   "intent": "every shipped face URL answers a real HTTP 200 with a non-empty body",
    "pass": true,
-   "measured": "lobby=200/10077B city=200/6653B checkout=200/8051B gate=200/7157B ledger=200/7977B ugc=200/8816B"
+   "measured": "lobby=200/10077B city=200/6653B checkout=200/8051B gate=200/7157B ledger=200/7977B ugc=200/8816B panel=200/8462B member=200/8752B"
   },
   {
    "id": "AC-PLR3",
    "intent": "each door serves its own page: non-empty title, no two bodies identical",
    "pass": true,
-   "measured": "titles_nonempty=6/6 distinct_bodies=6/6"
+   "measured": "titles_nonempty=8/8 distinct_bodies=8/8"
   },
   {
    "id": "AC-PLR4",
-   "intent": "city/snapshot 200 parsable JSON with as_of; hub probe map reads all six live",
+   "intent": "city/snapshot 200 parsable JSON with as_of; hub probe map reads every face live",
    "pass": true,
    "measured": "snapshot=200 keys=4 as_of=2026-09-24T14:00:00Z hub_live_all=True equals_verifier=True"
   },
@@ -37,34 +37,42 @@
   },
   {
    "id": "AC-PLR6",
-   "intent": "after teardown all four children are kernel GONE and all eight ports refuse",
+   "intent": "after teardown every child is kernel GONE and every planned port refuses",
    "pass": true,
-   "measured": "children_gone=4/4 ports_refusing=8/8"
+   "measured": "children_gone=6/6 ports_refusing=10/10"
   },
   {
    "id": "AC-PLR7",
-   "intent": "no external host literal; the seven shipped files are byte-identical before and after",
+   "intent": "no external host literal; every shipped entry file byte-identical before and after",
    "pass": true,
    "measured": "external_literals=none shipped_identical=True"
   },
   {
    "id": "AC-PLR8",
-   "intent": "sizes self-consistent, one paste-ready command, AIGC/non-advisory/msgSecCheck faces, mock stated",
+   "intent": "sizes self-consistent with the landed pair, one paste-ready command, AIGC/non-advisory/msgSecCheck faces, mock stated",
    "pass": true,
-   "measured": "compliance_faces=3/3 commands=2 mock_stated=True sizes=(6889B,5292B)"
+   "measured": "compliance_faces=3/3 commands=2 mock_stated=True sizes=(7918B,6219B)"
+  },
+  {
+   "id": "AC-PLR9",
+   "intent": "no typed count in the criteria prose or the page: every count is a digit measured this run, or absent",
+   "pass": true,
+   "measured": "typed_counts=none"
   }
  ],
  "faces": {
-  "lobby": "http://127.0.0.1:63320/lobby/",
-  "city": "http://127.0.0.1:63318/city/",
-  "checkout": "http://127.0.0.1:63322/checkout/",
-  "gate": "http://127.0.0.1:63319/gate/",
-  "ledger": "http://127.0.0.1:63323/ledger/",
-  "ugc": "http://127.0.0.1:63324/ugc/"
+  "lobby": "http://127.0.0.1:65305/lobby/",
+  "city": "http://127.0.0.1:65303/city/",
+  "checkout": "http://127.0.0.1:65307/checkout/",
+  "gate": "http://127.0.0.1:65304/gate/",
+  "ledger": "http://127.0.0.1:65308/ledger/",
+  "ugc": "http://127.0.0.1:65309/ugc/",
+  "panel": "http://127.0.0.1:65310/panel/",
+  "member": "http://127.0.0.1:65311/member/"
  },
  "pages": {
   "lobby": {
-   "url": "http://127.0.0.1:63320/lobby/",
+   "url": "http://127.0.0.1:65305/lobby/",
    "status": 200,
    "bytes": 10077,
    "ctype": "text/html",
@@ -72,7 +80,7 @@
    "sha": "6c5513f6c56b8068"
   },
   "city": {
-   "url": "http://127.0.0.1:63318/city/",
+   "url": "http://127.0.0.1:65303/city/",
    "status": 200,
    "bytes": 6653,
    "ctype": "text/html",
@@ -80,7 +88,7 @@
    "sha": "f4da3a32459c2e32"
   },
   "checkout": {
-   "url": "http://127.0.0.1:63322/checkout/",
+   "url": "http://127.0.0.1:65307/checkout/",
    "status": 200,
    "bytes": 8051,
    "ctype": "text/html",
@@ -88,7 +96,7 @@
    "sha": "7e145ec71f17a12a"
   },
   "gate": {
-   "url": "http://127.0.0.1:63319/gate/",
+   "url": "http://127.0.0.1:65304/gate/",
    "status": 200,
    "bytes": 7157,
    "ctype": "text/html",
@@ -96,7 +104,7 @@
    "sha": "bac08b7b9d63e907"
   },
   "ledger": {
-   "url": "http://127.0.0.1:63323/ledger/",
+   "url": "http://127.0.0.1:65308/ledger/",
    "status": 200,
    "bytes": 7977,
    "ctype": "text/html",
@@ -104,23 +112,41 @@
    "sha": "a3924b40b8d1d2df"
   },
   "ugc": {
-   "url": "http://127.0.0.1:63324/ugc/",
+   "url": "http://127.0.0.1:65309/ugc/",
    "status": 200,
    "bytes": 8816,
    "ctype": "text/html",
    "title": "UGC 管道控制台 · BigDomain 沙箱",
    "sha": "8569ef06639c7c5f"
+  },
+  "panel": {
+   "url": "http://127.0.0.1:65310/panel/",
+   "status": 200,
+   "bytes": 8462,
+   "ctype": "text/html",
+   "title": "沙箱控制台 · Sandbox Panel",
+   "sha": "0042242e0f1cf17c"
+  },
+  "member": {
+   "url": "http://127.0.0.1:65311/member/",
+   "status": 200,
+   "bytes": 8752,
+   "ctype": "text/html",
+   "title": "BigDomain 会员权益面 · 沙箱",
+   "sha": "1a2b90e702f5f051"
   }
  },
  "ports": {
-  "ws": 63317,
-  "city": 63318,
-  "gate": 63319,
-  "web": 63320,
-  "hub": 63321,
-  "checkout": 63322,
-  "ledger": 63323,
-  "ugc": 63324
+  "ws": 65302,
+  "city": 65303,
+  "gate": 65304,
+  "web": 65305,
+  "hub": 65306,
+  "checkout": 65307,
+  "ledger": 65308,
+  "ugc": 65309,
+  "panel": 65310,
+  "member": 65311
  },
  "ports_refusing_after_teardown": {
   "ws": true,
@@ -130,13 +156,17 @@
   "hub": true,
   "checkout": true,
   "ledger": true,
-  "ugc": true
+  "ugc": true,
+  "panel": true,
+  "member": true
  },
  "children_gone": {
   "lobby": true,
   "checkout": true,
   "ledger": true,
-  "ugc": true
+  "ugc": true,
+  "panel": true,
+  "member": true
  },
  "city_snapshot": {
   "status": 200,
@@ -155,18 +185,20 @@
   "checkout": true,
   "gate": true,
   "ledger": true,
-  "ugc": true
+  "ugc": true,
+  "panel": true,
+  "member": true
  },
  "shipped_sha256": {
-  "src\\sandbox\\start_all.py": "727b6ac64f731555",
-  "src\\sandbox\\lobby\\server.py": "fa1c0bd679ed3ad5",
-  "src\\sandbox\\lobby\\checkout_demo.py": "d657dd20ee417168",
-  "src\\sandbox\\ledger\\ledger_page.py": "0c005db6c9ac9bc8",
-  "src\\sandbox\\ugc\\ugc_page.py": "55f7f0c8284e8e0c",
+  "src\\sandbox\\start_all.py": "881d9182011c81e4",
+  "src\\sandbox\\lobby\\server.py": "3bc82d4c54b593d4",
+  "src\\sandbox\\lobby\\checkout_demo.py": "a6a8b9e22d6694ea",
+  "src\\sandbox\\ledger\\ledger_page.py": "719795c2cf30265e",
+  "src\\sandbox\\ugc\\ugc_page.py": "e91a45371961ceef",
   "src\\sandbox\\lobby\\config.json": "ab7cc97834f4950d",
-  "src\\sandbox\\pay\\config.json": "6c35b1765d9075f4"
+  "src\\sandbox\\pay\\config.json": "1f3dd9233a82b565"
  },
- "fingerprint": "44ec8b5a60f4d1f3",
+ "fingerprint": "fa804043e736acf8",
  "reproduce": [
   "python tools/platform_live_report.py",
   "python src/sandbox/start_all.py"
@@ -185,7 +217,7 @@
   "production criteria AC-P1..P5 are pre-registered and not executed"
  ],
  "sizes": {
-  "html": 6889,
-  "json": 5292
+  "html": 7918,
+  "json": 6219
  }
 }

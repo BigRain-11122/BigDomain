@@ -1,0 +1,10 @@
+PASS AC-UGR1 html=9576B json=6881B rows=4 each-row-once-missing=0
+PASS AC-UGR2 must_refuse=3 blocked=3 hole_recorded=True
+PASS AC-UGR3 decisions=4 recomputed-agree=4 mismatched=0
+PASS AC-UGR4 provider=msgSecCheck-v2 blocked_on_carried=True
+PASS AC-UGR5 found=True line=154
+PASS AC-UGR6 ascii=True third_party_imports=0
+PASS AC-UGR7 rc=0 carried=True line=MSGSEC PARITY cases=14 stub_mismatch=0 gate_agree=14 verdict=PARITY-OK
+PASS AC-UGR8 status=LIVE sites=4 first_carried=True
+PASS AC-UGR9 json_sizes={'html': 9576, 'json': 6881} disk=9576/6881
+VERDICT PASS checks=9/9 failed=(none)

@@ -1,0 +1,10 @@
+gate first-yuan-chain rc=0   mutated=0 VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=3715B read_only=True (0.35s)
+gate six-gate-live    rc=0   mutated=0 VERDICT PASS 9/9 fingerprint=fa804043e736acf8 landed=fa804043e736acf8 sizes={'html': 7918, 'json': 6219} (4.65s)
+gate lobby-ws         rc=0   mutated=0 VERDICT PASS 8/8 fingerprint=fbdb7f517fb06222 landed=fbdb7f517fb06222 sizes={'html': 5952, 'json': 3070} (1.50s)
+gate city-face        rc=0   mutated=0 VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f (0.75s)
+gate ugc-gate         rc=0   mutated=0 VERDICT PASS checks=9/9 failed=(none) (0.36s)
+gate payment-gate     rc=0   mutated=0 value-domain: PASS products=5 tiers=0 (0.18s)
+gate membership       rc=0   mutated=0 value-domain: PASS products=0 tiers=4 (0.29s)
+gate ledger-business  rc=0   mutated=0 LEDGER BUSINESS CHECK PASS fails=0 (0.13s)
+gate entry-index      rc=0   mutated=0 VERDICT PASS 15/15 fingerprint=f07a1198c3d5c0e6 (0.15s)
+GATES PASS gates=9 green=9 red=0 red_ids=none mutated=none

@@ -1,0 +1,10 @@
+ | PASS AC-PLR1: ready=True faces=['checkout', 'city', 'gate', 'ledger', 'lobby', 'member', 'panel', 'ugc'] errors=none ports_keys=10 distinct=True
+ | PASS AC-PLR2: lobby=200/10077B city=200/6653B checkout=200/8051B gate=200/7157B ledger=200/7977B ugc=200/8816B panel=200/8462B member=200/8752B
+ | PASS AC-PLR3: titles_nonempty=8/8 distinct_bodies=8/8
+ | PASS AC-PLR4: snapshot=200 keys=4 as_of=2026-09-24T14:00:00Z hub_live_all=True equals_verifier=True
+ | PASS AC-PLR5: external_hosts=none port_mismatch=none
+ | PASS AC-PLR6: children_gone=6/6 ports_refusing=10/10
+ | PASS AC-PLR7: external_literals=none shipped_identical=True
+ | PASS AC-PLR8: compliance_faces=3/3 commands=2 mock_stated=True sizes=(7918B,6219B)
+ | PASS AC-PLR9: typed_counts=none
+VERDICT PASS 9/9 fingerprint=fa804043e736acf8 landed=fa804043e736acf8 sizes={'html': 7918, 'json': 6219}

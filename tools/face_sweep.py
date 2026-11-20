@@ -57,10 +57,13 @@ FACES = [
      "tools/first_yuan_chain.py",
      "preview/first-yuan-chain.html", "preview/first-yuan-chain.json",
      "\u4e00\u7b14\u4ed8\u6b3e\u8de8\u4e0d\u8fc7\u652f\u4ed8\u3001\u4f1a\u5458\u3001\u8d26\u672c\u4e09\u6bb5\uff0c\u6536\u5165\u4e3a\u96f6\u3002"),
-    ("six-gate-live", "\u516d\u95e8\u5b9e\u51b5 / six gates live",
+    # R3070: the label used to count the doors by hand ("six gates live") and stayed
+    # that way while the shipped launcher grew to eight, so the board undercounted the
+    # very face it was quoting. The id is a key and stays; the label states no count.
+    ("six-gate-live", "\u5168\u90e8\u95e8\u5b9e\u51b5 / every door live",
      "tools/platform_live_report.py",
      "preview/platform-live-report.html", "preview/platform-live-report.json",
-     "\u516d\u95e8\u5b9e\u51b5\u4e0d\u53ef\u4fe1\u65f6\uff0c\u4e0a\u6e38\u6570\u636e\u5df2\u504f\u79bb\uff0c\u6240\u6709\u9762\u8bfb\u6570\u90fd\u8981\u91cd\u770b\u3002"),
+     "\u5404\u95e8\u5b9e\u51b5\u4e0d\u53ef\u4fe1\u65f6\uff0c\u4e0a\u6e38\u6570\u636e\u5df2\u504f\u79bb\uff0c\u6240\u6709\u9762\u8bfb\u6570\u90fd\u8981\u91cd\u770b\u3002"),
     ("lobby-ws", "\u5927\u5385 WebSocket / P-47 \u7b2c 1 \u9879",
      "tools/lobby_ws_report.py",
      "preview/lobby-ws-report.html", "preview/lobby-ws-report.json",

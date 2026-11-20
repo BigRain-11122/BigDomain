@@ -1,0 +1,5 @@
+CLEAN Q1 landed-page-clean typed_counts=none
+CAUGHT Q2 typed-intent-caught typed_counts=AC-PLR2:six
+CAUGHT Q3a cjk-count-caught typed_counts=page:六门
+CAUGHT Q3b english-count-caught typed_counts=page:eight
+VERDICT PASS checks=4/4 failed=(none)

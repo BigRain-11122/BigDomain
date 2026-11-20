@@ -7,33 +7,37 @@ but that command only prints JSON to a console, and nothing in the repository
 records what it measured. A reader therefore has two choices: trust the
 launcher's word, or run it himself. This driver closes that gap: it IMPORTS the
 shipped launcher (plan/build_commands/start/verify/teardown) instead of
-re-implementing it, boots the six faces, speaks real HTTP to every door, tears
-the whole thing down again, and only then renders one page with the measured
-numbers.
+re-implementing it, boots every face the launcher publishes, speaks real HTTP to
+every door, tears the whole thing down again, and only then renders one page
+with the measured numbers.
 
 Pre-registered criteria (pinned before any code, per the honesty law):
-  AC-PLR1  the shipped verifier reports ready with exactly the six published
-           faces (lobby, city, gate, checkout, ledger, ugc), zero errors, and
-           every port came from plan() as eight distinct OS-assigned values.
-  AC-PLR2  every one of the six face URLs answers a real HTTP GET with status
-           200 and a non-empty body; status, bytes and content-type recorded.
+  AC-PLR1  the shipped verifier reports ready with exactly the faces the
+           launcher publishes, zero errors, and every port came from plan() as
+           one distinct OS-assigned value per plan key.
+  AC-PLR2  every face URL answers a real HTTP GET with status 200 and a
+           non-empty body; status, bytes and content-type recorded.
   AC-PLR3  each answering door serves its own page: every body carries a
-           non-empty <title>, and no two of the six bodies are byte-identical.
+           non-empty <title>, and no two bodies are byte-identical.
   AC-PLR4  the deep reads hold: GET city/snapshot answers 200 as parsable JSON
-           carrying as_of, and the hub's own probe map reads all six live.
+           carrying as_of, and the hub's own probe map reads every face live.
   AC-PLR5  every face URL is loopback and its port equals the planned port for
            that face under the shipped FACE_PORT_KEY mapping - no external host.
-  AC-PLR6  teardown is clean: after it, all four child processes are kernel
-           GONE and every one of the eight planned ports refuses a connection,
-           so no orphan keeps a sandbox port.
+  AC-PLR6  teardown is clean: after it, every child process is kernel GONE and
+           every planned port refuses a connection, so no orphan keeps a
+           sandbox port.
   AC-PLR7  zero external network: every host-bearing URL literal in this driver
-           is loopback, and the four shipped entry modules plus their two
-           configs are byte-identical before and after the run.
+           is loopback, and every shipped entry file is byte-identical before
+           and after the run.
   AC-PLR8  the report is self-consistent and carries the standing law: the
            embedded sizes equal the bytes on disk, the page prints one command
            a reader can paste to reproduce it, and the AIGC mark, the
            non-advisory notice and the msgSecCheck pre-gate are rendered as
            permanent faces while mock=true and chargeable=false are stated.
+  AC-PLR9  no hand-typed count survives in the criteria prose or the page: a
+           count is either a digit this run measured or it is absent, so growth
+           of the shipped launcher cannot leave the label undercounting. (Added
+           at R3070 after the page read "six doors" above a row naming eight.)
 """
 from __future__ import annotations
 
@@ -67,14 +71,15 @@ REPRODUCE = "python tools/platform_live_report.py"
 SERVE = "python src/sandbox/start_all.py"
 
 CRITERIA = [
-    ("AC-PLR1", "shipped verifier ready with six faces, zero errors, eight distinct planned ports"),
-    ("AC-PLR2", "all six face URLs answer real HTTP 200 with a non-empty body"),
+    ("AC-PLR1", "shipped verifier ready with every shipped face, zero errors, one distinct port per plan key"),
+    ("AC-PLR2", "every shipped face URL answers a real HTTP 200 with a non-empty body"),
     ("AC-PLR3", "each door serves its own page: non-empty title, no two bodies identical"),
-    ("AC-PLR4", "city/snapshot 200 parsable JSON with as_of; hub probe map reads all six live"),
+    ("AC-PLR4", "city/snapshot 200 parsable JSON with as_of; hub probe map reads every face live"),
     ("AC-PLR5", "every face URL loopback and its port equal to the planned port for that face"),
-    ("AC-PLR6", "after teardown all four children are kernel GONE and all eight ports refuse"),
-    ("AC-PLR7", "no external host literal; the seven shipped files are byte-identical before and after"),
-    ("AC-PLR8", "sizes self-consistent, one paste-ready command, AIGC/non-advisory/msgSecCheck faces, mock stated"),
+    ("AC-PLR6", "after teardown every child is kernel GONE and every planned port refuses"),
+    ("AC-PLR7", "no external host literal; every shipped entry file byte-identical before and after"),
+    ("AC-PLR8", "sizes self-consistent with the landed pair, one paste-ready command, AIGC/non-advisory/msgSecCheck faces, mock stated"),
+    ("AC-PLR9", "no typed count in the criteria prose or the page: every count is a digit measured this run, or absent"),
 ]
 
 COMPLIANCE = [
@@ -123,6 +128,41 @@ def _loopback_hosts(text):
     """Host-bearing literals only: a bare scheme inside prose is not a target."""
     found = sorted(set(re.findall(r"(?:wss?|https?)://[A-Za-z0-9._-]+", text)))
     return found, [tok for tok in found if "127.0.0.1" not in tok and "localhost" not in tok]
+
+
+# R3070: this face was authored while the shipped launcher held six faces, and its
+# title, its criteria prose and its closing line counted them by hand. The launcher
+# then grew - eight faces, six children, ten planned ports - and every typed count
+# stayed put, so the page published "six doors" directly above a measured row naming
+# eight. A typed count is a claim nothing measures; tools/face_sweep.py already lives
+# by this law (AC-FSW18 E_FSW_SCOPE_TYPED derives its sentence from the row table
+# after R2901 deleted a hand-moved count literal), and this face is late to it. The
+# criterion therefore refuses the word instead of grading it, so growth of the
+# shipped launcher cannot make the label wrong again. Digits printed from this run's
+# measurement are not typed counts.
+TYPED_COUNTS_EN = ("three", "four", "five", "six", "seven", "eight", "nine", "ten")
+TYPED_COUNTS_CJK = u"\u516d\u4e03\u516b\u4e5d\u5341"  # 6 7 8 9 10
+_CNT_EN_RE = re.compile(r"\b(" + "|".join(TYPED_COUNTS_EN) + r")\b", re.I)
+_CNT_CJK_RE = re.compile(u"[" + TYPED_COUNTS_CJK + u"](?:\u95e8|\u4e2a|\u6761|\u9879)")
+
+
+def ac_plr9(doc, criteria):
+    """Refuse a hand-typed count wherever this face publishes one."""
+    hits = []
+    for cid, intent in criteria:
+        found = _CNT_EN_RE.findall(intent)
+        if found:
+            hits.append("%s:%s" % (cid, ",".join(found)))
+    found = _CNT_EN_RE.findall(doc)
+    if found:
+        hits.append("page:" + ",".join(sorted(set(w.lower() for w in found))))
+    match = _CNT_CJK_RE.search(doc)
+    if match:
+        hits.append("page:" + match.group(0))
+    return {
+        "pass": not hits,
+        "measured": "typed_counts=%s" % (",".join(hits) if hits else "none"),
+    }
 
 
 def measure():
@@ -276,12 +316,37 @@ def _fingerprint(evidence, facts):
 def render(evidence, facts):
     passed = sum(1 for v in evidence.values() if v["pass"])
     total = len(CRITERIA)
+    # R3070: two criteria can only be graded AFTER this page exists (the byte-pair
+    # check needs the written bytes, the no-typed-count check needs the document).
+    # The page used to print them as "bad" rows reading "-" and then announce
+    # "7/8 PASS" beside a JSON verdict of PASS 8/8 - the face contradicted its own
+    # evidence on the one line a reader trusts. A criterion this page cannot grade
+    # now says so, and the score counts only what this page graded.
+    def _row_class(cid):
+        if cid not in evidence:
+            return "later"
+        return "ok" if evidence[cid]["pass"] else "bad"
+
     rows = "\n".join(
         '<tr class="%s"><td>%s</td><td>%s</td><td>%s</td></tr>'
-        % ("ok" if evidence.get(cid, {}).get("pass") else "bad", cid, intent,
-           str(evidence.get(cid, {}).get("measured", "-")).replace("<", "&lt;"))
+        % (_row_class(cid), cid, intent,
+           (str(evidence[cid]["measured"]).replace("<", "&lt;") if cid in evidence
+            else "graded by --check against the landed pair"))
         for cid, intent in CRITERIA
     )
+    later = len([cid for cid, _ in CRITERIA if cid not in evidence])
+    score = "%d/%d PASS" % (passed, total - later)
+    if later:
+        later_note = (
+            "%d \u6761\u53ea\u80fd\u5728\u672c\u9875\u5199\u6210\u4e4b\u540e\u6838\u5bf9"
+            "\uff08\u5b57\u8282\u5bf9\u3001\u4e0d\u6253\u5b57\u8ba1\u6570\uff09\uff0c\u7531 "
+            "<code>--check</code> \u5bf9\u843d\u5730\u4ef6\u9010\u6761\u9a8c\u8bc1\uff1a%s\u3002"
+            % (later, ", ".join(cid for cid, _ in CRITERIA if cid not in evidence))
+        )
+    else:
+        later_note = "\u672c\u9875\u4e0a\u7684\u5224\u636e\u5747\u5df2\u5728\u672c\u9875\u5185\u5b8c\u6210\u6838\u5bf9\u3002"
+
+
     door_rows = "\n".join(
         '<tr class="%s"><td>%s</td><td><code>%s</code></td><td>%d</td><td>%d B</td>'
         "<td>%s</td><td>%s</td></tr>"
@@ -303,7 +368,7 @@ def render(evidence, facts):
     snap = facts["city_snapshot"]
     doc = """<!DOCTYPE html>
 <meta charset="utf-8">
-<title>BigDomain 沙箱 · 六门实测在线（一指令拉起）</title>
+<title>BigDomain 沙箱 · 全部门实测在线（一指令拉起）</title>
 <style>
 body{{font:15px/1.65 -apple-system,"Segoe UI",sans-serif;margin:0;background:#0f1115;color:#e8eaed}}
 main{{max-width:1060px;margin:0 auto;padding:32px 24px 64px}}
@@ -314,28 +379,30 @@ h1{{font-size:24px;margin:0 0 6px}}
 table{{width:100%;border-collapse:collapse;font-size:13px}}
 td,th{{text-align:left;padding:8px 6px;border-bottom:1px solid #262b36;vertical-align:top}}
 tr.ok td:first-child{{color:#7ee787}} tr.bad td:first-child{{color:#ff7b72}}
+tr.later td:first-child{{color:#d29922}}
 pre{{background:#0b0d11;border:1px solid #262b36;border-radius:8px;padding:12px;overflow:auto;font-size:12.5px;color:#c9d1d9}}
 .score{{font-size:28px;color:#7ee787}}
 code{{color:#79c0ff}}
 .note{{color:#9aa0a6;font-size:13px}}
 </style>
 <main>
-<h1>BigDomain 沙箱 · 六门实测在线</h1>
+<h1>BigDomain 沙箱 · 全部门实测在线</h1>
 <p class="sub">本轮把「一个指令拉起全平台」变成一页可看的实物：导入 shipped 启动器 <code>src/sandbox/start_all.py</code>（不是复刻），
-起六门、逐门真实 HTTP 取回、再整体拆台，页面上的每个数字都是这一轮量出来的。</p>
+起全部面、逐面真实 HTTP 取回、再整体拆台，页面上的每个数字都是这一轮量出来的。</p>
 <div class="card"><h2>判据结果</h2>
-<p class="score">{passed}/{total} PASS</p>
+<p class="score">{score}</p>
+<p class="note">{later_note}</p>
 <table><tr><th>判据</th><th>意图（预注册）</th><th>实测</th></tr>
 {rows}
 </table></div>
-<div class="card"><h2>六道门（真实 HTTP 取回）</h2>
+<div class="card"><h2>各道门（真实 HTTP 取回）</h2>
 <table><tr><th>门</th><th>地址</th><th>HTTP</th><th>字节</th><th>Content-Type</th><th>页面 title</th></tr>
 {door_rows}
 </table>
 <p class="note">Hub 门：<code>{hub}</code>（hub 自报 live：{hub_live}）</p></div>
 <div class="card"><h2>深读一例：city /city/snapshot</h2>
 <p>HTTP {snap_status} · {snap_bytes} B · 顶层键 {snap_keys} 个 · <code>as_of</code> = <code>{snap_asof}</code></p></div>
-<div class="card"><h2>八个计划端口与拆台后状态</h2>
+<div class="card"><h2>计划端口与拆台后状态</h2>
 <table><tr><th>端口键</th><th>端口</th><th>拆台后</th></tr>
 {port_rows}
 </table>
@@ -349,7 +416,7 @@ code{{color:#79c0ff}}
 <p class="note">本件 mock=true、chargeable=false：沙箱入城为模拟凭证，无任何真实扣费；19.9 真实收款要等 CEO 物理件（微信商户号）。</p></div>
 <div class="card"><h2>边界（诚实披露）</h2>
 <ul>
-<li>本页证明的是「六门在真实套接字上起得来、答得出、拆得净」，不是上线许可。</li>
+<li>本页证明的是「各门在真实套接字上起得来、答得出、拆得净」，不是上线许可。</li>
 <li>生产面 wss/TLS/域名/ICP/1000 并发为 AC-P1..P5，预注册不预执行。</li>
 <li>内容安全现役为 shipped 词表 stub；真实 msgSecCheck 未接线，按规格大厅禁开门。</li>
 <li>沙箱数据为演示库，非真实用户数据；页面 title 取自各门真实返回，未手写。</li>
@@ -357,6 +424,7 @@ code{{color:#79c0ff}}
 </main>
 """.format(
         passed=passed, total=total, rows=rows, door_rows=door_rows,
+        score=score, later_note=later_note,
         hub=facts["hub_url"],
         hub_live=", ".join("%s=%s" % (k, v) for k, v in sorted(facts["hub_live"].items())),
         snap_status=snap["status"], snap_bytes=snap["bytes"],
@@ -365,7 +433,7 @@ code{{color:#79c0ff}}
     )
     data = {
         "artifact": "platform-live-report",
-        "face": "P-47 platform: six sandbox doors proved live over real sockets",
+        "face": "P-47 platform: every sandbox door proved live over real sockets",
         "verdict": "PASS" if passed == len(evidence) == total else "FAIL",
         "passed": passed,
         "total": total,
@@ -445,6 +513,9 @@ def main(argv):
         sizes = _sizes()
         fresh8 = ac_plr8(doc, sizes["html"], sizes["json"])
         evidence["AC-PLR8"] = fresh8
+        # R3070: graded on the document this run would publish, so the check reads
+        # the same prose a reader would.
+        evidence["AC-PLR9"] = ac_plr9(doc, CRITERIA)
         for cid, intent in CRITERIA:
             item = evidence[cid]
             print(" | %s %s: %s" % ("PASS" if item["pass"] else "FAIL", cid, item["measured"]))
@@ -463,6 +534,7 @@ def main(argv):
                  landed.get("fingerprint"), sizes))
         return 0 if ok else 2
     os.makedirs(PREVIEW, exist_ok=True)
+    evidence["AC-PLR9"] = ac_plr9(doc, CRITERIA)
     # The document embeds its own byte sizes, so a one-pass render always
     # reports the size the file had before that line changed it. Iterate to a
     # fixed point and refuse to land if it does not converge.
@@ -472,8 +544,13 @@ def main(argv):
         html_bytes = _write(doc, HTML_PATH)
         data["sizes"] = {"html": html_bytes, "json": prev_json}
         row8 = ac_plr8(doc, html_bytes, prev_json)
-        data["criteria"][-1]["pass"] = row8["pass"]
-        data["criteria"][-1]["measured"] = row8["measured"]
+        for row in data["criteria"]:
+            if row["id"] == "AC-PLR8":
+                row["pass"] = row8["pass"]
+                row["measured"] = row8["measured"]
+            elif row["id"] == "AC-PLR9":
+                row["pass"] = evidence["AC-PLR9"]["pass"]
+                row["measured"] = evidence["AC-PLR9"]["measured"]
         data["passed"] = sum(1 for c in data["criteria"] if c["pass"])
         data["verdict"] = "PASS" if data["passed"] == data["total"] else "FAIL"
         json_text = json.dumps(data, ensure_ascii=False, indent=1) + "\n"
