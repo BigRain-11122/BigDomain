@@ -1,0 +1,36 @@
+R3121 probe - read-only, private worlds only, zero socket
+== Q1 walk cost on the live tree ==
+whole-tree walk: dirs=3482 files=57329 bytes=5416210094 seconds=0.787
+  subtree src            dirs=2671   files=29376   seconds=0.232 share=29.5%
+  subtree .codely-cli    dirs=543    files=8770    seconds=0.056 share=7.2%
+  subtree logs           dirs=70     files=9197    seconds=0.017 share=2.2%
+  subtree tmp            dirs=167    files=5363    seconds=0.014 share=1.8%
+  subtree qa             dirs=2      files=4307    seconds=0.008 share=1.0%
+  subtree docs           dirs=9      files=54      seconds=0.001 share=0.1%
+  subtree tools          dirs=7      files=98      seconds=0.001 share=0.1%
+  subtree state          dirs=7      files=37      seconds=0.000 share=0.1%
+unlistable directories in the live tree: 0 []
+stage_residue.scan(): residue=0 seconds=0.647
+qa/ files=4307 walk_seconds=0.020
+
+== Q2 which calls make replace/remove refuse on this platform ==
+  replace over an open handle                refused PermissionError errno=13 winerror=5
+  replace over a read-only target            refused PermissionError errno=13 winerror=5
+  replace with a missing source              refused FileNotFoundError errno=2 winerror=2
+  replace onto a directory name              refused PermissionError errno=13 winerror=5
+  remove a directory name                    refused PermissionError errno=13 winerror=5
+  remove a residue held open                 refused PermissionError errno=13 winerror=32
+  remove a read-only residue                 refused PermissionError errno=13 winerror=5
+
+== Q3 closeout suite arms (current run) ==
+rc=0 arms=27 red=0 []
+tail='SUITE PASS 27/27'
+
+== Q3b did the R3120 red arm go green without a code change? ==
+  632f940e R3120: stage sweep surface - measured 16 residues across 5 dirs, the old two-name list found 8 and missed 12 silently, 33 shipped call sites name an explicit --export, so scan now walks by exact suffix and skips .git; AC-SR2 6 arms + AC-COUT15 4 arms (a display with zero readers), registry 739/6008, matrix DOC-CURRENT, gate PASS files=4196, export PASS, closeout suite 26/27 (AC-COUT13 occupied-name arm red on Windows, carried) [via BigDomain-OSLoop]
+  3c299842 R3119: the stage residue a killed writer leaves is now swept by the closeout before the tree is judged - measured 0 shipped .py enumerating docs/ and 3 name-filtered logs/ readers, so a residue was never misread, but docs/status-export.json.sxf-stage is NOT git-ignored and dirties the tree the next round reads; stage_residue.py sweeps four measured suffixes and never the live face, AC-SR1 six arms 6/6, registry 739/6006, matrix DOC-CURRENT, live gate PASS stage_residue=0 [via BigDomain-OSLoop]
+  80d04846 R3114: the published heartbeat gets a face that reads it. frontdoor gains heartbeat_card(face) - a pure consumption face over the parsed block (ASCII, zero business copy, FLAG prints class=fail plus the reason, absence prints an honest line) wired into the v0.30 card; closeout prints hb=<n|none> hb_verdict=PASS|FLAG with hb_reason= on both paths. Measured: 22 block-key readers, all writer/checker/test, zero external consumers, and the card key tuple did not name the block; 0 read-back disagreements since the R3111 wire. AC-FDC1 six arms (new suite), AC-COUT14 five arms (25->26), registry 736->737 suites 5999->6001 criteria, matrix DOC-CURRENT, census re-pinned 737, gate PASS. Disclosed: the OK-path PASS is near-tautological since step 1.6 aligns the row first; my own tree reddened once on E_CLG_CENSUS. [via BigDomain-OSLoop]
+  0c1ab2b1 R3111/R3112: closeout step 1.6 writes the heartbeat row through its one birth site, derived from the tick it just proved and read back (E_CO_HB_UNPROVEN, face=NOT-WRITTEN); --check stays zero-write and prints hb= as a reading. Measured: 40 of 46 modules naming heartbeat.txt are one-off evidence scripts, zero live writers. AC-COUT13 six arms, 24->25 criteria, registry 5997->5998, matrix DOC-CURRENT, gate PASS. Slip disclosed: a replay probe appended a new line, tick realigned at 3112. [via BigDomain-OSLoop]
+  e8188205 Closeout gate names the baseline it judged: a deep PASS publishes a derived CENSUS-BASELINE row (name/bytes/rows/sha256/written) and the vehicle prints it on both the --check and OK paths; AC-CLG10 (suite 10 criteria) and AC-COUT12 (24) pin the derivation, with AC-COUT9 arm e judged-changed to forbid only refusal fine print. [via BigDomain-OSLoop]
+  2a1356da Name what else sits where the closeout gate looked: the not-asked line gains a derived hint (qa-is-file, near-baseline/near-matrix with real counts, or none) so an absent input and an occupied name stop printing the same sentence (AC-COUT11, registry 5993->5994) [via BigDomain-OSLoop]
+  uncommitted changes to those files: 'none'

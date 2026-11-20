@@ -1379,15 +1379,61 @@ def ac_cout15():
             sys.modules["stage_residue"] = saved
     d_ok = refusal.startswith("E_CO_STAGE_UNAVAILABLE module=")
 
+    # ---- R3121: a blind spot and an OS refusal get their own words. ------
+    # The clean case above must stay byte-identical (arms a/b), so the new
+    # tokens appear ONLY when they are non-zero; these two arms prove they do.
+    blind = tempfile.mkdtemp(prefix="cout15b-")
+    os.makedirs(os.path.join(blind, "docs"))
+    blind_face = os.path.join(blind, "docs", "status-export.json")
+    with open(blind_face, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write('{"export_ts": "2026-11-21T12:00:00+08:00"}\n')
+    hidden = os.path.join(blind, "state", "denied")
+    os.makedirs(hidden)
+    real_listdir = os.listdir
+
+    def blind_listdir(path, *args, **kwargs):
+        if os.path.abspath(path) == os.path.abspath(hidden):
+            raise PermissionError(13, "denied by the arm")
+        return real_listdir(path, *args, **kwargs)
+
+    os.listdir = blind_listdir
+    try:
+        unread_line = CO.stage_residue_face(blind, dry_run=True)
+    finally:
+        os.listdir = real_listdir
+    e_ok = (unread_line.startswith(
+        "stage_residue=0 swept=0 unreadable=1 dirs=state/denied:")
+        and open(blind_face, "rb").read().startswith(b'{"export_ts"'))
+
+    stuck = os.path.join(blind, "docs", "status-export.json.sxf-stage")
+    with open(stuck, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write('{"partial')
+    handle = open(stuck, "r", encoding="utf-8")
+    try:
+        failed_line = CO.stage_residue_face(blind)
+    finally:
+        handle.close()
+    code = "winerror=32" if os.name == "nt" else "errno="
+    f_ok = (failed_line.startswith(
+        "stage_residue=1 swept=0 skipped=0 failed=1 "
+        "names=docs/status-export.json.sxf-stage:")
+        and code in failed_line and os.path.isfile(stuck))
+    shutil.rmtree(blind, ignore_errors=True)
+    if not (e_ok and f_ok):
+        print("  measured: e=%r unread=%r f=%r failed=%r"
+              % (e_ok, unread_line, f_ok, failed_line), flush=True)
+
     shutil.rmtree(world, ignore_errors=True)
-    ok = a_ok and b_ok and c_ok and d_ok
+    ok = a_ok and b_ok and c_ok and d_ok and e_ok and f_ok
     if not ok:
         print("  measured: a=%r b=%r c=%r d=%r refusal=%r"
               % (a_ok, b_ok, c_ok, d_ok, refusal), flush=True)
     check(ok, "AC-COUT15 the sweep line names what it did on both paths: the "
           "dry run counts and touches nothing, the OK path names swept and "
-          "skipped, a suffix-named directory is skipped rather than swept, "
-          "and a missing module is a named refusal")
+          "skipped, a suffix-named directory is skipped rather than swept, a "
+          "missing module is a named refusal, an unlistable directory is "
+          "named rather than implied covered, and an OS refusal is named with "
+          "its own code")
 
 
 def main():

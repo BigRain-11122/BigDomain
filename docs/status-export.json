@@ -4,26 +4,26 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "R3120 GROUP SCAN (content-addressed, read before any work): the shipped five-still scan read ledger atbd_lines=0 unreplied_groups=0 (no new @BigDomain row), the decisions face read rows=438 tokens=145 with new=0 (438 = the recorded baseline), the group orders face still ends at the 2026-11-20 22:5x content-handover row already acknowledged at R3104, benchmarks_refreshed 2026-11-18 sits inside the seven-day gate, and git status was clean with no index.lock; the board head carried pullable work (the R3120 MAIN row), so this window ran the full task book rather than a declaration.",
+    "current": "2026-11-21 R3121 PRODUCT+ENGINEERING: the sweep now names its own blind spots and its own refusals - a directory the OS will not list reads unreadable= instead of vanishing, and a residue the OS refuses to delete reads failed=winerror=<n> instead of looking like not-a-file; both tokens appear ONLY when non-zero, so a clean round keeps the exact bytes it already printed.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-status-export-fresh-R3119.log (6526B, 2026-11-21)",
-    "latest_evidence": "qa/suite-status-export-fresh-R3119.log (6526B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-closeout-R3121.log (5230B, 2026-11-21)",
+    "latest_evidence": "qa/suite-closeout-R3121.log (5230B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3121] next window (<=48h): (0) MAIN — **扫描面修好了，但它每轮走全树，而「它不会走进 `.git`」这件事只有一条测试臂在说；同时清扫的**成本与边界**从未被量过**——整树目录数、每周期跑一次的实测耗时、以及「原子替换」在Windows 上会出 PermissionError（本轮 closeout 套件的 AC-COUT13 实测拿到了一次）。下一轮先量（只读 + 私有世界）：①活树目录/文件数与一次走查的耗时分布（哪些子树占了大头，qa/ 4241 件是不是主体）；②`os.replace` 在 Windows 上失败的真实触发条件（目标被另一进程打开？防病毒?）与 sweep 该怎么报告它；③closeout 套件当前红在哪几臂、是否本轮自己造成（证据不足的那几臂必须先复绿再动代码）。**先量后裁，先落板再动代码。**",
-    "next_milestone_due": "2026-11-23T02:45:49+08:00",
-    "updated_at": "2026-11-21T02:45:49+08:00",
+    "next_milestone": "[R3122] next window (<=48h): (0) MAIN — **走一遍 0.65s 是可接受的，但这份成本花在什么上没人量过：活树 57329 个文件里 `src/` 占 29.5%，而清扫只认四个后缀——若其中大头是 `__pycache__`、`tmp/`、`qa/` 这类生成物，那么每轮都在为永远不会携带残件的目录付账，而成本涨到多少会让收口变慢也没有任何一行在报。**下一轮先量（只读＋git 历史）：①57329 个文件与 3482 个目录按生成物类别（`__pycache__` / `tmp/` / `qa/` / `.codely-cli/` / 其余）的份额，以及各自占走查耗时的比例；②在 git 历史的全部 blob 里，四个后缀是否曾出现在 `__pycache__` 或 `tmp/` 下（数量非手写）；③收口行是否该带走查耗时（当前只用探针量过，产品面零读数）。然后裁定：按实测清单剪掉生成物子树（并补一条臂证明该子树内残件不可达）、把走查耗时印进收口行、还是维持全树并把成本上限写成可验证断言。**先落板再动代码。**",
+    "next_milestone_due": "2026-11-23T03:05:21+08:00",
+    "updated_at": "2026-11-21T03:05:21+08:00",
     "heartbeat": {
-      "tick": 3119,
-      "state_tick": 3119,
+      "tick": 3121,
+      "state_tick": 3121,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
     }
   },
-  "current": "R3120 GROUP SCAN (content-addressed, read before any work): the shipped five-still scan read ledger atbd_lines=0 unreplied_groups=0 (no new @BigDomain row), the decisions face read rows=438 tokens=145 with new=0 (438 = the recorded baseline), the group orders face still ends at the 2026-11-20 22:5x content-handover row already acknowledged at R3104, benchmarks_refreshed 2026-11-18 sits inside the seven-day gate, and git status was clean with no index.lock; the board head carried pullable work (the R3120 MAIN row), so this window ran the full task book rather than a declaration.",
+  "current": "2026-11-21 R3121 PRODUCT+ENGINEERING: the sweep now names its own blind spots and its own refusals - a directory the OS will not list reads unreadable= instead of vanishing, and a residue the OS refuses to delete reads failed=winerror=<n> instead of looking like not-a-file; both tokens appear ONLY when non-zero, so a clean round keeps the exact bytes it already printed.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -51,11 +51,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "R3120 GROUP SCAN (content-addressed, read before any work): the shipped five-still scan read ledger atbd_lines=0 unreplied_groups=0 (no new @BigDomain row), the decisions face read rows=438 tokens=145 with new=0 (438 = the recorded baseline), the group orders face still ends at the 2026-11-20 22:5x content-handover row already acknowledged at R3104, benchmarks_refreshed 2026-11-18 sits inside the seven-day gate, and git status was clean with no index.lock; the board head carried pullable work (the R3120 MAIN row), so this window ran the full task book rather than a declaration.",
-  "export_ts": "2026-11-21T02:45:49+08:00",
+  "do": "2026-11-21 R3121 PRODUCT+ENGINEERING: the sweep now names its own blind spots and its own refusals - a directory the OS will not list reads unreadable= instead of vanishing, and a residue the OS refuses to delete reads failed=winerror=<n> instead of looking like not-a-file; both tokens appear ONLY when non-zero, so a clean round keeps the exact bytes it already printed.",
+  "export_ts": "2026-11-21T03:05:21+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/suite-status-export-fresh-R3119.log (6526B, 2026-11-21)",
-  "next_milestone": "[R3121] next window (<=48h): (0) MAIN — **扫描面修好了，但它每轮走全树，而「它不会走进 `.git`」这件事只有一条测试臂在说；同时清扫的**成本与边界**从未被量过**——整树目录数、每周期跑一次的实测耗时、以及「原子替换」在Windows 上会出 PermissionError（本轮 closeout 套件的 AC-COUT13 实测拿到了一次）。下一轮先量（只读 + 私有世界）：①活树目录/文件数与一次走查的耗时分布（哪些子树占了大头，qa/ 4241 件是不是主体）；②`os.replace` 在 Windows 上失败的真实触发条件（目标被另一进程打开？防病毒?）与 sweep 该怎么报告它；③closeout 套件当前红在哪几臂、是否本轮自己造成（证据不足的那几臂必须先复绿再动代码）。**先量后裁，先落板再动代码。**",
+  "latest_evidence": "qa/suite-closeout-R3121.log (5230B, 2026-11-21)",
+  "next_milestone": "[R3122] next window (<=48h): (0) MAIN — **走一遍 0.65s 是可接受的，但这份成本花在什么上没人量过：活树 57329 个文件里 `src/` 占 29.5%，而清扫只认四个后缀——若其中大头是 `__pycache__`、`tmp/`、`qa/` 这类生成物，那么每轮都在为永远不会携带残件的目录付账，而成本涨到多少会让收口变慢也没有任何一行在报。**下一轮先量（只读＋git 历史）：①57329 个文件与 3482 个目录按生成物类别（`__pycache__` / `tmp/` / `qa/` / `.codely-cli/` / 其余）的份额，以及各自占走查耗时的比例；②在 git 历史的全部 blob 里，四个后缀是否曾出现在 `__pycache__` 或 `tmp/` 下（数量非手写）；③收口行是否该带走查耗时（当前只用探针量过，产品面零读数）。然后裁定：按实测清单剪掉生成物子树（并补一条臂证明该子树内残件不可达）、把走查耗时印进收口行、还是维持全树并把成本上限写成可验证断言。**先落板再动代码。**",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -180,7 +180,7 @@
   },
   "results": [
     [
-      "3119",
+      "3121",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -194,21 +194,21 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 74,
+    "log_lines_in_window": 84,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 65426,
-  "next_milestone_due": "2026-11-23T02:45:49+08:00",
+  "state_bytes": 71122,
+  "next_milestone_due": "2026-11-23T03:05:21+08:00",
   "heartbeat": {
-    "tick": 3119,
-    "state_tick": 3119,
+    "tick": 3121,
+    "state_tick": 3121,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"

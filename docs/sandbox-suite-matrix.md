@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 739 | 6008 | 675/675 | R2739 |
+| 739 | 6009 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -775,8 +775,8 @@
 | 736 | os-heartbeat | ../os/test_heartbeat.py | 1 | no-evidence | - |
 | 737 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
 | 738 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
-| 739 | os-stage-residue | ../os/test_stage_residue.py | 2 | no-evidence | - |
-|  | 合计 |  | 6008 | green 675 / FAIL 0 / no-evidence 64 |  |
+| 739 | os-stage-residue | ../os/test_stage_residue.py | 3 | no-evidence | - |
+|  | 合计 |  | 6009 | green 675 / FAIL 0 / no-evidence 64 |  |
 
 ## 证据出处
 

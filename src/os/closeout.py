@@ -425,18 +425,33 @@ def stage_residue_face(root, dry_run=False):
     for a face - but `docs/status-export.json.sxf-stage` is NOT ignored by git,
     and the next round reads an untracked file as another executor mid-write.
     The sweep therefore runs on the OK path only, and a dry run just counts.
-    A missing module is a named refusal, never a silent skip.
+    A missing module is a named refusal, never a silent skip. R3121: the line
+    appends `unreadable=` and `failed=` ONLY when they are non-zero, so a normal
+    round keeps the exact bytes a person already reads, while a blind spot or an
+    OS refusal stops reading exactly like a clean sweep.
     """
     try:
         import stage_residue as SR
     except ImportError as exc:
         return "E_CO_STAGE_UNAVAILABLE module=%s" % exc
     try:
+        report = SR.scan_report(root)
         if dry_run:
-            return "stage_residue=%d swept=0" % len(SR.scan(root))
-        removed, skipped = SR.sweep(root)
-        return ("stage_residue=%d swept=%d skipped=%d"
-                % (len(removed) + len(skipped), len(removed), len(skipped)))
+            bits = "stage_residue=%d swept=0" % len(report["found"])
+            if report["unreadable"]:
+                bits += " unreadable=%d dirs=%s" % (
+                    len(report["unreadable"]), ",".join(report["unreadable"]))
+            return bits
+        removed, skipped, failed = SR.sweep(root)
+        bits = ("stage_residue=%d swept=%d skipped=%d"
+                % (len(removed) + len(skipped) + len(failed),
+                   len(removed), len(skipped)))
+        if report["unreadable"]:
+            bits += " unreadable=%d dirs=%s" % (
+                len(report["unreadable"]), ",".join(report["unreadable"]))
+        if failed:
+            bits += " failed=%d names=%s" % (len(failed), ",".join(failed))
+        return bits
     except (IOError, OSError) as exc:
         return "E_CO_STAGE_FAIL %s: %s" % (type(exc).__name__, exc)
 

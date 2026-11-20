@@ -134,6 +134,117 @@ def shipped_sources(include_tests):
                 yield os.path.join(folder, name)
 
 
+def ac_sr3(worlds):
+    """AC-SR3: the sweep's own blind spots and refusals are NAMED (R3121).
+
+    Measured before the arms existed (`tmp/probe_R3121.py` ->
+    `qa/probe-R3121.log`): the live tree walks in 0.787s over 3482 directories
+    with zero unlistable ones TODAY, so the old silent `except: continue` was
+    invisible rather than harmless; and on Windows a residue held open by
+    another handle refuses with winerror=32 while a read-only one refuses with
+    5 - both errno=13, so folding them into `skipped` read exactly like "not a
+    file". Six arms, one criterion.
+    """
+    # ---- a: a directory the OS refuses to list is named, not vanished. ----
+    blocked_world = wide_world()
+    worlds.append(blocked_world)
+    hidden = os.path.join(blocked_world, "state", "denied")
+    os.makedirs(hidden)
+    with open(os.path.join(blocked_world, "docs",
+                           "status-export.json.parity-stage"),
+              "w", encoding="utf-8", newline="\n") as handle:
+        handle.write('{"partial')
+    real_listdir = os.listdir
+
+    def fake_listdir(path, *args, **kwargs):
+        if os.path.abspath(path) == os.path.abspath(hidden):
+            raise PermissionError(13, "denied by the arm")
+        return real_listdir(path, *args, **kwargs)
+
+    os.listdir = fake_listdir
+    try:
+        report = SR.scan_report(blocked_world)
+    finally:
+        os.listdir = real_listdir
+    unread = report["unreadable"]
+    ok("AC-SR3 arm a - a directory the OS refuses to list is named unreadable "
+       "instead of vanishing, while residue elsewhere is still found",
+       len(unread) == 1 and unread[0].startswith("state/denied:")
+       and report["found"] == ["docs/status-export.json.parity-stage"]
+       and report["folders"] >= 5,
+       "unreadable=%r found=%r folders=%d"
+       % (unread, report["found"], report["folders"]))
+
+    # ---- b / d / e: the OS refusals are a separate reading from `skipped`. --
+    held_world = wide_world()
+    worlds.append(held_world)
+    before = face_bytes(held_world)
+    victim = os.path.join(held_world, "state", "held.json.sxf-stage")
+    with open(victim, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write('{"partial')
+    read_only = os.path.join(held_world, "preview", "ro.json.edqf-stage")
+    with open(read_only, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write('{"partial')
+    os.chmod(read_only, 0o444)
+    held = open(victim, "r", encoding="utf-8")
+    try:
+        removed, skipped, failed = SR.sweep(held_world)
+        again_removed, again_skipped, again_failed = SR.sweep(held_world)
+    finally:
+        held.close()
+        os.chmod(read_only, 0o666)
+    after = face_bytes(held_world)
+
+    held_rows = [f for f in failed if f.startswith("state/held.json.sxf-stage:")]
+    ro_rows = [f for f in failed if f.startswith("preview/ro.json.edqf-stage:")]
+    want = "winerror=32" if os.name == "nt" else "errno="
+    ok("AC-SR3 arm b - a residue held open by another handle lands in `failed` "
+       "with the sharing refusal named, not in removed or skipped",
+       len(held_rows) == 1 and want in held_rows[0]
+       and "state/held.json.sxf-stage" not in removed
+       and "state/held.json.sxf-stage" not in skipped
+       and os.path.isfile(victim),
+       "failed=%r removed=%r skipped=%r on_disk=%s"
+       % (held_rows, removed, skipped, os.path.isfile(victim)))
+
+    ok("AC-SR3 arm d - a read-only residue lands in `failed` and never in "
+       "`removed`, so an attribute refusal cannot pass for a sweep",
+       len(ro_rows) == 1 and "preview/ro.json.edqf-stage" not in removed
+       and os.path.isfile(read_only),
+       "failed=%r removed=%r on_disk=%s"
+       % (ro_rows, removed, os.path.isfile(read_only)))
+
+    ok("AC-SR3 arm e - with refusals present the live face is byte-identical "
+       "and a second sweep names the same refusals instead of claiming clean",
+       before == after and again_failed == failed
+       and again_removed == [] and again_skipped == []
+       and os.path.isfile(victim) and os.path.isfile(read_only),
+       "face_same=%s second_failed=%r second_removed=%r"
+       % (before == after, again_failed, again_removed))
+
+    # ---- c: skipped and failed are disjoint readings. --------------------
+    dir_case = wide_world()
+    worlds.append(dir_case)
+    blocked = os.path.join(dir_case, "logs", "held.sxf-stage")
+    os.makedirs(blocked)
+    dir_removed, dir_skipped, dir_failed = SR.sweep(dir_case)
+    ok("AC-SR3 arm c - a suffix-named directory stays in `skipped` and is "
+       "disjoint from `failed`",
+       dir_skipped == ["logs/held.sxf-stage"] and dir_failed == []
+       and dir_removed == [] and os.path.isdir(blocked),
+       "skipped=%r failed=%r removed=%r still_dir=%s"
+       % (dir_skipped, dir_failed, dir_removed, os.path.isdir(blocked)))
+
+    # ---- f: the live tree has no blind spot and no refusal right now. ----
+    live = SR.scan_report()
+    ok("AC-SR3 arm f - the live tree walks every directory it can list "
+       "(unreadable named, refuse count read, folder count derived)",
+       live["unreadable"] == [] and live["folders"] > 0
+       and SR.sweep.__defaults__ == (None, None),
+       "live_unreadable=%r folders=%d live_found=%r"
+       % (live["unreadable"], live["folders"], live["found"][:3]))
+
+
 def main():
     worlds = []
 
@@ -155,19 +266,21 @@ def main():
 
     # ---- c / d: the sweep removes exactly those names, once. -------------
     before = face_bytes(planted)
-    removed, skipped = SR.sweep(planted)
+    removed, skipped, failed = SR.sweep(planted)
     after = face_bytes(planted)
     left = SR.scan(planted)
     ok("AC-SR1 arm c - sweep removes exactly the planted names, face untouched",
-       len(removed) == 8 and not skipped and left == [] and before == after
+       len(removed) == 8 and not skipped and not failed and left == []
+       and before == after
        and os.path.isfile(os.path.join(planted, "docs", "status-export.json")),
-       "removed=%d skipped=%d left=%r face_same=%s"
-       % (len(removed), len(skipped), left, before == after))
+       "removed=%d skipped=%d failed=%d left=%r face_same=%s"
+       % (len(removed), len(skipped), len(failed), left, before == after))
 
-    again_removed, again_skipped = SR.sweep(planted)
+    again_removed, again_skipped, again_failed = SR.sweep(planted)
     ok("AC-SR1 arm d - the second sweep removes nothing",
-       again_removed == [] and again_skipped == [],
-       "removed=%r skipped=%r" % (again_removed, again_skipped))
+       again_removed == [] and again_skipped == [] and again_failed == [],
+       "removed=%r skipped=%r failed=%r"
+       % (again_removed, again_skipped, again_failed))
 
     # ---- e: no shipped writer invents a fifth suffix. --------------------
     literals = set()
@@ -250,13 +363,14 @@ def main():
 
     # ---- AC-SR2 d: the sweep clears all of them, once. -------------------
     wide_before = face_bytes(wide)
-    wide_removed, wide_skipped = SR.sweep(wide)
+    wide_removed, wide_skipped, wide_failed = SR.sweep(wide)
     wide_after = face_bytes(wide)
     ok("AC-SR2 arm d - sweep removes all 20 planted names, is idempotent, and "
        "leaves the live face byte-identical",
        len(wide_removed) == planted_wide and not wide_skipped
+       and not wide_failed
        and wide_before == wide_after and SR.scan(wide) == []
-       and SR.sweep(wide) == ([], [])
+       and SR.sweep(wide) == ([], [], [])
        and os.path.isfile(os.path.join(wide, "docs", "status-export.json")),
        "removed=%d left=%r face_same=%s"
        % (len(wide_removed), SR.scan(wide), wide_before == wide_after))
@@ -267,14 +381,15 @@ def main():
     blocked = os.path.join(dir_case, "state", "held.sxf-stage")
     os.makedirs(blocked)
     dir_named = SR.scan(dir_case)
-    dir_removed, dir_skipped = SR.sweep(dir_case)
+    dir_removed, dir_skipped, dir_failed = SR.sweep(dir_case)
     ok("AC-SR2 arm e - a directory named like a residue is named and skipped, "
        "never removed",
        dir_named == ["state/held.sxf-stage"] and dir_removed == []
-       and dir_skipped == ["state/held.sxf-stage"]
+       and dir_skipped == ["state/held.sxf-stage"] and dir_failed == []
        and os.path.isdir(blocked),
-       "named=%r removed=%r skipped=%r still_dir=%s"
-       % (dir_named, dir_removed, dir_skipped, os.path.isdir(blocked)))
+       "named=%r removed=%r skipped=%r failed=%r still_dir=%s"
+       % (dir_named, dir_removed, dir_skipped, dir_failed,
+          os.path.isdir(blocked)))
 
     # ---- AC-SR2 f: the live tree, and the measured defaults inside it. ---
     started = time.time()
@@ -287,6 +402,8 @@ def main():
        live_ok and all(os.path.isdir(os.path.join(ROOT, name))
                        for name in SR.DIRS),
        "live=%r dirs=%r elapsed=%.2fs" % (live, SR.DIRS, elapsed))
+
+    ac_sr3(worlds)
 
     for path in worlds:
         shutil.rmtree(path, ignore_errors=True)

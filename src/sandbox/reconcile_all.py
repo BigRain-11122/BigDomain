@@ -7781,7 +7781,7 @@ SUITES = [
     # --export can put the same residue anywhere and the old two-name list left
     # 12 of 16 planted residues unseen.
     ("os-stage-residue",
-     os.path.join("..", "os", "test_stage_residue.py"), 2),
+     os.path.join("..", "os", "test_stage_residue.py"), 3),
     ]
 
 FAILS = 0
