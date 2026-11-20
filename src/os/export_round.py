@@ -581,7 +581,48 @@ def archive_state(data, repo):
                   % (rel, arch.get('count')))
 
 
-def payload(repo, state, stamp):
+def corpus_block(corpus):
+    """Publish the tree-gate corpus reading, or nothing at all (R3128).
+
+    Measured before this existed: the corpus is derived in exactly ONE place
+    (tools/closeout_gate.py hands its `stats` out-parameter of
+    qa_writer_census.check_against_baseline into the verdict), and the OK path
+    runs the gate BEFORE the writer - so handing the block in costs zero extra
+    walking. Asking this module to run the census itself would re-read the
+    whole qa tree (4219 files / 508.1MB at R3124) every round.
+
+    Absent input publishes NOTHING rather than a zero: a fabricated 0/0 would
+    read as a measured empty corpus, which is the opposite of "not measured".
+    The MB divisor is decimal because the label says MB (R3126).
+    """
+    if not isinstance(corpus, dict):
+        return None
+    files = corpus.get('files')
+    total = corpus.get('bytes')
+    if files is None or total is None:
+        return None
+    try:
+        files = int(files)
+        total = int(total)
+    except (TypeError, ValueError):
+        return None
+    block = {'files': files, 'bytes': total, 'mb': round(total / 1e6, 1)}
+    readable = corpus.get('readable')
+    if readable is not None:
+        try:
+            readable = int(readable)
+        except (TypeError, ValueError):
+            readable = None
+    if readable is not None:
+        block['readable'] = readable
+        # The token appears ONLY when the two disagree, so a clean corpus
+        # publishes no unread key instead of a decorative zero.
+        if readable != files:
+            block['unread'] = files - readable
+    return block
+
+
+def payload(repo, state, stamp, corpus=None):
     """Build the new face WITHOUT writing it (AC-EXPW4 needs a pure path)."""
     import check_export_consistency as cec
     import export_driver_queue_face as EDQF
@@ -636,6 +677,18 @@ def payload(repo, state, stamp):
     hb = heartbeat_block(repo, state)
     data['heartbeat'] = hb
     ceo['heartbeat'] = hb
+    # R3128: the tree-gate corpus reading gets the same treatment - two copies
+    # of ONE derivation, and only when the caller actually measured it. An
+    # unmeasured writer REMOVES the pair instead of leaving the previous
+    # round's counts behind, because a stale count reads exactly like a live
+    # one on a face that carries no age of its own.
+    cb = corpus_block(corpus)
+    if cb is not None:
+        data['corpus'] = cb
+        ceo['corpus'] = cb
+    else:
+        data.pop('corpus', None)
+        ceo.pop('corpus', None)
     ceo['updated_at'] = stamp
     data['ceo_face'] = ceo
     # AC-EXPW3: the self_drive block is not a second derivation, it IS the
@@ -736,13 +789,13 @@ def face_judgeable(exp, now=None):
     return None, report
 
 
-def write(repo, stamp):
+def write(repo, stamp, corpus=None):
     import export_driver_queue_face as EDQF
     state = json.loads(_read(os.path.join(repo, 'src', 'os', 'state.json')))
     refusal = round_shape_refusal(state)
     if refusal:
         raise ValueError(refusal)
-    data, d = payload(repo, state, stamp)
+    data, d = payload(repo, state, stamp, corpus=corpus)
     exp = os.path.join(repo, 'docs', 'status-export.json')
     text = json.dumps(data, ensure_ascii=False, indent=2) + '\n'
     proof = EDQF.publish(repo, exp, text)

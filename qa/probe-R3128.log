@@ -1,0 +1,233 @@
+=== Q1: how many steps to publish corpus, and who re-walks 508MB ===
+census stats out-param call sites in closeout_gate.py: 1
+closeout.py lines that name gate_verdict: 8
+OK-path order: tree_refusal at 27178, ER.write at 30917 -> gate first: True
+export_round.write signature: ['def write(repo, stamp):']
+export_round.payload signature: ['def payload(repo, state, stamp):']
+export_round.py names census module: False
+exact-key-set assertions over the face in shipped .py: 8
+   .\src\sandbox\ledger\test_apimarket_feeddev.py:392 'sorted(doc) =='
+   .\src\sandbox\ledger\test_apimarket_marketfeed_listing.py:356 'sorted(doc) =='
+   .\src\sandbox\ledger\test_apimarket_report_activity.py:196 'sorted(doc) =='
+   .\src\sandbox\ledger\test_apimarket_report_buyerhistory.py:260 'sorted(doc) =='
+   .\src\sandbox\ledger\test_apimarket_report_dossier.py:248 'sorted(doc) =='
+   .\src\sandbox\ledger\test_apimarket_report_json.py:132 'sorted(doc) =='
+   .\src\sandbox\ledger\test_apimarket_report_refundregister.py:369 'sorted(doc) =='
+   .\src\sandbox\ledger\test_apimarket_report_workbench.py:226 'sorted(doc) =='
+shipped .py naming status-export.json: 212
+   one-off round scripts: 28, everything else: 184
+   .\src\os\battery_outcome_R2203.py
+   .\src\os\board_R2674.py
+   .\src\os\board_close_tech_703_R2742.py
+   .\src\os\capturefix_R2418.py
+   .\src\os\check_export_consistency.py
+   .\src\os\close_R2318.py
+   .\src\os\closeout.py
+   .\src\os\closeout2_R1990.py
+   .\src\os\closeout2_R1998.py
+   .\src\os\closeout2_R2006.py
+   .\src\os\closeout2_R2007.py
+   .\src\os\closeout2_R2008.py
+   .\src\os\closeout2_R2021.py
+   .\src\os\closeout2_R2029.py
+   .\src\os\closeout2_R2030.py
+   .\src\os\closeout3_R1955.py
+   .\src\os\closeout_dedupe_R2212.py
+   .\src\os\closeout_export_R2418.py
+   .\src\os\closeout_export_parity_dialect_wire.py
+   .\src\os\closeout_export_parity_text_binding.py
+   .\src\os\closeout_export_parity_wire.py
+   .\src\os\closeout_export_parity_wire_binding_consumer.py
+   .\src\os\comma_binding_consumer_wire.py
+   .\src\os\comma_binding_face_row_drift.py
+   .\src\os\comma_binding_identity_face_compare.py
+   .\src\os\comma_binding_sibling_faces.py
+   .\src\os\correction_R2524.py
+   .\src\os\evidence_R2452.py
+   .\src\os\evidence_R2491.py
+   .\src\os\export_R2431.py
+   .\src\os\export_closeout_R2235.py
+   .\src\os\export_closeout_gate_parity.py
+   .\src\os\export_consistency_queue_face.py
+   .\src\os\export_counters_R2071.py
+   .\src\os\export_derived_R2250.py
+   .\src\os\export_driver_queue_face.py
+   .\src\os\export_fix_R2120.py
+   .\src\os\export_fix_R2229.py
+   .\src\os\export_fix_R2245.py
+   .\src\os\export_fix_R2294.py
+   .\src\os\export_freshness.py
+   .\src\os\export_publish_from_import_law.py
+   .\src\os\export_publish_path_guard.py
+   .\src\os\export_publish_wire_identity.py
+   .\src\os\export_round.py
+   .\src\os\export_tick_R2155.py
+   .\src\os\export_tickfix_R1970.py
+   .\src\os\export_tickfix_R2054.py
+   .\src\os\export_tickfix_R2055.py
+   .\src\os\export_tickfix_R2056.py
+   .\src\os\export_tickfix_R2058.py
+   .\src\os\exportbackfill_R2134.py
+   .\src\os\exportfix_R1971.py
+   .\src\os\exportfix_R2008.py
+   .\src\os\exportrepair_R2108.py
+   .\src\os\fix_R2248.py
+   .\src\os\fix_R2248b.py
+   .\src\os\fix_R2252.py
+   .\src\os\fix_R2253.py
+   .\src\os\fix_export_R2408.py
+   .\src\os\fix_export_results_R2006.py
+   .\src\os\fix_export_tick_R2070.py
+   .\src\os\fix_results_R2454.py
+   .\src\os\fix_tickrows_R2057.py
+   .\src\os\flush_export_R2025.py
+   .\src\os\flush_export_R2026.py
+   .\src\os\flush_export_R2044.py
+   .\src\os\flush_export_R2045.py
+   .\src\os\flush_export_R2048.py
+   .\src\os\flush_export_R2051.py
+   .\src\os\flush_export_R2053.py
+   .\src\os\flush_export_R2054.py
+   .\src\os\flush_export_R2055.py
+   .\src\os\flush_export_R2056.py
+   .\src\os\flush_export_R2057.py
+   .\src\os\flush_export_R2058.py
+   .\src\os\flush_export_R2066.py
+   .\src\os\flush_export_R2070.py
+   .\src\os\flush_export_R2071.py
+   .\src\os\flush_export_R2072.py
+   .\src\os\flush_export_R2073.py
+   .\src\os\flush_export_R2088.py
+   .\src\os\flush_selfdrive_R2212.py
+   .\src\os\fold_battery_R2181.py
+   .\src\os\gate_drift.py
+   .\src\os\live_R2376.py
+   .\src\os\live_R2400.py
+   .\src\os\live_R2402.py
+   .\src\os\live_R2444.py
+   .\src\os\live_R2492.py
+   .\src\os\live_R2501.py
+   .\src\os\machine_gate.py
+   .\src\os\parameter_destination_resolution.py
+   .\src\os\patch2_R2244.py
+   .\src\os\patch_R2244.py
+   .\src\os\patch_export_R1950.py
+   .\src\os\patch_export_tick_R1938.py
+   .\src\os\patch_export_tick_R1939.py
+   .\src\os\patch_export_tick_R1946.py
+   .\src\os\publish_relative_package_identity.py
+   .\src\os\queue_R2378.py
+   .\src\os\queue_close_R2248.py
+   .\src\os\queue_done_stamp.py
+   .\src\os\queue_export_freshness_gate.py
+   .\src\os\queue_export_gate_wire.py
+   .\src\os\queue_floor_export_face.py
+   .\src\os\queue_row_exempt.py
+   .\src\os\r2140_export.py
+   .\src\os\r2141_export.py
+   .\src\os\r2142_export.py
+   .\src\os\r2143_closeout.py
+   .\src\os\r2143_export.py
+   .\src\os\r2148_export.py
+   .\src\os\r2152_export.py
+   .\src\os\r2161_export.py
+   .\src\os\r2162_export.py
+   .\src\os\r2187_export.py
+   .\src\os\r2454_export.py
+   .\src\os\reexport_R2395.py
+   .\src\os\refresh_export_R2393.py
+   .\src\os\refresh_export_R2399.py
+   .\src\os\refresh_export_R2401.py
+   .\src\os\refresh_export_counters_R2073.py
+   .\src\os\relative_import_publish_binding.py
+   .\src\os\repair_R2433.py
+   .\src\os\review_window_guard_parity.py
+   .\src\os\review_window_guard_parity_consumer_wire.py
+   .\src\os\row_key_carrier_scope.py
+   .\src\os\seed_queue_R2240.py
+   .\src\os\stage_residue.py
+   .\src\os\stamp_exempt_append.py
+   .\src\os\stamp_exempt_seed_guard_wire.py
+   .\src\os\stamp_queue_R2448.py
+   .\src\os\state_close_R2307.py
+   .\src\os\state_indent_fix_R2673.py
+   .\src\os\status_export_writer_dialect_wire.py
+   .\src\os\status_export_writer_transport_scope.py
+   .\src\os\taker_closeout_R1980.py
+   .\src\os\test_closeout.py
+   .\src\os\test_closeout_export_parity_dialect_wire.py
+   .\src\os\test_closeout_export_parity_text_binding.py
+   .\src\os\test_closeout_export_parity_wire.py
+   .\src\os\test_closeout_export_parity_wire_binding_consumer.py
+   .\src\os\test_comma_binding_consumer_wire.py
+   .\src\os\test_comma_binding_face_row_drift.py
+   .\src\os\test_comma_binding_identity_face_compare.py
+   .\src\os\test_comma_binding_sibling_faces.py
+   .\src\os\test_comma_binding_wire.py
+   .\src\os\test_export_closeout_gate_parity.py
+   .\src\os\test_export_consistency_queue_face.py
+   .\src\os\test_export_driver_queue_face.py
+   .\src\os\test_export_driver_self_drive_health.py
+   .\src\os\test_export_freshness.py
+   .\src\os\test_export_publish_from_import_law.py
+   .\src\os\test_export_publish_path_guard.py
+   .\src\os\test_export_publish_wire_identity.py
+   .\src\os\test_export_round.py
+   .\src\os\test_plain_import_alias_gate.py
+   .\src\os\test_publish_relative_package_identity.py
+   .\src\os\test_queue_export_freshness_gate.py
+   .\src\os\test_queue_export_gate_wire.py
+   .\src\os\test_queue_floor_export_face.py
+   .\src\os\test_relative_import_alias_gate.py
+   .\src\os\test_relative_import_publish_binding.py
+   .\src\os\test_relative_module_corpus_scope.py
+   .\src\os\test_relative_module_existence_face.py
+   .\src\os\test_relative_package_presence_refusal.py
+   .\src\os\test_row_key_carrier_scope.py
+   .\src\os\test_stage_residue.py
+   .\src\os\test_status_export_fresh.py
+   .\src\os\test_status_export_writer_dialect_wire.py
+   .\src\os\test_status_export_writer_transport_scope.py
+   .\src\os\test_tree_snapshot.py
+   .\src\os\tree_snapshot.py
+   .\src\os\trim_export_tick_R2071.py
+   .\src\os\trim_export_tick_R2072.py
+   .\src\os\trim_export_tick_R2073.py
+   .\src\sandbox\frontdoor.py
+   .\src\sandbox\reconcile_all.py
+   .\src\sandbox\test_frontdoor_face_age.py
+   .\src\sandbox\test_frontdoor_heartbeat_card.py
+   .\tools\closeout_R2089.py
+   .\tools\closeout_R2192.py
+   .\tools\status_export_fresh.py
+
+=== Q2: does an added key collide with the two shipped judges ===
+frontdoor presence tuple: "export_ts", "do", "ceo_face", "depts", "outs",                    "results", "self_drive"
+frontdoor rejects extra keys: False
+export_freshness.FACE_KEYS: "current", "latest_artifact", "next_milestone"
+export_freshness rejects extra keys: False
+live face verdict (unmodified): FRESH
+augmented face (corpus at top + in ceo_face) verdict: FRESH
+
+=== Q3: do the other two unreadable forms land in the honest other bucket ===
+read-loop failure branch (verbatim):
+   try:
+   with open(fpath, "rb") as handle:
+   raw = handle.read()
+   except OSError as exc:
+   # unreadable file: the shipped census counted it in the
+   # honest other bucket, and it never reaches the debt split
+   lists["other"].append(name)
+   continue
+   corpus_bytes += len(raw)
+no-baseline run rc=2 first=baseline file missing: baseline.json.missing
+ACL-denied + held-handle drive rc=2
+   other bucket names acl.log: False
+   other bucket names held.log: False
+   any new-dialect flag raised for them: True
+   stats={"bytes": 15, "files": 3, "readable": 1}
+   corpus line: NONE
+real dir.log after baseline rc=2 other-bucket: False new-dialect: True
+   stats={"bytes": 15, "files": 2, "readable": 1}
+
+live corpus: {}

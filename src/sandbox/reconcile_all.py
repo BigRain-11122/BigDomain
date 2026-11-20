@@ -7278,7 +7278,7 @@ SUITES = [
     # with the later STAMP; a re-save with identical bytes moves the stamp and no
     # number on the line moves with it, so the retired `newer=` word is refused.
     ("os-export-round",
-     os.path.join("..", "os", "test_export_round.py"), 45),
+     os.path.join("..", "os", "test_export_round.py"), 46),
     # R2806: tools/payment_gate_report.py renders the face that decides whether
     # the 19.9 channel may be connected, and all 690 registered suites were
     # measured to mention ZERO of its AC-PAYG1..AC-PAYG8 tokens, so it was
@@ -7773,6 +7773,13 @@ SUITES = [
     # criterion) was pinned in src/os/backlog.md BEFORE the card consumed it.
     ("frontdoor-face-age",
      os.path.join("test_frontdoor_face_age.py"), 1),
+    # R3128: the tree-gate corpus reading (files / readable / bytes the flags
+    # face already pays to read) was derived in one place and printed on one
+    # closeout stdout line; of 2307 shipped faces exactly one ever carried the
+    # key and the live one carries none. AC-FDC3 (four arms, ONE criterion) was
+    # pinned in src/os/backlog.md BEFORE the card consumed it.
+    ("frontdoor-corpus-card",
+     os.path.join("test_frontdoor_corpus_card.py"), 1),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files

@@ -1,0 +1,42 @@
+=== Q3 precise: unreadable forms AFTER the name is already baselined ===
+--- ACL denial on a baselined tee row (baselined=True, blocker=PermissionError)
+    [flag] new-dialect: b.log (class=other)
+    census: files=2 tee=1 baselined=0
+    labeled_baselined=0 unlabeled_baselined=0
+    plain_unusable=0 reader_rescued=0 reader_refused=0
+    nul_bytes=0
+    disappeared=0
+    flags=1
+    verdict: DRIFT-FLAG
+    rc=2 stats={"bytes": 15, "files": 2, "readable": 1}
+--- held handle (WinError 32 shape) (baselined=True, blocker=PermissionError)
+    [flag] new-dialect: b.log (class=other)
+    census: files=2 tee=1 baselined=0
+    labeled_baselined=0 unlabeled_baselined=0
+    plain_unusable=0 reader_rescued=0 reader_refused=0
+    nul_bytes=0
+    disappeared=0
+    flags=1
+    verdict: DRIFT-FLAG
+    rc=2 stats={"bytes": 15, "files": 2, "readable": 1}
+--- IsADirectoryError on a baselined name (baselined=True, blocker=IsADirectoryError)
+    [flag] new-dialect: b.log (class=other)
+    census: files=2 tee=1 baselined=0
+    labeled_baselined=0 unlabeled_baselined=0
+    plain_unusable=0 reader_rescued=0 reader_refused=0
+    nul_bytes=0
+    disappeared=0
+    flags=1
+    verdict: DRIFT-FLAG
+    rc=2 stats={"bytes": 15, "files": 2, "readable": 1}
+
+baseline record for b.log: {"cmd-raw": [], "nul-bytes": [], "other": ["a.log", "b.log"], "ps-utf16": [], "pwsh-capture": []}
+--- other-baselined name, ACL denied
+    census: files=2 tee=0 baselined=2
+    labeled_baselined=0 unlabeled_baselined=1
+    plain_unusable=0 reader_rescued=0 reader_refused=0
+    nul_bytes=0
+    disappeared=0
+    flags=0
+    verdict: DRIFT-CLEAN
+    rc=0 stats={"bytes": 18, "files": 2, "readable": 1}

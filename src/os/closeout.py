@@ -635,7 +635,8 @@ def run(args):
     # readings and this path printed none for the step that writes the face.
     face_start = time.perf_counter()
     try:
-        ok, derived, proof = ER.write(root, stamp)
+        ok, derived, proof = ER.write(root, stamp,
+                                  corpus=(gate_verdict or {}).get("corpus"))
     except ValueError as exc:
         return 2, ["CLOSEOUT FAIL E_CO_NO_FACE step=face state=WRITTEN "
                    "tick=%d %s" % (result["tick"], exc)]

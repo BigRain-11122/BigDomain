@@ -761,7 +761,10 @@ def ac_cout8():
         lazy_ok = ("closeout_gate" not in top and "qa_writer_census" not in top
                    and "gate_at" not in top)
         order = source.find("tree_refusal(root)")
-        face_at = source.find("ER.write(root, stamp)")
+        # R3128: the call prefix, not the whole call - the writer now takes the
+        # corpus reading as a second argument, and a literal that pins the
+        # closing paren made an unchanged ORDER read as a missing call.
+        face_at = source.find("ER.write(root, stamp")
         lazy_ok = lazy_ok and order != -1 and face_at != -1 and order < face_at
 
         ok = (bare_ok and refuse_ok and replay_ok and dry_ok and lazy_ok)

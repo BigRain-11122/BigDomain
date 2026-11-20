@@ -5730,6 +5730,37 @@ def heartbeat_card(face):
             % (esc(line), esc(show(face.get("reason")))))
 
 
+def corpus_card(face):
+    """Render the published tree-gate corpus reading. One input, zero re-count.
+
+    R3128 measured the hole: the corpus reading (files / readable / bytes that
+    the flags face already paid to read) lived on one closeout stdout line and
+    nowhere on the only face that keeps being rendered after the loop stops.
+    This is a pure consumption face - it never re-walks qa/, never re-derives a
+    count, and an absent block prints a named absence instead of a zero, because
+    a fabricated 0/0 would read as a measured empty corpus.
+    """
+    if not isinstance(face, dict):
+        face = {}
+    block = face.get("corpus")
+    if not isinstance(block, dict) or "files" not in block:
+        return ("<p class=kv>CORPUS absent from the export face "
+                "(honest absence, not a zero)</p>")
+
+    def show(value):
+        return "none" if value is None else str(value)
+
+    line = ("CORPUS files=%s readable=%s mb=%s"
+            % (show(block.get("files")), show(block.get("readable")),
+               show(block.get("mb"))))
+    unread = block.get("unread")
+    # A nonzero unread count is a READING, not a gate (R3127 adjudication): it
+    # prints, and it does not borrow a verdict word from either judge.
+    if unread is not None:
+        line += " unread=%s" % show(unread)
+    return "<p class=kv>%s</p>" % esc(line)
+
+
 def _export_freshness():
     """The shipped time gate, imported lazily so a thin tree stays honest.
 
@@ -7609,6 +7640,9 @@ def render():
         # from the shipped gate at render time (an age nobody renders is an
         # age nobody sees).
         sd30_age = face_age_card(face_reading())
+        # R3128: the tree-gate corpus reading gets its one live consumer, from
+        # the data file's own block - never re-counted here.
+        sd30_corpus = corpus_card(_cf if isinstance(_cf, dict) else None)
         sd30_sd_html = esc(sd30_sd_txt)
         sd30_hard = esc(
             "structural law (R1223 pre-registered AC-FD30a..f): "
@@ -7627,7 +7661,7 @@ def render():
             "makes the CEO-visible process status live")
     else:
         sd30_kpis = sd30_do_html = sd30_ceolines = ""
-        sd30_hb = sd30_age = ""
+        sd30_hb = sd30_age = sd30_corpus = ""
         sd30_sd_html = sd30_hard = ""
     if sd30_err:
         sd30_kpis = ("<p class=fail>STATUS-EXPORT READ FAILED "
@@ -8361,6 +8395,7 @@ from export)</h3>
 </h3>
 __SD30_HB__
 __SD30_AGE__
+__SD30_CORPUS__
 <p class=kv>__SD30_SD__</p>
 <p class=kv>__SD30_HARD__</p>
 </div>
@@ -8644,6 +8679,7 @@ __PAYWARN__</footer>
         "__SD30_CEOLINES__": sd30_ceolines,
         "__SD30_HB__": sd30_hb,
         "__SD30_AGE__": sd30_age,
+        "__SD30_CORPUS__": sd30_corpus,
         "__SD30_SD__": sd30_sd_html,
         "__SD30_HARD__": sd30_hard,
         "__M1_TITLE__": esc(m1["card_title"]),

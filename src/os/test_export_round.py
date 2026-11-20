@@ -1409,6 +1409,66 @@ def main():
             ok('AC-EXPR3 the live face is still judgeable through the door',
                True, 'absent-honest')
 
+        # ---- AC-EXPR4 (R3128 pin): the corpus reading gets a face ----
+        # Measured before the pin: the tree-gate corpus is derived in exactly
+        # one place (tools/closeout_gate.py hands the census `stats`
+        # out-parameter into the verdict) and the OK path runs the gate BEFORE
+        # the writer, so publishing it costs zero extra walking - while this
+        # module named the census zero times and the reading lived on one
+        # closeout stdout line only.
+        wc = build_world(9314)
+        worlds.append(wc)
+        write(os.path.join(wc, 'heartbeat.txt'), 'tick 9314\n')
+        stampc = mod.datetime.datetime.now(mod.TZ).replace(
+            microsecond=0).isoformat()
+        corpus_in = {'files': 7, 'readable': 7, 'bytes': 2000000}
+        mod.write(wc, stampc, corpus=corpus_in)
+        cexp = os.path.join(wc, 'docs', 'status-export.json')
+        cface = json.loads(read(cexp))
+        top = cface.get('corpus')
+        mirrored = (cface.get('ceo_face') or {}).get('corpus')
+        ok('AC-EXPR4 a supplied corpus publishes two copies of one derivation',
+           isinstance(top, dict) and top == mirrored
+           and top.get('files') == 7 and top.get('bytes') == 2000000,
+           'top=%s mirrored=%s' % (top, mirrored))
+        # decimal-divisor arm: the label says MB, so 2,000,000 bytes reads 2.0
+        ok('AC-EXPR4 the MB token uses the decimal divisor',
+           isinstance(top, dict) and top.get('mb') == 2.0,
+           'mb=%s' % (top or {}).get('mb'))
+        # absence arm: no corpus handed in -> NO key, not a fabricated zero,
+        # AND a previously published pair is removed rather than left to read
+        # as the current counts on a face that carries no age of its own.
+        wa = build_world(9315)
+        worlds.append(wa)
+        write(os.path.join(wa, 'heartbeat.txt'), 'tick 9315\n')
+        stampa = mod.datetime.datetime.now(mod.TZ).replace(
+            microsecond=0).isoformat()
+        mod.write(wa, stampa, corpus={'files': 5, 'readable': 5, 'bytes': 50})
+        aexp = os.path.join(wa, 'docs', 'status-export.json')
+        had_block = 'corpus' in json.loads(read(aexp))
+        mod.write(wa, stampa)
+        aface = json.loads(read(aexp))
+        ok('AC-EXPR4 an unmeasured corpus publishes no key at all',
+           had_block
+           and 'corpus' not in aface
+           and 'corpus' not in (aface.get('ceo_face') or {}),
+           'had=%s present=%s' % (had_block,
+                                  [k for k in ('corpus',) if k in aface]))
+        # unread arm: the token appears ONLY when the two counts disagree
+        mod.write(wc, stampc, corpus={'files': 3, 'readable': 2, 'bytes': 10})
+        uface = json.loads(read(cexp))
+        ublk = uface.get('corpus') or {}
+        ok('AC-EXPR4 unread appears only when files and readable disagree',
+           ublk.get('unread') == 1 and ublk.get('readable') == 2
+           and isinstance(top, dict) and 'unread' not in top,
+           'unread=%s clean_has_unread=%s'
+           % (ublk.get('unread'),
+              isinstance(top, dict) and 'unread' in top))
+        # judgeability arm: carrying the block must not make the face unreadable
+        code_c, _rep_c = mod.face_judgeable(cexp)
+        ok('AC-EXPR4 the face carrying a corpus block stays judgeable',
+           code_c is None, 'code=%s' % code_c)
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')
