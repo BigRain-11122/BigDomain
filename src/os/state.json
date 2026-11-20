@@ -984,6 +984,6 @@
   "R3078 tokens: local=~14k api=0 api_reason=one shipped five-still scan, one board/state read set, three read-only probes BEFORE the pin (the reconcile diff with its 11 named files, the name-argument blast radius with zero regressions, and an eight-family runtime sample), one PIN row written before the code, one branch in _arg_text with its module-header paragraph, one criterion with five arms, one registry count 10 to 11, one pin re-write and check, one suite run through the shipped writer, one battery leg, one matrix regeneration with its check, one closeout gate, and the board/state/heartbeat/export closeout; zero cloud calls and zero external API touches.",
   "R3078 closeout: tick set to 3078, heartbeat.txt moved to the same round, the board carries the R3078 done row with its measured numbers, the R3078 PIN row keeps its pre-registration text verbatim, the R3078 next-window row is flipped to EXECUTED with its text kept verbatim, and a new R3079 next-window row names the 89-row split (9 no-verdict / 54 carry-names / 26 other) and refuses to report it as one number; docs/status-export.json refreshed from this round's evidence files."
   ],
-  "state_bytes": 674224,
+  "state_bytes": 673925,
   "tick": 3078
 }

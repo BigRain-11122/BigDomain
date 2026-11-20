@@ -12,8 +12,8 @@
     "latest_evidence": "qa/negctl-R3077.log (203B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3079] next window (<=48h): (0) MAIN — **剩 89 行 UNPARSED 里 9 行的 format 根本没有 verdict 词（`SUITE %d/%d green`），这不是读者该修的面；而 54 行「含名字」与 26 行「其他」还没逐一量清。** 下一轮先量（只读，勿改盘）：①9 行无 verdict 词逐行列出，判每行是不是「运行期本来就不可反驳」（若是=套件侧改字面 verdict，照 R3076 先例，一次一批）；②54 行「含名字」量清形状（名字在常量字典里没解析到？在嵌套表达式里？在 `%` 之外的 f-string？）——先分组再决定是否值得扩，禁一次性报总数；③26 行「其他」逐行看是否有共同的读者缺陷，还是真的是嵌套拼装/跨函数；④`assembled_print_lines=293` 仍不进 pin，理由行是否需要写进模块头（R3077 已写一次，本轮只确认）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, the pre-existing AC-LGA9 red carried since R3040, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a (truncated)",
-    "next_milestone_due": "2026-11-22T09:50:43+08:00",
-    "updated_at": "2026-11-20T09:50:43+08:00"
+    "next_milestone_due": "2026-11-22T09:52:50+08:00",
+    "updated_at": "2026-11-20T09:52:50+08:00"
   },
   "current": "2026-11-20 R3078 PRODUCT+ENGINEERING: the census's remaining UNPARSED bucket was overstated by 215 rows for one reason - a format ARGUMENT that is a plain name (a runtime counter such as passed/total) was refused, while the same argument written as a call (len(...)) already took a placeholder digit. Measured before the pin: treating an unbound name as one placeholder digit flips 215 live rows with 0 regressions (other=131 ledger=57 funnel=17 face=4 live=2 panel=2 member=1 pay=1), and eight of them were RUN across eight families with their own SUITE rows read back 8/8.",
   "depts": [
@@ -44,7 +44,7 @@
     }
   ],
   "do": "2026-11-20 R3078 PRODUCT+ENGINEERING: the census's remaining UNPARSED bucket was overstated by 215 rows for one reason - a format ARGUMENT that is a plain name (a runtime counter such as passed/total) was refused, while the same argument written as a call (len(...)) already took a placeholder digit. Measured before the pin: treating an unbound name as one placeholder digit flips 215 live rows with 0 regressions (other=131 ledger=57 funnel=17 face=4 live=2 panel=2 member=1 pay=1), and eight of them were RUN across eight families with their own SUITE rows read back 8/8.",
-  "export_ts": "2026-11-20T09:50:43+08:00",
+  "export_ts": "2026-11-20T09:52:50+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
   "latest_evidence": "qa/negctl-R3077.log (203B, 2026-11-20)",
   "next_milestone": "[R3079] next window (<=48h): (0) MAIN — **剩 89 行 UNPARSED 里 9 行的 format 根本没有 verdict 词（`SUITE %d/%d green`），这不是读者该修的面；而 54 行「含名字」与 26 行「其他」还没逐一量清。** 下一轮先量（只读，勿改盘）：①9 行无 verdict 词逐行列出，判每行是不是「运行期本来就不可反驳」（若是=套件侧改字面 verdict，照 R3076 先例，一次一批）；②54 行「含名字」量清形状（名字在常量字典里没解析到？在嵌套表达式里？在 `%` 之外的 f-string？）——先分组再决定是否值得扩，禁一次性报总数；③26 行「其他」逐行看是否有共同的读者缺陷，还是真的是嵌套拼装/跨函数；④`assembled_print_lines=293` 仍不进 pin，理由行是否需要写进模块头（R3077 已写一次，本轮只确认）。量清后二选一实现并配判据，且**先落板再动代码**。(1) carried unchanged: the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth input of the ledger face, the pre-existing AC-LGA9 red carried since R3040, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door still cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap of 31 is a (truncated)",
@@ -195,5 +195,5 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 674224
+  "state_bytes": 673925
 }
