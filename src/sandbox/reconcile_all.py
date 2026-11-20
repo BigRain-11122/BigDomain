@@ -4824,6 +4824,15 @@ SUITES = [
     # carries the archive's own file, in-file ordinal and marker line.)
     ("os-ledger-archive",
      os.path.join("..", "os", "test_ledger_archive.py"), 13),
+    # R3091: the archive's own provenance is now readable WITHOUT a child
+    # process - the tracked set comes from the repository index (DIRC v2
+    # only; 3/4 and a bad magic are refused by name), so a reader of a
+    # published FOLD-CARRY locator can say which of the three archives git
+    # actually backs (measured live: 11月 tracked, 09/10 not, 656872B /
+    # 6666 entries, agreeing with 'git ls-files logs' on all rows).
+    # (AC-APR1..AC-APR6 pinned in src/os/backlog.md R3091 BEFORE the file.)
+    ("os-archive-provenance",
+     os.path.join("..", "os", "test_archive_provenance.py"), 6),
     # R2157: the baseline is the gate's only exemption channel, so its
     # semantics are pinned - one entry exempts one round only, a stale
     # entry is reported instead of rotting quietly, a broken baseline

@@ -1,0 +1,11 @@
+Q1 index=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\.git\index bytes=656872 entries=6666 tracked_logs=3
+  indexed logs/state-log-archive-2026-11.md
+  indexed logs/state-preop-R2567.bak
+  indexed logs/status-export-legacy-2026-11.json
+  git ls-files logs rc=0 rows=3 agree=True
+  archive state-log-archive-2026-09.md bytes=16565173 tracked=no
+  archive state-log-archive-2026-10.md bytes=4987837 tracked=no
+  archive state-log-archive-2026-11.md bytes=5040093 tracked=yes
+Q2 pins: loc=file@line occurrences=5 exact OK/VACUOUS literal pairs=4
+Q3 archives total=26593103 single_max_margin=4406347 batch_margin=183122097
+Q4 export carries provenance word=False ceo_face_current=True ceo_face_milestone=True

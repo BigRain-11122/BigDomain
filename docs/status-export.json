@@ -4,7 +4,7 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-20 R3090 PRODUCT+ENGINEERING: a FOLD-CARRY red line now names WHERE the short window opens - each gap token prints R<round>(w<marker>@<file>:<in-file ordinal>:<marker line>) from the coordinates the gap entry already carried - so an operator no longer searches by marker; the printer change is measured on a private-world red sample and the live green line is byte-identical.",
+    "current": "R3091 GROUP SCAN (content-addressed, read before any work): the ledger @BigDomain face held 0 rows so no dispatch was owed; decisions.md read 438 rows, equal to the stored baseline, with no new token set; the group orders face still ends at the 2026-11-18 15:3x row, so the five-still read found nothing new. tasks.md carries only its two standing anchors (the proposal track and the blocked-on-CEO list), the P2/P3 queue files are absent, and the backlog head [R3091] was claimed; benchmarks were refreshed 2026-11-18, inside the 7-day window.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -12,11 +12,11 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/demo-R3090.log (436B, 2026-11-20)",
     "latest_evidence": "qa/demo-R3090.log (436B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3091] next window (<=48h): (0) MAIN — **红行能打开了，但绿行/红行都还只写 `loc=file@line`，读者无法从这一行知道这个行号有没有 git 背书——11 月有、9/10 月没有。** 下一轮先量（只读）：①库内能否在不新增子进程/网络的前提下拿到「该册是否被 git 跟踪」（CLI 侧传入 vs 读 `.git/info/exclude` 都不可靠；先量消费者与既有测试对尾词的钉法）；②本轮刚把 OK/VACUOUS 两形态钉成逐字节精确，任何新尾词都会红这两臂——要动必须按「判据 JUDGED-CHANGED」声明并写进板，不能悄悄改；③给 9/10 月册补 git 跟踪（16.5MB+5.0MB）与 REPO-SLIM 出生级大件闸/推送预算的冲突面（门限 20MB/件、单批 200MB，逐项量）；④若不加词，是否至少在上报给 CEO 的 status-export 里区分三册凭据。量清后落一条判据或一条只发布读数。**先落板再动代码。** (1) carried unchanged: the same-window law remains uninstalled (measured false-kill vs vacuous), the 4 live duplicate markers (2935/2941/2946/3085) are frozen history, 787 archive payload lines, the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no (truncated)",
-    "next_milestone_due": "2026-11-22T19:25:27+08:00",
-    "updated_at": "2026-11-20T19:25:27+08:00"
+    "next_milestone": "[R3092] next window (<=48h): (0) MAIN — **凭据读出来了但还没上任何一面**：FOLD-CARRY 三形态仍逐字节不变（要改就要 JUDGED-CHANGED，现场4 条字面钉），CEO 面 status-export 也还没有 provenance 字。下一轮先量（只读）：①`tools/status_export_fresh.py` 的 AC-SXF1..16 里哪几条会因新增一个数据键变红（只增键与改既有键两种改法分开量）；②`--json` 面当前零消费者，接入前先量哪一面真需要它；③若要把 `prov=` 印进 FOLD-CARRY 行，具体红哪 4 条字面钉、JUDGED-CHANGED 声明怎么写，一条一条列出；④实现面是否能只用索引读器就算出“这一行的行号有无 git 背书”而不让任何一个面变形。量清后二选一落地。**先落板再动代码。**",
+    "next_milestone_due": "2026-11-22T19:35:45+08:00",
+    "updated_at": "2026-11-20T19:35:45+08:00"
   },
-  "current": "2026-11-20 R3090 PRODUCT+ENGINEERING: a FOLD-CARRY red line now names WHERE the short window opens - each gap token prints R<round>(w<marker>@<file>:<in-file ordinal>:<marker line>) from the coordinates the gap entry already carried - so an operator no longer searches by marker; the printer change is measured on a private-world red sample and the live green line is byte-identical.",
+  "current": "R3091 GROUP SCAN (content-addressed, read before any work): the ledger @BigDomain face held 0 rows so no dispatch was owed; decisions.md read 438 rows, equal to the stored baseline, with no new token set; the group orders face still ends at the 2026-11-18 15:3x row, so the five-still read found nothing new. tasks.md carries only its two standing anchors (the proposal track and the blocked-on-CEO list), the P2/P3 queue files are absent, and the backlog head [R3091] was claimed; benchmarks were refreshed 2026-11-18, inside the 7-day window.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -44,11 +44,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3090 PRODUCT+ENGINEERING: a FOLD-CARRY red line now names WHERE the short window opens - each gap token prints R<round>(w<marker>@<file>:<in-file ordinal>:<marker line>) from the coordinates the gap entry already carried - so an operator no longer searches by marker; the printer change is measured on a private-world red sample and the live green line is byte-identical.",
-  "export_ts": "2026-11-20T19:25:27+08:00",
+  "do": "R3091 GROUP SCAN (content-addressed, read before any work): the ledger @BigDomain face held 0 rows so no dispatch was owed; decisions.md read 438 rows, equal to the stored baseline, with no new token set; the group orders face still ends at the 2026-11-18 15:3x row, so the five-still read found nothing new. tasks.md carries only its two standing anchors (the proposal track and the blocked-on-CEO list), the P2/P3 queue files are absent, and the backlog head [R3091] was claimed; benchmarks were refreshed 2026-11-18, inside the 7-day window.",
+  "export_ts": "2026-11-20T19:35:45+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
   "latest_evidence": "qa/demo-R3090.log (436B, 2026-11-20)",
-  "next_milestone": "[R3091] next window (<=48h): (0) MAIN — **红行能打开了，但绿行/红行都还只写 `loc=file@line`，读者无法从这一行知道这个行号有没有 git 背书——11 月有、9/10 月没有。** 下一轮先量（只读）：①库内能否在不新增子进程/网络的前提下拿到「该册是否被 git 跟踪」（CLI 侧传入 vs 读 `.git/info/exclude` 都不可靠；先量消费者与既有测试对尾词的钉法）；②本轮刚把 OK/VACUOUS 两形态钉成逐字节精确，任何新尾词都会红这两臂——要动必须按「判据 JUDGED-CHANGED」声明并写进板，不能悄悄改；③给 9/10 月册补 git 跟踪（16.5MB+5.0MB）与 REPO-SLIM 出生级大件闸/推送预算的冲突面（门限 20MB/件、单批 200MB，逐项量）；④若不加词，是否至少在上报给 CEO 的 status-export 里区分三册凭据。量清后落一条判据或一条只发布读数。**先落板再动代码。** (1) carried unchanged: the same-window law remains uninstalled (measured false-kill vs vacuous), the 4 live duplicate markers (2935/2941/2946/3085) are frozen history, 787 archive payload lines, the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no (truncated)",
+  "next_milestone": "[R3092] next window (<=48h): (0) MAIN — **凭据读出来了但还没上任何一面**：FOLD-CARRY 三形态仍逐字节不变（要改就要 JUDGED-CHANGED，现场4 条字面钉），CEO 面 status-export 也还没有 provenance 字。下一轮先量（只读）：①`tools/status_export_fresh.py` 的 AC-SXF1..16 里哪几条会因新增一个数据键变红（只增键与改既有键两种改法分开量）；②`--json` 面当前零消费者，接入前先量哪一面真需要它；③若要把 `prov=` 印进 FOLD-CARRY 行，具体红哪 4 条字面钉、JUDGED-CHANGED 声明怎么写，一条一条列出；④实现面是否能只用索引读器就算出“这一行的行号有无 git 背书”而不让任何一个面变形。量清后二选一落地。**先落板再动代码。**",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -197,6 +197,6 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 66505,
+  "state_bytes": 68936,
   "next_milestone_due": "2026-11-22T10:45:10+08:00"
 }
