@@ -1,0 +1,32 @@
+ALL-WINDOWS total=754 files=3
+POST-PIN since=2914 windows=29
+
+Q1 COLLISION KNOWABILITY
+  writer reads existing markers before append: NO (append_archive only reads the tail byte for the newline seam)
+  writer holds its own marker: round_label -> '# --- R<n>'
+  writer holds a distinct ordinal in the SAME header text: 'fold <n> window' -> PARTIAL
+  duplicate marker rounds post-pin=4 [(2935, 2), (2941, 2), (2946, 2), (3085, 3)]
+  duplicate marker rounds all-history=37 (list truncated to 8) [(2034, 2), (2299, 2), (2313, 2), (2320, 2), (2331, 2), (2336, 2), (2338, 2), (2345, 2)]
+
+Q2 ONE-ROUND-ONE-WINDOW APPLIED TO TODAY
+  post-pin windows=29 distinct markers=24 violations=5
+    marker R2935: first fold 19, second fold 20 (state-log-archive-2026-11.md:4425, 6 lines)
+    marker R2941: first fold 24, second fold 25 (state-log-archive-2026-11.md:4470, 6 lines)
+    marker R2946: first fold 29, second fold 30 (state-log-archive-2026-11.md:4532, 5 lines)
+    marker R3085: first fold 39, second fold 40 (state-log-archive-2026-11.md:5488, 2 lines)
+    marker R3085: first fold 39, second fold 39 (state-log-archive-2026-11.md:5491, 7 lines)
+
+Q3 REPAIR CASE (R3085)
+  fold 39 @state-log-archive-2026-11.md:4839 verbatim=648 range=None
+  fold 40 @state-log-archive-2026-11.md:5488 verbatim=2 range=None
+  fold 39 @state-log-archive-2026-11.md:5491 verbatim=7 range=None
+  blanket 'forbid second window for one round' would refuse folds 40 and 39-again above: 2 of the 3 R3085 windows
+
+Q4 MARKER UNIQUIFICATION
+  ordinal duplicates post-pin=1 [(39, 2)]
+  ordinal duplicates all-history=45 [(1, 4), (2, 4), (9, 2), (12, 2), (39, 2), (600, 2), (601, 2), (617, 2), (619, 3), (620, 4), (622, 2), (626, 2), (631, 2), (641, 2), (642, 2), (644, 2), (645, 2), (646, 3), (647, 2), (648, 3), (649, 3), (650, 3), (654, 2), (655, 3), (657, 2), (658, 2), (659, 5), (660, 3), (661, 2), (662, 2), (665, 2), (666, 2), (669, 2), (670, 2), (672, 2), (673, 2), (674, 3), (675, 2), (698, 2), (699, 3), (700, 3), (705, 2), (713, 2), (714, 2), (2504, 2)]
+  (marker,ordinal) unique post-pin: False  all-history(same file): False
+  range-labelled markers (R2936-R2937 style, marker reads the first round only): 1
+    state-log-archive-2026-11.md:4438 # --- R2924-R2925 fold append (2026-11-18, 11 lines verbatim: log window, fold 22 window, pre-op sha16 650dcb8
+
+PROBE-R3088 DONE (read-only, no bytes written)

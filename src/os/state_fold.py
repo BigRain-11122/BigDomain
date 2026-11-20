@@ -54,6 +54,24 @@ ROUND_HEAD_RE = re.compile(r'^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\b')
 
 VERDICTS = ("FOLD-CLEAR", "FOLD-DUE")
 
+# R3088 AC-SF7: the fold vehicle writes '# --- R<n> ...' as a window marker
+# and, until now, never read the target archive before writing, so two folds
+# in one round wrote two windows under one marker with nothing naming the
+# collision (measured: 5 post-pin windows / 4 markers, and the R3085 repair
+# folds 40 and 39-again are 2 of them). The vehicle now refuses to reuse a
+# marker SILENTLY: a real re-fold says so and its reason lands verbatim in
+# the header. A blanket "one round, one window" law was measured first and
+# would have blocked that repair, which is why the law is "no silent
+# collision" rather than "no second window".
+#
+# ARCHIVE_MARKER_RE is the writer's twin of ledger_lines.FOLD_MARKER_RE; the
+# suite pins that both read the same marker from the same header, because a
+# writer that marks windows a reader cannot see is the defect this gate
+# exists to prevent.
+ARCHIVE_MARKER_RE = re.compile(r"^#\s*---\s*R(\d{3,5})\b")
+ROUND_LABEL_RE = re.compile(r"^R(\d{3,5})$")
+REFOLD_DECL = "re-fold"
+
 ITEM_INDENT = 16
 ITEM_PREFIX = " " * ITEM_INDENT
 
@@ -288,6 +306,40 @@ def plan_fold(raw, state, window_start, window_end, summary, reserve=0,
     return plan, folded_text
 
 
+def round_marker(round_label):
+    """The marker round a fold label would write, or None (labels like RTEST).
+
+    Fractional or non-numeric labels never become markers, so they are also
+    invisible to the archive reader; the gate stays out of their way rather
+    than inventing an ordering it cannot prove.
+    """
+    match = ROUND_LABEL_RE.match(round_label or "")
+    return int(match.group(1)) if match is not None else None
+
+
+def marker_rounds(path):
+    """The marker rounds already written into ONE archive file (read-only).
+
+    Reads header lines only, never a payload, and reads no clock. A path
+    that is not a file holds no markers, which is what a first fold sees.
+    """
+    rounds = set()
+    if not os.path.isfile(path):
+        return rounds
+    try:
+        with io.open(path, "r", encoding="utf-8") as handle:
+            for raw in handle:
+                text = raw.rstrip("\n").rstrip("\r")
+                if not text.startswith("# --- "):
+                    continue
+                match = ARCHIVE_MARKER_RE.match(text)
+                if match is not None:
+                    rounds.add(int(match.group(1)))
+    except (IOError, OSError, UnicodeDecodeError) as exc:
+        raise StateFoldError("E_SF_ARCHIVE", "%s (%s)" % (path, exc))
+    return rounds
+
+
 def archive_appendix(header, window_lines):
     """The exact bytes a fold contributes to the archive."""
     if not isinstance(header, str) or not header.startswith("# --- "):
@@ -350,11 +402,15 @@ def append_archive(path, header, window_lines, allow_create=False, now=None):
 
 
 def fold(root, round_label, fold_no, window_start, window_end, summary,
-         reserve=0, gate=GATE, execute=True, archive_path=None, now=None):
+         reserve=0, gate=GATE, execute=True, archive_path=None, now=None,
+         refold_reason=None):
     """One callable: plan the fold, back up, append the archive, write state.
 
     A dry run (execute=False) returns the plan and writes nothing. An
-    execute run refuses before any write when the plan is not clean.
+    execute run refuses before any write when the plan is not clean, and
+    refuses a window marker the target archive already carries unless the
+    caller declares refold_reason (AC-SF7) - a repair may open a second
+    window for one round, a silent one may not.
     """
     path = state_path(root)
     raw, state = read_state(path)
@@ -378,6 +434,28 @@ def fold(root, round_label, fold_no, window_start, window_end, summary,
     if not execute or fail:
         return result
     stamp = now or datetime.now()
+    archive = archive_path or default_archive(root, stamp)
+    reason = ""
+    if refold_reason is not None:
+        text = str(refold_reason).strip()
+        if not text:
+            raise StateFoldError("E_SF_BAD_ARGS",
+                                 "refold_reason must be non-empty when given")
+        reason = ", %s: %s" % (REFOLD_DECL, text)
+    header = ("# --- %s fold append (%s, %d lines verbatim: %s, "
+              "fold %s window, pre-op sha16 %s%s)"
+              % (round_label, stamp.strftime("%Y-%m-%d"),
+                 plan["window_lines"], "log window", fold_no,
+                 plan["preop_sha16"], reason))
+    marker = round_marker(round_label)
+    if marker is not None:
+        existing = marker_rounds(archive)
+        if marker in existing and REFOLD_DECL not in header:
+            raise StateFoldError(
+                "E_SF_MARKER_COLLISION",
+                "%s already carries a window marked R%d and this fold does "
+                "not declare %s: <reason>"
+                % (os.path.basename(archive), marker, REFOLD_DECL))
     window = state["log"][plan["window_start"] - 1:plan["window_end"]]
     backup_path = os.path.join(root, "logs",
                                "state-preop-%s.bak" % round_label)
@@ -386,12 +464,6 @@ def fold(root, round_label, fold_no, window_start, window_end, summary,
     with io.open(backup_path, "rb") as handle:
         if handle.read() != raw:
             raise StateFoldError("E_SF_BACKUP", "backup read-back differs")
-    archive = archive_path or default_archive(root, stamp)
-    header = ("# --- %s fold append (%s, %d lines verbatim: %s, "
-              "fold %s window, pre-op sha16 %s)"
-              % (round_label, stamp.strftime("%Y-%m-%d"),
-                 plan["window_lines"], "log window", fold_no,
-                 plan["preop_sha16"]))
     appended = append_archive(archive, header, window,
                              allow_create=True, now=stamp)
     import general_writer_dialect_audit as GWDA

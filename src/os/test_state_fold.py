@@ -29,7 +29,7 @@ sys.path.insert(0, BASE)
 
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 7
 MODULE = os.path.join(BASE, "state_fold.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold"
@@ -298,14 +298,83 @@ def run():
     clean = all(needle not in source for needle in forbidden)
     with io.open(RUNNER, "r", encoding="utf-8") as handle:
         runner = handle.read()
-    needle = '"%s"' % LABEL
+    # R3088: bind the pinned count to THIS suite's own path. The old 400-char
+    # window could also reach the sibling os-state-fold-run row, so it could
+    # read green while this row said something else.
+    needle = '"test_state_fold.py"'
     wired = False
     if needle in runner:
-        window = runner[runner.find(needle):][:400]
-        wired = "test_state_fold.py" in window and ", 6)" in window
+        window = runner[runner.find(needle):][:60]
+        wired = ", 7)" in window
     check(ascii_ok and clean and wired and "AC-SF" in source,
           "AC-SF6 source ASCII, stdlib only, no network, predicate single "
-          "owned and wired as os-state-fold(6)")
+          "owned and wired as os-state-fold(7)")
+
+    # AC-SF7: a marker is never reused SILENTLY (R3088). Measured before the
+    # gate was written: 5 post-pin archive windows carry 4 markers between
+    # them, and 2 of those windows are the R3085 repair folds - which a
+    # blanket "one round, one window" law would have refused. So the law is
+    # "declare it or do not write it".
+    world = make_world(["R3001 alpha AC-SF7", "R3002 beta AC-SF7",
+                        "R3003 gamma", "R3004 delta", "R3005 epsilon"])
+    try:
+        header_seen = ("# --- R3085 fold append (2026-11-20, 2 lines verbatim: "
+                       "log window, fold 41 window, pre-op sha16 abcdef)")
+        import ledger_lines as LL
+        agree = (SF.ARCHIVE_MARKER_RE.match(header_seen).group(1)
+                 == LL.FOLD_MARKER_RE.match(header_seen).group(1))
+        not_file_ok = SF.marker_rounds(
+            os.path.join(world, "logs", "absent-archive.md")) == set()
+        first = SF.fold(world, "R3085", 41, 1, 1,
+                        "carry-forward R3001 (AC-SF7 folded)", execute=True)
+        archive_path = SF.default_archive(world)
+        marks_after_first = SF.marker_rounds(archive_path) == set([3085])
+        before = digest_tree(world)
+        refused = None
+        try:
+            SF.fold(world, "R3085", 42, 1, 1,
+                    "carry-forward R3001..R3002 (AC-SF7 folded twice)",
+                    execute=True)
+        except SF.StateFoldError as exc:
+            refused = exc.code
+        after_refusal = digest_tree(world)
+        silent_ok = (refused == "E_SF_MARKER_COLLISION"
+                     and after_refusal == before)
+        dry_seen = SF.fold(world, "R3085", 42, 1, 1,
+                           "carry-forward R3001..R3002 (AC-SF7 folded twice)",
+                           execute=False)
+        dry_ok = (dry_seen["mode"] == "dry-run"
+                  and digest_tree(world) == after_refusal)
+        declared = SF.fold(world, "R3085", 42, 1, 1,
+                           "carry-forward R3001..R3002 (AC-SF7 folded twice)",
+                           execute=True,
+                           refold_reason="repair of a split round")
+        with io.open(archive_path, "r", encoding="utf-8") as handle:
+            archive_text = handle.read()
+        declared_ok = (declared["predicted_eq_actual"] is True
+                       and "re-fold: repair of a split round"
+                       in archive_text
+                       and SF.marker_rounds(archive_path) == set([3085]))
+        other = SF.fold(world, "R3086", 43, 1, 1,
+                        "carry-forward R3001..R3002 R3003 (AC-SF7 again)",
+                        execute=True)
+        other_ok = (other["predicted_eq_actual"] is True
+                    and SF.marker_rounds(archive_path) == set([3085, 3086]))
+        empty_reason = None
+        try:
+            SF.fold(world, "R3087", 44, 1, 1,
+                    "carry-forward R3002..R3003 R3004 (AC-SF7)", execute=True,
+                    refold_reason="   ")
+        except SF.StateFoldError as exc:
+            empty_reason = exc.code
+        check(agree and not_file_ok and first["would_fail"] == []
+              and marks_after_first and silent_ok and dry_ok and declared_ok
+              and other_ok and empty_reason == "E_SF_BAD_ARGS",
+              "AC-SF7 marker read agrees with the archive reader, a silent "
+              "marker reuse is refused before any write, a declared re-fold "
+              "lands its reason verbatim, and a distinct marker is free")
+    finally:
+        drop_world(world)
 
 
 if __name__ == "__main__":

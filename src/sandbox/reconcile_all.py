@@ -4902,8 +4902,11 @@ SUITES = [
     # and an execute path that lands exactly on its own prediction or
     # refuses before any write.
     # (AC-SF1..AC-SF6 pre-registered in state/queue/tech.md R2240 b.)
+    # R3088: AC-SF7 - the fold vehicle reads the target archive's markers
+    # before it writes and refuses a silent reuse of one (measured: 4 markers
+    # shared by 5 post-pin windows, 2 of them the R3085 repair folds).
     ("os-state-fold",
-     os.path.join("..", "os", "test_state_fold.py"), 6),
+     os.path.join("..", "os", "test_state_fold.py"), 7),
     # R2567: the fold FACE state_fold.py never shipped (AC-SFOLD1..AC-SFOLD6
     # pinned at R2548): shipped predicate reused, archive copy proved byte-equal,
     # ledger coverage read THROUGH the archive, layout writer/reader agreement,

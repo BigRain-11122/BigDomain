@@ -208,7 +208,7 @@ def already_folded(state, window_start, window_end, summary):
 
 
 def run(root, round_label, fold_no, window_start, window_end, summary,
-        archive_path=None, dry_run=False, gate=SF.GATE):
+        archive_path=None, dry_run=False, gate=SF.GATE, refold_reason=None):
     """Plan, refuse on any dirty predicate, execute, then prove the result."""
     path = SF.state_path(root)
     raw, state = SF.read_state(path)
@@ -321,7 +321,8 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
         return report
 
     result = SF.fold(root, round_label, fold_no, window_start, window_end,
-                     summary, gate=gate, execute=True, archive_path=archive)
+                     summary, gate=gate, execute=True, archive_path=archive,
+                     refold_reason=refold_reason)
     if result.get("would_fail"):
         raise FoldRunError("E_SFOLD_PREDICATE",
                            ",".join(result["would_fail"]))
@@ -368,6 +369,8 @@ USAGE = (
     "--start <a> --end <b> --summary <line>\n"
     "                                   [--dry-run] [--root PATH] "
     "[--archive PATH] [--json]\n"
+    "                                   [--refold-reason TEXT]  (required to "
+    "open a second window for one round marker)\n"
     "       state_fold_run.py --check [--root PATH] [--json]\n"
     "  exit 0 = folded / ALREADY-FOLDED / FOLD-CLEAR\n"
     "  exit 2 = refused by the predicate (nothing written)\n"
@@ -397,6 +400,7 @@ def main(argv):
     end = None
     summary = None
     archive = None
+    refold_reason = None
     as_json = False
     dry_run = False
     fold_mode = False
@@ -413,7 +417,7 @@ def main(argv):
         elif arg == "--json":
             as_json = True
         elif arg in ("--round", "--fold-no", "--start", "--end", "--summary",
-                     "--root", "--archive"):
+                     "--root", "--archive", "--refold-reason"):
             index += 1
             if index >= len(argv):
                 sys.stdout.write("E_SFOLD_BAD_ARGS: %s needs a value\n" % arg)
@@ -431,6 +435,8 @@ def main(argv):
                 summary = value
             elif arg == "--root":
                 root = value
+            elif arg == "--refold-reason":
+                refold_reason = value
             else:
                 archive = value
         elif arg in ("--help", "-h"):
@@ -469,7 +475,8 @@ def main(argv):
         return 5
     try:
         report = run(root, round_label, int(fold_no), int(start), int(end),
-                     summary, archive_path=archive, dry_run=dry_run)
+                     summary, archive_path=archive, dry_run=dry_run,
+                     refold_reason=refold_reason)
     except FoldRunError as exc:
         sys.stdout.write("%s %s\n" % (exc.code, exc.detail))
         return 2
