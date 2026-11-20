@@ -9,12 +9,12 @@
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-registry_counter_census-R3105.log (5452B, 2026-11-20)",
-    "latest_evidence": "qa/suite-registry_counter_census-R3105.log (5452B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-closeout-siblings-R3105.log (880B, 2026-11-20)",
+    "latest_evidence": "qa/leg-closeout-siblings-R3105.log (880B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3105] next window (<=48h): (0) MAIN — **守卫按名拒绝了外层，但车辆只把它压成一行**：`src/os/closeout.py::tree_refusal` 取 `lines[0]`（`CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS … census=FAIL`），内层 `E_CLG_FOREIGN_REGISTRY registry=… root=…` 被丢弃——操作者看得到「普查红了」，看不到「因为我问的树没有注册表」。下一轮先量：①`tree_refusal` 的第三个返回值（verdict）里现在有什么、`closeout.py::run` 打印 RED 时用的是哪一行；②把 gate 的第二行带进车辆会不会撞上既有臂（`test_closeout` 20/20 的字符串断言与 `test_closeout_gate` 的 PASS 行钉）；③`E_CLG_FOREIGN_REGISTRY` 现在有三处消费者（census / matrix / evaluate 包装），哪一处该有自己的码而不是共用，值得一并量。**先落板再动代码。** (1) carried unchanged: `reconcile.py` as the uncovered fourth ledger input, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, 27 deep shard-6 rows unmeasured, shard offset/resume as the carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap (truncated)",
-    "next_milestone_due": "2026-11-22T23:06:28+08:00",
-    "updated_at": "2026-11-20T23:06:28+08:00"
+    "next_milestone": "[R3106] next window (<=48h): (0) MAIN — **「世界没有树」与「世界有树但没有基线」在这个车辆里印着同一句话，而后者是误述**：只读实测（本轮收口后一次临时世界）——一个带 `qa/a.log` 与 `docs/sandbox-suite-matrix.md`、只是没有 `qa/` 基线件的世界，`tree_refusal` 读 `NOT-ASKED` 并印 `E_CO_GATE_NO_INPUTS qa=1 doc=1 (this world builds no tree for the gate to read)`：**读数说 qa=1 doc=1，句子却说没有树**。下一轮先量：①这种世界有多少种真实形态（有 qa 无基线／有基线无 doc／qa 存在但不可读／baseline 在但不是 census 的 `BASELINE_NAME`），各印什么；②`NOT-ASKED` 是 skip 还是 refusal 该怎么按输入缺失**分裂命名**（一个码还是一族），并核对 `test_closeout` 20→21 臂里 `E_CO_GATE_NO_INPUTS` 的子串断言会不会被新码撞上；③同一条句子还有什么地方同样自相矛盾（`qa=<n> doc=<n>` 与括号内的断言），值得一并扫。**先落板再动代码。** (1) carried unchanged: `reconcile.py` as the uncovered fourth ledger input, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, 27 deep shard-6 rows unmeasured, shard offset/resume as the carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot (truncated)",
+    "next_milestone_due": "2026-11-22T23:09:56+08:00",
+    "updated_at": "2026-11-20T23:09:56+08:00"
   },
   "current": "2026-11-20 R3105 PRODUCT+ENGINEERING: the vehicle that closes a round now prints the gate fine print - a refusal that read only census=FAIL now also names the cause (E_CLG_FOREIGN_REGISTRY face=census registry=... root=...), and the flags face own rows arrive the same way.",
   "depts": [
@@ -45,10 +45,10 @@
     }
   ],
   "do": "2026-11-20 R3105 PRODUCT+ENGINEERING: the vehicle that closes a round now prints the gate fine print - a refusal that read only census=FAIL now also names the cause (E_CLG_FOREIGN_REGISTRY face=census registry=... root=...), and the flags face own rows arrive the same way.",
-  "export_ts": "2026-11-20T23:06:28+08:00",
+  "export_ts": "2026-11-20T23:09:56+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/suite-registry_counter_census-R3105.log (5452B, 2026-11-20)",
-  "next_milestone": "[R3105] next window (<=48h): (0) MAIN — **守卫按名拒绝了外层，但车辆只把它压成一行**：`src/os/closeout.py::tree_refusal` 取 `lines[0]`（`CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS … census=FAIL`），内层 `E_CLG_FOREIGN_REGISTRY registry=… root=…` 被丢弃——操作者看得到「普查红了」，看不到「因为我问的树没有注册表」。下一轮先量：①`tree_refusal` 的第三个返回值（verdict）里现在有什么、`closeout.py::run` 打印 RED 时用的是哪一行；②把 gate 的第二行带进车辆会不会撞上既有臂（`test_closeout` 20/20 的字符串断言与 `test_closeout_gate` 的 PASS 行钉）；③`E_CLG_FOREIGN_REGISTRY` 现在有三处消费者（census / matrix / evaluate 包装），哪一处该有自己的码而不是共用，值得一并量。**先落板再动代码。** (1) carried unchanged: `reconcile.py` as the uncovered fourth ledger input, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, 27 deep shard-6 rows unmeasured, shard offset/resume as the carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap (truncated)",
+  "latest_evidence": "qa/leg-closeout-siblings-R3105.log (880B, 2026-11-20)",
+  "next_milestone": "[R3106] next window (<=48h): (0) MAIN — **「世界没有树」与「世界有树但没有基线」在这个车辆里印着同一句话，而后者是误述**：只读实测（本轮收口后一次临时世界）——一个带 `qa/a.log` 与 `docs/sandbox-suite-matrix.md`、只是没有 `qa/` 基线件的世界，`tree_refusal` 读 `NOT-ASKED` 并印 `E_CO_GATE_NO_INPUTS qa=1 doc=1 (this world builds no tree for the gate to read)`：**读数说 qa=1 doc=1，句子却说没有树**。下一轮先量：①这种世界有多少种真实形态（有 qa 无基线／有基线无 doc／qa 存在但不可读／baseline 在但不是 census 的 `BASELINE_NAME`），各印什么；②`NOT-ASKED` 是 skip 还是 refusal 该怎么按输入缺失**分裂命名**（一个码还是一族），并核对 `test_closeout` 20→21 臂里 `E_CO_GATE_NO_INPUTS` 的子串断言会不会被新码撞上；③同一条句子还有什么地方同样自相矛盾（`qa=<n> doc=<n>` 与括号内的断言），值得一并扫。**先落板再动代码。** (1) carried unchanged: `reconcile.py` as the uncovered fourth ledger input, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, 27 deep shard-6 rows unmeasured, shard offset/resume as the carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot (truncated)",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -187,16 +187,16 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 93,
+    "log_lines_in_window": 79,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 80423,
+  "state_bytes": 67942,
   "next_milestone_due": "2026-11-22T10:45:10+08:00"
 }
