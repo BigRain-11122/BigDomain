@@ -265,10 +265,22 @@ def write_baseline(target, path):
     return lines, 0, base
 
 
-def check_against_baseline(target, path, stats=None):
+def check_against_baseline(target, path, stats=None, shape=None, now=None):
     """AC-WCB2..WCB5 drift-detector face. Read-only against the target
     dir AND the baseline file. Three verdict faces: new-dialect FLAG,
     class-migrated FLAG, disappeared info. Deterministic output.
+
+    R3101 (AC-WCB13): the corpus this face re-reads every round is
+    507.8MB and nothing published how much of it is fresh. Measured over
+    the live tree, 92.6% of those bytes are older than seven days and the
+    recent mass grows ~6.75MB/day, so the face will slow down on a
+    schedule no reading named. The same directory enumeration that names
+    the corpus now also carries each file's size and mtime for free
+    (scandir+stat=9.5ms for 4119 entries vs 8.5ms for listdir alone), and
+    the growth split is published through a SECOND out-parameter so the
+    `stats` three-key contract (AC-WCB12-R1) and every returned line stay
+    byte-identical. `now` is injectable because the recency boundary must
+    be testable without a clock.
 
     R3100 (AC-WCB12): the same single pass that feeds the class lists now
     also counts the corpus it read (files and bytes). The count is DERIVED
@@ -306,7 +318,27 @@ def check_against_baseline(target, path, stats=None):
         if c not in base:
             lines.append("baseline malformed: missing class key %s" % c)
             return lines, 2
-    names = sorted(n for n in os.listdir(target) if n.endswith(".log"))
+    # R3101 (AC-WCB13): one enumeration names the corpus AND carries the
+    # size/mtime the growth split needs (Windows serves both from the
+    # directory read). The name set is identical to the shipped listdir
+    # version, which AC-WCB13-g pins on a private world.
+    names = []
+    meta = {}
+    try:
+        with os.scandir(target) as it:
+            for entry in it:
+                if not entry.name.endswith(".log"):
+                    continue
+                names.append(entry.name)
+                try:
+                    st = entry.stat()
+                    meta[entry.name] = (st.st_size, st.st_mtime)
+                except OSError:
+                    meta[entry.name] = None
+    except OSError:
+        names = []
+        meta = {}
+    names.sort()
     if not names:
         lines.append("no *.log candidates under target dir (refusal)")
         return lines, 3
@@ -316,6 +348,13 @@ def check_against_baseline(target, path, stats=None):
             base_of[n] = c
     # the single read pass: class lists, the label column for baselined
     # files, and the debt split all come out of these same bytes
+    if shape is not None:
+        # R3101: seven days is a READING boundary, not a law - no gate
+        # grades these numbers, and nothing is excluded from the scan.
+        cut = (time.time() if now is None else now) - 7 * 86400.0
+        shape.update({"files": len(names), "recent7d_files": 0,
+                      "recent7d_bytes": 0, "older_files": 0,
+                      "older_bytes": 0, "unmeasured": 0})
     lists = dict((c, []) for c in CLASSES)
     rows = []
     unusable = 0
@@ -326,6 +365,18 @@ def check_against_baseline(target, path, stats=None):
     corpus_readable = 0
     for name in names:
         fpath = os.path.join(target, name)
+        if shape is not None:
+            # counted before the read so an unreadable file still lands
+            # on one side of the split instead of vanishing from the sum
+            m = meta.get(name)
+            if m is None:
+                shape["unmeasured"] += 1
+            elif m[1] >= cut:
+                shape["recent7d_files"] += 1
+                shape["recent7d_bytes"] += m[0]
+            else:
+                shape["older_files"] += 1
+                shape["older_bytes"] += m[0]
         try:
             with open(fpath, "rb") as handle:
                 raw = handle.read()
@@ -959,6 +1010,140 @@ def _selftest():
               and ("corpus files=5 readable=5 bytes=%d" % disk_bytes)
               in cli_out
               and "verdict: DRIFT-CLEAN" in cli_out)
+        # --- AC-WCB13 (R3101): the corpus growth reading ---
+        # a: asking for no shape leaves the shipped face untouched
+        plain_lines, plain_code = check_against_baseline(lw, lbase)
+        pst = {}
+        plain2, _pcode2 = check_against_baseline(lw, lbase, pst)
+        check("AC-WCB13-a shape absent: lines and the stats three-key "
+              "dict unchanged",
+              plain_code == 0 and plain_lines == ww and plain2 == ww
+              and sorted(pst) == ["bytes", "files", "readable"])
+        # one world with mtimes this arm controls (no clock dependence)
+        gw = os.path.join(tmp, "growth-world")
+        os.mkdir(gw)
+        # offsets are relative to this instant, so the +/-1h boundary
+        # files stay exact whether an arm injects `now` or the CLI reads
+        # the wall clock (main() has no --now flag on purpose)
+        NOW = time.time()
+        DAY = 86400.0
+        ages = {"g-new.log": 60.0,
+                "g-old.log": 10 * DAY,
+                "g-bound-new.log": 7 * DAY - 3600.0,
+                "g-bound-old.log": 7 * DAY + 3600.0}
+        for gname, age in ages.items():
+            gpath = os.path.join(gw, gname)
+            with open(gpath, "wb") as fh:
+                fh.write(b"PASS suite row\n")
+            os.utime(gpath, (NOW - age, NOW - age))
+        with open(os.path.join(gw, "g-notlog.txt"), "wb") as fh:
+            fh.write(b"ignore me\n")
+        gbase = os.path.join(gw, BASELINE_NAME)
+        write_baseline(gw, gbase)
+        gst, gsh = {}, {}
+        glines, gcode = check_against_baseline(gw, gbase, gst, gsh,
+                                               now=NOW)
+        # b: the split is recomputed from disk here, so a typed number
+        #    cannot pass, and the three buckets still sum to files
+        gcut = NOW - 7 * DAY
+        rec_f = rec_b = old_f = old_b = 0
+        for gname in sorted(os.listdir(gw)):
+            if not gname.endswith(".log"):
+                continue
+            gsize = os.path.getsize(os.path.join(gw, gname))
+            if os.path.getmtime(os.path.join(gw, gname)) >= gcut:
+                rec_f += 1
+                rec_b += gsize
+            else:
+                old_f += 1
+                old_b += gsize
+        check("AC-WCB13-b disk recompute agrees (recent=%d/%dB older=%d/%dB)"
+              % (rec_f, rec_b, old_f, old_b),
+              gsh.get("recent7d_files") == rec_f
+              and gsh.get("recent7d_bytes") == rec_b
+              and gsh.get("older_files") == old_f
+              and gsh.get("older_bytes") == old_b
+              and gsh.get("unmeasured") == 0
+              and (gsh.get("recent7d_files", 0) + gsh.get("older_files", 0)
+                   + gsh.get("unmeasured", 0)) == gsh.get("files"))
+        # c: the boundary is one comparison, not an intuition - a file
+        #    an hour inside the seven days is recent, an hour outside is not
+        check("AC-WCB13-c seven-day boundary: 2 recent / 2 older",
+              gsh.get("recent7d_files") == 2
+              and gsh.get("older_files") == 2)
+        # d: the *.log law survives the scandir rewrite - a non-.log and
+        #    an uppercase extension are neither counted nor read
+        with open(os.path.join(gw, "G-UPPER.LOG"), "wb") as fh:
+            fh.write(u"AI \u5224\u5b9a".encode("gbk") + b"\r\n")
+        gst2, gsh2 = {}, {}
+        glines2, _gcode2 = check_against_baseline(gw, gbase, gst2, gsh2,
+                                                 now=NOW)
+        check("AC-WCB13-d non-.log and uppercase .LOG stay outside "
+              "the corpus (files=4)",
+              gsh2.get("files") == 4 and gst2.get("files") == 4
+              and "G-UPPER.LOG" not in "\n".join(glines2)
+              and "g-notlog.txt" not in "\n".join(glines2))
+        # e: the two out-parameters do not leak into each other
+        check("AC-WCB13-e stats stays three keys and lines stay pinned "
+              "while shape is asked",
+              sorted(gst) == ["bytes", "files", "readable"]
+              and glines == check_against_baseline(gw, gbase)[0])
+        # f: the CLI publishes the growth line; verdict and rc untouched
+        ggrab = io.StringIO()
+        gkeep = sys.stdout
+        sys.stdout = ggrab
+        try:
+            gcli = main(["--dir", gw, "--check"])
+        finally:
+            sys.stdout = gkeep
+        gout = ggrab.getvalue()
+        check("AC-WCB13-f CLI prints corpus_growth and keeps the "
+              "R3100 substring (rc=%d)" % gcli,
+              gcli == 0 and "verdict: DRIFT-CLEAN" in gout
+              and ("corpus files=4 readable=4 bytes=%d" % (rec_b + old_b))
+              in gout
+              and ("corpus_growth recent7d_files=2 recent7d_bytes=%d"
+                   % rec_b) in gout)
+        # g: the scandir enumeration publishes exactly what listdir did
+        real_scandir = os.scandir
+
+        class _Entry(object):
+            def __init__(self, name, st):
+                self.name = name
+                self._st = st
+
+            def stat(self, follow_symlinks=True):
+                if self._st is None:
+                    raise OSError("unstatable in this arm")
+                return self._st
+
+        class _Scan(object):
+            def __init__(self, path):
+                rows = []
+                for nm in os.listdir(path):
+                    try:
+                        rows.append(_Entry(nm, os.stat(
+                            os.path.join(path, nm))))
+                    except OSError:
+                        rows.append(_Entry(nm, None))
+                self._rows = rows
+
+            def __enter__(self):
+                return iter(self._rows)
+
+            def __exit__(self, *exc):
+                return False
+
+        os.scandir = _Scan
+        try:
+            sst, ssh = {}, {}
+            slines, _scode = check_against_baseline(gw, gbase, sst, ssh,
+                                                    now=NOW)
+        finally:
+            os.scandir = real_scandir
+        check("AC-WCB13-g scandir face is byte-identical to the listdir "
+              "face it replaced",
+              slines == glines and sst == gst and ssh == gsh)
     finally:
         for sub in os.listdir(tmp):
             d = os.path.join(tmp, sub)
@@ -1039,13 +1224,24 @@ def main(argv=None):
         print("baseline: %s" % bpath)
         t0 = time.perf_counter()
         cstats = {}
-        lines, code = check_against_baseline(target, bpath, cstats)
+        cshape = {}
+        lines, code = check_against_baseline(target, bpath, cstats, cshape)
         print("elapsed_ms=%.1f" % ((time.perf_counter() - t0) * 1000.0))
         # AC-WCB12 guard reading: the corpus the face read, derived from the
         # same pass, so "did it get slower" is answerable without a probe.
         print("corpus files=%d readable=%d bytes=%d"
               % (cstats.get("files", 0), cstats.get("readable", 0),
                  cstats.get("bytes", 0)))
+        # AC-WCB13 growth reading (R3101): how much of that corpus is fresh
+        # and how much is frozen history. No threshold: this is the number
+        # that tells a reader whether the face is on a slower schedule.
+        print("corpus_growth recent7d_files=%d recent7d_bytes=%d "
+              "older_files=%d older_bytes=%d unmeasured=%d"
+              % (cshape.get("recent7d_files", 0),
+                 cshape.get("recent7d_bytes", 0),
+                 cshape.get("older_files", 0),
+                 cshape.get("older_bytes", 0),
+                 cshape.get("unmeasured", 0)))
         for line in lines:
             print(line)
         return code

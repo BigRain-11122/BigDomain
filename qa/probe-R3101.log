@@ -1,0 +1,30 @@
+Q0 corpus files=4118 bytes=507790925
+
+Q1 daily increments (mtime age buckets, bytes and file count)
+  day-0 files=303 bytes=2205557
+  day-1 files=412 bytes=1337426
+  day-2 files=250 bytes=662729
+  day-3 files=91 bytes=255737
+  day-4 files=37 bytes=175374
+  day-5 files=65 bytes=16601235
+  day-6 files=45 bytes=16200087
+  day-7 files=33 bytes=12037885
+  day-8 files=34 bytes=10006008
+  day-9 files=32 bytes=9879054
+  mean7 bytes/day=6752925
+  doubling projection days=75.2
+
+Q2 history share (this is the byte mass re-read every round)
+  older_than= 1d files=3815 bytes=505585368 share=99.6%
+  older_than= 3d files=3153 bytes=503585213 share=99.2%
+  older_than= 7d files=2915 bytes=470352780 share=92.6%
+  older_than=14d files=2601 bytes=355159458 share=69.9%
+  older_than=30d files=1632 bytes=113019959 share=22.3%
+
+Q3 full corpus: ms=1216.8 flags=0 files=4118 bytes=507790925
+  recent_ 3d ms=180.8 flags=0 files=965 bytes=4205712 same_flags=True
+    verdict_line=verdict: DRIFT-CLEAN
+  recent_ 7d ms=264.4 flags=0 files=1203 bytes=37438145 same_flags=True
+    verdict_line=verdict: DRIFT-CLEAN
+  recent_14d ms=470.7 flags=0 files=1517 bytes=152631467 same_flags=True
+    verdict_line=verdict: DRIFT-CLEAN

@@ -1,0 +1,6 @@
+listdir only            ms=8.5 files=4119
+listdir + 4118x os.stat ms=21.3 bytes=507793397
+scandir + entry.stat()  ms=9.5 files=4119 bytes=507793397
+scandir + follow=False  ms=7.6 files=4119
+same_name_set=True
+same_as_listdir=True
