@@ -24,6 +24,7 @@ and mtime_ns before and after and must be identical.
 """
 
 import contextlib
+import datetime as dt
 import hashlib
 import io
 import json
@@ -104,12 +105,13 @@ def build_world(root):
             "last_artifact": derived_artifact,
             "latest_artifact_abs": os.path.join(root, "preview", "fixture.html"),
             "next_milestone": derived_milestone,
-            "next_milestone_due": "2026-11-17T00:00:00+08:00",
+            "next_milestone_due": "2026-11-16T12:00:00+08:00",
             "updated_at": "2026-11-16T00:00:00+08:00",
         },
         "current": NARRATIVE,
         "latest_artifact": derived_artifact,
         "next_milestone": derived_milestone,
+        "next_milestone_due": "2026-11-16T12:00:00+08:00",
         "depts": [],
         "outs": [],
         "results": LEGACY,
@@ -349,6 +351,51 @@ def run(root):
            == derived_art,
            "top=%d inner=%d fixed=%d" % (rc_art_top, rc_art_inner, rc_art_fixed))
 
+    # AC-SXF21 (R3107): the due row was answered TWICE and the two answers were
+    # 12.7 hours apart on a tree every gate called healthy (measured on the live
+    # document: export_ts=23:24:44 -> ceo_face due +48.0h, top-level due
+    # +35.34h). Both directions must redden, AND two copies carrying the SAME
+    # wrong hour must still redden, because equality alone would let two
+    # agreeing falsehoods read green. One --apply must land export_ts + the
+    # row's own hour claim on both copies.
+    export, doc = build_world(root)
+    healthy = json.loads(io.open(export, encoding="utf-8").read())
+    hours = sx.next_milestone(sx.BACKLOG)["hours"]
+    stamp = dt.datetime.fromisoformat(healthy["export_ts"])
+    wrong = sx.iso(stamp + dt.timedelta(hours=hours + 35))
+    top_old = json.loads(json.dumps(healthy))
+    top_old["next_milestone_due"] = "2026-11-16T00:00:00+08:00"
+    write_json(export, top_old)
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer):
+        rc_due_top = sx.check(export, sx.STATE)
+    said_due_top = buffer.getvalue()
+    inner_old = json.loads(json.dumps(healthy))
+    inner_old["ceo_face"]["next_milestone_due"] = "2026-11-16T00:00:00+08:00"
+    write_json(export, inner_old)
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer):
+        rc_due_inner = sx.check(export, sx.STATE)
+    said_due_inner = buffer.getvalue()
+    both_wrong = json.loads(json.dumps(healthy))
+    both_wrong["next_milestone_due"] = wrong
+    both_wrong["ceo_face"]["next_milestone_due"] = wrong
+    write_json(export, both_wrong)
+    rc_due_agree = sx.check(export, sx.STATE)
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    rc_due_fixed = sx.check(export, sx.STATE)
+    landed_due = json.loads(io.open(export, encoding="utf-8").read())
+    derived_due = sx.iso(dt.datetime.fromisoformat(landed_due["export_ts"])
+                         + dt.timedelta(hours=hours))
+    record("AC-SXF21",
+           rc_due_top == 2 and "E_SXF_DUE_STALE" in said_due_top
+           and rc_due_inner == 2 and "E_SXF_DUE_STALE" in said_due_inner
+           and rc_due_agree == 2 and rc_due_fixed == 0
+           and landed_due.get("next_milestone_due")
+           == landed_due["ceo_face"].get("next_milestone_due") == derived_due,
+           "top=%d inner=%d same_wrong=%d fixed=%d derived=%s"
+           % (rc_due_top, rc_due_inner, rc_due_agree, rc_due_fixed, derived_due))
+
     # AC-SXFB16 (AC-SXF16): the milestone used to be cut at 400 chars mid-word, so
     # the CEO read half a sentence. A short row must land WHOLE (no marker), a long
     # row must be cut at a clause boundary with an explicit marker, and the writer
@@ -466,7 +513,7 @@ def run(root):
             if "test_status_export_fresh.py" in line:
                 row = line
                 break
-    record("AC-SXFB10", row is not None and declared == 20,
+    record("AC-SXFB10", row is not None and declared == 21,
            "matrix_row=%s declared=%d" % (bool(row), declared))
 
 

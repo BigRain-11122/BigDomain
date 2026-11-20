@@ -6146,7 +6146,7 @@ SUITES = [
     # had been published as that round's narrative, so a healthy closeout wrote
     # the old sentence and read stale against its own gate (18 -> 20).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 20),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 21),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives

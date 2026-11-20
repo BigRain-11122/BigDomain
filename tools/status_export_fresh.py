@@ -55,6 +55,18 @@ only rot, while check() graded do/ceo_face.current/current and nothing else:
            last clause boundary with an explicit "(truncated)" marker. The writer
            and the grader call that one function.
 
+Added at R3107 (pinned in src/os/backlog.md BEFORE this code), because the CEO
+face answered "when is the next milestone due" TWICE and the two answers were
+12.7 hours apart on a tree every gate called healthy: export_ts=23:24:44 landed
+ceo_face.next_milestone_due=+48.0h while the top-level copy still read +35.34h
+from an earlier window, because apply() only ever wrote the ceo_face copy and
+_ensure_top covered the other two rows but not this one:
+  AC-SXF21 next_milestone_due is a DERIVED row (export_ts + the milestone row's
+           own 12/48h claim), published to BOTH copies by --apply and graded on
+           both copies against that derivation. Equality alone is not enough: two
+           copies carrying the same wrong hour still redden, because agreeing on
+           a false hour is not truth.
+
 ASCII source only (repository encoding law). Product text is read from the live
 state, never authored here.
 """
@@ -393,16 +405,35 @@ def check(export_path, state_path):
     artifact = newest_artifact(PREVIEW)
     derived_artifact = artifact["line"] if artifact else ""
     face = doc.get("ceo_face") or {}
-    for label, top, inner, derived in (
-            ("next_milestone", doc.get("next_milestone"), face.get("next_milestone"),
-             derived_milestone),
-            ("latest_artifact", doc.get("latest_artifact"), face.get("latest_artifact"),
-             derived_artifact)):
+    # AC-SXF21: the due row is a DERIVED row, not a free text. When the backlog
+    # carries a next-window row, the only truthful due is export_ts + that row's
+    # own hour claim, so both copies are graded against the derivation rather
+    # than against each other (two copies agreeing on a wrong hour is not truth).
+    pairs = [
+        ("next_milestone", doc.get("next_milestone"), face.get("next_milestone"),
+         derived_milestone),
+        ("latest_artifact", doc.get("latest_artifact"), face.get("latest_artifact"),
+         derived_artifact),
+    ]
+    if milestone:
+        try:
+            stamp = dt.datetime.fromisoformat(doc.get("export_ts") or "")
+        except ValueError:
+            problems.append(("E_SXF_DUE_STALE",
+                             "export_ts=%r is not an ISO timestamp, so the due row "
+                             "cannot be derived" % (doc.get("export_ts"),)))
+            stamp = None
+        if stamp is not None:
+            pairs.append(("next_milestone_due", doc.get("next_milestone_due"),
+                          face.get("next_milestone_due"),
+                          iso(stamp + dt.timedelta(hours=milestone["hours"]))))
+    for label, top, inner, derived in pairs:
         tops = top or ""
         inners = inner or ""
         if tops == derived and inners == derived:
             continue
         code = ("E_SXF_MILESTONE_STALE" if label == "next_milestone"
+                else "E_SXF_DUE_STALE" if label == "next_milestone_due"
                 else "E_SXF_ARTIFACT_STALE")
         # AC-SXF14 second half: a landed value that is a strict prefix of the
         # derivation was cut rather than left behind, and that is the same
@@ -498,7 +529,8 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     # AC-SXF14/15: the top-level copies are published by the same derivation, so
     # the file the CEO downloads can no longer answer these two questions twice.
     for key, value in (("latest_artifact", artifact["line"]),
-                       ("next_milestone", milestone_line)):
+                       ("next_milestone", milestone_line),
+                       ("next_milestone_due", iso(due))):
         text, ok = _ensure_top(text, key, value, "  ")
         if not ok:
             missing.append(key + "@top")
@@ -524,7 +556,8 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     # value, so a document that leaves one of them behind cannot be published.
     landed_face = parsed.get("ceo_face") or {}
     for key, derived in (("latest_artifact", artifact["line"]),
-                         ("next_milestone", milestone_line)):
+                         ("next_milestone", milestone_line),
+                         ("next_milestone_due", iso(due))):
         pair = (parsed.get(key), landed_face.get(key))
         if pair != (derived, derived):
             print("E_SXF_WRITE: %s copies are not both the derived value (top=%r ceo_face=%r)"
