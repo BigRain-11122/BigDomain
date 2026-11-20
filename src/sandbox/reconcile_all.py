@@ -4984,9 +4984,10 @@ SUITES = [
     # count (AC-COUT11). R3109: AC-COUT12 asks whether the round output names
     # the baseline its census face judged (23 -> 24). R3111: AC-COUT13 asks
     # whether the closed round also aligns the heartbeat row through its one
-    # birth site (24 -> 25).
+    # birth site (24 -> 25). R3120: the stage sweep line the vehicle prints has
+    # zero readers and no arm, so AC-COUT15 pins its two shapes (26 -> 27).
     ("os-closeout",
-     os.path.join("..", "os", "test_closeout.py"), 26),
+     os.path.join("..", "os", "test_closeout.py"), 27),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with
@@ -7775,9 +7776,12 @@ SUITES = [
     # enumerate docs/, 3 name logs/ (all filtered by an archive prefix+suffix),
     # and a docs/ residue is NOT ignored by git - so the residue dirties the
     # tree the next round reads. AC-SR1 (six arms, ONE criterion) was pinned in
-    # src/os/backlog.md BEFORE the module existed.
+    # src/os/backlog.md BEFORE the module existed. R3120 added AC-SR2 (six
+    # arms): the sweep's reach is the whole tree by suffix, because a named
+    # --export can put the same residue anywhere and the old two-name list left
+    # 12 of 16 planted residues unseen.
     ("os-stage-residue",
-     os.path.join("..", "os", "test_stage_residue.py"), 1),
+     os.path.join("..", "os", "test_stage_residue.py"), 2),
     ]
 
 FAILS = 0

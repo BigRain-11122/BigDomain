@@ -32,7 +32,7 @@ sys.path.insert(0, BASE)
 import closeout as CO  # noqa: E402
 import heartbeat as HB  # noqa: E402
 
-EXPECTED_CRITERIA = 26
+EXPECTED_CRITERIA = 27
 MODULE = os.path.join(BASE, "closeout.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout"
@@ -1316,6 +1316,80 @@ def ac_cout14():
           "and the live dry run agrees with heartbeat.verify")
 
 
+def ac_cout15():
+    """AC-COUT15: the stage sweep line is a display nothing parses, so this
+    criterion is its only guard.
+
+    MEASURED at R3120 before this arm existed: `stage_residue=` / `swept=` /
+    `skipped=` appear in shipped code exactly twice, both as WRITERS
+    (closeout.py:436 and :438); no shipped reader parses them. A display with no
+    reader is exactly the line a refactor drops without a red test, so the four
+    arms below pin the shape a person reads on the CEO face: the dry run counts
+    and touches nothing, the OK path names swept and skipped, a suffix-named
+    DIRECTORY is skipped rather than swept, and a missing module is a refusal
+    with a name instead of a silent skip.
+    """
+    world = tempfile.mkdtemp(prefix="cout15-")
+    face = os.path.join(world, "docs", "status-export.json")
+    os.makedirs(os.path.dirname(face))
+    with open(face, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write('{"export_ts": "2026-11-21T12:00:00+08:00"}\n')
+    with open(face, "rb") as handle:
+        before = handle.read()
+    planted = []
+    for suffix in (".sxf-stage", ".parity-stage"):
+        path = face + suffix
+        with open(path, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write('{"partial')
+        planted.append(path)
+
+    dry = CO.stage_residue_face(world, dry_run=True)
+    a_ok = (dry == "stage_residue=%d swept=0" % len(planted)
+            and all(os.path.isfile(p) for p in planted))
+    if not a_ok:
+        print("  measured dry=%r left=%r"
+              % (dry, [os.path.isfile(p) for p in planted]), flush=True)
+
+    done = CO.stage_residue_face(world)
+    b_ok = (done == "stage_residue=%d swept=%d skipped=0"
+            % (len(planted), len(planted))
+            and not any(os.path.exists(p) for p in planted)
+            and open(face, "rb").read() == before)
+    if not b_ok:
+        print("  measured done=%r left=%r"
+              % (done, [os.path.exists(p) for p in planted]), flush=True)
+
+    held = os.path.join(world, "docs", "held.gate-stage")
+    os.makedirs(held)
+    skipped_line = CO.stage_residue_face(world)
+    c_ok = (skipped_line == "stage_residue=1 swept=0 skipped=1"
+            and os.path.isdir(held))
+    if not c_ok:
+        print("  measured skipped=%r held=%s"
+              % (skipped_line, os.path.isdir(held)), flush=True)
+
+    saved = sys.modules.get("stage_residue")
+    sys.modules["stage_residue"] = None
+    try:
+        refusal = CO.stage_residue_face(world)
+    finally:
+        if saved is None:
+            sys.modules.pop("stage_residue", None)
+        else:
+            sys.modules["stage_residue"] = saved
+    d_ok = refusal.startswith("E_CO_STAGE_UNAVAILABLE module=")
+
+    shutil.rmtree(world, ignore_errors=True)
+    ok = a_ok and b_ok and c_ok and d_ok
+    if not ok:
+        print("  measured: a=%r b=%r c=%r d=%r refusal=%r"
+              % (a_ok, b_ok, c_ok, d_ok, refusal), flush=True)
+    check(ok, "AC-COUT15 the sweep line names what it did on both paths: the "
+          "dry run counts and touches nothing, the OK path names swept and "
+          "skipped, a suffix-named directory is skipped rather than swept, "
+          "and a missing module is a named refusal")
+
+
 def main():
     print("closeout suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -1345,6 +1419,7 @@ def main():
     ac_cout12()
     ac_cout13()
     ac_cout14()
+    ac_cout15()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

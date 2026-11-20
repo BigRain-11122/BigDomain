@@ -1,0 +1,53 @@
+== 1. what each writer DECLARES ==
+  tools/status_export_fresh.py                  STAGE_SUFFIX   '.sxf-stage'
+  src/os/export_driver_queue_face.py            STAGE_SUFFIX   '.edqf-stage'
+  src/os/queue_export_gate_wire.py              STAGE_SUFFIX   '.gate-stage'
+== 2. the sweep's hand-written surface ==
+  DIRS = ('docs', 'logs')
+  SUFFIXES = ('.sxf-stage', '.edqf-stage', '.gate-stage', '.parity-stage')
+== 3. private world: stage landed beside a target in each directory ==
+  scan() found 8 of 16 planted files
+  docs     planted=4 found=4
+  logs     planted=4 found=4
+  state    planted=4 found=0
+  preview  planted=4 found=0
+  tmp      planted=4 found=0
+  missed=12 e.g. ['preview/status-export.json.edqf-stage', 'preview/status-export.json.gate-stage']
+== 4. can a shipped caller name a third directory today? ==
+  src/os/closeout_export_parity_dialect_wire.py passes an explicit --export
+  src/os/closeout_export_parity_text_binding.py passes an explicit --export
+  src/os/closeout_export_parity_wire.py passes an explicit --export
+  src/os/comma_binding_consumer_wire.py passes an explicit --export
+  src/os/comma_binding_face_row_drift.py passes an explicit --export
+  src/os/comma_binding_identity_face_compare.py passes an explicit --export
+  src/os/comma_binding_sibling_faces.py passes an explicit --export
+  src/os/export_closeout_gate_parity.py passes an explicit --export
+  src/os/export_consistency_queue_face.py passes an explicit --export
+  src/os/export_driver_queue_face.py passes an explicit --export
+  src/os/export_freshness.py passes an explicit --export
+  src/os/export_publish_from_import_law.py passes an explicit --export
+  src/os/export_publish_path_guard.py passes an explicit --export
+  src/os/export_publish_wire_identity.py passes an explicit --export
+  src/os/live_R2376.py passes an explicit --export
+  src/os/publish_relative_package_identity.py passes an explicit --export
+  src/os/queue_export_freshness_gate.py passes an explicit --export
+  src/os/queue_export_gate_wire.py passes an explicit --export
+  src/os/queue_floor_export_face.py passes an explicit --export
+  src/os/relative_import_publish_binding.py passes an explicit --export
+  src/os/relative_module_corpus_scope.py passes an explicit --export
+  src/os/relative_module_existence_face.py passes an explicit --export
+  src/os/relative_package_presence_refusal.py passes an explicit --export
+  src/os/row_key_carrier_scope.py passes an explicit --export
+  src/os/test_closeout_export_parity_dialect_wire.py passes an explicit --export
+  src/os/test_closeout_export_parity_text_binding.py passes an explicit --export
+  src/os/test_closeout_export_parity_wire.py passes an explicit --export
+  src/os/test_export_closeout_gate_parity.py passes an explicit --export
+  src/os/test_export_consistency_queue_face.py passes an explicit --export
+  src/os/test_export_driver_queue_face.py passes an explicit --export
+  src/os/test_export_freshness.py passes an explicit --export
+  src/os/test_queue_export_freshness_gate.py passes an explicit --export
+  src/os/test_queue_export_gate_wire.py passes an explicit --export
+  call sites naming --export = 33
+== 5. verdict ==
+  default: stages land in docs/ (face) and logs/ (archive) -> covered
+  any named target elsewhere: stage lands beside it -> INVISIBLE to scan()

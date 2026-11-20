@@ -1,0 +1,28 @@
+python : <unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. D
+id you mean "\\("? A raw string is also an option.
+所在位置 行:1 字符: 32
++ ... NIOENCODING='utf-8'; python src\os\test_stage_residue.py 2>&1 | Out-F ...
++                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (<unknown>:18: S...also an option.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+<unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+PASS AC-SR1 arm a - four residues found, live face not among them found=8 docs_sxf=['docs/status-export.json.sxf-stage']
+PASS AC-SR1 arm b - a clean world scans to zero found=[]
+PASS AC-SR1 arm c - sweep removes exactly the planted names, face untouched removed=8 skipped=0 left=[] face_same=True
+PASS AC-SR1 arm d - the second sweep removes nothing removed=[] skipped=[]
+PASS AC-SR1 arm e - every shipped stage literal is a swept suffix literals=4 stray=[]
+PASS AC-SR1 arm f - no shipped docs/ enumerator, and the archive reader admits no residue docs_enum=[] archive_entries=0
+PASS AC-SR2 arm a - residue beside a named target in every directory is found by the default scan planted=20 found=20 face_named=False
+PASS AC-SR2 arm b - a stage-suffixed name inside .git is neither named nor removed named=[] still_on_disk=True
+PASS AC-SR2 arm c - dirs= narrows the surface to the folder the caller names narrowed=4 ['docs/status-export.json.edqf-stage', 'docs/status-export.json.gate-stage', 'docs/status-export.json.parity-stage', 'docs/status-export.json.sxf-stage']
+PASS AC-SR2 arm d - sweep removes all 20 planted names, is idempotent, and leaves the live face byte-identical removed=20 left=[] face_same=True
+PASS AC-SR2 arm e - a directory named like a residue is named and skipped, never removed named=['state/held.sxf-stage'] removed=[] skipped=['state/held.sxf-stage'] still_dir=True
+PASS AC-SR2 arm f - the live tree scans by suffix only and never names the live face live=['tmp/probe-sr-world/docs/status-export.json.edqf-stage', 'tmp/probe-sr-world/docs/status-export.json.gate-stage', 'tmp/probe-sr-world/docs/status-export.json.parity-stage', 'tmp/probe-sr-world/docs/status-export.json.sxf-stage', 'tmp/probe-sr-world/logs/status-export.json.edqf-stage', 'tmp/probe-sr-world/logs/status-export.json.gate-stage', 'tmp/probe-sr-world/logs/status-export.json.parity-stage', 'tmp/probe-sr-world/logs/status-export.json.sxf-stage', 'tmp/probe-sr-world/preview/status-export.json.edqf-stage', 'tmp/probe-sr-world/preview/status-export.json.gate-stage', 'tmp/probe-sr-world/preview/status-export.json.parity-stage', 'tmp/probe-sr-world/preview/status-export.json.sxf-stage', 'tmp/probe-sr-world/state/status-export.json.edqf-stage', 'tmp/probe-sr-world/state/status-export.json.gate-stage', 'tmp/probe-sr-world/state/status-export.json.parity-stage', 'tmp/probe-sr-world/state/status-export.json.sxf-stage', 'tmp/probe-sr-world/tmp/status-export.json.edqf-stage', 'tmp/probe-sr-world/tmp/status-export.json.gate-stage', 'tmp/probe-sr-world/tmp/status-export.json.parity-stage', 'tmp/probe-sr-world/tmp/status-export.json.sxf-stage'] dirs=('docs', 'logs') elapsed=0.62s
+suite: 12 assertions over 2 criteria
+SUITE PASS 12/12

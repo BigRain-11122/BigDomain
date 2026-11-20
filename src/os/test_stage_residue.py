@@ -1,4 +1,5 @@
-"""Battery suite for src/os/stage_residue.py - criterion AC-SR1 (six arms).
+"""Battery suite for src/os/stage_residue.py - AC-SR1 (six arms) and AC-SR2
+(six arms).
 
 WHY THIS SUITE EXISTS (measured at R3119, not assumed):
 The R3117/R3118 stage doors made "a refusal lands nothing" structural, but the
@@ -23,6 +24,20 @@ WHAT IS PROVED HERE (one criterion, six arms):
   f  never-read: no shipped non-test .py enumerates `docs/`, and the shipped
      logs/ archive enumerator admits none of the four names.
 
+AC-SR2 (the sweep's REACH, measured at R3120): a two-name whitelist saw 8 of 16
+residues planted across five directories and missed the rest without a word,
+while 33 shipped call sites name an explicit `--export`. Six arms:
+  a  residue beside a named target in state/, preview/ and tmp/ is found by the
+     default scan (20 of 20 planted, live face not among them).
+  b  `.git` is never entered: a stage-suffixed name inside it is neither named
+     nor removed, while the same name outside it is.
+  c  `dirs=` still narrows the surface for a caller that asks about one folder.
+  d  sweep of the five-directory world removes all 20, is idempotent, and
+     leaves the live face byte-identical.
+  e  a DIRECTORY named like a residue is skipped by name, never removed.
+  f  the live tree scans without naming the live face, and DIRS (the measured
+     default destinations) are still covered by the walk.
+
 Isolation: private worlds are temp dirs; the only live reads are shipped
 sources. Stdlib only. Exit 0 = all green, 2 = at least one red.
 """
@@ -32,6 +47,7 @@ import re
 import shutil
 import sys
 import tempfile
+import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BATTERY = os.path.abspath(__file__)
@@ -61,6 +77,33 @@ def world():
               encoding="utf-8", newline="\n") as handle:
         handle.write('{"export_ts": "2026-11-21T12:00:00+08:00"}\n')
     return base
+
+
+# The five directories the R3120 probe planted into: the two the writers reach
+# by default plus the three a named `--export` can reach today.
+WIDE_DIRS = ("docs", "logs", "state", "preview", "tmp")
+
+
+def wide_world():
+    base = tempfile.mkdtemp(prefix="sr-wide-")
+    for name in WIDE_DIRS:
+        os.makedirs(os.path.join(base, name))
+    with open(os.path.join(base, "docs", "status-export.json"), "w",
+              encoding="utf-8", newline="\n") as handle:
+        handle.write('{"export_ts": "2026-11-21T12:00:00+08:00"}\n')
+    return base
+
+
+def wide_plant(base):
+    """One residue per (directory, suffix) pair; returns how many were made."""
+    made = 0
+    for name in WIDE_DIRS:
+        for suffix in SR.SUFFIXES:
+            with open(os.path.join(base, name, "status-export.json" + suffix),
+                      "w", encoding="utf-8", newline="\n") as handle:
+                handle.write('{"partial')
+            made += 1
+    return made
 
 
 def face_bytes(base):
@@ -170,6 +213,80 @@ def main():
        "admits no residue",
        docs_enum == [] and admit == [],
        "docs_enum=%r archive_entries=%d" % (docs_enum, len(admit)))
+
+    # ---- AC-SR2 a: the surface is every directory, not two names. --------
+    wide = wide_world()
+    worlds.append(wide)
+    planted_wide = wide_plant(wide)
+    wide_found = SR.scan(wide)
+    ok("AC-SR2 arm a - residue beside a named target in every directory is "
+       "found by the default scan",
+       len(wide_found) == planted_wide
+       and "docs/status-export.json" not in wide_found
+       and all(p.split("/")[0] in WIDE_DIRS for p in wide_found),
+       "planted=%d found=%d face_named=%s"
+       % (planted_wide, len(wide_found),
+          "docs/status-export.json" in wide_found))
+
+    # ---- AC-SR2 b: git's own store is never entered. ---------------------
+    git_dir = os.path.join(wide, ".git")
+    if not os.path.isdir(git_dir):
+        os.makedirs(git_dir)
+    hidden = os.path.join(git_dir, "status-export.json.sxf-stage")
+    with open(hidden, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write('{"partial')
+    git_named = [p for p in SR.scan(wide) if p.startswith(".git/")]
+    ok("AC-SR2 arm b - a stage-suffixed name inside .git is neither named nor "
+       "removed",
+       git_named == [] and os.path.isfile(hidden),
+       "named=%r still_on_disk=%s" % (git_named, os.path.isfile(hidden)))
+
+    # ---- AC-SR2 c: a caller may still ask about one folder. --------------
+    docs_narrow = SR.scan(wide, ("docs",))
+    ok("AC-SR2 arm c - dirs= narrows the surface to the folder the caller names",
+       len(docs_narrow) == len(SR.SUFFIXES)
+       and all(p.startswith("docs/") for p in docs_narrow),
+       "narrowed=%d %r" % (len(docs_narrow), docs_narrow))
+
+    # ---- AC-SR2 d: the sweep clears all of them, once. -------------------
+    wide_before = face_bytes(wide)
+    wide_removed, wide_skipped = SR.sweep(wide)
+    wide_after = face_bytes(wide)
+    ok("AC-SR2 arm d - sweep removes all 20 planted names, is idempotent, and "
+       "leaves the live face byte-identical",
+       len(wide_removed) == planted_wide and not wide_skipped
+       and wide_before == wide_after and SR.scan(wide) == []
+       and SR.sweep(wide) == ([], [])
+       and os.path.isfile(os.path.join(wide, "docs", "status-export.json")),
+       "removed=%d left=%r face_same=%s"
+       % (len(wide_removed), SR.scan(wide), wide_before == wide_after))
+
+    # ---- AC-SR2 e: a directory that carries the suffix is skipped. -------
+    dir_case = wide_world()
+    worlds.append(dir_case)
+    blocked = os.path.join(dir_case, "state", "held.sxf-stage")
+    os.makedirs(blocked)
+    dir_named = SR.scan(dir_case)
+    dir_removed, dir_skipped = SR.sweep(dir_case)
+    ok("AC-SR2 arm e - a directory named like a residue is named and skipped, "
+       "never removed",
+       dir_named == ["state/held.sxf-stage"] and dir_removed == []
+       and dir_skipped == ["state/held.sxf-stage"]
+       and os.path.isdir(blocked),
+       "named=%r removed=%r skipped=%r still_dir=%s"
+       % (dir_named, dir_removed, dir_skipped, os.path.isdir(blocked)))
+
+    # ---- AC-SR2 f: the live tree, and the measured defaults inside it. ---
+    started = time.time()
+    live = SR.scan()
+    elapsed = time.time() - started
+    live_ok = (all(p.rsplit("/", 1)[-1].endswith(SR.SUFFIXES) for p in live)
+               and "docs/status-export.json" not in live)
+    ok("AC-SR2 arm f - the live tree scans by suffix only and never names the "
+       "live face",
+       live_ok and all(os.path.isdir(os.path.join(ROOT, name))
+                       for name in SR.DIRS),
+       "live=%r dirs=%r elapsed=%.2fs" % (live, SR.DIRS, elapsed))
 
     for path in worlds:
         shutil.rmtree(path, ignore_errors=True)

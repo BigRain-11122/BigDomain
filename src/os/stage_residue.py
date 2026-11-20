@@ -15,6 +15,15 @@ the next round reads an untracked file as another executor mid-write and turns
 into a read-only round. This module sweeps exactly the four measured suffixes,
 never names the live face, and is idempotent by construction.
 
+WHY THE SURFACE IS A WALK AND NOT A DIRECTORY LIST (measured at R3120, not
+assumed): every writer stages at `<target> + suffix` and the target is a CLI
+argument - `tmp/probe_R3120.py` -> `qa/probe-R3120.log` counted 33 shipped call
+sites that name an explicit `--export`. A two-name whitelist therefore saw 8 of
+16 residues planted across docs/logs/state/preview/tmp and missed the other 12
+without a word. The suffixes are exact and pinned by AC-SR1 arm e, so a walk
+cannot reach a face; only the repository's own bookkeeping (`.git`) is left
+unwalked.
+
 ASCII only, stdlib only, no network, no clock.
 """
 import os
@@ -27,21 +36,39 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 # so a fifth stage writer reddens the arm instead of slipping past the sweep.
 SUFFIXES = (".sxf-stage", ".edqf-stage", ".gate-stage", ".parity-stage")
 
-# Only the two directories the four writers use. Named rather than walked: a
-# sweep that ranges over the whole tree deletes things it was never asked about.
+# The two directories the four writers reach by default: docs/ holds the live
+# face, logs/ the archive. Kept as the measurement record (the suite asserts the
+# walk still covers both); the sweep no longer narrows to them, because a named
+# target can put the same residue anywhere.
 DIRS = ("docs", "logs")
+
+# The only subtree a sweep refuses to enter: git's own store, where a name that
+# ends with a stage suffix is not residue beside a face.
+SKIP_DIRS = (".git",)
+
+
+def _folders(base):
+    """Every directory under `base` except SKIP_DIRS, deterministically."""
+    for folder, dirnames, _files in os.walk(base):
+        dirnames[:] = sorted(name for name in dirnames if name not in SKIP_DIRS)
+        yield folder
 
 
 def scan(root=None, dirs=None):
     """Relative paths (forward slashes) of residue under `dirs`, sorted.
 
     A name qualifies only when it ENDS with one of SUFFIXES, so the live face
-    and every other document are out of reach by construction.
+    and every other document are out of reach by construction. `dirs` names a
+    narrower surface for callers that ask about one directory; the default is
+    the whole tree minus SKIP_DIRS.
     """
     base = os.path.abspath(root) if root else ROOT
+    if dirs is None:
+        folders = list(_folders(base))
+    else:
+        folders = [os.path.join(base, name) for name in dirs]
     found = []
-    for name in (DIRS if dirs is None else dirs):
-        folder = os.path.join(base, name)
+    for folder in folders:
         if not os.path.isdir(folder):
             continue
         try:
