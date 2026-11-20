@@ -245,7 +245,21 @@ def _gate_bits(verdict):
     corpus = verdict.get("corpus") or {}
     if "files" in corpus and "bytes" in corpus:
         bits.append("corpus_files=%d" % corpus["files"])
-        bits.append("corpus_mb=%.1f" % (corpus["bytes"] / 1048576.0))
+        # R3126: the label says MB, so the divisor is decimal. Measured on the
+        # live tree (qa/probe-R3126.log): 4219 *.log entries, 508,066,256 bytes
+        # read, zero unread - 508.1 MB under 1e6 and 484.5 MiB under 1048576.
+        # The old divisor published the MiB count under an MB label, which read
+        # as a ~4.6% shortfall against every MB measurement on this board. The
+        # %.1f token shape is unchanged.
+        bits.append("corpus_mb=%.1f" % (corpus["bytes"] / 1e6))
+        readable = corpus.get("readable")
+        if readable is not None and int(readable) != int(corpus["files"]):
+            # R3126: files counts every candidate, bytes counts only what was
+            # read, so a corpus with unreadable entries used to describe itself
+            # as fully read. The token appears ONLY when the two disagree, so a
+            # clean round keeps the exact bytes it printed before.
+            bits.append("corpus_unread=%d"
+                        % (int(corpus["files"]) - int(readable)))
     return " ".join(bits)
 
 

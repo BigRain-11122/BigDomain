@@ -1690,17 +1690,60 @@ def ac_cout17():
     finally:
         shutil.rmtree(small, ignore_errors=True)
 
-    ok = a_ok and b_ok and c_ok and d_ok and e_ok
+    # f: R3126 - the published MB is DECIMAL and a corpus that could not read
+    #    every candidate says so instead of describing itself as fully read.
+    #    MEASURED before the pin (qa/probe-R3126.log): the live corpus is 4219
+    #    entries / 508,066,256 bytes / zero unread, which is 508.1 MB under 1e6
+    #    and 484.5 MiB under 1048576 - so the old number was a MiB count under
+    #    an MB label and the "4.6% unread" reading was the unit, not a file.
+    f_world = tempfile.mkdtemp(prefix="cout17f-")
+    try:
+        # a directory named *.log is unreadable on both Windows and POSIX
+        os.makedirs(os.path.join(f_world, "klass.log"))
+        with open(os.path.join(f_world, "big.log"), "wb") as handle:
+            handle.write(b"a\n" * 1000000)      # exactly 2,000,000 bytes
+        f_base = os.path.join(f_world, CENSUS.BASELINE_NAME)
+        CENSUS.write_baseline(f_world, f_base)
+        fbox = {}
+        CENSUS.check_against_baseline(f_world, f_base, stats=fbox)
+        f_line = CO._gate_bits({"face_ms": {}, "corpus": fbox})
+        only = tempfile.mkdtemp(prefix="cout17g-")
+        try:
+            with open(os.path.join(only, "big.log"), "wb") as handle:
+                handle.write(b"a\n" * 1000000)
+            obase = os.path.join(only, CENSUS.BASELINE_NAME)
+            CENSUS.write_baseline(only, obase)
+            obox = {}
+            CENSUS.check_against_baseline(only, obase, stats=obox)
+            o_line = CO._gate_bits({"face_ms": {}, "corpus": obox})
+        finally:
+            shutil.rmtree(only, ignore_errors=True)
+        f_ok = (fbox.get("files") == 2 and fbox.get("readable") == 1
+                and int(fbox.get("bytes") or 0) == 2000000
+                and "corpus_files=2" in f_line
+                and "corpus_mb=2.0" in f_line      # MiB would print 1.9
+                and "corpus_unread=1" in f_line
+                and obox.get("files") == 1 and obox.get("readable") == 1
+                and "corpus_mb=2.0" in o_line
+                and "corpus_unread=" not in o_line)
+        if not f_ok:
+            print("  measured f=%r line=%r/%r" % (fbox, f_line, o_line),
+                  flush=True)
+    finally:
+        shutil.rmtree(f_world, ignore_errors=True)
+
+    ok = a_ok and b_ok and c_ok and d_ok and e_ok and f_ok
     if not ok:
-        print("  measured: a=%r b=%r c=%r d=%r e=%r head=%r check=%r"
-              % (a_ok, b_ok, c_ok, d_ok, e_ok, head[:120],
+        print("  measured: a=%r b=%r c=%r d=%r e=%r f=%r head=%r check=%r"
+              % (a_ok, b_ok, c_ok, d_ok, e_ok, f_ok, head[:120],
                  check_text[:200]), flush=True)
     check(ok, "AC-COUT17 the OK path prints the tree-gate ledger it paid for, "
           "the dry run publishes the corpus beside the milliseconds, a world "
           "that did not ask the gate prints no invented readings, the readings "
           "are derived from the gate's verdict rather than typed, the gate's "
-          "published headline keeps its shipped shape, and a byte change that "
-          "moves the corpus does not move the verdict")
+          "published headline keeps its shipped shape, a byte change that "
+          "moves the corpus does not move the verdict, and the published MB is "
+          "decimal with unread candidates named only when they exist")
 
 
 def main():

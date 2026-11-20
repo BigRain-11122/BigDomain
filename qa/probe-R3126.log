@@ -1,0 +1,11 @@
+q1 entries=4219 stat_bytes=508066256 stat_missing=0
+q1 readable=4219 read_bytes=508066256 unread=0
+q3 read_bytes/1e6=508.1 MB  read_bytes/1048576=484.5 MiB
+q3 r3125_measured_508.1MB * 1e6 / 1048576 = 484.6 MiB
+q3 stat_bytes/1e6=508.1 MB  stat_bytes/1048576=484.5 MiB
+q2 CLASSES=['tee', 'cmd-raw', 'pwsh-capture', 'ps-utf16', 'nul-bytes', 'other']
+q2 BASELINE_CLASSES=['cmd-raw', 'pwsh-capture', 'ps-utf16', 'nul-bytes', 'other']
+q2 baseline rows=590
+q2 baseline other_rows=110
+q2b dir-named-.log rc=2
+q2b | baseline malformed: missing class key cmd-raw
