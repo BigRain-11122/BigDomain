@@ -1,0 +1,52 @@
+probe R3093 - read-only, no socket, no clock, no network
+
+Q1 closeout_gate faces
+  GATING_FACE=flags
+  INFORMATIONAL_FACES=('reader_refused', 'plain_unusable', 'reader_rescued', 'flags')
+  live rc=0 lines=1
+  live line0=CLOSEOUT-GATE PASS files=4079 flags=0 reader_refused=0 gating=flags
+  verdict keys=['files', 'flags', 'gating', 'reader_refused', 'verdict']
+  verdict={"files": 4079, "flags": 0, "gating": "flags", "reader_refused": 0, "verdict": "PASS"}
+  evaluate signature accepts root? False
+
+Q2 ledger_lines --round-main
+  live line=ROUND-MAIN OK 3092
+  report keys=['code', 'dated_lines', 'detail', 'labelled_lines', 'ok', 'round', 'round_lines', 'sample']
+  newest round in live log=3092
+  state file bytes=76088
+
+Q3 registry_counter_census --check
+  REGISTRY=src\sandbox\reconcile_all.py
+  PIN=src\os\registry_counter_census_pin.json
+  live REGISTRY COUNTER CENSUS rows=734 readable=734 unparsed=0 silent=0 assembled_print_lines=294
+  live compare fails=[]
+  pinned total=734
+
+Q4 consumers and literal pins
+  exact 'CLOSEOUT-GATE PASS files=' carriers=['tools\\closeout_gate.py']
+  startswith('CLOSEOUT-GATE PASS') carriers=['src\\os\\test_closeout_gate.py']
+  CG.evaluate( call sites=['src\\os\\test_closeout_gate.py', 'src\\os\\test_pre_commit_gate.py']
+  evaluate() call arity in tests:
+    src\os\test_closeout_gate.py: lines, code, verdict = CG.evaluate(live, live_base)
+    src\os\test_closeout_gate.py: _l, clean_rc, clean_v = CG.evaluate(world, base)
+    src\os\test_closeout_gate.py: leak_lines, leak_rc, leak_v = CG.evaluate(world, base)
+    src\os\test_closeout_gate.py: back_lines, back_rc, _back_v = CG.evaluate(world, base)
+    src\os\test_closeout_gate.py: d_lines, d_rc, d_v = CG.evaluate(drown, drown_base)
+    src\os\test_closeout_gate.py: first, first_rc, _fv = CG.evaluate(world, base)
+    src\os\test_closeout_gate.py: second, second_rc, _sv = CG.evaluate(world, base)
+    src\os\test_closeout_gate.py: missing = CG.evaluate(world, os.path.join(world, "no-such-baseline.json"))
+    src\os\test_closeout_gate.py: empty_run = CG.evaluate(empty, empty_base)
+    src\os\test_closeout_gate.py: blind = CG.evaluate(world, base)
+    src\os\test_pre_commit_gate.py: _lines_cg, rc_cg, verdict_cg = CG.evaluate(
+  round-main/census carriers=[('src\\os\\export_round.py', 'round-main'), ('src\\os\\ledger_lines.py', 'round-main'), ('src\\os\\logs_toolkit.py', 'round-main'), ('src\\os\\registry_counter_census.py', 'census'), ('src\\os\\state_append.py', 'round-main'), ('src\\os\\test_battery_shard.py', 'census'), ('src\\os\\test_export_round.py', 'round-main'), ('src\\os\\test_ledger_round_main_shape.py', 'round-main'), ('src\\os\\test_logs_toolkit.py', 'round-main'), ('src\\os\\test_registry_counter_census.py', 'census'), ('src\\os\\test_state_append.py', 'round-main'), ('src\\os\\test_suite_closing_row_census.py', 'census'), ('src\\sandbox\\reconcile_all.py', 'round-main'), ('src\\sandbox\\reconcile_all.py', 'census'), ('tools\\suite_closing_row_census.py', 'census')]
+
+Q5 newest live round lines
+  2026-11-20 R3092 PRODUCT+ENGINEERING: the FOLD-CARRY line now publishes how strong its own locator is - the CL
+  R3092 measured, in order: tmp/probe_R3092.py (-> qa/probe-R3092.log, zero socket/clock/network, private copies
+  R3092 landed: provenance_counts(paths) walks up to .git, imports tools/archive_provenance INSIDE the function 
+  R3092 gates: SUITE PASS 14/14 over AC-LGA1..AC-LGA14 (qa/ledger-archive-R3092.log, 1503B, 16 lines, utf-8/lf, 
+  R3092 two live defects that the gates found and that were repaired as DATA, disclosed rather than papered over
+  R3092 GROUP SCAN (content-addressed, read before any work): the shipped five-still scan read atbd_lines=0 unre
+  R3092 honest disclosures: (a) ZERO new payment capability and no network beyond loopback - a provenance token 
+  R3092 closeout: tick set to 3092, heartbeat.txt moved to the same round, the board carries the R3092 done row 
+  R3092 tick

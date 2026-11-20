@@ -7644,8 +7644,14 @@ SUITES = [
     # refusing on it would redden every closeout for history no round created.
     # The red control is a fixture world in which a new cmd-raw file is refused
     # BY NAME and removing it returns the gate to PASS.
+    # R3093: the gate now also asks round-main and the registry census through
+    # an OPT-IN root argument, so a round that skipped its dated labelled main
+    # line, or edited a registry row without re-pinning, is refused at closeout
+    # instead of only by its own suite. The default face (root=None) is
+    # byte-identical to R2932, which is why the eleven shipped call sites keep
+    # their meaning.
     ("os-closeout-gate",
-     os.path.join("..", "os", "test_closeout_gate.py"), 5),
+     os.path.join("..", "os", "test_closeout_gate.py"), 6),
     # R2935: R2934 photographed the sandbox for the first time, but one pass is
     # a SNAPSHOT - it cannot tell "alive" from "painted cleanly this time". The
     # ruling is not to run a browser under the registry law but to move the LAW

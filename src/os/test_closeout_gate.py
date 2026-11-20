@@ -1,4 +1,4 @@
-"""Battery suite for tools/closeout_gate.py - criteria AC-CLG1..AC-CLG5 (R2932).
+"""Battery suite for tools/closeout_gate.py - criteria AC-CLG1..AC-CLG6 (R2932).
 
 WHY: the R2926 commit hook refuses STAGED evidence bytes only, so an
 uncommitted shell-captured write still reaches disk and no gate has ever
@@ -22,6 +22,7 @@ hashes), and that is why the gate is a precondition, not a jail.
 Source discipline: pure ASCII, stdlib only, no clock, no network, writes only
 inside its own temp fixture worlds.
 """
+import json
 import os
 import sys
 import tempfile
@@ -72,6 +73,36 @@ def snapshot(world):
             raw = fh.read()
         rows[name] = (len(raw), raw, os.stat(path).st_mtime_ns)
     return rows
+
+
+def build_root(tmp, dated=True):
+    """A private repo ROOT for the R3093 faces: one log, one registry row, one pin.
+
+    Shaped like the real root in the only three places the two faces read it,
+    so the arms prove the wiring instead of a mock of it: src/os/state.json,
+    a registry whose SUITES row names a fixture suite, and that fixture suite
+    printing one parseable SUITE leaf.
+    """
+    os.makedirs(os.path.join(tmp, "src", "os"))
+    os.makedirs(os.path.join(tmp, "src", "sandbox"))
+    line = ("2026-11-20 R5001 PRODUCT: a fixture round main line" if dated
+            else "R5001 PRODUCT: no date anchor on this line")
+    with open(os.path.join(tmp, "src", "os", "state.json"), "w",
+              encoding="utf-8", newline="\n") as fh:
+        fh.write(json.dumps({"log": [line]}) + "\n")
+    with open(os.path.join(tmp, "src", "os", "fixture_suite.py"), "w",
+              encoding="utf-8", newline="\n") as fh:
+        fh.write('print("SUITE PASS 1/1")\n')
+    reg = os.path.join(tmp, "src", "sandbox", "reg.py")
+    with open(reg, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write('import os\nSUITES = [\n'
+                 '    ("fixture-suite", os.path.join("..", "os", '
+                 '"fixture_suite.py"), 1),\n]\n')
+    pin = os.path.join(tmp, "src", "os", "census_pin.json")
+    with open(pin, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write('{"readable": ["fixture-suite"], "unparsed": [], '
+                 '"silent": []}\n')
+    return tmp, reg, pin
 
 
 def main():
@@ -171,6 +202,66 @@ def main():
         ok("AC-CLG5 a census row without flags= is REFUSED, not read as clean",
            blind[1] == 2 and "E_CLG_ROW" in blind[0][0],
            "rc=%d line=%s" % (blind[1], blind[0][0]))
+
+    # AC-CLG6 (R3093): the two laws a round could slip past are now asked by
+    # THIS gate - opt-in through root, and the default face is unchanged.
+    ok("AC-CLG6 arm a - the default face (root=None) is the shipped question",
+       lines[0] == ("CLOSEOUT-GATE PASS files=%d flags=0 reader_refused=0 "
+                    "gating=flags" % disk_logs)
+       and "round_main=" not in lines[0]
+       and "round_main" not in verdict,
+       "line=%s" % lines[0])
+    deep, deep_rc, deep_v = CG.evaluate(live, live_base, root=ROOT)
+    ok("AC-CLG6 arm b - root=ROOT asks both faces and PASS names them",
+       deep_rc == 0
+       and deep[0] == ("CLOSEOUT-GATE PASS files=%d flags=0 reader_refused=0 "
+                       "gating=flags round_main=OK census=PASS" % disk_logs)
+       and deep_v.get("round_main") == "OK"
+       and deep_v.get("census") == "PASS",
+       "rc=%d line=%s" % (deep_rc, deep[0] if deep else ""))
+
+    with tempfile.TemporaryDirectory() as tmp2:
+        root_ok, reg_ok, pin_ok = build_root(os.path.join(tmp2, "root-ok"))
+        world2, base2 = build_world(os.path.join(tmp2, "ev2"))
+        # arm e: the new faces are read-only and repeat byte-identically
+        before2 = snapshot(world2)
+        first2, first2_rc, first2_v = CG.evaluate(
+            world2, base2, root=root_ok, registry=reg_ok, census_pin=pin_ok)
+        second2, second2_rc, _s2v = CG.evaluate(
+            world2, base2, root=root_ok, registry=reg_ok, census_pin=pin_ok)
+        after2 = snapshot(world2)
+        ok("AC-CLG6 arm e - the root faces write nothing and repeat exactly",
+           before2 == after2 and (first2, first2_rc) == (second2, second2_rc)
+           and first2_rc == 0 and first2_v.get("census") == "PASS",
+           "rc=%d files=%d line=%s"
+           % (first2_rc, len(before2), first2[0] if first2 else ""))
+        # arm c: a round with no dated labelled main line is refused BY NAME
+        root_undated, _ru, _pu = build_root(os.path.join(tmp2, "root-undated"),
+                                            dated=False)
+        u_lines, u_rc, u_v = CG.evaluate(world2, base2, root=root_undated)
+        ok("AC-CLG6 arm c - an undated round is refused by E_CLG_ROUND_MAIN",
+           u_rc == 2 and u_v.get("reason") == "E_CLG_ROUND_MAIN"
+           and any(l.startswith("ROUND-MAIN FAIL E_RMS_NO_DATE")
+                   for l in u_lines),
+           "rc=%d lines=%s" % (u_rc, u_lines[:2]))
+        # arm d: a registry row that was never re-pinned is refused BY NAME
+        bad_pin = os.path.join(root_ok, "src", "os", "census_pin.json")
+        with open(bad_pin, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write('{"readable": [], "unparsed": [], "silent": []}\n')
+        c_lines, c_rc, c_v = CG.evaluate(world2, base2, root=root_ok,
+                                        registry=reg_ok, census_pin=bad_pin)
+        ok("AC-CLG6 arm d - an unpinned registry row is refused by E_CLG_CENSUS",
+           c_rc == 2 and c_v.get("reason") == "E_CLG_CENSUS"
+           and any(l.startswith("VERDICT FAIL") for l in c_lines),
+           "rc=%d reason=%s" % (c_rc, c_v.get("reason")))
+        # arm f: flags is asked FIRST - a drifted tree never reaches round-main
+        write_bytes(os.path.join(world2, "late-leak.log"),
+                    u"AI \u5224\u5b9a".encode("gbk") + b"\r\n")
+        f_lines, f_rc, f_v = CG.evaluate(world2, base2, root=root_undated)
+        ok("AC-CLG6 arm f - a drifted tree is refused as DRIFT, before round-main",
+           f_rc == 2 and f_v.get("reason") == "E_CLG_DRIFT"
+           and not any("ROUND-MAIN" in l for l in f_lines),
+           "rc=%d reason=%s" % (f_rc, f_v.get("reason")))
 
     total = len(CHECKS)
     acs = set()

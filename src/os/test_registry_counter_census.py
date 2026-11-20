@@ -416,13 +416,21 @@ def main():
            'the AST pass (the text pass sees %d leaf/leaves, none parsing)'
            % len(split))
         live = json.loads(io.open(PIN, encoding='utf-8').read())
+        # R3093 JUDGED-CHANGED (not deleted): this arm pinned the registry
+        # total as the literal 733, so R3091 (which added a suite and made the
+        # registry 734) turned it RED from that round on while every other
+        # face stayed green. The law the arm states is "the pin is total over
+        # the registry rows", so the total is READ from the registry instead
+        # of typed here - the same fix R3092 applied to the pin itself.
+        registry_total = len(RCC.registry_rows(RCC.REGISTRY))
         ok(len(live.get('unparsed', [])) < 426
            and len(live.get('readable', [])) > 307
            and len(live.get('readable', [])) + len(live.get('unparsed', []))
-           + len(live.get('silent', [])) == 733,
-           'AC-RCC10-R5 the pin moved two-way and stays total: readable=%d '
-           'unparsed=%d' % (len(live.get('readable', [])),
-                            len(live.get('unparsed', []))))
+           + len(live.get('silent', [])) == registry_total,
+           'AC-RCC10-R5 the pin is total over the registry rows: readable=%d '
+           'unparsed=%d rows=%d' % (len(live.get('readable', [])),
+                                    len(live.get('unparsed', [])),
+                                    registry_total))
     finally:
         shutil.rmtree(root5, ignore_errors=True)
 
@@ -577,14 +585,19 @@ def main():
            'word (the law vocabulary is PASS/FAIL)')
         live7 = RCC.census()
         pinned7 = json.loads(io.open(PIN, encoding='utf-8').read())
-        ok(len(live7['READABLE']) == 733 and not live7['UNPARSED']
+        # R3093 JUDGED-CHANGED (not deleted): the readable count was typed as
+        # 733, which R3091's added suite moved to 734. The law is "every
+        # registry row is readable, none unparsed or silent", so the count is
+        # read from the registry the census itself walks.
+        rows7 = len(RCC.registry_rows(RCC.REGISTRY))
+        ok(len(live7['READABLE']) == rows7 and not live7['UNPARSED']
            and not live7['SILENT'] and live7['assembled'] == 294,
-           'AC-RCC12-R8 the live census reads 733 readable, 0 unparsed, '
+           'AC-RCC12-R8 the live census reads %d readable, 0 unparsed, '
            '0 silent, assembled 294 (measured: 89 flipped, 0 regressed; the '
            '294 is the 293 plus this suite\'s own new fixture line, which '
-           'this reader counts because it reads its own suite too)')
+           'this reader counts because it reads its own suite too)' % rows7)
         ok(RCC.compare(live7, pinned7) == [],
-           'AC-RCC12-R9 the re-written pin names the same 733 rows: the pin '
+           'AC-RCC12-R9 the re-written pin names the same rows: the pin '
            'was re-written because the reach changed, not to hide a defect')
     finally:
         shutil.rmtree(root7, ignore_errors=True)

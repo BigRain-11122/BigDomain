@@ -1,0 +1,45 @@
+SHARD scope=SHARD registry_suites=734 registry_criteria=5982 selected=1 selected_criteria=12 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-registry-counter-census rc=1 pass=34 fail=0 detail=yes suite=none crit=12 11.3s
+SHARD detail os-registry-counter-census PASS AC-RCC1-R1 the census walked every row its own AST read: 734 == 734
+SHARD detail os-registry-counter-census PASS AC-RCC1-R2 the three classes are total: 734 == 734
+SHARD detail os-registry-counter-census PASS AC-RCC1-R3 no label is counted twice across classes
+SHARD detail os-registry-counter-census PASS AC-RCC2-R0 the pin still names every row (a new registry row must refresh the pin, which is the one place the population is written)
+SHARD detail os-registry-counter-census PASS AC-RCC2-R1 the shipped tree matches its pin two-way
+SHARD detail os-registry-counter-census PASS AC-RCC2-R2 the fixture world reads exactly one readable row
+SHARD detail os-registry-counter-census PASS AC-RCC2-R3 a file that prints no SUITE row reads silent
+SHARD detail os-registry-counter-census PASS AC-RCC2-R4 a SUITE row assembled from literals reads unparsed (the extractor limit, measured rather than assumed)
+SHARD detail os-registry-counter-census PASS AC-RCC2-R5 a pin naming the wrong class is refused: readable +1 -1 unparsed +1 -0 silent +1 -0
+SHARD detail os-registry-counter-census PASS AC-RCC3-R1 the registry is byte-identical after the census
+SHARD detail os-registry-counter-census PASS AC-RCC3-R2 the pin is byte-identical after the census
+SHARD detail os-registry-counter-census PASS AC-RCC3-R3 the parser is imported from the tool, not re-declared here
+SHARD detail os-registry-counter-census PASS AC-RCC3-R4 the reader is loaded by path from tools/battery_shard.py
+SHARD detail os-registry-counter-census PASS AC-RCC4-R1 the census source is pure ASCII
+SHARD detail os-registry-counter-census PASS AC-RCC4-R2 stdlib only, no network module: 
+SHARD detail os-registry-counter-census PASS AC-RCC5-R1 the shipped reader reads this declaration dialect
+SHARD detail os-registry-counter-census PASS AC-RCC5-R2 the same reader reads a missing declaration as None
+SHARD detail os-registry-counter-census PASS AC-RCC5-R3 a checks-only leaf stays refused rather than guessed
+SHARD detail os-registry-counter-census PASS AC-RCC6-R1 a SUITE row printed through a formatted constant reads readable, not silent
+SHARD detail os-registry-counter-census PASS AC-RCC6-R2 an if/else constant carrying no numbers reads unparsed, not silent
+SHARD detail os-registry-counter-census PASS AC-RCC6-R3 the via-constant world leaves only the two real silent probes: probe-nosuite,probe-lookalike
+SHARD detail os-registry-counter-census PASS AC-RCC7-R1 the negative control stays silent: a file with no SUITE literal and no SUITE constant
+SHARD detail os-registry-counter-census PASS AC-RCC7-R2 a constant the print line does not name is not borrowed by a substring match
+SHARD detail os-registry-counter-census PASS AC-RCC8-R1 a constant joined with the format string on the SAME print line reads readable: probe-viajoin
+SHARD detail os-registry-counter-census PASS AC-RCC8-R2 the same constant and the same numbers on two lines stay unparsed: a cross-line join would fabricate a leaf
+SHARD detail os-registry-counter-census PASS AC-RCC8-R3 text before the placeholder stays unparsed, so the shipped reader anchor - not this join - decides the head
+SHARD detail os-registry-counter-census PASS AC-RCC9-R1 the three face rows read readable: none
+SHARD detail os-registry-counter-census PASS AC-RCC9-R2 each face suite spells its verdict in the literal: none
+SHARD detail os-registry-counter-census PASS AC-RCC9-R3 (re-judged R3077) the inline-conditional fixture is readable only through the AST pass, and its literal twin stays readable
+SHARD detail os-registry-counter-census PASS AC-RCC9-R4 the pin names the three rows readable and none unparsed
+SHARD detail os-registry-counter-census PASS AC-RCC10-R1 the AST pass is what reads an inline-conditional row
+SHARD detail os-registry-counter-census PASS AC-RCC10-R2 a row the text pass already read stays readable
+SHARD detail os-registry-counter-census PASS AC-RCC10-R3 a word before SUITE is still refused by the anchored reader
+SHARD detail os-registry-counter-census PASS AC-RCC10-R4 a CALL spanning physical lines is readable only through the AST pass (the text pass sees 1 leaf/leaves, none parsing)
+SHARD detail os-registry-counter-census Traceback (most recent call last):
+SHARD detail os-registry-counter-census   File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\..\os\test_registry_counter_census.py", line 609, in <module>
+SHARD detail os-registry-counter-census     main()
+SHARD detail os-registry-counter-census     ~~~~^^
+SHARD detail os-registry-counter-census   File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\..\os\test_registry_counter_census.py", line 419, in main
+SHARD detail os-registry-counter-census     ok(len(live.get('unparsed', [])) < 426
+SHARD rc=2 scope=SHARD selected=1 executed=1 green=0 criteria=12 crit_mismatch=0 elapsed=11.3s crit_checked=0 crit_unchecked=1
+SHARD disclosure crit_unchecked=os-registry-counter-census
+SHARD red os-registry-counter-census:rc=1

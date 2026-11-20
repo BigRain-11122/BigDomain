@@ -1,0 +1,22 @@
+  | PASS AC-CLG1 live tree PASSES the closeout gate rc=0 line=CLOSEOUT-GATE PASS files=4081 flags=0 reader_refused=0 gating=flags
+  | PASS AC-CLG1 reported file count equals the directory, not a typed number reported=4081 disk=4081
+  | PASS AC-CLG1 gating face is flags gating=flags flags=0
+  | PASS AC-CLG2 frozen world passes before any leak rc=0 flags=0
+  | PASS AC-CLG2 a new non-tee write is REFUSED (the precondition fires) rc=2 reason=E_CLG_DRIFT
+  | PASS AC-CLG2 the refusal NAMES the leaking file named=['[flag] new-dialect: this-round-leak.log (class=cmd-raw)']
+  | PASS AC-CLG2 removing the leak returns the gate to PASS rc=0 line=CLOSEOUT-GATE PASS files=2 flags=0 reader_refused=0 gating=flags
+  | PASS AC-CLG3 an undecodable BASELINED file counts reader_refused=1 reader_refused=1
+  | PASS AC-CLG3 reader_refused ALONE does not refuse the closeout rc=0 verdict=PASS flags=0
+  | PASS AC-CLG4 the gate writes nothing (bytes and mtimes unchanged) files=3
+  | PASS AC-CLG4 two runs are byte-identical rc=0
+  | PASS AC-CLG5 a missing baseline is a NAMED refusal rc=2 line=CLOSEOUT-GATE REFUSED reason=E_CLG_NO_BASELINE baseline=no-such-baseline.json
+  | PASS AC-CLG5 an empty evidence dir is a NAMED refusal rc=2 line=CLOSEOUT-GATE REFUSED reason=E_CLG_EMPTY target=C:\Users\sjs20\AppData\Local\Temp\tmpfmpzk7e3\empty
+  | PASS AC-CLG5 a census row without flags= is REFUSED, not read as clean rc=2 line=CLOSEOUT-GATE REFUSED reason=E_CLG_ROW detail=census did not publish flags=
+  | PASS AC-CLG6 arm a - the default face (root=None) is the shipped question line=CLOSEOUT-GATE PASS files=4081 flags=0 reader_refused=0 gating=flags
+  | PASS AC-CLG6 arm b - root=ROOT asks both faces and PASS names them rc=0 line=CLOSEOUT-GATE PASS files=4081 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS
+  | PASS AC-CLG6 arm e - the root faces write nothing and repeat exactly rc=0 files=3 line=CLOSEOUT-GATE PASS files=2 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS
+  | PASS AC-CLG6 arm c - an undated round is refused by E_CLG_ROUND_MAIN rc=2 lines=['CLOSEOUT-GATE REFUSED reason=E_CLG_ROUND_MAIN files=2 flags=0 round_main=FAIL', 'ROUND-MAIN FAIL E_RMS_NO_DATE round=5001']
+  | PASS AC-CLG6 arm d - an unpinned registry row is refused by E_CLG_CENSUS rc=2 reason=E_CLG_CENSUS
+  | PASS AC-CLG6 arm f - a drifted tree is refused as DRIFT, before round-main rc=2 reason=E_CLG_DRIFT
+suite: 20 assertions over 6 criteria
+SUITE PASS 20/20

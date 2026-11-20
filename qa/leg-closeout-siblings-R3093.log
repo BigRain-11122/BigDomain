@@ -1,0 +1,8 @@
+SHARD scope=SHARD registry_suites=734 registry_criteria=5982 selected=6 selected_criteria=73 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-closeout rc=0 pass=19 fail=0 detail=yes suite=PASS 19/19 crit=19 1.9s
+SHARD row os-closeout-export-parity-text-binding rc=0 pass=21 fail=0 detail=yes suite=PASS 6/6 crit=6 0.7s
+SHARD row os-closeout-export-parity-wire rc=0 pass=16 fail=0 detail=yes suite=PASS 16/16 crit=16 0.3s
+SHARD row os-closeout-export-parity-dialect-wire rc=0 pass=20 fail=0 detail=yes suite=PASS 20/20 crit=20 0.3s
+SHARD row os-closeout-export-parity-wire-binding-consumer rc=0 pass=37 fail=0 detail=yes suite=PASS 6/6 crit=6 4.6s
+SHARD row os-closeout-gate rc=0 pass=20 fail=0 detail=yes suite=PASS 20/20 crit=6 10.1s
+SHARD rc=0 scope=SHARD selected=6 executed=6 green=6 criteria=73 crit_mismatch=0 elapsed=18.1s crit_checked=6 crit_unchecked=0
