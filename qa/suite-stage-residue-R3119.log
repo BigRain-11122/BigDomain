@@ -1,0 +1,8 @@
+PASS AC-SR1 arm a - four residues found, live face not among them found=8 docs_sxf=['docs/status-export.json.sxf-stage']
+PASS AC-SR1 arm b - a clean world scans to zero found=[]
+PASS AC-SR1 arm c - sweep removes exactly the planted names, face untouched removed=8 skipped=0 left=[] face_same=True
+PASS AC-SR1 arm d - the second sweep removes nothing removed=[] skipped=[]
+PASS AC-SR1 arm e - every shipped stage literal is a swept suffix literals=4 stray=[]
+PASS AC-SR1 arm f - no shipped docs/ enumerator, and the archive reader admits no residue docs_enum=[] archive_entries=0
+suite: 6 assertions over 1 criteria
+SUITE PASS 6/6

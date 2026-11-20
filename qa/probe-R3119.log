@@ -1,0 +1,31 @@
+R3119 probe: stage residue readers
+
+Q1 enumerations in shipped .py: total=690
+Q1a literal docs/ enumerations: 0
+Q1b literal logs/ enumerations: 3
+    src/os/ledger_lines.py:582 listdir(logs_dir)
+    src/os/test_status_export_fresh.py:549 listdir(logs)
+    src/os/test_status_export_fresh.py:553 listdir(logs)
+
+Q1c shipped glob patterns mentioning json:
+    src/sandbox/test_reconcile_daily_census.py:313 shipped += sorted(glob.glob(os.path.join(BASE, "*", "config.json")))
+    src/sandbox/test_reconcile_daily_profile.py:257 shipped += sorted(glob.glob(os.path.join(BASE, "*", "config.json")))
+    src/sandbox/test_reconcile_daily_sentinel.py:186 shipped += sorted(glob.glob(os.path.join(BASE, "*", "config.json")))
+
+Q1d git add call sites in vehicles: 4
+    .codely-cli/tmp/r1797_commit.ps1:3 & $git add -- docs/sandbox-suite-matrix.md docs/status-export.json heartbeat.txt src/os/state.json src/sandbox/reconcile_all.py src/sandbox/ugc/pipeline.py state/queue/tech.md qa/export-consistency-R1797.log qa/reconcile-all-R1797.log qa/ugc-drainwater-R1797.log src/sandbox/ugc/test_drain_waterwire.py
+    tmp/probe_R3119.py:122 if "git add" in s:
+    tmp/probe_R3119.py:124 say("Q1d git add call sites in vehicles: %d" % len(adds))
+    tools/hooks/pre_commit_gate.py:185 not mirrors: `git add` a healthy file and then rewrite it in a shell
+
+Q1e check-ignore docs/status-export.json.sxf-stage -> NOT-IGNORED
+Q1e check-ignore logs/status-export-legacy-2026-11.json.sxf-stage -> IGNORED
+Q1f tracked stage-named files: ''
+
+Q2a face_judgeable(live, residue present) code=None verdict='FRESH'
+Q2b export_freshness.assess(live) verdict='FRESH' errors=[] age=0.163
+Q2c a docs/*.json glob sees: ['status-export.json']
+Q2d a docs/* glob sees: ['status-export.json', 'status-export.json.edqf-stage', 'status-export.json.gate-stage', 'status-export.json.parity-stage', 'status-export.json.sxf-stage']
+Q2e ledger_lines.archive_files(logs) -> 0 entries []
+Q2f a stage under an ignored dir is IGNORED (so the live tree test must use docs/)
+Q2g live residue now: count=0 []

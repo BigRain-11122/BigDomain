@@ -635,6 +635,7 @@
     "os-seed-anchor",
     "os-ship-checklist",
     "os-single-append-status-face",
+    "os-stage-residue",
     "os-stamp-exempt-append",
     "os-stamp-exempt-guard",
     "os-stamp-exempt-prune",

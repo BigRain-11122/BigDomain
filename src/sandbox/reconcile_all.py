@@ -7769,6 +7769,15 @@ SUITES = [
     # criterion) was pinned in src/os/backlog.md BEFORE the card consumed it.
     ("frontdoor-face-age",
      os.path.join("test_frontdoor_face_age.py"), 1),
+    # R3119: the stage doors made "a refusal lands nothing" structural, but the
+    # stage names still exist while they are written and a killed process can
+    # leave one behind. Measured before the sweep existed: 0 shipped .py files
+    # enumerate docs/, 3 name logs/ (all filtered by an archive prefix+suffix),
+    # and a docs/ residue is NOT ignored by git - so the residue dirties the
+    # tree the next round reads. AC-SR1 (six arms, ONE criterion) was pinned in
+    # src/os/backlog.md BEFORE the module existed.
+    ("os-stage-residue",
+     os.path.join("..", "os", "test_stage_residue.py"), 1),
     ]
 
 FAILS = 0

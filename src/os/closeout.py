@@ -417,6 +417,30 @@ def _detail_lines(verdict):
     return rows
 
 
+def stage_residue_face(root, dry_run=False):
+    """Sweep the stage residue a killed writer could leave (R3119).
+
+    Measured before this step existed: no shipped reader enumerates docs/ and
+    the logs/ archive reader filters by name, so a residue is never mistaken
+    for a face - but `docs/status-export.json.sxf-stage` is NOT ignored by git,
+    and the next round reads an untracked file as another executor mid-write.
+    The sweep therefore runs on the OK path only, and a dry run just counts.
+    A missing module is a named refusal, never a silent skip.
+    """
+    try:
+        import stage_residue as SR
+    except ImportError as exc:
+        return "E_CO_STAGE_UNAVAILABLE module=%s" % exc
+    try:
+        if dry_run:
+            return "stage_residue=%d swept=0" % len(SR.scan(root))
+        removed, skipped = SR.sweep(root)
+        return ("stage_residue=%d swept=%d skipped=%d"
+                % (len(removed) + len(skipped), len(removed), len(skipped)))
+    except (IOError, OSError) as exc:
+        return "E_CO_STAGE_FAIL %s: %s" % (type(exc).__name__, exc)
+
+
 def run(args):
     """Return (rc, message lines). One command, two writes, named steps."""
     root = os.path.abspath(args.root)
@@ -496,10 +520,11 @@ def run(args):
         ms_tail = (" " + " ".join(bits) + " state_ms=%s" % state_ms
                    if bits else " face_ms=n/a state_ms=%s" % state_ms)
         return 0, (["CLOSEOUT CHECK step=state tick=%d log=%d bytes=%d "
-                    "fold_margin=%d %s face=NOT-MEASURED gate=%s %s%s"
+                    "fold_margin=%d %s face=NOT-MEASURED gate=%s %s %s%s"
                     % (result["tick"], result["log"], result["bytes"],
                        result["fold_margin"], result.get("detail") or "",
-                       gate_word, hb_bits, ms_tail)]
+                       gate_word, hb_bits,
+                       stage_residue_face(root, dry_run=True), ms_tail)]
                    + _detail_lines(gate_verdict))
 
     unproven = _confirm_state_moved(state_path(root), result)
@@ -513,6 +538,13 @@ def run(args):
     if heart:
         return 2, ["CLOSEOUT FAIL %s step=heartbeat state=WRITTEN "
                    "face=NOT-WRITTEN tick=%d" % (heart, result["tick"])]
+
+    # ---- step 1.7: the stage residue this round could have left. ----------
+    # Before the tree face, because a residue is exactly what would dirty it.
+    stage_bits = stage_residue_face(root)
+    if stage_bits.startswith("E_CO_"):
+        return 2, ["CLOSEOUT FAIL %s step=stage state=WRITTEN "
+                   "face=NOT-WRITTEN tick=%d" % (stage_bits, result["tick"])]
 
     # ---- step 1.5: the TREE this face is about to speak for. ---------------
     # Asked after the state write (a refusal costs that write, which is the
@@ -550,11 +582,11 @@ def run(args):
     hb_now = HB.verify(root, result["tick"])
     lines = ["CLOSEOUT OK tick=%d state=WRITTEN face=WRITTEN "
              "log=%d bytes=%d fold_margin=%d queue=%s queue_bytes=%s "
-             "latest=%s gate=%s %s"
+             "latest=%s gate=%s %s %s"
              % (result["tick"], result["log"], result["bytes"],
                 result["fold_margin"], proof.get("gate"),
                 proof.get("bytes"), derived.get("latest"), gate_word,
-                _hb_bits(hb_now))]
+                _hb_bits(hb_now), stage_bits)]
     if gate_word == "NOT-ASKED":
         # Printed, not silent: a round closed in a world whose gate inputs are
         # not all present says so on its own line, naming which are absent.

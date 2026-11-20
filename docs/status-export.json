@@ -4,26 +4,26 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3118 PRODUCT+ENGINEERING: the two ungraded write points in the CEO-face vehicle now share one door - apply proves the STAGED bytes before rename (R3117 refused only AFTER its own io.open) and the archive rewrite, which no production vehicle had ever called, is judged too; the zero-caller fact is asserted.",
+    "current": "2026-11-21 R3119 PRODUCT+ENGINEERING: the stage residue a killed writer leaves beside the face is now swept by the closeout before the tree is judged, and the sweep covers exactly the four suffixes the tree actually writes; measured first - no shipped reader enumerates docs/, the logs/ archive reader filters by name, and a residue beside a judgeable face changes no verdict, so the only damage it did was a dirty tree.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-sxf-siblings-R3118.log (4506B, 2026-11-21)",
-    "latest_evidence": "qa/leg-sxf-siblings-R3118.log (4506B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-status-export-fresh-R3119.log (6526B, 2026-11-21)",
+    "latest_evidence": "qa/suite-status-export-fresh-R3119.log (6526B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3119] next window (<=48h): (0) MAIN — **stage 门把「拒绝时零落地」做成结构事实，但 stage 自己会留下尸体**：`status-export.json.sxf-stage` 与归档 stage 都在同目录写入，进程若在 `io.open(stage)` 与 `os.replace` 之间被杀（续烧 runner 每 8 分钟重启、CLI 重启击杀子进程树是本机已实证的面），残件就留在 `docs/` 或 `logs/` 里，而**没有任何读者知道该怎么看它**。下一轮先量（只读）：①全仓有几个读者会吞下 `docs/*.json` 或 `logs/*.json` 的新名字（glob 式读取、`git add -A` 式清扫、证据收集器），量到几个就写几个；②在私有世界把 stage 写到一半即停（复现尸体形态），看活盘闸/导出一致性面/预提交闸各自对残件的表态（红/静默/误当正式面）；③若①>0：裁定是给 stage 名字加读者侧排除（一个具名约定＋断言）、还是给收口加一次残件清扫（具名拒绝＋计数）、或把「残件永不被读」写成可验证断言。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board - ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is (truncated)",
-    "next_milestone_due": "2026-11-23T02:12:54+08:00",
-    "updated_at": "2026-11-21T02:12:54+08:00",
+    "next_milestone": "[R3120] next window (<=48h): (0) MAIN — **清扫只知道「后缀」，不知道「目录」**：`stage_residue.scan()` 只看 `docs/` 与 `logs/`，而「四个 stage 写者只写这两处」这句话本轮**没有测量运行时写入目录**（只按代码里的常量推断）；若某个写者把 stage 落到 `state/`、`preview/` 或任意目标同目录，清扫会静默漏掉且无人知道；同时收口那三行接线仍无专属臂。下一轮先量（只读）：①对四个 stage 写者逐个静态求「stage 路径的目录表达式」，量出实际目录集合（不是手写断言），与 `stage_residue.DIRS` 做集合差；②在私有世界真跑四个写者的拒绝路径，抓 stage 实际落在哪个目录，与①对照——静态与运行时不一致者逐个具名；③若差集非空：裁定是扩 `DIRS`、还是把目录也做成从写者派生的集合（派生臂）、还是把「只写两处」写成可验证断言并让越界者红；并为收口接线补一条专属臂。**先落板再动代码。**",
+    "next_milestone_due": "2026-11-23T02:29:02+08:00",
+    "updated_at": "2026-11-21T02:29:02+08:00",
     "heartbeat": {
-      "tick": 3118,
-      "state_tick": 3118,
+      "tick": 3119,
+      "state_tick": 3119,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
     }
   },
-  "current": "2026-11-21 R3118 PRODUCT+ENGINEERING: the two ungraded write points in the CEO-face vehicle now share one door - apply proves the STAGED bytes before rename (R3117 refused only AFTER its own io.open) and the archive rewrite, which no production vehicle had ever called, is judged too; the zero-caller fact is asserted.",
+  "current": "2026-11-21 R3119 PRODUCT+ENGINEERING: the stage residue a killed writer leaves beside the face is now swept by the closeout before the tree is judged, and the sweep covers exactly the four suffixes the tree actually writes; measured first - no shipped reader enumerates docs/, the logs/ archive reader filters by name, and a residue beside a judgeable face changes no verdict, so the only damage it did was a dirty tree.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -51,11 +51,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3118 PRODUCT+ENGINEERING: the two ungraded write points in the CEO-face vehicle now share one door - apply proves the STAGED bytes before rename (R3117 refused only AFTER its own io.open) and the archive rewrite, which no production vehicle had ever called, is judged too; the zero-caller fact is asserted.",
-  "export_ts": "2026-11-21T02:12:54+08:00",
+  "do": "2026-11-21 R3119 PRODUCT+ENGINEERING: the stage residue a killed writer leaves beside the face is now swept by the closeout before the tree is judged, and the sweep covers exactly the four suffixes the tree actually writes; measured first - no shipped reader enumerates docs/, the logs/ archive reader filters by name, and a residue beside a judgeable face changes no verdict, so the only damage it did was a dirty tree.",
+  "export_ts": "2026-11-21T02:29:02+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/leg-sxf-siblings-R3118.log (4506B, 2026-11-21)",
-  "next_milestone": "[R3119] next window (<=48h): (0) MAIN — **stage 门把「拒绝时零落地」做成结构事实，但 stage 自己会留下尸体**：`status-export.json.sxf-stage` 与归档 stage 都在同目录写入，进程若在 `io.open(stage)` 与 `os.replace` 之间被杀（续烧 runner 每 8 分钟重启、CLI 重启击杀子进程树是本机已实证的面），残件就留在 `docs/` 或 `logs/` 里，而**没有任何读者知道该怎么看它**。下一轮先量（只读）：①全仓有几个读者会吞下 `docs/*.json` 或 `logs/*.json` 的新名字（glob 式读取、`git add -A` 式清扫、证据收集器），量到几个就写几个；②在私有世界把 stage 写到一半即停（复现尸体形态），看活盘闸/导出一致性面/预提交闸各自对残件的表态（红/静默/误当正式面）；③若①>0：裁定是给 stage 名字加读者侧排除（一个具名约定＋断言）、还是给收口加一次残件清扫（具名拒绝＋计数）、或把「残件永不被读」写成可验证断言。**先落板再动代码。** (1) carried unchanged: the same-window law uninstalled, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, reconcile.py as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the carrier blocker, outs 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, tasks.md untouched (the P-47 canonical board - ZERO payment capability), Docker absent, BigDomain-OSLoop reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is (truncated)",
+  "latest_evidence": "qa/suite-status-export-fresh-R3119.log (6526B, 2026-11-21)",
+  "next_milestone": "[R3120] next window (<=48h): (0) MAIN — **清扫只知道「后缀」，不知道「目录」**：`stage_residue.scan()` 只看 `docs/` 与 `logs/`，而「四个 stage 写者只写这两处」这句话本轮**没有测量运行时写入目录**（只按代码里的常量推断）；若某个写者把 stage 落到 `state/`、`preview/` 或任意目标同目录，清扫会静默漏掉且无人知道；同时收口那三行接线仍无专属臂。下一轮先量（只读）：①对四个 stage 写者逐个静态求「stage 路径的目录表达式」，量出实际目录集合（不是手写断言），与 `stage_residue.DIRS` 做集合差；②在私有世界真跑四个写者的拒绝路径，抓 stage 实际落在哪个目录，与①对照——静态与运行时不一致者逐个具名；③若差集非空：裁定是扩 `DIRS`、还是把目录也做成从写者派生的集合（派生臂）、还是把「只写两处」写成可验证断言并让越界者红；并为收口接线补一条专属臂。**先落板再动代码。**",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -180,7 +180,7 @@
   },
   "results": [
     [
-      "3118",
+      "3119",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -194,21 +194,21 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 67,
+    "log_lines_in_window": 74,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 56465,
-  "next_milestone_due": "2026-11-23T02:12:54+08:00",
+  "state_bytes": 61900,
+  "next_milestone_due": "2026-11-23T02:29:02+08:00",
   "heartbeat": {
-    "tick": 3118,
-    "state_tick": 3118,
+    "tick": 3119,
+    "state_tick": 3119,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
