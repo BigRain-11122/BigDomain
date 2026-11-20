@@ -28,7 +28,7 @@ sys.path.insert(0, BASE)
 
 import ledger_lines as LL  # noqa: E402
 
-EXPECTED_CRITERIA = 13
+EXPECTED_CRITERIA = 14
 MODULE = os.path.join(BASE, "ledger_lines.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 STATE = os.path.join(BASE, "state.json")
@@ -727,6 +727,109 @@ def run():
               "AC-LGA13 every published position is openable - file, in-file "
               "ordinal and marker line - while window_index keeps its "
               "measured meaning")
+
+        # AC-LGA14 (R3092): the positions are openable but the line never
+        # said how strong the claim is - three archives are read and only one
+        # is git-tracked, so 'loc=file@line' was equally true of a frozen file
+        # and of an unbacked one. The CLI now appends the provenance it reads
+        # from the repository index, while a report built without provenance
+        # renders the pre-R3092 bytes exactly, which is why the five literal
+        # pins on the two green shapes did not have to move.
+        plain = LL.audit_fold_carry([two_file], 7000)
+        ok_shape = LL.format_fold_carry(plain)
+        vac_shape = LL.format_fold_carry(LL.audit_fold_carry([two_file], 9999))
+        red_dir = os.path.join(world, "logs-lga14-red")
+        os.makedirs(red_dir)
+        red_file = os.path.join(red_dir, "state-log-archive-2026-12.md")
+        write_text(red_file, "# fixture header\n"
+                             "# --- R7101 fold append (fixture)\n"
+                             + narrative(7102) + "\n")
+        fail_shape = LL.format_fold_carry(LL.audit_fold_carry([red_file],
+                                                              7000))
+        counted = LL.audit_fold_carry([two_file], 7000,
+                                      provenance={"tracked": 1, "total": 3})
+        refused = LL.audit_fold_carry([two_file], 7000,
+                                      provenance={"error": "E_APR_NO_INDEX"})
+        counted_line = LL.format_fold_carry(counted)
+        refused_line = LL.format_fold_carry(refused)
+        # independent count: the reader alone, over exactly the files the CLI
+        # hands it, so the published numbers cannot be self-certified
+        sys.path.insert(0, os.path.join(REPO, "tools"))
+        import archive_provenance as APR
+        live_paths = LL.archive_files(real_logs3)
+        live_tracked, _stats = APR.read_index(
+            os.path.join(REPO, ".git", "index"))
+        manual_hits = sum(1 for path in live_paths
+                          if os.path.relpath(path, REPO).replace(
+                              os.sep, "/") in live_tracked)
+        live_prov = LL.provenance_counts(live_paths)
+        rc_live, out_live, _ = run_cli(
+            [STATE, "--check", "--archives", real_logs3, "--fold-carry",
+             "--since", str(LL.FOLD_CARRY_PIN)])
+        lonely = os.path.join(world, "logs-lga14")
+        os.makedirs(lonely)
+        write_text(os.path.join(lonely, "state-log-archive-2026-12.md"),
+                   archive_block([6001, 6002]))
+        lonely_prov = LL.provenance_counts(
+            LL.archive_files(lonely))
+        rc_lonely, out_lonely, _ = run_cli(
+            [STATE, "--check", "--archives", lonely, "--fold-carry",
+             "--since", "6000"])
+        with io.open(MODULE, "r", encoding="ascii") as handle:
+            ledger_src = handle.read()
+        import ast
+        module_imports = set()
+        for node in ast.parse(ledger_src).body:
+            if isinstance(node, ast.Import):
+                module_imports.update(alias.name.split(".")[0]
+                                      for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                module_imports.add(node.module.split(".")[0])
+        check(
+            # a: library shapes are byte-identical to the pre-R3092 line
+            ok_shape.endswith("loc=file@line")
+            and "prov=" not in ok_shape
+            and vac_shape.endswith("loc=file@line")
+            and "prov=" not in vac_shape
+            and "prov=" not in fail_shape
+            and "duplicate_markers" in plain
+            # b: a measured count is printed, ASCII, numbers verbatim
+            and counted_line.endswith(" prov=tracked=1/3")
+            and counted_line.isascii()
+            and LL.format_fold_carry(
+                LL.audit_fold_carry([two_file], 7000,
+                                    provenance={"tracked": 0,
+                                                "total": 2})
+            ).endswith(" prov=tracked=0/2")
+            # c: an unreadable index says so instead of implying 'all backed'
+            and refused_line.endswith(" prov=n/a")
+            and refused_line.isascii()
+            # d: the live numbers agree with an independent index count
+            and isinstance(live_prov, dict)
+            and live_prov.get("tracked") == manual_hits
+            and live_prov.get("total") == len(live_paths)
+            and ("prov=tracked=%d/%d" % (manual_hits, len(live_paths)))
+            in out_live
+            and live_prov.get("total") == 3
+            # e: a world with no index returns an error, and the CLI line
+            #    still reads OK with prov=n/a at the same rc as before
+            and isinstance(lonely_prov, dict)
+            and "error" in lonely_prov
+            and rc_lonely == 0
+            and out_lonely.startswith("FOLD-CARRY OK")
+            and "prov=n/a" in out_lonely
+            and "prov=tracked=" not in out_lonely
+            # f: no child process and no socket on the module import surface,
+            #    and the index reader is imported INSIDE the function so a
+            #    tree without tools/ can still import this module
+            and "subprocess" not in module_imports
+            and "socket" not in module_imports
+            and "archive_provenance" not in module_imports
+            and "archive_provenance.read_index" in ledger_src,
+            "AC-LGA14 the FOLD-CARRY line publishes how many of the archives "
+            "it just read are git-tracked (prov=tracked=n/m, prov=n/a when "
+            "the index is unreadable) while a library report without "
+            "provenance keeps the pre-R3092 bytes")
 
     finally:
         shutil.rmtree(world, ignore_errors=True)

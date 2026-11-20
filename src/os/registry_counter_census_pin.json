@@ -364,6 +364,7 @@
     "minors-wiring",
     "opsreview",
     "os-append-check-status-precedence",
+    "os-archive-provenance",
     "os-artifact-disk-text-readability",
     "os-bare-evidence-deep-pile",
     "os-bare-evidence-pile-refusal",

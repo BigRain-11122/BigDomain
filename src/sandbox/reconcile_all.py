@@ -4821,9 +4821,13 @@ SUITES = [
     # archive COUNT face reads the same presence law and the fold-carry
     # report names split rounds and same-window gaps without gating on
     # either. AC-LGA13 added at R3089: every published position also
-    # carries the archive's own file, in-file ordinal and marker line.)
+    # carries the archive's own file, in-file ordinal and marker line.
+    # AC-LGA14 added at R3092: the CLI appends prov=tracked=<n>/<total>
+    # (or prov=n/a when the index cannot be read) to the printed line, so
+    # the reader learns how strong the loc claim is; a library report
+    # without provenance keeps the pre-R3092 bytes.)
     ("os-ledger-archive",
-     os.path.join("..", "os", "test_ledger_archive.py"), 13),
+     os.path.join("..", "os", "test_ledger_archive.py"), 14),
     # R3091: the archive's own provenance is now readable WITHOUT a child
     # process - the tracked set comes from the repository index (DIRC v2
     # only; 3/4 and a bad magic are refused by name), so a reader of a

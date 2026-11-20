@@ -689,7 +689,58 @@ def load_archive_windows(path):
     return windows
 
 
-def audit_fold_carry(paths, min_round=None):
+def provenance_counts(paths):
+    """Count how many of the given archive files git actually tracks (R3092).
+
+    R3089/R3090 taught the FOLD-CARRY line to publish WHERE a position opens
+    (file, in-file ordinal, marker line), and R3091 shipped a reader that
+    answers how strong that claim is from the repository index alone - no
+    child process, because no gate here may spawn one. Until now nothing
+    printed that answer, so the line said `loc=file@line` for three archives
+    of which only one has git backing.
+
+    Returns {"tracked": n, "total": m} when the index could be read, else
+    {"error": <code>} with the first refusal named - never None, and never a
+    count guessed from a partial read. The caller decides the token; the
+    library shape stays untouched, so a report that carries no provenance is
+    byte-identical to the pre-R3092 line.
+    """
+    ordered = [os.path.abspath(path) for path in paths]
+    root = None
+    probe = os.path.dirname(ordered[0]) if ordered else None
+    for _ in range(6):
+        if probe is None:
+            break
+        if os.path.isdir(os.path.join(probe, ".git")):
+            root = probe
+            break
+        parent = os.path.dirname(probe)
+        probe = None if parent == probe else parent
+    if root is None:
+        return {"error": "E_APR_NO_INDEX"}
+    tools = os.path.join(root, "tools")
+    if os.path.isdir(tools) and tools not in sys.path:
+        sys.path.insert(0, tools)
+    try:
+        import archive_provenance
+    except ImportError:
+        return {"error": "E_LFC_PROV_NO_READER"}
+    try:
+        tracked, _stats = archive_provenance.read_index(
+            os.path.join(root, ".git", "index"))
+    except archive_provenance.ProvenanceError as exc:
+        return {"error": exc.code}
+    except (IOError, OSError):
+        return {"error": "E_APR_NO_INDEX"}
+    hits = 0
+    for path in ordered:
+        rel = os.path.relpath(path, root).replace(os.sep, "/")
+        if rel in tracked:
+            hits += 1
+    return {"tracked": hits, "total": len(ordered)}
+
+
+def audit_fold_carry(paths, min_round=None, provenance=None):
     """Ask the FOLD-CARRY law of every window opened at or after the pin.
 
     For each such window, every round whose NARRATIVE sits inside it must
@@ -815,9 +866,28 @@ def audit_fold_carry(paths, min_round=None):
         "split_rounds": split,
         "same_window_gaps": same_window,
         "duplicate_markers": duplicate_markers,
+        "provenance": provenance,
         "clean": not gaps,
         "vacuous": not examined,
     }
+
+
+def provenance_token(report):
+    """The trailing token that says how strong the loc claim is (R3092).
+
+    A report without provenance keeps the pre-R3092 line byte for byte,
+    which is why no literal pin on the two green shapes had to move; the
+    CLI always supplies one, so the line a person reads never hides the
+    question. 'prov=n/a' means the index could not be read and says so
+    rather than implying that every archive is tracked.
+    """
+    prov = report.get("provenance")
+    if not isinstance(prov, dict):
+        return ""
+    if "error" in prov:
+        return " prov=n/a"
+    return " prov=tracked=%d/%d" % (prov.get("tracked", 0),
+                                    prov.get("total", 0))
 
 
 def format_fold_carry(report):
@@ -836,19 +906,27 @@ def format_fold_carry(report):
     rewrite observed on this machine', not 'append-only proven'. The FAIL
     shape now publishes those coordinates on every gap, because a red line
     that names only the marker still sends the reader hunting by hand.
+
+    R3092: the strength is now printed rather than documented - the CLI
+    appends prov=tracked=<n>/<total> (or prov=n/a when the index could not
+    be read), so a reader of the live line knows how many of the archives
+    it just read have git backing. The token is appended LAST, after
+    loc=file@line, and a report built without provenance renders the old
+    bytes exactly.
     """
+    token = provenance_token(report)
     if report["vacuous"]:
         return ("FOLD-CARRY VACUOUS since=%d windows=0 skipped=%d "
                 "(no window opened at or after the pin yet) dup=0 "
                 "loc=file@line"
-                % (report["since"], report["skipped_windows"]))
+                % (report["since"], report["skipped_windows"])) + token
     if report["clean"]:
         return ("FOLD-CARRY OK since=%d windows=%d rounds=%d skipped=%d "
                 "split=%d same_window=%d dup=%d loc=file@line"
                 % (report["since"], report["windows"], report["rounds"],
                    report["skipped_windows"], len(report["split_rounds"]),
                    len(report["same_window_gaps"]),
-                   len(report["duplicate_markers"])))
+                   len(report["duplicate_markers"]))) + token
     # R3090: a gap entry already knows where its window opens; printing only
     # the marker left the reader to search. The locator is appended INSIDE
     # the per-gap token so every existing reader (which matches R<n>) keeps
@@ -867,7 +945,7 @@ def format_fold_carry(report):
             % (report["since"], report["windows"], gaps,
                len(report["split_rounds"]),
                len(report["same_window_gaps"]),
-               len(report["duplicate_markers"])))
+               len(report["duplicate_markers"]))) + token
 
 
 def coverage_floor(report, minimum=MIN_COVERAGE_LINES):
@@ -1247,8 +1325,14 @@ def main(argv=None):
         elif round_main:
             report = check_round_main_shape(log)
         elif fold_carry:
-            report = audit_fold_carry(archive_files(archives_dir),
-                                      since_round)
+            # R3092 AC-LGA14: the CLI is the only caller that reads the
+            # repository index, so the printed line can say how many of the
+            # archives it just read have git backing. library callers (the
+            # suites) pass no provenance and keep the pre-R3092 bytes.
+            carry_paths = archive_files(archives_dir)
+            report = audit_fold_carry(carry_paths, since_round,
+                                      provenance=provenance_counts(
+                                          carry_paths))
         else:
             if archives_dir is not None:
                 report = audit_scope(

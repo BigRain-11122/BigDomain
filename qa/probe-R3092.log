@@ -1,0 +1,41 @@
+=== R3092 PROBE (read-only) ===
+Q1 graded keys read by check(): 10 -> ceo_face,current,do,export_ts,latest_artifact,next_milestone,path,results_archive,sha256,state_bytes
+Q1 whole-document set comparisons in check(): 0
+Q1 live export bytes=38440 graded=state_bytes:True
+Q1 arm a (ADDED key only) rc=0 bytes=38534
+Q1 arm b (CHANGED graded key) rc=2
+Q1 apply() writes doc keys: 0 named assignments
+Q2 files mentioning archive_provenance: 2 -> src/os/test_archive_provenance.py,src/sandbox/reconcile_all.py
+Q2 consumers that CALL the reader: 0 -> none
+Q3 lines touching the printed FOLD-CARRY shapes: 22
+Q3 pin L313: bad_line = LL.format_fold_carry(bad)
+Q3 pin L341: and LL.format_fold_carry(pre_pin) ==
+Q3 pin L342: ("FOLD-CARRY VACUOUS since=5000 windows=0 skipped=1 "
+Q3 pin L344: "loc=file@line")
+Q3 pin L345: and LL.format_fold_carry(good) ==
+Q3 pin L346: ("FOLD-CARRY OK since=5000 windows=1 rounds=2 skipped=0 "
+Q3 pin L347: "split=0 same_window=0 dup=0 loc=file@line")
+Q3 pin L352: and rc_ok == 0 and out_ok.startswith("FOLD-CARRY OK")
+Q3 pin L432: and rc_dat == 0 and out_dat.startswith("FOLD-CARRY OK")
+Q3 pin L531: and "split=1" in LL.format_fold_carry(mixed_carry)
+Q3 pin L532: and "same_window=3" in LL.format_fold_carry(mixed_carry)
+Q3 pin L533: and LL.format_fold_carry(mixed_carry).isascii()
+Q3 pin L613: and "dup=1" in LL.format_fold_carry(dup_carry)
+Q3 pin L614: and "dup=0" in LL.format_fold_carry(dist_carry)
+Q3 pin L615: and "dup=" in LL.format_fold_carry(real_carry3)
+Q3 pin L616: and LL.format_fold_carry(dup_carry).isascii()
+Q3 pin L617: and LL.format_fold_carry(real_carry3).isascii()
+Q3 pin L718: and LL.format_fold_carry(two_carry).endswith("loc=file@line")
+Q3 pin L719: and LL.format_fold_carry(dist_carry).endswith("loc=file@line")
+Q3 pin L720: and LL.format_fold_carry(LL.audit_fold_carry([two_file],
+Q3 pin L722: ).endswith("loc=file@line")
+Q3 pin L723: and LL.format_fold_carry(two_carry).isascii()
+Q4 index entries=6671 bytes=657352 tracked_paths=6671
+Q4 archive state-log-archive-2026-09.md tracked=no
+Q4 archive state-log-archive-2026-10.damaged-R1646.bak tracked=no
+Q4 archive state-log-archive-2026-10.md tracked=no
+Q4 archive state-log-archive-2026-11.md tracked=yes
+Q4 no cycle: ledger_lines imported after the reader, audit windows=29 clean=True
+Q4 library shape without provenance: 'FOLD-CARRY OK since=2914 windows=29 rounds=179 skipped=725 split=4 same_window=3 dup=4 loc=file@line'
+Q4 fallback: private world refuses by name -> E_APR_NO_INDEX
+=== END PROBE ===

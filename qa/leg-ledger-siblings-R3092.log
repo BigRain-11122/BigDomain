@@ -1,0 +1,29 @@
+SHARD scope=SHARD registry_suites=734 registry_criteria=5981 selected=13 selected_criteria=99 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-ledger-page rc=0 pass=12 fail=0 detail=yes suite=PASS 6/6 crit=6 1.7s
+SHARD row os-ledger-lines rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row os-ledger-archive rc=0 pass=14 fail=0 detail=yes suite=PASS 14/14 crit=14 2.7s
+SHARD row os-ledger-baseline rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.2s
+SHARD row os-ledger-fold-kind rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-ledger-fold-kind-dateprefix rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-ledger-fold-kind-inflection rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.4s
+SHARD row os-ledger-closeout rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row os-ledger-line-shape-guard rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.6s
+SHARD row os-ledger-round-main-shape rc=1 pass=7 fail=2 detail=yes suite=FAIL 7/9 crit=9 0.4s
+SHARD detail os-ledger-round-main-shape round main line shape suite (expected criteria 9)
+SHARD detail os-ledger-round-main-shape PASS AC-RMS1 dated newest round passes, an undated main line is refused by name with its round and a sample
+SHARD detail os-ledger-round-main-shape PASS AC-RMS2 highest round wins over position, and an undated sub-line of that round does not redden a healthy tree
+SHARD detail os-ledger-round-main-shape PASS AC-RMS3 ledger lines and four fold-summary forms never count as a round main, and an empty window fails closed
+SHARD detail os-ledger-round-main-shape   measured: ok=2/['ROUND-MAIN FAIL E_RMS_NO_DATE round=3091']/{'ok': False, 'round': 3091, 'code': 'E_RMS_NO_DATE'} bad=2/['ROUND-MAIN FAIL E_RMS_NO_DATE round=9002'] missing=3
+SHARD detail os-ledger-round-main-shape FAIL AC-RMS4 CLI reads exactly one line on the real tree (rc=0), names E_RMS_NO_DATE in a private world (rc=2), rc=3 when absent
+SHARD detail os-ledger-round-main-shape PASS AC-RMS5 AnchorError is typed and carries a code, the newest round is sampled, and check() turns it into one FAIL row
+SHARD detail os-ledger-round-main-shape PASS AC-RMS6 the gate writes zero bytes, the library is ASCII with no net, and the registry declares this suite at 9 criteria
+SHARD detail os-ledger-round-main-shape PASS AC-RMS7 a lowercase-label newest round is refused by name E_RMS_NO_LABEL while the reader behind it would have published the OLDER round 9001, and the same line with a label passes both
+SHARD detail os-ledger-round-main-shape PASS AC-RMS8 ROUND_LABEL_SRC is the only definition - both readers carry it verbatim and all three agree on six label shapes
+SHARD detail os-ledger-round-main-shape   measured: live={'round': 3091, 'ok': False, 'code': 'E_RMS_NO_DATE', 'detail': 'newest round 3091 has 3 round line(s) and none starts with a YYYY-MM-DD prefix', 'round_lines': 3, 'dated_lines': 0, 'labelled_lines': 0, 'sample': 'R3091 GROUP SCAN (content-addressed, rea'} bad=2/'APPEND FAIL E_RMS_NO_LABEL round=9002 newest round 9002 has 1 dated line(s) and none carries an UPPERCASE label after the round number, so no CEO-face reader ac' good=0 untouched=True declared=9
+SHARD detail os-ledger-round-main-shape FAIL AC-RMS9 the live tree passes, the shipped vehicle refuses a label-less line at rc=2 with E_RMS_NO_LABEL and accepts the labelled one without writing, registry declares 9
+SHARD detail os-ledger-round-main-shape SUITE FAIL 7/9
+SHARD row os-ledger-tokens-prefix-repair rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-ledger-reconcile-face rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.8s
+SHARD row os-ledger-business-report rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.3s
+SHARD rc=2 scope=SHARD selected=13 executed=13 green=12 criteria=99 crit_mismatch=0 elapsed=10.9s crit_checked=13 crit_unchecked=0
+SHARD red os-ledger-round-main-shape:rc=1
