@@ -460,6 +460,7 @@
     "os-gate-decl-retire-wire",
     "os-gate-drift",
     "os-general-writer-dialect-audit",
+    "os-heartbeat",
     "os-journey-demo-face",
     "os-ledger-archive",
     "os-ledger-baseline",

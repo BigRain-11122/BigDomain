@@ -7743,6 +7743,13 @@ SUITES = [
     # the tool existed.
     ("os-corpus-rewrite-audit",
      os.path.join("..", "os", "test_corpus_rewrite_audit.py"), 1),
+    # R3110: the repo-root heartbeat row gets its one birth site. Measured
+    # before the guard existed: 43 shipped .py files name heartbeat.txt, 41
+    # write-shaped, 39 with no tick guard, and 40 of the last 60 shipped
+    # versions would FLAG under the only reader's rule. AC-HB1 (seven arms, ONE
+    # criterion) was pinned in src/os/backlog.md BEFORE the module existed.
+    ("os-heartbeat",
+     os.path.join("..", "os", "test_heartbeat.py"), 1),
     ]
 
 FAILS = 0

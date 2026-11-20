@@ -1,0 +1,6 @@
+HEARTBEAT-WRITERS shipped_py=43 write_shaped=41 writers_without_guard=39
+HEARTBEAT-WRITER-NAMES src/os/backlog_R2507.py,src/os/backlog_R2561.py,src/os/backlog_R2564.py,src/os/backlog_R2565.py,src/os/backlog_prepend_R2500.py,src/os/backlog_prepend_R2503.py,src/os/claim_R2525.py,src/os/close_R2318.py,src/os/closeout2_R1955.py,src/os/closeout2_R1990.py,src/os/closeout2_R1998.py,src/os/closeout2_R2006.py
+HEARTBEAT-HISTORY versions=60 clean_tick_line=20 narrative_with_tick=0 bare_number=19 other=21 ps_rule_would_flag=40
+HEARTBEAT-LIVE bytes=10 crlf=False bom=False ps_rule_tick=3109 state_tick=3109 lag=0
+HEARTBEAT-MODULES src_os_named_heartbeat=14
+HEARTBEAT-PY-FIVE-STILL mentions_heartbeat=False

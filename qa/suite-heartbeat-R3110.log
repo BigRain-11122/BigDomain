@@ -1,0 +1,9 @@
+PASS AC-HB1 arm a - one tick line, no CR, no BOM, round trip read=42 bytes=b'tick 42\n'
+PASS AC-HB1 arm b - four illegal values refused, file untouched codes=['refused', 'refused', 'refused', 'refused'] untouched=True
+PASS AC-HB1 arm c - read_tick matches the shipped reader on six shapes; a missing file reads None; the transcription is anchored parity=[('clean', 7, 7), ('bare-number', None, -1), ('prose-with-tick', 7, 7), ('trailing-blanks', None, -1), ('tick-just-outside-window', None, -1), ('empty', None, -1)] absent=None anchored=True
+PASS AC-HB1 arm d - verify derives PASS/FLAG and the lag fresh=PASS/0 behind=FLAG/3 gone=FLAG/heartbeat_missing_or_unparsed
+PASS AC-HB1 arm e - live heartbeat equals the live state tick heartbeat=3109 state=3109
+PASS AC-HB1 arm f - no temp leftovers, and a rewrite really moves listings=['heartbeat.txt']/['heartbeat.txt']/['heartbeat.txt'] moved=True cli=0
+PASS AC-HB1 arm g - ASCII, no network import, no external host, coded refusal ascii=True socket=False host=False code=E_HB_TICK
+suite: 7 assertions over 1 criteria
+SUITE PASS 7/7
