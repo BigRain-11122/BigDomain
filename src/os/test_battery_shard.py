@@ -788,14 +788,17 @@ def main():
         finally:
             shard.QA_DIR = saved_dir
 
-        # AC-BSGB17 - the field exists, it counts only COMPARED rows, and it is
-        # appended LAST so every pre-R2919 field-order reader still parses.
+        # AC-BSGB17 - the field exists, it counts only COMPARED rows, and the
+        # NEWEST field sits LAST so every earlier field-order reader still
+        # parses. Judged change at R3081: AC-BSGB21 appended crit_unchecked
+        # after crit_checked, so the last-token anchor moved with it - the law
+        # is "newest appended last", not "crit_checked is forever last".
         mixed_line = closing_of(out_mixed)
         ok("AC-BSGB17",
            code_mixed == 0 and field(out_mixed, "executed") == "2"
            and field(out_mixed, "crit_checked") == "1"
            and field(out_mixed, "crit_mismatch") == "0"
-           and mixed_line.split()[-1].startswith("crit_checked="),
+           and mixed_line.split()[-1].startswith("crit_unchecked="),
            "executed=%s checked=%s mismatch=%s last=%s"
            % (field(out_mixed, "executed"), field(out_mixed, "crit_checked"),
               field(out_mixed, "crit_mismatch"),
@@ -826,6 +829,32 @@ def main():
            "bad_rc=%d mismatch=%s checked=%s check_rc=%d"
            % (code_bad, field(out_bad, "crit_mismatch"),
               field(out_bad, "crit_checked"), code_chk))
+
+        # AC-BSGB21 (R3081 pin) - the closing row now carries the DENOMINATOR's
+        # other half. Before it, "crit_mismatch=0 crit_checked=1" could not be
+        # told apart from a leg that compared one row out of forty; the
+        # disclosure line named the unchecked rows but a reader of the closing
+        # row alone never saw the count. Every row lands in exactly one bucket.
+        checked_sil = field(out_sil, "crit_checked")
+        unchecked_sil = field(out_sil, "crit_unchecked")
+        checked_mix = field(out_mixed, "crit_checked")
+        unchecked_mix = field(out_mixed, "crit_unchecked")
+        sums_ok = all(v is not None for v in (checked_sil, unchecked_sil,
+                                              checked_mix, unchecked_mix))
+        if sums_ok:
+            sums_ok = (int(checked_sil) + int(unchecked_sil)
+                       == int(field(out_sil, "executed"))
+                       and int(checked_mix) + int(unchecked_mix)
+                       == int(field(out_mixed, "executed")))
+        ok("AC-BSGB21",
+           code_sil == 0 and code_mixed == 0 and sums_ok
+           and checked_sil == "0" and unchecked_sil == "1"
+           and checked_mix == "1" and unchecked_mix == "1"
+           and mixed_line.split()[-1] == "crit_unchecked=1"
+           and code_chk == 0 and "VERDICT PASS" in buf_chk.getvalue(),
+           "sil=%s/%s mix=%s/%s sum_ok=%s last=%s check_rc=%d"
+           % (checked_sil, unchecked_sil, checked_mix, unchecked_mix, sums_ok,
+              mixed_line.split()[-1] if mixed_line else "none", code_chk))
     finally:
         shutil.rmtree(world, ignore_errors=True)
 

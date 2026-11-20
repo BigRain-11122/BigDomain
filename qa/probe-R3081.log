@@ -1,0 +1,18 @@
+P3 carriers_static=30 registry=733
+P1 sample=launcher-mutex,ugc-msgsec-wire,os-debt-gate,kill-on-close
+P1 row launcher-mutex       rc=0 registry=5 parsed_total=5 6.7s
+P1 row ugc-msgsec-wire      rc=0 registry=5 parsed_total=5 10.0s
+P1 row os-debt-gate         rc=0 registry=5 parsed_total=5 0.8s
+P1 row kill-on-close        rc=0 registry=12 declared=12 23.3s
+P1 silent_leg selected=3 executed=3 green=3 crit_checked=3 crit_mismatch=0 unchecked=0
+P1 mixed_leg selected=4 crit_checked=4 crit_mismatch=0 unchecked=0
+P1 unchecked_labels=
+P2 close_legacy_pre_R2919 matched=True
+P2 close_shipped_today matched=False
+P2 close_with_unchecked matched=False
+P2 row_plain matched=False
+P2 row_timeout matched=False
+P2 today_parse=refused
+P4 positional_last_token_readers=src/os/test_battery_shard.py:AC-BSGB17
+P4 token_readers=tools/leg_audit.py,tools/leg_watch.py (key=value, tolerate extra fields)
+P4 regex_anchored_readers=tools/battery_shard_report.py:CLOSE_RE,ROW_RE

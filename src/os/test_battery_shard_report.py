@@ -1,4 +1,4 @@
-"""Battery suite for tools/battery_shard_report.py - AC-BSRB1..AC-BSRB8.
+"""Battery suite for tools/battery_shard_report.py - AC-BSRB1..AC-BSRB10.
 
 The eight criteria of the tool (AC-BSR1..AC-BSR8) were pinned in
 src/os/backlog.md at R2799/R2800, BEFORE the tool existed.  The tool shipped
@@ -10,11 +10,10 @@ existed) puts those eight under a battery row.
 
 Scope, stated honestly: this suite never runs a real family.  A family is tens
 of seconds of child processes and the R2800 six-family measurement already
-stands as that evidence.  What is guarded here is the MACHINERY - the registry
-re-derivation, the parse of the runner's row formats, the registry-continuity
-refusal, the red-is-red rule, the render/check fixed point, the read-only
-posture, the load-bearing controls and the two family-set laws - each driven
-through the real functions with synthetic streams in a PRIVATE world under the
+stands as that evidence.  AC-BSRB10 (R3081) added ONE one-suite real leg
+(os-debt-gate, ~1s) because a synthetic-only fixture is what let the reader go
+stale while this suite stayed green; everything else is graded through the real
+functions with synthetic streams in a PRIVATE world under the
 system temp directory, which is removed before the run ends.
 
 Every check is read-only against the repo: the landed report pair, the tool and
@@ -31,6 +30,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -77,20 +77,43 @@ def load(name, path):
     return module
 
 
-def stream(reg_suites, reg_crit, rows, close):
-    """Build runner stdout in the EXACT shipped row formats."""
+def stream(reg_suites, reg_crit, rows, close, legacy=False, unchecked=0,
+           timeout_labels=()):
+    """Build runner stdout.
+
+    AC-BSRB10 (R3081): the default is the SHIPPED row shape - detail= on every
+    row, an optional timeout=yes tail, and the closing row's crit_checked /
+    crit_unchecked fields. This fixture used to be built from the PRE-R2919
+    shape, which is exactly why the report reader could go stale for many
+    rounds with this suite still green. legacy=True keeps the old shapes only
+    for the backward-compatibility arm.
+    """
     sel = sum(1 for r in rows)
     crit = sum(int(r[5]) for r in rows)
     lines = ["SHARD scope=SHARD registry_suites=%d registry_criteria=%d "
              "selected=%d selected_criteria=%d"
              % (reg_suites, reg_crit, sel, crit)]
     for label, rc, passed, failed, suite, crits, secs in rows:
-        lines.append("SHARD row %s rc=%d pass=%d fail=%d suite=%s crit=%d %.1fs"
-                     % (label, rc, passed, failed, suite, crits, secs))
+        if legacy:
+            lines.append("SHARD row %s rc=%d pass=%d fail=%d suite=%s "
+                         "crit=%d %.1fs"
+                         % (label, rc, passed, failed, suite, crits, secs))
+            continue
+        lines.append("SHARD row %s rc=%d pass=%d fail=%d detail=yes suite=%s "
+                     "crit=%d %.1fs%s"
+                     % (label, rc, passed, failed, suite, crits, secs,
+                        " timeout=yes" if label in timeout_labels else ""))
     rc, executed, green, elapsed = close
-    lines.append("SHARD rc=%d scope=SHARD selected=%d executed=%d green=%d "
-                 "criteria=%d crit_mismatch=0 elapsed=%.1fs"
-                 % (rc, sel, executed, green, crit, elapsed))
+    if legacy:
+        lines.append("SHARD rc=%d scope=SHARD selected=%d executed=%d green=%d "
+                     "criteria=%d crit_mismatch=0 elapsed=%.1fs"
+                     % (rc, sel, executed, green, crit, elapsed))
+    else:
+        lines.append("SHARD rc=%d scope=SHARD selected=%d executed=%d green=%d "
+                     "criteria=%d crit_mismatch=0 elapsed=%.1fs "
+                     "crit_checked=%d crit_unchecked=%d"
+                     % (rc, sel, executed, green, crit, elapsed,
+                        sel - unchecked, unchecked))
     return "\n".join(lines) + "\n"
 
 
@@ -359,6 +382,41 @@ def main():
     ok("AC-BSRB6b", untouched, "pair_tool_registry_unchanged=%s" % untouched)
     ok("AC-BSRB7b", not banned and ascii_ok,
        "banned=%d ascii=%s" % (len(banned), ascii_ok))
+
+    # ---- AC-BSRB10 (R3081 pin): the reader must read the row the writer ships.
+    # This is the arm that would have caught the staleness: the fixture now
+    # carries detail=/timeout=yes and the closing row's crit_checked /
+    # crit_unchecked, and one arm runs a REAL shipped leg end to end.
+    shipped = stream(733, 5965, GREEN_ROWS, (0, 2, 2, 1.5), unchecked=1,
+                     timeout_labels=("probe-b",))
+    fam = bsr.parse_family("probe", "probe-", "g", 0, shipped)
+    today_ok = (fam["parse"] == "ok" and len(fam["suites"]) == 2
+                and fam["crit_unchecked"] == 1
+                and fam["crit_unchecked_seen"] == 1
+                and fam["crit_mismatch"] == 0)
+    old = stream(733, 5965, GREEN_ROWS, (0, 2, 2, 1.5), legacy=True)
+    fam_old = bsr.parse_family("probe", "probe-", "g", 0, old)
+    legacy_ok = (fam_old["parse"] == "ok" and len(fam_old["suites"]) == 2
+                 and fam_old["crit_unchecked"] == 0
+                 and fam_old["crit_unchecked_seen"] == 0)
+    timeout_row = fam["suites"][1] if len(fam["suites"]) > 1 else {}
+    timeout_ok = (timeout_row.get("label") == "probe-b"
+                  and timeout_row.get("crit") == 2
+                  and timeout_row.get("pass") == 2)
+    proc = subprocess.run([sys.executable, SHARD, "--exact", "os-debt-gate"],
+                          cwd=ROOT, stdout=subprocess.PIPE,
+                          stderr=subprocess.STDOUT)
+    real_out = proc.stdout.decode("utf-8", "replace")
+    real_out = real_out.replace("\r\n", "\n").replace("\r", "\n")
+    fam_real = bsr.parse_family("real", "os-debt-gate", "g", proc.returncode,
+                                real_out)
+    real_ok = (fam_real["parse"] == "ok" and fam_real["executed"] == 1
+               and fam_real["crit_unchecked_seen"] == 1
+               and fam_real["green"] == 1)
+    ok("AC-BSRB10",
+       today_ok and legacy_ok and timeout_ok and real_ok,
+       "today=%s legacy=%s timeout=%s real=%s(%s)"
+       % (today_ok, legacy_ok, timeout_ok, real_ok, fam_real["parse"]))
 
     total = len(CHECKS)
     passed = total - len(FAILS)

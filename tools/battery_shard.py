@@ -578,10 +578,17 @@ def _round(args):
     # first draft of this law, which reddened every mismatch, was narrowed on
     # that criterion rather than the criterion being adjusted to it.
     rc = 0 if (green == executed == len(picked)) and not undeclared else 2
+    # AC-BSGB21 (R3081): crit_checked alone is a numerator with no denominator,
+    # so a reader of this row saw "crit_mismatch=0 checked=4" and could not tell
+    # whether the leg compared four rows out of four or four out of forty. The
+    # unchecked population is the denominator's other half - every row is in
+    # exactly one bucket, so checked+unchecked==executed, and a new field always
+    # goes LAST (a positional reader has to move with it).
     closing = ("SHARD rc=%d scope=SHARD selected=%d executed=%d green=%d "
-               "criteria=%d crit_mismatch=%d elapsed=%.1fs crit_checked=%d"
+               "criteria=%d crit_mismatch=%d elapsed=%.1fs crit_checked=%d "
+               "crit_unchecked=%d"
                % (rc, len(picked), executed, green, crit_run, len(mismatch),
-                  elapsed, crit_checked))
+                  elapsed, crit_checked, len(unchecked)))
     print(closing, flush=True)
     # AC-BSGB15: the closing row plus a COMPLETE header are what separate an
     # artifact from a progress note, so a killed leg keeps a truthful RUNNING

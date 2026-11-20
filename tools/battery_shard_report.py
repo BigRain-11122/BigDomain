@@ -52,11 +52,19 @@ SCOPE_RE = re.compile(
     r"^SHARD scope=SHARD registry_suites=(\d+) registry_criteria=(\d+) "
     r"selected=(\d+) selected_criteria=(\d+)", re.M)
 ROW_RE = re.compile(
-    r"^SHARD row (\S+) rc=(\d+) pass=(\d+) fail=(\d+) suite=(.*) "
-    r"crit=(\d+) ([\d.]+)s$", re.M)
+    r"^SHARD row (\S+) rc=(\d+) pass=(\d+) fail=(\d+)(?: detail=\S+)? "
+    r"suite=(.*) crit=(\d+) ([\d.]+)s(?: timeout=yes)?$", re.M)
+# AC-BSRB10 (R3081): this regex used to end at "elapsed=Ns$", which was true
+# until R2919 appended crit_checked and R3081 appended crit_unchecked. Measured
+# consequence: every shipped leg read "refused" while this file's own suite
+# stayed green, because the suite built its fixture from the OLD row shape. The
+# tail is optional on both sides so a leg from either era parses; a missing
+# crit_unchecked is published as 0 WITH a seen flag rather than passed off as a
+# measurement of zero.
 CLOSE_RE = re.compile(
     r"^SHARD rc=(\d+) scope=SHARD selected=(\d+) executed=(\d+) green=(\d+) "
-    r"criteria=(\d+) crit_mismatch=(\d+) elapsed=([\d.]+)s$", re.M)
+    r"criteria=(\d+) crit_mismatch=(\d+) elapsed=([\d.]+)s"
+    r"(?: crit_checked=(\d+))?(?: crit_unchecked=(\d+))?$", re.M)
 
 
 class Refuse(Exception):
@@ -87,6 +95,8 @@ def parse_family(key, prefix, guards, rc, out):
         resp["executed"] = 0
         resp["green"] = 0
         resp["crit_mismatch"] = 0
+        resp["crit_unchecked"] = 0
+        resp["crit_unchecked_seen"] = 0
         resp["elapsed_s"] = 0.0
         resp["registry_suites"] = 0
         resp["registry_criteria"] = 0
@@ -99,6 +109,14 @@ def parse_family(key, prefix, guards, rc, out):
     resp["selected_criteria"] = int(close.group(5))
     resp["crit_mismatch"] = int(close.group(6))
     resp["elapsed_s"] = float(close.group(7))
+    # AC-BSRB10: the unchecked count is published only when the row carried it;
+    # seen=0 says "this leg predates the field", never "zero unmeasured rows".
+    if close.group(9) is None:
+        resp["crit_unchecked"] = 0
+        resp["crit_unchecked_seen"] = 0
+    else:
+        resp["crit_unchecked"] = int(close.group(9))
+        resp["crit_unchecked_seen"] = 1
     for m in ROW_RE.finditer(out):
         row = {"label": m.group(1), "rc": int(m.group(2)),
                "pass": int(m.group(3)), "fail": int(m.group(4)),
@@ -143,6 +161,9 @@ def measure():
             "uncovered_suites": suites - total_sel,
             "cover_pct": round(100.0 * total_sel / suites, 1) if suites else 0.0,
             "crit_mismatch": sum(f["crit_mismatch"] for f in fams),
+            "crit_unchecked": sum(f.get("crit_unchecked", 0) for f in fams),
+            "crit_unchecked_seen": sum(f.get("crit_unchecked_seen", 0)
+                                       for f in fams),
         },
         "verdict": verdict,
         "not_the_battery": (

@@ -7444,9 +7444,10 @@ SUITES = [
     # R2886: 24 -> 26 (AC-BSGB15/16, the streaming law and the partial-file
     # refusal); R2919: 26 -> 29 (AC-BSGB17/18/19, crit_checked plus the named
     # unchecked population); R2920: 29 -> 30 (AC-BSGB20, the declaration bound
-    # to a registry row).
+    # to a registry row); R3081: 30 -> 31 (AC-BSGB21, the closing row now
+    # carries crit_unchecked so checked+unchecked==executed is readable).
     ("os-battery-shard",
-     os.path.join("..", "os", "test_battery_shard.py"), 30),
+     os.path.join("..", "os", "test_battery_shard.py"), 31),
     # R2845: the OUTPUT-level face of the same question the census asks from
     # source. Four probe suites in a private world classify by the row they
     # really printed, the law and the invocation are imported from the runner,
@@ -7474,7 +7475,7 @@ SUITES = [
     # and the landed report pair, the tool and this registry are stat-signed
     # before and after.
     ("os-battery-shard-report",
-     os.path.join("..", "os", "test_battery_shard_report.py"), 10),
+     os.path.join("..", "os", "test_battery_shard_report.py"), 11),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

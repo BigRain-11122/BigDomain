@@ -1,0 +1,12 @@
+  | PASS AC-BSRB1 suites=733 criteria=5967 families=6 exp_equal=True literals=0
+  | PASS AC-BSRB2 rows=True nums=True red=True refused=True crlf_refused=True
+  | PASS AC-BSRB3 named=True no_write=True
+  | PASS AC-BSRB4 verdict=RED red=2 green=1 row_red=True fam_c=True
+  | PASS AC-BSRB5 clean=0 tampered=6 json_eq=True html_eq=True
+  | PASS AC-BSRB7 drift_named=True verdict_named=True cross=False
+  | PASS AC-BSRB6 http=0 scope_note=True uncovered=696 links=True
+  | PASS AC-BSRB8 overlap=True dup=True typed=True absent=True clean_no_family=True
+  | PASS AC-BSRB6b pair_tool_registry_unchanged=True
+  | PASS AC-BSRB7b banned=0 ascii=True
+  | PASS AC-BSRB10 today=True legacy=True timeout=True real=True(ok)
+SUITE PASS 11/11
