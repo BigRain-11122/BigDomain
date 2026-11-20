@@ -57,6 +57,17 @@ unpublishable, measured at R3131:
      either level, and the card prints its absent sentence rather than
      "readable=none".
 
+AC-CSC4 (five arms) - why an over-count is unpublishable, measured at R3133:
+  p  a dict claiming readable > files publishes nothing: unread would go
+     negative, and "more readings than entries" is physically impossible.
+  q  the negative control still publishes: equal counts keep the four keys
+     and grow no unread key.
+  r  the two counts are ONE enumeration's output: the census has exactly one
+     corpus_readable increment and it sits inside the names loop, while a
+     private world of four entries with two denied reads reads 4/2.
+  s  a real census reading never yields a negative unread end to end.
+  t  the card names a hand-made over-count instead of printing unread=-2.
+
 Isolation: private worlds are temp dirs; the only live reads are shipped
 sources. Stdlib only. Exit 0 = all green, 2 = at least one red.
 """
@@ -490,6 +501,118 @@ def arm_o():
     return True, "no corpus key at either level; card prints the absent line"
 
 
+def _four_entry_qa(world, denied=2):
+    """A world of four readable-shaped logs, `denied` of which refuse a read."""
+    baseline = _empty_baseline(world)
+    qa = os.path.join(world, "qa")
+    os.makedirs(qa)
+    for i in range(4):
+        write(os.path.join(qa, "w%d.log" % i), "[label] tidy row %d\n" % i)
+    return qa, baseline
+
+
+def _denied_reading(world, target_builder):
+    """Run the census with a read denial injected into its read pass."""
+    import qa_writer_census as CENSUS
+    target, baseline = target_builder(world)
+    real_open = io.open
+
+    def fake_open(path, *a, **kw):
+        if a and a[0] == "rb" and os.path.basename(path) in ("w1.log", "w2.log"):
+            raise OSError(13, "simulated denial")
+        return real_open(path, *a, **kw)
+
+    stats = {}
+    CENSUS.open = fake_open
+    try:
+        lines, rc = CENSUS.check_against_baseline(target, baseline, stats=stats)
+    finally:
+        del CENSUS.open
+    return stats, rc, "\n".join(lines)
+
+
+def arm_p():
+    """R3133: an over-count is a caller error and publishes nothing."""
+    if ER.corpus_block({"files": 5, "readable": 7, "bytes": 100}) is not None:
+        return False, "readable > files published a block"
+    return True, "readable=7 files=5 -> None"
+
+
+def arm_q():
+    """Negative control: equal counts still publish, with no unread key."""
+    block = ER.corpus_block({"files": 5, "readable": 5, "bytes": 100})
+    if not isinstance(block, dict):
+        return False, "a clean corpus stopped publishing: %r" % (block,)
+    if block.get("readable") != 5 or block.get("files") != 5:
+        return False, "counts drifted: %r" % (block,)
+    if "unread" in block:
+        return False, "clean corpus grew an unread key: %r" % (block,)
+    return True, "files=5 readable=5, no unread"
+
+
+def arm_r():
+    """The two counts are ONE enumeration's output, so overload is unreachable."""
+    import qa_writer_census as CENSUS
+    path = os.path.join(ROOT, "src", "os", "qa_writer_census.py")
+    tree = ast.parse(io.open(path, encoding="utf-8").read())
+    increments = []
+    loops = []
+    for node in ast.walk(tree):
+        if (isinstance(node, ast.For) and isinstance(node.iter, ast.Name)
+                and node.iter.id == "names"):
+            start = node.body[0].lineno
+            end = max(getattr(n, "lineno", start) for n in node.body)
+            loops.append((start, end))
+        if isinstance(node, ast.AugAssign) and isinstance(node.target, ast.Name):
+            if node.target.id == "corpus_readable":
+                increments.append(node.lineno)
+    if len(increments) != 1:
+        return False, "corpus_readable increment sites=%r" % (increments,)
+    if not any(lo <= increments[0] <= hi for lo, hi in loops):
+        return False, "the increment is outside the names loop %r" % (loops,)
+    world = tempfile.mkdtemp(prefix="csc-over-")
+    try:
+        stats, rc, _text = _denied_reading(world, _four_entry_qa)
+    finally:
+        shutil.rmtree(world, ignore_errors=True)
+    if stats.get("files") != 4 or stats.get("readable") != 2:
+        return False, "denied world read files=%r readable=%r (rc=%d)" % (
+            stats.get("files"), stats.get("readable"), rc)
+    if stats["readable"] > stats["files"]:
+        return False, "the census produced an over-count: %r" % (stats,)
+    return True, "one increment inside the names loop; 4 files/2 readable"
+
+
+def arm_s():
+    """End to end: a real census reading never yields a negative unread."""
+    world = tempfile.mkdtemp(prefix="csc-over-")
+    try:
+        stats, _rc, _text = _denied_reading(world, _four_entry_qa)
+    finally:
+        shutil.rmtree(world, ignore_errors=True)
+    block = ER.corpus_block({k: stats[k] for k in ("files", "readable", "bytes")})
+    if not isinstance(block, dict):
+        return False, "a real census reading stopped publishing: %r" % (block,)
+    unread = block.get("unread")
+    if unread is not None and not isinstance(unread, int):
+        return False, "unread is not an int: %r" % (block,)
+    if isinstance(unread, int) and unread < 0:
+        return False, "real reading published a negative unread: %r" % (block,)
+    return True, "block=%r unread=%r" % (block, unread)
+
+
+def arm_t():
+    """The card names a hand-made over-count instead of printing unread=-2."""
+    card = FD.corpus_card({"corpus": {"files": 5, "readable": 7,
+                                      "bytes": 100, "mb": 0.0, "unread": -2}})
+    if "readable exceeds files" not in card:
+        return False, "card did not name the over-count: %r" % card
+    for token in ("files=5", "readable=7", "unread=-2"):
+        if token in card:
+            return False, "card still printed %s: %r" % (token, card)
+    return True, "named defect line, no numbers"
+
+
 def main():
     criteria = [
         ("AC-CSC1", "os-corpus-supply-chain", [
@@ -510,6 +633,12 @@ def main():
           ("m", "negative control", arm_m),
           ("n", "supply census", arm_n),
           ("o", "payload + card", arm_o)]),
+        ("AC-CSC4", "os-corpus-over-count",
+         [("p", "over-count block", arm_p),
+          ("q", "negative control", arm_q),
+          ("r", "one enumeration", arm_r),
+          ("s", "real reading", arm_s),
+          ("t", "card defect line", arm_t)]),
     ]
     arms_total = 0
     red = 0

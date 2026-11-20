@@ -5756,10 +5756,23 @@ def corpus_card(face):
     # `readable=x` would read as a measurement; name the shape defect instead
     # and print no numbers at all.
     try:
-        int(block.get("readable"))
+        readable = int(block.get("readable"))
     except (TypeError, ValueError):
         return ("<p class=kv>CORPUS block is malformed (readable missing) "
                 "- not a reading</p>")
+
+    # R3133: the writer refuses an over-count (R3133 corpus_block), and the
+    # supply pass can never produce one - files and readable come out of ONE
+    # enumeration, so `readable > files` means this block was hand-made. A card
+    # that printed it would show unread=-2, a negative count that reads like a
+    # measurement. Name the shape defect and print no numbers.
+    try:
+        files_int = int(block.get("files"))
+    except (TypeError, ValueError):
+        files_int = None
+    if files_int is not None and readable > files_int:
+        return ("<p class=kv>CORPUS block is malformed (readable exceeds "
+                "files) - not a reading</p>")
 
     def show(value):
         return "none" if value is None else str(value)

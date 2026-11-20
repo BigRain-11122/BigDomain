@@ -1,0 +1,143 @@
+  | PASS AC-EXPW1 current follows the live tick R9001 - SOMETHING 
+  | PASS AC-EXPW1 the ledger line is never mistaken for the narrative R9001 - SOMETHING MEASURED IN THIS WINDO
+  | PASS AC-EXPW1 latest follows the newest pair on disk preview/zz-late-face.html (16B) + 
+  | PASS AC-EXPW1 next follows the open board row MAIN �� ʧ����·��**��д�ߡ�û�ж���**��`qa/crawl
+  | PASS AC-EXPW1 no round-number literal survives in the code strings bad=[]
+  | PASS AC-EXPW2 the built face carries the derived three lines tick=9001
+  | PASS AC-EXPW2 the tick row slot equals the live tick rows=1
+  | PASS AC-EXPW2 the newest pair heads the outs band preview/zz-late-face.html (16B
+  | PASS AC-EXPW3 every self_drive key comes from the shipped recompute keys=7
+  | PASS AC-EXPW3 a private world never invents a second derivation 
+  | PASS AC-EXPW4 --check writes nothing and both bytes and mtime hold fails=[]
+  | PASS AC-EXPW5 a missing tick row refuses with E_EXP and zero write E_EXP expected exactly 1 tick row,
+  | PASS AC-EXPW5 a duplicated tick row refuses with E_EXP and zero write E_EXP expected exactly 1 tick row,
+  | PASS AC-EXPW7 the board set is an explicit constant, not a guess board=('ceo-blockers', 'face-sweep', 'battery-shard-report', 'index')
+  | PASS AC-EXPW7 the newest pair on disk being a board page does not move the line preview/first-yuan-chain.html (16B) + pr
+  | PASS AC-EXPW7 every skipped name is a member of the same constant skipped=3
+  | PASS AC-EXPW7 a product pair on top needs no exclusion preview/first-yuan-chain.html (16B) + pr
+  | PASS AC-EXPW7 the live tree picks a non-board face picked=ledger-business-report
+  | PASS AC-EXPW8 an all-board tree yields a stated fact, not a board name (no product pair on disk - every pair is a meta boar
+  | PASS AC-EXPW8 the stated fact is not a pair receipt (no product pair on disk - every pair is
+  | PASS AC-EXPW8 adding one product pair replaces the fact with its name preview/first-yuan-chain.html (16B) + pr
+  | PASS AC-EXPW8 an empty preview keeps the existing empty-tree sentence (no preview pair on disk)
+  | PASS AC-EXPW9 the face carries the skipped audit and the board flag skipped=3
+  | PASS AC-EXPW9 the audit empties when no board pair is newer skipped=0
+  | PASS AC-EXPW9 the audit names bytes so it cannot be typed in s.html (16B)
+  | PASS AC-EXPW10 a correct private face reads clean fails=[]
+  | PASS AC-EXPW10 naming a board page reddens AC-EXPW7 fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk', 'AC-EXPW7 latest_artifact names a meta board page (ceo-blockers)']
+  | PASS AC-EXPW10 a silent exclusion reddens AC-EXPW9 fails=['AC-EXPW9 newest pair on disk is a board page but the skipped audit is empty']
+  | PASS AC-EXPW10 restoring the derived face reads clean again fails=[]
+  | PASS AC-EXPW11 a summary line above the headline never becomes current R9011 - ENGINEERING: the round did one measu
+  | PASS AC-EXPW11 removing the summary leaves current unchanged R9011 - ENGINEERING: the round did one measu
+  | PASS AC-EXPW11 a narrative about a fold stays a narrative, a bare range too, and the summary shape is excluded about=False range=False summary=True
+  | PASS AC-EXPW13 an intact archive does not block the write and is not re-grown skip='results archived to logs/status-export-legac'
+  | PASS AC-EXPW13 a live results list still moves the tick slot tick_row=['9013'] skipped=None
+  | PASS AC-EXPW14 a missing, mismatched or dangling archive is refused by name refusals=['E_EXP_NO_ARCHIVE results_archive a', 'E_EXP_NO_ARCHIVE archive sha256 00', 'E_EXP_NO_ARCHIVE results_archive.p']
+  | PASS AC-EXPG1 a dated round main line passes the law 
+  | PASS AC-EXPG4 an anchored private world grades clean (positive control) fails=[]
+  | PASS AC-EXPG1 an unanchored newest round refuses the write, zero bytes E_EXP_ROUND_SHAPE E_RMS_NO_DATE round=9031 n
+  | PASS AC-EXPG1 the refusal carries the law code it came from E_EXP_ROUND_SHAPE E_RMS_NO_DATE round=9031 newest round 9031
+  | PASS AC-EXPG2 the gate is the law module, not a second local regex law_calls=1 local_codes=0
+  | PASS AC-EXPG3 --check reddens on the unanchored tree, read-only fails=['E_EXP_ROUND_SHAPE E_RMS_NO_DATE round=9031 newest round 9031 has 1 round line(s) and none starts with a YYYY-MM-DD prefix']
+  | PASS AC-EXPG4 restoring the anchor clears the refusal again fails=[]
+  | PASS AC-EXPG4 the live tree still grades clean fails=[]
+  | PASS AC-EXPG5 the one-off state appenders are retired and the single vehicle remains leftovers=0
+  | PASS AC-EXPA1 --help and -h print usage at rc=0 and write nothing rc=0,0 face_moved=False
+  | PASS AC-EXPA2 an undefined flag and a dangling --root fail closed at rc=2 with the face untouched rc=2,2 face_moved=False
+  | PASS AC-EXPE1 the evidence line names the newest qa/*.log with its own bytes and date qa/zz-evidence-new.log (40B, 2026-11-21)
+  | PASS AC-EXPE1 a newer non-log fixture and an older log do not move it qa/zz-evidence-new.log (40B, 2026-11-21)
+  | PASS AC-EXPE1 evidence never leaks into the product slot preview/first-yuan-chain.html (16B) + pr
+  | PASS AC-EXPE2 evidence newer than the pair publishes a note naming it newest artifact this window is EVIDENCE, not a produ
+  | PASS AC-EXPE2 the note empties when the product pair is newer ''
+  | PASS AC-EXPE3 an absent qa/ is a stated fact and publishes no note (no qa evidence on disk)
+  | PASS AC-EXPE3 a correct evidence-free face reads clean fails=[]
+  | PASS AC-EXPE3 a fabricated evidence line reddens AC-EXPE1 fails=['AC-EXPE1 latest_evidence names a file that is not on disk: qa/invented-9999.log']
+  | PASS AC-EXPE3 a note over an evidence-free tree reddens AC-EXPE2 fails=['AC-EXPE2 a note is published although no evidence file is newer than the product pair']
+  | PASS AC-EXPE3 restoring the derived face reads clean again fails=[]
+  | PASS AC-EXPE4 the product slot still derives from the pair law alone preview/first-yuan-chain.html (16B) + pr
+  | PASS AC-EXPE4 the live face carries the evidence line after its refresh qa/probe-R3132.log (2002B, 2026-11-21)
+  | PASS AC-EXPD1 the pair line ends with the pair own mtime date json (3B) [2026-11-21 mtime]
+  | PASS AC-EXPD1 the published shape is the graded shape on (3B) [2026-11-21 mtime]
+  | PASS AC-EXPD1 both derivations publish the identical line sx=json (3B) [2026-11-21 mtime]
+  | PASS AC-EXPD2 the derived dated line grades clean fails=[]
+  | PASS AC-EXPD2 the OLD date-less shape reddens the check fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk']
+  | PASS AC-EXPD2 a WRONG date reddens it too fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk']
+  | PASS AC-EXPD2 restoring the derived line reads clean again fails=[]
+  | PASS AC-EXPD3 the board exclusion still holds on the dated line preview/first-yuan-chain.html (16B) + previe
+  | PASS AC-EXPD3 the all-board fact and the evidence line are unchanged (no product pair on disk - every
+  | PASS AC-EXPD4 the fixture built a real git work tree C:\Users\sjs20\AppData\Local\Temp\expw-git-zhbdlogh
+  | PASS AC-EXPD4 the red control: the mtime law picks the touched page old=1769904000 new=1767312000
+  | PASS AC-EXPD4 the content law picks the genuinely newer page preview/genuinely-new.html
+  | PASS AC-EXPD4 the ordering stamp is the committed change time 1767312000 vs t2=1767312000
+  | PASS AC-EXPD4 the touched page keeps its own commit date 2026-01-01
+  | PASS AC-EXPD5 uncommitted bytes use their own mtime stamp=1769990400 t4=1769990400
+  | PASS AC-EXPD5 an untracked page participates by its mtime stamp=1770076800 t5=1770076800
+  | PASS AC-EXPD5 a non-git world still orders by pure mtime stamp=1795215017
+  | PASS AC-EXPD5 an unreadable repository answers None instead of raising no exception
+  | PASS AC-EXPD6 the second git world built C:\Users\sjs20\AppData\Local\Temp\expw-git-2ppc_7b_
+  | PASS AC-EXPD6 the published line still matches PAIR_LINE_RE preview/genuinely-new.html (16B) + preview/g
+  | PASS AC-EXPD6 a face graded on a git world reads clean fails=[]
+  | PASS AC-EXPD6 the date red control still bites fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk']
+  | PASS AC-EXPD7 the provenance fixture built C:\Users\sjs20\AppData\Local\Temp\expw-git-n53syj47
+  | PASS AC-EXPD7 a committed pair publishes the commit clock uinely-new.json (3B) [2026-01-02 commit]
+  | PASS AC-EXPD8 the derived line grades clean fails=[]
+  | PASS AC-EXPD8 the marker-less pre-R2898 line reddens the check fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk']
+  | PASS AC-EXPD8 a face claiming the WRONG clock reddens it too fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk']
+  | PASS AC-EXPD9 both derivations publish the identical line sx=.json (3B) [2026-01-02 commit]
+  | PASS AC-EXPD7 the same pair edited after its commit publishes the mtime clock  + json [2026-01-02 commit]; later=html)
+  | PASS AC-EXPD9 group 1 of the line is still the DATE clean=2026-01-02 dirty=2026-02-02
+  | PASS AC-EXPD7 a non-git world publishes the mtime clock markers=commit/mtime/mtime
+  | PASS AC-EXPD9 the board exclusion and the all-board fact are unchanged preview/first-yuan-chain.html (16B) + pr
+  | PASS AC-EXPD10 an agreeing pair publishes NO disagreement note ew/agreeing.json (3B) [2026-01-01 mtime]
+  | PASS AC-EXPD11 a split pair names BOTH halves beside the winner bracket -02 mtime] (halves differ: html [2026-02-02 mtime] + json [2026-01-02 commit]; later=html)
+  | PASS AC-EXPD11 the noted line grades clean fails=[]
+  | PASS AC-EXPD11 a face that drops the note reddens --check fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk']
+  | PASS AC-EXPD12 both derivations publish the identical noted line sx= + json [2026-01-02 commit]; later=html)
+  | PASS AC-EXPD12 the noted line still yields date and clock in groups groups=('2026-02-02', 'mtime')
+  | PASS AC-EXPD10 the agreeing control line publishes no note either /dated-face.json (3B) [2026-11-21 mtime]
+  | PASS AC-EXPD12 appending the note to an AGREEING pair reddens fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk']
+  | PASS AC-EXPD13 a pair whose JSON half is later names json 1-01 mtime] + json [2026-01-02 mtime]; later=json)
+  | PASS AC-EXPD13 the MIRRORED pair names html 1-03 mtime] + json [2026-01-02 mtime]; later=html)
+  | PASS AC-EXPD14 the line carrying a later tag grades clean fails=[]
+  | PASS AC-EXPD14 stripping the later tag reddens --check fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk']
+  | PASS AC-EXPD14 claiming the WRONG half reddens too fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk']
+  | PASS AC-EXPD15 an agreeing pair publishes neither note nor later tag ew/agreeing.json (3B) [2026-01-01 mtime]
+  | PASS AC-EXPD15 groups on a noted line are still date and clock groups=('2026-01-03', 'mtime')
+  | PASS AC-EXPD16 the retired newer= shape is refused by PAIR_LINE_RE ] + json [2026-01-02 mtime]; later=html)
+  | PASS AC-EXPD16 a face still carrying newer= reddens --check fails=['AC-EXPW1 latest_artifact is not the newest product pair on disk']
+  | PASS AC-EXPD17 identical bytes keep the published size unchanged before=3 after=3 disk=3/3
+  | PASS AC-EXPD17 the tag still flips, so it measures the STAMP only ml [2026-01-03 mtime] + json [2026-01-04 mtime]; later=json)
+  | PASS AC-EXPD18 the note format carries later= and not newer= later=True newer=False
+  | PASS AC-EXPD18 both derivations agree on the noted line sx=] + json [2026-01-04 mtime]; later=json)
+  | PASS AC-EXPR1 the face publishes the birth site verdict block={'tick': 9310, 'state_tick': 9310, 'lag': 0, 'verdict': 'PASS', 'reason': 'fresh'}
+  | PASS AC-EXPR1 both copies are one derivation 
+  | PASS AC-EXPR1 a rewritten heartbeat moves lag and flips the verdict block={'tick': 9305, 'state_tick': 9310, 'lag': 5, 'verdict': 'FLAG', 'reason': 'heartbeat_row_debt'}
+  | PASS AC-EXPR1 a missing heartbeat is a named FLAG, not a green block={'tick': None, 'state_tick': 9310, 'lag': None, 'verdict': 'FLAG', 'reason': 'heartbeat_missing_or_unparsed'}
+  | PASS AC-EXPR1 the writer publishes it and --check reads the face clean fails=[]
+  | PASS AC-EXPR1 the live derivation equals the birth site reading live={'tick': 3132, 'state_tick': 3132, 'lag': 0, 'verdict': 'PASS', 'reason': 'fresh'} want={'status': 'PASS', 'tick': 3132, 'state': 3132, 'lag': 0, 'reason': 'fresh'}
+  | PASS AC-EXPR2 a landed face is judgeable by the shipped gate code=None ok=True
+  | PASS AC-EXPR2 a naive stamp is refused by name code=E_EXP_BAD_TS
+  | PASS AC-EXPR2 an unparsable face is refused by name code=E_EXP_BAD_FILE
+  | PASS AC-EXPR2 an absent face is refused by name code=E_EXP_NO_FILE
+  | PASS AC-EXPR2 repeated readings agree and carry a gate verdict a=None b=None v=FRESH
+  | PASS AC-EXPR3 a judgeable face lands through the door 
+  | PASS AC-EXPR3 a naive stamp refuses at the door and lands nothing code=E_EDQF_FACE_UNPROVEN: E_EXP_BAD_TS
+  | PASS AC-EXPR3 non-JSON refuses at the door and lands nothing code=E_EDQF_FACE_UNPROVEN: E_EXP_BAD_FILE
+APPLIED R9314 changed=True bytes=4500 lf_only=True bom=False
+do->2026-11-15 R9314 SOMETHING MEASURED IN THIS WINDOW
+latest_artifact->preview/zz-late-face.html (16B) + preview/zz-late-face.json (3B) [2026-11-21 mtime]
+next_milestone->R3133 [R3133] next window (<=48h): (0) MAIN �� **ȱ����ֻ�Ρ�ȱ readable�������ڲ�����һ����У�飺`files=5 ... due=2026-11-23T06:50:35+08:00
+E_SXF_UNPROVEN face=STAGED code=E_EXP_BAD_TS
+  | PASS AC-EXPR3 the raw-open composer self-proves its own landing ok=0 naive=8
+  | PASS AC-EXPR3 the live face is still judgeable through the door code=None
+  | PASS AC-EXPR4 a supplied corpus publishes two copies of one derivation top={'files': 7, 'bytes': 2000000, 'mb': 2.0, 'readable': 7} mirrored={'files': 7, 'bytes': 2000000, 'mb': 2.0, 'readable': 7}
+  | PASS AC-EXPR4 the MB token uses the decimal divisor mb=2.0
+  | PASS AC-EXPR4 an unmeasured corpus publishes no key at all had=True present=[]
+  | PASS AC-EXPR4 unread appears only when files and readable disagree unread=1 clean_has_unread=False
+  | PASS AC-EXPR4 the face carrying a corpus block stays judgeable code=None
+  | PASS AC-EXPW6 module source is pure ASCII 
+  | PASS AC-EXPW6 no network import found=[]
+  | PASS AC-EXPW6 exactly one battery row for this suite rows=['46']
+  | PASS AC-EXPE4-registry-units declared=[46] printed=46
+suite: 136 assertions over 46 criteria
+SUITE PASS 136/136

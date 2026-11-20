@@ -1,8 +1,8 @@
 """Suite for the corpus card: the tree-gate reading gets one live consumer.
 
-TWO criteria, each pre-registered on the src/os/backlog.md board BEFORE this
-file and the code it grades: AC-FDC3 (four arms, R3128) and AC-FDC4 (five arms,
-R3132).
+THREE criteria, each pre-registered on the src/os/backlog.md board BEFORE this
+file and the code it grades: AC-FDC3 (four arms, R3128), AC-FDC4 (five arms,
+R3132) and AC-FDC5 (R3133: an over-count is named, not rendered).
 
 R3128 measured the hole: the corpus (files / readable / bytes that the flags
 face already pays to read, ~4219 files / 508.1MB) was derived in exactly one
@@ -172,6 +172,31 @@ def main():
     if "absent" not in end_html or "malformed" in end_html:
         malformed.append("end-to-end-not-absent")
     report("AC-FDC4", bool(malformed), ",".join(malformed))
+
+    # ---- AC-FDC5: an over-count is a named defect, not a reading. ----
+    # R3133 pre-registered this on the board before the card changed: the
+    # census derives files and readable from ONE enumeration (one scandir, one
+    # increment inside the names loop), so readable > files cannot come from
+    # the supply path - a card that printed it would show unread=-2, a negative
+    # count that reads like a measurement. Legal disagreement (fewer readable
+    # than files) still prints its unread reading, which is the control.
+    over = []
+    html = frontdoor.corpus_card({"corpus": {"files": 5, "readable": 7,
+                                             "bytes": 100, "mb": 0.0,
+                                             "unread": -2}})
+    if "readable exceeds files" not in html:
+        over.append("over-count-not-named")
+    for token in ("files=", "readable=", "unread="):
+        if token in html:
+            over.append("prints-" + token.replace("=", ""))
+    legal = frontdoor.corpus_card({"corpus": {"files": 5, "readable": 3,
+                                              "bytes": 100, "mb": 0.0,
+                                              "unread": 2}})
+    if "unread=2" not in legal or "readable exceeds files" in legal:
+        over.append("legal-unread-changed")
+    if ER.corpus_block({"files": 5, "readable": 7, "bytes": 100}) is not None:
+        over.append("writer-now-publishes-over-count")
+    report("AC-FDC5", bool(over), ",".join(over))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

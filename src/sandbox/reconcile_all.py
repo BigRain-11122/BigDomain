@@ -7779,9 +7779,11 @@ SUITES = [
     # key and the live one carries none. AC-FDC3 (four arms, ONE criterion) was
     # pinned in src/os/backlog.md BEFORE the card consumed it. AC-FDC4 (five
     # arms) was pinned at R3132 BEFORE the card stopped printing a malformed
-    # block as a reading.
+    # block as a reading. R3133 added AC-FDC5: a block claiming more readings
+    # than files is named as a defect too, because printing it would show
+    # unread=-2 - while a legal shortfall still prints its unread reading.
     ("frontdoor-corpus-card",
-     os.path.join("test_frontdoor_corpus_card.py"), 2),
+     os.path.join("test_frontdoor_corpus_card.py"), 3),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files
@@ -7813,8 +7815,14 @@ SUITES = [
     # R3131 added a third (AC-CSC3): a corpus that cannot state `readable` is
     # also unpublishable - the one supply path writes all three counts in one
     # block and all 8 historical blocks carry readable.
+    # R3133 added a fourth (AC-CSC4): readable > files is unpublishable too.
+    # The census derives both counts from one enumeration (one scandir, one
+    # increment inside the names loop), a private world of 4 entries with 2
+    # denied reads reads 4/2, and all 10 historical blocks carry equal pairs -
+    # so an over-count is a caller error, and refusing it keeps `unread`
+    # non-negative by construction.
     ("os-corpus-supply-chain",
-     os.path.join("..", "os", "test_corpus_supply_chain.py"), 3),
+     os.path.join("..", "os", "test_corpus_supply_chain.py"), 4),
     ]
 
 FAILS = 0

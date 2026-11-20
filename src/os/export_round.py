@@ -636,6 +636,18 @@ def corpus_block(corpus):
         # publishes NOTHING.
         return None
     block['readable'] = readable
+    if readable > files:
+        # R3133: a corpus that claims more readings than entries is a caller
+        # error, not a very readable tree. Measured (qa/probe-R3133.log): the
+        # census derives files and readable from ONE enumeration (one scandir,
+        # one `corpus_readable += 1` inside the names loop), a private world of
+        # 4 entries with 2 denied reads reads files=4 readable=2, and across
+        # the 10 corpus blocks a published face has ever carried the pairs are
+        # 4230/4230, 4240/4240, 4248/4248 and 4256/4256 - never an over-count
+        # and never a negative unread. So readable > files cannot come from the
+        # supply path, and refusing here keeps `unread` non-negative by
+        # construction instead of publishing unread=-2.
+        return None
     # The token appears ONLY when the two disagree, so a clean corpus
     # publishes no unread key instead of a decorative zero.
     if readable != files:

@@ -1,0 +1,20 @@
+R3133 probe root=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain
+Q1a census enumerations (scandir/listdir) in check_against_baseline: 1
+Q1a corpus_readable increment sites: 1
+Q1a corpus_bytes increment sites: 1
+Q1a 'files' store: 1  'readable' store: 1
+Q1b private world: 4 files, 2 unreadable -> rc=2 stats={'files': 4, 'readable': 2, 'bytes': 38}
+Q1b readable <= files holds: True
+Q1b lines tail: disappeared=0 | flags=2 | verdict: DRIFT-FLAG
+Q1c forged readable>files -> {'files': 5, 'bytes': 100, 'mb': 0.0, 'readable': 7, 'unread': -2}
+Q2 face revisions in history: 2314
+Q2 corpus blocks anywhere in history: 10  unparseable faces: 591
+Q2 distinct (files,readable) pairs: {"4230/4230": 4, "4240/4240": 2, "4248/4248": 2, "4256/4256": 2}
+Q2 blocks with readable > files: 0
+Q2 blocks with negative unread: 0
+Q3 src/os/test_corpus_supply_chain.py: 'unread'=13 'readable > files'=0 'readable>files'=0
+Q3 src/os/test_corpus_supply_chain.py contains literal "files": 5
+Q3 src/sandbox/test_frontdoor_corpus_card.py: 'unread'=8 'readable > files'=0 'readable>files'=0
+Q3 src/sandbox/test_frontdoor_corpus_card.py contains literal "files": 5
+Q3 src/sandbox/frontdoor.py: 'unread'=8 'readable > files'=0 'readable>files'=0
+
