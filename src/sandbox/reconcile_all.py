@@ -4979,8 +4979,11 @@ SUITES = [
     # R3106: the not-asked line spells all three gate inputs (qa/baseline/doc)
     # and derives missing= from them - measured, one sentence covered three
     # different defects and called a world with qa+doc treeless (AC-COUT10).
+    # R3108: it also carries a derived hint - a file named qa no longer prints
+    # what an absent qa prints, and a near-name baseline is named with its real
+    # count (AC-COUT11).
     ("os-closeout",
-     os.path.join("..", "os", "test_closeout.py"), 22),
+     os.path.join("..", "os", "test_closeout.py"), 23),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with

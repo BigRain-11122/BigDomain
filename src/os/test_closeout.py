@@ -31,7 +31,7 @@ sys.path.insert(0, BASE)
 
 import closeout as CO  # noqa: E402
 
-EXPECTED_CRITERIA = 22
+EXPECTED_CRITERIA = 23
 MODULE = os.path.join(BASE, "closeout.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout"
@@ -991,6 +991,92 @@ def ac_cout10():
           "the code stays one token, and the live tree still reads PASS")
 
 
+def ac_cout11():
+    """AC-COUT11: the not-asked line says what else sits where the gate looked.
+
+    Six arms, one criterion (R3108): a world with a FILE named qa and a world
+    with no qa at all no longer print the same sentence; a baseline carrying
+    another name is named instead of merely implied absent; a qa directory
+    holding nothing near-name prints hint=none rather than a false lead; the
+    hint is DERIVED from the disk (a second near-name file changes the printed
+    count); the shipped parser and AC-COUT10's exact substring still match the
+    longer line; and the live tree still reads PASS without a hint token.
+    """
+    import re as _re
+    import qa_writer_census as cwc
+
+    tokens = _re.compile(r"qa=(\d) baseline=(\d) doc=(\d) missing=([a-z,]+)")
+
+    def build(folder, doc=True):
+        for sub in ("qa", "docs"):
+            path = os.path.join(folder, sub)
+            if not os.path.isdir(path):
+                os.makedirs(path)
+        if doc:
+            write(os.path.join(folder, "docs", "sandbox-suite-matrix.md"),
+                  "| x |\n")
+        return folder
+
+    bare = world()
+    qa_file = world()
+    write(os.path.join(qa_file, "qa"), "not a directory\n")
+    near = build(world())
+    write(os.path.join(near, "qa", "baseline.json"), "{}\n")
+    empty_qa = build(world())
+
+    try:
+        word_bare, line_bare, _v1 = CO.tree_refusal(bare)
+        word_file, line_file, _v2 = CO.tree_refusal(qa_file)
+        a_ok = (word_bare == word_file == "NOT-ASKED"
+                and "hint=qa-is-file" in line_file
+                and "hint=none" in line_bare
+                and line_bare != line_file)
+
+        word_near, line_near, _v3 = CO.tree_refusal(near)
+        b_ok = (word_near == "NOT-ASKED" and tokens.search(line_near) is not None
+                and tokens.search(line_near).group(4) == "baseline"
+                and "near-baseline:1:qa/baseline.json" in line_near)
+
+        word_empty, line_empty, _v4 = CO.tree_refusal(empty_qa)
+        c_ok = word_empty == "NOT-ASKED" and "hint=none" in line_empty
+
+        # DERIVATION: a second near-name file must move the printed count.
+        write(os.path.join(near, "qa", "another-baseline.json"), "{}\n")
+        _w, line_near2, _v5 = CO.tree_refusal(near)
+        d_ok = ("near-baseline:2:" in line_near2
+                and "qa/another-baseline.json" in line_near2)
+
+        # ZERO COLLISION: the one shipped parser and AC-COUT10's substring.
+        parsed = tokens.search(line_near)
+        e_ok = (parsed is not None
+                and parsed.groups() == ("1", "0", "1", "baseline")
+                and "E_CO_GATE_NO_INPUTS qa=1 baseline=0 doc=1 "
+                    "missing=baseline" in line_near
+                and cwc.BASELINE_NAME not in line_near)
+
+        live_word, live_line, _live_v = CO.tree_refusal(ROOT)
+        f_ok = (live_word == "PASS" and "census=PASS" in live_line
+                and "hint=" not in live_line)
+
+        ok = a_ok and b_ok and c_ok and d_ok and e_ok and f_ok
+        if not ok:
+            print("  measured: a=%r b=%r c=%r d=%r e=%r f=%r lines=%r"
+                  % (a_ok, b_ok, c_ok, d_ok, e_ok, f_ok,
+                     (line_bare, line_file, line_near, line_near2)),
+                  flush=True)
+    finally:
+        cleanup(bare)
+        cleanup(qa_file)
+        cleanup(near)
+        cleanup(empty_qa)
+    check(ok, "AC-COUT11 the not-asked line carries a derived hint: a file "
+          "named qa no longer prints what an absent qa prints, a near-name "
+          "baseline is named with its real count, an empty qa directory says "
+          "hint=none, the hint is recomputed from the disk, the shipped "
+          "parser and AC-COUT10's substring still match, and the live tree "
+          "still reads PASS")
+
+
 def main():
     print("closeout suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -1016,6 +1102,7 @@ def main():
     ac_cout8()
     ac_cout9()
     ac_cout10()
+    ac_cout11()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

@@ -1,0 +1,70 @@
+Q1 baseline name read from tools/qa_writer_census.py = 'writer-census-baseline.json'
+Q1 live qa/ entries=4241 json_not_baseline=7 case_variant_of_baseline=0 dirs=1
+   near-name qa/benchgate-R691.json (1245 bytes)
+   near-name qa/crawl-baselines.json (804 bytes)
+   near-name qa/deliverable-metrics-R683.json (8127 bytes)
+   near-name qa/runner-profile-baseline.json (12681 bytes)
+   near-name qa/runner-profile-daily-baseline.json (2243 bytes)
+   near-name qa/tmp-sweep-R2126-dryrun.json (204 bytes)
+   near-name qa/tmp-sweep-R2126-execute.json (211 bytes)
+Q1 live baseline present=True isdir_qa=True
+Q2 scanned .py files=2606 under src/ and tools/
+Q2 lines carrying a token=310 parser-shaped=1 printer-shaped=309
+   PARSER src\os\test_closeout.py:928 tokens = _re.compile(r"qa=(\d) baseline=(\d) doc=(\d) missing=([a-z,]+)")
+Q3 set-equality shaped readers=53
+   SET src\os\dm_precheck.py:83 f1 = (seq_rows_missing == 0 and live_missing == 14)
+   SET src\os\fold_roll_gen_R1976.py:63 assert not missing, "token loss: %s" % sorted(missing)
+   SET src\os\fold_roll_gen_R1992.py:63 assert not missing, "token loss: %s" % sorted(missing)
+   SET src\os\fold_roll_gen_R1997.py:63 assert not missing, "token loss: %s" % sorted(missing)
+   SET src\os\live_R2396.py:92 and rc_missing == 2
+   SET src\os\repair_tokens_prefix_R2597.py:75 for round_no in sorted(set(missing)):
+   SET src\os\stamp_locator.py:147 "missing_queues": sorted(missing),
+   SET src\os\test_bare_evidence_pile_refusal.py:181 and rc_missing == 2
+   SET src\os\test_bare_evidence_pile_refusal.py:219 ok = (rc_clean == 0 and rc_foreign == 2 and rc_missing == 2
+   SET src\os\test_closeout_export_parity_dialect_wire.py:364 check(missing == 3 and bad == 5 and no_publish == 5,
+   SET src\os\test_closeout_export_parity_wire.py:297 check(refused == 2 and missing == 3 and bad == 5 and no_publish == 5,
+   SET src\os\test_evidence_capture.py:265 and rc_missing == 3 and "E_EVC_NO_SUITE" in _body_missing
+   SET src\os\test_evidence_writer.py:159 ok(c_tee == 0 and c_dirty == 2 and c_missing == 3 and c_fix == 0
+   SET src\os\test_evidence_writer_dir.py:188 and c_missing == 3 and out_missing.startswith("MISSING"),
+   SET src\os\test_export_closeout_gate_parity.py:311 and code_missing == 3 and code_bad == 5)
+   SET src\os\test_export_publish_from_import_law.py:272 and rc_missing == 3 and "E_EPBW_NO_ROOT" in missing_err
+   SET src\os\test_export_publish_path_guard.py:280 and rc_missing == 3 and "E_EPPG_NO_ROOT" in missing_err
+   SET src\os\test_export_publish_wire_identity.py:316 and rc_missing == 3 and "E_EPWI_NO_ROOT" in missing_err
+   SET src\os\test_followup_guard_evidence_scope.py:245 ok = (rc_clean == 0 and rc_foreign == 2 and rc_missing == 3
+   SET src\os\test_gate_decl_append.py:291 and code_flag == 5 and code_missing == 5)
+   SET src\os\test_ledger_archive.py:234 and rc_missing == 3 and out_missing == ""
+   SET src\os\test_ledger_round_main_shape.py:223 and code_missing == 3)
+   SET src\os\test_leg_watch.py:180 rc_missing == 3 and rc_run == 0 and rc_closed == 2,
+   SET src\os\test_matrix_evidence_pile_consistency.py:282 ok = (rc_placed == 0 and rc_missing == 2 and rc_unreadable == 3
+   SET src\os\test_orphan_promote.py:317 and code_missing == 3 and no_clock)
+   SET src\os\test_os_retry_naming.py:172 and rc_missing == 3
+   SET src\os\test_owner_table_parity.py:249 ok = (rc_ok == 0 and rc_dis == 2 and rc_missing == 3 and rc_bad == 5
+   SET src\os\test_owner_table_reader_parity.py:301 ok = (rc_clean == 0 and rc_split == 2 and rc_missing == 3
+   SET src\os\test_owner_table_split_triage.py:278 ok = (rc_clean == 0 and rc_split == 2 and rc_missing == 3
+   SET src\os\test_owner_table_triage_expiry.py:268 ok = (rc_clean == 0 and rc_aged == 2 and rc_missing == 3
+   SET src\os\test_owner_table_usage_wire.py:307 and rc_dis == 2 and rc_missing == 3 and rc_bad == 5
+   SET src\os\test_patterns_label_readability.py:245 ok = check(rc_missing == 3, "AC-PLR5 a missing file exits 3") and ok
+   SET src\os\test_plain_import_alias_gate.py:264 and rc_missing == 3 and "E_PIAG_NO_ROOT" in missing_err
+   SET src\os\test_plain_import_comma_binding.py:259 and rc_missing == 3 and "E_PICB_NO_ROOT" in missing_err
+   SET src\os\test_publish_relative_package_identity.py:258 and rc_missing == 3 and "E_PRPI_NO_ROOT" in missing_err
+   SET src\os\test_queue_export_gate_wire.py:275 and code_missing == 3 and code_bad == 5)
+   SET src\os\test_queue_floor_reading_wire.py:218 and rc_debt == 2 and rc_bad == 2 and rc_missing == 3
+   SET src\os\test_refused_check_declaration_face.py:193 ok = (rc_missing == 2 and "UNPINNED" in body_missing
+   SET src\os\test_relative_import_alias_gate.py:259 and rc_missing == 3 and "E_RIAG_NO_ROOT" in missing_err
+   SET src\os\test_relative_import_publish_binding.py:268 and rc_missing == 3 and "E_RIPB_NO_ROOT" in missing_err
+   SET src\os\test_relative_module_corpus_scope.py:126 scoped = (code_missing == 2
+   SET src\os\test_relative_module_corpus_scope.py:290 check(rc_ok == 0 and rc_missing == rc_twice == 2
+   SET src\os\test_relative_module_existence_face.py:231 and rc_missing == 3
+   SET src\os\test_retire_candidate.py:334 and rc_none == 2 and rc_missing == 3 and rc_flags == 5)
+   SET src\os\test_review_window_guard_parity_consumer_wire.py:292 and code_missing == 5
+   SET src\os\test_run_identity.py:242 and code_audit == 0 and code_missing == 3
+   SET src\os\test_stamp_exempt_append.py:318 and missing == "E_SEAP_UNPINNED" and cli_bad.returncode == 5
+   SET src\os\test_suite_closing_row_census.py:202 ok = non_law == 0 and law == registry_n and missing == 0
+   SET src\os\water_consistency_probe.py:3038 and sqd_rows_missing == 14
+   SET src\os\water_consistency_probe.py:3040 and sqd_total_missing == sqd_total_pre)
+   SET src\sandbox\lobby\.venv\Lib\site-packages\pip\_internal\distributions\sdist.py:98 " and ".join(map(repr, sorted(missing))),
+   SET src\sandbox\lobby\.venv\Lib\site-packages\pip\_internal\distributions\sdist.py:162 requirement=self.req, missing=", ".join(map(repr, sorted(missing)))
+   SET src\sandbox\lobby\.venv\Lib\site-packages\pip\_internal\operations\check.py:99 missing[package_name] = sorted(missing_deps, key=str)
+Q4 no-qa      -> NOT-ASKED | E_CO_GATE_NO_INPUTS qa=0 baseline=0 doc=0 missing=qa,baseline,doc (the gate was not asked: absent qa,baseline,doc)
+Q4 qa-is-file -> NOT-ASKED | E_CO_GATE_NO_INPUTS qa=0 baseline=0 doc=0 missing=qa,baseline,doc (the gate was not asked: absent qa,baseline,doc)
+Q4 near-name -> NOT-ASKED | E_CO_GATE_NO_INPUTS qa=1 baseline=0 doc=1 missing=baseline (the gate was not asked: absent baseline)

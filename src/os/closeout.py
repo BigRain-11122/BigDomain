@@ -34,7 +34,10 @@ face and the derived document are tree-wide laws that no per-round vehicle was
 asking, which is how "state written, face written, gate red" happened. A world
 whose three gate inputs are not all present reads `gate=NOT-ASKED` with its
 reason on its own line (R3106: the line spells `qa`, `baseline` and `doc`, and
-derives `missing=` from them); one that builds a drifted tree is refused by
+derives `missing=` from them; R3108: it also carries a derived `hint=` - what
+else sits where the gate looked - so "there is nothing" and "something else
+occupies the name" stop printing the same sentence); one that builds a drifted
+tree is refused by
 name and the face keeps its bytes.
 Criteria AC-COUT8 were pinned in src/os/backlog.md at R3095 BEFORE this change.
 
@@ -219,6 +222,50 @@ def one_off_refusal(root):
     return ""
 
 
+HINT_CAP = 2
+
+
+def _near(folder, root, word, suffix):
+    """Names in `folder` that look like the input the gate wanted (R3108).
+
+    Derived from the disk on every call, never typed: the count is the real
+    count (so "two look like this" is provable) and only the first HINT_CAP
+    names ride on the line.
+    """
+    try:
+        names = sorted(n for n in os.listdir(folder)
+                       if n.lower().endswith(suffix) and word in n.lower())
+    except (IOError, OSError):
+        return []
+    if not names:
+        return []
+    shown = [os.path.relpath(os.path.join(folder, n), root).replace("\\", "/")
+             for n in names[:HINT_CAP]]
+    return ["near-%s:%d:%s" % (word, len(names), ",".join(shown))]
+
+
+def _hint(root, qa, have):
+    """What sits where the gate looked, for the inputs it did not find.
+
+    R3108 measured two shapes that printed the same sentence: a world with no
+    qa entry at all, and a world with a FILE named qa - and the second one
+    sends the reader to create a directory that is already occupied. The live
+    tree adds a third: qa/ holds three json files whose names contain
+    "baseline" while the census reads only writer-census-baseline.json, so
+    `missing=baseline` alone points at the wrong files.
+    """
+    parts = []
+    if not have[0] and os.path.exists(qa):
+        parts.append("qa-is-file")
+    if not have[1] and have[0]:
+        parts.extend(_near(qa, root, "baseline", ".json"))
+    if not have[2]:
+        docs = os.path.join(root, "docs")
+        if os.path.isdir(docs):
+            parts.extend(_near(docs, root, "matrix", ".md"))
+    return ";".join(parts) if parts else "none"
+
+
 def tree_refusal(root):
     """The closeout gate's TREE faces, asked before the CEO face is published.
 
@@ -268,8 +315,10 @@ def tree_refusal(root):
         missing = ",".join(name for name, ok in
                            zip(("qa", "baseline", "doc"), have) if not ok)
         return "NOT-ASKED", ("E_CO_GATE_NO_INPUTS qa=%d baseline=%d doc=%d "
-                             "missing=%s (the gate was not asked: absent %s)"
-                             % (have[0], have[1], have[2], missing, missing)), {}
+                             "missing=%s hint=%s (the gate was not asked: "
+                             "absent %s)"
+                             % (have[0], have[1], have[2], missing,
+                                _hint(root, qa, have), missing)), {}
     try:
         lines, code, verdict = CG.evaluate(qa, baseline, root=root)
     except (IOError, OSError, ValueError) as exc:

@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 735 | 5993 | 675/675 | R2739 |
+| 735 | 5994 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -502,7 +502,7 @@
 | 463 | os-state-append | ../os/test_state_append.py | 10 | no-evidence | - |
 | 464 | os-one-off-round-scripts | ../os/test_one_off_round_scripts.py | 6 | no-evidence | - |
 | 465 | os-pre-commit-gate | ../os/test_pre_commit_gate.py | 21 | no-evidence | - |
-| 466 | os-closeout | ../os/test_closeout.py | 22 | no-evidence | - |
+| 466 | os-closeout | ../os/test_closeout.py | 23 | no-evidence | - |
 | 467 | os-debt-register | ../os/test_debt_register.py | 8 | green | 1.3 |
 | 468 | os-export-freshness | ../os/test_export_freshness.py | 6 | green | 0.9 |
 | 469 | os-debt-append | ../os/test_debt_append.py | 6 | green | 0.2 |
@@ -772,7 +772,7 @@
 | 733 | os-ledger-business-report | ../os/test_ledger_business_report.py | 8 | no-evidence | - |
 | 734 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
 | 735 | os-corpus-rewrite-audit | ../os/test_corpus_rewrite_audit.py | 1 | no-evidence | - |
-|  | 合计 |  | 5993 | green 675 / FAIL 0 / no-evidence 60 |  |
+|  | 合计 |  | 5994 | green 675 / FAIL 0 / no-evidence 60 |  |
 
 ## 证据出处
 
