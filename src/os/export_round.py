@@ -707,6 +707,35 @@ def round_shape_refusal(state):
         report.get('code'), report.get('round'), report.get('detail'))
 
 
+UNJUDGEABLE_CODES = ('E_EXP_BAD_TS', 'E_EXP_BAD_FILE', 'E_EXP_NO_FILE',
+                     'E_EXP_BAD_FACE')
+
+
+def face_judgeable(exp, now=None):
+    """AC-EXPR2 (R3116): can the shipped gate JUDGE the face just landed?
+
+    R3116 measured that all four birth sites compare shapes and not one asks
+    the gate that actually reads the face whether it can read it - a naive
+    stamp would pass every shape check and still print `unreadable` on the
+    CEO card. Returns (code, report); code None means judgeable.
+
+    Only the four refusal codes count: freshness and the milestone window are
+    deliberately NOT judged here. A face is a snapshot, and an absent due
+    stamp is an honest unknown rather than a defect - the writer has no
+    standing to convict the milestone window.
+    """
+    import export_freshness as EF
+    if now is None:
+        now = datetime.datetime.now(TZ)
+    try:
+        report = EF.assess(exp, now)
+    except EF.ExportFreshnessError as exc:
+        return exc.code, None
+    if not report.get('present'):
+        return 'E_EXP_NO_FILE', report
+    return None, report
+
+
 def write(repo, stamp):
     import export_driver_queue_face as EDQF
     state = json.loads(_read(os.path.join(repo, 'src', 'os', 'state.json')))
@@ -721,6 +750,14 @@ def write(repo, stamp):
     if os.path.abspath(repo) == os.path.abspath(REPO):
         grader_code, grader_problems = _grader_reconcile(repo)
     back = json.loads(_read(exp))
+    # AC-EXPR2 (R3116): shape equality is not judgement. Ask the shipped gate
+    # whether the face this writer just landed can be judged at all before
+    # reporting ok - a naive stamp passes every shape check above and still
+    # prints `unreadable` on the only face the CEO keeps rendering.
+    unjudgeable, _report = face_judgeable(exp)
+    if unjudgeable:
+        raise ValueError('E_EXPR_UNPROVEN the face cannot be judged '
+                         'face=WRITTEN code=%s' % unjudgeable)
     # AC-RMS7: `current` is no longer compared against this module's own
     # derivation. The grader publishes the dated narrative line and grades it
     # (AC-SXF14/15), so keeping a second expected shape here would only make

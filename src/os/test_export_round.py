@@ -1243,7 +1243,12 @@ def main():
            'block=%s' % hb_h3)
         # writer arm: the writer refuses to publish a face without its own block
         write(os.path.join(wh, 'heartbeat.txt'), 'tick 9305\n')
-        ok_w, _, _ = mod.write(wh, 'TH4')
+        # R3116: this arm now lands a REAL ISO stamp, because AC-EXPR2 makes
+        # the writer ask the shipped gate whether the face is judgeable - a
+        # placeholder stamp is refused before ok can be reported.
+        stamp4 = mod.datetime.datetime.now(mod.TZ).replace(
+            microsecond=0).isoformat()
+        ok_w, _, _ = mod.write(wh, stamp4)
         back_h = json.loads(read(os.path.join(wh, 'docs', 'status-export.json')))
         ok('AC-EXPR1 the writer publishes it and --check reads the face clean',
            ok_w
@@ -1268,6 +1273,55 @@ def main():
            and live_hb.get('lag') == want_hb.get('lag')
            and live_hb.get('verdict') == want_hb.get('status'),
            'live=%s want=%s' % (live_hb, want_hb))
+
+        # ---- AC-EXPR2 (R3116 pin): shape equality is not judgement ----
+        # Measured before the pin: all four birth sites (closeout, export_round,
+        # export_R2431, tools/status_export_fresh) name export_freshness zero
+        # times and call assess zero times, while 160 shipped faces were all
+        # judgeable - so the gap was latent, not historical. The writer now asks
+        # the shipped gate whether the face it just landed can be read at all.
+        wj = build_world(9311)
+        worlds.append(wj)
+        write(os.path.join(wj, 'heartbeat.txt'), 'tick 9311\n')
+        stampj = mod.datetime.datetime.now(mod.TZ).replace(
+            microsecond=0).isoformat()
+        ok_j, _, _ = mod.write(wj, stampj)
+        jexp = os.path.join(wj, 'docs', 'status-export.json')
+        code_live, rep_live = mod.face_judgeable(jexp)
+        ok('AC-EXPR2 a landed face is judgeable by the shipped gate',
+           ok_j and code_live is None and rep_live.get('present') is True,
+           'code=%s ok=%s' % (code_live, ok_j))
+        # naive-stamp arm: the exact shape parse_ts refuses
+        face_j = json.loads(read(jexp))
+        face_j['export_ts'] = '2026-11-21T01:00:00'
+        write(jexp, json.dumps(face_j, ensure_ascii=False, indent=2) + '\n')
+        code_naive, _ = mod.face_judgeable(jexp)
+        ok('AC-EXPR2 a naive stamp is refused by name',
+           code_naive == 'E_EXP_BAD_TS', 'code=%s' % code_naive)
+        # bad-file arm: unparsable bytes are not a face
+        write(jexp, 'not json at all\n')
+        code_bad, _ = mod.face_judgeable(jexp)
+        ok('AC-EXPR2 an unparsable face is refused by name',
+           code_bad == 'E_EXP_BAD_FILE', 'code=%s' % code_bad)
+        # absent arm: a missing face is named, not assumed fresh
+        os.remove(jexp)
+        code_gone, _ = mod.face_judgeable(jexp)
+        ok('AC-EXPR2 an absent face is refused by name',
+           code_gone == 'E_EXP_NO_FILE', 'code=%s' % code_gone)
+        # derived arm: a judgeable face reads None twice and carries a real
+        # verdict from the gate's own vocabulary - so this is neither a
+        # constant refusal nor a shape-only skip
+        face_j['export_ts'] = stampj
+        write(jexp, json.dumps(face_j, ensure_ascii=False, indent=2) + '\n')
+        code_a, rep_a = mod.face_judgeable(jexp)
+        code_b, rep_b = mod.face_judgeable(jexp)
+        ok('AC-EXPR2 repeated readings agree and carry a gate verdict',
+           code_a is None and code_b is None
+           and rep_a.get('verdict') in ('FRESH', 'STALE-FACE',
+                                        'STALE-WINDOW',
+                                        'UNVERIFIABLE-WINDOW')
+           and rep_a.get('export_ts') == rep_b.get('export_ts'),
+           'a=%s b=%s v=%s' % (code_a, code_b, rep_a.get('verdict')))
 
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))

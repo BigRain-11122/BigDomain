@@ -1,0 +1,10 @@
+Q1 write-then-verify census
+  src/os/closeout.py                 assess=0 module_named=0 verify_after_write=False
+  src/os/export_round.py             assess=0 module_named=0 verify_after_write=False
+  src/os/export_R2431.py             assess=0 module_named=0 verify_after_write=False
+  tools/status_export_fresh.py       assess=0 module_named=0 verify_after_write=False
+
+Q2 shipped face versions scanned=160
+  stats={"absent": 0, "bad_json": 0, "empty": 0, "no_offset": 0, "ok": 160, "unparsable": 0}
+  newest_ok=feeb6393 oldest_ok=979b34e6
+  refused=0
