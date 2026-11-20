@@ -32,7 +32,7 @@ sys.path.insert(0, BASE)
 import closeout as CO  # noqa: E402
 import heartbeat as HB  # noqa: E402
 
-EXPECTED_CRITERIA = 25
+EXPECTED_CRITERIA = 26
 MODULE = os.path.join(BASE, "closeout.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout"
@@ -1238,6 +1238,84 @@ def ac_cout13():
           "nothing, and the live row equals the live tick")
 
 
+def ac_cout14():
+    """AC-COUT14: the heartbeat line carries its judgment, not only its tick.
+
+    Five arms, one criterion (R3114): R3113 published the reading and R3114
+    measured that nothing consumed it, while `hb=` still printed a lagging row
+    exactly like a fresh one. The OK path must say PASS (derived, not typed),
+    a lagging private world must say FLAG with the debt reason, a world with no
+    row must say FLAG with the missing reason, both token values are graded for
+    shape, and the live dry run must agree with heartbeat.verify character for
+    character.
+    """
+    folder = world(ROUND + 40)
+    try:
+        code_a, out_a, _ = run_cli(["--root", folder, "--round",
+                                    str(ROUND + 40), "--line",
+                                    "2026-11-21 R%d PRODUCT: verdict lands"
+                                    % (ROUND + 40), "--tick"])
+        a_ok = code_a == 0 and "hb_verdict=PASS" in out_a
+    finally:
+        cleanup(folder)
+
+    lagging = world(ROUND + 50)
+    try:
+        HB.write_tick(lagging, ROUND + 47)
+        code_b, out_b, _ = run_cli(
+            ["--root", lagging, "--round", str(ROUND + 50), "--line",
+             "2026-11-21 R%d PRODUCT: lagging dry run" % (ROUND + 50),
+             "--tick", "--check"])
+        b_ok = (code_b == 0 and "hb_verdict=FLAG" in out_b
+                and "hb_reason=heartbeat_row_debt" in out_b)
+    finally:
+        cleanup(lagging)
+
+    bare = world(ROUND + 60)
+    try:
+        code_c, out_c, _ = run_cli(
+            ["--root", bare, "--round", str(ROUND + 60), "--line",
+             "2026-11-21 R%d PRODUCT: no row dry run" % (ROUND + 60),
+             "--tick", "--check"])
+        c_ok = (code_c == 0 and "hb=none" in out_c
+                and "hb_verdict=FLAG" in out_c
+                and "hb_reason=heartbeat_missing_or_unparsed" in out_c)
+    finally:
+        cleanup(bare)
+
+    shape = re.compile(r"hb_verdict=(PASS|FLAG)(?: hb_reason=([a-z_]+))?")
+    seen = shape.findall(out_a) + shape.findall(out_b) + shape.findall(out_c)
+    d_ok = (len(seen) == 3
+            and all(reason == "" or re.match(r"^[a-z_]+$", reason)
+                    for _status, reason in seen))
+
+    live_tick, _ = ticks(ROOT)
+    live = HB.verify(ROOT, live_tick)
+    code_e, out_e, _ = run_cli(["--root", ROOT, "--round", str(live_tick + 1),
+                                "--line",
+                                "2026-11-21 R%d SMOKE the dry run prints the "
+                                "heartbeat verdict it derived"
+                                % (live_tick + 1), "--check"])
+    if live.get("tick") is None:
+        want = "hb=none hb_verdict=FLAG hb_reason=heartbeat_missing_or_unparsed"
+    else:
+        want = "hb=%d hb_verdict=%s" % (int(live["tick"]), live["status"])
+        if live["status"] != "PASS":
+            want += " hb_reason=%s" % live["reason"]
+    e_ok = code_e == 0 and want in out_e
+
+    ok = a_ok and b_ok and c_ok and d_ok and e_ok
+    if not ok:
+        print("  measured: a=%r b=%r c=%r d=%r e=%r out_a=%r out_b=%r "
+              "out_c=%r want=%r"
+              % (a_ok, b_ok, c_ok, d_ok, e_ok, out_a.strip()[:220],
+                 out_b.strip()[:220], out_c.strip()[:220], want), flush=True)
+    check(ok, "AC-COUT14 the heartbeat line carries its judgment: OK says "
+          "PASS, a lagging row says FLAG with the debt reason, a missing row "
+          "says FLAG with the missing reason, both tokens are shape-graded, "
+          "and the live dry run agrees with heartbeat.verify")
+
+
 def main():
     print("closeout suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -1266,6 +1344,7 @@ def main():
     ac_cout11()
     ac_cout12()
     ac_cout13()
+    ac_cout14()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

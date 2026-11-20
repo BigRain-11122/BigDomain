@@ -4986,7 +4986,7 @@ SUITES = [
     # whether the closed round also aligns the heartbeat row through its one
     # birth site (24 -> 25).
     ("os-closeout",
-     os.path.join("..", "os", "test_closeout.py"), 25),
+     os.path.join("..", "os", "test_closeout.py"), 26),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with
@@ -7752,6 +7752,13 @@ SUITES = [
     # criterion) was pinned in src/os/backlog.md BEFORE the module existed.
     ("os-heartbeat",
      os.path.join("..", "os", "test_heartbeat.py"), 1),
+    # R3114: the published heartbeat block gets its one live consumer. Measured
+    # before the card existed: 22 shipped readers of the block key, all writer,
+    # checker or test, and the CEO card's validated key tuple did not name the
+    # block - so a FLAG verdict was published and never rendered. AC-FDC1 (six
+    # arms, ONE criterion) was pinned in src/os/backlog.md BEFORE the card.
+    ("frontdoor-heartbeat-card",
+     os.path.join("test_frontdoor_heartbeat_card.py"), 1),
     ]
 
 FAILS = 0

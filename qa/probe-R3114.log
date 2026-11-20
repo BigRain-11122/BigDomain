@@ -1,0 +1,44 @@
+Q1 block-key readers over 2078 shipped .py files
+  production src/os/export_round.py:484 def heartbeat_block(repo, state):
+  production src/os/export_round.py:636 hb = heartbeat_block(repo, state)
+  production src/os/export_round.py:637 data['heartbeat'] = hb
+  production src/os/export_round.py:638 ceo['heartbeat'] = hb
+  production src/os/export_round.py:738 and back.get('heartbeat') == data.get('heartbeat')
+  production src/os/export_round.py:739 and (back.get('ceo_face') or {}).get('heartbeat')
+  production src/os/export_round.py:740 == back.get('heartbeat')
+  production src/os/export_round.py:769 hb = data.get('heartbeat')
+  production src/os/export_round.py:783 if cur.get('heartbeat') != hb:
+  test   src/os/test_export_round.py:1222 hb_h = built_h.get('heartbeat') or {}
+  test   src/os/test_export_round.py:1228 (built_h.get('ceo_face') or {}).get('heartbeat') == hb_h)
+  test   src/os/test_export_round.py:1232 hb_h2 = built_h2.get('heartbeat') or {}
+  test   src/os/test_export_round.py:1239 hb_h3 = built_h3.get('heartbeat') or {}
+  test   src/os/test_export_round.py:1250 and back_h.get('heartbeat')
+  test   src/os/test_export_round.py:1251 == (back_h.get('ceo_face') or {}).get('heartbeat')
+  test   src/os/test_export_round.py:1263 live_hb = mod.heartbeat_block(ROOT, live_state)
+  production src/sandbox/frontdoor.py:5748 hb = lobby["heartbeat"]
+  production src/sandbox/lobby/server.py:104 heartbeat = cfg["heartbeat"]
+  production src/sandbox/lobby/server.py:687 cfg["heartbeat"]["ping_interval"]
+  production src/sandbox/lobby/server.py:690 cfg["heartbeat"]["ping_timeout"]
+  test   src/sandbox/lobby/test_client.py:4166 ok_cfg_hb = (cfg["heartbeat"]["ping_interval"] == 30
+  test   src/sandbox/lobby/test_client.py:4167 and cfg["heartbeat"]["ping_timeout"] == 60)
+Q1 totals: production=13, test=9
+Q1 production readers OUTSIDE export_round.py = 4
+Q1 non-python hits = 18
+  docs/status-export.json:18 "heartbeat": {
+  docs/status-export.json:209 "heartbeat": {
+  src/os/backlog.md:1 - [x] [done 2026-11-21 R3113 — 板头 (0) 落地：**心跳读数有了消费者——它现在被发布，而不是被打印。**先量（`tmp/probe_R3113.py` → `qa/probe-R311
+  src/os/backlog.md:3 - [R3113 PIN — 本轮回答队头·判据先立·**先落板再动代码**] 队头具名：**`hb=` 是读数却没有一个生产消费者——而心跳的真实历史证明它不是装饰。** 只读实测（`tmp/probe_R3113.p
+  src/os/closeout_lines_R2032.json:4 "heartbeat": "R2032: nine-company @domain plan + FUNNEL-LOOP v0.1 landed (docs/ops/FUNNEL-AUTOMATION-PLAN-v1.m
+  src/os/export_lines_R2329.json:7 "heartbeat": "tick 2329 2026-11-01 product window: shipped src/os/stamp_exempt_prune.py + src/os/test_stamp_ex
+  src/os/export_lines_R2330.json:7 "heartbeat": "tick 2330 2026-11-01 verification window: battery RED 471/472 on ledger-devshare-persist (AC-DSV
+  src/os/export_lines_R2331.json:7 "heartbeat": "tick 2331 2026-11-01 product window: retire_candidate shipped (six criteria green twice, three i
+  src/os/export_lines_R2333.json:7 "heartbeat": "tick 2333 product window: retire_accept shipped (six criteria green twice with an identical dige
+  src/os/export_lines_R2335.json:7 "heartbeat": "R2335 product window: shipped residue_triage_append (one dated entry as its own operation, dupli
+  src/os/export_lines_R2336.json:8 "heartbeat": "tick 2336 R2336 verdict=PASS battery=475/475 criteria=3826 followups=PASS folds=625,626 debt=fol
+  src/os/export_lines_R2337.json:7 "heartbeat": "tick 2337 2026-11-01 R2337 product window: queue_occupancy reads the tech queue claimable=10 pre
+Q2 commits inspected (bounded, newest 80 touching the two files) = 80, readable pairs = 80
+Q2 versions with state tick >= 3111 = 2
+Q2 disagreements = 0
+Q2 distinct ticks = 2, ticks with >1 version = 0 []
+Q3 frontdoor validated key tuple at line 7465:         for _k in ("export_ts", "do", "ceo_face", "depts", "outs",\n                   "results", "self_drive"):\n            if _k not in sd30:\n                raise KeyError("missing key: %s" % _k)
+Q3 frontdoor renders the heartbeat block = False

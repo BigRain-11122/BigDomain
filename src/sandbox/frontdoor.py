@@ -5702,6 +5702,34 @@ def run_wm_probe_once():
 WM_RES, WM_ERR = run_wm_probe_once()
 
 
+def heartbeat_card(face):
+    """Render the published heartbeat block. One input, zero business copy.
+
+    R3114 measured the hole: 22 shipped readers of this block key exist, all of
+    them the writer (src/os/export_round.py), its checker or its test, and the
+    key tuple this page validates against did not even name `heartbeat` - so a
+    FLAG verdict was published into a document nobody read that far down. This
+    is a pure consumption face: it renders what the data file says, it never
+    re-derives a verdict, and an absent block prints an honest absence line
+    rather than a green one.
+    """
+    if not isinstance(face, dict) or not face:
+        return ("<p class=kv>HB block absent from the export face "
+                "(honest absence, no fake PASS)</p>")
+
+    def show(value):
+        return "none" if value is None else str(value)
+
+    verdict = str(face.get("verdict") or "FLAG")
+    line = ("HB tick=%s state_tick=%s lag=%s verdict=%s"
+            % (show(face.get("tick")), show(face.get("state_tick")),
+               show(face.get("lag")), verdict))
+    if verdict == "PASS":
+        return "<p class=kv>%s</p>" % esc(line)
+    return ("<p class=kv>%s</p><p class=fail>HB ALERT reason=%s</p>"
+            % (esc(line), esc(show(face.get("reason")))))
+
+
 def render():
     lobby = load_json(LOBBY_CFG)
     pay = load_json(PAY_CFG)
@@ -7496,6 +7524,10 @@ def render():
         sd30_do_html = esc("company mandate line (do): %s"
                            % str(sd30["do"]))
         sd30_ceolines = esc(sd30_ceo_txt)
+        # R3114: the heartbeat block gets its one live consumer. Rendered from
+        # the data file's own block, never re-derived here.
+        sd30_hb = heartbeat_card(_cf.get("heartbeat")
+                                 if isinstance(_cf, dict) else None)
         sd30_sd_html = esc(sd30_sd_txt)
         sd30_hard = esc(
             "structural law (R1223 pre-registered AC-FD30a..f): "
@@ -7514,6 +7546,7 @@ def render():
             "makes the CEO-visible process status live")
     else:
         sd30_kpis = sd30_do_html = sd30_ceolines = ""
+        sd30_hb = ""
         sd30_sd_html = sd30_hard = ""
     if sd30_err:
         sd30_kpis = ("<p class=fail>STATUS-EXPORT READ FAILED "
@@ -8243,6 +8276,9 @@ __SD30_KPIS__
 <h3 style="margin:14px 0 8px">CEO face (three lines, verbatim
 from export)</h3>
 <p class="mgcompliance">__SD30_CEOLINES__</p>
+<h3 style="margin:14px 0 8px">Heartbeat (the closeout's own tick row)
+</h3>
+__SD30_HB__
 <p class=kv>__SD30_SD__</p>
 <p class=kv>__SD30_HARD__</p>
 </div>
@@ -8524,6 +8560,7 @@ __PAYWARN__</footer>
         "__SD30_KPIS__": sd30_kpis,
         "__SD30_DO__": sd30_do_html,
         "__SD30_CEOLINES__": sd30_ceolines,
+        "__SD30_HB__": sd30_hb,
         "__SD30_SD__": sd30_sd_html,
         "__SD30_HARD__": sd30_hard,
         "__M1_TITLE__": esc(m1["card_title"]),

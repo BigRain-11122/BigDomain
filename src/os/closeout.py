@@ -205,6 +205,24 @@ def _confirm_state_moved(path, result):
     return ""
 
 
+def _hb_bits(verdict):
+    r"""The heartbeat reading AND its judgment, in one place for both paths.
+
+    R3114 measured the hole this closes: the block published at R3113 has zero
+    consumers outside its writer, and `hb=` printed the tick with no verdict -
+    so a lagging heartbeat read exactly like a fresh one. The tokens ride after
+    a space, so the one parser-shaped regex in the tree (a test pinning
+    `qa=(\d) baseline=(\d) doc=(\d) missing=([a-z,]+)`) is untouched.
+    """
+    tick = verdict.get("tick")
+    status = verdict.get("status") or "FLAG"
+    bits = "hb=%s hb_verdict=%s" % ("none" if tick is None else str(tick),
+                                    status)
+    if status != "PASS":
+        bits += " hb_reason=%s" % (verdict.get("reason") or "unstated")
+    return bits
+
+
 def heartbeat_face(root, tick):
     """Write the repo-root tick through the one birth site, then read it back.
 
@@ -456,7 +474,11 @@ def run(args):
         # face), so the heartbeat is only READ here - a private world with no
         # heartbeat row legitimately reads `none`, and the writing face lives
         # on the OK path after the state really moved.
-        held_hb = HB.read_tick(root)
+        # R3114: the read carries its verdict. A dry run is exactly where a
+        # lagging row is real (state has not moved yet this round), so the
+        # judgment is printed instead of being left to the operator.
+        held_hb = HB.verify(root, result["tick"])
+        hb_bits = _hb_bits(held_hb)
         # The tree faces are round-independent, so a dry run can and does ask
         # them - that is the one verdict a --check can give without waiting for
         # a write. A red tree is reported here, not invented.
@@ -474,11 +496,10 @@ def run(args):
         ms_tail = (" " + " ".join(bits) + " state_ms=%s" % state_ms
                    if bits else " face_ms=n/a state_ms=%s" % state_ms)
         return 0, (["CLOSEOUT CHECK step=state tick=%d log=%d bytes=%d "
-                    "fold_margin=%d %s face=NOT-MEASURED gate=%s hb=%s%s"
+                    "fold_margin=%d %s face=NOT-MEASURED gate=%s %s%s"
                     % (result["tick"], result["log"], result["bytes"],
                        result["fold_margin"], result.get("detail") or "",
-                       gate_word,
-                       "none" if held_hb is None else str(held_hb), ms_tail)]
+                       gate_word, hb_bits, ms_tail)]
                    + _detail_lines(gate_verdict))
 
     unproven = _confirm_state_moved(state_path(root), result)
@@ -523,14 +544,17 @@ def run(args):
                    % (ok, proof.get("gate"), proof.get("bytes"),
                       derived.get("latest"))]
 
-    hb_now = HB.read_tick(root)
+    # R3114: the OK path prints the same reading-plus-judgment as the dry run.
+    # Step 1.6 has just aligned the row, so PASS is the only honest outcome
+    # here - but it is DERIVED, not asserted, and a refusal would show by name.
+    hb_now = HB.verify(root, result["tick"])
     lines = ["CLOSEOUT OK tick=%d state=WRITTEN face=WRITTEN "
              "log=%d bytes=%d fold_margin=%d queue=%s queue_bytes=%s "
-             "latest=%s gate=%s hb=%s"
+             "latest=%s gate=%s %s"
              % (result["tick"], result["log"], result["bytes"],
                 result["fold_margin"], proof.get("gate"),
                 proof.get("bytes"), derived.get("latest"), gate_word,
-                "none" if hb_now is None else str(hb_now))]
+                _hb_bits(hb_now))]
     if gate_word == "NOT-ASKED":
         # Printed, not silent: a round closed in a world whose gate inputs are
         # not all present says so on its own line, naming which are absent.
