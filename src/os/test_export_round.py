@@ -1209,6 +1209,66 @@ def main():
         ok('AC-EXPD18 both derivations agree on the noted line',
            sx_n3 == line_n3, 'sx=%s' % sx_n3[-40:])
 
+        # ---- AC-EXPR1 (R3113 pin): the heartbeat reading gets a consumer ----
+        # R3113 measured 0 production parsers of closeout's `hb=` reading, and
+        # 18 of 2125 shipped heartbeat versions disagreed with their own round's
+        # state tick - so the reading is published on the CEO face and graded
+        # for internal consistency, never for freshness (the face is a snapshot).
+        wh = build_world(9310)
+        worlds.append(wh)
+        sh = json.loads(read(os.path.join(wh, 'src', 'os', 'state.json')))
+        write(os.path.join(wh, 'heartbeat.txt'), 'tick 9310\n')
+        built_h, _ = mod.payload(wh, sh, 'TH1')
+        hb_h = built_h.get('heartbeat') or {}
+        ok('AC-EXPR1 the face publishes the birth site verdict',
+           hb_h.get('verdict') == 'PASS' and hb_h.get('lag') == 0
+           and hb_h.get('tick') == 9310 and hb_h.get('state_tick') == 9310,
+           'block=%s' % hb_h)
+        ok('AC-EXPR1 both copies are one derivation',
+           (built_h.get('ceo_face') or {}).get('heartbeat') == hb_h)
+        # derived arm: a rewritten heartbeat must move the reading
+        write(os.path.join(wh, 'heartbeat.txt'), 'tick 9305\n')
+        built_h2, _ = mod.payload(wh, sh, 'TH2')
+        hb_h2 = built_h2.get('heartbeat') or {}
+        ok('AC-EXPR1 a rewritten heartbeat moves lag and flips the verdict',
+           hb_h2.get('lag') == 5 and hb_h2.get('verdict') == 'FLAG'
+           and hb_h2.get('tick') == 9305, 'block=%s' % hb_h2)
+        # missing arm: absence is a named FLAG, never a green
+        os.remove(os.path.join(wh, 'heartbeat.txt'))
+        built_h3, _ = mod.payload(wh, sh, 'TH3')
+        hb_h3 = built_h3.get('heartbeat') or {}
+        ok('AC-EXPR1 a missing heartbeat is a named FLAG, not a green',
+           hb_h3.get('verdict') == 'FLAG' and hb_h3.get('tick') is None
+           and hb_h3.get('reason') == 'heartbeat_missing_or_unparsed',
+           'block=%s' % hb_h3)
+        # writer arm: the writer refuses to publish a face without its own block
+        write(os.path.join(wh, 'heartbeat.txt'), 'tick 9305\n')
+        ok_w, _, _ = mod.write(wh, 'TH4')
+        back_h = json.loads(read(os.path.join(wh, 'docs', 'status-export.json')))
+        ok('AC-EXPR1 the writer publishes it and --check reads the face clean',
+           ok_w
+           and back_h.get('heartbeat')
+           == (back_h.get('ceo_face') or {}).get('heartbeat')
+           and mod.check(wh) == [], 'fails=%s' % mod.check(wh)[:2])
+        # live arm: the block derived from the LIVE tree equals the birth site's
+        # own reading. R3113 amendment (recorded on the board): the first shape
+        # of this arm read ROOT/docs/status-export.json, which is written by the
+        # closeout - so the suite could only pass AFTER the round it belongs to
+        # had closed. A law that grades the closing order is not grading the
+        # code; publication is pinned by the writer arm above, and this arm now
+        # grades the live derivation itself.
+        import heartbeat as HB
+        live_state = json.loads(read(os.path.join(ROOT, 'src', 'os',
+                                                  'state.json')))
+        live_hb = mod.heartbeat_block(ROOT, live_state)
+        want_hb = HB.verify(ROOT, int(live_state.get('tick')))
+        ok('AC-EXPR1 the live derivation equals the birth site reading',
+           live_hb.get('tick') == want_hb.get('tick')
+           and live_hb.get('state_tick') == want_hb.get('state')
+           and live_hb.get('lag') == want_hb.get('lag')
+           and live_hb.get('verdict') == want_hb.get('status'),
+           'live=%s want=%s' % (live_hb, want_hb))
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')

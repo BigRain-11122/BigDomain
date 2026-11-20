@@ -481,6 +481,31 @@ def next_window_row(repo):
     return ''
 
 
+def heartbeat_block(repo, state):
+    """The heartbeat birth site's own verdict, PUBLISHED instead of printed.
+
+    R3113 measured: of eleven repo hits naming the closeout's `hb=` reading,
+    zero parse it in production (two are the writer's own format strings, two
+    are assertions inside its test, the rest are prose copies). A reading no
+    surface consumes is a reading that cannot be missed. This block hands it to
+    the CEO face: every value comes from heartbeat.verify() over the tree, so a
+    PASS cannot be typed into the document either.
+    """
+    import heartbeat
+    try:
+        state_tick = int(state.get('tick'))
+    except (TypeError, ValueError):
+        state_tick = None
+    verdict = heartbeat.verify(repo, state_tick)
+    return {
+        'tick': verdict.get('tick'),
+        'state_tick': verdict.get('state'),
+        'lag': verdict.get('lag'),
+        'verdict': verdict.get('status'),
+        'reason': verdict.get('reason'),
+    }
+
+
 def derive(repo, state, stamp):
     """Every value the face publishes, derived from files on disk."""
     cur = last_round_line(state).strip()
@@ -605,6 +630,12 @@ def payload(repo, state, stamp):
     ceo['latest_evidence'] = d['evidence']
     ceo['latest_artifact_note'] = d['note']
     data['latest_evidence'] = d['evidence']
+    # R3113: the heartbeat reading gets a consumer. Two copies of ONE derivation,
+    # for the same reason the evidence line carries two - a reader must never
+    # find two opinions about the same file in one document.
+    hb = heartbeat_block(repo, state)
+    data['heartbeat'] = hb
+    ceo['heartbeat'] = hb
     ceo['updated_at'] = stamp
     data['ceo_face'] = ceo
     # AC-EXPW3: the self_drive block is not a second derivation, it IS the
@@ -702,6 +733,11 @@ def write(repo, stamp):
           and back['ceo_face'].get('latest_evidence') == d['evidence']
           and back['ceo_face'].get('latest_artifact_note') == d['note']
           and back.get('latest_evidence') == d['evidence']
+          # R3113: the writer must publish the heartbeat reading it derived -
+          # this is the consumer the R3113 probe measured as missing.
+          and back.get('heartbeat') == data.get('heartbeat')
+          and (back.get('ceo_face') or {}).get('heartbeat')
+          == back.get('heartbeat')
           # R2834 measured: this used to read `back['export_ts'] == stamp`, which
           # compares TWO clocks. The grader that publishes the stamp takes its own
           # `now()` after this function's stamp exists, so a one-second boundary
@@ -726,6 +762,26 @@ def check(repo):
     state = json.loads(_read(os.path.join(repo, 'src', 'os', 'state.json')))
     cur = data.get('ceo_face') or {}
     fails = []
+    # AC-EXPR1: the published heartbeat block is graded for INTERNAL
+    # consistency, never for freshness. The face is a snapshot at export_ts and
+    # a heartbeat legitimately lags between rounds, so comparing it to the live
+    # tree here would redden every round - a gate that cannot pass is not a gate.
+    hb = data.get('heartbeat')
+    if isinstance(hb, dict):
+        if hb.get('verdict') not in ('PASS', 'FLAG'):
+            fails.append('AC-EXPR1 heartbeat verdict %r is not PASS/FLAG'
+                         % (hb.get('verdict'),))
+        if hb.get('tick') is not None and hb.get('state_tick') is not None:
+            try:
+                want = int(hb['state_tick']) - int(hb['tick'])
+            except (TypeError, ValueError):
+                fails.append('AC-EXPR1 heartbeat ticks are not integers')
+            else:
+                if hb.get('lag') != want:
+                    fails.append('AC-EXPR1 heartbeat lag %r != state_tick - tick'
+                                 % (hb.get('lag'),))
+        if cur.get('heartbeat') != hb:
+            fails.append('AC-EXPR1 the two heartbeat copies disagree')
     # AC-EXPG3: the read-only verdict asks the same law, so an unanchored log
     # reddens the gate without anyone writing anything.
     refusal = round_shape_refusal(state)

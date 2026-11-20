@@ -1,0 +1,31 @@
+PROBE R3113 (read-only; git blobs only; no socket, no clock, no network)
+CORPUS hb_versions=2125
+Q1_UNREADABLE commit=d2a8fc79ce77 err=JSONDecodeError('Invalid \\escape: line 26 column 472 (char 35941)') head=b'{\n  "tick": 1243,\n  "log": [\n    "2026-09-25\xef\xbc\x88R'
+Q1_HB_VS_SAME_COMMIT_STATE versions=2125 state_unreadable=1 mismatch=18
+Q1_ROW commit=c5d1b006323c hb=948 state=949
+Q1_ROW commit=0a93b0f16ac4 hb=1516 state=1517
+Q1_ROW commit=2a6f71a13add hb=1794 state=1795
+Q1_ROW commit=2a60675f21e7 hb=2026 state=2236
+Q1_ROW commit=7fc80908f9c9 hb=2026 state=2237
+Q1_ROW commit=ec1cb0ae398c hb=2026 state=2241
+Q1_ROW commit=57a245d1bb86 hb=2026 state=2242
+Q1_ROW commit=9841dcb2e569 hb=2026 state=2243
+Q1_ROW commit=8e8fb1d19d68 hb=2026 state=2249
+Q1_ROW commit=a30f725df806 hb=2026 state=2251
+Q1_ROW commit=e9901a311583 hb=2026 state=2252
+Q1_ROW commit=2488a16dbfc0 hb=2026 state=2255
+Q3_PS_PARITY versions=2125 agree=2125 disagree=0
+Q2_HB_PARSE_CONSUMERS=11
+Q2_ROW docs/status-export.json :: "next_milestone": "[R3112] next window (<=48h): (0) MAIN — **出生站现在有了唯一消费者，但「消费者是否真的跑过」只能靠人眼读日志**：`heartbeat_face` 的失败臂只在
+Q2_ROW docs/status-export.json :: "next_milestone": "[R3112] next window (<=48h): (0) MAIN — **出生站现在有了唯一消费者，但「消费者是否真的跑过」只能靠人眼读日志**：`heartbeat_face` 的失败臂只在
+Q2_ROW src/os/backlog.md :: - [x] [done 2026-11-21 R3111 — 板头 (0) 落地：**收口车辆现在自己对齐 heartbeat 行——心跳不再是每轮人手写的那一步。**先量（`tmp/probe_R3111.py` → `qa/probe-
+Q2_ROW src/os/backlog.md :: - [R3113] next window (<=48h): (0) MAIN — **出生站现在有了唯一消费者，但「消费者是否真的跑过」只能靠人眼读日志**：`heartbeat_face` 的失败臂只在私有世界里被证明过，活盘上从未失败
+Q2_ROW src/os/backlog.md :: - [R3111 PIN — 本轮回答队头·判据先立·**先落板再动代码**] 队头具名：**出生站已上船（R3110），但收口车辆不认识它——每轮的心跳写入仍是人工步骤，第 39 个无守卫写者就是「本轮的手」。** 只读实测（`tmp/p
+Q2_ROW src/os/closeout.py :: "fold_margin=%d %s face=NOT-MEASURED gate=%s hb=%s%s"
+Q2_ROW src/os/closeout.py :: "latest=%s gate=%s hb=%s"
+Q2_ROW src/os/state.json :: "R3111 measured: tmp/probe_R3111.py -> qa/probe-R3111.log (46 modules naming heartbeat.txt, 40 one-off shaped, 6 inspect
+Q2_ROW src/os/state.json :: "R3111 honest disclosures: (a) ZERO new payment capability and no network beyond loopback - a heartbeat birth site moves
+Q2_ROW src/os/test_closeout.py :: a_ok = (a_ok and code_a == 0 and "hb=%d" % tick_a in out_a
+Q2_ROW src/os/test_closeout.py :: e_ok = (code_e == 0 and "hb=none" in out_e
+Q2_EXPORT mentions_hb=True
+Q3_ANCHOR ps1_has_tail5=True ps1_has_tick_re=True
