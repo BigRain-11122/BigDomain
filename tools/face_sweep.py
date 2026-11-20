@@ -1,7 +1,7 @@
 """Face sweep: execute every CEO-facing page's own --check gate right now and render
 the result as ONE openable page.
 
-Why this exists: preview/index.html lists the eight faces and quotes the verdict each
+Why this exists: preview/index.html lists the faces and quotes the verdict each
 artifact DECLARED when it was written, but nothing re-executes those gates. This driver
 runs each shipped tool's read-only --check as a subprocess, records its exit code, its
 VERDICT line and the landed artifact bytes, and renders a single board.
@@ -20,7 +20,7 @@ Usage:
     python tools/face_sweep.py --gates        # run every face's --check, print rows, write nothing
     python tools/face_sweep.py --faces-json P # sweep an alternate face spec (controls)
 
-R3069: --gates exists because the round-opening scan ran only ONE of these nine
+R3069: --gates exists because the round-opening scan ran only ONE of these
 gates while two of them were red and invisible (measured: six-gate-live and
 ugc-gate both read rc=2 and stable across runs). Scheduling this tool's render
 mode instead would write two CEO pages every round, and AC-FSW10 makes the board
@@ -84,6 +84,15 @@ FACES = [
      "tools/membership_benefit_report.py",
      "preview/membership-benefit-report.html", "preview/membership-benefit-report.json",
      "\u6708\u5361\u6743\u76ca\u4e0d\u53ef\u5151\u73b0\uff0c\u590d\u8d2d\u4e3a\u96f6\u3002"),
+    # R3075: the tenth row. This page carried its own byte-level freshness proof (E_STALE
+    # re-derivation, a pay-config sha16 and a live value-domain compare) and was registered
+    # in the battery, yet no face-level sweep ever executed it - a page nobody re-runs is a
+    # page whose gate is only a declaration. It follows the benefit page because both belong
+    # to P-47 item 5, and the money row still leads the reading order.
+    ("membership-face", "\u4f1a\u5458\u6708\u5361\u9762\uff08\u89c4\u683c\u9875\uff09/ P-47 \u7b2c 5 \u9879",
+     "tools/membership_face.py",
+     "preview/membership-face.html", "preview/membership-face.json",
+     "\u4f1a\u5458\u9762\u8bfb\u4e0d\u51fa\u771f\u5b9e\u6743\u76ca\u4e0e\u4ef7\u683c\uff0c\u590d\u8d2d\u4e0e\u53e3\u7891\u4e3a\u96f6\u3002"),
     ("ledger-business", "\u4ee3\u5e01\u8d26\u672c\u9762 / P-47 \u7b2c 2 \u9879",
      "tools/ledger_business_report.py",
      "preview/ledger-business-report.html", "preview/ledger-business-report.json",
@@ -511,7 +520,7 @@ def sweep(opts):
 def gates(opts):
     """Run every face's own --check and print the reading; render nothing, write nothing.
 
-    R3069: the opening scan needs "are the nine gates green right now?" without the
+    R3069: the opening scan needs "are all face gates green right now?" without the
     board, because rendering the board costs two page writes per round and goes stale
     again on the next face re-render (AC-FSW10). One row per face, then one summary
     whose counts are derived from the rows rather than from a second tally.

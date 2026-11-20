@@ -1,0 +1,58 @@
+  | PASS AC-FSWB19a an all-green table exits zero and prints one row per face rc=0 rows=3
+  | PASS AC-FSWB19b the summary derives its counts from those rows GATES PASS gates=3 green=3 red=0 red_ids=none mutated=none
+  | PASS AC-FSWB19c one red face flips the exit and is NAMED, with every face still read GATES FLAG gates=3 green=2 red=1 red_ids=stub-b mutated=none
+  | PASS AC-FSWB19d a gate that rewrites its own page is FLAG even when it exits zero GATES FLAG gates=2 green=1 red=1 red_ids=stub-a mutated=stub-a
+  | PASS AC-FSWB19e a missing driver counts red (rc 127) and the other faces still run GATES FLAG gates=2 green=1 red=1 red_ids=stub-a mutated=none
+  | PASS AC-FSWB19f --gates renders nothing: the board pair is absent before and after exists=False/False
+  | PASS AC-FSWB19g main() dispatches --gates rather than falling through to the sweep GATES PASS gates=3 green=3 red=0 red_ids=none mutated=none
+  | PASS AC-FSWB3 sweep exits zero on all-passing stubs rc=0
+  | PASS AC-FSWB3b every face artifact is older than swept_ns swept_ns=1795136418825399400 newest_delta=-1389298900
+  | PASS AC-FSWB3c a fresh board reads PASS VERDICT PASS 21/21
+  | PASS AC-FSWB1 landed doc states its own sizes and a derived fingerprint fingerprint=1d3270431a1bf9e1
+  | PASS AC-FSWB1b a row whose exit disagrees with the headline reddens the board rc=2
+  | PASS AC-FSWB2 an artifact newer than the sweep reddens and names the face rc=2 named=True
+  | PASS AC-FSWB2b size untouched, so the size criterion cannot be the cause size=20 stable=True
+  | PASS AC-FSWB2c restoring the mtime returns the board to PASS rc=0
+  | PASS AC-FSWB4 a board without swept_ns is refused with E_FSW_NO_SWEEP_STAMP rc=2
+  | PASS AC-FSWB5 a face whose gate exits non-zero is not counted as passing rc=2 verdict=FAIL
+  | PASS AC-FSWB6 a missing driver reads MISSING-DRIVER and is not passing verdict=MISSING-DRIVER rc=2
+  | PASS AC-FSWB7 a driver that rewrites its own artifact is mutated and not passing mutated=True files=['html']
+  | PASS AC-FSWB7b check() refuses a board carrying a mutated row rc=2
+  | PASS AC-FSWB8 a passing sweep writes no face artifact changed=[]
+  | PASS AC-FSWB9 the three standing compliance lines are resident standing=True excluded=True snapshot=True
+  | PASS AC-FSWB9b every row is linked and no external literal appears rows=3
+  | PASS AC-FSWB10 the battery registry declares one row for this suite at its own count 20 rows=['20'] hits=1 expected=['20']
+  | PASS AC-FSWB11 every row carries its consequence and the page quotes it rows=3
+  | PASS AC-FSWB11b a row with no declared consequence reddens and is named rc=2
+  | PASS AC-FSWB12 the landed order equals the rows it landed order=['stub-a', 'stub-b', 'stub-c']
+  | PASS AC-FSWB12b a reversed document reddens on AC-FSW13 rc=2
+  | PASS AC-FSWB13 a table that owns the money row lands it first and reads PASS sweep=0 check=0
+  | PASS AC-FSWB13b the same table with the money row last is refused E_MONEY_NOT_FIRST rc=2
+  | PASS AC-FSWB14 the money sentence carries the reading its own row reported legs='2' tx='1'
+  | PASS AC-FSWB14b the lawful measured board reads PASS rc=0
+  | PASS AC-FSWB14c a sentence claiming tx=9 over a row reading tx=1 reddens rc=2
+  | PASS AC-FSWB14d a money row with no reading is REFUSED, not published bare rc=2
+  | PASS AC-FSWB15 the shipped-shape table reads PASS with every row declaring its own rc=0
+  | PASS AC-FSWB15b a five-field row reddens and is named rc=2
+  | PASS AC-FSWB15c an undeclared sentence inherits the CURRENT row tuple inherited='a red money row is zero revenue'
+  | PASS AC-FSWB15d a face the table does not carry inherits NOTHING, never a leftover inherited=''
+  | PASS AC-FSWB16 the payment row carries products=/tiers= from its own verdict meaning='a red payment row is lost revenue（本行实测 products=5 tiers=0）'
+  | PASS AC-FSWB16b the membership row carries its own reading too meaning='a red membership row is zero repeat purchase（本行实测 products=5 tiers=0）'
+  | PASS AC-FSWB16c the lawful three-revenue-row board reads PASS rc=0
+  | PASS AC-FSWB16d a payment sentence claiming tiers=9 over a row reading tiers=0 reddens rc=2
+  | PASS AC-FSWB16e a revenue row with no reading is REFUSED, not published bare rc=2
+  | PASS AC-FSWB17 the scope sentence is on the landed page rc=0
+  | PASS AC-FSWB17b a non-revenue row that grows a bracket reddens E_FSW_SCOPE_DRIFT rc=2
+  | PASS AC-FSWB18 the published scope sentence equals the derivation rc=0
+  | PASS AC-FSWB18b the sentence names the declared rows and no others derived='实测范围：3 行营收面（money proof stub、payment stub、membership stub）各引用本行自己的读数；其余行只有声明句，因为它们的 FAIL 是内部记账而非收入事实。'
+  | PASS AC-FSWB18c a typed scope sentence reddens E_FSW_SCOPE_TYPED rc=2
+  | PASS AC-FSWB18d a row moved out of the table moves the sentence by itself rc=0
+  | PASS AC-FSWB8b the temp world is removed (a leak is loud, not silent) removed=True
+  | PASS AC-FSWB8c the real preview/ directory is unchanged by the whole suite entries=91
+  | PASS AC-FSWB20 the shipped table names every face whose gate can prove freshness rows=10 ids=first-yuan-chain,six-gate-live,lobby-ws,city-face,ugc-gate,payment-gate,membership,membership-face,ledger-business,entry-index
+  | PASS AC-FSWB20b every shipped driver still carries its declared freshness anchor missing=none
+  | PASS AC-FSWB20c dropping the membership-face row names it missing instead of passing rows=9
+  | PASS AC-FSWB20d a removed anchor reddens that face alone missing=['ledger-business']
+  | PASS AC-FSWB20e the anchor map is declared once, in the suite declared=1
+suite: 56 assertions over 20 criteria
+SUITE PASS 56/56 in 7.9s

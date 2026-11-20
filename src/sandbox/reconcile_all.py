@@ -7359,8 +7359,10 @@ SUITES = [
     # declared set that nothing compared - it is now DERIVED from the table and the row
     # labels, and a sentence only a hand edit could produce reddens E_FSW_SCOPE_TYPED.
     # R3069 grew it to nineteen: the read-only --gates reading the opening scan now runs.
+    # R3075 grew it to twenty: AC-FSWB20 pins that every shipped row's driver still carries
+    # its declared freshness anchor and that the membership-face row is in the table.
     ("os-face-sweep",
-     os.path.join("..", "os", "test_face_sweep.py"), 19),
+     os.path.join("..", "os", "test_face_sweep.py"), 20),
     # R2782 shipped tools/money_path_demo.py with the same hole - the 19.9 money
     # path page was guarded only by its own --check, which cannot catch a page
     # whose derivation changed under it.

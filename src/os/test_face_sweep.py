@@ -57,6 +57,50 @@ MUTATE_DRIVER = ("import sys\n"
                  "print('VERDICT PASS 1/1')\n"
                  "sys.exit(0)\n")
 
+# R3075 (AC-FSWB20, pinned in src/os/backlog.md BEFORE this code): one anchor per shipped
+# face, naming the text its own --check uses to prove the landed page is FRESH rather than
+# merely well-sized. The map lives HERE, beside the assertion: a map inside the driver would
+# certify itself, which is the defect this criterion refuses. An anchor is a TEXT, not a
+# proof - it says "this driver still carries a freshness statement", and the matching face
+# gate is what executes it.
+FRESH_ANCHORS = {
+    'first-yuan-chain': 'E_STALE html is not the fresh derivation',
+    'six-gate-live': 'landed.get("fingerprint") == data["fingerprint"]',
+    'lobby-ws': 'landed.get("fingerprint") == data["fingerprint"]',
+    'city-face': 'fresh_fingerprint=',
+    'ugc-gate': 'AC-UGR9',
+    'payment-gate': 'fresh = {c["id"]',
+    'membership': 'fresh_fingerprint=',
+    'ledger-business': 'E_SOURCE_STALE',
+    'entry-index': 'AC-DIX8',
+    'membership-face': 'E_STALE html is not the fresh derivation',
+}
+
+
+def shipped_face_rows(text):
+    """(id, driver) rows of the SHIPPED FACES literal, read from source text."""
+    m = re.search(r'^FACES = \[\n(.*?)^\]', text, re.S | re.M)
+    if not m:
+        return []
+    rows = []
+    pending = None
+    for line in m.group(1).splitlines():
+        hit = re.match(r'^    \("([^"]+)",', line)
+        if hit:
+            pending = hit.group(1)
+            continue
+        if pending:
+            drv = re.match(r'^     "([^"]+)",$', line)
+            if drv:
+                rows.append((pending, drv.group(1)))
+                pending = None
+    return rows
+
+
+def anchor_missing(ids, sources, anchors):
+    """Face ids whose declared freshness anchor is absent from that driver's source."""
+    return [i for i in ids if anchors.get(i) and anchors[i] not in sources.get(i, '')]
+
 
 def ok(name, cond, detail=''):
     CHECKS.append(name)
@@ -630,6 +674,57 @@ def main():
     ok('AC-FSWB8c the real preview/ directory is unchanged by the whole suite',
        pre_preview == snapshot(PREVIEW, ('.html', '.json')),
        'entries=%d' % len(pre_preview))
+
+    # ---- AC-FSWB20 (R3075) every shipped row must still be able to prove freshness, and
+    # the page that no face-level sweep executed must be IN the table. Source text is read
+    # from disk, so a private world that replaces tool.FACES cannot move this reading. Each
+    # arm carries its own red direction in a mutated copy: a criterion that can only say
+    # "the shipped bytes are green" is a declaration, not a guard.
+    src20 = io.open(TOOL, encoding='utf-8').read()
+    rows20 = shipped_face_rows(src20)
+    ids20 = [r[0] for r in rows20]
+    ok('AC-FSWB20 the shipped table names every face whose gate can prove freshness',
+       len(ids20) == 10 and len(set(ids20)) == 10
+       and 'membership-face' in ids20 and set(ids20) == set(FRESH_ANCHORS),
+       'rows=%d ids=%s' % (len(ids20), ','.join(ids20)))
+
+    sources20 = {}
+    for fid, drv in rows20:
+        p = os.path.join(ROOT, drv)
+        sources20[fid] = io.open(p, encoding='utf-8').read() if os.path.isfile(p) else ''
+    missing20 = anchor_missing(ids20, sources20, FRESH_ANCHORS)
+    ok('AC-FSWB20b every shipped driver still carries its declared freshness anchor',
+       not missing20 and all(os.path.isfile(os.path.join(ROOT, d)) for _, d in rows20),
+       'missing=%s' % (missing20 or 'none'))
+
+    lines20 = src20.splitlines(True)
+    start20 = [i for i, ln in enumerate(lines20) if ln.startswith('    ("membership-face",')]
+    mutant20 = src20
+    if start20:
+        end20 = start20[0]
+        while end20 < len(lines20) - 1 and not lines20[end20].rstrip().endswith('),'):
+            end20 += 1
+        mutant20 = ''.join(lines20[:start20[0]] + lines20[end20 + 1:])
+    ids20m = [r[0] for r in shipped_face_rows(mutant20)]
+    ok('AC-FSWB20c dropping the membership-face row names it missing instead of passing',
+       bool(start20) and len(ids20m) == 9
+       and 'membership-face' in (set(FRESH_ANCHORS) - set(ids20m)),
+       'rows=%d' % len(ids20m))
+
+    mutant_sources = dict(sources20)
+    victim = 'ledger-business'
+    mutant_sources[victim] = mutant_sources[victim].replace('E_SOURCE_STALE', '')
+    miss20 = anchor_missing(ids20, mutant_sources, FRESH_ANCHORS)
+    ok('AC-FSWB20d a removed anchor reddens that face alone',
+       miss20 == [victim], 'missing=%s' % (miss20 or 'none'))
+
+    body20 = io.open(__file__, encoding='utf-8').read()
+    # Count DECLARATIONS (a module-level line), not mentions: the first version of this arm
+    # counted every occurrence and read 3 because its own assertion quotes the name.
+    decls20 = [ln for ln in body20.splitlines() if ln.startswith('FRESH_ANCHORS = {')]
+    ok('AC-FSWB20e the anchor map is declared once, in the suite',
+       len(decls20) == 1 and 'FRESH_ANCHORS' not in src20
+       and all(ord(ch) < 128 for ch in body20), 'declared=%d' % len(decls20))
 
     total = len(CHECKS)
     # Declared units (R2860): the AC inventory below is derived from CHECKS,
