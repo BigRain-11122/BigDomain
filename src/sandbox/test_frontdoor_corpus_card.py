@@ -1,9 +1,10 @@
 """Suite for the corpus card: the tree-gate reading gets one live consumer.
 
-FOUR criteria, each pre-registered on the src/os/backlog.md board BEFORE this
+FIVE criteria, each pre-registered on the src/os/backlog.md board BEFORE this
 file and the code it grades: AC-FDC3 (four arms, R3128), AC-FDC4 (five arms,
-R3132), AC-FDC5 (R3133: an over-count is named, not rendered) and AC-FDC6
-(R3134: the third number is derived from the two on the line, not trusted).
+R3132), AC-FDC5 (R3133: an over-count is named, not rendered), AC-FDC6
+(R3134: the third number is derived from the two on the line, not trusted) and
+AC-FDC7 (R3135: the fourth number is derived from bytes, never copied).
 
 R3128 measured the hole: the corpus (files / readable / bytes that the flags
 face already pays to read, ~4219 files / 508.1MB) was derived in exactly one
@@ -240,6 +241,54 @@ def main():
     if "unread=" in blind_html:
         third.append("unverifiable-files-printed-unread")
     report("AC-FDC6", bool(third), ",".join(third))
+
+    # ---- AC-FDC7: the fourth number is derived, not trusted. -------------
+    # R3135 pre-registered this on the board before the card changed: the card
+    # printed whatever `mb` the face carried, so a hand-made block like
+    # bytes=508066256 mb=0.0 rendered two numbers contradicting each other on
+    # one line, and a block with no bytes still printed the face's mb. Measured:
+    # 10 published blocks, every one stating mb equal to round(bytes/1e6,1), and
+    # the only shipped corpus writer derives it from an integer total without
+    # ever reading an input mb. Derived, the pair agrees by construction; a
+    # disagreeing or unparseable key is a shape defect with no numbers, and a
+    # block that states no bytes cannot be cross-checked at all.
+    fourth = []
+    for label, bad_block in (
+            ("forged", {"files": 5, "readable": 5, "bytes": 508066256,
+                        "mb": 0.0}),
+            ("unparseable", {"files": 5, "readable": 5, "bytes": 508066256,
+                             "mb": "lots"})):
+        html = frontdoor.corpus_card({"corpus": bad_block})
+        if "mb disagrees with bytes" not in html:
+            fourth.append(label + "-not-named")
+        for token in ("files=", "readable=", "mb="):
+            if token in html:
+                fourth.append(label + "-prints-" + token.replace("=", ""))
+    legal_html = frontdoor.corpus_card({"corpus": {"files": 3, "readable": 2,
+                                                   "bytes": 10, "mb": 0.0,
+                                                   "unread": 1}})
+    if "CORPUS files=3 readable=2 mb=0.0 unread=1" not in legal_html:
+        fourth.append("legal-line-changed")
+    if "malformed" in legal_html:
+        fourth.append("legal-read-as-defect")
+    # a block that states no bytes cannot be cross-checked, so it prints no
+    # numbers instead of the face's mb
+    nobytes_html = frontdoor.corpus_card({"corpus": {"files": 5,
+                                                     "readable": 5,
+                                                     "mb": 12.5}})
+    if "bytes missing" not in nobytes_html:
+        fourth.append("no-bytes-not-named")
+    for token in ("files=", "readable=", "mb="):
+        if token in nobytes_html:
+            fourth.append("no-bytes-prints-" + token.replace("=", ""))
+    # a block that states bytes but no mb is stated from the bytes it prints
+    derived_html = frontdoor.corpus_card({"corpus": {"files": 5, "readable": 5,
+                                                     "bytes": 508066256}})
+    if "mb=508.1" not in derived_html:
+        fourth.append("absent-key-not-derived")
+    if "malformed" in derived_html:
+        fourth.append("absent-key-read-as-defect")
+    report("AC-FDC7", bool(fourth), ",".join(fourth))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

@@ -4,26 +4,32 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3134 MEASURED THEN FIXED THE THIRD NUMBER: the corpus card printed any stored unread value verbatim, so a hand-made face with files=5 readable=5 unread=9 rendered three numbers contradicting each other on one line. The read-only probe (tmp/probe_R3134.py -> qa/probe-R3134.log) answered three questions before any code: (a) of 10 corpus blocks across 2315 face revisions (1724 parsable, 591 named not as readings) ZERO carry an unread key and every pair is equal, so the key has never appeared on a published face; (b) shipped code stores it in exactly ONE place (export_round.py:654 subscript store, zero kwargs, zero dict literals) while three shipped subscript stores touch the corpus key overall, so the reader still cannot lean on one writer; (c) the two arms that print it (3/2/1 and 5/3/2) are internally consistent, so deriving keeps them byte for byte. Landed: frontdoor.corpus_card derives the third number as files minus readable (printed only when positive) and never copies the face value; a stored key that is not an integer or disagrees with the difference now reads CORPUS block is malformed (unread disagrees with files-readable) - not a reading, with no numbers, after the readable-missing and over-count branches; an unparseable files prints no third number because it cannot be cross-checked.",
+    "current": "2026-11-21 R3135 PRODUCT+ENGINEERING: the corpus card no longer trusts the fourth number - mb is derived from bytes, so a face edited to bytes=508066256 mb=0.0 now reads one consistent number instead of two contradicting ones, and a block that states no bytes prints no numbers at all",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-corpus-supply-chain-R3134.log (567B, 2026-11-21)",
-    "latest_evidence": "qa/leg-corpus-supply-chain-R3134.log (567B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/citymodel-R850.log (606B, 2026-11-21)",
+    "latest_evidence": "qa/citymodel-R850.log (606B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3135] next window (<=48h): (0) MAIN — **第四个数字仍被信任：卡片照印面里的 `mb`，从不验它是否等于 `round(bytes/1e6,1)`——手改面可以交出 `bytes=508066256 mb=0.0`，两数在同一行互相矛盾，而第三个数字上一轮已经被从两数派生。** 下一轮先量（只读＋按文件派生）：①历史 10 份块里 `mb` 是否恒等于 `round(bytes/1e6,1)`（以及 cards 里 `mb` 的既有字面量）；②装运链里除 `corpus_block` 外还有谁写/改 `mb` 键（AST 下标写入与 kwargs）；③若让卡片从 `bytes` 派生 `mb`、不再读面里的键，`AC-FDC3` a 臂（`mb=508.1`）与 `AC-FDC5/6` 各臂是否逐字兼容；或者反过来在写者侧拒绝 `mb` 与派生值不符。然后裁定：读者派生、写者拒绝、还是具名缺陷。**先落板再动代码。**",
-    "next_milestone_due": "2026-11-23T07:16:50+08:00",
-    "updated_at": "2026-11-21T07:16:50+08:00",
+    "next_milestone_due": "2026-11-23T07:44:35+08:00",
+    "updated_at": "2026-11-21T07:44:35+08:00",
     "heartbeat": {
-      "tick": 3134,
-      "state_tick": 3134,
+      "tick": 3135,
+      "state_tick": 3135,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
+    },
+    "corpus": {
+      "files": 4290,
+      "bytes": 508391335,
+      "mb": 508.4,
+      "readable": 4290
     }
   },
-  "current": "2026-11-21 R3134 MEASURED THEN FIXED THE THIRD NUMBER: the corpus card printed any stored unread value verbatim, so a hand-made face with files=5 readable=5 unread=9 rendered three numbers contradicting each other on one line. The read-only probe (tmp/probe_R3134.py -> qa/probe-R3134.log) answered three questions before any code: (a) of 10 corpus blocks across 2315 face revisions (1724 parsable, 591 named not as readings) ZERO carry an unread key and every pair is equal, so the key has never appeared on a published face; (b) shipped code stores it in exactly ONE place (export_round.py:654 subscript store, zero kwargs, zero dict literals) while three shipped subscript stores touch the corpus key overall, so the reader still cannot lean on one writer; (c) the two arms that print it (3/2/1 and 5/3/2) are internally consistent, so deriving keeps them byte for byte. Landed: frontdoor.corpus_card derives the third number as files minus readable (printed only when positive) and never copies the face value; a stored key that is not an integer or disagrees with the difference now reads CORPUS block is malformed (unread disagrees with files-readable) - not a reading, with no numbers, after the readable-missing and over-count branches; an unparseable files prints no third number because it cannot be cross-checked.",
+  "current": "2026-11-21 R3135 PRODUCT+ENGINEERING: the corpus card no longer trusts the fourth number - mb is derived from bytes, so a face edited to bytes=508066256 mb=0.0 now reads one consistent number instead of two contradicting ones, and a block that states no bytes prints no numbers at all",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -51,10 +57,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3134 MEASURED THEN FIXED THE THIRD NUMBER: the corpus card printed any stored unread value verbatim, so a hand-made face with files=5 readable=5 unread=9 rendered three numbers contradicting each other on one line. The read-only probe (tmp/probe_R3134.py -> qa/probe-R3134.log) answered three questions before any code: (a) of 10 corpus blocks across 2315 face revisions (1724 parsable, 591 named not as readings) ZERO carry an unread key and every pair is equal, so the key has never appeared on a published face; (b) shipped code stores it in exactly ONE place (export_round.py:654 subscript store, zero kwargs, zero dict literals) while three shipped subscript stores touch the corpus key overall, so the reader still cannot lean on one writer; (c) the two arms that print it (3/2/1 and 5/3/2) are internally consistent, so deriving keeps them byte for byte. Landed: frontdoor.corpus_card derives the third number as files minus readable (printed only when positive) and never copies the face value; a stored key that is not an integer or disagrees with the difference now reads CORPUS block is malformed (unread disagrees with files-readable) - not a reading, with no numbers, after the readable-missing and over-count branches; an unparseable files prints no third number because it cannot be cross-checked.",
-  "export_ts": "2026-11-21T07:16:50+08:00",
+  "do": "2026-11-21 R3135 PRODUCT+ENGINEERING: the corpus card no longer trusts the fourth number - mb is derived from bytes, so a face edited to bytes=508066256 mb=0.0 now reads one consistent number instead of two contradicting ones, and a block that states no bytes prints no numbers at all",
+  "export_ts": "2026-11-21T07:44:35+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/leg-corpus-supply-chain-R3134.log (567B, 2026-11-21)",
+  "latest_evidence": "qa/citymodel-R850.log (606B, 2026-11-21)",
   "next_milestone": "[R3135] next window (<=48h): (0) MAIN — **第四个数字仍被信任：卡片照印面里的 `mb`，从不验它是否等于 `round(bytes/1e6,1)`——手改面可以交出 `bytes=508066256 mb=0.0`，两数在同一行互相矛盾，而第三个数字上一轮已经被从两数派生。** 下一轮先量（只读＋按文件派生）：①历史 10 份块里 `mb` 是否恒等于 `round(bytes/1e6,1)`（以及 cards 里 `mb` 的既有字面量）；②装运链里除 `corpus_block` 外还有谁写/改 `mb` 键（AST 下标写入与 kwargs）；③若让卡片从 `bytes` 派生 `mb`、不再读面里的键，`AC-FDC3` a 臂（`mb=508.1`）与 `AC-FDC5/6` 各臂是否逐字兼容；或者反过来在写者侧拒绝 `mb` 与派生值不符。然后裁定：读者派生、写者拒绝、还是具名缺陷。**先落板再动代码。**",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -180,7 +186,7 @@
   },
   "results": [
     [
-      "3134",
+      "3135",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -194,23 +200,29 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 93,
+    "log_lines_in_window": 86,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 19,
+    "substantive_non_idle_mention_lines": 17,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 76777,
-  "next_milestone_due": "2026-11-23T07:16:50+08:00",
+  "state_bytes": 75780,
+  "next_milestone_due": "2026-11-23T07:44:35+08:00",
   "heartbeat": {
-    "tick": 3134,
-    "state_tick": 3134,
+    "tick": 3135,
+    "state_tick": 3135,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
+  },
+  "corpus": {
+    "files": 4290,
+    "bytes": 508391335,
+    "mb": 508.4,
+    "readable": 4290
   }
 }

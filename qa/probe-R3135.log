@@ -1,0 +1,56 @@
+== Q1: historical corpus blocks ==
+face revisions in history: 2316
+parsable revisions: 1725  unparsable(named, not readings): 591
+corpus blocks at every level: 10
+distinct (files,readable,bytes,mb): 4
+  shape x4 ('4230', '4230', '508125802', '508.1')
+  shape x2 ('4256', '4256', '508248525', '508.2')
+  shape x2 ('4248', '4248', '508209452', '508.2')
+  shape x2 ('4240', '4240', '508170054', '508.2')
+blocks omitting mb: 0
+blocks where mb != round(bytes/1e6,1): 0
+
+== Q2: shipped writers of the 'mb' key ==
+python : <unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. D
+id you mean "\\("? A raw string is also an option.
+所在位置 行:1 字符: 1
++ python -u tmp/probe_R3135.py > qa/probe-R3135.log 2>&1; Write-Output  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (<unknown>:18: S...also an option.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+subscript stores: shipped=0 test-only=0
+dict-literal keys: shipped=2 test-only=15
+  SHIPPED src/os/export_round.py:621 dict-literal
+  SHIPPED src/os/logs_toolkit.py:239 dict-literal
+  test    src/os/test_corpus_supply_chain.py:104 dict-literal
+  test    src/os/test_corpus_supply_chain.py:617 dict-literal
+  test    src/sandbox/test_frontdoor_corpus_card.py:57 dict-literal
+  test    src/sandbox/test_frontdoor_corpus_card.py:67 dict-literal
+keyword args: shipped=0 test-only=0
+
+== Q3: would a derived mb keep the shipped arms byte for byte? ==
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+[ WARN:0@0.390] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_
+8U.
+FDC3-a      stored=508.1 derived=508.1 same=True | CORPUS files=4219 readable=4219 mb=508.1
+FDC3-b      stored=0.0 derived=0.0 same=True | CORPUS files=3 readable=2 mb=0.0 unread=1
+FDC3-d      stored=600.0 derived=600.0 same=True | CORPUS files=4300 readable=4300 mb=600.0
+FDC5-over   stored=0.0 derived=0.0 same=True | CORPUS block is malformed (readable exceeds files) - not a reading
+FDC6-legal  stored=0.0 derived=0.0 same=True | CORPUS files=3 readable=2 mb=0.0 unread=1
+FDC6-gap    stored=0.0 derived=0.0 same=True | CORPUS files=5 readable=3 mb=0.0 unread=2
+forged-mb   -> CORPUS files=5 readable=5 mb=0.0
+bogus-mb    -> CORPUS files=5 readable=5 mb=lots
+no-bytes    -> CORPUS files=5 readable=5 mb=12.5
+live face corpus blocks: 0
+live card line: CORPUS absent from the export face (honest absence, not a zero)
+
+== SUMMARY ==
+blocks=10 diverged_mb=0 missing_mb=0 shipped_mb_writers=2 arms_moved=0

@@ -12,7 +12,7 @@ three: closeout.py passes corpus=, export_round.py calls the grader's line
 rewrite, and one test arm passes nothing. export_R2431.py names no corpus and
 its write lives behind the __main__ guard, so importing it lands nothing.
 
-WHAT IS PROVED HERE (five criteria):
+WHAT IS PROVED HERE (six criteria):
 AC-CSC1 (five arms):
   a  every call to export_round.write in a shipped NON-TEST module passes
      corpus=, and at least one such call exists (an empty census cannot pass).
@@ -78,6 +78,18 @@ measured at R3134:
   s  the difference is derived from the two integers (7/4 -> unread=3).
   t  an unparseable input key is dropped too (unread='x' -> 1), because the
      published value comes from the counts, never from the face's claim.
+
+AC-CSC6 (five arms) - why the fourth number is derived instead of trusted,
+measured at R3135:
+  p  a dict carrying bytes=508066256 with a forged mb=0.0 publishes mb=508.1.
+  q  a zero-byte corpus keeps mb=0.0 and grows no unread key.
+  r  the divisor is decimal and the reading is one place: 508125802 -> 508.1,
+     508248525 -> 508.2, and 508066256 -> 508.1 (MiB would read 484.5).
+  s  an mb key cannot travel without bytes: absent or unparseable bytes still
+     return None, so no block is published at all.
+  t  AST: the shipped writer reads no mb key from its input (zero subscript
+     loads, zero dict .get calls) and stores exactly one value, derived from
+     the integer total.
 
 Isolation: private worlds are temp dirs; the only live reads are shipped
 sources. Stdlib only. Exit 0 = all green, 2 = at least one red.
@@ -673,6 +685,99 @@ def arm_y():
     return True, "unread='x' -> derived 1"
 
 
+def arm_z1():
+    """A forged fourth number cannot leak into the published block."""
+    block = ER.corpus_block({"files": 5, "readable": 5,
+                             "bytes": 508066256, "mb": 0.0})
+    if not isinstance(block, dict) or block.get("mb") != 508.1:
+        return False, "forged mb leaked: %r" % (block,)
+    return True, "input mb=0.0 -> block mb=508.1"
+
+
+def arm_z2():
+    """Zero bytes still publishes mb=0.0 and grows no third number."""
+    block = ER.corpus_block({"files": 2, "readable": 2, "bytes": 0})
+    if not isinstance(block, dict):
+        return False, "zero-byte corpus refused"
+    if block.get("mb") != 0.0 or "unread" in block:
+        return False, "zero-byte shape changed: %r" % (block,)
+    return True, "bytes=0 -> mb=0.0, no unread"
+
+
+def arm_z3():
+    """The divisor is decimal and the reading is one decimal place."""
+    rows = ((508125802, 508.1), (508248525, 508.2), (508066256, 508.1))
+    for total, want in rows:
+        block = ER.corpus_block({"files": 4230, "readable": 4230,
+                                 "bytes": total})
+        if not isinstance(block, dict) or block.get("mb") != want:
+            return False, "bytes=%d read %r, want %r" % (
+                total, (block or {}).get("mb"), want)
+    # the negative control: MiB would read 484.5 for the same bytes
+    return True, "decimal divisor, one decimal (508066256 -> 508.1)"
+
+
+def arm_z4():
+    """A block carrying mb but no usable bytes is still unpublishable."""
+    for total in (None, "x"):
+        corpus = {"files": 5, "readable": 5, "mb": 12.5}
+        if total is not None:
+            corpus["bytes"] = total
+        block = ER.corpus_block(corpus)
+        if block is not None:
+            return False, "unusable bytes published: %r" % (block,)
+    return True, "no bytes -> None, mb cannot travel alone"
+
+
+def arm_z5():
+    """The writer never reads an mb key, and stores exactly one derived value."""
+    path = os.path.join(ROOT, "src", "os", "export_round.py")
+    with io.open(path, encoding="utf-8") as handle:
+        tree = ast.parse(handle.read())
+    fn = None
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef) and node.name == "corpus_block":
+            fn = node
+    if fn is None:
+        return False, "corpus_block not found"
+    reads = []
+    derived = []
+    for node in ast.walk(fn):
+        if isinstance(node, ast.Subscript):
+            sl = node.slice
+            if isinstance(sl, ast.Constant) and sl.value == "mb":
+                reads.append(node.lineno)
+        elif isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+            if node.func.attr == "get" and node.args:
+                first = node.args[0]
+                if isinstance(first, ast.Constant) and first.value == "mb":
+                    reads.append(node.lineno)
+        elif isinstance(node, ast.Dict):
+            for key, value in zip(node.keys, node.values):
+                if isinstance(key, ast.Constant) and key.value == "mb":
+                    derived.append(value)
+    if reads:
+        return False, "writer reads an input mb at %r" % (reads,)
+    if len(derived) != 1:
+        return False, "mb stores=%d" % len(derived)
+    call = derived[0]
+    # one store, and it is round(total / 1e6, 1) - a decimal divisor with one
+    # place, over the integer total rather than any caller-supplied reading
+    ok = (isinstance(call, ast.Call)
+          and getattr(call.func, "id", None) == "round"
+          and len(call.args) == 2
+          and isinstance(call.args[0], ast.BinOp)
+          and isinstance(call.args[0].op, ast.Div)
+          and ast.unparse(call.args[0].left) == "total"
+          and isinstance(call.args[0].right, ast.Constant)
+          and abs(float(call.args[0].right.value) - 1e6) < 1e-9
+          and isinstance(call.args[1], ast.Constant)
+          and call.args[1].value == 1)
+    if not ok:
+        return False, "store is %s" % ast.unparse(call)
+    return True, "zero mb reads, one store: %s" % ast.unparse(call)
+
+
 def main():
     criteria = [
         ("AC-CSC1", "os-corpus-supply-chain", [
@@ -705,6 +810,12 @@ def main():
           ("r", "consistent key", arm_w),
           ("s", "derived difference", arm_x),
           ("t", "unparseable third", arm_y)]),
+        ("AC-CSC6", "os-corpus-fourth-number",
+         [("p", "forged fourth number", arm_z1),
+          ("q", "zero bytes", arm_z2),
+          ("r", "decimal divisor", arm_z3),
+          ("s", "mb without bytes", arm_z4),
+          ("t", "writer never reads mb", arm_z5)]),
     ]
     arms_total = 0
     red = 0

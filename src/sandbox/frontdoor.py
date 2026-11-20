@@ -5798,9 +5798,33 @@ def corpus_card(face):
     def show(value):
         return "none" if value is None else str(value)
 
+    # R3135: the fourth number is derived as well. Measured (qa/probe-R3135.log):
+    # across 10 published blocks taken from 2316 face revisions mb always equals
+    # round(bytes/1e6, 1) and every block states bytes, while the only shipped
+    # corpus writer builds mb from an integer total and never reads an input mb
+    # (zero subscript stores, zero keyword args). A face can still be hand-edited
+    # into bytes=508066256 mb=0.0 - two numbers contradicting each other on one
+    # line - so the printed value comes from bytes, never from the face. A
+    # stored key that is not a number or disagrees is the same shape defect as
+    # the third number, and a block with no bytes cannot be cross-checked at all.
+    try:
+        bytes_int = int(block.get("bytes"))
+    except (TypeError, ValueError):
+        return ("<p class=kv>CORPUS block is malformed (bytes missing) "
+                "- not a reading</p>")
+    mb = round(bytes_int / 1e6, 1)
+    if "mb" in block:
+        try:
+            stored_mb = float(block.get("mb"))
+        except (TypeError, ValueError):
+            stored_mb = None
+        if stored_mb is None or abs(stored_mb - mb) > 1e-9:
+            return ("<p class=kv>CORPUS block is malformed (mb disagrees "
+                    "with bytes) - not a reading</p>")
+
     line = ("CORPUS files=%s readable=%s mb=%s"
             % (show(block.get("files")), show(block.get("readable")),
-               show(block.get("mb"))))
+               show(mb)))
     # A nonzero unread count is a READING, not a gate (R3127 adjudication): it
     # prints, and it does not borrow a verdict word from either judge.
     if gap is not None and gap > 0:

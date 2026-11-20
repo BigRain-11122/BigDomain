@@ -7785,8 +7785,15 @@ SUITES = [
     # R3134 added AC-FDC6: the third number is derived from the two counts on
     # the line, never copied from the face; a stored key that disagrees with
     # files-readable is a named defect and prints no numbers.
+    # R3135 added a fifth (AC-FDC7): the fourth number `mb` is derived from
+    # bytes too. Measured over 10 published blocks taken from 2316 face
+    # revisions: every block states mb equal to round(bytes/1e6,1) and none is
+    # missing it, while the only shipped corpus writer derives it from an
+    # integer total and never reads an input mb - so a disagreeing or
+    # unparseable key is a shape defect with no numbers, and a block that
+    # states no bytes cannot be cross-checked at all.
     ("frontdoor-corpus-card",
-     os.path.join("test_frontdoor_corpus_card.py"), 4),
+     os.path.join("test_frontdoor_corpus_card.py"), 5),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files
@@ -7828,8 +7835,13 @@ SUITES = [
     # counts, so a forged/unparseable/consistent input key can never leak into
     # the published block. Measured: one shipped store of that key, and no
     # published block has ever carried it.
+    # R3135 added a sixth (AC-CSC6): the fourth number is derived by the writer
+    # from the integer total as well - a forged mb cannot reach the published
+    # block, the divisor is decimal with one place (MiB would read 484.5 for the
+    # same bytes), mb cannot travel without bytes, and AST pins that the shipped
+    # writer reads no mb key at all while storing exactly one derived value.
     ("os-corpus-supply-chain",
-     os.path.join("..", "os", "test_corpus_supply_chain.py"), 5),
+     os.path.join("..", "os", "test_corpus_supply_chain.py"), 6),
     ]
 
 FAILS = 0
