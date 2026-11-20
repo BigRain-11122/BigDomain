@@ -12,32 +12,50 @@ every door, tears the whole thing down again, and only then renders one page
 with the measured numbers.
 
 Pre-registered criteria (pinned before any code, per the honesty law):
-  AC-PLR1  the shipped verifier reports ready with exactly the faces the
+  AC-PLVR1  the shipped verifier reports ready with exactly the faces the
            launcher publishes, zero errors, and every port came from plan() as
            one distinct OS-assigned value per plan key.
-  AC-PLR2  every face URL answers a real HTTP GET with status 200 and a
+  AC-PLVR2  every face URL answers a real HTTP GET with status 200 and a
            non-empty body; status, bytes and content-type recorded.
-  AC-PLR3  each answering door serves its own page: every body carries a
+  AC-PLVR3  each answering door serves its own page: every body carries a
            non-empty <title>, and no two bodies are byte-identical.
-  AC-PLR4  the deep reads hold: GET city/snapshot answers 200 as parsable JSON
+  AC-PLVR4  the deep reads hold: GET city/snapshot answers 200 as parsable JSON
            carrying as_of, and the hub's own probe map reads every face live.
-  AC-PLR5  every face URL is loopback and its port equals the planned port for
+  AC-PLVR5  every face URL is loopback and its port equals the planned port for
            that face under the shipped FACE_PORT_KEY mapping - no external host.
-  AC-PLR6  teardown is clean: after it, every child process is kernel GONE and
+  AC-PLVR6  teardown is clean: after it, every child process is kernel GONE and
            every planned port refuses a connection, so no orphan keeps a
            sandbox port.
-  AC-PLR7  zero external network: every host-bearing URL literal in this driver
+  AC-PLVR7  zero external network: every host-bearing URL literal in this driver
            is loopback, and every shipped entry file is byte-identical before
            and after the run.
-  AC-PLR8  the report is self-consistent and carries the standing law: the
+  AC-PLVR8  the report is self-consistent and carries the standing law: the
            embedded sizes equal the bytes on disk, the page prints one command
            a reader can paste to reproduce it, and the AIGC mark, the
            non-advisory notice and the msgSecCheck pre-gate are rendered as
            permanent faces while mock=true and chargeable=false are stated.
-  AC-PLR9  no hand-typed count survives in the criteria prose or the page: a
+  AC-PLVR9  no hand-typed count survives in the criteria prose or the page: a
            count is either a digit this run measured or it is absent, so growth
            of the shipped launcher cannot leave the label undercounting. (Added
            at R3070 after the page read "six doors" above a row naming eight.)
+
+R3071 - why this family is AC-PLVR, not AC-PLR. Measured before the change:
+this module carried AC-PLR1..AC-PLR9 while src/os/patterns_label_readability.py
+has carried AC-PLR1..AC-PLR6 since R2494 (it is the readability gate's family,
+registry row os-patterns-label-readability). Two unrelated criteria families
+shared one prefix, so a red line naming a bare AC-PLR id did not say WHICH
+criterion had failed - the [GATES] face prints ids, not modules. The rename cost was
+counted first: every occurrence lived in this one file, and outside the two
+owners only historical seed rows and docs/copyright carried the token, so no
+consumer moved. Three refusals, stated instead of implied: (1) the readability
+family keeps its numbers - it is the older family and its seed row lives in
+state/queue/tech.md, so renaming it would rewrite history to fix a newcomer;
+(2) adding a comment while keeping the id was refused - the ambiguity lives in
+the ID, not in the comment; (3) the guard suite this round ships is NOT named
+AC-PLR*B, because "AC-PLRB1" still contains "AC-PLR" and a substring census
+would keep reporting the collision. The battery row is the other half of the
+same defect: this face had ZERO row in src/sandbox/reconcile_all.py, so its
+criteria were graded only by the round-opening gate sweep.
 """
 from __future__ import annotations
 
@@ -71,15 +89,15 @@ REPRODUCE = "python tools/platform_live_report.py"
 SERVE = "python src/sandbox/start_all.py"
 
 CRITERIA = [
-    ("AC-PLR1", "shipped verifier ready with every shipped face, zero errors, one distinct port per plan key"),
-    ("AC-PLR2", "every shipped face URL answers a real HTTP 200 with a non-empty body"),
-    ("AC-PLR3", "each door serves its own page: non-empty title, no two bodies identical"),
-    ("AC-PLR4", "city/snapshot 200 parsable JSON with as_of; hub probe map reads every face live"),
-    ("AC-PLR5", "every face URL loopback and its port equal to the planned port for that face"),
-    ("AC-PLR6", "after teardown every child is kernel GONE and every planned port refuses"),
-    ("AC-PLR7", "no external host literal; every shipped entry file byte-identical before and after"),
-    ("AC-PLR8", "sizes self-consistent with the landed pair, one paste-ready command, AIGC/non-advisory/msgSecCheck faces, mock stated"),
-    ("AC-PLR9", "no typed count in the criteria prose or the page: every count is a digit measured this run, or absent"),
+    ("AC-PLVR1", "shipped verifier ready with every shipped face, zero errors, one distinct port per plan key"),
+    ("AC-PLVR2", "every shipped face URL answers a real HTTP 200 with a non-empty body"),
+    ("AC-PLVR3", "each door serves its own page: non-empty title, no two bodies identical"),
+    ("AC-PLVR4", "city/snapshot 200 parsable JSON with as_of; hub probe map reads every face live"),
+    ("AC-PLVR5", "every face URL loopback and its port equal to the planned port for that face"),
+    ("AC-PLVR6", "after teardown every child is kernel GONE and every planned port refuses"),
+    ("AC-PLVR7", "no external host literal; every shipped entry file byte-identical before and after"),
+    ("AC-PLVR8", "sizes self-consistent with the landed pair, one paste-ready command, AIGC/non-advisory/msgSecCheck faces, mock stated"),
+    ("AC-PLVR9", "no typed count in the criteria prose or the page: every count is a digit measured this run, or absent"),
 ]
 
 COMPLIANCE = [
@@ -187,15 +205,15 @@ def measure():
         facts["live"] = dict(live)
         facts["errors"] = list(errors)
 
-        # AC-PLR1
+        # AC-PLVR1
         distinct = len(set(ports.values())) == len(start_all.PLAN_KEYS)
-        evidence["AC-PLR1"] = {
+        evidence["AC-PLVR1"] = {
             "pass": bool(ready) and sorted(faces) == sorted(start_all.FACE_KEYS) and not errors and distinct,
             "measured": "ready=%s faces=%s errors=%s ports_keys=%d distinct=%s"
             % (ready, sorted(faces), errors or "none", len(ports), distinct),
         }
 
-        # AC-PLR2 / AC-PLR3
+        # AC-PLVR2 / AC-PLVR3
         pages = {}
         for key in start_all.FACE_KEYS:
             url = faces.get(key) or ""
@@ -206,19 +224,19 @@ def measure():
             pages[key] = got
         facts["pages"] = pages
         ok2 = all(p["status"] == 200 and p["bytes"] > 0 for p in pages.values()) and len(pages) == len(start_all.FACE_KEYS)
-        evidence["AC-PLR2"] = {
+        evidence["AC-PLVR2"] = {
             "pass": ok2,
             "measured": " ".join("%s=%d/%dB" % (k, pages[k]["status"], pages[k]["bytes"]) for k in start_all.FACE_KEYS),
         }
         titles = [pages[k]["title"] for k in start_all.FACE_KEYS]
         bodies = {pages[k]["sha"] for k in start_all.FACE_KEYS}
-        evidence["AC-PLR3"] = {
+        evidence["AC-PLVR3"] = {
             "pass": all(titles) and len(bodies) == len(start_all.FACE_KEYS),
             "measured": "titles_nonempty=%d/%d distinct_bodies=%d/%d"
             % (len([t for t in titles if t]), len(titles), len(bodies), len(start_all.FACE_KEYS)),
         }
 
-        # AC-PLR4
+        # AC-PLVR4
         snap = _get(faces.get("city", "") + "snapshot") if faces.get("city") else {"status": 0, "body": b""}
         snap_body = snap.get("body", b"")
         snap_json = {}
@@ -240,7 +258,7 @@ def measure():
             "as_of": snap_json.get("as_of"),
         }
         facts["hub_live"] = hub_live
-        evidence["AC-PLR4"] = {
+        evidence["AC-PLVR4"] = {
             "pass": snap.get("status") == 200 and bool(snap_json.get("as_of")) is not None
             and "as_of" in snap_json and all(hub_live.values()) and hub_live == dict(live),
             "measured": "snapshot=%d keys=%d as_of=%s hub_live_all=%s equals_verifier=%s"
@@ -248,7 +266,7 @@ def measure():
                all(hub_live.values()), hub_live == dict(live)),
         }
 
-        # AC-PLR5
+        # AC-PLVR5
         bad_host, bad_port = [], []
         for key in start_all.FACE_KEYS:
             url = faces.get(key) or ""
@@ -259,12 +277,12 @@ def measure():
             want = ports[start_all.FACE_PORT_KEY[key]]
             if str(want) != port_text:
                 bad_port.append("%s:%s!=%d" % (key, port_text, want))
-        evidence["AC-PLR5"] = {
+        evidence["AC-PLVR5"] = {
             "pass": not bad_host and not bad_port,
             "measured": "external_hosts=%s port_mismatch=%s" % (bad_host or "none", bad_port or "none"),
         }
 
-        # AC-PLR7 source face (measured before teardown, it is file-only)
+        # AC-PLVR7 source face (measured before teardown, it is file-only)
         here = open(os.path.abspath(__file__), encoding="utf-8").read()
         found, external = _loopback_hosts(here)
         facts["url_literals"] = found
@@ -272,14 +290,14 @@ def measure():
     finally:
         start_all.teardown(children)
 
-    # AC-PLR6 measured strictly after teardown
+    # AC-PLVR6 measured strictly after teardown
     gone = {name: (proc.poll() is not None) for name, proc in children}
     refusing = {}
     for key in start_all.PLAN_KEYS:
         refusing[key] = not start_all.can_connect(host, ports[key])
     facts["children_gone"] = gone
     facts["ports_refusing"] = refusing
-    evidence["AC-PLR6"] = {
+    evidence["AC-PLVR6"] = {
         "pass": all(gone.values()) and all(refusing.values()),
         "measured": "children_gone=%d/%d ports_refusing=%d/%d"
         % (len([v for v in gone.values() if v]), len(gone), len([v for v in refusing.values() if v]), len(refusing)),
@@ -287,7 +305,7 @@ def measure():
 
     after = {os.path.relpath(p, ROOT): _sha(p) for p in SHIPPED}
     facts["shipped_after"] = after
-    evidence["AC-PLR7"] = {
+    evidence["AC-PLVR7"] = {
         "pass": not external and before == after,
         "measured": "external_literals=%s shipped_identical=%s"
         % (external or "none", before == after),
@@ -512,10 +530,10 @@ def main(argv):
             landed = json.load(handle)
         sizes = _sizes()
         fresh8 = ac_plr8(doc, sizes["html"], sizes["json"])
-        evidence["AC-PLR8"] = fresh8
+        evidence["AC-PLVR8"] = fresh8
         # R3070: graded on the document this run would publish, so the check reads
         # the same prose a reader would.
-        evidence["AC-PLR9"] = ac_plr9(doc, CRITERIA)
+        evidence["AC-PLVR9"] = ac_plr9(doc, CRITERIA)
         for cid, intent in CRITERIA:
             item = evidence[cid]
             print(" | %s %s: %s" % ("PASS" if item["pass"] else "FAIL", cid, item["measured"]))
@@ -534,7 +552,7 @@ def main(argv):
                  landed.get("fingerprint"), sizes))
         return 0 if ok else 2
     os.makedirs(PREVIEW, exist_ok=True)
-    evidence["AC-PLR9"] = ac_plr9(doc, CRITERIA)
+    evidence["AC-PLVR9"] = ac_plr9(doc, CRITERIA)
     # The document embeds its own byte sizes, so a one-pass render always
     # reports the size the file had before that line changed it. Iterate to a
     # fixed point and refuse to land if it does not converge.
@@ -545,12 +563,12 @@ def main(argv):
         data["sizes"] = {"html": html_bytes, "json": prev_json}
         row8 = ac_plr8(doc, html_bytes, prev_json)
         for row in data["criteria"]:
-            if row["id"] == "AC-PLR8":
+            if row["id"] == "AC-PLVR8":
                 row["pass"] = row8["pass"]
                 row["measured"] = row8["measured"]
-            elif row["id"] == "AC-PLR9":
-                row["pass"] = evidence["AC-PLR9"]["pass"]
-                row["measured"] = evidence["AC-PLR9"]["measured"]
+            elif row["id"] == "AC-PLVR9":
+                row["pass"] = evidence["AC-PLVR9"]["pass"]
+                row["measured"] = evidence["AC-PLVR9"]["measured"]
         data["passed"] = sum(1 for c in data["criteria"] if c["pass"])
         data["verdict"] = "PASS" if data["passed"] == data["total"] else "FAIL"
         json_text = json.dumps(data, ensure_ascii=False, indent=1) + "\n"

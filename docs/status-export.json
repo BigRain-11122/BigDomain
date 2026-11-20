@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-20 R3070 PRODUCT+DEFECT: the two red faces had different causes and neither was 'the gate is wrong' - six-gate-live was a live defect (its page and its nine intents counted the doors by hand while the shipped launcher had grown) and ugc-gate was a stale landed artifact (its criteria read today's truth, the page carried yesterday's line number).",
+    "current": "2026-11-20 R3071 PRODUCT+ENGINEERING: the face that boots every sandbox door had no battery row and wore another family's criteria ids - both halves of one defect are now closed. tools/platform_live_report.py grades itself with AC-PLVR1..AC-PLVR9 (the readability gate keeps AC-PLR1..AC-PLR6, carried since R2494), and the new suite src/os/test_platform_live_report.py binds that face into the 731-suite registry with AC-PLVB1..AC-PLVB8.",
     "do": "R3068 ENGINEERING: the loop now runs the entry page's own live gate every round. MEASURED BEFORE ANY CODE: `python tools/deliverable_index.py --check` on the real tree = VERDICT PASS 15/15 in 0.16 s; the battery suite drives the tool in a private temp world (so it cannot see the landed page drift); the only executor of that tool outside its suite is tools/face_sweep.py, and nothing schedules face_sweep; `Get-ScheduledTask BigDomain*` = exactly one task (BigDomain-OSLoop -> iteration_loop.ps1: lock / crawl beat / git pull / spawn); preview pages are re-rendered by hand only. Change: one `[DELIV]` face in the shipped opening scanner (source + install copies byte-identical, PURE ASCII) that runs the tool with --check and answers PASS / FLAG(failed=<AC-DIX codes> rc=<n>) / SKIP, never aborting the scan. Verified: harness ALL CRITERIA PASS (AC-SC1..SC22, 51 checks) with four new arms; live scan `[DELIV] PASS entry_page_matches_disk=1 failed=none`; evidence qa/deliv-face-R3068.log (1438B utf-8/lf). Honest limits: no new CEO page this round; sandbox arms drive a stub (face contract, not tool behaviour); a RED line is a signal, not a refusal; it covers ONE of nine CEO faces (face_sweep still unscheduled); a buyer still cannot pay.",
-    "last_artifact": "preview/ugc-gate-report.html (9576B) + preview/ugc-gate-report.json (6881B) [2026-11-20 commit]",
-    "latest_artifact": "preview/ugc-gate-report.html (9576B) + preview/ugc-gate-report.json (6881B) [2026-11-20 commit]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3062.log (126B, 2026-11-20)",
-    "latest_evidence": "qa/deliv-face-R3068.log (1438B, this round: AC-SC22 four arms + live [DELIV] PASS)",
+    "last_artifact": "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
+    "latest_artifact": "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\platform-live-report.html",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-face-sweep-R3071.log (5156B, 2026-11-20)",
+    "latest_evidence": "qa/leg-face-sweep-R3071.log (5156B, 2026-11-20)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3071] next window (<=48h): (0) MAIN — **本轮证明了两张面会酸，但没证明这张面被谁守着**。下一轮先量（只读）：① `tools/platform_live_report.py` 在注册表里零电池行，它的 9 条判据除了每轮 [GATES] 还有谁在跑；② AC-PLR 前缀撞车的两套判据（本面 AC-PLR1..9 / patterns_label_readability AC-PLR1..6）各自的消费者是谁，改名代价与风险分别多少；③ 重渲入口：九张面各自的写路径是否都有显式选项（本轮实节验：platform_live 默认就写、ugc 需 `--write`），“写前写后自证”能不能用各家自己的 `--check` 合成（不新造工具，先量现有路径）。量清后二选一：给 platform_live 补电池套件（同 R2814 UGC 先例），或把 [GATES] 读红→人修的链写成一条可守的规则并配判据。**先落板再动代码**。",
-    "next_milestone_due": "2026-11-22T08:01:00+08:00",
-    "updated_at": "2026-11-20T08:01:00+08:00"
+    "next_milestone": "[R3072] next window (<=48h): (0) MAIN — **一张脸挂上了电池，另外几张还没量**。下一轮先量（只读）：①`tools/lobby_ws_report.py`、`tools/city_face_report.py` 等其余 CEO 面各自在 `src/sandbox/reconcile_all.py` 里有没有电池行（本轮只量了 platform_live）；②九脸共享重渲入口仍不存在——“谁有权写 preview/、写前写后如何自证”能不能用各家自己的 `--check` 合成，不新造工具；③`AC-PLVB3` 把“落地件必须新鲜”变成电池红，那么谁负责在驱动改动后重渲、这条链有没有可守的规则。量清后二选一实现并配判据，且**先落板再动代码**。",
+    "next_milestone_due": "2026-11-22T08:14:47+08:00",
+    "updated_at": "2026-11-20T08:14:47+08:00"
   },
-  "current": "2026-11-20 R3070 PRODUCT+DEFECT: the two red faces had different causes and neither was 'the gate is wrong' - six-gate-live was a live defect (its page and its nine intents counted the doors by hand while the shipped launcher had grown) and ugc-gate was a stale landed artifact (its criteria read today's truth, the page carried yesterday's line number).",
+  "current": "2026-11-20 R3071 PRODUCT+ENGINEERING: the face that boots every sandbox door had no battery row and wore another family's criteria ids - both halves of one defect are now closed. tools/platform_live_report.py grades itself with AC-PLVR1..AC-PLVR9 (the readability gate keeps AC-PLR1..AC-PLR6, carried since R2494), and the new suite src/os/test_platform_live_report.py binds that face into the 731-suite registry with AC-PLVB1..AC-PLVB8.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -41,12 +41,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3070 PRODUCT+DEFECT: the two red faces had different causes and neither was 'the gate is wrong' - six-gate-live was a live defect (its page and its nine intents counted the doors by hand while the shipped launcher had grown) and ugc-gate was a stale landed artifact (its criteria read today's truth, the page carried yesterday's line number).",
-  "export_ts": "2026-11-20T08:01:00+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (9576B) + preview/ugc-gate-report.json (6881B) [2026-11-20 commit]",
-  "latest_evidence": "qa/deliv-face-R3068.log (1438B, this round: AC-SC22 four arms + live [DELIV] PASS)",
-  "next_milestone": "[R3071] next window (<=48h): (0) MAIN — **本轮证明了两张面会酸，但没证明这张面被谁守着**。下一轮先量（只读）：① `tools/platform_live_report.py` 在注册表里零电池行，它的 9 条判据除了每轮 [GATES] 还有谁在跑；② AC-PLR 前缀撞车的两套判据（本面 AC-PLR1..9 / patterns_label_readability AC-PLR1..6）各自的消费者是谁，改名代价与风险分别多少；③ 重渲入口：九张面各自的写路径是否都有显式选项（本轮实节验：platform_live 默认就写、ugc 需 `--write`），“写前写后自证”能不能用各家自己的 `--check` 合成（不新造工具，先量现有路径）。量清后二选一：给 platform_live 补电池套件（同 R2814 UGC 先例），或把 [GATES] 读红→人修的链写成一条可守的规则并配判据。**先落板再动代码**。",
+  "do": "2026-11-20 R3071 PRODUCT+ENGINEERING: the face that boots every sandbox door had no battery row and wore another family's criteria ids - both halves of one defect are now closed. tools/platform_live_report.py grades itself with AC-PLVR1..AC-PLVR9 (the readability gate keeps AC-PLR1..AC-PLR6, carried since R2494), and the new suite src/os/test_platform_live_report.py binds that face into the 731-suite registry with AC-PLVB1..AC-PLVB8.",
+  "export_ts": "2026-11-20T08:14:47+08:00",
+  "latest_artifact": "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
+  "latest_evidence": "qa/leg-face-sweep-R3071.log (5156B, 2026-11-20)",
+  "next_milestone": "[R3072] next window (<=48h): (0) MAIN — **一张脸挂上了电池，另外几张还没量**。下一轮先量（只读）：①`tools/lobby_ws_report.py`、`tools/city_face_report.py` 等其余 CEO 面各自在 `src/sandbox/reconcile_all.py` 里有没有电池行（本轮只量了 platform_live）；②九脸共享重渲入口仍不存在——“谁有权写 preview/、写前写后如何自证”能不能用各家自己的 `--check` 合成，不新造工具；③`AC-PLVB3` 把“落地件必须新鲜”变成电池红，那么谁负责在驱动改动后重渲、这条链有没有可守的规则。量清后二选一实现并配判据，且**先落板再动代码**。",
   "outs": [
+    "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 commit]",
     "preview/live-sandbox.html (5766B) + preview/live-sandbox.json (4772B) [2026-11-19 mtime]",
     "preview/live-sandbox.html (3472B) + preview/live-sandbox.json (4772B) [2026-11-18 commit]",
@@ -105,9 +106,9 @@
   "queue": {
     "delivered_total": 2,
     "floors": {
-      "explore": 10,
       "main": 5,
-      "tech": 10
+      "tech": 10,
+      "explore": 10
     },
     "missing": [],
     "queues": [
@@ -168,7 +169,7 @@
   },
   "results": [
     [
-      "3068",
+      "3071",
       "OSLoop 执行 tick"
     ]
   ],
@@ -179,18 +180,17 @@
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
   "self_drive": {
-    "idle_fast_mention_lines": 0,
-    "log_lines_in_window": 573,
-    "no_pullable_mention_lines": 0,
-    "proposals_open": 8,
-    "proposals_total": 10,
-    "queue_explore_open": 10,
-    "queue_main_open": 6,
-    "queue_main_open_note": "counted as '- [ ]' lines in state/queue/*.md this round",
-    "queue_tech_open": 10,
-    "substantive_non_idle_mention_lines": 78,
     "window": "2026-11-14..2026-11-20",
-    "window_days": 7
+    "window_days": 7,
+    "log_lines_in_window": 593,
+    "idle_fast_mention_lines": 0,
+    "no_pullable_mention_lines": 0,
+    "substantive_non_idle_mention_lines": 85,
+    "proposals_total": 10,
+    "proposals_open": 8,
+    "queue_main_open": 6,
+    "queue_tech_open": 10,
+    "queue_explore_open": 10
   },
-  "state_bytes": 619603
+  "state_bytes": 625763
 }

@@ -1,0 +1,9 @@
+PASS AC-PLVB1 ids=AC-PLVR1,AC-PLVR2,AC-PLVR3,AC-PLVR4,AC-PLVR5,AC-PLVR6,AC-PLVR7,AC-PLVR8,AC-PLVR9 stray_ac_plr_ids=0
+PASS AC-PLVB2 offenders=none
+PASS AC-PLVB3 rc=0 rows=9 green=9 VERDICT PASS 9/9 fingerprint=3868750817119248 landed=3868750817119248 sizes={'html': 7929, 'json': 6228}
+PASS AC-PLVB6 pair_unchanged=True sizes=((7929, 1795133376415809400), (6228, 1795133376416807600))
+PASS AC-PLVB4 real=True no_face=False no_mock=False
+PASS AC-PLVB5 real=typed_counts=none planted=typed_counts=AC-PLVR1:six
+PASS AC-PLVB7 registry_rows=1 declared=8 own=8
+PASS AC-PLVB8 ascii=True socket_import=False external_host=False
+SUITE PASS 8/8

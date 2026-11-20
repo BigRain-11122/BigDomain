@@ -6,73 +6,73 @@
  "total": 9,
  "criteria": [
   {
-   "id": "AC-PLR1",
+   "id": "AC-PLVR1",
    "intent": "shipped verifier ready with every shipped face, zero errors, one distinct port per plan key",
    "pass": true,
    "measured": "ready=True faces=['checkout', 'city', 'gate', 'ledger', 'lobby', 'member', 'panel', 'ugc'] errors=none ports_keys=10 distinct=True"
   },
   {
-   "id": "AC-PLR2",
+   "id": "AC-PLVR2",
    "intent": "every shipped face URL answers a real HTTP 200 with a non-empty body",
    "pass": true,
    "measured": "lobby=200/10077B city=200/6653B checkout=200/8051B gate=200/7157B ledger=200/7977B ugc=200/8816B panel=200/8462B member=200/8752B"
   },
   {
-   "id": "AC-PLR3",
+   "id": "AC-PLVR3",
    "intent": "each door serves its own page: non-empty title, no two bodies identical",
    "pass": true,
    "measured": "titles_nonempty=8/8 distinct_bodies=8/8"
   },
   {
-   "id": "AC-PLR4",
+   "id": "AC-PLVR4",
    "intent": "city/snapshot 200 parsable JSON with as_of; hub probe map reads every face live",
    "pass": true,
    "measured": "snapshot=200 keys=4 as_of=2026-09-24T14:00:00Z hub_live_all=True equals_verifier=True"
   },
   {
-   "id": "AC-PLR5",
+   "id": "AC-PLVR5",
    "intent": "every face URL loopback and its port equal to the planned port for that face",
    "pass": true,
    "measured": "external_hosts=none port_mismatch=none"
   },
   {
-   "id": "AC-PLR6",
+   "id": "AC-PLVR6",
    "intent": "after teardown every child is kernel GONE and every planned port refuses",
    "pass": true,
    "measured": "children_gone=6/6 ports_refusing=10/10"
   },
   {
-   "id": "AC-PLR7",
+   "id": "AC-PLVR7",
    "intent": "no external host literal; every shipped entry file byte-identical before and after",
    "pass": true,
    "measured": "external_literals=none shipped_identical=True"
   },
   {
-   "id": "AC-PLR8",
+   "id": "AC-PLVR8",
    "intent": "sizes self-consistent with the landed pair, one paste-ready command, AIGC/non-advisory/msgSecCheck faces, mock stated",
    "pass": true,
-   "measured": "compliance_faces=3/3 commands=2 mock_stated=True sizes=(7918B,6219B)"
+   "measured": "compliance_faces=3/3 commands=2 mock_stated=True sizes=(7929B,6228B)"
   },
   {
-   "id": "AC-PLR9",
+   "id": "AC-PLVR9",
    "intent": "no typed count in the criteria prose or the page: every count is a digit measured this run, or absent",
    "pass": true,
    "measured": "typed_counts=none"
   }
  ],
  "faces": {
-  "lobby": "http://127.0.0.1:65305/lobby/",
-  "city": "http://127.0.0.1:65303/city/",
-  "checkout": "http://127.0.0.1:65307/checkout/",
-  "gate": "http://127.0.0.1:65304/gate/",
-  "ledger": "http://127.0.0.1:65308/ledger/",
-  "ugc": "http://127.0.0.1:65309/ugc/",
-  "panel": "http://127.0.0.1:65310/panel/",
-  "member": "http://127.0.0.1:65311/member/"
+  "lobby": "http://127.0.0.1:64700/lobby/",
+  "city": "http://127.0.0.1:64698/city/",
+  "checkout": "http://127.0.0.1:64702/checkout/",
+  "gate": "http://127.0.0.1:64699/gate/",
+  "ledger": "http://127.0.0.1:64703/ledger/",
+  "ugc": "http://127.0.0.1:64704/ugc/",
+  "panel": "http://127.0.0.1:64705/panel/",
+  "member": "http://127.0.0.1:64706/member/"
  },
  "pages": {
   "lobby": {
-   "url": "http://127.0.0.1:65305/lobby/",
+   "url": "http://127.0.0.1:64700/lobby/",
    "status": 200,
    "bytes": 10077,
    "ctype": "text/html",
@@ -80,7 +80,7 @@
    "sha": "6c5513f6c56b8068"
   },
   "city": {
-   "url": "http://127.0.0.1:65303/city/",
+   "url": "http://127.0.0.1:64698/city/",
    "status": 200,
    "bytes": 6653,
    "ctype": "text/html",
@@ -88,7 +88,7 @@
    "sha": "f4da3a32459c2e32"
   },
   "checkout": {
-   "url": "http://127.0.0.1:65307/checkout/",
+   "url": "http://127.0.0.1:64702/checkout/",
    "status": 200,
    "bytes": 8051,
    "ctype": "text/html",
@@ -96,7 +96,7 @@
    "sha": "7e145ec71f17a12a"
   },
   "gate": {
-   "url": "http://127.0.0.1:65304/gate/",
+   "url": "http://127.0.0.1:64699/gate/",
    "status": 200,
    "bytes": 7157,
    "ctype": "text/html",
@@ -104,7 +104,7 @@
    "sha": "bac08b7b9d63e907"
   },
   "ledger": {
-   "url": "http://127.0.0.1:65308/ledger/",
+   "url": "http://127.0.0.1:64703/ledger/",
    "status": 200,
    "bytes": 7977,
    "ctype": "text/html",
@@ -112,7 +112,7 @@
    "sha": "a3924b40b8d1d2df"
   },
   "ugc": {
-   "url": "http://127.0.0.1:65309/ugc/",
+   "url": "http://127.0.0.1:64704/ugc/",
    "status": 200,
    "bytes": 8816,
    "ctype": "text/html",
@@ -120,7 +120,7 @@
    "sha": "8569ef06639c7c5f"
   },
   "panel": {
-   "url": "http://127.0.0.1:65310/panel/",
+   "url": "http://127.0.0.1:64705/panel/",
    "status": 200,
    "bytes": 8462,
    "ctype": "text/html",
@@ -128,7 +128,7 @@
    "sha": "0042242e0f1cf17c"
   },
   "member": {
-   "url": "http://127.0.0.1:65311/member/",
+   "url": "http://127.0.0.1:64706/member/",
    "status": 200,
    "bytes": 8752,
    "ctype": "text/html",
@@ -137,16 +137,16 @@
   }
  },
  "ports": {
-  "ws": 65302,
-  "city": 65303,
-  "gate": 65304,
-  "web": 65305,
-  "hub": 65306,
-  "checkout": 65307,
-  "ledger": 65308,
-  "ugc": 65309,
-  "panel": 65310,
-  "member": 65311
+  "ws": 64697,
+  "city": 64698,
+  "gate": 64699,
+  "web": 64700,
+  "hub": 64701,
+  "checkout": 64702,
+  "ledger": 64703,
+  "ugc": 64704,
+  "panel": 64705,
+  "member": 64706
  },
  "ports_refusing_after_teardown": {
   "ws": true,
@@ -198,7 +198,7 @@
   "src\\sandbox\\lobby\\config.json": "ab7cc97834f4950d",
   "src\\sandbox\\pay\\config.json": "1f3dd9233a82b565"
  },
- "fingerprint": "fa804043e736acf8",
+ "fingerprint": "3868750817119248",
  "reproduce": [
   "python tools/platform_live_report.py",
   "python src/sandbox/start_all.py"
@@ -217,7 +217,7 @@
   "production criteria AC-P1..P5 are pre-registered and not executed"
  ],
  "sizes": {
-  "html": 7918,
-  "json": 6219
+  "html": 7929,
+  "json": 6228
  }
 }

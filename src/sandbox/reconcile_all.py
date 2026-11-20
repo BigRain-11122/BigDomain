@@ -7637,6 +7637,21 @@ SUITES = [
     # path, whose byte count the CEO latest-artifact line quotes.
     ("os-live-proof",
      os.path.join("..", "os", "test_live_proof.py"), 13),
+    # R3071: tools/platform_live_report.py renders the face that boots every
+    # sandbox door over real sockets and grades it with AC-PLVR1..AC-PLVR9, yet
+    # this registry held ZERO platform_live rows, so the face was graded only by
+    # the round-opening [GATES] sweep and a regression could pass unseen. The
+    # same probe found its criteria wearing AC-PLR ids that
+    # src/os/patterns_label_readability.py has used since R2494, so one printed
+    # id named two unrelated criteria; the driver was renamed to AC-PLVR (the
+    # readability family keeps its history) and this row is the second half of
+    # the repair. AC-PLVB1..AC-PLVB8 were pinned in src/os/backlog.md BEFORE this
+    # suite existed. The only child process is the driver's own --check, which
+    # is proved read-only by size+mtime around the call. Appended at the END for
+    # the same reason as every row above: a mid-list insert shifts each later
+    # suite's shard.
+    ("os-platform-live-report",
+     os.path.join("..", "os", "test_platform_live_report.py"), 8),
     ]
 
 FAILS = 0
