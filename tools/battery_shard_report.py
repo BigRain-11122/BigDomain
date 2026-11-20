@@ -16,6 +16,16 @@ from that stdout or re-derived from the registry; none of them is typed here.
   python tools/battery_shard_report.py --control  # the gate must redden
 
 Exit codes: 0 pass, 2 refuse or red.
+
+R3082: the page now carries the OTHER half of the criteria denominator. R3081
+made the runner print crit_unchecked and taught this reader to parse it, but
+the published pair was still the R2800 render, so --check read
+E_REGISTRY_DRIFT on every family: the registry has grown since that render and
+the page cannot be trusted to say by how much. The pair is regenerated here,
+and the count is printed where a reader already looks: totals line plus one
+column per family. A leg that predates the field (crit_unchecked_seen=0) prints
+the word in Chinese rather than a measured 0, and unchecked_cell() is the
+single source both the page and check_payload use.
 """
 
 import copy
@@ -33,7 +43,7 @@ PREVIEW = os.path.join(ROOT, "preview")
 OUT_JSON = os.path.join(PREVIEW, "battery-shard-report.json")
 OUT_HTML = os.path.join(PREVIEW, "battery-shard-report.html")
 SHARD = os.path.join(HERE, "battery_shard.py")
-ROUND = "R2800"
+ROUND = "R3082"
 
 # label prefix, family key, what the family guards.  These are the REQUEST;
 # every number that comes back is measured.
@@ -128,6 +138,17 @@ def parse_family(key, prefix, guards, rc, out):
     return resp
 
 
+def unchecked_cell(fam):
+    """AC-BSRB11 (R3082): one source for the page and the gate.
+
+    A leg that predates crit_unchecked has seen=0 and must NOT print a measured
+    zero -- the word says the family never declared, which is the honest read.
+    """
+    if fam.get("crit_unchecked_seen"):
+        return "%d" % fam.get("crit_unchecked", 0)
+    return "\u672a\u7533\u62a5"
+
+
 def measure():
     fams = []
     for prefix, key, guards in FAMILIES:
@@ -204,22 +225,24 @@ def render_html(p):
     a("<h2>\u7ed3\u8bba</h2>")
     cls = "pass" if p["verdict"] == "PASS" else "red"
     a("<p>VERDICT <span class=\"%s\">%s</span> \u00b7 \u7eff\u65cf %d / %d \u00b7 "
-      "\u65cf\u5185\u5957\u4ef6 %d / %d \u6267\u884c\u7eff \u00b7 \u5224\u636e %d \u00b7 \u5224\u636e\u6570\u4e0d\u4e00\u81f4 %d</p>"
+      "\u65cf\u5185\u5957\u4ef6 %d / %d \u6267\u884c\u7eff \u00b7 \u5224\u636e %d \u00b7 \u5224\u636e\u6570\u4e0d\u4e00\u81f4 %d \u00b7 "
+      "\u672a\u6bd4\u8f83\u5224\u636e %d\uff08%d/%d \u65cf\u5df2\u7533\u62a5\uff09</p>"
       % (cls, p["verdict"], t["green_families"], t["families"],
          sum(f["green"] for f in p["families"]),
          sum(f["executed"] for f in p["families"]),
-         t["selected_criteria"], t["crit_mismatch"]))
+         t["selected_criteria"], t["crit_mismatch"],
+         t["crit_unchecked"], t["crit_unchecked_seen"], t["families"]))
     a("<h2>\u65cf\u8bfb\u6570</h2><table><tr><th>\u65cf</th><th>\u6807\u7b7e\u524d\u7f00</th><th>\u5b88\u62a4\u9762</th>"
-      "<th>rc</th><th>\u5957\u4ef6</th><th>\u5224\u636e</th><th>\u7eff/\u6267\u884c</th><th>\u8017\u65f6</th>"
+      "<th>rc</th><th>\u5957\u4ef6</th><th>\u5224\u636e</th><th>\u672a\u6bd4\u8f83</th><th>\u7eff/\u6267\u884c</th><th>\u8017\u65f6</th>"
       "<th>\u7ed3\u8bba</th></tr>")
     for f in p["families"]:
         ok = f["rc"] == 0 and f["parse"] == "ok"
         a("<tr><td>%s</td><td><code>%s</code></td><td>%s</td>"
           "<td class=\"n\">%d</td><td class=\"n\">%d</td><td class=\"n\">%d</td>"
-          "<td class=\"n\">%d / %d</td><td class=\"n\">%.1fs</td>"
+          "<td class=\"n\">%s</td><td class=\"n\">%d / %d</td><td class=\"n\">%.1fs</td>"
           "<td class=\"%s\">%s</td></tr>"
           % (f["key"], f["match"], f["guards"], f["rc"], f["selected"],
-             f["selected_criteria"], f["green"], f["executed"],
+             f["selected_criteria"], unchecked_cell(f), f["green"], f["executed"],
              f["elapsed_s"], "pass" if ok else "red",
              "GREEN" if ok else "RED"))
     a("</table>")
@@ -244,6 +267,10 @@ def render_html(p):
     a("<li>\u8017\u65f6\u9010\u6b21\u4e0d\u540c\uff0c\u6240\u4ee5 <code>--check</code> \u4e0d\u91cd\u8dd1\u5957\u4ef6\uff1b\u5b83\u590d\u7b97\u7684\u662f"
       "json \u9010\u5b57\u8282\u91cd\u5e8f\u5217\u5316\u3001html \u9010\u5b57\u8282\u91cd\u6e32\u67d3\u3001\u5404\u65cf\u5224\u636e\u6570\u4e0e\u6ce8\u518c\u8868\u91cd\u65b0\u9009\u62e9\u76f8\u7b49\u3001"
       "\u6c47\u603b\u7b97\u672f\u81ea\u6d3d\u3001verdict=\u5404\u65cf rc \u6700\u5927\u503c\u6620\u5c04\u3002</li>")
+    a("<li>\u300c\u672a\u6bd4\u8f83\u300d\u53d6\u81ea\u6bcf\u65cf\u5c3e\u884c\u81ea\u62a5\u7684 "
+      "<code>crit_unchecked=</code>\uff1b\u8be5\u65cf\u5c3e\u884c\u65e9\u4e8e\u8fd9\u4e2a\u5b57\u6bb5"
+      "\uff08R3081 \u4e4b\u524d\uff09\u65f6\u9875\u9762\u5199\u300c\u672a\u7533\u62a5\u300d\uff0c"
+      "\u800c\u4e0d\u662f\u5b9e\u6d4b\u7684 0\u3002</li>")
     a("<li>\u672c\u9875\u4e0d\u8bc1\u660e\u672a\u88ab\u9009\u4e2d\u65cf\u7684\u72b6\u6001\uff0c\u4e5f\u4e0d\u66ff\u4ee3\u5168\u91cf\u7535\u6c60\uff1b\u672a\u8986\u76d6\u5957\u4ef6\u6570\u89c1\u9996\u5c4f\u3002</li>")
     a("</ul>")
     a("<h2>\u90bb\u5c45\u9762</h2><ul>")
@@ -328,6 +355,21 @@ def check_payload(payload, html_text, json_text, reg_suites, reg_criteria, exp):
         fails.append("E_VERDICT")
     if t["red_families"] != len(reds):
         fails.append("E_TOTALS_RED")
+    # AC-BSRB11 (R3082): the unchecked face is arithmetic over the payload, and
+    # the page prints that same single source -- never a literal left behind by
+    # an older round.
+    if t.get("crit_unchecked") != sum(f.get("crit_unchecked", 0)
+                                      for f in payload["families"]):
+        fails.append("E_TOTALS_UNCHECKED")
+    if t.get("crit_unchecked_seen") != sum(f.get("crit_unchecked_seen", 0)
+                                           for f in payload["families"]):
+        fails.append("E_TOTALS_UNCHECKED_SEEN")
+    if ("\u672a\u6bd4\u8f83\u5224\u636e %d" % t.get("crit_unchecked", 0)) \
+            not in html_text:
+        fails.append("E_PAGE_UNCHECKED")
+    for fam in payload["families"]:
+        if ("<td class=\"n\">%s</td>" % unchecked_cell(fam)) not in html_text:
+            fails.append("E_PAGE_UNCHECKED:%s" % fam["key"])
     if "http://" in html_text or "https://" in html_text:
         fails.append("E_HTTP_LITERAL")
     for name in LINKS:

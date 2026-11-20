@@ -2,7 +2,9 @@
   "families": [
     {
       "crit_mismatch": 0,
-      "elapsed_s": 159.8,
+      "crit_unchecked": 0,
+      "crit_unchecked_seen": 1,
+      "elapsed_s": 126.0,
       "executed": 7,
       "green": 7,
       "guards": "会话、房间、限流、UGC 闸、持久化",
@@ -11,68 +13,68 @@
       "parse": "ok",
       "rc": 0,
       "red": [],
-      "registry_criteria": 5150,
-      "registry_suites": 690,
+      "registry_criteria": 5968,
+      "registry_suites": 733,
       "selected": 7,
       "selected_criteria": 118,
       "suites": [
         {
           "crit": 79,
-          "elapsed_s": 51.2,
+          "elapsed_s": 42.2,
           "fail": 0,
           "label": "lobby",
           "pass": 79,
           "rc": 0,
-          "suite": "none"
+          "suite": "PASS 79/79"
         },
         {
           "crit": 6,
-          "elapsed_s": 13.7,
+          "elapsed_s": 11.5,
           "fail": 0,
           "label": "lobby-hub-ledger",
-          "pass": 0,
+          "pass": 6,
           "rc": 0,
           "suite": "PASS 6/6"
         },
         {
           "crit": 6,
-          "elapsed_s": 31.7,
+          "elapsed_s": 21.4,
           "fail": 0,
           "label": "lobby-hub-ugc",
-          "pass": 0,
+          "pass": 6,
           "rc": 0,
           "suite": "PASS 6/6"
         },
         {
           "crit": 6,
-          "elapsed_s": 52.3,
+          "elapsed_s": 43.2,
           "fail": 0,
           "label": "lobby-hub-panel",
-          "pass": 0,
+          "pass": 6,
           "rc": 0,
           "suite": "PASS 6/6"
         },
         {
           "crit": 6,
-          "elapsed_s": 10.1,
+          "elapsed_s": 7.4,
           "fail": 0,
           "label": "lobby-hub-member",
-          "pass": 0,
+          "pass": 6,
           "rc": 0,
           "suite": "PASS 6/6"
         },
         {
           "crit": 7,
-          "elapsed_s": 0.4,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "lobby-persist",
           "pass": 7,
           "rc": 0,
-          "suite": "none"
+          "suite": "PASS 7/7"
         },
         {
           "crit": 8,
-          "elapsed_s": 0.5,
+          "elapsed_s": 0.3,
           "fail": 0,
           "label": "lobby-chat-mute-idem",
           "pass": 8,
@@ -82,26 +84,31 @@
       ]
     },
     {
-      "crit_mismatch": 1,
-      "elapsed_s": 19.6,
+      "crit_mismatch": 0,
+      "crit_unchecked": 0,
+      "crit_unchecked_seen": 1,
+      "elapsed_s": 30.7,
       "executed": 20,
-      "green": 19,
+      "green": 16,
       "guards": "导出新鲜度、发布路径、一致性",
       "key": "OS 导出面",
       "match": "os-export",
       "parse": "ok",
       "rc": 2,
       "red": [
+        "os-export-driver-queue-face",
+        "os-export-consistency-queue-face",
+        "os-export-driver-self-drive-health",
         "os-export-round"
       ],
-      "registry_criteria": 5150,
-      "registry_suites": 690,
+      "registry_criteria": 5968,
+      "registry_suites": 733,
       "selected": 20,
-      "selected_criteria": 120,
+      "selected_criteria": 156,
       "suites": [
         {
           "crit": 6,
-          "elapsed_s": 2.9,
+          "elapsed_s": 0.8,
           "fail": 0,
           "label": "os-export-freshness",
           "pass": 6,
@@ -110,7 +117,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.1,
           "fail": 0,
           "label": "os-export-composed-landed-face",
           "pass": 6,
@@ -119,7 +126,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.1,
           "fail": 0,
           "label": "os-export-composed-landed-wordspace",
           "pass": 6,
@@ -128,7 +135,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.1,
           "fail": 0,
           "label": "os-export-composed-landed-bom-precedence",
           "pass": 6,
@@ -137,7 +144,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "os-export-composed-landed-bom-precedence-second-wave",
           "pass": 6,
@@ -164,12 +171,12 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "os-export-composed-landed-bom-precedence-fifth-wave",
           "pass": 6,
           "rc": 0,
-          "suite": "none"
+          "suite": "PASS 6/6"
         },
         {
           "crit": 6,
@@ -178,7 +185,7 @@
           "label": "os-export-composed-landed-bom-precedence-sixth-wave",
           "pass": 6,
           "rc": 0,
-          "suite": "none"
+          "suite": "PASS 6/6"
         },
         {
           "crit": 6,
@@ -187,47 +194,47 @@
           "label": "os-export-composed-landed-bom-precedence-seventh-wave",
           "pass": 6,
           "rc": 0,
-          "suite": "none"
+          "suite": "PASS 6/6"
         },
         {
           "crit": 6,
-          "elapsed_s": 1.8,
+          "elapsed_s": 1.1,
           "fail": 0,
           "label": "os-export-publish-wire-identity",
           "pass": 9,
-          "rc": 0,
-          "suite": "none"
-        },
-        {
-          "crit": 6,
-          "elapsed_s": 3.1,
-          "fail": 0,
-          "label": "os-export-publish-from-import-law",
-          "pass": 8,
-          "rc": 0,
-          "suite": "none"
-        },
-        {
-          "crit": 6,
-          "elapsed_s": 1.2,
-          "fail": 0,
-          "label": "os-export-driver-queue-face",
-          "pass": 6,
           "rc": 0,
           "suite": "PASS 6/6"
         },
         {
           "crit": 6,
-          "elapsed_s": 1.6,
+          "elapsed_s": 1.1,
           "fail": 0,
-          "label": "os-export-consistency-queue-face",
-          "pass": 15,
+          "label": "os-export-publish-from-import-law",
+          "pass": 8,
           "rc": 0,
-          "suite": "none"
+          "suite": "PASS 8/6"
         },
         {
           "crit": 6,
-          "elapsed_s": 1.4,
+          "elapsed_s": 0.3,
+          "fail": 2,
+          "label": "os-export-driver-queue-face",
+          "pass": 4,
+          "rc": 1,
+          "suite": "FAIL 4/6"
+        },
+        {
+          "crit": 6,
+          "elapsed_s": 0.4,
+          "fail": 3,
+          "label": "os-export-consistency-queue-face",
+          "pass": 12,
+          "rc": 2,
+          "suite": "FAIL 0/6"
+        },
+        {
+          "crit": 6,
+          "elapsed_s": 0.8,
           "fail": 0,
           "label": "os-export-closeout-gate-parity",
           "pass": 6,
@@ -236,21 +243,21 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 1.7,
+          "elapsed_s": 0.9,
           "fail": 0,
           "label": "os-export-publish-path-guard",
           "pass": 8,
           "rc": 0,
-          "suite": "none"
+          "suite": "PASS 6/6"
         },
         {
           "crit": 6,
-          "elapsed_s": 0.7,
-          "fail": 0,
+          "elapsed_s": 0.2,
+          "fail": 4,
           "label": "os-export-driver-self-drive-health",
-          "pass": 6,
-          "rc": 0,
-          "suite": "PASS 6/6"
+          "pass": 2,
+          "rc": 1,
+          "suite": "FAIL 2/6"
         },
         {
           "crit": 6,
@@ -263,7 +270,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 1.7,
+          "elapsed_s": 0.4,
           "fail": 0,
           "label": "os-export-parity-difference-order-field",
           "pass": 55,
@@ -271,35 +278,39 @@
           "suite": "PASS 6/6"
         },
         {
-          "crit": 6,
-          "elapsed_s": 1.5,
-          "fail": 0,
+          "crit": 42,
+          "elapsed_s": 23.4,
+          "fail": 1,
           "label": "os-export-round",
-          "pass": 0,
+          "pass": 114,
           "rc": 1,
-          "suite": "FAIL 15/16"
+          "suite": "FAIL 114/115"
         }
       ]
     },
     {
       "crit_mismatch": 0,
-      "elapsed_s": 33.5,
+      "crit_unchecked": 0,
+      "crit_unchecked_seen": 1,
+      "elapsed_s": 12.9,
       "executed": 16,
-      "green": 16,
+      "green": 15,
       "guards": "队头/队尾/占位/盖章/交付",
       "key": "OS 队列面",
       "match": "os-queue",
       "parse": "ok",
-      "rc": 0,
-      "red": [],
-      "registry_criteria": 5150,
-      "registry_suites": 690,
+      "rc": 2,
+      "red": [
+        "os-queue-floor-export-face"
+      ],
+      "registry_criteria": 5968,
+      "registry_suites": 733,
       "selected": 16,
       "selected_criteria": 98,
       "suites": [
         {
           "crit": 8,
-          "elapsed_s": 1.5,
+          "elapsed_s": 0.9,
           "fail": 0,
           "label": "os-queue-floor",
           "pass": 8,
@@ -308,7 +319,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 1.6,
+          "elapsed_s": 1.0,
           "fail": 0,
           "label": "os-queue-row",
           "pass": 6,
@@ -317,7 +328,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 2.4,
+          "elapsed_s": 1.0,
           "fail": 0,
           "label": "os-queue-only",
           "pass": 6,
@@ -326,7 +337,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 3.8,
+          "elapsed_s": 0.9,
           "fail": 0,
           "label": "os-queue-floor-decl",
           "pass": 6,
@@ -335,7 +346,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 3.3,
+          "elapsed_s": 1.2,
           "fail": 0,
           "label": "os-queue-only-floor-wire",
           "pass": 6,
@@ -344,7 +355,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 3.4,
+          "elapsed_s": 1.0,
           "fail": 0,
           "label": "os-queue-head",
           "pass": 6,
@@ -353,7 +364,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 3.3,
+          "elapsed_s": 0.5,
           "fail": 0,
           "label": "os-queue-row-exempt",
           "pass": 6,
@@ -362,7 +373,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 1.5,
+          "elapsed_s": 0.5,
           "fail": 0,
           "label": "os-queue-done-stamp",
           "pass": 6,
@@ -371,7 +382,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 5.0,
+          "elapsed_s": 1.4,
           "fail": 0,
           "label": "os-queue-done-stamp-exempt",
           "pass": 6,
@@ -380,7 +391,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 1.0,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "os-queue-occupancy",
           "pass": 6,
@@ -389,7 +400,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 1.0,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "os-queue-head-delivered",
           "pass": 6,
@@ -398,7 +409,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 1.1,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "os-queue-floor-delivered-wire",
           "pass": 6,
@@ -407,7 +418,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 1.0,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "os-queue-floor-reading-wire",
           "pass": 6,
@@ -416,16 +427,16 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 0.6,
-          "fail": 0,
+          "elapsed_s": 0.2,
+          "fail": 1,
           "label": "os-queue-floor-export-face",
-          "pass": 6,
-          "rc": 0,
-          "suite": "PASS 6/6"
+          "pass": 5,
+          "rc": 1,
+          "suite": "FAIL 5/6"
         },
         {
           "crit": 6,
-          "elapsed_s": 1.3,
+          "elapsed_s": 0.8,
           "fail": 0,
           "label": "os-queue-export-freshness-gate",
           "pass": 6,
@@ -434,7 +445,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 1.8,
+          "elapsed_s": 0.6,
           "fail": 0,
           "label": "os-queue-export-gate-wire",
           "pass": 6,
@@ -445,77 +456,95 @@
     },
     {
       "crit_mismatch": 0,
-      "elapsed_s": 15.2,
-      "executed": 10,
-      "green": 10,
+      "crit_unchecked": 0,
+      "crit_unchecked_seen": 1,
+      "elapsed_s": 9.7,
+      "executed": 13,
+      "green": 7,
       "guards": "双式记账、对账闸、台账归档、判据前缀",
       "key": "OS 台账面",
       "match": "os-ledger",
       "parse": "ok",
-      "rc": 0,
-      "red": [],
-      "registry_criteria": 5150,
-      "registry_suites": 690,
-      "selected": 10,
-      "selected_criteria": 70,
+      "rc": 2,
+      "red": [
+        "os-ledger-lines",
+        "os-ledger-archive",
+        "os-ledger-baseline",
+        "os-ledger-fold-kind",
+        "os-ledger-fold-kind-dateprefix",
+        "os-ledger-fold-kind-inflection"
+      ],
+      "registry_criteria": 5968,
+      "registry_suites": 733,
+      "selected": 13,
+      "selected_criteria": 94,
       "suites": [
         {
           "crit": 6,
-          "elapsed_s": 2.6,
+          "elapsed_s": 1.6,
           "fail": 0,
           "label": "os-ledger-page",
-          "pass": 0,
+          "pass": 12,
           "rc": 0,
           "suite": "PASS 6/6"
         },
         {
           "crit": 8,
-          "elapsed_s": 5.5,
-          "fail": 0,
+          "elapsed_s": 1.2,
+          "fail": 1,
           "label": "os-ledger-lines",
-          "pass": 8,
-          "rc": 0,
-          "suite": "PASS 8/8"
+          "pass": 7,
+          "rc": 2,
+          "suite": "FAIL 7/8"
+        },
+        {
+          "crit": 9,
+          "elapsed_s": 1.2,
+          "fail": 3,
+          "label": "os-ledger-archive",
+          "pass": 6,
+          "rc": 2,
+          "suite": "FAIL 6/9"
         },
         {
           "crit": 8,
           "elapsed_s": 1.1,
-          "fail": 0,
-          "label": "os-ledger-archive",
-          "pass": 8,
-          "rc": 0,
-          "suite": "PASS 8/8"
-        },
-        {
-          "crit": 8,
-          "elapsed_s": 2.2,
-          "fail": 0,
+          "fail": 1,
           "label": "os-ledger-baseline",
-          "pass": 8,
-          "rc": 0,
-          "suite": "PASS 8/8"
+          "pass": 7,
+          "rc": 2,
+          "suite": "FAIL 7/8"
         },
         {
           "crit": 6,
-          "elapsed_s": 0.3,
-          "fail": 0,
+          "elapsed_s": 0.1,
+          "fail": 1,
           "label": "os-ledger-fold-kind",
-          "pass": 6,
-          "rc": 0,
-          "suite": "PASS 6/6"
+          "pass": 5,
+          "rc": 1,
+          "suite": "FAIL 5/6"
         },
         {
           "crit": 6,
           "elapsed_s": 0.2,
-          "fail": 0,
+          "fail": 1,
           "label": "os-ledger-fold-kind-dateprefix",
-          "pass": 6,
-          "rc": 0,
-          "suite": "PASS 6/6"
+          "pass": 5,
+          "rc": 1,
+          "suite": "FAIL 5/6"
+        },
+        {
+          "crit": 6,
+          "elapsed_s": 0.4,
+          "fail": 1,
+          "label": "os-ledger-fold-kind-inflection",
+          "pass": 5,
+          "rc": 1,
+          "suite": "FAIL 5/6"
         },
         {
           "crit": 8,
-          "elapsed_s": 0.8,
+          "elapsed_s": 0.5,
           "fail": 0,
           "label": "os-ledger-closeout",
           "pass": 8,
@@ -524,7 +553,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 0.9,
+          "elapsed_s": 0.6,
           "fail": 0,
           "label": "os-ledger-line-shape-guard",
           "pass": 6,
@@ -532,20 +561,38 @@
           "suite": "PASS 6/6"
         },
         {
+          "crit": 9,
+          "elapsed_s": 0.4,
+          "fail": 0,
+          "label": "os-ledger-round-main-shape",
+          "pass": 9,
+          "rc": 0,
+          "suite": "PASS 9/9"
+        },
+        {
           "crit": 6,
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.1,
           "fail": 0,
           "label": "os-ledger-tokens-prefix-repair",
-          "pass": 0,
+          "pass": 6,
           "rc": 0,
-          "suite": "none"
+          "suite": "PASS 6/6"
         },
         {
           "crit": 8,
-          "elapsed_s": 1.3,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "os-ledger-reconcile-face",
-          "pass": 0,
+          "pass": 8,
+          "rc": 0,
+          "suite": "PASS 8/8"
+        },
+        {
+          "crit": 8,
+          "elapsed_s": 1.5,
+          "fail": 0,
+          "label": "os-ledger-business-report",
+          "pass": 8,
           "rc": 0,
           "suite": "PASS 8/8"
         }
@@ -553,7 +600,9 @@
     },
     {
       "crit_mismatch": 0,
-      "elapsed_s": 23.4,
+      "crit_unchecked": 0,
+      "crit_unchecked_seen": 1,
+      "elapsed_s": 62.9,
       "executed": 4,
       "green": 4,
       "guards": "分片器、全量电池口径、自测试",
@@ -562,14 +611,14 @@
       "parse": "ok",
       "rc": 0,
       "red": [],
-      "registry_criteria": 5150,
-      "registry_suites": 690,
+      "registry_criteria": 5968,
+      "registry_suites": 733,
       "selected": 4,
-      "selected_criteria": 30,
+      "selected_criteria": 55,
       "suites": [
         {
           "crit": 6,
-          "elapsed_s": 12.6,
+          "elapsed_s": 6.2,
           "fail": 0,
           "label": "os-battery-followup",
           "pass": 6,
@@ -578,7 +627,7 @@
         },
         {
           "crit": 6,
-          "elapsed_s": 7.3,
+          "elapsed_s": 5.0,
           "fail": 0,
           "label": "os-battery-followup-help-wire",
           "pass": 6,
@@ -586,27 +635,29 @@
           "suite": "PASS 6/6"
         },
         {
-          "crit": 8,
-          "elapsed_s": 2.8,
+          "crit": 31,
+          "elapsed_s": 50.6,
           "fail": 0,
           "label": "os-battery-shard",
-          "pass": 0,
+          "pass": 31,
           "rc": 0,
-          "suite": "PASS 8/8"
+          "suite": "PASS 31/31"
         },
         {
-          "crit": 10,
-          "elapsed_s": 0.8,
+          "crit": 12,
+          "elapsed_s": 1.1,
           "fail": 0,
           "label": "os-battery-shard-report",
-          "pass": 0,
+          "pass": 12,
           "rc": 0,
-          "suite": "PASS 10/10"
+          "suite": "PASS 12/12"
         }
       ]
     },
     {
       "crit_mismatch": 0,
+      "crit_unchecked": 0,
+      "crit_unchecked_seen": 1,
       "elapsed_s": 0.3,
       "executed": 1,
       "green": 1,
@@ -616,39 +667,41 @@
       "parse": "ok",
       "rc": 0,
       "red": [],
-      "registry_criteria": 5150,
-      "registry_suites": 690,
+      "registry_criteria": 5968,
+      "registry_suites": 733,
       "selected": 1,
-      "selected_criteria": 16,
+      "selected_criteria": 18,
       "suites": [
         {
-          "crit": 16,
+          "crit": 18,
           "elapsed_s": 0.3,
           "fail": 0,
           "label": "os-deliverable-index",
-          "pass": 0,
+          "pass": 18,
           "rc": 0,
-          "suite": "PASS 16/16"
+          "suite": "PASS 18/18"
         }
       ]
     }
   ],
-  "generated_at": "2026-11-16T00:52:41",
-  "not_the_battery": "本页是分片，不是全量电池：它只跑下列族，未覆盖的 632 套件仍是欠账。",
+  "generated_at": "2026-11-20T15:48:36",
+  "not_the_battery": "本页是分片，不是全量电池：它只跑下列族，未覆盖的 672 套件仍是欠账。",
   "registry": {
-    "criteria": 5150,
-    "suites": 690
+    "criteria": 5968,
+    "suites": 733
   },
-  "round": "R2800",
+  "round": "R3082",
   "totals": {
-    "cover_pct": 8.4,
-    "crit_mismatch": 1,
+    "cover_pct": 8.3,
+    "crit_mismatch": 0,
+    "crit_unchecked": 0,
+    "crit_unchecked_seen": 6,
     "families": 6,
-    "green_families": 5,
-    "red_families": 1,
-    "selected": 58,
-    "selected_criteria": 452,
-    "uncovered_suites": 632
+    "green_families": 3,
+    "red_families": 3,
+    "selected": 61,
+    "selected_criteria": 539,
+    "uncovered_suites": 672
   },
   "verdict": "RED"
 }

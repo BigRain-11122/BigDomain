@@ -1,4 +1,4 @@
-"""Battery suite for tools/battery_shard_report.py - AC-BSRB1..AC-BSRB10.
+"""Battery suite for tools/battery_shard_report.py - AC-BSRB1..AC-BSRB11.
 
 The eight criteria of the tool (AC-BSR1..AC-BSR8) were pinned in
 src/os/backlog.md at R2799/R2800, BEFORE the tool existed.  The tool shipped
@@ -362,6 +362,54 @@ def main():
               has(typed_tok, "E_TYPED_FAMILY_COUNT"),
               has(absent_tok, "E_FAMILY_COUNT_ABSENT"),
               not [f for f in honest if f.startswith("E_FAMILY")]))
+
+        # AC-BSRB11 (R3082 pin): the unchecked face must reach the page from
+        # the same single source as json totals, and a family whose leg never
+        # declared the field must print the word, not a measured zero.
+        unchecked_sum = sum(f.get("crit_unchecked", 0)
+                            for f in payload["families"])
+        seen_sum = sum(f.get("crit_unchecked_seen", 0)
+                       for f in payload["families"])
+        tot_ok = (tot["crit_unchecked"] == unchecked_sum
+                  and tot["crit_unchecked_seen"] == seen_sum)
+        page_total = ("\u672a\u6bd4\u8f83\u5224\u636e %d\uff08%d/%d \u65cf"
+                      "\u5df2\u7533\u62a5\uff09"
+                      % (tot["crit_unchecked"], tot["crit_unchecked_seen"],
+                         tot["families"]))
+        page_ok = page_total in html
+        fam_c = [f for f in payload["families"] if f["key"] == "fam-c"][0]
+        seen0_ok = (fam_c["crit_unchecked_seen"] == 0
+                    and bsr.unchecked_cell(fam_c) == "\u672a\u7533\u62a5"
+                    and html.count("<td class=\"n\">\u672a\u7533\u62a5</td>") == 1)
+        nz = copy.deepcopy(payload)
+        nz["families"][0]["crit_unchecked"] = 3
+        nz["families"][0]["crit_unchecked_seen"] = 1
+        nz["totals"]["crit_unchecked"] = 3 + sum(
+            f.get("crit_unchecked", 0) for f in nz["families"][1:])
+        nz_html = bsr.render_html(nz)
+        nz_ok = (bsr.unchecked_cell(nz["families"][0]) == "3"
+                 and "<td class=\"n\">3</td>" in nz_html
+                 and ("\u672a\u6bd4\u8f83\u5224\u636e %d"
+                      % nz["totals"]["crit_unchecked"]) in nz_html)
+        page_tamper = bsr.check_payload(
+            payload,
+            html.replace("\u672a\u6bd4\u8f83\u5224\u636e %d"
+                         % tot["crit_unchecked"],
+                         "\u672a\u6bd4\u8f83\u5224\u636e %d"
+                         % (tot["crit_unchecked"] + 9)),
+            jtext, 700, 5000, exp)
+        tb = copy.deepcopy(payload)
+        tb["totals"]["crit_unchecked"] = 9
+        totals_tamper = bsr.check_payload(tb, bsr.render_html(tb),
+                                          bsr.dumps(tb), 700, 5000, exp)
+        ok("AC-BSRB11",
+           tot_ok and page_ok and seen0_ok and nz_ok
+           and has(page_tamper, "E_PAGE_UNCHECKED")
+           and has(totals_tamper, "E_TOTALS_UNCHECKED"),
+           "tot=%s page=%s seen0=%s nonzero=%s page_tamper=%s tot_tamper=%s"
+           % (tot_ok, page_ok, seen0_ok, nz_ok,
+              has(page_tamper, "E_PAGE_UNCHECKED"),
+              has(totals_tamper, "E_TOTALS_UNCHECKED")))
     finally:
         bsr.FAMILIES, bsr.run_family, bsr.PREVIEW, bsr.OUT_JSON, bsr.OUT_HTML = keep
         shutil.rmtree(world, ignore_errors=True)

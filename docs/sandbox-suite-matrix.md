@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 733 | 5967 | 675/675 | R2739 |
+| 733 | 5968 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -753,7 +753,7 @@
 | 714 | os-battery-shard | ../os/test_battery_shard.py | 31 | no-evidence | - |
 | 715 | os-suite-output-audit | ../os/test_suite_output_audit.py | 6 | no-evidence | - |
 | 716 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 20 | no-evidence | - |
-| 717 | os-battery-shard-report | ../os/test_battery_shard_report.py | 11 | no-evidence | - |
+| 717 | os-battery-shard-report | ../os/test_battery_shard_report.py | 12 | no-evidence | - |
 | 718 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 12 | no-evidence | - |
 | 719 | os-tree-snapshot | ../os/test_tree_snapshot.py | 6 | no-evidence | - |
 | 720 | os-lobby-ws-report-face | ../os/test_lobby_ws_report.py | 7 | no-evidence | - |
@@ -770,7 +770,7 @@
 | 731 | os-platform-live-report | ../os/test_platform_live_report.py | 8 | no-evidence | - |
 | 732 | os-ledger-business-report | ../os/test_ledger_business_report.py | 8 | no-evidence | - |
 | 733 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
-|  | 合计 |  | 5967 | green 675 / FAIL 0 / no-evidence 58 |  |
+|  | 合计 |  | 5968 | green 675 / FAIL 0 / no-evidence 58 |  |
 
 ## 证据出处
 

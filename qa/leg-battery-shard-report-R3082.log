@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=733 registry_criteria=5968 selected=1 selected_criteria=12 cap=600s leg_cap=0s overrides=1 exact=0 state=RUNNING
+SHARD selected os-battery-shard-report crit=12 path=..\os\test_battery_shard_report.py
+SHARD row os-battery-shard-report rc=0 pass=12 fail=0 detail=yes suite=PASS 12/12 crit=12 1.0s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=12 crit_mismatch=0 elapsed=1.0s crit_checked=1 crit_unchecked=0

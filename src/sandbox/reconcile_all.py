@@ -7475,7 +7475,7 @@ SUITES = [
     # and the landed report pair, the tool and this registry are stat-signed
     # before and after.
     ("os-battery-shard-report",
-     os.path.join("..", "os", "test_battery_shard_report.py"), 11),
+     os.path.join("..", "os", "test_battery_shard_report.py"), 12),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*
