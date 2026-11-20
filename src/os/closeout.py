@@ -223,6 +223,32 @@ def _hb_bits(verdict):
     return bits
 
 
+def _gate_bits(verdict):
+    r"""The tree-gate ledger, printed by BOTH paths from one derivation (R3124).
+
+    Measured before this existed: the four gate faces cost the live round
+    ~1.75s (flags 1186.3ms, census 219.1, matrix 348.6, round_main 0.7) and the
+    OK line named none of them - so the largest step of a WRITING closeout had
+    no name, while the dry run had printed all four since R3097. The readings
+    come from the verdict the gate already returned; a world that did not ask
+    the gate (`gate=NOT-ASKED`) prints nothing rather than invented zeros.
+
+    The `flags` face is BYTES, not names: 69.9% of it is the whole-blob read
+    (484.5MB at 582.6MB/s) and 28.3% the classification sweep. The census
+    already derives files/bytes through its `stats` out-parameter, so the
+    corpus is published next to the milliseconds and a slow round can be
+    attributed per megabyte instead of per mystery.
+    """
+    face_ms = verdict.get("face_ms") or {}
+    bits = ["%s_ms=%s" % (key, face_ms[key]) for key in
+            ("flags", "round_main", "census", "matrix") if key in face_ms]
+    corpus = verdict.get("corpus") or {}
+    if "files" in corpus and "bytes" in corpus:
+        bits.append("corpus_files=%d" % corpus["files"])
+        bits.append("corpus_mb=%.1f" % (corpus["bytes"] / 1048576.0))
+    return " ".join(bits)
+
+
 def heartbeat_face(root, tick):
     """Write the repo-root tick through the one birth site, then read it back.
 
@@ -539,10 +565,10 @@ def run(args):
         # its own milliseconds, so "slow" points at a face instead of at the
         # whole command. The reading is diagnostic and never gates: a slow
         # face is still PASS, and a world that was not asked prints n/a.
-        face_ms = gate_verdict.get("face_ms") or {}
-        bits = ["%s_ms=%s" % (key, face_ms[key]) for key in
-                ("flags", "round_main", "census", "matrix") if key in face_ms]
-        ms_tail = (" " + " ".join(bits) + " state_ms=%s" % state_ms
+        # R3124: the same derivation the OK path now prints - one helper, so
+        # the two paths cannot drift about which step owns which millisecond.
+        bits = _gate_bits(gate_verdict)
+        ms_tail = (" " + bits + " state_ms=%s" % state_ms
                    if bits else " face_ms=n/a state_ms=%s" % state_ms)
         # R3123: the last unmeasured step on this path. Measured before the
         # token existed: the readings summed to 2794.7ms against 2810.5ms, and
@@ -616,13 +642,18 @@ def run(args):
     # Step 1.6 has just aligned the row, so PASS is the only honest outcome
     # here - but it is DERIVED, not asserted, and a refusal would show by name.
     hb_now = HB.verify(root, result["tick"])
+    # R3124: the OK path carried no reading for the tree gate it just asked -
+    # measured on the live tree, that is ~1.75s of a writing closeout with no
+    # name. The dry run has printed these four since R3097; now both paths do.
+    gate_bits = _gate_bits(gate_verdict)
     lines = ["CLOSEOUT OK tick=%d state=WRITTEN face=WRITTEN "
              "log=%d bytes=%d fold_margin=%d queue=%s queue_bytes=%s "
-             "latest=%s gate=%s %s %s oneoff_ms=%s export_ms=%s"
+             "latest=%s gate=%s %s %s oneoff_ms=%s export_ms=%s%s"
              % (result["tick"], result["log"], result["bytes"],
                 result["fold_margin"], proof.get("gate"),
                 proof.get("bytes"), derived.get("latest"), gate_word,
-                _hb_bits(hb_now), stage_bits, oneoff_ms, export_ms)]
+                _hb_bits(hb_now), stage_bits, oneoff_ms, export_ms,
+                (" " + gate_bits) if gate_bits else "")]
     if gate_word == "NOT-ASKED":
         # Printed, not silent: a round closed in a world whose gate inputs are
         # not all present says so on its own line, naming which are absent.

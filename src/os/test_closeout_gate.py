@@ -209,7 +209,13 @@ def main():
            "rc=%d line=%s" % (empty_run[1], empty_run[0][0]))
         real = CG.CENSUS.check_against_baseline
 
-        def silent_row(_target, _baseline):
+        def silent_row(_target, _baseline, stats=None):
+            # R3124: the shipped face accepts an optional `stats` out-parameter
+            # (files/readable/bytes, R3100) and the gate now passes it, so a
+            # stub emulating that face keeps the signature. The arm's judgment
+            # - a row without flags= is refused, never read as clean - is
+            # unchanged, and this stub publishes no stats so the gate gets no
+            # corpus reading rather than an invented one.
             return ["census: files=3 tee=3 baselined=0",
                     "reader_refused=0", "verdict: DRIFT-CLEAN"], 0
 

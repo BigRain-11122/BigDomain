@@ -320,13 +320,23 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
     registry census; either red refuses the closeout by name.
     """
     face_ms = {}
+    # R3124: measured on the live tree, this face's 1186.3ms is BYTES, not
+    # names - enumeration cost 13.7ms (1.2%) while the whole-blob read cost
+    # 831.6ms (69.9%, 582.6MB/s) and the classification sweep 337.0ms (28.3%)
+    # over 4211 files / 484.5MB. The census already derives files/readable/
+    # bytes through its own `stats` out-parameter, so the corpus the reading
+    # paid for is published through the verdict (never the PASS line, whose
+    # token shape is pinned) instead of being re-counted here.
+    corpus = {}
     census_lines, census_rc = _timed(face_ms, "flags",
                                      CENSUS.check_against_baseline,
-                                     target, baseline)
+                                     target, baseline, stats=corpus)
 
     def _pub(verdict):
         # R3097: the per-face readings ride in the verdict, never on the line.
         verdict["face_ms"] = dict(face_ms)
+        if corpus:
+            verdict["corpus"] = dict(corpus)
         return verdict
     out = []
     if census_lines and census_lines[0].startswith("baseline file missing"):

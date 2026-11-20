@@ -4986,8 +4986,11 @@ SUITES = [
     # whether the closed round also aligns the heartbeat row through its one
     # birth site (24 -> 25). R3120: the stage sweep line the vehicle prints has
     # zero readers and no arm, so AC-COUT15 pins its two shapes (26 -> 27).
+    # R3124: AC-COUT17 prints the tree-gate ledger on BOTH paths and the
+    # corpus beside the milliseconds (measured: 69.9% of the `flags` face is
+    # the whole-blob read, not the file count), so this suite is 29.
     ("os-closeout",
-     os.path.join("..", "os", "test_closeout.py"), 28),
+     os.path.join("..", "os", "test_closeout.py"), 29),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with

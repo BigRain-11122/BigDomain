@@ -1,0 +1,24 @@
+=== Q1: flags face decomposition (live qa/) ===
+enumeration: files=4212 bytes=508047373 bytes_mb=484.5 enum_ms=13.2 us_per_file=3
+read-only pass: files=4212 bytes=508047373 read_ms=774.2 rate_mb_s=625.8 us_per_file=184
+classify-only pass (bytes already in memory): files=4212 classify_ms=340.6 rate_mb_s=1422.5 us_per_file=81
+classes: cmd-raw=14 nul-bytes=15 other=110 ps-utf16=119 pwsh-capture=332 tee=3622
+full face: rc=0 full_ms=1124.4 (read+classify+baseline compare) shares: read=68.9% classify=30.3% other=0.9%
+baseline: bytes=16724 rows=590 classes=5
+face lines: total=7 head='census: files=4212 tee=3622 baselined=590'
+  census: files=4212 tee=3622 baselined=590
+
+=== Q2a: live dry run, wall time vs printed readings ===
+dry run: rc=0 wall_ms=2879.0
+dry run head: CLOSEOUT CHECK step=state tick=3123 log=92 bytes=74380 fold_margin=4120 +1 line(s) face=NOT-MEASURED gate=PASS hb=3123 hb_verdict=PASS stage_residue=0 swept=0 walk_ms=1108.7 flags_ms=1253.5 round_main_ms=0.4 census_ms=274.5 matrix_ms=211.5 
+printed readings: census_ms=274.5 flags_ms=1253.5 matrix_ms=211.5 oneoff_ms=14.0 round_main_ms=0.4 state_ms=1.1 walk_ms=1108.7
+sum=2863.7 gap=15.3
+
+=== Q2c: dry-run residual attribution (the 15.5ms nobody names) ===
+hb_verify=0.4 face_behind=0.9 verdict=None behind=''
+
+=== Q2b: private-world OK path, wall time vs printed readings ===
+ok path: rc=0 wall_ms=62.4
+ok line: CLOSEOUT OK tick=9101 state=WRITTEN face=WRITTEN log=2 bytes=179 fold_margin=78321 queue=CURRENT queue_bytes=3131 latest=preview/zz-cout-face.html (16B) + preview/zz-cout-face.json (3B) [2026-11-21 mtime] gate=NOT-ASKED hb=9101 hb_verdict=PASS stage_residue=0 swept=0 skipped=0 walk_ms=2.9 oneoff_ms=
+printed readings: export_ms=53.2 oneoff_ms=0.3 walk_ms=2.9
+sum=56.4 gap=6.0 (unnamed: state+heartbeat+stage+tree gate)

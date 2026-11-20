@@ -1,0 +1,31 @@
+closeout suite (expected criteria 29)
+PASS AC-COUT1 the closeout delegates both writes to state_append and export_round, owns no serialisation of its own, is ASCII with no net, and answers --help
+PASS AC-COUT2 an undated round line reads E_CO_NO_STATE with rc=2, the face keeps its exact bytes and mtime, and the state did not move - so a face describing a round the state never got is unreachable
+PASS AC-COUT3 a face that cannot be derived reads E_CO_NO_FACE, names the face step, states face=state was already WRITTEN, and the state on disk really carries the new tick and line
+PASS AC-COUT4 one closeout call moves the state by one tick and two lines and publishes a face whose current line and tick row both name the new tick
+PASS AC-COUT5 --check writes zero bytes to the state AND the face, prints the state dry-run verdict, and does not invent a face verdict it cannot derive
+PASS AC-COUT6 replaying the same closeout reads E_CO_DUPLICATE with rc=0, leaves the face byte-identical and the state untouched, so a no-op cannot pass for a refresh
+PASS AC-COUT7 the registry declares this suite at 29 criteria
+PASS AC-COUTB1 E_CO_FACE_BEHIND fires only on a measured face round below the live state tick; level, ahead and unparseable faces stay silent, and the module carries no round literal
+PASS AC-COUTB2 --check on a lagging face exits 2 with E_CO_FACE_BEHIND, names the repair, and leaves both files' sha256 AND mtime untouched
+PASS AC-COUTB3 a duplicate replay over a level face keeps the R2835 no-op at rc=0, and over a lagging face reads E_CO_FACE_BEHIND at rc=2 - so the half-close can no longer pass for a no-op
+PASS AC-COUTB4 re-deriving the face clears E_CO_FACE_BEHIND and the same --check turns green - the refusal names a repair that works
+PASS AC-COUTB5 the registry and the suite matrix both declare this suite at 29 criteria
+PASS AC-OOSW1 the closeout imports one_off_round_scripts and asks its audit(), owns no walk and no one-off shape regex of its own, and stays ASCII
+PASS AC-OOSW2 a one-off named at or above the freeze round reads E_CO_ONE_OFF at rc=2, is named file by file, and both the state and the face keep their exact bytes and mtime
+PASS AC-OOSW3 a world with no one-off at the freeze closes normally, and the live tree's --check carries no E_CO_ONE_OFF
+PASS AC-OOSW4 --check reddens on the same one-off with rc=2 and leaves both files' sha256 and mtime unchanged
+PASS AC-OOSW5 the refusal carries scanned / one_offs / max_round / freeze from the law's own report
+PASS AC-OOSW6 a root with no src/os reads E_CO_ONE_OFF_SCOPE with rc=2, no traceback, and no file written
+PASS AC-OOSW7 the registry and the suite matrix declare this suite at 29 criteria, and the one-off gate is called before the state step
+PASS AC-COUT8 the vehicle judges the tree it is about to speak for: a world with no tree reads gate=NOT-ASKED with its reason printed, a drifted census baseline is refused at step tree with the state WRITTEN and the face byte-identical, the replay names the half-close, --check asks the same face without writing, and the gate stays lazily imported ahead of the face step
+PASS AC-COUT9 the vehicle carries the gate's own fine print: a root with no registry reads cause=E_CLG_FOREIGN_REGISTRY with the registry and root named, the flags face's rows arrive, --check asks it without writing, the live tree stays PASS with no refusal fine print, and the lines are byte-identical to the gate's own (a re-typed copy would fail) with a named cap
+PASS AC-COUT10 the not-asked line names all three gate inputs: a world with qa and a document but no baseline reads baseline=0 with missing=baseline instead of claiming a treeless world, an empty world names all three, a baseline without a document names the document, the missing set is derived from the printed bits, the code stays one token, and the live tree still reads PASS
+PASS AC-COUT11 the not-asked line carries a derived hint: a file named qa no longer prints what an absent qa prints, a near-name baseline is named with its real count, an empty qa directory says hint=none, the hint is recomputed from the disk, the shipped parser and AC-COUT10's substring still match, and the live tree still reads PASS
+PASS AC-COUT12 the round output names the baseline its census face judged: the PASS verdict carries the derived identity row, the dry run prints it, and a world with no tree carries no detail
+PASS AC-COUT13 the closed round derives the heartbeat row from the tick it just proved, a replay leaves it untouched, an occupied name is refused by name with the face intact, a dry run writes nothing, and the live row equals the live tick
+PASS AC-COUT14 the heartbeat line carries its judgment: OK says PASS, a lagging row says FLAG with the debt reason, a missing row says FLAG with the missing reason, both tokens are shape-graded, and the live dry run agrees with heartbeat.verify
+PASS AC-COUT15 the sweep line names what it did on both paths: the dry run counts and touches nothing, the OK path names swept and skipped, a suffix-named directory is skipped rather than swept, a missing module is a named refusal, an unlistable directory is named rather than implied covered, an OS refusal is named with its own code, and the OK path walks the tree exactly once while printing its own walk_ms
+PASS AC-COUT16 the dry run names all seven timed steps it asks and no write step, the OK path names the export write it performed, every reading is a non-negative decimal, both new readings are derived from the clock rather than typed, and the live tree names the four gate faces alongside them
+PASS AC-COUT17 the OK path prints the tree-gate ledger it paid for, the dry run publishes the corpus beside the milliseconds, a world that did not ask the gate prints no invented readings, the readings are derived from the gate's verdict rather than typed, the gate's published headline keeps its shipped shape, and a byte change that moves the corpus does not move the verdict
+SUITE PASS 29/29

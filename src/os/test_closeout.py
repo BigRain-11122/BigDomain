@@ -32,7 +32,7 @@ sys.path.insert(0, BASE)
 import closeout as CO  # noqa: E402
 import heartbeat as HB  # noqa: E402
 
-EXPECTED_CRITERIA = 28
+EXPECTED_CRITERIA = 29
 MODULE = os.path.join(BASE, "closeout.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout"
@@ -1583,6 +1583,126 @@ def ac_cout16():
           "the four gate faces alongside them")
 
 
+def ac_cout17():
+    """AC-COUT17: the tree gate's cost is on BOTH paths, and it is bytes.
+
+    MEASURED at R3124 before this criterion existed (tmp/probe_R3124.py ->
+    qa/probe-R3124.log): the `flags` face took 1186.3ms of a 2749.8ms dry run
+    and its own breakdown was 13.7ms enumeration (1.2%), 831.6ms whole-blob
+    read (69.9%, 582.6MB/s over 484.5MB) and 337.0ms classification (28.3%) -
+    so the cost follows BYTES, not file names. The OK path printed oneoff_ms,
+    export_ms and walk_ms and NOT ONE of the four face readings it had just
+    paid ~1.75s for. The arms pin the visibility and the out-of-band ride, not
+    the milliseconds: a reading never becomes a verdict.
+    """
+    def ms_tokens(line):
+        return dict(re.findall(r"\b([a-z_]+)_ms=(\d+(?:\.\d+)?)", line))
+
+    # a: the live dry run names the face AND the corpus it paid for.
+    live_tick = int(ticks(ROOT)[0])
+    code, out, _ = run_cli(["--round", str(live_tick + 1), "--line",
+                            "2026-11-21 R%d PRODUCT: gate ledger arm"
+                            % (live_tick + 1), "--check"])
+    check_line = [row for row in out.splitlines()
+                  if row.startswith("CLOSEOUT CHECK")]
+    check_text = check_line[0] if check_line else ""
+    files_hit = re.search(r"\bcorpus_files=(\d+)", check_text)
+    mb_hit = re.search(r"\bcorpus_mb=(\d+(?:\.\d+)?)", check_text)
+    a_ok = (code == 0 and "flags" in ms_tokens(check_text)
+            and bool(files_hit) and int(files_hit.group(1)) > 0
+            and bool(mb_hit) and float(mb_hit.group(1)) > 0.0)
+
+    # b: a world that never asked the gate invents no readings.
+    folder = world()
+    try:
+        ok_code, ok_out, _ = run_cli(
+            ["--root", folder, "--round", str(ROUND),
+             "--line", "2026-11-21 R%d PRODUCT: not-asked ledger" % ROUND,
+             "--tick"])
+        ok_line = [row for row in ok_out.splitlines()
+                   if row.startswith("CLOSEOUT OK")]
+        ok_text = ok_line[0] if ok_line else ""
+        ok_bits = ms_tokens(ok_text)
+        b_ok = (ok_code == 0 and "NOT-ASKED" in ok_text
+                and "flags" not in ok_bits
+                and "corpus_files=" not in ok_text
+                and {"oneoff", "export", "walk"} <= set(ok_bits))
+    finally:
+        cleanup(folder)
+
+    # c: the readings are DERIVED from the gate's verdict, never typed. The
+    #    source is the evidence, because any hand-typed number passes arm a.
+    src = read(MODULE)
+    tree = ast.parse(src)
+    helper = None
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef) and node.name == "_gate_bits":
+            helper = node
+    helper_src = ast.get_source_segment(src, helper) if helper else ""
+    c_ok = (bool(helper) and '"face_ms"' in helper_src
+            and '"corpus"' in helper_src and "def " in helper_src
+            and '"flags_ms="' not in src
+            and sum(1 for node in ast.walk(tree)
+                    if isinstance(node, ast.Call)
+                    and isinstance(node.func, ast.Name)
+                    and node.func.id == "_gate_bits") >= 2)
+
+    # d: the gate's published headline keeps its shipped token shape; the
+    #    corpus rides in the verdict only, and its file count is the same
+    #    number the headline publishes from the same scan.
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import closeout_gate as CG
+    qa = os.path.join(ROOT, "qa")
+    lines, gate_code, verdict = CG.evaluate(
+        qa, os.path.join(qa, CG.CENSUS.BASELINE_NAME), root=ROOT)
+    head = lines[0] if lines else ""
+    head_files = re.search(r"\bfiles=(\d+)", head)
+    corpus = verdict.get("corpus") or {}
+    d_ok = (gate_code == 0 and "CLOSEOUT-GATE PASS" in head
+            and "corpus" not in head and not re.search(r"[a-z_]+_ms=", head)
+            and bool(head_files) and corpus.get("files") == int(head_files.group(1))
+            and int(corpus.get("bytes") or 0) > 0)
+
+    # e: the reading is not a verdict - byte volume moves, flags does not.
+    import qa_writer_census as CENSUS
+    small = tempfile.mkdtemp(prefix="cout17-")
+    try:
+        first = "qa=1 baseline=1 doc=1 missing=a\n"
+        with open(os.path.join(small, "a.log"), "w", encoding="utf-8",
+                  newline="\n") as handle:
+            handle.write(first)
+        base_path = os.path.join(small, CENSUS.BASELINE_NAME)
+        _lines, write_code, _base = CENSUS.write_baseline(small, base_path)
+        box1 = {}
+        _l1, c1 = CENSUS.check_against_baseline(small, base_path, stats=box1)
+        with open(os.path.join(small, "a.log"), "a", encoding="utf-8",
+                  newline="\n") as handle:
+            handle.write("extra healthy bytes on the same dialect\n" * 40)
+        box2 = {}
+        lines2, c2 = CENSUS.check_against_baseline(small, base_path, stats=box2)
+        e_ok = (write_code == 0 and c1 == 0 and c2 == 0
+                and box1.get("files") == 1 and box2.get("files") == 1
+                and int(box2.get("bytes") or 0) > int(box1.get("bytes") or 0)
+                and not any("corpus" in row for row in lines2))
+        if not e_ok:
+            print("  measured e=%r/%r bytes=%r/%r"
+                  % (c1, c2, box1.get("bytes"), box2.get("bytes")), flush=True)
+    finally:
+        shutil.rmtree(small, ignore_errors=True)
+
+    ok = a_ok and b_ok and c_ok and d_ok and e_ok
+    if not ok:
+        print("  measured: a=%r b=%r c=%r d=%r e=%r head=%r check=%r"
+              % (a_ok, b_ok, c_ok, d_ok, e_ok, head[:120],
+                 check_text[:200]), flush=True)
+    check(ok, "AC-COUT17 the OK path prints the tree-gate ledger it paid for, "
+          "the dry run publishes the corpus beside the milliseconds, a world "
+          "that did not ask the gate prints no invented readings, the readings "
+          "are derived from the gate's verdict rather than typed, the gate's "
+          "published headline keeps its shipped shape, and a byte change that "
+          "moves the corpus does not move the verdict")
+
+
 def main():
     print("closeout suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -1614,6 +1734,7 @@ def main():
     ac_cout14()
     ac_cout15()
     ac_cout16()
+    ac_cout17()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:
