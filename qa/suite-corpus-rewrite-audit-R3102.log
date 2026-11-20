@@ -1,0 +1,8 @@
+PASS AC-CRA1 arm a - the manifest names what moved and nothing else named=True write_rc=0 same_rc=0 moved_rc=1
+PASS AC-CRA1 arm b - same size and same mtime_ns reads as unchanged hidden=True undetected=True by_size=True by_mtime=True
+PASS AC-CRA1 arm c - basename census is counted, not typed private=3/1/2 live_dup=0 independent=0
+PASS AC-CRA1 arm d - a modify history is read; no history is named moved=1/1/1 quiet=0 absent=E_CRA_NO_GIT
+PASS AC-CRA1 arm e - the live face answers rc=0 and writes nothing rc=0 lines=5 stamp_same=True
+PASS AC-CRA1 arm f - ASCII, no network import, no external host ascii=True socket=False host=False labelled=True
+suite: 6 assertions over 1 criteria
+SUITE PASS 6/6

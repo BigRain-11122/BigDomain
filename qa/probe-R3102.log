@@ -1,0 +1,18 @@
+PROBE R3102 corpus rewrite question
+A git: tracked_log_files=4122 commits_with_modify=73 modified_files=71 modify_events=109
+A modified: qa/BD-PROP-010-R2767.log
+A modified: qa/adjacent-R2826d.log
+A modified: qa/apimarket-reportclaims-R2134-run2.log
+A modified: qa/apimarket-reportclaims-R2134.log
+A modified: qa/apimarket-search-R2082-run2.log
+A modified: qa/apimarket-search-R2082.log
+A modified: qa/apimarket-sellerrepeatmonths-R2228-a.log
+A modified: qa/apimarket-sellerrepeatmonths-R2228-b.log
+A modified: qa/battery-R2752-r2614-remainder.log
+A modified: qa/battery-shard-regress-R2917.log
+B duplicates: log_files=4125 basenames=4125 duplicate_names=0 duplicate_files=0
+C cost: files=4123 bytes=507797739 stat_only_ms=9.6 read_all_ms=735.4 ratio=76.7
+D blind spot: same_size_same_mtime=True content_changed=True fingerprint_says_changed=False
+D size change: fingerprint_says_changed=True
+D mtime change: fingerprint_says_changed=True
+E followup: make_world_calls=11 qa_mentions=23 matrix_mentions=18 registry_mentions=0 baseline_mentions=0

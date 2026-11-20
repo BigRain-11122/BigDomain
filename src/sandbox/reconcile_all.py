@@ -7712,6 +7712,21 @@ SUITES = [
     # the only freshness proof this face has, which is why it is pinned here.
     ("os-city-face-report",
      os.path.join("..", "os", "test_city_face_report.py"), 7),
+    # R3102: R3101 refused a windowed drift scan on a LAW argument ("skipping
+    # old files turns drift detection into sampling") without a number behind
+    # it. This row pins the instrument that turns that into a reading: git
+    # history says 71 of 4,122 tracked evidence files were modified after being
+    # added (109 events, 73 commits), the recursive basename face is clean
+    # (4,125 files, 0 duplicates), a stat-only pass costs 9.6-39.2ms against
+    # ~712-780ms to read, and a same-length rewrite whose mtime_ns is restored
+    # reads as UNCHANGED - so the fingerprint stays an instrument and never
+    # replaces the whole-corpus read. Arm b pins that blind spot as a law so a
+    # later round cannot quietly adopt the sampling law; arm d proves the git
+    # face on a private repo and refuses a world without one BY NAME.
+    # AC-CRA1 (six arms, ONE criterion) was pinned in src/os/backlog.md BEFORE
+    # the tool existed.
+    ("os-corpus-rewrite-audit",
+     os.path.join("..", "os", "test_corpus_rewrite_audit.py"), 1),
     ]
 
 FAILS = 0

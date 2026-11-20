@@ -388,6 +388,7 @@
     "os-comma-binding-wire",
     "os-content-gate-console",
     "os-contract-usage-renderer",
+    "os-corpus-rewrite-audit",
     "os-crawl-record",
     "os-crawl-runner",
     "os-debt-append",
