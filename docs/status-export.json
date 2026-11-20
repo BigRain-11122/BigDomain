@@ -9,12 +9,12 @@
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/state-fold-R3088.log (875B, 2026-11-20)",
-    "latest_evidence": "qa/state-fold-R3088.log (875B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3088.log (2385B, 2026-11-20)",
+    "latest_evidence": "qa/probe-R3088.log (2385B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3089] next window (<=48h): (0) MAIN — **写侧现在不会再静默重用 marker，但`same_window_gaps` 里那个 `window_index` 仍是「审查子集内的位置」——pin 一动它就变，而读者拿着报告也开不到文件里那一行。** 下一轮先量（只读）：①三册归档共 754 个窗口的**文件内绝对序号**（每文件从 1 数起）与「字节偏移 + 行号」两种定位点的可用性，以及它们与现行 `window_index` 的差异集有多大；②全仓有几个消费者读 `window_index`（套件、页面、导出），改成文件内绝对序号会红几个；③序号与行号在「同一文件被后续追加」后是否仍真实（只应实于已写成的那一刻，必须在读数上标明基准）。量清后再决：要么把定位点换成文件内绝对序号 + 行号，要么就此声明「位置只在本报告内有效」并把这句话印在 `format_fold_carry` 行上。**先落板再动代码。** (1) carried unchanged: the same-window law remains uninstalled (measured false-kill vs vacuous), the 4 live duplicate markers (2935/2941/2946/3085) are frozen history the gate cannot retro-fit, 787 archive payload lines, the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door cannot name its holder, the (truncated)",
-    "next_milestone_due": "2026-11-22T19:04:15+08:00",
-    "updated_at": "2026-11-20T19:04:15+08:00"
+    "next_milestone_due": "2026-11-22T19:06:18+08:00",
+    "updated_at": "2026-11-20T19:06:18+08:00"
   },
   "current": "2026-11-20 R3088 GROUP SCAN (content-addressed, read before any work): the shipped five-still scan read atbd_lines=0 unreplied_groups=0 so no ledger dispatch row was owed; the decisions face read 144 distinct tokens against a 333-entry baseline whose extra entries are pre-rotation history, with the only difference being a pre-existing lowercase spelling (d-20261023-2358) and no new decision row; the group orders face still ends at the 2026-11-18 15:3x bm-a fleet-archive row; benchmarks_refreshed 2026-11-18 sits inside the seven-day gate; git status was clean with no index.lock; the board head WAS pullable (the R3088 measurement row), so this is a work round.",
   "depts": [
@@ -45,9 +45,9 @@
     }
   ],
   "do": "2026-11-20 R3088 GROUP SCAN (content-addressed, read before any work): the shipped five-still scan read atbd_lines=0 unreplied_groups=0 so no ledger dispatch row was owed; the decisions face read 144 distinct tokens against a 333-entry baseline whose extra entries are pre-rotation history, with the only difference being a pre-existing lowercase spelling (d-20261023-2358) and no new decision row; the group orders face still ends at the 2026-11-18 15:3x bm-a fleet-archive row; benchmarks_refreshed 2026-11-18 sits inside the seven-day gate; git status was clean with no index.lock; the board head WAS pullable (the R3088 measurement row), so this is a work round.",
-  "export_ts": "2026-11-20T19:04:15+08:00",
+  "export_ts": "2026-11-20T19:06:18+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/state-fold-R3088.log (875B, 2026-11-20)",
+  "latest_evidence": "qa/probe-R3088.log (2385B, 2026-11-20)",
   "next_milestone": "[R3089] next window (<=48h): (0) MAIN — **写侧现在不会再静默重用 marker，但`same_window_gaps` 里那个 `window_index` 仍是「审查子集内的位置」——pin 一动它就变，而读者拿着报告也开不到文件里那一行。** 下一轮先量（只读）：①三册归档共 754 个窗口的**文件内绝对序号**（每文件从 1 数起）与「字节偏移 + 行号」两种定位点的可用性，以及它们与现行 `window_index` 的差异集有多大；②全仓有几个消费者读 `window_index`（套件、页面、导出），改成文件内绝对序号会红几个；③序号与行号在「同一文件被后续追加」后是否仍真实（只应实于已写成的那一刻，必须在读数上标明基准）。量清后再决：要么把定位点换成文件内绝对序号 + 行号，要么就此声明「位置只在本报告内有效」并把这句话印在 `format_fold_carry` 行上。**先落板再动代码。** (1) carried unchanged: the same-window law remains uninstalled (measured false-kill vs vacuous), the 4 live duplicate markers (2935/2941/2946/3085) are frozen history the gate cannot retro-fit, 787 archive payload lines, the R3067 crawl-consumer question, `reconcile.py` as the uncovered fourth ledger input, 27 deep shard-6 rows unmeasured, shard offset/resume the named carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board — ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive (re-registration needs an elevated shell), the mutex door cannot name its holder, the (truncated)",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -187,7 +187,7 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 57,
+    "log_lines_in_window": 58,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 12,
@@ -197,6 +197,6 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 55645,
+  "state_bytes": 56243,
   "next_milestone_due": "2026-11-22T10:45:10+08:00"
 }
