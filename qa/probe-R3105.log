@@ -1,0 +1,21 @@
+Q1a gate rc=2 lines=2
+Q1a line: CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS files=1 flags=0 round_main=OK census=FAIL
+Q1a line: E_CLG_FOREIGN_REGISTRY registry=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\reconcile_all.py root=C:\Users\sjs20\AppData\Local\Temp\probe3105-38w0zwtm
+Q1b verdict keys=['census', 'face_ms', 'files', 'flags', 'reason', 'round_main', 'verdict']
+Q1b verdict json={"census": "FAIL", "face_ms": {"census": 2.0, "flags": 0.4, "round_main": 0.2}, "files": 1, "flags": 0, "reason": "E_CLG_CENSUS", "round_main": "OK", "verdict": "REFUSED"}
+Q1c vehicle word=RED line=CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS files=1 flags=0 round_main=OK census=FAIL
+Q1c vehicle verdict keys=['census', 'face_ms', 'files', 'flags', 'reason', 'round_main', 'verdict']
+Q1d inner code visible in vehicle line=False
+Q1d inner code visible in vehicle verdict=False
+Q2a exact-output equality asserts in test_closeout.py=0
+Q2b AC-COUT8 refuse arm asserts substrings=True
+Q2c exact-output equality asserts in test_closeout_gate.py=0
+Q2d tree_refusal call sites in suites=2
+Q3a drift gate rc=2 lines=3 reason=E_CLG_DRIFT
+Q3b drift first line=CLOSEOUT-GATE REFUSED reason=E_CLG_DRIFT files=3 flags=2 reader_refused=0 gating=flags
+Q3c drift detail lines=2 sample=[flag] new-dialect: b.log (class=other)
+Q3d vehicle on drift word=RED line=CLOSEOUT-GATE REFUSED reason=E_CLG_DRIFT files=3 flags=2 reader_refused=0 gating=flags
+Q4a E_CLG_FOREIGN_REGISTRY return sites in closeout_gate.py=2
+Q4b census line carries a face token=False
+Q4c matrix line carries a face token=True
+Q5a live tree word=PASS line=CLOSEOUT-GATE PASS files=4138 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS matrix=DOC-CURRENT

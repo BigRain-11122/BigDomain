@@ -1,0 +1,11 @@
+battery_followup suite (expected criteria 7)
+PASS AC-BFU1 four pinned sections in order, PASS/FAIL one-line detail
+PASS AC-BFU2 matrix read-back, mismatch FAIL names both byte counts
+PASS AC-BFU3 read-orchestrator writes nothing; one writer, one path
+PASS AC-BFU4 missing tool / unreadable matrix FAIL with codes
+PASS AC-BFU5 CLI 0/2/3/5, --json pinned, single append target
+  legacy copies=42 total=137947B widest=4254B callable=14928B
+PASS AC-BFU6 ASCII, no network, wired, legacy pile byte-wider
+  worlds=3 inputs={'qa_baseline': False, 'registry': False, 'census_module': False, 'matrix_doc': True} refused='E_CLG_FOREIGN_REGISTRY face=census registry=C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\sandbox\\reconcile_all.py root=C:\\Users\\sjs20\\AppData\\Local\\Temp\\bigdomain-bfu-w-u6n5pdma'/'E_CLG_NO_STATE src/os/state.json'
+PASS AC-BFU7 tree faces refused on fixture worlds, exemption named
+SUITE PASS 7/7

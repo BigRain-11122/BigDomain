@@ -4,19 +4,19 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-20 R3104 PRODUCT+ENGINEERING: the matrix face now refuses a root whose registry it cannot address. Measured on a fixture world carrying a byte copy of the live document plus the leg that document records: it read EVIDENCE-FACE rows=735/735 in 65.7ms - a refusal on the leg provenance string while publishing LIVE registry numbers about a world with no registry. check_matrix now applies the same guard as check_census: the registry file the law reads must live under root, or the face refuses by name E_CLG_FOREIGN_REGISTRY face=matrix.",
+    "current": "2026-11-20 R3105 PRODUCT+ENGINEERING: the vehicle that closes a round now prints the gate fine print - a refusal that read only census=FAIL now also names the cause (E_CLG_FOREIGN_REGISTRY face=census registry=... root=...), and the flags face own rows arrive the same way.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-closeout-siblings-R3104.log (880B, 2026-11-20)",
-    "latest_evidence": "qa/leg-closeout-siblings-R3104.log (880B, 2026-11-20)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-registry_counter_census-R3105.log (5452B, 2026-11-20)",
+    "latest_evidence": "qa/suite-registry_counter_census-R3105.log (5452B, 2026-11-20)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3105] next window (<=48h): (0) MAIN — **守卫按名拒绝了外层，但车辆只把它压成一行**：`src/os/closeout.py::tree_refusal` 取 `lines[0]`（`CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS … census=FAIL`），内层 `E_CLG_FOREIGN_REGISTRY registry=… root=…` 被丢弃——操作者看得到「普查红了」，看不到「因为我问的树没有注册表」。下一轮先量：①`tree_refusal` 的第三个返回值（verdict）里现在有什么、`closeout.py::run` 打印 RED 时用的是哪一行；②把 gate 的第二行带进车辆会不会撞上既有臂（`test_closeout` 20/20 的字符串断言与 `test_closeout_gate` 的 PASS 行钉）；③`E_CLG_FOREIGN_REGISTRY` 现在有三处消费者（census / matrix / evaluate 包装），哪一处该有自己的码而不是共用，值得一并量。**先落板再动代码。** (1) carried unchanged: `reconcile.py` as the uncovered fourth ledger input, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, 27 deep shard-6 rows unmeasured, shard offset/resume as the carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap (truncated)",
-    "next_milestone_due": "2026-11-22T22:57:17+08:00",
-    "updated_at": "2026-11-20T22:57:17+08:00"
+    "next_milestone_due": "2026-11-22T23:06:28+08:00",
+    "updated_at": "2026-11-20T23:06:28+08:00"
   },
-  "current": "2026-11-20 R3104 PRODUCT+ENGINEERING: the matrix face now refuses a root whose registry it cannot address. Measured on a fixture world carrying a byte copy of the live document plus the leg that document records: it read EVIDENCE-FACE rows=735/735 in 65.7ms - a refusal on the leg provenance string while publishing LIVE registry numbers about a world with no registry. check_matrix now applies the same guard as check_census: the registry file the law reads must live under root, or the face refuses by name E_CLG_FOREIGN_REGISTRY face=matrix.",
+  "current": "2026-11-20 R3105 PRODUCT+ENGINEERING: the vehicle that closes a round now prints the gate fine print - a refusal that read only census=FAIL now also names the cause (E_CLG_FOREIGN_REGISTRY face=census registry=... root=...), and the flags face own rows arrive the same way.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -44,10 +44,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-20 R3104 PRODUCT+ENGINEERING: the matrix face now refuses a root whose registry it cannot address. Measured on a fixture world carrying a byte copy of the live document plus the leg that document records: it read EVIDENCE-FACE rows=735/735 in 65.7ms - a refusal on the leg provenance string while publishing LIVE registry numbers about a world with no registry. check_matrix now applies the same guard as check_census: the registry file the law reads must live under root, or the face refuses by name E_CLG_FOREIGN_REGISTRY face=matrix.",
-  "export_ts": "2026-11-20T22:57:17+08:00",
+  "do": "2026-11-20 R3105 PRODUCT+ENGINEERING: the vehicle that closes a round now prints the gate fine print - a refusal that read only census=FAIL now also names the cause (E_CLG_FOREIGN_REGISTRY face=census registry=... root=...), and the flags face own rows arrive the same way.",
+  "export_ts": "2026-11-20T23:06:28+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/leg-closeout-siblings-R3104.log (880B, 2026-11-20)",
+  "latest_evidence": "qa/suite-registry_counter_census-R3105.log (5452B, 2026-11-20)",
   "next_milestone": "[R3105] next window (<=48h): (0) MAIN — **守卫按名拒绝了外层，但车辆只把它压成一行**：`src/os/closeout.py::tree_refusal` 取 `lines[0]`（`CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS … census=FAIL`），内层 `E_CLG_FOREIGN_REGISTRY registry=… root=…` 被丢弃——操作者看得到「普查红了」，看不到「因为我问的树没有注册表」。下一轮先量：①`tree_refusal` 的第三个返回值（verdict）里现在有什么、`closeout.py::run` 打印 RED 时用的是哪一行；②把 gate 的第二行带进车辆会不会撞上既有臂（`test_closeout` 20/20 的字符串断言与 `test_closeout_gate` 的 PASS 行钉）；③`E_CLG_FOREIGN_REGISTRY` 现在有三处消费者（census / matrix / evaluate 包装），哪一处该有自己的码而不是共用，值得一并量。**先落板再动代码。** (1) carried unchanged: `reconcile.py` as the uncovered fourth ledger input, the 4 live duplicate markers, 787 archive payload lines, the R3067 crawl-consumer question, 27 deep shard-6 rows unmeasured, shard offset/resume as the carrier blocker, `outs` 37 unmaintained entries, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand on the Network Data Security Regulation, 18 BOM-carrying scripts, `tasks.md` untouched (the P-47 canonical board - ZERO payment capability), Docker absent, `BigDomain-OSLoop` reads LogonType=Interactive, the mutex door cannot name its holder, the failure artifact is a single slot with no history, the single default crawl source is one page, the cap (truncated)",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -173,7 +173,7 @@
   },
   "results": [
     [
-      "3104",
+      "3105",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -187,7 +187,7 @@
   "self_drive": {
     "window": "2026-11-14..2026-11-20",
     "window_days": 7,
-    "log_lines_in_window": 94,
+    "log_lines_in_window": 93,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 12,
@@ -197,6 +197,6 @@
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 74375,
+  "state_bytes": 80423,
   "next_milestone_due": "2026-11-22T10:45:10+08:00"
 }

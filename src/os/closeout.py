@@ -39,6 +39,16 @@ Criteria AC-COUT8 were pinned in src/os/backlog.md at R3095 BEFORE this change.
 Criteria AC-COUT1..AC-COUT7 were pinned in src/os/backlog.md at R2835 BEFORE
 this file existed.
 
+R3105 closes the last hole of the tree face: the gate answers a refusal with
+its headline AND the laws' own lines, and this vehicle printed `lines[0]` only.
+Measured on a fixture world whose root carried no registry, the inner
+`E_CLG_FOREIGN_REGISTRY registry=... root=...` was reachable in neither the
+printed line nor the verdict, so the operator read "census=FAIL" and could not
+see why; the drift face lost its `[flag]` rows the same way. The detail now
+rides in the verdict (capped at TREE_DETAIL_CAP, the rest counted) and is
+printed after the headline. Criteria AC-COUT9 were pinned in src/os/backlog.md
+at R3105 BEFORE this change.
+
 R2836 adds the one hole R2835 disclosed: a crash BETWEEN the two writes leaves
 the state written and the face narrating the previous round, and a duplicate
 replay of the same closeout deliberately does not rewrite the face - so the
@@ -89,6 +99,12 @@ import state_io  # noqa: E402
 # optional date anchor, then the round. A face string that does not match this
 # is NOT graded by the detector below - it is another named defect's business.
 FACE_ROUND_RE = re.compile(r"^\s*(?:\d{4}-\d{2}-\d{2}\s+)?R(\d+)\b")
+
+# R3105: the gate answers a refusal with its headline PLUS the laws' own
+# lines, and this vehicle used to print only the headline. A cap keeps a
+# drifted tree from flooding a closeout, and the count it dropped is printed
+# on its own line - a truncation a reader can see, never a silent sample.
+TREE_DETAIL_CAP = 10
 
 
 def state_path(root):
@@ -218,6 +234,16 @@ def tree_refusal(root):
     NOT-ASKED - printed with its reason, never a silent skip. A world that
     builds them and has drifted is refused by name, and the face keeps its
     bytes.
+
+    R3105: a RED gate answers with the headline AND the laws' own lines
+    (`E_CLG_FOREIGN_REGISTRY registry=... root=...`, `[flag] new-dialect: ...`),
+    and this function used to return `lines[0]` alone - measured on a fixture
+    world: the inner code was reachable in NEITHER the line NOR the verdict, so
+    an operator saw "census=FAIL" and could not see that the root had no
+    registry to judge. The remaining lines now ride in `verdict["detail"]`
+    (capped at TREE_DETAIL_CAP, with `omitted` naming the rest) and their first
+    code token in `verdict["cause"]`. They are DERIVED from the gate's own
+    lines, never re-typed here.
     """
     tools = os.path.join(os.path.dirname(os.path.dirname(HERE)), "tools")
     if tools not in sys.path:
@@ -242,7 +268,32 @@ def tree_refusal(root):
                        % (type(exc).__name__, exc)), {}
     if code == 0:
         return "PASS", lines[0], verdict
+    rest = list(lines[1:])
+    shown = rest[:TREE_DETAIL_CAP]
+    verdict["detail"] = shown
+    verdict["omitted"] = len(rest) - len(shown)
+    cause = ""
+    for row in rest:
+        head = row.split(" ", 1)[0]
+        if head.startswith("E_"):
+            cause = head
+            break
+    verdict["cause"] = cause
     return "RED", lines[0], verdict
+
+
+def _detail_lines(verdict):
+    """The gate's own fine print, capped, with the count it did not print.
+
+    R3105: a refusal that names only its headline is a refusal an operator
+    cannot act on - "census=FAIL" does not say the root carried no registry.
+    The lines come from the gate; this vehicle only decides how many fit.
+    """
+    rows = list(verdict.get("detail") or [])
+    omitted = int(verdict.get("omitted") or 0)
+    if omitted:
+        rows.append("CLOSEOUT TREE detail-truncated omitted=%d" % omitted)
+    return rows
 
 
 def run(args):
@@ -303,8 +354,8 @@ def run(args):
         # a write. A red tree is reported here, not invented.
         gate_word, gate_line, gate_verdict = tree_refusal(root)
         if gate_word == "RED":
-            return 2, ["CLOSEOUT CHECK RED step=tree %s face=NOT-MEASURED"
-                       % gate_line]
+            return 2, (["CLOSEOUT CHECK RED step=tree %s face=NOT-MEASURED"
+                        % gate_line] + _detail_lines(gate_verdict))
         # R3097: one total is not a name. Every face the dry run asked prints
         # its own milliseconds, so "slow" points at a face instead of at the
         # whole command. The reading is diagnostic and never gates: a slow
@@ -328,12 +379,13 @@ def run(args):
     # Asked after the state write (a refusal costs that write, which is the
     # cheaper of the two and the one an operator can replay) and before the
     # face (so a red tree never reaches the CEO face).
-    gate_word, gate_line, _gate_verdict = tree_refusal(root)
+    gate_word, gate_line, gate_verdict = tree_refusal(root)
     if gate_word == "RED":
-        return 2, ["CLOSEOUT FAIL E_CO_TREE_RED step=tree "
-                   "state=WRITTEN face=NOT-WRITTEN tick=%d %s "
-                   "repair=\"fix the tree, then python src/os/export_round.py\""
-                   % (result["tick"], gate_line)]
+        return 2, (["CLOSEOUT FAIL E_CO_TREE_RED step=tree "
+                    "state=WRITTEN face=NOT-WRITTEN tick=%d %s "
+                    "repair=\"fix the tree, then python src/os/export_round.py\""
+                    % (result["tick"], gate_line)]
+                   + _detail_lines(gate_verdict))
 
     # ---- step 2: the face. Reachable only when the state really moved. -----
     stamp = ER.datetime.datetime.now(ER.TZ).replace(microsecond=0).isoformat()

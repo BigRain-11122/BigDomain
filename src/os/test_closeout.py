@@ -31,7 +31,7 @@ sys.path.insert(0, BASE)
 
 import closeout as CO  # noqa: E402
 
-EXPECTED_CRITERIA = 20
+EXPECTED_CRITERIA = 21
 MODULE = os.path.join(BASE, "closeout.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-closeout"
@@ -781,6 +781,122 @@ def ac_cout8():
           "gate stays lazily imported ahead of the face step")
 
 
+def ac_cout9():
+    """AC-COUT9: a refusal that names only its headline is not actionable.
+
+    Six arms, one criterion: the vehicle carries the gate's own fine print, so
+    "census=FAIL" is no longer the last word when the truth is "this root has
+    no registry to judge"; the flags face's rows arrive the same way; the dry
+    run asks it too without writing; the live tree stays PASS with no detail;
+    and the vehicle derives the lines instead of re-typing them.
+    """
+    import qa_writer_census as cwc
+
+    def tree_world(flags=0):
+        folder = world()
+        qa_dir = os.path.join(folder, "qa")
+        if not os.path.isdir(qa_dir):
+            os.makedirs(qa_dir)
+        write(os.path.join(qa_dir, "a.log"), "plain healthy line\n")
+        cwc.write_baseline(qa_dir, os.path.join(qa_dir, cwc.BASELINE_NAME))
+        write(os.path.join(folder, "docs", "sandbox-suite-matrix.md"), "| x |\n")
+        for index in range(flags):
+            with io.open(os.path.join(qa_dir, "bad%d.log" % index), "wb") as fh:
+                fh.write(b"\xef\xbb\xbfA BOM LINE\r\n")
+        return folder
+
+    foreign = tree_world()
+    drift = tree_world(flags=2)
+    flood = tree_world(flags=12)
+    dry = tree_world()
+    try:
+        word, line, verdict = CO.tree_refusal(foreign)
+        detail = verdict.get("detail") or []
+        a_ok = (word == "RED"
+                and verdict.get("cause") == "E_CLG_FOREIGN_REGISTRY"
+                and any(row.startswith("E_CLG_FOREIGN_REGISTRY face=census")
+                        for row in detail)
+                and any(os.path.basename(foreign) in row for row in detail)
+                and "reason=E_CLG_CENSUS" in line and "census=FAIL" in line)
+
+        set_face_current(foreign, "R%d a previous round" % (ROUND - 1))
+        face_before = fingerprint(os.path.join(foreign, "docs",
+                                               "status-export.json"))
+        code_b, out_b, _ = run_cli([
+            "--root", foreign, "--round", str(ROUND), "--line",
+            "2026-11-16 R%d PRODUCT: the root carries no registry" % ROUND,
+            "--tick"])
+        face_after = fingerprint(os.path.join(foreign, "docs",
+                                              "status-export.json"))
+        tick_b, _log_b = ticks(foreign)
+        b_ok = (code_b == 2 and "E_CO_TREE_RED" in out_b
+                and "step=tree" in out_b and "state=WRITTEN" in out_b
+                and "face=NOT-WRITTEN" in out_b
+                and "E_CLG_FOREIGN_REGISTRY face=census" in out_b
+                and tick_b > ROUND and face_before == face_after)
+
+        code_c, out_c, _ = run_cli([
+            "--root", drift, "--round", str(ROUND), "--line",
+            "2026-11-16 R%d PRODUCT: two flagged files" % ROUND, "--tick"])
+        c_ok = (code_c == 2 and "flags=2" in out_c
+                and out_c.count("[flag]") == 2)
+
+        state_fp = fingerprint(os.path.join(dry, "src", "os", "state.json"))
+        code_d, out_d, _ = run_cli([
+            "--root", dry, "--round", str(ROUND), "--line",
+            "2026-11-16 R%d PRODUCT: dry run" % ROUND, "--check"])
+        d_ok = (code_d == 2 and "CLOSEOUT CHECK RED" in out_d
+                and "E_CLG_FOREIGN_REGISTRY face=census" in out_d
+                and state_fp == fingerprint(os.path.join(
+                    dry, "src", "os", "state.json")))
+
+        live_word, live_line, live_verdict = CO.tree_refusal(ROOT)
+        e_ok = (live_word == "PASS" and "census=PASS" in live_line
+                and not (live_verdict.get("detail") or [])
+                and not live_verdict.get("cause"))
+
+        code_f, out_f, _ = run_cli([
+            "--root", flood, "--round", str(ROUND), "--line",
+            "2026-11-16 R%d PRODUCT: twelve flagged files" % ROUND, "--tick"])
+        import closeout_gate as CG
+        gate_lines, gate_code, _ = CG.evaluate(
+            os.path.join(flood, "qa"),
+            os.path.join(flood, "qa", CG.CENSUS.BASELINE_NAME), root=flood)
+        expected_omitted = max(0, len(gate_lines) - 1 - CO.TREE_DETAIL_CAP)
+        _fw, _fl, flood_verdict = CO.tree_refusal(flood)
+        # DERIVATION, not a name: the vehicle's detail must be the gate's own
+        # lines, byte for byte, so a re-typed copy would fail this arm.
+        derived = (flood_verdict.get("detail") or []) == \
+            gate_lines[1:1 + CO.TREE_DETAIL_CAP]
+        source = io.open(MODULE, encoding="utf-8").read()
+        f_ok = (gate_code == 2
+                and out_f.count("[flag]") == CO.TREE_DETAIL_CAP
+                and ("CLOSEOUT TREE detail-truncated omitted=%d"
+                     % expected_omitted) in out_f
+                and derived
+                and source.find("import closeout_gate") > source.find(
+                    "def tree_refusal"))
+
+        ok = a_ok and b_ok and c_ok and d_ok and e_ok and f_ok
+        if not ok:
+            print("  measured: a=%r b=%r c=%r d=%r e=%r f=%r code_b=%r "
+                  "out_b=%r code_c=%r out_c=%r"
+                  % (a_ok, b_ok, c_ok, d_ok, e_ok, f_ok, code_b,
+                     out_b.strip()[:260], code_c, out_c.strip()[:200]),
+                  flush=True)
+    finally:
+        cleanup(foreign)
+        cleanup(drift)
+        cleanup(flood)
+        cleanup(dry)
+    check(ok, "AC-COUT9 the vehicle carries the gate's own fine print: a root "
+          "with no registry reads cause=E_CLG_FOREIGN_REGISTRY with the "
+          "registry and root named, the flags face's rows arrive, --check asks "
+          "it without writing, the live tree stays PASS with no detail, and "
+          "the lines are byte-identical to the gate's own (a re-typed copy "
+          "would fail) with a named cap")
+
+
 def main():
     print("closeout suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -804,6 +920,7 @@ def main():
     ac_oosw6()
     ac_oosw7()
     ac_cout8()
+    ac_cout9()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

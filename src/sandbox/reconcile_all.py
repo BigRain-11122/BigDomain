@@ -4974,8 +4974,10 @@ SUITES = [
     # R3095: the vehicle now asks the closeout gate tree faces before it
     # publishes the CEO face, and a world that builds no tree says so on
     # its own line instead of being silently unasked.
+    # R3105: the vehicle prints the gate's own fine print, so a refusal that
+    # read "census=FAIL" now also names the cause (AC-COUT9, six arms).
     ("os-closeout",
-     os.path.join("..", "os", "test_closeout.py"), 20),
+     os.path.join("..", "os", "test_closeout.py"), 21),
     # R2248: carried debt becomes a readable register instead of log prose -
     # column-0 rows with known keys only, unknown and duplicate keys
     # refused, at most one first item, a three-window staleness alarm with

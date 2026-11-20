@@ -74,11 +74,21 @@ name E_CLG_FOREIGN_REGISTRY face=matrix. The guard sits on root and the
 registry, NOT on the document path, so a caller checking a CANDIDATE document
 inside this repo (the shipped AC-CLG7c usage) still gets the document verdict.
 
-Honest boundary, disclosed rather than implied: `src/os/closeout.py` - the ONE
-command that closes a round - does NOT call this gate (measured R3094: zero
-references). The gate is asked by its CLI and by the round's own habit, so it
-is still possible to close a round without asking. Wiring the vehicle is the
-next round's head, not this one's claim.
+Honest boundary, disclosed rather than implied: the vehicle `src/os/closeout.py`
+asks this gate through `tree_refusal` (R3095), so `evaluate` is reached whenever
+a world builds both `qa/` and the derived document; a world that builds neither
+prints `gate=NOT-ASKED` with its reason, and that is the one shape still
+unjudged - printed, never silently skipped.
+
+R3105 - the same address law spells which face refused:
+
+`check_census`'s refusal carried `registry=... root=...` with no face token,
+while `check_matrix` carried `face=matrix`, so a reader holding the census line
+could not tell which face had refused. The census line now reads
+`E_CLG_FOREIGN_REGISTRY face=census registry=... root=...`. The two faces keep
+ONE code on purpose: it is one law (a face may not judge a tree it cannot
+address), and the face token - not a second spelling - is what makes the line
+actionable. Pinned by AC-CLG9 and by AC-COUT9 (the vehicle now prints it).
 
 Shape: a published line, never a silent pass.
 
@@ -196,7 +206,11 @@ def check_census(root, registry=None, pin=None):
     for name, path in (("registry", registry), ("pin", pin)):
         if os.path.normcase(os.path.abspath(path)).startswith(base):
             continue
-        return False, ("%s %s=%s root=%s"
+        # R3105: the same address law is spelled by two faces, so the line
+        # names WHICH face refused. Without the token a reader holding
+        # `E_CLG_FOREIGN_REGISTRY registry=...` could not tell the census
+        # refusal from the matrix one, which already carried face=matrix.
+        return False, ("%s face=census %s=%s root=%s"
                        % (E_CLG_FOREIGN_REGISTRY, name, path,
                           os.path.abspath(root)))
     # R3098: the live registry may use the shipped content-addressed cache, but
