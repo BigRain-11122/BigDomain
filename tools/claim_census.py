@@ -21,6 +21,14 @@ Three readings per claim, never a verdict:
 The live ledger is asked through `qa_log.ledger_report` and nothing else: a
 second parser here would let the reader and the writer disagree about what a
 row is.
+
+R3226: a count is not a name. `census(root, detail=[])` appends one named row
+per contradicted claim - face, 1-based line, the number the sentence claims,
+the file or ledger it points at, the number that source actually carries, and a
+`why=` form. Nine of the ten live-tree contradictions measured this window were
+dated snapshots (an old round's sentence saying `rows=0` while today's ledger
+holds four), so the form is what lets a reader tell a historical record from a
+sentence about now; the classification itself is untouched.
 """
 
 import io
@@ -37,7 +45,9 @@ FACES = (("board", os.path.join("src", "os", "backlog.md")),
 ROWS_RE = re.compile(r"rows=(\d+)")
 QA_REF_RE = re.compile(r"qa/([A-Za-z0-9._-]+\.(?:log|txt|json|md))")
 LEDGER_ROW_RE = re.compile(r"LEDGER\s+\S+\s+rows=(\d+)")
+ROUND_RE = re.compile(r"R(\d{3,4})")
 LIVE_NAMES = ("state/qa_replacements.jsonl", "qa_replacements.jsonl")
+DETAIL_LIMIT = 8
 
 
 def _read(path):
@@ -95,8 +105,39 @@ def classify(root, line, live_rows):
     return out
 
 
-def census(root=None):
-    """Classify every written claim of the three faces. Read-only."""
+def _newest_tag(texts):
+    """The newest round tag any face carries - a reading, never a constant."""
+    best = 0
+    for text in texts:
+        for raw in ROUND_RE.findall(text):
+            best = max(best, int(raw))
+    return best
+
+
+def _named(root, face, lineno, line, reading, live_rows, newest):
+    """One contradicted claim, addressed and sourced (R3226)."""
+    source = reading["source"]
+    if source == "live":
+        src_rows = [live_rows]
+        label = "live"
+        tags = [int(raw) for raw in ROUND_RE.findall(line)]
+        why = "live-snapshot" if tags and max(tags) < newest else "live-now"
+    else:
+        body = _read(os.path.join(root, "qa", source))
+        src_rows = [int(raw) for raw in LEDGER_ROW_RE.findall(body)]
+        label = "qa/" + source
+        why = "evidence-differs" if src_rows else "evidence-no-ledger-row"
+    return {"face": face, "line": lineno, "rows": reading["rows"],
+            "source": label, "source_rows": src_rows, "why": why}
+
+
+def census(root=None, detail=None):
+    """Classify every written claim of the three faces. Read-only.
+
+    `detail`, when a list is passed, receives one named row per contradicted
+    claim. The result dict is unchanged, so a caller that only wants the counts
+    (the closeout gate) keeps exactly the shape it had.
+    """
     root = ROOT if root is None else root
     import sys
     sys.path.insert(0, BASE)
@@ -108,19 +149,46 @@ def census(root=None):
     result = {"claimed": 0, "captured": 0, "contradicted": 0, "uncaptured": 0,
               "rows": live_rows, "present": bool(report["present"]),
               "faces": {}}
+    faces = []
     for face, rel in FACES:
         path = os.path.join(root, rel)
-        if not os.path.isfile(path):
+        text = _read(path) if os.path.isfile(path) else None
+        faces.append((face, text))
+    newest = 0
+    if detail is not None:
+        newest = _newest_tag([text for _face, text in faces if text is not None])
+    for face, text in faces:
+        if text is None:
             result["faces"][face] = {"present": False, "claimed": 0}
             continue
         claimed = 0
-        for line in _read(path).split("\n"):
+        for lineno, line in enumerate(text.split("\n"), 1):
             for reading in classify(root, line, live_rows):
                 claimed += 1
                 result[reading["status"]] += 1
+                if detail is not None and reading["status"] == "contradicted":
+                    detail.append(_named(root, face, lineno, line, reading,
+                                         live_rows, newest))
         result["faces"][face] = {"present": True, "claimed": claimed}
         result["claimed"] += claimed
     return result
+
+
+def detail_row(item):
+    """One line a reader can act on: where the sentence is and what disagrees."""
+    return ("CLAIM %s:%d rows=%d source=%s source_rows=%s why=%s"
+            % (item["face"], item["line"], item["rows"], item["source"],
+               ",".join(str(n) for n in item["source_rows"]) or "none",
+               item["why"]))
+
+
+def detail_lines(items, limit=DETAIL_LIMIT):
+    """Named rows, capped, with the remainder counted rather than dropped."""
+    limit = max(0, limit)
+    out = [detail_row(item) for item in items[:limit]]
+    if len(items) > limit:
+        out.append("+%d more" % (len(items) - limit))
+    return out
 
 
 def census_row(result):
@@ -132,11 +200,18 @@ def census_row(result):
 
 
 def _main(argv):
-    if len(argv) > 1:
+    args = argv[1:]
+    unknown = [arg for arg in args if arg != "--all"]
+    if unknown:
         import sys
-        sys.stdout.write("usage: claim_census.py\n")
+        sys.stdout.write("usage: claim_census.py [--all]\n")
         return 2
-    print(census_row(census()))
+    named = []
+    result = census(detail=named)
+    print(census_row(result))
+    limit = len(named) if "--all" in args else DETAIL_LIMIT
+    for line in detail_lines(named, limit):
+        print(line)
     return 0
 
 

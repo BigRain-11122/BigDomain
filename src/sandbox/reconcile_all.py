@@ -8054,8 +8054,11 @@ SUITES = [
     # disagreed with the ledger as that round's own commit recorded it
     # (qa/probe-R3225.log). AC-CLAIM1..3 (three criteria) were pinned in
     # src/os/backlog.md BEFORE the reader existed.
+    # R3226: the counts were real but unnamed - every contradicted claim now
+    # carries face/line/claimed number/source number/why. AC-CLAIM4..6 pinned
+    # in the R3226 PIN row before the detail face existed.
     ("claim-census",
-     os.path.join("test_claim_census.py"), 3),
+     os.path.join("test_claim_census.py"), 6),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files

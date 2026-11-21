@@ -189,11 +189,125 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             reg = handle.read()
         found = re.search(r'test_claim_census\.py"\)\s*,\s*(\d+)', reg)
-        if not found or int(found.group(1)) != 3:
+        if not found or int(found.group(1)) != 6:
             bad3.append("registry-count-%s" % (found.group(1) if found else "-"))
         if len(RESULTS) != 2:
             bad3.append("results-before-this-arm-%d" % len(RESULTS))
         report("AC-CLAIM3", bool(bad3), ",".join(bad3))
+
+        # ---- AC-CLAIM4: every contradicted claim gets an address. ---------
+        bad4 = []
+        named_board = [
+            "- [R3210] old snapshot LEDGER OK rows=0 path=state/qa_replacements.jsonl",
+            "- [R3230] about now LEDGER OK rows=9 path=state/qa_replacements.jsonl",
+            "- [R3230] cited wrong LEDGER OK rows=4 bad=0 (qa/other.log)",
+            "- [R3230] cited right LEDGER OK rows=2 bad=0 (qa/other.log)",
+            "- [R3230] prose only rows=7 nobody can check",
+        ]
+        world(root, named_board, ledger_rows=4, cited=citations)
+        named = []
+        result4 = CC.census(root, detail=named)
+        if len(named) != result4["contradicted"]:
+            bad4.append("named=%d contradicted=%d"
+                        % (len(named), result4["contradicted"]))
+        statuses4 = statuses(root, named_board)
+        wanted = [(i) for i in statuses4 if i["status"] == "contradicted"]
+        if len(wanted) != 3 or len(named) != 3:
+            bad4.append("fixture-shape-wanted=%d named=%d"
+                        % (len(wanted), len(named)))
+        for item in named:
+            for key in ("face", "line", "rows", "source", "source_rows", "why"):
+                if key not in item:
+                    bad4.append("missing-%s" % key)
+        if [item["line"] for item in named] != [1, 2, 3]:
+            bad4.append("lines=%s" % [item["line"] for item in named])
+        if [item["rows"] for item in named] != [0, 9, 4]:
+            bad4.append("rows=%s" % [item["rows"] for item in named])
+        row = CC.detail_row(named[2])
+        if not row.startswith("CLAIM board:3 rows=4 source=qa/other.log "
+                              "source_rows=2 why=evidence-differs"):
+            bad4.append("row-shape-%r" % row)
+        capped = CC.detail_lines(named, 1)
+        if len(capped) != 2 or capped[-1] != "+2 more":
+            bad4.append("cap1=%r" % capped)
+        full = CC.detail_lines(named, 5)
+        if len(full) != 3 or any("more" in line for line in full):
+            bad4.append("cap5=%r" % full)
+        if CC.detail_lines([], 5) != []:
+            bad4.append("cap-empty")
+        report("AC-CLAIM4", bool(bad4), ",".join(bad4))
+
+        # ---- AC-CLAIM5: the detail face is pure addition. ------------------
+        bad5 = []
+        named = []
+        bare = CC.census(root)
+        with_detail = CC.census(root, detail=named)
+        for key in ("claimed", "captured", "contradicted", "uncaptured",
+                    "rows", "present"):
+            if bare[key] != with_detail[key]:
+                bad5.append("detail-moved-%s" % key)
+        if bare["faces"] != with_detail["faces"]:
+            bad5.append("detail-moved-faces")
+        literal = ("CLAIMS captured=%d uncaptured=%d contradicted=%d rows=%d "
+                   "present=%s"
+                   % (bare["captured"], bare["uncaptured"],
+                      bare["contradicted"], bare["rows"],
+                      "true" if bare["present"] else "false"))
+        if CC.census_row(bare) != literal:
+            bad5.append("main-row-text")
+        reading = {}
+        CG.check_claims(root, reading=reading)
+        if set(reading) != {"claimed", "captured", "contradicted", "uncaptured",
+                            "rows", "present"}:
+            bad5.append("gate-keys-%s" % sorted(reading))
+        gate_text = io.open(GATE, encoding="utf-8").read()
+        if gate_text.count("CC.census(root)") != 1:
+            bad5.append("gate-passes-detail")
+        watched = [os.path.join(root, "src", "os", "backlog.md"),
+                   os.path.join(root, "state", "qa_replacements.jsonl"),
+                   os.path.join(root, "qa", "other.log")]
+        before = [(os.path.getsize(p), os.path.getmtime(p)) for p in watched]
+        CC.census(root, detail=[])
+        after = [(os.path.getsize(p), os.path.getmtime(p)) for p in watched]
+        if before != after:
+            bad5.append("detail-wrote")
+        raw = io.open(MODULE, "rb").read()
+        if any(byte > 126 or byte == 13 for byte in raw):
+            bad5.append("not-ascii-lf")
+        report("AC-CLAIM5", bool(bad5), ",".join(bad5))
+
+        # ---- AC-CLAIM6: the source number is a reading, not a caption. ----
+        bad6 = []
+        vocab = {"live-snapshot", "live-now", "evidence-differs",
+                 "evidence-no-ledger-row"}
+        world(root, named_board, ledger_rows=1, cited=citations)
+        named = []
+        CC.census(root, detail=named)
+        if [item["source_rows"] for item in named] != [[1], [1], [2]]:
+            bad6.append("first-read=%s" % [i["source_rows"] for i in named])
+        world(root, named_board, ledger_rows=4, cited=citations)
+        named = []
+        CC.census(root, detail=named)
+        if [item["source_rows"] for item in named] != [[4], [4], [2]]:
+            bad6.append("ledger-not-derived=%s"
+                        % [i["source_rows"] for i in named])
+        other = os.path.join(root, "qa", "other.log")
+        write(other, "LEDGER OK rows=5 names=5 bad=0 broken=0\n")
+        named = []
+        CC.census(root, detail=named)
+        if named[2]["source_rows"] != [5]:
+            bad6.append("citation-not-re-read=%s" % named[2]["source_rows"])
+        if named[0]["why"] != "live-snapshot" or named[1]["why"] != "live-now":
+            bad6.append("tag-split=%s" % [i["why"] for i in named])
+        untagged = ["- not dated LEDGER OK rows=9 path=state/qa_replacements.jsonl"]
+        world(root, untagged, ledger_rows=4, cited=citations)
+        named = []
+        CC.census(root, detail=named)
+        if [item["why"] for item in named] != ["live-now"]:
+            bad6.append("untagged-%s" % [i["why"] for i in named])
+        bad6.extend("bad-why-%s" % item["why"] for item in named
+                    if item["why"] not in vocab)
+        report("AC-CLAIM6", bool(bad6), ",".join(bad6))
     finally:
         shutil.rmtree(root, ignore_errors=True)
 

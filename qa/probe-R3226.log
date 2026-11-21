@@ -1,0 +1,18 @@
+Q1 live_rows=4 present=True contradicted=10
+Q1 unnamed=0 (a claim with no address)
+Q1 why={"evidence-differs": 1, "live-snapshot": 9}
+Q1 round-tag={"old": 9, "yes": 1}
+CLAIM board:4 rows=2 source=live source_rows=4 why=live-snapshot round=old
+CLAIM board:6 rows=2 source=live source_rows=4 why=live-snapshot round=old
+CLAIM board:10 rows=3 source=live source_rows=4 why=live-snapshot round=old
+CLAIM board:10 rows=0 source=live source_rows=4 why=live-snapshot round=old
+CLAIM board:10 rows=0 source=live source_rows=4 why=live-snapshot round=old
+CLAIM board:11 rows=0 source=probe-R3222.log source_rows=2 why=evidence-differs round=yes
+CLAIM board:22 rows=0 source=live source_rows=4 why=live-snapshot round=old
+CLAIM board:24 rows=0 source=live source_rows=4 why=live-snapshot round=old
+CLAIM state:53 rows=0 source=live source_rows=4 why=live-snapshot round=old
+CLAIM state:60 rows=0 source=live source_rows=4 why=live-snapshot round=old
+Q2 before claimed=2 contradicted=1 named=1
+Q2 after  claimed=2 contradicted=0 uncaptured=1 named=0
+Q2 moved=True
+Q2 cite-the-right-file contradicted=0 captured=2
