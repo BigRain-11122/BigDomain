@@ -1,0 +1,5 @@
+gate_reads_gauge=False gate_reads_eol=False gate_reads_78500=False
+{"bare_lf": 0, "bytes": 70888, "canonical": true, "crlf": 89, "fold_needed": false, "gate": 78500, "indent_anomaly": 0, "indent_ok": true, "layout_ok": true, "log_items": 78, "margin": 7612, "name": "src/os/state.json", "parsed": true}
+{"bare_lf": 0, "bytes": 94106, "canonical": true, "crlf": 453, "fold_needed": true, "gate": 78500, "indent_anomaly": 0, "indent_ok": true, "layout_ok": true, "log_items": 108, "margin": -15606, "name": "logs/state-preop-R3176.bak", "parsed": true}
+LAW src/os/state.json -> OK
+LAW logs/state-preop-R3176.bak -> OK

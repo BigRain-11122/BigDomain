@@ -5350,6 +5350,17 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-source-bom",
      os.path.join("..", "os", "test_source_bom_scan.py"), 6),
+    # R3177: the closeout gate learns the carrier it reads through - the state
+    # waterline and the canonical layout already ship as readers in
+    # logs_toolkit, but nothing asked them at closeout, so a 13829B breach that
+    # could not even be folded (E_STATE_LAYOUT) stayed invisible for dozens of
+    # rounds. A non-canonical layout and an over-line carrier with no fold
+    # window refuse by name; an over-line carrier that is foldable stays green
+    # and publishes its debt on a CARRIER row below the pinned PASS line.
+    # (AC-WLG1..AC-WLG6 pinned in src/os/backlog.md as the R3177 PIN row
+    # BEFORE the code existed.)
+    ("os-closeout-carrier",
+     os.path.join("..", "os", "test_closeout_carrier.py"), 6),
     ("os-state-seq",
      os.path.join("..", "os", "test_state_seq.py"), 8),
     # R2259: a seed's face name must be provably unoccupied before it lands -

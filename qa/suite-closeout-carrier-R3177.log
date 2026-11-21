@@ -1,0 +1,7 @@
+PASS AC-WLG1 the carrier face is read-only: every digest in the fixture world is unchanged after two readings
+PASS AC-WLG2 a bare-LF log and a drifted indent both refuse as E_CLG_CARRIER_LAYOUT instead of passing
+PASS AC-WLG3 an over-line carrier carrying one log item has no fold window and refuses as E_CLG_CARRIER_FOLD
+PASS AC-WLG4 an over-line carrier that is canonical and foldable stays green and publishes its debt as fold_needed=true on the CARRIER row
+PASS AC-WLG5 a root with no state.json and a root with unparsable bytes both refuse by name, never green
+PASS AC-WLG6 the live closeout publishes one CARRIER row and asks carrier=OK while the root=None face stays byte-identical; the module is ASCII with no network import and the registry row carries this suite with its six criteria
+SUITE PASS 6/6

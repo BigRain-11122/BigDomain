@@ -87,12 +87,16 @@ def world(tick=ROUND, drop_tick_row=False):
     label = tick_label()
     write(os.path.join(folder, "src", "os", "backlog.md"),
           read(os.path.join(ROOT, "src", "os", "backlog.md")))
+    # R3177: the canonical layout the shipped carrier face reads (CRLF, and a
+    # 16-space log item). json.dumps(indent=2) gives a 4-space nested item,
+    # which logs_toolkit honestly calls a drifted indent - so the fixture is
+    # spelled out instead of being dumped.
     write(os.path.join(folder, "src", "os", "state.json"),
-          json.dumps({"tick": tick,
-                      "benchmarks_refreshed": "2026-11-16",
-                      "log": ["2026-11-15 R%d SOMETHING MEASURED IN A PAST "
-                              "WINDOW" % (tick - 1)]},
-                     ensure_ascii=False, indent=2) + "\n")
+          '{\r\n  "tick": %d,\r\n  "benchmarks_refreshed": "2026-11-16",'
+          '\r\n  "log": [\r\n%s"%s"\r\n  ]\r\n}\r\n'
+          % (tick, " " * 16,
+             "2026-11-15 R%d SOMETHING MEASURED IN A PAST WINDOW"
+             % (tick - 1)))
     for name in ("main.md", "tech.md", "explore.md"):
         src = os.path.join(ROOT, "state", "queue", name)
         if os.path.isfile(src):

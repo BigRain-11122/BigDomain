@@ -121,6 +121,11 @@ GATING_FACE = "flags"
 # judging the tree this module was imported from.
 E_CLG_FOREIGN_REGISTRY = "E_CLG_FOREIGN_REGISTRY"
 E_CLG_NO_STATE = "E_CLG_NO_STATE"
+# R3177: the state carrier's own two pathologies, named so a reader can act.
+E_CLG_CARRIER = "E_CLG_CARRIER"
+E_CLG_CARRIER_LAYOUT = "E_CLG_CARRIER_LAYOUT"
+E_CLG_CARRIER_FOLD = "E_CLG_CARRIER_FOLD"
+E_CLG_CARRIER_UNREADABLE = "E_CLG_CARRIER_UNREADABLE"
 INFORMATIONAL_FACES = ("reader_refused", "plain_unusable",
                        "reader_rescued", "flags")
 
@@ -185,6 +190,56 @@ def check_round_main(root):
     log = LEDGER.load_state_log(os.path.join(path, "state.json"))
     report = LEDGER.check_round_main_shape(log)
     return bool(report["ok"]), LEDGER.format_round_main(report)
+
+
+def check_carrier(root):
+    """Ask the state carrier's waterline and canonical layout (AC-WLG1..6).
+
+    WHY (R3177, measured at R3176): state.json read 92329B against the 78500B
+    gate with bare_lf=453, so the shipped fold door refused E_STATE_LAYOUT and
+    the breach could not be paid down - yet this gate read neither the gauge
+    nor the layout, so the debt accumulated for dozens of rounds with every
+    closeout green. The laws asked here already ship in `logs_toolkit`
+    (`GATE`, `eol_profile`, `load_state`); this face re-reads them and adds no
+    second definition of either number.
+
+    Two pathologies refuse, and only these two (pre-registered R3177):
+      * a NON-CANONICAL layout - the fold door cannot read it, so any debt is
+        unpayable by construction;
+      * OVER the line with no window to fold (`log_items < 2`).
+    An over-line carrier that is canonical and foldable is NOT refused: it is
+    published as `fold_needed=true` on the CARRIER row so the debt is visible
+    at every closeout without turning an honest mid-round state into a red.
+
+    Read-only; returns (ok, line) where `line` is the CARRIER row either way.
+    """
+    path = _src_os(root)
+    state = os.path.join(path, "state.json")
+    if not os.path.isfile(state):
+        return False, "%s src/os/state.json" % E_CLG_NO_STATE
+    import logs_toolkit as LT
+    try:
+        _path, raw, payload = LT.load_state(root)
+        prof = LT.eol_profile(raw)
+        items = len(payload.get("log") or [])
+    except (IOError, OSError, ValueError, UnicodeDecodeError) as exc:
+        return False, "%s %s: %s" % (E_CLG_CARRIER_UNREADABLE,
+                                     type(exc).__name__, exc)
+    disk = os.path.getsize(state)
+    margin = LT.GATE - disk
+    fold_needed = disk > LT.GATE
+    canonical = bool(prof["layout_ok"] and prof["indent_ok"])
+    row = ("CARRIER bytes=%d gate=%d margin=%d fold_needed=%s layout_ok=%s "
+           "crlf=%d bare_lf=%d indent_anomaly=%d log_items=%d"
+           % (disk, LT.GATE, margin,
+              "true" if fold_needed else "false",
+              "true" if canonical else "false",
+              prof["crlf"], prof["bare_lf"], prof["indent_anomaly"], items))
+    if not canonical:
+        return False, "CARRIER FAIL %s %s" % (E_CLG_CARRIER_LAYOUT, row)
+    if fold_needed and items < 2:
+        return False, "CARRIER FAIL %s %s" % (E_CLG_CARRIER_FOLD, row)
+    return True, row
 
 
 def check_census(root, registry=None, pin=None):
@@ -369,7 +424,29 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
         verdict = {"verdict": "PASS", "files": count, "flags": flags,
                    "reader_refused": refused, "gating": GATING_FACE}
         tail = ""
+        carrier_row = ""
         if root is not None:
+            # R3177: the carrier is the cheapest root face (one state read)
+            # and the one every later face reads through, so it is asked
+            # first. An unpayable breach or a non-canonical layout refuses by
+            # name; a canonical over-line carrier passes and publishes its
+            # debt on the CARRIER row below the verdict.
+            try:
+                cr_ok, cr_line = _timed(face_ms, "carrier",
+                                        check_carrier, root)
+            except (IOError, OSError, ValueError, UnicodeDecodeError) as exc:
+                cr_ok = False
+                cr_line = "%s %s" % (E_CLG_CARRIER_UNREADABLE, exc)
+            if not cr_ok:
+                out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_CARRIER "
+                           "files=%d flags=%d carrier=FAIL"
+                           % (count, flags))
+                out.append(cr_line)
+                verdict = {"verdict": "REFUSED", "reason": "E_CLG_CARRIER",
+                           "files": count, "flags": flags,
+                           "carrier": "FAIL"}
+                return out, 2, _pub(verdict)
+            carrier_row = cr_line
             # R3093: the two laws a round could slip past. Read-only, cheap,
             # and asked only after the byte-drift face is green.
             try:
@@ -445,11 +522,16 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 tail_matrix = ""
             verdict["round_main"] = "OK"
             verdict["census"] = "PASS"
+            verdict["carrier"] = "OK"
             tail = " round_main=OK census=PASS" + tail_matrix
         out.append("CLOSEOUT-GATE PASS files=%d flags=%d "
                    "reader_refused=%d gating=%s%s"
                    % (count, flags, refused, GATING_FACE, tail))
         if root is not None:
+            # R3177: the carrier reading rides BELOW the verdict so the pinned
+            # PASS token shape stays byte-identical (same law as R3109 below).
+            if carrier_row:
+                out.append(carrier_row)
             # R3109: a PASS that does not name the baseline it judged cannot
             # be re-checked by the reader who quotes it. The identity row is a
             # READING (no threshold, no gate) and rides below the verdict so

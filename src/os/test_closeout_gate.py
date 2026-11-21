@@ -106,9 +106,16 @@ def build_root(tmp, dated=True):
     os.makedirs(os.path.join(tmp, "src", "sandbox"))
     line = ("2026-11-20 R5001 PRODUCT: a fixture round main line" if dated
             else "R5001 PRODUCT: no date anchor on this line")
+    # R3177: the fixture log is written in the R2246 canonical layout (CRLF,
+    # sixteen-space items). Before this the world carried a bare-LF log, which
+    # the new carrier face honestly refuses as E_CLG_CARRIER_LAYOUT - so the
+    # fixtures stopped isolating the law each arm asks. Correcting the fixture,
+    # no criterion relaxed: the non-canonical world is now exercised by the
+    # carrier suite, where it is the arm under test.
     with open(os.path.join(tmp, "src", "os", "state.json"), "w",
-              encoding="utf-8", newline="\n") as fh:
-        fh.write(json.dumps({"log": [line]}) + "\n")
+              encoding="utf-8", newline="") as fh:
+        fh.write('{\r\n  "log": [\r\n%s"%s"\r\n  ],\r\n  "tick": 1\r\n}\r\n'
+                 % (" " * 16, line.replace("\\", "\\\\").replace('"', '\\"')))
     with open(os.path.join(tmp, "src", "os", "fixture_suite.py"), "w",
               encoding="utf-8", newline="\n") as fh:
         fh.write('print("SUITE PASS 1/1")\n')
@@ -356,9 +363,9 @@ def main():
     ok("AC-CLG8 arm a - the default face carries no timing key",
        "face_ms" not in verdict, "keys=%s" % sorted(verdict))
     ms8 = deep_v.get("face_ms") or {}
-    ok("AC-CLG8 arm b - root=ROOT publishes four named readings and the PASS "
-       "line is byte-identical",
-       sorted(ms8) == ["census", "flags", "matrix", "round_main"]
+    ok("AC-CLG8 arm b - root=ROOT publishes five named readings (R3177 added "
+       "the carrier face) and the PASS line is byte-identical",
+       sorted(ms8) == ["carrier", "census", "flags", "matrix", "round_main"]
        and all(isinstance(v, float) and v >= 0.0 for v in ms8.values())
        and deep[0] == ("CLOSEOUT-GATE PASS files=%d flags=0 reader_refused=0 "
                        "gating=flags round_main=OK census=PASS "
@@ -466,11 +473,14 @@ def main():
         write_bytes(os.path.join(qa9, "healthy.log"), b"PASS suite row\n")
         base9 = os.path.join(qa9, CENSUS.BASELINE_NAME)
         _bl, _bcode, _bb = CENSUS.write_baseline(qa9, base9)
+        # R3177: canonical layout (CRLF, sixteen-space item), same reason as
+        # build_root above - a bare-LF fixture state is refused by the new
+        # carrier face before the law this arm asks is reached.
         with open(os.path.join(gate9, "src", "os", "state.json"), "w",
-                  encoding="utf-8", newline="\n") as fh:
-            fh.write(json.dumps(
-                {"log": ["2026-11-20 R5009 PRODUCT: a fixture round main"]})
-                + "\n")
+                  encoding="utf-8", newline="") as fh:
+            fh.write('{\r\n  "log": [\r\n%s"%s"\r\n  ],\r\n  "tick": 1\r\n}\r\n'
+                     % (" " * 16,
+                        "2026-11-20 R5009 PRODUCT: a fixture round main"))
         with open(os.path.join(gate9, "docs", "sandbox-suite-matrix.md"),
                   "wb") as fh:
             fh.write(doc_text9.encode("utf-8"))
