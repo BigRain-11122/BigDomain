@@ -91,6 +91,25 @@ parses once and passes the tree into `suite_constants`, `classify` and
 optional parameter defaults to None so an outside caller keeps its old
 behaviour. Nothing about the reading changed: the pin on disk was written by
 the pre-R3097 code, so a passing --check is the equivalence proof, not a claim.
+
+R3207 - assembled is a derived count, never a typed one:
+
+The battery suite's AC-RCC12-R8 assertion typed `assembled == 294` and read
+302. Measured this round, the 8-line gap is entirely registry GROWTH, not a
+reach change: R3093's registry text (commit 07e2e8a2) plus that commit's own
+suite sources recounts 294 over 734 rows, while today's 755 rows recount 302,
+and every suite that existed at the base commits the same contribution now
+(260 carriers, delta 0). The 8 lines come from 7 rows added after R3093:
+os-debt-stale-open +2 (both are `write(..., "SUITE PASS n/n")` FIXTURE rows -
+PRINT_LINE accepts `write(` as well as `print(`, so a suite that writes a
+fake evidence file looks like it prints a row), ledger-monthly-faces-preview
++1 and the four ledger-apimarket-*months rows +1 each (each an own closing
+row assembled across literals). So the number counts THIS READER's reach, and
+R3077 already refused to put assembled_print_lines into the pin. The suite
+now derives it three ways - per-row recount, cold cache and warm cache must
+agree - and asserts the pin carries no assembled key, so a hand-copied total
+cannot redden a suite again. The reach itself (write() fixtures counting as
+rows) is a known limit, recorded rather than repaired.
 """
 import ast
 import hashlib

@@ -1,0 +1,11 @@
+ROWS then=734 now=755
+ASSEMBLED then=294
+ROWS added since base=21 removed=0
+ASSEMBLED now=302 delta=8
+DELTA   +2 NEW-ROW  os-debt-stale-open                           ..\os\test_debt_stale_open_scan.py             then=0 now=2
+DELTA   +1 NEW-ROW  ledger-monthly-faces-preview                 ledger\test_monthly_faces_preview.py           then=0 now=1
+DELTA   +1 NEW-ROW  ledger-apimarket-sellerchurnmonths           ledger\test_apimarket_sellerchurnmonths.py     then=0 now=1
+DELTA   +1 NEW-ROW  ledger-apimarket-marketrestockmonths         ledger\test_apimarket_marketrestockmonths.py   then=0 now=1
+DELTA   +1 NEW-ROW  ledger-apimarket-discountmonths              ledger\test_apimarket_discountmonths.py        then=0 now=1
+DELTA   +1 NEW-ROW  ledger-apimarket-categoryrestockmonths       ledger\test_apimarket_categoryrestockmonths.py then=0 now=1
+DELTA   +1 NEW-ROW  ledger-apimarket-buyerquestionmonths         ledger\test_apimarket_buyerquestionmonths.py   then=0 now=1

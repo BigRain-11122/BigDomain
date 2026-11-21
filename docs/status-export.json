@@ -1,20 +1,20 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3206 PRODUCT+ENGINEERING: the leg progress file can no longer grow an UNMARKED proof line - the in-place writer now marks a bare LOG OK line CARRIED before it lands, while all three measured progress shapes still land byte for byte as before.",
+    "current": "2026-11-22 R3207 PRODUCT+ENGINEERING: the assembled total is derived three ways instead of typed - AC-RCC12-R8 carried 294 in its assertion and read 302, an inherited red that also reddened the sibling battery arm AC-BSGB20 through a leg rc; the 8-line gap is registry growth, not a reach change.",
     "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-monthly-faces.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-battery-shard-R3206.log (1965B, 2026-11-22)",
-    "latest_evidence": "qa/suite-battery-shard-R3206.log (1965B, 2026-11-22)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3207.log (3207B, 2026-11-22)",
+    "latest_evidence": "qa/reorg-R3207.log (3207B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3206] next window (<=48h): (0) MAIN — **一条继承下来的红：注册表普查把 `assembled` 硬编码成 294，实测已是 302**（本轮跑姊妹电池套件时 AC-BSGB20 因此红；本窗自己的套件在 HEAD 与当前的 assembled 贡献都实测为 0，故不是本窗造成）。做法=先只读量三问：①列出被计入 assembled 的 print 行（哪条套件、哪一轮新增），给出 294→302 的 8 行账；②判断 302 是「此读者极限被新增行推高」还是「建成行真的变多」（前者是计数对象变化、后者是可达性变化，两种结论对应不同修法）；③收口判断：把 294 按实测重钉并写明来源（JUDGED-CHANGED），还是让该数从 live 计算派生（唯一判据、不再手抄），并证明所选面不动 readable/silent/unparsed 三面与 pin。三条量完再落，判据沿用 AC-RCC12 写法（AC-RCC12-R8 改述），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
-    "next_milestone_due": "2026-11-24T00:58:58+08:00",
-    "updated_at": "2026-11-22T00:58:58+08:00",
+    "next_milestone": "[R3207] next window (<=48h): (0) MAIN — **载体换行漂移在 R3204 修好两天后又回来了**（本窗收口门再次以 `E_CLG_CARRIER_LAYOUT bare_lf=70` 拒收 `src/os/state.json`，同门同法再修一次通过）。做法=先只读量三问：①在私有副本上逐字节复现三条可能写手（`state_append.py`、`state_io.dump_canon`、任一会整份重写 state 的工具）各自落下的换行，指明**哪一条真的会写出 LF**，并给出该路径在本仓历史上的调用计数；②量「出生地拦」的可行性：让唯一写手在写入前断言目标文本的换行方言（非 CRLF 则拒写并具名），对既有 67 行日志与 `state_bytes` 字段是否有任何字节影响；③收口判断：出生地拦（写手拒写）／收口门侧自动修（当前做法，已连修两次）／只记不复发修——三选一，并证明所选面不改内容语义（`content_eq`/`json_eq`）。判据沿用 AC-SFOLD 写法，**先落板再动代码**。(1) 次选（本窗实测发现、未入板为正式项）：**`readable` 可能高估**——一条行的唯一 SUITE 形状若是夹具里的 `write(..., \"SUITE PASS 6/6\")`，普查判它 readable，但电池**永远无法**用该行反驳注册表（夹具行不是运行期收尾行）；量清 755 行里有几行**仅**靠 `write(` 夹具行才 readable、pin 会不会因此变化。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 tech=4/10 explore=3/10（欠 13，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+    "next_milestone_due": "2026-11-24T01:18:39+08:00",
+    "updated_at": "2026-11-22T01:18:39+08:00",
     "heartbeat": {
       "tick": null,
-      "state_tick": 3206,
+      "state_tick": 3207,
       "lag": null,
       "verdict": "FLAG",
       "reason": "heartbeat_missing_or_unparsed"
@@ -35,7 +35,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-22 R3206 PRODUCT+ENGINEERING: the leg progress file can no longer grow an UNMARKED proof line - the in-place writer now marks a bare LOG OK line CARRIED before it lands, while all three measured progress shapes still land byte for byte as before.",
+  "current": "2026-11-22 R3207 PRODUCT+ENGINEERING: the assembled total is derived three ways instead of typed - AC-RCC12-R8 carried 294 in its assertion and read 302, an inherited red that also reddened the sibling battery arm AC-BSGB20 through a leg rc; the 8-line gap is registry growth, not a reach change.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,11 +63,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3206 PRODUCT+ENGINEERING: the leg progress file can no longer grow an UNMARKED proof line - the in-place writer now marks a bare LOG OK line CARRIED before it lands, while all three measured progress shapes still land byte for byte as before.",
-  "export_ts": "2026-11-22T00:58:58+08:00",
+  "do": "2026-11-22 R3207 PRODUCT+ENGINEERING: the assembled total is derived three ways instead of typed - AC-RCC12-R8 carried 294 in its assertion and read 302, an inherited red that also reddened the sibling battery arm AC-BSGB20 through a leg rc; the 8-line gap is registry growth, not a reach change.",
+  "export_ts": "2026-11-22T01:18:39+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
-  "latest_evidence": "qa/suite-battery-shard-R3206.log (1965B, 2026-11-22)",
-  "next_milestone": "[R3206] next window (<=48h): (0) MAIN — **一条继承下来的红：注册表普查把 `assembled` 硬编码成 294，实测已是 302**（本轮跑姊妹电池套件时 AC-BSGB20 因此红；本窗自己的套件在 HEAD 与当前的 assembled 贡献都实测为 0，故不是本窗造成）。做法=先只读量三问：①列出被计入 assembled 的 print 行（哪条套件、哪一轮新增），给出 294→302 的 8 行账；②判断 302 是「此读者极限被新增行推高」还是「建成行真的变多」（前者是计数对象变化、后者是可达性变化，两种结论对应不同修法）；③收口判断：把 294 按实测重钉并写明来源（JUDGED-CHANGED），还是让该数从 live 计算派生（唯一判据、不再手抄），并证明所选面不动 readable/silent/unparsed 三面与 pin。三条量完再落，判据沿用 AC-RCC12 写法（AC-RCC12-R8 改述），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+  "latest_evidence": "qa/reorg-R3207.log (3207B, 2026-11-22)",
+  "next_milestone": "[R3207] next window (<=48h): (0) MAIN — **载体换行漂移在 R3204 修好两天后又回来了**（本窗收口门再次以 `E_CLG_CARRIER_LAYOUT bare_lf=70` 拒收 `src/os/state.json`，同门同法再修一次通过）。做法=先只读量三问：①在私有副本上逐字节复现三条可能写手（`state_append.py`、`state_io.dump_canon`、任一会整份重写 state 的工具）各自落下的换行，指明**哪一条真的会写出 LF**，并给出该路径在本仓历史上的调用计数；②量「出生地拦」的可行性：让唯一写手在写入前断言目标文本的换行方言（非 CRLF 则拒写并具名），对既有 67 行日志与 `state_bytes` 字段是否有任何字节影响；③收口判断：出生地拦（写手拒写）／收口门侧自动修（当前做法，已连修两次）／只记不复发修——三选一，并证明所选面不改内容语义（`content_eq`/`json_eq`）。判据沿用 AC-SFOLD 写法，**先落板再动代码**。(1) 次选（本窗实测发现、未入板为正式项）：**`readable` 可能高估**——一条行的唯一 SUITE 形状若是夹具里的 `write(..., \"SUITE PASS 6/6\")`，普查判它 readable，但电池**永远无法**用该行反驳注册表（夹具行不是运行期收尾行）；量清 755 行里有几行**仅**靠 `write(` 夹具行才 readable、pin 会不会因此变化。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 tech=4/10 explore=3/10（欠 13，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -157,7 +157,7 @@
   },
   "results": [
     [
-      "3206",
+      "3207",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -171,21 +171,21 @@
   "self_drive": {
     "window": "2026-11-16..2026-11-22",
     "window_days": 7,
-    "log_lines_in_window": 58,
+    "log_lines_in_window": 66,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 8,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 52725,
-  "next_milestone_due": "2026-11-24T00:58:58+08:00",
+  "state_bytes": 59886,
+  "next_milestone_due": "2026-11-24T01:18:39+08:00",
   "heartbeat": {
     "tick": null,
-    "state_tick": 3206,
+    "state_tick": 3207,
     "lag": null,
     "verdict": "FLAG",
     "reason": "heartbeat_missing_or_unparsed"

@@ -1,0 +1,53 @@
+R3207 round evidence - the assembled total is derived, never typed
+
+Board head claimed: the registry counter census asserts assembled == 294 while
+the live census reads 302 (AC-RCC12-R8 / AC-BSGB20 cascade). Three read-only
+questions were measured before any code, private temp trees, zero socket, zero
+network, zero live-disk write.
+
+Q1 the 294 -> 302 account (tmp/probe_R3207.py, tmp/probe_R3207c.py):
+  live         rows=755 readable=755 unparsed=0 silent=0 assembled=302
+  base 07e2e8a2 rows=734 assembled=294 (same law, that commit's registry text
+               and that commit's suite texts)
+  delta        8 lines, all from 7 registry rows ADDED after R3093:
+               os-debt-stale-open +2, ledger-monthly-faces-preview +1,
+               ledger-apimarket-{sellerchurn,marketrestock,discount,
+               categoryrestock,buyerquestion}months +1 each
+  21 rows were added in total; only those 7 carry assembled lines.
+
+Q2 nature of the number: the counted object moved, not the reach.
+  Per-file recount at 07e2e8a2 vs HEAD over the 260 carriers: delta 0 for every
+  pre-existing suite (CARRIERS CHANGED: 0). assembled is defined as THIS
+  reader's reach limit (see the module docstring) and PRINT_LINE accepts both
+  print( and write(, so two of the eight lines are fixture writes of a fake
+  evidence file ("SUITE PASS 6/6") rather than close-out rows. The pin
+  (registry_counter_census_pin.json) has no assembled field - R3077 refused to
+  pin that number - so typing 294 in the assertion contradicted a standing
+  refusal.
+
+Q3 decision: derive, do not re-pin, do not delete.
+  AC-RCC12-R8 is JUDGED-CHANGED in place: readable == registry rows, unparsed
+  empty, silent empty (unchanged law); assembled must equal a per-row recount
+  AND a cold-cache reading AND a warm-cache reading; and the pin must not carry
+  an assembled key. The sentence prints the runtime number instead of a typed
+  one. registry_counter_census.py gained an R3207 docstring paragraph carrying
+  the account and naming the write()-fixture limit as recorded, not repaired.
+
+Gates:
+  src/os/test_registry_counter_census.py  SUITE PASS 55/55 over 13 criteria
+  src/os/test_battery_shard.py            SUITE PASS 32/32, AC-BSGB20 green
+                                          (declared=13 registry=13 leg_rc=0,
+                                          the inherited cascade self-healed)
+  suite_matrix_reconcile.py --write/--check   DOC-CURRENT 78486B/755 rows
+  registry_counter_census.py --check      VERDICT PASS pinned=755 (cache HIT)
+  closeout_gate.py --root .               PASS files=4533 flags=0
+                                          round_main=OK census=PASS
+                                          matrix=DOC-CURRENT CARRIER 52795
+                                          margin 25705 layout_ok=true
+
+Pre-existing carrier drift found and repaired through the shipped door:
+  closeout first refused E_CLG_CARRIER_LAYOUT with bare_lf=70 on
+  src/os/state.json (the file was LF while state_io.dump_canon emits CRLF).
+  Repaired with src/os/logs_toolkit.py eol --fix --execute:
+  52725 -> 52795 bytes, crlf=70, bare_lf=0, content_eq=true, json_eq=true,
+  verify_pass=true, predicted_eq_actual=true.

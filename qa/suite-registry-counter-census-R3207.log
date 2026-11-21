@@ -1,0 +1,57 @@
+PASS AC-RCC1-R1 the census walked every row its own AST read: 755 == 755
+PASS AC-RCC1-R2 the three classes are total: 755 == 755
+PASS AC-RCC1-R3 no label is counted twice across classes
+PASS AC-RCC2-R0 the pin still names every row (a new registry row must refresh the pin, which is the one place the population is written)
+PASS AC-RCC2-R1 the shipped tree matches its pin two-way
+PASS AC-RCC2-R2 the fixture world reads exactly one readable row
+PASS AC-RCC2-R3 a file that prints no SUITE row reads silent
+PASS AC-RCC2-R4 a SUITE row assembled from literals reads unparsed (the extractor limit, measured rather than assumed)
+PASS AC-RCC2-R5 a pin naming the wrong class is refused: readable +1 -1 unparsed +1 -0 silent +1 -0
+PASS AC-RCC3-R1 the registry is byte-identical after the census
+PASS AC-RCC3-R2 the pin is byte-identical after the census
+PASS AC-RCC3-R3 the parser is imported from the tool, not re-declared here
+PASS AC-RCC3-R4 the reader is loaded by path from tools/battery_shard.py
+PASS AC-RCC4-R1 the census source is pure ASCII
+PASS AC-RCC4-R2 stdlib only, no network module: 
+PASS AC-RCC5-R1 the shipped reader reads this declaration dialect
+PASS AC-RCC5-R2 the same reader reads a missing declaration as None
+PASS AC-RCC5-R3 a checks-only leaf stays refused rather than guessed
+PASS AC-RCC6-R1 a SUITE row printed through a formatted constant reads readable, not silent
+PASS AC-RCC6-R2 an if/else constant carrying no numbers reads unparsed, not silent
+PASS AC-RCC6-R3 the via-constant world leaves only the two real silent probes: probe-nosuite,probe-lookalike
+PASS AC-RCC7-R1 the negative control stays silent: a file with no SUITE literal and no SUITE constant
+PASS AC-RCC7-R2 a constant the print line does not name is not borrowed by a substring match
+PASS AC-RCC8-R1 a constant joined with the format string on the SAME print line reads readable: probe-viajoin
+PASS AC-RCC8-R2 the same constant and the same numbers on two lines stay unparsed: a cross-line join would fabricate a leaf
+PASS AC-RCC8-R3 text before the placeholder stays unparsed, so the shipped reader anchor - not this join - decides the head
+PASS AC-RCC9-R1 the three face rows read readable: none
+PASS AC-RCC9-R2 each face suite spells its verdict in the literal: none
+PASS AC-RCC9-R3 (re-judged R3077) the inline-conditional fixture is readable only through the AST pass, and its literal twin stays readable
+PASS AC-RCC9-R4 the pin names the three rows readable and none unparsed
+PASS AC-RCC10-R1 the AST pass is what reads an inline-conditional row
+PASS AC-RCC10-R2 a row the text pass already read stays readable
+PASS AC-RCC10-R3 a word before SUITE is still refused by the anchored reader
+PASS AC-RCC10-R4 a CALL spanning physical lines is readable only through the AST pass (the text pass sees 1 leaf/leaves, none parsing)
+PASS AC-RCC10-R5 the pin is total over the registry rows: readable=755 unparsed=0 rows=755
+PASS AC-RCC11-R1 a row whose counters are plain names reads readable, and the text pass alone still cannot see it
+PASS AC-RCC11-R2 a format carrying no verdict word stays unparsed: the reader does not invent a verdict from the numbers
+PASS AC-RCC11-R3 a name bound to a SUITE literal keeps its literal, a name bound to anything else contributes one placeholder digit
+PASS AC-RCC11-R4 a word before SUITE is still refused (the anchored reader, not this pass, decides the head)
+PASS AC-RCC11-R5 no readable row left the class (0 lost) and the class carries at least the measured R3078 floor: 755
+PASS AC-RCC12-R1 a SUITE word carried only by a format ARGUMENT reads readable, and the text pass alone still cannot see it
+PASS AC-RCC12-R2 a name bound to the bare word PASS/FAIL beside a SUITE format reads readable
+PASS AC-RCC12-R3 an unknown name argument stays a placeholder (SUITE 7 7/7): the reader does not invent a verdict
+PASS AC-RCC12-R4 a format and arguments carrying no SUITE anywhere stays non-readable: SILENT, not an invented row
+PASS AC-RCC12-R5 a BOM-prefixed file whose row is reachable only through the AST pass reads readable
+PASS AC-RCC12-R6 a BOM-prefixed row with no verdict word stays unparsed: a BOM is an encoding artefact, not a verdict
+PASS AC-RCC12-R7 a name bound to GREEN is not accepted as a verdict word (the law vocabulary is PASS/FAIL)
+PASS AC-RCC12-R8 the live census reads 755 readable, 0 unparsed, 0 silent, and its assembled limit 302 is derived three ways (per-row 302, cold 302, warm 302) with no pinned total (R3079 measured 89 flipped, 0 regressed; R3207 measured the old 294 was 294 plus 8 lines from 7 registry rows added after R3093, and that no suite own contribution moved)
+PASS AC-RCC12-R9 the re-written pin names the same rows: the pin was re-written because the reach changed, not to hide a defect
+PASS AC-RCC13-R1 a cold run writes the cache, a warm run reuses all 3 rows, and all three readings name the same classes
+PASS AC-RCC13-R2 the cache is self-describing (version + reader digest + sealed table), so it can name its own validity
+PASS AC-RCC13-R3 an equal-size, equal-mtime_ns rewrite MOVES the class: the content key proves what an mtime key could not
+PASS AC-RCC13-R4 a reader digest mismatch discards every entry and falls back to a cold read with the same classes
+PASS AC-RCC13-R5 a corrupted or refused table is NAMED and the census still reads the same classes: an unusable cache is never silent
+PASS AC-RCC13-R6 the live cached reading is judged by the PIN over the measured report: the cache changes the cost, not the verdict
+suite: 55 assertions over 13 criteria
+SUITE PASS 55/55

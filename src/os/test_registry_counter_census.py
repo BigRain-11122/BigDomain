@@ -593,13 +593,50 @@ def main():
         # 733, which R3091's added suite moved to 734. The law is "every
         # registry row is readable, none unparsed or silent", so the count is
         # read from the registry the census itself walks.
+        # R3207 JUDGED-CHANGED (not deleted): the assembled total was typed as
+        # 294 and read 302. Measured this round: 294 plus 8 lines carried by 7
+        # registry rows added after R3093, with no suite's own contribution
+        # changing (per-file recount equal at 07e2e8a2 and HEAD, delta 0 of
+        # 260 carriers). The total is THIS READER's reach limit, not a tree
+        # fact, and R3077 already refused to pin assembled_print_lines - so it
+        # is derived three ways now instead of re-typed: a per-row recount, a
+        # cold-cache census and a warm-cache census must agree, and the pin
+        # must stay free of an assembled field so no future round can freeze
+        # the number again.
         rows7 = len(RCC.registry_rows(RCC.REGISTRY))
+        direct7 = 0
+        live_sandbox7 = os.path.dirname(REGISTRY)
+        for label7, rel7, crit7 in RCC.registry_rows(RCC.REGISTRY):
+            with io.open(os.path.join(live_sandbox7, rel7), 'rb') as handle:
+                raw7 = handle.read()
+            with io.TextIOWrapper(io.BytesIO(raw7), encoding='utf-8-sig',
+                                  errors='replace') as text_io7:
+                text7 = text_io7.read()
+            try:
+                tree7 = ast.parse(text7)
+            except SyntaxError:
+                tree7 = None
+            _kind7, asm7 = RCC.classify(text7, RCC.reader(),
+                                        RCC.suite_constants(text7, tree7),
+                                        tree7)
+            direct7 += asm7
+        live_cache7 = os.path.join(root7, 'live-cache.json')
+        cold7 = RCC.census(cache_path=live_cache7)
+        warm7 = RCC.census(cache_path=live_cache7)
         ok(len(live7['READABLE']) == rows7 and not live7['UNPARSED']
-           and not live7['SILENT'] and live7['assembled'] == 294,
+           and not live7['SILENT']
+           and live7['assembled'] == direct7
+           and cold7['assembled'] == live7['assembled']
+           and warm7['assembled'] == live7['assembled']
+           and 'assembled' not in pinned7,
            'AC-RCC12-R8 the live census reads %d readable, 0 unparsed, '
-           '0 silent, assembled 294 (measured: 89 flipped, 0 regressed; the '
-           '294 is the 293 plus this suite\'s own new fixture line, which '
-           'this reader counts because it reads its own suite too)' % rows7)
+           '0 silent, and its assembled limit %d is derived three ways '
+           '(per-row %d, cold %d, warm %d) with no pinned total (R3079 '
+           'measured 89 flipped, 0 regressed; R3207 measured the old 294 was '
+           '294 plus 8 lines from 7 registry rows added after R3093, and that '
+           'no suite own contribution moved)'
+           % (rows7, live7['assembled'], direct7, cold7['assembled'],
+              warm7['assembled']))
         ok(RCC.compare(live7, pinned7) == [],
            'AC-RCC12-R9 the re-written pin names the same rows: the pin '
            'was re-written because the reach changed, not to hide a defect')
