@@ -105,6 +105,17 @@ than reddened. It is asked LAST (cheapest read, but it judges bytes a previous
 write replaced) and `ledger=False` is the named opt-out. The reading rides
 BELOW the verdict so the PASS token shape stays byte-identical.
 
+R3221 - the reading a machine can compare (AC-CLG15..16):
+
+`check_ledger` printed `rows=`/`broken=` on the LEDGER row, but `evaluate`
+published only `ledger: "OK"/"RED"` in its verdict dict. Measured on three
+fixture worlds (absent ledger, healthy chain, broken chain) the key set was
+identical and no count was reachable except by parsing prose - the same
+criticism as R3218, moved one layer up. `check_ledger` now accepts a `reading`
+dict filled from the report it judged (never re-parsed), and the verdict gains
+`ledger_rows` / `ledger_broken` as VALUES; the printed row and the PASS token
+shape are unchanged, and a break is still never gated.
+
 Shape: a published line, never a silent pass.
 
     CLOSEOUT-GATE PASS files=<n> flags=0 reader_refused=<n> gating=flags
@@ -260,7 +271,7 @@ def check_carrier(root):
     return True, row
 
 
-def check_ledger(root):
+def check_ledger(root, reading=None):
     """Ask the replacement ledger of THIS world (R3219, AC-CLG11..13).
 
     WHY (measured at R3218): `qa_log.py --ledger-check` shipped a read face and
@@ -285,11 +296,24 @@ def check_ledger(root):
     row's new_sha16). It is published, never gated: a break is either a lost
     record or a lawful deletion-then-recreate / external write, and this face
     cannot tell them apart, so refusing would accuse the lawful case.
+
+    R3221 (AC-CLG15): the same counts were reachable ONLY by reading the row
+    text - measured on three fixture worlds (absent / healthy chain / broken
+    chain) the verdict dict answered the identical `ledger='OK'` and carried no
+    count at all, so a machine consumer had to parse prose. A caller may now
+    pass a `reading` dict; it is filled from the SAME report this face judged
+    (never re-parsed), so the value and the printed row cannot disagree.
     """
     _src_os(root)
     import qa_log as QL
     path = os.path.join(root, "state", QL.LEDGER_NAME)
     report = QL.ledger_report(path, evidence_dir=os.path.join(root, "qa"))
+    if reading is not None:
+        reading.update({"rows": report["rows"], "names": report["names"],
+                        "bad": len(report["bad"]),
+                        "stale": len(report["stale"]),
+                        "missing": len(report["missing"]),
+                        "broken": len(report["broken"])})
     lines = ["LEDGER %s rows=%d names=%d bad=%d stale=%d missing=%d broken=%d "
              "path=%s"
              % (report["verdict"], report["rows"], report["names"],
@@ -432,6 +456,22 @@ def _baseline_identity(baseline, root):
     return ("CENSUS-BASELINE name=%s bytes=%d rows=%d sha256=%s written=%s"
             % (name, len(raw), rows, hashlib.sha256(raw).hexdigest()[:12],
                time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(written))))
+
+
+def _ledger_values(verdict, reading):
+    """Publish the ledger's two machine-readable counts (R3221, AC-CLG15).
+
+    The values come from `check_ledger`'s `reading` out-parameter, which that
+    face fills from the report it judged - so the verdict and the printed
+    LEDGER row are two renderings of ONE report and cannot disagree. A world
+    where the face produced no reading (it refused before reading, or the
+    caller said `ledger=False`) publishes neither key: absent means "not
+    read", which is not the same claim as rows=0.
+    """
+    for source, target in (("rows", "ledger_rows"), ("broken", "ledger_broken")):
+        if source in reading:
+            verdict[target] = reading[source]
+    return verdict
 
 
 def evaluate(target, baseline, root=None, registry=None, census_pin=None,
@@ -596,9 +636,14 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 # cheapest read of the five (one small file) but it judges
                 # bytes a previous write replaced, so it must not be the face
                 # that explains a red that the drift face already owns.
+                # R3221: the counts ride into the verdict as VALUES, filled by
+                # the same report the row is rendered from, so no consumer has
+                # to parse the prose (and none can disagree with it).
+                ledger_reading = {}
                 try:
                     lg_ok, lg_lines = _timed(face_ms, "ledger",
-                                             check_ledger, root)
+                                             check_ledger, root,
+                                             reading=ledger_reading)
                 except (IOError, OSError, ValueError,
                         UnicodeDecodeError) as exc:
                     lg_ok = False
@@ -612,9 +657,11 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                                "files": count, "flags": flags,
                                "round_main": "OK", "census": "PASS",
                                "ledger": "RED"}
+                    _ledger_values(verdict, ledger_reading)
                     return out, 2, _pub(verdict)
                 ledger_row = lg_lines[0]
                 verdict["ledger"] = "OK"
+                _ledger_values(verdict, ledger_reading)
             else:
                 face_ms["ledger"] = 0.0
                 ledger_row = ""

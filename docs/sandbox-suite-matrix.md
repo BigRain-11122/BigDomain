@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 756 | 6247 | 675/675 | R2739 |
+| 756 | 6249 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -780,7 +780,7 @@
 | 741 | os-registry-counter-census | ../os/test_registry_counter_census.py | 13 | no-evidence | - |
 | 742 | os-evidence-read | ../os/test_evidence_read.py | 5 | no-evidence | - |
 | 743 | os-face-walk-static | ../os/test_face_walk_static.py | 5 | no-evidence | - |
-| 744 | os-closeout-gate | ../os/test_closeout_gate.py | 14 | no-evidence | - |
+| 744 | os-closeout-gate | ../os/test_closeout_gate.py | 16 | no-evidence | - |
 | 745 | os-live-proof | ../os/test_live_proof.py | 13 | no-evidence | - |
 | 746 | os-platform-live-report | ../os/test_platform_live_report.py | 8 | no-evidence | - |
 | 747 | os-ledger-business-report | ../os/test_ledger_business_report.py | 8 | no-evidence | - |
@@ -793,7 +793,7 @@
 | 754 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
 | 755 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 756 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6247 | green 675 / FAIL 0 / no-evidence 81 |  |
+|  | 合计 |  | 6249 | green 675 / FAIL 0 / no-evidence 81 |  |
 
 ## 证据出处
 

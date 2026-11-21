@@ -1,0 +1,73 @@
+R3221 ROUND EVIDENCE - the chain reading becomes a machine value
+================================================================
+Board head claimed: R3220 next-window (0) MAIN - "the chain reading lives
+only in the text row; the machine face cannot get it".
+
+MEASURED FIRST (read-only): tmp/probe_R3221.py -> this log via --from.
+  (a) AST census, executable faces only: 41 call sites naming
+      closeout_gate.evaluate()/check_ledger; 50 key reads of a "ledger" key
+      tree-wide (of which the gate verdict's own are test_closeout_gate.py
+      lines 618/621/718); 19 string constants starting "LEDGER " (text
+      readers). The shipped non-test carrier is src/os/closeout.py:416
+      (tree_refusal), which passes the verdict dict through.
+  (b) three fixture worlds (absent ledger / healthy chain / broken chain):
+      every one answered the IDENTICAL key set
+      ['carrier','census','corpus','face_ms','files','flags','gating',
+       'ledger','reader_refused','round_main','verdict']
+      with ledger='OK' and ledger_rows=None ledger_broken=None, while the
+      broken world's row read "LEDGER OK rows=2 ... broken=1". So the count
+      existed only as prose.
+  (c) tree_refusal(live) published ledger='OK' and the row text inside
+      detail - a dict reader could see a word and had to parse for the count.
+
+DECISION: verdict gains ledger_rows / ledger_broken as VALUES, filled by a
+"reading" out-parameter that check_ledger fills from the SAME report it
+renders; nothing is re-parsed and a break is still never gated.
+
+LANDED:
+  * tools/closeout_gate.py: check_ledger(root, reading=None) fills
+    rows/names/bad/stale/missing/broken counts from qa_log.ledger_report;
+    _ledger_values publishes only the two pinned keys; called on both the
+    OK and the REFUSED ledger paths; ledger=False publishes neither key
+    (absent means "not read", not rows=0).
+  * src/os/test_closeout_gate.py: AC-CLG15 (a-e: healthy 1/0, broken 2/1
+    still PASS rc=0, absent 0/0, refused keeps counts with ledger=RED,
+    opt-out publishes neither key) and AC-CLG16 (a-d: PASS token shape
+    byte-identical to a built expectation, one QL.ledger_report call and no
+    read_ledger in the module, publishing writes nothing - ledger and
+    evidence (size,mtime_ns) unchanged, the closeout carrier publishes the
+    same numbers it prints).
+  * src/sandbox/reconcile_all.py: os-closeout-gate 14 -> 16.
+
+MY OWN ARMS WENT RED FIRST (recorded, not hidden): the first AC-CLG15 arm b
+used the truncated-row world instead of the broken-chain world (broken=0
+where 1 was claimed), and the absent-ledger arm unpacked a five-value
+fixture helper as three - both fixed by correcting the arms, not by
+loosening a criterion.
+
+GATES:
+  SUITE PASS 62/62 over 16 criteria (qa/suite-closeout-gate-R3221.log,
+  10291B/64 lines sha256 2d47cf41437d8b87, through --from and re-read).
+  Neighbours: test_closeout 29/29, test_battery_followup 7/7,
+  test_export_closeout_gate_parity 6/6, test_qa_log 38/38 over 35 criteria,
+  test_suite_matrix_reconcile 14/14.
+  Matrix regenerated through its own vehicle then DOC-CURRENT.
+  Registry census --check VERDICT PASS pinned=756.
+  Live gate: CLOSEOUT-GATE PASS files=4579 flags=0 reader_refused=0
+  round_main=OK census=PASS matrix=DOC-CURRENT with
+  LEDGER OK rows=0 names=0 bad=0 stale=0 missing=0 broken=0.
+
+HONEST BOUNDARY:
+  (a) ZERO payment capability and no network beyond loopback - a published
+      count moves no money; a buyer still cannot pay (no merchant id,
+      server, domain, filing+ICP or miniprogram appid+secret).
+  (b) zero product surface, zero api surface, zero gate number - what
+      changed is whether the chain count is a value a program can compare.
+  (c) the keys are a READING, never a verdict: a break still does not
+      refuse, because a lost record and a lawful delete-then-recreate leave
+      the same shape here.
+  (d) the live ledger state/qa_replacements.jsonl still does not exist and
+      this round created none, so the key is proven on fixtures and reads
+      0/0 live.
+  (e) only the two pinned keys ship; names/bad/stale/missing stay on the
+      row text by choice, not by omission.

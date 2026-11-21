@@ -21,6 +21,12 @@ This suite grades both questions on fixture worlds:
   AC-CLG14  the chain between one name's records is published as `broken=` and
            never gated (R3220): a lost record and a lawful delete-then-recreate
            look identical here, so a refusal would accuse the lawful case
+  AC-CLG15..16  the counts are VALUES, not prose (R3221): the verdict carries
+           `ledger_rows` / `ledger_broken` filled from the same report the row
+           is rendered from, an absent ledger reads 0/0, a refused ledger keeps
+           what it read, the named opt-out publishes neither key, the PASS
+           token shape stays byte-identical, the closeout carrier passes the
+           values through, and publishing writes nothing
 
 Honest boundary: `flags` sees a new file or a class change; a rewrite that
 stays inside the same class is invisible to both faces (the census keeps no
@@ -720,6 +726,116 @@ def main():
            and "bad=0" in e_rows[0] and "stale=0" in e_rows[0]
            and e_chain == [],
            "rc=%s row=%s chain=%s" % (e_rc, e_rows, e_chain))
+
+        # AC-CLG15..16 (R3221): the counts existed only as TEXT. Measured on
+        # the three worlds above (absent / healthy / broken) the verdict key
+        # set was identical and `ledger` was the word 'OK' in all three, so a
+        # machine consumer had to parse the row. The gate now fills
+        # `ledger_rows` / `ledger_broken` from the SAME report it renders.
+        def reading_of(world, base, root, reg, pin):
+            lines, rc, verdict = CG.evaluate(world, base, root=root,
+                                             registry=reg, census_pin=pin,
+                                             matrix=False)
+            row = [l for l in lines if l.startswith("LEDGER ")]
+            return lines, rc, verdict, (row[0] if row else "")
+
+        def number(row, key):
+            token = [part for part in row.split() if part.startswith(key + "=")]
+            return int(token[0].split("=", 1)[1]) if token else None
+
+        world_a2, base_a2 = build_world(os.path.join(tmp12, "wa2"))
+        lines_a2, rc_a2, v_a2, row_a2 = reading_of(
+            world_a2, base_a2, root_a, reg_a, pin_a)
+        ok("AC-CLG15 arm a - a healthy ledger publishes rows/broken as VALUES",
+           rc_a2 == 0 and v_a2.get("ledger_rows") == number(row_a2, "rows") == 1
+           and v_a2.get("ledger_broken") == number(row_a2, "broken") == 0,
+           "rc=%s rows=%r broken=%r row=%s"
+           % (rc_a2, v_a2.get("ledger_rows"), v_a2.get("ledger_broken"),
+              row_a2))
+        world_b2, base_b2 = build_world(os.path.join(tmp12, "wb2"))
+        lines_b2, rc_b2, v_b2, row_b2 = reading_of(
+            world_b2, base_b2, root_e, reg_e, pin_e)
+        ok("AC-CLG15 arm b - a broken chain is a VALUE, and still never gated",
+           rc_b2 == 0 and v_b2.get("verdict") == "PASS"
+           and v_b2.get("ledger_broken") == number(row_b2, "broken")
+           and v_b2.get("ledger_rows") == number(row_b2, "rows"),
+           "rc=%s broken=%r row=%s"
+           % (rc_b2, v_b2.get("ledger_broken"), row_b2))
+        world_c2, base_c2 = build_world(os.path.join(tmp12, "wc2"))
+        root_f, reg_f, pin_f, _led_f, _qa_f = ledger_world(
+            os.path.join(tmp12, "f"), None)
+        lines_c2, rc_c2, v_c2, row_c2 = reading_of(
+            world_c2, base_c2, root_f, reg_f, pin_f)
+        ok("AC-CLG15 arm c - an absent ledger publishes rows=0 broken=0",
+           rc_c2 == 0 and v_c2.get("ledger") == "OK"
+           and v_c2.get("ledger_rows") == number(row_c2, "rows") == 0
+           and v_c2.get("ledger_broken") == number(row_c2, "broken") == 0,
+           "rc=%s rows=%r row=%s"
+           % (rc_c2, v_c2.get("ledger_rows"), row_c2))
+        world_d2, base_d2 = build_world(os.path.join(tmp12, "wd2"))
+        lines_d2, rc_d2, v_d2, row_d2 = reading_of(
+            world_d2, base_d2, root_c, reg_c, pin_c)
+        ok("AC-CLG15 arm e - a REFUSED ledger still carries what it read",
+           rc_d2 == 2 and v_d2.get("ledger") == "RED"
+           and v_d2.get("reason") == "E_CLG_LEDGER"
+           and v_d2.get("ledger_rows") == number(row_d2, "rows")
+           and v_d2.get("ledger_broken") == number(row_d2, "broken"),
+           "rc=%s rows=%r row=%s"
+           % (rc_d2, v_d2.get("ledger_rows"), row_d2))
+        opt_rows, opt_rc2, opt_v2 = CG.evaluate(
+            world_a2, base_a2, root=root_a, registry=reg_a, census_pin=pin_a,
+            matrix=False, ledger=False)
+        ok("AC-CLG15 arm d - the named opt-out publishes NEITHER key",
+           opt_rc2 == 0 and "ledger_rows" not in opt_v2
+           and "ledger_broken" not in opt_v2
+           and "ledger" not in opt_v2,
+           "rc=%s keys=%s" % (opt_rc2, sorted(opt_v2)))
+
+        # AC-CLG16: the pinned shapes do not move, the carrier passes the
+        # values through, and the face stays read-only.
+        expected = ("CLOSEOUT-GATE PASS files=%d flags=0 reader_refused=0 "
+                    "gating=flags round_main=OK census=PASS"
+                    % number(lines_a2[0], "files"))
+        ok("AC-CLG16 arm a - the PASS token shape is byte-identical",
+           lines_a2[0] == expected and "ledger_rows=" not in lines_a2[0]
+           and "ledger_broken=" not in lines_a2[0],
+           "line=%s" % lines_a2[0])
+        source = io.open(os.path.join(ROOT, "tools", "closeout_gate.py"),
+                         encoding="utf-8").read()
+        ok("AC-CLG16 arm b - ONE report feeds both renderings (no re-parse)",
+           source.count("QL.ledger_report(") == 1
+           and "read_ledger" not in source
+           and source.count("_ledger_values(") == 3,
+           "ledger_report=%d _ledger_values=%d"
+           % (source.count("QL.ledger_report("),
+              source.count("_ledger_values(")))
+
+        def stat_of2(path):
+            info = os.stat(path)
+            return (info.st_size, info.st_mtime_ns)
+
+        before_led_a2 = stat_of2(_led_a)
+        before_qa_a2 = stat_of2(os.path.join(_qa_a, "probe-evidence.log"))
+        CG.evaluate(world_a2, base_a2, root=root_a, registry=reg_a,
+                    census_pin=pin_a, matrix=False)
+        ok("AC-CLG16 arm c - publishing the values writes nothing",
+           stat_of2(_led_a) == before_led_a2
+           and stat_of2(os.path.join(_qa_a, "probe-evidence.log"))
+           == before_qa_a2,
+           "ledger=%s qa=%s" % (before_led_a2, before_qa_a2))
+
+        sys.path.insert(0, os.path.join(ROOT, "src", "os"))
+        import closeout as CO
+        word, headline, tree_v = CO.tree_refusal(ROOT)
+        tree_led = [d for d in (tree_v.get("detail") or [])
+                    if d.startswith("LEDGER ")]
+        tree_row = tree_led[0] if tree_led else ""
+        ok("AC-CLG16 arm d - the carrier publishes the counts, never re-types",
+           word == "PASS" and tree_v.get("ledger_rows") == number(tree_row, "rows")
+           and tree_v.get("ledger_broken") == number(tree_row, "broken"),
+           "word=%s rows=%r broken=%r row=%s"
+           % (word, tree_v.get("ledger_rows"), tree_v.get("ledger_broken"),
+              tree_row))
 
     total = len(CHECKS)
     acs = set()

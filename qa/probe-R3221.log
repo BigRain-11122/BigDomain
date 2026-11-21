@@ -1,0 +1,126 @@
+== R3221 probe: the chain reading on the machine face ==
+[1] executable faces naming evaluate()/check_ledger: 41
+    call src/os/closeout.py:416
+    call src/os/test_closeout.py:1663
+    call src/os/test_closeout.py:879
+    call src/os/test_closeout_carrier.py:195
+    call src/os/test_closeout_carrier.py:196
+    call src/os/test_closeout_gate.py:145
+    call src/os/test_closeout_gate.py:253
+    call src/os/test_closeout_gate.py:595
+    call src/os/test_closeout_gate.py:159
+    call src/os/test_closeout_gate.py:165
+    call src/os/test_closeout_gate.py:173
+    call src/os/test_closeout_gate.py:187
+    call src/os/test_closeout_gate.py:201
+    call src/os/test_closeout_gate.py:202
+    call src/os/test_closeout_gate.py:210
+    call src/os/test_closeout_gate.py:220
+    call src/os/test_closeout_gate.py:269
+    call src/os/test_closeout_gate.py:272
+    call src/os/test_closeout_gate.py:284
+    call src/os/test_closeout_gate.py:294
+    call src/os/test_closeout_gate.py:303
+    call src/os/test_closeout_gate.py:331
+    call src/os/test_closeout_gate.py:340
+    call src/os/test_closeout_gate.py:351
+    call src/os/test_closeout_gate.py:496
+    call src/os/test_closeout_gate.py:522
+    call src/os/test_closeout_gate.py:544
+    call src/os/test_closeout_gate.py:552
+    call src/os/test_closeout_gate.py:614
+    call src/os/test_closeout_gate.py:627
+    call src/os/test_closeout_gate.py:640
+    call src/os/test_closeout_gate.py:654
+    call src/os/test_closeout_gate.py:671
+    call src/os/test_closeout_gate.py:673
+    call src/os/test_closeout_gate.py:682
+    call src/os/test_closeout_gate.py:690
+    call src/os/test_closeout_gate.py:712
+    call src/os/test_closeout_gate.py:238
+    call src/os/test_corpus_supply_chain.py:404
+    call src/os/test_corpus_supply_chain.py:410
+    call src/os/test_pre_commit_gate.py:594
+[1] executable KEY reads of verdict['ledger']: 50
+    key  src/os/ledger_lines.py:423 ['ledger']
+    key  src/os/ledger_lines.py:474 ['ledger']
+    key  src/os/orphan_promotion_wire.py:248 ['ledger']
+    key  src/os/orphan_promotion_wire.py:248 ['ledger']
+    key  src/os/orphan_promotion_wire.py:236 ['ledger']
+    key  src/os/orphan_promotion_wire.py:275 ['ledger']
+    key  src/os/test_closeout_gate.py:618 .get('ledger')
+    key  src/os/test_closeout_gate.py:621 .get('ledger')
+    key  src/os/test_closeout_gate.py:718 .get('ledger')
+    key  src/os/test_ledger_archive.py:520 ['ledger']
+    key  src/os/test_ledger_business_report.py:247 ['ledger']
+    key  src/os/test_ledger_business_report.py:248 ['ledger']
+    key  src/os/test_orphan_promotion_wire.py:190 ['ledger']
+    key  src/os/test_orphan_promotion_wire.py:192 ['ledger']
+    key  src/os/test_orphan_promotion_wire.py:252 ['ledger']
+    key  src/os/test_orphan_promotion_wire.py:291 ['ledger']
+    key  src/os/test_orphan_promotion_wire.py:299 ['ledger']
+    key  src/os/test_orphan_promotion_wire.py:198 ['ledger']
+    key  src/os/test_orphan_promotion_wire.py:198 ['ledger']
+    key  src/os/test_orphan_promotion_wire.py:262 ['ledger']
+    key  src/os/test_runner_suite_timeout_headroom.py:146 ['ledger']
+    key  src/os/test_runner_suite_timeout_headroom.py:147 ['ledger']
+    key  src/os/test_runner_suite_timeout_headroom.py:148 ['ledger']
+    key  src/os/test_runner_suite_timeout_headroom.py:150 ['ledger']
+    key  src/os/test_runner_suite_timeout_headroom.py:207 ['ledger']
+    key  src/os/test_runner_suite_timeout_headroom.py:208 ['ledger']
+    key  src/os/test_runner_suite_timeout_headroom.py:209 ['ledger']
+    key  src/sandbox/start_all.py:121 ['ledger']
+    key  src/sandbox/start_all.py:142 ['ledger']
+    key  src/sandbox/test_fingerprint_regen.py:95 ['ledger']
+    key  src/sandbox/test_fingerprint_regen.py:97 ['ledger']
+    key  src/sandbox/ledger/apimarket_report.py:1116 .get('ledger')
+    key  src/sandbox/ledger/test_apimarket_buyerledger.py:503 ['ledger']
+    key  src/sandbox/lobby/hub_page.py:190 ['ledger']
+    key  src/sandbox/lobby/test_hub_ledger_live.py:98 .get('ledger')
+    key  src/sandbox/lobby/test_hub_ledger_live.py:124 .get('ledger')
+    key  src/sandbox/lobby/test_hub_ledger_live.py:127 .get('ledger')
+    key  src/sandbox/lobby/test_hub_ledger_live.py:153 .get('ledger')
+    key  src/sandbox/lobby/test_hub_ledger_live.py:163 .get('ledger')
+    key  src/sandbox/lobby/test_hub_ledger_live.py:100 .get('ledger')
+    key  src/sandbox/lobby/test_hub_ledger_live.py:126 .get('ledger')
+    key  src/sandbox/lobby/test_hub_ugc.py:166 .get('ledger')
+    key  src/sandbox/pay/test_pay_v3.py:93 ['ledger']
+    key  src/sandbox/pay/test_pay_v3.py:237 ['ledger']
+    key  src/sandbox/pay/test_pay_v3_real.py:271 ['ledger']
+    key  src/sandbox/pay/test_pay_v3_window.py:288 ['ledger']
+    key  src/sandbox/pay/test_pay_v3_window.py:289 ['ledger']
+    key  tools/closeout_gate.py:617 ['ledger']
+    key  tools/closeout_gate.py:619 ['ledger']
+    key  tools/first_yuan_chain.py:140 ['ledger']
+[1] executable TEXT heads 'LEDGER ': 19
+    text src/os/ledger_lines.py:1357 'LEDGER OK %d\n'
+    text src/os/probe_decord_R1985.py:41 'LEDGER @BigDomain rows=%'
+    text src/os/test_closeout_gate.py:596 'LEDGER '
+    text src/os/test_closeout_gate.py:598 'LEDGER OK '
+    text src/os/test_closeout_gate.py:715 'LEDGER OK '
+    text src/os/test_closeout_gate.py:619 'LEDGER OK rows=1 names=1'
+    text src/os/test_closeout_gate.py:658 'LEDGER OK '
+    text src/os/test_closeout_gate.py:687 'LEDGER '
+    text src/os/test_closeout_gate.py:693 'LEDGER '
+    text src/os/test_ledger_business_report.py:137 'LEDGER BUSINESS CHECK'
+    text src/os/test_ledger_closeout.py:153 'LEDGER OK 2150'
+    text src/os/test_ledger_closeout.py:155 'LEDGER OK'
+    text src/sandbox/ledger/ledger_page.py:344 'LEDGER CONSOLE on http:/'
+    text tools/closeout_gate.py:293 'LEDGER %s rows=%d names='
+    text tools/closeout_gate.py:300 'LEDGER detail bad line=%'
+    text tools/closeout_gate.py:302 'LEDGER detail stale name'
+    text tools/closeout_gate.py:305 'LEDGER detail missing na'
+    text tools/closeout_gate.py:307 'LEDGER detail chain name'
+    text tools/ledger_business_report.py:310 'LEDGER BUSINESS CHECK %s'
+[2] absent  rc=0 keys=['carrier', 'census', 'corpus', 'face_ms', 'files', 'flags', 'gating', 'ledger', 'reader_refused', 'round_main', 'verdict']
+    ledger_row=LEDGER OK rows=0 names=0 bad=0 stale=0 missing=0 broken=0 path=state/qa_replacements.jsonl
+    ledger='OK' ledger_rows=None ledger_broken=None
+[2] healthy rc=0 keys=['carrier', 'census', 'corpus', 'face_ms', 'files', 'flags', 'gating', 'ledger', 'reader_refused', 'round_main', 'verdict']
+    ledger_row=LEDGER OK rows=1 names=1 bad=0 stale=0 missing=0 broken=0 path=state/qa_replacements.jsonl
+    ledger='OK' ledger_rows=None ledger_broken=None
+[2] broken  rc=0 keys=['carrier', 'census', 'corpus', 'face_ms', 'files', 'flags', 'gating', 'ledger', 'reader_refused', 'round_main', 'verdict']
+    ledger_row=LEDGER OK rows=2 names=1 bad=0 stale=0 missing=0 broken=1 path=state/qa_replacements.jsonl
+    ledger='OK' ledger_rows=None ledger_broken=None
+[3] tree_refusal(live) word=PASS keys=['carrier', 'census', 'corpus', 'detail', 'face_ms', 'files', 'flags', 'gating', 'ledger', 'matrix', 'omitted', 'reader_refused', 'round_main', 'verdict']
+    ledger='OK' ledger_rows=None ledger_broken=None detail=['CARRIER bytes=59436 gate=78500 margin=19064 fold_needed=fals', 'LEDGER OK rows=0 names=0 bad=0 stale=0 missing=0 broken=0 pa', 'CENSUS-BASELINE name=qa/writer-census-baseline.json bytes=14']
+== end of probe ==
