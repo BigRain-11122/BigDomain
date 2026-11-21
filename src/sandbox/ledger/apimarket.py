@@ -14278,6 +14278,336 @@ class APIMarketFace:
         out["disclaimer"] = self.disclaimer
         return out
 
+    def api_market_restock_months(self):
+        """Market-wide monthly replenishment pressure (criteria
+        AC-MRS1..AC-MRS8 pre-registered in the R2240 explore-queue
+        seed row BEFORE this code existed; the AC-MRS prefix, this
+        face name, test_apimarket_marketrestockmonths and
+        ledger-apimarket-marketrestockmonths were git-grep
+        zero-occupancy against HEAD 2026-11-21, rc=1).
+
+        api_seller_restock_months answers one shop's cadence and
+        api_market_supply_months samples the whole shelf at each month
+        end - in stock, sold out, unlimited - so how fast the market's
+        sold-out shelves actually came BACK had no face at all, and a
+        fast replenishment wave read exactly like a slow stockout.
+
+        Booking law (AC-MRS2): every apimarket_supply_revisions row
+        books in the UTC month of its own immutable restocked_utc, so
+        a later restock never rewrites an earlier month and a month
+        that carried none is an honest zero row.
+
+        Denominator law (AC-MRS3): sold_out_listing_count is the
+        number of finite, live shelves sold out at that month's LAST
+        second, derived through _alive_at_instant and
+        _supply_at_instant by the same sampling law
+        api_market_supply_months uses, so the two faces agree month by
+        month on every shared month. An unlimited shelf is never sold
+        out (the same honest asymmetry the sibling faces report).
+
+        Coverage law (AC-MRS6): restocked_from_soldout_count counts
+        the distinct listings that were sold out at the PREVIOUS month
+        end and received at least one restock this month, and
+        restock_coverage is that count over the previous month-end
+        sold-out count - None when the denominator is zero or the
+        month has no predecessor, never clamped, so a month that
+        recovered more shelves than the prior peak reads above one.
+
+        Episode law (AC-MRS5): a sold-out episode starts at the first
+        stored stamp where a finite live shelf's remaining units reach
+        zero and ends at the first later stamp where they are positive
+        again. Everything is derived from the append-only restock,
+        purchase and refund stamps (zero new tables) with the SAME net
+        law as _supply_at_instant, so a clamped walk can never invent
+        units a refund did not hand back. The recovery kind is 'refund'
+        when the ending stamp carries no restock - a refund returns the
+        unit to the shelf and honestly ends the episode - and only
+        'restock' episodes enter recovered_episode_count. Latency is
+        whole seconds between the two stamps; a second-resolution tie
+        between a restock and a sale at one stamp is judged on the
+        stamp's net, never as an invented order.
+
+        Grid and peak law (AC-MRS4): rows run contiguous over the same
+        event union api_market_supply_months uses (publish, re-listing,
+        delisting, restock, purchase, refund), so no month is silently
+        absent; running accumulators are monotone and end at the
+        envelope totals; the peak takes the highest monthly units_added
+        with ties resolved to the EARLIER month and a zero month is
+        never a peak.
+
+        Pure read: zero row mutations, zero token movement, no
+        arguments (any argument is a TypeError, never silently
+        ignored), and the envelope restock_count / units_added /
+        listing_count agree with api_seller_restock_months() on the
+        same market scope."""
+        fmt = "%Y-%m-%dT%H:%M:%SZ"
+
+        def _seconds(earlier, later):
+            return int((datetime.datetime.strptime(later, fmt)
+                        - datetime.datetime.strptime(earlier, fmt)
+                        ).total_seconds())
+
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, supply, dev_account, listed_utc"
+                " FROM apimarket_listings ORDER BY listing_id"
+            ).fetchall()
+            restocks = self._conn.execute(
+                "SELECT listing_id, dev_account, add_units,"
+                " restocked_utc FROM apimarket_supply_revisions"
+                " ORDER BY revision_id").fetchall()
+            buys = self._conn.execute(
+                "SELECT listing_id, purchased_utc"
+                " FROM apimarket_purchases ORDER BY purchase_id"
+            ).fetchall()
+            refunds = self._conn.execute(
+                "SELECT listing_id, refunded_utc"
+                " FROM apimarket_refunds ORDER BY refund_id"
+            ).fetchall()
+            relists = self._conn.execute(
+                "SELECT relisted_utc FROM apimarket_relistings"
+            ).fetchall()
+            delists = self._conn.execute(
+                "SELECT delisted_utc FROM apimarket_delistings"
+            ).fetchall()
+
+            events = {}
+
+            def bump(month):
+                events[month] = events.get(month, 0) + 1
+
+            for _lid, _sup, _dev, listed_utc in listings:
+                bump(str(listed_utc)[:7])
+            for stamp, in relists:
+                bump(str(stamp)[:7])
+            for stamp, in delists:
+                bump(str(stamp)[:7])
+            for _lid, _dev, _units, stamp in restocks:
+                bump(str(stamp)[:7])
+            for _lid, stamp in buys:
+                bump(str(stamp)[:7])
+            for _lid, stamp in refunds:
+                bump(str(stamp)[:7])
+            months = _contiguous_months(sorted(events))
+
+            per_month = {}
+            per_listing = {}
+            for lid, dev, units, stamp in restocks:
+                lid = int(lid)
+                units = int(units)
+                month = str(stamp)[:7]
+                b = per_month.get(month)
+                if b is None:
+                    b = {"count": 0, "units": 0, "listings": set(),
+                         "sellers": set(), "largest": 0}
+                    per_month[month] = b
+                b["count"] += 1
+                b["units"] += units
+                b["listings"].add(lid)
+                b["sellers"].add(str(dev))
+                if units > b["largest"]:
+                    b["largest"] = units
+                slot = per_listing.setdefault(
+                    lid, {}).setdefault(
+                        str(stamp), {"restock": 0, "buy": 0,
+                                     "refund": 0})
+                slot["restock"] += units
+            for lid, stamp in buys:
+                per_listing.setdefault(
+                    int(lid), {}).setdefault(
+                        str(stamp), {"restock": 0, "buy": 0,
+                                     "refund": 0})["buy"] += 1
+            for lid, stamp in refunds:
+                per_listing.setdefault(
+                    int(lid), {}).setdefault(
+                        str(stamp), {"restock": 0, "buy": 0,
+                                     "refund": 0})["refund"] += 1
+
+            episodes = []
+            for lid, base_supply, _dev, listed_utc in listings:
+                lid = int(lid)
+                if base_supply is None:
+                    continue
+                timeline = per_listing.get(lid)
+                if not timeline:
+                    continue
+                effective = 0
+                bought = 0
+                refunded = 0
+                remaining = int(base_supply)
+                start = None
+                for stamp in sorted(timeline):
+                    slot = timeline[stamp]
+                    effective += slot["restock"]
+                    bought += slot["buy"]
+                    refunded += slot["refund"]
+                    sold = max(0, bought - refunded)
+                    now = max(0, int(base_supply) + effective - sold)
+                    if remaining > 0 and now == 0:
+                        if self._alive_at_instant(
+                                lid, listed_utc, stamp):
+                            start = stamp
+                    elif start is not None and now > 0:
+                        kind = ("restock" if slot["restock"]
+                                else "refund")
+                        episodes.append((lid, start, stamp, kind))
+                        start = None
+                    remaining = now
+                if start is not None:
+                    episodes.append((lid, start, None, "open"))
+
+            sold_out_by_month = {}
+            for month in months:
+                as_of = _month_end(month)
+                ids = set()
+                for lid, base_supply, _dev, listed_utc in listings:
+                    lid = int(lid)
+                    if not self._alive_at_instant(
+                            lid, listed_utc, as_of):
+                        continue
+                    _effective, _sold, remaining, sold_out = \
+                        self._supply_at_instant(
+                            lid, base_supply, as_of)
+                    if remaining is not None and sold_out:
+                        ids.add(lid)
+                sold_out_by_month[month] = ids
+
+            ended_by_month = {}
+            for _lid, start, end, kind in episodes:
+                if end is None:
+                    continue
+                ended_by_month.setdefault(str(end)[:7], []).append(
+                    (_seconds(start, end), kind))
+
+            rows = []
+            running_count = 0
+            running_units = 0
+            for index, month in enumerate(months):
+                b = per_month.get(month)
+                slot = ended_by_month.get(month, [])
+                if b is None:
+                    coverage = None
+                    if index > 0 and sold_out_by_month.get(
+                            months[index - 1]):
+                        coverage = 0.0
+                    rows.append({
+                        "month": month,
+                        "restock_count": 0,
+                        "units_added": 0,
+                        "listing_count": 0,
+                        "seller_count": 0,
+                        "sold_out_listing_count":
+                            len(sold_out_by_month.get(month, ())),
+                        "restocked_from_soldout_count": 0,
+                        "restock_coverage": coverage,
+                        "recovered_episode_count": len(slot),
+                        "mean_recovery_seconds": (
+                            sum(secs for secs, _k in slot) // len(slot)
+                            if slot else None),
+                        "avg_units_per_restock": None,
+                        "largest_restock_units": None,
+                        "running_restock_count": running_count,
+                        "running_units_added": running_units})
+                    continue
+                running_count += b["count"]
+                running_units += b["units"]
+                from_soldout = 0
+                coverage = None
+                if index > 0:
+                    prior = sold_out_by_month.get(months[index - 1],
+                                                  set())
+                    from_soldout = len(prior & b["listings"])
+                    if prior:
+                        coverage = round(
+                            float(from_soldout) / len(prior), 2)
+                rows.append({
+                    "month": month,
+                    "restock_count": b["count"],
+                    "units_added": b["units"],
+                    "listing_count": len(b["listings"]),
+                    "seller_count": len(b["sellers"]),
+                    "sold_out_listing_count":
+                        len(sold_out_by_month.get(month, ())),
+                    "restocked_from_soldout_count": from_soldout,
+                    "restock_coverage": coverage,
+                    "recovered_episode_count": len(slot),
+                    "mean_recovery_seconds": (
+                        sum(secs for secs, _k in slot) // len(slot)
+                        if slot else None),
+                    "avg_units_per_restock": b["units"] // b["count"],
+                    "largest_restock_units": b["largest"],
+                    "running_restock_count": running_count,
+                    "running_units_added": running_units})
+            active = [row for row in rows if row["restock_count"] > 0]
+            total_count = sum(row["restock_count"] for row in rows)
+            total_units = sum(row["units_added"] for row in rows)
+            restocked_listings = set(int(_l) for _l, _d, _u, _s
+                                     in restocks)
+            sellers = set(str(_d) for _l, _d, _u, _s in restocks)
+            peak_month = None
+            peak_units = None
+            for row in rows:
+                if row["units_added"] > 0 and (
+                        peak_units is None
+                        or row["units_added"] > peak_units):
+                    peak_month = row["month"]
+                    peak_units = row["units_added"]
+            restock_episodes = [secs for _l, s, e, kind in episodes
+                                if e is not None and kind == "restock"
+                                for secs in (_seconds(s, e),)]
+            refund_episodes = [secs for _l, s, e, kind in episodes
+                               if e is not None and kind == "refund"
+                               for secs in (_seconds(s, e),)]
+            recovered_count = len(restock_episodes)
+            open_count = sum(1 for _l, _s, e, _k in episodes
+                             if e is None)
+            all_latencies = restock_episodes + refund_episodes
+            return {
+                "scope": "market",
+                "dev_account": None,
+                "month_count": len(rows),
+                "active_month_count": len(active),
+                "restock_count": total_count,
+                "units_added": total_units,
+                "listing_count": len(restocked_listings),
+                "seller_count": len(sellers),
+                "sold_out_listing_count": (
+                    len(sold_out_by_month.get(months[-1], ()))
+                    if months else 0),
+                "episode_count": len(episodes),
+                "recovered_episode_count": recovered_count,
+                "refund_recovered_episode_count": len(refund_episodes),
+                "open_episode_count": open_count,
+                "restock_coverage": (
+                    round(float(recovered_count) / len(episodes), 2)
+                    if episodes else None),
+                "mean_recovery_seconds": (
+                    sum(all_latencies) // len(all_latencies)
+                    if all_latencies else None),
+                "mean_restock_recovery_seconds": (
+                    sum(restock_episodes) // len(restock_episodes)
+                    if restock_episodes else None),
+                "min_recovery_seconds": (
+                    min(all_latencies) if all_latencies else None),
+                "max_recovery_seconds": (
+                    max(all_latencies) if all_latencies else None),
+                "avg_units_per_restock": (
+                    total_units // total_count if total_count else None),
+                "largest_restock_units": (
+                    max(int(_u) for _l, _d, _u, _s in restocks)
+                    if restocks else None),
+                "peak_month": peak_month,
+                "peak_units_added": peak_units,
+                "first_month": rows[0]["month"] if rows else None,
+                "last_month": rows[-1]["month"] if rows else None,
+                "latest_month_units_added": (
+                    rows[-1]["units_added"] if rows else 0),
+                "latest_month_sold_out_listing_count": (
+                    len(sold_out_by_month.get(months[-1], ()))
+                    if months else 0),
+                "disclaimer": self.disclaimer,
+                "months": rows}
+
     def api_market_relist_months(self):
         """Market-wide monthly retirement / re-listing timeline (criteria
         AC-MRM1..AC-MRM8 pre-registered in the R2189 seed 9/10

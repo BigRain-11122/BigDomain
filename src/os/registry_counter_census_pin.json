@@ -132,6 +132,7 @@
     "ledger-apimarket-marketmonths",
     "ledger-apimarket-marketprovidermonths",
     "ledger-apimarket-marketrelistmonths",
+    "ledger-apimarket-marketrestockmonths",
     "ledger-apimarket-marketstats",
     "ledger-apimarket-marketsupplymonths",
     "ledger-apimarket-marketwatchmonths",

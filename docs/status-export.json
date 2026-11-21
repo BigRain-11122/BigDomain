@@ -5,20 +5,20 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3153 PRODUCT: the market now carries a seller-side monthly claim pressure face - a seller reads how many claims it opened this month, how many closed, how many still hang, and what disputed money and refunded money weigh, with a claim booked only in its own opened_utc month.",
+    "current": "2026-11-21 R3154 PRODUCT+ENGINEERING: the market now has a monthly restock-pressure face - how many shelves sold out this month, how many of LAST month-end's sold-out shelves were restocked within the month, and how long recovery took on average; a refund that hands a unit back ends an episode honestly but is never counted as a restock.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/leg-sellerclaimmonths-R3153.log (756B, 2026-11-21)",
-    "latest_evidence": "qa/leg-sellerclaimmonths-R3153.log (756B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-apimarket-marketrestockmonths-R3154.log (1335B, 2026-11-21)",
+    "latest_evidence": "qa/suite-apimarket-marketrestockmonths-R3154.log (1335B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3153] next window (<=48h): (0) MAIN — **P3 explore 队头换到 R2240 e：`api_market_restock_months`（市场月度补货压力，AC-MRS1..8 已预注册在 `state/queue/explore.md` 的种子里，零新表、派生自既有 restock/售罄面）**；同窗口顺带核对本轮新面的两个具名边界是否该收紧（笔数口径 `refund_rate` 是否该与金额口径并列、`buyer_count` 是否该把「只开单未退款」的买方也计入）。先量后裁、**先落板再动代码**。（备选：R2240 f 的 buy‑side claim outcome seed 同样可认领；tasks.md 仍零 open，产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活。）",
-    "next_milestone_due": "2026-11-23T13:34:35+08:00",
-    "updated_at": "2026-11-21T13:34:35+08:00",
+    "next_milestone": "[R3154] next window (<=48h): (0) MAIN — **P3 explore 队头换到 R2240 f：`api_buyer_claim_outcome_months`（买方月度售后结果构成，AC-BCO1..8 已预注册在 `state/queue/explore.md` 的种子里，零新表、派生自既有 claim/答复/撤回/退款面）**；同窗口顺带核对本轮两个具名边界是否该收紧（`restock_coverage` 分母是否该改用「本月月初售罄数」而非「上月末售罄数」、episode 在跨月 delist/relist 时是否该重开）。先量后裁、**先落板再动代码**。（备选：R2248 a/b/c 三个 seed 同样可认领；tasks.md 仍零 open，产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活。）",
+    "next_milestone_due": "2026-11-23T13:46:56+08:00",
+    "updated_at": "2026-11-21T13:46:56+08:00",
     "heartbeat": {
-      "tick": 3153,
-      "state_tick": 3153,
+      "tick": 3154,
+      "state_tick": 3154,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -39,13 +39,13 @@
       "criteria_claims": 1
     },
     "corpus": {
-      "files": 4401,
-      "bytes": 508803779,
+      "files": 4403,
+      "bytes": 508807008,
       "mb": 508.8,
-      "readable": 4401
+      "readable": 4403
     }
   },
-  "current": "2026-11-21 R3153 PRODUCT: the market now carries a seller-side monthly claim pressure face - a seller reads how many claims it opened this month, how many closed, how many still hang, and what disputed money and refunded money weigh, with a claim booked only in its own opened_utc month.",
+  "current": "2026-11-21 R3154 PRODUCT+ENGINEERING: the market now has a monthly restock-pressure face - how many shelves sold out this month, how many of LAST month-end's sold-out shelves were restocked within the month, and how long recovery took on average; a refund that hands a unit back ends an episode honestly but is never counted as a restock.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -73,11 +73,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3153 PRODUCT: the market now carries a seller-side monthly claim pressure face - a seller reads how many claims it opened this month, how many closed, how many still hang, and what disputed money and refunded money weigh, with a claim booked only in its own opened_utc month.",
-  "export_ts": "2026-11-21T13:34:35+08:00",
+  "do": "2026-11-21 R3154 PRODUCT+ENGINEERING: the market now has a monthly restock-pressure face - how many shelves sold out this month, how many of LAST month-end's sold-out shelves were restocked within the month, and how long recovery took on average; a refund that hands a unit back ends an episode honestly but is never counted as a restock.",
+  "export_ts": "2026-11-21T13:46:56+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/leg-sellerclaimmonths-R3153.log (756B, 2026-11-21)",
-  "next_milestone": "[R3153] next window (<=48h): (0) MAIN — **P3 explore 队头换到 R2240 e：`api_market_restock_months`（市场月度补货压力，AC-MRS1..8 已预注册在 `state/queue/explore.md` 的种子里，零新表、派生自既有 restock/售罄面）**；同窗口顺带核对本轮新面的两个具名边界是否该收紧（笔数口径 `refund_rate` 是否该与金额口径并列、`buyer_count` 是否该把「只开单未退款」的买方也计入）。先量后裁、**先落板再动代码**。（备选：R2240 f 的 buy‑side claim outcome seed 同样可认领；tasks.md 仍零 open，产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活。）",
+  "latest_evidence": "qa/suite-apimarket-marketrestockmonths-R3154.log (1335B, 2026-11-21)",
+  "next_milestone": "[R3154] next window (<=48h): (0) MAIN — **P3 explore 队头换到 R2240 f：`api_buyer_claim_outcome_months`（买方月度售后结果构成，AC-BCO1..8 已预注册在 `state/queue/explore.md` 的种子里，零新表、派生自既有 claim/答复/撤回/退款面）**；同窗口顺带核对本轮两个具名边界是否该收紧（`restock_coverage` 分母是否该改用「本月月初售罄数」而非「上月末售罄数」、episode 在跨月 delist/relist 时是否该重开）。先量后裁、**先落板再动代码**。（备选：R2248 a/b/c 三个 seed 同样可认领；tasks.md 仍零 open，产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活。）",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -90,7 +90,7 @@
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
     "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
-    "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（77322B·687 行）",
+    "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（77438B·687 行）",
     "preview/money-path-demo.html (10161B) + preview/money-path-demo.json (4705B)",
     "preview/ceo-blockers.html (8453B) + preview/ceo-blockers.json (6754B)",
     "preview/battery-shard-report.html (16421B) + preview/battery-shard-report.json (16240B)",
@@ -156,26 +156,26 @@
         "status": "SHORT"
       },
       {
-        "claimable": 8,
+        "claimable": 7,
         "delivered": [],
         "discounted": 0,
-        "done_rows": 241,
+        "done_rows": 242,
         "floor": 10,
         "gated_rows": 0,
-        "open_rows": 8,
+        "open_rows": 7,
         "path": "state/queue/explore.md",
         "present": true,
         "queue": "explore",
-        "shortfall": 2,
+        "shortfall": 3,
         "status": "SHORT"
       }
     ],
-    "shortfall_total": 5,
+    "shortfall_total": 6,
     "verdict": "FLOOR-DEBT"
   },
   "results": [
     [
-      "3153",
+      "3154",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -189,21 +189,21 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 163,
+    "log_lines_in_window": 169,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 26,
+    "substantive_non_idle_mention_lines": 27,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
-    "queue_explore_open": 8
+    "queue_explore_open": 7
   },
-  "state_bytes": 135244,
-  "next_milestone_due": "2026-11-23T13:34:35+08:00",
+  "state_bytes": 140827,
+  "next_milestone_due": "2026-11-23T13:46:56+08:00",
   "heartbeat": {
-    "tick": 3153,
-    "state_tick": 3153,
+    "tick": 3154,
+    "state_tick": 3154,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
@@ -224,9 +224,9 @@
     "criteria_claims": 1
   },
   "corpus": {
-    "files": 4401,
-    "bytes": 508803779,
+    "files": 4403,
+    "bytes": 508807008,
     "mb": 508.8,
-    "readable": 4401
+    "readable": 4403
   }
 }

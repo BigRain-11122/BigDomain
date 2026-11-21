@@ -3105,6 +3105,16 @@ SUITES = [
     # claim row BEFORE the code.
     ("ledger-apimarket-sellerclaimmonths", os.path.join(
         "ledger", "test_apimarket_sellerclaimmonths.py"), 8),
+    # market-wide monthly restock pressure (a restock books in its own
+    # restocked_utc month, the sold-out denominator is sampled by the
+    # same law as the market supply face, coverage is measured against
+    # the PREVIOUS month-end sold-out count, sold-out episodes carry a
+    # pooled recovery latency with refund recoveries named apart, the
+    # grid is contiguous with honest zero months and the totals agree
+    # with the seller restock face) - criteria AC-MRS1..AC-MRS8
+    # registered in the R2240 explore-queue seed row BEFORE the code.
+    ("ledger-apimarket-marketrestockmonths", os.path.join(
+        "ledger", "test_apimarket_marketrestockmonths.py"), 8),
     # buyer-side monthly claim flow (a claim books in the UTC month of its
     # own opened_utc, a later refund never re-dates it nor invents a row
     # in the refund month, honest zero months carried flat, the five-state

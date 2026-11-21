@@ -1,0 +1,21 @@
+== Q1 name occupancy (git grep -F -l by anchor) ==
+  api_market_restock_months                  rc=0 hits=5 ['docs/status-export.json', 'src/os/backlog.md', 'src/os/seed_queue_R2240.py', 'src/sandbox/ledger/apimarket.py']
+  test_apimarket_marketrestockmonths         rc=0 hits=2 ['src/os/backlog.md', 'src/sandbox/ledger/apimarket.py']
+  ledger-apimarket-marketrestockmonths       rc=0 hits=2 ['src/os/backlog.md', 'src/sandbox/ledger/apimarket.py']
+  AC-MRS                                     rc=0 hits=5 ['docs/status-export.json', 'src/os/backlog.md', 'src/os/seed_queue_R2240.py', 'src/sandbox/ledger/apimarket.py']
+== Q2 does a shipped face join sold-out to a recovery clock ==
+  api_* faces=117  faces stating sold_out AND a clock=5 ['api_supply_history', 'api_seller_supply', 'api_category_supply_months', 'api_market_restock_months', 'api_market_supply_months']
+  restock faces=['api_seller_restock_months', 'api_market_restock_months']
+  supply faces=['api_supply', 'api_supply_history', 'api_seller_supply', 'api_category_supply_months', 'api_market_supply_months']
+== Q3 episode derivability on a private world ==
+  stamps=9  distinct=6  same-second mixed=0
+  listing 1 episodes=[('2026-08-10T10:00:00Z', '2026-08-20T10:00:00Z', 'restock')]
+  listing 2 episodes=[('2026-08-12T10:00:00Z', '2026-08-25T10:00:00Z', 'restock'), ('2026-09-02T10:00:00Z', None, 'open')]
+  listing 3 unlimited -> no episode possible
+  derived episode_count=3 recovered=2 open=1 kinds=['open', 'restock']
+  api_market_supply_months sold_out per month=[('2026-08', 0), ('2026-09', 1)]
+  api_seller_restock_months totals restock=2 units=4 listings=2
+  NEW face keys=28 rowkeys=14
+  NEW totals restock=2 units=4 listings=2 episodes=3 recovered=2 refund_rec=0 open=1 coverage=0.67
+  NEW mean_recovery=993600 min=864000 max=1123200
+  NEW rows=[('2026-08', 2, 4, 0, 0, None, 2), ('2026-09', 0, 0, 1, 0, None, 0)]
