@@ -29,7 +29,7 @@ sys.path.insert(0, BASE)
 import state_fold_run as FR  # noqa: E402
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 14
+EXPECTED_CRITERIA = 15
 MODULE = os.path.join(BASE, "state_fold_run.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold-run"
@@ -1034,7 +1034,7 @@ def main():
               and bad_sum_obj.get("error") == "E_FLR_SUMMARY_SHAPE"
               and check_ok_rc == 0
               and sorted(check_ok_obj.keys()) == sorted(SF.CHECK_KEYS)
-              and fold_source.count(b'stage="after-write"') == 3
+              and fold_source.count(b'stage="after-write"') == 5
               and fold_ascii,
               "AC-SFOLD11 the rc=3 family answers in JSON too "
               "[missing=%s/%s rc=%s text=%r, window=%s/%s rc=%s text_ok=%s, "
@@ -1053,6 +1053,118 @@ def main():
                  bad_sum_rc, bad_sum_obj.get("error"),
                  sorted(check_ok_obj.keys()) == sorted(SF.CHECK_KEYS),
                  fold_source.count(b'stage="after-write"'), fold_ascii))
+        # --- AC-SFOLD12: the state write face refuses by name --------------
+        # R3190 measured the crash: a mkstemp or os.replace failure escaped
+        # as a raw OSError (rc=1, traceback, nothing under --json) AFTER the
+        # backup and the archive had landed. A static state-is-a-directory
+        # shape never reaches this face - read_state refuses it first at
+        # E_SF_BAD_STATE with zero bytes (measured), so the arms inject the
+        # failure in process and say so rather than pretending a filesystem
+        # shape exists.
+        sw_root, sw_path = make_world(os.path.join(base, "sf12-mkstemp"))
+        sw_before = read(sw_path)
+        sw_summary = clean_summary.replace("R9010", "R9017")
+        real_mkstemp = SF.tempfile.mkstemp
+
+        def _mkstemp_boom(*args, **kwargs):
+            raise OSError(28, "no space left on device (injected)")
+
+        sw_code = None
+        sw_error = None
+        try:
+            SF.tempfile.mkstemp = _mkstemp_boom
+            try:
+                SF.fold(sw_root, "R9017", 1, 1, 12, sw_summary)
+            except SF.StateFoldError as exc:
+                sw_code = exc.code
+                sw_error = exc
+            except Exception as exc:  # noqa: BLE001
+                sw_code = "RAW:" + type(exc).__name__
+        finally:
+            SF.tempfile.mkstemp = real_mkstemp
+        sw_face = sw_error.face() if sw_error is not None else {}
+        sw_logs = os.listdir(os.path.join(sw_root, "logs"))
+
+        rp_root, rp_path = make_world(os.path.join(base, "sf12-replace"))
+        rp_before = read(rp_path)
+        rp_summary = clean_summary.replace("R9010", "R9018")
+        real_replace = SF.os.replace
+
+        def _replace_boom(*args, **kwargs):
+            raise PermissionError(13, "access denied (injected)")
+
+        rp_code = None
+        rp_error = None
+        try:
+            SF.os.replace = _replace_boom
+            try:
+                SF.fold(rp_root, "R9018", 1, 1, 12, rp_summary)
+            except SF.StateFoldError as exc:
+                rp_code = exc.code
+                rp_error = exc
+            except Exception as exc:  # noqa: BLE001
+                rp_code = "RAW:" + type(exc).__name__
+        finally:
+            SF.os.replace = real_replace
+        rp_leftovers = [name for name in
+                        os.listdir(os.path.join(rp_root, "src", "os"))
+                        if name.startswith(".state-fold-")]
+
+        jf_root, jf_path = make_world(os.path.join(base, "sf12-json"))
+        jf_summary = clean_summary.replace("R9010", "R9019")
+        jf_buf = io.StringIO()
+        try:
+            SF.tempfile.mkstemp = _mkstemp_boom
+            with contextlib.redirect_stdout(jf_buf):
+                jf_rc = FR.main(["--root", jf_root, "--fold", "--round",
+                                 "R9019", "--fold-no", "1", "--start", "1",
+                                 "--end", "12", "--summary", jf_summary,
+                                 "--json"])
+        finally:
+            SF.tempfile.mkstemp = real_mkstemp
+        try:
+            jf_obj = json.loads(jf_buf.getvalue().strip())
+        except ValueError:
+            jf_obj = {}
+
+        ok_root, ok_path = make_world(os.path.join(base, "sf12-ok"))
+        ok_report = SF.fold(ok_root, "R9020", 1, 1, 12,
+                            clean_summary.replace("R9010", "R9020"))
+
+        check(sw_code == "E_SF_STATE_WRITE"
+              and sw_face.get("stage") == "after-write"
+              and sw_face.get("after_write") is True
+              and read(sw_path) == sw_before
+              and len([n for n in sw_logs if n.startswith("state-preop-")]) == 1
+              and len([n for n in sw_logs
+                       if n.startswith("state-log-archive-")]) == 1
+              and rp_code == "E_SF_STATE_WRITE"
+              and rp_error is not None
+              and rp_error.stage == "after-write"
+              and rp_leftovers == []
+              and read(rp_path) == rp_before
+              and jf_rc == 3
+              and jf_obj.get("error") == "E_SF_STATE_WRITE"
+              and jf_obj.get("after_write") is True
+              and ok_report.get("predicted_eq_actual") is True
+              and fold_source.count(b'"E_SF_STATE_WRITE"') == 2
+              and fold_ascii,
+              "AC-SFOLD12 the state write face refuses by name "
+              "[mkstemp=%s stage=%s after_write=%s state_same=%s backup=%d "
+              "archive=%d, replace=%s stage=%s leftovers=%d state_same=%s, "
+              "json rc=%s error=%s after_write=%s, healthy_eq=%s "
+              "code_sites=%d ascii=%s]"
+              % (sw_code, sw_face.get("stage"), sw_face.get("after_write"),
+                 read(sw_path) == sw_before,
+                 len([n for n in sw_logs if n.startswith("state-preop-")]),
+                 len([n for n in sw_logs
+                      if n.startswith("state-log-archive-")]),
+                 rp_code,
+                 rp_error.stage if rp_error is not None else None,
+                 len(rp_leftovers), read(rp_path) == rp_before, jf_rc,
+                 jf_obj.get("error"), jf_obj.get("after_write"),
+                 ok_report.get("predicted_eq_actual"),
+                 fold_source.count(b'"E_SF_STATE_WRITE"'), fold_ascii))
     finally:
         shutil.rmtree(base, ignore_errors=True)
 

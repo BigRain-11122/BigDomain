@@ -496,16 +496,33 @@ def fold(root, round_label, fold_no, window_start, window_end, summary,
                              allow_create=True, now=stamp)
     import general_writer_dialect_audit as GWDA
     payload = GWDA.payload_for(path, folded_text)
-    fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path),
-                               prefix=".state-fold-")
+    # R3190 measured the sibling face of the backup refusal: a static
+    # state-is-a-directory shape is already refused by read_state at
+    # E_SF_BAD_STATE with zero bytes, but a mkstemp or os.replace failure
+    # escaped as a raw OSError (rc=1 with a traceback and no --json face)
+    # AFTER the backup and the archive had landed. The honest shape is a
+    # named refusal that says so, not a crash and not a claim of pre-write
+    # (AC-SFOLD12 arm d proves the backup and archive really are on disk).
+    try:
+        fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path),
+                                   prefix=".state-fold-")
+    except (IOError, OSError) as exc:
+        raise StateFoldError(
+            "E_SF_STATE_WRITE",
+            "%s could not open a temp file (%s); backup and archive already "
+            "landed, state bytes unchanged" % (path, exc),
+            stage="after-write")
     try:
         with os.fdopen(fd, "wb") as handle:
             handle.write(payload)
         os.replace(tmp, path)
-    except OSError:
+    except (IOError, OSError) as exc:
         if os.path.exists(tmp):
             os.remove(tmp)
-        raise
+        raise StateFoldError(
+            "E_SF_STATE_WRITE",
+            "%s not replaced (%s); backup and archive already landed, state "
+            "bytes unchanged" % (path, exc), stage="after-write")
     with io.open(path, "rb") as handle:
         post_raw = handle.read()
     post_state = json.loads(post_raw.decode("utf-8"))

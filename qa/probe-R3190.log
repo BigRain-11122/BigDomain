@@ -1,0 +1,54 @@
+=== Q0 healthy control ===
+Q0 in-process: clean, predicted_eq_actual = True | post_bytes = 119
+Q0 disk before: {"logs": {}, "src_os": ["state.json"], "state": 76, "state_is_dir": false}
+Q0 disk after : {"logs": {"state-log-archive-2026-11.md": 197, "state-preop-R9002.bak": 76}, "src_os": ["state.json"], "state": 119, "state_is_dir": false}
+Q0 CLI rc= 2 stderr_bytes= 0 stdout= E_FLR_SUMMARY_SHAPE summary is not a fold summary the reader recognises (needs '^R<n> fold' plus 'state-log-archive-')
+
+=== Q1 state target is a DIRECTORY (os.replace face) ===
+Q1 in-process exception: StateFoldError | is StateFoldError: True | msg: E_SF_BAD_STATE: C:\Users\sjs20\AppData\Local\Temp\probe3190-replace-tu_0u9cf\src\os\state.json ([Errno 13] Permission denied: 'C:\\Users\\sjs20\\AppData\\Local\\Temp\\probe3190-replace-tu_0u9cf\\src\\
+Q1 disk before: {"logs": {}, "src_os": ["state.json"], "state": null, "state_is_dir": true}
+Q1 disk after : {"logs": {}, "src_os": ["state.json"], "state": null, "state_is_dir": true}
+Q1 CLI: rc= 2 stderr_bytes= 0 stdout= E_FLR_SUMMARY_SHAPE summary is not a fold summary the reader recognises (needs '^R<n> fold' plus 'state-log-archive-')
+Q1 CLI stderr tail: 
+Q1 CLI --json: rc= 2 parseable= True stdout= {"after_write": false, "detail": "summary is not a fold summary the reader recognises (needs '^R<n> fold' plus 'state-log-archive-')", "error": "E_FLR_SUMMARY_S stderr_bytes= 0
+
+=== Q2 mkstemp raising (in-process, monkeypatched) ===
+Q2 exception: PermissionError | is StateFoldError: False | msg: [Errno 13] simulated mkstemp failure
+Q2 disk before: {"logs": {}, "src_os": ["state.json"], "state": 76, "state_is_dir": false}
+Q2 disk after : {"logs": {"state-log-archive-2026-11.md": 197, "state-preop-R9002.bak": 76}, "src_os": ["state.json"], "state": 76, "state_is_dir": false}
+
+=== Q3 consumer census (direct fold callers) ===
+Q3 SF.fold( -> rows= 53 live= 52
+    src/os/close_R2318.py:246:    report = SF.fold(ROOT, "R2318", 617, 3, end, summary, reserve=delta,
+    src/os/fold2_R2472.py:31:    result = SF.fold(ROOT, "R2472b", 656, 1, END, summary, execute=True)
+    src/os/fold_R2294.py:80:    report = SF.fold(ROOT, "R2294", fold_no, WINDOW_START, WINDOW_END, summary,
+    src/os/fold_R2309.py:73:    result = SF.fold(ROOT, "R2309", fold_no, 1, end, summary,
+    src/os/fold_R2311.py:73:    result = SF.fold(ROOT, "R2311", fold_no, 1, end, summary,
+Q3 state_fold.fold( -> rows= 7 live= 6
+    src/os/fold_R2364.py:87:    result = state_fold.fold(BASE, ROUND_LABEL, FOLD_NO, 1, end, summary,
+    src/os/fold_R2379.py:80:    result = state_fold.fold(BASE, ROUND_LABEL, FOLD_NO, 1, end, summary,
+    src/os/fold_R2383.py:39:    result = state_fold.fold(REPO, "R2383", FOLD_NO, WINDOW_START, WINDOW_END,
+    src/os/fold_R2429.py:80:    result = state_fold.fold(ROOT, "R2429", 641, start + 1, end + 1, summary,
+    src/os/fold_R2445.py:60:    result = state_fold.fold(ROOT, "R2445", 2445, 1, end, summary,
+Q3 except OSError -> rows= 255 live= 250
+    src/os/append_R2355_fold_residue.py:69:    except OSError:
+    src/os/append_R2453.py:80:        except OSError:
+    src/os/bare_evidence_deep_pile.py:85:            except OSError:
+    src/os/bare_evidence_deep_pile.py:126:        except OSError:
+    src/os/closeout_export_parity_wire.py:150:        except OSError:
+Q3 E_SF_BACKUP -> rows= 14 live= 4
+    src/os/state.json:44:                "2026-11-21 R3189 PRODUCT+ENGINEERING: the rc=3 error family publishes machine facts too - StateFoldError gained 
+    src/os/state_fold.py:487:        raise StateFoldError("E_SF_BACKUP",
+    src/os/state_fold.py:493:            raise StateFoldError("E_SF_BACKUP", "backup read-back differs",
+    src/os/test_state_fold_run.py:1027:              and face_ok(back_obj, "E_SF_BACKUP")
+
+=== Q4 named-code census (semantic overlap) ===
+Q4 codes in state_fold.py: ['"E_SF_ARCHIVE"', '"E_SF_ARCHIVE_MISSING"', '"E_SF_BACKUP"', '"E_SF_BAD_ARGS"', '"E_SF_BAD_HEADER"', '"E_SF_BAD_LAYOUT"', '"E_SF_BAD_STATE"', '"E_SF_BAD_SUMMARY"', '"E_SF_MARKER_COLLISION"', '"E_SF_WINDOW"']
+Q4 occupied? E_SF_STATE -> no
+Q4 occupied? E_SF_WRITE -> no
+Q4 occupied? E_SF_SAVE -> no
+
+=== Q5 byte order on the failing path ===
+Q5 refusal: StateFoldError
+Q5 state is dir: True | src/os: ["state.json"]
+Q5 logs: {}

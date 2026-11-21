@@ -1,0 +1,13 @@
+R3190 evidence: probe qa/probe-R3190.log 4268B/55 lines utf-8/lf sha256 1375d16f5caeba56 (read-only, private worlds, real subprocess CLI cases)
+R3190 probe finding: a static state-is-a-directory shape is refused by read_state at E_SF_BAD_STATE with zero bytes, so the write face is CLI-unreachable in a static world
+R3190 probe finding: mkstemp raising escapes as a raw PermissionError (is StateFoldError=False) AFTER the backup and the archive have landed, state bytes unchanged
+R3190 probe census: 52 live SF.fold/state_fold.fold call sites, none wrapping the fold in except OSError; E_SF_STATE_WRITE/WRITE/SAVE unoccupied repo-wide
+R3190 landed: E_SF_STATE_WRITE with stage after-write at both write primitives (mkstemp, os.replace); the temp file is cleaned on the replace arm; E_SF_BACKUP semantics untouched
+R3190 criteria: AC-SFOLD12 six arms landed, EXPECTED_CRITERIA 14->15, registry os-state-fold-run 14->15
+R3190 suite: SUITE PASS 15/15 qa/suite-state-fold-run-R3190.log 5623B/17 lines utf-8/lf sha256 41029b158497bef8
+R3190 peers: state_fold 7/7, state_seq 8/8, state_append 10/10, closeout_carrier 6/6 (after the matrix regen), general_writer_dialect_audit 6/6, closeout_gate 42/42
+R3190 matrix: regenerated 78385B/754 rows, --check DOC-CURRENT
+R3190 census: --write-pin (honest CACHE E_RCC_CACHE_PARTIAL reused=753/754) then --check VERDICT PASS pinned=754
+R3190 live gate: CLOSEOUT-GATE PASS files=4484 flags=0 reader_refused=0 round_main=OK census=PASS matrix=DOC-CURRENT
+R3190 carrier: bytes=39524 margin=38976 fold_needed=false layout_ok=true log_items=43
+R3190 own red: the AC-SFOLD11 arm was re-pinned 3->4 and went RED at 5 because the new face adds TWO after-write sites; re-pinned to 5 (it counts raise sites, no law relaxed)
