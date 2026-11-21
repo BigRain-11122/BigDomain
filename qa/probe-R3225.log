@@ -1,0 +1,18 @@
+R3225 probe: the numbers this company writes about its own ledger
+repo=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain
+Q1 face census (rows=N tokens, their citations, and the citations' own tokens)
+  face=board  rows_tokens=261  cited_lines=122  captured=85   cited_without_the_number=79
+  face=state  rows_tokens=38   cited_lines=12   captured=10   cited_without_the_number=11
+  face=export rows_tokens=8    cited_lines=3    captured=6    cited_without_the_number=0
+  total rows_tokens=307
+  LEDGER-row claims on all three faces=21
+Q2 decisive arm (claimed rows vs the ledger as that round committed it)
+  claims carrying a round tag=21
+  board line=2 R3224 claimed=0 committed=1 DISAGREE
+  board line=2 R3224 claimed=1 committed=1 AGREE
+  board line=3 R3224 claimed=2 committed=1 DISAGREE
+  board line=5 R3223 claimed=2 committed=1 DISAGREE
+  state line=92 R3224 claimed=1 committed=1 AGREE
+  export line=12 R3224 claimed=2 committed=1 DISAGREE
+  export line=77 R3224 claimed=2 committed=1 DISAGREE
+  measured=7 disagreements=5

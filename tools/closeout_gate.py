@@ -156,7 +156,7 @@ E_CLG_CARRIER_UNREADABLE = "E_CLG_CARRIER_UNREADABLE"
 # act; an absent ledger is rows=0 and never a refusal.
 E_CLG_LEDGER = "E_CLG_LEDGER"
 INFORMATIONAL_FACES = ("reader_refused", "plain_unusable",
-                       "reader_rescued", "flags")
+                       "reader_rescued", "flags", "claims")
 
 
 class GateRowError(Exception):
@@ -340,6 +340,38 @@ def check_ledger(root, reading=None):
                      "prev_new_sha16=%s old_sha16=%s"
                      % (name, prev_line, line, prev_sha, old_sha))
     return report["verdict"] == "OK", lines
+
+
+def check_claims(root, reading=None):
+    """Ask what the three written faces SAY the ledger holds (R3225). (ok, line)
+
+    WHY (measured this window, qa/probe-R3225.log): the board, the state log and
+    the export carry 307 `rows=<n>` tokens and 21 `LEDGER ... rows=N` claims and
+    no face had ever read one back. Five of the seven claims that carry a round
+    tag disagree with the ledger as that round's own commit recorded it, so the
+    company's own prose is the least-checked source it has.
+
+    The reading is `claim_census.census`: each claim is captured, contradicted
+    or uncaptured against a landed file it names (or against the live ledger
+    when it speaks about it). This face is INFORMATIONAL on purpose - a written
+    sentence is not a gate, and refusing on prose would make tomorrow's board
+    row unpublishable. `ok` is therefore always True; the counts are the point.
+
+    `reading` is filled with the counts so the verdict can carry them as values
+    (the same law as the ledger face), never a second parse.
+    """
+    import sys
+    sys.path.insert(0, BASE)
+    import claim_census as CC
+    result = CC.census(root)
+    if reading is not None:
+        reading.update({"claimed": result["claimed"],
+                        "captured": result["captured"],
+                        "contradicted": result["contradicted"],
+                        "uncaptured": result["uncaptured"],
+                        "rows": result["rows"],
+                        "present": result["present"]})
+    return True, CC.census_row(result)
 
 
 def check_census(root, registry=None, pin=None):
@@ -544,6 +576,7 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
         tail = ""
         carrier_row = ""
         ledger_row = ""
+        claims_row = ""
         if root is not None:
             # R3177: the carrier is the cheapest root face (one state read)
             # and the one every later face reads through, so it is asked
@@ -673,6 +706,20 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
             else:
                 face_ms["ledger"] = 0.0
                 ledger_row = ""
+            # R3225: the last face asks the question none of the others ask -
+            # what did WE SAY this ledger holds. Informational by construction
+            # (a written sentence is not a gate), so it never refuses; the
+            # counts ride into the verdict as values so a machine consumer
+            # does not have to parse the row.
+            claims_reading = {}
+            try:
+                _cl_ok, claims_row = _timed(face_ms, "claims", check_claims,
+                                            root, reading=claims_reading)
+            except (IOError, OSError, ValueError, UnicodeDecodeError) as exc:
+                face_ms.setdefault("claims", 0.0)
+                claims_row = "E_CLG_CLAIMS %s" % exc
+            if claims_reading:
+                verdict["claims"] = dict(claims_reading)
             verdict["round_main"] = "OK"
             verdict["census"] = "PASS"
             verdict["carrier"] = "OK"
@@ -696,6 +743,10 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
             ident = _baseline_identity(baseline, root)
             if ident:
                 out.append(ident)
+            # R3225: the claims reading rides LAST among the readings, so the
+            # earlier rows keep the positions readers already index by.
+            if claims_row:
+                out.append(claims_row)
         # The informational debt is never silent: a baselined file no family
         # decodes is still named on every closeout, it just does not refuse.
         out.extend(line for line in census_lines

@@ -376,11 +376,11 @@ def main():
     ok("AC-CLG8 arm a - the default face carries no timing key",
        "face_ms" not in verdict, "keys=%s" % sorted(verdict))
     ms8 = deep_v.get("face_ms") or {}
-    ok("AC-CLG8 arm b - root=ROOT publishes six named readings (R3177 added "
-       "the carrier face, R3219 the ledger face) and the PASS line is "
-       "byte-identical",
-       sorted(ms8) == ["carrier", "census", "flags", "ledger", "matrix",
-                       "round_main"]
+    ok("AC-CLG8 arm b - root=ROOT publishes seven named readings (R3177 added "
+       "the carrier face, R3219 the ledger face, R3225 the claims face) and "
+       "the PASS line is byte-identical",
+       sorted(ms8) == ["carrier", "census", "claims", "flags", "ledger",
+                       "matrix", "round_main"]
        and all(isinstance(v, float) and v >= 0.0 for v in ms8.values())
        and deep[0] == ("CLOSEOUT-GATE PASS files=%d flags=0 reader_refused=0 "
                        "gating=flags round_main=OK census=PASS "

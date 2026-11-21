@@ -8049,6 +8049,13 @@ SUITES = [
     # pinned before the third state existed (2 -> 4).
     ("frontdoor-chain-card",
      os.path.join("test_frontdoor_chain_card.py"), 4),
+    # R3225: the three written faces carried 307 `rows=<n>` tokens and nothing
+    # read one back; five of seven round-tagged `LEDGER ... rows=N` claims
+    # disagreed with the ledger as that round's own commit recorded it
+    # (qa/probe-R3225.log). AC-CLAIM1..3 (three criteria) were pinned in
+    # src/os/backlog.md BEFORE the reader existed.
+    ("claim-census",
+     os.path.join("test_claim_census.py"), 3),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files
