@@ -5043,9 +5043,11 @@ SUITES = [
     # claim; AC-SIO9 added at R3179 for carrier-gate parity; AC-SIO10 added at
     # R3180 so every write site publishes the fold door own reading; AC-SIO11
     # added at R3181 so a refused write lands nothing and every entry shape
-    # the writer emits is a shape its own reader counts.)
+    # the writer emits is a shape its own reader counts; AC-SIO12 added at
+    # R3182 so eight spaces stay disease on both faces and the gate composite
+    # is published under its own name instead of the EOL face.)
     ("os-state-io",
-     os.path.join("..", "os", "test_state_io.py"), 11),
+     os.path.join("..", "os", "test_state_io.py"), 12),
     # R2833: the one vehicle that appends to state.json. It reads through
     # state_io and gates through ledger_lines BEFORE writing, so a round
     # line that forgot its date prefix is refused at the write site rather

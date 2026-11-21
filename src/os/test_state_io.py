@@ -27,7 +27,7 @@ sys.path.insert(0, BASE)
 
 import state_io as SIO  # noqa: E402
 
-EXPECTED_CRITERIA = 11
+EXPECTED_CRITERIA = 12
 MODULE = os.path.join(BASE, "state_io.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-io"
@@ -298,8 +298,9 @@ def ac_sio10():
     written = SIO.write_canon(path, SIO.canon(clean))
     face = written["carrier"]
     arm_a = (face.get("layout_ok") is True and face.get("indent_ok") is True
-             and face.get("gate_layout_ok") is True
+             and face.get("gate_eol_ok") is True
              and face.get("gate_indent_ok") is True
+             and face.get("gate_health") is True
              and face.get("fold_readable") is True
              and face.get("agree") is True
              and written["written"] == len(clean.encode("utf-8"))
@@ -488,6 +489,115 @@ def ac_sio11():
                   (arm_a, arm_b, arm_c, arm_d, arm_e, arm_f)))
 
 
+def ac_sio12():
+    """The eight-space "two answers" was a field name, not a law split.
+
+    R3181 recorded a boundary: a uniform eight-space document reads
+    gate_layout_ok true while this module's caliber set is (2, 16). Measured
+    at R3182, the gate's layout_ok is the EOL face ONLY and its indent verdict
+    lives in indent_ok, so the composite the closeout gate actually refuses on
+    (layout_ok and indent_ok) says the same thing this module says: not clean.
+    The caliber set therefore stays (2, 16), no gate law moves, and the face
+    publishes the EOL face as gate_eol_ok plus the gate's own composite as
+    gate_health so no reader compares unlike names again.
+    """
+    import logs_toolkit as LT
+
+    folder = tmpdir()
+    shapes = (("canon16", sample_text("\r\n", 16), True),
+              ("legacy2", sample_text("\r\n", 2), True),
+              ("uniform8", sample_text("\r\n", 8), False),
+              ("mixed", sample_text("\r\n", 16).replace(
+                  " " * 16 + '"two"', " " * 8 + '"two"'), False),
+              ("barelf", sample_text("\n", 16), False))
+
+    def read(text):
+        raw = text.encode("utf-8")
+        mine = SIO.layout(text)
+        prof = LT.eol_profile(raw)
+        return mine, prof, SIO.carrier_face(raw)
+
+    # a) the eight-space shape is refused by BOTH faces, so the caliber set
+    # stays (2, 16) and no widening is needed
+    eight_mine, eight_prof, _eight_face = read(sample_text("\r\n", 8))
+    arm_a = (eight_mine["layout_ok"] is False
+             and eight_mine["indent_ok"] is False
+             and eight_prof["indent_ok"] is False
+             and eight_prof["indent_caliber"] is None
+             and tuple(SIO.LOG_ITEM_CALIBERS) == (2, 16))
+
+    # b) on every shape the published composite equals this module's verdict
+    arm_b = True
+    for name, text, want in shapes:
+        mine, prof, face = read(text)
+        health = bool(prof["layout_ok"] and prof["indent_ok"])
+        arm_b = arm_b and (mine["layout_ok"] is want
+                           and face["gate_health"] is health
+                           and face["agree"] is True
+                           and face["layout_ok"] is mine["layout_ok"])
+
+    # c) negative control: widening the caliber set to accept eight spaces
+    # makes the two faces diverge, so this criterion catches that change
+    save = SIO.LOG_ITEM_CALIBERS
+    try:
+        SIO.LOG_ITEM_CALIBERS = (2, 8, 16)
+        widened = SIO.carrier_face(sample_text("\r\n", 8).encode("utf-8"))
+    finally:
+        SIO.LOG_ITEM_CALIBERS = save
+    arm_c = (widened["layout_ok"] is True
+             and widened["gate_health"] is False
+             and widened["agree"] is False)
+
+    # d) the EOL face is published under its own name, so a reader can not
+    # mistake it for a health verdict
+    face8 = _eight_face
+    arm_d = (face8["gate_eol_ok"] is True
+             and face8["gate_indent_ok"] is False
+             and face8["gate_health"] is False
+             and "gate_layout_ok" not in face8
+             and "gate_health" in face8)
+
+    # e) no contract moved: same error codes, the fold door, the gate row and
+    # the caliber law are untouched by this round
+    source = open(MODULE, "r", encoding="utf-8").read()
+    codes = set()
+    for token in source.replace('"', " ").replace("'", " ").split():
+        if token.startswith("E_SIO_"):
+            codes.add(token.strip("(),:;"))
+    gate_src = open(os.path.join(REPO, "tools", "closeout_gate.py"),
+                    "rb").read().decode("utf-8")
+    arm_e = (codes == set(("E_SIO_BOM", "E_SIO_UTF8", "E_SIO_JSON",
+                           "E_SIO_LAYOUT", "E_SIO_BACK", "E_SIO_PREDICT",
+                           "E_SIO_READ"))
+             and 'canonical = bool(prof["layout_ok"] and prof["indent_ok"])'
+             in gate_src
+             and "only if only in (2, 16)" in open(
+                 os.path.join(BASE, "logs_toolkit.py"), "rb").read().decode(
+                     "utf-8"))
+
+    # f) hygiene and the live carrier still read the same on both faces
+    try:
+        SIO.read_raw(MODULE).decode("ascii")
+        ascii_ok = True
+    except UnicodeDecodeError:
+        ascii_ok = False
+    offline = not any(token in source for token in
+                      ("import urllib", "import requests", "import socket",
+                       "import subprocess", "http://", "https://"))
+    live = os.path.join(BASE, "state.json")
+    live_ok = True
+    if os.path.exists(live):
+        live_face = SIO.carrier_face(SIO.read_raw(live))
+        live_ok = (live_face["agree"] is True
+                   and live_face.get("gate_health") is True)
+    arm_f = ascii_ok and offline and live_ok
+    check(arm_a and arm_b and arm_c and arm_d and arm_e and arm_f,
+          "AC-SIO12 eight spaces stay disease on both faces, composite named "
+          "(a%s b%s c%s d%s e%s f%s)"
+          % tuple("+" if arm else "-" for arm in
+                  (arm_a, arm_b, arm_c, arm_d, arm_e, arm_f)))
+
+
 def main():
     ac_sio1()
     ac_sio2()
@@ -500,6 +610,7 @@ def main():
     ac_sio9()
     ac_sio10()
     ac_sio11()
+    ac_sio12()
     total = PASSES + FAILS
     print("SUITE %s %d/%d criteria=%d"
           % ("PASS" if FAILS == 0 and total == EXPECTED_CRITERIA else "FAIL",

@@ -291,6 +291,18 @@ def carrier_face(raw):
     here while the fold door reads only its own caliber), and a document this
     face cannot measure is reported as an error instead of refused - a reading
     must never change the write contract.
+
+    The name `layout_ok` means three different things across the shipped tree
+    (R3182 measured): in logs_toolkit.eol_profile it is the EOL face ONLY, in
+    this module it is EOL plus count plus indent, and in the closeout gate
+    CARRIER row it is the conjunction of the first two. Publishing the gate
+    EOL face under the name `gate_layout_ok` therefore invited a reader to
+    compare two different concepts and see a split that does not exist on the
+    composite: a uniform eight-space file reads EOL-clean and indent-dirty on
+    the gate, exactly as this module reads it un-clean, so both refuse it.
+    The EOL face is published as `gate_eol_ok` and the composite the closeout
+    gate actually uses is published as `gate_health`; `agree` compares like
+    with like.
     """
     import logs_toolkit  # lazy: the gate imports nothing from this module
     try:
@@ -300,17 +312,19 @@ def carrier_face(raw):
         log_len = (len(payload.get("log") or [])
                    if isinstance(payload, dict) else 0)
         prof = logs_toolkit.eol_profile(raw)
-        gate_layout = bool(prof.get("layout_ok"))
+        gate_eol = bool(prof.get("layout_ok"))
         gate_indent = bool(prof.get("indent_ok"))
+        gate_health = gate_eol and gate_indent
         return {
             "bytes": len(raw),
             "layout_ok": mine["layout_ok"],
             "indent_ok": mine["indent_ok"],
-            "gate_layout_ok": gate_layout,
+            "gate_eol_ok": gate_eol,
             "gate_indent_ok": gate_indent,
+            "gate_health": gate_health,
             "fold_readable": (logs_toolkit.split_ps_layout(text, log_len)
                               is not None),
-            "agree": mine["layout_ok"] == (gate_layout and gate_indent),
+            "agree": mine["layout_ok"] == gate_health,
         }
     except StateIOError as exc:
         return {"bytes": len(raw), "error": exc.code, "agree": False}

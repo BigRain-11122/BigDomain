@@ -1,0 +1,75 @@
+=== R3182 PROBE (read-only; fixtures in a private temp dir) ===
+SHAPE canon16    bytes=100 crlf=8 bare_lf=0
+  state_io.layout      layout_ok=True  indent_ok=True  off=0 items=2/2
+  eol_profile          layout_ok=True  indent_ok=True  caliber=16 anomaly=0
+  gate composite       health=True    (eol layout_ok and indent_ok)
+  carrier_face         keys=agree,bytes,fold_readable,gate_indent_ok,gate_layout_ok,indent_ok,layout_ok
+  carrier_face values  {"agree": true, "fold_readable": true, "gate_indent_ok": true, "gate_layout_ok": true, "indent_ok": true, "layout_ok": true}
+  split_ps_layout      fold_readable=True
+  VERDICT              state==composite:True
+SHAPE legacy2    bytes=72 crlf=8 bare_lf=0
+  state_io.layout      layout_ok=True  indent_ok=True  off=0 items=2/2
+  eol_profile          layout_ok=True  indent_ok=True  caliber=2 anomaly=0
+  gate composite       health=True    (eol layout_ok and indent_ok)
+  carrier_face         keys=agree,bytes,fold_readable,gate_indent_ok,gate_layout_ok,indent_ok,layout_ok
+  carrier_face values  {"agree": true, "fold_readable": true, "gate_indent_ok": true, "gate_layout_ok": true, "indent_ok": true, "layout_ok": true}
+  split_ps_layout      fold_readable=True
+  VERDICT              state==composite:True
+SHAPE uniform8   bytes=84 crlf=8 bare_lf=0
+  state_io.layout      layout_ok=False indent_ok=False off=2 items=2/2
+  eol_profile          layout_ok=True  indent_ok=False caliber=None anomaly=2
+  gate composite       health=False   (eol layout_ok and indent_ok)
+  carrier_face         keys=agree,bytes,fold_readable,gate_indent_ok,gate_layout_ok,indent_ok,layout_ok
+  carrier_face values  {"agree": true, "fold_readable": false, "gate_indent_ok": false, "gate_layout_ok": true, "indent_ok": false, "layout_ok": false}
+  split_ps_layout      fold_readable=False
+  VERDICT              state==composite:True
+SHAPE mixed      bytes=92 crlf=8 bare_lf=0
+  state_io.layout      layout_ok=False indent_ok=False off=2 items=2/2
+  eol_profile          layout_ok=True  indent_ok=False caliber=None anomaly=2
+  gate composite       health=False   (eol layout_ok and indent_ok)
+  carrier_face         keys=agree,bytes,fold_readable,gate_indent_ok,gate_layout_ok,indent_ok,layout_ok
+  carrier_face values  {"agree": true, "fold_readable": false, "gate_indent_ok": false, "gate_layout_ok": true, "indent_ok": false, "layout_ok": false}
+  split_ps_layout      fold_readable=False
+  VERDICT              state==composite:True
+SHAPE barelf16   bytes=92 crlf=0 bare_lf=8
+  state_io.layout      layout_ok=False indent_ok=True  off=0 items=2/2
+  eol_profile          layout_ok=False indent_ok=True  caliber=16 anomaly=0
+  gate composite       health=False   (eol layout_ok and indent_ok)
+  carrier_face         keys=agree,bytes,fold_readable,gate_indent_ok,gate_layout_ok,indent_ok,layout_ok
+  carrier_face values  {"agree": true, "fold_readable": false, "gate_indent_ok": true, "gate_layout_ok": false, "indent_ok": true, "layout_ok": false}
+  split_ps_layout      fold_readable=False
+  VERDICT              state==composite:True
+SHAPE live       bytes=69980 crlf=90 bare_lf=0
+  state_io.layout      layout_ok=True  indent_ok=True  off=0 items=79/79
+  eol_profile          layout_ok=True  indent_ok=True  caliber=16 anomaly=0
+  gate composite       health=True    (eol layout_ok and indent_ok)
+  carrier_face         keys=agree,bytes,fold_readable,gate_indent_ok,gate_layout_ok,indent_ok,layout_ok
+  carrier_face values  {"agree": true, "fold_readable": true, "gate_indent_ok": true, "gate_layout_ok": true, "indent_ok": true, "layout_ok": true}
+  split_ps_layout      fold_readable=True
+  VERDICT              state==composite:True
+
+=== Q1: are the two layout_ok the same concept? ===
+eol_profile.layout_ok source line: ["'layout_ok': bare_lf == 0 and lone_cr == 0,"]
+eol_profile.indent_ok source line: ["'indent_ok': (not log_block_found) or indent_anomaly == 0,"]
+item_indent_caliber returns only 2 or 16: True
+closeout_gate canonical expression: ['canonical = bool(prof["layout_ok"] and prof["indent_ok"])']
+closeout_gate CARRIER row publishes layout_ok=<canonical>: True ['row = ("CARRIER bytes=%d gate=%d margin=%d fold_needed=%s layout_ok=%s "']
+
+=== Q2: does the COMPOSITE face really disagree on 8 spaces? ===
+barelf16   state=False composite=False agree=True gate_layout_ok=False gate_indent_ok=True
+canon16    state=True composite=True agree=True gate_layout_ok=True gate_indent_ok=True
+legacy2    state=True composite=True agree=True gate_layout_ok=True gate_indent_ok=True
+live       state=True composite=True agree=True gate_layout_ok=True gate_indent_ok=True
+mixed      state=False composite=False agree=True gate_layout_ok=True gate_indent_ok=False
+uniform8   state=False composite=False agree=True gate_layout_ok=True gate_indent_ok=False
+
+=== Q3: who reads the published keys, and does AC-SIO9 pin 8 spaces? ===
+carrier_face <- ['src/os/state_io.py', 'src/os/test_state_io.py']
+gate_indent_ok <- ['src/os/state_io.py', 'src/os/test_state_io.py']
+gate_layout_ok <- ['src/os/state_io.py', 'src/os/test_state_io.py']
+AC-SIO9 body mentions an 8-space shape: True
+AC-SIO9 shapes declared: ['mixed = sample_text("\\r\\n", 16).replace(" " * 16 + \'"two"\',', 'shapes = (("legacy2.json", sample_text("\\r\\n", 2), True),', '("canon16.json", sample_text("\\r\\n", 16), True),', '("barelf.json", sample_text("\\n", 16), False))']
+
+=== NEGATIVE CONTROL: widening the caliber set must be caught ===
+widened caliber: state layout_ok=True gate_health=False agree=False
+restored caliber set: (2, 16)
