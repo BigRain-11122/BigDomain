@@ -183,6 +183,7 @@
     "ledger-apimarket-searchstock",
     "ledger-apimarket-selleranswers",
     "ledger-apimarket-sellercategorymix",
+    "ledger-apimarket-sellerchurnmonths",
     "ledger-apimarket-sellerclaimmonths",
     "ledger-apimarket-sellercohort",
     "ledger-apimarket-sellerdelistmonths",

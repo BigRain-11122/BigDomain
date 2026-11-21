@@ -1,0 +1,9 @@
+PASS AC-SSC1: env_keys=22 exact=True row_keys=True rows=6 empty=(0, 0, [])
+PASS AC-SSC2: grid=['2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06'] jan_as_of=2026-01-31T23:59:59Z jan_active=2 dana_months=6 mar_active=1
+PASS AC-SSC3: may=(2, 0, 0, 1.0) conservation=True joined=5/5 departed=2/2
+PASS AC-SSC4: jan=(2, 2, None) feb=(1, 1, 1.0) apr=(1, 0, 1) totals=new4/ret1/joined5
+PASS AC-SSC5: feb(ret1/exp1) mar(dep2/ret0) totals(ret1/exp5/dep2)
+PASS AC-SSC6: mar_tenure=1.5 env_mean=1.5 longest=2 peak=2026-02/3 gap_feb=(0, 1.0) gap_peak=2026-01
+PASS AC-SSC7: identity=True lifetime=4 supply_lifetime=4 cohort_months=['2026-01', '2026-02', '2026-04', '2026-06'] mar=(1, 2)
+PASS AC-SSC8: digests_same=True tx_same=True repeat=True cross=True source_clean=True wired=True
+SUITE PASS 8/8

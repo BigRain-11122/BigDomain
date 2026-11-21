@@ -1,0 +1,25 @@
+=== Q1 shipped faces on this world ===
+api_market_supply_months rows=6 keys=as_of,closed_count,in_stock_listing_count,live_listing_count,month,net_shop_change,opened_count,remaining_units,seller_count,sold_out_listing_count,units_added,units_sold,unlimited_listing_count
+  supply month=2026-01 live=3 seller_count=2 opened=3 closed=0
+  supply month=2026-02 live=3 seller_count=3 opened=1 closed=1
+  supply month=2026-03 live=1 seller_count=1 opened=0 closed=2
+  supply month=2026-04 live=2 seller_count=2 opened=1 closed=0
+  supply month=2026-05 live=2 seller_count=2 opened=0 closed=0
+  supply month=2026-06 live=3 seller_count=3 opened=1 closed=0
+api_market_seller_cohort months=['2026-01', '2026-02', '2026-04', '2026-06']
+  cohort month=2026-01 sellers=2 new=2 returning=0
+  cohort month=2026-02 sellers=1 new=1 returning=0
+  cohort month=2026-04 sellers=1 new=0 returning=1
+  cohort month=2026-06 sellers=1 new=1 returning=0
+
+=== Q2/Q3 independent month-end register + churn ===
+grid=['2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06']
+  2026-01 active=2 prev=0 joined=2 new=2 returning=0 departed=0 register=['usr:alice', 'usr:dana']
+  2026-02 active=3 prev=2 joined=1 new=1 returning=0 departed=0 register=['usr:alice', 'usr:bob', 'usr:dana']
+  2026-03 active=1 prev=3 joined=0 new=0 returning=0 departed=2 register=['usr:dana']
+    departed_tenure_months={'usr:alice': 2, 'usr:bob': 1}
+  2026-04 active=2 prev=1 joined=1 new=0 returning=1 departed=0 register=['usr:bob', 'usr:dana']
+  2026-05 active=2 prev=2 joined=0 new=0 returning=0 departed=0 register=['usr:bob', 'usr:dana']
+  2026-06 active=3 prev=2 joined=1 new=1 returning=0 departed=0 register=['usr:bob', 'usr:carol', 'usr:dana']
+lifetime register sellers=['usr:alice', 'usr:bob', 'usr:carol', 'usr:dana']
+sold-out check: d1 alive at 2026-01-31 and its owner still in register = True

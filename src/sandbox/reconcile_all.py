@@ -3160,6 +3160,14 @@ SUITES = [
     # and pinned in the R3158 row BEFORE the code.
     ("ledger-apimarket-sellerdelistmonths", os.path.join(
         "ledger", "test_apimarket_sellerdelistmonths.py"), 8),
+    # market seller register churn (month-end register sampled through the
+    # shared point-in-time law, a sold-out shelf still keeps its seller,
+    # joined split into new versus returning, whole-seller exits separated
+    # from partial retreats, departing tenure and the earlier-month peak
+    # tie) - criteria AC-SSC1..AC-SSC8 registered in the R2248 d
+    # explore-queue seed row and pinned in the R3159 row BEFORE the code.
+    ("ledger-apimarket-sellerchurnmonths", os.path.join(
+        "ledger", "test_apimarket_sellerchurnmonths.py"), 8),
     # buyer-side monthly claim flow (a claim books in the UTC month of its
     # own opened_utc, a later refund never re-dates it nor invents a row
     # in the refund month, honest zero months carried flat, the five-state

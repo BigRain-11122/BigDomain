@@ -18265,3 +18265,208 @@ class APIMarketFace:
         out["disclaimer"] = self.disclaimer
         out["months"] = rows
         return out
+
+    def api_market_seller_churn_months(self):
+        """Market-wide monthly seller REGISTER churn (criteria
+        AC-SSC1..AC-SSC8 pre-registered in the R2248 d explore-queue
+        seed row and pinned in the R3159 row BEFORE this code existed;
+        the seed row's AC-MSC prefix collided with the shipped seller
+        COHORT family (AC-MSC1..AC-MSC8), so the churn prefix is AC-SSC
+        and the collision is named rather than silently reused).
+
+        The market already had two half answers. api_market_supply_months
+        reports a month-end seller BREADTH snapshot (its per-month
+        seller_count), and api_market_seller_cohort counts who first
+        listed or re-listed in a month - but the cohort grid only
+        carries months that hold a listing EVENT, so the month in which
+        two sellers left and nobody listed has no cohort row at all, and
+        neither face answers who JOINED or LEFT the register, whether a
+        seller left entirely or only pulled one shelf, or how long a
+        departing seller had been in the register. Breadth holding still
+        hid the churn underneath.
+
+        Register law (AC-SSC2): a seller is in the register at one
+        instant when at least one of their listings holds an open cycle
+        there under the shared point-in-time law (_alive_at_instant), so
+        the monthly sample is taken at that month's LAST second and a
+        SOLD-OUT shelf still keeps its seller in the register. Purchases
+        and refunds move no membership and are deliberately not grid
+        events; publication, re-listing and delisting are.
+
+        Join and leave law (AC-SSC4): joined = this month-end register
+        minus the previous month-end register, split into NEW sellers
+        (their first register month is this month) and RETURNING sellers
+        (they had been in the register before and came back, so a
+        re-listing after a dark month reads returning, not new).
+        departed = previous register minus this one. The grid's first
+        month is a bootstrap month: its previous register is empty, so
+        joined equals active and both rates are None - never a fabricated
+        0.0.
+
+        Partial versus full exit (AC-SSC5): departed is a WHOLE-seller
+        exit (no live shelf left anywhere), while a seller who closed at
+        least one shelf this month and is still in the register is
+        counted as retreating, and one who opened or re-listed at least
+        one shelf and stayed is counted as expanding. A seller closing
+        their LAST shelf is departed, never retreating, because the two
+        readings answer different questions.
+
+        Grid and conservation (AC-SSC3): month rows run contiguously from
+        the first to the last membership event month, a month with no
+        event carries an honest zero row, every row's net_change equals
+        active minus the previous active, and both running accumulators
+        end on the envelope totals.
+
+        Tenure and peak laws (AC-SSC6): a departing seller's tenure is
+        the month index they left in minus the month index of their first
+        register month (inclusive of both endpoints), averaged with a
+        four-decimal mean and reported with the longest; the peak is the
+        highest active count with ties resolved to the EARLIER month and
+        a zero-active month is never a peak.
+
+        Cross-face identity (AC-SSC7): every month's active count agrees
+        value for value with api_market_supply_months' seller_count for
+        the same month, and the lifetime seller_count is the number of
+        sellers ever present in the register.
+
+        No arguments, so no gate: pure read, zero row mutations and zero
+        token movement."""
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, dev_account, listed_utc"
+                " FROM apimarket_listings ORDER BY listing_id"
+            ).fetchall()
+            relists = self._conn.execute(
+                "SELECT listing_id, relisted_utc"
+                " FROM apimarket_relistings ORDER BY relist_id"
+            ).fetchall()
+            delists = self._conn.execute(
+                "SELECT listing_id, delisted_utc"
+                " FROM apimarket_delistings ORDER BY delist_id"
+            ).fetchall()
+            owner = {}
+            opened = {}
+            closed = {}
+            events = set()
+            for lid, dev, stamp in listings:
+                lid = int(lid)
+                owner[lid] = str(dev)
+                month = str(stamp)[:7]
+                events.add(month)
+                opened.setdefault(month, set()).add(str(dev))
+            for lid, stamp in relists:
+                month = str(stamp)[:7]
+                events.add(month)
+                opened.setdefault(month, set()).add(owner[int(lid)])
+            for lid, stamp in delists:
+                month = str(stamp)[:7]
+                events.add(month)
+                closed.setdefault(month, set()).add(owner[int(lid)])
+            months = _contiguous_months(sorted(events))
+            registers = {}
+            for month in months:
+                as_of = _month_end(month)
+                present = set()
+                for lid, dev, listed in listings:
+                    if self._alive_at_instant(
+                            int(lid), str(listed), as_of):
+                        present.add(str(dev))
+                registers[month] = present
+
+            rows = []
+            first_seen = {}
+            previous = set()
+            running_joined = 0
+            running_departed = 0
+            tenures_pool = []
+            for month in months:
+                now = registers[month]
+                for dev in now:
+                    first_seen.setdefault(dev, month)
+                joined = now - previous
+                new = set(dev for dev in joined
+                          if first_seen.get(dev) == month)
+                returning = joined - new
+                departed = previous - now
+                tenures = [months.index(month)
+                           - months.index(first_seen[dev])
+                           for dev in departed]
+                tenures_pool.extend(tenures)
+                running_joined += len(joined)
+                running_departed += len(departed)
+                prev_active = len(previous)
+                rows.append({
+                    "month": month,
+                    "as_of": _month_end(month),
+                    "active_seller_count": len(now),
+                    "joined_seller_count": len(joined),
+                    "new_seller_count": len(new),
+                    "returning_seller_count": len(returning),
+                    "departed_seller_count": len(departed),
+                    "departed_tenure_months_mean": (
+                        round(float(sum(tenures)) / len(tenures), 4)
+                        if tenures else None),
+                    "retention_rate": (
+                        round(float(len(now & previous)) / prev_active, 4)
+                        if prev_active else None),
+                    "churn_rate": (
+                        round(float(len(departed)) / prev_active, 4)
+                        if prev_active else None),
+                    "retreating_seller_count": len(
+                        closed.get(month, set()) & now),
+                    "expanding_seller_count": len(
+                        opened.get(month, set()) & now),
+                    "net_change": len(joined) - len(departed),
+                    "running_joined_count": running_joined,
+                    "running_departed_count": running_departed,
+                })
+                previous = now
+
+        active_rows = [row for row in rows
+                       if row["active_seller_count"] > 0]
+        peak_month = None
+        peak_active = None
+        for row in rows:
+            if row["active_seller_count"] > 0 and (
+                    peak_active is None
+                    or row["active_seller_count"] > peak_active):
+                peak_month = row["month"]
+                peak_active = row["active_seller_count"]
+        return {
+            "scope": "market",
+            "month_count": len(rows),
+            "active_month_count": len(active_rows),
+            "seller_count": len(first_seen),
+            "joined_count": sum(row["joined_seller_count"]
+                                for row in rows),
+            "new_seller_count": sum(row["new_seller_count"]
+                                    for row in rows),
+            "returning_seller_count": sum(
+                row["returning_seller_count"] for row in rows),
+            "departed_count": sum(row["departed_seller_count"]
+                                  for row in rows),
+            "retreating_count": sum(row["retreating_seller_count"]
+                                    for row in rows),
+            "expanding_count": sum(row["expanding_seller_count"]
+                                   for row in rows),
+            "mean_tenure_of_departed_months": (
+                round(float(sum(tenures_pool)) / len(tenures_pool), 4)
+                if tenures_pool else None),
+            "longest_departed_tenure_months": (
+                max(tenures_pool) if tenures_pool else None),
+            "peak_month": peak_month,
+            "peak_active_seller_count": peak_active,
+            "first_month": rows[0]["month"] if rows else None,
+            "last_month": rows[-1]["month"] if rows else None,
+            "latest_month_active_seller_count": (
+                rows[-1]["active_seller_count"] if rows else 0),
+            "latest_month_joined_count": (
+                rows[-1]["joined_seller_count"] if rows else 0),
+            "latest_month_departed_count": (
+                rows[-1]["departed_seller_count"] if rows else 0),
+            "net_seller_change": (
+                rows[-1]["active_seller_count"]
+                - rows[0]["active_seller_count"] if rows else None),
+            "disclaimer": self.disclaimer,
+            "months": rows,
+        }
