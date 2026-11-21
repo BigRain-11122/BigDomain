@@ -5,20 +5,20 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3172 PRODUCT+ENGINEERING: the matrix document's LIVE leg is now the leg the DOCUMENT records - nine reconcile suites that had gone red together (each carrying its own newest-first helper) read 8/8 and 6/6 x8 again, while a newest PASS in qa/ is demoted to a fallback and still reads EVIDENCE-FACE when it differs from the record.",
+    "current": "2026-11-21 R3173 PRODUCT+ENGINEERING: the board's own pre-registered gate answered NO CHANGE, and the answer is measured rather than argued - the whole-pile fallback would have to return the very same leg as the runner-name family for the change to be honest, and on this tree it does not (newest PASS overall is qa/authorize-R1719.log 07:40, newest family PASS is qa/reconcile-all-R2739.log 11-15), so live_pass_leg keeps reading the pile and the hole is named instead of papered over.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/run-R3172.log (1325B, 2026-11-21)",
-    "latest_evidence": "qa/run-R3172.log (1325B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3173.log (831513B, 2026-11-21)",
+    "latest_evidence": "qa/probe-R3173.log (831513B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3172] next window (<=48h): (0) MAIN — **回落腿仍是「带天花板的整堆走查」，而线上默认读取走的是「族优先」走查**：本轮实测 `newest_pass_leg()` 在该 756 文件堆上返回 `None`（天花板 64，族优先 `walk-leg` 只解 12 件即中），于是「文档记录不可用」时 `live_pass_leg` 读不到任何腿。先按同例只读测量两问：(a) 全堆 PASS 腿在 mtime 序里落在天花板之后多远、要解多少件才中（成本曲线一条，非猜）；(b) 还有哪些套件/模块仍各自持有 `getmtime` 版「最新 PASS」助手（重复助手普查，具名表）。只有测出「族优先能稳定给出同一条腿且成本远低」才让回落改调族优先并保留一条「整堆饿死=读 None」的负控臂，否则只记账。**先落板再动代码**（实测入口=`tmp/probe_R3173.py`）。备选=`table_shape` 同款 import 白名单是否还有别处副本。产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 仍零 open。",
-    "next_milestone_due": "2026-11-23T17:40:56+08:00",
-    "updated_at": "2026-11-21T17:40:56+08:00",
+    "next_milestone": "[R3173] next window (<=48h): (0) MAIN — **回落洞已被确认但未修，且原判据是概率事件**：`live_pass_leg` 在「文档记录不可用」时读 `newest_pass_leg`，而该腿在本树 64 件天花板处饿死（本轮实测 `None`）。下一窗先只读测量两问：(a) 把「记录不可用」模拟出来（文档记录指向缺失/非 PASS 的文件），8 个 reconcile 套件的 `leg(\"PASS\")` 与 `table_shape.pass_legs()` 各自实际读到哪一条、判词变不变——即**改回落是否只改失败信息、不改任何 verdict**（若是，则该改动无消费者，应具名关行而不是实现）；(b) 那 5 处「先问 live_pass_leg、仍留整堆副本」的包装，在记录不可用时是否自动掉进同一饿死（成本证明）。只有测出「改回落会翻转某个真实 verdict 或让某消费者从 None 变成可用腿」才按 JUDGED-CHANGED 重钉并实现（含「族全未命中=读 None」负控）；否则登记为「无消费者，关行」并回 P2/P3 队头。备选=队列地板债（tech/explore 种子行，每条带实测出处）。产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 仍零 open。",
+    "next_milestone_due": "2026-11-23T17:50:54+08:00",
+    "updated_at": "2026-11-21T17:50:54+08:00",
     "heartbeat": {
-      "tick": 3172,
-      "state_tick": 3172,
+      "tick": 3173,
+      "state_tick": 3173,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -39,7 +39,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-21 R3172 PRODUCT+ENGINEERING: the matrix document's LIVE leg is now the leg the DOCUMENT records - nine reconcile suites that had gone red together (each carrying its own newest-first helper) read 8/8 and 6/6 x8 again, while a newest PASS in qa/ is demoted to a fallback and still reads EVIDENCE-FACE when it differs from the record.",
+  "current": "2026-11-21 R3173 PRODUCT+ENGINEERING: the board's own pre-registered gate answered NO CHANGE, and the answer is measured rather than argued - the whole-pile fallback would have to return the very same leg as the runner-name family for the change to be honest, and on this tree it does not (newest PASS overall is qa/authorize-R1719.log 07:40, newest family PASS is qa/reconcile-all-R2739.log 11-15), so live_pass_leg keeps reading the pile and the hole is named instead of papered over.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3172 PRODUCT+ENGINEERING: the matrix document's LIVE leg is now the leg the DOCUMENT records - nine reconcile suites that had gone red together (each carrying its own newest-first helper) read 8/8 and 6/6 x8 again, while a newest PASS in qa/ is demoted to a fallback and still reads EVIDENCE-FACE when it differs from the record.",
-  "export_ts": "2026-11-21T17:40:56+08:00",
+  "do": "2026-11-21 R3173 PRODUCT+ENGINEERING: the board's own pre-registered gate answered NO CHANGE, and the answer is measured rather than argued - the whole-pile fallback would have to return the very same leg as the runner-name family for the change to be honest, and on this tree it does not (newest PASS overall is qa/authorize-R1719.log 07:40, newest family PASS is qa/reconcile-all-R2739.log 11-15), so live_pass_leg keeps reading the pile and the hole is named instead of papered over.",
+  "export_ts": "2026-11-21T17:50:54+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/run-R3172.log (1325B, 2026-11-21)",
-  "next_milestone": "[R3172] next window (<=48h): (0) MAIN — **回落腿仍是「带天花板的整堆走查」，而线上默认读取走的是「族优先」走查**：本轮实测 `newest_pass_leg()` 在该 756 文件堆上返回 `None`（天花板 64，族优先 `walk-leg` 只解 12 件即中），于是「文档记录不可用」时 `live_pass_leg` 读不到任何腿。先按同例只读测量两问：(a) 全堆 PASS 腿在 mtime 序里落在天花板之后多远、要解多少件才中（成本曲线一条，非猜）；(b) 还有哪些套件/模块仍各自持有 `getmtime` 版「最新 PASS」助手（重复助手普查，具名表）。只有测出「族优先能稳定给出同一条腿且成本远低」才让回落改调族优先并保留一条「整堆饿死=读 None」的负控臂，否则只记账。**先落板再动代码**（实测入口=`tmp/probe_R3173.py`）。备选=`table_shape` 同款 import 白名单是否还有别处副本。产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 仍零 open。",
+  "latest_evidence": "qa/probe-R3173.log (831513B, 2026-11-21)",
+  "next_milestone": "[R3173] next window (<=48h): (0) MAIN — **回落洞已被确认但未修，且原判据是概率事件**：`live_pass_leg` 在「文档记录不可用」时读 `newest_pass_leg`，而该腿在本树 64 件天花板处饿死（本轮实测 `None`）。下一窗先只读测量两问：(a) 把「记录不可用」模拟出来（文档记录指向缺失/非 PASS 的文件），8 个 reconcile 套件的 `leg(\"PASS\")` 与 `table_shape.pass_legs()` 各自实际读到哪一条、判词变不变——即**改回落是否只改失败信息、不改任何 verdict**（若是，则该改动无消费者，应具名关行而不是实现）；(b) 那 5 处「先问 live_pass_leg、仍留整堆副本」的包装，在记录不可用时是否自动掉进同一饿死（成本证明）。只有测出「改回落会翻转某个真实 verdict 或让某消费者从 None 变成可用腿」才按 JUDGED-CHANGED 重钉并实现（含「族全未命中=读 None」负控）；否则登记为「无消费者，关行」并回 P2/P3 队头。备选=队列地板债（tech/explore 种子行，每条带实测出处）。产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 仍零 open。",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -165,7 +165,7 @@
   },
   "results": [
     [
-      "3172",
+      "3173",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -179,21 +179,21 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 88,
+    "log_lines_in_window": 94,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 15,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 6,
     "queue_explore_open": 1
   },
-  "state_bytes": 76009,
-  "next_milestone_due": "2026-11-23T17:40:56+08:00",
+  "state_bytes": 81081,
+  "next_milestone_due": "2026-11-23T17:50:54+08:00",
   "heartbeat": {
-    "tick": 3172,
-    "state_tick": 3172,
+    "tick": 3173,
+    "state_tick": 3173,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
