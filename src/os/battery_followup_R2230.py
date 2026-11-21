@@ -1,4 +1,4 @@
-﻿# battery_followup_R2230.py - run the post-RUNNER battery sections
+# battery_followup_R2230.py - run the post-RUNNER battery sections
 # (matrix regen+check, fingerprint --check, profile --daily --check,
 # census --update-baseline then --check), then append all sections
 # plus a VERDICT line to the R2230 RUNNER evidence log.

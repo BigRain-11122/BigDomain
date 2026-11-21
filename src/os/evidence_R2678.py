@@ -1,4 +1,4 @@
-﻿"""Single-writer evidence for the R2678 prefix-free ack face.
+"""Single-writer evidence for the R2678 prefix-free ack face.
 
 Runs the suite twice in this process and writes each run through ONE utf-8 LF
 writer, never a shell redirection, then reports the sha16 of both files so a

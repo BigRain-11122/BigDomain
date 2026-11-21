@@ -1,4 +1,4 @@
-﻿"""One-off: fold the R2459/R2460 log window 1..17 at a true round-block boundary.
+"""One-off: fold the R2459/R2460 log window 1..17 at a true round-block boundary.
 
 Line 17 is the R2460 push line, the last item of that round, and line 18 opens
 R2461 - so the whole R2459 and R2460 blocks leave the live log; line 1 is the

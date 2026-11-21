@@ -1,0 +1,278 @@
+Q1 total_py=4713 bom_py=80
+  bom .codely-cli/tmp/amend_R1975.py bytes=1323
+  bom .codely-cli/tmp/append_r2861.py bytes=5846
+  bom .codely-cli/tmp/board2845.py bytes=6134
+  bom .codely-cli/tmp/checkbox_flip_R1975.py bytes=845
+  bom .codely-cli/tmp/chk.py bytes=160
+  bom .codely-cli/tmp/cl.py bytes=363
+  bom .codely-cli/tmp/claim_brm.py bytes=2370
+  bom .codely-cli/tmp/close2845.py bytes=5200
+  bom .codely-cli/tmp/closeout_R2789.py bytes=4560
+  bom .codely-cli/tmp/dbg_cd7.py bytes=253
+  bom .codely-cli/tmp/dbg_cd7b.py bytes=436
+  bom .codely-cli/tmp/dbg_tail_r1937.py bytes=497
+  bom .codely-cli/tmp/derive-export.py bytes=225
+  bom .codely-cli/tmp/derive_law_status.py bytes=1298
+  bom .codely-cli/tmp/diag_fsw.py bytes=360
+  bom .codely-cli/tmp/export_flush_R1700.py bytes=5788
+  bom .codely-cli/tmp/export_inspect_R1975.py bytes=967
+  bom .codely-cli/tmp/export_refresh2_R1975.py bytes=1641
+  bom .codely-cli/tmp/five_silence_R1975.py bytes=1130
+  bom .codely-cli/tmp/fix-tech-tail.py bytes=1412
+  bom .codely-cli/tmp/fix.py bytes=825
+  bom .codely-cli/tmp/fix_addendum_dialect_R1952.py bytes=1607
+  bom .codely-cli/tmp/fold2845.py bytes=465
+  bom .codely-cli/tmp/fold_iterate14.py bytes=1462
+  bom .codely-cli/tmp/fold_r1466_dump.py bytes=156
+  bom .codely-cli/tmp/fold_r1466_probe.py bytes=466
+  bom .codely-cli/tmp/fold_r1466_probe2.py bytes=889
+  bom .codely-cli/tmp/fold_r1466_probe3.py bytes=1063
+  bom .codely-cli/tmp/fold_r1466_verify.py bytes=1213
+  bom .codely-cli/tmp/fold_r403_analyze.py bytes=2888
+  bom .codely-cli/tmp/fp_probe.py bytes=467
+  bom .codely-cli/tmp/gord_tail_R1975.py bytes=471
+  bom .codely-cli/tmp/indent_cont.py bytes=640
+  bom .codely-cli/tmp/indent_probe_R1975.py bytes=514
+  bom .codely-cli/tmp/insp_R1971.py bytes=553
+  bom .codely-cli/tmp/inspect.py bytes=1673
+  bom .codely-cli/tmp/legs/leg_fold_tokens_R2892c.py bytes=2084
+  bom .codely-cli/tmp/legwatch-arms-R2890.py bytes=2201
+  bom .codely-cli/tmp/mk-cbe-ev.py bytes=2907
+  bom .codely-cli/tmp/negctl_rp7_rp8.py bytes=5091
+  bom .codely-cli/tmp/peek.py bytes=264
+  bom .codely-cli/tmp/pin2845.py bytes=3187
+  bom .codely-cli/tmp/prep1.py bytes=829
+  bom .codely-cli/tmp/prep2.py bytes=1329
+  bom .codely-cli/tmp/prep3.py bytes=259
+  bom .codely-cli/tmp/prep4.py bytes=775
+  bom .codely-cli/tmp/prep5.py bytes=941
+  bom .codely-cli/tmp/prepend-R2890.py bytes=520
+  bom .codely-cli/tmp/probe_r979_pre.py bytes=1824
+  bom .codely-cli/tmp/probe_r979_tok.py bytes=2116
+  bom .codely-cli/tmp/probe_r979_tok2.py bytes=2482
+  bom .codely-cli/tmp/r2073ev.py bytes=1088
+  bom .codely-cli/tmp/r678_fix.py bytes=1477
+  bom .codely-cli/tmp/racetest/race_probe_keep.py bytes=2453
+  bom .codely-cli/tmp/read_r1410.py bytes=313
+  bom .codely-cli/tmp/read_r1410b.py bytes=655
+  bom .codely-cli/tmp/reg2845.py bytes=785
+  bom .codely-cli/tmp/scan2_R1971.py bytes=501
+  bom .codely-cli/tmp/scan3_R1971.py bytes=614
+  bom .codely-cli/tmp/scan_R1971.py bytes=896
+  bom .codely-cli/tmp/takeover1_R1971.py bytes=918
+  bom .codely-cli/tmp/taker_lf_sha_R1975.py bytes=498
+  bom .codely-cli/tmp/taker_suite_doublerun_R1975.py bytes=864
+  bom .codely-cli/tmp/upd-export-r1831.py bytes=5458
+  bom .codely-cli/tmp/upd-state-r1831.py bytes=4193
+  bom .codely-cli/tmp_backlog_R2262.py bytes=1931
+  bom .codely-cli/tmp_state_edit_R2262.py bytes=2992
+  bom logs/live_R2547.py bytes=2223
+  bom logs/probe-R2560.py bytes=418
+  bom src/os/battery_followup_R2230.py bytes=3149
+  bom src/os/battery_followup_R2266.py bytes=3848
+  bom src/os/capture_R2633.py bytes=2242
+  bom src/os/evidence_R2678.py bytes=2338
+  bom src/os/fold_R2470.py bytes=1646
+  bom src/os/live_R2492.py bytes=3051
+  bom src/os/test_battery_followup.py bytes=19338
+  bom src/os/test_export_round.py bytes=110295
+  bom src/os/test_matrix_stamp_compare.py bytes=21712
+  bom src/sandbox/ledger/test_apimarket_report_refundregister.py bytes=21587
+  bom tools/adoption_preflight_controls.py bytes=4728
+Q2 parse with and without the BOM (a difference means the BOM is load-bearing)
+  parse .codely-cli/tmp/amend_R1975.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/append_r2861.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/board2845.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/checkbox_flip_R1975.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/chk.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/cl.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/claim_brm.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/close2845.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/closeout_R2789.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/dbg_cd7.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/dbg_cd7b.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/dbg_tail_r1937.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/derive-export.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/derive_law_status.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/diag_fsw.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/export_flush_R1700.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/export_inspect_R1975.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/export_refresh2_R1975.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/five_silence_R1975.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/fix-tech-tail.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/fix.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/fix_addendum_dialect_R1952.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/fold2845.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/fold_iterate14.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/fold_r1466_dump.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/fold_r1466_probe.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/fold_r1466_probe2.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/fold_r1466_probe3.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/fold_r1466_verify.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/fold_r403_analyze.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/fp_probe.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/gord_tail_R1975.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/indent_cont.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/indent_probe_R1975.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/insp_R1971.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/inspect.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/legs/leg_fold_tokens_R2892c.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/legwatch-arms-R2890.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/mk-cbe-ev.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/negctl_rp7_rp8.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/peek.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/pin2845.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/prep1.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/prep2.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/prep3.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/prep4.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/prep5.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/prepend-R2890.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/probe_r979_pre.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/probe_r979_tok.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/probe_r979_tok2.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/r2073ev.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/r678_fix.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/racetest/race_probe_keep.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/read_r1410.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/read_r1410b.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/reg2845.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/scan2_R1971.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/scan3_R1971.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/scan_R1971.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/takeover1_R1971.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/taker_lf_sha_R1975.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/taker_suite_doublerun_R1975.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/upd-export-r1831.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp/upd-state-r1831.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp_backlog_R2262.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse .codely-cli/tmp_state_edit_R2262.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse logs/live_R2547.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse logs/probe-R2560.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse src/os/battery_followup_R2230.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse src/os/battery_followup_R2266.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse src/os/capture_R2633.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse src/os/evidence_R2678.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse src/os/fold_R2470.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse src/os/live_R2492.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse src/os/test_battery_followup.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse src/os/test_export_round.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse src/os/test_matrix_stamp_compare.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse src/sandbox/ledger/test_apimarket_report_refundregister.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  parse tools/adoption_preflight_controls.py sig=OK plain=SyntaxError:invalid non-printable character U+FEFF plain_blind=YES
+  Q2 summary plain_utf8_blind=80 of 80
+Q3 any repo .py reading one of these names with plain utf-8
+  consumer .codely-cli/tmp/fold_r1569_fix.py names=fix.py
+  consumer .codely-cli/tmp/legs/leg_stream_redfirst_R2886.py names=fix.py
+  consumer .codely-cli/tmp/legs/leg_unitlaw_R2881.py names=cl.py
+  consumer .codely-cli/tmp/r2860_declare.py names=test_export_round.py
+  consumer .codely-cli/tmp/r628_fix.py names=fix.py
+  consumer src/os/append_log_R2581.py names=fix.py
+  consumer src/os/battery_followup_R2233.py names=battery_followup_R2230.py
+  consumer src/os/battery_followup_R2268.py names=battery_followup_R2266.py
+  consumer src/os/battery_followup_R2271.py names=battery_followup_R2266.py
+  consumer src/os/claim_R2111.py names=test_apimarket_report_refundregister.py
+  consumer src/os/closeout_book_R2581.py names=fix.py
+  consumer src/os/evidence_R2111.py names=test_apimarket_report_refundregister.py
+  consumer src/os/queue_close_R2581.py names=fix.py
+  consumer src/os/queue_close_R2613.py names=test_apimarket_report_refundregister.py
+  consumer src/os/queue_floor_decl.py names=cl.py
+  consumer src/os/queue_seed_R2613.py names=test_apimarket_report_refundregister.py
+  consumer src/os/review_window_decl.py names=cl.py
+  consumer src/os/settle_battery_R2742.py names=fix.py
+  consumer src/os/test_battery_shard.py names=cl.py
+  consumer src/os/test_ledger_fold_kind_inflection.py names=fix.py
+  consumer src/os/test_queue_floor_decl.py names=cl.py
+  consumer src/os/test_review_window.py names=cl.py
+  consumer src/sandbox/ledger/test_apimarket_report_claims.py names=test_apimarket_report_refundregister.py
+  consumer src/sandbox/ledger/test_apimarket_report_claims_nesting.py names=test_apimarket_report_refundregister.py
+  consumer src/sandbox/reconcile_all.py names=cl.py
+  consumer src/sandbox/reconcile_all.py names=fix.py
+  consumer src/sandbox/reconcile_all.py names=test_apimarket_report_refundregister.py
+  consumer src/sandbox/reconcile_all.py names=test_battery_followup.py
+  consumer src/sandbox/reconcile_all.py names=test_export_round.py
+  consumer src/sandbox/reconcile_all.py names=test_matrix_stamp_compare.py
+Q4 registered suites among the BOM files
+  registry parses_without_sig=OK
+  reg .codely-cli/tmp/amend_R1975.py in_registry_text=NO
+  reg .codely-cli/tmp/append_r2861.py in_registry_text=NO
+  reg .codely-cli/tmp/board2845.py in_registry_text=NO
+  reg .codely-cli/tmp/checkbox_flip_R1975.py in_registry_text=NO
+  reg .codely-cli/tmp/chk.py in_registry_text=NO
+  reg .codely-cli/tmp/cl.py in_registry_text=YES
+  reg .codely-cli/tmp/claim_brm.py in_registry_text=NO
+  reg .codely-cli/tmp/close2845.py in_registry_text=NO
+  reg .codely-cli/tmp/closeout_R2789.py in_registry_text=NO
+  reg .codely-cli/tmp/dbg_cd7.py in_registry_text=NO
+  reg .codely-cli/tmp/dbg_cd7b.py in_registry_text=NO
+  reg .codely-cli/tmp/dbg_tail_r1937.py in_registry_text=NO
+  reg .codely-cli/tmp/derive-export.py in_registry_text=NO
+  reg .codely-cli/tmp/derive_law_status.py in_registry_text=NO
+  reg .codely-cli/tmp/diag_fsw.py in_registry_text=NO
+  reg .codely-cli/tmp/export_flush_R1700.py in_registry_text=NO
+  reg .codely-cli/tmp/export_inspect_R1975.py in_registry_text=NO
+  reg .codely-cli/tmp/export_refresh2_R1975.py in_registry_text=NO
+  reg .codely-cli/tmp/five_silence_R1975.py in_registry_text=NO
+  reg .codely-cli/tmp/fix-tech-tail.py in_registry_text=NO
+  reg .codely-cli/tmp/fix.py in_registry_text=YES
+  reg .codely-cli/tmp/fix_addendum_dialect_R1952.py in_registry_text=NO
+  reg .codely-cli/tmp/fold2845.py in_registry_text=NO
+  reg .codely-cli/tmp/fold_iterate14.py in_registry_text=NO
+  reg .codely-cli/tmp/fold_r1466_dump.py in_registry_text=NO
+  reg .codely-cli/tmp/fold_r1466_probe.py in_registry_text=NO
+  reg .codely-cli/tmp/fold_r1466_probe2.py in_registry_text=NO
+  reg .codely-cli/tmp/fold_r1466_probe3.py in_registry_text=NO
+  reg .codely-cli/tmp/fold_r1466_verify.py in_registry_text=NO
+  reg .codely-cli/tmp/fold_r403_analyze.py in_registry_text=NO
+  reg .codely-cli/tmp/fp_probe.py in_registry_text=NO
+  reg .codely-cli/tmp/gord_tail_R1975.py in_registry_text=NO
+  reg .codely-cli/tmp/indent_cont.py in_registry_text=NO
+  reg .codely-cli/tmp/indent_probe_R1975.py in_registry_text=NO
+  reg .codely-cli/tmp/insp_R1971.py in_registry_text=NO
+  reg .codely-cli/tmp/inspect.py in_registry_text=NO
+  reg .codely-cli/tmp/legs/leg_fold_tokens_R2892c.py in_registry_text=NO
+  reg .codely-cli/tmp/legwatch-arms-R2890.py in_registry_text=NO
+  reg .codely-cli/tmp/mk-cbe-ev.py in_registry_text=NO
+  reg .codely-cli/tmp/negctl_rp7_rp8.py in_registry_text=NO
+  reg .codely-cli/tmp/peek.py in_registry_text=NO
+  reg .codely-cli/tmp/pin2845.py in_registry_text=NO
+  reg .codely-cli/tmp/prep1.py in_registry_text=NO
+  reg .codely-cli/tmp/prep2.py in_registry_text=NO
+  reg .codely-cli/tmp/prep3.py in_registry_text=NO
+  reg .codely-cli/tmp/prep4.py in_registry_text=NO
+  reg .codely-cli/tmp/prep5.py in_registry_text=NO
+  reg .codely-cli/tmp/prepend-R2890.py in_registry_text=NO
+  reg .codely-cli/tmp/probe_r979_pre.py in_registry_text=NO
+  reg .codely-cli/tmp/probe_r979_tok.py in_registry_text=NO
+  reg .codely-cli/tmp/probe_r979_tok2.py in_registry_text=NO
+  reg .codely-cli/tmp/r2073ev.py in_registry_text=NO
+  reg .codely-cli/tmp/r678_fix.py in_registry_text=NO
+  reg .codely-cli/tmp/racetest/race_probe_keep.py in_registry_text=NO
+  reg .codely-cli/tmp/read_r1410.py in_registry_text=NO
+  reg .codely-cli/tmp/read_r1410b.py in_registry_text=NO
+  reg .codely-cli/tmp/reg2845.py in_registry_text=NO
+  reg .codely-cli/tmp/scan2_R1971.py in_registry_text=NO
+  reg .codely-cli/tmp/scan3_R1971.py in_registry_text=NO
+  reg .codely-cli/tmp/scan_R1971.py in_registry_text=NO
+  reg .codely-cli/tmp/takeover1_R1971.py in_registry_text=NO
+  reg .codely-cli/tmp/taker_lf_sha_R1975.py in_registry_text=NO
+  reg .codely-cli/tmp/taker_suite_doublerun_R1975.py in_registry_text=NO
+  reg .codely-cli/tmp/upd-export-r1831.py in_registry_text=NO
+  reg .codely-cli/tmp/upd-state-r1831.py in_registry_text=NO
+  reg .codely-cli/tmp_backlog_R2262.py in_registry_text=NO
+  reg .codely-cli/tmp_state_edit_R2262.py in_registry_text=NO
+  reg logs/live_R2547.py in_registry_text=NO
+  reg logs/probe-R2560.py in_registry_text=NO
+  reg src/os/battery_followup_R2230.py in_registry_text=NO
+  reg src/os/battery_followup_R2266.py in_registry_text=NO
+  reg src/os/capture_R2633.py in_registry_text=NO
+  reg src/os/evidence_R2678.py in_registry_text=NO
+  reg src/os/fold_R2470.py in_registry_text=NO
+  reg src/os/live_R2492.py in_registry_text=NO
+  reg src/os/test_battery_followup.py in_registry_text=YES
+  reg src/os/test_export_round.py in_registry_text=YES
+  reg src/os/test_matrix_stamp_compare.py in_registry_text=YES
+  reg src/sandbox/ledger/test_apimarket_report_refundregister.py in_registry_text=YES
+  reg tools/adoption_preflight_controls.py in_registry_text=NO
+Q5 git tracking
+  tracked=11 of 80

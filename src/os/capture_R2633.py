@@ -1,4 +1,4 @@
-﻿"""R2633 capture driver: the AC-EDMJ suite through the SHIPPED capture
+"""R2633 capture driver: the AC-EDMJ suite through the SHIPPED capture
 callable (two legs, identical criterion lines), the adjacent matrix suites,
 and the after-fix limit measurement folded into the same evidence file.
 """

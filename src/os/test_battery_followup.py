@@ -1,4 +1,4 @@
-﻿"""battery_followup suite (R2272; criteria AC-BFU1..AC-BFU6 were pre-registered
+"""battery_followup suite (R2272; criteria AC-BFU1..AC-BFU6 were pre-registered
 inside the R2250 seed row of state/queue/tech.md BEFORE this code existed).
 
 What this proves: the four post-battery sections are one callable instead of

@@ -1,4 +1,4 @@
-﻿"""Negative/positive controls for tools/adoption_preflight.py.
+"""Negative/positive controls for tools/adoption_preflight.py.
 
 Builds private worlds in tmp/preflight-ctrl/ so the gate is proven in both
 directions instead of only being read. Dead pid 4 is used so the pid gate reads

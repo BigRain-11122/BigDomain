@@ -1,4 +1,4 @@
-﻿"""Battery suite for src/os/export_round.py.
+"""Battery suite for src/os/export_round.py.
 
 R2901: this header no longer enumerates the criteria. The inventory used to be
 typed here in prose and drifted silently (it still said "thirty-three criteria"

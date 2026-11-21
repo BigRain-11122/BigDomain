@@ -1,4 +1,4 @@
-﻿"""R2492 live leg: the seed defect reproduced end to end on a real tree."""
+"""R2492 live leg: the seed defect reproduced end to end on a real tree."""
 import io
 import json
 import os

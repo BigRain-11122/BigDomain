@@ -1,4 +1,4 @@
-﻿# battery_followup_R2266.py - run the post-RUNNER battery sections
+# battery_followup_R2266.py - run the post-RUNNER battery sections
 # (matrix regen+check, fingerprint --check, profile --daily --check,
 # census re-freeze + check), append them to the R2266 evidence log,
 # then prove the whole log is single-dialect utf-8 LF with no BOM.

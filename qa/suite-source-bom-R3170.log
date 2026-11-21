@@ -1,0 +1,7 @@
+PASS AC-SBS1 detection is exact: a UTF-8 BOM at byte 0 is an offender, a UTF-16 BOM and a BOM past byte 0 are not
+PASS AC-SBS2 the universe is the git index: an untracked BOM file and a tracked non-Python BOM file never enter the reading, and an unreadable tree reports an error instead of clean
+PASS AC-SBS3 the scan and its --check write nothing: every file digest is unchanged and no file appears
+PASS AC-SBS4 the CLI keeps four truthful codes: 0 clean, 2 offenders, 2 bad flags with usage, 3 an unreadable tree
+PASS AC-SBS5 the JSON face carries exactly the pinned keys in order, twice byte-identical, with no internal key leaked
+PASS AC-SBS6 the live tree is BOM-clean after the R3170 strip, the module source is ASCII with no network import, and the registry row carries this suite with its six criteria
+SUITE PASS 6/6

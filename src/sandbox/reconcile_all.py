@@ -5339,6 +5339,17 @@ SUITES = [
     # behind a log that looks the same either way.
     # (AC-SEQ1..AC-SEQ6 pinned in state/queue/tech.md as the R2248 d seed
     # BEFORE the code existed.)
+    # R3170: a UTF-8 BOM on a tracked source file is invisible to the plain
+    # reader every source gate uses - utf-8 keeps the U+FEFF and ast.parse then
+    # refuses the WHOLE file - and the defect bit twice before this face
+    # existed (R3164 made reconcile_all.py unparseable that way, and
+    # registry_counter_census lost four rows to the same cause). The universe
+    # is the git index for *.py, the law is three bytes at byte 0, and nothing
+    # is ever written.
+    # (AC-SBS1..AC-SBS6 pinned in src/os/backlog.md as the R3170 PIN row
+    # BEFORE the code existed.)
+    ("os-source-bom",
+     os.path.join("..", "os", "test_source_bom_scan.py"), 6),
     ("os-state-seq",
      os.path.join("..", "os", "test_state_seq.py"), 8),
     # R2259: a seed's face name must be provably unoccupied before it lands -

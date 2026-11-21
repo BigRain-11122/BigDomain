@@ -1,4 +1,4 @@
-﻿"""Acceptance suite for the market-wide refund register and its
+"""Acceptance suite for the market-wide refund register and its
 settlement-report section (BigDomain R2111; canon = the R2111
 explore-queue claim row, criteria AC-AMRR1..AC-AMRR8 registered there
 BEFORE this code existed - honesty law; the AC-AMRR prefix,

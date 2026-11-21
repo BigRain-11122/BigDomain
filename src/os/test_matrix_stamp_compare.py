@@ -1,4 +1,4 @@
-﻿"""matrix_stamp_compare suite (R2418; criteria AC-MSC1..AC-MSC6 were pinned
+"""matrix_stamp_compare suite (R2418; criteria AC-MSC1..AC-MSC6 were pinned
 at R2414 inside the seed row of state/queue/tech.md line 493 BEFORE this code).
 
 What this proves: the matrix section's compare is content-only because the
