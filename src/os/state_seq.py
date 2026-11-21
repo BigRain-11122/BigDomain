@@ -42,6 +42,23 @@ ARCHIVE_DIR = ("logs",)
 
 ARCHIVE_PREFIX = "state-log-archive-"
 
+# A fold summary line, written by state_fold IN PLACE of the window it moved.
+# It carries the FOLDING round's own label, so reading it as a sequence item
+# puts a late label at an early position (R3168 measured the live tree read
+# SEQUENCE-BROKEN with backwards R3160 after R3167, repeats R3166/R3167 and
+# gaps R3156..R3159 purely because three fold summaries stand at the head).
+# The fold is bookkeeping: its round still owns its own items at the tail, and
+# the rounds it moved are recorded in the archive. So a fold summary is
+# excluded from the sequence and only counted.
+#
+# The predicate is deliberately NARROW - the label head must be followed by
+# the word "fold" AND the item must name the archive file - so an ordinary
+# item is never swallowed. A summary whose shape this reader does not
+# recognise falls back to being read as a round item: fail-visible (a false
+# red an operator can see) rather than a silent hole.
+FOLD_HEAD_RE = re.compile(r"^(?:\d{4}-\d{2}-\d{2}\s+)?R(\d{3,5})\s+fold\b",
+                          re.I)
+
 VERDICTS = ("EMPTY", "SEQUENCE-OK", "SEQUENCE-BROKEN")
 
 REPEAT_KEYS = ("round", "count")
@@ -50,6 +67,7 @@ BACKWARDS_KEYS = ("index", "round", "previous")
 
 REPORT_KEYS = (
     "labels",
+    "fold_summaries",
     "distinct",
     "smallest",
     "largest",
@@ -94,8 +112,40 @@ def read_tick(state):
     return tick
 
 
+def is_fold_summary(text):
+    """True only for a fold summary the shipped fold writes (AC-SEQ7).
+
+    Narrow on purpose: the label head must be followed by "fold" and the item
+    must name the archive file. Anything else stays a sequence item.
+    """
+    return (FOLD_HEAD_RE.match(text) is not None
+            and ARCHIVE_PREFIX in text)
+
+
+def extract_fold_summaries(state):
+    """Fold-summary items' own labels, in log order (AC-SEQ7)."""
+    log = state.get("log")
+    if not isinstance(log, list):
+        raise StateSeqError("E_SEQ_BAD_STATE", "log is not a list")
+    numbers = []
+    for raw in log:
+        if not isinstance(raw, str):
+            raise StateSeqError("E_SEQ_BAD_STATE", "log item is not text")
+        if not is_fold_summary(raw):
+            continue
+        number = round_evidence.item_round(raw)
+        if number is not None:
+            numbers.append(number)
+    return numbers
+
+
 def extract_labels(state):
-    """Every log item's own round label, in log order (AC-SEQ2)."""
+    """Every log item's own round label, in log order (AC-SEQ2).
+
+    Fold summaries are excluded (AC-SEQ7): they are bookkeeping written in
+    place of a moved window, not round items, so reading them as sequence
+    items made an honest tree read SEQUENCE-BROKEN.
+    """
     log = state.get("log")
     if not isinstance(log, list):
         raise StateSeqError("E_SEQ_BAD_STATE", "log is not a list")
@@ -103,6 +153,8 @@ def extract_labels(state):
     for raw in log:
         if not isinstance(raw, str):
             raise StateSeqError("E_SEQ_BAD_STATE", "log item is not text")
+        if is_fold_summary(raw):
+            continue
         number = round_evidence.item_round(raw)
         if number is None:
             continue
@@ -224,6 +276,7 @@ def audit(root):
     state = load_state(root)
     tick = read_tick(state)
     labels = extract_labels(state)
+    fold_summaries = extract_fold_summaries(state)
     distinct = sorted(set(labels))
     gaps = find_gaps(labels)
     repeats = find_repeats(labels)
@@ -248,6 +301,7 @@ def audit(root):
         tick_lead = None
     return {
         "labels": labels,
+        "fold_summaries": len(fold_summaries),
         "distinct": len(distinct),
         "smallest": distinct[0] if distinct else None,
         "largest": largest,
@@ -264,10 +318,12 @@ def audit(root):
 
 def one_line(report):
     """The single line an operator reads."""
-    return ("STATE SEQUENCE labels=%d distinct=%d span=%s..%s gaps=%d "
+    return ("STATE SEQUENCE labels=%d fold_summaries=%d distinct=%d "
+            "span=%s..%s gaps=%d "
             "repeats=%d backwards=%d tick=%d tick_lead=%s queue_done=%d "
             "queue_only=%d verdict=%s"
-            % (len(report["labels"]), report["distinct"],
+            % (len(report["labels"]), report["fold_summaries"],
+               report["distinct"],
                report["smallest"], report["largest"], len(report["gaps"]),
                len(report["repeats"]), len(report["backwards"]),
                report["tick"], report["tick_lead"], report["queue_done"],

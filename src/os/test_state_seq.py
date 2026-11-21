@@ -27,11 +27,11 @@ sys.path.insert(0, BASE)
 
 import state_seq as SS  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 7
 MODULE = os.path.join(BASE, "state_seq.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-seq"
-WIRED_EXPECT = '"test_state_seq.py"), 6),'
+WIRED_EXPECT = '"test_state_seq.py"), 7),'
 
 PASSES = 0
 FAILS = 0
@@ -287,6 +287,94 @@ def ac_seq6():
               "byte-stable json, queue_only named")
 
 
+def ac_seq7():
+    """Fold summaries are bookkeeping, not sequence items (R3168).
+
+    Measured live: three fold summaries stand at the head of the log carrying
+    their folding round's own label, which made an honest tree read
+    SEQUENCE-BROKEN (backwards R3160 after R3167, repeats R3166/R3167, gaps
+    R3156..R3159). The narrowing is narrow on purpose - an item must carry
+    the label head AND the word "fold" AND the archive file name - and the
+    real defect law must survive it.
+    """
+    summary = ("R4000 fold: the 3 oldest state-log items (R3990 through "
+               "R3992) were folded verbatim into logs/state-log-archive-"
+               "2026-11.md, carrying AC-X1")
+    world = make_world([summary,
+                        "2026-11-21 R4001 a",
+                        "2026-11-21 R4002 b",
+                        "2026-11-21 R4003 c"], tick=4004)
+    try:
+        report = SS.audit(world)
+        rc_clean = run_cli(["--check", "--root", world])[0]
+    finally:
+        drop_world(world)
+    arm_a = (report["labels"] == [4001, 4002, 4003]
+             and report["fold_summaries"] == 1
+             and len(report["labels"]) + report["fold_summaries"] == 4
+             and report["gaps"] == [] and report["repeats"] == []
+             and report["backwards"] == []
+             and report["verdict"] == "SEQUENCE-OK" and rc_clean == 0)
+
+    near = make_world(["R4005 fold: a note that names no archive file",
+                       "2026-11-21 R4006 a"], tick=4007)
+    try:
+        near_report = SS.audit(near)
+    finally:
+        drop_world(near)
+    arm_b = (near_report["labels"] == [4005, 4006]
+             and near_report["fold_summaries"] == 0)
+
+    gap_world = make_world(["2026-11-21 R4010 a",
+                            "2026-11-21 R4012 b"], tick=4013)
+    rep_world = make_world(["2026-11-21 R4020 a",
+                            "2026-11-21 R4021 b",
+                            "2026-11-21 R4020 c"], tick=4022)
+    try:
+        gap_report = SS.audit(gap_world)
+        rep_report = SS.audit(rep_world)
+        rc_gap = run_cli(["--check", "--root", gap_world])[0]
+    finally:
+        drop_world(gap_world)
+        drop_world(rep_world)
+    arm_c = (gap_report["gaps"] == [4011]
+             and gap_report["verdict"] == "SEQUENCE-BROKEN" and rc_gap == 2
+             and rep_report["repeats"] == [{"round": 4020, "count": 2}]
+             and rep_report["backwards"] == [{"index": 2, "round": 4020,
+                                              "previous": 4021}])
+
+    live = SS.audit(REPO)
+    arm_d = (live["verdict"] == "SEQUENCE-OK" and live["gaps"] == []
+             and live["repeats"] == [] and live["backwards"] == []
+             and live["fold_summaries"] >= 1)
+
+    first = run_cli(["--check", "--root", REPO, "--json"])
+    second = run_cli(["--check", "--root", REPO, "--json"])
+    keys = list(json.loads(first[1]).keys())
+    body = run_cli(["--check", "--root", REPO])[1]
+    arm_e = (first == second and keys == list(SS.REPORT_KEYS)
+             and "fold_summaries=" in body and first[0] == 0)
+
+    with io.open(MODULE, "rb") as handle:
+        raw = handle.read()
+    ascii_only = True
+    try:
+        raw.decode("ascii")
+    except UnicodeDecodeError:
+        ascii_only = False
+    arm_f = ascii_only
+    if not (arm_a and arm_b and arm_c and arm_d and arm_e and arm_f):
+        print("  measured: a=%r labels=%r fold=%r b=%r near=%r c=%r gap=%r "
+              "rep=%r d=%r live=%r e=%r f=%r"
+              % (arm_a, report["labels"], report["fold_summaries"], arm_b,
+                 near_report["labels"], arm_c, gap_report["gaps"],
+                 rep_report["repeats"], arm_d, live["verdict"], arm_e,
+                 arm_f), flush=True)
+    check(arm_a and arm_b and arm_c and arm_d and arm_e and arm_f,
+          "AC-SEQ7 fold summaries excluded but counted, narrowing is narrow, "
+          "real defects still caught, live tree green")
+
+
 def main():
     print("state_seq suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -296,6 +384,7 @@ def main():
     ac_seq4()
     ac_seq5()
     ac_seq6()
+    ac_seq7()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

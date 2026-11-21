@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 752 | 6131 | 675/675 | R2739 |
+| 752 | 6132 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -537,7 +537,7 @@
 | 498 | os-suite-matrix-reconcile-second-table-separator | ../os/test_suite_matrix_reconcile_second_table_separator.py | 6 | green | 0.7 |
 | 499 | os-queue-row | ../os/test_queue_row.py | 6 | green | 1.3 |
 | 500 | os-round-evidence | ../os/test_round_evidence.py | 10 | green | 1.2 |
-| 501 | os-state-seq | ../os/test_state_seq.py | 6 | green | 2.9 |
+| 501 | os-state-seq | ../os/test_state_seq.py | 7 | green | 2.9 |
 | 502 | os-seed-anchor | ../os/test_seed_anchor.py | 5 | green | 20.7 |
 | 503 | os-evidence-capture | ../os/test_evidence_capture.py | 6 | green | 6.3 |
 | 504 | os-queue-only | ../os/test_queue_only_reconcile.py | 6 | green | 1.4 |
@@ -789,7 +789,7 @@
 | 750 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
 | 751 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 752 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6131 | green 675 / FAIL 0 / no-evidence 77 |  |
+|  | 合计 |  | 6132 | green 675 / FAIL 0 / no-evidence 77 |  |
 
 ## 证据出处
 

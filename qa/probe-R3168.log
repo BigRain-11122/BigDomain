@@ -1,0 +1,18 @@
+Q1 live_labels=54 archive_labels=8004 union=1943
+Q1 queue_done=400 done_in_live=4 done_archive_only=395 done_nowhere=1
+Q1 done_archive_only_sample=[1755, 1763, 1824, 1825, 1883, 1884]
+Q1 done_nowhere=[2165]
+Q2 log_items=54 labelled=54 fold_summaries=3 near_misses=4
+Q2 FOLD index=0 R3155 'R3155 fold: the 95 oldest state-log items (R3130 through R3143) were folded verbatim into '
+Q2 FOLD index=1 R3166 '2026-11-21 R3166 fold: the 71 oldest live state-log items (R3144 through R3153) were folde'
+Q2 FOLD index=2 R3167 'R3167 fold 604: the 42 oldest live state-log items (R3154 through R3159) were folded verba'
+Q2 NEAR index=30 R3164 '2026-11-21 R3164 PRODUCT+ENGINEERING: the evidence reader now judges TWO worlds - the live'
+Q2 NEAR index=35 R3164 'R3164 honest: (a) ZERO new payment capability and no network beyond loopback - judging a f'
+Q2 NEAR index=37 R3165 '2026-11-21 R3165 PRODUCT+ENGINEERING: the 82 folded rounds that claim a pass but own no ev'
+Q2 NEAR index=39 R3165 'R3165 landed: archive_lines() (one reader for the fold, used by archive_rounds() with unch'
+Q2b shipped verdict=SEQUENCE-BROKEN gaps=[3156, 3157, 3158, 3159] repeats=[{'round': 3166, 'count': 2}, {'round': 3167, 'count': 2}] backwards=[{'index': 3, 'round': 3160, 'previous': 3167}] span=3155..3167
+Q2c filtered_labels=51 span=3160..3167 gaps=0 repeats=[] backwards=[]
+Q2c would_read=SEQUENCE-OK
+Q3 real_defect shipped_gaps=[4003] verdict=SEQUENCE-BROKEN (as shipped, fold summary R4000 sits before R4001 so no backwards)
+Q3 real_backwards repeats=[{'round': 4001, 'count': 2}] backwards=[{'index': 2, 'round': 4001, 'previous': 4002}] verdict=SEQUENCE-BROKEN
+Q3 real_gap gaps=[4002] verdict=SEQUENCE-BROKEN
