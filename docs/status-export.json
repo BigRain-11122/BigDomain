@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3217 PRODUCT+ENGINEERING: the replacement record now outlives the process - a same-name rewrite prints its QA-LOG REPLACED line AND appends one JSON record (name/old_bytes/old_sha16/new_bytes/new_sha16/ts) to state/qa_replacements.jsonl for the live qa/ dir, or to a sibling file in any other world, so evidence that a rewrite destroyed can still be read by a machine after the window that replaced it is gone.",
+    "current": "2026-11-22 R3218 PRODUCT+ENGINEERING: the replacement ledger now has a read face - qa_log.py --ledger-check [PATH] prints rows/names/bad/stale/missing on one line and one detail line per defect; read-only, defaults to state/qa_replacements.jsonl; an absent ledger answers rows=0, a bad JSON line or a row whose latest new_sha16 no longer matches disk answers RED, and a row whose file is gone is counted as missing rather than reddened.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
@@ -9,9 +9,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-qa-log-R3217.log (7389B, 2026-11-22)",
     "latest_evidence": "qa/suite-qa-log-R3217.log (7389B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3217] next window (<=48h): (0) MAIN — **台账是只写不读的**：本窗让每一次替换留下一行 JSON，但出厂没有任何一条读面把它读回来——行是否合法、有没有重复、末行的 `new_sha16` 与盘上现件是否还对得上，今天全靠人眼。做法=先只读量三问：①**台账现状**＝活盘 `state/qa_replacements.jsonl` 是否存在、行数、字段形态，并逐条列出「本仓任何读面目前读它」的调用点（预期 0）；②**决定性臂**＝私有世界造三种台账（健康／坏 JSON 行／末行 sha 与盘上不符），量 `--ledger-check` 该答什么、现任三读者看不看得见；③**收口三选一**（加只读读面 `qa_log.py --ledger-check`／把 `replaced=<n>` 接进 `tools/closeout_gate.py` 的行／只记不改），并证明所选面**不改任何既有证据字节、也不写台账**。判据沿用 AC-QALB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗·Docker 门控行跳过）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3215 实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行不变，当窗提案面 BD-PROP-010（2026-11-17）仍在册。",
-    "next_milestone_due": "2026-11-24T03:44:54+08:00",
-    "updated_at": "2026-11-22T03:44:54+08:00",
+    "next_milestone": "[R3218] next window (<=48h): (0) MAIN — **读面有了，但没有任何执行体跑它**：`--ledger-check` 今天只有人手调，closeout 闸与轮收口都不读台账，所以「台账变坏」仍然只能靠谁想起来跑一次。做法=先只读量三问：①**载体面**＝`tools/closeout_gate.py` 的判据结构（它读哪些输入、怎么得出 PASS/flags）与 `src/os/qa_writer_census.py` 的输入枚举，量出「把台账健康接进去」要动的是闸还是普查，以及会不会把 state/ 读进只枚举 qa/ 的面；②**决定性臂**＝私有世界造健康/坏行/stale 三台账，量接线后各自的裁决行与 rc，并证明活树（台账不存在）仍 PASS；③**收口三选一**（闸加一行 `ledger=<verdict>` 且坏=flags+1／只在轮收口调一次并记 log／维持只读不复用），并证明所选面不改任何既有证据字节、不写台账。判据沿用 AC-QALB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗·Docker 门控行跳过）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3215 实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行不变，当窗提案面 BD-PROP-010（2026-11-17）仍在册。- [R3218 PIN — 认领板头 R3217 next-window (0) MAIN（**替换台账只写不读：`state/qa_replacements.jsonl` 存在与否、行是否合法、行里点的 sha16 是否还对得上盘上现件，全仓零读面，只能人眼**）·判据 AC-QALB30..32 先立·**本行先于本轮一切探针与代码写入**] 只读待量三问：**Q1 台账现状**＝活盘 `state/qa_replacements.jsonl` 是否存在、行数、字段形态，并逐点列出全仓读它的调用点（AST/字面量两路，按「可执行读面／散文提及」两分，预期可执行 0）；**Q2 决定性臂**＝私有 temp 世界造四种台账（健康两行／坏 JSON 行／末行 sha16 与盘上不符／行指向不存在文件），量今天三读者（`--check NAME`、`verify_written`、普查＋closeout (truncated)",
+    "next_milestone_due": "2026-11-24T03:58:44+08:00",
+    "updated_at": "2026-11-22T03:58:44+08:00",
     "heartbeat": {
       "tick": 3216,
       "state_tick": 3217,
@@ -35,7 +35,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-22 R3217 PRODUCT+ENGINEERING: the replacement record now outlives the process - a same-name rewrite prints its QA-LOG REPLACED line AND appends one JSON record (name/old_bytes/old_sha16/new_bytes/new_sha16/ts) to state/qa_replacements.jsonl for the live qa/ dir, or to a sibling file in any other world, so evidence that a rewrite destroyed can still be read by a machine after the window that replaced it is gone.",
+  "current": "2026-11-22 R3218 PRODUCT+ENGINEERING: the replacement ledger now has a read face - qa_log.py --ledger-check [PATH] prints rows/names/bad/stale/missing on one line and one detail line per defect; read-only, defaults to state/qa_replacements.jsonl; an absent ledger answers rows=0, a bad JSON line or a row whose latest new_sha16 no longer matches disk answers RED, and a row whose file is gone is counted as missing rather than reddened.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,11 +63,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3217 PRODUCT+ENGINEERING: the replacement record now outlives the process - a same-name rewrite prints its QA-LOG REPLACED line AND appends one JSON record (name/old_bytes/old_sha16/new_bytes/new_sha16/ts) to state/qa_replacements.jsonl for the live qa/ dir, or to a sibling file in any other world, so evidence that a rewrite destroyed can still be read by a machine after the window that replaced it is gone.",
-  "export_ts": "2026-11-22T03:44:54+08:00",
+  "do": "2026-11-22 R3218 PRODUCT+ENGINEERING: the replacement ledger now has a read face - qa_log.py --ledger-check [PATH] prints rows/names/bad/stale/missing on one line and one detail line per defect; read-only, defaults to state/qa_replacements.jsonl; an absent ledger answers rows=0, a bad JSON line or a row whose latest new_sha16 no longer matches disk answers RED, and a row whose file is gone is counted as missing rather than reddened.",
+  "export_ts": "2026-11-22T03:58:44+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
   "latest_evidence": "qa/suite-qa-log-R3217.log (7389B, 2026-11-22)",
-  "next_milestone": "[R3217] next window (<=48h): (0) MAIN — **台账是只写不读的**：本窗让每一次替换留下一行 JSON，但出厂没有任何一条读面把它读回来——行是否合法、有没有重复、末行的 `new_sha16` 与盘上现件是否还对得上，今天全靠人眼。做法=先只读量三问：①**台账现状**＝活盘 `state/qa_replacements.jsonl` 是否存在、行数、字段形态，并逐条列出「本仓任何读面目前读它」的调用点（预期 0）；②**决定性臂**＝私有世界造三种台账（健康／坏 JSON 行／末行 sha 与盘上不符），量 `--ledger-check` 该答什么、现任三读者看不看得见；③**收口三选一**（加只读读面 `qa_log.py --ledger-check`／把 `replaced=<n>` 接进 `tools/closeout_gate.py` 的行／只记不改），并证明所选面**不改任何既有证据字节、也不写台账**。判据沿用 AC-QALB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗·Docker 门控行跳过）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3215 实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行不变，当窗提案面 BD-PROP-010（2026-11-17）仍在册。",
+  "next_milestone": "[R3218] next window (<=48h): (0) MAIN — **读面有了，但没有任何执行体跑它**：`--ledger-check` 今天只有人手调，closeout 闸与轮收口都不读台账，所以「台账变坏」仍然只能靠谁想起来跑一次。做法=先只读量三问：①**载体面**＝`tools/closeout_gate.py` 的判据结构（它读哪些输入、怎么得出 PASS/flags）与 `src/os/qa_writer_census.py` 的输入枚举，量出「把台账健康接进去」要动的是闸还是普查，以及会不会把 state/ 读进只枚举 qa/ 的面；②**决定性臂**＝私有世界造健康/坏行/stale 三台账，量接线后各自的裁决行与 rc，并证明活树（台账不存在）仍 PASS；③**收口三选一**（闸加一行 `ledger=<verdict>` 且坏=flags+1／只在轮收口调一次并记 log／维持只读不复用），并证明所选面不改任何既有证据字节、不写台账。判据沿用 AC-QALB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗·Docker 门控行跳过）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3215 实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行不变，当窗提案面 BD-PROP-010（2026-11-17）仍在册。- [R3218 PIN — 认领板头 R3217 next-window (0) MAIN（**替换台账只写不读：`state/qa_replacements.jsonl` 存在与否、行是否合法、行里点的 sha16 是否还对得上盘上现件，全仓零读面，只能人眼**）·判据 AC-QALB30..32 先立·**本行先于本轮一切探针与代码写入**] 只读待量三问：**Q1 台账现状**＝活盘 `state/qa_replacements.jsonl` 是否存在、行数、字段形态，并逐点列出全仓读它的调用点（AST/字面量两路，按「可执行读面／散文提及」两分，预期可执行 0）；**Q2 决定性臂**＝私有 temp 世界造四种台账（健康两行／坏 JSON 行／末行 sha16 与盘上不符／行指向不存在文件），量今天三读者（`--check NAME`、`verify_written`、普查＋closeout (truncated)",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -181,8 +181,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 41643,
-  "next_milestone_due": "2026-11-24T03:44:54+08:00",
+  "state_bytes": 48151,
+  "next_milestone_due": "2026-11-24T03:58:44+08:00",
   "heartbeat": {
     "tick": 3216,
     "state_tick": 3217,

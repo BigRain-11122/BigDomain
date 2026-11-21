@@ -7508,8 +7508,12 @@ SUITES = [
     # one JSON record per rewrite to a ledger outside qa/. Three more criteria
     # (27..29): the record's fields, the ledger's place, a lost record answering
     # rc=2.
+    # R3218: that ledger was write-only - exactly one file in the tree named it
+    # and that file is the writer, so a corrupt, stale or absent ledger answered
+    # nothing to any face. --ledger-check [PATH] is the read half (AC-QALB30..32):
+    # rows/names/bad/stale/missing on one line, one detail line per defect.
     ("os-qa-log",
-     os.path.join("..", "os", "test_qa_log.py"), 29),
+     os.path.join("..", "os", "test_qa_log.py"), 32),
     # R3208: src/os/state.json carries the canonical CRLF dialect its readers
     # require, but the path was not pinned in .gitattributes - so a checkout
     # running with core.autocrlf=false materialized the whole carrier as bare

@@ -11,6 +11,8 @@ Usage:
   python tools/qa_log.py NAME.log                 # read stdin, write qa/NAME.log
   python tools/qa_log.py NAME.log --from FILE     # read FILE (any dialect), write qa/NAME.log
   python tools/qa_log.py --check NAME             # read-only dialect verdict, rc=2 = red
+  python tools/qa_log.py --ledger-check [PATH]    # read-only replacement ledger verdict,
+                                                  # default state/qa_replacements.jsonl
   python tools/qa_log.py --selftest               # fixtures in a temp dir, nothing in qa/
 
 Contract (AC-QAL1..7):
@@ -138,6 +140,16 @@ world, so a suite never records into the live ledger. A failed append names
 itself and answers rc=2: the file landed, the record did not. Evidence bytes are
 untouched - the ledger is a separate append.
 
+R3218 (AC-QALB30..32): that ledger was write-only. Measured first: exactly one
+file in the tree names it and that file is this writer, so a ledger that is
+corrupt, stale or absent answered nothing to anyone - the dialect face, the
+read-back proof and the writer census all return the same output either way.
+--ledger-check [PATH] is the missing read: read-only, default the live ledger,
+one line with rows/names/bad/stale/missing and one detail line per defect. A
+missing ledger is rows=0 (no rewrite yet, not a defect); a bad JSON line or a
+row whose latest new_sha16 no longer matches the file on disk is RED; a row
+whose file is gone is counted as missing, because a deletion is another event.
+
 Stdlib only, ASCII source, zero network, zero shell.
 """
 
@@ -214,6 +226,108 @@ def record_replacement(directory, name, previous, proof):
         handle.flush()
         os.fsync(handle.fileno())
     return path
+
+
+def ledger_row_problem(obj):
+    """R3218 (AC-QALB30/31): what a record must be before it can be believed."""
+    if not isinstance(obj, dict):
+        return "not-object"
+    if obj.get("event") != "REPLACED":
+        return "event"
+    name = obj.get("name")
+    if (not isinstance(name, str) or not name or name in (".", "..")
+            or "/" in name or "\\" in name):
+        return "name"
+    for key in ("old_bytes", "new_bytes"):
+        value = obj.get(key)
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            return key
+    for key in ("old_sha16", "new_sha16"):
+        value = obj.get(key)
+        if not isinstance(value, str) or len(value) != 16:
+            return key
+        if any(ch not in "0123456789abcdef" for ch in value):
+            return key
+    return None
+
+
+def read_ledger(path):
+    """R3218: parse a ledger without ever writing it.
+
+    Returns (records, bad), where bad is a list of (line number, reason). Blank
+    lines carry no claim and are skipped; an undecodable file is one bad line 0,
+    because nothing below it can be judged.
+    """
+    if not os.path.isfile(path):
+        return [], []
+    raw = io.open(path, "rb").read()
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return [], [(0, "undecodable")]
+    records = []
+    bad = []
+    for number, line in enumerate(text.split("\n"), 1):
+        if not line.strip():
+            continue
+        try:
+            obj = json.loads(line)
+        except ValueError:
+            bad.append((number, "json"))
+            continue
+        problem = ledger_row_problem(obj)
+        if problem:
+            bad.append((number, problem))
+            continue
+        records.append(obj)
+    return records, bad
+
+
+def do_ledger_check(path=None):
+    """R3218 (AC-QALB30..32): read the replacement ledger back, read-only.
+
+    One line says what the ledger holds, one detail line per defect. A ledger
+    that is not there answers rows=0: no rewrite has happened yet, which is not
+    a defect. A row whose latest record no longer matches the file on disk is
+    named stale, because that is evidence changing with no record of it. A row
+    whose file is gone is counted, not reddened - a deletion is another event,
+    and this ledger never claimed the file would stay.
+    """
+    path = LEDGER if path is None else path
+    records, bad = read_ledger(path)
+    latest = {}
+    for record in records:
+        latest[record["name"]] = record
+    here = os.path.normcase(os.path.realpath(path))
+    live = os.path.normcase(os.path.realpath(LEDGER))
+    if here == live:
+        evidence_dir = os.path.join(REPO, "qa")
+    else:
+        evidence_dir = os.path.dirname(os.path.abspath(path))
+    stale = []
+    missing = []
+    for name in sorted(latest):
+        target = os.path.join(evidence_dir, name)
+        if not os.path.isfile(target):
+            missing.append(name)
+            continue
+        disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+        if disk != latest[name]["new_sha16"]:
+            stale.append((name, disk, latest[name]["new_sha16"]))
+    verdict = "RED" if (bad or stale) else "OK"
+    sys.stdout.write("QA-LEDGER %s path=%s rows=%d names=%d bad=%d stale=%d "
+                     "missing=%d\n"
+                     % (verdict, path, len(records), len(latest), len(bad),
+                        len(stale), len(missing)))
+    for number, reason in bad:
+        sys.stdout.write("QA-LEDGER detail bad line=%d reason=%s\n"
+                         % (number, reason))
+    for name, disk, wanted in stale:
+        sys.stdout.write("QA-LEDGER detail stale name=%s disk_sha16=%s "
+                         "ledger_sha16=%s\n" % (name, disk, wanted))
+    for name in missing:
+        sys.stdout.write("QA-LEDGER detail missing name=%s\n" % name)
+    return 0 if verdict == "OK" else 2
 
 
 def read_source(raw):
@@ -659,7 +773,7 @@ def main(argv):
     args = list(argv[1:])
     if not args:
         sys.stdout.write("usage: qa_log.py NAME [--from FILE] | --check NAME | "
-                         "--selftest\n")
+                         "--ledger-check [PATH] | --selftest\n")
         return 2
     if args[0] == "--selftest":
         return selftest()
@@ -668,6 +782,12 @@ def main(argv):
             sys.stdout.write("QA-LOG REFUSED --check needs exactly one name\n")
             return 2
         return do_check(args[1])
+    if args[0] == "--ledger-check":
+        if len(args) > 2:
+            sys.stdout.write("QA-LOG REFUSED --ledger-check takes at most one "
+                             "path\n")
+            return 2
+        return do_ledger_check(args[1] if len(args) == 2 else None)
     name = args[0]
     source = None
     if "--from" in args:

@@ -1,0 +1,44 @@
+python : <unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. D
+id you mean "\\("? A raw string is also an option.
+所在位置 行:1 字符: 1
++ python tmp/probe_R3218.py > tmp/probe_R3218.out 2>&1; "probe rc=$LAST ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (<unknown>:18: S...also an option.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+<unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+Q1 live ledger path=state\qa_replacements.jsonl exists=False
+Q1 executable faces naming the ledger (py string constants + ps1):
+   tools\qa_log.py hits=1 ['qa_replacements.jsonl']
+Q1 reader_files=1 external_to_writer=0
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=2c8b08da5ce60398 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=4 old_sha16=2c8b08da5ce60398 new_bytes=4 new_sha16=27dd8ed44a83ff94
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=27dd8ed44a83ff94 dialect=utf-8/lf VERDICT PASS
+Q2 healthy ledger rows=1 fields=['event', 'name', 'new_bytes', 'new_sha16', 'old_bytes', 'old_sha16', 'ts']
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=2c8b08da5ce60398 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=4 old_sha16=2c8b08da5ce60398 new_bytes=4 new_sha16=27dd8ed44a83ff94
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=27dd8ed44a83ff94 dialect=utf-8/lf VERDICT PASS
+Q2 badjson ledger rows=1 fields=['event', 'name', 'new_bytes', 'new_sha16', 'old_bytes', 'old_sha16', 'ts']
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=2c8b08da5ce60398 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=4 old_sha16=2c8b08da5ce60398 new_bytes=4 new_sha16=27dd8ed44a83ff94
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=27dd8ed44a83ff94 dialect=utf-8/lf VERDICT PASS
+Q2 stale ledger rows=1 fields=['event', 'name', 'new_bytes', 'new_sha16', 'old_bytes', 'old_sha16', 'ts']
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=2c8b08da5ce60398 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=4 old_sha16=2c8b08da5ce60398 new_bytes=4 new_sha16=27dd8ed44a83ff94
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=27dd8ed44a83ff94 dialect=utf-8/lf VERDICT PASS
+Q2 missing ledger rows=1 fields=['event', 'name', 'new_bytes', 'new_sha16', 'old_bytes', 'old_sha16', 'ts']
+Q2 stale disk_sha16=27dd8ed44a83ff94 ledger_new_sha16=0000000000000000
+Q2 healthy --check rc=0 says=QA-LOG OK name=rec.log dialect=utf-8/lf bytes=4 carried=0 bare_proofs=0
+Q2 badjson --check rc=0 says=QA-LOG OK name=rec.log dialect=utf-8/lf bytes=4 carried=0 bare_proofs=0
+Q2 stale --check rc=0 says=QA-LOG OK name=rec.log dialect=utf-8/lf bytes=4 carried=0 bare_proofs=0
+Q2 missing --check rc=0 says=QA-LOG OK name=rec.log dialect=utf-8/lf bytes=4 carried=0 bare_proofs=0
+Q2 tools/closeout_gate.py mentions_ledger=0
+Q2 src/os/qa_writer_census.py mentions_ledger=0
+Q2 tools/evidence_dialect.py absent
+Q2 verdict: the three shipped faces never name the ledger, so a corrupt ledger answers the same as a healthy one
+Q3 decision: add one read-only face --ledger-check [PATH] (default the live ledger); the gate line would only echo a constant count and the "record only" option keeps the question unanswerable

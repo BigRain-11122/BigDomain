@@ -1,4 +1,4 @@
-"""Battery suite for tools/qa_log.py - criteria AC-QALB1..AC-QALB9.
+"""Battery suite for tools/qa_log.py - criteria AC-QALB1..AC-QALB32.
 
 AC-QALB1..AC-QALB9 were pinned in src/os/backlog.md at R2807 BEFORE this suite
 existed, mapping one-to-one onto AC-QAL1..AC-QAL7 that the tool prints, plus one
@@ -365,8 +365,8 @@ def main():
             if found:
                 declared.append(found.group(1))
         ok('AC-QALB9 registry declares exactly one row for this suite, '
-           'twenty-nine',
-           declared == ['29'], 'rows=%s hits=%d' % (declared, len(hits)))
+           'thirty-two',
+           declared == ['32'], 'rows=%s hits=%d' % (declared, len(hits)))
 
         # ---- AC-QALB11: a carried proof line is marked, not certified -----
         # R3203: the generator prints "LOG OK path=... sha16=..." to prove a
@@ -690,7 +690,9 @@ def main():
         # A refusal nobody documents only moves the same mistake into a
         # traceback. Every name a shipped usage example shows must end with
         # .log; the --check examples are exempt on purpose, because that face
-        # deliberately keeps reading any flat name.
+        # deliberately keeps reading any flat name. --selftest and
+        # --ledger-check (R3218) take no evidence name at all - the second one
+        # takes a ledger path - so neither is a name example.
         tool_doc = read_text(TOOL)
         shard_doc = read_text(os.path.join(ROOT, 'tools', 'battery_shard.py'))
         usage_names = []
@@ -698,7 +700,8 @@ def main():
             stripped = line.strip()
             if not stripped.startswith('python tools/qa_log.py'):
                 continue
-            if '--check' in stripped or '--selftest' in stripped:
+            if ('--check' in stripped or '--selftest' in stripped
+                    or '--ledger-check' in stripped):
                 continue
             for token in stripped.split()[2:]:
                 if token.startswith('--') or token.startswith('#'):
@@ -1127,6 +1130,152 @@ def main():
            % (rc_e, rc_f, 'REPLACEMENT-RECORD-FAILED' in out_f,
               landed_f == mod.normalize(mod.read_source(b'beta\n')).encode(),
               'QA-LOG WROTE name=fail.log' in out_f))
+
+        # ---- AC-QALB30: a healthy ledger reads back -------------------------
+        # R3218: the record was write-only. Measured first: exactly one file in
+        # the tree names the ledger and that file is this writer, so a corrupt,
+        # stale or absent ledger answered nothing to any face - the dialect
+        # verdict, the read-back proof and the writer census all return the same
+        # output either way.
+        lc = os.path.join(world, 'lcheck')
+        os.makedirs(lc)
+        lpath = os.path.join(lc, mod.LEDGER_NAME)
+        rc_l1, _o1 = quiet(mod.do_write, 'rec.log', b'one\n', directory=lc)
+        rc_l2, _o2 = quiet(mod.do_write, 'rec.log', b'two\nlines\n',
+                           directory=lc)
+        rc_l2b, _o2b = quiet(mod.do_write, 'rec.log', b'three\nlines\n',
+                             directory=lc)
+        rows_two = len([ln for ln in read_text(lpath).splitlines() if ln.strip()])
+        rc_l3, _o3 = quiet(mod.do_write, 'fresh.log', b'x\n', directory=lc)
+        rows_fresh = len([ln for ln in read_text(lpath).splitlines()
+                          if ln.strip()])
+        rc_h, out_h = quiet(mod.do_ledger_check, lpath)
+        rc_d, out_d = quiet(mod.do_ledger_check)
+        ok('AC-QALB30 a healthy ledger reads back with no defect',
+           rc_l1 == 0 and rc_l2 == 0 and rc_l2b == 0 and rows_two == 2
+           and rc_l3 == 0 and rows_fresh == 2
+           and rc_h == 0 and out_h.startswith('QA-LEDGER OK ')
+           and 'rows=2' in out_h and 'names=1' in out_h
+           and 'bad=0' in out_h and 'stale=0' in out_h
+           and 'missing=0' in out_h and 'detail ' not in out_h
+           and rc_d in (0, 2)
+           and ('path=%s' % mod.LEDGER) in out_d,
+           'rc=%d rows=%d/%d detail_free=%s default_names_live=%s'
+           % (rc_h, rows_two, rows_fresh, 'detail ' not in out_h,
+              ('path=%s' % mod.LEDGER) in out_d))
+
+        # ---- AC-QALB31: the ways a ledger can be wrong ----------------------
+        # A blank line carries no claim and is skipped. A truncated line, a row
+        # whose sha16 no longer matches the file, a row whose file is gone and a
+        # file that cannot be decoded at all each answer their own thing.
+        def ledger_world(tag):
+            d = os.path.join(world, tag)
+            os.makedirs(d)
+            mod.do_write('rec.log', b'one\n', directory=d)
+            mod.do_write('rec.log', b'two\nlines\n', directory=d)
+            mod.do_write('rec.log', b'three\nlines\n', directory=d)
+            return d, os.path.join(d, mod.LEDGER_NAME)
+
+        def append_ledger(path, text):
+            with io.open(path, 'a', encoding='utf-8', newline='\n') as fh:
+                fh.write(text)
+
+        d_bad, p_bad = ledger_world('ldef-bad')
+        append_ledger(p_bad, '\n{"ts": "cut\n')
+        rc_bad, out_bad = quiet(mod.do_ledger_check, p_bad)
+
+        d_stale, p_stale = ledger_world('ldef-stale')
+        disk_stale = hashlib.sha256(
+            read_bytes(os.path.join(d_stale, 'rec.log'))).hexdigest()[:16]
+        append_ledger(p_stale, json.dumps({
+            'ts': '2026-11-22T00:00:00Z', 'event': 'REPLACED',
+            'name': 'rec.log', 'old_bytes': 4, 'old_sha16': disk_stale,
+            'new_bytes': 7, 'new_sha16': '0' * 16}, sort_keys=True) + '\n')
+        rc_stale, out_stale = quiet(mod.do_ledger_check, p_stale)
+
+        d_miss, p_miss = ledger_world('ldef-miss')
+        append_ledger(p_miss, json.dumps({
+            'ts': '2026-11-22T00:00:00Z', 'event': 'REPLACED',
+            'name': 'gone.log', 'old_bytes': 4, 'old_sha16': 'a' * 16,
+            'new_bytes': 7, 'new_sha16': 'b' * 16}, sort_keys=True) + '\n')
+        rc_miss, out_miss = quiet(mod.do_ledger_check, p_miss)
+
+        d_shape, p_shape = ledger_world('ldef-shape')
+        append_ledger(p_shape, json.dumps({
+            'ts': '2026-11-22T00:00:00Z', 'event': 'REPLACED',
+            'name': 'sub/x.log', 'old_bytes': 4, 'old_sha16': 'a' * 16,
+            'new_bytes': 7, 'new_sha16': 'b' * 16}, sort_keys=True) + '\n')
+        rc_shape, out_shape = quiet(mod.do_ledger_check, p_shape)
+
+        d_und, p_und = ledger_world('ldef-und')
+        with io.open(p_und, 'wb') as fh:
+            fh.write(b'\xff\xfe\x00\x00')
+        rc_und, out_und = quiet(mod.do_ledger_check, p_und)
+
+        rc_abs, out_abs = quiet(mod.do_ledger_check,
+                                os.path.join(world, 'no-ledger.jsonl'))
+        ok('AC-QALB31 a bad line, a stale row, a gone file, a shape and an '
+           'unreadable file each answer their own thing',
+           rc_bad == 2 and 'QA-LEDGER RED' in out_bad and 'rows=2' in out_bad
+           and 'bad=1' in out_bad and 'line=4' in out_bad
+           and rc_stale == 2 and 'QA-LEDGER RED' in out_stale
+           and 'stale=1' in out_stale and 'bad=0' in out_stale
+           and ('ledger_sha16=%s' % ('0' * 16)) in out_stale
+           and ('disk_sha16=%s' % disk_stale) in out_stale
+           and rc_miss == 0 and 'QA-LEDGER OK' in out_miss
+           and 'missing=1' in out_miss and 'names=2' in out_miss
+           and 'detail missing name=gone.log' in out_miss
+           and rc_shape == 2 and 'bad=1' in out_shape
+           and rc_und == 2 and 'QA-LEDGER RED' in out_und
+           and 'rows=0' in out_und and 'line=0' in out_und
+           and rc_abs == 0 and 'QA-LEDGER OK' in out_abs
+           and 'rows=0' in out_abs and 'missing=0' in out_abs,
+           'bad=%d/%s stale=%d/%s miss=%d/%s shape=%d und=%d/%s abs=%d'
+           % (rc_bad, 'bad=1' in out_bad, rc_stale, 'stale=1' in out_stale,
+              rc_miss, 'missing=1' in out_miss, rc_shape, rc_und,
+              'rows=0' in out_und, rc_abs))
+
+        # ---- AC-QALB32: read-only, and declared once ------------------------
+        # The face reads files and prints; it must not reach the writer, create
+        # a directory, or touch the live ledger or the live qa/ tree.
+        ledger_text = read_text(TOOL)
+        led_src = ledger_text[ledger_text.index('def do_ledger_check('):]
+        led_src = led_src[:led_src.index('def read_source(')]
+        read_src = ledger_text[ledger_text.index('def read_ledger('):]
+        read_src = read_src[:read_src.index('def do_ledger_check(')]
+        live_before = (read_bytes(mod.LEDGER)
+                       if os.path.isfile(mod.LEDGER) else b'')
+        qa_before_read = qa_snapshot()
+        l_before = stamp(p_bad)
+        e_before = stamp(os.path.join(d_bad, 'rec.log'))
+        names_before = sorted(os.listdir(d_bad))
+        rc_r1, out_r1 = quiet(mod.do_ledger_check, p_bad)
+        rc_r2, out_r2 = quiet(mod.do_ledger_check, p_bad)
+        live_after = (read_bytes(mod.LEDGER)
+                      if os.path.isfile(mod.LEDGER) else b'')
+        ok('AC-QALB32 the read face writes nothing and is declared once',
+           stamp(p_bad) == l_before
+           and stamp(os.path.join(d_bad, 'rec.log')) == e_before
+           and sorted(os.listdir(d_bad)) == names_before
+           and out_r1 == out_r2 and rc_r1 == rc_r2 == 2
+           and 'record_replacement' not in led_src
+           and 'write_atomic' not in led_src
+           and 'fsync' not in led_src
+           and 'makedirs' not in led_src
+           and 'record_replacement' not in read_src
+           and 'write_atomic' not in read_src
+           and ledger_text.count('def do_ledger_check(') == 1
+           and ledger_text.count('def read_ledger(') == 1
+           and ledger_text.count('def ledger_row_problem(') == 1
+           and ledger_text.count('args[0] == "--ledger-check"') == 1
+           and ledger_text.count('"QA-LEDGER %s path=') == 1
+           and live_after == live_before
+           and qa_snapshot() == qa_before_read,
+           'repeatable=%s no_writer=%s one_dispatch=%s live_stable=%s '
+           'qa_stable=%s'
+           % (out_r1 == out_r2, 'record_replacement' not in led_src,
+              ledger_text.count('args[0] == "--ledger-check"') == 1,
+              live_after == live_before, qa_snapshot() == qa_before_read))
 
     finally:
         mod.QA = original_qa
