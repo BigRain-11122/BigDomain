@@ -5883,6 +5883,45 @@ def face_reading():
 FUTURE_TOLERANCE_HOURS = 0.05
 
 
+def outs_age_card(face):
+    """Render the published age of the CEO artifact list. Consumption only.
+
+    R3142 measured the hole: the artifact list renders 56 rows whose dates are
+    frozen strings, and the only surfaces reading `outs` were a length and a
+    presence check - so a row from eleven days ago and a row from today looked
+    alike, and nothing said so. This is a pure consumption face over the
+    block the exporter derives: it never re-walks preview/ or qa/, never
+    re-stamps a file, and an absent block prints a named absence rather than
+    a zero, because a fabricated `oldest_days=0` would read as "everything is
+    fresh" on the face that is supposed to warn about staleness.
+    """
+    if not isinstance(face, dict):
+        face = {}
+    block = face.get("outs_age")
+    if not isinstance(block, dict) or "rows" not in block:
+        return ("<p class=kv>OUTS-AGE absent from the export face "
+                "(honest absence, not a zero)</p>")
+
+    def show(value):
+        return "none" if value is None else str(value)
+
+    line = ("OUTS-AGE rows=%s measurable=%s unmeasurable=%s oldest_days=%s "
+            "over7=%s dup_rows=%s distinct=%s"
+            % (show(block.get("rows")), show(block.get("measurable")),
+               show(block.get("unmeasurable")), show(block.get("oldest_days")),
+               show(block.get("over7")), show(block.get("dup_rows")),
+               show(block.get("distinct"))))
+    try:
+        over7 = int(block.get("over7"))
+    except (TypeError, ValueError):
+        return ("<p class=kv>%s</p><p class=fail>OUTS-AGE block shape defect: "
+                "over7 is not an integer (no numbers printed)</p>" % esc(line))
+    if over7 > 0:
+        return ("<p class=kv>%s</p><p class=fail>OUTS-AGE %d row(s) older than "
+                "seven days</p>" % (esc(line), over7))
+    return "<p class=kv>%s</p>" % esc(line)
+
+
 def face_age_card(reading):
     """Render the gate's own reading of the export face. Consumption only.
 
@@ -7723,6 +7762,9 @@ def render():
         # R3128: the tree-gate corpus reading gets its one live consumer, from
         # the data file's own block - never re-counted here.
         sd30_corpus = corpus_card(_cf if isinstance(_cf, dict) else None)
+        # R3142: the artifact list's derived age gets its one live consumer,
+        # from the data file's own block - never re-walked here.
+        sd30_outs_age = outs_age_card(_cf if isinstance(_cf, dict) else None)
         sd30_sd_html = esc(sd30_sd_txt)
         sd30_hard = esc(
             "structural law (R1223 pre-registered AC-FD30a..f): "
@@ -7742,6 +7784,7 @@ def render():
     else:
         sd30_kpis = sd30_do_html = sd30_ceolines = ""
         sd30_hb = sd30_age = sd30_corpus = ""
+        sd30_outs_age = ""
         sd30_sd_html = sd30_hard = ""
     if sd30_err:
         sd30_kpis = ("<p class=fail>STATUS-EXPORT READ FAILED "
@@ -8476,6 +8519,7 @@ from export)</h3>
 __SD30_HB__
 __SD30_AGE__
 __SD30_CORPUS__
+__SD30_OUTS_AGE__
 <p class=kv>__SD30_SD__</p>
 <p class=kv>__SD30_HARD__</p>
 </div>
@@ -8760,6 +8804,7 @@ __PAYWARN__</footer>
         "__SD30_HB__": sd30_hb,
         "__SD30_AGE__": sd30_age,
         "__SD30_CORPUS__": sd30_corpus,
+        "__SD30_OUTS_AGE__": sd30_outs_age,
         "__SD30_SD__": sd30_sd_html,
         "__SD30_HARD__": sd30_hard,
         "__M1_TITLE__": esc(m1["card_title"]),

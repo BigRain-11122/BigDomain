@@ -167,18 +167,23 @@ def _git(repo, args):
     return proc.stdout.decode('utf-8', 'replace')
 
 
-def _git_content_times(repo):
-    """preview/ path -> committer time of the last commit that changed it.
+def _git_content_times(repo, paths=None):
+    """path -> committer time of the last commit that changed it.
 
     R2897 AC-EXPD4: git records WHEN THE CONTENT changed, which is the question
     the artifact line claims to answer; a filesystem clock moves when a file is
     merely touched, copied or restored. One `git log` is asked for the whole
-    preview/ tree, newest commit first, so the first time a path appears is its
-    most recent content change.
+    tree, newest commit first, so the first time a path appears is its most
+    recent content change.
+
+    R3142: the same rule is asked for a wider scope so the artifact list's age
+    can be derived from the SAME clock the `latest` line is dated by - one
+    stamp rule, one formatter, never a second one for the list.
     """
     if not os.path.exists(os.path.join(repo, '.git')):
         return {}
-    text = _git(repo, ['log', '--format=%x00%ct', '--name-only', '--', 'preview'])
+    scope = list(paths) if paths else ['preview']
+    text = _git(repo, ['log', '--format=%x00%ct', '--name-only', '--'] + scope)
     if text is None:
         return {}
     times = {}
@@ -198,16 +203,20 @@ def _git_content_times(repo):
     return times
 
 
-def _git_uncommitted(repo):
-    """preview/ paths whose committed bytes are NOT what is on disk.
+def _git_uncommitted(repo, paths=None):
+    """paths whose committed bytes are NOT what is on disk.
 
     R2897 AC-EXPD5: a file written after the commit that git would name must use
     its own mtime, because its content really is newer than that commit - and an
     untracked file is uncommitted by definition.
+
+    R3142: the scope is a parameter for the same reason as _git_content_times -
+    the list's age reads the same clock as the `latest` line.
     """
     if not os.path.exists(os.path.join(repo, '.git')):
         return set()
-    text = _git(repo, ['status', '--porcelain', '--', 'preview'])
+    scope = list(paths) if paths else ['preview']
+    text = _git(repo, ['status', '--porcelain', '--'] + scope)
     if text is None:
         return set()
     dirty = set()
@@ -463,6 +472,67 @@ def fmt_pair(pair):
 _fmt_pair = fmt_pair
 
 
+# R3142: a row in the artifact list names its own files, so its age can be
+# asked of the FILES. The label in the row cannot answer it: measured on the
+# live face, 16 of 56 rows carry any date token at all and 8 of those claim a
+# date the file's own content stamp already contradicts.
+OUTS_PATH_RE = re.compile(
+    r'\b((?:preview|qa)/[A-Za-z0-9_.\-]+\.(?:html|json|log|png))')
+
+
+def outs_age_block(repo, rows):
+    """The artifact list's own age, derived from each row's target files.
+
+    R3142 measured the hole: the CEO face renders 56 artifact rows whose dates
+    are frozen strings typed when the row was appended, and no surface judges
+    whether one still holds - 8 rows' dates and 4 rows' byte counts are already
+    false on live disk. The AGE itself is derivable: 52 of 56 rows name files
+    that are all on disk, so each age is the newest content stamp of the row's
+    own files (a row is only as fresh as its newest half), read through the SAME
+    rule that dates the `latest` line.
+
+    A row that names no file, or whose files are all gone, counts as
+    unmeasurable - never as age 0, because a fabricated zero reads as "landed
+    today" on a face that carries no other age. Nothing is pruned here: today
+    zero rows are older than seven days, so a pruning gate could not fire, and
+    the 27 duplicate rows are NAMED (dup_rows/distinct) rather than deleted.
+    """
+    rows = [str(r) for r in (rows or [])]
+    if not rows:
+        return None
+    times = _git_content_times(repo, ('preview', 'qa'))
+    dirty = _git_uncommitted(repo, ('preview', 'qa'))
+    today = datetime.datetime.now(TZ).date()
+    ages = []
+    for row in rows:
+        stamps = []
+        for rel in OUTS_PATH_RE.findall(row):
+            full = os.path.join(repo, rel)
+            if not os.path.isfile(full):
+                continue
+            if rel in times and rel not in dirty:
+                stamps.append(times[rel])
+            else:
+                stamps.append(os.path.getmtime(full))
+        if not stamps:
+            ages.append(None)
+            continue
+        when = datetime.datetime.fromtimestamp(max(stamps), TZ).date()
+        ages.append((today - when).days)
+    measured = [a for a in ages if a is not None]
+    keys = [tuple(sorted(set(OUTS_PATH_RE.findall(row)))) or (row[:50],)
+            for row in rows]
+    return {
+        'rows': len(rows),
+        'measurable': len(measured),
+        'unmeasurable': len(ages) - len(measured),
+        'oldest_days': max(measured) if measured else None,
+        'over7': len([a for a in measured if a > 7]),
+        'dup_rows': len(keys) - len(set(keys)),
+        'distinct': len(set(keys)),
+    }
+
+
 def next_window_row(repo):
     """The topmost open next-window row, with its markdown and DONE items cut."""
     board = os.path.join(repo, 'src', 'os', 'backlog.md')
@@ -694,6 +764,11 @@ def payload(repo, state, stamp, corpus=None):
     if not outs or outs[0] != d['latest']:
         outs.insert(0, d['latest'])
     data['outs'] = outs
+    # R3142: the list's age gets a derivation and (in frontdoor) a consumer.
+    # Two copies of ONE derivation, for the same reason the evidence line
+    # carries two - a reader must never find two opinions in one document.
+    oab = outs_age_block(repo, outs)
+    data['outs_age'] = oab
     data['export_ts'] = stamp
     data['do'] = d['current']
     ceo = data.get('ceo_face') or {}
@@ -704,6 +779,7 @@ def payload(repo, state, stamp, corpus=None):
     ceo['newest_pair_on_disk_is_board'] = d['newest_is_board']
     ceo['next_milestone'] = d['next']
     ceo['next_milestone_due'] = d['next_due']
+    ceo['outs_age'] = oab
     # AC-EXPE1/AC-EXPE2: both copies of the evidence line move together, for the
     # same reason AC-SXF15 pins two copies of latest_artifact - one writer, one
     # value, so a reader cannot find two opinions in one document.
@@ -876,6 +952,11 @@ def write(repo, stamp, corpus=None):
           # clock it wrote under.
           and str(back.get('export_ts') or '') >= stamp
           and back['outs'][0] == d['latest']
+          # R3142: the age block is one derivation published twice - a face
+          # that carries two opinions about the same list is a defect.
+          and back.get('outs_age') == data.get('outs_age')
+          and (back.get('ceo_face') or {}).get('outs_age')
+          == back.get('outs_age')
           and back['self_drive'] == data['self_drive']
           and grader_code == 0
           and not grader_problems)
@@ -911,6 +992,30 @@ def check(repo):
                                  % (hb.get('lag'),))
         if cur.get('heartbeat') != hb:
             fails.append('AC-EXPR1 the two heartbeat copies disagree')
+    # AC-EXPR5 (R3142): the artifact list's age block is graded for INTERNAL
+    # consistency - arithmetic that must close, and two copies of one
+    # derivation. Its VALUES are deliberately not re-measured here: the age is
+    # a snapshot at export_ts, and re-walking the tree would redden every round
+    # that lands a new file (a gate that cannot pass is not a gate).
+    oab = data.get('outs_age')
+    if isinstance(oab, dict):
+        try:
+            rows_n = int(oab.get('rows'))
+            measurable = int(oab.get('measurable'))
+            unmeasurable = int(oab.get('unmeasurable'))
+            distinct = int(oab.get('distinct'))
+            dup_rows = int(oab.get('dup_rows'))
+        except (TypeError, ValueError):
+            fails.append('AC-EXPR5 outs_age counters are not integers')
+        else:
+            if measurable + unmeasurable != rows_n:
+                fails.append('AC-EXPR5 measurable+unmeasurable != rows')
+            if distinct + dup_rows != rows_n:
+                fails.append('AC-EXPR5 distinct+dup_rows != rows')
+            if rows_n != len(data.get('outs') or []):
+                fails.append('AC-EXPR5 outs_age rows != len(outs)')
+        if cur.get('outs_age') != oab:
+            fails.append('AC-EXPR5 the two outs_age copies disagree')
     # AC-EXPG3: the read-only verdict asks the same law, so an unanchored log
     # reddens the gate without anyone writing anything.
     refusal = round_shape_refusal(state)

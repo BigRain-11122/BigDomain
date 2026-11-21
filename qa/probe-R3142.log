@@ -1,0 +1,43 @@
+Q0 outs count = 56
+Q0 first == ceo_face.latest_artifact? True
+Q1 tag kinds = {'commit': 8, 'mtime': 5, 'R2984': 1, 'R2946': 1}
+Q1 rows with no parsable tail tag = 41
+   no-tag #15 'preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B) [2026-11-1'
+   no-tag #16 'preview/apimarket-report.html (36146B) + preview/apimarket-report.json (59515B)'
+   no-tag #17 'qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidenc'
+   no-tag #18 'preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)'
+   no-tag #19 'preview/membership-face.html (10881B) + preview/membership-face.json (7051B)'
+   no-tag #20 'qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+'
+   no-tag #21 'preview/membership-face.html (10881B) + preview/membership-face.json (7051B)'
+   no-tag #22 'preview/membership-face.html (8853B) + preview/membership-face.json (4602B)'
+   no-tag #23 'preview/money-path-demo.html (10161B) + preview/money-path-demo.json (4705B)'
+   no-tag #24 'preview/first-yuan-chain.html (3078B) + preview/first-yuan-chain.json (4159B)'
+Q1b rows whose claimed DATE no longer matches the file stamp = 8
+   stale-date #4 preview/live-sandbox.html claimed=2026-11-18 now=2026-11-19(commit)
+   stale-date #4 preview/live-sandbox.json claimed=2026-11-18 now=2026-11-19(commit)
+   stale-date #6 preview/live-sandbox.html claimed=2026-11-18 now=2026-11-19(commit)
+   stale-date #6 preview/live-sandbox.json claimed=2026-11-18 now=2026-11-19(commit)
+   stale-date #8 preview/live-sandbox.html claimed=2026-11-18 now=2026-11-19(commit)
+   stale-date #8 preview/live-sandbox.json claimed=2026-11-18 now=2026-11-19(commit)
+   stale-date #9 preview/live-sandbox.html claimed=2026-11-18 now=2026-11-19(commit)
+   stale-date #9 preview/live-sandbox.json claimed=2026-11-18 now=2026-11-19(commit)
+Q1b rows whose claimed SIZE no longer matches the file = 4
+   size #4 preview/live-sandbox.html claimed=3472B now=5766B
+   size #6 preview/live-sandbox.html claimed=3472B now=5766B
+   size #8 preview/live-sandbox.html claimed=3472B now=5766B
+   size #9 preview/live-sandbox.html claimed=3472B now=5766B
+Q1b rows whose target file is MISSING = 0
+Q2 age buckets (days:rows) = {1: 2, 2: 3, 3: 9, 4: 1}
+Q2 rows older than 7 days = 0 across 0 dates
+Q2b description groups appearing more than once = 13 (rows=40)
+   dup rows 'preview/live-sandbox.html + preview/live-sandbox.json' -> [2, 3, 4, 6, 8, 9]
+   dup rows 'preview/filing-checklist.html + preview/filing-checklist.json' -> [10, 11, 46, 47]
+   dup rows 'preview/journey-19.9.html + preview/journey-19.9.json' -> [12, 13]
+   dup rows 'preview/apimarket-report.html + preview/apimarket-report.json' -> [14, 15, 16]
+   dup rows 'preview/first-yuan-chain.html + preview/first-yuan-chain.json' -> [18, 24, 27]
+   dup rows 'preview/membership-face.html + preview/membership-face.json' -> [19, 21, 22, 44]
+   dup rows 'qa/deliverable-index-suite-R2796.log' -> [20, 34]
+   dup rows 'preview/money-path-demo.html + preview/money-path-demo.json' -> [23, 45]
+   dup rows 'preview/battery-shard-report.html + preview/battery-shard-report.json' -> [26, 28, 29, 30, 31]
+   dup rows 'preview/ledger-reconcile-face.html + preview/ledger-reconcile-face.json' -> [35, 36]
+Q3 consumers found by grep are printed by the calling shell

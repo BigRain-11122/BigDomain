@@ -1,0 +1,21 @@
+rows=56
+rows carrying ANY date token anywhere = 16
+rows whose targets are ALL missing = 0
+rows with no path token at all = 4
+   no-path #37 'src/os/launch_battery_R2128..R2781.py (36 launchers wired to the singl'
+   no-path #52 'first-yuan-R2772.log (1214B)'
+   no-path #54 'leg-interlock-R2771.log (758B)'
+   no-path #55 'ceo-blockers-R2770.log (879B)'
+rows with a derivable age from their own files = 52
+derived age buckets (days:rows) = {0: 1, 1: 8, 2: 7, 3: 7, 4: 4, 5: 9, 6: 16}
+derived rows older than 7 days = 0
+   oldest #20 2026-11-15 age=6d paths=1/1
+   oldest #32 2026-11-15 age=6d paths=1/1
+   oldest #33 2026-11-15 age=6d paths=2/2
+   oldest #34 2026-11-15 age=6d paths=1/1
+   oldest #35 2026-11-15 age=6d paths=2/2
+   oldest #36 2026-11-15 age=6d paths=2/2
+   oldest #38 2026-11-15 age=6d paths=2/2
+   oldest #39 2026-11-15 age=6d paths=2/2
+rows that duplicate an earlier row's path set = 27
+distinct path sets = 29

@@ -1469,6 +1469,68 @@ def main():
         ok('AC-EXPR4 the face carrying a corpus block stays judgeable',
            code_c is None, 'code=%s' % code_c)
 
+        # ---- AC-EXPW15 (R3142 pin): the artifact list gets a DERIVED age ----
+        # R3142 measured the live face: 56 rows, only 16 carrying any date token,
+        # 8 rows whose claimed date already contradicts the file's own content
+        # stamp and 4 whose claimed bytes are stale - and no surface judged any
+        # of it. The age is derivable from the row's own files (52/56), so it is
+        # derived there and never read back off the label.
+        ww = tempfile.mkdtemp(prefix='expw-outs-')
+        worlds.append(ww)
+        today = time.time()
+        write(os.path.join(ww, 'preview', 'aged-face.html'), '<!DOCTYPE html>\n')
+        write(os.path.join(ww, 'preview', 'aged-face.json'), '{}\n')
+        want_age = 1
+        for ext in ('.html', '.json'):
+            p = os.path.join(ww, 'preview', 'aged-face' + ext)
+            os.utime(p, (today - want_age * 86400, today - want_age * 86400))
+        # p: the LABEL claims a ten-day-old date; the file says one day. The
+        # block must read the file - a face that trusts its own frozen label is
+        # exactly the hole this round measured.
+        stale_label = ('preview/aged-face.html (16B) + preview/aged-face.json '
+                       '(3B) [2026-11-11 commit]')
+        blk = mod.outs_age_block(ww, [stale_label])
+        ok('AC-EXPW15 p age comes from the file stamp, never the label',
+           blk and blk.get('measurable') == 1
+           and blk.get('oldest_days') == want_age,
+           'block=%s' % blk)
+        # q: a row naming a file that is gone is UNMEASURABLE, never age 0.
+        gone = mod.outs_age_block(ww, ['preview/gone-face.html (1B)'])
+        ok('AC-EXPW15 q a missing target is unmeasurable, not a fake zero',
+           gone and gone.get('unmeasurable') == 1
+           and gone.get('measurable') == 0
+           and gone.get('oldest_days') is None,
+           'block=%s' % gone)
+        # s: duplicates are NAMED, and the counts close as a relation.
+        rows_s = ['preview/aged-face.html + preview/aged-face.json'] * 2 + \
+                 ['preview/gone-face.html (1B)']
+        blk_s = mod.outs_age_block(ww, rows_s)
+        ok('AC-EXPW15 s duplicates are counted, not silently pruned',
+           blk_s and blk_s.get('dup_rows') == 1
+           and blk_s.get('distinct') < blk_s.get('rows')
+           and blk_s.get('measurable') + blk_s.get('unmeasurable')
+           == blk_s.get('rows')
+           and blk_s.get('distinct') + blk_s.get('dup_rows')
+           == blk_s.get('rows'),
+           'block=%s' % blk_s)
+        # r/t: published twice from ONE derivation, and the list itself is
+        # byte-unchanged - the age is a SIBLING key, so the existing equality
+        # law on outs[0] (AC-EXPW1/AC-EXPW5) still holds.
+        wb = build_world(9320)
+        worlds.append(wb)
+        sb = json.loads(read(os.path.join(wb, 'src', 'os', 'state.json')))
+        built_b, _ = mod.payload(wb, sb, 'TB1')
+        oab_b = built_b.get('outs_age') or {}
+        ok('AC-EXPW15 r the age block is one derivation published twice',
+           oab_b and (built_b.get('ceo_face') or {}).get('outs_age') == oab_b
+           and oab_b.get('rows') == len(built_b.get('outs') or []),
+           'block=%s' % oab_b)
+        ok('AC-EXPW15 t the list rows stay byte-identical strings',
+           built_b.get('outs', [None])[0]
+           == (built_b.get('ceo_face') or {}).get('latest_artifact')
+           and (built_b.get('outs') or [])[1:] == ['x'],
+           'head=%r' % (built_b.get('outs') or [None])[0])
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')
