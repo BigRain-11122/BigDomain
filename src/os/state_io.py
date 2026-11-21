@@ -216,7 +216,8 @@ def write_canon(path, new_text):
     if back != new_bytes:
         raise StateIOError("E_SIO_BACK", "read-back does not match the write")
     return {"written": len(new_bytes),
-            "previous": None if previous is None else len(previous)}
+            "previous": None if previous is None else len(previous),
+            "carrier": carrier_face(back)}
 
 
 def write_document(path, payload):
@@ -252,11 +253,50 @@ def write_document(path, payload):
     after = report(path)
     if not after["layout_ok"]:
         raise StateIOError("E_SIO_LAYOUT", "document write did not read clean")
-    return {"written": len(new_bytes), "after": after}
+    return {"written": len(new_bytes), "after": after,
+            "carrier": carrier_face(back)}
 
 
 def report(path):
     return layout(decode(read_raw(path)))
+
+
+def carrier_face(raw):
+    """Publish every shipped reading of the same bytes by name (R3180).
+
+    This module can only speak for itself: a writer that publishes one verdict
+    lets its consumer believe a document is foldable when the fold door reads
+    it otherwise, which is exactly how the R3176/R3178 carrier debt was born.
+    Both answers are named rather than merged (a two-space document is healthy
+    here while the fold door reads only its own caliber), and a document this
+    face cannot measure is reported as an error instead of refused - a reading
+    must never change the write contract.
+    """
+    import logs_toolkit  # lazy: the gate imports nothing from this module
+    try:
+        text = decode(raw)
+        mine = layout(text)
+        payload = parse(text)
+        log_len = (len(payload.get("log") or [])
+                   if isinstance(payload, dict) else 0)
+        prof = logs_toolkit.eol_profile(raw)
+        gate_layout = bool(prof.get("layout_ok"))
+        gate_indent = bool(prof.get("indent_ok"))
+        return {
+            "bytes": len(raw),
+            "layout_ok": mine["layout_ok"],
+            "indent_ok": mine["indent_ok"],
+            "gate_layout_ok": gate_layout,
+            "gate_indent_ok": gate_indent,
+            "fold_readable": (logs_toolkit.split_ps_layout(text, log_len)
+                              is not None),
+            "agree": mine["layout_ok"] == (gate_layout and gate_indent),
+        }
+    except StateIOError as exc:
+        return {"bytes": len(raw), "error": exc.code, "agree": False}
+    except Exception as exc:  # a reading never masks the writer contract
+        return {"bytes": len(raw), "error": type(exc).__name__,
+                "agree": False}
 
 
 def fix(path, execute=False):
@@ -281,12 +321,12 @@ def fix(path, execute=False):
     if before["layout_ok"]:
         return {"verdict": "CANON-CLEAN", "before": before,
                 "predicted_bytes": len(raw), "written": 0,
-                "execute": bool(execute)}
+                "execute": bool(execute), "carrier": carrier_face(raw)}
     planned = canon(text)
     predicted = len(planned.encode("utf-8"))
     out = {"verdict": "CANON-DRIFT", "before": before,
            "predicted_bytes": predicted, "written": 0,
-           "execute": bool(execute)}
+           "execute": bool(execute), "carrier": carrier_face(raw)}
     if not execute:
         return out
     written = write_canon(path, planned)
@@ -300,6 +340,7 @@ def fix(path, execute=False):
     if not after["layout_ok"]:
         raise StateIOError("E_SIO_LAYOUT", "canon write did not read clean")
     out["verdict"] = "CANON-FIXED"
+    out["carrier"] = carrier_face(read_raw(path))
     return out
 
 

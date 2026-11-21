@@ -5,23 +5,23 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3179 PRODUCT+ENGINEERING: the carrier is refilled and the writer now reads the indent the document actually uses - fold 607 moved the 18 oldest live items verbatim into the 2026-11 archive (carrier 76204B margin 2296 -> 62433B margin 16067), and state_io no longer calls a 16-space canon drifted: it measures the caliber from the bytes (a uniform 2 or 16 is healthy, mixed or anything else is disease) and writes the live 16-space form.",
+    "current": "2026-11-21 R3180 PRODUCT+ENGINEERING: every state_io write site now publishes the fold door reading - write_canon, write_document and fix each return a carrier face naming layout_ok, indent_ok, gate_layout_ok, gate_indent_ok, fold_readable and agree, so a consumer can read on the bytes it just landed whether the fold can read them; zero product surface, zero api surface, zero new refusal code.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3179.log (996B, 2026-11-21)",
-    "latest_evidence": "qa/reorg-R3179.log (996B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-state-io-R3180.log (684B, 2026-11-21)",
+    "latest_evidence": "qa/suite-state-io-R3180.log (684B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3179] next window (<=48h): (0) MAIN — **把「写入器口径」变成出生站闸**：`state_io` 与折叠门已同口径，但**没有任何东西**在写盘前问「这段文本落地后会不会被折叠门拒绝」；`state_append` 有 `E_RSA_LAYOUT` 一道，`write_canon`/`write_document`/`fix` 三道全无。做法=先只读量：把 `logs_toolkit.eol_profile` 的 `indent_ok`/`layout_ok` 接进 `state_io.write_canon` 与 `write_document` 的**返回面**（不新增拒绝码），量一件「谁在写」的消费者普查（`import state_io` 的 30+ 件里哪些仍活在电池里），再决定是否加闸；判据沿用 AC-SIO9 的「同一份字节、同一个结论」。禁在 `state/carrier` 之外改折叠门。(1) 备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 `main=5/5 MET tech open=8 claimable=7 shortfall=3 explore open=4 claimable=4 shortfall=6`（承前债，禁造活凑数）。(2) 产品面真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 仍零 open，无 P-47 可认领件。",
-    "next_milestone_due": "2026-11-23T19:12:19+08:00",
-    "updated_at": "2026-11-21T19:12:19+08:00",
+    "next_milestone": "[R3180] next window (<=48h): (0) MAIN — **`write_document` 的拒写发生在 `os.replace` 之后**（先落盘再退 `E_SIO_LAYOUT`，坏形状会留在盘上，本轮已把它变成可测）：做法=先只读量「拒写路径留下的坏字节是否可由随后的 `fix` 自动收敛」（构造三形状：8 空格、混合缩进、4 空格 `json.dump` 形状），只有测出「`fix` 能全收敛」或「不能」才决定是**改成写前判定**（用同一 `carrier_face` 在 `os.replace` 之前问）还是**保留后置拒写并把它写进面**；判据沿用 AC-SIO10 的「同一份字节、两面同判」；**先落板再动代码**。(1) 备选=`write_canon` 拒写政策独立裁定（是否让它在落地前拒绝折叠门读不懂的 legacy2/8 空格形状）；(2) P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；队列地板承前窗读数（本轮未重量，禁造活凑数）。(3) 产品面真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 仍零 open。",
+    "next_milestone_due": "2026-11-23T19:23:03+08:00",
+    "updated_at": "2026-11-21T19:23:03+08:00",
     "heartbeat": {
       "tick": 3179,
-      "state_tick": 3179,
-      "lag": 0,
-      "verdict": "PASS",
-      "reason": "fresh"
+      "state_tick": 3180,
+      "lag": 1,
+      "verdict": "FLAG",
+      "reason": "heartbeat_row_debt"
     },
     "outs_age": {
       "rows": 29,
@@ -32,14 +32,14 @@
       "dup_rows": 0,
       "distinct": 29,
       "collapsed": 0,
-      "labels_refreshed": 0,
+      "labels_refreshed": 1,
       "notes_stale": 2,
       "note_claims": 6,
       "criteria_stale": 1,
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-21 R3179 PRODUCT+ENGINEERING: the carrier is refilled and the writer now reads the indent the document actually uses - fold 607 moved the 18 oldest live items verbatim into the 2026-11 archive (carrier 76204B margin 2296 -> 62433B margin 16067), and state_io no longer calls a 16-space canon drifted: it measures the caliber from the bytes (a uniform 2 or 16 is healthy, mixed or anything else is disease) and writes the live 16-space form.",
+  "current": "2026-11-21 R3180 PRODUCT+ENGINEERING: every state_io write site now publishes the fold door reading - write_canon, write_document and fix each return a carrier face naming layout_ok, indent_ok, gate_layout_ok, gate_indent_ok, fold_readable and agree, so a consumer can read on the bytes it just landed whether the fold can read them; zero product surface, zero api surface, zero new refusal code.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3179 PRODUCT+ENGINEERING: the carrier is refilled and the writer now reads the indent the document actually uses - fold 607 moved the 18 oldest live items verbatim into the 2026-11 archive (carrier 76204B margin 2296 -> 62433B margin 16067), and state_io no longer calls a 16-space canon drifted: it measures the caliber from the bytes (a uniform 2 or 16 is healthy, mixed or anything else is disease) and writes the live 16-space form.",
-  "export_ts": "2026-11-21T19:12:19+08:00",
+  "do": "2026-11-21 R3180 PRODUCT+ENGINEERING: every state_io write site now publishes the fold door reading - write_canon, write_document and fix each return a carrier face naming layout_ok, indent_ok, gate_layout_ok, gate_indent_ok, fold_readable and agree, so a consumer can read on the bytes it just landed whether the fold can read them; zero product surface, zero api surface, zero new refusal code.",
+  "export_ts": "2026-11-21T19:23:03+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/reorg-R3179.log (996B, 2026-11-21)",
-  "next_milestone": "[R3179] next window (<=48h): (0) MAIN — **把「写入器口径」变成出生站闸**：`state_io` 与折叠门已同口径，但**没有任何东西**在写盘前问「这段文本落地后会不会被折叠门拒绝」；`state_append` 有 `E_RSA_LAYOUT` 一道，`write_canon`/`write_document`/`fix` 三道全无。做法=先只读量：把 `logs_toolkit.eol_profile` 的 `indent_ok`/`layout_ok` 接进 `state_io.write_canon` 与 `write_document` 的**返回面**（不新增拒绝码），量一件「谁在写」的消费者普查（`import state_io` 的 30+ 件里哪些仍活在电池里），再决定是否加闸；判据沿用 AC-SIO9 的「同一份字节、同一个结论」。禁在 `state/carrier` 之外改折叠门。(1) 备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 `main=5/5 MET tech open=8 claimable=7 shortfall=3 explore open=4 claimable=4 shortfall=6`（承前债，禁造活凑数）。(2) 产品面真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 仍零 open，无 P-47 可认领件。",
+  "latest_evidence": "qa/suite-state-io-R3180.log (684B, 2026-11-21)",
+  "next_milestone": "[R3180] next window (<=48h): (0) MAIN — **`write_document` 的拒写发生在 `os.replace` 之后**（先落盘再退 `E_SIO_LAYOUT`，坏形状会留在盘上，本轮已把它变成可测）：做法=先只读量「拒写路径留下的坏字节是否可由随后的 `fix` 自动收敛」（构造三形状：8 空格、混合缩进、4 空格 `json.dump` 形状），只有测出「`fix` 能全收敛」或「不能」才决定是**改成写前判定**（用同一 `carrier_face` 在 `os.replace` 之前问）还是**保留后置拒写并把它写进面**；判据沿用 AC-SIO10 的「同一份字节、两面同判」；**先落板再动代码**。(1) 备选=`write_canon` 拒写政策独立裁定（是否让它在落地前拒绝折叠门读不懂的 legacy2/8 空格形状）；(2) P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；队列地板承前窗读数（本轮未重量，禁造活凑数）。(3) 产品面真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 仍零 open。",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -84,7 +84,7 @@
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
     "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
-    "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（78383B·687 行）",
+    "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（78384B·687 行）",
     "preview/money-path-demo.html (10161B) + preview/money-path-demo.json (4705B)",
     "preview/ceo-blockers.html (8453B) + preview/ceo-blockers.json (6754B)",
     "preview/battery-shard-report.html (16421B) + preview/battery-shard-report.json (16240B)",
@@ -160,7 +160,7 @@
   },
   "results": [
     [
-      "3179",
+      "3180",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -174,24 +174,24 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 70,
+    "log_lines_in_window": 78,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 66438,
-  "next_milestone_due": "2026-11-23T19:12:19+08:00",
+  "state_bytes": 71806,
+  "next_milestone_due": "2026-11-23T19:23:03+08:00",
   "heartbeat": {
     "tick": 3179,
-    "state_tick": 3179,
-    "lag": 0,
-    "verdict": "PASS",
-    "reason": "fresh"
+    "state_tick": 3180,
+    "lag": 1,
+    "verdict": "FLAG",
+    "reason": "heartbeat_row_debt"
   },
   "outs_age": {
     "rows": 29,
@@ -202,7 +202,7 @@
     "dup_rows": 0,
     "distinct": 29,
     "collapsed": 0,
-    "labels_refreshed": 0,
+    "labels_refreshed": 1,
     "notes_stale": 2,
     "note_claims": 6,
     "criteria_stale": 1,

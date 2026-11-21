@@ -1,0 +1,14 @@
+R3180 REORG EVIDENCE (state_io publishes the fold door reading)
+SUITE os-state-io 10/10 criteria=10 arms=a+b+c+d+e+f+
+NEIGHBOUR os-state-append 10/10
+NEIGHBOUR os-general-writer-dialect-audit 6/6
+NEIGHBOUR os-closeout-carrier 6/6
+NEIGHBOUR os-closeout-gate 42/42
+NEIGHBOUR os-state-fold 7/7
+MATRIX DOC-CURRENT bytes=78384 rows=754
+CENSUS VERDICT PASS pinned=754
+CARRIER-FACE live bytes=66438 layout_ok=true indent_ok=true gate_layout_ok=true gate_indent_ok=true fold_readable=true agree=true
+WRITER-CENSUS write_canon=2 (state_io.fix + suite) write_document=1 (declare_R2779 one-off) live_bare_state_writers=0
+CODES unchanged=7 (BOM UTF8 JSON LAYOUT BACK PREDICT READ)
+LEGACY2-DECISIVE layout_ok=true fold_readable=false (two answers published, never merged)
+CONTRACT read-only face, zero new refusal code, write_canon payload change still E_SIO_JSON

@@ -27,7 +27,7 @@ sys.path.insert(0, BASE)
 
 import state_io as SIO  # noqa: E402
 
-EXPECTED_CRITERIA = 9
+EXPECTED_CRITERIA = 10
 MODULE = os.path.join(BASE, "state_io.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-io"
@@ -280,6 +280,118 @@ def ac_sio9():
           "AC-SIO9 state_io and the carrier gate agree on the same file")
 
 
+def ac_sio10():
+    """Every writer publishes the fold door own reading (R3180).
+
+    R3179 closed the caliber split between this module and the carrier gate,
+    but nothing at a write site said whether the bytes just landed are
+    readable by the fold. The face names both answers separately instead of
+    merging them, and the write contract is unchanged.
+    """
+    import logs_toolkit as LT
+
+    folder = tmpdir()
+    clean = sample_text("\r\n", SIO.ITEM_INDENT)
+    path = write_sample(folder, clean, "clean.json")
+
+    # a) the raw door publishes the face on the bytes it just landed
+    written = SIO.write_canon(path, SIO.canon(clean))
+    face = written["carrier"]
+    arm_a = (face.get("layout_ok") is True and face.get("indent_ok") is True
+             and face.get("gate_layout_ok") is True
+             and face.get("gate_indent_ok") is True
+             and face.get("fold_readable") is True
+             and face.get("agree") is True
+             and written["written"] == len(clean.encode("utf-8"))
+             and "previous" in written)
+
+    # b) the new-payload door face equals a recomputation on the written bytes
+    payload = {"tick": 9, "note": "x", "log": ["one", "two"]}
+    doc = SIO.write_document(path, payload)
+    arm_b = (doc["carrier"] == SIO.carrier_face(SIO.read_raw(path))
+             and doc["carrier"]["agree"] is True
+             and doc["carrier"]["fold_readable"] is True)
+
+    # c) the repair path publishes the face on both states
+    clean_plan = SIO.fix(path, execute=False)
+    drift_path = write_sample(folder, sample_text("\n", SIO.ITEM_INDENT),
+                              "drift.json")
+    drift_plan = SIO.fix(drift_path, execute=False)
+    drift_done = SIO.fix(drift_path, execute=True)
+    arm_c = (clean_plan["verdict"] == "CANON-CLEAN"
+             and clean_plan["carrier"]["agree"] is True
+             and drift_plan["carrier"].get("fold_readable") is False
+             and drift_done["verdict"] == "CANON-FIXED"
+             and drift_done["carrier"]["fold_readable"] is True
+             and drift_done["carrier"] == SIO.carrier_face(
+                 SIO.read_raw(drift_path)))
+
+    # d) decisive arm: two answers stay two answers. A uniform two-space
+    # document is healthy here while the fold door reads only its own
+    # caliber, and the face must publish that instead of averaging it away.
+    legacy_path = write_sample(folder, sample_text("\r\n", 2), "legacy.json")
+    legacy_face = SIO.carrier_face(SIO.read_raw(legacy_path))
+    legacy_text = SIO.decode(SIO.read_raw(legacy_path))
+    want_fold = LT.split_ps_layout(legacy_text, 2) is not None
+    arm_d = (legacy_face["layout_ok"] is True
+             and legacy_face["fold_readable"] is want_fold
+             and "indent_ok" in legacy_face
+             and "fold_readable" in legacy_face)
+
+    # e) the write contract is untouched: same error codes, payload change
+    # still refused with the old bytes intact, and the new-payload door still
+    # refuses a shape its own gate calls drifted.
+    source = open(MODULE, "r", encoding="utf-8").read()
+    found = set()
+    for token in source.replace('"', " ").replace("'", " ").split():
+        if token.startswith("E_SIO_"):
+            found.add(token.strip("(),:;"))
+    codes = set(("E_SIO_BOM", "E_SIO_UTF8", "E_SIO_JSON", "E_SIO_LAYOUT",
+                 "E_SIO_BACK", "E_SIO_PREDICT", "E_SIO_READ"))
+    refuse_path = write_sample(folder, clean, "refuse.json")
+    refuse_before = SIO.read_raw(refuse_path)
+    payload_refused = False
+    try:
+        SIO.write_canon(refuse_path, SIO.canon(clean).replace('"one"',
+                                                              '"uno"'))
+    except SIO.StateIOError as exc:
+        payload_refused = exc.code == "E_SIO_JSON"
+    intact = SIO.read_raw(refuse_path) == refuse_before
+    shape_refused = False
+    saved = SIO.ITEM_INDENT
+    try:
+        SIO.ITEM_INDENT = 8
+        try:
+            SIO.write_document(write_sample(folder, clean, "shape.json"),
+                               payload)
+        except SIO.StateIOError as exc:
+            shape_refused = exc.code == "E_SIO_LAYOUT"
+    finally:
+        SIO.ITEM_INDENT = saved
+    arm_e = (found == codes and payload_refused and intact and shape_refused)
+
+    # f) hygiene and the live carrier
+    ascii_ok = True
+    try:
+        SIO.read_raw(MODULE).decode("ascii")
+    except UnicodeDecodeError:
+        ascii_ok = False
+    offline = not any(token in source for token in
+                      ("import urllib", "import requests", "import socket",
+                       "import subprocess", "http://", "https://"))
+    live = os.path.join(BASE, "state.json")
+    live_ok = False
+    if os.path.exists(live):
+        live_face = SIO.carrier_face(SIO.read_raw(live))
+        live_ok = (live_face.get("agree") is True
+                   and live_face.get("fold_readable") is True)
+    arm_f = ascii_ok and offline and live_ok
+    check(arm_a and arm_b and arm_c and arm_d and arm_e and arm_f,
+          "AC-SIO10 writers publish both readings (a%s b%s c%s d%s e%s f%s)"
+          % tuple("+" if arm else "-" for arm in
+                  (arm_a, arm_b, arm_c, arm_d, arm_e, arm_f)))
+
+
 def main():
     ac_sio1()
     ac_sio2()
@@ -290,6 +402,7 @@ def main():
     ac_sio7()
     ac_sio8()
     ac_sio9()
+    ac_sio10()
     total = PASSES + FAILS
     print("SUITE %s %d/%d criteria=%d"
           % ("PASS" if FAILS == 0 and total == EXPECTED_CRITERIA else "FAIL",

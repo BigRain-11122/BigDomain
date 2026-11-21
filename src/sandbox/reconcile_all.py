@@ -5040,9 +5040,10 @@ SUITES = [
     # measured layout report, a payload-preserving canonical rewrite and an
     # atomic write that refuses any payload change.
     # (AC-SIO1..AC-SIO9 pre-registered in state/queue/tech.md as the R2246
-    # claim; AC-SIO9 added at R3179 for carrier-gate parity.)
+    # claim; AC-SIO9 added at R3179 for carrier-gate parity; AC-SIO10 added at
+    # R3180 so every write site publishes the fold door own reading.)
     ("os-state-io",
-     os.path.join("..", "os", "test_state_io.py"), 9),
+     os.path.join("..", "os", "test_state_io.py"), 10),
     # R2833: the one vehicle that appends to state.json. It reads through
     # state_io and gates through ledger_lines BEFORE writing, so a round
     # line that forgot its date prefix is refused at the write site rather
