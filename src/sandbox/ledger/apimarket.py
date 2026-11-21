@@ -14978,6 +14978,216 @@ class APIMarketFace:
         out["disclaimer"] = self.disclaimer
         return out
 
+    def api_seller_claim_months(self, dev_account=None):
+        """Seller-scoped (and market-wide) monthly after-sales claim
+        pressure (criteria AC-SCLM1..AC-SCLM8 pre-registered in the
+        R3153 explore-queue claim row BEFORE this code existed).
+
+        api_market_claim_months answers the whole market on a month
+        axis, api_category_claim_months one category and
+        api_buyer_claim_months one buyer, while api_claims only lists a
+        seller's claims with their current status - so a seller could
+        not read whether its own after-sales pressure is rising month
+        over month. Eleven seller month faces exist and none of them
+        reads a claim (qa/probe-R3153.log measured it).
+
+        BOOKING law (AC-SCLM2): a claim books in the UTC month of its
+        own opened_utc and nothing later moves it - a refund, an answer
+        or a withdrawal landing in a later month neither shifts the
+        claim nor invents a row in that month, and a month with no
+        claim is never fabricated.
+
+        Status follows the api_claims seam (refunded beats withdrawn
+        beats answered beats open), so the four counts always partition
+        claim_count, and a refund landing later flips answered to
+        refunded without rewriting anything (AC-SCLM3).
+
+        MONEY stays on the claim side (AC-SCLM4): claim_amount sums the
+        price_paid frozen at open and refunded_amount sums the refund
+        amount joined through the claim's purchase, so a refund with no
+        claim never appears here - that cash month lives in
+        api_market_months. refund_rate is the COUNT ratio
+        (refunded_count / claim_count), deliberately not the money
+        ratio of api_seller_refund_months, and it is None on a month
+        with no claim rather than a fabricated 0.0.
+
+        Month rows are the contiguous grid between the first and the
+        last claiming month, so an idle month carries an honest zero
+        row whose rate and average are None while the running
+        accumulator is carried flat (AC-SCLM5). The peak takes the
+        largest claim_count, breaks ties toward the earlier month and
+        never peaks on a zero month.
+
+        Gate runs before any read: the usr: prefix account shape
+        (fail-closed E_AM_BAD_ACCOUNT); a prefix-valid unknown seller
+        reads honestly empty rather than the market. Pure read: zero
+        row mutations, zero token movement."""
+        if dev_account is not None:
+            if not str(dev_account).startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        def core(scope_account):
+            sql = ("SELECT c.claim_id, c.price_paid, c.opened_utc,"
+                   " c.listing_id, c.buyer_id, c.dev_account,"
+                   " f.refunded_utc, f.amount, w.withdrawn_utc,"
+                   " r.replied_utc"
+                   " FROM apimarket_claims c"
+                   " LEFT JOIN apimarket_refunds f"
+                   " ON f.purchase_id = c.purchase_id"
+                   " LEFT JOIN apimarket_claim_responses r"
+                   " ON r.claim_id = c.claim_id"
+                   " LEFT JOIN apimarket_claim_withdrawals w"
+                   " ON w.claim_id = c.claim_id")
+            args = ()
+            if scope_account is not None:
+                sql += " WHERE c.dev_account = ?"
+                args = (str(scope_account),)
+            sql += " ORDER BY c.claim_id"
+            with self._lock:
+                raw = self._conn.execute(sql, args).fetchall()
+
+            buckets = {}
+
+            def bucket(month):
+                return buckets.setdefault(month, {
+                    "claim_count": 0, "open_count": 0,
+                    "answered_count": 0, "withdrawn_count": 0,
+                    "refunded_count": 0, "claim_amount": 0,
+                    "refunded_amount": 0, "listings": set(),
+                    "buyers": set(), "sellers": set()})
+
+            listings = set()
+            buyers = set()
+            sellers = set()
+            amounts = []
+            for (_cid, price, opened, listing_id, buyer, seller,
+                 refunded, amount, withdrawn, replied) in raw:
+                b = bucket(str(opened)[:7])
+                b["claim_count"] += 1
+                b["claim_amount"] += int(price)
+                b["listings"].add(int(listing_id))
+                b["buyers"].add(buyer)
+                b["sellers"].add(seller)
+                listings.add(int(listing_id))
+                buyers.add(buyer)
+                sellers.add(seller)
+                amounts.append(int(price))
+                if refunded is not None:
+                    b["refunded_count"] += 1
+                    b["refunded_amount"] += int(amount)
+                elif withdrawn is not None:
+                    b["withdrawn_count"] += 1
+                elif replied is not None:
+                    b["answered_count"] += 1
+                else:
+                    b["open_count"] += 1
+
+            months = []
+            running = 0
+            for month in _contiguous_months(sorted(buckets)):
+                b = buckets.get(month)
+                if b is None:
+                    months.append({
+                        "month": month,
+                        "claim_count": 0,
+                        "open_count": 0,
+                        "answered_count": 0,
+                        "withdrawn_count": 0,
+                        "refunded_count": 0,
+                        "claim_amount": 0,
+                        "refunded_amount": 0,
+                        "refund_rate": None,
+                        "avg_claim_amount": None,
+                        "listing_count": 0,
+                        "buyer_count": 0,
+                        "seller_count": 0,
+                        "running_claim_count": running})
+                    continue
+                running += b["claim_count"]
+                months.append({
+                    "month": month,
+                    "claim_count": b["claim_count"],
+                    "open_count": b["open_count"],
+                    "answered_count": b["answered_count"],
+                    "withdrawn_count": b["withdrawn_count"],
+                    "refunded_count": b["refunded_count"],
+                    "claim_amount": b["claim_amount"],
+                    "refunded_amount": b["refunded_amount"],
+                    "refund_rate": (
+                        round(float(b["refunded_count"])
+                              / b["claim_count"], 4)
+                        if b["claim_count"] else None),
+                    "avg_claim_amount": (
+                        round(float(b["claim_amount"])
+                              / b["claim_count"], 2)
+                        if b["claim_count"] else None),
+                    "listing_count": len(b["listings"]),
+                    "buyer_count": len(b["buyers"]),
+                    "seller_count": len(b["sellers"]),
+                    "running_claim_count": running})
+
+            peak_month = None
+            peak_count = None
+            for row in months:
+                if row["claim_count"] > 0 and (
+                        peak_count is None
+                        or row["claim_count"] > peak_count):
+                    peak_month = row["month"]
+                    peak_count = row["claim_count"]
+            total = sum(row["claim_count"] for row in months)
+            claim_total = sum(row["claim_amount"] for row in months)
+            refunded_total = sum(row["refunded_amount"] for row in months)
+            refunded_count = sum(row["refunded_count"] for row in months)
+            return {
+                "month_count": len(months),
+                "active_month_count": sum(
+                    1 for row in months if row["claim_count"] > 0),
+                "claim_count": total,
+                "open_count": sum(row["open_count"] for row in months),
+                "answered_count": sum(row["answered_count"]
+                                      for row in months),
+                "withdrawn_count": sum(row["withdrawn_count"]
+                                       for row in months),
+                "refunded_count": refunded_count,
+                "claim_amount": claim_total,
+                "refunded_amount": refunded_total,
+                "refund_rate": (
+                    round(float(refunded_count) / total, 4)
+                    if total else None),
+                "avg_claim_amount": (
+                    round(float(claim_total) / total, 2)
+                    if total else None),
+                "listing_count": len(listings),
+                "buyer_count": len(buyers),
+                "seller_count": len(sellers),
+                "largest_claim": max(amounts) if amounts else None,
+                "peak_month": peak_month,
+                "peak_claim_count": peak_count,
+                "first_month": months[0]["month"] if months else None,
+                "last_month": months[-1]["month"] if months else None,
+                "latest_month_claim_count": (
+                    months[-1]["claim_count"] if months else None),
+                "latest_month_refunded_count": (
+                    months[-1]["refunded_count"] if months else None),
+                "months": months}
+
+        if dev_account is None:
+            scope = "market"
+            market_rate = None
+            body = core(None)
+        else:
+            scope = "seller"
+            body = core(dev_account)
+            market_rate = core(None)["refund_rate"]
+
+        out = {"scope": scope,
+               "dev_account": None if dev_account is None
+               else str(dev_account)}
+        out.update(body)
+        out["market_claim_rate"] = market_rate
+        out["disclaimer"] = self.disclaimer
+        return out
+
     def api_market_provider_months(self):
         """Market-wide monthly provider-identity redeclaration timeline
         (criteria AC-PIM1..AC-PIM8 pre-registered in the R2202 seed row

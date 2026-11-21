@@ -179,6 +179,7 @@
     "ledger-apimarket-searchstock",
     "ledger-apimarket-selleranswers",
     "ledger-apimarket-sellercategorymix",
+    "ledger-apimarket-sellerclaimmonths",
     "ledger-apimarket-sellercohort",
     "ledger-apimarket-sellerinbox",
     "ledger-apimarket-sellerledger",

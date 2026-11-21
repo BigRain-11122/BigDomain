@@ -1,0 +1,10 @@
+PASS AC-SCLM1: keys=26 empty=(0, 0, None, []) market_rows=4 scope='market'
+PASS AC-SCLM2: dana_grid=['2026-08', '2026-09'] frank_grid=['2026-11'] aug=(2, 1, 10) sep=(2, 1, 4) oct=(0, 0) nov=(2, 1, 6)
+PASS AC-SCLM3: dana=(0, 1, 0, 1) sep=(0, 0, 1, 1) frank11=(1, 1) market=(6, 3, 40)
+PASS AC-SCLM4: raw=(6, 40, 3, 20) face=(6, 40, 3, 20) refunds_face=(3, 20)
+PASS AC-SCLM5: running=[2, 4, 4, 6] peaks=('2026-08', '2026-08', '2026-11') latest=(2, 1)
+PASS AC-SCLM6: dana=(4, 28, 14) frank=(2, 12, 6) market=(6, 40, 20)
+PASS AC-SCLM7: market_face=(6, 40, 20) buyers={'claim_count': 6, 'claim_amount': 40, 'refunded_amount': 20} seller=(6, 40, 20)
+PASS AC-SCLM8: gates=True digests_same=True tx_same=True bytes=True ascii=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

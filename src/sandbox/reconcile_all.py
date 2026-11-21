@@ -3096,6 +3096,15 @@ SUITES = [
     # BEFORE the code.
     ("ledger-apimarket-sellerrefundmonths", os.path.join(
         "ledger", "test_apimarket_sellerrefundmonths.py"), 8),
+    # seller-side monthly claim pressure (a claim books in the UTC month of
+    # its own opened_utc, a later refund/answer/withdrawal never re-dates it
+    # nor invents a row, money stays on the claim side with the count-ratio
+    # refund rate None on a zero-claim month, honest zero months carried
+    # flat, the five-state partition and strict seller isolation) -
+    # criteria AC-SCLM1..AC-SCLM8 registered in the R3153 explore-queue
+    # claim row BEFORE the code.
+    ("ledger-apimarket-sellerclaimmonths", os.path.join(
+        "ledger", "test_apimarket_sellerclaimmonths.py"), 8),
     # buyer-side monthly claim flow (a claim books in the UTC month of its
     # own opened_utc, a later refund never re-dates it nor invents a row
     # in the refund month, honest zero months carried flat, the five-state
