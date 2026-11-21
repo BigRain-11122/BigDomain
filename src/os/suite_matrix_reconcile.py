@@ -208,6 +208,9 @@ CODE_NEST = "E_EDMG_NEST"
 # Matrix table data rows carry SIX cells (index, suite, path, criteria, state,
 # secs). The billable-faces table below it also starts with a number, so a
 # bare "^| <n> |" would count it too and inflate the row count by design.
+# AC-EDML5: this is the SHAPE law and it stays untouched - it is asked by 23
+# consumers (limits and test oracles) whose answers must not move. WHAT a data
+# row must CARRY is a second law, is_data_row(), asked by the count face.
 ROW_RE = re.compile(r"(?m)^\| \d+ \|(?:[^|\n]*\|){5}$")
 # AC-EDMH1: a row that OPENS like a data row (a pipe, digits, a pipe) but
 # carries the wrong cell count is ONE malformed row, not the end of the table.
@@ -223,6 +226,12 @@ WORD_STRAY = "STRAY-HEADER"
 WORD_UNSEP = "HEADER-UNSEPARATED"
 CODE_STRAY = "E_EDMJ_STRAY"
 CODE_UNSEP = "E_EDMJ_UNSEP"
+# AC-EDML1 (R3175): a second-table header whose FIRST cell is numeric carries
+# the SHAPE of a data row, so ROW_RE counted it as one before the header law
+# was ever asked (measured at HEAD: delta +2 with one row under it, +1 when it
+# trails the table). It is told apart by the CELLS it carries, not by a digit.
+WORD_NUMHEAD = "NUMBERED-HEADER"
+CODE_NUMHEAD = "E_EDML_NUMHEAD"
 # AC-EDMF1: a fenced code block quotes example text. A quoted data-shaped row
 # is not a matrix row, so the row law has to know where the fence is.
 FENCE_MARK = "```"
@@ -335,6 +344,58 @@ def stray_header(lines, mask, index):
     return (width, None)
 
 
+# AC-EDML1/AC-EDML3: the seconds cell a matrix data row carries is either a
+# number or this shipped dash. suite_matrix.suite_status emits
+# ("no-evidence", "-") for a suite with no evidence, and the live document
+# carries 78 such rows, so a law that insisted on a number would lose them.
+SECS_DASH = "-"
+
+
+def is_data_row(line):
+    """True when `line` carries the CELLS a matrix data row must carry.
+
+    AC-EDML1: a numbered second-table header carries the shape of a data row
+    (six cells, a numeric first cell) but names words where the criteria and
+    seconds cells belong. AC-EDML3: a real data row carries a numeric criteria
+    cell and a seconds cell that is a number or the shipped dash, so every row
+    the live document carries - including the 78 no-evidence rows - is still
+    counted. AC-EDML5: this is a VALUE law asked at CALL time by the count
+    face; ROW_RE stays the SHAPE law for its 23 consumers.
+    """
+    if not ROW_RE.match(line):
+        return False
+    cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+    if len(cells) != 6:
+        return False
+    if not _numeric_cell(cells[3]):
+        return False
+    return _numeric_cell(cells[5]) or cells[5] == SECS_DASH
+
+
+def numbered_header(lines, mask, index):
+    """(width, separator_width_or_None, WORD_NUMHEAD) when the row at `index`
+    is data-SHAPED but carries header CELLS.
+
+    AC-EDML1: it ENDS the first table instead of being counted as one of its
+    rows. AC-EDML2: when a separator of its OWN width follows,
+    is_second_table_header answers first and this law is never asked, so the
+    AC-EDMI2 answer stays byte-identical.
+    """
+    candidate = lines[index]
+    width = candidate.count("|") - 1
+    follow = index + 1
+    while follow < len(lines):
+        if mask[follow] or not lines[follow].strip():
+            follow += 1
+            continue
+        break
+    if follow < len(lines):
+        below = lines[follow]
+        if below.startswith("|") and is_separator_row(below):
+            return (width, below.count("|") - 1, WORD_NUMHEAD)
+    return (width, None, WORD_NUMHEAD)
+
+
 def doc_rows_scan(text, patterns=None):
     """(count, problem): matrix table data rows of a composed document, plus
     the FIRST table-shaped run this walk refuses to absorb (AC-EDMJ1/2).
@@ -380,7 +441,20 @@ def doc_rows_scan(text, patterns=None):
         if not line.startswith("|"):
             break
         if ROW_RE.match(line):
-            count += 1
+            if is_data_row(line):
+                count += 1
+            elif is_second_table_header(lines, mask, index):
+                # AC-EDML2 (AC-EDMI2 unchanged): a header carrying a separator
+                # of its OWN width opens ANOTHER table and ends this one in
+                # silence, whether or not its first cell is numeric.
+                break
+            else:
+                # AC-EDML1: a data-SHAPED row carrying header CELLS (a word
+                # where the criteria or the seconds cell belongs) is a numbered
+                # second-table header. It ends the first table and is named,
+                # never counted as one of its rows.
+                problem = numbered_header(lines, mask, index)
+                break
         elif is_separator_row(line):
             # AC-EDMH3: a separator row reappearing inside the table neither
             # restarts nor ends it.
@@ -808,10 +882,24 @@ def report(doc_path=None, evidence_path=None, qa_dir=None, ceiling=None):
     # it is a document-shape answer, and the row count it publishes is the
     # first table own rows rather than a number inflated by the run.
     if body_problem is not None:
-        width, separator_width = body_problem
+        if len(body_problem) == 3:
+            width, separator_width, kind = body_problem
+        else:
+            width, separator_width = body_problem
+            kind = None
         answer = {"doc": rel(doc_path), "exit": 3, "written": False,
                   "doc_rows": have_rows, "header_cells": width}
-        if separator_width is None:
+        if kind == WORD_NUMHEAD:
+            # AC-EDML1: a data-SHAPED row naming words in the criteria or
+            # seconds cell is a numbered second-table header, and it ends the
+            # matrix table rather than counting as one of its rows.
+            answer.update({"verdict": WORD_NUMHEAD, "code": CODE_NUMHEAD})
+            if separator_width is not None:
+                answer["separator_cells"] = separator_width
+            answer["reason"] = ("a data-shaped row carrying %d cells names a"
+                               " word where the criteria or the seconds cell"
+                               " belongs" % width)
+        elif separator_width is None:
             answer.update({
                 "verdict": WORD_UNSEP, "code": CODE_UNSEP,
                 "reason": ("a table-shaped header carrying %d cells is never"

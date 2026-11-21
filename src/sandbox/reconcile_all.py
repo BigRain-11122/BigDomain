@@ -5134,7 +5134,7 @@ SUITES = [
     # criteria-first law - a case-variant path to the live document takes the
     # scratch cross-check.)
     ("os-suite-matrix-reconcile",
-     os.path.join("..", "os", "test_suite_matrix_reconcile.py"), 8),
+     os.path.join("..", "os", "test_suite_matrix_reconcile.py"), 14),
     # R2602: the evidence face of the matrix reconciliation - a PASS leg that
     # differs from the leg the document records reads its own word naming BOTH
     # legs, the candidate walk reports what it decoded, a MISSING document can

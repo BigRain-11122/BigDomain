@@ -32,13 +32,13 @@ import suite_matrix_reconcile as SMR  # noqa: E402
 import suite_matrix as SM  # noqa: E402
 import reconcile_all as RA  # noqa: E402
 
-EXPECTED_CRITERIA = 8
+EXPECTED_CRITERIA = 14
 MODULE = os.path.join(BASE, "suite_matrix_reconcile.py")
 DOC = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
 QA_DIR = os.path.join(REPO, "qa")
 RUNNER = os.path.join(SANDBOX, "reconcile_all.py")
 WIRED_LABEL = '"os-suite-matrix-reconcile",'
-WIRED_SUITE = '"test_suite_matrix_reconcile.py"), 8),'
+WIRED_SUITE = '"test_suite_matrix_reconcile.py"), 14),'
 NET = ("urllib", "requests", "socket", "http", "ftplib", "xmlrpc",
        "smtplib", "asyncio", "time")
 
@@ -96,6 +96,27 @@ def read(path):
 def write_text(path, text):
     with open(path, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(text)
+
+
+def mini_doc(rows):
+    """A private matrix document: the shipped title, header, separator, rows.
+
+    AC-EDML: every fixture is built in memory from the shipped label face, so
+    no fixture carries a hand-copied title and no file is written."""
+    title = SM.load_patterns()["labels"]["matrix_title"].strip()
+    lines = [title,
+             "| # | suite | path | criteria | state | secs |",
+             "|---|---|---|---|---|---|"] + list(rows)
+    return "\n".join(lines) + "\n"
+
+
+NUM_HEAD = "| 1 | Suite | Path | Criteria | State | Secs |"
+WORD_HEAD = "| # | Suite | Path | Criteria | State | Secs |"
+SEP_OWN = "| --- | --- | --- | --- | --- | --- |"
+SEP_NARROW = "|---|---|---|---|---|"
+ROW_A = "| 1 | suite-a | a.py | 6 | green | 0.4 |"
+ROW_B = "| 2 | suite-b | b.py | 7 | green | 0.5 |"
+ROW_DASH = "| 3 | suite-c | c.py | 12 | no-evidence | - |"
 
 
 def verify():
@@ -319,6 +340,110 @@ def verify():
                and os.path.abspath(live_path) == os.path.abspath(recorded_path),
                control["verdict"] if control else "no-other-leg",
                [one[2] for one in fallbacks], sum(helpers))))
+
+        # AC-EDML1: a numbered second-table header is NOT a data row and ENDS
+        # the first table. Measured at HEAD before the law, the same three
+        # fixtures read delta +2 (no separator), +2 (narrow separator) and +1
+        # (trailing header) because ROW_RE was asked before the header law.
+        no_sep = SMR.doc_rows_scan(mini_doc([ROW_A, NUM_HEAD, ROW_B]))
+        narrow = SMR.doc_rows_scan(mini_doc(
+            [ROW_A, NUM_HEAD, SEP_NARROW, ROW_B]))
+        trailing = SMR.doc_rows_scan(mini_doc([ROW_A, NUM_HEAD]))
+        results.append(check(
+            no_sep[0] == 1 and no_sep[1] == (6, None, SMR.WORD_NUMHEAD)
+            and narrow[0] == 1 and narrow[1] == (6, 5, SMR.WORD_NUMHEAD)
+            and trailing[0] == 1
+            and trailing[1] == (6, None, SMR.WORD_NUMHEAD),
+            "AC-EDML1 numbered header ends the table: no-sep=%r narrow=%r"
+            " trailing=%r" % (no_sep, narrow, trailing)))
+
+        # AC-EDML2: a numbered header carrying a separator of its OWN width
+        # still opens another table in silence - the AC-EDMI2 answer byte for
+        # byte, proved beside a header whose first cell is a word.
+        own = SMR.doc_rows_scan(mini_doc([ROW_A, NUM_HEAD, SEP_OWN, ROW_B]))
+        word_own = SMR.doc_rows_scan(mini_doc(
+            [ROW_A, WORD_HEAD, SEP_OWN, ROW_B]))
+        results.append(check(
+            own == (1, None) and word_own == (1, None),
+            "AC-EDML2 own-width separator stays silent: numbered=%r word=%r"
+            % (own, word_own)))
+
+        # AC-EDML3: every well-formed data row is counted exactly once - the
+        # shipped dash row included - and the AC-EDMJ/AC-EDMH1 answers survive
+        # byte for byte (their problem tuples are still TWO elements).
+        counted = SMR.doc_rows_scan(mini_doc([ROW_A, ROW_DASH, ROW_B]))
+        malformed = SMR.doc_rows_scan(mini_doc(["| 9 | broken | b.py |",
+                                                ROW_B]))
+        stray_narrow = SMR.doc_rows_scan(mini_doc(
+            [ROW_A, WORD_HEAD, SEP_NARROW, ROW_B]))
+        stray_none = SMR.doc_rows_scan(mini_doc([ROW_A, WORD_HEAD, ROW_B]))
+        results.append(check(
+            counted[0] == 3 and counted[1] is None
+            and SMR.is_data_row(ROW_A) and SMR.is_data_row(ROW_DASH)
+            and not SMR.is_data_row(NUM_HEAD)
+            and not SMR.is_data_row(ROW_DASH.replace("-", "n/a"))
+            and malformed[0] == 1 and malformed[1] is None
+            and stray_narrow[1] == (6, 5) and stray_none[1] == (6, None)
+            and stray_narrow[0] == 1 and stray_none[0] == 1,
+            "AC-EDML3 rows survive: counted=%r dash=%s malformed=%r"
+            " stray=%r/%r" % (counted, SMR.is_data_row(ROW_DASH), malformed,
+                              stray_narrow, stray_none)))
+
+        # AC-EDML4: the LIVE document loses nothing to the value law, and the
+        # shipped check still reads current on it.
+        live_text = read(DOC)
+        live_shaped = [line for line in live_text.splitlines()
+                       if SMR.ROW_RE.match(line)]
+        live_rep = SMR.report()
+        results.append(check(
+            all(SMR.is_data_row(line) for line in live_shaped)
+            and SMR.doc_rows(live_text) == len(live_shaped)
+            == SMR.registry_counts()[0]
+            and live_rep["verdict"] == SMR.WORD_CURRENT
+            and live_rep["exit"] == 0,
+            "AC-EDML4 live doc rows=%d shaped=%d registry=%d verdict=%s"
+            % (SMR.doc_rows(live_text), len(live_shaped),
+               SMR.registry_counts()[0], live_rep["verdict"])))
+
+        # AC-EDML5: the value law is asked at CALL time and the SHAPE law is
+        # untouched - a numbered header still matches ROW_RE while the value
+        # law refuses it, and patching the value law moves the count.
+        saved_pred = SMR.is_data_row
+        try:
+            SMR.is_data_row = lambda line: bool(SMR.ROW_RE.match(line))
+            patched = SMR.doc_rows_scan(mini_doc([ROW_A, NUM_HEAD, ROW_B]))
+        finally:
+            SMR.is_data_row = saved_pred
+        results.append(check(
+            bool(SMR.ROW_RE.match(NUM_HEAD)) and not saved_pred(NUM_HEAD)
+            and patched[0] == 3 and patched[1] is None
+            and SMR.doc_rows_scan(mini_doc([ROW_A, NUM_HEAD, ROW_B]))[0] == 1,
+            "AC-EDML5 shape-vs-value split: shape=%s value=%s patched=%d"
+            % (bool(SMR.ROW_RE.match(NUM_HEAD)), saved_pred(NUM_HEAD),
+               patched[0])))
+
+        # AC-EDML6: hygiene - both laws and the dash decision live in the
+        # module, the registry carries this suite's criteria count, and the
+        # module stays ASCII and clock/network free.
+        with open(MODULE, "rb") as handle:
+            law_raw = handle.read()
+        with open(MODULE, encoding="utf-8") as handle:
+            law_src = handle.read()
+        registry_row = [row for row in RA.SUITES
+                        if str(row[1]).replace("\\", "/").endswith(
+                            "os/test_suite_matrix_reconcile.py")]
+        results.append(check(
+            all(byte < 128 for byte in law_raw)
+            and law_src.count("def is_data_row(") == 1
+            and law_src.count("def numbered_header(") == 1
+            and "SECS_DASH" in law_src
+            and len(registry_row) == 1
+            and registry_row[0][2] == EXPECTED_CRITERIA,
+            "AC-EDML6 hygiene ascii=%s laws=%d registry=%r"
+            % (all(byte < 128 for byte in law_raw),
+               law_src.count("def is_data_row(")
+               + law_src.count("def numbered_header("),
+               registry_row[0][2] if len(registry_row) == 1 else None)))
 
         # AC-EDM6: hygiene and registration.
         with open(MODULE, "rb") as handle:

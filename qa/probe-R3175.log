@@ -1,0 +1,70 @@
+(1) ANCHOR: the seed prefix AC-EDMK1..6 at HEAD
+    AC-EDMK files=12 lines=26
+    src/os/board_R2633.py:70: " Criteria AC-EDMK1..AC-EDMK6 pinned HERE BEFORE any code: AC-EDMK1 a"
+    src/os/board_R2633.py:73: " table own rows; AC-EDMK2 a numbered header followed by a separator of"
+    src/os/board_R2633.py:75: " AC-EDMK3 a well-formed data row that happens to carry a numeric first"
+    src/os/board_R2633.py:77: " survive byte for byte); AC-EDMK4 the shipped check face is still asked"
+    src/os/board_R2633.py:79: " word; AC-EDMK5 every AC-EDMJ answer survives beside the new ones"
+    src/os/board_R2633.py:82: " words, both counts, the named evidence source); AC-EDMK6 pure ASCII,"
+    src/os/board_R2633.py:106: and "AC-EDMK1..AC-EDMK6 pinned HERE BEFORE any code" in back)
+    src/os/suite_matrix_reconcile.py:502: """AC-EDMK1: WHICH leg a live reading holds, said rather than assumed.
+    src/os/test_suite_matrix_reconcile.py:251: # AC-EDMK1: the LIVE leg is the leg the DOCUMENT records; the newest
+    src/os/test_suite_matrix_reconcile.py:315: "AC-EDMK1 live source=%s same-as-recorded=%s control=%s"
+    src/os/test_suite_matrix_reconcile_fence.py:64: AC-EDMK1: for PASS the leg the DOCUMENT records answers first and the
+    src/os/test_suite_matrix_reconcile_fence_rows.py:71: AC-EDMK1: for PASS the leg the DOCUMENT records answers first and the
+    src/os/test_suite_matrix_reconcile_fence_table.py:74: # AC-EDMK1: the leg the DOCUMENT records answers first; the newest
+    src/os/test_suite_matrix_reconcile_row_membership.py:81: # AC-EDMK1: the leg the DOCUMENT records answers first; the newest
+    src/os/test_suite_matrix_reconcile_row_shape.py:79: # AC-EDMK1: the leg the DOCUMENT records answers first; the newest
+    src/os/test_suite_matrix_reconcile_second_table_separator.py:83: # AC-EDMK1: the leg the DOCUMENT records answers first; the newest
+    src/os/test_suite_matrix_reconcile_shape.py:61: AC-EDMK1: for PASS the leg the DOCUMENT records answers first and the
+    src/os/test_suite_matrix_reconcile_table_shape.py:395: # AC-EDMK1: the live leg is the leg the DOCUMENT records; the newest PASS
+(2) FREE PREFIX CANDIDATES
+    AC-EDML files=0 lines=0
+    AC-EDMO files=0 lines=0
+    AC-EDMP files=0 lines=0
+(3) THE REAL DOCUMENT READ BY THE SHIPPED LAW
+    ROW_RE rows=753 numeric_criteria_and_secs=675 lost_under_value_law=78
+    lost line 49 cells=['10', 'kill-on-close', 'test_kill_on_close.py', '12', 'no-evidence', '-']
+    lost line 50 cells=['11', 'launcher-registry', 'test_launcher_registry.py', '9', 'no-evidence', '-']
+    lost line 51 cells=['12', 'launcher-mutex', 'test_launcher_mutex.py', '5', 'no-evidence', '-']
+    lost line 52 cells=['13', 'birth-gate', 'test_birth_gate.py', '11', 'no-evidence', '-']
+    lost line 53 cells=['14', 'bind-site-scan', 'test_bind_site_scan.py', '27', 'no-evidence', '-']
+    doc_rows(text)=753 registry_rows=753
+    numbered-leading rows anywhere=754 (shape-checked=753)
+    sample line 13: | 753 | 6140 | 675/675 | R2739 |
+    sample line 40: | 1 | lobby | lobby/test_client.py | 79 | green | 43.4 |
+(4) THE R2633 THREE SHAPES AT HEAD
+    base (control)               count=1 delta=+0 problem=None
+    (a) numheader + row          count=3 delta=+2 problem=None
+    (b) numheader+sep_own+row    count=3 delta=+2 problem=None
+    (c) trailing numheader       count=2 delta=+1 problem=None
+    (d) numheader+sep_5cell+row  count=3 delta=+2 problem=None
+(5) WHO ASKS ROW_RE, AND WHOSE FIXTURES WOULD MOVE
+    consumers=23
+    src/os/board_R2633.py                                          refs=1  fixture_rows=1  movers=1
+        line 58 cells=['1', 'Suite', 'Path', 'Criteria', 'State', 'Secs']
+    src/os/export_round.py                                         refs=2  fixture_rows=0  movers=0
+    src/os/limits_matrix_reconcile_fence_rows_next_R2616.py        refs=1  fixture_rows=6  movers=0
+    src/os/limits_matrix_reconcile_fence_table_next_R2621.py       refs=1  fixture_rows=1  movers=0
+    src/os/limits_matrix_reconcile_row_membership_R2630.py         refs=1  fixture_rows=1  movers=0
+    src/os/limits_matrix_reconcile_row_membership_next_R2630.py    refs=1  fixture_rows=1  movers=0
+    src/os/limits_matrix_reconcile_row_shape_R2624.py              refs=1  fixture_rows=1  movers=0
+    src/os/limits_matrix_reconcile_row_shape_next_R2624.py         refs=1  fixture_rows=0  movers=0
+    src/os/limits_matrix_reconcile_second_table_separator_R2633.py refs=1  fixture_rows=1  movers=0
+    src/os/limits_matrix_reconcile_second_table_separator_next_R2633.py refs=1  fixture_rows=2  movers=1
+        line 29 cells=['1', 'Suite', 'Path', 'Criteria', 'State', 'Secs']
+    src/os/live_suite_matrix_reconcile_fence_rows_R2616.py         refs=1  fixture_rows=1  movers=0
+    src/os/queue_close_R2608.py                                    refs=1  fixture_rows=0  movers=0
+    src/os/suite_matrix_reconcile.py                               refs=3  fixture_rows=0  movers=0
+    src/os/test_suite_matrix_reconcile.py                          refs=1  fixture_rows=0  movers=0
+    src/os/test_suite_matrix_reconcile_evidence_face.py            refs=1  fixture_rows=0  movers=0
+    src/os/test_suite_matrix_reconcile_fence.py                    refs=1  fixture_rows=1  movers=0
+    src/os/test_suite_matrix_reconcile_fence_rows.py               refs=2  fixture_rows=1  movers=0
+    src/os/test_suite_matrix_reconcile_fence_table.py              refs=1  fixture_rows=1  movers=0
+    src/os/test_suite_matrix_reconcile_row_membership.py           refs=1  fixture_rows=1  movers=0
+    src/os/test_suite_matrix_reconcile_row_shape.py                refs=6  fixture_rows=1  movers=0
+    src/os/test_suite_matrix_reconcile_second_table_separator.py   refs=1  fixture_rows=1  movers=0
+    src/os/test_suite_matrix_reconcile_shape.py                    refs=1  fixture_rows=1  movers=0
+    src/os/test_suite_matrix_reconcile_table_shape.py              refs=1  fixture_rows=0  movers=0
+(6) REGISTRY ROW FOR THE MAIN SUITE
+    ('os-suite-matrix-reconcile', '..\\os\\test_suite_matrix_reconcile.py', 8)
