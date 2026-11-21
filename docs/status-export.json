@@ -1,35 +1,36 @@
 {
   "ceo_face": {
     "board_pages_skipped": [
+      "preview/ceo-blockers.html (8453B)",
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3140 PRODUCT+ENGINEERING: a word-form counter must now own its digit - \"exit=0 pass-lines=11 fail-lines=0 criteria=11\" no longer reads as \"0 pass\"/\"11 fail\", while the four live rows that are law ONLY through the word dialect (three civic suites and one battery fixture) stay byte-identical.",
+    "current": "2026-11-21 R3141 PRODUCT+ENGINEERING: the word-form counter's prose ambiguity is not a separable shape - a body that starts with SUITE and states criteria/pass/fail IS a counter row - so the ruling pins completeness instead of tightening: five suites read law through words alone and dropping any one key stops it.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3140.log (6896B, 2026-11-21)",
-    "latest_evidence": "qa/probe-R3140.log (6896B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3141.log (3409B, 2026-11-21)",
+    "latest_evidence": "qa/probe-R3141.log (3409B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3141] next window (<=48h): (0) MAIN — **词式方言的散文模糊面从未量过：行首 `SUITE`、三组「数字＋criteria/pass/fail」都在，但整行是一段散文（例如 `SUITE PASS 12/12 - 3 criteria, 11 pass, 0 fail`）时，它仍读 `law_counters`——R3140 只关掉了 token 粘连，没关掉这个。** 下一轮先量（只读＋AST＋活盘，禁手写数字）：①741 行注册表与全仓 .py 里，锚定＋词式独有＋行内没有 `N/M` 数字对的常量有多少（即纯散文形态）；②若为零，本项具名保留并回产品面；③若非零，裁定是否要求词式行同时带一个 `p/t` 对或三键完整键形。**先落板再动代码。**（备选：tasks.md 无 open 项，产品面的真缺口是物理件〔商户号/服务器/域名〕，不得造活。）",
-    "next_milestone_due": "2026-11-23T10:29:33+08:00",
-    "updated_at": "2026-11-21T10:29:33+08:00",
+    "next_milestone": "[R3142] next window (<=48h): (0) MAIN — **CEO 面的 outs 清单已经 56 条，每条带一个 `[日期 commit/mtime]` 标签，但没有任何面判断该标签今天是否还成立——一条 11-19 的 commit 与一条 11-21 的条目并排渲染，看的人分不出哪条已经陈旧。** 下一轮先量（只读＋活盘派生）：①56 条 outs 的标签口径是否统一（commit 与 mtime 各几条，谁写的）；②按标签日期分档，最老一档（>7 天）有几条、它们指向的文件是否仍能扫到；③若给每条加一个「龄」（天）字段并按龄排序，是否与现有 outs 消费面（`preview/index.html`、`externals` 引用）逐字兼容。然后裁定：加龄字段、按龄剪枝、还是具名保留。**先落板再动代码。**（备选：tasks.md 无 open 项，产品面的真缺口仍是物理件〔商户号/服务器/域名〕，不得造活。）",
+    "next_milestone_due": "2026-11-23T10:51:08+08:00",
+    "updated_at": "2026-11-21T10:51:08+08:00",
     "heartbeat": {
-      "tick": 3140,
-      "state_tick": 3140,
+      "tick": 3141,
+      "state_tick": 3141,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
     },
     "corpus": {
-      "files": 4319,
-      "bytes": 508499678,
+      "files": 4321,
+      "bytes": 508506007,
       "mb": 508.5,
-      "readable": 4319
+      "readable": 4321
     }
   },
-  "current": "2026-11-21 R3140 PRODUCT+ENGINEERING: a word-form counter must now own its digit - \"exit=0 pass-lines=11 fail-lines=0 criteria=11\" no longer reads as \"0 pass\"/\"11 fail\", while the four live rows that are law ONLY through the word dialect (three civic suites and one battery fixture) stay byte-identical.",
+  "current": "2026-11-21 R3141 PRODUCT+ENGINEERING: the word-form counter's prose ambiguity is not a separable shape - a body that starts with SUITE and states criteria/pass/fail IS a counter row - so the ruling pins completeness instead of tightening: five suites read law through words alone and dropping any one key stops it.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -57,11 +58,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3140 PRODUCT+ENGINEERING: a word-form counter must now own its digit - \"exit=0 pass-lines=11 fail-lines=0 criteria=11\" no longer reads as \"0 pass\"/\"11 fail\", while the four live rows that are law ONLY through the word dialect (three civic suites and one battery fixture) stay byte-identical.",
-  "export_ts": "2026-11-21T10:29:33+08:00",
+  "do": "2026-11-21 R3141 PRODUCT+ENGINEERING: the word-form counter's prose ambiguity is not a separable shape - a body that starts with SUITE and states criteria/pass/fail IS a counter row - so the ruling pins completeness instead of tightening: five suites read law through words alone and dropping any one key stops it.",
+  "export_ts": "2026-11-21T10:51:08+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/probe-R3140.log (6896B, 2026-11-21)",
-  "next_milestone": "[R3141] next window (<=48h): (0) MAIN — **词式方言的散文模糊面从未量过：行首 `SUITE`、三组「数字＋criteria/pass/fail」都在，但整行是一段散文（例如 `SUITE PASS 12/12 - 3 criteria, 11 pass, 0 fail`）时，它仍读 `law_counters`——R3140 只关掉了 token 粘连，没关掉这个。** 下一轮先量（只读＋AST＋活盘，禁手写数字）：①741 行注册表与全仓 .py 里，锚定＋词式独有＋行内没有 `N/M` 数字对的常量有多少（即纯散文形态）；②若为零，本项具名保留并回产品面；③若非零，裁定是否要求词式行同时带一个 `p/t` 对或三键完整键形。**先落板再动代码。**（备选：tasks.md 无 open 项，产品面的真缺口是物理件〔商户号/服务器/域名〕，不得造活。）",
+  "latest_evidence": "qa/probe-R3141.log (3409B, 2026-11-21)",
+  "next_milestone": "[R3142] next window (<=48h): (0) MAIN — **CEO 面的 outs 清单已经 56 条，每条带一个 `[日期 commit/mtime]` 标签，但没有任何面判断该标签今天是否还成立——一条 11-19 的 commit 与一条 11-21 的条目并排渲染，看的人分不出哪条已经陈旧。** 下一轮先量（只读＋活盘派生）：①56 条 outs 的标签口径是否统一（commit 与 mtime 各几条，谁写的）；②按标签日期分档，最老一档（>7 天）有几条、它们指向的文件是否仍能扫到；③若给每条加一个「龄」（天）字段并按龄排序，是否与现有 outs 消费面（`preview/index.html`、`externals` 引用）逐字兼容。然后裁定：加龄字段、按龄剪枝、还是具名保留。**先落板再动代码。**（备选：tasks.md 无 open 项，产品面的真缺口仍是物理件〔商户号/服务器/域名〕，不得造活。）",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -186,7 +187,7 @@
   },
   "results": [
     [
-      "3140",
+      "3141",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -200,29 +201,29 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 90,
+    "log_lines_in_window": 81,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 14,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 79016,
-  "next_milestone_due": "2026-11-23T10:29:33+08:00",
+  "state_bytes": 71450,
+  "next_milestone_due": "2026-11-23T10:51:08+08:00",
   "heartbeat": {
-    "tick": 3140,
-    "state_tick": 3140,
+    "tick": 3141,
+    "state_tick": 3141,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
   },
   "corpus": {
-    "files": 4319,
-    "bytes": 508499678,
+    "files": 4321,
+    "bytes": 508506007,
     "mb": 508.5,
-    "readable": 4319
+    "readable": 4321
   }
 }

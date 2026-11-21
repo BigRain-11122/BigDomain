@@ -1,0 +1,40 @@
+python : <unknown>:11: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. D
+id you mean "\\/"? A raw string is also an option.
+所在位置 行:1 字符: 32
++ $env:PYTHONIOENCODING="utf-8"; python tmp\probe_R3141.py 2>&1 | Tee-O ...
++                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (<unknown>:11: S...also an option.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+<unknown>:12: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\/"? A raw string is also an option.
+<unknown>:14: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\/"? A raw string is also an option.
+<unknown>:15: SyntaxWarning: "\/" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\/"? A raw string is also an option.
+<unknown>:239: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you m
+ean "\\d"? A raw string is also an option.
+<unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+Q1a registry rows=741 files=741 law_counters=44 word_only=5
+  WORD src\sandbox\ledger\test_civic_distribution.py:249 pair=False 'SUITE %s: %d criteria, %d pass, %d fail'
+  WORD src\sandbox\ledger\test_civic_monthwindow.py:321 pair=False 'SUITE %s: %d criteria, %d pass, %d fail'
+  WORD src\sandbox\ledger\test_civic_competition_monthwindow.py:367 pair=False 'SUITE %s: %d criteria, %d pass, %d fail'
+  WORD src\os\test_battery_shard.py:347 pair=False 'SUITE PASS: 6 criteria, 6 pass, 0 fail'
+  WORD src\os\test_suite_closing_row_census.py:1221 pair=False 'SUITE %s: %d criteria, %d pass, %d fail'
+Q1a anchored_no_pair=5
+Q1b repo py_files=6307 law_counters=47 word_only=5
+  WORD src\os\test_battery_shard.py:347 pair=False 'SUITE PASS: 6 criteria, 6 pass, 0 fail'
+  WORD src\os\test_suite_closing_row_census.py:1221 pair=False 'SUITE %s: %d criteria, %d pass, %d fail'
+  WORD src\sandbox\ledger\test_civic_competition_monthwindow.py:367 pair=False 'SUITE %s: %d criteria, %d pass, %d fail'
+  WORD src\sandbox\ledger\test_civic_distribution.py:249 pair=False 'SUITE %s: %d criteria, %d pass, %d fail'
+  WORD src\sandbox\ledger\test_civic_monthwindow.py:321 pair=False 'SUITE %s: %d criteria, %d pass, %d fail'
+Q1b anchored_no_pair=5
+Q3 legal word rows carried=5
+  LEGAL src\os\test_battery_shard.py:347 pair=False equals=False anchored=True 'SUITE PASS: 6 criteria, 6 pass, 0 fail'
+  LEGAL src\os\test_suite_closing_row_census.py:1221 pair=False equals=False anchored=True 'SUITE %s: %d criteria, %d pass, %d fail'
+  LEGAL src\sandbox\ledger\test_civic_competition_monthwindow.py:367 pair=False equals=False anchored=True 'SUITE %s: %d criteria, %d pass, %d fail'
+  LEGAL src\sandbox\ledger\test_civic_distribution.py:249 pair=False equals=False anchored=True 'SUITE %s: %d criteria, %d pass, %d fail'
+  LEGAL src\sandbox\ledger\test_civic_monthwindow.py:321 pair=False equals=False anchored=True 'SUITE %s: %d criteria, %d pass, %d fail'

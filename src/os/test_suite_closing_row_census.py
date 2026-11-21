@@ -58,7 +58,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.dirname(BASE)
 ROOT = os.path.dirname(SRC)
 
-EXPECTED_CRITERIA = 23
+EXPECTED_CRITERIA = 24
 LABEL = "os-suite-closing-row-census"
 TOOL = os.path.join(ROOT, "tools", "suite_closing_row_census.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
@@ -1270,6 +1270,78 @@ def ac_cen23():
              text_law, ast_law, registry_n, t))
 
 
+def ac_cen24():
+    """A word-form counter row must carry all three keys (R3141).
+
+    The board asked whether a body that STARTS with SUITE, states the three
+    counter words and carries no N/M pair could be prose rather than a closing
+    row. Measured this window (741 registry sources plus all 6307 repo .py):
+    exactly five constants have that shape and all five ARE the word dialect -
+    three civic templates, the battery fixture and this suite's own fixture - so
+    "prose" is not separable by shape (a body stating the three counts is a
+    counter row). What can be pinned is the completeness rule:
+      p only the five known suites read law through words alone, so a future
+        suite that reaches law_counters with a fragment goes red by name;
+      q/r dropping one key from the legal template stops being law;
+      s the live tree still reads text==ast==registry and keeps five word rows;
+      t the equals dialect is untouched.
+    """
+    census = _census()
+    WORD_SUITES = {"civic-behavior-distribution",
+                   "civic-behavior-monthwindow",
+                   "civic-competition-monthwindow",
+                   "os-battery-shard",
+                   "os-suite-closing-row-census"}
+    word_only, word_rows = 0, set()
+    text_law, ast_law, registry_n = 0, 0, 0
+    for label, rel, _declared in census.registry(ROOT):
+        path = os.path.join(ROOT, "src", "sandbox", rel)
+        if not os.path.isfile(path):
+            continue
+        registry_n += 1
+        with open(path, "r", encoding="utf-8", errors="replace") as fh:
+            src = fh.read()
+        for body in census._string_constants(src) or []:
+            if census.shape_of_literal(body, src) != "law_counters":
+                continue
+            norm = census.normalise(body)
+            eq = (census.COUNTER_TOTAL.search(norm)
+                  and census.COUNTER_PASS.search(norm)
+                  and census.COUNTER_FAIL.search(norm))
+            word = all(rx.search(norm) for rx in (
+                census.COUNTER_WORD_TOTAL, census.COUNTER_WORD_PASS,
+                census.COUNTER_WORD_FAIL))
+            if word and not eq:
+                word_only += 1
+                word_rows.add(label)
+        if census.classify(src) in census.LAW_FAMILIES:
+            text_law += 1
+        if census.classify_bodies(src) in census.LAW_FAMILIES:
+            ast_law += 1
+    p = word_only == 5 and word_rows == WORD_SUITES
+    q = (census.shape_of_literal("SUITE %s: %d criteria, %d fail",
+                                 ANCHORED_COUNTERS_SRC)
+         not in census.LAW_FAMILIES)
+    r = (census.shape_of_literal("SUITE %s: %d pass, %d fail",
+                                 ANCHORED_COUNTERS_SRC)
+         not in census.LAW_FAMILIES)
+    s = text_law == ast_law == registry_n and word_only == 5
+    t = (census.shape_of_literal("SUITE PASS criteria=6 passes=8 fails=0",
+                                 ANCHORED_COUNTERS_EQ_SRC)
+         == "law_counters")
+    ok = bool(p and q and r and s and t)
+    if not ok:
+        print("  measured p=%r q=%r r=%r s=%r t=%r word_only=%d rows=%r "
+              "text/ast=%d/%d registry=%d"
+              % (p, q, r, s, t, word_only, sorted(word_rows),
+                 text_law, ast_law, registry_n), flush=True)
+    check(ok, "AC-CEN24 a word counter row carries all three keys "
+          "(word-only=%d rows=%r missing-key-silent=%r/%r "
+          "text=ast=%d/%d registry=%d equals-law=%r)"
+          % (word_only, sorted(word_rows), q, r,
+             text_law, ast_law, registry_n, t))
+
+
 def main():
     print("suite closing-row census suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -1296,6 +1368,7 @@ def main():
     ac_cen21()
     ac_cen22()
     ac_cen23()
+    ac_cen24()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

@@ -13,7 +13,7 @@
    "exists": true,
    "face": "preview/platform-live-report.html",
    "face_state": {
-    "bytes": 6889,
+    "bytes": 7929,
     "path": "preview/platform-live-report.html",
     "state": "PRESENT"
    },
@@ -33,7 +33,7 @@
    "exists": true,
    "face": "preview/payment-gate-report.html",
    "face_state": {
-    "bytes": 6737,
+    "bytes": 6991,
     "path": "preview/payment-gate-report.html",
     "state": "PRESENT"
    },
@@ -113,7 +113,7 @@
    "exists": true,
    "face": "preview/index.html",
    "face_state": {
-    "bytes": 36506,
+    "bytes": 37062,
     "path": "preview/index.html",
     "state": "PRESENT"
    },
@@ -153,7 +153,7 @@
    "exists": true,
    "face": "preview/index.html",
    "face_state": {
-    "bytes": 36506,
+    "bytes": 37062,
     "path": "preview/index.html",
     "state": "PRESENT"
    },
@@ -172,5 +172,5 @@
   "html": 8453,
   "json": 6754
  },
- "tick": "2811"
+ "tick": "3140"
 }
