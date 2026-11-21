@@ -63,6 +63,18 @@ def record(name, ok, detail):
     print("%s %s %s" % ("PASS" if ok else "FAIL", name, detail))
 
 
+def claims_reading(block):
+    """The census reading a block carries, without its own age stamp.
+
+    AC-SXF33 (R3231): the age cannot be re-derived at check time (it is a
+    clock), so it is graded separately against export_ts; every reading
+    comparison goes through this slicing so no arm accidentally compares a
+    dict that carries the stamp.
+    """
+    return {key: value for key, value in (block or {}).items()
+            if key != sx.CLAIMS_TS_KEY}
+
+
 def snapshot(path):
     if not os.path.isfile(path):
         return None
@@ -126,7 +138,10 @@ def build_world(root):
         # AC-SXFB20 (R3228): same law for the census reading. Built from the
         # derivation, so every hand-copied fixture below inherits a correct block
         # instead of each arm having to remember to type one.
-        "claims": sx.claims_face(root),
+        # AC-SXF33 (R3231): the block now states its own age, and the healthy
+        # fixture's age IS the apply moment it claims - the same string it
+        # publishes as export_ts.
+        "claims": dict(sx.claims_face(root), census_ts="2026-11-16T00:00:00+08:00"),
     }
     export = os.path.join(root, "docs", "status-export.json")
     write_json(export, doc)
@@ -729,7 +744,7 @@ def run(root):
     sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
     claims_doc = json.loads(io.open(export, encoding="utf-8").read())
     arm_a = isinstance(claims_doc.get("claims"), dict)
-    arm_b = claims_doc.get("claims") == sx.claims_face(sx.ROOT)
+    arm_b = claims_reading(claims_doc.get("claims")) == sx.claims_face(sx.ROOT)
     rc_claims_ok = sx.check(export, sx.STATE)
     tampered_claims = json.loads(json.dumps(claims_doc))
     tampered_claims["claims"]["contradicted"] = int(
@@ -772,7 +787,7 @@ def run(root):
     finally:
         sx.now_local = real_clock
     record("AC-SXFB21", rc_landed == 0 and landed_claims["contradicted"] >= 1
-           and landed_claims == derived_claims
+           and claims_reading(landed_claims) == derived_claims
            and rc_once == 0 and rc_twice == 0 and once_claims == twice_claims,
            "landed=%s derived=%s idempotent=%s rc=%d/%d/%d"
            % (json.dumps(landed_claims, sort_keys=True),
@@ -824,11 +839,13 @@ def run(root):
         rc_legacy_seven = sx.check(export, sx.STATE)
     legacy_named = "E_SXF_CLAIMS_STALE" in buffer.getvalue()
     sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
-    record("AC-SXFB23", arm_keys and arm_equal and landed_seven == derived_seven
+    record("AC-SXFB23", arm_keys and arm_equal
+           and claims_reading(landed_seven) == derived_seven
            and rc_seven == 0 and rc_stale_seven == 2 and stale_named
            and rc_legacy_seven == 2 and legacy_named,
            "keys=%s equal=%s landed=%s rc=%d/%d/%d named=%s/%s"
-           % (arm_keys, arm_equal, landed_seven == derived_seven, rc_seven,
+           % (arm_keys, arm_equal,
+              claims_reading(landed_seven) == derived_seven, rc_seven,
               rc_stale_seven, rc_legacy_seven, stale_named, legacy_named))
 
     # AC-SXFB24 (AC-SXF31): publishing the census must not move the census. Two
@@ -887,11 +904,101 @@ def run(root):
            and sorted(seven_doc["chain"]) == ["broken", "path", "present", "rows"]
            and seven_doc["do"] == NARRATIVE
            and seven_doc["next_milestone_due"] == expected_due
-           and len(seven_doc["claims"]) == 7,
+           and len(seven_doc["claims"]) == 8,
            "rc=%d/%d idempotent=%s chain=%s do=%s due=%s keys=%d"
            % (rc_seven_once, rc_seven_twice, seven_once == seven_twice,
               ",".join(sorted(seven_doc["chain"])), seven_doc["do"] == NARRATIVE,
               seven_doc["next_milestone_due"], len(seven_doc["claims"])))
+
+    # AC-SXFB33 (AC-SXF33, R3231): the reading states its OWN age, and that age
+    # is pinned to the face's own moment. Probed (qa/probe-R3231.log, ARM-B): the
+    # census moved uncaptured 0 -> 1 while the stamp stayed behind and check()
+    # still answered rc=0 - every criterion compared the block to the census and
+    # none compared it to a moment.
+    real_clock_age = sx.now_local
+    pinned_age = dt.datetime(2026, 11, 22, 7, 0, 0,
+                             tzinfo=dt.timezone(dt.timedelta(hours=8)))
+    try:
+        sx.now_local = lambda: pinned_age
+        rc_age_apply = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    finally:
+        sx.now_local = real_clock_age
+    age_doc = json.loads(io.open(export, encoding="utf-8").read())
+    rc_age_ok = sx.check(export, sx.STATE)
+    arm_same = (age_doc["claims"][sx.CLAIMS_TS_KEY] == age_doc["export_ts"]
+                == "2026-11-22T07:00:00+08:00")
+    no_stamp = json.loads(json.dumps(age_doc))
+    no_stamp["claims"].pop(sx.CLAIMS_TS_KEY)
+    write_json(export, no_stamp)
+    with contextlib.redirect_stdout(io.StringIO()) as buffer:
+        rc_age_missing = sx.check(export, sx.STATE)
+    age_missing = "E_SXF_CLAIMS_AGE:" in buffer.getvalue()
+    bad_stamp = json.loads(json.dumps(age_doc))
+    bad_stamp["claims"][sx.CLAIMS_TS_KEY] = "yesterday"
+    write_json(export, bad_stamp)
+    with contextlib.redirect_stdout(io.StringIO()) as buffer:
+        rc_age_bad = sx.check(export, sx.STATE)
+    age_bad = "E_SXF_CLAIMS_AGE:" in buffer.getvalue()
+    split_stamp = json.loads(json.dumps(age_doc))
+    split_stamp["claims"][sx.CLAIMS_TS_KEY] = "2026-11-22T08:00:00+08:00"
+    write_json(export, split_stamp)
+    with contextlib.redirect_stdout(io.StringIO()) as buffer:
+        rc_age_split = sx.check(export, sx.STATE)
+    age_split = "E_SXF_CLAIMS_AGE_SPLIT:" in buffer.getvalue()
+    # A split is NOT reported as missing: the two defects stay separate codes.
+    split_only = "E_SXF_CLAIMS_AGE:" not in buffer.getvalue()
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    rc_age_fixed = sx.check(export, sx.STATE)
+    record("AC-SXFB33", rc_age_apply == 0 and rc_age_ok == 0 and arm_same
+           and rc_age_missing == 2 and age_missing
+           and rc_age_bad == 2 and age_bad
+           and rc_age_split == 2 and age_split and split_only
+           and rc_age_fixed == 0,
+           "same=%s rc=%d/%d/%d/%d/%d missing=%s bad=%s split=%s split_only=%s"
+           % (arm_same, rc_age_apply, rc_age_ok, rc_age_missing, rc_age_bad,
+              rc_age_split, age_missing, age_bad, age_split, split_only))
+
+    # AC-SXFB34 (AC-SXF34, R3231): the age is ADDITIVE - the chain block, the
+    # derived narrative and the 48h due stay exactly as they were, a second apply
+    # on a pinned clock is byte-identical, and publishing the stamp moves no
+    # census counter (a JSON key is not a `rows=<n>` token).
+    real_clock_add = sx.now_local
+    pinned_add = dt.datetime(2026, 11, 22, 8, 0, 0,
+                             tzinfo=dt.timezone(dt.timedelta(hours=8)))
+    before_census_add = {key: value for key, value in CC.census(sx.ROOT).items()
+                         if key != "faces"}
+    hours_add = sx.next_milestone(sx.BACKLOG)["hours"]
+    try:
+        sx.now_local = lambda: pinned_add
+        rc_add_once = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        add_once = io.open(export, "rb").read()
+        rc_add_twice = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        add_twice = io.open(export, "rb").read()
+    finally:
+        sx.now_local = real_clock_add
+    after_census_add = {key: value for key, value in CC.census(sx.ROOT).items()
+                        if key != "faces"}
+    add_doc = json.loads(add_twice.decode("utf-8"))
+    expected_due_add = (pinned_add + dt.timedelta(hours=hours_add)).strftime(
+        "%Y-%m-%dT%H:%M:%S+08:00")
+    counters_still = all(before_census_add[key] == after_census_add[key]
+                         for key in ("claimed", "captured", "contradicted",
+                                     "uncaptured", "historic", "rows"))
+    add_lines = [line for line in add_twice.decode("utf-8").split("\n")
+                 if line.startswith('  "claims": ')]
+    add_tokens = len(add_lines) == 1 and "rows=" not in add_lines[0]
+    record("AC-SXFB34", rc_add_once == 0 and rc_add_twice == 0
+           and add_once == add_twice
+           and sorted(add_doc["chain"]) == ["broken", "path", "present", "rows"]
+           and add_doc["do"] == NARRATIVE
+           and add_doc["next_milestone_due"] == expected_due_add
+           and len(add_doc["claims"]) == 8
+           and counters_still and add_tokens,
+           "rc=%d/%d idempotent=%s chain=%s due=%s keys=%d counters=%s tokens=%s"
+           % (rc_add_once, rc_add_twice, add_once == add_twice,
+              ",".join(sorted(add_doc["chain"])),
+              add_doc["next_milestone_due"], len(add_doc["claims"]),
+              counters_still, add_tokens))
 
     # AC-SXFB10 (AC-SXF10): the registry row exists AND declares this many
     # criteria, so adding a criterion without moving the count is red instead of
@@ -907,7 +1014,7 @@ def run(root):
             if "test_status_export_fresh.py" in line:
                 row = line
                 break
-    record("AC-SXFB10", row is not None and declared == 32,
+    record("AC-SXFB10", row is not None and declared == 34,
            "matrix_row=%s declared=%d" % (bool(row), declared))
 
 

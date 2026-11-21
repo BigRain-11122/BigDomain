@@ -1,0 +1,4 @@
+GREEN Q1 honest-driver rc=0/0 age_pinned=True
+GREEN Q2 unstamped-writer refused rc=0/2 named=True
+GREEN Q3 blind-gate hides the same defect blind=0 honest=2
+PASS NEGCTL q=True/True/True

@@ -539,11 +539,37 @@ def check(export_path, state_path):
         problems.append(("E_SXF_CLAIMS_MISSING",
                          "%s absent; derived=%s"
                          % (CLAIMS_KEY, json.dumps(derived_claims, sort_keys=True))))
-    elif landed_claims != derived_claims:
-        problems.append(("E_SXF_CLAIMS_STALE",
-                         "landed=%s derived=%s"
-                         % (json.dumps(landed_claims, sort_keys=True),
-                            json.dumps(derived_claims, sort_keys=True))))
+    else:
+        landed_reading = {key: value for key, value in landed_claims.items()
+                          if key != CLAIMS_TS_KEY}
+        if landed_reading != derived_claims:
+            problems.append(("E_SXF_CLAIMS_STALE",
+                             "landed=%s derived=%s"
+                             % (json.dumps(landed_reading, sort_keys=True),
+                                json.dumps(derived_claims, sort_keys=True))))
+        # AC-SXF33 (R3231): a reading that cannot state its own age is a defect,
+        # and a reading whose age is not this apply's own moment is a DIFFERENT
+        # defect - so "no stamp / unusable stamp" and "stamp from another apply"
+        # are named separately instead of collapsing into one refusal.
+        stamp = landed_claims.get(CLAIMS_TS_KEY)
+        if not isinstance(stamp, str) or not stamp:
+            problems.append(("E_SXF_CLAIMS_AGE",
+                             "%s carries no %s; the reading cannot state its own "
+                             "age" % (CLAIMS_KEY, CLAIMS_TS_KEY)))
+        else:
+            try:
+                dt.datetime.fromisoformat(stamp)
+            except ValueError:
+                problems.append(("E_SXF_CLAIMS_AGE",
+                                 "%s=%r is not an ISO timestamp"
+                                 % (CLAIMS_TS_KEY, stamp)))
+            else:
+                if stamp != (doc.get("export_ts") or ""):
+                    problems.append(("E_SXF_CLAIMS_AGE_SPLIT",
+                                     "%s=%s but export_ts=%s: the reading and the "
+                                     "face were not written by one apply"
+                                     % (CLAIMS_TS_KEY, stamp,
+                                        doc.get("export_ts"))))
     if problems:
         print("VERDICT %s FAIL" % tag)
         for code, problem in problems:
@@ -562,6 +588,8 @@ def check(export_path, state_path):
              derived_claims["uncaptured"], derived_claims["contradicted"],
              derived_claims["historic"], derived_claims["rows"],
              "true" if derived_claims["present"] else "false"))
+    print("claims age=%s (pinned to export_ts by AC-SXF33)"
+          % (landed_claims.get(CLAIMS_TS_KEY) or "unknown"))
     return 0
 
 
@@ -641,6 +669,11 @@ def chain_face(root):
 
 
 CLAIMS_KEY = "claims"
+# AC-SXF33 (R3231): the reading states its OWN age. Probed this window
+# (qa/probe-R3231.log): the census moved (uncaptured 0 -> 1) while the stamp
+# stayed behind and check() still answered rc=0, because every criterion
+# compared the block to the census and none compared it to a moment.
+CLAIMS_TS_KEY = "census_ts"
 
 
 def claims_face(root):
@@ -680,6 +713,20 @@ def claims_face(root):
             "historic": reading.get("historic", 0),
             "rows": reading.get("rows", 0),
             "present": reading.get("present")}
+
+
+def claims_block(root, moment):
+    """The published block: the census reading PLUS the moment it was taken.
+
+    AC-SXF33 (R3231). `claims_face` stays a pure reading with no clock in it, so
+    a grader can ask it at any time and get the same answer; the age rides
+    beside it and `check` pins it to `export_ts`. The two are written from the
+    same `moment` in `apply`, which is what makes "one apply" a fact a machine
+    can verify instead of a convention a reader has to trust.
+    """
+    block = claims_face(root)
+    block[CLAIMS_TS_KEY] = iso(moment)
+    return block
 
 
 def _ensure_block(text, key, mapping, indent="  "):
@@ -766,7 +813,7 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     # the grader uses. Landing it adds zero `rows=` tokens (JSON shape), so the
     # value it publishes is not moved by publishing it - the second --apply is
     # byte-identical for that reason, not by luck.
-    claims = claims_face(ROOT)
+    claims = claims_block(ROOT, moment)
     text, ok = _ensure_block(text, CLAIMS_KEY, claims, "  ")
     if not ok:
         missing.append(CLAIMS_KEY)

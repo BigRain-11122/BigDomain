@@ -6090,6 +6090,19 @@ def claims_card(block):
         line += " (presence unknown: block predates the present field)"
     out = ["<p class=kv>%s</p>" % esc(line)]
 
+    # AC-FDC21 (R3231): the reading states its own age. Probed
+    # (qa/probe-R3231.log): the census moved while the stamp stayed behind and
+    # the gate still passed, and this card printed no moment at all - so the only
+    # age a reader saw came from another card's export_ts, by convention. The
+    # stamp is published beside the numbers now and graded equal to export_ts by
+    # AC-SXF33, so the age here is the reading's own, not a neighbour's.
+    stamp = block.get("census_ts")
+    if isinstance(stamp, str) and stamp:
+        out.append("<p class=kv>CLAIMS census taken at %s</p>" % esc(stamp))
+    else:
+        out.append("<p class=kv>CLAIMS census age unknown (the block carries no "
+                   "census_ts - honest absence, not a measured moment)</p>")
+
     total = (counts["captured"] + counts["contradicted"]
              + counts["uncaptured"])
     if total == counts["claimed"]:

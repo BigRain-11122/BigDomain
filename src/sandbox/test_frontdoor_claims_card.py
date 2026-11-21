@@ -259,10 +259,47 @@ def main():
         found4 = re.search(r'test_frontdoor_claims_card\.py"\)\s*,\s*(\d+)',
                            handle.read())
     declared4 = int(found4.group(1)) if found4 else -1
-    if declared4 != 4:
+    if declared4 != 5:
         bad4.append("registry-count-%d" % declared4)
 
     report("AC-FDC20", bool(bad4), ",".join(bad4))
+
+    # ---- AC-FDC21: the reading states its own age. -------------------------
+    # R3231 measured (qa/probe-R3231.log, ARM-C) that this card printed no
+    # moment at all: the only age a reader saw came from another card's
+    # export_ts, by convention. The stamp now rides inside the block and is
+    # graded equal to export_ts by AC-SXF33, so a reader can age the numbers
+    # without cross-reading a neighbour. Absence is named, never faked as 0.
+    bad5 = []
+    stamped = frontdoor.claims_card(dict(HEALTHY,
+                                         census_ts="2026-11-22T06:00:00+08:00"))
+    if "CLAIMS census taken at 2026-11-22T06:00:00+08:00" not in stamped:
+        bad5.append("stamp-not-printed")
+    plain5 = frontdoor.claims_card(dict(HEALTHY))
+    if "CLAIMS census age unknown" not in plain5:
+        bad5.append("absent-stamp-not-named")
+    if re.search(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}", plain5):
+        bad5.append("absent-stamp-invented-a-moment")
+    odd5 = frontdoor.claims_card(dict(HEALTHY, census_ts=12345))
+    if "CLAIMS census age unknown" not in odd5:
+        bad5.append("non-string-stamp-not-named")
+    for html5, label5 in ((stamped, "stamped"), (plain5, "plain"), (odd5, "odd")):
+        if "class=fail>CLAIMS census" in html5:
+            bad5.append("%s-age-is-a-verdict" % label5)
+        if html5.count("<p class=kv>CLAIMS census ") != 1:
+            bad5.append("%s-age-lines-%d"
+                        % (label5, html5.count("<p class=kv>CLAIMS census ")))
+    page5 = frontdoor.render().decode("utf-8")
+    if page5.count("CLAIMS census ") != 1:
+        bad5.append("page-age-lines-%d" % page5.count("CLAIMS census "))
+    with io.open(REGISTRY, encoding="utf-8") as handle:
+        found5 = re.search(r'test_frontdoor_claims_card\.py"\)\s*,\s*(\d+)',
+                           handle.read())
+    declared5 = int(found5.group(1)) if found5 else -1
+    if declared5 != 5:
+        bad5.append("registry-count-%d" % declared5)
+
+    report("AC-FDC21", bool(bad5), ",".join(bad5))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

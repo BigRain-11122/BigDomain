@@ -1,0 +1,21 @@
+
+Q1 export_ts write sites in driver: 1
+Q1 claims block write sites in driver: 1
+Q1 check codes naming claims: 3 4
+Q1 check codes naming age/census-ts: 0 0
+Q1 live export bytes: 39692 keys: 20
+Q1 live claims keys: captured,claimed,contradicted,historic,present,rows,uncaptured
+Q1 live claims any timestamp key: False
+Q1 live export_ts: 2026-11-22T06:49:39+08:00
+Q1 frontdoor export_ts consumer sites: 2 census_ts sites: 0
+ARM-A no-milestone world: apply=8 healthy_check=0
+ARM-A only export_ts moved: check=0 codes=none
+ARM-A page age source is the moved stamp: 2026-11-16T00:00:00+08:00 -> 2026-11-16T06:00:00+08:00
+ARM-A2 milestone world: apply=0 healthy_check=0
+ARM-A2 only export_ts moved: check=2 codes=E_SXF_DUE_STALE
+ARM-B census moved: old_uncaptured=0 new_uncaptured=1
+ARM-B block refreshed, stamp kept: check=0 codes=none
+ARM-B stamp the page still shows: 2026-11-22T06:58:07+08:00
+ARM-C card on today's block prints any timestamp: False
+ARM-C card on a block carrying census_ts prints it: False same_length_delta=0
+PROBE R3231 complete

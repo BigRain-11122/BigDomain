@@ -6345,7 +6345,7 @@ SUITES = [
     # face carries the denominator and the conservation a reader can check
     # (29 -> 32).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 32),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 34),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives
@@ -8062,7 +8062,7 @@ SUITES = [
     # existed; AC-FDC20 was added after landing the card proved that a data
     # value quoting a placeholder literal got substituted a second time.
     ("frontdoor-claims-card",
-     os.path.join("test_frontdoor_claims_card.py"), 4),
+     os.path.join("test_frontdoor_claims_card.py"), 5),
     # R3225: the three written faces carried 307 `rows=<n>` tokens and nothing
     # read one back; five of seven round-tagged `LEDGER ... rows=N` claims
     # disagreed with the ledger as that round's own commit recorded it
