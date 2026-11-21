@@ -1,0 +1,18 @@
+PASS AC-DIX1   registry=9 disk=9 missing=[] extra=[]
+PASS AC-DIX2   quoted-sizes=9 of 9, each equal to os.path.getsize
+PASS AC-DIX3   landed-names-newest=True snapshot-label=True fingerprint=4c03a2997192dd63
+PASS AC-DIX4   markers=True scheme_free=True fronts_before=5 fronts_after=5 bytes=38877
+PASS AC-DIX5   links=50 relative-and-present=50 bad=[]
+PASS AC-DIX6   compliance=3/3 blocker-named=9/9
+PASS AC-DIX7   verdicts-quoted=9/9 defect-rows=0
+PASS AC-DIX8   newest=apimarket-monthly-faces.json bytes=13015 names_fresh=True snapshot_label=True
+PASS AC-DIX9   band-rows=41 fresh-scan=41 listed-in-landed=41
+PASS AC-DIX10  pairs=41 missing-targets=[]
+PASS AC-DIX11  check-left-size+mtime-unchanged=True
+PASS AC-DIX12  band-offline=True rows=41
+PASS AC-DIX13  self-referential-bytes-wrong=[]
+PASS AC-DIX14  gate-pages-listed=[]
+PASS AC-DIX17  html-faces=41 unlisted=[] unlabelled-incomplete=[]
+PASS AC-DIX19  export-census_ts=2026-11-22T07:26:27+08:00 printed-in-landed=True
+VERDICT PASS 16/16 fingerprint=4c03a2997192dd63
+{"failed": [], "fingerprint": "4c03a2997192dd63", "passed": 16, "total": 16}

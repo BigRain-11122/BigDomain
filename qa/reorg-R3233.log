@@ -1,0 +1,23 @@
+R3233 reorg evidence (one judgement, two claims faces)
+probe          qa/probe-R3233.log bytes=2016 lines=26 sha256=f437b5170c2930ce
+Q1a            shipped files naming BOTH faces in one place = 0
+Q1b            block shapes through both faces = 12, agree before fix = 11,
+               only disagreement = present-string (card refused, band printed)
+Q2a            hand-drifted number in the landed page: --check rc=0,
+               VERDICT PASS 16/16 (silent)
+Q2a  control   moved census_ts, page not re-rendered: rc=2, AC-DIX19 FAIL
+landed         src/sandbox/claims_view.py  (the one judgement)
+               src/sandbox/frontdoor.py     claims_card reads it
+               tools/deliverable_index.py   claims_band reads it
+criteria       AC-CVP1..3, registry row claims-view-parity (3)
+gates          SUITE PASS 3/3   qa/suite-claims-view-parity-R3233.log
+               SUITE PASS 5/5   qa/suite-frontdoor-claims-card-R3233.log
+               SUITE PASS 20/20 qa/deliverable-index-suite-R3233.log
+               tool VERDICT PASS 16/16 fingerprint=4c03a2997192dd63
+matrix         760 rows, --check DOC-CURRENT
+census         VERDICT PASS pinned=760
+export         VERDICT R3232 PASS, chain rows=8 broken=0
+behaviour      band: readings-without-census_ts is now a READING with a named
+               missing moment (was 'block malformed'); named in the PIN row
+honest         zero payment, zero network; the numbers themselves are still
+               not pinned by any criterion - that is the next window's question

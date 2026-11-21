@@ -1,0 +1,26 @@
+Q1a files mentioning both faces in one place (a cross-face comparison site): 1 ['tmp/probe_R3233.py']
+Q1a band-only files=2 ['tmp/append_state_R3232.py', 'tools/deliverable_index.py']
+Q1a card-only files=6 (count only)
+Q1b healthy            numbers agree={'claimed': '309', 'captured': '107', 'contradicted': '11', 'uncaptured': '191', 'historic': '7', 'records': '6'}
+Q1b zero               numbers agree={'claimed': '0', 'captured': '0', 'contradicted': '0', 'uncaptured': '0', 'historic': '0', 'records': '0'}
+Q1b absent-None        numbers agree=both-refuse
+Q1b absent-empty       numbers agree=both-refuse
+Q1b present-false      numbers agree=both-refuse
+Q1b legacy-no-present  numbers agree={'claimed': '309', 'captured': '107', 'contradicted': '11', 'uncaptured': '191', 'historic': '7', 'records': '6'}
+Q1b no-stamp           numbers agree={'claimed': '309', 'captured': '107', 'contradicted': '11', 'uncaptured': '191', 'historic': '7', 'records': '6'}
+Q1b key-missing        numbers agree=both-refuse
+Q1b key-string         numbers agree=both-refuse
+Q1b key-bool           numbers agree=both-refuse
+Q1b key-negative       numbers agree=both-refuse
+Q1b present-string     DISAGREE card=None band={'claimed': '309', 'captured': '107', 'contradicted': '11', 'uncaptured': '191', 'historic': '7', 'records': '6'}
+Q1b live block numbers agree=True
+Q2a world page band numbers={'claimed': '3', 'captured': '2', 'contradicted': '0', 'uncaptured': '1', 'historic': '0', 'records': '1'}
+Q2a drift applied=True
+Q2a --check after a NUMBER drift rc=0 (0 means the drift is silent)
+Q2a   VERDICT PASS 16/16 fingerprint=f67ccd3becb34348
+Q2a control: moved census_ts, page not re-rendered, --check rc=2
+Q2a   FAIL AC-DIX19  export-census_ts=2026-11-22T09:00:00+08:00 printed-in-landed=False
+Q2a   VERDICT FAIL 15/16 fingerprint=5ce01f35867a0a26
+Q2b cross-face comparison sites found=1 (0 = the card can drift unseen by every shipped check)
+Q1b shapes compared=12 agree=11 disagree=['present-string']
+PROBE DONE lines=25

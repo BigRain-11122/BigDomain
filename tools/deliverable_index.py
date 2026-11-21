@@ -26,6 +26,16 @@ PREVIEW = os.path.join(REPO, "preview")
 INDEX = os.path.join(PREVIEW, "index.html")
 REGISTRY = os.path.join(PREVIEW, "deliverable-index.json")
 EXPORT = os.path.join(REPO, "docs", "status-export.json")
+
+# R3233: the claims census has ONE judgement, and this page is one of its two
+# renderers. The other is src/sandbox/frontdoor.py's card. Probed before this
+# change (qa/probe-R3233.log): the two faces carried separate key tuples and
+# separate validation, already disagreed on a block whose `present` was a
+# string, and a hand-drifted number in this page stayed silent under --check.
+SANDBOX = os.path.join(REPO, "src", "sandbox")
+if SANDBOX not in sys.path:
+    sys.path.insert(0, SANDBOX)
+import claims_view  # noqa: E402  (one derivation, shared with the live card)
 BEGIN = "<!-- BD-DELIVERABLE-INDEX:BEGIN -->"
 END = "<!-- BD-DELIVERABLE-INDEX:END -->"
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S)
@@ -241,30 +251,42 @@ def claims_band(block):
     """Print the census readings and their moment, or a named honest absence.
 
     This page is a static file a reader opens by path, so it has to say how old
-    its own reading is; AC-DIX18 pins the printed moment to the live export.
+    its own reading is; AC-DIX19 pins the printed moment to the live export.
+
+    R3233: the readings and the shape verdict come from claims_view, the same
+    judgement src/sandbox/frontdoor.py's card reads - so the file a reader
+    opens and the page the hub serves can no longer say two different worlds.
+    Only the prose is per surface. The one behaviour that changed here: a block
+    that carries the six readings but no census_ts is now a READING with a
+    named missing moment (it used to be called "block malformed"), which is
+    what the card already said; the numbers are the export's, the moment is
+    not, and no moment is invented.
     """
-    if block is None:
+    view = claims_view.claims_view(block)
+    if view["state"] == claims_view.ABSENT:
         return ('<div class="note" id="claims-census">claims census: no claims '
                 'block in docs/status-export.json; no moment invented.</div>')
-    if block.get("present") is False:
+    if view["state"] == claims_view.EMPTY:
         return ('<div class="note" id="claims-census">claims census: nothing to '
                 'census (present=false); no moment invented.</div>')
-    need = ("claimed", "captured", "contradicted", "uncaptured", "historic", "rows")
-    bad = [k for k in need if isinstance(block.get(k), bool)
-           or not isinstance(block.get(k), int)]
-    ts = block.get("census_ts")
-    if bad or not isinstance(ts, str) or not ts:
+    if view["state"] == claims_view.MALFORMED:
         return ('<div class="note" id="claims-census">claims census: block '
                 'malformed (%s); no moment invented.</div>'
-                % (",".join(bad) if bad else "census_ts"))
+                % ",".join(view["bad"]))
+    counts = view["counts"]
     readings = ("claimed=%d captured=%d contradicted=%d uncaptured=%d "
                 "historic=%d records=%d"
-                % (block["claimed"], block["captured"], block["contradicted"],
-                   block["uncaptured"], block["historic"], block["rows"]))
+                % (counts["claimed"], counts["captured"], counts["contradicted"],
+                   counts["uncaptured"], counts["historic"], counts["rows"]))
+    ts = view["stamp"]
+    if not ts:
+        return ('<div class="note" id="claims-census">claims census: %s \u00b7 '
+                'the block carries no census_ts; the numbers are the export\'s '
+                'and the moment is not - no moment invented.</div>' % readings)
     return ('<div class="note" id="claims-census">claims census: %s \u00b7 '
             'census taken at %s (derived from docs/status-export.json at render '
             'time; a page not re-rendered after an --apply is stale and '
-            'AC-DIX18 refuses it).</div>' % (readings, html.escape(ts)))
+            'AC-DIX19 refuses it).</div>' % (readings, html.escape(ts)))
 
 
 def render_body(rows, defects_total, newest, pairs, claims):

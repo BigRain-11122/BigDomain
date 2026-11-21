@@ -141,6 +141,7 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import reconcile_all  # suite inventory single source (reuse, no copy)
+import claims_view as claims_view_mod  # R3233: one claims reading, two faces
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
@@ -6058,33 +6059,34 @@ def claims_card(block):
     The conservation line is arithmetic over the block's own numbers
     (captured + contradicted + uncaptured == claimed), never a re-census: this
     card reads no ledger and stats no file.
+
+    R3233: the shape verdict and the six readings are not decided here any
+    more. claims_view.claims_view owns that judgement and this module reads it,
+    exactly as tools/deliverable_index.py does for the static page. Measured
+    before this change (qa/probe-R3233.log): a block whose `present` was a
+    string was refused here and printed as six numbers there, and no shipped
+    file mentioned both faces, so nothing could compare them.
     """
-    if not isinstance(block, dict) or not block:
+    view = claims_view_mod.claims_view(block)
+    if view["state"] == claims_view_mod.ABSENT:
         return ("<p class=kv>CLAIMS block absent from the export face "
                 "(honest absence, not a measured zero)</p>")
-
-    counts = {}
-    for key in ("claimed", "captured", "contradicted", "uncaptured",
-                "historic", "rows"):
-        value = block.get(key)
-        if not isinstance(value, int) or isinstance(value, bool) or value < 0:
-            return ("<p class=kv>CLAIMS block is malformed (%s is not a "
-                    "non-negative integer) - not a reading</p>" % key)
-        counts[key] = value
-
-    present = block.get("present")
-    if present is not None and not isinstance(present, bool):
-        return ("<p class=kv>CLAIMS block is malformed (present is not a "
-                "boolean) - not a reading</p>")
-    if present is False:
+    if view["state"] == claims_view_mod.MALFORMED:
+        if view["bad"][0] == "present":
+            return ("<p class=kv>CLAIMS block is malformed (present is not a "
+                    "boolean) - not a reading</p>")
+        return ("<p class=kv>CLAIMS block is malformed (%s is not a "
+                "non-negative integer) - not a reading</p>" % view["bad"][0])
+    if view["state"] == claims_view_mod.EMPTY:
         return ("<p class=kv>CLAIMS census has no ledger to read "
                 "(nothing to census - not a measured zero)</p>")
 
+    counts = view["counts"]
     line = ("CLAIMS claimed=%d captured=%d contradicted=%d uncaptured=%d "
             "historic=%d records=%d"
             % (counts["claimed"], counts["captured"], counts["contradicted"],
                counts["uncaptured"], counts["historic"], counts["rows"]))
-    if present is True:
+    if view["present"] is True:
         line += " (as published by the closeout, not censused here)"
     else:
         line += " (presence unknown: block predates the present field)"
@@ -6096,8 +6098,8 @@ def claims_card(block):
     # age a reader saw came from another card's export_ts, by convention. The
     # stamp is published beside the numbers now and graded equal to export_ts by
     # AC-SXF33, so the age here is the reading's own, not a neighbour's.
-    stamp = block.get("census_ts")
-    if isinstance(stamp, str) and stamp:
+    stamp = view["stamp"]
+    if stamp:
         out.append("<p class=kv>CLAIMS census taken at %s</p>" % esc(stamp))
     else:
         out.append("<p class=kv>CLAIMS census age unknown (the block carries no "

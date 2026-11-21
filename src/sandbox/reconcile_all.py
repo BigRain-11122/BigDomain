@@ -8067,6 +8067,15 @@ SUITES = [
     # value quoting a placeholder literal got substituted a second time.
     ("frontdoor-claims-card",
      os.path.join("test_frontdoor_claims_card.py"), 5),
+    # R3233: the same claims block was derived twice - once for the static page
+    # (tools/deliverable_index.py:claims_band) and once for the live card
+    # (frontdoor.py:claims_card). Probed (qa/probe-R3233.log): zero shipped file
+    # named both faces, they already disagreed on a block whose `present` was a
+    # string, and a hand-drifted number in the landed page stayed silent under
+    # --check while a drifted census_ts was caught. AC-CVP1..3 (three criteria)
+    # were pinned in the R3233 PIN row BEFORE the shared judgement existed.
+    ("claims-view-parity",
+     os.path.join("test_claims_view_parity.py"), 3),
     # R3225: the three written faces carried 307 `rows=<n>` tokens and nothing
     # read one back; five of seven round-tagged `LEDGER ... rows=N` claims
     # disagreed with the ledger as that round's own commit recorded it
