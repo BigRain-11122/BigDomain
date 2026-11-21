@@ -1,0 +1,15 @@
+PROBE R3183 live_items=86
+Q1 FOLD_HEAD_RE='^(?:\\d{4}-\\d{2}-\\d{2}\\s+)?R(\\d{3,5})\\s+fold\\b'
+Q1 ARCHIVE_PREFIX='state-log-archive-'
+Q1 is_fold_summary = FOLD_HEAD_RE.match AND ARCHIVE_PREFIX in text
+Q2 live[0] len=886 fold_head=True has_archive_prefix=False is_fold_summary=False
+Q2 live[0] head='2026-11-21 R3181 fold 608: the six oldest live items left the carrier verbatim (window 1:6); payload unchanged'
+Q2 live[0] tail_has_archive_name=False
+Q3 labels_head=[3181, 3170, 3170, 3170, 3170, 3171]
+Q3 fold_summaries=[]
+Q3 repeats=[{'round': 3181, 'count': 2}]
+Q3 backwards=[{'index': 1, 'round': 3170, 'previous': 3181}]
+Q3 first_eight=[(0, 3181, 'item'), (1, 3170, 'item'), (2, 3170, 'item'), (3, 3170, 'item'), (4, 3170, 'item'), (5, 3171, 'item'), (6, 3171, 'item'), (7, 3171, 'item')]
+ARCHIVE tail_lines=9 has_fold607_summary=True
+ARCHIVE has_fold608_header=True
+TOKENS carried=79 distinct=79

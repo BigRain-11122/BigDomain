@@ -5,23 +5,23 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3182 PRODUCT+ENGINEERING: the eight-space two answers was a field name, not a law split - the carrier gate layout_ok is the EOL face only and its own composite (layout_ok and indent_ok) refuses an eight-space file exactly as this module does, so the caliber set stays (2,16) and the face now publishes gate_eol_ok plus gate_health with agree comparing like with like.",
+    "current": "2026-11-21 R3183 MEASURED: the live red gate was ONE write-side root, not two reader bugs - fold 608 left a prose summary that names no archive file, so is_fold_summary refused it and it re-entered the sequence as round R3181 (BACKWARDS index=1 R3170 after R3181, REPEAT R3181 count=2, fold_summaries=0), while the archived 607 summary named the file and was recognised, and find_repeats counts only blocks split by a DIFFERENT round. Evidence: tmp/probe_R3183.py -> qa/probe-R3183.log (903B/15 lines, written through tools/qa_log.py).",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-state-io-R3182.log (862B, 2026-11-21)",
-    "latest_evidence": "qa/suite-state-io-R3182.log (862B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3183.log (903B, 2026-11-21)",
+    "latest_evidence": "qa/probe-R3183.log (903B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3182] next window (<=48h): (0) 先补余量再开新题 — 本窗收账后 `CARRIER bytes=75861 margin=2639 fold_needed=false`，按现速下轮自身 7 行约 6-7k 必然越线，故先把余量拉到 ≥9k（正门 `fold --window-slice 1:N`，dry-run 先看 `predicted`/`token_missing`，`post_bytes==predicted` 才算过），判据沿用 AC-FLX2/3/4；**注意**：fold 摘要行位正是下条 MAIN 的病灶，补余量时须先量清行位律再动手。(1) MAIN — **`state_seq --check` 在 HEAD 即红，先量清折叠摘要的行位律再改**：实测现状=`BACKWARDS index=1 R3170 after R3181`（fold 608 的摘要行落在 log[0]，后面紧跟更旧的 R3170 行）+`REPEAT R3181 count=2`+`fold_summaries=0`（而 R3179 同形摘要曾读 `fold_summaries=1`）。做法=先只读量三问：`FOLD_SUMMARY_RE` 认的是哪种形、`fold_summaries` 为何对同形摘要读 0、`REPEAT` 是否要求同标签行相邻；只有测出「摘要行位」与「识别器」到底哪一侧错，才决定是**把摘要放在折叠窗末尾**还是**让识别器承认 fold-head 形**；判据沿用 AC-FLX2/3/4（窗律/token 律/字节律）与 `state_seq` 自身的 gaps/repeats/backwards 三读数；**先落板再动代码**。备选=本窗新具名的 `gate_layout_ok`→`gate_eol_ok` 改名如有仓外读者需回访（本仓普查为 0）。(1) 备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板读数承前窗（本轮未重量，禁造活凑数）。(2) 产品面真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 仍零可认领 open。",
-    "next_milestone_due": "2026-11-23T19:48:24+08:00",
-    "updated_at": "2026-11-21T19:48:24+08:00",
+    "next_milestone": "[R3183] next window (<=48h): (0) MAIN — **「读侧认不了的摘要」现在写不进去了，但盘上还有一类同形风险：`state_fold_run` 只在收 summary 字符串时把关，`base_summary` 自己产出的名字来自 `SF.default_archive()`——下一问是「当 `--archive` 指向非默认文件时，`base_summary` 的 `archive_name` 是否总会带上该文件名」（若某条路径仍产出无文件名的摘要，闸会在那里红，诚实红）。做法=只读量 `default_archive` 与 `--archive` 两条路径的 summary 文本，再看是否需要一条 `AC-SUM6`；**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`。产品的真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+    "next_milestone_due": "2026-11-23T20:03:59+08:00",
+    "updated_at": "2026-11-21T20:03:59+08:00",
     "heartbeat": {
-      "tick": 3181,
-      "state_tick": 3182,
-      "lag": 1,
-      "verdict": "FLAG",
-      "reason": "heartbeat_row_debt"
+      "tick": 3183,
+      "state_tick": 3183,
+      "lag": 0,
+      "verdict": "PASS",
+      "reason": "fresh"
     },
     "outs_age": {
       "rows": 29,
@@ -37,9 +37,15 @@
       "note_claims": 6,
       "criteria_stale": 1,
       "criteria_claims": 1
+    },
+    "corpus": {
+      "files": 4468,
+      "bytes": 509767205,
+      "mb": 509.8,
+      "readable": 4468
     }
   },
-  "current": "2026-11-21 R3182 PRODUCT+ENGINEERING: the eight-space two answers was a field name, not a law split - the carrier gate layout_ok is the EOL face only and its own composite (layout_ok and indent_ok) refuses an eight-space file exactly as this module does, so the caliber set stays (2,16) and the face now publishes gate_eol_ok plus gate_health with agree comparing like with like.",
+  "current": "2026-11-21 R3183 MEASURED: the live red gate was ONE write-side root, not two reader bugs - fold 608 left a prose summary that names no archive file, so is_fold_summary refused it and it re-entered the sequence as round R3181 (BACKWARDS index=1 R3170 after R3181, REPEAT R3181 count=2, fold_summaries=0), while the archived 607 summary named the file and was recognised, and find_repeats counts only blocks split by a DIFFERENT round. Evidence: tmp/probe_R3183.py -> qa/probe-R3183.log (903B/15 lines, written through tools/qa_log.py).",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,11 +73,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3182 PRODUCT+ENGINEERING: the eight-space two answers was a field name, not a law split - the carrier gate layout_ok is the EOL face only and its own composite (layout_ok and indent_ok) refuses an eight-space file exactly as this module does, so the caliber set stays (2,16) and the face now publishes gate_eol_ok plus gate_health with agree comparing like with like.",
-  "export_ts": "2026-11-21T19:48:24+08:00",
+  "do": "2026-11-21 R3183 MEASURED: the live red gate was ONE write-side root, not two reader bugs - fold 608 left a prose summary that names no archive file, so is_fold_summary refused it and it re-entered the sequence as round R3181 (BACKWARDS index=1 R3170 after R3181, REPEAT R3181 count=2, fold_summaries=0), while the archived 607 summary named the file and was recognised, and find_repeats counts only blocks split by a DIFFERENT round. Evidence: tmp/probe_R3183.py -> qa/probe-R3183.log (903B/15 lines, written through tools/qa_log.py).",
+  "export_ts": "2026-11-21T20:03:59+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/suite-state-io-R3182.log (862B, 2026-11-21)",
-  "next_milestone": "[R3182] next window (<=48h): (0) 先补余量再开新题 — 本窗收账后 `CARRIER bytes=75861 margin=2639 fold_needed=false`，按现速下轮自身 7 行约 6-7k 必然越线，故先把余量拉到 ≥9k（正门 `fold --window-slice 1:N`，dry-run 先看 `predicted`/`token_missing`，`post_bytes==predicted` 才算过），判据沿用 AC-FLX2/3/4；**注意**：fold 摘要行位正是下条 MAIN 的病灶，补余量时须先量清行位律再动手。(1) MAIN — **`state_seq --check` 在 HEAD 即红，先量清折叠摘要的行位律再改**：实测现状=`BACKWARDS index=1 R3170 after R3181`（fold 608 的摘要行落在 log[0]，后面紧跟更旧的 R3170 行）+`REPEAT R3181 count=2`+`fold_summaries=0`（而 R3179 同形摘要曾读 `fold_summaries=1`）。做法=先只读量三问：`FOLD_SUMMARY_RE` 认的是哪种形、`fold_summaries` 为何对同形摘要读 0、`REPEAT` 是否要求同标签行相邻；只有测出「摘要行位」与「识别器」到底哪一侧错，才决定是**把摘要放在折叠窗末尾**还是**让识别器承认 fold-head 形**；判据沿用 AC-FLX2/3/4（窗律/token 律/字节律）与 `state_seq` 自身的 gaps/repeats/backwards 三读数；**先落板再动代码**。备选=本窗新具名的 `gate_layout_ok`→`gate_eol_ok` 改名如有仓外读者需回访（本仓普查为 0）。(1) 备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板读数承前窗（本轮未重量，禁造活凑数）。(2) 产品面真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 仍零可认领 open。",
+  "latest_evidence": "qa/probe-R3183.log (903B, 2026-11-21)",
+  "next_milestone": "[R3183] next window (<=48h): (0) MAIN — **「读侧认不了的摘要」现在写不进去了，但盘上还有一类同形风险：`state_fold_run` 只在收 summary 字符串时把关，`base_summary` 自己产出的名字来自 `SF.default_archive()`——下一问是「当 `--archive` 指向非默认文件时，`base_summary` 的 `archive_name` 是否总会带上该文件名」（若某条路径仍产出无文件名的摘要，闸会在那里红，诚实红）。做法=只读量 `default_archive` 与 `--archive` 两条路径的 summary 文本，再看是否需要一条 `AC-SUM6`；**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`。产品的真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -160,7 +166,7 @@
   },
   "results": [
     [
-      "3182",
+      "3183",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -174,24 +180,24 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 86,
+    "log_lines_in_window": 81,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 17,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 75847,
-  "next_milestone_due": "2026-11-23T19:48:24+08:00",
+  "state_bytes": 68904,
+  "next_milestone_due": "2026-11-23T20:03:59+08:00",
   "heartbeat": {
-    "tick": 3181,
-    "state_tick": 3182,
-    "lag": 1,
-    "verdict": "FLAG",
-    "reason": "heartbeat_row_debt"
+    "tick": 3183,
+    "state_tick": 3183,
+    "lag": 0,
+    "verdict": "PASS",
+    "reason": "fresh"
   },
   "outs_age": {
     "rows": 29,
@@ -207,5 +213,11 @@
     "note_claims": 6,
     "criteria_stale": 1,
     "criteria_claims": 1
+  },
+  "corpus": {
+    "files": 4468,
+    "bytes": 509767205,
+    "mb": 509.8,
+    "readable": 4468
   }
 }

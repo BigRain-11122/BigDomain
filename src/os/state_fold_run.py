@@ -29,6 +29,7 @@ if BASE not in sys.path:
 import state_fold as SF  # noqa: E402
 import general_writer_dialect_audit as GWDA  # noqa: E402
 import ledger_lines as LL  # noqa: E402
+import state_seq as SQ  # noqa: E402
 
 MIN_LIVE_LINES = 30
 LABEL = "os-state-fold-run"
@@ -207,9 +208,27 @@ def already_folded(state, window_start, window_end, summary):
     return summary in state["log"]
 
 
+def check_summary_shape(summary):
+    """Refuse a summary the sequence reader cannot recognise (AC-SUM2).
+
+    R3183 measured the live red gate: a hand-written summary that named no
+    archive file was not a fold summary to `state_seq`, so it re-entered the
+    live sequence as a round of its own - BACKWARDS and REPEAT appeared and
+    `fold_summaries` read 0. Loosening the reader would let any narrative
+    starting with "R<n> fold" leave the sequence silently, so the birth point
+    is here instead: a summary this reader refuses is never written.
+    """
+    if not SQ.is_fold_summary(summary or ""):
+        raise FoldRunError(
+            "E_FLR_SUMMARY_SHAPE",
+            "summary is not a fold summary the reader recognises"
+            " (needs '^R<n> fold' plus %r)" % SQ.ARCHIVE_PREFIX)
+
+
 def run(root, round_label, fold_no, window_start, window_end, summary,
         archive_path=None, dry_run=False, gate=SF.GATE, refold_reason=None):
     """Plan, refuse on any dirty predicate, execute, then prove the result."""
+    check_summary_shape(summary)
     path = SF.state_path(root)
     raw, state = SF.read_state(path)
     pre_digest = digest(raw)

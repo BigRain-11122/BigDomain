@@ -26,7 +26,7 @@ sys.path.insert(0, BASE)
 import state_fold_run as FR  # noqa: E402
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 7
+EXPECTED_CRITERIA = 8
 MODULE = os.path.join(BASE, "state_fold_run.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold-run"
@@ -183,8 +183,10 @@ def main():
         root, path = make_world(base)
         before = read(path)
         before_state = json.loads(before.decode("utf-8"))
-        summary = ("fixture fold summary R1000 R1001 R1002 R1003 R1004 "
-                   "R1005 R1006 R1007 R1008 R1009 R1010 R1011")
+        summary = ("R1001 fold 1 of log lines 1..12 into"
+                   " logs/state-log-archive-2026-11.md; tokens carried:"
+                   " R1000 R1001 R1002 R1003 R1004 R1005 R1006 R1007 R1008"
+                   " R1009 R1010 R1011")
         report = FR.run(root, "R9001", 1, 1, 12, summary)
         archive = report["archive_path"]
         archived_text = read(archive).decode("utf-8")
@@ -234,7 +236,9 @@ def main():
         other_root, other_path = make_world(os.path.join(base, "other"),
                                             indent="  ")
         other_before = read(other_path)
-        other = FR.run(other_root, "R9002", 1, 1, 4, "other layout summary")
+        other = FR.run(other_root, "R9002", 1, 1, 4,
+                       "R9002 fold 1 of log lines 1..4 into"
+                       " logs/state-log-archive-2026-11.md")
         other_after = read(other_path)
         kept_prefix = other_after.startswith(other_before.split(b"\n")[0])
         header_same = (other_after.split(b'"log"')[0]
@@ -248,7 +252,9 @@ def main():
         bad_before = read(bad_path)
         refused = False
         try:
-            FR.run(bad_root, "R9003", 1, 1, 4, "mixed layout summary")
+            FR.run(bad_root, "R9003", 1, 1, 4,
+                   "R9003 fold 1 of log lines 1..4 into"
+                   " logs/state-log-archive-2026-11.md")
         except SF.StateFoldError as exc:
             refused = exc.code in ("E_SF_BAD_LAYOUT", "E_SF_BAD_STATE")
         check(agree and other["verdict"] == "CLEAR" and other["layout_agree"]
@@ -266,7 +272,9 @@ def main():
         gate_root, _ = make_world(os.path.join(base, "gate"))
         over = False
         try:
-            FR.run(gate_root, "R9003", 1, 1, 4, "gate summary", gate=100)
+            FR.run(gate_root, "R9003", 1, 1, 4,
+                   "R9003 fold 1 of log lines 1..4 into"
+                   " logs/state-log-archive-2026-11.md", gate=100)
         except FR.FoldRunError as exc:
             over = exc.code == "E_SFOLD_GATE"
         honest = (report["verdict"] == "CLEAR"
@@ -281,7 +289,9 @@ def main():
         # --- AC-SFOLD6: dry run writes nothing; ASCII; registry wired ------
         dry_root, dry_path = make_world(os.path.join(base, "dry"))
         dry_before = read(dry_path)
-        dry = FR.run(dry_root, "R9004", 1, 1, 4, "dry run summary",
+        dry = FR.run(dry_root, "R9004", 1, 1, 4,
+                     "R9004 fold 1 of log lines 1..4 into"
+                     " logs/state-log-archive-2026-11.md",
                      dry_run=True)
         source = read(MODULE)
         ascii_ok = all(byte < 128 for byte in source)
@@ -289,7 +299,7 @@ def main():
         with io.open(RUNNER, "rb") as handle:
             runner = handle.read()
         wired = (LABEL.encode("ascii") in runner
-                 and EXPECTED_CRITERIA == 7)
+                 and EXPECTED_CRITERIA == 8)
         check(read(dry_path) == dry_before
               and dry["dry_run_digest_same"] is True
               and dry["verdict"] == "DRY-RUN" and ascii_ok and no_clock
@@ -307,7 +317,8 @@ def main():
         split_before = read(split_path)
         split_end = cut_after_ledger(gap_lines(separated=True))
         split_report = FR.run(split_root, "R9005", 1, 1, split_end,
-                              "separated pairing summary")
+                              "R9006 fold 1 of log lines 1..4 into"
+                          " logs/state-log-archive-2026-11.md")
         arm_a = (split_report["verdict"] == "REFUSED"
                  and "live-dirty" in split_report["would_fail"]
                  and read(split_path) == split_before
@@ -319,7 +330,8 @@ def main():
                                           gap_lines(separated=False))
         pair_report = FR.run(pair_root, "R9006", 1, 1,
                              cut_after_ledger(gap_lines(separated=False)),
-                             "adjacent pairing summary")
+                             "R9007 fold 1 of log lines 1..4 into"
+                          " logs/state-log-archive-2026-11.md")
         pair_state = json.loads(read(pair_path).decode("utf-8"))
         pair_gaps = FR.live_gaps(pair_root, pair_state["log"])
         pair_archive = read(pair_report["archive_path"]).decode("utf-8")
@@ -336,7 +348,8 @@ def main():
         subset_report = FR.run(
             subset_root, "R9007", 1, 1,
             cut_after_ledger(gap_lines(separated=False, orphan_ledger=True)),
-            "pre-existing gap summary")
+            "R9008 fold 1 of log lines 1..4 into"
+                          " logs/state-log-archive-2026-11.md")
         subset_state = json.loads(read(subset_path).decode("utf-8"))
         after_gaps = FR.live_gaps(subset_root, subset_state["log"])
         arm_c = (before_gaps["orphan"] == {5000}
@@ -347,7 +360,8 @@ def main():
         carry_before = read(carry_path)
         carry_report = FR.run(carry_root, "R9008", 1, 1,
                               cut_after_ledger(carry_lines()),
-                              "split round summary")
+                              "R9010 fold 1 of log lines 1..4 into"
+                              " logs/state-log-archive-2026-11.md")
         arm_d = (carry_report["verdict"] == "REFUSED"
                  and "carry-gap" in carry_report["would_fail"]
                  and "live-dirty" not in carry_report["would_fail"]
@@ -389,8 +403,35 @@ def main():
                  read(split_path) == split_before, arm_b, pair_gaps, arm_c,
                  sorted(before_gaps["orphan"]), sorted(after_gaps["orphan"]),
                  arm_d, carry_report["would_fail"], arm_e, end))
+
+        # --- AC-SUM2: a summary the reader cannot recognise never lands -----
+        # R3183 measured the live red gate this closes: fold 608 wrote a prose
+        # summary that named no archive file, so the sequence reader counted
+        # it as a round (BACKWARDS + REPEAT, fold_summaries=0). The reader is
+        # not loosened; the birth point refuses instead.
+        prose_root, prose_path = make_world(os.path.join(base, "prose"))
+        prose_before = read(prose_path)
+        prose_codes = []
+        for dry in (True, False):
+            try:
+                FR.run(prose_root, "R9005", 1, 1, 4,
+                       "R9005 fold 1: prose without the archive name",
+                       dry_run=dry)
+            except FR.FoldRunError as exc:
+                prose_codes.append(exc.code)
+        shipped_ok = FR.SQ.is_fold_summary(
+            "R9005 fold 1 of log lines 1..4 into"
+            " logs/state-log-archive-2026-11.md")
+        after_prose = read(prose_path)
+        check(prose_codes == ["E_FLR_SUMMARY_SHAPE", "E_FLR_SUMMARY_SHAPE"]
+              and after_prose == prose_before and shipped_ok,
+              "AC-SUM2 a summary the reader refuses is refused at the birth "
+              "point in dry-run AND execute (%s), zero bytes written "
+              "[untouched=%s], while the shipped shape is still accepted "
+              "[%s]" % (prose_codes, after_prose == prose_before, shipped_ok))
     finally:
         shutil.rmtree(base, ignore_errors=True)
+
 
     print("CRITERIA %d/%d passes=%d fails=%d"
           % (EXPECTED_CRITERIA, EXPECTED_CRITERIA, PASSES, FAILS))
