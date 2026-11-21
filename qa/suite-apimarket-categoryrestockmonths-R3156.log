@@ -1,0 +1,10 @@
+PASS AC-CRS1: envelope=29 keys, rows=2 x 15 keys, cells 14 keys, empty world honest, six bad flags fail closed with E_AM_BAD_ARGS before any read
+PASS AC-CRS2: restocks book in their own restocked_utc month and under the category in force at the stamp: l1 books 3 units under tools in Aug, then 2 under data in Sep after the 09-01 revision; l6 books 1 under media; no earlier month moved
+PASS AC-CRS3: every month row equals its cells; running 1/3 then 4/7; and all 21 restock-family numbers equal api_market_restock_months (the Sep seller_count reads 2 seller-category pairs against 1 distinct seller, named)
+PASS AC-CRS4: sold-out cells agree with api_category_supply_months on both shared months (Aug data=1 tools=1); coverage divides by the PREVIOUS month-end same-bucket count: Aug None, Sep data 1/1=1.0, tools 0/1=0.0, media None on a zero denominator, row 1/2=0.5; the unlimited shelf is never sold out
+PASS AC-CRS5: five episodes: l1 restock 9d (tools), l2 restock 21d (data), l3 refund 2d (uncategorized), l5 open (media), l6 restock 11d booked under its START bucket tools even though its restock books under media; pooled envelope mean 928800
+PASS AC-CRS6: one contiguous Aug..Sep window with month-end as_of stamps, cells ordered data/media/tools/uncategorized last, a zero-restock cell carries honest Nones, the peak takes Sep (4 units over Aug 3), 7 units over 4 restocks floors to 1 and the largest single restock is 3
+PASS AC-CRS7: the flag drops the uncategorized bucket from every cell AND every aggregate: three categories, the 2d refund episode leaves the episode family (5 -> 4), coverage reads 3/4, and no month row keeps a None cell
+PASS AC-CRS8: an unknown argument raises TypeError, two calls and two instances read byte-identically, table digests and ledger_tx sets unchanged, wired exactly once, ASCII/LF and BOM-free
+
+SUITE PASS 8/8

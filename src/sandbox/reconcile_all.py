@@ -3126,6 +3126,17 @@ SUITES = [
     # registered in the R2240 explore-queue seed row BEFORE the code.
     ("ledger-apimarket-marketrestockmonths", os.path.join(
         "ledger", "test_apimarket_marketrestockmonths.py"), 8),
+    # per-category monthly RESTOCK pressure (a restock books in the UTC
+    # month of its own restocked_utc AND under the category in force at
+    # that stamp, the sold-out denominator is sampled by the same trio
+    # the category supply face uses, coverage divides by the PREVIOUS
+    # month-end same-bucket count, an episode books under its START
+    # bucket while its restock books under the stamp bucket, and every
+    # month row equals its cells and the market face totals) -
+    # criteria AC-CRS1..AC-CRS8 registered in the R2248 explore-queue
+    # seed row and the R3156 PIN BEFORE the code.
+    ("ledger-apimarket-categoryrestockmonths", os.path.join(
+        "ledger", "test_apimarket_categoryrestockmonths.py"), 8),
     # buyer-side monthly claim flow (a claim books in the UTC month of its
     # own opened_utc, a later refund never re-dates it nor invents a row
     # in the refund month, honest zero months carried flat, the five-state
