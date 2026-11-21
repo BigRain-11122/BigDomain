@@ -1,0 +1,22 @@
+PROBE R3167 bounded near-name candidates in qa/
+offqa_rounds=10 qa_files=4517
+R1255 near_tokens=0 tokens=tasks.md(0)
+R1256 near_tokens=0 tokens=tasks.md(0)
+R1623 near_tokens=0 tokens=OH-20261009-cph4.md(0)
+R1653 near_tokens=0 tokens=OH-20261008-bigstream.md(0)
+R1670 near_tokens=0 tokens=OH-20260904-cph4.md(0)
+    R1971 runner-profile-baseline -> runner-profile-baseline.json
+R1971 near_tokens=1 tokens=runner-profile-baseline(1)
+    R1994 R1992.log -> evidence-battery-R1992.log
+    R1994 R1992.log -> export-consistency-R1992.log
+    R1994 R1992.log -> reconcile-all-R1992.log
+    R1994 R1992.log -> showcase-statscappersist-R1992.log
+    R1994 R1993.log -> lobby-det-R1993.log
+    R1994 R1993.log -> reconcile-all-R1993.log
+R1994 near_tokens=2 tokens=R1992.log(4),R1993.log(2)
+    R2738 leg-status -> leg-status-export-fresh-R3107.log
+    R2738 leg-status -> leg-status-export-fresh-R3118.log
+R2738 near_tokens=1 tokens=leg-status(2)
+R2756 near_tokens=0 tokens=state.json(0),tasks.md(0)
+R2813 near_tokens=0 tokens=state.json(0),tasks.md(0)
+SUMMARY tokens=13 near=4 unique=1 multi=3 unresolved=9 qa_tokens=0

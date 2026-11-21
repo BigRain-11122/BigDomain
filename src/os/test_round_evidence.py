@@ -30,11 +30,11 @@ sys.path.insert(0, BASE)
 
 import round_evidence as RE  # noqa: E402
 
-EXPECTED_CRITERIA = 9
+EXPECTED_CRITERIA = 10
 MODULE = os.path.join(BASE, "round_evidence.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-round-evidence"
-WIRED_EXPECT = '"test_round_evidence.py"), 9),'
+WIRED_EXPECT = '"test_round_evidence.py"), 10),'
 
 PASSES = 0
 FAILS = 0
@@ -520,6 +520,136 @@ def ac_rqe9():
     check(ok, "AC-RQE9 unresolvable names published, verdict unmoved")
 
 
+def ac_rqe10():
+    """An unresolvable name publishes its candidate count, never as evidence."""
+    world = make_world(["2026-11-21 R3300 SUITE PASS 6/6"], ["suite-R3300.log"])
+    try:
+        write_archive(world, [
+            "2026-09-01 R3201 SUITE PASS 1/1 named leg-status",
+            "2026-09-01 R3202 SUITE PASS 2/2 named R1992.log",
+            "2026-09-01 R3203 SUITE PASS 3/3 named qa/absent.log and tasks.md",
+            "2026-09-01 R3204 SUITE PASS 4/4 named nothing at all",
+            "2026-09-01 R3205 SUITE PASS 5/5 named runner-profile-baseline",
+            "2026-09-01 R3206 SUITE PASS 6/6 named ledger.log",
+        ])
+        extra = ["leg-status-a.log", "leg-statuses-b.log",
+                 "reconcile-all-R1992.log", "R19920.log", "R1992.json",
+                 "runner-profile-baseline.json",
+                 "ledger-a.log", "ledger-b.log"]
+        for name in extra:
+            with io.open(os.path.join(world, "qa", name), "w",
+                         encoding="utf-8", newline="\n") as handle:
+                handle.write("evidence body\n")
+        named = RE.named_evidence(world, include_archive=True)
+        report = RE.resolvable_evidence(world, include_archive=True)
+        by_round = dict((row["round"], row["tokens"]) for row in report["rows"])
+
+        # arm a: same universe as the offqa rows, same rounds, same token order.
+        same_universe = (
+            [row["round"] for row in report["rows"]]
+            == [row["round"] for row in named["offqa"]]
+            and report["verdict"] == "RESOLVABLE-READING"
+            and all(by_round[row["round"]] is not None
+                    and [p["token"] for p in by_round[row["round"]]]
+                    == row["tokens"] for row in named["offqa"]))
+
+        # arm b: both sum laws hold and every round aligns with its tokens.
+        sums = (report["unique_tokens"] + report["multi_tokens"]
+                == report["near_tokens"]
+                and report["near_tokens"] + report["unresolved_tokens"]
+                == report["tokens_total"]
+                and report["offqa_rounds"] == len(named["offqa"])
+                and sum(len(parts) for parts in by_round.values())
+                == report["tokens_total"]
+                and (report["offqa_rounds"], report["tokens_total"],
+                     report["near_tokens"], report["unique_tokens"],
+                     report["multi_tokens"], report["unresolved_tokens"])
+                == (5, 6, 4, 3, 1, 2))
+
+        # arm c: the bounded law - family prefix, extension, and no qa/ scan.
+        bounded = (
+            by_round.get(3201) == [{"token": "leg-status", "hits": 1,
+                                    "resume": "leg-status-a.log"}]
+            and by_round.get(3202) == [{"token": "R1992.log", "hits": 1,
+                                        "resume": "reconcile-all-R1992.log"}]
+            and by_round.get(3203) == [
+                {"token": "qa/absent.log", "hits": 0, "resume": ""},
+                {"token": "tasks.md", "hits": 0, "resume": ""}]
+            and 3204 not in by_round
+            and by_round.get(3205) == [
+                {"token": "runner-profile-baseline", "hits": 1,
+                 "resume": "runner-profile-baseline.json"}]
+            and sorted(p["token"] for p in by_round.get(3206, []))
+            == ["ledger.log"]
+            and by_round[3206][0]["hits"] == 2
+            and by_round[3206][0]["resume"] == "")
+
+        # arm d: the named face and the claim verdict are byte-for-byte unmoved.
+        expected_named = (
+            "ROUND NAMED EVIDENCE missing=6 named_on_disk=0 named_pass=0 "
+            "named_no_pass=0 no_named=6 offqa=5 silent=1 "
+            "verdict=NAMED-READING\n"
+            "  OFFQA R3201 tokens=leg-status\n"
+            "  OFFQA R3202 tokens=R1992.log\n"
+            "  OFFQA R3203 tokens=qa/absent.log,tasks.md\n"
+            "  OFFQA R3205 tokens=runner-profile-baseline\n"
+            "  OFFQA R3206 tokens=ledger.log")
+        audit_arch = RE.audit(world, include_archive=True)
+        unmoved = (RE.render_named(named) == expected_named
+                   and audit_arch["verdict"] == "EVIDENCE-MISSING"
+                   and [row["round"] for row in audit_arch["missing"]]
+                   == [3201, 3202, 3203, 3204, 3205, 3206]
+                   and run_cli(["--check", "--root", world, "--archive"])[0]
+                   == 2)
+
+        # arm e: the CLI - no --check needed, stable JSON, refusals stand.
+        first = run_cli(["--resolvable", "--root", world, "--archive", "--json"])
+        second = run_cli(["--resolvable", "--root", world, "--archive", "--json"])
+        pinned = list(json.loads(first[1]).keys())
+        text = RE.render_resolve(report)
+        face = ("offqa_rounds=5 tokens=6 near=4 unique=3 multi=1 unresolved=2"
+                in text
+                and "RES R1971" not in text
+                and "RES R3202 tokens=R1992.log(1)=reconcile-all-R1992.log"
+                in text
+                and "RES R3206 tokens=ledger.log(2)" in text)
+        no_check = run_cli(["--resolvable", "--root", world])[0]
+        bad_flag = run_cli(["--resolvable", "--root", world, "--bogus"])[0]
+        broken = make_world([], raw_state="{not json")
+        broken_code = run_cli(["--resolvable", "--root", broken])[0]
+        drop_world(broken)
+
+        # arm f: the live face reaches all three buckets; source stays stdlib.
+        live = RE.resolvable_evidence(REPO, include_archive=True)
+        live_ok = (live["offqa_rounds"] == 10 and live["tokens_total"] == 13
+                   and live["near_tokens"] == 4 and live["unique_tokens"] == 1
+                   and live["multi_tokens"] == 3
+                   and live["unresolved_tokens"] == 9
+                   and live["unique_tokens"] + live["multi_tokens"]
+                   == live["near_tokens"])
+        with io.open(MODULE, "r", encoding="ascii") as handle:
+            source = handle.read()
+        clean = ("import socket" not in source
+                 and "import urllib" not in source)
+
+        ok = (same_universe and sums and bounded and unmoved and face
+              and first == second and pinned == list(RE.REPORT_RESOLVE_KEYS)
+              and no_check == 0 and bad_flag == 2 and broken_code == 3
+              and live_ok and clean)
+        if not ok:
+            print("  measured: universe=%r sums=%r bounded=%r named=%r "
+                  "audit=%r face=%r cli=%r pinned=%r live=%r clean=%r"
+                  % (same_universe, sums, bounded,
+                     RE.render_named(named) == expected_named,
+                     audit_arch["verdict"],
+                     face, (no_check, bad_flag, broken_code),
+                     pinned == list(RE.REPORT_RESOLVE_KEYS), live_ok, clean),
+                  flush=True)
+    finally:
+        drop_world(world)
+    check(ok, "AC-RQE10 candidate counts published, evidence and verdict unmoved")
+
+
 def main():
     print("round_evidence suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -532,6 +662,7 @@ def main():
     ac_rqe7()
     ac_rqe8()
     ac_rqe9()
+    ac_rqe10()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

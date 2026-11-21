@@ -5,7 +5,7 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3166 PRODUCT+ENGINEERING: the named-evidence face now splits what it could not resolve from what it never named - ten folded rounds publish the thirteen tokens they pointed at (offqa) instead of hiding inside the 38-name no_named bucket, while the shipped claim-to-file verdict, its exit codes and its report shape are unmoved.",
+    "current": "2026-11-21 R3167 PRODUCT+ENGINEERING: an unresolvable evidence name now publishes how many qa/ candidates it has, so an operator can tell a near miss from a narrative word without a candidate ever being read as evidence.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -13,9 +13,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-round-evidence-R3166.log (595B, 2026-11-21)",
     "latest_evidence": "qa/suite-round-evidence-R3166.log (595B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3166] next window (<=48h): (0) MAIN — **offqa 的 10 轮里 4 轮点名的是 `qa/` 内近名（R1971 `runner-profile-baseline`、R1994 `R1992.log`/`R1993.log`、R2738 `leg-status`），下一问是「这些近名在 qa/ 里是否只有一个候选文件」：按同律只读测量每条的候选数，只有唯一候选占比够高才值得在读面上把 offqa 行再标一个 `near`（多候选照旧只列 token），否则保持现状**；**先落板再动代码**（实测入口=本窗 `qa/probe-R3166.log` 的 PREFIX-NEAR 段）。备选=tech 队列 R2586 `state_seq` stamped-but-never-logged。产品的真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 零 open 不变。",
-    "next_milestone_due": "2026-11-23T16:15:43+08:00",
-    "updated_at": "2026-11-21T16:15:43+08:00",
+    "next_milestone": "[R3167] next window (<=48h): (0) MAIN — **先验 P2 tech 队头 R2586（`state_seq` stamped-but-never-logged）的前提是否已被后续轮次实现掉：按同律只读测量折叠归档侧是否存在「有 done 戳但无自身轮标」的行，若已由 `archived_labels` 覆盖则按 R2916 判例以证据关行（ALREADY-DELIVERED），否则再决定是否给它加 `--archive` 面**；**先落板再动代码**。备选=**队列地板债（本轮实测 `QUEUE FLOOR main=5/5 tech=6/10 explore=1/10 shortfall=13`）：按实测缺口补 tech 4 条 + explore 9 条种子行**（禁造活，每条必带实测出处）。产品的真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 零 open 不变。",
+    "next_milestone_due": "2026-11-23T16:29:06+08:00",
+    "updated_at": "2026-11-21T16:29:06+08:00",
     "heartbeat": {
       "tick": 3165,
       "state_tick": 3166,
@@ -39,7 +39,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-21 R3166 PRODUCT+ENGINEERING: the named-evidence face now splits what it could not resolve from what it never named - ten folded rounds publish the thirteen tokens they pointed at (offqa) instead of hiding inside the 38-name no_named bucket, while the shipped claim-to-file verdict, its exit codes and its report shape are unmoved.",
+  "current": "2026-11-21 R3167 PRODUCT+ENGINEERING: an unresolvable evidence name now publishes how many qa/ candidates it has, so an operator can tell a near miss from a narrative word without a candidate ever being read as evidence.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3166 PRODUCT+ENGINEERING: the named-evidence face now splits what it could not resolve from what it never named - ten folded rounds publish the thirteen tokens they pointed at (offqa) instead of hiding inside the 38-name no_named bucket, while the shipped claim-to-file verdict, its exit codes and its report shape are unmoved.",
-  "export_ts": "2026-11-21T16:15:43+08:00",
+  "do": "2026-11-21 R3167 PRODUCT+ENGINEERING: an unresolvable evidence name now publishes how many qa/ candidates it has, so an operator can tell a near miss from a narrative word without a candidate ever being read as evidence.",
+  "export_ts": "2026-11-21T16:29:06+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
   "latest_evidence": "qa/suite-round-evidence-R3166.log (595B, 2026-11-21)",
-  "next_milestone": "[R3166] next window (<=48h): (0) MAIN — **offqa 的 10 轮里 4 轮点名的是 `qa/` 内近名（R1971 `runner-profile-baseline`、R1994 `R1992.log`/`R1993.log`、R2738 `leg-status`），下一问是「这些近名在 qa/ 里是否只有一个候选文件」：按同律只读测量每条的候选数，只有唯一候选占比够高才值得在读面上把 offqa 行再标一个 `near`（多候选照旧只列 token），否则保持现状**；**先落板再动代码**（实测入口=本窗 `qa/probe-R3166.log` 的 PREFIX-NEAR 段）。备选=tech 队列 R2586 `state_seq` stamped-but-never-logged。产品的真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 零 open 不变。",
+  "next_milestone": "[R3167] next window (<=48h): (0) MAIN — **先验 P2 tech 队头 R2586（`state_seq` stamped-but-never-logged）的前提是否已被后续轮次实现掉：按同律只读测量折叠归档侧是否存在「有 done 戳但无自身轮标」的行，若已由 `archived_labels` 覆盖则按 R2916 判例以证据关行（ALREADY-DELIVERED），否则再决定是否给它加 `--archive` 面**；**先落板再动代码**。备选=**队列地板债（本轮实测 `QUEUE FLOOR main=5/5 tech=6/10 explore=1/10 shortfall=13`）：按实测缺口补 tech 4 条 + explore 9 条种子行**（禁造活，每条必带实测出处）。产品的真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 零 open 不变。",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -193,8 +193,8 @@
     "queue_tech_open": 7,
     "queue_explore_open": 1
   },
-  "state_bytes": 75576,
-  "next_milestone_due": "2026-11-23T16:15:43+08:00",
+  "state_bytes": 45570,
+  "next_milestone_due": "2026-11-23T16:29:06+08:00",
   "heartbeat": {
     "tick": 3165,
     "state_tick": 3166,

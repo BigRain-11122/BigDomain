@@ -81,6 +81,31 @@ OFFQA_FAMILY_RE = re.compile(
 
 OFFQA_ROW_KEYS = ("round", "tokens")
 
+# R3167 (AC-RQE10): the OFFQA tokens are names the reader could not resolve,
+# and an operator could not tell a near miss (a longer qa/ file name holding
+# the token) from a narrative word. Measured at R3167 over the same ten rounds
+# and thirteen tokens: 4 are near misses and only 1 of those has a single
+# candidate, so a candidate is a CANDIDATE and never evidence - the face
+# publishes the count and a resume file only when the count is exactly one.
+RESOLVE_EXTENSIONS = (".log", ".json", ".md", ".png", ".txt")
+
+RESOLVE_TOKEN_KEYS = ("token", "hits", "resume")
+
+RESOLVE_ROW_KEYS = ("round", "tokens")
+
+REPORT_RESOLVE_KEYS = (
+    "offqa_rounds",
+    "tokens_total",
+    "near_tokens",
+    "unique_tokens",
+    "multi_tokens",
+    "unresolved_tokens",
+    "rows",
+    "verdict",
+)
+
+RESOLVE_VERDICT = "RESOLVABLE-READING"
+
 NAMED_VERDICT = "NAMED-READING"
 
 NAMED_ROW_KEYS = ("round", "files", "pass")
@@ -498,6 +523,153 @@ def to_json_named(report):
     return json.dumps(ordered, ensure_ascii=True, sort_keys=False) + "\n"
 
 
+def split_extension(name):
+    """Split a known evidence extension off a name (AC-RQE10 c)."""
+    for ext in RESOLVE_EXTENSIONS:
+        if name.endswith(ext) and len(name) > len(ext):
+            return name[:-len(ext)], ext
+    return name, ""
+
+
+def stem_carries(stem, target):
+    """Does `stem` carry `target` at a boundary, never inside a number run?
+
+    The boundary test is what keeps R1992.log from matching R19920.log while
+    still matching reconcile-all-R1992.log (AC-RQE10 c).
+    """
+    start = stem.find(target)
+    while start >= 0:
+        before = stem[start - 1] if start > 0 else ""
+        after = stem[start + len(target):]
+        if (before == "" or not before.isalnum()) and \
+                (after == "" or not after[0].isdigit()):
+            return True
+        start = stem.find(target, start + 1)
+    return False
+
+
+def near_candidates(token, qa_names):
+    """The qa/ files a token could be a near miss of, bounded (AC-RQE10 c).
+
+    A token carrying a known extension matches a file of the same extension
+    whose stem carries the token's stem at a boundary; a bare or family token
+    matches a file whose name starts with it and continues with - _ or . .
+    A qa/ path is never near-scanned: it is here only because that file is
+    absent, so it is unresolved by construction (AC-RQE10 b).
+    """
+    token = token.strip()
+    hits = []
+    if token.startswith("qa/"):
+        return hits
+    stem, ext = split_extension(token)
+    for name in qa_names:
+        if name == token:
+            hits.append(name)
+            continue
+        if ext:
+            name_stem, name_ext = split_extension(name)
+            if name_ext != ext:
+                continue
+            if stem_carries(name_stem, stem):
+                hits.append(name)
+        elif name.startswith(token) and len(name) > len(token):
+            if name[len(token)] in "-_.":
+                hits.append(name)
+    return hits
+
+
+def resolvable_evidence(root, qa_dir=None, include_archive=False):
+    """How many qa/ candidates each unresolvable token has (AC-RQE10).
+
+    The universe is named_evidence's own `offqa` rows, so this reading adds
+    no round and never moves the claim-to-file verdict (arm a, d). A count is
+    published, a resume file only when the count is exactly one, and the
+    summary carries unique/multi/unresolved so the face says how far a token
+    is from being evidence rather than implying it is.
+    """
+    reading = named_evidence(root, qa_dir, include_archive)
+    if qa_dir is None:
+        qa_dir = os.path.join(root, "qa")
+    qa_names = []
+    if os.path.isdir(qa_dir):
+        try:
+            qa_names = sorted(name for name in os.listdir(qa_dir)
+                              if os.path.isfile(os.path.join(qa_dir, name)))
+        except (IOError, OSError) as exc:
+            raise RoundEvidenceError("E_RQE_BAD_QA", "%s (%s)" % (qa_dir, exc))
+    rows = []
+    tokens_total = 0
+    near = 0
+    unique = 0
+    for row in reading["offqa"]:
+        parts = []
+        for token in row["tokens"]:
+            tokens_total += 1
+            hits = near_candidates(token, qa_names)
+            if hits:
+                near += 1
+                if len(hits) == 1:
+                    unique += 1
+            parts.append({"token": token, "hits": len(hits),
+                          "resume": hits[0] if len(hits) == 1 else ""})
+        rows.append({"round": row["round"], "tokens": parts})
+    return {
+        "offqa_rounds": len(rows),
+        "tokens_total": tokens_total,
+        "near_tokens": near,
+        "unique_tokens": unique,
+        "multi_tokens": near - unique,
+        "unresolved_tokens": tokens_total - near,
+        "rows": rows,
+        "verdict": RESOLVE_VERDICT,
+    }
+
+
+def render_resolve(report):
+    """The resolution face: one summary line, then every offqa round."""
+    out = [("ROUND TOKEN RESOLUTION offqa_rounds=%d tokens=%d near=%d "
+            "unique=%d multi=%d unresolved=%d verdict=%s")
+           % (report["offqa_rounds"], report["tokens_total"],
+              report["near_tokens"], report["unique_tokens"],
+              report["multi_tokens"], report["unresolved_tokens"],
+              report["verdict"])]
+    for row in report["rows"]:
+        parts = []
+        for item in row["tokens"]:
+            text = "%s(%d)" % (item["token"], item["hits"])
+            if item["resume"]:
+                text += "=" + item["resume"]
+            parts.append(text)
+        out.append("  RES R%d tokens=%s" % (row["round"], ",".join(parts)))
+    return "\n".join(out)
+
+
+def to_json_resolve(report):
+    """Serialise the resolution reading in a stable key order (AC-RQE10 e)."""
+    pinned_rows = []
+    for row in report["rows"]:
+        item = {}
+        for key in RESOLVE_ROW_KEYS:
+            if key == "tokens":
+                tokens = []
+                for part in row["tokens"]:
+                    piece = {}
+                    for name in RESOLVE_TOKEN_KEYS:
+                        piece[name] = part[name]
+                    tokens.append(piece)
+                item[key] = tokens
+            else:
+                item[key] = row[key]
+        pinned_rows.append(item)
+    ordered = {}
+    for key in REPORT_RESOLVE_KEYS:
+        if key == "rows":
+            ordered[key] = pinned_rows
+        else:
+            ordered[key] = report[key]
+    return json.dumps(ordered, ensure_ascii=True, sort_keys=False) + "\n"
+
+
 def render(report):
     """Full text rendering: the one line, then every missing round."""
     out = [one_line(report)]
@@ -533,9 +705,14 @@ USAGE = ("usage: round_evidence.py --check [--root PATH] [--qa-dir PATH] "
          "[--archive] [--json]\n"
          "       round_evidence.py --named [--root PATH] [--qa-dir PATH] "
          "[--archive] [--json]\n"
+         "       round_evidence.py --resolvable [--root PATH] [--qa-dir PATH] "
+         "[--archive] [--json]\n"
          "  --archive also judges the rounds folded into logs/ (AC-RQE7)\n"
          "  --named reads, for every missing round, the qa/ files its own\n"
          "          lines name (AC-RQE8); it never changes the verdict\n"
+         "  --resolvable reads, for every unresolvable name, how many qa/\n"
+         "          candidates it has (AC-RQE10); never evidence, never a\n"
+         "          verdict move\n"
          "  exit 0 = every claiming round has a qa/ file (or the log is "
          "empty)\n"
          "  exit 2 = a claiming round has no file (EVIDENCE-MISSING) or "
@@ -548,6 +725,7 @@ def main(argv):
     as_json = False
     include_archive = False
     named = False
+    resolvable = False
     root = os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__))))
     qa_dir = None
@@ -562,6 +740,8 @@ def main(argv):
             include_archive = True
         elif arg == "--named":
             named = True
+        elif arg == "--resolvable":
+            resolvable = True
         elif arg == "--root":
             index += 1
             if index >= len(argv):
@@ -592,6 +772,17 @@ def main(argv):
             sys.stdout.write(to_json_named(reading))
         else:
             sys.stdout.write(render_named(reading) + "\n")
+        return 0
+    if resolvable:
+        try:
+            reading = resolvable_evidence(root, qa_dir, include_archive)
+        except RoundEvidenceError as exc:
+            sys.stdout.write("%s\n" % exc.code)
+            return 3
+        if as_json:
+            sys.stdout.write(to_json_resolve(reading))
+        else:
+            sys.stdout.write(render_resolve(reading) + "\n")
         return 0
     if not check:
         sys.stdout.write("E_RQE_BAD_ARGS: --check is required\n")
