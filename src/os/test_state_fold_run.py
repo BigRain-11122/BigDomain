@@ -26,7 +26,7 @@ sys.path.insert(0, BASE)
 import state_fold_run as FR  # noqa: E402
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 9
+EXPECTED_CRITERIA = 10
 MODULE = os.path.join(BASE, "state_fold_run.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold-run"
@@ -299,7 +299,7 @@ def main():
         with io.open(RUNNER, "rb") as handle:
             runner = handle.read()
         wired = (LABEL.encode("ascii") in runner
-                 and EXPECTED_CRITERIA == 9)
+                 and EXPECTED_CRITERIA == 10)
         check(read(dry_path) == dry_before
               and dry["dry_run_digest_same"] is True
               and dry["verdict"] == "DRY-RUN" and ascii_ok and no_clock
@@ -504,6 +504,91 @@ def main():
                  named_custom in custom_state["log"],
                  default_report["verdict"], len(two_names),
                  same_name_twice, hygiene))
+        # --- AC-SUM7: the archive must live where the summary says ---------
+        # R3185 measured the hole AC-SUM6 leaves open: the NAME matched while
+        # the archive sat outside <root>/logs, so the fold record named a path
+        # that never existed - and the fold really grew the outside file (in a
+        # private tree: outside/ created, logs/ untouched, state bytes already
+        # rewritten). The reader only looks for the archive prefix, so the
+        # honest gate belongs at the write site.
+        p_root, p_path = make_world(os.path.join(base, "patharc"))
+        p_before = read(p_path)
+        p_outside_dir = os.path.join(p_root, "outside")
+        os.makedirs(p_outside_dir)
+        p_name = os.path.basename(SF.default_archive(p_root))
+        p_outside = os.path.join(p_outside_dir, p_name)
+        p_summary = "R9020 fold 1 of log lines 1..4 into logs/%s" % p_name
+        p_codes = []
+        for dry in (True, False):
+            try:
+                FR.run(p_root, "R9020", 1, 1, 4, p_summary,
+                       archive_path=p_outside, dry_run=dry)
+            except FR.FoldRunError as exc:
+                p_codes.append(exc.code)
+        p_trav = os.path.join(p_root, "logs", "..", p_name)
+        t_codes = []
+        for dry in (True, False):
+            try:
+                FR.run(p_root, "R9021", 1, 1, 4, p_summary,
+                       archive_path=p_trav, dry_run=dry)
+            except FR.FoldRunError as exc:
+                t_codes.append(exc.code)
+        reader_outside = FR.SQ.is_fold_summary(
+            "R9020 fold 1 of log lines 1..4 into outside/%s" % p_name)
+        ok_root, ok_path = make_world(os.path.join(base, "inlogs"))
+        ok_archive = os.path.join(ok_root, "logs",
+                                  "state-log-archive-2026-10.md")
+        ok_summary = ("R9022 fold 1 of log lines 1..4 into"
+                      " logs/state-log-archive-2026-10.md")
+        ok_report = FR.run(ok_root, "R9022", 1, 1, 4, ok_summary,
+                           archive_path=ok_archive)
+        dflt_root, dflt_path = make_world(os.path.join(base, "dflt2"))
+        dflt_name = os.path.basename(SF.default_archive(dflt_root))
+        dflt_report = FR.run(dflt_root, "R9023", 1, 1, 4,
+                             "R9023 fold 1 of log lines 1..4 into logs/%s"
+                             % dflt_name)
+        nm_root, nm_path = make_world(os.path.join(base, "namelaw"))
+        nm_archive = os.path.join(nm_root, "logs",
+                                  "state-log-archive-2026-10.md")
+        nm_codes = []
+        try:
+            FR.run(nm_root, "R9024", 1, 1, 4,
+                   "R9024 fold 1 of log lines 1..4 into"
+                   " logs/state-log-archive-2026-11.md",
+                   archive_path=nm_archive)
+        except FR.FoldRunError as exc:
+            nm_codes.append(exc.code)
+        text7 = io.open(MODULE, "rb").read().decode("utf-8")
+        hygiene7 = (all(ord(char) < 128 for char in text7)
+                    and "import socket" not in text7
+                    and "import urllib" not in text7
+                    and "def check_archive_path(" in text7
+                    and text7.count("E_FLR_ARCHIVE_PATH") == 1)
+        check(p_codes == ["E_FLR_ARCHIVE_PATH", "E_FLR_ARCHIVE_PATH"]
+              and t_codes == ["E_FLR_ARCHIVE_PATH", "E_FLR_ARCHIVE_PATH"]
+              and read(p_path) == p_before
+              and not os.path.exists(p_outside)
+              and not os.path.exists(os.path.join(p_root, "logs", p_name))
+              and reader_outside
+              and ok_report["verdict"] == "CLEAR"
+              and ok_report["archive_verified"]
+              and dflt_report["verdict"] == "CLEAR"
+              and nm_codes == ["E_FLR_SUMMARY_ARCHIVE"]
+              and hygiene7,
+              "AC-SUM7 an archive outside <root>/logs is refused at the birth "
+              "point in dry-run AND execute [outside=%s traversal=%s], state "
+              "bytes untouched [%s], neither the outside file nor a lookalike "
+              "under logs/ is created [%s %s], while the reader still accepts "
+              "that outside text [%s] - so the gate is the writer; a custom "
+              "archive INSIDE logs still folds and VERIFIES [%s %s]; the "
+              "default path is not hurt [%s]; and the AC-SUM6 name law is "
+              "unchanged [%s]; module hygiene and one named code [%s]"
+              % (p_codes, t_codes, read(p_path) == p_before,
+                 not os.path.exists(p_outside),
+                 not os.path.exists(os.path.join(p_root, "logs", p_name)),
+                 reader_outside, ok_report["verdict"],
+                 ok_report["archive_verified"], dflt_report["verdict"],
+                 nm_codes, hygiene7))
     finally:
         shutil.rmtree(base, ignore_errors=True)
 

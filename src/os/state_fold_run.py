@@ -223,6 +223,26 @@ def summary_archive_names(summary):
     return names
 
 
+def check_archive_path(archive_path, root):
+    """Refuse an archive that is not a direct child of <root>/logs (AC-SUM7).
+
+    R3185 measured the hole the AC-SUM6 name law leaves open: base_summary
+    always writes "logs/<name>", while --archive can point anywhere, so a fold
+    record could name a path that does not exist and is not the file that
+    really grew (measured in a private tree: outside/ created, logs/ left
+    untouched, state bytes already rewritten). The reader only looks for the
+    archive prefix, so the honest birth point is here - every accepted fold
+    lands where its own sentence says it does.
+    """
+    logs_dir = os.path.join(root, "logs")
+    target = os.path.normcase(os.path.realpath(archive_path))
+    home = os.path.normcase(os.path.realpath(logs_dir))
+    if os.path.dirname(target) != home:
+        raise FoldRunError(
+            "E_FLR_ARCHIVE_PATH",
+            "archive %s is not inside %s" % (archive_path, logs_dir))
+
+
 def check_summary_shape(summary, archive_path=None):
     """Refuse a summary the reader cannot recognise, or one that misnames
     the archive it is about to be written into (AC-SUM2 + AC-SUM6).
@@ -260,6 +280,7 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
         archive_path=None, dry_run=False, gate=SF.GATE, refold_reason=None):
     """Plan, refuse on any dirty predicate, execute, then prove the result."""
     archive = archive_path or SF.default_archive(root)
+    check_archive_path(archive, root)
     check_summary_shape(summary, archive)
     path = SF.state_path(root)
     raw, state = SF.read_state(path)
