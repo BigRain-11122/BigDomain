@@ -516,7 +516,57 @@ def dedupe_outs(rows):
     return kept, collapsed
 
 
-def outs_age_block(repo, rows, collapsed=0):
+# R3144: the byte count inside a row label and the path it belongs to, in the
+# shape the writer produces. Rows using full-width brackets (11 on the live
+# face) never match, so they fall to the untouched branch rather than a guess.
+OUTS_LABEL_SIZE_RE = re.compile(
+    r'((?:preview|qa)/[A-Za-z0-9_.\-]+\.(?:html|json|log|png)) \((\d+)B\)')
+
+
+def refresh_outs_labels(rows, repo):
+    """Rewrite each row's claimed byte count from disk; return (rows, changed).
+
+    R3144 measured before this existed (qa/probe-R3144.log): after the R3143
+    collapse the live list is 29 rows, and exactly TWO of them claim a size the
+    files contradict (battery-shard-report 15456/15211 -> 16421/16240B,
+    lobby-protocol-map 26458/25645 -> 27260/26725B). No row's DATE is wrong any
+    more - the 8 stale dates R3142 measured were duplicates the collapse dropped
+    (18 of the 25 dropped rows were stale, 2 of the 31 kept ones).
+
+    So the byte count is the only field on a row that claims a CURRENT fact and
+    can be re-derived; the bracket date is a LANDING fact and is left byte-
+    identical (pinned by AC-EXPW17 u), because re-deriving it would erase when
+    the artifact landed the moment its file is re-rendered.
+
+    A row naming a file that is gone is left verbatim and not counted - the same
+    law as outs_age_block, which refuses to fabricate an age for it. A row with
+    no parsable label (path-less rows, rows using full-width brackets) never
+    moves, which is what AC-EXPW15 t already pins.
+    """
+    out, changed = [], 0
+    for row in rows or []:
+        row = str(row)
+        moves = []
+
+        def sub(match):
+            rel, claimed = match.group(1), int(match.group(2))
+            full = os.path.join(repo, rel)
+            if not os.path.isfile(full):
+                return match.group(0)
+            size = os.path.getsize(full)
+            if size == claimed:
+                return match.group(0)
+            moves.append((rel, claimed, size))
+            return '%s (%dB)' % (rel, size)
+
+        new = OUTS_LABEL_SIZE_RE.sub(sub, row)
+        if moves:
+            changed += 1
+        out.append(new)
+    return out, changed
+
+
+def outs_age_block(repo, rows, collapsed=0, refreshed=0):
     """The artifact list's own age, derived from each row's target files.
 
     R3142 measured the hole: the CEO face renders 56 artifact rows whose dates
@@ -569,6 +619,10 @@ def outs_age_block(repo, rows, collapsed=0):
         # as a shorter history. Zero on a list that was already one row per
         # file set, and absent on faces written before the collapse existed.
         'collapsed': collapsed,
+        # R3144: how many rows this write corrected from disk. A face that
+        # carries the key states the correction instead of silently editing a
+        # history line; absent on faces written before the refresh existed.
+        'labels_refreshed': refreshed,
     }
 
 
@@ -807,11 +861,16 @@ def payload(repo, state, stamp, corpus=None):
     # the freshest label of every file set and can never move outs[0] off the
     # latest line (AC-EXPW1/AC-EXPW5 compare it by equality).
     outs, collapsed = dedupe_outs(outs)
+    # R3144: a row's byte count claims a CURRENT fact, so it is re-derived from
+    # disk at every write (measured: exactly 2 of 29 rows move on the live face,
+    # and the derived head row is byte-identical - the negative control). The
+    # bracket date is a landing fact and is never rewritten.
+    outs, refreshed = refresh_outs_labels(outs, repo)
     data['outs'] = outs
     # R3142: the list's age gets a derivation and (in frontdoor) a consumer.
     # Two copies of ONE derivation, for the same reason the evidence line
     # carries two - a reader must never find two opinions in one document.
-    oab = outs_age_block(repo, outs, collapsed=collapsed)
+    oab = outs_age_block(repo, outs, collapsed=collapsed, refreshed=refreshed)
     data['outs_age'] = oab
     data['export_ts'] = stamp
     data['do'] = d['current']

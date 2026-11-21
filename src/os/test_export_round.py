@@ -1602,6 +1602,80 @@ def main():
            'rows=%d folded=%d dup=%r' % (len(live_rows), live_folded,
                                          live_blk.get('dup_rows')))
 
+        # ---- AC-EXPW17 (R3144 pin): a row's BYTE COUNT is a current fact ----
+        # R3144 measured on the live face BEFORE this arm existed: after the
+        # R3143 collapse 29 rows remain, exactly TWO of them claim a size the
+        # files contradict (battery-shard-report, lobby-protocol-map) and ZERO
+        # claim a wrong date - the 8 stale dates R3142 measured were duplicates
+        # the collapse dropped (18 of 25 dropped rows stale, 2 of 31 kept). So
+        # only the byte count is re-derived; the bracket date is a landing fact
+        # and stays byte-identical, because re-deriving it would erase when the
+        # artifact landed the moment its file is re-rendered.
+        wl = tempfile.mkdtemp(prefix='expw-label-')
+        worlds.append(wl)
+        write(os.path.join(wl, 'preview', 'aged-pair.html'), 'x' * 40)
+        write(os.path.join(wl, 'preview', 'aged-pair.json'), 'y' * 7)
+        stale_row = ('preview/aged-pair.html (1B) + preview/aged-pair.json (2B) '
+                     '[2026-11-01 commit]')
+        rows_p, moved_p = mod.refresh_outs_labels([stale_row], wl)
+        ok('AC-EXPW17 p a stale byte count is rewritten from disk, date kept',
+           rows_p == ['preview/aged-pair.html (40B) + '
+                      'preview/aged-pair.json (7B) [2026-11-01 commit]']
+           and moved_p == 1, 'rows=%r moved=%r' % (rows_p, moved_p))
+        # q: a row naming a file that is GONE is left verbatim and not counted -
+        # the same law as the age block, which refuses to fabricate an age.
+        gone_row = 'preview/never-written.html (5B) [2026-11-01 commit]'
+        rows_q, moved_q = mod.refresh_outs_labels([gone_row], wl)
+        ok('AC-EXPW17 q a missing target is left verbatim, never fabricated',
+           rows_q == [gone_row] and moved_q == 0,
+           'rows=%r moved=%r' % (rows_q, moved_q))
+        # r: a row with no parsable ASCII label never moves - the full-width
+        # bracket rows on the live face stay out of scope by shape, not guess.
+        wide_row = ('preview/aged-pair.html\uff081B\u00b7\u5168\u89d2\uff09')
+        rows_r, moved_r = mod.refresh_outs_labels([wide_row, 'x'], wl)
+        ok('AC-EXPW17 r a label the reader cannot parse stays untouched',
+           rows_r == [wide_row, 'x'] and moved_r == 0,
+           'rows=%r moved=%r' % (rows_r, moved_r))
+        # s: NEGATIVE CONTROL - the head row is produced by fmt_pair from the
+        # files themselves, so re-deriving it must be the identity.
+        stamp_l = os.path.getmtime(os.path.join(wl, 'preview', 'aged-pair.html'))
+        line_s = mod.fmt_pair((stamp_l, 'preview/aged-pair.html',
+                               'preview/aged-pair.json', 40, 7, 'mtime'))
+        rows_s, moved_s = mod.refresh_outs_labels([line_s], wl)
+        ok('AC-EXPW17 s the derived head row is byte-identical',
+           rows_s == [line_s] and moved_s == 0,
+           'head=%r moved=%r' % (rows_s, moved_s))
+        # u: the DATE is a landing fact. A row claiming 1999 keeps 1999 while
+        # its byte count is corrected - the arm that makes "never rewritten"
+        # verifiable instead of a comment.
+        dated_row = 'preview/aged-pair.html (1B) [1999-01-01 commit]'
+        rows_u, moved_u = mod.refresh_outs_labels([dated_row], wl)
+        ok('AC-EXPW17 u the bracket date is never rewritten',
+           rows_u == ['preview/aged-pair.html (40B) [1999-01-01 commit]']
+           and moved_u == 1, 'rows=%r moved=%r' % (rows_u, moved_u))
+        # t: end to end - the correction is PUBLISHED (one derivation, two
+        # copies) and the shipped laws still close on the same write.
+        wt = build_world(9322)
+        worlds.append(wt)
+        write(os.path.join(wt, 'preview', 'stale-label.html'), 'z' * 33)
+        fp_t = os.path.join(wt, 'docs', 'status-export.json')
+        face_t = json.loads(read(fp_t))
+        face_t['outs'] = ['preview/stale-label.html (1B) [2026-11-01 commit]',
+                          'x']
+        write(fp_t, json.dumps(face_t, ensure_ascii=False, indent=2) + '\n')
+        st_t = json.loads(read(os.path.join(wt, 'src', 'os', 'state.json')))
+        built_t, _ = mod.payload(wt, st_t, 'TT1')
+        outs_t = [str(r) for r in (built_t.get('outs') or [])]
+        oab_t = built_t.get('outs_age') or {}
+        ok('AC-EXPW17 t payload publishes the correction and keeps the laws',
+           any('stale-label.html (33B)' in r for r in outs_t)
+           and oab_t.get('labels_refreshed') == 1
+           and (built_t.get('ceo_face') or {}).get('outs_age') == oab_t
+           and oab_t.get('rows') == len(outs_t)
+           and outs_t[0] == (built_t.get('ceo_face') or {}).get(
+               'latest_artifact'),
+           'outs=%r block=%r' % (outs_t, oab_t))
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')

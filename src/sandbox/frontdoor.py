@@ -5917,6 +5917,14 @@ def outs_age_card(face):
     collapsed = block.get("collapsed")
     if isinstance(collapsed, int) and not isinstance(collapsed, bool):
         line += " collapsed=%d" % collapsed
+    # R3144: the exporter re-derives a row's byte count from disk at every
+    # write, so the face says how many labels this write corrected - printed
+    # only when the key is carried and only when a correction happened, so an
+    # older face and an ordinary round stay byte-equal.
+    refreshed = block.get("labels_refreshed")
+    if isinstance(refreshed, int) and not isinstance(refreshed, bool) \
+            and refreshed > 0:
+        line += " labels_refreshed=%d" % refreshed
     try:
         over7 = int(block.get("over7"))
     except (TypeError, ValueError):

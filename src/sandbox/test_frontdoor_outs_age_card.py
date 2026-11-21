@@ -1,9 +1,10 @@
 """Suite for the artifact-list age card: the derived age gets one live consumer.
 
-ONE criterion (AC-FDC9), pre-registered on the src/os/backlog.md board BEFORE
-this file existed. R3142 shipped the card with the age block and no suite at
-all; R3143 measured that gap while it was changing the same card, so the first
-arm here is the absence branch it was written for.
+TWO criteria (AC-FDC9, AC-FDC10), pre-registered on the src/os/backlog.md
+board BEFORE this file existed. R3142 shipped the card with the age block and
+no suite at all; R3143 measured that gap while it was changing the same card,
+so the first arm here is the absence branch it was written for. R3144 added the
+second criterion for the correction count the exporter now publishes.
 
 The card is a pure consumption face over the block the exporter derives. It
 never re-walks preview/ or qa/, never re-stamps a file, and an absent block
@@ -135,6 +136,27 @@ def main():
         bad.append("live-card-not-on-page")
 
     report("AC-FDC9", bool(bad), ",".join(bad))
+
+    # ---- AC-FDC10 (R3144 pin): the correction count is printed only when it
+    # ---- is a real correction. R3144 made the exporter re-derive every row's
+    # ---- byte count from disk; a face that says how many labels moved must
+    # ---- not invent a zero on an ordinary round or on an older face.
+    bad10 = []
+    moved_block = {"outs_age": dict(clean["outs_age"], labels_refreshed=2)}
+    moved_html = frontdoor.outs_age_card(moved_block)
+    if "labels_refreshed=2" not in moved_html:
+        bad10.append("refreshed-not-printed")
+    if "OUTS-AGE rows=29" not in moved_html:
+        bad10.append("refreshed-lost-the-line")
+    zero_block = {"outs_age": dict(clean["outs_age"], labels_refreshed=0)}
+    zero_html = frontdoor.outs_age_card(zero_block)
+    if "labels_refreshed" in zero_html:
+        bad10.append("zero-invents-the-token")
+    if zero_html != clean_html:
+        bad10.append("zero-face-not-byte-equal")
+    if frontdoor.outs_age_card(moved_block) != moved_html:
+        bad10.append("not-deterministic-under-refresh")
+    report("AC-FDC10", bool(bad10), ",".join(bad10))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

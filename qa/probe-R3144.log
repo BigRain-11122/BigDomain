@@ -1,0 +1,38 @@
+=== Q1 live 29 rows (date shape = any bracket date) ===
+kinds={"bytes-stale": 2, "clean": 8, "no-date": 8, "no-path": 11}
+  [08] no-date     claim=None newest=2026-11-17 bad=[] qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence
+  [09] no-date     claim=None newest=2026-11-16 bad=[] preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)
+  [10] no-date     claim=None newest=2026-11-16 bad=[] preview/membership-face.html (10881B) + preview/membership-face.json (7051B)
+  [11] no-path     claim=None newest=None bad=None qa/deliverable-index-suite-R2796.log��1045B������֤�ݣ�+ src/os/test_deliverable_index.py��14 �оݣ�+ docs/sandbox-suite-
+  [12] no-date     claim=None newest=2026-11-16 bad=[] preview/money-path-demo.html (10161B) + preview/money-path-demo.json (4705B)
+  [13] no-date     claim=None newest=2026-11-21 bad=[] preview/ceo-blockers.html (8453B) + preview/ceo-blockers.json (6754B)
+  [14] bytes-stale claim=None newest=2026-11-20 bad=[('preview/battery-shard-report.html', 15456, 16421), ('preview/battery-shard-report.json', 15211, 16240)] preview/battery-shard-report.html (15456B) + preview/battery-shard-report.json (15211B)
+  [15] no-path     claim=None newest=None bad=None src/os/test_battery_shard.py��AC-BSGB1..8 �ػ��׼���8/8�� + qa/battery-shard-suite-R2798.log��1000B��19 �С�sha256 d1c4ee
+  [16] no-path     claim=None newest=None bad=None tools/battery_shard.py����Ƭ��������+ qa/battery-shard-R2797.log��977B��10 �С�sha256 1de46b10e4151e79��+ qa/battery-shard
+  [17] no-date     claim=None newest=2026-11-15 bad=[] preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B)
+  [18] no-path     claim=None newest=None bad=None src/os/launch_battery_R2128..R2781.py (36 launchers wired to the single interlock gate, py_compile 36/36 clean
+  [19] no-path     claim=None newest=None bad=None preview/lobby-session-trace.html��8347B��+ preview/lobby-session-trace.json��8008B��˫��Ⱦ���ֽ�ͬһ��
+  [20] bytes-stale claim=None newest=2026-11-15 bad=[('preview/lobby-protocol-map.html', 26458, 27260), ('preview/lobby-protocol-map.json', 25645, 26725)] preview/lobby-protocol-map.html (26458B) + preview/lobby-protocol-map.json (25645B)
+  [21] no-date     claim=None newest=2026-11-15 bad=[] preview/core-loop-walkthrough.html (5433B) + preview/core-loop-walkthrough.json (4056B)
+  [22] no-date     claim=None newest=2026-11-15 bad=[] preview/ship-checklist.html (9182B) + preview/ship-checklist.json (4983B)
+  [23] no-path     claim=None newest=None bad=None preview/index.html��33817B��ȫ�� 27 ��ɵ㿪����qa/entry-pairs-band-R2777.log��732B��UTF-8/LF���� tools/qa_log.py ����д����
+  [24] no-path     claim=None newest=None bad=None qa/index-newest-band-R2775.log�������޸��� 509B��UTF-8/LF����logs/qa-encoding-preop-R2775/index-newest-band-R2775.log.u
+  [25] no-path     claim=None newest=None bad=None first-yuan-R2772.log (1214B)
+  [26] no-path     claim=None newest=None bad=None preview/first-yuan.html��3911B�������ֶ�+�����������ۣ�+ preview/first-yuan.json��2600B��+ qa/first-yuan-R2772.log������أ�
+  [27] no-path     claim=None newest=None bad=None leg-interlock-R2771.log (758B)
+  [28] no-path     claim=None newest=None bad=None ceo-blockers-R2770.log (879B)
+=== Q2 collapse: pre-fold 56 rows, live 29 ===
+pre-fold kinds={"both-stale": 4, "bytes-stale": 16, "clean": 12, "no-date": 10, "no-path": 14}
+literal kept=31 kinds={"bytes-stale": 2, "clean": 8, "no-date": 9, "no-path": 12}
+literal dropped=25 kinds={"both-stale": 4, "bytes-stale": 14, "clean": 4, "no-date": 1, "no-path": 2}
+pre-fold distinct keys=29 (dedupe would keep that many)
+dedupe(pre)=29 folded=27 ; equals live after first row? True
+first-occurrence rows=31 kinds={"bytes-stale": 2, "clean": 8, "no-date": 9, "no-path": 12}
+later-duplicate rows=25 kinds={"both-stale": 4, "bytes-stale": 14, "clean": 4, "no-date": 1, "no-path": 2}
+stale in kept=2 ; stale in dropped=18
+=== Q3 derive compatibility ===
+bytes-only: changed=2/29 head-identical=True
+bytes+date: changed=2/29 dates moved=0 head-identical=True
+no-parsable-path rows=11 (AC-EXPW15 t control)
+dedupe keys identical under derive: True
+live outs[0] kind=clean claim=2026-11-20 newest=2026-11-20
