@@ -1,0 +1,23 @@
+R3211 evidence - archive census header grammar (read-only measurement first)
+
+(Q1) shipped census before the change: sections_total=779 unknown_mismatch=14 rc=2
+     header-shaped lines 793 (# ---) plus 6 (##); 14 of them failed the old grammar
+     (13 section headers + 1 date-led annotation).
+(Q2) shapes measured: missing R ("# --- 3113 fold append"), letter suffix (R2472b),
+     range (R2924-R2925), legacy Fold 785 (R2523), # --- Fold R2484 (2026-11-06),
+     ## secR596 append, ## Fold R2393; each unparsed header merged its body into the
+     previous section, which is what produced the 14 unread mismatches.
+(Q3) after the grammar: sections_total=798 header_lines=799 annotation_lines=1
+     unlabeled_sections=0 body_header_lines=0 unknown_mismatch=2
+     residual: R2405 21/23 (the in-archive R2407 repair annotation names the appended
+     line; the declared count was never updated) and R2907 20/21 (one extra line,
+     source unknown).
+
+SUITE PASS 172/172 (qa/logs-toolkit-R3211.log 8792B/173 lines sha256 056273bc24602f8b)
+matrix 78577B/756 rows 6215 criteria DOC-CURRENT (through src/os/suite_matrix_reconcile.py)
+registry census VERDICT PASS pinned=756
+CLOSEOUT-GATE PASS files=4546 flags=0 round_main=OK census=PASS matrix=DOC-CURRENT
+
+pre-registered AC-CEN4 (unknown_mismatch -> 0) NOT met: reported as 14 -> 2, not green.
+no archive byte was touched; the fold --round gate was not rebuilt (AC-LT25 already
+refuses a bare 3113).

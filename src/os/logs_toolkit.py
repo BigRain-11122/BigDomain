@@ -909,18 +909,73 @@ CEN_FILE_ORIG = re.compile(r'state-log-archive-(\d{4}-\d{2})\.md(.{0,4})\u539f')
 CEN_HEADER = re.compile(r'^# --- (R\d+) (.*)$')
 CEN_DECLARED = re.compile(r'(\d+) lines verbatim')
 
+# R3211 (AC-CEN1..4, pinned in src/os/backlog.md BEFORE this edit): a section
+# header is any "# --- " line that is NOT a date-led annotation. The round
+# token is read through four documented shapes because 14 such lines in the
+# live archives were written before the AC-LT25 --round gate existed, and the
+# old grammar silently merged each of their bodies into the previous section
+# (14 unadjudicated mismatches on an honest tree, census exit 2).
+CEN_ANY = re.compile(r'^# --- ')
+CEN_ANNOT = re.compile(r'^# --- \d{4}-\d{2}-\d{2} ')
+CEN_HDR_RANGE = re.compile(r'^# --- (R\d+)-(R\d+)\b')
+CEN_HDR_LABEL = re.compile(r'^# --- (R\d+[a-z]?)(?=[\s(])')
+CEN_HDR_BARE = re.compile(r'^# --- (\d{4}) fold append\b')
+CEN_HDR_FOLD = re.compile(r'^# --- Fold \d+ \((R\d+)\)')
+CEN_HDR_FOLD2 = re.compile(r'^# --- Fold (R\d+)\b')
+# markdown level-2 headers are section boundaries too: the pre-re-org archive
+# used "## \u00a7R#### append(...)" and one 2026-11 fold wrote "## Fold R####"
+CEN_SUB_ANY = re.compile(r'^##\s')
+CEN_HDR_SUB = re.compile(r'^##\s*\u00a7?(R\d+)\b')
+CEN_HDR_SUB_FOLD = re.compile(r'^##\s*Fold (R\d+)\b')
+
+
+def header_rounds(line):
+    """Round tokens of one "# --- " line, or None when it is not a header.
+
+    Shapes: canonical R####, letter suffix R####b, range R####-R####,
+    missing-R "#### fold append", and legacy "Fold N (R####)". A date-led
+    line is an annotation, never a header (handled by the caller).
+    """
+    m = CEN_HDR_RANGE.match(line)
+    if m:
+        return [m.group(1), m.group(2)]
+    m = CEN_HDR_LABEL.match(line)
+    if m:
+        return [m.group(1)]
+    m = CEN_HDR_FOLD.match(line)
+    if m:
+        return [m.group(1)]
+    m = CEN_HDR_FOLD2.match(line)
+    if m:
+        return [m.group(1)]
+    m = CEN_HDR_SUB_FOLD.match(line)
+    if m:
+        return [m.group(1)]
+    m = CEN_HDR_SUB.match(line)
+    if m:
+        return [m.group(1)]
+    m = CEN_HDR_BARE.match(line)
+    if m:
+        return ['R' + m.group(1)]
+    return None
+
 
 def parse_archives(root):
-    """Parse all logs/state-log-archive-*.md into (files, sections).
+    """Parse all logs/state-log-archive-*.md into (files, sections, stats).
 
     files: {month: {'path','bytes','sections': [section dicts]}}
-    sections: {'R####': first section dict with that round tag}
+    sections: {'R####': first section dict with that round tag} (aliases of a
+    range header point at their primary section)
     section dict: {'round','file','header','declared'(int|None),'lines'}
+    stats: {'header_lines','annotation_lines','unlabeled_sections',
+    'body_header_lines','aliases'} - R3211 boundary-completeness face
     """
     ldir = os.path.join(root, 'logs')
     files, sections = {}, {}
+    stats = {'header_lines': 0, 'annotation_lines': 0,
+             'unlabeled_sections': [], 'body_header_lines': 0, 'aliases': {}}
     if not os.path.isdir(ldir):
-        return files, sections
+        return files, sections, stats
     for entry in sorted(os.scandir(ldir), key=lambda e: e.name):
         m = re.match(r'^state-log-archive-(\d{4}-\d{2})\.md$', entry.name)
         if not m or not entry.is_file():
@@ -932,20 +987,39 @@ def parse_archives(root):
         cur = None
         secs = []
         for ln in text.split('\n'):
-            hm = CEN_HEADER.match(ln)
-            if hm:
-                cur = {'round': hm.group(1), 'file': month, 'header': ln,
-                       'declared': None, 'lines': []}
-                dm = CEN_DECLARED.search(hm.group(2))
+            if CEN_ANY.match(ln) or CEN_SUB_ANY.match(ln):
+                stats['header_lines'] += 1
+                if CEN_ANNOT.match(ln):
+                    # annotation, not a boundary: it stays inside the body
+                    stats['annotation_lines'] += 1
+                    if cur is not None:
+                        cur['lines'].append(ln)
+                    continue
+                rounds = header_rounds(ln)
+                if rounds is None:
+                    cur = {'round': None, 'file': month, 'header': ln,
+                           'declared': None, 'lines': []}
+                    stats['unlabeled_sections'].append(
+                        {'file': month, 'header': ln[:120]})
+                else:
+                    cur = {'round': rounds[0], 'file': month, 'header': ln,
+                           'declared': None, 'lines': []}
+                    for alias in rounds[1:]:
+                        stats['aliases'][alias] = rounds[0]
+                        if alias not in sections:
+                            sections[alias] = cur
+                    if rounds[0] not in sections:
+                        sections[rounds[0]] = cur
+                dm = CEN_DECLARED.search(ln)
                 if dm:
                     cur['declared'] = int(dm.group(1))
                 secs.append(cur)
-                if cur['round'] not in sections:
-                    sections[cur['round']] = cur
             elif cur is not None:
+                if CEN_ANY.match(ln) or CEN_SUB_ANY.match(ln):
+                    stats['body_header_lines'] += 1
                 cur['lines'].append(ln)
         files[month] = {'path': entry.path, 'bytes': len(raw), 'sections': secs}
-    return files, sections
+    return files, sections, stats
 
 
 def load_known_findings(path):
@@ -966,7 +1040,7 @@ def load_known_findings(path):
 
 def cmd_census(args):
     _, _, st = load_state(args.root)
-    files, sections = parse_archives(args.root)
+    files, sections, hstats = parse_archives(args.root)
     known_path = args.known_file or os.path.join(
         os.path.dirname(os.path.abspath(__file__)), 'census_known_findings.json')
     known_mm, known_dg = load_known_findings(known_path)
@@ -1054,7 +1128,14 @@ def cmd_census(args):
         'live_tokens_total': len(live_toks),
         'archive_only_count': len(archive_only),
         'archive_only_tokens': archive_only,
-        'pass': not unknown_mismatches and unknown_dangling_total == 0,
+        'header_lines': hstats['header_lines'],
+        'annotation_lines': hstats['annotation_lines'],
+        'unlabeled_sections': hstats['unlabeled_sections'],
+        'body_header_lines': hstats['body_header_lines'],
+        'section_aliases': hstats['aliases'],
+        'pass': (not unknown_mismatches and unknown_dangling_total == 0
+                 and hstats['body_header_lines'] == 0
+                 and not hstats['unlabeled_sections']),
     }
     print(json.dumps(out, ensure_ascii=False, indent=2))
     return 0 if out['pass'] else 2

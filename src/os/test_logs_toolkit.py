@@ -660,6 +660,41 @@ def main():
        and cen7['section_line_mismatches'][0]['adjudicated'] is False,
        'census non-listed finding still fails with known-file present')
 
+    # (viii) header shapes (AC-CEN1..2, pinned in src/os/backlog.md R3211
+    # BEFORE this edit): five non-canonical header shapes and one annotation
+    ARC_V = ('# --- R10 fold append (2026-10-09, 2 lines verbatim: pair, fold R1 window)\n'
+             '2026-10-09 R10 a D-20260930-19\n'
+             '2026-10-09 R10 b\n'
+             '# --- 3113 fold append (2026-10-09, 1 lines verbatim: x, fold R2 window)\n'
+             '2026-10-09 R3113 a\n'
+             '# --- R2472b fold append (2026-10-09, 1 lines verbatim: y, fold R3 window)\n'
+             '2026-10-09 R2472b a\n'
+             '# --- R2924-R2925 fold append (2026-10-09, 1 lines verbatim: z, fold R4 window)\n'
+             '2026-10-09 R2925 a\n'
+             '# --- Fold R2484 (2026-11-06) log items 1..78 ---\n'
+             '2026-10-09 R2484 a\n'
+             '## Fold R2393\n'
+             '2026-10-09 R2393 a\n'
+             '# --- 2026-10-09 R2407 repair: annotation stays in the body\n')
+    cf8, _ = build_census_fixture(
+        ['2026-10-09 window refs ' + SEC + 'R2925 and ' + SEC + 'R3113, both embedded'],
+        ARC_V)
+    rc, out, _ = run(cf8, 'census')
+    cen8 = json.loads(out)
+    ok(rc == 0 and cen8['sections_total'] == 6 and cen8['header_lines'] == 7
+       and cen8['annotation_lines'] == 1 and cen8['unlabeled_sections'] == []
+       and cen8['body_header_lines'] == 0,
+       'census variant headers: 6 sections, 7 header lines, 1 annotation (AC-CEN1)')
+    ok(cen8['section_line_mismatches'] == [] and cen8['pass'] is True,
+       'census variant headers declared==actual, no absorption (AC-CEN2)')
+    ok(cen8['pointer_lines'][0]['pointers'] == ['R2925', 'R3113']
+       and cen8['pointer_lines'][0]['dangling'] == []
+       and cen8['section_aliases'] == {'R2925': 'R2924'},
+       'census range alias resolves + missing-R normalised (AC-CEN2)')
+    ok(cen['header_lines'] == 3 and cen['annotation_lines'] == 0
+       and cen['body_header_lines'] == 0 and cen['pass'] is True,
+       'census canonical fixture header accounting unchanged (AC-CEN1)')
+
     # ---- closeout EOL repair (AC-EO1..EO6, R1705 slice) ----
     # fresh canonical PS-layout state (CRLF) so this section is self-contained
     build_ps_state(root, ['2026-10-10 R1705 eol case line one D-20261010-01',
