@@ -1,0 +1,10 @@
+state_seq suite (expected criteria 8)
+PASS AC-SEQ1 tick read as int with tick_lead, bad tick fails closed
+PASS AC-SEQ2 only the item's own label counts, log order kept
+PASS AC-SEQ3 gaps named inside the span, verdict off OK
+PASS AC-SEQ4 repeats and backwards reported separately
+PASS AC-SEQ5 CLI codes 0/2/3 and the queue stamp counted
+PASS AC-SEQ6 pure read, ASCII source, no network, wired, byte-stable json, queue_only named
+PASS AC-SEQ7 fold summaries excluded but counted, narrowing is narrow, real defects still caught, live tree green
+PASS AC-SEQ8 queue-only stamps publish their own evidence files, conservation holds, and the verdict is unmoved by the split
+SUITE PASS 8/8

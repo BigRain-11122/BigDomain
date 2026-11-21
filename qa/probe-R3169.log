@@ -1,0 +1,16 @@
+=== probe R3169: QUEUE-ONLY R2165 attribution ===
+Q1 stamp: [('explore.md', 65, '[done 2026-10-27 R2165]')]
+Q2 qa files: ['apimarket-hourheatmap-R2165-a.log', 'apimarket-hourheatmap-R2165-b.log', 'reconcile-all-R2165.log']
+Q2 qa sizes: {'apimarket-hourheatmap-R2165-a.log': 736, 'apimarket-hourheatmap-R2165-b.log': 736, 'reconcile-all-R2165.log': 705610}
+Q2 product has api_market_hour_heatmap: True
+Q2 suite criteria: ['AC-MHH1', 'AC-MHH2', 'AC-MHH3', 'AC-MHH4', 'AC-MHH5', 'AC-MHH6', 'AC-MHH7', 'AC-MHH8']
+Q2 wired hourheatmap: True
+Q3 archive decisive line: (2671, '2026-10-27 R2166 (this window opened on an INTERRUPTED predecessor: the R2165 product diff (api_market_hour_heatmap, +152 lines in apimarket.py), the eight-criterion suite, the reconcile_all wiring, the explore claim row, both suite evidence logs, the full battery log and its stdout/stderr twins were all on disk uncommitted while state.json still ended at R2')
+Q4 queue_done: 400
+Q4 queue_only: [2165]
+Q4 fold_summaries: 3
+Q4 verdict: SEQUENCE-OK
+Q5 backed: [{'round': 2165, 'files': ['apimarket-hourheatmap-R2165-a.log', 'apimarket-hourheatmap-R2165-b.log', 'reconcile-all-R2165.log']}]
+Q5 bare: []
+Q5 conservation: True
+=== done ===

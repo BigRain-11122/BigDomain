@@ -5340,7 +5340,7 @@ SUITES = [
     # (AC-SEQ1..AC-SEQ6 pinned in state/queue/tech.md as the R2248 d seed
     # BEFORE the code existed.)
     ("os-state-seq",
-     os.path.join("..", "os", "test_state_seq.py"), 7),
+     os.path.join("..", "os", "test_state_seq.py"), 8),
     # R2259: a seed's face name must be provably unoccupied before it lands -
     # the HEAD revision and the working tree (uncommitted + untracked) are
     # grepped literally, the counts reconcile, and any hit refuses to seed.

@@ -37,6 +37,16 @@ DONE_STAMP_RE = re.compile(r"\[done\s+\d{4}-\d{2}-\d{2}\s+R(\d{3,5})\]")
 
 QUEUE_DIR = ("state", "queue")
 
+# Where a round's own evidence files live. A queue stamp whose round has no
+# log item in either face is still not necessarily a stamp with nothing behind
+# it: R2165 was a crashed window whose product, suite and evidence logs all
+# reached the disk while its own log item never did (the successor R2166 says
+# so in its own words and closed the work). Reading such a stamp as a bare
+# hole hid that difference. So each queue-only round is checked against the
+# SAME round-token-on-the-file-name law round_evidence already applies, and
+# the proof file names are published beside it (R3169).
+QA_DIR = ("qa",)
+
 # Folded round blocks live here, not in the live log (R2586).
 ARCHIVE_DIR = ("logs",)
 
@@ -65,6 +75,8 @@ REPEAT_KEYS = ("round", "count")
 
 BACKWARDS_KEYS = ("index", "round", "previous")
 
+QUEUE_EVIDENCE_KEYS = ("round", "files")
+
 REPORT_KEYS = (
     "labels",
     "fold_summaries",
@@ -78,6 +90,7 @@ REPORT_KEYS = (
     "backwards",
     "queue_done",
     "queue_only",
+    "queue_only_evidence",
     "verdict",
 )
 
@@ -271,6 +284,23 @@ def queue_done_rounds(root):
     return sorted(found)
 
 
+def queue_only_evidence(root, numbers):
+    """Which queue-only stamps left their own evidence file behind (R3169).
+
+    The law is round_evidence's, not a second one: a qa/ file whose NAME
+    carries the round token is that round's evidence file. A stamp with no
+    log item in either face and no such file stays bare, so the hole an
+    operator has to chase is exactly where it was - only the shape of the
+    report gets narrower.
+    """
+    try:
+        mapping = round_evidence.map_files(os.path.join(root, *QA_DIR))
+    except round_evidence.RoundEvidenceError as exc:
+        raise StateSeqError("E_SEQ_BAD_QA", "%s (%s)" % (exc.code, exc.detail))
+    return [{"round": number, "files": mapping[number]}
+            for number in numbers if number in mapping]
+
+
 def audit(root):
     """Audit the sequence; return the closed report shape."""
     state = load_state(root)
@@ -287,6 +317,7 @@ def audit(root):
     # are about live order and a fold is not a reordering.
     logged = set(labels) | set(archived_labels(root))
     queue_only = [number for number in done if number not in logged]
+    queue_evidence = queue_only_evidence(root, queue_only)
     if not labels:
         verdict = "EMPTY"
     elif gaps or repeats or backwards:
@@ -312,6 +343,7 @@ def audit(root):
         "backwards": backwards,
         "queue_done": len(done),
         "queue_only": queue_only,
+        "queue_only_evidence": queue_evidence,
         "verdict": verdict,
     }
 
@@ -321,13 +353,14 @@ def one_line(report):
     return ("STATE SEQUENCE labels=%d fold_summaries=%d distinct=%d "
             "span=%s..%s gaps=%d "
             "repeats=%d backwards=%d tick=%d tick_lead=%s queue_done=%d "
-            "queue_only=%d verdict=%s"
+            "queue_only=%d queue_only_backed=%d verdict=%s"
             % (len(report["labels"]), report["fold_summaries"],
                report["distinct"],
                report["smallest"], report["largest"], len(report["gaps"]),
                len(report["repeats"]), len(report["backwards"]),
                report["tick"], report["tick_lead"], report["queue_done"],
-               len(report["queue_only"]), report["verdict"]))
+               len(report["queue_only"]),
+               len(report["queue_only_evidence"]), report["verdict"]))
 
 
 def render(report):
@@ -340,8 +373,15 @@ def render(report):
     for item in report["backwards"]:
         out.append("  BACKWARDS index=%d R%d after R%d"
                    % (item["index"], item["round"], item["previous"]))
+    backed = {}
+    for item in report["queue_only_evidence"]:
+        backed[item["round"]] = item["files"]
     for number in report["queue_only"]:
-        out.append("  QUEUE-ONLY R%d" % number)
+        if number in backed:
+            out.append("  QUEUE-ONLY R%d EVIDENCE files=%s"
+                       % (number, ",".join(backed[number])))
+        else:
+            out.append("  QUEUE-ONLY R%d" % number)
     return "\n".join(out)
 
 
@@ -364,6 +404,13 @@ def to_json(report):
             row[key] = item[key]
         pinned_backwards.append(row)
     ordered["backwards"] = pinned_backwards
+    pinned_evidence = []
+    for item in report["queue_only_evidence"]:
+        row = {}
+        for key in QUEUE_EVIDENCE_KEYS:
+            row[key] = item[key]
+        pinned_evidence.append(row)
+    ordered["queue_only_evidence"] = pinned_evidence
     return json.dumps(ordered, ensure_ascii=True, sort_keys=False) + "\n"
 
 

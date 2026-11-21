@@ -27,11 +27,11 @@ sys.path.insert(0, BASE)
 
 import state_seq as SS  # noqa: E402
 
-EXPECTED_CRITERIA = 7
+EXPECTED_CRITERIA = 8
 MODULE = os.path.join(BASE, "state_seq.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-seq"
-WIRED_EXPECT = '"test_state_seq.py"), 7),'
+WIRED_EXPECT = '"test_state_seq.py"), 8),'
 
 PASSES = 0
 FAILS = 0
@@ -47,7 +47,7 @@ def check(ok, label):
         print("FAIL %s" % label, flush=True)
 
 
-def make_world(items, tick=1, queue=None, raw_state=None):
+def make_world(items, tick=1, queue=None, raw_state=None, qa=None):
     """Build a temp root: src/os/state.json plus an optional state/queue/."""
     world = tempfile.mkdtemp(prefix="bigdomain-seq-")
     inner = os.path.join(world, "src", "os")
@@ -64,6 +64,13 @@ def make_world(items, tick=1, queue=None, raw_state=None):
         os.makedirs(qdir)
         for name, text in queue.items():
             with io.open(os.path.join(qdir, name), "w", encoding="utf-8",
+                         newline="\n") as handle:
+                handle.write(text)
+    if qa is not None:
+        edir = os.path.join(world, "qa")
+        os.makedirs(edir)
+        for name, text in qa.items():
+            with io.open(os.path.join(edir, name), "w", encoding="utf-8",
                          newline="\n") as handle:
                 handle.write(text)
     return world
@@ -375,6 +382,107 @@ def ac_seq7():
           "real defects still caught, live tree green")
 
 
+def ac_seq8():
+    """A queue-only stamp publishes whether its round left evidence (R3169).
+
+    Measured live: the single queue-only stamp is R2165, a crashed window
+    whose product, suite and evidence logs all reached the disk while its own
+    log item never did - the successor R2166 says so in its own words and
+    closed the work. The reading splits the same bucket with round_evidence's
+    own file-name law, so a hole stays a hole and a backed stamp says so.
+
+    The decisive arm is c: the verdict and the exit codes are driven by gaps,
+    repeats and backwards alone - the queue readings never move them.
+    """
+    queue = {
+        "main.md": "- [x] row (R4100) [done 2026-11-21 R4100]\n",
+        "tech.md": ("- [x] row (R4101) [done 2026-11-21 R4101]\n"
+                    "- [x] row (R4102) [done 2026-11-21 R4102]\n"
+                    "- [x] row (R4103) [done 2026-11-21 R4103]\n"),
+    }
+    qa = {
+        "thing-R4102-b.log": "SUITE PASS 1/1\n",
+        "thing-R4102-a.log": "SUITE PASS 1/1\n",
+        "other-R4101.log": "SUITE PASS 1/1\n",
+    }
+    world = make_world(["2026-11-21 R4100 a", "2026-11-21 R4101 b"],
+                       tick=4104, queue=queue, qa=qa)
+    try:
+        report = SS.audit(world)
+        body = run_cli(["--check", "--root", world])[1]
+    finally:
+        drop_world(world)
+    backed = report["queue_only_evidence"]
+    lines = [row for row in body.splitlines() if "QUEUE-ONLY" in row]
+    arm_a = (report["queue_only"] == [4102, 4103]
+             and len(report["queue_only"]) == len(backed) + 1
+             and len(lines) == len(report["queue_only"]))
+    arm_b = ([{"round": item["round"], "files": item["files"]}
+              for item in backed]
+             == [{"round": 4102,
+                  "files": ["thing-R4102-a.log", "thing-R4102-b.log"]}]
+             and any("QUEUE-ONLY R4103" in row and "EVIDENCE" not in row
+                     for row in lines)
+             and any("QUEUE-ONLY R4102 EVIDENCE" in row for row in lines)
+             and "R4101" not in body)
+
+    gap_queue = {"main.md": "- [x] row (R4111) [done 2026-11-21 R4111]\n"}
+    gap_world = make_world(["2026-11-21 R4110 a", "2026-11-21 R4112 b"],
+                           tick=4113, queue=gap_queue)
+    try:
+        gap_report = SS.audit(gap_world)
+        rc_gap = run_cli(["--check", "--root", gap_world])[0]
+    finally:
+        drop_world(gap_world)
+    arm_c = (gap_report["gaps"] == [4111]
+             and gap_report["queue_only"] == [4111]
+             and gap_report["queue_only_evidence"] == []
+             and gap_report["verdict"] == "SEQUENCE-BROKEN" and rc_gap == 2
+             and report["verdict"] == "SEQUENCE-OK")
+
+    first = run_cli(["--check", "--root", REPO, "--json"])
+    second = run_cli(["--check", "--root", REPO, "--json"])
+    keys = list(json.loads(first[1]).keys())
+    arm_d = (first == second and keys == list(SS.REPORT_KEYS)
+             and keys.index("queue_only_evidence")
+             == keys.index("queue_only") + 1
+             and list(json.loads(first[1])["queue_only_evidence"][0].keys())
+             == list(SS.QUEUE_EVIDENCE_KEYS))
+
+    live = SS.audit(REPO)
+    live_rounds = [item["round"] for item in live["queue_only_evidence"]]
+    arm_e = (len(live["queue_only"]) >= 1
+             and len(live["queue_only"])
+             == len(live["queue_only_evidence"]) + len(
+                 [n for n in live["queue_only"] if n not in live_rounds])
+             and 2165 in live_rounds
+             and "queue_only_backed=" in run_cli(
+                 ["--check", "--root", REPO])[1])
+
+    with io.open(MODULE, "rb") as handle:
+        raw = handle.read()
+    ascii_only = True
+    try:
+        raw.decode("ascii")
+    except UnicodeDecodeError:
+        ascii_only = False
+    with io.open(RUNNER, "r", encoding="utf-8") as handle:
+        runner = handle.read()
+    arm_f = (ascii_only and WIRED_EXPECT in runner
+             and "socket" not in raw.decode("ascii")
+             and "urllib" not in raw.decode("ascii"))
+    if not (arm_a and arm_b and arm_c and arm_d and arm_e and arm_f):
+        print("  measured: a=%r qo=%r ev=%r lines=%r b=%r c=%r gap=%r d=%r "
+              "e=%r live=%r f=%r"
+              % (arm_a, report["queue_only"],
+                 [item["round"] for item in backed], lines, arm_b, arm_c,
+                 gap_report["gaps"], arm_d, arm_e, live_rounds, arm_f),
+              flush=True)
+    check(arm_a and arm_b and arm_c and arm_d and arm_e and arm_f,
+          "AC-SEQ8 queue-only stamps publish their own evidence files, "
+          "conservation holds, and the verdict is unmoved by the split")
+
+
 def main():
     print("state_seq suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -385,6 +493,7 @@ def main():
     ac_seq5()
     ac_seq6()
     ac_seq7()
+    ac_seq8()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:
