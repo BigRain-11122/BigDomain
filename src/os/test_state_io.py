@@ -27,7 +27,7 @@ sys.path.insert(0, BASE)
 
 import state_io as SIO  # noqa: E402
 
-EXPECTED_CRITERIA = 8
+EXPECTED_CRITERIA = 9
 MODULE = os.path.join(BASE, "state_io.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-io"
@@ -246,6 +246,40 @@ def ac_sio8():
           "AC-SIO8 ASCII, stdlib-only, offline, wired as %s" % LABEL)
 
 
+def ac_sio9():
+    """Same layout law as the shipped carrier gate (R3179).
+
+    The two faces used to disagree on the live file: state_io called a
+    16-space canon drifted while logs_toolkit called it clean, so a repair
+    through this module would have written a shape the gate flags.
+    """
+    import logs_toolkit as LT
+
+    def agrees(text):
+        measured = SIO.layout(text)
+        gate = LT.eol_profile(text.encode("utf-8"))
+        return measured["layout_ok"] == (gate["layout_ok"]
+                                         and gate["indent_ok"])
+
+    verdicts = []
+    live = os.path.join(BASE, "state.json")
+    if os.path.exists(live):
+        verdicts.append(agrees(SIO.decode(SIO.read_raw(live))))
+    folder = tmpdir()
+    mixed = sample_text("\r\n", 16).replace(" " * 16 + '"two"',
+                                            " " * 8 + '"two"')
+    shapes = (("legacy2.json", sample_text("\r\n", 2), True),
+              ("canon16.json", sample_text("\r\n", 16), True),
+              ("mixed.json", mixed, False),
+              ("barelf.json", sample_text("\n", 16), False))
+    for name, text, want in shapes:
+        write_sample(folder, text, name)
+        verdicts.append(agrees(text) and SIO.layout(text)["layout_ok"] is want)
+    check(len(verdicts) == (5 if os.path.exists(live) else 4)
+          and all(verdicts),
+          "AC-SIO9 state_io and the carrier gate agree on the same file")
+
+
 def main():
     ac_sio1()
     ac_sio2()
@@ -255,6 +289,7 @@ def main():
     ac_sio6()
     ac_sio7()
     ac_sio8()
+    ac_sio9()
     total = PASSES + FAILS
     print("SUITE %s %d/%d criteria=%d"
           % ("PASS" if FAILS == 0 and total == EXPECTED_CRITERIA else "FAIL",

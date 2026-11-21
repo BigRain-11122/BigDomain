@@ -1,0 +1,9 @@
+LIVE bytes=62433 items=63 caliber_constant=16 calibers=[2, 16]
+SHAPE live-canon16 state_io_layout_ok=True indent_ok=True off=0 | gate_layout_ok=True indent_ok=True caliber=16 anomaly=0 | agree=True
+SHAPE legacy2 state_io_layout_ok=True indent_ok=True off=0 | gate_layout_ok=True indent_ok=True caliber=2 anomaly=0 | agree=True
+SHAPE canon16 state_io_layout_ok=True indent_ok=True off=0 | gate_layout_ok=True indent_ok=True caliber=16 anomaly=0 | agree=True
+SHAPE mixed state_io_layout_ok=False indent_ok=False off=2 | gate_layout_ok=True indent_ok=False caliber=None anomaly=2 | agree=True
+SHAPE barelf state_io_layout_ok=False indent_ok=True off=0 | gate_layout_ok=False indent_ok=True caliber=16 anomaly=0 | agree=True
+SHAPE eight state_io_layout_ok=False indent_ok=False off=2 | gate_layout_ok=True indent_ok=False caliber=None anomaly=2 | agree=True
+PARITY all_agree=True shapes=6
+CARRIER tick=3178 items=63 bytes=62433 gate=78500 margin=16067 fold_needed=False layout_ok=True indent_ok=True

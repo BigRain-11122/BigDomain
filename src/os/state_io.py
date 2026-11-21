@@ -25,7 +25,14 @@ import sys
 import tempfile
 
 EOL = "\r\n"
-ITEM_INDENT = 2
+# The writer target is the LIVE canon (sixteen spaces), not the two-space form
+# this constant carried until R3179: the shipped carrier gate reads the live
+# file clean while this module called it drifted, and a repair through this
+# module would have rewritten the file into a shape that gate flags (R3179).
+ITEM_INDENT = 16
+# Both uniform indents are healthy per the carrier gate (R2747); anything else
+# is disease. Measured from the document, never hardcoded per file.
+LOG_ITEM_CALIBERS = (2, 16)
 PINS = ("bytes", "crlf", "bare_lf", "lone_cr", "eol_ok", "log_items",
         "log_len", "items_off_indent", "indent_ok", "count_ok", "layout_ok")
 
@@ -93,8 +100,14 @@ def layout(text):
         raise StateIOError("E_SIO_LAYOUT", "state.json has no log array")
     items = [index for index in range(start + 1, end)
              if lines[index].strip().startswith('"')]
+    indents = set(len(lines[index]) - len(lines[index].lstrip(" "))
+                  for index in items)
+    caliber = next(iter(indents)) if len(indents) == 1 else None
+    if caliber not in LOG_ITEM_CALIBERS:
+        caliber = None
     off = [index for index in items
-           if len(lines[index]) - len(lines[index].lstrip(" ")) != ITEM_INDENT]
+           if caliber is None
+           or len(lines[index]) - len(lines[index].lstrip(" ")) != caliber]
     crlf = text.count("\r\n")
     lf = text.count("\n") - crlf
     lone_cr = text.count("\r") - crlf
