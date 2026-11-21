@@ -1,0 +1,51 @@
+R3191 evidence - the fold state temp file is reserved before any byte.
+Probe: tmp/probe_R3191.py -> qa/probe-R3191.log 2302B/31 lines utf-8/lf
+sha256 63b1441e7d6c09da (private temp worlds, zero socket, zero network,
+zero live writes).
+
+Q1 defect re-measured: an injected mkstemp failure refused E_SF_STATE_WRITE
+   with stage=after-write while logs/ already carried state-preop-R9002.bak
+   (76B) and state-log-archive-2026-11.md (197B) and state.json was its old
+   76 bytes - a half-landed fold.
+Q2 order: at the old mkstemp call the backup and the archive were BOTH on
+   disk (backup_present=true, archive_present=true), so the reservation was
+   the last write step.
+Q3 relocation safety: a pre-reserved empty .state-fold-* file changes no
+   byte - the archive and the state of two identical worlds are byte-equal
+   and predicted_eq_actual is True in both. The write materials come from
+   archive_appendix(header, window) and payload_for(path, folded_text); the
+   temp path is not an input to either.
+Q4 appendix: before_bytes=65, appendix_bytes=123, starts with
+   '# --- R9002 fold append (', ends with a newline; truncating to
+   before_bytes restores sha16 02521ce8671c6c36 exactly. The archive text is
+   header plus the window lines verbatim - the round summary goes to state,
+   not to the archive (recorded, not a defect).
+Q5 consumers: src/os/state_fold.py (this face), src/os/logs_toolkit.py (its
+   own save face with its own prefix), one test arm scanning leftovers;
+   tools/ zero. files= is read from census output, not a directory walk.
+
+Landed: tempfile.mkstemp now runs FIRST, its fd is closed at once (Windows
+cannot remove an open file), the reserved name is written only after the
+backup and the archive land, and a finally block removes it on every refusal.
+AC-SFOLD13 (six arms) added; AC-SFOLD12's mkstemp arm is JUDGED-CHANGED to
+the stronger pre-write/zero-byte shape; AC-SFOLD11 arm f re-pinned 5 -> 4
+because the reservation arm no longer raises after bytes moved.
+
+Gates: SUITE PASS 16/16 (qa/suite-state-fold-run-R3191.log 6009B/18 lines
+utf-8/lf sha256 4ec3d8f48aef44f5); peers state_fold 7/7, state_seq 8/8,
+state_append 10/10, general_writer_dialect_audit 6/6, closeout_carrier 6/6
+(red first on stale matrix rows, green after the regen), closeout_gate 42/42;
+matrix regenerated through its own vehicle (78385B/754 rows) then
+--check DOC-CURRENT; census --write-pin (honest CACHE E_RCC_CACHE_PARTIAL
+reused=753/754) then --check VERDICT PASS pinned=754; live gate
+CLOSEOUT-GATE PASS files=4487 flags=0 reader_refused=0 round_main=OK
+census=PASS matrix=DOC-CURRENT with CARRIER bytes=44673 margin=33827
+fold_needed=false layout_ok=true log_items=50.
+
+Honest: zero payment capability and no network beyond loopback - a
+reservation moved earlier moves no money, and a buyer still cannot pay (no
+merchant id, server, domain, filing+ICP or miniprogram appid+secret). Zero
+product surface, zero api surface, zero gate number. An os.replace failure
+still leaves the backup and the archive on disk; this window moved only the
+half that can be moved. The face is CLI-unreachable through a static
+filesystem (measured at R3190), so the arms inject the failure in process.

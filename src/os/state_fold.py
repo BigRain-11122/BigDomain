@@ -475,54 +475,65 @@ def fold(root, round_label, fold_no, window_start, window_end, summary,
     window = state["log"][plan["window_start"] - 1:plan["window_end"]]
     backup_path = os.path.join(root, "logs",
                                "state-preop-%s.bak" % round_label)
-    # R3189 measured an uncaught traceback here: a backup path that is a
-    # directory made io.open raise IsADirectoryError, which left the CLI at
-    # rc=1 with 1145 bytes of stderr and NO output under --json. The fold has
-    # not written its archive or its state at this point, so the honest shape
-    # is a named refusal, not a crash (AC-SFOLD11 arm d).
-    try:
-        with io.open(backup_path, "wb") as handle:
-            handle.write(raw)
-    except (IOError, OSError) as exc:
-        raise StateFoldError("E_SF_BACKUP",
-                             "%s (%s)" % (backup_path, exc))
-    with io.open(backup_path, "rb") as handle:
-        if handle.read() != raw:
-            # the backup file exists now, so bytes moved even though the
-            # archive and the state have not been touched.
-            raise StateFoldError("E_SF_BACKUP", "backup read-back differs",
-                                 stage="after-write")
-    appended = append_archive(archive, header, window,
-                             allow_create=True, now=stamp)
-    import general_writer_dialect_audit as GWDA
-    payload = GWDA.payload_for(path, folded_text)
-    # R3190 measured the sibling face of the backup refusal: a static
-    # state-is-a-directory shape is already refused by read_state at
-    # E_SF_BAD_STATE with zero bytes, but a mkstemp or os.replace failure
-    # escaped as a raw OSError (rc=1 with a traceback and no --json face)
-    # AFTER the backup and the archive had landed. The honest shape is a
-    # named refusal that says so, not a crash and not a claim of pre-write
-    # (AC-SFOLD12 arm d proves the backup and archive really are on disk).
+    # R3191 measured the order this closes: the temp file used to be reserved
+    # LAST, so at that moment the backup and the archive were already on disk
+    # and a reservation failure left a half-landed fold behind. The
+    # reservation now comes FIRST - a failure here moves no byte at all - and
+    # every refusal after it removes the reserved file (AC-SFOLD13).
     try:
         fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path),
                                    prefix=".state-fold-")
+        os.close(fd)
     except (IOError, OSError) as exc:
         raise StateFoldError(
             "E_SF_STATE_WRITE",
-            "%s could not open a temp file (%s); backup and archive already "
-            "landed, state bytes unchanged" % (path, exc),
-            stage="after-write")
+            "%s could not open a temp file (%s); nothing was written"
+            % (path, exc))
     try:
-        with os.fdopen(fd, "wb") as handle:
-            handle.write(payload)
-        os.replace(tmp, path)
-    except (IOError, OSError) as exc:
-        if os.path.exists(tmp):
-            os.remove(tmp)
-        raise StateFoldError(
-            "E_SF_STATE_WRITE",
-            "%s not replaced (%s); backup and archive already landed, state "
-            "bytes unchanged" % (path, exc), stage="after-write")
+        # R3189 measured an uncaught traceback here: a backup path that is a
+        # directory made io.open raise IsADirectoryError, which left the CLI
+        # at rc=1 with 1145 bytes of stderr and NO output under --json. Only
+        # the reserved temp file exists at this point, so the honest shape is
+        # a named refusal, not a crash (AC-SFOLD11 arm d).
+        try:
+            with io.open(backup_path, "wb") as backup:
+                backup.write(raw)
+        except (IOError, OSError) as exc:
+            raise StateFoldError("E_SF_BACKUP",
+                                 "%s (%s)" % (backup_path, exc))
+        with io.open(backup_path, "rb") as backup:
+            if backup.read() != raw:
+                # the backup file exists now, so bytes moved even though the
+                # archive and the state have not been touched.
+                raise StateFoldError("E_SF_BACKUP",
+                                     "backup read-back differs",
+                                     stage="after-write")
+        appended = append_archive(archive, header, window,
+                                 allow_create=True, now=stamp)
+        import general_writer_dialect_audit as GWDA
+        payload = GWDA.payload_for(path, folded_text)
+        # R3190 measured the crash this face replaces: a mkstemp or os.replace
+        # failure escaped as a raw OSError (rc=1 with a traceback and no
+        # --json face). Reservation is now pre-write; a replace failure is
+        # still honestly after-write because the backup and archive have
+        # landed (AC-SFOLD12 arm d proves that, AC-SFOLD13 keeps it).
+        try:
+            with io.open(tmp, "wb") as state_handle:
+                state_handle.write(payload)
+            os.replace(tmp, path)
+        except (IOError, OSError) as exc:
+            raise StateFoldError(
+                "E_SF_STATE_WRITE",
+                "%s not replaced (%s); backup and archive already landed, "
+                "state bytes unchanged" % (path, exc),
+                stage="after-write")
+        tmp = None
+    finally:
+        if tmp is not None and os.path.exists(tmp):
+            try:
+                os.remove(tmp)
+            except OSError:
+                pass
     with io.open(path, "rb") as handle:
         post_raw = handle.read()
     post_state = json.loads(post_raw.decode("utf-8"))

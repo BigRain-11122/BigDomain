@@ -5,7 +5,7 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3190 PRODUCT+ENGINEERING: the fold state write face refuses by name too - a mkstemp or os.replace failure used to escape as a raw OSError (rc=1, traceback, nothing under --json) AFTER the backup and the archive had landed; both primitives now raise E_SF_STATE_WRITE with stage after-write, and the temp file is still removed on the replace arm.",
+    "current": "2026-11-21 R3191 PRODUCT+ENGINEERING: the fold state temp file is reserved before the backup and the archive - a reservation failure used to leave a half-landed fold and now moves no byte, and every later refusal removes the reserved file.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -14,8 +14,8 @@
     "latest_evidence": "qa/reorg-R3190.log (1749B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3190] next window (<=48h): (0) MAIN — **半边落盘还在，而且可以前移治掉**：本窗刚让「mkstemp/replace 失败」说得清楚，但失败时归档已含该窗、state 未重写，`after-write` 只描述不修复。做法=先只读量三问：①`mkstemp` 能否**前移到备份与归档之前**（在 `<root>/src/os` 先占临时文件、失败即 `pre-write` 零字节，然后 backup→archive→replace 顺序不变），量 dry-run/execute 两态字节与顺序是否逐字节等价；②`os.replace` 失败时归档里那段 appendix 是否**自定界可安全回滚**（用 `append_archive` 的 header + 已知行数判定），以及回滚会不会破坏 `ledger_coverage`（覆盖不减）；③全仓是否有消费者依赖 `.state-fold-*` 临时文件的出现时机或残留。量出「前移不改变任何既有字节与判据」再落，判据沿用 AC-SFOLD12 写法（先落板再动代码）。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
-    "next_milestone_due": "2026-11-23T21:32:51+08:00",
-    "updated_at": "2026-11-21T21:32:51+08:00",
+    "next_milestone_due": "2026-11-23T21:48:08+08:00",
+    "updated_at": "2026-11-21T21:48:08+08:00",
     "heartbeat": {
       "tick": 3190,
       "state_tick": 3190,
@@ -39,7 +39,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-21 R3190 PRODUCT+ENGINEERING: the fold state write face refuses by name too - a mkstemp or os.replace failure used to escape as a raw OSError (rc=1, traceback, nothing under --json) AFTER the backup and the archive had landed; both primitives now raise E_SF_STATE_WRITE with stage after-write, and the temp file is still removed on the replace arm.",
+  "current": "2026-11-21 R3191 PRODUCT+ENGINEERING: the fold state temp file is reserved before the backup and the archive - a reservation failure used to leave a half-landed fold and now moves no byte, and every later refusal removes the reserved file.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,8 +67,8 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3190 PRODUCT+ENGINEERING: the fold state write face refuses by name too - a mkstemp or os.replace failure used to escape as a raw OSError (rc=1, traceback, nothing under --json) AFTER the backup and the archive had landed; both primitives now raise E_SF_STATE_WRITE with stage after-write, and the temp file is still removed on the replace arm.",
-  "export_ts": "2026-11-21T21:32:51+08:00",
+  "do": "2026-11-21 R3191 PRODUCT+ENGINEERING: the fold state temp file is reserved before the backup and the archive - a reservation failure used to leave a half-landed fold and now moves no byte, and every later refusal removes the reserved file.",
+  "export_ts": "2026-11-21T21:48:08+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
   "latest_evidence": "qa/reorg-R3190.log (1749B, 2026-11-21)",
   "next_milestone": "[R3190] next window (<=48h): (0) MAIN — **半边落盘还在，而且可以前移治掉**：本窗刚让「mkstemp/replace 失败」说得清楚，但失败时归档已含该窗、state 未重写，`after-write` 只描述不修复。做法=先只读量三问：①`mkstemp` 能否**前移到备份与归档之前**（在 `<root>/src/os` 先占临时文件、失败即 `pre-write` 零字节，然后 backup→archive→replace 顺序不变），量 dry-run/execute 两态字节与顺序是否逐字节等价；②`os.replace` 失败时归档里那段 appendix 是否**自定界可安全回滚**（用 `append_archive` 的 header + 已知行数判定），以及回滚会不会破坏 `ledger_coverage`（覆盖不减）；③全仓是否有消费者依赖 `.state-fold-*` 临时文件的出现时机或残留。量出「前移不改变任何既有字节与判据」再落，判据沿用 AC-SFOLD12 写法（先落板再动代码）。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
@@ -184,8 +184,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 44673,
-  "next_milestone_due": "2026-11-23T21:32:51+08:00",
+  "state_bytes": 50392,
+  "next_milestone_due": "2026-11-23T21:48:08+08:00",
   "heartbeat": {
     "tick": 3190,
     "state_tick": 3190,

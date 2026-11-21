@@ -1,0 +1,30 @@
+=== Q1 mkstemp failure: what is on disk afterwards ===
+Q1 refusal: E_SF_STATE_WRITE stage: after-write after_write: True
+Q1 disk before: {"logs": {}, "src_os": ["state.json"], "state_bytes": 76}
+Q1 disk after : {"logs": {"state-log-archive-2026-11.md": 197, "state-preop-R9002.bak": 76}, "src_os": ["state.json"], "state_bytes": 76}
+Q1 leftover backup: ['state-preop-R9002.bak']
+Q1 leftover archive: ['state-log-archive-2026-11.md']
+
+=== Q2 reservation order: what is already on disk at mkstemp time ===
+Q2 at mkstemp call: {"archive_present": true, "backup_present": true, "state_bytes": 76}
+Q2 healthy after: predicted_eq_actual = True post_bytes = 119
+
+=== Q3 relocation safety: a pre-existing temp file changes no byte ===
+Q3 archive tail1 sha16: ef2bf1874eca2aa6 | tail2 sha16: ef2bf1874eca2aa6 | identical: True
+Q3 state bytes identical: True | eq_a: True | eq_b: True
+Q3 pre-reserved file still on disk (expected, caller-owned): True
+
+=== Q4 appendix is self-delimiting; a rollback restores coverage ===
+Q4 before_bytes: 65 appendix_bytes: 123 | prefix_intact: True
+Q4 appendix starts with header: True | ends with newline: True | last line is the summary: False
+Q4 rollback restores pre-append sha16: True | pre: 02521ce8671c6c36 | after rollback: 02521ce8671c6c36
+
+=== Q5 who else depends on the .state-fold- temp name ===
+Q5 scope src/os -> rows= 5
+    src/os/backlog.md:2:- [R3190] next window (<=48h): (0) MAIN — **半边落盘还在，而且可以前移治掉**：本窗刚让「mkstemp/replace 失败」说得清楚，但失败时归档已含该窗、state 未重写，`after-write` 只描述不修复。做法=先只读量
+    src/os/backlog.md:3:- [R3190 PIN — 本轮认领板头 R3189 next-window (0) MAIN（**state 写面：把崩溃换成具名拒绝，且如实说「已经写下去了一半」**）·判据先立·**先落板再动代码**] 只读实测（`tmp/probe_R3190.py` → `qa/pr
+    src/os/logs_toolkit.py:872:    fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path), prefix='.state-fold-')
+    src/os/state_fold.py:508:                                   prefix=".state-fold-")
+    src/os/test_state_fold_run.py:1111:                        if name.startswith(".state-fold-")]
+Q5 scope tools -> rows= 0
+Q5 files= is read from census output, not a directory walk: True

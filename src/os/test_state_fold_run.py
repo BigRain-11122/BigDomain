@@ -29,7 +29,7 @@ sys.path.insert(0, BASE)
 import state_fold_run as FR  # noqa: E402
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 15
+EXPECTED_CRITERIA = 16
 MODULE = os.path.join(BASE, "state_fold_run.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold-run"
@@ -1034,7 +1034,7 @@ def main():
               and bad_sum_obj.get("error") == "E_FLR_SUMMARY_SHAPE"
               and check_ok_rc == 0
               and sorted(check_ok_obj.keys()) == sorted(SF.CHECK_KEYS)
-              and fold_source.count(b'stage="after-write"') == 5
+              and fold_source.count(b'stage="after-write"') == 4
               and fold_ascii,
               "AC-SFOLD11 the rc=3 family answers in JSON too "
               "[missing=%s/%s rc=%s text=%r, window=%s/%s rc=%s text_ok=%s, "
@@ -1131,13 +1131,17 @@ def main():
         ok_report = SF.fold(ok_root, "R9020", 1, 1, 12,
                             clean_summary.replace("R9010", "R9020"))
 
+        # R3191 JUDGED-CHANGED: the reservation moved ahead of the backup and
+        # the archive, so this arm now demands the STRONGER shape (pre-write,
+        # zero bytes on disk) instead of describing a half-landed fold. The
+        # sentence is unchanged and no law was relaxed.
         check(sw_code == "E_SF_STATE_WRITE"
-              and sw_face.get("stage") == "after-write"
-              and sw_face.get("after_write") is True
+              and sw_face.get("stage") == "pre-write"
+              and sw_face.get("after_write") is False
               and read(sw_path) == sw_before
-              and len([n for n in sw_logs if n.startswith("state-preop-")]) == 1
+              and len([n for n in sw_logs if n.startswith("state-preop-")]) == 0
               and len([n for n in sw_logs
-                       if n.startswith("state-log-archive-")]) == 1
+                       if n.startswith("state-log-archive-")]) == 0
               and rp_code == "E_SF_STATE_WRITE"
               and rp_error is not None
               and rp_error.stage == "after-write"
@@ -1145,7 +1149,7 @@ def main():
               and read(rp_path) == rp_before
               and jf_rc == 3
               and jf_obj.get("error") == "E_SF_STATE_WRITE"
-              and jf_obj.get("after_write") is True
+              and jf_obj.get("after_write") is False
               and ok_report.get("predicted_eq_actual") is True
               and fold_source.count(b'"E_SF_STATE_WRITE"') == 2
               and fold_ascii,
@@ -1165,6 +1169,123 @@ def main():
                  jf_obj.get("error"), jf_obj.get("after_write"),
                  ok_report.get("predicted_eq_actual"),
                  fold_source.count(b'"E_SF_STATE_WRITE"'), fold_ascii))
+        # --- AC-SFOLD13: the temp file is reserved BEFORE any byte ---------
+        # R3191 measured the order this closes: at the old reservation point
+        # the backup and the archive were already on disk, so a reservation
+        # failure left a half-landed fold. The reservation now comes first,
+        # which makes that failure pre-write with zero bytes, and every later
+        # refusal cleans the reserved file up.
+        ec_root, ec_path = make_world(os.path.join(base, "sf13-mkstemp"))
+        ec_before = read(ec_path)
+        ec_code = None
+        ec_error = None
+        try:
+            SF.tempfile.mkstemp = _mkstemp_boom
+            try:
+                SF.fold(ec_root, "R9022", 1, 1, 12,
+                        clean_summary.replace("R9010", "R9022"))
+            except SF.StateFoldError as exc:
+                ec_code = exc.code
+                ec_error = exc
+            except Exception as exc:  # noqa: BLE001
+                ec_code = "RAW:" + type(exc).__name__
+        finally:
+            SF.tempfile.mkstemp = real_mkstemp
+        ec_logs = os.listdir(os.path.join(ec_root, "logs"))
+        ec_leftovers = [n for n in
+                        os.listdir(os.path.join(ec_root, "src", "os"))
+                        if n.startswith(".state-fold-")]
+
+        od_root, od_path = make_world(os.path.join(base, "sf13-order"))
+        od_seen = {}
+
+        def _mkstemp_spy(*args, **kwargs):
+            names = os.listdir(os.path.join(od_root, "logs"))
+            od_seen["backup"] = any(n.startswith("state-preop-")
+                                    for n in names)
+            od_seen["archive"] = any(n.startswith("state-log-archive-")
+                                     for n in names)
+            return real_mkstemp(*args, **kwargs)
+
+        try:
+            SF.tempfile.mkstemp = _mkstemp_spy
+            od_report = SF.fold(od_root, "R9023", 1, 1, 12,
+                                clean_summary.replace("R9010", "R9023"))
+        finally:
+            SF.tempfile.mkstemp = real_mkstemp
+
+        pc_root, pc_path = make_world(os.path.join(base, "sf13-plain"))
+        pr_root, pr_path = make_world(os.path.join(base, "sf13-reserved"))
+        fd13, _pre13 = tempfile.mkstemp(
+            dir=os.path.join(pr_root, "src", "os"), prefix=".state-fold-")
+        os.close(fd13)
+        same_summary = clean_summary.replace("R9010", "R9026")
+        pc_rep = SF.fold(pc_root, "R9026", 1, 1, 12, same_summary)
+        pr_rep = SF.fold(pr_root, "R9026", 1, 1, 12, same_summary)
+        same_arch = (read(os.path.join(pc_root, "logs",
+                                      "state-log-archive-2026-11.md"))
+                     == read(os.path.join(pr_root, "logs",
+                                          "state-log-archive-2026-11.md")))
+        same_state = read(pc_path) == read(pr_path)
+
+        md_root, md_path = make_world(os.path.join(base, "sf13-midway"))
+        md_before = read(md_path)
+        os.makedirs(os.path.join(md_root, "logs",
+                                 "state-preop-R9027.bak"))
+        md_code = None
+        md_error = None
+        try:
+            SF.fold(md_root, "R9027", 1, 1, 12,
+                    clean_summary.replace("R9010", "R9027"))
+        except SF.StateFoldError as exc:
+            md_code = exc.code
+            md_error = exc
+        md_leftovers = [n for n in
+                        os.listdir(os.path.join(md_root, "src", "os"))
+                        if n.startswith(".state-fold-")]
+        md_archives = [n for n in os.listdir(os.path.join(md_root, "logs"))
+                       if n.startswith("state-log-archive-")]
+
+        check(ec_code == "E_SF_STATE_WRITE"
+              and ec_error is not None
+              and ec_error.stage == "pre-write"
+              and ec_error.face().get("after_write") is False
+              and read(ec_path) == ec_before
+              and ec_logs == []
+              and ec_leftovers == []
+              and od_seen.get("backup") is False
+              and od_seen.get("archive") is False
+              and od_report.get("predicted_eq_actual") is True
+              and pc_rep.get("predicted_eq_actual") is True
+              and pr_rep.get("predicted_eq_actual") is True
+              and same_arch and same_state
+              and md_code == "E_SF_BACKUP"
+              and md_error is not None
+              and md_error.stage == "pre-write"
+              and read(md_path) == md_before
+              and md_leftovers == [] and md_archives == []
+              and rp_code == "E_SF_STATE_WRITE"
+              and rp_error is not None
+              and rp_error.stage == "after-write"
+              and fold_source.count(b"tempfile.mkstemp(") == 1
+              and fold_ascii,
+              "AC-SFOLD13 the temp file is reserved before any byte "
+              "[mkstemp=%s stage=%s after_write=%s state_same=%s logs=%d "
+              "leftovers=%d, order backup=%s archive=%s eq=%s, "
+              "relocation arch_same=%s state_same=%s, midway=%s stage=%s "
+              "state_same=%s leftovers=%d archives=%d, replace=%s stage=%s, "
+              "mkstemp_sites=%d ascii=%s]"
+              % (ec_code, ec_error.stage if ec_error else None,
+                 ec_error.face().get("after_write") if ec_error else None,
+                 read(ec_path) == ec_before, len(ec_logs), len(ec_leftovers),
+                 od_seen.get("backup"), od_seen.get("archive"),
+                 od_report.get("predicted_eq_actual"),
+                 same_arch, same_state, md_code,
+                 md_error.stage if md_error else None,
+                 read(md_path) == md_before, len(md_leftovers),
+                 len(md_archives), rp_code,
+                 rp_error.stage if rp_error else None,
+                 fold_source.count(b"tempfile.mkstemp("), fold_ascii))
     finally:
         shutil.rmtree(base, ignore_errors=True)
 
