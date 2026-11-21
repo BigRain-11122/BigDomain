@@ -1,0 +1,17 @@
+PASS AC-MFRW1 exports=10/10 own_copies=none cli_exit=0 cli_equal=True
+PASS AC-MFRW2 html 30527da5ec5dc7e2/30527da5ec5dc7e2 json 76e42600895a4dc5/76e42600895a4dc5
+PASS AC-MFRW3 problems=0/none faces=api_market_months:3,api_market_supply_months:3,api_market_claim_months:0,api_market_restock_months:3,api_market_discount_months:0
+PASS AC-MFRW4 empty_faces=api_market_claim_months,api_market_discount_months missing=none
+PASS AC-MFRW5 aigc=True disclaimer=True external=False script=False module_ascii=True
+PASS AC-MFRW6 snapshot size=106496 sha16=8b835e8514ed5eb0 pages=True unchanged=True
+PASS AC-MFRW7 ascii=True banned=none stray=none imports=9
+PASS AC-MFRW8 label_hits=1 file_hits=1 declared=14 law=14
+PASS AC-MFPC1 law=13 read=13 shipped=13 same_law_read=True same_law_shipped=True
+PASS AC-MFPC2 keys=13 refused=13 failures=none control=True
+PASS AC-MFPC3 cli_rc=2 stderr_bytes=0 one_line=True no_outputs=True verify_rc=2 verify_log=False verify_stderr_bytes=0
+PASS AC-MFPC4 html_bytes=6834 json_bytes=13015 inproc_equal=True cli_equal=True
+PASS AC-MFPC5 list_refused=True detail='top level is list, expected object' extra_tolerated=True module_ascii=True face_ok=True
+PASS AC-MFPC6 label_hits=1 file_hits=1 declared=14 recorded=14 law=14
+
+SUITE PASS 14/14
+SUITE-SHA16 2824249a8bd8e049

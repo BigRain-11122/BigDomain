@@ -1,0 +1,55 @@
+R3195 window evidence (copy-key contract, product line untouched)
+
+WHAT CHANGED
+  src/sandbox/ledger/monthly_faces_preview.py gains REQUIRED_COPY_KEYS
+  (13 top-level keys in document order), CopyError (code E_MFP_COPY,
+  detail, face()) and a load_copy that refuses a non-object top level
+  and any missing required key. main() prints the one-line face and
+  returns rc=2 before collect, before any output file and before any
+  evidence log write.
+  src/sandbox/ledger/test_monthly_faces_preview.py grows 8 -> 14
+  criteria with AC-MFPC1..AC-MFPC6; DECLARED 8 -> 14.
+  src/sandbox/reconcile_all.py registry row 8 -> 14.
+
+MEASURED BEFORE THE CODE (qa/probe-R3195.log, 15 lines)
+  keys read by the generator = 13, keys in the shipped copy = 13, none
+  dead and none missing.
+  dropping src_line, sep, empty_default, title or footer_note each read
+  a bare KeyError; the CLI answered rc=1 with zero stdout bytes and
+  fourteen stderr lines; --verify was identical.
+  the failure also left a ZERO-BYTE page.html (file opened and truncated
+  before the render raised), no JSON and no requested --log.
+  empty_default is never used in the current world yet still crashes when
+  deleted, because copy empty .get(fn, copy empty_default) evaluates its
+  default eagerly.
+  a JSON round-trip of the copy renders the shipped page 6834B and JSON
+  13015B byte for byte (html sha16 30527da5ec5dc7e2).
+
+GATES
+  SUITE PASS 14/14 qa/suite-monthly-faces-preview-R3195.log 1289B/17
+  lines sha256 e02971aef42f230e (qa_log --from, re-read by --check).
+  generator --verify VERIFY PASS qa/preview-monthly-faces-R3195.log
+  661B/9 lines sha256 271ba9eb7b2d1230, html 6834B json 13015B,
+  snapshot sha16 8b835e8514ed5eb0 unchanged.
+  matrix regenerated through src/os/suite_matrix_reconcile.py --write
+  (78486 bytes, 755 rows, row 469 criteria 8 -> 14) then --check
+  DOC-CURRENT.
+  registry counter census --write-pin (honest CACHE
+  E_RCC_CACHE_PARTIAL reused=754/755) then --check VERDICT PASS
+  pinned=755.
+  live gate CLOSEOUT-GATE PASS files=4497 flags=0 reader_refused=0
+  round_main=OK census=PASS matrix=DOC-CURRENT, CARRIER bytes=67276
+  margin=11224 fold_needed=false layout_ok=true.
+
+HONEST BOUNDARIES
+  zero payment capability and no network beyond loopback; a buyer still
+  cannot pay (no merchant id, server, domain, filing+ICP, miniprogram
+  appid+secret).
+  zero product surface: the page bytes and the copy text are untouched.
+  only the top-level key set is pinned; a missing nested faces/fields/
+  empty key still falls back silently through .get.
+  a copy file that is malformed JSON still raises a bare
+  json.JSONDecodeError; that face is named for the next window, not fixed.
+  other render-time exceptions can still leave a truncated output file.
+  the non-object top level was not measured before the change, so that
+  arm proves the new refusal rather than an old shape.

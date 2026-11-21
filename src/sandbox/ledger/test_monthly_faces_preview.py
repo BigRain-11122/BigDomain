@@ -34,16 +34,47 @@ Criteria:
   AC-MFRW7 hygiene: this source is ASCII, its imports are stdlib only (no
     socket, urllib, http.client or requests) plus the generator itself, and
     every write lands in a private temp dir removed on exit.
-  AC-MFRW8 runner wiring (recorded last so it can weight the count against
-    this suite own records): reconcile_all.py carries the label exactly
-    once, names this file and declares the same number of criteria this
-    suite actually records.
+  AC-MFRW8 runner wiring: reconcile_all.py carries the label exactly
+    once and names this file, and the count it declares equals the
+    DECLARED law below. (Until R3195 this arm also proved that count
+    against its own position; the positional half moved to AC-MFPC6
+    when this suite grew from eight criteria to fourteen - recorded as
+    JUDGED-CHANGED, no sentence relaxed.)
+
+R3195 copy-key contract criteria (pre-registered in the same board as a
+PIN row BEFORE this code existed):
+
+  AC-MFPC1 the key law self-proves: REQUIRED_COPY_KEYS equals the set of
+    distinct top-level keys the generator source really reads through
+    copy["..."] (this suite scans the GENERATOR source only, never its
+    own text, so no scan literal can match itself), and equals the key
+    set of the shipped copy file.
+  AC-MFPC2 every required key is refused when missing: dropping any one
+    of the thirteen keys makes load_copy raise CopyError with code
+    E_MFP_COPY and the key named in the detail, while the untouched
+    shipped copy loads clean.
+  AC-MFPC3 the refusal writes nothing: a CLI run with a short copy file
+    exits 2 with one stdout line naming E_MFP_COPY and the missing key,
+    zero stderr bytes, and neither --out nor --json-out on disk; the
+    --verify --log path refuses identically and creates no log.
+  AC-MFPC4 the healthy bytes do not move: the shipped copy renders the
+    shipped page and JSON byte for byte (6834B / 13015B) in process, and
+    the CLI writing to temp paths produces those same bytes at rc=0.
+  AC-MFPC5 shape and hygiene: a JSON list as the whole copy file is
+    refused by name with the type in the detail, an extra unread key is
+    tolerated (forward compatibility), the module source stays ASCII,
+    and CopyError publishes code, detail and face().
+  AC-MFPC6 wiring and self-count (recorded last so it can weigh the
+    count against this suite own records): reconcile_all.py carries the
+    label once and this file once, the registry count equals DECLARED,
+    and DECLARED equals the number of criteria actually recorded here.
 
 Usage: python test_monthly_faces_preview.py
 """
 
 import hashlib
 import io
+import json
 import os
 import shutil
 import subprocess
@@ -63,7 +94,7 @@ SUITE_FILE = os.path.abspath(__file__)
 RECONCILE = os.path.join(BASE, "src", "sandbox", "reconcile_all.py")
 MODULE = os.path.join(LEDGER, "monthly_faces_preview.py")
 LABEL = "ledger-monthly-faces-preview"
-DECLARED = 8
+DECLARED = 14
 TEMPS = []
 
 
@@ -231,7 +262,7 @@ def check_hygiene():
     banned = [line for line in imports
               if ("socket" in line or "urllib" in line
                   or "http.client" in line or "requests" in line)]
-    allowed = ("hashlib", "io", "os", "shutil", "subprocess", "sys",
+    allowed = ("hashlib", "io", "json", "os", "shutil", "subprocess", "sys",
                "tempfile", "monthly_faces_preview")
     stray = []
     for line in imports:
@@ -248,11 +279,8 @@ def check_hygiene():
               ",".join(stray) or "none", len(imports)))
 
 
-def check_wiring():
-    with io.open(RECONCILE, "r", encoding="utf-8") as fh:
-        text = fh.read()
-    label_hits = text.count('"%s"' % LABEL)
-    file_hits = text.count("test_monthly_faces_preview.py")
+def registry_declared(text):
+    """The count reconcile_all.py declares beside this suite label."""
     declared = -1
     marker = text.find('"%s"' % LABEL)
     if marker >= 0:
@@ -267,11 +295,200 @@ def check_wiring():
                     break
             if digits:
                 declared = int(digits)
+    return declared
+
+
+def check_wiring():
+    with io.open(RECONCILE, "r", encoding="utf-8") as fh:
+        text = fh.read()
+    label_hits = text.count('"%s"' % LABEL)
+    file_hits = text.count("test_monthly_faces_preview.py")
+    declared = registry_declared(text)
+    ok = (label_hits == 1 and file_hits == 1 and declared == DECLARED)
+    record("AC-MFRW8", ok,
+           "label_hits=%d file_hits=%d declared=%d law=%d"
+           % (label_hits, file_hits, declared, DECLARED))
+
+
+def keys_read_by_generator():
+    """Distinct top-level copy keys the GENERATOR source reads. This suite
+    own text is never scanned, so no scan literal can match itself."""
+    with io.open(MODULE, "r", encoding="utf-8") as fh:
+        source = fh.read()
+    keys = []
+    marker = 'copy["'
+    index = 0
+    while True:
+        index = source.find(marker, index)
+        if index < 0:
+            break
+        end = source.find('"]', index + len(marker))
+        if end < 0:
+            break
+        name = source[index + len(marker):end]
+        if name not in keys:
+            keys.append(name)
+        index = end + 2
+    return keys
+
+
+def check_copy_keys():
+    law = list(getattr(M, "REQUIRED_COPY_KEYS", ()))
+    read = keys_read_by_generator()
+    shipped = sorted(M.load_copy().keys())
+    ok = (bool(law) and sorted(law) == sorted(read)
+          and sorted(law) == shipped)
+    record("AC-MFPC1", ok,
+           "law=%d read=%d shipped=%d same_law_read=%s same_law_shipped=%s"
+           % (len(law), len(read), len(shipped),
+              sorted(law) == sorted(read), sorted(law) == shipped))
+
+
+def write_copy_variant(payload, tag):
+    path = os.path.join(temp_root("copy-" + tag), "copy.json")
+    with io.open(path, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(payload, fh, ensure_ascii=False, indent=2)
+    return path
+
+
+def check_copy_refusal():
+    copy = M.load_copy()
+    law = list(M.REQUIRED_COPY_KEYS)
+    failures = []
+    for key in law:
+        mutated = dict(copy)
+        del mutated[key]
+        path = write_copy_variant(mutated, "miss-" + key)
+        try:
+            M.load_copy(path)
+            failures.append(key + ".accepted")
+            continue
+        except M.CopyError as exc:
+            if exc.code != "E_MFP_COPY":
+                failures.append(key + ".code=" + exc.code)
+            if key not in exc.detail:
+                failures.append(key + ".unnamed")
+        except Exception as exc:  # noqa: BLE001 - any other type is a failure
+            failures.append(key + "." + type(exc).__name__)
+    try:
+        M.load_copy(M.COPY_PATH)
+        control = True
+    except Exception:  # noqa: BLE001 - the shipped file must load
+        control = False
+    record("AC-MFPC2", control and not failures,
+           "keys=%d refused=%d failures=%s control=%s"
+           % (len(law), len(law) - len([f for f in failures
+                                        if f.endswith(".accepted")]),
+              ",".join(failures) or "none", control))
+
+
+def check_copy_cli():
+    copy = M.load_copy()
+    mutated = dict(copy)
+    del mutated["src_line"]
+    path = write_copy_variant(mutated, "cli")
+    out_dir = temp_root("copy-cli-out")
+    out_html = os.path.join(out_dir, "page.html")
+    out_json = os.path.join(out_dir, "page.json")
+    proc = subprocess.run([sys.executable, MODULE, "--copy", path,
+                           "--out", out_html, "--json-out", out_json],
+                          capture_output=True)
+    stdout = proc.stdout.decode("utf-8", "replace")
+    ok_line = (stdout.count("\n") == 1
+               and "E_MFP_COPY" in stdout and "src_line" in stdout)
+    ok_none = not os.path.isfile(out_html) and not os.path.isfile(out_json)
+    log_path = os.path.join(temp_root("copy-cli-log"), "verify.log")
+    vproc = subprocess.run([sys.executable, MODULE, "--copy", path,
+                            "--verify", "--log", log_path],
+                           capture_output=True)
+    ok_verify = (vproc.returncode == 2 and not os.path.isfile(log_path)
+                 and vproc.stderr == b"")
+    record("AC-MFPC3",
+           proc.returncode == 2 and proc.stderr == b"" and ok_line
+           and ok_none and ok_verify,
+           "cli_rc=%d stderr_bytes=%d one_line=%s no_outputs=%s "
+           "verify_rc=%d verify_log=%s verify_stderr_bytes=%d"
+           % (proc.returncode, len(proc.stderr), ok_line, ok_none,
+              vproc.returncode, os.path.isfile(log_path),
+              len(vproc.stderr)))
+
+
+def check_copy_bytes():
+    copy = M.load_copy()
+    faces = M.collect(temp_root("copy-bytes"))
+    html_now = M.render_html(copy, faces).encode("utf-8")
+    json_now = M.render_json(faces).encode("utf-8")
+    with open(M.OUT_HTML, "rb") as fh:
+        html_shipped = fh.read()
+    with open(M.OUT_JSON, "rb") as fh:
+        json_shipped = fh.read()
+    out_dir = temp_root("copy-bytes-cli")
+    out_html = os.path.join(out_dir, "page.html")
+    out_json = os.path.join(out_dir, "page.json")
+    proc = subprocess.run([sys.executable, MODULE, "--out", out_html,
+                           "--json-out", out_json], capture_output=True)
+    cli_equal = False
+    if proc.returncode == 0:
+        with open(out_html, "rb") as fh:
+            cli_html = fh.read()
+        with open(out_json, "rb") as fh:
+            cli_json = fh.read()
+        cli_equal = cli_html == html_shipped and cli_json == json_shipped
+    record("AC-MFPC4",
+           html_now == html_shipped and json_now == json_shipped
+           and proc.returncode == 0 and cli_equal,
+           "html_bytes=%d json_bytes=%d inproc_equal=%s cli_equal=%s"
+           % (len(html_shipped), len(json_shipped),
+              html_now == html_shipped and json_now == json_shipped,
+              cli_equal))
+
+
+def check_copy_shape():
+    path = write_copy_variant([{"title": "x"}], "list")
+    detail = ""
+    code = ""
+    named = False
+    try:
+        M.load_copy(path)
+    except M.CopyError as exc:
+        code, detail = exc.code, exc.detail
+    except Exception:  # noqa: BLE001 - a bare crash is not a named refusal
+        pass
+    named = code == "E_MFP_COPY" and "list" in detail
+    copy = dict(M.load_copy())
+    copy["r3195_unread_key"] = "tolerated"
+    tolerated = True
+    try:
+        M.load_copy(write_copy_variant(copy, "extra"))
+    except Exception:  # noqa: BLE001 - an extra key must not be refused
+        tolerated = False
+    with open(MODULE, "rb") as fh:
+        raw = fh.read()
+    try:
+        raw.decode("ascii")
+        ascii_ok = True
+    except UnicodeDecodeError:
+        ascii_ok = False
+    face_ok = (getattr(M.CopyError, "code", "") == "E_MFP_COPY"
+               and hasattr(M.CopyError("x"), "detail")
+               and M.CopyError("x").face().startswith("E_MFP_COPY "))
+    record("AC-MFPC5", named and tolerated and ascii_ok and face_ok,
+           "list_refused=%s detail=%r extra_tolerated=%s module_ascii=%s "
+           "face_ok=%s"
+           % (named, detail[:40], tolerated, ascii_ok, face_ok))
+
+
+def check_copy_wiring():
+    with io.open(RECONCILE, "r", encoding="utf-8") as fh:
+        text = fh.read()
+    label_hits = text.count('"%s"' % LABEL)
+    file_hits = text.count("test_monthly_faces_preview.py")
+    declared = registry_declared(text)
     total_after = len(RESULTS) + 1
     ok = (label_hits == 1 and file_hits == 1 and declared == DECLARED
           and total_after == DECLARED)
-    record("AC-MFRW8", ok,
-           "label_hits=%d file_hits=%d declared=%d recorded=%d expected=%d"
+    record("AC-MFPC6", ok,
+           "label_hits=%d file_hits=%d declared=%d recorded=%d law=%d"
            % (label_hits, file_hits, declared, total_after, DECLARED))
 
 
@@ -286,6 +503,12 @@ def main():
         check_zero_write(before)
         check_hygiene()
         check_wiring()
+        check_copy_keys()
+        check_copy_refusal()
+        check_copy_cli()
+        check_copy_bytes()
+        check_copy_shape()
+        check_copy_wiring()
     finally:
         for path in TEMPS:
             shutil.rmtree(path, ignore_errors=True)

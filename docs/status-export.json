@@ -1,20 +1,20 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-21 R3194 PRODUCT+GATE: the R3193 monthly faces page is inside the battery now - src/sandbox/ledger/test_monthly_faces_preview.py drives the generator own exports (no renderer copy) through eight criteria and the row ledger-monthly-faces-preview(8) sits in reconcile_all, so the matrix, the registry counter census and the closeout gate finally see the page.",
+    "current": "2026-11-21 R3195 PRODUCT+ENGINEERING: the copy file is a contract now - dropping any of the thirteen top-level keys the renderer reads is refused by name (E_MFP_COPY) BEFORE any output file is opened, where until this window the same file raised a bare KeyError at rc=1 with empty stdout, fourteen traceback lines on stderr and a zero-byte page.html left on disk.",
     "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-monthly-faces.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/preview-monthly-faces-R3194.log (661B, 2026-11-21)",
-    "latest_evidence": "qa/preview-monthly-faces-R3194.log (661B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3195.log (1716B, 2026-11-21)",
+    "latest_evidence": "qa/probe-R3195.log (1716B, 2026-11-21)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3194] next window (<=48h): (0) MAIN — **copy 文件的契约没人守**：`preview/monthly-faces-copy.json` 现在承载 13 个键（本轮新增 `src_line`/`empty_default`/`sep`），生成器直接 `copy[\"src_line\"]`、`copy[\"sep\"]`、`copy[title/subtitle/...]`，掉一个键就是 `KeyError` 裸抛（rc=1 + traceback），而没有任何判据钉住「必需键集」。做法=先只读量三问：①删掉 `src_line`/`sep`/`empty_default` 各一次，量 CLI 与 `--verify` 的真实失败形状（rc/异常类型/stdout 是否有可读面）；②全仓是否有消费者依赖这些键或缺键时的静默（含 `test_monthly_faces_preview.py` 与 `preview/index.html` 的自动清单）；③把「必需键集」写进一个纯函数（如 `REQUIRED_COPY_KEYS`）+ 具名拒绝（`E_MFP_COPY`），是否改变任何既有渲染字节（同值时应零差异）。量出「缺键确为裸抛且可命名为拒绝」再落，判据沿用 AC-MFRW 写法（AC-MFPC1..N），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
-    "next_milestone_due": "2026-11-23T22:31:21+08:00",
-    "updated_at": "2026-11-21T22:31:21+08:00",
+    "next_milestone": "[R3195] next window (<=48h): (0) MAIN — **坏 copy 文件的读入口还全是裸抛**：本轮把「缺键」提到开文件之前，但 `load_copy` 的 `io.open`/`json.load` 失败仍是裸抛——路径不存在=`FileNotFoundError`、非法 UTF-8=`UnicodeDecodeError`、坏 JSON=`JSONDecodeError`（三种 rc=1 + traceback、stdout 0 字节）。做法=先只读量三问：①三种坏文件各跑一次 CLI 与 `--verify --log`，量 rc/stdout/stderr 与「是否留下任何盘上痕迹」（预期无，因校验在写之前）；②全仓是否有消费者依赖这三种异常类型或 rc=1（含 `test_monthly_faces_preview.py` 的 `load_copy` 调用与 `tools/`）；③把读入口包成同一具名拒绝（`E_MFP_COPY` + detail 说明 read 类型）后，健康面渲染字节是否一字不变（应零差异）。量出「确为裸抛且可命名」再落，判据沿用 AC-MFPC 写法（AC-MFPR1..N），**先落板再动代码**；若三态语义差异太大（如「文件不存在」与「文件坏了」应给不同码），如实拆分并预注册。**另**：本轮末 log_items=82、carrier 71001B、margin 7499（闸 78500）——下窗若再加 4-5 行会触 fold_needed，先经 shipped fold door 折一次再干活。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+    "next_milestone_due": "2026-11-23T22:41:07+08:00",
+    "updated_at": "2026-11-21T22:41:07+08:00",
     "heartbeat": {
-      "tick": 3194,
-      "state_tick": 3194,
+      "tick": 3195,
+      "state_tick": 3195,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -28,14 +28,14 @@
       "dup_rows": 0,
       "distinct": 30,
       "collapsed": 0,
-      "labels_refreshed": 0,
+      "labels_refreshed": 1,
       "notes_stale": 2,
       "note_claims": 6,
       "criteria_stale": 1,
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-21 R3194 PRODUCT+GATE: the R3193 monthly faces page is inside the battery now - src/sandbox/ledger/test_monthly_faces_preview.py drives the generator own exports (no renderer copy) through eight criteria and the row ledger-monthly-faces-preview(8) sits in reconcile_all, so the matrix, the registry counter census and the closeout gate finally see the page.",
+  "current": "2026-11-21 R3195 PRODUCT+ENGINEERING: the copy file is a contract now - dropping any of the thirteen top-level keys the renderer reads is refused by name (E_MFP_COPY) BEFORE any output file is opened, where until this window the same file raised a bare KeyError at rc=1 with empty stdout, fourteen traceback lines on stderr and a zero-byte page.html left on disk.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,11 +63,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3194 PRODUCT+GATE: the R3193 monthly faces page is inside the battery now - src/sandbox/ledger/test_monthly_faces_preview.py drives the generator own exports (no renderer copy) through eight criteria and the row ledger-monthly-faces-preview(8) sits in reconcile_all, so the matrix, the registry counter census and the closeout gate finally see the page.",
-  "export_ts": "2026-11-21T22:31:21+08:00",
+  "do": "2026-11-21 R3195 PRODUCT+ENGINEERING: the copy file is a contract now - dropping any of the thirteen top-level keys the renderer reads is refused by name (E_MFP_COPY) BEFORE any output file is opened, where until this window the same file raised a bare KeyError at rc=1 with empty stdout, fourteen traceback lines on stderr and a zero-byte page.html left on disk.",
+  "export_ts": "2026-11-21T22:41:07+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
-  "latest_evidence": "qa/preview-monthly-faces-R3194.log (661B, 2026-11-21)",
-  "next_milestone": "[R3194] next window (<=48h): (0) MAIN — **copy 文件的契约没人守**：`preview/monthly-faces-copy.json` 现在承载 13 个键（本轮新增 `src_line`/`empty_default`/`sep`），生成器直接 `copy[\"src_line\"]`、`copy[\"sep\"]`、`copy[title/subtitle/...]`，掉一个键就是 `KeyError` 裸抛（rc=1 + traceback），而没有任何判据钉住「必需键集」。做法=先只读量三问：①删掉 `src_line`/`sep`/`empty_default` 各一次，量 CLI 与 `--verify` 的真实失败形状（rc/异常类型/stdout 是否有可读面）；②全仓是否有消费者依赖这些键或缺键时的静默（含 `test_monthly_faces_preview.py` 与 `preview/index.html` 的自动清单）；③把「必需键集」写进一个纯函数（如 `REQUIRED_COPY_KEYS`）+ 具名拒绝（`E_MFP_COPY`），是否改变任何既有渲染字节（同值时应零差异）。量出「缺键确为裸抛且可命名为拒绝」再落，判据沿用 AC-MFRW 写法（AC-MFPC1..N），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+  "latest_evidence": "qa/probe-R3195.log (1716B, 2026-11-21)",
+  "next_milestone": "[R3195] next window (<=48h): (0) MAIN — **坏 copy 文件的读入口还全是裸抛**：本轮把「缺键」提到开文件之前，但 `load_copy` 的 `io.open`/`json.load` 失败仍是裸抛——路径不存在=`FileNotFoundError`、非法 UTF-8=`UnicodeDecodeError`、坏 JSON=`JSONDecodeError`（三种 rc=1 + traceback、stdout 0 字节）。做法=先只读量三问：①三种坏文件各跑一次 CLI 与 `--verify --log`，量 rc/stdout/stderr 与「是否留下任何盘上痕迹」（预期无，因校验在写之前）；②全仓是否有消费者依赖这三种异常类型或 rc=1（含 `test_monthly_faces_preview.py` 的 `load_copy` 调用与 `tools/`）；③把读入口包成同一具名拒绝（`E_MFP_COPY` + detail 说明 read 类型）后，健康面渲染字节是否一字不变（应零差异）。量出「确为裸抛且可命名」再落，判据沿用 AC-MFPC 写法（AC-MFPR1..N），**先落板再动代码**；若三态语义差异太大（如「文件不存在」与「文件坏了」应给不同码），如实拆分并预注册。**另**：本轮末 log_items=82、carrier 71001B、margin 7499（闸 78500）——下窗若再加 4-5 行会触 fold_needed，先经 shipped fold door 折一次再干活。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -81,7 +81,7 @@
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
     "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
-    "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（78485B·687 行）",
+    "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（78486B·687 行）",
     "preview/money-path-demo.html (10161B) + preview/money-path-demo.json (4705B)",
     "preview/ceo-blockers.html (8453B) + preview/ceo-blockers.json (6754B)",
     "preview/battery-shard-report.html (16421B) + preview/battery-shard-report.json (16240B)",
@@ -157,7 +157,7 @@
   },
   "results": [
     [
-      "3194",
+      "3195",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -171,21 +171,21 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 75,
+    "log_lines_in_window": 82,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 64528,
-  "next_milestone_due": "2026-11-23T22:31:21+08:00",
+  "state_bytes": 71001,
+  "next_milestone_due": "2026-11-23T22:41:07+08:00",
   "heartbeat": {
-    "tick": 3194,
-    "state_tick": 3194,
+    "tick": 3195,
+    "state_tick": 3195,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
@@ -199,7 +199,7 @@
     "dup_rows": 0,
     "distinct": 30,
     "collapsed": 0,
-    "labels_refreshed": 0,
+    "labels_refreshed": 1,
     "notes_stale": 2,
     "note_claims": 6,
     "criteria_stale": 1,

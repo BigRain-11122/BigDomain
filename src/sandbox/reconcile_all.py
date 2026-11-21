@@ -3471,9 +3471,14 @@ SUITES = [
     # against the shipped snapshot and page files, hygiene, and the
     # registry count this suite records. (AC-MFRW1..AC-MFRW8 were
     # pre-registered in src/os/backlog.md at R3194 BEFORE this suite,
-    # its label and this row existed.)
+    # its label and this row existed.) R3195 added the copy-key contract
+    # criteria AC-MFPC1..AC-MFPC6 (same board, PIN first): the key law
+    # self-proves against the generator own reads, every required key is
+    # refused by name when missing, the CLI refusal writes nothing, the
+    # healthy bytes stay identical, the shape law and hygiene hold, and
+    # the last arm weighs the declared count against what was recorded.
     ("ledger-monthly-faces-preview", os.path.join(
-        "ledger", "test_monthly_faces_preview.py"), 8),
+        "ledger", "test_monthly_faces_preview.py"), 14),
     # R2102 attention digest on the same report generator: the
     # statement-shaped R2101 page now opens with an ordered operator
     # to-do list derived from the faces (seller inbox debt, sold-out

@@ -23,8 +23,22 @@ Usage:
   python src/sandbox/ledger/monthly_faces_preview.py --verify \
       --log qa/preview-monthly-faces-R3193.log
 
+Exit codes: 0 written or verified, 1 identity problems (VERIFY FAIL), and
+2 refused by name before anything is written (E_MFP_COPY: the copy file
+is not a JSON object or lacks a required top-level key).
+
 Criteria AC-MFR1..AC-MFR8 are registered in src/os/backlog.md (R3193
 PIN row) BEFORE this file existed.
+
+R3195 (AC-MFPC1..AC-MFPC6): the copy file is a contract, not a
+convenience. Every top-level key this renderer reads is listed in
+REQUIRED_COPY_KEYS and load_copy refuses a file that drops one with the
+named code E_MFP_COPY, BEFORE any output file is opened - until this
+window a missing key raised a bare KeyError (rc=1, 14 traceback lines,
+empty stdout) and left a zero-byte page.html behind. A copy file that
+is not a JSON object is refused the same way, and extra unread keys are
+tolerated so a newer copy file still renders here. The healthy render
+stays byte-identical: the refusal never touches what is written.
 """
 import argparse
 import hashlib
@@ -85,9 +99,52 @@ def sha16(path):
         return hashlib.sha256(fh.read()).hexdigest()[:16]
 
 
+# Every top-level copy key render_html reads, in document order. The
+# contract pin is src/os/backlog.md R3195 PIN (AC-MFPC1..AC-MFPC6); a key
+# missing here raises a bare KeyError in the renderer, and empty_default
+# is REQUIRED even for a world where every empty face has its own entry,
+# because copy["empty"].get(fn, copy["empty_default"]) evaluates its
+# default eagerly.
+REQUIRED_COPY_KEYS = (
+    "title",
+    "subtitle",
+    "aigc_label",
+    "source_note",
+    "section_note",
+    "src_line",
+    "sep",
+    "empty",
+    "empty_default",
+    "fields",
+    "faces",
+    "disclaimer",
+    "footer_note",
+)
+
+
+class CopyError(Exception):
+    """Named refusal for a copy file that cannot drive this renderer."""
+
+    code = "E_MFP_COPY"
+
+    def __init__(self, detail):
+        Exception.__init__(self, detail)
+        self.detail = detail
+
+    def face(self):
+        return "%s %s" % (self.code, self.detail)
+
+
 def load_copy(path=COPY_PATH):
     with io.open(path, "r", encoding="utf-8") as fh:
-        return json.load(fh)
+        data = json.load(fh)
+    if not isinstance(data, dict):
+        raise CopyError("top level is %s, expected object"
+                        % type(data).__name__)
+    missing = [key for key in REQUIRED_COPY_KEYS if key not in data]
+    if missing:
+        raise CopyError("missing keys: %s" % ",".join(missing))
+    return data
 
 
 def collect(tmp_root):
@@ -383,7 +440,11 @@ def main(argv=None):
     parser.add_argument("--verify", action="store_true")
     parser.add_argument("--log", default=None)
     args = parser.parse_args(argv)
-    copy = load_copy(args.copy)
+    try:
+        copy = load_copy(args.copy)
+    except CopyError as exc:
+        sys.stdout.write("%s\n" % exc.face())
+        return 2
     if args.verify:
         return run_verify(copy, args.log)
     tmp = tempfile.mkdtemp(prefix="monthly-faces-")

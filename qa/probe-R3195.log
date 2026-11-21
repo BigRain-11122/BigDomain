@@ -1,0 +1,15 @@
+Q2 keys_read=13 title,subtitle,aigc_label,source_note,section_note,faces,src_line,empty,empty_default,fields,sep,disclaimer,footer_note
+Q2 copy_keys=13 aigc_label,disclaimer,empty,empty_default,faces,fields,footer_note,section_note,sep,source_note,src_line,subtitle,title
+Q2 copy_keys_unread=none
+Q3 shipped copy=2856B html=6834B json=13015B
+Q3 round_trip html_equal=True json_equal=True html_sha16=30527da5ec5dc7e2
+Q3 empty_faces=api_market_claim_months,api_market_discount_months covered_by_empty=2 empty_default_used=False
+Q1 key=src_line inproc=KeyError cli_rc=1 stdout='' stderr_last="KeyError: 'src_line'" wrote=(True, False) verify_rc=1 verify_stdout='' verify_stderr="KeyError: 'src_line'"
+Q1 key=sep inproc=KeyError cli_rc=1 stdout='' stderr_last="KeyError: 'sep'" wrote=(True, False) verify_rc=1 verify_stdout='' verify_stderr="KeyError: 'sep'"
+Q1 key=empty_default inproc=KeyError cli_rc=1 stdout='' stderr_last="KeyError: 'empty_default'" wrote=(True, False) verify_rc=1 verify_stdout='' verify_stderr="KeyError: 'empty_default'"
+Q1 key=title inproc=KeyError cli_rc=1 stdout='' stderr_last="KeyError: 'title'" wrote=(True, False) verify_rc=1 verify_stdout='' verify_stderr="KeyError: 'title'"
+Q1 key=footer_note inproc=KeyError cli_rc=1 stdout='' stderr_last="KeyError: 'footer_note'" wrote=(True, False) verify_rc=1 verify_stdout='' verify_stderr="KeyError: 'footer_note'"
+Q1 control_rc=0 stdout='PASS preview ..\\..\\..\\..\\AppData\\Local\\Temp\\probe-r3195-no4jzsdc\\ok.html (6834 bytes) + ..\\..\\..\\..\\AppData\\Local\\Temp\\p' stderr_bytes=0
+CLI rc=2 html_exists=False html_bytes=-1 json_exists=False
+CLI stdout_bytes=35 stderr_lines=0
+VERIFY rc=2 log_exists=False stdout_bytes=35 stderr_tail=''
