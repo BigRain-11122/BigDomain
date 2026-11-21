@@ -3168,6 +3168,15 @@ SUITES = [
     # explore-queue seed row and pinned in the R3159 row BEFORE the code.
     ("ledger-apimarket-sellerchurnmonths", os.path.join(
         "ledger", "test_apimarket_sellerchurnmonths.py"), 8),
+    # market monthly discount-EVENT flow (a discount is one revision
+    # strictly below the price live before it, booked in its own month; a
+    # later revision reaching the pre-discount price makes it undone, else
+    # it stands; category at the event instant, pooled averages, and the
+    # cadence face as the cross-face anchor) - criteria AC-MDK1..AC-MDK8
+    # registered in the R2248 e explore-queue seed row and pinned in the
+    # R3160 row BEFORE the code.
+    ("ledger-apimarket-discountmonths", os.path.join(
+        "ledger", "test_apimarket_discountmonths.py"), 8),
     # buyer-side monthly claim flow (a claim books in the UTC month of its
     # own opened_utc, a later refund never re-dates it nor invents a row
     # in the refund month, honest zero months carried flat, the five-state

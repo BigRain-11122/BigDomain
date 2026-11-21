@@ -15756,6 +15756,277 @@ class APIMarketFace:
             "months": core["months"]}
 
 
+    def api_market_discount_months(self, include_uncategorized=True):
+        """Market monthly DISCOUNT-EVENT flow (criteria AC-MDK1..AC-MDK8
+        pre-registered in the R2248 e explore-queue seed and pinned in
+        the R3160 PIN row BEFORE this code existed).
+
+        The price family answers snapshots and cadence:
+        api_category_price_months is one distribution per month end,
+        api_market_price_percentiles one lifetime distribution, and
+        api_seller_price_cadence_months counts up/down revisions per
+        month with their average absolute step. None of them answers
+        the discount as an EVENT: how many tokens were given away, how
+        deep the cut went, which shelves were cut, and whether the cut
+        was later taken back. A month of heavy discounting and a month
+        of unchanged asking prices can therefore read alike, because a
+        cut that is later restored leaves the month-end snapshot flat.
+
+        Event law: a discount is one append-only revision whose price
+        is STRICTLY BELOW the price live before it (the immutable base
+        row, or the previous revision in revision_id order). It books
+        in the UTC month of its own revised_utc, so a later revision
+        never rewrites what an earlier month already saw. Every other
+        revision is a raise (the write door refuses a same-price
+        revision with E_AM_PRICE_UNCHANGED), so per month
+        discount_count + raise_count == revision_count.
+
+        Undo law: a discount is UNDONE when any later revision on the
+        same listing (a higher revision_id) reaches or beats the
+        pre-discount price, and STANDING otherwise. The price book is
+        ordered by revision_id and spans delisting and re-listing
+        cycles, so a cut made before a retirement can still be taken
+        back after the shelf returns. Standing tokens are the only
+        cuts that moved the asking price at face time; undone +
+        standing == discount_count in every row and in the envelope.
+
+        Category law: each event books to _category_at_instant at its
+        OWN stamp, so a listing that moves buckets and then cuts books
+        the cut to the new bucket while its earlier cuts stay in the
+        old one. Cells are ordered by category ascending with the
+        uncategorized bucket last. include_uncategorized=False removes
+        that bucket from the cells and from category_count but leaves
+        the month totals and the envelope untouched - deliberate, and
+        different from api_category_price_months, where hiding the
+        bucket also removes its listings from the month aggregates.
+
+        Month rows run the contiguous grid from the first to the last
+        revision month, so a month with no repricing carries an honest
+        zero row whose share and averages are None rather than a
+        fabricated 0.0. avg_cut_pct is POOLED over events, never a mean
+        of monthly means; deepest_cut_pct is the most negative step and
+        largest_cut_tokens the biggest single cut. Peak ties go to the
+        earlier month and a zero month is never a peak.
+
+        Envelope listing/seller counts are DISTINCT over the discounts,
+        so they can be smaller than the row sums. Gate:
+        include_uncategorized must be a real bool, fail-closed with
+        E_AM_BAD_ARGS before any read. Pure read: zero row mutations and
+        zero token movement."""
+        if not isinstance(include_uncategorized, bool):
+            raise ApiMarketError(E_AM_BAD_ARGS, include_uncategorized)
+        with self._lock:
+            listings = self._conn.execute(
+                "SELECT listing_id, dev_account, token_price, category"
+                " FROM apimarket_listings ORDER BY listing_id"
+            ).fetchall()
+            records = []
+            for lid, dev, base_price, base_category in listings:
+                lid = int(lid)
+                previous = int(base_price)
+                rows = self._conn.execute(
+                    "SELECT token_price, revised_utc FROM"
+                    " apimarket_price_revisions WHERE listing_id = ?"
+                    " ORDER BY revision_id", (lid,)).fetchall()
+                prices = [int(r[0]) for r in rows]
+                for pos, (price, stamp) in enumerate(rows):
+                    price = int(price)
+                    bucket = self._category_at_instant(
+                        lid, base_category, str(stamp))
+                    record = {
+                        "month": str(stamp)[:7],
+                        "listing_id": lid,
+                        "dev_account": dev,
+                        "category": bucket,
+                        "raise": price >= previous,
+                    }
+                    if price < previous:
+                        record.update({
+                            "cut_tokens": previous - price,
+                            "cut_pct": round(
+                                (price - previous) * 100.0 / previous, 2),
+                            "undone": any(p >= previous
+                                          for p in prices[pos + 1:]),
+                        })
+                    records.append(record)
+                    previous = price
+            months = _contiguous_months(
+                sorted({record["month"] for record in records}))
+
+        buckets = {}
+        all_pcts = []
+        tokens_cut = 0
+        undone_count = 0
+        standing_count = 0
+        standing_tokens = 0
+        largest_cut = 0
+        discount_listings = set()
+        discount_sellers = set()
+        categories = set()
+        has_uncategorized = False
+        for record in records:
+            if record["raise"]:
+                discount = False
+            else:
+                discount = True
+                tokens_cut += record["cut_tokens"]
+                all_pcts.append(record["cut_pct"])
+                largest_cut = max(largest_cut, record["cut_tokens"])
+                discount_listings.add(record["listing_id"])
+                discount_sellers.add(record["dev_account"])
+                if record["undone"]:
+                    undone_count += 1
+                else:
+                    standing_count += 1
+                    standing_tokens += record["cut_tokens"]
+            slot = buckets.setdefault(record["month"], {
+                "revision": 0, "discount": 0, "raise": 0, "tokens": 0,
+                "pcts": [], "undone": 0, "standing": 0, "largest": 0,
+                "listings": set(), "sellers": set(), "cells": {}})
+            slot["revision"] += 1
+            if discount:
+                slot["discount"] += 1
+                slot["tokens"] += record["cut_tokens"]
+                slot["pcts"].append(record["cut_pct"])
+                slot["largest"] = max(slot["largest"],
+                                      record["cut_tokens"])
+                if record["undone"]:
+                    slot["undone"] += 1
+                else:
+                    slot["standing"] += 1
+                slot["listings"].add(record["listing_id"])
+                slot["sellers"].add(record["dev_account"])
+            else:
+                slot["raise"] += 1
+            cell = slot["cells"].setdefault(record["category"], {
+                "revision": 0, "discount": 0, "raise": 0,
+                "tokens": 0, "pcts": []})
+            cell["revision"] += 1
+            if discount:
+                cell["discount"] += 1
+                cell["tokens"] += record["cut_tokens"]
+                cell["pcts"].append(record["cut_pct"])
+            else:
+                cell["raise"] += 1
+            if record["category"] is None:
+                has_uncategorized = True
+            else:
+                categories.add(record["category"])
+
+        rows = []
+        running_discount = 0
+        running_tokens = 0
+        peak_month = None
+        peak_count = None
+        for month in months:
+            slot = buckets.get(month)
+            if slot is None:
+                cells = []
+                rows.append({
+                    "month": month,
+                    "as_of": _month_end(month),
+                    "revision_count": 0,
+                    "discount_count": 0,
+                    "raise_count": 0,
+                    "discount_share": None,
+                    "discounted_listing_count": 0,
+                    "discounted_seller_count": 0,
+                    "tokens_cut": 0,
+                    "avg_cut_pct": None,
+                    "deepest_cut_pct": None,
+                    "largest_cut_tokens": 0,
+                    "undone_discount_count": 0,
+                    "standing_discount_count": 0,
+                    "running_discount_count": running_discount,
+                    "running_tokens_cut": running_tokens,
+                    "categories": cells})
+                continue
+            running_discount += slot["discount"]
+            running_tokens += slot["tokens"]
+            order = sorted(c for c in slot["cells"] if c is not None)
+            if None in slot["cells"]:
+                order.append(None)
+            cells = []
+            for bucket in order:
+                if bucket is None and not include_uncategorized:
+                    continue
+                cell = slot["cells"][bucket]
+                cells.append({
+                    "category": bucket,
+                    "revision_count": cell["revision"],
+                    "discount_count": cell["discount"],
+                    "raise_count": cell["raise"],
+                    "tokens_cut": cell["tokens"],
+                    "avg_cut_pct": (round(sum(cell["pcts"])
+                                          / len(cell["pcts"]), 2)
+                                    if cell["pcts"] else None)})
+            pcts = slot["pcts"]
+            rows.append({
+                "month": month,
+                "as_of": _month_end(month),
+                "revision_count": slot["revision"],
+                "discount_count": slot["discount"],
+                "raise_count": slot["raise"],
+                "discount_share": (round(float(slot["discount"])
+                                         / slot["revision"], 4)
+                                   if slot["revision"] else None),
+                "discounted_listing_count": len(slot["listings"]),
+                "discounted_seller_count": len(slot["sellers"]),
+                "tokens_cut": slot["tokens"],
+                "avg_cut_pct": (round(sum(pcts) / len(pcts), 2)
+                                if pcts else None),
+                "deepest_cut_pct": min(pcts) if pcts else None,
+                "largest_cut_tokens": slot["largest"],
+                "undone_discount_count": slot["undone"],
+                "standing_discount_count": slot["standing"],
+                "running_discount_count": running_discount,
+                "running_tokens_cut": running_tokens,
+                "categories": cells})
+            if slot["discount"] > 0 and (
+                    peak_count is None
+                    or slot["discount"] > peak_count):
+                peak_month = month
+                peak_count = slot["discount"]
+
+        revision_total = len(records)
+        discount_total = sum(1 for record in records
+                             if not record["raise"])
+        return {
+            "scope": "market",
+            "include_uncategorized": include_uncategorized,
+            "month_count": len(rows),
+            "active_month_count": sum(
+                1 for row in rows if row["revision_count"] > 0),
+            "revision_count": revision_total,
+            "discount_count": discount_total,
+            "raise_count": revision_total - discount_total,
+            "discount_share": (round(float(discount_total)
+                                     / revision_total, 4)
+                               if revision_total else None),
+            "discounted_listing_count": len(discount_listings),
+            "discounted_seller_count": len(discount_sellers),
+            "tokens_cut": tokens_cut,
+            "avg_cut_pct": (round(sum(all_pcts) / len(all_pcts), 2)
+                            if all_pcts else None),
+            "deepest_cut_pct": (min(all_pcts) if all_pcts else None),
+            "largest_cut_tokens": largest_cut,
+            "undone_discount_count": undone_count,
+            "standing_discount_count": standing_count,
+            "standing_tokens_cut": standing_tokens,
+            "peak_month": peak_month,
+            "peak_discount_count": peak_count,
+            "first_month": rows[0]["month"] if rows else None,
+            "last_month": rows[-1]["month"] if rows else None,
+            "latest_month_discount_count": (
+                rows[-1]["discount_count"] if rows else None),
+            "category_count": (len(categories)
+                               + (1 if has_uncategorized else 0)
+                               if include_uncategorized
+                               else len(categories)),
+            "disclaimer": self.disclaimer,
+            "months": rows}
+
+
     def api_buyer_refund_months(self, buyer_id):
         """Buyer-side monthly refund flow (criteria AC-BRM1..AC-BRM8
         pre-registered in the R2203 explore-queue claim row BEFORE this

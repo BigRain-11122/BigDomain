@@ -1,0 +1,9 @@
+PASS AC-MDK1: env_keys=25 rows_ok=True cells_ok=True rows=6 empty=(0, 0, None, None) gate=['E_AM_BAD_ARGS', 'E_AM_BAD_ARGS', 'E_AM_BAD_ARGS']
+PASS AC-MDK2: jan=(2, 1, 1, 20) feb_tokens=50 mar_tokens=10 apr_tokens=40 jun_tokens=70 env=(11, 7, 4, 0.6364, 190)
+PASS AC-MDK3: undone=2 standing=5 standing_tokens=160 per_month=True
+PASS AC-MDK4: grid=6 active=5 may=(0, None, 0) sums=7/7 tokens=190/190
+PASS AC-MDK5: jun_tools=(1, 20) jun_data=(1, 50) apr_none=(None, 10) order=True categories=3/2 bare_cells=['tools'] totals_same=True
+PASS AC-MDK6: peak=2026-04/2 deepest=-25.0 largest=50 pooled=-22.86 naive=-22.0
+PASS AC-MDK7: identity=True monthly=True counts=listings5/sellers3 rows=7 control=0
+PASS AC-MDK8: digests_same=True tx_same=True repeat=True cross=True source_clean=True wired=True
+SUITE PASS 8/8
