@@ -1133,7 +1133,10 @@ SUITES = [
     # R3148 AC-SM8: the live matrix document has ONE writer - the gate law
     # at src/os/suite_matrix_reconcile.py; a default --out run is refused by
     # name and leaves the document byte- and mtime-identical (+1 case).
-    ("suite-matrix-discovery", "test_suite_matrix.py", 17),
+    # R3149 AC-SM9: the same ownership covers the READ face - a default
+    # --check is refused by name at exit 5 naming the judging command, while
+    # docs passed via --out keep --check (+1 case).
+    ("suite-matrix-discovery", "test_suite_matrix.py", 18),
     # R1715 runner-profile daily variant: --daily face (discovery
     # restricted to reconcile-daily-*.log evidence, separate
     # runner-profile-daily-baseline.json; sentinel-section parser

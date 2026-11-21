@@ -1,0 +1,19 @@
+PASS fixture-gap-replay: new face picked showroom-R1700.log, old glob face would have picked reconcile-all-R1699.log (naming-gap difference proven)
+PASS fixture-none-eligible: default None + main exit=2
+PASS fixture-runner-fail-fallback: skipped z-newest-fail.log, picked a-older-pass.log
+PASS fixture-self-evidence-skip: skipped suite-matrix-self-R9999.log, picked a-other.log
+PASS fixture-duplicate-labels-refused: fell to a-clean.log
+PASS fixture-count-mismatch-refused: fell to a-clean.log
+PASS fixture-tie-name-asc: 3-way same-mtime tie -> a-ace.log
+PASS fixture-tie-ineligible-mix: skipped a-fail.log inside tie, picked z-tie-pass.log (older m-old-pass.log not reached)
+PASS fixture-all-flattened: 4 files one mtime -> a-ace.log x3
+PASS listdir-order-independence: reversed enumeration -> same winner a-ace.log
+PASS live-tie-probe: authorize-R1719.log x3 identical, tie_peers=1 (no live tie)
+PASS live-default-discovery: newest eligible = authorize-R1719.log
+PASS explicit-evidence-lenient: runner-only log accepted, 742 suites no-evidence
+PASS check-roundtrip-tmp: identical exit 0, tamper exit 2
+PASS stale-face-mismatch-hint: mismatch named + hint, aligned faces green, tamper red with agree note
+PASS default-doc-write-refused: exit 3 named, live doc untouched, explicit --out green, default --check names the judge at exit 5
+PASS check-judge-owned: exit 5 named, doc untouched, own doc green then tamper 2, pointed judge answers DOC-CURRENT
+PASS hygiene-self-checks: pure-ascii, zero network imports
+SUITE PASS (18/18 cases)

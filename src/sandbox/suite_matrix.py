@@ -29,6 +29,14 @@ disk; any drift or missing doc exits 2. A patterns file the shipped
 readability gate refuses exits 4 with FAIL readability naming the gate
 own code and the label key, and writes no artifact byte.
 
+The live document at DEFAULT_OUT is owned by the gate law
+(src/os/suite_matrix_reconcile.py) for BOTH its write and its read
+face: a write to that path exits 3 (E_SMX_DOC_OWNED) and a --check of
+it exits 5 (E_SMX_CHECK_DOC_OWNED, naming the command that judges it),
+because this renderer's default evidence discovery is not the law that
+document was stamped under. Own documents passed via --out keep every
+face, including --check.
+
 Pre-registered criteria AC-MX1..AC-MX7: state/queue/tech.md R1683
 claim row, registered BEFORE this code (honesty law).
 Evidence: qa/suite-matrix-R1683.log.
@@ -445,9 +453,22 @@ def main(argv):
     # src/os/suite_matrix_reconcile.py. This renderer keeps its discovery and
     # render faces for its own suite, but a write to the default path is
     # refused by name: a face produced here reads EVIDENCE-FACE at the gate
-    # and must never be published. --check is a read face and stays allowed.
-    if (not args.check
-            and os.path.abspath(args.out) == os.path.abspath(DEFAULT_OUT)):
+    # and must never be published.
+    #
+    # R3149 (AC-SM9): ownership covers the READ face too. This renderer's
+    # default evidence discovery is not the law the live document was stamped
+    # under, so --check here printed stale on a document the gate reads
+    # DOC-CURRENT - two answers for one command word. The refusal names the
+    # face that actually judges it, at its own exit code (3 = writer,
+    # 4 = readability, 5 = judge). Own documents passed via --out keep every
+    # face, --check included.
+    if os.path.abspath(args.out) == os.path.abspath(DEFAULT_OUT):
+        if args.check:
+            print("FAIL doc-owned: E_SMX_CHECK_DOC_OWNED %s is judged by "
+                  "python src/os/suite_matrix_reconcile.py --check (the gate "
+                  "law); pass --out for any other path"
+                  % rel(DEFAULT_OUT))
+            return 5
         print("FAIL doc-owned: E_SMX_DOC_OWNED %s is written by "
               "src/os/suite_matrix_reconcile.py (the gate law); "
               "pass --out for any other path" % rel(DEFAULT_OUT))

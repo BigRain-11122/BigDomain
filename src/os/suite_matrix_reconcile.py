@@ -622,12 +622,32 @@ def matrix_header_cells(text, patterns):
 
 
 def shipped_check(doc_path, evidence_path):
-    """Ask the SHIPPED check face. Returns (exit_code, its own output)."""
-    buffer = io.StringIO()
-    with contextlib.redirect_stdout(buffer):
-        code = SM.main(["suite_matrix.py", "--check", "--out", doc_path,
-                        "--evidence", evidence_path])
-    return code, buffer.getvalue()
+    """Ask the SHIPPED check face. Returns (exit_code, its own output).
+
+    R3149 (AC-SM9): the live document's READ face is owned by this gate law,
+    so the shipped face now refuses to judge it by name (exit 5,
+    E_SMX_CHECK_DOC_OWNED) instead of printing a foreign-stamp drift. The
+    cross-check keeps its meaning by judging the SAME BYTES at a scratch
+    copy - the shipped face still does the judging, on a path it owns."""
+    target = doc_path
+    scratch = None
+    try:
+        if (os.path.abspath(doc_path) == os.path.abspath(SM.DEFAULT_OUT)
+                and os.path.isfile(doc_path)):
+            import tempfile
+            handle, scratch = tempfile.mkstemp(suffix=".md")
+            os.close(handle)
+            with open(doc_path, "rb") as src, open(scratch, "wb") as dst:
+                dst.write(src.read())
+            target = scratch
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = SM.main(["suite_matrix.py", "--check", "--out", target,
+                            "--evidence", evidence_path])
+        return code, buffer.getvalue()
+    finally:
+        if scratch and os.path.exists(scratch):
+            os.remove(scratch)
 
 
 def compose(doc_path, evidence_path, source_text=None, origin=None):

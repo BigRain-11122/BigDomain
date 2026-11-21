@@ -485,11 +485,19 @@ def case_default_doc_write_refused(tmp):
     with contextlib.redirect_stdout(buf):
         code = SM.main(["suite_matrix.py", "--check", "--evidence", evidence])
     text = buf.getvalue()
-    assert "E_SMX_DOC_OWNED" not in text, \
-        "--check is a read face and must not be refused as a writer"
-    assert code != 3, "--check must not take the writer refusal exit: %s" % text
+    # AC-SM9 (R3149) JUDGED-CHANGED: the default path's READ face is owned by
+    # the gate law too, at its own exit code - so this arm is sharper than
+    # "not the writer refusal", it names the judge.
+    assert code == 5, "--check on the owned doc must exit 5: %r" % text
+    assert "E_SMX_CHECK_DOC_OWNED" in text, \
+        "judge refusal must be named: %s" % text
+    assert "E_SMX_DOC_OWNED " not in text, \
+        "writer token must not stand in for the judge token: %s" % text
+    with io.open(live, "rb") as handle:
+        assert handle.read() == before_bytes, "check changed document bytes"
+    assert os.stat(live).st_mtime == before_mtime, "check changed document mtime"
     return "PASS default-doc-write-refused: exit 3 named, live doc untouched,"\
-           " explicit --out green, --check still reads"
+           " explicit --out green, default --check names the judge at exit 5"
 
 
 def case_hygiene_self_checks(tmp):
@@ -497,6 +505,66 @@ def case_hygiene_self_checks(tmp):
     problems = SM.self_checks()
     assert problems == [], "hygiene problems: %r" % problems
     return "PASS hygiene-self-checks: pure-ascii, zero network imports"
+
+
+def case_check_judge_owned(tmp):
+    """AC-SM9 (R3149): the live document's READ face belongs to the gate law
+    too. p default --check is refused by name at exit 5 (never drift, never
+    the writer code) and leaves the document byte/mtime-identical; q a doc
+    passed via --out keeps a green --check; r a tampered own doc still exits
+    2 (drift is still judged where this renderer owns the doc); s the command
+    the refusal points at actually answers - it prints a verdict word and no
+    E_SMX* refusal of its own."""
+    import io
+    import contextlib
+
+    live = SM.DEFAULT_OUT
+    with io.open(live, "rb") as handle:
+        before_bytes = handle.read()
+    before_mtime = os.stat(live).st_mtime
+
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        code = SM.main(["suite_matrix.py", "--check"])
+    text = buf.getvalue()
+    assert code == 5, "default --check must exit 5, got %r (%s)" % (code, text)
+    assert "E_SMX_CHECK_DOC_OWNED" in text, "refusal must be named: %s" % text
+    assert "stale" not in text, \
+        "a foreign-stamped doc must never be called stale: %s" % text
+    assert "suite_matrix_reconcile.py --check" in text, \
+        "refusal must name the judging command: %s" % text
+    with io.open(live, "rb") as handle:
+        assert handle.read() == before_bytes, "refused check wrote bytes"
+    assert os.stat(live).st_mtime == before_mtime, "refused check touched mtime"
+
+    evidence = os.path.join(tmp, "ev.log")
+    _write(evidence, MINI_EVIDENCE)
+    own = os.path.join(tmp, "doc-own.md")
+    base = [sys.executable, SM.__file__, "--evidence", evidence, "--out", own]
+    proc = subprocess.run(base, capture_output=True, text=True)
+    assert proc.returncode == 0, "own doc must generate: %s" % proc.stdout
+    proc = subprocess.run(base + ["--check"], capture_output=True, text=True)
+    assert proc.returncode == 0, \
+        "own doc --check must stay green: %s" % (proc.stdout + proc.stderr)
+    with open(own, encoding="utf-8") as handle:
+        doc = handle.read()
+    with open(own, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(doc.replace("| 1 |", "| 9 |", 1))
+    proc = subprocess.run(base + ["--check"], capture_output=True, text=True)
+    assert proc.returncode == 2, \
+        "tampered own doc must still exit 2: %s" % proc.stdout
+
+    judge = os.path.join(SM.ROOT, "src", "os", "suite_matrix_reconcile.py")
+    proc = subprocess.run([sys.executable, judge, "--check"],
+                          capture_output=True, text=True)
+    words = (proc.stdout or "").split()
+    assert words, "the pointed command printed nothing"
+    assert words[0].isupper() and words[0].replace("-", "").isalpha(), \
+        "the pointed command must print a verdict word: %r" % words[0]
+    assert "E_SMX" not in (proc.stdout or "") + (proc.stderr or ""), \
+        "the pointed command must not be another refusal: %s" % proc.stdout
+    return "PASS check-judge-owned: exit 5 named, doc untouched, own doc"\
+           " green then tamper 2, pointed judge answers %s" % words[0]
 
 
 def main():
@@ -517,6 +585,7 @@ def main():
         case_check_roundtrip_tmp,
         case_stale_face_mismatch_hint,
         case_default_doc_write_refused,
+        case_check_judge_owned,
         case_hygiene_self_checks,
     ]
     failures = 0
