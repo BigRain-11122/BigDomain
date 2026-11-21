@@ -10,8 +10,8 @@
     "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3232] next window (<=48h): (0) MAIN — **页上印的年龄，是不是这页自己的年龄**：本轮让读数块自带 `census_ts` 并被闸钉等于 `export_ts`，但那句话是写在**导出 JSON**上的；CEO 真正打开的是 `preview/` 里那份 HTML——如果那份 HTML 是某次渲染的快照，它就会印着一个旧时刻而 JSON 早已更新，页面自己看不出来。做法=先只读量三问：①**渲染时点普查**＝`frontdoor.render()` 是每次调用读活导出（则页面天然新鲜），还是在某个时点写盘成静态件；若写盘，谁负责重渲、页面上的 `census_ts` 与 JSON 里的当前值是否被任何判据比对过；②**决定性臂**＝私有 world 里让 JSON 前移一次 `--apply` 而把已渲染的 HTML 留在旧时刻，量页面上印的年龄与 JSON 的年龄是否可分、有没有闸会红；③**收口三选一**＝①新增一条「页面所印时刻必须等于导出当前时刻」的判据（写入即自证）②页面改在请求时渲染（若无静态件则本项自动为真，写进注释）③不做（页面本就是活渲染，仅补一条断言）——并证明所选面不改 `claims` 块八键、不改 48h due 判据、不新增工具。判据沿用 AC-FDC/AC-SXF 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）。地板沿用上次实测 main 6 open／tech 8 open／explore 4 open（欠 0/2/6，未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T07:05:15+08:00",
-    "updated_at": "2026-11-22T07:05:15+08:00",
+    "next_milestone_due": "2026-11-24T07:08:03+08:00",
+    "updated_at": "2026-11-22T07:08:03+08:00",
     "heartbeat": {
       "tick": 3223,
       "state_tick": 3223,
@@ -42,7 +42,7 @@
     }
   },
   "current": "2026-11-22 R3231 PRODUCT+ENGINEERING: the claims reading now states its own age - docs/status-export.json claims carried seven counts and no moment, so the only age on the CEO page came from another card's export_ts by convention; apply now publishes census_ts from the same moment as export_ts, check pins them equal with two named codes, and frontdoor.claims_card prints census taken at <ts> or an honest age-unknown sentence.",
-  "claims": {"claimed": 315, "captured": 107, "contradicted": 11, "uncaptured": 197, "historic": 7, "rows": 8, "present": true, "census_ts": "2026-11-22T07:05:15+08:00"},
+  "claims": {"claimed": 315, "captured": 107, "contradicted": 11, "uncaptured": 197, "historic": 7, "rows": 8, "present": true, "census_ts": "2026-11-22T07:08:03+08:00"},
   "chain": {"present": true, "rows": 8, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -72,7 +72,7 @@
     }
   ],
   "do": "2026-11-22 R3231 PRODUCT+ENGINEERING: the claims reading now states its own age - docs/status-export.json claims carried seven counts and no moment, so the only age on the CEO page came from another card's export_ts by convention; apply now publishes census_ts from the same moment as export_ts, check pins them equal with two named codes, and frontdoor.claims_card prints census taken at <ts> or an honest age-unknown sentence.",
-  "export_ts": "2026-11-22T07:05:15+08:00",
+  "export_ts": "2026-11-22T07:08:03+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
   "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
   "next_milestone": "[R3232] next window (<=48h): (0) MAIN — **页上印的年龄，是不是这页自己的年龄**：本轮让读数块自带 `census_ts` 并被闸钉等于 `export_ts`，但那句话是写在**导出 JSON**上的；CEO 真正打开的是 `preview/` 里那份 HTML——如果那份 HTML 是某次渲染的快照，它就会印着一个旧时刻而 JSON 早已更新，页面自己看不出来。做法=先只读量三问：①**渲染时点普查**＝`frontdoor.render()` 是每次调用读活导出（则页面天然新鲜），还是在某个时点写盘成静态件；若写盘，谁负责重渲、页面上的 `census_ts` 与 JSON 里的当前值是否被任何判据比对过；②**决定性臂**＝私有 world 里让 JSON 前移一次 `--apply` 而把已渲染的 HTML 留在旧时刻，量页面上印的年龄与 JSON 的年龄是否可分、有没有闸会红；③**收口三选一**＝①新增一条「页面所印时刻必须等于导出当前时刻」的判据（写入即自证）②页面改在请求时渲染（若无静态件则本项自动为真，写进注释）③不做（页面本就是活渲染，仅补一条断言）——并证明所选面不改 `claims` 块八键、不改 48h due 判据、不新增工具。判据沿用 AC-FDC/AC-SXF 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）。地板沿用上次实测 main 6 open／tech 8 open／explore 4 open（欠 0/2/6，未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
@@ -189,8 +189,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 64400,
-  "next_milestone_due": "2026-11-24T07:05:15+08:00",
+  "state_bytes": 65290,
+  "next_milestone_due": "2026-11-24T07:08:03+08:00",
   "heartbeat": {
     "tick": 3223,
     "state_tick": 3223,
