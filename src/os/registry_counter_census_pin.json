@@ -15,6 +15,7 @@
     "frontdoor-corpus-card",
     "frontdoor-face-age",
     "frontdoor-heartbeat-card",
+    "frontdoor-outs-age-card",
     "funnel",
     "funnel-account",
     "funnel-cli-chain",

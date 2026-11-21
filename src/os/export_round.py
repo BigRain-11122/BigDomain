@@ -480,7 +480,43 @@ OUTS_PATH_RE = re.compile(
     r'\b((?:preview|qa)/[A-Za-z0-9_.\-]+\.(?:html|json|log|png))')
 
 
-def outs_age_block(repo, rows):
+def outs_row_key(row):
+    """The identity of one artifact row: the set of files it names.
+
+    R3143: the fallback is the WHOLE row, not its first fifty characters,
+    because this key also drives a COLLAPSE and must never merge two different
+    rows that name no file (the four live path-less rows all differ, but two
+    rows sharing a prefix would have been folded by the old key). In a
+    newest-first list the first occurrence of a key IS the newest, so a collapse
+    that keeps it keeps the freshest label of that file set.
+    """
+    paths = tuple(sorted(set(OUTS_PATH_RE.findall(row))))
+    return paths or (row,)
+
+
+def dedupe_outs(rows):
+    """Collapse rows that name the same files; return (kept, collapsed).
+
+    R3143 measured the live list: 56 rows, 27 of them re-appending a path set
+    already listed (6 x live-sandbox, 5 x battery-shard-report, 4 x
+    membership-face, 4 x filing-checklist, ...), so nearly half of the CEO's
+    artifact list was the same files listed again. A CAP was refused by
+    measurement: next_outs(keep=4) drops 52 rows spanning seven age days
+    (0..6) and 27 distinct path sets - that deletes evidence, it does not
+    dedupe. Nothing else is pruned here.
+    """
+    kept, seen, collapsed = [], set(), 0
+    for row in rows:
+        key = outs_row_key(row)
+        if key in seen:
+            collapsed += 1
+            continue
+        seen.add(key)
+        kept.append(row)
+    return kept, collapsed
+
+
+def outs_age_block(repo, rows, collapsed=0):
     """The artifact list's own age, derived from each row's target files.
 
     R3142 measured the hole: the CEO face renders 56 artifact rows whose dates
@@ -520,8 +556,7 @@ def outs_age_block(repo, rows):
         when = datetime.datetime.fromtimestamp(max(stamps), TZ).date()
         ages.append((today - when).days)
     measured = [a for a in ages if a is not None]
-    keys = [tuple(sorted(set(OUTS_PATH_RE.findall(row)))) or (row[:50],)
-            for row in rows]
+    keys = [outs_row_key(row) for row in rows]
     return {
         'rows': len(rows),
         'measurable': len(measured),
@@ -530,6 +565,10 @@ def outs_age_block(repo, rows):
         'over7': len([a for a in measured if a > 7]),
         'dup_rows': len(keys) - len(set(keys)),
         'distinct': len(set(keys)),
+        # R3143: how many rows THIS write folded, so a shorter list never reads
+        # as a shorter history. Zero on a list that was already one row per
+        # file set, and absent on faces written before the collapse existed.
+        'collapsed': collapsed,
     }
 
 
@@ -763,11 +802,16 @@ def payload(repo, state, stamp, corpus=None):
     outs = data.get('outs') or []
     if not outs or outs[0] != d['latest']:
         outs.insert(0, d['latest'])
+    # R3143: the same files listed twice are ONE artifact, not two. The insert
+    # above puts the newest row at index 0, so a first-occurrence collapse keeps
+    # the freshest label of every file set and can never move outs[0] off the
+    # latest line (AC-EXPW1/AC-EXPW5 compare it by equality).
+    outs, collapsed = dedupe_outs(outs)
     data['outs'] = outs
     # R3142: the list's age gets a derivation and (in frontdoor) a consumer.
     # Two copies of ONE derivation, for the same reason the evidence line
     # carries two - a reader must never find two opinions in one document.
-    oab = outs_age_block(repo, outs)
+    oab = outs_age_block(repo, outs, collapsed=collapsed)
     data['outs_age'] = oab
     data['export_ts'] = stamp
     data['do'] = d['current']

@@ -1531,6 +1531,77 @@ def main():
            and (built_b.get('outs') or [])[1:] == ['x'],
            'head=%r' % (built_b.get('outs') or [None])[0])
 
+        # ---- AC-EXPW16 (R3143 pin): the same files listed twice are ONE row --
+        # R3143 measured the live list BEFORE any code: 56 rows, 27 of them
+        # re-appending a path set already listed (6 x live-sandbox, 5 x
+        # battery-shard-report, 4 x membership-face), and next_outs(keep=4)
+        # would drop 52 rows across SEVEN age days and 27 distinct path sets -
+        # a cap deletes evidence, so only the collapse lands. The first
+        # occurrence wins because the list is newest-first.
+        dup_hi = ('preview/aged-face.html (16B) + preview/aged-face.json (3B) '
+                  '[2026-11-11 commit]')
+        dup_lo = ('preview/aged-face.html (15B) + preview/aged-face.json (3B) '
+                  '[2026-11-10 commit]')
+        other = 'preview/gone-face.html (1B)'
+        kept_v, folded_v = mod.dedupe_outs([dup_hi, dup_lo, other])
+        ok('AC-EXPW16 p the same file set keeps only its newest row',
+           kept_v == [dup_hi, other] and folded_v == 1,
+           'kept=%r folded=%r' % (kept_v, folded_v))
+        kept_d, folded_d = mod.dedupe_outs([dup_hi, other, 'qa/a.log (1B)'])
+        ok('AC-EXPW16 q rows naming different files are untouched',
+           kept_d == [dup_hi, other, 'qa/a.log (1B)'] and folded_d == 0,
+           'kept=%r' % (kept_d,))
+        # r: two PATH-LESS rows that share a prefix must not be folded - the
+        # key falls back to the WHOLE row, never to its first fifty characters.
+        pa = 'first-yuan-R2772.log (1214B) run A'
+        pb = 'first-yuan-R2772.log (1214B) run B'
+        kept_p, folded_p = mod.dedupe_outs([pa, pb])
+        ok('AC-EXPW16 r two path-less rows that only share a prefix stay two',
+           kept_p == [pa, pb] and folded_p == 0, 'kept=%r' % (kept_p,))
+        # s: a list already one row per file set is returned unchanged, so the
+        # collapse is idempotent and cannot shrink a face twice.
+        kept_s, folded_s = mod.dedupe_outs(kept_v)
+        ok('AC-EXPW16 s an already-collapsed list is unchanged',
+           kept_s == kept_v and folded_s == 0, 'kept=%r' % (kept_s,))
+        # t: end to end - the writer publishes one row per file set, states how
+        # many it folded, and leaves the block's arithmetic closing at rows.
+        wd = build_world(9321)
+        worlds.append(wd)
+        fp = os.path.join(wd, 'docs', 'status-export.json')
+        face_d = json.loads(read(fp))
+        seeded = ('preview/zz-late-face.html (16B) + preview/zz-late-face.json '
+                  '(3B) [2026-11-11 commit]')
+        face_d['outs'] = [seeded, 'preview/ugc-gate-report.html (1B)', seeded]
+        write(fp, json.dumps(face_d, ensure_ascii=False, indent=2) + '\n')
+        sd = json.loads(read(os.path.join(wd, 'src', 'os', 'state.json')))
+        built_d, _ = mod.payload(wd, sd, 'TD1')
+        outs_d = built_d.get('outs') or []
+        oab_d = built_d.get('outs_age') or {}
+        ok('AC-EXPW16 t payload publishes one row per file set',
+           outs_d
+           and outs_d[0]
+           == (built_d.get('ceo_face') or {}).get('latest_artifact')
+           and oab_d.get('rows') == len(outs_d)
+           and oab_d.get('collapsed') == 2
+           and oab_d.get('dup_rows') == 0
+           and oab_d.get('distinct') == len(outs_d),
+           'outs=%r block=%r' % (outs_d, oab_d))
+        # u: ONE key rule. On the LIVE face the rows the collapse would fold are
+        # exactly the duplicates the age block names for the same rows, and the
+        # collapsed list has none left. A relation, never a snapshot: the list
+        # grows every round that lands a file.
+        live = json.loads(read(os.path.join(ROOT, 'docs', 'status-export.json')))
+        live_rows = [str(r) for r in (live.get('outs') or [])]
+        live_kept, live_folded = mod.dedupe_outs(live_rows)
+        live_blk = mod.outs_age_block(ROOT, live_rows) or {}
+        live_after = mod.outs_age_block(ROOT, live_kept) or {}
+        ok('AC-EXPW16 u the fold count equals the duplicate count it names',
+           live_rows and live_folded == live_blk.get('dup_rows')
+           and live_after.get('dup_rows') == 0
+           and len(live_kept) == len(live_rows) - live_folded,
+           'rows=%d folded=%d dup=%r' % (len(live_rows), live_folded,
+                                         live_blk.get('dup_rows')))
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')

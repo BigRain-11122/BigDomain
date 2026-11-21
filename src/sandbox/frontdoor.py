@@ -5911,6 +5911,12 @@ def outs_age_card(face):
                show(block.get("unmeasurable")), show(block.get("oldest_days")),
                show(block.get("over7")), show(block.get("dup_rows")),
                show(block.get("distinct"))))
+    # R3143: a list that got shorter must never read as a history that got
+    # shorter - the block states how many rows this write folded, and the card
+    # prints it only when the face carries it (an older face stays byte-equal).
+    collapsed = block.get("collapsed")
+    if isinstance(collapsed, int) and not isinstance(collapsed, bool):
+        line += " collapsed=%d" % collapsed
     try:
         over7 = int(block.get("over7"))
     except (TypeError, ValueError):

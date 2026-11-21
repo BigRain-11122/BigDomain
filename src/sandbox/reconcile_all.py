@@ -7278,7 +7278,7 @@ SUITES = [
     # with the later STAMP; a re-save with identical bytes moves the stamp and no
     # number on the line moves with it, so the retired `newer=` word is refused.
     ("os-export-round",
-     os.path.join("..", "os", "test_export_round.py"), 47),
+     os.path.join("..", "os", "test_export_round.py"), 48),
     # R2806: tools/payment_gate_report.py renders the face that decides whether
     # the 19.9 channel may be connected, and all 690 registered suites were
     # measured to mention ZERO of its AC-PAYG1..AC-PAYG8 tokens, so it was
@@ -7799,6 +7799,15 @@ SUITES = [
     # on a pure consumption face.
     ("frontdoor-corpus-card",
      os.path.join("test_frontdoor_corpus_card.py"), 6),
+    # R3143: R3142 shipped the artifact-list age card with the block and NO
+    # suite at all - measured while the same card gained its fold count. The
+    # card renders rows/measurable/unmeasurable/oldest_days/over7/dup_rows/
+    # distinct from the face's own block, prints the fold count only when the
+    # face carries it (an older face stays byte-equal) and prints an absent
+    # block as a named absence rather than a zero. AC-FDC9 (four arms, ONE
+    # criterion) was pinned in src/os/backlog.md BEFORE this file existed.
+    ("frontdoor-outs-age-card",
+     os.path.join("test_frontdoor_outs_age_card.py"), 1),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files
