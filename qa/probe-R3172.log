@@ -1,0 +1,30 @@
+Q1 which leg does a live arm hold
+  doc records            = qa/reconcile-all-R2739.log
+  newest PASS by mtime   = qa/authorize-R1719.log
+  same file              = False
+  recorded exists        = True
+  recorded RUNNER verdict= PASS (675/675)
+  report(DOC,newest)     = EVIDENCE-FACE exit=2
+  report(DOC,recorded)   = DOC-CURRENT exit=0
+  report(DOC) default    = DOC-CURRENT exit=0 source=walk-leg
+
+Q2 what does each live arm expect from its leg
+  fence                    WORD_CURRENT=1 getmtime=1 leg_helper=yes
+  fence_rows               WORD_CURRENT=2 getmtime=1 leg_helper=yes
+  fence_table              WORD_CURRENT=2 getmtime=1 leg_helper=yes
+  row_membership           WORD_CURRENT=2 getmtime=1 leg_helper=yes
+  row_shape                WORD_CURRENT=2 getmtime=1 leg_helper=yes
+  second_table_separator   WORD_CURRENT=2 getmtime=1 leg_helper=yes
+  shape                    WORD_CURRENT=1 getmtime=1 leg_helper=yes
+  table_shape              WORD_CURRENT=2 getmtime=1 leg_helper=pass_legs[0]
+
+Q3 does closeout_gate read registered suite verdicts
+  tools/closeout_gate.py bytes=24144 lines=489
+    token SUITE PASS    = 0
+    token verdict       = 41
+    token registry      = 46
+    token matrix        = 36
+    token census        = 60
+    token reconcile_all = 2
+    token SUITES        = 2
+  gate functions=['main']

@@ -32,13 +32,13 @@ import suite_matrix_reconcile as SMR  # noqa: E402
 import suite_matrix as SM  # noqa: E402
 import reconcile_all as RA  # noqa: E402
 
-EXPECTED_CRITERIA = 7
+EXPECTED_CRITERIA = 8
 MODULE = os.path.join(BASE, "suite_matrix_reconcile.py")
 DOC = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
 QA_DIR = os.path.join(REPO, "qa")
 RUNNER = os.path.join(SANDBOX, "reconcile_all.py")
 WIRED_LABEL = '"os-suite-matrix-reconcile",'
-WIRED_SUITE = '"test_suite_matrix_reconcile.py"), 7),'
+WIRED_SUITE = '"test_suite_matrix_reconcile.py"), 8),'
 NET = ("urllib", "requests", "socket", "http", "ftplib", "xmlrpc",
        "smtplib", "asyncio", "time")
 
@@ -91,6 +91,11 @@ def drop_one_row(text):
 def read(path):
     with open(path, encoding="utf-8") as handle:
         return handle.read()
+
+
+def write_text(path, text):
+    with open(path, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(text)
 
 
 def verify():
@@ -242,6 +247,78 @@ def verify():
             " path; missing path exits %d without an ownership token"
             % ("same text" if face(plain_out) == face(variant_out)
                else "different text", variant_code, word, missing_code)))
+
+        # AC-EDMK1: the LIVE leg is the leg the DOCUMENT records; the newest
+        # PASS in the pile is only a fallback. The three fallbacks are proved
+        # on their own document text, and the negative control keeps AC-EDMB1
+        # alive: a newest PASS that DIFFERS from the record still reads
+        # EVIDENCE-FACE, so this narrows WHICH leg is held, never the law.
+        text_live = read(DOC)
+        recorded = SM.doc_evidence_face(text_live, SM.load_patterns())
+        recorded_path = (os.path.join(REPO, recorded) if recorded else None)
+        live_path, live_run, live_source = SMR.live_pass_leg()
+        newest_path, _newest_run = SMR.newest_pass_leg()
+        others = [p for p in [os.path.join(QA_DIR, n)
+                              for n in os.listdir(QA_DIR) if n.endswith(".log")]
+                  if recorded_path and os.path.abspath(p) != os.path.abspath(
+                      recorded_path)]
+        control = None
+        for candidate in others:
+            try:
+                _raw, cand_run = SM.parse_evidence(candidate)
+            except (OSError, UnicodeDecodeError):
+                continue
+            if cand_run and cand_run["verdict"] == "PASS":
+                control = SMR.report(DOC, candidate)
+                break
+        fallbacks = []
+        if recorded:
+            absent_doc = os.path.join(workdir, "absent-leg.md")
+            write_text(absent_doc, text_live.replace(
+                recorded, "qa/no-such-leg-R3172.log"))
+            red_doc = os.path.join(workdir, "red-leg.md")
+            red_name = os.path.basename(red[0]) if isinstance(red, tuple) else red
+            write_text(red_doc, text_live.replace(
+                recorded, "qa/" + red_name))
+            none_doc = os.path.join(workdir, "no-leg.md")
+            write_text(none_doc, text_live.replace(recorded, "none"))
+            saved = SMR.DOC
+            try:
+                for path in (absent_doc, red_doc, none_doc):
+                    SMR.DOC = path
+                    fallbacks.append(SMR.live_pass_leg())
+            finally:
+                SMR.DOC = saved
+        helpers = []
+        for name in ("fence", "fence_rows", "fence_table", "row_membership",
+                     "row_shape", "second_table_separator", "shape",
+                     "table_shape"):
+            with open(os.path.join(BASE, "test_suite_matrix_reconcile_%s.py"
+                                  % name), encoding="utf-8") as handle:
+                helpers.append("SMR.live_pass_leg" in handle.read())
+        results.append(check(
+            recorded_path is not None
+            and live_source == "recorded"
+            and live_path is not None
+            and os.path.abspath(live_path) == os.path.abspath(recorded_path)
+            and live_run["verdict"] == "PASS"
+            and (control is None or (control["verdict"] == SMR.WORD_EVID
+                                     and control["exit"] == 2))
+            and len(fallbacks) == 3
+            and all(one[2] == "newest" for one in fallbacks)
+            and all((one[0] is None) == (newest_path is None)
+                    for one in fallbacks)
+            and (newest_path is None or all(
+                os.path.abspath(one[0]) == os.path.abspath(newest_path)
+                for one in fallbacks))
+            and all(helpers),
+            "AC-EDMK1 live source=%s same-as-recorded=%s control=%s"
+            " fallbacks=%s helpers=%d/8"
+            % (live_source,
+               live_path is not None
+               and os.path.abspath(live_path) == os.path.abspath(recorded_path),
+               control["verdict"] if control else "no-other-leg",
+               [one[2] for one in fallbacks], sum(helpers))))
 
         # AC-EDM6: hygiene and registration.
         with open(MODULE, "rb") as handle:

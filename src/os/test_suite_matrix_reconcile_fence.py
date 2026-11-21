@@ -59,7 +59,15 @@ def check(ok, label):
 
 
 def leg(kind):
-    """Newest qa/*.log whose RUNNER answer is `kind` (measured, not canned)."""
+    """Newest qa/*.log whose RUNNER answer is `kind` (measured, not canned).
+
+    AC-EDMK1: for PASS the leg the DOCUMENT records answers first and the
+    newest PASS in the pile is only the fallback, so a newer qa log cannot
+    redden a document that is current."""
+    if kind == "PASS":
+        path, run, _source = SMR.live_pass_leg()
+        if path is not None:
+            return path, run
     paths = [os.path.join(QA_DIR, n) for n in os.listdir(QA_DIR)
              if n.endswith(".log")]
     paths.sort(key=lambda p: (-os.path.getmtime(p), os.path.basename(p)))

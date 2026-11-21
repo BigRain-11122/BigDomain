@@ -1,0 +1,7 @@
+PASS AC-EDMH1 four=752 seven=752 real=753 registry=753 verdict=ROWS-MISMATCH/ROWS-MISMATCH
+PASS AC-EDMH2 genuine-header rows=753 ac-edmg1-rows=753 real=753 titles=1 verdict=STALE-CONTENT
+PASS AC-EDMH3 separator-inside rows=753 real=753 verdict=STALE-CONTENT
+PASS AC-EDMH4 asked live=1 diff=1 verdict=DOC-CURRENT/STALE-CONTENT
+PASS AC-EDMH5 quoted=753/753 fence=FENCE-UNCLOSED/800 nest=FENCE-NESTED/4/3 titles=1/2 other=TITLE-REPEATED narrow=HEADER-SHAPE nosep=SEPARATOR-MISSING starved=CEILING-STARVED drop=752 src=explicit/walk
+PASS AC-EDMH6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6

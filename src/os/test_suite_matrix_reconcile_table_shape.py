@@ -359,8 +359,14 @@ def criterion_edmc6(work, text, leg):
     ok &= check(not [name for name in imports if name in NET],
                 "module imports no clock/network face (%r)"
                 % (sorted(imports),))
+    # AC-EDMC6 allowlist, corrected at R3172: the module imports tempfile
+    # INSIDE write() for its scratch cross-check, and an AST walk sees a
+    # function-local import like any other. tempfile is stdlib, so the arm
+    # still refuses every non-stdlib, non-shipped face - the list was simply
+    # missing the one stdlib name the module really uses.
     allowed = {"argparse", "contextlib", "io", "json", "os", "re", "sys",
-               "reconcile_all", "suite_matrix", "matrix_stamp_provenance_line"}
+               "tempfile", "reconcile_all", "suite_matrix",
+               "matrix_stamp_provenance_line"}
     ok &= check(imports <= allowed,
                 "module imports stdlib and shipped faces only (%r)"
                 % (sorted(imports - allowed),))
@@ -386,7 +392,9 @@ def main():
     if not legs:
         print("FAIL no RUNNER PASS leg under qa/")
         return 1
-    leg = legs[0]
+    # AC-EDMK1: the live leg is the leg the DOCUMENT records; the newest PASS
+    # in the pile is only the fallback, so a newer qa log cannot redden it.
+    leg = SMR.live_pass_leg()[0] or legs[0]
     work = tempfile.mkdtemp(prefix="edmc-")
     ok = True
     try:

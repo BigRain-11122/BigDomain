@@ -79,6 +79,10 @@ def copy(workdir, name, doctor):
 
 
 def leg(kind):
+    if kind == "PASS":
+        # AC-EDMK1: the leg the DOCUMENT records answers first; the newest
+        # PASS in the pile is only the fallback.
+        return SMR.live_pass_leg()[0]
     paths = [os.path.join(QA_DIR, n) for n in os.listdir(QA_DIR)
              if n.endswith(".log")]
     paths.sort(key=lambda p: (-os.path.getmtime(p), os.path.basename(p)))

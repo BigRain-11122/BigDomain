@@ -1,0 +1,20 @@
+=== R3172 RECONCILE-DRIFT SUITE RUN ===
+test_suite_matrix_reconcile                                rc=0 SUITE PASS 8/8
+  evidence=suite-suite-matrix-reconcile-R3172.log 0
+test_suite_matrix_reconcile_fence                          rc=0 SUITE PASS 6/6
+  evidence=suite-suite-matrix-reconcile-fence-R3172.log 0
+test_suite_matrix_reconcile_fence_rows                     rc=0 SUITE PASS 6/6
+  evidence=suite-suite-matrix-reconcile-fence-rows-R3172.log 0
+test_suite_matrix_reconcile_fence_table                    rc=0 SUITE PASS 6/6
+  evidence=suite-suite-matrix-reconcile-fence-table-R3172.log 0
+test_suite_matrix_reconcile_row_membership                 rc=0 SUITE PASS 6/6
+  evidence=suite-suite-matrix-reconcile-row-membership-R3172.log 0
+test_suite_matrix_reconcile_row_shape                      rc=0 SUITE PASS 6/6
+  evidence=suite-suite-matrix-reconcile-row-shape-R3172.log 0
+test_suite_matrix_reconcile_second_table_separator         rc=0 SUITE PASS 6/6
+  evidence=suite-suite-matrix-reconcile-second-table-separator-R3172.log 0
+test_suite_matrix_reconcile_shape                          rc=0 SUITE PASS 6/6
+  evidence=suite-suite-matrix-reconcile-shape-R3172.log 0
+test_suite_matrix_reconcile_table_shape                    rc=0 SUITE PASS 6/6
+  evidence=suite-suite-matrix-reconcile-table-shape-R3172.log 0
+red=0 of 9

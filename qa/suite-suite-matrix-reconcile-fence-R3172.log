@@ -1,0 +1,7 @@
+PASS AC-EDME1 mixed-separator narrow-shape=(6, 2) -> HEADER-SHAPE cells=6/2, wide-shape=(6, 6) verdict=STALE-CONTENT
+PASS AC-EDME2 fenced-title count=1 -> STALE-CONTENT rows=753/753 CLI=STALE-CONTENT rc=2 (the row counter is NOT fence-aware: a quoted data row still counts, which is the seeded successor limit)
+PASS AC-EDME3 trailing-bare-title count=1 -> STALE-CONTENT rows=753/753
+PASS AC-EDME4 starved=CEILING-STARVED(ceiling=1 bounded=True) drained=RED-LEG(decoded=3) CLI=CEILING-STARVED rc=3
+PASS AC-EDME5 sep=SEPARATOR-MISSING dash2=6/2 nodoc=NO-DOC header5=5/6 src=walk/explicit rows=ROWS-MISMATCH(752<753) live=DOC-CURRENT
+PASS AC-EDME6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE PASS 6/6

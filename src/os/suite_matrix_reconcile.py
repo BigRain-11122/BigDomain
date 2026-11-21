@@ -498,6 +498,41 @@ def newest_pass_leg(qa_dir=None):
     return path, run
 
 
+def live_pass_leg(qa_dir=None):
+    """AC-EDMK1: WHICH leg a live reading holds, said rather than assumed.
+
+    A document's own face is its RECORDED leg, so the live leg is read from
+    the document first and only falls back to the newest PASS in the pile.
+    Returns (path, run, source) with source "recorded" when the document names
+    a leg that exists and parses PASS, and "newest" for all three fallbacks:
+    no recorded leg, a recorded leg that is absent, or a recorded leg that is
+    not a PASS. The fallback is newest_pass_leg untouched, so a document with
+    no usable record still gets read instead of being unreadable.
+
+    Why this exists rather than being inlined: eight readability suites each
+    carried their own newest-first copy of this helper and therefore drifted
+    together the moment any newer PASS log landed under qa/ - the live arms
+    then read EVIDENCE-FACE against a document that was current all along."""
+    recorded = None
+    try:
+        with open(DOC, encoding="utf-8") as handle:
+            text = handle.read()
+        recorded = SM.doc_evidence_face(text, SM.load_patterns())
+    except (OSError, UnicodeDecodeError):
+        recorded = None
+    if recorded is not None:
+        path = (recorded if os.path.isabs(recorded)
+                else os.path.join(REPO, recorded))
+        try:
+            _, run = SM.parse_evidence(path)
+        except (OSError, UnicodeDecodeError):
+            run = None
+        if run and run["verdict"] == "PASS":
+            return path, run, "recorded"
+    path, run = newest_pass_leg(qa_dir)
+    return path, run, "newest"
+
+
 def is_separator_row(cells_text):
     """True when a table row is a SEPARATOR: every non-space character is
     punctuation (AC-EDMD1 accepted ONE repeated punctuation character; R2608
