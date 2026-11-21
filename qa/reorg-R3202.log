@@ -1,0 +1,27 @@
+R3202 evidence - the verify proof line
+board head claimed: R3201 next-window (0) MAIN (the --verify face had no byte evidence of its own)
+probe: tmp/probe_R3202.py -> qa/probe-R3202.log (1474B/26 lines utf-8/lf sha256=89d01d7f4b4570e9)
+  Q1a healthy rc=0 stdout 670B/9 lines, log 661B/9 lines sha16=271ba9eb7b2d1230
+  Q1a stdout mentions log sha16=False and log byte count=False
+  Q1b write_log returned proof bytes=661 lines=9 sha256=271ba9eb7b2d1230, published=False
+  Q1c a line carrying the log own sha16 moves it: 271ba9eb7b2d1230 -> 50522dc2cc6582c6
+  Q2 five named consumers (reconcile_all, closeout_gate, test_evidence_read, qa_writer_census, deliverable_index) with zero VERIFY mentions
+  Q2 four py files carry the VERIFY PASS literal; qa_log.py --from stays the archive habit
+  Q3 page 6834B/30527da5ec5dc7e2 json 13015B/76e42600895a4dc5 snapshot 106496B/8b835e8514ed5eb0
+  Q3 --log pointing at a directory: rc=2 stdout 886B proof lines=0 last line E_MFP_LOG stage=replace
+  Q3 --verify without --log: rc=0 stdout 670B proof lines=0
+landed: _log_proof_line renders one line from the dict write_log already returns; run_verify keeps that value and prints it after the text
+landed: the refusal path is untouched - text first, one E_MFP_LOG line, rc=2, and no proof line is invented
+criteria: AC-MFPX8 (six arms) landed; DECLARED 32->33; registry ledger-monthly-faces-preview 32->33
+criteria: AC-MFPX4 and AC-MFPX5 re-expressed by measurement (compare the log with the answer minus the one proof line, and require the log to be free of it) - JUDGED-CHANGED, sentences keep their meaning
+criteria: AC-MFPW6 handed its positional half to AC-MFPX8 exactly as earlier rounds moved it (sentence unchanged)
+gates: SUITE PASS 33/33 qa/suite-monthly-faces-preview-R3202.log 2773B/36 lines sha256=69161cb7016d0d20
+gates: generator VERIFY PASS with LOG OK path=qa\preview-monthly-faces-R3202.log bytes=661 lines=9 sha16=271ba9eb7b2d1230
+gates: qa_log.py --check preview-monthly-faces-R3202.log QA-LOG OK 661B (bytes unchanged from R3194..R3201)
+gates: matrix 78486B/755 rows then --check DOC-CURRENT; census --write-pin reused=754/755 then VERDICT PASS pinned=755
+gates: peers state_fold 7/7, state_fold_run 17/17, state_append 10/10, closeout_carrier 6/6, general_writer_dialect_audit 6/6, closeout_gate 42/42
+gates: CLOSEOUT-GATE PASS files=4522 flags=0 reader_refused=0 round_main=OK census=PASS matrix=DOC-CURRENT CARRIER bytes=76999 margin=1501 fold_needed=false
+honest: zero payment and zero network beyond loopback - a proof line moves no money
+honest: the proof names the --log target, not the truth of the answer (that is AC-MFR1..8)
+honest: a later re-write through qa_log.py --from carries this line with the earlier sha16 - recorded, not repaired
+honest: a non-ASCII --log path reaches stdout as-is (unmeasured, not claimed)

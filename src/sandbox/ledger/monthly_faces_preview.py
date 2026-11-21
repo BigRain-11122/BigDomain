@@ -112,8 +112,20 @@ first in the detail and both landed and intended bytes and sha16 given.
 The proof is per file, not a joint boolean, because a false page beside a
 true JSON must name the false one. The "PASS preview" line now quotes the
 proof (bytes and sha16 of the bytes read back) instead of os.path.getsize.
-A mismatch is not rolled back - the previous bytes are already gone - so
-the landed file stays and the detail says it is unproven.
+A mismatch is not rolled back - the previous bytes are already gone - so the
+landed file stays and the detail says it is unproven.
+
+R3202 (AC-MFPX8): a proven log is named on stdout. write_log has returned
+bytes/lines/sha16 since R3200, but run_verify dropped that value, so the
+answer it printed carried no readable link to the file it wrote (measured:
+healthy rc=0 with stdout lines equal to the log lines and no sha16, no byte
+count anywhere in the output). The proof line cannot live in the log: it
+would name the log own sha16 and that number changes the moment the line is
+added (measured: 271ba9eb7b2d1230 became 50522dc2cc6582c6). So exactly one
+"LOG OK path=... bytes=... lines=... sha16=..." line follows the answer on
+stdout, quoting the read-back proof. It is printed only when a log was asked
+for and proven, so a refusal never pretends the file landed, and the log
+bytes, the page and the JSON stay byte-identical.
 """
 import argparse
 import hashlib
@@ -285,6 +297,22 @@ class LogError(Exception):
 def _log_error(stage, exc):
     return LogError(stage, "%s: %s" % (type(exc).__name__,
                                        _one_line(exc)))
+
+
+def _log_proof_line(path, proof):
+    """One readable line of evidence for a log that is already proven.
+
+    R3202 (AC-MFPX8): write_log has returned bytes/lines/sha16 since
+    R3200, but run_verify dropped the value, so a printed VERIFY answer
+    carried no readable link to the file on disk. The line cannot be part
+    of the log itself - naming the log own sha16 changes that sha16 the
+    moment the line is added (measured: 271ba9eb7b2d1230 became
+    50522dc2cc6582c6) - so it goes to stdout right after the answer and
+    names the file it proves.
+    """
+    return ("LOG OK path=%s bytes=%d lines=%d sha16=%s"
+            % (os.path.relpath(path, BASE), proof["bytes"],
+               proof["lines"], proof["sha256"]))
 
 
 def read_copy_file(path):
@@ -745,6 +773,12 @@ def run_verify(copy, log_path):
     is printed BEFORE any log refusal, so a bad --log path can no longer
     cost the caller the whole verify answer (measured before R3199:
     rc=1, stdout 0 bytes, a traceback).
+
+    Since R3202 a proven log is named on stdout: write_log has returned
+    bytes/lines/sha16 since R3200 and this face used to drop it, so the
+    answer could not be tied to the file it wrote. The proof line comes
+    after the text and never enters the log, because a log cannot carry
+    its own sha16 (measured).
     """
     lines = []
     problems = []
@@ -769,14 +803,17 @@ def run_verify(copy, log_path):
         say("VERIFY PASS criteria=AC-MFR1..AC-MFR8 (MFR6 index entry and "
             "MFR8 hygiene checked by the caller)")
     text = "\n".join(lines) + "\n"
+    proof = None
     if log_path:
         try:
-            write_log(log_path, text)
+            proof = write_log(log_path, text)
         except LogError as exc:
             sys.stdout.write(text)
             sys.stdout.write("%s\n" % exc.face())
             return 2
     sys.stdout.write(text)
+    if proof is not None:
+        sys.stdout.write("%s\n" % _log_proof_line(log_path, proof))
     if rc == 0 and problems:
         rc = 1
     return rc

@@ -3488,8 +3488,11 @@ SUITES = [
     # world that cannot be built answers E_MFP_WORLD, an evidence log is
     # staged and a bad --log path still hands over the verify text, and a
     # failed --verify leaves the log it was asked for.
+    # R3202 added AC-MFPX8: a proven log is named on stdout with the
+    # read-back bytes, lines and sha16, and that line never enters the log
+    # itself (a log cannot carry its own sha16).
     ("ledger-monthly-faces-preview", os.path.join(
-        "ledger", "test_monthly_faces_preview.py"), 32),
+        "ledger", "test_monthly_faces_preview.py"), 33),
     # R2102 attention digest on the same report generator: the
     # statement-shaped R2101 page now opens with an ordered operator
     # to-do list derived from the faces (seller inbox debt, sold-out

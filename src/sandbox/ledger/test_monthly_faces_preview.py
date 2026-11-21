@@ -127,8 +127,10 @@ row BEFORE this code existed):
     stage; recorded as JUDGED-CHANGED, the meaning "every stage that can
     fail is named" unchanged), main catches
     WriteError once, reconcile_all.py carries the label and this file
-    once, and the registry count equals DECLARED equals what this run
-    recorded.
+    once, and the registry count equals DECLARED. (Until R3202 this arm
+    also weighed the recorded total against DECLARED; that positional
+    half moved to AC-MFPX8 - the sentence is unchanged and no law was
+    relaxed.)
 
 R3198 named write-face criteria (pre-registered in the same board as a
 PIN row BEFORE this code existed):
@@ -153,16 +155,19 @@ BEFORE this code existed):
     original reachable as __cause__; a healthy world builds all five
     faces and raises nothing.
   AC-MFPX4 the log is swapped in and never costs the answer: a healthy
-    subprocess run writes a log whose lines equal stdout's and whose
-    bytes carry no CR (the canonical utf-8/lf dialect); when the --log
-    path is a directory the same text is printed in full, one E_MFP_LOG
-    refusal line follows, rc=2, stderr is empty, the directory is still
-    a directory and no .mfp-write-* temp is left; a missing log
+    subprocess run writes a log whose lines equal stdout's minus the one
+    proof line R3202 added, and the log itself never carries that line;
+    its bytes carry no CR (the canonical utf-8/lf dialect). When the
+    --log path is a directory the same text is printed in full, one
+    E_MFP_LOG refusal line follows, rc=2, stderr is empty, the directory
+    is still a directory and no .mfp-write-* temp is left; a missing log
     directory is created and the log lands.
   AC-MFPX5 a failed verify still leaves its evidence: with --log set and
     collect() failing, the log file exists, carries VERIFY FAIL
-    problems=1 and the E_MFP_WORLD line, equals what was printed, and
-    the run exits 2 (before R3199 the file did not exist at all).
+    problems=1 and the E_MFP_WORLD line, equals what was printed minus
+    the one proof line (which is required to be there, since this log
+    did land), and the run exits 2 (before R3199 the file did not exist
+    at all).
 
 R3201 delivered-file criteria (pre-registered in the same board as a
 PIN row BEFORE this code existed):
@@ -180,6 +185,25 @@ PIN row BEFORE this code existed):
     landed true, so the true file is proven and kept. The wrong bytes are
     left on disk unproven rather than rolled back, and the healthy PASS
     line quotes the two proofs (bytes and sha16) instead of sizes.
+
+R3202 verify-proof criteria (pre-registered in the same board as a PIN
+row BEFORE this code existed):
+
+  AC-MFPX8 a proven log is named on stdout: write_log has returned
+    bytes/lines/sha16 since R3200 and run_verify dropped it, so a printed
+    answer carried no readable link to the file it wrote. Exactly one
+    "LOG OK path=... bytes=... lines=... sha16=..." line now follows the
+    answer, quoting the read-back proof, and never enters the log - a log
+    cannot carry its own sha16 (measured). The arms measure: the three
+    numbers against the file on disk; the log and the two delivered files
+    unchanged; two failure faces with no proof line and empty stderr; the
+    no-log face unchanged; the self-reference arithmetic; and the hygiene
+    plus registry count with the positional duty this arm inherits from
+    AC-MFPW6.
+
+R3201's AC-MFPW6 positional half moved here by measurement, exactly as
+earlier rounds moved it: its sentence is unchanged and no law was
+relaxed.
 
 Usage: python test_monthly_faces_preview.py
 """
@@ -206,7 +230,7 @@ SUITE_FILE = os.path.abspath(__file__)
 RECONCILE = os.path.join(BASE, "src", "sandbox", "reconcile_all.py")
 MODULE = os.path.join(LEDGER, "monthly_faces_preview.py")
 LABEL = "ledger-monthly-faces-preview"
-DECLARED = 32
+DECLARED = 33
 TEMPS = []
 
 
@@ -1367,8 +1391,7 @@ def check_write_wiring():
           and named_sites == 5 and caught_sites == 2
           and world_sites == 1 and world_caught == 2
           and stage_sites == (1, 1, 1)
-          and label_hits == 1 and file_hits == 1 and declared == DECLARED
-          and total_after == DECLARED)
+          and label_hits == 1 and file_hits == 1 and declared == DECLARED)
     record("AC-MFPW6", ok,
            "module_ascii=%s replace_sites=%d swaps=%d+%d "
            "render_before_stage=%s named_sites=%d caught=%d "
@@ -1437,23 +1460,38 @@ def check_world_named():
 
 def check_log_atomic_cli():
     """AC-MFPX4: the log is swapped in, and a bad path still hands over
-    the whole verify text instead of throwing it away."""
+    the whole verify text instead of throwing it away.
+
+    Since R3202 the healthy stdout carries one extra proof line after the
+    answer, so the log is compared with stdout minus that line - and the
+    log must not carry the line itself (a log cannot hold its own sha16).
+    """
     problems = []
+
+    def split_proof(out_bytes):
+        lines = out_bytes.splitlines()
+        if lines and lines[-1].startswith(b"LOG OK "):
+            return lines[:-1], lines[-1]
+        return lines, None
+
     root = temp_root("log-atomic-healthy")
     healthy_log = os.path.join(root, "verify.log")
     proc = subprocess.run(
         [sys.executable, MODULE, "--verify", "--log", healthy_log],
         capture_output=True, cwd=BASE)
     healthy = proc.stdout
+    body_lines, proof_line = split_proof(healthy)
     healthy_ok = (proc.returncode == 0 and proc.stderr == b"" and healthy != b""
+                  and proof_line is not None
                   and os.path.isfile(healthy_log))
     if healthy_ok:
         with open(healthy_log, "rb") as fh:
             logged = fh.read()
         # stdout goes through the Windows newline translation, the file is
         # written in the canonical utf-8/lf dialect qa_log.py --check reads.
-        healthy_ok = (logged.splitlines() == healthy.splitlines()
-                      and b"\r" not in logged)
+        healthy_ok = (logged.splitlines() == body_lines
+                      and b"\r" not in logged
+                      and b"LOG OK " not in logged)
     if not healthy_ok:
         problems.append("healthy")
     if _leftovers(root):
@@ -1465,13 +1503,16 @@ def check_log_atomic_cli():
     proc = subprocess.run(
         [sys.executable, MODULE, "--verify", "--log", logdir],
         capture_output=True, cwd=BASE)
-    tail = proc.stdout[len(healthy):]
+    refusal, refused_proof = split_proof(proc.stdout)
+    tail = refusal[len(body_lines):]
     if proc.returncode != 2:
         problems.append("dir.rc=%d" % proc.returncode)
-    if healthy != b"" and not proc.stdout.startswith(healthy):
+    if refusal[:len(body_lines)] != body_lines:
         problems.append("dir.text-lost")
-    if tail.count(b"\n") != 1 or b"E_MFP_LOG" not in tail:
-        problems.append("dir.refusal=%r" % tail[:48])
+    if len(tail) != 1 or b"E_MFP_LOG" not in tail[0]:
+        problems.append("dir.refusal=%r" % (tail[:1],))
+    if refused_proof is not None or b"LOG OK" in proc.stdout:
+        problems.append("dir.proof-claimed")
     if proc.stderr != b"":
         problems.append("dir.stderr=%d" % len(proc.stderr))
     if not os.path.isdir(logdir):
@@ -1491,7 +1532,10 @@ def check_log_atomic_cli():
     else:
         with open(miss_log, "rb") as fh:
             logged = fh.read()
-        if logged.splitlines() != proc.stdout.splitlines():
+        miss_lines, miss_proof = split_proof(proc.stdout)
+        if miss_proof is None:
+            problems.append("missing.no-proof")
+        if logged.splitlines() != miss_lines:
             problems.append("missing.log!=stdout")
     record("AC-MFPX4", not problems,
            "healthy=%s cases=3 problems=%s"
@@ -1524,8 +1568,14 @@ def check_verify_evidence():
         problems.append("no-fail-line")
     if "E_MFP_WORLD" not in body:
         problems.append("no-code")
-    if body != text:
+    lines = text.splitlines()
+    proof = lines[-1] if lines and lines[-1].startswith("LOG OK ") else None
+    if proof is None:
+        problems.append("no-proof")
+    elif body.splitlines() != lines[:-1]:
         problems.append("log!=stdout")
+    if "LOG OK" in body:
+        problems.append("log-carries-proof")
     if _leftovers(root):
         problems.append("temp")
     record("AC-MFPX5", not problems,
@@ -1616,6 +1666,11 @@ def check_log_readback():
     rc0, text0 = _call_main(["--verify", "--log", target])
     if rc0 != 0 or not text0:
         problems.append("cli.control=%r/%d" % (rc0, len(text0)))
+    # The R3202 proof line is printed only for a proven log, so the
+    # refusal face below must hand over the answer without it.
+    keep_lines = text0.splitlines(True)
+    if keep_lines and keep_lines[-1].startswith("LOG OK "):
+        text0 = "".join(keep_lines[:-1])
     real = os.replace
     os.replace = land("truncated", target)
     try:
@@ -1669,6 +1724,133 @@ def check_log_readback():
               ",".join(problems) or "none"))
 
 
+def check_verify_proof():
+    """AC-MFPX8: a proven log is named on stdout, and never inside itself."""
+    problems = []
+    root = temp_root("verify-proof")
+    log = os.path.join(root, "verify.log")
+    proc = subprocess.run([sys.executable, MODULE, "--verify", "--log", log],
+                          capture_output=True, cwd=BASE)
+    out = proc.stdout.decode("utf-8", "replace")
+    lines = out.splitlines()
+    disk = io.open(log, "rb").read() if os.path.isfile(log) else b""
+
+    # a) the proof line names numbers measured on the file, not inferred
+    fields = {}
+    if lines and lines[-1].startswith("LOG OK "):
+        parts = lines[-1][len("LOG OK "):].rsplit(" ", 3)
+        if len(parts) == 4:
+            for token in parts:
+                if "=" in token:
+                    key, value = token.split("=", 1)
+                    fields[key] = value
+    if proc.returncode != 0 or proc.stderr != b"":
+        problems.append("a.rc=%d/%d" % (proc.returncode, len(proc.stderr)))
+    if out.count("LOG OK ") != 1 or len(fields) != 4:
+        problems.append("a.shape=%r" % (lines[-1][:48] if lines else ""))
+    elif (int(fields.get("bytes", "-1")) != len(disk)
+          or int(fields.get("lines", "-1")) != len(disk.splitlines())
+          or fields.get("sha16") != sha16_bytes(disk)):
+        problems.append("a.mismatch=%s disk=%dB/%s"
+                        % (lines[-1][:64], len(disk), sha16_bytes(disk)))
+
+    # b) the proof never enters the log, and nothing shipped moved
+    if b"LOG OK" in disk:
+        problems.append("b.proof-in-log")
+    if len(disk) != 661 or sha16_bytes(disk) != "271ba9eb7b2d1230":
+        problems.append("b.log=%dB/%s" % (len(disk), sha16_bytes(disk)))
+    page = io.open(M.OUT_HTML, "rb").read()
+    payload = io.open(M.OUT_JSON, "rb").read()
+    marks = (len(page), sha16_bytes(page), len(payload), sha16_bytes(payload))
+    if marks != (6834, "30527da5ec5dc7e2", 13015, "76e42600895a4dc5"):
+        problems.append("b.shipped=%r" % (marks,))
+
+    # c) a refusal never invents a proof - two failure faces
+    droot = temp_root("verify-proof-dir")
+    dlog = os.path.join(droot, "logdir")
+    os.mkdir(dlog)
+    proc = subprocess.run([sys.executable, MODULE, "--verify", "--log", dlog],
+                          capture_output=True, cwd=BASE)
+    if proc.returncode != 2 or proc.stderr != b"":
+        problems.append("c.dir=%d/%d" % (proc.returncode, len(proc.stderr)))
+    if b"LOG OK" in proc.stdout:
+        problems.append("c.dir-proof")
+
+    troot = temp_root("verify-proof-trunc")
+    tlog = os.path.join(troot, "verify.log")
+    real = os.replace
+
+    def shim(src, dst):
+        if os.path.abspath(dst) != os.path.abspath(tlog):
+            return real(src, dst)
+        with io.open(src, "rb") as fh:
+            landed = fh.read()
+        with io.open(dst, "wb") as fh:
+            fh.write(landed[: max(1, len(landed) // 2)])
+        try:
+            os.remove(src)
+        except OSError:
+            pass
+
+    os.replace = shim
+    try:
+        rc, printed = _call_main(["--verify", "--log", tlog])
+    finally:
+        os.replace = real
+    if rc != 2:
+        problems.append("c.readback.rc=%r" % (rc,))
+    if "LOG OK" in printed:
+        problems.append("c.readback-proof")
+    if printed.count("E_MFP_LOG stage=read-back") != 1:
+        problems.append("c.readback.code=%d" % printed.count("E_MFP_LOG"))
+
+    # d) without --log nothing is claimed
+    rc, printed = _call_main(["--verify"])
+    if rc != 0 or "LOG OK" in printed:
+        problems.append("d.rc=%r proof=%s" % (rc, "LOG OK" in printed))
+    if lines and printed.splitlines() != lines[:-1]:
+        problems.append("d.text-moved")
+
+    # e) the self-reference is impossible, measured on this window's bytes
+    first = sha16_bytes(disk)
+    candidate = (disk.decode("utf-8")
+                 + "LOG OK path=x bytes=%d lines=%d sha16=%s\n"
+                 % (len(disk), len(disk.splitlines()), first))
+    moved = sha16_bytes(candidate.encode("utf-8"))
+    if moved == first:
+        problems.append("e.fixed-point")
+    if first.encode("ascii") in disk:
+        problems.append("e.self-sha16-in-log")
+
+    # f) hygiene, one proof site, and the positional duty from AC-MFPW6
+    with open(MODULE, "rb") as fh:
+        raw = fh.read()
+    try:
+        raw.decode("ascii")
+        ascii_ok = True
+    except UnicodeDecodeError:
+        ascii_ok = False
+    with io.open(MODULE, "r", encoding="utf-8") as fh:
+        source = fh.read()
+    kept = source.count("proof = write_log(log_path, text)")
+    named = source.count("_log_proof_line(")
+    literal = source.count('"LOG OK path=%s')
+    with io.open(RECONCILE, "r", encoding="utf-8") as fh:
+        declared = registry_declared(fh.read())
+    total_after = len(RESULTS) + 1
+    if not (ascii_ok and kept == 1 and named == 2 and literal == 1
+            and declared == DECLARED and total_after == DECLARED):
+        problems.append("f.hygiene=ascii:%s kept:%d named:%d literal:%d "
+                        "declared:%d recorded:%d"
+                        % (ascii_ok, kept, named, literal, declared,
+                           total_after))
+    record("AC-MFPX8", not problems,
+           "proof=%r moved=%s/%s ascii=%s named=%d declared=%d "
+           "problems=%s"
+           % (lines[-1][:56] if lines else "", first, moved, ascii_ok,
+              named, declared, ",".join(problems) or "none"))
+
+
 def main():
     before = shipped_marks()
     try:
@@ -1704,6 +1886,7 @@ def main():
         check_log_readback()
         check_outputs_readback()
         check_write_wiring()
+        check_verify_proof()
     finally:
         for path in TEMPS:
             shutil.rmtree(path, ignore_errors=True)

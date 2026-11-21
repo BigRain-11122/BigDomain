@@ -1,0 +1,36 @@
+PASS AC-MFRW1 exports=10/10 own_copies=none cli_exit=0 cli_equal=True
+PASS AC-MFRW2 html 30527da5ec5dc7e2/30527da5ec5dc7e2 json 76e42600895a4dc5/76e42600895a4dc5
+PASS AC-MFRW3 problems=0/none faces=api_market_months:3,api_market_supply_months:3,api_market_claim_months:0,api_market_restock_months:3,api_market_discount_months:0
+PASS AC-MFRW4 empty_faces=api_market_claim_months,api_market_discount_months missing=none
+PASS AC-MFRW5 aigc=True disclaimer=True external=False script=False module_ascii=True
+PASS AC-MFRW6 snapshot size=106496 sha16=8b835e8514ed5eb0 pages=True unchanged=True
+PASS AC-MFRW7 ascii=True banned=none stray=none imports=10
+PASS AC-MFRW8 label_hits=1 file_hits=1 declared=33 law=33
+PASS AC-MFPC1 law=13 read=13 shipped=13 same_law_read=True same_law_shipped=True
+PASS AC-MFPC2 keys=13 refused=13 failures=none control=True
+PASS AC-MFPC3 cli_rc=2 stderr_bytes=0 one_line=True no_outputs=True verify_rc=2 verify_log=False verify_stderr_bytes=0
+PASS AC-MFPC4 html_bytes=6834 json_bytes=13015 inproc_equal=True cli_equal=True
+PASS AC-MFPC5 list_refused=True detail='top level is list, expected object' extra_tolerated=True module_ascii=True face_ok=True
+PASS AC-MFPC6 label_hits=1 file_hits=1 declared=33 recorded=14 law=33
+PASS AC-MFPR1 fixtures=3 refused=3 failures=none control=True
+PASS AC-MFPR2 fixtures=3 problems=none
+PASS AC-MFPR3 html_bytes=6834 json_bytes=13015 inproc_equal=True twin_dict=True cli_equal=True
+PASS AC-MFPR4 list_refused=True extra_tolerated=True key_named=True
+PASS AC-MFPR5 module_ascii=True read_sites=2 label_hits=1 file_hits=1 declared=33 recorded=19 law=33
+PASS AC-MFPW1 cases=4 problems=none
+PASS AC-MFPW2 raised=True stage=stage html_kept=True json_kept=True temps=0 stages=2
+PASS AC-MFPW3 raised=True stage=replace html_kept=True json_kept=True temps=0
+PASS AC-MFPW4 html_bytes=6834 json_bytes=13015 inproc_equal=True cli_equal=True
+PASS AC-MFPW5 cases=4 problems=none
+PASS AC-MFPX1 cases=4 control=True problems=none
+PASS AC-MFPX2 cases=4 problems=none
+PASS AC-MFPX3 cases=1 control=True problems=none
+PASS AC-MFPX4 healthy=True cases=3 problems=none
+PASS AC-MFPX5 rc=2 exists=True bytes=74 problems=none
+PASS AC-MFPX6 kept={"crlf": 60, "truncated": 29} cli_disk=330 census_tee=True ascii=True sites=True problems=none
+PASS AC-MFPX7 landed=6834B/30527da5ec5dc7e2 dual=clean ascii=True sites=1 named=5 problems=none
+PASS AC-MFPW6 module_ascii=True replace_sites=2 swaps=1+1 render_before_stage=True named_sites=5 caught=2 world=1/2 stages=1,1,1 label_hits=1 file_hits=1 declared=33 recorded=32 law=33
+PASS AC-MFPX8 proof='LOG OK path=..\\..\\..\\..\\AppData\\Local\\Temp\\monthly-faces' moved=271ba9eb7b2d1230/06eec320b0405b9d ascii=True named=2 declared=33 problems=none
+
+SUITE PASS 33/33
+SUITE-SHA16 9628b269ce6362c4

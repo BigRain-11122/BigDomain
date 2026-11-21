@@ -1,0 +1,26 @@
+Q1a healthy rc=0 stdout_bytes=670 stdout_lines=9 stderr=0
+Q1a log_bytes=661 log_lines=9 log_sha16=271ba9eb7b2d1230
+Q1a stdout_lines_eq_log_lines=True
+Q1a stdout_mentions_log_sha16=False
+Q1a stdout_mentions_bytes_or_lines=False
+Q1a stdout_tail=b'VERIFY PASS criteria=AC-MFR1..AC-MFR8 (MFR6 index entry and MFR8 hygiene'
+Q1b rc=0 proof={'bytes': 661, 'lines': 9, 'sha256': '271ba9eb7b2d1230'}
+Q1b stdout_publishes_sha16=False
+Q1b stdout_publishes_bytes=False
+Q1c text_sha16=271ba9eb7b2d1230 with_proof_line_sha16=50522dc2cc6582c6 differs=True
+Q1c log_body_mentions_own_sha16=False
+Q2 src/sandbox/reconcile_all.py mentions_VERIFY=False mentions_LOG_OK=False
+Q2 tools/closeout_gate.py mentions_VERIFY=False mentions_LOG_OK=False
+Q2 src/os/battery_shard.py absent
+Q2 src/os/test_evidence_read.py mentions_VERIFY=False mentions_LOG_OK=False
+Q2 src/os/qa_writer_census.py mentions_VERIFY=False mentions_LOG_OK=False
+Q2 tools/deliverable_index.py mentions_VERIFY=False mentions_LOG_OK=False
+Q2 qa_log_from_references_excluding_board=1293
+Q2 py_files_carrying_VERIFY_PASS=4
+Q3 page_bytes=6834 sha16=30527da5ec5dc7e2
+Q3 json_bytes=13015 sha16=76e42600895a4dc5
+Q3 snapshot_bytes=106496 sha16=8b835e8514ed5eb0
+Q3 shipped_verify_log_bytes=661 sha16=271ba9eb7b2d1230 has_LOG_OK=False
+Q3b dir rc=2 stdout_bytes=886 stderr=0 proof_lines=0
+Q3b dir_last="E_MFP_LOG stage=replace PermissionError: [WinError 5] 鎷掔粷璁块棶銆? 'C:"
+Q3b nolog rc=0 stdout_bytes=670 stderr=0 proof_lines=0

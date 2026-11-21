@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 755 | 6198 | 675/675 | R2739 |
+| 755 | 6199 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -375,7 +375,7 @@
 | 336 | ledger-apimarket-marketmonths | ledger/test_apimarket_marketmonths.py | 8 | green | 1.6 |
 | 337 | ledger-apimarket-buyermonths | ledger/test_apimarket_buyermonths.py | 8 | green | 2.0 |
 | 338 | ledger-apimarket-report | ledger/test_apimarket_report.py | 9 | green | 3.1 |
-| 339 | ledger-monthly-faces-preview | ledger/test_monthly_faces_preview.py | 32 | no-evidence | - |
+| 339 | ledger-monthly-faces-preview | ledger/test_monthly_faces_preview.py | 33 | no-evidence | - |
 | 340 | ledger-apimarket-attention | ledger/test_apimarket_report_attention.py | 9 | green | 4.2 |
 | 341 | ledger-apimarket-reportjson | ledger/test_apimarket_report_json.py | 10 | green | 5.9 |
 | 342 | ledger-apimarket-reportworkbench | ledger/test_apimarket_report_workbench.py | 8 | green | 20.5 |
@@ -792,7 +792,7 @@
 | 753 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
 | 754 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 755 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6198 | green 675 / FAIL 0 / no-evidence 80 |  |
+|  | 合计 |  | 6199 | green 675 / FAIL 0 / no-evidence 80 |  |
 
 ## 证据出处
 
