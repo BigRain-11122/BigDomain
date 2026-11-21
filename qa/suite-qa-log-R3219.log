@@ -1,0 +1,73 @@
+python : <unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. D
+id you mean "\\("? A raw string is also an option.
+所在位置 行:1 字符: 1
++ python src/os/test_qa_log.py > tmp/qalog-R3219e.out 2>&1; Write-Outpu ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (<unknown>:18: S...also an option.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+  | PASS AC-QALB1 four dialects land as utf-8/lf with text intact rows=4 utf16=True utf8bom=True gb18030=True plain=True
+  | PASS AC-QALB2 printed bytes/lines/sha256 recomputed; CR injection refused rows_matched=4/4 cr_caught=True
+  | PASS AC-QALB3 ten atomic writes, zero .tmp, refusal leaves no half file logs=10 tmp=0 refused=True bad_absent=True
+  | PASS AC-QALB4 --check read-only, verdict 0/2/2/2 and stats unchanged verdicts=0,2,2,2 stats_stable=True
+  | PASS AC-QALB5 archived R2775 sample replays byte-equal (missing = red) archive=True live=True byte_equal=True
+  | PASS AC-QALB6 five bad names refused and one good name really writes refused=5/5 accepted=True wrote=True
+  | PASS AC-QALB7 selftest 9/9 leaves qa/ identical, both sources pure rc=0 verdict=True qa_stable=True tool_extra= suite_extra= net=[]
+  | PASS AC-QALB8 NUL-bearing source refused and a planted NUL file is red refused=True class=nul-bytes check_rc=2 reason=source carries NUL bytes (BOM-less UTF-16 is not an evidence
+  | PASS AC-QALB10 a leading dash is refused and a refusal writes no file refused=3/3 dir_stable=True wrote_nothing=True good_rc=0
+  | PASS AC-QALB9 registry declares exactly one row for this suite, thirty-three rows=['33'] hits=1
+  | PASS AC-QALB11 carried proof marked CARRIED once, exact shapes only rc=0 marked=1 unmarked=False twice=1 plain_eq=True near_stable=True
+  | PASS AC-QALB12 --check names carried=N for exact shapes only, read-only c0=True c1=True c2=True recomputed=2 near=True stats_stable=True red_rc=2 red_has_field=False live=True sites=1
+  | PASS AC-QALB13 --check names bare_proofs=N for exact shapes only u0=True u1=True u2=True recount=2 carried_arm=True near=True stable=True red_rc=2 red_has_field=False live=True sites=1
+  | PASS AC-QALB14 the progress door marks a bare proof line, nothing else once=1 kept=True bare=0 carried=1 plus8=True shapes=True idem=True half_rows=1 half_nl=True mark_sites=1 fsync=1 open=1
+  | PASS AC-QALB15 a suffixless name is refused and writes no file refused=[True, True, True] landed=[] good_rc=0 good_files=['ok-R3213.log']
+  | PASS AC-QALB16 --check still reads a suffixless name; readers unchanged fixture_rc=0 live_rc=0 gate_has_filter=True census_sites=7
+  | PASS AC-QALB17 shipped usage examples name .log files only usage=['NAME.log', 'NAME.log'] evidence=['battery-shard-R2797.log', 'battery-shard-R2797.log']
+  | PASS AC-QALB18 the in-place door refuses a suffixless name and a path outside qa/, and lands nothing verdicts=[('suffixless', "name must end with .log, got 'NAME' (the writer census, the pre-commit evidence gate and the closeout files= count all enumerate only *.log, so this file would land and never be judged; --check still reads an existing suffixless file)"), ('outside', 'E_STREAM_PATH C:\\Users\\sjs20\\AppData\\Local\\Temp\\qalb-57dmwk05\\outside\\x.log'), ('traversal', 'E_STREAM_PATH C:\\Users\\sjs20\\AppData\\Local\\Temp\\qalb-57dmwk05\\door\\..\\escape.log')] door_files=[] escaped=[] control=True
+  | PASS AC-QALB19 a lawful .log progress file is unchanged and a killed leg still leaves a readable RUNNING half shapes=True running=True closing=True one_row=1 door=1181 mark=1243 sites=1/1/1/1
+  | PASS AC-QALB20 the guard moves no existing qa/ byte files=4659 stable=True suffixless=(1126, '1db4e88432c7b131')
+  | PASS AC-QALB21 a repo destination outside qa/ is refused at both doors and lands nothing verdicts=[('repo-root', "E_DEST_INSIDE_REPO destination must be the qa/ dir or a path outside the repo, got 'C:\\\\Users\\\\sjs20\\\\Desktop\\\\FluxGroup\\\\domain\\\\BigDomain' (the writer census, the pre-commit evidence gate and the closeout files= count enumerate qa/*.log only, so a .log written here would land in the healthy dialect and never be judged)"), ('repo-tmp', "E_DEST_INSIDE_REPO destination must be the qa/ dir or a path outside the repo, got 'C:\\\\Users\\\\sjs20\\\\Desktop\\\\FluxGroup\\\\domain\\\\BigDomain\\\\tmp\\\\r3215-arm' (the writer census, the pre-commit evidence gate and the closeout files= count enumerate qa/*.log only, so a .log written here would land in the healthy dialect and never be judged)"), ('qa-sub', "E_DEST_INSIDE_REPO destination must be the qa/ dir or a path outside the repo, got 'C:\\\\Users\\\\sjs20\\\\Desktop\\\\FluxGroup\\\\domain\\\\BigDomain\\\\qa\\\\r3215-sub' (the writer census, the pre-commit evidence gate and the closeout files= count enumerate qa/*.log only, so a .log written here would land in the healthy dialect and never be judged)"), ('repo-logs', "E_DEST_INSIDE_REPO destination must be the qa/ dir or a path outside the repo, got 'C:\\\\Users\\\\sjs20\\\\Desktop\\\\FluxGroup\\\\domain\\\\BigDomain\\\\logs' (the writer census, the pre-commit evidence gate and the closeout files= count enumerate qa/*.log only, so a .log written here would land in the healthy dialect and never be judged)")] landed=[] door=True temp_rc=0
+  | PASS AC-QALB22 the default destination follows QA at call time rc=0 in_world=True in_live=False signature=True
+  | PASS AC-QALB23 no shipped call site names a repo destination named=38 prod=[('tools/battery_shard.py', 310, 'QA_DIR')] worlds=['src/os/test_qa_log.py', 'tools/battery_shard.py', 'tools/qa_log.py'] mkdtemp=[True, True, True] control=True
+  | PASS AC-QALB24 a same-name rewrite names the bytes it replaced fresh_quiet=True rewrite=['QA-LOG REPLACED name=same.log old_bytes=11 old_sha16=51e5f80e60c2bb85 new_bytes=19 new_sha16=26165ce0d384a2b7'] identical=['QA-LOG REPLACED name=same.log old_bytes=19 old_sha16=26165ce0d384a2b7 new_bytes=19 new_sha16=26165ce0d384a2b7'] new_quiet=True
+  | PASS AC-QALB25 the announcement moves no byte of the file bytes=19 lines=2 tmp=[] check='QA-LOG OK name=same.log dialect=utf-8/lf bytes=19 carried=0 bare_proofs=0'
+  | PASS AC-QALB26 the announcement lives only at the evidence door atomic_clean=True sites=1 direct_write_bytes=11 live_stable=True
+  | PASS AC-QALB27 a rewrite appends one machine-readable record fresh_rows=True rows=[{'event': 'REPLACED', 'name': 'rec.log', 'new_bytes': 10, 'new_sha16': '3cd2b845bb8a0312', 'old_bytes': 4, 'old_sha16': '2c8b08da5ce60398', 'ts': '2026-11-21T20:10:36Z'}] identical=2 after_fresh=2 evidence=True
+  | PASS AC-QALB28 the ledger is not evidence and the suite never writes it live=True world=True suffix_log=False live_state=True live_untouched=True qa_stable=True
+  | PASS AC-QALB29 a lost record is named, not silent fresh_rc=0 rewrite_rc=2 named=True landed=True wrote=True
+  | PASS AC-QALB30 a healthy ledger reads back with no defect rc=0 rows=2/2 detail_free=True default_names_live=True
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=2c8b08da5ce60398 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=4 old_sha16=2c8b08da5ce60398 new_bytes=10 new_sha16=3cd2b845bb8a0312
+QA-LOG WROTE name=rec.log bytes=10 lines=2 sha256=3cd2b845bb8a0312 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=10 old_sha16=3cd2b845bb8a0312 new_bytes=12 new_sha16=f812215c7c9432b6
+QA-LOG WROTE name=rec.log bytes=12 lines=2 sha256=f812215c7c9432b6 dialect=utf-8/lf VERDICT PASS
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=2c8b08da5ce60398 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=4 old_sha16=2c8b08da5ce60398 new_bytes=10 new_sha16=3cd2b845bb8a0312
+QA-LOG WROTE name=rec.log bytes=10 lines=2 sha256=3cd2b845bb8a0312 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=10 old_sha16=3cd2b845bb8a0312 new_bytes=12 new_sha16=f812215c7c9432b6
+QA-LOG WROTE name=rec.log bytes=12 lines=2 sha256=f812215c7c9432b6 dialect=utf-8/lf VERDICT PASS
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=2c8b08da5ce60398 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=4 old_sha16=2c8b08da5ce60398 new_bytes=10 new_sha16=3cd2b845bb8a0312
+QA-LOG WROTE name=rec.log bytes=10 lines=2 sha256=3cd2b845bb8a0312 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=10 old_sha16=3cd2b845bb8a0312 new_bytes=12 new_sha16=f812215c7c9432b6
+QA-LOG WROTE name=rec.log bytes=12 lines=2 sha256=f812215c7c9432b6 dialect=utf-8/lf VERDICT PASS
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=2c8b08da5ce60398 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=4 old_sha16=2c8b08da5ce60398 new_bytes=10 new_sha16=3cd2b845bb8a0312
+QA-LOG WROTE name=rec.log bytes=10 lines=2 sha256=3cd2b845bb8a0312 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=10 old_sha16=3cd2b845bb8a0312 new_bytes=12 new_sha16=f812215c7c9432b6
+QA-LOG WROTE name=rec.log bytes=12 lines=2 sha256=f812215c7c9432b6 dialect=utf-8/lf VERDICT PASS
+QA-LOG WROTE name=rec.log bytes=4 lines=1 sha256=2c8b08da5ce60398 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=4 old_sha16=2c8b08da5ce60398 new_bytes=10 new_sha16=3cd2b845bb8a0312
+QA-LOG WROTE name=rec.log bytes=10 lines=2 sha256=3cd2b845bb8a0312 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=rec.log old_bytes=10 old_sha16=3cd2b845bb8a0312 new_bytes=12 new_sha16=f812215c7c9432b6
+QA-LOG WROTE name=rec.log bytes=12 lines=2 sha256=f812215c7c9432b6 dialect=utf-8/lf VERDICT PASS
+  | PASS AC-QALB31 a bad line, a stale row, a gone file, a shape and an unreadable file each answer their own thing bad=2/True stale=2/True miss=0/True shape=2 und=2/True abs=0
+  | PASS AC-QALB32 the read face writes nothing and is declared once repeatable=True no_writer=True one_dispatch=True live_stable=True qa_stable=True
+  | PASS AC-QALB33 arm a - one definition: the printer renders the report verdict=RED rows=2 printed=QA-LEDGER RED path=C:\Users\sjs20\AppData\Local\Temp\qalb-57dmwk05\ldef-bad\qa_replacements.jsonl rows=2 names=1 bad=1 stale=0 missing=0
+  | PASS AC-QALB33 arm b - the gate imports the judgement, never a copy check_ledger=1 ledger_report=1 face_json=False
+  | PASS AC-QALB9c temp world removed (a leak is loud, not silent) removed=True
+  | PASS AC-QALB9b the real qa/ directory is unchanged by the whole suite entries=4660 stable=True
+suite: 36 assertions over 33 criteria
+SUITE PASS 36/36 in 5.7s

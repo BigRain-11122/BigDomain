@@ -1,4 +1,4 @@
-"""Battery suite for tools/qa_log.py - criteria AC-QALB1..AC-QALB32.
+"""Battery suite for tools/qa_log.py - criteria AC-QALB1..AC-QALB33.
 
 AC-QALB1..AC-QALB9 were pinned in src/os/backlog.md at R2807 BEFORE this suite
 existed, mapping one-to-one onto AC-QAL1..AC-QAL7 that the tool prints, plus one
@@ -365,8 +365,8 @@ def main():
             if found:
                 declared.append(found.group(1))
         ok('AC-QALB9 registry declares exactly one row for this suite, '
-           'thirty-two',
-           declared == ['32'], 'rows=%s hits=%d' % (declared, len(hits)))
+           'thirty-three',
+           declared == ['33'], 'rows=%s hits=%d' % (declared, len(hits)))
 
         # ---- AC-QALB11: a carried proof line is marked, not certified -----
         # R3203: the generator prints "LOG OK path=... sha16=..." to prove a
@@ -1276,6 +1276,38 @@ def main():
            % (out_r1 == out_r2, 'record_replacement' not in led_src,
               ledger_text.count('args[0] == "--ledger-check"') == 1,
               live_after == live_before, qa_snapshot() == qa_before_read))
+
+        # AC-QALB33 (R3219): the closeout gate asks the same question at every
+        # closeout, so the judgement must exist ONCE. ledger_report is that
+        # definition; the printer renders it and the gate imports it. An arm
+        # that let the gate carry its own json parser would pass while the two
+        # faces disagreed about what a bad row is.
+        report_bad = mod.ledger_report(p_bad)
+        rc_b33, out_b33 = quiet(mod.do_ledger_check, p_bad)
+        printed = out_b33.strip().split('\n')[0]
+        ok('AC-QALB33 arm a - one definition: the printer renders the report',
+           ledger_text.count('def ledger_report(') == 1
+           and 'ledger_report(path)' in led_src
+           and report_bad['verdict'] == 'RED'
+           and report_bad['rows'] == 2 and len(report_bad['bad']) == 1
+           and 'rows=2' in printed and 'bad=1' in printed,
+           'verdict=%s rows=%s printed=%s'
+           % (report_bad['verdict'], report_bad['rows'], printed))
+        gate_text = read_text(os.path.join(ROOT, 'tools', 'closeout_gate.py'))
+        # The claim is about the FACE, not the module: the gate already parses
+        # the baseline json elsewhere, so the arm reads check_ledger's own body
+        # and requires that it never parses the ledger and never hashes a file.
+        face = gate_text[gate_text.index('def check_ledger('):]
+        face = face[:face.index('def check_census(')]
+        ok('AC-QALB33 arm b - the gate imports the judgement, never a copy',
+           gate_text.count('def check_ledger(') == 1
+           and 'import qa_log as QL' in gate_text
+           and 'QL.ledger_report(' in gate_text
+           and 'json.' not in face and 'hashlib' not in face
+           and 'read_ledger' not in face,
+           'check_ledger=%d ledger_report=%d face_json=%s'
+           % (gate_text.count('def check_ledger('),
+              gate_text.count('QL.ledger_report('), 'json.' in face))
 
     finally:
         mod.QA = original_qa

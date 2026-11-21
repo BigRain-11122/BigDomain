@@ -14,6 +14,10 @@ This suite grades both questions on fixture worlds:
   AC-CLG4  the gate is read-only and deterministic
   AC-CLG5  a missing baseline, an empty dir, and a census row that cannot be
            read are each a NAMED refusal, never a silent pass
+  AC-CLG11..13  the replacement ledger (R3219): an absent ledger is rows=0 and
+           PASS, a bad row or a stale latest row REFUSES by name
+           E_CLG_LEDGER, a gone file is counted missing, the face is read-only
+           and opt-out-able, and the pinned PASS token shape never moves
 
 Honest boundary: `flags` sees a new file or a class change; a rewrite that
 stays inside the same class is invisible to both faces (the census keeps no
@@ -363,9 +367,11 @@ def main():
     ok("AC-CLG8 arm a - the default face carries no timing key",
        "face_ms" not in verdict, "keys=%s" % sorted(verdict))
     ms8 = deep_v.get("face_ms") or {}
-    ok("AC-CLG8 arm b - root=ROOT publishes five named readings (R3177 added "
-       "the carrier face) and the PASS line is byte-identical",
-       sorted(ms8) == ["carrier", "census", "flags", "matrix", "round_main"]
+    ok("AC-CLG8 arm b - root=ROOT publishes six named readings (R3177 added "
+       "the carrier face, R3219 the ledger face) and the PASS line is "
+       "byte-identical",
+       sorted(ms8) == ["carrier", "census", "flags", "ledger", "matrix",
+                       "round_main"]
        and all(isinstance(v, float) and v >= 0.0 for v in ms8.values())
        and deep[0] == ("CLOSEOUT-GATE PASS files=%d flags=0 reader_refused=0 "
                        "gating=flags round_main=OK census=PASS "
@@ -550,6 +556,141 @@ def main():
            and "gating=flags" in plain_lines[0]
            and "round_main=" not in plain_lines[0],
            "rc=%s lines=%s" % (plain_rc, plain_lines))
+
+    # AC-CLG11..13 (R3219): the replacement ledger was write-only at closeout -
+    # `qa_log --ledger-check` had no execution body, and measured on four
+    # fixture worlds a truncated JSON row and a stale latest row both answered
+    # the identical PASS with no ledger token. The gate now asks the writer's
+    # own judgement against THIS world, publishes one LEDGER row below the
+    # verdict, and refuses by name when the ledger cannot be believed.
+    def ledger_world(tmp, payloads):
+        """A root that passes every earlier face, plus its ledger rows."""
+        root, reg, pin = build_root(tmp)
+        state = os.path.join(root, "state")
+        os.makedirs(state)
+        qa_dir = os.path.join(root, "qa")
+        os.makedirs(qa_dir)
+        write_bytes(os.path.join(qa_dir, "probe-evidence.log"), b"beta two\n")
+        ledger = os.path.join(state, "qa_replacements.jsonl")
+        if payloads is not None:
+            with open(ledger, "w", encoding="utf-8", newline="\n") as fh:
+                fh.write("".join(payloads))
+        return root, reg, pin, ledger, qa_dir
+
+    def replacement_row(name, old, new):
+        return json.dumps({
+            "event": "REPLACED", "name": name, "old_bytes": len(old),
+            "old_sha16": hashlib.sha256(old).hexdigest()[:16],
+            "new_bytes": len(new),
+            "new_sha16": hashlib.sha256(new).hexdigest()[:16],
+            "ts": "2026-11-22T00:00:00"}) + "\n"
+
+    healthy_row = replacement_row("probe-evidence.log", b"alpha\n",
+                                  b"beta two\n")
+    live11 = os.path.join(ROOT, "qa")
+    live_base11 = os.path.join(live11, CENSUS.BASELINE_NAME)
+    lines11, rc11, v11 = CG.evaluate(live11, live_base11, root=ROOT)
+    rows11 = [line for line in lines11 if line.startswith("LEDGER ")]
+    ok("AC-CLG11 arm a - the live closeout publishes exactly one LEDGER row",
+       rc11 == 0 and len(rows11) == 1 and rows11[0].startswith("LEDGER OK "),
+       "rc=%s rows=%s" % (rc11, rows11))
+    ok("AC-CLG11 arm b - an absent live ledger reads rows=0, not a defect",
+       rc11 == 0 and "rows=0" in rows11[0]
+       and "path=state/qa_replacements.jsonl" in rows11[0],
+       "row=%s" % rows11[:1])
+    ok("AC-CLG11 arm c - the pinned PASS token shape is byte-identical",
+       lines11[0].startswith("CLOSEOUT-GATE PASS files=")
+       and "gating=flags" in lines11[0]
+       and "ledger=" not in lines11[0],
+       "line=%s" % lines11[:1])
+
+    with tempfile.TemporaryDirectory() as tmp12:
+        root_a, reg_a, pin_a, _led_a, _qa_a = ledger_world(
+            os.path.join(tmp12, "a"), [healthy_row])
+        world_a, base_a = build_world(os.path.join(tmp12, "wa"))
+        a_lines, a_rc, a_v = CG.evaluate(world_a, base_a, root=root_a,
+                                         registry=reg_a, census_pin=pin_a,
+                                         matrix=False)
+        ok("AC-CLG12 arm a - a healthy ledger passes and says what it read",
+           a_rc == 0 and a_v.get("ledger") == "OK"
+           and any(line.startswith("LEDGER OK rows=1 names=1 ")
+                   for line in a_lines),
+           "rc=%s ledger=%s" % (a_rc, a_v.get("ledger")))
+
+        root_b, reg_b, pin_b, _led_b, _qa_b = ledger_world(
+            os.path.join(tmp12, "b"),
+            [healthy_row, '{"event": "REPLACED", "name": "trunc\n'])
+        world_b, base_b = build_world(os.path.join(tmp12, "wb"))
+        b_lines, b_rc, b_v = CG.evaluate(world_b, base_b, root=root_b,
+                                         registry=reg_b, census_pin=pin_b,
+                                         matrix=False)
+        ok("AC-CLG12 arm b - a truncated row REFUSES the closeout by name",
+           b_rc == 2 and b_v.get("reason") == "E_CLG_LEDGER"
+           and any("detail bad line=2" in line for line in b_lines),
+           "rc=%s reason=%s lines=%s"
+           % (b_rc, b_v.get("reason"), [l for l in b_lines if "bad" in l]))
+
+        root_c, reg_c, pin_c, _led_c, _qa_c = ledger_world(
+            os.path.join(tmp12, "c"),
+            [replacement_row("probe-evidence.log", b"alpha\n", b"moved\n")])
+        world_c, base_c = build_world(os.path.join(tmp12, "wc"))
+        c_lines, c_rc, c_v = CG.evaluate(world_c, base_c, root=root_c,
+                                         registry=reg_c, census_pin=pin_c,
+                                         matrix=False)
+        stale_lines = [l for l in c_lines if "detail stale" in l]
+        ok("AC-CLG12 arm c - a stale latest row REFUSES and names both hashes",
+           c_rc == 2 and c_v.get("reason") == "E_CLG_LEDGER"
+           and len(stale_lines) == 1 and "disk_sha16=" in stale_lines[0]
+           and "ledger_sha16=" in stale_lines[0],
+           "rc=%s stale=%s" % (c_rc, stale_lines))
+
+        root_d, reg_d, pin_d, _led_d, _qa_d = ledger_world(
+            os.path.join(tmp12, "d"),
+            [replacement_row("gone.log", b"alpha\n", b"beta two\n")])
+        world_d, base_d = build_world(os.path.join(tmp12, "wd"))
+        d_lines, d_rc, d_v = CG.evaluate(world_d, base_d, root=root_d,
+                                         registry=reg_d, census_pin=pin_d,
+                                         matrix=False)
+        ok("AC-CLG12 arm d - a row whose file is gone counts missing, no red",
+           d_rc == 0 and any(line.startswith("LEDGER OK ")
+                             and "missing=1" in line for line in d_lines),
+           "rc=%s lines=%s" % (d_rc, [l for l in d_lines
+                                      if l.startswith("LEDGER")]))
+
+        # AC-CLG13: read-only, honest opt-out, and the default face untouched.
+        def stat_of(path):
+            info = os.stat(path)
+            return (info.st_size, info.st_mtime_ns)
+
+        before_led = stat_of(_led_a)
+        before_qa = stat_of(os.path.join(_qa_a, "probe-evidence.log"))
+        names_before = sorted(os.listdir(root_a))
+        first_run = CG.evaluate(world_a, base_a, root=root_a, registry=reg_a,
+                                census_pin=pin_a, matrix=False)
+        second_run = CG.evaluate(world_a, base_a, root=root_a, registry=reg_a,
+                                 census_pin=pin_a, matrix=False)
+        ok("AC-CLG13 arm a - two runs are identical and touch nothing",
+           first_run[0] == second_run[0]
+           and first_run[1] == second_run[1] == 0
+           and stat_of(_led_a) == before_led
+           and stat_of(os.path.join(_qa_a, "probe-evidence.log")) == before_qa
+           and sorted(os.listdir(root_a)) == names_before,
+           "rc=%s/%s" % (first_run[1], second_run[1]))
+        opt_lines, opt_rc, opt_v = CG.evaluate(
+            world_a, base_a, root=root_a, registry=reg_a, census_pin=pin_a,
+            matrix=False, ledger=False)
+        ok("AC-CLG13 arm b - ledger=False is a named opt-out that prints no row",
+           opt_rc == 0
+           and not any(line.startswith("LEDGER ") for line in opt_lines)
+           and "ledger" not in opt_v,
+           "rc=%s verdict=%s" % (opt_rc, sorted(opt_v)))
+        plain13, plain13_rc, _pv13 = CG.evaluate(world_a, base_a)
+        ok("AC-CLG13 arm c - root=None answers the pre-R3093 shape untouched",
+           plain13_rc == 0
+           and not any(line.startswith("LEDGER ") for line in plain13)
+           and plain13[0].startswith("CLOSEOUT-GATE PASS")
+           and "round_main=" not in plain13[0],
+           "rc=%s lines=%s" % (plain13_rc, plain13[:1]))
 
     total = len(CHECKS)
     acs = set()

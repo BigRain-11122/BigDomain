@@ -1,0 +1,65 @@
+R3219 EVIDENCE - the replacement ledger is asked at closeout
+==========================================================
+
+BOARD HEAD CLAIMED (R3218 next window): the ledger read face ships but no
+execution body runs it, so a bad ledger is invisible where it matters.
+
+MEASURED BEFORE (tmp/probe_R3219.py, read-only, private worlds, zero socket,
+zero network, zero write to the live qa/ or the live ledger):
+  Q1 live ledger exists = False
+  Q1 writer ledger path for live qa/ = state/qa_replacements.jsonl
+  Q2 absent   rc=0 PASS ... ledger token absent
+  Q2 healthy  rc=0 PASS ... ledger token absent
+  Q2 bad-json rc=0 PASS ... ledger token absent      <-- the gap
+  Q2 stale    rc=0 PASS ... ledger token absent      <-- the gap
+
+MEASURED AFTER (same probe, same worlds):
+  Q2 absent   rc=0 PASS (one LEDGER OK rows=0 row published)
+  Q2 healthy  rc=0 PASS (LEDGER OK rows=1 names=1)
+  Q2 bad-json rc=2 REFUSED reason=E_CLG_LEDGER
+             LEDGER detail bad line=2 reason=json
+  Q2 stale    rc=2 REFUSED reason=E_CLG_LEDGER
+             LEDGER detail stale name=probe-evidence.log
+                 disk_sha16=7c68d64c303ee0f5 ledger_sha16=2c85ab0700b59729
+
+LANDED
+  tools/qa_log.py      ledger_report(path, evidence_dir=None) is the ONE
+                       judgement; do_ledger_check renders it and its printed
+                       bytes are unchanged.
+  tools/closeout_gate.py  check_ledger(root) reads root/state/
+                       qa_replacements.jsonl and judges the named files under
+                       root/qa; asked LAST among the root faces; refuses by
+                       name E_CLG_LEDGER; publishes one LEDGER row BELOW the
+                       verdict so the pinned PASS token shape is byte-equal;
+                       ledger=False is the named opt-out.
+  src/os/test_closeout_gate.py  AC-CLG11..13 (16 assertions)
+  src/os/test_qa_log.py         AC-QALB33 (2 arms, one definition)
+  src/sandbox/reconcile_all.py  os-closeout-gate 10 -> 13, os-qa-log 32 -> 33
+
+GATES
+  suite-closeout-gate-R3219.log   SUITE PASS 52/52 over 13 criteria
+  suite-qa-log-R3219.log          SUITE PASS 36/36 over 33 criteria
+  qa_log --selftest               not re-run this round (its own suite covers
+                                  the printer byte shape)
+  neighbours: test_closeout 29/29, test_battery_followup 7/7,
+              test_export_closeout_gate_parity 6/6,
+              test_suite_matrix_reconcile 14/14
+  matrix --write then --check     DOC-CURRENT (78577B / 756 rows)
+  registry census --write-pin then --check   VERDICT PASS pinned=756
+                                  (honest CACHE E_RCC_CACHE_PARTIAL 754/756)
+  live gate                       CLOSEOUT-GATE PASS files=4569 flags=0
+                                  reader_refused=0 gating=flags round_main=OK
+                                  census=PASS matrix=DOC-CURRENT
+                                  + LEDGER OK rows=0 names=0 bad=0 stale=0
+                                    missing=0 path=state/qa_replacements.jsonl
+
+HONEST BOUNDARY
+  * ZERO payment capability, no network beyond loopback: a buyer still cannot
+    pay (no merchant id, server, domain, filing+ICP, miniprogram appid+secret).
+  * Zero product surface, zero api surface, zero gate number: what changed is
+    whether a corrupt replacement ledger can close a round green.
+  * Only root/state/qa_replacements.jsonl and files named under root/qa are
+    judged; a ledger carried out of its world is not covered.
+  * A gone file is counted missing, never red - a deletion is another event.
+  * Evidence bytes and the live ledger are untouched (the ledger still does
+    not exist; this round did not create one).

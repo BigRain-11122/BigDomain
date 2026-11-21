@@ -283,27 +283,30 @@ def read_ledger(path):
     return records, bad
 
 
-def do_ledger_check(path=None):
-    """R3218 (AC-QALB30..32): read the replacement ledger back, read-only.
+def ledger_report(path=None, evidence_dir=None):
+    """R3219 (AC-QALB33): the ONE reading of a ledger, shared with the gate.
 
-    One line says what the ledger holds, one detail line per defect. A ledger
-    that is not there answers rows=0: no rewrite has happened yet, which is not
-    a defect. A row whose latest record no longer matches the file on disk is
-    named stale, because that is evidence changing with no record of it. A row
-    whose file is gone is counted, not reddened - a deletion is another event,
-    and this ledger never claimed the file would stay.
+    AC-QALB30..32 shipped the printer; the closeout gate now asks the same
+    question at every closeout, so the judgement moved here and the printer
+    below renders this dict. A second parser in the gate would let the two
+    faces disagree about what a bad row is.
+
+    `evidence_dir` defaults to the shipped rule: the live ledger is read
+    against REPO/qa, every other ledger against its own directory. A caller
+    that knows the world (the gate) passes the dir it is judging.
     """
     path = LEDGER if path is None else path
     records, bad = read_ledger(path)
     latest = {}
     for record in records:
         latest[record["name"]] = record
-    here = os.path.normcase(os.path.realpath(path))
-    live = os.path.normcase(os.path.realpath(LEDGER))
-    if here == live:
-        evidence_dir = os.path.join(REPO, "qa")
-    else:
-        evidence_dir = os.path.dirname(os.path.abspath(path))
+    if evidence_dir is None:
+        here = os.path.normcase(os.path.realpath(path))
+        live = os.path.normcase(os.path.realpath(LEDGER))
+        if here == live:
+            evidence_dir = os.path.join(REPO, "qa")
+        else:
+            evidence_dir = os.path.dirname(os.path.abspath(path))
     stale = []
     missing = []
     for name in sorted(latest):
@@ -314,20 +317,36 @@ def do_ledger_check(path=None):
         disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
         if disk != latest[name]["new_sha16"]:
             stale.append((name, disk, latest[name]["new_sha16"]))
-    verdict = "RED" if (bad or stale) else "OK"
+    return {"verdict": "RED" if (bad or stale) else "OK",
+            "path": path, "rows": len(records), "names": len(latest),
+            "bad": bad, "stale": stale, "missing": missing}
+
+
+def do_ledger_check(path=None):
+    """R3218 (AC-QALB30..32): read the replacement ledger back, read-only.
+
+    One line says what the ledger holds, one detail line per defect. A ledger
+    that is not there answers rows=0: no rewrite has happened yet, which is not
+    a defect. A row whose latest record no longer matches the file on disk is
+    named stale, because that is evidence changing with no record of it. A row
+    whose file is gone is counted, not reddened - a deletion is another event,
+    and this ledger never claimed the file would stay.
+    """
+    report = ledger_report(path)
     sys.stdout.write("QA-LEDGER %s path=%s rows=%d names=%d bad=%d stale=%d "
                      "missing=%d\n"
-                     % (verdict, path, len(records), len(latest), len(bad),
-                        len(stale), len(missing)))
-    for number, reason in bad:
+                     % (report["verdict"], report["path"], report["rows"],
+                        report["names"], len(report["bad"]),
+                        len(report["stale"]), len(report["missing"])))
+    for number, reason in report["bad"]:
         sys.stdout.write("QA-LEDGER detail bad line=%d reason=%s\n"
                          % (number, reason))
-    for name, disk, wanted in stale:
+    for name, disk, wanted in report["stale"]:
         sys.stdout.write("QA-LEDGER detail stale name=%s disk_sha16=%s "
                          "ledger_sha16=%s\n" % (name, disk, wanted))
-    for name in missing:
+    for name in report["missing"]:
         sys.stdout.write("QA-LEDGER detail missing name=%s\n" % name)
-    return 0 if verdict == "OK" else 2
+    return 0 if report["verdict"] == "OK" else 2
 
 
 def read_source(raw):

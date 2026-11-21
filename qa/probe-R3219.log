@@ -1,0 +1,126 @@
+"""R3219 read-only probe: is a bad replacement ledger visible at closeout?
+
+Q1 carrier face: read closeout_gate's root faces and the PASS tail tokens.
+Q2 decisive arms: build a fixture root that already passes carrier/round-main/
+   census/matrix, then give it (a) no ledger (b) a healthy ledger (c) a
+   truncated JSON line (d) a latest row whose new_sha16 no longer matches disk,
+   and read what evaluate(root=...) answers TODAY.
+Q3 cost: every fixture world that passes root=... would get the face asked.
+No socket, no network, no write to the live qa/ tree or the live ledger.
+"""
+import hashlib
+import io
+import json
+import os
+import sys
+import tempfile
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+sys.path.insert(0, os.path.join(ROOT, "src", "os"))
+
+import closeout_gate as CG
+import qa_writer_census as CENSUS
+
+
+def write(path, payload):
+    with io.open(path, "wb") as fh:
+        fh.write(payload)
+
+
+def build_world(tmp):
+    """qa-like frozen world plus its baseline (same recipe the suite uses)."""
+    world = os.path.join(tmp, "world")
+    os.makedirs(world)
+    write(os.path.join(world, "healthy.log"), b"PASS suite row\n")
+    base = os.path.join(world, CENSUS.BASELINE_NAME)
+    _lines, code, _base = CENSUS.write_baseline(world, base)
+    if code != 0:
+        raise RuntimeError("fixture baseline freeze failed rc=%d" % code)
+    return world, base
+
+
+def build_root(tmp, dated=True):
+    """repo-like root: one canonical state log, one registry row, one pin."""
+    os.makedirs(os.path.join(tmp, "src", "os"))
+    os.makedirs(os.path.join(tmp, "src", "sandbox"))
+    line = ("2026-11-20 R5001 PRODUCT: a fixture round main line" if dated
+            else "R5001 PRODUCT: no date anchor on this line")
+    with io.open(os.path.join(tmp, "src", "os", "state.json"), "w",
+                 encoding="utf-8", newline="") as fh:
+        fh.write('{\r\n  "log": [\r\n%s"%s"\r\n  ],\r\n  "tick": 1\r\n}\r\n'
+                 % (" " * 16, line))
+    with io.open(os.path.join(tmp, "src", "os", "fixture_suite.py"), "w",
+                 encoding="utf-8", newline="\n") as fh:
+        fh.write('print("SUITE PASS 1/1")\n')
+    reg = os.path.join(tmp, "src", "sandbox", "reg.py")
+    with io.open(reg, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write('import os\nSUITES = [\n'
+                 '    ("fixture-suite", os.path.join("..", "os", '
+                 '"fixture_suite.py"), 1),\n]\n')
+    pin = os.path.join(tmp, "src", "os", "census_pin.json")
+    with io.open(pin, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write('{"readable": ["fixture-suite"], "unparsed": [], '
+                 '"silent": []}\n')
+    return tmp, reg, pin
+
+
+def sha16(raw):
+    return hashlib.sha256(raw).hexdigest()[:16]
+
+
+def row(name, old, new):
+    return {"event": "REPLACED", "name": name, "old_bytes": len(old),
+            "old_sha16": sha16(old), "new_bytes": len(new),
+            "new_sha16": sha16(new), "ts": "2026-11-22T00:00:00"}
+
+
+def main():
+    print("=== R3219 PROBE (read-only) ===")
+    print("Q1 live ledger exists: %s"
+          % os.path.isfile(os.path.join(ROOT, "state",
+                                        "qa_replacements.jsonl")))
+    print("Q1 ledger path the writer uses for the live qa/ dir: %s"
+          % os.path.relpath(
+              __import__("qa_log").ledger_path(os.path.join(ROOT, "qa")),
+              ROOT))
+
+    with tempfile.TemporaryDirectory() as tmp:
+        world, base = build_world(os.path.join(tmp, "w"))
+        root, reg, pin = build_root(os.path.join(tmp, "root"))
+        state = os.path.join(root, "state")
+        os.makedirs(state)
+        ledger = os.path.join(state, "qa_replacements.jsonl")
+        # evidence the ledger will name lives under root/qa
+        os.makedirs(os.path.join(root, "qa"))
+        old, new = b"alpha\n", b"beta two\n"
+        write(os.path.join(root, "qa", "probe-evidence.log"), new)
+        healthy = json.dumps(row("probe-evidence.log", old, new)) + "\n"
+
+        arms = [
+            ("absent", None),
+            ("healthy", healthy),
+            ("bad-json", healthy + '{"event": "REPLACED", "name": "trunc\n'),
+            ("stale", json.dumps(row("probe-evidence.log", old, b"moved\n"))
+             + "\n"),
+        ]
+        for label, payload in arms:
+            if payload is None:
+                if os.path.isfile(ledger):
+                    os.remove(ledger)
+            else:
+                write(ledger, payload.encode("utf-8"))
+            lines, code, verdict = CG.evaluate(
+                world, base, root=root, registry=reg, census_pin=pin,
+                matrix=False)
+            print("Q2 %-8s rc=%d first=%s ledger_token=%s"
+                  % (label, code, lines[0][:110],
+                     "ledger=" in " ".join(lines)))
+        print("Q3 PASS tail tokens today: %s" % lines[0])
+    print("=== end probe ===")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

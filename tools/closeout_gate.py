@@ -91,6 +91,20 @@ ONE code on purpose: it is one law (a face may not judge a tree it cannot
 address), and the face token - not a second spelling - is what makes the line
 actionable. Pinned by AC-CLG9 and by AC-COUT9 (the vehicle now prints it).
 
+R3219 - the replacement ledger (AC-CLG11..13):
+
+`qa_log.py --ledger-check` shipped at R3218 but nothing ran it: measured on
+four fixture worlds, a truncated JSON row and a latest row whose `new_sha16`
+no longer matched the file on disk both answered the identical
+`CLOSEOUT-GATE PASS` with no ledger token. `check_ledger(root)` now asks the
+writer's OWN judgement (`qa_log.ledger_report`, one definition) about
+`root/state/qa_replacements.jsonl` with the named files judged under
+`root/qa`; a bad row or a stale latest row refuses by name E_CLG_LEDGER, an
+absent ledger is rows=0 and PASS, and a gone file is counted missing rather
+than reddened. It is asked LAST (cheapest read, but it judges bytes a previous
+write replaced) and `ledger=False` is the named opt-out. The reading rides
+BELOW the verdict so the PASS token shape stays byte-identical.
+
 Shape: a published line, never a silent pass.
 
     CLOSEOUT-GATE PASS files=<n> flags=0 reader_refused=<n> gating=flags
@@ -126,6 +140,10 @@ E_CLG_CARRIER = "E_CLG_CARRIER"
 E_CLG_CARRIER_LAYOUT = "E_CLG_CARRIER_LAYOUT"
 E_CLG_CARRIER_FOLD = "E_CLG_CARRIER_FOLD"
 E_CLG_CARRIER_UNREADABLE = "E_CLG_CARRIER_UNREADABLE"
+# R3219: the replacement ledger's two pathologies (a bad row, a latest row
+# whose new_sha16 no longer matches the file on disk). Named so a reader can
+# act; an absent ledger is rows=0 and never a refusal.
+E_CLG_LEDGER = "E_CLG_LEDGER"
 INFORMATIONAL_FACES = ("reader_refused", "plain_unusable",
                        "reader_rescued", "flags")
 
@@ -240,6 +258,45 @@ def check_carrier(root):
     if fold_needed and items < 2:
         return False, "CARRIER FAIL %s %s" % (E_CLG_CARRIER_FOLD, row)
     return True, row
+
+
+def check_ledger(root):
+    """Ask the replacement ledger of THIS world (R3219, AC-CLG11..13).
+
+    WHY (measured at R3218): `qa_log.py --ledger-check` shipped a read face and
+    nothing ran it - a ledger with a truncated JSON line or with a latest row
+    whose `new_sha16` no longer matches the file on disk answered the identical
+    `CLOSEOUT-GATE PASS` as a healthy one, so a rewrite-recorded-then-changed
+    evidence file could close green.
+
+    Read-only. The judgement is the writer's OWN (qa_log.ledger_report), so the
+    gate cannot drift from `--ledger-check`; this face only decides the verdict
+    against THIS world: the ledger is `root/state/qa_replacements.jsonl` and
+    the files it names are judged under `root/qa`. An absent ledger is rows=0
+    and PASS - no rewrite has happened yet, which is not a defect. A gone file
+    is counted `missing`, not reddened: a deletion is another event and the
+    ledger never claimed the file would stay.
+
+    Returns (ok, lines) where lines[0] is the LEDGER row and the rest are one
+    detail line per defect.
+    """
+    _src_os(root)
+    import qa_log as QL
+    path = os.path.join(root, "state", QL.LEDGER_NAME)
+    report = QL.ledger_report(path, evidence_dir=os.path.join(root, "qa"))
+    lines = ["LEDGER %s rows=%d names=%d bad=%d stale=%d missing=%d path=%s"
+             % (report["verdict"], report["rows"], report["names"],
+                len(report["bad"]), len(report["stale"]),
+                len(report["missing"]),
+                os.path.relpath(path, root).replace("\\", "/"))]
+    for number, reason in report["bad"]:
+        lines.append("LEDGER detail bad line=%d reason=%s" % (number, reason))
+    for name, disk, wanted in report["stale"]:
+        lines.append("LEDGER detail stale name=%s disk_sha16=%s ledger_sha16=%s"
+                     % (name, disk, wanted))
+    for name in report["missing"]:
+        lines.append("LEDGER detail missing name=%s" % name)
+    return report["verdict"] == "OK", lines
 
 
 def check_census(root, registry=None, pin=None):
@@ -367,12 +424,14 @@ def _baseline_identity(baseline, root):
 
 
 def evaluate(target, baseline, root=None, registry=None, census_pin=None,
-             matrix=None):
+             matrix=None, ledger=None):
     """Run the census check and return (lines, exit_code, verdict dict).
 
     `root=None` -> the pre-R3093 question, byte for byte.
     `root` given -> after a green `flags` face, also ask round-main and the
     registry census; either red refuses the closeout by name.
+    `ledger=False` -> the named opt-out for the R3219 replacement-ledger face,
+    so a world that keeps no ledger says so in code instead of being skipped.
     """
     face_ms = {}
     # R3124: measured on the live tree, this face's 1186.3ms is BYTES, not
@@ -425,6 +484,7 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                    "reader_refused": refused, "gating": GATING_FACE}
         tail = ""
         carrier_row = ""
+        ledger_row = ""
         if root is not None:
             # R3177: the carrier is the cheapest root face (one state read)
             # and the one every later face reads through, so it is asked
@@ -520,6 +580,33 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 # see that the face was skipped rather than slow.
                 face_ms["matrix"] = 0.0
                 tail_matrix = ""
+            if ledger is not False:
+                # R3219: the replacement ledger is asked LAST - it is the
+                # cheapest read of the five (one small file) but it judges
+                # bytes a previous write replaced, so it must not be the face
+                # that explains a red that the drift face already owns.
+                try:
+                    lg_ok, lg_lines = _timed(face_ms, "ledger",
+                                             check_ledger, root)
+                except (IOError, OSError, ValueError,
+                        UnicodeDecodeError) as exc:
+                    lg_ok = False
+                    lg_lines = ["%s %s" % (E_CLG_LEDGER, exc)]
+                if not lg_ok:
+                    out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_LEDGER "
+                               "files=%d flags=%d round_main=OK census=PASS"
+                               % (count, flags))
+                    out.extend(lg_lines)
+                    verdict = {"verdict": "REFUSED", "reason": E_CLG_LEDGER,
+                               "files": count, "flags": flags,
+                               "round_main": "OK", "census": "PASS",
+                               "ledger": "RED"}
+                    return out, 2, _pub(verdict)
+                ledger_row = lg_lines[0]
+                verdict["ledger"] = "OK"
+            else:
+                face_ms["ledger"] = 0.0
+                ledger_row = ""
             verdict["round_main"] = "OK"
             verdict["census"] = "PASS"
             verdict["carrier"] = "OK"
@@ -532,6 +619,10 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
             # PASS token shape stays byte-identical (same law as R3109 below).
             if carrier_row:
                 out.append(carrier_row)
+            # R3219: the ledger reading rides BELOW the verdict for the same
+            # reason - the pinned PASS token shape stays byte-identical.
+            if ledger_row:
+                out.append(ledger_row)
             # R3109: a PASS that does not name the baseline it judged cannot
             # be re-checked by the reader who quotes it. The identity row is a
             # READING (no threshold, no gate) and rides below the verdict so
