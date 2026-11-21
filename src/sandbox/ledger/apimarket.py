@@ -15830,6 +15830,233 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
             "months": months}
 
+    def api_buyer_claim_outcome_months(self, buyer_id):
+        """Buyer-side monthly claim OUTCOME mix (criteria AC-BCO1..AC-BCO8
+        pre-registered in the R3155 explore-queue claim row BEFORE this
+        code existed; the AC-BCO prefix, this face name,
+        test_apimarket_buyerclaimoutcomemonths and
+        ledger-apimarket-buyerclaimoutcomemonths were all git-grep
+        zero-occupancy against HEAD 2026-11-21, rc=1).
+
+        api_buyer_claim_months already carries the four outcome counts,
+        but it books every claim in the month it was OPENED. What a
+        buyer cannot read is when the after-sales work actually CLOSED:
+        a claim opened on 08-05 and refunded on 10-03 shows up only in
+        August on the opened face, and October is silently absent, so
+        "how many claims did I close this month, by which outcome, and
+        how long did I wait" had no face at all. The measurement behind
+        this row: of 82 month-bucket sites in this module not one keys
+        a claim month on a resolution stamp (api_seller_reply_months
+        books SELLER replies to questions and the refund faces book
+        refund CASH, neither is a claim outcome).
+
+        Booking law (AC-BCO2): a closed claim books ONLY in the UTC
+        month of its own resolution stamp, chosen by the api_claims seam
+        refunded > withdrawn > answered. A later refund moves an
+        answered claim to the refunded bucket and to the refund month -
+        it never adds a second row and never re-dates the opened month.
+        An OPEN claim has no resolution stamp, so it never enters a
+        month row; it stays in the envelope's open_count as the present
+        debt, whose per-month view the opened-month face already owns.
+
+        Shares and rate (AC-BCO4): the three shares divide by
+        resolved_count, not by claim_count, so the mix is a composition
+        of what closed; a month that closed nothing reads None for all
+        three rather than a fabricated 0.0, and resolution_rate is
+        resolved_count / claim_count reading None on a zero denominator.
+
+        Latency (AC-BCO5): seconds are derived ONLY from two stored
+        stamps (resolution minus opened_utc), never from a wall clock;
+        avg/median/fastest/slowest are POOLED over that month's closed
+        claims across all three outcomes, and the envelope pools the
+        whole window. A closed claim always has both stamps, so a
+        negative duration cannot arise and a zero-second close is a
+        legitimate reading.
+
+        Grid (AC-BCO6): the contiguous months from the first to the
+        last resolution month, honest zero rows with None latency and
+        running_resolved_count carried flat; the peak takes the largest
+        resolved_count with ties resolved to the EARLIER month and a
+        zero month is never a peak.
+
+        Buyer isolation and identity (AC-BCO7): another buyer's claims
+        never leak, and the envelope's claim_count / open_count /
+        answered_count / withdrawn_count / refunded_count equal the same
+        lifetime keys of api_buyer_claim_months for this buyer. The two
+        faces answer different axes (opened month versus resolution
+        month) and their month rows cannot be derived from each other -
+        named, not hidden.
+
+        The usr: prefix gate runs before any read (fail-closed
+        E_AM_BAD_ACCOUNT), the bare prefix reads honestly empty, and the
+        read is pure: zero row mutations, zero token movement, repeated
+        calls and post-restart instances byte-identical (AC-BCO8)."""
+        if not str(buyer_id or "").startswith("usr:"):
+            raise ApiMarketError(E_AM_BAD_ACCOUNT, buyer_id)
+        buyer = str(buyer_id)
+
+        def _elapsed(earlier, later):
+            fmt = "%Y-%m-%dT%H:%M:%SZ"
+            start = datetime.datetime.strptime(str(earlier), fmt)
+            end = datetime.datetime.strptime(str(later), fmt)
+            return int((end - start).total_seconds())
+
+        def _pooled(latencies):
+            if not latencies:
+                return None, None, None, None
+            ordered = sorted(latencies)
+            count = len(ordered)
+            mid = count // 2
+            median = (float(ordered[mid]) if count % 2
+                      else (ordered[mid - 1] + ordered[mid]) / 2.0)
+            return (round(float(sum(ordered)) / count, 2), median,
+                    ordered[0], ordered[-1])
+
+        with self._lock:
+            raw = self._conn.execute(
+                "SELECT c.claim_id, c.price_paid, c.opened_utc,"
+                " f.refunded_utc, f.amount, w.withdrawn_utc,"
+                " r.replied_utc"
+                " FROM apimarket_claims c"
+                " LEFT JOIN apimarket_refunds f"
+                " ON f.purchase_id = c.purchase_id"
+                " LEFT JOIN apimarket_claim_responses r"
+                " ON r.claim_id = c.claim_id"
+                " LEFT JOIN apimarket_claim_withdrawals w"
+                " ON w.claim_id = c.claim_id"
+                " WHERE c.buyer_id = ? ORDER BY c.claim_id",
+                (buyer,)).fetchall()
+
+        buckets = {}
+        claim_total = 0
+        claim_amount = 0
+        open_total = 0
+        for _cid, price, opened, refunded_utc, amount, withdrawn_utc, \
+                replied_utc in raw:
+            claim_total += 1
+            claim_amount += int(price)
+            if refunded_utc is not None:
+                outcome, stamp, cash = "refunded", refunded_utc, int(amount)
+            elif withdrawn_utc is not None:
+                outcome, stamp, cash = "withdrawn", withdrawn_utc, 0
+            elif replied_utc is not None:
+                outcome, stamp, cash = "answered", replied_utc, 0
+            else:
+                open_total += 1
+                continue
+            month = str(stamp)[:7]
+            b = buckets.get(month)
+            if b is None:
+                b = {"answered_count": 0, "withdrawn_count": 0,
+                     "refunded_count": 0, "resolved_claim_amount": 0,
+                     "refunded_amount": 0, "latencies": []}
+                buckets[month] = b
+            b[outcome + "_count"] += 1
+            b["resolved_claim_amount"] += int(price)
+            if outcome == "refunded":
+                b["refunded_amount"] += cash
+            b["latencies"].append(_elapsed(opened, stamp))
+
+        months = []
+        running = 0
+        for month in _contiguous_months(sorted(buckets)):
+            b = buckets.get(month)
+            if b is None:
+                months.append({
+                    "month": month,
+                    "resolved_count": 0,
+                    "answered_count": 0,
+                    "withdrawn_count": 0,
+                    "refunded_count": 0,
+                    "answered_share": None,
+                    "withdrawn_share": None,
+                    "refunded_share": None,
+                    "resolved_claim_amount": 0,
+                    "refunded_amount": 0,
+                    "avg_resolve_seconds": None,
+                    "median_resolve_seconds": None,
+                    "fastest_resolve_seconds": None,
+                    "slowest_resolve_seconds": None,
+                    "running_resolved_count": running})
+                continue
+            resolved = (b["answered_count"] + b["withdrawn_count"]
+                        + b["refunded_count"])
+            running += resolved
+            avg, median, fastest, slowest = _pooled(b["latencies"])
+            months.append({
+                "month": month,
+                "resolved_count": resolved,
+                "answered_count": b["answered_count"],
+                "withdrawn_count": b["withdrawn_count"],
+                "refunded_count": b["refunded_count"],
+                "answered_share": round(
+                    float(b["answered_count"]) / resolved, 4),
+                "withdrawn_share": round(
+                    float(b["withdrawn_count"]) / resolved, 4),
+                "refunded_share": round(
+                    float(b["refunded_count"]) / resolved, 4),
+                "resolved_claim_amount": b["resolved_claim_amount"],
+                "refunded_amount": b["refunded_amount"],
+                "avg_resolve_seconds": avg,
+                "median_resolve_seconds": median,
+                "fastest_resolve_seconds": fastest,
+                "slowest_resolve_seconds": slowest,
+                "running_resolved_count": running})
+
+        peak_month = None
+        peak_count = None
+        for row in months:
+            if row["resolved_count"] > 0 and (
+                    peak_count is None
+                    or row["resolved_count"] > peak_count):
+                peak_month = row["month"]
+                peak_count = row["resolved_count"]
+        answered = sum(row["answered_count"] for row in months)
+        withdrawn = sum(row["withdrawn_count"] for row in months)
+        refunded = sum(row["refunded_count"] for row in months)
+        resolved = answered + withdrawn + refunded
+        latencies = []
+        for b in buckets.values():
+            latencies.extend(b["latencies"])
+        avg, median, fastest, slowest = _pooled(latencies)
+        return {
+            "buyer_id": buyer,
+            "scope": "buyer",
+            "month_count": len(months),
+            "active_month_count": sum(
+                1 for row in months if row["resolved_count"] > 0),
+            "claim_count": claim_total,
+            "resolved_count": resolved,
+            "open_count": open_total,
+            "answered_count": answered,
+            "withdrawn_count": withdrawn,
+            "refunded_count": refunded,
+            "answered_share": (round(float(answered) / resolved, 4)
+                               if resolved else None),
+            "withdrawn_share": (round(float(withdrawn) / resolved, 4)
+                                if resolved else None),
+            "refunded_share": (round(float(refunded) / resolved, 4)
+                               if resolved else None),
+            "resolution_rate": (round(float(resolved) / claim_total, 4)
+                                if claim_total else None),
+            "claim_amount": claim_amount,
+            "resolved_claim_amount": sum(
+                row["resolved_claim_amount"] for row in months),
+            "refunded_amount": sum(
+                row["refunded_amount"] for row in months),
+            "avg_resolve_seconds": avg,
+            "median_resolve_seconds": median,
+            "fastest_resolve_seconds": fastest,
+            "slowest_resolve_seconds": slowest,
+            "peak_month": peak_month,
+            "peak_resolved_count": peak_count,
+            "first_month": months[0]["month"] if months else None,
+            "last_month": months[-1]["month"] if months else None,
+            "latest_month_resolved_count": (
+                months[-1]["resolved_count"] if months else None),
+            "disclaimer": self.disclaimer,
+            "months": months}
+
     def api_market_feed_months(self, since_utc=None, until_utc=None,
                                kinds=None, dev_account=None):
         """Monthly activity-volume timeline over the merged feed

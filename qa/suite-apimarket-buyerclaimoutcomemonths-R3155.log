@@ -1,0 +1,10 @@
+PASS AC-BCO1: keys=28 empty=(0, 0, None, []) grid=['2026-09', '2026-10', '2026-11', '2026-12'] rows=4
+PASS AC-BCO2: grid=['2026-09', '2026-10', '2026-11', '2026-12'] sep=(2, 1, 1, 0) oct=(1, 1, 10) dec=(1, 1)
+PASS AC-BCO3: bob=(2, 1, 1, 1) carol=(1, 1) nov=0
+PASS AC-BCO4: shares=(0.5, 0.25, 0.25) rates=(0.8, 1.0) money=(38, 34, 10)
+PASS AC-BCO5: sep=(259200.0, 259200.0, 86400, 432000) oct=(5090400.0, 5090400) env=(1639800.0, 691200.0, 86400, 5090400)
+PASS AC-BCO6: running=[2, 3, 3, 4] peak=('2026-09', 2) window=('2026-09', '2026-12', 1)
+PASS AC-BCO7: opened=(5, 1, 2, 1, 1) bob=(5, 1, 2, 1, 1) sum=(4, 4) carol=1
+PASS AC-BCO8: gates=True digests_same=True tx_same=True bytes=True ascii=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

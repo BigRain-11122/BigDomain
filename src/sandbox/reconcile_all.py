@@ -3105,6 +3105,17 @@ SUITES = [
     # claim row BEFORE the code.
     ("ledger-apimarket-sellerclaimmonths", os.path.join(
         "ledger", "test_apimarket_sellerclaimmonths.py"), 8),
+    # buyer-side monthly claim OUTCOME mix (a claim books in the month of
+    # its own resolution stamp - a cross-month refund books in the refund
+    # month and never in the opened month, an open claim enters no month
+    # row, the shares divide by resolved_count and read None on a month
+    # that closed nothing, latency is pooled over the closed claims from
+    # two stored stamps only, honest zero months carried flat, earlier
+    # peak tie-break and strict buyer isolation with lifetime identity
+    # against api_buyer_claim_months) - criteria AC-BCO1..AC-BCO8
+    # registered in the R3155 explore-queue claim row BEFORE the code.
+    ("ledger-apimarket-buyerclaimoutcomemonths", os.path.join(
+        "ledger", "test_apimarket_buyerclaimoutcomemonths.py"), 8),
     # market-wide monthly restock pressure (a restock books in its own
     # restocked_utc month, the sold-out denominator is sampled by the
     # same law as the market supply face, coverage is measured against
