@@ -21,6 +21,7 @@ before and after and must be identical. The repo files are never written.
 Source discipline: pure ASCII, stdlib only, no clock in assertions, no network,
 no shell.
 """
+import ast
 import hashlib
 import importlib.util
 import io
@@ -249,7 +250,11 @@ def main():
         suite_src = read_text(os.path.abspath(__file__))
         tool_allowed = {'hashlib', 'io', 'os', 're', 'sys', 'tempfile'}
         suite_allowed = {'hashlib', 'importlib', 'io', 'os', 're', 'shutil',
-                         'sys', 'tempfile', 'time', 'contextlib'}
+                         'sys', 'tempfile', 'time', 'contextlib',
+                         # R3215: AC-QALB23 censuses call sites by parsing the
+                         # tree. ast is stdlib, parses text only and is in the
+                         # banned set below if it ever grows a network face.
+                         'ast'}
 
         def imp_names(text):
             names = set()
@@ -341,8 +346,9 @@ def main():
                               reg[pos:pos + 200])
             if found:
                 declared.append(found.group(1))
-        ok('AC-QALB9 registry declares exactly one row for this suite, twenty',
-           declared == ['20'], 'rows=%s hits=%d' % (declared, len(hits)))
+        ok('AC-QALB9 registry declares exactly one row for this suite, '
+           'twenty-three',
+           declared == ['23'], 'rows=%s hits=%d' % (declared, len(hits)))
 
         # ---- AC-QALB11: a carried proof line is marked, not certified -----
         # R3203: the generator prints "LOG OK path=... sha16=..." to prove a
@@ -780,6 +786,141 @@ def main():
            'files=%d stable=%s suffixless=%s'
            % (len(live_after), live_before == live_after,
               live_after.get('round-R2835-closeout')))
+        # ---- AC-QALB21: a destination inside the repo and outside qa/ is
+        # ---- refused at both doors and lands nothing -----------------------
+        # R3215: the writer took any `directory`, while every reader enumerates
+        # qa/*.log only - so a .log landed in the healthy dialect at a repo
+        # path the caller picked and no face judged it. Measured before the
+        # guard (AST census + one repo-internal arm, removed again): the only
+        # production call site passing a directory is battery_shard's QA_DIR,
+        # and every test world passes a tempfile.mkdtemp path, so the law is
+        # drawn where it costs nothing: qa/ itself, or outside the repo.
+        dest_world = os.path.join(world, 'dest')
+        os.makedirs(dest_world)
+        dest_cases = [
+            ('repo-root', ROOT),
+            ('repo-tmp', os.path.join(ROOT, 'tmp', 'r3215-arm')),
+            ('qa-sub', os.path.join(QA_DIR, 'r3215-sub')),
+            ('repo-logs', os.path.join(ROOT, 'logs')),
+        ]
+        dest_verdicts = []
+        for label, dest in dest_cases:
+            try:
+                quiet(mod.do_write, 'place.log', b'x\n', directory=dest)
+                dest_verdicts.append((label, 'LANDED'))
+            except ValueError as exc:
+                dest_verdicts.append((label, str(exc)))
+        dest_landed = [os.path.join(d, 'place.log') for _, d in dest_cases
+                       if os.path.exists(os.path.join(d, 'place.log'))]
+        door_refused = False
+        try:
+            mod.write_atomic(os.path.join(ROOT, 'tmp', 'r3215-arm'),
+                             'place.log', 'x\n')
+        except ValueError as exc:
+            door_refused = 'E_DEST_INSIDE_REPO' in str(exc)
+        rc_dest, out_dest = quiet(mod.do_write, 'temp-ok.log', b'x\n',
+                                  directory=dest_world)
+        verdict_by_label = dict(dest_verdicts)
+        ok('AC-QALB21 a repo destination outside qa/ is refused at both doors '
+           'and lands nothing',
+           all(verdict_by_label.get(lbl, '').startswith(
+               'E_DEST_INSIDE_REPO') for lbl, _d in dest_cases)
+           and dest_landed == [] and door_refused
+           and not os.path.exists(os.path.join(ROOT, 'tmp', 'r3215-arm'))
+           and rc_dest == 0 and 'VERDICT PASS' in out_dest,
+           'verdicts=%s landed=%s door=%s temp_rc=%d'
+           % (dest_verdicts, dest_landed, door_refused, rc_dest))
+
+        # ---- AC-QALB22: the default destination is resolved at call time ---
+        # A default bound at import time would keep aiming at the real qa/ once
+        # a suite points QA elsewhere - so the suite would either write into the
+        # live tree or be refused for asking for its own world.
+        tool_src = read_text(TOOL)
+        default_world = os.path.join(world, 'default')
+        os.makedirs(default_world)
+        saved_qa_here = mod.QA
+        try:
+            mod.QA = default_world
+            rc_def, out_def = quiet(mod.do_write, 'default.log', b'z\n')
+        finally:
+            mod.QA = saved_qa_here
+        ok('AC-QALB22 the default destination follows QA at call time',
+           rc_def == 0 and 'VERDICT PASS' in out_def
+           and os.path.isfile(os.path.join(default_world, 'default.log'))
+           and not os.path.exists(os.path.join(QA_DIR, 'default.log'))
+           and 'def do_write(name, source_bytes, directory=None):' in tool_src
+           and '        directory = QA\n' in tool_src,
+           'rc=%d in_world=%s in_live=%s signature=%s'
+           % (rc_def,
+              os.path.isfile(os.path.join(default_world, 'default.log')),
+              os.path.exists(os.path.join(QA_DIR, 'default.log')),
+              'directory=None' in tool_src))
+
+        # ---- AC-QALB23: no shipped call site passes a repo path ------------
+        # The census is derived from the tree, not typed: every call that names
+        # a destination is listed, the production ones must be exactly
+        # battery_shard's QA_DIR, and every file that names one must build its
+        # world with tempfile.mkdtemp. A literal repo path anywhere reddens it.
+        census_rows = []
+        for part in ('src/os', 'tools'):
+            base = os.path.join(ROOT, *part.split('/'))
+            for name in sorted(os.listdir(base)):
+                if not name.endswith('.py'):
+                    continue
+                path = os.path.join(base, name)
+                try:
+                    tree = ast.parse(read_text(path))
+                except SyntaxError:
+                    continue
+                text = read_text(path)
+                for node in ast.walk(tree):
+                    if not isinstance(node, ast.Call):
+                        continue
+                    callee_name = None
+                    if isinstance(node.func, ast.Name):
+                        callee_name = node.func.id
+                    elif isinstance(node.func, ast.Attribute):
+                        callee_name = node.func.attr
+                    if callee_name == 'quiet' and node.args and \
+                            isinstance(node.args[0], ast.Attribute):
+                        callee_name = node.args[0].attr
+                    if callee_name not in ('do_write', 'write_atomic'):
+                        continue
+                    for kw in node.keywords:
+                        if kw.arg != 'directory':
+                            continue
+                        census_rows.append((
+                            '%s/%s' % (part, name), node.lineno,
+                            ast.get_source_segment(text, kw.value)))
+        prod_explicit = [r for r in census_rows
+                         if not os.path.basename(r[0]).startswith('test_')
+                         and r[0] != 'tools/qa_log.py']
+        world_files = sorted(set(r[0] for r in census_rows))
+        worlds_ok = []
+        for rel in world_files:
+            src = read_text(os.path.join(ROOT, *rel.split('/')))
+            if os.path.basename(rel).startswith('test_') or \
+                    rel == 'tools/qa_log.py':
+                # a world that names a destination must build it with mkdtemp,
+                # so a suite can never point the writer at a repo path
+                worlds_ok.append('mkdtemp(' in src)
+            else:
+                # production must name qa/ itself and nothing else
+                worlds_ok.append(all(expr in ('QA', 'QA_DIR') for _p, _l,
+                                     expr in census_rows if _p == rel))
+        control_body = b'R3215 control line\n'
+        rc_ctl, _out_ctl = quiet(mod.do_write, 'control.log', control_body,
+                                 directory=dest_world)
+        ctl_sha = hashlib.sha256(
+            read_bytes(os.path.join(dest_world, 'control.log'))).hexdigest()[:16]
+        want_ctl = hashlib.sha256(control_body).hexdigest()[:16]
+        ok('AC-QALB23 no shipped call site names a repo destination',
+           rc_ctl == 0 and ctl_sha == want_ctl
+           and prod_explicit == [('tools/battery_shard.py', 310, 'QA_DIR')]
+           and all(worlds_ok) and bool(world_files),
+           'named=%d prod=%s worlds=%s mkdtemp=%s control=%s'
+           % (len(census_rows), prod_explicit, world_files, worlds_ok,
+              ctl_sha == want_ctl))
     finally:
         mod.QA = original_qa
         shutil.rmtree(world, ignore_errors=True)

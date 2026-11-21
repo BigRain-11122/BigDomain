@@ -1,0 +1,171 @@
+probe R3215 repo=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain
+== Q1: directory= call sites ==
+  src/os/test_qa_log.py:325 [test] mod.do_write(name, b'flag probe\n', directory=qa_private)
+  src/os/test_qa_log.py:851 [test] and 'def do_write(name, source_bytes, directory=None):' in tool_src
+  tools/battery_shard.py:310 [prod] qa_log.do_write(name, text.encode("utf-8"), directory=QA_DIR)
+  tools/qa_log.py:378 [prod] def do_write(name, source_bytes, directory=None):
+  tools/qa_log.py:502 [prod] do_write("carried-qal9.log", proof, directory=tmp)
+  tools/qa_log.py:504 [prod] do_write("carried2-qal9.log", first, directory=tmp)
+  tools/qa_log.py:507 [prod] do_write("plain-qal9.log", plain, directory=tmp)
+  tools/qa_log.py:511 [prod] do_write("near-qal9.log", near, directory=tmp)
+  total=8 prod=6 test_or_selftest=2
+  QA=c:\users\sjs20\desktop\fluxgroup\domain\bigdomain\qa
+  prod-site tools/battery_shard.py:310 passes=QA_DIR? True
+  prod-site tools/qa_log.py:378 passes=QA_DIR? False
+  prod-site tools/qa_log.py:502 passes=QA_DIR? False
+  prod-site tools/qa_log.py:504 passes=QA_DIR? False
+  prod-site tools/qa_log.py:507 passes=QA_DIR? False
+  prod-site tools/qa_log.py:511 passes=QA_DIR? False
+  write_atomic definitions=10
+    src/os/append_R2453.py ['def write_atomic(path, data, prefix):']
+    src/os/board_R2371.py ['def write_atomic(path, data):']
+    src/os/dec_watermark.py ['def write_atomic(path, entry):']
+    src/os/fold_R2324.py ['def write_atomic(path, text, predicted_bytes):']
+    src/os/repair_R2328.py ['def write_atomic(path, text, predicted_bytes):']
+    src/os/residue_triage_head_renew.py ['def write_atomic(path, data, predicted, tail, old_tail):']
+    tools/battery_shard_report.py ['def write_atomic(path, text):']
+    tools/first_yuan_chain.py ['def write_atomic(path, text):']
+    tools/membership_face.py ['def write_atomic(path, data):']
+    tools/qa_log.py ['def write_atomic(directory, name, text):']
+== Q2: decisive arm ==
+QA-LOG WROTE name=outside.log bytes=2 lines=1 sha256=73cb3858a687a849 dialect=utf-8/lf VERDICT PASS
+python : Traceback (most recent call last):
+所在位置 行:1 字符: 57
++ ... BigDomain"; python tmp\probe_R3215.py *> "$env:TEMP\r3215_probe.txt"; ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tmp\probe_R3215.py", line 171, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tmp\probe_R3215.py", line 164, in main
+    q2()
+    ~~^^
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tmp\probe_R3215.py", line 105, in q2
+    rc = qa_log.do_write("repo.log", b"y\n", directory=inside_repo)
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py", line 391, in do_write
+    path = write_atomic(directory, name, text)
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py", line 224, in write_atomic
+    check_destination(directory)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py", line 210, in check_destination
+    raise ValueError(
+    ...<4 lines>...
+        "and never be judged)" % directory)
+ValueError: E_DEST_INSIDE_REPO destination must be the qa/ dir or a path outside the repo, got 'C:\\Users\\sjs20\\Deskt
+op\\FluxGroup\\domain\\BigDomain\\tmp\\probe_R3215_dest' (the writer census, the pre-commit evidence gate and the close
+out files= count enumerate qa/*.log only, so a .log written here would land in the healthy dialect and never be judged)
+python : <unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. D
+id you mean "\\("? A raw string is also an option.
+所在位置 行:1 字符: 115
++ ... probe.txt"; python tmp\probe_R3215b.py *>> "$env:TEMP\r3215_probe.txt ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (<unknown>:18: S...also an option.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+== AST call sites ==
+  src/os/append_R2453.py:109 write_atomic kw=[] directory=None
+  src/os/append_R2453.py:113 write_atomic kw=[] directory=None
+  src/os/board_R2371.py:81 write_atomic kw=[] directory=None
+  src/os/board_R2371.py:95 write_atomic kw=[] directory=None
+  src/os/dec_watermark.py:163 write_atomic kw=[] directory=None
+  src/os/fold_R2324.py:128 write_atomic kw=[] directory=None
+  src/os/repair_R2328.py:105 write_atomic kw=[] directory=None
+  src/os/residue_triage_head_renew.py:363 write_atomic kw=[] directory=None
+  src/os/test_battery_shard_report.py:249 write_atomic kw=[] directory=None
+  src/os/test_battery_shard_report.py:250 write_atomic kw=[] directory=None
+  src/os/test_membership_face.py:92 write_atomic kw=[] directory=None
+  src/os/test_membership_face.py:93 write_atomic kw=[] directory=None
+  src/os/test_membership_face.py:307 write_atomic kw=[] directory=None
+  src/os/test_membership_face.py:308 write_atomic kw=[] directory=None
+  src/os/test_qa_log.py:123 do_write kw=['directory'] directory=qa_private
+  src/os/test_qa_log.py:147 do_write kw=['directory'] directory=qa_private
+  src/os/test_qa_log.py:171 do_write kw=['directory'] directory=atomic
+  src/os/test_qa_log.py:176 do_write kw=['directory'] directory=atomic
+  src/os/test_qa_log.py:237 do_write kw=['directory'] directory=qa_private
+  src/os/test_qa_log.py:325 do_write kw=['directory'] directory=qa_private
+  src/os/test_qa_log.py:330 do_write kw=['directory'] directory=qa_private
+  src/os/test_qa_log.py:363 do_write kw=['directory'] directory=carried_dir
+  src/os/test_qa_log.py:366 do_write kw=['directory'] directory=carried_dir
+  src/os/test_qa_log.py:370 do_write kw=['directory'] directory=carried_dir
+  src/os/test_qa_log.py:375 do_write kw=['directory'] directory=carried_dir
+  src/os/test_qa_log.py:627 do_write kw=['directory'] directory=suffix_dir
+  src/os/test_qa_log.py:632 do_write kw=['directory'] directory=suffix_dir
+  src/os/test_qa_log.py:809 do_write kw=['directory'] directory=dest
+  src/os/test_qa_log.py:817 write_atomic kw=[] directory=None
+  src/os/test_qa_log.py:821 do_write kw=['directory'] directory=dest_world
+  src/os/test_qa_log.py:844 do_write kw=[] directory=None
+  src/os/test_qa_log.py:912 do_write kw=['directory'] directory=dest_world
+  tools/battery_shard.py:310 do_write kw=['directory'] directory=QA_DIR
+  tools/battery_shard_report.py:446 write_atomic kw=[] directory=None
+  tools/battery_shard_report.py:447 write_atomic kw=[] directory=None
+  tools/first_yuan_chain.py:488 write_atomic kw=[] directory=None
+  tools/first_yuan_chain.py:489 write_atomic kw=[] directory=None
+  tools/membership_face.py:594 write_atomic kw=[] directory=None
+  tools/membership_face.py:595 write_atomic kw=[] directory=None
+  tools/qa_log.py:391 write_atomic kw=[] directory=None
+  tools/qa_log.py:449 write_atomic kw=[] directory=None
+  tools/qa_log.py:502 do_write kw=['directory'] directory=tmp
+  tools/qa_log.py:504 do_write kw=['directory'] directory=tmp
+  tools/qa_log.py:507 do_write kw=['directory'] directory=tmp
+  tools/qa_log.py:511 do_write kw=['directory'] directory=tmp
+  tools/qa_log.py:560 do_write kw=[] directory=None
+parse_fail=[]
+
+== classified ==
+  prod=16
+    src/os/append_R2453.py:109 write_atomic dir=None
+    src/os/append_R2453.py:113 write_atomic dir=None
+    src/os/board_R2371.py:81 write_atomic dir=None
+    src/os/board_R2371.py:95 write_atomic dir=None
+    src/os/dec_watermark.py:163 write_atomic dir=None
+    src/os/fold_R2324.py:128 write_atomic dir=None
+    src/os/repair_R2328.py:105 write_atomic dir=None
+    src/os/residue_triage_head_renew.py:363 write_atomic dir=None
+    tools/battery_shard.py:310 do_write dir=QA_DIR
+    tools/battery_shard_report.py:446 write_atomic dir=None
+    tools/battery_shard_report.py:447 write_atomic dir=None
+    tools/first_yuan_chain.py:488 write_atomic dir=None
+    tools/first_yuan_chain.py:489 write_atomic dir=None
+    tools/membership_face.py:594 write_atomic dir=None
+    tools/membership_face.py:595 write_atomic dir=None
+    tools/qa_log.py:391 write_atomic dir=None
+  selftest=6
+    tools/qa_log.py:449 write_atomic dir=None
+    tools/qa_log.py:502 do_write dir=tmp
+    tools/qa_log.py:504 do_write dir=tmp
+    tools/qa_log.py:507 do_write dir=tmp
+    tools/qa_log.py:511 do_write dir=tmp
+    tools/qa_log.py:560 do_write dir=None
+  test=24
+    src/os/test_battery_shard_report.py:249 write_atomic dir=None
+    src/os/test_battery_shard_report.py:250 write_atomic dir=None
+    src/os/test_membership_face.py:92 write_atomic dir=None
+    src/os/test_membership_face.py:93 write_atomic dir=None
+    src/os/test_membership_face.py:307 write_atomic dir=None
+    src/os/test_membership_face.py:308 write_atomic dir=None
+    src/os/test_qa_log.py:123 do_write dir=qa_private
+    src/os/test_qa_log.py:147 do_write dir=qa_private
+    src/os/test_qa_log.py:171 do_write dir=atomic
+    src/os/test_qa_log.py:176 do_write dir=atomic
+    src/os/test_qa_log.py:237 do_write dir=qa_private
+    src/os/test_qa_log.py:325 do_write dir=qa_private
+    src/os/test_qa_log.py:330 do_write dir=qa_private
+    src/os/test_qa_log.py:363 do_write dir=carried_dir
+    src/os/test_qa_log.py:366 do_write dir=carried_dir
+    src/os/test_qa_log.py:370 do_write dir=carried_dir
+    src/os/test_qa_log.py:375 do_write dir=carried_dir
+    src/os/test_qa_log.py:627 do_write dir=suffix_dir
+    src/os/test_qa_log.py:632 do_write dir=suffix_dir
+    src/os/test_qa_log.py:809 do_write dir=dest
+    src/os/test_qa_log.py:817 write_atomic dir=None
+    src/os/test_qa_log.py:821 do_write dir=dest_world
+    src/os/test_qa_log.py:844 do_write dir=None
+    src/os/test_qa_log.py:912 do_write dir=dest_world
+
+== test worlds ==
+  src/os/test_qa_log.py mkdtemp=2
+  tools/qa_log.py mkdtemp=1

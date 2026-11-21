@@ -91,6 +91,23 @@ changes: every call site passes os.path.join(QA_DIR, evidence_name(...)), and
 the in-place write with its fsync stays, so a killed leg still leaves a
 readable RUNNING file.
 
+R3215 (AC-QALB21): the destination had no law either. do_write and write_atomic
+take a `directory` and accept any of them, so "evidence may leave qa/" was held
+only by caller discipline: every reader enumerates qa/*.log (the writer census,
+the pre-commit evidence gate, the closeout files= count), so a .log written
+inside the repo but outside qa/ lands in the healthy dialect and is never
+judged. Measured first (AST census of every call site, plus decisive arms in a
+private temp world and one repo-internal arm removed again): the repo has
+exactly one production call site that passes a directory at all
+(tools/battery_shard.py passes QA_DIR itself), the rest of the shipped writer
+calls omit it, and every test world passes a tempfile.mkdtemp path outside the
+repo. So the law is drawn where it costs nothing: the destination must be, after
+realpath, the qa/ dir or something outside the repo. A repo path that is not
+qa/ is refused with E_DEST_INSIDE_REPO and lands nothing. The default is now
+resolved at call time (directory=None), because a default bound at import time
+would keep pointing at the real qa/ inside a suite that has pointed QA at a
+private world.
+
 Stdlib only, ASCII source, zero network, zero shell.
 """
 
@@ -166,8 +183,45 @@ def check_name(name):
         raise ValueError("name must not start with a dash, got %r" % name)
 
 
+def check_destination(directory):
+    """R3215 (AC-QALB21): evidence written inside the repo but outside qa/ is
+    not evidence.
+
+    Measured before this guard: the writer took any destination, and the three
+    readers enumerate qa/*.log only - so a .log landed in the healthy dialect at
+    a repo path of the caller's choosing and no face ever judged it. The cost
+    was measured before the law: exactly one production call site passes a
+    directory (tools/battery_shard.py passes QA_DIR itself), the shipped writer
+    calls omit it, and every test world passes a tempfile.mkdtemp path outside
+    the repo, so nothing legitimate reddens.
+
+    QA and REPO are read at call time, not captured at import, because a suite
+    points QA at a private world; a default bound at import time would keep
+    aiming at the real qa/ and the refusal would name the wrong thing.
+    """
+    if not directory:
+        raise ValueError("E_DEST_INSIDE_REPO destination directory is required")
+    dest = os.path.normcase(os.path.realpath(directory))
+    qa = os.path.normcase(os.path.realpath(QA))
+    repo = os.path.normcase(os.path.realpath(REPO))
+    if dest == qa:
+        return
+    if dest == repo or dest.startswith(repo + os.sep):
+        raise ValueError(
+            "E_DEST_INSIDE_REPO destination must be the qa/ dir or a path "
+            "outside the repo, got %r (the writer census, the pre-commit "
+            "evidence gate and the closeout files= count enumerate qa/*.log "
+            "only, so a .log written here would land in the healthy dialect "
+            "and never be judged)" % directory)
+
+
 def write_atomic(directory, name, text):
-    """AC-QAL3: tmp in the destination dir, then one replace."""
+    """AC-QAL3: tmp in the destination dir, then one replace.
+
+    AC-QALB21 (R3215): the destination is judged here, the single choke point
+    both write faces pass through.
+    """
+    check_destination(directory)
     payload = text.encode("utf-8")
     final = os.path.join(directory, name)
     fd, tmp = tempfile.mkstemp(prefix=".qa_log_", suffix=".tmp", dir=directory)
@@ -321,7 +375,15 @@ def check_log_suffix(name):
             "judged; --check still reads an existing suffixless file)" % name)
 
 
-def do_write(name, source_bytes, directory=QA):
+def do_write(name, source_bytes, directory=None):
+    """AC-QALB21 (R3215): the default destination is QA resolved at call time.
+
+    A default captured at import time would keep pointing at the real qa/ even
+    after a suite points QA at a private world, so the guard would refuse the
+    world the suite just asked for and the writer would aim somewhere else.
+    """
+    if directory is None:
+        directory = QA
     check_name(name)
     check_log_suffix(name)
     text = normalize(read_source(source_bytes))

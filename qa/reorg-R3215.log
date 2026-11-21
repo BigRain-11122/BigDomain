@@ -1,0 +1,94 @@
+R3215 evidence - the writer's own destination face, judged for the first time
+=============================================================================
+
+Board head claimed (src/os/backlog.md PIN row, written before any code):
+R3214 next-window (0) MAIN - qa_log.do_write / write_atomic take a `directory`
+and accept any of them, so "evidence may leave qa/" was held by caller
+discipline only.
+
+Q1 - who names a destination (AST census over src/os and tools, .venv absent)
+  named call sites total 21 across 3 files
+  production explicit destinations exactly 1: tools/battery_shard.py:310 QA_DIR
+  tools/qa_log.py selftest: 4 sites, all `tmp` from tempfile.mkdtemp
+  src/os/test_qa_log.py: 16 sites, all bare names bound under one mkdtemp world
+  shipped writer calls that omit the argument: do_write(name, source) in main()
+  write_atomic has 10 same-name definitions elsewhere, all different signatures
+  (path-first, no directory); only tools/qa_log.py has the directory-first one.
+
+Q2 - decisive arms, before the law (private temp world + one repo arm removed)
+  temp destination outside the repo : rc=0 2 bytes class=tee in-census=False
+  repo destination (tmp/ inside repo): rc=0 2 bytes class=tee in-census=False
+                                      under-qa=False, verify_written clean
+  pre-commit gate filter            : qa-prefix only (evidence face reads
+                                      staged qa/*.log)
+  residue after the arm             : none (directory removed, proved absent)
+  so a .log at a repo path outside qa/ landed in the healthy dialect and no
+  reader enumerated it - the same class of defect as R3213 and R3214, one
+  layer lower.
+
+Q3 - three closeout options and their measured cost
+  (a) refuse every non-QA directory   : would red 5 shipped call sites
+      (battery_shard QA_DIR, 4 qa_log selftest temp writes) and every suite
+      world - the tests cannot be starved of a private world
+  (b) refuse only "realpath inside repo and != QA": cost 0, because the one
+      production site passes QA_DIR itself and every suite world is
+      tempfile.mkdtemp (outside the repo)
+  (c) record only                     : cost 0, no guard
+  chosen: (b), plus the default resolved at call time (directory=None), so a
+  suite that points QA at a private world cannot end up aiming at the live qa/.
+
+LANDED (tools/qa_log.py)
+  check_destination(directory): realpath + normcase of the destination and of
+  QA and REPO, read at call time; QA passes, a repo path that is not QA raises
+  E_DEST_INSIDE_REPO naming the three readers; a path outside the repo passes.
+  write_atomic calls it first, so both write faces inherit one choke point.
+  do_write(name, source_bytes, directory=None) resolves QA at call time.
+  No other face moved: check_name, check_log_suffix, read_source, normalize,
+  mark_carried_proofs, count_carried_proofs, count_bare_proofs, classify,
+  verify_written, do_check and the CLI are byte-identical in behaviour.
+
+CRITERIA (pinned on the board before the code)
+  AC-QALB21 the refusal bites at both doors, four shapes (repo root, repo/tmp,
+           qa/ subdir, logs/), nothing lands, the temp control still writes
+  AC-QALB22 the default follows QA at call time (patched world wins, live qa/
+           untouched, signature proven from source)
+  AC-QALB23 the census is derived from the tree: production explicit
+           destinations are exactly [battery_shard:310 QA_DIR], every file that
+           names one builds its world with mkdtemp, control write byte-equal
+  registry row os-qa-log 20 -> 23; AC-QALB9 sentence twenty -> twenty-three
+  AC-QALB7 allowed-import set gained ast (stdlib, text only; the ban list and
+  the ASCII check are untouched) with the reason written at the set
+
+GATES
+  SUITE PASS 25/25 over 23 criteria  qa/suite-qa-log-R3215.log 6170B/37 lines
+                                     sha256 f9042bd63f55f45b through --from,
+                                     re-read by --check
+  qa_log --selftest VERDICT PASS 9/9 and the real qa/ snapshot unchanged
+  os-battery-shard SUITE PASS 32/32 (AC-BSGB20 green inherited)
+  os-evidence-read 17/17, os-suite-output-audit 6/6
+  matrix regenerated through its own vehicle: 78577 bytes / 756 rows, --check
+  DOC-CURRENT
+  writer census --check verdict DRIFT-CLEAN flags=0
+  probe qa/probe-R3215.log 10177B/171 lines sha256 c140078577d23d85
+
+HONEST BOUNDARIES
+  (a) ZERO payment capability and no network beyond loopback - a buyer still
+      cannot pay (no merchant id, server, domain, filing+ICP, miniprogram
+      appid+secret); this round moves no product surface, no api and no gate
+      number.
+  (b) the law is one sentence: the destination must be qa/ or outside the repo.
+      A symlinked path that resolves outside the repo but lands inside, and a
+      runtime change of REPO, are outside the claimed surface.
+  (c) test worlds stay legal on purpose - the suite must be able to write
+      somewhere without touching live evidence, and that is exactly the cost
+      measured in Q3.
+  (d) the repo-internal arm wrote 2 bytes into tmp/ and was removed; residue
+      is proved absent, and the arm is in the probe log rather than in qa/.
+  (e) no existing qa/ byte moved (AC-QALB20 enumeration before/after, 4647
+      files stable).
+  (f) carried unchanged: tasks.md zero open (the P-47 canonical board - ZERO
+      payment capability), Docker absent, BigDomain-OSLoop LogonType=Interactive,
+      the same-window law uninstalled, the AC-LNKF1 queue head, AC-VAC1..6, the
+      R2778 stand, 18 BOM-carrying scripts, the single default crawl source,
+      the cap of 31 as a chosen law, series_file_order=day, and the machine
+      local day law.

@@ -7492,8 +7492,13 @@ SUITES = [
     # R3214: the one in-place qa/ door (battery_shard.stream_evidence) takes a
     # full path and asked neither the name nor the place question. It now
     # refuses a suffixless name and a path outside qa/. Three more (18..20).
+    # R3215: the destination had no law either - do_write and write_atomic took
+    # any directory while every reader enumerates qa/*.log only, so a .log
+    # inside the repo but outside qa/ landed in the healthy dialect and was
+    # never judged. The place is now judged at the one choke point both faces
+    # pass through, and the default is resolved at call time. Three (21..23).
     ("os-qa-log",
-     os.path.join("..", "os", "test_qa_log.py"), 20),
+     os.path.join("..", "os", "test_qa_log.py"), 23),
     # R3208: src/os/state.json carries the canonical CRLF dialect its readers
     # require, but the path was not pinned in .gitattributes - so a checkout
     # running with core.autocrlf=false materialized the whole carrier as bare
