@@ -341,8 +341,8 @@ def main():
                               reg[pos:pos + 200])
             if found:
                 declared.append(found.group(1))
-        ok('AC-QALB9 registry declares exactly one row for this suite, eleven',
-           declared == ['11'], 'rows=%s hits=%d' % (declared, len(hits)))
+        ok('AC-QALB9 registry declares exactly one row for this suite, twelve',
+           declared == ['12'], 'rows=%s hits=%d' % (declared, len(hits)))
 
         # ---- AC-QALB11: a carried proof line is marked, not certified -----
         # R3203: the generator prints "LOG OK path=... sha16=..." to prove a
@@ -384,10 +384,72 @@ def main():
               b'\nLOG OK path=' in relog, twice.count(b'CARRIED'),
               plain_out == plain_expected.encode('utf-8'),
               near_out == near_src))
+
+        # ---- AC-QALB12: --check names how many carried proofs it saw ------
+        # R3204: measured before the repair, three files holding 0, 1 and 2
+        # CARRIED lines all read rc=0 with the same text, the census answered
+        # class=tee for all three and the pre-commit gate refused none - it
+        # reads row["class"] only. The count is exact shapes only, and it is
+        # never a verdict.
+        counted = os.path.join(world, 'carried-count')
+        os.makedirs(counted)
+        proof_a = ('LOG OK path=qa/preview.log bytes=661 lines=9 '
+                   'sha16=271ba9eb7b2d1230')
+        proof_b = ('LOG OK path=qa/other.log bytes=12 lines=1 '
+                   'sha16=50522dc2cc6582c6')
+        bodies = {
+            'c0.log': 'PASS one\n',
+            'c1.log': 'PASS one\nCARRIED ' + proof_a + '\n',
+            'c2.log': ('PASS one\nCARRIED ' + proof_a + '\nCARRIED '
+                       + proof_b + '\n'),
+            'near.log': ('CARRIED LOG OK path=qa/p.log bytes=six lines=9 '
+                         'sha16=271ba9eb7b2d1230\n' + proof_a + '\n'),
+        }
+        for cname, cbody in bodies.items():
+            with io.open(os.path.join(counted, cname), 'wb') as handle:
+                handle.write(cbody.encode('utf-8'))
+        with io.open(os.path.join(counted, 'red.log'), 'wb') as handle:
+            handle.write(b'\xef\xbb\xbfPASS one\nCARRIED ' +
+                         proof_a.encode('utf-8') + b'\n')
+        before_cnt = dict((n, stamp(os.path.join(counted, n))) for n in bodies)
+        mod.QA = counted
+        try:
+            seen = dict((n, quiet(mod.do_check, n)) for n in bodies)
+            red_rc, red_text = quiet(mod.do_check, 'red.log')
+        finally:
+            mod.QA = original_qa
+        after_cnt = dict((n, stamp(os.path.join(counted, n))) for n in bodies)
+        c2_body = read_bytes(os.path.join(counted, 'c2.log')).decode('utf-8')
+        recomputed = len([ln for ln in c2_body.splitlines()
+                          if ln.startswith('CARRIED ')
+                          and mod.PROOF_LINE_RE.match(ln[8:])])
+        c1_bytes = os.path.getsize(os.path.join(counted, 'c1.log'))
+        live_rc, live_text = quiet(mod.do_check, 'index-newest-band-R2775.log')
+        tool_src2 = read_text(TOOL)
+        ok('AC-QALB12 --check names carried=N for exact shapes only, read-only',
+           seen['c0.log'][0] == 0 and 'carried=0' in seen['c0.log'][1]
+           and seen['c1.log'][0] == 0 and 'carried=1' in seen['c1.log'][1]
+           and seen['c2.log'][0] == 0 and 'carried=2' in seen['c2.log'][1]
+           and recomputed == 2
+           and seen['near.log'][0] == 0
+           and 'carried=0' in seen['near.log'][1]
+           and before_cnt == after_cnt
+           and ('bytes=%d ' % c1_bytes) in seen['c1.log'][1]
+           and red_rc == 2 and 'carried=' not in red_text
+           and live_rc == 0 and 'carried=0' in live_text
+           and tool_src2.count('"QA-LOG OK ') == 1,
+           'c0=%s c1=%s c2=%s recomputed=%d near=%s stats_stable=%s '
+           'red_rc=%d red_has_field=%s live=%s sites=%d'
+           % ('carried=0' in seen['c0.log'][1],
+              'carried=1' in seen['c1.log'][1],
+              'carried=2' in seen['c2.log'][1], recomputed,
+              'carried=0' in seen['near.log'][1], before_cnt == after_cnt,
+              red_rc, 'carried=' in red_text,
+              'carried=0' in live_text,
+              tool_src2.count('"QA-LOG OK ')))
     finally:
         mod.QA = original_qa
         shutil.rmtree(world, ignore_errors=True)
-
     leak = os.path.isdir(world)
     ok('AC-QALB9c temp world removed (a leak is loud, not silent)', not leak,
        'removed=%s' % (not leak))

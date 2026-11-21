@@ -1,0 +1,66 @@
+R3204 evidence: --check names carried=N (AC-QAL10 / AC-QALB12)
+=================================================================
+
+1. Read-only probe (tmp/probe_R3204.py -> tmp/probe_R3204.out), private system
+   temp dir, zero socket, zero network, zero write to qa/:
+
+   file          --check rc  text                      census  gate law
+   zero.log      0          OK dialect bytes=18        tee     tee refuses=no
+   one.log       0          OK dialect bytes=85        tee     tee refuses=no
+   two.log       0          OK dialect bytes=161       tee     tee refuses=no
+   -> all three read the SAME text, none mentioned the carried lines.
+
+   consumers of the QA-LOG OK text anywhere in *.py/*.ps1: 0 (the tool itself
+   excluded). --check related references: 3, and none reads the OK line text:
+     src/sandbox/reconcile_all.py            (registry comment)
+     src/sandbox/ledger/test_monthly_faces_preview.py  (--from write face)
+     tools/battery_shard.py                  (do_write + verify_written)
+   AC-QALB4 asserts rc list [0,2,2,2] and a stable qa/ snapshot, not text.
+   pre_commit_gate.evidence_refusals reads row["class"] != HEALTHY only.
+   shipped qa/*.log scan: with_bare_proof=0 with_carried=0, so the new field
+   can only read 0 on existing evidence.
+
+2. Landed (tools/qa_log.py):
+   count_carried_proofs(text) counts exact shapes only:
+   line starts "CARRIED " and the remaining text matches PROOF_LINE_RE.
+   do_check appends " carried=<n>" to the OK line; the old fields are byte
+   for byte the same, the RED lines are untouched (a red dialect means the
+   body was never judged, so no content claim is made).
+
+3. Criteria: AC-QAL10 in the tool contract; AC-QALB12 in
+   src/os/test_qa_log.py with five arms:
+   a 0/1/2 CARRIED -> carried=0/1/2, rc=0, count equals a line-by-line
+     recomputation;
+   b a near miss (bytes=six) and a bare proof line both read carried=0;
+   c read-only: (size, mtime_ns) and bytes identical before/after;
+   d old faces intact: bytes= equals len(raw), a BOM file still rc=2 with no
+     carried field, and the shipped qa/index-newest-band-R2775.log reads
+     carried=0;
+   e one write site for the OK line, DECLARED 11 -> 12, registry row 12.
+
+4. Gates:
+   SUITE PASS 14/14 over 12 criteria (qa/suite-qa-log-R3204.log 1796B/16
+   lines utf-8/lf sha256 90f807ff06045720, written and read back through
+   tools/qa_log.py).
+   qa_log --selftest VERDICT PASS 9/9 (qa/ untouched).
+   matrix regenerated through its own vehicle (78486 bytes, 755 rows) then
+   --check DOC-CURRENT.
+   registry counter census --write-pin (honest CACHE E_RCC_CACHE_PARTIAL
+   reused=754/755) then --check VERDICT PASS pinned=755.
+
+5. Carrier repair found this window (pre-existing, not introduced here):
+   closeout_gate refused E_CLG_CARRIER_LAYOUT with bare_lf=49 on
+   src/os/state.json: the whole file was LF while the canonical writer
+   state_io.dump_canon emits CRLF, so the fold door could not read it and no
+   debt could be paid down. Repaired through the shipped door
+   `logs_toolkit.py eol --fix --execute`: bytes 36570 -> 36619, crlf=49,
+   bare_lf=0, content_eq=true, json_eq=true, verify_pass=true.
+   Also recorded, not repaired: the R3203 round-main line carries no date
+   (gate E_RMS_NO_DATE round=3203); older rounds are deliberately not asked
+   by that law, and R3204 supplies the dated main line.
+
+6. Honest: zero payment capability and no network beyond loopback - a count
+   moves no money, and a buyer still cannot pay (no merchant id, server,
+   domain, filing+ICP or miniprogram appid+secret). carried=N says this file
+   quotes N proofs of other files; it does not certify those proofs and does
+   not accuse this file.

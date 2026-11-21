@@ -29,7 +29,6 @@ R2807 (AC-QALB8): a source that still carries NUL after decoding is REFUSED
 rather than stored - BOM-less UTF-16 used to be written as a NUL-riddled file
 with VERDICT PASS and read back as the healthy utf-8/lf dialect by this tool and
 by the writer census. --check names such a file nul-bytes.
-
 R3203 (AC-QAL9): a generator's carrier proof line is not a relogged file's
 proof. The preview generator prints "LOG OK path=<p> bytes=<n> lines=<n>
 sha16=<h>" on stdout, proving the file it just wrote; storing that whole stdout
@@ -40,6 +39,17 @@ prefixed CARRIED, so no reader can take it for this log's proof; a near-miss
 shape is left untouched, and the line is never dropped. This is the writer's
 job because --from (and stdin) is the only door through which one file's bytes
 become another file's evidence.
+
+R3204 (AC-QAL10): --check now names the count instead of leaving it to the eye.
+Measured before this change: files holding 0, 1 and 2 CARRIED lines all read
+rc=0 with the same QA-LOG OK line naming only dialect and bytes, the writer
+census answered class=tee for all three, and the pre-commit gate refused none
+of them - it reads row["class"] only. Zero files in the tree parse that text,
+so the OK line gained carried=<n> at its tail with the old fields untouched.
+The count is exact shapes only (a near miss is not counted), and it is not a
+verdict: it says this file quotes N proofs of other files, not that the
+quoted text is right and not that this file is wrong. A RED line never gains
+the field, because a red dialect means the body was never judged.
 
 Stdlib only, ASCII source, zero network, zero shell.
 """
@@ -214,6 +224,22 @@ def mark_carried_proofs(text):
     return "\n".join(out), carried
 
 
+def count_carried_proofs(text):
+    """R3204 (AC-QAL10): how many carried proofs a body quotes, exact shapes.
+
+    A reader could see a CARRIED line but no machine face could count it:
+    --check answered the same text for 0, 1 and 2 of them, and both the
+    writer census and the pre-commit gate judge the dialect class only. So
+    the count is named here. Exact shape after the prefix, same rule as
+    mark_carried_proofs: a near miss is not a count.
+    """
+    carried = 0
+    for line in text.split("\n"):
+        if line.startswith("CARRIED ") and PROOF_LINE_RE.match(line[8:]):
+            carried += 1
+    return carried
+
+
 def do_write(name, source_bytes, directory=QA):
     check_name(name)
     text = normalize(read_source(source_bytes))
@@ -243,8 +269,8 @@ def do_check(name):
         sys.stdout.write("QA-LOG RED name=%s dialect=%s bytes=%d expected=utf-8/lf\n"
                          % (name, dialect, len(raw)))
         return 2
-    sys.stdout.write("QA-LOG OK name=%s dialect=utf-8/lf bytes=%d\n"
-                     % (name, len(raw)))
+    sys.stdout.write("QA-LOG OK name=%s dialect=utf-8/lf bytes=%d carried=%d\n"
+                     % (name, len(raw), count_carried_proofs(raw.decode("utf-8"))))
     return 0
 
 
