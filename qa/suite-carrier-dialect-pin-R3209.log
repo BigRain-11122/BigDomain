@@ -1,0 +1,9 @@
+  | PASS AC-CDPIN1 the carrier dialect is pinned in .gitattributes rc=0 los=src/os/state.json: text: set;src/os/state.json: eol: crlf pins=1
+  | PASS AC-CDPIN2 an unpinned carrier lands bare LF, the pinned one cannot free=(62529, 0, 81) pinned=(62610, 81, 0) pinned2=(62610, 81, 0) blob_free_crlf=0
+  | PASS AC-CDPIN3 the fold names an LF carrier instead of carrying it code=E_SF_EOL hint=True control=CRLF toolkit_lf=refused
+  | PASS AC-CDPIN4 the live carrier needs no repair and the refusal is single live=(62610, 81, 0) e_sf_eol_sites=2
+  | PASS AC-CDPIN5 every hard-reader carrier is pinned and no tolerant one is missing=none decorated=none law_lines=5
+  | PASS AC-CDPIN6 the tolerant readers give one answer for both dialects tick_lf=7 tick_crlf=7 export_eq=True baseline_eq=True
+  | PASS AC-CDPIN7 the same pin law works on a carrier that needs no pin free=(38424, 220, 0) pinned=[(38204, 0, 220), (38204, 0, 220), (38204, 0, 220)]
+suite: 7 assertions over 7 criteria
+SUITE PASS 7/7 in 6.5s

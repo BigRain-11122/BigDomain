@@ -7495,8 +7495,11 @@ SUITES = [
     # fold door silently re-landed an LF carrier while its sibling refused it.
     # No registered suite held either face, so this one pins the file's
     # dialect in git and the fold's refusal of a carrier that lost it.
+    # R3209 added the SCOPE half: four more carriers flip dialect under a
+    # checkout but their own readers were measured to answer the same on both,
+    # so the law is "pin the hard readers, never decorate", held by AC-CDPIN5..7.
     ("os-carrier-dialect-pin",
-     os.path.join("..", "os", "test_carrier_dialect_pin.py"), 4),
+     os.path.join("..", "os", "test_carrier_dialect_pin.py"), 7),
     # R2808 added the nul-bytes class to the writer census and re-froze the
     # baseline, but the new rule was guarded only by the tool's own --check and
     # by two census suites whose expectations derive from BASELINE_CLASSES on

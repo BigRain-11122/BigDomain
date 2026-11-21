@@ -37,3 +37,19 @@ docs/sandbox-suite-matrix.md text eol=lf
 # add/checkout combinations. The carrier dialect is a property of the FILE,
 # never of the machine's git settings. Born at R3208.
 src/os/state.json text eol=crlf
+
+# R3209 measured the SCOPE of this law instead of extending it. A pin is owed
+# only to a carrier whose shipped reader refuses or misreads the other dialect.
+# Hard readers (measured): src/os/state.json (both fold doors plus the closeout
+# gate), state/queue/*.md (their writers publish lf_only and a suite asserted
+# it), docs/sandbox-suite-matrix.md (--check byte-compares regenerated LF),
+# qa/*.log (evidence_dialect classifies, pre-commit refuses), and
+# tools/hooks/pre-commit (read by sh). Tolerant carriers, each measured with a
+# real add/checkout cycle and then read back through its own reader at R3209:
+# docs/status-export.json, heartbeat.txt, qa/writer-census-baseline.json and
+# logs/state-log-archive-*.md ALL flip to CRLF under a checkout on an
+# autocrlf=true host, yet heartbeat.read_tick normalises CRLF before parsing,
+# the other three are read through json.loads or re-rendered LF and compared
+# downstream, and the archives have no dialect reader at all. Pinning those
+# four would change nothing a machine can judge - decoration - so AC-CDPIN5
+# holds the scope: every hard-reader carrier is pinned, no tolerant carrier is.

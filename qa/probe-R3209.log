@@ -1,0 +1,67 @@
+temp C:\Users\sjs20\AppData\Local\Temp\probe_r3209_yyxwdul5
+== Q1 reader table ==
+CARRIER docs/status-export.json readers= [('src/os/qa_log.py', 'MISSING'), ('src/os/check_export_consistency.py', '1 dialect lines'), ('tools/status_export_fresh.py', '5 dialect lines')]
+CARRIER heartbeat.txt readers= [('src/os/qa_log.py', 'MISSING')]
+CARRIER qa/writer-census-baseline.json readers= [('src/os/qa_writer_census.py', '20 dialect lines'), ('src/os/qa_log.py', 'MISSING')]
+CARRIER logs/state-log-archive-2026-11.md readers= [('src/os/qa_log.py', 'MISSING')]
+CARRIER docs/sandbox-suite-matrix.md readers= [('src/os/qa_log.py', 'MISSING'), ('tools/closeout_gate.py', '5 dialect lines')]
+CARRIER state/queue/tech.md readers= [('src/os/logs_toolkit.py', '21 dialect lines'), ('src/os/state_fold.py', '6 dialect lines'), ('src/os/qa_writer_census.py', '20 dialect lines'), ('src/os/qa_log.py', 'MISSING'), ('src/os/general_writer_dialect_audit.py', '1 dialect lines'), ('src/os/check_export_consistency.py', '1 dialect lines'), ('src/os/scan_five_still.py', '0 dialect lines')]
+CARRIER src/os/state.json readers= [('src/os/logs_toolkit.py', '21 dialect lines'), ('src/os/state_fold.py', '6 dialect lines'), ('src/os/state_io.py', '26 dialect lines'), ('src/os/state_append.py', '0 dialect lines'), ('src/os/qa_writer_census.py', '20 dialect lines'), ('src/os/qa_log.py', 'MISSING'), ('src/os/general_writer_dialect_audit.py', '1 dialect lines'), ('src/os/check_export_consistency.py', '1 dialect lines'), ('src/os/scan_five_still.py', '0 dialect lines'), ('tools/closeout_gate.py', '5 dialect lines'), ('tools/status_export_fresh.py', '5 dialect lines')]
+== Q2 add/checkout arms (unpinned) ==
+CARRIER docs/status-export.json src {'bytes': 38204, 'crlf': 0, 'lf': 220, 'bare_lf': 220, 'sha16': '8c4fdb5d8633a14d'} changed_by ['addF_coT', 'addT_coT']
+    addT_coF {'bytes': 38204, 'crlf': 0, 'lf': 220, 'bare_lf': 220, 'sha16': '8c4fdb5d8633a14d'}
+    addF_coT {'bytes': 38424, 'crlf': 220, 'lf': 220, 'bare_lf': 0, 'sha16': '6d329378f91e8af8'}
+    addT_coT {'bytes': 38424, 'crlf': 220, 'lf': 220, 'bare_lf': 0, 'sha16': '6d329378f91e8af8'}
+CARRIER heartbeat.txt src {'bytes': 10, 'crlf': 0, 'lf': 1, 'bare_lf': 1, 'sha16': '309b59bd02e1995c'} changed_by ['addF_coT', 'addT_coT']
+    addT_coF {'bytes': 10, 'crlf': 0, 'lf': 1, 'bare_lf': 1, 'sha16': '309b59bd02e1995c'}
+    addF_coT {'bytes': 11, 'crlf': 1, 'lf': 1, 'bare_lf': 0, 'sha16': '643e8d33b4e36b7d'}
+    addT_coT {'bytes': 11, 'crlf': 1, 'lf': 1, 'bare_lf': 0, 'sha16': '643e8d33b4e36b7d'}
+CARRIER qa/writer-census-baseline.json src {'bytes': 14484, 'crlf': 0, 'lf': 511, 'bare_lf': 511, 'sha16': '2fe1299ceb9fbc4e'} changed_by ['addF_coT', 'addT_coT']
+    addT_coF {'bytes': 14484, 'crlf': 0, 'lf': 511, 'bare_lf': 511, 'sha16': '2fe1299ceb9fbc4e'}
+    addF_coT {'bytes': 14995, 'crlf': 511, 'lf': 511, 'bare_lf': 0, 'sha16': '19e31da297227226'}
+    addT_coT {'bytes': 14995, 'crlf': 511, 'lf': 511, 'bare_lf': 0, 'sha16': '19e31da297227226'}
+CARRIER logs/state-log-archive-2026-11.md src {'bytes': 5666145, 'crlf': 0, 'lf': 6345, 'bare_lf': 6345, 'sha16': 'a5b0c8e77022b107'} changed_by ['addF_coT', 'addT_coT']
+    addT_coF {'bytes': 5666145, 'crlf': 0, 'lf': 6345, 'bare_lf': 6345, 'sha16': 'a5b0c8e77022b107'}
+    addF_coT {'bytes': 5672490, 'crlf': 6345, 'lf': 6345, 'bare_lf': 0, 'sha16': '00f4508488625c89'}
+    addT_coT {'bytes': 5672490, 'crlf': 6345, 'lf': 6345, 'bare_lf': 0, 'sha16': '00f4508488625c89'}
+CARRIER docs/sandbox-suite-matrix.md src {'bytes': 78577, 'crlf': 0, 'lf': 801, 'bare_lf': 801, 'sha16': 'bcde9e4f8d65406a'} changed_by ['addF_coT', 'addT_coT']
+    addT_coF {'bytes': 78577, 'crlf': 0, 'lf': 801, 'bare_lf': 801, 'sha16': 'bcde9e4f8d65406a'}
+    addF_coT {'bytes': 79378, 'crlf': 801, 'lf': 801, 'bare_lf': 0, 'sha16': '5a0ef9e90458c8d1'}
+    addT_coT {'bytes': 79378, 'crlf': 801, 'lf': 801, 'bare_lf': 0, 'sha16': '5a0ef9e90458c8d1'}
+CARRIER state/queue/tech.md src {'bytes': 2017853, 'crlf': 0, 'lf': 734, 'bare_lf': 734, 'sha16': '2d11e1536925697d'} changed_by ['addF_coT', 'addT_coT']
+    addT_coF {'bytes': 2017853, 'crlf': 0, 'lf': 734, 'bare_lf': 734, 'sha16': '2d11e1536925697d'}
+    addF_coT {'bytes': 2018587, 'crlf': 734, 'lf': 734, 'bare_lf': 0, 'sha16': '8c7af722d984878b'}
+    addT_coT {'bytes': 2018587, 'crlf': 734, 'lf': 734, 'bare_lf': 0, 'sha16': '8c7af722d984878b'}
+CARRIER src/os/state.json src {'bytes': 62610, 'crlf': 81, 'lf': 81, 'bare_lf': 0, 'sha16': '9ad24b260723a6d1'} changed_by ['addT_coF']
+    addT_coF {'bytes': 62529, 'crlf': 0, 'lf': 81, 'bare_lf': 81, 'sha16': '3b9486af0034e0b6'}
+    addF_coT {'bytes': 62610, 'crlf': 81, 'lf': 81, 'bare_lf': 0, 'sha16': '9ad24b260723a6d1'}
+    addT_coT {'bytes': 62610, 'crlf': 81, 'lf': 81, 'bare_lf': 0, 'sha16': '9ad24b260723a6d1'}
+== Q3 pin arms ==
+CARRIER docs/status-export.json pin=eol:lf restores ['addT_coF', 'addF_coT', 'addT_coT'] of 3
+    addT_coF {'bytes': 38204, 'crlf': 0, 'lf': 220, 'bare_lf': 220, 'sha16': '8c4fdb5d8633a14d'}
+    addF_coT {'bytes': 38204, 'crlf': 0, 'lf': 220, 'bare_lf': 220, 'sha16': '8c4fdb5d8633a14d'}
+    addT_coT {'bytes': 38204, 'crlf': 0, 'lf': 220, 'bare_lf': 220, 'sha16': '8c4fdb5d8633a14d'}
+CARRIER heartbeat.txt pin=eol:lf restores ['addT_coF', 'addF_coT', 'addT_coT'] of 3
+    addT_coF {'bytes': 10, 'crlf': 0, 'lf': 1, 'bare_lf': 1, 'sha16': '309b59bd02e1995c'}
+    addF_coT {'bytes': 10, 'crlf': 0, 'lf': 1, 'bare_lf': 1, 'sha16': '309b59bd02e1995c'}
+    addT_coT {'bytes': 10, 'crlf': 0, 'lf': 1, 'bare_lf': 1, 'sha16': '309b59bd02e1995c'}
+CARRIER qa/writer-census-baseline.json pin=eol:lf restores ['addT_coF', 'addF_coT', 'addT_coT'] of 3
+    addT_coF {'bytes': 14484, 'crlf': 0, 'lf': 511, 'bare_lf': 511, 'sha16': '2fe1299ceb9fbc4e'}
+    addF_coT {'bytes': 14484, 'crlf': 0, 'lf': 511, 'bare_lf': 511, 'sha16': '2fe1299ceb9fbc4e'}
+    addT_coT {'bytes': 14484, 'crlf': 0, 'lf': 511, 'bare_lf': 511, 'sha16': '2fe1299ceb9fbc4e'}
+CARRIER logs/state-log-archive-2026-11.md pin=eol:lf restores ['addT_coF', 'addF_coT', 'addT_coT'] of 3
+    addT_coF {'bytes': 5666145, 'crlf': 0, 'lf': 6345, 'bare_lf': 6345, 'sha16': 'a5b0c8e77022b107'}
+    addF_coT {'bytes': 5666145, 'crlf': 0, 'lf': 6345, 'bare_lf': 6345, 'sha16': 'a5b0c8e77022b107'}
+    addT_coT {'bytes': 5666145, 'crlf': 0, 'lf': 6345, 'bare_lf': 6345, 'sha16': 'a5b0c8e77022b107'}
+CARRIER docs/sandbox-suite-matrix.md pin=eol:lf restores ['addT_coF', 'addF_coT', 'addT_coT'] of 3
+    addT_coF {'bytes': 78577, 'crlf': 0, 'lf': 801, 'bare_lf': 801, 'sha16': 'bcde9e4f8d65406a'}
+    addF_coT {'bytes': 78577, 'crlf': 0, 'lf': 801, 'bare_lf': 801, 'sha16': 'bcde9e4f8d65406a'}
+    addT_coT {'bytes': 78577, 'crlf': 0, 'lf': 801, 'bare_lf': 801, 'sha16': 'bcde9e4f8d65406a'}
+CARRIER state/queue/tech.md pin=eol:lf restores ['addT_coF', 'addF_coT', 'addT_coT'] of 3
+    addT_coF {'bytes': 2017853, 'crlf': 0, 'lf': 734, 'bare_lf': 734, 'sha16': '2d11e1536925697d'}
+    addF_coT {'bytes': 2017853, 'crlf': 0, 'lf': 734, 'bare_lf': 734, 'sha16': '2d11e1536925697d'}
+    addT_coT {'bytes': 2017853, 'crlf': 0, 'lf': 734, 'bare_lf': 734, 'sha16': '2d11e1536925697d'}
+CARRIER src/os/state.json pin=eol:crlf restores ['addT_coF', 'addF_coT', 'addT_coT'] of 3
+    addT_coF {'bytes': 62610, 'crlf': 81, 'lf': 81, 'bare_lf': 0, 'sha16': '9ad24b260723a6d1'}
+    addF_coT {'bytes': 62610, 'crlf': 81, 'lf': 81, 'bare_lf': 0, 'sha16': '9ad24b260723a6d1'}
+    addT_coT {'bytes': 62610, 'crlf': 81, 'lf': 81, 'bare_lf': 0, 'sha16': '9ad24b260723a6d1'}

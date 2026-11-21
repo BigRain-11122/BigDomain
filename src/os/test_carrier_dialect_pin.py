@@ -19,6 +19,18 @@ composed 77 bare-LF separators with every gate green - the fold propagated the
 dialect instead of naming it. It now refuses with E_SF_EOL, matching the
 sibling door that has refused an LF carrier since it shipped.
 
+R3209 extended the same law to its SCOPE (AC-CDPIN5..7), from a read-only
+probe (tmp/probe_R3209.py). Measured: four more carriers flip to CRLF under a
+checkout on an autocrlf=true host (docs/status-export.json 38204->38424B,
+heartbeat.txt 10->11B, qa/writer-census-baseline.json 14484->14995B,
+logs/state-log-archive-2026-11.md 5666145->5672490B), yet their shipped
+readers answer the same on both dialects - heartbeat.read_tick normalises CRLF
+before parsing, the other two are read through json.loads, the archives have
+no dialect reader - so pinning them would change nothing a machine can judge.
+The suite now holds the boundary instead: every hard-reader carrier must be
+pinned with the matching eol, NO tolerant carrier may appear as a law line,
+and the pin mechanism itself is proven to work on a carrier that needs none.
+
 Isolation: every git repository, state file and archive this suite builds
 lives in the system temp dir. The real .gitattributes, state.json and qa/ are
 read only, never written. Source is pure ASCII, stdlib only, no clock in
@@ -114,7 +126,48 @@ def cycle(attrs_line, add_autocrlf, co_autocrlf, carrier):
         shutil.rmtree(box, ignore_errors=True)
 
 
+def cycle_at(attrs_line, add_autocrlf, co_autocrlf, carrier, rel):
+    """The same decisive cycle for any relative path, not just the state file."""
+    box = tempfile.mkdtemp(prefix='cdpin_at_')
+    try:
+        git(['init', '-q'], box)
+        folder = os.path.dirname(os.path.join(box, rel))
+        os.makedirs(folder, exist_ok=True)
+        if attrs_line is not None:
+            with io.open(os.path.join(box, '.gitattributes'), 'w',
+                         encoding='utf-8', newline='\n') as handle:
+                handle.write(attrs_line + '\n')
+        path = os.path.join(box, rel)
+        with io.open(path, 'wb') as handle:
+            handle.write(carrier)
+        git(['-c', 'core.autocrlf=%s' % add_autocrlf, 'add', rel], box)
+        git(['commit', '-q', '-m', 'x', '--no-verify'], box)
+        os.remove(path)
+        git(['-c', 'core.autocrlf=%s' % co_autocrlf, 'checkout', '--', rel],
+            box)
+        return read_bytes(path) if os.path.exists(path) else b''
+    finally:
+        shutil.rmtree(box, ignore_errors=True)
+
+
 PIN = 'src/os/state.json text eol=crlf'
+
+# Measured at R3209 (tmp/probe_R3209.py). A carrier belongs in STRICT only if a
+# shipped reader refuses or misreads the other dialect; TOLERANT lists the ones
+# whose readers were measured to answer the same on both.
+STRICT = [
+    ('src/os/state.json', 'text: set', 'eol: crlf'),
+    ('state/queue/tech.md', 'text: set', 'eol: lf'),
+    ('docs/sandbox-suite-matrix.md', 'text: set', 'eol: lf'),
+    ('tools/hooks/pre-commit', 'text: set', 'eol: lf'),
+    ('qa/probe-R3208.log', 'text: unset', 'eol: unspecified'),
+]
+TOLERANT = [
+    'docs/status-export.json',
+    'heartbeat.txt',
+    'qa/writer-census-baseline.json',
+    'logs/state-log-archive-2026-11.md',
+]
 
 
 def main():
@@ -127,12 +180,19 @@ def main():
                         'src/os/state.json'], ROOT)
     pin_lines = [row for row in attrs.splitlines()
                  if row.strip() == PIN]
+    # R3209: the old arm counted every mention of the path, so two comments
+    # that quote it reddened an otherwise healthy pin. Uniqueness is a property
+    # of the LAW lines; prose is not a law. Narrowed, not loosened: a second
+    # attribute line naming the path still fails.
+    law_rows = [row for row in attrs.splitlines()
+                if row.strip() and not row.strip().startswith('#')]
+    naming = [row for row in law_rows if row.split()[0] == 'src/os/state.json']
     ok('AC-CDPIN1 the carrier dialect is pinned in .gitattributes',
        rc == 0
        and 'text: set' in out
        and 'eol: crlf' in out
        and len(pin_lines) == 1
-       and attrs.count('src/os/state.json') == 2,
+       and len(naming) == 1,
        'rc=%d los=%s pins=%d' % (rc, out.replace('\n', ';')[:60],
                                  len(pin_lines)))
 
@@ -188,6 +248,66 @@ def main():
        and raises == 2  # the raise plus the docstring mention
        and mod.split_layout(live.decode('utf-8'), log_len) is not None,
        'live=%s e_sf_eol_sites=%d' % (live_prof, raises))
+
+    # ---- AC-CDPIN5: the scope is exactly the hard readers ---------------
+    missing = []
+    for rel, want_text, want_eol in STRICT:
+        rc, out, err = git(['check-attr', 'text', 'eol', '--', rel], ROOT)
+        if rc != 0 or want_text not in out or want_eol not in out:
+            missing.append('%s(%s)' % (rel, out.replace('\n', ';')[:40]))
+    law_lines = [row for row in attrs.splitlines()
+                 if row.strip() and not row.strip().startswith('#')]
+    decorated = [rel for rel in TOLERANT
+                 if any(row.split()[0].rstrip('/') == rel.split('/')[0]
+                        or rel in row for row in law_lines)]
+    ok('AC-CDPIN5 every hard-reader carrier is pinned and no tolerant one is',
+       not missing and not decorated,
+       'missing=%s decorated=%s law_lines=%d'
+       % (missing or 'none', decorated or 'none', len(law_lines)))
+
+    # ---- AC-CDPIN6: the tolerant readers answer the same on both --------
+    hb = load('heartbeat_under_test', os.path.join(SRC, 'heartbeat.py'))
+    box = tempfile.mkdtemp(prefix='cdpin_hb_')
+    try:
+        lf_dir = os.path.join(box, 'lf')
+        crlf_dir = os.path.join(box, 'crlf')
+        os.makedirs(lf_dir)
+        os.makedirs(crlf_dir)
+        with io.open(os.path.join(lf_dir, 'heartbeat.txt'), 'wb') as handle:
+            handle.write(b'tick 7\n')
+        with io.open(os.path.join(crlf_dir, 'heartbeat.txt'), 'wb') as handle:
+            handle.write(b'tick 7\r\n')
+        lf_tick = hb.read_tick(lf_dir)
+        crlf_tick = hb.read_tick(crlf_dir)
+    finally:
+        shutil.rmtree(box, ignore_errors=True)
+    export_lf = read_bytes(os.path.join(ROOT, 'docs', 'status-export.json'))
+    base_lf = read_bytes(os.path.join(ROOT, 'qa',
+                                      'writer-census-baseline.json'))
+    export_eq = (json.loads(export_lf.decode('utf-8'))
+                 == json.loads(export_lf.replace(b'\r\n', b'\n')
+                               .replace(b'\n', b'\r\n').decode('utf-8')))
+    base_eq = (json.loads(base_lf.decode('utf-8'))
+               == json.loads(base_lf.replace(b'\n', b'\r\n').decode('utf-8')))
+    ok('AC-CDPIN6 the tolerant readers give one answer for both dialects',
+       lf_tick == 7 and crlf_tick == 7 and export_eq and base_eq,
+       'tick_lf=%r tick_crlf=%r export_eq=%s baseline_eq=%s'
+       % (lf_tick, crlf_tick, export_eq, base_eq))
+
+    # ---- AC-CDPIN7: the mechanism generalises, the pin is just unused ---
+    export_src = export_lf
+    free_land = cycle_at(None, 'false', 'true', export_src,
+                         'docs/status-export.json')
+    pinned = [cycle_at('docs/status-export.json text eol=lf', a, co,
+                       export_src, 'docs/status-export.json')
+              for a, co in (('true', 'false'), ('false', 'true'),
+                            ('true', 'true'))]
+    ok('AC-CDPIN7 the same pin law works on a carrier that needs no pin',
+       free_land != export_src
+       and profile(free_land)[1] == profile(export_src)[2] > 0
+       and all(land == export_src for land in pinned),
+       'free=%s pinned=%s'
+       % (profile(free_land), [profile(land) for land in pinned]))
 
     total = len(CHECKS)
     acs = set()
