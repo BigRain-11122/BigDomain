@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3221 PRODUCT+ENGINEERING: the chain count is now a value - closeout_gate.evaluate publishes ledger_rows and ledger_broken in its verdict, filled by a reading out-parameter that check_ledger fills from the same qa_log.ledger_report it renders, so a machine consumer no longer has to parse the LEDGER row and the two renderings cannot disagree; a break is still published, never gated.",
+    "current": "2026-11-22 R3222 PRODUCT+ENGINEERING: the two ledger counts finally have a consumer - docs/status-export.json now carries a \"chain\" block {rows, broken, path} derived at check time by closeout_gate.check_ledger(root, reading), so a machine reading the CEO face sees a broken chain instead of a count that lived only in a test.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
@@ -9,9 +9,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3219.log (3678B, 2026-11-22)",
     "latest_evidence": "qa/reorg-R3219.log (3678B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3221] next window (<=48h): (0) MAIN — **新键发布了，但有没有真正的读者？**：R3221 让 verdict 带上 `ledger_rows`/`ledger_broken`，今天读它的只有测试（AC-CLG15/16）与 `tree_refusal` 的整包透传；`docs/status-export.json`、CEO 面、battery 跟进段**一个都没读这两个键**——这正是 R3218→R3219→R3220→R3221 那条批评的下一个位置（读数存在 ≠ 有消费者）。做法=先只读量三问：①**读者普查**＝AST 列全仓 `ledger_rows`/`ledger_broken` 的读点，分「测试」「载体透传」「真消费者（写进导出/json/判决）」并逐条给出处；②**决定性臂**＝私有 fixture 造断链世界，量导出面与跟进段各自看不看得见 `ledger_broken=1`（预期：看不见）；③**收口三选一**＝①接进 `docs/status-export.json` 的 tree 段（字段+值，导出闸同步）②接进轮收口一行 `LCHAIN broken=<n>` ③维持只进测试，并把「有读数无消费者」写成具名待办而不是当已解决。判据沿用 AC-CLG/AC-EXP 写法，**先落板再动代码**，证明所选面不改 PASS token 形状、不改证据或台账字节、不让断链变拒收。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗·Docker 门控行跳过）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3220 实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行不变，当窗提案面 BD-PROP-010（2026-11-17）仍在册。",
-    "next_milestone_due": "2026-11-24T04:42:07+08:00",
-    "updated_at": "2026-11-22T04:42:07+08:00",
+    "next_milestone": "[R3222] next window (<=48h): (0) MAIN — **块发布了，人看得见吗？**：R3222 让 `docs/status-export.json` 带上 `chain {rows, broken, path}`，但读这份文件的机器面不止一个——`src/sandbox/frontdoor.py` 把同一份 export 渲染成 CEO 卡（`heartbeat`/`outs_age` 等段已是这样来的），今天卡上一个字都没提 `chain`。读数到了文件，不等于到了人眼前。做法=先只读量三问：①**渲染面普查**＝AST 列 `frontdoor.py` 读 export 的每个键（分「已渲染」「读了未显示」「未读」三派），给出 `chain` 现在属于哪一派与具体行号；②**决定性臂**＝私有 export 世界里把 `chain.broken` 置 1，量卡片渲染输出看不看得见这个 1（预期：看不见）；③**收口三选一**＝①卡上新增一行`chain rows=<n> broken=<n>`（沿用卡片既有行文规格）②只在卡上显示 broken>0 的告警行③维持不显示并把理由写成具名待办。判据沿用 AC-CEO/AC-FD 写法，**先落板再动代码**，并证明所选面不改 export 字节、不改卡片既有行的形状、不让断链变拒收。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗·Docker 门控行跳过）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3220 实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行不变，当窗提案面 BD-PROP-010（2026-11-17）仍在册。",
+    "next_milestone_due": "2026-11-24T04:54:27+08:00",
+    "updated_at": "2026-11-22T04:54:27+08:00",
     "heartbeat": {
       "tick": 3218,
       "state_tick": 3219,
@@ -35,7 +35,8 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-22 R3221 PRODUCT+ENGINEERING: the chain count is now a value - closeout_gate.evaluate publishes ledger_rows and ledger_broken in its verdict, filled by a reading out-parameter that check_ledger fills from the same qa_log.ledger_report it renders, so a machine consumer no longer has to parse the LEDGER row and the two renderings cannot disagree; a break is still published, never gated.",
+  "current": "2026-11-22 R3222 PRODUCT+ENGINEERING: the two ledger counts finally have a consumer - docs/status-export.json now carries a \"chain\" block {rows, broken, path} derived at check time by closeout_gate.check_ledger(root, reading), so a machine reading the CEO face sees a broken chain instead of a count that lived only in a test.",
+  "chain": {"rows": 0, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,11 +64,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3221 PRODUCT+ENGINEERING: the chain count is now a value - closeout_gate.evaluate publishes ledger_rows and ledger_broken in its verdict, filled by a reading out-parameter that check_ledger fills from the same qa_log.ledger_report it renders, so a machine consumer no longer has to parse the LEDGER row and the two renderings cannot disagree; a break is still published, never gated.",
-  "export_ts": "2026-11-22T04:42:07+08:00",
+  "do": "2026-11-22 R3222 PRODUCT+ENGINEERING: the two ledger counts finally have a consumer - docs/status-export.json now carries a \"chain\" block {rows, broken, path} derived at check time by closeout_gate.check_ledger(root, reading), so a machine reading the CEO face sees a broken chain instead of a count that lived only in a test.",
+  "export_ts": "2026-11-22T04:54:27+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
   "latest_evidence": "qa/reorg-R3219.log (3678B, 2026-11-22)",
-  "next_milestone": "[R3221] next window (<=48h): (0) MAIN — **新键发布了，但有没有真正的读者？**：R3221 让 verdict 带上 `ledger_rows`/`ledger_broken`，今天读它的只有测试（AC-CLG15/16）与 `tree_refusal` 的整包透传；`docs/status-export.json`、CEO 面、battery 跟进段**一个都没读这两个键**——这正是 R3218→R3219→R3220→R3221 那条批评的下一个位置（读数存在 ≠ 有消费者）。做法=先只读量三问：①**读者普查**＝AST 列全仓 `ledger_rows`/`ledger_broken` 的读点，分「测试」「载体透传」「真消费者（写进导出/json/判决）」并逐条给出处；②**决定性臂**＝私有 fixture 造断链世界，量导出面与跟进段各自看不看得见 `ledger_broken=1`（预期：看不见）；③**收口三选一**＝①接进 `docs/status-export.json` 的 tree 段（字段+值，导出闸同步）②接进轮收口一行 `LCHAIN broken=<n>` ③维持只进测试，并把「有读数无消费者」写成具名待办而不是当已解决。判据沿用 AC-CLG/AC-EXP 写法，**先落板再动代码**，证明所选面不改 PASS token 形状、不改证据或台账字节、不让断链变拒收。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗·Docker 门控行跳过）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3220 实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行不变，当窗提案面 BD-PROP-010（2026-11-17）仍在册。",
+  "next_milestone": "[R3222] next window (<=48h): (0) MAIN — **块发布了，人看得见吗？**：R3222 让 `docs/status-export.json` 带上 `chain {rows, broken, path}`，但读这份文件的机器面不止一个——`src/sandbox/frontdoor.py` 把同一份 export 渲染成 CEO 卡（`heartbeat`/`outs_age` 等段已是这样来的），今天卡上一个字都没提 `chain`。读数到了文件，不等于到了人眼前。做法=先只读量三问：①**渲染面普查**＝AST 列 `frontdoor.py` 读 export 的每个键（分「已渲染」「读了未显示」「未读」三派），给出 `chain` 现在属于哪一派与具体行号；②**决定性臂**＝私有 export 世界里把 `chain.broken` 置 1，量卡片渲染输出看不看得见这个 1（预期：看不见）；③**收口三选一**＝①卡上新增一行`chain rows=<n> broken=<n>`（沿用卡片既有行文规格）②只在卡上显示 broken>0 的告警行③维持不显示并把理由写成具名待办。判据沿用 AC-CEO/AC-FD 写法，**先落板再动代码**，并证明所选面不改 export 字节、不改卡片既有行的形状、不让断链变拒收。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗·Docker 门控行跳过）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3220 实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行不变，当窗提案面 BD-PROP-010（2026-11-17）仍在册。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -181,8 +182,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 64441,
-  "next_milestone_due": "2026-11-24T04:42:07+08:00",
+  "state_bytes": 70715,
+  "next_milestone_due": "2026-11-24T04:54:27+08:00",
   "heartbeat": {
     "tick": 3218,
     "state_tick": 3219,

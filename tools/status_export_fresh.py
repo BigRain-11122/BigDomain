@@ -67,6 +67,24 @@ _ensure_top covered the other two rows but not this one:
            copies carrying the same wrong hour still redden, because agreeing on
            a false hour is not truth.
 
+Added at R3222 (pinned in src/os/backlog.md BEFORE this code), because the two
+counts R3221 published into the gate's verdict had no real reader: measured by
+an AST census of the whole tree, every `ledger_rows` / `ledger_broken` site was
+a test, a probe, or `closeout_gate`'s own definition, while docs/status-export
+.json - the one file both the CEO and a machine read - carried no field for
+them. A count published where only a test looks is the same complaint as a
+count printed only as prose:
+  AC-SXF23 the export carries a "chain" block whose rows/broken/path equal the
+           live judgement, derived at check time by closeout_gate.check_ledger
+           (one definition, no second parser, root read at call time). Absent is
+           E_SXF_CHAIN_MISSING; different numbers are E_SXF_CHAIN_STALE.
+  AC-SXF24 --apply publishes that block from the same derivation, so a world
+           whose adjacent ledger rows do not link lands broken=1 rather than a
+           hardcoded 0, and a second --apply leaves the file byte-identical.
+  AC-SXF25 publishing is not gating: a broken chain still reads VERDICT PASS.
+           The block adds no refusal and moves no PASS token, no evidence byte
+           and no ledger byte.
+
 ASCII source only (repository encoding law). Product text is read from the live
 state, never authored here.
 """
@@ -453,6 +471,20 @@ def check(export_path, state_path):
             code = "E_SXF_MILESTONE_FRAGMENT"
         problems.append((code, "%s top=%r ceo_face=%r derived=%r"
                          % (label, tops[:60], inners[:60], derived[:60])))
+    # AC-SXF23 (R3222): the counts a machine can compare, published on the face
+    # a machine reads. Derived here, at check time, so a rewritten ledger cannot
+    # leave a stale field green.
+    derived_chain = chain_face(ROOT)
+    landed_chain = doc.get(CHAIN_KEY)
+    if not isinstance(landed_chain, dict):
+        problems.append(("E_SXF_CHAIN_MISSING",
+                         "%s absent; derived=%s"
+                         % (CHAIN_KEY, json.dumps(derived_chain, sort_keys=True))))
+    elif landed_chain != derived_chain:
+        problems.append(("E_SXF_CHAIN_STALE",
+                         "landed=%s derived=%s"
+                         % (json.dumps(landed_chain, sort_keys=True),
+                            json.dumps(derived_chain, sort_keys=True))))
     if problems:
         print("VERDICT %s FAIL" % tag)
         for code, problem in problems:
@@ -463,6 +495,8 @@ def check(export_path, state_path):
           % (real_bytes, live_bytes,
              (doc.get("results_archive") or {}).get("path") or "none"))
     print("export_ts=%s" % (doc.get("export_ts") or ""))
+    print("chain rows=%d broken=%d path=%s"
+          % (derived_chain["rows"], derived_chain["broken"], derived_chain["path"]))
     return 0
 
 
@@ -507,6 +541,64 @@ def _ensure_top(text, key, value, indent="  "):
     return text[:match.end()] + row + text[match.end():], True
 
 
+CHAIN_KEY = "chain"
+
+
+def chain_face(root):
+    """AC-SXF23 (R3222): the ledger counts, read by the gate's OWN face.
+
+    The values come from `closeout_gate.check_ledger(root, reading)`, which fills
+    the reading from the same `qa_log.ledger_report` it renders - so the export,
+    the gate's verdict and the printed LEDGER row are three renderings of ONE
+    report. `root` is a parameter and is resolved at call time: an import-time
+    default would keep aiming at the live tree once a suite rebinds ROOT.
+    """
+    for path in (os.path.join(REAL_ROOT, "tools"),
+                 os.path.join(REAL_ROOT, "src", "os")):
+        if path not in sys.path:
+            sys.path.insert(0, path)
+    import closeout_gate as CG
+    import qa_log as QL
+    reading = {}
+    CG.check_ledger(root, reading)
+    return {"rows": reading.get("rows", 0),
+            "broken": reading.get("broken", 0),
+            "path": "state/" + QL.LEDGER_NAME}
+
+
+def _ensure_block(text, key, mapping, indent="  "):
+    """Publish a derived one-line object, replacing whatever shape is on disk.
+
+    A landed block may be one line (this writer) or spread over several by
+    json.dumps (a fixture world, or a future writer), so the replacement walks
+    brace depth to its closing line instead of assuming a single line. The
+    payload is our own dict of two integers and one relative path, so brace
+    counting is safe here; a value carrying braces would need a real parse.
+    """
+    payload = json.dumps(mapping, ensure_ascii=False)
+    prefix = "%s\"%s\": " % (indent, key)
+    lines = text.split("\n")
+    for index, line in enumerate(lines):
+        if not line.startswith(prefix):
+            continue
+        end = index
+        rest = line[len(prefix):]
+        if "{" in rest:
+            depth = rest.count("{") - rest.count("}")
+            while depth > 0 and end + 1 < len(lines):
+                end += 1
+                depth += lines[end].count("{") - lines[end].count("}")
+        comma = "," if lines[end].rstrip().endswith(",") else ""
+        lines[index:end + 1] = [prefix + payload + comma]
+        return "\n".join(lines), True
+    anchor = "%s\"current\": " % indent
+    for index, line in enumerate(lines):
+        if line.startswith(anchor) and line.rstrip().endswith(","):
+            lines[index + 1:index + 1] = [prefix + payload + ","]
+            return "\n".join(lines), True
+    return text, False
+
+
 def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     state = load_state(state_path)
     round_int, narrative = newest_round(state)
@@ -548,6 +640,12 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
         text, ok = _set_line(text, key, value, indent)
         if not ok:
             missing.append(key + "@" + indent.strip())
+    # AC-SXF24 (R3222): the block is published from the same derivation the
+    # grader uses, so a broken chain lands broken=1 instead of a carried zero.
+    chain = chain_face(ROOT)
+    text, ok = _ensure_block(text, CHAIN_KEY, chain, "  ")
+    if not ok:
+        missing.append(CHAIN_KEY)
     # AC-SXF7: the byte count is recomputed from the file, never carried forward.
     text, ok = _set_number(text, "state_bytes", os.path.getsize(state_path), "  ")
     if not ok:
@@ -561,6 +659,10 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
         return 7
     if parsed.get("current") != narrative:
         print("E_SXF_WRITE: top-level current is not the derived narrative")
+        return 7
+    if parsed.get(CHAIN_KEY) != chain:
+        print("E_SXF_WRITE: chain block is not the derived judgement (landed=%r derived=%r)"
+              % (parsed.get(CHAIN_KEY), chain))
         return 7
     # AC-SXF14/15: the write is only complete when BOTH copies carry the derived
     # value, so a document that leaves one of them behind cannot be published.

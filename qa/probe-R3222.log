@@ -1,0 +1,38 @@
+== Q1 reader census (AST, whole repo, ledger_rows/ledger_broken) ==
+  src/os/test_closeout_gate.py              :750 ledger_rows    Constant     test
+  src/os/test_closeout_gate.py              :751 ledger_broken  Constant     test
+  src/os/test_closeout_gate.py              :753 ledger_broken  Constant     test
+  src/os/test_closeout_gate.py              :753 ledger_rows    Constant     test
+  src/os/test_closeout_gate.py              :760 ledger_broken  Constant     test
+  src/os/test_closeout_gate.py              :761 ledger_rows    Constant     test
+  src/os/test_closeout_gate.py              :763 ledger_broken  Constant     test
+  src/os/test_closeout_gate.py              :771 ledger_rows    Constant     test
+  src/os/test_closeout_gate.py              :772 ledger_broken  Constant     test
+  src/os/test_closeout_gate.py              :774 ledger_rows    Constant     test
+  src/os/test_closeout_gate.py              :781 ledger_rows    Constant     test
+  src/os/test_closeout_gate.py              :782 ledger_broken  Constant     test
+  src/os/test_closeout_gate.py              :784 ledger_rows    Constant     test
+  src/os/test_closeout_gate.py              :789 ledger_rows    Constant     test
+  src/os/test_closeout_gate.py              :790 ledger_broken  Constant     test
+  src/os/test_closeout_gate.py              :834 ledger_rows    Constant     test
+  src/os/test_closeout_gate.py              :835 ledger_broken  Constant     test
+  src/os/test_closeout_gate.py              :837 ledger_broken  Constant     test
+  src/os/test_closeout_gate.py              :837 ledger_rows    Constant     test
+  tmp/probe_R3221.py                        :156 ledger_rows    Constant     OTHER
+  tmp/probe_R3221.py                        :157 ledger_broken  Constant     OTHER
+  tmp/probe_R3221.py                        :165 ledger_rows    Constant     OTHER
+  tmp/probe_R3221.py                        :166 ledger_broken  Constant     OTHER
+  tmp/probe_R3222.py                        :22 ledger_broken  Constant     OTHER
+  tmp/probe_R3222.py                        :22 ledger_rows    Constant     OTHER
+  tmp/probe_R3222.py                        :96 ledger_rows    Constant     OTHER
+  tmp/probe_R3222.py                        :97 ledger_broken  Constant     OTHER
+  tools/closeout_gate.py                    :471 ledger_broken  Constant     OTHER
+  tools/closeout_gate.py                    :471 ledger_rows    Constant     OTHER
+  total=29
+== Q2 decisive arm: broken chain, does any published face see it? ==
+  check_ledger ok=True reading={"bad": 0, "broken": 1, "missing": 0, "names": 1, "rows": 2, "stale": 0}
+  row: LEDGER OK rows=2 names=1 bad=0 stale=0 missing=0 broken=1 path=state/qa_replacements.jsonl
+  verdict keys: {"ledger_broken": 1, "ledger_rows": 2}
+  live export carries chain=None ledger_rows=None ledger_broken=None
+  live export keys: ceo_face,current,depts,do,export_ts,heartbeat,latest_artifact,latest_evidence,next_milestone,next_milestone_due,outs,outs_age,queue,results,results_archive,self_drive,state_bytes
+  => the count is a text line; the export has no field for it

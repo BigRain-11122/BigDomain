@@ -118,6 +118,9 @@ def build_world(root):
         "self_drive": {},
         "state_bytes": os.path.getsize(os.path.join(root, "src", "os", "state.json")),
         "queue": {},
+        # AC-SXFB17/18: the chain block is a DERIVED row, so the healthy fixture
+        # is built from the same derivation the grader asks rather than typed.
+        "chain": sx.chain_face(root),
     }
     export = os.path.join(root, "docs", "status-export.json")
     write_json(export, doc)
@@ -599,6 +602,74 @@ def run(root):
     finally:
         sx.now_local = real_clock
 
+    # AC-SXFB17/18/19 (AC-SXF23..25): the ledger counts finally have the consumer
+    # the R3221 row demanded. Driven with a REAL broken chain, so a hardcoded zero
+    # cannot pass.
+    write_json(sx.STATE, {"tick": 9, "log": [NARRATIVE]})
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    healthy = json.loads(io.open(export, encoding="utf-8").read())
+    chain_ok = healthy.get("chain")
+    rc_chain_ok = sx.check(export, sx.STATE)
+    tampered = json.loads(json.dumps(healthy))
+    tampered["chain"]["broken"] = int(tampered["chain"]["broken"]) + 1
+    write_json(export, tampered)
+    rc_chain_bad = sx.check(export, sx.STATE)
+    absent = json.loads(json.dumps(healthy))
+    absent.pop("chain")
+    write_json(export, absent)
+    rc_chain_absent = sx.check(export, sx.STATE)
+    write_json(export, healthy)
+    record("AC-SXFB17", rc_chain_ok == 0 and rc_chain_bad == 2 and rc_chain_absent == 2
+           and isinstance(chain_ok, dict) and chain_ok.get("rows") == 0
+           and chain_ok.get("broken") == 0,
+           "ok=%d tampered=%d absent=%d chain=%s"
+           % (rc_chain_ok, rc_chain_bad, rc_chain_absent,
+              json.dumps(chain_ok, sort_keys=True)))
+
+    # AC-SXFB18 (AC-SXF24): a world whose adjacent ledger rows do not link lands
+    # broken=1 in the export - derived at write time, not carried forward.
+    qa_dir = os.path.join(root, "qa")
+    os.makedirs(qa_dir, exist_ok=True)
+    evidence = os.path.join(qa_dir, "fixture.log")
+    with io.open(evidence, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write("fixture evidence\n")
+    good = hashlib.sha256(io.open(evidence, "rb").read()).hexdigest()[:16]
+    first = {"ts": "2026-11-16T00:00:00Z", "event": "REPLACED",
+             "name": "fixture.log", "old_bytes": 1, "old_sha16": "0" * 16,
+             "new_bytes": 17, "new_sha16": "a" * 16}
+    second = dict(first, old_sha16="b" * 16, new_sha16=good)
+    ledger = os.path.join(root, "state", "qa_replacements.jsonl")
+    os.makedirs(os.path.dirname(ledger), exist_ok=True)
+    with io.open(ledger, "w", encoding="utf-8", newline="\n") as handle:
+        for row in (first, second):
+            handle.write(json.dumps(row, sort_keys=True) + "\n")
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    broken_doc = json.loads(io.open(export, encoding="utf-8").read())
+    rc_broken = sx.check(export, sx.STATE)
+    record("AC-SXFB18", broken_doc["chain"]["rows"] == 2
+           and broken_doc["chain"]["broken"] == 1 and rc_broken == 0,
+           "chain=%s rc=%d" % (json.dumps(broken_doc["chain"], sort_keys=True), rc_broken))
+
+    # AC-SXFB19 (AC-SXF24/25): a second --apply is byte-identical on a pinned
+    # clock, and a broken chain still reads PASS - published, never gated.
+    real_clock = sx.now_local
+    pinned = dt.datetime(2026, 11, 22, 4, 0, 0,
+                         tzinfo=dt.timezone(dt.timedelta(hours=8)))
+    try:
+        sx.now_local = lambda: pinned
+        rc_first = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        once = io.open(export, "rb").read()
+        rc_second = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        twice = io.open(export, "rb").read()
+        rc_gate = sx.check(export, sx.STATE)
+    finally:
+        sx.now_local = real_clock
+    record("AC-SXFB19", rc_first == 0 and rc_second == 0 and once == twice
+           and rc_gate == 0
+           and json.loads(twice.decode("utf-8"))["chain"]["broken"] == 1,
+           "apply=%d/%d identical=%s check=%d"
+           % (rc_first, rc_second, once == twice, rc_gate))
+
     # AC-SXFB10 (AC-SXF10): the registry row exists AND declares this many
     # criteria, so adding a criterion without moving the count is red instead of
     # silently uncounted.
@@ -613,7 +684,7 @@ def run(root):
             if "test_status_export_fresh.py" in line:
                 row = line
                 break
-    record("AC-SXFB10", row is not None and declared == 22,
+    record("AC-SXFB10", row is not None and declared == 25,
            "matrix_row=%s declared=%d" % (bool(row), declared))
 
 
