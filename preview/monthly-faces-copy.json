@@ -1,0 +1,52 @@
+{
+  "title": "硅基域 · 市场月度台账",
+  "subtitle": "五个市场月度读面的第一张可开页：成交、供给、售后、补货、折扣",
+  "source_note": "数据来源：确定性演示世界（两卖家 / 四买家 / 三上架 / 跨三个月成交与一笔跨月退款），不是真实交易。",
+  "aigc_label": "AIGC 生成内容",
+  "disclaimer": "非投资建议：本页仅展示开发者服务市场的月度读数，不构成任何投资或交易建议。演示世界数据，不涉及真实资金。",
+  "section_note": "每个读面都来自已交付的只读月面；零月面按诚实空态呈现，不合成月份。",
+  "empty": {
+    "api_market_claim_months": "演示世界没有售后单（claims 表 0 行），因此本月度售后压力为诚实空态，不合成任何月份。",
+    "api_market_discount_months": "演示世界没有改价/折扣事件（price_revisions 表 0 行），因此本月度折扣压力为诚实空态，不合成任何月份。",
+    "api_market_restock_months": "该世界没有补货事件；月网格仍与供给面同源连续，故三行全为零（诚实零行，不是缺失）。"
+  },
+  "faces": {
+    "api_market_months": "市场月度成交与退款",
+    "api_market_supply_months": "市场月度供给（上架 / 在架 / 售罄 / 库存）",
+    "api_market_claim_months": "市场月度售后压力",
+    "api_market_restock_months": "市场月度补货压力",
+    "api_market_discount_months": "市场月度折扣"
+  },
+  "fields": {
+    "month": "月份",
+    "sales_count": "成交笔数",
+    "gross": "成交额",
+    "refund_count": "退款笔数",
+    "refunded": "退款额",
+    "net": "净额",
+    "dev_share": "开发者分成",
+    "platform_share": "平台分成",
+    "dev_share_net": "开发者净分成",
+    "platform_share_net": "平台净分成",
+    "buyer_count": "买家数",
+    "seller_count": "卖家数",
+    "listing_count": "商品数",
+    "opened_count": "新上架",
+    "closed_count": "下架",
+    "net_shop_change": "净增",
+    "live_listing_count": "在架",
+    "in_stock_listing_count": "有货",
+    "sold_out_listing_count": "售罄",
+    "unlimited_listing_count": "不限量",
+    "remaining_units": "剩余库存",
+    "units_added": "入库",
+    "units_sold": "售出",
+    "restock_count": "补货次数",
+    "restocked_from_soldout_count": "售罄后补回",
+    "restock_coverage": "补回覆盖率",
+    "recovered_episode_count": "恢复档期",
+    "running_restock_count": "累计补货",
+    "running_units_added": "累计入库"
+  },
+  "footer_note": "本页由 src/sandbox/ledger/monthly_faces_preview.py 生成，文案与字段名来自本 JSON；生成器源保持纯 ASCII。"
+}

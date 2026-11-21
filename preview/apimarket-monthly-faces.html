@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>硅基域 · 市场月度台账</title>
+<style>
+  :root { --ink:#182033; --muted:#6b7280; --line:#e5e7eb; --bg:#f7f8fa;
+          --accent:#3b5bdb; --ok:#2f9e44; --warn:#e8590c; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+         color:var(--ink); background:var(--bg); line-height:1.65;
+         padding:0 0 48px; }
+  .wrap { max-width:960px; margin:0 auto; padding:0 20px; }
+  header { background:linear-gradient(135deg,#1f2b4d,#3b5bdb); color:#fff;
+           padding:32px 0 24px; }
+  header h1 { font-size:24px; letter-spacing:1px; }
+  header .sub { margin-top:6px; font-size:14px; opacity:.92; }
+  .badges { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; }
+  .badge { font-size:12px; border:1px solid rgba(255,255,255,.55);
+           border-radius:999px; padding:2px 10px; }
+  .badge.ai { background:#fff; color:#1f2b4d; font-weight:700;
+              border-color:#fff; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:8px;
+          padding:16px 18px; margin:18px 0; }
+  .card h2 { font-size:16px; margin-bottom:4px; }
+  .card .src { font-size:12px; color:var(--muted); margin-bottom:10px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th,td { border-bottom:1px solid var(--line); padding:7px 10px;
+          text-align:right; }
+  th:first-child,td:first-child { text-align:left; }
+  th { background:#eef1f6; font-size:12px; }
+  .empty { background:#fff8f0; border:1px dashed #ffc078; color:#8a4b08;
+           border-radius:6px; padding:10px 12px; font-size:13px; }
+  .kv { font-size:12px; color:var(--muted); margin:8px 0 0; }
+  footer { max-width:960px; margin:8px auto 0; padding:0 20px;
+           font-size:12px; color:var(--muted); }
+  footer .dis { background:#fff; border:1px solid var(--line);
+                border-radius:8px; padding:12px 14px; margin-top:10px; }
+</style>
+</head><body>
+<header><div class="wrap">
+<h1>硅基域 · 市场月度台账</h1>
+<div class="sub">五个市场月度读面的第一张可开页：成交、供给、售后、补货、折扣</div>
+<div class="badges">
+<span class="badge ai">AIGC 生成内容</span>
+<span class="badge">数据来源：确定性演示世界（两卖家 / 四买家 / 三上架 / 跨三个月成交与一笔跨月退款），不是真实交易。</span>
+</div></div></header>
+<div class="wrap">
+<p class="kv">每个读面都来自已交付的只读月面；零月面按诚实空态呈现，不合成月份。</p>
+<div class="card">
+<h2>市场月度成交与退款</h2>
+<div class="src">api_market_months · 信封 10 键 · 月行 3 行</div>
+<table><thead><tr><th>月份</th>
+<th>成交笔数</th>
+<th>成交额</th>
+<th>退款笔数</th>
+<th>退款额</th>
+<th>净额</th>
+<th>开发者分成</th>
+<th>平台分成</th>
+<th>开发者净分成</th>
+</tr></thead><tbody>
+<tr><td>2026-08</td>
+<td>1</td>
+<td>10</td>
+<td>0</td>
+<td>0</td>
+<td>10</td>
+<td>7</td>
+<td>3</td>
+<td>7</td>
+</tr>
+<tr><td>2026-09</td>
+<td>3</td>
+<td>18</td>
+<td>0</td>
+<td>0</td>
+<td>18</td>
+<td>14</td>
+<td>4</td>
+<td>14</td>
+</tr>
+<tr><td>2026-10</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>15</td>
+<td>-15</td>
+<td>0</td>
+<td>0</td>
+<td>-11</td>
+</tr>
+</tbody></table>
+<p class="kv">month_count=3 · lifetime_sales_count=4 · lifetime_gross=28 · lifetime_refund_count=2 · lifetime_refunded=15 · lifetime_net=13 · lifetime_dev_revenue=10 · lifetime_platform_revenue=3</p>
+</div>
+<div class="card">
+<h2>市场月度供给（上架 / 在架 / 售罄 / 库存）</h2>
+<div class="src">api_market_supply_months · 信封 17 键 · 月行 3 行</div>
+<table><thead><tr><th>月份</th>
+<th>新上架</th>
+<th>下架</th>
+<th>净增</th>
+<th>在架</th>
+<th>卖家数</th>
+<th>有货</th>
+<th>售罄</th>
+<th>不限量</th>
+</tr></thead><tbody>
+<tr><td>2026-08</td>
+<td>3</td>
+<td>0</td>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+</tr>
+<tr><td>2026-09</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+</tr>
+<tr><td>2026-10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+</tr>
+</tbody></table>
+<p class="kv">scope=market · month_count=3 · first_month=2026-08 · last_month=2026-10 · 商品数=3 · 卖家数=2 · peak_month=2026-08 · peak_live_listing_count=3</p>
+</div>
+<div class="card">
+<h2>市场月度售后压力</h2>
+<div class="src">api_market_claim_months · 信封 13 键 · 月行 0 行</div>
+<div class="empty">演示世界没有售后单（claims 表 0 行），因此本月度售后压力为诚实空态，不合成任何月份。</div>
+<p class="kv">month_count=0 · claim_count=0 · open_count=0 · answered_count=0 · withdrawn_count=0 · refunded_count=0 · claim_amount=0 · refunded_amount=0</p>
+</div>
+<div class="card">
+<h2>市场月度补货压力</h2>
+<div class="src">api_market_restock_months · 信封 28 键 · 月行 3 行</div>
+<table><thead><tr><th>月份</th>
+<th>补货次数</th>
+<th>入库</th>
+<th>商品数</th>
+<th>卖家数</th>
+<th>售罄</th>
+<th>售罄后补回</th>
+<th>补回覆盖率</th>
+<th>恢复档期</th>
+</tr></thead><tbody>
+<tr><td>2026-08</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>-</td>
+<td>0</td>
+</tr>
+<tr><td>2026-09</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>-</td>
+<td>0</td>
+</tr>
+<tr><td>2026-10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>-</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p class="kv">该世界没有补货事件；月网格仍与供给面同源连续，故三行全为零（诚实零行，不是缺失）。</p>
+<p class="kv">scope=market · dev_account=- · month_count=3 · active_month_count=0 · 补货次数=0 · 入库=0 · 商品数=0 · 卖家数=0</p>
+</div>
+<div class="card">
+<h2>市场月度折扣</h2>
+<div class="src">api_market_discount_months · 信封 25 键 · 月行 0 行</div>
+<div class="empty">演示世界没有改价/折扣事件（price_revisions 表 0 行），因此本月度折扣压力为诚实空态，不合成任何月份。</div>
+<p class="kv">scope=market · include_uncategorized=yes · month_count=0 · active_month_count=0 · revision_count=0 · discount_count=0 · raise_count=0 · discount_share=-</p>
+</div>
+</div>
+<footer>
+<div class="dis">非投资建议：本页仅展示开发者服务市场的月度读数，不构成任何投资或交易建议。演示世界数据，不涉及真实资金。</div>
+<p class="kv">本页由 src/sandbox/ledger/monthly_faces_preview.py 生成，文案与字段名来自本 JSON；生成器源保持纯 ASCII。</p>
+</footer>
+</body></html>
