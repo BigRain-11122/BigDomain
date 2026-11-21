@@ -1,0 +1,6 @@
+registry rows                        : 741
+literals with pair AND numeric criteria: 2
+literals where pair total != criteria   : 2
+  watermark-scale-unknown pair=4 criteria=6 registry=6
+  watermark-scale-refine pair=2 criteria=6 registry=6
+AST-unparsable sources (named)          : 4 ['ledger-apimarket-refundregister', 'os-battery-followup', 'os-matrix-stamp-compare', 'os-export-round']

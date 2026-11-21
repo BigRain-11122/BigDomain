@@ -7494,7 +7494,7 @@ SUITES = [
     # to a registry row); R3081: 30 -> 31 (AC-BSGB21, the closing row now
     # carries crit_unchecked so checked+unchecked==executed is readable).
     ("os-battery-shard",
-     os.path.join("..", "os", "test_battery_shard.py"), 31),
+     os.path.join("..", "os", "test_battery_shard.py"), 32),
     # R2845: the OUTPUT-level face of the same question the census asks from
     # source. Four probe suites in a private world classify by the row they
     # really printed, the law and the invocation are imported from the runner,

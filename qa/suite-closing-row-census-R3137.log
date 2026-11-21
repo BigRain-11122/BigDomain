@@ -1,0 +1,24 @@
+suite closing-row census suite (expected criteria 20)
+  PASS AC-CEN1 law imported from the runner and a wrong pattern REFUSED
+  PASS AC-CEN2 11 probe shapes classify as measured
+  PASS AC-CEN3 live tree: law families partition the registry
+  PASS AC-CEN4 two runs read byte-identical output
+  PASS AC-CEN5 quiet-list drops the naming and keeps the shapes
+  PASS AC-CEN6 the registry declares 20 criteria
+  PASS AC-CEN7 single-count row stays non-law in BOTH authorities
+  PASS AC-CEN8 shipped closing row reads PASS through the runner (SUITE PASS 168/168)
+  PASS AC-CEN9 law-by-source prints an unreadable row (run, not asserted)
+  PASS AC-CEN10 position face partitions law (law=741 exec=741 unexecuted=0 named=0)
+  PASS AC-CEN11 a fixture string buys no split verdict (fixture=other,real=law_split,uncond=no_numbers)
+  PASS AC-CEN12 live gap closed: row reads ('PASS', 55, 55) and registry='741' law='741' non_law='0' exec=741 unexecuted=0 named=0
+  PASS AC-CEN13 stored probe module measured; a live row not flagged
+  PASS AC-CEN14 live fixture class measured law_only='0' law_literal_rows='1', verdict unchanged
+  PASS AC-CEN15 stored row counted; bind-then-print and a direct print stay out ((({'law_direct'}, set()), (set(), {'law_direct'}), (set(), {'law_direct'})))
+  measured rc=0/0/0 identical=True unchanged=True rows=['os-leg-header-check', 'os-registry-counter-census', 'os-runner-abort-face', 'os-runner-abort-history', 'os-runner-suite-timeout-headroom', 'os-runner-suite-timeout-headroom-overrides'] fields={'nowhere': '6', 'law_only': '0'}
+  FAIL AC-CEN16 live nowhere class pinned at 5 rows, law_only 0, verdict lines unchanged
+  PASS AC-CEN17 a fixture split at an implicit join is counted by the AST audit only ((True, False)), and a one-piece fixture still is ((True, True))
+  measured rc=0/0 verdict_same=True fields={'law_literal_rows': '1', 'law_only': '0'} ast_rows=['os-suite-closing-row-census'] text_rows=['os-suite-closing-row-census'] moves=[('suite-matrix-discovery', 'law_status_punct', 'law_counters')] law text/ast=741/741
+  FAIL AC-CEN18 live fixture row(s) ('os-suite-closing-row-census',) counted by both readings, law_only 0, 1 family move(s) inside the law set, law 741=741
+  PASS AC-CEN19 both readings funnel through one loop (2 hits, two body lists), the local copy is gone, unparsable source falls back to the text pieces
+  PASS AC-CEN20 the pre-R2968 binary at 61d3db7a prints byte-identical lines on this tree
+SUITE FAIL 18/20

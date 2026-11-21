@@ -86,6 +86,24 @@ def parse_criteria_unit(text):
     return int(match.group(2)) if match else None
 
 
+def parse_counter_unit(text):
+    """The criteria count a SUITE row declares with a counter, or None.
+
+    AC-BSGB22 (R3137): "SUITE PASS 34/34 arms=34 criteria=7" states which of
+    its numbers counts what, yet the pair was read first and compared to the
+    registry row, so the suite was graded as an undeclared disagreement and
+    that leg went red on six consecutive windows. Only a row that starts with
+    SUITE is read (SUITE_ROW, which carries the \\b boundary): R3137 measured a
+    docstring line "SUITES wiring (... criteria=6)" in the tree, and a reader
+    without the boundary would let a comment pass itself off as a declaration.
+    """
+    for row in SUITE_ROW.finditer(text):
+        counter = COUNTER_TOTAL.search(row.group(0))
+        if counter:
+            return int(counter.group(1))
+    return None
+
+
 def _counter_row(line):
     """(verdict, passed, total) from a counter row, or None when incomplete.
 
@@ -528,6 +546,7 @@ def _round(args):
         # R2859: a suite that declares its own criteria count is compared in
         # the registry's unit; a suite that does not keeps the old reading.
         declared = parse_criteria_unit(out)
+        counter = parse_counter_unit(out)
         if declared is not None:
             # AC-BSGB12 (R2859) pins this case deliberately: a suite that STATES
             # its criteria count is compared like-for-like, and a disagreement
@@ -536,6 +555,16 @@ def _round(args):
             crit_checked += 1
             if declared != int(crit):
                 mismatch.append("%s:%d!=%d" % (label, declared, crit))
+        elif counter is not None:
+            # AC-BSGB22 (R3137): a row that prints "criteria=<n>" beside its own
+            # pair has already declared WHICH number counts what, so the pair's
+            # total is no longer a blind spot - it is a different unit stated in
+            # the same line. Graded exactly like the lowercase declaration (named
+            # footnote, no rc), because AC-BSGB14's red is reserved for a row
+            # that declares NOTHING and can therefore be read either way.
+            crit_checked += 1
+            if counter != int(crit):
+                mismatch.append("%s:%d!=%d" % (label, counter, crit))
         elif parsed is not None:
             # AC-BSGB14 (R2881): an UNDECLARED suite whose printed total
             # disagrees with its registry row is the true blind spot - no reader

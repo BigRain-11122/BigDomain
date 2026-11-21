@@ -1,0 +1,24 @@
+== Q1 parse branches ==
+verdict+pair (arms=criteria)                   parsed=('PASS', 34, 34) unit=None counter=None
+verdict+pair (arms!=criteria, counter present) parsed=('PASS', 34, 34) unit=None counter=7
+counter row                                    parsed=('PASS', 7, 7) unit=None counter=7
+declaration line                               parsed=('PASS', 21, 21) unit=8 counter=None
+numbers only                                   parsed=('PASS', 8, 8) unit=None counter=None
+== Q2 registry rows = 741 ==
+sources printing a SUITE row with criteria= : 1
+of those, SUITE pair total != counter criteria : 0
+counter value disagrees with registry row     : 0 []
+registry rows whose source is missing         : 0
+== Q3 private world ==
+SHARD row probe-bare rc=0 pass=0 fail=0 detail=none suite=PASS 21/21 crit=8 0.1s
+SHARD row probe-cnt-ok rc=0 pass=0 fail=0 detail=none suite=PASS 21/21 crit=8 0.1s
+SHARD row probe-cnt-bad rc=0 pass=0 fail=0 detail=none suite=PASS 21/21 crit=8 0.1s
+SHARD row probe-decl rc=0 pass=0 fail=0 detail=none suite=PASS 21/21 crit=8 0.1s
+SHARD rc=2 scope=SHARD selected=4 executed=4 green=4 criteria=32 crit_mismatch=3 elapsed=0.3s crit_checked=4 crit_unchecked=0
+SHARD red-unit undeclared=probe-bare:21!=8,probe-cnt-ok:21!=8,probe-cnt-bad:21!=8
+SHARD disclosure crit_mismatch=probe-bare:21!=8,probe-cnt-ok:21!=8,probe-cnt-bad:21!=8
+rc=2
+== Q3 declared-only semantics ==
+DECL_PRINTER selects on 'assertions over' ; carriers are source-level, so a counter-form
+suite is NOT swept by --declared-only unless parse_criteria_unit learns
+the counter form (left untouched this round by design).

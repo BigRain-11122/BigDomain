@@ -1,0 +1,2 @@
+sources with a plain ^SUITE line carrying numeric criteria=: 1
+  watermark-scale-refine       reg=6   SUITES wiring (watermark-scale-refine, criteria=6) + RUNNER full

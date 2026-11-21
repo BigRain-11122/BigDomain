@@ -1,0 +1,7 @@
+registry rows                        : 741
+sources mentioning an arms token     : 2
+sources printing SUITE row w/ arms+criteria : 0 []
+shipped leg logs naming a mismatch   : 6
+named mismatch entries total          : 6
+entries where printed total > registry (arms-as-criteria shape) : 6
+  os-corpus-supply-chain                   x6

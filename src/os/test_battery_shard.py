@@ -89,6 +89,28 @@ print("suite: 21 assertions over 8 criteria")
 print("SUITE PASS 21/21")
 """
 
+# R3137: the counter form of the same declaration ("SUITE ... criteria=<n>").
+# Written as module constants so each print line carries ONE literal - the
+# registry counter census counts a print line built from several literals as
+# its own unreadable shape, and a fixture must not move that pinned reading.
+PROBE_UNIT_COUNTER_OK = """
+print("SUITE PASS 21/21 arms=21 criteria=8")
+"""
+
+PROBE_UNIT_COUNTER_BAD = """
+print("SUITE PASS 21/21 arms=21 criteria=7")
+"""
+
+PROBE_UNIT_COUNTER_PREV = """
+print("suite: 21 assertions over 8 criteria")
+print("SUITE PASS 21/21 arms=21 criteria=9")
+"""
+
+PROBE_UNIT_COUNTER_DOC = """
+print("SUITES wiring (probe, criteria=6)")
+print("SUITE PASS 21/21")
+"""
+
 # R2859: the declared-units pair. Both probes print the SAME verdict row; only
 # the declaration differs, so a mismatch can only come from the declaration.
 PROBE_DECL_OK = """print("  | PASS probe-decl-ok")
@@ -638,6 +660,67 @@ def main():
         ok("AC-BSGB14", code_all == 2 and bare_named and lawful_kept,
            "rc=%d bare_named=%s declared_rc=%d" % (code_all, bare_named,
                                                    code_decl))
+    finally:
+        shutil.rmtree(world, ignore_errors=True)
+
+    # AC-BSGB22 (R3137) - a SUITE row that prints a criteria counter beside its
+    # own pair has DECLARED which number counts what, so the pair's total stops
+    # being a blind spot. Measured fact this exists for: os-corpus-supply-chain
+    # prints "SUITE PASS 34/34 arms=34 criteria=7" and the shard read 34 against
+    # a registry row of 7, so that one leg was red for six consecutive windows
+    # (R3130..R3136) while the number the registry counts sat on the same line.
+    # One private world, six arms: the counter agreeing and disagreeing, the
+    # undeclared pair (AC-BSGB14 must still bite), the lowercase declaration
+    # (AC-BSGB12 verbatim), the precedence when both declarations appear, and a
+    # docstring-shaped line that must NOT pass itself off as a declaration.
+    world = tempfile.mkdtemp(prefix="battery_shard_counter_unit_")
+    try:
+        sources = {
+            "probe_cnt_ok.py": PROBE_UNIT_COUNTER_OK,
+            "probe_cnt_bad.py": PROBE_UNIT_COUNTER_BAD,
+            "probe_cnt_prev.py": PROBE_UNIT_COUNTER_PREV,
+            "probe_cnt_doc.py": PROBE_UNIT_COUNTER_DOC,
+        }
+        sources["probe_unit_bare.py"] = PROBE_UNIT_BARE
+        sources["probe_unit_decl.py"] = PROBE_UNIT_DECL
+        for name, body in sources.items():
+            with open(os.path.join(world, name), "w", encoding="utf-8",
+                      newline="\n") as handle:
+                handle.write(body)
+        rows_live = [("probe-unit-bare", "probe_unit_bare.py", 8),
+                     ("probe-unit-decl", "probe_unit_decl.py", 8),
+                     ("probe-cnt-ok", "probe_cnt_ok.py", 8),
+                     ("probe-cnt-bad", "probe_cnt_bad.py", 8),
+                     ("probe-cnt-prev", "probe_cnt_prev.py", 8),
+                     ("probe-cnt-doc", "probe_cnt_doc.py", 8)]
+        saved = shard.registry
+        try:
+            patch_registry(shard, rows_live, world)
+            code_w, out_w = run_cli(shard, ["--match", "probe"])
+        finally:
+            shard.registry = saved
+        red_rows = [l for l in out_w.splitlines()
+                    if l.startswith("SHARD red-unit")]
+        red_text = red_rows[0] if red_rows else ""
+        disc_rows = [l for l in out_w.splitlines()
+                     if l.startswith("SHARD disclosure")]
+        disc_text = disc_rows[0] if disc_rows else ""
+        arm_p = (code_w == 2
+                 and "probe-cnt-ok" not in red_text
+                 and "probe-cnt-ok" not in disc_text)
+        arm_q = ("probe-cnt-bad:7!=8" in disc_text
+                 and "probe-cnt-bad" not in red_text)
+        arm_r = "probe-unit-bare:21!=8" in red_text
+        arm_s = ("probe-unit-decl" not in disc_text
+                 and "probe-unit-decl" not in red_text)
+        arm_t = ("probe-cnt-prev:9!=8" not in out_w
+                 and "probe-cnt-prev" not in red_text)
+        arm_u = "probe-cnt-doc:21!=8" in red_text
+        ok("AC-BSGB22",
+           arm_p and arm_q and arm_r and arm_s and arm_t and arm_u
+           and code_w == 2,
+           "p=%s q=%s r=%s s=%s t=%s u=%s rc=%d"
+           % (arm_p, arm_q, arm_r, arm_s, arm_t, arm_u, code_w))
     finally:
         shutil.rmtree(world, ignore_errors=True)
 
