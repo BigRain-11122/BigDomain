@@ -45,10 +45,25 @@ REPORT_KEYS = ("round", "fold_no", "mode", "verdict", "window_start",
 
 
 class FoldRunError(Exception):
-    def __init__(self, code, detail=""):
+    """A refusal, carrying WHETHER the fold already landed (AC-SFOLD10).
+
+    R3188 measured that two different facts exited through one code and one
+    text line: "refused before any byte" and "landed, then unproven" both
+    read as rc=2 under the same code, distinguished only by the literal
+    prefix inside detail. `stage` is that fact as a field, so a caller reads
+    it instead of matching prose. Text output is unchanged.
+    """
+
+    def __init__(self, code, detail="", stage="pre-write"):
         Exception.__init__(self, code)
         self.code = code
         self.detail = detail
+        self.stage = stage
+
+    def face(self):
+        return {"error": self.code, "stage": self.stage,
+                "detail": self.detail,
+                "after_write": self.stage == "after-write"}
 
 
 def digest(raw):
@@ -482,7 +497,8 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
         # blames the fold for a reader failure.
         raise FoldRunError("E_SFOLD_ARCHIVE_READ",
                            "after write: %s (state, archive and backup"
-                           " already changed)" % after_cov["archive_error"])
+                           " already changed)" % after_cov["archive_error"],
+                           stage="after-write")
     # AC-SFOLD2: no round that had a ledger line may lose it to the fold.
     # R3186: these three proofs run AFTER the write, so their codes say so -
     # the caller must not read "refused, nothing written" from a fold that
@@ -492,19 +508,24 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
                            "after write: %d -> %d (state, archive and backup"
                            " already changed)"
                            % (len(before_cov["ledger_rounds"]),
-                              len(after_cov["ledger_rounds"])))
+                              len(after_cov["ledger_rounds"])),
+                           stage="after-write")
     if not report["archive_verified"]:
         raise FoldRunError("E_SFOLD_ARCHIVE_COPY",
-                           "after write: %s" % archive)
+                           "after write: %s" % archive, stage="after-write")
     if not report["layout_agree"]:
         raise FoldRunError("E_SFOLD_LAYOUT_DISAGREE",
-                           "after write: %s" % path)
+                           "after write: %s" % path, stage="after-write")
     # AC-SFOLD5: the gate is honest - success only at or under the waterline.
     post = SF.check(root, gate=gate)
     report["verdict"] = post["verdict"].replace("FOLD-", "")
     if post["fold_needed"]:
+        # R3188: this raise was the fifth after-write exit and the only one
+        # that named neither the fact nor the prefix - measured before the
+        # fix, a caller read it as a refusal into an untouched tree.
         raise FoldRunError("E_SFOLD_GATE",
-                           "%d bytes over %d" % (post["bytes"], gate))
+                           "after write: %d bytes over %d"
+                           % (post["bytes"], gate), stage="after-write")
     return report
 
 
@@ -517,8 +538,12 @@ USAGE = (
     "open a second window for one round marker)\n"
     "       state_fold_run.py --check [--root PATH] [--json]\n"
     "  exit 0 = folded / ALREADY-FOLDED / FOLD-CLEAR\n"
-    "  exit 2 = refused by the predicate (nothing written), or a proof that\n"
-    "           ran after the write (message starts 'after write:')\n"
+    "  exit 2 = refused by the predicate, or a proof that ran after the\n"
+    "           write. With --json a refusal is a JSON object carrying\n"
+    "           error, stage ('pre-write' or 'after-write'), detail and\n"
+    "           after_write - so the two meanings are told apart by a\n"
+    "           field, not by matching the 'after write:' text prefix.\n"
+    "           Without --json the line is unchanged.\n"
     "  exit 3 = state file missing or unreadable\n"
     "  exit 5 = bad flags\n")
 
@@ -623,7 +648,15 @@ def main(argv):
                      summary, archive_path=archive, dry_run=dry_run,
                      refold_reason=refold_reason)
     except FoldRunError as exc:
-        sys.stdout.write("%s %s\n" % (exc.code, exc.detail))
+        # AC-SFOLD10 (R3188): --json asked for a machine face, so the error
+        # face is machine-readable too - measured this round that every
+        # refusal printed plain text and no caller could parse it. The text
+        # face (no --json) is byte-identical to what it was before.
+        if as_json:
+            sys.stdout.write(json.dumps(exc.face(), ensure_ascii=True,
+                                        sort_keys=True) + "\n")
+        else:
+            sys.stdout.write("%s %s\n" % (exc.code, exc.detail))
         return 2
     except SF.StateFoldError as exc:
         sys.stdout.write("%s %s\n" % (exc.code, exc.detail))

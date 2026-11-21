@@ -1,0 +1,28 @@
+R3188 evidence - 2026-11-21 (fold refusal carries whether the fold landed)
+PROBE probe-R3188.log 1966B - read-only: healthy world rc=0; bad name rc=2 text;
+  --json on the same refusal parsed as TEXT (contract break); static worlds never
+  reach E_SFOLD_ARCHIVE_READ (birth gates fire first: E_FLR_ARCHIVE_NAME,
+  E_FLR_ARCHIVE_UNREADABLE, E_FLR_ARCHIVE_PATH); after-write path rc=2 text with
+  bytes already changed; only a text prefix told the two meanings apart.
+LANDED state_fold_run.FoldRunError.stage (pre-write default; after-write at all
+  five after-write raise sites, incl. the E_SFOLD_GATE post-check that carried
+  neither the prefix nor a field before); FoldRunError.face() publishes
+  error/stage/detail/after_write; main() writes that JSON under --json and keeps
+  the exact text line without it; USAGE pins both meanings.
+SUITE PASS 13/13 qa/suite-state-fold-run-R3188.log (AC-SFOLD10 added,
+  EXPECTED_CRITERIA 12 -> 13, registry os-state-fold-run 12 -> 13; AC-SFOLD6
+  now READS the registry row and compares that number, JUDGED-CHANGED - the
+  sentence and the measurement now agree, no law relaxed).
+PEERS state_seq 8/8, state_fold 7/7, closeout_carrier 6/6, state_append 10/10,
+  general_writer_dialect_audit 6/6, closeout_gate 42/42.
+MATRIX regenerated through suite_matrix_reconcile --write (78385B/754 rows) then
+  --check DOC-CURRENT.
+CENSUS --write-pin (honest CACHE E_RCC_CACHE_PARTIAL reused=753/754) then
+  --check VERDICT PASS pinned=754.
+LIVE GATE CLOSEOUT-GATE PASS files=4479 flags=0 reader_refused=0 round_main=OK
+  census=PASS matrix=DOC-CURRENT; CARRIER bytes=67140 gate=78500 margin=11360
+  fold_needed=false layout_ok=true.
+HONEST the refusal face is bookkeeping, not capability: zero payment, zero
+  network beyond loopback, zero product or api surface, zero gate number; a
+  static world still cannot produce the two meanings at all - only a concurrent
+  writer can, and now that case reads as stage=after-write instead of prose.

@@ -1,0 +1,23 @@
+Q1a healthy execute: rc=0 stdout_kind=TEXT stdout_lines=1 stderr_bytes=0
+Q1a first tokens: STATE FOLD RUN round=R9001 fold=1 mode=execute verdict=CLEAR window=1..12 lines=12 live 44->33 bytes 3111->2463 margin=7
+Q1a archive grew: True
+Q1b bad archive name (text): rc=2 stdout_kind=TEXT stdout_lines=1 stderr_bytes=0
+Q1b body: E_FLR_ARCHIVE_NAME state-log-archive-2026-11.txt (the coverage reader enumerates state-log-archive-*.md only)
+Q1b bad archive name (--json): rc=2 stdout_kind=TEXT stdout_lines=1 stderr_bytes=0
+Q1b --json body is: E_FLR_ARCHIVE_NAME state-log-archive-2026-11.txt (the coverage reader enumerates state-log-archive-*.md only)
+Q1b --json parses as JSON: TEXT
+Q1c unreadable sibling (text): rc=2 stdout_kind=TEXT stdout_lines=1 stderr_bytes=0
+Q1c body: E_FLR_ARCHIVE_UNREADABLE C:\Users\sjs20\AppData\Local\Temp\probe-R3188-fei25wok\unreadable\logs\state-log-arch
+Q1c unreadable sibling (--json): rc=2 stdout_kind=TEXT stdout_lines=1 stderr_bytes=0
+Q1c --json parses as JSON: TEXT
+Q1d logs dir missing                 -> rc=2 code=E_FLR_ARCHIVE_UNREADABLE
+Q1d archive name is a directory      -> rc=2 code=E_FLR_ARCHIVE_UNREADABLE
+Q1d archive outside logs             -> rc=2 code=E_FLR_ARCHIVE_PATH
+Q1d name without prefix              -> rc=2 code=E_FLR_ARCHIVE_NAME
+Q1d E_SFOLD_ARCHIVE_READ reached statically: False
+Q2 after-write (--json): rc=2 stdout_kind=TEXT body=E_SFOLD_ARCHIVE_READ after write: UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: late
+Q2 bytes already landed: True
+Q2b pre meaning line = 'E_SFOLD_ARCHIVE_READ <reader error>'
+Q2b post meaning line = 'E_SFOLD_ARCHIVE_READ after write: ...'
+Q2b only difference a caller can see: the literal prefix 'after write:' inside detail (no rc, no json field)
+Q3 consumer census: run() is called by the CLI, by this module own suite, and by no other shipped face; reconcile_all only executes the suite; no shipped caller branches on rc or on the detail text

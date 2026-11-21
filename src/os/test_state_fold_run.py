@@ -11,11 +11,14 @@ or under the waterline, and a fold re-run on its own output writes zero bytes.
 Stdlib only, ASCII source, zero network. Exit 0 = all green.
 """
 
+import contextlib
 import hashlib
 import io
 import json
 import os
+import re
 import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -26,7 +29,7 @@ sys.path.insert(0, BASE)
 import state_fold_run as FR  # noqa: E402
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 12
+EXPECTED_CRITERIA = 13
 MODULE = os.path.join(BASE, "state_fold_run.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold-run"
@@ -298,15 +301,26 @@ def main():
         no_clock = b"import datetime" not in source and b"time.time" not in source
         with io.open(RUNNER, "rb") as handle:
             runner = handle.read()
+        # R3188: the arm used to compare EXPECTED_CRITERIA with a literal
+        # typed three lines below it, which measured nothing about the
+        # registry its own sentence names. It now READS the registry row and
+        # compares that number with the declared count (JUDGED-CHANGED: the
+        # sentence and the measurement now agree; no law relaxed).
+        registry_match = re.search(
+            r'"os-state-fold-run",\s*os\.path\.join\("\.\.",\s*"os",\s*'
+            r'"test_state_fold_run\.py"\),\s*(\d+)\)',
+            runner.decode("utf-8", "replace"))
+        registry_count = int(registry_match.group(1)) if registry_match else -1
         wired = (LABEL.encode("ascii") in runner
-                 and EXPECTED_CRITERIA == 12)
+                 and registry_count == EXPECTED_CRITERIA)
         check(read(dry_path) == dry_before
               and dry["dry_run_digest_same"] is True
               and dry["verdict"] == "DRY-RUN" and ascii_ok and no_clock
               and wired,
               "AC-SFOLD6 dry run wrote zero bytes (digest %s), source ASCII "
-              "and clockless, wired as %s(6)"
-              % (digest(read(dry_path))[:16], LABEL))
+              "and clockless, wired as %s(%d) against registry %d"
+              % (digest(read(dry_path))[:16], LABEL, EXPECTED_CRITERIA,
+                 registry_count))
         # --- AC-SFOLD7: a fold may not CREATE a live gap -------------------
         # R3085 measured the live shape this closes: R3059's narrative sat at
         # 512..517 while its retro-written ledger line sat at 666, so a cut
@@ -788,6 +802,117 @@ def main():
                  guard_code, guard_untouched, guard_files, late_code,
                  late_detail[:40], late_changed,
                  healthy_cov["archive_read"]))
+
+        # --- AC-SFOLD10: the refusal says whether the fold already landed --
+        # R3188 measured two facts leaving through one code and one text
+        # line: "refused before any byte" and "landed, then unproven" both
+        # read rc=2 with E_SFOLD_ARCHIVE_READ, told apart only by a prefix
+        # inside detail - and --json printed that same prose, so no machine
+        # caller could parse any refusal at all.
+        clean_summary = ("R9010 fold 1 of log lines 1..12 into"
+                         " logs/state-log-archive-2026-11.md; tokens carried:"
+                         " R1000 R1001 R1002 R1003 R1004 R1005 R1006 R1007"
+                         " R1008 R1009 R1010 R1011")
+        default_face = FR.FoldRunError("E_PROBE", "why").face()
+        bad_root, bad_path = make_world(os.path.join(base, "json-bad"))
+        bad_archive = os.path.join(bad_root, "logs",
+                                   "state-log-archive-2026-11.txt")
+        bad_argv = ["--root", bad_root, "--fold", "--round", "R9010",
+                    "--fold-no", "1", "--start", "1", "--end", "12",
+                    "--summary", clean_summary, "--archive", bad_archive]
+        text_buf = io.StringIO()
+        with contextlib.redirect_stdout(text_buf):
+            text_rc = FR.main(list(bad_argv))
+        text_line = text_buf.getvalue().strip()
+        json_buf = io.StringIO()
+        with contextlib.redirect_stdout(json_buf):
+            json_rc = FR.main(list(bad_argv) + ["--json"])
+        try:
+            pre_obj = json.loads(json_buf.getvalue().strip())
+        except ValueError:
+            pre_obj = {}
+
+        late10_root, late10_path = make_world(os.path.join(base, "json-late"))
+        late10_before = read(late10_path)
+        real_reader10 = FR.LL.load_archive_lines
+        calls10 = {"n": 0}
+
+        def die_second10(logs_dir=None, state_path=None):
+            calls10["n"] += 1
+            if calls10["n"] >= 2:
+                raise UnicodeDecodeError("utf-8", b"\xff", 0, 1, "late")
+            return real_reader10(logs_dir, state_path)
+
+        late_buf = io.StringIO()
+        FR.LL.load_archive_lines = die_second10
+        try:
+            with contextlib.redirect_stdout(late_buf):
+                late_rc = FR.main(["--root", late10_root, "--json", "--fold",
+                                   "--round", "R9011", "--fold-no", "1",
+                                   "--start", "1", "--end", "12",
+                                   "--summary",
+                                   clean_summary.replace("R9010", "R9011")])
+        finally:
+            FR.LL.load_archive_lines = real_reader10
+        try:
+            post_obj = json.loads(late_buf.getvalue().strip())
+        except ValueError:
+            post_obj = {}
+        late10_changed = read(late10_path) != late10_before
+
+        ok_root, ok_path = make_world(os.path.join(base, "json-ok"))
+        ok_buf = io.StringIO()
+        with contextlib.redirect_stdout(ok_buf):
+            FR.main(["--root", ok_root, "--json", "--dry-run", "--fold",
+                     "--round", "R9012", "--fold-no", "1", "--start", "1",
+                     "--end", "12", "--summary",
+                     clean_summary.replace("R9010", "R9012")])
+        try:
+            ok_obj = json.loads(ok_buf.getvalue().strip())
+        except ValueError:
+            ok_obj = {}
+
+        proc = subprocess.run(
+            [sys.executable, MODULE] + list(bad_argv) + ["--json"],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        try:
+            cli_obj = json.loads(proc.stdout.decode("utf-8").strip())
+        except ValueError:
+            cli_obj = {}
+
+        check(default_face["stage"] == "pre-write"
+              and default_face["after_write"] is False
+              and text_rc == 2
+              and text_line.startswith("E_FLR_ARCHIVE_NAME ")
+              and "{" not in text_line
+              and json_rc == 2
+              and pre_obj.get("error") == "E_FLR_ARCHIVE_NAME"
+              and pre_obj.get("stage") == "pre-write"
+              and pre_obj.get("after_write") is False
+              and isinstance(pre_obj.get("detail"), str)
+              and late_rc == 2
+              and post_obj.get("error") == "E_SFOLD_ARCHIVE_READ"
+              and post_obj.get("stage") == "after-write"
+              and post_obj.get("after_write") is True
+              and late10_changed
+              and post_obj.get("stage") != pre_obj.get("stage")
+              and sorted(ok_obj.keys()) == sorted(FR.REPORT_KEYS)
+              and proc.returncode == 2 and proc.stderr == b""
+              and cli_obj.get("error") == "E_FLR_ARCHIVE_NAME"
+              and module_text.count('stage="after-write"') == 5
+              and "after write: %d bytes over %d" in module_text,
+              "AC-SFOLD10 a refusal carries whether the fold landed "
+              "[default=%s/%s, text rc=%s line starts %r, --json pre=%s/%s, "
+              "--json after-write=%s/%s bytes changed=%s, dry-run keys "
+              "intact=%s, real subprocess rc=%s error=%s, after-write raise "
+              "sites=%d]"
+              % (default_face["stage"], default_face["after_write"], text_rc,
+                 text_line[:24], pre_obj.get("stage"),
+                 pre_obj.get("after_write"), post_obj.get("stage"),
+                 post_obj.get("after_write"), late10_changed,
+                 sorted(ok_obj.keys()) == sorted(FR.REPORT_KEYS),
+                 proc.returncode, cli_obj.get("error"),
+                 module_text.count('stage="after-write"')))
     finally:
         shutil.rmtree(base, ignore_errors=True)
 
