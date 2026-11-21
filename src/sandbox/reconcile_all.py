@@ -3461,6 +3461,19 @@ SUITES = [
     # pure read, no external reference).
     ("ledger-apimarket-report", os.path.join(
         "ledger", "test_apimarket_report.py"), 9),
+    # R3194 gate on the R3193 product page: the five monthly market read
+    # faces had an openable page since R3193 but only a generator-local
+    # --verify flag, so the battery, matrix, census and closeout gate
+    # could not see it. This row drives the generator own exported
+    # functions (no renderer copy) and pins contract/CLI-render equality,
+    # determinism, envelope conservation, honest empty cards, standing
+    # AIGC plus non-advisory markers with an ASCII source, zero write
+    # against the shipped snapshot and page files, hygiene, and the
+    # registry count this suite records. (AC-MFRW1..AC-MFRW8 were
+    # pre-registered in src/os/backlog.md at R3194 BEFORE this suite,
+    # its label and this row existed.)
+    ("ledger-monthly-faces-preview", os.path.join(
+        "ledger", "test_monthly_faces_preview.py"), 8),
     # R2102 attention digest on the same report generator: the
     # statement-shaped R2101 page now opens with an ordered operator
     # to-do list derived from the faces (seller inbox debt, sold-out

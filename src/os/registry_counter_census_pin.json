@@ -291,6 +291,7 @@
     "ledger-incentive-persist",
     "ledger-metered",
     "ledger-metered-persist",
+    "ledger-monthly-faces-preview",
     "ledger-observation",
     "ledger-observation-persist",
     "ledger-proposal",

@@ -210,11 +210,12 @@ def render_html(copy, faces):
         label = copy["faces"].get(fn, fn)
         parts.append('<div class="card">')
         parts.append("<h2>%s</h2>" % esc(label))
-        parts.append('<div class="src">%s · 信封 %d 键 · 月行 %d 行</div>'
-                     % (esc(fn), face["key_count"], face["month_count"]))
+        parts.append('<div class="src">%s</div>'
+                     % esc(copy["src_line"]
+                           % (fn, face["key_count"], face["month_count"])))
         months = face["months"]
         if not months:
-            msg = copy["empty"].get(fn, "该读面在此源里没有月份。")
+            msg = copy["empty"].get(fn, copy["empty_default"])
             parts.append('<div class="empty">%s</div>' % esc(msg))
         else:
             cols = numeric_columns(months)
@@ -243,7 +244,8 @@ def render_html(copy, faces):
             if len(scalars) >= 8:
                 break
         if scalars:
-            parts.append('<p class="kv">%s</p>' % esc(" · ".join(scalars)))
+            parts.append('<p class="kv">%s</p>'
+                         % esc(copy["sep"].join(scalars)))
         parts.append("</div>")
     parts.append("</div>")
     parts.append("<footer>")
