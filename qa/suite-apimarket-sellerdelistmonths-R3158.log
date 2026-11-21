@@ -1,0 +1,10 @@
+PASS AC-SDL1: env_keys=26 exact=True row_keys=True rows=5 empty=(0, None, [])
+PASS AC-SDL2: jan=returned2/relist0 apr=delist0/relist1 grid_end=2026-05
+PASS AC-SDL3: naive_same_cycle_answered=1 law_n+1_answered=3 face=3 open=1
+PASS AC-SDL4: jan=(4, 1) mar=2 may=7 env=(13, 1, 4) lia=(0, 1, None)
+PASS AC-SDL5: grid=['2026-01', '2026-02', '2026-03', '2026-04', '2026-05'] sums=4/13 running=[2, 2, 3, 3, 4]/[4, 4, 6, 6, 13]
+PASS AC-SDL6: peak='2026-01'/2 tie='2026-03'/2 dark=3024000/4435200/6566400
+PASS AC-SDL7: refused=8/8 digests_same=True shared_equal=True market_only=['2026-06'] dana=(2, 2, 1.3333) gina=(1, 1) stranger=(0, 0)
+PASS AC-SDL8: digests_same=True tx_same=True bytes=True wired=True ascii=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

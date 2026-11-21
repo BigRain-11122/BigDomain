@@ -185,6 +185,7 @@
     "ledger-apimarket-sellercategorymix",
     "ledger-apimarket-sellerclaimmonths",
     "ledger-apimarket-sellercohort",
+    "ledger-apimarket-sellerdelistmonths",
     "ledger-apimarket-sellerinbox",
     "ledger-apimarket-sellerledger",
     "ledger-apimarket-sellermonths",

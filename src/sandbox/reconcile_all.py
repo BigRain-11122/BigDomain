@@ -3149,6 +3149,17 @@ SUITES = [
     # the R2248 explore-queue seed row and the R3157 PIN BEFORE the code.
     ("ledger-apimarket-buyerquestionmonths", os.path.join(
         "ledger", "test_apimarket_buyerquestionmonths.py"), 8),
+    # seller-scoped monthly retirement flow (a retirement books in the
+    # UTC month of its own delisted_utc and the RETURN LEG is judged at
+    # that same month, so a later re-listing never rewrites the month the
+    # shelf left in - the deliberate opposite of the market face's cash
+    # basis; the cycle pairing is re-list cycle == retire cycle + 1, the
+    # withdrawn units come from the shared point-in-time supply law with
+    # unlimited shelves counted as unknown rather than zero) - criteria
+    # AC-SDL1..AC-SDL8 registered in the R2248 c explore-queue seed row
+    # and pinned in the R3158 row BEFORE the code.
+    ("ledger-apimarket-sellerdelistmonths", os.path.join(
+        "ledger", "test_apimarket_sellerdelistmonths.py"), 8),
     # buyer-side monthly claim flow (a claim books in the UTC month of its
     # own opened_utc, a later refund never re-dates it nor invents a row
     # in the refund month, honest zero months carried flat, the five-state

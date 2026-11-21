@@ -15330,6 +15330,243 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
         }
 
+    def api_seller_delist_months(self, dev_account=None):
+        """Monthly retirement flow on both scopes (criteria
+        AC-SDL1..AC-SDL8 pre-registered in the R2248 c explore-queue
+        seed row and pinned in the R3158 row BEFORE this code existed;
+        the face name, the AC-SDL prefix, this suite name and the
+        registry id were git-grep zero-occupancy against HEAD
+        2026-11-21, rc=1).
+
+        api_market_relist_months answers the MARKET axis on cash basis
+        (a retirement books in its own month, a return books in ITS own
+        month), api_relist_gap pairs one named listing's retirement with
+        its return, and api_seller_supply / api_seller_restock_months
+        answer adds. So the question a seller actually asks - of the
+        shelves I pulled THIS month, how many came back, how many units
+        left the shelf, how long were they dark, and is my retirement
+        accelerating - had no face at all.
+
+        Booking law (AC-SDL2): every retirement books in the UTC month
+        of its own immutable delisted_utc, and the return leg is judged
+        AT THAT SAME MONTH even though the re-listing stamp lands later,
+        so a later return never rewrites the month the shelf left in.
+        This is the deliberate opposite of api_market_relist_months'
+        double stamp and the two axes are NOT inter-derivable.
+
+        Pairing law (AC-SDL3): relist_api writes the cycle it OPENS, so a
+        retirement row carrying cycle N is answered only by the
+        re-listing row of the SAME listing carrying cycle N + 1. An
+        equal-cycle join finds nothing on any world this ledger can
+        build, and the second retirement of one listing (cycle 2) pairs
+        with cycle 3. A retirement with no such answer is open; a return
+        stamped at or before its retirement (impossible here, kept
+        defensive) counts as answered but contributes no dark seconds.
+
+        Units law (AC-SDL4): units_withdrawn is the remaining shelf at
+        the retirement stamp under the shared point-in-time law
+        (_supply_at_instant), so purchases, refunds and restocks stamped
+        at or before the retirement are already netted. A listing with no
+        declared base supply is unlimited and its withdrawn units are
+        genuinely unknowable: it counts in units_unknown_count and is
+        never summed as zero, and every average divides by the known
+        units only.
+
+        Grid and conservation (AC-SDL5): month rows run contiguously
+        from the first to the last retirement month, an eventless month
+        carries an honest zero row, row sums equal the envelope totals
+        and the two running accumulators end on them.
+
+        Peak and ratio laws (AC-SDL6): the peak is the highest monthly
+        retirement count with ties resolved to the EARLIER month and a
+        zero month is never a peak (None on an empty world); return_rate
+        is a four-decimal ratio and is None - never a fabricated 0.0 - on
+        a month with no retirement; the dark-time triple is measured over
+        answered pairs only.
+
+        Scope law (AC-SDL7): dev_account None is the whole market
+        (scope == 'market', market_mean_delist_count None - the face
+        never benchmarks itself against itself) and its per-month
+        retirement counts agree with api_market_relist_months value for
+        value; a seller scope reads that seller's rows only, carries the
+        market-wide pooled mean computed by the same law, and other
+        sellers never leak in. The account shape gate runs before any
+        read, so a bad account fails closed; a prefix-valid account with
+        no retirement history gets an honest empty envelope.
+
+        Pure read: zero row mutations and zero token movement."""
+        fmt = "%Y-%m-%dT%H:%M:%SZ"
+
+        def _flow(scope):
+            sql = ("SELECT d.listing_id, d.dev_account, d.delisted_utc,"
+                   " d.cycle, l.supply FROM apimarket_delistings d"
+                   " JOIN apimarket_listings l ON l.listing_id ="
+                   " d.listing_id")
+            args = ()
+            if scope is not None:
+                sql += " WHERE d.dev_account = ?"
+                args = (str(scope),)
+            sql += " ORDER BY d.delist_id"
+            raw = self._conn.execute(sql, args).fetchall()
+            buckets = {}
+            sellers = set()
+            listings = set()
+            total_delist = 0
+            total_units = 0
+            total_unknown = 0
+            returned_total = 0
+            known_units = []
+            darks = []
+            for lid, dev, stamp, cycle, base_supply in raw:
+                lid = int(lid)
+                stamp = str(stamp)
+                month = stamp[:7]
+                remaining = self._supply_at_instant(
+                    lid, base_supply, stamp)[2]
+                answer = answers.get((lid, int(cycle) + 1))
+                dark = None
+                if answer is not None and answer > stamp:
+                    dark = int(
+                        (datetime.datetime.strptime(answer, fmt)
+                         - datetime.datetime.strptime(stamp, fmt)
+                         ).total_seconds())
+                b = buckets.get(month)
+                if b is None:
+                    b = {"count": 0, "units": 0, "unknown": 0,
+                         "listings": set(), "returned": 0, "open": 0,
+                         "darks": [], "largest": None}
+                    buckets[month] = b
+                b["count"] += 1
+                b["listings"].add(lid)
+                if remaining is None:
+                    b["unknown"] += 1
+                    total_unknown += 1
+                else:
+                    b["units"] += int(remaining)
+                    total_units += int(remaining)
+                    known_units.append(int(remaining))
+                    if (b["largest"] is None
+                            or int(remaining) > b["largest"]):
+                        b["largest"] = int(remaining)
+                if answer is None:
+                    b["open"] += 1
+                else:
+                    b["returned"] += 1
+                    returned_total += 1
+                    if dark is not None:
+                        b["darks"].append(dark)
+                        darks.append(dark)
+                sellers.add(dev)
+                listings.add(lid)
+                total_delist += 1
+            months = []
+            running_count = 0
+            running_units = 0
+            for month in _contiguous_months(sorted(buckets)):
+                b = buckets.get(month)
+                if b is None:
+                    b = {"count": 0, "units": 0, "unknown": 0,
+                         "listings": set(), "returned": 0,
+                         "open": 0, "darks": [], "largest": None}
+                known = b["count"] - b["unknown"]
+                running_count += b["count"]
+                running_units += b["units"]
+                months.append({
+                    "month": month,
+                    "delist_count": b["count"],
+                    "units_withdrawn": b["units"],
+                    "units_unknown_count": b["unknown"],
+                    "listing_count": len(b["listings"]),
+                    "returned_count": b["returned"],
+                    "open_retirement_count": b["open"],
+                    "return_rate": (round(
+                        float(b["returned"]) / b["count"], 4)
+                        if b["count"] else None),
+                    "mean_dark_seconds": ((sum(b["darks"])
+                                           // len(b["darks"]))
+                                          if b["darks"] else None),
+                    "avg_units_per_delist": ((b["units"] // known)
+                                             if known else None),
+                    "largest_withdrawal_units": b["largest"],
+                    "running_delist_count": running_count,
+                    "running_units_withdrawn": running_units})
+            active = [row for row in months if row["delist_count"] > 0]
+            peak_month = None
+            peak_count = None
+            for row in months:
+                if row["delist_count"] > 0 and (
+                        peak_count is None
+                        or row["delist_count"] > peak_count):
+                    peak_month = row["month"]
+                    peak_count = row["delist_count"]
+            return {
+                "month_count": len(months),
+                "active_month_count": len(active),
+                "delist_count": total_delist,
+                "units_withdrawn": total_units,
+                "units_unknown_count": total_unknown,
+                "avg_units_per_delist": ((total_units
+                                          // len(known_units))
+                                         if known_units else None),
+                "largest_withdrawal_units": (max(known_units)
+                                             if known_units else None),
+                "listing_count": len(listings),
+                "seller_count": len(sellers),
+                "returned_count": returned_total,
+                "open_retirement_count": (total_delist
+                                          - returned_total),
+                "return_rate": (round(
+                    float(returned_total) / total_delist, 4)
+                    if total_delist else None),
+                "mean_dark_seconds": ((sum(darks) // len(darks))
+                                      if darks else None),
+                "min_dark_seconds": min(darks) if darks else None,
+                "max_dark_seconds": max(darks) if darks else None,
+                "peak_month": peak_month,
+                "peak_delist_count": peak_count,
+                "first_month": months[0]["month"] if months else None,
+                "last_month": months[-1]["month"] if months else None,
+                "latest_month_delist_count": (
+                    months[-1]["delist_count"] if months else 0),
+                "months": months}
+
+        if dev_account is not None:
+            if not str(dev_account or "").startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        with self._lock:
+            answers = {}
+            for lid, cycle, stamp in self._conn.execute(
+                    "SELECT listing_id, cycle, relisted_utc FROM"
+                    " apimarket_relistings ORDER BY relist_id"
+            ).fetchall():
+                answers.setdefault((int(lid), int(cycle)), str(stamp))
+            core = _flow(dev_account)
+            if dev_account is None:
+                market_mean = None
+                owned = self._conn.execute(
+                    "SELECT COUNT(*) FROM apimarket_listings"
+                ).fetchone()[0]
+            else:
+                market_core = _flow(None)
+                market_mean = (round(
+                    float(market_core["delist_count"])
+                    / market_core["active_month_count"], 4)
+                    if market_core["active_month_count"] else None)
+                owned = self._conn.execute(
+                    "SELECT COUNT(*) FROM apimarket_listings"
+                    " WHERE dev_account = ?",
+                    (str(dev_account),)).fetchone()[0]
+        out = {
+            "scope": ("market" if dev_account is None else "seller"),
+            "dev_account": (None if dev_account is None
+                            else str(dev_account)),
+            "owned_listing_count": int(owned),
+            "market_mean_delist_count": market_mean}
+        out.update(core)
+        out["disclaimer"] = self.disclaimer
+        return out
+
     def api_seller_price_cadence_months(self, dev_account=None):
         """Monthly repricing cadence on both scopes (criteria
         AC-SPC1..AC-SPC8 pre-registered in the R2189 seed 10/10
