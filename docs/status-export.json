@@ -1,23 +1,23 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3209 PRODUCT+ENGINEERING: the carrier dialect law now carries a measured SCOPE - four more carriers are PROVEN to flip dialect under a checkout and every one of their shipped readers is PROVEN to answer the same on both, so the law reads 'pin the hard readers, never decorate' and the suite now refuses a decorative pin instead of trusting the next window's judgement.",
+    "current": "2026-11-22 R3210 PRODUCT+ENGINEERING: the two hand-written things in the carrier law are now measured and held - a scan of the refusal codes reaches only 2 of the 5 STRICT rows (precision 2/10), so the table stays hand-written, and AC-CDPIN8 closes the direction AC-CDPIN5 left open: a NEW pin line in .gitattributes can no longer exist without a table row.",
     "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-monthly-faces.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3209.log (7498B, 2026-11-22)",
-    "latest_evidence": "qa/probe-R3209.log (7498B, 2026-11-22)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3210.log (4804B, 2026-11-22)",
+    "latest_evidence": "qa/reorg-R3210.log (4804B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3209] next window (<=48h): (0) MAIN — **两张表还是手抄的：`STRICT` 载体清单和「哪些读者是硬读者」都是本窗人工判定，另外 `logs/state-log-archive-2026-09.md` 实测是混合方言（`crlf=478` 与 `bare_lf=15500` 同存）而没人能说出这有没有害**。做法=先只读量三问：①把 `STRICT` 从「人工清单」变成「派生」是否可行——在出厂模块里扫方言拒收码（`E_STATE_LAYOUT`/`E_SF_EOL`/`E_CLG_CARRIER_LAYOUT`/`evidence_dialect` 分类）与其命名路径，能否自动得出「载体→要求方言」表并与现表逐条对账（量出漏/多各几条）；②混合方言归档件（2026-09／2026-10）到底被谁读、读成什么——列出读者与它在两种方言下的答复，判定「混合」是可容忍的历史还是会让某个读者漏行（量到实际行列数与 `splitlines` 结果对比）；③收口判断：派生表（表由代码生成，套件只比对）／维持手抄但加一条「新硬读者必须入表」的闸／只记录。三条量完再落，判据沿用 AC-CDPIN 写法，**先落板再动代码**（本窗两次都是探针先跑、板行后写，已连记两轮）。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
-    "next_milestone_due": "2026-11-24T01:49:28+08:00",
-    "updated_at": "2026-11-22T01:49:28+08:00",
+    "next_milestone_due": "2026-11-24T02:02:16+08:00",
+    "updated_at": "2026-11-22T02:02:16+08:00",
     "heartbeat": {
-      "tick": 3208,
-      "state_tick": 3208,
-      "lag": 0,
-      "verdict": "PASS",
-      "reason": "fresh"
+      "tick": 3209,
+      "state_tick": 3210,
+      "lag": 1,
+      "verdict": "FLAG",
+      "reason": "heartbeat_row_debt"
     },
     "outs_age": {
       "rows": 30,
@@ -33,15 +33,9 @@
       "note_claims": 6,
       "criteria_stale": 1,
       "criteria_claims": 1
-    },
-    "corpus": {
-      "files": 4542,
-      "bytes": 510934243,
-      "mb": 510.9,
-      "readable": 4542
     }
   },
-  "current": "2026-11-22 R3209 PRODUCT+ENGINEERING: the carrier dialect law now carries a measured SCOPE - four more carriers are PROVEN to flip dialect under a checkout and every one of their shipped readers is PROVEN to answer the same on both, so the law reads 'pin the hard readers, never decorate' and the suite now refuses a decorative pin instead of trusting the next window's judgement.",
+  "current": "2026-11-22 R3210 PRODUCT+ENGINEERING: the two hand-written things in the carrier law are now measured and held - a scan of the refusal codes reaches only 2 of the 5 STRICT rows (precision 2/10), so the table stays hand-written, and AC-CDPIN8 closes the direction AC-CDPIN5 left open: a NEW pin line in .gitattributes can no longer exist without a table row.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -69,10 +63,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3209 PRODUCT+ENGINEERING: the carrier dialect law now carries a measured SCOPE - four more carriers are PROVEN to flip dialect under a checkout and every one of their shipped readers is PROVEN to answer the same on both, so the law reads 'pin the hard readers, never decorate' and the suite now refuses a decorative pin instead of trusting the next window's judgement.",
-  "export_ts": "2026-11-22T01:49:28+08:00",
+  "do": "2026-11-22 R3210 PRODUCT+ENGINEERING: the two hand-written things in the carrier law are now measured and held - a scan of the refusal codes reaches only 2 of the 5 STRICT rows (precision 2/10), so the table stays hand-written, and AC-CDPIN8 closes the direction AC-CDPIN5 left open: a NEW pin line in .gitattributes can no longer exist without a table row.",
+  "export_ts": "2026-11-22T02:02:16+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
-  "latest_evidence": "qa/probe-R3209.log (7498B, 2026-11-22)",
+  "latest_evidence": "qa/reorg-R3210.log (4804B, 2026-11-22)",
   "next_milestone": "[R3209] next window (<=48h): (0) MAIN — **两张表还是手抄的：`STRICT` 载体清单和「哪些读者是硬读者」都是本窗人工判定，另外 `logs/state-log-archive-2026-09.md` 实测是混合方言（`crlf=478` 与 `bare_lf=15500` 同存）而没人能说出这有没有害**。做法=先只读量三问：①把 `STRICT` 从「人工清单」变成「派生」是否可行——在出厂模块里扫方言拒收码（`E_STATE_LAYOUT`/`E_SF_EOL`/`E_CLG_CARRIER_LAYOUT`/`evidence_dialect` 分类）与其命名路径，能否自动得出「载体→要求方言」表并与现表逐条对账（量出漏/多各几条）；②混合方言归档件（2026-09／2026-10）到底被谁读、读成什么——列出读者与它在两种方言下的答复，判定「混合」是可容忍的历史还是会让某个读者漏行（量到实际行列数与 `splitlines` 结果对比）；③收口判断：派生表（表由代码生成，套件只比对）／维持手抄但加一条「新硬读者必须入表」的闸／只记录。三条量完再落，判据沿用 AC-CDPIN 写法，**先落板再动代码**（本窗两次都是探针先跑、板行后写，已连记两轮）。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
@@ -163,7 +157,7 @@
   },
   "results": [
     [
-      "3208",
+      "3210",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -177,24 +171,24 @@
   "self_drive": {
     "window": "2026-11-16..2026-11-22",
     "window_days": 7,
-    "log_lines_in_window": 76,
+    "log_lines_in_window": 84,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 68754,
-  "next_milestone_due": "2026-11-24T01:49:28+08:00",
+  "state_bytes": 75049,
+  "next_milestone_due": "2026-11-24T02:02:16+08:00",
   "heartbeat": {
-    "tick": 3208,
-    "state_tick": 3208,
-    "lag": 0,
-    "verdict": "PASS",
-    "reason": "fresh"
+    "tick": 3209,
+    "state_tick": 3210,
+    "lag": 1,
+    "verdict": "FLAG",
+    "reason": "heartbeat_row_debt"
   },
   "outs_age": {
     "rows": 30,
@@ -210,11 +204,5 @@
     "note_claims": 6,
     "criteria_stale": 1,
     "criteria_claims": 1
-  },
-  "corpus": {
-    "files": 4542,
-    "bytes": 510934243,
-    "mb": 510.9,
-    "readable": 4542
   }
 }

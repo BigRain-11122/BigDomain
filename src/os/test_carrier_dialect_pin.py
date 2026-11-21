@@ -1,4 +1,4 @@
-"""Battery suite for the carrier dialect pin - criteria AC-CDPIN1..AC-CDPIN4.
+"""Battery suite for the carrier dialect pin - criteria AC-CDPIN1..AC-CDPIN8.
 
 Pinned in src/os/backlog.md at R3208 BEFORE this file existed, from a
 read-only probe (tmp/probe_R3208.py, tmp/probe_R3208b.py, tmp/probe_R3208c.py)
@@ -35,11 +35,43 @@ Isolation: every git repository, state file and archive this suite builds
 lives in the system temp dir. The real .gitattributes, state.json and qa/ are
 read only, never written. Source is pure ASCII, stdlib only, no clock in
 assertions, no network.
+
+R3210 asked whether the two hand-written things in this file - the STRICT
+carrier list and the "which readers are hard" judgement behind it - can be
+derived from shipped code, and whether the mixed-dialect archives cost a
+reader anything (tmp/probe_R3210.py).
+
+Derivation measured NOT VIABLE: scanning the refusal codes (E_STATE_LAYOUT,
+E_SF_EOL, E_CLG_CARRIER_LAYOUT, E_CLG_MATRIX, evidence_dialect, lf_only) and
+the path literals beside them reaches 2 of the 5 STRICT rows and, of the 10
+literals it reaches, only 2 are carriers at all. The missing three leak
+through three different holes: state/queue/tech.md is only named by a one-off
+round script and its law is a GLOB, tools/hooks/pre-commit is hard because sh
+reads it (a comment in .gitattributes, not a refusal code), and qa/*.log is a
+family-level -text whose refusal code never names a path. So the knowledge is
+partly in comments, partly in one-off scripts, partly in an execution model.
+
+What was NOT acceptable - and what AC-CDPIN8 now holds - is that the table and
+the law lines could drift apart in one direction: AC-CDPIN5 only asked
+"table -> law", so a NEW pin line added to .gitattributes without a table row
+was invisible. AC-CDPIN8 asks both ends plus the scan (every resolvable
+literal beside a refusal code is either a law-covered carrier or a declared
+NON_CARRIER, and the set of unresolvable bare names is pinned), which is the
+mechanical form of "a new hard reader must enter the table".
+
+The archive half was measured tolerable: logs/state-log-archive-2026-09.md is
+mixed (crlf=478 with bare_lf=15500), yet its one shipped reader
+(ledger_lines.load_archive, universal newlines) returns the SAME 15611 lines
+for the live file and for forced-LF and forced-CRLF copies, with zero accepted
+line carrying an embedded CR. R3209's note that "the archives have no dialect
+reader at all" was wrong and is corrected there rather than restated here.
 """
+import fnmatch
 import io
 import importlib.util
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -168,6 +200,23 @@ TOLERANT = [
     'qa/writer-census-baseline.json',
     'logs/state-log-archive-2026-11.md',
 ]
+
+# R3210: the table stays hand-written (the scan below reaches 2 of 5 rows),
+# but every resolvable literal the scan lands on is DISPOSED here: either it is
+# a carrier matched by a law line, or it is named as a code file. Digesting a
+# new refusal code beside a new carrier path therefore reddens r until the
+# table gets a decision. Measured at R3210 with tmp/probe_R3210.py.
+SCANNED_FOR_CODES = ['src/os/logs_toolkit.py', 'src/os/state_fold.py',
+                     'tools/closeout_gate.py', 'src/os/evidence_dialect.py',
+                     'tools/hooks/pre_commit_gate.py',
+                     'src/os/seed_queue_R2548.py']
+NON_CARRIER = ['src/os/backlog.md', 'src/os/closeout.py',
+               'src/os/evidence_dialect.py', 'src/os/logs_toolkit.py',
+               'src/os/one_off_round_scripts.py',
+               'src/os/suite_matrix_reconcile.py']
+CODE_TOKENS = ['E_STATE_LAYOUT', 'E_SF_EOL', 'E_CLG_CARRIER_LAYOUT',
+               'E_CLG_MATRIX', 'evidence_dialect', 'lf_only']
+BLIND_NAMES = ['state.json', 'tech.md']
 
 
 def main():
@@ -308,6 +357,41 @@ def main():
        and all(land == export_src for land in pinned),
        'free=%s pinned=%s'
        % (profile(free_land), [profile(land) for land in pinned]))
+
+    # ---- AC-CDPIN8: the table and the law lines agree BOTH ways ---------
+    patterns = [row.split()[0] for row in law_lines]
+    unrepresented = [pat for pat in patterns
+                     if not any(fnmatch.fnmatch(rel, pat)
+                                for rel, _text, _eol in STRICT)]
+    unpinned = [rel for rel, _text, _eol in STRICT
+                if not any(fnmatch.fnmatch(rel, pat) for pat in patterns)]
+    literal_re = re.compile(r'[\w.\-/*]+\.(?:json|md|log|py)|hooks/pre-commit')
+    reached = set()
+    for rel in SCANNED_FOR_CODES:
+        rows = read_text(os.path.join(ROOT, rel)).splitlines()
+        for i, row in enumerate(rows):
+            if not any(token in row for token in CODE_TOKENS):
+                continue
+            for near in rows[max(0, i - 20):i + 21]:
+                for lit in literal_re.findall(near):
+                    lit = lit.rstrip('.')
+                    if lit.startswith('tmp/') or 'probe_' in lit:
+                        continue
+                    reached.add(lit)
+    resolvable = [lit for lit in sorted(reached)
+                  if os.path.isfile(os.path.join(ROOT, lit))]
+    unplaced = [lit for lit in resolvable
+                if lit not in NON_CARRIER
+                and not any(fnmatch.fnmatch(lit, pat) for pat in patterns)]
+    blind = sorted(lit for lit in reached
+                   if '/' not in lit
+                   and not os.path.isfile(os.path.join(ROOT, lit)))
+    ok('AC-CDPIN8 the hand-written table and the law lines cannot drift apart',
+       not unrepresented and not unpinned and not unplaced
+       and blind == BLIND_NAMES,
+       'law_unrepresented=%s strict_unpinned=%s scan_unplaced=%s blind=%s'
+       % (unrepresented or 'none', unpinned or 'none', unplaced or 'none',
+          blind))
 
     total = len(CHECKS)
     acs = set()

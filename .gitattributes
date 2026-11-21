@@ -48,8 +48,13 @@ src/os/state.json text eol=crlf
 # real add/checkout cycle and then read back through its own reader at R3209:
 # docs/status-export.json, heartbeat.txt, qa/writer-census-baseline.json and
 # logs/state-log-archive-*.md ALL flip to CRLF under a checkout on an
-# autocrlf=true host, yet heartbeat.read_tick normalises CRLF before parsing,
-# the other three are read through json.loads or re-rendered LF and compared
-# downstream, and the archives have no dialect reader at all. Pinning those
-# four would change nothing a machine can judge - decoration - so AC-CDPIN5
-# holds the scope: every hard-reader carrier is pinned, no tolerant carrier is.
+# autocrlf=true host, yet heartbeat.read_tick normalises CRLF before parsing
+# and the other two are read through json.loads or re-rendered LF and compared
+# downstream. CORRECTION (R3210): an earlier version of this comment said the
+# archives have "no dialect reader at all", which is false -
+# src/os/ledger_lines.load_archive reads them (measured: the mixed 2026-09
+# archive, crlf=478 with bare_lf=15500, yields the SAME 15611 lines live,
+# forced-LF and forced-CRLF, zero accepted line carrying an embedded CR), so
+# they are TOLERATED by measurement rather than unread. Pinning those four
+# would change nothing a machine can judge - decoration - so AC-CDPIN5 holds
+# the scope: every hard-reader carrier is pinned, no tolerant carrier is.

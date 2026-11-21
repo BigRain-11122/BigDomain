@@ -1,0 +1,45 @@
+=== Q1 derivation scan ===
+  code E_STATE_LAYOUT         sighted ['src/os/logs_toolkit.py x4', 'src/os/state_fold.py x1', 'tools/closeout_gate.py x1']
+  code E_SF_EOL               sighted ['src/os/state_fold.py x2']
+  code E_CLG_CARRIER_LAYOUT   sighted ['tools/closeout_gate.py x2']
+  code E_CLG_MATRIX           sighted ['tools/closeout_gate.py x3']
+  code evidence_dialect       sighted ['tools/hooks/pre_commit_gate.py x2']
+  code lf_only                sighted ['src/os/seed_queue_R2548.py x1']
+  derived literals (literal -> codes it sits beside):
+    docs/sandbox-suite-matrix.md       <- E_CLG_MATRIX,evidence_dialect
+    src/os/backlog.md                  <- evidence_dialect
+    src/os/closeout.py                 <- E_CLG_MATRIX
+    src/os/evidence_dialect.py         <- evidence_dialect
+    src/os/logs_toolkit.py             <- E_SF_EOL,E_STATE_LAYOUT
+    src/os/one_off_round_scripts.py    <- evidence_dialect
+    src/os/state.json                  <- E_CLG_CARRIER_LAYOUT,E_STATE_LAYOUT
+    src/os/suite_matrix_reconcile.py   <- E_CLG_MATRIX
+    state.json                         <- E_SF_EOL,E_STATE_LAYOUT
+    tech.md                            <- E_STATE_LAYOUT
+  .gitattributes law lines: 5
+    LAW qa/*.log -text
+    LAW tools/hooks/pre-commit text eol=lf
+    LAW state/queue/*.md text eol=lf
+    LAW docs/sandbox-suite-matrix.md text eol=lf
+    LAW src/os/state.json text eol=crlf
+  STRICT rows: 5 -> ['src/os/state.json', 'state/queue/tech.md', 'docs/sandbox-suite-matrix.md', 'tools/hooks/pre-commit', 'qa/probe-R3208.log']
+  DERIVED named carriers: ['docs/sandbox-suite-matrix.md', 'src/os/state.json', 'state.json']
+  derived families whose dialect is NOT stated by a code (blind): ['tech.md']
+  STRICT reached by scan : ['src/os/state.json', 'docs/sandbox-suite-matrix.md']
+  STRICT NOT reached     : ['state/queue/tech.md', 'tools/hooks/pre-commit', 'qa/probe-R3208.log']
+=== Q2 mixed-dialect archives ===
+  state-log-archive-2026-09.md     bytes=16565173 crlf=478 bare_lf=15500 lone_cr=0
+    splitlines=15978 split_nl=15979 load_archive_live=15611
+    load_archive lf=15611 crlf=15611 equal=True lf==live=True crlf==live=True
+    accepted_lines_with_CR=0
+  state-log-archive-2026-10.md     bytes=4987837 crlf=21 bare_lf=3009 lone_cr=0
+    splitlines=3030 split_nl=3031 load_archive_live=2679
+    load_archive lf=2679 crlf=2679 equal=True lf==live=True crlf==live=True
+    accepted_lines_with_CR=0
+  state-log-archive-2026-11.md     bytes=5666145 crlf=0 bare_lf=6345 lone_cr=0
+    splitlines=6345 split_nl=6346 load_archive_live=6072
+    load_archive lf=6072 crlf=6072 equal=True lf==live=True crlf==live=True
+    accepted_lines_with_CR=0
+=== SUMMARY ===
+Q1 derived_named=10 strict_rows=5 reached=2 missing=3
+Q2 archives_read=3 verdict=DIALECT-NEUTRAL

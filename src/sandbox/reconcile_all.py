@@ -7498,8 +7498,11 @@ SUITES = [
     # R3209 added the SCOPE half: four more carriers flip dialect under a
     # checkout but their own readers were measured to answer the same on both,
     # so the law is "pin the hard readers, never decorate", held by AC-CDPIN5..7.
+    # R3210 kept the table hand-written (a refusal-code scan reaches 2 of 5
+    # rows) and closed the other direction instead: AC-CDPIN8 holds table<->law
+    # both ways plus a scan disposition, so a new pin cannot skip the table.
     ("os-carrier-dialect-pin",
-     os.path.join("..", "os", "test_carrier_dialect_pin.py"), 7),
+     os.path.join("..", "os", "test_carrier_dialect_pin.py"), 8),
     # R2808 added the nul-bytes class to the writer census and re-froze the
     # baseline, but the new rule was guarded only by the tool's own --check and
     # by two census suites whose expectations derive from BASELINE_CLASSES on
