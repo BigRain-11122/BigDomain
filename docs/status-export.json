@@ -5,15 +5,15 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3191 PRODUCT+ENGINEERING: the fold state temp file is reserved before the backup and the archive - a reservation failure used to leave a half-landed fold and now moves no byte, and every later refusal removes the reserved file.",
-    "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
+    "current": "2026-11-21 R3192 PRODUCT+ENGINEERING: a failed fold state write no longer leaves a half-landed archive - the block it appended is taken back and the backup removed, so the refusal reads stage=rolled-back with after_write=False and the same window can simply be retried.",
+    "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3190.log (1749B, 2026-11-21)",
-    "latest_evidence": "qa/reorg-R3190.log (1749B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3192.log (4987B, 2026-11-21)",
+    "latest_evidence": "qa/reorg-R3192.log (4987B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3190] next window (<=48h): (0) MAIN — **半边落盘还在，而且可以前移治掉**：本窗刚让「mkstemp/replace 失败」说得清楚，但失败时归档已含该窗、state 未重写，`after-write` 只描述不修复。做法=先只读量三问：①`mkstemp` 能否**前移到备份与归档之前**（在 `<root>/src/os` 先占临时文件、失败即 `pre-write` 零字节，然后 backup→archive→replace 顺序不变），量 dry-run/execute 两态字节与顺序是否逐字节等价；②`os.replace` 失败时归档里那段 appendix 是否**自定界可安全回滚**（用 `append_archive` 的 header + 已知行数判定），以及回滚会不会破坏 `ledger_coverage`（覆盖不减）；③全仓是否有消费者依赖 `.state-fold-*` 临时文件的出现时机或残留。量出「前移不改变任何既有字节与判据」再落，判据沿用 AC-SFOLD12 写法（先落板再动代码）。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+    "next_milestone": "[R3192] next window (<=48h): (0) MAIN - the same half-landing still lives on the append_archive failure face: an append read-back difference raises after the archive has grown while the state did not, and the caller never receives the appended report, so no before_sha16 is available to prove a take-back. Measure first: the real disk shape after an append read-back failure, whether a before-bytes/sha snapshot taken before the call can drive the same rollback_archive shape, and whether the stale prefix_intact/sha16 report repeats. Land the same shape only if the block is provably recoverable; otherwise pin manual recovery in detail/USAGE and record the decision. Alternatives: P2 state/queue/tech.md head (Docker-gated row skipped), P3 state/queue/explore.md head; floor main=5/5 tech=7/10 explore=4/10. The real product gap is still the physical set {merchant id / server / domain / filing+ICP / miniprogram appid+secret} - a buyer still cannot pay; tasks.md stays at zero open.",
     "next_milestone_due": "2026-11-23T21:48:08+08:00",
     "updated_at": "2026-11-21T21:48:08+08:00",
     "heartbeat": {
@@ -39,7 +39,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-21 R3191 PRODUCT+ENGINEERING: the fold state temp file is reserved before the backup and the archive - a reservation failure used to leave a half-landed fold and now moves no byte, and every later refusal removes the reserved file.",
+  "current": "2026-11-21 R3192 PRODUCT+ENGINEERING: a failed fold state write no longer leaves a half-landed archive - the block it appended is taken back and the backup removed, so the refusal reads stage=rolled-back with after_write=False and the same window can simply be retried.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3191 PRODUCT+ENGINEERING: the fold state temp file is reserved before the backup and the archive - a reservation failure used to leave a half-landed fold and now moves no byte, and every later refusal removes the reserved file.",
-  "export_ts": "2026-11-21T21:48:08+08:00",
+  "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
+  "export_ts": "2026-11-21T22:05:41+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/reorg-R3190.log (1749B, 2026-11-21)",
-  "next_milestone": "[R3190] next window (<=48h): (0) MAIN — **半边落盘还在，而且可以前移治掉**：本窗刚让「mkstemp/replace 失败」说得清楚，但失败时归档已含该窗、state 未重写，`after-write` 只描述不修复。做法=先只读量三问：①`mkstemp` 能否**前移到备份与归档之前**（在 `<root>/src/os` 先占临时文件、失败即 `pre-write` 零字节，然后 backup→archive→replace 顺序不变），量 dry-run/execute 两态字节与顺序是否逐字节等价；②`os.replace` 失败时归档里那段 appendix 是否**自定界可安全回滚**（用 `append_archive` 的 header + 已知行数判定），以及回滚会不会破坏 `ledger_coverage`（覆盖不减）；③全仓是否有消费者依赖 `.state-fold-*` 临时文件的出现时机或残留。量出「前移不改变任何既有字节与判据」再落，判据沿用 AC-SFOLD12 写法（先落板再动代码）。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+  "latest_evidence": "qa/reorg-R3192.log (4987B, 2026-11-21)",
+  "next_milestone": "[R3192] next window (<=48h): (0) MAIN - the same half-landing still lives on the append_archive failure face: an append read-back difference raises after the archive has grown while the state did not, and the caller never receives the appended report, so no before_sha16 is available to prove a take-back. Measure first: the real disk shape after an append read-back failure, whether a before-bytes/sha snapshot taken before the call can drive the same rollback_archive shape, and whether the stale prefix_intact/sha16 report repeats. Land the same shape only if the block is provably recoverable; otherwise pin manual recovery in detail/USAGE and record the decision. Alternatives: P2 state/queue/tech.md head (Docker-gated row skipped), P3 state/queue/explore.md head; floor main=5/5 tech=7/10 explore=4/10. The real product gap is still the physical set {merchant id / server / domain / filing+ICP / miniprogram appid+secret} - a buyer still cannot pay; tasks.md stays at zero open.",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -160,9 +160,9 @@
   },
   "results": [
     [
-      "3190",
+      "3192",
       "OSLoop 执行 tick",
-      "shard report page carries its unchecked denominator and its live reds"
+      "a failed fold state write takes the appended archive block back and removes the backup"
     ]
   ],
   "results_archive": {
@@ -174,21 +174,21 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 49,
+    "log_lines_in_window": 63,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 7,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 50392,
+  "state_bytes": 56620,
   "next_milestone_due": "2026-11-23T21:48:08+08:00",
   "heartbeat": {
-    "tick": 3190,
-    "state_tick": 3190,
+    "tick": 3192,
+    "state_tick": 3192,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"

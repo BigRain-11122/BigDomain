@@ -29,7 +29,7 @@ sys.path.insert(0, BASE)
 import state_fold_run as FR  # noqa: E402
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 16
+EXPECTED_CRITERIA = 17
 MODULE = os.path.join(BASE, "state_fold_run.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold-run"
@@ -1034,7 +1034,11 @@ def main():
               and bad_sum_obj.get("error") == "E_FLR_SUMMARY_SHAPE"
               and check_ok_rc == 0
               and sorted(check_ok_obj.keys()) == sorted(SF.CHECK_KEYS)
-              and fold_source.count(b'stage="after-write"') == 4
+              # R3192: this arm counts after-write raise sites, and the
+              # rollback face adds two (a rollback that fails, and the
+              # read-back check inside rollback_archive). The count follows
+              # the law rather than the law following the count.
+              and fold_source.count(b'stage="after-write"') == 5
               and fold_ascii,
               "AC-SFOLD11 the rc=3 family answers in JSON too "
               "[missing=%s/%s rc=%s text=%r, window=%s/%s rc=%s text_ok=%s, "
@@ -1144,14 +1148,20 @@ def main():
                        if n.startswith("state-log-archive-")]) == 0
               and rp_code == "E_SF_STATE_WRITE"
               and rp_error is not None
-              and rp_error.stage == "after-write"
+              and rp_error.stage == "rolled-back"
               and rp_leftovers == []
               and read(rp_path) == rp_before
               and jf_rc == 3
               and jf_obj.get("error") == "E_SF_STATE_WRITE"
               and jf_obj.get("after_write") is False
               and ok_report.get("predicted_eq_actual") is True
-              and fold_source.count(b'"E_SF_STATE_WRITE"') == 2
+              # R3192: this code now has three raise sites instead of two -
+              # mkstemp, and the two the replace arm was split into (rollback
+              # failed, rollback landed). The arm counts sites, so the number
+              # moves with the law (JUDGED-CHANGED, not relaxed). The replace
+              # stage above reads 'rolled-back' because the appended archive
+              # block is taken back before the raise.
+              and fold_source.count(b'"E_SF_STATE_WRITE"') == 3
               and fold_ascii,
               "AC-SFOLD12 the state write face refuses by name "
               "[mkstemp=%s stage=%s after_write=%s state_same=%s backup=%d "
@@ -1266,7 +1276,7 @@ def main():
               and md_leftovers == [] and md_archives == []
               and rp_code == "E_SF_STATE_WRITE"
               and rp_error is not None
-              and rp_error.stage == "after-write"
+              and rp_error.stage == "rolled-back"
               and fold_source.count(b"tempfile.mkstemp(") == 1
               and fold_ascii,
               "AC-SFOLD13 the temp file is reserved before any byte "
@@ -1286,6 +1296,151 @@ def main():
                  len(md_archives), rp_code,
                  rp_error.stage if rp_error else None,
                  fold_source.count(b"tempfile.mkstemp("), fold_ascii))
+        # --- AC-SFOLD14: a failed state write takes the archive back ------
+        # R3192 measured the leftover: after a replace failure the archive
+        # carried the window while the state did not, the ledger face read
+        # 7 -> 9 lines for a fold that never landed, and the retry was
+        # refused by E_SF_MARKER_COLLISION with no way back. The appended
+        # block is now rolled back and the backup removed, so the refusal
+        # reads stage='rolled-back' with after_write=False and the same
+        # window may simply be retried.
+        rb_root, rb_path = make_world(os.path.join(base, "sf14-rollback"))
+        rb_first = SF.fold(rb_root, "R9030", 1, 1, 12,
+                           clean_summary.replace("R9010", "R9030"))
+        rb_archive = os.path.join(rb_root, "logs",
+                                  "state-log-archive-2026-11.md")
+        arch_before = read(rb_archive)
+        rb_before = read(rb_path)
+        rb_summary = ("R9031 fold 2 of log lines 2..9 into"
+                      " logs/state-log-archive-2026-11.md")
+        rb_cov0 = FR.ledger_coverage(
+            os.path.join(rb_root, "logs"),
+            json.loads(rb_before.decode("utf-8"))["log"])
+        real_replace14 = SF.os.replace
+
+        def _replace_boom14(*args, **kwargs):
+            raise PermissionError(13, "access denied (injected)")
+
+        rb_code = None
+        rb_error = None
+        try:
+            SF.os.replace = _replace_boom14
+            try:
+                SF.fold(rb_root, "R9031", 2, 2, 9, rb_summary)
+            except SF.StateFoldError as exc:
+                rb_code = exc.code
+                rb_error = exc
+            except Exception as exc:  # noqa: BLE001
+                rb_code = "RAW:" + type(exc).__name__
+        finally:
+            SF.os.replace = real_replace14
+        rb_face = rb_error.face() if rb_error is not None else {}
+        arch_after = read(rb_archive)
+        rb_after_fail = read(rb_path)
+        rb_logs = os.listdir(os.path.join(rb_root, "logs"))
+        rb_leftovers = [name for name in
+                        os.listdir(os.path.join(rb_root, "src", "os"))
+                        if name.startswith(".state-fold-")]
+        rb_cov1 = FR.ledger_coverage(
+            os.path.join(rb_root, "logs"),
+            json.loads(read(rb_path).decode("utf-8"))["log"])
+        rb_markers = SF.marker_rounds(rb_archive)
+        # c: the same window folds clean after the rollback - no re-fold claim
+        rb_retry = SF.fold(rb_root, "R9031", 2, 2, 9, rb_summary)
+
+        # b: the archive this fold CREATES must be gone too
+        cb_root, cb_path = make_world(os.path.join(base, "sf14-created"))
+        cb_archive = os.path.join(cb_root, "logs",
+                                  "state-log-archive-2026-11.md")
+        cb_before = read(cb_path)
+        cb_code = None
+        cb_error = None
+        try:
+            SF.os.replace = _replace_boom14
+            try:
+                SF.fold(cb_root, "R9032", 1, 1, 12,
+                        clean_summary.replace("R9010", "R9032"))
+            except SF.StateFoldError as exc:
+                cb_code = exc.code
+                cb_error = exc
+        finally:
+            SF.os.replace = real_replace14
+
+        # e: a rollback that itself dies must not claim a clean refusal
+        rf_root, rf_path = make_world(os.path.join(base, "sf14-rbfail"))
+        rf_archive = os.path.join(rf_root, "logs",
+                                  "state-log-archive-2026-11.md")
+        rf_code = None
+        rf_error = None
+        real_rollback = SF.rollback_archive
+
+        def _rollback_boom(*args, **kwargs):
+            raise OSError(5, "rollback refused (injected)")
+
+        try:
+            SF.rollback_archive = _rollback_boom
+            SF.os.replace = _replace_boom14
+            try:
+                SF.fold(rf_root, "R9033", 1, 1, 12,
+                        clean_summary.replace("R9010", "R9033"))
+            except SF.StateFoldError as exc:
+                rf_code = exc.code
+                rf_error = exc
+        finally:
+            SF.rollback_archive = real_rollback
+            SF.os.replace = real_replace14
+        rf_markers = SF.marker_rounds(rf_archive)
+
+        rb_retry_ok = rb_retry.get("predicted_eq_actual") is True
+        rf_detail_ok = (rf_error is not None
+                        and "archive still carries the window"
+                        in rf_error.detail)
+        check(rb_first.get("predicted_eq_actual") is True
+              and rb_code == "E_SF_STATE_WRITE"
+              and rb_error is not None
+              and rb_error.stage == "rolled-back"
+              and rb_face.get("after_write") is False
+              and arch_after == arch_before
+              and rb_after_fail == rb_before
+              and not [n for n in rb_logs
+                       if n.startswith("state-preop-R9031")]
+              and rb_leftovers == []
+              and rb_cov0["ledger_rounds"] == rb_cov1["ledger_rounds"]
+              and rb_cov0["ledger_lines"] == rb_cov1["ledger_lines"]
+              and 9031 not in rb_markers
+              and rb_retry_ok
+              and cb_code == "E_SF_STATE_WRITE"
+              and cb_error is not None
+              and cb_error.stage == "rolled-back"
+              and read(cb_path) == cb_before
+              and not os.path.exists(cb_archive)
+              and rf_code == "E_SF_STATE_WRITE"
+              and rf_error is not None
+              and rf_error.stage == "after-write"
+              and rf_detail_ok
+              and 9033 in rf_markers
+              and fold_source.count(b"rollback_archive(") == 2
+              and fold_ascii,
+              "AC-SFOLD14 a failed state write takes the archive back "
+              "[replace=%s stage=%s after_write=%s arch_same=%s state_same=%s "
+              "backups=%d leftovers=%d, coverage rounds %d/%d lines %d/%d "
+              "marker=%s, retry_eq=%s, created=%s stage=%s archive_absent=%s "
+              "state_same=%s, rollback_failed=%s stage=%s keeps_window=%s "
+              "detail_ok=%s, sites=%d ascii=%s]"
+              % (rb_code, rb_error.stage if rb_error else None,
+                 rb_face.get("after_write"), arch_after == arch_before,
+                 rb_after_fail == rb_before,
+                 len([n for n in rb_logs
+                      if n.startswith("state-preop-R9031")]),
+                 len(rb_leftovers),
+                 len(rb_cov0["ledger_rounds"]), len(rb_cov1["ledger_rounds"]),
+                 rb_cov0["ledger_lines"], rb_cov1["ledger_lines"],
+                 9031 in rb_markers, rb_retry_ok,
+                 cb_code, cb_error.stage if cb_error else None,
+                 not os.path.exists(cb_archive), read(cb_path) == cb_before,
+                 rf_code, rf_error.stage if rf_error else None,
+                 9033 in rf_markers, rf_detail_ok,
+                 fold_source.count(b"rollback_archive("), fold_ascii))
     finally:
         shutil.rmtree(base, ignore_errors=True)
 

@@ -85,7 +85,7 @@ PLAN_KEYS = ("window_start", "window_end", "window_lines",
              "round_split", "newline", "folded_log_len")
 
 ARCHIVE_KEYS = ("path", "created", "prefix_intact", "before_bytes",
-                "after_bytes", "appendix_bytes", "sha16")
+                "before_sha16", "after_bytes", "appendix_bytes", "sha16")
 
 
 class StateFoldError(Exception):
@@ -97,6 +97,11 @@ class StateFoldError(Exception):
     the detail entirely. `stage` and `face()` give a machine caller the same
     facts the FoldRunError family publishes (AC-SFOLD11); the text face is
     unchanged.
+
+    R3192 adds a third stage: `rolled-back` means bytes did move and were
+    taken back (the appended archive block plus the backup), so `after_write`
+    is False and the same window may be retried; `after-write` still means
+    the half-landing is on disk and needs a human.
     """
 
     def __init__(self, code, detail, stage="pre-write"):
@@ -390,6 +395,7 @@ def append_archive(path, header, window_lines, allow_create=False, now=None):
             "before_bytes": len(before),
             "after_bytes": len(after),
             "appendix_bytes": len(separator) + len(appendix),
+            "before_sha16": hashlib.sha256(before).hexdigest()[:16],
             "sha16": hashlib.sha256(after).hexdigest()[:16],
         }
     if not allow_create:
@@ -413,8 +419,37 @@ def append_archive(path, header, window_lines, allow_create=False, now=None):
         "before_bytes": 0,
         "after_bytes": len(blob),
         "appendix_bytes": len(blob),
+        "before_sha16": hashlib.sha256(b"").hexdigest()[:16],
         "sha16": hashlib.sha256(blob).hexdigest()[:16],
     }
+
+
+def rollback_archive(path, appended):
+    """Take back the fold block that landed before the state write failed.
+
+    R3192 measured both halves of the hole: a replace failure left the
+    archive carrying the window while the state did not (the ledger face read
+    7 -> 9 lines for a fold that never landed), and the retry was refused by
+    E_SF_MARKER_COLLISION with no way back. Truncating to before_bytes - or
+    deleting an archive this fold created - restores the exact pre-fold
+    bytes, and that restoration is PROVED by before_sha16 rather than
+    assumed.
+    """
+    if appended.get("created"):
+        os.remove(path)
+        return {"rolled_back": True, "how": "removed the created archive"}
+    before_bytes = int(appended["before_bytes"])
+    with io.open(path, "r+b") as handle:
+        handle.truncate(before_bytes)
+    with io.open(path, "rb") as handle:
+        restored = handle.read()
+    if (len(restored) != before_bytes
+            or hashlib.sha256(restored).hexdigest()[:16]
+            != appended.get("before_sha16")):
+        raise StateFoldError("E_SF_ARCHIVE",
+                             "rollback read-back differs from before_sha16",
+                             stage="after-write")
+    return {"rolled_back": True, "how": "truncated to before_bytes"}
 
 
 def fold(root, round_label, fold_no, window_start, window_end, summary,
@@ -522,11 +557,34 @@ def fold(root, round_label, fold_no, window_start, window_end, summary,
                 state_handle.write(payload)
             os.replace(tmp, path)
         except (IOError, OSError) as exc:
+            # R3192 measured the leftover: the archive carried the window
+            # while the state did not, so the ledger face read 7 -> 9 lines
+            # for a fold that never landed and the retry was refused by
+            # E_SF_MARKER_COLLISION with no way back. The block this fold
+            # appended is taken back here and the backup goes with it - the
+            # state bytes never changed, so the backup holds no new
+            # information. A rollback that itself fails is reported as the
+            # half-landing it is, never as a clean refusal.
+            try:
+                rolled = rollback_archive(archive, appended)
+            except (IOError, OSError, StateFoldError) as rb:
+                raise StateFoldError(
+                    "E_SF_STATE_WRITE",
+                    "%s not replaced (%s); archive still carries the window "
+                    "(%s); state bytes unchanged" % (path, exc, rb),
+                    stage="after-write")
+            backup_note = "the backup was removed"
+            try:
+                if os.path.exists(backup_path):
+                    os.remove(backup_path)
+            except OSError:
+                backup_note = "the backup could not be removed"
             raise StateFoldError(
                 "E_SF_STATE_WRITE",
-                "%s not replaced (%s); backup and archive already landed, "
-                "state bytes unchanged" % (path, exc),
-                stage="after-write")
+                "%s not replaced (%s); %s and %s; state bytes unchanged, "
+                "the fold did not land"
+                % (path, exc, rolled["how"], backup_note),
+                stage="rolled-back")
         tmp = None
     finally:
         if tmp is not None and os.path.exists(tmp):
@@ -592,6 +650,9 @@ USAGE = ("usage: state_fold.py --check [--root PATH] [--json]\n"
          "  exit 3 = the state file is missing or not readable, or another\n"
          "           StateFoldError code. With --json the refusal is a JSON\n"
          "           object carrying error, stage, detail and after_write;\n"
+         "           stage is pre-write, after-write or rolled-back (R3192:\n"
+         "           the appended archive block was taken back, so\n"
+         "           after_write is False and a retry is allowed);\n"
          "           without --json the line is the code alone, unchanged.\n")
 
 

@@ -5026,8 +5026,11 @@ SUITES = [
     # R3189: the rc=3 family (StateFoldError) publishes error/stage/detail/
     # after_write under --json, and a backup path that cannot be written is a
     # named refusal instead of an uncaught traceback.
+    # R3192: a failed state write takes the appended archive block back and
+    # removes the backup, so the refusal reads stage='rolled-back' with
+    # after_write=False instead of leaving a half-landed fold behind.
     ("os-state-fold-run",
-     os.path.join("..", "os", "test_state_fold_run.py"), 16),
+     os.path.join("..", "os", "test_state_fold_run.py"), 17),
     # R2407: a tokens line is not automatically a block's LAST line - a round
     # may append disclosures after its ledger, and the R2405 fold then left
     # R2395's ledger in the archive while the rest of the round stayed live.

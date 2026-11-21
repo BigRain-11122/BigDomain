@@ -1,0 +1,86 @@
+R3192 evidence summary - a failed state write takes the archive back
+====================================================================
+Board row claimed: R3191 next-window (0) MAIN - the second half of the
+half-landing: compensate after os.replace fails.
+
+PROBE (read-only, tmp/probe_R3192.py -> qa/probe-R3192.log, private temp
+worlds, zero socket, zero network, zero live writes)
+  Q1a after a replace failure the refusal read E_SF_STATE_WRITE with
+      stage=after-write while the backup and the archive were on disk.
+  Q1b the archive grew by 295 bytes and the state kept its bytes.
+  Q1c the ledger face was ALREADY rewritten: rounds 7 -> 7 but ledger
+      lines 7 -> 9 for a fold that never landed.
+  Q1d truncating the archive to before_bytes and removing the backup
+      restored the exact pre-fold bytes (sha 8628313c9b240d63), the R9002
+      marker vanished and coverage returned to 7/7.
+  Q1e the same window then folded clean (predicted_eq_actual True,
+      live 12 -> 9, rounds still 7).
+  Q1f WITHOUT the rollback the retry was refused by
+      E_SF_MARKER_COLLISION - the window became unretryable, and the only
+      escape (a re-fold claim) writes the same content twice.
+  Q2  consumers: run() after-write proofs are reachable only on success
+      (SF.fold raises first); closeout_gate never references these faces;
+      logs_toolkit classifies state-preop-* names but does not require
+      them to exist; state_fold.py had no truncate path.
+  Q3  append_archive returned sha16 of the AFTER bytes; after a rollback
+      that hash described nothing on disk (report e424b1feb7deef64 vs
+      disk 1e461438e4efba63), while prefix_intact stayed True and meant
+      nothing. The rollback therefore has to re-state the fact instead of
+      reusing the report.
+
+LANDED (src/os/state_fold.py)
+  append_archive publishes before_sha16 (ARCHIVE_KEYS extended).
+  rollback_archive(path, appended): deletes an archive this fold created,
+  otherwise truncates to before_bytes and proves the restoration against
+  before_sha16 (E_SF_ARCHIVE, after-write, if the read-back differs).
+  fold(): the state-write failure arm now rolls the archive back, removes
+  the backup, and raises E_SF_STATE_WRITE with stage='rolled-back' and
+  after_write=False. When the rollback itself fails the stage stays
+  'after-write' and the detail says the archive still carries the window -
+  the half-landing is reported, never dressed up as a clean refusal.
+  USAGE names the third stage.
+
+CRITERIA
+  AC-SFOLD14 (six arms) in src/os/test_state_fold_run.py, 17 -> 17 total.
+  JUDGED-CHANGED, all three measured rather than assumed:
+    AC-SFOLD12 replace arm stage after-write -> rolled-back;
+    AC-SFOLD12 code-site count 2 -> 3 (the replace arm split in two);
+    AC-SFOLD13 replace arm stage after-write -> rolled-back;
+    AC-SFOLD11 after-write raise-site count 4 -> 5;
+    AC-SF3 archive report keys follow ARCHIVE_KEYS, which now carries
+    before_sha16.
+  Two of my own arms went red first and were corrected by measurement, not
+  by loosening: the AC-SFOLD14 window had to open at 2..9 (the first fold
+  leaves a summary line at index 0, so 13..20 landed mid-round and the fold
+  refused before the injection), and the state comparison had to be
+  snapshotted before the retry rather than after it.
+
+GATES
+  SUITE PASS 17/17   qa/suite-state-fold-run-R3192.log 6433B/19 lines
+                     utf-8/lf sha256 7f0811026582aeb7 (through
+                     tools/qa_log.py --from and re-read by --check)
+  peers state_fold 7/7, state_seq 8/8, state_append 10/10,
+        general_writer_dialect_audit 6/6, closeout_carrier 6/6 (5/6 first
+        on the stale matrix rows), closeout_gate 42/42
+  matrix regenerated through its own vehicle (78385B/754 rows, row 469
+        criteria 16 -> 17) then --check DOC-CURRENT
+  census --write-pin (honest CACHE E_RCC_CACHE_PARTIAL reused=753/754)
+        then --check VERDICT PASS pinned=754
+  live gate CLOSEOUT-GATE PASS files=4489 flags=0 reader_refused=0
+        gating=flags round_main=OK census=PASS matrix=DOC-CURRENT
+        CARRIER bytes=50392 margin=28108 fold_needed=false layout_ok=true
+
+HONEST BOUNDARIES
+  (a) ZERO payment capability and no network beyond loopback - a taken-back
+      archive moves no money, and a buyer still cannot pay (no merchant id,
+      server, domain, filing+ICP or miniprogram appid+secret).
+  (b) zero product face, zero api face, zero gate number - what changed is
+      what a failure leaves behind.
+  (c) the rollback covers the measured state-write face only; an
+      append_archive read-back failure is not rolled back (unmeasured, so
+      not claimed).
+  (d) the third stage value changes two existing arms' asserted stage
+      (recorded above as JUDGED-CHANGED with the sentence unchanged).
+  (e) a failed fold still writes a backup before the archive; it is removed
+      only when the rollback lands. If removal fails the detail says so
+      instead of claiming the backup is gone.

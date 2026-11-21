@@ -1,0 +1,16 @@
+Q1a failure kind=StateFoldError code=E_SF_STATE_WRITE stage=after-write after_write=True
+Q1b archive grew=True (+295B) state bytes same=True backups=['state-preop-R9002.bak']
+Q1c coverage before rounds=7 lines=7 | after-failure rounds=7 lines=9 | marker R9002 present=True
+Q1d rollback byte-identical=True sha 8628313c9b240d63 -> 8628313c9b240d63, marker R9002 present=False, coverage rounds=7 lines=7, equals_before=True
+Q1e refold verdict=execute predicted_eq_actual=True live 12 -> 9 prefix_intact=True coverage rounds=7 lines=7 kept=True
+Q1f no-rollback failure kind=StateFoldError code=E_SF_STATE_WRITE, retry without any cleanup:
+Q1f retry refused code=E_SF_MARKER_COLLISION detail=E_SF_MARKER_COLLISION: state-log-archive-2026-11.md already carries a window marked R9002 and this fold does not declare
+Q2a run() after-write proofs reachable only on success=True (SF.fold raises before they run)
+Q2b closeout_gate mentions state_fold=False mentions state-preop=False mentions state-log-archive=False
+Q2c logs_toolkit references fold-carry=False state-preop=True
+Q2d state_fold.py has a rollback path already=False; archive consumers in-module=4
+Q3a separator inserted=True report before=63 after=278 appendix=215 prefix_intact=True
+Q3b after rollback file equals before=True sha 1e461438e4efba63 -> 1e461438e4efba63; report sha16=e424b1feb7deef64 still describes disk=False
+Q3c created-archive case: does the same hold for a file the fold creates? before_bytes=0r
+Q3d fold created archive=True created_flag=True bytes=369
+Q3e after deleting the created archive the logs dir holds only the backup=[]; replay of the same fold works=pending
