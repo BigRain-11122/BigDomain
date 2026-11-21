@@ -55,6 +55,29 @@ QA_DIR = os.path.join(ROOT, "qa")
 PATTERNS = os.path.join(BASE, "suite_matrix_patterns.json")
 DEFAULT_OUT = os.path.join(ROOT, "docs", "sandbox-suite-matrix.md")
 
+
+def canonical_path(path):
+    """The identity of a path SPELLING, as the filesystem reads it.
+
+    R3150 (AC-SM10): abspath alone is a string comparison, so the same file
+    reached as DOCS/SANDBOX-SUITE-MATRIX.MD or through its 8.3 short name was
+    a different document for the ownership test and re-opened the write/read
+    faces this tool is supposed to refuse. normcase folds the case mismatch,
+    realpath resolves short names and links, abspath anchors the cwd.
+    """
+    return os.path.normcase(os.path.realpath(os.path.abspath(path)))
+
+
+def is_live_doc(path):
+    """True when `path` names the live matrix document under any spelling the
+    filesystem accepts (case, 8.3 short name, separators, `..`).
+
+    Path identity only, deliberately: a hard link is a second NAME for the
+    same file, so it is not caught here - named as a known residual, not
+    claimed closed."""
+    return canonical_path(path) == canonical_path(DEFAULT_OUT)
+
+
 sys.path.insert(0, BASE)
 import reconcile_all as RA  # suite registry single source of truth
 
@@ -462,7 +485,7 @@ def main(argv):
     # face that actually judges it, at its own exit code (3 = writer,
     # 4 = readability, 5 = judge). Own documents passed via --out keep every
     # face, --check included.
-    if os.path.abspath(args.out) == os.path.abspath(DEFAULT_OUT):
+    if is_live_doc(args.out):
         if args.check:
             print("FAIL doc-owned: E_SMX_CHECK_DOC_OWNED %s is judged by "
                   "python src/os/suite_matrix_reconcile.py --check (the gate "

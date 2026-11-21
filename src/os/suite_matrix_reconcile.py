@@ -632,8 +632,7 @@ def shipped_check(doc_path, evidence_path):
     target = doc_path
     scratch = None
     try:
-        if (os.path.abspath(doc_path) == os.path.abspath(SM.DEFAULT_OUT)
-                and os.path.isfile(doc_path)):
+        if SM.is_live_doc(doc_path) and os.path.isfile(doc_path):
             import tempfile
             handle, scratch = tempfile.mkstemp(suffix=".md")
             os.close(handle)

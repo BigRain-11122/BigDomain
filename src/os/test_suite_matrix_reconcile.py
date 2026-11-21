@@ -1,4 +1,4 @@
-"""AC-EDM1..AC-EDM6 suite for the suite-matrix reconciliation face (R2601).
+"""AC-EDM1..AC-EDM7 suite for the suite-matrix reconciliation face (R2601).
 
 Criteria were pinned in state/queue/tech.md:633 at R2599 BEFORE this code
 existed.
@@ -32,13 +32,13 @@ import suite_matrix_reconcile as SMR  # noqa: E402
 import suite_matrix as SM  # noqa: E402
 import reconcile_all as RA  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 7
 MODULE = os.path.join(BASE, "suite_matrix_reconcile.py")
 DOC = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
 QA_DIR = os.path.join(REPO, "qa")
 RUNNER = os.path.join(SANDBOX, "reconcile_all.py")
 WIRED_LABEL = '"os-suite-matrix-reconcile",'
-WIRED_SUITE = '"test_suite_matrix_reconcile.py"), 6),'
+WIRED_SUITE = '"test_suite_matrix_reconcile.py"), 7),'
 NET = ("urllib", "requests", "socket", "http", "ftplib", "xmlrpc",
        "smtplib", "asyncio", "time")
 
@@ -207,6 +207,41 @@ def verify():
             "AC-EDM5 report wrote nothing, one verdict word (%s), idempotent"
             " rewrite (%s)" % (words[0].split()[0] if words else "-",
                                again["verdict"])))
+
+        # AC-EDM7 (R3150): the live document is recognised by PATH IDENTITY,
+        # so a case-variant spelling of it takes the same scratch cross-check
+        # instead of being judged as some other document. p after normalising
+        # the scratch copy's own temp name, the variant and the plain spelling
+        # answer the SAME text - before this arm existed the variant was
+        # handed to the shipped face on the LIVE path, a different question
+        # with a different answer; q neither answer is an ownership token,
+        # i.e. both were judged rather than refused; r a path that does not
+        # exist is not a live document - no scratch copy, no ownership token,
+        # a non-zero answer.
+        plain_code, plain_out = SMR.shipped_check(DOC, green)
+        variant_code, variant_out = SMR.shipped_check(DOC.upper(), green)
+        missing_path = os.path.join(workdir, "no-such-matrix.md")
+        missing_code, missing_out = SMR.shipped_check(missing_path, green)
+
+        def face(text):
+            lines = text.splitlines()
+            if lines and len(lines[0].split()) > 2:
+                parts = lines[0].split()
+                parts[2] = "<doc>"
+                lines[0] = " ".join(parts)
+            return "\n".join(lines)
+
+        judged_words = ("doc-current", "rows-mismatch", "red-leg", "stale",
+                        "evidence-face")
+        word = next((w for w in judged_words if w in plain_out.lower()), "-")
+        results.append(check(
+            plain_code == variant_code and face(plain_out) == face(variant_out)
+            and word != "-" and "E_SMX" not in plain_out + variant_out
+            and missing_code != 0 and "E_SMX" not in missing_out,
+            "AC-EDM7 case variant answers %s (%d, %s) exactly as the plain"
+            " path; missing path exits %d without an ownership token"
+            % ("same text" if face(plain_out) == face(variant_out)
+               else "different text", variant_code, word, missing_code)))
 
         # AC-EDM6: hygiene and registration.
         with open(MODULE, "rb") as handle:

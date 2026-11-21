@@ -1136,7 +1136,7 @@ SUITES = [
     # R3149 AC-SM9: the same ownership covers the READ face - a default
     # --check is refused by name at exit 5 naming the judging command, while
     # docs passed via --out keep --check (+1 case).
-    ("suite-matrix-discovery", "test_suite_matrix.py", 18),
+    ("suite-matrix-discovery", "test_suite_matrix.py", 19),
     # R1715 runner-profile daily variant: --daily face (discovery
     # restricted to reconcile-daily-*.log evidence, separate
     # runner-profile-daily-baseline.json; sentinel-section parser
@@ -5037,10 +5037,12 @@ SUITES = [
     # its evidence line still names a RUNNER PASS leg, so the six readability
     # suites and the check face are green at once and the battery is no
     # longer deadlocked on a stale document.
-    # (AC-EDM1..AC-EDM6 pre-registered in state/queue/tech.md:633 as the
-    # R2599 seed BEFORE the code existed.)
+    # (AC-EDM1..AC-EDM7 pre-registered in state/queue/tech.md:633 as the
+    # R2599 seed BEFORE the code existed; AC-EDM7 added R3150 by the same
+    # criteria-first law - a case-variant path to the live document takes the
+    # scratch cross-check.)
     ("os-suite-matrix-reconcile",
-     os.path.join("..", "os", "test_suite_matrix_reconcile.py"), 6),
+     os.path.join("..", "os", "test_suite_matrix_reconcile.py"), 7),
     # R2602: the evidence face of the matrix reconciliation - a PASS leg that
     # differs from the leg the document records reads its own word naming BOTH
     # legs, the candidate walk reports what it decoded, a MISSING document can

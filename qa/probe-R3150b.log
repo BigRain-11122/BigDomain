@@ -1,0 +1,6 @@
+DOC C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\docs\sandbox-suite-matrix.md
+is_live plain=True variant=True
+canon equal=True
+ev exists=True
+plain code=2 out='FAIL check: ../../../../AppData/Local/Temp/tmpfck212wo.md stale (registry/config/evidence drifted)\n  evidence-face: doc-recorded=qa/reconcile-all-R2739.log check-resolved=qa/authorize-R1719.log\n  hint: evidence face-mismatch - the doc was generated against a different evidence file than this check resolved; rerun: python src/sandbox/suite_matrix.py --evidence qa/authorize-R1719.log  then re-run --'
+variant code=2 out='FAIL check: ../../../../AppData/Local/Temp/tmprtm3ok8l.md stale (registry/config/evidence drifted)\n  evidence-face: doc-recorded=qa/reconcile-all-R2739.log check-resolved=qa/authorize-R1719.log\n  hint: evidence face-mismatch - the doc was generated against a different evidence file than this check resolved; rerun: python src/sandbox/suite_matrix.py --evidence qa/authorize-R1719.log  then re-run --'

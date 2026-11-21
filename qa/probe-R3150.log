@@ -1,0 +1,22 @@
+LIVE=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\docs\sandbox-suite-matrix.md
+LIVE exists=True ident=(6518491087103129961, 11540474045510306)
+abspath=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\docs\sandbox-suite-matrix.md
+canon=c:\users\sjs20\desktop\fluxgroup\domain\bigdomain\docs\sandbox-suite-matrix.md
+
+spelling           same?  abs?   canon? esc-abs esc-canon
+exact              True   True   True   False  False 
+dot-segment        True   True   True   False  False 
+dotdot-segment     True   True   True   False  False 
+double-separator   True   True   True   False  False 
+forward-slash      True   True   True   False  False 
+upper-case         True   False  True   True   False 
+lower-case-dir     True   False  True   True   False 
+trailing-dot       True   True   True   False  False 
+trailing-space     True   True   True   False  False 
+short-8.3          True   False  True   True   False 
+
+ESCAPES_ABS=['upper-case', 'lower-case-dir', 'short-8.3']
+ESCAPES_CANON=[]
+symlink: UNAVAILABLE OSError
+hardlink: CONSTRUCTIBLE same_ident=True
+hardlink: abs_equal=False canon_equal=False

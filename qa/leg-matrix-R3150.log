@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=742 registry_criteria=6046 selected=2 selected_criteria=26 cap=600s leg_cap=0s overrides=1 exact=2 state=COMPLETE
+SHARD row suite-matrix-discovery rc=0 pass=19 fail=0 detail=yes suite=PASS 19/19 crit=19 2.1s
+SHARD row os-suite-matrix-reconcile rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 0.7s
+SHARD rc=0 scope=SHARD selected=2 executed=2 green=2 criteria=26 crit_mismatch=0 elapsed=2.9s crit_checked=2 crit_unchecked=0

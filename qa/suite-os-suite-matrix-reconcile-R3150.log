@@ -1,0 +1,8 @@
+  PASS AC-EDM1 regenerated doc rows=742 registry rows=742 evidence names authorize-R1719.log with RUNNER PASS 53/53
+  PASS AC-EDM2 rows word=ROWS-MISMATCH doc=741 registry=742 BOTH named
+  PASS AC-EDM3 red leg refused word=RED-LEG, doc byte-identical, shipped check unchanged (exit=2)
+  PASS AC-EDM4 patch parse_evidence -> RED-LEG, patch check face -> DOC-CURRENT, live -> EVIDENCE-FACE
+  PASS AC-EDM5 report wrote nothing, one verdict word (ROWS-MISMATCH), idempotent rewrite (DOC-CURRENT)
+  PASS AC-EDM7 case variant answers same text (2, stale) exactly as the plain path; missing path exits 2 without an ownership token
+  PASS AC-EDM6 hygiene ascii=True clock=False network=[] registered=True
+SUITE PASS 7/7

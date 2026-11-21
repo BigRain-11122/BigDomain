@@ -500,6 +500,96 @@ def case_default_doc_write_refused(tmp):
            " explicit --out green, default --check names the judge at exit 5"
 
 
+def case_live_doc_path_identity(tmp):
+    """AC-SM10 (R3150): the live document's ownership is decided by PATH
+    IDENTITY, not by string equality. p a case variant is refused by name at
+    exit 3 and leaves the document byte/mtime-identical; q its --check is
+    refused at exit 5; r the 8.3 short name resolves to the same document
+    (driven through main() when this volume has one); s a HARD LINK is the
+    named residual - a second name for the same file that path identity
+    cannot see, pinned as judged-not-closed; t trailing dot/space spellings
+    that abspath already normalised stay owned; u an own path under tmp is
+    still green."""
+    import contextlib
+    import io
+
+    live = SM.DEFAULT_OUT
+    if not os.path.isfile(live):
+        raise AssertionError("live document missing: %s" % live)
+    with io.open(live, "rb") as handle:
+        before_bytes = handle.read()
+    before_mtime = os.stat(live).st_mtime
+    before_ident = (os.stat(live).st_dev, os.stat(live).st_ino)
+
+    variant = live.upper()
+    assert variant != live, "upper-case spelling must differ as a string"
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        code = SM.main(["suite_matrix.py", "--out", variant])
+    text = buf.getvalue()
+    assert code == 3, "case variant must hit the writer refusal: %r" % text
+    assert "E_SMX_DOC_OWNED" in text, "refusal must be named: %s" % text
+    with io.open(live, "rb") as handle:
+        assert handle.read() == before_bytes, "case variant wrote bytes"
+    assert os.stat(live).st_mtime == before_mtime, "case variant touched mtime"
+
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        code = SM.main(["suite_matrix.py", "--check", "--out", variant])
+    text = buf.getvalue()
+    assert code == 5, "case variant --check must exit 5: %r" % text
+    assert "E_SMX_CHECK_DOC_OWNED" in text, \
+        "judge refusal must be named: %s" % text
+
+    import ctypes
+    short_buf = ctypes.create_unicode_buffer(512)
+    got = ctypes.windll.kernel32.GetShortPathNameW(live, short_buf, 512)
+    short = short_buf.value if got and got < 512 else None
+    assert short, "GetShortPathNameW returned no short name"
+    assert SM.is_live_doc(short), "8.3 short name must be the same document"
+    if os.path.normcase(short) != os.path.normcase(live):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code = SM.main(["suite_matrix.py", "--out", short])
+        assert code == 3, \
+            "short-name spelling must hit the refusal: %r" % buf.getvalue()
+
+    hard = os.path.join(tmp, "live-hardlink.md")
+    os.link(live, hard)
+    try:
+        assert (os.stat(hard).st_dev, os.stat(hard).st_ino) == before_ident, \
+            "hard link probe must name the same file"
+        assert SM.is_live_doc(hard) is False, \
+            "hard link is the named residual, not a claimed catch"
+    finally:
+        os.unlink(hard)
+
+    for tail in (".", " "):
+        spelling = live + tail
+        assert tmpl_ident(spelling) == before_ident, \
+            "spelling %r must open the live document" % spelling
+        assert SM.is_live_doc(spelling), \
+            "trailing %r spelling must stay owned" % tail
+
+    evidence = os.path.join(tmp, "ev.log")
+    _write(evidence, MINI_EVIDENCE)
+    own = os.path.join(tmp, "doc-own.md")
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        code = SM.main(["suite_matrix.py", "--evidence", evidence,
+                        "--out", own])
+    assert code == 0, "own path must still generate: %s" % buf.getvalue()
+    assert os.path.isfile(own), "own path wrote no document"
+    return "PASS live-doc-path-identity: case variant 3 and check 5 named,"\
+           " short name owned/refused, hard link named residual, trailing"\
+           " dot/space owned, own path green"
+
+
+def tmpl_ident(path):
+    st = os.stat(path)
+    return (st.st_dev, st.st_ino)
+
+
 def case_hygiene_self_checks(tmp):
     """AC-SM6: self_checks() clean on the current source."""
     problems = SM.self_checks()
@@ -586,6 +676,7 @@ def main():
         case_stale_face_mismatch_hint,
         case_default_doc_write_refused,
         case_check_judge_owned,
+        case_live_doc_path_identity,
         case_hygiene_self_checks,
     ]
     failures = 0
