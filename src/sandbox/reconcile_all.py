@@ -8057,8 +8057,11 @@ SUITES = [
     # R3226: the counts were real but unnamed - every contradicted claim now
     # carries face/line/claimed number/source number/why. AC-CLAIM4..6 pinned
     # in the R3226 PIN row before the detail face existed.
+    # R3227: the same nine were true when written, so the row publishes the
+    # sub-count `historic=` beside `contradicted=` (never shrinking it);
+    # AC-CLAIM7..9 pinned in the R3227 PIN row before the token existed.
     ("claim-census",
-     os.path.join("test_claim_census.py"), 6),
+     os.path.join("test_claim_census.py"), 9),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files

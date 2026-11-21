@@ -1,0 +1,21 @@
+== Q1: publishable surfaces ==
+main-row-literal-assertions=1
+reading-keyset-assertions=0
+rows-token-shape-assertions=1
+check_claims-census_row-call-sites=1
+export-keys=19 has_claims_block=False
+export-ceo_face-has_claims=False
+== Q2: two snapshots and one live error ==
+census-keys=['captured', 'claimed', 'contradicted', 'faces', 'present', 'rows', 'uncaptured']
+has_historic_key=False
+contradicted=3
+row='CLAIMS captured=0 uncaptured=1 contradicted=3 rows=4 present=true'
+snapshot-line-tag=[3200]
+newest-tag=3230
+detail-whys=['live-snapshot', 'live-snapshot', 'live-now']
+snapshots=2 live-errors=1
+reading-keys=['captured', 'claimed', 'contradicted', 'present', 'rows', 'uncaptured']
+row-carries-historic=False
+== live tree (reading, not a verdict) ==
+live-census-keys=['captured', 'claimed', 'contradicted', 'faces', 'present', 'rows', 'uncaptured']
+live-row='CLAIMS captured=103 uncaptured=189 contradicted=10 rows=4 present=true'

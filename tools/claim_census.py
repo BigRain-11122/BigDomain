@@ -29,6 +29,15 @@ the file or ledger it points at, the number that source actually carries, and a
 dated snapshots (an old round's sentence saying `rows=0` while today's ledger
 holds four), so the form is what lets a reader tell a historical record from a
 sentence about now; the classification itself is untouched.
+
+R3227: the same nine needed a number, not only a name, because a reader who
+lowered `contradicted` from ten to one would delete them from the record. So
+`historic` is published beside it - a SUB-count, never a reclassification:
+every contradicted claim stays counted, and `historic` says how many of them
+were true when written (the line carries a round tag older than the newest tag
+any face carries, and the claim speaks about the live ledger). A citation that
+disagrees with its own file was wrong when written, so it is never historic.
+`contradicted - historic` is what is wrong about now.
 """
 
 import io
@@ -114,14 +123,28 @@ def _newest_tag(texts):
     return best
 
 
+def _is_historic(line, reading, newest):
+    """A contradicted claim that was true when it was written (R3227).
+
+    Only a claim about the live ledger can be a snapshot: its own line carries
+    a round tag, and that tag is older than the newest tag the three faces
+    carry. A citation that disagrees with the file it names was wrong when it
+    was written, so it stays among what is wrong about now.
+    """
+    if reading["status"] != "contradicted" or reading["source"] != "live":
+        return False
+    tags = [int(raw) for raw in ROUND_RE.findall(line)]
+    return bool(tags) and max(tags) < newest
+
+
 def _named(root, face, lineno, line, reading, live_rows, newest):
     """One contradicted claim, addressed and sourced (R3226)."""
     source = reading["source"]
     if source == "live":
         src_rows = [live_rows]
         label = "live"
-        tags = [int(raw) for raw in ROUND_RE.findall(line)]
-        why = "live-snapshot" if tags and max(tags) < newest else "live-now"
+        why = ("live-snapshot" if _is_historic(line, reading, newest)
+               else "live-now")
     else:
         body = _read(os.path.join(root, "qa", source))
         src_rows = [int(raw) for raw in LEDGER_ROW_RE.findall(body)]
@@ -147,16 +170,14 @@ def census(root=None, detail=None):
                               evidence_dir=os.path.join(root, "qa"))
     live_rows = report["rows"]
     result = {"claimed": 0, "captured": 0, "contradicted": 0, "uncaptured": 0,
-              "rows": live_rows, "present": bool(report["present"]),
-              "faces": {}}
+              "historic": 0, "rows": live_rows,
+              "present": bool(report["present"]), "faces": {}}
     faces = []
     for face, rel in FACES:
         path = os.path.join(root, rel)
         text = _read(path) if os.path.isfile(path) else None
         faces.append((face, text))
-    newest = 0
-    if detail is not None:
-        newest = _newest_tag([text for _face, text in faces if text is not None])
+    newest = _newest_tag([text for _face, text in faces if text is not None])
     for face, text in faces:
         if text is None:
             result["faces"][face] = {"present": False, "claimed": 0}
@@ -166,7 +187,11 @@ def census(root=None, detail=None):
             for reading in classify(root, line, live_rows):
                 claimed += 1
                 result[reading["status"]] += 1
-                if detail is not None and reading["status"] == "contradicted":
+                if reading["status"] != "contradicted":
+                    continue
+                if _is_historic(line, reading, newest):
+                    result["historic"] += 1
+                if detail is not None:
                     detail.append(_named(root, face, lineno, line, reading,
                                          live_rows, newest))
         result["faces"][face] = {"present": True, "claimed": claimed}
@@ -192,10 +217,11 @@ def detail_lines(items, limit=DETAIL_LIMIT):
 
 
 def census_row(result):
-    """One line: the three readings, the live count, and whether it exists."""
-    return ("CLAIMS captured=%d uncaptured=%d contradicted=%d rows=%d present=%s"
+    """One line: the three readings, the historic sub-count, the live count."""
+    return ("CLAIMS captured=%d uncaptured=%d contradicted=%d historic=%d "
+            "rows=%d present=%s"
             % (result["captured"], result["uncaptured"],
-               result["contradicted"], result["rows"],
+               result["contradicted"], result["historic"], result["rows"],
                "true" if result["present"] else "false"))
 
 

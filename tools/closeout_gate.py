@@ -369,6 +369,7 @@ def check_claims(root, reading=None):
                         "captured": result["captured"],
                         "contradicted": result["contradicted"],
                         "uncaptured": result["uncaptured"],
+                        "historic": result["historic"],
                         "rows": result["rows"],
                         "present": result["present"]})
     return True, CC.census_row(result)

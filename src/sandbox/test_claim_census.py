@@ -1,7 +1,8 @@
 """Suite for the claims census: the numbers this company writes get a reader.
 
-THREE criteria, AC-CLAIM1..3, pre-registered in the R3225 backlog PIN row
-BEFORE this file and tools/claim_census.py existed.
+NINE criteria. AC-CLAIM1..3 were pre-registered in the R3225 backlog PIN row,
+AC-CLAIM4..6 in the R3226 PIN row, AC-CLAIM7..9 in the R3227 PIN row - every
+group before the code it grades existed.
 
 R3224 measured the hole: the board wrote `LEDGER OK rows=2` while the ledger as
 that round's own commit recorded it held one row, and nothing read the number
@@ -189,7 +190,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             reg = handle.read()
         found = re.search(r'test_claim_census\.py"\)\s*,\s*(\d+)', reg)
-        if not found or int(found.group(1)) != 6:
+        if not found or int(found.group(1)) != 9:
             bad3.append("registry-count-%s" % (found.group(1) if found else "-"))
         if len(RESULTS) != 2:
             bad3.append("results-before-this-arm-%d" % len(RESULTS))
@@ -248,17 +249,17 @@ def main():
                 bad5.append("detail-moved-%s" % key)
         if bare["faces"] != with_detail["faces"]:
             bad5.append("detail-moved-faces")
-        literal = ("CLAIMS captured=%d uncaptured=%d contradicted=%d rows=%d "
-                   "present=%s"
+        literal = ("CLAIMS captured=%d uncaptured=%d contradicted=%d historic=%d "
+                   "rows=%d present=%s"
                    % (bare["captured"], bare["uncaptured"],
-                      bare["contradicted"], bare["rows"],
+                      bare["contradicted"], bare["historic"], bare["rows"],
                       "true" if bare["present"] else "false"))
         if CC.census_row(bare) != literal:
             bad5.append("main-row-text")
         reading = {}
         CG.check_claims(root, reading=reading)
         if set(reading) != {"claimed", "captured", "contradicted", "uncaptured",
-                            "rows", "present"}:
+                            "historic", "rows", "present"}:
             bad5.append("gate-keys-%s" % sorted(reading))
         gate_text = io.open(GATE, encoding="utf-8").read()
         if gate_text.count("CC.census(root)") != 1:
@@ -308,6 +309,119 @@ def main():
         bad6.extend("bad-why-%s" % item["why"] for item in named
                     if item["why"] not in vocab)
         report("AC-CLAIM6", bool(bad6), ",".join(bad6))
+
+        # ---- AC-CLAIM7: the historic sub-count is derived, not declared. ---
+        bad7 = []
+        snap_a = ("- [R3200] old snapshot A LEDGER OK rows=0 "
+                  "path=state/qa_replacements.jsonl")
+        snap_b = ("- [R3201] old snapshot B LEDGER OK rows=0 "
+                  "path=state/qa_replacements.jsonl")
+        err_now = ("- error about now LEDGER OK rows=9 "
+                   "path=state/qa_replacements.jsonl")
+        split_board = [snap_a, snap_b,
+                       "- [R3230] newest marker rows=4 nobody can check",
+                       err_now]
+        world(root, split_board, ledger_rows=4, cited=citations)
+        named = []
+        result7 = CC.census(root, detail=named)
+        if (result7["contradicted"], result7["historic"]) != (3, 2):
+            bad7.append("split=%d/%d" % (result7["contradicted"],
+                                         result7["historic"]))
+        snapshots = sum(1 for item in named if item["why"] == "live-snapshot")
+        if snapshots != result7["historic"]:
+            bad7.append("detail-disagrees-%d" % snapshots)
+        # Same board, but the snapshots' own tags are no longer older than the
+        # newest one: the sub-count follows the tags, it is not a caption.
+        same_tag = ["- [R3230] old snapshot A LEDGER OK rows=0 "
+                    "path=state/qa_replacements.jsonl",
+                    "- [R3230] old snapshot B LEDGER OK rows=0 "
+                    "path=state/qa_replacements.jsonl",
+                    "- [R3230] newest marker rows=4 nobody can check",
+                    err_now]
+        world(root, same_tag, ledger_rows=4, cited=citations)
+        result7b = CC.census(root)
+        if (result7b["contradicted"], result7b["historic"]) != (3, 0):
+            bad7.append("tag-flip=%d/%d" % (result7b["contradicted"],
+                                            result7b["historic"]))
+        # A snapshot that agrees with today's ledger is captured, not historic.
+        world(root, split_board, ledger_rows=0, cited=citations)
+        result7c = CC.census(root)
+        if (result7c["contradicted"], result7c["historic"]) != (1, 0):
+            bad7.append("agreement=%d/%d" % (result7c["contradicted"],
+                                             result7c["historic"]))
+        # No contradiction at all answers 0 rather than an error.
+        world(root, ["- nothing to contradict rows=7"], ledger_rows=4)
+        result7d = CC.census(root)
+        if (result7d["contradicted"], result7d["historic"]) != (0, 0):
+            bad7.append("empty=%d/%d" % (result7d["contradicted"],
+                                         result7d["historic"]))
+        report("AC-CLAIM7", bool(bad7), ",".join(bad7))
+
+        # ---- AC-CLAIM8: conservation and one published token. --------------
+        bad8 = []
+        world(root, split_board, ledger_rows=4, cited=citations)
+        bare = CC.census(root)
+        named = []
+        with_detail = CC.census(root, detail=named)
+        if bare["historic"] != with_detail["historic"]:
+            bad8.append("detail-moved-historic")
+        if not (0 <= bare["historic"] <= bare["contradicted"]):
+            bad8.append("range-%d/%d" % (bare["historic"], bare["contradicted"]))
+        # Independent path: classify again and count what is wrong about now.
+        newest8 = CC._newest_tag([io.open(os.path.join(root, rel),
+                                          encoding="utf-8").read()
+                                  for _face, rel in CC.FACES])
+        live_now = 0
+        for line in split_board:
+            for item in CC.classify(root, line, ledger_rows_of(root)):
+                if (item["status"] == "contradicted"
+                        and not CC._is_historic(line, item, newest8)):
+                    live_now += 1
+        if bare["historic"] + live_now != bare["contradicted"]:
+            bad8.append("conservation-%d+%d!=%d"
+                        % (bare["historic"], live_now, bare["contradicted"]))
+        row8 = CC.census_row(bare)
+        if row8.count("historic=") != 1:
+            bad8.append("row-token-%d" % row8.count("historic="))
+        if ("historic=%d" % bare["historic"]) not in row8:
+            bad8.append("row-value")
+        reading = {}
+        CG.check_claims(root, reading=reading)
+        if reading.get("historic") != bare["historic"]:
+            bad8.append("reading-value")
+        for key in ("claimed", "captured", "contradicted", "uncaptured",
+                    "rows", "present"):
+            if key not in bare or key not in with_detail:
+                bad8.append("key-lost-%s" % key)
+            elif bare[key] != with_detail[key]:
+                bad8.append("detail-moved-%s" % key)
+        report("AC-CLAIM8", bool(bad8), ",".join(bad8))
+
+        # ---- AC-CLAIM9: the three existing faces are untouched. -------------
+        bad9 = []
+        world(root, named_board, ledger_rows=4, cited=citations)
+        statuses9 = [item["status"] for item in statuses(root, named_board)]
+        if statuses9 != ["contradicted", "contradicted", "contradicted",
+                         "captured", "uncaptured"]:
+            bad9.append("classification=%s" % statuses9)
+        named = []
+        CC.census(root, detail=named)
+        vocab9 = {"live-snapshot", "live-now", "evidence-differs",
+                  "evidence-no-ledger-row"}
+        bad9.extend("bad-why-%s" % item["why"] for item in named
+                    if item["why"] not in vocab9)
+        row9 = CC.detail_row(named[2])
+        if not row9.startswith("CLAIM board:3 rows=4 source=qa/other.log "
+                               "source_rows=2 why=evidence-differs"):
+            bad9.append("detail-shape-%r" % row9)
+        ok9, line9 = CG.check_claims(root)
+        if ok9 is not True or not line9.startswith("CLAIMS "):
+            bad9.append("face-refused")
+        live = CC.census()
+        if not (0 <= live["historic"] <= live["contradicted"]):
+            bad9.append("live-range-%d/%d" % (live["historic"],
+                                              live["contradicted"]))
+        report("AC-CLAIM9", bool(bad9), ",".join(bad9))
     finally:
         shutil.rmtree(root, ignore_errors=True)
 

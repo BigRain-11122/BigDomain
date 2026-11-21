@@ -1,0 +1,12 @@
+CLAIMS captured=107 uncaptured=184 contradicted=11 historic=7 rows=5 present=true
+CLAIM board:1 rows=758 source=qa/probe-R3227.log source_rows=none why=evidence-no-ledger-row
+CLAIM board:3 rows=0 source=qa/probe-R3222.log source_rows=2 why=evidence-differs
+CLAIM board:9 rows=2 source=live source_rows=5 why=live-snapshot
+CLAIM board:11 rows=2 source=live source_rows=5 why=live-snapshot
+CLAIM board:15 rows=3 source=live source_rows=5 why=live-snapshot
+CLAIM board:15 rows=0 source=live source_rows=5 why=live-snapshot
+CLAIM board:15 rows=0 source=live source_rows=5 why=live-snapshot
+CLAIM board:16 rows=0 source=qa/probe-R3222.log source_rows=2 why=evidence-differs
+CLAIM board:27 rows=0 source=live source_rows=5 why=live-snapshot
+CLAIM board:29 rows=0 source=live source_rows=5 why=live-snapshot
+CLAIM state:40 rows=0 source=qa/probe-R3226.log source_rows=none why=evidence-no-ledger-row
