@@ -303,13 +303,21 @@ def check_ledger(root, reading=None):
     count at all, so a machine consumer had to parse prose. A caller may now
     pass a `reading` dict; it is filled from the SAME report this face judged
     (never re-parsed), so the value and the printed row cannot disagree.
+
+    R3224 (AC-SXF26): the reading also carries `present`, whether the ledger
+    file exists. Measured this window: absent and empty ledgers answered the
+    identical row AND the identical reading, so a downstream face published
+    rows=0 for both - "nothing to measure" read as "measured empty". The row
+    text is unchanged on purpose (an absent ledger is still OK rows=0); only
+    the machine-readable reading gains the existence bit.
     """
     _src_os(root)
     import qa_log as QL
     path = os.path.join(root, "state", QL.LEDGER_NAME)
     report = QL.ledger_report(path, evidence_dir=os.path.join(root, "qa"))
     if reading is not None:
-        reading.update({"rows": report["rows"], "names": report["names"],
+        reading.update({"present": report["present"],
+                        "rows": report["rows"], "names": report["names"],
                         "bad": len(report["bad"]),
                         "stale": len(report["stale"]),
                         "missing": len(report["missing"]),

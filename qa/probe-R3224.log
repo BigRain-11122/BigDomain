@@ -1,0 +1,41 @@
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+== Q1: live export and the file its path points at ==
+live chain block: {"broken": 0, "path": "state/qa_replacements.jsonl", "rows": 1}
+live ledger exists: True
+live ledger bytes: 202
+
+== Q1/Q2: three fixture worlds ==
+absent report keys: ['bad', 'broken', 'missing', 'names', 'path', 'rows', 'stale', 'verdict']
+absent report rows/bad: 0/[]
+absent reading: {"bad": 0, "broken": 0, "missing": 0, "names": 0, "rows": 0, "stale": 0}
+absent LEDGER row: LEDGER OK rows=0 names=0 bad=0 stale=0 missing=0 broken=0 path=state/qa_replacements.jsonl
+absent chain_face: {"broken": 0, "path": "state/qa_replacements.jsonl", "rows": 0}
+absent ok: True
+empty report keys: ['bad', 'broken', 'missing', 'names', 'path', 'rows', 'stale', 'verdict']
+empty report rows/bad: 0/[]
+empty reading: {"bad": 0, "broken": 0, "missing": 0, "names": 0, "rows": 0, "stale": 0}
+empty LEDGER row: LEDGER OK rows=0 names=0 bad=0 stale=0 missing=0 broken=0 path=state/qa_replacements.jsonl
+empty chain_face: {"broken": 0, "path": "state/qa_replacements.jsonl", "rows": 0}
+empty ok: True
+rows report keys: ['bad', 'broken', 'missing', 'names', 'path', 'rows', 'stale', 'verdict']
+rows report rows/bad: 1/[]
+rows reading: {"bad": 0, "broken": 0, "missing": 1, "names": 1, "rows": 1, "stale": 0}
+rows LEDGER row: LEDGER OK rows=1 names=1 bad=0 stale=0 missing=1 broken=0 path=state/qa_replacements.jsonl
+rows chain_face: {"broken": 0, "path": "state/qa_replacements.jsonl", "rows": 1}
+rows ok: True
+
+absent vs empty: LEDGER rows identical = True
+absent vs empty: chain_face identical = True
+absent vs rows:   chain_face identical = False
+absent vs empty: report (sans path) identical = True
+
+== Q3: the card today ==
+chain_card(live-shaped rows=0): <p class=kv>CHAIN rows=0 broken=0 path=state/qa_replacements.jsonl</p>
+chain_card(None): <p class=kv>CHAIN block absent from the export face (honest absence, not a measured zero)</p>
+card distinguishes the two: True
+PROBE OK

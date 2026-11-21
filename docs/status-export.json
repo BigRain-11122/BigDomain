@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3223 SHIPPED the chain card: src/sandbox/frontdoor.py gained chain_card(block) plus the __SD30_CHAIN__ slot, so the export face's top-level chain block (rows/broken/path) is printed on the only surface that keeps being rendered after the loop stops - always the row, a class=fail alert when broken>0, a named absence when the block is missing and a named malformed line with no numbers when the counts or the path are not what the writer can produce. The same window caught its own bug (sd30_chain was assigned only on the successful read, so a corrupt export would have raised NameError instead of rendering the honest-failure line) and recorded a pre-existing red neighbour honestly: AC-FDC2's absent-branch literal stopped matching a chained reset on a clean HEAD tree, and the check now accepts the chained form by name with the reason written beside it.",
+    "current": "2026-11-22 R3224 SHIPPED the ledger's existence on the chain face: tools/qa_log.ledger_report now answers present (one stat, a reading never a verdict), closeout_gate.check_ledger carries it into the reading it already fills, status_export_fresh.chain_face publishes it as a fourth key, and frontdoor.chain_card renders three states instead of two - an absent ledger named with no numbers at all, a present ledger with its counts (rows=0 named measured empty), and a legacy block keeping its numbers with presence named unknown rather than guessed. The hole was measured before any code (qa/probe-R3224.log): on an absent ledger and on an empty ledger the report, the LEDGER row and chain_face were byte-identical, so the face published rows=0 for something it never measured. Chosen option 1 of three: omitting the block on absence would have made a present-but-empty chain silent again and would have broken AC-SXFB17's absent-world rows==0 arm; the additive bit keeps the shipped three keys byte-identical.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
@@ -9,9 +9,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3223] next window (<=48h): (0) MAIN — **「没有台账」与「台账是空的」在链块上同形**：`chain` 块无论活台账在不在都发布 `rows=0`（R3203 已立「缺席=未读、不等于 0」，但块本身不带存在性字段），于是卡上 `rows=0` 读起来像「量过、确实是空的」。做法=先只读量三问：①导出面普查＝`chain_face(root)` 在三种世界（台账不存在／存在但空／有行）各写什么，`path` 是否指向一个不存在的文件；②决定性臂＝私有世界造三态，量卡与导出面能不能区分；③收口三选一＝①块增 `present: true/false`（缺台账=false，卡印具名「台账不存在」）②台账缺失时不写 `chain` 块（卡落到 absence 行）③维持现状并把理由写成具名待办——并证明所选面不改 `LEDGER` 行、不改「断链仍不拒收」律、不改导出既有键。判据沿用 AC-FDC/AC-SXF 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板本窗实测 main 6 open／tech 8 open／explore 4 open（欠 0/2/6）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T05:08:17+08:00",
-    "updated_at": "2026-11-22T05:08:17+08:00",
+    "next_milestone": "[R3224] next window (<=48h): (0) MAIN — **板面自己的数字与它的源相矛盾，而这一轮刚给它装上可被问的嘴**：R3223 行写「两次落盘、两行」「LEDGER OK rows=2」，但 `git show 8e02357d:state/qa_replacements.jsonl` 自引入起只有 1 行、此后零改动（本窗 `git log --follow` 实证）。**先只读量三问**：①全树普查＝board/state/export 三面各有多少条手写的 `LEDGER rows=N` / `rows=N` 式宣称，其中多少能在同名证据文件里找到逐字一致的捕获行；②决定性臂＝若把某条宣称的 N 与当时台账真实行数对照，反例有几条（R3223 这条是已知 1 条）；③收口三选一＝①宣称必须引用一份已落盘的闸输出证据（行文本+文件名+sha），无从引用的宣称改写成「未捕获」②从 board/state 移除这类数字宣称（只留证据文件指针）③维持并具名「手写数字不受闸保护」——并证明所选面不改 `LEDGER` 行、不改断链不拒收律、不改导出既有键。判据沿用 AC-FDC/AC-SXF 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板本窗实测 main 6 open／tech 8 open／explore 4 open（欠 0/2/6，不用造活补）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T05:25:14+08:00",
+    "updated_at": "2026-11-22T05:25:14+08:00",
     "heartbeat": {
       "tick": 3223,
       "state_tick": 3223,
@@ -41,8 +41,8 @@
       "readable": 4586
     }
   },
-  "current": "2026-11-22 R3223 SHIPPED the chain card: src/sandbox/frontdoor.py gained chain_card(block) plus the __SD30_CHAIN__ slot, so the export face's top-level chain block (rows/broken/path) is printed on the only surface that keeps being rendered after the loop stops - always the row, a class=fail alert when broken>0, a named absence when the block is missing and a named malformed line with no numbers when the counts or the path are not what the writer can produce. The same window caught its own bug (sd30_chain was assigned only on the successful read, so a corrupt export would have raised NameError instead of rendering the honest-failure line) and recorded a pre-existing red neighbour honestly: AC-FDC2's absent-branch literal stopped matching a chained reset on a clean HEAD tree, and the check now accepts the chained form by name with the reason written beside it.",
-  "chain": {"rows": 1, "broken": 0, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-22 R3224 SHIPPED the ledger's existence on the chain face: tools/qa_log.ledger_report now answers present (one stat, a reading never a verdict), closeout_gate.check_ledger carries it into the reading it already fills, status_export_fresh.chain_face publishes it as a fourth key, and frontdoor.chain_card renders three states instead of two - an absent ledger named with no numbers at all, a present ledger with its counts (rows=0 named measured empty), and a legacy block keeping its numbers with presence named unknown rather than guessed. The hole was measured before any code (qa/probe-R3224.log): on an absent ledger and on an empty ledger the report, the LEDGER row and chain_face were byte-identical, so the face published rows=0 for something it never measured. Chosen option 1 of three: omitting the block on absence would have made a present-but-empty chain silent again and would have broken AC-SXFB17's absent-world rows==0 arm; the additive bit keeps the shipped three keys byte-identical.",
+  "chain": {"present": true, "rows": 1, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -70,11 +70,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3223 SHIPPED the chain card: src/sandbox/frontdoor.py gained chain_card(block) plus the __SD30_CHAIN__ slot, so the export face's top-level chain block (rows/broken/path) is printed on the only surface that keeps being rendered after the loop stops - always the row, a class=fail alert when broken>0, a named absence when the block is missing and a named malformed line with no numbers when the counts or the path are not what the writer can produce. The same window caught its own bug (sd30_chain was assigned only on the successful read, so a corrupt export would have raised NameError instead of rendering the honest-failure line) and recorded a pre-existing red neighbour honestly: AC-FDC2's absent-branch literal stopped matching a chained reset on a clean HEAD tree, and the check now accepts the chained form by name with the reason written beside it.",
-  "export_ts": "2026-11-22T05:08:17+08:00",
+  "do": "2026-11-22 R3224 SHIPPED the ledger's existence on the chain face: tools/qa_log.ledger_report now answers present (one stat, a reading never a verdict), closeout_gate.check_ledger carries it into the reading it already fills, status_export_fresh.chain_face publishes it as a fourth key, and frontdoor.chain_card renders three states instead of two - an absent ledger named with no numbers at all, a present ledger with its counts (rows=0 named measured empty), and a legacy block keeping its numbers with presence named unknown rather than guessed. The hole was measured before any code (qa/probe-R3224.log): on an absent ledger and on an empty ledger the report, the LEDGER row and chain_face were byte-identical, so the face published rows=0 for something it never measured. Chosen option 1 of three: omitting the block on absence would have made a present-but-empty chain silent again and would have broken AC-SXFB17's absent-world rows==0 arm; the additive bit keeps the shipped three keys byte-identical.",
+  "export_ts": "2026-11-22T05:25:14+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
   "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
-  "next_milestone": "[R3223] next window (<=48h): (0) MAIN — **「没有台账」与「台账是空的」在链块上同形**：`chain` 块无论活台账在不在都发布 `rows=0`（R3203 已立「缺席=未读、不等于 0」，但块本身不带存在性字段），于是卡上 `rows=0` 读起来像「量过、确实是空的」。做法=先只读量三问：①导出面普查＝`chain_face(root)` 在三种世界（台账不存在／存在但空／有行）各写什么，`path` 是否指向一个不存在的文件；②决定性臂＝私有世界造三态，量卡与导出面能不能区分；③收口三选一＝①块增 `present: true/false`（缺台账=false，卡印具名「台账不存在」）②台账缺失时不写 `chain` 块（卡落到 absence 行）③维持现状并把理由写成具名待办——并证明所选面不改 `LEDGER` 行、不改「断链仍不拒收」律、不改导出既有键。判据沿用 AC-FDC/AC-SXF 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板本窗实测 main 6 open／tech 8 open／explore 4 open（欠 0/2/6）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3224] next window (<=48h): (0) MAIN — **板面自己的数字与它的源相矛盾，而这一轮刚给它装上可被问的嘴**：R3223 行写「两次落盘、两行」「LEDGER OK rows=2」，但 `git show 8e02357d:state/qa_replacements.jsonl` 自引入起只有 1 行、此后零改动（本窗 `git log --follow` 实证）。**先只读量三问**：①全树普查＝board/state/export 三面各有多少条手写的 `LEDGER rows=N` / `rows=N` 式宣称，其中多少能在同名证据文件里找到逐字一致的捕获行；②决定性臂＝若把某条宣称的 N 与当时台账真实行数对照，反例有几条（R3223 这条是已知 1 条）；③收口三选一＝①宣称必须引用一份已落盘的闸输出证据（行文本+文件名+sha），无从引用的宣称改写成「未捕获」②从 board/state 移除这类数字宣称（只留证据文件指针）③维持并具名「手写数字不受闸保护」——并证明所选面不改 `LEDGER` 行、不改断链不拒收律、不改导出既有键。判据沿用 AC-FDC/AC-SXF 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板本窗实测 main 6 open／tech 8 open／explore 4 open（欠 0/2/6，不用造活补）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -188,8 +188,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 72188,
-  "next_milestone_due": "2026-11-24T05:08:17+08:00",
+  "state_bytes": 75564,
+  "next_milestone_due": "2026-11-24T05:25:14+08:00",
   "heartbeat": {
     "tick": 3223,
     "state_tick": 3223,

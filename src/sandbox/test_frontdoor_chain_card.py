@@ -1,8 +1,8 @@
 """Suite for the chain card: the published replacement-chain reading gets a
 live consumer on the only face that keeps being rendered after the loop stops.
 
-TWO criteria, AC-FDC13 and AC-FDC14, pre-registered in the R3223 backlog PIN
-row BEFORE this file and the code it grades.
+FOUR criteria, AC-FDC13..16. AC-FDC13/14 were pre-registered in the R3223
+backlog PIN row, AC-FDC15/16 in the R3224 row, each BEFORE the code it grades.
 
 R3223 measured the hole: R3222 published `chain {rows, broken, path}` into
 docs/status-export.json, and src/sandbox/frontdoor.py named it nowhere - zero
@@ -12,6 +12,12 @@ pure consumption face: it prints what the data file says, it never re-reads the
 ledger or re-derives `broken`, and an absent block prints a named absence
 instead of a fabricated `rows=0`.
 
+R3224 measured the second hole: a world with NO ledger and a world with an
+EMPTY ledger published the identical block (probe qa/probe-R3224.log), so the
+card printed `rows=0` for something that was never measured. AC-FDC15 grades
+the three states the block now distinguishes; AC-FDC16 grades that the new bit
+is read from the block and never measured inside the card.
+
 Usage: python test_frontdoor_chain_card.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
 """
@@ -19,6 +25,7 @@ Exit: 0 = SUITE PASS, 2 = FAIL.
 import io
 import json
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -151,7 +158,14 @@ def main():
     # ---- the live page really carries what the file published. -----------
     page = frontdoor.render().decode("utf-8")
     block = live_block()
-    if isinstance(block, dict) and block:
+    if isinstance(block, dict) and block.get("present") is False:
+        # R3224: an absent ledger publishes a named absence, so requiring
+        # `rows=` here would demand a fabricated number.
+        if "does not exist" not in page:
+            bad2.append("live-absent-unnamed")
+        if "CHAIN rows=" in page:
+            bad2.append("live-absent-fabricates-rows")
+    elif isinstance(block, dict) and block:
         for needle in ("rows=%s" % block.get("rows"),
                        "broken=%s" % block.get("broken"),
                        "path=%s" % block.get("path")):
@@ -165,6 +179,82 @@ def main():
             bad2.append("live-absent-not-named")
 
     report("AC-FDC14", bool(bad2), ",".join(bad2))
+
+    # ---- AC-FDC15 (R3224): three states, not two. ------------------------
+    # p: an absent ledger is named and prints no counts at all - "nothing to
+    # measure" must not wear the clothes of a measurement.
+    bad3 = []
+    p_block = {"present": False, "rows": 0, "broken": 0,
+               "path": "state/qa_replacements.jsonl"}
+    p_html = frontdoor.chain_card(p_block)
+    if "does not exist" not in p_html:
+        bad3.append("absent-ledger-unnamed")
+    if "rows=" in p_html or "broken=" in p_html:
+        bad3.append("absent-ledger-prints-numbers")
+    # q: present-but-empty IS a measurement, and it says which one.
+    q_block = dict(p_block, present=True)
+    q_html = frontdoor.chain_card(q_block)
+    for needle in ("rows=0", "present", "measured empty"):
+        if needle not in q_html:
+            bad3.append("empty-missing-" + needle.replace(" ", "-"))
+    if "class=fail" in q_html:
+        bad3.append("empty-carries-alert")
+    # r: the broken alert survives the new state.
+    r_block = {"present": True, "rows": 2, "broken": 1,
+               "path": "state/qa_replacements.jsonl"}
+    r_html = frontdoor.chain_card(r_block)
+    if "class=fail" not in r_html or "broken=1" not in r_html:
+        bad3.append("broken-alert-lost")
+    # s: a present that is not a boolean is a shape defect, and prints nothing.
+    for value in ("yes", 1, None):
+        s_html = frontdoor.chain_card(dict(q_block, present=value))
+        if "malformed" not in s_html:
+            bad3.append("present-%r-unnamed" % (value,))
+        if "rows=" in s_html or "broken=" in s_html:
+            bad3.append("present-%r-prints-numbers" % (value,))
+    # t: a legacy block keeps its numbers and names the gap instead of guessing.
+    t_block = {"rows": 3, "broken": 0, "path": "state/qa_replacements.jsonl"}
+    t_html = frontdoor.chain_card(t_block)
+    for needle in ("rows=3", "presence unknown"):
+        if needle not in t_html:
+            bad3.append("legacy-missing-" + needle.replace(" ", "-"))
+    # u: derived, not typed; and the presence really moves the output.
+    if frontdoor.chain_card(p_block) != p_html:
+        bad3.append("not-deterministic")
+    if p_html == q_html:
+        bad3.append("presence-ignored")
+    report("AC-FDC15", bool(bad3), ",".join(bad3))
+
+    # ---- AC-FDC16 (R3224): the new bit is READ, never measured here. -----
+    bad4 = []
+    with io.open(MODULE, "rb") as handle:
+        text4 = handle.read().decode("utf-8", "replace")
+    body4 = function_slice(text4)
+    for forbidden in ("os.", "stat(", "isfile", "getmtime"):
+        if forbidden in body4:
+            bad4.append("card-reads-the-world-" + forbidden.replace("(", "par")
+                        .replace(".", "dot"))
+    page4 = frontdoor.render().decode("utf-8")
+    block4 = live_block()
+    if isinstance(block4, dict) and block4.get("present") is False:
+        if "does not exist" not in page4:
+            bad4.append("live-absent-ledger-unnamed")
+        if "CHAIN rows=" in page4:
+            bad4.append("live-absent-ledger-prints-numbers")
+    elif isinstance(block4, dict) and block4:
+        if "rows=%s" % block4.get("rows") not in page4:
+            bad4.append("live-missing-rows")
+    # Declared criteria count must move with this file, or the census cannot
+    # see a criterion added without a registry bump.
+    with io.open(REGISTRY, encoding="utf-8") as handle:
+        reg_text = handle.read()
+    found = re.search(r'test_frontdoor_chain_card\.py"\)\s*,\s*(\d+)', reg_text)
+    declared = int(found.group(1)) if found else -1
+    if declared != 4:
+        bad4.append("registry-count-%d" % declared)
+    if len(RESULTS) != 3:
+        bad4.append("results-before-this-arm-%d" % len(RESULTS))
+    report("AC-FDC16", bool(bad4), ",".join(bad4))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

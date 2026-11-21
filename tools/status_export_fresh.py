@@ -552,6 +552,14 @@ def chain_face(root):
     the gate's verdict and the printed LEDGER row are three renderings of ONE
     report. `root` is a parameter and is resolved at call time: an import-time
     default would keep aiming at the live tree once a suite rebinds ROOT.
+
+    R3224 (AC-SXF26): the block also carries `present`. Measured this window:
+    an absent ledger and an empty one published the identical `rows=0`, so the
+    CEO face could not tell "no ledger exists" from "the ledger was measured
+    and holds nothing". `present` is passed through from the same reading (no
+    second stat, no second parser); `None` rather than `False` if the reading
+    ever stops carrying it, because inventing a `False` would be a claim this
+    face did not measure.
     """
     for path in (os.path.join(REAL_ROOT, "tools"),
                  os.path.join(REAL_ROOT, "src", "os")):
@@ -561,7 +569,8 @@ def chain_face(root):
     import qa_log as QL
     reading = {}
     CG.check_ledger(root, reading)
-    return {"rows": reading.get("rows", 0),
+    return {"present": reading.get("present"),
+            "rows": reading.get("rows", 0),
             "broken": reading.get("broken", 0),
             "path": "state/" + QL.LEDGER_NAME}
 

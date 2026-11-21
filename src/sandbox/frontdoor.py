@@ -5962,6 +5962,16 @@ def chain_card(block):
     This is a pure consumption face: it never re-reads the ledger, never
     re-derives `broken`, and an absent block prints a named absence rather than
     `rows=0`, because a fabricated zero would read as a measured empty chain.
+
+    R3224 measured the remaining hole: a WORLD with no ledger and a world whose
+    ledger is measured empty published the identical `rows=0` block (probe
+    qa/probe-R3224.log), so the card printed a measurement for something that
+    was never measured. The block now carries `present`; this card renders
+    three states instead of two - absent ledger (named, no numbers), present
+    ledger (numbers, `rows=0` allowed and named measured empty), and a legacy
+    block that predates the field (numbers kept, presence named unknown rather
+    than guessed). Existence is READ FROM THE BLOCK: the card never stats a
+    file, so it cannot disagree with the export it is rendering.
     """
     if not isinstance(block, dict) or not block:
         return ("<p class=kv>CHAIN block absent from the export face "
@@ -5979,8 +5989,26 @@ def chain_card(block):
     if not isinstance(path, str) or not path.strip():
         return ("<p class=kv>CHAIN block is malformed (path missing) "
                 "- not a reading</p>")
+    if "present" in block and not isinstance(block.get("present"), bool):
+        return ("<p class=kv>CHAIN block is malformed (present is not a "
+                "boolean) - not a reading</p>")
 
-    line = "CHAIN rows=%d broken=%d path=%s" % (rows, broken, path)
+    present = block.get("present")
+    if present is False:
+        return ("<p class=kv>CHAIN ledger does not exist at path=%s "
+                "(nothing to measure - not a measured empty chain)</p>"
+                % esc(path))
+
+    base = "CHAIN rows=%d broken=%d path=%s" % (rows, broken, path)
+    if present is True:
+        if rows == 0:
+            line = base + " (ledger present, measured empty)"
+        else:
+            line = base + " (ledger present)"
+    else:
+        # A block written before R3224 states no existence. Keep its numbers
+        # and name the gap instead of inventing either answer.
+        line = base + " (presence unknown: block predates the present field)"
     if broken > 0:
         return ("<p class=kv>%s</p><p class=fail>CHAIN ALERT broken=%d "
                 "(a replacement record does not join the previous line)</p>"

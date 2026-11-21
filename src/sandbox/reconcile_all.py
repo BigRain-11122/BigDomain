@@ -6336,9 +6336,11 @@ SUITES = [
     # refused AFTER its own io.open, and the archive rewrite that judged nothing
     # while no production vehicle called it - now share one stage-then-prove
     # door, and the zero-caller fact is asserted (20 -> 22). R3222 gave the
-    # ledger counts a real consumer on the export face (22 -> 25).
+    # ledger counts a real consumer on the export face (22 -> 25). R3224 gave
+    # the same face the ledger's existence, so "no ledger" and "empty ledger"
+    # stopped publishing the identical block (25 -> 26).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 25),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 26),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives
@@ -8042,8 +8044,11 @@ SUITES = [
     # zero placeholder, zero call site - so a broken replacement chain and a
     # chain that never existed looked alike on the card. AC-FDC13..14 (two
     # criteria) were pinned in src/os/backlog.md BEFORE this card existed.
+    # R3224: the block carried no existence either, so a world with no ledger
+    # and a world measured empty both read rows=0. AC-FDC15..16 (two more) were
+    # pinned before the third state existed (2 -> 4).
     ("frontdoor-chain-card",
-     os.path.join("test_frontdoor_chain_card.py"), 2),
+     os.path.join("test_frontdoor_chain_card.py"), 4),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files

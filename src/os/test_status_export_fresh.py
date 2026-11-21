@@ -670,6 +670,53 @@ def run(root):
            "apply=%d/%d identical=%s check=%d"
            % (rc_first, rc_second, once == twice, rc_gate))
 
+    # AC-SXF26 (R3224): "no ledger" and "empty ledger" published the identical
+    # block. Measured before the change (qa/probe-R3224.log): the report, the
+    # LEDGER row and chain_face were byte-identical for the two worlds, so the
+    # face said rows=0 for something it never measured. The reading now carries
+    # `present`; the row text is deliberately unchanged (an absent ledger is
+    # still OK rows=0), so this arm also proves the two did NOT get conflated
+    # in the other direction.
+    import closeout_gate as CG
+    present_world = os.path.join(root, "present-world")
+    os.makedirs(os.path.join(present_world, "state"))
+    os.makedirs(os.path.join(present_world, "qa"))
+    p_ledger = os.path.join(present_world, "state", "qa_replacements.jsonl")
+    face_absent = sx.chain_face(present_world)
+    read_absent = {}
+    CG.check_ledger(present_world, read_absent)
+    row_absent = CG.check_ledger(present_world)[1][0]
+    with io.open(p_ledger, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write("")
+    face_empty = sx.chain_face(present_world)
+    read_empty = {}
+    CG.check_ledger(present_world, read_empty)
+    row_empty = CG.check_ledger(present_world)[1][0]
+    with io.open(p_ledger, "a", encoding="utf-8", newline="\n") as handle:
+        handle.write(json.dumps(first, sort_keys=True) + "\n")
+    face_rows = sx.chain_face(present_world)
+    arm_p = (face_absent.get("present") is False
+             and face_empty.get("present") is True
+             and face_rows.get("present") is True
+             and face_absent.get("rows") == face_empty.get("rows") == 0
+             and face_rows.get("rows") == 1)
+    arm_q = (read_absent.get("present") is False
+             and read_empty.get("present") is True
+             and row_absent == row_empty)
+    arm_r = sorted(face_rows) == ["broken", "path", "present", "rows"]
+    write_json(sx.STATE, {"tick": 9, "log": [NARRATIVE]})
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    live_doc = json.loads(io.open(export, encoding="utf-8").read())
+    rc_live = sx.check(export, sx.STATE)
+    arm_s = (isinstance(live_doc.get("chain", {}).get("present"), bool)
+             and live_doc["chain"]["present"] is True and rc_live == 0)
+    record("AC-SXF26", arm_p and arm_q and arm_r and arm_s,
+           "p=%s q=%s r=%s s=%s absent=%s empty=%s rows=%s rc=%d"
+           % (arm_p, arm_q, arm_r, arm_s,
+              json.dumps(face_absent, sort_keys=True),
+              json.dumps(face_empty, sort_keys=True),
+              json.dumps(face_rows, sort_keys=True), rc_live))
+
     # AC-SXFB10 (AC-SXF10): the registry row exists AND declares this many
     # criteria, so adding a criterion without moving the count is red instead of
     # silently uncounted.
@@ -684,7 +731,7 @@ def run(root):
             if "test_status_export_fresh.py" in line:
                 row = line
                 break
-    record("AC-SXFB10", row is not None and declared == 25,
+    record("AC-SXFB10", row is not None and declared == 26,
            "matrix_row=%s declared=%d" % (bool(row), declared))
 
 

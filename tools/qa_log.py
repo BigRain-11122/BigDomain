@@ -311,6 +311,13 @@ def ledger_report(path=None, evidence_dir=None):
     `evidence_dir` defaults to the shipped rule: the live ledger is read
     against REPO/qa, every other ledger against its own directory. A caller
     that knows the world (the gate) passes the dir it is judging.
+
+    R3224 (AC-SXF26): `present` is whether the ledger FILE exists. Measured
+    this window on three worlds - an absent ledger, an empty ledger and a
+    one-row ledger - the first two answered identical `rows=0 bad=[]`, so a
+    consumer could not tell "nothing to measure" from "measured empty": the
+    counts alone carry no existence. One stat, published as a reading, never a
+    verdict; an absent ledger is still OK and still rows=0.
     """
     path = LEDGER if path is None else path
     located, bad = read_ledger_located(path)
@@ -347,7 +354,8 @@ def ledger_report(path=None, evidence_dir=None):
         if disk != latest[name]["new_sha16"]:
             stale.append((name, disk, latest[name]["new_sha16"]))
     return {"verdict": "RED" if (bad or stale) else "OK",
-            "path": path, "rows": len(located), "names": len(latest),
+            "path": path, "present": os.path.isfile(path),
+            "rows": len(located), "names": len(latest),
             "bad": bad, "stale": stale, "missing": missing,
             "broken": broken}
 

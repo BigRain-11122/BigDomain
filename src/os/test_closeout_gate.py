@@ -603,10 +603,19 @@ def main():
     ok("AC-CLG11 arm a - the live closeout publishes exactly one LEDGER row",
        rc11 == 0 and len(rows11) == 1 and rows11[0].startswith("LEDGER OK "),
        "rc=%s rows=%s" % (rc11, rows11))
-    ok("AC-CLG11 arm b - an absent live ledger reads rows=0, not a defect",
-       rc11 == 0 and "rows=0" in rows11[0]
+    # R3224: this arm asserted the LIVE ledger was absent. R3223's own closeout
+    # then wrote the live ledger, so the premise stopped being true one tick
+    # after it passed. The strength is kept and the premise is now computed:
+    # the live row must publish the count the live file actually holds.
+    live_ledger11 = os.path.join(ROOT, "state", "qa_replacements.jsonl")
+    expected11 = 0
+    if os.path.isfile(live_ledger11):
+        with io.open(live_ledger11, encoding="utf-8") as fh:
+            expected11 = sum(1 for line in fh if line.strip())
+    ok("AC-CLG11 arm b - the live row publishes the live ledger's own count",
+       rc11 == 0 and ("rows=%d" % expected11) in rows11[0]
        and "path=state/qa_replacements.jsonl" in rows11[0],
-       "row=%s" % rows11[:1])
+       "expected=%d row=%s" % (expected11, rows11[:1]))
     ok("AC-CLG11 arm c - the pinned PASS token shape is byte-identical",
        lines11[0].startswith("CLOSEOUT-GATE PASS files=")
        and "gating=flags" in lines11[0]
