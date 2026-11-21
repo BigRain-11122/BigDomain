@@ -10,8 +10,8 @@
     "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3234] next window (<=48h): (0) MAIN — **页上印的六读数本身没有任何判据**：本轮把两面收敛到一次判定（`claims_view`），但 `AC-DIX19` 只钉「页上印的普查时刻 == 导出当前 `census_ts`」；实测（`qa/probe-R3233.log` Q2a）手工把落地页 `contradicted=0` 改成 `contradicted=999`、时刻不动 ⇒ `--check rc=0` `VERDICT PASS 16/16`。于是「渲染之后有人/有段代码改了数字」与「band 派生逻辑改了口径而页面没重渲」两种情况都看不见（时刻不变则永不红）。做法=先只读量三问：①**现状普查**＝`claims_band(read_claims())` 新鲜输出与落地块里那一段的逐值差；活页与活导出现在是否逐值一致（应为一致，否则本轮即有回归）；②**决定性臂**＝私有 world 里只改落地页数字（时刻与其余字节不动）⇒ 现有判据 rc（预期 0）；再改派生口径而不重渲 ⇒ 现有判据 rc（预期 0）；③**收口三选一**＝①新增 `AC-DIX20`：把落地块里的六读数与「本次 `--check` 新鲜派生的 `claims_band`」逐值比对（不动渲染代码、不改导出八键、不改 48h due）②在带里印一个派生指纹并钉它 ③不做（写进注释，承认数字靠时刻间接覆盖）——并证明所选面不改 `AC-DIX1..19` 判据原文与 `AC-FDC17..21` 原文。判据先落板再动代码。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T07:30:40+08:00",
-    "updated_at": "2026-11-22T07:30:40+08:00",
+    "next_milestone_due": "2026-11-24T07:43:50+08:00",
+    "updated_at": "2026-11-22T07:43:50+08:00",
     "heartbeat": {
       "tick": 3223,
       "state_tick": 3223,
@@ -42,7 +42,7 @@
     }
   },
   "current": "2026-11-22 R3233 PRODUCT+ENGINEERING: the same claims block is no longer derived twice - src/sandbox/claims_view.py now owns the one judgement (shape absent/empty/malformed/reading, the six readings, present, census_ts) and both faces read it: src/sandbox/frontdoor.py's claims_card (the card the live hub serves) and tools/deliverable_index.py's claims_band (the band on the static page a reader opens by path). Two renderings, one meaning. The one behaviour that changed, pre-registered in the PIN row: a block carrying the six readings but no census_ts is now a READING with a named missing moment on the static page instead of 'block malformed', which is what the card already said and which invents no moment.",
-  "claims": {"claimed": 320, "captured": 107, "contradicted": 11, "uncaptured": 202, "historic": 7, "rows": 8, "present": true, "census_ts": "2026-11-22T07:30:40+08:00"},
+  "claims": {"claimed": 320, "captured": 107, "contradicted": 11, "uncaptured": 202, "historic": 7, "rows": 8, "present": true, "census_ts": "2026-11-22T07:43:50+08:00"},
   "chain": {"present": true, "rows": 8, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -72,7 +72,7 @@
     }
   ],
   "do": "2026-11-22 R3233 PRODUCT+ENGINEERING: the same claims block is no longer derived twice - src/sandbox/claims_view.py now owns the one judgement (shape absent/empty/malformed/reading, the six readings, present, census_ts) and both faces read it: src/sandbox/frontdoor.py's claims_card (the card the live hub serves) and tools/deliverable_index.py's claims_band (the band on the static page a reader opens by path). Two renderings, one meaning. The one behaviour that changed, pre-registered in the PIN row: a block carrying the six readings but no census_ts is now a READING with a named missing moment on the static page instead of 'block malformed', which is what the card already said and which invents no moment.",
-  "export_ts": "2026-11-22T07:30:40+08:00",
+  "export_ts": "2026-11-22T07:43:50+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
   "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
   "next_milestone": "[R3234] next window (<=48h): (0) MAIN — **页上印的六读数本身没有任何判据**：本轮把两面收敛到一次判定（`claims_view`），但 `AC-DIX19` 只钉「页上印的普查时刻 == 导出当前 `census_ts`」；实测（`qa/probe-R3233.log` Q2a）手工把落地页 `contradicted=0` 改成 `contradicted=999`、时刻不动 ⇒ `--check rc=0` `VERDICT PASS 16/16`。于是「渲染之后有人/有段代码改了数字」与「band 派生逻辑改了口径而页面没重渲」两种情况都看不见（时刻不变则永不红）。做法=先只读量三问：①**现状普查**＝`claims_band(read_claims())` 新鲜输出与落地块里那一段的逐值差；活页与活导出现在是否逐值一致（应为一致，否则本轮即有回归）；②**决定性臂**＝私有 world 里只改落地页数字（时刻与其余字节不动）⇒ 现有判据 rc（预期 0）；再改派生口径而不重渲 ⇒ 现有判据 rc（预期 0）；③**收口三选一**＝①新增 `AC-DIX20`：把落地块里的六读数与「本次 `--check` 新鲜派生的 `claims_band`」逐值比对（不动渲染代码、不改导出八键、不改 48h due）②在带里印一个派生指纹并钉它 ③不做（写进注释，承认数字靠时刻间接覆盖）——并证明所选面不改 `AC-DIX1..19` 判据原文与 `AC-FDC17..21` 原文。判据先落板再动代码。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
@@ -190,7 +190,7 @@
     "queue_explore_open": 4
   },
   "state_bytes": 73414,
-  "next_milestone_due": "2026-11-24T07:30:40+08:00",
+  "next_milestone_due": "2026-11-24T07:43:50+08:00",
   "heartbeat": {
     "tick": 3223,
     "state_tick": 3223,

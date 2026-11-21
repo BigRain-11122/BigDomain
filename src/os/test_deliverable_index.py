@@ -28,8 +28,8 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TOOL = os.path.join(ROOT, "tools", "deliverable_index.py")
-N = 20  # AC-DIX1..14, the two R2804 snapshot controls, the R2883 html-only controls,
-#         and the two R3232 claims-age controls
+N = 23  # AC-DIX1..14, the two R2804 snapshot controls, the R2883 html-only controls,
+#         the two R3232 claims-age controls, and the three R3234 claims-readings controls
 
 FAILS = []
 CHECKS = []
@@ -131,7 +131,8 @@ def rows_of(text):
     out = {}
     for line in text.splitlines():
         parts = line.split()
-        if len(parts) >= 2 and parts[0] in ("PASS", "FAIL") and parts[1].startswith("AC-DIX"):
+        if len(parts) >= 2 and parts[0] in ("PASS", "FAIL") \
+                and parts[1].startswith(("AC-DIX", "AC-CVL")):
             out[parts[1]] = parts[0]
     return out
 
@@ -230,8 +231,8 @@ def main():
         rc_t, out_t = call(mod, ["--check"])
         rows_t = rows_of(out_t)
         point_to(mod, world)
-        ok("AC-DIX3 two writer runs byte identical and the gate reads 16/16",
-           first == second and rc_c == 0 and "VERDICT PASS 16/16" in out_c
+        ok("AC-DIX3 two writer runs byte identical and the gate reads 17/17",
+           first == second and rc_c == 0 and "VERDICT PASS 17/17" in out_c
            and "VERDICT FAIL" in out_t and rc_t == 2
            and rows_t.get("AC-DIX7") == "FAIL"
            and rows_t.get("AC-DIX1") in (None, "PASS"),
@@ -405,7 +406,49 @@ def main():
            "stale_rc=%s stale_gate=%s rerendered_gate=%s"
            % (rc_6, rows_6.get("AC-DIX19"), rows_7.get("AC-DIX19")))
 
-        # suite hygiene, scored inside AC-DIX3..AC-DIX19 by design: none of the
+        # ---- AC-CVL1/AC-CVL2 (pinned 2026-11-22 R3234 BEFORE this tool edit):
+        # the six printed numbers are judged, not only the moment beside them.
+        point_to(mod, world)
+        call(mod, [])
+        index_path = os.path.join(pv, "index.html")
+        page_cvl = read(index_path)
+        live_readings = ("claimed=3 captured=2 contradicted=0 uncaptured=1 "
+                         "historic=0 records=1")
+        write(index_path, page_cvl.replace("contradicted=0",
+                                           "contradicted=999", 1))
+        rc_c1, out_c1 = call(mod, ["--check"])
+        rows_c1 = rows_of(out_c1)
+        call(mod, [])
+        rc_c2, out_c2 = call(mod, ["--check"])
+        rows_c2 = rows_of(out_c2)
+        ok("AC-CVL1 the landed page prints exactly the live six readings",
+           live_readings in page_cvl and rows_c2.get("AC-CVL1") == "PASS"
+           and rc_c2 == 0,
+           "printed=%s gate=%s" % (live_readings in page_cvl,
+                                   rows_c2.get("AC-CVL1")))
+        ok("AC-CVL1 negative control: one drifted number reddens CVL1 while the moment row stays green",
+           rc_c1 == 2 and rows_c1.get("AC-CVL1") == "FAIL"
+           and rows_c1.get("AC-DIX19") == "PASS",
+           "rc=%s cvl=%s dix19=%s"
+           % (rc_c1, rows_c1.get("AC-CVL1"), rows_c1.get("AC-DIX19")))
+        zero_claims = {"claimed": 0, "captured": 0, "contradicted": 0,
+                       "uncaptured": 0, "historic": 0, "rows": 0,
+                       "present": False}
+        write(os.path.join(world, "docs", "status-export.json"),
+              json.dumps({"export_ts": CENSUS_TS, "claims": zero_claims},
+                         sort_keys=True) + "\n")
+        rc_c3, out_c3 = call(mod, ["--check"])
+        rows_c3 = rows_of(out_c3)
+        call(mod, [])
+        rc_c4, out_c4 = call(mod, ["--check"])
+        rows_c4 = rows_of(out_c4)
+        ok("AC-CVL2 an export without readings reddens a page still printing six numbers",
+           rc_c3 == 2 and rows_c3.get("AC-CVL2") == "FAIL"
+           and rows_c4.get("AC-CVL2") == "PASS" and rc_c4 == 0,
+           "stale=%s rendered=%s"
+           % (rows_c3.get("AC-CVL2"), rows_c4.get("AC-CVL2")))
+
+        # suite hygiene, scored inside AC-DIX3..AC-CVL2 by design: none of the
         # criteria above may import network or shell, and this file
         # itself must stay ASCII (the parser reads it back below).
         bad_bytes = [i for i, ch in enumerate(src) if ord(ch) > 127]

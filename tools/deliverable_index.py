@@ -40,6 +40,7 @@ BEGIN = "<!-- BD-DELIVERABLE-INDEX:BEGIN -->"
 END = "<!-- BD-DELIVERABLE-INDEX:END -->"
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S)
 LINK_RE = re.compile(r'href="([^"]+)"')
+CLAIMS_DIV_RE = re.compile(r'<div class="note" id="claims-census">(.*?)</div>', re.S)
 MARKERS = ["AIGC", "msgSecCheck", "\u6295\u987e", "19.9"]
 COMPLIANCE = [
     "AIGC \u6807\u8bc6",
@@ -247,6 +248,22 @@ def read_claims():
     return block if isinstance(block, dict) else None
 
 
+def claims_readings(view):
+    """The exact six readings this page prints, or None when it prints none.
+
+    R3234: the readings line has ONE author. AC-CVL1 compares the landed page
+    against this function's output from a fresh view, so the criterion cannot
+    restate the format string and quietly agree with itself.
+    """
+    if view["state"] != claims_view.READING:
+        return None
+    counts = view["counts"]
+    return ("claimed=%d captured=%d contradicted=%d uncaptured=%d "
+            "historic=%d records=%d"
+            % (counts["claimed"], counts["captured"], counts["contradicted"],
+               counts["uncaptured"], counts["historic"], counts["rows"]))
+
+
 def claims_band(block):
     """Print the census readings and their moment, or a named honest absence.
 
@@ -273,11 +290,7 @@ def claims_band(block):
         return ('<div class="note" id="claims-census">claims census: block '
                 'malformed (%s); no moment invented.</div>'
                 % ",".join(view["bad"]))
-    counts = view["counts"]
-    readings = ("claimed=%d captured=%d contradicted=%d uncaptured=%d "
-                "historic=%d records=%d"
-                % (counts["claimed"], counts["captured"], counts["contradicted"],
-                   counts["uncaptured"], counts["historic"], counts["rows"]))
+    readings = claims_readings(view)
     ts = view["stamp"]
     if not ts:
         return ('<div class="note" id="claims-census">claims census: %s \u00b7 '
@@ -567,6 +580,30 @@ def main(argv):
         named = "no moment invented" in landed_block
         record("AC-DIX19", named,
                "export-claims=none named-absence-in-page=%s" % named)
+
+    # AC-CVL1/AC-CVL2 (pinned 2026-11-22 R3234 BEFORE this code): AC-DIX19 pins
+    # the moment this static page prints and never the six numbers beside it.
+    # Measured (qa/probe-R3234.log): hand-editing contradicted=11 -> 999 left
+    # --check at rc=0, and so did moving the export block without a re-render.
+    # The readings line is now compared, value by value, against the same
+    # claims_readings() the page renders from - one author, not two.
+    live_view = claims_view.claims_view(live_claims)
+    census = CLAIMS_DIV_RE.search(landed_block)
+    div_text = census.group(1) if census else ""
+    want_readings = claims_readings(live_view)
+    if want_readings is not None:
+        printed_readings = want_readings in div_text
+        record("AC-CVL1", printed_readings,
+               "live-readings=%r printed=%s" % (want_readings, printed_readings))
+    else:
+        absence = {claims_view.ABSENT: "no claims block in docs/status-export.json",
+                   claims_view.EMPTY: "nothing to census (present=false)",
+                   claims_view.MALFORMED: "block malformed ("}[live_view["state"]]
+        named = (absence in div_text) and ("claimed=" not in div_text)
+        record("AC-CVL2", named,
+               "live-state=%s named-absence=%s invented-numbers=%s"
+               % (live_view["state"], absence in div_text,
+                  "claimed=" in div_text))
 
     if check:
         for code, ok, detail in checks:

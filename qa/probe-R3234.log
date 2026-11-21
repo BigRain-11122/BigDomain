@@ -1,0 +1,18 @@
+== R3234 probe tag=BEFORE
+Q1 export_readings=(320, 107, 11, 202, 7, None)
+Q1 landed_readings_hits=1 [('320', '107', '11', '202', '7', '8')]
+Q1 agree=False
+Q2 number_drift_rc=0 failed=[]
+Q2b AC-CVL_hits=0 AC-DIX19_hits=16
+Q3 stamp_drift_rc=2 failed=['AC-DIX19']
+Q4 drift_derivation_only_rc=0 failed=[]
+== probe done tag=BEFORE
+== R3234 probe tag=AFTER
+Q1 export_readings=(320, 107, 11, 202, 7, 8)
+Q1 landed_readings_hits=1 [('320', '107', '11', '202', '7', '8')]
+Q1 agree=True
+Q2 number_drift_rc=2 failed=['AC-CVL1']
+Q2b AC-CVL_hits=5 AC-DIX19_hits=17
+Q3 stamp_drift_rc=2 failed=['AC-DIX19']
+Q4 drift_derivation_only_rc=2 failed=['AC-CVL1']
+== probe done tag=AFTER
