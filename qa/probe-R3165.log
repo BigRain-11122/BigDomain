@@ -1,0 +1,25 @@
+R3165 PROBE (read-only) missing=82
+A lines_found=310 rounds_with_lines=82 rounds_without_any_line=0
+B rounds_naming_any_file=54 of which resolvable=44 unresolvable_only=10 no_ref=28
+C rounds_naming_qa_path=44 of which at_least_one_on_disk=44
+D resolvable_rounds=R1257,R1258,R1259,R1260,R1261,R1262,R1263,R1264,R1265,R1511,R1647,R1648,R1654,R1883,R1924,R1973,R2002,R2092,R2166,R2220,R2408,R2534,R2540,R2570,R2572,R2576,R2578,R2582,R2589,R2591,R2609,R2623,R2628,R2632,R2639,R2641,R2651,R2663,R2674,R2694
+E unresolvable_only=R1255,R1256,R1623,R1653,R1670,R1971,R1994,R2738,R2756,R2813
+F no_ref_count=28 sample=R1622,R1625,R1626,R1627,R1629,R1630,R1631,R1635,R1636,R1637,R1639,R1640,R1641,R1643,R1644,R1645,R1649,R1651,R1652,R1661
+S MISS R1255 toks=tasks.md | 2026-10-06 R1255 waiting: 全部活口已闸（OSS 窗5 切片=认领窗 10-07 午后〔硬线 10-08 03:07·带内提前窗 10-07 19:00-21:50〕·法务复核窗定稿 ETA 10-06 12:00→窗后首轮落 §五.8 修条款列〔R1197 开闸在册·窗前零重扫〕·雷达第五窗清
+S MISS R1256 toks=tasks.md | 2026-10-06 R1256 waiting: 全部活口已闸承传零变化（OSS 窗5 切片=认领窗 10-07 午后〔硬线 10-08 03:07·R1243 排程行在板 10-06 轮不提前认领〕·法务复核窗定稿 ETA 10-06 12:00 窗前零重扫〔R1197 开闸在册·窗后首轮落 §五.8 修条款列〕·
+S HIT R1257 toks=qa/reconcile-daily-20261006.log | 2026-10-06 R1257 waiting: 全部活口已闸承传零变化（OSS 窗5 切片=认领窗 10-07 午后〔硬线 10-08 03:07·R1243 排程行在板 10-06 轮不提前认领〕·法务复核窗定稿 ETA 10-06 12:00 窗前零重扫〔R1197 开闸在册·窗后首轮落 §五.8 修条款列〕·
+S HIT R1258 toks=qa/reconcile-daily-20261006.log | 2026-10-06 R1258 waiting: 全部活口已闸承传零变化（OSS 窗5 切片=认领窗 10-07 午后〔硬线 10-08 03:07·10-06 不提前认领先例带外〕·法务复核窗定稿 ETA 10-06 12:00 窗前零重扫〔R1197 开闸在册·窗后首轮落 §五.8 修条款列·D-20260929
+S HIT R1259 toks=qa/reconcile-daily-20261006.log | 2026-10-06 R1259 waiting: 全部活口已闸承传零变化（OSS 窗5 切片=认领窗 10-07 午后〔硬线 10-08 03:07·R1243 排程行在板 10-06 轮不提前认领〕·法务复核窗定稿 ETA 10-06 12:00 窗前零重扫〔R1197 开闸在册·窗后首轮落 §五.8 修条款列〕·
+S HIT R1260 toks=qa/reconcile-daily-20261006.log | 2026-10-06 R1260 waiting: 全部活口已闸承传零变化（OSS 窗5 切片=认领窗 10-07 午后〔硬线 10-08 03:07·R1243 排程行在板 10-06 轮不提前认领〕·法务复核窗定稿 ETA 10-06 12:00 窗前零重扫〔R1197 开闸在册·窗后首轮落 §五.8 修条款列·D
+S HIT R1261 toks=qa/reconcile-daily-20261006.log | 2026-10-06 R1261 waiting: 全部活口已闸承传零变化（OSS 窗5 切片=认领窗 10-07 午后〔硬线 10-08 03:07·R1243 排程行在板 10-06 轮不提前认领〕·法务复核窗定稿 ETA 10-06 12:00 窗前零重扫〔R1197 开闸在册·窗后首轮落 §五.8 修条款列·D
+S HIT R1262 toks=qa/reconcile-daily-20261006.log | 2026-10-06 R1262 waiting: 全部活口已闸承传零变化（OSS 窗5 切片=认领窗 10-07 午后〔硬线 10-08 03:07·R1243 排程行在板 10-06 轮不提前认领〕·法务复核窗定稿 ETA 10-06 12:00 窗前零重扫〔R1197 开闸在册·窗后首轮落 §五.8 修条款列·D
+S HIT R1263 toks=qa/reconcile-daily-20261006.log | 2026-10-06 R1263 waiting: 全部活口已闸承传零变化（OSS 窗5 切片=认领窗 10-07 午后〔硬线 10-08 03:07·R1243 排程行在板 10-06 轮不提前认领〕·法务复核窗定稿 ETA 10-06 12:00 窗前零重扫〔R1197 开闸在册·窗后首轮落 §五.8 修条款列·D
+S HIT R1264 toks=qa/reconcile-daily-20261006.log | 2026-10-06 R1264 waiting: 全部活口已闸承传零变化（OSS 窗5 切片=认领窗 10-07 午后〔硬线 10-08 03:07·R1243 排程行在板 10-06 轮不提前认领〕·法务复核窗定稿 ETA 10-06 12:00 窗前零重扫〔R1197 开闸在册·窗后首轮落 §五.8 修条款列·D
+S HIT R1265 toks=qa/reconcile-daily-20261006.log | 2026-10-06 R1265 waiting: 全部活口已闸承传零变化（OSS 窗5 切片=认领窗 10-07 午后〔硬线 10-08 03:07·R1243 排程行在板 10-06 轮不提前认领〕·法务复核窗定稿 ETA 10-06 12:00 窗前零重扫〔R1197 开闸在册·窗后首轮落 §五.8 修条款列·D
+S HIT R1511 toks=qa/reconcile-daily-20261008.log | 2026-10-08 R1511 waiting 一行声明收轮（九面扫描全 PASS/INFO 零变化承 R1510：STATE 轮首水位 78201B 线下 <78,500B fold R401 未触发〔收账后水位若再越线则 fold R401=下轮轮首首测裁定〕·LEDGER 115 行 conflict=0 零新
+S MISS R1623 toks=OH-20261009-cph4.md | 2026-10-09 R1623 no-pullable 一行声明收轮（计分 0·保护态豁免；五静 exit 0 承 R1622 链零变化：LEDGER 135 atbd=0 conflict=0·DEC 242 行/126 token 内容寻址零新行·GORD 173 基线零新令·BENCH 0 天〔refreshe
+S MISS R1653 toks=OH-20261008-bigstream.md | 2026-10-09 R1653 no-pullable 一行声明收轮（五静全过·九面扫描 exit 0 全 PASS/INFO 零变化承 R1652 判读链：STATE 轮首水位 75377B <78,500B fold R446 未触发〔收账后水位若越线则 fold R446=下轮轮首首测裁定〕·LEDGER 13
+S MISS R1670 toks=OH-20260904-cph4.md | 2026-10-09 R1670 no-pullable 一行声明收轮（保护态豁免·轮计分 0·R1666 同型）：九面 scan 全 PASS/INFO 零变化承 R1669 判读链——STATE 轮首水位 73282B<78500B fold R450 未触发〔收账两行后若越线则 fold R450=下轮轮首首测裁
+S MISS R1971 toks=runner-profile-baseline | 2026-10-14 R1971 崩轮孤儿载荷接管收口轮（第十七案·五静扫描树脏检出·R1924/R1969 接管先例通道）：R1970 cold_board 交付载荷崩于 commit 前（15 文件 staged：curation.py cold_board 反滤读面+test_curation.py 扩五例+re
+S MISS R1994 toks=R1992.log,R1993.log | 2026-10-15 R1994（R1993 commit-debt 接管收口轮第 26 案〔R1924/R1969/R1976/R1985/R1987/R1990/R1991 先例族·五静检出树脏→转全任务书〕——五静面：ledger @BigDomain 零行✓·DEC 328 行〔338→328=集团记忆面清理减
+S MISS R2738 toks=leg-status | R2738 ADOPTION-REPAIR window, zero new product face (the R2737 leg was NOT adopted: at open it still read LEG-ALIVE-NO-EVIDENCE pid=31080 pass=649 fail=4 remain

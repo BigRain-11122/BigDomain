@@ -54,6 +54,30 @@ CLAIM_MARKERS = ("SUITE PASS", "RUNNER PASS")
 ARCHIVE_DIR = ("logs",)
 ARCHIVE_PREFIX = "state-log-archive-"
 
+# R3165 (AC-RQE8): a claiming round with no file of its OWN NAME may still
+# name a qa/ file inside its own log line. Measured live at R3165 over the 82
+# folded claiming rounds: 44 name at least one on-disk qa/ path and 42 of
+# those files carry a pinned marker - but the names almost always carry
+# ANOTHER round's token (29 rounds) or none at all (15 rounds, nine of them
+# sharing qa/reconcile-daily-20261006.log), so a named file is not this
+# round's evidence. The claim-to-file verdict is therefore left untouched and
+# this reading only publishes the third state for an operator to act on.
+NAMED_PATH_RE = re.compile(r"qa/[A-Za-z0-9][A-Za-z0-9._\-]*")
+
+NAMED_VERDICT = "NAMED-READING"
+
+NAMED_ROW_KEYS = ("round", "files", "pass")
+
+REPORT_NAMED_KEYS = (
+    "rounds_missing",
+    "named_on_disk",
+    "named_pass",
+    "named_no_pass",
+    "no_named",
+    "named",
+    "verdict",
+)
+
 VERDICTS = ("EMPTY", "EVIDENCE-OK", "EVIDENCE-MISSING")
 
 ROUND_KEYS = ("round", "items", "markers", "claims")
@@ -163,13 +187,11 @@ def map_files(qa_dir):
     return mapping
 
 
-def archive_rounds(root):
-    """Every round the fold archive labels, and the items it holds (AC-RQE7).
+def archive_lines(root):
+    """Every line the fold archive holds, in file and line order (AC-RQE7).
 
-    The owning label is the same `item_round` law the live log uses, and the
-    claim markers are the same pinned pair, so a folded round is read exactly
-    as it would have been before the fold. A missing directory reads nothing
-    rather than raising (the same tolerance state_seq applies).
+    A missing directory reads nothing rather than raising (the same tolerance
+    state_seq applies); an unreadable file fails closed like archive_rounds.
     """
     directory = os.path.join(root, *ARCHIVE_DIR)
     if not os.path.isdir(directory):
@@ -179,8 +201,7 @@ def archive_rounds(root):
     except (IOError, OSError) as exc:
         raise RoundEvidenceError("E_RQE_BAD_ARCHIVE",
                                  "%s (%s)" % (directory, exc))
-    order = []
-    seen = {}
+    lines = []
     for name in names:
         if not (name.startswith(ARCHIVE_PREFIX) and name.endswith(".md")):
             continue
@@ -191,21 +212,34 @@ def archive_rounds(root):
         except (IOError, OSError, ValueError) as exc:
             raise RoundEvidenceError("E_RQE_BAD_ARCHIVE",
                                      "%s (%s)" % (path, exc))
-        for line in text.split("\n"):
-            number = item_round(line)
-            if number is None:
-                continue
-            if number not in seen:
-                seen[number] = {"round": number, "items": 0, "markers": [],
-                                "claims": False}
-                order.append(number)
-            row = seen[number]
-            row["items"] += 1
-            for marker in item_markers(line):
-                if marker not in row["markers"]:
-                    row["markers"].append(marker)
-            if row["markers"]:
-                row["claims"] = True
+        lines.extend(text.split("\n"))
+    return lines
+
+
+def archive_rounds(root):
+    """Every round the fold archive labels, and the items it holds (AC-RQE7).
+
+    The owning label is the same `item_round` law the live log uses, and the
+    claim markers are the same pinned pair, so a folded round is read exactly
+    as it would have been before the fold.
+    """
+    order = []
+    seen = {}
+    for line in archive_lines(root):
+        number = item_round(line)
+        if number is None:
+            continue
+        if number not in seen:
+            seen[number] = {"round": number, "items": 0, "markers": [],
+                            "claims": False}
+            order.append(number)
+        row = seen[number]
+        row["items"] += 1
+        for marker in item_markers(line):
+            if marker not in row["markers"]:
+                row["markers"].append(marker)
+        if row["markers"]:
+            row["claims"] = True
     return [seen[number] for number in order]
 
 
@@ -282,6 +316,113 @@ def one_line(report):
                report["files_total"], report["verdict"]))
 
 
+def named_paths(text):
+    """The qa/ paths an item names, in first-occurrence order (AC-RQE8)."""
+    found = []
+    for match in NAMED_PATH_RE.findall(text):
+        if match not in found:
+            found.append(match)
+    return found
+
+
+def carries_marker(path):
+    """Does the file's own text carry a pinned claim marker? (AC-RQE8 b)."""
+    try:
+        with io.open(path, "r", encoding="utf-8", errors="replace") as handle:
+            text = handle.read()
+    except (IOError, OSError, ValueError):
+        return False
+    return any(marker in text for marker in CLAIM_MARKERS)
+
+
+def named_evidence(root, qa_dir=None, include_archive=False):
+    """The third state: did a missing round name an on-disk qa/ file?
+
+    The judged universe is the audit's own `missing` set - this reading adds
+    no round and never moves the claim-to-file verdict (AC-RQE8 a, d). Only a
+    path that starts with qa/ and resolves to a file on disk is counted; a
+    missing target or a name outside qa/ is no evidence at all (AC-RQE8 c).
+    A named file proves nothing about the claim on its own, so the face says
+    what was named and whether the file carries a marker, and stops there.
+    """
+    report = audit(root, qa_dir, include_archive)
+    if qa_dir is None:
+        qa_dir = os.path.join(root, "qa")
+    missing = set(row["round"] for row in report["missing"])
+    lines_by_round = {}
+    state = load_state(root)
+    for raw in state.get("log") or []:
+        if not isinstance(raw, str):
+            continue
+        number = item_round(raw)
+        if number in missing:
+            lines_by_round.setdefault(number, []).append(raw)
+    if include_archive:
+        for line in archive_lines(root):
+            number = item_round(line)
+            if number in missing:
+                lines_by_round.setdefault(number, []).append(line)
+    rows = []
+    for number in sorted(missing):
+        names = []
+        passes = False
+        for line in lines_by_round.get(number, []):
+            for token in named_paths(line):
+                leaf = token.split("/", 1)[1]
+                if leaf in names:
+                    continue
+                path = os.path.join(qa_dir, leaf)
+                if not os.path.isfile(path):
+                    continue
+                names.append(leaf)
+                if carries_marker(path):
+                    passes = True
+        if names:
+            rows.append({"round": number, "files": names, "pass": passes})
+    named_pass = 0
+    for row in rows:
+        if row["pass"]:
+            named_pass += 1
+    return {
+        "rounds_missing": len(missing),
+        "named_on_disk": len(rows),
+        "named_pass": named_pass,
+        "named_no_pass": len(rows) - named_pass,
+        "no_named": len(missing) - len(rows),
+        "named": rows,
+        "verdict": NAMED_VERDICT,
+    }
+
+
+def render_named(report):
+    """The named-evidence face: one summary line, then every named round."""
+    out = [("ROUND NAMED EVIDENCE missing=%d named_on_disk=%d named_pass=%d "
+            "named_no_pass=%d no_named=%d verdict=%s")
+           % (report["rounds_missing"], report["named_on_disk"],
+              report["named_pass"], report["named_no_pass"],
+              report["no_named"], report["verdict"])]
+    for row in report["named"]:
+        out.append("  NAMED R%d files=%s pass=%s"
+                   % (row["round"], ",".join(row["files"]),
+                      "yes" if row["pass"] else "no"))
+    return "\n".join(out)
+
+
+def to_json_named(report):
+    """Serialise the named reading in a stable key order (AC-RQE8 e)."""
+    ordered = {}
+    for key in REPORT_NAMED_KEYS:
+        ordered[key] = report[key]
+    pinned = []
+    for row in report["named"]:
+        item = {}
+        for key in NAMED_ROW_KEYS:
+            item[key] = row[key]
+        pinned.append(item)
+    ordered["named"] = pinned
+    return json.dumps(ordered, ensure_ascii=True, sort_keys=False) + "\n"
+
+
 def render(report):
     """Full text rendering: the one line, then every missing round."""
     out = [one_line(report)]
@@ -315,7 +456,11 @@ def to_json(report):
 
 USAGE = ("usage: round_evidence.py --check [--root PATH] [--qa-dir PATH] "
          "[--archive] [--json]\n"
+         "       round_evidence.py --named [--root PATH] [--qa-dir PATH] "
+         "[--archive] [--json]\n"
          "  --archive also judges the rounds folded into logs/ (AC-RQE7)\n"
+         "  --named reads, for every missing round, the qa/ files its own\n"
+         "          lines name (AC-RQE8); it never changes the verdict\n"
          "  exit 0 = every claiming round has a qa/ file (or the log is "
          "empty)\n"
          "  exit 2 = a claiming round has no file (EVIDENCE-MISSING) or "
@@ -327,6 +472,7 @@ def main(argv):
     check = False
     as_json = False
     include_archive = False
+    named = False
     root = os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__))))
     qa_dir = None
@@ -339,6 +485,8 @@ def main(argv):
             as_json = True
         elif arg == "--archive":
             include_archive = True
+        elif arg == "--named":
+            named = True
         elif arg == "--root":
             index += 1
             if index >= len(argv):
@@ -359,6 +507,17 @@ def main(argv):
             sys.stdout.write(USAGE)
             return 2
         index += 1
+    if named:
+        try:
+            reading = named_evidence(root, qa_dir, include_archive)
+        except RoundEvidenceError as exc:
+            sys.stdout.write("%s\n" % exc.code)
+            return 3
+        if as_json:
+            sys.stdout.write(to_json_named(reading))
+        else:
+            sys.stdout.write(render_named(reading) + "\n")
+        return 0
     if not check:
         sys.stdout.write("E_RQE_BAD_ARGS: --check is required\n")
         sys.stdout.write(USAGE)

@@ -30,11 +30,11 @@ sys.path.insert(0, BASE)
 
 import round_evidence as RE  # noqa: E402
 
-EXPECTED_CRITERIA = 7
+EXPECTED_CRITERIA = 8
 MODULE = os.path.join(BASE, "round_evidence.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-round-evidence"
-WIRED_EXPECT = '"test_round_evidence.py"), 7),'
+WIRED_EXPECT = '"test_round_evidence.py"), 8),'
 
 PASSES = 0
 FAILS = 0
@@ -339,6 +339,85 @@ def ac_rqe7():
     check(ok, "AC-RQE7 folded claims are judged, live reading byte-identical")
 
 
+def ac_rqe8():
+    """A missing round's own named qa/ files are published; verdict untouched."""
+    items = ["2026-11-21 R3200 SUITE PASS 6/6"]
+    world = make_world(items, ["suite-R3200.log"])
+    try:
+        # arm a: the judged universe is the audit's own missing set.
+        live_clean = RE.named_evidence(world)
+        write_archive(world, [
+            "2026-09-01 R1255 RUNNER PASS legs=1 named qa/pass-1254.log",
+            "2026-09-01 R1256 SUITE PASS 2/2 named qa/quiet.log",
+            "2026-09-01 R1257 SUITE PASS 3/3 named qa/absent.log",
+            "2026-09-01 R1258 SUITE PASS 4/4 named tasks.md",
+        ])
+        qa = os.path.join(world, "qa")
+        for name, body in (("pass-1254.log", "SUITE PASS 9/9\n"),
+                           ("quiet.log", "nothing claimed here\n")):
+            with io.open(os.path.join(qa, name), "w", encoding="utf-8",
+                         newline="\n") as handle:
+                handle.write(body)
+        audit_arch = RE.audit(world, include_archive=True)
+        named = RE.named_evidence(world, include_archive=True)
+        by_round = dict((row["round"], row) for row in named["named"])
+
+        # arm b/c: pass, no-pass, an absent target and a name outside qa/.
+        classified = (by_round.get(1255) == {"round": 1255,
+                                             "files": ["pass-1254.log"],
+                                             "pass": True}
+                      and by_round.get(1256) == {"round": 1256,
+                                                 "files": ["quiet.log"],
+                                                 "pass": False}
+                      and 1257 not in by_round and 1258 not in by_round)
+
+        # arm d: the claim-to-file verdict is never moved by this reading.
+        verdict_kept = (audit_arch["verdict"] == "EVIDENCE-MISSING"
+                        and named["verdict"] == "NAMED-READING"
+                        and [r["round"] for r in audit_arch["missing"]]
+                        == [1255, 1256, 1257, 1258]
+                        and named["rounds_missing"] == 4)
+
+        # arm e: the CLI flag, its pinned shape and its refusals.
+        no_check = run_cli(["--named", "--root", world, "--archive"])[0]
+        first = run_cli(["--named", "--root", world, "--archive", "--json"])
+        second = run_cli(["--named", "--root", world, "--archive", "--json"])
+        pinned = list(json.loads(first[1]).keys())
+        bad_flag = run_cli(["--named", "--root", world, "--bogus"])[0]
+        broken = make_world([], raw_state="{not json")
+        broken_code = run_cli(["--named", "--root", broken])[0]
+        drop_world(broken)
+
+        # arm f: the live face reaches all three buckets and obeys the sum law.
+        live = RE.named_evidence(REPO, include_archive=True)
+        consistent = (live["rounds_missing"] == live["named_on_disk"]
+                      + live["no_named"]
+                      and live["named_on_disk"] == (live["named_pass"]
+                                                    + live["named_no_pass"])
+                      and live["rounds_missing"] > 0
+                      and live["named_on_disk"] > 0
+                      and live["named_pass"] > 0
+                      and live["no_named"] > 0)
+
+        ok = (live_clean["rounds_missing"] == 0 and live_clean["named"] == []
+              and classified and verdict_kept
+              and no_check == 0 and first == second
+              and pinned == list(RE.REPORT_NAMED_KEYS) and bad_flag == 2
+              and broken_code == 3 and consistent)
+        if not ok:
+            print("  measured: live_clean=%r named=%r audit=%r classify=%r "
+                  "cli=%r pinned=%r consistent=%r"
+                  % (live_clean["rounds_missing"], named,
+                     audit_arch["verdict"],
+                     (by_round.get(1255), by_round.get(1256)),
+                     (no_check, bad_flag, broken_code),
+                     pinned == list(RE.REPORT_NAMED_KEYS), consistent),
+                  flush=True)
+    finally:
+        drop_world(world)
+    check(ok, "AC-RQE8 named evidence published, verdict untouched")
+
+
 def main():
     print("round_evidence suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -349,6 +428,7 @@ def main():
     ac_rqe5()
     ac_rqe6()
     ac_rqe7()
+    ac_rqe8()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

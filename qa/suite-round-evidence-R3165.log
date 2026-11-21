@@ -1,0 +1,10 @@
+round_evidence suite (expected criteria 8)
+PASS AC-RQE1 own round label extracted, body mentions ignored
+PASS AC-RQE2 whole round token mapped, fragments refused
+PASS AC-RQE3 pinned claim markers, prose is not a claim
+PASS AC-RQE4 missing evidence reported, exit 2
+PASS AC-RQE5 honest empty, absent and broken state exit 3
+PASS AC-RQE6 pure read, ASCII source, no network, wired, byte-stable json
+PASS AC-RQE7 folded claims are judged, live reading byte-identical
+PASS AC-RQE8 named evidence published, verdict untouched
+SUITE PASS 8/8
