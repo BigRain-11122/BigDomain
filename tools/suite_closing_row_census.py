@@ -190,9 +190,16 @@ COUNTER_TOTAL = re.compile(r"(?:expected-criteria|criteria)=(?:%d|\{[^{}\n]*\}|\
 COUNTER_PASS = re.compile(r"(?:passes|pass-lines|pass)=(?:%d|\{[^{}\n]*\}|\d+)")
 COUNTER_FAIL = re.compile(r"(?:fails|fail-lines|fail)=(?:%d|\{[^{}\n]*\}|\d+)")
 # The equals-free dialect: "SUITE PASS: %d criteria, %d pass, %d fail".
-COUNTER_WORD_TOTAL = re.compile(r"(?:%d|\{[^{}\n]*\}|\d+)\s+criteria\b")
-COUNTER_WORD_PASS = re.compile(r"(?:%d|\{[^{}\n]*\}|\d+)\s+pass\b")
-COUNTER_WORD_FAIL = re.compile(r"(?:%d|\{[^{}\n]*\}|\d+)\s+fail\b")
+# R3140: a word form must OWN its digit. Measured this window: 42 constants read
+# law_counters, of which 4 are word-only and all 4 are this real dialect (three
+# civic suites and one battery fixture), while every straddling hit sat in
+# evidence text ("exit=0 pass-lines=11" reads as "0 pass"/"11 fail"). The
+# digit therefore may not sit against -, = or a word character; the four legal
+# rows keep a space before the digit, so nothing legal moves (38/38 equals rows
+# and 4/4 word rows byte-compatible).
+COUNTER_WORD_TOTAL = re.compile(r"(?<![\w=\-])(?:%d|\{[^{}\n]*\}|\d+)\s+criteria\b")
+COUNTER_WORD_PASS = re.compile(r"(?<![\w=\-])(?:%d|\{[^{}\n]*\}|\d+)\s+pass\b")
+COUNTER_WORD_FAIL = re.compile(r"(?<![\w=\-])(?:%d|\{[^{}\n]*\}|\d+)\s+fail\b")
 
 
 def normalise(lit):

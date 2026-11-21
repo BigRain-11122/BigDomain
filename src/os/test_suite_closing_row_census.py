@@ -58,7 +58,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.dirname(BASE)
 ROOT = os.path.dirname(SRC)
 
-EXPECTED_CRITERIA = 22
+EXPECTED_CRITERIA = 23
 LABEL = "os-suite-closing-row-census"
 TOOL = os.path.join(ROOT, "tools", "suite_closing_row_census.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
@@ -1204,6 +1204,72 @@ def ac_cen22():
           % (p, q, r, text_law, len(moves), [f for _l, f in former]))
 
 
+def ac_cen23():
+    """A word-form counter must own its digit (R3140).
+
+    The word dialect is real (four live rows read law only through it), so it
+    cannot be deleted; but a digit that is the VALUE of a neighbouring key is
+    not a counter pair. Measured: every straddling hit lived in evidence text
+    and every legal word row keeps a space before its digit.
+    """
+    census = _census()
+    ev = "exit=0 pass-lines=11 fail-lines=0 criteria=11"
+    p = all(rx.search(ev) is None for rx in (
+        census.COUNTER_WORD_TOTAL, census.COUNTER_WORD_PASS,
+        census.COUNTER_WORD_FAIL))
+    q = census.shape_of_literal(
+        "SUITE %s: %d criteria, %d pass, %d fail",
+        ANCHORED_COUNTERS_SRC + '"PASS" "FAIL"') == "law_counters"
+    r = census.shape_of_literal(
+        "SUITE PASS criteria=6 passes=8 fails=0",
+        ANCHORED_COUNTERS_EQ_SRC) == "law_counters"
+    word_only, word_labels = 0, set()
+    text_law, ast_law, registry_n = 0, 0, 0
+    for label, rel, _declared in census.registry(ROOT):
+        path = os.path.join(ROOT, "src", "sandbox", rel)
+        if not os.path.isfile(path):
+            continue
+        registry_n += 1
+        with open(path, "r", encoding="utf-8", errors="replace") as fh:
+            src = fh.read()
+        for body in census._string_constants(src) or []:
+            if census.shape_of_literal(body, src) != "law_counters":
+                continue
+            norm = census.normalise(body)
+            eq = (census.COUNTER_TOTAL.search(norm)
+                  and census.COUNTER_PASS.search(norm)
+                  and census.COUNTER_FAIL.search(norm))
+            word = all(rx.search(norm) for rx in (
+                census.COUNTER_WORD_TOTAL, census.COUNTER_WORD_PASS,
+                census.COUNTER_WORD_FAIL))
+            if word and not eq:
+                word_only += 1
+                word_labels.add(label)
+        if census.classify(src) in census.LAW_FAMILIES:
+            text_law += 1
+        if census.classify_bodies(src) in census.LAW_FAMILIES:
+            ast_law += 1
+    # Containment, not equality: this criterion's own dialect literal is a
+    # SUITE-bearing constant and the census counts it (measured word_only=5 on
+    # the tree that carries this suite). The four live word-only rows are what
+    # must survive the tightening; the fifth is this arm's own input, named
+    # rather than excluded by a filter that would also hide a real row.
+    s = (word_only >= 4
+         and {"civic-behavior-distribution", "civic-behavior-monthwindow",
+              "civic-competition-monthwindow", "os-battery-shard"}
+         <= word_labels
+         and text_law == ast_law == registry_n)
+    glued = ("exit=0 pass", "criteria=11 fail", "x1 fail", "-3 fail")
+    t = all(rx.search(g) is None for g in glued for rx in (
+        census.COUNTER_WORD_TOTAL, census.COUNTER_WORD_PASS,
+        census.COUNTER_WORD_FAIL))
+    check(bool(p and q and r and s and t),
+          "AC-CEN23 a word counter owns its digit (evidence-silent=%r word-row=%r "
+          "eq-row=%r live-word=%d %r rows=%d/%d/%d glued-silent=%r)"
+          % (p, q, r, word_only, sorted(word_labels),
+             text_law, ast_law, registry_n, t))
+
+
 def main():
     print("suite closing-row census suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -1229,6 +1295,7 @@ def main():
     ac_cen20()
     ac_cen21()
     ac_cen22()
+    ac_cen23()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:
