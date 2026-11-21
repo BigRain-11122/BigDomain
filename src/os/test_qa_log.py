@@ -341,8 +341,8 @@ def main():
                               reg[pos:pos + 200])
             if found:
                 declared.append(found.group(1))
-        ok('AC-QALB9 registry declares exactly one row for this suite, thirteen',
-           declared == ['13'], 'rows=%s hits=%d' % (declared, len(hits)))
+        ok('AC-QALB9 registry declares exactly one row for this suite, fourteen',
+           declared == ['14'], 'rows=%s hits=%d' % (declared, len(hits)))
 
         # ---- AC-QALB11: a carried proof line is marked, not certified -----
         # R3203: the generator prints "LOG OK path=... sha16=..." to prove a
@@ -517,6 +517,89 @@ def main():
               'bare_proofs=' in ured_text,
               'bare_proofs=0' in uk_text,
               tool_src3.count('"QA-LOG OK ')))
+
+        # ---- AC-QALB14: the progress door carries the same marking law ------
+        # R3206: stream_evidence is the one qa/ door that does not go through
+        # do_write, so it was the only place a bare proof line could be born.
+        # Measured before the repair: today's three progress shapes (146B
+        # RUNNING header, 226B killed-after-one-row, 432B complete) carry zero
+        # proof shapes and mark byte for byte unchanged; a body carrying one
+        # landed it unmarked while --check named bare_proofs=1. The law is
+        # applied at the door, not at the reader, so no future leg needs a
+        # reviewer to notice the line.
+        shard_spec = importlib.util.spec_from_file_location(
+            'shard_under_test', os.path.join(ROOT, 'tools', 'battery_shard.py'))
+        shard = importlib.util.module_from_spec(shard_spec)
+        shard_spec.loader.exec_module(shard)
+        stream_dir = os.path.join(world, 'stream')
+        os.makedirs(stream_dir)
+        stream_header = ('SHARD scope=SHARD registry_suites=2 '
+                         'registry_criteria=2 selected=2 selected_criteria=2 '
+                         'cap=600s leg_cap=0s overrides=0 exact=0 state=')
+        stream_row = ('SHARD row probe-a rc=0 pass=1 fail=0 detail=PASS 1/1 '
+                      'suite=PASS 1/1 crit=1 0.4s')
+        stream_closing = ('SHARD rc=0 scope=SHARD selected=2 executed=2 '
+                          'green=2 criteria=2 crit_mismatch=0 elapsed=0.8s '
+                          'crit_checked=2 crit_unchecked=0')
+        stream_shapes = {
+            'initial.log': stream_header + 'RUNNING\n',
+            'killed.log': stream_header + 'RUNNING\n' + stream_row + '\n',
+            'complete.log': (stream_header + 'COMPLETE\n' + stream_row + '\n'
+                             + stream_closing + '\n'),
+        }
+        shape_same = {}
+        for sname, sbody in stream_shapes.items():
+            starget = os.path.join(stream_dir, sname)
+            shard.stream_evidence(starget, sbody)
+            shape_same[sname] = read_bytes(starget) == sbody.encode('utf-8')
+        bare_body = (stream_header + 'RUNNING\n' + proof_a + '\n'
+                     + stream_row + '\n')
+        bare_target = os.path.join(stream_dir, 'bare.log')
+        shard.stream_evidence(bare_target, bare_body)
+        bare_disk = read_bytes(bare_target).decode('utf-8')
+        once = [ln for ln in bare_disk.splitlines()
+                if ln == 'CARRIED ' + proof_a]
+        twice_body = 'PASS x\nCARRIED ' + proof_a + '\n'
+        twice_target = os.path.join(stream_dir, 'twice.log')
+        shard.stream_evidence(twice_target, twice_body)
+        twice_disk = read_bytes(twice_target).decode('utf-8')
+        killed_disk = read_bytes(os.path.join(stream_dir, 'killed.log'))
+        killed_text = killed_disk.decode('utf-8')
+        shard_src = read_text(os.path.join(ROOT, 'tools', 'battery_shard.py'))
+        ok('AC-QALB14 the progress door marks a bare proof line, nothing else',
+           len(once) == 1
+           and proof_a in bare_disk
+           and mod.count_bare_proofs(bare_disk) == 0
+           and mod.count_carried_proofs(bare_disk) == 1
+           and len(bare_disk.encode('utf-8'))
+           == len(bare_body.encode('utf-8')) + 8
+           and all(shape_same.values())
+           and twice_disk == twice_body
+           and killed_disk.endswith(b'\n')
+           and len([ln for ln in killed_text.splitlines()
+                    if ln.startswith('SHARD row ')]) == 1
+           and 'state=RUNNING' in killed_text
+           and 'SHARD rc=' not in killed_text
+           and shard_src.count('mark_carried_proofs(') == 1
+           and shard_src.count('os.fsync(') == 1
+           and shard_src.count(
+               'open(path, "w", encoding="utf-8", newline="\\n")') == 1
+           and all(ord(ch) < 128 for ch in shard_src),
+           'once=%d kept=%s bare=%d carried=%d plus8=%s shapes=%s idem=%s '
+           'half_rows=%d half_nl=%s mark_sites=%d fsync=%d open=%d'
+           % (len(once), proof_a in bare_disk,
+              mod.count_bare_proofs(bare_disk),
+              mod.count_carried_proofs(bare_disk),
+              len(bare_disk.encode('utf-8'))
+              == len(bare_body.encode('utf-8')) + 8,
+              all(shape_same.values()), twice_disk == twice_body,
+              len([ln for ln in killed_text.splitlines()
+                   if ln.startswith('SHARD row ')]),
+              killed_disk.endswith(b'\n'),
+              shard_src.count('mark_carried_proofs('),
+              shard_src.count('os.fsync('),
+              shard_src.count(
+                  'open(path, "w", encoding="utf-8", newline="\\n")')))
     finally:
         mod.QA = original_qa
         shutil.rmtree(world, ignore_errors=True)

@@ -1,0 +1,18 @@
+  | PASS AC-QALB1 four dialects land as utf-8/lf with text intact rows=4 utf16=True utf8bom=True gb18030=True plain=True
+  | PASS AC-QALB2 printed bytes/lines/sha256 recomputed; CR injection refused rows_matched=4/4 cr_caught=True
+  | PASS AC-QALB3 ten atomic writes, zero .tmp, refusal leaves no half file logs=10 tmp=0 refused=True bad_absent=True
+  | PASS AC-QALB4 --check read-only, verdict 0/2/2/2 and stats unchanged verdicts=0,2,2,2 stats_stable=True
+  | PASS AC-QALB5 archived R2775 sample replays byte-equal (missing = red) archive=True live=True byte_equal=True
+  | PASS AC-QALB6 five bad names refused and one good name really writes refused=5/5 accepted=True wrote=True
+  | PASS AC-QALB7 selftest 9/9 leaves qa/ identical, both sources pure rc=0 verdict=True qa_stable=True tool_extra= suite_extra= net=[]
+  | PASS AC-QALB8 NUL-bearing source refused and a planted NUL file is red refused=True class=nul-bytes check_rc=2 reason=source carries NUL bytes (BOM-less UTF-16 is not an evidence
+  | PASS AC-QALB10 a leading dash is refused and a refusal writes no file refused=3/3 dir_stable=True wrote_nothing=True good_rc=0
+  | PASS AC-QALB9 registry declares exactly one row for this suite, fourteen rows=['14'] hits=1
+  | PASS AC-QALB11 carried proof marked CARRIED once, exact shapes only rc=0 marked=1 unmarked=False twice=1 plain_eq=True near_stable=True
+  | PASS AC-QALB12 --check names carried=N for exact shapes only, read-only c0=True c1=True c2=True recomputed=2 near=True stats_stable=True red_rc=2 red_has_field=False live=True sites=1
+  | PASS AC-QALB13 --check names bare_proofs=N for exact shapes only u0=True u1=True u2=True recount=2 carried_arm=True near=True stable=True red_rc=2 red_has_field=False live=True sites=1
+  | PASS AC-QALB14 the progress door marks a bare proof line, nothing else once=1 kept=True bare=0 carried=1 plus8=True shapes=True idem=True half_rows=1 half_nl=True mark_sites=1 fsync=1 open=1
+  | PASS AC-QALB9c temp world removed (a leak is loud, not silent) removed=True
+  | PASS AC-QALB9b the real qa/ directory is unchanged by the whole suite entries=4621 stable=True
+suite: 16 assertions over 14 criteria
+SUITE PASS 16/16 in 0.2s

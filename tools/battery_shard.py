@@ -294,8 +294,19 @@ def evidence_name(raw):
     return name
 
 
+_QA_LOG_CACHE = []
+
+
+def qa_log_module():
+    """The writer that owns the qa/ birth site, loaded once per process."""
+    if not _QA_LOG_CACHE:
+        _QA_LOG_CACHE.append(
+            load_module(os.path.join(ROOT, QA_LOG_REL), "_bs_qa_log"))
+    return _QA_LOG_CACHE[0]
+
+
 def write_evidence(name, text):
-    qa_log = load_module(os.path.join(ROOT, QA_LOG_REL), "_bs_qa_log")
+    qa_log = qa_log_module()
     qa_log.do_write(name, text.encode("utf-8"), directory=QA_DIR)
     path = os.path.join(QA_DIR, name)
     proof = qa_log.verify_written(path)
@@ -311,7 +322,17 @@ def stream_evidence(path, text):
     writes the partial form in place (header state=RUNNING plus every finished
     row) and fsyncs it; the final artifact still goes through write_evidence so
     the qa_log birth site keeps owning the shipped file.
+
+    AC-QALB14 (R3206): this in-place door bypassed do_write, so it was the one
+    place a qa/ file could grow an UNMARKED proof line - a line that proves
+    some other file and looks self-certifying in this one. The same law now
+    runs here: the text is marked before it lands. A progress body carries no
+    proof shapes today, so every measured shape lands byte for byte as before;
+    a body that does carry one gets the CARRIED prefix instead of a silent
+    bare line. The mark is idempotent, and the write stays in place with its
+    fsync so a killed leg still leaves a readable RUNNING file.
     """
+    text, _carried = qa_log_module().mark_carried_proofs(text)
     with open(path, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(text)
         handle.flush()

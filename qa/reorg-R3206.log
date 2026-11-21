@@ -1,0 +1,24 @@
+R3206 evidence: the progress door carries the carried-proof law (AC-QALB14).
+Control: qa/suite-qa-log-R3206.log = SUITE PASS 16/16 over 14 criteria.
+Probe (read-only, private temp, zero socket, zero network, zero live-disk write):
+  tmp/probe_R3206.py -> tmp/probe_out_R3206.txt
+  three real progress shapes (146B initial RUNNING, 226B killed after one row,
+  432B complete) pass mark_carried_proofs with carried=0 and byte-identical
+  text (sha16 4fec3e70be9be8a7 / 01aba7dc2be83d96 / a20a7a37b5fe9248);
+  a body carrying one bare proof line is marked exactly once, a second pass
+  adds nothing, and the marked file holds bare=0 carried=1.
+Sibling battery suite (must not regress): SUITE 31/32 - AC-BSGB15 PASS
+  (rc=0 running_seen=True pipe_row=True final_rows=2 complete=True) and
+  AC-BSGB16 PASS; the single red AC-BSGB20 is an INHERITED cascade, not this
+  window: the registry counter census asserts its hardcoded assembled==294
+  while the live census reads 302, and this window's suite contributes 0
+  assembled lines on BOTH sides (HEAD and current measured equal), so the
+  drift predates the window and was left untouched by name.
+Matrix: DOC-CURRENT docs/sandbox-suite-matrix.md (78486 bytes, 755 rows).
+Live gate: CLOSEOUT-GATE PASS files=4530 flags=0 reader_refused=0 gating=flags
+  round_main=OK census=PASS matrix=DOC-CURRENT
+Carrier: bytes=47500 gate=78500 margin=31000 fold_needed=false crlf=63 bare_lf=0
+Honest: zero payment capability, zero network beyond loopback - a buyer still
+cannot pay (no merchant id, server, domain, filing+ICP or miniprogram
+appid+secret). No product surface and no api surface changed; what changed is
+whether a progress file can grow an unmarked proof line.
