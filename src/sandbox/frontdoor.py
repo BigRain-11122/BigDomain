@@ -131,6 +131,7 @@ import html
 import io
 import json
 import os
+import re
 import shutil
 import sqlite3
 import subprocess
@@ -229,6 +230,22 @@ def load_json(path):
 
 def esc(value):
     return html.escape(str(value), quote=True)
+
+
+def _fill_template(page, repl):
+    """Fill __NAME__ slots in ONE pass (R3230).
+
+    The shipped loop replaced key by key, so a value that itself carried a
+    placeholder literal was substituted again on a later iteration. Measured
+    this round: the state's own product line named the claims slot token, and
+    the page then carried THREE claims cards - the two embedded in the export
+    prose plus the real one. One pass fixes it at the birth station: re.sub
+    never rescans replacement text, so data may quote a placeholder without
+    being eaten by it.
+    """
+    return re.sub(r"__[A-Z0-9_]+__",
+                  lambda match: repl.get(match.group(0), match.group(0)),
+                  page)
 
 
 # Caller-supplied scenario probe params (single source: the data
@@ -6016,6 +6033,85 @@ def chain_card(block):
     return "<p class=kv>%s</p>" % esc(line)
 
 
+def claims_card(block):
+    """Render the published claims census. Consumption only.
+
+    R3230 measured the hole: R3229 published all seven census readings
+    (claimed / captured / contradicted / uncaptured / historic / rows /
+    present) into docs/status-export.json, and this module carried ZERO site
+    that reads the `claims` key (probe qa/probe-R3230.log:
+    claims_consumer_sites=0), so the one face still rendered after the loop
+    stops named not one of the numbers.
+
+    Two laws this card keeps:
+
+    * A reading is not a verdict. Non-zero `uncaptured` (a written number with
+      nothing behind it) and non-zero `contradicted` are named as plain rows,
+      never as class=fail - the export gate itself passes on both.
+    * The card must not feed the census it displays. The census counts
+      `rows=<n>` tokens, so the `rows` reading is printed as `records=`; a card
+      that typed the token would add a claim to the very number it shows.
+      Measured: the live page already carries 15 such tokens from shipped
+      cards, so the law grades the DELTA (this card adds zero) instead of an
+      absolute the page has never had.
+
+    The conservation line is arithmetic over the block's own numbers
+    (captured + contradicted + uncaptured == claimed), never a re-census: this
+    card reads no ledger and stats no file.
+    """
+    if not isinstance(block, dict) or not block:
+        return ("<p class=kv>CLAIMS block absent from the export face "
+                "(honest absence, not a measured zero)</p>")
+
+    counts = {}
+    for key in ("claimed", "captured", "contradicted", "uncaptured",
+                "historic", "rows"):
+        value = block.get(key)
+        if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+            return ("<p class=kv>CLAIMS block is malformed (%s is not a "
+                    "non-negative integer) - not a reading</p>" % key)
+        counts[key] = value
+
+    present = block.get("present")
+    if present is not None and not isinstance(present, bool):
+        return ("<p class=kv>CLAIMS block is malformed (present is not a "
+                "boolean) - not a reading</p>")
+    if present is False:
+        return ("<p class=kv>CLAIMS census has no ledger to read "
+                "(nothing to census - not a measured zero)</p>")
+
+    line = ("CLAIMS claimed=%d captured=%d contradicted=%d uncaptured=%d "
+            "historic=%d records=%d"
+            % (counts["claimed"], counts["captured"], counts["contradicted"],
+               counts["uncaptured"], counts["historic"], counts["rows"]))
+    if present is True:
+        line += " (as published by the closeout, not censused here)"
+    else:
+        line += " (presence unknown: block predates the present field)"
+    out = ["<p class=kv>%s</p>" % esc(line)]
+
+    total = (counts["captured"] + counts["contradicted"]
+             + counts["uncaptured"])
+    if total == counts["claimed"]:
+        out.append("<p class=kv>CLAIMS conservation holds: captured + "
+                   "contradicted + uncaptured = claimed = %d</p>"
+                   % counts["claimed"])
+    else:
+        out.append("<p class=fail>CLAIMS ALERT conservation broken: captured + "
+                   "contradicted + uncaptured = %d, claimed = %d (the "
+                   "published counts do not add up)</p>"
+                   % (total, counts["claimed"]))
+    if counts["uncaptured"] > 0:
+        out.append("<p class=kv>CLAIMS %d claim(s) carry no citation: a "
+                   "written number with nothing behind it</p>"
+                   % counts["uncaptured"])
+    if counts["contradicted"] > 0:
+        out.append("<p class=kv>CLAIMS %d claim(s) contradict the source "
+                   "they cite (%d of them were true when written)</p>"
+                   % (counts["contradicted"], counts["historic"]))
+    return "".join(out)
+
+
 def face_age_card(reading):
     """Render the gate's own reading of the export face. Consumption only.
 
@@ -7864,6 +7960,9 @@ def render():
         # ceo_face), so it is read from the file's own member and never
         # re-derived here.
         sd30_chain = chain_card(sd30.get("chain"))
+        # R3230: the published claims census gets its one live consumer, from
+        # the export file's own top-level member - never re-censused here.
+        sd30_claims = claims_card(sd30.get("claims"))
         sd30_sd_html = esc(sd30_sd_txt)
         sd30_hard = esc(
             "structural law (R1223 pre-registered AC-FD30a..f): "
@@ -7885,6 +7984,7 @@ def render():
         sd30_hb = sd30_age = sd30_corpus = ""
         sd30_outs_age = ""
         sd30_chain = ""
+        sd30_claims = ""
         sd30_sd_html = sd30_hard = ""
     if sd30_err:
         sd30_kpis = ("<p class=fail>STATUS-EXPORT READ FAILED "
@@ -8621,6 +8721,7 @@ __SD30_AGE__
 __SD30_CORPUS__
 __SD30_OUTS_AGE__
 __SD30_CHAIN__
+__SD30_CLAIMS__
 <p class=kv>__SD30_SD__</p>
 <p class=kv>__SD30_HARD__</p>
 </div>
@@ -8907,6 +9008,7 @@ __PAYWARN__</footer>
         "__SD30_CORPUS__": sd30_corpus,
         "__SD30_OUTS_AGE__": sd30_outs_age,
         "__SD30_CHAIN__": sd30_chain,
+        "__SD30_CLAIMS__": sd30_claims,
         "__SD30_SD__": sd30_sd_html,
         "__SD30_HARD__": sd30_hard,
         "__M1_TITLE__": esc(m1["card_title"]),
@@ -8980,9 +9082,7 @@ __PAYWARN__</footer>
         "__WARN__": warn,
         "__PAYWARN__": pay_warn,
     }
-    for key, val in repl.items():
-        page = page.replace(key, val)
-    return page.encode("utf-8")
+    return _fill_template(page, repl).encode("utf-8")
 
 
 class Handler(BaseHTTPRequestHandler):

@@ -4,3 +4,5 @@
 {"event": "REPLACED", "name": "reorg-R3225.log", "new_bytes": 520, "new_sha16": "569aa48dd9ec1d61", "old_bytes": 520, "old_sha16": "0e5734fd22e1fdb7", "ts": "2026-11-21T21:42:01Z"}
 {"event": "REPLACED", "name": "suite-closeout-gate-R3227.log", "new_bytes": 10381, "new_sha16": "636eb8d77fe71775", "old_bytes": 10606, "old_sha16": "f1de9253e3901de6", "ts": "2026-11-21T22:05:45Z"}
 {"event": "REPLACED", "name": "reorg-R3228.log", "new_bytes": 533, "new_sha16": "d6a9d886319c5428", "old_bytes": 533, "old_sha16": "967e6f55a5eb1f43", "ts": "2026-11-21T22:21:15Z"}
+{"event": "REPLACED", "name": "suite-frontdoor-claims-card-R3230.log", "new_bytes": 57, "new_sha16": "2fd74e26bb422bca", "old_bytes": 57, "old_sha16": "2fd74e26bb422bca", "ts": "2026-11-21T22:44:08Z"}
+{"event": "REPLACED", "name": "suite-frontdoor-claims-card-R3230.log", "new_bytes": 71, "new_sha16": "4b83ca5eccdf084b", "old_bytes": 57, "old_sha16": "2fd74e26bb422bca", "ts": "2026-11-21T22:47:47Z"}

@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3229 PRODUCT+ENGINEERING: the CEO export face now carries the whole census - claimed/captured/uncaptured beside contradicted/historic/rows/present - so the largest number the census already knew (187 handwritten claims with nothing behind them) can be read by a machine instead of living only on the closeout stdout; claimed ships beside it because uncaptured alone names no denominator.",
+    "current": "2026-11-22 R3230 PRODUCT+ENGINEERING: the seven census readings finally reach the page the CEO opens - src/sandbox/frontdoor.py gained claims_card(block) plus its own claims card slot, so the claims block of docs/status-export.json is printed on the only surface still rendered after the loop stops: claimed/captured/contradicted/uncaptured/historic/records, a conservation line computed from the block itself, and named hints for uncaptured>0 and contradicted>0 that stay class=kv - a reading is not a verdict. The rows reading prints as records= because the census counts rows=<n> tokens and a card that typed one would feed the number it shows. The same window measured and fixed a second, pre-existing defect: the placeholder fill looped key by key, so any data value quoting a placeholder literal was substituted again - this round's own state line named the claims slot token and the page carried THREE claims cards; the fill is one pass now (_fill_template).",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
@@ -9,9 +9,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3230] next window (<=48h): (0) MAIN — **187 条无出处数字上了导出面，却仍不在那张会被反复渲染的页面上**：`frontdoor` 只有 `__SD30_CHAIN__` 卡（R3223），本窗实测无 claims 槽，所以循环停下后 CEO 实际看的那张 HTML 读不到 `uncaptured/captured`。做法=先只读量三问：①**渲染面普查**＝`frontdoor` 现有卡片槽、`chain_card` 的写法（token 替换点、缺失/畸形两态、`class=fail` 条件）与既有卡片字节断言逐条列出，量新增 `claims` 卡要动几处；②**决定性臂**＝同一 export 的「正常块／缺块／畸形块（少键或类型不对）」三形态下，量现役卡行为与拟议卡的三种输出，并量卡源与产出 HTML 是否含普查所数的那种测量令牌（不得产生）；③**收口三选一**＝①发一张 `claims` 卡（七读数＋守恒一行，`uncaptured>0` 给出具名提示而非 fail）②只在 `chain` 卡里加一行散文 ③不做（导出面已够）——并证明所选面不改 `chain` 卡字节、不写任何盘、不影响三面普查计数。判据沿用 AC-FDC 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3225 实测 main 6 open／tech 8 open／explore 4 open（欠 0/2/6，未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T06:32:02+08:00",
-    "updated_at": "2026-11-22T06:32:02+08:00",
+    "next_milestone": "[R3231] next window (<=48h): (0) MAIN — **读数页说不出自己有多旧**：`claims` 四行印的是 `--apply` 那一刻的普查快照，页上唯一的年龄来自另一张卡的 `export_ts`，两者同属一次 apply 只靠约定、没有一条判据把它们钉成同一时刻——若将来有写手只刷块不刷 `export_ts`（或反之），页会同时显示新数字与旧时间而无人察觉。做法=先只读量三问：①**写点普查**＝`tools/status_export_fresh.apply()` 里 `export_ts` 与 `claims` 块是否由同一次调用写、有没有可分离的写点，`check()` 现有两码是否已覆盖块与时间的同源性；②**决定性臂**＝私有 world 里分别只改 `export_ts`、只改块，量 `--check` 与页面各自是否报错（两条臂各证明哪一面沉默）；③**收口三选一**＝①`--check` 增一条「块与 `export_ts` 同源」判据 ②块内自带 `census_ts` 一键 ③不做（约定已足，写进注释）——并证明所选面不改 `chain` 块、不改 48h due 判据、二次 `--apply` 逐字节相同。判据沿用 AC-SXF 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3225 实测 main 6 open／tech 8 open／explore 4 open（欠 0/2/6，未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T06:49:39+08:00",
+    "updated_at": "2026-11-22T06:49:39+08:00",
     "heartbeat": {
       "tick": 3223,
       "state_tick": 3223,
@@ -41,9 +41,9 @@
       "readable": 4586
     }
   },
-  "current": "2026-11-22 R3229 PRODUCT+ENGINEERING: the CEO export face now carries the whole census - claimed/captured/uncaptured beside contradicted/historic/rows/present - so the largest number the census already knew (187 handwritten claims with nothing behind them) can be read by a machine instead of living only on the closeout stdout; claimed ships beside it because uncaptured alone names no denominator.",
-  "claims": {"claimed": 309, "captured": 107, "contradicted": 11, "uncaptured": 191, "historic": 7, "rows": 6, "present": true},
-  "chain": {"present": true, "rows": 6, "broken": 0, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-22 R3230 PRODUCT+ENGINEERING: the seven census readings finally reach the page the CEO opens - src/sandbox/frontdoor.py gained claims_card(block) plus its own claims card slot, so the claims block of docs/status-export.json is printed on the only surface still rendered after the loop stops: claimed/captured/contradicted/uncaptured/historic/records, a conservation line computed from the block itself, and named hints for uncaptured>0 and contradicted>0 that stay class=kv - a reading is not a verdict. The rows reading prints as records= because the census counts rows=<n> tokens and a card that typed one would feed the number it shows. The same window measured and fixed a second, pre-existing defect: the placeholder fill looped key by key, so any data value quoting a placeholder literal was substituted again - this round's own state line named the claims slot token and the page carried THREE claims cards; the fill is one pass now (_fill_template).",
+  "claims": {"claimed": 313, "captured": 107, "contradicted": 11, "uncaptured": 195, "historic": 7, "rows": 8, "present": true},
+  "chain": {"present": true, "rows": 8, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -71,11 +71,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3229 PRODUCT+ENGINEERING: the CEO export face now carries the whole census - claimed/captured/uncaptured beside contradicted/historic/rows/present - so the largest number the census already knew (187 handwritten claims with nothing behind them) can be read by a machine instead of living only on the closeout stdout; claimed ships beside it because uncaptured alone names no denominator.",
-  "export_ts": "2026-11-22T06:32:02+08:00",
+  "do": "2026-11-22 R3230 PRODUCT+ENGINEERING: the seven census readings finally reach the page the CEO opens - src/sandbox/frontdoor.py gained claims_card(block) plus its own claims card slot, so the claims block of docs/status-export.json is printed on the only surface still rendered after the loop stops: claimed/captured/contradicted/uncaptured/historic/records, a conservation line computed from the block itself, and named hints for uncaptured>0 and contradicted>0 that stay class=kv - a reading is not a verdict. The rows reading prints as records= because the census counts rows=<n> tokens and a card that typed one would feed the number it shows. The same window measured and fixed a second, pre-existing defect: the placeholder fill looped key by key, so any data value quoting a placeholder literal was substituted again - this round's own state line named the claims slot token and the page carried THREE claims cards; the fill is one pass now (_fill_template).",
+  "export_ts": "2026-11-22T06:49:39+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
   "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
-  "next_milestone": "[R3230] next window (<=48h): (0) MAIN — **187 条无出处数字上了导出面，却仍不在那张会被反复渲染的页面上**：`frontdoor` 只有 `__SD30_CHAIN__` 卡（R3223），本窗实测无 claims 槽，所以循环停下后 CEO 实际看的那张 HTML 读不到 `uncaptured/captured`。做法=先只读量三问：①**渲染面普查**＝`frontdoor` 现有卡片槽、`chain_card` 的写法（token 替换点、缺失/畸形两态、`class=fail` 条件）与既有卡片字节断言逐条列出，量新增 `claims` 卡要动几处；②**决定性臂**＝同一 export 的「正常块／缺块／畸形块（少键或类型不对）」三形态下，量现役卡行为与拟议卡的三种输出，并量卡源与产出 HTML 是否含普查所数的那种测量令牌（不得产生）；③**收口三选一**＝①发一张 `claims` 卡（七读数＋守恒一行，`uncaptured>0` 给出具名提示而非 fail）②只在 `chain` 卡里加一行散文 ③不做（导出面已够）——并证明所选面不改 `chain` 卡字节、不写任何盘、不影响三面普查计数。判据沿用 AC-FDC 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3225 实测 main 6 open／tech 8 open／explore 4 open（欠 0/2/6，未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3231] next window (<=48h): (0) MAIN — **读数页说不出自己有多旧**：`claims` 四行印的是 `--apply` 那一刻的普查快照，页上唯一的年龄来自另一张卡的 `export_ts`，两者同属一次 apply 只靠约定、没有一条判据把它们钉成同一时刻——若将来有写手只刷块不刷 `export_ts`（或反之），页会同时显示新数字与旧时间而无人察觉。做法=先只读量三问：①**写点普查**＝`tools/status_export_fresh.apply()` 里 `export_ts` 与 `claims` 块是否由同一次调用写、有没有可分离的写点，`check()` 现有两码是否已覆盖块与时间的同源性；②**决定性臂**＝私有 world 里分别只改 `export_ts`、只改块，量 `--check` 与页面各自是否报错（两条臂各证明哪一面沉默）；③**收口三选一**＝①`--check` 增一条「块与 `export_ts` 同源」判据 ②块内自带 `census_ts` 一键 ③不做（约定已足，写进注释）——并证明所选面不改 `chain` 块、不改 48h due 判据、二次 `--apply` 逐字节相同。判据沿用 AC-SXF 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3225 实测 main 6 open／tech 8 open／explore 4 open（欠 0/2/6，未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -189,8 +189,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 53139,
-  "next_milestone_due": "2026-11-24T06:32:02+08:00",
+  "state_bytes": 60077,
+  "next_milestone_due": "2026-11-24T06:49:39+08:00",
   "heartbeat": {
     "tick": 3223,
     "state_tick": 3223,

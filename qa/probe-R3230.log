@@ -1,0 +1,14 @@
+Q1 module bytes=454115 lines=9035 ascii=True crlf=False
+Q1 slots=20 chain_slot=2 chain_call=1 chain_reset=1
+Q1 claims_consumer_sites=0 claims_slot=0 claims_word=0
+Q1 export keys=20 bytes=38040 waterline=60000 headroom=21960
+Q1 claims_block={"captured": 107, "claimed": 309, "contradicted": 11, "historic": 7, "present": true, "rows": 6, "uncaptured": 191} keys=7
+Q2 live_page bytes=206266
+Q2 claims_numbers_on_page=2 rows,present
+Q2 chain_numbers_on_page=2
+Q2 page_rows_tokens=15 source_rows_tokens=4
+Q2 chain_card_bytes=87 carries_claims_word=False carries_rows_token=1
+Q3 conservation captured+contradicted+uncaptured=309 claimed=309 holds=True
+Q3 hints uncaptured>0=True contradicted>0=True
+Q3 export_check_requires_seven_keys_ok=True
+Q3 registry chain_rows=1 claims_rows=0 placeholder_rows=0

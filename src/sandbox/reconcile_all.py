@@ -8054,6 +8054,15 @@ SUITES = [
     # pinned before the third state existed (2 -> 4).
     ("frontdoor-chain-card",
      os.path.join("test_frontdoor_chain_card.py"), 4),
+    # R3230: R3229 published all seven census readings on the export face and
+    # the CEO page carried ZERO consumer site for the block (probe
+    # qa/probe-R3230.log: claims_consumer_sites=0), so the seven numbers were
+    # readable only off a terminal that stops with the loop. AC-FDC17..19
+    # (three criteria) were pinned in the R3230 PIN row BEFORE the card
+    # existed; AC-FDC20 was added after landing the card proved that a data
+    # value quoting a placeholder literal got substituted a second time.
+    ("frontdoor-claims-card",
+     os.path.join("test_frontdoor_claims_card.py"), 4),
     # R3225: the three written faces carried 307 `rows=<n>` tokens and nothing
     # read one back; five of seven round-tagged `LEDGER ... rows=N` claims
     # disagreed with the ledger as that round's own commit recorded it
