@@ -69,6 +69,30 @@ PIN row BEFORE this code existed):
     label once and this file once, the registry count equals DECLARED,
     and DECLARED equals the number of criteria actually recorded here.
 
+R3196 read-entry criteria (pre-registered in the same board as a PIN row
+BEFORE this code existed):
+
+  AC-MFPR1 three read failures are refused by name: a missing path,
+    invalid UTF-8 and malformed JSON each make load_copy raise
+    CopyError with code E_MFP_COPY and a detail that starts with the
+    underlying reader type, while the shipped copy still loads clean.
+  AC-MFPR2 the CLI reads as one line and writes nothing: each fixture
+    exits 2 with exactly one stdout line naming E_MFP_COPY and the
+    reader type, zero stderr bytes and neither output file on disk; the
+    --verify --log path refuses identically and creates no log.
+  AC-MFPR3 the healthy bytes do not move: the shipped copy renders the
+    shipped page and JSON byte for byte in process and through the CLI
+    at rc=0, and a byte-identical copy at another path loads to an
+    equal mapping.
+  AC-MFPR4 the older shape laws survive the wrapper: a JSON list at the
+    top level is still refused with the type in the detail, an extra
+    unread key is still tolerated, and dropping a required key is still
+    refused with the key named.
+  AC-MFPR5 hygiene and wiring self-count (recorded last): the module
+    source stays ASCII, the read entry is one definition plus one call
+    site, reconcile_all.py carries the label and this file once, and
+    the registry count equals DECLARED equals what this run recorded.
+
 Usage: python test_monthly_faces_preview.py
 """
 
@@ -94,7 +118,7 @@ SUITE_FILE = os.path.abspath(__file__)
 RECONCILE = os.path.join(BASE, "src", "sandbox", "reconcile_all.py")
 MODULE = os.path.join(LEDGER, "monthly_faces_preview.py")
 LABEL = "ledger-monthly-faces-preview"
-DECLARED = 14
+DECLARED = 19
 TEMPS = []
 
 
@@ -485,11 +509,177 @@ def check_copy_wiring():
     file_hits = text.count("test_monthly_faces_preview.py")
     declared = registry_declared(text)
     total_after = len(RESULTS) + 1
-    ok = (label_hits == 1 and file_hits == 1 and declared == DECLARED
-          and total_after == DECLARED)
+    ok = (label_hits == 1 and file_hits == 1 and declared == DECLARED)
     record("AC-MFPC6", ok,
            "label_hits=%d file_hits=%d declared=%d recorded=%d law=%d"
            % (label_hits, file_hits, declared, total_after, DECLARED))
+
+
+def read_failure_fixtures(tag):
+    """Three unreadable copy files: missing path, bad UTF-8, bad JSON."""
+    root = temp_root("read-" + tag)
+    missing = os.path.join(root, "no-such-copy.json")
+    bad_utf8 = os.path.join(root, "bad-utf8.json")
+    with open(bad_utf8, "wb") as fh:
+        fh.write(b'{"title": "\xff\xfe"}')
+    bad_json = os.path.join(root, "bad-json.json")
+    with open(bad_json, "wb") as fh:
+        fh.write(b'{"title": ')
+    return (("missing", missing, "FileNotFoundError"),
+            ("badutf8", bad_utf8, "UnicodeDecodeError"),
+            ("badjson", bad_json, "JSONDecodeError"))
+
+
+def check_read_refusal():
+    failures = []
+    fixtures = read_failure_fixtures("refusal")
+    for tag, path, want in fixtures:
+        try:
+            M.load_copy(path)
+            failures.append(tag + ".accepted")
+        except M.CopyError as exc:
+            if exc.code != "E_MFP_COPY":
+                failures.append(tag + ".code=" + exc.code)
+            if not exc.detail.startswith(want + ":"):
+                failures.append(tag + ".detail=" + exc.detail[:30])
+        except Exception as exc:  # noqa: BLE001 - a bare crash is a failure
+            failures.append(tag + "." + type(exc).__name__)
+    try:
+        M.load_copy(M.COPY_PATH)
+        control = True
+    except Exception:  # noqa: BLE001 - the shipped file must load
+        control = False
+    record("AC-MFPR1", control and not failures,
+           "fixtures=%d refused=%d failures=%s control=%s"
+           % (len(fixtures), len(fixtures) - len([f for f in failures
+                                                  if f.endswith(".accepted")]),
+              ",".join(failures) or "none", control))
+
+
+def check_read_cli():
+    problems = []
+    fixtures = read_failure_fixtures("cli")
+    for tag, path, want in fixtures:
+        out_dir = temp_root("read-cli-" + tag)
+        out_html = os.path.join(out_dir, "page.html")
+        out_json = os.path.join(out_dir, "page.json")
+        proc = subprocess.run([sys.executable, MODULE, "--copy", path,
+                               "--out", out_html, "--json-out", out_json],
+                              capture_output=True)
+        stdout = proc.stdout.decode("utf-8", "replace")
+        if proc.returncode != 2:
+            problems.append(tag + ".rc=%d" % proc.returncode)
+        if stdout.count("\n") != 1 or "E_MFP_COPY" not in stdout \
+                or want not in stdout:
+            problems.append(tag + ".stdout=%r" % stdout[:40])
+        if proc.stderr != b"":
+            problems.append(tag + ".stderr=%d" % len(proc.stderr))
+        if os.path.isfile(out_html) or os.path.isfile(out_json):
+            problems.append(tag + ".wrote")
+        log_path = os.path.join(temp_root("read-cli-log-" + tag),
+                                "verify.log")
+        vproc = subprocess.run([sys.executable, MODULE, "--copy", path,
+                                "--verify", "--log", log_path],
+                               capture_output=True)
+        if vproc.returncode != 2 or os.path.isfile(log_path) \
+                or vproc.stderr != b"":
+            problems.append(tag + ".verify")
+    record("AC-MFPR2", not problems,
+           "fixtures=%d problems=%s"
+           % (len(fixtures), ",".join(problems) or "none"))
+
+
+def check_read_bytes():
+    copy = M.load_copy()
+    faces = M.collect(temp_root("read-bytes"))
+    html_now = M.render_html(copy, faces).encode("utf-8")
+    json_now = M.render_json(faces).encode("utf-8")
+    with open(M.OUT_HTML, "rb") as fh:
+        html_shipped = fh.read()
+    with open(M.OUT_JSON, "rb") as fh:
+        json_shipped = fh.read()
+    root = temp_root("read-bytes-copy")
+    twin = os.path.join(root, "copy.json")
+    shutil.copyfile(M.COPY_PATH, twin)
+    same_dict = M.load_copy(twin) == copy
+    out_dir = temp_root("read-bytes-cli")
+    out_html = os.path.join(out_dir, "page.html")
+    out_json = os.path.join(out_dir, "page.json")
+    proc = subprocess.run([sys.executable, MODULE, "--out", out_html,
+                           "--json-out", out_json], capture_output=True)
+    cli_equal = False
+    if proc.returncode == 0:
+        with open(out_html, "rb") as fh:
+            cli_html = fh.read()
+        with open(out_json, "rb") as fh:
+            cli_json = fh.read()
+        cli_equal = cli_html == html_shipped and cli_json == json_shipped
+    record("AC-MFPR3",
+           html_now == html_shipped and json_now == json_shipped
+           and same_dict and proc.returncode == 0 and cli_equal,
+           "html_bytes=%d json_bytes=%d inproc_equal=%s twin_dict=%s "
+           "cli_equal=%s"
+           % (len(html_shipped), len(json_shipped),
+              html_now == html_shipped and json_now == json_shipped,
+              same_dict, cli_equal))
+
+
+def check_read_shape_kept():
+    detail = ""
+    code = ""
+    try:
+        M.load_copy(write_copy_variant([{"title": "x"}], "read-list"))
+    except M.CopyError as exc:
+        code, detail = exc.code, exc.detail
+    except Exception:  # noqa: BLE001 - a bare crash is not a named refusal
+        pass
+    list_ok = code == "E_MFP_COPY" and "list" in detail
+    copy = dict(M.load_copy())
+    copy["r3196_unread_key"] = "tolerated"
+    tolerated = True
+    try:
+        M.load_copy(write_copy_variant(copy, "read-extra"))
+    except Exception:  # noqa: BLE001 - an extra key must not be refused
+        tolerated = False
+    dropped = dict(M.load_copy())
+    del dropped["footer_note"]
+    key_named = False
+    try:
+        M.load_copy(write_copy_variant(dropped, "read-drop"))
+    except M.CopyError as exc:
+        key_named = exc.code == "E_MFP_COPY" and "footer_note" in exc.detail
+    except Exception:  # noqa: BLE001 - the key law must still refuse
+        pass
+    record("AC-MFPR4", list_ok and tolerated and key_named,
+           "list_refused=%s extra_tolerated=%s key_named=%s"
+           % (list_ok, tolerated, key_named))
+
+
+def check_read_wiring():
+    with open(MODULE, "rb") as fh:
+        raw = fh.read()
+    try:
+        raw.decode("ascii")
+        ascii_ok = True
+    except UnicodeDecodeError:
+        ascii_ok = False
+    with io.open(MODULE, "r", encoding="utf-8") as fh:
+        source = fh.read()
+    read_sites = source.count("read_copy_file(")
+    with io.open(RECONCILE, "r", encoding="utf-8") as fh:
+        text = fh.read()
+    label_hits = text.count('"%s"' % LABEL)
+    file_hits = text.count("test_monthly_faces_preview.py")
+    declared = registry_declared(text)
+    total_after = len(RESULTS) + 1
+    ok = (ascii_ok and read_sites == 2 and label_hits == 1
+          and file_hits == 1 and declared == DECLARED
+          and total_after == DECLARED)
+    record("AC-MFPR5", ok,
+           "module_ascii=%s read_sites=%d label_hits=%d file_hits=%d "
+           "declared=%d recorded=%d law=%d"
+           % (ascii_ok, read_sites, label_hits, file_hits, declared,
+              total_after, DECLARED))
 
 
 def main():
@@ -509,6 +699,11 @@ def main():
         check_copy_bytes()
         check_copy_shape()
         check_copy_wiring()
+        check_read_refusal()
+        check_read_cli()
+        check_read_bytes()
+        check_read_shape_kept()
+        check_read_wiring()
     finally:
         for path in TEMPS:
             shutil.rmtree(path, ignore_errors=True)

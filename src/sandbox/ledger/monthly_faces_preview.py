@@ -39,6 +39,14 @@ empty stdout) and left a zero-byte page.html behind. A copy file that
 is not a JSON object is refused the same way, and extra unread keys are
 tolerated so a newer copy file still renders here. The healthy render
 stays byte-identical: the refusal never touches what is written.
+
+R3196 (AC-MFPR1..AC-MFPR5): the reading itself is refused by name too.
+A path that does not exist, bytes that are not UTF-8 and malformed JSON
+used to escape as FileNotFoundError, UnicodeDecodeError and
+JSONDecodeError (rc=1, empty stdout, a traceback, and - for the CLI - no
+output file either). All three now answer the same E_MFP_COPY code at
+rc=2 with the underlying reader type named in the detail, where the old
+shapes kept one code per family apart only by prose.
 """
 import argparse
 import hashlib
@@ -135,9 +143,36 @@ class CopyError(Exception):
         return "%s %s" % (self.code, self.detail)
 
 
+def _one_line(text, limit=160):
+    """Collapse a reader message to one bounded line."""
+    flat = " ".join(str(text).split())
+    if len(flat) > limit:
+        flat = flat[:limit] + "..."
+    return flat
+
+
+def read_copy_file(path):
+    """Read the copy JSON, turning every read failure into CopyError.
+
+    A missing path, undecodable bytes and malformed JSON used to escape
+    as FileNotFoundError, UnicodeDecodeError and json.JSONDecodeError
+    (rc=1 with a traceback). They are one family here - the copy file
+    cannot drive this renderer - so they share the E_MFP_COPY code and
+    name the underlying type in the detail instead of adding three codes.
+    """
+    try:
+        with io.open(path, "r", encoding="utf-8") as fh:
+            return json.load(fh)
+    except UnicodeDecodeError as exc:
+        raise CopyError("UnicodeDecodeError: %s" % _one_line(exc))
+    except json.JSONDecodeError as exc:
+        raise CopyError("JSONDecodeError: %s" % _one_line(exc))
+    except OSError as exc:
+        raise CopyError("%s: %s" % (type(exc).__name__, _one_line(exc)))
+
+
 def load_copy(path=COPY_PATH):
-    with io.open(path, "r", encoding="utf-8") as fh:
-        data = json.load(fh)
+    data = read_copy_file(path)
     if not isinstance(data, dict):
         raise CopyError("top level is %s, expected object"
                         % type(data).__name__)

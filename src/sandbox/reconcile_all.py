@@ -3478,7 +3478,7 @@ SUITES = [
     # healthy bytes stay identical, the shape law and hygiene hold, and
     # the last arm weighs the declared count against what was recorded.
     ("ledger-monthly-faces-preview", os.path.join(
-        "ledger", "test_monthly_faces_preview.py"), 14),
+        "ledger", "test_monthly_faces_preview.py"), 19),
     # R2102 attention digest on the same report generator: the
     # statement-shaped R2101 page now opens with an ordered operator
     # to-do list derived from the faces (seller inbox debt, sold-out

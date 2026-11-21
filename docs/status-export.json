@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-21 R3195 PRODUCT+ENGINEERING: the copy file is a contract now - dropping any of the thirteen top-level keys the renderer reads is refused by name (E_MFP_COPY) BEFORE any output file is opened, where until this window the same file raised a bare KeyError at rc=1 with empty stdout, fourteen traceback lines on stderr and a zero-byte page.html left on disk.",
+    "current": "2026-11-21 R3196 PRODUCT+ENGINEERING: the copy read entry refuses by name - a missing path, undecodable bytes and malformed JSON used to escape as FileNotFoundError, UnicodeDecodeError and JSONDecodeError at rc=1 with empty stdout and a traceback, and all three now answer one E_MFP_COPY line at rc=2 with the reader type named in the detail while writing nothing.",
     "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
@@ -9,9 +9,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3195.log (1716B, 2026-11-21)",
     "latest_evidence": "qa/probe-R3195.log (1716B, 2026-11-21)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3195] next window (<=48h): (0) MAIN — **坏 copy 文件的读入口还全是裸抛**：本轮把「缺键」提到开文件之前，但 `load_copy` 的 `io.open`/`json.load` 失败仍是裸抛——路径不存在=`FileNotFoundError`、非法 UTF-8=`UnicodeDecodeError`、坏 JSON=`JSONDecodeError`（三种 rc=1 + traceback、stdout 0 字节）。做法=先只读量三问：①三种坏文件各跑一次 CLI 与 `--verify --log`，量 rc/stdout/stderr 与「是否留下任何盘上痕迹」（预期无，因校验在写之前）；②全仓是否有消费者依赖这三种异常类型或 rc=1（含 `test_monthly_faces_preview.py` 的 `load_copy` 调用与 `tools/`）；③把读入口包成同一具名拒绝（`E_MFP_COPY` + detail 说明 read 类型）后，健康面渲染字节是否一字不变（应零差异）。量出「确为裸抛且可命名」再落，判据沿用 AC-MFPC 写法（AC-MFPR1..N），**先落板再动代码**；若三态语义差异太大（如「文件不存在」与「文件坏了」应给不同码），如实拆分并预注册。**另**：本轮末 log_items=82、carrier 71001B、margin 7499（闸 78500）——下窗若再加 4-5 行会触 fold_needed，先经 shipped fold door 折一次再干活。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
-    "next_milestone_due": "2026-11-23T22:41:07+08:00",
-    "updated_at": "2026-11-21T22:41:07+08:00",
+    "next_milestone": "[R3196] next window (<=48h): (0) MAIN — **写盘仍先开文件后渲染**：`write_outputs` 先 `io.open(...,\"w\")` 截断再调 `render_html`/`render_json`（R3195 实测缺键时留下 **0 字节 `page.html`**），本轮只把「读与缺键」提到开文件之前，**渲染期其余异常仍会留下被截断/半截的输出件**。做法=先只读量三问：①在私有世界注入渲染期异常（分别让 `render_html`、`render_json` 抛一次），量盘上 `--out`/`--json-out` 的真实形状（0 字节/半截/未建）与 CLI 的 rc/stdout/stderr；②消费者普查：谁依赖 `write_outputs` 的直接写盘（`run_verify` 自包含路径、套件 CLI 臂、`tools/`），以及是否已有「失败不留半件」的硬要求；③改成「先渲染成字符串 → 写临时文件 → 一次 `os.replace`」后，健康面 6834B/13015B 是否逐字节不变（应零差异），以及**失败时旧页是否原样保留**。量出确为半落盘再落，判据沿用 AC-MFPR 写法（AC-MFPW1..N），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+    "next_milestone_due": "2026-11-23T22:51:31+08:00",
+    "updated_at": "2026-11-21T22:51:31+08:00",
     "heartbeat": {
       "tick": 3195,
       "state_tick": 3195,
@@ -35,7 +35,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-21 R3195 PRODUCT+ENGINEERING: the copy file is a contract now - dropping any of the thirteen top-level keys the renderer reads is refused by name (E_MFP_COPY) BEFORE any output file is opened, where until this window the same file raised a bare KeyError at rc=1 with empty stdout, fourteen traceback lines on stderr and a zero-byte page.html left on disk.",
+  "current": "2026-11-21 R3196 PRODUCT+ENGINEERING: the copy read entry refuses by name - a missing path, undecodable bytes and malformed JSON used to escape as FileNotFoundError, UnicodeDecodeError and JSONDecodeError at rc=1 with empty stdout and a traceback, and all three now answer one E_MFP_COPY line at rc=2 with the reader type named in the detail while writing nothing.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,11 +63,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3195 PRODUCT+ENGINEERING: the copy file is a contract now - dropping any of the thirteen top-level keys the renderer reads is refused by name (E_MFP_COPY) BEFORE any output file is opened, where until this window the same file raised a bare KeyError at rc=1 with empty stdout, fourteen traceback lines on stderr and a zero-byte page.html left on disk.",
-  "export_ts": "2026-11-21T22:41:07+08:00",
+  "do": "2026-11-21 R3196 PRODUCT+ENGINEERING: the copy read entry refuses by name - a missing path, undecodable bytes and malformed JSON used to escape as FileNotFoundError, UnicodeDecodeError and JSONDecodeError at rc=1 with empty stdout and a traceback, and all three now answer one E_MFP_COPY line at rc=2 with the reader type named in the detail while writing nothing.",
+  "export_ts": "2026-11-21T22:51:31+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
   "latest_evidence": "qa/probe-R3195.log (1716B, 2026-11-21)",
-  "next_milestone": "[R3195] next window (<=48h): (0) MAIN — **坏 copy 文件的读入口还全是裸抛**：本轮把「缺键」提到开文件之前，但 `load_copy` 的 `io.open`/`json.load` 失败仍是裸抛——路径不存在=`FileNotFoundError`、非法 UTF-8=`UnicodeDecodeError`、坏 JSON=`JSONDecodeError`（三种 rc=1 + traceback、stdout 0 字节）。做法=先只读量三问：①三种坏文件各跑一次 CLI 与 `--verify --log`，量 rc/stdout/stderr 与「是否留下任何盘上痕迹」（预期无，因校验在写之前）；②全仓是否有消费者依赖这三种异常类型或 rc=1（含 `test_monthly_faces_preview.py` 的 `load_copy` 调用与 `tools/`）；③把读入口包成同一具名拒绝（`E_MFP_COPY` + detail 说明 read 类型）后，健康面渲染字节是否一字不变（应零差异）。量出「确为裸抛且可命名」再落，判据沿用 AC-MFPC 写法（AC-MFPR1..N），**先落板再动代码**；若三态语义差异太大（如「文件不存在」与「文件坏了」应给不同码），如实拆分并预注册。**另**：本轮末 log_items=82、carrier 71001B、margin 7499（闸 78500）——下窗若再加 4-5 行会触 fold_needed，先经 shipped fold door 折一次再干活。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+  "next_milestone": "[R3196] next window (<=48h): (0) MAIN — **写盘仍先开文件后渲染**：`write_outputs` 先 `io.open(...,\"w\")` 截断再调 `render_html`/`render_json`（R3195 实测缺键时留下 **0 字节 `page.html`**），本轮只把「读与缺键」提到开文件之前，**渲染期其余异常仍会留下被截断/半截的输出件**。做法=先只读量三问：①在私有世界注入渲染期异常（分别让 `render_html`、`render_json` 抛一次），量盘上 `--out`/`--json-out` 的真实形状（0 字节/半截/未建）与 CLI 的 rc/stdout/stderr；②消费者普查：谁依赖 `write_outputs` 的直接写盘（`run_verify` 自包含路径、套件 CLI 臂、`tools/`），以及是否已有「失败不留半件」的硬要求；③改成「先渲染成字符串 → 写临时文件 → 一次 `os.replace`」后，健康面 6834B/13015B 是否逐字节不变（应零差异），以及**失败时旧页是否原样保留**。量出确为半落盘再落，判据沿用 AC-MFPR 写法（AC-MFPW1..N），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -181,8 +181,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 71001,
-  "next_milestone_due": "2026-11-23T22:41:07+08:00",
+  "state_bytes": 47191,
+  "next_milestone_due": "2026-11-23T22:51:31+08:00",
   "heartbeat": {
     "tick": 3195,
     "state_tick": 3195,
