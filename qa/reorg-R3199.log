@@ -1,0 +1,49 @@
+R3199 evidence - the evidence log and the demo world refused by name
+
+PROBE (read-only, before any code): tmp/probe_R3199.py
+  private temp worlds, no socket, no network, no live writes
+  Q1a collect raises, --verify (subprocess)   rc=1 stdout 0B stderr 581B log exists=False
+  Q1b collect raises, write path (subprocess) rc=1 stdout 0B stderr 415B left=[]
+  Q1c check_identity problem, write path      rc=1 stdout 31B  left=[]
+  Q1d check_identity problem, verify path     rc=1 stdout 644B log 644B
+  Q2a --log is a directory (subprocess)       rc=1 stdout 0B stderr 753B
+  Q2b --log in a missing directory            rc=1 stdout 0B stderr 773B
+  Q2c healthy control                         rc=0 stdout 661B log 661B
+
+AFTER the change (same probe re-run)
+  Q1e collect raises, --verify CLI   rc=2 stdout 76B stderr 0B log exists=True 76B
+  Q1f collect raises, write CLI      rc=2 stdout 51B stderr 0B left=[]
+  Q2a --log is a directory           rc=2 stdout 866B (661B text + refusal) stderr 0B
+  Q2b --log in a missing directory   rc=0 log 661B (directory created)
+  Q2c healthy control                rc=0 stdout 661B log 661B
+  Q1c/Q1d unchanged on purpose: the check_identity FAIL prose face and its
+  rc=1 were measured as a deliberate face, not a crash, so they were not
+  touched this window.
+
+LANDED
+  AC-MFPX3 build_world names a failed demo world as E_MFP_WORLD at rc=2
+  AC-MFPX4 the log is staged and swapped in; a bad path prints the whole
+          text first and then one E_MFP_LOG line at rc=2
+  AC-MFPX5 a --verify that cannot build still writes the log it was asked
+          for, carrying VERIFY FAIL problems=1 and the E_MFP_WORLD line
+  AC-MFPW6 re-expressed (JUDGED-CHANGED, sentence unchanged): os.replace is
+          counted per body (write_outputs=1, write_log=1) instead of once in
+          the file, WriteError catch sites 1 -> 2 (main, run_verify), and
+          WorldError raise=1 catch=2 are pinned
+
+GATES
+  suite-monthly-faces-preview SUITE PASS 30/30 twice, identical output bytes
+  generator --verify VERIFY PASS, log sha256 271ba9eb7b2d1230 (unchanged)
+  page bytes 6834 / json bytes 13015 unchanged
+  peers closeout_gate 42/42, closeout_carrier 6/6, general_writer_dialect 6/6
+  matrix 78486B / 755 rows DOC-CURRENT; census VERDICT PASS pinned=755
+  live CLOSEOUT-GATE PASS files=4510 flags=0
+
+HONEST
+  zero payment capability: no merchant id, server, domain, filing+ICP or
+  miniprogram appid+secret, so a buyer still cannot pay
+  no product surface, no api surface, no gate number changed: what changed
+  is that a failed verification leaves evidence and a bad --log path no
+  longer destroys the answer
+  a missing --log directory is now created instead of refusing - behaviour
+  change, recorded rather than smuggled

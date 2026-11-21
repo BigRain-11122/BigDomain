@@ -141,6 +141,26 @@ PIN row BEFORE this code existed):
     E_MFP_WRITE and the matching stage, zero stderr bytes, the previous
     bytes untouched and no .mfp-write-* temp file left behind.
 
+R3199 world/log criteria (pre-registered in the same board as a PIN row
+BEFORE this code existed):
+
+  AC-MFPX3 a demo world that cannot be built is one named code: an
+    injected collect() failure makes build_world raise WorldError with
+    code E_MFP_WORLD, the injected type first in the detail and the
+    original reachable as __cause__; a healthy world builds all five
+    faces and raises nothing.
+  AC-MFPX4 the log is swapped in and never costs the answer: a healthy
+    subprocess run writes a log whose lines equal stdout's and whose
+    bytes carry no CR (the canonical utf-8/lf dialect); when the --log
+    path is a directory the same text is printed in full, one E_MFP_LOG
+    refusal line follows, rc=2, stderr is empty, the directory is still
+    a directory and no .mfp-write-* temp is left; a missing log
+    directory is created and the log lands.
+  AC-MFPX5 a failed verify still leaves its evidence: with --log set and
+    collect() failing, the log file exists, carries VERIFY FAIL
+    problems=1 and the E_MFP_WORLD line, equals what was printed, and
+    the run exits 2 (before R3199 the file did not exist at all).
+
 Usage: python test_monthly_faces_preview.py
 """
 
@@ -166,7 +186,7 @@ SUITE_FILE = os.path.abspath(__file__)
 RECONCILE = os.path.join(BASE, "src", "sandbox", "reconcile_all.py")
 MODULE = os.path.join(LEDGER, "monthly_faces_preview.py")
 LABEL = "ledger-monthly-faces-preview"
-DECLARED = 27
+DECLARED = 30
 TEMPS = []
 
 
@@ -1114,10 +1134,17 @@ def check_write_wiring():
     replace_sites = source.count("os.replace(")
     named_sites = source.count("_write_error(")
     caught_sites = source.count("except WriteError as exc:")
+    world_sites = source.count("raise WorldError(")
+    world_caught = source.count("except WorldError as exc:")
     stage_sites = tuple(source.count('_write_error("%s",' % stage)
                         for stage in ("render", "stage", "replace"))
     body_start = source.find("def write_outputs(")
     body = source[body_start:] if body_start >= 0 else ""
+    log_start = source.find("def write_log(")
+    log_body = (source[log_start:body_start]
+                if 0 <= log_start < body_start else "")
+    replace_in_outputs = body.count("os.replace(")
+    replace_in_log = log_body.count("os.replace(")
     render_at = body.find("render_html(")
     json_at = body.find("render_json(")
     stage_at = body.find("_stage(")
@@ -1130,18 +1157,176 @@ def check_write_wiring():
     file_hits = text.count("test_monthly_faces_preview.py")
     declared = registry_declared(text)
     total_after = len(RESULTS) + 1
-    ok = (ascii_ok and replace_sites == 1 and ordered
-          and named_sites == 4 and caught_sites == 1
+    ok = (ascii_ok and replace_sites == 2 and ordered
+          and replace_in_outputs == 1 and replace_in_log == 1
+          and named_sites == 4 and caught_sites == 2
+          and world_sites == 1 and world_caught == 2
           and stage_sites == (1, 1, 1)
           and label_hits == 1 and file_hits == 1 and declared == DECLARED
           and total_after == DECLARED)
     record("AC-MFPW6", ok,
-           "module_ascii=%s replace_sites=%d render_before_stage=%s "
-           "named_sites=%d caught=%d stages=%s "
+           "module_ascii=%s replace_sites=%d swaps=%d+%d "
+           "render_before_stage=%s named_sites=%d caught=%d "
+           "world=%d/%d stages=%s "
            "label_hits=%d file_hits=%d declared=%d recorded=%d law=%d"
-           % (ascii_ok, replace_sites, ordered, named_sites, caught_sites,
+           % (ascii_ok, replace_sites, replace_in_outputs, replace_in_log,
+              ordered, named_sites, caught_sites, world_sites, world_caught,
               ",".join(str(n) for n in stage_sites),
               label_hits, file_hits, declared, total_after, DECLARED))
+
+
+def _call_main(argv):
+    """Call M.main with stdout captured; returns (rc, text)."""
+    buf = io.StringIO()
+    real = sys.stdout
+    sys.stdout = buf
+    try:
+        rc = M.main(argv)
+    finally:
+        sys.stdout = real
+    return rc, buf.getvalue()
+
+
+def check_world_named():
+    """AC-MFPX3: a demo world that cannot be built is one named code."""
+    problems = []
+    original = M.collect
+
+    def boom(_tmp):
+        raise RuntimeError("injected build failure")
+
+    M.collect = boom
+    caught = None
+    other = None
+    try:
+        M.build_world(temp_root("world-named"))
+    except M.WorldError as exc:
+        caught = exc
+    except Exception as exc:  # noqa: BLE001 - a wrong type is a bug
+        other = type(exc).__name__
+    finally:
+        M.collect = original
+    if other is not None:
+        problems.append("raised=%s" % other)
+    elif caught is None:
+        problems.append("no-exception")
+    else:
+        if caught.code != "E_MFP_WORLD":
+            problems.append("code=%s" % caught.code)
+        if not caught.detail.startswith("RuntimeError:"):
+            problems.append("detail=%s" % caught.detail[:24])
+        if caught.__cause__ is None:
+            problems.append("no-cause")
+        elif type(caught.__cause__).__name__ != "RuntimeError":
+            problems.append("cause=%s" % type(caught.__cause__).__name__)
+    control_ok = False
+    try:
+        control = M.build_world(temp_root("world-named-control"))
+        control_ok = isinstance(control, list) and len(control) == len(M.FACES)
+    except Exception as exc:  # noqa: BLE001 - a healthy world must not raise
+        problems.append("control.raised=%s" % type(exc).__name__)
+    record("AC-MFPX3", not problems,
+           "cases=1 control=%s problems=%s"
+           % (control_ok, ",".join(problems) or "none"))
+
+
+def check_log_atomic_cli():
+    """AC-MFPX4: the log is swapped in, and a bad path still hands over
+    the whole verify text instead of throwing it away."""
+    problems = []
+    root = temp_root("log-atomic-healthy")
+    healthy_log = os.path.join(root, "verify.log")
+    proc = subprocess.run(
+        [sys.executable, MODULE, "--verify", "--log", healthy_log],
+        capture_output=True, cwd=BASE)
+    healthy = proc.stdout
+    healthy_ok = (proc.returncode == 0 and proc.stderr == b"" and healthy != b""
+                  and os.path.isfile(healthy_log))
+    if healthy_ok:
+        with open(healthy_log, "rb") as fh:
+            logged = fh.read()
+        # stdout goes through the Windows newline translation, the file is
+        # written in the canonical utf-8/lf dialect qa_log.py --check reads.
+        healthy_ok = (logged.splitlines() == healthy.splitlines()
+                      and b"\r" not in logged)
+    if not healthy_ok:
+        problems.append("healthy")
+    if _leftovers(root):
+        problems.append("healthy.temp")
+
+    bad_root = temp_root("log-atomic-dir")
+    logdir = os.path.join(bad_root, "logdir")
+    os.mkdir(logdir)
+    proc = subprocess.run(
+        [sys.executable, MODULE, "--verify", "--log", logdir],
+        capture_output=True, cwd=BASE)
+    tail = proc.stdout[len(healthy):]
+    if proc.returncode != 2:
+        problems.append("dir.rc=%d" % proc.returncode)
+    if healthy != b"" and not proc.stdout.startswith(healthy):
+        problems.append("dir.text-lost")
+    if tail.count(b"\n") != 1 or b"E_MFP_LOG" not in tail:
+        problems.append("dir.refusal=%r" % tail[:48])
+    if proc.stderr != b"":
+        problems.append("dir.stderr=%d" % len(proc.stderr))
+    if not os.path.isdir(logdir):
+        problems.append("dir.moved")
+    if _leftovers(bad_root):
+        problems.append("dir.temp")
+
+    miss_root = temp_root("log-atomic-missing")
+    miss_log = os.path.join(miss_root, "nodir", "verify.log")
+    proc = subprocess.run(
+        [sys.executable, MODULE, "--verify", "--log", miss_log],
+        capture_output=True, cwd=BASE)
+    if proc.returncode != 0:
+        problems.append("missing.rc=%d" % proc.returncode)
+    if not os.path.isfile(miss_log):
+        problems.append("missing.no-log")
+    else:
+        with open(miss_log, "rb") as fh:
+            logged = fh.read()
+        if logged.splitlines() != proc.stdout.splitlines():
+            problems.append("missing.log!=stdout")
+    record("AC-MFPX4", not problems,
+           "healthy=%s cases=3 problems=%s"
+           % (healthy_ok, ",".join(problems) or "none"))
+
+
+def check_verify_evidence():
+    """AC-MFPX5: a --verify that cannot build its world still leaves the
+    evidence file it was asked for, carrying the named refusal."""
+    problems = []
+    root = temp_root("verify-evidence")
+    log = os.path.join(root, "verify.log")
+    original = M.collect
+
+    def boom(_tmp):
+        raise RuntimeError("injected build failure")
+
+    M.collect = boom
+    try:
+        rc, text = _call_main(["--verify", "--log", log])
+    finally:
+        M.collect = original
+    exists = os.path.isfile(log)
+    body = io.open(log, encoding="utf-8").read() if exists else ""
+    if rc != 2:
+        problems.append("rc=%r" % (rc,))
+    if not exists:
+        problems.append("log-missing")
+    if "VERIFY FAIL problems=1" not in body:
+        problems.append("no-fail-line")
+    if "E_MFP_WORLD" not in body:
+        problems.append("no-code")
+    if body != text:
+        problems.append("log!=stdout")
+    if _leftovers(root):
+        problems.append("temp")
+    record("AC-MFPX5", not problems,
+           "rc=%r exists=%s bytes=%d problems=%s"
+           % (rc, exists, len(body.encode("utf-8")),
+              ",".join(problems) or "none"))
 
 
 def main():
@@ -1173,6 +1358,9 @@ def main():
         check_write_cli_face()
         check_write_named()
         check_write_named_cli()
+        check_world_named()
+        check_log_atomic_cli()
+        check_verify_evidence()
         check_write_wiring()
     finally:
         for path in TEMPS:

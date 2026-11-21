@@ -25,7 +25,9 @@ Usage:
 
 Exit codes: 0 written or verified, 1 identity problems (VERIFY FAIL), and
 2 refused by name (E_MFP_COPY: the copy file cannot drive this renderer;
-E_MFP_WRITE: the delivered files cannot be rendered, staged or swapped).
+E_MFP_WRITE: the delivered files cannot be rendered, staged or swapped;
+E_MFP_WORLD: the demo world cannot be built; E_MFP_LOG: the evidence log
+cannot be staged or swapped in).
 
 Criteria AC-MFR1..AC-MFR8 are registered in src/os/backlog.md (R3193
 PIN row) BEFORE this file existed.
@@ -65,6 +67,19 @@ The three stages now answer one E_MFP_WRITE line at rc=2 with the stage
 and the underlying exception type in the detail, and the caught
 exception stays reachable as __cause__. The healthy run is untouched:
 rc=0, the same "PASS preview" line, the same 6834B/13015B bytes.
+
+R3199 (AC-MFPX3..AC-MFPX5): the demo world and the evidence log are
+refused by name as well. A build failure inside collect() used to escape
+raw (measured: rc=1, empty stdout, a traceback) and, under --verify, the
+--log file was never written at all - a failed verification left no
+evidence that it had run. It now answers E_MFP_WORLD at rc=2, and the
+verify text always reaches stdout, so the log carries the failure. The
+log itself used to be written in place, which meant a bad path threw the
+freshly computed answer away (measured: rc=1, stdout 0 bytes) and a
+partial write could truncate the evidence file; it is now staged beside
+its target and swapped in, answering E_MFP_LOG at rc=2 only AFTER the
+text has been printed. A missing log directory is created, as it already
+was for the outputs.
 """
 import argparse
 import hashlib
@@ -193,6 +208,48 @@ def _write_error(stage, exc):
                                          _one_line(exc)))
 
 
+class WorldError(Exception):
+    """Named refusal for a demo world that cannot be built.
+
+    Until R3199 a failing collect() escaped as the raw exception, so a
+    --verify run answered rc=1 with empty stdout and - worse - never
+    wrote the evidence log it was asked for.
+    """
+
+    code = "E_MFP_WORLD"
+
+    def __init__(self, detail):
+        Exception.__init__(self, detail)
+        self.detail = detail
+
+    def face(self):
+        return "%s %s" % (self.code, self.detail)
+
+
+class LogError(Exception):
+    """Named refusal for an evidence log that cannot be written.
+
+    The verify text is already computed when this is raised, so a caller
+    that only sees this code has still been handed the answer: the text
+    reaches stdout before the refusal line.
+    """
+
+    code = "E_MFP_LOG"
+
+    def __init__(self, stage, detail):
+        Exception.__init__(self, detail)
+        self.stage = stage
+        self.detail = detail
+
+    def face(self):
+        return "%s stage=%s %s" % (self.code, self.stage, self.detail)
+
+
+def _log_error(stage, exc):
+    return LogError(stage, "%s: %s" % (type(exc).__name__,
+                                       _one_line(exc)))
+
+
 def read_copy_file(path):
     """Read the copy JSON, turning every read failure into CopyError.
 
@@ -251,6 +308,19 @@ def collect(tmp_root):
         mtr.close()
         led.close()
     return payload
+
+
+def build_world(tmp_root):
+    """collect() with every build failure named instead of raw.
+
+    The original exception stays reachable as __cause__, so a caller can
+    still see what the ledger said when the demo world would not build.
+    """
+    try:
+        return collect(tmp_root)
+    except Exception as exc:
+        raise WorldError("%s: %s" % (type(exc).__name__,
+                                     _one_line(exc))) from exc
 
 
 def fmt(value):
@@ -423,6 +493,29 @@ def _stage(path, text):
     return temp, path
 
 
+def write_log(path, text):
+    """Write the evidence log beside its target, then swap it in.
+
+    Until R3199 the log was written in place, so a path that could not
+    be opened threw away the freshly computed verify text (measured:
+    rc=1, stdout 0 bytes, a traceback) and a partial write could leave a
+    truncated evidence file. The text is staged and os.replace is the
+    only write to the log path; the target directory is created when it
+    is missing, exactly as the outputs are.
+    """
+    try:
+        temp, target = _stage(path, text)
+    except Exception as exc:
+        raise _log_error("stage", exc) from exc
+    try:
+        os.replace(temp, target)
+    except Exception as exc:
+        raise _log_error("replace", exc) from exc
+    finally:
+        if os.path.exists(temp):
+            _remove_quietly(temp)
+
+
 def write_outputs(faces, copy, out_html, out_json):
     """Render both faces fully, then swap them in.
 
@@ -497,13 +590,12 @@ def check_identity(faces, problems):
                                        env.get(key)))
 
 
-def run_verify(copy, log_path):
-    lines = []
-    problems = []
+def _verify_body(copy, say, problems):
+    """Build two worlds, check identity and write outputs into them.
 
-    def say(text):
-        lines.append(text)
-
+    Reports through say(); every problem is appended to problems().
+    Snapshot bytes are re-checked before anything is claimed.
+    """
     snap_before = (os.path.getsize(SNAPSHOT), sha16(SNAPSHOT))
     dirs = []
     try:
@@ -511,7 +603,7 @@ def run_verify(copy, log_path):
         for _ in range(2):
             tmp = tempfile.mkdtemp(prefix="monthly-faces-")
             dirs.append(tmp)
-            faces = collect(tmp)
+            faces = build_world(tmp)
             check_identity(faces, problems)
             out_html = os.path.join(tmp, "page.html")
             out_json = os.path.join(tmp, "page.json")
@@ -551,6 +643,32 @@ def run_verify(copy, log_path):
     finally:
         for tmp in dirs:
             shutil.rmtree(tmp, ignore_errors=True)
+
+
+def run_verify(copy, log_path):
+    """Answer the criteria, then write the answer out as evidence.
+
+    A world that cannot be built, an output that cannot be written and a
+    log that cannot be staged are each named at rc=2. The computed text
+    is printed BEFORE any log refusal, so a bad --log path can no longer
+    cost the caller the whole verify answer (measured before R3199:
+    rc=1, stdout 0 bytes, a traceback).
+    """
+    lines = []
+    problems = []
+    rc = 0
+
+    def say(text):
+        lines.append(text)
+
+    try:
+        _verify_body(copy, say, problems)
+    except WorldError as exc:
+        problems.append(exc.face())
+        rc = 2
+    except WriteError as exc:
+        problems.append(exc.face())
+        rc = 2
     if problems:
         say("VERIFY FAIL problems=%d" % len(problems))
         for item in problems:
@@ -560,10 +678,16 @@ def run_verify(copy, log_path):
             "MFR8 hygiene checked by the caller)")
     text = "\n".join(lines) + "\n"
     if log_path:
-        with io.open(log_path, "w", encoding="utf-8", newline="\n") as fh:
-            fh.write(text)
+        try:
+            write_log(log_path, text)
+        except LogError as exc:
+            sys.stdout.write(text)
+            sys.stdout.write("%s\n" % exc.face())
+            return 2
     sys.stdout.write(text)
-    return 0 if not problems else 1
+    if rc == 0 and problems:
+        rc = 1
+    return rc
 
 
 def main(argv=None):
@@ -583,7 +707,7 @@ def main(argv=None):
         return run_verify(copy, args.log)
     tmp = tempfile.mkdtemp(prefix="monthly-faces-")
     try:
-        faces = collect(tmp)
+        faces = build_world(tmp)
         problems = []
         check_identity(faces, problems)
         if problems:
@@ -591,6 +715,9 @@ def main(argv=None):
                 sys.stdout.write("FAIL %s\n" % item)
             return 1
         write_outputs(faces, copy, args.out, args.json_out)
+    except WorldError as exc:
+        sys.stdout.write("%s\n" % exc.face())
+        return 2
     except WriteError as exc:
         sys.stdout.write("%s\n" % exc.face())
         return 2
