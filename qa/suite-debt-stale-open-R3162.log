@@ -1,0 +1,8 @@
+PASS AC-DSRC1 the register is read through the shipped debt row law asked at call time, and this module carries no second parser
+PASS AC-DSRC2 the item round decides, a live or folded round both count, and a discharged NOTE round never promotes a row whose item names no round (the false-positive guard)
+PASS AC-DSRC3 a round that is never labelled, a labelled round with no evidence file and a token that is not a round all stay OPEN, and a missing or malformed register refuses by name
+PASS AC-DSRC4 the reading closes nothing: the world digest is identical before and after, the module holds no write primitive, and the report says CLOSE-BY-HAND
+PASS AC-DSRC5 the CLI exits 0 on a clean or reported reading, 2 only when --gate finds stale, 3 on a missing register, 5 on bad flags, and --json is byte-stable over the pinned keys
+LIVE DEBT STALE OPEN open=12 stale=10 unnamed=2 undischarged=0 action=CLOSE-BY-HAND verdict=STALE-FOUND
+PASS AC-DSRC6 pure ASCII stdlib with no clock and no network, wired as os-debt-stale-open(6), and the live register reading sums and prints its stale count as a number
+SUITE PASS 6/6

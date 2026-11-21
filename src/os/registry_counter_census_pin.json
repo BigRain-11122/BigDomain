@@ -411,6 +411,7 @@
     "os-debt-item-unique",
     "os-debt-note-append",
     "os-debt-register",
+    "os-debt-stale-open",
     "os-declaration-writer-dialect-preservation",
     "os-declaration-writer-noop-parity",
     "os-decwatermark",

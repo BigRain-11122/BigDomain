@@ -1,0 +1,31 @@
+REGISTER open=12 done=419 verdict=DEBT-STALE
+ROUND-EVIDENCE rounds=18 claiming=18 with_files=18 missing=0
+ROW item=loop-s4u-reconcile opened=R2231 tokens=R2268:NOT-LABELLED
+ROW silent item=product-face-R2527 opened=R2527 note_len=132
+ROW silent item=product-face-R2529 opened=R2529 note_len=137
+ROW silent item=product-face-R2535 opened=R2535 note_len=166
+ROW silent item=product-face-R2537 opened=R2537 note_len=194
+ROW item=product-face-R2539 opened=R2539 tokens=R2539:NOT-LABELLED
+ROW silent item=product-face-R2559 opened=R2559 note_len=57
+ROW item=product-face-R2565 opened=R2565 tokens=R2565:NOT-LABELLED
+ROW item=product-face-R2602 opened=R2602 tokens=R2602:NOT-LABELLED
+ROW silent item=product-face-R2742b opened=R2742 note_len=353
+ROW item=product-face-R2751 opened=R2751 tokens=R2750:NOT-LABELLED R2751:NOT-LABELLED R2431:NOT-LABELLED R2742:NOT-LABELLED
+ROW item=reconcile-battery-R2757 opened=R2757 tokens=R2168:NOT-LABELLED R2757:NOT-LABELLED R2431:NOT-LABELLED R2755:NOT-LABELLED R2757:NOT-LABELLED
+SUMMARY open=12 with_note_rounds=6 silent=6
+TREE files=48036/48036 digest_same=True
+---- part 2 (archive face) ----
+live_labelled=18 archived_labelled=1919 qa_rounds=1945
+archive_min=265 archive_max=3143
+ROW item=loop-s4u-reconcile R2268:arch:files=1
+ROW silent item=product-face-R2527
+ROW silent item=product-face-R2529
+ROW silent item=product-face-R2535
+ROW silent item=product-face-R2537
+ROW item=product-face-R2539 R2539:arch:files=3
+ROW silent item=product-face-R2559
+ROW item=product-face-R2565 R2565:arch:files=2
+ROW item=product-face-R2602 R2602:arch:files=2
+ROW silent item=product-face-R2742b
+ROW item=product-face-R2751 R2750:arch:files=1 R2751:arch:files=1 R2431:arch:files=2 R2742:arch:files=4
+ROW item=reconcile-battery-R2757 R2168:arch:files=1 R2757:arch:files=1 R2431:arch:files=2 R2755:arch:files=1 R2757:arch:files=1

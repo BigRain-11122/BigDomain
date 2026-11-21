@@ -5395,6 +5395,17 @@ SUITES = [
     # BEFORE the code existed.)
     ("os-debt-gate",
      os.path.join("..", "os", "test_debt_gate.py"), 5),
+    # R3162: the register can carry an OPEN row whose named work already
+    # shipped and nothing said so - debt_gate names only the first=yes row and
+    # debt_register ages by windows, so "landed long ago" and "still owed"
+    # read the same. This reader judges each open row by its OWN item round
+    # against two shipped evidence faces (live/archived round labels and qa/
+    # files) and never promotes a missing measurement to STALE.
+    # (AC-DSRC1..AC-DSRC6 pinned in state/queue/tech.md as the R2524 seed row
+    # BEFORE the code existed; AC-DSRC2 JUDGED-CHANGED at R3162 with the
+    # measured false-positive reason on the board.)
+    ("os-debt-stale-open",
+     os.path.join("..", "os", "test_debt_stale_open_scan.py"), 6),
     # R2270: which queue row comes FIRST becomes a reading. queue_floor counts
     # claimable rows and queue_row gates their prefix, but the top deliverable
     # row was still re-derived by hand every window; this reader names the head
