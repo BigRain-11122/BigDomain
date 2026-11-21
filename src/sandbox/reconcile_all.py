@@ -3137,6 +3137,18 @@ SUITES = [
     # seed row and the R3156 PIN BEFORE the code.
     ("ledger-apimarket-categoryrestockmonths", os.path.join(
         "ledger", "test_apimarket_categoryrestockmonths.py"), 8),
+    # buyer-side monthly pre-sale question volume (a question books in the
+    # UTC month of its own immutable asked_utc, the answering leg is
+    # credited to the ASKING month and a later answer moves nothing, the
+    # grid runs over asking months only so the answer month adds no row,
+    # an honest zero month carries a None answer_rate, per-month and
+    # lifetime participant counts are event-derived, the peak breaks a tie
+    # toward the earlier month, strict buyer isolation holds, and the
+    # lifetime totals reconcile against api_buyer_questions and
+    # api_market_question_months) - criteria AC-BQM1..AC-BQM8 registered in
+    # the R2248 explore-queue seed row and the R3157 PIN BEFORE the code.
+    ("ledger-apimarket-buyerquestionmonths", os.path.join(
+        "ledger", "test_apimarket_buyerquestionmonths.py"), 8),
     # buyer-side monthly claim flow (a claim books in the UTC month of its
     # own opened_utc, a later refund never re-dates it nor invents a row
     # in the refund month, honest zero months carried flat, the five-state

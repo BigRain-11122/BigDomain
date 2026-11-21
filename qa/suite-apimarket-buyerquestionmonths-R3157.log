@@ -1,0 +1,10 @@
+PASS AC-BQM1 contract+honest-empty: envelope=18 row=9 empty_months=0 bare=True gate=True
+PASS AC-BQM2 asked-month booking: aug=(1, 1) oct_q=0 dec_row=False last=2026-11
+PASS AC-BQM3 contiguous grid+running: grid=['2026-08', '2026-09', '2026-10', '2026-11'] runs=[(1, 1), (2, 2), (2, 2), (4, 3)] env_q=4 env_a=3
+PASS AC-BQM4 event-derived participants: nov=(1, 2) sep_list=1 env_sellers=1 env_listings=3
+PASS AC-BQM5 peak+tie-break: bob_peak=2026-11/2 dave_peak=2026-05/2
+PASS AC-BQM6 buyer isolation: bob_q=4 carol_q=1 carol_month=2026-09 market=5
+PASS AC-BQM7 cross-face identity: life=4/3/1 market=5 per_month=True
+PASS AC-BQM8 purity+determinism+wiring: tables_same=True tx_same=True twice=True twin=True wired=True
+PASS AC-BQM8 product files byte-identical: files=5
+SUITE PASS 9/9
