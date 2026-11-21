@@ -5,23 +5,23 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3147 PRODUCT+ENGINEERING: the last derivable number family on the CEO face is judged - a criteria claim that disagrees with the shipped registry (14 claimed against a declared 18) is now counted on the face and never rewritten, while the two suite conclusions (8/8, 3/3) are named rather than graded because the only artifact that can answer them is the evidence log the same row names.",
+    "current": "2026-11-21 R3148 PRODUCT+ENGINEERING: the live matrix document now has ONE writer - a default --out run of src/sandbox/suite_matrix.py is refused by name (E_SMX_DOC_OWNED, exit 3, zero bytes written), so the only face the gate can read is the one its own law produced.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-closeout-gate-R3147.log (6791B, 2026-11-21)",
-    "latest_evidence": "qa/suite-closeout-gate-R3147.log (6791B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3148.log (1788B, 2026-11-21)",
+    "latest_evidence": "qa/probe-R3148.log (1788B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3147] next window (<=48h): (0) MAIN — **本轮亲手撞到同一文档的两个写入车辆：`src/sandbox/suite_matrix.py` 写 `docs/sandbox-suite-matrix.md` 得 79492B、evidence 面记 `qa/authorize-R1719.log`，而闸法（`src/os/suite_matrix_reconcile.py`）的 `--write` 得 77096B、evidence=`qa/reconcile-all-R2739.log`；前者产物被闸判 `EVIDENCE-FACE`，后者才 `DOC-CURRENT`。两个车辆都在注册表里吗？谁被文档/套件/闸引用、谁只是历史遗留？** 下一轮先量（只读＋活盘派生，禁手写数字）：①两个生成器各自被哪些文件/套件引用、是否都注册；②同一注册表下两份产物逐行差异是「evidence 面」还是「行形状」；③若把 `suite_matrix.py` 改成拒绝写（或改走 reconcile 车辆），`os-suite-matrix` 与相关套件、电池腿会不会红。然后裁定：保留一个车辆并让另一个具名拒绝、还是把两者收敛为同一实现。**先落板再动代码。**（备选：tasks.md 无 open 项，产品面真缺口仍是物理件〔商户号/服务器/域名〕，不得造活。） (0) MAIN — **本轮把「可派生」的说明段数字（行数、`sha256`）判了，但括号里还有 3 个**套件结论**一条都没判，其中至少 `14 判据` 是可判的：注册表自己为 `src/os/test_deliverable_index.py` 声明了判据数，而面上一句手写的 `14 判据` 与它是否相符、从来没有面判过；同理 `3/3`（负控）、`8/8`（守护套件）多半也能追到某个套件的打印行。** 下一轮先量（只读＋活盘派生，禁手写数字）：①这 3 个数各自指哪个文件、注册表/套件打印里能否找到同名同数的声明、相符几何；②若把「注册表声明」当产源，`14 判据` 这类手写行会不会与被派生的数逐字重合，撞不撞 `AC-EXPW19 s`（家族外不判）与卡面输出；③家族边界是否该从「单斜杠路径类」扩到 `logs/…/`、`src/os/…` 两族多段路径（这两族今天各有一条不领头字节数与一条判据数）。然后裁定：把注册表当产源判套件结论、只判「注册表有声明」的那一类、还是把「套件结论是落地快照」写成可验证断言。**先落板再动代码。**（备选：tasks.md 无 open 项，产品面真缺口仍是物理件〔商户号/服务器/域名〕，不得造活。）",
-    "next_milestone_due": "2026-11-23T12:27:16+08:00",
-    "updated_at": "2026-11-21T12:27:16+08:00",
+    "next_milestone": "[R3148] next window (<=48h): (0) MAIN — **本轮封了默认写入面，但 `src/sandbox/suite_matrix.py --check` 对活文档仍会报漂移（它的渲染引擎与闸法不同源）：同一命令在两个入口上给出相反答案，一个读者无法从输出字面判断该信哪个。** 下一轮先量（只读＋活盘派生，禁手写数字）：①两个 `--check` 对同一文档的输出字面、exit 码、以及各自声称的依据（stamp/evidence）逐字对照；②若让 sandbox `--check` 也具名拒绝（它不是闸法，建议路得指向闸法），`suite-matrix-discovery` 的 `--check` 臂会不会红；③闸法自身的 `--check` 是否已在注册表/键靴子里被引用，两个入口能否收敛为一个。然后裁定：让 sandbox `--check` 具名拒绝并指路，还是把两个入口收敛为同一实现。**先落板再动代码。**（备选：tasks.md 无 open 项，产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活。）",
+    "next_milestone_due": "2026-11-23T12:40:06+08:00",
+    "updated_at": "2026-11-21T12:40:06+08:00",
     "heartbeat": {
       "tick": 3147,
-      "state_tick": 3147,
-      "lag": 0,
-      "verdict": "PASS",
-      "reason": "fresh"
+      "state_tick": 3148,
+      "lag": 1,
+      "verdict": "FLAG",
+      "reason": "heartbeat_row_debt"
     },
     "outs_age": {
       "rows": 29,
@@ -37,15 +37,9 @@
       "note_claims": 6,
       "criteria_stale": 1,
       "criteria_claims": 1
-    },
-    "corpus": {
-      "files": 4366,
-      "bytes": 508735540,
-      "mb": 508.7,
-      "readable": 4366
     }
   },
-  "current": "2026-11-21 R3147 PRODUCT+ENGINEERING: the last derivable number family on the CEO face is judged - a criteria claim that disagrees with the shipped registry (14 claimed against a declared 18) is now counted on the face and never rewritten, while the two suite conclusions (8/8, 3/3) are named rather than graded because the only artifact that can answer them is the evidence log the same row names.",
+  "current": "2026-11-21 R3148 PRODUCT+ENGINEERING: the live matrix document now has ONE writer - a default --out run of src/sandbox/suite_matrix.py is refused by name (E_SMX_DOC_OWNED, exit 3, zero bytes written), so the only face the gate can read is the one its own law produced.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -73,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3147 PRODUCT+ENGINEERING: the last derivable number family on the CEO face is judged - a criteria claim that disagrees with the shipped registry (14 claimed against a declared 18) is now counted on the face and never rewritten, while the two suite conclusions (8/8, 3/3) are named rather than graded because the only artifact that can answer them is the evidence log the same row names.",
-  "export_ts": "2026-11-21T12:27:16+08:00",
+  "do": "2026-11-21 R3148 PRODUCT+ENGINEERING: the live matrix document now has ONE writer - a default --out run of src/sandbox/suite_matrix.py is refused by name (E_SMX_DOC_OWNED, exit 3, zero bytes written), so the only face the gate can read is the one its own law produced.",
+  "export_ts": "2026-11-21T12:40:06+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/suite-closeout-gate-R3147.log (6791B, 2026-11-21)",
-  "next_milestone": "[R3147] next window (<=48h): (0) MAIN — **本轮亲手撞到同一文档的两个写入车辆：`src/sandbox/suite_matrix.py` 写 `docs/sandbox-suite-matrix.md` 得 79492B、evidence 面记 `qa/authorize-R1719.log`，而闸法（`src/os/suite_matrix_reconcile.py`）的 `--write` 得 77096B、evidence=`qa/reconcile-all-R2739.log`；前者产物被闸判 `EVIDENCE-FACE`，后者才 `DOC-CURRENT`。两个车辆都在注册表里吗？谁被文档/套件/闸引用、谁只是历史遗留？** 下一轮先量（只读＋活盘派生，禁手写数字）：①两个生成器各自被哪些文件/套件引用、是否都注册；②同一注册表下两份产物逐行差异是「evidence 面」还是「行形状」；③若把 `suite_matrix.py` 改成拒绝写（或改走 reconcile 车辆），`os-suite-matrix` 与相关套件、电池腿会不会红。然后裁定：保留一个车辆并让另一个具名拒绝、还是把两者收敛为同一实现。**先落板再动代码。**（备选：tasks.md 无 open 项，产品面真缺口仍是物理件〔商户号/服务器/域名〕，不得造活。） (0) MAIN — **本轮把「可派生」的说明段数字（行数、`sha256`）判了，但括号里还有 3 个**套件结论**一条都没判，其中至少 `14 判据` 是可判的：注册表自己为 `src/os/test_deliverable_index.py` 声明了判据数，而面上一句手写的 `14 判据` 与它是否相符、从来没有面判过；同理 `3/3`（负控）、`8/8`（守护套件）多半也能追到某个套件的打印行。** 下一轮先量（只读＋活盘派生，禁手写数字）：①这 3 个数各自指哪个文件、注册表/套件打印里能否找到同名同数的声明、相符几何；②若把「注册表声明」当产源，`14 判据` 这类手写行会不会与被派生的数逐字重合，撞不撞 `AC-EXPW19 s`（家族外不判）与卡面输出；③家族边界是否该从「单斜杠路径类」扩到 `logs/…/`、`src/os/…` 两族多段路径（这两族今天各有一条不领头字节数与一条判据数）。然后裁定：把注册表当产源判套件结论、只判「注册表有声明」的那一类、还是把「套件结论是落地快照」写成可验证断言。**先落板再动代码。**（备选：tasks.md 无 open 项，产品面真缺口仍是物理件〔商户号/服务器/域名〕，不得造活。）",
+  "latest_evidence": "qa/probe-R3148.log (1788B, 2026-11-21)",
+  "next_milestone": "[R3148] next window (<=48h): (0) MAIN — **本轮封了默认写入面，但 `src/sandbox/suite_matrix.py --check` 对活文档仍会报漂移（它的渲染引擎与闸法不同源）：同一命令在两个入口上给出相反答案，一个读者无法从输出字面判断该信哪个。** 下一轮先量（只读＋活盘派生，禁手写数字）：①两个 `--check` 对同一文档的输出字面、exit 码、以及各自声称的依据（stamp/evidence）逐字对照；②若让 sandbox `--check` 也具名拒绝（它不是闸法，建议路得指向闸法），`suite-matrix-discovery` 的 `--check` 臂会不会红；③闸法自身的 `--check` 是否已在注册表/键靴子里被引用，两个入口能否收敛为一个。然后裁定：让 sandbox `--check` 具名拒绝并指路，还是把两个入口收敛为同一实现。**先落板再动代码。**（备选：tasks.md 无 open 项，产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活。）",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -175,7 +169,7 @@
   },
   "results": [
     [
-      "3147",
+      "3148",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -189,24 +183,24 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 121,
+    "log_lines_in_window": 128,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 20,
+    "substantive_non_idle_mention_lines": 21,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 101861,
-  "next_milestone_due": "2026-11-23T12:27:16+08:00",
+  "state_bytes": 106881,
+  "next_milestone_due": "2026-11-23T12:40:06+08:00",
   "heartbeat": {
     "tick": 3147,
-    "state_tick": 3147,
-    "lag": 0,
-    "verdict": "PASS",
-    "reason": "fresh"
+    "state_tick": 3148,
+    "lag": 1,
+    "verdict": "FLAG",
+    "reason": "heartbeat_row_debt"
   },
   "outs_age": {
     "rows": 29,
@@ -222,11 +216,5 @@
     "note_claims": 6,
     "criteria_stale": 1,
     "criteria_claims": 1
-  },
-  "corpus": {
-    "files": 4366,
-    "bytes": 508735540,
-    "mb": 508.7,
-    "readable": 4366
   }
 }

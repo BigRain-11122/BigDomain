@@ -441,6 +441,18 @@ def main(argv):
                         " at exit 3 instead of inventing a stamp")
     args = parser.parse_args(argv[1:])
 
+    # R3148 (AC-SM8): the live document has ONE writer - the gate law at
+    # src/os/suite_matrix_reconcile.py. This renderer keeps its discovery and
+    # render faces for its own suite, but a write to the default path is
+    # refused by name: a face produced here reads EVIDENCE-FACE at the gate
+    # and must never be published. --check is a read face and stays allowed.
+    if (not args.check
+            and os.path.abspath(args.out) == os.path.abspath(DEFAULT_OUT)):
+        print("FAIL doc-owned: E_SMX_DOC_OWNED %s is written by "
+              "src/os/suite_matrix_reconcile.py (the gate law); "
+              "pass --out for any other path" % rel(DEFAULT_OUT))
+        return 3
+
     problems = self_checks()
     for problem in problems:
         print("FAIL hygiene: %s" % problem)

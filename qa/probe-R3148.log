@@ -1,0 +1,24 @@
+PROBE R3148 - read-only measurement before any code (zero socket, zero network)
+
+Q1 who references each vehicle (rg over the tree, AST-free text scan):
+  sandbox/suite_matrix.py   <- src/sandbox/test_suite_matrix.py (suite-matrix-discovery, 16 criteria before this round)
+  os/suite_matrix_reconcile.py <- tools/closeout_gate.py:269 (DOC-CURRENT law) plus the os-suite-matrix-reconcile* suites
+  both scripts are tracked by git and both are declared in reconcile_all.SUITES
+
+Q2 the two products of the SAME registry (742 suites, 6042 criteria before this round):
+  sandbox  : tmp/matrix-probe-sandbox.md  79492 bytes  787 physical lines  evidence=qa/authorize-R1719.log (53/53)
+  reconcile: tmp/matrix-probe-reconcile.md 77154 bytes  788 physical lines  evidence=qa/reconcile-all-R2739.log (675/675)
+  data rows identical at 742/742; compare-object diff = 1349 lines, all of them EVIDENCE-FACE
+  (summary four cells, per-row status/seconds, and one extra 'stamp source' line), not row shape
+
+Q3 what the gate says about the sandbox product (shipped SMR.report, live call):
+  verdict=EVIDENCE-FACE exit=2 doc_rows=742 registry_rows=742 evidence=qa/reconcile-all-R2739.log
+  so a run of the sandbox vehicle leaves a face the gate refuses
+
+Q4 would closing the default write redden the discovery suite (rg over test_suite_matrix.py):
+  every SM.main call passes an explicit --out under tmp/ (11 call sites), zero of them touch DEFAULT_OUT,
+  so the 16 existing criteria never write the live document
+
+DECISION (pinned in src/os/backlog.md before the first byte of code):
+  the live document keeps ONE writer, the gate law; the sandbox entry keeps its render/discovery faces
+  but refuses the default path by name (E_SMX_DOC_OWNED, exit 3, zero bytes written), and --check stays a read face.

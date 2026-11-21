@@ -1130,7 +1130,10 @@ SUITES = [
     # R1709 AC-TIE1..TIE7: same-mtime tie-break coverage (+5 cases).
     # R1749 AC-EF1..EF6: stale --check evidence-face comparison +
     # face-mismatch hint (+1 case; seed = R1739 same-run stale x2).
-    ("suite-matrix-discovery", "test_suite_matrix.py", 16),
+    # R3148 AC-SM8: the live matrix document has ONE writer - the gate law
+    # at src/os/suite_matrix_reconcile.py; a default --out run is refused by
+    # name and leaves the document byte- and mtime-identical (+1 case).
+    ("suite-matrix-discovery", "test_suite_matrix.py", 17),
     # R1715 runner-profile daily variant: --daily face (discovery
     # restricted to reconcile-daily-*.log evidence, separate
     # runner-profile-daily-baseline.json; sentinel-section parser

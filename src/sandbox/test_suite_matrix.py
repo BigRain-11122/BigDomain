@@ -447,6 +447,51 @@ def case_stale_face_mismatch_hint(tmp):
            " aligned faces green, tamper red with agree note"
 
 
+def case_default_doc_write_refused(tmp):
+    """AC-SM8 (R3148): the live document has ONE writer - the gate law at
+    src/os/suite_matrix_reconcile.py. A run with the default --out is refused
+    by name and leaves the document byte- and mtime-identical, while an
+    explicit --out elsewhere still generates and --check still reads."""
+    import io
+    import contextlib
+
+    live = SM.DEFAULT_OUT
+    assert os.path.isfile(live), "live document missing: %s" % live
+    with io.open(live, "rb") as handle:
+        before_bytes = handle.read()
+    before_mtime = os.stat(live).st_mtime
+
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        code = SM.main(["suite_matrix.py"])
+    out = buf.getvalue()
+    assert code == 3, "expected exit 3, got %r (%s)" % (code, out)
+    assert "E_SMX_DOC_OWNED" in out, "refusal must be named: %s" % out
+    with io.open(live, "rb") as handle:
+        assert handle.read() == before_bytes, "document bytes changed"
+    assert os.stat(live).st_mtime == before_mtime, "document mtime changed"
+
+    evidence = os.path.join(tmp, "ev.log")
+    _write(evidence, MINI_EVIDENCE)
+    out_path = os.path.join(tmp, "doc-q.md")
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        code = SM.main(["suite_matrix.py", "--evidence", evidence,
+                        "--out", out_path])
+    assert code == 0, "explicit --out must still generate: %s" % buf.getvalue()
+    assert os.path.isfile(out_path), "explicit --out wrote no document"
+
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        code = SM.main(["suite_matrix.py", "--check", "--evidence", evidence])
+    text = buf.getvalue()
+    assert "E_SMX_DOC_OWNED" not in text, \
+        "--check is a read face and must not be refused as a writer"
+    assert code != 3, "--check must not take the writer refusal exit: %s" % text
+    return "PASS default-doc-write-refused: exit 3 named, live doc untouched,"\
+           " explicit --out green, --check still reads"
+
+
 def case_hygiene_self_checks(tmp):
     """AC-SM6: self_checks() clean on the current source."""
     problems = SM.self_checks()
@@ -471,6 +516,7 @@ def main():
         case_explicit_evidence_lenient,
         case_check_roundtrip_tmp,
         case_stale_face_mismatch_hint,
+        case_default_doc_write_refused,
         case_hygiene_self_checks,
     ]
     failures = 0
