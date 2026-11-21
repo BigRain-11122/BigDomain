@@ -1,0 +1,44 @@
+R3214 收口证据（本文件经 tools/qa_log.py 落盘并以 --check 复读）
+
+实测（只读先行：tmp/probe_R3214.py → qa/probe-R3214.log 1984B/26 行；私有 temp、
+零 socket、零外网、零活盘 qa/ 写入）：
+Q1 绕门清点 = 2633 个 py 文件里 567 个引用 qa/，写型 open/fsync 行共 3795 条，
+  其中真正绑定 qa/ 树（行内出现 QA_DIR 或字面量 qa/）的只有 1 条：
+  tools/rebuild-archive10-R1648.py:502（一次性轮脚本，历史冻结件）。
+  出厂三条写路：qa_log.write_atomic（写手本身，tmp+os.replace）、
+  battery_shard.write_evidence（走 do_write）、
+  battery_shard.stream_evidence（唯一不经 do_write 的原地写，AC-BSGB15 进度门）。
+Q2 决定性臂（修复前实测，第一轮探针）= 三种目标全部落盘 141B、census_class=tee、
+  gate_class=tee：①无后缀 NAME 落下且 --check NAME.log 找不到；
+  ②qa/ 之外的深层路径同样落盘（该门根本不问目录）；③正规 x.log 正常。
+  修复后同三臂（QA_DIR 指向私有目录）：①ValueError「name must end with .log」零落盘；
+  ②Refuse E_STREAM_PATH 零落盘（实测 outside/deep 与 ../escape 两向均拒）；
+  ③正规 x.log 仍落 141B、tee、可被枚举。
+Q3 收口判断 = 门内拒收（父目录必须=QA_DIR 且名过 check_name + check_log_suffix，
+  两者在调用时读取 QA_DIR）。不选「只收窄调用点」（函数仍是公开门，第三方调用无律）；
+  不选「只记不改」（本轮实测就是它既能写无后缀件又能写 qa/ 之外）。
+  代价实测 = 全部出厂调用点都传 os.path.join(QA_DIR, evidence_name(...))，
+  且 CLI 侧 R3213 已在 _round 里先问 check_log_suffix，故本次拒收不让任何现有
+  出货调用变红；AC-BSGB15「被杀腿仍留 RUNNING 半件」由 AC-QALB19 复验：
+  state=RUNNING、零 SHARD rc=、末行换行、单行字节不变、fsync 与原地 open 各恰一处。
+
+落地 = tools/battery_shard.py 新增 _progress_name(path) 并在 stream_evidence 首行调用
+（拒收先于标记律与落盘）；tools/qa_log.py 文档补 R3214 段；
+src/os/test_qa_log.py 增 AC-QALB18/19/20（并让 AC-QALB14 通过改 QA_DIR 指向私有
+目录来跑门口律，不写活 qa/）；注册行 os-qa-log 17→20，AC-QALB9 句 seventeen→twenty。
+
+Gates = SUITE PASS 22/22 over 20 criteria（qa/suite-qa-log-R3214.log 3543B/24 行
+utf-8/lf sha256 d422fa0623de87df，经 --from 落盘并 --check 复读）；
+os-battery-shard SUITE PASS 32/32；qa_log --selftest VERDICT PASS 9/9 且 qa/ 快照不变；
+矩阵经自身车辆 --write 重生（78577B/756 行）后 --check DOC-CURRENT；
+普查 --check DRIFT-CLEAN flags=0（files=4555 tee=4056 baselined=499 nul_bytes=15）；
+活盘 CLOSEOUT-GATE PASS files=4555 flags=0 reader_refused=0 round_main=OK census=PASS
+matrix=DOC-CURRENT，CARRIER bytes=75595 gate=78500 margin=2905 fold_needed=false
+layout_ok=true crlf=99 bare_lf=0。
+
+诚实边界 = ①零支付、零外网（回环之外无网络），买家仍付不了钱（无商户号/服务器/
+域名/备案+ICP/小程序 appid+secret）；②零产品面／零 api 面／零闸数值——改的是
+「唯一不经出厂写手的 qa/ 写门有没有名字面与地方面」；③门只认「父目录=QA_DIR 且
+basename 精确小写 .log」，符号链接穿出与运行期改 QA_DIR 不在宣称面内；
+④既有证据零字节改动（AC-QALB20 逐件 sha256+字节前后相等），被拒的只有新的非法目标；
+⑤一次性轮脚本 rebuild-archive10-R1648.py 的字面量写点本轮只点名不改（历史冻结件）。

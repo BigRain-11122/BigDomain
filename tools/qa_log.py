@@ -78,6 +78,19 @@ suffixless artifact (round-R2835-closeout, written before this guard). The
 refusal is on the WRITE face only: do_check still reads any flat name, so
 that existing artifact stays readable. The fix is at birth, not at the reader.
 
+R3214 (AC-QALB18): the sibling in-place door was reopened and then guarded.
+battery_shard.stream_evidence writes progress while a leg is still running, so
+it cannot use do_write - but it took a FULL path and asked neither question the
+write face asks. Measured before the guard over a private temp tree: a
+suffixless qa/NAME landed in the healthy dialect (invisible to the census, the
+pre-commit gate and the closeout files= count), and a path outside qa/ landed
+the same bytes anywhere on disk. It now requires the parent directory to be
+QA_DIR and the name to pass check_name plus check_log_suffix, both read at call
+time so a suite can point the door at a private directory. Nothing shipped
+changes: every call site passes os.path.join(QA_DIR, evidence_name(...)), and
+the in-place write with its fsync stays, so a killed leg still leaves a
+readable RUNNING file.
+
 Stdlib only, ASCII source, zero network, zero shell.
 """
 

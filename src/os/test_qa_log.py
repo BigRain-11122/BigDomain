@@ -341,8 +341,8 @@ def main():
                               reg[pos:pos + 200])
             if found:
                 declared.append(found.group(1))
-        ok('AC-QALB9 registry declares exactly one row for this suite, seventeen',
-           declared == ['17'], 'rows=%s hits=%d' % (declared, len(hits)))
+        ok('AC-QALB9 registry declares exactly one row for this suite, twenty',
+           declared == ['20'], 'rows=%s hits=%d' % (declared, len(hits)))
 
         # ---- AC-QALB11: a carried proof line is marked, not certified -----
         # R3203: the generator prints "LOG OK path=... sha16=..." to prove a
@@ -533,6 +533,10 @@ def main():
         shard_spec.loader.exec_module(shard)
         stream_dir = os.path.join(world, 'stream')
         os.makedirs(stream_dir)
+        # R3214: the door now reads QA_DIR at call time (parent must equal it),
+        # so this suite points it at a private directory instead of qa/.
+        saved_shard_qa = shard.QA_DIR
+        shard.QA_DIR = stream_dir
         stream_header = ('SHARD scope=SHARD registry_suites=2 '
                          'registry_criteria=2 selected=2 selected_criteria=2 '
                          'cap=600s leg_cap=0s overrides=0 exact=0 state=')
@@ -565,6 +569,7 @@ def main():
         twice_disk = read_bytes(twice_target).decode('utf-8')
         killed_disk = read_bytes(os.path.join(stream_dir, 'killed.log'))
         killed_text = killed_disk.decode('utf-8')
+        shard.QA_DIR = saved_shard_qa
         shard_src = read_text(os.path.join(ROOT, 'tools', 'battery_shard.py'))
         ok('AC-QALB14 the progress door marks a bare proof line, nothing else',
            len(once) == 1
@@ -683,6 +688,98 @@ def main():
            and all(n.endswith('.log') for n in usage_names)
            and all(n.endswith('.log') for n in evidence_names),
            'usage=%s evidence=%s' % (usage_names, evidence_names))
+
+        # ---- AC-QALB18: the in-place door refuses a bad name or a bad place --
+        # R3214: stream_evidence takes a FULL path, so a direct caller could
+        # land qa/NAME (skipped by every reader) or any path outside qa/.
+        # Measured before the guard over private temp: both landed 141 sane
+        # bytes, and only the suffixless case was invisible to --check NAME.log.
+        def live_qa_digest():
+            rows = {}
+            for name in sorted(os.listdir(QA_DIR)):
+                p = os.path.join(QA_DIR, name)
+                if not os.path.isfile(p):
+                    continue
+                raw = read_bytes(p)
+                rows[name] = (len(raw), hashlib.sha256(raw).hexdigest()[:16])
+            return rows
+
+        live_before = live_qa_digest()
+        door_dir = os.path.join(world, 'door')
+        os.makedirs(door_dir)
+        shard.QA_DIR = door_dir
+        door_cases = [
+            ('suffixless', os.path.join(door_dir, 'NAME')),
+            ('outside', os.path.join(world, 'outside', 'x.log')),
+            ('traversal', os.path.join(door_dir, '..', 'escape.log')),
+        ]
+        door_verdicts = []
+        for label, target in door_cases:
+            try:
+                shard.stream_evidence(target, stream_shapes['initial.log'])
+                door_verdicts.append((label, 'LANDED'))
+            except (ValueError, shard.Refuse) as exc:
+                door_verdicts.append((label, str(exc)))
+        door_files = sorted(os.listdir(door_dir))
+        escaped = [p for p in (os.path.join(world, 'outside', 'x.log'),
+                               os.path.join(world, 'escape.log'))
+                   if os.path.exists(p)]
+        shard.stream_evidence(os.path.join(door_dir, 'control.log'),
+                              stream_shapes['initial.log'])
+        control_ok = (read_bytes(os.path.join(door_dir, 'control.log'))
+                      == stream_shapes['initial.log'].encode('utf-8'))
+        shard.QA_DIR = saved_shard_qa
+        verdict = dict(door_verdicts)
+        ok('AC-QALB18 the in-place door refuses a suffixless name and a path '
+           'outside qa/, and lands nothing',
+           'name must end with .log' in verdict.get('suffixless', '')
+           and verdict.get('outside', '').startswith('E_STREAM_PATH')
+           and verdict.get('traversal', '').startswith('E_STREAM_PATH')
+           and door_files == [] and escaped == [] and control_ok,
+           'verdicts=%s door_files=%s escaped=%s control=%s'
+           % (door_verdicts, door_files, escaped, control_ok))
+
+        # ---- AC-QALB19: a lawful progress file keeps the AC-BSGB15 promise --
+        shard_body = shard_src[shard_src.index('def stream_evidence('):]
+        shard_body = shard_body[:shard_body.index('def do_check(')]
+        door_call = shard_body.find('    _progress_name(path)\n')
+        mark_call = shard_body.find('mark_carried_proofs(text)')
+        killed_rows = [ln for ln in killed_text.splitlines()
+                       if ln.startswith('SHARD row ')]
+        ok('AC-QALB19 a lawful .log progress file is unchanged and a killed '
+           'leg still leaves a readable RUNNING half',
+           all(shape_same.values())
+           and 'state=RUNNING' in killed_text
+           and 'SHARD rc=' not in killed_text
+           and killed_disk.endswith(b'\n')
+           and len(killed_rows) == 1
+           and door_call >= 0 and 0 <= door_call < mark_call
+           and shard_src.count('qa_log.check_name(name)') == 1
+           and shard_src.count('qa_log.check_log_suffix(name)') == 1
+           and shard_src.count('os.fsync(') == 1
+           and shard_src.count(
+               'open(path, "w", encoding="utf-8", newline="\\n")') == 1,
+           'shapes=%s running=%s closing=%s one_row=%d door=%d mark=%d '
+           'sites=%d/%d/%d/%d'
+           % (all(shape_same.values()), 'state=RUNNING' in killed_text,
+              'SHARD rc=' not in killed_text, len(killed_rows), door_call,
+              mark_call, shard_src.count('qa_log.check_name(name)'),
+              shard_src.count('qa_log.check_log_suffix(name)'),
+              shard_src.count('os.fsync('),
+              shard_src.count(
+                  'open(path, "w", encoding="utf-8", newline="\\n")')))
+
+        # ---- AC-QALB20: no existing evidence byte moved --------------------
+        # The arms above wrote only into private temp dirs; the live tree must
+        # be identical byte for byte, and the one suffixless artifact already
+        # on disk must still be there (the reader-side exemption R3213 kept).
+        live_after = live_qa_digest()
+        ok('AC-QALB20 the guard moves no existing qa/ byte',
+           live_before == live_after
+           and live_after.get('round-R2835-closeout') is not None,
+           'files=%d stable=%s suffixless=%s'
+           % (len(live_after), live_before == live_after,
+              live_after.get('round-R2835-closeout')))
     finally:
         mod.QA = original_qa
         shutil.rmtree(world, ignore_errors=True)

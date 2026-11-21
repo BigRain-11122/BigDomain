@@ -7489,8 +7489,11 @@ SUITES = [
     # NAME without the suffix landed in the healthy dialect while all of them
     # skipped it. The write face now refuses; the reader face stays open so the
     # one existing suffixless artifact keeps reading. Three criteria (15..17).
+    # R3214: the one in-place qa/ door (battery_shard.stream_evidence) takes a
+    # full path and asked neither the name nor the place question. It now
+    # refuses a suffixless name and a path outside qa/. Three more (18..20).
     ("os-qa-log",
-     os.path.join("..", "os", "test_qa_log.py"), 17),
+     os.path.join("..", "os", "test_qa_log.py"), 20),
     # R3208: src/os/state.json carries the canonical CRLF dialect its readers
     # require, but the path was not pinned in .gitattributes - so a checkout
     # running with core.autocrlf=false materialized the whole carrier as bare

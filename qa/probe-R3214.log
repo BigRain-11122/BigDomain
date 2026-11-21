@@ -1,0 +1,26 @@
+== Q1 in-place write sites (.py under tools/, src/, tools/hooks/) ==
+py files scanned=2633 qa-referencing=567
+total write-open/fsync lines across those files=3795
+qa-bound write sites=1
+  BOUND tools/rebuild-archive10-R1648.py:502 def derive_desc | open('qa/reorg-archive10-rebuild.log', 'w', encoding='ascii', errors='replace').write('\n'.join(L) + '\n')
+qa-bound by module: ['tools/rebuild-archive10-R1648.py']
+in-place doors reached through qa_log.do_write: qa_log.write_atomic (the writer itself, tmp+os.replace), battery_shard.write_evidence
+in-place door NOT through do_write: battery_shard.stream_evidence (AC-BSGB15 progress, open+fsync)
+one-off literal writer: tools/rebuild-archive10-R1648.py:502 ('qa/reorg-archive10-rebuild.log', frozen round script)
+
+== Q2 decisive arms (private temp, zero live qa/ write) ==
+   BEFORE the guard (first probe run): A landed 141B class=tee, B landed 141B class=tee, C landed 141B class=tee
+-- arm A suffixless qa-like NAME target=C:\Users\sjs20\AppData\Local\Temp\r3214_9izlq_t4\NAME
+   landed=False exc=ValueError: name must end with .log, got 'NAME' (the writer census, the pre-commit evidence gate and the closeout files= count all enumerate only *.log, so this file would land and never be judged; --check still reads an existing suffixless file)
+-- arm B path outside any qa dir target=C:\Users\sjs20\AppData\Local\Temp\r3214_9izlq_t4\outside\deep\x.log
+   landed=False exc=Refuse: E_STREAM_PATH C:\Users\sjs20\AppData\Local\Temp\r3214_9izlq_t4\outside\deep\x.log
+-- arm C legitimate name.log target=C:\Users\sjs20\AppData\Local\Temp\r3214_9izlq_t4\x.log
+   landed=True bytes=141 census_class=tee gate_class=tee
+   enumerated_by_check=True
+   QA_DIR constant=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\qa
+   evidence_name('qa/y.log')='y.log' ; evidence_name('qa/y')='y'
+
+== Q3 baseline ==
+qa/ files=4666 bytes=530647601
+suffixless log-shaped files=['round-R2835-closeout']
+live qa/ untouched by this probe (private temp only)

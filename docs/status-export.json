@@ -1,17 +1,17 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3213 PRODUCT+ENGINEERING: the writer's own NAME face now refuses a file no reader can see - 55 shipped enumerations filter on endswith .log (the writer census at seven sites, the pre-commit evidence gate and the closeout files= count that reads the census line), so qa/NAME without the suffix landed in the healthy dialect, was skipped by all of them, and could not be found by --check NAME.log either.",
-    "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
+    "current": "2026-11-22 R3214 PRODUCT+ENGINEERING: the last qa/ door that took a full path now asks both questions - stream_evidence refuses a suffixless name and any directory outside qa/, where a direct caller could land qa/NAME (skipped by every reader) or the same bytes anywhere on disk.",
+    "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-monthly-faces.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-qa-log-R3213.log (2618B, 2026-11-22)",
-    "latest_evidence": "qa/suite-qa-log-R3213.log (2618B, 2026-11-22)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3214.log (3648B, 2026-11-22)",
+    "latest_evidence": "qa/suite-qa-log-R3214.log (3543B, 2026-11-22); qa/reorg-R3214.log (3648B)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3213] next window (<=48h): (0) MAIN — **`stream_evidence` 仍是唯一绕过写手命名律的 qa/ 门：它收的是完整路径，不经过 `check_log_suffix`，所以「出生地拦截」在电池腿的进度落盘这一支上还是空的**。做法=先只读量三问：①列出全仓所有**原地写**（`open(...,\"w\")`/fsync）到 `qa/` 的调用点，逐个给「谁写、写什么形态、是否经 `do_write`」三列表，量出 `stream_evidence` 之外还有没有第二个绕门；②对每个绕门做决定性臂：给一个非 `.log` 目标路径，看它现在落不落、落成什么方言、普查/pre-commit 看不看得见（预期：落、健康方言、两者都看不见）；③收口判断：在 `stream_evidence` 里拒收（会否打断「被杀腿仍留 RUNNING 半件」的 AC-BSGB15 承诺？量出恢复路径）／把调用点收窄到 `.log` 名（一行断言）／只记不改——三选一并证明不改既有证据字节。判据沿用 AC-QAL/AC-BSGB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
-    "next_milestone_due": "2026-11-24T02:44:03+08:00",
-    "updated_at": "2026-11-22T02:44:03+08:00",
+    "next_milestone": "[R3214] next window (<=48h): (0) MAIN — **写手自己的 `directory=` 参数没有律**：`qa_log.do_write(name, source, directory=QA)` 与 `write_atomic(directory=...)` 接受任意目录，测试世界靠它把写手指向私有目录——也就是说「写出的证据可以离开 qa/」现在只由调用者自觉，出厂面没有一处断言谁可以传它。做法=先只读量三问：①全仓 `do_write(` 与 `write_atomic(` 的 `directory=` 实参形态分类（生产件全默认／测试世界指向 private／另有第三方），逐条给出处；②决定性臂：以 `directory=<qa 之外>` 直接调 `do_write`，量它今天落不落、落成什么方言、普查/pre-commit 看不看得见（预期：落、utf-8/lf、两者都看不见），并量 `verify_written` 的复读是否仍成立；③收口三选一（把可覆盖面收成显式的测试开关／在 `do_write` 里拒收非 QA 目录／只记不改），并证明所选面不改任何既有证据字节。判据沿用 AC-QALB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行（提案锚／物理件单）不变，当窗提案面已有 BD-PROP-010（2026-11-17）在册。",
+    "next_milestone_due": "2026-11-24T02:57:50+08:00",
+    "updated_at": "2026-11-22T02:57:50+08:00",
     "heartbeat": {
       "tick": 3212,
       "state_tick": 3213,
@@ -35,7 +35,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-22 R3213 PRODUCT+ENGINEERING: the writer's own NAME face now refuses a file no reader can see - 55 shipped enumerations filter on endswith .log (the writer census at seven sites, the pre-commit evidence gate and the closeout files= count that reads the census line), so qa/NAME without the suffix landed in the healthy dialect, was skipped by all of them, and could not be found by --check NAME.log either.",
+  "current": "2026-11-22 R3214 PRODUCT+ENGINEERING: the last qa/ door that took a full path now asks both questions - stream_evidence refuses a suffixless name and any directory outside qa/, where a direct caller could land qa/NAME (skipped by every reader) or the same bytes anywhere on disk.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,11 +63,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3213 PRODUCT+ENGINEERING: the writer's own NAME face now refuses a file no reader can see - 55 shipped enumerations filter on endswith .log (the writer census at seven sites, the pre-commit evidence gate and the closeout files= count that reads the census line), so qa/NAME without the suffix landed in the healthy dialect, was skipped by all of them, and could not be found by --check NAME.log either.",
-  "export_ts": "2026-11-22T02:44:03+08:00",
+  "do": "2026-11-22 R3214 PRODUCT+ENGINEERING: the last qa/ door that took a full path now asks both questions - stream_evidence refuses a suffixless name and any directory outside qa/, where a direct caller could land qa/NAME (skipped by every reader) or the same bytes anywhere on disk.",
+  "export_ts": "2026-11-22T02:57:50+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
-  "latest_evidence": "qa/suite-qa-log-R3213.log (2618B, 2026-11-22)",
-  "next_milestone": "[R3213] next window (<=48h): (0) MAIN — **`stream_evidence` 仍是唯一绕过写手命名律的 qa/ 门：它收的是完整路径，不经过 `check_log_suffix`，所以「出生地拦截」在电池腿的进度落盘这一支上还是空的**。做法=先只读量三问：①列出全仓所有**原地写**（`open(...,\"w\")`/fsync）到 `qa/` 的调用点，逐个给「谁写、写什么形态、是否经 `do_write`」三列表，量出 `stream_evidence` 之外还有没有第二个绕门；②对每个绕门做决定性臂：给一个非 `.log` 目标路径，看它现在落不落、落成什么方言、普查/pre-commit 看不看得见（预期：落、健康方言、两者都看不见）；③收口判断：在 `stream_evidence` 里拒收（会否打断「被杀腿仍留 RUNNING 半件」的 AC-BSGB15 承诺？量出恢复路径）／把调用点收窄到 `.log` 名（一行断言）／只记不改——三选一并证明不改既有证据字节。判据沿用 AC-QAL/AC-BSGB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+  "latest_evidence": "qa/suite-qa-log-R3214.log (3543B, 2026-11-22); qa/reorg-R3214.log (3648B)",
+  "next_milestone": "[R3214] next window (<=48h): (0) MAIN — **写手自己的 `directory=` 参数没有律**：`qa_log.do_write(name, source, directory=QA)` 与 `write_atomic(directory=...)` 接受任意目录，测试世界靠它把写手指向私有目录——也就是说「写出的证据可以离开 qa/」现在只由调用者自觉，出厂面没有一处断言谁可以传它。做法=先只读量三问：①全仓 `do_write(` 与 `write_atomic(` 的 `directory=` 实参形态分类（生产件全默认／测试世界指向 private／另有第三方），逐条给出处；②决定性臂：以 `directory=<qa 之外>` 直接调 `do_write`，量它今天落不落、落成什么方言、普查/pre-commit 看不看得见（预期：落、utf-8/lf、两者都看不见），并量 `verify_written` 的复读是否仍成立；③收口三选一（把可覆盖面收成显式的测试开关／在 `do_write` 里拒收非 QA 目录／只记不改），并证明所选面不改任何既有证据字节。判据沿用 AC-QALB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行（提案锚／物理件单）不变，当窗提案面已有 BD-PROP-010（2026-11-17）在册。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -181,8 +181,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 75595,
-  "next_milestone_due": "2026-11-24T02:44:03+08:00",
+  "state_bytes": 69830,
+  "next_milestone_due": "2026-11-24T02:57:50+08:00",
   "heartbeat": {
     "tick": 3212,
     "state_tick": 3213,

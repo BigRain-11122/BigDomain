@@ -313,6 +313,31 @@ def write_evidence(name, text):
     return proof
 
 
+def _progress_name(path):
+    """AC-QALB18 (R3214): the in-place progress door is still an evidence door.
+
+    Measured before this guard (read-only probe over private temp): this door
+    takes a FULL path and asked neither question its siblings ask - a suffixless
+    qa/NAME landed in the healthy dialect where the writer census, the
+    pre-commit gate and the closeout files= count all skip it by construction,
+    and a path pointing outside qa/ landed the same bytes anywhere on disk.
+    evidence_name() pins qa/ and the CLI already asks check_log_suffix before
+    any suite runs, so this closes the door for a DIRECT caller; it costs no
+    existing evidence a byte, because every shipped call site passes
+    os.path.join(QA_DIR, evidence_name(...)). QA_DIR is read at call time so a
+    suite can point the door at a private directory instead of the live tree.
+    """
+    directory = os.path.dirname(os.path.abspath(path))
+    if (os.path.normcase(os.path.realpath(directory))
+            != os.path.normcase(os.path.realpath(QA_DIR))):
+        raise Refuse("E_STREAM_PATH %s" % path)
+    name = os.path.basename(path)
+    qa_log = qa_log_module()
+    qa_log.check_name(name)
+    qa_log.check_log_suffix(name)
+    return name
+
+
 def stream_evidence(path, text):
     """AC-BSGB15 (R2886): progress lands on disk while the leg is still running.
 
@@ -332,6 +357,7 @@ def stream_evidence(path, text):
     bare line. The mark is idempotent, and the write stays in place with its
     fsync so a killed leg still leaves a readable RUNNING file.
     """
+    _progress_name(path)
     text, _carried = qa_log_module().mark_carried_proofs(text)
     with open(path, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(text)
