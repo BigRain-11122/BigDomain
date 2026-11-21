@@ -21,6 +21,9 @@
 # Layout law: the live state.json is the PS 5.1 layout - one log item per
 # line, indented by exactly 16 spaces, CRLF separators. A file whose layout
 # does not match the parsed log length is refused rather than guessed at.
+# R3208: the CRLF half of that law is now asked explicitly (E_SF_EOL) - the
+# reader used to fall back to a bare-LF split, so a drifted carrier was folded
+# and re-landed as LF with every gate green.
 #
 # Pure read in --check: nothing is written, no clock is read on that path.
 # Source is pure ASCII, stdlib only, zero network imports, and the fold
@@ -271,6 +274,20 @@ def plan_fold(raw, state, window_start, window_end, summary, reserve=0,
     except UnicodeDecodeError as exc:
         raise StateFoldError("E_SF_BAD_LAYOUT", "state is not utf-8 (%s)"
                              % exc)
+    # R3208: split_layout falls back to a bare-LF reading, so a carrier that
+    # had already lost its CRLF was planned and re-landed as LF - measured:
+    # plan_fold on an LF carrier answered newline=LF and composed 77 bare LF
+    # separators with every gate green. The fold was therefore a silent
+    # PROPAGATOR of the drift the closeout gate only flags at the end of the
+    # round. The sibling door has refused an LF carrier since it shipped
+    # (logs_toolkit prints E_STATE_LAYOUT plus the repair hint), so this door
+    # now refuses it by name instead of carrying the dialect forward.
+    if "\r\n" not in text:
+        raise StateFoldError(
+            "E_SF_EOL",
+            "the carrier carries no CRLF separator, so a fold would land the "
+            "same dialect back (nothing written); repair: python "
+            "src/os/logs_toolkit.py eol --fix --execute")
     layout = split_layout(text, count)
     if layout is None:
         raise StateFoldError("E_SF_BAD_LAYOUT",

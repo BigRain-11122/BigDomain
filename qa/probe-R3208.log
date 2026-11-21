@@ -1,0 +1,53 @@
+LIVE bytes=59886 crlf=78 bare_lf=0 lone_cr=0
+
+W1 state_append.atomic_write rc=2 bytes=59886 crlf=78 bare_lf=0 lone_cr=0
+   stdout=APPEND FAIL E_RMS_NO_LABEL round=3208 newest round 3208 has 1 dated line(s) and none carri
+W2 state_io.write_document              bytes=59886 crlf=78 bare_lf=0 lone_cr=0
+W3a payload_for on the CRLF carrier      bytes=38 crlf=5 bare_lf=0 lone_cr=0
+W3b payload_for on an LF carrier         bytes=33 crlf=0 bare_lf=5 lone_cr=0
+python : Traceback (most recent call last):
+所在位置 行:1 字符: 55
++ ... \BigDomain; python tmp/probe_R3208.py > tmp/probe_R3208.out 2>&1; pyt ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tmp\probe_R3208.py", line 178, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tmp\probe_R3208.py", line 101, in main
+    plan, folded = SF.plan_fold(io.open(path, "rb").read(),
+                   ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                json.loads(live.decode("utf-8")), 1, 2,
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                "R0001 probe summary", gate=200000)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\state_fold.py", line 286, in plan_fold
+    raise StateFoldError(
+    ...<3 lines>...
+        "src/os/logs_toolkit.py eol --fix --execute")
+state_fold.StateFoldError: E_SF_EOL: the carrier carries no CRLF separator, so a fold would land the same dialect back 
+(nothing written); repair: python src/os/logs_toolkit.py eol --fix --execute
+BASELINE live bytes=59886 crlf=78 bare_lf=0
+add crlf=true  -> checkout crlf=true       blob[bytes=59808 crlf=0 bare_lf=78] landed[bytes=59886 crlf=78 bare_lf=0]
+add crlf=false -> checkout crlf=true       blob[bytes=59886 crlf=78 bare_lf=0] landed[bytes=59886 crlf=78 bare_lf=0]
+add crlf=false -> checkout crlf=false      blob[bytes=59886 crlf=78 bare_lf=0] landed[bytes=59886 crlf=78 bare_lf=0]
+add crlf=true  -> checkout crlf=false      blob[bytes=59808 crlf=0 bare_lf=78] landed[bytes=59808 crlf=0 bare_lf=78]
+git stash push/pop (autocrlf=true)         bytes=59887 crlf=78 bare_lf=0
+
+logs_toolkit.split_ps_layout CRLF -> readable
+logs_toolkit.split_ps_layout LF   -> REFUSED
+logs_toolkit fold gate (source) asks: '\r\n' not in text -> E_STATE_LAYOUT (refuses an LF carrier)
+state_fold.split_layout CRLF      -> readable
+state_fold.split_layout LF        -> readable (newline=
+)
+
+archive files=4 fold markers=799
+BASELINE live bytes=59886 crlf=78 bare_lf=0
+LF  no pin, add true -> co false           blob[bytes=59808 crlf=0 bare_lf=78] landed[bytes=59808 crlf=0 bare_lf=78]
+OK  pin text eol=crlf, add true -> co false blob[bytes=59808 crlf=0 bare_lf=78] landed[bytes=59886 crlf=78 bare_lf=0]
+OK  pin text eol=crlf, add false -> co false blob[bytes=59808 crlf=0 bare_lf=78] landed[bytes=59886 crlf=78 bare_lf=0]
+OK  pin text eol=crlf, add true -> co true blob[bytes=59808 crlf=0 bare_lf=78] landed[bytes=59886 crlf=78 bare_lf=0]
+OK  pin -text, add true -> co false        blob[bytes=59886 crlf=78 bare_lf=0] landed[bytes=59886 crlf=78 bare_lf=0]
+LIVE check-attr text rc=0 src/os/state.json: text: set
+LIVE check-attr eol  rc=0 src/os/state.json: eol: crlf

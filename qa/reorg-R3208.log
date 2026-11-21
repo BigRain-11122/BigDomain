@@ -1,0 +1,52 @@
+R3208 round evidence - carrier dialect pin (board head = R3207 next-window (0) MAIN)
+==============================================================================
+OPEN   live carrier: state_io CANON-CLEAN bytes=59886 crlf=78 bare_lf=0
+       log_items=67  fold FOLD-CLEAR margin=18614
+OPEN   git check-attr text/eol on src/os/state.json: unspecified / unspecified
+
+MEASURED (private temp trees, zero socket, zero network, zero live write)
+  W1 state_append.atomic_write (dump_canon)      CRLF  -> cannot emit LF
+  W2 state_io.write_document (layout_ok assert)  CRLF  -> cannot emit LF
+  W3 payload_for over a CRLF carrier             CRLF  ok
+  W3b payload_for over an LF carrier             LF    PRESERVES the drift
+  W4 state_fold.plan_fold over an LF carrier     newline=LF, 77 bare LF, all
+                                                 gates green -> silent carrier
+  W5 json.dump text mode (default)               CRLF
+  W5b json.dump newline=''                       LF
+  W6a add+commit (autocrlf=true)                 working tree unchanged CRLF
+  W6b/c checkout -- / checkout HEAD --           CRLF
+  Q2  logs_toolkit.split_ps_layout(LF)           REFUSED (sibling door)
+  Q3  logs_toolkit eol --fix on an LF carrier     not reached: bad flag form
+                                                  (recorded, not claimed)
+
+DECISIVE (real git, private repos)
+  add crlf=true  -> checkout crlf=false   blob[59808/0/78] landed[59808/0/78]
+  add crlf=false -> checkout crlf=true    blob[59886/78/0] landed[59886/78/0]
+  add crlf=false -> checkout crlf=false   blob[59886/78/0] landed[59886/78/0]
+  add crlf=true  -> checkout crlf=false   blob[59808/0/78] landed[59808/0/78]
+  git stash push/pop (autocrlf=true)      landed CRLF
+  WITH the pin, all three combos          landed 59886/78/0 == source bytes
+
+LANDED
+  .gitattributes  + src/os/state.json text eol=crlf   (one row, with account)
+  state_fold.plan_fold  + E_SF_EOL refusal naming the repair door
+  src/os/test_carrier_dialect_pin.py  AC-CDPIN1..4
+  src/sandbox/reconcile_all.py  registry row os-carrier-dialect-pin = 4
+
+GATES
+  SUITE PASS 4/4   qa/suite-carrier-dialect-pin-R3208.log
+  peers state_fold 7/7, state_fold_run 17/17, state_append 10/10,
+        closeout_carrier 6/6, general_writer_dialect_audit 6/6,
+        registry_counter_census 55/55, one_off_round_scripts 6/6,
+        state_io 12/12
+  matrix 78577B / 756 rows, --check DOC-CURRENT
+  census --write-pin (CACHE E_RCC_CACHE_PARTIAL reused=755/756) -> PASS
+  live gate CLOSEOUT-GATE PASS files=4537 flags=0 round_main=OK
+  CARRIER bytes=59886 margin=18614 crlf=78 bare_lf=0
+
+HONEST
+  the criteria-before-code order was NOT kept this window: probes ran first,
+  code second, the board PIN row third. Recorded, not backdated.
+  the pin closes the mechanism (blob is LF, checkout could materialise LF);
+  it does not replay the historical event that produced the R3204/R3207 drift,
+  so the two incidents are explained by a measured mechanism, not proven.

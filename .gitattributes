@@ -23,3 +23,17 @@ state/queue/*.md text eol=lf
 # an earlier version of this comment claimed a 491/491 R2548 diff was that
 # dialect churn - it was not, it was 491 genuine per-suite timing cells.
 docs/sandbox-suite-matrix.md text eol=lf
+
+# src/os/state.json is read by both fold doors and by the closeout gate in its
+# canonical dialect: CRLF separators, sixteen-space log items. This path was
+# NOT pinned before R3208, and a blob is always stored as LF, so any checkout
+# running with core.autocrlf=false materialized the WHOLE carrier as bare LF -
+# exactly the drift the closeout gate refused twice (R3204 bare_lf=49, R3207
+# bare_lf=70) and each time repaired by hand through
+# `python src/os/logs_toolkit.py eol --fix --execute`. Measured at R3208 in a
+# private repo: add under autocrlf=true then checkout under autocrlf=false
+# landed bytes=59808 crlf=0 bare_lf=78, while the same cycle with this pin
+# landed bytes=59886 crlf=78 bare_lf=0, and the pin held for all three
+# add/checkout combinations. The carrier dialect is a property of the FILE,
+# never of the machine's git settings. Born at R3208.
+src/os/state.json text eol=crlf

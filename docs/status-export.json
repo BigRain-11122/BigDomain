@@ -1,23 +1,23 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3207 PRODUCT+ENGINEERING: the assembled total is derived three ways instead of typed - AC-RCC12-R8 carried 294 in its assertion and read 302, an inherited red that also reddened the sibling battery arm AC-BSGB20 through a leg rc; the 8-line gap is registry growth, not a reach change.",
+    "current": "2026-11-22 R3208 PRODUCT+ENGINEERING: the carrier dialect is pinned in git - src/os/state.json had no .gitattributes row, so a checkout under core.autocrlf=false landed the whole file as bare LF (measured 59808 crlf=0 bare_lf=78 against the live 59886/78), which is exactly the drift the closeout gate refused at R3204 and R3207 and repaired by hand twice; with text eol=crlf all three measured add/checkout combinations land the live bytes back, and the new fold door now refuses an LF carrier with E_SF_EOL instead of silently re-landing it while its sibling door has refused one since it shipped.",
     "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-monthly-faces.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3207.log (3207B, 2026-11-22)",
-    "latest_evidence": "qa/reorg-R3207.log (3207B, 2026-11-22)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3208.log (2988B, 2026-11-22)",
+    "latest_evidence": "qa/reorg-R3208.log (2988B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3207] next window (<=48h): (0) MAIN — **载体换行漂移在 R3204 修好两天后又回来了**（本窗收口门再次以 `E_CLG_CARRIER_LAYOUT bare_lf=70` 拒收 `src/os/state.json`，同门同法再修一次通过）。做法=先只读量三问：①在私有副本上逐字节复现三条可能写手（`state_append.py`、`state_io.dump_canon`、任一会整份重写 state 的工具）各自落下的换行，指明**哪一条真的会写出 LF**，并给出该路径在本仓历史上的调用计数；②量「出生地拦」的可行性：让唯一写手在写入前断言目标文本的换行方言（非 CRLF 则拒写并具名），对既有 67 行日志与 `state_bytes` 字段是否有任何字节影响；③收口判断：出生地拦（写手拒写）／收口门侧自动修（当前做法，已连修两次）／只记不复发修——三选一，并证明所选面不改内容语义（`content_eq`/`json_eq`）。判据沿用 AC-SFOLD 写法，**先落板再动代码**。(1) 次选（本窗实测发现、未入板为正式项）：**`readable` 可能高估**——一条行的唯一 SUITE 形状若是夹具里的 `write(..., \"SUITE PASS 6/6\")`，普查判它 readable，但电池**永远无法**用该行反驳注册表（夹具行不是运行期收尾行）；量清 755 行里有几行**仅**靠 `write(` 夹具行才 readable、pin 会不会因此变化。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 tech=4/10 explore=3/10（欠 13，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
-    "next_milestone_due": "2026-11-24T01:18:39+08:00",
-    "updated_at": "2026-11-22T01:18:39+08:00",
+    "next_milestone": "[R3208] next window (<=48h): (0) MAIN — **方言钉现在只护住 `src/os/state.json` 一条路径，同类载体还没量**：本窗实测「blob 恒 LF＋检出 autocrlf=false＝整份裸 LF」是**通用机制**，而 `.gitattributes` 里只有四行钉。做法=先只读量三问：①全仓还有哪些**出厂读者要求 CRLF 或指定方言**的文件（`docs/status-export.json`？`logs/state-log-archive-*.md` 的报文头？`qa/writer-census-baseline.json`？），逐条给出「它的读者是谁、要求什么方言、现在钉没钉」三列表；②对每一条做私有仓 `add→checkout` 臂，量出「未钉时检出会不会改方言」（只有会改的才值得钉，钉多了是装饰）；③收口判断：把**会改的**按同一行格式钉进 `.gitattributes` 并共用一条判据，还是维持现状只钉状态载体，并证明所选面不改任何既有字节（`content_eq`/`json_eq`）。三条量完再落，判据沿用 AC-CDPIN 写法，**先落板再动代码**（本窗该时序已违例一次，见上）。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+    "next_milestone_due": "2026-11-24T01:33:45+08:00",
+    "updated_at": "2026-11-22T01:33:45+08:00",
     "heartbeat": {
-      "tick": null,
-      "state_tick": 3207,
-      "lag": null,
-      "verdict": "FLAG",
-      "reason": "heartbeat_missing_or_unparsed"
+      "tick": 3208,
+      "state_tick": 3208,
+      "lag": 0,
+      "verdict": "PASS",
+      "reason": "fresh"
     },
     "outs_age": {
       "rows": 30,
@@ -28,14 +28,20 @@
       "dup_rows": 0,
       "distinct": 30,
       "collapsed": 0,
-      "labels_refreshed": 0,
+      "labels_refreshed": 1,
       "notes_stale": 2,
       "note_claims": 6,
       "criteria_stale": 1,
       "criteria_claims": 1
+    },
+    "corpus": {
+      "files": 4540,
+      "bytes": 510925746,
+      "mb": 510.9,
+      "readable": 4540
     }
   },
-  "current": "2026-11-22 R3207 PRODUCT+ENGINEERING: the assembled total is derived three ways instead of typed - AC-RCC12-R8 carried 294 in its assertion and read 302, an inherited red that also reddened the sibling battery arm AC-BSGB20 through a leg rc; the 8-line gap is registry growth, not a reach change.",
+  "current": "2026-11-22 R3208 PRODUCT+ENGINEERING: the carrier dialect is pinned in git - src/os/state.json had no .gitattributes row, so a checkout under core.autocrlf=false landed the whole file as bare LF (measured 59808 crlf=0 bare_lf=78 against the live 59886/78), which is exactly the drift the closeout gate refused at R3204 and R3207 and repaired by hand twice; with text eol=crlf all three measured add/checkout combinations land the live bytes back, and the new fold door now refuses an LF carrier with E_SF_EOL instead of silently re-landing it while its sibling door has refused one since it shipped.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,11 +69,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3207 PRODUCT+ENGINEERING: the assembled total is derived three ways instead of typed - AC-RCC12-R8 carried 294 in its assertion and read 302, an inherited red that also reddened the sibling battery arm AC-BSGB20 through a leg rc; the 8-line gap is registry growth, not a reach change.",
-  "export_ts": "2026-11-22T01:18:39+08:00",
+  "do": "2026-11-22 R3208 PRODUCT+ENGINEERING: the carrier dialect is pinned in git - src/os/state.json had no .gitattributes row, so a checkout under core.autocrlf=false landed the whole file as bare LF (measured 59808 crlf=0 bare_lf=78 against the live 59886/78), which is exactly the drift the closeout gate refused at R3204 and R3207 and repaired by hand twice; with text eol=crlf all three measured add/checkout combinations land the live bytes back, and the new fold door now refuses an LF carrier with E_SF_EOL instead of silently re-landing it while its sibling door has refused one since it shipped.",
+  "export_ts": "2026-11-22T01:33:45+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
-  "latest_evidence": "qa/reorg-R3207.log (3207B, 2026-11-22)",
-  "next_milestone": "[R3207] next window (<=48h): (0) MAIN — **载体换行漂移在 R3204 修好两天后又回来了**（本窗收口门再次以 `E_CLG_CARRIER_LAYOUT bare_lf=70` 拒收 `src/os/state.json`，同门同法再修一次通过）。做法=先只读量三问：①在私有副本上逐字节复现三条可能写手（`state_append.py`、`state_io.dump_canon`、任一会整份重写 state 的工具）各自落下的换行，指明**哪一条真的会写出 LF**，并给出该路径在本仓历史上的调用计数；②量「出生地拦」的可行性：让唯一写手在写入前断言目标文本的换行方言（非 CRLF 则拒写并具名），对既有 67 行日志与 `state_bytes` 字段是否有任何字节影响；③收口判断：出生地拦（写手拒写）／收口门侧自动修（当前做法，已连修两次）／只记不复发修——三选一，并证明所选面不改内容语义（`content_eq`/`json_eq`）。判据沿用 AC-SFOLD 写法，**先落板再动代码**。(1) 次选（本窗实测发现、未入板为正式项）：**`readable` 可能高估**——一条行的唯一 SUITE 形状若是夹具里的 `write(..., \"SUITE PASS 6/6\")`，普查判它 readable，但电池**永远无法**用该行反驳注册表（夹具行不是运行期收尾行）；量清 755 行里有几行**仅**靠 `write(` 夹具行才 readable、pin 会不会因此变化。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 tech=4/10 explore=3/10（欠 13，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+  "latest_evidence": "qa/reorg-R3208.log (2988B, 2026-11-22)",
+  "next_milestone": "[R3208] next window (<=48h): (0) MAIN — **方言钉现在只护住 `src/os/state.json` 一条路径，同类载体还没量**：本窗实测「blob 恒 LF＋检出 autocrlf=false＝整份裸 LF」是**通用机制**，而 `.gitattributes` 里只有四行钉。做法=先只读量三问：①全仓还有哪些**出厂读者要求 CRLF 或指定方言**的文件（`docs/status-export.json`？`logs/state-log-archive-*.md` 的报文头？`qa/writer-census-baseline.json`？），逐条给出「它的读者是谁、要求什么方言、现在钉没钉」三列表；②对每一条做私有仓 `add→checkout` 臂，量出「未钉时检出会不会改方言」（只有会改的才值得钉，钉多了是装饰）；③收口判断：把**会改的**按同一行格式钉进 `.gitattributes` 并共用一条判据，还是维持现状只钉状态载体，并证明所选面不改任何既有字节（`content_eq`/`json_eq`）。三条量完再落，判据沿用 AC-CDPIN 写法，**先落板再动代码**（本窗该时序已违例一次，见上）。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -81,7 +87,7 @@
     "qa/smoke-R2868.png (186784B) + qa/smoke-R2868.log (7091B) - QA charter daily crawl evidence",
     "preview/first-yuan-chain.html (3715B) + preview/first-yuan-chain.json (4806B)",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B)",
-    "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（78486B·687 行）",
+    "qa/deliverable-index-suite-R2796.log（1045B·本轮证据）+ src/os/test_deliverable_index.py（14 判据）+ docs/sandbox-suite-matrix.md（78577B·687 行）",
     "preview/money-path-demo.html (10161B) + preview/money-path-demo.json (4705B)",
     "preview/ceo-blockers.html (8453B) + preview/ceo-blockers.json (6754B)",
     "preview/battery-shard-report.html (16421B) + preview/battery-shard-report.json (16240B)",
@@ -157,7 +163,7 @@
   },
   "results": [
     [
-      "3207",
+      "3208",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -171,24 +177,24 @@
   "self_drive": {
     "window": "2026-11-16..2026-11-22",
     "window_days": 7,
-    "log_lines_in_window": 66,
+    "log_lines_in_window": 69,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 59886,
-  "next_milestone_due": "2026-11-24T01:18:39+08:00",
+  "state_bytes": 62610,
+  "next_milestone_due": "2026-11-24T01:33:45+08:00",
   "heartbeat": {
-    "tick": null,
-    "state_tick": 3207,
-    "lag": null,
-    "verdict": "FLAG",
-    "reason": "heartbeat_missing_or_unparsed"
+    "tick": 3208,
+    "state_tick": 3208,
+    "lag": 0,
+    "verdict": "PASS",
+    "reason": "fresh"
   },
   "outs_age": {
     "rows": 30,
@@ -199,10 +205,16 @@
     "dup_rows": 0,
     "distinct": 30,
     "collapsed": 0,
-    "labels_refreshed": 0,
+    "labels_refreshed": 1,
     "notes_stale": 2,
     "note_claims": 6,
     "criteria_stale": 1,
     "criteria_claims": 1
+  },
+  "corpus": {
+    "files": 4540,
+    "bytes": 510925746,
+    "mb": 510.9,
+    "readable": 4540
   }
 }

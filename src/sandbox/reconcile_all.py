@@ -7486,6 +7486,17 @@ SUITES = [
     # while both this tool and the writer census named the result utf-8/lf.
     ("os-qa-log",
      os.path.join("..", "os", "test_qa_log.py"), 14),
+    # R3208: src/os/state.json carries the canonical CRLF dialect its readers
+    # require, but the path was not pinned in .gitattributes - so a checkout
+    # running with core.autocrlf=false materialized the whole carrier as bare
+    # LF (measured bytes=59808 crlf=0 bare_lf=78 against live 59886/78). The
+    # closeout gate refused that drift twice (R3204 bare_lf=49, R3207 70) and
+    # both times it was repaired by hand; the second half was that the new
+    # fold door silently re-landed an LF carrier while its sibling refused it.
+    # No registered suite held either face, so this one pins the file's
+    # dialect in git and the fold's refusal of a carrier that lost it.
+    ("os-carrier-dialect-pin",
+     os.path.join("..", "os", "test_carrier_dialect_pin.py"), 4),
     # R2808 added the nul-bytes class to the writer census and re-froze the
     # baseline, but the new rule was guarded only by the tool's own --check and
     # by two census suites whose expectations derive from BASELINE_CLASSES on

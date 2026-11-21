@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 755 | 6203 | 675/675 | R2739 |
+| 756 | 6207 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -750,49 +750,50 @@
 | 711 | os-export-round | ../os/test_export_round.py | 52 | no-evidence | - |
 | 712 | os-payment-gate-report | ../os/test_payment_gate_report.py | 11 | no-evidence | - |
 | 713 | os-qa-log | ../os/test_qa_log.py | 14 | no-evidence | - |
-| 714 | os-census-nul-class | ../os/test_census_nul_class.py | 7 | no-evidence | - |
-| 715 | os-ceo-blockers | ../os/test_ceo_blockers.py | 12 | no-evidence | - |
-| 716 | os-scan-five-still | ../os/test_scan_five_still.py | 6 | no-evidence | - |
-| 717 | os-filing-checklist | ../os/test_filing_checklist.py | 8 | no-evidence | - |
-| 718 | os-membership-face | ../os/test_membership_face.py | 10 | no-evidence | - |
-| 719 | os-value-domain | ../os/test_value_domain.py | 12 | no-evidence | - |
-| 720 | os-face-sweep | ../os/test_face_sweep.py | 20 | no-evidence | - |
-| 721 | os-money-path-demo | ../os/test_money_path_demo.py | 6 | no-evidence | - |
-| 722 | os-first-yuan-path | ../os/test_first_yuan_path.py | 7 | no-evidence | - |
-| 723 | os-lobby-session-trace | ../os/test_lobby_session_trace.py | 9 | no-evidence | - |
-| 724 | os-first-yuan-chain | ../os/test_first_yuan_chain.py | 13 | no-evidence | - |
-| 725 | os-lobby-protocol-map | ../os/test_lobby_protocol_map.py | 6 | no-evidence | - |
-| 726 | os-ledger-reconcile-face | ../os/test_ledger_reconcile_face.py | 8 | no-evidence | - |
-| 727 | os-deliverable-index | ../os/test_deliverable_index.py | 18 | no-evidence | - |
-| 728 | os-battery-shard | ../os/test_battery_shard.py | 32 | no-evidence | - |
-| 729 | os-suite-output-audit | ../os/test_suite_output_audit.py | 6 | no-evidence | - |
-| 730 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 24 | no-evidence | - |
-| 731 | os-battery-shard-report | ../os/test_battery_shard_report.py | 12 | no-evidence | - |
-| 732 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 12 | no-evidence | - |
-| 733 | os-tree-snapshot | ../os/test_tree_snapshot.py | 6 | no-evidence | - |
-| 734 | os-lobby-ws-report-face | ../os/test_lobby_ws_report.py | 7 | no-evidence | - |
-| 735 | os-journey-demo-face | ../os/test_journey_demo.py | 6 | no-evidence | - |
-| 736 | os-leg-audit | ../os/test_leg_audit.py | 12 | no-evidence | - |
-| 737 | os-leg-watch | ../os/test_leg_watch.py | 6 | no-evidence | - |
-| 738 | os-leg-header-check | ../os/test_leg_header_check.py | 6 | no-evidence | - |
-| 739 | os-logs-toolkit | ../os/test_logs_toolkit.py | 168 | no-evidence | - |
-| 740 | os-registry-counter-census | ../os/test_registry_counter_census.py | 13 | no-evidence | - |
-| 741 | os-evidence-read | ../os/test_evidence_read.py | 5 | no-evidence | - |
-| 742 | os-face-walk-static | ../os/test_face_walk_static.py | 5 | no-evidence | - |
-| 743 | os-closeout-gate | ../os/test_closeout_gate.py | 10 | no-evidence | - |
-| 744 | os-live-proof | ../os/test_live_proof.py | 13 | no-evidence | - |
-| 745 | os-platform-live-report | ../os/test_platform_live_report.py | 8 | no-evidence | - |
-| 746 | os-ledger-business-report | ../os/test_ledger_business_report.py | 8 | no-evidence | - |
-| 747 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
-| 748 | os-corpus-rewrite-audit | ../os/test_corpus_rewrite_audit.py | 1 | no-evidence | - |
-| 749 | os-heartbeat | ../os/test_heartbeat.py | 1 | no-evidence | - |
-| 750 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
-| 751 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
-| 752 | frontdoor-corpus-card | test_frontdoor_corpus_card.py | 6 | no-evidence | - |
-| 753 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
-| 754 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
-| 755 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6203 | green 675 / FAIL 0 / no-evidence 80 |  |
+| 714 | os-carrier-dialect-pin | ../os/test_carrier_dialect_pin.py | 4 | no-evidence | - |
+| 715 | os-census-nul-class | ../os/test_census_nul_class.py | 7 | no-evidence | - |
+| 716 | os-ceo-blockers | ../os/test_ceo_blockers.py | 12 | no-evidence | - |
+| 717 | os-scan-five-still | ../os/test_scan_five_still.py | 6 | no-evidence | - |
+| 718 | os-filing-checklist | ../os/test_filing_checklist.py | 8 | no-evidence | - |
+| 719 | os-membership-face | ../os/test_membership_face.py | 10 | no-evidence | - |
+| 720 | os-value-domain | ../os/test_value_domain.py | 12 | no-evidence | - |
+| 721 | os-face-sweep | ../os/test_face_sweep.py | 20 | no-evidence | - |
+| 722 | os-money-path-demo | ../os/test_money_path_demo.py | 6 | no-evidence | - |
+| 723 | os-first-yuan-path | ../os/test_first_yuan_path.py | 7 | no-evidence | - |
+| 724 | os-lobby-session-trace | ../os/test_lobby_session_trace.py | 9 | no-evidence | - |
+| 725 | os-first-yuan-chain | ../os/test_first_yuan_chain.py | 13 | no-evidence | - |
+| 726 | os-lobby-protocol-map | ../os/test_lobby_protocol_map.py | 6 | no-evidence | - |
+| 727 | os-ledger-reconcile-face | ../os/test_ledger_reconcile_face.py | 8 | no-evidence | - |
+| 728 | os-deliverable-index | ../os/test_deliverable_index.py | 18 | no-evidence | - |
+| 729 | os-battery-shard | ../os/test_battery_shard.py | 32 | no-evidence | - |
+| 730 | os-suite-output-audit | ../os/test_suite_output_audit.py | 6 | no-evidence | - |
+| 731 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 24 | no-evidence | - |
+| 732 | os-battery-shard-report | ../os/test_battery_shard_report.py | 12 | no-evidence | - |
+| 733 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 12 | no-evidence | - |
+| 734 | os-tree-snapshot | ../os/test_tree_snapshot.py | 6 | no-evidence | - |
+| 735 | os-lobby-ws-report-face | ../os/test_lobby_ws_report.py | 7 | no-evidence | - |
+| 736 | os-journey-demo-face | ../os/test_journey_demo.py | 6 | no-evidence | - |
+| 737 | os-leg-audit | ../os/test_leg_audit.py | 12 | no-evidence | - |
+| 738 | os-leg-watch | ../os/test_leg_watch.py | 6 | no-evidence | - |
+| 739 | os-leg-header-check | ../os/test_leg_header_check.py | 6 | no-evidence | - |
+| 740 | os-logs-toolkit | ../os/test_logs_toolkit.py | 168 | no-evidence | - |
+| 741 | os-registry-counter-census | ../os/test_registry_counter_census.py | 13 | no-evidence | - |
+| 742 | os-evidence-read | ../os/test_evidence_read.py | 5 | no-evidence | - |
+| 743 | os-face-walk-static | ../os/test_face_walk_static.py | 5 | no-evidence | - |
+| 744 | os-closeout-gate | ../os/test_closeout_gate.py | 10 | no-evidence | - |
+| 745 | os-live-proof | ../os/test_live_proof.py | 13 | no-evidence | - |
+| 746 | os-platform-live-report | ../os/test_platform_live_report.py | 8 | no-evidence | - |
+| 747 | os-ledger-business-report | ../os/test_ledger_business_report.py | 8 | no-evidence | - |
+| 748 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
+| 749 | os-corpus-rewrite-audit | ../os/test_corpus_rewrite_audit.py | 1 | no-evidence | - |
+| 750 | os-heartbeat | ../os/test_heartbeat.py | 1 | no-evidence | - |
+| 751 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
+| 752 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
+| 753 | frontdoor-corpus-card | test_frontdoor_corpus_card.py | 6 | no-evidence | - |
+| 754 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
+| 755 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
+| 756 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
+|  | 合计 |  | 6207 | green 675 / FAIL 0 / no-evidence 81 |  |
 
 ## 证据出处
 
