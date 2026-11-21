@@ -17,7 +17,9 @@ never uses it as argv (measured by opening each file, not assumed).
 This module adds the missing triage declaration:
 
   - a declaration is a dated one-entry-per-tool list of rows shaped exactly
-    {tool, reason, since_round};
+    {tool, reason, since_round}, plus ONE optional key {window} that is never
+    read here: the expiry face ages an acceptance against it when it is
+    present and against its global window when it is not;
   - an entry that matches a LIVE disagreement row (same tool AND same reason)
     moves that row out of the split count into TRIAGED, while the row is still
     printed with both verdicts and the law's own flags;
@@ -75,6 +77,10 @@ EXIT_UNREADABLE = 3
 EXIT_BAD_FLAG = 5
 
 ENTRY_KEYS = ("tool", "reason", "since_round")
+# One optional key, carried only so the expiry face can age this acceptance
+# against a cadence of its own (R2438/R3161). It never changes the triage
+# verdict, and a declaration without it behaves exactly as before.
+OPTIONAL_ENTRY_KEYS = ("window",)
 ROW_KEYS = ("tool", "law", "wire", "reason", "flags", "status")
 STALE_KEYS = ("tool", "reason", "since_round", "why")
 JSON_KEYS = ("root", "scanned", "rows", "superseded", "split", "triaged",
@@ -106,11 +112,20 @@ def _entry(raw, where):
     if not isinstance(raw, dict):
         raise DeclarationError(E_OTST_BAD_DECL, "%s is not an object" % where)
     keys = set(raw.keys())
-    if keys != set(ENTRY_KEYS):
+    required = set(ENTRY_KEYS)
+    allowed = required | set(OPTIONAL_ENTRY_KEYS)
+    if not required <= keys <= allowed:
         raise DeclarationError(
             E_OTST_BAD_DECL,
-            "%s keys %s are not exactly %s"
-            % (where, sorted(keys), list(ENTRY_KEYS)))
+            "%s keys %s are not %s with optional %s"
+            % (where, sorted(keys), list(ENTRY_KEYS),
+               list(OPTIONAL_ENTRY_KEYS)))
+    window = raw.get("window")
+    if "window" in keys:
+        if isinstance(window, bool) or not isinstance(window, int) \
+                or window <= 0:
+            raise DeclarationError(
+                E_OTST_BAD_DECL, "%s window is not a round number" % where)
     tool = raw["tool"]
     reason = raw["reason"]
     since = raw["since_round"]
@@ -121,7 +136,10 @@ def _entry(raw, where):
     if isinstance(since, bool) or not isinstance(since, int) or since <= 0:
         raise DeclarationError(E_OTST_BAD_DECL,
                                "%s since_round is not a round number" % where)
-    return {"tool": tool, "reason": reason, "since_round": since}
+    entry = {"tool": tool, "reason": reason, "since_round": since}
+    if "window" in keys:
+        entry["window"] = window
+    return entry
 
 
 def load_declaration(path):

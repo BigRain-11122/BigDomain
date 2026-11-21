@@ -1,0 +1,34 @@
+R3161 PROBE owner_table_triage_expiry per-entry window
+
+(1) source lines carrying 'window': 19
+    - age <= window reads FRESH, age > window reads AGED;
+    [--round N] [--window N] [--json]
+    missing or malformed / round or window missing or bad, 5 bad tool flags.
+    JSON_KEYS = ("root", "scanned", "round", "window", "rows", "triaged", "aged",
+    def _window(value):
+    number = _as_round(value, E_OTTE_BAD_WINDOW, "window")
+    def age_rows(rows, entries, current_round, window):
+    and status, fresh counts those still inside the window, and unageable
+    age_status = STATUS_AGED if age > window else STATUS_FRESH
+    window=DEFAULT_WINDOW):
+    span = _window(window)
+    "window": span,
+    line = ("%s root=%s scanned=%d round=%d window=%d triaged=%d aged=%d "
+    payload["window"], payload["triaged"], payload["aged"],
+    "[--round N] [--window N] [--json]\n"
+    window = DEFAULT_WINDOW
+    if token in ("--declaration", "--round", "--window"):
+    window = _window(value)
+    payload = audit(root, declaration, current_round, window)
+    DEFAULT_WINDOW=30 AGE_KEYS=('tool', 'law', 'wire', 'reason', 'flags', 'since_round', 'age_rounds', 'status', 'age_status') ENTRY_KEYS=('tool', 'reason', 'since_round')
+
+(4) live split row measured: 'law_only.py'
+    window=30 -> rc=2 OWNER TABLE TRIAGE EXPIRY root=C:\Users\sjs20\AppData\Local\Temp\otte-probe-ljptklba scanned=1 round=2438 window=30 triaged=1 aged=1 fresh=0 unageable=0 verdict=EXPIRY-AGED aged=[law_only.py(38)]
+    window=90 -> rc=0 OWNER TABLE TRIAGE EXPIRY root=C:\Users\sjs20\AppData\Local\Temp\otte-probe-ljptklba scanned=1 round=2438 window=90 triaged=1 aged=0 fresh=1 unageable=0 verdict=EXPIRY-CLEAN fresh=[law_only.py(38)]
+    one entry, two global windows: the same acceptance flips verdict with no way to state a cadence of its own
+
+(2) declaration with a per-entry window: REFUSED E_OTST_BAD_DECL C:\Users\sjs20\AppData\Local\Temp\otte-probe-ljptklba\triage.json entries[0] keys ['reason', 'since_round', 'tool', 'window'] are not exactly ['tool', 'reason', 'since_round']
+
+(3) load_declaration readers in src/os: [('board_R2393.py', 0), ('log_floor.py', 1), ('owner_table_split_triage.py', 1), ('owner_table_triage_expiry.py', 2), ('refused_check_declaration_face.py', 1), ('residue_triage.py', 1), ('residue_triage_append.py', 1), ('residue_triage_append_batch.py', 1), ('residue_triage_decl_reason.py', 1), ('residue_triage_entry_retire.py', 1), ('residue_triage_repin.py', 1), ('review_window_decl.py', 1), ('test_leg_audit.py', 0), ('test_refused_check_declaration_face.py', 0), ('test_residue_triage_append.py', 1), ('test_residue_triage_append_batch.py', 1), ('test_residue_triage_decl_reason.py', 3), ('test_residue_triage_entry_retire.py', 5), ('test_residue_triage_head_renew.py', 3), ('test_residue_triage_repin.py', 3)]
+
+(5) name occupancy (files containing the token): {'AC-OTTE7': 1, 'window_rounds': 29, 'per-entry window': 39}

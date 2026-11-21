@@ -20,6 +20,12 @@ negative age.
            0/2/3/5 and --json is byte-stable over the pinned keys;
   AC-OTTE6 pure ASCII, stdlib only, zero network, no clock, own reconcile
            label wired into the runner.
+  AC-OTTE7 the window is per entry when the declaration carries one and the
+           global --window otherwise: the override and the fallback are proved
+           on one acceptance, the per-entry boundary is exact, two entries in
+           one run are aged against their OWN cadences, the row prints the
+           cadence beside the age, a bad window fails closed, and the triage
+           face's own counts are unchanged by the optional key (R3161).
 
 Stdlib only, one throwaway world per case, no network.
 """
@@ -221,9 +227,9 @@ def ac_otte4():
     rc_badround, out_badround, _ = run_cli(
         world, [world, "--declaration", decl, "--round", "nope"])
     ok = (rc_aged == 2 and "verdict=EXPIRY-AGED" in out_aged
-          and "aged=[law_only.py(38)]" in out_aged
+          and "aged=[law_only.py(38/30)]" in out_aged
           and rc_fresh == 0 and "verdict=EXPIRY-CLEAN" in out_fresh
-          and "fresh=[law_only.py(10)]" in out_fresh
+          and "fresh=[law_only.py(10/30)]" in out_fresh
           and rc_noround == 3 and OTTE.E_OTTE_NO_ROUND in out_noround
           and rc_badround == 3 and OTTE.E_OTTE_BAD_ROUND in out_badround)
     if not ok:
@@ -321,6 +327,127 @@ def ac_otte6():
               "reconcile label is wired into the runner")
 
 
+def ac_otte7():
+    """A per-entry window overrides the global one; absence falls back."""
+    world = make_world()
+    write_tool(world, "law_only.py", LAW_ONLY_TOOL)
+    write_tool(world, "law_two.py", LAW_ONLY_TOOL)
+    row = live_row(world)
+    if row is None:
+        print("  measured: no live row in the fixture world", flush=True)
+        shutil.rmtree(world, ignore_errors=True)
+        check(False, "AC-OTTE7 a declared window is used and an absent one "
+                     "falls back to the global default")
+        return
+    reason = row["reason"]
+    two = {"tool": "law_two.py", "reason": reason, "since_round": 2420}
+    own = {"tool": "law_only.py", "reason": reason, "since_round": 2400,
+           "window": 90}
+    # arm a: override versus fallback on the SAME acceptance
+    decl = write_declaration(world, [own])
+    override = OTTE.audit(world, decl, current_round=2438, window=30)
+    plain = {"tool": "law_only.py", "reason": reason, "since_round": 2400}
+    decl = write_declaration(world, [plain])
+    fallback = OTTE.audit(world, decl, current_round=2438, window=30)
+    override_row = override["rows"][0]
+    fallback_row = fallback["rows"][0]
+    arm_a = (override_row["age_status"] == OTTE.STATUS_FRESH
+             and override_row["window_rounds"] == 90
+             and override_row["age_rounds"] == 38
+             and override["aged"] == 0 and override["fresh"] == 1
+             and fallback_row["age_status"] == OTTE.STATUS_AGED
+             and fallback_row["window_rounds"] == 30
+             and fallback["aged"] == 1 and fallback["fresh"] == 0)
+    # arm b: the per-entry boundary is exact
+    edge = {"tool": "law_only.py", "reason": reason, "since_round": 2400,
+            "window": 38}
+    decl = write_declaration(world, [edge])
+    at_edge = OTTE.audit(world, decl, current_round=2438, window=30)
+    edge["window"] = 37
+    decl = write_declaration(world, [edge])
+    past_edge = OTTE.audit(world, decl, current_round=2438, window=30)
+    arm_b = (at_edge["rows"][0]["age_rounds"] == 38
+             and at_edge["rows"][0]["window_rounds"] == 38
+             and at_edge["rows"][0]["age_status"] == OTTE.STATUS_FRESH
+             and past_edge["rows"][0]["age_status"] == OTTE.STATUS_AGED
+             and past_edge["aged"] == 1)
+    # arm c: two entries, two cadences, one run
+    decl = write_declaration(world, [own, {"tool": "law_two.py",
+                                           "reason": reason,
+                                           "since_round": 2420,
+                                           "window": 10}])
+    mixed = OTTE.audit(world, decl, current_round=2438, window=30)
+    by_tool = dict((item["tool"], item) for item in mixed["rows"])
+    arm_c = (len(mixed["rows"]) == 2
+             and mixed["aged"] == 1 and mixed["fresh"] == 1
+             and mixed["verdict"] == OTTE.VERDICT_AGED
+             and by_tool["law_only.py"]["age_status"] == OTTE.STATUS_FRESH
+             and by_tool["law_two.py"]["age_status"] == OTTE.STATUS_AGED
+             and by_tool["law_two.py"]["window_rounds"] == 10
+             and by_tool["law_two.py"]["age_rounds"] == 18)
+    # arm d: shape, JSON head versus row cadence, printed cadence
+    keys_ok = (set(mixed.keys()) == set(OTTE.JSON_KEYS)
+               and set(by_tool["law_only.py"].keys()) == set(OTTE.AGED_KEYS)
+               and mixed["window"] == 30)
+    rc, out, _ = run_cli(world, [world, "--declaration", decl,
+                                 "--round", "2438", "--window", "30"])
+    printed = ("aged=[law_two.py(18/10)]" in out
+               and "fresh=[law_only.py(38/90)]" in out)
+    arm_d = keys_ok and printed and rc == 2
+    # arm e: bad windows and a truly unknown key stay fail-closed
+    bad_windows = [0, -5, "90", True, 1.5]
+    refused = []
+    for bad in bad_windows:
+        bad_entry = {"tool": "law_only.py", "reason": reason,
+                     "since_round": 2400, "window": bad}
+        path = write_declaration(world, [bad_entry])
+        try:
+            OTST.load_declaration(path)
+            refused.append((bad, "ACCEPTED"))
+        except OTST.DeclarationError as error:
+            refused.append((bad, error.code))
+    extra = write_declaration(world, [{"tool": "law_only.py",
+                                       "reason": reason,
+                                       "since_round": 2400,
+                                       "extra": 1}])
+    try:
+        OTST.load_declaration(extra)
+        extra_code = "ACCEPTED"
+    except OTST.DeclarationError as error:
+        extra_code = error.code
+    bad_path = write_declaration(world, [{"tool": "law_only.py",
+                                          "reason": reason,
+                                          "since_round": 2400,
+                                          "window": 0}])
+    rc_bad, out_bad, _ = run_cli(world, [world, "--declaration", bad_path,
+                                         "--round", "2438"])
+    arm_e = (all(code == OTST.E_OTST_BAD_DECL for _bad, code in refused)
+             and extra_code == OTST.E_OTST_BAD_DECL
+             and rc_bad == 3 and OTST.E_OTST_BAD_DECL in out_bad)
+    # arm f: the triage face's own counts are unchanged by the optional key
+    with_window = write_declaration(world, [own, two])
+    without = write_declaration(world, [
+        {"tool": "law_only.py", "reason": reason, "since_round": 2400},
+        {"tool": "law_two.py", "reason": reason, "since_round": 2420}])
+    left = OTST.audit(world, with_window)
+    right = OTST.audit(world, without)
+    clean = OTTE.audit(world, without, current_round=2438, window=30)
+    arm_f = (left["triaged"] == right["triaged"]
+             and left["split"] == right["split"]
+             and len(left["stale"]) == len(right["stale"])
+             and all(item["window_rounds"] == 30 for item in clean["rows"]))
+    ok = arm_a and arm_b and arm_c and arm_d and arm_e and arm_f
+    if not ok:
+        print("  measured: a=%r b=%r c=%r d=%r e=%r f=%r"
+              % (arm_a, arm_b, arm_c, arm_d, arm_e, arm_f), flush=True)
+        print("  measured: refused=%r extra=%r rc_bad=%r out=%r"
+              % (refused, extra_code, rc_bad, out_bad.strip()), flush=True)
+    shutil.rmtree(world, ignore_errors=True)
+    check(ok, "AC-OTTE7 the window comes from the entry when declared and from "
+              "the global default when absent, boundary exact, two cadences in "
+              "one run, bad windows fail closed, triage counts unchanged")
+
+
 def main():
     ac_otte1()
     ac_otte2()
@@ -328,6 +455,7 @@ def main():
     ac_otte4()
     ac_otte5()
     ac_otte6()
+    ac_otte7()
     print("SUMMARY passes=%d fails=%d" % (PASSES, FAILS), flush=True)
     _law_total = PASSES + FAILS
     _law_verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"

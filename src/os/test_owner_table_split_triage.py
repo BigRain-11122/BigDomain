@@ -153,19 +153,39 @@ def ac_otst1():
     dead = write_declaration(world, [entry("ghost.py", "accepted")])
     payload = OTST.audit(world, dead)
     stale = payload["stale"]
+    # R3161: ONE optional key rides along for the expiry face's cadence, and
+    # an invalid value on it is refused exactly like a bad required field.
+    windowed = write_declaration(world, [
+        {"tool": "law_only.py", "reason": "x", "since_round": 1,
+         "window": 90}])
+    loaded, _label = OTST.load_declaration(windowed)
+    bad_window = write_declaration(world, [
+        {"tool": "law_only.py", "reason": "x", "since_round": 1,
+         "window": 0}])
+    try:
+        OTST.load_declaration(bad_window)
+        bad_window_code = "ACCEPTED"
+    except OTST.DeclarationError as error:
+        bad_window_code = error.code
     ok = (all(rc == 3 and named for rc, named in bad_results)
           and len(stale) == 1
           and stale[0]["tool"] == "ghost.py"
           and stale[0]["why"] == OTST.STALE_NO_LIVE
           and set(stale[0].keys()) == set(OTST.STALE_KEYS)
-          and set(OTST.ENTRY_KEYS) == set(["tool", "reason", "since_round"]))
+          and set(OTST.ENTRY_KEYS) == set(["tool", "reason", "since_round"])
+          and set(OTST.OPTIONAL_ENTRY_KEYS) == set(["window"])
+          and set(loaded[0].keys()) == set(["tool", "reason", "since_round",
+                                            "window"])
+          and loaded[0]["window"] == 90
+          and bad_window_code == OTST.E_OTST_BAD_DECL)
     if not ok:
-        print("  measured: bad=%r stale=%r keys=%r"
-              % (bad_results, stale, sorted(stale[0].keys()) if stale else []),
-              flush=True)
+        print("  measured: bad=%r stale=%r keys=%r loaded=%r window_code=%r"
+              % (bad_results, stale, sorted(stale[0].keys()) if stale else [],
+                 loaded, bad_window_code), flush=True)
     shutil.rmtree(world, ignore_errors=True)
     check(ok, "AC-OTST1 the declaration row shape is exactly "
-              "{tool, reason, since_round} and a dead entry reads STALE")
+              "{tool, reason, since_round} with one optional window and a dead "
+              "entry reads STALE")
 
 
 def ac_otst2():

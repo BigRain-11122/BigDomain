@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 751 | 6119 | 675/675 | R2739 |
+| 751 | 6120 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -662,7 +662,7 @@
 | 623 | os-library-declaration-dialect-sweep | ../os/test_library_declaration_dialect_sweep.py | 6 | green | 6.2 |
 | 624 | os-owner-table-reader-parity | ../os/test_owner_table_reader_parity.py | 6 | green | 1.0 |
 | 625 | os-owner-table-split-triage | ../os/test_owner_table_split_triage.py | 6 | green | 1.6 |
-| 626 | os-owner-table-triage-expiry | ../os/test_owner_table_triage_expiry.py | 6 | green | 1.6 |
+| 626 | os-owner-table-triage-expiry | ../os/test_owner_table_triage_expiry.py | 7 | green | 1.6 |
 | 627 | os-relative-module-existence-face | ../os/test_relative_module_existence_face.py | 6 | green | 1.4 |
 | 628 | os-relative-module-corpus-scope | ../os/test_relative_module_corpus_scope.py | 6 | green | 1.1 |
 | 629 | os-relative-package-presence-refusal | ../os/test_relative_package_presence_refusal.py | 6 | green | 1.0 |
@@ -788,7 +788,7 @@
 | 749 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
 | 750 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 751 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6119 | green 675 / FAIL 0 / no-evidence 76 |  |
+|  | 合计 |  | 6120 | green 675 / FAIL 0 / no-evidence 76 |  |
 
 ## 证据出处
 

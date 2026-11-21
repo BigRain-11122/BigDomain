@@ -6500,8 +6500,10 @@ SUITES = [
     # measures the age against the supplied round and prints AGED while the
     # row stays TRIAGED until re-reviewed. (AC-OTTE1..AC-OTTE6 were pinned in
     # state/queue/tech.md:502 as the R2436 seed row BEFORE the code.)
+    # R3161 added AC-OTTE7: the window is per entry when the declaration
+    # carries one, falling back to the global default (6 -> 7 criteria).
     ("os-owner-table-triage-expiry",
-     os.path.join("..", "os", "test_owner_table_triage_expiry.py"), 6),
+     os.path.join("..", "os", "test_owner_table_triage_expiry.py"), 7),
     # R2440: a package-relative publish joined onto its DECLARED package was
     # never checked against the modules the read tree carries, so a typo read
     # FOREIGN exactly like a genuinely foreign wire (measured at R2415). The

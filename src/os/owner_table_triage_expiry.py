@@ -9,6 +9,10 @@ a silent waiver carrying a date nobody reads.
 This module measures the age of every TRIAGED row against the current round:
 
   - age = current_round - since_round, printed in rounds;
+  - the window is per entry when the declaration carries one, and the global
+    --window otherwise, so a permanent law false positive and a temporary
+    waiver can carry different review cadences; the row prints the cadence it
+    was judged against, never only the global default;
   - age <= window reads FRESH, age > window reads AGED;
   - the row itself keeps status TRIAGED and still prints both verdicts, so an
     aged acceptance is a REVIEW DUE notice, not a silent un-triage;
@@ -66,7 +70,7 @@ EXIT_BAD_FLAG = 5
 DEFAULT_WINDOW = 30
 
 AGED_KEYS = ("tool", "law", "wire", "reason", "flags", "since_round",
-             "age_rounds", "status", "age_status")
+             "window_rounds", "age_rounds", "status", "age_status")
 UNAGEABLE_KEYS = ("tool", "reason", "since_round", "why")
 JSON_KEYS = ("root", "scanned", "round", "window", "rows", "triaged", "aged",
              "fresh", "unageable", "declaration", "verdict")
@@ -144,13 +148,14 @@ def age_rows(rows, entries, current_round, window):
             continue
         matched.add(key)
         since = entry["since_round"]
+        cadence = entry.get("window") or window
         age = current_round - since
         if age < 0:
             raise ExpiryError(
                 E_OTTE_FUTURE,
                 "%s since_round=%d is later than round=%d"
                 % (row["tool"], since, current_round))
-        age_status = STATUS_AGED if age > window else STATUS_FRESH
+        age_status = STATUS_AGED if age > cadence else STATUS_FRESH
         if age_status == STATUS_AGED:
             aged += 1
         else:
@@ -162,6 +167,7 @@ def age_rows(rows, entries, current_round, window):
             "reason": row["reason"],
             "flags": list(row["flags"]),
             "since_round": since,
+            "window_rounds": cadence,
             "age_rounds": age,
             "status": STATUS_TRIAGED,
             "age_status": age_status,
@@ -235,9 +241,11 @@ def render(payload, as_json):
         body = dict((key, payload[key]) for key in JSON_KEYS)
         return json.dumps(body, sort_keys=True, separators=(",", ":"),
                           ensure_ascii=True)
-    aged = ["%s(%d)" % (row["tool"], row["age_rounds"])
+    aged = ["%s(%d/%d)" % (row["tool"], row["age_rounds"],
+                           row["window_rounds"])
             for row in payload["rows"] if row["age_status"] == STATUS_AGED]
-    fresh = ["%s(%d)" % (row["tool"], row["age_rounds"])
+    fresh = ["%s(%d/%d)" % (row["tool"], row["age_rounds"],
+                            row["window_rounds"])
              for row in payload["rows"] if row["age_status"] == STATUS_FRESH]
     unageable = [item["tool"] for item in payload["unageable"]]
     line = ("%s root=%s scanned=%d round=%d window=%d triaged=%d aged=%d "
