@@ -5,7 +5,7 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3170 PRODUCT+ENGINEERING: the tree is BOM-clean and a birth gate keeps it that way - 11 tracked source files that carried a UTF-8 BOM lost it, and source_bom_scan --check now names any tracked *.py whose first three bytes are EF BB BF, so the byte that makes a whole file invisible to every plain utf-8 ast reader can no longer land unnoticed.",
+    "current": "2026-11-21 R3171 PRODUCT+ENGINEERING: the matrix stamp suite is green again, and not by deleting the question - the two live arms that used to ask the superseded renderer how the shipped doc stands now ask the gate law that actually judges it, while each arm also proves the renderer still refuses rc=5 and names that law, so the reading is one document with one judge rather than two entries quietly disagreeing.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -13,9 +13,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3169.log (1207B, 2026-11-21)",
     "latest_evidence": "qa/probe-R3169.log (1207B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3170] next window (<=48h): (0) MAIN — **本轮测出一条存量红：注册套件 `test_matrix_stamp_compare` 在 HEAD 就是 `SUITE FAIL 7/9`（与 BOM 无关：同一文件加回 BOM 复跑仍 7/9，对照实验 `tmp/bom_control_R3170.py` 已存）——两臂仍调 `suite_matrix.py --check`，而闸法已改由 `src/os/suite_matrix_reconcile.py --check` 判定，旧入口现在回 `rc=5 E_SMX_CHECK_DOC_OWNED`，于是 AC-MSC4/AC-MSC9 的 `agrees` 恒为 False。下一窗**先只读测量**（两臂的判据字面是否允许改指、改指后两臂是否真的变绿、有无其他套件同病），只有测出「纯接线漂移」才按 JUDGED-CHANGED 改指并同步契约文字，否则只记账。备选=队列地板债（按实测缺口补 tech/explore 种子行，每条带实测出处）。产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 仍零 open（两行为常设锚行非工作项）。",
-    "next_milestone_due": "2026-11-23T17:09:03+08:00",
-    "updated_at": "2026-11-21T17:09:03+08:00",
+    "next_milestone": "[R3171] next window (<=48h): (0) MAIN — **8 个 `test_suite_matrix_reconcile_*` 套件在 HEAD 红，且活盘闸看不见它们**：先只读测量两件事——(a) 这些活盘臂的 `leg(\"PASS\")` 到底想钉什么（是「文档记录的那条腿」还是「最新落盘的 PASS 腿」），把 `doc_evidence_face(DOC)` 与 mtime 选取结果逐件对照并出具名表；(b) `closeout_gate` 为何不消费注册套件的 verdict（是有意的分工还是缺口），产出一行判据。只有测出「判据想钉的是文档记录的腿、实现却按 mtime 漂移」才按 JUDGED-CHANGED 把活盘臂改用文档自述的证据面（并保留一条「mtime 选取≠文档腿」的负控臂），否则只记账不动 8 件。**先落板再动代码**（实测入口=`tmp/probe_R3172.py`）。备选=队列地板债（按实测缺口补 tech/explore 种子行，每条带实测出处）。产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 仍零 open。",
+    "next_milestone_due": "2026-11-23T17:23:32+08:00",
+    "updated_at": "2026-11-21T17:23:32+08:00",
     "heartbeat": {
       "tick": 3168,
       "state_tick": 3169,
@@ -39,7 +39,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-21 R3170 PRODUCT+ENGINEERING: the tree is BOM-clean and a birth gate keeps it that way - 11 tracked source files that carried a UTF-8 BOM lost it, and source_bom_scan --check now names any tracked *.py whose first three bytes are EF BB BF, so the byte that makes a whole file invisible to every plain utf-8 ast reader can no longer land unnoticed.",
+  "current": "2026-11-21 R3171 PRODUCT+ENGINEERING: the matrix stamp suite is green again, and not by deleting the question - the two live arms that used to ask the superseded renderer how the shipped doc stands now ask the gate law that actually judges it, while each arm also proves the renderer still refuses rc=5 and names that law, so the reading is one document with one judge rather than two entries quietly disagreeing.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3170 PRODUCT+ENGINEERING: the tree is BOM-clean and a birth gate keeps it that way - 11 tracked source files that carried a UTF-8 BOM lost it, and source_bom_scan --check now names any tracked *.py whose first three bytes are EF BB BF, so the byte that makes a whole file invisible to every plain utf-8 ast reader can no longer land unnoticed.",
-  "export_ts": "2026-11-21T17:09:03+08:00",
+  "do": "2026-11-21 R3171 PRODUCT+ENGINEERING: the matrix stamp suite is green again, and not by deleting the question - the two live arms that used to ask the superseded renderer how the shipped doc stands now ask the gate law that actually judges it, while each arm also proves the renderer still refuses rc=5 and names that law, so the reading is one document with one judge rather than two entries quietly disagreeing.",
+  "export_ts": "2026-11-21T17:23:32+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
   "latest_evidence": "qa/probe-R3169.log (1207B, 2026-11-21)",
-  "next_milestone": "[R3170] next window (<=48h): (0) MAIN — **本轮测出一条存量红：注册套件 `test_matrix_stamp_compare` 在 HEAD 就是 `SUITE FAIL 7/9`（与 BOM 无关：同一文件加回 BOM 复跑仍 7/9，对照实验 `tmp/bom_control_R3170.py` 已存）——两臂仍调 `suite_matrix.py --check`，而闸法已改由 `src/os/suite_matrix_reconcile.py --check` 判定，旧入口现在回 `rc=5 E_SMX_CHECK_DOC_OWNED`，于是 AC-MSC4/AC-MSC9 的 `agrees` 恒为 False。下一窗**先只读测量**（两臂的判据字面是否允许改指、改指后两臂是否真的变绿、有无其他套件同病），只有测出「纯接线漂移」才按 JUDGED-CHANGED 改指并同步契约文字，否则只记账。备选=队列地板债（按实测缺口补 tech/explore 种子行，每条带实测出处）。产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 仍零 open（两行为常设锚行非工作项）。",
+  "next_milestone": "[R3171] next window (<=48h): (0) MAIN — **8 个 `test_suite_matrix_reconcile_*` 套件在 HEAD 红，且活盘闸看不见它们**：先只读测量两件事——(a) 这些活盘臂的 `leg(\"PASS\")` 到底想钉什么（是「文档记录的那条腿」还是「最新落盘的 PASS 腿」），把 `doc_evidence_face(DOC)` 与 mtime 选取结果逐件对照并出具名表；(b) `closeout_gate` 为何不消费注册套件的 verdict（是有意的分工还是缺口），产出一行判据。只有测出「判据想钉的是文档记录的腿、实现却按 mtime 漂移」才按 JUDGED-CHANGED 把活盘臂改用文档自述的证据面（并保留一条「mtime 选取≠文档腿」的负控臂），否则只记账不动 8 件。**先落板再动代码**（实测入口=`tmp/probe_R3172.py`）。备选=队列地板债（按实测缺口补 tech/explore 种子行，每条带实测出处）。产品面真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 仍零 open。",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -189,8 +189,8 @@
     "queue_tech_open": 6,
     "queue_explore_open": 1
   },
-  "state_bytes": 62641,
-  "next_milestone_due": "2026-11-23T17:09:03+08:00",
+  "state_bytes": 68325,
+  "next_milestone_due": "2026-11-23T17:23:32+08:00",
   "heartbeat": {
     "tick": 3168,
     "state_tick": 3169,

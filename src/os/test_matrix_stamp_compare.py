@@ -40,6 +40,12 @@ SANDBOX = os.path.join(SRC, "sandbox")
 DOC = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
 EVIDENCE = os.path.join(REPO, "qa", "reconcile-all-R2418.log")
 MATRIX_TOOL = os.path.join(SANDBOX, "suite_matrix.py")
+# R3171 (AC-MSC4/AC-MSC9 re-pinned JUDGED-CHANGED): the shipped document's
+# --check was handed to the gate law, and the renderer says so itself (rc=5
+# E_SMX_CHECK_DOC_OWNED naming this command). The authority the live arms ask
+# is therefore the law, and each arm also proves the renderer still refuses -
+# one document, one judge.
+GATE_LAW = os.path.join(BASE, "suite_matrix_reconcile.py")
 OTHER_MINUTE = "1999-01-01 00:00 +08:00"
 BODY = "SUITE body line one\nSUITE body line two\n"
 
@@ -65,6 +71,21 @@ def read_text(path):
 def digest(path):
     with open(path, "rb") as handle:
         return hashlib.sha256(handle.read()).hexdigest()
+
+
+def gate_law_rc():
+    """The judge of the shipped document, asked the way the law publishes it."""
+    run = subprocess.run([sys.executable, GATE_LAW, "--check"], cwd=REPO,
+                         capture_output=True)
+    return run.returncode
+
+
+def renderer_yields():
+    """The superseded renderer names the law and refuses rc=5, not silently."""
+    run = subprocess.run([sys.executable, MATRIX_TOOL, "--check"], cwd=REPO,
+                         capture_output=True)
+    text = run.stdout.decode("utf-8", "replace")
+    return run.returncode == 5 and "E_SMX_CHECK_DOC_OWNED" in text
 
 
 def recorded_evidence():
@@ -315,23 +336,23 @@ def ac_msc4():
     source = read_text(MODULE)
     never_writes_doc = not re.search(r'doc_path[^\n]*,\s*"w', source)
     live_row = MSC.compare(REPO, DOC, recorded_evidence())
-    authority_live = subprocess.run([sys.executable, MATRIX_TOOL, "--check"],
-                                    cwd=REPO, capture_output=True)
-    agrees = ((authority_live.returncode == 0)
-              == (live_row["verdict"] == MSC.PASS))
+    authority_rc = gate_law_rc()
+    yields = renderer_yields()
+    agrees = (authority_rc == 0) == (live_row["verdict"] == MSC.PASS)
     ok = (green_row["verdict"] == MSC.PASS
           and red_row["verdict"] == MSC.FAIL
           and before == mid == after
           and never_writes_doc
+          and yields
           and agrees)
     if not ok:
         print("  measured: green=%r red=%r unchanged=%r no_write=%r"
-              " check=%r live=%r agrees=%r"
+              " gate=%r yields=%r live=%r agrees=%r"
               % (green_row, red_row, before == mid == after, never_writes_doc,
-                 authority_live.returncode, live_row["verdict"], agrees),
+                 authority_rc, yields, live_row["verdict"], agrees),
               flush=True)
-    check(ok, "AC-MSC4 --check remains the authority and no path rewrites the "
-              "shipped doc")
+    check(ok, "AC-MSC4 the gate law --check remains the authority, the "
+              "renderer yields to it, and no path rewrites the shipped doc")
 
 
 def ac_msc5():
@@ -473,7 +494,8 @@ def ac_msc8():
 
 def ac_msc9():
     """Live tree: the default run and the doc-recorded run are one payload,
-    and both agree with suite_matrix --check in both directions."""
+    and both agree with the gate law --check in both directions while the
+    renderer still refuses the shipped doc (rc=5 naming the law)."""
     recorded = MSC.recorded_evidence_face(DOC)
     if recorded is None:
         check(False, "AC-MSC9 live default and doc-recorded runs agree")
@@ -483,20 +505,21 @@ def ac_msc9():
     elided = [k for k in ("verdict", "code", "on_disk_bytes") if
               default_row[k] != MSC.compare(REPO, DOC,
                                            os.path.join(REPO, recorded))[k]]
-    authority = subprocess.run([sys.executable, MATRIX_TOOL, "--check"],
-                               cwd=REPO, capture_output=True)
-    agrees = ((authority.returncode == 0)
-              == (default_row["verdict"] == MSC.PASS))
+    authority_rc = gate_law_rc()
+    yields = renderer_yields()
+    agrees = (authority_rc == 0) == (default_row["verdict"] == MSC.PASS)
     ok = (code_default == 0
           and default_row["verdict"] == MSC.PASS
           and not elided
+          and yields
           and agrees)
     if not ok:
-        print("  measured: code=%r row=%r drift=%r authority=%r agrees=%r"
-              % (code_default, default_row, elided, authority.returncode,
+        print("  measured: code=%r row=%r drift=%r gate=%r yields=%r"
+              " agrees=%r"
+              % (code_default, default_row, elided, authority_rc, yields,
                  agrees), flush=True)
     check(ok, "AC-MSC9 live default and doc-recorded runs read one payload "
-              "and agree with suite_matrix --check")
+              "and agree with the gate law --check")
 
 
 def main():

@@ -1,0 +1,34 @@
+=== MATRIX VEHICLE SUITE CENSUS R3171 ===
+NOTE this run is POST-fix for test_matrix_stamp_compare only; the same
+command on the pre-fix tree (measured earlier in this window) read
+9 red = that suite at 7/9 plus the same 8 reconcile-family rows below.
+os/test_matrix_stamp_compare.py                            rc=0 SUITE PASS 9/9
+os/test_matrix_stamp_from_liveness.py                      rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+os/test_matrix_stamp_provenance_line.py                    rc=0 SUITE PASS exit=0 pass-lines=6 fail-lines=0 criteria=6
+os/test_matrix_evidence_pile_consistency.py                rc=0 SUITE PASS 6/6
+sandbox/test_suite_matrix.py                               rc=0 SUITE PASS (20/20 cases)
+os/test_suite_matrix_reconcile.py                          rc=0 SUITE PASS 7/7
+os/test_suite_matrix_reconcile_evidence_face.py            rc=0 SUITE PASS 7/7
+os/test_suite_matrix_reconcile_fence.py                    rc=1 SUITE FAIL 5/6
+    FAIL AC-EDME5 sep=SEPARATOR-MISSING dash2=6/2 nodoc=NO-DOC header5=5/6 src=walk/explicit rows=ROWS-MISMATCH(752<753) live=EVIDENCE-FACE
+os/test_suite_matrix_reconcile_fence_rows.py               rc=1 SUITE FAIL 5/6
+    FAIL AC-EDMF4 check-asked=1 code=2 content=EVIDENCE-FACE | live asked=1 code=2 verdict=EVIDENCE-FACE
+os/test_suite_matrix_reconcile_fence_table.py              rc=1 SUITE FAIL 3/6
+    FAIL AC-EDMG1 second-table rows=753 real=753 registry=753 titles=1 verdict=EVIDENCE-FACE
+os/test_suite_matrix_reconcile_row_membership.py           rc=1 SUITE FAIL 2/6
+    FAIL AC-EDMI2 genuine-header rows=753 ac-edmg1-rows=753 real=753 titles=1 verdict=EVIDENCE-FACE
+    FAIL AC-EDMI3 footer-after-last rows=753 real=753 delta=+0 verdict=EVIDENCE-FACE
+    FAIL AC-EDMI4 asked live=1 diff=1 verdict=EVIDENCE-FACE/EVIDENCE-FACE
+    FAIL AC-EDMI5 four=752 two=751 last=752 sep=753 quoted=753 fence=FENCE-UNCLOSED/800 nest=FENCE-NESTED/4/3 titles=1/2 other=TITLE-REPEATED/2 narrow=HEADER-SHAPE nosep=SEPARATOR-MISSING starved=CEILING-STARVED nodoc=NO-DOC counts=753/753 src=explicit/walk
+os/test_suite_matrix_reconcile_row_shape.py                rc=1 SUITE FAIL 2/6
+    FAIL AC-EDMH2 genuine-header rows=753 ac-edmg1-rows=753 real=753 titles=1 verdict=EVIDENCE-FACE
+    FAIL AC-EDMH3 separator-inside rows=753 real=753 verdict=EVIDENCE-FACE
+    FAIL AC-EDMH4 asked live=1 diff=1 verdict=EVIDENCE-FACE/EVIDENCE-FACE
+    FAIL AC-EDMH5 quoted=753/753 fence=FENCE-UNCLOSED/800 nest=FENCE-NESTED/4/3 titles=1/2 other=TITLE-REPEATED narrow=HEADER-SHAPE nosep=SEPARATOR-MISSING starved=CEILING-STARVED drop=752 src=explicit/walk
+os/test_suite_matrix_reconcile_second_table_separator.py   rc=1 SUITE FAIL 4/6
+    FAIL AC-EDMJ4 asked live=1 diff=1 verdict=EVIDENCE-FACE/EVIDENCE-FACE
+    FAIL AC-EDMJ5 four=752 two=751 nfoot=753 foot=753 second=753 sep=753 quoted=753 fence=FENCE-UNCLOSED/800 nest=FENCE-NESTED/4/3 titles=1/2 other=TITLE-REPEATED/2 narrow=HEADER-SHAPE/6/2 nosep=SEPARATOR-MISSING starved=CEILING-STARVED nodoc=NO-DOC counts=753/753 src=explicit/walk
+os/test_suite_matrix_reconcile_shape.py                    rc=1 SUITE FAIL 5/6
+    FAIL AC-EDMD5 header5=HEADER-SHAPE(dash2=6/2) table=TABLE-MISSING nodoc=NO-DOC walk=CEILING-STARVED(bounded=True,decoded=1) src=walk/explicit evid=EVIDENCE-FACE(qa/edmd-other-leg.log) rows=ROWS-MISMATCH(752<753) live=EVIDENCE-FACE
+os/test_suite_matrix_reconcile_table_shape.py              rc=1 SUITE FAIL 6/6
+census suites=15 red=8

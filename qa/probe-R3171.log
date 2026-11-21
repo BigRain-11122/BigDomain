@@ -1,0 +1,77 @@
+=== Q1 suites that ask the SHIPPED doc's --check (no --out) ===
+  src\os\test_artifact_disk_text_readability.py:104 check=False out=False
+  src\os\test_battery_followup.py:106 check=False out=False
+  src\os\test_battery_followup_help_wire.py:104 check=False out=False
+  src\os\test_evidence_name_text_coverage.py:90 check=False out=False
+  src\os\test_followup_bare_evidence_face.py:74 check=False out=False
+  src\os\test_followup_guard_evidence_scope.py:95 check=False out=False
+  src\os\test_followup_section_foreign_wire.py:93 check=False out=False
+  src\os\test_matrix_evidence_pile_consistency.py:97 check=False out=False
+  src\os\test_matrix_stamp_compare.py:42 check=False out=False
+  src\os\test_matrix_stamp_compare.py:158 check=False out=False
+  src\os\test_matrix_stamp_from_liveness.py:41 check=False out=False
+  src\os\test_matrix_stamp_provenance_line.py:44 check=False out=False
+  src\os\test_patterns_label_readability_render_consumer.py:100 check=False out=False
+  src\os\test_patterns_non_label_text_readability.py:111 check=False out=False
+  src\os\test_pre_commit_gate.py:61 check=False out=False
+  src\os\test_pre_commit_gate.py:74 check=False out=False
+  src\os\test_probe_seam_alias_expression_scope.py:44 check=False out=False
+  src\os\test_probe_seam_annotated_constant_scope.py:46 check=False out=False
+  src\os\test_probe_seam_constant_alias_scope.py:44 check=False out=False
+  src\os\test_probe_seam_constant_binding_scope.py:44 check=False out=False
+  src\os\test_probe_seam_dynamic_import_scope.py:47 check=False out=False
+  src\os\test_probe_seam_for_container_name.py:43 check=False out=False
+  src\os\test_probe_seam_forwarding_scope.py:43 check=False out=False
+  src\os\test_probe_seam_lazy_scope.py:45 check=False out=False
+  src\os\test_probe_seam_local_constant_scope.py:46 check=False out=False
+  src\os\test_probe_seam_name_binding_arm_mixed_residual_naming.py:47 check=False out=False
+  src\os\test_probe_seam_name_binding_control_flow_guard_exhaustive.py:42 check=False out=False
+  src\os\test_probe_seam_name_binding_control_flow_guard_scope.py:42 check=False out=False
+  src\os\test_probe_seam_name_binding_control_flow_scope.py:39 check=False out=False
+  src\os\test_probe_seam_name_binding_nested_arm_mixed_scope.py:49 check=False out=False
+  src\os\test_probe_seam_name_binding_nested_exhaustive_path.py:45 check=False out=False
+  src\os\test_probe_seam_name_binding_position_scope.py:39 check=False out=False
+  src\os\test_probe_seam_name_binding_scope_awareness.py:41 check=False out=False
+  src\os\test_probe_seam_nested_key_binding_scope.py:44 check=False out=False
+  src\os\test_probe_seam_nested_subscript_scope.py:44 check=False out=False
+  src\os\test_probe_seam_registry.py:42 check=False out=False
+  src\os\test_probe_seam_subscript_container_scope.py:42 check=False out=False
+  src\os\test_stamp_text_coverage.py:103 check=False out=False
+  src\sandbox\test_suite_matrix.py:114 check=False out=True
+  src\sandbox\test_suite_matrix.py:410 check=False out=True
+  src\sandbox\test_suite_matrix.py:413 check=True out=True
+  src\sandbox\test_suite_matrix.py:426 check=False out=True
+  src\sandbox\test_suite_matrix.py:429 check=True out=True
+  src\sandbox\test_suite_matrix.py:437 check=True out=True
+  src\sandbox\test_suite_matrix.py:466 check=False out=False
+  src\sandbox\test_suite_matrix.py:479 check=False out=True
+  src\sandbox\test_suite_matrix.py:486 check=True out=False
+  src\sandbox\test_suite_matrix.py:528 check=False out=True
+  src\sandbox\test_suite_matrix.py:538 check=True out=True
+  src\sandbox\test_suite_matrix.py:553 check=False out=True
+  src\sandbox\test_suite_matrix.py:584 check=False out=True
+  src\sandbox\test_suite_matrix.py:629 check=False out=True
+  src\sandbox\test_suite_matrix.py:640 check=True out=True
+  src\sandbox\test_suite_matrix.py:677 check=False out=True
+  src\sandbox\test_suite_matrix.py:687 check=True out=True
+  src\sandbox\test_suite_matrix.py:708 check=False out=True
+  src\sandbox\test_suite_matrix.py:718 check=True out=True
+  src\sandbox\test_suite_matrix.py:765 check=True out=False
+  live-check arms (check and no out) = 2
+
+=== Q2 what the two entries answer on the live doc ===
+  renderer rc=5 first='FAIL doc-owned: E_SMX_CHECK_DOC_OWNED docs/sandbox-suite-matrix.md is judged by python src/os/suite_matrix_reconcile.py --check (the gate law); pass --out for any other path'
+  gate     rc=0 first='DOC-CURRENT docs/sandbox-suite-matrix.md'
+  renderer refusal tokens=['E_SMX_CHECK_DOC_OWNED'] names_gate=True
+
+=== Q3 two-direction answer of the gate law ===
+  current doc rc=0 word='DOC-CURRENT'
+  drifted doc rc=2 word='STALE-CONTENT'
+
+=== Q4 the literal each arm pins (read from the HEAD blob, so the
+        reading is reproducible after this window edits the file) ===
+  head blob rc=0 bytes=21182
+  AC-MSC4 literals=['--check', 'MATRIX_TOOL'] authority_run=True
+  AC-MSC9 literals=['--check', 'MATRIX_TOOL', 'suite_matrix'] authority_run=True
+  docstring names the judge: True
+PROBE-R3171 DONE
