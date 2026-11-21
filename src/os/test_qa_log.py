@@ -341,8 +341,8 @@ def main():
                               reg[pos:pos + 200])
             if found:
                 declared.append(found.group(1))
-        ok('AC-QALB9 registry declares exactly one row for this suite, twelve',
-           declared == ['12'], 'rows=%s hits=%d' % (declared, len(hits)))
+        ok('AC-QALB9 registry declares exactly one row for this suite, thirteen',
+           declared == ['13'], 'rows=%s hits=%d' % (declared, len(hits)))
 
         # ---- AC-QALB11: a carried proof line is marked, not certified -----
         # R3203: the generator prints "LOG OK path=... sha16=..." to prove a
@@ -447,6 +447,76 @@ def main():
               red_rc, 'carried=' in red_text,
               'carried=0' in live_text,
               tool_src2.count('"QA-LOG OK ')))
+
+        # ---- AC-QALB13: --check names how many UNMARKED proofs it saw ------
+        # R3205: measured before the repair, three files holding 0, 1 and 2
+        # bare proof lines all read rc=0 with text that differed only in
+        # bytes=, the census answered class=tee for all three and the
+        # pre-commit gate compares the dialect class only, never the body.
+        # A bare line is born without do_write - measured today the only such
+        # door is battery_shard.stream_evidence - and the real qa/ tree holds
+        # zero of them. The field is a name, not a verdict.
+        bare_dir = os.path.join(world, 'bare-count')
+        os.makedirs(bare_dir)
+        bare_bodies = {
+            'u0.log': 'PASS one\n',
+            'u1.log': 'PASS one\n' + proof_a + '\n',
+            'u2.log': 'PASS one\n' + proof_a + '\n' + proof_b + '\n',
+            'ucarried.log': 'PASS one\nCARRIED ' + proof_a + '\n',
+            'unear.log': ('PASS one\nLOG OK path=qa/p.log bytes=six lines=9 '
+                          'sha16=271ba9eb7b2d1230\n'),
+        }
+        for uname, ubody in bare_bodies.items():
+            with io.open(os.path.join(bare_dir, uname), 'wb') as handle:
+                handle.write(ubody.encode('utf-8'))
+        with io.open(os.path.join(bare_dir, 'ured.log'), 'wb') as handle:
+            handle.write(b'\xef\xbb\xbfPASS one\n' +
+                         proof_a.encode('utf-8') + b'\n')
+        before_bare = dict((n, stamp(os.path.join(bare_dir, n)))
+                           for n in bare_bodies)
+        mod.QA = bare_dir
+        try:
+            useen = dict((n, quiet(mod.do_check, n)) for n in bare_bodies)
+            ured_rc, ured_text = quiet(mod.do_check, 'ured.log')
+        finally:
+            mod.QA = original_qa
+        after_bare = dict((n, stamp(os.path.join(bare_dir, n)))
+                          for n in bare_bodies)
+        u2_text = read_bytes(os.path.join(bare_dir, 'u2.log')).decode('utf-8')
+        urecount = len([ln for ln in u2_text.splitlines()
+                        if mod.PROOF_LINE_RE.match(ln)])
+        u1_bytes = os.path.getsize(os.path.join(bare_dir, 'u1.log'))
+        uk_rc, uk_text = quiet(mod.do_check, 'index-newest-band-R2775.log')
+        tool_src3 = read_text(TOOL)
+        ok('AC-QALB13 --check names bare_proofs=N for exact shapes only',
+           useen['u0.log'][0] == 0 and 'bare_proofs=0' in useen['u0.log'][1]
+           and useen['u1.log'][0] == 0
+           and 'bare_proofs=1' in useen['u1.log'][1]
+           and useen['u2.log'][0] == 0
+           and 'bare_proofs=2' in useen['u2.log'][1]
+           and urecount == 2
+           and 'bare_proofs=0' in useen['ucarried.log'][1]
+           and 'carried=1' in useen['ucarried.log'][1]
+           and 'bare_proofs=0' in useen['unear.log'][1]
+           and 'carried=0' in useen['unear.log'][1]
+           and before_bare == after_bare
+           and ('bytes=%d ' % u1_bytes) in useen['u1.log'][1]
+           and ured_rc == 2 and 'bare_proofs=' not in ured_text
+           and uk_rc == 0 and 'bare_proofs=0' in uk_text
+           and 'carried=0' in uk_text
+           and tool_src3.count('"QA-LOG OK ') == 1,
+           'u0=%s u1=%s u2=%s recount=%d carried_arm=%s near=%s stable=%s '
+           'red_rc=%d red_has_field=%s live=%s sites=%d'
+           % ('bare_proofs=0' in useen['u0.log'][1],
+              'bare_proofs=1' in useen['u1.log'][1],
+              'bare_proofs=2' in useen['u2.log'][1], urecount,
+              ('bare_proofs=0' in useen['ucarried.log'][1]
+               and 'carried=1' in useen['ucarried.log'][1]),
+              'bare_proofs=0' in useen['unear.log'][1],
+              before_bare == after_bare, ured_rc,
+              'bare_proofs=' in ured_text,
+              'bare_proofs=0' in uk_text,
+              tool_src3.count('"QA-LOG OK ')))
     finally:
         mod.QA = original_qa
         shutil.rmtree(world, ignore_errors=True)

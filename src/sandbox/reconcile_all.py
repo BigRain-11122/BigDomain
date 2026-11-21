@@ -7485,7 +7485,7 @@ SUITES = [
     # UTF-16 source was accepted, landed NUL bytes and reported VERDICT PASS
     # while both this tool and the writer census named the result utf-8/lf.
     ("os-qa-log",
-     os.path.join("..", "os", "test_qa_log.py"), 12),
+     os.path.join("..", "os", "test_qa_log.py"), 13),
     # R2808 added the nul-bytes class to the writer census and re-froze the
     # baseline, but the new rule was guarded only by the tool's own --check and
     # by two census suites whose expectations derive from BASELINE_CLASSES on

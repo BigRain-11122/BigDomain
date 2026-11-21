@@ -1,0 +1,29 @@
+Q1 bypass writers into qa/
+  write_evidence_uses_do_write=True
+  stream_evidence_uses_do_write=False
+  stream_evidence_opens_in_place=True
+  stream_evidence_lands_bare=1 stream_bytes=102
+  stream_evidence_marks_carried=False
+Q2 three faces, private fixtures
+  b0.log      rc=0 carried=True bare_named=False bare_true=0
+    text=QA-LOG OK name=b0.log dialect=utf-8/lf bytes=9 carried=0 bare_proofs=0
+  b1.log      rc=0 carried=True bare_named=False bare_true=1
+    text=QA-LOG OK name=b1.log dialect=utf-8/lf bytes=97 carried=0 bare_proofs=1
+  b2.log      rc=0 carried=True bare_named=False bare_true=2
+    text=QA-LOG OK name=b2.log dialect=utf-8/lf bytes=168 carried=0 bare_proofs=2
+  near.log    rc=0 carried=True bare_named=False bare_true=0
+    text=QA-LOG OK name=near.log dialect=utf-8/lf bytes=74 carried=0 bare_proofs=0
+  carried.log rc=0 carried=True bare_named=False bare_true=0
+    text=QA-LOG OK name=carried.log dialect=utf-8/lf bytes=105 carried=1 bare_proofs=0
+  fixtures_untouched=True
+  census b1.log      class=tee dialect_class=tee gate_refuses=None
+  census near.log    class=tee dialect_class=tee gate_refuses=None
+  census carried.log class=tee dialect_class=tee gate_refuses=None
+Q2b real qa/ scan
+  qa_files=4617 bare_files=0 bare_lines=0 carried_files=0
+  bare_file_names=[]
+Q3 face choice
+  ok_text_consumers_outside_tool=1 ['src/os/test_qa_log.py']
+  bare_token_occupied=388 ['.codely-cli/auto-saves/chat-auto-save-2026-10-10-02-45-06-892.json', '.codely-cli/auto-saves/chat-auto-save-2026-10-10-03-09-51-070.json', '.codely-cli/auto-saves/chat-auto-save-2026-10-11-00-18-23-819.json', '.codely-cli/auto-saves/chat-auto-save-2026-10-11-10-11-46-538.json', '.codely-cli/auto-saves/chat-auto-save-2026-10-11-15-50-00-715.json', '.codely-cli/auto-saves/chat-auto-save-2026-10-12-03-38-41-050.json', '.codely-cli/auto-saves/chat-auto-save-2026-10-12-15-03-58-500.json', '.codely-cli/auto-saves/chat-auto-save-2026-10-12-19-52-37-158.json', '.codely-cli/auto-saves/chat-auto-save-2026-10-12-22-16-42-414.json', '.codely-cli/auto-saves/chat-auto-save-2026-10-13-00-22-13-389.json']
+  anchor r2775 bytes=509 sha16=d2ceded6f764f9a1 bare=0 carried=0
+world_removed=True

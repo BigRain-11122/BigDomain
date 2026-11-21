@@ -1,0 +1,59 @@
+R3205 EVIDENCE (2026-11-22) - a BARE proof line now has a machine name.
+
+Board head taken: R3204 next-window (0) MAIN - the opposite direction of R3204.
+R3204 taught --check to count CARRIED lines (marked carrier proofs). It counts
+only lines that carry the prefix, so a proof line that entered qa/ WITHOUT
+do_write read as a clean file: carried=0 and no other field.
+
+Measured read-only first (tmp/probe_R3205.py, private system temp dir, zero
+socket, zero network, no live-disk write; every CLI-shaped case real subprocess
+or in-process module call):
+
+Q1 bypass door exists. battery_shard.write_evidence goes through do_write
+(measured True); battery_shard.stream_evidence does NOT (False) - it opens the
+target in place with fsync for AC-BSGB15 progress. Fed one bare proof line it
+landed unmarked: lands_bare=1, 102 bytes, zero CARRIED bytes. So the door not
+only exists, it is exactly the shape that can create a bare line.
+
+Q2 three faces blind. Three private fixtures holding 0/1/2 bare proof lines all
+answered rc=0 with text that differed only in bytes= (9/97/168); neither
+"carried" nor "bare" appeared. qa_writer_census.classify_file answered
+class=tee for all three. The pre-commit gate compares row["class"] against
+HEALTHY only (evidence_refusals body read), so it never looks at the body.
+
+Q2b real tree. qa/ holds 4617 files with bare proof lines = 0 and carried files
+= 0. The gate held today because write_evidence routes through do_write; the
+stream door has simply never carried a proof-shaped line.
+
+Q3 face chosen. --check text face: OK line gains bare_proofs=N at its tail with
+every old field byte for byte the same. Not a refusal: refusing would redden
+pre-R3203 evidence with no repair door and would mix a content judgement into a
+dialect face. The only consumer of the QA-LOG OK text is this suite itself;
+"bare=" is already a prefix elsewhere (bare_lf=, rows==bare=), so the field is
+named bare_proofs=.
+
+Landed: count_bare_proofs() counts exact PROOF_LINE_RE shapes only; do_check
+appends bare_proofs=<n>; RED lines are untouched because a red dialect means
+the body was never judged. AC-QALB13 shipped in src/os/test_qa_log.py with five
+arms (0/1/2 decisive and equal to a line recount, CARRIED counts as carried and
+not bare, near miss counts as neither, read-only stats, old faces plus the
+shipped R2775 log, one write site and the registry 12 -> 13). AC-QALB9 sentence
+moved twelve -> thirteen.
+
+Gates: SUITE PASS 15/15 over 13 criteria (qa/suite-qa-log-R3205.log 1987B/17
+lines utf-8/lf sha256 80c4ade8c12ee7c5 written and read back through
+tools/qa_log.py --from and --check); qa_log --selftest VERDICT PASS 9/9 with
+qa/ untouched; matrix regenerated through its own vehicle --write (78486 bytes,
+755 rows) then --check DOC-CURRENT; census --check DRIFT-CLEAN flags=0; live
+gate CLOSEOUT-GATE PASS files=4527 flags=0 reader_refused=0 round_main=OK
+census=PASS matrix=DOC-CURRENT with CARRIER bytes=42626 margin=35874
+fold_needed=false crlf=56 bare_lf=0.
+
+Honest limits: zero payment capability and no network beyond loopback - a count
+still moves no money and a buyer still cannot pay (no merchant id, server,
+domain, filing+ICP, miniprogram appid+secret). Zero product surface, zero api
+surface, zero gate number: what changed is whether a bare proof line can be
+seen by a machine. bare_proofs=N is not a verdict - it says this file holds N
+unmarked lines that prove other files, not that the body is right or wrong. The
+stream_evidence birth site was deliberately NOT changed this window; it is
+recorded as the next-window option. Only exact shapes are counted.

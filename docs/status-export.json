@@ -1,23 +1,23 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3204 PRODUCT+ENGINEERING: the reader now names how many carried proofs a file holds - before this window files with 0, 1 and 2 CARRIED lines all read rc=0 with the same ok text, and the two faces that judge the dialect class alone (writer census, pre-commit gate) refused none of them, so the R3203 marker existed only for a human eye.",
+    "current": "2026-11-22 R3205 PRODUCT+ENGINEERING: a bare (unmarked) proof line now has a machine name - --check appends bare_proofs=N where before it answered carried=0 and nothing else, so one file's proof stored in another file read as clean.",
     "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-monthly-faces.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3204.log (3694B, 2026-11-22)",
-    "latest_evidence": "qa/reorg-R3204.log (3694B, 2026-11-22)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3205.log (3600B, 2026-11-22)",
+    "latest_evidence": "qa/reorg-R3205.log (3600B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3204] next window (<=48h): (0) MAIN — **反方向的盲区：裸的（未标记）证明行无人计**：本窗让 `--check` 数出 `CARRIED`，但它只数**带前缀**的行；一条未经 `do_write` 就落进 `qa/` 的裸 `LOG OK path=… sha16=<另一份文件>` 会让 `--check` 答 `carried=0` 而看起来干净（与 R3203 同病，方向相反）。做法=先只读量三问：①有哪些出厂写手能往 `qa/` 写字节却不经 `do_write`（普查的 writer 家族表 + `battery_shard.stream_evidence` 的原地写；量清各自落盘时机）；②造 fixture 量「裸证明行」今天在 `--check`／普查／pre-commit 三面各答什么，并量真实 `qa/` 里现存裸行数（本窗已测 0，需确认是门守住了还是侥幸）；③收口判断：在 `--check` 文本面加 `bare=N`、还是让它拒绝、还是修「绕过 `do_write` 的路径」，并证明所选面不动任何既有字节。三条量完再落，判据沿用 AC-QALB 写法（AC-QALB13），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
-    "next_milestone_due": "2026-11-24T00:36:55+08:00",
-    "updated_at": "2026-11-22T00:36:55+08:00",
+    "next_milestone_due": "2026-11-24T00:46:15+08:00",
+    "updated_at": "2026-11-22T00:46:15+08:00",
     "heartbeat": {
-      "tick": 3201,
-      "state_tick": 3204,
-      "lag": 3,
+      "tick": null,
+      "state_tick": 3205,
+      "lag": null,
       "verdict": "FLAG",
-      "reason": "heartbeat_row_debt"
+      "reason": "heartbeat_missing_or_unparsed"
     },
     "outs_age": {
       "rows": 30,
@@ -35,7 +35,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-22 R3204 PRODUCT+ENGINEERING: the reader now names how many carried proofs a file holds - before this window files with 0, 1 and 2 CARRIED lines all read rc=0 with the same ok text, and the two faces that judge the dialect class alone (writer census, pre-commit gate) refused none of them, so the R3203 marker existed only for a human eye.",
+  "current": "2026-11-22 R3205 PRODUCT+ENGINEERING: a bare (unmarked) proof line now has a machine name - --check appends bare_proofs=N where before it answered carried=0 and nothing else, so one file's proof stored in another file read as clean.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,10 +63,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3204 PRODUCT+ENGINEERING: the reader now names how many carried proofs a file holds - before this window files with 0, 1 and 2 CARRIED lines all read rc=0 with the same ok text, and the two faces that judge the dialect class alone (writer census, pre-commit gate) refused none of them, so the R3203 marker existed only for a human eye.",
-  "export_ts": "2026-11-22T00:36:55+08:00",
+  "do": "2026-11-22 R3205 PRODUCT+ENGINEERING: a bare (unmarked) proof line now has a machine name - --check appends bare_proofs=N where before it answered carried=0 and nothing else, so one file's proof stored in another file read as clean.",
+  "export_ts": "2026-11-22T00:46:15+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
-  "latest_evidence": "qa/reorg-R3204.log (3694B, 2026-11-22)",
+  "latest_evidence": "qa/reorg-R3205.log (3600B, 2026-11-22)",
   "next_milestone": "[R3204] next window (<=48h): (0) MAIN — **反方向的盲区：裸的（未标记）证明行无人计**：本窗让 `--check` 数出 `CARRIED`，但它只数**带前缀**的行；一条未经 `do_write` 就落进 `qa/` 的裸 `LOG OK path=… sha16=<另一份文件>` 会让 `--check` 答 `carried=0` 而看起来干净（与 R3203 同病，方向相反）。做法=先只读量三问：①有哪些出厂写手能往 `qa/` 写字节却不经 `do_write`（普查的 writer 家族表 + `battery_shard.stream_evidence` 的原地写；量清各自落盘时机）；②造 fixture 量「裸证明行」今天在 `--check`／普查／pre-commit 三面各答什么，并量真实 `qa/` 里现存裸行数（本窗已测 0，需确认是门守住了还是侥幸）；③收口判断：在 `--check` 文本面加 `bare=N`、还是让它拒绝、还是修「绕过 `do_write` 的路径」，并证明所选面不动任何既有字节。三条量完再落，判据沿用 AC-QALB 写法（AC-QALB13），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
@@ -157,7 +157,7 @@
   },
   "results": [
     [
-      "3204",
+      "3205",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -171,24 +171,24 @@
   "self_drive": {
     "window": "2026-11-16..2026-11-22",
     "window_days": 7,
-    "log_lines_in_window": 44,
+    "log_lines_in_window": 51,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 42626,
-  "next_milestone_due": "2026-11-24T00:36:55+08:00",
+  "state_bytes": 47500,
+  "next_milestone_due": "2026-11-24T00:46:15+08:00",
   "heartbeat": {
-    "tick": 3201,
-    "state_tick": 3204,
-    "lag": 3,
+    "tick": null,
+    "state_tick": 3205,
+    "lag": null,
     "verdict": "FLAG",
-    "reason": "heartbeat_row_debt"
+    "reason": "heartbeat_missing_or_unparsed"
   },
   "outs_age": {
     "rows": 30,

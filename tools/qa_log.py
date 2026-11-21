@@ -51,6 +51,19 @@ verdict: it says this file quotes N proofs of other files, not that the
 quoted text is right and not that this file is wrong. A RED line never gains
 the field, because a red dialect means the body was never judged.
 
+R3205 (AC-QAL11): the other direction - an UNMARKED proof line was invisible.
+Measured before this change: three files holding 0, 1 and 2 bare proof lines
+all answered rc=0 with text that differed only in bytes=, the writer census
+answered class=tee for all three, and the pre-commit gate compares the dialect
+class only, never the body. A bare line can only be born one way today:
+battery_shard.stream_evidence writes progress in place without going through
+do_write (measured: one bare proof line landed unmarked, 102 bytes), while the
+real qa/ tree holds zero bare lines across 4617 files. So --check now also
+names bare_proofs=<n>, exact shapes only, old fields byte for byte the same.
+It is a count, not a verdict: the line proves another file, and a RED line
+still gains no field because its body was never judged. The name avoids a
+prefix clash - bare_lf= and rows==bare= already exist elsewhere.
+
 Stdlib only, ASCII source, zero network, zero shell.
 """
 
@@ -240,6 +253,22 @@ def count_carried_proofs(text):
     return carried
 
 
+def count_bare_proofs(text):
+    """R3205 (AC-QAL11): how many UNMARKED proof lines a body carries.
+
+    The same exact shape mark_carried_proofs marks, asked without the
+    CARRIED prefix. A bare line proves some other file and reached this body
+    without going through do_write - measured today the only such door is
+    battery_shard.stream_evidence, which opens the file in place. Counting
+    it is not a verdict about the body, only a name for what is in it.
+    """
+    bare = 0
+    for line in text.split("\n"):
+        if PROOF_LINE_RE.match(line):
+            bare += 1
+    return bare
+
+
 def do_write(name, source_bytes, directory=QA):
     check_name(name)
     text = normalize(read_source(source_bytes))
@@ -269,8 +298,11 @@ def do_check(name):
         sys.stdout.write("QA-LOG RED name=%s dialect=%s bytes=%d expected=utf-8/lf\n"
                          % (name, dialect, len(raw)))
         return 2
-    sys.stdout.write("QA-LOG OK name=%s dialect=utf-8/lf bytes=%d carried=%d\n"
-                     % (name, len(raw), count_carried_proofs(raw.decode("utf-8"))))
+    body = raw.decode("utf-8")
+    sys.stdout.write("QA-LOG OK name=%s dialect=utf-8/lf bytes=%d carried=%d "
+                     "bare_proofs=%d\n"
+                     % (name, len(raw), count_carried_proofs(body),
+                        count_bare_proofs(body)))
     return 0
 
 
