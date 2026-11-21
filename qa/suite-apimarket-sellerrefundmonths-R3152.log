@@ -1,0 +1,10 @@
+PASS AC-SRFM1: keys=27 empty=(0, 0, None, []) market_rows=5 scope='market'
+PASS AC-SRFM2: aug=(20, 2, 0) sep=(9, 0, 9) oct=(5, 2, -4) dec=(0, 1, -6)
+PASS AC-SRFM3: raw=(46, 35, 5, 26, 9) face=(46, 35, 5, 26, 9) rows=(46, 35) split=True
+PASS AC-SRFM4: rates=(1.0, 0.0, 1.8, None) market=0.76 bench=0.76
+PASS AC-SRFM5: grids=(['2026-08', '2026-09', '2026-10'], ['2026-11', '2026-12']) running=[2, 2, 4, 4, 5] peak=('2026-08', 2)
+PASS AC-SRFM6: dana=(4, 29, 34) frank=(1, 6, 12) market=(5, 35, 46)
+PASS AC-SRFM7: buyers=(4, 1, 0) market=(5, 2)
+PASS AC-SRFM8: gates=True digests_same=True tx_same=True bytes=True ascii=True
+PRODUCT_SHA_STABLE True
+SUITE 8/8

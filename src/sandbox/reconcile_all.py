@@ -3088,6 +3088,14 @@ SUITES = [
     # the pooled money average)
     ("ledger-apimarket-buyerrefundmonths", os.path.join(
         "ledger", "test_apimarket_buyerrefundmonths.py"), 8),
+    # seller-side monthly refund flow (two clocks: a purchase books gross in
+    # its own purchased_utc month and a refund books in its own refunded_utc
+    # month, so a month can honestly refund more than it sold; the rate is
+    # None on a zero-gross month and is never clamped) - criteria
+    # AC-SRFM1..AC-SRFM8 registered in the R3152 explore-queue claim row
+    # BEFORE the code.
+    ("ledger-apimarket-sellerrefundmonths", os.path.join(
+        "ledger", "test_apimarket_sellerrefundmonths.py"), 8),
     # buyer-side monthly claim flow (a claim books in the UTC month of its
     # own opened_utc, a later refund never re-dates it nor invents a row
     # in the refund month, honest zero months carried flat, the five-state

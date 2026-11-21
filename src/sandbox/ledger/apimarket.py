@@ -14762,6 +14762,222 @@ class APIMarketFace:
             "disclaimer": self.disclaimer,
             "months": months}
 
+    def api_seller_refund_months(self, dev_account=None):
+        """Seller-scoped (and market-wide) monthly refund flow (criteria
+        AC-SRFM1..AC-SRFM8 pre-registered in the R3152 explore-queue
+        claim row BEFORE this code existed).
+
+        api_buyer_refund_months is the buyer axis and
+        api_category_refund_months the category axis, while
+        api_seller_refund_reasons is only a lifetime reason mix, so a
+        seller could not read its own month-by-month refund pressure
+        against the money it actually took in.
+
+        Two clocks, deliberately (AC-SRFM2): a purchase books its
+        price_paid as GROSS in the UTC month of its own purchased_utc,
+        and a refund books its amount in the UTC month of its own
+        refunded_utc. A refund never re-dates the purchase month and
+        never adds a row to it, so a month can honestly carry refunds
+        against little or no selling and a negative net.
+
+        refund_rate is refunded/gross and is None on a zero-gross month
+        rather than a fabricated 0.0 (AC-SRFM4); it is never clamped, so
+        a month that refunded more than it sold reads above 1.0. The
+        market view carries no benchmark of itself (market_refund_rate
+        is None), while a seller view carries the TRUE market lifetime
+        rate.
+
+        Month rows run the contiguous grid between the first and the
+        last event month (either clock), so an idle month carries an
+        honest zero row whose rate and average are None and whose
+        running accumulator is carried flat (AC-SRFM5).
+
+        gross(month) sums purchases of the seller's own listings, and
+        refunded(month) sums refunds whose dev_account is that seller,
+        so a seller envelope partitions the market envelope on
+        refund_count, refunded and gross (AC-SRFM6). buyer_count,
+        listing_count and seller_count are DISTINCT per row while the
+        envelope carries lifetime distinct counts.
+
+        Gates run before any read: the usr: prefix account shape
+        (fail-closed E_AM_BAD_ACCOUNT); a prefix-valid unknown seller
+        reads honestly empty rather than the market. Pure read: zero
+        row mutations, zero token movement."""
+        if dev_account is not None:
+            if not str(dev_account).startswith("usr:"):
+                raise ApiMarketError(E_AM_BAD_ACCOUNT, dev_account)
+
+        def core(scope_account):
+            refund_sql = (
+                "SELECT f.refunded_utc, f.amount, f.dev_share,"
+                " f.platform_share, f.listing_id, f.dev_account,"
+                " f.buyer_id, p.purchased_utc"
+                " FROM apimarket_refunds f JOIN apimarket_purchases p"
+                " ON p.purchase_id = f.purchase_id")
+            gross_sql = (
+                "SELECT p.purchased_utc, p.price_paid, p.listing_id,"
+                " l.dev_account FROM apimarket_purchases p"
+                " JOIN apimarket_listings l"
+                " ON l.listing_id = p.listing_id")
+            args = ()
+            if scope_account is not None:
+                refund_sql += " WHERE f.dev_account = ?"
+                gross_sql += " WHERE l.dev_account = ?"
+                args = (str(scope_account),)
+            refund_sql += " ORDER BY f.refund_id"
+            gross_sql += " ORDER BY p.purchase_id"
+            with self._lock:
+                refunds = self._conn.execute(refund_sql, args).fetchall()
+                purchases = self._conn.execute(
+                    gross_sql, args).fetchall()
+
+            buckets = {}
+
+            def bucket(month):
+                return buckets.setdefault(month, {
+                    "refund_count": 0, "refunded": 0, "dev": 0,
+                    "platform": 0, "gross": 0, "buyers": set(),
+                    "listings": set(), "sellers": set(),
+                    "same_month": 0})
+
+            amounts = []
+            buyers = set()
+            listings = set()
+            sellers = set()
+            same_month_total = 0
+            for (refunded_utc, amount, dev_share, platform_share,
+                 listing_id, seller, buyer,
+                 purchased_utc) in refunds:
+                b = bucket(str(refunded_utc)[:7])
+                b["refund_count"] += 1
+                b["refunded"] += int(amount)
+                b["dev"] += int(dev_share)
+                b["platform"] += int(platform_share)
+                b["listings"].add(int(listing_id))
+                b["sellers"].add(seller)
+                b["buyers"].add(buyer)
+                if str(refunded_utc)[:7] == str(purchased_utc)[:7]:
+                    b["same_month"] += 1
+                    same_month_total += 1
+                amounts.append(int(amount))
+                listings.add(int(listing_id))
+                sellers.add(seller)
+                buyers.add(buyer)
+            for (purchased_utc, price_paid, listing_id,
+                 seller) in purchases:
+                b = bucket(str(purchased_utc)[:7])
+                b["gross"] += int(price_paid)
+                b["listings"].add(int(listing_id))
+                b["sellers"].add(seller)
+                listings.add(int(listing_id))
+                sellers.add(seller)
+
+            months = []
+            running = 0
+            for month in _contiguous_months(sorted(buckets)):
+                b = buckets.get(month)
+                if b is None:
+                    months.append({
+                        "month": month,
+                        "refund_count": 0,
+                        "refunded": 0,
+                        "gross": 0,
+                        "net": 0,
+                        "refund_rate": None,
+                        "dev_refunded": 0,
+                        "platform_refunded": 0,
+                        "listing_count": 0,
+                        "buyer_count": 0,
+                        "seller_count": 0,
+                        "avg_refund_amount": None,
+                        "same_month_count": 0,
+                        "running_refund_count": running})
+                    continue
+                running += b["refund_count"]
+                months.append({
+                    "month": month,
+                    "refund_count": b["refund_count"],
+                    "refunded": b["refunded"],
+                    "gross": b["gross"],
+                    "net": b["gross"] - b["refunded"],
+                    "refund_rate": (
+                        round(float(b["refunded"]) / b["gross"], 2)
+                        if b["gross"] > 0 else None),
+                    "dev_refunded": b["dev"],
+                    "platform_refunded": b["platform"],
+                    "listing_count": len(b["listings"]),
+                    "buyer_count": len(b["buyers"]),
+                    "seller_count": len(b["sellers"]),
+                    "avg_refund_amount": (
+                        round(float(b["refunded"]) / b["refund_count"], 2)
+                        if b["refund_count"] else None),
+                    "same_month_count": b["same_month"],
+                    "running_refund_count": running})
+
+            peak_month = None
+            peak_count = None
+            for row in months:
+                if row["refund_count"] > 0 and (
+                        peak_count is None
+                        or row["refund_count"] > peak_count):
+                    peak_month = row["month"]
+                    peak_count = row["refund_count"]
+            total = sum(row["refund_count"] for row in months)
+            gross_total = sum(row["gross"] for row in months)
+            refunded_total = sum(row["refunded"] for row in months)
+            return {
+                "month_count": len(months),
+                "active_month_count": sum(
+                    1 for row in months
+                    if row["refund_count"] > 0 or row["gross"] > 0),
+                "refund_count": total,
+                "refunded": refunded_total,
+                "gross": gross_total,
+                "net": gross_total - refunded_total,
+                "refund_rate": (
+                    round(float(refunded_total) / gross_total, 2)
+                    if gross_total > 0 else None),
+                "dev_refunded": sum(
+                    row["dev_refunded"] for row in months),
+                "platform_refunded": sum(
+                    row["platform_refunded"] for row in months),
+                "listing_count": len(listings),
+                "buyer_count": len(buyers),
+                "seller_count": len(sellers),
+                "avg_refund_amount": (
+                    round(float(refunded_total) / total, 2)
+                    if total else None),
+                "same_month_count": same_month_total,
+                "largest_refund": max(amounts) if amounts else None,
+                "peak_month": peak_month,
+                "peak_refund_count": peak_count,
+                "first_month": months[0]["month"] if months else None,
+                "last_month": months[-1]["month"] if months else None,
+                "latest_month_refund_count": (
+                    months[-1]["refund_count"] if months else None),
+                "latest_month_refunded": (
+                    months[-1]["refunded"] if months else None),
+                "latest_month_refund_rate": (
+                    months[-1]["refund_rate"] if months else None),
+                "months": months}
+
+        if dev_account is None:
+            scope = "market"
+            market_rate = None
+            body = core(None)
+        else:
+            scope = "seller"
+            body = core(dev_account)
+            market_rate = core(None)["refund_rate"]
+
+        out = {"scope": scope,
+               "dev_account": None if dev_account is None
+               else str(dev_account)}
+        out.update(body)
+        out["market_refund_rate"] = market_rate
+        out["disclaimer"] = self.disclaimer
+        return out
+
     def api_market_provider_months(self):
         """Market-wide monthly provider-identity redeclaration timeline
         (criteria AC-PIM1..AC-PIM8 pre-registered in the R2202 seed row
