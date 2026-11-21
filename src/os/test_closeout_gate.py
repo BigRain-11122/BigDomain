@@ -18,6 +18,9 @@ This suite grades both questions on fixture worlds:
            PASS, a bad row or a stale latest row REFUSES by name
            E_CLG_LEDGER, a gone file is counted missing, the face is read-only
            and opt-out-able, and the pinned PASS token shape never moves
+  AC-CLG14  the chain between one name's records is published as `broken=` and
+           never gated (R3220): a lost record and a lawful delete-then-recreate
+           look identical here, so a refusal would accuse the lawful case
 
 Honest boundary: `flags` sees a new file or a class change; a rewrite that
 stays inside the same class is invisible to both faces (the census keeps no
@@ -691,6 +694,32 @@ def main():
            and plain13[0].startswith("CLOSEOUT-GATE PASS")
            and "round_main=" not in plain13[0],
            "rc=%s lines=%s" % (plain13_rc, plain13[:1]))
+
+        # AC-CLG14 (R3220): the count of names whose adjacent records do not
+        # link is PUBLISHED on the row, and never gated. Measured before the
+        # change: a clean three-row chain and a chain with its middle row lost
+        # answered the identical "LEDGER OK rows=... bad=0 stale=0 missing=0".
+        # A break can be a lost record OR a lawful deletion-then-recreate or an
+        # external write_atomic call, and this face cannot tell them apart, so a
+        # refusal would accuse the lawful cases.
+        gap_rows = [replacement_row("probe-evidence.log", b"alpha\n",
+                                    b"middle\n"),
+                    replacement_row("probe-evidence.log", b"other\n",
+                                    b"beta two\n")]
+        root_e, reg_e, pin_e, _led_e, _qa_e = ledger_world(
+            os.path.join(tmp12, "e"), gap_rows)
+        world_e, base_e = build_world(os.path.join(tmp12, "we"))
+        e_lines, e_rc, e_v = CG.evaluate(world_e, base_e, root=root_e,
+                                         registry=reg_e, census_pin=pin_e,
+                                         matrix=False)
+        e_rows = [line for line in e_lines if line.startswith("LEDGER OK ")]
+        e_chain = [line for line in e_lines if "detail chain" in line]
+        ok("AC-CLG14 a broken chain is published on the row, never gated",
+           e_rc == 0 and e_v.get("ledger") == "OK"
+           and len(e_rows) == 1 and "broken=1" in e_rows[0]
+           and "bad=0" in e_rows[0] and "stale=0" in e_rows[0]
+           and e_chain == [],
+           "rc=%s row=%s chain=%s" % (e_rc, e_rows, e_chain))
 
     total = len(CHECKS)
     acs = set()

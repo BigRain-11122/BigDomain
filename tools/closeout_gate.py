@@ -279,15 +279,22 @@ def check_ledger(root):
 
     Returns (ok, lines) where lines[0] is the LEDGER row and the rest are one
     detail line per defect.
+
+    R3220 (AC-CLG14): the row also prints `broken=`, the count of names whose
+    adjacent records do not link (the later row's old_sha16 must be the earlier
+    row's new_sha16). It is published, never gated: a break is either a lost
+    record or a lawful deletion-then-recreate / external write, and this face
+    cannot tell them apart, so refusing would accuse the lawful case.
     """
     _src_os(root)
     import qa_log as QL
     path = os.path.join(root, "state", QL.LEDGER_NAME)
     report = QL.ledger_report(path, evidence_dir=os.path.join(root, "qa"))
-    lines = ["LEDGER %s rows=%d names=%d bad=%d stale=%d missing=%d path=%s"
+    lines = ["LEDGER %s rows=%d names=%d bad=%d stale=%d missing=%d broken=%d "
+             "path=%s"
              % (report["verdict"], report["rows"], report["names"],
                 len(report["bad"]), len(report["stale"]),
-                len(report["missing"]),
+                len(report["missing"]), len(report["broken"]),
                 os.path.relpath(path, root).replace("\\", "/"))]
     for number, reason in report["bad"]:
         lines.append("LEDGER detail bad line=%d reason=%s" % (number, reason))
@@ -296,6 +303,10 @@ def check_ledger(root):
                      % (name, disk, wanted))
     for name in report["missing"]:
         lines.append("LEDGER detail missing name=%s" % name)
+    for name, prev_line, line, prev_sha, old_sha in report["broken"]:
+        lines.append("LEDGER detail chain name=%s prev_line=%d line=%d "
+                     "prev_new_sha16=%s old_sha16=%s"
+                     % (name, prev_line, line, prev_sha, old_sha))
     return report["verdict"] == "OK", lines
 
 

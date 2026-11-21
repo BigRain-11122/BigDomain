@@ -1,0 +1,17 @@
+R3220 probe: replacement-chain face
+read_ledger returns records alone (no line kept): True
+ledger_report keeps only the latest row per name: True
+ledger_report mentions chain/broken: False
+--- clean-3
+  qa_log rc=0 :: QA-LEDGER OK path=C:\Users\sjs20\AppData\Local\Temp\r3220-ggf4_zsr\chain-ok\state\qa_replacements.jsonl rows=3 names=1 bad=0 stale=0 missing=0
+  gate ok=True :: LEDGER OK rows=3 names=1 bad=0 stale=0 missing=0 path=state/qa_replacements.jsonl
+--- gap
+  qa_log rc=0 :: QA-LEDGER OK path=C:\Users\sjs20\AppData\Local\Temp\r3220-cz8cgphq\chain-gap\state\qa_replacements.jsonl rows=2 names=1 bad=0 stale=0 missing=0
+  gate ok=True :: LEDGER OK rows=2 names=1 bad=0 stale=0 missing=0 path=state/qa_replacements.jsonl
+--- two-names
+  qa_log rc=0 :: QA-LEDGER OK path=C:\Users\sjs20\AppData\Local\Temp\r3220-9zlc2o2x\two-names\state\qa_replacements.jsonl rows=4 names=2 bad=0 stale=0 missing=0
+  gate ok=True :: LEDGER OK rows=4 names=2 bad=0 stale=0 missing=0 path=state/qa_replacements.jsonl
+--- fresh
+  qa_log rc=0 :: QA-LEDGER OK path=C:\Users\sjs20\AppData\Local\Temp\r3220-ftq2w8tt\fresh\state\qa_replacements.jsonl rows=1 names=1 bad=0 stale=0 missing=0
+  gate ok=True :: LEDGER OK rows=1 names=1 bad=0 stale=0 missing=0 path=state/qa_replacements.jsonl
+ledger bytes untouched by both faces: True

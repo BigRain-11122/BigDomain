@@ -7512,8 +7512,9 @@ SUITES = [
     # and that file is the writer, so a corrupt, stale or absent ledger answered
     # nothing to any face. --ledger-check [PATH] is the read half (AC-QALB30..32):
     # rows/names/bad/stale/missing on one line, one detail line per defect.
+    # R3220 added AC-QALB34..35, the chain between adjacent records (33 -> 35).
     ("os-qa-log",
-     os.path.join("..", "os", "test_qa_log.py"), 33),
+     os.path.join("..", "os", "test_qa_log.py"), 35),
     # R3208: src/os/state.json carries the canonical CRLF dialect its readers
     # require, but the path was not pinned in .gitattributes - so a checkout
     # running with core.autocrlf=false materialized the whole carrier as bare
@@ -7909,9 +7910,10 @@ SUITES = [
     # whose registry it cannot address, and gives the R3103 refusal codes arms
     # in this suite instead of only in battery_followup (8 -> 9). R3109:
     # AC-CLG10 asks whether a deep PASS names the baseline it judged (9 -> 10);
-    # R3219 added AC-CLG11..13, the replacement-ledger face (10 -> 13).
+    # R3219 added AC-CLG11..13, the replacement-ledger face (10 -> 13);
+    # R3220 added AC-CLG14, the chain reading published but never gated (13 -> 14).
     ("os-closeout-gate",
-     os.path.join("..", "os", "test_closeout_gate.py"), 13),
+     os.path.join("..", "os", "test_closeout_gate.py"), 14),
     # R2935: R2934 photographed the sandbox for the first time, but one pass is
     # a SNAPSHOT - it cannot tell "alive" from "painted cleanly this time". The
     # ruling is not to run a browser under the registry law but to move the LAW

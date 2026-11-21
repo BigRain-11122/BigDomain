@@ -1,0 +1,48 @@
+R3220 reorg evidence: replacement-ledger chain face
+===================================================
+Board head claimed: R3219 next-window (0) MAIN - the ledger believes only each
+name's LATEST row, so a chain with a lost or mismatched middle record reads OK.
+
+MEASURED BEFORE THE CHANGE (read-only, tmp/probe_R3220.py -> qa/probe-R3220.log):
+  clean three-row chain : QA-LEDGER OK rows=3 names=1 bad=0 stale=0 missing=0
+                          LEDGER OK rows=3 ... (gate passes)
+  middle row lost       : QA-LEDGER OK rows=2 names=1 bad=0 stale=0 missing=0
+                          LEDGER OK rows=2 ... (gate passes - identical shape)
+  two names interleaved : QA-LEDGER OK broken absent (no chain question at all)
+  one-record name       : QA-LEDGER OK (no predecessor, correctly no break)
+  ledger bytes untouched by both faces: True
+
+CHANGED (one parser, no second copy):
+  tools/qa_log.py
+    read_ledger_located(path)  - the parser now keeps the line each record came
+                                 from; read_ledger(path) renders records alone
+    ledger_report(...)         - adds "broken": for each name, adjacent records
+                                 must link (later old_sha16/old_bytes == earlier
+                                 new_sha16/new_bytes)
+    do_ledger_check(...)       - prints broken=N on the line and one
+                                 "detail chain" line per break (prev_line, line,
+                                 prev_new_sha16, old_sha16)
+  tools/closeout_gate.py
+    check_ledger(root)         - prints broken=N on the LEDGER row, same detail
+                                 lines, and does NOT refuse on a break
+
+WHY NOT GATED (measured, not preferred):
+  A break is indistinguishable here from a lawful deletion-then-recreate, a
+  direct in-place rewrite that bypassed this writer, or a cross-machine writer.
+  The ledger only ever claimed to record do_write replacements, so refusing on
+  a break would accuse lawful worlds. It is published as a reading instead; a
+  lost record still shows up, and the reader decides.
+
+MEASURED AFTER (AC-QALB34/35, AC-CLG14):
+  three linked writes      : broken=0, no detail line
+  middle record removed    : broken=1, detail chain prev_line=1 line=2 with the
+                             two sha16 values
+  one-record name          : broken=0 (no predecessor is not a break)
+  two names interleaved    : broken=0 (chains never cross-link)
+  identical-bytes rewrite  : broken=0 (old == previous new)
+  broken chain at closeout : LEDGER OK ... broken=1, rc=0 (published, not gated)
+  read-only                : ledger and evidence (size, mtime_ns) unchanged,
+                             zero new files, live ledger and live qa/ stable
+
+Live ledger state/qa_replacements.jsonl still does not exist; no backfill was
+created, so the first live row remains whichever rewrite happens next.

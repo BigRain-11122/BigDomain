@@ -1,4 +1,4 @@
-"""Battery suite for tools/qa_log.py - criteria AC-QALB1..AC-QALB33.
+"""Battery suite for tools/qa_log.py - criteria AC-QALB1..AC-QALB35.
 
 AC-QALB1..AC-QALB9 were pinned in src/os/backlog.md at R2807 BEFORE this suite
 existed, mapping one-to-one onto AC-QAL1..AC-QAL7 that the tool prints, plus one
@@ -365,8 +365,8 @@ def main():
             if found:
                 declared.append(found.group(1))
         ok('AC-QALB9 registry declares exactly one row for this suite, '
-           'thirty-three',
-           declared == ['33'], 'rows=%s hits=%d' % (declared, len(hits)))
+           'thirty-five',
+           declared == ['35'], 'rows=%s hits=%d' % (declared, len(hits)))
 
         # ---- AC-QALB11: a carried proof line is marked, not certified -----
         # R3203: the generator prints "LOG OK path=... sha16=..." to prove a
@@ -1308,6 +1308,106 @@ def main():
            'check_ledger=%d ledger_report=%d face_json=%s'
            % (gate_text.count('def check_ledger('),
               gate_text.count('QL.ledger_report('), 'json.' in face))
+
+        # ---- AC-QALB34: the chain between records is counted ----------------
+        # R3220: ledger_report believed only each name's LATEST row, so a ledger
+        # whose middle record was lost answered the identical OK as a clean one
+        # (measured: gap world rc=0 "bad=0 stale=0 missing=0"). The chain law is
+        # the one the writer already implies - a later row's old_sha16/old_bytes
+        # must be an earlier row's new_sha16/new_bytes.
+        def chain_world(tag, writes):
+            d = os.path.join(world, tag)
+            os.makedirs(d)
+            for name, payload in writes:
+                mod.do_write(name, payload, directory=d)
+            return d, os.path.join(d, mod.LEDGER_NAME)
+
+        def rows_of(path):
+            return [ln for ln in read_text(path).splitlines() if ln.strip()]
+
+        d_ok, p_ok = chain_world('chain-ok', [('rec.log', b'a\n'),
+                                              ('rec.log', b'b\n'),
+                                              ('rec.log', b'c\n'),
+                                              ('rec.log', b'd\n')])
+        rc_ok, out_ok = quiet(mod.do_ledger_check, p_ok)
+        rows_ok = rows_of(p_ok)
+
+        # the middle record is lost: first and third write survive, and their
+        # link cannot hold (b != c).
+        d_gap, p_gap = chain_world('chain-gap', [('rec.log', b'a\n'),
+                                                 ('rec.log', b'b\n'),
+                                                 ('rec.log', b'c\n'),
+                                                 ('rec.log', b'd\n')])
+        kept = rows_of(p_gap)
+        with io.open(p_gap, 'w', encoding='utf-8', newline='\n') as fh:
+            fh.write('\n'.join([kept[0], kept[2]]) + '\n')
+        rc_gap, out_gap = quiet(mod.do_ledger_check, p_gap)
+        first_row = json.loads(kept[0])
+        third_row = json.loads(kept[2])
+
+        # a name with one record has no predecessor, so it can never be a break
+        d_one, p_one = chain_world('chain-one', [('rec.log', b'a\n'),
+                                                 ('rec.log', b'b\n')])
+        rc_one, out_one = quiet(mod.do_ledger_check, p_one)
+
+        # two names interleaved: each keeps its own chain, never cross-links
+        d_two, p_two = chain_world('chain-two', [('one.log', b'a\n'),
+                                                 ('two.log', b'a\n'),
+                                                 ('one.log', b'b\n'),
+                                                 ('one.log', b'c\n'),
+                                                 ('two.log', b'b\n')])
+        rc_two, out_two = quiet(mod.do_ledger_check, p_two)
+
+        # an identical-bytes rewrite still links (old == previous new)
+        d_same, p_same = chain_world('chain-same', [('rec.log', b'a\n'),
+                                                    ('rec.log', b'b\n'),
+                                                    ('rec.log', b'b\n')])
+        rc_same, out_same = quiet(mod.do_ledger_check, p_same)
+
+        ok('AC-QALB34 adjacent records are chained and a lost row is named',
+           rc_ok == 0 and 'broken=0' in out_ok
+           and 'detail chain' not in out_ok and len(rows_ok) == 3
+           and rc_gap == 0 and 'broken=1' in out_gap
+           and 'detail chain name=rec.log prev_line=1 line=2' in out_gap
+           and ('prev_new_sha16=%s' % first_row['new_sha16']) in out_gap
+           and ('old_sha16=%s' % third_row['old_sha16']) in out_gap
+           and rc_one == 0 and 'broken=0' in out_one
+           and rc_two == 0 and 'broken=0' in out_two
+           and rc_same == 0 and 'broken=0' in out_same,
+           'ok=%d/%s gap=%d/%s one=%d/%s two=%d/%s same=%d/%s'
+           % (rc_ok, 'broken=0' in out_ok, rc_gap, 'broken=1' in out_gap,
+              rc_one, 'broken=0' in out_one, rc_two, 'broken=0' in out_two,
+              rc_same, 'broken=0' in out_same))
+
+        # ---- AC-QALB35: a break is a reading, never a verdict ---------------
+        # A missing record and a lawful deletion-then-recreate or an external
+        # write_atomic call leave the same shape here, so refusing would accuse
+        # the lawful cases. The face reports, stays read-only, and leaves the
+        # live ledger and the live qa/ tree alone.
+        live_l_before = (read_bytes(mod.LEDGER)
+                         if os.path.isfile(mod.LEDGER) else b'')
+        qa_before_chain = qa_snapshot()
+        l_before_gap = stamp(p_gap)
+        e_before_gap = stamp(os.path.join(d_gap, 'rec.log'))
+        names_before_gap = sorted(os.listdir(d_gap))
+        rc_g1, out_g1 = quiet(mod.do_ledger_check, p_gap)
+        rc_g2, out_g2 = quiet(mod.do_ledger_check, p_gap)
+        report_gap = mod.ledger_report(p_gap)
+        live_l_after = (read_bytes(mod.LEDGER)
+                        if os.path.isfile(mod.LEDGER) else b'')
+        ok('AC-QALB35 a broken chain is reported, never reddened',
+           rc_g1 == 0 and rc_g2 == 0 and out_g1 == out_g2
+           and report_gap['verdict'] == 'OK'
+           and len(report_gap['broken']) == 1
+           and len(report_gap['bad']) == 0 and len(report_gap['stale']) == 0
+           and stamp(p_gap) == l_before_gap
+           and stamp(os.path.join(d_gap, 'rec.log')) == e_before_gap
+           and sorted(os.listdir(d_gap)) == names_before_gap
+           and live_l_after == live_l_before
+           and qa_snapshot() == qa_before_chain,
+           'rc=%d/%d verdict=%s broken=%d stable=%s'
+           % (rc_g1, rc_g2, report_gap['verdict'],
+              len(report_gap['broken']), stamp(p_gap) == l_before_gap))
 
     finally:
         mod.QA = original_qa

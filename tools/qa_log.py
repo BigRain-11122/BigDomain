@@ -251,10 +251,11 @@ def ledger_row_problem(obj):
     return None
 
 
-def read_ledger(path):
-    """R3218: parse a ledger without ever writing it.
+def read_ledger_located(path):
+    """R3220: parse a ledger and keep the line each record came from.
 
-    Returns (records, bad), where bad is a list of (line number, reason). Blank
+    Still ONE parser: `read_ledger` renders this for callers that only want the
+    records, and the chain face needs the line numbers to name a gap. Blank
     lines carry no claim and are skipped; an undecodable file is one bad line 0,
     because nothing below it can be judged.
     """
@@ -279,8 +280,17 @@ def read_ledger(path):
         if problem:
             bad.append((number, problem))
             continue
-        records.append(obj)
+        records.append((number, obj))
     return records, bad
+
+
+def read_ledger(path):
+    """R3218: parse a ledger without ever writing it.
+
+    Returns (records, bad), where bad is a list of (line number, reason).
+    """
+    located, bad = read_ledger_located(path)
+    return [obj for _number, obj in located], bad
 
 
 def ledger_report(path=None, evidence_dir=None):
@@ -291,15 +301,34 @@ def ledger_report(path=None, evidence_dir=None):
     below renders this dict. A second parser in the gate would let the two
     faces disagree about what a bad row is.
 
+    R3220 (AC-QALB34/35): `broken` counts the names whose adjacent rows do not
+    link - the later row's `old_sha16/old_bytes` must be the earlier row's
+    `new_sha16/new_bytes`. It is a READING, never a verdict: a break can be a
+    lost record OR a lawful deletion-then-recreate, a direct in-place rewrite
+    or a cross-machine writer, and this ledger never claimed to observe those.
+    Refusing on a break would accuse the lawful cases.
+
     `evidence_dir` defaults to the shipped rule: the live ledger is read
     against REPO/qa, every other ledger against its own directory. A caller
     that knows the world (the gate) passes the dir it is judging.
     """
     path = LEDGER if path is None else path
-    records, bad = read_ledger(path)
+    located, bad = read_ledger_located(path)
     latest = {}
-    for record in records:
-        latest[record["name"]] = record
+    previous = {}
+    broken = []
+    for number, record in located:
+        name = record["name"]
+        prev = previous.get(name)
+        if prev is not None:
+            prev_number, prev_record = prev
+            if (record["old_sha16"] != prev_record["new_sha16"]
+                    or record["old_bytes"] != prev_record["new_bytes"]):
+                broken.append((name, prev_number, number,
+                               prev_record["new_sha16"],
+                               record["old_sha16"]))
+        previous[name] = (number, record)
+        latest[name] = record
     if evidence_dir is None:
         here = os.path.normcase(os.path.realpath(path))
         live = os.path.normcase(os.path.realpath(LEDGER))
@@ -318,8 +347,9 @@ def ledger_report(path=None, evidence_dir=None):
         if disk != latest[name]["new_sha16"]:
             stale.append((name, disk, latest[name]["new_sha16"]))
     return {"verdict": "RED" if (bad or stale) else "OK",
-            "path": path, "rows": len(records), "names": len(latest),
-            "bad": bad, "stale": stale, "missing": missing}
+            "path": path, "rows": len(located), "names": len(latest),
+            "bad": bad, "stale": stale, "missing": missing,
+            "broken": broken}
 
 
 def do_ledger_check(path=None):
@@ -334,10 +364,11 @@ def do_ledger_check(path=None):
     """
     report = ledger_report(path)
     sys.stdout.write("QA-LEDGER %s path=%s rows=%d names=%d bad=%d stale=%d "
-                     "missing=%d\n"
+                     "missing=%d broken=%d\n"
                      % (report["verdict"], report["path"], report["rows"],
                         report["names"], len(report["bad"]),
-                        len(report["stale"]), len(report["missing"])))
+                        len(report["stale"]), len(report["missing"]),
+                        len(report["broken"])))
     for number, reason in report["bad"]:
         sys.stdout.write("QA-LEDGER detail bad line=%d reason=%s\n"
                          % (number, reason))
@@ -346,6 +377,10 @@ def do_ledger_check(path=None):
                          "ledger_sha16=%s\n" % (name, disk, wanted))
     for name in report["missing"]:
         sys.stdout.write("QA-LEDGER detail missing name=%s\n" % name)
+    for name, prev_line, line, prev_sha, old_sha in report["broken"]:
+        sys.stdout.write("QA-LEDGER detail chain name=%s prev_line=%d "
+                         "line=%d prev_new_sha16=%s old_sha16=%s\n"
+                         % (name, prev_line, line, prev_sha, old_sha))
     return 0 if report["verdict"] == "OK" else 2
 
 
