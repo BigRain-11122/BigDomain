@@ -6340,9 +6340,12 @@ SUITES = [
     # the same face the ledger's existence, so "no ledger" and "empty ledger"
     # stopped publishing the identical block (25 -> 26). R3228 published the
     # census reading there too, as a JSON block that the census itself cannot
-    # count (26 -> 29).
+    # count (26 -> 29). R3229 widened that block to the whole census - claimed,
+    # captured and uncaptured beside the three it already published - so the
+    # face carries the denominator and the conservation a reader can check
+    # (29 -> 32).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 29),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 32),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives

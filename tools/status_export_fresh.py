@@ -108,6 +108,29 @@ published shape is part of the law, not a detail of it:
            and the block must not feed the number it publishes), and the chain
            block, do/ceo_face.current and next_milestone_due are unchanged.
 
+Added at R3229 (pinned in src/os/backlog.md BEFORE this code), because the four
+shipped keys published the contradiction count but not the largest number the
+same census already knew - how many handwritten claims have nothing behind them
+(uncaptured), and the denominator that makes it readable (claimed/captured).
+Probed first (qa/probe-R3229.log): a private world with 1 captured + 1 prose
+claim answered the same six counters before and after publishing either shape,
+a 7-key block cost +46 bytes and carried no `rows=` token, and a legacy 4-key
+block was refused by name (E_SXF_CLAIMS_STALE) rather than silently accepted:
+  AC-SXF30 the block carries all seven readings (claimed/captured/contradicted/
+           uncaptured/historic/rows/present) and each equals the gate's own
+           reading (one census, no second reader, root resolved at call time).
+           A missing block is E_SXF_CLAIMS_MISSING; one altered number is
+           E_SXF_CLAIMS_STALE; a legacy four-key block is STALE, not accepted.
+  AC-SXF31 publication stays invisible to the number it publishes: a world with
+           one captured and one uncaptured claim answers the same six counters
+           after the block lands, their conservation holds (captured +
+           contradicted + uncaptured == claimed), and the landed block carries
+           zero `rows=` tokens.
+  AC-SXF32 the change is additive: the chain block keeps its four keys, do and
+           ceo_face.current stay the derived narrative, next_milestone_due keeps
+           its 48h derivation, and a second --apply on a pinned clock is
+           byte-identical.
+
 ASCII source only (repository encoding law). Product text is read from the live
 state, never authored here.
 """
@@ -533,9 +556,11 @@ def check(export_path, state_path):
     print("export_ts=%s" % (doc.get("export_ts") or ""))
     print("chain rows=%d broken=%d path=%s"
           % (derived_chain["rows"], derived_chain["broken"], derived_chain["path"]))
-    print("claims contradicted=%d historic=%d rows=%d present=%s"
-          % (derived_claims["contradicted"], derived_claims["historic"],
-             derived_claims["rows"],
+    print("claims claimed=%d captured=%d uncaptured=%d contradicted=%d "
+          "historic=%d rows=%d present=%s"
+          % (derived_claims["claimed"], derived_claims["captured"],
+             derived_claims["uncaptured"], derived_claims["contradicted"],
+             derived_claims["historic"], derived_claims["rows"],
              "true" if derived_claims["present"] else "false"))
     return 0
 
@@ -632,6 +657,14 @@ def claims_face(root):
     while the same reading written as prose moved claimed 2 -> 3 and uncaptured
     0 -> 1. The shape is what keeps the mirror from feeding the number it
     mirrors - no exclusion law is needed and none was added.
+    R3229 (AC-SXF30..32): all seven readings ship, not only the four that were
+    published at R3228. Measured (qa/probe-R3229.log): the same census counted
+    1 captured and 1 uncaptured claim while the export carried neither, so the
+    CEO face showed the contradiction count and hid the larger number - claims
+    with nothing behind them. `claimed` is published beside them because
+    `uncaptured=187` alone names no denominator; the conservation
+    (captured + contradicted + uncaptured == claimed) is what makes the number
+    checkable by a reader instead of trusted.
     """
     for path in (os.path.join(REAL_ROOT, "tools"),
                  os.path.join(REAL_ROOT, "src", "os")):
@@ -640,7 +673,10 @@ def claims_face(root):
     import closeout_gate as CG
     reading = {}
     CG.check_claims(root, reading)
-    return {"contradicted": reading.get("contradicted", 0),
+    return {"claimed": reading.get("claimed", 0),
+            "captured": reading.get("captured", 0),
+            "contradicted": reading.get("contradicted", 0),
+            "uncaptured": reading.get("uncaptured", 0),
             "historic": reading.get("historic", 0),
             "rows": reading.get("rows", 0),
             "present": reading.get("present")}

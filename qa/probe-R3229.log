@@ -1,0 +1,16 @@
+Q1 live export keys=20 bytes=38186 headroom=21814 claims_keys=contradicted,historic,present,rows
+Q1 live block={"contradicted": 11, "historic": 7, "present": true, "rows": 6}
+Q1 named sites: claims_face=6 check_claims=7 CLAIMS_KEY=7 mirror_line=2
+Q1 carrying files: test_status_export_fresh.py(3) closeout_gate.py(1) status_export_fresh.py(12) test_claim_census.py(4)
+Q1 frontdoor renders claims block? slots=False chain_slot=True
+Q2 base census claimed=2 captured=1 uncaptured=1 contradicted=0
+Q2 shipped 4-key block rc=0 keys=contradicted,historic,present,rows bytes=1536
+Q2 counters after 4-key publication delta=none
+Q2 seven-key block rc=0 keys=captured,claimed,contradicted,historic,present,rows,uncaptured bytes=1582
+Q2 counters after 7-key publication delta=none
+Q2 conservation captured+contradicted+uncaptured==claimed is True
+Q2 does the block carry a rows= token? False
+Q2 check() on the 7-key face rc=0 codes=[]
+Q2 check() on a legacy 4-key block rc=2 codes=['E_SXF_CLAIMS_STALE']
+Q2 republish rc=0 pinned idempotent=True rc=0/0 bytes=1582
+Q3 no verdict here: the four measured facts are the input to the PIN's choice

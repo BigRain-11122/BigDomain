@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 758 | 6269 | 675/675 | R2739 |
+| 758 | 6272 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -635,7 +635,7 @@
 | 596 | os-bare-evidence-deep-pile | ../os/test_bare_evidence_deep_pile.py | 6 | green | 1.8 |
 | 597 | os-general-writer-dialect-audit | ../os/test_general_writer_dialect_audit.py | 6 | green | 31.8 |
 | 598 | os-parameter-destination-resolution | ../os/test_parameter_destination_resolution.py | 6 | green | 12.2 |
-| 599 | os-status-export-fresh | ../os/test_status_export_fresh.py | 29 | no-evidence | - |
+| 599 | os-status-export-fresh | ../os/test_status_export_fresh.py | 32 | no-evidence | - |
 | 600 | os-status-export-writer-dialect-wire | ../os/test_status_export_writer_dialect_wire.py | 6 | green | 13.3 |
 | 601 | os-status-export-writer-transport-scope | ../os/test_status_export_writer_transport_scope.py | 6 | green | 31.6 |
 | 602 | os-ledger-line-shape-guard | ../os/test_ledger_line_shape_guard.py | 6 | green | 1.0 |
@@ -795,7 +795,7 @@
 | 756 | claim-census | test_claim_census.py | 9 | no-evidence | - |
 | 757 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 758 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6269 | green 675 / FAIL 0 / no-evidence 83 |  |
+|  | 合计 |  | 6272 | green 675 / FAIL 0 / no-evidence 83 |  |
 
 ## 证据出处
 

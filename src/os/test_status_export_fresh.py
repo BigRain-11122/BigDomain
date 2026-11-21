@@ -41,6 +41,8 @@ sys.path.insert(0, os.path.join(REPO, "tools"))
 sys.path.insert(0, BASE)
 
 import status_export_fresh as sx  # noqa: E402
+import claim_census as CC  # noqa: E402
+import closeout_gate as CG  # noqa: E402
 
 REAL_EXPORT = os.path.join(REPO, "docs", "status-export.json")
 REAL_STATE = os.path.join(REPO, "src", "os", "state.json")
@@ -794,6 +796,103 @@ def run(root):
            % (rc_gate_red, len(mirror_lines), arm_tokens,
               ",".join(chain_keys), do_text == NARRATIVE))
 
+    # AC-SXFB23 (AC-SXF30, R3229): the CEO face carries the WHOLE census, not the
+    # four keys that fit first. Probed (qa/probe-R3229.log): the same census read
+    # 1 captured + 1 uncaptured while the export published neither.
+    reading = {}
+    CG.check_claims(sx.ROOT, reading)
+    derived_seven = sx.claims_face(sx.ROOT)
+    arm_keys = sorted(derived_seven) == ["captured", "claimed", "contradicted",
+                                         "historic", "present", "rows",
+                                         "uncaptured"]
+    arm_equal = all(derived_seven[key] == reading[key] for key in derived_seven)
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    landed_seven = json.loads(io.open(export, encoding="utf-8").read())["claims"]
+    rc_seven = sx.check(export, sx.STATE)
+    tampered_seven = json.loads(io.open(export, encoding="utf-8").read())
+    tampered_seven["claims"]["uncaptured"] = int(
+        tampered_seven["claims"]["uncaptured"]) + 1
+    write_json(export, tampered_seven)
+    with contextlib.redirect_stdout(io.StringIO()) as buffer:
+        rc_stale_seven = sx.check(export, sx.STATE)
+    stale_named = "E_SXF_CLAIMS_STALE" in buffer.getvalue()
+    legacy_seven = json.loads(json.dumps(tampered_seven))
+    legacy_seven["claims"] = {key: legacy_seven["claims"][key] for key in
+                              ("contradicted", "historic", "rows", "present")}
+    write_json(export, legacy_seven)
+    with contextlib.redirect_stdout(io.StringIO()) as buffer:
+        rc_legacy_seven = sx.check(export, sx.STATE)
+    legacy_named = "E_SXF_CLAIMS_STALE" in buffer.getvalue()
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    record("AC-SXFB23", arm_keys and arm_equal and landed_seven == derived_seven
+           and rc_seven == 0 and rc_stale_seven == 2 and stale_named
+           and rc_legacy_seven == 2 and legacy_named,
+           "keys=%s equal=%s landed=%s rc=%d/%d/%d named=%s/%s"
+           % (arm_keys, arm_equal, landed_seven == derived_seven, rc_seven,
+              rc_stale_seven, rc_legacy_seven, stale_named, legacy_named))
+
+    # AC-SXFB24 (AC-SXF31): publishing the census must not move the census. Two
+    # claims are planted (one prose, one citing a landed file that carries the
+    # same token), the counters are taken, then the block lands and the counters
+    # must be unchanged and still conserve.
+    with io.open(sx.BACKLOG, "a", encoding="utf-8", newline="\n") as handle:
+        handle.write("- [R9996] prose arm says rows=41 and names nothing\n")
+        handle.write("- [R9996] captured arm says rows=42 in qa/census-arm.log\n")
+    if not os.path.isdir(os.path.join(sx.ROOT, "qa")):
+        os.makedirs(os.path.join(sx.ROOT, "qa"))
+    with io.open(os.path.join(sx.ROOT, "qa", "census-arm.log"), "w",
+                 encoding="utf-8", newline="\n") as handle:
+        handle.write("LEDGER OK rows=42\n")
+    before_census = {key: value for key, value in CC.census(sx.ROOT).items()
+                     if key != "faces"}
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    after_census = {key: value for key, value in CC.census(sx.ROOT).items()
+                    if key != "faces"}
+    census_still = all(before_census[key] == after_census[key]
+                       for key in ("claimed", "captured", "contradicted",
+                                   "uncaptured", "historic", "rows"))
+    block_line = [line for line in io.open(export, encoding="utf-8").read().split("\n")
+                  if line.startswith('  "claims": ')]
+    arm_tokens_seven = len(block_line) == 1 and "rows=" not in block_line[0]
+    landed_block = json.loads(io.open(export, encoding="utf-8").read())["claims"]
+    conserves = (landed_block["captured"] + landed_block["contradicted"]
+                 + landed_block["uncaptured"]) == landed_block["claimed"]
+    record("AC-SXFB24", census_still and arm_tokens_seven and conserves
+           and landed_block["captured"] >= 1 and landed_block["uncaptured"] >= 1,
+           "still=%s blocks=%d tokens=%s conserves=%s claimed/captured/uncaptured=%d/%d/%d"
+           % (census_still, len(block_line), arm_tokens_seven, conserves,
+              landed_block["claimed"], landed_block["captured"],
+              landed_block["uncaptured"]))
+
+    # AC-SXFB25 (AC-SXF32): the seven-key block is ADDITIVE - chain keys, the
+    # derived narrative and the 48h milestone due are untouched, and a second
+    # apply on a pinned clock is byte-identical with the wider block on disk.
+    real_clock_seven = sx.now_local
+    pinned_seven = dt.datetime(2026, 11, 22, 6, 0, 0,
+                               tzinfo=dt.timezone(dt.timedelta(hours=8)))
+    hours_seven = sx.next_milestone(sx.BACKLOG)["hours"]
+    try:
+        sx.now_local = lambda: pinned_seven
+        rc_seven_once = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        seven_once = io.open(export, "rb").read()
+        rc_seven_twice = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        seven_twice = io.open(export, "rb").read()
+    finally:
+        sx.now_local = real_clock_seven
+    seven_doc = json.loads(seven_twice.decode("utf-8"))
+    expected_due = (pinned_seven + dt.timedelta(hours=hours_seven)).strftime(
+        "%Y-%m-%dT%H:%M:%S+08:00")
+    record("AC-SXFB25", rc_seven_once == 0 and rc_seven_twice == 0
+           and seven_once == seven_twice
+           and sorted(seven_doc["chain"]) == ["broken", "path", "present", "rows"]
+           and seven_doc["do"] == NARRATIVE
+           and seven_doc["next_milestone_due"] == expected_due
+           and len(seven_doc["claims"]) == 7,
+           "rc=%d/%d idempotent=%s chain=%s do=%s due=%s keys=%d"
+           % (rc_seven_once, rc_seven_twice, seven_once == seven_twice,
+              ",".join(sorted(seven_doc["chain"])), seven_doc["do"] == NARRATIVE,
+              seven_doc["next_milestone_due"], len(seven_doc["claims"])))
+
     # AC-SXFB10 (AC-SXF10): the registry row exists AND declares this many
     # criteria, so adding a criterion without moving the count is red instead of
     # silently uncounted.
@@ -808,7 +907,7 @@ def run(root):
             if "test_status_export_fresh.py" in line:
                 row = line
                 break
-    record("AC-SXFB10", row is not None and declared == 29,
+    record("AC-SXFB10", row is not None and declared == 32,
            "matrix_row=%s declared=%d" % (bool(row), declared))
 
 
