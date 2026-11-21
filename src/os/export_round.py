@@ -517,10 +517,42 @@ def dedupe_outs(rows):
 
 
 # R3144: the byte count inside a row label and the path it belongs to, in the
-# shape the writer produces. Rows using full-width brackets (11 on the live
-# face) never match, so they fall to the untouched branch rather than a guess.
+# shape the writer produces.
 OUTS_LABEL_SIZE_RE = re.compile(
     r'((?:preview|qa)/[A-Za-z0-9_.\-]+\.(?:html|json|log|png)) \((\d+)B\)')
+
+# R3145 measured the full-width family BEFORE this existed (qa/probe-R3145.log):
+# the board said "11 full-width rows"; the live face carries SEVEN rows holding
+# 17 full-width segments, and 11 of those segments are leading byte claims -
+# 2 stale (docs/sandbox-suite-matrix.md 72516 -> 77096B, preview/index.html
+# 33817 -> 37062B), 9 in agreement, 0 missing. NONE of those rows carries a
+# date token (the fmt_pair [date clock] tail appears 0 times there, against 8
+# of 18 ASCII rows), so the two families differ in WRITE FACE: fmt_pair emits
+# the ASCII head line, the wide rows are typed rows that carry notes.
+#
+# The claim is the SAME fact as the ASCII label, so it is re-derived by the
+# SAME law. What makes a segment a claim is that the DIGITS LEAD the bracket:
+# two live segments bracket a number behind prose ('fixed 509B', 'original
+# 1032B kept') and describe something other than the named path, so they are
+# notes and never move. The path class is wider than the ASCII one because the
+# matrix document's claim is a real stale claim on the CEO face, measured to
+# move zero dedupe keys and zero OUTS_PATH_RE sets (0 of 29 rows).
+_FW_OPEN = '\uff08'
+_FW_CLOSE = '\uff09'
+_FW_MIDDOT = '\u00b7'
+OUTS_LABEL_WIDE_SIZE_RE = re.compile(
+    r'((?:preview|qa|src|tools|docs|logs)/[A-Za-z0-9_.\-]+'
+    r'\.(?:html|json|log|png|py|md))' + _FW_OPEN + r'(\d+)B(?=[' +
+    _FW_CLOSE + _FW_MIDDOT + r'])')
+
+
+def _resize(repo, rel, claimed):
+    """The disk size when it differs from the claim; None to leave the row."""
+    full = os.path.join(repo, rel)
+    if not os.path.isfile(full):
+        return None
+    size = os.path.getsize(full)
+    return None if size == claimed else size
 
 
 def refresh_outs_labels(rows, repo):
@@ -540,26 +572,38 @@ def refresh_outs_labels(rows, repo):
 
     A row naming a file that is gone is left verbatim and not counted - the same
     law as outs_age_block, which refuses to fabricate an age for it. A row with
-    no parsable label (path-less rows, rows using full-width brackets) never
-    moves, which is what AC-EXPW15 t already pins.
+    no parsable label (path-less rows, and a bracketed number behind prose) never
+    moves.
+
+    R3145 measured the OTHER label form on the live face: 7 rows hold 17
+    full-width segments and 11 of them are leading byte claims, 2 of which the
+    ASCII reader could not reach (the matrix document and index.html). The same
+    law now covers them, so the count is per ROW: a row carrying one ASCII and
+    one full-width claim still counts as one corrected row.
     """
     out, changed = [], 0
     for row in rows or []:
         row = str(row)
         moves = []
 
-        def sub(match):
+        def sub_ascii(match):
             rel, claimed = match.group(1), int(match.group(2))
-            full = os.path.join(repo, rel)
-            if not os.path.isfile(full):
-                return match.group(0)
-            size = os.path.getsize(full)
-            if size == claimed:
+            size = _resize(repo, rel, claimed)
+            if size is None:
                 return match.group(0)
             moves.append((rel, claimed, size))
             return '%s (%dB)' % (rel, size)
 
-        new = OUTS_LABEL_SIZE_RE.sub(sub, row)
+        def sub_wide(match):
+            rel, claimed = match.group(1), int(match.group(2))
+            size = _resize(repo, rel, claimed)
+            if size is None:
+                return match.group(0)
+            moves.append((rel, claimed, size))
+            return rel + _FW_OPEN + '%dB' % size
+
+        new = OUTS_LABEL_SIZE_RE.sub(sub_ascii, row)
+        new = OUTS_LABEL_WIDE_SIZE_RE.sub(sub_wide, new)
         if moves:
             changed += 1
         out.append(new)

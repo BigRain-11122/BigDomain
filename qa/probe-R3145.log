@@ -1,0 +1,119 @@
+R3145 PROBE (read-only, live face + live disk)
+face rows=29
+forms: full-width=7 ascii-bracket=18 other=4
+
+Q1 full-width rows: every byte claim checked against disk
+  row 11: qa/deliverable-index-suite-R2796.log claimed=1045B disk=1045B OK
+  row 11: docs/sandbox-suite-matrix.md claimed=72516B disk=77096B STALE
+  row 15: qa/battery-shard-suite-R2798.log claimed=1000B disk=1000B OK
+  row 16: qa/battery-shard-R2797.log claimed=977B disk=977B OK
+  row 16: qa/battery-shard-negctl-R2797.log claimed=827B disk=827B OK
+  row 19: preview/lobby-session-trace.html claimed=8347B disk=8347B OK
+  row 19: preview/lobby-session-trace.json claimed=8008B disk=8008B OK
+  row 23: preview/index.html claimed=33817B disk=37062B STALE
+  row 23: qa/entry-pairs-band-R2777.log claimed=732B disk=732B OK
+  row 24: no candidate byte claim
+  row 26: preview/first-yuan.html claimed=3911B disk=3911B OK
+  row 26: preview/first-yuan.json claimed=2600B disk=2600B OK
+Q1 byte claims=11 stale=2 missing=0
+
+Q1b full-width rows: dates they claim vs the files' own stamp
+  row 11: date-token=NONE fmt_pair-tail=NONE
+  row 15: date-token=NONE fmt_pair-tail=NONE
+  row 16: date-token=NONE fmt_pair-tail=NONE
+  row 19: date-token=NONE fmt_pair-tail=NONE
+  row 23: date-token=NONE fmt_pair-tail=NONE
+  row 24: date-token=NONE fmt_pair-tail=NONE
+  row 26: date-token=NONE fmt_pair-tail=NONE
+Q1b full-width rows carrying any date token=0, carrying the fmt_pair [date clock] tail=0
+   contrast ascii rows: date token=8 fmt_pair tail=8 of 18
+
+Q2 provenance: which shipped formatter can emit a full-width bracket
+  shipped .py containing the full-width open bracket=33
+    src\os\backlog_annotation_R1990.py
+    src\os\backlog_edit_R2195.py
+    src\os\backlog_R2190.py
+    src\os\claim_R1981.py
+    src\os\claim_R1990.py
+    src\os\closeout2_R1956.py
+    src\os\closeout2_R2006.py
+    src\os\closeout2_R2007.py
+    src\os\closeout2_R2008.py
+    src\os\close_R2318.py
+    src\os\export_closeout_R2235.py
+    src\os\export_fix_R2229.py
+    src\os\export_patch_R2290.py
+    src\os\fold_battery_R2181.py
+    src\os\fold_R2002.py
+    src\os\gen546.py
+    src\os\patch2_R2244.py
+    src\os\patch_R2244.py
+    src\os\prereg_R2119.py
+    src\os\prereg_R2181.py
+    src\os\proposal_append_R2622.py
+    src\os\r2141_export.py
+    src\os\r2142_export.py
+    src\os\r2148_boards.py
+    src\os\r2454_export.py
+    src\os\tech_done_R2072.py
+    src\sandbox\member\test_reminder.py
+    tools\ceo_blockers.py
+    tools\first_yuan_path.py
+    tools\generate_copyright_materials.py
+    tools\lobby_ws_report.py
+    tools\platform_live_report.py
+    tools\ship_checklist.py
+  shipped .py containing an ASCII "(%dB)" format=24
+    src\os\export_R2431.py
+    src\os\export_round.py
+    src\os\queue_close_R2637.py
+    src\os\queue_close_R2638.py
+    src\os\queue_close_R2643.py
+    src\os\queue_close_R2646.py
+    src\os\test_export_round.py
+    src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope.py
+    src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_call_target_scope.py
+    src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_class_base_scope.py
+    src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_class_source_scope.py
+    src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_from_scope.py
+    src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_alias_scope.py
+    src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_attribute_scope.py
+    src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_module_alias_chain_scope.py
+    src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_import_alias_scope_two_level_scope.py
+    src\os\test_probe_seam_name_binding_arm_mixed_residual_alias_attribute_predicate_scope.py
+    src\sandbox\ledger\test_metered_persist.py
+    tools\ceo_face_latest.py
+    tools\city_face_report.py
+    tools\filing_checklist.py
+    tools\ledger_reconcile_face.py
+    tools\membership_benefit_report.py
+    tools\ship_checklist.py
+  corrected row 14 tail=NONE ascii-label=YES
+  corrected row 20 tail=NONE ascii-label=YES
+
+Q3 compatibility of teaching the reader the full-width form
+  (a) dedupe keys moved by a label-only rewrite: 0 of 29
+  (a2) rows whose OUTS_PATH_RE set moved: 0
+  (b) rows the SHIPPED (ASCII-only) reader rewrites today: 0 []
+  (c) AC-EXPW17 r fixture (full-width) = 'preview/aged-pair.html（1B·全角）'
+      matches candidate full-width reader: YES
+      candidate would rewrite it to: 'preview/aged-pair.html（40B·全角）'
+      full-width segments in the live rows: 17
+      full-width segments that are NOT leading byte claims: 6
+        row 11 'src/os/test_deliverable_index.py'（14 判据）
+        row 15 'src/os/test_battery_shard.py'（AC-BSGB1..8 守护套件·8/8）
+        row 16 'tools/battery_shard.py'（分片跑批器）
+        row 24 'qa/index-newest-band-R2775.log'（方言修复后 509B·UTF-8/LF）
+        row 24 'logs/qa-encoding-preop-R2775/index-newest-band-R2775.log.utf16le'（原字节 1032B 留证）
+        row 26 'qa/first-yuan-R2772.log'（七项反控）
+      byte claims followed by a middle-dot note: 9 of 11
+  (d) full-width claims whose path is outside preview|qa: 1
+      row 11 docs/sandbox-suite-matrix.md
+  (e) stale full-width claims the ASCII reader cannot reach: 2
+  (f) bracketed segments carrying a byte count that does NOT lead it: 2
+      row 24 '方言修复后 509B·UTF-8/LF'
+      row 24 '原字节 1032B 留证'
+  (g) candidate reader [preview|qa only] rewrites live rows: 1 [23]
+  (g) candidate reader [wide class] rewrites live rows: 2 [11, 23]
+
+R3145 PROBE END rows=29 fw=7 ascii=18 claims=11 stale=2

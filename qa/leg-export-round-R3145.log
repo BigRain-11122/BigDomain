@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=742 registry_criteria=6038 selected=1 selected_criteria=50 cap=600s leg_cap=0s overrides=1 exact=1 state=RUNNING
+SHARD selected os-export-round crit=50 path=..\os\test_export_round.py
+SHARD row os-export-round rc=0 pass=160 fail=0 detail=yes suite=PASS 160/160 crit=50 26.9s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=50 crit_mismatch=0 elapsed=26.9s crit_checked=1 crit_unchecked=0

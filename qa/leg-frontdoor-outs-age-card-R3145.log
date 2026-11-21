@@ -1,0 +1,4 @@
+SHARD scope=SHARD registry_suites=742 registry_criteria=6038 selected=1 selected_criteria=2 cap=600s leg_cap=0s overrides=1 exact=1 state=RUNNING
+SHARD selected frontdoor-outs-age-card crit=2 path=test_frontdoor_outs_age_card.py
+SHARD row frontdoor-outs-age-card rc=0 pass=2 fail=0 detail=yes suite=PASS 2/2 crit=2 2.5s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=2 crit_mismatch=0 elapsed=2.5s crit_checked=1 crit_unchecked=0

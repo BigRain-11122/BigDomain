@@ -1629,9 +1629,12 @@ def main():
         ok('AC-EXPW17 q a missing target is left verbatim, never fabricated',
            rows_q == [gone_row] and moved_q == 0,
            'rows=%r moved=%r' % (rows_q, moved_q))
-        # r: a row with no parsable ASCII label never moves - the full-width
-        # bracket rows on the live face stay out of scope by shape, not guess.
-        wide_row = ('preview/aged-pair.html\uff081B\u00b7\u5168\u89d2\uff09')
+        # r: a bracketed number that does NOT lead its bracket is a note, not a
+        # claim, and never moves. R3145 JUDGED-CHANGED this arm: it used to hold
+        # because the full-width WIDTH was unparseable, and R3145 taught the
+        # reader that width - so the witness moved to the thing that is still
+        # not a claim, a digit behind prose.
+        wide_row = ('preview/aged-pair.html\uff08\u6ce8 1B\uff09')
         rows_r, moved_r = mod.refresh_outs_labels([wide_row, 'x'], wl)
         ok('AC-EXPW17 r a label the reader cannot parse stays untouched',
            rows_r == [wide_row, 'x'] and moved_r == 0,
@@ -1675,6 +1678,88 @@ def main():
            and outs_t[0] == (built_t.get('ceo_face') or {}).get(
                'latest_artifact'),
            'outs=%r block=%r' % (outs_t, oab_t))
+
+        # ---- AC-EXPW18 (R3145 pin): the FULL-WIDTH label is the SAME claim --
+        # R3145 measured on the live face BEFORE this arm existed
+        # (qa/probe-R3145.log): 7 rows carry full-width brackets holding 17
+        # segments, 11 of them leading byte claims, TWO stale
+        # (docs/sandbox-suite-matrix.md 72516 -> 77096B, preview/index.html
+        # 33817 -> 37062B), 9 agreeing, ZERO missing, and NO row there carries a
+        # date token - so the wide family is a different write face from the
+        # fmt_pair head (8 of 18 ASCII rows carry the [date clock] tail).
+        # A segment is a claim only when its DIGITS LEAD the bracket; two live
+        # segments bracket a number behind prose and describe other things.
+        # p: a stale leading claim is rewritten from disk and the note after the
+        # middle dot survives byte for byte.
+        wide_p = ('preview/aged-pair.html\uff081B\u00b7note kept\uff09')
+        rows_wp, moved_wp = mod.refresh_outs_labels([wide_p], wl)
+        ok('AC-EXPW18 p a stale full-width claim is rewritten from disk',
+           rows_wp == ['preview/aged-pair.html\uff0840B\u00b7note kept\uff09']
+           and moved_wp == 1, 'rows=%r moved=%r' % (rows_wp, moved_wp))
+        # q: NEGATIVE CONTROL - a claim already equal to disk is untouched.
+        wide_q = 'preview/aged-pair.json\uff087B\uff09'
+        rows_wq, moved_wq = mod.refresh_outs_labels([wide_q], wl)
+        ok('AC-EXPW18 q an agreeing full-width claim is byte-identical',
+           rows_wq == [wide_q] and moved_wq == 0,
+           'rows=%r moved=%r' % (rows_wq, moved_wq))
+        # r: a claim whose target is gone is left verbatim and not counted -
+        # the same law R3144 pins for the ASCII label.
+        wide_r = 'qa/never-written-wide.log\uff085B\u00b7x\uff09'
+        rows_wr, moved_wr = mod.refresh_outs_labels([wide_r], wl)
+        ok('AC-EXPW18 r a missing full-width target is left verbatim',
+           rows_wr == [wide_r] and moved_wr == 0,
+           'rows=%r moved=%r' % (rows_wr, moved_wr))
+        # s: a number BEHIND prose inside the bracket is a note. This carries
+        # the shape of both live examples (a rewritten size, a kept original)
+        # so the arm refuses a reader that grabs any NB in a full-width bracket.
+        wide_s = ('preview/aged-pair.html\uff08\u6539\u540e 509B\u00b7'
+                  '\u539f\u5b57\u8282 1032B \u7559\u8bc1\uff09')
+        rows_ws, moved_ws = mod.refresh_outs_labels([wide_s], wl)
+        ok('AC-EXPW18 s a byte count behind prose is never a claim',
+           rows_ws == [wide_s] and moved_ws == 0,
+           'rows=%r moved=%r' % (rows_ws, moved_ws))
+        # t: both label forms in ONE row are corrected, and the row-level count
+        # stays one - a row is one artifact, not one correction.
+        wide_t = ('preview/aged-pair.html (1B) + '
+                  'preview/aged-pair.json\uff082B\uff09')
+        rows_wt, moved_wt = mod.refresh_outs_labels([wide_t], wl)
+        ok('AC-EXPW18 t one row with both forms is corrected and counted once',
+           rows_wt == ['preview/aged-pair.html (40B) + '
+                       'preview/aged-pair.json\uff087B\uff09']
+           and moved_wt == 1, 'rows=%r moved=%r' % (rows_wt, moved_wt))
+        # u: the DATE inside a full-width note is a landing fact, like the
+        # bracketed ASCII date - the bytes move, the date text does not.
+        wide_u = 'preview/aged-pair.json\uff082B\u00b72026-11-01\uff09'
+        rows_wu, moved_wu = mod.refresh_outs_labels([wide_u], wl)
+        ok('AC-EXPW18 u a date inside the wide note is never rewritten',
+           rows_wu == ['preview/aged-pair.json\uff087B\u00b72026-11-01\uff09']
+           and moved_wu == 1, 'rows=%r moved=%r' % (rows_wu, moved_wu))
+        # v: end to end - the correction is PUBLISHED (one derivation, two
+        # copies), the head row still equals the latest line, and the row's
+        # IDENTITY (its file set) is unchanged by a label rewrite.
+        wv = build_world(9324)
+        worlds.append(wv)
+        write(os.path.join(wv, 'preview', 'wide-face.html'), 'q' * 27)
+        fp_v = os.path.join(wv, 'docs', 'status-export.json')
+        face_v = json.loads(read(fp_v))
+        wide_v = ('preview/wide-face.html\uff081B\u00b7\u5168\u89d2'
+                  '\u58f0\u660e\uff09')
+        face_v['outs'] = [wide_v, 'x']
+        write(fp_v, json.dumps(face_v, ensure_ascii=False, indent=2) + '\n')
+        st_v = json.loads(read(os.path.join(wv, 'src', 'os', 'state.json')))
+        built_v, _ = mod.payload(wv, st_v, 'TV1')
+        outs_v = [str(r) for r in (built_v.get('outs') or [])]
+        oab_v = built_v.get('outs_age') or {}
+        wide_out = [r for r in outs_v if 'wide-face.html' in r]
+        ok('AC-EXPW18 v payload publishes the wide correction and keeps the laws',
+           any('wide-face.html\uff0827B' in r for r in outs_v)
+           and oab_v.get('labels_refreshed') == 1
+           and (built_v.get('ceo_face') or {}).get('outs_age') == oab_v
+           and outs_v[0] == (built_v.get('ceo_face') or {}).get(
+               'latest_artifact')
+           and wide_out
+           and mod.outs_row_key(wide_out[0]) == mod.outs_row_key(wide_v),
+           'outs=%r block=%r' % (outs_v, oab_v))
 
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))

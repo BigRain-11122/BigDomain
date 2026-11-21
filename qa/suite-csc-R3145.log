@@ -1,0 +1,62 @@
+python : [ WARN:0@0.291] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallback
+ed to CV_8U.
+所在位置 行:1 字符: 297
++ ... TEXITCODE"; python src/os/test_corpus_supply_chain.py > tmp/r3145-csc ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([ WARN:0@0.291]...acked to CV_8U.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+<unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+<unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+<unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+SUITE os-corpus-supply-chain criteria=7
+  AC-CSC1 a supply census      calls=1 all pass corpus= (src/os/closeout.py:638)
+  AC-CSC1 b absence vs zero    None->nothing, zero files->nothing, zero bytes->{'files': 3, 'bytes': 0, 'mb': 0.0, 'readable': 3}
+  AC-CSC1 c removal            both copies removed (no stale count)
+  AC-CSC1 d grader rewrite     rewrite keeps both blocks verbatim
+  AC-CSC1 e legacy writer      guard=1, no importer calls main (src/os/limits_export_composed_landed_R2637.py(classify); src/os/repair_R2433.py(self_drive); tools/ceo_face_latest.py(derive_latest))
+  AC-CSC2 f empty target       rc=3, stats={} (zero unreachable), refusal named
+  AC-CSC2 g missing target     rc=3, stats={} - a missing tree cannot read as empty
+  AC-CSC2 h only-unreadable    files=1 readable=0 unread=1 (vs files absent when empty)
+  AC-CSC2 i gate hand-off      E_CLG_EMPTY and E_CLG_DRIFT both carry no corpus (files=1 named)
+  AC-CSC2 j payload + card     no corpus key at either level; card prints the absent line
+  AC-CSC3 k bare block         bare {files,bytes} -> None
+  AC-CSC3 l unparseable readable unparseable readable -> None (3 shapes)
+  AC-CSC3 m negative control   files/bytes/mb/readable, mb=0.0, no unread
+  AC-CSC3 n supply census      census hands {'files': 1, 'readable': 1, 'bytes': 18}; corpus_block callers=1 (src/os/export_round.py:947)
+  AC-CSC3 o payload + card     no corpus key at either level; card prints the absent line
+  AC-CSC4 p over-count block   readable=7 files=5 -> None
+  AC-CSC4 q negative control   files=5 readable=5, no unread
+  AC-CSC4 r one enumeration    one increment inside the names loop; 4 files/2 readable
+  AC-CSC4 s real reading       block={'files': 4, 'bytes': 38, 'mb': 0.0, 'readable': 2, 'unread': 2} unread=2
+  AC-CSC4 t card defect line   named defect line, no numbers
+  AC-CSC5 p forged third number input unread=9 -> block unread=2
+  AC-CSC5 q clean corpus       files=readable=5 -> no unread key
+  AC-CSC5 r consistent key     consistent key is a no-op
+  AC-CSC5 s derived difference 7/4 -> unread=3
+  AC-CSC5 t unparseable third  unread='x' -> derived 1
+  AC-CSC6 p forged fourth number input mb=0.0 -> block mb=508.1
+  AC-CSC6 q zero bytes         bytes=0 -> mb=0.0, no unread
+  AC-CSC6 r decimal divisor    decimal divisor, one decimal (508066256 -> 508.1)
+  AC-CSC6 s mb without bytes   no bytes -> None, mb cannot travel alone
+  AC-CSC6 t writer never reads mb zero mb reads, one store: round(total / 1000000.0, 1)
+  AC-CSC7 p non-integer files  files=x/None/'5.5' -> None
+  AC-CSC7 q negative control   5/5/10 -> {'files': 5, 'readable': 5, 'bytes': 10, 'mb': 0.0}
+  AC-CSC7 r counts normalised  5.9/'4'/'10' -> files=5 readable=4 bytes=10 unread=1
+  AC-CSC7 s published from int() one int() store, published from the converted name
+SUITE PASS 34/34 arms=34 criteria=7
