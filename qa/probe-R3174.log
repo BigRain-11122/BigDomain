@@ -1,0 +1,36 @@
+R3174 probe evidence - live_pass_leg fallback consumer audit (read-only)
+
+[A] baseline (recorded leg usable):
+  recorded      = qa/reconcile-all-R2739.log
+  newest_pass_leg()      -> None   (64-file ceiling, 0.07s)
+  resolve_walk_leg()     -> qa/reconcile-all-R2739.log source=walk-leg walk={considered:756, decoded:12} (0.17s)
+  live_pass_leg()        -> qa/reconcile-all-R2739.log source=recorded (0.01s)
+
+[B] three unusable-record shapes, same document, None vs family leg:
+  shape=absent   live_pass_leg -> None source=newest (0.08s); family -> reconcile-all-R2739 (12 decoded)
+                 report(doc,None)   -> EVIDENCE-FACE exit=2 source=walk-leg
+                 report(doc,family) -> EVIDENCE-FACE exit=2 evidence=reconcile-all-R2739.log
+                 VERDICT-SAME=True
+  shape=none     live_pass_leg -> None source=newest (0.06s); family -> reconcile-all-R2739 (12 decoded)
+                 report(doc,None)   -> EVIDENCE-FACE exit=2 source=walk-leg
+                 report(doc,family) -> EVIDENCE-FACE exit=2 evidence=reconcile-all-R2739.log
+                 VERDICT-SAME=True
+  shape=missing-doc (the probe notpass fixture was never written - honest defect noted)
+                 report(doc,None)   -> NO-DOC exit=2
+                 report(doc,family) -> NO-DOC exit=2 (same)
+
+[C] the eight suite leg helpers under an unusable record:
+  fence, fence_rows, shape      -> authorize-R1719.log (own pile copy, 0.15-0.20s)
+  fence_table, row_membership,
+  row_shape, second_table_sep   -> None (pure wrapper), and its ONLY use is report(DOC, green)
+  table_shape                   -> legs[0]=authorize-R1719.log; pass_legs()=836 PASS, 5.8-7.1s paid BEFORE the or-fallback
+
+[D] the primary suite pins the fallback SHAPE itself:
+  AC-EDMK1 all(one[2]==newest) = True ; (one[0] is None)==(newest_path is None) = True
+  -> changing the fallback to family-first reddens this suite own shape assertions,
+     not any product/charter verdict.
+
+[VERDICT] NO CONSUMER. Zero real verdict flips (report already walks family-first when
+the leg is None). Zero helper turns None into a usable leg todays consumers read.
+The cost argument also fails: family walk 0.26s vs pile copy 0.15s, and table_shape
+pays pass_legs() unconditionally. Registered as no-consumer, line closed, zero code change.
