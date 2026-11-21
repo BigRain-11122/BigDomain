@@ -1,0 +1,74 @@
+REORG R3189 - the rc=3 error family publishes machine facts too
+=================================================================
+Board head claimed: R3188 next-window (0) MAIN - SF.StateFoldError
+(state missing / unreadable) still prints prose under --json at rc=3, so a
+machine caller cannot parse it.
+
+MEASURED FIRST (read-only; tmp/probe_R3189.py -> this log; zero socket,
+zero network, zero live writes, every world a private temp tree, all cases
+real subprocesses):
+  Q1a  state missing              rc=3  stdout 'E_SF_BAD_STATE' 16 bytes
+  Q1a  same world with --json     rc=3  stdout 'E_SF_BAD_STATE' 16 bytes
+  Q1b  state is not JSON --json   rc=3  stdout 'E_SF_BAD_STATE' 16 bytes
+  Q1c  log is not a list --json   rc=3  stdout 'E_SF_BAD_STATE' 16 bytes
+  Q1d  window 1:99 out of bounds  rc=3  'E_SF_WINDOW window 1:99 ...' 51B
+       (--json saw the same prose; json.loads refused it)
+  Q1f  marker collision --json    rc=3  'E_SF_MARKER_COLLISION ...' 139B
+  Q1e  bad summary --json         rc=2  {"error":"E_FLR_SUMMARY_SHAPE",...}
+       -> E_SF_BAD_SUMMARY is CLI-UNREACHABLE since the R3183 shape gate
+  Q1g  state_fold.py --check --json on a missing state: rc=3, code only
+  Q1h  backup path is a directory: rc=1, stdout 0 bytes, stderr 1145 bytes
+       of uncaught IsADirectoryError traceback - a crash, not a refusal
+  Q2   consumer census: zero shipped consumers branch on rc=3 or on that
+       text; tools/closeout_gate.py does not reference state_fold_run or
+       state_fold at all; reconcile_all only runs suites - so adding a
+       machine face cannot break an existing assertion
+  Q3   merging the two codes is a policy change, not a bug fix; it was NOT
+       done here (measured, named, left undecided)
+
+LANDED:
+  state_fold.py    StateFoldError gained stage (default pre-write) and
+                   face() -> error/stage/detail/after_write
+                   after-write raise sites: backup read-back, archive
+                   append read-back, archive create read-back (3 sites)
+                   backup WRITE is now wrapped: an unwritable backup path
+                   refuses by name (E_SF_BACKUP) instead of a traceback
+                   main(): under --json the refusal is the JSON object;
+                   the text face keeps its code-only line
+  state_fold_run.py main(): check and fold modes publish the same JSON face
+                   under --json; text lines are byte-identical to before
+                   USAGE names the new rc=3 machine face
+  test_state_fold_run.py  AC-SFOLD11 (six arms), 13 -> 14 criteria
+  reconcile_all.py        registry os-state-fold-run 13 -> 14
+
+GATES:
+  SUITE PASS 14/14  qa/suite-state-fold-run-R3189.log 5309B/16 lines
+                    utf-8/lf sha256 533cb7dda3a899c7 via tools/qa_log.py
+                    --from and re-read by its own --check
+  peers: state_fold 7/7, state_seq 8/8, closeout_carrier 6/6,
+         state_append 10/10, general_writer_dialect_audit 6/6,
+         closeout_gate 42/42 (33/42 while the matrix still carried the old
+         criteria total - the expected drift)
+  matrix: suite_matrix_reconcile --write (78385B/754 rows) then --check
+          DOC-CURRENT
+  census: --write-pin (honest CACHE E_RCC_CACHE_PARTIAL reused=753/754)
+          then --check VERDICT PASS pinned=754
+  carrier: fold 612 first (window 1..56, 72788 -> 33662 bytes, predicted
+           33662, archive VERIFIED, tokens 18 ok, margin 44838)
+  live gate: CLOSEOUT-GATE PASS files=4481 flags=0 reader_refused=0
+             round_main=OK census=PASS matrix=DOC-CURRENT
+             CARRIER bytes=33662 margin=44838 fold_needed=false
+
+HONEST:
+  (a) ZERO payment capability, no network beyond loopback: a parseable error
+      moves no money and a buyer still cannot pay (no merchant id, server,
+      domain, filing+ICP or miniprogram appid+secret).
+  (b) zero product surface, zero api surface, zero gate number - what
+      improved is that a caller can READ what happened.
+  (c) the --check text face still prints the code alone; that contract was
+      left alone on purpose (machine callers use --json).
+  (d) only the ONE uncaught path this window measured is repaired; other
+      unmeasured uncaught exceptions are not claimed fixed.
+  (e) E_SF_BAD_STATE still carries three meanings behind one code (missing,
+      not JSON, log not a list); the JSON face now carries the detail text
+      that distinguishes them, but the code itself stays coarse.

@@ -544,7 +544,10 @@ USAGE = (
     "           after_write - so the two meanings are told apart by a\n"
     "           field, not by matching the 'after write:' text prefix.\n"
     "           Without --json the line is unchanged.\n"
-    "  exit 3 = state file missing or unreadable\n"
+    "  exit 3 = state file missing or unreadable (or any other refusal this\n"
+    "           face takes from state_fold's StateFoldError family). With\n"
+    "           --json this family answers with error, stage, detail and\n"
+    "           after_write too, so both refusal families read the same way.\n"
     "  exit 5 = bad flags\n")
 
 
@@ -622,7 +625,13 @@ def main(argv):
         try:
             report = SF.check(root)
         except SF.StateFoldError as exc:
-            sys.stdout.write("%s\n" % exc.code)
+            # R3189 (AC-SFOLD11): the rc=3 family publishes its facts to a
+            # machine caller too. The text face stays the code-only line.
+            if as_json:
+                sys.stdout.write(json.dumps(exc.face(), ensure_ascii=True,
+                                            sort_keys=True) + "\n")
+            else:
+                sys.stdout.write("%s\n" % exc.code)
             return 3
         if as_json:
             sys.stdout.write(SF.to_json(report, SF.CHECK_KEYS))
@@ -659,7 +668,14 @@ def main(argv):
             sys.stdout.write("%s %s\n" % (exc.code, exc.detail))
         return 2
     except SF.StateFoldError as exc:
-        sys.stdout.write("%s %s\n" % (exc.code, exc.detail))
+        # R3189 (AC-SFOLD11): the same machine face for the rc=3 family, so a
+        # caller never has to tell a fold refusal from a state refusal by
+        # matching prose. Without --json the line is unchanged.
+        if as_json:
+            sys.stdout.write(json.dumps(exc.face(), ensure_ascii=True,
+                                        sort_keys=True) + "\n")
+        else:
+            sys.stdout.write("%s %s\n" % (exc.code, exc.detail))
         return 3
     if as_json:
         ordered = {}

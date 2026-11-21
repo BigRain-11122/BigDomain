@@ -29,7 +29,7 @@ sys.path.insert(0, BASE)
 import state_fold_run as FR  # noqa: E402
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 13
+EXPECTED_CRITERIA = 14
 MODULE = os.path.join(BASE, "state_fold_run.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold-run"
@@ -913,6 +913,146 @@ def main():
                  sorted(ok_obj.keys()) == sorted(FR.REPORT_KEYS),
                  proc.returncode, cli_obj.get("error"),
                  module_text.count('stage="after-write"')))
+
+        # --- AC-SFOLD11: the rc=3 family publishes machine facts too -------
+        # R3189 measured four different facts leaving through prose only:
+        # state missing, state not JSON and log not a list ALL printed the
+        # same 16-byte E_SF_BAD_STATE (the --check face dropped the detail as
+        # well), and E_SF_WINDOW plus E_SF_MARKER_COLLISION printed prose
+        # under --json that json.loads refused. The same window caught an
+        # uncaught IsADirectoryError when the backup path is a directory:
+        # rc=1 with 1145 bytes of traceback and nothing at all under --json.
+        miss_root = os.path.join(base, "sf11-missing")
+        os.makedirs(os.path.join(miss_root, "src", "os"))
+        os.makedirs(os.path.join(miss_root, "logs"))
+        miss_text_buf = io.StringIO()
+        with contextlib.redirect_stdout(miss_text_buf):
+            miss_text_rc = FR.main(["--root", miss_root, "--check"])
+        miss_json_buf = io.StringIO()
+        with contextlib.redirect_stdout(miss_json_buf):
+            miss_rc = FR.main(["--root", miss_root, "--check", "--json"])
+        try:
+            miss_obj = json.loads(miss_json_buf.getvalue().strip())
+        except ValueError:
+            miss_obj = {}
+
+        win_root, win_path = make_world(os.path.join(base, "sf11-window"))
+        win_summary = clean_summary.replace("R9010", "R9013")
+        win_json_buf = io.StringIO()
+        with contextlib.redirect_stdout(win_json_buf):
+            win_rc = FR.main(["--root", win_root, "--fold", "--round",
+                              "R9013", "--fold-no", "1", "--start", "1",
+                              "--end", "999", "--summary", win_summary,
+                              "--json"])
+        try:
+            win_obj = json.loads(win_json_buf.getvalue().strip())
+        except ValueError:
+            win_obj = {}
+        win_text_buf = io.StringIO()
+        with contextlib.redirect_stdout(win_text_buf):
+            FR.main(["--root", win_root, "--fold", "--round", "R9013",
+                     "--fold-no", "1", "--start", "1", "--end", "999",
+                     "--summary", win_summary])
+        expected_win_text = ("E_SF_WINDOW window 1:999 is out of log bounds"
+                             " 1:%d" % len(fixture_lines()))
+
+        marker_root, marker_path = make_world(os.path.join(base, "sf11-marker"))
+        marker_archive = os.path.join(marker_root, "logs",
+                                      "state-log-archive-2026-11.md")
+        with io.open(marker_archive, "wb") as handle:
+            handle.write(("# --- R9014 fold append (2026-11-01, 1 lines "
+                          "verbatim: log window, fold 1 window, pre-op sha16"
+                          " 0000)\n").encode("utf-8"))
+        marker_json_buf = io.StringIO()
+        with contextlib.redirect_stdout(marker_json_buf):
+            marker_rc = FR.main(["--root", marker_root, "--fold", "--round",
+                                 "R9014", "--fold-no", "2", "--start", "1",
+                                 "--end", "12", "--summary",
+                                 clean_summary.replace("R9010", "R9014"),
+                                 "--json"])
+        try:
+            marker_obj = json.loads(marker_json_buf.getvalue().strip())
+        except ValueError:
+            marker_obj = {}
+
+        back_root, back_path = make_world(os.path.join(base, "sf11-backup"))
+        back_before = read(back_path)
+        os.makedirs(os.path.join(back_root, "logs", "state-preop-R9015.bak"))
+        proc11 = subprocess.run(
+            [sys.executable, MODULE, "--root", back_root, "--fold", "--round",
+             "R9015", "--fold-no", "1", "--start", "1", "--end", "12",
+             "--summary", clean_summary.replace("R9010", "R9015"), "--json"],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        try:
+            back_obj = json.loads(proc11.stdout.decode("utf-8").strip())
+        except ValueError:
+            back_obj = {}
+
+        bad_sum_buf = io.StringIO()
+        with contextlib.redirect_stdout(bad_sum_buf):
+            bad_sum_rc = FR.main(["--root", win_root, "--fold", "--round",
+                                  "R9016", "--fold-no", "1", "--start", "1",
+                                  "--end", "12", "--summary", "hello",
+                                  "--json"])
+        try:
+            bad_sum_obj = json.loads(bad_sum_buf.getvalue().strip())
+        except ValueError:
+            bad_sum_obj = {}
+
+        check_ok_buf = io.StringIO()
+        with contextlib.redirect_stdout(check_ok_buf):
+            check_ok_rc = FR.main(["--root", win_root, "--check", "--json"])
+        try:
+            check_ok_obj = json.loads(check_ok_buf.getvalue().strip())
+        except ValueError:
+            check_ok_obj = {}
+
+        fold_source = read(os.path.join(BASE, "state_fold.py"))
+        fold_ascii = all(byte < 128 for byte in fold_source)
+
+        def face_ok(obj, code):
+            return (obj.get("error") == code
+                    and isinstance(obj.get("stage"), str)
+                    and isinstance(obj.get("detail"), str)
+                    and isinstance(obj.get("after_write"), bool))
+
+        check(face_ok(miss_obj, "E_SF_BAD_STATE") and miss_rc == 3
+              and miss_text_rc == 3
+              and miss_text_buf.getvalue() == "E_SF_BAD_STATE\n"
+              and face_ok(win_obj, "E_SF_WINDOW") and win_rc == 3
+              and win_obj.get("stage") == "pre-write"
+              and win_text_buf.getvalue().strip() == expected_win_text
+              and face_ok(marker_obj, "E_SF_MARKER_COLLISION")
+              and marker_rc == 3
+              and face_ok(back_obj, "E_SF_BACKUP")
+              and back_obj.get("after_write") is False
+              and proc11.returncode == 3 and proc11.stderr == b""
+              and read(back_path) == back_before
+              and not os.path.exists(os.path.join(
+                  back_root, "logs", "state-log-archive-2026-11.md"))
+              and bad_sum_rc == 2
+              and bad_sum_obj.get("error") == "E_FLR_SUMMARY_SHAPE"
+              and check_ok_rc == 0
+              and sorted(check_ok_obj.keys()) == sorted(SF.CHECK_KEYS)
+              and fold_source.count(b'stage="after-write"') == 3
+              and fold_ascii,
+              "AC-SFOLD11 the rc=3 family answers in JSON too "
+              "[missing=%s/%s rc=%s text=%r, window=%s/%s rc=%s text_ok=%s, "
+              "marker=%s rc=%s, backup=%s after_write=%s rc=%s stderr=%d "
+              "state_same=%s archive_absent=%s, bad-summary rc=%s error=%s, "
+              "check keys intact=%s, after-write sites=%d ascii=%s]"
+              % (miss_obj.get("error"), miss_obj.get("stage"), miss_rc,
+                 miss_text_buf.getvalue(), win_obj.get("error"),
+                 win_obj.get("stage"), win_rc,
+                 win_text_buf.getvalue().strip() == expected_win_text,
+                 marker_obj.get("error"), marker_rc, back_obj.get("error"),
+                 back_obj.get("after_write"), proc11.returncode,
+                 len(proc11.stderr), read(back_path) == back_before,
+                 not os.path.exists(os.path.join(
+                     back_root, "logs", "state-log-archive-2026-11.md")),
+                 bad_sum_rc, bad_sum_obj.get("error"),
+                 sorted(check_ok_obj.keys()) == sorted(SF.CHECK_KEYS),
+                 fold_source.count(b'stage="after-write"'), fold_ascii))
     finally:
         shutil.rmtree(base, ignore_errors=True)
 

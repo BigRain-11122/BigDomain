@@ -89,12 +89,26 @@ ARCHIVE_KEYS = ("path", "created", "prefix_intact", "before_bytes",
 
 
 class StateFoldError(Exception):
-    """Raised when the fold cannot produce an honest result."""
+    """Raised when the fold cannot produce an honest result.
 
-    def __init__(self, code, detail):
+    R3189 measured that this family exited through prose only: four different
+    facts (state missing, state not JSON, log not a list, window out of
+    bounds) all printed one line under --json, and the --check face dropped
+    the detail entirely. `stage` and `face()` give a machine caller the same
+    facts the FoldRunError family publishes (AC-SFOLD11); the text face is
+    unchanged.
+    """
+
+    def __init__(self, code, detail, stage="pre-write"):
         Exception.__init__(self, "%s: %s" % (code, detail))
         self.code = code
         self.detail = detail
+        self.stage = stage
+
+    def face(self):
+        return {"error": self.code, "stage": self.stage,
+                "detail": self.detail,
+                "after_write": self.stage == "after-write"}
 
 
 def state_path(root):
@@ -367,7 +381,8 @@ def append_archive(path, header, window_lines, allow_create=False, now=None):
             after = handle.read()
         if after != expected:
             raise StateFoldError("E_SF_ARCHIVE",
-                                 "append read-back differs from expectation")
+                                 "append read-back differs from expectation",
+                                 stage="after-write")
         return {
             "path": path,
             "created": False,
@@ -389,7 +404,8 @@ def append_archive(path, header, window_lines, allow_create=False, now=None):
     with io.open(path, "rb") as handle:
         if handle.read() != blob:
             raise StateFoldError("E_SF_ARCHIVE",
-                                 "create read-back differs from expectation")
+                                 "create read-back differs from expectation",
+                                 stage="after-write")
     return {
         "path": path,
         "created": True,
@@ -459,11 +475,23 @@ def fold(root, round_label, fold_no, window_start, window_end, summary,
     window = state["log"][plan["window_start"] - 1:plan["window_end"]]
     backup_path = os.path.join(root, "logs",
                                "state-preop-%s.bak" % round_label)
-    with io.open(backup_path, "wb") as handle:
-        handle.write(raw)
+    # R3189 measured an uncaught traceback here: a backup path that is a
+    # directory made io.open raise IsADirectoryError, which left the CLI at
+    # rc=1 with 1145 bytes of stderr and NO output under --json. The fold has
+    # not written its archive or its state at this point, so the honest shape
+    # is a named refusal, not a crash (AC-SFOLD11 arm d).
+    try:
+        with io.open(backup_path, "wb") as handle:
+            handle.write(raw)
+    except (IOError, OSError) as exc:
+        raise StateFoldError("E_SF_BACKUP",
+                             "%s (%s)" % (backup_path, exc))
     with io.open(backup_path, "rb") as handle:
         if handle.read() != raw:
-            raise StateFoldError("E_SF_BACKUP", "backup read-back differs")
+            # the backup file exists now, so bytes moved even though the
+            # archive and the state have not been touched.
+            raise StateFoldError("E_SF_BACKUP", "backup read-back differs",
+                                 stage="after-write")
     appended = append_archive(archive, header, window,
                              allow_create=True, now=stamp)
     import general_writer_dialect_audit as GWDA
@@ -533,7 +561,10 @@ def render(report):
 USAGE = ("usage: state_fold.py --check [--root PATH] [--json]\n"
          "  exit 0 = FOLD-CLEAR (disk size at or under the waterline)\n"
          "  exit 2 = FOLD-DUE (disk size over the waterline) or bad flags\n"
-         "  exit 3 = the state file is missing or not readable\n")
+         "  exit 3 = the state file is missing or not readable, or another\n"
+         "           StateFoldError code. With --json the refusal is a JSON\n"
+         "           object carrying error, stage, detail and after_write;\n"
+         "           without --json the line is the code alone, unchanged.\n")
 
 
 def main(argv):
@@ -569,7 +600,15 @@ def main(argv):
     try:
         report = check(root)
     except StateFoldError as exc:
-        sys.stdout.write("%s\n" % exc.code)
+        # R3189 (AC-SFOLD11): --json asked for a machine face, so the error
+        # face is machine-readable too. The text face keeps the code-only
+        # line it always printed (that contract is unchanged).
+        if as_json:
+            sys.stdout.write(to_json(exc.face(),
+                                     ("error", "stage", "detail",
+                                      "after_write")))
+        else:
+            sys.stdout.write("%s\n" % exc.code)
         return 3
     if as_json:
         sys.stdout.write(to_json(report, CHECK_KEYS))
