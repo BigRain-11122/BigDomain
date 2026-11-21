@@ -1,0 +1,8 @@
+Q1 landed_sites=['src/sandbox/frontdoor.py:629', 'src/sandbox/journey_demo.py:90', 'src/sandbox/lobby/msgsec_stub.py:40', 'src/sandbox/lobby/msgsec_stub.py:123']
+Q1 live_sites=['src/sandbox/frontdoor.py:647', 'src/sandbox/journey_demo.py:90', 'src/sandbox/lobby/msgsec_stub.py:40', 'src/sandbox/lobby/msgsec_stub.py:123']
+Q1 same_file_set=True same_first_site=False
+Q2 BEFORE old_criterion=False (this is the red the loop printed)
+Q2 AFTER new_criterion=True on the same stale face
+Q3 moved-lines new_criterion=True old_criterion=False
+Q4 new-unlisted-file new_criterion=False
+Q5 latent new_criterion=True (status named on face)

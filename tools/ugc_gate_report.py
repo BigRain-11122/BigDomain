@@ -43,7 +43,7 @@ CRITERIA = (
     ("AC-UGR5", "the AIGC flag face is quoted from the shipped server source, or reported UNVERIFIED when that source does not carry it"),
     ("AC-UGR6", "stdlib only, ASCII source, read-only on src/, writes only under preview/ and qa/, exit 0 on pass and 2 on any failed criterion"),
     ("AC-UGR7", "the shipped parity face msgsec_stub.py --parity reads PARITY-OK and its own line is carried verbatim"),
-    ("AC-UGR8", "the constructor hole is measured at its call sites by scanning non-test sandbox sources, and the report states LATENT or LIVE with the sites named, never a bare assertion"),
+    ("AC-UGR8", "the constructor hole is measured at its call sites by scanning non-test sandbox sources, and the report states LATENT or LIVE with every measured FILE named on the face - a new constructing file reddens it, a moved line number (orientation for a reader, named as such on the page) does not"),
     ("AC-UGR9", "BD-PROP-010: the json states the byte size of both artifacts it belongs to, iterated to a fixed point, and --check refuses when either number disagrees with the bytes on disk"),
     ("AC-UGR10", "a --check run must not author the document it verifies: both artifacts keep their bytes and mtimes across a --check, so a stale document stays visibly stale instead of being silently refreshed into a pass (verified by an mtime control; measured red before R2768 when --check alone re-rendered)"),
     ("AC-UGR11", "re-rendering is an explicit act: --write re-renders before checking, and a bare run with no flags still renders, so no caller loses its previous behaviour"),
@@ -248,6 +248,9 @@ def render_html(data):
         "<span class='mono'>from_config</span> only.<br><br>"
         "Non-test call sites that construct the gate directly and would therefore skip that refusal:"
         "<ul>%s</ul><br>"
+        "The line numbers above are the coordinates measured when this document was rendered - "
+        "orientation for a reader, not a graded fact (R3235). What is graded is the FILE set, so a "
+        "moved line stays quiet while a newly constructing file reddens this face.<br><br>"
         "Status: <b>%s</b> - every site above passes lists read from config today, so the door is shut "
         "only because the config is not empty, not because the type forbids an empty gate.<br><br>"
         "Repair pre-registered, NOT applied in this window: src/ bytes are frozen under the live battery "
@@ -458,14 +461,22 @@ def check(data):
                     % (data["parity"]["rc"], data["parity"]["line"] in html_text,
                        data["parity"]["line"])))
 
-    # AC-UGR8
+    # AC-UGR8: grade the FILES, never the line numbers (R3235, reason measured
+    # in qa/probe-R3235.log). Pinning sites[0] as an exact `file:line` reddened
+    # this face whenever anything above the call site was edited - frontdoor.py
+    # is edited most rounds - while the event this criterion exists for (a NEW
+    # file constructing SecGate around the emptiness refusal) would have been
+    # told apart only by luck. The line is now orientation for a reader, named
+    # as such on the page; the graded fact is the file set.
     sites = data.get("call_sites") or []
     status = data.get("hole_status")
+    site_files = [s.rsplit(":", 1)[0] if ":" in s else s for s in sites]
+    carried = [f for f in site_files if f in html_text]
     ok8 = (status in ("LIVE", "LATENT")
            and status in html_text
-           and (not sites or (sites[0] in html_text and data["hole_status"] == "LIVE")))
-    results.append(("AC-UGR8", ok8, "status=%s sites=%d first_carried=%s"
-                    % (status, len(sites), bool(sites) and sites[0] in html_text)))
+           and (not sites or (status == "LIVE" and len(carried) == len(site_files))))
+    results.append(("AC-UGR8", ok8, "status=%s sites=%d files_carried=%d/%d"
+                    % (status, len(sites), len(carried), len(site_files))))
 
     # AC-UGR9: the sizes block is read back FROM THE LANDED DOCUMENT, never from
     # the in-memory dict, so a --no-write run still gates on what is on disk.

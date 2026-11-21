@@ -5,7 +5,7 @@
     "token": "ai_generated"
   },
   "call_sites": [
-    "src/sandbox/frontdoor.py:629",
+    "src/sandbox/frontdoor.py:647",
     "src/sandbox/journey_demo.py:90",
     "src/sandbox/lobby/msgsec_stub.py:40",
     "src/sandbox/lobby/msgsec_stub.py:123"
@@ -72,7 +72,7 @@
     },
     {
       "id": "AC-UGR8",
-      "text": "the constructor hole is measured at its call sites by scanning non-test sandbox sources, and the report states LATENT or LIVE with the sites named, never a bare assertion"
+      "text": "the constructor hole is measured at its call sites by scanning non-test sandbox sources, and the report states LATENT or LIVE with every measured FILE named on the face - a new constructing file reddens it, a moved line number (orientation for a reader, named as such on the page) does not"
     },
     {
       "id": "AC-UGR9",
@@ -213,8 +213,8 @@
     }
   ],
   "sizes": {
-    "html": 9576,
-    "json": 6881
+    "html": 9952,
+    "json": 7000
   },
   "wordlist": {
     "advisory": 7,

@@ -226,6 +226,30 @@ def main():
 
         red, r = tamper_json('AC-UGR9', b9)
         ok('AC-UGRB9', red, 'AC-UGR9 red when the landed size disagrees with disk, rc=%d' % r)
+
+        # ---- B12: the R3235 change itself must be proved both ways. Moving a
+        # line number inside the same file has NO safety meaning (frontdoor.py
+        # is edited most rounds; the old exact file:line pin reddened this face
+        # on every edit above the site), so AC-UGR8 must stay green.
+        def move_lines(d):
+            d['call_sites'] = [
+                s.rsplit(':', 1)[0] + ':%d' % (int(s.rsplit(':', 1)[1]) + 18)
+                for s in d['call_sites']]
+
+        moved = copy.deepcopy(data)
+        move_lines(moved)
+        r12, res12, _, _ = run_check(mod, moved)
+        ok('AC-UGRB12', res12.get('AC-UGR8') is True,
+           'AC-UGR8 stays green when only line numbers move (rc=%d)' % r12)
+
+        # ---- B13: the safety event it exists for must still redden it: a
+        # constructing file the landed face never names.
+        def b13(d):
+            d['call_sites'] = d['call_sites'] + ['src/sandbox/new_door.py:12']
+
+        red, r = tamper_data('AC-UGR8', b13)
+        ok('AC-UGRB13', red,
+           'AC-UGR8 red when a constructing file is not named on the face, rc=%d' % r)
     finally:
         mod.OUT_HTML, mod.OUT_JSON = real_html_path, real_json_path
         shutil.rmtree(tmpdir, ignore_errors=True)
@@ -250,7 +274,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 12,
+    ok('AC-UGRB11', bool(row) and declared == 14,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"
