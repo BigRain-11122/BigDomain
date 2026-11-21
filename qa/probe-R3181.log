@@ -1,0 +1,20 @@
+R3181 probe: refused-write residue and shape convergence
+live state bytes=71806 sha16=e18d979254ff63e9
+A refusal reachable: code=E_SIO_LAYOUT before_sha16=48453871924b61ca after_sha16=48453871924b61ca bytes_changed=False after_layout_ok=True after_items_off_indent=0 after_gate_layout_ok=True
+B shape=indent8    plan=CANON-DRIFT exec=CANON-FIXED after_ok=True predicted_match=True payload_kept=True pre=2e94f98402ed796c post=48453871924b61ca
+B shape=mixed      plan=CANON-DRIFT exec=CANON-FIXED after_ok=True predicted_match=True payload_kept=True pre=f4aa7ed6648004a3 post=48453871924b61ca
+B shape=dumpjson4  plan=CANON-DRIFT exec=CANON-FIXED after_ok=True predicted_match=True payload_kept=True pre=4de2700340881b31 post=2006edacc4f6d634
+C payload=empty-log  bytes=  36 layout_ok=True gate=True indent=True fold=False
+C payload=unicode    bytes=  82 layout_ok=True gate=True indent=True fold=True
+C payload=nested     bytes=  84 layout_ok=True gate=True indent=False fold=False
+C payload=many       bytes=4925 layout_ok=True gate=True indent=True fold=True
+C payload=one        bytes=  57 layout_ok=True gate=True indent=True fold=True
+C payload=log-first  bytes=  57 layout_ok=True gate=True indent=True fold=True
+D write_document(  callers=2 src/os/declare_R2779.py,src/os/test_state_io.py
+D write_canon(     callers=1 src/os/test_state_io.py
+E nested_item: write=None landed_bytes=67 log_items=1 log_len=1 layout_ok=True fix=None
+F HEAD rigged_indent=8 code=E_SIO_LAYOUT bytes_landed=True
+F now  rigged_indent=8 code=E_SIO_LAYOUT bytes_landed=False
+F HEAD nested_item: write=E_SIO_LAYOUT fix=E_SIO_LAYOUT
+F now  nested_item: write=None fix=None
+VERDICT refusal_code=E_SIO_LAYOUT residue=False converges=3/3 nested_write=None nested_fix=None head_residue=True now_residue=False

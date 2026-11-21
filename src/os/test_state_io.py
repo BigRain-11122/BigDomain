@@ -27,7 +27,7 @@ sys.path.insert(0, BASE)
 
 import state_io as SIO  # noqa: E402
 
-EXPECTED_CRITERIA = 10
+EXPECTED_CRITERIA = 11
 MODULE = os.path.join(BASE, "state_io.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-io"
@@ -392,6 +392,102 @@ def ac_sio10():
                   (arm_a, arm_b, arm_c, arm_d, arm_e, arm_f)))
 
 
+def ac_sio11():
+    """A refused write must not land bytes, and every entry shape must read.
+
+    R3180 published the readings but the new-payload door still measured AFTER
+    os.replace: a divergent indent left the bad shape on disk and then raised,
+    and an entry that is not a string was written one-per-line and read back as
+    zero items, which made the file unrepairable through fix() as well. The
+    same measurement now runs on the exact candidate text before the write, and
+    the item-line detector accepts any entry line inside the log block.
+    """
+    folder = tmpdir()
+    clean = sample_text("\r\n", SIO.ITEM_INDENT)
+    path = write_sample(folder, clean, "state.json")
+    before = SIO.read_raw(path)
+
+    # a) fail-closed BEFORE the disk: a shape the reader calls drifted can no
+    # longer land. The previous bytes stay byte-identical and no temp file is
+    # left behind.
+    saved = SIO.ITEM_INDENT
+    code = None
+    try:
+        SIO.ITEM_INDENT = 8
+        try:
+            SIO.write_document(path, {"tick": 9, "note": "x",
+                                      "log": ["one", "two"]})
+        except SIO.StateIOError as exc:
+            code = exc.code
+    finally:
+        SIO.ITEM_INDENT = saved
+    residue = [name for name in os.listdir(folder)
+               if name.startswith(".state_io_")]
+    arm_a = (code == "E_SIO_LAYOUT" and SIO.read_raw(path) == before
+             and residue == [])
+
+    # b) entries that are not strings round-trip: the writer lands them, the
+    # reader counts them, and the repair path then reads the file clean.
+    payload = {"tick": 11, "log": [{"a": [1, 2], "b": {"c": "d"}}, 7]}
+    nested = write_sample(folder, clean, "nested.json")
+    landed = SIO.write_document(nested, payload)
+    after = SIO.read_raw(nested)
+    measured = SIO.report(nested)
+    arm_b = (SIO.parse(after) == payload
+             and measured["log_items"] == 2 and measured["log_len"] == 2
+             and measured["layout_ok"] is True
+             and landed["after"]["layout_ok"] is True
+             and SIO.fix(nested, execute=False)["verdict"] == "CANON-CLEAN")
+
+    # c) the count law is unchanged: two entries on one line are still refused
+    # by the repair path, so widening the detector did not weaken the gate.
+    two_on_one = ('{\r\n  "tick": 7,\r\n  "log": [\r\n'
+                  + " " * SIO.ITEM_INDENT + '"one", "two"\r\n  ]\r\n}\r\n')
+    one_line = write_sample(folder, two_on_one, "two_on_one.json")
+    count_code = None
+    try:
+        SIO.canon(SIO.decode(SIO.read_raw(one_line)))
+    except SIO.StateIOError as exc:
+        count_code = exc.code
+    arm_c = (count_code == "E_SIO_LAYOUT"
+             and SIO.read_raw(one_line) == two_on_one.encode("utf-8"))
+
+    # d) the live carrier reads the same numbers as its own payload: the
+    # broader detector cannot inflate or deflate the live item count.
+    live = os.path.join(BASE, "state.json")
+    arm_d = True
+    if os.path.exists(live):
+        live_text = SIO.decode(SIO.read_raw(live))
+        live_measured = SIO.layout(live_text)
+        arm_d = (live_measured["log_items"] == live_measured["log_len"]
+                 and live_measured["log_items"]
+                 == len(SIO.parse(live_text)["log"])
+                 and live_measured["layout_ok"] is True
+                 and SIO.carrier_face(SIO.read_raw(live))["agree"] is True)
+
+    # e) one detector, two call sites: no quote-only item scan survives, so a
+    # future entry shape can not slip back between the reader and the writer.
+    source = open(MODULE, "r", encoding="utf-8").read()
+    quote_scan = "startswith('\"')" in source or 'startswith("\\"")' in source
+    arm_e = (source.count("_item_lines(") == 3 and not quote_scan)
+
+    # f) hygiene
+    try:
+        SIO.read_raw(MODULE).decode("ascii")
+        ascii_ok = True
+    except UnicodeDecodeError:
+        ascii_ok = False
+    offline = not any(token in source for token in
+                      ("import urllib", "import requests", "import socket",
+                       "import subprocess", "http://", "https://"))
+    arm_f = ascii_ok and offline
+    check(arm_a and arm_b and arm_c and arm_d and arm_e and arm_f,
+          "AC-SIO11 refused write lands nothing, every entry shape reads "
+          "(a%s b%s c%s d%s e%s f%s)"
+          % tuple("+" if arm else "-" for arm in
+                  (arm_a, arm_b, arm_c, arm_d, arm_e, arm_f)))
+
+
 def main():
     ac_sio1()
     ac_sio2()
@@ -403,6 +499,7 @@ def main():
     ac_sio8()
     ac_sio9()
     ac_sio10()
+    ac_sio11()
     total = PASSES + FAILS
     print("SUITE %s %d/%d criteria=%d"
           % ("PASS" if FAILS == 0 and total == EXPECTED_CRITERIA else "FAIL",

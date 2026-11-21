@@ -90,6 +90,19 @@ def _log_block(lines):
     return start, end
 
 
+def _item_lines(lines, start, end):
+    """Every line inside the log block that carries an entry (R3181).
+
+    The detector used to accept only lines starting with a quote, so a payload
+    whose log holds an object or a number was written one-per-line and then
+    read back as zero items: the writer landed a document its own reader called
+    drifted, and canon() could not repair it either. The bracket lines that
+    bound the block are the only non-item lines.
+    """
+    return [index for index in range(start + 1, end)
+            if lines[index].strip() not in ("", "]", "],")]
+
+
 def layout(text):
     """Measure the layout of a state document from its own bytes."""
     lines = _lf_lines(text)
@@ -98,8 +111,7 @@ def layout(text):
     log = data.get("log") if isinstance(data, dict) else None
     if not isinstance(log, list):
         raise StateIOError("E_SIO_LAYOUT", "state.json has no log array")
-    items = [index for index in range(start + 1, end)
-             if lines[index].strip().startswith('"')]
+    items = _item_lines(lines, start, end)
     indents = set(len(lines[index]) - len(lines[index].lstrip(" "))
                   for index in items)
     caliber = next(iter(indents)) if len(indents) == 1 else None
@@ -179,10 +191,8 @@ def canon(text):
                            % (measured["log_items"], measured["log_len"]))
     lines = _lf_lines(text)
     start, end = _log_block(lines)
-    for index in range(start + 1, end):
-        stripped = lines[index].strip()
-        if stripped.startswith('"'):
-            lines[index] = " " * ITEM_INDENT + stripped
+    for index in _item_lines(lines, start, end):
+        lines[index] = " " * ITEM_INDENT + lines[index].strip()
     out = EOL.join(lines)
     if parse(out) != parse(text):
         raise StateIOError("E_SIO_JSON", "canon moved the payload")
@@ -232,6 +242,16 @@ def write_document(path, payload):
     text = dump_canon(payload)
     if parse(text) != payload:
         raise StateIOError("E_SIO_JSON", "dump_canon moved the payload")
+    # Ask the same measurement BEFORE the bytes can land (R3181): the check
+    # used to run after os.replace, so a divergent indent or an entry the
+    # reader could not see left the bad shape on disk and then refused - a
+    # document the writer itself calls drifted is worse than no write at all.
+    planned = layout(text)
+    if not planned["layout_ok"]:
+        raise StateIOError("E_SIO_LAYOUT",
+                           "document would not read clean (%d item lines for "
+                           "a log of %d entries); nothing written"
+                           % (planned["log_items"], planned["log_len"]))
     new_bytes = text.encode("utf-8")
     folder = os.path.dirname(os.path.abspath(path))
     handle, temp = tempfile.mkstemp(dir=folder, prefix=".state_io_")

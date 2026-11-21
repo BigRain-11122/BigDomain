@@ -1,0 +1,12 @@
+PASS AC-SIO1 layout measured from bytes (clean vs drift, live size)
+PASS AC-SIO2 canon forces CRLF and the canon indent, payload unchanged
+PASS AC-SIO3 bad item count and bad JSON refused, nothing written
+PASS AC-SIO4 payload change refused, old bytes byte-identical
+PASS AC-SIO5 atomic write, read-back proof, zero temp residue
+PASS AC-SIO6 dry plan writes nothing, execute lands on prediction
+PASS AC-SIO7 CLI codes 0/2/3, pinned --json keys, second fix no-op
+PASS AC-SIO8 ASCII, stdlib-only, offline, wired as os-state-io
+PASS AC-SIO9 state_io and the carrier gate agree on the same file
+PASS AC-SIO10 writers publish both readings (a+ b+ c+ d+ e+ f+)
+PASS AC-SIO11 refused write lands nothing, every entry shape reads (a+ b+ c+ d+ e+ f+)
+SUITE PASS 11/11 criteria=11

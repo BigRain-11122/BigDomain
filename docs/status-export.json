@@ -5,7 +5,7 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3180 PRODUCT+ENGINEERING: every state_io write site now publishes the fold door reading - write_canon, write_document and fix each return a carrier face naming layout_ok, indent_ok, gate_layout_ok, gate_indent_ok, fold_readable and agree, so a consumer can read on the bytes it just landed whether the fold can read them; zero product surface, zero api surface, zero new refusal code.",
+    "current": "2026-11-21 R3181 LANDED: the new-payload door asks its own layout law BEFORE the bytes can land - with the indent rigged to 8 (the same rig AC-SIO10 already uses) write_document raises E_SIO_LAYOUT with the previous file byte-identical and zero temp residue, where HEAD landed the 8-space shape first and refused after (qa/probe-R3181.log F).",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -13,9 +13,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-state-io-R3180.log (684B, 2026-11-21)",
     "latest_evidence": "qa/suite-state-io-R3180.log (684B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3180] next window (<=48h): (0) MAIN — **`write_document` 的拒写发生在 `os.replace` 之后**（先落盘再退 `E_SIO_LAYOUT`，坏形状会留在盘上，本轮已把它变成可测）：做法=先只读量「拒写路径留下的坏字节是否可由随后的 `fix` 自动收敛」（构造三形状：8 空格、混合缩进、4 空格 `json.dump` 形状），只有测出「`fix` 能全收敛」或「不能」才决定是**改成写前判定**（用同一 `carrier_face` 在 `os.replace` 之前问）还是**保留后置拒写并把它写进面**；判据沿用 AC-SIO10 的「同一份字节、两面同判」；**先落板再动代码**。(1) 备选=`write_canon` 拒写政策独立裁定（是否让它在落地前拒绝折叠门读不懂的 legacy2/8 空格形状）；(2) P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；队列地板承前窗读数（本轮未重量，禁造活凑数）。(3) 产品面真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 仍零 open。",
-    "next_milestone_due": "2026-11-23T19:23:03+08:00",
-    "updated_at": "2026-11-21T19:23:03+08:00",
+    "next_milestone": "[R3181] next window (<=48h): (0) MAIN — **「均匀 8 空格到底算不算健康」两面给了两个答案**：`logs_toolkit.eol_profile` 对 8 空格件读 `layout_ok=True`（本窗 A 臂实测），而 `state_io.LOG_ITEM_CALIBERS=(2,16)` 判它不净——先只读量清楚「两面各自凭什么判健康」（折叠门 `split_ps_layout` 是否另有独立口径、gate 的 `indent_ok` 是否只查一致性不查宽度、`canon` 修整后落哪个宽度），只有测出「折叠门真能读 8 空格」或「不能」才决定是**把 8 收进本模块口径**还是**让 gate 拒宽度 8**（判据沿用 AC-SIO9「同一份字节、两面同判」）；**先落板再动代码**。备选=`write_canon` 拒写政策独立裁定（是否让它在落盘前拒绝折叠门读不懂的 legacy2/8 空格形状，与 `write_document` 同律）。(1) 备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板读数承前窗（本轮未重量，禁造活凑数）。(2) tasks.md 零可认领 open（PT-20260928-02 ①②=常设行/物理件阻塞行）。",
+    "next_milestone_due": "2026-11-23T19:36:48+08:00",
+    "updated_at": "2026-11-21T19:36:48+08:00",
     "heartbeat": {
       "tick": 3179,
       "state_tick": 3180,
@@ -39,7 +39,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-21 R3180 PRODUCT+ENGINEERING: every state_io write site now publishes the fold door reading - write_canon, write_document and fix each return a carrier face naming layout_ok, indent_ok, gate_layout_ok, gate_indent_ok, fold_readable and agree, so a consumer can read on the bytes it just landed whether the fold can read them; zero product surface, zero api surface, zero new refusal code.",
+  "current": "2026-11-21 R3181 LANDED: the new-payload door asks its own layout law BEFORE the bytes can land - with the indent rigged to 8 (the same rig AC-SIO10 already uses) write_document raises E_SIO_LAYOUT with the previous file byte-identical and zero temp residue, where HEAD landed the 8-space shape first and refused after (qa/probe-R3181.log F).",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3180 PRODUCT+ENGINEERING: every state_io write site now publishes the fold door reading - write_canon, write_document and fix each return a carrier face naming layout_ok, indent_ok, gate_layout_ok, gate_indent_ok, fold_readable and agree, so a consumer can read on the bytes it just landed whether the fold can read them; zero product surface, zero api surface, zero new refusal code.",
-  "export_ts": "2026-11-21T19:23:03+08:00",
+  "do": "2026-11-21 R3181 LANDED: the new-payload door asks its own layout law BEFORE the bytes can land - with the indent rigged to 8 (the same rig AC-SIO10 already uses) write_document raises E_SIO_LAYOUT with the previous file byte-identical and zero temp residue, where HEAD landed the 8-space shape first and refused after (qa/probe-R3181.log F).",
+  "export_ts": "2026-11-21T19:36:48+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
   "latest_evidence": "qa/suite-state-io-R3180.log (684B, 2026-11-21)",
-  "next_milestone": "[R3180] next window (<=48h): (0) MAIN — **`write_document` 的拒写发生在 `os.replace` 之后**（先落盘再退 `E_SIO_LAYOUT`，坏形状会留在盘上，本轮已把它变成可测）：做法=先只读量「拒写路径留下的坏字节是否可由随后的 `fix` 自动收敛」（构造三形状：8 空格、混合缩进、4 空格 `json.dump` 形状），只有测出「`fix` 能全收敛」或「不能」才决定是**改成写前判定**（用同一 `carrier_face` 在 `os.replace` 之前问）还是**保留后置拒写并把它写进面**；判据沿用 AC-SIO10 的「同一份字节、两面同判」；**先落板再动代码**。(1) 备选=`write_canon` 拒写政策独立裁定（是否让它在落地前拒绝折叠门读不懂的 legacy2/8 空格形状）；(2) P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；队列地板承前窗读数（本轮未重量，禁造活凑数）。(3) 产品面真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 仍零 open。",
+  "next_milestone": "[R3181] next window (<=48h): (0) MAIN — **「均匀 8 空格到底算不算健康」两面给了两个答案**：`logs_toolkit.eol_profile` 对 8 空格件读 `layout_ok=True`（本窗 A 臂实测），而 `state_io.LOG_ITEM_CALIBERS=(2,16)` 判它不净——先只读量清楚「两面各自凭什么判健康」（折叠门 `split_ps_layout` 是否另有独立口径、gate 的 `indent_ok` 是否只查一致性不查宽度、`canon` 修整后落哪个宽度），只有测出「折叠门真能读 8 空格」或「不能」才决定是**把 8 收进本模块口径**还是**让 gate 拒宽度 8**（判据沿用 AC-SIO9「同一份字节、两面同判」）；**先落板再动代码**。备选=`write_canon` 拒写政策独立裁定（是否让它在落盘前拒绝折叠门读不懂的 legacy2/8 空格形状，与 `write_document` 同律）。(1) 备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板读数承前窗（本轮未重量，禁造活凑数）。(2) tasks.md 零可认领 open（PT-20260928-02 ①②=常设行/物理件阻塞行）。",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -184,8 +184,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 71806,
-  "next_milestone_due": "2026-11-23T19:23:03+08:00",
+  "state_bytes": 69980,
+  "next_milestone_due": "2026-11-23T19:36:48+08:00",
   "heartbeat": {
     "tick": 3179,
     "state_tick": 3180,
