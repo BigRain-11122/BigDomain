@@ -24,8 +24,8 @@ Usage:
       --log qa/preview-monthly-faces-R3193.log
 
 Exit codes: 0 written or verified, 1 identity problems (VERIFY FAIL), and
-2 refused by name before anything is written (E_MFP_COPY: the copy file
-is not a JSON object or lacks a required top-level key).
+2 refused by name (E_MFP_COPY: the copy file cannot drive this renderer;
+E_MFP_WRITE: the delivered files cannot be rendered, staged or swapped).
 
 Criteria AC-MFR1..AC-MFR8 are registered in src/os/backlog.md (R3193
 PIN row) BEFORE this file existed.
@@ -57,6 +57,14 @@ each goes to a temp file beside its target, and os.replace is the only
 write to a delivered path. The CLI face is unchanged on purpose: the
 same exception still reaches the caller, so rc and the traceback stay as
 they were - what changed is what is left on disk.
+
+R3198 (AC-MFPX1..AC-MFPX2): the CLI face of a write failure is named
+too. A render, stage or swap failure used to escape as the raw exception
+(rc=1, empty stdout, a 13-line traceback) while the disk stayed intact.
+The three stages now answer one E_MFP_WRITE line at rc=2 with the stage
+and the underlying exception type in the detail, and the caught
+exception stays reachable as __cause__. The healthy run is untouched:
+rc=0, the same "PASS preview" line, the same 6834B/13015B bytes.
 """
 import argparse
 import hashlib
@@ -159,6 +167,30 @@ def _one_line(text, limit=160):
     if len(flat) > limit:
         flat = flat[:limit] + "..."
     return flat
+
+
+class WriteError(Exception):
+    """Named refusal for a failed render, stage or swap of the outputs.
+
+    All three stages mean the same thing to a caller - the delivered
+    files cannot be produced - so they share one code and name the stage
+    plus the underlying exception type in the detail.
+    """
+
+    code = "E_MFP_WRITE"
+
+    def __init__(self, stage, detail):
+        Exception.__init__(self, detail)
+        self.stage = stage
+        self.detail = detail
+
+    def face(self):
+        return "%s stage=%s %s" % (self.code, self.stage, self.detail)
+
+
+def _write_error(stage, exc):
+    return WriteError(stage, "%s: %s" % (type(exc).__name__,
+                                         _one_line(exc)))
 
 
 def read_copy_file(path):
@@ -400,15 +432,29 @@ def write_outputs(faces, copy, out_html, out_json):
     zero-byte page with no JSON at all. Both texts are now built before
     any target is opened, each goes to a temp file beside its target, and
     the two swaps are the only writes to the delivered paths.
+
+    Since R3198 each of the three stages answers WriteError (E_MFP_WRITE)
+    with the stage named, instead of letting the raw exception escape to
+    a caller that can only see rc=1 and a traceback. The original
+    exception stays reachable as __cause__.
     """
-    texts = ((out_html, render_html(copy, faces)),
-             (out_json, render_json(faces)))
+    try:
+        texts = ((out_html, render_html(copy, faces)),
+                 (out_json, render_json(faces)))
+    except Exception as exc:
+        raise _write_error("render", exc) from exc
     staged = []
     try:
         for path, text in texts:
-            staged.append(_stage(path, text))
+            try:
+                staged.append(_stage(path, text))
+            except Exception as exc:
+                raise _write_error("stage", exc) from exc
         for temp, path in staged:
-            os.replace(temp, path)
+            try:
+                os.replace(temp, path)
+            except Exception as exc:
+                raise _write_error("replace", exc) from exc
     finally:
         for temp, _unused in staged:
             if os.path.exists(temp):
@@ -545,6 +591,9 @@ def main(argv=None):
                 sys.stdout.write("FAIL %s\n" % item)
             return 1
         write_outputs(faces, copy, args.out, args.json_out)
+    except WriteError as exc:
+        sys.stdout.write("%s\n" % exc.face())
+        return 2
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     print("PASS preview %s (%d bytes) + %s (%d bytes)"

@@ -112,14 +112,34 @@ row BEFORE this code existed):
     the staged temp file is removed.
   AC-MFPW4 the healthy bytes do not move: in process and through the
     CLI the page and JSON match the shipped 6834B/13015B byte for byte.
-  AC-MFPW5 the CLI face is unchanged on purpose: an injected render
-    failure still exits 1 with zero stdout bytes and a traceback on
-    stderr, and the target keeps its previous bytes.
+  AC-MFPW5 the CLI face is named (R3198 rewrote this arm): an injected
+    render, stage or replace failure exits 2 with exactly one stdout
+    line carrying E_MFP_WRITE and the stage, zero stderr bytes, and the
+    target keeps its previous bytes. (Until R3197 this arm pinned the
+    opposite - rc=1 with a traceback - because that window only moved
+    what lands on disk; the sentence changed with the new face, recorded
+    as JUDGED-CHANGED.)
   AC-MFPW6 hygiene and wiring self-count (recorded last): the module
     source stays ASCII, os.replace appears exactly once, both render
-    calls happen inside write_outputs before the first _stage,
-    reconcile_all.py carries the label and this file once, and the
-    registry count equals DECLARED equals what this run recorded.
+    calls happen inside write_outputs before the first _stage, three
+    raise WriteError sites carry the three stages, main catches
+    WriteError once, reconcile_all.py carries the label and this file
+    once, and the registry count equals DECLARED equals what this run
+    recorded.
+
+R3198 named write-face criteria (pre-registered in the same board as a
+PIN row BEFORE this code existed):
+
+  AC-MFPX1 three stages, one named family: injecting a failure into
+    render_html, render_json, _stage or os.replace makes write_outputs
+    raise WriteError with code E_MFP_WRITE, stage render/render/stage/
+    replace, the injected exception type first in the detail, and the
+    original exception reachable as __cause__; a healthy world raises
+    nothing.
+  AC-MFPX2 the CLI names the stage, not the traceback: four real
+    subprocess runs exit 2 with exactly one stdout line carrying
+    E_MFP_WRITE and the matching stage, zero stderr bytes, the previous
+    bytes untouched and no .mfp-write-* temp file left behind.
 
 Usage: python test_monthly_faces_preview.py
 """
@@ -146,7 +166,7 @@ SUITE_FILE = os.path.abspath(__file__)
 RECONCILE = os.path.join(BASE, "src", "sandbox", "reconcile_all.py")
 MODULE = os.path.join(LEDGER, "monthly_faces_preview.py")
 LABEL = "ledger-monthly-faces-preview"
-DECLARED = 25
+DECLARED = 27
 TEMPS = []
 
 
@@ -742,11 +762,12 @@ def check_write_render_failure():
             original = getattr(M, attr)
             setattr(M, attr, _boom_factory(attr))
             raised = True
+            caught = None
             try:
                 M.write_outputs(faces, copy, out_html, out_json)
                 raised = False
-            except RuntimeError:
-                pass
+            except M.WriteError as exc:
+                caught = exc
             except Exception as exc:  # noqa: BLE001 - wrong type is a bug
                 problems.append("%s.%s.raised=%s"
                                 % (attr, world, type(exc).__name__))
@@ -755,6 +776,13 @@ def check_write_render_failure():
                 setattr(M, attr, original)
             if not raised:
                 problems.append("%s.%s.no-exception" % (attr, world))
+            if caught is not None:
+                if caught.stage != "render":
+                    problems.append("%s.%s.stage=%s"
+                                    % (attr, world, caught.stage))
+                if not caught.detail.startswith("RuntimeError:"):
+                    problems.append("%s.%s.detail=%s"
+                                    % (attr, world, caught.detail[:24]))
             if world == "stale":
                 for target, text in ((out_html, stale[0]),
                                      (out_json, stale[1])):
@@ -798,22 +826,26 @@ def check_write_no_half():
 
     M._stage = flaky
     raised = True
+    caught = None
     try:
         M.write_outputs(faces, copy, out_html, out_json)
         raised = False
-    except OSError:
-        pass
+    except M.WriteError as exc:
+        caught = exc
     finally:
         M._stage = original
     with open(out_html, "rb") as fh:
         html_after = fh.read()
     with open(out_json, "rb") as fh:
         json_after = fh.read()
+    stage_ok = caught is not None and caught.stage == "stage"
     record("AC-MFPW2",
-           raised and html_after == html_before and json_after == json_before
+           raised and stage_ok
+           and html_after == html_before and json_after == json_before
            and not _leftovers(root),
-           "raised=%s html_kept=%s json_kept=%s temps=%d stages=%d"
-           % (raised, html_after == html_before,
+           "raised=%s stage=%s html_kept=%s json_kept=%s temps=%d stages=%d"
+           % (raised, caught.stage if caught is not None else "-",
+              html_after == html_before,
               json_after == json_before, len(_leftovers(root)),
               calls["n"]))
 
@@ -838,23 +870,27 @@ def check_write_replace_failure():
 
     os.replace = refuse
     raised = True
+    caught = None
     try:
         M.write_outputs(faces, copy, out_html, out_json)
         raised = False
-    except OSError:
-        pass
+    except M.WriteError as exc:
+        caught = exc
     finally:
         os.replace = original
     with open(out_html, "rb") as fh:
         html_after = fh.read()
     with open(out_json, "rb") as fh:
         json_after = fh.read()
+    stage_ok = caught is not None and caught.stage == "replace"
     record("AC-MFPW3",
-           raised and html_after == html_before and json_after == json_before
+           raised and stage_ok
+           and html_after == html_before and json_after == json_before
            and not _leftovers(root),
-           "raised=%s html_kept=%s json_kept=%s temps=%d"
-           % (raised, html_after == html_before,
-              json_after == json_before, len(_leftovers(root))))
+           "raised=%s stage=%s html_kept=%s json_kept=%s temps=%d"
+           % (raised, caught.stage if caught is not None else "-",
+              html_after == html_before, json_after == json_before,
+              len(_leftovers(root))))
 
 
 def check_write_bytes():
@@ -900,50 +936,169 @@ BASE = sys.argv[1]
 sys.path.insert(0, os.path.join(BASE, "src", "sandbox", "ledger"))
 import monthly_faces_preview as M
 which = sys.argv[2]
+def boom(name):
+    def inner(*_a, **_k):
+        raise RuntimeError("injected %s failure" % name)
+    return inner
 if which == "html":
-    M.render_html = lambda *a, **k: (_ for _ in ()).throw(
-        RuntimeError("injected render_html failure"))
+    M.render_html = boom("render_html")
+elif which == "json":
+    M.render_json = boom("render_json")
+elif which == "stage":
+    M._stage = boom("_stage")
 else:
-    M.render_json = lambda *a, **k: (_ for _ in ()).throw(
-        RuntimeError("injected render_json failure"))
+    def refuse(_src, _dst):
+        raise OSError("injected replace failure")
+    M.os.replace = refuse
 raise SystemExit(M.main(["--out", sys.argv[3], "--json-out", sys.argv[4]]))
 '''
 
+WRITE_CASES = ("html", "json", "stage", "replace")
 
-def check_write_cli_face():
-    """AC-MFPW5: the CLI face is unchanged on purpose (rc 1 + traceback)."""
-    root = temp_root("write-cli-face")
+
+def _run_write_case(which, tag):
+    """Run one failing stage through the CLI in a world with old bytes.
+
+    Returns (returncode, stdout_bytes, stderr_bytes, kept, leftovers,
+    html_before, html_after)."""
+    root = temp_root(tag)
     driver = os.path.join(root, "driver.py")
     _write_target(driver, WRITE_DRIVER)
+    world = temp_root(tag + "-world")
+    out_html = os.path.join(world, "page.html")
+    out_json = os.path.join(world, "page.json")
+    _write_target(out_html, "OLD PAGE " * 50)
+    _write_target(out_json, '{"old": true}\n')
+    with open(out_html, "rb") as fh:
+        html_before = fh.read()
+    with open(out_json, "rb") as fh:
+        json_before = fh.read()
+    proc = subprocess.run([sys.executable, driver, BASE, which,
+                           out_html, out_json], capture_output=True)
+    with open(out_html, "rb") as fh:
+        html_after = fh.read()
+    with open(out_json, "rb") as fh:
+        json_after = fh.read()
+    return (proc.returncode, proc.stdout, proc.stderr,
+            html_after == html_before and json_after == json_before,
+            _leftovers(world))
+
+
+def check_write_cli_face():
+    """AC-MFPW5: the CLI answers a refused write in one named line."""
     problems = []
-    for which in ("html", "json"):
-        world = temp_root("write-cli-face-" + which)
-        out_html = os.path.join(world, "page.html")
-        out_json = os.path.join(world, "page.json")
-        _write_target(out_html, "OLD PAGE " * 50)
-        _write_target(out_json, '{"old": true}\n')
-        with open(out_html, "rb") as fh:
-            html_before = fh.read()
-        with open(out_json, "rb") as fh:
-            json_before = fh.read()
-        proc = subprocess.run([sys.executable, driver, BASE, which,
-                               out_html, out_json], capture_output=True)
-        with open(out_html, "rb") as fh:
-            html_after = fh.read()
-        with open(out_json, "rb") as fh:
-            json_after = fh.read()
-        if proc.returncode != 1:
-            problems.append("%s.rc=%d" % (which, proc.returncode))
-        if proc.stdout != b"":
-            problems.append("%s.stdout=%d" % (which, len(proc.stdout)))
-        if b"Traceback" not in proc.stderr:
-            problems.append("%s.no-traceback" % which)
-        if html_after != html_before or json_after != json_before:
+    for which in WRITE_CASES:
+        rc, stdout, stderr, kept, temps = _run_write_case(
+            which, "write-cli-face-" + which)
+        if rc != 2:
+            problems.append("%s.rc=%d" % (which, rc))
+        lines = stdout.splitlines()
+        if len(lines) != 1:
+            problems.append("%s.stdout_lines=%d" % (which, len(lines)))
+        elif b"E_MFP_WRITE" not in lines[0]:
+            problems.append("%s.no-code" % which)
+        if stderr != b"":
+            problems.append("%s.stderr=%d" % (which, len(stderr)))
+        if not kept:
             problems.append("%s.bytes-moved" % which)
-        if _leftovers(world):
+        if temps:
             problems.append("%s.temp" % which)
     record("AC-MFPW5", not problems,
-           "cases=2 problems=%s" % (",".join(problems) or "none"))
+           "cases=%d problems=%s"
+           % (len(WRITE_CASES), ",".join(problems) or "none"))
+
+
+def check_write_named():
+    """AC-MFPX1: render, stage and swap failures are one named family."""
+    faces = M.collect(temp_root("write-named-world"))
+    copy = M.load_copy()
+    problems = []
+    cases = (("render_html", "render", "RuntimeError"),
+             ("render_json", "render", "RuntimeError"),
+             ("_stage", "stage", "RuntimeError"),
+             ("os.replace", "replace", "OSError"))
+    for attr, stage, kind in cases:
+        root = temp_root("write-named-" + attr.strip("_").replace(".", "-"))
+        out_html = os.path.join(root, "page.html")
+        out_json = os.path.join(root, "page.json")
+        if attr == "os.replace":
+            original = os.replace
+
+            def refuse(_src, _dst):
+                raise OSError("injected replace failure")
+
+            os.replace = refuse
+        else:
+            original = getattr(M, attr)
+            setattr(M, attr, _boom_factory(attr))
+        caught = None
+        other = None
+        try:
+            M.write_outputs(faces, copy, out_html, out_json)
+        except M.WriteError as exc:
+            caught = exc
+        except Exception as exc:  # noqa: BLE001 - wrong type is a bug
+            other = type(exc).__name__
+        finally:
+            if attr == "os.replace":
+                os.replace = original
+            else:
+                setattr(M, attr, original)
+        label = attr.replace(".", "-")
+        if other is not None:
+            problems.append("%s.raised=%s" % (label, other))
+            continue
+        if caught is None:
+            problems.append("%s.no-exception" % label)
+            continue
+        if caught.code != "E_MFP_WRITE":
+            problems.append("%s.code=%s" % (label, caught.code))
+        if caught.stage != stage:
+            problems.append("%s.stage=%s" % (label, caught.stage))
+        if not caught.detail.startswith(kind + ":"):
+            problems.append("%s.detail=%s" % (label, caught.detail[:24]))
+        if caught.__cause__ is None:
+            problems.append("%s.no-cause" % label)
+        elif type(caught.__cause__).__name__ != kind:
+            problems.append("%s.cause=%s"
+                            % (label, type(caught.__cause__).__name__))
+        if _leftovers(root):
+            problems.append("%s.temp" % label)
+    control = temp_root("write-named-control")
+    control_html = os.path.join(control, "page.html")
+    control_json = os.path.join(control, "page.json")
+    try:
+        M.write_outputs(faces, copy, control_html, control_json)
+        healthy_ok = (os.path.isfile(control_html)
+                      and os.path.isfile(control_json)
+                      and not _leftovers(control))
+    except Exception as exc:  # noqa: BLE001 - a healthy world must not raise
+        healthy_ok = False
+        problems.append("control.raised=%s" % type(exc).__name__)
+    record("AC-MFPX1", not problems,
+           "cases=%d control=%s problems=%s"
+           % (len(cases), healthy_ok, ",".join(problems) or "none"))
+
+
+def check_write_named_cli():
+    """AC-MFPX2: each CLI refusal names the stage that actually failed."""
+    expected = {"html": "render", "json": "render",
+                "stage": "stage", "replace": "replace"}
+    problems = []
+    for which in WRITE_CASES:
+        rc, stdout, stderr, _kept, _temps = _run_write_case(
+            which, "write-named-cli-" + which)
+        line = stdout.decode("utf-8", "replace").strip()
+        want = "stage=%s" % expected[which]
+        if rc != 2:
+            problems.append("%s.rc=%d" % (which, rc))
+        if want not in line:
+            problems.append("%s.line=%s" % (which, line[:60] or "-"))
+        if stderr != b"":
+            problems.append("%s.stderr=%d" % (which, len(stderr)))
+    record("AC-MFPX2", not problems,
+           "cases=%d problems=%s"
+           % (len(WRITE_CASES), ",".join(problems) or "none"))
 
 
 def check_write_wiring():
@@ -957,6 +1112,10 @@ def check_write_wiring():
     with io.open(MODULE, "r", encoding="utf-8") as fh:
         source = fh.read()
     replace_sites = source.count("os.replace(")
+    named_sites = source.count("_write_error(")
+    caught_sites = source.count("except WriteError as exc:")
+    stage_sites = tuple(source.count('_write_error("%s",' % stage)
+                        for stage in ("render", "stage", "replace"))
     body_start = source.find("def write_outputs(")
     body = source[body_start:] if body_start >= 0 else ""
     render_at = body.find("render_html(")
@@ -972,13 +1131,17 @@ def check_write_wiring():
     declared = registry_declared(text)
     total_after = len(RESULTS) + 1
     ok = (ascii_ok and replace_sites == 1 and ordered
+          and named_sites == 4 and caught_sites == 1
+          and stage_sites == (1, 1, 1)
           and label_hits == 1 and file_hits == 1 and declared == DECLARED
           and total_after == DECLARED)
     record("AC-MFPW6", ok,
            "module_ascii=%s replace_sites=%d render_before_stage=%s "
+           "named_sites=%d caught=%d stages=%s "
            "label_hits=%d file_hits=%d declared=%d recorded=%d law=%d"
-           % (ascii_ok, replace_sites, ordered, label_hits, file_hits,
-              declared, total_after, DECLARED))
+           % (ascii_ok, replace_sites, ordered, named_sites, caught_sites,
+              ",".join(str(n) for n in stage_sites),
+              label_hits, file_hits, declared, total_after, DECLARED))
 
 
 def main():
@@ -1008,6 +1171,8 @@ def main():
         check_write_replace_failure()
         check_write_bytes()
         check_write_cli_face()
+        check_write_named()
+        check_write_named_cli()
         check_write_wiring()
     finally:
         for path in TEMPS:

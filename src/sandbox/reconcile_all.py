@@ -3481,8 +3481,11 @@ SUITES = [
     # write-face criteria AC-MFPW1..AC-MFPW6 (both PIN-first on the same
     # board): three unreadable copy shapes are refused by name, and a
     # render-time failure no longer truncates the delivered files.
+    # R3198 added AC-MFPX1..AC-MFPX2 (same board, PIN first): a render,
+    # stage or swap failure now answers one E_MFP_WRITE line at rc=2 with
+    # the stage named, and AC-MFPW5 was rewritten from the old rc=1 face.
     ("ledger-monthly-faces-preview", os.path.join(
-        "ledger", "test_monthly_faces_preview.py"), 25),
+        "ledger", "test_monthly_faces_preview.py"), 27),
     # R2102 attention digest on the same report generator: the
     # statement-shaped R2101 page now opens with an ordered operator
     # to-do list derived from the faces (seller inbox debt, sold-out

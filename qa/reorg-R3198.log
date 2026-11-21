@@ -1,0 +1,41 @@
+R3198 EVIDENCE - named write face for the monthly faces preview
+window 2026-11-21, one round, board head R3197 next-window (0) MAIN
+
+PROBE (read-only, qa/probe-R3198.log 1013B/10 lines sha256 f799b39dfd1ac5ec)
+  Q1 render_html / render_json / _stage / os.replace each: rc=1, stdout 0B,
+     13 stderr lines, old bytes kept, zero .mfp-write-* temps
+  Q2 write_outputs consumers: the module, its suite, tools/ugc_gate_report.py
+     (def write_outputs(data) - same name, different module, zero import);
+     tools/closeout_gate.py zero references; the only old-face pin was
+     AC-MFPW5 inside the suite
+  Q3 healthy CLI: rc=0, html 6834B sha16 30527da5ec5dc7e2,
+     json 13015B sha16 76e42600895a4dc5, equal to the shipped files
+
+LANDED
+  WriteError(code E_MFP_WRITE, stage, detail, face())
+  _write_error(stage, exc) - stage literal plus the underlying type name
+  write_outputs wraps render / stage / swap, keeps the original as __cause__
+  main() answers a caught WriteError with one stdout line at rc=2
+  AC-MFPX1 (four in-process stages plus a healthy control)
+  AC-MFPX2 (four subprocess worlds, each keyed to its own stage)
+  DECLARED 25 -> 27, registry ledger-monthly-faces-preview 25 -> 27
+
+GATES
+  SUITE PASS 27/27 qa/suite-monthly-faces-preview-R3198.log
+    2220B/30 lines utf-8/lf sha256 c6ea44205d170575
+  generator --verify VERIFY PASS qa/preview-monthly-faces-R3198.log
+    661B/9 lines sha256 271ba9eb7b2d1230 (same as R3194..R3197)
+  peers closeout_gate 42/42, closeout_carrier 6/6,
+    general_writer_dialect_audit 6/6
+  matrix 78486B/755 rows, --check DOC-CURRENT
+  census --write-pin then --check VERDICT PASS pinned=755
+  live CLOSEOUT-GATE PASS files=4507 flags=0 reader_refused=0
+    round_main=OK census=PASS matrix=DOC-CURRENT
+    CARRIER bytes=52435 margin=26065 fold_needed=false log_items=57
+
+HONEST
+  zero payment capability, zero network beyond loopback: a named refusal
+  moves no money and a buyer still cannot pay (no merchant id, server,
+  domain, filing+ICP or miniprogram appid+secret); zero product surface
+  delta - the page and the copy text are untouched; the CLI rc moved 1 -> 2
+  on purpose and that is a behaviour change, not a relaxation.

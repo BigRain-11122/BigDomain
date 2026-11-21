@@ -1,0 +1,10 @@
+Q1 html rc=1 stdout=0B stderr=13_lines kept=True temps=0 last=RuntimeError: injected render_html failure
+Q1 json rc=1 stdout=0B stderr=13_lines kept=True temps=0 last=RuntimeError: injected render_json failure
+Q1 stage rc=1 stdout=0B stderr=13_lines kept=True temps=0 last=RuntimeError: injected _stage failure
+Q1 replace rc=1 stdout=0B stderr=13_lines kept=True temps=0 last=OSError: injected replace failure
+Q2 write_outputs_refs=src\sandbox\ledger\monthly_faces_preview.py,src\sandbox\ledger\test_monthly_faces_preview.py,tools\ugc_gate_report.py
+Q2 suite_pins_rc1=AC-MFPW5 traceback=1 catch_oserror=2 catch_runtimeerror=1
+Q2 closeout_gate_refs=0
+Q3 rc=0 html=6834B sha=30527da5ec5dc7e2 json=13015B sha=76e42600895a4dc5 stdout=PASS preview ..\..\..\..\AppData\Local\Temp\probe-r3198-apnmwl_0\healthy\page.html (6834 bytes) + ..\..\..\..\AppData\Local\Temp\probe-r3198-apnmwl_0\healthy\page.json (13015 bytes)
+Q3 shipped html=6834B sha=30527da5ec5dc7e2 json=13015B sha=76e42600895a4dc5
+Q3 temps_after_healthy=0
