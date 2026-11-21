@@ -5332,7 +5332,7 @@ SUITES = [
     # already occupied by other criteria families, so AC-RQE was registered
     # instead - disclosed, no criterion relaxed.)
     ("os-round-evidence",
-     os.path.join("..", "os", "test_round_evidence.py"), 6),
+     os.path.join("..", "os", "test_round_evidence.py"), 7),
     # R2257: the round sequence becomes a reading - the tick, the log items'
     # own round labels and the queue's done stamps are compared, so a skipped
     # round, a reused label or a label that goes backwards can no longer hide

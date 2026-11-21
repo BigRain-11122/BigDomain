@@ -43,6 +43,17 @@ FILE_ROUND_RE = re.compile(r"(?<![0-9A-Za-z])R(\d{3,5})(?![0-9])")
 # A round claims evidence only through these markers (AC-RQE3).
 CLAIM_MARKERS = ("SUITE PASS", "RUNNER PASS")
 
+# R3164 (AC-RQE7): the fold moves a round's log items OUT of the live log and
+# into logs/state-log-archive-*.md, and this reader judged only the live log,
+# so every folded round left its judgement without a word. Measured live at
+# R3164: 1939 labelled rounds, 374 with no qa/ file, and ALL 374 are
+# archive-only - the live log carries none - of which 82 claim a pass. The
+# folder and prefix below are the fold's own names, mirrored from state_seq
+# (which imports this module, so the dependency cannot run the other way);
+# AC-RQE7 arm f asserts the two modules still agree rather than trusting it.
+ARCHIVE_DIR = ("logs",)
+ARCHIVE_PREFIX = "state-log-archive-"
+
 VERDICTS = ("EMPTY", "EVIDENCE-OK", "EVIDENCE-MISSING")
 
 ROUND_KEYS = ("round", "items", "markers", "claims")
@@ -152,12 +163,82 @@ def map_files(qa_dir):
     return mapping
 
 
-def audit(root, qa_dir=None):
-    """Audit the claim-to-file link; return the closed report shape."""
+def archive_rounds(root):
+    """Every round the fold archive labels, and the items it holds (AC-RQE7).
+
+    The owning label is the same `item_round` law the live log uses, and the
+    claim markers are the same pinned pair, so a folded round is read exactly
+    as it would have been before the fold. A missing directory reads nothing
+    rather than raising (the same tolerance state_seq applies).
+    """
+    directory = os.path.join(root, *ARCHIVE_DIR)
+    if not os.path.isdir(directory):
+        return []
+    try:
+        names = sorted(os.listdir(directory))
+    except (IOError, OSError) as exc:
+        raise RoundEvidenceError("E_RQE_BAD_ARCHIVE",
+                                 "%s (%s)" % (directory, exc))
+    order = []
+    seen = {}
+    for name in names:
+        if not (name.startswith(ARCHIVE_PREFIX) and name.endswith(".md")):
+            continue
+        path = os.path.join(directory, name)
+        try:
+            with io.open(path, "r", encoding="utf-8") as handle:
+                text = handle.read()
+        except (IOError, OSError, ValueError) as exc:
+            raise RoundEvidenceError("E_RQE_BAD_ARCHIVE",
+                                     "%s (%s)" % (path, exc))
+        for line in text.split("\n"):
+            number = item_round(line)
+            if number is None:
+                continue
+            if number not in seen:
+                seen[number] = {"round": number, "items": 0, "markers": [],
+                                "claims": False}
+                order.append(number)
+            row = seen[number]
+            row["items"] += 1
+            for marker in item_markers(line):
+                if marker not in row["markers"]:
+                    row["markers"].append(marker)
+            if row["markers"]:
+                row["claims"] = True
+    return [seen[number] for number in order]
+
+
+def audit(root, qa_dir=None, include_archive=False):
+    """Audit the claim-to-file link; return the closed report shape.
+
+    With include_archive the judged universe is the LIVE log plus the fold
+    archive, merged per round (items summed, markers unioned) and ordered by
+    round number, so a folded claim is judged instead of silently leaving the
+    face. The default reads the live log only, byte-identical to before.
+    """
     if qa_dir is None:
         qa_dir = os.path.join(root, "qa")
     state = load_state(root)
     rounds = extract_rounds(state)
+    log_items = len(state.get("log") or [])
+    if include_archive:
+        folded = archive_rounds(root)
+        merged = {}
+        for row in rounds + folded:
+            key = row["round"]
+            if key not in merged:
+                merged[key] = {"round": key, "items": 0, "markers": [],
+                               "claims": False}
+            target = merged[key]
+            target["items"] += row["items"]
+            for marker in row["markers"]:
+                if marker not in target["markers"]:
+                    target["markers"].append(marker)
+            target["claims"] = bool(target["markers"])
+        rounds = [merged[key] for key in sorted(merged)]
+        for row in folded:
+            log_items += row["items"]
     mapping = map_files(qa_dir)
     files_total = 0
     for names in mapping.values():
@@ -182,7 +263,7 @@ def audit(root, qa_dir=None):
         verdict = "EVIDENCE-OK"
     return {
         "rounds": rounds,
-        "log_items": len(state.get("log") or []),
+        "log_items": log_items,
         "claiming_rounds": claiming,
         "with_files": with_files,
         "files_total": files_total,
@@ -233,7 +314,8 @@ def to_json(report):
 
 
 USAGE = ("usage: round_evidence.py --check [--root PATH] [--qa-dir PATH] "
-         "[--json]\n"
+         "[--archive] [--json]\n"
+         "  --archive also judges the rounds folded into logs/ (AC-RQE7)\n"
          "  exit 0 = every claiming round has a qa/ file (or the log is "
          "empty)\n"
          "  exit 2 = a claiming round has no file (EVIDENCE-MISSING) or "
@@ -244,6 +326,7 @@ USAGE = ("usage: round_evidence.py --check [--root PATH] [--qa-dir PATH] "
 def main(argv):
     check = False
     as_json = False
+    include_archive = False
     root = os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__))))
     qa_dir = None
@@ -254,6 +337,8 @@ def main(argv):
             check = True
         elif arg == "--json":
             as_json = True
+        elif arg == "--archive":
+            include_archive = True
         elif arg == "--root":
             index += 1
             if index >= len(argv):
@@ -279,7 +364,7 @@ def main(argv):
         sys.stdout.write(USAGE)
         return 2
     try:
-        report = audit(root, qa_dir)
+        report = audit(root, qa_dir, include_archive)
     except RoundEvidenceError as exc:
         sys.stdout.write("%s\n" % exc.code)
         return 3

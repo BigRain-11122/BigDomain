@@ -30,11 +30,11 @@ sys.path.insert(0, BASE)
 
 import round_evidence as RE  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 7
 MODULE = os.path.join(BASE, "round_evidence.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-round-evidence"
-WIRED_EXPECT = '"test_round_evidence.py"), 6),'
+WIRED_EXPECT = '"test_round_evidence.py"), 7),'
 
 PASSES = 0
 FAILS = 0
@@ -240,6 +240,105 @@ def ac_rqe6():
               "byte-stable json")
 
 
+def write_archive(world, lines, name="state-log-archive-2026-11.md"):
+    """Add a fold archive under logs/ (the fold's own folder and prefix)."""
+    directory = os.path.join(world, "logs")
+    if not os.path.isdir(directory):
+        os.makedirs(directory)
+    path = os.path.join(directory, name)
+    with io.open(path, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write("\n".join(lines) + "\n")
+    return path
+
+
+def ac_rqe7():
+    """The folded rounds are judged too, and the live reading is unchanged."""
+    items = ["2026-11-21 R3200 SUITE PASS 6/6"]
+    world = make_world(items, ["suite-R3200.log"])
+    try:
+        # arm a: a folded claim with no file is reported, a quiet fold is not.
+        write_archive(world, [
+            "2026-09-01 R1255 RUNNER PASS legs=1",
+            "2026-09-01 R1256 (narrative only, no claim marker)",
+            "2026-09-01 R1256 tokens: local=~1k api=0",
+        ])
+        live_only = RE.audit(world)
+        with_archive = RE.audit(world, include_archive=True)
+        missing = [row["round"] for row in with_archive["missing"]]
+
+        # arm b: the union sums items per round across both faces and orders
+        # by round number.
+        doubled = make_world(items, ["suite-R3200.log"])
+        write_archive(doubled, [
+            "2026-09-01 R3200 SUITE PASS 6/6",
+            "R1255 RUNNER PASS legs=1",
+        ])
+        union = RE.audit(doubled, include_archive=True)
+        row_3200 = [r for r in union["rounds"] if r["round"] == 3200]
+
+        # arm c: the file fragment law holds in the folded face too.
+        frag = make_world(items, ["suite-R3200.log", "suite-R22541.log"])
+        write_archive(frag, ["R2254 SUITE PASS 1/1"])
+
+        # arm d: an absent logs/ directory reads nothing rather than raising.
+        absent = make_world(items, ["suite-R3200.log"])
+        no_archive = RE.archive_rounds(absent)
+
+        # arm e: the CLI flag, and its refusals.
+        bad_flag = run_cli(["--check", "--root", world, "--bogus"])[0]
+        no_check = run_cli(["--root", world, "--archive"])[0]
+        code_archive, out_archive, _ = run_cli(
+            ["--check", "--root", world, "--archive"])
+        code_live, out_live, _ = run_cli(["--check", "--root", world])
+        first = run_cli(["--check", "--root", world, "--archive", "--json"])
+        second = run_cli(["--check", "--root", world, "--archive", "--json"])
+        pinned = list(json.loads(first[1]).keys())
+
+        # arm f: the archive folder and prefix are the fold's, not a copy that
+        # may drift; state_seq owns the same two literals.
+        with io.open(os.path.join(BASE, "state_seq.py"), "r",
+                     encoding="utf-8") as handle:
+            source = handle.read()
+        agrees = ('ARCHIVE_DIR = ("logs",)' in source
+                  and 'ARCHIVE_PREFIX = "state-log-archive-"' in source
+                  and RE.ARCHIVE_DIR == ("logs",)
+                  and RE.ARCHIVE_PREFIX == "state-log-archive-")
+
+        ok = (live_only["missing_count"] == 0
+              and live_only["verdict"] == "EVIDENCE-OK"
+              and with_archive["missing_count"] == 1
+              and missing == [1255]
+              and with_archive["missing"][0]["markers"] == ["RUNNER PASS"]
+              and with_archive["claiming_rounds"] == 2
+              and [r["round"] for r in union["rounds"]] == [1255, 3200]
+              and len(row_3200) == 1 and row_3200[0]["items"] == 2
+              and union["log_items"] == 1 + 2
+              and [r["round"] for r in RE.audit(frag, include_archive=True)
+                   ["missing"]] == [2254]
+              and no_archive == []
+              and bad_flag == 2 and no_check == 2
+              and code_archive == 2 and "MISSING R1255" in out_archive
+              and code_live == 0 and "verdict=EVIDENCE-OK" in out_live
+              and first == second and pinned == list(RE.REPORT_KEYS)
+              and agrees)
+        if not ok:
+            print("  measured: live=%r archive=%r missing=%r union=%r "
+                  "frag=%r noarch=%r cli=%r agrees=%r"
+                  % (live_only["missing_count"], with_archive["missing_count"],
+                     missing, [r["round"] for r in union["rounds"]],
+                     [r["round"] for r in RE.audit(frag,
+                                                   include_archive=True)
+                      ["missing"]], no_archive,
+                     (bad_flag, no_check, code_archive, code_live), agrees),
+                  flush=True)
+    finally:
+        drop_world(world)
+        drop_world(doubled)
+        drop_world(frag)
+        drop_world(absent)
+    check(ok, "AC-RQE7 folded claims are judged, live reading byte-identical")
+
+
 def main():
     print("round_evidence suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -249,6 +348,7 @@ def main():
     ac_rqe4()
     ac_rqe5()
     ac_rqe6()
+    ac_rqe7()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:
