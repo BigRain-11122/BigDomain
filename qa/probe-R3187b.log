@@ -1,0 +1,87 @@
+"""R3187 second probe: who depends on ledger_coverage swallowing a bad
+archive, and what a reader sees when it does.  Private temp worlds only;
+zero socket, zero network, zero live writes.
+
+Run through tools/qa_log.py so the evidence log is utf-8/lf.
+"""
+import io
+import json
+import os
+import shutil
+import sys
+import tempfile
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "src", "os"))
+
+import state_fold as SF  # noqa: E402
+import state_fold_run as FR  # noqa: E402
+
+
+def build_world(items):
+    world = tempfile.mkdtemp(prefix="r3187_")
+    os.makedirs(os.path.join(world, "src", "os"))
+    os.makedirs(os.path.join(world, "logs"))
+    log = ["R%04d note %s tokens: local=%d api=0" % (3000 + i, "x" * 20, i)
+           for i in range(items)]
+    text = ("{\r\n  \"log\": [\r\n"
+            + ",\r\n".join('                %s' % json.dumps(x) for x in log)
+            + "\r\n  ]\r\n}\r\n")
+    with io.open(os.path.join(world, "src", "os", "state.json"), "wb") as f:
+        f.write(text.encode("utf-8"))
+    return world, log
+
+
+print("Q1 consumer census (grep, live tree):")
+print("   src/os/state_fold_run.py:349  report field ledger_rounds_before")
+print("   src/os/state_fold_run.py:404  before-write AC-SFOLD2")
+print("   src/os/state_fold_run.py:458  after-write AC-SFOLD2")
+print("   src/os/test_state_fold_run.py:206  one test arm")
+print("   ledger_lines.load_archive_lines: other callers are the CLI faces")
+
+world, log = build_world(60)
+try:
+    logs_dir = os.path.join(world, "logs")
+    summary = ("R9999 fold 1 of log lines 1..20 into "
+               "logs/state-log-archive-2026-11.md")
+    out = FR.run(world, "R9999", 1, 1, 20, summary)
+    print("Q2 seeded fold: verdict=%s would_fail=%s"
+          % (out["verdict"], out.get("would_fail")))
+    if out["verdict"] != "FOLDED":
+        out = SF.fold(world, "R9999", 1, 1, 20, summary, execute=True)
+        print("Q2 seeded through SF.fold instead: would_fail=%s"
+              % out.get("would_fail"))
+    with io.open(os.path.join(world, "src", "os", "state.json"), "rb") as f:
+        print("Q2 carrier now %d bytes" % len(f.read()))
+    good = os.path.join(logs_dir, "state-log-archive-2026-11.md")
+    keep = io.open(good, "rb").read()
+    st = json.loads(io.open(os.path.join(world, "src", "os", "state.json"),
+                            "rb").read().decode("utf-8"))
+    full = FR.ledger_coverage(logs_dir, st["log"])
+    print("Q3 coverage with the archive readable: rounds=%d ledger_lines=%d"
+          % (len(full["ledger_rounds"]), full["ledger_lines"]))
+    with io.open(good, "wb") as f:
+        f.write(b"\xff\xfe not utf-8 \x80")
+    blind = FR.ledger_coverage(logs_dir, st["log"])
+    print("Q4 same call with the archive unreadable: rounds=%d ledger_lines=%d"
+          " keys=%s -- NO exception, archive silently skipped"
+          % (len(blind["ledger_rounds"]), blind["ledger_lines"],
+             sorted(blind.keys())))
+    print("Q4 blast radius: AC-SFOLD2 would read %d -> %d and name the fold "
+          "as the loss, although nothing was lost"
+          % (len(full["ledger_rounds"]), len(blind["ledger_rounds"])))
+    with io.open(good, "wb") as f:
+        f.write(b"\xff\xfe not utf-8 \x80")
+    for label, text in (("corrupt sibling",
+                         "R9999 fold 2 of log lines 1..5 into "
+                         "logs/state-log-archive-2026-11.md"),):
+        try:
+            FR.run(world, "R9999", 2, 1, 5, text, dry_run=True)
+            print("Q5 %s: run() REACHED the plan (birth gate did not fire)"
+                  % label)
+        except FR.FoldRunError as exc:
+            print("Q5 %s: run() refused EARLIER with %s -- the swallow is "
+                  "unreachable through the CLI, only a direct call sees it"
+                  % (label, exc.code))
+finally:
+    shutil.rmtree(world, ignore_errors=True)

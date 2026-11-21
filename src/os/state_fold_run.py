@@ -60,11 +60,21 @@ def ledger_coverage(logs_dir, live_lines):
 
     The archive is READ here rather than ignored: that is the only way the
     count can survive a fold.
+
+    R3187 (AC-SFOLD9): a reader that fails is REPORTED, never silently
+    skipped. R3186 measured what the silence costs - a blind read still
+    returns a number, so the after-write set comparison read 40 -> 21 and
+    named the fold as the loss although nothing was lost. `archive_read`
+    says whether the archive was really read; `archive_error` carries the
+    reason when it was not, so the caller can refuse instead of publishing
+    a proof computed from half its input.
     """
+    archive_error = ""
     try:
         archived = LL.load_archive_lines(logs_dir)
-    except Exception:
+    except Exception as exc:  # noqa: BLE001 - the fact is reported, not hidden
         archived = []
+        archive_error = ("%s: %s" % (type(exc).__name__, exc))[:160]
     lines = list(archived) + list(live_lines)
     rounds = set()
     ledgers = 0
@@ -74,7 +84,9 @@ def ledger_coverage(logs_dir, live_lines):
             rounds.add("R" + head.group(1))
         if SF.TOKENS_RE.match(line):
             ledgers += 1
-    return {"ledger_rounds": rounds, "ledger_lines": ledgers}
+    return {"ledger_rounds": rounds, "ledger_lines": ledgers,
+            "archive_read": not archive_error,
+            "archive_error": archive_error}
 
 
 def archive_copy_ok(path, window_lines):
@@ -402,6 +414,12 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
                            % (plan["predicted_bytes"], gate))
 
     before_cov = ledger_coverage(logs_dir, state["log"])
+    if not before_cov["archive_read"]:
+        # AC-SFOLD9 (R3187): a coverage number that could not read the archive
+        # is not a proof. check_archive_set refuses this path first, so this
+        # is defence in depth - a caller that reaches ledger_coverage by
+        # another route is refused BEFORE any byte is written.
+        raise FoldRunError("E_SFOLD_ARCHIVE_READ", before_cov["archive_error"])
     report = {
         "round": round_label, "fold_no": fold_no,
         "mode": "dry-run" if dry_run else "execute",
@@ -457,6 +475,14 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
     })
     after_cov = ledger_coverage(logs_dir, post_state["log"])
     report["ledger_rounds_after"] = len(after_cov["ledger_rounds"])
+    if not after_cov["archive_read"]:
+        # AC-SFOLD9 (R3187): the archive became unreadable between the birth
+        # gate and the proof. AC-SFOLD2 cannot be computed from half its
+        # input, so the honest answer is "unproven" - never a loss count that
+        # blames the fold for a reader failure.
+        raise FoldRunError("E_SFOLD_ARCHIVE_READ",
+                           "after write: %s (state, archive and backup"
+                           " already changed)" % after_cov["archive_error"])
     # AC-SFOLD2: no round that had a ledger line may lose it to the fold.
     # R3186: these three proofs run AFTER the write, so their codes say so -
     # the caller must not read "refused, nothing written" from a fold that

@@ -4930,7 +4930,7 @@ SUITES = [
     # process - the tracked set comes from the repository index (DIRC v2
     # only; 3/4 and a bad magic are refused by name), so a reader of a
     # published FOLD-CARRY locator can say which of the three archives git
-    # actually backs (measured live: 11月 tracked, 09/10 not, 656872B /
+    # actually backs (measured live: 11鏈?tracked, 09/10 not, 656872B /
     # 6666 entries, agreeing with 'git ls-files logs' on all rows).
     # (AC-APR1..AC-APR6 pinned in src/os/backlog.md R3091 BEFORE the file.)
     ("os-archive-provenance",
@@ -5024,7 +5024,7 @@ SUITES = [
     # ledger coverage read THROUGH the archive, layout writer/reader agreement,
     # and a gate that only clears at or under the waterline.
     ("os-state-fold-run",
-     os.path.join("..", "os", "test_state_fold_run.py"), 11),
+     os.path.join("..", "os", "test_state_fold_run.py"), 12),
     # R2407: a tokens line is not automatically a block's LAST line - a round
     # may append disclosures after its ledger, and the R2405 fold then left
     # R2395's ledger in the archive while the rest of the round stayed live.

@@ -26,7 +26,7 @@ sys.path.insert(0, BASE)
 import state_fold_run as FR  # noqa: E402
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 11
+EXPECTED_CRITERIA = 12
 MODULE = os.path.join(BASE, "state_fold_run.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold-run"
@@ -299,7 +299,7 @@ def main():
         with io.open(RUNNER, "rb") as handle:
             runner = handle.read()
         wired = (LABEL.encode("ascii") in runner
-                 and EXPECTED_CRITERIA == 11)
+                 and EXPECTED_CRITERIA == 12)
         check(read(dry_path) == dry_before
               and dry["dry_run_digest_same"] is True
               and dry["verdict"] == "DRY-RUN" and ascii_ok and no_clock
@@ -681,6 +681,113 @@ def main():
                  logs_after_names, s_codes, s_untouched,
                  s_logs, healed["verdict"], healed["archive_verified"],
                  d_report["verdict"], hygiene8))
+        # --- AC-SFOLD9: a blind coverage reader is refused, not published ---
+        # R3187 measured the hole R3186 named and left: ledger_coverage
+        # swallowed a decode failure and answered from the LIVE log only, so a
+        # proof computed "after write" could read a 61 -> 41 loss on a fold
+        # that lost nothing. The reader now says whether it read, and run()
+        # refuses instead of publishing a number from half its input.
+        blind_root, blind_path = make_world(os.path.join(base, "blind"))
+        blind_logs = os.path.join(blind_root, "logs")
+        blind_state = json.loads(read(blind_path).decode("utf-8"))
+        sibling = os.path.join(blind_logs, "state-log-archive-2026-10.md")
+        with io.open(sibling, "wb") as handle:
+            handle.write(b"\xff\xfe not utf-8 \x80")
+        blind_cov = FR.ledger_coverage(blind_logs, blind_state["log"])
+        live_rounds = set()
+        for line in blind_state["log"]:
+            head = SF.ROUND_HEAD_RE.match(line)
+            if head:
+                live_rounds.add("R" + head.group(1))
+        blind_before = read(blind_path)
+        gate_code = ""
+        try:
+            FR.run(blind_root, "R9004", 1, 1, 4,
+                   "R9004 fold 1 of log lines 1..4 into"
+                   " logs/state-log-archive-2026-11.md", dry_run=True)
+        except FR.FoldRunError as exc:
+            gate_code = exc.code
+        gate_untouched = read(blind_path) == blind_before
+        gate_files = sorted(os.listdir(blind_logs))
+
+        # With the birth gate out of the way the same world is refused by the
+        # new reader guard - still before any byte is written.
+        original_gate = FR.check_archive_set
+        FR.check_archive_set = lambda root: None
+        guard_code = ""
+        try:
+            FR.run(blind_root, "R9004", 1, 1, 4,
+                   "R9004 fold 1 of log lines 1..4 into"
+                   " logs/state-log-archive-2026-11.md", dry_run=True)
+        except FR.FoldRunError as exc:
+            guard_code = exc.code
+        finally:
+            FR.check_archive_set = original_gate
+        guard_untouched = read(blind_path) == blind_before
+        guard_files = sorted(os.listdir(blind_logs))
+
+        # The archive dies BETWEEN the gate and the proof: the second read
+        # fails, and the error must say the bytes are already written.
+        late_root, late_path = make_world(os.path.join(base, "late"))
+        late_original = read(late_path)
+        real_reader = FR.LL.load_archive_lines
+        calls = {"n": 0}
+
+        def die_on_second(logs_dir=None, state_path=None):
+            calls["n"] += 1
+            if calls["n"] >= 2:
+                raise UnicodeDecodeError("utf-8", b"\xff", 0, 1, "late")
+            return real_reader(logs_dir, state_path)
+
+        FR.LL.load_archive_lines = die_on_second
+        late_code = ""
+        late_detail = ""
+        try:
+            FR.run(late_root, "R9005", 1, 1, 4,
+                   "R9005 fold 1 of log lines 1..4 into"
+                   " logs/state-log-archive-2026-11.md")
+        except FR.FoldRunError as exc:
+            late_code = exc.code
+            late_detail = exc.detail
+        finally:
+            FR.LL.load_archive_lines = real_reader
+        late_changed = read(late_path) != late_original
+
+        healthy_root, healthy_path = make_world(os.path.join(base, "healthy"))
+        healthy_cov = FR.ledger_coverage(
+            os.path.join(healthy_root, "logs"),
+            json.loads(read(healthy_path).decode("utf-8"))["log"])
+
+        module_text = io.open(MODULE, "rb").read().decode("ascii", "strict")
+        check(blind_cov["archive_read"] is False
+              and bool(blind_cov["archive_error"])
+              and blind_cov["ledger_rounds"] == live_rounds
+              and gate_code == "E_FLR_ARCHIVE_UNREADABLE"
+              and gate_untouched
+              and gate_files == [os.path.basename(sibling)]
+              and guard_code == "E_SFOLD_ARCHIVE_READ"
+              and guard_untouched
+              and guard_files == [os.path.basename(sibling)]
+              and late_code == "E_SFOLD_ARCHIVE_READ"
+              and late_detail.startswith("after write:")
+              and late_changed
+              and healthy_cov["archive_read"] is True
+              and healthy_cov["archive_error"] == ""
+              and module_text.count("E_SFOLD_ARCHIVE_READ") == 2
+              and "import socket" not in module_text
+              and "import urllib" not in module_text,
+              "AC-SFOLD9 a coverage reader that cannot read the archive says "
+              "so [read=%s rounds=%d=%d live-only] instead of answering blind; "
+              "the birth gate still refuses first [%s, bytes unchanged=%s, "
+              "logs=%s], the reader guard refuses the same world on its own "
+              "[%s, bytes unchanged=%s, logs=%s], an archive that dies between "
+              "the gate and the proof reads [%s ... %s] with the bytes already "
+              "written [%s], and a healthy world still reports a real read [%s]"
+              % (blind_cov["archive_read"], len(blind_cov["ledger_rounds"]),
+                 len(live_rounds), gate_code, gate_untouched, gate_files,
+                 guard_code, guard_untouched, guard_files, late_code,
+                 late_detail[:40], late_changed,
+                 healthy_cov["archive_read"]))
     finally:
         shutil.rmtree(base, ignore_errors=True)
 
