@@ -1,0 +1,11 @@
+Q1 keys=19 bytes=38291 waterline=60000 headroom=21709
+Q1 live_census {"captured": 107, "claimed": 303, "contradicted": 11, "historic": 7, "present": true, "rows": 5, "uncaptured": 185}
+Q1 live_faces={"board": {"claimed": 275, "present": true}, "export": {"claimed": 0, "present": true}, "state": {"claimed": 28, "present": true}}
+Q1 chain_literal_sites=94
+Q2 world_census_before {"captured": 1, "claimed": 2, "contradicted": 1, "historic": 1, "present": true, "rows": 0, "uncaptured": 0}
+Q2 json_block {"contradicted": 1, "historic": 1, "present": true, "rows": 0}
+Q2 after_json {"captured": 1, "claimed": 2, "contradicted": 1, "historic": 1, "present": true, "rows": 0, "uncaptured": 0}
+Q2 after_prose {"captured": 1, "claimed": 3, "contradicted": 1, "historic": 1, "present": true, "rows": 0, "uncaptured": 1}
+Q2 delta_json={"captured": 0, "claimed": 0, "contradicted": 0, "historic": 0, "present": 0, "rows": 0, "uncaptured": 0}
+Q2 delta_prose={"captured": 0, "claimed": 1, "contradicted": 0, "historic": 0, "present": 0, "rows": 0, "uncaptured": 1}
+Q2 json_shape_lines=1 prose_shape_lines=1

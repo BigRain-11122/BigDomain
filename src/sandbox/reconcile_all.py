@@ -6338,9 +6338,11 @@ SUITES = [
     # door, and the zero-caller fact is asserted (20 -> 22). R3222 gave the
     # ledger counts a real consumer on the export face (22 -> 25). R3224 gave
     # the same face the ledger's existence, so "no ledger" and "empty ledger"
-    # stopped publishing the identical block (25 -> 26).
+    # stopped publishing the identical block (25 -> 26). R3228 published the
+    # census reading there too, as a JSON block that the census itself cannot
+    # count (26 -> 29).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 26),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 29),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives

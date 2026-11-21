@@ -85,6 +85,29 @@ count printed only as prose:
            The block adds no refusal and moves no PASS token, no evidence byte
            and no ledger byte.
 
+Added at R3228 (pinned in src/os/backlog.md BEFORE this code), because R3227's
+`historic=` split was printed only on the closeout's stdout: the export face the
+CEO downloads carried 19 keys and no claims reading at all, and the whole-tree
+census found no machine consumer of the split. Probed first (qa/probe-R3228.log):
+a world with two claims counted 1 captured + 1 contradicted, and publishing the
+reading as a JSON block moved NOTHING (delta zero on every counter) while the
+same reading written as prose moved claimed 2 -> 3 / uncaptured 0 -> 1. So the
+published shape is part of the law, not a detail of it:
+  AC-SXF27 the export carries a "claims" block whose contradicted/historic/rows
+           /present equal the live census, derived at check time by
+           closeout_gate.check_claims (one definition, no second census, root
+           read at call time). Absent is E_SXF_CLAIMS_MISSING; different numbers
+           are E_SXF_CLAIMS_STALE.
+  AC-SXF28 --apply publishes that block from the same derivation, so a world
+           carrying a real contradiction lands contradicted=1 rather than a
+           carried zero, and a second --apply on a pinned clock leaves the file
+           byte-identical.
+  AC-SXF29 publishing is not gating and the shape is part of the proof: a world
+           with contradicted>0 still reads VERDICT PASS, the published block
+           adds ZERO `rows=` tokens to the export text (the census counts those,
+           and the block must not feed the number it publishes), and the chain
+           block, do/ceo_face.current and next_milestone_due are unchanged.
+
 ASCII source only (repository encoding law). Product text is read from the live
 state, never authored here.
 """
@@ -485,6 +508,19 @@ def check(export_path, state_path):
                          "landed=%s derived=%s"
                          % (json.dumps(landed_chain, sort_keys=True),
                             json.dumps(derived_chain, sort_keys=True))))
+    # AC-SXF27 (R3228): the same law for the census reading. Published as a
+    # reading, never a verdict - a contradicted count of 1 still reads PASS.
+    derived_claims = claims_face(ROOT)
+    landed_claims = doc.get(CLAIMS_KEY)
+    if not isinstance(landed_claims, dict):
+        problems.append(("E_SXF_CLAIMS_MISSING",
+                         "%s absent; derived=%s"
+                         % (CLAIMS_KEY, json.dumps(derived_claims, sort_keys=True))))
+    elif landed_claims != derived_claims:
+        problems.append(("E_SXF_CLAIMS_STALE",
+                         "landed=%s derived=%s"
+                         % (json.dumps(landed_claims, sort_keys=True),
+                            json.dumps(derived_claims, sort_keys=True))))
     if problems:
         print("VERDICT %s FAIL" % tag)
         for code, problem in problems:
@@ -497,6 +533,10 @@ def check(export_path, state_path):
     print("export_ts=%s" % (doc.get("export_ts") or ""))
     print("chain rows=%d broken=%d path=%s"
           % (derived_chain["rows"], derived_chain["broken"], derived_chain["path"]))
+    print("claims contradicted=%d historic=%d rows=%d present=%s"
+          % (derived_claims["contradicted"], derived_claims["historic"],
+             derived_claims["rows"],
+             "true" if derived_claims["present"] else "false"))
     return 0
 
 
@@ -573,6 +613,37 @@ def chain_face(root):
             "rows": reading.get("rows", 0),
             "broken": reading.get("broken", 0),
             "path": "state/" + QL.LEDGER_NAME}
+
+
+CLAIMS_KEY = "claims"
+
+
+def claims_face(root):
+    """AC-SXF27 (R3228): the census readings, read by the gate's OWN face.
+
+    The values come from `closeout_gate.check_claims(root, reading)`, which fills
+    the reading from the same `claim_census.census` it renders - so the export,
+    the gate's CLAIMS row and the verdict's `claims` key are three renderings of
+    ONE census.
+
+    Published as a JSON object on purpose (measured, qa/probe-R3228.log): the
+    census counts `rows=<n>` tokens, and a JSON `"rows": 4` is not one of them,
+    so publishing this reading moves no counter (delta zero on every field),
+    while the same reading written as prose moved claimed 2 -> 3 and uncaptured
+    0 -> 1. The shape is what keeps the mirror from feeding the number it
+    mirrors - no exclusion law is needed and none was added.
+    """
+    for path in (os.path.join(REAL_ROOT, "tools"),
+                 os.path.join(REAL_ROOT, "src", "os")):
+        if path not in sys.path:
+            sys.path.insert(0, path)
+    import closeout_gate as CG
+    reading = {}
+    CG.check_claims(root, reading)
+    return {"contradicted": reading.get("contradicted", 0),
+            "historic": reading.get("historic", 0),
+            "rows": reading.get("rows", 0),
+            "present": reading.get("present")}
 
 
 def _ensure_block(text, key, mapping, indent="  "):
@@ -655,6 +726,14 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     text, ok = _ensure_block(text, CHAIN_KEY, chain, "  ")
     if not ok:
         missing.append(CHAIN_KEY)
+    # AC-SXF28 (R3228): the census reading is published from the same derivation
+    # the grader uses. Landing it adds zero `rows=` tokens (JSON shape), so the
+    # value it publishes is not moved by publishing it - the second --apply is
+    # byte-identical for that reason, not by luck.
+    claims = claims_face(ROOT)
+    text, ok = _ensure_block(text, CLAIMS_KEY, claims, "  ")
+    if not ok:
+        missing.append(CLAIMS_KEY)
     # AC-SXF7: the byte count is recomputed from the file, never carried forward.
     text, ok = _set_number(text, "state_bytes", os.path.getsize(state_path), "  ")
     if not ok:
@@ -672,6 +751,10 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     if parsed.get(CHAIN_KEY) != chain:
         print("E_SXF_WRITE: chain block is not the derived judgement (landed=%r derived=%r)"
               % (parsed.get(CHAIN_KEY), chain))
+        return 7
+    if parsed.get(CLAIMS_KEY) != claims:
+        print("E_SXF_WRITE: claims block is not the derived census (landed=%r derived=%r)"
+              % (parsed.get(CLAIMS_KEY), claims))
         return 7
     # AC-SXF14/15: the write is only complete when BOTH copies carry the derived
     # value, so a document that leaves one of them behind cannot be published.

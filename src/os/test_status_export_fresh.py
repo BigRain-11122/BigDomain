@@ -121,6 +121,10 @@ def build_world(root):
         # AC-SXFB17/18: the chain block is a DERIVED row, so the healthy fixture
         # is built from the same derivation the grader asks rather than typed.
         "chain": sx.chain_face(root),
+        # AC-SXFB20 (R3228): same law for the census reading. Built from the
+        # derivation, so every hand-copied fixture below inherits a correct block
+        # instead of each arm having to remember to type one.
+        "claims": sx.claims_face(root),
     }
     export = os.path.join(root, "docs", "status-export.json")
     write_json(export, doc)
@@ -717,6 +721,79 @@ def run(root):
               json.dumps(face_empty, sort_keys=True),
               json.dumps(face_rows, sort_keys=True), rc_live))
 
+    # AC-SXFB20 (AC-SXF27, R3228): the census reading finally reaches the file the
+    # CEO downloads. Probed first (qa/probe-R3228.log): publishing the reading as
+    # a JSON block moved no counter, so the block cannot feed itself.
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    claims_doc = json.loads(io.open(export, encoding="utf-8").read())
+    arm_a = isinstance(claims_doc.get("claims"), dict)
+    arm_b = claims_doc.get("claims") == sx.claims_face(sx.ROOT)
+    rc_claims_ok = sx.check(export, sx.STATE)
+    tampered_claims = json.loads(json.dumps(claims_doc))
+    tampered_claims["claims"]["contradicted"] = int(
+        tampered_claims["claims"]["contradicted"]) + 1
+    write_json(export, tampered_claims)
+    with contextlib.redirect_stdout(io.StringIO()) as buffer:
+        rc_claims_bad = sx.check(export, sx.STATE)
+    code_stale = "E_SXF_CLAIMS_STALE" in buffer.getvalue()
+    absent_claims = json.loads(json.dumps(claims_doc))
+    absent_claims.pop("claims")
+    write_json(export, absent_claims)
+    with contextlib.redirect_stdout(io.StringIO()) as buffer:
+        rc_claims_absent = sx.check(export, sx.STATE)
+    code_missing = "E_SXF_CLAIMS_MISSING" in buffer.getvalue()
+    write_json(export, claims_doc)
+    record("AC-SXFB20", arm_a and arm_b and rc_claims_ok == 0
+           and rc_claims_bad == 2 and rc_claims_absent == 2
+           and code_stale and code_missing,
+           "block=%s derived_equal=%s rc=%d/%d/%d codes=%s/%s"
+           % (arm_a, arm_b, rc_claims_ok, rc_claims_bad, rc_claims_absent,
+              code_stale, code_missing))
+
+    # AC-SXFB21 (AC-SXF28): a world that really contradicts itself lands the real
+    # number at write time, and publishing it is idempotent on a pinned clock.
+    with io.open(sx.BACKLOG, "a", encoding="utf-8", newline="\n") as handle:
+        handle.write("- [R9997] probe row live: the ledger holds rows=0 in "
+                     "state/qa_replacements.jsonl\n")
+    rc_landed = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    landed_claims = json.loads(io.open(export, encoding="utf-8").read())["claims"]
+    derived_claims = sx.claims_face(sx.ROOT)
+    real_clock = sx.now_local
+    pinned_claims = dt.datetime(2026, 11, 22, 5, 0, 0,
+                                tzinfo=dt.timezone(dt.timedelta(hours=8)))
+    try:
+        sx.now_local = lambda: pinned_claims
+        rc_once = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        once_claims = io.open(export, "rb").read()
+        rc_twice = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        twice_claims = io.open(export, "rb").read()
+    finally:
+        sx.now_local = real_clock
+    record("AC-SXFB21", rc_landed == 0 and landed_claims["contradicted"] >= 1
+           and landed_claims == derived_claims
+           and rc_once == 0 and rc_twice == 0 and once_claims == twice_claims,
+           "landed=%s derived=%s idempotent=%s rc=%d/%d/%d"
+           % (json.dumps(landed_claims, sort_keys=True),
+              json.dumps(derived_claims, sort_keys=True),
+              once_claims == twice_claims, rc_landed, rc_once, rc_twice))
+
+    # AC-SXFB22 (AC-SXF29): publishing is not gating, and the SHAPE is the proof
+    # - the census counts `rows=<n>` tokens, so the published block must carry
+    # none of them (a prose mirror measured claimed 2 -> 3 in the probe).
+    rc_gate_red = sx.check(export, sx.STATE)
+    export_text = io.open(export, encoding="utf-8").read()
+    mirror_lines = [line for line in export_text.split("\n")
+                    if line.startswith('  "claims": ')]
+    arm_tokens = all("rows=" not in line for line in mirror_lines)
+    chain_keys = sorted(json.loads(export_text)["chain"])
+    do_text = json.loads(export_text)["do"]
+    record("AC-SXFB22", rc_gate_red == 0 and len(mirror_lines) == 1 and arm_tokens
+           and chain_keys == ["broken", "path", "present", "rows"]
+           and do_text == NARRATIVE,
+           "gate=%d lines=%d tokens=%s chain=%s do=%s"
+           % (rc_gate_red, len(mirror_lines), arm_tokens,
+              ",".join(chain_keys), do_text == NARRATIVE))
+
     # AC-SXFB10 (AC-SXF10): the registry row exists AND declares this many
     # criteria, so adding a criterion without moving the count is red instead of
     # silently uncounted.
@@ -731,7 +808,7 @@ def run(root):
             if "test_status_export_fresh.py" in line:
                 row = line
                 break
-    record("AC-SXFB10", row is not None and declared == 26,
+    record("AC-SXFB10", row is not None and declared == 29,
            "matrix_row=%s declared=%d" % (bool(row), declared))
 
 
