@@ -1,0 +1,48 @@
+R3178 fold 606 carrier repair evidence (pre 79337B margin -837 fold_needed true -> post 71218B margin +7282)
+=== python src/os/logs_toolkit.py gauge rc=0
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "disk_bytes": 71218,
+  "gate": 78500,
+  "log_lines": 74,
+  "log_content_bytes": 62075,
+  "margin_bytes": 7282,
+  "fold_needed": false,
+  "tick": 3177
+}
+=== python src/os/logs_toolkit.py eol rc=0
+{
+  "file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "mode": "check",
+  "bytes": 71218,
+  "total_lf": 419,
+  "crlf": 419,
+  "bare_lf": 0,
+  "lone_cr": 0,
+  "ends_with_eol": true,
+  "layout_ok": true,
+  "log_block_found": true,
+  "log_item_lines": 74,
+  "indent16_lines": 74,
+  "indent_anomaly": 0,
+  "indent_caliber": 16,
+  "indent_ok": true
+}
+=== python src/os/state_seq.py --check rc=0
+STATE SEQUENCE labels=73 fold_summaries=1 distinct=11 span=3167..3177 gaps=0 repeats=0 backwards=0 tick=3177 tick_lead=0 queue_done=401 queue_only=1 queue_only_backed=1 verdict=SEQUENCE-OK
+  QUEUE-ONLY R2165 EVIDENCE files=apimarket-hourheatmap-R2165-a.log,apimarket-hourheatmap-R2165-b.log,reconcile-all-R2165.log
+=== python src/os/ledger_lines.py --check --archives logs rc=0
+lines: total=24219 window=74 tail=all
+kinds: ledger=1976 round=5637 other=16606
+scope: live+archive archive_lines=24145 live_lines=74 archived_missing=3 archived_orphan=279
+archive_payload: dated=786 unshaped=793 codes=E_LGR_BAD_LOCAL:785,E_LGR_NO_LOCAL:6,E_LGR_NO_REASON:2
+rounds_without_ledger: none
+ledger_without_round: none
+baseline: missing=0 orphan=0
+new_missing: none
+new_orphan: none
+VERDICT CLEAN
+=== python tools/closeout_gate.py rc=0
+CLOSEOUT-GATE PASS files=4456 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS matrix=DOC-CURRENT
+CARRIER bytes=71218 gate=78500 margin=7282 fold_needed=false layout_ok=true crlf=419 bare_lf=0 indent_anomaly=0 log_items=74
+CENSUS-BASELINE name=qa/writer-census-baseline.json bytes=14484 rows=499 sha256=2fe1299ceb9f written=2026-11-21T07:42:42
