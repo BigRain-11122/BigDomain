@@ -126,8 +126,29 @@ after it the old bytes are gone from disk. An identical-bytes rewrite prints the
 line too, so "nothing changed" is visible rather than assumed, and a brand-new
 name prints none.
 
+R3217 (AC-QALB27): that announcement lived only in stdout. Measured first: of
+fourteen executable faces naming this writer, thirteen print to the screen and
+one captures, so by contract nobody was obliged to keep the line; and the one
+capture path re-lands the text as evidence body, where another file's old hash
+reads like this file's own. The record therefore moved into the writer: after a
+replacement it appends one JSON line (name, old_bytes, old_sha16, new_bytes,
+new_sha16, ts) to a ledger that is not evidence - state/qa_replacements.jsonl
+for the live qa/ dir, and a sibling file in the destination dir for any other
+world, so a suite never records into the live ledger. A failed append names
+itself and answers rc=2: the file landed, the record did not. Evidence bytes are
+untouched - the ledger is a separate append.
+
 Stdlib only, ASCII source, zero network, zero shell.
 """
+
+import datetime
+import hashlib
+import io
+import json
+import os
+import re
+import sys
+import tempfile
 
 import hashlib
 import io
@@ -143,6 +164,56 @@ QA = os.path.join(REPO, "qa")
 BOM_UTF8 = b"\xef\xbb\xbf"
 BOM_16LE = b"\xff\xfe"
 BOM_16BE = b"\xfe\xff"
+
+LEDGER_NAME = "qa_replacements.jsonl"
+LEDGER = os.path.join(REPO, "state", LEDGER_NAME)
+
+
+def ledger_path(directory):
+    """R3217: where the replacement record goes for this destination.
+
+    The live qa/ dir owns one tracked ledger in state/; every other world keeps
+    its ledger inside itself, so a suite that points the writer at a temp dir
+    records into that dir and never appends to the live file. The live anchor is
+    REPO/qa rather than the module-level QA, because suites reassign QA and the
+    ledger must not follow them into the repo.
+    """
+    dest = os.path.normcase(os.path.realpath(directory))
+    live = os.path.normcase(os.path.realpath(os.path.join(REPO, "qa")))
+    if dest == live:
+        return LEDGER
+    return os.path.join(directory, LEDGER_NAME)
+
+
+def record_replacement(directory, name, previous, proof):
+    """R3217 (AC-QALB27): the replacement record survives the process.
+
+    One JSON line per rewrite, appended with a flush and an fsync, so the old
+    identity is readable by a machine after the window that replaced it is gone.
+    The ledger is not evidence: it is a different file with a different name,
+    and the evidence bytes it describes are not touched here.
+    """
+    path = ledger_path(directory)
+    parent = os.path.dirname(path)
+    if parent and not os.path.isdir(parent):
+        os.makedirs(parent)
+    stamp = datetime.datetime.now(
+        datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    record = {
+        "ts": stamp,
+        "event": "REPLACED",
+        "name": name,
+        "old_bytes": previous[0],
+        "old_sha16": previous[1],
+        "new_bytes": proof["bytes"],
+        "new_sha16": proof["sha256"],
+    }
+    line = json.dumps(record, sort_keys=True, ensure_ascii=True) + "\n"
+    with io.open(path, "a", encoding="utf-8", newline="\n") as handle:
+        handle.write(line)
+        handle.flush()
+        os.fsync(handle.fileno())
+    return path
 
 
 def read_source(raw):
@@ -437,6 +508,18 @@ def do_write(name, source_bytes, directory=None):
         "QA-LOG WROTE name=%s bytes=%d lines=%d sha256=%s dialect=utf-8/lf "
         "VERDICT PASS\n"
         % (name, proof["bytes"], proof["lines"], proof["sha256"]))
+    if previous is not None:
+        # R3217 (AC-QALB27/29): the announcement above is stdout only, so the
+        # record goes into a machine-readable ledger as well. A ledger that
+        # cannot be written still leaves the evidence on disk, but the round
+        # must not read as clean: the failure is named and the rc is 2.
+        try:
+            record_replacement(directory, name, previous, proof)
+        except (OSError, ValueError) as exc:
+            sys.stdout.write(
+                "QA-LOG REPLACEMENT-RECORD-FAILED name=%s reason=%s "
+                "(the file landed, the record did not)\n" % (name, exc))
+            return 2
     return 0
 
 

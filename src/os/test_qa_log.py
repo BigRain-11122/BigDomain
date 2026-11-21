@@ -25,6 +25,7 @@ import ast
 import hashlib
 import importlib.util
 import io
+import json
 import os
 import re
 import shutil
@@ -256,13 +257,22 @@ def main():
         post_self = qa_snapshot()
         tool_src = read_text(TOOL)
         suite_src = read_text(os.path.abspath(__file__))
-        tool_allowed = {'hashlib', 'io', 'os', 're', 'sys', 'tempfile'}
+        tool_allowed = {'hashlib', 'io', 'os', 're', 'sys', 'tempfile',
+                        # R3217: the replacement record is one JSON line per
+                        # rewrite, stamped in UTC. Both are stdlib, touch no
+                        # network and no process face; they sit in the banned
+                        # set below the moment either grows one.
+                        'datetime', 'json'}
         suite_allowed = {'hashlib', 'importlib', 'io', 'os', 're', 'shutil',
                          'sys', 'tempfile', 'time', 'contextlib',
                          # R3215: AC-QALB23 censuses call sites by parsing the
                          # tree. ast is stdlib, parses text only and is in the
                          # banned set below if it ever grows a network face.
-                         'ast'}
+                         'ast',
+                         # R3217: AC-QALB27 reads the replacement ledger back as
+                         # data, so the suite asserts the record's fields instead
+                         # of matching prose.
+                         'json'}
 
         def imp_names(text):
             names = set()
@@ -355,8 +365,8 @@ def main():
             if found:
                 declared.append(found.group(1))
         ok('AC-QALB9 registry declares exactly one row for this suite, '
-           'twenty-six',
-           declared == ['26'], 'rows=%s hits=%d' % (declared, len(hits)))
+           'twenty-nine',
+           declared == ['29'], 'rows=%s hits=%d' % (declared, len(hits)))
 
         # ---- AC-QALB11: a carried proof line is marked, not certified -----
         # R3203: the generator prints "LOG OK path=... sha16=..." to prove a
@@ -1021,6 +1031,102 @@ def main():
            % ('REPLACED' not in atomic_src,
               tool_text.count('"QA-LOG REPLACED'), len(atomic_shown),
               qa_before == qa_snapshot()))
+
+        # ---- AC-QALB27: the record outlives the process ----------------------
+        # R3217: the announcement was stdout only. Measured before the change:
+        # of fourteen executable faces naming this writer, thirteen print to the
+        # screen and one captures, so no contract kept the line; and a captured
+        # line re-landed as evidence body would carry another file's old sha16
+        # inside this file. The writer now appends one JSON line per rewrite to
+        # a ledger that is not evidence.
+        lw = os.path.join(world, 'ledger')
+        os.makedirs(lw)
+        live_ledger_before = (read_bytes(mod.LEDGER)
+                             if os.path.isfile(mod.LEDGER) else b'')
+        qa_before_ledger = qa_snapshot()
+        ledger_in_world = os.path.join(lw, mod.LEDGER_NAME)
+        rc_a, out_a = quiet(mod.do_write, 'rec.log', b'one\n', directory=lw)
+        no_row_fresh = not os.path.isfile(ledger_in_world)
+        raw_one = read_bytes(os.path.join(lw, 'rec.log'))
+        sha_one = hashlib.sha256(raw_one).hexdigest()[:16]
+        rc_b, out_b = quiet(mod.do_write, 'rec.log', b'two\nlines\n',
+                            directory=lw)
+        raw_two = read_bytes(os.path.join(lw, 'rec.log'))
+        sha_two = hashlib.sha256(raw_two).hexdigest()[:16]
+        rows = [json.loads(ln) for ln in
+                read_text(ledger_in_world).splitlines() if ln.strip()]
+        rc_c, out_c = quiet(mod.do_write, 'rec.log', b'two\nlines\n',
+                            directory=lw)
+        rows_ident = [json.loads(ln) for ln in
+                      read_text(ledger_in_world).splitlines() if ln.strip()]
+        rc_d, out_d = quiet(mod.do_write, 'fresh-after.log', b'x\n',
+                            directory=lw)
+        rows_after = [json.loads(ln) for ln in
+                      read_text(ledger_in_world).splitlines() if ln.strip()]
+        ok('AC-QALB27 a rewrite appends one machine-readable record',
+           rc_a == 0 and no_row_fresh and rc_b == 0 and len(rows) == 1
+           and rows[0]['name'] == 'rec.log'
+           and rows[0]['old_bytes'] == len(raw_one)
+           and rows[0]['old_sha16'] == sha_one
+           and rows[0]['new_bytes'] == len(raw_two)
+           and rows[0]['new_sha16'] == sha_two
+           and len(rows[0].get('ts', '')) == 20 and rows[0]['ts'].endswith('Z')
+           and rc_c == 0 and len(rows_ident) == 2
+           and rows_ident[1]['old_sha16'] == sha_two
+           and rows_ident[1]['new_sha16'] == sha_two
+           and rc_d == 0 and len(rows_after) == 2
+           and raw_two == mod.normalize(mod.read_source(b'two\nlines\n')).encode(),
+           'fresh_rows=%s rows=%r identical=%d after_fresh=%d evidence=%s'
+           % (no_row_fresh, rows, len(rows_ident), len(rows_after),
+              raw_two == mod.normalize(mod.read_source(b'two\nlines\n')).encode()))
+
+        # ---- AC-QALB28: the ledger is outside the evidence enumeration face --
+        # Three readers enumerate qa/*.log only, so a ledger inside that face
+        # would either redden the census every round or be skipped unseen. The
+        # live ledger is a state/ file for the live qa/ dir and a sibling file
+        # in any other world - which is also what keeps a suite off the live
+        # ledger.
+        live_rel = os.path.relpath(mod.LEDGER, QA_DIR)
+        live_ledger_after = (read_bytes(mod.LEDGER)
+                            if os.path.isfile(mod.LEDGER) else b'')
+        ok('AC-QALB28 the ledger is not evidence and the suite never writes it',
+           mod.ledger_path(mod.QA) == mod.LEDGER
+           and mod.ledger_path(lw) == ledger_in_world
+           and not mod.LEDGER_NAME.endswith('.log')
+           and live_rel.startswith('..')
+           and os.path.dirname(mod.LEDGER) == os.path.join(ROOT, 'state')
+           and live_ledger_after == live_ledger_before
+           and qa_snapshot() == qa_before_ledger,
+           'live=%s world=%s suffix_log=%s live_state=%s live_untouched=%s '
+           'qa_stable=%s'
+           % (mod.ledger_path(mod.QA) == mod.LEDGER,
+              mod.ledger_path(lw) == ledger_in_world,
+              mod.LEDGER_NAME.endswith('.log'),
+              os.path.dirname(mod.LEDGER) == os.path.join(ROOT, 'state'),
+              live_ledger_after == live_ledger_before,
+              qa_snapshot() == qa_before_ledger))
+
+        # ---- AC-QALB29: a lost record is named, and the file still landed ----
+        # A record that cannot be written must not read as a clean round. The
+        # evidence lands (it is already on disk by then), the failure is named in
+        # one line and the rc is 2. A fresh name owes no record, so it stays 0
+        # even when the ledger target is unusable.
+        failw = os.path.join(world, 'failw')
+        os.makedirs(failw)
+        os.makedirs(os.path.join(failw, mod.LEDGER_NAME))
+        rc_e, out_e = quiet(mod.do_write, 'fail.log', b'alpha\n', directory=failw)
+        rc_f, out_f = quiet(mod.do_write, 'fail.log', b'beta\n', directory=failw)
+        landed_f = read_bytes(os.path.join(failw, 'fail.log'))
+        ok('AC-QALB29 a lost record is named, not silent',
+           rc_e == 0 and rc_f == 2
+           and 'REPLACEMENT-RECORD-FAILED' in out_f
+           and 'QA-LOG WROTE name=fail.log' in out_f
+           and landed_f == mod.normalize(mod.read_source(b'beta\n')).encode()
+           and os.path.isfile(os.path.join(failw, 'fail.log')),
+           'fresh_rc=%d rewrite_rc=%d named=%s landed=%s wrote=%s'
+           % (rc_e, rc_f, 'REPLACEMENT-RECORD-FAILED' in out_f,
+              landed_f == mod.normalize(mod.read_source(b'beta\n')).encode(),
+              'QA-LOG WROTE name=fail.log' in out_f))
 
     finally:
         mod.QA = original_qa

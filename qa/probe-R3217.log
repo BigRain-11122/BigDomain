@@ -1,0 +1,60 @@
+python : <unknown>:18: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. D
+id you mean "\\("? A raw string is also an option.
+所在位置 行:1 字符: 1
++ python tmp/probe_R3217.py 2>&1 | Out-File -Encoding utf8 tmp/probe_R3 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (<unknown>:18: S...also an option.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+<unknown>:32: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you me
+an "\\("? A raw string is also an option.
+=== Q1 executable faces naming qa_log.py: 14 ===
+  kind=gate     captures=0 screen_only=2
+  kind=one-off  captures=0 screen_only=2
+  kind=suite    captures=0 screen_only=6
+  kind=tool     captures=1 screen_only=3
+  SCR src/os/test_qa_log.py:1 kind=suite | """Battery suite for tools/qa_log.py - criteria AC-QALB1..AC-QALB9.
+  SCR src/os/test_qa_log.py:37 kind=suite | TOOL = os.path.join(ROOT, 'tools', 'qa_log.py')
+  SCR src/os/test_qa_log.py:689 kind=suite | if not stripped.startswith('python tools/qa_log.py'):
+  SCR src/os/test_qa_log.py:905 kind=suite | and r[0] != 'tools/qa_log.py']
+  SCR src/os/test_qa_log.py:911 kind=suite | rel == 'tools/qa_log.py':
+  SCR src/os/test_suite_output_audit.py:78 kind=suite | "suite_output_audit.py", "suite_run_evidence.py", "qa_log.py"):
+  SCR src/sandbox/ledger/monthly_faces_preview.py:1 kind=one-off | """R3193 product round: the first openable page over the shipped market
+  SCR src/sandbox/ledger/monthly_faces_preview.py:562 kind=tool | """Read a swapped-in file back and prove it carries the intended text.
+  SCR src/sandbox/reconcile_all.py:7507 kind=tool | os.path.join("..", "os", "test_qa_log.py"), 26),
+  SCR tools/battery_shard.py:38 kind=tool | QA_LOG_REL = os.path.join("tools", "qa_log.py")
+  SCR tools/hooks/pre_commit_gate.py:338 kind=gate | "E_HOOK_EVIDENCE staged evidence is not in the healthy "
+  SCR tools/hooks/pre_commit_gate.py:354 kind=gate | "E_HOOK_TREE the working tree holds evidence a shell writer "
+  SCR tools/qa_log.py:1 kind=one-off | """qa_log - one canonical writer for window evidence logs (R2776, AC-QAL1..7).
+  CAP tools/qa_log.py:578 kind=tool | sys.stdout.write("usage: qa_log.py NAME [--from FILE] | --check NAME | "
+
+=== in-process do_write face files: 2 ===
+  src/os/test_qa_log.py calls=2
+  tools/battery_shard.py calls=1
+
+=== Q2a screen-only same-name rewrite ===
+  fresh-name stdout has REPLACED=False
+  rewrite stdout has REPLACED=True
+  final file body has REPLACED=False
+  old body 'alpha' survives anywhere in world=False
+  world files after rewrite=['same.log']
+QA-LOG WROTE name=relog.log bytes=208 lines=2 sha256=fc720c844f73debf dialect=utf-8/lf VERDICT PASS
+
+=== Q2b redirect -> re-land ===
+  relog bytes=208 has REPLACED=True has WROTE=True
+  relog carries ANOTHER file's old sha16=False
+  bare proof count as the reader sees it=0
+
+=== Q2c readers on the screen-only rewrite ===
+  verify_written bytes=14 lines=2
+  dialect=utf-8/lf
+  every reader answers clean while the old identity is gone
+
+=== Q3 option cost ===
+  option (a) require caller capture: 13 executable faces print to screen only, 1 already capture
+  option (b) writer-side ledger: adds one append after the replace, zero evidence byte change
+  in-process files that would gain the ledger for free=2
+  existing readers of the word REPLACED outside the writer=
+    2 files mention it (tests + board rows only)
+
+  temp world removed=True

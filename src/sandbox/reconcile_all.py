@@ -7503,8 +7503,13 @@ SUITES = [
     # from disk; the census read class=tee for both versions). A refusal was
     # measured too expensive, so the door announces old_bytes/old_sha16. Three
     # more criteria (24..26), one registry row.
+    # R3217: that announcement was stdout only and no face kept it (13 of 14
+    # executable faces print to screen, one captures), so the writer now appends
+    # one JSON record per rewrite to a ledger outside qa/. Three more criteria
+    # (27..29): the record's fields, the ledger's place, a lost record answering
+    # rc=2.
     ("os-qa-log",
-     os.path.join("..", "os", "test_qa_log.py"), 26),
+     os.path.join("..", "os", "test_qa_log.py"), 29),
     # R3208: src/os/state.json carries the canonical CRLF dialect its readers
     # require, but the path was not pinned in .gitattributes - so a checkout
     # running with core.autocrlf=false materialized the whole carrier as bare

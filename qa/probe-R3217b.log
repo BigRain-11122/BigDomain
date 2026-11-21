@@ -1,0 +1,14 @@
+=== after-arm: writer-side ledger ===
+  ledger path=C:\Users\sjs20\AppData\Local\Temp\r3217b_bifbm1u1\qa_replacements.jsonl exists=True
+  fresh rc=0 rows=0
+  rewrite rc=0 stdout_has_REPLACED=True rows=1
+  row={"event": "REPLACED", "name": "a.log", "new_bytes": 14, "new_sha16": "e38fcdf950e6f3ae", "old_bytes": 6, "old_sha16": "b640e840b19d3786", "ts": "2026-11-21T19:39:59Z"}
+  row matches disk: old=True new=True
+  evidence bytes == normalize(payload): True
+  live ledger untouched by the private world: True
+
+=== after-arm: a lost record ===
+  fresh rc=0 rewrite rc=2 named=True landed=True
+  failure line: ["QA-LOG REPLACEMENT-RECORD-FAILED name=f.log reason=[Errno 13] Permission denied: 'C:\\\\Users\\\\sjs20\\\\AppData\\\\Local\\\\Temp\\\\r3217b_bifbm1u1\\\\fail\\\\qa_replacements.jsonl' (the file landed, the record did not)"]
+
+  temp world removed=True
