@@ -1,0 +1,27 @@
+Q1 healthy rc=0 line='PASS preview ..\\..\\..\\..\\AppData\\Local\\Temp\\probe3201-healthy-c5yygnzo\\page.html (6834 bytes sha' html=6834B/30527da5ec5dc7e2 json=13015B/76e42600895a4dc5 refusal=False
+Q1 html-shim rc=2 line='E_MFP_WRITE stage=read-back page.html: ValueError: landed 6834 bytes sha16=91de2f09d40265db, int' html=6834B/91de2f09d40265db json=0B/e3b0c44298fc1c14 refusal=True
+Q1 json-shim rc=2 line='E_MFP_WRITE stage=read-back page.json: ValueError: landed 13015 bytes sha16=54c2e188f7e0cb08, in' html=6834B/30527da5ec5dc7e2 json=13015B/54c2e188f7e0cb08 refusal=True
+Q1 both-shim rc=2 line='E_MFP_WRITE stage=read-back page.html: ValueError: landed 6834 bytes sha16=91de2f09d40265db, int' html=6834B/91de2f09d40265db json=0B/e3b0c44298fc1c14 refusal=True
+Q1 cmp-healthy rc=0 line='PASS preview ..\\..\\..\\..\\AppData\\Local\\Temp\\probe3201-cmp-healthy-supa0xc_\\page.html (6834 bytes' html=6834B/30527da5ec5dc7e2 json=13015B/76e42600895a4dc5 refusal=False
+Q1 cmp-shim rc=2 line='E_MFP_WRITE stage=read-back page.html: ValueError: landed 6834 bytes sha16=91de2f09d40265db, int' html=6834B/91de2f09d40265db json=0B/e3b0c44298fc1c14 refusal=True
+Q1d pass_lines_equal_up_to_paths=False html_bytes_equal=True html_sha_equal=False
+Q2a deliverable_index getsize=12 reads_html_bytes=False reads_json_blob=True
+Q2b export getsize=5 getmtime=5 reads_page_body=False
+Q2c reconcile_names_page=False gate_names_page=False content_face_is_suite_only=True
+Q2d repo_getsize_of_delivered=6 repo_open_delivered=6
+Q3a write_outputs os_replace=1 readback=1 verify_log=3 pass_line_pinned_in_suite=3
+python : Traceback (most recent call last):
+所在位置 行:1 字符: 57
++ ... BigDomain"; python tmp/probe_R3201.py > tmp/probe-R3201.out 2>&1; pyt ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tmp\probe_R3201.py", line 227, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tmp\probe_R3201.py", line 210, in main
+    got_json = io.open(out_json, "rb").read()
+               ~~~~~~~^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\sjs20\\AppData\\Local\\Temp\\probe3201-parity-v2nkb
+_8m\\page.json'

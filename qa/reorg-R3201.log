@@ -1,0 +1,72 @@
+R3201 evidence - the two delivered files prove themselves by reading back
+
+MEASURED BEFORE ANY CODE (tmp/probe_R3201.py -> qa/probe-R3201.log, private
+worlds, zero socket, zero network, no live qa/ or preview/ write; the shim is
+in process and only intercepts one destination):
+Q1  a same-length substitution landed through os.replace reported rc=0, the
+    same "PASS preview" line and no refusal, while the bytes on disk changed:
+    html 30527da5ec5dc7e2 -> 91de2f09d40265db, json 76e42600895a4dc5 ->
+    54c2e188f7e0cb08.
+Q1d the two PASS lines were identical up to the path with equal sizes
+    (6834B/13015B); only sha16 told them apart - the printed evidence was
+    os.path.getsize, so size could not distinguish a rendered page from a
+    substituted one.
+Q2  no consumer reads the page body: tools/deliverable_index.py reads sizes
+    plus the JSON's own verdict/generated_utc (no open of html_path),
+    src/os/export_round.py ages rows by getmtime+getsize, and neither
+    reconcile_all.py nor tools/closeout_gate.py names the page. The only
+    content face is this suite (AC-MFPW4).
+Q3  write_outputs had one swap loop and zero read-back; verify_log already
+    existed for the log; the suite pins "PASS preview" nowhere, so the line
+    could carry the proof; a one-true-one-false pair measured joint_bool
+    False while json_ok True - a joint boolean hides which file is wrong.
+
+LANDED:
+- write_outputs stages (role, temp, text), swaps, then reads each target back
+  through verify_log and compares with the rendered text byte for byte; a
+  mismatch answers WriteError stage=read-back with the failing file basename
+  first, both landed and intended bytes/sha16, and "landed bytes left as they
+  are, unproven" (plus "later outputs unproven" when the first file fails).
+- write_outputs returns role -> (bytes, lines, sha256) as read back, and the
+  PASS line now quotes those two proofs instead of os.path.getsize.
+- _write_error gained optional path/note so one helper names all four stages.
+- AC-MFPX7 shipped (six arms) in test_monthly_faces_preview.py (31 -> 32);
+  AC-MFPW6 recount re-pinned 4 -> 5 named sites (JUDGED-CHANGED, the sentence
+  now says four stages); registry row 31 -> 32.
+
+MY OWN CRITERION WENT RED FIRST: arm e assumed a false html beside a true json
+would still land the json. Measured: the loop fails fast, so a bad html means
+the json is never attempted. The arm now states both orders as measured - html
+false names html and the json is never attempted, json false names json after
+the html proof landed true.
+
+GATES:
+- SUITE PASS 32/32 (qa/suite-monthly-faces-preview-R3201.log, written through
+  tools/qa_log.py --from and re-read by --check).
+- generator --verify VERIFY PASS, 661B log (qa/preview-monthly-faces-R3201.log)
+  and the delivered bytes unchanged: html 6834B sha16 30527da5ec5dc7e2,
+  json 13015B sha16 76e42600895a4dc5, snapshot sha16 8b835e8514ed5eb0.
+- matrix regenerated through its own vehicle (78486B/755 rows, row 339
+  criteria 31 -> 32) then --check DOC-CURRENT.
+- census --write-pin (honest CACHE E_RCC_CACHE_PARTIAL reused=754/755) then
+  --check VERDICT PASS pinned=755.
+- peers: state_fold 7/7, state_fold_run 17/17, state_append 10/10,
+  closeout_carrier 6/6, general_writer_dialect_audit 6/6, closeout_gate 42/42.
+- live CLOSEOUT-GATE PASS files=4518 flags=0 reader_refused=0 round_main=OK
+  census=PASS matrix=DOC-CURRENT, CARRIER bytes=70327 margin=8173
+  fold_needed=false log_items=79.
+
+CARRIED RED (pre-existing, not from this window): state_seq 7/8 - the live
+reading names GAP R3193 and GAP R3194 because the R3196 fold moved those log
+items into logs/state-log-archive-2026-11.md (11 mentions) while its summary
+names only "lines 1..40", not the round labels it removed. The fold itself is
+the shipped door; the gap law vs folded labels needs its own ruling, so this
+window records it instead of repairing it.
+
+HONEST: zero payment capability and no network beyond loopback (no merchant
+id, server, domain, filing+ICP or miniprogram appid+secret); zero product
+face, zero api face, zero gate number - what changed is whether "written" has
+byte evidence; the read-back proves landed == intended, not that the intended
+text is right; the shim is in-process and CLI-unreachable on a static
+filesystem; a mismatch is left on disk unproven, not rolled back; the two
+files remain two swaps, so a failure after the first swap leaves it landed.

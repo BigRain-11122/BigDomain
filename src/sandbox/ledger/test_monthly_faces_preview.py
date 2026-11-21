@@ -121,8 +121,11 @@ row BEFORE this code existed):
     as JUDGED-CHANGED.)
   AC-MFPW6 hygiene and wiring self-count (recorded last): the module
     source stays ASCII, os.replace appears exactly once, both render
-    calls happen inside write_outputs before the first _stage, three
-    raise WriteError sites carry the three stages, main catches
+    calls happen inside write_outputs before the first _stage, four
+    named raise sites carry the four stages (render, stage, replace,
+    read-back - this arm counted three until R3201 added the read-back
+    stage; recorded as JUDGED-CHANGED, the meaning "every stage that can
+    fail is named" unchanged), main catches
     WriteError once, reconcile_all.py carries the label and this file
     once, and the registry count equals DECLARED equals what this run
     recorded.
@@ -161,6 +164,23 @@ BEFORE this code existed):
     problems=1 and the E_MFP_WORLD line, equals what was printed, and
     the run exits 2 (before R3199 the file did not exist at all).
 
+R3201 delivered-file criteria (pre-registered in the same board as a
+PIN row BEFORE this code existed):
+
+  AC-MFPX7 both delivered files prove themselves by reading back: a swap
+    that lands same-length but different bytes used to leave rc=0 and an
+    unchanged "PASS preview" line, because that line quoted
+    os.path.getsize and no consumer reads the page body. Each file must
+    now equal its rendered text on the read-back; a mismatch answers
+    E_MFP_WRITE with stage=read-back, the failing file named first and
+    both landed and intended bytes and sha16 in the detail. The proof is
+    per file and measured in both orders: a false page names the page and
+    the JSON is never attempted (fail fast, stated as "later outputs
+    unproven"), while a false JSON names the JSON after the page proof
+    landed true, so the true file is proven and kept. The wrong bytes are
+    left on disk unproven rather than rolled back, and the healthy PASS
+    line quotes the two proofs (bytes and sha16) instead of sizes.
+
 Usage: python test_monthly_faces_preview.py
 """
 
@@ -186,7 +206,7 @@ SUITE_FILE = os.path.abspath(__file__)
 RECONCILE = os.path.join(BASE, "src", "sandbox", "reconcile_all.py")
 MODULE = os.path.join(LEDGER, "monthly_faces_preview.py")
 LABEL = "ledger-monthly-faces-preview"
-DECLARED = 31
+DECLARED = 32
 TEMPS = []
 
 
@@ -1121,6 +1141,191 @@ def check_write_named_cli():
            % (len(WRITE_CASES), ",".join(problems) or "none"))
 
 
+def _flip_same_length(payload):
+    head = b"X" if payload[:1] != b"X" else b"Y"
+    return head + payload[1:]
+
+
+def check_outputs_readback():
+    """AC-MFPX7: both delivered files prove themselves by reading back."""
+    problems = []
+    copy = M.load_copy()
+    faces = M.collect(temp_root("out-readback-world"))
+    want = {"html": M.render_html(copy, faces).encode("utf-8"),
+            "json": M.render_json(faces).encode("utf-8")}
+
+    def make_shim(targets):
+        real = os.replace
+        wanted = [os.path.abspath(t) for t in targets]
+
+        def inner(src, dst):
+            if os.path.abspath(dst) not in wanted:
+                return real(src, dst)
+            with io.open(src, "rb") as fh:
+                payload = fh.read()
+            with io.open(dst, "wb") as fh:
+                fh.write(_flip_same_length(payload))
+            try:
+                os.remove(src)
+            except OSError:
+                pass
+        return inner
+
+    def run_world(tag, which):
+        root = temp_root("out-readback-" + tag)
+        out_html = os.path.join(root, "page.html")
+        out_json = os.path.join(root, "page.json")
+        real = os.replace
+        if which:
+            chosen = {"html": [out_html], "json": [out_json],
+                      "both": [out_html, out_json]}[which]
+            os.replace = make_shim(chosen)
+        caught = None
+        proofs = None
+        try:
+            proofs = M.write_outputs(faces, copy, out_html, out_json)
+        except Exception as exc:  # noqa: BLE001 - the type is the finding
+            caught = exc
+        finally:
+            os.replace = real
+        disk = {}
+        for name, path in (("html", out_html), ("json", out_json)):
+            disk[name] = (io.open(path, "rb").read()
+                          if os.path.isfile(path) else b"")
+        return root, caught, proofs, disk
+
+    # a) decisive: whichever file landed wrong names itself first, with both
+    # the landed and the intended bytes and sha16 in the detail.
+    shapes = {}
+    for which, basename in (("html", "page.html"), ("json", "page.json")):
+        root, caught, _proofs, disk = run_world("a-" + which, which)
+        if not isinstance(caught, M.WriteError):
+            shapes[which] = "raised=%s" % type(caught).__name__
+        else:
+            detail = caught.detail
+            ok = (caught.code == "E_MFP_WRITE" and caught.stage == "read-back"
+                  and detail.startswith(basename + ": ")
+                  and "landed" in detail and "intended" in detail
+                  and "unproven" in detail
+                  and isinstance(caught.__cause__, ValueError))
+            if not ok:
+                shapes[which] = "code=%s stage=%s detail=%s" % (
+                    caught.code, caught.stage, detail[:80])
+        if which == "html":
+            # d) the wrong bytes stay on disk: no rollback is claimed.
+            if not disk["html"] or disk["html"] == want["html"]:
+                shapes["kept"] = "disk=%d" % len(disk["html"])
+            if len(disk["html"]) != len(want["html"]):
+                shapes["kept_len"] = "%d!=%d" % (len(disk["html"]),
+                                                 len(want["html"]))
+        if _leftovers(root):
+            shapes["temp_" + which] = "left"
+    if shapes:
+        problems.append("a.shapes=%s" % json.dumps(shapes, sort_keys=True))
+
+    # b) the healthy face keeps its bytes and now publishes its proof.
+    root = temp_root("out-readback-healthy")
+    out_html = os.path.join(root, "page.html")
+    out_json = os.path.join(root, "page.json")
+    proofs = M.write_outputs(faces, copy, out_html, out_json)
+    healthy = (io.open(out_html, "rb").read() == want["html"]
+               and io.open(out_json, "rb").read() == want["json"]
+               and proofs.get("html", {}).get("bytes") == 6834
+               and proofs.get("html", {}).get("sha256") == "30527da5ec5dc7e2"
+               and proofs.get("json", {}).get("bytes") == 13015
+               and proofs.get("json", {}).get("sha256") == "76e42600895a4dc5")
+    if not healthy or _leftovers(root):
+        problems.append("b.healthy=%s temps=%s"
+                        % (healthy, ",".join(_leftovers(root)) or "none"))
+
+    # c) the CLI face: a refusal replaces the PASS line, and a healthy run
+    # still prints the two proofs.
+    root = temp_root("out-readback-cli")
+    out_html = os.path.join(root, "page.html")
+    out_json = os.path.join(root, "page.json")
+    rc0, text0 = _call_main(["--out", out_html, "--json-out", out_json])
+    pass_line = [ln for ln in text0.splitlines()
+                 if ln.startswith("PASS preview")]
+    if (rc0 != 0 or len(pass_line) != 1
+            or "30527da5ec5dc7e2" not in pass_line[0]
+            or "76e42600895a4dc5" not in pass_line[0]):
+        problems.append("c.control=%r/%s" % (rc0, pass_line[:1]))
+    real = os.replace
+    os.replace = make_shim([out_html])
+    try:
+        rc, printed = _call_main(["--out", out_html, "--json-out", out_json])
+    finally:
+        os.replace = real
+    refusals = [ln for ln in printed.splitlines() if "E_MFP_WRITE" in ln]
+    if (rc != 2 or len(refusals) != 1
+            or "stage=read-back" not in refusals[0]
+            or "page.html" not in refusals[0]
+            or any(ln.startswith("PASS preview")
+                   for ln in printed.splitlines())):
+        problems.append("c.refusal=%r/%s" % (rc, refusals[:1]))
+    if _leftovers(root):
+        problems.append("c.temp=%s" % ",".join(_leftovers(root)))
+
+    # e) per-file proof, measured in both orders: a false html names html and
+    # the JSON is never attempted (fail fast); a false json names json after
+    # the html proof landed true, so the true file is proven and kept.
+    _root, caught, _proofs, disk = run_world("e-html", "html")
+    dual = {}
+    if not isinstance(caught, M.WriteError) \
+            or not caught.detail.startswith("page.html: "):
+        dual["first"] = str(getattr(caught, "detail", "-"))[:40]
+    if disk["json"]:
+        dual["json_after_html_fail"] = "%dB" % len(disk["json"])
+    if "later outputs unproven" not in (caught.detail
+                                        if isinstance(caught, M.WriteError)
+                                        else ""):
+        dual["note"] = "missing-later"
+    _root, caught_json, _proofs, disk_json = run_world("e-json", "json")
+    if not isinstance(caught_json, M.WriteError) \
+            or not caught_json.detail.startswith("page.json: "):
+        dual["second"] = str(getattr(caught_json, "detail", "-"))[:40]
+    if disk_json["html"] != want["html"]:
+        dual["html_true_landed"] = "no"
+    if "later outputs unproven" in (caught_json.detail
+                                    if isinstance(caught_json, M.WriteError)
+                                    else ""):
+        dual["second_note"] = "unexpected-later"
+    if dual:
+        problems.append("e.dual=%s" % json.dumps(dual, sort_keys=True))
+
+    # f) hygiene and wiring: one read-back implementation, named counts and
+    # a PASS line that quotes the proof instead of os.path.getsize.
+    with open(MODULE, "rb") as fh:
+        raw = fh.read()
+    try:
+        raw.decode("ascii")
+        ascii_ok = True
+    except UnicodeDecodeError:
+        ascii_ok = False
+    with io.open(MODULE, "r", encoding="utf-8") as fh:
+        source = fh.read()
+    readback_sites = source.count('io.open(path, "rb")')
+    named_sites = source.count("_write_error(")
+    proof_line = ('proofs["html"]["sha256"]' in source
+                  and 'proofs["json"]["sha256"]' in source)
+    size_line = "getsize(args.out)" in source
+    with io.open(RECONCILE, "r", encoding="utf-8") as fh:
+        declared = registry_declared(fh.read())
+    if not (ascii_ok and readback_sites == 1 and named_sites == 5
+            and proof_line and not size_line and declared == DECLARED):
+        problems.append("f.hygiene=ascii:%s sites:%d named:%d proof:%s "
+                        "size:%s declared:%d"
+                        % (ascii_ok, readback_sites, named_sites, proof_line,
+                           size_line, declared))
+    record("AC-MFPX7", not problems,
+           "landed=%dB/%s dual=%s ascii=%s sites=%d named=%d "
+           "problems=%s"
+           % (len(want["html"]), sha16_bytes(want["html"]),
+              json.dumps(dual, sort_keys=True) if dual else "clean",
+              ascii_ok, readback_sites, named_sites,
+              ",".join(problems) or "none"))
+
+
 def check_write_wiring():
     with open(MODULE, "rb") as fh:
         raw = fh.read()
@@ -1159,7 +1364,7 @@ def check_write_wiring():
     total_after = len(RESULTS) + 1
     ok = (ascii_ok and replace_sites == 2 and ordered
           and replace_in_outputs == 1 and replace_in_log == 1
-          and named_sites == 4 and caught_sites == 2
+          and named_sites == 5 and caught_sites == 2
           and world_sites == 1 and world_caught == 2
           and stage_sites == (1, 1, 1)
           and label_hits == 1 and file_hits == 1 and declared == DECLARED
@@ -1497,6 +1702,7 @@ def main():
         check_log_atomic_cli()
         check_verify_evidence()
         check_log_readback()
+        check_outputs_readback()
         check_write_wiring()
     finally:
         for path in TEMPS:

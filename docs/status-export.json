@@ -1,21 +1,21 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-21 R3200 PRODUCT+ENGINEERING: the evidence-log writer now proves its own write by reading the swapped-in file back - a log that lands other bytes than the answer answers E_MFP_LOG stage=read-back naming the landed and the intended size+sha16, where a successful os.replace used to be the only evidence (measured: half the payload, CRLF for LF and zero bytes all landed with rc=0 and no code printed).",
+    "current": "2026-11-21 R3201 PRODUCT+ENGINEERING: the two delivered files prove themselves by reading back - every swap is read back and must equal the rendered text byte for byte, a mismatch answers E_MFP_WRITE stage=read-back naming the failing file with both landed and intended bytes and sha16, and the PASS preview line quotes those two proofs instead of os.path.getsize.",
     "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-monthly-faces.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3200.log (995B, 2026-11-21)",
-    "latest_evidence": "qa/probe-R3200.log (995B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3201.log (4419B, 2026-11-21)",
+    "latest_evidence": "qa/reorg-R3201.log (4419B, 2026-11-21)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3200] next window (<=48h): (0) MAIN — **交付的两份文件同样只靠 `os.replace` 报成功、从不回读**：本轮只给 `--log` 装了回读，`write_outputs` 两次换入后既不比对字节也不复读，`PASS preview` 行的两个尺寸来自 `os.path.getsize`——**同长度的错页会照印 PASS**。做法=先只读量三问：①对 `--out`/`--json-out` 注入「同长度但内容不同」的落地，量 rc、stdout 的 PASS 行与盘上字节各是什么；②消费者普查：谁读这两份文件（`tools/deliverable_index.py`、`src/sandbox/frontdoor.py` 的 outs_age 卡、`reconcile_all` 的矩阵）——有哪一面能从尺寸以外判出内容；③证明该落在 `write_outputs` 内（回读比对意图 payload）还是落在 PASS 行（复读并打印 sha16），两文件要不要联合证明（一真一假时应报哪一个）。三条量完再落，判据沿用 AC-MFPX 写法（AC-MFPX7），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
-    "next_milestone_due": "2026-11-23T23:42:27+08:00",
-    "updated_at": "2026-11-21T23:42:27+08:00",
+    "next_milestone": "[R3201] next window (<=48h): (0) MAIN — **`--verify` 面自己还没有字节证据**：`write_log` 从 R3200 起返回 proof（bytes/lines/sha256），但 `run_verify` 直接丢弃它，所以打印出来的 VERIFY 文本无法说明「盘上那份证据件与这段文字逐字节相同」。做法=先只读量三问：①`run_verify` 打印什么、`write_log` 返回什么、两者差在哪（注意自指陷阱：日志不能包含自身 sha16，故 proof 只能印到 stdout）；②消费者普查：谁解析 VERIFY 行（`tools/qa_log.py --check` 只判方言、`reconcile_all` 谱、`battery_shard`）；③证明该加一行 stdout proof（并在 `--log` 失败时保持既有先印后拒语义）是否动任何既有字节。三条量完再落，判据沿用 AC-MFPX 写法（AC-MFPX8），**先落板再动代码**。备选=(1) **承运红**：折叠摘要只记行号不记轮次号，令 R3193/R3194 在活树读出缺口——需一条「缺口律 vs 折叠标签」的裁决（委员会/CEO 口径），本司不自裁；(2) P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+    "next_milestone_due": "2026-11-23T23:56:30+08:00",
+    "updated_at": "2026-11-21T23:56:30+08:00",
     "heartbeat": {
       "tick": 3199,
-      "state_tick": 3200,
-      "lag": 1,
+      "state_tick": 3201,
+      "lag": 2,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -35,7 +35,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-21 R3200 PRODUCT+ENGINEERING: the evidence-log writer now proves its own write by reading the swapped-in file back - a log that lands other bytes than the answer answers E_MFP_LOG stage=read-back naming the landed and the intended size+sha16, where a successful os.replace used to be the only evidence (measured: half the payload, CRLF for LF and zero bytes all landed with rc=0 and no code printed).",
+  "current": "2026-11-21 R3201 PRODUCT+ENGINEERING: the two delivered files prove themselves by reading back - every swap is read back and must equal the rendered text byte for byte, a mismatch answers E_MFP_WRITE stage=read-back naming the failing file with both landed and intended bytes and sha16, and the PASS preview line quotes those two proofs instead of os.path.getsize.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,11 +63,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3200 PRODUCT+ENGINEERING: the evidence-log writer now proves its own write by reading the swapped-in file back - a log that lands other bytes than the answer answers E_MFP_LOG stage=read-back naming the landed and the intended size+sha16, where a successful os.replace used to be the only evidence (measured: half the payload, CRLF for LF and zero bytes all landed with rc=0 and no code printed).",
-  "export_ts": "2026-11-21T23:42:27+08:00",
+  "do": "2026-11-21 R3201 PRODUCT+ENGINEERING: the two delivered files prove themselves by reading back - every swap is read back and must equal the rendered text byte for byte, a mismatch answers E_MFP_WRITE stage=read-back naming the failing file with both landed and intended bytes and sha16, and the PASS preview line quotes those two proofs instead of os.path.getsize.",
+  "export_ts": "2026-11-21T23:56:30+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
-  "latest_evidence": "qa/probe-R3200.log (995B, 2026-11-21)",
-  "next_milestone": "[R3200] next window (<=48h): (0) MAIN — **交付的两份文件同样只靠 `os.replace` 报成功、从不回读**：本轮只给 `--log` 装了回读，`write_outputs` 两次换入后既不比对字节也不复读，`PASS preview` 行的两个尺寸来自 `os.path.getsize`——**同长度的错页会照印 PASS**。做法=先只读量三问：①对 `--out`/`--json-out` 注入「同长度但内容不同」的落地，量 rc、stdout 的 PASS 行与盘上字节各是什么；②消费者普查：谁读这两份文件（`tools/deliverable_index.py`、`src/sandbox/frontdoor.py` 的 outs_age 卡、`reconcile_all` 的矩阵）——有哪一面能从尺寸以外判出内容；③证明该落在 `write_outputs` 内（回读比对意图 payload）还是落在 PASS 行（复读并打印 sha16），两文件要不要联合证明（一真一假时应报哪一个）。三条量完再落，判据沿用 AC-MFPX 写法（AC-MFPX7），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+  "latest_evidence": "qa/reorg-R3201.log (4419B, 2026-11-21)",
+  "next_milestone": "[R3201] next window (<=48h): (0) MAIN — **`--verify` 面自己还没有字节证据**：`write_log` 从 R3200 起返回 proof（bytes/lines/sha256），但 `run_verify` 直接丢弃它，所以打印出来的 VERIFY 文本无法说明「盘上那份证据件与这段文字逐字节相同」。做法=先只读量三问：①`run_verify` 打印什么、`write_log` 返回什么、两者差在哪（注意自指陷阱：日志不能包含自身 sha16，故 proof 只能印到 stdout）；②消费者普查：谁解析 VERIFY 行（`tools/qa_log.py --check` 只判方言、`reconcile_all` 谱、`battery_shard`）；③证明该加一行 stdout proof（并在 `--log` 失败时保持既有先印后拒语义）是否动任何既有字节。三条量完再落，判据沿用 AC-MFPX 写法（AC-MFPX8），**先落板再动代码**。备选=(1) **承运红**：折叠摘要只记行号不记轮次号，令 R3193/R3194 在活树读出缺口——需一条「缺口律 vs 折叠标签」的裁决（委员会/CEO 口径），本司不自裁；(2) P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -157,7 +157,7 @@
   },
   "results": [
     [
-      "3200",
+      "3201",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -171,22 +171,22 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 77,
+    "log_lines_in_window": 85,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 69943,
-  "next_milestone_due": "2026-11-23T23:42:27+08:00",
+  "state_bytes": 76999,
+  "next_milestone_due": "2026-11-23T23:56:30+08:00",
   "heartbeat": {
     "tick": 3199,
-    "state_tick": 3200,
-    "lag": 1,
+    "state_tick": 3201,
+    "lag": 2,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },

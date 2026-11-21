@@ -3489,7 +3489,7 @@ SUITES = [
     # staged and a bad --log path still hands over the verify text, and a
     # failed --verify leaves the log it was asked for.
     ("ledger-monthly-faces-preview", os.path.join(
-        "ledger", "test_monthly_faces_preview.py"), 31),
+        "ledger", "test_monthly_faces_preview.py"), 32),
     # R2102 attention digest on the same report generator: the
     # statement-shaped R2101 page now opens with an ordered operator
     # to-do list derived from the faces (seller inbox debt, sold-out

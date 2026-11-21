@@ -25,7 +25,8 @@ Usage:
 
 Exit codes: 0 written or verified, 1 identity problems (VERIFY FAIL), and
 2 refused by name (E_MFP_COPY: the copy file cannot drive this renderer;
-E_MFP_WRITE: the delivered files cannot be rendered, staged or swapped;
+E_MFP_WRITE: the delivered files cannot be rendered, staged, swapped or
+proven by reading them back;
 E_MFP_WORLD: the demo world cannot be built; E_MFP_LOG: the evidence log
 cannot be staged, swapped in or proven by reading it back).
 
@@ -94,6 +95,25 @@ with stage=read-back naming both the landed and the intended size and
 sha16. A mismatch is not rolled back - at that point the previous
 evidence bytes are already gone - so the file stays as landed and the
 detail says it is unproven.
+
+R3201 (AC-MFPX7): the two delivered files prove themselves the same way.
+Until this window a successful os.replace was the whole evidence that the
+page and the JSON had landed: a swap that reported success while carrying
+same-length but different bytes left rc=0, the same "PASS preview" line
+(its two numbers came from os.path.getsize) and no refusal, so a page
+that was never rendered could be shipped as one. Measured: shrinking the
+payload changes the printed size, but any same-length substitution is
+invisible to every consumer - the artifact index reads sizes plus the
+JSON's own verdict, the export face ages rows by mtime and size, and
+reconcile_all and the closeout gate never name the page. Both swaps now
+read their target back and must equal the rendered text byte for byte; a
+mismatch answers E_MFP_WRITE with stage=read-back, the failing file named
+first in the detail and both landed and intended bytes and sha16 given.
+The proof is per file, not a joint boolean, because a false page beside a
+true JSON must name the false one. The "PASS preview" line now quotes the
+proof (bytes and sha16 of the bytes read back) instead of os.path.getsize.
+A mismatch is not rolled back - the previous bytes are already gone - so
+the landed file stays and the detail says it is unproven.
 """
 import argparse
 import hashlib
@@ -199,11 +219,12 @@ def _one_line(text, limit=160):
 
 
 class WriteError(Exception):
-    """Named refusal for a failed render, stage or swap of the outputs.
+    """Named refusal for a failed render, stage, swap or read-back.
 
-    All three stages mean the same thing to a caller - the delivered
+    All four stages mean the same thing to a caller - the delivered
     files cannot be produced - so they share one code and name the stage
-    plus the underlying exception type in the detail.
+    plus the underlying exception type in the detail. The read-back stage
+    also names which delivered file disagreed with its rendered text.
     """
 
     code = "E_MFP_WRITE"
@@ -217,9 +238,11 @@ class WriteError(Exception):
         return "%s stage=%s %s" % (self.code, self.stage, self.detail)
 
 
-def _write_error(stage, exc):
-    return WriteError(stage, "%s: %s" % (type(exc).__name__,
-                                         _one_line(exc)))
+def _write_error(stage, exc, path=None, note=None):
+    where = "%s: " % os.path.basename(path) if path else ""
+    tail = "; %s" % note if note else ""
+    return WriteError(stage, "%s%s: %s%s" % (where, type(exc).__name__,
+                                             _one_line(exc), tail))
 
 
 class WorldError(Exception):
@@ -508,7 +531,7 @@ def _stage(path, text):
 
 
 def verify_log(path, text):
-    """Read the swapped-in log back and prove it carries the answer.
+    """Read a swapped-in file back and prove it carries the intended text.
 
     R3200 (AC-MFPX6): a successful os.replace used to be the only proof
     that the log had landed, so bytes other than the computed answer were
@@ -516,6 +539,12 @@ def verify_log(path, text):
     bytes all returned without a refusal and left rc=0). tools/qa_log.py
     has proven its writes back since AC-QAL2; this is the same law on the
     second writer, stated as byte equality with the intended payload.
+
+    R3201 (AC-MFPX7) applies the same proof to the two delivered files:
+    the page and the JSON were swapped in with nothing but os.replace
+    reporting success, so a same-length substitution shipped silently.
+    One implementation serves both doors - the log and the outputs - so
+    there is exactly one place where "landed" is compared with "wanted".
     """
     want = text.encode("utf-8")
     raw = io.open(path, "rb").read()
@@ -563,7 +592,7 @@ def write_log(path, text):
 
 
 def write_outputs(faces, copy, out_html, out_json):
-    """Render both faces fully, then swap them in.
+    """Render both faces fully, then swap them in and read them back.
 
     Until R3197 this opened each target first and rendered into it, so a
     render-time exception truncated the previous page to zero bytes and
@@ -576,28 +605,45 @@ def write_outputs(faces, copy, out_html, out_json):
     with the stage named, instead of letting the raw exception escape to
     a caller that can only see rc=1 and a traceback. The original
     exception stays reachable as __cause__.
+
+    Since R3201 each swap is proven by reading the target back and
+    comparing it with the text that was meant to land (verify_log), so a
+    successful os.replace is no longer accepted as evidence on its own
+    (measured: same-length substitutions landed silently). A mismatch
+    answers stage=read-back with the failing file named first. The proof
+    is per file: a false page beside a true JSON must name the page. The
+    returned mapping is role -> (bytes, lines, sha256) as read back.
     """
     try:
-        texts = ((out_html, render_html(copy, faces)),
-                 (out_json, render_json(faces)))
+        texts = (("html", out_html, render_html(copy, faces)),
+                 ("json", out_json, render_json(faces)))
     except Exception as exc:
         raise _write_error("render", exc) from exc
     staged = []
     try:
-        for path, text in texts:
+        for role, path, text in texts:
             try:
-                staged.append(_stage(path, text))
+                staged.append((role, _stage(path, text), text))
             except Exception as exc:
                 raise _write_error("stage", exc) from exc
-        for temp, path in staged:
+        proofs = {}
+        for role, (temp, path), text in staged:
             try:
                 os.replace(temp, path)
             except Exception as exc:
                 raise _write_error("replace", exc) from exc
+            try:
+                proofs[role] = verify_log(path, text)
+            except Exception as exc:
+                note = "landed bytes left as they are, unproven"
+                if role != texts[-1][0]:
+                    note += "; later outputs unproven"
+                raise _write_error("read-back", exc, path, note) from exc
     finally:
-        for temp, _unused in staged:
+        for _role, (temp, _unused), _text in staged:
             if os.path.exists(temp):
                 _remove_quietly(temp)
+    return proofs
 
 
 def check_identity(faces, problems):
@@ -760,7 +806,7 @@ def main(argv=None):
             for item in problems:
                 sys.stdout.write("FAIL %s\n" % item)
             return 1
-        write_outputs(faces, copy, args.out, args.json_out)
+        proofs = write_outputs(faces, copy, args.out, args.json_out)
     except WorldError as exc:
         sys.stdout.write("%s\n" % exc.face())
         return 2
@@ -769,10 +815,11 @@ def main(argv=None):
         return 2
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-    print("PASS preview %s (%d bytes) + %s (%d bytes)"
-          % (os.path.relpath(args.out, BASE), os.path.getsize(args.out),
-             os.path.relpath(args.json_out, BASE),
-             os.path.getsize(args.json_out)))
+    print("PASS preview %s (%d bytes sha16=%s) + %s (%d bytes sha16=%s)"
+          % (os.path.relpath(args.out, BASE), proofs["html"]["bytes"],
+             proofs["html"]["sha256"],
+             os.path.relpath(args.json_out, BASE), proofs["json"]["bytes"],
+             proofs["json"]["sha256"]))
     return 0
 
 
