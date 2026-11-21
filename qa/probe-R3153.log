@@ -1,0 +1,33 @@
+R3153 probe (read-only, no socket, no network, no live writes)
+
+Q1 name occupancy at HEAD (git grep -F -l, rc=1 means zero)
+  AC-SCLM                                rc=0 hits=4 ['docs/status-export.json', 'src/os/backlog.md', 'src/os/seed_queue_R2240.py', 'state/queue/explore.md']
+  api_seller_claim_months                rc=0 hits=4 ['docs/status-export.json', 'src/os/backlog.md', 'src/os/seed_queue_R2240.py', 'state/queue/explore.md']
+  test_apimarket_sellerclaimmonths       rc=1 hits=0 []
+  ledger-apimarket-sellerclaimmonths     rc=1 hits=0 []
+  seller_claim_months                    rc=0 hits=4 ['docs/status-export.json', 'src/os/backlog.md', 'src/os/seed_queue_R2240.py', 'state/queue/explore.md']
+
+Q2 shipped claim faces and their axes
+  api_buyer_claim_todo                          (self, buyer_id) month_axis=False
+  api_claim_thread                              (self, claim_id, account) month_axis=False
+  api_claims                                    (self, buyer_id=None, dev_account=None) month_axis=False
+  api_claim_latency                             (self, dev_account=None) month_axis=False
+  api_market_claim_months                       (self) month_axis=True
+  api_category_claim_months                     (self, include_uncategorized=True) month_axis=True
+  api_buyer_claim_months                        (self, buyer_id) month_axis=True
+  seller month faces = ['api_seller_rating_months', 'api_seller_answer_months', 'api_seller_question_months', 'api_seller_watch_months', 'api_seller_reply_months', 'api_seller_restock_months', 'api_seller_price_cadence_months', 'api_seller_refund_months', 'api_seller_repeat_months', 'api_seller_price_demand_months', 'api_seller_watch_conversion_months']
+  any seller claim month face = False
+
+Q3 claim table columns and the market claim month face
+  apimarket_claims DDL = 'claim_id INTEGER PRIMARY KEY AUTOINCREMENT, purchase_id INTEGER NOT NULL, listing_id INTEGER NOT NULL, buyer_id TEXT NOT NULL, dev_account TEXT NOT NULL, price_paid INTEGER NOT NULL, claim_text TEXT NOT NULL, opened_utc TEXT NOT NULL, UNIQUE (purchase_id'
+  apimarket_claim_responses DDL = 'response_id INTEGER PRIMARY KEY AUTOINCREMENT, claim_id INTEGER NOT NULL, dev_account TEXT NOT NULL, response_text TEXT NOT NULL, replied_utc TEXT NOT NULL, UNIQUE (claim_id'
+  apimarket_claim_withdrawals DDL = 'claim_id INTEGER PRIMARY KEY, buyer_id TEXT NOT NULL, withdrawn_utc TEXT NOT NULL, UNIQUE (claim_id'
+  apimarket_claim_notes DDL = 'note_id INTEGER PRIMARY KEY AUTOINCREMENT, claim_id INTEGER NOT NULL, buyer_id TEXT NOT NULL, note_text TEXT NOT NULL, noted_utc TEXT NOT NULL, UNIQUE (claim_id'
+  market face sums claim_count from month rows = True
+
+Q4 the same-month / status seam the seller face must reuse
+  seam word refunded   present=True
+  seam word withdrawn  present=True
+  seam word answered   present=True
+  seam word open       present=True
+  opened_utc is the booking stamp = True
