@@ -7484,8 +7484,13 @@ SUITES = [
     # --selftest. AC-QALB8 holds the defect measured this window: a BOM-less
     # UTF-16 source was accepted, landed NUL bytes and reported VERDICT PASS
     # while both this tool and the writer census named the result utf-8/lf.
+    # R3213 (AC-QAL12): the writer's NAME face could create a file no reader
+    # enumerates - fifty-five shipped faces filter endswith(".log") and qa/
+    # NAME without the suffix landed in the healthy dialect while all of them
+    # skipped it. The write face now refuses; the reader face stays open so the
+    # one existing suffixless artifact keeps reading. Three criteria (15..17).
     ("os-qa-log",
-     os.path.join("..", "os", "test_qa_log.py"), 14),
+     os.path.join("..", "os", "test_qa_log.py"), 17),
     # R3208: src/os/state.json carries the canonical CRLF dialect its readers
     # require, but the path was not pinned in .gitattributes - so a checkout
     # running with core.autocrlf=false materialized the whole carrier as bare

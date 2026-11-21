@@ -1,23 +1,23 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3212 PRODUCT+ENGINEERING: the two residual census mismatches are closed on a per-line face, not on a wish to be green - R2405 reads 21 declared / 23 actual because a later R2407 repair appended one date annotation plus the one R2395 line the fold had left behind, and R2907 reads 20/21 because its R2893 tokens line was appended at 590400e7 (R2912); both are adjudicated in the known-findings book with numbers and source, so census reads rc=0 with all four findings still visible.",
+    "current": "2026-11-22 R3213 PRODUCT+ENGINEERING: the writer's own NAME face now refuses a file no reader can see - 55 shipped enumerations filter on endswith .log (the writer census at seven sites, the pre-commit evidence gate and the closeout files= count that reads the census line), so qa/NAME without the suffix landed in the healthy dialect, was skipped by all of them, and could not be found by --check NAME.log either.",
     "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-monthly-faces.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-logs-toolkit-R3212.log (9258B, 2026-11-22)",
-    "latest_evidence": "qa/suite-logs-toolkit-R3212.log (9258B, 2026-11-22)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-qa-log-R3213.log (2618B, 2026-11-22)",
+    "latest_evidence": "qa/suite-qa-log-R3213.log (2618B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3212] next window (<=48h): (0) MAIN — **`tools/qa_log.py` 不校验 `.log` 后缀，而全仓证据引用一律按 `qa/<name>.log` 书写：本窗实弹打了两次脸**（先以无后缀名落盘 → 写出 `qa/suite-logs-toolkit-R3212` 无扩展名件；随后我自己的裸 CRLF 抓包反被 `[flag] new-dialect` 点名）。实测量化已完成一半：`qa/` 现 4643 件中**只有 1 件无扩展名**（`round-R2835-closeout`，说明这个坑历史上已经踩过一次）；活日志里 34 个 `qa/` 引用中真正解析不到的只有正则把 `qa/probe-R3212*.log` 截断产生的伪命中。做法=先只读量三问：①`.log` 后缀是**法**还是**习惯**——扫全部判据（CEN/CLG/QAL/WCB 族）看有哪条真的按后缀判定，给出「有/没有」与出处；②若只是习惯，量出两条路的代价：写手侧拒收（无后缀则报错并提示）会让多少**现有**调用红一次（扫仓内 `qa_log.py` 调用点与其 name 形态）；③收口判断：写手侧规范化（自动补 `.log`）／写手侧拒收／只记不改——三选一并证明所选面不改任何既有证据字节。判据沿用 AC-QAL 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10 的地板，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
-    "next_milestone_due": "2026-11-24T02:28:12+08:00",
-    "updated_at": "2026-11-22T02:28:12+08:00",
+    "next_milestone": "[R3213] next window (<=48h): (0) MAIN — **`stream_evidence` 仍是唯一绕过写手命名律的 qa/ 门：它收的是完整路径，不经过 `check_log_suffix`，所以「出生地拦截」在电池腿的进度落盘这一支上还是空的**。做法=先只读量三问：①列出全仓所有**原地写**（`open(...,\"w\")`/fsync）到 `qa/` 的调用点，逐个给「谁写、写什么形态、是否经 `do_write`」三列表，量出 `stream_evidence` 之外还有没有第二个绕门；②对每个绕门做决定性臂：给一个非 `.log` 目标路径，看它现在落不落、落成什么方言、普查/pre-commit 看不看得见（预期：落、健康方言、两者都看不见）；③收口判断：在 `stream_evidence` 里拒收（会否打断「被杀腿仍留 RUNNING 半件」的 AC-BSGB15 承诺？量出恢复路径）／把调用点收窄到 `.log` 名（一行断言）／只记不改——三选一并证明不改既有证据字节。判据沿用 AC-QAL/AC-BSGB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+    "next_milestone_due": "2026-11-24T02:44:03+08:00",
+    "updated_at": "2026-11-22T02:44:03+08:00",
     "heartbeat": {
-      "tick": 3211,
-      "state_tick": 3211,
-      "lag": 0,
-      "verdict": "PASS",
-      "reason": "fresh"
+      "tick": 3212,
+      "state_tick": 3213,
+      "lag": 1,
+      "verdict": "FLAG",
+      "reason": "heartbeat_row_debt"
     },
     "outs_age": {
       "rows": 30,
@@ -35,7 +35,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-22 R3212 PRODUCT+ENGINEERING: the two residual census mismatches are closed on a per-line face, not on a wish to be green - R2405 reads 21 declared / 23 actual because a later R2407 repair appended one date annotation plus the one R2395 line the fold had left behind, and R2907 reads 20/21 because its R2893 tokens line was appended at 590400e7 (R2912); both are adjudicated in the known-findings book with numbers and source, so census reads rc=0 with all four findings still visible.",
+  "current": "2026-11-22 R3213 PRODUCT+ENGINEERING: the writer's own NAME face now refuses a file no reader can see - 55 shipped enumerations filter on endswith .log (the writer census at seven sites, the pre-commit evidence gate and the closeout files= count that reads the census line), so qa/NAME without the suffix landed in the healthy dialect, was skipped by all of them, and could not be found by --check NAME.log either.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,11 +63,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3212 PRODUCT+ENGINEERING: the two residual census mismatches are closed on a per-line face, not on a wish to be green - R2405 reads 21 declared / 23 actual because a later R2407 repair appended one date annotation plus the one R2395 line the fold had left behind, and R2907 reads 20/21 because its R2893 tokens line was appended at 590400e7 (R2912); both are adjudicated in the known-findings book with numbers and source, so census reads rc=0 with all four findings still visible.",
-  "export_ts": "2026-11-22T02:28:12+08:00",
+  "do": "2026-11-22 R3213 PRODUCT+ENGINEERING: the writer's own NAME face now refuses a file no reader can see - 55 shipped enumerations filter on endswith .log (the writer census at seven sites, the pre-commit evidence gate and the closeout files= count that reads the census line), so qa/NAME without the suffix landed in the healthy dialect, was skipped by all of them, and could not be found by --check NAME.log either.",
+  "export_ts": "2026-11-22T02:44:03+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
-  "latest_evidence": "qa/suite-logs-toolkit-R3212.log (9258B, 2026-11-22)",
-  "next_milestone": "[R3212] next window (<=48h): (0) MAIN — **`tools/qa_log.py` 不校验 `.log` 后缀，而全仓证据引用一律按 `qa/<name>.log` 书写：本窗实弹打了两次脸**（先以无后缀名落盘 → 写出 `qa/suite-logs-toolkit-R3212` 无扩展名件；随后我自己的裸 CRLF 抓包反被 `[flag] new-dialect` 点名）。实测量化已完成一半：`qa/` 现 4643 件中**只有 1 件无扩展名**（`round-R2835-closeout`，说明这个坑历史上已经踩过一次）；活日志里 34 个 `qa/` 引用中真正解析不到的只有正则把 `qa/probe-R3212*.log` 截断产生的伪命中。做法=先只读量三问：①`.log` 后缀是**法**还是**习惯**——扫全部判据（CEN/CLG/QAL/WCB 族）看有哪条真的按后缀判定，给出「有/没有」与出处；②若只是习惯，量出两条路的代价：写手侧拒收（无后缀则报错并提示）会让多少**现有**调用红一次（扫仓内 `qa_log.py` 调用点与其 name 形态）；③收口判断：写手侧规范化（自动补 `.log`）／写手侧拒收／只记不改——三选一并证明所选面不改任何既有证据字节。判据沿用 AC-QAL 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10 的地板，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+  "latest_evidence": "qa/suite-qa-log-R3213.log (2618B, 2026-11-22)",
+  "next_milestone": "[R3213] next window (<=48h): (0) MAIN — **`stream_evidence` 仍是唯一绕过写手命名律的 qa/ 门：它收的是完整路径，不经过 `check_log_suffix`，所以「出生地拦截」在电池腿的进度落盘这一支上还是空的**。做法=先只读量三问：①列出全仓所有**原地写**（`open(...,\"w\")`/fsync）到 `qa/` 的调用点，逐个给「谁写、写什么形态、是否经 `do_write`」三列表，量出 `stream_evidence` 之外还有没有第二个绕门；②对每个绕门做决定性臂：给一个非 `.log` 目标路径，看它现在落不落、落成什么方言、普查/pre-commit 看不看得见（预期：落、健康方言、两者都看不见）；③收口判断：在 `stream_evidence` 里拒收（会否打断「被杀腿仍留 RUNNING 半件」的 AC-BSGB15 承诺？量出恢复路径）／把调用点收窄到 `.log` 名（一行断言）／只记不改——三选一并证明不改既有证据字节。判据沿用 AC-QAL/AC-BSGB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -157,7 +157,7 @@
   },
   "results": [
     [
-      "3211",
+      "3213",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -181,14 +181,14 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 70542,
-  "next_milestone_due": "2026-11-24T02:28:12+08:00",
+  "state_bytes": 75595,
+  "next_milestone_due": "2026-11-24T02:44:03+08:00",
   "heartbeat": {
-    "tick": 3211,
-    "state_tick": 3211,
-    "lag": 0,
-    "verdict": "PASS",
-    "reason": "fresh"
+    "tick": 3212,
+    "state_tick": 3213,
+    "lag": 1,
+    "verdict": "FLAG",
+    "reason": "heartbeat_row_debt"
   },
   "outs_age": {
     "rows": 30,

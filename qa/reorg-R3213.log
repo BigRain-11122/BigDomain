@@ -1,0 +1,8 @@
+R3213 evidence: the writer refuses a suffixless evidence name.
+
+probe (read-only): 55 endswith(.log) sites in 38 shipped files; qa/ 4642 files, 90 non-.log, exactly 1 log-shaped without extension (round-R2835-closeout 1126B); 43 documented --evidence usages all carry .log; battery_shard.evidence_name adds no suffix.
+
+closeout gate:
+CLOSEOUT-GATE PASS files=4553 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS matrix=DOC-CURRENT
+CARRIER bytes=75595 gate=78500 margin=2905 fold_needed=false layout_ok=true crlf=99 bare_lf=0 indent_anomaly=0 log_items=88
+CENSUS-BASELINE name=qa/writer-census-baseline.json bytes=14484 rows=499 sha256=2fe1299ceb9f written=2026-11-21T07:42:42

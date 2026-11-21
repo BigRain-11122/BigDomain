@@ -8,10 +8,10 @@ went red on cd7. That was the third artifact of the class (R2768 re-encoded two)
 so the repair is a birth site, not another re-encode by hand.
 
 Usage:
-  python tools/qa_log.py NAME                 # read stdin, write qa/NAME
-  python tools/qa_log.py NAME --from FILE     # read FILE (any dialect), write qa/NAME
-  python tools/qa_log.py --check NAME         # read-only dialect verdict, rc=2 = red
-  python tools/qa_log.py --selftest           # fixtures in a temp dir, nothing in qa/
+  python tools/qa_log.py NAME.log                 # read stdin, write qa/NAME.log
+  python tools/qa_log.py NAME.log --from FILE     # read FILE (any dialect), write qa/NAME.log
+  python tools/qa_log.py --check NAME             # read-only dialect verdict, rc=2 = red
+  python tools/qa_log.py --selftest               # fixtures in a temp dir, nothing in qa/
 
 Contract (AC-QAL1..7):
   AC-QAL1 any readable source (utf-8, utf-8-BOM, utf-16 BOM, gb18030 fallback) is
@@ -63,6 +63,20 @@ names bare_proofs=<n>, exact shapes only, old fields byte for byte the same.
 It is a count, not a verdict: the line proves another file, and a RED line
 still gains no field because its body was never judged. The name avoids a
 prefix clash - bare_lf= and rows==bare= already exist elsewhere.
+
+R3213 (AC-QAL12): the writer's own NAME face could create a file that no
+reader enumerates. Measured before this guard (read-only probe over the
+shipped tree): fifty-five shipped enumerations filter on endswith(".log") -
+the writer census at three sites, the pre-commit evidence gate at one, and
+the closeout `files=` count which reads the census line - so a file written
+as qa/NAME without the suffix landed in the healthy dialect, was skipped by
+every one of them, and could not even be found by `--check NAME.log`. The
+cost of closing it was measured first: every documented invocation in the
+repo names a .log file, tools/battery_shard.py passes its --evidence name
+through evidence_name() unchanged, and qa/ holds exactly one log-shaped
+suffixless artifact (round-R2835-closeout, written before this guard). The
+refusal is on the WRITE face only: do_check still reads any flat name, so
+that existing artifact stays readable. The fix is at birth, not at the reader.
 
 Stdlib only, ASCII source, zero network, zero shell.
 """
@@ -269,8 +283,34 @@ def count_bare_proofs(text):
     return bare
 
 
+def check_log_suffix(name):
+    """R3213 (AC-QAL12): an evidence file no reader enumerates is not evidence.
+
+    Measured before this guard (read-only probe over the shipped tree):
+    fifty-five enumerations filter on endswith(".log") - qa_writer_census
+    at three sites, tools/hooks/pre_commit_gate.py on the staged set, and
+    the closeout `files=` count which reads the census line - so qa/NAME
+    without the suffix landed in the healthy dialect, was skipped by every
+    one of them, and `--check NAME.log` could not find it either. The cost
+    was measured before the law landed: every documented invocation names a
+    .log file and battery_shard's evidence_name() adds no suffix, so this
+    refusal reddens no existing shipped call site.
+
+    Write face only. do_check keeps reading any flat name, because the one
+    existing suffixless artifact (round-R2835-closeout) must stay readable:
+    the defect is born at the write, so that is where it is stopped.
+    """
+    if not name.endswith(".log"):
+        raise ValueError(
+            "name must end with .log, got %r (the writer census, the "
+            "pre-commit evidence gate and the closeout files= count all "
+            "enumerate only *.log, so this file would land and never be "
+            "judged; --check still reads an existing suffixless file)" % name)
+
+
 def do_write(name, source_bytes, directory=QA):
     check_name(name)
+    check_log_suffix(name)
     text = normalize(read_source(source_bytes))
     text, carried = mark_carried_proofs(text)
     path = write_atomic(directory, name, text)

@@ -341,8 +341,8 @@ def main():
                               reg[pos:pos + 200])
             if found:
                 declared.append(found.group(1))
-        ok('AC-QALB9 registry declares exactly one row for this suite, fourteen',
-           declared == ['14'], 'rows=%s hits=%d' % (declared, len(hits)))
+        ok('AC-QALB9 registry declares exactly one row for this suite, seventeen',
+           declared == ['17'], 'rows=%s hits=%d' % (declared, len(hits)))
 
         # ---- AC-QALB11: a carried proof line is marked, not certified -----
         # R3203: the generator prints "LOG OK path=... sha16=..." to prove a
@@ -600,6 +600,89 @@ def main():
               shard_src.count('os.fsync('),
               shard_src.count(
                   'open(path, "w", encoding="utf-8", newline="\\n")')))
+        # ---- AC-QALB15: a suffixless write is refused and lands nothing ----
+        # R3213: measured before this guard, qa/NAME without .log landed in the
+        # healthy dialect while every reader skipped it by construction - the
+        # census and the pre-commit gate enumerate endswith(".log") only, and
+        # the closeout files= count reads the census line. Three shapes are
+        # refused and one control lands, so the guard is proved to bite and
+        # not to over-bite; case matters, because .LOG is enumerated by none.
+        suffix_dir = os.path.join(world, 'suffix')
+        os.makedirs(suffix_dir)
+        bad_shapes = ['plain-R3213', 'run-R3213.log-run2', 'upper-R3213.LOG']
+        refused_suffix = []
+        for bad in bad_shapes:
+            try:
+                quiet(mod.do_write, bad, b'x\n', directory=suffix_dir)
+                refused_suffix.append(False)
+            except ValueError as exc:
+                refused_suffix.append('name must end with .log' in str(exc))
+        after_bad = sorted(os.listdir(suffix_dir))
+        rc_suffix, out_suffix = quiet(mod.do_write, 'ok-R3213.log', b'x\n',
+                                      directory=suffix_dir)
+        after_good = sorted(os.listdir(suffix_dir))
+        ok('AC-QALB15 a suffixless name is refused and writes no file',
+           all(refused_suffix) and after_bad == [] and rc_suffix == 0
+           and 'VERDICT PASS' in out_suffix
+           and after_good == ['ok-R3213.log'],
+           'refused=%s landed=%s good_rc=%d good_files=%s'
+           % (refused_suffix, after_bad, rc_suffix, after_good))
+
+        # ---- AC-QALB16: the reader face stays open and the law stays one ---
+        # The suffixless artifact already on disk must remain readable, and the
+        # two shipping enumeration faces must still filter *.log - so the
+        # writer now refuses exactly the set the readers skip instead of
+        # growing a second, stricter law of its own.
+        saved_qa = mod.QA
+        try:
+            mod.QA = suffix_dir
+            with io.open(os.path.join(suffix_dir, 'legacy-R3213'), 'wb') as fh:
+                fh.write(b'PASS x\n')
+            rc_leg, out_leg = quiet(mod.do_check, 'legacy-R3213')
+        finally:
+            mod.QA = saved_qa
+        live_legacy = os.path.join(QA_DIR, 'round-R2835-closeout')
+        rc_live, out_live = quiet(mod.do_check, 'round-R2835-closeout')
+        gate_src = read_text(os.path.join(ROOT, 'tools', 'hooks',
+                                          'pre_commit_gate.py'))
+        census_src = read_text(os.path.join(ROOT, 'src', 'os',
+                                            'qa_writer_census.py'))
+        ok('AC-QALB16 --check still reads a suffixless name; readers unchanged',
+           rc_leg == 0 and 'dialect=' in out_leg
+           and os.path.isfile(live_legacy)
+           and rc_live in (0, 2) and 'dialect=' in out_live
+           and 'endswith(".log")' in gate_src
+           and census_src.count('endswith(".log")') >= 3,
+           'fixture_rc=%d live_rc=%d gate_has_filter=%s census_sites=%d'
+           % (rc_leg, rc_live, 'endswith(".log")' in gate_src,
+              census_src.count('endswith(".log")')))
+
+        # ---- AC-QALB17: the shipped examples teach the lawful shape --------
+        # A refusal nobody documents only moves the same mistake into a
+        # traceback. Every name a shipped usage example shows must end with
+        # .log; the --check examples are exempt on purpose, because that face
+        # deliberately keeps reading any flat name.
+        tool_doc = read_text(TOOL)
+        shard_doc = read_text(os.path.join(ROOT, 'tools', 'battery_shard.py'))
+        usage_names = []
+        for line in tool_doc.splitlines():
+            stripped = line.strip()
+            if not stripped.startswith('python tools/qa_log.py'):
+                continue
+            if '--check' in stripped or '--selftest' in stripped:
+                continue
+            for token in stripped.split()[2:]:
+                if token.startswith('--') or token.startswith('#'):
+                    continue
+                usage_names.append(token)
+                break
+        evidence_names = re.findall(
+            r'--evidence[ =]+(\S+)', '\n'.join(shard_doc.splitlines()[:40]))
+        ok('AC-QALB17 shipped usage examples name .log files only',
+           bool(usage_names) and bool(evidence_names)
+           and all(n.endswith('.log') for n in usage_names)
+           and all(n.endswith('.log') for n in evidence_names),
+           'usage=%s evidence=%s' % (usage_names, evidence_names))
     finally:
         mod.QA = original_qa
         shutil.rmtree(world, ignore_errors=True)

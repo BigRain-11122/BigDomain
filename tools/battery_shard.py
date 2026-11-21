@@ -487,8 +487,16 @@ def main(argv=None):
 def _round(args):
     # AC-BSH6: the evidence path is validated BEFORE any suite runs, including
     # in --dry mode, so a bad path can never be discovered after 10 minutes.
+    # R3213 (AC-QAL12): the writer refuses a name that does not end with .log,
+    # so the same law is asked here rather than discovered at write time; the
+    # --check direction keeps reading the writer's existing suffixless artifact.
     if args.evidence:
         evidence_name(args.evidence)
+        if not args.check:
+            try:
+                qa_log_module().check_log_suffix(evidence_name(args.evidence))
+            except ValueError as exc:
+                raise Refuse("E_EVIDENCE_SUFFIX %s" % exc)
 
     if args.claim and args.claim.strip().lower() == "full":
         print("E_NOT_FULL a shard cannot claim battery coverage; run the "
