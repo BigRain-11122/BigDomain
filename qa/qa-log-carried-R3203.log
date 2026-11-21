@@ -1,0 +1,9 @@
+R3203 evidence - a carried proof line is marked, not certified
+probe tmp/probe_R3203.py: generator rc=0 stdout=771B, proof sha16 271ba9eb7b2d1230 = log on disk (661B/9 lines)
+relog through do_write: new file 761B/10 lines own sha16 4210a333be0b1d92, carried line verbatim, classify utf-8/lf, verify_written OK
+unfixed control (git HEAD writer, same fixture): rc=0 marked=0 unmarked_proof_present=True writer_says_carried=False classify=utf-8/lf
+fixed: marked=1, QA-LOG CARRIED proofs=1, exact shapes only, plain source byte-identical, near-miss shape untouched, idempotent
+selftest 9/9; suite 13/13 assertions over 11 criteria; registry os-qa-log 10->11
+matrix WRITTEN 78486 bytes / 755 rows then DOC-CURRENT; census --write-pin then VERDICT PASS pinned=755
+pre-existing reds, reproduced on a clean HEAD worktree: AC-RCC12-R8 (assembled 302 vs pinned prose 294) and AC-BSGB20 (leg_rc=2 via that suite)
+honest limits: zero payment, zero external network, a buyer still cannot pay; only the exact shipped proof shape is marked; CARRIED cures the relog face only and does not prove the carried text itself

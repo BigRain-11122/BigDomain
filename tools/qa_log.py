@@ -30,12 +30,24 @@ rather than stored - BOM-less UTF-16 used to be written as a NUL-riddled file
 with VERDICT PASS and read back as the healthy utf-8/lf dialect by this tool and
 by the writer census. --check names such a file nul-bytes.
 
+R3203 (AC-QAL9): a generator's carrier proof line is not a relogged file's
+proof. The preview generator prints "LOG OK path=<p> bytes=<n> lines=<n>
+sha16=<h>" on stdout, proving the file it just wrote; storing that whole stdout
+through this writer kept the line verbatim inside a new file whose own sha16 was
+a different number (measured: 761 bytes, carried 271ba9eb7b2d1230, own
+4210a333be0b1d92) while both dialect faces stayed green. Such a line is now
+prefixed CARRIED, so no reader can take it for this log's proof; a near-miss
+shape is left untouched, and the line is never dropped. This is the writer's
+job because --from (and stdin) is the only door through which one file's bytes
+become another file's evidence.
+
 Stdlib only, ASCII source, zero network, zero shell.
 """
 
 import hashlib
 import io
 import os
+import re
 import sys
 import tempfile
 
@@ -166,11 +178,52 @@ def classify(raw):
     return "utf-8/lf"
 
 
+PROOF_LINE_RE = re.compile(
+    r"^LOG OK path=(\S+) bytes=(\d+) lines=(\d+) sha16=([0-9a-f]{16})$")
+
+
+def mark_carried_proofs(text):
+    """R3203 (AC-QAL9): a proof line carried in by a relog is not this
+    file's proof.
+
+    Measured before this function existed: a generator that prints
+    "LOG OK path=... bytes=... lines=... sha16=..." on stdout had its
+    whole stdout stored through this writer, and the new file carried
+    that line unchanged while its own sha16 was a different number
+    (761 bytes, carried 271ba9eb7b2d1230, own 4210a333be0b1d92). The
+    dialect faces cannot see it - classify() answered utf-8/lf and
+    verify_written() read back clean - so the only reader who could
+    catch it was a human comparing hashes.
+
+    The line is kept, never dropped (the information is real: it proves
+    another file), and prefixed with CARRIED so no reader can take it for
+    this log's own proof. A line that does not match the exact shipped
+    shape is left alone: guessing at a near miss would be a second guess
+    on top of the first.
+    """
+    carried = 0
+    out = []
+    for line in text.split("\n"):
+        if PROOF_LINE_RE.match(line):
+            out.append("CARRIED " + line)
+            carried += 1
+        else:
+            out.append(line)
+    if not carried:
+        return text, 0
+    return "\n".join(out), carried
+
+
 def do_write(name, source_bytes, directory=QA):
     check_name(name)
     text = normalize(read_source(source_bytes))
+    text, carried = mark_carried_proofs(text)
     path = write_atomic(directory, name, text)
     proof = verify_written(path)
+    if carried:
+        sys.stdout.write(
+            "QA-LOG CARRIED proofs=%d (a LOG OK line names another file, so "
+            "it is marked CARRIED and is not this log's proof)\n" % carried)
     sys.stdout.write(
         "QA-LOG WROTE name=%s bytes=%d lines=%d sha256=%s dialect=utf-8/lf "
         "VERDICT PASS\n"
@@ -265,6 +318,31 @@ def selftest():
         else:
             sys.stdout.write("INFO qal5-sample-absent archive=%s live=%s\n"
                              % (os.path.exists(arch), os.path.exists(live)))
+
+        # R3203 (AC-QAL9): a carried proof line is marked, never certified.
+        # Measured before the repair: a relog of a generator's stdout kept
+        # "LOG OK ... sha16=<other file>" verbatim inside a file whose own
+        # sha16 was a different number.
+        proof = (b"PASS one\n"
+                 b"LOG OK path=qa/preview.log bytes=661 lines=9 "
+                 b"sha16=271ba9eb7b2d1230\n")
+        do_write("carried-qal9.log", proof, directory=tmp)
+        first = io.open(os.path.join(tmp, "carried-qal9.log"), "rb").read()
+        do_write("carried2-qal9.log", first, directory=tmp)
+        second = io.open(os.path.join(tmp, "carried2-qal9.log"), "rb").read()
+        plain = b"PASS x\n"
+        do_write("plain-qal9.log", plain, directory=tmp)
+        plain_out = io.open(os.path.join(tmp, "plain-qal9.log"), "rb").read()
+        near = (b"LOG OK path=qa/preview.log bytes=six lines=9 "
+                b"sha16=271ba9eb7b2d1230\n")
+        do_write("near-qal9.log", near, directory=tmp)
+        near_out = io.open(os.path.join(tmp, "near-qal9.log"), "rb").read()
+        check(first.count(b"CARRIED LOG OK path=") == 1
+              and b"\nLOG OK path=" not in first
+              and second.count(b"CARRIED") == 1
+              and plain_out == plain
+              and near_out == near,
+              "qal9-carried-proof-marked-once-and-only-exact-shapes")
     finally:
         for name in os.listdir(tmp):
             try:

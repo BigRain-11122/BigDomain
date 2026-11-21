@@ -247,7 +247,7 @@ def main():
         post_self = qa_snapshot()
         tool_src = read_text(TOOL)
         suite_src = read_text(os.path.abspath(__file__))
-        tool_allowed = {'hashlib', 'io', 'os', 'sys', 'tempfile'}
+        tool_allowed = {'hashlib', 'io', 'os', 're', 'sys', 'tempfile'}
         suite_allowed = {'hashlib', 'importlib', 'io', 'os', 're', 'shutil',
                          'sys', 'tempfile', 'time', 'contextlib'}
 
@@ -267,15 +267,19 @@ def main():
             r'\b(?:socket|urllib|requests|subprocess)\.\w', tool_src)
         net_suite = sorted(suite_imp & banned) + re.findall(
             r'\b(?:socket|urllib|requests|subprocess)\.\w', suite_src)
-        ok('AC-QALB7 selftest 8/8 leaves qa/ identical, both sources pure',
-           rc_self == 0 and 'VERDICT PASS 8/8' in out_self
+        # JUDGED-CHANGED (R3203): the selftest grew one fixture for AC-QAL9,
+        # so its verdict line moved 8/8 -> 9/9. The fixture is asserted below
+        # by AC-QALB11; this arm still reads the real printed total, so it
+        # would redden if the count drifted without a matching criterion.
+        ok('AC-QALB7 selftest 9/9 leaves qa/ identical, both sources pure',
+           rc_self == 0 and 'VERDICT PASS 9/9' in out_self
            and pre_self == post_self
            and all(ord(c) < 128 for c in tool_src)
            and all(ord(c) < 128 for c in suite_src)
            and tool_imp <= tool_allowed and suite_imp <= suite_allowed
            and not net_tool and not net_suite,
            'rc=%d verdict=%s qa_stable=%s tool_extra=%s suite_extra=%s net=%s'
-           % (rc_self, 'VERDICT PASS 8/8' in out_self, pre_self == post_self,
+           % (rc_self, 'VERDICT PASS 9/9' in out_self, pre_self == post_self,
               ','.join(sorted(tool_imp - tool_allowed)),
               ','.join(sorted(suite_imp - suite_allowed)),
               net_tool + net_suite))
@@ -337,8 +341,49 @@ def main():
                               reg[pos:pos + 200])
             if found:
                 declared.append(found.group(1))
-        ok('AC-QALB9 registry declares exactly one row for this suite, ten',
-           declared == ['10'], 'rows=%s hits=%d' % (declared, len(hits)))
+        ok('AC-QALB9 registry declares exactly one row for this suite, eleven',
+           declared == ['11'], 'rows=%s hits=%d' % (declared, len(hits)))
+
+        # ---- AC-QALB11: a carried proof line is marked, not certified -----
+        # R3203: the generator prints "LOG OK path=... sha16=..." to prove a
+        # file it wrote. Storing that stdout through this writer kept the line
+        # verbatim inside a different file, whose own sha16 was another number,
+        # while both dialect faces read green. Measured before the repair.
+        carried_dir = os.path.join(world, 'carried')
+        os.makedirs(carried_dir)
+        proof_src = (b'PASS one\n'
+                     b'LOG OK path=qa/preview.log bytes=661 lines=9 '
+                     b'sha16=271ba9eb7b2d1230\n')
+        rc_c, out_c = quiet(mod.do_write, 'relog.log', proof_src,
+                            directory=carried_dir)
+        relog = read_bytes(os.path.join(carried_dir, 'relog.log'))
+        rc_c2, _out2 = quiet(mod.do_write, 'relog2.log', relog,
+                             directory=carried_dir)
+        twice = read_bytes(os.path.join(carried_dir, 'relog2.log'))
+        plain_src = b'PASS x\n'
+        rc_p, _outp = quiet(mod.do_write, 'plain.log', plain_src,
+                            directory=carried_dir)
+        plain_out = read_bytes(os.path.join(carried_dir, 'plain.log'))
+        near_src = (b'LOG OK path=qa/preview.log bytes=six lines=9 '
+                    b'sha16=271ba9eb7b2d1230\n')
+        rc_n, out_n = quiet(mod.do_write, 'near.log', near_src,
+                            directory=carried_dir)
+        near_out = read_bytes(os.path.join(carried_dir, 'near.log'))
+        plain_expected = mod.normalize(plain_src.decode('utf-8'))
+        ok('AC-QALB11 carried proof marked CARRIED once, exact shapes only',
+           rc_c == 0 and rc_c2 == 0 and rc_p == 0 and rc_n == 0
+           and relog.count(b'CARRIED LOG OK path=') == 1
+           and b'\nLOG OK path=' not in relog
+           and 'QA-LOG CARRIED proofs=1' in out_c
+           and twice.count(b'CARRIED') == 1
+           and plain_out == plain_expected.encode('utf-8')
+           and 'CARRIED' not in out_n and near_out == near_src
+           and mod.classify(relog) == 'utf-8/lf',
+           'rc=%d marked=%d unmarked=%s twice=%d plain_eq=%s near_stable=%s'
+           % (rc_c, relog.count(b'CARRIED LOG OK path='),
+              b'\nLOG OK path=' in relog, twice.count(b'CARRIED'),
+              plain_out == plain_expected.encode('utf-8'),
+              near_out == near_src))
     finally:
         mod.QA = original_qa
         shutil.rmtree(world, ignore_errors=True)

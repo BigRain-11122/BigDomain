@@ -1,0 +1,17 @@
+Q1a generator rc=0 stdout=771 stderr=0
+Q1a proof_line='LOG OK path=tmp\\R3203\\live\\preview-monthly-faces-R9003.log bytes=661 lines=9 sha16=271ba9eb7b2d1230'
+Q1a proof names path='tmp\\R3203\\live\\preview-monthly-faces-R9003.log' bytes='661' lines='9' sha16='271ba9eb7b2d1230'
+Q1a log on disk bytes=661 lines=9 sha16=271ba9eb7b2d1230
+Q1a proof_sha16_matches_log=True
+Q1b relog rc=0 writer_says='QA-LOG WROTE name=relogged-R9003.log bytes=761 lines=10 sha256=4210a333be0b1d92 dialect=utf-8/lf VERDICT PASS'
+Q1b new file bytes=761 lines=10 sha16=4210a333be0b1d92
+Q1b carried line inside new file='LOG OK path=tmp\\R3203\\live\\preview-monthly-faces-R9003.log bytes=661 lines=9 sha16=271ba9eb7b2d1230'
+Q1b carried sha16='271ba9eb7b2d1230' new own sha16=4210a333be0b1d92 same=False
+Q1b dialect=utf-8/lf
+Q1b verify_written OK bytes=761 lines=10
+Q1b stale_proof_visible_to_dialect_gates=True
+Q1c stdin relog byte_equal_to_from=True sha16=4210a333be0b1d92
+Q2 baseline no-proof normalize bytes=35 sha16=66959b50fe31e73e
+Q2 baseline crlf normalize='a\nb\n'
+Q3 marker vocabulary already present in relogged file=[]
+Q3 writer mentions carrier vocabulary=[]

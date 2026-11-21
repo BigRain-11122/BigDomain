@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3202 PRODUCT+ENGINEERING: a proven evidence log is now named on stdout - run_verify had been dropping the proof write_log returns since R3200, so a printed VERIFY answer carried no readable link to the file it wrote; exactly one LOG OK line follows the answer with path, bytes, lines and sha16 read back from disk, and it never enters the log because a log cannot hold its own sha16.",
+    "current": "R3203 ENGINEERING: a proof line relogged through the one writer is marked CARRIED instead of being certified - measured a 761B file carrying sha16 271ba9eb7b2d1230 while its own was 4210a333be0b1d92 and both dialect faces read green; AC-QALB11 four arms, selftest 9/9, SUITE 13/13 over 11 criteria, registry os-qa-log 10->11, matrix 78486B/755 rows DOC-CURRENT, census PASS pinned=755; two pre-existing reds (AC-RCC12-R8 assembled 302 vs pinned prose 294, AC-BSGB20 leg_rc=2) reproduce on a clean HEAD worktree so they are not this round; zero cloud calls, zero external API touches",
     "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
@@ -9,9 +9,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3202.log (2835B, 2026-11-22)",
     "latest_evidence": "qa/reorg-R3202.log (2835B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3202] next window (<=48h): (0) MAIN — **承运的 proof 行会撒谎**：本窗立的 `LOG OK ... sha16=...` 只对自己那次 `--log` 写出的文件成立；一旦有人按本仓惯例把 stdout 经 `tools/qa_log.py --from` 二次落盘，这行会跟着进新文件，而里面的 sha16 指向**另一份文件**——读者看到的是「自证」其实是误证。做法=先只读量三问：①把本窗 stdout 经 `--from` 落到临时目录，量新文件里那行读起来是什么、`--check` 与 `qa_writer_census` 各答什么（方言闸按设计看不见内容，同 R3200 已量）；②消费者普查：改完本窗后谁真的读 `LOG OK`（本套件 AC-MFPX8 各臂、EXECUTED 散文面），以及仓内 `--from` 的实际引用规模（含归档散文）；③收口判断：修在生成器（让该行自带可判别的归属标记）还是修在 `qa_log.py`（`--from` 时识别并改写/拒收该行），并证明所选面**不动任何既有字节**（页/JSON/快照/已交付日志）。三条量完再落，判据沿用 AC-MFPX 写法（AC-MFPX9），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
-    "next_milestone_due": "2026-11-24T00:10:04+08:00",
-    "updated_at": "2026-11-22T00:10:04+08:00",
+    "next_milestone": "[R3203] next window (<=48h): (0) MAIN — **CARRIED 目前只有人眼能看见，机器面是零**：本窗让搬运面把证明行标成 `CARRIED`，但 `--check` 对含 CARRIED 的文件仍只答 `dialect=utf-8/lf`，普查与 pre-commit 方言闸也不看内容，于是「这个文件里有几条被搬运的证明」在机器面并不存在。做法=先只读量三问：①同一份含 0/1/2 条 CARRIED 的文件，`qa_log --check`、`qa_writer_census`、`tools/hooks/pre_commit_gate.py` 各答什么；②消费者普查：给 `--check` 文本面加 `carried=N` 会动谁的断言（`test_qa_log.py` AC-QALB4 的文本面、census baseline 是否记行数、pre-commit 的提示语）；③收口判断：修在 `--check` 文本面（加字段、旧判据不动）还是另立一条只读子命令，并证明所选面不动任何既有字节。三条量完再落，判据沿用 AC-QALB 写法（AC-QALB12），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+    "next_milestone_due": "2026-11-24T00:25:45+08:00",
+    "updated_at": "2026-11-22T00:25:45+08:00",
     "heartbeat": {
       "tick": 3201,
       "state_tick": 3202,
@@ -35,7 +35,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-22 R3202 PRODUCT+ENGINEERING: a proven evidence log is now named on stdout - run_verify had been dropping the proof write_log returns since R3200, so a printed VERIFY answer carried no readable link to the file it wrote; exactly one LOG OK line follows the answer with path, bytes, lines and sha16 read back from disk, and it never enters the log because a log cannot hold its own sha16.",
+  "current": "R3203 ENGINEERING: a proof line relogged through the one writer is marked CARRIED instead of being certified - measured a 761B file carrying sha16 271ba9eb7b2d1230 while its own was 4210a333be0b1d92 and both dialect faces read green; AC-QALB11 four arms, selftest 9/9, SUITE 13/13 over 11 criteria, registry os-qa-log 10->11, matrix 78486B/755 rows DOC-CURRENT, census PASS pinned=755; two pre-existing reds (AC-RCC12-R8 assembled 302 vs pinned prose 294, AC-BSGB20 leg_rc=2) reproduce on a clean HEAD worktree so they are not this round; zero cloud calls, zero external API touches",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,11 +63,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3202 PRODUCT+ENGINEERING: a proven evidence log is now named on stdout - run_verify had been dropping the proof write_log returns since R3200, so a printed VERIFY answer carried no readable link to the file it wrote; exactly one LOG OK line follows the answer with path, bytes, lines and sha16 read back from disk, and it never enters the log because a log cannot hold its own sha16.",
-  "export_ts": "2026-11-22T00:10:04+08:00",
+  "do": "R3203 ENGINEERING: a proof line relogged through the one writer is marked CARRIED instead of being certified - measured a 761B file carrying sha16 271ba9eb7b2d1230 while its own was 4210a333be0b1d92 and both dialect faces read green; AC-QALB11 four arms, selftest 9/9, SUITE 13/13 over 11 criteria, registry os-qa-log 10->11, matrix 78486B/755 rows DOC-CURRENT, census PASS pinned=755; two pre-existing reds (AC-RCC12-R8 assembled 302 vs pinned prose 294, AC-BSGB20 leg_rc=2) reproduce on a clean HEAD worktree so they are not this round; zero cloud calls, zero external API touches",
+  "export_ts": "2026-11-22T00:25:45+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
   "latest_evidence": "qa/reorg-R3202.log (2835B, 2026-11-22)",
-  "next_milestone": "[R3202] next window (<=48h): (0) MAIN — **承运的 proof 行会撒谎**：本窗立的 `LOG OK ... sha16=...` 只对自己那次 `--log` 写出的文件成立；一旦有人按本仓惯例把 stdout 经 `tools/qa_log.py --from` 二次落盘，这行会跟着进新文件，而里面的 sha16 指向**另一份文件**——读者看到的是「自证」其实是误证。做法=先只读量三问：①把本窗 stdout 经 `--from` 落到临时目录，量新文件里那行读起来是什么、`--check` 与 `qa_writer_census` 各答什么（方言闸按设计看不见内容，同 R3200 已量）；②消费者普查：改完本窗后谁真的读 `LOG OK`（本套件 AC-MFPX8 各臂、EXECUTED 散文面），以及仓内 `--from` 的实际引用规模（含归档散文）；③收口判断：修在生成器（让该行自带可判别的归属标记）还是修在 `qa_log.py`（`--from` 时识别并改写/拒收该行），并证明所选面**不动任何既有字节**（页/JSON/快照/已交付日志）。三条量完再落，判据沿用 AC-MFPX 写法（AC-MFPX9），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+  "next_milestone": "[R3203] next window (<=48h): (0) MAIN — **CARRIED 目前只有人眼能看见，机器面是零**：本窗让搬运面把证明行标成 `CARRIED`，但 `--check` 对含 CARRIED 的文件仍只答 `dialect=utf-8/lf`，普查与 pre-commit 方言闸也不看内容，于是「这个文件里有几条被搬运的证明」在机器面并不存在。做法=先只读量三问：①同一份含 0/1/2 条 CARRIED 的文件，`qa_log --check`、`qa_writer_census`、`tools/hooks/pre_commit_gate.py` 各答什么；②消费者普查：给 `--check` 文本面加 `carried=N` 会动谁的断言（`test_qa_log.py` AC-QALB4 的文本面、census baseline 是否记行数、pre-commit 的提示语）；③收口判断：修在 `--check` 文本面（加字段、旧判据不动）还是另立一条只读子命令，并证明所选面不动任何既有字节。三条量完再落，判据沿用 AC-QALB 写法（AC-QALB12），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -181,8 +181,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 35585,
-  "next_milestone_due": "2026-11-24T00:10:04+08:00",
+  "state_bytes": 36570,
+  "next_milestone_due": "2026-11-24T00:25:45+08:00",
   "heartbeat": {
     "tick": 3201,
     "state_tick": 3202,
