@@ -1,0 +1,44 @@
+  | PASS AC-CLG1 live tree PASSES the closeout gate rc=0 line=CLOSEOUT-GATE PASS files=4297 flags=0 reader_refused=0 gating=flags
+  | PASS AC-CLG1 reported file count equals the directory, not a typed number reported=4297 disk=4297
+  | PASS AC-CLG1 gating face is flags gating=flags flags=0
+  | PASS AC-CLG2 frozen world passes before any leak rc=0 flags=0
+  | PASS AC-CLG2 a new non-tee write is REFUSED (the precondition fires) rc=2 reason=E_CLG_DRIFT
+  | PASS AC-CLG2 the refusal NAMES the leaking file named=['[flag] new-dialect: this-round-leak.log (class=cmd-raw)']
+  | PASS AC-CLG2 removing the leak returns the gate to PASS rc=0 line=CLOSEOUT-GATE PASS files=2 flags=0 reader_refused=0 gating=flags
+  | PASS AC-CLG3 an undecodable BASELINED file counts reader_refused=1 reader_refused=1
+  | PASS AC-CLG3 reader_refused ALONE does not refuse the closeout rc=0 verdict=PASS flags=0
+  | PASS AC-CLG4 the gate writes nothing (bytes and mtimes unchanged) files=3
+  | PASS AC-CLG4 two runs are byte-identical rc=0
+  | PASS AC-CLG5 a missing baseline is a NAMED refusal rc=2 line=CLOSEOUT-GATE REFUSED reason=E_CLG_NO_BASELINE baseline=no-such-baseline.json
+  | PASS AC-CLG5 an empty evidence dir is a NAMED refusal rc=2 line=CLOSEOUT-GATE REFUSED reason=E_CLG_EMPTY target=C:\Users\sjs20\AppData\Local\Temp\tmpoaym7yey\empty
+  | PASS AC-CLG5 a census row without flags= is REFUSED, not read as clean rc=2 line=CLOSEOUT-GATE REFUSED reason=E_CLG_ROW detail=census did not publish flags=
+  | PASS AC-CLG6 arm a - the default face (root=None) is the shipped question line=CLOSEOUT-GATE PASS files=4297 flags=0 reader_refused=0 gating=flags
+  | PASS AC-CLG6 arm b - root=ROOT asks all three faces and PASS names them rc=0 line=CLOSEOUT-GATE PASS files=4297 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS matrix=DOC-CURRENT
+  | PASS AC-CLG6 arm e - the root faces write nothing and repeat exactly rc=0 files=3 line=CLOSEOUT-GATE PASS files=2 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS
+  | PASS AC-CLG6 arm c - an undated round is refused by E_CLG_ROUND_MAIN rc=2 lines=['CLOSEOUT-GATE REFUSED reason=E_CLG_ROUND_MAIN files=2 flags=0 round_main=FAIL', 'ROUND-MAIN FAIL E_RMS_NO_DATE round=5001']
+  | PASS AC-CLG6 arm d - an unpinned registry row is refused by E_CLG_CENSUS rc=2 reason=E_CLG_CENSUS
+  | PASS AC-CLG6 arm f - a drifted tree is refused as DRIFT, before round-main rc=2 reason=E_CLG_DRIFT
+  | PASS AC-CLG7 arm a - the default face carries no matrix token either line=CLOSEOUT-GATE PASS files=4297 flags=0 reader_refused=0 gating=flags
+  | PASS AC-CLG7 arm b - the live matrix face is green and named LAST line=CLOSEOUT-GATE PASS files=4297 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS matrix=DOC-CURRENT
+  | PASS AC-CLG7 arm c - a document that drifted from the registry is refused by E_CLG_MATRIX changed=True rc=2 reason=E_CLG_MATRIX lines=['CLOSEOUT-GATE REFUSED reason=E_CLG_MATRIX files=4297 flags=0 round_main=OK census=PASS matrix=FAIL', 'STALE-CONTENT ../../../../AppData/Local/Temp/tmpiphu67qn/stale.md rows=741/741']
+  | PASS AC-CLG7 arm d - a missing document is a NAMED refusal, not a skip rc=2 lines=['CLOSEOUT-GATE REFUSED reason=E_CLG_MATRIX files=4297 flags=0 round_main=OK census=PASS matrix=FAIL', 'E_EDM_NO_DOC absent.md']
+  | PASS AC-CLG7 arm e - the matrix face is asked only after the bytes face rc=2 reason=E_CLG_DRIFT
+  | PASS AC-CLG7 arm f - the matrix face writes nothing and repeats m1=(True, 'DOC-CURRENT docs/sandbox-suite-matrix.md rows=741/741') m2=(True, 'DOC-CURRENT docs/sandbox-suite-matrix.md rows=741/741')
+  | PASS AC-CLG8 arm a - the default face carries no timing key keys=['files', 'flags', 'gating', 'reader_refused', 'verdict']
+  | PASS AC-CLG8 arm b - root=ROOT publishes four named readings and the PASS line is byte-identical face_ms={'flags': 1168.2, 'round_main': 1.7, 'census': 172.3, 'matrix': 211.5}
+  | PASS AC-CLG8 arm c - a named opt-out still publishes a reading face_ms={'flags': 0.6, 'round_main': 0.2, 'census': 1.3, 'matrix': 0.0}
+  | PASS AC-CLG8 arm d - a red census is still refused by the same name reason=E_CLG_CENSUS face_ms={'flags': 0.6, 'round_main': 0.2, 'census': 1.1}
+  | PASS AC-CLG8 arm e - one parse reads a suite exactly as two parses did rows=5 mismatch=[]
+  | PASS AC-CLG9 arm a - a foreign world is refused by NAME, and the line publishes no live row counts leg=True line=E_CLG_FOREIGN_REGISTRY face=matrix registry=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\reconcile_all.py root=C:\Users\sjs20\AppData\Local\Temp\tmp8dnll90z\world
+  | PASS AC-CLG9 arm b - the live tree stays green under the guard line=DOC-CURRENT docs/sandbox-suite-matrix.md rows=741/741
+  | PASS AC-CLG9 arm c - the guard sits on root/registry, not on the document path: a candidate document still gets the DOC verdict changed=True line=STALE-CONTENT ../../../../AppData/Local/Temp/tmp8dnll90z/candidate.md rows=741/741
+  | PASS AC-CLG9 arm d - a world with no state is refused by E_CLG_NO_STATE in this suite, not only in battery_followup line=E_CLG_NO_STATE src/os/state.json
+  | PASS AC-CLG9 arm e - evaluate(root=world) wraps the new code in E_CLG_CENSUS instead of judging the live registry rc=2 reason=E_CLG_CENSUS lines=['CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS files=1 flags=0 round_main=OK census=FAIL', 'E_CLG_FOREIGN_REGISTRY face=census registry=C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\sandbox\\reconcile_all.py root=C:\\Users\\sjs20\\AppData\\Local\\Temp\\tmp8dnll90z\\gateworld']
+  | PASS AC-CLG9 arm f - tree_refusal reads RED and carries the census refusal instead of a silent pass word=RED line=CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS files=1 flags=0 round_main=OK census=FAIL
+  | PASS AC-CLG10 arm a - a deep PASS names the baseline it judged rc=0 ident=['CENSUS-BASELINE name=qa/writer-census-baseline.json bytes=14484 rows=499 sha256=2fe1299ceb9f written=2026-11-21T07:42:42']
+  | PASS AC-CLG10 arm b - the sha256 is of those exact bytes, not typed got=2fe1299ceb9f want=2fe1299ceb9f
+  | PASS AC-CLG10 arm c - rows is the sum of the baseline own class lists got=499 want=499
+  | PASS AC-CLG10 arm d - a fixture baseline prints ITS identity, not the live one live=['CENSUS-BASELINE name=qa/writer-census-baseline.json bytes=14484 rows=499 sha256=2fe1299ceb9f written=2026-11-21T07:42:42'] fixture=['CENSUS-BASELINE name=../../../../AppData/Local/Temp/tmps3p6rzx7/w10/world/writer-census-baseline.json bytes=119 rows=1 sha256=175c899e4c5e written=2026-11-21T07:57:57']
+  | PASS AC-CLG10 arm e - the default face (root=None) publishes no identity row and keeps its shipped shape rc=0 lines=['CLOSEOUT-GATE PASS files=2 flags=0 reader_refused=0 gating=flags']
+suite: 42 assertions over 10 criteria
+SUITE PASS 42/42

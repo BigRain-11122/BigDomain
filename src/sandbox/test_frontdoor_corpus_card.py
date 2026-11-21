@@ -1,10 +1,12 @@
 """Suite for the corpus card: the tree-gate reading gets one live consumer.
 
-FIVE criteria, each pre-registered on the src/os/backlog.md board BEFORE this
+SIX criteria, each pre-registered on the src/os/backlog.md board BEFORE this
 file and the code it grades: AC-FDC3 (four arms, R3128), AC-FDC4 (five arms,
 R3132), AC-FDC5 (R3133: an over-count is named, not rendered), AC-FDC6
-(R3134: the third number is derived from the two on the line, not trusted) and
-AC-FDC7 (R3135: the fourth number is derived from bytes, never copied).
+(R3134: the third number is derived from the two on the line, not trusted),
+AC-FDC7 (R3135: the fourth number is derived from bytes, never copied) and
+AC-FDC8 (R3136: the first two are printed as the integers the line computes
+with, and a `files` that cannot be an integer is named instead of rendered).
 
 R3128 measured the hole: the corpus (files / readable / bytes that the flags
 face already pays to read, ~4219 files / 508.1MB) was derived in exactly one
@@ -289,6 +291,49 @@ def main():
     if "malformed" in derived_html:
         fourth.append("absent-key-read-as-defect")
     report("AC-FDC7", bool(fourth), ",".join(fourth))
+
+    # ---- AC-FDC8: the first two numbers are the ones the line computes with. --
+    # R3136 pre-registered this on the board before the card changed: `files`
+    # is the denominator of every number on the line and `readable` is the
+    # subtrahend of the third, yet both were printed verbatim from the face -
+    # `files=x` read as a measurement with the third number silently dropped,
+    # `readable=4.9` printed 4.9 while the gap used 4, and `files='007'` printed
+    # 007 while the comparison used 7. Measured: across 12 published blocks the
+    # three count keys are int 12/12 and mb is the only float, the card has
+    # exactly ONE `files=` print path, and the writer already int()s the value.
+    first = []
+    for label, blind_block in (
+            ("unparseable", {"files": "x", "readable": 4, "bytes": 10,
+                             "mb": 0.0}),
+            ("null", {"files": None, "readable": 4, "bytes": 10, "mb": 0.0})):
+        html = frontdoor.corpus_card({"corpus": blind_block})
+        if "files missing" not in html:
+            first.append(label + "-not-named")
+        for token in ("files=", "readable=", "mb=", "unread="):
+            if token in html:
+                first.append(label + "-prints-" + token.replace("=", ""))
+        if "absent" in html:
+            first.append(label + "-reads-as-absent")
+    # negative control: the shaped block renders exactly as it did before
+    if frontdoor.corpus_card(clean) != a_html:
+        first.append("shaped-block-changed")
+    # a float readable is printed as the integer the gap was derived from
+    float_html = frontdoor.corpus_card({"corpus": {"files": 5,
+                                                   "readable": 4.9,
+                                                   "bytes": 10, "mb": 0.0}})
+    if "CORPUS files=5 readable=4 mb=0.0 unread=1" not in float_html:
+        first.append("float-readable-not-derived")
+    if "malformed" in float_html or "4.9" in float_html:
+        first.append("float-readable-leaked")
+    # a numeric-string files is printed in its integer form, not its raw form
+    text_html = frontdoor.corpus_card({"corpus": {"files": "007",
+                                                  "readable": 7,
+                                                  "bytes": 10, "mb": 0.0}})
+    if "CORPUS files=7 readable=7 mb=0.0" not in text_html:
+        first.append("string-files-not-derived")
+    if "007" in text_html or "malformed" in text_html:
+        first.append("string-files-leaked")
+    report("AC-FDC8", bool(first), ",".join(first))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

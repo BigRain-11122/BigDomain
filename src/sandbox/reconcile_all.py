@@ -7791,9 +7791,14 @@ SUITES = [
     # missing it, while the only shipped corpus writer derives it from an
     # integer total and never reads an input mb - so a disagreeing or
     # unparseable key is a shape defect with no numbers, and a block that
-    # states no bytes cannot be cross-checked at all.
+    # states no bytes cannot be cross-checked at all. R3136 added a sixth
+    # (AC-FDC8): the first two numbers are printed as the integers the line
+    # computes with (a face stating readable=4.9 printed 4.9 while the gap used
+    # 4), and a `files` that cannot be an integer is named as `files missing`
+    # instead of rendered as `files=x` - the denominator cannot be re-derived
+    # on a pure consumption face.
     ("frontdoor-corpus-card",
-     os.path.join("test_frontdoor_corpus_card.py"), 5),
+     os.path.join("test_frontdoor_corpus_card.py"), 6),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files
@@ -7840,8 +7845,12 @@ SUITES = [
     # block, the divisor is decimal with one place (MiB would read 484.5 for the
     # same bytes), mb cannot travel without bytes, and AST pins that the shipped
     # writer reads no mb key at all while storing exactly one derived value.
+    # R3136 added a seventh (AC-CSC7): the first count is normalised too - a
+    # `files` that cannot be an integer publishes nothing, files=5.9 publishes
+    # 5, and AST pins that the published key is built from the name the single
+    # int() store produced rather than from the caller's raw value.
     ("os-corpus-supply-chain",
-     os.path.join("..", "os", "test_corpus_supply_chain.py"), 6),
+     os.path.join("..", "os", "test_corpus_supply_chain.py"), 7),
     ]
 
 FAILS = 0

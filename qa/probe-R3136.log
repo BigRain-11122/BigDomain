@@ -1,0 +1,168 @@
+== Q1: integer-valued keys across every published corpus block ==
+face revisions in history: 2317
+parsable revisions: 1726  unparsable(named): 591
+corpus blocks at every level: 12
+  files    types: int x12
+  readable types: int x12
+  bytes    types: int x12
+  mb       types: float x12
+distinct (files,readable,bytes): 5
+  shape x4 ('4230', '4230', '508125802')
+  shape x2 ('4290', '4290', '508391335')
+  shape x2 ('4256', '4256', '508248525')
+  shape x2 ('4248', '4248', '508209452')
+  shape x2 ('4240', '4240', '508170054')
+values whose int() differs from the stored form: 12
+  ('9beb857baea4', 'root.ceo_face.corpus', 'mb', 'not-integral', '508.4')
+  ('9beb857baea4', 'root.corpus', 'mb', 'not-integral', '508.4')
+  ('02a0a51af484', 'root.ceo_face.corpus', 'mb', 'not-integral', '508.2')
+  ('02a0a51af484', 'root.corpus', 'mb', 'not-integral', '508.2')
+  ('b9d8e28988a4', 'root.ceo_face.corpus', 'mb', 'not-integral', '508.2')
+  ('b9d8e28988a4', 'root.corpus', 'mb', 'not-integral', '508.2')
+  ('c416702ea628', 'root.ceo_face.corpus', 'mb', 'not-integral', '508.2')
+  ('c416702ea628', 'root.corpus', 'mb', 'not-integral', '508.2')
+
+== Q2: shipped print paths and readers of the 'files' key ==
+string literals containing 'files=': shipped=80 test-only=46
+  SHIPPED src/os/append_R2558.py:16 '2026-11-08 R2558 VERIFICATION window on the battery the regi'
+  SHIPPED src/os/append_R2569.py:21 '2026-11-08 R2569 SHIPPED src/os/probe_seam_name_binding_arm_'
+  SHIPPED src/os/append_R2571.py:24 '2026-11-08 R2571 SHIPPED src/os/probe_seam_name_binding_arm_'
+  SHIPPED src/os/backlog_edit_R2195.py:4 '- [x] 清欠账认领（R2195·非新面·R2193/R2194 两连挂账）：**全量电池 + 套件矩阵再生成**——'
+  SHIPPED src/os/backlog_insert_R2252.py:10 '- [x] [done 2026-10-29 R2252] debt register first item close'
+  SHIPPED src/os/backlog_prepend_R2512.py:6 '- [x] [done 2026-11-07 R2512] R2512 VERIFICATION window on t'
+  SHIPPED src/os/backlog_prepend_R2538.py:39 '- [x] [done 2026-11-07 R2538] R2538 VERIFICATION window on t'
+  SHIPPED src/os/board_R2260.py:7 '- [x] [done 2026-10-29 R2260] verification window on the deb'
+  SHIPPED src/os/capture_R2706.py:66 'LIVE files=%d loops=%d read_only=True'
+  SHIPPED src/os/capture_R2710.py:69 'LIVE files=%d loops=%d read_only=True'
+  SHIPPED src/os/closeout.py:311 'E_CO_ONE_OFF refused=%d freeze=%d scanned=%d one_offs=%d max'
+  SHIPPED src/os/closeout.py:247 'corpus_files=%d'
+  SHIPPED src/os/comma_binding_consumer_wire.py:283 'COMMA BINDING CONSUMER WIRE %s verdict=%s scanned=%d publish'
+  SHIPPED src/os/comma_binding_wire.py:308 'COMMA BINDING WIRE %s verdict=%s scanned=%d compared=%d pari'
+  SHIPPED src/os/evidence_census_R2072.py:52 'fingerprint stable=%s files=%d'
+  SHIPPED src/os/evidence_census_R2072.py:57 'read-only=%s class=%s files=%d total=%d'
+  SHIPPED src/os/evidence_writer.py:305 'dir files=%d tee=%d flagged=%d'
+  SHIPPED src/os/export_closeout_R2235.py:20 '2026-10-29 R2235 (five-silence scan clean at open: decisions'
+  SHIPPED src/os/export_closeout_R2235.py:102 'full battery on the committed tree fefa7103: RUNNER PASS 418'
+  SHIPPED src/os/export_closeout_R2235.py:114 'verification window: RUNNER PASS 418/418 suites + controls 7'
+  SHIPPED src/os/export_round.py:585 'Publish the tree-gate corpus reading, or nothing at all (R31'
+  SHIPPED src/os/fix_R2252.py:14 'verification window on the debt register first item: full re'
+  SHIPPED src/os/flush_export_R2026.py:19 'R2026: P3 explore queue FIFO head delivered: honorcert yearb'
+  SHIPPED src/os/flush_export_R2051.py:30 'R2051 tech-queue FIFO head claim (R2047 reseed seed 3): funn'
+  SHIPPED src/os/live_R2553.py:83 'BOUNDED REAL TREE files=%d verdict=%s probes=%d covered=%d o'
+  SHIPPED src/os/live_R2555.py:90 'BOUNDED REAL TREE files=%d verdict=%s probes=%d covered=%d o'
+  SHIPPED src/os/live_R2565.py:50 '%s BOUNDED-READ files=%d loops=%d from_resolved=%d from_name'
+  SHIPPED src/os/live_R2569.py:58 '%s BOUNDED-READ files=%d loops=%d ct_resolved=%d ct_named=%d'
+  SHIPPED src/os/live_class_base_R2573.py:97 'live files=%d loops=%d cb_resolved=%d cb_named=%d read_only='
+  SHIPPED src/os/live_class_source_R2575.py:104 'live files=%d loops=%d cs_resolved=%d cs_named=%d read_only='
+  SHIPPED src/os/live_two_level_R2571.py:91 'live files=%d loops=%d tl_resolved=%d tl_named=%d read_only='
+  SHIPPED src/os/owner_table_reader_parity.py:226 ' files=[%s]'
+  SHIPPED src/os/owner_table_split_triage.py:276 ' files=[%s]'
+  SHIPPED src/os/plain_import_comma_binding.py:288 'PLAIN IMPORT COMMA BINDING %s verdict=%s scanned=%d comma_li'
+  SHIPPED src/os/qa_writer_census.py:442 'census: files=%d tee=%d baselined=%d'
+  SHIPPED src/os/qa_writer_census.py:966 'AC-WCB11-R3 counters from one pass: files=5 tee=1 baselined='
+  SHIPPED src/os/qa_writer_census.py:1093 'AC-WCB13-d non-.log and uppercase .LOG stay outside the corp'
+  SHIPPED src/os/qa_writer_census.py:1000 'AC-WCB12-R1 stats out-param is the bytes on disk (files=%d b'
+  SHIPPED src/os/qa_writer_census.py:1019 'AC-WCB12-R3 CLI --check prints corpus files=5 bytes=%d rc=%d'
+  SHIPPED src/os/qa_writer_census.py:1244 'corpus files=%d readable=%d bytes=%d'
+  SHIPPED src/os/qa_writer_census.py:1250 'corpus_growth recent7d_files=%d recent7d_bytes=%d older_file'
+  SHIPPED src/os/qa_writer_census.py:969 'census: files=5 tee=1 baselined=4'
+  SHIPPED src/os/qa_writer_census.py:980 'census: files=5 tee=1 baselined=4'
+  SHIPPED src/os/qa_writer_census.py:1022 'corpus files=5 readable=5 bytes=%d'
+  SHIPPED src/os/qa_writer_census.py:1115 'corpus files=4 readable=4 bytes=%d'
+  SHIPPED src/os/qa_writer_census.py:1117 'corpus_growth recent7d_files=2 recent7d_bytes=%d'
+  SHIPPED src/os/queue_R2426.py:15 ' DELIVERED R2426: src/os/comma_binding_wire.py plus its six-'
+  SHIPPED src/os/queue_close_R2557.py:98 '  DISCHARGED R2557 (line 593, AC-PNDS1..AC-PNDS6 pinned in t'
+  SHIPPED src/os/repair_R2472.py:103 'EXECUTED files=%d'
+  SHIPPED src/os/repair_R2472.py:86 'DRY-RUN wrote=no files=%d'
+  SHIPPED src/os/repair_R2478.py:108 'EXECUTED files=%d'
+  SHIPPED src/os/repair_R2478.py:90 'DRY-RUN wrote=no files=%d'
+  SHIPPED src/os/retry_naming.py:204 'dir files=%d retry=%d legacy=%d pairs=%d'
+  SHIPPED src/os/round_evidence.py:197 'ROUND EVIDENCE rounds=%d claiming=%d with_files=%d missing=%'
+  SHIPPED src/os/state_update_R2051.py:14 '2026-10-20 R2051 (tech FIFO head claim, R2047 reseed seed 3:'
+  SHIPPED src/sandbox/frontdoor.py:5825 'CORPUS files=%s readable=%s mb=%s'
+  SHIPPED src/sandbox/reconcile_all.py:7943 'FREEZE LAW REFUSE refused=%d freeze=%d files=%s'
+  SHIPPED src/sandbox/funnel/funnel_daily.py:876 'ring1 leads: files=%d seen=%d new=%d'
+  SHIPPED tools/archive_provenance.py:1 'Name which ledger archives git actually tracks, without spaw'
+  SHIPPED tools/archive_provenance.py:107 'PROVENANCE files=%d tracked=%d untracked=%d source=.git/inde'
+  SHIPPED tools/closeout_gate.py:1 'Closeout precondition gate (R2932, criteria AC-CLG1..AC-CLG9'
+  SHIPPED tools/closeout_gate.py:466 'CLOSEOUT-GATE REFUSED reason=E_CLG_DRIFT files=%d flags=%d r'
+  SHIPPED tools/closeout_gate.py:358 'census: files='
+  SHIPPED tools/closeout_gate.py:449 'CLOSEOUT-GATE PASS files=%d flags=%d reader_refused=%d gatin'
+  SHIPPED tools/closeout_gate.py:388 'CLOSEOUT-GATE REFUSED reason=E_CLG_ROUND_MAIN files=%d flags'
+  SHIPPED tools/closeout_gate.py:409 'CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS files=%d flags=%d '
+  SHIPPED tools/closeout_gate.py:379 'CLOSEOUT-GATE REFUSED reason=E_CLG_ROUND_MAIN files=%d flags'
+  SHIPPED tools/closeout_gate.py:400 'CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS files=%d flags=%d '
+  SHIPPED tools/closeout_gate.py:430 'CLOSEOUT-GATE REFUSED reason=E_CLG_MATRIX files=%d flags=%d '
+  SHIPPED tools/corpus_rewrite_audit.py:1 "Corpus rewrite audit - does the drift law's evidence corpus "
+  SHIPPED tools/corpus_rewrite_audit.py:211 'CORPUS-DUPLICATES log_files=%d basenames=%d duplicate_names='
+  SHIPPED tools/corpus_rewrite_audit.py:208 'CORPUS-REWRITES tracked=%d commits=%d files=%d events=%d'
+  SHIPPED tools/corpus_rewrite_audit.py:258 'MANIFEST-WRITE files=%d path=%s'
+  SHIPPED tools/corpus_rewrite_audit.py:265 'MANIFEST-VERIFY files=%d changed=%d missing=%d added=%d'
+  SHIPPED tools/generate_copyright_materials.py:424 'inventory: files=%d lines=%d vendored_excluded=%s'
+  SHIPPED tools/membership_benefit_report.py:865 'MEMBERSHIP BENEFIT --check files=%s/%s facts_drift=%s'
+  SHIPPED tools/hooks/pre_commit_gate.py:327 'E_HOOK_REFUSE refused=%d freeze=%d staged=%d files=%s\n'
+  SHIPPED tools/hooks/pre_commit_gate.py:335 'E_HOOK_EVIDENCE refused=%d staged=%d files=%s\n'
+  SHIPPED tools/hooks/pre_commit_gate.py:221 'E_HOOK_TREE flags=%d files=%d gating=flags'
+  SHIPPED tools/hooks/pre_commit_gate.py:219 'HOOK TREE PASS files=%d flags=0 reader_refused=%d gating=fla'
+  test    src/os/test_archive_provenance.py:154 'files=%d'
+  test    src/os/test_battery_followup_help_wire.py:87 "print('CENSUS DRIFT-CLEAN files=0 flags=0')"
+  test    src/os/test_closeout.py:1612 '\\bcorpus_files=(\\d+)'
+  test    src/os/test_closeout.py:1662 '\\bfiles=(\\d+)'
+  test    src/os/test_closeout.py:1631 'corpus_files='
+  test    src/os/test_closeout.py:1726 'corpus_files=2'
+shipped readers of the 'files' key: 25
+  SHIPPED src/os/closeout.py:247 subscript-load
+  SHIPPED src/os/closeout.py:256 subscript-load
+  SHIPPED src/os/closeout.py:262 subscript-load
+  SHIPPED src/os/export_round.py:612 .get('files')
+  SHIPPED src/os/qa_writer_census.py:1001 .get('files')
+  SHIPPED src/os/qa_writer_census.py:1080 .get('files')
+  SHIPPED src/os/qa_writer_census.py:1095 .get('files')
+  SHIPPED src/os/qa_writer_census.py:1095 .get('files')
+  SHIPPED src/os/qa_writer_census.py:1245 .get('files')
+  SHIPPED src/os/queue_close_R2553.py:115 .get('files')
+  SHIPPED src/os/queue_close_R2555.py:111 .get('files')
+  SHIPPED src/os/queue_close_R2557.py:129 .get('files')
+  SHIPPED src/os/queue_close_R2557.py:130 .get('files')
+  SHIPPED src/os/queue_close_R2565.py:134 .get('files')
+  SHIPPED src/os/queue_close_R2569.py:136 .get('files')
+  SHIPPED src/os/queue_close_R2571.py:139 .get('files')
+  SHIPPED src/os/queue_close_R2573.py:137 .get('files')
+  SHIPPED src/os/queue_close_R2575.py:146 .get('files')
+  SHIPPED src/sandbox/frontdoor.py:5770 .get('files')
+  SHIPPED src/sandbox/frontdoor.py:5826 .get('files')
+  SHIPPED src/sandbox/lobby/.venv/Lib/site-packages/pip/_internal/index/collector.py:227 .get('files')
+  SHIPPED tools/corpus_rewrite_audit.py:209 subscript-load
+  SHIPPED tools/corpus_rewrite_audit.py:266 subscript-load
+  SHIPPED tools/generate_copyright_materials.py:283 subscript-load
+  SHIPPED tools/generate_copyright_materials.py:282 subscript-load
+
+== Q3: do the existing arms survive a files-missing defect? ==
+FDC3-a clean       -> CORPUS files=4219 readable=4219 mb=508.1
+FDC3-b unread      -> CORPUS files=3 readable=2 mb=0.0 unread=1
+FDC3-d moved       -> CORPUS files=4300 readable=4300 mb=600.0
+FDC4-bare          -> CORPUS block is malformed (readable missing) - not a reading
+FDC4-readable-x    -> CORPUS block is malformed (readable missing) - not a reading
+FDC5-over          -> CORPUS block is malformed (readable exceeds files) - not a reading
+FDC5-legal         -> CORPUS files=5 readable=3 mb=0.0 unread=2
+FDC6-contra        -> CORPUS block is malformed (unread disagrees with files-readable) - not a reading
+FDC6-blind         -> CORPUS files=x readable=4 mb=0.0
+FDC7-s nobytes     -> CORPUS block is malformed (bytes missing) - not a reading
+FDC7-t derived     -> CORPUS files=5 readable=5 mb=508.1
+float-readable     -> CORPUS files=5 readable=4.9 mb=0.0 unread=1
+string-files-007   -> CORPUS files=007 readable=7 mb=0.0
+gap from 4.9/5 = 1 while the raw field prints 4.9
+byte-identical candidate: FDC3-a clean   <p class=kv>CORPUS files=4219 readable=4219 mb=508.1</p>
+byte-identical candidate: FDC3-b unread  <p class=kv>CORPUS files=3 readable=2 mb=0.0 unread=1</p>
+byte-identical candidate: FDC3-d moved   <p class=kv>CORPUS files=4300 readable=4300 mb=600.0</p>
+byte-identical candidate: FDC5-legal     <p class=kv>CORPUS files=5 readable=3 mb=0.0 unread=2</p>
+byte-identical candidate: FDC7-t derived <p class=kv>CORPUS files=5 readable=5 mb=508.1</p>
+FDC3-c absent -> CORPUS absent from the export face (honest absence, not a zero)
+FDC3-c absent -> CORPUS absent from the export face (honest absence, not a zero)
+FDC3-c absent -> CORPUS absent from the export face (honest absence, not a zero)
+FDC3-c absent -> CORPUS absent from the export face (honest absence, not a zero)
+live face corpus blocks: 2
+live card line: CORPUS files=4290 readable=4290 mb=508.4
+
+== SUMMARY ==
+blocks=12 non_integral_or_unparseable=12 shipped_files_print_paths=80 shipped_files_readers=25

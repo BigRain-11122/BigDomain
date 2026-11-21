@@ -5766,11 +5766,21 @@ def corpus_card(face):
     # enumeration, so `readable > files` means this block was hand-made. A card
     # that printed it would show unread=-2, a negative count that reads like a
     # measurement. Name the shape defect and print no numbers.
+    # R3136: `files` is the denominator of every number on this line, and this
+    # card is a pure consumer - it never re-walks qa/, so the denominator
+    # cannot be re-derived here. Measured (qa/probe-R3136.log): across 12
+    # published blocks the three count keys are int 12/12 (files, readable,
+    # bytes) while mb is the only float, so a non-integer `files` did not come
+    # from the supply path; the writer already int()s it and refuses what it
+    # cannot (corpus_block). The card used to print `files=x` verbatim, which
+    # reads as a measurement while the third number was silently dropped for
+    # being unverifiable. Name the shape defect instead, like readable missing.
     try:
         files_int = int(block.get("files"))
     except (TypeError, ValueError):
-        files_int = None
-    if files_int is not None and readable > files_int:
+        return ("<p class=kv>CORPUS block is malformed (files missing) "
+                "- not a reading</p>")
+    if readable > files_int:
         return ("<p class=kv>CORPUS block is malformed (readable exceeds "
                 "files) - not a reading</p>")
 
@@ -5783,20 +5793,15 @@ def corpus_card(face):
     # `unread=9`, three numbers contradicting each other on one line. Derived,
     # the three agree by construction; a stored key that disagrees is a shape
     # defect and prints no numbers at all.
-    gap = None
-    if files_int is not None:
-        gap = files_int - readable
-        if "unread" in block:
-            try:
-                stored = int(block.get("unread"))
-            except (TypeError, ValueError):
-                stored = None
-            if stored != gap:
-                return ("<p class=kv>CORPUS block is malformed (unread "
-                        "disagrees with files-readable) - not a reading</p>")
-
-    def show(value):
-        return "none" if value is None else str(value)
+    gap = files_int - readable
+    if "unread" in block:
+        try:
+            stored = int(block.get("unread"))
+        except (TypeError, ValueError):
+            stored = None
+        if stored != gap:
+            return ("<p class=kv>CORPUS block is malformed (unread "
+                    "disagrees with files-readable) - not a reading</p>")
 
     # R3135: the fourth number is derived as well. Measured (qa/probe-R3135.log):
     # across 10 published blocks taken from 2316 face revisions mb always equals
@@ -5822,12 +5827,16 @@ def corpus_card(face):
             return ("<p class=kv>CORPUS block is malformed (mb disagrees "
                     "with bytes) - not a reading</p>")
 
-    line = ("CORPUS files=%s readable=%s mb=%s"
-            % (show(block.get("files")), show(block.get("readable")),
-               show(mb)))
+    # R3136: print the two integers this line actually computes with, never the
+    # face's raw form. Measured: a face stating readable=4.9 printed
+    # `readable=4.9` while the third number was derived from 4, and `files=007`
+    # printed 007 while the comparison used 7 - the same contradiction shape
+    # the last three rounds closed, now on the first two numbers.
+    line = ("CORPUS files=%d readable=%d mb=%s"
+            % (files_int, readable, mb))
     # A nonzero unread count is a READING, not a gate (R3127 adjudication): it
     # prints, and it does not borrow a verdict word from either judge.
-    if gap is not None and gap > 0:
+    if gap > 0:
         line += " unread=%d" % gap
     return "<p class=kv>%s</p>" % esc(line)
 

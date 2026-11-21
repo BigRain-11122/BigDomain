@@ -91,6 +91,15 @@ measured at R3135:
      loads, zero dict .get calls) and stores exactly one value, derived from
      the integer total.
 
+AC-CSC7 (four arms) - why the first number is normalised, measured at R3136:
+  p  a `files` that cannot be an integer publishes NOTHING (x, None, '5.5'):
+     the denominator is not something the card may re-derive.
+  q  negative control: an integer block is published byte-identical (5/5/10).
+  r  the writer normalises the counts before storing: files=5.9 readable='4'
+     publish as files=5 readable=4 (ints), and the gap is stated as unread=1.
+  s  AST: the published `files` key is built from the name the single int()
+     store produced, never from the caller's raw value.
+
 Isolation: private worlds are temp dirs; the only live reads are shipped
 sources. Stdlib only. Exit 0 = all green, 2 = at least one red.
 """
@@ -778,6 +787,74 @@ def arm_z5():
     return True, "zero mb reads, one store: %s" % ast.unparse(call)
 
 
+def arm_z6():
+    """R3136: a `files` that cannot be an integer publishes nothing."""
+    for bad in ("x", None, "5.5"):
+        block = ER.corpus_block({"files": bad, "readable": 4, "bytes": 10})
+        if block is not None:
+            return False, "files=%r published %r" % (bad, block)
+    return True, "files=x/None/'5.5' -> None"
+
+
+def arm_z7():
+    """R3136 negative control: an integer block is published unchanged."""
+    block = ER.corpus_block({"files": 5, "readable": 5, "bytes": 10})
+    want = {"files": 5, "readable": 5, "bytes": 10, "mb": 0.0}
+    if block != want:
+        return False, "int block read %r" % (block,)
+    return True, "5/5/10 -> %r" % (want,)
+
+
+def arm_z8():
+    """R3136: the writer normalises the counts to integers before storing."""
+    block = ER.corpus_block({"files": 5.9, "readable": "4", "bytes": "10"})
+    if not isinstance(block, dict):
+        return False, "normalisable block refused: %r" % (block,)
+    if block.get("files") != 5 or block.get("readable") != 4:
+        return False, "counts not normalised: %r" % (block,)
+    for key in ("files", "readable", "bytes"):
+        if not isinstance(block.get(key), int) or isinstance(block.get(key), bool):
+            return False, "%s is %r" % (key, type(block.get(key)).__name__)
+    if block.get("unread") != 1:
+        return False, "gap not stated: %r" % (block,)
+    return True, "5.9/'4'/'10' -> files=5 readable=4 bytes=10 unread=1"
+
+
+def arm_z9():
+    """R3136: the stored `files` comes from the int() conversion, not the input."""
+    path = os.path.join(ROOT, "src", "os", "export_round.py")
+    with io.open(path, encoding="utf-8") as handle:
+        tree = ast.parse(handle.read())
+    fn = None
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef) and node.name == "corpus_block":
+            fn = node
+    if fn is None:
+        return False, "corpus_block not found"
+    stores = []
+    for node in ast.walk(fn):
+        if isinstance(node, ast.Assign) and len(node.targets) == 1:
+            target = node.targets[0]
+            if getattr(target, "id", None) == "files":
+                stores.append(node)
+    converted = [node for node in stores
+                 if isinstance(node.value, ast.Call)
+                 and getattr(node.value.func, "id", None) == "int"]
+    if len(converted) != 1:
+        return False, "int() conversions of files=%d of %d stores" % (
+            len(converted), len(stores))
+    # the published key is built from the converted name, never from corpus.get
+    dict_sources = []
+    for node in ast.walk(fn):
+        if isinstance(node, ast.Dict):
+            for key, value in zip(node.keys, node.values):
+                if isinstance(key, ast.Constant) and key.value == "files":
+                    dict_sources.append(ast.unparse(value))
+    if dict_sources != ["files"]:
+        return False, "published files sources %r" % (dict_sources,)
+    return True, "one int() store, published from the converted name"
+
+
 def main():
     criteria = [
         ("AC-CSC1", "os-corpus-supply-chain", [
@@ -816,6 +893,11 @@ def main():
           ("r", "decimal divisor", arm_z3),
           ("s", "mb without bytes", arm_z4),
           ("t", "writer never reads mb", arm_z5)]),
+        ("AC-CSC7", "os-corpus-first-number",
+         [("p", "non-integer files", arm_z6),
+          ("q", "negative control", arm_z7),
+          ("r", "counts normalised", arm_z8),
+          ("s", "published from int()", arm_z9)]),
     ]
     arms_total = 0
     red = 0
