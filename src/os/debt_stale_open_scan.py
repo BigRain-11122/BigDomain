@@ -2,13 +2,14 @@
 # Criteria AC-DSRC1..AC-DSRC6 were pinned in state/queue/tech.md as the R2524
 # seed row BEFORE this file existed, and re-pinned on the board at R3162
 # (AC-DSRC2 JUDGED-CHANGED, narrower: see the module docstring note below).
+# AC-DSRC7 was pinned on the board at R3163 BEFORE the split it judges.
 #
 # Why this exists: the register can carry an OPEN row whose named work already
 # shipped, and no shipped reader ever says so. debt_gate names only the single
 # `first=yes` row; debt_register ages rows by windows carried. So "a row whose
 # own window landed long ago" and "a row that still owes work" read the same.
 #
-# Three deliberate narrowings:
+# Four deliberate narrowings:
 #   * The register is read through the SHIPPED row law (debt_register), never
 #     a second parser, so a typo cannot be read differently in two places.
 #   * The DECIDING round is the row's own ITEM round. Round tokens in the note
@@ -21,6 +22,11 @@
 #     state_seq.archived_labels, same item_round law) AND qa/ carries at least
 #     one file bearing its token (round_evidence.map_files). A missing
 #     measurement is never promoted to STALE.
+#   * R3163 (AC-DSRC7): the round's discharge bracket is named, not merged.
+#     A labelled round with no evidence file is LANDED-NO-EVIDENCE (find the
+#     file); a round no evidence face ever labelled is UNKNOWN (check the
+#     number). Measured live: 374 of 1938 labels carry no qa file, so the
+#     middle bracket is a real class rather than a hypothetical one.
 #
 # Pure read: nothing is written, no clock is read, no network import.
 # Source is pure ASCII, stdlib only.
@@ -38,13 +44,16 @@ import state_seq
 # (so "R2742b" in an item is honestly NOT a round number).
 ITEM_ROUND_RE = re.compile(r"(?<![0-9A-Za-z])R(\d{3,6})(?![0-9A-Za-z])")
 
-STATES = ("STALE-OPEN", "OPEN-UNNAMED", "OPEN-UNDISCHARGED")
+STATES = ("STALE-OPEN", "OPEN-UNNAMED", "LANDED-NO-EVIDENCE", "UNKNOWN")
+
+# How a deciding round resolves against the two shipped evidence faces.
+EVIDENCE_STATES = ("DISCHARGED", "LANDED-NO-EVIDENCE", "UNKNOWN")
 
 VERDICTS = ("UNPINNED", "STALE-FOUND", "NO-STALE")
 
 ACTION = "CLOSE-BY-HAND"
 
-ROW_KEYS = ("item", "opened", "deciding", "state", "note_rounds")
+ROW_KEYS = ("item", "opened", "deciding", "state", "evidence", "note_rounds")
 
 REPORT_KEYS = (
     "register",
@@ -52,7 +61,8 @@ REPORT_KEYS = (
     "open_count",
     "stale_count",
     "unnamed_count",
-    "undischarged_count",
+    "landed_no_evidence_count",
+    "unknown_count",
     "rows",
     "action",
     "verdict",
@@ -109,12 +119,20 @@ def evidence_context(root, qa_dir=None):
 
 def round_reading(number, context):
     """DISCHARGED only when both shipped faces agree on this round."""
+    labelled = number in context["labelled"]
+    files = len(context["files"].get(number) or [])
+    if labelled and files:
+        evidence = "DISCHARGED"
+    elif labelled:
+        evidence = "LANDED-NO-EVIDENCE"
+    else:
+        evidence = "UNKNOWN"
     return {
         "round": number,
-        "labelled": number in context["labelled"],
-        "files": len(context["files"].get(number) or []),
-        "discharged": (number in context["labelled"]
-                       and bool(context["files"].get(number))),
+        "labelled": labelled,
+        "files": files,
+        "discharged": evidence == "DISCHARGED",
+        "evidence": evidence,
     }
 
 
@@ -124,18 +142,18 @@ def judge_row(row, context):
     tokens = note_rounds(row["note"])
     if deciding is None:
         state = "OPEN-UNNAMED"
+        evidence = "UNKNOWN"
         deciding_out = None
-    elif round_reading(deciding, context)["discharged"]:
-        state = "STALE-OPEN"
-        deciding_out = deciding
     else:
-        state = "OPEN-UNDISCHARGED"
+        evidence = round_reading(deciding, context)["evidence"]
+        state = "STALE-OPEN" if evidence == "DISCHARGED" else evidence
         deciding_out = deciding
     return {
         "item": row["item"],
         "opened": row["opened"],
         "deciding": deciding_out,
         "state": state,
+        "evidence": evidence,
         "note_rounds": tokens,
     }
 
@@ -154,7 +172,8 @@ def scan(root, qa_dir=None):
     rows = []
     stale = 0
     unnamed = 0
-    undischarged = 0
+    landed_no_evidence = 0
+    unknown = 0
     for row in register["rows"]:
         if row["state"] != "open":
             continue
@@ -163,8 +182,10 @@ def scan(root, qa_dir=None):
             stale += 1
         elif judged["state"] == "OPEN-UNNAMED":
             unnamed += 1
+        elif judged["state"] == "LANDED-NO-EVIDENCE":
+            landed_no_evidence += 1
         else:
-            undischarged += 1
+            unknown += 1
         rows.append(judged)
     if stale:
         verdict = "STALE-FOUND"
@@ -176,7 +197,8 @@ def scan(root, qa_dir=None):
         "open_count": len(rows),
         "stale_count": stale,
         "unnamed_count": unnamed,
-        "undischarged_count": undischarged,
+        "landed_no_evidence_count": landed_no_evidence,
+        "unknown_count": unknown,
         "rows": rows,
         "action": ACTION,
         "verdict": verdict,
@@ -185,19 +207,22 @@ def scan(root, qa_dir=None):
 
 def one_line(report):
     """The single line an operator reads."""
-    return ("DEBT STALE OPEN open=%d stale=%d unnamed=%d undischarged=%d "
-            "action=%s verdict=%s"
+    return ("DEBT STALE OPEN open=%d stale=%d unnamed=%d "
+            "landed_no_evidence=%d unknown=%d action=%s verdict=%s"
             % (report["open_count"], report["stale_count"],
-               report["unnamed_count"], report["undischarged_count"],
-               report["action"], report["verdict"]))
+               report["unnamed_count"],
+               report["landed_no_evidence_count"],
+               report["unknown_count"], report["action"], report["verdict"]))
 
 
 def render(report):
     """Full rendering: the one line, then every open row with its state."""
     out = [one_line(report)]
     for row in report["rows"]:
-        out.append("  %s item=%s opened=%s deciding=%s note_rounds=%s"
-                   % (row["state"], row["item"], row["opened"],
+        out.append("  %s evidence=%s item=%s opened=%s deciding=%s "
+                   "note_rounds=%s"
+                   % (row["state"], row["evidence"], row["item"],
+                      row["opened"],
                       "R%d" % row["deciding"] if row["deciding"] else "none",
                       ",".join("R%d" % tok for tok in row["note_rounds"])
                       or "none"))

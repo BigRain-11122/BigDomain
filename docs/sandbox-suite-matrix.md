@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 752 | 6126 | 675/675 | R2739 |
+| 752 | 6127 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -545,7 +545,7 @@
 | 506 | os-queue-floor-decl | ../os/test_queue_floor_decl.py | 6 | green | 1.2 |
 | 507 | os-queue-only-floor-wire | ../os/test_queue_only_floor_wire.py | 6 | green | 2.3 |
 | 508 | os-debt-gate | ../os/test_debt_gate.py | 5 | green | 1.3 |
-| 509 | os-debt-stale-open | ../os/test_debt_stale_open_scan.py | 6 | no-evidence | - |
+| 509 | os-debt-stale-open | ../os/test_debt_stale_open_scan.py | 7 | no-evidence | - |
 | 510 | os-queue-head | ../os/test_queue_head.py | 6 | green | 1.6 |
 | 511 | os-battery-followup | ../os/test_battery_followup.py | 7 | green | 10.6 |
 | 512 | os-battery-followup-help-wire | ../os/test_battery_followup_help_wire.py | 6 | green | 7.9 |
@@ -789,7 +789,7 @@
 | 750 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
 | 751 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 752 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6126 | green 675 / FAIL 0 / no-evidence 77 |  |
+|  | 合计 |  | 6127 | green 675 / FAIL 0 / no-evidence 77 |  |
 
 ## 证据出处
 

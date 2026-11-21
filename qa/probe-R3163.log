@@ -1,0 +1,11 @@
+Q1 open rows=12 of 431
+Q2 DISCHARGED count=10 R2527,R2529,R2535,R2537,R2539,R2559
+Q2 LANDED-NO-EVIDENCE count=0 
+Q2 UNKNOWN count=0 
+Q2 UNNAMED count=2 loop-s4u-reconcile,product-face-R2742b
+Q3 label union=1938 with_qa_file=1564 without_qa_file=374
+Q3 sample_no_file=R265,R266,R267,R268,R450,R460,R468,R1193,R1195,R1197,R1199,R1200,R1202,R1204,R1207,R1223,R1226,R1228,R1229,R1231,R1233,R1235,R1236,R1238,R1239,R1240,R1241,R1242,R1243,R1244,R1245,R1246,R1247,R1248,R1249,R1250,R1252,R1255,R1256,R1257,R1258,R1259,R1260,R1261,R1262,R1263,R1264,R1265,R1267,R1268,R1269,R1270,R1271,R1272,R1273,R1274,R1276,R1277,R1278,R1279,R1280,R1281,R1283,R1284,R1285,R1287,R1288,R1290
+Q4 binders outside the module+suite=1 src/os/test_debt_stale_open_scan.py
+Q5 shipped round_reading can name both brackets: {'round': 3002, 'labelled': True, 'files': 0, 'discharged': False}
+Q5 shipped round_reading on an absent round: {'round': 3999, 'labelled': False, 'files': 0, 'discharged': False}
+Q6 live reading today: DEBT STALE OPEN open=12 stale=10 unnamed=2 undischarged=0 action=CLOSE-BY-HAND verdict=STALE-FOUND

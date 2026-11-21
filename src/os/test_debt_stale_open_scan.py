@@ -1,10 +1,13 @@
 """debt_stale_open_scan suite (R3162; criteria AC-DSRC1..AC-DSRC6 were pinned
 in state/queue/tech.md as the R2524 seed row BEFORE the code existed, and
 AC-DSRC2 was JUDGED-CHANGED on the board at R3162 with the measured reason).
+AC-DSRC7 was pinned on the board at R3163 BEFORE the three-way split landed,
+and AC-DSRC3 was re-pinned (JUDGED-CHANGED, narrower) to the new state names.
 
 What this proves: an OPEN debt row is judged by its OWN item round against the
 two shipped evidence faces, a missing measurement can never read STALE, the
-reading writes nothing, and the CLI keeps its pinned codes.
+discharge bracket is named rather than merged, the reading writes nothing, and
+the CLI keeps its pinned codes.
 
 Stdlib only, ASCII source, zero network. Exit 0 = all green.
 """
@@ -25,11 +28,11 @@ sys.path.insert(0, BASE)
 import debt_register  # noqa: E402
 import debt_stale_open_scan as DSOS  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 7
 MODULE = os.path.join(BASE, "debt_stale_open_scan.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-debt-stale-open"
-WIRED_EXPECT = '"test_debt_stale_open_scan.py"), 6),'
+WIRED_EXPECT = '"test_debt_stale_open_scan.py"), 7),'
 
 PASSES = 0
 FAILS = 0
@@ -174,16 +177,17 @@ def ac_dsrc3(world):
             code = exc.code
         refused.append(code)
     zeros = 0
-    ok = (unknown["state"] == "OPEN-UNDISCHARGED"
-          and no_file["state"] == "OPEN-UNDISCHARGED"
+    ok = (unknown["state"] == "UNKNOWN"
+          and no_file["state"] == "LANDED-NO-EVIDENCE"
           and not_round["state"] == "OPEN-UNNAMED"
           and report["stale_count"] == 2
           and refused[0] == "E_DSRC_NO_REGISTER"
           and refused[1] == "E_DSRC_REGISTER"
           and zeros == 0)
-    check(ok, "AC-DSRC3 a round that is never labelled, a labelled round with "
-          "no evidence file and a token that is not a round all stay OPEN, "
-          "and a missing or malformed register refuses by name")
+    check(ok, "AC-DSRC3 a round that is never labelled reads UNKNOWN, a "
+          "labelled round with no evidence file reads LANDED-NO-EVIDENCE, a "
+          "token that is not a round stays OPEN-UNNAMED, and a missing or "
+          "malformed register refuses by name")
 
 
 def ac_dsrc4(world):
@@ -246,15 +250,101 @@ def ac_dsrc6(world):
     wired = WIRED_EXPECT in runner and ('("%s",' % LABEL) in runner
     live = DSOS.scan(REPO)
     summed = (live["stale_count"] + live["unnamed_count"]
-              + live["undischarged_count"])
+              + live["landed_no_evidence_count"] + live["unknown_count"])
     ok = (ascii_ok and no_clock and wired
           and summed == live["open_count"] and live["open_count"] > 0
           and isinstance(live["stale_count"], int)
           and len(live["rows"]) == live["open_count"])
     print("LIVE %s" % DSOS.one_line(live), flush=True)
     check(ok, "AC-DSRC6 pure ASCII stdlib with no clock and no network, wired "
-          "as %s(6), and the live register reading sums and prints its stale "
+          "as %s(7), and the live register reading sums and prints its stale "
           "count as a number" % LABEL)
+
+
+def ac_dsrc7(world):
+    """The discharge bracket is named, never merged (R3163)."""
+    report = DSOS.scan(world)
+    rows = by_item(report)
+    live = rows["product-face-R3001"]
+    no_file = rows["product-face-R3002"]
+    never = rows["product-face-R3999"]
+    arm_a = (live["state"] == "STALE-OPEN"
+             and live["evidence"] == "DISCHARGED"
+             and live["deciding"] == 3001
+             and no_file["state"] == "LANDED-NO-EVIDENCE"
+             and no_file["evidence"] == "LANDED-NO-EVIDENCE"
+             and no_file["deciding"] == 3002
+             and never["state"] == "UNKNOWN"
+             and never["evidence"] == "UNKNOWN"
+             and never["deciding"] == 3999)
+    tallies = {
+        "STALE-OPEN": 0, "OPEN-UNNAMED": 0,
+        "LANDED-NO-EVIDENCE": 0, "UNKNOWN": 0,
+    }
+    for row in report["rows"]:
+        tallies[row["state"]] += 1
+    live_report = DSOS.scan(REPO)
+    live_tallies = {
+        "STALE-OPEN": 0, "OPEN-UNNAMED": 0,
+        "LANDED-NO-EVIDENCE": 0, "UNKNOWN": 0,
+    }
+    for row in live_report["rows"]:
+        live_tallies[row["state"]] += 1
+    arm_b = (
+        report["stale_count"] == tallies["STALE-OPEN"]
+        and report["unnamed_count"] == tallies["OPEN-UNNAMED"]
+        and report["landed_no_evidence_count"] == tallies["LANDED-NO-EVIDENCE"]
+        and report["unknown_count"] == tallies["UNKNOWN"]
+        and sum(tallies.values()) == report["open_count"]
+        and live_report["stale_count"] == live_tallies["STALE-OPEN"]
+        and live_report["unnamed_count"] == live_tallies["OPEN-UNNAMED"]
+        and (live_report["landed_no_evidence_count"]
+             == live_tallies["LANDED-NO-EVIDENCE"])
+        and live_report["unknown_count"] == live_tallies["UNKNOWN"]
+        and sum(live_tallies.values()) == live_report["open_count"])
+    measuring = tempfile.mkdtemp(prefix="bigdomain-dsos-measuring-")
+    write(os.path.join(measuring, "state", "debt.md"),
+          "- [ ] opened=R3002 | item=landed-no-file-R3002 | note=x | first=no\n"
+          "- [ ] opened=R3999 | item=never-labelled-R3999 | note=y | first=no\n")
+    write(os.path.join(measuring, "src", "os", "state.json"),
+          json.dumps({"tick": 3002, "log": [QUIET_LABEL]}) + "\n")
+    code_gate, out_gate = run_cli(
+        ["--check", "--gate", "--root", measuring])
+    arm_c = (code_gate == 0 and "NO-STALE" in out_gate
+             and "landed_no_evidence=1" in out_gate
+             and "unknown=1" in out_gate and "stale=0" in out_gate)
+    first, text_first = run_cli(["--check", "--json", "--root", world])
+    second, text_second = run_cli(["--check", "--json", "--root", world])
+    parsed = json.loads(text_first)
+    row_keys = list(parsed["rows"][0])
+    line = DSOS.one_line(report)
+    arm_d = (row_keys == list(DSOS.ROW_KEYS) and "evidence" in row_keys
+             and list(parsed) == list(DSOS.REPORT_KEYS)
+             and text_first == text_second
+             and "landed_no_evidence=%d" % report["landed_no_evidence_count"]
+             in line
+             and "unknown=%d" % report["unknown_count"] in line
+             and "undischarged=" not in line)
+    arm_e = (report["stale_count"] == 2
+             and rows["loop-s4u-reconcile"]["state"] == "OPEN-UNNAMED"
+             and rows["product-face-R3003b"]["state"] == "OPEN-UNNAMED"
+             and rows["product-face-R3000"]["state"] == "STALE-OPEN"
+             and rows["product-face-R3000"]["evidence"] == "DISCHARGED")
+    with io.open(MODULE, "r", encoding="utf-8") as handle:
+        source = handle.read()
+    seen = set(row["evidence"] for row in report["rows"])
+    arm_f = ("OPEN-UNDISCHARGED" not in source
+             and DSOS.EVIDENCE_STATES == (
+                 "DISCHARGED", "LANDED-NO-EVIDENCE", "UNKNOWN")
+             and seen == set(DSOS.EVIDENCE_STATES)
+             and isinstance(live_report["landed_no_evidence_count"], int)
+             and isinstance(live_report["unknown_count"], int))
+    ok = (arm_a and arm_b and arm_c and arm_d and arm_e and arm_f)
+    check(ok, "AC-DSRC7 the discharge bracket is named not merged: the three "
+          "states are separately reachable with their own evidence word, each "
+          "count equals its row tally and sums to open, a world holding only "
+          "the two unproven brackets is NO-STALE and gates clean, the keys and "
+          "the one line carry both new counts, and the retired word is gone")
 
 
 def main():
@@ -265,6 +355,7 @@ def main():
     ac_dsrc4(world)
     ac_dsrc5(world)
     ac_dsrc6(world)
+    ac_dsrc7(world)
     print("SUITE %s %d/%d"
           % ("PASS" if FAILS == 0 else "FAIL", PASSES,
              PASSES + FAILS), flush=True)

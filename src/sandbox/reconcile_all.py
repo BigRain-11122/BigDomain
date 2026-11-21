@@ -5403,9 +5403,10 @@ SUITES = [
     # files) and never promotes a missing measurement to STALE.
     # (AC-DSRC1..AC-DSRC6 pinned in state/queue/tech.md as the R2524 seed row
     # BEFORE the code existed; AC-DSRC2 JUDGED-CHANGED at R3162 with the
-    # measured false-positive reason on the board.)
+    # measured false-positive reason on the board. AC-DSRC7 pinned on the board
+    # at R3163 BEFORE the three-way bracket split landed.)
     ("os-debt-stale-open",
-     os.path.join("..", "os", "test_debt_stale_open_scan.py"), 6),
+     os.path.join("..", "os", "test_debt_stale_open_scan.py"), 7),
     # R2270: which queue row comes FIRST becomes a reading. queue_floor counts
     # claimable rows and queue_row gates their prefix, but the top deliverable
     # row was still re-derived by hand every window; this reader names the head

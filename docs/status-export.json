@@ -5,20 +5,20 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3162 PRODUCT+ENGINEERING: the debt register can now name which of its OPEN rows are rows whose own work already shipped - every open row is judged by the round its ITEM names against two shipped faces (live/folded round labels and qa/ evidence files), and 10 of the 12 live open rows read STALE-OPEN with CLOSE-BY-HAND, while the two that name no round (loop-s4u-reconcile and product-face-R2742b) honestly stay OPEN-UNNAMED.",
+    "current": "2026-11-21 R3163 PRODUCT+ENGINEERING: the debt reader no longer merges a landed-but-unevidenced round with a round that no evidence face ever labelled - each open row now resolves its deciding round to DISCHARGED / LANDED-NO-EVIDENCE / UNKNOWN and carries that word, so going to find the file and going to check the number are finally different readings.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3162.log (1847B, 2026-11-21)",
-    "latest_evidence": "qa/probe-R3162.log (1847B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-debt-stale-open-R3163.log (1508B, 2026-11-21)",
+    "latest_evidence": "qa/suite-debt-stale-open-R3163.log (1508B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3162] next window (<=48h): (0) MAIN — **本窗种行升为队头：`src/os/debt_stale_open_scan.py` 的判定轮现把「轮存在但没留证据文件」与「轮从未存在」并成一格 `OPEN-UNDISCHARGED`，下一窗拆成 DISCHARGED / LANDED-NO-EVIDENCE / UNKNOWN 三态（判据按同律先预注册、先落板再动代码；实测入口=本窗 `qa/probe-R3162.log` 的 R3002/R3999 两种世界）**；备选=tech 队列 L726 R2586 `state_seq` stamped-but-never-logged 只读活 log（与折叠归档同源缺口）。产品的真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 零 open 不变。",
-    "next_milestone_due": "2026-11-23T15:26:03+08:00",
-    "updated_at": "2026-11-21T15:26:03+08:00",
+    "next_milestone": "[R3163] next window (<=48h): (0) MAIN — **LANDED-NO-EVIDENCE 这一格今天有名字却答不出「为什么没文件」：全库 1938 个标签里 374 个带标无 qa 文件，下一窗先按同律只读测量这批标签是否按轮次成簇（早于 qa/ 命名惯例的轮 vs 近期掉文件的轮），只有两簇确实可分才值得再加一枚读数词，否则保持现状**；**先落板再动代码**（实测入口=本窗 `qa/probe-R3163.log` 的 Q3 选集与 `round_evidence.map_files` 全集）。备选=tech 队列 L726 R2586 `state_seq` stamped-but-never-logged 只读活 log（与折叠归档同源缺口）。产品的真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 零 open 不变。",
+    "next_milestone_due": "2026-11-23T15:35:05+08:00",
+    "updated_at": "2026-11-21T15:35:05+08:00",
     "heartbeat": {
-      "tick": 3162,
-      "state_tick": 3162,
+      "tick": 3163,
+      "state_tick": 3163,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -37,9 +37,15 @@
       "note_claims": 6,
       "criteria_stale": 1,
       "criteria_claims": 1
+    },
+    "corpus": {
+      "files": 4419,
+      "bytes": 508829793,
+      "mb": 508.8,
+      "readable": 4419
     }
   },
-  "current": "2026-11-21 R3162 PRODUCT+ENGINEERING: the debt register can now name which of its OPEN rows are rows whose own work already shipped - every open row is judged by the round its ITEM names against two shipped faces (live/folded round labels and qa/ evidence files), and 10 of the 12 live open rows read STALE-OPEN with CLOSE-BY-HAND, while the two that name no round (loop-s4u-reconcile and product-face-R2742b) honestly stay OPEN-UNNAMED.",
+  "current": "2026-11-21 R3163 PRODUCT+ENGINEERING: the debt reader no longer merges a landed-but-unevidenced round with a round that no evidence face ever labelled - each open row now resolves its deciding round to DISCHARGED / LANDED-NO-EVIDENCE / UNKNOWN and carries that word, so going to find the file and going to check the number are finally different readings.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,11 +73,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3162 PRODUCT+ENGINEERING: the debt register can now name which of its OPEN rows are rows whose own work already shipped - every open row is judged by the round its ITEM names against two shipped faces (live/folded round labels and qa/ evidence files), and 10 of the 12 live open rows read STALE-OPEN with CLOSE-BY-HAND, while the two that name no round (loop-s4u-reconcile and product-face-R2742b) honestly stay OPEN-UNNAMED.",
-  "export_ts": "2026-11-21T15:26:03+08:00",
+  "do": "2026-11-21 R3163 PRODUCT+ENGINEERING: the debt reader no longer merges a landed-but-unevidenced round with a round that no evidence face ever labelled - each open row now resolves its deciding round to DISCHARGED / LANDED-NO-EVIDENCE / UNKNOWN and carries that word, so going to find the file and going to check the number are finally different readings.",
+  "export_ts": "2026-11-21T15:35:05+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/probe-R3162.log (1847B, 2026-11-21)",
-  "next_milestone": "[R3162] next window (<=48h): (0) MAIN — **本窗种行升为队头：`src/os/debt_stale_open_scan.py` 的判定轮现把「轮存在但没留证据文件」与「轮从未存在」并成一格 `OPEN-UNDISCHARGED`，下一窗拆成 DISCHARGED / LANDED-NO-EVIDENCE / UNKNOWN 三态（判据按同律先预注册、先落板再动代码；实测入口=本窗 `qa/probe-R3162.log` 的 R3002/R3999 两种世界）**；备选=tech 队列 L726 R2586 `state_seq` stamped-but-never-logged 只读活 log（与折叠归档同源缺口）。产品的真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 零 open 不变。",
+  "latest_evidence": "qa/suite-debt-stale-open-R3163.log (1508B, 2026-11-21)",
+  "next_milestone": "[R3163] next window (<=48h): (0) MAIN — **LANDED-NO-EVIDENCE 这一格今天有名字却答不出「为什么没文件」：全库 1938 个标签里 374 个带标无 qa 文件，下一窗先按同律只读测量这批标签是否按轮次成簇（早于 qa/ 命名惯例的轮 vs 近期掉文件的轮），只有两簇确实可分才值得再加一枚读数词，否则保持现状**；**先落板再动代码**（实测入口=本窗 `qa/probe-R3163.log` 的 Q3 选集与 `round_evidence.map_files` 全集）。备选=tech 队列 L726 R2586 `state_seq` stamped-but-never-logged 只读活 log（与折叠归档同源缺口）。产品的真缺口仍是物理件｛商户号/服务器/域名｝，不得造活；tasks.md 零 open 不变。",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "preview/platform-live-report.html (7929B) + preview/platform-live-report.json (6228B) [2026-11-20 mtime]",
@@ -169,7 +175,7 @@
   },
   "results": [
     [
-      "3162",
+      "3163",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -183,21 +189,21 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 133,
+    "log_lines_in_window": 140,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 19,
+    "substantive_non_idle_mention_lines": 20,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 7,
     "queue_explore_open": 1
   },
-  "state_bytes": 112830,
-  "next_milestone_due": "2026-11-23T15:26:03+08:00",
+  "state_bytes": 118080,
+  "next_milestone_due": "2026-11-23T15:35:05+08:00",
   "heartbeat": {
-    "tick": 3162,
-    "state_tick": 3162,
+    "tick": 3163,
+    "state_tick": 3163,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
@@ -216,5 +222,11 @@
     "note_claims": 6,
     "criteria_stale": 1,
     "criteria_claims": 1
+  },
+  "corpus": {
+    "files": 4419,
+    "bytes": 508829793,
+    "mb": 508.8,
+    "readable": 4419
   }
 }
