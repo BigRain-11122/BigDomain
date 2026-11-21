@@ -4,26 +4,26 @@
       "preview/battery-shard-report.html (16421B)",
       "preview/face-sweep.html (7445B)"
     ],
-    "current": "2026-11-21 R3138 PRODUCT+ENGINEERING: the closing-row census was confusing its own subject with its own audit - a law literal used only as a comparison pattern (inline = \"SUITE %s %d/%d\" in body) was reported as a stored row, and its live signature was pinned to an absolute tally that every newly registered suite reddened.",
+    "current": "R3139 GROUP SCAN (content-addressed, read before any work): the shipped five-still scan read ledger atbd_lines=0 unreplied=0, decisions rows=356 tokens=143 with new=0 against the stored baseline, the group orders tail still at the 2026-11-20 22:5x handover row acknowledged at R3104, benchmarks 2026-11-18 inside the seven-day gate, conversation tree clean with no index.lock; the board head (the R3139 next-window row) WAS pullable, so this is a work round. BigDomain-OSLoop remains registered and running, so nothing was registered.",
     "do": "R3081: added crit_unchecked to tools/battery_shard.py's closing row (invariant crit_checked+crit_unchecked==executed), made tools/battery_shard_report.py's CLOSE_RE/ROW_RE read today's shapes while still accepting pre-R2853/pre-R2919 rows, published crit_unchecked plus crit_unchecked_seen in its payload, added AC-BSGB21 (4 arms), re-judged AC-BSGB17, and added AC-BSRB10 (5 arms) whose last arm runs a REAL leg end to end. Registry 5965->5967 criteria, matrix byte-identical, closeout PASS.",
     "last_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-business-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-census-R3138.log (2146B, 2026-11-21)",
-    "latest_evidence": "qa/suite-census-R3138.log (2146B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-rcc-R3139.log (5452B, 2026-11-21)",
+    "latest_evidence": "qa/suite-rcc-R3139.log (5452B, 2026-11-21)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3139] next window (<=48h): (0) MAIN — **AST 面把「RUNNER 证据文本」读成 `law_counters`：`suite-matrix-discovery` 的 `MINI_EVIDENCE` 串（`PASS suite ledger exit=0 ... criteria=11 0.5s`）同时满足三计数器规则，于是同一条源被 text 面读成 `law_status_punct`、AST 面读成 `law_counters`——两读法各读**不同常量**，law 总数侥幸相等（741=741），但若某套件只存证据串而无真收尾行，AST 面会判它 law 而它实际印不出可读行。** 下一轮先量（只读＋AST＋活盘）：①741 行里被 `classify_bodies` 读成 `law_counters` 的常量，有多少的**行首不是** `SUITE`（即证据文本/日志回显，而非收尾行）；②`COUNTER_WORD_*`/`COUNTER_*` 三维正则对 `PASS suite ... criteria=N` 命中的是哪几条；③若在 `shape_of_literal`/`classify_bodies` 侧要求「计数器行的行首是 SUITE」，`AC-CEN18` 的 `FAMILY_MOVES`、5 个钉行（全部 law_counters）与 `AC-CSC*` 是否逐字兼容。然后裁定：修 AST 面、修计数器正则、还是具名保留（`AC-CEN18` 已把该 move 写在判据里）。**先落板再动代码。**（备选：若判为「不该动」，则回 P-47 正典板最上可认领项——tasks.md 至今零改动、支付能力为零是长期具名债务。）",
-    "next_milestone_due": "2026-11-23T09:13:16+08:00",
-    "updated_at": "2026-11-21T09:13:16+08:00",
+    "next_milestone_due": "2026-11-23T10:00:12+08:00",
+    "updated_at": "2026-11-21T10:00:12+08:00",
     "heartbeat": {
-      "tick": 3138,
-      "state_tick": 3138,
+      "tick": 3139,
+      "state_tick": 3139,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
     }
   },
-  "current": "2026-11-21 R3138 PRODUCT+ENGINEERING: the closing-row census was confusing its own subject with its own audit - a law literal used only as a comparison pattern (inline = \"SUITE %s %d/%d\" in body) was reported as a stored row, and its live signature was pinned to an absolute tally that every newly registered suite reddened.",
+  "current": "R3139 GROUP SCAN (content-addressed, read before any work): the shipped five-still scan read ledger atbd_lines=0 unreplied=0, decisions rows=356 tokens=143 with new=0 against the stored baseline, the group orders tail still at the 2026-11-20 22:5x handover row acknowledged at R3104, benchmarks 2026-11-18 inside the seven-day gate, conversation tree clean with no index.lock; the board head (the R3139 next-window row) WAS pullable, so this is a work round. BigDomain-OSLoop remains registered and running, so nothing was registered.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -51,10 +51,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3138 PRODUCT+ENGINEERING: the closing-row census was confusing its own subject with its own audit - a law literal used only as a comparison pattern (inline = \"SUITE %s %d/%d\" in body) was reported as a stored row, and its live signature was pinned to an absolute tally that every newly registered suite reddened.",
-  "export_ts": "2026-11-21T09:13:16+08:00",
+  "do": "R3139 GROUP SCAN (content-addressed, read before any work): the shipped five-still scan read ledger atbd_lines=0 unreplied=0, decisions rows=356 tokens=143 with new=0 against the stored baseline, the group orders tail still at the 2026-11-20 22:5x handover row acknowledged at R3104, benchmarks 2026-11-18 inside the seven-day gate, conversation tree clean with no index.lock; the board head (the R3139 next-window row) WAS pullable, so this is a work round. BigDomain-OSLoop remains registered and running, so nothing was registered.",
+  "export_ts": "2026-11-21T10:00:12+08:00",
   "latest_artifact": "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
-  "latest_evidence": "qa/suite-census-R3138.log (2146B, 2026-11-21)",
+  "latest_evidence": "qa/suite-rcc-R3139.log (5452B, 2026-11-21)",
   "next_milestone": "[R3139] next window (<=48h): (0) MAIN — **AST 面把「RUNNER 证据文本」读成 `law_counters`：`suite-matrix-discovery` 的 `MINI_EVIDENCE` 串（`PASS suite ledger exit=0 ... criteria=11 0.5s`）同时满足三计数器规则，于是同一条源被 text 面读成 `law_status_punct`、AST 面读成 `law_counters`——两读法各读**不同常量**，law 总数侥幸相等（741=741），但若某套件只存证据串而无真收尾行，AST 面会判它 law 而它实际印不出可读行。** 下一轮先量（只读＋AST＋活盘）：①741 行里被 `classify_bodies` 读成 `law_counters` 的常量，有多少的**行首不是** `SUITE`（即证据文本/日志回显，而非收尾行）；②`COUNTER_WORD_*`/`COUNTER_*` 三维正则对 `PASS suite ... criteria=N` 命中的是哪几条；③若在 `shape_of_literal`/`classify_bodies` 侧要求「计数器行的行首是 SUITE」，`AC-CEN18` 的 `FAMILY_MOVES`、5 个钉行（全部 law_counters）与 `AC-CSC*` 是否逐字兼容。然后裁定：修 AST 面、修计数器正则、还是具名保留（`AC-CEN18` 已把该 move 写在判据里）。**先落板再动代码。**（备选：若判为「不该动」，则回 P-47 正典板最上可认领项——tasks.md 至今零改动、支付能力为零是长期具名债务。）",
   "outs": [
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -180,7 +180,7 @@
   },
   "results": [
     [
-      "3138",
+      "3139",
       "OSLoop 执行 tick",
       "shard report page carries its unchecked denominator and its live reds"
     ]
@@ -194,21 +194,21 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 79,
+    "log_lines_in_window": 83,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 15,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 10,
     "queue_explore_open": 10
   },
-  "state_bytes": 70466,
-  "next_milestone_due": "2026-11-23T09:13:16+08:00",
+  "state_bytes": 74032,
+  "next_milestone_due": "2026-11-23T10:00:12+08:00",
   "heartbeat": {
-    "tick": 3138,
-    "state_tick": 3138,
+    "tick": 3139,
+    "state_tick": 3139,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"

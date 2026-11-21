@@ -182,6 +182,10 @@ LAW_LABEL_PT = re.compile(
 LAW_STATUS_PUNCT = re.compile(r"^SUITE %s\s*[\(\:\-]\s*" + NUM + r"\s*/\s*" + NUM)
 # Counters are the third skin: criteria/expected-criteria (total), pass/passes/
 # pass-lines, fail/fails/fail-lines, in any order. Read like the runner does.
+# R3139: and like every other family here, only a body whose row STARTS with
+# SUITE is a row - an evidence line that happens to carry the three counters
+# is not this suite's closing row.
+SUITE_ANCHOR = re.compile(r"^SUITE\b")
 COUNTER_TOTAL = re.compile(r"(?:expected-criteria|criteria)=(?:%d|\{[^{}\n]*\}|\d+)")
 COUNTER_PASS = re.compile(r"(?:passes|pass-lines|pass)=(?:%d|\{[^{}\n]*\}|\d+)")
 COUNTER_FAIL = re.compile(r"(?:fails|fail-lines|fail)=(?:%d|\{[^{}\n]*\}|\d+)")
@@ -412,12 +416,19 @@ def shape_of_literal(lit, src):
         return "law_label_pt"
     if LAW_STATUS_PUNCT.match(lit):
         return "law_status_punct" if BINDS.search(src) else "suspect_status"
-    if (COUNTER_TOTAL.search(lit) and COUNTER_PASS.search(lit)
-            and COUNTER_FAIL.search(lit)) or \
+    if SUITE_ANCHOR.match(lit) and (
+            (COUNTER_TOTAL.search(lit) and COUNTER_PASS.search(lit)
+             and COUNTER_FAIL.search(lit)) or
             (COUNTER_WORD_TOTAL.search(lit) and COUNTER_WORD_PASS.search(lit)
-             and COUNTER_WORD_FAIL.search(lit)):
+             and COUNTER_WORD_FAIL.search(lit))):
         # a counter row carries total, passed and failed, so the verdict is
-        # the fail count; a row without all three is not law
+        # the fail count; a row without all three is not law.
+        # R3139: the row must START with SUITE, the same anchor the runner's
+        # own law and the other nine families already carry. Measured this
+        # window: a runner evidence file stored as a constant
+        # ("PASS suite ledger exit=0 pass-lines=11 fail-lines=0 criteria=11")
+        # satisfies all three counter patterns anywhere in its body, so the
+        # unanchored reading turned evidence text into a closing row.
         return "law_counters"
     if LEGACY_STATUS_COLON.match(lit):
         # "SUITE %s: %d/%d": law only when the slot is bound to PASS/FAIL,

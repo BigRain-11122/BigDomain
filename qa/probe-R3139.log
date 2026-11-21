@@ -1,0 +1,70 @@
+registry rows=741
+Q1 law_counters constants anchored=40 unanchored=10
+  ANCHORED civic-behavior-distribution :: SUITE %s: %d criteria, %d pass, %d fail
+  ANCHORED civic-behavior-monthwindow :: SUITE %s: %d criteria, %d pass, %d fail
+  ANCHORED civic-competition-monthwindow :: SUITE %s: %d criteria, %d pass, %d fail
+  ANCHORED os-stamp-exempt-append :: SUITE RESULT passes=%d fails=%d criteria
+  ANCHORED os-stamp-exempt-guard :: SUITE RESULT passes=%d fails=%d criteria
+  ANCHORED os-stamp-exempt-seed-guard-wire :: SUITE RESULT passes=%d fails=%d criteria
+  ANCHORED os-runner-arg-guard :: SUITE RESULT passes=%d fails=%d criteria
+  ANCHORED os-export-publish-from-import-law :: SUITE %s criteria=%d passes=%d fails=%d
+  ANCHORED os-relative-import-publish-binding :: SUITE %s criteria=%d passes=%d fails=%d
+  ANCHORED os-publish-relative-package-identity :: SUITE %s criteria=%d passes=%d fails=%d
+  ANCHORED os-relative-import-alias-gate :: SUITE %s criteria=%d passes=%d fails=%d
+  ANCHORED os-plain-import-alias-gate :: SUITE %s criteria=%d passes=%d fails=%d
+  ANCHORED os-plain-import-comma-binding :: SUITE %s criteria=%d passes=%d fails=%d
+  ANCHORED os-comma-binding-wire :: SUITE %s criteria=%d passes=%d fails=%d
+  ANCHORED os-comma-binding-consumer-wire :: SUITE %s criteria=%d passes=%d fails=%d
+  ANCHORED os-comma-binding-sibling-faces :: SUITE %s criteria=%d pass=%d fail=%d
+  ANCHORED os-general-writer-dialect-audit :: SUITE %s criteria=%d pass=%d fail=%d
+  ANCHORED os-parameter-destination-resolution :: SUITE %s criteria=%d pass=%d fail=%d
+  ANCHORED os-single-append-status-face :: SUITE %s expected-criteria=%d pass=%d fa
+  ANCHORED os-review-window-guard-parity-consumer-wire :: SUITE %s criteria=%d pass=%d fail=%d
+  ANCHORED os-matrix-stamp-provenance-line :: SUITE %s exit=%d pass-lines=%d fail-line
+  ANCHORED os-matrix-stamp-from-liveness :: SUITE %s exit=%d pass-lines=%d fail-line
+  ANCHORED os-patterns-label-readability :: SUITE %s exit=%d pass-lines=%d fail-line
+  ANCHORED os-patterns-label-readability-render-consumer :: SUITE %s exit=%d pass-lines=%d fail-line
+  ANCHORED os-patterns-non-label-text-readability :: SUITE %s exit=%d pass-lines=%d fail-line
+  ANCHORED os-artifact-disk-text-readability :: SUITE %s exit=%d pass-lines=%d fail-line
+  ANCHORED os-evidence-name-text-coverage :: SUITE %s exit=%d pass-lines=%d fail-line
+  ANCHORED os-stamp-text-coverage :: SUITE %s exit=%d pass-lines=%d fail-line
+  ANCHORED os-probe-seam-registry :: SUITE %s exit=%d pass-lines=%d fail-line
+  ANCHORED os-probe-seam-forwarding-scope :: SUITE %s exit=%d pass-lines=%d fail-line
+  ANCHORED os-probe-seam-lazy-scope :: SUITE %s exit=%d pass-lines=%d fail-line
+  ANCHORED os-probe-seam-dynamic-import-scope :: SUITE %s exit=%d pass-lines=%d fail-line
+  ANCHORED os-battery-shard :: SUITE RESULT passes=6 fails=0 criteria=6
+  ANCHORED os-battery-shard :: SUITE PASS criteria=6 passes=8 fails=0
+  ANCHORED os-battery-shard :: SUITE os-x expected-criteria=6 pass=6 fa
+  ANCHORED os-battery-shard :: SUITE PASS exit=0 pass-lines=6 fail-line
+  ANCHORED os-battery-shard :: SUITE PASS: 6 criteria, 6 pass, 0 fail
+  ANCHORED os-battery-shard :: SUITE PASS criteria=6 passes=5 fails=1
+  ANCHORED os-battery-shard :: SUITE RESULT passes=6 fails=1 criteria=6
+  ANCHORED os-battery-shard :: SUITE PASS exit=1 pass-lines=6 fail-line
+  UNANCHORED suite-matrix-discovery (test_suite_matrix.py) :: PASS suite ledger exit=0 pass-lines=11 f
+  UNANCHORED suite-matrix-discovery (test_suite_matrix.py) :: RUNNER PASS (2/2 suites green, reconcile
+  UNANCHORED runner-profile-daily (test_runner_profile_daily.py) :: PASS suite %s exit=0 pass-lines=1 fail-l
+  UNANCHORED os-runner-suite-timeout-headroom (..\os\test_runner_suite_timeout_headroom.py) :: %s suite %s exit=%d pass-lines=3 fail-li
+  UNANCHORED os-runner-suite-timeout-headroom-overrides (..\os\test_runner_suite_timeout_headroom_overrides.py) :: %s suite %s exit=%d pass-lines=3 fail-li
+  UNANCHORED os-runner-abort-face (..\os\test_runner_abort_face.py) :: PASS suite %s exit=0 pass-lines=3 fail-l
+  UNANCHORED os-runner-abort-history (..\os\test_runner_abort_history.py) :: PASS suite %s exit=0 pass-lines=3 fail-l
+  UNANCHORED os-suite-closing-row-census (..\os\test_suite_closing_row_census.py) :: print("SUITE RESULT passes=6 fails=0 cri
+  UNANCHORED os-leg-watch (..\os\test_leg_watch.py) :: SHARD scope=SHARD registry_suites=711 re
+  UNANCHORED os-leg-header-check (..\os\test_leg_header_check.py) :: SHARD scope=SHARD registry_suites=%d reg
+Q2 normalised evidence head :: PASS suite ledger exit=0 pass-lines=11 fail-lines=0 criteria=11 0.5s PASS suite lobby exit
+  COUNTER_TOTAL hits=2 ['criteria=11', 'criteria=16']
+  COUNTER_PASS hits=2 ['pass-lines=11', 'pass-lines=16']
+  COUNTER_FAIL hits=2 ['fail-lines=0', 'fail-lines=0']
+  COUNTER_WORD_TOTAL hits=2 ['0 criteria', '0 criteria']
+  COUNTER_WORD_PASS hits=2 ['0 pass', '0 pass']
+  COUNTER_WORD_FAIL hits=2 ['11 fail', '16 fail']
+  shape_of_literal(evidence) = law_counters
+Q3 law text=741 ast_before=741 ast_after=741
+Q3 shape moves=1
+  MOVE suite-matrix-discovery law_counters -> law_status_punct
+Q3b nowhere readings (before | after):
+  os-runner-suite-timeout-headroom before=law_counters after=-
+  os-runner-suite-timeout-headroom-overrides before=law_counters after=-
+  os-runner-abort-face before=law_counters after=-
+  os-runner-abort-history before=law_counters after=-
+  os-leg-header-check before=law_counters after=-
+Q3c fixture law_literal_rows after=1 ['os-suite-closing-row-census']

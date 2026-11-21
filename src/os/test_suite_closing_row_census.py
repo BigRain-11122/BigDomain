@@ -58,7 +58,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.dirname(BASE)
 ROOT = os.path.dirname(SRC)
 
-EXPECTED_CRITERIA = 21
+EXPECTED_CRITERIA = 22
 LABEL = "os-suite-closing-row-census"
 TOOL = os.path.join(ROOT, "tools", "suite_closing_row_census.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
@@ -676,9 +676,17 @@ DIRECT_ROW_SRC = 'print("SUITE PASS %d/%d" % (2, 2))\n'
 # R2965 had already named plus os-leg-header-check, whose stored counters row
 # only the AST read can see. A new stored law literal must be counted HERE
 # deliberately - the same pressure AC-CEN3 puts on the live registry.
-NOWHERE_ROWS = ("os-leg-header-check", "os-runner-abort-face",
-                "os-runner-abort-history", "os-runner-suite-timeout-headroom",
-                "os-runner-suite-timeout-headroom-overrides")
+# R3139 JUDGED-CHANGED: the class is EMPTY on the live tree. All five former
+# members' nowhere family was law_counters read from a runner EVIDENCE template
+# ("PASS suite %s exit=0 pass-lines=3 fail-lines=0 criteria=3"), which is not a
+# closing row at all; once the counter family carries the same ^SUITE anchor as
+# every other family, no live suite stores a closing row it never prints. The
+# five names are kept as FORMER_NOWHERE_ROWS and witnessed by AC-CEN22 arm u.
+NOWHERE_ROWS = ()
+FORMER_NOWHERE_ROWS = ("os-leg-header-check", "os-runner-abort-face",
+                       "os-runner-abort-history",
+                       "os-runner-suite-timeout-headroom",
+                       "os-runner-suite-timeout-headroom-overrides")
 
 
 def audit_line(out, prefix):
@@ -785,7 +793,12 @@ AST_ONLY_LAW_ROWS = ("suite-matrix-discovery",)
 # one row moves INSIDE the law set because the same bytes read as one constant
 # carry a counter triple: law_status_punct -> law_counters. Both are law, so
 # what law MEANS did not move; the family name did, and it is named here.
-FAMILY_MOVES = (("suite-matrix-discovery", "law_status_punct", "law_counters"),)
+# R3139 JUDGED-CHANGED: the move was the counter family matching anywhere in a
+# literal. With the ^SUITE anchor the AST reading of that row is law_status_punct
+# again - the same family the text reading gives - so the two readings now agree
+# row by row and both tuples are empty. Measured: 741 rows, zero moves.
+FAMILY_MOVES = ()
+AST_ONLY_LAW_ROWS = ()
 
 
 def _census():
@@ -977,9 +990,10 @@ def ac_cen20():
     R3138 JUDGED-CHANGED: the binary pinned at PRE_R2968 predates the compare
     rule, so its nowhere class still carries one extra row. Pinning raw
     byte-identity would now demand that this round's trusted change be undone;
-    the pin is instead: every NON-audit line is byte-identical, the only audit
-    difference is that the old binary names os-registry-counter-census and the
-    new one does not, and the new binary names nothing the old one did not.
+    the pin is instead: every NON-audit line is byte-identical, and the audit
+    difference is exactly the rows a named rule removed - the compare row
+    (R3138) plus, since R3139, the five evidence-template rows - with nothing
+    added. Measured this window: removed=6, added=0.
     """
     old = subprocess.run(["git", "show",
                           "%s:tools/suite_closing_row_census.py" % PRE_R2968],
@@ -1004,9 +1018,10 @@ def ac_cen20():
     same_non_audit = verdict_lines(now_text) == verdict_lines(was_text)
     removed = _nowhere_labels(was.stdout) - _nowhere_labels(now.stdout)
     added = _nowhere_labels(now.stdout) - _nowhere_labels(was.stdout)
+    removed_expected = {"os-registry-counter-census"} | set(FORMER_NOWHERE_ROWS)
     ok = (old.returncode == 0 and now.returncode == 0 and was.returncode == 0
           and now.stdout.strip() != b"" and same_non_audit
-          and removed == {"os-registry-counter-census"} and added == set())
+          and removed == removed_expected and added == set())
     if not ok:
         print("  measured git=%d rc now/old=%d/%d non_audit_same=%r "
               "removed=%r added=%r bytes=%d/%d"
@@ -1086,6 +1101,109 @@ def ac_cen21():
              registry_n))
 
 
+# R3139: the counter family used to match ANYWHERE in a literal, so a runner
+# evidence file stored as a constant read as a closing row. Evidence text is a
+# line a CHILD wrote; this suite's closing row must start with SUITE, which is
+# what the runner's own law and the other nine families already require.
+EVIDENCE_TEXT = (
+    "PASS suite ledger exit=0 pass-lines=11 fail-lines=0 criteria=11 0.5s\n"
+    "PASS suite lobby exit=0 pass-lines=16 fail-lines=0 criteria=16 0.3s\n"
+    "RUNNER PASS (2/2 suites green, reconcile controls 6/6, 0.8s)\n")
+EVIDENCE_ONLY_SRC = (
+    'EVIDENCE = ("PASS suite ledger exit=0 pass-lines=11 fail-lines=0"\n'
+    '            " criteria=11 0.5s\\n")\n'
+    'print("done")\n')
+ANCHORED_COUNTERS_SRC = (
+    'print("SUITE %s exit=%d pass-lines=%d fail-lines=%d criteria=%d"\n'
+    '      % ("lobby", 0, 3, 0, 3))\n')
+ANCHORED_COUNTERS_EQ_SRC = 'print("SUITE PASS criteria=6 passes=8 fails=0")\n'
+
+
+def _counter_candidates(src):
+    """SUITE-bearing constants that carry a counter triple anywhere."""
+    census = _census()
+    out = []
+    for body in census._string_constants(src) or []:
+        norm = census.normalise(body)
+        eq = (census.COUNTER_TOTAL.search(norm)
+              and census.COUNTER_PASS.search(norm)
+              and census.COUNTER_FAIL.search(norm))
+        word = (census.COUNTER_WORD_TOTAL.search(norm)
+                and census.COUNTER_WORD_PASS.search(norm)
+                and census.COUNTER_WORD_FAIL.search(norm))
+        if eq or word:
+            out.append((norm.startswith("SUITE"),
+                        census.shape_of_literal(body, src)))
+    return out
+
+
+def ac_cen22():
+    """A counter triple only makes a row when the body STARTS with SUITE."""
+    census = _census()
+    p = (census.shape_of_literal(EVIDENCE_TEXT, EVIDENCE_TEXT) == "other"
+         and census.classify(EVIDENCE_ONLY_SRC) not in census.LAW_FAMILIES)
+    q = census.shape_of_literal(
+        "SUITE %s exit=%d pass-lines=%d fail-lines=%d criteria=%d",
+        ANCHORED_COUNTERS_SRC + '"PASS" "FAIL"') == "law_counters"
+    r = census.shape_of_literal(
+        "SUITE PASS criteria=6 passes=8 fails=0",
+        ANCHORED_COUNTERS_EQ_SRC) == "law_counters"
+    text_law, ast_law, registry_n, moves, discovery = 0, 0, 0, [], None
+    for label, rel, _declared in census.registry(ROOT):
+        path = os.path.join(ROOT, "src", "sandbox", rel)
+        if not os.path.isfile(path):
+            continue
+        registry_n += 1
+        with open(path, "r", encoding="utf-8", errors="replace") as fh:
+            src = fh.read()
+        text_shape = census.classify(src)
+        ast_shape = census.classify_bodies(src)
+        if text_shape in census.LAW_FAMILIES:
+            text_law += 1
+        if ast_shape in census.LAW_FAMILIES:
+            ast_law += 1
+        if text_shape != ast_shape:
+            moves.append((label, text_shape, ast_shape))
+        if label == "suite-matrix-discovery":
+            discovery = (text_shape, ast_shape)
+    s = (registry_n > 0 and text_law == ast_law == registry_n
+         and moves == [] and discovery == ("law_status_punct", "law_status_punct"))
+    former = []
+    for label in FORMER_NOWHERE_ROWS:
+        rel = dict((l, r) for l, r, _d in census.registry(ROOT)).get(label)
+        path = os.path.join(ROOT, "src", "sandbox", rel) if rel else None
+        if not path or not os.path.isfile(path):
+            former.append((label, None))
+            continue
+        with open(path, "r", encoding="utf-8", errors="replace") as fh:
+            src = fh.read()
+        cands = _counter_candidates(src)
+        unanchored = [fam for anchored, fam in cands if not anchored]
+        former.append((label, unanchored))
+    t = (all(fams is not None for _l, fams in former)
+         and all(fams and all(fam not in census.LAW_FAMILIES for fam in fams)
+                 for _l, fams in former))
+    live_nowhere = []
+    for label, rel, _declared in census.registry(ROOT):
+        path = os.path.join(ROOT, "src", "sandbox", rel)
+        if not os.path.isfile(path):
+            continue
+        with open(path, "r", encoding="utf-8", errors="replace") as fh:
+            src = fh.read()
+        got = census.nowhere_law(src)
+        if got is not None and got[0]:
+            live_nowhere.append(label)
+    ok = bool(p and q and r and s and t and not live_nowhere)
+    if not ok:
+        print("  measured p=%r q=%r r=%r s=%r t=%r former=%r "
+              "live_nowhere=%r moves=%r text/ast=%d/%d registry=%d"
+              % (p, q, r, s, t, former, sorted(live_nowhere), moves,
+                 text_law, ast_law, registry_n), flush=True)
+    check(ok, "AC-CEN22 a counter row must START with SUITE (evidence other=%r, "
+          "anchored=%r/%r, text=ast=%d, moves=%d, former-nonlaw=%r)"
+          % (p, q, r, text_law, len(moves), [f for _l, f in former]))
+
+
 def main():
     print("suite closing-row census suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -1110,6 +1228,7 @@ def main():
     ac_cen19()
     ac_cen20()
     ac_cen21()
+    ac_cen22()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

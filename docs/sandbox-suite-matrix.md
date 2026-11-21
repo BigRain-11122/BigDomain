@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 741 | 6029 | 675/675 | R2739 |
+| 741 | 6030 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -753,7 +753,7 @@
 | 714 | os-deliverable-index | ../os/test_deliverable_index.py | 18 | no-evidence | - |
 | 715 | os-battery-shard | ../os/test_battery_shard.py | 32 | no-evidence | - |
 | 716 | os-suite-output-audit | ../os/test_suite_output_audit.py | 6 | no-evidence | - |
-| 717 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 21 | no-evidence | - |
+| 717 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 22 | no-evidence | - |
 | 718 | os-battery-shard-report | ../os/test_battery_shard_report.py | 12 | no-evidence | - |
 | 719 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 12 | no-evidence | - |
 | 720 | os-tree-snapshot | ../os/test_tree_snapshot.py | 6 | no-evidence | - |
@@ -778,7 +778,7 @@
 | 739 | frontdoor-corpus-card | test_frontdoor_corpus_card.py | 6 | no-evidence | - |
 | 740 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 741 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6029 | green 675 / FAIL 0 / no-evidence 66 |  |
+|  | 合计 |  | 6030 | green 675 / FAIL 0 / no-evidence 66 |  |
 
 ## 证据出处
 
