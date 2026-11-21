@@ -555,6 +555,84 @@ def _resize(repo, rel, claimed):
     return None if size == claimed else size
 
 
+# R3146 measured the notes that FOLLOW a leading byte claim in the same
+# full-width bracket (qa/probe-R3146.log, read-only, live face): 7 wide rows
+# hold 17 brackets, 11 of them lead with a byte claim, and inside those eleven
+# 3 note claims name a line count - TWO stale (docs/sandbox-suite-matrix.md
+# 687 -> 787 physical lines, qa/battery-shard-R2797.log 10 -> 12; one agreeing,
+# zero missing) - and 3 name a sha256 prefix, all agreeing. One "3/3" is a suite
+# conclusion no file can answer. Outside the family sit "14 criteria", "8/8" and
+# the two byte counts behind prose R3145 already named.
+#
+# These notes are LANDING facts, the same class as the bracket date: they say
+# what the artifact looked like when it landed. So they are judged, never
+# rewritten - rewriting a sha256 would silently bless a changed artifact as
+# "this is today's hash", which reads worse than an old one. The line unit is
+# built from an escape so this module stays pure ASCII (AC-EXPW6).
+_FW_NOTE_RE = re.compile(
+    r'((?:preview|qa|src|tools|docs|logs)/[A-Za-z0-9_.\-]+'
+    r'\.(?:html|json|log|png|py|md))' + _FW_OPEN + r'\d+B([^' + _FW_CLOSE +
+    r'\n]*)')
+_FW_LINE_UNIT = '\u884c'
+_FW_NOTE_LINES_RE = re.compile(r'(?<![0-9])(\d+) ' + _FW_LINE_UNIT)
+_FW_NOTE_SHA_RE = re.compile(r'sha256 ([0-9a-fA-F]{8,64})')
+
+
+def _line_count(full):
+    """Physical lines of a file (LF count, plus 1 when the last one is bare)."""
+    if not os.path.isfile(full):
+        return None
+    with open(full, 'rb') as handle:
+        data = handle.read()
+    if not data:
+        return 0
+    return data.count(b'\n') + (0 if data.endswith(b'\n') else 1)
+
+
+def _sha_prefix(full, width):
+    """The leading hex digits of a file's sha256, or None when it is gone."""
+    if not os.path.isfile(full):
+        return None
+    with open(full, 'rb') as handle:
+        return hashlib.sha256(handle.read()).hexdigest()[:width]
+
+
+def outs_note_readings(rows, repo):
+    """(rows with a stale note, note claims actually judged).
+
+    Only the bracket family whose body LEADS with a byte count is in scope, and
+    only the middle-dot segments after that first one are notes - the same
+    "digits must lead" law R3145 pinned for the claim itself. A note naming a
+    file that is gone is neither judged nor called stale: the reading refuses to
+    fabricate agreement, exactly as the age block refuses to fabricate an age.
+    """
+    stale, judged = 0, 0
+    for row in rows or []:
+        bad = False
+        for match in _FW_NOTE_RE.finditer(str(row)):
+            rel, body = match.group(1), match.group(2)
+            full = os.path.join(repo, rel)
+            for seg in body.split(_FW_MIDDOT)[1:]:
+                for hit in _FW_NOTE_LINES_RE.finditer(seg):
+                    actual = _line_count(full)
+                    if actual is None:
+                        continue
+                    judged += 1
+                    if actual != int(hit.group(1)):
+                        bad = True
+                for hit in _FW_NOTE_SHA_RE.finditer(seg):
+                    claimed = hit.group(1).lower()
+                    actual = _sha_prefix(full, len(claimed))
+                    if actual is None:
+                        continue
+                    judged += 1
+                    if actual != claimed:
+                        bad = True
+        if bad:
+            stale += 1
+    return stale, judged
+
+
 def refresh_outs_labels(rows, repo):
     """Rewrite each row's claimed byte count from disk; return (rows, changed).
 
@@ -651,6 +729,7 @@ def outs_age_block(repo, rows, collapsed=0, refreshed=0):
         ages.append((today - when).days)
     measured = [a for a in ages if a is not None]
     keys = [outs_row_key(row) for row in rows]
+    notes_stale, note_claims = outs_note_readings(rows, repo)
     return {
         'rows': len(rows),
         'measurable': len(measured),
@@ -667,6 +746,12 @@ def outs_age_block(repo, rows, collapsed=0, refreshed=0):
         # carries the key states the correction instead of silently editing a
         # history line; absent on faces written before the refresh existed.
         'labels_refreshed': refreshed,
+        # R3146: how many rows carry a landing note the disk now contradicts,
+        # and how many note claims were actually judged. The pair is published
+        # so a zero-stale reading never reads as "nothing was checked" - the
+        # count of checks is in the block even when no card prints it.
+        'notes_stale': notes_stale,
+        'note_claims': note_claims,
     }
 
 

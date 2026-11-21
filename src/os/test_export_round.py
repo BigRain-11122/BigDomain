@@ -1761,6 +1761,73 @@ def main():
            and mod.outs_row_key(wide_out[0]) == mod.outs_row_key(wide_v),
            'outs=%r block=%r' % (outs_v, oab_v))
 
+        # ---- AC-EXPW19 (R3146 pin): the notes BEHIND the middle dot ----
+        # R3146 measured on the live face BEFORE this arm existed
+        # (qa/probe-R3146.log): 7 wide rows hold 17 brackets, 11 leading with a
+        # byte claim; inside those, 3 note claims name a line count (TWO stale:
+        # matrix 687 -> 787 physical lines, battery-shard-R2797 10 -> 12; one
+        # agreeing, zero missing) and 3 name a sha256 prefix (all agreeing).
+        # "3/3", "14 criteria" and "8/8" are suite conclusions no file answers.
+        # The notes are landing facts, so they are JUDGED, never rewritten.
+        wn = tempfile.mkdtemp(prefix='expw-note-')
+        worlds.append(wn)
+        write(os.path.join(wn, 'qa', 'note.log'), 'a\nb\nc\n')
+        sha_ok = mod._sha_prefix(os.path.join(wn, 'qa', 'note.log'), 16)
+        stale_note = ('qa/note.log\uff086B\u00b79 \u884c\u00b7sha256 aaaaaaaa\uff09')
+        rows_np, moved_np = mod.refresh_outs_labels([stale_note], wn)
+        note_np = mod.outs_note_readings([stale_note], wn)
+        ok('AC-EXPW19 p a stale line note is judged and never rewritten',
+           note_np == (1, 2) and rows_np == [stale_note] and moved_np == 0,
+           'reading=%r rows=%r moved=%r' % (note_np, rows_np, moved_np))
+        # q: NEGATIVE CONTROL - every note agrees with disk, and the row is the
+        # identity under the writer as well.
+        good_note = ('qa/note.log\uff086B\u00b73 \u884c\u00b7sha256 %s\uff09'
+                     % sha_ok[:16])
+        rows_nq, moved_nq = mod.refresh_outs_labels([good_note], wn)
+        ok('AC-EXPW19 q agreeing notes read zero stale and move nothing',
+           mod.outs_note_readings([good_note], wn) == (0, 2)
+           and rows_nq == [good_note] and moved_nq == 0,
+           'reading=%r rows=%r' % (mod.outs_note_readings([good_note], wn),
+                                   rows_nq))
+        # r: a sha256 prefix that disagrees is caught on its own - the arm that
+        # makes the digest claim judged rather than decorative.
+        bad_sha = ('qa/note.log\uff086B\u00b73 \u884c\u00b7sha256 00000000\uff09')
+        ok('AC-EXPW19 r a disagreeing sha256 prefix is a stale note',
+           mod.outs_note_readings([bad_sha], wn) == (1, 2),
+           'reading=%r' % (mod.outs_note_readings([bad_sha], wn),))
+        # s: OUT OF FAMILY - a bracket that does not LEAD with a byte count is
+        # not a claim bracket, so its numbers ("14 criteria", "8/8") are suite
+        # conclusions and the byte counts behind prose stay out too.
+        outside = ('src/os/test_x.py\uff0814 \u5224\u636e\uff09 + '
+                   'qa/note.log\uff08\u4fee\u540e 509B\u00b7\u539f 1032B \u7559\u8bc1\uff09')
+        ok('AC-EXPW19 s out-of-family numbers are never judged',
+           mod.outs_note_readings([outside], wn) == (0, 0),
+           'reading=%r' % (mod.outs_note_readings([outside], wn),))
+        # t: a note naming a file that is GONE is neither judged nor stale -
+        # no fabricated agreement, the same law the age block keeps.
+        gone_note = ('qa/never-written-note.log\uff085B\u00b79 \u884c\uff09')
+        ok('AC-EXPW19 t a missing target is not judged and not called stale',
+           mod.outs_note_readings([gone_note], wn) == (0, 0),
+           'reading=%r' % (mod.outs_note_readings([gone_note], wn),))
+        # u: end to end - the pair is PUBLISHED in both copies, and the shipped
+        # laws still close on the same write.
+        wu = build_world(9326)
+        worlds.append(wu)
+        write(os.path.join(wu, 'qa', 'note-face.log'), 'a\nb\n')
+        fp_u = os.path.join(wu, 'docs', 'status-export.json')
+        face_u = json.loads(read(fp_u))
+        face_u['outs'] = ['qa/note-face.log\uff084B\u00b77 \u884c\uff09', 'x']
+        write(fp_u, json.dumps(face_u, ensure_ascii=False, indent=2) + '\n')
+        st_u = json.loads(read(os.path.join(wu, 'src', 'os', 'state.json')))
+        built_u, _ = mod.payload(wu, st_u, 'TU1')
+        oab_u = built_u.get('outs_age') or {}
+        ok('AC-EXPW19 u payload publishes the reading in both copies',
+           oab_u.get('notes_stale') == 1 and oab_u.get('note_claims') == 1
+           and (built_u.get('ceo_face') or {}).get('outs_age') == oab_u
+           and (built_u.get('outs') or [])[0] ==
+           (built_u.get('ceo_face') or {}).get('latest_artifact'),
+           'block=%r' % (oab_u,))
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')

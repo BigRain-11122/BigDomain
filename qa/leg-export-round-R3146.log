@@ -1,0 +1,3 @@
+SHARD scope=SHARD registry_suites=742 registry_criteria=6040 selected=1 selected_criteria=51 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-export-round rc=0 pass=166 fail=0 detail=yes suite=PASS 166/166 crit=51 26.5s
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=51 crit_mismatch=0 elapsed=26.5s crit_checked=1 crit_unchecked=0

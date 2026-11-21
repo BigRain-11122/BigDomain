@@ -158,6 +158,31 @@ def main():
         bad10.append("not-deterministic-under-refresh")
     report("AC-FDC10", bool(bad10), ",".join(bad10))
 
+    # ---- AC-FDC11 (R3146 pin): the stale-note count is printed only when a
+    # ---- note really is stale. R3146 measured that the notes behind the middle
+    # ---- dot are landing facts and are judged rather than rewritten, so the
+    # ---- face must state the count when it is positive and stay byte-equal
+    # ---- when it is zero or when the face predates the key.
+    bad11 = []
+    note_block = {"outs_age": dict(clean["outs_age"], notes_stale=2,
+                                   note_claims=6)}
+    note_html = frontdoor.outs_age_card(note_block)
+    if "notes_stale=2" not in note_html:
+        bad11.append("stale-not-printed")
+    if "OUTS-AGE rows=29" not in note_html:
+        bad11.append("stale-lost-the-line")
+    if "note_claims" in note_html:
+        bad11.append("claims-leaked-onto-the-card")
+    zero_note = {"outs_age": dict(clean["outs_age"], notes_stale=0,
+                                 note_claims=6)}
+    if frontdoor.outs_age_card(zero_note) != clean_html:
+        bad11.append("zero-stale-not-byte-equal")
+    if frontdoor.outs_age_card(clean) != clean_html:
+        bad11.append("keyless-face-not-byte-equal")
+    if frontdoor.outs_age_card(note_block) != note_html:
+        bad11.append("not-deterministic-under-stale")
+    report("AC-FDC11", bool(bad11), ",".join(bad11))
+
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
         print("SUITE FAIL %d/%d failed=%s" % (len(failed), len(RESULTS),

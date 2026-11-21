@@ -5925,6 +5925,15 @@ def outs_age_card(face):
     if isinstance(refreshed, int) and not isinstance(refreshed, bool) \
             and refreshed > 0:
         line += " labels_refreshed=%d" % refreshed
+    # R3146: the notes behind the middle dot are landing facts and are never
+    # rewritten, so the face states how many rows carry one the disk now
+    # contradicts - printed only when positive, so a clean round and an older
+    # face stay byte-equal. `note_claims` stays in the block: a "0 stale" line
+    # on the card must never stand next to "0 judged".
+    notes_stale = block.get("notes_stale")
+    if isinstance(notes_stale, int) and not isinstance(notes_stale, bool) \
+            and notes_stale > 0:
+        line += " notes_stale=%d" % notes_stale
     try:
         over7 = int(block.get("over7"))
     except (TypeError, ValueError):

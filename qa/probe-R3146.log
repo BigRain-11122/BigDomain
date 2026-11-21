@@ -1,0 +1,15 @@
+outs_rows=29 wide_rows=7
+lead_brackets=11 other_brackets=6
+line_claims=3 stale=2 missing=0
+  LINES docs/sandbox-suite-matrix.md claimed=687 disk=787 agree=False
+  LINES qa/battery-shard-suite-R2798.log claimed=19 disk=19 agree=True
+  LINES qa/battery-shard-R2797.log claimed=10 disk=12 agree=False
+sha_claims=3 stale=0 missing=0
+  SHA qa/battery-shard-suite-R2798.log claimed=d1c4ee2051a932db disk=d1c4ee2051a932db agree=True
+  SHA qa/battery-shard-R2797.log claimed=1de46b10e4151e79 disk=1de46b10e4151e79 agree=True
+  SHA qa/battery-shard-negctl-R2797.log claimed=e74b66e57d34ff0f disk=e74b66e57d34ff0f agree=True
+family_ratio_claims=1 [('qa/battery-shard-suite-R2798.log', '3/3')]
+outside_crit_claims=1 [('src/os/test_deliverable_index.py', 14)]
+outside_ratio_claims=1 [('src/os/test_battery_shard.py', '8/8')]
+byte_counts_behind_prose=2
+DERIVABLE=lines(3),sha256(3) NOT_DERIVABLE=ratio(2),criteria(1)
