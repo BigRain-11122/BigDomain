@@ -1,23 +1,23 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-21 R3199 PRODUCT+ENGINEERING: the evidence log and the demo world are refused by name too - a collect() failure now answers E_MFP_WORLD at rc=2, the log is staged beside its target and swapped in, and a bad --log path prints the whole verify text BEFORE one E_MFP_LOG line, where it used to throw the answer away (measured rc=1 with 0 stdout bytes) and a failed --verify wrote no evidence file at all.",
+    "current": "2026-11-21 R3200 PRODUCT+ENGINEERING: the evidence-log writer now proves its own write by reading the swapped-in file back - a log that lands other bytes than the answer answers E_MFP_LOG stage=read-back naming the landed and the intended size+sha16, where a successful os.replace used to be the only evidence (measured: half the payload, CRLF for LF and zero bytes all landed with rc=0 and no code printed).",
     "do": "R3192: measured the leftover a replace failure leaves (archive +295B carrying the window while the state did not; ledger lines 7 -> 9 for a fold that never landed; a retry refused by E_SF_MARKER_COLLISION) and landed rollback_archive: truncate to before_bytes or delete an archive this fold created, proved against before_sha16, backup removed, stage rolled-back. AC-SFOLD14 (six arms), 17 criteria; four arms JUDGED-CHANGED by measurement. Suite 17/17, matrix DOC-CURRENT, census PASS pinned=754, closeout PASS files=4489.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-monthly-faces.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3195.log (1716B, 2026-11-21)",
-    "latest_evidence": "qa/probe-R3195.log (1716B, 2026-11-21)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3200.log (995B, 2026-11-21)",
+    "latest_evidence": "qa/probe-R3200.log (995B, 2026-11-21)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3199] next window (<=48h): (0) MAIN — **生成器自己的 `--log` 现在原子了，但它是全仓第二套、未被回读证明的写手**：`tools/qa_log.py` 的 AC-QAL2 要求\"写完读回来证明（无 BOM/无 CR/可解码/非空/尾换行）\"，AC-QAL3 要求临时件+`os.replace`+无残留——本轮 `write_log` 只做到 AC-QAL3，**零回读证明**。下一轮先只读量三问：①把 `--log` 目标做成\"能 stage 但落盘后内容不符\"的形状（如并发截断/权限位异常），量 `E_MFP_LOG` 是否报得出、日志件是否以\"已写成功\"的面貌留下坏内容；②消费者普查：`qa/*.log` 里由生成器直写的那些文件（`preview-monthly-faces-*`）有没有被 `qa_writer_census` 计入、`tools/qa_log.py --check` 判方言时是否会因 CRLF/BOM 之外的\"内容不符\"漏判；③与 `qa_log.py` 的职责重叠是否该收口（生成器只产文本到 stdout、证据一律交 `qa_log.py --from`？）——三条都量完再落，判据沿用 AC-MFPX 写法（AC-MFPX6..N），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
-    "next_milestone_due": "2026-11-23T23:31:04+08:00",
-    "updated_at": "2026-11-21T23:31:04+08:00",
+    "next_milestone": "[R3200] next window (<=48h): (0) MAIN — **交付的两份文件同样只靠 `os.replace` 报成功、从不回读**：本轮只给 `--log` 装了回读，`write_outputs` 两次换入后既不比对字节也不复读，`PASS preview` 行的两个尺寸来自 `os.path.getsize`——**同长度的错页会照印 PASS**。做法=先只读量三问：①对 `--out`/`--json-out` 注入「同长度但内容不同」的落地，量 rc、stdout 的 PASS 行与盘上字节各是什么；②消费者普查：谁读这两份文件（`tools/deliverable_index.py`、`src/sandbox/frontdoor.py` 的 outs_age 卡、`reconcile_all` 的矩阵）——有哪一面能从尺寸以外判出内容；③证明该落在 `write_outputs` 内（回读比对意图 payload）还是落在 PASS 行（复读并打印 sha16），两文件要不要联合证明（一真一假时应报哪一个）。三条量完再落，判据沿用 AC-MFPX 写法（AC-MFPX7），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+    "next_milestone_due": "2026-11-23T23:42:27+08:00",
+    "updated_at": "2026-11-21T23:42:27+08:00",
     "heartbeat": {
-      "tick": 3195,
-      "state_tick": 3195,
-      "lag": 0,
-      "verdict": "PASS",
-      "reason": "fresh"
+      "tick": 3199,
+      "state_tick": 3200,
+      "lag": 1,
+      "verdict": "FLAG",
+      "reason": "heartbeat_row_debt"
     },
     "outs_age": {
       "rows": 30,
@@ -28,14 +28,14 @@
       "dup_rows": 0,
       "distinct": 30,
       "collapsed": 0,
-      "labels_refreshed": 1,
+      "labels_refreshed": 0,
       "notes_stale": 2,
       "note_claims": 6,
       "criteria_stale": 1,
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-21 R3199 PRODUCT+ENGINEERING: the evidence log and the demo world are refused by name too - a collect() failure now answers E_MFP_WORLD at rc=2, the log is staged beside its target and swapped in, and a bad --log path prints the whole verify text BEFORE one E_MFP_LOG line, where it used to throw the answer away (measured rc=1 with 0 stdout bytes) and a failed --verify wrote no evidence file at all.",
+  "current": "2026-11-21 R3200 PRODUCT+ENGINEERING: the evidence-log writer now proves its own write by reading the swapped-in file back - a log that lands other bytes than the answer answers E_MFP_LOG stage=read-back naming the landed and the intended size+sha16, where a successful os.replace used to be the only evidence (measured: half the payload, CRLF for LF and zero bytes all landed with rc=0 and no code printed).",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,11 +63,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-21 R3199 PRODUCT+ENGINEERING: the evidence log and the demo world are refused by name too - a collect() failure now answers E_MFP_WORLD at rc=2, the log is staged beside its target and swapped in, and a bad --log path prints the whole verify text BEFORE one E_MFP_LOG line, where it used to throw the answer away (measured rc=1 with 0 stdout bytes) and a failed --verify wrote no evidence file at all.",
-  "export_ts": "2026-11-21T23:31:04+08:00",
+  "do": "2026-11-21 R3200 PRODUCT+ENGINEERING: the evidence-log writer now proves its own write by reading the swapped-in file back - a log that lands other bytes than the answer answers E_MFP_LOG stage=read-back naming the landed and the intended size+sha16, where a successful os.replace used to be the only evidence (measured: half the payload, CRLF for LF and zero bytes all landed with rc=0 and no code printed).",
+  "export_ts": "2026-11-21T23:42:27+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
-  "latest_evidence": "qa/probe-R3195.log (1716B, 2026-11-21)",
-  "next_milestone": "[R3199] next window (<=48h): (0) MAIN — **生成器自己的 `--log` 现在原子了，但它是全仓第二套、未被回读证明的写手**：`tools/qa_log.py` 的 AC-QAL2 要求\"写完读回来证明（无 BOM/无 CR/可解码/非空/尾换行）\"，AC-QAL3 要求临时件+`os.replace`+无残留——本轮 `write_log` 只做到 AC-QAL3，**零回读证明**。下一轮先只读量三问：①把 `--log` 目标做成\"能 stage 但落盘后内容不符\"的形状（如并发截断/权限位异常），量 `E_MFP_LOG` 是否报得出、日志件是否以\"已写成功\"的面貌留下坏内容；②消费者普查：`qa/*.log` 里由生成器直写的那些文件（`preview-monthly-faces-*`）有没有被 `qa_writer_census` 计入、`tools/qa_log.py --check` 判方言时是否会因 CRLF/BOM 之外的\"内容不符\"漏判；③与 `qa_log.py` 的职责重叠是否该收口（生成器只产文本到 stdout、证据一律交 `qa_log.py --from`？）——三条都量完再落，判据沿用 AC-MFPX 写法（AC-MFPX6..N），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
+  "latest_evidence": "qa/probe-R3200.log (995B, 2026-11-21)",
+  "next_milestone": "[R3200] next window (<=48h): (0) MAIN — **交付的两份文件同样只靠 `os.replace` 报成功、从不回读**：本轮只给 `--log` 装了回读，`write_outputs` 两次换入后既不比对字节也不复读，`PASS preview` 行的两个尺寸来自 `os.path.getsize`——**同长度的错页会照印 PASS**。做法=先只读量三问：①对 `--out`/`--json-out` 注入「同长度但内容不同」的落地，量 rc、stdout 的 PASS 行与盘上字节各是什么；②消费者普查：谁读这两份文件（`tools/deliverable_index.py`、`src/sandbox/frontdoor.py` 的 outs_age 卡、`reconcile_all` 的矩阵）——有哪一面能从尺寸以外判出内容；③证明该落在 `write_outputs` 内（回读比对意图 payload）还是落在 PASS 行（复读并打印 sha16），两文件要不要联合证明（一真一假时应报哪一个）。三条量完再落，判据沿用 AC-MFPX 写法（AC-MFPX7），**先落板再动代码**。备选=P2 队头 `state/queue/tech.md`（Docker 门控行跳过）、P3 队头 `state/queue/explore.md`；地板实测 main=5/5 tech=7/10 explore=4/10（欠 9，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 零 open 不变。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -157,7 +157,7 @@
   },
   "results": [
     [
-      "3195",
+      "3200",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -171,24 +171,24 @@
   "self_drive": {
     "window": "2026-11-15..2026-11-21",
     "window_days": 7,
-    "log_lines_in_window": 82,
+    "log_lines_in_window": 77,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 64711,
-  "next_milestone_due": "2026-11-23T23:31:04+08:00",
+  "state_bytes": 69943,
+  "next_milestone_due": "2026-11-23T23:42:27+08:00",
   "heartbeat": {
-    "tick": 3195,
-    "state_tick": 3195,
-    "lag": 0,
-    "verdict": "PASS",
-    "reason": "fresh"
+    "tick": 3199,
+    "state_tick": 3200,
+    "lag": 1,
+    "verdict": "FLAG",
+    "reason": "heartbeat_row_debt"
   },
   "outs_age": {
     "rows": 30,
@@ -199,7 +199,7 @@
     "dup_rows": 0,
     "distinct": 30,
     "collapsed": 0,
-    "labels_refreshed": 1,
+    "labels_refreshed": 0,
     "notes_stale": 2,
     "note_claims": 6,
     "criteria_stale": 1,

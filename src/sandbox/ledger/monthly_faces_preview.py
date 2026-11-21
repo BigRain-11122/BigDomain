@@ -27,7 +27,7 @@ Exit codes: 0 written or verified, 1 identity problems (VERIFY FAIL), and
 2 refused by name (E_MFP_COPY: the copy file cannot drive this renderer;
 E_MFP_WRITE: the delivered files cannot be rendered, staged or swapped;
 E_MFP_WORLD: the demo world cannot be built; E_MFP_LOG: the evidence log
-cannot be staged or swapped in).
+cannot be staged, swapped in or proven by reading it back).
 
 Criteria AC-MFR1..AC-MFR8 are registered in src/os/backlog.md (R3193
 PIN row) BEFORE this file existed.
@@ -80,6 +80,20 @@ partial write could truncate the evidence file; it is now staged beside
 its target and swapped in, answering E_MFP_LOG at rc=2 only AFTER the
 text has been printed. A missing log directory is created, as it already
 was for the outputs.
+
+R3200 (AC-MFPX6): the log write now proves itself by reading back. Until
+this window a successful os.replace was the whole evidence that the log
+had landed, so a swap that reported success while carrying other bytes
+went unnoticed (measured on three injected shapes: half the payload,
+CRLF for LF, and zero bytes - all returned normally, rc stayed 0 and no
+code was printed, while the file on disk no longer matched the answer).
+tools/qa_log.py has proven its own writes back since AC-QAL2; this
+applies the same law to the second writer: the landed bytes must equal
+the intended payload byte for byte, and a mismatch answers E_MFP_LOG
+with stage=read-back naming both the landed and the intended size and
+sha16. A mismatch is not rolled back - at that point the previous
+evidence bytes are already gone - so the file stays as landed and the
+detail says it is unproven.
 """
 import argparse
 import hashlib
@@ -493,6 +507,28 @@ def _stage(path, text):
     return temp, path
 
 
+def verify_log(path, text):
+    """Read the swapped-in log back and prove it carries the answer.
+
+    R3200 (AC-MFPX6): a successful os.replace used to be the only proof
+    that the log had landed, so bytes other than the computed answer were
+    reported as written (measured: 29B of 58B, CRLF for LF and zero
+    bytes all returned without a refusal and left rc=0). tools/qa_log.py
+    has proven its writes back since AC-QAL2; this is the same law on the
+    second writer, stated as byte equality with the intended payload.
+    """
+    want = text.encode("utf-8")
+    raw = io.open(path, "rb").read()
+    if raw != want:
+        raise ValueError(
+            "landed %d bytes sha16=%s, intended %d bytes sha16=%s"
+            % (len(raw), hashlib.sha256(raw).hexdigest()[:16],
+               len(want), hashlib.sha256(want).hexdigest()[:16]))
+    return {"bytes": len(raw),
+            "lines": len(text.splitlines()),
+            "sha256": hashlib.sha256(raw).hexdigest()[:16]}
+
+
 def write_log(path, text):
     """Write the evidence log beside its target, then swap it in.
 
@@ -502,6 +538,12 @@ def write_log(path, text):
     truncated evidence file. The text is staged and os.replace is the
     only write to the log path; the target directory is created when it
     is missing, exactly as the outputs are.
+
+    Since R3200 the swapped-in file is read back and must equal the
+    intended payload byte for byte (verify_log). A mismatch is named at
+    read-back and the landed bytes are left as they are: the previous
+    evidence is already gone, so the refusal says unproven rather than
+    pretending a rollback happened.
     """
     try:
         temp, target = _stage(path, text)
@@ -514,6 +556,10 @@ def write_log(path, text):
     finally:
         if os.path.exists(temp):
             _remove_quietly(temp)
+    try:
+        return verify_log(target, text)
+    except Exception as exc:
+        raise _log_error("read-back", exc) from exc
 
 
 def write_outputs(faces, copy, out_html, out_json):

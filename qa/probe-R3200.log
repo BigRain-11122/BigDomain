@@ -1,0 +1,12 @@
+Q1a healthy raised=none exact=True bytes=58 sha16=e4dc4c1489c1f971
+Q1b shim=truncated raised=none exact=False bytes=29 sha16=51e77b7ea5258cf2 has_code=False
+Q1b shim=crlf raised=none exact=False bytes=60 sha16=4b6500226616bd4a has_code=False
+Q1b shim=empty raised=none exact=False bytes=0 sha16=e3b0c44298fc1c14 has_code=False
+Q1c control rc=0 log_matches_stdout=True text_head='AC-MFR2 determinism html=same json=same'
+Q1c shimmed rc=0 log_matches_stdout=False confidence_unchanged=True refusal_printed=False
+Q2a census rc=0 bytes=443 tee_lines=2 sample='[tee] preview-monthly-faces-R9999.log bytes=58 bom=utf-8 crlf=0 bare_lf=2 utf8=yes label=no'
+Q2a baseline_has_generator_log=False entries=0
+Q2b classify(wrong_content)=utf-8/lf classify(truncated_mid_line)=no-trailing-newline
+Q2b shipped_check rc=0 line='QA-LOG OK name=preview-monthly-faces-R3199.log dialect=utf-8/lf bytes=661'
+Q3 write_log_callsites=1 os_replace_in_log=1 qa_log_do_write_arity=3
+Q3 shipped_writers_using_qa_log_from=50

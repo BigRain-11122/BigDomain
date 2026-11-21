@@ -1,0 +1,96 @@
+R3200 PRODUCT+ENGINEERING: the evidence-log writer proves itself by
+reading the swapped-in file back, so a log that lands other bytes than
+the answer is refused E_MFP_LOG stage=read-back with both sizes and
+sha16 named, instead of being reported as written.
+
+MEASURED BEFORE (read-only: tmp/probe_R3200.py -> qa/probe-R3200.log;
+private temp trees, zero socket, zero network, no live qa/ or preview/
+write; the CLI case ran M.main in process with the fault narrowed to
+the --log destination):
+(a) healthy write_log landed 58 bytes exactly matching the intended
+    payload, sha16 e4dc4c1489c1f971;
+(b) an os.replace shim that reports success while landing other bytes
+    was not refused at all: half the payload (29B), CRLF for LF (60B)
+    and zero bytes (0B) all returned normally, no code printed;
+(c) the CLI-equivalent control run read rc=0 with log==stdout; with the
+    same shim rc stayed 0, the full answer was still printed, E_MFP_LOG
+    never appeared, and the file on disk no longer matched stdout -
+    a caller was handed "success" with no byte evidence;
+(d) consumer census: qa_writer_census --dir classifies the family tee
+    (bom=utf-8 crlf=0 utf8=yes) and a healthy dialect needs no baseline
+    row; tools/qa_log.py classify answers utf-8/lf for bytes that are
+    the wrong answer, and --check reads QA-LOG OK on the shipped 661B
+    log - the dialect gate cannot see content, and only AC-QAL2 proved
+    its own writes back before this window;
+(e) overlap: write_log has one call site and one os.replace inside it;
+    qa_log.do_write takes three parameters (a separate step) and
+    qa_log.py --from is referenced 50 times across the repo, but moving
+    this writer to it would overturn the R3199 property that a failed
+    verify still leaves its evidence.
+
+LANDED: verify_log(path, text) reads the swapped-in file back and
+requires byte equality with the intended payload, returning bytes/lines/
+sha16; write_log calls it after the swap and a mismatch raises
+E_MFP_LOG with stage=read-back naming landed and intended size+sha16.
+The landed bytes are NOT rolled back or deleted (the previous evidence
+is already gone); the detail says unproven. USAGE and the module
+docstring name the new stage. AC-MFPX6 shipped in
+test_monthly_faces_preview.py (30 -> 31; six arms: healthy proof and
+byte identity, two injected wrong landings refused with both faces and
+left on disk, the CLI face keeping the whole answer plus exactly one
+refusal at rc=2, census tee coverage of the written family, and module
+hygiene plus one proof site). AC-MFPW6 was re-measured and its counts
+are unchanged (replace=2, named=4, world 1/2, stages 1,1,1), so no arm
+was re-pinned or loosened.
+
+GATES: SUITE PASS 31/31 (qa/suite-monthly-faces-preview-R3200.log
+2506B/34 lines utf-8/lf sha256 9234c194e183af1c through
+tools/qa_log.py --from and re-read by --check); the generator own
+--verify still reads VERIFY PASS (qa/preview-monthly-faces-R3200.log,
+page 6834B json 13015B, snapshot sha16 8b835e8514ed5eb0 unchanged);
+matrix regenerated through its own vehicle (78486B/755 rows) then
+--check DOC-CURRENT; census --write-pin (honest CACHE
+E_RCC_CACHE_PARTIAL reused=754/755) then --check VERDICT PASS
+pinned=755; live gate CLOSEOUT-GATE PASS files=4513 flags=0
+reader_refused=0 round_main=OK census=PASS matrix=DOC-CURRENT with
+CARRIER bytes=64711 margin=13789 fold_needed=false layout_ok=true.
+
+GROUP SCAN (content-addressed): ledger @BigDomain lines=0 so no
+dispatch was owed; decisions rows=356 tokens=143 new=0 against the
+stored baseline; the group orders face still ends at the 2026-11-20
+22:5x content-handover row acknowledged at R3104; benchmarks_refreshed
+2026-11-18 sits inside the seven-day gate; git status clean with no
+index.lock; the board head (the R3199 next-window read-back row) WAS
+pullable, so this is a work round. BigDomain-OSLoop remains registered
+and running, so nothing was registered.
+
+HONEST: (a) ZERO payment capability and no network beyond loopback - a
+proven log moves no money, and a buyer still cannot pay (no merchant
+id, server, domain, filing+ICP or miniprogram appid+secret); (b) zero
+product surface, zero api surface and zero gate number: what changed is
+whether the writer own claim has byte evidence; (c) the proof covers
+the log only - the two delivered files are still swapped in and never
+read back, so a same-size wrong page would still print PASS (named, not
+fixed this window); (d) the read-back proves landed bytes equal the
+intended bytes, not that the intended text is right (AC-MFR1..8 own
+that); (e) the refusal path is process-injected and unreachable through
+a static filesystem, as measured at R3190/R3191; (f) carried unchanged:
+tasks.md zero open (the P-47 canonical board - ZERO payment
+capability), Docker absent, BigDomain-OSLoop LogonType=Interactive, the
+same-window law uninstalled, the 4 live duplicate markers, reconcile.py
+as the uncovered fourth ledger input, AC-VAC1..6, the AC-LNKF1 queue
+head, the R2778 stand, 18 BOM-carrying scripts, the single default
+crawl source is one page, the cap of 31 as a chosen law,
+series_file_order=day, the machine local day law, and the queue floor
+main=5/5 tech=7/10 explore=4/10 (shortfall 9, not topped up by
+invention).
+
+TOKENS: local=~18k api=0 api_reason=one shipped five-still scan, one
+board/state/queue read set, one read-only five-question probe with real
+injected landings plus one in-process CLI case, one PIN row written
+before any code, one read-back proof plus one refusal stage, one new
+six-arm criterion, one registry row 30 -> 31, six suites, one matrix
+regeneration with its check, one census re-pin with its check, one
+suite log and one evidence log through the shipped writer, one live
+gate run, and the board/state/export closeout; zero cloud calls and
+zero external API touches.

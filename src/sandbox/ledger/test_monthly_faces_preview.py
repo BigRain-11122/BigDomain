@@ -186,7 +186,7 @@ SUITE_FILE = os.path.abspath(__file__)
 RECONCILE = os.path.join(BASE, "src", "sandbox", "reconcile_all.py")
 MODULE = os.path.join(LEDGER, "monthly_faces_preview.py")
 LABEL = "ledger-monthly-faces-preview"
-DECLARED = 30
+DECLARED = 31
 TEMPS = []
 
 
@@ -1329,6 +1329,141 @@ def check_verify_evidence():
               ",".join(problems) or "none"))
 
 
+def check_log_readback():
+    """AC-MFPX6: the swapped-in log proves itself by reading back."""
+    problems = []
+    text = "VERIFY PASS criteria=AC-MFR1..AC-MFR8 (probe)\nsecond line\n"
+    want = text.encode("utf-8")
+
+    def land(which, only):
+        real = os.replace
+
+        def shim(src, dst):
+            if os.path.abspath(dst) != os.path.abspath(only):
+                return real(src, dst)
+            with io.open(src, "rb") as fh:
+                payload = fh.read()
+            if which == "truncated":
+                payload = payload[: max(1, len(payload) // 2)]
+            elif which == "crlf":
+                payload = payload.replace(b"\n", b"\r\n")
+            with io.open(dst, "wb") as fh:
+                fh.write(payload)
+            try:
+                os.remove(src)
+            except OSError:
+                pass
+
+        return shim
+
+    root = temp_root("readback-healthy")
+    target = os.path.join(root, "verify.log")
+    proof = M.write_log(target, text)
+    landed = io.open(target, "rb").read()
+    if landed != want:
+        problems.append("healthy.bytes=%d" % len(landed))
+    if (proof.get("bytes") != len(want)
+            or proof.get("sha256") != sha16_bytes(want)
+            or proof.get("lines") != 2):
+        problems.append("healthy.proof=%r" % (proof,))
+    if _leftovers(root):
+        problems.append("healthy.temp")
+
+    shapes = {}
+    kept = {}
+    for which in ("truncated", "crlf"):
+        root = temp_root("readback-%s" % which)
+        target = os.path.join(root, "verify.log")
+        real = os.replace
+        os.replace = land(which, target)
+        caught = None
+        try:
+            M.write_log(target, text)
+        except M.LogError as exc:
+            caught = exc
+        except Exception as exc:  # noqa: BLE001 - a wrong type is a bug
+            shapes[which] = "raised=%s" % type(exc).__name__
+            continue
+        finally:
+            os.replace = real
+        on_disk = io.open(target, "rb").read() if os.path.isfile(target) else b""
+        kept[which] = len(on_disk)
+        if caught is None:
+            shapes[which] = "no-refusal"
+            continue
+        detail = caught.detail
+        ok = (caught.code == "E_MFP_LOG" and caught.stage == "read-back"
+              and "landed" in detail and "intended" in detail
+              and ("landed %d bytes" % len(on_disk)) in detail
+              and isinstance(caught.__cause__, ValueError))
+        if not ok:
+            shapes[which] = "code=%s stage=%s detail=%s" % (
+                caught.code, caught.stage, detail[:64])
+        if on_disk == want:
+            shapes[which] = "disk-matches"
+        if not os.path.isfile(target):
+            shapes[which] = "disk-missing"
+    if shapes:
+        problems.append("shapes=%s" % json.dumps(shapes, sort_keys=True))
+
+    root = temp_root("readback-cli")
+    target = os.path.join(root, "verify.log")
+    rc0, text0 = _call_main(["--verify", "--log", target])
+    if rc0 != 0 or not text0:
+        problems.append("cli.control=%r/%d" % (rc0, len(text0)))
+    real = os.replace
+    os.replace = land("truncated", target)
+    try:
+        rc, printed = _call_main(["--verify", "--log", target])
+    finally:
+        os.replace = real
+    if rc != 2:
+        problems.append("cli.rc=%r" % (rc,))
+    if printed.count("E_MFP_LOG stage=read-back") != 1:
+        problems.append("cli.refusals=%d" % printed.count("E_MFP_LOG"))
+    if text0 and not printed.startswith(text0):
+        problems.append("cli.text-lost")
+    cli_disk = io.open(target, "rb").read() if os.path.isfile(target) else b""
+    if cli_disk == printed.encode("utf-8"):
+        problems.append("cli.disk-matches")
+
+    root = temp_root("readback-census")
+    target = os.path.join(root, "preview-monthly-faces-R9999.log")
+    M.write_log(target, text)
+    proc = subprocess.run([sys.executable,
+                           os.path.join(BASE, "src", "os",
+                                        "qa_writer_census.py"),
+                           "--dir", root],
+                          capture_output=True, cwd=BASE)
+    census = proc.stdout.decode("utf-8", "replace")
+    if proc.returncode != 0 or "[tee]" not in census:
+        problems.append("census.rc=%d tee=%s"
+                        % (proc.returncode, "[tee]" in census))
+
+    with open(MODULE, "rb") as fh:
+        raw = fh.read()
+    try:
+        raw.decode("ascii")
+        ascii_ok = True
+    except UnicodeDecodeError:
+        ascii_ok = False
+    with io.open(MODULE, "r", encoding="utf-8") as fh:
+        source = fh.read()
+    log_start = source.find("def verify_log(")
+    log_end = source.find("def write_log(")
+    proof_body = source[log_start:log_end] if 0 <= log_start < log_end else ""
+    site_ok = (proof_body.count('io.open(path, "rb")') == 1
+               and source.count('_log_error("read-back", exc)') == 1)
+    if not (ascii_ok and site_ok):
+        problems.append("hygiene=ascii:%s sites:%s" % (ascii_ok, site_ok))
+    record("AC-MFPX6", not problems,
+           "kept=%s cli_disk=%d census_tee=%s ascii=%s sites=%s "
+           "problems=%s"
+           % (json.dumps(kept, sort_keys=True), len(cli_disk),
+              "[tee]" in census, ascii_ok, site_ok,
+              ",".join(problems) or "none"))
+
+
 def main():
     before = shipped_marks()
     try:
@@ -1361,6 +1496,7 @@ def main():
         check_world_named()
         check_log_atomic_cli()
         check_verify_evidence()
+        check_log_readback()
         check_write_wiring()
     finally:
         for path in TEMPS:
