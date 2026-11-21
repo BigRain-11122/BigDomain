@@ -1,0 +1,25 @@
+REORG R3184 2026-11-21 -- a fold summary must name the archive it lands in
+
+PROBE qa/probe-R3184.log bytes=865 lines=16 sha256=55b58b5713a8d9f2 dialect=utf-8/lf zero_socket=true zero_network=true zero_live_writes=true
+Q1 base_summary(archive_name=None) names state-log-archive-2026-11.md (the default month file): True
+Q2 base_summary(archive_name=state-log-archive-2026-10.md) names it: True
+Q3 choose_window(archive_name=custom) returns a summary naming the custom file: True (R9002 fold of log lines 1..14)
+Q4 HEAD birth gate accepted a summary naming the default file while the fold wrote a custom archive: True; dry-run verdict=DRY-RUN would_fail=[]; summary_names_written_archive=False
+Q4 state_seq.is_fold_summary accepts that same text: True (its law is the ARCHIVE_PREFIX substring only)
+Q5 CLI contract carries --summary TEXT + --archive PATH; run() has no archive_name parameter, so the write side never compared them
+Q6 reader law ARCHIVE_PREFIX = state-log-archive-
+
+LANDED summary_archive_names() reads every state-log-archive-* name a summary points at; check_summary_shape(summary, archive_path=None) refuses any name that differs from basename(archive) with E_FLR_SUMMARY_ARCHIVE before any plan or write; run() resolves the archive once at the top so the shape check and the fold append answer about the same path
+LANDED AC-SUM6 in src/os/test_state_fold_run.py (8 -> 9): mismatch refused in dry-run AND execute with the state bytes untouched and the archive file absent, the reader still accepting that text (so the gate is the writer), a custom-named fold landing VERIFIED, the default path unhurt, two different names compared, the same name twice accepted, and module hygiene
+REGISTRY os-state-fold-run 8 -> 9 (one row)
+
+SUITE qa/suite-state-fold-run-R3184.log bytes=2613 lines=11 sha256=5f39c622a8061ac9 SUITE PASS 9/9
+PEERS state_seq 8/8, state_fold 7/7, logs_toolkit 168/168, state_append 10/10, general_writer_dialect_audit 6/6, closeout_gate 33/42 before the matrix re-stamp and 42/42 after
+MATRIX docs/sandbox-suite-matrix.md bytes=78384 rows=754 criteria_total 6157 -> 6158 row 469 8 -> 9 DOC-CURRENT
+CENSUS rows=754 readable=754 unparsed=0 silent=0 VERDICT PASS pinned=754 (pin run honestly reported CACHE E_RCC_CACHE_PARTIAL reused=753/754)
+GATE CLOSEOUT-GATE PASS files=4470 flags=0 reader_refused=0 round_main=OK census=PASS matrix=DOC-CURRENT
+CARRIER bytes=68904 gate=78500 margin=9596 fold_needed=false layout_ok=true crlf=94 bare_lf=0 indent_anomaly=0 log_items=83
+
+HONEST my own arm went red once: this face prints CLEAR for a cleared fold (FOLD-CLEAR minus its prefix) and the arm demanded FOLDED; the arm was corrected, no law relaxed
+HONEST boundary kept: the summary always says logs/<name>, so an archive outside root/logs would match by name while misstating the directory; that question is named for the next window, not ruled here
+HONEST zero payment capability and no network beyond loopback; a buyer still cannot pay (no merchant id, server, domain, filing+ICP or miniprogram appid+secret)

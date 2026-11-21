@@ -5024,7 +5024,7 @@ SUITES = [
     # ledger coverage read THROUGH the archive, layout writer/reader agreement,
     # and a gate that only clears at or under the waterline.
     ("os-state-fold-run",
-     os.path.join("..", "os", "test_state_fold_run.py"), 8),
+     os.path.join("..", "os", "test_state_fold_run.py"), 9),
     # R2407: a tokens line is not automatically a block's LAST line - a round
     # may append disclosures after its ledger, and the R2405 fold then left
     # R2395's ledger in the archive while the rest of the round stayed live.

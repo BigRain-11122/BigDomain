@@ -26,7 +26,7 @@ sys.path.insert(0, BASE)
 import state_fold_run as FR  # noqa: E402
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 8
+EXPECTED_CRITERIA = 9
 MODULE = os.path.join(BASE, "state_fold_run.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold-run"
@@ -299,7 +299,7 @@ def main():
         with io.open(RUNNER, "rb") as handle:
             runner = handle.read()
         wired = (LABEL.encode("ascii") in runner
-                 and EXPECTED_CRITERIA == 8)
+                 and EXPECTED_CRITERIA == 9)
         check(read(dry_path) == dry_before
               and dry["dry_run_digest_same"] is True
               and dry["verdict"] == "DRY-RUN" and ascii_ok and no_clock
@@ -429,6 +429,81 @@ def main():
               "point in dry-run AND execute (%s), zero bytes written "
               "[untouched=%s], while the shipped shape is still accepted "
               "[%s]" % (prose_codes, after_prose == prose_before, shipped_ok))
+        # --- AC-SUM6: a summary must name the archive it lands in -----------
+        # R3184 measured the hole: check_summary_shape accepted a summary that
+        # named the default month file while --archive pointed elsewhere, and
+        # the reader accepts it too (it only checks the prefix), so a fold
+        # record could misname its own destination. The writer refuses now.
+        wrong_root, wrong_path = make_world(os.path.join(base, "wrongarc"))
+        wrong_before = read(wrong_path)
+        wrong_archive = os.path.join(wrong_root, "logs",
+                                     "state-log-archive-2026-10.md")
+        mismatched = ("R9010 fold 1 of log lines 1..4 into"
+                      " logs/state-log-archive-2026-11.md")
+        wrong_codes = []
+        for dry in (True, False):
+            try:
+                FR.run(wrong_root, "R9010", 1, 1, 4, mismatched,
+                       archive_path=wrong_archive, dry_run=dry)
+            except FR.FoldRunError as exc:
+                wrong_codes.append(exc.code)
+        reader_accepts = FR.SQ.is_fold_summary(mismatched)
+        matches_root, matches_path = make_world(os.path.join(base, "matcharc"))
+        matches_archive = os.path.join(matches_root, "logs",
+                                       "state-log-archive-2026-10.md")
+        named_custom = ("R9011 fold 1 of log lines 1..4 into"
+                        " logs/state-log-archive-2026-10.md")
+        custom_report = FR.run(matches_root, "R9011", 1, 1, 4, named_custom,
+                               archive_path=matches_archive)
+        custom_state = json.loads(read(matches_path).decode("utf-8"))
+        default_root, default_path = make_world(os.path.join(base, "defarc"))
+        default_report = FR.run(default_root, "R9012", 1, 1, 4,
+                                "R9012 fold 1 of log lines 1..4 into logs/%s"
+                                % os.path.basename(SF.default_archive(
+                                    default_root)))
+        double_names = FR.summary_archive_names(named_custom)
+        two_names = FR.summary_archive_names(
+            named_custom + " and logs/state-log-archive-2026-11.md")
+        same_name_twice = False
+        try:
+            FR.check_summary_shape(named_custom + " and " + named_custom,
+                                   matches_archive)
+            same_name_twice = True
+        except FR.FoldRunError:
+            same_name_twice = False
+        module_src = io.open(MODULE, "rb").read().decode("utf-8")
+        hygiene = (all(ord(char) < 128 for char in module_src)
+                   and "import socket" not in module_src
+                   and "import urllib" not in module_src
+                   and "import http" not in module_src)
+        check(wrong_codes == ["E_FLR_SUMMARY_ARCHIVE",
+                              "E_FLR_SUMMARY_ARCHIVE"]
+              and read(wrong_path) == wrong_before
+              and not os.path.exists(wrong_archive)
+              and reader_accepts
+              and custom_report["verdict"] == "CLEAR"
+              and custom_report["archive_verified"]
+              and named_custom in custom_state["log"]
+              and default_report["verdict"] == "CLEAR"
+              and double_names == ["state-log-archive-2026-10.md"]
+              and len(two_names) == 2 and same_name_twice and hygiene,
+              "AC-SUM6 a summary naming one archive while the fold writes "
+              "another is refused at the birth point in dry-run AND execute "
+              "[%s] with zero bytes written [untouched=%s archive_absent=%s] "
+              "while the reader still accepts that same text [%s] - so the "
+              "gate is the writer, not a loosened reader; a summary naming "
+              "the custom archive it does write folds and VERIFIES [%s %s "
+              "landed=%s]; the default path is not hurt [%s]; and every "
+              "archive name the summary points at is compared, so two "
+              "different names are seen [%d] while the same name twice "
+              "passes [%s]; module hygiene [%s]"
+              % (wrong_codes, read(wrong_path) == wrong_before,
+                 not os.path.exists(wrong_archive), reader_accepts,
+                 custom_report["verdict"],
+                 custom_report["archive_verified"],
+                 named_custom in custom_state["log"],
+                 default_report["verdict"], len(two_names),
+                 same_name_twice, hygiene))
     finally:
         shutil.rmtree(base, ignore_errors=True)
 

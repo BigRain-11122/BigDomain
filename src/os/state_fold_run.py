@@ -208,8 +208,24 @@ def already_folded(state, window_start, window_end, summary):
     return summary in state["log"]
 
 
-def check_summary_shape(summary):
-    """Refuse a summary the sequence reader cannot recognise (AC-SUM2).
+def summary_archive_names(summary):
+    """Every archive file name a fold summary points at, in text order."""
+    names = []
+    marker = SQ.ARCHIVE_PREFIX
+    index = summary.find(marker)
+    while index != -1:
+        end = index + len(marker)
+        while end < len(summary) and (summary[end].isalnum()
+                                      or summary[end] in "-._"):
+            end += 1
+        names.append(summary[index:end])
+        index = summary.find(marker, end)
+    return names
+
+
+def check_summary_shape(summary, archive_path=None):
+    """Refuse a summary the reader cannot recognise, or one that misnames
+    the archive it is about to be written into (AC-SUM2 + AC-SUM6).
 
     R3183 measured the live red gate: a hand-written summary that named no
     archive file was not a fold summary to `state_seq`, so it re-entered the
@@ -217,18 +233,34 @@ def check_summary_shape(summary):
     `fold_summaries` read 0. Loosening the reader would let any narrative
     starting with "R<n> fold" leave the sequence silently, so the birth point
     is here instead: a summary this reader refuses is never written.
+
+    R3184 measured the same birth point accepting a summary that names one
+    archive while the fold lands in another (the reader only checks the
+    prefix, and run() never compared the two). A fold record that misnames
+    its own destination is unreadable history, so the write is refused here.
     """
     if not SQ.is_fold_summary(summary or ""):
         raise FoldRunError(
             "E_FLR_SUMMARY_SHAPE",
             "summary is not a fold summary the reader recognises"
             " (needs '^R<n> fold' plus %r)" % SQ.ARCHIVE_PREFIX)
+    if archive_path is None:
+        return
+    written = os.path.basename(archive_path)
+    named = summary_archive_names(summary)
+    wrong = [name for name in named if name != written]
+    if wrong:
+        raise FoldRunError(
+            "E_FLR_SUMMARY_ARCHIVE",
+            "summary names %s but the fold writes %s"
+            % (",".join(wrong), written))
 
 
 def run(root, round_label, fold_no, window_start, window_end, summary,
         archive_path=None, dry_run=False, gate=SF.GATE, refold_reason=None):
     """Plan, refuse on any dirty predicate, execute, then prove the result."""
-    check_summary_shape(summary)
+    archive = archive_path or SF.default_archive(root)
+    check_summary_shape(summary, archive)
     path = SF.state_path(root)
     raw, state = SF.read_state(path)
     pre_digest = digest(raw)
@@ -248,7 +280,7 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
             "bytes_before": bytes_before, "bytes_after": bytes_before,
             "gate": int(gate), "margin_after": int(gate) - bytes_before,
             "token_ok": True, "tokens_total": 0, "tokens_missing": [],
-            "archive_path": archive_path or SF.default_archive(root),
+            "archive_path": archive,
             "archive_appendix_bytes": 0, "archive_verified": True,
             "layout_agree": True, "field_set_same": True,
             "ledger_rounds_before": len(ledger_coverage(
@@ -260,8 +292,7 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
 
     plan, folded_text = SF.plan_fold(raw, state, window_start, window_end,
                                      summary, gate=gate,
-                                     covered=SF.archive_tokens(
-                                         archive_path or SF.default_archive(root)))
+                                     covered=SF.archive_tokens(archive))
     # AC-SFOLD4: the layout the append path lands and the layout this fold
     # reader expects must agree about the SAME file.
     payload = GWDA.payload_for(path, folded_text)
@@ -307,7 +338,6 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
                            "%d bytes over %d"
                            % (plan["predicted_bytes"], gate))
 
-    archive = archive_path or SF.default_archive(root)
     before_cov = ledger_coverage(logs_dir, state["log"])
     report = {
         "round": round_label, "fold_no": fold_no,

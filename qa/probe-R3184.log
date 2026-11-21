@@ -1,0 +1,16 @@
+PROBE R3184 start: default archive name is 'state-log-archive-2026-11.md'
+Q1 default_summary='R9001 fold of log lines 1..6 into logs/state-log-archive-2026-11.md'
+Q1 names_default_file=True
+Q2 custom_summary='R9001 fold of log lines 1..6 into logs/state-log-archive-2026-10.md'
+Q2 names_custom_file=True
+Q3 choose_window end=14 names_custom=True summary='R9002 fold of log lines 1..14 into logs/state-log-archive-2026-10.md'
+Q4 birth_gate_accepts_mismatch=True error=None
+Q4 dry_run verdict=DRY-RUN would_fail=[]
+Q4 summary_names_written_archive=False
+Q4 reader_accepts=True
+Q4 archive_arg='C:\\Users\\sjs20\\AppData\\Local\\Temp\\probe-R3184-qpdecka7\\world2\\logs\\state-log-archive-2026-10.md'
+Q5 cli_contract_carries_summary=True
+Q5 run_validates_archive_name=False
+Q6 seq_has_ARCHIVE_PREFIX=True
+Q6 ARCHIVE_PREFIX_value='"state-log-archive-"'
+PROBE R3184 done
