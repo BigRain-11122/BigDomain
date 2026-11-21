@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 759 | 6279 | 675/675 | R2739 |
+| 759 | 6281 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -764,7 +764,7 @@
 | 725 | os-first-yuan-chain | ../os/test_first_yuan_chain.py | 13 | no-evidence | - |
 | 726 | os-lobby-protocol-map | ../os/test_lobby_protocol_map.py | 6 | no-evidence | - |
 | 727 | os-ledger-reconcile-face | ../os/test_ledger_reconcile_face.py | 8 | no-evidence | - |
-| 728 | os-deliverable-index | ../os/test_deliverable_index.py | 18 | no-evidence | - |
+| 728 | os-deliverable-index | ../os/test_deliverable_index.py | 20 | no-evidence | - |
 | 729 | os-battery-shard | ../os/test_battery_shard.py | 32 | no-evidence | - |
 | 730 | os-suite-output-audit | ../os/test_suite_output_audit.py | 6 | no-evidence | - |
 | 731 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 24 | no-evidence | - |
@@ -796,7 +796,7 @@
 | 757 | claim-census | test_claim_census.py | 9 | no-evidence | - |
 | 758 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 759 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6279 | green 675 / FAIL 0 / no-evidence 84 |  |
+|  | 合计 |  | 6281 | green 675 / FAIL 0 / no-evidence 84 |  |
 
 ## 证据出处
 

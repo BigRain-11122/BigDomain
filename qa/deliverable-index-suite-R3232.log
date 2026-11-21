@@ -1,0 +1,21 @@
+  | PASS AC-DIX1 registry set equals the -report pairs on disk registry=['alpha-report.html'] disk=['alpha-report.html'] gate=PASS control=FAIL rc=2
+  | PASS AC-DIX2 every row byte size quoted equals disk rows=1 wrong=[]
+  | PASS AC-DIX3 two writer runs byte identical and the gate reads 16/16 identical=True rc=0 tamper_rc=2 tamper_row=PASS verdict_row=FAIL
+  | PASS AC-DIX3b snapshot label present in the landed page label_present=True
+  | PASS AC-DIX3b removing the snapshot label flips AC-DIX3 and AC-DIX8 only rc=2 dix3=FAIL dix8=FAIL dix1=PASS
+  | PASS AC-DIX4 four markers present, zero http literals, entry >= 4096B markers=4/4 bytes=8822
+  | PASS AC-DIX5 every block href is relative and exists links=3 bad=[]
+  | PASS AC-DIX6 compliance strings present and every row names its blocker compliance-missing=[] blocker_named=True
+  | PASS AC-DIX7 every row verdict string is quoted quoted=True
+  | PASS AC-DIX8 newest pair named with its byte size in the landed block newest=beta-face.json
+  | PASS AC-DIX9 every shipped pair is listed by href pairs=2 unlisted=[]
+  | PASS AC-DIX10 every pair target exists on disk pairs=2 missing=[]
+  | PASS AC-DIX11 two --check runs leave size and mtime unchanged before=(8822, 1795302813.679136) after=(8822, 1795302813.679136) rc=0,0
+  | PASS AC-DIX12 the rendered block carries no http(s) literal band_bytes=1835
+  | PASS AC-DIX13 every recorded pair byte size equals disk pairs=2 wrong=[]
+  | PASS AC-DIX14 no gate page listed as an artifact gate-pages-listed=[]
+  | PASS AC-DIX17 an html-only face is listed and labelled incomplete by the gate listed=True label=True gate=PASS rc=0
+  | PASS AC-DIX18 negative control: the label is load-bearing, the row leaves with its html paired-unlabelled=True gone=True gate=PASS
+  | PASS AC-DIX19 the landed page prints the export census moment it was rendered from printed=True gate=PASS rc=0
+  | PASS AC-DIX19 negative control: an --apply the page never followed reddens the gate stale_rc=2 stale_gate=FAIL rerendered_gate=PASS
+SUITE PASS 20/20 announced=20

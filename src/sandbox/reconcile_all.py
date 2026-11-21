@@ -7701,8 +7701,12 @@ SUITES = [
     # R2883: 16 -> 18. AC-DIX17 (an html-only face is listed and labelled, not
     # dropped) and AC-DIX18 (its negative control) joined the suite when the
     # band universe moved from "every pair" to "every html face".
+    # R3232: 18 -> 20. AC-DIX19 (the static CEO page prints the export's census
+    # moment) and its negative control (an --apply the page never followed must
+    # redden the gate) joined when tools/deliverable_index.py gained the derived
+    # claims band. Counted from the suite's own announcement.
     ("os-deliverable-index",
-     os.path.join("..", "os", "test_deliverable_index.py"), 18),
+     os.path.join("..", "os", "test_deliverable_index.py"), 20),
     # R2798. tools/battery_shard.py decides whether a FAMILY of suites is green
     # and carried no battery row, so a tool that grades suites was graded only
     # by the run that graded them. AC-BSH1..AC-BSH8 pinned in src/os/backlog.md

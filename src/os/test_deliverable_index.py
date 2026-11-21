@@ -28,7 +28,8 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TOOL = os.path.join(ROOT, "tools", "deliverable_index.py")
-N = 18  # AC-DIX1..14, the two R2804 snapshot controls, and the R2883 html-only controls
+N = 20  # AC-DIX1..14, the two R2804 snapshot controls, the R2883 html-only controls,
+#         and the two R3232 claims-age controls
 
 FAILS = []
 CHECKS = []
@@ -36,6 +37,7 @@ CHECKS = []
 FACE = "alpha-report"
 BLOCKER = "blocked on the merchant id"
 TITLE = "Alpha Report"
+CENSUS_TS = "2026-11-22T07:00:00+08:00"
 
 
 def ok(name, cond, detail=""):
@@ -90,6 +92,12 @@ def build_world():
             + ("<p>padding line so the entry page clears its own byte floor</p>\n" * 100)
             + "</body></html>\n")
     write(os.path.join(pv, "index.html"), body)
+    write(os.path.join(d, "docs", "status-export.json"),
+          json.dumps({"export_ts": CENSUS_TS,
+                      "claims": {"claimed": 3, "captured": 2, "contradicted": 0,
+                                 "uncaptured": 1, "historic": 0, "rows": 1,
+                                 "present": True, "census_ts": CENSUS_TS}},
+                     sort_keys=True) + "\n")
     return d
 
 
@@ -105,6 +113,7 @@ def point_to(mod, world):
     mod.PREVIEW = pv
     mod.INDEX = os.path.join(pv, "index.html")
     mod.REGISTRY = os.path.join(pv, "deliverable-index.json")
+    mod.EXPORT = os.path.join(world, "docs", "status-export.json")
 
 
 def call(mod, args):
@@ -221,8 +230,8 @@ def main():
         rc_t, out_t = call(mod, ["--check"])
         rows_t = rows_of(out_t)
         point_to(mod, world)
-        ok("AC-DIX3 two writer runs byte identical and the gate reads 15/15",
-           first == second and rc_c == 0 and "VERDICT PASS 15/15" in out_c
+        ok("AC-DIX3 two writer runs byte identical and the gate reads 16/16",
+           first == second and rc_c == 0 and "VERDICT PASS 16/16" in out_c
            and "VERDICT FAIL" in out_t and rc_t == 2
            and rows_t.get("AC-DIX7") == "FAIL"
            and rows_t.get("AC-DIX1") in (None, "PASS"),
@@ -368,7 +377,35 @@ def main():
            % (beta_clean, 'href="delta-face.html"' not in block4b,
               rows_4b.get("AC-DIX17")))
 
-        # suite hygiene, scored inside AC-DIX3..AC-DIX18 by design: none of the
+        # ---- AC-DIX19: the static page prints the export's census moment, and a
+        # page left behind by an --apply reddens rather than keeping a quiet stamp ----
+        point_to(mod, world)
+        block5 = block_of(read(os.path.join(pv, "index.html")))
+        printed_now = ("census taken at %s" % CENSUS_TS) in block5
+        rc_5, out_5 = call(mod, ["--check"])
+        rows_5 = rows_of(out_5)
+        moved = "2026-11-22T09:30:00+08:00"
+        write(os.path.join(world, "docs", "status-export.json"),
+              json.dumps({"export_ts": moved,
+                          "claims": {"claimed": 3, "captured": 2, "contradicted": 0,
+                                     "uncaptured": 1, "historic": 0, "rows": 1,
+                                     "present": True, "census_ts": moved}},
+                         sort_keys=True) + "\n")
+        rc_6, out_6 = call(mod, ["--check"])
+        rows_6 = rows_of(out_6)
+        call(mod, [])
+        rc_7, out_7 = call(mod, ["--check"])
+        rows_7 = rows_of(out_7)
+        ok("AC-DIX19 the landed page prints the export census moment it was rendered from",
+           printed_now and rc_5 == 0 and rows_5.get("AC-DIX19") == "PASS",
+           "printed=%s gate=%s rc=%s" % (printed_now, rows_5.get("AC-DIX19"), rc_5))
+        ok("AC-DIX19 negative control: an --apply the page never followed reddens the gate",
+           rc_6 == 2 and rows_6.get("AC-DIX19") == "FAIL" and rc_7 == 0
+           and rows_7.get("AC-DIX19") == "PASS",
+           "stale_rc=%s stale_gate=%s rerendered_gate=%s"
+           % (rc_6, rows_6.get("AC-DIX19"), rows_7.get("AC-DIX19")))
+
+        # suite hygiene, scored inside AC-DIX3..AC-DIX19 by design: none of the
         # criteria above may import network or shell, and this file
         # itself must stay ASCII (the parser reads it back below).
         bad_bytes = [i for i, ch in enumerate(src) if ord(ch) > 127]

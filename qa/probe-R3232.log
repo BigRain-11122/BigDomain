@@ -1,0 +1,22 @@
+Q1 carrier census
+  tool status-export refs = 0
+  tool claims refs        = 1
+  tool census_ts refs     = 0
+  tool AC-DIX criteria    = 17
+  tool reads export file  = False
+  live export keys        = 20
+  live export export_ts   = 2026-11-22T07:08:03+08:00
+  live claims keys        = 8 ['captured', 'census_ts', 'claimed', 'contradicted', 'historic', 'present', 'rows', 'uncaptured']
+  live claims census_ts   = 2026-11-22T07:08:03+08:00
+Q2 decisive arm (page vs export moment)
+  page bytes              = 38568
+  page token CLAIMS         = 0
+  page token claims         = 6
+  page token census taken   = 0
+  page token census_ts      = 0
+  page carries export ts  = 0
+  page carries export y-m= 0
+  frontdoor live-render at line(s) = []
+  page is static on disk  = True (mtime 2026-11-21 22:14:33)
+  AC-DIX verdict can see export = False
+RESULT the static page prints no reading and no age; every AC-DIX verdict is independent of docs/status-export.json, so a page left behind by an --apply cannot redden anything.

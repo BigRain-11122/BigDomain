@@ -25,6 +25,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PREVIEW = os.path.join(REPO, "preview")
 INDEX = os.path.join(PREVIEW, "index.html")
 REGISTRY = os.path.join(PREVIEW, "deliverable-index.json")
+EXPORT = os.path.join(REPO, "docs", "status-export.json")
 BEGIN = "<!-- BD-DELIVERABLE-INDEX:BEGIN -->"
 END = "<!-- BD-DELIVERABLE-INDEX:END -->"
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S)
@@ -226,10 +227,51 @@ def render_pairs(pairs):
     return "\n".join(out)
 
 
-def render_body(rows, defects_total, newest, pairs):
+def read_claims():
+    """Read the export face's claims block at render time, or None if absent."""
+    try:
+        blob = json.loads(read(EXPORT))
+    except (OSError, ValueError):
+        return None
+    block = blob.get("claims")
+    return block if isinstance(block, dict) else None
+
+
+def claims_band(block):
+    """Print the census readings and their moment, or a named honest absence.
+
+    This page is a static file a reader opens by path, so it has to say how old
+    its own reading is; AC-DIX18 pins the printed moment to the live export.
+    """
+    if block is None:
+        return ('<div class="note" id="claims-census">claims census: no claims '
+                'block in docs/status-export.json; no moment invented.</div>')
+    if block.get("present") is False:
+        return ('<div class="note" id="claims-census">claims census: nothing to '
+                'census (present=false); no moment invented.</div>')
+    need = ("claimed", "captured", "contradicted", "uncaptured", "historic", "rows")
+    bad = [k for k in need if isinstance(block.get(k), bool)
+           or not isinstance(block.get(k), int)]
+    ts = block.get("census_ts")
+    if bad or not isinstance(ts, str) or not ts:
+        return ('<div class="note" id="claims-census">claims census: block '
+                'malformed (%s); no moment invented.</div>'
+                % (",".join(bad) if bad else "census_ts"))
+    readings = ("claimed=%d captured=%d contradicted=%d uncaptured=%d "
+                "historic=%d records=%d"
+                % (block["claimed"], block["captured"], block["contradicted"],
+                   block["uncaptured"], block["historic"], block["rows"]))
+    return ('<div class="note" id="claims-census">claims census: %s \u00b7 '
+            'census taken at %s (derived from docs/status-export.json at render '
+            'time; a page not re-rendered after an --apply is stale and '
+            'AC-DIX18 refuses it).</div>' % (readings, html.escape(ts)))
+
+
+def render_body(rows, defects_total, newest, pairs, claims):
     out = [render_newest(newest), ""]
     out.append(render_pairs(pairs))
     out.append("")
+    out.append(claims_band(claims))
     out.append("<h2>\u5b9e\u7269\u53f0\u8d26\uff08\u4e00\u9875\u70b9\u8fdb\u6bcf\u4e2a\u5b9e\u6d4b\u9762\uff09</h2>")
     out.append(
         '<div class="note">\u672c\u5757\u7531 <code>tools/deliverable_index.py</code> '
@@ -284,7 +326,8 @@ def render_block():
     defects = sum(len(r["defects"]) for r in rows)
     newest = newest_artifact()
     pairs = artifact_pairs()
-    body = render_body(rows, defects, newest, pairs)
+    claims = read_claims()
+    body = render_body(rows, defects, newest, pairs, claims)
     fp = hashlib.sha256(body.encode("utf-8")).hexdigest()[:16]
     return (
         "%s\n%s\n<!-- fingerprint %s -->\n%s" % (BEGIN, body, fp, END), fp, rows,
@@ -483,6 +526,25 @@ def main(argv):
     record("AC-DIX17", not unlisted and not unlabelled,
            "html-faces=%d unlisted=%s unlabelled-incomplete=%s"
            % (len(raw_faces), unlisted, unlabelled))
+
+    # AC-DIX19 (pinned 2026-11-22 R3232 before this code; renumbered from the
+    # R3232 plan's AC-DIX18 because this suite already used that label for a
+    # control name): this page is a static file, so the moment it prints has to
+    # be the export's current moment. A page left behind by an --apply must
+    # redden rather than keep a quiet old stamp.
+    live_claims = read_claims()
+    live_ts = None
+    if isinstance(live_claims, dict) and isinstance(live_claims.get("census_ts"), str):
+        live_ts = live_claims["census_ts"] or None
+    if live_ts:
+        printed = ("census taken at %s" % html.escape(live_ts)) in landed_block
+        record("AC-DIX19", printed,
+               "export-census_ts=%s printed-in-%s=%s"
+               % (live_ts, "landed" if check else "block", printed))
+    else:
+        named = "no moment invented" in landed_block
+        record("AC-DIX19", named,
+               "export-claims=none named-absence-in-page=%s" % named)
 
     if check:
         for code, ok, detail in checks:
