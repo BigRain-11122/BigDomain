@@ -1,0 +1,57 @@
+PROBE R3166 dangling evidence names: wrong prefix or absent
+missing_universe=82 watch=10 repo_files=55680
+names=13 in_qa=0 prefix_wrong=4 non_evidence=6 absent=3
+
+R1255 names=1 prefix_wrong=0 non_evidence=1 absent=0
+  NAMED-NON-EVIDENCE   tasks.md
+      -> tasks.md
+
+R1256 names=1 prefix_wrong=0 non_evidence=1 absent=0
+  NAMED-NON-EVIDENCE   tasks.md
+      -> tasks.md
+
+R1623 names=1 prefix_wrong=0 non_evidence=0 absent=1
+  ABSENT               OH-20261009-cph4.md
+
+R1653 names=1 prefix_wrong=0 non_evidence=0 absent=1
+  ABSENT               OH-20261008-bigstream.md
+
+R1670 names=1 prefix_wrong=0 non_evidence=0 absent=1
+  ABSENT               OH-20260904-cph4.md
+
+R1971 names=1 prefix_wrong=1 non_evidence=0 absent=0
+  PREFIX-NEAR(qa)      runner-profile-baseline
+      -> runner-profile-baseline.json
+
+R1994 names=2 prefix_wrong=2 non_evidence=0 absent=0
+  PREFIX-NEAR(qa)      R1992.log
+      -> evidence-battery-R1992.log
+      -> export-consistency-R1992.log
+      -> reconcile-all-R1992.log
+      -> showcase-statscappersist-R1992.log
+  PREFIX-NEAR(qa)      R1993.log
+      -> lobby-det-R1993.log
+      -> reconcile-all-R1993.log
+
+R2738 names=1 prefix_wrong=1 non_evidence=0 absent=0
+  PREFIX-NEAR(qa)      leg-status
+      -> leg-status-export-fresh-R3107.log
+      -> leg-status-export-fresh-R3118.log
+
+R2756 names=2 prefix_wrong=0 non_evidence=2 absent=0
+  NAMED-NON-EVIDENCE   state.json
+      -> src/os/state.json
+      -> tmp/gaugehead/src/os/state.json
+      -> tmp/world_r2770/src/os/state.json
+  NAMED-NON-EVIDENCE   tasks.md
+      -> tasks.md
+
+R2813 names=2 prefix_wrong=0 non_evidence=2 absent=0
+  NAMED-NON-EVIDENCE   state.json
+      -> src/os/state.json
+      -> tmp/gaugehead/src/os/state.json
+      -> tmp/world_r2770/src/os/state.json
+  NAMED-NON-EVIDENCE   tasks.md
+      -> tasks.md
+
+SUMMARY rounds=10 names=13 in_qa=0 prefix_wrong=4 non_evidence=6 absent=3

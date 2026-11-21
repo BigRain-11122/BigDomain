@@ -30,11 +30,11 @@ sys.path.insert(0, BASE)
 
 import round_evidence as RE  # noqa: E402
 
-EXPECTED_CRITERIA = 8
+EXPECTED_CRITERIA = 9
 MODULE = os.path.join(BASE, "round_evidence.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-round-evidence"
-WIRED_EXPECT = '"test_round_evidence.py"), 8),'
+WIRED_EXPECT = '"test_round_evidence.py"), 9),'
 
 PASSES = 0
 FAILS = 0
@@ -418,6 +418,108 @@ def ac_rqe8():
     check(ok, "AC-RQE8 named evidence published, verdict untouched")
 
 
+def ac_rqe9():
+    """A round that named names it could not resolve is published apart."""
+    world = make_world(["2026-11-21 R3200 SUITE PASS 6/6"], ["suite-R3200.log"])
+    docs = os.path.join(world, "docs")
+    os.makedirs(docs)
+    with io.open(os.path.join(docs, "OH-1.md"), "w", encoding="utf-8",
+                 newline="\n") as handle:
+        handle.write("harvest body\n")
+    try:
+        write_archive(world, [
+            "2026-09-01 R1255 RUNNER PASS named qa/pass-1254.log",
+            "2026-09-01 R1256 SUITE PASS 2/2 named qa/absent.log",
+            "2026-09-01 R1257 SUITE PASS 3/3 named tasks.md and OH-1.md",
+            "2026-09-01 R1258 SUITE PASS 4/4 named nothing at all",
+            "2026-09-01 R1259 SUITE PASS 5/5 named qa/pass-1254.log",
+        ])
+        with io.open(os.path.join(world, "qa", "pass-1254.log"), "w",
+                     encoding="utf-8", newline="\n") as handle:
+            handle.write("SUITE PASS 9/9\n")
+        named = RE.named_evidence(world, include_archive=True)
+        by_named = dict((row["round"], row) for row in named["named"])
+        by_offqa = dict((row["round"], row) for row in named["offqa"])
+        audit_arch = RE.audit(world, include_archive=True)
+
+        # arm a: both sum laws hold on the fixture world.
+        sums = (named["rounds_missing"] == named["named_on_disk"]
+                + named["no_named"]
+                and named["no_named"] == named["silent"]
+                + named["named_offqa"]
+                and named["rounds_missing"] == 5)
+
+        # arm b: named / offqa / silent are exact; tokens keep first order.
+        classify = (1255 in by_named and 1255 not in by_offqa
+                    and 1259 in by_named and 1259 not in by_offqa
+                    and by_offqa.get(1256) == {"round": 1256,
+                                               "tokens": ["qa/absent.log"]}
+                    and by_offqa.get(1257) == {"round": 1257,
+                                               "tokens": ["tasks.md",
+                                                          "OH-1.md"]}
+                    and 1258 not in by_named and 1258 not in by_offqa
+                    and named["silent"] == 1
+                    and named["named_offqa"] == 2
+                    and named["named_on_disk"] == 2)
+
+        # arm c: the verdict and the shipped report shape are unmoved.
+        kept = (audit_arch["verdict"] == "EVIDENCE-MISSING"
+                and [r["round"] for r in audit_arch["missing"]]
+                == [1255, 1256, 1257, 1258, 1259]
+                and named["verdict"] == "NAMED-READING"
+                and list(RE.REPORT_KEYS) == [
+                    "rounds", "log_items", "claiming_rounds", "with_files",
+                    "files_total", "missing_count", "missing", "verdict"])
+
+        # arm d: the printed face and the pinned JSON key order.
+        text = RE.render_named(named)
+        first = run_cli(["--named", "--root", world, "--archive", "--json"])
+        second = run_cli(["--named", "--root", world, "--archive", "--json"])
+        pinned = list(json.loads(first[1]).keys())
+        face = ("offqa=2 silent=1" in text
+                and "OFFQA R1256 tokens=qa/absent.log" in text
+                and "OFFQA R1257 tokens=tasks.md,OH-1.md" in text)
+
+        # arm e: a name outside qa/ is never evidence, and refusals stand.
+        outside = (1257 in by_offqa and 1257 not in by_named
+                   and by_named.get(1255) == {"round": 1255,
+                                              "files": ["pass-1254.log"],
+                                              "pass": True})
+        bad_flag = run_cli(["--named", "--root", world, "--bogus"])[0]
+        broken = make_world([], raw_state="{not json")
+        broken_code = run_cli(["--named", "--root", broken])[0]
+        drop_world(broken)
+        rc_check = run_cli(["--check", "--root", world, "--archive"])[0]
+
+        # arm f: the live face reaches every bucket; source stays stdlib.
+        live = RE.named_evidence(REPO, include_archive=True)
+        live_sums = (live["rounds_missing"] == live["named_on_disk"]
+                     + live["no_named"]
+                     and live["no_named"] == live["silent"]
+                     + live["named_offqa"]
+                     and live["named_offqa"] > 0 and live["silent"] > 0
+                     and live["named_offqa"] == len(live["offqa"]))
+        with io.open(MODULE, "r", encoding="ascii") as handle:
+            source = handle.read()
+        clean = ("import socket" not in source
+                 and "import urllib" not in source)
+
+        ok = (sums and classify and kept and face
+              and first == second and pinned == list(RE.REPORT_NAMED_KEYS)
+              and outside and bad_flag == 2 and broken_code == 3
+              and rc_check == 2 and live_sums and clean)
+        if not ok:
+            print("  measured: sums=%r classify=%r kept=%r face=%r "
+                  "json=%r outside=%r rc=%r live=%r clean=%r"
+                  % (sums, classify, kept, face,
+                     (first == second, pinned == list(RE.REPORT_NAMED_KEYS)),
+                     outside, (bad_flag, broken_code, rc_check),
+                     live_sums, clean), flush=True)
+    finally:
+        drop_world(world)
+    check(ok, "AC-RQE9 unresolvable names published, verdict unmoved")
+
+
 def main():
     print("round_evidence suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -429,6 +531,7 @@ def main():
     ac_rqe6()
     ac_rqe7()
     ac_rqe8()
+    ac_rqe9()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

@@ -64,6 +64,23 @@ ARCHIVE_PREFIX = "state-log-archive-"
 # this reading only publishes the third state for an operator to act on.
 NAMED_PATH_RE = re.compile(r"qa/[A-Za-z0-9][A-Za-z0-9._\-]*")
 
+# R3166 (AC-RQE9): `no_named` mixed two worlds - a round that named nothing
+# at all and a round that named something the reader could not resolve. A
+# measurement over the ten such rounds (tmp/probe_R3166.py) found ZERO names
+# that exist under docs/ or logs/ (the wrong-prefix hypothesis), so no
+# DANGLE/PREFIX split is added here; what is published instead is the token
+# list of a round that named something and resolved nothing. Bare file names
+# and the leg-/runner- families are read for this READING ONLY: they never
+# enter `named`, never move a verdict, and a file on disk outside qa/ does
+# not count (AC-RQE9 e).
+OFFQA_BARE_RE = re.compile(
+    r"(?<![A-Za-z0-9._/\-])([A-Za-z0-9][A-Za-z0-9._\-]*"
+    r"\.(?:log|json|md|png|txt))")
+OFFQA_FAMILY_RE = re.compile(
+    r"(?<![A-Za-z0-9._/\-])((?:leg|runner)-[A-Za-z0-9._\-]+)")
+
+OFFQA_ROW_KEYS = ("round", "tokens")
+
 NAMED_VERDICT = "NAMED-READING"
 
 NAMED_ROW_KEYS = ("round", "files", "pass")
@@ -74,7 +91,10 @@ REPORT_NAMED_KEYS = (
     "named_pass",
     "named_no_pass",
     "no_named",
+    "named_offqa",
+    "silent",
     "named",
+    "offqa",
     "verdict",
 )
 
@@ -335,6 +355,26 @@ def carries_marker(path):
     return any(marker in text for marker in CLAIM_MARKERS)
 
 
+def offqa_names(text):
+    """Every evidence-shaped name an item points at (AC-RQE9 b).
+
+    The order is first occurrence; a qa/ path is kept verbatim so the caller
+    can tell an explicit folder from a bare name. This is a READING of what
+    the prose points at, not a claim about whether the round owes a file.
+    """
+    found = []
+    for token in named_paths(text):
+        if token not in found:
+            found.append(token)
+    for token in OFFQA_BARE_RE.findall(text):
+        if token not in found:
+            found.append(token)
+    for token in OFFQA_FAMILY_RE.findall(text):
+        if token not in found:
+            found.append(token)
+    return found
+
+
 def named_evidence(root, qa_dir=None, include_archive=False):
     """The third state: did a missing round name an on-disk qa/ file?
 
@@ -383,13 +423,34 @@ def named_evidence(root, qa_dir=None, include_archive=False):
     for row in rows:
         if row["pass"]:
             named_pass += 1
+    # AC-RQE9 a/b: split the no-evidence bucket. A round that is absent from
+    # `named` either pointed at names it could not resolve (offqa) or named
+    # nothing at all (silent); no_named keeps its shipped meaning.
+    named_rounds = set(row["round"] for row in rows)
+    offqa = []
+    silent = 0
+    for number in sorted(missing):
+        if number in named_rounds:
+            continue
+        tokens = []
+        for line in lines_by_round.get(number, []):
+            for token in offqa_names(line):
+                if token not in tokens:
+                    tokens.append(token)
+        if tokens:
+            offqa.append({"round": number, "tokens": tokens})
+        else:
+            silent += 1
     return {
         "rounds_missing": len(missing),
         "named_on_disk": len(rows),
         "named_pass": named_pass,
         "named_no_pass": len(rows) - named_pass,
         "no_named": len(missing) - len(rows),
+        "named_offqa": len(offqa),
+        "silent": silent,
         "named": rows,
+        "offqa": offqa,
         "verdict": NAMED_VERDICT,
     }
 
@@ -397,29 +458,43 @@ def named_evidence(root, qa_dir=None, include_archive=False):
 def render_named(report):
     """The named-evidence face: one summary line, then every named round."""
     out = [("ROUND NAMED EVIDENCE missing=%d named_on_disk=%d named_pass=%d "
-            "named_no_pass=%d no_named=%d verdict=%s")
+            "named_no_pass=%d no_named=%d offqa=%d silent=%d verdict=%s")
            % (report["rounds_missing"], report["named_on_disk"],
               report["named_pass"], report["named_no_pass"],
-              report["no_named"], report["verdict"])]
+              report["no_named"], report["named_offqa"], report["silent"],
+              report["verdict"])]
     for row in report["named"]:
         out.append("  NAMED R%d files=%s pass=%s"
                    % (row["round"], ",".join(row["files"]),
                       "yes" if row["pass"] else "no"))
+    for row in report["offqa"]:
+        out.append("  OFFQA R%d tokens=%s"
+                   % (row["round"], ",".join(row["tokens"])))
     return "\n".join(out)
 
 
 def to_json_named(report):
     """Serialise the named reading in a stable key order (AC-RQE8 e)."""
-    ordered = {}
-    for key in REPORT_NAMED_KEYS:
-        ordered[key] = report[key]
-    pinned = []
+    pinned_rows = []
     for row in report["named"]:
         item = {}
         for key in NAMED_ROW_KEYS:
             item[key] = row[key]
-        pinned.append(item)
-    ordered["named"] = pinned
+        pinned_rows.append(item)
+    offqa_rows = []
+    for row in report["offqa"]:
+        item = {}
+        for key in OFFQA_ROW_KEYS:
+            item[key] = row[key]
+        offqa_rows.append(item)
+    ordered = {}
+    for key in REPORT_NAMED_KEYS:
+        if key == "named":
+            ordered[key] = pinned_rows
+        elif key == "offqa":
+            ordered[key] = offqa_rows
+        else:
+            ordered[key] = report[key]
     return json.dumps(ordered, ensure_ascii=True, sort_keys=False) + "\n"
 
 
