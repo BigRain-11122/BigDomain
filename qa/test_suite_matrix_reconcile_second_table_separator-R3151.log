@@ -1,0 +1,7 @@
+PASS AC-EDMJ1 narrow-header rows=742 real=742 delta=+0 problem=(6, 2) verdict=STRAY-HEADER widths=6/2 doc_rows=742
+PASS AC-EDMJ2 no-separator rows=742 real=742 delta=+0 problem=(6, None) verdict=HEADER-UNSEPARATED doc_rows=742
+PASS AC-EDMJ3 malformed-data rows=741 real=742 delta=-1 problem=None verdict=ROWS-MISMATCH
+FAIL AC-EDMJ4 asked live=1 diff=1 verdict=EVIDENCE-FACE/EVIDENCE-FACE
+FAIL AC-EDMJ5 four=741 two=740 nfoot=742 foot=742 second=742 sep=742 quoted=742 fence=FENCE-UNCLOSED/789 nest=FENCE-NESTED/4/3 titles=1/2 other=TITLE-REPEATED/2 narrow=HEADER-SHAPE/6/2 nosep=SEPARATOR-MISSING starved=CEILING-STARVED nodoc=NO-DOC counts=742/742 src=explicit/walk
+PASS AC-EDMJ6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE FAIL 4/6

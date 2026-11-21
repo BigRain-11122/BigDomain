@@ -506,10 +506,10 @@ def case_live_doc_path_identity(tmp):
     exit 3 and leaves the document byte/mtime-identical; q its --check is
     refused at exit 5; r the 8.3 short name resolves to the same document
     (driven through main() when this volume has one); s a HARD LINK is the
-    named residual - a second name for the same file that path identity
-    cannot see, pinned as judged-not-closed; t trailing dot/space spellings
-    that abspath already normalised stay owned; u an own path under tmp is
-    still green."""
+    same FILE - path identity cannot see it, file identity can (AC-SM11
+    sharpened this arm from "named residual" to "owned"); t trailing dot/space
+    spellings that abspath already normalised stay owned; u an own path under
+    tmp is still green."""
     import contextlib
     import io
 
@@ -559,8 +559,13 @@ def case_live_doc_path_identity(tmp):
     try:
         assert (os.stat(hard).st_dev, os.stat(hard).st_ino) == before_ident, \
             "hard link probe must name the same file"
-        assert SM.is_live_doc(hard) is False, \
-            "hard link is the named residual, not a claimed catch"
+        # AC-SM11 (R3151) JUDGED-CHANGED, pre-registered in the backlog PIN row
+        # before this edit: file identity is now the deciding fact, so this arm
+        # states the sharper claim - the hard link IS the live document, not a
+        # named residual. The path-identity law of R3150 is the separate claim
+        # this case still pins for spellings and the 8.3 name.
+        assert SM.is_live_doc(hard) is True, \
+            "hard link is the same FILE and must read as the live document"
     finally:
         os.unlink(hard)
 
@@ -588,6 +593,148 @@ def case_live_doc_path_identity(tmp):
 def tmpl_ident(path):
     st = os.stat(path)
     return (st.st_dev, st.st_ino)
+
+
+def case_live_doc_file_identity(tmp):
+    """AC-SM11 (R3151): the live document is owned by FILE identity, so a
+    hard link - one file under a second name - is refused by both faces
+    instead of re-opening them. p the hard link is refused at the writer, the
+    live bytes and mtime untouched; q its --check is refused at exit 5; r the
+    predicate reads it as the live document; s a target that exists but cannot
+    be stat'ed is refused under its OWN name (fail-closed, and the writer's
+    sentence does not stand in for it); t negative control - own docs, a hard
+    link to an own doc, and a missing-path spelling of the live document keep
+    their pre-R3151 answers."""
+    import contextlib
+    import io
+
+    live = SM.DEFAULT_OUT
+    if not os.path.isfile(live):
+        raise AssertionError("live document missing: %s" % live)
+    with io.open(live, "rb") as handle:
+        before_bytes = handle.read()
+    before_mtime = os.stat(live).st_mtime
+    before_ident = (os.stat(live).st_dev, os.stat(live).st_ino)
+
+    hard = os.path.join(tmp, "hard-live.md")
+    os.link(live, hard)
+    try:
+        assert SM.file_identity(hard) == before_ident, \
+            "probe must reach the same file object"
+        assert SM.live_doc_identity(hard) == "live", \
+            "a hard link is the live document by file identity"
+
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code = SM.main(["suite_matrix.py", "--out", hard])
+        text = buf.getvalue()
+        assert code == 3, "hard link must hit the writer refusal: %r" % text
+        assert "E_SMX_DOC_OWNED" in text, "refusal must be named: %s" % text
+        with io.open(live, "rb") as handle:
+            assert handle.read() == before_bytes, "hard link wrote the live doc"
+        assert os.stat(live).st_mtime == before_mtime, \
+            "hard link touched the live mtime"
+
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code = SM.main(["suite_matrix.py", "--check", "--out", hard])
+        text = buf.getvalue()
+        assert code == 5, "hard link --check must exit 5: %r" % text
+        assert "E_SMX_CHECK_DOC_OWNED" in text, \
+            "judge refusal must be named: %s" % text
+
+        assert SM.is_live_doc(hard) is True, \
+            "predicate must read the hard link as the live document"
+    finally:
+        os.unlink(hard)
+
+    # s: an existing target whose identity cannot be read. Fail-closed, and
+    # named by a token of its own - claiming "this is the gate law's document"
+    # would be a sentence this round cannot prove.
+    unreadable = os.path.join(tmp, "unconfirmable.md")
+    _write(unreadable, "own bytes\n")
+    real_stat = os.stat
+    target_key = os.path.normcase(os.path.abspath(unreadable))
+
+    def fake_stat(path, *args, **kwargs):
+        try:
+            same = os.path.normcase(os.path.abspath(os.fspath(path))) \
+                == target_key
+        except TypeError:
+            same = False
+        if same:
+            raise PermissionError(13, "injected: identity cannot be confirmed")
+        return real_stat(path, *args, **kwargs)
+
+    os.stat = fake_stat
+    try:
+        assert SM.live_doc_identity(unreadable) == "unconfirmed", \
+            "an unreadable identity must be named, not assumed harmless"
+        assert SM.is_live_doc(unreadable) is True, \
+            "unconfirmed is fail-closed at the predicate"
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code = SM.main(["suite_matrix.py", "--evidence", unreadable,
+                            "--out", unreadable])
+        text = buf.getvalue()
+        assert code == 3, "unconfirmed write must be refused: %r" % text
+        assert "E_SMX_IDENTITY_UNCONFIRMED" in text, \
+            "unconfirmed must carry its own token: %s" % text
+        assert "E_SMX_DOC_OWNED" not in text, \
+            "the writer token would be a claim this round cannot prove: %s" % text
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code = SM.main(["suite_matrix.py", "--check", "--out", unreadable])
+        text = buf.getvalue()
+        assert code == 5, "unconfirmed --check must exit 5: %r" % text
+        assert "E_SMX_IDENTITY_UNCONFIRMED" in text, \
+            "unconfirmed must carry its own token: %s" % text
+        assert "E_SMX_CHECK_DOC_OWNED" not in text, \
+            "the judge token would be a claim this round cannot prove: %s" % text
+        with io.open(unreadable, "rb") as handle:
+            assert handle.read() == b"own bytes\n", \
+                "a refused write must not touch the target"
+    finally:
+        os.stat = real_stat
+
+    # t: negative controls - own documents keep every face (generated and
+    # checked), a hard link to one is not the live document, and the path
+    # fallback still owns a SPELLING of a live document that is not on disk.
+    evidence = os.path.join(tmp, "ev.log")
+    _write(evidence, MINI_EVIDENCE)
+    own = os.path.join(tmp, "doc-own.md")
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        code = SM.main(["suite_matrix.py", "--evidence", evidence,
+                        "--out", own])
+    assert code == 0, "own path must still generate: %s" % buf.getvalue()
+    own_hard = os.path.join(tmp, "own-hardlink.md")
+    os.link(own, own_hard)
+    try:
+        assert SM.live_doc_identity(own_hard) == "other", \
+            "a hard link to an own doc is not the live document"
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            code = SM.main(["suite_matrix.py", "--check", "--evidence",
+                            evidence, "--out", own])
+        assert code == 0, "own doc --check must stay green: %s" % buf.getvalue()
+    finally:
+        os.unlink(own_hard)
+
+    saved_out = SM.DEFAULT_OUT
+    absent = os.path.join(tmp, "absent-live.md")
+    SM.DEFAULT_OUT = absent
+    try:
+        assert not os.path.exists(absent), "probe must target a missing file"
+        assert SM.live_doc_identity(absent.upper()) == "live", \
+            "a spelling of the live document owns it even when it is missing"
+        assert SM.live_doc_identity(own) == "other", \
+            "an unrelated existing file stays other"
+    finally:
+        SM.DEFAULT_OUT = saved_out
+    return "PASS live-doc-file-identity: hard link refused 3/5 and owned,"\
+           " unconfirmable refused under its own token both faces,"\
+           " own docs and missing-spelling fallback unchanged"
 
 
 def case_hygiene_self_checks(tmp):
@@ -677,6 +824,7 @@ def main():
         case_default_doc_write_refused,
         case_check_judge_owned,
         case_live_doc_path_identity,
+        case_live_doc_file_identity,
         case_hygiene_self_checks,
     ]
     failures = 0

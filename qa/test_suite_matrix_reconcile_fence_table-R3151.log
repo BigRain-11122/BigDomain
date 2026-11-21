@@ -1,0 +1,7 @@
+  FAIL AC-EDMG1 second-table rows=742 real=742 registry=742 titles=1 verdict=EVIDENCE-FACE
+  PASS AC-EDMG2 unclosed verdict=FENCE-UNCLOSED code=E_EDMG_FENCE line=789 open-line=789 cli=FENCE-UNCLOSED/3
+  PASS AC-EDMG3 nested verdict=FENCE-NESTED markers=4/3 rows=742 real=742 cli=FENCE-NESTED/3
+  FAIL AC-EDMG4 asked live=1 diff=1 verdict=EVIDENCE-FACE/EVIDENCE-FACE
+  FAIL AC-EDMG5 quoted=742/742 same-titles=1 other=TITLE-REPEATED(2) none=TABLE-MISSING narrow=HEADER-SHAPE/2 nosep=SEPARATOR-MISSING starved=CEILING-STARVED rows=ROWS-MISMATCH(741/742) src=explicit/walk
+  PASS AC-EDMG6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE FAIL 3/6

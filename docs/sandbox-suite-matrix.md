@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 742 | 6046 | 675/675 | R2739 |
+| 742 | 6047 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -162,7 +162,7 @@
 | 123 | schema-migrate | test_schema_migrate.py | 21 | green | 8.5 |
 | 124 | fingerprint-regen | test_fingerprint_regen.py | 16 | green | 22.5 |
 | 125 | reconcile-daily-sentinel | test_reconcile_daily_sentinel.py | 8 | green | 1.8 |
-| 126 | suite-matrix-discovery | test_suite_matrix.py | 19 | green | 1.6 |
+| 126 | suite-matrix-discovery | test_suite_matrix.py | 20 | green | 1.6 |
 | 127 | runner-profile-daily | test_runner_profile_daily.py | 12 | green | 0.3 |
 | 128 | reconcile-daily-profile | test_reconcile_daily_profile.py | 7 | green | 1.1 |
 | 129 | reconcile-daily-census | test_reconcile_daily_census.py | 8 | green | 1.8 |
@@ -779,7 +779,7 @@
 | 740 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
 | 741 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 742 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6046 | green 675 / FAIL 0 / no-evidence 67 |  |
+|  | 合计 |  | 6047 | green 675 / FAIL 0 / no-evidence 67 |  |
 
 ## 证据出处
 

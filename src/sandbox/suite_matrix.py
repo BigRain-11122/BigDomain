@@ -37,6 +37,11 @@ because this renderer's default evidence discovery is not the law that
 document was stamped under. Own documents passed via --out keep every
 face, including --check.
 
+R3151 (AC-SM11) sharpens "that path" into "that file": ownership is decided
+by file identity (st_dev, st_ino), so a hard link is refused as the same
+document, and a target that cannot be stat'ed is refused under its own name
+(E_SMX_IDENTITY_UNCONFIRMED) rather than assumed harmless.
+
 Pre-registered criteria AC-MX1..AC-MX7: state/queue/tech.md R1683
 claim row, registered BEFORE this code (honesty law).
 Evidence: qa/suite-matrix-R1683.log.
@@ -68,14 +73,63 @@ def canonical_path(path):
     return os.path.normcase(os.path.realpath(os.path.abspath(path)))
 
 
-def is_live_doc(path):
-    """True when `path` names the live matrix document under any spelling the
-    filesystem accepts (case, 8.3 short name, separators, `..`).
+def file_identity(path):
+    """The identity the filesystem keeps for a file object, not for a name.
 
-    Path identity only, deliberately: a hard link is a second NAME for the
-    same file, so it is not caught here - named as a known residual, not
-    claimed closed."""
-    return canonical_path(path) == canonical_path(DEFAULT_OUT)
+    R3151 (AC-SM11): (st_dev, st_ino) is the pair a hard link cannot change,
+    because it is one file. Measured on this volume: every one of the 10
+    spellings R3150 collected AND a hard link report the same pair, and one
+    stat here costs ~3.5us against ~50us for canonical_path
+    (qa/probe-R3151.log)."""
+    st = os.stat(path)
+    return (st.st_dev, st.st_ino)
+
+
+def live_doc_identity(path):
+    """Classify `path` against the live document: 'live', 'other' or
+    'unconfirmed'.
+
+    R3151 (AC-SM11): R3150 decided ownership by PATH identity, so a hard link
+    - a second name for the same file - re-opened the write and judge faces
+    while canonical_path saw nothing wrong. File identity is the fact the
+    filesystem keeps, so it decides when both sides can be stat'ed.
+
+    'unconfirmed' is a LAW, not a comment (pinned by AC-SM11 arm s): a target
+    that exists but cannot be stat'ed (permission, sharing violation) cannot
+    be proven to be a different file, so callers refuse it. Never write what
+    you cannot prove is something else.
+
+    A target that does not exist cannot be the live file - that is the
+    write-a-new-document face - except when its SPELLING is the live
+    document's own: writing it would recreate the file this tool must not
+    own, so that case falls back to path identity."""
+    try:
+        target = file_identity(path)
+    except FileNotFoundError:
+        return "live" if canonical_path(path) == canonical_path(DEFAULT_OUT) \
+            else "other"
+    except OSError:
+        return "unconfirmed"
+    try:
+        live = file_identity(DEFAULT_OUT)
+    except FileNotFoundError:
+        # No live document on disk: there is no file identity to differ from,
+        # so only a SPELLING can still own a path (writing it would create the
+        # file this tool must not own).
+        return "live" if canonical_path(path) == canonical_path(DEFAULT_OUT) \
+            else "other"
+    except OSError:
+        return "unconfirmed"
+    return "live" if target == live else "other"
+
+
+def is_live_doc(path):
+    """True when `path` is, or cannot be proven not to be, the live matrix
+    document - under any spelling, and through any hard link.
+
+    Fail-closed by contract (R3151): 'unconfirmed' reads as owned, so every
+    existing caller keeps refusing rather than silently writing."""
+    return live_doc_identity(path) != "other"
 
 
 sys.path.insert(0, BASE)
@@ -485,7 +539,24 @@ def main(argv):
     # face that actually judges it, at its own exit code (3 = writer,
     # 4 = readability, 5 = judge). Own documents passed via --out keep every
     # face, --check included.
-    if is_live_doc(args.out):
+    # R3151 (AC-SM11): ownership is decided by FILE identity, so a hard link
+    # is refused as the same document instead of silently re-opening both
+    # faces. A target that cannot be stat'ed is refused by its own name: this
+    # round can prove neither that it is the live document nor that it is not.
+    identity = live_doc_identity(args.out)
+    if identity == "unconfirmed":
+        if args.check:
+            print("FAIL doc-owned: E_SMX_IDENTITY_UNCONFIRMED %s cannot be "
+                  "proven to be a different file from the gate law's "
+                  "document, so this face refuses to judge it; pass --out "
+                  "for any other path" % rel(args.out))
+            return 5
+        print("FAIL doc-owned: E_SMX_IDENTITY_UNCONFIRMED %s cannot be proven "
+              "to be a different file from the gate law's document, so this "
+              "face refuses to write it; pass --out for any other path"
+              % rel(args.out))
+        return 3
+    if identity == "live":
         if args.check:
             print("FAIL doc-owned: E_SMX_CHECK_DOC_OWNED %s is judged by "
                   "python src/os/suite_matrix_reconcile.py --check (the gate "

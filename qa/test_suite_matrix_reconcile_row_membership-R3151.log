@@ -1,0 +1,7 @@
+PASS AC-EDMI1 nonnumeric-first-cell rows=741 real=742 delta=-1 verdict=ROWS-MISMATCH doc_rows=741
+FAIL AC-EDMI2 genuine-header rows=742 ac-edmg1-rows=742 real=742 titles=1 verdict=EVIDENCE-FACE
+FAIL AC-EDMI3 footer-after-last rows=742 real=742 delta=+0 verdict=EVIDENCE-FACE
+FAIL AC-EDMI4 asked live=1 diff=1 verdict=EVIDENCE-FACE/EVIDENCE-FACE
+FAIL AC-EDMI5 four=741 two=740 last=741 sep=742 quoted=742 fence=FENCE-UNCLOSED/789 nest=FENCE-NESTED/4/3 titles=1/2 other=TITLE-REPEATED/2 narrow=HEADER-SHAPE nosep=SEPARATOR-MISSING starved=CEILING-STARVED nodoc=NO-DOC counts=742/742 src=explicit/walk
+PASS AC-EDMI6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE FAIL 2/6

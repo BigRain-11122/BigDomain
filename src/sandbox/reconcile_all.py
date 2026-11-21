@@ -1136,7 +1136,10 @@ SUITES = [
     # R3149 AC-SM9: the same ownership covers the READ face - a default
     # --check is refused by name at exit 5 naming the judging command, while
     # docs passed via --out keep --check (+1 case).
-    ("suite-matrix-discovery", "test_suite_matrix.py", 19),
+    # R3151 AC-SM11: ownership is decided by FILE identity, so a hard link is
+    # the same document and an unconfirmable target is refused under its own
+    # name; own docs and write-a-new-file paths keep every face (+1 case).
+    ("suite-matrix-discovery", "test_suite_matrix.py", 20),
     # R1715 runner-profile daily variant: --daily face (discovery
     # restricted to reconcile-daily-*.log evidence, separate
     # runner-profile-daily-baseline.json; sentinel-section parser

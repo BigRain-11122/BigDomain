@@ -1,0 +1,7 @@
+PASS AC-EDMD1 eq-separator 2/6 -> HEADER-SHAPE cells=6/2, eq-separator 6/6 shape=(6, 6) verdict=EVIDENCE-FACE
+PASS AC-EDMD2 no-separator -> SEPARATOR-MISSING (code=E_EDMD_SEPARATOR, exit=3) nothing written, CLI word=SEPARATOR-MISSING rc=3
+PASS AC-EDMD3 ceiling 0 -> CEILING-STARVED (exit=3) nothing written, CLI=CEILING-STARVED rc=3
+PASS AC-EDMD4 title lines=2 -> TITLE-REPEATED titles=2 (exit=3), nothing written, CLI=TITLE-REPEATED rc=3
+FAIL AC-EDMD5 header5=HEADER-SHAPE(dash2=6/2) table=TABLE-MISSING nodoc=NO-DOC walk=CEILING-STARVED(bounded=True,decoded=1) src=walk/explicit evid=EVIDENCE-FACE(qa/edmd-other-leg.log) rows=ROWS-MISMATCH(741<742) live=EVIDENCE-FACE
+PASS AC-EDMD6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE FAIL 5/6

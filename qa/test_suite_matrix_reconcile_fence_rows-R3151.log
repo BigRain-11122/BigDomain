@@ -1,0 +1,7 @@
+PASS AC-EDMF1 quoted rows=742 real=742 (quoted row present, not counted) law=DOC-CURRENT untouched=EVIDENCE-FACE live=EVIDENCE-FACE registry=742
+PASS AC-EDMF2 same-header-no-separator titles=1 (live=1) -> EVIDENCE-FACE exit=2
+PASS AC-EDMF3 other-header titles=2 -> TITLE-REPEATED titles=2 exit=3 CLI=TITLE-REPEATED rc=3
+FAIL AC-EDMF4 check-asked=1 code=2 content=EVIDENCE-FACE | live asked=1 code=2 verdict=EVIDENCE-FACE
+PASS AC-EDMF5 twice=2 fenced=1 bare=1 nodoc=NO-DOC narrow=HEADER-SHAPE/2 starved=CEILING-STARVED drained=RED-LEG red=RED-LEG src=walk/explicit rows=ROWS-MISMATCH(741/742)
+PASS AC-EDMF6 hygiene ascii=True/True clock=False network=[] registered=True cells=6
+SUITE FAIL 5/6
