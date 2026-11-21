@@ -96,6 +96,14 @@ def quiet(fn, *a, **kw):
     return rc, buf.getvalue()
 
 
+def find_function(path, name):
+    """R3216: the top-level function node called `name` in a module."""
+    for node in ast.parse(read_text(path)).body:
+        if isinstance(node, ast.FunctionDef) and node.name == name:
+            return node
+    return None
+
+
 def main():
     started = time.time()
     world = tempfile.mkdtemp(prefix='qalb-')
@@ -347,8 +355,8 @@ def main():
             if found:
                 declared.append(found.group(1))
         ok('AC-QALB9 registry declares exactly one row for this suite, '
-           'twenty-three',
-           declared == ['23'], 'rows=%s hits=%d' % (declared, len(hits)))
+           'twenty-six',
+           declared == ['26'], 'rows=%s hits=%d' % (declared, len(hits)))
 
         # ---- AC-QALB11: a carried proof line is marked, not certified -----
         # R3203: the generator prints "LOG OK path=... sha16=..." to prove a
@@ -921,6 +929,99 @@ def main():
            'named=%d prod=%s worlds=%s mkdtemp=%s control=%s'
            % (len(census_rows), prod_explicit, world_files, worlds_ok,
               ctl_sha == want_ctl))
+        # ---- AC-QALB24: a same-name rewrite announces the old identity ------
+        # R3216: write_atomic replaces the whole file and the only receipt named
+        # the NEW bytes, so the evidence that existed a moment earlier survived
+        # nowhere. Measured before the change (private temp world): two writes
+        # under one name answered rc=0 both times, only the second sha16 was
+        # printed, and the census read class=tee for both versions. The law is
+        # an announcement, not a refusal, because git history holds 72 rewrite
+        # events over 69 shipped *.log paths (re-lands the closeout gate itself
+        # demands). An identical rewrite prints the line as well, so "nothing
+        # changed" is visible rather than assumed.
+        repl_world = os.path.join(world, 'repl')
+        os.makedirs(repl_world)
+        first_body = b'first body\n'
+        second_body = b'second body\nlonger\n'
+        rc_f, out_f = quiet(mod.do_write, 'same.log', first_body,
+                            directory=repl_world)
+        first_raw = io.open(os.path.join(repl_world, 'same.log'), 'rb').read()
+        first_sha = hashlib.sha256(first_raw).hexdigest()[:16]
+        rc_s, out_s = quiet(mod.do_write, 'same.log', second_body,
+                            directory=repl_world)
+        second_raw = io.open(os.path.join(repl_world, 'same.log'), 'rb').read()
+        second_sha = hashlib.sha256(second_raw).hexdigest()[:16]
+        want_line = ('QA-LOG REPLACED name=same.log old_bytes=%d old_sha16=%s '
+                     'new_bytes=%d new_sha16=%s'
+                     % (len(first_raw), first_sha, len(second_raw), second_sha))
+        repl_lines = [ln for ln in out_s.splitlines()
+                      if ln.startswith('QA-LOG REPLACED')]
+        rc_i, out_i = quiet(mod.do_write, 'same.log', second_body,
+                            directory=repl_world)
+        identical_lines = [ln for ln in out_i.splitlines()
+                           if ln.startswith('QA-LOG REPLACED')]
+        rc_n, out_n = quiet(mod.do_write, 'brand-new.log', b'x\n',
+                            directory=repl_world)
+        ok('AC-QALB24 a same-name rewrite names the bytes it replaced',
+           rc_f == 0 and 'REPLACED' not in out_f
+           and rc_s == 0 and repl_lines == [want_line]
+           and rc_i == 0 and len(identical_lines) == 1
+           and identical_lines[0].split('old_sha16=')[1].split()[0] == second_sha
+           and identical_lines[0].split('new_sha16=')[1].split()[0] == second_sha
+           and rc_n == 0 and 'REPLACED' not in out_n,
+           'fresh_quiet=%s rewrite=%r identical=%r new_quiet=%s'
+           % ('REPLACED' not in out_f, repl_lines, identical_lines,
+              'REPLACED' not in out_n))
+
+        # ---- AC-QALB25: the file itself is unchanged by the announcement ----
+        # The law adds one stdout line and nothing else: the landed bytes are
+        # exactly the normalized payload, no .tmp survives, the dialect stays
+        # utf-8/lf, and the read face answers the same shapes it always did.
+        # do_check must not carry the word at all - a read face that announced
+        # replacements would be judging history it cannot see.
+        leftovers = [n for n in os.listdir(repl_world) if n.endswith('.tmp')]
+        want_second = mod.normalize(mod.read_source(second_body))
+        saved_qa_check = mod.QA
+        try:
+            mod.QA = repl_world
+            rc_c, out_c = quiet(mod.do_check, 'same.log')
+        finally:
+            mod.QA = saved_qa_check
+        ok('AC-QALB25 the announcement moves no byte of the file',
+           second_raw == want_second.encode('utf-8')
+           and leftovers == [] and mod.classify(second_raw) == 'utf-8/lf'
+           and rc_c == 0
+           and out_c.strip() == ('QA-LOG OK name=same.log dialect=utf-8/lf '
+                                 'bytes=%d carried=0 bare_proofs=0'
+                                 % len(second_raw))
+           and 'REPLACED' not in ast.get_source_segment(
+               read_text(TOOL), find_function(TOOL, 'do_check')),
+           'bytes=%d lines=%d tmp=%s check=%r'
+           % (len(second_raw), len(second_raw.splitlines()), leftovers,
+              out_c.strip()))
+
+        # ---- AC-QALB26: the law is scoped to the evidence door ---------------
+        # write_atomic is reused by the selftest and by test worlds for the same
+        # temp names, so the announcement must not live there; and exactly one
+        # write site may print it, so a second silent door cannot appear.
+        tool_text = read_text(TOOL)
+        atomic_src = ast.get_source_segment(
+            tool_text, find_function(TOOL, 'write_atomic'))
+        qa_before = qa_snapshot()
+        atomic_path = mod.write_atomic(repl_world, 'same.log', 'third body\n')
+        atomic_shown = io.open(atomic_path, 'rb').read()
+        ok('AC-QALB26 the announcement lives only at the evidence door',
+           'REPLACED' not in atomic_src
+           # the quote marks the STRING LITERAL, so prose in the docstring
+           # cannot satisfy this count
+           and tool_text.count('"QA-LOG REPLACED') == 1
+           and atomic_shown == b'third body\n'
+           and qa_before == qa_snapshot(),
+           'atomic_clean=%s sites=%d direct_write_bytes=%d live_stable=%s'
+           % ('REPLACED' not in atomic_src,
+              tool_text.count('"QA-LOG REPLACED'), len(atomic_shown),
+              qa_before == qa_snapshot()))
+
     finally:
         mod.QA = original_qa
         shutil.rmtree(world, ignore_errors=True)

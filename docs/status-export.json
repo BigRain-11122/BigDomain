@@ -1,23 +1,23 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3215 PRODUCT+ENGINEERING: the writer destination has a law - evidence may land only in qa/ itself or outside the repo, so a .log at a repo path that no reader enumerates can no longer be born.",
+    "current": "2026-11-22 R3216 PRODUCT+ENGINEERING: a same-name rewrite of evidence is now announced - write_atomic replaces the whole file and the only receipt named the NEW bytes, so the file that existed a moment earlier survived nowhere (not in stdout, not in the read-back proof, not in the census); exactly one QA-LOG REPLACED line now names old_bytes, old_sha16, new_bytes and new_sha16, read before and after the replace, and a brand-new name still prints nothing.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-monthly-faces.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3214.log (3648B, 2026-11-22)",
-    "latest_evidence": "qa/suite-qa-log-R3214.log (3543B, 2026-11-22); qa/reorg-R3214.log (3648B)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reorg-R3216.log (3471B, 2026-11-22)",
+    "latest_evidence": "qa/reorg-R3216.log (3471B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3215] next window (<=48h): (0) MAIN — **写手会静默覆盖既有证据**：`write_atomic` 用 `os.replace` 落盘，同名的既有 `qa/*.log` 被整件替换而没有任何一面记录或拒收——「证据可被无声改写」是这条链上最后一个没人守的面。做法=先只读量三问：①全仓 `qa_log.py --from`／`do_write` 的调用点里，有多少是**同名重写**（同一 round 名重跑、修补后重落、套件日志重建），逐条给出用名与出处，并量出历史上有多少 `qa/*.log` 的当前 sha16 与其首次落盘不同（`git log -p` 面与活盘对读）；②决定性臂：对一个私有 temp 证据文件先后写两次不同内容，量今天是否静默替换、`--check` 前后是否只报最新 sha、普查基线是否把改动读成漂移还是读不见；③收口三选一（同名拒收并提示改名／允许但打印 `REPLACED old_sha16=<h>`／只记不改），并证明所选面不改任何既有证据字节。判据沿用 AC-QALB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗·Docker 门控行跳过）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行不变，当窗提案面 BD-PROP-010（2026-11-17）仍在册。",
-    "next_milestone_due": "2026-11-24T03:15:17+08:00",
-    "updated_at": "2026-11-22T03:15:17+08:00",
+    "next_milestone": "[R3216] next window (<=48h): (0) MAIN — **替换声明只活在 stdout，没有任何一面把它留下来**：本窗让写手说出「旧件是谁」，但这句话若不被人抓进文件，就随进程消失——而契约里没有任何一条要求调用方抓取写手输出。做法=先只读量三问：①**抓取面普查**＝逐点列全仓调用 `qa_log.py` 的入口（py/ps1/md 里 `--from` 与管道／重定向），量出多少处把 stdout 落到文件、多少处只打屏，并按「轮证／套件／一次性」分类逐条给出处；②**决定性臂**＝在私有 temp 世界造一次同名重写，分别走「只打屏」与「重定向到文件再 `--from`」两条路，量 `REPLACED` 行在终态证据里存不存在、`--check` 读不读得出、普查与 closeout 面看不看得见；③**收口三选一**（要求调用方抓取／写手自己把替换行追加进一件机器可读台账／只记不改），并证明所选面不改任何既有证据字节。判据沿用 AC-QALB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗·Docker 门控行跳过）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3215 实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行不变，当窗提案面 BD-PROP-010（2026-11-17）仍在册。",
+    "next_milestone_due": "2026-11-24T03:30:40+08:00",
+    "updated_at": "2026-11-22T03:30:40+08:00",
     "heartbeat": {
-      "tick": 3212,
-      "state_tick": 3213,
-      "lag": 1,
-      "verdict": "FLAG",
-      "reason": "heartbeat_row_debt"
+      "tick": 3216,
+      "state_tick": 3216,
+      "lag": 0,
+      "verdict": "PASS",
+      "reason": "fresh"
     },
     "outs_age": {
       "rows": 30,
@@ -35,7 +35,7 @@
       "criteria_claims": 1
     }
   },
-  "current": "2026-11-22 R3215 PRODUCT+ENGINEERING: the writer destination has a law - evidence may land only in qa/ itself or outside the repo, so a .log at a repo path that no reader enumerates can no longer be born.",
+  "current": "2026-11-22 R3216 PRODUCT+ENGINEERING: a same-name rewrite of evidence is now announced - write_atomic replaces the whole file and the only receipt named the NEW bytes, so the file that existed a moment earlier survived nowhere (not in stdout, not in the read-back proof, not in the census); exactly one QA-LOG REPLACED line now names old_bytes, old_sha16, new_bytes and new_sha16, read before and after the replace, and a brand-new name still prints nothing.",
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -63,11 +63,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3215 PRODUCT+ENGINEERING: the writer destination has a law - evidence may land only in qa/ itself or outside the repo, so a .log at a repo path that no reader enumerates can no longer be born.",
-  "export_ts": "2026-11-22T03:15:17+08:00",
+  "do": "2026-11-22 R3216 PRODUCT+ENGINEERING: a same-name rewrite of evidence is now announced - write_atomic replaces the whole file and the only receipt named the NEW bytes, so the file that existed a moment earlier survived nowhere (not in stdout, not in the read-back proof, not in the census); exactly one QA-LOG REPLACED line now names old_bytes, old_sha16, new_bytes and new_sha16, read before and after the replace, and a brand-new name still prints nothing.",
+  "export_ts": "2026-11-22T03:30:40+08:00",
   "latest_artifact": "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
-  "latest_evidence": "qa/suite-qa-log-R3214.log (3543B, 2026-11-22); qa/reorg-R3214.log (3648B)",
-  "next_milestone": "[R3215] next window (<=48h): (0) MAIN — **写手会静默覆盖既有证据**：`write_atomic` 用 `os.replace` 落盘，同名的既有 `qa/*.log` 被整件替换而没有任何一面记录或拒收——「证据可被无声改写」是这条链上最后一个没人守的面。做法=先只读量三问：①全仓 `qa_log.py --from`／`do_write` 的调用点里，有多少是**同名重写**（同一 round 名重跑、修补后重落、套件日志重建），逐条给出用名与出处，并量出历史上有多少 `qa/*.log` 的当前 sha16 与其首次落盘不同（`git log -p` 面与活盘对读）；②决定性臂：对一个私有 temp 证据文件先后写两次不同内容，量今天是否静默替换、`--check` 前后是否只报最新 sha、普查基线是否把改动读成漂移还是读不见；③收口三选一（同名拒收并提示改名／允许但打印 `REPLACED old_sha16=<h>`／只记不改），并证明所选面不改任何既有证据字节。判据沿用 AC-QALB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗·Docker 门控行跳过）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行不变，当窗提案面 BD-PROP-010（2026-11-17）仍在册。",
+  "latest_evidence": "qa/reorg-R3216.log (3471B, 2026-11-22)",
+  "next_milestone": "[R3216] next window (<=48h): (0) MAIN — **替换声明只活在 stdout，没有任何一面把它留下来**：本窗让写手说出「旧件是谁」，但这句话若不被人抓进文件，就随进程消失——而契约里没有任何一条要求调用方抓取写手输出。做法=先只读量三问：①**抓取面普查**＝逐点列全仓调用 `qa_log.py` 的入口（py/ps1/md 里 `--from` 与管道／重定向），量出多少处把 stdout 落到文件、多少处只打屏，并按「轮证／套件／一次性」分类逐条给出处；②**决定性臂**＝在私有 temp 世界造一次同名重写，分别走「只打屏」与「重定向到文件再 `--from`」两条路，量 `REPLACED` 行在终态证据里存不存在、`--check` 读不读得出、普查与 closeout 面看不看得见；③**收口三选一**（要求调用方抓取／写手自己把替换行追加进一件机器可读台账／只记不改），并证明所选面不改任何既有证据字节。判据沿用 AC-QALB 写法，**先落板再动代码**。备选=P2 队头 `state/queue/tech.md:98`（suite_matrix live mtime 归一态实证窗·Docker 门控行跳过）、P3 队头 `state/queue/explore.md:643`（轮次号非 PAT token 的指针丢失面）；地板沿用 R3215 实测 main 6 open／tech 8 open／explore 4 open（欠 5/10/10，本窗未造活补齐）。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱；`tasks.md` 常设两行不变，当窗提案面 BD-PROP-010（2026-11-17）仍在册。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -157,7 +157,7 @@
   },
   "results": [
     [
-      "3213",
+      "3216",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -171,24 +171,24 @@
   "self_drive": {
     "window": "2026-11-16..2026-11-22",
     "window_days": 7,
-    "log_lines_in_window": 87,
+    "log_lines_in_window": 37,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 5,
     "proposals_total": 10,
     "proposals_open": 8,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 75405,
-  "next_milestone_due": "2026-11-24T03:15:17+08:00",
+  "state_bytes": 35134,
+  "next_milestone_due": "2026-11-24T03:30:40+08:00",
   "heartbeat": {
-    "tick": 3212,
-    "state_tick": 3213,
-    "lag": 1,
-    "verdict": "FLAG",
-    "reason": "heartbeat_row_debt"
+    "tick": 3216,
+    "state_tick": 3216,
+    "lag": 0,
+    "verdict": "PASS",
+    "reason": "fresh"
   },
   "outs_age": {
     "rows": 30,

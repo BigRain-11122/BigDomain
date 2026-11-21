@@ -108,6 +108,24 @@ resolved at call time (directory=None), because a default bound at import time
 would keep pointing at the real qa/ inside a suite that has pointed QA at a
 private world.
 
+R3216 (AC-QALB24): a same-name rewrite used to be silent. write_atomic replaces
+the whole file with os.replace and the only receipt named the NEW bytes, so the
+evidence that existed a moment earlier survived nowhere - not in stdout, not in
+the read-back proof, and not in the census. Measured first (private temp world,
+then the shipped history): writing the same name twice with different bodies
+answered rc=0 both times, printed only the second sha16, and read back clean
+both times while the census answered class=tee for both versions; 72 rewrite
+events over 69 shipped *.log paths exist in git history, and the live
+qa/suite-logs-toolkit-R3212.log has carried at least two different bodies under
+one name. A refusal was measured too expensive (it would have blocked all 72
+re-lands, including the repair re-land workflows the closeout gate itself
+demands), so the door now ANNOUNCES: when the target already exists, one
+QA-LOG REPLACED line names old_bytes, old_sha16, new_bytes and new_sha16, read
+before and after the replace. The old hash is captured before the write because
+after it the old bytes are gone from disk. An identical-bytes rewrite prints the
+line too, so "nothing changed" is visible rather than assumed, and a brand-new
+name prints none.
+
 Stdlib only, ASCII source, zero network, zero shell.
 """
 
@@ -388,12 +406,33 @@ def do_write(name, source_bytes, directory=None):
     check_log_suffix(name)
     text = normalize(read_source(source_bytes))
     text, carried = mark_carried_proofs(text)
+    # AC-QALB24 (R3216): a same-name rewrite used to be silent - write_atomic
+    # replaces the whole file and the only receipt named the NEW bytes, so the
+    # evidence that existed before the write survived nowhere: not in stdout,
+    # not in the read-back proof, not in the census (measured: 72 rewrite
+    # events over 69 shipped *.log paths, old sha16 gone from disk). The old
+    # identity is read here, before the replace, and announced below because
+    # a refusal would have blocked that entire re-land workflow.
+    previous = None
+    final = os.path.join(directory, name)
+    if os.path.isfile(final):
+        try:
+            raw_prev = io.open(final, "rb").read()
+            previous = (len(raw_prev), hashlib.sha256(raw_prev).hexdigest()[:16])
+        except OSError:
+            previous = None
     path = write_atomic(directory, name, text)
     proof = verify_written(path)
     if carried:
         sys.stdout.write(
             "QA-LOG CARRIED proofs=%d (a LOG OK line names another file, so "
             "it is marked CARRIED and is not this log's proof)\n" % carried)
+    if previous is not None:
+        sys.stdout.write(
+            "QA-LOG REPLACED name=%s old_bytes=%d old_sha16=%s new_bytes=%d "
+            "new_sha16=%s\n"
+            % (name, previous[0], previous[1], proof["bytes"],
+               proof["sha256"]))
     sys.stdout.write(
         "QA-LOG WROTE name=%s bytes=%d lines=%d sha256=%s dialect=utf-8/lf "
         "VERDICT PASS\n"

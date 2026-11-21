@@ -1,0 +1,56 @@
+R3216 closeout evidence - a same-name rewrite of evidence is now announced.
+
+WHAT CHANGED (one door, one line)
+  tools/qa_log.py do_write reads the target it is about to replace, before the
+  replace, and prints one line after the write:
+    QA-LOG REPLACED name=<n> old_bytes=<b> old_sha16=<h> new_bytes=<b> new_sha16=<h>
+  Fresh names print nothing. Identical-bytes rewrites print the line too, with
+  old_sha16 == new_sha16, so "nothing changed" is visible and not assumed.
+  write_atomic is untouched: the law lives at the evidence door only.
+
+WHY (measured, read-only first)
+  tmp/probe_R3216.py and tmp/probe_R3216b.py, private temp worlds, zero socket,
+  zero network, zero write to the live qa/ tree; report at
+  tmp/probe-R3216-report.txt, landed as qa/probe-R3216.log.
+  (a) decisive arms: writing the same name twice with different bodies answered
+      rc=0 both times, printed only the second sha16, and read back clean both
+      times; the census answered class=tee for the first version and the second,
+      so the replaced evidence survived nowhere on disk.
+  (b) cost of a refusal: git history holds 117 modify events over 75 qa/ paths,
+      of which 72 events over 69 *.log paths - re-landing is an established
+      workflow (the R3212 suite log alone has carried at least two bodies under
+      one name), so refusing would have blocked it. The announcement is the
+      option that costs zero and hides nothing.
+  (c) call sites: 22 do_write calls in the tree, 3 of them round-named literals,
+      and 58 --from invocations on shipped surfaces across 2 files.
+
+CRITERIA (pinned in src/os/backlog.md before any code was written)
+  AC-QALB24 the replaced identity is named: fresh name zero lines, rewrite
+           exactly one line with the measured old and new bytes and sha16,
+           identical rewrite prints old == new.
+  AC-QALB25 the file itself is unchanged: landed bytes equal the normalized
+           payload, no .tmp survives, dialect utf-8/lf, and do_check answers the
+           same OK shape with the same three fields (it never gains the word).
+  AC-QALB26 the law is scoped: the line exists at exactly one string literal in
+           the tool, write_atomic never announces, a direct write_atomic call
+           still lands silently, and the live qa/ tree is stable.
+
+GATES
+  SUITE PASS 28/28 over 26 criteria (qa/suite-qa-log-R3216.log, written and
+  re-read through the shipped writer); qa_log --selftest VERDICT PASS 9/9 with
+  the real qa/ untouched; os-battery-shard SUITE PASS 32/32; os-evidence-read
+  17/17; os-suite-output-audit 6/6; suites matrix regenerated through its own
+  vehicle (78577 bytes, 756 rows) then DOC-CURRENT; live gate run recorded on
+  stdout of this round and in src/os/state.json.
+
+HONEST BOUNDARIES
+  (a) ZERO payment capability and no network beyond loopback: a buyer still
+      cannot pay (no merchant id, server, domain, filing+ICP, appid+secret).
+  (b) zero product surface, zero api surface, zero gate number: what changed is
+      whether the evidence a write destroys can be seen by a machine.
+  (c) the law only knows "the target existed when this write began" - a
+      concurrent write from another machine is outside the claim.
+  (d) the announcement goes to stdout only; no file content changed, so every
+      existing evidence file is byte-identical.
+  (e) a re-land whose name also changed is not a replacement and prints nothing;
+      that is the intended meaning of the word.

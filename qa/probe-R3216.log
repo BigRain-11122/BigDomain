@@ -1,0 +1,46 @@
+# R3216 read-only probe - bounded report (machine lines selected from
+# tmp/probe_R3216.py and tmp/probe_R3216b.py output; no line was edited)
+# zero socket, zero network, zero write to the live qa/ tree
+== Q1 call-site census ==
+CALL_TOTAL 22
+ROUND_NAMED 3 example=[('tmp/probe_R3081.py', 120, '"probe-R3081.log"'), ('tmp/probe_R3203.py', 98, '"relogged-R9003.log"'), ('tmp/probe_R3203.py', 132, '"stdin-R9003.log"')]
+== Q1 historical rewrites ==
+QA_ADDED_BLOBS 4673
+QA_MODIFIED_PATHS 75 MODIFY_EVENTS 117
+REWRITTEN qa/writer-census-baseline.json events=26
+REWRITTEN qa/runner-profile-baseline.json events=11
+REWRITTEN qa/evidence-writer-census-R2072.log events=4
+REWRITTEN qa/crawl-failure-days.jsonl events=3
+REWRITTEN qa/crawl-baselines.json events=2
+REWRITTEN qa/crawl-log.jsonl events=2
+REWRITTEN qa/suite-closeout-gate-R3128.log events=1
+REWRITTEN qa/suite-export-round-R3128.log events=1
+REWRITTEN qa/suite-frontdoor-corpus-card-R3128.log events=1
+REWRITTEN qa/suite-status-export-fresh-R3128.log events=1
+== Q1 live example ==
+LIVE suite-logs-toolkit-R3212.log bytes=9258 sha16=1168cee1701c5ac1
+== Q2 decisive arms ==
+ARM1 first rc=0 bytes=11 sha16=51e5f80e60c2bb85 stdout_mentions_old=False
+ARM2 rewrite rc=0 bytes=19 sha16=26165ce0d384a2b7 old_visible=False new_only=True
+ARM2 stdout='QA-LOG WROTE name=same.log bytes=19 lines=2 sha256=26165ce0d384a2b7 dialect=utf-8/lf VERDICT PASS'
+ARM3 identical rc=0 same_bytes=True signal=False
+CHECK rc=0 text=QA-LOG OK name=same.log dialect=utf-8/lf bytes=19 carried=0 bare_proofs=0
+VERIFY_TWICE sha=26165ce0d384a2b7/26165ce0d384a2b7 class=utf-8/lf
+CENSUS unavailable reason=FileNotFoundError(2, 'No such file or directory')
+== Q3 cost of a refusal ==
+refusal would have blocked MODIFY_EVENTS 117 over 75 shipped paths
+== B1 --from call sites on shipped surfaces ==
+FROM_SHIPPED_TOTAL 58 files=2
+== B2 rewrite cost split by kind ==
+LOG_PATHS 69 LOG_EVENTS 72 OTHER_PATHS 6 OTHER_EVENTS 45
+LOG_REWRITTEN qa/evidence-writer-census-R2072.log events=4
+LOG_REWRITTEN qa/suite-closeout-gate-R3128.log events=1
+LOG_REWRITTEN qa/suite-export-round-R3128.log events=1
+LOG_REWRITTEN qa/suite-frontdoor-corpus-card-R3128.log events=1
+LOG_REWRITTEN qa/suite-status-export-fresh-R3128.log events=1
+LOG_REWRITTEN qa/battery-shard-regress-R2917.log events=1
+LOG_REWRITTEN qa/logs-toolkit-qreg-R2917a.log events=1
+LOG_REWRITTEN qa/logs-toolkit-qreg-R2917b.log events=1
+== B3 does any reader see the replacement ==
+CENSUS first_bytes=11 sha=51e5f80e60c2bb85 class={'name': 'same.log', 'bytes': 11, 'bom': 'utf-8', 'crlf': 0, 'bare_lf': 1, 'utf8': True, 'label': False, 'class': 'tee', 'err': ''} | second_bytes=19 sha=26165ce0d384a2b7 class={'name': 'same.log', 'bytes': 19, 'bom': 'utf-8', 'crlf': 0, 'bare_lf': 2, 'utf8': True, 'label': False, 'class': 'tee', 'err': ''}
+OLD_SURVIVES_ON_DISK False

@@ -1,0 +1,15 @@
+== B1 --from call sites on shipped surfaces ==
+FROM_SHIPPED_TOTAL 58 files=2
+== B2 rewrite cost split by kind ==
+LOG_PATHS 69 LOG_EVENTS 72 OTHER_PATHS 6 OTHER_EVENTS 45
+LOG_REWRITTEN qa/evidence-writer-census-R2072.log events=4
+LOG_REWRITTEN qa/suite-closeout-gate-R3128.log events=1
+LOG_REWRITTEN qa/suite-export-round-R3128.log events=1
+LOG_REWRITTEN qa/suite-frontdoor-corpus-card-R3128.log events=1
+LOG_REWRITTEN qa/suite-status-export-fresh-R3128.log events=1
+LOG_REWRITTEN qa/battery-shard-regress-R2917.log events=1
+LOG_REWRITTEN qa/logs-toolkit-qreg-R2917a.log events=1
+LOG_REWRITTEN qa/logs-toolkit-qreg-R2917b.log events=1
+== B3 does any reader see the replacement ==
+CENSUS first_bytes=11 sha=51e5f80e60c2bb85 class={'name': 'same.log', 'bytes': 11, 'bom': 'utf-8', 'crlf': 0, 'bare_lf': 1, 'utf8': True, 'label': False, 'class': 'tee', 'err': ''} | second_bytes=19 sha=26165ce0d384a2b7 class={'name': 'same.log', 'bytes': 19, 'bom': 'utf-8', 'crlf': 0, 'bare_lf': 2, 'utf8': True, 'label': False, 'class': 'tee', 'err': ''}
+OLD_SURVIVES_ON_DISK False

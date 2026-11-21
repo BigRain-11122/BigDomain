@@ -7497,8 +7497,14 @@ SUITES = [
     # inside the repo but outside qa/ landed in the healthy dialect and was
     # never judged. The place is now judged at the one choke point both faces
     # pass through, and the default is resolved at call time. Three (21..23).
+    # R3216: the same-name rewrite used to be silent - the only receipt named
+    # the new bytes, so the evidence replaced a moment earlier survived nowhere
+    # (measured: 72 rewrite events over 69 shipped *.log paths, old sha16 gone
+    # from disk; the census read class=tee for both versions). A refusal was
+    # measured too expensive, so the door announces old_bytes/old_sha16. Three
+    # more criteria (24..26), one registry row.
     ("os-qa-log",
-     os.path.join("..", "os", "test_qa_log.py"), 23),
+     os.path.join("..", "os", "test_qa_log.py"), 26),
     # R3208: src/os/state.json carries the canonical CRLF dialect its readers
     # require, but the path was not pinned in .gitattributes - so a checkout
     # running with core.autocrlf=false materialized the whole carrier as bare
