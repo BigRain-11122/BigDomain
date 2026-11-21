@@ -1,0 +1,20 @@
+== per-row: shipped nowhere vs compare-aware nowhere ==
+rows whose nowhere set MOVES under the compare rule: 1
+  os-registry-counter-census                     shipped=['law_status'] -> variant=[]
+
+== the six live nowhere rows under each reading ==
+  os-leg-header-check                            shipped=['law_counters'] variant=['law_counters']  pinned=True
+  os-registry-counter-census                     shipped=['law_status'] variant=[]  pinned=False
+  os-runner-abort-face                           shipped=['law_counters'] variant=['law_counters']  pinned=True
+  os-runner-abort-history                        shipped=['law_counters'] variant=['law_counters']  pinned=True
+  os-runner-suite-timeout-headroom               shipped=['law_counters'] variant=['law_counters']  pinned=True
+  os-runner-suite-timeout-headroom-overrides     shipped=['law_counters'] variant=['law_counters']  pinned=True
+
+== private-world controls (must not move) ==
+  STORED_ROW_SRC (dict value, no Compare)    shipped=(['law_direct'], []) variant=(['law_direct'], [])
+  BOUND_ROW_SRC (bind then print)            shipped=([], ['law_direct']) variant=([], ['law_direct'])
+  DIRECT_ROW_SRC (direct print)              shipped=([], ['law_direct']) variant=([], ['law_direct'])
+  SUITE-only compare operand                 shipped=([], []) variant=([], [])
+
+== tally ==
+shipped live nowhere rows=6, compare-aware=5

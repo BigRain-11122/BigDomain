@@ -1,9 +1,8 @@
 <!-- 机器派生文件：由 src/sandbox/suite_matrix.py 生成，勿手改（改=下轮 --check 漂移 exit 2）。再生命令见文档头「生成命令」行 -->
 # 沙箱套件矩阵（对账可计费可见面）
 
-- 生成时间: generated: 2026-11-21 06:29 +08:00
+- 生成时间: generated: 2026-11-21 09:02 +08:00
 - 生成命令: python src/sandbox/suite_matrix.py --evidence qa/reconcile-all-R2739.log
-- 印章来源: --stamp-from docs/sandbox-suite-matrix.md
 - 状态证据: reconcile-all-R2739.log (RUNNER PASS 675/675 suites green, reconcile controls 7/7, 4986.4s)
 - 回应: C-20261009-02「实质停摆零可计费」批评——本矩阵为机器派生的对账可计费可见面：套件注册表源自 reconcile_all.py 单一事实源，可计费面源自五域 config.json 单一事实源，逐套件状态源自最近全量回归证据 log，零手写数字。
 
@@ -11,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 741 | 6028 | 675/675 | R2739 |
+| 741 | 6029 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -754,7 +753,7 @@
 | 714 | os-deliverable-index | ../os/test_deliverable_index.py | 18 | no-evidence | - |
 | 715 | os-battery-shard | ../os/test_battery_shard.py | 32 | no-evidence | - |
 | 716 | os-suite-output-audit | ../os/test_suite_output_audit.py | 6 | no-evidence | - |
-| 717 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 20 | no-evidence | - |
+| 717 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 21 | no-evidence | - |
 | 718 | os-battery-shard-report | ../os/test_battery_shard_report.py | 12 | no-evidence | - |
 | 719 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 12 | no-evidence | - |
 | 720 | os-tree-snapshot | ../os/test_tree_snapshot.py | 6 | no-evidence | - |
@@ -779,7 +778,7 @@
 | 739 | frontdoor-corpus-card | test_frontdoor_corpus_card.py | 6 | no-evidence | - |
 | 740 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 741 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6028 | green 675 / FAIL 0 / no-evidence 66 |  |
+|  | 合计 |  | 6029 | green 675 / FAIL 0 / no-evidence 66 |  |
 
 ## 证据出处
 

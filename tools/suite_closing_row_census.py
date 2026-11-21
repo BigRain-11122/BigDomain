@@ -310,6 +310,15 @@ def _reached_bodies(tree):
     of an implicit concatenation while the parser makes them one constant, so a
     text-piece reach test called a printed row stored (measured this window:
     nowhere_hit=44 law_only=31 before this became AST-based).
+
+    R3138: a literal used as a COMPARE operand counts as exercised. A suite
+    that asks `inline = "SUITE %s %d/%d" in body` is testing whether some row
+    exists; the literal drives a decision instead of posing as this suite's own
+    closing row, and calling it "stored" would conflate the audit's subject
+    with the audit itself. Measured this window: of 741 live rows exactly ONE
+    moves under this rule, os-registry-counter-census, whose real closing row
+    prints SUITE PASS 55/55 through the runner (qa/probe-R3138c.log); the five
+    pinned nowhere rows and every private-world control stay put.
     """
     reached, used = set(), set()
     for arg in _call_args(tree):
@@ -325,6 +334,12 @@ def _reached_bodies(tree):
                    for t in node.targets):
             continue
         for sub in ast.walk(node.value):
+            if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
+                reached.add(normalise(sub.value))
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Compare):
+            continue
+        for sub in ast.walk(node):
             if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
                 reached.add(normalise(sub.value))
     return reached

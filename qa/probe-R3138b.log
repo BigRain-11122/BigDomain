@@ -1,0 +1,24 @@
+== os-registry-counter-census (..\os\test_registry_counter_census.py, declared 13) ==
+  BINDS.search(src) = True
+  [01] family=law_status         reached=False fixture=False line=311
+       body='SUITE %s %d/%d'
+  [02] family=law_direct         reached=True  fixture=False line=702
+       body='SUITE PASS %d/%d'
+  [03] family=law_direct         reached=True  fixture=False line=309
+       body='SUITE PASS %d/%d'
+  [04] family=law_direct         reached=False fixture=False line=310
+       body='SUITE FAIL %d/%d'
+  total law-family constants=4
+  nowhere=['law_status'] reach=['law_direct']
+
+== suite-matrix-discovery (test_suite_matrix.py, declared 16) ==
+  BINDS.search(src) = True
+  [01] family=law_counters       reached=True  fixture=False line=41
+       body='PASS suite ledger exit=0 pass-lines=11 fail-lines=0 criteria=11 0.5s\nPASS suite lobby exit=0 pass-lines=16 fail-lines=0 criteria=16 0.3s\nRUNNER PASS (2/2 suites'
+  [02] family=law_counters       reached=True  fixture=False line=180
+       body='\nRUNNER PASS (2/2 suites green, reconcile controls 6/6, 0.8s)\nPASS suite ledger exit=0 pass-lines=11 fail-lines=0 criteria=11 0.5s\n'
+  [03] family=law_status_punct   reached=True  fixture=False line=493
+       body='SUITE %s (%d/%d cases)'
+  total law-family constants=3
+  nowhere=[] reach=['law_counters', 'law_status_punct']
+

@@ -58,7 +58,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.dirname(BASE)
 ROOT = os.path.dirname(SRC)
 
-EXPECTED_CRITERIA = 20
+EXPECTED_CRITERIA = 21
 LABEL = "os-suite-closing-row-census"
 TOOL = os.path.join(ROOT, "tools", "suite_closing_row_census.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
@@ -849,7 +849,15 @@ def ac_cen17():
 
 
 def ac_cen18():
-    """Live: the join unification moves no verdict and names its disagreement."""
+    """Live: the join unification moves no verdict and names its disagreement.
+
+    R3138 JUDGED-CHANGED: the law tally used to be pinned to the absolute
+    snapshot 728, so every window that registered a suite reddened this arm
+    while nothing it grades had moved (measured: labels, moves and law_only
+    all matched at 741). The pin is now the RELATION - both readings agree and
+    the count is non-empty - while AC-CEN3/AC-CEN10 keep the absolute registry
+    count pinned to the live tree.
+    """
     plain_code, plain_out = run_census(ROOT, quiet=True)
     proc = subprocess.run([sys.executable, TOOL, "--root", ROOT,
                            "--quiet-list", "--fixture-audit"],
@@ -887,7 +895,7 @@ def ac_cen18():
           and tuple(sorted(set(text_rows))) == FIXTURE_ROWS
           and tuple(sorted(set(moves))) == FAMILY_MOVES
           and tuple(sorted(set(l for l, _t, _a in moves))) == AST_ONLY_LAW_ROWS
-          and text_law == ast_law == 728)
+          and text_law == ast_law and text_law > 0)
     if not ok:
         print("  measured rc=%d/%d verdict_same=%r fields=%r ast_rows=%r "
               "text_rows=%r moves=%r law text/ast=%d/%d"
@@ -957,8 +965,22 @@ def ac_cen19():
           "to the text pieces" % len(seen))
 
 
+def _nowhere_labels(stdout):
+    text = stdout.decode("utf-8", "replace")
+    return {line.split()[2] for line in text.splitlines()
+            if line.startswith("CENSUS nowhere ")}
+
+
 def ac_cen20():
-    """Nothing moved: the pre-R2968 binary prints the same bytes on this tree."""
+    """Nothing moved outside the audit faces; the audit face moved by design.
+
+    R3138 JUDGED-CHANGED: the binary pinned at PRE_R2968 predates the compare
+    rule, so its nowhere class still carries one extra row. Pinning raw
+    byte-identity would now demand that this round's trusted change be undone;
+    the pin is instead: every NON-audit line is byte-identical, the only audit
+    difference is that the old binary names os-registry-counter-census and the
+    new one does not, and the new binary names nothing the old one did not.
+    """
     old = subprocess.run(["git", "show",
                           "%s:tools/suite_closing_row_census.py" % PRE_R2968],
                          cwd=ROOT, capture_output=True)
@@ -977,15 +999,91 @@ def ac_cen20():
                              capture_output=True, env=env)
     finally:
         cleanup(folder)
+    now_text = now.stdout.decode("utf-8", "replace")
+    was_text = was.stdout.decode("utf-8", "replace")
+    same_non_audit = verdict_lines(now_text) == verdict_lines(was_text)
+    removed = _nowhere_labels(was.stdout) - _nowhere_labels(now.stdout)
+    added = _nowhere_labels(now.stdout) - _nowhere_labels(was.stdout)
     ok = (old.returncode == 0 and now.returncode == 0 and was.returncode == 0
-          and now.stdout == was.stdout and now.stdout.strip() != b"")
+          and now.stdout.strip() != b"" and same_non_audit
+          and removed == {"os-registry-counter-census"} and added == set())
     if not ok:
-        print("  measured git=%d rc now/old=%d/%d identical=%r bytes=%d/%d"
+        print("  measured git=%d rc now/old=%d/%d non_audit_same=%r "
+              "removed=%r added=%r bytes=%d/%d"
               % (old.returncode, now.returncode, was.returncode,
-                 now.stdout == was.stdout, len(now.stdout), len(was.stdout)),
-              flush=True)
-    check(ok, "AC-CEN20 the pre-R2968 binary at %s prints byte-identical lines "
-          "on this tree" % PRE_R2968[:8])
+                 same_non_audit, sorted(removed), sorted(added),
+                 len(now.stdout), len(was.stdout)), flush=True)
+    check(ok, "AC-CEN20 the pre-R2968 binary at %s keeps every non-audit line "
+          "and differs only by the compare-rule row on this tree"
+          % PRE_R2968[:8])
+
+
+# R3138: the adjacent class - a law literal that DRIVES A DECISION instead of
+# posing as this suite's own closing row. `if "SUITE %s %d/%d" in body` is the
+# audit asking whether some row exists; the literal is exercised, not stored.
+# Measured this window: of 741 live rows, exactly one moves under this rule
+# (os-registry-counter-census, whose own row prints SUITE PASS 55/55), and the
+# five pinned nowhere rows do not (qa/probe-R3138c.log).
+COMPARE_IN_SRC = (
+    'VERDICT = ("PASS" if ok else "FAIL")\n'
+    'body = "x"\n'
+    'if "SUITE %s %d/%d" in body:\n'
+    '    pass\n')
+COMPARE_EQ_SRC = (
+    'VERDICT = ("PASS" if ok else "FAIL")\n'
+    'body = "x"\n'
+    'if body == "SUITE %s %d/%d":\n'
+    '    pass\n')
+STORED_CONTROL_SRC = 'STORED = {"p": "SUITE PASS %d/%d"}\n'
+BOUND_CONTROL_SRC = ('verdict = "SUITE PASS %d/%d" % (2, 2)\n'
+                     'print(verdict)\n')
+
+
+def ac_cen21():
+    """A law literal used only to COMPARE is exercised, not stored."""
+    census = _census()
+    in_probe = census.nowhere_law(COMPARE_IN_SRC)
+    eq_probe = census.nowhere_law(COMPARE_EQ_SRC)
+    stored = census.nowhere_law(STORED_CONTROL_SRC)
+    bound = census.nowhere_law(BOUND_CONTROL_SRC)
+    direct = census.nowhere_law(DIRECT_ROW_SRC)
+    live_nowhere, live_law = [], 0
+    for label, rel, _declared in census.registry(ROOT):
+        path = os.path.join(ROOT, "src", "sandbox", rel)
+        if not os.path.isfile(path):
+            continue
+        with open(path, "r", encoding="utf-8", errors="replace") as fh:
+            src = fh.read()
+        got = census.nowhere_law(src)
+        if got is not None and got[0]:
+            live_nowhere.append(label)
+        # counted even when the source will not parse: the law tally is the
+        # text reading (which falls back), the same one AC-CEN18 compares to.
+        if census.classify(src) in census.LAW_FAMILIES:
+            live_law += 1
+    code, out = run_census(ROOT, quiet=True)
+    line = [l for l in out.splitlines() if l.startswith("CENSUS registry=")]
+    fields = dict(re.findall(r"(\w+)=(\d+)", line[0])) if (code == 0 and line) else {}
+    registry_n = int(fields.get("registry", -1))
+    law_n = int(fields.get("law", -1))
+    p = in_probe == (set(), {"law_status"})
+    q = stored == ({"law_direct"}, set())
+    r = eq_probe == (set(), {"law_status"})
+    s = (tuple(sorted(live_nowhere)) == NOWHERE_ROWS
+         and len(live_nowhere) == len(NOWHERE_ROWS))
+    t = (bound == (set(), {"law_direct"})
+         and direct == (set(), {"law_direct"}))
+    u = (registry_n > 0 and law_n == registry_n and live_law == registry_n)
+    ok = code == 0 and p and q and r and s and t and u
+    if not ok:
+        print("  measured rc=%d p=%r q=%r r=%r s=%r t=%r u=%r "
+              "live_nowhere=%r live_law=%d registry=%d law=%d"
+              % (code, p, q, r, s, t, u, sorted(live_nowhere), live_law,
+                 registry_n, law_n), flush=True)
+    check(ok, "AC-CEN21 a law literal used only to COMPARE is exercised "
+          "(in=%r eq=%r stored=%r live_nowhere=%d law=%d=%d)"
+          % (in_probe, eq_probe, stored, len(live_nowhere), live_law,
+             registry_n))
 
 
 def main():
@@ -1011,6 +1109,7 @@ def main():
     ac_cen18()
     ac_cen19()
     ac_cen20()
+    ac_cen21()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

@@ -1,0 +1,105 @@
+R3138 probe (read-only) root=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain
+
+== Q1: what is suite-os-registry-counter-census ==
+registry hit for os-registry-counter-census: [('os-registry-counter-census', '..\\os\\test_registry_counter_census.py', 13)]
+registry declares 13 criteria, rel=..\os\test_registry_counter_census.py
+closing literals mentioning SUITE (verbatim, 53):
+    'SUITES = [\\n'
+    'print("SUITE PASS %d/%d" % (3, 3))\\n'
+    'print("SUITE PASS", 4, "/", 4)\\n'
+    'SUITES = [\\n'
+    'V = "SUITE PASS %d/%d" % (2, 2)\\nprint(V)\\n'
+    'V = "SUITE PASS" if OK else "SUITE FAIL"\\n'
+    'Y = "SUITE PASS %d/%d"\\nprint("Yy", 1)\\n'
+    'SUITES = [\\n'
+    'V = "SUITE PASS"\\nprint("%s %d/%d" % (V, 2, 2))\\n'
+    'V = "SUITE PASS"\\nprint(V)\\nprint("%d/%d" % (1, 1))\\n'
+    'V = "SUITE PASS"\\nprint("note %s %d/%d" % (V, 1, 1))\\n'
+    'AC-RCC2-R3 a file that prints no SUITE row reads silent'
+    'AC-RCC2-R4 a SUITE row assembled from literals reads unparsed '
+    'SUITE_LINE_PUNCT'
+    'SUITE PASS <n> checks'
+    'SUITE PASS %d checks\\n'
+    'AC-RCC6-R1 a SUITE row printed through a formatted constant reads '
+    'AC-RCC7-R1 the negative control stays silent: a file with no SUITE '
+    'literal and no SUITE constant'
+    'SUITE 7 7/7'
+    'SUITE PASS %d/%d'
+    'SUITE FAIL %d/%d'
+    'SUITE %s %d/%d'
+    'SUITES = [\\n'
+    'print("SUITE %s %d/%d" % ("PASS" if not FAILS else '
+    'FAILS = []\\nprint("SUITE PASS %d/%d" % (1, 1))\\n'
+    'SUITES = [\\n'
+    'print("SUITE %s %d/%d" % ("PASS" if not FAILS else '
+    'print("SUITE PASS %d/%d" % (1, 1))\\n'
+    'print("SUITE %s %d/%d"\\n'
+    'print("note SUITE %s %d/%d" % ("PASS", 1, 1))\\n'
+    'AC-RCC10-R3 a word before SUITE is still refused by the anchored '
+    'SUITES = [\\n'
+    'print("SUITE %s %d/%d" % ("PASS" if not fails else '
+    'a = 6\\nb = 6\\nprint("SUITE %d/%d green" % (a, b))\\n'
+    'a = 6\\nb = 6\\nprint("note SUITE %s %d/%d" % ("PASS", a, b))\\n'
+    'SUITE PASS'
+    'SUITE PASS'
+    'AC-RCC11-R3 a name bound to a SUITE literal keeps its literal, a '
+    'AC-RCC11-R4 a word before SUITE is still refused (the anchored '
+    'SUITES = [\\n'
+    'V = "SUITE PASS" if bad == 0 else "SUITE FAIL"\\n'
+    'print("SUITE %s %d/%d" % (verdict, passed, total))\\n'
+    'print("SUITE %s %d/%d" % (label, passed, total))\\n'
+    'V = "SUITE PASS" if bad == 0 else "SUITE FAIL"\\n'
+    'a = 6\\nb = 6\\nprint("SUITE %d/%d green" % (a, b))\\n'
+    'print("SUITE %s %d/%d" % (word, passed, total))\\n'
+    'AC-RCC12-R1 a SUITE word carried only by a format ARGUMENT reads '
+    'SUITE format reads readable'
+    '(SUITE 7 7/7): the reader does not invent a verdict'
+    'AC-RCC12-R4 a format and arguments carrying no SUITE anywhere '
+    'SUITE'
+    'SUITE PASS %d/%d'
+classify(text) = 'law_direct'
+classify_bodies(ast) = 'law_direct'
+nowhere_law(text) = ({'law_status'}, {'law_direct'})
+RUN rc=0 closing row='SUITE PASS 55/55'
+runner reads that row as ('PASS', 55, 55)
+
+== Q1b: the five already-pinned nowhere rows, same reading ==
+  os-leg-header-check                            ast=law_direct     text=law_direct     nowhere=True
+  os-runner-abort-face                           ast=law_split      text=law_split      nowhere=True
+  os-runner-abort-history                        ast=law_split      text=law_split      nowhere=True
+  os-runner-suite-timeout-headroom               ast=law_split      text=law_split      nowhere=True
+  os-runner-suite-timeout-headroom-overrides     ast=law_split      text=law_split      nowhere=True
+
+== Q2: suite-matrix-discovery law_status_punct -> law_counters ==
+registry hit: [('suite-matrix-discovery', 'test_suite_matrix.py', 16)]
+closing literals mentioning SUITE (verbatim, 1):
+    'SUITE %s (%d/%d cases)'
+classify(text) = 'law_status_punct'
+classify_bodies(ast) = 'law_counters'
+RUN rc=0 closing row='SUITE PASS (16/16 cases)'
+runner reads that row as ('PASS', 16, 16)
+source carries 'criteria=': True
+    ctx: ' as SM\\n\\nMINI_EVIDENCE = (\\n    "PASS suite ledger exit=0 pass-lines=11 fail-lines=0"\\n    " criteria=11 0.5s\\n"\\n    "PASS suite lobby exit=0 pass-lines=16 fail-l'
+    ctx: '\\n    " criteria=11 0.5s\\n"\\n    "PASS suite lobby exit=0 pass-lines=16 fail-lines=0"\\n    " criteria=16 0.3s\\n"\\n    "RUNNER PASS (2/2 suites green, reconcile con'
+    ctx: '6,"\\n           " 0.8s)\\nPASS suite ledger exit=0 pass-lines=11"\\n           " fail-lines=0 criteria=11 0.5s\\n", mtime=1_700_000_300)\\n    other = os.path.join(tm'
+
+== live face: law counters text vs ast ==
+registry=741 law text=741 ast=741 missing=0
+moves=[('suite-matrix-discovery', 'law_status_punct', 'law_counters')]
+AC-CEN18 currently pins text_law == ast_law == 728
+
+== Q3: does --fixture-audit still read law_only=0, and what do AC-CEN14/15 pin ==
+audit rc=0
+  CENSUS registry=741 law=741 non_law=0 missing=0
+  CENSUS fixture law_literal_rows=1 law_only=0
+  CENSUS fixture nowhere=6 law_only=0
+  CENSUS nowhere os-runner-suite-timeout-headroom nowhere=law_counters
+  CENSUS nowhere os-runner-suite-timeout-headroom-overrides nowhere=law_counters
+  CENSUS nowhere os-runner-abort-face nowhere=law_counters
+  CENSUS nowhere os-runner-abort-history nowhere=law_counters
+  CENSUS nowhere os-leg-header-check nowhere=law_counters
+  CENSUS nowhere os-registry-counter-census nowhere=law_status
+
+AC-CEN14 pins: law_only=='0' and law_literal_rows is not None and verdict unchanged over two runs
+AC-CEN15 pins: three private-world families (stored/bound/direct), NOT any live count - a live pin bump cannot cross it
+AC-CEN18 pins: FIXTURE_ROWS, AST_ONLY_LAW_ROWS, FAMILY_MOVES and text_law == ast_law == 728
