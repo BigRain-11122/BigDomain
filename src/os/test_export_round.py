@@ -1828,6 +1828,90 @@ def main():
            (built_u.get('ceo_face') or {}).get('latest_artifact'),
            'block=%r' % (oab_u,))
 
+        # ---- AC-EXPW20 (R3147 pin): the criteria claims behind a suite path --
+        # R3147 measured on the live face BEFORE this arm existed
+        # (qa/probe-R3147.log): of 29 rows exactly ONE bracket carries a
+        # criteria claim - "14 criteria" on src/os/test_deliverable_index.py
+        # while the registry's own SUITES row declares 18 - and TWO carry suite
+        # conclusions ("8/8", "3/3") whose only answer is the evidence log the
+        # same row names. The claim is judged against the registry; the
+        # conclusion is named and left alone.
+        wc = tempfile.mkdtemp(prefix='expw-crit-')
+        worlds.append(wc)
+        registry_text = ('import os\n\nSUITES = [\n'
+                         '    ("os-x", os.path.join("..", "os", "test_x.py"), 18),\n'
+                         '    ("os-y", os.path.join("test_y.py"), 7),\n'
+                         ']\n')
+        write(os.path.join(wc, 'src', 'sandbox', 'reconcile_all.py'),
+              registry_text)
+        crit_stale = '+ src/os/test_x.py\uff0814 \u5224\u636e\uff09'
+        crit_good = '+ src/os/test_x.py\uff0818 \u5224\u636e\uff09'
+        ok('AC-EXPW20 p a stale criteria claim is judged and never rewritten',
+           mod.outs_note_criteria_readings([crit_stale], wc) == (1, 1)
+           and mod.refresh_outs_labels([crit_stale], wc) == ([crit_stale], 0),
+           'reading=%r' % (mod.outs_note_criteria_readings([crit_stale], wc),))
+        # q: NEGATIVE CONTROL - the claim equals the declaration, so the row is
+        # judged (one claim) and reads zero stale.
+        ok('AC-EXPW20 q agreeing criteria claim reads zero stale',
+           mod.outs_note_criteria_readings([crit_good], wc) == (0, 1),
+           'reading=%r' % (mod.outs_note_criteria_readings([crit_good], wc),))
+        # r: the live claim sits at src/os/..., so the path class is
+        # multi-segment; a bare filename with the same body is not a claim.
+        ok('AC-EXPW20 r multi-segment claims resolve, bare names do not',
+           mod.outs_note_criteria_readings(
+               ['src/sandbox/test_y.py\uff087 \u5224\u636e\uff09'], wc) == (0, 1)
+           and mod.outs_note_criteria_readings(
+               ['test_y.py\uff087 \u5224\u636e\uff09'], wc) == (0, 0),
+           'deep=%r bare=%r'
+           % (mod.outs_note_criteria_readings(
+               ['src/sandbox/test_y.py\uff087 \u5224\u636e\uff09'], wc),
+              mod.outs_note_criteria_readings(
+                  ['test_y.py\uff087 \u5224\u636e\uff09'], wc)))
+        # s: an undeclared suite and a world with no registry are both unjudged -
+        # no fabricated agreement, the same law the age block keeps for a file
+        # that is gone.
+        wcr = tempfile.mkdtemp(prefix='expw-noreg-')
+        worlds.append(wcr)
+        ok('AC-EXPW20 s undeclared suites and missing registries are unjudged',
+           mod.outs_note_criteria_readings(
+               ['src/os/test_absent.py\uff0814 \u5224\u636e\uff09'], wc) == (0, 0)
+           and mod.outs_note_criteria_readings([crit_stale], wcr) == (0, 0),
+           'undeclared=%r noreg=%r'
+           % (mod.outs_note_criteria_readings(
+               ['src/os/test_absent.py\uff0814 \u5224\u636e\uff09'], wc),
+              mod.outs_note_criteria_readings([crit_stale], wcr)))
+        # t: suite conclusions are named, never graded - the only artifact that
+        # can answer "8/8" or "3/3" is the log that landed it, so neither enters
+        # either reading.
+        conclusions = ('src/os/test_x.py\uff08AC-BSGB1..8 \u5b88\u62a4\u5957'
+                       '\u4ef6\u00b78/8\uff09 + qa/note.log\uff0819 \u884c'
+                       '\u00b7\u8d1f\u63a7 3/3 CONFIRMED\uff09')
+        ok('AC-EXPW20 t suite conclusions never enter either reading',
+           mod.outs_note_criteria_readings([conclusions], wc) == (0, 0)
+           and mod.outs_note_readings([conclusions], wc) == (0, 0),
+           'reading=%r'
+           % (mod.outs_note_criteria_readings([conclusions], wc),))
+        # u: end to end - the pair is published in both copies and the shipped
+        # laws still close on the same write.
+        wu2 = build_world(9327)
+        worlds.append(wu2)
+        write(os.path.join(wu2, 'src', 'sandbox', 'reconcile_all.py'),
+              registry_text)
+        fp_c = os.path.join(wu2, 'docs', 'status-export.json')
+        face_c = json.loads(read(fp_c))
+        face_c['outs'] = [crit_stale, 'x']
+        write(fp_c, json.dumps(face_c, ensure_ascii=False, indent=2) + '\n')
+        st_c = json.loads(read(os.path.join(wu2, 'src', 'os', 'state.json')))
+        built_c, _ = mod.payload(wu2, st_c, 'TC1')
+        oab_c = built_c.get('outs_age') or {}
+        ok('AC-EXPW20 u payload publishes the pair in both copies',
+           oab_c.get('criteria_stale') == 1
+           and oab_c.get('criteria_claims') == 1
+           and (built_c.get('ceo_face') or {}).get('outs_age') == oab_c
+           and (built_c.get('outs') or [])[0] ==
+           (built_c.get('ceo_face') or {}).get('latest_artifact'),
+           'block=%r' % (oab_c,))
+
         # ---- AC-EXPW6: hygiene, one battery row, twenty criteria ----
         ok('AC-EXPW6 module source is pure ASCII', all(ord(c) < 128 for c in src))
         net = [m for m in ('urllib', 'requests', 'socket', 'http.client')

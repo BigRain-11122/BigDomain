@@ -5934,6 +5934,13 @@ def outs_age_card(face):
     if isinstance(notes_stale, int) and not isinstance(notes_stale, bool) \
             and notes_stale > 0:
         line += " notes_stale=%d" % notes_stale
+    # R3147: a criteria claim the registry contradicts is named here too, and
+    # only when positive - a face written before this key existed, or one whose
+    # claims all agree, must stay byte-equal.
+    criteria_stale = block.get("criteria_stale")
+    if isinstance(criteria_stale, int) and not isinstance(criteria_stale, bool) \
+            and criteria_stale > 0:
+        line += " criteria_stale=%d" % criteria_stale
     try:
         over7 = int(block.get("over7"))
     except (TypeError, ValueError):

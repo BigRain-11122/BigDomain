@@ -1,10 +1,12 @@
 """Suite for the artifact-list age card: the derived age gets one live consumer.
 
-TWO criteria (AC-FDC9, AC-FDC10), pre-registered on the src/os/backlog.md
-board BEFORE this file existed. R3142 shipped the card with the age block and
-no suite at all; R3143 measured that gap while it was changing the same card,
-so the first arm here is the absence branch it was written for. R3144 added the
-second criterion for the correction count the exporter now publishes.
+FOUR criteria (AC-FDC9, AC-FDC10, AC-FDC11, AC-FDC12), pre-registered on the
+src/os/backlog.md board BEFORE this file existed. R3142 shipped the card with
+the age block and no suite at all; R3143 measured that gap while it was changing
+the same card, so the first arm here is the absence branch it was written for.
+R3144 added the second criterion for the correction count the exporter now
+publishes, R3146 the third for the stale landing notes, and R3147 the fourth for
+the criteria claim the registry contradicts.
 
 The card is a pure consumption face over the block the exporter derives. It
 never re-walks preview/ or qa/, never re-stamps a file, and an absent block
@@ -182,6 +184,31 @@ def main():
     if frontdoor.outs_age_card(note_block) != note_html:
         bad11.append("not-deterministic-under-stale")
     report("AC-FDC11", bool(bad11), ",".join(bad11))
+
+    # ---- AC-FDC12 (R3147 pin): the stale-criteria count is printed only when a
+    # ---- criteria claim really disagrees with the registry. R3147 measured one
+    # ---- live claim ("14 criteria" while the registry declares 18), so the card
+    # ---- must state it when positive and stay byte-equal when it is zero or
+    # ---- when the face predates the key.
+    bad12 = []
+    crit_block = {"outs_age": dict(clean["outs_age"], criteria_stale=1,
+                                   criteria_claims=1)}
+    crit_html = frontdoor.outs_age_card(crit_block)
+    if "criteria_stale=1" not in crit_html:
+        bad12.append("criteria-not-printed")
+    if "OUTS-AGE rows=29" not in crit_html:
+        bad12.append("criteria-lost-the-line")
+    if "criteria_claims" in crit_html:
+        bad12.append("claims-leaked-onto-the-card")
+    zero_crit = {"outs_age": dict(clean["outs_age"], criteria_stale=0,
+                                  criteria_claims=1)}
+    if frontdoor.outs_age_card(zero_crit) != clean_html:
+        bad12.append("zero-criteria-not-byte-equal")
+    if frontdoor.outs_age_card(clean) != clean_html:
+        bad12.append("keyless-face-not-byte-equal")
+    if frontdoor.outs_age_card(crit_block) != crit_html:
+        bad12.append("not-deterministic-under-criteria")
+    report("AC-FDC12", bool(bad12), ",".join(bad12))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

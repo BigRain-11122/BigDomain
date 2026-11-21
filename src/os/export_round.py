@@ -59,6 +59,7 @@ Usage:
   python src/os/export_round.py --check         # read-only verdict
   python src/os/export_round.py --root DIR      # operate on a private world
 """
+import ast
 import datetime
 import hashlib
 import io
@@ -633,6 +634,112 @@ def outs_note_readings(rows, repo):
     return stale, judged
 
 
+# R3147 measured the last three unjudged numbers on the live face
+# (qa/probe-R3147.log, read-only, live face plus AST over the shipped registry):
+# of 29 rows exactly ONE bracket carries a criteria claim - the deliverable-index
+# suite says "14 criteria" while the registry's own SUITES row declares 18
+# (the count moved 16 -> 18 at R2883) - and TWO carry a suite conclusion ("8/8"
+# guard suite, "3/3" negative control) whose answer is printed by the very
+# evidence log the same row names ("SUITE PASS 8/8", "controls=3/3").
+#
+# So the two classes are split by whether an INDEPENDENT artifact can answer
+# them. A criteria claim can: the registry is a different file from the row, and
+# its declaration is the number the suite must print. A conclusion cannot: the
+# only file that can answer "8/8" is the log that landed it, so judging it would
+# compare a landing artifact with itself. Conclusions are therefore named and
+# left alone, and a criterion arm pins that they never enter the reading.
+#
+# The path class is multi-segment because the live claim sits at src/os/... - the
+# single-segment byte-claim families of R3145/R3146 are untouched, so their
+# arms and counts do not move. Like every note on the face this is a LANDING
+# fact: it is judged and never rewritten, because rewriting it would erase what
+# the artifact said when it landed. The unit is built from an escape so this
+# module stays pure ASCII (AC-EXPW6).
+_FW_CRIT_UNIT = '\u5224\u636e'
+OUTS_NOTE_CRITERIA_RE = re.compile(
+    r'((?:[A-Za-z0-9_.\-]+/)+test_[A-Za-z0-9_.\-]+\.py)' + _FW_OPEN +
+    r'\s*(\d+) ' + _FW_CRIT_UNIT)
+
+
+def _suite_row_path(parts):
+    """The repo-relative path of one registry SUITES row, or ''."""
+    parts = [str(p).replace('\\', '/') for p in parts]
+    if not parts:
+        return ''
+    if parts[0] == '..':
+        return 'src/' + '/'.join(parts[1:])
+    return 'src/sandbox/' + '/'.join(parts)
+
+
+def suite_criteria_index(repo):
+    """{repo-relative suite path: declared criteria} from the shipped registry.
+
+    Read by AST so the registry is a DIFFERENT artifact from the face it is
+    judging, and so a private world without one simply yields no declarations -
+    an unjudged row is never called stale.
+    """
+    full = os.path.join(repo, 'src', 'sandbox', 'reconcile_all.py')
+    if not os.path.isfile(full):
+        return {}
+    try:
+        with open(full, 'r', encoding='utf-8', errors='replace') as handle:
+            tree = ast.parse(handle.read())
+    except (OSError, SyntaxError):
+        return {}
+    index = {}
+    for node in getattr(tree, 'body', []):
+        if not isinstance(node, ast.Assign):
+            continue
+        if not any(getattr(t, 'id', None) == 'SUITES' for t in node.targets):
+            continue
+        for elt in getattr(node.value, 'elts', []):
+            if not isinstance(elt, ast.Tuple) or len(elt.elts) != 3:
+                continue
+            call, count = elt.elts[1], elt.elts[2]
+            if not isinstance(call, ast.Call):
+                continue
+            if not isinstance(count, ast.Constant) or not isinstance(count.value, int):
+                continue
+            parts = []
+            for arg in call.args:
+                if not isinstance(arg, ast.Constant) or not isinstance(arg.value, str):
+                    parts = []
+                    break
+                parts.append(arg.value)
+            rel = _suite_row_path(parts) if parts else ''
+            if rel:
+                index[rel] = count.value
+    return index
+
+
+def outs_note_criteria_readings(rows, repo):
+    """(rows with a stale criteria claim, criteria claims judged).
+
+    Only a `test_*.py` path (one or more directory segments) followed by a
+    full-width bracket holding "N criteria" is a claim, and only when the
+    registry declares that suite. An undeclared path, an unparsable registry or
+    a suite conclusion ("8/8", "3/3") is not judged - the same refusal to
+    fabricate agreement the age block keeps for a missing file.
+    """
+    index = suite_criteria_index(repo)
+    if not index:
+        return 0, 0
+    stale, judged = 0, 0
+    for row in rows or []:
+        bad = False
+        for match in OUTS_NOTE_CRITERIA_RE.finditer(str(row)):
+            rel, claimed = match.group(1), int(match.group(2))
+            declared = index.get(rel)
+            if declared is None:
+                continue
+            judged += 1
+            if declared != claimed:
+                bad = True
+        if bad:
+            stale += 1
+    return stale, judged
+
+
 def refresh_outs_labels(rows, repo):
     """Rewrite each row's claimed byte count from disk; return (rows, changed).
 
@@ -730,6 +837,7 @@ def outs_age_block(repo, rows, collapsed=0, refreshed=0):
     measured = [a for a in ages if a is not None]
     keys = [outs_row_key(row) for row in rows]
     notes_stale, note_claims = outs_note_readings(rows, repo)
+    criteria_stale, criteria_claims = outs_note_criteria_readings(rows, repo)
     return {
         'rows': len(rows),
         'measurable': len(measured),
@@ -752,6 +860,12 @@ def outs_age_block(repo, rows, collapsed=0, refreshed=0):
         # count of checks is in the block even when no card prints it.
         'notes_stale': notes_stale,
         'note_claims': note_claims,
+        # R3147: how many rows claim a criteria count the registry contradicts,
+        # and how many such claims were actually judged. A suite conclusion
+        # ("8/8", "3/3") is deliberately outside this pair: only the log that
+        # landed it can answer it, so it is named rather than graded.
+        'criteria_stale': criteria_stale,
+        'criteria_claims': criteria_claims,
     }
 
 

@@ -1,0 +1,18 @@
+ceo_face rows=0 equal_to_top=False
+rows=29
+criteria brackets=1 ratio brackets=2
+CRIT head='+ src/os/test_deliverable_index.py' body='14 判据'
+RATIO head='src/os/test_battery_shard.py' body='AC-BSGB1..8 守护套件·8/8'
+RATIO head='+ qa/battery-shard-suite-R2798.log' body='1000B·19 行·sha256 d1c4ee2051a932db·负控 3/3 CONFIRMED'
+registry rows=723
+DECL src/os/test_deliverable_index.py = 18
+DECL src/os/test_battery_shard.py = 32
+claim 14 vs declared 18 -> STALE
+R2798 lines=19
+LOG 'SUITE PASS 8/8'
+LOG 'VERDICT CONFIRMED controls=3/3'
+8/8 has a named source in the same row=True
+3/3 has a named source in the same row=True
+shipped wide matches=11 note matches=11; rows with deep paths=4; deep matched by shipped=2
+deep criteria claims=1 [('src/os/test_deliverable_index.py', 14, 18)]
+stale would be=1
