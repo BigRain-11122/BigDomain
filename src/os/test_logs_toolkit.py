@@ -695,6 +695,68 @@ def main():
        and cen['body_header_lines'] == 0 and cen['pass'] is True,
        'census canonical fixture header accounting unchanged (AC-CEN1)')
 
+    # (ix) residual mismatch adjudication (AC-CEN4..6, pinned in
+    # src/os/backlog.md R3212 BEFORE this edit). The two pre-existing
+    # declared!=actual residuals are closed on a per-line face, not on a wish
+    # to be green: the annotation stays counted as body, and the appended line
+    # is proven unique so closing the account loses nothing.
+    import logs_toolkit as T9
+    LIVE = os.path.abspath(os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), os.pardir, os.pardir))
+    live_files, live_sections, _hstats = T9.parse_archives(LIVE)
+    b2405 = [l for l in live_sections['R2405']['lines'] if l.strip()]
+    b2907 = [l for l in live_sections['R2907']['lines'] if l.strip()]
+    ok((live_sections['R2405']['declared'], len(b2405)) == (21, 23)
+       and (live_sections['R2907']['declared'], len(b2907)) == (20, 21),
+       'live residuals stay 21/23 and 20/21 (AC-CEN5)')
+    ok(b2405[-2].startswith('# --- 2026-11-03 R2407 repair:')
+       and b2405[-1].startswith('2026-11-03 R2395 closeout disclosures,'
+                                ' measured not guessed:')
+       and b2907[-1].startswith('R2893 tokens: local=~23k api=0'),
+       'each residual is one annotation plus one appended round line (AC-CEN5)')
+    # the annotation is STILL body: dropping it would read 22/21 and still
+    # mismatch, so the counting definition is left alone on purpose.
+    ok(sum(1 for l in b2405 if l.startswith('# --- ')) == 1
+       and len(b2405) - 1 == 22,
+       'annotation counted as body, exclusion would still mismatch (AC-CEN5)')
+    hay = []
+    for _month, _finfo in sorted(live_files.items()):
+        with open(_finfo['path'], 'rb') as _fh:
+            hay.append(_fh.read().decode('utf-8'))
+    with open(os.path.join(LIVE, 'src', 'os', 'state.json'),
+              encoding='utf-8') as _fh:
+        _live_items = json.load(_fh)['log']
+    # a RECORD is a line that begins with the text; a quotation inside a later
+    # round's prose is not a second record. MY OWN ARM WENT RED FIRST: a bare
+    # substring count read 2 because the R3212 measured line quotes both
+    # markers, so the arm was re-expressed by shape rather than loosened.
+    _marks = (b2405[-1][:60], b2907[-1][:60])
+    _arc = [sum(1 for _t in hay for _ln in _t.split('\n')
+                if _ln.strip().startswith(_m)) for _m in _marks]
+    _live = [sum(1 for _l in _live_items if _l.startswith(_m))
+             for _m in _marks]
+    ok(_arc == [1, 1] and _live == [0, 0],
+       'each appended line is one archive record and no live item (AC-CEN5)')
+    rc, out, _ = run(LIVE, 'census')
+    live_cen = json.loads(out)
+    rounds_seen = set(e['round'] for e in live_cen['section_line_mismatches'])
+    ok(rounds_seen == {'R1317', 'R1823', 'R2405', 'R2907'},
+       'measured residual set is the four known rounds (AC-CEN6)')
+    kpath = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         'census_known_findings.json')
+    with open(kpath, encoding='utf-8') as _fh:
+        krows = {e['round']: e.get('reason', '')
+                 for e in json.load(_fh)['section_line_mismatches']}
+    ok(all(k in krows and krows[k] for k in rounds_seen)
+       and all(n in krows['R2405'] for n in ('21', '23', 'R2395', 'R2407'))
+       and all(n in krows['R2907'] for n in ('20', '21', 'R2893', '590400e7')),
+       'every residual adjudicated with numbers and source (AC-CEN6)')
+    ok(rc == 0 and live_cen['pass'] is True
+       and live_cen['unknown_mismatch_count'] == 0
+       and len(live_cen['section_line_mismatches']) == 4
+       and all(e['adjudicated'] for e in live_cen['section_line_mismatches']),
+       'live census green with all four findings visible (AC-CEN4)')
+
     # ---- closeout EOL repair (AC-EO1..EO6, R1705 slice) ----
     # fresh canonical PS-layout state (CRLF) so this section is self-contained
     build_ps_state(root, ['2026-10-10 R1705 eol case line one D-20261010-01',

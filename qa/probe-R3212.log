@@ -1,0 +1,50 @@
+======================================================================
+R2405 file= 2026-11 declared= 21 raw_lines= 23 nonempty= 23
+HEADER: # --- R2405 fold append (2026-11-03, 21 lines verbatim: R2393..R2395 blocks, fold R651 mid-window, pre-op sha16 633b1c5d4fcfb294)
+  [01] len=678   Fold R2402: 22 early log items moved verbatim into the monthly archive at a true round-block boundary (the cut lands on R2392's own ledger line, so no round block is split); tokens covered AC-ACSP1,AC
+  [02] len=726   2026-11-03 R2393 verification-then-product window (five-silence scan clean at open: empty git status at HEAD 3535cc1a, no .git/index.lock; LEDGER atbd_lines=0 unreplied_groups=0; DEC rows=131 tokens=8
+  [03] len=1041  2026-11-03 R2393 repair one, measured not guessed: state.json carried the R2392 ledger item as "2026-11-02 R2392 tokens: local=~38k ..." while ledger_lines owns LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens:,
+  [04] len=489   2026-11-03 R2393 export re-derivation after the repair, measured: check_export_consistency read FAIL self_drive.log_lines_in_window stored=8 recomputed=7, because the counter counts state log items ca
+  [05] len=1407  2026-11-03 R2393 PRODUCT: claimed state/queue/tech.md:451 prefix AC-RCDF1 (refused_check_declaration_face), criteria pinned in that row at R2392 BEFORE any code. SHIPPED src/os/refused_check_declarati
+  [06] len=785   2026-11-03 R2393 battery carried, measured leg by leg, zero green claim: leg 1 qa/reconcile-all-R2393.log read 514/519 suites with 6 failed assertions (the two repaired defects); leg 2 qa/reconcile-al
+  [07] len=445   2026-11-03 R2393 self-heal check: BigDomain-OSLoop is still registered with LogonType=InteractiveToken, which the 2026-09-29 machine law forbids for every lane task; the registration script already pa
+  [08] len=791   R2393 tokens: local=~96k api=0 api_reason=verification-then-product window dominated by three full battery legs (leg 1 red on two real birth-site defects, leg 2 red only on a derived counter, leg 3 ab
+  [09] len=725   2026-11-03 R2394 verification-only window (five-silence scan at open: empty git status at HEAD ef8bce07-ish, no .git/index.lock; LEDGER @BigDomain unreplied=0; DEC tokens 86 -> 92 with six new rows D-
+  [10] len=872   2026-11-03 R2394 battery leg 1 red on ONE real data defect, not code: qa/reconcile-all-R2394b.log read 519/520 suites with the only red being os-residue-triage AC-RTR6, whose live reading was RESIDUE 
+  [11] len=1134  2026-11-03 R2394 battery leg 2 GREEN: qa/reconcile-all-R2394-retry.log read RUNNER PASS (520/520 suites green, reconcile controls 7/7, 1007.7s) with criteria total 4096 exactly as the registry expects
+  [12] len=667   2026-11-03 R2394 product face, stated honestly: NO new product module shipped this window. The CLAIM-FIRST battery owned the window (two legs at 1007.7s and roughly 14 minutes each) and its single red
+  [13] len=638   2026-11-03 R2394 process note, disclosed rather than buried: the first battery invocation passed --help and the runner read it as an evidence PATH, writing a 13859B file literally named --help in the 
+  [14] len=458   2026-11-03 R2394 self-heal check: BigDomain-OSLoop is still registered with LogonType=InteractiveToken (state=Ready), which the 2026-09-29 machine law forbids for every lane task; the registration scr
+  [15] len=611   R2394 tokens: local=~72k api=0 api_reason=verification-only window where the carried battery ran twice on the committed tree (leg 1 red on one untriaged residue round, leg 2 green 520/520 plus control
+  [16] len=979   2026-11-03 R2395 product window (five-silence scan at open: empty git status, no .git/index.lock; LEDGER atbd_lines=0 unreplied_groups=0; DEC rows=140 tokens baseline 92 new=6, and those six - D-20261
+  [17] len=1048  2026-11-03 R2395 product face, the row the reader named: CLAIMED state/queue/tech.md:462 prefix AC-RTH1 (runner_suite_timeout_headroom), whose AC-RTH1..AC-RTH6 were pinned INSIDE that row at R2393 BEF
+  [18] len=1225  2026-11-03 R2395 evidence and board: SUITE PASS 6/6 twice with an identical criterion digest CB10BFECDEC50D24 plus three adjacent suites green (qa/runner-suite-timeout-headroom-R2395.log, 1276B, legs=
+  [19] len=1701  2026-11-03 R2395 honest disclosures: (a) two of this window own suite legs were RED on their first run and both reds were this window own fixtures, never the module: AC-RTH1's patch predicate matched 
+  [20] len=448   2026-11-03 R2395 self-heal check: BigDomain-OSLoop is still registered with LogonType=InteractiveToken, which the 2026-09-29 machine law forbids for every lane task; src/os/register_loop_task.ps1 alre
+  [21] len=640   R2395 tokens: local=~22k api=0 api_reason=product window - one headroom reading and its six-criteria suite written to criteria pinned two rounds earlier, one AST registry reader after the real tree pr
+  [22] len=184   # --- 2026-11-03 R2407 repair: the R2395 closeout disclosure line that the R2405 fold left behind (appended verbatim here, then removed from the live log so the round is not split) ---
+  [23] len=1461  2026-11-03 R2395 closeout disclosures, measured not guessed: (a) the fold ran TWICE in this window because the first execute pass then tried a re-pin with a flag the shipped CLI does not take (--decla
+======================================================================
+R2907 file= 2026-11 declared= 20 raw_lines= 21 nonempty= 21
+HEADER: # --- R2907 fold append (2026-11-18, 20 lines verbatim: oldest log items (prefix window), fold R5 mid-window, pre-op sha16 4335e8ea0d6f9c73)
+  [01] len=540   2026-11-18 R2903 PRODUCT+ENGINEERING: R2902 item (2) is CLOSED at the half that was actually wrong - the chain driver own docstring said it buys two products at the same price while the SAME run reads
+  [02] len=762   R2903 measured: AC-FYCF1 doctored arms read False (an injected at-the-same-price line, and a copy whose heading token is replaced) while the live docstring reads True, so the criterion is measured rat
+  [03] len=507     R2904 GROUP SCAN (content-addressed, read before any work): the ledger face carried zero @BigDomain lines; the decisions face read 122 unique D-/C- tokens with new=0, so no decision arrived; the gro
+  [04] len=1370    R2904 honest disclosures: (a) ZERO new payment capability - a buyer still cannot pay, because no merchant id, server, domain, filing+ICP or miniprogram appid+secret has arrived, and a truthful sente
+  [05] len=467   R2903 tokens: local=~9k api=0 api_reason=one five-still scan (ledger, decision tokens, orders mtime, benchmarks date, git status), one board and state read, one tool and one suite read, one docstring 
+  [06] len=1149  2026-11-18 R2894 PRODUCT+ENGINEERING: R2893 item (1) is CLOSED, and by MEASUREMENT rather than by a cap: the probe-seam cliff was never a slow suite, it was an operator-chosen leg cap, and the SAME su
+  [07] len=696   R2894 GROUP SCAN (content-addressed, read before any work): the shipped scanner read atbd_lines=0 unreplied_groups=0 so no @BigDomain ledger dispatch row is owed; the decisions face read rows=290 toke
+  [08] len=1276  R2894 honest disclosures: (a) ZERO new payment capability - a buyer still cannot pay, because no merchant id, server, domain, filing+ICP or miniprogram appid+secret has arrived, and a closed engineeri
+  [09] len=369   R2894 tokens: local=~9k api=0 api_reason=one five-still scan through the shipped scanner, one board/state read, one registry-row and one reader read to name the cost object, one two-arm measurement un
+  [10] len=1324  fold R2892 window 1..80 moves 80 whole-round lines into the monthly archive; every id they carry is named here so the token law sees no orphan: AC-AMAF2 AC-AMBD1 AC-AMFL7 AC-AMJ1 AC-AMJ10 AC-AMJ9 AC-A
+  [11] len=360   fold 4 of log items 11..36 (R2888, R2889, R2890, R2891 whole rounds): the four windows whose narrative had already been superseded by later closeouts are moved verbatim to the monthly archive, and eve
+  [12] len=572   2026-11-18 R2892 PRODUCT+ENGINEERING: the R2891 item (5) gap is CLOSED - a leg's header registry pair can now be adjudicated instead of eyeballed, and the discriminator is TIME rather than equality: t
+  [13] len=669   R2892 measured, red first: the naive law an equality check would implement reads REJECT on a legitimately stale header (qa/leg-header-redfirst-R2892.log, rc=0, 764B) while the shipped time law reads D
+  [14] len=1011  R2892 suite and honest scope: src/os/test_leg_header_check.py pins AC-LHC1..AC-LHC6 and reads SUITE PASS 6/6 twice byte-identical (qa/leg-header-check-R2892-a.log and -b.log, rc=0 both) - equal header
+  [15] len=716   R2892 DEFECT FOUND INSTEAD OF THE BOOKKEEPING THE BOARD ASKED FOR: R2891 item (3) ordered a fold before the next append, and the shipped vehicle REFUSES it - state_fold_run.py enforces MIN_LIVE_LINES=
+  [16] len=1510  R2892 honest disclosures: (a) ZERO new payment capability - a buyer still cannot pay, because no merchant id, server, domain, filing+ICP or miniprogram appid+secret has arrived; (b) what this round bo
+  [17] len=486   R2892 tokens: local=~19k api=0 api_reason=one five-still scan through the shipped scanner, one remaining-vs-run set computation over 286 suites, one sibling tool and one sibling suite read for dialect
+  [18] len=951   R2892 CLAIM MEASURED INSTEAD OF INHERITED: the in-flight leg's three reds (os-status-export-writer-dialect-wire rc=1, os-queue-floor-export-face rc=1, os-export-consistency-queue-face rc=2) had been c
+  [19] len=1083  R2892 CORRECTION OF MY OWN FINDING, landed the same round: the FOLD DEADLOCK this round reported is RETRACTED - it was not a deadlock, it was one badly chosen candidate. The window had been pinned at 
+  [20] len=1372  2026-11-18 R2893 LEG CLOSED AND ADJUDICATED, TWO REGISTRY ROWS LANDED: the R2890 family leg closed at 02:37 (286/286 rows, rc=2, 4 reds) and the two tools this board built gave the verdict instead of 
+  [21] len=402   R2893 tokens: local=~23k api=0 api_reason=one five-still scan, one leg close read plus two adjudicator runs, one four-red re-run with its argument form corrected from measurement, one registry append 

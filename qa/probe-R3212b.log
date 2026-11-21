@@ -1,0 +1,7 @@
+commits touching logs/state-log-archive-2026-11.md: 168
+first    f467891c 2026-11-08 Ship the fold face the waterline gate could only report on, and close the R2522 layout def  {'R2405': (21, 23), 'R2907': None}
+CHANGE at d820a753 2026-11-18 R2907b fold state.json to the 16-space canonical (79858->64091B, FOLD-CLEAR), run the firs  {'R2405': (21, 23), 'R2907': (20, 20)}
+        was              {'R2405': (21, 23), 'R2907': None}
+CHANGE at 590400e7 2026-11-18 R2912 run the family leg that never ran on this tree: six ledger reds traced to one orphan  {'R2405': (21, 23), 'R2907': (20, 21)}
+        was              {'R2405': (21, 23), 'R2907': (20, 20)}
+HEAD     {'R2405': (21, 23), 'R2907': (20, 21)}

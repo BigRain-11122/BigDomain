@@ -10,6 +10,16 @@
       "round": "R1823",
       "reason": "R1808 window line (fold R495 window, slice 7:42) embeds one literal U+000A inside the AC-BK4 malformed-window probe form '2026-10\\n' quoted verbatim in the log line (R1748 trailing-newline bad-window family); the archive write therefore splits that one logical line into two physical lines (declared 36, actual 37). Content byte-preserved, zero data loss - the newline is quoted probe payload, not a record boundary. Same class as R1317 (archive-write physical split of one logical line). Evidence: qa/reorg-R1823.log section 5 archive split-point probe.",
       "adjudicated": "2026-10-11 R1823"
+    },
+    {
+      "round": "R2405",
+      "reason": "Declared 21 / actual 23: the fold wrote 21 payload lines (R2402 + R2393 + R2394 + R2395 blocks) and a LATER repair appended two lines to the same folded section - one date annotation '# --- 2026-11-03 R2407 repair: ...' and the one R2395 line the fold had left behind ('2026-11-03 R2395 closeout disclosures, measured not guessed:', 1461 chars), which the annotation itself says was appended verbatim here and removed from the live log so the round is not split. Post-fold repair append to a folded section, same content-preservation class as R1317/R1823 (a split round block, one line restored). Content byte-preserved, zero data loss, zero duplicate (the appended line occurs exactly once across all archives and the live log). Evidence: the append predates the file's first commit (f467891c 2026-11-08 already reads 21/23), so the in-archive same-window annotation is the record; per-line face and uniqueness counted in R3212 - qa/probe-R3212.log, qa/probe-R3212b.log, qa/probe-R3212d.log, pinned by AC-CEN5.",
+      "adjudicated": "2026-11-22 R3212"
+    },
+    {
+      "round": "R2907",
+      "reason": "Declared 20 / actual 21: the fold wrote 20 payload lines and one line of the SAME round block was left in the live log - 'R2893 tokens: local=~23k ...' - which the R2912 family leg appended into this folded section. Measured by replaying every committed version through the shipped parser: at its fold commit d820a753 the section read declared 20 / actual 20, and at 590400e7 (R2912) it reads 20 / 21, with git show naming that single added line and nothing else. Post-fold repair append, content byte-preserved, zero data loss, zero duplicate (exactly one occurrence across all archives and the live log). Evidence: git show 590400e7 vs d820a753 section diff - qa/probe-R3212b.log, qa/probe-R3212c.log, pinned by AC-CEN5.",
+      "adjudicated": "2026-11-22 R3212"
     }
   ],
   "dangling_pointers": [

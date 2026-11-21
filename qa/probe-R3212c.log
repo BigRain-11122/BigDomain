@@ -1,0 +1,10 @@
+R2907 section lines: at d820a753 =20  at 590400e7 =21
+--- 
++++ 
+@@ -20,0 +21 @@
++R2893 tokens: local=~23k api=0 api_reason=one five-still scan, one leg close read plus two adjudicator runs, one four-red re-run with its argument form corrected from measurement, one registry append and one matrix regeneration plus check, two direct suite runs, one two-row battery leg, one five-suite regression leg, and the board/state/export closeout; zero cloud calls and zero external API touc
+
+--- R2405 at the commit that introduced the November archive ---
+R2405 section lines at f467891c = 21
+  [20] 2026-11-03 R2395 self-heal check: BigDomain-OSLoop is still registered with LogonType=InteractiveToken, which the 2026-09-29 machine law forbids for every lane task; src/os/register_loop_task.ps1 already passes an explic
+  [21] R2395 tokens: local=~22k api=0 api_reason=product window - one headroom reading and its six-criteria suite written to criteria pinned two rounds earlier, one AST registry reader after the real tree proved the table is no
