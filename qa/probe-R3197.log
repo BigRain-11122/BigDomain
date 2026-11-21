@@ -1,0 +1,13 @@
+Q0 copy keys=13 required=13
+Q0 healthy html=6834B sha16=30527da5ec5dc7e2 json=13015B sha16=76e42600895a4dc5
+Q1a raised RuntimeError: injected render_html failure
+Q1a old html was 1800B, now size=0B text='' stale_page_lost=True
+Q1a json after failure exists=True size=14
+Q1b raised RuntimeError: injected render_json failure
+Q1b html exists=True size=6834 json size=0 stale_json_lost=True
+Q1c raised RuntimeError
+Q1c fresh html exists=True size=0 json exists=False
+Q2 cli[html] rc=1 stdout_bytes=0 stderr_lines=15 html_size=0 json_exists=False
+Q2 cli[json] rc=1 stdout_bytes=0 stderr_lines=15 html_size=6834 json_exists=True
+Q3 string-then-replace html sha16=30527da5ec5dc7e2 equal=True json sha16=76e42600895a4dc5 equal=True
+Q4 write_outputs census: [('tools\\ugc_gate_report.py', 2), ('src\\os\\backlog.md', 3), ('src\\os\\state.json', 1), ('src\\sandbox\\ledger\\monthly_faces_preview.py', 3)]

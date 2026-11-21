@@ -1,0 +1,9 @@
+AC-MFR2 determinism html=same json=same
+AC-MFR3 face api_market_months keys=10 months=3 first=None last=None
+AC-MFR3 face api_market_supply_months keys=17 months=3 first=2026-08 last=2026-10
+AC-MFR3 face api_market_claim_months keys=13 months=0 first=None last=None
+AC-MFR3 face api_market_restock_months keys=28 months=3 first=2026-08 last=2026-10
+AC-MFR3 face api_market_discount_months keys=25 months=0 first=None last=None
+AC-MFR1/4/5 contract+empty+compliance html_bytes=6834 json_bytes=13015
+AC-MFR7 snapshot size=106496 sha16=8b835e8514ed5eb0 unchanged=True
+VERIFY PASS criteria=AC-MFR1..AC-MFR8 (MFR6 index entry and MFR8 hygiene checked by the caller)

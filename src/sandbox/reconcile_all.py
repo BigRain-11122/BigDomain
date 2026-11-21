@@ -3477,8 +3477,12 @@ SUITES = [
     # refused by name when missing, the CLI refusal writes nothing, the
     # healthy bytes stay identical, the shape law and hygiene hold, and
     # the last arm weighs the declared count against what was recorded.
+    # R3196 added the read-entry criteria AC-MFPR1..AC-MFPR5 and R3197 the
+    # write-face criteria AC-MFPW1..AC-MFPW6 (both PIN-first on the same
+    # board): three unreadable copy shapes are refused by name, and a
+    # render-time failure no longer truncates the delivered files.
     ("ledger-monthly-faces-preview", os.path.join(
-        "ledger", "test_monthly_faces_preview.py"), 19),
+        "ledger", "test_monthly_faces_preview.py"), 25),
     # R2102 attention digest on the same report generator: the
     # statement-shaped R2101 page now opens with an ordered operator
     # to-do list derived from the faces (seller inbox debt, sold-out

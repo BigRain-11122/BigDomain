@@ -47,6 +47,16 @@ JSONDecodeError (rc=1, empty stdout, a traceback, and - for the CLI - no
 output file either). All three now answer the same E_MFP_COPY code at
 rc=2 with the underlying reader type named in the detail, where the old
 shapes kept one code per family apart only by prose.
+
+R3197 (AC-MFPW1..AC-MFPW6): a render-time failure no longer damages the
+delivered files. write_outputs used to open each target and render into
+it, so an exception truncated the previous page to zero bytes (measured:
+1800B -> 0B) and left the JSON untouched, or truncated the JSON and left
+a fresh page. Both texts are now rendered before any target is opened,
+each goes to a temp file beside its target, and os.replace is the only
+write to a delivered path. The CLI face is unchanged on purpose: the
+same exception still reaches the caller, so rc and the traceback stay as
+they were - what changed is what is left on disk.
 """
 import argparse
 import hashlib
@@ -355,11 +365,54 @@ def render_json(faces):
                       indent=2) + "\n"
 
 
+def _remove_quietly(path):
+    try:
+        os.remove(path)
+    except OSError:
+        pass
+
+
+def _stage(path, text):
+    """Write text to a temp file beside path; return (temp, path).
+
+    Nothing is written to the delivered path here, so a failure in this
+    step leaves the previous file exactly as it was.
+    """
+    directory = os.path.dirname(os.path.abspath(path))
+    os.makedirs(directory, exist_ok=True)
+    fd, temp = tempfile.mkstemp(prefix=".mfp-write-", dir=directory)
+    os.close(fd)
+    try:
+        with io.open(temp, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(text)
+    except BaseException:
+        _remove_quietly(temp)
+        raise
+    return temp, path
+
+
 def write_outputs(faces, copy, out_html, out_json):
-    with io.open(out_html, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(render_html(copy, faces))
-    with io.open(out_json, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(render_json(faces))
+    """Render both faces fully, then swap them in.
+
+    Until R3197 this opened each target first and rendered into it, so a
+    render-time exception truncated the previous page to zero bytes and
+    left the JSON untouched (or the other way round); a fresh run left a
+    zero-byte page with no JSON at all. Both texts are now built before
+    any target is opened, each goes to a temp file beside its target, and
+    the two swaps are the only writes to the delivered paths.
+    """
+    texts = ((out_html, render_html(copy, faces)),
+             (out_json, render_json(faces)))
+    staged = []
+    try:
+        for path, text in texts:
+            staged.append(_stage(path, text))
+        for temp, path in staged:
+            os.replace(temp, path)
+    finally:
+        for temp, _unused in staged:
+            if os.path.exists(temp):
+                _remove_quietly(temp)
 
 
 def check_identity(faces, problems):

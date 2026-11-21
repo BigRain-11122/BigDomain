@@ -91,7 +91,35 @@ BEFORE this code existed):
   AC-MFPR5 hygiene and wiring self-count (recorded last): the module
     source stays ASCII, the read entry is one definition plus one call
     site, reconcile_all.py carries the label and this file once, and
-    the registry count equals DECLARED equals what this run recorded.
+    the registry count equals DECLARED. (Until R3197 this arm also
+    weighed DECLARED against what this run recorded; that positional
+    half moved to AC-MFPW6 when the suite grew from nineteen criteria
+    to twenty-five - JUDGED-CHANGED, no sentence relaxed.)
+
+R3197 write-face criteria (pre-registered in the same board as a PIN
+row BEFORE this code existed):
+
+  AC-MFPW1 a render-time failure writes nothing: injecting an exception
+    into render_html or render_json, in a world where the targets
+    already hold content and in a world where they do not, leaves the
+    old bytes identical or the targets absent, and no .mfp-write-*
+    temp file behind.
+  AC-MFPW2 two outputs cannot half-write: when the second _stage fails,
+    the first target is not swapped (both texts are staged before any
+    replace), so its previous bytes survive exactly.
+  AC-MFPW3 a replace failure does not truncate the target: with
+    os.replace raising once, the target keeps its previous bytes and
+    the staged temp file is removed.
+  AC-MFPW4 the healthy bytes do not move: in process and through the
+    CLI the page and JSON match the shipped 6834B/13015B byte for byte.
+  AC-MFPW5 the CLI face is unchanged on purpose: an injected render
+    failure still exits 1 with zero stdout bytes and a traceback on
+    stderr, and the target keeps its previous bytes.
+  AC-MFPW6 hygiene and wiring self-count (recorded last): the module
+    source stays ASCII, os.replace appears exactly once, both render
+    calls happen inside write_outputs before the first _stage,
+    reconcile_all.py carries the label and this file once, and the
+    registry count equals DECLARED equals what this run recorded.
 
 Usage: python test_monthly_faces_preview.py
 """
@@ -118,7 +146,7 @@ SUITE_FILE = os.path.abspath(__file__)
 RECONCILE = os.path.join(BASE, "src", "sandbox", "reconcile_all.py")
 MODULE = os.path.join(LEDGER, "monthly_faces_preview.py")
 LABEL = "ledger-monthly-faces-preview"
-DECLARED = 19
+DECLARED = 25
 TEMPS = []
 
 
@@ -673,13 +701,284 @@ def check_read_wiring():
     declared = registry_declared(text)
     total_after = len(RESULTS) + 1
     ok = (ascii_ok and read_sites == 2 and label_hits == 1
-          and file_hits == 1 and declared == DECLARED
-          and total_after == DECLARED)
+          and file_hits == 1 and declared == DECLARED)
     record("AC-MFPR5", ok,
            "module_ascii=%s read_sites=%d label_hits=%d file_hits=%d "
            "declared=%d recorded=%d law=%d"
            % (ascii_ok, read_sites, label_hits, file_hits, declared,
               total_after, DECLARED))
+
+
+def _boom_factory(name):
+    def boom(*_args, **_kwargs):
+        raise RuntimeError("injected %s failure" % name)
+    return boom
+
+
+def _leftovers(directory):
+    return sorted(name for name in os.listdir(directory)
+                  if name.startswith(".mfp-write-"))
+
+
+def _write_target(path, text):
+    with io.open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(text)
+
+
+def check_write_render_failure():
+    """AC-MFPW1: a render-time failure leaves the delivered files alone."""
+    faces = M.collect(temp_root("write-render-world"))
+    copy = M.load_copy()
+    problems = []
+    for attr in ("render_html", "render_json"):
+        for world in ("stale", "fresh"):
+            root = temp_root("write-render-%s-%s" % (attr, world))
+            out_html = os.path.join(root, "page.html")
+            out_json = os.path.join(root, "page.json")
+            stale = ("OLD PAGE " * 100, '{"old": true}\n')
+            if world == "stale":
+                _write_target(out_html, stale[0])
+                _write_target(out_json, stale[1])
+            original = getattr(M, attr)
+            setattr(M, attr, _boom_factory(attr))
+            raised = True
+            try:
+                M.write_outputs(faces, copy, out_html, out_json)
+                raised = False
+            except RuntimeError:
+                pass
+            except Exception as exc:  # noqa: BLE001 - wrong type is a bug
+                problems.append("%s.%s.raised=%s"
+                                % (attr, world, type(exc).__name__))
+                raised = True
+            finally:
+                setattr(M, attr, original)
+            if not raised:
+                problems.append("%s.%s.no-exception" % (attr, world))
+            if world == "stale":
+                for target, text in ((out_html, stale[0]),
+                                     (out_json, stale[1])):
+                    with io.open(target, "r", encoding="utf-8") as fh:
+                        now = fh.read()
+                    if now != text:
+                        problems.append("%s.%s.truncated=%d"
+                                        % (attr, world, len(now)))
+            else:
+                for target in (out_html, out_json):
+                    if os.path.exists(target):
+                        problems.append("%s.%s.stray" % (attr, world))
+            if _leftovers(root):
+                problems.append("%s.%s.temp=%s"
+                                % (attr, world, ",".join(_leftovers(root))))
+    record("AC-MFPW1", not problems,
+           "cases=4 problems=%s" % (",".join(problems) or "none"))
+
+
+def check_write_no_half():
+    """AC-MFPW2: a failure at the second stage does not swap the first."""
+    faces = M.collect(temp_root("write-half-world"))
+    copy = M.load_copy()
+    root = temp_root("write-half")
+    out_html = os.path.join(root, "page.html")
+    out_json = os.path.join(root, "page.json")
+    _write_target(out_html, "OLD PAGE " * 100)
+    _write_target(out_json, '{"old": true}\n')
+    with open(out_html, "rb") as fh:
+        html_before = fh.read()
+    with open(out_json, "rb") as fh:
+        json_before = fh.read()
+    original = M._stage
+    calls = {"n": 0}
+
+    def flaky(path, text):
+        calls["n"] += 1
+        if calls["n"] == 2:
+            raise OSError("injected second stage failure")
+        return original(path, text)
+
+    M._stage = flaky
+    raised = True
+    try:
+        M.write_outputs(faces, copy, out_html, out_json)
+        raised = False
+    except OSError:
+        pass
+    finally:
+        M._stage = original
+    with open(out_html, "rb") as fh:
+        html_after = fh.read()
+    with open(out_json, "rb") as fh:
+        json_after = fh.read()
+    record("AC-MFPW2",
+           raised and html_after == html_before and json_after == json_before
+           and not _leftovers(root),
+           "raised=%s html_kept=%s json_kept=%s temps=%d stages=%d"
+           % (raised, html_after == html_before,
+              json_after == json_before, len(_leftovers(root)),
+              calls["n"]))
+
+
+def check_write_replace_failure():
+    """AC-MFPW3: a replace failure keeps the target bytes and cleans temps."""
+    faces = M.collect(temp_root("write-replace-world"))
+    copy = M.load_copy()
+    root = temp_root("write-replace")
+    out_html = os.path.join(root, "page.html")
+    out_json = os.path.join(root, "page.json")
+    _write_target(out_html, "OLD PAGE " * 100)
+    _write_target(out_json, '{"old": true}\n')
+    with open(out_html, "rb") as fh:
+        html_before = fh.read()
+    with open(out_json, "rb") as fh:
+        json_before = fh.read()
+    original = os.replace
+
+    def refuse(_src, _dst):
+        raise OSError("injected replace failure")
+
+    os.replace = refuse
+    raised = True
+    try:
+        M.write_outputs(faces, copy, out_html, out_json)
+        raised = False
+    except OSError:
+        pass
+    finally:
+        os.replace = original
+    with open(out_html, "rb") as fh:
+        html_after = fh.read()
+    with open(out_json, "rb") as fh:
+        json_after = fh.read()
+    record("AC-MFPW3",
+           raised and html_after == html_before and json_after == json_before
+           and not _leftovers(root),
+           "raised=%s html_kept=%s json_kept=%s temps=%d"
+           % (raised, html_after == html_before,
+              json_after == json_before, len(_leftovers(root))))
+
+
+def check_write_bytes():
+    """AC-MFPW4: the healthy bytes do not move, in process or through the CLI."""
+    faces = M.collect(temp_root("write-bytes-world"))
+    copy = M.load_copy()
+    root = temp_root("write-bytes")
+    out_html = os.path.join(root, "page.html")
+    out_json = os.path.join(root, "page.json")
+    M.write_outputs(faces, copy, out_html, out_json)
+    with open(M.OUT_HTML, "rb") as fh:
+        html_shipped = fh.read()
+    with open(M.OUT_JSON, "rb") as fh:
+        json_shipped = fh.read()
+    with open(out_html, "rb") as fh:
+        html_now = fh.read()
+    with open(out_json, "rb") as fh:
+        json_now = fh.read()
+    cli_root = temp_root("write-bytes-cli")
+    cli_html = os.path.join(cli_root, "page.html")
+    cli_json = os.path.join(cli_root, "page.json")
+    proc = subprocess.run([sys.executable, MODULE, "--out", cli_html,
+                           "--json-out", cli_json], capture_output=True)
+    cli_equal = False
+    if proc.returncode == 0:
+        with open(cli_html, "rb") as fh:
+            cli_html_bytes = fh.read()
+        with open(cli_json, "rb") as fh:
+            cli_json_bytes = fh.read()
+        cli_equal = (cli_html_bytes == html_shipped
+                     and cli_json_bytes == json_shipped)
+    record("AC-MFPW4",
+           html_now == html_shipped and json_now == json_shipped
+           and proc.returncode == 0 and cli_equal,
+           "html_bytes=%d json_bytes=%d inproc_equal=%s cli_equal=%s"
+           % (len(html_shipped), len(json_shipped),
+              html_now == html_shipped and json_now == json_shipped,
+              cli_equal))
+
+
+WRITE_DRIVER = '''import os, sys
+BASE = sys.argv[1]
+sys.path.insert(0, os.path.join(BASE, "src", "sandbox", "ledger"))
+import monthly_faces_preview as M
+which = sys.argv[2]
+if which == "html":
+    M.render_html = lambda *a, **k: (_ for _ in ()).throw(
+        RuntimeError("injected render_html failure"))
+else:
+    M.render_json = lambda *a, **k: (_ for _ in ()).throw(
+        RuntimeError("injected render_json failure"))
+raise SystemExit(M.main(["--out", sys.argv[3], "--json-out", sys.argv[4]]))
+'''
+
+
+def check_write_cli_face():
+    """AC-MFPW5: the CLI face is unchanged on purpose (rc 1 + traceback)."""
+    root = temp_root("write-cli-face")
+    driver = os.path.join(root, "driver.py")
+    _write_target(driver, WRITE_DRIVER)
+    problems = []
+    for which in ("html", "json"):
+        world = temp_root("write-cli-face-" + which)
+        out_html = os.path.join(world, "page.html")
+        out_json = os.path.join(world, "page.json")
+        _write_target(out_html, "OLD PAGE " * 50)
+        _write_target(out_json, '{"old": true}\n')
+        with open(out_html, "rb") as fh:
+            html_before = fh.read()
+        with open(out_json, "rb") as fh:
+            json_before = fh.read()
+        proc = subprocess.run([sys.executable, driver, BASE, which,
+                               out_html, out_json], capture_output=True)
+        with open(out_html, "rb") as fh:
+            html_after = fh.read()
+        with open(out_json, "rb") as fh:
+            json_after = fh.read()
+        if proc.returncode != 1:
+            problems.append("%s.rc=%d" % (which, proc.returncode))
+        if proc.stdout != b"":
+            problems.append("%s.stdout=%d" % (which, len(proc.stdout)))
+        if b"Traceback" not in proc.stderr:
+            problems.append("%s.no-traceback" % which)
+        if html_after != html_before or json_after != json_before:
+            problems.append("%s.bytes-moved" % which)
+        if _leftovers(world):
+            problems.append("%s.temp" % which)
+    record("AC-MFPW5", not problems,
+           "cases=2 problems=%s" % (",".join(problems) or "none"))
+
+
+def check_write_wiring():
+    with open(MODULE, "rb") as fh:
+        raw = fh.read()
+    try:
+        raw.decode("ascii")
+        ascii_ok = True
+    except UnicodeDecodeError:
+        ascii_ok = False
+    with io.open(MODULE, "r", encoding="utf-8") as fh:
+        source = fh.read()
+    replace_sites = source.count("os.replace(")
+    body_start = source.find("def write_outputs(")
+    body = source[body_start:] if body_start >= 0 else ""
+    render_at = body.find("render_html(")
+    json_at = body.find("render_json(")
+    stage_at = body.find("_stage(")
+    ordered = (body_start >= 0 and render_at >= 0 and json_at >= 0
+               and stage_at >= 0 and render_at < stage_at
+               and json_at < stage_at)
+    with io.open(RECONCILE, "r", encoding="utf-8") as fh:
+        text = fh.read()
+    label_hits = text.count('"%s"' % LABEL)
+    file_hits = text.count("test_monthly_faces_preview.py")
+    declared = registry_declared(text)
+    total_after = len(RESULTS) + 1
+    ok = (ascii_ok and replace_sites == 1 and ordered
+          and label_hits == 1 and file_hits == 1 and declared == DECLARED
+          and total_after == DECLARED)
+    record("AC-MFPW6", ok,
+           "module_ascii=%s replace_sites=%d render_before_stage=%s "
+           "label_hits=%d file_hits=%d declared=%d recorded=%d law=%d"
+           % (ascii_ok, replace_sites, ordered, label_hits, file_hits,
+              declared, total_after, DECLARED))
 
 
 def main():
@@ -704,6 +1003,12 @@ def main():
         check_read_bytes()
         check_read_shape_kept()
         check_read_wiring()
+        check_write_render_failure()
+        check_write_no_half()
+        check_write_replace_failure()
+        check_write_bytes()
+        check_write_cli_face()
+        check_write_wiring()
     finally:
         for path in TEMPS:
             shutil.rmtree(path, ignore_errors=True)
