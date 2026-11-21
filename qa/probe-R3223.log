@@ -1,0 +1,37 @@
+python : [ WARN:0@0.334] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallback
+ed to CV_8U.
+所在位置 行:1 字符: 1
++ python tmp/probe_R3223.py > tmp/probe_R3223.log 2>&1; Write-Output "r ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([ WARN:0@0.334]...acked to CV_8U.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Q1a placeholder names for the status card:
+  __SD30_KPIS__          in_source=True
+  __SD30_HB__            in_source=True
+  __SD30_AGE__           in_source=True
+  __SD30_CORPUS__        in_source=True
+  __SD30_OUTS_AGE__      in_source=True
+  __SD30_CHAIN__         in_source=False
+Q1b call sites in source:
+  heartbeat_card(      count=2
+  face_age_card(       count=2
+  corpus_card(         count=2
+  outs_age_card(       count=2
+  chain_card(          count=0
+Q1c source mentions of the chain block:
+  source_lines_mentioning_chain=34 [460, 604, 873, 1061, 1254, 1452, 1747, 2088, 2404, 2757]
+Q1d live export chain block: null
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+Q2a page bytes=189139 lines=837
+Q2b page mentions CHAIN upper=0 lower=20
+Q2c block_present=False values_visible_on_page=False
+Q3 closeout choice: option 1 + alert row (pre-registered in the PIN row)
+Q3 verdict: CHAIN-INVISIBLE
+HONEST: live ledger absent, so live readings are rows=0 broken=0;
+HONEST: the broken=1 arm must be measured on a private fixture world.

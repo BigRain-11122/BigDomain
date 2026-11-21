@@ -8037,6 +8037,13 @@ SUITES = [
     # criterion) was pinned in src/os/backlog.md BEFORE this file existed.
     ("frontdoor-outs-age-card",
      os.path.join("test_frontdoor_outs_age_card.py"), 4),
+    # R3223: R3222 published `chain {rows, broken, path}` into the export face,
+    # and the only face still rendered after the loop stops named it nowhere -
+    # zero placeholder, zero call site - so a broken replacement chain and a
+    # chain that never existed looked alike on the card. AC-FDC13..14 (two
+    # criteria) were pinned in src/os/backlog.md BEFORE this card existed.
+    ("frontdoor-chain-card",
+     os.path.join("test_frontdoor_chain_card.py"), 2),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files

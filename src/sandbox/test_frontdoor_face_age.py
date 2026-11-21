@@ -181,7 +181,15 @@ def main():
         bad.append("placeholder-missing")
     if "sd30_age = face_age_card(" not in text:
         bad.append("render-not-wired")
-    if "sd30_age = \"\"" not in text:
+    # R3223 measured this arm red on a clean HEAD tree: a later round folded the
+    # three card resets into one chained assignment
+    # (sd30_hb = sd30_age = sd30_corpus = ""), so the old literal stopped
+    # matching while the absent branch still resets sd30_age. The criterion is
+    # unchanged - the reset must be there - so the chained forms are accepted by
+    # name; nothing about the age reading itself is relaxed.
+    if ("sd30_age = \"\"" not in text
+            and "sd30_age = sd30_corpus = \"\"" not in text
+            and "sd30_hb = sd30_age = sd30_corpus = \"\"" not in text):
         bad.append("absent-branch-not-wired")
     try:
         slice_text = card_slice(text)

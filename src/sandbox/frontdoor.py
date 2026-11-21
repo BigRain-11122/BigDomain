@@ -5952,6 +5952,42 @@ def outs_age_card(face):
     return "<p class=kv>%s</p>" % esc(line)
 
 
+def chain_card(block):
+    """Render the published replacement-chain reading. Consumption only.
+
+    R3223 measured the hole: R3222 published `chain {rows, broken, path}` into
+    docs/status-export.json, and the only face still rendered after the loop
+    stops did not name it - zero placeholder, zero call site - so a broken
+    replacement chain and a chain that never existed looked alike on the card.
+    This is a pure consumption face: it never re-reads the ledger, never
+    re-derives `broken`, and an absent block prints a named absence rather than
+    `rows=0`, because a fabricated zero would read as a measured empty chain.
+    """
+    if not isinstance(block, dict) or not block:
+        return ("<p class=kv>CHAIN block absent from the export face "
+                "(honest absence, not a measured zero)</p>")
+
+    # Shape defects print no numbers at all: `rows=0` on a block whose counts
+    # are unreadable would read as a measurement the face does not have.
+    rows = block.get("rows")
+    broken = block.get("broken")
+    path = block.get("path")
+    for value in (rows, broken):
+        if not isinstance(value, int) or isinstance(value, bool):
+            return ("<p class=kv>CHAIN block is malformed (counts not "
+                    "integers) - not a reading</p>")
+    if not isinstance(path, str) or not path.strip():
+        return ("<p class=kv>CHAIN block is malformed (path missing) "
+                "- not a reading</p>")
+
+    line = "CHAIN rows=%d broken=%d path=%s" % (rows, broken, path)
+    if broken > 0:
+        return ("<p class=kv>%s</p><p class=fail>CHAIN ALERT broken=%d "
+                "(a replacement record does not join the previous line)</p>"
+                % (esc(line), broken))
+    return "<p class=kv>%s</p>" % esc(line)
+
+
 def face_age_card(reading):
     """Render the gate's own reading of the export face. Consumption only.
 
@@ -7795,6 +7831,11 @@ def render():
         # R3142: the artifact list's derived age gets its one live consumer,
         # from the data file's own block - never re-walked here.
         sd30_outs_age = outs_age_card(_cf if isinstance(_cf, dict) else None)
+        # R3223: the published replacement-chain reading gets its one live
+        # consumer. The block sits at the top level of the export (not under
+        # ceo_face), so it is read from the file's own member and never
+        # re-derived here.
+        sd30_chain = chain_card(sd30.get("chain"))
         sd30_sd_html = esc(sd30_sd_txt)
         sd30_hard = esc(
             "structural law (R1223 pre-registered AC-FD30a..f): "
@@ -7815,6 +7856,7 @@ def render():
         sd30_kpis = sd30_do_html = sd30_ceolines = ""
         sd30_hb = sd30_age = sd30_corpus = ""
         sd30_outs_age = ""
+        sd30_chain = ""
         sd30_sd_html = sd30_hard = ""
     if sd30_err:
         sd30_kpis = ("<p class=fail>STATUS-EXPORT READ FAILED "
@@ -8550,6 +8592,7 @@ __SD30_HB__
 __SD30_AGE__
 __SD30_CORPUS__
 __SD30_OUTS_AGE__
+__SD30_CHAIN__
 <p class=kv>__SD30_SD__</p>
 <p class=kv>__SD30_HARD__</p>
 </div>
@@ -8835,6 +8878,7 @@ __PAYWARN__</footer>
         "__SD30_AGE__": sd30_age,
         "__SD30_CORPUS__": sd30_corpus,
         "__SD30_OUTS_AGE__": sd30_outs_age,
+        "__SD30_CHAIN__": sd30_chain,
         "__SD30_SD__": sd30_sd_html,
         "__SD30_HARD__": sd30_hard,
         "__M1_TITLE__": esc(m1["card_title"]),
