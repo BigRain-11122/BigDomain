@@ -1,0 +1,129 @@
+{
+ "rows": [
+  {
+   "arm": "txt-archive",
+   "archive": "state-log-archive-2026-11.txt",
+   "before": {
+    "state_bytes": 6005,
+    "state_sha8": "664a77a5",
+    "archive_bytes": {}
+   },
+   "raised": "E_FLR_ARCHIVE_NAME",
+   "detail": "state-log-archive-2026-11.txt (the coverage reader enumerates state-log-archive-*.md only)",
+   "after": {
+    "state_bytes": 6005,
+    "state_sha8": "664a77a5",
+    "archive_bytes": {}
+   },
+   "state_written": false,
+   "check_verdict": "FOLD-CLEAR",
+   "check_bytes": 6005
+  },
+  {
+   "arm": "upper-MD",
+   "archive": "state-log-archive-2026-11.MD",
+   "before": {
+    "state_bytes": 6005,
+    "state_sha8": "664a77a5",
+    "archive_bytes": {}
+   },
+   "raised": "E_FLR_ARCHIVE_NAME",
+   "detail": "state-log-archive-2026-11.MD (the coverage reader enumerates state-log-archive-*.md only)",
+   "after": {
+    "state_bytes": 6005,
+    "state_sha8": "664a77a5",
+    "archive_bytes": {}
+   },
+   "state_written": false,
+   "check_verdict": "FOLD-CLEAR",
+   "check_bytes": 6005
+  },
+  {
+   "arm": "md-archive",
+   "archive": "state-log-archive-2026-07.md",
+   "before": {
+    "state_bytes": 6005,
+    "state_sha8": "664a77a5",
+    "archive_bytes": {}
+   },
+   "raised": null,
+   "verdict": "CLEAR",
+   "archive_verified": true,
+   "layout_agree": true,
+   "ledger_before": 40,
+   "ledger_after": 41,
+   "after": {
+    "state_bytes": 3170,
+    "state_sha8": "a8df0ee5",
+    "archive_bytes": {
+     "state-log-archive-2026-07.md": 1747,
+     "state-preop-R999.bak": 6005
+    }
+   },
+   "state_written": true,
+   "check_verdict": "FOLD-CLEAR",
+   "check_bytes": 3170
+  },
+  {
+   "arm": "poison-sibling",
+   "archive": "state-log-archive-2026-08.md",
+   "before": {
+    "state_bytes": 6005,
+    "state_sha8": "664a77a5",
+    "archive_bytes": {}
+   },
+   "raised": "E_FLR_ARCHIVE_UNREADABLE",
+   "detail": "C:\\Users\\sjs20\\AppData\\Local\\Temp\\probe3186-poison-sibling-vh2kygcy\\logs\\state-log-archive-2025-01.md is not valid utf-8: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte",
+   "after": {
+    "state_bytes": 6005,
+    "state_sha8": "664a77a5",
+    "archive_bytes": {
+     "state-log-archive-2025-01.md": 20
+    }
+   },
+   "state_written": false,
+   "check_verdict": "FOLD-CLEAR",
+   "check_bytes": 6005
+  },
+  {
+   "arm": "no-prefix",
+   "archive": "fold-2026-09.md",
+   "before": {
+    "state_bytes": 6005,
+    "state_sha8": "664a77a5",
+    "archive_bytes": {}
+   },
+   "raised": "E_FLR_ARCHIVE_NAME",
+   "detail": "fold-2026-09.md (the coverage reader enumerates state-log-archive-*.md only)",
+   "after": {
+    "state_bytes": 6005,
+    "state_sha8": "664a77a5",
+    "archive_bytes": {}
+   },
+   "state_written": false,
+   "check_verdict": "FOLD-CLEAR",
+   "check_bytes": 6005
+  }
+ ],
+ "cli": [
+  {
+   "arm": "cli-txt",
+   "rc": 2,
+   "stdout": "E_FLR_ARCHIVE_NAME state-log-archive-2026-11.txt (the coverage reader enumerates state-log-archive-*.md only)",
+   "logs": [],
+   "state_exists": true
+  },
+  {
+   "arm": "cli-md",
+   "rc": 0,
+   "stdout": "STATE FOLD RUN round=R999 fold=1 mode=execute verdict=CLEAR window=1..40 lines=40 live 80->41 bytes 6005->3148 margin=75352 tokens=0 ok=True archive=VERIFIED layout=AGREE",
+   "logs": [
+    "state-log-archive-2026-07.md",
+    "state-preop-R999.bak"
+   ],
+   "state_exists": true
+  }
+ ],
+ "reader_prefix": "state-log-archive-",
+ "reader_suffix": ".md"
+}

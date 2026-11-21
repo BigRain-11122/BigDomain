@@ -243,6 +243,46 @@ def check_archive_path(archive_path, root):
             "archive %s is not inside %s" % (archive_path, logs_dir))
 
 
+def check_archive_name(archive_path):
+    """Refuse an archive the ledger coverage reader never enumerates (AC-SUM8).
+
+    R3186 measured the hole AC-SUM7 leaves open: a fold into logs/<name>.txt
+    (or .MD) passed every pre-gate, wrote backup + archive + state, and only
+    then failed E_SFOLD_LEDGER_LOSS 40 -> 21 - because `LL.load_archive_lines`
+    enumerates ARCHIVE_PREFIX*ARCHIVE_SUFFIX only, so the very file the fold
+    just wrote was invisible to the proof. The name is statically checkable
+    before any byte, so it is refused here instead of proved after the write.
+    """
+    name = os.path.basename(archive_path)
+    if not (name.startswith(LL.ARCHIVE_PREFIX)
+            and name.endswith(LL.ARCHIVE_SUFFIX)):
+        raise FoldRunError(
+            "E_FLR_ARCHIVE_NAME",
+            "%s (the coverage reader enumerates %s*%s only)"
+            % (name, LL.ARCHIVE_PREFIX, LL.ARCHIVE_SUFFIX))
+
+
+def check_archive_set(root):
+    """Refuse to fold while any archive the proof must read is unreadable.
+
+    R3186 measured the second legal-entry route: one sibling archive that
+    `load_archive` cannot decode makes `ledger_coverage` swallow the exception
+    and read zero archived lines, so the post-write set comparison collapses
+    (40 -> 21) after the fold landed. A proof whose reader is blind is not a
+    proof, so the read is done here, before the plan.
+    """
+    logs_dir = os.path.join(root, "logs")
+    try:
+        paths = LL.archive_files(logs_dir)
+    except LL.LedgerLineError as exc:
+        raise FoldRunError("E_FLR_ARCHIVE_UNREADABLE", exc.detail)
+    for path in paths:
+        try:
+            LL.load_archive(path)
+        except LL.LedgerLineError as exc:
+            raise FoldRunError("E_FLR_ARCHIVE_UNREADABLE", exc.detail)
+
+
 def check_summary_shape(summary, archive_path=None):
     """Refuse a summary the reader cannot recognise, or one that misnames
     the archive it is about to be written into (AC-SUM2 + AC-SUM6).
@@ -281,6 +321,8 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
     """Plan, refuse on any dirty predicate, execute, then prove the result."""
     archive = archive_path or SF.default_archive(root)
     check_archive_path(archive, root)
+    check_archive_name(archive)
+    check_archive_set(root)
     check_summary_shape(summary, archive)
     path = SF.state_path(root)
     raw, state = SF.read_state(path)
@@ -416,15 +458,21 @@ def run(root, round_label, fold_no, window_start, window_end, summary,
     after_cov = ledger_coverage(logs_dir, post_state["log"])
     report["ledger_rounds_after"] = len(after_cov["ledger_rounds"])
     # AC-SFOLD2: no round that had a ledger line may lose it to the fold.
+    # R3186: these three proofs run AFTER the write, so their codes say so -
+    # the caller must not read "refused, nothing written" from a fold that
+    # already moved bytes.
     if not before_cov["ledger_rounds"] <= after_cov["ledger_rounds"]:
         raise FoldRunError("E_SFOLD_LEDGER_LOSS",
-                           "%d -> %d" % (len(before_cov["ledger_rounds"]),
-                                         len(after_cov["ledger_rounds"])))
+                           "after write: %d -> %d (state, archive and backup"
+                           " already changed)"
+                           % (len(before_cov["ledger_rounds"]),
+                              len(after_cov["ledger_rounds"])))
     if not report["archive_verified"]:
         raise FoldRunError("E_SFOLD_ARCHIVE_COPY",
-                           "%s" % archive)
+                           "after write: %s" % archive)
     if not report["layout_agree"]:
-        raise FoldRunError("E_SFOLD_LAYOUT_DISAGREE", path)
+        raise FoldRunError("E_SFOLD_LAYOUT_DISAGREE",
+                           "after write: %s" % path)
     # AC-SFOLD5: the gate is honest - success only at or under the waterline.
     post = SF.check(root, gate=gate)
     report["verdict"] = post["verdict"].replace("FOLD-", "")
@@ -443,7 +491,8 @@ USAGE = (
     "open a second window for one round marker)\n"
     "       state_fold_run.py --check [--root PATH] [--json]\n"
     "  exit 0 = folded / ALREADY-FOLDED / FOLD-CLEAR\n"
-    "  exit 2 = refused by the predicate (nothing written)\n"
+    "  exit 2 = refused by the predicate (nothing written), or a proof that\n"
+    "           ran after the write (message starts 'after write:')\n"
     "  exit 3 = state file missing or unreadable\n"
     "  exit 5 = bad flags\n")
 

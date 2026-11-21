@@ -26,7 +26,7 @@ sys.path.insert(0, BASE)
 import state_fold_run as FR  # noqa: E402
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 10
+EXPECTED_CRITERIA = 11
 MODULE = os.path.join(BASE, "state_fold_run.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold-run"
@@ -299,7 +299,7 @@ def main():
         with io.open(RUNNER, "rb") as handle:
             runner = handle.read()
         wired = (LABEL.encode("ascii") in runner
-                 and EXPECTED_CRITERIA == 10)
+                 and EXPECTED_CRITERIA == 11)
         check(read(dry_path) == dry_before
               and dry["dry_run_digest_same"] is True
               and dry["verdict"] == "DRY-RUN" and ascii_ok and no_clock
@@ -589,6 +589,98 @@ def main():
                  reader_outside, ok_report["verdict"],
                  ok_report["archive_verified"], dflt_report["verdict"],
                  nm_codes, hygiene7))
+        # --- AC-SUM8: the post-write proof must be able to read the archive -
+        # R3186 measured two LEGAL entries that exited AFTER the write: an
+        # archive named *.txt (or *.MD) under logs/ passed every pre-gate and
+        # folded, then E_SFOLD_LEDGER_LOSS fired because the coverage reader
+        # enumerates ARCHIVE_PREFIX*ARCHIVE_SUFFIX only; and one unreadable
+        # sibling archive made that same reader blind, with the same result.
+        # Both conditions are statically checkable before any byte, so both
+        # are refused at the birth point now.
+        n_root, n_path = make_world(os.path.join(base, "nameset"))
+        n_before = read(n_path)
+        txt_name = "state-log-archive-2026-11.txt"
+        txt_archive = os.path.join(n_root, "logs", txt_name)
+        txt_summary = ("R9030 fold 1 of log lines 1..12 into logs/%s"
+                       % txt_name)
+        txt_codes = []
+        for dry in (True, False):
+            try:
+                FR.run(n_root, "R9030", 1, 1, 12, txt_summary,
+                       archive_path=txt_archive, dry_run=dry)
+            except FR.FoldRunError as exc:
+                txt_codes.append(exc.code)
+        up_name = "state-log-archive-2026-11.MD"
+        up_archive = os.path.join(n_root, "logs", up_name)
+        up_summary = ("R9030 fold 1 of log lines 1..12 into logs/%s"
+                      % up_name)
+        up_codes = []
+        for dry in (True, False):
+            try:
+                FR.run(n_root, "R9030", 1, 1, 12, up_summary,
+                       archive_path=up_archive, dry_run=dry)
+            except FR.FoldRunError as exc:
+                up_codes.append(exc.code)
+        logs_after_names = sorted(os.listdir(os.path.join(n_root, "logs")))
+        s_root, s_path = make_world(os.path.join(base, "sibling"))
+        s_before = read(s_path)
+        poison = os.path.join(s_root, "logs", "state-log-archive-2025-01.md")
+        with io.open(poison, "wb") as handle:
+            handle.write(b"\xff\xfe not utf-8 at all\n")
+        s_name = "state-log-archive-2026-10.md"
+        s_archive = os.path.join(s_root, "logs", s_name)
+        s_summary = "R9031 fold 1 of log lines 1..12 into logs/%s" % s_name
+        s_codes = []
+        for dry in (True, False):
+            try:
+                FR.run(s_root, "R9031", 1, 1, 12, s_summary,
+                       archive_path=s_archive, dry_run=dry)
+            except FR.FoldRunError as exc:
+                s_codes.append(exc.code)
+        s_logs = sorted(os.listdir(os.path.join(s_root, "logs")))
+        s_untouched = read(s_path) == s_before
+        os.remove(poison)
+        healed = FR.run(s_root, "R9031", 1, 1, 12, s_summary,
+                        archive_path=s_archive)
+        d_root, d_path = make_world(os.path.join(base, "defarc8"))
+        d_name = os.path.basename(SF.default_archive(d_root))
+        d_report = FR.run(d_root, "R9032", 1, 1, 12,
+                          "R9032 fold 1 of log lines 1..12 into logs/%s"
+                          % d_name)
+        text8 = io.open(MODULE, "rb").read().decode("utf-8")
+        hygiene8 = (all(ord(char) < 128 for char in text8)
+                    and "import socket" not in text8
+                    and "import urllib" not in text8
+                    and "def check_archive_name(" in text8
+                    and "def check_archive_set(" in text8
+                    and text8.count("E_FLR_ARCHIVE_NAME") == 1
+                    and text8.count("E_FLR_ARCHIVE_UNREADABLE") >= 1
+                    and text8.count("after write:") >= 3)
+        check(txt_codes == ["E_FLR_ARCHIVE_NAME", "E_FLR_ARCHIVE_NAME"]
+              and up_codes == ["E_FLR_ARCHIVE_NAME", "E_FLR_ARCHIVE_NAME"]
+              and read(n_path) == n_before
+              and logs_after_names == []
+              and s_codes == ["E_FLR_ARCHIVE_UNREADABLE"] * 2
+              and s_untouched
+              and s_logs == ["state-log-archive-2025-01.md"]
+              and healed["verdict"] == "CLEAR"
+              and healed["archive_verified"]
+              and d_report["verdict"] == "CLEAR"
+              and hygiene8,
+              "AC-SUM8 an archive name the coverage reader never enumerates "
+              "(*.txt %s, *.MD %s) is refused at the birth point in dry-run "
+              "AND execute with zero bytes and no archive or backup created "
+              "[untouched=%s logs=%s]; an unreadable sibling archive refuses "
+              "the fold too [%s untouched=%s logs=%s] and the SAME world "
+              "folds after the sibling is removed [%s %s] - so the refusal "
+              "is about readability, not the name; the default path is not "
+              "hurt [%s]; the three after-write proofs still say so in their "
+              "own words and the module stays ASCII, stdlib and zero-network "
+              "[%s]"
+              % (txt_codes, up_codes, read(n_path) == n_before,
+                 logs_after_names, s_codes, s_untouched,
+                 s_logs, healed["verdict"], healed["archive_verified"],
+                 d_report["verdict"], hygiene8))
     finally:
         shutil.rmtree(base, ignore_errors=True)
 
