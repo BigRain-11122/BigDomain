@@ -125,6 +125,12 @@
 #           carrying "D-...-04x" yields no token, while a real new owner row is
 #           still flagged by name (R3326 measured the old regex harvesting
 #           D-20261114-01 out of D-20261114-01x).
+#   AC-SC27 the same right-boundary law on the ledger program number and both
+#           @BigDomain counters (R3327 measured P-2026-09-24-56x printing
+#           lastp=P-2026-09-24-56 and @BigDomainX counting as a dispatch row).
+#   AC-SC28 the install-copy state is exercised in all three answers, including
+#           a private copy one byte longer answering drift (R3328: match and
+#           absent had arms, drift had only the accident record).
 #
 # SAFETY: everything runs inside a per-run TEMP sandbox shaped as
 # FluxGroup\domain\BigDomain plus FluxGroup-level fixture files. The real
@@ -729,6 +735,29 @@ try {
     Assert ($r.text -notmatch 'lastp=P-2026-09-24-56') 'AC-SC27' 'a program number continued by a digit is not harvested'
     Assert ($r.text -match '\[LEDGER\] PASS lines=1 atbd_rows=1') 'AC-SC27' 'a hyphenated machine mention still counts as this company'
 
+    # AC-SC28 (R3328, pinned in src/os/backlog.md BEFORE this arm existed): the
+    # drift answer was only ever produced by a real accident - R3325 measured the
+    # install copy 5 lines stale and R3326 caught it on its first run - so match
+    # and absent had arms and drift had none. Measured R3328 (probe-R3328.log):
+    # the shipped function answers absent for a missing path and the live copy is
+    # a match today, but no fixture had ever asked it about a drifted copy. This
+    # arm builds one in the sandbox by appending a single byte.
+    $copySrc = Join-Path $sbxRoot 'install-copy-fixture.ps1'
+    [System.IO.File]::WriteAllBytes($copySrc, [System.IO.File]::ReadAllBytes($srcScan))
+    $sameState = Get-InstallState $copySrc $srcSha
+    $origBytes = [System.IO.File]::ReadAllBytes($srcScan)
+    $plusBytes = New-Object byte[] ($origBytes.Length + 1)
+    [System.Array]::Copy($origBytes, $plusBytes, $origBytes.Length)
+    $plusBytes[$origBytes.Length] = 0x0A
+    [System.IO.File]::WriteAllBytes($copySrc, $plusBytes)
+    $driftState = Get-InstallState $copySrc $srcSha
+    $missingState = Get-InstallState (Join-Path $sbxRoot 'install-copy-fixture-missing.ps1') $srcSha
+    Write-Output ("[SCANFACES] drift_probe same=" + $sameState + " plus1byte=" + $driftState + " missing=" + $missingState)
+    Assert ($sameState -eq 'match') 'AC-SC28' 'a byte-identical private copy answers match'
+    Assert ($driftState -eq 'drift') 'AC-SC28' 'a private copy one byte longer answers drift (the R3325 defect shape, now a reading)'
+    Assert ($missingState -eq 'absent') 'AC-SC28' 'a missing private copy answers absent'
+    Assert (($driftState -ne 'drift') -eq $false) 'AC-SC28' 'the AC-SC24 guard would refuse this state rather than read it as healthy'
+
     # --- AC-SC10: harness laws ---------------------------------------------
     [System.IO.File]::Copy($realScan, $sbxScan, $true)
     $a = [System.IO.File]::ReadAllBytes($realScan)
@@ -747,6 +776,6 @@ finally {
     Remove-Item -LiteralPath $sbxRoot -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC27, " + $script:pass + " checks)"); exit 0 }
+if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC28, " + $script:pass + " checks)"); exit 0 }
 Write-Output ("FAILURES=" + $script:fail)
 exit 2

@@ -1,0 +1,15 @@
+=== R3328 NEGATIVE CONTROL ===
+SECTION 1: is the drift arm load-bearing?
+  same    content_shape=match  existence_only=match
+  plus1   content_shape=drift  existence_only=match
+  missing content_shape=absent existence_only=match
+READING drift: content_shape answers drift only for plus1; existence_only answers match three times
+  -> AC-SC28 asserts 'drift', so the existence-only shape reads FAIL there (arm is load-bearing)
+
+SECTION 2: dead twin versus the live face on one decoy set
+  live ps1 boundary literal found 2 time(s): ["'@BigDomain(?![A-Za-z0-9])'", "'@BigDomain(?![A-Za-z0-9])'"]
+  twin_atbd=1 live_atbd=1 | 4-56 @BigDomain dispatch row
+  twin_atbd=1 live_atbd=0 | 4-56x @BigDomainX near-miss row
+  twin_atbd=1 live_atbd=0 | 4-561 @BigDomain2 near-miss row
+  twin_atbd=1 live_atbd=1 | 4-56 @BigDomain-OSLoop machine row
+READING twin: the dead twin counts both near misses; the shipped literal counts neither

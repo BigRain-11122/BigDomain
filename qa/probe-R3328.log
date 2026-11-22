@@ -1,0 +1,28 @@
+=== R3328 PROBE: Q1 twin decoy readings (shipped TOKRE object) ===
+twin TOKRE pattern = (?:(?:P|D|C|O|T|XL)-\d{4}-\d{2}-\d{2}-\d+|O-2026\d{5}-\d+|D-\d{8}-\d+|C-\d{8}-\d+|BD-PROP-\d+|OH-\d{8})(?![0-9A-Za-z])
+twin stdout captured lines = 7 (not republished here)
+  clean      p_tokens=['P-2026-09-24-56'] twin_atbd=1  | 4-56 @BigDomain dispatch row
+  near       p_tokens=[] twin_atbd=1  | 4-56x @BigDomainX near-miss row
+  digit      p_tokens=['P-2026-09-24-561'] twin_atbd=1  | 4-561 @BigDomain2 near-miss row
+  machine    p_tokens=['P-2026-09-24-56'] twin_atbd=1  | 4-56 @BigDomain-OSLoop task mention
+
+READING q1: p_continuation_silent=no  atbd_substring_hits=yes
+
+=== R3328 PROBE: Q2 atbd_rows/lastp consumer census ===
+  producer      files=2
+    src\os\scan_five_still.py lines=[106]
+    tools\skills\bigdomain-loop-scan\scripts\scan_five_still.ps1 lines=[73, 76, 78, 80]
+  harness_assert files=1
+    src\os\test_scan_faces.ps1 lines=[702, 703, 712, 720, 721, 729, 730]
+  round_script  files=0
+  other         files=12
+    src\os\backlog.md lines=[1, 5, 7, 2796]
+    src\os\closeout_payload_R1948.json lines=[10]
+    src\os\closeout_payload_R1949.json lines=[10]
+    src\os\closeout_payload_R1950.json lines=[10]
+    src\os\closeout_payload_R2021.json lines=[5]
+    src\os\closeout_payload_R2023.json lines=[8]
+  named-face src\os\iteration_prompt.txt                    hits=[]
+  named-face tools\skills\bigdomain-loop-scan\SKILL.md      hits=[28]
+
+READING q2: consumer files=15 (dispatch-decision readers among them: none as listed)

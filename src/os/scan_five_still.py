@@ -1,5 +1,14 @@
 # scan_five_still.py - five-silence content-addressed scan (LEDGER/DEC/ORD/GORD faces)
 # Pure ASCII. Read-only on group files. Baseline = src/os/state.json fields.
+#
+# DEAD CODE, NAMED (R3325/R3326 measured zero production callers; the loop runs
+# the ps1 at tools/skills/bigdomain-loop-scan/scripts/, and SKILL.md names that
+# path). This twin is kept only because its own suite executes it.
+# KNOWN DIVERGENCE (R3328, measured): the token face here carries the R2780
+# right boundary, but the @BigDomain row selectors below are plain substring
+# tests, so "@BigDomainX" and "@BigDomain2" would count as dispatch rows - the
+# live ps1 face answers 0 for both since R3327. If this twin is ever revived,
+# take the live face's boundary law first; do not add a second live caliber.
 import io, json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
