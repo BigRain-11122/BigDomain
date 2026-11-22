@@ -427,8 +427,9 @@ def ac_rsa12():
     because a round that advances the tick through this vehicle never reached
     closeout step 1.6. The write stays there (AC-COUT13(d) pins the order),
     so this station reports the distance instead of staying silent: a lagging
-    row reads hb=lag=<n>, a fresh one reads hb=tick=<n>, a world with no row
-    reads hb=none, and a private world reads hb=skipped. None of the arms may
+    row reads hb=lag=<n>, a fresh one reads hb=tick=<n>, a row stamped past
+    this state reads hb=ahead=<n>, a world with no row reads hb=none, and a
+    private world reads hb=skipped. None of the arms may
     move a heartbeat byte - reading is the whole change.
     """
     folder = tempfile.mkdtemp(prefix="rsa-live-")
@@ -462,6 +463,18 @@ def ac_rsa12():
                                     "--tick", "--line",
                                     "2026-11-16 R9004 PRODUCT: fresh row"])
         c_ok = code_c == 0 and "hb=tick=%d" % (tick_a + 1) in out_c
+        tick_c = json.loads(io.open(path, encoding="utf-8").read())["tick"]
+        with io.open(hb_path, "wb") as handle:
+            handle.write(("tick %d\n" % (tick_c + 2)).encode("ascii"))
+        hb_ahead = fingerprint(hb_path)
+        code_e, out_e, _ = run_cli(["--state", path, "--round", "9005",
+                                    "--tick", "--line",
+                                    "2026-11-16 R9005 PRODUCT: row ahead"])
+        # R3321: a row stamped past the state is named, not printed as a
+        # negative lag. Measured before this arm: 25 hb= lines in qa/ carried
+        # lag=/tick= and none carried a minus sign, so the shape had no name.
+        e_ok = (code_e == 0 and "hb=ahead=1" in out_e
+                and "lag=-" not in out_e and fingerprint(hb_path) == hb_ahead)
     finally:
         shutil.rmtree(folder, ignore_errors=True)
 
@@ -475,15 +488,15 @@ def ac_rsa12():
     finally:
         cleanup(flat)
 
-    ok = a_ok and b_ok and c_ok and d_ok
+    ok = a_ok and b_ok and c_ok and d_ok and e_ok
     if not ok:
-        print("  measured: a=%r b=%r c=%r d=%r out_a=%r out_b=%r out_c=%r "
-              "out_d=%r"
-              % (a_ok, b_ok, c_ok, d_ok, out_a.strip()[:120],
+        print("  measured: a=%r b=%r c=%r d=%r e=%r out_a=%r out_b=%r "
+              "out_c=%r out_d=%r out_e=%r"
+              % (a_ok, b_ok, c_ok, d_ok, e_ok, out_a.strip()[:120],
                  out_b.strip()[:120], out_c.strip()[:120],
-                 out_d.strip()[:120]), flush=True)
+                 out_d.strip()[:120], out_e.strip()[:120]), flush=True)
     check(ok, "AC-RSA12 the tick station reports the heartbeat row it read "
-          "(lag, tick, skipped) and moves no heartbeat byte")
+          "(lag, tick, ahead, skipped) and moves no heartbeat byte")
 
 
 def main():

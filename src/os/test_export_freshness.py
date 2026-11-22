@@ -96,6 +96,14 @@ def wiring_ok():
     needle = '"%s"' % LABEL
     if needle not in text:
         return False
+    # R3321: measured, this label is written to the runner exactly once
+    # (count=1 of 552750 bytes). Pinning uniqueness here keeps the window
+    # below anchored on THAT row: with a second earlier mention, find() would
+    # slide onto the neighbour and the two asserted words could come from a
+    # different row. The negative control is measured too - dropping ", 6)"
+    # after the needle, or the needle itself, both open this arm (False).
+    if text.count(needle) != 1:
+        return False
     tail = text[text.find(needle):]
     window = tail[:400]
     return ("test_export_freshness.py" in window) and (", 6)" in window)

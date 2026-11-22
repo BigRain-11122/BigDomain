@@ -303,7 +303,11 @@ def run():
     # read green while this row said something else.
     needle = '"test_state_fold.py"'
     wired = False
-    if needle in runner:
+    # R3321: measured unique (count=1 of 552750 runner bytes). A second,
+    # earlier mention would slide find() onto another row whose own ", 7)"
+    # could satisfy this arm. Measured negative control: dropping ", 7)"
+    # after the needle opens the arm, and so does dropping the needle.
+    if needle in runner and runner.count(needle) == 1:
         window = runner[runner.find(needle):][:60]
         wired = ", 7)" in window
     check(ascii_ok and clean and wired and "AC-SF" in source,

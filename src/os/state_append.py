@@ -224,6 +224,12 @@ def _heartbeat_notice(state_path, tick):
         return "none"
     if row == tick:
         return "tick=%d" % tick
+    if row > tick:
+        # A row ahead of the tick is not a negative lag: it means someone
+        # stamped the heartbeat past this state (a hand ran
+        # `heartbeat.py --write N`). Naming it keeps every printed number
+        # non-negative, so a reader never has to decode a sign.
+        return "ahead=%d" % (row - tick)
     return "lag=%d" % (tick - row)
 
 

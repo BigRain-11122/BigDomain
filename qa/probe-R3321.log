@@ -1,0 +1,17 @@
+RUNNER bytes=552750
+AC-EXP needle="os-export-freshness" count=1
+AC-EXP baseline shipped_wiring_ok=True
+AC-EXP literal-dropped shipped_wiring_ok=False
+AC-EXP needle-dropped shipped_wiring_ok=False
+AC-EXP decoy-row-first shipped_wiring_ok=False
+AC-EXP decoy-row-first pre_guard_form=True (would be silent)
+AC-SF6 drift-guard present=True :: needle = '"test_state_fold.py"'
+AC-SF6 drift-guard present=True :: if needle in runner and runner.count(needle) == 1:
+AC-SF6 drift-guard present=True :: window = runner[runner.find(needle):][:60]
+AC-SF6 drift-guard present=True :: wired = ", 7)" in window
+AC-SF6 needle count=1
+AC-SF6 baseline shipped_wired=True
+AC-SF6 literal-dropped shipped_wired=False
+AC-SF6 needle-dropped shipped_wired=False
+AC-SF6 decoy-row-first shipped_wired=False pre_guard_form=True (would be silent)
+VERDICT: baseline True; both literal mutations False; decoy False
