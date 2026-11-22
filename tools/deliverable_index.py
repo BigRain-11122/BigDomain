@@ -275,6 +275,23 @@ LAW_NOTE_RE = re.compile(
     r'<div class="note" data-law="(diff|same|none)">(.*?)</div>', re.S)
 
 
+CLOCK_WORD_WIDTH = 6
+
+
+def CLOCK_PAD(word):
+    """Fixed-width clock word (R3298).
+
+    The note's byte length used to depend on whether the pair ranked by
+    'mtime' (5) or 'commit' (6), so preview/index.html changed size whenever
+    the newest pair flipped between dirty and clean - and every face that
+    embeds the entry page's byte count (data-back-bytes) went E_STALE with it.
+    Padding to one width stops the entry page's size from depending on that
+    state; HTML collapses the extra space, so the rendered sentence is
+    unchanged.
+    """
+    return (word or "").ljust(CLOCK_WORD_WIDTH)
+
+
 def newest_line(new):
     """The one derived line AC-DIX8 compares against a fresh read."""
     if new["empty"]:
@@ -324,7 +341,8 @@ def render_newest(new):
             '\u672c\u5e26\u6309\u6587\u4ef6 mtime \u6392\u540d\uff0c\u5bfc\u51fa'
             '\u9762\u6309\u63d0\u4ea4\u5185\u5bb9\u65f6\u949f\u6392\u540d\uff0c'
             '\u8fd9\u4e00\u5bf9\u8be5\u7528 %s \u949f\u3002</div>'
-            % (html.escape(view["json"]), html.escape(view["clock"])))
+            % (html.escape(view["json"]),
+               html.escape(CLOCK_PAD(view["clock"]))))
     else:
         out.append(
             '<div class="note" data-law="diff">\u4e24\u6761\u5f8b\u5404\u7ed9'
@@ -338,7 +356,7 @@ def render_newest(new):
             '\u6210\u4e00\u4e2a\u6570\u5b57\u3002</div>'
             % (html.escape(view["html"]), view["html_bytes"],
                html.escape(view["json"]), view["json_bytes"],
-               html.escape(view["clock"])))
+               html.escape(CLOCK_PAD(view["clock"]))))
     out.append('<div class="note">%s</div>' % html.escape(NEWEST_SNAPSHOT))
     return "\n".join(out)
 
