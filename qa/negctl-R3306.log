@@ -1,0 +1,9 @@
+PRIVATE-ROOT C:\Users\sjs20\AppData\Local\Temp\bd_r3306_neg_inneoj_5
+c0 clean rc=0 VERDICT PASS edges=6 cycles=1 | AC-COO13 PASS export-owns-the-field=True export-runs-last=True no-page-carries-it=True no-ring-reader-reads-it=True not-in-the-edge-table=True
+c1 owns rc=2 VERDICT FAIL AC-COO13 evidence input edge | AC-COO13 FAIL export-owns-the-field=False export-runs-last=True no-page-carries-it=True no-ring-reader-reads-it=True not-in-the-edge-table=True
+c2 reader rc=2 VERDICT FAIL AC-COO13 evidence input edge | AC-COO13 FAIL export-owns-the-field=True export-runs-last=True no-page-carries-it=True no-ring-reader-reads-it=False not-in-the-edge-table=True
+c3 order rc=2 VERDICT FAIL AC-COO12 day pass count | AC-COO13 FAIL export-owns-the-field=True export-runs-last=False no-page-carries-it=True no-ring-reader-reads-it=True not-in-the-edge-table=True
+c4 promoted rc=2 VERDICT FAIL AC-COO13 evidence input edge | AC-COO13 FAIL export-owns-the-field=True export-runs-last=True no-page-carries-it=True no-ring-reader-reads-it=True not-in-the-edge-table=False
+c5 leak rc=2 VERDICT FAIL AC-COO13 evidence input edge | AC-COO13 FAIL export-owns-the-field=True export-runs-last=True no-page-carries-it=False no-ring-reader-reads-it=True not-in-the-edge-table=True
+c6 restored rc=0 VERDICT PASS edges=6 cycles=1 | AC-COO13 PASS export-owns-the-field=True export-runs-last=True no-page-carries-it=True no-ring-reader-reads-it=True not-in-the-edge-table=True
+NEGCTL PASS cases=7/7 failed=-

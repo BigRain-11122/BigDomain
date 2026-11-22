@@ -61,6 +61,11 @@ this file existed):
           against its premise: the export step must still be the LAST step and
           must still be the writer of the census day, the declared count must
           fit inside MAX_PASSES, and no preview page may carry the row
+  AC-COO13 (R3306) the EVIDENCE edge (a newest qa/*.log moving the export's
+          latest_evidence line) is an INPUT, not a ring edge: the export must
+          still own that field, no ring reader's own source may read it, the
+          export must still run last, the edge must not be listed in EDGES, and
+          no preview page may carry the row
 
 The measured pass count (AC-COO12): R3304 proved a day republish reddens the
 entry page and the sweep board, and its remedy names both - but the remedy was
@@ -76,6 +81,18 @@ behind at pass end. Two passes is therefore not a defect to be tuned away: it
 is what a ring with export -> index -> sweep and sweep -> export owes. What the
 criterion refuses is the claim drifting away from that structure - reorder the
 steps and the arm reddens instead of the number quietly going stale.
+
+What the third edge costs (measured at R3306 in two private copy trees, not
+guessed): TWO edges (day + a reading width) need two passes; THREE edges (day,
+width, and a fresh qa/*.log whose mtime is newest) also need exactly two. The
+evidence edge is free because it is an INPUT to the last step, not a ring edge:
+the export face's own check grades the file it NAMES (a snapshot at export_ts),
+not "whatever is newest", so a new log cannot redden any face - and no ring
+reader's source reads `latest_evidence` at all (0 of 4, measured). The write
+still consumes it: after the write the export names the planted file and
+publishes the note. AC-COO13 grades that structure, so promoting the field into
+a reader or moving the export out of last place reddens the arm instead of the
+spare iteration quietly disappearing.
 
 The day edge (AC-COO10): preview/index.html prints `census day YYYY-MM-DD` and
 AC-DIX19 refuses a page whose day is not the export's current day. That is a
@@ -170,6 +187,22 @@ DAY_PASSES_WRITER = ("export", "src/os/export_round.py",
                      "import status_export_fresh as SXF")
 DAY_PASSES_KEY = ("tools/status_export_fresh.py", 'CLAIMS_TS_KEY = "census_ts"')
 DAY_PASSES_LEAK = "DAY-PASSES "
+
+# AC-COO13 (R3306). A newest qa/*.log moves the export's evidence line, and
+# that move is an INPUT to the last step rather than an edge inside the ring:
+# measured in a private tree, three simultaneous edges (day, width, evidence)
+# still converge in TWO passes, because no face's check grades "newest qa log"
+# and no ring reader reads the field. The arms grade that structure, so a future
+# change that promotes the field into a reader - or moves the export out of last
+# place - reddens here instead of silently eating the iteration budget.
+EVIDENCE_EDGE = ("export", "qa", "mtime", "src/os/export_round.py", "latest_evidence")
+EVIDENCE_READERS = (
+    ("chain", "tools/first_yuan_chain.py"),
+    ("index", "tools/deliverable_index.py"),
+    ("backhop", "tools/face_backhop.py"),
+    ("sweep", "tools/face_sweep.py"),
+)
+EVIDENCE_LEAK = "EVIDENCE-EDGE "
 
 # The standalone check face of each artifact (read-only, prints VERDICT).
 CHECKS = [
@@ -496,6 +529,62 @@ def day_passes_row():
     return all(arms.values())
 
 
+def evidence_view():
+    """AC-COO13 arms: the evidence edge is an input, never a ring edge.
+
+    Derived from the files: the export must still own the field, no ring
+    reader's own source may read it, the export must still be the last step, the
+    edge must not be listed in EDGES, and no preview page may carry the row.
+    """
+    reader_name, writer_name, kind, relpath, token = EVIDENCE_EDGE
+    path = os.path.join(ROOT, relpath)
+    owns = False
+    if os.path.isfile(path):
+        with io.open(path, "r", encoding="utf-8", errors="replace") as fh:
+            owns = token in fh.read()
+    readers = []
+    for name, rel in EVIDENCE_READERS:
+        abs_path = os.path.join(ROOT, rel)
+        hit = False
+        if os.path.isfile(abs_path):
+            with io.open(abs_path, "r", encoding="utf-8", errors="replace") as fh:
+                hit = token in fh.read()
+        readers.append({"name": name, "reader_file": rel, "reads_it": hit})
+    listed = [e for e in EDGES if writer_name in (e[0], e[1])]
+    last = STEPS[-1][0] if STEPS else ""
+    leaked = []
+    for name in sorted(os.listdir(PREVIEW)):
+        if not name.endswith(".html"):
+            continue
+        with io.open(os.path.join(PREVIEW, name), "r", encoding="utf-8",
+                     errors="replace") as fh:
+            if EVIDENCE_LEAK in fh.read():
+                leaked.append(name)
+    arms = {
+        "export-owns-the-field": owns,
+        "no-ring-reader-reads-it": not any(r["reads_it"] for r in readers),
+        "export-runs-last": last == reader_name,
+        "not-in-the-edge-table": not listed,
+        "no-page-carries-it": not leaked,
+    }
+    return arms, readers
+
+
+def evidence_row():
+    """Print the evidence-input edge and grade AC-COO13. Returns True/False."""
+    arms, readers = evidence_view()
+    reader_name, writer_name, kind, relpath, token = EVIDENCE_EDGE
+    print("EVIDENCE-EDGE %-7s %-7s %-5s %s:%s ring-readers=%d"
+          % (writer_name, reader_name, kind, relpath, token,
+             sum(1 for r in readers if r["reads_it"])))
+    for row in readers:
+        print("EVIDENCE-READER %-7s %s reads-it=%s"
+              % (row["name"], row["reader_file"], row["reads_it"]))
+    print("AC-COO13 %s %s" % ("PASS" if all(arms.values()) else "FAIL",
+                              " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items()))))
+    return all(arms.values())
+
+
 def cmd_plan():
     print("STEPS %d %s" % (len(STEPS), ",".join(n for n, _, _ in STEPS)))
     for row in edge_report():
@@ -508,6 +597,7 @@ def cmd_plan():
     day_ok = day_row()
     remedy_ok = remedy_row()
     passes_ok = day_passes_row()
+    evidence_ok = evidence_row()
     bad = [r for r in edge_report() if not (r["file_present"] and r["token_found"])]
     if bad:
         print("VERDICT FAIL %d orphan-edge(s): %s"
@@ -524,6 +614,9 @@ def cmd_plan():
         return 2
     if not passes_ok:
         print("VERDICT FAIL AC-COO12 day pass count")
+        return 2
+    if not evidence_ok:
+        print("VERDICT FAIL AC-COO13 evidence input edge")
         return 2
     print("VERDICT PASS edges=%d cycles=%d" % (len(EDGES), len(cycles)))
     return 0

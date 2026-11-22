@@ -1,0 +1,81 @@
+PRIVATE-ROOT two-edges C:\Users\sjs20\AppData\Local\Temp\bd_r3306_two_u999lw9l
+A0 export drift rc=2 VERDICT FAIL 2
+A0 export self-write rc=0 VERDICT R3305 PASS: do, ceo_face.current and current all name R3305
+A0 export settled rc=0 VERDICT PASS tick=2026-11-23 R3305 PRODUCT+ENG
+A baseline chain    rc=0 VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+A baseline index    rc=0 VERDICT PASS 23/23 fingerprint=a9a519c6a2f018cf
+A baseline sweep    rc=0 VERDICT PASS 21/21
+A baseline closeout rc=0 VERDICT PASS checks=4/4 read_only=True
+A two-edges planted census_ts 2026-11-23T01:16:11+08:00 -> 2026-11-24T01:16:11+08:00 claimed 339 -> 1000
+A two-edges one-write rc=0 passes=2
+A| PASS1 chain   rc=0 RENDER legs=2 prices=birthright_entry=990,tier_patron_30d=2990 same_price=False value_differs=True entries=2 tx=1 reconcile_rc=0 zero_delta=True html=4403B json=4806B
+A| PASS1 index   rc=0 DELIVERABLE INDEX faces=9 defects=0 fingerprint=3da4b589a43b6ffd index=42876B
+A| PASS1 backhop rc=0 backhop report written: C:\Users\sjs20\AppData\Local\Temp\bd_r3306_two_u999lw9l\state\backhop-report.json (9785 bytes, faces=32, sizes patched=0)
+A| PASS1 sweep   rc=2 VERDICT FAIL 11/13 fingerprint=2e10f672c0283f2b
+A| PASS1 export  rc=0 VERDICT R3305 PASS: do, ceo_face.current and current all name R3305
+A| PASS1 TRANSIENT red-steps=sweep (landed anyway; judged at pass end)
+A| PASS1 CHECK chain  PASS VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+A| PASS1 CHECK index  FAIL VERDICT FAIL 20/23 fingerprint=cf73ff287cc28cf2
+A| PASS1 CHECK sweep  PASS VERDICT PASS 21/21
+A| PASS1 CHECK export PASS VERDICT PASS tick=2026-11-23 R3305 PRODUCT+ENG
+A| REDGE pass=1 index <- chain bytes tools/deliverable_index.py
+A| REDGE pass=1 index <- export bytes tools/deliverable_index.py
+A| PASS2 chain   rc=0 RENDER legs=2 prices=birthright_entry=990,tier_patron_30d=2990 same_price=False value_differs=True entries=2 tx=1 reconcile_rc=0 zero_delta=True html=4403B json=4806B
+A| PASS2 index   rc=0 DELIVERABLE INDEX faces=9 defects=0 fingerprint=8d196a6250d3d15c index=42875B
+A| PASS2 backhop rc=0 backhop report written: C:\Users\sjs20\AppData\Local\Temp\bd_r3306_two_u999lw9l\state\backhop-report.json (9785 bytes, faces=32, sizes patched=0)
+A| PASS2 sweep   rc=2 VERDICT FAIL 11/13 fingerprint=96ffb8dac085bec0
+A| PASS2 export  rc=0 VERDICT R3305 PASS: do, ceo_face.current and current all name R3305
+A| PASS2 TRANSIENT red-steps=sweep (landed anyway; judged at pass end)
+A| PASS2 CHECK chain  PASS VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+A| PASS2 CHECK index  PASS VERDICT PASS 23/23 fingerprint=696c3fe9406182df
+A| PASS2 CHECK sweep  PASS VERDICT PASS 21/21
+A| PASS2 CHECK export PASS VERDICT PASS tick=2026-11-23 R3305 PRODUCT+ENG
+A| VERDICT PASS passes=2 steps=5 checks=4/4 transient_steps=1
+A VERDICT PASS converges=True passes=2
+PRIVATE-ROOT three-edges C:\Users\sjs20\AppData\Local\Temp\bd_r3306_three_hnn89286
+A0 export drift rc=2 VERDICT FAIL 2
+A0 export self-write rc=0 VERDICT R3305 PASS: do, ceo_face.current and current all name R3305
+A0 export settled rc=0 VERDICT PASS tick=2026-11-23 R3305 PRODUCT+ENG
+A baseline chain    rc=0 VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+A baseline index    rc=0 VERDICT PASS 23/23 fingerprint=a9a519c6a2f018cf
+A baseline sweep    rc=0 VERDICT PASS 21/21
+A baseline closeout rc=0 VERDICT PASS checks=4/4 read_only=True
+B evidence planted qa/zz-evidence-R3306.log bytes=67 mtime=1795371424
+B pre-write index-check rc=2 failed=- VERDICT FAIL 20/23 fingerprint=c701c8f9a36d60cb
+B pre-write export-check rc=0 failed=- VERDICT PASS tick=2026-11-23 R3305 PRODUCT+ENG
+B VERDICT PASS index-reddens=True export-snapshot-law-green=True
+B three-edges one-write rc=0 passes=2
+B| PASS1 chain   rc=0 RENDER legs=2 prices=birthright_entry=990,tier_patron_30d=2990 same_price=False value_differs=True entries=2 tx=1 reconcile_rc=0 zero_delta=True html=4403B json=4806B
+B| PASS1 index   rc=0 DELIVERABLE INDEX faces=9 defects=0 fingerprint=70b6a9833a70c64a index=42876B
+B| PASS1 backhop rc=0 backhop report written: C:\Users\sjs20\AppData\Local\Temp\bd_r3306_three_hnn89286\state\backhop-report.json (9785 bytes, faces=32, sizes patched=0)
+B| PASS1 sweep   rc=2 VERDICT FAIL 11/13 fingerprint=1bb8d5e4f0ef2a2d
+B| PASS1 export  rc=0 VERDICT R3305 PASS: do, ceo_face.current and current all name R3305
+B| PASS1 TRANSIENT red-steps=sweep (landed anyway; judged at pass end)
+B| PASS1 CHECK chain  PASS VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+B| PASS1 CHECK index  FAIL VERDICT FAIL 20/23 fingerprint=bc58277318f21e62
+B| PASS1 CHECK sweep  PASS VERDICT PASS 21/21
+B| PASS1 CHECK export PASS VERDICT PASS tick=2026-11-23 R3305 PRODUCT+ENG
+B| REDGE pass=1 index <- chain bytes tools/deliverable_index.py
+B| REDGE pass=1 index <- export bytes tools/deliverable_index.py
+B| PASS2 chain   rc=0 RENDER legs=2 prices=birthright_entry=990,tier_patron_30d=2990 same_price=False value_differs=True entries=2 tx=1 reconcile_rc=0 zero_delta=True html=4403B json=4806B
+B| PASS2 index   rc=0 DELIVERABLE INDEX faces=9 defects=0 fingerprint=a17967fbaef3b6f8 index=42875B
+B| PASS2 backhop rc=0 backhop report written: C:\Users\sjs20\AppData\Local\Temp\bd_r3306_three_hnn89286\state\backhop-report.json (9785 bytes, faces=32, sizes patched=0)
+B| PASS2 sweep   rc=2 VERDICT FAIL 11/13 fingerprint=ba874e59bb96066c
+B| PASS2 export  rc=0 VERDICT R3305 PASS: do, ceo_face.current and current all name R3305
+B| PASS2 TRANSIENT red-steps=sweep (landed anyway; judged at pass end)
+B| PASS2 CHECK chain  PASS VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+B| PASS2 CHECK index  PASS VERDICT PASS 23/23 fingerprint=7511b38fe6b5a56b
+B| PASS2 CHECK sweep  PASS VERDICT PASS 21/21
+B| PASS2 CHECK export PASS VERDICT PASS tick=2026-11-23 R3305 PRODUCT+ENG
+B| VERDICT PASS passes=2 steps=5 checks=4/4 transient_steps=1
+B VERDICT PASS converges=True passes=2
+D post-check rc=0 VERDICT PASS checks=4/4 read_only=True
+D latest_evidence='qa/zz-evidence-R3306.log (67B, 2026-11-23)' note='newest artifact this window is EVIDENCE, not a product page: qa/zz-evidence-R330' names-planted=True note-names=True
+D VERDICT PASS
+E reader tools/first_yuan_chain.py      reads-evidence=False
+E reader tools/deliverable_index.py     reads-evidence=False
+E reader tools/face_backhop.py          reads-evidence=False
+E reader tools/face_sweep.py            reads-evidence=False
+E VERDICT PASS ring-readers-of-evidence=0
+F VERDICT PASS third-edge-costs-another-pass=False two=2 three=2
+PROBE VERDICT PASS passes_two=2 passes_three=2
