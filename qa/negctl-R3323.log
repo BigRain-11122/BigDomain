@@ -1,0 +1,6 @@
+SHIPPED guards present=4/4 missing=[]
+NC tools/battery_shard.py anchor='def stream_evidence(' placed=True dups=2 mutant_reads_silent=True shipped_guard_reds=True
+NC tools/battery_shard.py anchor='def do_check(' placed=True dups=2 mutant_reads_silent=True shipped_guard_reds=True
+NC tools/qa_log.py anchor='def read_source(' placed=True dups=2 mutant_reads_silent=True shipped_guard_reds=True
+NC tools/closeout_gate.py anchor='def check_census(' placed=True dups=2 mutant_reads_silent=True shipped_guard_reds=True
+NEGCTL DONE mutant=guards-stripped shipped=guards-present

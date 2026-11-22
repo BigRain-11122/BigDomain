@@ -781,20 +781,29 @@ def main():
            and killed_disk.endswith(b'\n')
            and len(killed_rows) == 1
            and door_call >= 0 and 0 <= door_call < mark_call
+           # R3323: both slice anchors pin uniqueness. Measured on a decoy
+           # that repeats `def stream_evidence(` one line above the real one:
+           # the shipped predicate still answered True (the decoy sits ahead of
+           # the body it reads), so a second same-named definition would have
+           # been read silently. The end anchor is pinned for the same reason.
+           and shard_src.count('def stream_evidence(') == 1
+           and shard_src.count('def do_check(') == 1
            and shard_src.count('qa_log.check_name(name)') == 1
            and shard_src.count('qa_log.check_log_suffix(name)') == 1
            and shard_src.count('os.fsync(') == 1
            and shard_src.count(
                'open(path, "w", encoding="utf-8", newline="\\n")') == 1,
            'shapes=%s running=%s closing=%s one_row=%d door=%d mark=%d '
-           'sites=%d/%d/%d/%d'
+           'sites=%d/%d/%d/%d anchors=%d/%d'
            % (all(shape_same.values()), 'state=RUNNING' in killed_text,
               'SHARD rc=' not in killed_text, len(killed_rows), door_call,
               mark_call, shard_src.count('qa_log.check_name(name)'),
               shard_src.count('qa_log.check_log_suffix(name)'),
               shard_src.count('os.fsync('),
               shard_src.count(
-                  'open(path, "w", encoding="utf-8", newline="\\n")')))
+                  'open(path, "w", encoding="utf-8", newline="\\n")'),
+              shard_src.count('def stream_evidence('),
+              shard_src.count('def do_check(')))
 
         # ---- AC-QALB20: no existing evidence byte moved --------------------
         # The arms above wrote only into private temp dirs; the live tree must
@@ -1266,6 +1275,11 @@ def main():
            and 'write_atomic' not in read_src
            and ledger_text.count('def do_ledger_check(') == 1
            and ledger_text.count('def read_ledger(') == 1
+           # R3323: the led_src slice ends at `def read_source(`, and a decoy
+           # copy of that line one above the real one still answered every
+           # predicate in this arm (the tail slide moves the cut, not the body
+           # text), so the end anchor is pinned like the start anchors are.
+           and ledger_text.count('def read_source(') == 1
            and ledger_text.count('def ledger_row_problem(') == 1
            and ledger_text.count('args[0] == "--ledger-check"') == 1
            and ledger_text.count('"QA-LEDGER %s path=') == 1
@@ -1301,13 +1315,18 @@ def main():
         face = face[:face.index('def check_census(')]
         ok('AC-QALB33 arm b - the gate imports the judgement, never a copy',
            gate_text.count('def check_ledger(') == 1
+           # R3323: the face slice ends at `def check_census(`; a decoy copy of
+           # that line left every predicate in this arm green, so the end
+           # anchor is pinned exactly as the start anchor already was.
+           and gate_text.count('def check_census(') == 1
            and 'import qa_log as QL' in gate_text
            and 'QL.ledger_report(' in gate_text
            and 'json.' not in face and 'hashlib' not in face
            and 'read_ledger' not in face,
-           'check_ledger=%d ledger_report=%d face_json=%s'
+           'check_ledger=%d ledger_report=%d face_json=%s anchors=%d'
            % (gate_text.count('def check_ledger('),
-              gate_text.count('QL.ledger_report('), 'json.' in face))
+              gate_text.count('QL.ledger_report('), 'json.' in face,
+              gate_text.count('def check_census(')))
 
         # ---- AC-QALB34: the chain between records is counted ----------------
         # R3220: ledger_report believed only each name's LATEST row, so a ledger

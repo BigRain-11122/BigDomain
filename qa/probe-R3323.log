@@ -1,0 +1,25 @@
+=== Q1 slice-site decoy readings (src/os/test_qa_log.py) ===
+SITE QALB19 anchor=start old_live=True new_live=True old_decoy=True new_decoy=False counts=1/1 file=tools/battery_shard.py
+SITE QALB19 anchor=end old_live=True new_live=True old_decoy=True new_decoy=False counts=1/1 file=tools/battery_shard.py
+SITE QALB32-led anchor=start old_live=True new_live=True old_decoy=True new_decoy=False counts=1/1 file=tools/qa_log.py
+SITE QALB32-led anchor=end old_live=True new_live=True old_decoy=True new_decoy=False counts=1/1 file=tools/qa_log.py
+SITE QALB32-read anchor=start old_live=True new_live=True old_decoy=True new_decoy=False counts=1/1 file=tools/qa_log.py
+SITE QALB33b anchor=start old_live=True new_live=True old_decoy=True new_decoy=False counts=1/1 file=tools/closeout_gate.py
+SITE QALB33b anchor=end old_live=True new_live=True old_decoy=True new_decoy=False counts=1/1 file=tools/closeout_gate.py
+Q1 summary sites=7 silent_before=7 guarded_after=7
+
+=== Q2 heartbeat lag readers (shipped code only) ===
+READERS with a lag mention: 509
+READERS that compare lag with 0: 5 [('src/os/heartbeat.py', 'lag > 0'), ('src/os/heartbeat.py', 'lag < 0'), ('src/os/test_export_round.py', "lag') == 0"), ('src/os/test_heartbeat.py', 'lag>0'), ('src/os/test_heartbeat.py', 'lag"] == 0')]
+SCANNER branches debt_guard=True pass_lag0_literal=True
+SCANNER ahead_case hb=5 state=4 debt_guard_fires=False printed_lag=0 false_number=True
+EXPORT publishes the verify verdict verbatim: True
+CARD renders lag verbatim: True verdict from face: True
+
+=== Q3 suite_matrix.render with a duplicated registry label ===
+RENDER live_rows=761 with_dup=762 label=lobby occurrences=2 verdict=TWO-ROWS
+RENDER restored live_rows=761
+RUNNER gate whether a duplicate label is refused: True
+PIN AC-RCA13 literal registry: True
+
+PROBE DONE sites=7 readers=509 health_criteria=5

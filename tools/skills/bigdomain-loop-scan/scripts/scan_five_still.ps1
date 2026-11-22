@@ -301,6 +301,11 @@ try {
     Write-Output '[HB] FLAG heartbeat_missing_or_unparsed'
   } elseif (($stTick - $hbTick) -gt 0) {
     Write-Output "[HB] FLAG hb_tick=$hbTick state_tick=$stTick lag=$($stTick - $hbTick) (heartbeat row debt: backfill due in this round closeout)"
+  } elseif (($hbTick - $stTick) -gt 0) {
+    # R3323: a row stamped past the state is not a fresh row with lag 0. The
+    # shipped reader prints the truth instead of the old hard-coded lag=0, so
+    # an ahead row (a hand or repair wrote the next tick) names itself here.
+    Write-Output "[HB] PASS hb_tick=$hbTick state_tick=$stTick ahead=$($hbTick - $stTick) (heartbeat row is ahead of state by design)"
   } else {
     Write-Output "[HB] PASS hb_tick=$hbTick state_tick=$stTick lag=0"
   }
