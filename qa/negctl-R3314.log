@@ -1,0 +1,3 @@
+  DRIFT arm rc=2 drift_named=True suites_started=0
+  ZERO arm rc=2 zero_named=True suites_started=0
+  CONTROL arm rc=0 registry_line='REGISTRY rows=1 declared=1 inherited=0 dup=0 zero=0 drift=0' partial=True

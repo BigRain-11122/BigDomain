@@ -647,6 +647,7 @@
     "os-runner-abort-face",
     "os-runner-abort-history",
     "os-runner-arg-guard",
+    "os-runner-registry-face",
     "os-runner-suite-timeout-cap",
     "os-runner-suite-timeout-headroom",
     "os-runner-suite-timeout-headroom-overrides",

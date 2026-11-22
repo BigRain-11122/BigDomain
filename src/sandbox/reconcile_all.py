@@ -5989,6 +5989,15 @@ SUITES = [
     # seed BEFORE the code.)
     ("os-runner-abort-face",
      os.path.join("..", "os", "test_runner_abort_face.py"), 6),
+    # R3314: the table's own criterion cell (this third column) is graded
+    # against each suite's declared EXPECTED_CRITERIA before the first suite
+    # starts, so a hand edit that moves one side and forgets the other stops
+    # the leg by name. Measured at R3314: 760 rows, 245 declaring suites all
+    # agreeing, 463 inheriting the table cell.
+    # (AC-RCA6 pinned in src/os/backlog.md as the R3314 PIN row BEFORE this
+    # suite and this row existed.)
+    ("os-runner-registry-face",
+     os.path.join("..", "os", "test_runner_registry_face.py"), 6),
     # R2417: the abort face names the suite a body died on but never whether
     # that abort still matters - measured at R2403 over the real pile, the
     # aborted bodies had no way to be told apart from live debt. A body is now
@@ -8288,6 +8297,69 @@ def phase_freeze_law():
     return True
 
 
+# R3314 AC-RCA6: the third cell of every SUITES row is a THIRD fact written by
+# hand, and until now nothing graded it against the suite's own declaration.
+# Measured on the live registry at R3314 before any code moved: 760 rows /
+# 6331 criteria, 245 suites carry `EXPECTED_CRITERIA = N`, 463 carry none and
+# print no criteria number at all (163 distinct epilogue shapes), and every one
+# of the 245 agrees with the table - which is why the drift had never been
+# visible. The seam is a single anchored assignment, so a suite's own constant
+# is read without executing it and without a second trailing-shape regex.
+EXPECTED_CRIT_RE = re.compile(r"(?m)^EXPECTED_CRITERIA[ \t]*=[ \t]*(\d+)"
+                              r"[ \t]*(?:#.*)?$")
+
+
+def registry_declarations(rows):
+    """R3314 AC-RCA6: ask each suite what count it declares, then answer the
+    whole registry face as (declared, inherited, drift, dups, zeros).
+
+    drift is [(label, table_cell, suite_declaration)]; dups and zeros are
+    label lists. A suite with no declaration is legal and counted as
+    inherited, so the 463 legacy rows keep running exactly as before."""
+    counts = {}
+    for label, _rel, _crit in rows:
+        counts[label] = counts.get(label, 0) + 1
+    dups = sorted(label for label, n in counts.items() if n > 1)
+    zeros = [label for label, _rel, crit in rows if int(crit) <= 0]
+    declared = 0
+    drift = []
+    for label, rel, crit in rows:
+        path = os.path.join(BASE, rel)
+        try:
+            with open(path, "r", encoding="utf-8", errors="replace") as handle:
+                text = handle.read()
+        except (IOError, OSError):
+            # a missing suite is the run's own finding, not a registry one
+            continue
+        match = EXPECTED_CRIT_RE.search(text)
+        if match is None:
+            continue
+        declared += 1
+        if int(match.group(1)) != int(crit):
+            drift.append((label, int(crit), int(match.group(1))))
+    return declared, len(rows) - declared, drift, dups, zeros
+
+
+def phase_registry(rows):
+    """R3314 AC-RCA6: refuse a registry whose hand-written count disagrees with
+    the suite that owns the number, BEFORE the first suite starts.
+
+    One line is always published so a green gate is a readable fact rather than
+    a silence; every refusal names its own shape."""
+    declared, inherited, drift, dups, zeros = registry_declarations(rows)
+    print("REGISTRY rows=%d declared=%d inherited=%d dup=%d zero=%d drift=%d"
+          % (len(rows), declared, inherited, len(dups), len(zeros),
+             len(drift)), flush=True)
+    for label, table, suite in drift:
+        print("E_RCA_CRIT_DRIFT label=%s table=%d suite=%d"
+              % (label, table, suite), flush=True)
+    for label in dups:
+        print("E_RCA_DUP_LABEL label=%s" % label, flush=True)
+    for label in zeros:
+        print("E_RCA_ZERO_CRIT label=%s" % label, flush=True)
+    return not drift and not dups and not zeros
+
+
 def phase_suites(selected=None):
     """R3313 AC-RCA2/AC-RCA4: every selected suite announces itself BEFORE
     it runs, so a leg that needs minutes is observable while it moves
@@ -8672,6 +8744,19 @@ def main(argv):
             sys.stdout = tee.stdout
             tee.close()
         return 1
+    registry_rows = SUITES if selected is None else [
+        row for row in SUITES if row[0] in selected]
+    # R3314 AC-RCA6: the table's own criterion cell is graded against the suite
+    # that owns the number BEFORE the first suite starts. A stale hand edit used
+    # to print an old count silently; it now stops the leg by name, and a
+    # selected run grades only the rows it was asked to run.
+    if not phase_registry(registry_rows):
+        print("RUNNER FAIL (registry declarations refused): "
+              "aborted before the first suite", flush=True)
+        if tee is not None:
+            sys.stdout = tee.stdout
+            tee.close()
+        return 2
     green_n, rows_n, total_n = phase_suites(selected)
     suites_ok = green_n == rows_n
     if selected is None:

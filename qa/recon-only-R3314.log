@@ -1,0 +1,14 @@
+FREEZE LAW OK scanned=1491 one_offs=904 max_round=2781 freeze=2838
+REGISTRY rows=1 declared=1 inherited=0 dup=0 zero=0 drift=0
+SUITE 1/1 os-runner-registry-face starting (criteria=6)
+  | runner_registry_face suite (expected criteria 6)
+  | PASS AC-RCA6(a) live registry graded: declared=246 inherited=515 drift=0 dup=0 zero=0, one REGISTRY line published
+  | PASS AC-RCA6(b) drift refused naming label and both counts, the matched copy green
+  | PASS AC-RCA6(c) duplicate label refused by name
+  | PASS AC-RCA6(d) non-positive cell refused by name
+  | PASS AC-RCA6(e) undeclared and absent suites inherit the table cell, no refusal
+  | PASS AC-RCA6(f) wired before the first suite: --only os-ledger-lines prints REGISTRY then SUITE 1/1 and ends PARTIAL rc=0
+  | SUITE PASS 6/6
+PASS suite os-runner-registry-face exit=0 pass-lines=6 fail-lines=0 criteria=6 1.4s
+PASS suites 1/1 green, expected criteria total=6, suite cap=600s overrides=1
+RUNNER PARTIAL (selected 1/1 green, criteria=6, full battery NOT proven, 1.4s)
