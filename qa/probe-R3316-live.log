@@ -1,0 +1,31 @@
+FREEZE LAW OK scanned=1491 one_offs=904 max_round=2781 freeze=2838
+REGISTRY rows=1 declared=1 inherited=0 missing=0 dup=0 zero=0 drift=0
+SUITE 1/1 os-runner-registry-face starting (criteria=22)
+  | runner_registry_face suite (expected criteria 22)
+  | PASS AC-RCA6(a) live registry graded: declared=246 inherited=515 drift=0 dup=0 zero=0, one REGISTRY line published
+  | PASS AC-RCA6(b) drift refused naming label and both counts, the matched copy green
+  | PASS AC-RCA6(c) duplicate label refused by name
+  | PASS AC-RCA6(d) non-positive cell refused by name
+  | PASS AC-RCA6(e) undeclared suites inherit the table cell, no refusal
+  | PASS AC-RCA6(f) wired before the first suite: --only os-ledger-lines prints REGISTRY then SUITE 1/1 and ends PARTIAL rc=0
+  | PASS AC-RCA7(a) absent suite refused by name, buckets sum to rows
+  | PASS AC-RCA7(b) a real undeclared suite still inherits, no refusal
+  | PASS AC-RCA7(c) live registry answers missing=0 and stays green
+  | PASS AC-RCA7(d) live buckets are self-consistent (declared+inherited+missing==rows)
+  | PASS AC-RCA8(a) --registry-only grades the whole table, starts zero suites, publishes REGISTRY-ONLY, no PARTIAL/PASS sentence
+  | PASS AC-RCA8(b) --registry-only with --only refused by name, zero suites started
+  | PASS AC-RCA9(a) one graded green reads 7 against table 8 while its agreeing neighbour is silent, and three shapes stay ungraded (red suite, no fraction, self-inconsistent)
+  | PASS AC-RCA9(b) a space-indented green fraction that agrees with the table is graded and silent instead of missed
+  | PASS AC-RCA9(b2) the runner's own echo prefix is not read as a verdict, so only raw suite output can move the gate
+  | PASS AC-RCA9(c) the launcher numerator shape is not read as a count
+  | PASS AC-RCA9(d) the parser answers None or (numerator, denominator)
+  | PASS AC-RCA9(e) an empty observation set answers three zeros
+  | PASS AC-RCA10(a) a green 9/9 fixture against table 8 stops the leg by name and the reading line counts it
+  | PASS AC-RCA10(b) a green 8/8 fixture against table 8 is graded silent
+  | PASS AC-RCA10(c) a red fixture that prints 9/9 is left to its own exit code instead of being graded here
+  | PASS AC-RCA10(d) main() counts the drift list in the green flag
+  | SUITE PASS 22/22
+PASS suite os-runner-registry-face exit=0 pass-lines=22 fail-lines=0 criteria=22 2.4s
+RUNTIME-CRIT graded=1 ungraded=0 drift=0
+PASS suites 1/1 green, expected criteria total=22, suite cap=600s overrides=1
+RUNNER PARTIAL (selected 1/1 green, criteria=22, full battery NOT proven, 2.4s)

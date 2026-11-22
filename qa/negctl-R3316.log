@@ -1,0 +1,5 @@
+BASE clean=True ((0, 1, []), (0, 1, []), (1, 0, [('alpha', 8, 9)]))
+MUT drop-num==den arm reddens=True (1, 0, [('alpha', 8, 9)])
+MUT drop-exit0-guard arm reddens=True (1, 0, [('alpha', 8, 9)])
+MUT drop-drift-in-green-flag needle_absent=True
+RESTORED green=True ((0, 1, []), (0, 1, []), (1, 0, [('alpha', 8, 9)]))

@@ -1,0 +1,41 @@
+FREEZE LAW OK scanned=1491 one_offs=904 max_round=2781 freeze=2838
+REGISTRY rows=4 declared=0 inherited=4 missing=0 dup=0 zero=0 drift=0
+SUITE 1/4 os-lobby-city-view starting (criteria=6)
+  | PASS AC-CV1 status=200 type=text/html bytes=6653 offline=True
+  | PASS AC-CV2 aigc_label=True risk_note=True
+  | PASS AC-CV3 snapshot=json post=405 unknown=404 census=200
+  | PASS AC-CV4 identical=True bytes=6653 sha16=F4DA3A32459C2E32
+  | PASS AC-CV6 bom=False crlf=0 ascii_src=True wired=True
+  | PASS AC-CV5 page=200 snapshot=503 not_ready_line=True
+  | SUITE PASS 6/6
+PASS suite os-lobby-city-view exit=0 pass-lines=6 fail-lines=0 criteria=6 1.3s
+SUITE 2/4 lobby-hub-ugc starting (criteria=6)
+  | PASS AC-HUG1 additive face contract  old keys checked, ugc published at 8098
+  | PASS AC-HUG2 live map measured  listener on/off moved ugc only
+  | PASS AC-HUG3 read-only surface untouched  page byte-identical on both slash forms
+  | PASS AC-HUG4 page carries the face  5 markers, zero external references
+  | PASS AC-HUG5 operator wiring honest  flag advertised and passed through
+  | PASS AC-HUG6 hygiene and registration  ascii module, one row, adjacent suites green
+  | SUITE PASS 6/6
+PASS suite lobby-hub-ugc exit=0 pass-lines=6 fail-lines=0 criteria=6 21.6s
+SUITE 3/4 member-face starting (criteria=6)
+  | PASS AC-MFN1: page=8752B disk=8752B both_200=True
+  | PASS AC-MFN2: blank=400/E_NO_AVATAR days=400/E_BAD_BODY get404=404 post404=404
+  | PASS AC-MFN3: active=False tiers=[] cert=False
+  | PASS AC-MFN4: join=200 amount=1990 tiers=['experience'] cert=True periods=1
+  | PASS AC-MFN5: disclaimer_match=True ai_label='AI 生成' avatars=['alice']
+  | PASS AC-MFN6: external=none member_paths=3 ascii=True egress=0
+  | live: state=200 bytes=4187
+  | SUITE PASS 6/6
+  | SUITE 6/6 green
+PASS suite member-face exit=0 pass-lines=6 fail-lines=0 criteria=6 0.9s
+SUITE 4/4 launcher-mutex starting (criteria=5)
+  | PASS AC-LMX1
+  | PASS AC-LMX2
+  | PASS AC-LMX3
+  | PASS AC-LMX4
+  | PASS AC-LMX5
+  | SUITE PASS 5/5
+PASS suite launcher-mutex exit=0 pass-lines=5 fail-lines=0 criteria=5 6.6s
+PASS suites 4/4 green, expected criteria total=23, suite cap=600s overrides=1
+RUNNER PARTIAL (selected 4/4 green, criteria=23, full battery NOT proven, 30.5s)

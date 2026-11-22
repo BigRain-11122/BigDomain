@@ -1,0 +1,16 @@
+rows=761
+stat={"declared": 246, "inherited_frac": 503, "inherited_netiher": 1, "inherited_suite_line": 11} no_file=0
+sampled=478
+  lobby crit=79 | print("SUITE %s (%d/%d criteria pass)" % ("PASS" if not fails else "FAIL",
+  os-lobby-city-view crit=6 | print("SUITE %s %d/%d" % ("PASS" if not failed else "FAIL",
+  os-lobby-checkout-demo crit=6 | verdict = "SUITE PASS %d/%d" % (passed, total) if passed == total else \
+  lobby-hub-ledger crit=6 | print("SUITE PASS %d/%d" % (passed, total))
+  lobby-hub-ugc crit=6 | print("SUITE PASS %d/%d" % (passed, total))
+  lobby-hub-panel crit=6 | print("SUITE PASS %d/%d" % (passed, total))
+  lobby-hub-member crit=6 | print("SUITE PASS %d/%d" % (passed, total))
+  member-face crit=6 | print("SUITE %d/%d green" % (len(RESULTS) - len(fails), len(RESULTS)),
+  start-all crit=20 | print("SUITE FAIL %d/%d failed=%s" % (len(failed), len(RESULTS),
+  kill-on-close crit=12 | print("SUITE FAIL %d/%d failed=%s"
+  launcher-registry crit=9 | print("SUITE FAIL %d/%d failed=%s" % (len(failed), len(RESULTS),
+  launcher-mutex crit=5 | print("SUITE FAIL %d/%d failed=%s" % (len(failed), len(RESULTS),
+numerator_only=11

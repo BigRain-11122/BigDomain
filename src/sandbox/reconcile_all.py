@@ -5997,7 +5997,7 @@ SUITES = [
     # (AC-RCA6 pinned in src/os/backlog.md as the R3314 PIN row BEFORE this
     # suite and this row existed.)
     ("os-runner-registry-face",
-     os.path.join("..", "os", "test_runner_registry_face.py"), 12),
+     os.path.join("..", "os", "test_runner_registry_face.py"), 22),
     # R2417: the abort face names the suite a body died on but never whether
     # that abort still matters - measured at R2403 over the real pile, the
     # aborted bodies had no way to be told apart from live debt. A body is now
@@ -8385,14 +8385,63 @@ def phase_registry(rows):
     return not drift and not dups and not zeros and not missing
 
 
+# R3316 AC-RCA9: 515 of the 761 rows declare no count at the source layer, so
+# their table cell is a hand-written fact nothing graded. Measured at R3316
+# over all 761 sources (read-only, ast+e, no suite executed): 503 of those 515
+# carry their own verdict fraction (`n/m`) in the output, 478 of them on a line
+# that starts with SUITE, and exactly 1 carries neither shape. That fraction is
+# the suite's own statement about how many criteria it ran, so a GREEN suite
+# whose fraction reads n/n must agree with the table cell - a disagreement
+# means one of the two facts is stale and the leg stops by name. The gate stays
+# silent where it cannot know: an exit!=0 suite is already red, a fraction
+# whose numerator differs from its denominator is self-inconsistent (the
+# launcher family prints "SUITE FAIL <failed>/<total>"), and a suite that
+# prints no fraction is counted as ungraded instead of assumed green. What it
+# cannot see is a table cell and a suite that both went stale together; that
+# remainder is named in the R3316 round entry, not closed here.
+RUNTIME_VERDICT_RE = re.compile(r"(?m)^[ \t]*SUITE\b[^\n]*?(\d+)\s*/\s*(\d+)")
+RUNTIME_CRIT_DRIFT = []
+
+
+def parse_runtime_verdict(out):
+    """R3316 AC-RCA9: read the first SUITE-anchored `n/m` out of a suite's own
+    output and answer (numerator, denominator), or None when it printed none."""
+    match = RUNTIME_VERDICT_RE.search(out or "")
+    if match is None:
+        return None
+    return int(match.group(1)), int(match.group(2))
+
+
+def runtime_crit_drift(observations):
+    """R3316 AC-RCA9: grade each (label, crit, code, out) against the count the
+    suite itself published. Answers (graded, ungraded, drift) where drift is
+    [(label, table, suite)]; only a self-consistent GREEN fraction is graded,
+    for the three silences named above the constant."""
+    graded = 0
+    ungraded = 0
+    drift = []
+    for label, crit, code, out in observations:
+        verdict = parse_runtime_verdict(out)
+        if verdict is None or code != 0 or verdict[0] != verdict[1]:
+            ungraded += 1
+            continue
+        graded += 1
+        if verdict[1] != int(crit):
+            drift.append((label, int(crit), verdict[1]))
+    return graded, ungraded, drift
+
+
 def phase_suites(selected=None):
     """R3313 AC-RCA2/AC-RCA4: every selected suite announces itself BEFORE
     it runs, so a leg that needs minutes is observable while it moves
-    instead of silent until it returns. Returns (green, rows, criteria)."""
+    instead of silent until it returns. R3316 AC-RCA9/AC-RCA10 adds the
+    runtime count reading: a green suite whose own fraction disagrees with
+    the table cell stops the leg by name. Returns (green, rows, criteria)."""
     rows = SUITES if selected is None else [
         row for row in SUITES if row[0] in selected]
     green = 0
     total = 0
+    observed = []
     for idx, (label, rel, crit) in enumerate(rows, 1):
         path = os.path.join(BASE, rel)
         t0 = time.time()
@@ -8408,8 +8457,20 @@ def phase_suites(selected=None):
         ok = code == 0
         if ok:
             green += 1
+        observed.append((label, crit, code, out))
         note(ok, "suite %s exit=%d pass-lines=%d fail-lines=%d criteria=%d %.1fs"
              % (label, code, passes, fails, crit, time.time() - t0))
+    graded, ungraded, drift = runtime_crit_drift(observed)
+    del RUNTIME_CRIT_DRIFT[:]
+    RUNTIME_CRIT_DRIFT.extend(drift)
+    print("RUNTIME-CRIT graded=%d ungraded=%d drift=%d"
+          % (graded, ungraded, len(drift)), flush=True)
+    for label, table, suite in drift:
+        print("E_RCA_RUN_CRIT_DRIFT label=%s table=%d suite=%d"
+              % (label, table, suite), flush=True)
+    if drift:
+        note(False, "runtime-crit drift=%d graded=%d ungraded=%d"
+             % (len(drift), graded, ungraded))
     note(green == len(rows),
          "suites %d/%d green, expected criteria total=%d, suite cap=%ds"
          " overrides=%d"
@@ -8821,7 +8882,10 @@ def main(argv):
             tee.close()
         return 2
     green_n, rows_n, total_n = phase_suites(selected)
-    suites_ok = green_n == rows_n
+    # R3316 AC-RCA10: a green suite whose own published fraction disagrees
+    # with the table cell is drift, so the leg is not green even though every
+    # suite exited 0.
+    suites_ok = green_n == rows_n and not RUNTIME_CRIT_DRIFT
     if selected is None:
         tmp = tempfile.mkdtemp(prefix="reconcile-all-")
         try:

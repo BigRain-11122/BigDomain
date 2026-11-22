@@ -34,7 +34,7 @@ sys.path.insert(0, BASE)
 
 import reconcile_all as RA  # noqa: E402
 
-EXPECTED_CRITERIA = 12
+EXPECTED_CRITERIA = 22
 RUNNER = os.path.join(SANDBOX, "reconcile_all.py")
 LABEL = "os-runner-registry-face"
 
@@ -266,6 +266,106 @@ def ac_rca8():
           "suites started")
 
 
+def ac_rca9():
+    """R3316 AC-RCA9: only a self-consistent GREEN fraction is graded, and a
+    disagreement with the table cell is named."""
+    obs = [
+        ("alpha", 8, 0, "SUITE PASS 7/7\n"),
+        ("alpha", 8, 0, "SUITE 8/8 green\n"),
+        ("alpha", 8, 1, "SUITE FAIL 7/7\n"),
+        ("alpha", 8, 0, "SUITE PASS no fraction here\n"),
+        ("alpha", 8, 0, "SUITE FAIL 3/8 failed=[x]\n"),
+    ]
+    graded, ungraded, drift = RA.runtime_crit_drift(obs)
+    check(graded == 2 and ungraded == 3 and drift == [("alpha", 8, 7)],
+          "AC-RCA9(a) one graded green reads 7 against table 8 while its "
+          "agreeing neighbour is silent, and three shapes stay ungraded "
+          "(red suite, no fraction, self-inconsistent)")
+
+    graded2, ungraded2, drift2 = RA.runtime_crit_drift(
+        [("beta", 6, 0, "    SUITE PASS 6/6\n")])
+    check(graded2 == 1 and ungraded2 == 0 and not drift2,
+          "AC-RCA9(b) a space-indented green fraction that agrees with the "
+          "table is graded and silent instead of missed")
+
+    graded2b, ungraded2b, drift2b = RA.runtime_crit_drift(
+        [("beta", 6, 0, "  | SUITE PASS 9/9\n")])
+    check(graded2b == 0 and ungraded2b == 1 and not drift2b,
+          "AC-RCA9(b2) the runner's own echo prefix is not read as a verdict, "
+          "so only raw suite output can move the gate")
+
+    graded3, _u3, drift3 = RA.runtime_crit_drift(
+        [("gamma", 20, 0, "SUITE FAIL 2/20 failed=[a, b]\n")])
+    check(graded3 == 0 and not drift3,
+          "AC-RCA9(c) the launcher numerator shape is not read as a count")
+
+    check(RA.parse_runtime_verdict("no suite line\n") is None
+          and RA.parse_runtime_verdict("SUITE 9/9") == (9, 9),
+          "AC-RCA9(d) the parser answers None or (numerator, denominator)")
+
+    graded5, ungraded5, drift5 = RA.runtime_crit_drift([])
+    check((graded5, ungraded5, drift5) == (0, 0, []),
+          "AC-RCA9(e) an empty observation set answers three zeros")
+
+
+def _run_planted(body, crit):
+    """Run the shipped phase_suites over one planted suite row."""
+    root = plant(body)
+    saved_base, saved_suites = RA.BASE, RA.SUITES
+    saved_drift = list(RA.RUNTIME_CRIT_DRIFT)
+    RA.BASE = root
+    RA.SUITES = [("drift-fixture", "test_planted.py", crit)]
+    buf = io.StringIO()
+    try:
+        with contextlib.redirect_stdout(buf):
+            ran = RA.phase_suites()
+        drift = list(RA.RUNTIME_CRIT_DRIFT)
+    finally:
+        RA.BASE, RA.SUITES = saved_base, saved_suites
+        del RA.RUNTIME_CRIT_DRIFT[:]
+        RA.RUNTIME_CRIT_DRIFT.extend(saved_drift)
+        shutil.rmtree(root, ignore_errors=True)
+    return ran, drift, buf.getvalue()
+
+
+def ac_rca10():
+    """R3316 AC-RCA10: the reading is wired into the leg itself. A green
+    fixture whose own fraction disagrees with the table stops the run by name,
+    a matching one does not, and main()'s green flag reads the drift list."""
+    ran, drift, out = _run_planted(
+        "print('SUITE PASS 9/9')\n", 8)
+    lines = out.splitlines()
+    named = ("E_RCA_RUN_CRIT_DRIFT label=drift-fixture table=8 suite=9"
+             in out)
+    reading = "RUNTIME-CRIT graded=1 ungraded=0 drift=1" in lines
+    check(ran == (1, 1, 8) and drift == [("drift-fixture", 8, 9)]
+          and named and reading
+          and any(l.startswith("FAIL runtime-crit drift=1") for l in lines),
+          "AC-RCA10(a) a green 9/9 fixture against table 8 stops the leg by "
+          "name and the reading line counts it")
+
+    ran2, drift2, out2 = _run_planted(
+        "print('SUITE PASS 8/8')\n", 8)
+    check(ran2 == (1, 1, 8) and not drift2
+          and "RUNTIME-CRIT graded=1 ungraded=0 drift=0" in out2
+          and "E_RCA_" not in out2,
+          "AC-RCA10(b) a green 8/8 fixture against table 8 is graded silent")
+
+    ran3, drift3, out3 = _run_planted(
+        "import sys\nprint('SUITE PASS 9/9')\nsys.exit(2)\n", 8)
+    check(ran3 == (0, 1, 8) and not drift3
+          and "RUNTIME-CRIT graded=0 ungraded=1 drift=0" in out3,
+          "AC-RCA10(c) a red fixture that prints 9/9 is left to its own exit "
+          "code instead of being graded here")
+
+    with io.open(RUNNER, "r", encoding="utf-8") as handle:
+        source = handle.read()
+    wired = ("suites_ok = green_n == rows_n and not RUNTIME_CRIT_DRIFT"
+             in source)
+    check(wired,
+          "AC-RCA10(d) main() counts the drift list in the green flag")
+
+
 def main():
     print("runner_registry_face suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -277,6 +377,8 @@ def main():
     ac_rca6_f()
     ac_rca7()
     ac_rca8()
+    ac_rca9()
+    ac_rca10()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:
