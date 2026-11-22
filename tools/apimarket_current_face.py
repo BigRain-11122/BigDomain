@@ -36,6 +36,12 @@ Criteria AC-ACF1..10 (pre-registered in src/os/backlog.md before this file):
   ACF10 the date is not older than the day the stamp shipped, and not later
        than the machine local day at check time (a page cannot claim to have
        been rendered tomorrow)
+  ACF11 the stamp law is enforced at its birth site: the producer exposes the
+       floor (read from there, never copied here) and a refusal function with
+       a closed set of named reasons, refuses both out-of-range ends and an
+       impossible date, accepts the day the page itself carries, and its
+       `main()` answers rc=2 with the named code while the two artifacts stay
+       byte identical (measured, not asserted by reading its source)
 
 What this does NOT prove: that the numbers inside the report are correct, that
 they were a live reading on the printed date, or that a buyer can pay. All
@@ -44,8 +50,10 @@ three stay false until the physical set arrives.
 
 import argparse
 import ast
+import contextlib
 import datetime
 import hashlib
+import importlib.util
 import io
 import json
 import os
@@ -73,10 +81,14 @@ BADGE_RE = re.compile(
 SCHEMA_RE = re.compile(r"^REPORT_SCHEMA = (\d+)$", re.M)
 PIN_RE = re.compile(r"^preview/apimarket-report\.(?:html|json)\s+text\s+eol=lf\s*$",
                     re.M)
-# The day the render stamp shipped. Chosen when the criterion was written, not
-# derived from anything: a page cannot claim to predate the feature.
-STAMP_FLOOR = "2026-11-22"
+# R3294: the floor date is NOT defined here. AC-ACF10 used to keep its own
+# copy of "2026-11-22"; the producer now owns that constant (the birth site
+# that refuses the stamp), and this checker reads it from there, so one law
+# cannot drift into two. ACF11 measures that, including a private-tree arm
+# that moves the producer's floor and must move AC-ACF10 with it.
 SOURCE_KEYS = ("generator", "injector", "producer")
+PRODUCER_REL = os.path.join("src", "os", "preview_apimarket_current.py")
+LAW_CACHE = {}
 
 
 def set_root(root):
@@ -100,6 +112,36 @@ def paths():
         "attrs": os.path.join(ROOT, ".gitattributes"),
         "freeze": os.path.join(ROOT, "state", "apimarket-face-freeze.json"),
     }
+
+
+def producer_law():
+    """The producer module of the tree under check: (module, error).
+
+    Loaded by path, keyed by realpath, because --root points the negative
+    controls at private trees that carry their own copy of the producer. The
+    module is imported, never run: main() is only called with stamps the law
+    already refuses, so nothing is ever rendered or written.
+    """
+    path = os.path.join(ROOT, PRODUCER_REL)
+    if not os.path.isfile(path):
+        return None, "E_ACF11 producer missing at %s" % path
+    key = os.path.realpath(path)
+    if key in LAW_CACHE:
+        return LAW_CACHE[key], None
+    name = ("_apimarket_producer_"
+            + hashlib.sha256(key.encode("utf-8")).hexdigest()[:12])
+    module = sys.modules.get(name)
+    if module is None:
+        spec = importlib.util.spec_from_file_location(name, path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        try:
+            spec.loader.exec_module(module)
+        except Exception as exc:  # noqa: BLE001 - the tree is being graded
+            sys.modules.pop(name, None)
+            return None, "E_ACF11 producer unimportable: %s" % exc
+    LAW_CACHE[key] = module
+    return module, None
 
 
 def read_bytes(path):
@@ -321,15 +363,82 @@ def check():
         if extra:
             fails.append("E_ACF9 source_sha256 has unknown keys %r" % extra)
 
-    # ACF10 the date sits between the day the stamp shipped and the local day
-    if date_ok:
-        if stamp < STAMP_FLOOR:
+    # ACF10 the date sits between the day the stamp shipped and the local day.
+    # The floor is the producer's own constant (R3294), read here so the check
+    # and the refusal cannot disagree.
+    law, law_error = producer_law()
+    if law_error:
+        fails.append(law_error)
+    floor = getattr(law, "STAMP_FLOOR", None) if law is not None else None
+    today = datetime.date.today().isoformat()
+    if date_ok and isinstance(floor, str):
+        if stamp < floor:
             fails.append("E_ACF10 rendered_on %s predates the stamp (%s)"
-                         % (stamp, STAMP_FLOOR))
-        today = datetime.date.today().isoformat()
+                         % (stamp, floor))
         if stamp > today:
             fails.append("E_ACF10 rendered_on %s is in the future"
                          " (machine local day %s)" % (stamp, today))
+
+    # ACF11 the law is enforced where the stamp is born, and it lives once.
+    if law is not None:
+        refusal = getattr(law, "stamp_refusal", None)
+        codes = (getattr(law, "STAMP_FORMAT", None),
+                 getattr(law, "STAMP_EARLY", None),
+                 getattr(law, "STAMP_FUTURE", None))
+        missing = [name for name, value in
+                   (("stamp_refusal", refusal), ("STAMP_FLOOR", floor),
+                    ("STAMP_FORMAT", codes[0]), ("STAMP_EARLY", codes[1]),
+                    ("STAMP_FUTURE", codes[2]))
+                   if value is None]
+        if missing:
+            fails.append("E_ACF11 producer does not expose %s"
+                         % ", ".join(missing))
+        elif floor > today:
+            # A floor after today admits no date at all: name it rather than
+            # pretend the accept arm below is meaningful.
+            fails.append("E_ACF11 floor %s is later than the machine local"
+                         " day %s (no stamp could pass)" % (floor, today))
+        else:
+            early = (datetime.date.fromisoformat(floor)
+                     - datetime.timedelta(days=1)).isoformat()
+            late = (datetime.date.today()
+                    + datetime.timedelta(days=1)).isoformat()
+            accept = max(floor, today)
+            cases = ((early, codes[1], "floor"),
+                     ((late), codes[2], "future"),
+                     ("2026-02-30", codes[0], "format"))
+            for value, want_code, label in cases:
+                answer = refusal(value, today=today)
+                got = answer[0] if isinstance(answer, tuple) and answer else None
+                if got != want_code:
+                    fails.append("E_ACF11 %s stamp %s answered %r, want %s"
+                                 % (label, value, got, want_code))
+            if refusal(accept, today=today) is not None:
+                fails.append("E_ACF11 accepts no stamp at all on the machine"
+                             " day %s (floor %s)" % (today, floor))
+            if date_ok and refusal(stamp) is not None:
+                fails.append("E_ACF11 the page's own stamp %s is refused by"
+                             " the producer" % stamp)
+            # The birth gate, measured: main() must answer rc=2 with the named
+            # code and leave both artifacts byte identical.
+            before_html = sha256(read_bytes(p["html"]))
+            before_json = sha256(read_bytes(p["json"]))
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                rc = law.main(["--stamp", early])
+            captured = output.getvalue()
+            if rc != 2:
+                fails.append("E_ACF11 producer main(--stamp %s) answered rc=%r,"
+                             " want 2 (it wrote before refusing)" % (early, rc))
+            if codes[1] not in captured:
+                fails.append("E_ACF11 producer refusal did not name %s"
+                             % codes[1])
+            if sha256(read_bytes(p["html"])) != before_html:
+                fails.append("E_ACF11 producer refused %s but the html moved"
+                             % early)
+            if sha256(read_bytes(p["json"])) != before_json:
+                fails.append("E_ACF11 producer refused %s but the json moved"
+                             % early)
 
     return {
         "schema": schema,
@@ -399,7 +508,7 @@ def main(argv=None):
         for row in fails:
             print("  %s" % row)
     if not fails:
-        print("VERDICT PASS criteria=10")
+        print("VERDICT PASS criteria=11")
         return 0
     print("VERDICT FAIL")
     return 2

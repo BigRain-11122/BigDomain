@@ -1,0 +1,12 @@
+PASS clean rc=0 want=None
+PASS producer-floor-moved rc=2 want=E_ACF10
+PASS producer-gate-not-called rc=2 want=E_ACF11
+PASS producer-floor-not-enforced rc=2 want=E_ACF11
+PASS page-date-only rc=2 want=E_ACF8
+PASS impossible-date rc=2 want=E_ACF8
+PASS future-date rc=2 want=E_ACF10
+PASS pre-floor-date rc=2 want=E_ACF10
+PASS source-hash-tampered rc=2 want=E_ACF9
+PASS sentence-paraphrased rc=2 want=E_ACF3
+PASS page-byte-appended rc=2 want=E_ACF5
+NEGCTL 11/11

@@ -63,6 +63,47 @@ def local_day():
     return datetime.date.today().isoformat()
 
 
+# R3294: the day the render stamp shipped. This is the ONE definition - the
+# checker (tools/apimarket_current_face.py, AC-ACF10/11) reads this value
+# instead of keeping a copy, so "a page cannot claim to predate the feature"
+# is stated once and enforced at both ends: the producer refuses such a stamp
+# at birth, and the checker would still name an older page.
+STAMP_FLOOR = "2026-11-22"
+
+STAMP_FORMAT = "E_STAMP_FORMAT"
+STAMP_EARLY = "E_STAMP_FLOOR"
+STAMP_FUTURE = "E_STAMP_FUTURE"
+
+
+def stamp_refusal(stamp, today=None):
+    """(code, line) when this stamp may not be written, else None.
+
+    A stamp is a claim about when the page was rendered, so a date this tree
+    could not have produced - before the feature existed, or after today - is
+    refused here, before anything is rendered. R3293 measured that the only
+    gate was `fromisoformat`, so both out-of-range dates landed and only the
+    sweep's AC-ACF10 reddened them afterwards. The sweep stays as the second
+    line of defence; this is the birth site.
+
+    `today` is a parameter for measurement only: a law that answers
+    differently depending on the wall clock could not be tested.
+    """
+    try:
+        datetime.date.fromisoformat(stamp)
+    except (TypeError, ValueError):
+        return (STAMP_FORMAT,
+                "--stamp must be a calendar day YYYY-MM-DD, got %r"
+                % (stamp,))
+    if stamp < STAMP_FLOOR:
+        return (STAMP_EARLY, "--stamp %s predates the stamp floor %s"
+                % (stamp, STAMP_FLOOR))
+    today = local_day() if today is None else today
+    if stamp > today:
+        return (STAMP_FUTURE, "--stamp %s is later than the machine local"
+                " day %s" % (stamp, today))
+    return None
+
+
 def provenance():
     out = {}
     for key in sorted(SOURCES):
@@ -128,10 +169,11 @@ def main(argv):
             stamp = argv[i + 1]
         elif token.startswith("--stamp="):
             stamp = token.split("=", 1)[1]
-    try:
-        datetime.date.fromisoformat(stamp)
-    except ValueError:
-        print("--stamp must be YYYY-MM-DD, got %r" % stamp)
+    refusal = stamp_refusal(stamp)
+    if refusal is not None:
+        # R3294: refused before --dry-run answers too, because a dry run that
+        # prints a page the write path would refuse is a promise nobody keeps.
+        print("%s %s" % refusal)
         return 2
     if dry:
         text, how = expected_page(stamp)

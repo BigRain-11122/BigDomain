@@ -1,0 +1,8 @@
+Q2 floor home: {'tools/apimarket_current_face.py': {'STAMP_FLOOR': 3, 'literal_day': 1, 'fromisoformat': 1}, 'src/os/preview_apimarket_current.py': {'STAMP_FLOOR': 0, 'literal_day': 0, 'fromisoformat': 1}}
+Q2 producer bound checks before write: floor=0 future=1 today=3
+Q1 stamp=2026-01-01 rc=0 page_stamp=2026-01-01 bytes=37041 secs=0.2829 out='report written: C:\\Users\\sjs20\\AppData\\Local\\Temp\\probe-R3294-u5mulq2e\\preview\\apimarket-report.html (36345 bytes, sha25'
+Q1 stamp=2099-01-01 rc=0 page_stamp=2099-01-01 bytes=37041 secs=0.2887 out='report written: C:\\Users\\sjs20\\AppData\\Local\\Temp\\probe-R3294-u5mulq2e\\preview\\apimarket-report.html (36345 bytes, sha25'
+Q1 stamp=2026-02-30 rc=2 secs=0.1193 out="--stamp must be YYYY-MM-DD, got '2026-02-30'"
+Q1 stamp=<today> rc=0 page_stamp=2026-11-22 bytes=37041 secs=0.3278
+Q3 1000 date parses in 0.0001s (a refusal renders nothing)
+live artifacts unchanged: (37049, 59815) -> (37049, 59815)
