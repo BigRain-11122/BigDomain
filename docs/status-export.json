@@ -1,17 +1,17 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3237 PRODUCT+ENGINEERING: the content-safety door count is now PARSED, not grepped - tools/ugc_gate_report.py:direct_call_sites() walks each non-test src/sandbox source with ast and counts three call forms (SecGate(...), mod.SecGate(...), and a one-level module alias X = mod.SecGate or from ... import SecGate as X), so a name that appears only in a docstring or a comment no longer invents a door, and a construction sharing a `def` line is no longer dropped by the old line heuristic. Files that do not parse are named on the face instead of silently becoming a zero.",
+    "current": "2026-11-22 R3238 PRODUCT+ENGINEERING: the content-safety face listed three blind forms and only two were real - the probe found that a package re-export, a star import and a plain import all keep the class name in the call and were measured visible all along, while getattr(sg, \"SecGate\") really was invisible. The alias table now follows that third spelling (attribute assignment, import-as, literal getattr), the page sentence that called re-exports invisible is corrected against the measurement, and the factory-return form is named on the page as the ONE form this reader cannot decide statically.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/ugc-gate-report.html (10436B) + preview/ugc-gate-report.json (7187B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/ugc-gate-report.html (10436B) + preview/ugc-gate-report.json (7187B) [2026-11-22 mtime]",
+    "last_artifact": "preview/ugc-gate-report.html (11033B) + preview/ugc-gate-report.json (7396B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/ugc-gate-report.html (11033B) + preview/ugc-gate-report.json (7396B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3237] next window (<=48h): (0) MAIN — **读者还剩两条已知盲区，且本轮刻意没给新律配判据**：①**工厂面**＝`getattr(sec_gate, \"SecGate\")`、`factory()` 返回类、包的再导出这三种形态本轮解析看不见（页上已具名），先只读量三问：活树今日是否出现任一形态（预期 0）／把其中一种写进私有 world 量新读者是否仍绿（预期绿＝看不见）／追它需要跨文件符号表还是跨模块运行期解析（代价）。②**判据 vs 套件**＝本轮把「散文不算门、别名要跟」写进了 AC-UGR8/AC-UGR6 散文并由套件负控证明，但**没有任何 `--check` 判据**独立验证这两点；三选一＝①接受（套件臂即证据，判据只罚文件集）②让 `check()` 拿一份「散文样本」自证不算（会引入判据检查自己输入的循环）③把两条限制从页面散文降级为注释并不再声称。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T08:17:00+08:00",
-    "updated_at": "2026-11-22T08:17:00+08:00",
+    "next_milestone": "[R3238] next window (<=48h): (0) MAIN — **门面自己的读者没有任何 `--check` 判据**：AC-UGR8 比的是「数据里的站点文件集 ⊆ 落地面印出的文件集」，所以**读者若退化成不再跟别名**（B16/B18 那两条法则失效），站点数从 4 掉到 2，落地面仍印着 3 个文件、集合仍被包含 ⇒ `--check` 仍 `VERDICT PASS`，只有套件臂会红。做法＝先只读量三问：①把 `direct_call_sites` 打成「只认 Name `SecGate`」的退化版（私有 world 里替换函数），量面 `--check` 是否仍绿（预期绿＝看不见）；②活树今天退化版会掉几个站点（预期 1 个：`lobby/msgsec_stub.py` 的 `MsgSecStub` 不受影响，但别名/属性形态会掉）；③收口三选一＝①接受（读者由套件守、面只判世界，页上具名此分工）②在面上加一条「reader_probe」自证：`check()` 用一份**内置最小样本**跑一遍读者并断言命中数（会引入判据检查自己输入的循环，须先想清楚）③把站点数也印在面上并钉住（数量仍不区分「少一个真门」与「换了写法」）。同时把 R3237 第二问（散文／别名两条律无判据）与本问合判，因为它们问的是同一件事：**读者的行为由谁判**。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T08:24:24+08:00",
+    "updated_at": "2026-11-22T08:24:24+08:00",
     "heartbeat": {
       "tick": 3223,
       "state_tick": 3223,
@@ -41,8 +41,8 @@
       "readable": 4586
     }
   },
-  "current": "2026-11-22 R3237 PRODUCT+ENGINEERING: the content-safety door count is now PARSED, not grepped - tools/ugc_gate_report.py:direct_call_sites() walks each non-test src/sandbox source with ast and counts three call forms (SecGate(...), mod.SecGate(...), and a one-level module alias X = mod.SecGate or from ... import SecGate as X), so a name that appears only in a docstring or a comment no longer invents a door, and a construction sharing a `def` line is no longer dropped by the old line heuristic. Files that do not parse are named on the face instead of silently becoming a zero.",
-  "claims": {"claimed": 325, "captured": 99, "contradicted": 11, "uncaptured": 215, "historic": 7, "rows": 8, "present": true, "census_ts": "2026-11-22T08:17:00+08:00"},
+  "current": "2026-11-22 R3238 PRODUCT+ENGINEERING: the content-safety face listed three blind forms and only two were real - the probe found that a package re-export, a star import and a plain import all keep the class name in the call and were measured visible all along, while getattr(sg, \"SecGate\") really was invisible. The alias table now follows that third spelling (attribute assignment, import-as, literal getattr), the page sentence that called re-exports invisible is corrected against the measurement, and the factory-return form is named on the page as the ONE form this reader cannot decide statically.",
+  "claims": {"claimed": 316, "captured": 94, "contradicted": 10, "uncaptured": 212, "historic": 7, "rows": 8, "present": true, "census_ts": "2026-11-22T08:24:24+08:00"},
   "chain": {"present": true, "rows": 8, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -71,11 +71,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3237 PRODUCT+ENGINEERING: the content-safety door count is now PARSED, not grepped - tools/ugc_gate_report.py:direct_call_sites() walks each non-test src/sandbox source with ast and counts three call forms (SecGate(...), mod.SecGate(...), and a one-level module alias X = mod.SecGate or from ... import SecGate as X), so a name that appears only in a docstring or a comment no longer invents a door, and a construction sharing a `def` line is no longer dropped by the old line heuristic. Files that do not parse are named on the face instead of silently becoming a zero.",
-  "export_ts": "2026-11-22T08:17:00+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (10436B) + preview/ugc-gate-report.json (7187B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3238 PRODUCT+ENGINEERING: the content-safety face listed three blind forms and only two were real - the probe found that a package re-export, a star import and a plain import all keep the class name in the call and were measured visible all along, while getattr(sg, \"SecGate\") really was invisible. The alias table now follows that third spelling (attribute assignment, import-as, literal getattr), the page sentence that called re-exports invisible is corrected against the measurement, and the factory-return form is named on the page as the ONE form this reader cannot decide statically.",
+  "export_ts": "2026-11-22T08:24:24+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (11033B) + preview/ugc-gate-report.json (7396B) [2026-11-22 mtime]",
   "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
-  "next_milestone": "[R3237] next window (<=48h): (0) MAIN — **读者还剩两条已知盲区，且本轮刻意没给新律配判据**：①**工厂面**＝`getattr(sec_gate, \"SecGate\")`、`factory()` 返回类、包的再导出这三种形态本轮解析看不见（页上已具名），先只读量三问：活树今日是否出现任一形态（预期 0）／把其中一种写进私有 world 量新读者是否仍绿（预期绿＝看不见）／追它需要跨文件符号表还是跨模块运行期解析（代价）。②**判据 vs 套件**＝本轮把「散文不算门、别名要跟」写进了 AC-UGR8/AC-UGR6 散文并由套件负控证明，但**没有任何 `--check` 判据**独立验证这两点；三选一＝①接受（套件臂即证据，判据只罚文件集）②让 `check()` 拿一份「散文样本」自证不算（会引入判据检查自己输入的循环）③把两条限制从页面散文降级为注释并不再声称。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3238] next window (<=48h): (0) MAIN — **门面自己的读者没有任何 `--check` 判据**：AC-UGR8 比的是「数据里的站点文件集 ⊆ 落地面印出的文件集」，所以**读者若退化成不再跟别名**（B16/B18 那两条法则失效），站点数从 4 掉到 2，落地面仍印着 3 个文件、集合仍被包含 ⇒ `--check` 仍 `VERDICT PASS`，只有套件臂会红。做法＝先只读量三问：①把 `direct_call_sites` 打成「只认 Name `SecGate`」的退化版（私有 world 里替换函数），量面 `--check` 是否仍绿（预期绿＝看不见）；②活树今天退化版会掉几个站点（预期 1 个：`lobby/msgsec_stub.py` 的 `MsgSecStub` 不受影响，但别名/属性形态会掉）；③收口三选一＝①接受（读者由套件守、面只判世界，页上具名此分工）②在面上加一条「reader_probe」自证：`check()` 用一份**内置最小样本**跑一遍读者并断言命中数（会引入判据检查自己输入的循环，须先想清楚）③把站点数也印在面上并钉住（数量仍不区分「少一个真门」与「换了写法」）。同时把 R3237 第二问（散文／别名两条律无判据）与本问合判，因为它们问的是同一件事：**读者的行为由谁判**。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -189,8 +189,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 77210,
-  "next_milestone_due": "2026-11-24T08:17:00+08:00",
+  "state_bytes": 70984,
+  "next_milestone_due": "2026-11-24T08:24:24+08:00",
   "heartbeat": {
     "tick": 3223,
     "state_tick": 3223,

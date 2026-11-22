@@ -1,4 +1,4 @@
-"""Battery suite for tools/ugc_gate_report.py - criteria AC-UGRB0..AC-UGRB17.
+"""Battery suite for tools/ugc_gate_report.py - criteria AC-UGRB0..AC-UGRB19.
 
 WHY THIS SUITE EXISTS (measured at R2814, not hypothesised):
 tools/ugc_gate_report.py renders preview/ugc-gate-report.html + .json, the face
@@ -300,6 +300,29 @@ def main():
            alias_hits == ['src/sandbox/delta.py:3', 'src/sandbox/gamma.py:2'],
            'one-level module aliases are followed: hits=%s' % (alias_hits,))
 
+        # ---- B18/B19: the getattr spelling (R3238). The page used to say a
+        # package re-export was invisible; measured, it is visible, and the one
+        # spelling that really was invisible at the alias table was a literal
+        # getattr. B18 buys the door, B19 buys the boundary: an undecidable
+        # form must NOT be counted, or the file set would accuse innocent files.
+        getattr_hits, _ = world_scan({
+            'epsilon.py': ('import sec_gate as sg\n'
+                           'Door = getattr(sg, "SecGate")\n'
+                           'gate = Door([], [])\n'),
+        })
+        ok('AC-UGRB18', getattr_hits == ['src/sandbox/epsilon.py:3'],
+           'a literal getattr alias is counted: hits=%s' % (getattr_hits,))
+
+        dynamic_body = ('import sec_gate as sg\n'
+                        'Door = getattr(sg, name)\n'
+                        'gate = Door([], [])\n'
+                        'other = getattr(sg, "SecGate", None)\n'
+                        'gate2 = other([], [])\n')
+        dynamic_hits, _ = world_scan({'zeta.py': dynamic_body})
+        ok('AC-UGRB19', dynamic_hits == [],
+           'a getattr with a non-literal or defaulted class name is not counted: hits=%s'
+           % (dynamic_hits,))
+
         # ---- B17: the live tree must read the same site set as before the
         # reader changed (pure addition): three files, four constructions.
         live_hits, live_skipped = mod.direct_call_sites()
@@ -334,7 +357,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 18,
+    ok('AC-UGRB11', bool(row) and declared == 20,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"

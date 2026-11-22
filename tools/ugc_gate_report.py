@@ -44,7 +44,7 @@ CRITERIA = (
     ("AC-UGR5", "the AIGC flag face is quoted from the shipped server source, or reported UNVERIFIED when that source does not carry it"),
     ("AC-UGR6", "stdlib only (argparse, ast, html, json, os, subprocess, sys), ASCII source, read-only on src/, writes only under preview/ and qa/, exit 0 on pass and 2 on any failed criterion"),
     ("AC-UGR7", "the shipped parity face msgsec_stub.py --parity reads PARITY-OK and its own line is carried verbatim"),
-    ("AC-UGR8", "the constructor hole is measured at its call sites by PARSING every non-test sandbox source (a name that appears only in prose is not a construction; a module-scope alias of the class is followed one level), and the report states LATENT or LIVE with every measured FILE named on the face - a new constructing file reddens it, a moved line number (orientation for a reader, named as such on the page) does not"),
+    ("AC-UGR8", "the constructor hole is measured at its call sites by PARSING every non-test sandbox source (a name that appears only in prose is not a construction; a one-level module alias of the class is followed in all three spellings it was measured in - attribute assignment, import-as, and getattr with a literal class name), and the report states LATENT or LIVE with every measured FILE named on the face - a new constructing file reddens it, a moved line number (orientation for a reader, named as such on the page) does not, and a class returned by a factory stays named as the one form this reader cannot decide statically"),
     ("AC-UGR9", "BD-PROP-010: the json states the byte size of both artifacts it belongs to, iterated to a fixed point, and --check refuses when either number disagrees with the bytes on disk"),
     ("AC-UGR10", "a --check run must not author the document it verifies: both artifacts keep their bytes and mtimes across a --check, so a stale document stays visibly stale instead of being silently refreshed into a pass (verified by an mtime control; measured red before R2768 when --check alone re-rendered)"),
     ("AC-UGR11", "re-rendering is an explicit act: --write re-renders before checking, and a bare run with no flags still renders, so no caller loses its previous behaviour"),
@@ -118,17 +118,33 @@ def build_cases(cfg, msgsec_stub, sec_gate, gate_page):
 def _constructor_aliases(tree):
     """Module-scope names that ARE the class, so a call through them is a door.
 
-    Two spellings measured in qa/probe-R3237.log: `Ctor = sg.SecGate` and
-    `from sec_gate import SecGate as Ctor`. One level only - a class handed out
-    by a factory at run time is not visible here and the page says so.
+    Three spellings measured: `Ctor = sg.SecGate` and
+    `from sec_gate import SecGate as Ctor` (qa/probe-R3237.log), plus
+    `Ctor = getattr(sg, "SecGate")` (qa/probe-R3238.log). One level only.
+
+    The getattr form counts ONLY when the class name is a literal string: a
+    three-argument getattr carries a default and may answer None, so it is not
+    a door this reader may claim, and `getattr(mod, name)` names nothing at all.
+    A class handed out by a factory is not visible here - it is not decidable
+    statically (a function may return a different class per branch) - and the
+    page names that single remaining blind form instead of implying coverage.
     """
     aliases = set()
     for node in ast.walk(tree):
-        if isinstance(node, ast.Assign) and isinstance(node.value, ast.Attribute) \
-                and node.value.attr == "SecGate":
-            for target in node.targets:
-                if isinstance(target, ast.Name):
-                    aliases.add(target.id)
+        if isinstance(node, ast.Assign):
+            value = node.value
+            is_attr = isinstance(value, ast.Attribute) and value.attr == "SecGate"
+            is_getattr_literal = (
+                isinstance(value, ast.Call)
+                and isinstance(value.func, ast.Name)
+                and value.func.id == "getattr"
+                and len(value.args) == 2
+                and isinstance(value.args[1], ast.Constant)
+                and value.args[1].value == "SecGate")
+            if is_attr or is_getattr_literal:
+                for target in node.targets:
+                    if isinstance(target, ast.Name):
+                        aliases.add(target.id)
         if isinstance(node, ast.ImportFrom):
             for alias in node.names:
                 if alias.name == "SecGate" and alias.asname:
@@ -144,8 +160,9 @@ def direct_call_sites():
     scan invented two sites out of a docstring and a comment, and missed a
     construction written on a `def` line because of its own line heuristic.
     Three call forms count: SecGate(...), mod.SecGate(...), and a one-level
-    module alias of the class. A file that does not parse is skipped by name
-    rather than silently turned into a zero.
+    module alias of the class (attribute assignment, import-as, or a literal
+    getattr - R3238). A file that does not parse is skipped by name rather
+    than silently turned into a zero.
     """
     hits = []
     skipped = []
@@ -297,9 +314,15 @@ def render_html(data):
         "Non-test call sites that construct the gate directly and would therefore skip that refusal:"
         "<ul>%s</ul><br>"
         "The set above is PARSED, not grepped (R3237): a name that appears only in a docstring or a "
-        "comment is not a construction and is not counted, and a module-scope alias of the class "
-        "(<span class='mono'>Ctor = sg.SecGate</span>) is followed one level. A class obtained at run "
-        "time from a factory is not visible here.<br>"
+        "comment is not a construction and is not counted. A module-scope alias of the class is "
+        "followed one level in all three spellings measured - "
+        "<span class='mono'>Ctor = sg.SecGate</span>, "
+        "<span class='mono'>from sec_gate import SecGate as Ctor</span> and "
+        "<span class='mono'>Ctor = getattr(sg, \"SecGate\")</span> (R3238) - and a package "
+        "re-export, a star import or a plain import already keeps the class name in the call, so "
+        "those were measured visible all along. ONE form stays invisible: a class returned by a "
+        "factory, which is not statically decidable because a function may return a different "
+        "class per branch.<br>"
         "The line numbers above are the coordinates measured when this document was rendered - "
         "orientation for a reader, not a graded fact (R3235). What is graded is the FILE set, so a "
         "moved line stays quiet while a newly constructing file reddens this face.%s<br><br>"

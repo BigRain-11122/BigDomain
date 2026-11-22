@@ -7776,8 +7776,11 @@ SUITES = [
     # R3235: AC-UGRB12 (a moved line number stays green) and AC-UGRB13 (an
     # unnamed constructing file reddens) prove the AC-UGR8 regrade in both
     # directions, so the suite runs eighteen and the row says eighteen.
+    # R3238: AC-UGRB18 buys the literal-getattr alias as a door and AC-UGRB19
+    # keeps the boundary (a non-literal or defaulted getattr stays uncounted,
+    # so the file set never accuses a file on an undecidable form) - twenty.
     ("os-ugc-gate-report",
-     os.path.join("..", "os", "test_ugc_gate_report.py"), 18),
+     os.path.join("..", "os", "test_ugc_gate_report.py"), 20),
     # R2875. docs/status-export.json's latest_artifact follows the NEWEST preview
     # pair by mtime, so a fixture that re-renders a tracked pair moves the world
     # another suite measures - measured in the real tree at R2875 as

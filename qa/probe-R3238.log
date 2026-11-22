@@ -1,0 +1,10 @@
+=== PROBE R3238 read-only ===
+Q1 files_scanned=186 getattr_literal=0 factory_return=0 star_import=0
+Q2 form=getattr shipped_reader_hits=[] skipped=0 blind=True
+Q2 form=factory shipped_reader_hits=[] skipped=0 blind=True
+Q2 form=star shipped_reader_hits=['src/sandbox/door.py:2'] skipped=0 blind=False
+Q2 form=reexport shipped_reader_hits=['src/sandbox/door.py:2'] skipped=0 blind=False
+Q3 getattr_arm nodes_needed=1 cross_file=False runtime=False
+Q3 factory_arm return_nodes=1 cross_file=True runtime=False
+Q3 factory_static_decidable=False (a function may return a different class per branch)
+=== END PROBE R3238 ===

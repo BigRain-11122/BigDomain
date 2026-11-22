@@ -72,7 +72,7 @@
     },
     {
       "id": "AC-UGR8",
-      "text": "the constructor hole is measured at its call sites by PARSING every non-test sandbox source (a name that appears only in prose is not a construction; a module-scope alias of the class is followed one level), and the report states LATENT or LIVE with every measured FILE named on the face - a new constructing file reddens it, a moved line number (orientation for a reader, named as such on the page) does not"
+      "text": "the constructor hole is measured at its call sites by PARSING every non-test sandbox source (a name that appears only in prose is not a construction; a one-level module alias of the class is followed in all three spellings it was measured in - attribute assignment, import-as, and getattr with a literal class name), and the report states LATENT or LIVE with every measured FILE named on the face - a new constructing file reddens it, a moved line number (orientation for a reader, named as such on the page) does not, and a class returned by a factory stays named as the one form this reader cannot decide statically"
     },
     {
       "id": "AC-UGR9",
@@ -213,8 +213,8 @@
     }
   ],
   "sizes": {
-    "html": 10436,
-    "json": 7187
+    "html": 11033,
+    "json": 7396
   },
   "unparsed": [],
   "wordlist": {
