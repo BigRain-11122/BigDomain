@@ -546,6 +546,37 @@ def main():
            and 'GROUP' in mod.LL.ROUND_META_RE.pattern,
            mod.LL.ROUND_META_RE.pattern)
 
+        # R3311 AC-EXPW22: the meta set is wider than the one word GROUP and is
+        # evidence-backed. A waiting round that writes its MONITORED-WAIT line
+        # first must still publish the product line, the product/evidence labels
+        # must stay out of the set (so a widened name cannot swallow an artifact),
+        # and the set must equal the measured corpus rather than a guess.
+        wait = ('2026-11-14 R9011 MONITORED-WAIT window: the R2725 battery leg '
+                'is STILL LIVE at closeout and was NOT relaunched')
+        s11['log'] = [wait, prod, range_only]
+        cur5 = mod.derive(w11, s11, 'T11')['current']
+        ok('AC-EXPW22 a waiting-state line above the product line never becomes '
+           'current',
+           'PRODUCT+ENGINEERING' in cur5 and 'MONITORED-WAIT' not in cur5,
+           cur5[:60])
+        s11['log'] = [wait]
+        cur6 = mod.derive(w11, s11, 'T11')['current']
+        ok('AC-EXPW22 a round carrying only the waiting line still publishes it',
+           'MONITORED-WAIT' in cur6, cur6[:60])
+        measured = {'GROUP', 'MONITORED-WAIT', 'DECISIONS', 'BOARD', 'BATTERY',
+                    'REGISTRY', 'FOLD'}
+        ok('AC-EXPW22 the meta set equals the measured corpus (no guessed word '
+           'can enter, and no measured word can silently leave)',
+           set(mod.LL.META_LABELS) == measured,
+           repr(sorted(mod.LL.META_LABELS)))
+        artefacts = ('PRODUCT+ENGINEERING', 'PRODUCT', 'SHIPPED', 'PROOF',
+                     'VERIFICATION', 'DEBT', 'MEASURED')
+        leaked = [lab for lab in artefacts
+                  if mod.LL.ROUND_META_RE.match(
+                      '2026-11-23 R9011 %s: one thing' % lab)]
+        ok('AC-EXPW22 product and evidence labels are never classified as meta',
+           leaked == [], repr(leaked))
+
         # ---- AC-EXPW13: R2821 archived the results block, and the writer refuses
         # ---- to notice. An archive that still resolves must not block the write,
         # ---- and must not be re-grown a row at a time.

@@ -129,7 +129,22 @@ ROUND_LABEL_RE = re.compile(
 # fall back to position when the round carries nothing else. This is a
 # selection law, not a validity law: the label law above is untouched, and both
 # readers import this one pattern instead of keeping a second literal.
-META_LABELS = ("GROUP",)
+# R3311 AC-EXPW22: the set is EVIDENCE-BACKED, not guessed. Each label below is
+# measured at least once as a headline in the live log or the folded archive, and
+# each names an OBSERVATION, BOOKKEEPING or WAITING step rather than an artifact
+# (measured samples: 'MONITORED-WAIT window ... STILL LIVE ... STAYS OPEN',
+# 'DECISIONS (content-addressed, 65 new tokens)', 'BOARD: the claimed row was
+# closed', 'BATTERY GREEN ... RUNNER PASS 554/554', 'REGISTRY AND BOARD: one
+# runner row', 'FOLD: state.json was folded'). A round that writes one of these
+# first and its PRODUCT line second must publish the PRODUCT line, because the
+# CEO face answers "what did this round ship", not "what did it scan". The
+# fall-back arm is untouched: a round carrying only meta lines still publishes
+# the first one, so widening this set never blanks a waiting round. Labels that
+# name evidence or product (PRODUCT+ENGINEERING, PRODUCT, SHIPPED, PROOF,
+# VERIFICATION, DEBT, MEASURED) are deliberately ABSENT - a test arm rejects
+# their insertion, so the set cannot be widened into a false gate.
+META_LABELS = ("GROUP", "MONITORED-WAIT", "DECISIONS", "BOARD", "BATTERY",
+               "REGISTRY", "FOLD")
 ROUND_META_RE = re.compile(
     r"^(?:\d{4}-\d{2}-\d{2}\s+)?R\d{3,5}\s+(?:"
     + "|".join(META_LABELS) + r")\b")

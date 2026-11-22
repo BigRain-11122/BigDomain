@@ -1,0 +1,17 @@
+Q1 live carrier_face: layout_ok=True gate_eol_ok=True gate_health=True agree=True
+Q1 8-space disease: mine.layout_ok=False gate_eol_ok=True gate_health=False agree=True
+Q1 8-space raw eol_profile: layout_ok=True indent_ok=False caliber=None
+Q2 corpus count GROUP                = 419
+Q2 corpus count MONITORED-WAIT       = 14
+Q2 corpus count DECISIONS            = 10
+Q2 corpus count BOARD                = 37
+Q2 corpus count BATTERY              = 37
+Q2 corpus count REGISTRY             = 50
+Q2 corpus count FOLD                 = 26
+Q2 corpus count PRODUCT+ENGINEERING  = 400
+Q2 corpus count SHIPPED              = 95
+Q2 corpus count PROOF                = 77
+Q2 META_LABELS now = ('GROUP', 'MONITORED-WAIT', 'DECISIONS', 'BOARD', 'BATTERY', 'REGISTRY', 'FOLD')
+Q2 wait-then-product -> 2026-11-14 R9102 PRODUCT+ENGINEERING: the round shipped one 
+Q2 only-wait        -> 2026-11-14 R9102 MONITORED-WAIT window: the leg is STILL LIV
+Q2 artefact labels inside meta set = []

@@ -1,0 +1,5 @@
+clean world picks product = True
+OLD set (GROUP only) lets the wait line take the slot = True
+WIDENED to swallow PRODUCT takes the wait line = True
+only-wait world still publishes the wait line = True
+unrelated round untouched = True

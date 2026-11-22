@@ -6345,7 +6345,7 @@ SUITES = [
     # face carries the denominator and the conservation a reader can check
     # (29 -> 32).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 37),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 38),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives
@@ -7470,7 +7470,7 @@ SUITES = [
     # (measured at R3309: the published current named the GROUP SCAN line while
     # every check read PASS). The meta shape is ledger_lines' one definition.
     ("os-export-round",
-     os.path.join("..", "os", "test_export_round.py"), 53),
+     os.path.join("..", "os", "test_export_round.py"), 54),
     # R2806: tools/payment_gate_report.py renders the face that decides whether
     # the 19.9 channel may be connected, and all 690 registered suites were
     # measured to mention ZERO of its AC-PAYG1..AC-PAYG8 tokens, so it was

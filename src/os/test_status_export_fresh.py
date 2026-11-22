@@ -541,6 +541,22 @@ def run(root):
            "round=%r line=%r only=%r shared=%r"
            % (meta_round, meta_line, only_line, shared))
 
+    # AC-SXF24 (R3311): the meta set covers waiting and bookkeeping steps too.
+    # The two readers must agree on the same waiting-state world, and the product
+    # label must never be classified as meta - otherwise a widened name would
+    # hide the artifact this face exists to publish.
+    wait = ("2026-11-14 R9102 MONITORED-WAIT window: the leg is STILL LIVE at "
+            "closeout")
+    wprod = "2026-11-14 R9102 PRODUCT+ENGINEERING: the round shipped one thing"
+    w_round, w_line = sx.newest_round({"log": [wait, wprod]})
+    w_only_round, w_only_line = sx.newest_round({"log": [wait]})
+    not_meta = sx.META_RE.match(wprod) is None
+    record("AC-SXF24",
+           w_round == 9102 and w_line == wprod
+           and w_only_round == 9102 and w_only_line == wait and not_meta,
+           "round=%r line=%r only=%r not_meta=%r"
+           % (w_round, w_line, w_only_line, not_meta))
+
     # AC-SXF22 (R3118): "refused" and "did not land" must be the same fact. R3117
     # proved AFTER the bytes were already under the live name (measured on a
     # private world: rc=8 and the live name grew 1173->1149 bytes carrying a
@@ -1101,19 +1117,34 @@ def run(root):
     # AC-SXFB10 (AC-SXF10): the registry row exists AND declares this many
     # criteria, so adding a criterion without moving the count is red instead of
     # silently uncounted.
+    # AC-SXFB10 (AC-SXF10/R3311): the registry row exists AND declares the same
+    # count the matrix carries, so adding a criterion without moving the count is
+    # red instead of silently uncounted. The count is READ OUT OF the matrix row
+    # rather than pinned as a literal (measured R3311: the old arm compared
+    # declared == 37, so a new criterion needed TWO hand edits - the registry and
+    # this literal - which is the drift this arm exists to catch).
     registry = io.open(os.path.join(REPO, "src", "sandbox", "reconcile_all.py"),
                        encoding="utf-8", errors="replace").read()
     found = re.search(r'test_status_export_fresh\.py"\)\s*,\s*(\d+)', registry)
     declared = int(found.group(1)) if found else -1
     row = None
+    matrix_declared = -1
     if os.path.isfile(MATRIX):
         text = io.open(MATRIX, encoding="utf-8", errors="replace").read()
         for line in text.splitlines():
             if "test_status_export_fresh.py" in line:
                 row = line
+                cells = line.split("|")
+                if len(cells) >= 5:
+                    try:
+                        matrix_declared = int(cells[4].strip())
+                    except ValueError:
+                        matrix_declared = -1
                 break
-    record("AC-SXFB10", row is not None and declared == 37,
-           "matrix_row=%s declared=%d" % (bool(row), declared))
+    record("AC-SXFB10",
+           row is not None and declared > 0 and declared == matrix_declared,
+           "matrix_row=%s declared=%d matrix=%d"
+           % (bool(row), declared, matrix_declared))
 
 
 def main():

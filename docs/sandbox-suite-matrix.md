@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 760 | 6328 | 675/675 | R2739 |
+| 760 | 6330 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -635,7 +635,7 @@
 | 596 | os-bare-evidence-deep-pile | ../os/test_bare_evidence_deep_pile.py | 6 | green | 1.8 |
 | 597 | os-general-writer-dialect-audit | ../os/test_general_writer_dialect_audit.py | 6 | green | 31.8 |
 | 598 | os-parameter-destination-resolution | ../os/test_parameter_destination_resolution.py | 6 | green | 12.2 |
-| 599 | os-status-export-fresh | ../os/test_status_export_fresh.py | 37 | no-evidence | - |
+| 599 | os-status-export-fresh | ../os/test_status_export_fresh.py | 38 | no-evidence | - |
 | 600 | os-status-export-writer-dialect-wire | ../os/test_status_export_writer_dialect_wire.py | 6 | green | 13.3 |
 | 601 | os-status-export-writer-transport-scope | ../os/test_status_export_writer_transport_scope.py | 6 | green | 31.6 |
 | 602 | os-ledger-line-shape-guard | ../os/test_ledger_line_shape_guard.py | 6 | green | 1.0 |
@@ -747,7 +747,7 @@
 | 708 | os-closeout-export-parity-wire-binding-consumer | ../os/test_closeout_export_parity_wire_binding_consumer.py | 6 | green | 14.6 |
 | 709 | os-export-parity-difference-order-field | ../os/test_export_parity_difference_order_field.py | 6 | no-evidence | - |
 | 710 | os-ship-checklist | ../os/test_ship_checklist.py | 8 | no-evidence | - |
-| 711 | os-export-round | ../os/test_export_round.py | 53 | no-evidence | - |
+| 711 | os-export-round | ../os/test_export_round.py | 54 | no-evidence | - |
 | 712 | os-payment-gate-report | ../os/test_payment_gate_report.py | 11 | no-evidence | - |
 | 713 | os-qa-log | ../os/test_qa_log.py | 35 | no-evidence | - |
 | 714 | os-carrier-dialect-pin | ../os/test_carrier_dialect_pin.py | 8 | no-evidence | - |
@@ -797,7 +797,7 @@
 | 758 | claim-census | test_claim_census.py | 9 | no-evidence | - |
 | 759 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 760 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6328 | green 675 / FAIL 0 / no-evidence 85 |  |
+|  | 合计 |  | 6330 | green 675 / FAIL 0 / no-evidence 85 |  |
 
 ## 证据出处
 
