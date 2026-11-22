@@ -35,6 +35,7 @@ CATALOG_ROOT = os.path.dirname(HERE)
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
 import value_domain as VD  # noqa: E402
+import buyer_route  # noqa: E402
 PREVIEW = os.path.join(ROOT, "preview")
 
 SOURCE_NAMES = {
@@ -125,6 +126,7 @@ def derive():
             "steps_pass": len([s for s in steps if s["ok"]]),
         },
         "sources": {k: {"path": "preview/" + v, "bytes": sizes[k]} for k, v in SOURCE_NAMES.items()},
+        "onward": buyer_route.state("money-path-demo", PREVIEW),
         "criteria": [
             "AC-MPD1 derived numbers only",
             "AC-MPD2 product list equals source, CEO gate badged",
@@ -132,6 +134,7 @@ def derive():
             "AC-MPD4 selection carries copy/entitlement/channel, verdicts unaltered",
             "AC-MPD5 recorded source sizes, byte-identical rerender",
             "AC-MPD6 read-only --check, one script, one namespace, ASCII source",
+            "AC-MPD7 onward route present, every hop on disk and linked, sizes/controls fresh, at least one operable",
         ],
     }
 
@@ -202,6 +205,7 @@ def render_html(payload, script):
         "<h2>%s</h2>\n<ol id=\"steps\"></ol>\n"
         "<h2>%s</h2>\n<p class=\"small\" id=\"blocked\"></p>\n<ul class=\"small\" id=\"sizes\">%s</ul>\n"
         "<h2>%s</h2>\n<div class=\"ticks\" id=\"ticks\">%s</div>\n"
+        "%s\n"
         "<script>var NS='%s';var DATA=%s;%s</script>\n</body>\n</html>\n"
     ) % (
         T_TITLE,
@@ -222,6 +226,7 @@ def render_html(payload, script):
         sizes,
         T_TICKS,
         ticks,
+        buyer_route.render_block("money-path-demo", PREVIEW),
         NS,
         data,
         script,
@@ -344,6 +349,11 @@ def check(diag=None):
         problems.append("product count is not derived")
     if landed_json["counts"]["steps"] != len(landed_json["steps"]):
         problems.append("step count is not derived")
+    # AC-MPD7: the face where money appears must not be a dead end. Arms live in
+    # tools/buyer_route.py so journey-19.9 and this face grade the same way.
+    problems.extend(
+        buyer_route.check("money-path-demo", landed_html, landed_json.get("onward"), PREVIEW)
+    )
     # AC-VD9/AC-VD11 (R2826): printed line and exit code read ONE list.
     problems = VD.teeth(stats.get("products", 0), stats.get("tiers", 0), problems)
     if diag is not None:

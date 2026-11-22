@@ -1,0 +1,10 @@
+PASS c0 unmodified copies clean []
+PASS c1 typed hop size ['journey-19.9: hop measure drifted money-path-demo.html json=13165/3 disk=13164/3']
+PASS c2 hop link removed ['journey-19.9: hop not linked money-path-demo.html']
+PASS c3 printed hop count removed ['journey-19.9: page does not print hop count 4']
+PASS c4 json hop count tampered ['journey-19.9: hop count json=3 fresh=4']
+PASS c5 last-actionable sentence tampered ['journey-19.9: last-actionable sentence stale']
+PASS c6 hop file deleted ['journey-19.9: hop file missing merchant-onboard.html', 'journey-19.9: hop measure drifted merchant-onboard.html json=20402/9 disk=0/0']
+PASS c7 all hops read-only ['journey-19.9: hop measure drifted money-path-demo.html json=13164/3 disk=13161/0', 'journey-19.9: hop measure drifted merchant-onboard.html json=20402/9 disk=20043/0']
+PASS c8 money-path controls drifted ['money-path-demo: hop measure drifted buyer-trial.html json=22382/4 disk=22382/3']
+NEGCTL 9/9

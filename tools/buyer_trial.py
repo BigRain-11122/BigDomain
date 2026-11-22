@@ -110,24 +110,37 @@ def project_products():
     return out
 
 
+CONTROL_RE = re.compile(r"<(?:button|input|select|textarea)\b", re.I)
+
+
+def measure_hop(path):
+    """(bytes, controls) of one local face.
+
+    The single definition of "how much can a reader actually operate here":
+    AC-BT7 and the shared onward route (tools/buyer_route.py) both consume it,
+    so a hop's control class cannot be graded two different ways. Controls are
+    counted as literal tags; widgets a script injects at runtime are not
+    counted, which is why the number is a floor, not a promise.
+    """
+    if not os.path.exists(path):
+        return 0, 0
+    text = io.open(path, encoding="utf-8").read()
+    return os.path.getsize(path), len(CONTROL_RE.findall(text))
+
+
 def project_route():
     hops = []
     for href, label in ROUTE:
-        path = os.path.join(PREVIEW, href)
-        if os.path.exists(path):
-            text = io.open(path, encoding="utf-8").read()
-            controls = len(re.findall(r"<(?:button|input|select|textarea)\b", text, re.I))
-            hops.append(
-                {
-                    "href": href,
-                    "label": label,
-                    "bytes": os.path.getsize(path),
-                    "controls": controls,
-                    "readonly": controls == 0,
-                }
-            )
-        else:
-            hops.append({"href": href, "label": label, "bytes": 0, "controls": 0, "readonly": True})
+        size, controls = measure_hop(os.path.join(PREVIEW, href))
+        hops.append(
+            {
+                "href": href,
+                "label": label,
+                "bytes": size,
+                "controls": controls,
+                "readonly": controls == 0,
+            }
+        )
     return hops
 
 

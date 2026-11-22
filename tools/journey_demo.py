@@ -22,6 +22,8 @@ import os
 import sys
 from datetime import datetime, timezone
 
+import buyer_route
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPEC = os.path.join(ROOT, "docs", "spec", "journey-19.9-v2-spec.md")
 RISK_CONFIG = os.path.join(ROOT, "src", "sandbox", "lobby", "config.json")
@@ -247,6 +249,7 @@ def build_doc(sizes, spec_sha, spec_bytes):
             },
         },
         "blocked_on": blocked,
+        "onward": buyer_route.state("journey-19.9"),
         "headline": "%d of %d steps carry a declared PASS" % (passed, len(steps)),
         "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "sizes": {"html": sizes.get("html", 0), "json": sizes.get("json", 0)},
@@ -362,6 +365,8 @@ def render_html(doc):
         for item in doc["blocked_on"]:
             add("<li>%s</li>" % esc(item if isinstance(item, str) else json.dumps(item, ensure_ascii=False)))
         add("</ul></div>")
+
+    add(buyer_route.render_block("journey-19.9"))
 
     add(
         '<p class="small">rendered %s &middot; html %sB &middot; json %sB &middot; offline, zero external calls</p>'
@@ -528,6 +533,13 @@ def check():
         "p47_missing=%s absent=%s id_not_once=%s steps=%d"
         % (missing_p47 or "none", absent or "none", dupes or "none", len(doc.get("steps", []))),
     )
+
+    # AC-JNY9 - the onward route: this face is the live-room funnel landing, so
+    # an out-degree of zero stranded the buyer exactly where the product is
+    # explained. Arms and thresholds live in tools/buyer_route.py (one closure,
+    # one measurement shared with AC-BT7).
+    onward_problems = buyer_route.check("journey-19.9", page_text, doc.get("onward"))
+    add("AC-JNY9", not onward_problems, "onward=%s" % (onward_problems[:3] or "ok"))
 
     failed = [r for r in results if not r[1]]
     for cid, ok, note in results:

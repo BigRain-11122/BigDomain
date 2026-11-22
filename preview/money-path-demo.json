@@ -13,11 +13,52 @@
     "AC-MPD3 MOCK statement, offline",
     "AC-MPD4 selection carries copy/entitlement/channel, verdicts unaltered",
     "AC-MPD5 recorded source sizes, byte-identical rerender",
-    "AC-MPD6 read-only --check, one script, one namespace, ASCII source"
+    "AC-MPD6 read-only --check, one script, one namespace, ASCII source",
+    "AC-MPD7 onward route present, every hop on disk and linked, sizes/controls fresh, at least one operable"
   ],
   "face": "money-path-demo",
   "generated_by": "tools/money_path_demo.py",
   "kind": "MOCK",
+  "onward": {
+    "count": 4,
+    "face": "money-path-demo",
+    "hops": [
+      {
+        "bytes": 20402,
+        "controls": 9,
+        "exists": true,
+        "href": "merchant-onboard.html",
+        "label": "真收钱还缺什么：商户号 / 服务器 / 域名 / 备案（可填）",
+        "readonly": false
+      },
+      {
+        "bytes": 22382,
+        "controls": 3,
+        "exists": true,
+        "href": "buyer-trial.html",
+        "label": "自己点一遍 MOCK 下单与入账（可操作）",
+        "readonly": false
+      },
+      {
+        "bytes": 12873,
+        "controls": 0,
+        "exists": true,
+        "href": "journey-19.9.html",
+        "label": "这单买的是哪八步（只读判定表）",
+        "readonly": true
+      },
+      {
+        "bytes": 41366,
+        "controls": 0,
+        "exists": true,
+        "href": "start-here.html",
+        "label": "回到起点：本机能亲手做什么（只读汇总）",
+        "readonly": true
+      }
+    ],
+    "last_actionable": 2,
+    "last_sentence": "本机不接服务器时，这条路最远走到第 2 跳（buyer-trial.html，3 个控件）；再往后只有读数，没有可操作控件。"
+  },
   "products": [
     {
       "channel": "virtual",
@@ -67,11 +108,11 @@
   ],
   "sources": {
     "blockers": {
-      "bytes": 6754,
+      "bytes": 6755,
       "path": "preview/ceo-blockers.json"
     },
     "journey": {
-      "bytes": 6835,
+      "bytes": 7942,
       "path": "preview/journey-19.9.json"
     },
     "payment": {

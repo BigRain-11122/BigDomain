@@ -46,7 +46,7 @@
   }
  ],
  "face": "buyer-trial",
- "generated_utc": "2026-11-22T10:21:49Z",
+ "generated_utc": "2026-11-22T10:33:56Z",
  "products": [
   {
    "blocked": false,
@@ -301,7 +301,7 @@
    "readonly": false
   },
   {
-   "bytes": 10161,
+   "bytes": 13164,
    "controls": 3,
    "href": "money-path-demo.html",
    "label": "这笔钱在账本里怎么走（可操作）",

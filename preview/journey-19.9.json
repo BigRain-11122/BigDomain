@@ -22,7 +22,7 @@
    "carrier": "platform-live-report",
    "verdict": "PASS",
    "ok": true,
-   "detail": "8/8 criteria",
+   "detail": "9/9 criteria",
    "artifact": "preview/platform-live-report.json"
   },
   {
@@ -77,7 +77,7 @@
    "carrier": "ugc-gate-report",
    "verdict": "DECLARED",
    "ok": null,
-   "detail": "14 criteria declared, no in-artifact grade",
+   "detail": "24 criteria declared, no in-artifact grade",
    "artifact": "preview/ugc-gate-report.json"
   },
   {
@@ -88,7 +88,7 @@
    "carrier": "ugc-gate-report",
    "verdict": "DECLARED",
    "ok": null,
-   "detail": "14 criteria declared, no in-artifact grade",
+   "detail": "24 criteria declared, no in-artifact grade",
    "artifact": "preview/ugc-gate-report.json"
   },
   {
@@ -107,8 +107,8 @@
   {
    "stem": "ledger-business-report",
    "artifact": "preview/ledger-business-report.json",
-   "bytes": 1061,
-   "mtime_utc": "2026-11-15T01:46:48Z",
+   "bytes": 1174,
+   "mtime_utc": "2026-11-20T00:48:05Z",
    "verdict": "PASS",
    "ok": true,
    "detail": "reconcile_rc=0 tx_count=3 entry_count=6"
@@ -143,20 +143,20 @@
   {
    "stem": "platform-live-report",
    "artifact": "preview/platform-live-report.json",
-   "bytes": 5292,
-   "mtime_utc": "2026-11-15T00:43:41Z",
+   "bytes": 6228,
+   "mtime_utc": "2026-11-20T00:09:36Z",
    "verdict": "PASS",
    "ok": true,
-   "detail": "8/8 criteria"
+   "detail": "9/9 criteria"
   },
   {
    "stem": "ugc-gate-report",
    "artifact": "preview/ugc-gate-report.json",
-   "bytes": 6881,
-   "mtime_utc": "2026-11-15T02:00:36Z",
+   "bytes": 20170,
+   "mtime_utc": "2026-11-22T02:58:16Z",
    "verdict": "DECLARED",
    "ok": null,
-   "detail": "14 criteria declared, no in-artifact grade"
+   "detail": "24 criteria declared, no in-artifact grade"
   }
  ],
  "compliance": {
@@ -174,10 +174,50 @@
   }
  },
  "blocked_on": "CEO physical item: real merchant id / appid / appkey / settlement (AC-YP1); platform public key for V3 rsa mode",
+ "onward": {
+  "face": "journey-19.9",
+  "hops": [
+   {
+    "href": "money-path-demo.html",
+    "label": "这单的钱在账本里怎么走（可操作）",
+    "bytes": 13164,
+    "controls": 3,
+    "readonly": false,
+    "exists": true
+   },
+   {
+    "href": "merchant-onboard.html",
+    "label": "要真收钱还缺什么：商户号 / 服务器 / 域名 / 备案（可填）",
+    "bytes": 20402,
+    "controls": 9,
+    "readonly": false,
+    "exists": true
+   },
+   {
+    "href": "buyer-trial.html",
+    "label": "自己点一遍：选商品、MOCK 付款、看两本账配平（可操作）",
+    "bytes": 22382,
+    "controls": 3,
+    "readonly": false,
+    "exists": true
+   },
+   {
+    "href": "start-here.html",
+    "label": "回到起点：这台机器今天能亲手做什么（只读汇总）",
+    "bytes": 41366,
+    "controls": 0,
+    "readonly": true,
+    "exists": true
+   }
+  ],
+  "count": 4,
+  "last_actionable": 3,
+  "last_sentence": "本机不接服务器时，这条路最远走到第 3 跳（buyer-trial.html，3 个控件）；再往后只有读数，没有可操作控件。"
+ },
  "headline": "6 of 8 steps carry a declared PASS",
- "generated_utc": "2026-11-18T00:35:58Z",
+ "generated_utc": "2026-11-22T10:33:57Z",
  "sizes": {
-  "html": 11115,
-  "json": 6835
+  "html": 12873,
+  "json": 7942
  }
 }
