@@ -1,0 +1,17 @@
+R3280 NEGCTL cases=16 pass=16 fail=0
+OK   c0-live-copy-passes          rc=0 byte-identical
+OK   c1-func-face-count           rc=2 expected=SH26 func_counts
+OK   c2-func-site-count           rc=2 expected=SH26 func_counts
+OK   c3-func-sentence             rc=2 expected=SH26 func_sentence
+OK   c4-func-counts-attr          rc=2 expected=SH26 func_counts_attr
+OK   c5-func-row-sentence         rc=2 expected=SH26 func_face_sentence
+OK   c6-element-face-listed       rc=2 expected=SH26 func_rows
+OK   c7-func-head-gone            rc=2 expected=SH26 func_head_missing
+OK   c8-unbound-word-gone         rc=2 word arm
+OK   c9-target-slot-gone          rc=2 slot arm
+OK   c10-private-world            rc=0 private world
+OK   c11-two-targets              both targets printed
+OK   c12-whole-chain              whole chain printed
+OK   c13-bound-name               bound name says where
+OK   c14-chain-cut-tail           rc=2 expected=SH26 multi_face_sentence
+OK   c15-chain-reader-regress     rc=2 expected=SH26 owner_chain_cut

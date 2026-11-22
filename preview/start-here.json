@@ -1,7 +1,7 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "083ec5c4f742bcfc"
+  "state/start-here-faces.json": "c1b53ca21e958732"
  },
  "faces_total": 44,
  "operable": [
@@ -152,13 +152,43 @@
      "expr": "NS",
      "state": "handler",
      "owner": "b",
-     "kind": "element"
+     "kind": "element",
+     "binds": []
     },
     {
      "expr": "NS",
      "state": "handler",
      "owner": "reset",
-     "kind": "element"
+     "kind": "element",
+     "binds": []
+    }
+   ]
+  }
+ ],
+ "write_when_func": [
+  {
+   "face": "lobby-protocol-map.html",
+   "sites": [
+    {
+     "expr": "NS",
+     "state": "handler",
+     "owner": "apply",
+     "kind": "function",
+     "binds": [
+      "q"
+     ]
+    }
+   ]
+  },
+  {
+   "face": "merchant-onboard.html",
+   "sites": [
+    {
+     "expr": "KEY",
+     "state": "call",
+     "owner": "save",
+     "kind": "function",
+     "binds": []
     }
    ]
   }
@@ -174,6 +204,6 @@
   }
  ],
  "sizes": {
-  "html_bytes": 38823
+  "html_bytes": 40082
  }
 }

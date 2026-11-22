@@ -579,6 +579,10 @@ def when_reading(text):
     for start, end, target, _kind, _fn, chained in _arrow_spans(blanked, text):
         spans.append((start, end, "live", target, chained))
     bound, called = _reach_names(blanked)
+    # R3281: a `function`-kind owner is a NAME, and a name alone does not say which
+    # element it was bound to (or that it was never bound at all). Both binding forms
+    # are collected once per face and carried beside the site.
+    targets_by_name = _bound_targets(blanked, text)
     counts = {state: 0 for state in WHEN_STATES}
     never = []
     # R3277: the TOTALS said how many sites sit in each state, never WHICH site is
@@ -596,40 +600,51 @@ def when_reading(text):
         holders = [span for span in spans if span[0] <= match.start() <= span[1]]
         if not holders:
             counts["load"] += 1
-            sites.append([expr, "load", "", "top"])
+            sites.append([expr, "load", "", "top", []])
             continue
         inner = min(holders, key=lambda span: span[1] - span[0])
         kind = ("function" if inner[2] == "decl"
                 else ("chain" if inner[4] else "element"))
+        binds = list(targets_by_name.get(inner[3]) or []) if kind == "function" else []
         if inner[2] == "live" or inner[3] in bound:
             counts["handler"] += 1
-            sites.append([expr, "handler", inner[3], kind])
+            sites.append([expr, "handler", inner[3], kind, binds])
         elif inner[3] in called:
             counts["call"] += 1
-            sites.append([expr, "call", inner[3], kind])
+            sites.append([expr, "call", inner[3], kind, binds])
         else:
             counts["never"] += 1
             never.append([expr, inner[3]])
-            sites.append([expr, "never", inner[3], kind])
+            sites.append([expr, "never", inner[3], kind, binds])
     return {"counts": counts, "never": never, "sites": sites}
 
 
-def owner_phrase(doc, kind, owner):
+def owner_phrase(doc, kind, owner, targets=None):
     """R3279: the ONE place a site's owner is turned into words, shared by the page and
     the criterion so two encodings of one reading cannot drift. Each kind has its own
     word: an element expression, a declared function, no enclosing body, or a receiver
-    cut out of a member chain (that last one says the chain was cut)."""
+    that IS a member chain. R3281: a declared function also carries the elements it is
+    bound to (all of them, in source order) - a measured live face binds one name to a
+    control and never binds another, so `no binding` is a fact to state, not a blank.
+    Both slots are always supplied: the words file is external input, and a format
+    without {target} must be caught by the criterion rather than raising here."""
     if kind == "top":
         return doc.get("key_multi_owner_none") or ""
+    want = "、".join(targets or [])
     if kind == "function":
-        fmt = (doc.get("key_multi_func_fmt") or doc.get("key_multi_owner_fmt")
-               or "{name}")
+        if not (targets or []):
+            fmt = (doc.get("key_multi_func_unbound")
+                   or doc.get("key_multi_func_fmt")
+                   or doc.get("key_multi_owner_fmt") or "{name}")
+        else:
+            fmt = (doc.get("key_multi_func_fmt") or doc.get("key_multi_owner_fmt")
+                   or "{name}")
     elif kind == "chain":
         fmt = (doc.get("key_multi_chain_fmt") or doc.get("key_multi_owner_fmt")
                or "{name}")
     else:
         fmt = doc.get("key_multi_owner_fmt") or "{name}"
-    return fmt.format(name=owner)
+    return fmt.format(name=owner, target=want)
 
 
 def when_attr(naming):
@@ -987,6 +1002,61 @@ def _chained_at(blanked, pos):
     return blanked[max(0, pos - 3):pos].rstrip().endswith(".")
 
 
+def _chain_root(blanked, pos):
+    """R3281: walk LEFT along a member chain and return where it starts. R3279 could
+    only say a receiver was cut out of a chain; measuring the two calibers showed the
+    separator caliber slices `document.` (a dangling fragment) while walking `NAME .`
+    pairs yields the whole `document.getElementById('b')`. Stops at the first byte that
+    is not a dot, so `if (x) y.z` keeps `y.z` and never swallows `(x)`."""
+    i = pos
+    for _step in range(8):
+        k = i
+        while k > 0 and blanked[k - 1] in " \t":
+            k -= 1
+        if k == 0 or blanked[k - 1] != ".":
+            return i
+        j = k - 1
+        j2 = j
+        while j2 > 0 and (blanked[j2 - 1].isalnum() or blanked[j2 - 1] in "_$"):
+            j2 -= 1
+        if j2 == j:
+            return i
+        i = j2
+    return i
+
+
+def _recv_slice(raw, blanked, start, end):
+    """The receiver text plus whether it is the tail of a member chain, with the chain
+    read WHOLE: `document.getElementById('b').addEventListener` yields
+    `document.getElementById('b')` instead of `getElementById('b')`."""
+    root = _chain_root(blanked, start)
+    return _raw_slice(raw, blanked, root, end), root < start
+
+
+def _bound_targets(blanked, raw=None):
+    """R3281: name -> the elements a face binds it to, in source order. Both binding
+    forms count (a name passed to addEventListener, a name assigned to an onX
+    property); a name that is only CALLED is absent, which is the fact the page must
+    state instead of leaving a blank where a target would go."""
+    out = {}
+
+    def _add(name, text):
+        got = out.setdefault(name, [])
+        if text and text not in got:
+            got.append(text)
+
+    for match in H_ADDL_NAME.finditer(blanked):
+        start = _chain_root(blanked, match.start(1))
+        _add(match.group(2), _raw_slice(raw, blanked, start, match.end(1)))
+    for match in H_ONX_SITE.finditer(blanked):
+        cb = match.group(3).strip()
+        if not re.match(r"^[A-Za-z_$][\w$]*$", cb):
+            continue
+        start = _chain_root(blanked, match.start(1))
+        _add(cb, _raw_slice(raw, blanked, start, match.end(1)))
+    return out
+
+
 def _handler_spans(blanked, raw=None):
     """Every handler literal in the page: body start/end, the target it is assigned
     to, the form, whether its body is a `function` or an arrow, and whether that
@@ -996,24 +1066,24 @@ def _handler_spans(blanked, raw=None):
     for match in H_ASSIGN.finditer(blanked):
         got = _body_span(blanked, match.end())
         if got:
-            spans.append((got[0], got[1],
-                          _raw_slice(raw, blanked, match.start(1), match.end(1)),
-                          match.group(2), FUNC_KIND,
-                          _chained_at(blanked, match.start(1))))
+            target, chained = _recv_slice(raw, blanked, match.start(1),
+                                          match.end(1))
+            spans.append((got[0], got[1], target, match.group(2), FUNC_KIND,
+                          chained))
     for match in H_ADDL.finditer(blanked):
         got = _body_span(blanked, match.end())
         if got:
-            spans.append((got[0], got[1],
-                          _raw_slice(raw, blanked, match.start(1), match.end(1)),
-                          "addEventListener", FUNC_KIND,
-                          _chained_at(blanked, match.start(1))))
+            target, chained = _recv_slice(raw, blanked, match.start(1),
+                                          match.end(1))
+            spans.append((got[0], got[1], target, "addEventListener", FUNC_KIND,
+                          chained))
     for match in H_ADDL_CALL.finditer(blanked):
         got = _body_span(blanked, match.end())
         if got:
-            spans.append((got[0], got[1],
-                          _raw_slice(raw, blanked, match.start(1), match.end(1)),
-                          "addEventListener", FUNC_KIND,
-                          _chained_at(blanked, match.start(1))))
+            target, chained = _recv_slice(raw, blanked, match.start(1),
+                                          match.end(1))
+            spans.append((got[0], got[1], target, "addEventListener", FUNC_KIND,
+                          chained))
     spans.extend(_arrow_spans(blanked, raw))
     named, _ = _named_spans(blanked, raw)
     spans.extend(named)
@@ -1029,10 +1099,9 @@ def _named_report(blanked, raw=None):
     chains = {}
     for match in H_ADDL_NAME.finditer(blanked):
         name = match.group(2)
-        bindings.setdefault(name, []).append(
-            _raw_slice(raw, blanked, match.start(1), match.end(1)))
-        chains[name] = chains.get(name, False) or _chained_at(blanked,
-                                                              match.start(1))
+        text, chained = _recv_slice(raw, blanked, match.start(1), match.end(1))
+        bindings.setdefault(name, []).append(text)
+        chains[name] = chains.get(name, False) or chained
     decls = _decl_index(blanked)
     direct = set()
     for match in CALL_NAME.finditer(blanked):
@@ -1570,6 +1639,16 @@ def projection():
                   if len(key_naming(rows[name])["when_sites"]) >= 2]
     multi_mixed = len([1 for _name, sites in when_multi
                        if len({site[1] for site in sites}) > 1])
+    # R3281: the multi-site table names an owner but, on the live tree, no multi-site
+    # face puts its write in a DECLARED function - both live function owners sit on
+    # single-site faces, so the new binding-target words would have printed nowhere.
+    # A function owner is worth its own row regardless of site count: `save` is called
+    # by this face and bound by nothing, and a reader told only "in a named function"
+    # goes back to the code to find a control that does not exist.
+    when_func = [(name, key_naming(rows[name])["when_sites"])
+                 for name in sorted(operable)
+                 if any(site[3] == "function"
+                        for site in key_naming(rows[name])["when_sites"])]
     step_drawers = {name: drawer_naming(rows[name]) for name in steps}
     branch_drawers = {name: drawer_naming(rows[name])
                       for name, _reason in steps_excluded}
@@ -1639,6 +1718,7 @@ def projection():
         "when_faces": when_faces,
         "when_multi": when_multi,
         "multi_mixed": multi_mixed,
+        "when_func": when_func,
         "step_drawers": step_drawers,
         "branch_drawers": branch_drawers,
         "drawer_when_counts": drawer_when_counts,
@@ -2370,13 +2450,13 @@ def render(proj):
     if proj["when_multi"]:
         for name, sites in proj["when_multi"]:
             counts = ",".join("%s>%s>%s>%s" % (expr, state, owner or "-", kind)
-                              for expr, state, owner, kind in sites)
+                              for expr, state, owner, kind, _targets in sites)
             phrases = "、".join((doc.get("key_multi_site_fmt") or "").format(
                 expr=expr,
-                kind=owner_phrase(doc, kind, owner),
-                owner=owner_phrase(doc, kind, owner),
+                kind=owner_phrase(doc, kind, owner, targets),
+                owner=owner_phrase(doc, kind, owner, targets),
                 word=multi_words.get(state) or state)
-                for expr, state, owner, kind in sites)
+                for expr, state, owner, kind, targets in sites)
             multi_html += (
                 '\n  <p data-key-multi-face="%s" data-key-multi-counts="%s">%s</p>'
                 % (esc(name), esc(counts),
@@ -2385,8 +2465,35 @@ def render(proj):
     else:
         multi_html += ('\n  <p data-key-multi-absent>%s</p>'
                        % esc(doc.get("key_multi_absent") or ""))
+    # R3281: a declared-function owner gets its own row no matter how many sites the
+    # face has, because the name alone does not say which control it is bound to.
+    func_sites = sum(len(sites) for _name, sites in proj["when_func"])
+    func_html = (
+        '  <p class="keyfunc" data-key-func-faces="%d" '
+        'data-key-func-sites="%d">%s</p>'
+        % (len(proj["when_func"]), func_sites,
+           esc((doc.get("key_func_head_fmt") or "").format(
+               faces=len(proj["when_func"]), sites=func_sites))))
+    if proj["when_func"]:
+        for name, sites in proj["when_func"]:
+            counts = ",".join("%s>%s>%s>%s" % (expr, state, owner or "-", kind)
+                              for expr, state, owner, kind, _targets in sites)
+            phrases = "、".join((doc.get("key_multi_site_fmt") or "").format(
+                expr=expr,
+                kind=owner_phrase(doc, kind, owner, targets),
+                owner=owner_phrase(doc, kind, owner, targets),
+                word=multi_words.get(state) or state)
+                for expr, state, owner, kind, targets in sites)
+            func_html += (
+                '\n  <p data-key-func-face="%s" data-key-func-counts="%s">%s</p>'
+                % (esc(name), esc(counts),
+                   esc((doc.get("key_func_face_fmt") or "").format(
+                       name=name, phrases=phrases))))
+    else:
+        func_html += ('\n  <p data-key-func-absent>%s</p>'
+                      % esc(doc.get("key_func_absent") or ""))
     steps_block = (keynames_html + "\n" + repeats_html + "\n" + when_html + "\n"
-                   + multi_html + "\n" + unread_html
+                   + multi_html + "\n" + func_html + "\n" + unread_html
                    + "\n" + split_html + "\n"
                    + steps_head
                    + ("\n".join(steps_html) if steps_html else ""))
@@ -2547,9 +2654,16 @@ def write():
         "write_when_multi": [{"face": name,
                               "mixed": len({site[1] for site in sites}) > 1,
                               "sites": [{"expr": expr, "state": state,
-                                         "owner": owner, "kind": kind}
-                                        for expr, state, owner, kind in sites]}
+                                         "owner": owner, "kind": kind,
+                                         "binds": binds}
+                                        for expr, state, owner, kind, binds in sites]}
                              for name, sites in proj["when_multi"]],
+        "write_when_func": [{"face": name,
+                             "sites": [{"expr": expr, "state": state,
+                                        "owner": owner, "kind": kind,
+                                        "binds": binds}
+                                       for expr, state, owner, kind, binds in sites]}
+                            for name, sites in proj["when_func"]],
         "steps_excluded": [{"face": name, "reason": reason}
                            for name, reason in proj["steps_excluded"]],
         "sizes": {"html_bytes": len(html.encode("utf-8"))},
@@ -3503,7 +3617,10 @@ def check():
                 "key_when_head_fmt", "key_when_expr_fmt", "key_when_face_fmt",
                 "key_when_absent",
                 "key_multi_head_fmt", "key_multi_site_fmt", "key_multi_face_fmt",
-                "key_multi_owner_fmt", "key_multi_owner_none", "key_multi_absent"):
+                "key_multi_owner_fmt", "key_multi_owner_none", "key_multi_absent",
+                "key_multi_func_fmt", "key_multi_func_unbound",
+                "key_multi_chain_fmt", "key_func_head_fmt", "key_func_face_fmt",
+                "key_func_absent"):
         if not (proj["doc"].get(key) or "").strip():
             failures.append("SH26 word_missing:%s" % key)
     for slot in ("{total}", "{lit}", "{empty}", "{run}", "{none}"):
@@ -3545,9 +3662,22 @@ def check():
         failures.append("SH26 slot_missing:key_multi_owner_fmt:{name}")
     # R3279: each site's owner comes from a closed set of kinds, each kind has its own
     # word, and the word the page prints must be the one that kind names.
-    for key in ("key_multi_func_fmt", "key_multi_chain_fmt"):
+    for key in ("key_multi_func_fmt", "key_multi_func_unbound",
+                "key_multi_chain_fmt"):
         if "{name}" not in (proj["doc"].get(key) or ""):
             failures.append("SH26 slot_missing:%s:{name}" % key)
+    # R3281: a declared-function owner must be able to say WHICH element it is bound
+    # to, and a chain owner must be able to say it is a whole chain rather than a cut
+    # tail - both are slots, so a words file that cannot express the new fact reddens
+    # here instead of printing a sentence with the fact missing.
+    if "{target}" not in (proj["doc"].get("key_multi_func_fmt") or ""):
+        failures.append("SH26 slot_missing:key_multi_func_fmt:{target}")
+    for slot in ("{faces}", "{sites}"):
+        if slot not in (proj["doc"].get("key_func_head_fmt") or ""):
+            failures.append("SH26 slot_missing:key_func_head_fmt:%s" % slot)
+    for slot in ("{name}", "{phrases}"):
+        if slot not in (proj["doc"].get("key_func_face_fmt") or ""):
+            failures.append("SH26 slot_missing:key_func_face_fmt:%s" % slot)
     for kind, key in (("element", "key_multi_owner_fmt"),
                       ("function", "key_multi_func_fmt"),
                       ("chain", "key_multi_chain_fmt"),
@@ -3604,6 +3734,7 @@ def check():
     fresh = {}
     fresh_keys = {}
     fresh_decl = {}
+    fresh_raw = {}
     for name in proj["operable"]:
         try:
             with open(os.path.join(PREVIEW, name), encoding="utf-8",
@@ -3615,6 +3746,7 @@ def check():
         fresh_keys[name] = key_reading(raw_text)
         fresh[name] = key_naming({"keys": fresh_keys[name]})
         fresh_decl[name] = set(_decl_index(_blank_strings(raw_text)))
+        fresh_raw[name] = raw_text
     # R3275: the repeat bucket. A face writing one expression from two call sites
     # said nothing about it; the head counter, the named rows and both row
     # attributes are graded against a fresh resolution of each face's own bytes,
@@ -3776,11 +3908,11 @@ def check():
         for index, (name, counts_raw, said) in enumerate(multi_rows):
             sites = fresh_multi[index][1]
             want_counts = ",".join("%s>%s>%s>%s" % (expr, state, owner or "-", kind)
-                                   for expr, state, owner, kind in sites)
+                                   for expr, state, owner, kind, _targets in sites)
             if counts_raw != esc(want_counts):
                 failures.append("SH26 multi_counts_attr:%s page=%s fresh=%s"
                                 % (name, counts_raw, want_counts))
-            for _expr, _state, owner, kind in sites:
+            for _expr, _state, owner, kind, _targets in sites:
                 if kind not in OWNER_KINDS:
                     failures.append("SH26 owner_kind_open:%s kind=%s"
                                     % (name, kind))
@@ -3792,17 +3924,50 @@ def check():
                 if kind == "top" and owner:
                     failures.append("SH26 owner_kind_top_named:%s owner=%s"
                                     % (name, owner))
+            # R3281: a chain owner is read WHOLE, and a declared-function owner says
+            # which element(s) it is bound to - or says plainly that this face binds
+            # it nowhere. Both are graded from the same fresh reading the sentence
+            # arm uses, so a page printing the cut tail or dropping one of two
+            # targets reddens here.
+            for expr, _state, owner, kind, targets in sites:
+                phrase = owner_phrase(proj["doc"], kind, owner, targets)
+                if kind == "chain":
+                    # The owner must not itself be a tail of a chain: locate it in the
+                    # face's own bytes and refuse a preceding dot. This is the one
+                    # mechanical trace that the cut-tail reading is gone.
+                    body = fresh_raw.get(name) or ""
+                    at = body.find(owner) if owner else -1
+                    if at < 0:
+                        failures.append("SH26 owner_chain_not_found:%s owner=%s"
+                                        % (name, owner))
+                    elif body[:at].rstrip().endswith("."):
+                        failures.append("SH26 owner_chain_cut:%s owner=%s"
+                                        % (name, owner))
+                if kind == "function":
+                    if targets:
+                        for one in targets:
+                            if one and one not in phrase:
+                                failures.append(
+                                    "SH26 owner_func_target:%s owner=%s missing=%s"
+                                    % (name, owner, one))
+                    else:
+                        want_word = (proj["doc"].get("key_multi_func_unbound")
+                                     or "{name}").format(name=owner, target="")
+                        if phrase != want_word:
+                            failures.append(
+                                "SH26 owner_func_unbound:%s owner=%s said=%s"
+                                % (name, owner, phrase))
             phrases = "、".join((proj["doc"].get("key_multi_site_fmt") or "").format(
-                expr=expr, kind=owner_phrase(proj["doc"], kind, owner),
-                owner=owner_phrase(proj["doc"], kind, owner),
+                expr=expr, kind=owner_phrase(proj["doc"], kind, owner, targets),
+                owner=owner_phrase(proj["doc"], kind, owner, targets),
                 word=multi_words.get(state) or state)
-                for expr, state, owner, kind in sites)
+                for expr, state, owner, kind, targets in sites)
             want_text = (proj["doc"].get("key_multi_face_fmt") or "").format(
                 name=name, phrases=phrases)
             if said != esc(want_text):
                 failures.append("SH26 multi_face_sentence:%s" % name)
             tally = {state: 0 for state in WHEN_STATES}
-            for _expr, state, _owner, _kind in sites:
+            for _expr, state, _owner, _kind, _targets in sites:
                 tally[state] += 1
             want_attr = when_attr({"when": tally})
             # The two encodings are compared THROUGH THE PAGE when the face has a
@@ -3836,6 +4001,66 @@ def check():
     # one would print the same site twice, so the residue itself is a failure.
     if 'class="keymixed"' in text or "data-key-mixed-" in text:
         failures.append("SH26 multi_old_table_residue")
+    # R3281: a face that puts its write in a DECLARED function is listed whatever its
+    # site count, because the function name alone does not say which control it is
+    # bound to. The live tree has two such faces and one of them binds the name to
+    # nothing at all - that absence is a fact the row has to state, not a blank.
+    fresh_func = []
+    for name in sorted(fresh_keys):
+        got_sites = fresh_keys[name].get("when_sites") or []
+        if any(site[3] == "function" for site in got_sites):
+            fresh_func.append((name, got_sites))
+    func_head = re.search(
+        r'<p class="keyfunc" data-key-func-faces="(\d+)" '
+        r'data-key-func-sites="(\d+)">([^<]*)<', text)
+    if not func_head:
+        failures.append("SH26 func_head_missing")
+    else:
+        faces_raw, sites_raw, said = func_head.groups()
+        want_sites = sum(len(sites) for _name, sites in fresh_func)
+        got = (int(faces_raw), int(sites_raw))
+        want = (len(fresh_func), want_sites)
+        if got != want:
+            failures.append("SH26 func_counts page=%s fresh=%s" % (got, want))
+        want_text = (proj["doc"].get("key_func_head_fmt") or "").format(
+            faces=len(fresh_func), sites=want_sites)
+        if said != esc(want_text):
+            failures.append("SH26 func_sentence differs from the fresh derivation")
+    func_rows = re.findall(
+        r'<p data-key-func-face="([^"]+)" data-key-func-counts="([^"]*)">'
+        r'([^<]*)<', text)
+    want_func_names = [name for name, _sites in fresh_func]
+    if [name for name, _c, _s in func_rows] != want_func_names:
+        failures.append("SH26 func_rows page=%s fresh=%s"
+                        % ([name for name, _c, _s in func_rows], want_func_names))
+    else:
+        for index, (name, counts_raw, said) in enumerate(func_rows):
+            sites = fresh_func[index][1]
+            want_counts = ",".join("%s>%s>%s>%s" % (expr, state, owner or "-", kind)
+                                   for expr, state, owner, kind, _targets in sites)
+            if counts_raw != esc(want_counts):
+                failures.append("SH26 func_counts_attr:%s page=%s fresh=%s"
+                                % (name, counts_raw, want_counts))
+            phrases = "、".join((proj["doc"].get("key_multi_site_fmt") or "").format(
+                expr=expr, kind=owner_phrase(proj["doc"], kind, owner, targets),
+                owner=owner_phrase(proj["doc"], kind, owner, targets),
+                word=multi_words.get(state) or state)
+                for expr, state, owner, kind, targets in sites)
+            want_text = (proj["doc"].get("key_func_face_fmt") or "").format(
+                name=name, phrases=phrases)
+            if said != esc(want_text):
+                failures.append("SH26 func_face_sentence:%s" % name)
+    for name, _counts, _said in func_rows:
+        got_sites = (fresh_keys.get(name) or {}).get("when_sites") or []
+        if not any(site[3] == "function" for site in got_sites):
+            failures.append("SH26 func_element_face_listed:%s" % name)
+    func_absent = re.findall(r'<p data-key-func-absent>', text)
+    if fresh_func:
+        if func_absent:
+            failures.append("SH26 func_absent_line_on_func")
+    elif len(func_absent) != 1:
+        failures.append("SH26 func_absent_line expected=1 got=%d"
+                        % len(func_absent))
     # The two step/branch rows carry the same four counts, pinned to the fresh
     # reading so a hand edit on either row reddens on its own arm.
     for label, pattern in (

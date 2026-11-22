@@ -62,8 +62,11 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p data-key-repeat-face="ship-checklist.html" data-key-repeat-counts="NS:2">ship-checklist.html —— NS 写了 2 遍；同一个键从两个调用点写进去，读的时候只留最后一次写下的值。</p>
   <p class="keywhen" data-key-when-load="0" data-key-when-handler="5" data-key-when-call="1" data-key-when-never="0">点得动的面上这 6 处写并不是每一处都会在你打开页面时跑：0 处在脚本顶层、打开就写；5 处写在绑到某个控件上的处理函数里，要等你操作过才会跑；1 处写在某个函数里，只有那个函数被调用才跑；0 处写在一个既没被绑定、也没被本面调用的函数里——页上只能说它在代码里存在，不能说它跑得到。没有控件的那几张面不在这块计数里。这块是按面汇总的：一张面只用一种时点写键时，这几个数就是那一处的答案。</p>
   <p data-key-when-absent>今天没有一张点得动的面把写放在既没被绑定、也没被调用的函数里——每一处写要么在脚本顶层跑，要么挂在某个已经绑定的处理函数上。</p>
-  <p class="keymulti" data-key-multi-faces="1" data-key-multi-sites="2" data-key-multi-mixed="0">1 张点得动的面在同一张面上写下不止一处键，共 2 处写——其中 0 张的两处写不在同一时点；下面逐处印出每一处写在哪，并且说清那个名字是哪一种来路（元素表达式、具名函数、脚本顶层），只写一处的面已在上面的汇总里说清时点。</p>
+  <p class="keymulti" data-key-multi-faces="1" data-key-multi-sites="2" data-key-multi-mixed="0">1 张点得动的面在同一张面上写下不止一处键，共 2 处写——其中 0 张的两处写不在同一时点；下面逐处印出每一处写在哪，说清那个名字是哪一种来路（元素表达式、具名函数、脚本顶层），具名函数还要说它被绑到哪个控件上（本面没绑到任何控件时也照实说），只写一处的面已在上面的汇总里说清时点。</p>
   <p data-key-multi-face="ship-checklist.html" data-key-multi-counts="NS&gt;handler&gt;b&gt;element,NS&gt;handler&gt;reset&gt;element">ship-checklist.html —— NS 写在「b」的处理函数里，要等你操作过才跑、NS 写在「reset」的处理函数里，要等你操作过才跑；同一张面上的这几处写各在哪、名字从哪种来路来，页上逐处标出，不替你说它们先后与最终留下哪个值。</p>
+  <p class="keyfunc" data-key-func-faces="2" data-key-func-sites="2">2 张点得动的面把写放在具名函数里，共 2 处写；下面逐处印出那个函数名，以及它在本面被绑到哪个控件上——本面没把它绑到任何控件时也照实说，读者不必回代码里找一个可能不存在的控件。</p>
+  <p data-key-func-face="lobby-protocol-map.html" data-key-func-counts="NS&gt;handler&gt;apply&gt;function">lobby-protocol-map.html —— NS 写在「apply」这个具名函数里（它在本面被绑到「q」上），要等你操作过才跑；这里只说得清「名字是哪来的、绑在哪」，说不清那个函数跑起来时值最后留在哪。</p>
+  <p data-key-func-face="merchant-onboard.html" data-key-func-counts="KEY&gt;call&gt;save&gt;function">merchant-onboard.html —— KEY 写在「save」这个具名函数里（本面没有把它绑到任何控件上，它只在本面被调用——「绑在哪个控件上」这一问在本面没有答案），只有本面调用那个函数时才跑；这里只说得清「名字是哪来的、绑在哪」，说不清那个函数跑起来时值最后留在哪。</p>
   <p class="drawerunread" data-drawer-unread="0" data-drawer-unread-all="6">走线的 6 张面里，有 0 张的写入页面读不出来——这些写法页面给不出抽屉名和键名。</p>
   <p data-drawer-unread-absent>走线里每一张面的写入都是页面读得出来的写法——今天没有一张面带读不出的写入。</p>
   <p class="drawersplit" data-drawer-split-all="6" data-drawer-split-same="5" data-drawer-split-diff="0" data-drawer-split-noread="0" data-drawer-split-erase="0" data-drawer-split-stray="0">走线的 6 张面里，5 张有键：5 张读的抽屉和写的是同一个，0 张读的是另一个抽屉，0 张写完不读回来；0 张写完自己擦掉，0 张擦的是自己没写过的抽屉。</p>
@@ -271,7 +274,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p data-notice="advice">非投顾提示：本页与全部预览面不构成任何投资建议。</p>
   <p data-notice="mock">MOCK：本页列出的支付、账本、权益流程全部是页内模拟，不接真实资金通道。</p>
 </div>
-<footer>sources: state/start-here-faces.json 083ec5c4f742bcfc / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
+<footer>sources: state/start-here-faces.json c1b53ca21e958732 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
 </div>
 </body>
 </html>

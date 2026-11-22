@@ -1,0 +1,25 @@
+R3280 probe - named-owner binding target and chain extent (read-only)
+faces=44 operable=6 sites=6
+Q1 live sites (face expr state owner kind | targets)
+SITE filing-checklist.html  expr=NS                           state=handler owner=b                      kind=element  targets=-
+SITE lobby-protocol-map.html expr=NS                           state=handler owner=apply                  kind=function targets=q
+SITE merchant-onboard.html  expr=KEY                          state=call    owner=save                   kind=function targets=-
+SITE money-path-demo.html   expr=NS+':'+this.getAttribute('data-ck') state=handler owner=T[n]                   kind=element  targets=-
+SITE ship-checklist.html    expr=NS                           state=handler owner=b                      kind=element  targets=-
+SITE ship-checklist.html    expr=NS                           state=handler owner=reset                  kind=element  targets=-
+KINDS element=4 function=2
+Q2 function-kind sites=2 distinct owners=2
+FUNC lobby-protocol-map.html owner=apply    binds=q
+FUNC merchant-onboard.html  owner=save     binds=-
+TWOTARGET_OWNERS=0
+Q3 live chain sites=0
+PRIVATE world (synthetic bytes, not written anywhere):
+ PSITE expr='NS'     state=handler owner=document.getElementById('b') kind=chain    targets=-
+ PSITE expr='NS'     state=handler owner=$('reset') kind=element  targets=-
+ PSITE expr='NS'     state=handler owner=apply      kind=function targets=q
+ PSITE expr='NS'     state=handler owner=box        kind=element  targets=-
+ PCHAIN form=call   cut=getElementById('b')    left=document.    whole=document.getElementById('b')
+ATTR rows=1 current_bytes=63 fifth_segment_bytes=2
+PAGE bytes=40082
+ELAPSED=0.3963s per_face=0.06605s
+NOTE zero socket, zero network, zero live write, JS never run
