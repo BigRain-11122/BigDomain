@@ -1,0 +1,25 @@
+PRIVATE-ROOT C:\Users\sjs20\AppData\Local\Temp\bd_r3304_5eezidsj
+A baseline index rc=0 VERDICT PASS 23/23 fingerprint=1b22fb1d335bb85e
+A baseline chain rc=0 VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+A baseline sweep rc=0 VERDICT PASS 21/21
+A bytes index=42875 quoted-back-bytes=42875
+A export census_ts=2026-11-23T00:34:45+08:00 claimed=339 rows=24
+B day-only index-check rc=2 VERDICT FAIL 21/23 fingerprint=b2a5096a1b1d237a failed=AC-DIX19,AC-COO8
+C index-write rc=0 DELIVERABLE INDEX faces=9 defects=0 fingerprint=b2a5096a1b1d237a index=42875B
+C bytes before=42875 after=42875 delta=0 quoted-back-bytes=42875
+C chain-check rc=0 failed=- VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+C sweep-check rc=2 failed=AC-FSW10 VERDICT FAIL 20/21
+C VERDICT PASS one-index-render-suffices=True sweep-board-must-re-render=True
+D index-write rc=0 DELIVERABLE INDEX faces=9 defects=0 fingerprint=0b79607b3fddb09a index=42876B
+D bytes before=42875 after=42876 delta=1
+D chain-check rc=2 named-byte-edge=True failed=- VERDICT FAIL 1 E_STALE html is not the fresh derivation
+D VERDICT PASS control-reddens=True
+E step tools/first_yuan_chain.py    rc=0 RENDER legs=2 prices=birthright_entry=990,tier_patron_30d=2990 same_price=False value_differs=True entries=2 tx=1 reconcile_rc=0 zero_delta=True html=4403B json=4806B
+E step tools/deliverable_index.py   rc=0 DELIVERABLE INDEX faces=9 defects=0 fingerprint=fe8949b34389ea75 index=42876B
+E step tools/face_backhop.py        rc=0 backhop report written: C:\Users\sjs20\AppData\Local\Temp\bd_r3304_5eezidsj\state\backhop-report.json (9785 bytes, faces=32, sizes patched=0)
+E step tools/face_sweep.py          rc=2 VERDICT FAIL 11/13 fingerprint=06911ea00a51f2df
+E final chain rc=0 VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+E final index rc=0 VERDICT PASS 23/23 fingerprint=53d9743ee7b53529
+E final sweep rc=0 VERDICT PASS 21/21
+E VERDICT PASS renders=4 repair-green=True
+PROBE VERDICT PASS day_only_ok=True control_ok=True repair_ok=True index_delta=0

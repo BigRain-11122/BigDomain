@@ -52,6 +52,11 @@ this file existed):
           entry page prints a ten-character day, the declaration names both
           files and the remedy, it never enters the byte-edge list, and no
           preview page carries the declaration row
+  AC-COO11 (R3304) the remedy is MEASURED: the renderers it names are exactly
+          the ones a private-tree day advance actually reddened, each named
+          renderer's own file must still carry its criterion token, the edge
+          left out must still be the byte edge this table declares, and no
+          preview page may carry the remedy row
 
 The day edge (AC-COO10): preview/index.html prints `census day YYYY-MM-DD` and
 AC-DIX19 refuses a page whose day is not the export's current day. That is a
@@ -61,10 +66,18 @@ declared here instead of being cut because the day is the only thing telling a
 reader which day the six numbers belong to, and because it is ten ASCII
 characters whatever the date: a claims republish on a new day cannot move this
 page's byte count, so it cannot move the chain's data-back-bytes and cannot add
-an iteration to the ring. The cost it does carry is one re-render of the entry
-page, owed only when the six readings did NOT move (when they did, AC-CVL1
-already reddens the page). Measured at R3302: two exports a day apart render the
+an iteration to the ring. Measured at R3302: two exports a day apart render the
 same note in the same number of bytes.
+
+What a day republish still owes (measured at R3304 in a private copy tree, not
+guessed): the entry page must be re-rendered (AC-DIX19 and AC-COO8 redden on the
+export's new day), and so must the SWEEP BOARD - it stamps the moment it
+executed each face, so a newer index.html makes its verdict a claim about a
+version nobody measured (AC-FSW10, measured 20/21). The chain is NOT owed while
+only the day moves: the page stayed at 42875 bytes, delta zero. It IS owed the
+moment a reading changes width (claimed 339 -> 1000 moved the page one byte and
+the chain answered E_STALE), which is the byte edge the table above already
+carries - so this remedy does not invent a second rule, it names the renderers.
 
 Nothing here renders a page itself, runs JS, opens a socket or reads the clock
 for a product number.
@@ -109,6 +122,21 @@ EDGES = [
 # never from this table, so the declaration cannot agree with itself.
 DAY_EDGE = ("index", "export", "day", "preview/index.html", "census day ", 10)
 DAY_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
+
+# AC-COO11 (R3304). The remedy is a claim about which renderers a day advance
+# reddens, so it is graded against the CALL SITE each renderer uses to record
+# its criterion, not against a bare name: a comment that mentions AC-DIX19
+# grades nothing, and an arm proved that a bare-token read stays green when the
+# code is gone. (name, reader file, the call site the reader really holds)
+REMEDY = "re-render-index-and-sweep-after-claims-republish"
+REMEDY_OWED = (
+    ("index", "tools/deliverable_index.py", 'record("AC-DIX19"'),
+    ("sweep", "tools/face_sweep.py", 'fails.append("AC-FSW10'),
+)
+# The spared renderer is not described here on purpose: which edge it owes is
+# read out of EDGES above, so the exclusion cannot drift away from the table.
+REMEDY_SPARED = "chain"
+REMEDY_LEAK = "REMEDY-EDGE "
 
 # The standalone check face of each artifact (read-only, prints VERDICT).
 CHECKS = [
@@ -315,9 +343,74 @@ def day_row():
     """Print the declared day edge and grade AC-COO10. Returns True/False."""
     landed, kind, arms = day_view()
     print("DAY-EDGE index <- export kind=%s width=10 landed=%s in-byte-cycle=%s "
-          "remedy=re-render-index-after-claims-republish"
-          % (kind, landed or "-", not arms["outside-byte-cycle"]))
+          "remedy=%s"
+          % (kind, landed or "-", not arms["outside-byte-cycle"], REMEDY))
     print("AC-COO10 %s %s" % ("PASS" if all(arms.values()) else "FAIL",
+                              " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items()))))
+    return all(arms.values())
+
+
+def remedy_view():
+    """AC-COO11 arms: the printed remedy must be the measured one.
+
+    The names are parsed out of REMEDY (so a hand-edit that drops or adds a
+    renderer reddens), and each owed name must still be a file that holds the
+    criterion token measured to fail - the remedy cannot name a reader that
+    stopped grading anything. The spared edge must still be the byte edge the
+    table declares, so "chain is not owed" stays a statement about this ring.
+    """
+    names = []
+    at = REMEDY.find("re-render-")
+    if at >= 0:
+        head = REMEDY[at + len("re-render-"):].split("-after-")[0]
+        names = [n for n in head.split("-and-") if n]
+    owed = tuple(n for n, _, _ in REMEDY_OWED)
+    readers = []
+    for name, relpath, token in REMEDY_OWED:
+        path = os.path.join(ROOT, relpath)
+        present = os.path.isfile(path)
+        hit = False
+        if present:
+            with io.open(path, "r", encoding="utf-8", errors="replace") as fh:
+                hit = token in fh.read()
+        readers.append({"name": name, "reader_file": relpath, "token": token,
+                        "file_present": present, "token_found": hit})
+    spared = REMEDY_SPARED
+    spared_edges = [e for e in EDGES if e[0] == spared and e[2] == "bytes"]
+    spared_ok = False
+    if spared_edges:
+        relpath, token = spared_edges[0][3], spared_edges[0][4]
+        path = os.path.join(ROOT, relpath)
+        if os.path.isfile(path):
+            with io.open(path, "r", encoding="utf-8", errors="replace") as fh:
+                spared_ok = token in fh.read()
+    leaked = []
+    for name in sorted(os.listdir(PREVIEW)):
+        if not name.endswith(".html"):
+            continue
+        with io.open(os.path.join(PREVIEW, name), "r", encoding="utf-8",
+                     errors="replace") as fh:
+            if REMEDY_LEAK in fh.read():
+                leaked.append(name)
+    arms = {
+        "remedy-names-owed": sorted(names) == sorted(owed) and len(names) == len(owed),
+        "owed-readers-carry-token": all(r["file_present"] and r["token_found"]
+                                        for r in readers),
+        "spared-is-the-declared-edge": (spared not in names) and spared_ok,
+        "no-page-carries-it": not leaked,
+    }
+    return names, readers, arms
+
+
+def remedy_row():
+    """Print the measured remedy row and grade AC-COO11. Returns True/False."""
+    names, readers, arms = remedy_view()
+    print("REMEDY-EDGE owed=%s spared=%s why=day-is-ten-chars-and-board-stamps-"
+          "executions" % (",".join(names) or "-", REMEDY_SPARED))
+    for row in readers:
+        print("REMEDY-READER %-6s %s:%s found=%s"
+              % (row["name"], row["reader_file"], row["token"], row["token_found"]))
+    print("AC-COO11 %s %s" % ("PASS" if all(arms.values()) else "FAIL",
                               " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items()))))
     return all(arms.values())
 
@@ -332,6 +425,7 @@ def cmd_plan():
     print("BYTE-CYCLES %d %s" % (len(cycles), ",".join("->".join(c) for c in cycles) or "none"))
     law_ok = law_row()
     day_ok = day_row()
+    remedy_ok = remedy_row()
     bad = [r for r in edge_report() if not (r["file_present"] and r["token_found"])]
     if bad:
         print("VERDICT FAIL %d orphan-edge(s): %s"
@@ -342,6 +436,9 @@ def cmd_plan():
         return 2
     if not day_ok:
         print("VERDICT FAIL AC-COO10 day edge")
+        return 2
+    if not remedy_ok:
+        print("VERDICT FAIL AC-COO11 remedy row")
         return 2
     print("VERDICT PASS edges=%d cycles=%d" % (len(EDGES), len(cycles)))
     return 0

@@ -1,0 +1,9 @@
+ARM A1 clean tree                PASS rc=0 expect=AC-COO11 PASS | AC-COO11 PASS no-page-carries-it=True owed-readers-carry-token=True remedy-names-owed=True spared-is-the-declared-edge=True
+ARM A2 remedy drops sweep        PASS rc=2 expect=remedy-names-owed=False | AC-COO11 FAIL no-page-carries-it=True owed-readers-carry-token=True remedy-names-owed=False spared-is-the-declared-edge=True
+ARM A3 remedy names spare too    PASS rc=2 expect=spared-is-the-declared-edge=False | AC-COO11 FAIL no-page-carries-it=True owed-readers-carry-token=True remedy-names-owed=False spared-is-the-declared-edge=False
+ARM A4 remedy names nothing      PASS rc=2 expect=remedy-names-owed=False | AC-COO11 FAIL no-page-carries-it=True owed-readers-carry-token=True remedy-names-owed=False spared-is-the-declared-edge=True
+ARM A5 index loses AC-DIX19      PASS rc=2 expect=owed-readers-carry-token=False | AC-COO11 FAIL no-page-carries-it=True owed-readers-carry-token=False remedy-names-owed=True spared-is-the-declared-edge=True
+ARM A6 sweep loses AC-FSW10      PASS rc=2 expect=owed-readers-carry-token=False | AC-COO11 FAIL no-page-carries-it=True owed-readers-carry-token=False remedy-names-owed=True spared-is-the-declared-edge=True
+ARM A7 a page carries the row    PASS rc=2 expect=no-page-carries-it=False | AC-COO11 FAIL no-page-carries-it=False owed-readers-carry-token=True remedy-names-owed=True spared-is-the-declared-edge=True
+ARM A8 spared edge token drifts  PASS rc=2 expect=spared-is-the-declared-edge=False | AC-COO11 FAIL no-page-carries-it=True owed-readers-carry-token=True remedy-names-owed=True spared-is-the-declared-edge=False
+NEGCTL PASS arms=8/8
