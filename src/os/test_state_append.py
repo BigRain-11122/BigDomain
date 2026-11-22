@@ -25,6 +25,7 @@ import io
 import json
 import os
 import re
+import shutil
 import sys
 import tempfile
 
@@ -36,7 +37,7 @@ import state_append as SA  # noqa: E402
 import logs_toolkit as LT  # noqa: E402
 import state_io  # noqa: E402
 
-EXPECTED_CRITERIA = 11
+EXPECTED_CRITERIA = 12
 MODULE = os.path.join(BASE, "state_append.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-append"
@@ -419,6 +420,72 @@ def ac_rsa11():
         cleanup(folder)
 
 
+def ac_rsa12():
+    """AC-RSA12: the tick station publishes the heartbeat row it did not write.
+
+    R3317..R3319 each opened with heartbeat.txt two ticks behind state.json,
+    because a round that advances the tick through this vehicle never reached
+    closeout step 1.6. The write stays there (AC-COUT13(d) pins the order),
+    so this station reports the distance instead of staying silent: a lagging
+    row reads hb=lag=<n>, a fresh one reads hb=tick=<n>, a world with no row
+    reads hb=none, and a private world reads hb=skipped. None of the arms may
+    move a heartbeat byte - reading is the whole change.
+    """
+    folder = tempfile.mkdtemp(prefix="rsa-live-")
+    os.makedirs(os.path.join(folder, "src", "os"))
+    path = os.path.join(folder, "src", "os", "state.json")
+    hb_path = os.path.join(folder, "heartbeat.txt")
+    try:
+        data = {"tick": 10, "log": ["2026-11-16 R9001 PRODUCT: an older round"],
+                "benchmarks_refreshed": "2026-11-16"}
+        with io.open(path, "w", encoding="utf-8", newline="") as handle:
+            handle.write(state_io.dump_canon(data))
+        with io.open(hb_path, "wb") as handle:
+            handle.write(b"tick 8\n")
+        hb_before = fingerprint(hb_path)
+        code_a, out_a, _ = run_cli(["--state", path, "--round", "9002",
+                                    "--tick", "--line",
+                                    "2026-11-16 R9002 PRODUCT: lagging row"])
+        tick_a = json.loads(io.open(path, encoding="utf-8").read())["tick"]
+        a_ok = (code_a == 0 and "hb=lag=%d" % (tick_a - 8) in out_a
+                and fingerprint(hb_path) == hb_before)
+        state_before = fingerprint(path)
+        code_b, out_b, _ = run_cli(["--state", path, "--round", "9003",
+                                    "--tick", "--check", "--line",
+                                    "2026-11-16 R9003 PRODUCT: dry run"])
+        b_ok = (code_b == 0 and "hb=lag=%d" % (tick_a + 1 - 8) in out_b
+                and fingerprint(path) == state_before
+                and fingerprint(hb_path) == hb_before)
+        with io.open(hb_path, "wb") as handle:
+            handle.write(("tick %d\n" % (tick_a + 1)).encode("ascii"))
+        code_c, out_c, _ = run_cli(["--state", path, "--round", "9004",
+                                    "--tick", "--line",
+                                    "2026-11-16 R9004 PRODUCT: fresh row"])
+        c_ok = code_c == 0 and "hb=tick=%d" % (tick_a + 1) in out_c
+    finally:
+        shutil.rmtree(folder, ignore_errors=True)
+
+    flat, flat_path = world(["2026-11-16 R9001 PRODUCT: a private world"])
+    try:
+        code_d, out_d, _ = run_cli(["--state", flat_path, "--round", "9002",
+                                    "--tick", "--line",
+                                    "2026-11-16 R9002 PRODUCT: flat world"])
+        d_ok = (code_d == 0 and "hb=skipped" in out_d
+                and not os.path.exists(os.path.join(flat, "heartbeat.txt")))
+    finally:
+        cleanup(flat)
+
+    ok = a_ok and b_ok and c_ok and d_ok
+    if not ok:
+        print("  measured: a=%r b=%r c=%r d=%r out_a=%r out_b=%r out_c=%r "
+              "out_d=%r"
+              % (a_ok, b_ok, c_ok, d_ok, out_a.strip()[:120],
+                 out_b.strip()[:120], out_c.strip()[:120],
+                 out_d.strip()[:120]), flush=True)
+    check(ok, "AC-RSA12 the tick station reports the heartbeat row it read "
+          "(lag, tick, skipped) and moves no heartbeat byte")
+
+
 def main():
     print("state append suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -432,6 +499,7 @@ def main():
     ac_rsa9()
     ac_rsa10()
     ac_rsa11()
+    ac_rsa12()
     ac_rsa7()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)

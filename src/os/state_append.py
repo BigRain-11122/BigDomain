@@ -53,6 +53,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
+import heartbeat  # noqa: E402
 import ledger_lines  # noqa: E402
 import logs_toolkit  # noqa: E402
 import state_io  # noqa: E402
@@ -184,6 +185,48 @@ def _layout_refusal(text, log_len):
     return None
 
 
+def _shipped_root(state_path):
+    """The repo root a state file belongs to, or None for a private world.
+
+    Only `<root>/src/os/state.json` has a heartbeat neighbour: a world built
+    by a suite holds one state file and must keep holding exactly one.
+    """
+    state_dir = os.path.dirname(os.path.abspath(state_path))
+    if os.path.basename(state_dir) != "os":
+        return None
+    src_dir = os.path.dirname(state_dir)
+    if os.path.basename(src_dir) != "src":
+        return None
+    return os.path.dirname(src_dir)
+
+
+def _heartbeat_notice(state_path, tick):
+    """Publish the heartbeat row's distance from this tick (read only, R3320).
+
+    WHY THE WRITE IS NOT HERE (measured, not preferred): `closeout.py` step
+    1.6 lands the row through `heartbeat.write_tick` AFTER the state write is
+    proven, and AC-COUT13 arm (d) pins that order - a world whose heartbeat
+    name is occupied must advance the tick and only then refuse the face. A
+    second write inside this vehicle would move that refusal ahead of the
+    state write and change the tick the arm expects. So the write keeps its
+    one station and this one only SAYS what it sees, which is the reading a
+    round that advanced the tick directly had never been given: R3317..R3319
+    each opened with the row two ticks behind the state.
+    """
+    root = _shipped_root(state_path)
+    if root is None:
+        return "skipped"
+    try:
+        row = heartbeat.read_tick(root)
+    except (IOError, OSError):
+        return "unreadable"
+    if row is None:
+        return "none"
+    if row == tick:
+        return "tick=%d" % tick
+    return "lag=%d" % (tick - row)
+
+
 def run(args):
     try:
         raw_before = state_io.read_raw(args.state)
@@ -244,6 +287,7 @@ def run(args):
     result = {"rc": 0, "ok": True, "tick": new_tick,
               "log": len(new_lines), "bytes": size, "fold_margin": margin,
               "code": "APPEND",
+              "hb": _heartbeat_notice(args.state, new_tick),
               "detail": "+%d line(s)" % (len(new_lines) - log_before)}
     if args.check:
         return result
@@ -270,10 +314,10 @@ def main(argv=None):
 
     result = run(args)
     if result["ok"]:
-        print("APPEND %s tick=%d log=%d bytes=%d fold_margin=%d %s"
+        print("APPEND %s tick=%d log=%d bytes=%d fold_margin=%d hb=%s %s"
               % ("CHECK" if args.check else "OK", result["tick"],
                  result["log"], result["bytes"], result["fold_margin"],
-                 result["detail"]), flush=True)
+                 result["hb"], result["detail"]), flush=True)
     else:
         print("APPEND FAIL %s %s" % (result["code"], result["detail"]),
               flush=True)

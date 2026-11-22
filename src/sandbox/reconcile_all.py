@@ -5092,7 +5092,7 @@ SUITES = [
     # line that forgot its date prefix is refused at the write site rather
     # than discovered later by a crash or a battery leg (AC-RSA1..AC-RSA10).
     ("os-state-append",
-     os.path.join("..", "os", "test_state_append.py"), 11),
+     os.path.join("..", "os", "test_state_append.py"), 12),
     # R2838: retiring a one-off family does not stop it from growing again -
     # 226 state_append_R*.py and 682 export_R*/closeout_R*.py were deleted and
     # nothing refused the next one (R2837 disclosure (b)). The law is a freeze

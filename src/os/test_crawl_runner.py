@@ -9652,8 +9652,13 @@ def main():
     # The usage block also names the flag, so the options entry is the LAST
     # occurrence rather than the first.
     i82 = help82.rfind('--failures')
-    block82 = help82[i82:help82.find('--failure-days', i82)]
-    ok('AC-RUN82', 'newest_rows' in block82 and 'newest_kinds' in block82
+    # R3320: a slice whose bound is a find() result returns the nearly whole
+    # tail when that literal is gone (-1), so this arm used to pass while the
+    # separator it cuts on had disappeared. Presence first, then the cut.
+    j82 = help82.find('--failure-days', i82)
+    block82 = help82[i82:j82] if j82 >= 0 else ''
+    ok('AC-RUN82', i82 >= 0 and j82 > i82
+       and 'newest_rows' in block82 and 'newest_kinds' in block82
        and 'newest_kind=' in block82,
        'the --failures help names the tie family it prints')
 

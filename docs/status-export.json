@@ -3,20 +3,20 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-23 R3319 PRODUCT+ENGINEERING: the board asked whether the named exit can be disobeyed at the one call site that matters, and it could - a namedtuple still unpacks positionally, so a swapped field order would have pasted rows onto green. main now binds the exit once and reads .green/.rows/.criteria by name, and the two source anchors that read the old line were repaired at birth so a moved literal names its own failure instead of raising ValueError.",
+    "current": "2026-11-23 R3320 PRODUCT+ENGINEERING: the two questions the board could still only answer by opinion were answered by measurement, and both landed where they were born -- the tick station now says how far the heartbeat row is behind it, and the one slice-form arm that could stay green with its own separator missing now asks for the separator first.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3319.log (896B, 2026-11-23)",
-    "latest_evidence": "qa/negctl-R3319.log (896B, 2026-11-23)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3320.log (766B, 2026-11-23)",
+    "latest_evidence": "qa/probe-R3320.log (766B, 2026-11-23)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3319] next window (<=48h): (0) MAIN — 本轮让 main 按名取值，但三处仍未量到实：(1) `AC-RCA11(b)` 仍在**承诺**位置解包可用，而全仓今日真正的 position 消费者可能为零（另两处是 `ran == (0,1,3)` / `ran == (1,1,8)` 的**等值比较**，不是解包）——先只读 grep 出全部解包点，再决定这一臂是保留为兼容契约还是改成「无人解包」的实测断言。(2) `117` 处字面锚本轮判负的理由是「消失必红」，但**切片**形态（`src[a:x.find(lit)]`、`src[x.find(lit):]`）在字面消失时 `find` 返 -1 → 空切片/整段，**可能静默绿**——先只读量这一子族的真实数量与今日是否已有假绿臂，再定要不要给出生的那一类加具名断言。(3) 开轮时 `heartbeat.txt` 停在 3317 而 tick 已 3318（`AC-COUT13` 当场红，本轮靠 `heartbeat.py --write 3319` 对齐），说明「tick 推进」与「心跳写」是两个站——要不要让 `state_append --tick` 在同一事务里顺带写心跳，使 lag=1 不可能出现？先量谁会因此变红（`AC-COUT13` 的 replay 臂、`heartbeat_and_backlog_*` 历史脚本）。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 761 行 battery 仍未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）；载体 46364B / 78500（余 32136B，本轮无需 fold）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-25T04:24:37+08:00",
-    "updated_at": "2026-11-23T04:24:37+08:00",
+    "next_milestone": "[R3320] next window (<=48h): (0) MAIN — 本轮两处实物已落（心跳滞后在 tick 站可见；AC-RUN82 的字面存在性先行），但三处仍未量到实：(1) 心跳只被**读出**、未被**写出**，lag 仍要靠人看见后手跑 `heartbeat.py --write`——`closeout.py` 1.6 已承担写，故真正的问题是「直接走 state_append 的轮」到底占多少：先只读量最近 30 轮 tick 推进是否都经过 closeout（state log 行有无 `CLOSEOUT` 字样 vs 直接 `state_append`），再定要不要让 `state_append --tick` 在**同一次原子写内**落心跳（若做，AC-COUT13(d) 的 tick 期望与拒绝站顺序必须一并改，且要证明确实更早更便宜）。(2) `_heartbeat_notice` 只报差值，不报**方向**：心跳领先（负 lag）今日印 `lag=-1`，语义上不该有——先量这种情况在历史里出现过没有（qa 日志 + 归档），再定是否要单独的 `ahead=` 词与拒绝。(3) 八处切片站里另外七处本轮靠**推演**判为「内容臂必红」，没有一处实跑负控——挑其中两处（`test_export_freshness.py` tail、`test_state_fold.py` window）做一次「字面消失」实跑，若有一处实际是静的，按出生站补 presence 断言；若都红，把这条推演升格为实测并记进套件注释。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 761 行 battery 仍未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-25T04:35:52+08:00",
+    "updated_at": "2026-11-23T04:35:52+08:00",
     "heartbeat": {
-      "tick": 3319,
-      "state_tick": 3319,
+      "tick": 3320,
+      "state_tick": 3320,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-23 R3319 PRODUCT+ENGINEERING: the board asked whether the named exit can be disobeyed at the one call site that matters, and it could - a namedtuple still unpacks positionally, so a swapped field order would have pasted rows onto green. main now binds the exit once and reads .green/.rows/.criteria by name, and the two source anchors that read the old line were repaired at birth so a moved literal names its own failure instead of raising ValueError.",
-  "claims": {"claimed": 315, "captured": 97, "contradicted": 10, "uncaptured": 208, "historic": 7, "rows": 25, "present": true, "census_ts": "2026-11-23T04:24:37+08:00"},
+  "current": "2026-11-23 R3320 PRODUCT+ENGINEERING: the two questions the board could still only answer by opinion were answered by measurement, and both landed where they were born -- the tick station now says how far the heartbeat row is behind it, and the one slice-form arm that could stay green with its own separator missing now asks for the separator first.",
+  "claims": {"claimed": 316, "captured": 97, "contradicted": 10, "uncaptured": 209, "historic": 7, "rows": 25, "present": true, "census_ts": "2026-11-23T04:35:52+08:00"},
   "chain": {"present": true, "rows": 25, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-23 R3319 PRODUCT+ENGINEERING: the board asked whether the named exit can be disobeyed at the one call site that matters, and it could - a namedtuple still unpacks positionally, so a swapped field order would have pasted rows onto green. main now binds the exit once and reads .green/.rows/.criteria by name, and the two source anchors that read the old line were repaired at birth so a moved literal names its own failure instead of raising ValueError.",
-  "export_ts": "2026-11-23T04:24:37+08:00",
+  "do": "2026-11-23 R3320 PRODUCT+ENGINEERING: the two questions the board could still only answer by opinion were answered by measurement, and both landed where they were born -- the tick station now says how far the heartbeat row is behind it, and the one slice-form arm that could stay green with its own separator missing now asks for the separator first.",
+  "export_ts": "2026-11-23T04:35:52+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
-  "latest_evidence": "qa/negctl-R3319.log (896B, 2026-11-23)",
-  "next_milestone": "[R3319] next window (<=48h): (0) MAIN — 本轮让 main 按名取值，但三处仍未量到实：(1) `AC-RCA11(b)` 仍在**承诺**位置解包可用，而全仓今日真正的 position 消费者可能为零（另两处是 `ran == (0,1,3)` / `ran == (1,1,8)` 的**等值比较**，不是解包）——先只读 grep 出全部解包点，再决定这一臂是保留为兼容契约还是改成「无人解包」的实测断言。(2) `117` 处字面锚本轮判负的理由是「消失必红」，但**切片**形态（`src[a:x.find(lit)]`、`src[x.find(lit):]`）在字面消失时 `find` 返 -1 → 空切片/整段，**可能静默绿**——先只读量这一子族的真实数量与今日是否已有假绿臂，再定要不要给出生的那一类加具名断言。(3) 开轮时 `heartbeat.txt` 停在 3317 而 tick 已 3318（`AC-COUT13` 当场红，本轮靠 `heartbeat.py --write 3319` 对齐），说明「tick 推进」与「心跳写」是两个站——要不要让 `state_append --tick` 在同一事务里顺带写心跳，使 lag=1 不可能出现？先量谁会因此变红（`AC-COUT13` 的 replay 臂、`heartbeat_and_backlog_*` 历史脚本）。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 761 行 battery 仍未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）；载体 46364B / 78500（余 32136B，本轮无需 fold）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+  "latest_evidence": "qa/probe-R3320.log (766B, 2026-11-23)",
+  "next_milestone": "[R3320] next window (<=48h): (0) MAIN — 本轮两处实物已落（心跳滞后在 tick 站可见；AC-RUN82 的字面存在性先行），但三处仍未量到实：(1) 心跳只被**读出**、未被**写出**，lag 仍要靠人看见后手跑 `heartbeat.py --write`——`closeout.py` 1.6 已承担写，故真正的问题是「直接走 state_append 的轮」到底占多少：先只读量最近 30 轮 tick 推进是否都经过 closeout（state log 行有无 `CLOSEOUT` 字样 vs 直接 `state_append`），再定要不要让 `state_append --tick` 在**同一次原子写内**落心跳（若做，AC-COUT13(d) 的 tick 期望与拒绝站顺序必须一并改，且要证明确实更早更便宜）。(2) `_heartbeat_notice` 只报差值，不报**方向**：心跳领先（负 lag）今日印 `lag=-1`，语义上不该有——先量这种情况在历史里出现过没有（qa 日志 + 归档），再定是否要单独的 `ahead=` 词与拒绝。(3) 八处切片站里另外七处本轮靠**推演**判为「内容臂必红」，没有一处实跑负控——挑其中两处（`test_export_freshness.py` tail、`test_state_fold.py` window）做一次「字面消失」实跑，若有一处实际是静的，按出生站补 presence 断言；若都红，把这条推演升格为实测并记进套件注释。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 761 行 battery 仍未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-16 commit]; later=html)",
@@ -143,7 +143,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3319",
+      "3320",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -157,21 +157,21 @@
   "self_drive": {
     "window": "2026-11-17..2026-11-23",
     "window_days": 7,
-    "log_lines_in_window": 70,
+    "log_lines_in_window": 77,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 46938,
-  "next_milestone_due": "2026-11-25T04:24:37+08:00",
+  "state_bytes": 50473,
+  "next_milestone_due": "2026-11-25T04:35:52+08:00",
   "heartbeat": {
-    "tick": 3319,
-    "state_tick": 3319,
+    "tick": 3320,
+    "state_tick": 3320,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"

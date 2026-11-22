@@ -386,6 +386,12 @@ def ac_rca11():
           and (ran.green, ran.rows, ran.criteria) == tuple(ran),
           "AC-RCA11(a) the exit names its three fields in a fixed order")
     green, rows, total = ran
+    # R3320 measured the other half of the board question: the shipped tree
+    # holds ZERO three-name unpacking consumers of this exit - both runtime
+    # readers bind the whole value and compare it (`ran == (0, 1, 3)` in the
+    # timeout cap, `ran == (1, 1, 8)` here). The arm stays as a compatibility
+    # contract because the type is deliberately still a tuple, and it is the
+    # only thing that would redden if that promise were dropped.
     check((green, rows, total) == (1, 1, 3)
           and ran.green == green and ran.rows == rows
           and ran.criteria == total,

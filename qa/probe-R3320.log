@@ -1,0 +1,15 @@
+ARM-LINES 11
+HAS-PRESENCE-GUARD True
+SLICE-BOUND-REMOVED True
+NEW with-days True without-days False
+OLD with-days True without-days True
+SLICE-SITES 8
+SITE test_crawl_runner.py|9655|window OR fallback|was silent, now guarded
+SITE test_debt_register.py|270|one trailing char|content arms fail
+SITE test_export_freshness.py|99|one trailing char|content arms fail
+SITE test_queue_floor.py|313|one trailing char|content arms fail
+SITE test_state_fold.py|307|one trailing char|content arm fails
+SITE test_pre_commit_gate.py|655|one trailing char|count arm fails
+SITE test_declaration_writer_noop_parity.py|204|one trailing char|json parse fails
+SITE test_residue_triage_entry_retire.py|148|all but last char|equality of two equal derivations, other terms fail
+PROBE DONE
