@@ -1,19 +1,19 @@
 {
   "ceo_face": {
     "board_pages_skipped": [
-      "preview/face-sweep.html (8878B)"
+      "preview/face-sweep.html (8881B)"
     ],
     "current": "2026-11-22 R3298 PRODUCT+ENGINEERING: the front door's self-verify line was bound to ONE producer constant, so the day another pair took the newest band it degraded to a named absence - and a json stamp alone would have printed a command running the WRONG producer (the apimarket one, 37201B, for a 4403B pair). The binding is now per pair (PAIR_PRODUCERS), self_verify returns a mode (dry needs --dry-run/--stamp AND a rendered_on in the json; check needs the producer to declare --check), and a check-mode row carries a named caveat: it proves the recipe reproduces these bytes, not that the numbers are live. preview/index.html is 42643B.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 commit] (halves differ: html [2026-11-22 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 commit] (halves differ: html [2026-11-22 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/negctl-R3297.log (1375B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3298] next window (<=48h): (0) MAIN — **四件互为输入的排序环已被量出、但没被解**：chain 嵌 index 的字节数、index 嵌 chain 的 html 字节数与 `docs/status-export.json` 的 `census_ts`、sweep 要求 index 先写、export 在 sweep 为最新件时要跳过审计——四条边围成环，任何一次「只改一件」都会让另一件 `E_STALE`（R3297 的 FINDING 就是它的症状）。问：要不要把这条环**变成一条可执行的重渲次序并写成断言**（例如 `tools/closeout_order.py`：按依赖图拓扑序重渲，再跑四件 `--check`，环内若有相等性只允许一个方向）？做法＝先只读量三问：①四条边里哪几条是**真相等性**（字节数被逐字比对）哪几条只是**mtime 顺序**（mtime 边可以用「最后写」满足，不必进环）；②若把 index 那句 `census_ts` 改成从导出面**现读的引用**（而非落地副本），环是否断一条边；③价（一个拓扑序工具约 80 行 + 一条判据 + closeout 多跑四件 `--check` 的 4s）。收口三选一＝①写 `closeout_order.py` 并把「静止态四件全绿」变成判据 ②只把环写进诚实段（接受「改一件就要重渲三件」的人工纪律）③把 chain 的 back-hop 从入口页字节数改成**入口页指纹**（同样会变，但可一次性重算，不参与长度耦合）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
-    "next_milestone_due": "2026-11-24T23:22:53+08:00",
-    "updated_at": "2026-11-22T23:22:53+08:00",
+    "next_milestone_due": "2026-11-24T23:24:00+08:00",
+    "updated_at": "2026-11-22T23:24:00+08:00",
     "heartbeat": {
       "tick": 3297,
       "state_tick": 3298,
@@ -29,7 +29,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 8,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-22 R3298 PRODUCT+ENGINEERING: the front door's self-verify line was bound to ONE producer constant, so the day another pair took the newest band it degraded to a named absence - and a json stamp alone would have printed a command running the WRONG producer (the apimarket one, 37201B, for a 4403B pair). The binding is now per pair (PAIR_PRODUCERS), self_verify returns a mode (dry needs --dry-run/--stamp AND a rendered_on in the json; check needs the producer to declare --check), and a check-mode row carries a named caveat: it proves the recipe reproduces these bytes, not that the numbers are live. preview/index.html is 42643B.",
-  "claims": {"claimed": 332, "captured": 94, "contradicted": 10, "uncaptured": 228, "historic": 7, "rows": 23, "present": true, "census_ts": "2026-11-22T23:22:53+08:00"},
+  "claims": {"claimed": 332, "captured": 94, "contradicted": 10, "uncaptured": 228, "historic": 7, "rows": 23, "present": true, "census_ts": "2026-11-22T23:24:00+08:00"},
   "chain": {"present": true, "rows": 23, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,12 +68,12 @@
     }
   ],
   "do": "2026-11-22 R3298 PRODUCT+ENGINEERING: the front door's self-verify line was bound to ONE producer constant, so the day another pair took the newest band it degraded to a named absence - and a json stamp alone would have printed a command running the WRONG producer (the apimarket one, 37201B, for a 4403B pair). The binding is now per pair (PAIR_PRODUCERS), self_verify returns a mode (dry needs --dry-run/--stamp AND a rendered_on in the json; check needs the producer to declare --check), and a check-mode row carries a named caveat: it proves the recipe reproduces these bytes, not that the numbers are live. preview/index.html is 42643B.",
-  "export_ts": "2026-11-22T23:22:53+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-22T23:24:00+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 commit] (halves differ: html [2026-11-22 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/negctl-R3297.log (1375B, 2026-11-22)",
   "next_milestone": "[R3298] next window (<=48h): (0) MAIN — **四件互为输入的排序环已被量出、但没被解**：chain 嵌 index 的字节数、index 嵌 chain 的 html 字节数与 `docs/status-export.json` 的 `census_ts`、sweep 要求 index 先写、export 在 sweep 为最新件时要跳过审计——四条边围成环，任何一次「只改一件」都会让另一件 `E_STALE`（R3297 的 FINDING 就是它的症状）。问：要不要把这条环**变成一条可执行的重渲次序并写成断言**（例如 `tools/closeout_order.py`：按依赖图拓扑序重渲，再跑四件 `--check`，环内若有相等性只允许一个方向）？做法＝先只读量三问：①四条边里哪几条是**真相等性**（字节数被逐字比对）哪几条只是**mtime 顺序**（mtime 边可以用「最后写」满足，不必进环）；②若把 index 那句 `census_ts` 改成从导出面**现读的引用**（而非落地副本），环是否断一条边；③价（一个拓扑序工具约 80 行 + 一条判据 + closeout 多跑四件 `--check` 的 4s）。收口三选一＝①写 `closeout_order.py` 并把「静止态四件全绿」变成判据 ②只把环写进诚实段（接受「改一件就要重渲三件」的人工纪律）③把 chain 的 back-hop 从入口页字节数改成**入口页指纹**（同样会变，但可一次性重算，不参与长度耦合）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
   "outs": [
-    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-16 commit]; later=html)",
+    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 commit] (halves differ: html [2026-11-22 commit] + json [2026-11-16 commit]; later=html)",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-22 commit]; later=html)",
     "preview/apimarket-report-slowanswer.html (13022B) + preview/apimarket-report-slowanswer.json (18381B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-10-25 commit]; later=html)",
     "preview/start-here.html (41366B) + preview/start-here.json (3298B) [2026-11-22 mtime]",
@@ -168,7 +168,7 @@
     "queue_explore_open": 4
   },
   "state_bytes": 222071,
-  "next_milestone_due": "2026-11-24T23:22:53+08:00",
+  "next_milestone_due": "2026-11-24T23:24:00+08:00",
   "heartbeat": {
     "tick": 3297,
     "state_tick": 3298,
@@ -184,7 +184,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 8,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
