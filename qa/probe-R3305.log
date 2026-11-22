@@ -1,0 +1,70 @@
+PRIVATE-ROOT day-only C:\Users\sjs20\AppData\Local\Temp\bd_r3305_dayonly_dl76boic
+A0 copy-tree export drift before write rc=2 VERDICT FAIL 2
+A0 export self-write rc=0 VERDICT R3304 PASS: do, ceo_face.current and current all name R3304
+A0 export after self-write rc=0 VERDICT PASS tick=2026-11-23 R3304 PRODUCT+ENG
+A baseline chain     rc=0 VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+A baseline index     rc=0 VERDICT PASS 23/23 fingerprint=1b22fb1d335bb85e
+A baseline sweep     rc=0 VERDICT PASS 21/21
+A baseline export    rc=0 VERDICT PASS tick=2026-11-23 R3304 PRODUCT+ENG
+A baseline closeout  rc=0 VERDICT PASS checks=4/4 read_only=True
+A sizes {"docs/status-export.json": 37831, "preview/face-sweep.html": 8878, "preview/first-yuan-chain.html": 4403, "preview/index.html": 42875}
+A export census_ts=2026-11-23T01:02:41+08:00 claimed=339 rows=24
+B day-only index-check  rc=2 failed=- VERDICT FAIL 21/23 fingerprint=b2a5096a1b1d237a
+B day-only export-check rc=0 failed=- VERDICT PASS tick=2026-11-23 R3304 PRODUCT+ENG
+B VERDICT PASS index-reddens=True export-reddens=False
+C one-write rc=0 passes=2 transient_lines=2
+C| PASS1 chain   rc=0 RENDER legs=2 prices=birthright_entry=990,tier_patron_30d=2990 same_price=False value_differs=True entries=2 tx=1 reconcile_rc=0 zero_delta=True html=4403B json=4806B
+C| PASS1 index   rc=0 DELIVERABLE INDEX faces=9 defects=0 fingerprint=15516772eabd1f92 index=42875B
+C| PASS1 backhop rc=0 backhop report written: C:\Users\sjs20\AppData\Local\Temp\bd_r3305_dayonly_dl76boic\state\backhop-report.json (9785 bytes, faces=32, sizes patched=0)
+C| PASS1 sweep   rc=2 VERDICT FAIL 11/13 fingerprint=7062349198f8089f
+C| PASS1 export  rc=0 VERDICT R3304 PASS: do, ceo_face.current and current all name R3304
+C| PASS1 TRANSIENT red-steps=sweep (landed anyway; judged at pass end)
+C| PASS1 CHECK chain  PASS VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+C| PASS1 CHECK index  FAIL VERDICT FAIL 21/23 fingerprint=4e16015638d8d6b6
+C| PASS1 CHECK sweep  PASS VERDICT PASS 21/21
+C| PASS1 CHECK export PASS VERDICT PASS tick=2026-11-23 R3304 PRODUCT+ENG
+C| REDGE pass=1 index <- chain bytes tools/deliverable_index.py
+C| REDGE pass=1 index <- export bytes tools/deliverable_index.py
+C| PASS2 chain   rc=0 RENDER legs=2 prices=birthright_entry=990,tier_patron_30d=2990 same_price=False value_differs=True entries=2 tx=1 reconcile_rc=0 zero_delta=True html=4403B json=4806B
+C| PASS2 index   rc=0 DELIVERABLE INDEX faces=9 defects=0 fingerprint=3fe00e316213d952 index=42875B
+C| PASS2 backhop rc=0 backhop report written: C:\Users\sjs20\AppData\Local\Temp\bd_r3305_dayonly_dl76boic\state\backhop-report.json (9785 bytes, faces=32, sizes patched=0)
+C| PASS2 sweep   rc=2 VERDICT FAIL 11/13 fingerprint=eab0e883eca0432d
+C| PASS2 export  rc=0 VERDICT R3304 PASS: do, ceo_face.current and current all name R3304
+C| PASS2 TRANSIENT red-steps=sweep (landed anyway; judged at pass end)
+C| PASS2 CHECK chain  PASS VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+C| PASS2 CHECK index  PASS VERDICT PASS 23/23 fingerprint=6905155e1a7c6f6d
+C| PASS2 CHECK sweep  PASS VERDICT PASS 21/21
+C| PASS2 CHECK export PASS VERDICT PASS tick=2026-11-23 R3304 PRODUCT+ENG
+C| VERDICT PASS passes=2 steps=5 checks=4/4 transient_steps=1
+C census planted=2026-11-24T01:02:41+08:00 after-write=2026-11-23T01:03:12+08:00 rewritten-by-export=True
+C VERDICT PASS converges=True one-pass=False observed=2
+D post-check rc=0 VERDICT PASS checks=4/4 read_only=True sizes={"docs/status-export.json": 37809, "preview/face-sweep.html": 8914, "preview/first-yuan-chain.html": 4403, "preview/index.html": 42875}
+D VERDICT PASS post-green=True read-only=True moved-files=['docs/status-export.json', 'preview/face-sweep.html']
+PRIVATE-ROOT width-control C:\Users\sjs20\AppData\Local\Temp\bd_r3305_width_jvyj8avu
+E width-control index-check-before rc=2 failed=-
+E width-control one-write rc=0 passes=2
+E| PASS1 chain   rc=0 RENDER legs=2 prices=birthright_entry=990,tier_patron_30d=2990 same_price=False value_differs=True entries=2 tx=1 reconcile_rc=0 zero_delta=True html=4403B json=4806B
+E| PASS1 index   rc=0 DELIVERABLE INDEX faces=9 defects=0 fingerprint=9c289a95e9ea041f index=42876B
+E| PASS1 backhop rc=0 backhop report written: C:\Users\sjs20\AppData\Local\Temp\bd_r3305_width_jvyj8avu\state\backhop-report.json (9785 bytes, faces=32, sizes patched=0)
+E| PASS1 sweep   rc=2 VERDICT FAIL 11/13 fingerprint=90bef8c64d7691fb
+E| PASS1 export  rc=0 VERDICT R3304 PASS: do, ceo_face.current and current all name R3304
+E| PASS1 TRANSIENT red-steps=sweep (landed anyway; judged at pass end)
+E| PASS1 CHECK chain  PASS VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+E| PASS1 CHECK index  FAIL VERDICT FAIL 20/23 fingerprint=9663d06bebf866f2
+E| PASS1 CHECK sweep  PASS VERDICT PASS 21/21
+E| PASS1 CHECK export PASS VERDICT PASS tick=2026-11-23 R3304 PRODUCT+ENG
+E| REDGE pass=1 index <- chain bytes tools/deliverable_index.py
+E| REDGE pass=1 index <- export bytes tools/deliverable_index.py
+E| PASS2 chain   rc=0 RENDER legs=2 prices=birthright_entry=990,tier_patron_30d=2990 same_price=False value_differs=True entries=2 tx=1 reconcile_rc=0 zero_delta=True html=4403B json=4806B
+E| PASS2 index   rc=0 DELIVERABLE INDEX faces=9 defects=0 fingerprint=8d6ac56b937066fb index=42875B
+E| PASS2 backhop rc=0 backhop report written: C:\Users\sjs20\AppData\Local\Temp\bd_r3305_width_jvyj8avu\state\backhop-report.json (9785 bytes, faces=32, sizes patched=0)
+E| PASS2 sweep   rc=2 VERDICT FAIL 11/13 fingerprint=757280f96730eeb8
+E| PASS2 export  rc=0 VERDICT R3304 PASS: do, ceo_face.current and current all name R3304
+E| PASS2 TRANSIENT red-steps=sweep (landed anyway; judged at pass end)
+E| PASS2 CHECK chain  PASS VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+E| PASS2 CHECK index  PASS VERDICT PASS 23/23 fingerprint=e5b7b2bf74787204
+E| PASS2 CHECK sweep  PASS VERDICT PASS 21/21
+E| PASS2 CHECK export PASS VERDICT PASS tick=2026-11-23 R3304 PRODUCT+ENG
+E| VERDICT PASS passes=2 steps=5 checks=4/4 transient_steps=1
+E VERDICT PASS control-reddens=True write-green=True post-check=0 passes=2
+PROBE VERDICT PASS day_reddens=True one_pass=False passes=2 ctrl_passes=2

@@ -57,6 +57,25 @@ this file existed):
           renderer's own file must still carry its criterion token, the edge
           left out must still be the byte edge this table declares, and no
           preview page may carry the remedy row
+  AC-COO12 (R3305) a DAY CROSSING costs TWO passes, and that count is graded
+          against its premise: the export step must still be the LAST step and
+          must still be the writer of the census day, the declared count must
+          fit inside MAX_PASSES, and no preview page may carry the row
+
+The measured pass count (AC-COO12): R3304 proved a day republish reddens the
+entry page and the sweep board, and its remedy names both - but the remedy was
+never measured as an ORDERING, and the closeout's own contract ("<=3 passes
+until the four faces are green together") had never been run in a world whose
+day had moved. R3305 measured it in two private copy trees (day only, and day
+plus a reading whose width moves): both needed TWO passes, and the second pass
+was never a rounding error. The premise is the order itself - the export step
+is LAST in STEPS and it is a WRITER of the census day (it imports
+status_export_fresh, whose CLAIMS_TS_KEY is census_ts), so the index rendered
+earlier in the same pass prints the day it read at pass start and is one step
+behind at pass end. Two passes is therefore not a defect to be tuned away: it
+is what a ring with export -> index -> sweep and sweep -> export owes. What the
+criterion refuses is the claim drifting away from that structure - reorder the
+steps and the arm reddens instead of the number quietly going stale.
 
 The day edge (AC-COO10): preview/index.html prints `census day YYYY-MM-DD` and
 AC-DIX19 refuses a page whose day is not the export's current day. That is a
@@ -137,6 +156,20 @@ REMEDY_OWED = (
 # read out of EDGES above, so the exclusion cannot drift away from the table.
 REMEDY_SPARED = "chain"
 REMEDY_LEAK = "REMEDY-EDGE "
+
+# AC-COO12 (R3305). A day crossing costs TWO passes, measured in two private
+# copy trees (day only, and day + a reading width). The count is a property of
+# the order, so its PREMISE is graded rather than the number alone: export must
+# still be the last step and must still be the writer of the census day (it
+# imports the fresh writer, whose CLAIMS_TS_KEY is census_ts). Reorder STEPS or
+# move the day out of the export step and this arm reddens, so the declared
+# count cannot outlive the structure that produced it.
+DAY_PASSES = 2
+DAY_PASSES_WHY = "export-publishes-census-day-and-runs-last"
+DAY_PASSES_WRITER = ("export", "src/os/export_round.py",
+                     "import status_export_fresh as SXF")
+DAY_PASSES_KEY = ("tools/status_export_fresh.py", 'CLAIMS_TS_KEY = "census_ts"')
+DAY_PASSES_LEAK = "DAY-PASSES "
 
 # The standalone check face of each artifact (read-only, prints VERDICT).
 CHECKS = [
@@ -415,6 +448,54 @@ def remedy_row():
     return all(arms.values())
 
 
+def day_passes_view():
+    """AC-COO12 arms: the declared pass count and the structure that owes it.
+
+    The number is not re-measured here (a day cannot be advanced from a
+    read-only plan); what is graded is that the order still has the shape the
+    measurement found - export last, export really writing the census day - and
+    that the declared count fits the iteration budget.
+    """
+    writer_name, relpath, import_token = DAY_PASSES_WRITER
+    path = os.path.join(ROOT, relpath)
+    import_hit = False
+    if os.path.isfile(path):
+        with io.open(path, "r", encoding="utf-8", errors="replace") as fh:
+            import_hit = import_token in fh.read()
+    key_path, key_token = DAY_PASSES_KEY
+    key_hit = False
+    key_abs = os.path.join(ROOT, key_path)
+    if os.path.isfile(key_abs):
+        with io.open(key_abs, "r", encoding="utf-8", errors="replace") as fh:
+            key_hit = key_token in fh.read()
+    last = STEPS[-1][0] if STEPS else ""
+    leaked = []
+    for name in sorted(os.listdir(PREVIEW)):
+        if not name.endswith(".html"):
+            continue
+        with io.open(os.path.join(PREVIEW, name), "r", encoding="utf-8",
+                     errors="replace") as fh:
+            if DAY_PASSES_LEAK in fh.read():
+                leaked.append(name)
+    arms = {
+        "budget-covers-it": MAX_PASSES >= DAY_PASSES,
+        "export-runs-last": last == writer_name,
+        "export-writes-the-day": import_hit and key_hit,
+        "no-page-carries-it": not leaked,
+    }
+    return arms
+
+
+def day_passes_row():
+    """Print the measured pass count and grade AC-COO12. Returns True/False."""
+    arms = day_passes_view()
+    print("DAY-PASSES count=%d why=%s budget=%d export-last=%s"
+          % (DAY_PASSES, DAY_PASSES_WHY, MAX_PASSES, arms["export-runs-last"]))
+    print("AC-COO12 %s %s" % ("PASS" if all(arms.values()) else "FAIL",
+                              " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items()))))
+    return all(arms.values())
+
+
 def cmd_plan():
     print("STEPS %d %s" % (len(STEPS), ",".join(n for n, _, _ in STEPS)))
     for row in edge_report():
@@ -426,6 +507,7 @@ def cmd_plan():
     law_ok = law_row()
     day_ok = day_row()
     remedy_ok = remedy_row()
+    passes_ok = day_passes_row()
     bad = [r for r in edge_report() if not (r["file_present"] and r["token_found"])]
     if bad:
         print("VERDICT FAIL %d orphan-edge(s): %s"
@@ -439,6 +521,9 @@ def cmd_plan():
         return 2
     if not remedy_ok:
         print("VERDICT FAIL AC-COO11 remedy row")
+        return 2
+    if not passes_ok:
+        print("VERDICT FAIL AC-COO12 day pass count")
         return 2
     print("VERDICT PASS edges=%d cycles=%d" % (len(EDGES), len(cycles)))
     return 0

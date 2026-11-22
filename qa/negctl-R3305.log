@@ -1,0 +1,9 @@
+PRIVATE-ROOT C:\Users\sjs20\AppData\Local\Temp\bd_r3305_neg_0lf7yvix
+c0 clean rc=0 VERDICT PASS edges=6 cycles=1 | AC-COO12 PASS budget-covers-it=True export-runs-last=True export-writes-the-day=True no-page-carries-it=True
+c1 budget rc=2 VERDICT FAIL AC-COO12 day pass count | AC-COO12 FAIL budget-covers-it=False export-runs-last=True export-writes-the-day=True no-page-carries-it=True
+c2 order rc=2 VERDICT FAIL AC-COO12 day pass count | AC-COO12 FAIL budget-covers-it=True export-runs-last=False export-writes-the-day=True no-page-carries-it=True
+c3 writer rc=2 VERDICT FAIL AC-COO12 day pass count | AC-COO12 FAIL budget-covers-it=True export-runs-last=True export-writes-the-day=False no-page-carries-it=True
+c4 key rc=2 VERDICT FAIL AC-COO12 day pass count | AC-COO12 FAIL budget-covers-it=True export-runs-last=True export-writes-the-day=False no-page-carries-it=True
+c5 leak rc=2 VERDICT FAIL AC-COO12 day pass count | AC-COO12 FAIL budget-covers-it=True export-runs-last=True export-writes-the-day=True no-page-carries-it=False
+c6 restored rc=0 VERDICT PASS edges=6 cycles=1
+NEGCTL PASS cases=7/7 failed=-
