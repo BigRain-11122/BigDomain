@@ -1,0 +1,19 @@
+faces_scanned=45 faces_mentioning_drawer=8
+TOTALS mentions=8 setItem=8 unnamed_setItem=0 idx_write=0 prop_write=0 db_open=0 alias=4
+W1 word_but_no_readable_write=1
+  W1 start-here.html words=localStorage set=- idx=0 prop=0 db=0 alias=-
+W2 faces_with_a_shape_other_than_named_setItem=4
+  W2 lobby-protocol-map.html idx=- prop=- db=0 alias=['saved=localStorage'] unnamed=-
+  W2 lobby-session-trace.html idx=- prop=- db=0 alias=['v=localStorage'] unnamed=-
+  W2 membership-face.html idx=- prop=- db=0 alias=['v=localStorage'] unnamed=-
+  W2 merchant-onboard.html idx=- prop=- db=0 alias=['raw=localStorage'] unnamed=-
+W3 per_face_mentions:
+  F filing-checklist.html words=localStorage setItem_named=localStorage shipped_write=localStorage
+  F lobby-protocol-map.html words=localStorage setItem_named=localStorage shipped_write=localStorage
+  F lobby-session-trace.html words=localStorage setItem_named=localStorage shipped_write=localStorage
+  F membership-face.html words=localStorage setItem_named=localStorage shipped_write=localStorage
+  F merchant-onboard.html words=localStorage setItem_named=localStorage shipped_write=localStorage
+  F money-path-demo.html words=localStorage setItem_named=localStorage shipped_write=localStorage
+  F ship-checklist.html words=localStorage setItem_named=localStorage,localStorage shipped_write=localStorage
+  F start-here.html words=localStorage setItem_named=- shipped_write=-
+cost_s=0.0429 per_face_s=0.00095

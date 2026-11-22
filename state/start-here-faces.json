@@ -203,7 +203,7 @@
   "ref": "外链资源"
  },
  "step_head": "从哪一步开始（派生，不是手写）：",
- "step_fmt": "{n}. {face} —— 点它之后，{key}留在{drawer}里；{when}；离开页面再回来还能接着做。这一步能证明「这里确实会留下状态」，不能证明「这份状态对平台有效」——全部在本机。",
+ "step_fmt": "{n}. {face} —— 点它之后，{key}留在{drawer}里；{when}；离开页面再回来还能接着做。这一步能证明「这里确实会留下状态」，不能证明「这份状态对平台有效」——全部在本机。{unread}",
  "step_excluded_fmt": "走线之外还有 {side} 张点得动的面（主步 {main} 条已经在上面）：它们不是走线的一步，理由逐张写在下面。",
  "step_absent": "今天没有可走的第一步：没有一张可操作面同时满足「状态留存」与「键自配平」——这不是走线坏了，而是六张面里一张都不成立。",
  "step_key_none": "（写侧没有具名键）",
@@ -214,7 +214,7 @@
  "key_absent": "今天没有一张点得动的面的键名能从字节里解析成字面量——页面不会把变量名冒充成你能搜的字符串。",
  "step_orphan_word": "读的键不是自己写的",
  "step_nokey_word": "没有可读键",
- "branch_fmt": "旁支 {n}：{face} —— {word}；{key}；{drawer}，{when}",
+ "branch_fmt": "旁支 {n}：{face} —— {word}；{key}；{drawer}，{when}{unread}",
  "branch_absent": "旁支：今天没有——所有点得动的面都已经在上面那条走线里。",
  "branch_words": {
   "screen": "点下去会改屏幕，但什么都不留（看得到、留不下）",
@@ -227,5 +227,18 @@
  "drawer_none": "（这张面不写存储，没有抽屉）",
  "when_click": "这个键是点过之后才写进去的，不是一打开页面就有",
  "when_open": "这个键不用点，页面一打开就已经写进去了",
- "when_none": "没有键，也就没有写入时机"
+ "when_none": "没有键，也就没有写入时机",
+ "drawer_unread_head_fmt": "走线的 {all} 张面里，有 {n} 张的写入页面读不出来——这些写法页面给不出抽屉名和键名。",
+ "drawer_unread_none": "走线里每一张面的写入都是页面读得出来的写法——今天没有一张面带读不出的写入。",
+ "drawer_unread_fmt": "（这张面有页面读不出来的写入：{forms}）",
+ "drawer_unread_face_fmt": "{name} —— 页面读不出来的写法：{forms}",
+ "drawer_unread_forms": {
+  "unnamed_setItem": "接收者不是抽屉的 setItem",
+  "index_assign": "方括号赋值",
+  "prop_assign": "属性赋值",
+  "db_open": "打开了对象仓"
+ },
+ "drawer_mute": "（这张面提到了浏览器存储，但页面读不到它写过任何键）",
+ "when_mute": "页面说不出这个键是什么时候出现的",
+ "when_unread": "这些写法页面读不出键名，也就说不了写入时机"
 }

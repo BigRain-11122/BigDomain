@@ -55,6 +55,17 @@ KINDS = ("persists", "screen", "wires", "inert")
 # the same bytes, never authored.
 DRAWERS = ("localStorage", "sessionStorage", "indexedDB")
 DRAW = re.compile(r"\b(localStorage|sessionStorage|indexedDB)\b")
+# R3270: not every write into a drawer is a `.setItem(` call with a drawer as the
+# receiver. A bracket assignment, a property assignment, a write through an alias
+# receiver and a bare `indexedDB.open(` are shapes the call reader cannot turn into
+# a drawer+key. They are counted, so a face that carries one can never be described
+# as "writes no storage" - the closed set is four words.
+UNREAD_FORMS = ("unnamed_setItem", "index_assign", "prop_assign", "db_open")
+IDX_ASSIGN = re.compile(r"\b(localStorage|sessionStorage)\s*\[[^\]]{0,160}\]\s*"
+                        r"(?:\+?=)(?!=)")
+PROP_ASSIGN = re.compile(r"\b(localStorage|sessionStorage)\s*\.\s*"
+                         r"[A-Za-z_$][\w$]*\s*=(?!=)")
+DB_OPEN = re.compile(r"\bindexedDB\s*\.\s*open\s*\(")
 # The receiver of a storage call: the dotted name just before `.setItem(`.
 RECV = re.compile(r"([A-Za-z_$][\w$]*(?:\s*\.\s*[A-Za-z_$][\w$]*)*)\s*$")
 SCRIPT_TAG = re.compile(r"<script\b[^>]*>", re.I)
@@ -234,12 +245,17 @@ def drawer_reading(text):
              for drawer in DRAWERS}
     on_open = 0
     unnamed = 0
+    index_assign = 0
+    prop_assign = 0
+    db_open = 0
     for body in _script_bodies(text):
         for match in CALL.finditer(body):
             head = RECV.search(body[:match.start()])
             name = head.group(1).split(".")[-1].strip() if head else ""
-            if name not in DRAWERS:
+            if match.group(1) == "setItem" and name not in DRAWERS:
                 unnamed += 1
+                continue
+            if name not in DRAWERS:
                 continue
             calls[name][match.group(1)] += 1
             if match.group(1) == "setItem":
@@ -247,11 +263,16 @@ def drawer_reading(text):
                          - body.count("}", 0, match.start()))
                 if depth <= 0:
                     on_open += 1
+        index_assign += len(IDX_ASSIGN.findall(body))
+        prop_assign += len(PROP_ASSIGN.findall(body))
+        db_open += len(DB_OPEN.findall(body))
     return {
         "write": sorted(d for d in DRAWERS if calls[d]["setItem"]),
         "read": sorted(d for d in DRAWERS if calls[d]["getItem"]),
         "remove": sorted(d for d in DRAWERS if calls[d]["removeItem"]),
         "on_open": on_open, "unnamed": unnamed,
+        "unread": {"unnamed_setItem": unnamed, "index_assign": index_assign,
+                   "prop_assign": prop_assign, "db_open": db_open},
         "words": sorted(set(DRAW.findall(text))),
         "calls": calls,
     }
@@ -260,25 +281,54 @@ def drawer_reading(text):
 def drawer_naming(row):
     """Which drawer names a row may print, and the closed timing word. A face with
     no storage write prints no drawer name at all, so a branch that keeps nothing
-    cannot borrow one from a word mentioned in its text."""
+    cannot borrow one from a word mentioned in its text. R3270: the same naming
+    carries the write shapes the call reader could not resolve, so a row can say
+    "the page cannot read this face's writes" instead of claiming it writes none."""
     got = row.get("drawers") or {}
     writes = list(got.get("write") or [])
-    if not writes:
-        return {"drawers": [], "when": "none"}
+    unread = got.get("unread") or {}
+    forms = [form for form in UNREAD_FORMS if unread.get(form)]
     return {"drawers": writes,
-            "when": "on-open" if got.get("on_open") else "on-click"}
+            "when": ("on-open" if got.get("on_open") else "on-click")
+                    if writes else "none",
+            "unread": forms,
+            "words": list(got.get("words") or [])}
+
+
+def unread_text(naming, doc):
+    """The phrase a row appends when this face's writes cannot be turned into a
+    drawer and a key. Empty when every write is readable. One function for the page
+    and the criterion, so neither can print its own version."""
+    forms = naming.get("unread") or []
+    if not forms:
+        return ""
+    words = doc.get("drawer_unread_forms") or {}
+    return (doc.get("drawer_unread_fmt") or "").format(
+        forms="、".join(words.get(form) or form for form in forms))
 
 
 def drawer_text(naming, doc):
     """The phrase a step or branch sentence puts where the drawer goes. One function
     for the page and the criterion, so neither can print its own version."""
     if not naming["drawers"]:
+        if naming.get("unread"):
+            return unread_text(naming, doc)
+        if naming.get("words"):
+            return doc.get("drawer_mute") or ""
         return doc.get("drawer_none") or ""
     fmt = doc.get("drawer_names_fmt") or "「{name}」"
     return "、".join(fmt.format(name=name) for name in naming["drawers"])
 
 
 def when_text(naming, doc):
+    """R3270: "no key, no timing" is only true when the page could actually read the
+    face. A face whose writes are unreadable, or that mentions a drawer without any
+    readable write, must not borrow that sentence."""
+    if naming["when"] == "none":
+        if naming.get("unread"):
+            return doc.get("when_unread") or ""
+        if naming.get("words"):
+            return doc.get("when_mute") or ""
     return doc.get(WHEN_WORDS[naming["when"]]) or ""
 
 
@@ -1190,6 +1240,9 @@ def projection():
     drawer_when_counts = {when: 0 for when in DRAWER_WHENS}
     for name in operable:
         drawer_when_counts[drawer_naming(rows[name])["when"]] += 1
+    drawer_unread = [(name, drawer_naming(rows[name])["unread"])
+                     for name in sorted(operable)
+                     if drawer_naming(rows[name])["unread"]]
     return {
         "rows": rows,
         "doc": doc,
@@ -1240,6 +1293,7 @@ def projection():
         "step_drawers": step_drawers,
         "branch_drawers": branch_drawers,
         "drawer_when_counts": drawer_when_counts,
+        "drawer_unread": drawer_unread,
         "data16": sha16(DATA),
     }
 
@@ -1735,16 +1789,19 @@ def render(proj):
                 '  <p class="step" data-step="%d" data-step-face="%s" '
                 'data-step-ops="%d" data-step-key="%s" '
                 'data-step-key-kind="%s" data-step-literal="%s" '
-                'data-step-drawers="%s" data-step-when="%s">%s</p>'
+                'data-step-drawers="%s" data-step-when="%s" '
+                'data-step-unread="%s">%s</p>'
                 % (index, esc(name), proj["rows"][name]["ops"],
                    esc(" , ".join(keys)), naming["kind"],
                    esc(naming["value"] or ""),
                    esc(",".join(drawn["drawers"])), esc(drawn["when"]),
+                   esc(",".join(drawn["unread"])),
                    esc((doc.get("step_fmt") or "").format(
                        n=index, face=name,
                        key=key_name_text(naming, doc),
                        drawer=drawer_text(drawn, doc),
-                       when=when_text(drawn, doc)))))
+                       when=when_text(drawn, doc),
+                       unread=unread_text(drawn, doc)))))
     else:
         steps_html.append('  <p data-step-absent>%s</p>'
                           % esc(doc.get("step_absent") or ""))
@@ -1770,16 +1827,18 @@ def render(proj):
                 '  <p class="branch" data-branch="%d" data-branch-face="%s" '
                 'data-branch-reason="%s" data-branch-key-kind="%s" '
                 'data-branch-literal="%s" data-branch-drawers="%s" '
-                'data-branch-when="%s">%s</p>'
+                'data-branch-when="%s" data-branch-unread="%s">%s</p>'
                 % (index, esc(name), esc(reason), naming["kind"],
                    esc(naming["value"] or ""),
                    esc(",".join(drawn["drawers"])), esc(drawn["when"]),
+                   esc(",".join(drawn["unread"])),
                    esc((doc.get("branch_fmt") or "").format(
                        n=index, face=name,
                        word=branch_words.get(reason) or "",
                        key=key_name_text(naming, doc),
                        drawer=drawer_text(drawn, doc),
-                       when=when_text(drawn, doc)))))
+                       when=when_text(drawn, doc),
+                       unread=unread_text(drawn, doc)))))
     else:
         steps_html.append(
             '  <p class="branchhead" data-branch-count="0" '
@@ -1796,9 +1855,30 @@ def render(proj):
     if not key_counts["literal"]:
         keynames_html += ('\n  <p data-key-absent>%s</p>'
                           % esc(doc.get("key_absent") or ""))
+    unread = proj["drawer_unread"]
+    unread_html = (
+        '  <p class="drawerunread" data-drawer-unread="%d" '
+        'data-drawer-unread-all="%d">%s</p>'
+        % (len(unread), len(proj["operable"]),
+           esc((doc.get("drawer_unread_head_fmt") or "").format(
+               n=len(unread), all=len(proj["operable"])))))
+    if unread:
+        unread_words = doc.get("drawer_unread_forms") or {}
+        for name, forms in unread:
+            unread_html += (
+                '\n  <p data-drawer-unread-face="%s" '
+                'data-drawer-unread-forms="%s">%s</p>'
+                % (esc(name), esc(",".join(forms)),
+                   esc((doc.get("drawer_unread_face_fmt") or "").format(
+                       name=name,
+                       forms="、".join(unread_words.get(form) or form
+                                       for form in forms)))))
+    else:
+        unread_html += ('\n  <p data-drawer-unread-absent>%s</p>'
+                        % esc(doc.get("drawer_unread_none") or ""))
     steps_head = ('  <p class="kindshead">%s</p>\n'
                   % esc(doc.get("step_head") or ""))
-    steps_block = (keynames_html + "\n" + steps_head
+    steps_block = (keynames_html + "\n" + unread_html + "\n" + steps_head
                    + ("\n".join(steps_html) if steps_html else ""))
 
     if proj["missing"]:
@@ -2754,7 +2834,8 @@ def check():
                 want = (proj["doc"].get("step_fmt") or "").format(
                     n=index, face=name, key=key_name_text(naming, proj["doc"]),
                     drawer=drawer_text(proj["step_drawers"][name], proj["doc"]),
-                    when=when_text(proj["step_drawers"][name], proj["doc"]))
+                    when=when_text(proj["step_drawers"][name], proj["doc"]),
+                    unread=unread_text(proj["step_drawers"][name], proj["doc"]))
                 if said != esc(want):
                     failures.append("SH24 sentence:%s differs from the fresh "
                                     "derivation" % name)
@@ -2865,7 +2946,8 @@ def check():
                     n=index, face=name, word=branch_words.get(reason) or "",
                     key=key_name_text(naming, proj["doc"]),
                     drawer=drawer_text(drawn, proj["doc"]),
-                    when=when_text(drawn, proj["doc"]))
+                    when=when_text(drawn, proj["doc"]),
+                    unread=unread_text(drawn, proj["doc"]))
                 if said != esc(want):
                     failures.append("SH25 sentence:%s differs from the fresh "
                                     "derivation" % name)
@@ -3050,12 +3132,112 @@ def check():
                 if wrong and wrong in said:
                     failures.append("SH27 wrong_when_word:%s" % name)
 
+    # AC-SH28 (R3270): the drawer name is read off `.setItem(`'s receiver, so a face
+    # that writes through a bracket, a property or an alias receiver is invisible -
+    # and "this face writes no storage" was printed for it anyway. Four closed write
+    # shapes are counted from the same bytes; a face carrying one must name it, and
+    # a face whose writes are all readable must not mention any of the four words.
+    for key in ("drawer_mute", "when_mute", "drawer_unread_fmt",
+                "drawer_unread_none", "drawer_unread_head_fmt",
+                "drawer_unread_face_fmt"):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH28 word_missing:%s" % key)
+    for slot in ("{n}", "{all}"):
+        if slot not in (proj["doc"].get("drawer_unread_head_fmt") or ""):
+            failures.append("SH28 slot_missing:drawer_unread_head_fmt:%s" % slot)
+    for slot in ("{name}", "{forms}"):
+        if slot not in (proj["doc"].get("drawer_unread_face_fmt") or ""):
+            failures.append("SH28 slot_missing:drawer_unread_face_fmt:%s" % slot)
+    if "{forms}" not in (proj["doc"].get("drawer_unread_fmt") or ""):
+        failures.append("SH28 slot_missing:drawer_unread_fmt:{forms}")
+    form_words = proj["doc"].get("drawer_unread_forms") or {}
+    for form in UNREAD_FORMS:
+        if not (form_words.get(form) or "").strip():
+            failures.append("SH28 form_word_missing:%s" % form)
+    for template in ("step_fmt", "branch_fmt"):
+        if "{unread}" not in (proj["doc"].get(template) or ""):
+            failures.append("SH28 slot_missing:%s:{unread}" % template)
+    fresh_unread = {}
+    for name in proj["operable"]:
+        try:
+            with open(os.path.join(PREVIEW, name), encoding="utf-8",
+                      errors="replace") as handle:
+                fresh_unread[name] = drawer_naming(
+                    {"drawers": drawer_reading(handle.read())})
+        except OSError:
+            failures.append("SH28 face_unreadable:%s" % name)
+    dirty = sorted((name, naming["unread"])
+                   for name, naming in fresh_unread.items() if naming["unread"])
+    head = re.search(r'data-drawer-unread="(\d+)" data-drawer-unread-all="(\d+)"',
+                     text)
+    if not head:
+        failures.append("SH28 head_missing")
+    else:
+        if int(head.group(1)) != len(dirty):
+            failures.append("SH28 head_count page=%s fresh=%d"
+                            % (head.group(1), len(dirty)))
+        if int(head.group(2)) != len(proj["operable"]):
+            failures.append("SH28 head_all page=%s fresh=%d"
+                            % (head.group(2), len(proj["operable"])))
+    face_rows = re.findall(
+        r'data-drawer-unread-face="([^"]+)" '
+        r'data-drawer-unread-forms="([^"]*)"', text)
+    got_faces = [(name, [part for part in forms.split(",") if part])
+                 for name, forms in face_rows]
+    if got_faces != dirty:
+        failures.append("SH28 face_rows page=%s fresh=%s" % (got_faces, dirty))
+    absent = re.findall(r'data-drawer-unread-absent', text)
+    if dirty and absent:
+        failures.append("SH28 absent_line_on_unread")
+    if not dirty and len(absent) != 1:
+        failures.append("SH28 absent_line expected=1 got=%d" % len(absent))
+    for name, forms in got_faces:
+        for token in forms:
+            if token not in UNREAD_FORMS:
+                failures.append("SH28 form_not_closed:%s=%s" % (name, token))
+    # every walk row: the attribute and the sentence, each against a fresh reading
+    row_unread = re.findall(
+        r'data-(?:step|branch)-face="([^"]+)"[^>]*'
+        r'data-(?:step|branch)-unread="([^"]*)"[^>]*>([^<]*)<', text)
+    for name, forms_raw, said in row_unread:
+        if name not in fresh_unread:
+            failures.append("SH28 not_operable:%s" % name)
+            continue
+        naming = fresh_unread[name]
+        page_forms = [part for part in forms_raw.split(",") if part]
+        if page_forms != naming["unread"]:
+            failures.append("SH28 %s_forms page=%s fresh=%s"
+                            % (name, page_forms, naming["unread"]))
+        if naming["unread"]:
+            if esc(unread_text(naming, proj["doc"])) not in said:
+                failures.append("SH28 sentence_missing:%s" % name)
+            for form in naming["unread"]:
+                word = form_words.get(form) or form
+                if esc(word) not in said:
+                    failures.append("SH28 form_word_in_sentence:%s=%s"
+                                    % (name, form))
+            for key, label in (("drawer_none", "drawer_none"),
+                               ("when_none", "when_none")):
+                bad = esc(proj["doc"].get(key) or "")
+                if bad and bad in said:
+                    failures.append("SH28 %s_on_unread:%s" % (label, name))
+        else:
+            for form in UNREAD_FORMS:
+                word = form_words.get(form) or ""
+                if word and esc(word) in said:
+                    failures.append("SH28 clean_row_printed_form:%s=%s"
+                                    % (name, form))
+            if not naming["drawers"] and naming["words"]:
+                mute = esc(proj["doc"].get("drawer_mute") or "")
+                if mute and mute not in said:
+                    failures.append("SH28 mute_word_missing:%s" % name)
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=27 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=28 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=27 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+    print("VERDICT PASS criteria=28 faces=%d operable=%d missing_ceo=%d external_refs=0 "
           "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
           "expr_bodies=%d forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
@@ -3089,7 +3271,9 @@ def check():
                         for kind in KEY_KINDS)
              + " drawers=%s"
              % ",".join("%s:%d" % (when, proj["drawer_when_counts"][when])
-                        for when in DRAWER_WHENS)))
+                        for when in DRAWER_WHENS)
+             + " unread=%d/%d"
+             % (len(proj["drawer_unread"]), len(proj["operable"]))))
 
     return 0
 

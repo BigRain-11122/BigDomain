@@ -1,0 +1,33 @@
+OK   C1-live-copy                       rc=0 expect=0 
+OK   C2-step-unread-invented            rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH28 filing-checklist.html_forms page=['index_assign'] fresh=[]
+OK   C3-head-count-edited               rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH28 head_count page=1 fresh=0
+OK   C4-head-all-edited                 rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH28 head_all page=5 fresh=6
+OK   C5-absent-line-dropped             rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH28 absent_line expected=1 got=0
+OK   C6-fake-face-row                   rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH28 face_rows page=[('filing-checklist.html', ['index_assign'])] fresh=[]
+OK   C7-form-word-in-template           rc=2 expect=2 
+      FAIL SH28 clean_row_printed_form:filing-checklist.html=index_assign
+      FAIL SH28 clean_row_printed_form:ship-checklist.html=index_assign
+OK   C8-unread-slot-dropped             rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH28 slot_missing:step_fmt:{unread}
+OK   C9-form-word-dropped               rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH28 form_word_missing:index_assign
+OK   C10-mute-word-dropped              rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH28 word_missing:drawer_mute
+OK   C11-world-index-assign             rc=0 expect=0 
+OK   C12-world-alias-receiver           rc=0 expect=0 
+OK   C13-world-mention-only             rc=0 expect=0 
+OK   C14-world-db-open                  rc=0 expect=0 
+NEGCTL PASS cases=14 distinct=14
