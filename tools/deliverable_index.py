@@ -26,6 +26,9 @@ PREVIEW = os.path.join(REPO, "preview")
 INDEX = os.path.join(PREVIEW, "index.html")
 REGISTRY = os.path.join(PREVIEW, "deliverable-index.json")
 EXPORT = os.path.join(REPO, "docs", "status-export.json")
+FREEZE = os.path.join(REPO, "state", "apimarket-face-freeze.json")
+HIST_TAG_RE = re.compile(r'<span class="tag hist">\u5386\u53f2\u5feb\u7167\u00b7schema ')
+HIST_OPEN = '<span class="tag hist">\u5386\u53f2\u5feb\u7167\u00b7schema '
 
 # R3233: the claims census has ONE judgement, and this page is one of its two
 # renderers. The other is src/sandbox/frontdoor.py's card. Probed before this
@@ -214,8 +217,39 @@ def artifact_pairs():
     return pairs
 
 
+def frozen_hist():
+    """stem -> declared schema (None = no sibling) for every frozen face.
+
+    R3291 (AC-DIX20): a reader can see from the entry page that a link is a
+    historical snapshot before clicking it. The list is derived from the freeze
+    manifest, so a face frozen or released there appears or disappears here -
+    never a second written-down list of names.
+    """
+    try:
+        doc = json.loads(read(FREEZE))
+    except (OSError, ValueError):
+        return {}
+    rows = doc.get("faces")
+    if not isinstance(rows, list):
+        return {}
+    out = {}
+    for row in rows:
+        html_name = row.get("html")
+        if not isinstance(html_name, str):
+            continue
+        stem = os.path.splitext(os.path.basename(html_name))[0]
+        value = row.get("schema_version")
+        out[stem] = None if value is None else int(value)
+    return out
+
+
+def hist_tag(schema):
+    return '%s%s</span>' % (HIST_OPEN, "\u672a\u77e5" if schema is None else schema)
+
+
 def render_pairs(pairs):
     """The all-pairs band, derived row by row (never a written-down list)."""
+    hist = frozen_hist()
     out = ["<h2>\u5168\u90e8\u5df2\u4e0a\u7ebf\u9762\uff08\u76d8\u4e0a pair \u6d3e\u751f\u00b7\u70b9\u5f00\u5373\u770b\uff09</h2>"]
     if not pairs:
         out.append('<div class="note">preview/ \u76ee\u524d\u6ca1\u6709 '
@@ -232,12 +266,13 @@ def render_pairs(pairs):
         stamp = datetime.datetime.fromtimestamp(p["mtime"]).strftime("%Y-%m-%d %H:%M")
         paired = p.get("paired", True)
         label = ("json=%s" % p["json"]) if paired else "json=missing"
+        tag = (" " + hist_tag(hist[p["stem"]])) if p["stem"] in hist else ""
         out.append(
             '<li><a href="%s">%s</a> <span class="tag">%dB</span> '
-            '<span class="tag">%s</span> <span class="tag%s">%s</span></li>'
+            '<span class="tag">%s</span> <span class="tag%s">%s</span>%s</li>'
             % (html.escape(p["html"]), html.escape(p["stem"]), p["bytes"],
                html.escape(stamp), "" if paired else " warn",
-               html.escape(label))
+               html.escape(label), tag)
         )
     out.append("</ul>")
     return "\n".join(out)
@@ -624,6 +659,32 @@ def main(argv):
                "live-state=%s named-absence=%s invented-numbers=%s"
                % (live_view["state"], absence in div_text,
                   "claimed=" in div_text))
+
+    # AC-DIX20 (pinned 2026-11-22 R3291 in src/os/backlog.md BEFORE this code):
+    # the frozen apimarket faces carry an in-page schema banner, but the entry
+    # page still listed all thirteen as ordinary rows, so a reader could not
+    # tell a schema-3 snapshot from a current face before clicking. Each frozen
+    # row now carries its declared schema, taken from the freeze manifest; a
+    # released or newly frozen face changes this page without a second list.
+    hist = frozen_hist()
+    hist_tagged = []
+    for stem, schema in sorted(hist.items()):
+        at = landed_block.find('href="%s.html"' % html.escape(stem))
+        if at >= 0 and (hist_tag(schema) in landed_block[at:at + 400]):
+            hist_tagged.append(stem)
+    leaked = []
+    for p in pairs:
+        if p["stem"] in hist:
+            continue
+        at = landed_block.find('href="%s"' % html.escape(p["html"]))
+        if at >= 0 and (HIST_OPEN in landed_block[at:at + 400]):
+            leaked.append(p["stem"])
+    printed_tags = len(HIST_TAG_RE.findall(landed_block))
+    record("AC-DIX20",
+           bool(hist) and len(hist_tagged) == len(hist)
+           and printed_tags == len(hist) and not leaked,
+           "frozen=%d tagged=%d printed=%d leaked=%s"
+           % (len(hist), len(hist_tagged), printed_tags, leaked))
 
     if check:
         for code, ok, detail in checks:

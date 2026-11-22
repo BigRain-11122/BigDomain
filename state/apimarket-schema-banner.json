@@ -1,10 +1,12 @@
 {
- "banner_schema": 1,
+ "banner_schema": 2,
  "tool": "tools/apimarket_schema_banner.py",
- "why": "the thirteen frozen apimarket report faces are titled Settlement Ledger and print no schema at all, so a reader cannot tell a schema-4 snapshot from the current schema-17 generator",
+ "why": "the thirteen frozen apimarket report faces are titled Settlement Ledger and print no schema at all, so a reader cannot tell a schema-4 snapshot from the current schema-17 generator, and nothing on the page said where a current reading lives",
+ "current_face": "apimarket-report.html",
  "banner_open": "<div class=\"wrap\"><div class=\"schema-banner\" data-schema-banner=\"{slug}\" data-schema-declared=\"{declared}\" data-schema-current=\"{current}\" data-schema-stale=\"{stale}\" style=\"margin:18px 0;padding:12px 14px;border:1px solid #d0b56b;background:#fff8e1;border-radius:8px;font-size:13px;line-height:1.7;color:#5a4a12\">",
  "banner_close": "</div></div>",
  "line_stale": "本页是历史快照：页面数字取自 schema {declared}，当前生成器已是 schema {current}，所以这里的数字不是当前读数。本页是 R3289 冻结登记的静态副本（清单见 state/apimarket-face-freeze.json），全部数字为合成演示数据。",
  "line_same": "本页是冻结快照：schema {declared} 与当前生成器相同，但这些数字是 R3289 冻结下来的静态副本，不是实时读数。全部数字为合成演示数据。",
- "line_unknown": "本页没有相邻 JSON，schema 版本未知；当前生成器是 schema {current}。这些数字是 R3289 冻结下来的静态副本，不是实时读数，全部数字为合成演示数据。"
+ "line_unknown": "本页没有相邻 JSON，schema 版本未知；当前生成器是 schema {current}。这些数字是 R3289 冻结下来的静态副本，不是实时读数，全部数字为合成演示数据。",
+ "link_line": "<div class=\"schema-next\" data-schema-next=\"{target}\" data-schema-target=\"{target_schema}\" style=\"margin-top:8px;padding-top:8px;border-top:1px dotted #d0b56b\">要看当前生成器（schema {current}）的输出，去 <a href=\"{target}\">{target}</a>——那一页由同一份 src/sandbox/ledger/apimarket_report.py 现渲，但它同样是盘上的静态文件，不是实时读数；真正的实时读数要等服务器与商户号到位。</div>"
 }

@@ -21,6 +21,15 @@ Criteria AC-ASB1..6 (pre-registered in src/os/backlog.md before this file):
   ASB4 the freeze manifest still matches the bytes on disk afterwards
   ASB5 a second --write changes nothing
   ASB6 only the frozen html files are written; json and other pages untouched
+
+R3291 adds AC-ASB7: the banner said "this is not a current reading" and never
+said where a current one lives, so it now carries one link to the face the
+current generator renders.  The target is named in the data file, its own
+sibling schema is read at run time and must equal the run-time REPORT_SCHEMA
+(a target older than the generator is refused, not linked), and the visible
+sentence is derived from those two readings instead of pinning schema 17.
+The link goes INSIDE the existing banner block, so AC-ASB1 and the route law
+keep their shape; the target is a static file on disk and the sentence says so.
 """
 
 import argparse
@@ -39,6 +48,7 @@ REPORT = os.path.join(ROOT, "src", "sandbox", "ledger", "apimarket_report.py")
 ANCHOR = "</header>"
 BANNER_RE = re.compile(r'<div class="wrap"><div class="schema-banner".*?</div></div>',
                        re.S)
+NEXT_MARK = 'class="schema-next"'
 BLOCK_MARK = 'data-schema-banner="'
 STALE_TOKENS = ("yes", "same", "unknown")
 
@@ -89,6 +99,33 @@ def declared_of(face):
     return None if value is None else int(value)
 
 
+def target_stem(data):
+    """The face the current generator renders, named by data, not by code."""
+    name = data.get("current_face")
+    if not isinstance(name, str) or not name.endswith(".html"):
+        raise SystemExit("E_ASB7 data file has no current_face: %s" % name)
+    return name
+
+
+def target_schema(data):
+    """Read the target's own sibling schema at run time (None = no sibling)."""
+    stem = os.path.splitext(target_stem(data))[0]
+    path = os.path.join(ROOT, "preview", stem + ".json")
+    if not os.path.isfile(path):
+        return None
+    doc = load_json(path)
+    value = doc.get("schema_version")
+    return None if value is None else int(value)
+
+
+def link_text(data, current, target_schema_value):
+    return data["link_line"].format(
+        target=target_stem(data),
+        target_schema="unknown" if target_schema_value is None
+        else target_schema_value,
+        current=current)
+
+
 def verdict(declared, current):
     if declared is None:
         return "unknown"
@@ -109,7 +146,8 @@ def banner_text(data, face, current):
         declared="unknown" if declared is None else declared,
         current=current,
         stale=stale)
-    return head + body + data["banner_close"]
+    link = link_text(data, current, target_schema(data))
+    return head + body + link + data["banner_close"]
 
 
 def page_path(face):
@@ -135,6 +173,14 @@ def write(data):
     current = current_schema()
     problems = []
     changed = []
+    target = target_stem(data)
+    if not os.path.isfile(os.path.join(ROOT, "preview", target)):
+        problems.append("E_ASB7 current-reading target %r is not on disk" % target)
+        return current, changed, problems
+    if target_schema(data) != current:
+        problems.append("E_ASB7 target %r is at schema %r, generator at %d"
+                        % (target, target_schema(data), current))
+        return current, changed, problems
     for face in frozen_faces():
         path = page_path(face)
         if not os.path.isfile(path):
@@ -156,6 +202,13 @@ def check(data):
     fails = []
     faces = frozen_faces()
     seen = set()
+    target = target_stem(data)
+    if not os.path.isfile(os.path.join(ROOT, "preview", target)):
+        fails.append("E_ASB7 current-reading target %r is not on disk" % target)
+    elif target_schema(data) != current:
+        fails.append("E_ASB7 target %r is at schema %r, generator at %d"
+                     % (target, target_schema(data), current))
+    want_link = link_text(data, current, target_schema(data))
     for face in faces:
         slug = face["slug"]
         seen.add(slug)
@@ -171,6 +224,11 @@ def check(data):
         expected = banner_text(data, face, current)
         if expected not in text:
             fails.append("E_ASB2/3 %r banner is not the fresh-derived one" % slug)
+        links = text.count(NEXT_MARK)
+        if links != 1:
+            fails.append("E_ASB7 %r carries %d current-reading links" % (slug, links))
+        elif want_link not in text:
+            fails.append("E_ASB7 %r current-reading link is not the fresh one" % slug)
         stale = verdict(declared_of(face), current)
         if stale not in STALE_TOKENS:
             fails.append("E_ASB3 %r verdict %r out of the closed set"
@@ -224,7 +282,7 @@ def main(argv=None):
         for row in fails:
             print("  %s" % row)
     if not fails:
-        print("VERDICT PASS criteria=6")
+        print("VERDICT PASS criteria=7")
         return 0
     print("VERDICT FAIL")
     return 2

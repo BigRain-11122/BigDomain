@@ -1,0 +1,9 @@
+PASS C0 clean private tree PASSes
+PASS C1 target older than generator is refused
+PASS C2 dropped link block is named
+PASS C3 paraphrased link sentence is refused
+PASS D1 a dropped history tag reddens AC-DIX20
+PASS D2 a wrong schema number reddens AC-DIX20
+PASS D3 a tag on a non-frozen row reddens AC-DIX20
+PASS D4 a released frozen face reddens AC-DIX20
+NEGCTL 8/8

@@ -1,0 +1,65 @@
+current schema = 17, frozen faces = 13
+
+Q1 - every preview face whose sibling json names a schema:
+  schema=1 faces=3 filing-checklist,ledger-reconcile-face,ship-checklist
+  schema=10 faces=1 apimarket-report-quality
+  schema=11 faces=1 apimarket-report-questions
+  schema=12 faces=1 apimarket-report-buyerquestions
+  schema=13 faces=1 apimarket-report-selleranswers
+  schema=14 faces=2 apimarket-report-csv,apimarket-report-slowanswer
+  schema=15 faces=1 apimarket-report-duty
+  schema=17 faces=3 apimarket-report-claims-demo,apimarket-report-claims,apimarket-report
+  schema=2 faces=1 apimarket-report-workbench
+  schema=3 faces=1 apimarket-report-activity
+  schema=4 faces=1 apimarket-report-dossiers
+  schema=5 faces=1 apimarket-report-buyers
+  schema=6 faces=1 apimarket-report-refunds
+  schema=9 faces=1 apimarket-report-demand
+  schema=face-sweep-v1 faces=1 face-sweep
+  -> non-frozen faces already at the current schema: apimarket-report-claims-demo,apimarket-report-claims,apimarket-report
+     apimarket-report-claims-demo: producer(s)=['tools/face_sweep.py']
+     apimarket-report-claims: producer(s)=['tools/face_sweep.py']
+     apimarket-report: producer(s)=['tools/face_sweep.py']
+
+Q2 - blast radius of one href inside the banner:
+  index.html bytes=41434 hrefs=59
+  activity               listed_on_index=True frozen_schema=3
+  attention              listed_on_index=True frozen_schema=None
+  buyers                 listed_on_index=True frozen_schema=5
+  claims                 listed_on_index=True frozen_schema=17
+  claims-demo            listed_on_index=True frozen_schema=17
+  csv                    listed_on_index=True frozen_schema=14
+  demand                 listed_on_index=True frozen_schema=9
+  dossiers               listed_on_index=True frozen_schema=4
+  duty                   listed_on_index=True frozen_schema=15
+  json                   listed_on_index=True frozen_schema=None
+  quality                listed_on_index=True frozen_schema=10
+  slowanswer             listed_on_index=True frozen_schema=14
+  workbench              listed_on_index=True frozen_schema=2
+  tools naming any frozen slug:
+    activity               NONE
+    attention              NONE
+    buyers                 NONE
+    claims                 tools/face_sweep.py
+    claims-demo            tools/face_sweep.py
+    csv                    NONE
+    demand                 NONE
+    dossiers               NONE
+    duty                   NONE
+    json                   NONE
+    quality                NONE
+    slowanswer             NONE
+    workbench              NONE
+
+Q3 - cost of the two edits:
+  word banner_close chars=12
+  word banner_open  chars=314
+  word banner_schema chars=-1
+  word line_same    chars=77
+  word line_stale   chars=142
+  word line_unknown chars=89
+  word tool         chars=32
+  word why          chars=180
+  live banner block bytes=550
+  one <a> + 60 chinese chars ~= 217 bytes x 13 faces
+  freeze tool self-checks html bytes: True

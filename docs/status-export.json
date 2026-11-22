@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8408B)"
     ],
-    "current": "2026-11-22 R3290 EXEC: the thirteen frozen apimarket report faces now say on the page itself which schema their numbers came from and whether the generator has moved on (nine are older schemas, the generator is at 17), so a reader can no longer take a schema-4 settlement ledger for current readings. New tool tools/apimarket_schema_banner.py (AC-ASB1..6, negative controls 9/9 on private copies) plus state/apimarket-schema-banner.json for the wording; the current schema is parsed from src/sandbox/ledger/apimarket_report.py at run time, the visible sentence is derived per face, and the freeze manifest was re-anchored after injection (freeze --check still PASS). Honest limit: a label does not repair the old pages, they still cannot be re-created, and no buyer can pay yet - the five physical pieces are still missing.",
+    "current": "2026-11-22 R3291 PRODUCT: a frozen page that says 'this is not a current reading' now also says where a current one lives. All thirteen apimarket banners carry one link to preview/apimarket-report.html, the face the current generator (schema 17) renders, and the entry page labels each of the thirteen frozen rows with its own declared schema (nine older than the generator, two unknown, two at 17), so a reader can tell a schema-3 snapshot from a current face BEFORE clicking.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/apimarket-report-slowanswer.html (12555B) + preview/apimarket-report-slowanswer.json (18381B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-10-25 commit]; later=html)",
-    "latest_artifact": "preview/apimarket-report-slowanswer.html (12555B) + preview/apimarket-report-slowanswer.json (18381B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-10-25 commit]; later=html)",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report-slowanswer.html",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3290.log (582B, 2026-11-22)",
     "latest_evidence": "qa/negctl-R3290.log (582B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3290] next window (<=48h): (0) MAIN — **13 张冻结面现在自己说「我在 schema 几」，但页内与入口页都没有一条通往「当前读数在哪」的路**：读者读完「页面数字不是当前读数」之后，横幅只告诉他别信这一页，没说该去看哪一页；入口页 index 上的 13 个 `apimarket-report-*` 链接标签也仍是 `Settlement Ledger` 一类，点之前看不出是历史快照。问：要不要在横幅里加一条到当前 schema 对应读数的链接（并把入口页这 13 个链接标上 schema/历史），还是把 13 面在当前 schema 重造到新前缀？做法＝先只读量三问：①当前 schema 的对应读数今天在哪几张面上（逐面核 `apimarket-monthly-faces` / `ledger-business-report` / `platform-live-report` 各自的 schema_version 与内容域，逐项列，不猜）；②若在横幅加链接，13 张页会新增外链 → 全站律/终点表/入口索引哪几道闸要跟着重跑、`face_route_scan` 与 `deliverable_index` 的判据要不要扩；③代价（改 13 页 + 重钉 + 索引重渲 vs 建 slug 驱动重造 13 面到新前缀并保留历史，哪个更少动镜子、哪个会让「历史快照」与「当前读数」两个概念混掉）。收口三选一＝①横幅加一条当前读数链接 + 入口页 13 个链接标 schema ②建 slug 驱动把 13 面按当前 schema 重造到新前缀（历史面保留并保持冻结）③不动，只在诚实段写明「本页不含指向当前读数的链接」。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=179123·gate=78500）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
-    "next_milestone_due": "2026-11-24T19:51:02+08:00",
-    "updated_at": "2026-11-22T19:51:02+08:00",
+    "next_milestone": "[R3291] next window (<=48h): (0) MAIN — **14 条链接现在都指向同一张「当前输出面」，可那张页自己一个字都没提 schema**（实测 `preview/apimarket-report.html` 36850B，`schema` 出现 0 次，标题仍叫 `BigDomain API Market - Settlement Ledger`）：横幅承诺「那是当前生成器（schema 17）的输出」，可读者到了那一页无法自证。问：要不要让生成器把自己的 `REPORT_SCHEMA` 印进它渲染的页与 sibling json（并在页内说明「这是当前代码渲染的静态文件，不是实时读数」），还是保持生成器不写版本、只由来源页声明？做法＝先只读量三问：①`apimarket_report.py` 现在把哪些字段写进 html/json，加一个 `schema` 徽章会打破哪些自校闸（`test_apimarket_report*.py`、`apimarket_face_freeze` 豁免面判据、`face_sweep` 里点名该页的行）；②印出的值必须现读 `REPORT_SCHEMA`，`--check` 该怎么比才不是自比自；③代价（改生成器 + 4 张豁免面重渲 + freeze 清单里豁免段是否要跟着改 + index 尺寸重算，几轮固定点）。收口三选一＝①生成器在 html+json 里印 `schema` 与「静态文件非实时」一句，判据 `AC-APR*` 比现读数；②不改生成器，改由 index 那 13 行标签直接写「当前读数面=apimarket-report(未标 schema)」；③不动，把这条缺口写进诚实段。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+    "next_milestone_due": "2026-11-24T20:03:34+08:00",
+    "updated_at": "2026-11-22T20:03:34+08:00",
     "heartbeat": {
       "tick": 3290,
       "state_tick": 3290,
@@ -37,9 +37,9 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3290 EXEC: the thirteen frozen apimarket report faces now say on the page itself which schema their numbers came from and whether the generator has moved on (nine are older schemas, the generator is at 17), so a reader can no longer take a schema-4 settlement ledger for current readings. New tool tools/apimarket_schema_banner.py (AC-ASB1..6, negative controls 9/9 on private copies) plus state/apimarket-schema-banner.json for the wording; the current schema is parsed from src/sandbox/ledger/apimarket_report.py at run time, the visible sentence is derived per face, and the freeze manifest was re-anchored after injection (freeze --check still PASS). Honest limit: a label does not repair the old pages, they still cannot be re-created, and no buyer can pay yet - the five physical pieces are still missing.",
-  "claims": {"claimed": 327, "captured": 94, "contradicted": 10, "uncaptured": 223, "historic": 7, "rows": 18, "present": true, "census_ts": "2026-11-22T19:51:02+08:00"},
-  "chain": {"present": true, "rows": 18, "broken": 0, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-22 R3291 PRODUCT: a frozen page that says 'this is not a current reading' now also says where a current one lives. All thirteen apimarket banners carry one link to preview/apimarket-report.html, the face the current generator (schema 17) renders, and the entry page labels each of the thirteen frozen rows with its own declared schema (nine older than the generator, two unknown, two at 17), so a reader can tell a schema-3 snapshot from a current face BEFORE clicking.",
+  "claims": {"claimed": 328, "captured": 94, "contradicted": 10, "uncaptured": 224, "historic": 7, "rows": 19, "present": true, "census_ts": "2026-11-22T20:03:34+08:00"},
+  "chain": {"present": true, "rows": 19, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3290 EXEC: the thirteen frozen apimarket report faces now say on the page itself which schema their numbers came from and whether the generator has moved on (nine are older schemas, the generator is at 17), so a reader can no longer take a schema-4 settlement ledger for current readings. New tool tools/apimarket_schema_banner.py (AC-ASB1..6, negative controls 9/9 on private copies) plus state/apimarket-schema-banner.json for the wording; the current schema is parsed from src/sandbox/ledger/apimarket_report.py at run time, the visible sentence is derived per face, and the freeze manifest was re-anchored after injection (freeze --check still PASS). Honest limit: a label does not repair the old pages, they still cannot be re-created, and no buyer can pay yet - the five physical pieces are still missing.",
-  "export_ts": "2026-11-22T19:51:02+08:00",
-  "latest_artifact": "preview/apimarket-report-slowanswer.html (12555B) + preview/apimarket-report-slowanswer.json (18381B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-10-25 commit]; later=html)",
+  "do": "2026-11-22 R3291 PRODUCT: a frozen page that says 'this is not a current reading' now also says where a current one lives. All thirteen apimarket banners carry one link to preview/apimarket-report.html, the face the current generator (schema 17) renders, and the entry page labels each of the thirteen frozen rows with its own declared schema (nine older than the generator, two unknown, two at 17), so a reader can tell a schema-3 snapshot from a current face BEFORE clicking.",
+  "export_ts": "2026-11-22T20:03:34+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/negctl-R3290.log (582B, 2026-11-22)",
-  "next_milestone": "[R3290] next window (<=48h): (0) MAIN — **13 张冻结面现在自己说「我在 schema 几」，但页内与入口页都没有一条通往「当前读数在哪」的路**：读者读完「页面数字不是当前读数」之后，横幅只告诉他别信这一页，没说该去看哪一页；入口页 index 上的 13 个 `apimarket-report-*` 链接标签也仍是 `Settlement Ledger` 一类，点之前看不出是历史快照。问：要不要在横幅里加一条到当前 schema 对应读数的链接（并把入口页这 13 个链接标上 schema/历史），还是把 13 面在当前 schema 重造到新前缀？做法＝先只读量三问：①当前 schema 的对应读数今天在哪几张面上（逐面核 `apimarket-monthly-faces` / `ledger-business-report` / `platform-live-report` 各自的 schema_version 与内容域，逐项列，不猜）；②若在横幅加链接，13 张页会新增外链 → 全站律/终点表/入口索引哪几道闸要跟着重跑、`face_route_scan` 与 `deliverable_index` 的判据要不要扩；③代价（改 13 页 + 重钉 + 索引重渲 vs 建 slug 驱动重造 13 面到新前缀并保留历史，哪个更少动镜子、哪个会让「历史快照」与「当前读数」两个概念混掉）。收口三选一＝①横幅加一条当前读数链接 + 入口页 13 个链接标 schema ②建 slug 驱动把 13 面按当前 schema 重造到新前缀（历史面保留并保持冻结）③不动，只在诚实段写明「本页不含指向当前读数的链接」。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=179123·gate=78500）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+  "next_milestone": "[R3291] next window (<=48h): (0) MAIN — **14 条链接现在都指向同一张「当前输出面」，可那张页自己一个字都没提 schema**（实测 `preview/apimarket-report.html` 36850B，`schema` 出现 0 次，标题仍叫 `BigDomain API Market - Settlement Ledger`）：横幅承诺「那是当前生成器（schema 17）的输出」，可读者到了那一页无法自证。问：要不要让生成器把自己的 `REPORT_SCHEMA` 印进它渲染的页与 sibling json（并在页内说明「这是当前代码渲染的静态文件，不是实时读数」），还是保持生成器不写版本、只由来源页声明？做法＝先只读量三问：①`apimarket_report.py` 现在把哪些字段写进 html/json，加一个 `schema` 徽章会打破哪些自校闸（`test_apimarket_report*.py`、`apimarket_face_freeze` 豁免面判据、`face_sweep` 里点名该页的行）；②印出的值必须现读 `REPORT_SCHEMA`，`--check` 该怎么比才不是自比自；③代价（改生成器 + 4 张豁免面重渲 + freeze 清单里豁免段是否要跟着改 + index 尺寸重算，几轮固定点）。收口三选一＝①生成器在 html+json 里印 `schema` 与「静态文件非实时」一句，判据 `AC-APR*` 比现读数；②不改生成器，改由 index 那 13 行标签直接写「当前读数面=apimarket-report(未标 schema)」；③不动，把这条缺口写进诚实段。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
   "outs": [
     "preview/apimarket-report-slowanswer.html (12555B) + preview/apimarket-report-slowanswer.json (18381B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-10-25 commit]; later=html)",
     "preview/start-here.html (41366B) + preview/start-here.json (3298B) [2026-11-22 mtime]",
@@ -166,8 +166,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 179123,
-  "next_milestone_due": "2026-11-24T19:51:02+08:00",
+  "state_bytes": 186637,
+  "next_milestone_due": "2026-11-24T20:03:34+08:00",
   "heartbeat": {
     "tick": 3290,
     "state_tick": 3290,

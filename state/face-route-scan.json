@@ -27,23 +27,25 @@
    "title": "硅基域 · 市场月度台账"
   },
   {
-   "bytes": 15157,
+   "bytes": 16192,
    "controls": 0,
    "face": "apimarket-report-activity.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 13128,
+   "bytes": 14102,
    "controls": 0,
    "face": "apimarket-report-attention.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
@@ -57,93 +59,102 @@
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 24878,
+   "bytes": 25911,
    "controls": 0,
    "face": "apimarket-report-buyers.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 46430,
+   "bytes": 47383,
    "controls": 0,
    "face": "apimarket-report-claims-demo.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 36410,
+   "bytes": 37358,
    "controls": 0,
    "face": "apimarket-report-claims.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 31910,
+   "bytes": 32942,
    "controls": 0,
    "face": "apimarket-report-csv.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 29028,
+   "bytes": 30061,
    "controls": 0,
    "face": "apimarket-report-demand.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 20554,
+   "bytes": 21589,
    "controls": 0,
    "face": "apimarket-report-dossiers.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 33470,
+   "bytes": 34503,
    "controls": 0,
    "face": "apimarket-report-duty.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 13123,
+   "bytes": 14092,
    "controls": 0,
    "face": "apimarket-report-json.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 38854,
+   "bytes": 39890,
    "controls": 0,
    "face": "apimarket-report-quality.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
@@ -177,23 +188,25 @@
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 11983,
+   "bytes": 13022,
    "controls": 0,
    "face": "apimarket-report-slowanswer.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 14629,
+   "bytes": 15665,
    "controls": 0,
    "face": "apimarket-report-workbench.html",
    "links": [
+    "apimarket-report.html",
     "buyer-trial.html"
    ],
-   "out": 1,
+   "out": 2,
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
@@ -262,10 +275,12 @@
    "title": "Core loop walkthrough"
   },
   {
-   "bytes": 7450,
+   "bytes": 8408,
    "controls": 0,
    "face": "face-sweep.html",
    "links": [
+    "apimarket-report-claims-demo.html",
+    "apimarket-report-claims.html",
     "city-face-report.html",
     "first-yuan-chain.html",
     "index.html",
@@ -277,8 +292,8 @@
     "platform-live-report.html",
     "ugc-gate-report.html"
    ],
-   "out": 10,
-   "title": "10 面实况板 / face sweep board"
+   "out": 12,
+   "title": "12 面实况板 / face sweep board"
   },
   {
    "bytes": 12893,
@@ -312,7 +327,7 @@
    "title": "BigDomain 第一笔收入路径"
   },
   {
-   "bytes": 41434,
+   "bytes": 42140,
    "controls": 2,
    "face": "index.html",
    "links": [
