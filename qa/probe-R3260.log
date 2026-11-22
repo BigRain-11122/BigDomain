@@ -1,0 +1,13 @@
+R3260 PROBE - named callback DECLARATION forms (text only)
+(a) live storage faces: bound names and the form(s) each is declared in
+  lobby-protocol-map.html name=apply decls=func status=called
+  merchant-onboard.html name=onToggle decls=func status=resolved
+  faces=7 bound_names=2
+(b) whole tree: modern declaration forms present at all
+  var|let|const NAME = function: names=0 faces=0 bound_as_listener=0
+  var|let|const NAME = () =>:  names=0 faces=0 bound_as_listener=0
+(c) decisive private worlds through the SHIPPED reader (today's buckets)
+  W1_var_function named={'upd': ('nodecl', ['T[n]'])} hosts=('unknown', [], ['T[n]'], 1, 0)
+  W2_const_arrow named={'upd': ('nodecl', ['T[n]'])} hosts=('lexical', [], ['T[n]'], 0, 1)
+  W3_two_forms_one_name named={'upd': ('resolved', ['T[n]'])} hosts=('same-host', ['T[n]'], ['T[n]'], 0, 0)
+(d) cost: live census 0.2142s; host_reading over 7 storage faces 0.1521s

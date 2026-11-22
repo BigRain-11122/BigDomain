@@ -118,12 +118,21 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <span class="kc" data-form-count="named"><b>2</b>具名回调</span>
   <span class="kc" data-form-count="attr"><b>0</b>内联字符串属性</span>
   </div>
+  <p class="kindshead">具名回调是怎么声明出来的（R3260）：上一段只认 `function NAME(` 这一种声明写法，而现代脚本常写 `var NAME = function(){…}` 或 `const NAME = (…) =&gt; {…}`。三种形态统一进「恰好一处声明」的计数：`function NAME(` 与 `var/let/const NAME = function` 同权（body 都是函数字面量，this 由绑定目标供给），箭头声明则不同权——箭头里的 this 是词法的，永不当作该元素。下面按声明形态计数，同名两处（哪怕形态不同）一律判「同名两种形态」而不合并。</p>
+  <div class="counts kinds">
+  <span class="kc" data-decl-count="func"><b>2</b>function 声明</span>
+  <span class="kc" data-decl-count="varfunc"><b>0</b>变量赋函数</span>
+  <span class="kc" data-decl-count="arrow"><b>0</b>箭头声明（词法 this）</span>
+  <span class="kc" data-decl-count="mixed"><b>0</b>同名两种形态</span>
+  <span class="kc" data-decl-count="none"><b>0</b>找不到声明</span>
+  </div>
   <div class="legend forms">
   <p data-forms-call="merchant-onboard.html" data-forms-recv="$('reset')">接收者是一个调用表达式：$('reset') —— this 归它，但同一句换成另一种写法取到同一个节点时，本读数也认不出来（与 T[n] 同一条边界）。</p>
-  <p data-forms-named="lobby-protocol-map.html" data-forms-cb="apply" data-forms-status="called" data-forms-target="q">具名回调 apply：同面内被直接调用过，this 不一定是该元素，不解析（目标 q）—— 只有「同面唯一声明 + 绑定目标唯一 + 从未被直接调用」三条同时成立，才把声明体当作该元素的 this。</p>
-  <p data-forms-named="merchant-onboard.html" data-forms-cb="onToggle" data-forms-status="resolved" data-forms-target="boxes[i]">具名回调 onToggle：resolved（目标 boxes[i]）—— 只有「同面唯一声明 + 绑定目标唯一 + 从未被直接调用」三条同时成立，才把声明体当作该元素的 this。</p>
+  <p data-forms-named="lobby-protocol-map.html" data-forms-cb="apply" data-forms-status="called" data-forms-target="q" data-forms-form="func">具名回调 apply：同面内被直接调用过，this 不一定是该元素，不解析（目标 q；声明形态：function 声明）—— 只有「同面唯一声明 + 绑定目标唯一 + 从未被直接调用」三条同时成立，才把声明体当作该元素的 this；箭头声明即使三条全成立也只判词法 this。</p>
+  <p data-forms-named="merchant-onboard.html" data-forms-cb="onToggle" data-forms-status="resolved" data-forms-target="boxes[i]" data-forms-form="func">具名回调 onToggle：resolved（目标 boxes[i]；声明形态：function 声明）—— 只有「同面唯一声明 + 绑定目标唯一 + 从未被直接调用」三条同时成立，才把声明体当作该元素的 this；箭头声明即使三条全成立也只判词法 this。</p>
   </div>
   <p class="note">「从未被直接调用」只按本面文本判：跨脚本、内联属性、第三方库包装或 bind 都认不出来；全程读文本，不执行 JS。</p>
+  <p class="note">形态只按本面文本判：库包装、跨脚本声明、`window.NAME = …` 都认不出；「变量赋函数」与 `function` 同权不等于运行时等价——本判据只拒绝把两种声明并入一处，不推断 var 提升后的赋值顺序；全程读文本，不执行 JS。</p>
 </div></header>
 <div class="wrap">
 <h2>能动手的 6 张面（逐个点开）</h2>
@@ -225,7 +234,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p data-notice="advice">非投顾提示：本页与全部预览面不构成任何投资建议。</p>
   <p data-notice="mock">MOCK：本页列出的支付、账本、权益流程全部是页内模拟，不接真实资金通道。</p>
 </div>
-<footer>sources: state/start-here-faces.json f77dd204fee313b1 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
+<footer>sources: state/start-here-faces.json 390ecfdafc64fbd7 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
 </div>
 </body>
 </html>

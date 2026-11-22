@@ -1,7 +1,7 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "f77dd204fee313b1"
+  "state/start-here-faces.json": "390ecfdafc64fbd7"
  },
  "faces_total": 44,
  "operable": [
@@ -60,6 +60,14 @@
   "attr": 0
  },
  "form_sites": 7,
+ "named_decl_counts": {
+  "func": 2,
+  "varfunc": 0,
+  "arrow": 0,
+  "mixed": 0,
+  "none": 0
+ },
+ "named_total": 2,
  "form_calls": {
   "merchant-onboard.html": [
    "$('reset')"
@@ -72,7 +80,8 @@
     "called",
     [
      "q"
-    ]
+    ],
+    "func"
    ]
   ],
   "merchant-onboard.html": [
@@ -81,7 +90,8 @@
     "resolved",
     [
      "boxes[i]"
-    ]
+    ],
+    "func"
    ]
   ]
  },
@@ -94,6 +104,6 @@
   "pubkey"
  ],
  "sizes": {
-  "html_bytes": 24326
+  "html_bytes": 25893
  }
 }

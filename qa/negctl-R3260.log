@@ -1,0 +1,12 @@
+PASS c1_live_copy_passes live copy rc=0
+PASS c2_edited_form_names_the_callback form flipped rc=2
+PASS c3_edited_counter_reddens counter edit rc=2
+PASS c4_dropped_counter_row_is_named row dropped rc=2
+PASS c5_wrong_status_reddens status edit rc=2
+PASS c6_missing_form_slot_reddens slot rc=2
+PASS c7_missing_decl_word_reddens tag rc=2
+PASS c8_varfunc_world_resolves varfunc status=resolved form=varfunc hosts=same-host
+PASS c9_arrow_world_is_lexical_not_resolved arrow status=lexical form=arrow hosts=lexical
+PASS c10_mixed_world_is_twodecl_never_resolved mixed status=twodecl form=mixed hosts=unknown
+PASS c11_undeclared_world_is_named_none undeclared status=nodecl form=none
+NEGCTL PASS cases=11 failed=0

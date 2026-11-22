@@ -348,13 +348,40 @@ H_ADDL_CALL = re.compile(r"(" + CALL_RECV + r")\s*\.\s*addEventListener\s*\("
 H_ADDL_NAME = re.compile(r"(" + RECV_EXPR + r")\s*\.\s*addEventListener\s*\("
                          r"\s*['\"][^'\"]*['\"]\s*,\s*([A-Za-z_$][\w$]*)\s*\)")
 FUNC_DECL = re.compile(r"function\s+([A-Za-z_$][\w$]*)\s*\(")
+# R3260: `function NAME(` is one way to declare a callback, not the only one. A
+# var/let/const bound to a function literal is the SAME weight - its body is a function
+# literal, so the binding target supplies `this`. One bound to an arrow is a
+# declaration of a DIFFERENT weight: an arrow's `this` is lexical (R3258) and can never
+# be read as the element. All three forms count toward "declared exactly once", because
+# `function upd(` PLUS `var upd = function(` is two declarations - and R3259 resolved
+# that pair as one, since it only counted the first form.
+DECL_VARFUNC = re.compile(r"\b(?:var|let|const)\s+([A-Za-z_$][\w$]*)\s*=\s*function\s*\(")
+DECL_ARROW = re.compile(r"\b(?:var|let|const)\s+([A-Za-z_$][\w$]*)\s*=\s*"
+                        r"(?:\([^)]*\)|[A-Za-z_$][\w$]*)\s*=>")
+DECL_FORMS = ("func", "varfunc", "arrow", "mixed", "none")
 CALL_NAME = re.compile(r"([A-Za-z_$][\w$]*)\s*\(")
 H_SITE = re.compile(r"(" + RECV_EXPR + r")\s*\.\s*addEventListener\s*\("
                     r"\s*['\"][^'\"]*['\"]\s*,\s*([^)]{0,64})")
 H_ONX_SITE = re.compile(r"(" + RECV_EXPR + r")\s*\.\s*(on[a-z]+)\s*=\s*([^;]{0,64})")
 ATTR_SITE = re.compile(r"<[^>]+\son(?:click|change|input|submit|keyup|keydown)\s*=")
 HANDLER_FORMS = ("simple", "call", "named", "attr")
-NAMED_REASONS = ("called", "nodecl", "twodecl", "twotarget", "nobody")
+NAMED_REASONS = ("called", "nodecl", "twodecl", "twotarget", "lexical", "nobody")
+
+
+def _decl_index(blanked):
+    """Every declaration of a name, by FORM, with where a body scan starts: the
+    parameter paren for `function NAME(` and for a var/let/const bound to a function
+    literal, the arrow itself for one bound to an arrow. A face that declares one name
+    twice - in the same form or across forms - is ambiguous, which is what makes a
+    lookup here a count and not a flag."""
+    out = {}
+    for match in FUNC_DECL.finditer(blanked):
+        out.setdefault(match.group(1), []).append(("func", match.end() - 1))
+    for match in DECL_VARFUNC.finditer(blanked):
+        out.setdefault(match.group(1), []).append(("varfunc", match.end() - 1))
+    for match in DECL_ARROW.finditer(blanked):
+        out.setdefault(match.group(1), []).append(("arrow", match.end()))
+    return out
 
 
 def _body_span(text, frm):
@@ -412,14 +439,14 @@ def _handler_spans(blanked, raw=None):
 
 def _named_report(blanked, raw=None):
     """Per named callback bound as a listener: whether its declaration body can stand
-    for the binding target, or the closed-set reason it cannot."""
+    for the binding target, which form declared it, or the closed-set reason it cannot.
+    An arrow declaration is named `lexical` rather than resolved: its `this` is not the
+    element even though the declaration itself is unambiguous."""
     bindings = {}
     for match in H_ADDL_NAME.finditer(blanked):
         bindings.setdefault(match.group(2), []).append(
             _raw_slice(raw, blanked, match.start(1), match.end(1)))
-    decls = {}
-    for match in FUNC_DECL.finditer(blanked):
-        decls.setdefault(match.group(1), []).append(match.end() - 1)
+    decls = _decl_index(blanked)
     direct = set()
     for match in CALL_NAME.finditer(blanked):
         before = blanked[max(0, match.start() - 12):match.start()]
@@ -428,16 +455,23 @@ def _named_report(blanked, raw=None):
     out = {}
     for name, targets in bindings.items():
         inner = sorted(set(targets))
+        got = decls.get(name) or []
+        forms = sorted(set(form for form, _ in got))
+        form = "none" if not got else (forms[0] if len(forms) == 1 and
+                                       len(got) == 1 else "mixed")
         if name in direct:
-            out[name] = {"status": "called", "targets": inner}
-        elif not decls.get(name):
-            out[name] = {"status": "nodecl", "targets": inner}
-        elif len(decls[name]) > 1:
-            out[name] = {"status": "twodecl", "targets": inner}
+            status = "called"
+        elif not got:
+            status = "nodecl"
+        elif len(got) > 1:
+            status = "twodecl"
         elif len(inner) > 1:
-            out[name] = {"status": "twotarget", "targets": inner}
+            status = "twotarget"
+        elif got[0][0] == "arrow":
+            status = "lexical"
         else:
-            out[name] = {"status": "resolved", "targets": inner}
+            status = "resolved"
+        out[name] = {"status": status, "targets": inner, "form": form}
     return out
 
 
@@ -447,13 +481,11 @@ def _named_spans(blanked, raw=None):
     `this` at that call is not the element it was bound to."""
     spans = []
     report = _named_report(blanked, raw)
-    decls = {}
-    for match in FUNC_DECL.finditer(blanked):
-        decls.setdefault(match.group(1), []).append(match.end() - 1)
+    decls = _decl_index(blanked)
     for name, got in list(report.items()):
         if got["status"] != "resolved":
             continue
-        body = _body_span(blanked, decls[name][0])
+        body = _body_span(blanked, decls[name][0][1])
         if not body:
             got["status"] = "nobody"
             continue
@@ -499,7 +531,8 @@ def handler_census(text):
     forms["attr"] += len(ATTR_SITE.findall(text))
     report = _named_report(blanked, text)
     for name in sorted(report):
-        names.append((name, report[name]["status"], report[name]["targets"]))
+        names.append((name, report[name]["status"], report[name]["targets"],
+                      report[name]["form"]))
     return {"forms": forms, "calls": sorted(set(calls)), "named": names,
             "sites": sum(forms.values())}
 
@@ -770,6 +803,11 @@ def projection():
     form_named = [n for n in key_faces if rows[n]["forms"]["named"]]
     form_named_open = [n for n in form_named
                        if any(got[1] != "resolved" for got in rows[n]["forms"]["named"])]
+    named_decl_counts = {form: 0 for form in DECL_FORMS}
+    for name in form_named:
+        for got in rows[name]["forms"]["named"]:
+            named_decl_counts[got[3]] += 1
+    named_total = sum(named_decl_counts.values())
     return {
         "rows": rows,
         "doc": doc,
@@ -799,6 +837,8 @@ def projection():
         "form_calls": form_calls,
         "form_named": form_named,
         "form_named_open": form_named_open,
+        "named_decl_counts": named_decl_counts,
+        "named_total": named_total,
         "form_sites": sum(form_counts.values()),
         "missing": missing_ceo_items(),
         "data16": sha16(DATA),
@@ -885,6 +925,10 @@ def form_phrase(doc, forms):
 
 def named_reason(doc, status):
     return ((doc.get("form_reasons") or {}).get(status) or status)
+
+
+def decl_word(doc, form):
+    return ((doc.get("decl_tags") or {}).get(form) or form)
 
 
 def render(proj):
@@ -1157,18 +1201,30 @@ def render(proj):
             form_notes.append('  <p data-forms-named-absent>%s</p>'
                               % esc(doc.get("form_named_absent") or ""))
             continue
-        for cb, status, targets in proj["rows"][name]["forms"]["named"]:
+        for cb, status, targets, form in proj["rows"][name]["forms"]["named"]:
             shown = " , ".join(targets) or doc.get("host_none", "")
             form_notes.append(
                 '  <p data-forms-named="%s" data-forms-cb="%s" '
-                'data-forms-status="%s" data-forms-target="%s">%s</p>'
-                % (esc(name), esc(cb), esc(status), esc(shown),
+                'data-forms-status="%s" data-forms-target="%s" '
+                'data-forms-form="%s">%s</p>'
+                % (esc(name), esc(cb), esc(status), esc(shown), esc(form),
                    esc((doc.get("form_named_fmt") or "").format(
-                       cb=cb, status=named_reason(doc, status), target=shown))))
+                       cb=cb, status=named_reason(doc, status), target=shown,
+                       form=decl_word(doc, form)))))
+    decl_counts_html = "\n".join(
+        '  <span class="kc" data-decl-count="%s"><b>%d</b>%s</span>'
+        % (form, proj["named_decl_counts"][form], esc(decl_word(doc, form)))
+        for form in DECL_FORMS
+    )
     forms_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
-                   '  </div>\n  <div class="legend forms">\n%s\n  </div>\n  <p class="note">%s</p>'
+                   '  </div>\n  <p class="kindshead">%s</p>\n'
+                   '  <div class="counts kinds">\n%s\n  </div>\n'
+                   '  <div class="legend forms">\n%s\n  </div>\n  <p class="note">%s</p>\n'
+                   '  <p class="note">%s</p>'
                    % (esc(doc.get("forms_head", "")), form_counts_html,
-                      "\n".join(form_notes), esc(doc.get("form_note", ""))))
+                      esc(doc.get("decl_head", "")), decl_counts_html,
+                      "\n".join(form_notes), esc(doc.get("form_note", "")),
+                      esc(doc.get("decl_note", ""))))
     keys_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
                   '  </div>\n  <div class="legend keys">\n%s\n  </div>\n%s\n%s\n%s\n%s'
                   % (esc(doc.get("keys_head", "")), key_counts_html,
@@ -1296,6 +1352,8 @@ def write():
         "host_lexical_calls": proj["host_lexical_calls"],
         "form_counts": proj["form_counts"],
         "form_sites": proj["form_sites"],
+        "named_decl_counts": proj["named_decl_counts"],
+        "named_total": proj["named_total"],
         "form_calls": {name: proj["rows"][name]["forms"]["calls"]
                        for name in proj["form_calls"]},
         "form_named": {name: proj["rows"][name]["forms"]["named"]
@@ -1717,7 +1775,7 @@ def check():
             failures.append("SH17 reason_open:%s" % status)
     fresh_named = {}
     for name in proj["form_named"]:
-        for cb, status, targets in proj["rows"][name]["forms"]["named"]:
+        for cb, status, targets, _form in proj["rows"][name]["forms"]["named"]:
             fresh_named[(name, cb)] = (status, " , ".join(targets)
                                        or proj["doc"].get("host_none", ""))
     if listed_named != fresh_named:
@@ -1733,12 +1791,62 @@ def check():
         if not (proj["doc"].get(key) or "").strip():
             failures.append("SH17 word_missing:%s" % key)
 
+    # AC-SH18: WHICH form declared a named callback is graded, not assumed. A
+    # `function NAME(` and a var/let/const bound to a function literal are one weight;
+    # an arrow is a declaration whose `this` is lexical and must never be resolved to
+    # the element; and a name declared in two forms is ambiguous (`twodecl`), never
+    # merged into the "exactly one declaration" the resolution rests on.
+    listed_decl = {}
+    for name, cb, status, target, form in re.findall(
+            r'data-forms-named="([^"]+)" data-forms-cb="([^"]+)" '
+            r'data-forms-status="([^"]+)" data-forms-target="([^"]*)" '
+            r'data-forms-form="([^"]+)"', text):
+        listed_decl[(name, cb)] = (status, target, form)
+    fresh_decl = {}
+    for name in proj["form_named"]:
+        for cb, status, targets, form in proj["rows"][name]["forms"]["named"]:
+            fresh_decl[(name, cb)] = (status, " , ".join(targets)
+                                      or proj["doc"].get("host_none", ""), form)
+    if listed_decl != fresh_decl:
+        failures.append("SH18 decl_list page=%s fresh=%s"
+                        % (sorted(listed_decl), sorted(fresh_decl)))
+    for (name, cb), (status, _target, form) in sorted(fresh_decl.items()):
+        if form not in DECL_FORMS:
+            failures.append("SH18 form_open:%s=%s" % (cb, form))
+        if form == "mixed" and status != "twodecl":
+            failures.append("SH18 mixed_resolved:%s=%s" % (cb, status))
+        if form == "arrow" and status != "lexical":
+            failures.append("SH18 arrow_not_lexical:%s=%s" % (cb, status))
+        if form in ("func", "varfunc") and status in ("nodecl", "twodecl", "lexical"):
+            failures.append("SH18 declared_refused:%s=%s" % (cb, status))
+    for form in DECL_FORMS:
+        got = re.search(r'data-decl-count="%s"><b>(\d+)</b>' % form, text)
+        if not got:
+            failures.append("SH18 total_missing:%s" % form)
+        elif int(got.group(1)) != proj["named_decl_counts"][form]:
+            failures.append("SH18 total:%s page=%s fresh=%d"
+                            % (form, got.group(1), proj["named_decl_counts"][form]))
+        if not (proj["doc"].get("decl_tags") or {}).get(form):
+            failures.append("SH18 tag_missing:%s" % form)
+    if sum(proj["named_decl_counts"].values()) != proj["named_total"]:
+        failures.append("SH18 sum=%d named=%d"
+                        % (sum(proj["named_decl_counts"].values()),
+                           proj["named_total"]))
+    if proj["named_total"] != sum(len(proj["rows"][n]["forms"]["named"])
+                                  for n in proj["form_named"]):
+        failures.append("SH18 named_total=%d" % proj["named_total"])
+    for key in ("decl_head", "decl_note"):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH18 word_missing:%s" % key)
+    if "{form}" not in (proj["doc"].get("form_named_fmt") or ""):
+        failures.append("SH18 slot_missing:form_named_fmt")
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=17 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=18 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=17 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+    print("VERDICT PASS criteria=18 faces=%d operable=%d missing_ceo=%d external_refs=0 "
           "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
           "forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
@@ -1754,7 +1862,9 @@ def check():
                       for verdict in HOST_VERDICTS),
              len(proj["host_lexical"]), proj["host_lexical_calls"],
              ",".join("%s:%d" % (form, proj["form_counts"][form])
-                      for form in HANDLER_FORMS)))
+                      for form in HANDLER_FORMS)
+             + " decl=%s" % ",".join("%s:%d" % (form, proj["named_decl_counts"][form])
+                                     for form in DECL_FORMS)))
 
     return 0
 

@@ -149,12 +149,33 @@
  "host_lexical_fmt": "有 {calls} 处 this 属性读落在箭头函数体里，而上方没有 function handler：箭头不改变 this，它取外层作用域的 this（模块里是 undefined、经典脚本里是 window），所以这里不是赋值目标 {target}，没有被算进同宿主。",
  "host_lexical_absent": "本轮没有落在箭头函数体里的 this（不是没判，是都判过了）。",
  "forms_head": "handler 是怎么绑上去的（R3259）：上一段说「this 落在哪个元素表达式」，但它只认两种写法，页面里还有两种活写法一直是静默——监听挂在一个调用表达式上（如 $('reset').addEventListener(...)），或者回调是一个具名函数（如 boxes[i].addEventListener('change', onToggle)）。下面把每张面的监听站点按绑定形态计数：简单元素表达式 / 调用表达式 / 具名回调 / 内联字符串属性；调用表达式与具名回调各自单独具名，具名回调再给出能否解析到声明体。",
- "form_tags": {"simple": "挂在元素表达式上", "call": "挂在调用表达式上", "named": "具名回调", "attr": "内联字符串属性"},
+ "form_tags": {
+  "simple": "挂在元素表达式上",
+  "call": "挂在调用表达式上",
+  "named": "具名回调",
+  "attr": "内联字符串属性"
+ },
  "forms_fmt": "绑定形态：简单 {simple} ／ 调用 {call} ／ 具名 {named} ／ 字符串 {attr}。计数只说监听怎么写上去的，不证明运行时绑到了哪个节点。",
  "form_calls_fmt": "接收者是一个调用表达式：{recv} —— this 归它，但同一句换成另一种写法取到同一个节点时，本读数也认不出来（与 T[n] 同一条边界）。",
  "form_calls_absent": "本轮没有监听挂在调用表达式上（不是没判，是都判过了）。",
- "form_named_fmt": "具名回调 {cb}：{status}（目标 {target}）—— 只有「同面唯一声明 + 绑定目标唯一 + 从未被直接调用」三条同时成立，才把声明体当作该元素的 this。",
+ "form_named_fmt": "具名回调 {cb}：{status}（目标 {target}；声明形态：{form}）—— 只有「同面唯一声明 + 绑定目标唯一 + 从未被直接调用」三条同时成立，才把声明体当作该元素的 this；箭头声明即使三条全成立也只判词法 this。",
  "form_named_absent": "本轮没有具名回调被绑定为监听（不是没判，是都判过了）。",
- "form_reasons": {"called": "同面内被直接调用过，this 不一定是该元素，不解析", "nodecl": "同面内找不到 function 声明", "twodecl": "同面内有不止一处同名声明，不合并", "twotarget": "同一名字绑到了不同目标表达式，不猜", "nobody": "声明体花括号找不到，不猜"},
- "form_note": "「从未被直接调用」只按本面文本判：跨脚本、内联属性、第三方库包装或 bind 都认不出来；全程读文本，不执行 JS。"
+ "form_reasons": {
+  "called": "同面内被直接调用过，this 不一定是该元素，不解析",
+  "nodecl": "同面内找不到 function 声明",
+  "twodecl": "同面内有不止一处同名声明，不合并",
+  "twotarget": "同一名字绑到了不同目标表达式，不猜",
+  "nobody": "声明体花括号找不到，不猜",
+  "lexical": "声明是箭头函数，this 是词法的，永不当作该元素"
+ },
+ "form_note": "「从未被直接调用」只按本面文本判：跨脚本、内联属性、第三方库包装或 bind 都认不出来；全程读文本，不执行 JS。",
+ "decl_head": "具名回调是怎么声明出来的（R3260）：上一段只认 `function NAME(` 这一种声明写法，而现代脚本常写 `var NAME = function(){…}` 或 `const NAME = (…) => {…}`。三种形态统一进「恰好一处声明」的计数：`function NAME(` 与 `var/let/const NAME = function` 同权（body 都是函数字面量，this 由绑定目标供给），箭头声明则不同权——箭头里的 this 是词法的，永不当作该元素。下面按声明形态计数，同名两处（哪怕形态不同）一律判「同名两种形态」而不合并。",
+ "decl_tags": {
+  "func": "function 声明",
+  "varfunc": "变量赋函数",
+  "arrow": "箭头声明（词法 this）",
+  "mixed": "同名两种形态",
+  "none": "找不到声明"
+ },
+ "decl_note": "形态只按本面文本判：库包装、跨脚本声明、`window.NAME = …` 都认不出；「变量赋函数」与 `function` 同权不等于运行时等价——本判据只拒绝把两种声明并入一处，不推断 var 提升后的赋值顺序；全程读文本，不执行 JS。"
 }
