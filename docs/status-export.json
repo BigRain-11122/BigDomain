@@ -1,17 +1,17 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3242 PRODUCT+ENGINEERING: refusal in the gate face walk is by OWNERSHIP now instead of by project directory name - VENDOR_DIRS dropped ygo-poc (a directory name cannot decide whose code it holds) and gained site-packages and toolchain (the roots that denote someone else's code), and the vendor side is no longer silent about never being parsed: a substring mention census reads its files, prints files=N mentions=M with every mentioning file named, and AC-UGR13 grades that printed count against a fresh reading, so doors=0 can no longer stand in for never looked.",
+    "current": "2026-11-22 R3243 PRODUCT+ENGINEERING: the gate face stopped letting a directory NAME decide whose code a file is - a .py under a vendor-named directory is now refused only when git does not track it, tracked files are READ and parsed as this repo's own source, and the page names which rule decided (evidence, or the named fallback where git cannot answer) plus the count and every owned path; AC-UGR15 grades that printed rule, count and path set against a fresh reading (criteria 12 -> 13, registry 29 -> 32).",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/ugc-gate-report.html (16440B) + preview/ugc-gate-report.json (10860B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/ugc-gate-report.html (16440B) + preview/ugc-gate-report.json (10860B) [2026-11-22 mtime]",
+    "last_artifact": "preview/ugc-gate-report.html (18186B) + preview/ugc-gate-report.json (12058B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/ugc-gate-report.html (18186B) + preview/ugc-gate-report.json (12058B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3242] next window (<=48h): (0) MAIN — **名字规则仍是判据的最终依据，而本轮刚证明了「名字不代表归属」**：`toolchain`/`site-packages`/`.venv`/`node_modules`/`__pycache__` 五个名字决定谁不被读，今天一个**自有**的 `src/sandbox/xxx/toolchain/` 目录里的门会静默消失——正是本轮为 `ygo-poc` 关掉的那个洞，只是换了个名字。做法＝先只读量三问：①五个名字在活树各命中几个目录、其中几个其内容可判定为非本仓（git 跟踪 0 / 无 .py / 名字确为包管理器布局）；②写一个自有目录叫 `toolchain` 的门，量 `--check` 是否仍绿（预期绿＝同名洞仍在）；③收口三选一＝①接受并在页上具名「名字规则可被同名自有目录误拒」②把拒绝从**名字**改为**证据**（git 跟踪状态 + 是否含 `site-packages`/`METADATA` 之类包标记），代价=collect 里加一次 `git ls-files` ③保守版：名字命中但**目录内含自有源码布局**时印出告警行而不改变站点集（可先做，零风险）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T09:18:21+08:00",
-    "updated_at": "2026-11-22T09:18:21+08:00",
+    "next_milestone": "[R3243] next window (<=48h): (0) MAIN — **回退世界里的同名洞仍开着，而它只有「名字」这一种证据**：本轮把拒绝从名字推到 git 跟踪状态，但 git 无法回答的世界（导出成 tarball 的部署件、没有 `.git` 的 CI 检出、私有临时世界）里，`toolchain`/`site-packages` 这些名字**仍是唯一判据**，本轮只是把这件事印在页上（`decided by name`）。做法＝先只读量三问：①这些名字对应的活树目录里，**包管理器证据**（`METADATA`/`PKG-INFO`/`.dist-info`/`RECORD`）存在率多少（本轮测到 2 个全在 `.venv`），能否在无 git 时把「真第三方」与「同名自有目录」分开；②在没有 `.git` 的复制件上跑 `--check`，量当前读数（预期：全 vendor 名下文件都被拒，`decided by name`）；③收口三选一＝①接受并只把回退频率印在页上②给回退加第二种证据（无 git 时按包标记判，仍无法判则退回名字并具名）③把「无 git」本身升级为红（会让复制件世界无法交付，须先想清楚代价）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T09:33:22+08:00",
+    "updated_at": "2026-11-22T09:33:22+08:00",
     "heartbeat": {
       "tick": 3223,
       "state_tick": 3223,
@@ -41,8 +41,8 @@
       "readable": 4586
     }
   },
-  "current": "2026-11-22 R3242 PRODUCT+ENGINEERING: refusal in the gate face walk is by OWNERSHIP now instead of by project directory name - VENDOR_DIRS dropped ygo-poc (a directory name cannot decide whose code it holds) and gained site-packages and toolchain (the roots that denote someone else's code), and the vendor side is no longer silent about never being parsed: a substring mention census reads its files, prints files=N mentions=M with every mentioning file named, and AC-UGR13 grades that printed count against a fresh reading, so doors=0 can no longer stand in for never looked.",
-  "claims": {"claimed": 327, "captured": 94, "contradicted": 10, "uncaptured": 223, "historic": 7, "rows": 8, "present": true, "census_ts": "2026-11-22T09:18:21+08:00"},
+  "current": "2026-11-22 R3243 PRODUCT+ENGINEERING: the gate face stopped letting a directory NAME decide whose code a file is - a .py under a vendor-named directory is now refused only when git does not track it, tracked files are READ and parsed as this repo's own source, and the page names which rule decided (evidence, or the named fallback where git cannot answer) plus the count and every owned path; AC-UGR15 grades that printed rule, count and path set against a fresh reading (criteria 12 -> 13, registry 29 -> 32).",
+  "claims": {"claimed": 329, "captured": 94, "contradicted": 10, "uncaptured": 225, "historic": 7, "rows": 8, "present": true, "census_ts": "2026-11-22T09:33:22+08:00"},
   "chain": {"present": true, "rows": 8, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -71,11 +71,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3242 PRODUCT+ENGINEERING: refusal in the gate face walk is by OWNERSHIP now instead of by project directory name - VENDOR_DIRS dropped ygo-poc (a directory name cannot decide whose code it holds) and gained site-packages and toolchain (the roots that denote someone else's code), and the vendor side is no longer silent about never being parsed: a substring mention census reads its files, prints files=N mentions=M with every mentioning file named, and AC-UGR13 grades that printed count against a fresh reading, so doors=0 can no longer stand in for never looked.",
-  "export_ts": "2026-11-22T09:18:21+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (16440B) + preview/ugc-gate-report.json (10860B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3243 PRODUCT+ENGINEERING: the gate face stopped letting a directory NAME decide whose code a file is - a .py under a vendor-named directory is now refused only when git does not track it, tracked files are READ and parsed as this repo's own source, and the page names which rule decided (evidence, or the named fallback where git cannot answer) plus the count and every owned path; AC-UGR15 grades that printed rule, count and path set against a fresh reading (criteria 12 -> 13, registry 29 -> 32).",
+  "export_ts": "2026-11-22T09:33:22+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (18186B) + preview/ugc-gate-report.json (12058B) [2026-11-22 mtime]",
   "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
-  "next_milestone": "[R3242] next window (<=48h): (0) MAIN — **名字规则仍是判据的最终依据，而本轮刚证明了「名字不代表归属」**：`toolchain`/`site-packages`/`.venv`/`node_modules`/`__pycache__` 五个名字决定谁不被读，今天一个**自有**的 `src/sandbox/xxx/toolchain/` 目录里的门会静默消失——正是本轮为 `ygo-poc` 关掉的那个洞，只是换了个名字。做法＝先只读量三问：①五个名字在活树各命中几个目录、其中几个其内容可判定为非本仓（git 跟踪 0 / 无 .py / 名字确为包管理器布局）；②写一个自有目录叫 `toolchain` 的门，量 `--check` 是否仍绿（预期绿＝同名洞仍在）；③收口三选一＝①接受并在页上具名「名字规则可被同名自有目录误拒」②把拒绝从**名字**改为**证据**（git 跟踪状态 + 是否含 `site-packages`/`METADATA` 之类包标记），代价=collect 里加一次 `git ls-files` ③保守版：名字命中但**目录内含自有源码布局**时印出告警行而不改变站点集（可先做，零风险）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3243] next window (<=48h): (0) MAIN — **回退世界里的同名洞仍开着，而它只有「名字」这一种证据**：本轮把拒绝从名字推到 git 跟踪状态，但 git 无法回答的世界（导出成 tarball 的部署件、没有 `.git` 的 CI 检出、私有临时世界）里，`toolchain`/`site-packages` 这些名字**仍是唯一判据**，本轮只是把这件事印在页上（`decided by name`）。做法＝先只读量三问：①这些名字对应的活树目录里，**包管理器证据**（`METADATA`/`PKG-INFO`/`.dist-info`/`RECORD`）存在率多少（本轮测到 2 个全在 `.venv`），能否在无 git 时把「真第三方」与「同名自有目录」分开；②在没有 `.git` 的复制件上跑 `--check`，量当前读数（预期：全 vendor 名下文件都被拒，`decided by name`）；③收口三选一＝①接受并只把回退频率印在页上②给回退加第二种证据（无 git 时按包标记判，仍无法判则退回名字并具名）③把「无 git」本身升级为红（会让复制件世界无法交付，须先想清楚代价）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -189,8 +189,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 72105,
-  "next_milestone_due": "2026-11-24T09:18:21+08:00",
+  "state_bytes": 77758,
+  "next_milestone_due": "2026-11-24T09:33:22+08:00",
   "heartbeat": {
     "tick": 3223,
     "state_tick": 3223,

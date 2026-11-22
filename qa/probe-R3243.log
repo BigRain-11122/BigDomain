@@ -1,0 +1,35 @@
+== Q1 live census of the five skip names ==
+git ls-files -- src/sandbox: 601 tracked, 0.141s
+  name=__pycache__    dirs=85 py=0    tracked_py=0  package_evidence=0
+    dir src/sandbox/__pycache__
+    dir src/sandbox/benchgate/__pycache__
+    dir src/sandbox/citymodel/__pycache__
+    dir src/sandbox/compliance/__pycache__
+  name=.venv          dirs=1  py=453  tracked_py=0  package_evidence=2
+    dir src/sandbox/lobby/.venv
+    py  src/sandbox/lobby/.venv/Lib/site-packages/pip/__init__.py tracked=False
+    py  src/sandbox/lobby/.venv/Lib/site-packages/pip/__main__.py tracked=False
+  name=node_modules   dirs=1  py=0    tracked_py=0  package_evidence=0
+    dir src/sandbox/ygo-poc/js/node_modules
+  name=site-packages  dirs=1  py=453  tracked_py=0  package_evidence=2
+    dir src/sandbox/lobby/.venv/Lib/site-packages
+    py  src/sandbox/lobby/.venv/Lib/site-packages/pip/__init__.py tracked=False
+    py  src/sandbox/lobby/.venv/Lib/site-packages/pip/__main__.py tracked=False
+  name=toolchain      dirs=2  py=2    tracked_py=0  package_evidence=0
+    dir src/sandbox/ygo-poc/data/toolchain
+    dir src/sandbox/ygo-poc/data/toolchain/goroot/src/cmd/go/internal/toolchain
+    py  src/sandbox/ygo-poc/data/toolchain/goroot/lib/hg/goreposum.py tracked=False
+    py  src/sandbox/ygo-poc/data/toolchain/goroot/src/runtime/runtime-gdb.py tracked=False
+  totals dirs=90 py=908 (live reading today: read=188 sites=4 unparsed=0)
+== Q2 private world: is a gate under OUR OWN 'toolchain' read? ==
+  reader hits=['src/sandbox/mypoc/own_door.py:2'] skipped=[]
+  refused/vendor_dir={'files': 1, 'parsed': False, 'doors': [], 'unparsed': [], 'mentions': ['src/sandbox/mypoc/toolchain/door.py']}
+  control (same bytes not under the vendor name) seen=1
+  gate under our own 'toolchain' seen=0  => name hole OPEN
+== Q3 cost of judging by ownership ==
+  one git ls-files per collect: 0.147s, 601 paths
+  a private temp world is not a repo => the call fails => the name rule
+  must stay as the documented fallback, and the page must say which
+  rule decided (evidence vs name).
+  tracked files anywhere under a vendor-named path: 0
+== DONE (read-only; no socket, no network, no live write) ==

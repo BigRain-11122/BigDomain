@@ -123,7 +123,7 @@ def main():
         mod.OUT_HTML, mod.OUT_JSON = copy_html, copy_json
 
         rc, base, text, verdict = run_check(mod, data)
-        ok('AC-UGRB0', rc == 0 and len(base) == 12 and all(base.values()),
+        ok('AC-UGRB0', rc == 0 and len(base) == 13 and all(base.values()),
            'baseline rc=%d criteria=%d green=%d %s'
            % (rc, len(base), sum(1 for v in base.values() if v), verdict))
 
@@ -557,6 +557,66 @@ def main():
            'AC-UGR8=%s stays PASS rc=%d'
            % (res28.get('AC-UGR13'), res28.get('AC-UGR8'), r28))
 
+        # ---- B29/B30/B31: refusal is judged by OWNERSHIP EVIDENCE, with the
+        # name rule kept as a NAMED fallback (R3243). Measured in
+        # qa/probe-R3243.log: zero .py files under any of the five skip names are
+        # git tracked today, and a gate written under OUR OWN
+        # src/sandbox/mypoc/toolchain/ answered zero sites while the same bytes
+        # one level up were seen. B29 proves the evidence closes that hole while
+        # an untracked sibling stays refused; B30 proves the fallback is not
+        # silent (a world git cannot answer for keeps today's behaviour and the
+        # page must say `name`); B31 proves the printed rule/count/names are
+        # graded, and that AC-UGR13 does not inherit the job.
+        own_vendor = world_tree({
+            'src/sandbox/mypoc/toolchain/door.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/mypoc/toolchain/plain.py': 'x = 1\n',
+        })
+        real_root = mod.ROOT
+        real_tracked = mod._tracked_sources
+        try:
+            mod.ROOT = own_vendor
+            mod._tracked_sources = lambda: {'src/sandbox/mypoc/toolchain/door.py'}
+            e_hits, _e_skip = mod.direct_call_sites()
+            e_census = mod.refused_census()
+            _e_read, _e_ref, e_owned = mod._sandbox_walk()
+            mod._tracked_sources = lambda: None
+            n_hits, _n_skip = mod.direct_call_sites()
+            n_census = mod.refused_census()
+            _n_read, _n_ref, n_owned = mod._sandbox_walk()
+        finally:
+            mod._tracked_sources = real_tracked
+            mod.ROOT = real_root
+            shutil.rmtree(own_vendor, ignore_errors=True)
+        e_vendor = e_census.get('vendor_dir') or {}
+        n_vendor = n_census.get('vendor_dir') or {}
+        ok('AC-UGRB29',
+           e_hits == ['src/sandbox/mypoc/toolchain/door.py:2']
+           and e_owned == ['src/sandbox/mypoc/toolchain/door.py']
+           and e_vendor.get('files') == 1
+           and e_vendor.get('doors') == []
+           and e_vendor.get('mentions') == [],
+           'ownership evidence: gate under our own toolchain/ read=%s owned=%s '
+           'refused_files=%s (the untracked sibling stays refused)'
+           % (e_hits, e_owned, e_vendor.get('files')))
+        ok('AC-UGRB30',
+           n_hits == [] and n_owned == [] and n_vendor.get('files') == 2,
+           'name fallback where git cannot answer: read=%s owned=%s refused_files=%s '
+           '(today behaviour kept, and the face must say name)'
+           % (n_hits, n_owned, n_vendor.get('files')))
+
+        def b31(d):
+            d['vendor_owned'] = ['src/sandbox/.venv/lib/ghost_owned.py']
+
+        mutated31 = copy.deepcopy(data)
+        b31(mutated31)
+        r31, res31, _t31, _v31 = run_check(mod, mutated31)
+        ok('AC-UGRB31',
+           res31.get('AC-UGR15') is False and res31.get('AC-UGR13') is True,
+           'an unprinted owned path reddens AC-UGR15=%s (must be FAIL) while '
+           'AC-UGR13=%s stays PASS rc=%d'
+           % (res31.get('AC-UGR15'), res31.get('AC-UGR13'), r31))
+
         # ---- B17: the live tree must read the same site set as before the
         # reader changed (pure addition): three files, four constructions.
         live_hits, live_skipped = mod.direct_call_sites()
@@ -575,7 +635,7 @@ def main():
     after = real_snapshot()
     rc_real, res_real, _, verdict_real = run_check(mod, mod.collect())
     ok('AC-UGRB10',
-       before == after and rc_real == 0 and len(res_real) == 12 and all(res_real.values()),
+       before == after and rc_real == 0 and len(res_real) == 13 and all(res_real.values()),
        'real pair unchanged=%s real rc=%d green=%d' %
        (before == after, rc_real, sum(1 for v in res_real.values() if v)))
 
@@ -591,7 +651,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 29,
+    ok('AC-UGRB11', bool(row) and declared == 32,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"

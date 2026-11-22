@@ -7791,8 +7791,13 @@ SUITES = [
     # R3242 adds B26/B27/B28: a vendor mention is counted and named but never a
     # door, refusal is by OWNERSHIP (ygo-poc left the skip set so a project-local
     # door is read now), and the printed mention count is graded - twenty-nine.
+    # R3243 adds B29/B30/B31: the five remaining names stop being the final word
+    # (a gate under our own toolchain/ is read once git tracks it, an untracked
+    # sibling stays refused), the name rule survives as a NAMED fallback where
+    # git cannot answer, and an unprinted owned path reddens AC-UGR15 rather than
+    # AC-UGR13 - thirty-two.
     ("os-ugc-gate-report",
-     os.path.join("..", "os", "test_ugc_gate_report.py"), 29),
+     os.path.join("..", "os", "test_ugc_gate_report.py"), 32),
     # R2875. docs/status-export.json's latest_artifact follows the NEWEST preview
     # pair by mtime, so a fixture that re-renders a tracked pair moves the world
     # another suite measures - measured in the real tree at R2875 as
