@@ -12,14 +12,14 @@
     "latest_evidence": "qa/negctl-R3297.log (1375B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3297] next window (<=48h): (0) MAIN — **今天「最新件」落到 `first-yuan-chain`，而它的 json 没有 `rendered_on`，入口页那条自验命令因此退化成具名缺席**（AC-DIX21 如实印出，不编造）。问：要不要把这条缺席变成可用件？做法＝先只读量三问：①`tools/first_yuan_chain.py` 的渲染是否已有日期入参（若无，加一个 `--stamp` 与产出器同律的落地日期写进 json，代价几行）；②若加，AC-DIX21 的「dry-run 报出同一字节数」是否就能对这对件成立（`first_yuan_chain --dry-run` 是否存在、报不报 bytes）；③代价（改产出器会不会牵动面清扫、交付索引、导出面三处 recorded 尺寸与快照标签）。收口三选一＝①给 first-yuan-chain 补 `rendered_on` + 自验命令 ②入口页在缺席时改印「对应产出器的 `--check` 命令」并具名说明它只证配方不证数字 ③不动，板头留作已知代价。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=213756·gate=78500）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
-    "next_milestone_due": "2026-11-24T22:26:45+08:00",
-    "updated_at": "2026-11-22T22:26:45+08:00",
+    "next_milestone_due": "2026-11-24T22:51:57+08:00",
+    "updated_at": "2026-11-22T22:51:57+08:00",
     "heartbeat": {
-      "tick": 3292,
+      "tick": 3297,
       "state_tick": 3297,
-      "lag": 5,
-      "verdict": "FLAG",
-      "reason": "heartbeat_row_debt"
+      "lag": 0,
+      "verdict": "PASS",
+      "reason": "fresh"
     },
     "outs_age": {
       "rows": 8,
@@ -29,7 +29,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 8,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-22 R3297 PRODUCT+ENGINEERING: the board asked why two CEO-facing pages named different newest pairs. Measured first: 42 pairs, 31 of 40 sat at a different position under mtime order than under commit order, every winning half provenance=commit, so the split is structural and not dirt. Both laws were kept and the entry band now prints its own law plus the export face's answer taken from that face's own derivation.",
-  "claims": {"claimed": 332, "captured": 94, "contradicted": 10, "uncaptured": 228, "historic": 7, "rows": 23, "present": true, "census_ts": "2026-11-22T22:26:45+08:00"},
+  "claims": {"claimed": 332, "captured": 94, "contradicted": 10, "uncaptured": 228, "historic": 7, "rows": 23, "present": true, "census_ts": "2026-11-22T22:51:57+08:00"},
   "chain": {"present": true, "rows": 23, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,7 +68,7 @@
     }
   ],
   "do": "2026-11-22 R3297 PRODUCT+ENGINEERING: the board asked why two CEO-facing pages named different newest pairs. Measured first: 42 pairs, 31 of 40 sat at a different position under mtime order than under commit order, every winning half provenance=commit, so the split is structural and not dirt. Both laws were kept and the entry band now prints its own law plus the export face's answer taken from that face's own derivation.",
-  "export_ts": "2026-11-22T22:26:45+08:00",
+  "export_ts": "2026-11-22T22:51:57+08:00",
   "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/negctl-R3297.log (1375B, 2026-11-22)",
   "next_milestone": "[R3297] next window (<=48h): (0) MAIN — **今天「最新件」落到 `first-yuan-chain`，而它的 json 没有 `rendered_on`，入口页那条自验命令因此退化成具名缺席**（AC-DIX21 如实印出，不编造）。问：要不要把这条缺席变成可用件？做法＝先只读量三问：①`tools/first_yuan_chain.py` 的渲染是否已有日期入参（若无，加一个 `--stamp` 与产出器同律的落地日期写进 json，代价几行）；②若加，AC-DIX21 的「dry-run 报出同一字节数」是否就能对这对件成立（`first_yuan_chain --dry-run` 是否存在、报不报 bytes）；③代价（改产出器会不会牵动面清扫、交付索引、导出面三处 recorded 尺寸与快照标签）。收口三选一＝①给 first-yuan-chain 补 `rendered_on` + 自验命令 ②入口页在缺席时改印「对应产出器的 `--check` 命令」并具名说明它只证配方不证数字 ③不动，板头留作已知代价。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=213756·gate=78500）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
@@ -167,14 +167,14 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 218727,
-  "next_milestone_due": "2026-11-24T22:26:45+08:00",
+  "state_bytes": 218823,
+  "next_milestone_due": "2026-11-24T22:51:57+08:00",
   "heartbeat": {
-    "tick": 3292,
+    "tick": 3297,
     "state_tick": 3297,
-    "lag": 5,
-    "verdict": "FLAG",
-    "reason": "heartbeat_row_debt"
+    "lag": 0,
+    "verdict": "PASS",
+    "reason": "fresh"
   },
   "outs_age": {
     "rows": 8,
@@ -184,7 +184,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 8,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
