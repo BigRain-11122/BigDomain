@@ -42,6 +42,15 @@ Criteria AC-ACF1..10 (pre-registered in src/os/backlog.md before this file):
        impossible date, accepts the day the page itself carries, and its
        `main()` answers rc=2 with the named code while the two artifacts stay
        byte identical (measured, not asserted by reading its source)
+  ACF12 the badge says what the date MEANS: that it labels this artifact and
+       not the day the bytes were written, and that re-running this recipe
+       unchanged with the same date republishes these same bytes - each
+       clause exactly once, inside the one sentence ACF3 binds to the
+       template. Measured before this criterion: the page said "rendered on
+       <date>" and nothing about back-dating, while an mtime upper bound was
+       refused as a false-positive machine (tmp/probe_R3295.py: identical
+       bytes, os.utime to another day, rule answers REFUSE; a fresh checkout
+       stamps every file with checkout time)
 
 What this does NOT prove: that the numbers inside the report are correct, that
 they were a live reading on the printed date, or that a buyer can pay. All
@@ -89,6 +98,18 @@ PIN_RE = re.compile(r"^preview/apimarket-report\.(?:html|json)\s+text\s+eol=lf\s
 SOURCE_KEYS = ("generator", "injector", "producer")
 PRODUCER_REL = os.path.join("src", "os", "preview_apimarket_current.py")
 LAW_CACHE = {}
+
+# R3295 (AC-ACF12): the visible meaning of data-rendered-on. These are the
+# specification of what a reader must be told, so they are literal here on
+# purpose - the same way ACF3 pins "not a live reading". If the generator's
+# template and this pair ever disagree, the page reds instead of drifting.
+DATE_CLAUSES = (
+    ("the label clause",
+     "the date labels this artifact and not the day it was written"),
+    ("the republish clause",
+     "re-running this recipe unchanged with the same date republishes"
+     " these same bytes"),
+)
 
 
 def set_root(root):
@@ -440,6 +461,24 @@ def check():
                 fails.append("E_ACF11 producer refused %s but the json moved"
                              % early)
 
+    # ACF12 the badge says what the date MEANS (added at R3295, when the
+    # board asked whether to forbid back-dating outright). It is not measured
+    # by recomputing anything: the claim is the artifact, so it is read off
+    # the same sentence ACF3 binds to the template, and each clause must
+    # appear exactly once - a clause pasted into the footer while the template
+    # lost it is not the promise, and two copies are a reader who cannot tell
+    # which one is graded.
+    if len(badges) == 1:
+        for label, clause in DATE_CLAUSES:
+            hits = sentence.count(clause)
+            if hits == 0:
+                fails.append("E_ACF12 badge does not carry %s" % label)
+            elif hits > 1:
+                fails.append("E_ACF12 badge carries %s %d times (want 1)"
+                             % (label, hits))
+    else:
+        fails.append("E_ACF12 no single badge to read the date clauses from")
+
     return {
         "schema": schema,
         "printed": printed,
@@ -463,7 +502,7 @@ def check_frozen_untouched(before):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true",
-                        help="read-only verification of AC-ACF1..10")
+                        help="read-only verification of AC-ACF1..12")
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--no-repro", action="store_true",
                         help="skip the render (ACF5) for a quick reading")
@@ -508,7 +547,7 @@ def main(argv=None):
         for row in fails:
             print("  %s" % row)
     if not fails:
-        print("VERDICT PASS criteria=11")
+        print("VERDICT PASS criteria=12")
         return 0
     print("VERDICT FAIL")
     return 2

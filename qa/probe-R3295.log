@@ -1,0 +1,12 @@
+[Q1] page stamp = 2026-11-22  json rendered_on = 2026-11-22
+[Q1] generator mtime_day=2026-11-22 sha256=3a83dce99c9e recorded_matches=True
+[Q1] injector  mtime_day=2026-11-22 sha256=b2c3b25d7d99 recorded_matches=True
+[Q1] producer  mtime_day=2026-11-22 sha256=f1a3768dcd33 recorded_matches=True
+[Q1] newest source mtime day = 2026-11-22 ; stamp == newest: True ; nothing enforces this
+[Q2a] copy identical bytes=True ; mtime day now 2026-12-01
+[Q2a] prototype rule 'stamp >= newest source mtime day' would answer REFUSE for a page stamped 2026-11-22, though content is unchanged
+[Q2a] a fresh clone/checkout stamps every file with checkout time: a pristine clone taken on 2026-12-01 would red a page honestly rendered on 2026-11-22
+[Q2b] two renders with stamp=2026-11-22 identical=True how=inserted/inserted elapsed=0.36s
+[Q3] 300 mtime reads in 0.0012s (a gate would add ~0.000004s)
+[Q3] os.utime usable for controls=True (day 2026-12-01)
+[VERDICT] Q1 mtime days agree today but by coincidence; Q2 an mtime bound is keyed on checkout time, so it reds identical bytes (false positive measured above); Q3 cost is negligible and os.utime is enough. Recommendation = option 2 but stated as a property of the field, not as an apology.

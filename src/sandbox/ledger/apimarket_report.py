@@ -148,8 +148,18 @@ REPORT_SCHEMA = 17
 # byte for byte with a fresh render. --rendered-on carries it (default: the
 # machine local day), tools/apimarket_current_face.py re-renders with the date
 # the page itself claims, and a reader can at last tell how old the copy is.
+# R3295: the date labels the artifact, not the moment the bytes were written.
+# Measured (tmp/probe_R3295.py): the recipe is deterministic in its date input
+# - two renders with the same date are byte identical - while an mtime upper
+# bound reds identical bytes after an os.utime or a fresh checkout (a clone
+# stamps every file with checkout time), so no mtime law was added and the
+# limit is stated on the page instead. The two clauses are graded by
+# AC-ACF12 in tools/apimarket_current_face.py.
 SCHEMA_BADGE = ("schema %d &middot; this page is a static file rendered on %s"
-                " by the current code, not a live reading")
+                " by the current code, not a live reading &middot; the date"
+                " labels this artifact and not the day it was written:"
+                " re-running this recipe unchanged with the same date"
+                " republishes these same bytes")
 
 # One day. A seller who leaves a buyer waiting longer than this shows
 # up in the attention digest; the boundary stays silent on the exact

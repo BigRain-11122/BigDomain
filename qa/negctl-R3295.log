@@ -1,0 +1,11 @@
+[ARM 01] clean copy                                 want=PASS     rc=0 got=PASS -> OK
+[ARM 02] template drops the label clause            want=E_ACF12  rc=2 got=E_ACF12 -> OK
+[ARM 03] template drops the republish clause        want=E_ACF12  rc=2 got=E_ACF12 -> OK
+[ARM 04] template carries the label clause twice    want=E_ACF12  rc=2 got=E_ACF12 -> OK
+[ARM 05] page paraphrases the label clause          want=E_ACF12  rc=2 got=E_ACF12 E_ACF3 E_ACF4 E_ACF5 -> OK
+[ARM 06] page loses the whole badge                 want=E_ACF12  rc=2 got=E_ACF1 E_ACF12 E_ACF3 E_ACF4 E_ACF5 -> OK
+[ARM 07] json claims another day                    want=E_ACF8   rc=2 got=E_ACF8 -> OK
+[ARM 08] generator edited after the render          want=E_ACF9   rc=2 got=E_ACF9 -> OK
+[ARM 09] page byte appended                         want=E_ACF5   rc=2 got=E_ACF4 E_ACF5 -> OK
+[ARM 10] badge number flipped                       want=E_ACF2   rc=2 got=E_ACF2 E_ACF5 -> OK
+[NEGCTL] 10/10 arms answered the code they name
