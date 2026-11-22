@@ -1,0 +1,15 @@
+P-R3265 Q1 LIVE TREE
+  faces_html=45 bytes=787612
+  sites_total=0 forms=fetch:0,xhr:0,ws:0,form:0,ref:0
+  faces_with_any=0 []
+P-R3265 Q2 WHO OWNS THE CLAIM
+  gen_mentions_external=5
+  gen_reads_row_external=0
+  gen_ac_sh2_ext_on_page_only=1
+  sub_fmt_carries_claim=1
+  sub_fmt_derived_from_count=0
+  header_lines=freeze,money
+P-R3265 Q3 COST
+  scan_seconds=0.0461 per_face=0.00102 single_pass=true
+  page_bytes_now=29257
+PROBE OK rows=45 sites=0

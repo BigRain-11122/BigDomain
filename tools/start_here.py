@@ -25,6 +25,20 @@ OPS = ("input", "button", "select", "textarea")
 EXT = re.compile(r'(?:src|href)\s*=\s*["\']https?://', re.I)
 HREF = re.compile(r'<a\s[^>]*href="([^"]+)"')
 
+# R3265: the header said "zero links, zero network" in prose while the per-row
+# `external` count was computed and then read by nobody. Five text forms are read
+# per face on the same pass that already opens the bytes. This is a count of SITES,
+# never a judgement about what a browser could still do: a dynamic fetch, an
+# eval'd URL or a CSS @import is invisible here, and the line says so.
+NET_FORMS = ("fetch", "xhr", "ws", "form", "ref")
+NET = {
+    "fetch": re.compile(r"\bfetch\s*\(", re.I),
+    "xhr": re.compile(r"\bXMLHttpRequest\b"),
+    "ws": re.compile(r"\bnew\s+WebSocket\b"),
+    "form": re.compile(r"<form[^>]*\baction\s*=\s*[\"']\s*https?://", re.I),
+    "ref": EXT,
+}
+
 # What a control actually changes is read off the face itself, never authored:
 # a page whose script touches browser storage keeps its state across a reload
 # (persists); a page whose script rewrites the DOM keeps it only while open
@@ -795,7 +809,9 @@ def scan_faces():
             "counts": counts,
             "ops": sum(counts.values()),
             "external": len(EXT.findall(text)),
+            "net": {form: len(NET[form].findall(text)) for form in NET_FORMS},
         }
+        row["net_sites"] = sum(row["net"].values())
         row.update(classify(text))
         if row["storage"]:
             row["keys"] = key_reading(text)
@@ -841,6 +857,40 @@ def money_status():
         "total": c["total"],
         "proven": c["proven"],
         "pending_ids": pending,
+    }
+
+
+def network_status(rows):
+    """R3265: whether the faces a visitor opens could reach the network at all.
+
+    The header claimed "zero links, zero network" in prose while nothing derived
+    it; the per-row `external` count existed but no criterion read it, and AC-SH2
+    only refuses external refs in the rendered page itself. This reads the same
+    five text forms out of the same bytes scan_faces() already opened - no second
+    disk pass - and answers one question: how many network sites do the faces
+    carry, and on which faces. The page itself is excluded (faces_total scope);
+    a page counting its own prose would be circular.
+
+    The name is SITES, never capability: `importScripts`, a fetch built at
+    runtime, an eval'd URL and CSS @import are all outside this reading.
+    """
+    faces = [name for name in rows if name != "start-here.html"]
+    totals = {form: 0 for form in NET_FORMS}
+    hits = {}
+    for name in faces:
+        row = rows[name]
+        for form in NET_FORMS:
+            totals[form] += row["net"][form]
+        if row["net_sites"]:
+            hits[name] = row["net_sites"]
+    sites = sum(totals.values())
+    return {
+        "state": "offline" if sites == 0 else "online",
+        "sites": sites,
+        "faces": len(hits),
+        "total": len(faces),
+        "totals": totals,
+        "hits": hits,
     }
 
 
@@ -961,6 +1011,7 @@ def projection():
         "form_sites": sum(form_counts.values()),
         "missing": missing_ceo_items(),
         "money": money_status(),
+        "net": network_status(rows),
         "data16": sha16(DATA),
     }
 
@@ -1410,6 +1461,29 @@ def render(proj):
         money_html += ('\n  <p data-money-absent>%s</p>'
                        % esc(doc.get("money_absent") or ""))
 
+    net = proj["net"]
+    net_word = doc.get("net_offline_fmt" if net["state"] == "offline"
+                       else "net_online_fmt") or ""
+    net_said = (doc.get("net_head") or "") + net_word.format(
+        sites=net["sites"], faces=net["faces"], total=net["total"])
+    net_html = ('  <p class="net" data-net="%s" data-net-sites="%d" '
+                'data-net-faces="%d" data-net-total="%d">%s</p>'
+                % (net["state"], net["sites"], net["faces"], net["total"],
+                   esc(net_said)))
+    if net["state"] == "offline":
+        net_html += ('\n  <p data-net-absent>%s</p>'
+                     % esc(doc.get("net_absent") or ""))
+    else:
+        net_words = doc.get("net_form_words") or {}
+        for name in sorted(net["hits"]):
+            row = proj["rows"][name]["net"]
+            forms = ", ".join("%s:%d" % (net_words.get(form, form), row[form])
+                              for form in NET_FORMS if row[form])
+            net_html += ('\n  <p data-net-face="%s" data-net-sites="%d">%s</p>'
+                         % (esc(name), net["hits"][name],
+                            esc((doc.get("net_face_fmt") or "").format(
+                                name=name, sites=net["hits"][name], forms=forms))))
+
     if proj["missing"]:
         items = "\n".join(
             '    <li data-ceo-item="%s"><b>%s</b> &mdash; %s</li>'
@@ -1443,6 +1517,8 @@ def render(proj):
         ".count b{font-size:20px;margin-right:6px}\n"
         ".kindshead{margin-top:14px;font-size:13px;opacity:.94}\n"
         ".freeze{margin-top:14px;background:rgba(255,255,255,.16);border:1px solid #ffd43b;"
+        "border-radius:8px;padding:9px 13px;font-size:13px}\n"
+        ".net{margin-top:14px;background:rgba(255,255,255,.16);border:1px solid #a5d8ff;"
         "border-radius:8px;padding:9px 13px;font-size:13px}\n"
         ".kc{display:inline-block;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.4);"
         "border-radius:6px;padding:4px 10px;font-size:12px;margin:4px 6px 0 0}\n"
@@ -1487,6 +1563,7 @@ def render(proj):
         "<span class=\"count\"><b data-count=\"operable\">%d</b>%s</span>"
         "</div>\n"
         "%s\n"
+        "%s\n"
         "  <p class=\"kindshead\">%s</p>\n"
         "  <div class=\"counts kinds\">\n%s\n  </div>\n"
         "%s\n"
@@ -1503,6 +1580,7 @@ def render(proj):
         proj["faces_total"], esc(doc.get("count_faces", "")),
         len(proj["operable"]), esc(doc.get("count_operable", "")),
         money_html,
+        net_html,
         esc(doc.get("kind_counts_head", "")), kind_counts, keys_block, freeze_html,
         esc(doc["h2_can"].format(operable=len(proj["operable"]))), legend_block, "\n".join(cards),
         esc(doc["h2_cannot"]), missing_block,
@@ -2212,12 +2290,89 @@ def check():
     if money["pending"] > 0 and absent_line:
         failures.append("SH22 absent_line_on_blocked")
 
+    # AC-SH23 (R3265): the page said "zero links, zero network" in prose while the
+    # per-row external count was read by nobody. The header now carries one network
+    # line derived from the same five-form reading scan_faces() already took; its
+    # state word, two numbers, sentence and named rows are graded against this
+    # round's derivation, and the line states that it counts SITES, not capability.
+    for key in ("net_head", "net_offline_fmt", "net_online_fmt", "net_absent",
+                "net_face_fmt"):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH23 word_missing:%s" % key)
+    for key in ("net_offline_fmt", "net_online_fmt"):
+        word = proj["doc"].get(key) or ""
+        for slot in ("{sites}", "{faces}", "{total}"):
+            if slot not in word:
+                failures.append("SH23 slot_missing:%s:%s" % (key, slot))
+    net_words = proj["doc"].get("net_form_words") or {}
+    for form in NET_FORMS:
+        if not (net_words.get(form) or "").strip():
+            failures.append("SH23 form_word_missing:%s" % form)
+    net = proj["net"]
+    derived = "offline" if net["sites"] == 0 else "online"
+    if net["state"] != derived:
+        failures.append("SH23 state_not_derived fresh=%s sites=%d"
+                        % (net["state"], net["sites"]))
+    if net["faces"] != len(net["hits"]):
+        failures.append("SH23 face_count_differs hits=%d counted=%d"
+                        % (len(net["hits"]), net["faces"]))
+    got = re.search(r'data-net="([^"]+)" data-net-sites="(\d+)" '
+                    r'data-net-faces="(\d+)" data-net-total="(\d+)">([^<]*)<',
+                    text)
+    if not got:
+        failures.append("SH23 line_missing")
+    else:
+        state_word, s_raw, f_raw, t_raw, said = got.groups()
+        fresh = (net["sites"], net["faces"], net["total"])
+        if (int(s_raw), int(f_raw), int(t_raw)) != fresh:
+            failures.append("SH23 counts page=%s fresh=%s"
+                            % ((s_raw, f_raw, t_raw), fresh))
+        if state_word != net["state"]:
+            failures.append("SH23 state page=%s fresh=%s"
+                            % (state_word, net["state"]))
+        want_key = ("net_offline_fmt" if net["state"] == "offline"
+                    else "net_online_fmt")
+        want = ((proj["doc"].get("net_head") or "")
+                + (proj["doc"].get(want_key) or "").format(
+                    sites=net["sites"], faces=net["faces"], total=net["total"]))
+        if said != esc(want):
+            failures.append("SH23 sentence differs from the fresh derivation")
+        for number in (net["sites"], net["total"]):
+            if str(number) not in said:
+                failures.append("SH23 number_missing:%d" % number)
+        if int(t_raw) != proj["faces_total"]:
+            failures.append("SH23 total_differs page=%s faces_total=%d"
+                            % (t_raw, proj["faces_total"]))
+    page_net_faces = dict(
+        (name, int(count)) for name, count in
+        re.findall(r'data-net-face="([^"]+)" data-net-sites="(\d+)"', text))
+    absent_line = re.findall(r'<p data-net-absent>', text)
+    if net["sites"] == 0:
+        if len(absent_line) != 1:
+            failures.append("SH23 absent_line expected=1 got=%d"
+                            % len(absent_line))
+        if page_net_faces:
+            failures.append("SH23 face_listed_offline=%s"
+                            % sorted(page_net_faces))
+    else:
+        if absent_line:
+            failures.append("SH23 absent_line_on_online")
+        if set(page_net_faces) != set(net["hits"]):
+            failures.append("SH23 face_list page=%s fresh=%s"
+                            % (sorted(page_net_faces), sorted(net["hits"])))
+        for name, count in page_net_faces.items():
+            if name in net["hits"] and count != net["hits"][name]:
+                failures.append("SH23 face_count:%s page=%d fresh=%d"
+                                % (name, count, net["hits"][name]))
+            if name not in net["hits"]:
+                failures.append("SH23 clean_face_listed:%s" % name)
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=22 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=23 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=22 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+    print("VERDICT PASS criteria=23 faces=%d operable=%d missing_ceo=%d external_refs=0 "
           "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
           "expr_bodies=%d forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
@@ -2240,7 +2395,9 @@ def check():
              + " cond_unbal=%d freeze=%s money=%s:%d/%d/%d"
              % (proj["cond_total"], proj["freeze_state"],
                 proj["money"]["state"], proj["money"]["pending"],
-                proj["money"]["total"], proj["money"]["proven"])))
+                proj["money"]["total"], proj["money"]["proven"])
+             + " net=%s:%d/%d"
+             % (proj["net"]["state"], proj["net"]["sites"], proj["net"]["total"])))
 
     return 0
 

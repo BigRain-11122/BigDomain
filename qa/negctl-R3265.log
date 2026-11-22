@@ -1,0 +1,12 @@
+PASS c1_live_copy_passes live copy rc=0
+PASS c2_edited_site_count_reddens site edit rc=2
+PASS c3_edited_total_reddens total edit rc=2 both=True
+PASS c4_flipped_state_word_reddens state edit rc=2
+PASS c5_dropped_line_is_named line dropped rc=2
+PASS c6_missing_word_reddens word rc=2
+PASS c7_removed_absent_line_reddens absent removed rc=2
+PASS c8_sentence_edit_reddens sentence edit rc=2
+PASS c9_private_online_world_flips_the_line rc=0 online=True named=True absent_gone=True
+PASS c10_face_listed_while_offline_reddens clean face listed rc=2
+PASS c11_form_word_missing_reddens form word rc=2
+NEGCTL PASS cases=11 failed=0

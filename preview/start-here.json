@@ -1,7 +1,7 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "35bb59c9ca106442"
+  "state/start-here-faces.json": "dd0c977c31b88ab9"
  },
  "faces_total": 44,
  "operable": [
@@ -95,8 +95,15 @@
    ]
   ]
  },
- "missing_ceo_items": [],
+ "missing_ceo_items": [
+  "mchid",
+  "settlement",
+  "domain",
+  "filing",
+  "miniapp",
+  "pubkey"
+ ],
  "sizes": {
-  "html_bytes": 28075
+  "html_bytes": 29923
  }
 }

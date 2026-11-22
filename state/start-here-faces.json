@@ -189,5 +189,17 @@
  "money_head": "第一件要说的事：",
  "money_blocked_fmt": "这台平台现在收不了钱——{total} 项接入项里有 {pending} 项 CEO 物理件未到位，已证 {proven} 项；这一行与页下那份缺口清单同源，不是手写。",
  "money_clear_fmt": "收钱前置已全部到位——{total} 项接入项里已证 {proven} 项，未到位的 CEO 物理件 {pending} 项。",
- "money_absent": "未到位项已归零，缺口清单为空（这一句只在未到位数归零时出现）。"
+ "money_absent": "未到位项已归零，缺口清单为空（这一句只在未到位数归零时出现）。",
+ "net_head": "联网读数：",
+ "net_offline_fmt": "本仓 {total} 张预览面里共 {sites} 处联网站点，落在 {faces} 张面上——今天一处都没有，全部只在本机打开；这一行读的是页面字节里的站点，不是浏览器能力判定。",
+ "net_online_fmt": "本仓 {total} 张预览面里共 {sites} 处联网站点，落在 {faces} 张面上（下面逐面具名）；这一行读的是页面字节里的站点，不是浏览器能力判定。",
+ "net_absent": "联网面：今天没有——这五类站点一处都没有，但这不等于浏览器不能被唤起：运行期拼出的地址、eval 出来的 URL 与 CSS @import 都不在这五类计数里。",
+ "net_face_fmt": "{name} 有 {sites} 处联网站点（{forms}）。",
+ "net_form_words": {
+  "fetch": "fetch",
+  "xhr": "XMLHttpRequest",
+  "ws": "WebSocket",
+  "form": "表单外提",
+  "ref": "外链资源"
+ }
 }
