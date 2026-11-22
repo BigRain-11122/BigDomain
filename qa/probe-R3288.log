@@ -1,0 +1,12 @@
+{
+ "termini": 0,
+ "producer_files": 0,
+ "producers": [],
+ "faces_without_producer": [],
+ "faces_with_json": 0,
+ "faces_with_sizes_block": 0,
+ "faces_sizes_ok": 0,
+ "faces_check_sizes": 0,
+ "faces_no_body_anchor": [],
+ "rows": []
+}

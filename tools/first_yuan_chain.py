@@ -36,6 +36,8 @@ import subprocess
 import sys
 import tempfile
 
+import face_backhop
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAY = os.path.join(ROOT, "src", "sandbox", "pay")
 MEMBER = os.path.join(ROOT, "src", "sandbox", "member")
@@ -345,6 +347,14 @@ def price_section(payload):
 
 
 def render_html(payload):
+    # The back-hop block is part of the page this tool renders, so the fresh
+    # derivation compared by --check carries it too (AC-FBH1 holds by
+    # construction rather than by a post-write patch).
+    return face_backhop.inject_text(_render_html(payload),
+                                    "first-yuan-chain.html")[0]
+
+
+def _render_html(payload):
     money = money_text
 
     rows = []

@@ -35,6 +35,9 @@ import tempfile
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
+import face_backhop  # noqa: E402
 ROOT = os.path.dirname(HERE)
 LOBBY = os.path.join(ROOT, "src", "sandbox", "lobby")
 SERVER = os.path.join(LOBBY, "server.py")
@@ -317,6 +320,13 @@ def _cells(payload):
 
 
 def render_html(payload):
+    # The visible back-hop block is part of this page, so the fresh derivation
+    # compared by --check carries it too (AC-FBH1 holds by construction).
+    return face_backhop.inject_text(_render_html(payload),
+                                    "lobby-session-trace.html")[0]
+
+
+def _render_html(payload):
     derived = _cells(payload)
     summary = payload["summary"]
     src = payload["source"]

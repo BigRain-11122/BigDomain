@@ -1,0 +1,10 @@
+PASS clean-world            -> clean copy has no problem
+PASS AC-FBH1 no block       -> AC-FBH1 ceo-blockers.html carries 0 back blocks (want 1) (collateral=0)
+PASS AC-FBH1 two blocks     -> AC-FBH1 ledger-business-report.html carries 2 back blocks (want 1) (collateral=0)
+PASS AC-FBH2 target gone    -> AC-FBH2 apimarket-monthly-faces.html links a file not on disk: buyer-trial.html (collateral=19)
+PASS AC-FBH2 target read-only -> AC-FBH2 ceo-blockers.html links a read-only page (controls=0): start-here.html (collateral=3)
+PASS AC-FBH3 stale bytes    -> AC-FBH3 ceo-blockers.html prints bytes/controls 1/2 fresh=41434/2 (collateral=1)
+PASS AC-FBH4 wrong rule     -> AC-FBH4 lobby-ws-report.html back=buyer-trial.html rule=merchant-onboard.html record=merchant-onboar (collateral=2)
+PASS AC-FBH5 stale sizes    -> AC-FBH5 ugc-gate-report.html sizes.html=1 disk=28799 (collateral=0)
+PASS AC-FBH6 grave          -> AC-FBH6 recorded face missing from disk: membership-benefit-report.html (collateral=0)
+NEGCTL 9/9

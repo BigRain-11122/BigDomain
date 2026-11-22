@@ -250,7 +250,7 @@
   ],
   "sizes": {
     "spec_bytes": 29184,
-    "pay_bytes": 6959,
+    "pay_bytes": 7177,
     "config_bytes": 3233,
     "payconf_bytes": 4769,
     "mconf_bytes": 7890
@@ -263,7 +263,7 @@
     "mconf": "src/sandbox/member/config.json"
   },
   "spec_sha16": "bb0a5dc0b2a49946",
-  "pay_sha16": "971f4cabbbff0747",
+  "pay_sha16": "6a5f112cf930788c",
   "payconf_sha16": "1f3dd9233a82b565",
   "criteria": [
     "AC-MEMF1",

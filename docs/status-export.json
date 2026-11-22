@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (7449B)"
     ],
-    "current": "2026-11-22 R3287 PRODUCT+ENGINEERING: the site law stopped covering only the 7 pages that carry a control. 32 of the 38 read-only faces linked nowhere and still read PASS, so a reader who clicked into an apimarket report, a CEO face or the lobby session trace had no route out of it. The law now grades both directions - every face must be reachable from the entry page, and every face with no downstream must be declared as an endpoint in ONE closure that also names the operable page it sends the reader back to.",
+    "current": "2026-11-22 R3288 EXEC: the 32 silent endpoint pages now carry a visible line and a clickable way back (tools/face_backhop.py, AC-FBH1..6); face-route-scan derives dead_end=0 termini=0 unreachable=0 over 45 faces, and 11 sibling json sizes were patched in place (2-line diffs).",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/merchant-onboard.html (23088B) + preview/merchant-onboard.json (8124B) [2026-11-22 commit]",
-    "latest_artifact": "preview/merchant-onboard.html (23088B) + preview/merchant-onboard.json (8124B) [2026-11-22 commit]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\merchant-onboard.html",
+    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3273.log (1280B, 2026-11-22)",
     "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3288] next window (<=48h): (0) MAIN — **终点表说了「回到哪一页」，但读者在只读页里看不见它**：32 张终点页一个字节没动，回跳只是 JSON 里的一行。问：要不要给这 32 张页真的加上可见回跳？做法＝先只读量三问：①32 张页里各自由哪个生成器渲染、其中多少个工具的 `--check` 会校验自己页面字节（上轮只量了「17 个工具 getsize」，需逐面指名）；②若改生成器让回跳成为渲染产物，32 次 `--write` 的重渲顺序与索引/面清扫的固定点要跑几轮、会不会把九张 CEO 面的闸打红；③代价（32 个生成器改动 vs 一个后置注入通道 + 32 次重渲，哪个更少动镜子）。收口三选一＝①改 32 个生成器统一调用同一回跳块 ②建一个后置注入通道并纳入固定点顺序 ③不动，页上写明靠浏览器后退。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T19:11:26+08:00",
-    "updated_at": "2026-11-22T19:11:26+08:00",
+    "next_milestone": "[R3289] next window (<=48h): (0) MAIN — **32 张面里有 13 张在盘上找不到任何能重造它的脚本**（`apimarket-report-{activity,attention,buyers,claims,claims-demo,csv,demand,dossiers,duty,json,quality,slowanswer,workbench}.html`：`src/sandbox/ledger/apimarket_report.py` 只按 `--out` 写一页，测试件写临时目录，无 slug 循环）——它们今天只能被注入、不能被重建，一旦漂移就没人能复现。问：要不要给这 13 张面补一个可复现的 slug 驱动产出器（单一 `--out` 表 + 一份 `--check`），还是把它们钉成「冻结面」（记 sha256+字节数并在漂移时红）？做法＝先只读量三问：①13 张面各自的 db 数据源与 `apimarket_report.collect()` 入参是否同构（同一 db 能否一次渲 13 页）；②若建驱动，`--check` 该比「整页派生」还是「字节+sizes」（前者会因注入块而脆，后者要写 sizes 块）；③代价（是否要重建 demo db、渲染 13 页耗时、面清扫/索引/导出各重跑几轮）。收口三选一＝①建 slug 驱动让 13 张可再生 ②钉 sha256 冻结并让漂移红 ③不动，只在报告里标「无产出器」。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+    "next_milestone_due": "2026-11-24T19:29:57+08:00",
+    "updated_at": "2026-11-22T19:29:57+08:00",
     "heartbeat": {
       "tick": 3262,
       "state_tick": 3273,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3287 PRODUCT+ENGINEERING: the site law stopped covering only the 7 pages that carry a control. 32 of the 38 read-only faces linked nowhere and still read PASS, so a reader who clicked into an apimarket report, a CEO face or the lobby session trace had no route out of it. The law now grades both directions - every face must be reachable from the entry page, and every face with no downstream must be declared as an endpoint in ONE closure that also names the operable page it sends the reader back to.",
-  "claims": {"claimed": 327, "captured": 94, "contradicted": 10, "uncaptured": 223, "historic": 7, "rows": 16, "present": true, "census_ts": "2026-11-22T19:11:26+08:00"},
+  "current": "2026-11-22 R3288 EXEC: the 32 silent endpoint pages now carry a visible line and a clickable way back (tools/face_backhop.py, AC-FBH1..6); face-route-scan derives dead_end=0 termini=0 unreachable=0 over 45 faces, and 11 sibling json sizes were patched in place (2-line diffs).",
+  "claims": {"claimed": 327, "captured": 94, "contradicted": 10, "uncaptured": 223, "historic": 7, "rows": 16, "present": true, "census_ts": "2026-11-22T19:29:57+08:00"},
   "chain": {"present": true, "rows": 16, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3287 PRODUCT+ENGINEERING: the site law stopped covering only the 7 pages that carry a control. 32 of the 38 read-only faces linked nowhere and still read PASS, so a reader who clicked into an apimarket report, a CEO face or the lobby session trace had no route out of it. The law now grades both directions - every face must be reachable from the entry page, and every face with no downstream must be declared as an endpoint in ONE closure that also names the operable page it sends the reader back to.",
-  "export_ts": "2026-11-22T19:11:26+08:00",
-  "latest_artifact": "preview/merchant-onboard.html (23088B) + preview/merchant-onboard.json (8124B) [2026-11-22 commit]",
+  "do": "2026-11-22 R3288 EXEC: the 32 silent endpoint pages now carry a visible line and a clickable way back (tools/face_backhop.py, AC-FBH1..6); face-route-scan derives dead_end=0 termini=0 unreachable=0 over 45 faces, and 11 sibling json sizes were patched in place (2-line diffs).",
+  "export_ts": "2026-11-22T19:29:57+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime]",
   "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
-  "next_milestone": "[R3288] next window (<=48h): (0) MAIN — **终点表说了「回到哪一页」，但读者在只读页里看不见它**：32 张终点页一个字节没动，回跳只是 JSON 里的一行。问：要不要给这 32 张页真的加上可见回跳？做法＝先只读量三问：①32 张页里各自由哪个生成器渲染、其中多少个工具的 `--check` 会校验自己页面字节（上轮只量了「17 个工具 getsize」，需逐面指名）；②若改生成器让回跳成为渲染产物，32 次 `--write` 的重渲顺序与索引/面清扫的固定点要跑几轮、会不会把九张 CEO 面的闸打红；③代价（32 个生成器改动 vs 一个后置注入通道 + 32 次重渲，哪个更少动镜子）。收口三选一＝①改 32 个生成器统一调用同一回跳块 ②建一个后置注入通道并纳入固定点顺序 ③不动，页上写明靠浏览器后退。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3289] next window (<=48h): (0) MAIN — **32 张面里有 13 张在盘上找不到任何能重造它的脚本**（`apimarket-report-{activity,attention,buyers,claims,claims-demo,csv,demand,dossiers,duty,json,quality,slowanswer,workbench}.html`：`src/sandbox/ledger/apimarket_report.py` 只按 `--out` 写一页，测试件写临时目录，无 slug 循环）——它们今天只能被注入、不能被重建，一旦漂移就没人能复现。问：要不要给这 13 张面补一个可复现的 slug 驱动产出器（单一 `--out` 表 + 一份 `--check`），还是把它们钉成「冻结面」（记 sha256+字节数并在漂移时红）？做法＝先只读量三问：①13 张面各自的 db 数据源与 `apimarket_report.collect()` 入参是否同构（同一 db 能否一次渲 13 页）；②若建驱动，`--check` 该比「整页派生」还是「字节+sizes」（前者会因注入块而脆，后者要写 sizes 块）；③代价（是否要重建 demo db、渲染 13 页耗时、面清扫/索引/导出各重跑几轮）。收口三选一＝①建 slug 驱动让 13 张可再生 ②钉 sha256 冻结并让漂移红 ③不动，只在报告里标「无产出器」。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
   "outs": [
     "preview/start-here.html (35942B) + preview/start-here.json (2180B) [2026-11-22 mtime]",
     "preview/ugc-gate-report.html (28112B) + preview/ugc-gate-report.json (20170B) [2026-11-22 mtime]",
@@ -165,8 +165,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 173621,
-  "next_milestone_due": "2026-11-24T19:11:26+08:00",
+  "state_bytes": 173389,
+  "next_milestone_due": "2026-11-24T19:29:57+08:00",
   "heartbeat": {
     "tick": 3262,
     "state_tick": 3273,

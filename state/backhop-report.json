@@ -1,0 +1,296 @@
+{
+ "back_rule_count": 3,
+ "face_count": 32,
+ "faces": {
+  "apimarket-monthly-faces.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 7545,
+   "bytes_before": 7545,
+   "face": "apimarket-monthly-faces.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-activity.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 15157,
+   "bytes_before": 15157,
+   "face": "apimarket-report-activity.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-attention.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 13128,
+   "bytes_before": 13128,
+   "face": "apimarket-report-attention.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-buyerquestions.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 18840,
+   "bytes_before": 18840,
+   "face": "apimarket-report-buyerquestions.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-buyers.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 24878,
+   "bytes_before": 24878,
+   "face": "apimarket-report-buyers.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-claims-demo.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 46430,
+   "bytes_before": 46430,
+   "face": "apimarket-report-claims-demo.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-claims.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 36410,
+   "bytes_before": 36410,
+   "face": "apimarket-report-claims.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-csv.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 31910,
+   "bytes_before": 31910,
+   "face": "apimarket-report-csv.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-demand.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 29028,
+   "bytes_before": 29028,
+   "face": "apimarket-report-demand.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-dossiers.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 20554,
+   "bytes_before": 20554,
+   "face": "apimarket-report-dossiers.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-duty.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 33470,
+   "bytes_before": 33470,
+   "face": "apimarket-report-duty.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-json.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 13123,
+   "bytes_before": 13123,
+   "face": "apimarket-report-json.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-quality.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 38854,
+   "bytes_before": 38854,
+   "face": "apimarket-report-quality.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-questions.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 32309,
+   "bytes_before": 32309,
+   "face": "apimarket-report-questions.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-refunds.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 25966,
+   "bytes_before": 25966,
+   "face": "apimarket-report-refunds.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-selleranswers.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 19612,
+   "bytes_before": 19612,
+   "face": "apimarket-report-selleranswers.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-slowanswer.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 11983,
+   "bytes_before": 11983,
+   "face": "apimarket-report-slowanswer.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report-workbench.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 14629,
+   "bytes_before": 14629,
+   "face": "apimarket-report-workbench.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "apimarket-report.html": {
+   "back": "buyer-trial.html",
+   "bytes_after": 36850,
+   "bytes_before": 36850,
+   "face": "apimarket-report.html",
+   "how": "inserted",
+   "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
+   "sizes_patched": false
+  },
+  "ceo-blockers.html": {
+   "back": "index.html",
+   "bytes_after": 9138,
+   "bytes_before": 9138,
+   "face": "ceo-blockers.html",
+   "how": "inserted",
+   "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
+   "sizes_patched": false
+  },
+  "city-face-report.html": {
+   "back": "index.html",
+   "bytes_after": 7988,
+   "bytes_before": 7988,
+   "face": "city-face-report.html",
+   "how": "inserted",
+   "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
+   "sizes_patched": false
+  },
+  "first-yuan-chain.html": {
+   "back": "index.html",
+   "bytes_after": 4403,
+   "bytes_before": 4403,
+   "face": "first-yuan-chain.html",
+   "how": "inserted",
+   "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
+   "sizes_patched": false
+  },
+  "first-yuan.html": {
+   "back": "index.html",
+   "bytes_after": 4593,
+   "bytes_before": 4593,
+   "face": "first-yuan.html",
+   "how": "inserted",
+   "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
+   "sizes_patched": false
+  },
+  "ledger-business-report.html": {
+   "back": "index.html",
+   "bytes_after": 5970,
+   "bytes_before": 5970,
+   "face": "ledger-business-report.html",
+   "how": "inserted",
+   "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
+   "sizes_patched": false
+  },
+  "ledger-reconcile-face.html": {
+   "back": "index.html",
+   "bytes_after": 8656,
+   "bytes_before": 8656,
+   "face": "ledger-reconcile-face.html",
+   "how": "inserted",
+   "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
+   "sizes_patched": false
+  },
+  "live-sandbox.html": {
+   "back": "index.html",
+   "bytes_after": 6450,
+   "bytes_before": 6450,
+   "face": "live-sandbox.html",
+   "how": "inserted",
+   "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
+   "sizes_patched": false
+  },
+  "lobby-session-trace.html": {
+   "back": "merchant-onboard.html",
+   "bytes_after": 9092,
+   "bytes_before": 9092,
+   "face": "lobby-session-trace.html",
+   "how": "inserted",
+   "rule_reason": "大厅协议读数面：回到「这套协议要真跑起来还缺什么」那一页",
+   "sizes_patched": false
+  },
+  "lobby-ws-report.html": {
+   "back": "merchant-onboard.html",
+   "bytes_after": 6693,
+   "bytes_before": 6693,
+   "face": "lobby-ws-report.html",
+   "how": "appended",
+   "rule_reason": "大厅协议读数面：回到「这套协议要真跑起来还缺什么」那一页",
+   "sizes_patched": false
+  },
+  "membership-benefit-report.html": {
+   "back": "index.html",
+   "bytes_after": 10915,
+   "bytes_before": 10915,
+   "face": "membership-benefit-report.html",
+   "how": "inserted",
+   "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
+   "sizes_patched": false
+  },
+  "payment-gate-report.html": {
+   "back": "index.html",
+   "bytes_after": 7682,
+   "bytes_before": 7682,
+   "face": "payment-gate-report.html",
+   "how": "inserted",
+   "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
+   "sizes_patched": false
+  },
+  "platform-live-report.html": {
+   "back": "index.html",
+   "bytes_after": 8621,
+   "bytes_before": 8621,
+   "face": "platform-live-report.html",
+   "how": "appended",
+   "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
+   "sizes_patched": false
+  },
+  "ugc-gate-report.html": {
+   "back": "index.html",
+   "bytes_after": 28799,
+   "bytes_before": 28799,
+   "face": "ugc-gate-report.html",
+   "how": "inserted",
+   "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
+   "sizes_patched": false
+  }
+ },
+ "law": "a read-only face must show the reader a clickable way back to an operable page",
+ "sizes_patched": 0
+}

@@ -93,8 +93,8 @@
   ],
   "schema": "bigdomain-first-yuan-1",
   "sizes": {
-    "html": 3911,
-    "json": 2600
+    "html": 4593,
+    "json": 2701
   },
   "top_edge": "物理件未到位 3 项（具名清单见 preview/ceo-blockers.html）；UGC 闸现读 hole_status=LIVE",
   "verdict": "BLOCKED-PHYSICAL"
