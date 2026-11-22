@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-22 R3276 PRODUCT+ENGINEERING: the front door now says WHEN a write can run, not only how often it is written - four closed states per call site (load / handler / call / never), one counter row, a named row per face whose write sits in a function it neither binds nor calls, and a named absence when none does. preview/start-here.html is 37859B (36731B last round) and preview/start-here.json (2457B) carries write_when/write_when_never; tools/start_here.py gained WHEN_STATES, _reach_names, when_reading, when_attr, a site-offset list inside key_reading and eight AC-SH26 arms; state/start-here-faces.json gained four word entries.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/start-here.html (37859B) + preview/start-here.json (2457B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/start-here.html (37859B) + preview/start-here.json (2457B) [2026-11-22 mtime]",
+    "last_artifact": "preview/start-here.html (37859B) + preview/start-here.json (2457B) [2026-11-22 commit]",
+    "latest_artifact": "preview/start-here.html (37859B) + preview/start-here.json (2457B) [2026-11-22 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3273.log (1280B, 2026-11-22)",
     "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3276] next window (<=48h): (0) MAIN — **写侧现在有了「写了不止一遍」的次数，但仍然不说这两处写到底跑不跑得到**：片上每一处 `setItem` 都只被算成一个调用点，凡是写在函数体里的（`ship-checklist.html` 的两处都在监听器里）都要等那个函数被谁调用才会执行；如果某处写落在一个**从没被绑定也从未被调用**的函数里，页上照样把它算进「写了 2 遍」，读者拿着这个数去 devtools 会找不到那一次写。问：值不值得把「写侧调用点是否可及」读出来（所在函数有没有被 addEventListener 绑过或直接调用过，复用 R3259 的具名回调解析），并对不可及的写印一个具名词？做法＝先只读量三问：①43 张面里写在函数体内的 setItem 有几处、其中所在函数**没有任何绑定也没有调用**的有几处（逐面列，不猜；先看活树到底有没有这个形状）；②可及性判定要不要与 R3259 的 `_named_report()` 共用一份声明索引（`function NAME(`/`var NAME = function`/箭头三种形式已经在册，写出两种「读得到」的定义：绑到监听器、被直接调用——各自漏掉什么，逐项列）；③代价（判据 29 不动还是要 30；页增多少字节；每处写是否都要一个可及属性，还是只在有重复写的面上带）。收口三选一＝①不建，只在诚实段写明「次数不证可及」②建可及桶并对不可及写具名（就地扩 AC-SH26）③单开一条可及判据（29→30）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes≈100.1k gate=78500·fold 因 live-dirty 连续多窗被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
-    "next_milestone_due": "2026-11-24T16:48:21+08:00",
-    "updated_at": "2026-11-22T16:48:21+08:00",
+    "next_milestone": "[R3277] next window (<=48h): (0) MAIN — **写侧现在有「什么时候才跑」的四态，但只在面上汇总，不说是哪一处写在哪一态**：一张面写两个键、一个在脚本顶层写、一个在监听器里写，页上只会印 `load:1,handler:1`，读者仍要自己回去找出哪个键是打开就写、哪个键要点过才写。问：值不值得把「每个写侧表达式各在哪一态」印出来（多键面逐表达式带状态），并对混合态的面具名？做法＝先只读量三问：①43 张面里**同一张面同时出现两种以上写态**的有几张（逐面列，不猜；活树今天很可能 0 张）；②若逐表达式印，`data-step-write-when` 这个四态汇总属性要不要保留（保留＝两种编码并存的风险；改＝AC-SH26 的步/支行臂与 R3274 的「单一来源」律怎么才不破，逐项列）；③代价（判据 29 不动还是要 30；页增多少字节；只在混合态面才逐表达式印，还是一律印）。收口三选一＝①不建，只在诚实段写明「四态是面上汇总、不分表达式」②混合态面才逐表达式印③一律逐表达式印并把汇总挪到派生。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes≈107.5k gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+    "next_milestone_due": "2026-11-24T16:49:23+08:00",
+    "updated_at": "2026-11-22T16:49:23+08:00",
     "heartbeat": {
       "tick": 3262,
       "state_tick": 3273,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-22 R3276 PRODUCT+ENGINEERING: the front door now says WHEN a write can run, not only how often it is written - four closed states per call site (load / handler / call / never), one counter row, a named row per face whose write sits in a function it neither binds nor calls, and a named absence when none does. preview/start-here.html is 37859B (36731B last round) and preview/start-here.json (2457B) carries write_when/write_when_never; tools/start_here.py gained WHEN_STATES, _reach_names, when_reading, when_attr, a site-offset list inside key_reading and eight AC-SH26 arms; state/start-here-faces.json gained four word entries.",
-  "claims": {"claimed": 316, "captured": 94, "contradicted": 10, "uncaptured": 212, "historic": 7, "rows": 14, "present": true, "census_ts": "2026-11-22T16:48:21+08:00"},
+  "claims": {"claimed": 316, "captured": 94, "contradicted": 10, "uncaptured": 212, "historic": 7, "rows": 14, "present": true, "census_ts": "2026-11-22T16:49:23+08:00"},
   "chain": {"present": true, "rows": 14, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,10 +68,10 @@
     }
   ],
   "do": "2026-11-22 R3276 PRODUCT+ENGINEERING: the front door now says WHEN a write can run, not only how often it is written - four closed states per call site (load / handler / call / never), one counter row, a named row per face whose write sits in a function it neither binds nor calls, and a named absence when none does. preview/start-here.html is 37859B (36731B last round) and preview/start-here.json (2457B) carries write_when/write_when_never; tools/start_here.py gained WHEN_STATES, _reach_names, when_reading, when_attr, a site-offset list inside key_reading and eight AC-SH26 arms; state/start-here-faces.json gained four word entries.",
-  "export_ts": "2026-11-22T16:48:21+08:00",
-  "latest_artifact": "preview/start-here.html (37859B) + preview/start-here.json (2457B) [2026-11-22 mtime]",
+  "export_ts": "2026-11-22T16:49:23+08:00",
+  "latest_artifact": "preview/start-here.html (37859B) + preview/start-here.json (2457B) [2026-11-22 commit]",
   "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
-  "next_milestone": "[R3276] next window (<=48h): (0) MAIN — **写侧现在有了「写了不止一遍」的次数，但仍然不说这两处写到底跑不跑得到**：片上每一处 `setItem` 都只被算成一个调用点，凡是写在函数体里的（`ship-checklist.html` 的两处都在监听器里）都要等那个函数被谁调用才会执行；如果某处写落在一个**从没被绑定也从未被调用**的函数里，页上照样把它算进「写了 2 遍」，读者拿着这个数去 devtools 会找不到那一次写。问：值不值得把「写侧调用点是否可及」读出来（所在函数有没有被 addEventListener 绑过或直接调用过，复用 R3259 的具名回调解析），并对不可及的写印一个具名词？做法＝先只读量三问：①43 张面里写在函数体内的 setItem 有几处、其中所在函数**没有任何绑定也没有调用**的有几处（逐面列，不猜；先看活树到底有没有这个形状）；②可及性判定要不要与 R3259 的 `_named_report()` 共用一份声明索引（`function NAME(`/`var NAME = function`/箭头三种形式已经在册，写出两种「读得到」的定义：绑到监听器、被直接调用——各自漏掉什么，逐项列）；③代价（判据 29 不动还是要 30；页增多少字节；每处写是否都要一个可及属性，还是只在有重复写的面上带）。收口三选一＝①不建，只在诚实段写明「次数不证可及」②建可及桶并对不可及写具名（就地扩 AC-SH26）③单开一条可及判据（29→30）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes≈100.1k gate=78500·fold 因 live-dirty 连续多窗被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+  "next_milestone": "[R3277] next window (<=48h): (0) MAIN — **写侧现在有「什么时候才跑」的四态，但只在面上汇总，不说是哪一处写在哪一态**：一张面写两个键、一个在脚本顶层写、一个在监听器里写，页上只会印 `load:1,handler:1`，读者仍要自己回去找出哪个键是打开就写、哪个键要点过才写。问：值不值得把「每个写侧表达式各在哪一态」印出来（多键面逐表达式带状态），并对混合态的面具名？做法＝先只读量三问：①43 张面里**同一张面同时出现两种以上写态**的有几张（逐面列，不猜；活树今天很可能 0 张）；②若逐表达式印，`data-step-write-when` 这个四态汇总属性要不要保留（保留＝两种编码并存的风险；改＝AC-SH26 的步/支行臂与 R3274 的「单一来源」律怎么才不破，逐项列）；③代价（判据 29 不动还是要 30；页增多少字节；只在混合态面才逐表达式印，还是一律印）。收口三选一＝①不建，只在诚实段写明「四态是面上汇总、不分表达式」②混合态面才逐表达式印③一律逐表达式印并把汇总挪到派生。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes≈107.5k gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
   "outs": [
     "preview/start-here.html (35942B) + preview/start-here.json (2180B) [2026-11-22 mtime]",
     "preview/ugc-gate-report.html (28112B) + preview/ugc-gate-report.json (20170B) [2026-11-22 mtime]",
@@ -166,7 +166,7 @@
     "queue_explore_open": 4
   },
   "state_bytes": 107524,
-  "next_milestone_due": "2026-11-24T16:48:21+08:00",
+  "next_milestone_due": "2026-11-24T16:49:23+08:00",
   "heartbeat": {
     "tick": 3262,
     "state_tick": 3273,
