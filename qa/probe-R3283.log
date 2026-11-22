@@ -1,0 +1,19 @@
+pages=45
+reachable_from_index=45 operable_total=7 operable_reachable=7
+unreachable_pages=0
+--- operable pages reachable from index (name controls outbound) ---
+  buyer-trial.html             controls=3   outbound=4
+  filing-checklist.html        controls=21  outbound=2
+  index.html                   controls=2   outbound=44
+  lobby-protocol-map.html      controls=1   outbound=0
+  merchant-onboard.html        controls=9   outbound=0
+  money-path-demo.html         controls=3   outbound=0
+  ship-checklist.html          controls=12  outbound=6
+operable_dead_ends=3 lobby-protocol-map.html,merchant-onboard.html,money-path-demo.html
+--- buyer route (each hop: exists controls outbound links_to_next) ---
+  hop1 index.html               bytes=39633  controls=2   outbound=44 to_next=yes
+  hop2 start-here.html          bytes=41366  controls=0   outbound=6  to_next=yes
+  hop3 buyer-trial.html         bytes=22382  controls=3   outbound=4  to_next=yes
+  hop4 membership-face.html     bytes=10881  controls=0   outbound=4  to_next=NO
+  hop5 merchant-onboard.html    bytes=20402  controls=9   outbound=0  to_next=-
+last operable step on the route=merchant-onboard.html

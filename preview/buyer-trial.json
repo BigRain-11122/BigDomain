@@ -38,10 +38,15 @@
    "id": "AC-BT6",
    "pass_": true,
    "text": "MOCK / AIGC / non-advice disclaimers are permanent on the face"
+  },
+  {
+   "id": "AC-BT7",
+   "pass_": true,
+   "text": "every onward hop exists on disk, is linked, and prints its current size"
   }
  ],
  "face": "buyer-trial",
- "generated_utc": "2026-11-22T03:12:21Z",
+ "generated_utc": "2026-11-22T10:21:49Z",
  "products": [
   {
    "blocked": false,
@@ -280,9 +285,39 @@
   }
  ],
  "products_sha256": "86d5f2df75fbcd7a87c6b8aead5d40b2a4c9b61d05e2b7730c49762b92fe5451",
+ "route": [
+  {
+   "bytes": 10881,
+   "controls": 0,
+   "href": "membership-face.html",
+   "label": "这条权益落在哪：会员面（只读）",
+   "readonly": true
+  },
+  {
+   "bytes": 20402,
+   "controls": 9,
+   "href": "merchant-onboard.html",
+   "label": "要真收钱还缺什么：商户号 / 服务器 / 域名 / 备案（可填）",
+   "readonly": false
+  },
+  {
+   "bytes": 10161,
+   "controls": 3,
+   "href": "money-path-demo.html",
+   "label": "这笔钱在账本里怎么走（可操作）",
+   "readonly": false
+  },
+  {
+   "bytes": 41366,
+   "controls": 0,
+   "href": "start-here.html",
+   "label": "回到起点：这台机器今天能亲手做什么（只读汇总）",
+   "readonly": true
+  }
+ ],
  "sizes": {
-  "html_bytes": 20450,
-  "json_bytes": 5722
+  "html_bytes": 22382,
+  "json_bytes": 6571
  },
  "source": {
   "path": "preview/payment-gate-report.json",

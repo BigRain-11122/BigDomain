@@ -1,0 +1,12 @@
+buyer-trial VERDICT PASS criteria=7 products=5 route_hops=4 external_refs=0 html=22382B json=6574B
+PASS copy-unchanged               rc=0 expected=PASS
+buyer-trial CHECK-MISMATCH failed=1
+  - AC-BT7 hop not linked membership-face.html
+PASS route-hop-unlinked           rc=2 expected=RED
+buyer-trial CHECK-MISMATCH failed=1
+  - AC-BT7 hop size drifted membership-face.html json=10882 disk=10881
+PASS route-size-drifted           rc=2 expected=RED
+buyer-trial CHECK-MISMATCH failed=1
+  - AC-BT7 json hops=3 fresh=4
+PASS route-hop-dropped            rc=2 expected=RED
+NEGCTL PASS arms=4

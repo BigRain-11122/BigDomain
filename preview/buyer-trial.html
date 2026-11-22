@@ -107,12 +107,19 @@ footer{padding:0 32px 40px;color:var(--dim);font-size:12px;font-family:ui-monosp
 </main>
 <footer>
   <div id="src"></div>
+  <div id="route" data-route-hops="4">
+    <h2 style="margin:14px 0 6px">下一步 · 付完这一单之后还能走到哪里（4 跳，每跳文件在盘，构建时核对）</h2>
+    <div class="hop" data-hop="1" data-hop-bytes="10881">1. <a href="membership-face.html">membership-face.html</a> <span class="tag">只读 · 10881B</span> — 这条权益落在哪：会员面（只读）</div>
+    <div class="hop" data-hop="2" data-hop-bytes="20402">2. <a href="merchant-onboard.html">merchant-onboard.html</a> <span class="tag">可操作 · 20402B</span> — 要真收钱还缺什么：商户号 / 服务器 / 域名 / 备案（可填）</div>
+    <div class="hop" data-hop="3" data-hop-bytes="10161">3. <a href="money-path-demo.html">money-path-demo.html</a> <span class="tag">可操作 · 10161B</span> — 这笔钱在账本里怎么走（可操作）</div>
+    <div class="hop" data-hop="4" data-hop-bytes="41366">4. <a href="start-here.html">start-here.html</a> <span class="tag">只读 · 41366B</span> — 回到起点：这台机器今天能亲手做什么（只读汇总）</div>
+  </div>
   <div>账本为本页内模拟双式记账，不是 src/sandbox/ledger 真账库；真实入账需物理件到位后接真通道。</div>
 </footer>
 <script id="payload" type="application/json">{
  "face": "buyer-trial",
  "title": "买家试用镜 · 本地演示",
- "generated_utc": "2026-11-22T03:12:21Z",
+ "generated_utc": "2026-11-22T10:21:49Z",
  "source": {
   "path": "preview/payment-gate-report.json",
   "sha256": "971f4cabbbff074702208a8d453a0c11cd0d5b7be6df69eca35569a39249217b"
@@ -359,6 +366,36 @@ footer{padding:0 32px 40px;color:var(--dim);font-size:12px;font-family:ui-monosp
   "cash": "分",
   "token": "点"
  },
+ "route": [
+  {
+   "href": "membership-face.html",
+   "label": "这条权益落在哪：会员面（只读）",
+   "bytes": 10881,
+   "controls": 0,
+   "readonly": true
+  },
+  {
+   "href": "merchant-onboard.html",
+   "label": "要真收钱还缺什么：商户号 / 服务器 / 域名 / 备案（可填）",
+   "bytes": 20402,
+   "controls": 9,
+   "readonly": false
+  },
+  {
+   "href": "money-path-demo.html",
+   "label": "这笔钱在账本里怎么走（可操作）",
+   "bytes": 10161,
+   "controls": 3,
+   "readonly": false
+  },
+  {
+   "href": "start-here.html",
+   "label": "回到起点：这台机器今天能亲手做什么（只读汇总）",
+   "bytes": 41366,
+   "controls": 0,
+   "readonly": true
+  }
+ ],
  "compliance": {
   "mock": "MOCK 非真实支付：本页不联网、不扣款、不产生商户订单；一切数字为本机模拟。",
   "aigc": "AIGC 标识：平台生成的呈现内容带 ai_service 标识，本页为演示壳，不冒充真人作品。",
@@ -388,6 +425,10 @@ footer{padding:0 32px 40px;color:var(--dim);font-size:12px;font-family:ui-monosp
   {
    "id": "AC-BT6",
    "text": "MOCK / AIGC / non-advice disclaimers are permanent on the face"
+  },
+  {
+   "id": "AC-BT7",
+   "text": "every onward hop exists on disk, is linked, and prints its current size"
   }
  ]
 }</script>

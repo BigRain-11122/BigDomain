@@ -41,6 +41,17 @@ SHORT = {
 
 NEEDLES = ["MOCK", "AIGC", "非投资建议"]
 
+# Where the buyer goes after a mock payment. Before R3284 this page was an
+# operable dead end: three controls, zero outbound links, so the chain stopped
+# exactly where money appears. Each hop is a local file; its size is read from
+# disk at write time, never written down here.
+ROUTE = [
+    ("membership-face.html", "这条权益落在哪：会员面（只读）"),
+    ("merchant-onboard.html", "要真收钱还缺什么：商户号 / 服务器 / 域名 / 备案（可填）"),
+    ("money-path-demo.html", "这笔钱在账本里怎么走（可操作）"),
+    ("start-here.html", "回到起点：这台机器今天能亲手做什么（只读汇总）"),
+]
+
 CRITERIA = [
     ("AC-BT1", "source sha256 recorded on the face equals the file on disk"),
     ("AC-BT2", "every product id / price_cent / entitlement / channel equals the source"),
@@ -48,6 +59,7 @@ CRITERIA = [
     ("AC-BT4", "double-entry books balance: cash sum == 0 and token sum == 0 after each post"),
     ("AC-BT5", "a repeated callback for one order books once (idempotent guard)"),
     ("AC-BT6", "MOCK / AIGC / non-advice disclaimers are permanent on the face"),
+    ("AC-BT7", "every onward hop exists on disk, is linked, and prints its current size"),
 ]
 
 
@@ -98,6 +110,27 @@ def project_products():
     return out
 
 
+def project_route():
+    hops = []
+    for href, label in ROUTE:
+        path = os.path.join(PREVIEW, href)
+        if os.path.exists(path):
+            text = io.open(path, encoding="utf-8").read()
+            controls = len(re.findall(r"<(?:button|input|select|textarea)\b", text, re.I))
+            hops.append(
+                {
+                    "href": href,
+                    "label": label,
+                    "bytes": os.path.getsize(path),
+                    "controls": controls,
+                    "readonly": controls == 0,
+                }
+            )
+        else:
+            hops.append({"href": href, "label": label, "bytes": 0, "controls": 0, "readonly": True})
+    return hops
+
+
 def payload_doc():
     products = project_products()
     canonical = json.dumps(products, ensure_ascii=False, sort_keys=True).encode("utf-8")
@@ -112,6 +145,7 @@ def payload_doc():
         "products_sha256": hashlib.sha256(canonical).hexdigest(),
         "products": products,
         "books": {"cash": "分", "token": "点"},
+        "route": project_route(),
         "compliance": {
             "mock": "MOCK 非真实支付：本页不联网、不扣款、不产生商户订单；一切数字为本机模拟。",
             "aigc": "AIGC 标识：平台生成的呈现内容带 ai_service 标识，本页为演示壳，不冒充真人作品。",
@@ -226,6 +260,10 @@ footer{padding:0 32px 40px;color:var(--dim);font-size:12px;font-family:ui-monosp
 </main>
 <footer>
   <div id="src"></div>
+  <div id="route" data-route-hops="__ROUTE_HOPS__">
+    <h2 style="margin:14px 0 6px">下一步 · 付完这一单之后还能走到哪里（__ROUTE_HOPS__ 跳，每跳文件在盘，构建时核对）</h2>
+    __ROUTE__
+  </div>
   <div>账本为本页内模拟双式记账，不是 src/sandbox/ledger 真账库；真实入账需物理件到位后接真通道。</div>
 </footer>
 <script id="payload" type="application/json">__PAYLOAD__</script>
@@ -423,6 +461,27 @@ def render_cards(products):
     return "\n".join(parts)
 
 
+def render_route(hops):
+    rows = []
+    for i, h in enumerate(hops):
+        kind = "只读" if h["readonly"] else "可操作"
+        rows.append(
+            '<div class="hop" data-hop="%d" data-hop-bytes="%d">%d. '
+            '<a href="%s">%s</a> <span class="tag">%s · %dB</span> — %s</div>'
+            % (
+                i + 1,
+                h["bytes"],
+                i + 1,
+                html.escape(h["href"], quote=True),
+                html.escape(h["href"]),
+                kind,
+                h["bytes"],
+                html.escape(h["label"]),
+            )
+        )
+    return "\n    ".join(rows)
+
+
 def render_html(payload):
     blob = json.dumps(payload, ensure_ascii=False, indent=1)
     blob = blob.replace("</", "<\\/")
@@ -431,6 +490,8 @@ def render_html(payload):
     body = body.replace("__SRC_SHA16__", payload["source"]["sha256"][:16])
     body = body.replace("__EXT__", "0")
     body = body.replace("__CARDS__", render_cards(payload["products"]))
+    body = body.replace("__ROUTE_HOPS__", str(len(payload["route"])))
+    body = body.replace("__ROUTE__", render_route(payload["route"]))
     body = body.replace("__PAYLOAD__", blob)
     return body
 
@@ -506,13 +567,32 @@ def check():
         if marker not in page:
             failed.append("AC-BT4/5 marker missing %s" % marker)
 
+    # AC-BT7: the footer route must exist, be linked, and be sized from disk
+    hops = project_route()
+    landed_route = landed.get("route", [])
+    if ('data-route-hops="%d"' % len(hops)) not in page:
+        failed.append("AC-BT7 page does not print hop count %d" % len(hops))
+    if len(landed_route) != len(hops):
+        failed.append("AC-BT7 json hops=%d fresh=%d" % (len(landed_route), len(hops)))
+    for fresh_hop, kept_hop in zip(hops, landed_route):
+        name = fresh_hop["href"]
+        if fresh_hop["bytes"] == 0:
+            failed.append("AC-BT7 hop file missing %s" % name)
+        if ('href="%s"' % name) not in page:
+            failed.append("AC-BT7 hop not linked %s" % name)
+        if kept_hop.get("bytes") != fresh_hop["bytes"]:
+            failed.append(
+                "AC-BT7 hop size drifted %s json=%s disk=%s"
+                % (name, kept_hop.get("bytes"), fresh_hop["bytes"])
+            )
+
     if failed:
         print("buyer-trial CHECK-MISMATCH failed=%d" % len(failed))
         for f in failed:
             print("  - " + f)
         return 2
-    print("buyer-trial VERDICT PASS criteria=6 products=%d external_refs=0 html=%dB json=%dB"
-          % (len(fresh), os.path.getsize(OUT_HTML), os.path.getsize(OUT_JSON)))
+    print("buyer-trial VERDICT PASS criteria=%d products=%d route_hops=%d external_refs=0 html=%dB json=%dB"
+          % (len(CRITERIA), len(fresh), len(hops), os.path.getsize(OUT_HTML), os.path.getsize(OUT_JSON)))
     return 0
 
 
