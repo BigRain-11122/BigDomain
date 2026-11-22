@@ -1,0 +1,19 @@
+[R3329] CEO ENTRY PAGE - measured before any repair, read-only
+SECTION 1 closeout_order --check (four faces)
+  chain   PASS VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+  index   FAIL VERDICT FAIL 22/23 (only red = AC-CVL1 live-readings printed=False)
+  sweep   FAIL VERDICT FAIL 20/21
+  export  PASS VERDICT PASS tick=2026-11-23 R3328
+  REDGE index <- chain bytes ; index <- export bytes ; sweep <- index bytes ; sweep <- chain bytes
+SECTION 2 the drift, byte for byte
+  page printed : claimed=312 captured=95 contradicted=10 uncaptured=207 historic=7 records=26
+  export block : claimed=313 captured=95 contradicted=10 uncaptured=208 historic=7 records=26 census_ts=2026-11-23T06:16:22+08:00
+  delta        : exactly one claim (claimed +1, uncaptured +1) - the page was one claim behind disk
+SECTION 3 repair through the owner, no producer touched
+  python tools\closeout_order.py --write -> VERDICT PASS passes=1 steps=5 checks=4/4
+  chain PASS / index DELIVERABLE INDEX faces=9 defects=0 index=42875B / backhop faces=32 sizes patched=0 / sweep PASS 13/13 / export PASS
+SECTION 4 read back after the pass
+  page printed : claimed=313 captured=95 contradicted=10 uncaptured=208 historic=7 records=26 census day 2026-11-23
+  deliverable_index --check : PASS 23/23
+SECTION 5 scope
+  zero code changed; zero socket; zero network; zero hand-edited number
