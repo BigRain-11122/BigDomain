@@ -1,0 +1,26 @@
+{
+ "face": "start-here",
+ "generated_from": {
+  "state/start-here-faces.json": "0ee38f1117f869c3"
+ },
+ "faces_total": 44,
+ "operable": [
+  "buyer-trial.html",
+  "filing-checklist.html",
+  "lobby-protocol-map.html",
+  "merchant-onboard.html",
+  "money-path-demo.html",
+  "ship-checklist.html"
+ ],
+ "missing_ceo_items": [
+  "mchid",
+  "settlement",
+  "domain",
+  "filing",
+  "miniapp",
+  "pubkey"
+ ],
+ "sizes": {
+  "html_bytes": 8033
+ }
+}

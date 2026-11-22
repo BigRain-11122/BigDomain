@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>从这里开始 · 这台机器上你今天能亲手做什么</title>
+<style>
+:root{--ink:#182033;--muted:#6b7280;--line:#e5e7eb;--accent:#3b5bdb;--warn:#e8590c;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;color:var(--ink);background:#f7f8fa;line-height:1.65;padding:0 0 48px}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+header{background:linear-gradient(135deg,#1f2b4d,#3b5bdb);color:#fff;padding:34px 0 26px}
+header h1{font-size:26px;letter-spacing:1px}
+header .sub{margin-top:8px;font-size:14px;opacity:.94}
+.counts{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+.count{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.5);border-radius:8px;padding:8px 14px;font-size:13px}
+.count b{font-size:20px;margin-right:6px}
+h2{font-size:18px;margin:32px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+.face{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:12px}
+.face h3{font-size:16px;margin-bottom:4px}
+.face h3 code{font-size:12px;color:var(--muted);font-weight:400;margin-left:6px}
+.face .tagline{font-size:12px;color:var(--accent);margin-bottom:6px}
+.face .limit{color:var(--warn);font-size:13px}
+.face p{font-size:13px;margin:4px 0}
+.face b{font-size:12px;color:var(--muted);display:block}
+.go{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;border-radius:6px;padding:4px 12px;font-size:13px}
+a{color:var(--accent)}
+.missing{background:#fde8ef;border:1px solid #f4b8cc;border-radius:8px;padding:14px 16px}
+.missing ul{padding-left:20px;margin:8px 0}
+.missing li{font-size:13px;margin:4px 0}
+.notices{background:#fffbe6;border:1px solid #ffe58f;border-radius:8px;padding:12px 16px;font-size:13px}
+.notices p{margin:4px 0}
+footer{margin-top:32px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>从这里开始</h1>
+  <div class="sub">本仓 44 张预览面，其中 6 张接受你的操作；其余都是只读报告。双击本文件即开，零外链、零网络。</div>
+  <div class="counts"><span class="count"><b data-count="faces">44</b>张预览面（全仓）</span><span class="count"><b data-count="operable">6</b>张能动手的面</span></div>
+</div></header>
+<div class="wrap">
+<h2>能动手的 6 张面（逐个点开）</h2>
+  <article class="face" data-face="buyer-trial.html">
+    <h3><a href="buyer-trial.html">买家试用镜</a> <code>buyer-trial.html</code></h3>
+    <p><b>这一步能做什么</b>点一件商品下单、走 MOCK 支付、看现金账与代币账各自配平、拿到权益与收据，并点『重复回调』自证同一订单只入账一次。</p>
+    <p class="limit"><b>它不能证明什么</b>不能真收钱：没有商户号、结算主体、服务器与域名、备案+ICP、小程序 appid+secret。</p>
+    <p><a class="go" href="buyer-trial.html">打开这张面 &rarr;</a></p>
+  </article>
+
+  <article class="face" data-face="filing-checklist.html">
+    <h3><a href="filing-checklist.html">小程序备案执行清单</a> <code>filing-checklist.html</code></h3>
+    <p><b>这一步能做什么</b>逐项勾选备案执行步骤，进度存在本机浏览器里，可随时回来接着勾。</p>
+    <p class="limit"><b>它不能证明什么</b>勾选是本机自述，不是平台受理回执；本仓没有备案号。</p>
+    <p><a class="go" href="filing-checklist.html">打开这张面 &rarr;</a></p>
+  </article>
+
+  <article class="face" data-face="lobby-protocol-map.html">
+    <h3><a href="lobby-protocol-map.html">大厅协议图</a> <code>lobby-protocol-map.html</code></h3>
+    <p><b>这一步能做什么</b>在过滤框里输入消息前缀或判据号，筛出对应的协议节点与判据覆盖。</p>
+    <p class="limit"><b>它不能证明什么</b>只读派生视图：不改任何协议，也不连任何服务器。</p>
+    <p><a class="go" href="lobby-protocol-map.html">打开这张面 &rarr;</a></p>
+  </article>
+
+  <article class="face" data-face="merchant-onboard.html">
+    <h3><a href="merchant-onboard.html">商户号接入自查单</a> <code>merchant-onboard.html</code></h3>
+    <p><b>这一步能做什么</b>看 8 项缺口（6 项 CEO 物理件 + 2 项我方证据），逐项勾自述进度，并同时看到『自述 k/6』与『有证据 m/8』两个计数器。</p>
+    <p class="limit"><b>它不能证明什么</b>自述不是验证；两项证据只证沙箱回调与页内账簿自洽，不证明真实商户通道可用；本页永远不收密钥值。</p>
+    <p><a class="go" href="merchant-onboard.html">打开这张面 &rarr;</a></p>
+  </article>
+
+  <article class="face" data-face="money-path-demo.html">
+    <h3><a href="money-path-demo.html">收款演练（MOCK）</a> <code>money-path-demo.html</code></h3>
+    <p><b>这一步能做什么</b>按打勾步骤走一遍收款到入权益的钱路，看每一步的页内读数。</p>
+    <p class="limit"><b>它不能证明什么</b>全程页内模拟：没有一笔真实资金移动，也没有真实订单落在任何支付平台。</p>
+    <p><a class="go" href="money-path-demo.html">打开这张面 &rarr;</a></p>
+  </article>
+
+  <article class="face" data-face="ship-checklist.html">
+    <h3><a href="ship-checklist.html">上线前置清单</a> <code>ship-checklist.html</code></h3>
+    <p><b>这一步能做什么</b>逐项勾选上线前的硬门（AIGC 标识、msgSecCheck 前置闸等），进度本地留存。</p>
+    <p class="limit"><b>它不能证明什么</b>勾满不等于可上线：支付通道、备案、服务器等物理件仍缺。</p>
+    <p><a class="go" href="ship-checklist.html">打开这张面 &rarr;</a></p>
+  </article>
+
+<h2>今天还不能做的事（缺口列在这里，不藏在别处）</h2>
+<div class="missing">
+  <p>要让买家真能付钱，还缺 6 项 CEO 物理件；勾选与演示都不能代替它们。</p>
+  <ul>
+    <li data-ceo-item="mchid"><b>真实微信支付商户号（MchID）</b> &mdash; 在微信支付商户平台申请并下发；本页只登记它的名字，不填任何密钥值。</li>
+    <li data-ceo-item="settlement"><b>结算主体（营业执照 / 对公账户）</b> &mdash; 与商户号绑定的对公结算账户，入账前须与营业执照主体一致。</li>
+    <li data-ceo-item="domain"><b>服务器 + 可公网访问域名（回调可达）</b> &mdash; 一台公网服务器与已解析域名；支付回调 URL 由本司提供后在此登记。</li>
+    <li data-ceo-item="filing"><b>网站备案 + ICP 号</b> &mdash; 境内域名须完成 ICP 备案，商户平台审核会核验主体与域名一致。</li>
+    <li data-ceo-item="miniapp"><b>小程序 appid + secret</b> &mdash; appid 可登记；secret 只进 .env（不入 git），也不在任何页面或浏览器里粘贴。</li>
+    <li data-ceo-item="pubkey"><b>平台公钥（APIv3 RSA 验签模式）</b> &mdash; 现有 HMAC 替身已通过；切真实 APIv3 验签需要商户平台下发的平台公钥。</li>
+  </ul>
+  <p>接入自查单把 8 项（含我方 2 项证据）逐项列出并现场重算证据：merchant-onboard.html</p>
+</div>
+<h2>三条常驻说明</h2>
+<div class="notices">
+  <p data-notice="aigc">AI 生成标识：本页由 AI 参与生成并整理，数字均为本机实测派生。</p>
+  <p data-notice="advice">非投顾提示：本页与全部预览面不构成任何投资建议。</p>
+  <p data-notice="mock">MOCK：本页列出的支付、账本、权益流程全部是页内模拟，不接真实资金通道。</p>
+</div>
+<footer>sources: state/start-here-faces.json 0ee38f1117f869c3 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
+</div>
+</body>
+</html>

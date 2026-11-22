@@ -1,0 +1,12 @@
+faces=44 operable=7 linked_from_index=42
+  OPERABLE buyer-trial.html             ops=3   in=0 btn=3 sel=0 ta=0 ls=False ext=0 linked=True
+  OPERABLE filing-checklist.html        ops=21  in=21 btn=0 sel=0 ta=0 ls=True ext=0 linked=True
+  OPERABLE index.html                   ops=2   in=0 btn=2 sel=0 ta=0 ls=False ext=0 linked=False
+  OPERABLE lobby-protocol-map.html      ops=1   in=1 btn=0 sel=0 ta=0 ls=True ext=0 linked=True
+  OPERABLE merchant-onboard.html        ops=9   in=8 btn=1 sel=0 ta=0 ls=True ext=0 linked=False
+  OPERABLE money-path-demo.html         ops=3   in=3 btn=0 sel=0 ta=0 ls=True ext=0 linked=True
+  OPERABLE ship-checklist.html          ops=12  in=11 btn=1 sel=0 ta=0 ls=True ext=0 linked=True
+operable_not_linked_from_index=2 ['index.html', 'merchant-onboard.html']
+faces_with_external_refs=0
+index_bytes=39080 index_links=42
+index_sha256=ff414a3de6ce04ac

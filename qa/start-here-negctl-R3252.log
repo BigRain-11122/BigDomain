@@ -1,0 +1,9 @@
+baseline               rc=0 VERDICT PASS criteria=6 faces=44 operable=6 missing_ceo=6 external_refs=0
+tampered_count         rc=2 FAIL SH1 count:operable page=7 fresh=6 |   FAIL SH6 page_out_of_date | VERDICT FAIL criteria=6 failures=2
+dropped_card           rc=2 FAIL SH2 listed=['buyer-trial.html', 'filing-checklist.html', 'lobby-protocol-map.html', 'merchant-onboard.html', 'ship-checklist.html'] fresh=['buyer-trial.html', 'filing-checklist.html', 'lobby-protocol-map.html', 'merchant-onboard.html', 'money-path-demo.html', 'ship-checklist.html'] |   FAIL SH6 page_out_of_date | 
+dead_link              rc=2 FAIL SH2 dead_link=buyer-trial-gone.html |   FAIL SH6 page_out_of_date | VERDICT FAIL criteria=6 failures=2
+missing_entry          rc=2 FAIL SH3 ship-checklist.html missing label |   FAIL SH3 ship-checklist.html missing can |   FAIL SH3 ship-checklist.html missing cannot |   FAIL SH6 page_out_of_date | VERDICT FAIL criteria=6 failures=4
+external_ref           rc=2 FAIL SH2 external_ref_present |   FAIL SH6 page_out_of_date | VERDICT FAIL criteria=6 failures=2
+WROTE preview\start-here.html html=8033B operable=6 faces=44 missing=6
+RESTORED check: restored               rc=0 VERDICT PASS criteria=6 faces=44 operable=6 missing_ceo=6 external_refs=0
+NEGCTL PASS cases=7
