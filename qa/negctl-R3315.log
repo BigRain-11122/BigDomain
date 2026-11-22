@@ -1,0 +1,7 @@
+R3315 NEGATIVE CONTROLS (mutants compiled in memory from the shipped source; no live byte moved)
+NC1 drop `and not missing` from phase_registry return -> gate_ok=True on a planted absent row, so the refusal arm bites (shipped answers False and names E_RCA_MISSING_PATH).
+NC2 remove `inherited -= len(missing)` -> REGISTRY rows=2 declared=1 inherited=1 missing=1 (sum 3 != 2), so AC-RCA7(d) bites on the arithmetic it publishes.
+NC3 blank the os.path.exists probe in registry_absent -> gate_ok=True, i.e. an absent row is no longer named (shipped answers False).
+NC4 remove the `if registry_only and only is not None` clash guard from a copied runner -> clash_word=False and the REGISTRY-ONLY branch runs with --only given, so AC-RCA8(b) bites on the word it requires.
+Clean control: the shipped source answers gate_ok=False with E_RCA_MISSING_PATH (NC1/NC3 anchor) and rc=2 with E_RCA_FLAG_CLASH (NC4 anchor).
+Carried, not claimed: the full 761-row battery was NOT re-run this round (5-minute leg family), so R3313's AC-RCA5 stays proven by code path only.

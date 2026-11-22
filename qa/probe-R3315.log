@@ -1,0 +1,17 @@
+PROBE R3315 - three board questions, read-only first
+A1 live registry gate ok=True line=REGISTRY rows=761 declared=246 inherited=515 missing=0 dup=0 zero=0 drift=0
+A2 live rows=761 declared=246 inherited=515 missing=0 drift=0 dup=0
+A3 census_rc=0 line=REGISTRY COUNTER CENSUS rows=761 readable=761 unparsed=0 silent=0 assembled_print_lines=302
+A4 Q1 VERDICT: proxy refused - census grades whether each suite's SUITE line is extractable, and it calls all 761 rows readable while 515 of them declare no criteria, so the buckets cannot separate the unsupervised set.
+B1 Q2 planted absent row: gate_ok=False refusal=E_RCA_MISSING_PATH label=gone path=test_gone.py
+B2 Q2 VERDICT: 0 live paths are absent, and the seam was real - the reader folded an unreadable file into `inherited`, which a --only run of other rows never contradicted; one absent row now prints its own name.
+C1 registry-only rc=0 registry_line=1 suites_started=0 final=REGISTRY-ONLY rows=761 criteria=6343 suites_started=0 tree_law=not-run PASS runner_pass=False
+C2 clash rc=2 word=True suites_started=0
+C3 one-row regression rc=0 partial=True
+C4 Q3 VERDICT: --registry-only grades the whole table with zero suites and never borrows the PASS sentence; the two questions are different questions and are refused together.
+NEGATIVE CONTROLS (mutants loaded from source, no live byte moved)
+NC NC1-drop-missing-arm -> gate_ok=True
+NC NC2-keep-missing-in-inherited -> gate_ok=False line=REGISTRY rows=2 declared=1 inherited=1 missing=1 dup=0 zero=0 drift=0
+NC NC3-blank-absent-reader -> gate_ok=True
+NC4-clash-removed -> rc=2 clash_word=False registry_only_branch=True
+PROBE DONE

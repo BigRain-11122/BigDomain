@@ -5997,7 +5997,7 @@ SUITES = [
     # (AC-RCA6 pinned in src/os/backlog.md as the R3314 PIN row BEFORE this
     # suite and this row existed.)
     ("os-runner-registry-face",
-     os.path.join("..", "os", "test_runner_registry_face.py"), 6),
+     os.path.join("..", "os", "test_runner_registry_face.py"), 12),
     # R2417: the abort face names the suite a body died on but never whether
     # that abort still matters - measured at R2403 over the real pile, the
     # aborted bodies had no way to be told apart from live debt. A body is now
@@ -8340,16 +8340,41 @@ def registry_declarations(rows):
     return declared, len(rows) - declared, drift, dups, zeros
 
 
+def registry_absent(rows):
+    """R3315 AC-RCA7: name the rows whose suite path is not on disk.
+
+    The declaration reader treats an unreadable file as `continue`, so a
+    renamed or absent suite was counted as `inherited` - indistinguishable
+    from a suite that simply declares no count. A full run would catch it
+    through the suite's own exit code, but a `--only` run of other rows never
+    touches it while the REGISTRY line still claims it inherited a cell.
+    Returns [(label, rel)]."""
+    missing = []
+    for label, rel, _crit in rows:
+        if not os.path.exists(os.path.join(BASE, rel)):
+            missing.append((label, rel))
+    return missing
+
+
 def phase_registry(rows):
-    """R3314 AC-RCA6: refuse a registry whose hand-written count disagrees with
-    the suite that owns the number, BEFORE the first suite starts.
+    """R3314 AC-RCA6 / R3315 AC-RCA7: refuse a registry whose hand-written
+    count disagrees with the suite that owns the number, and refuse a row
+    whose suite file is absent, BEFORE the first suite starts.
 
     One line is always published so a green gate is a readable fact rather than
-    a silence; every refusal names its own shape."""
+    a silence; every refusal names its own shape. `inherited` counts only rows
+    that really have no declaration, and the three buckets sum to the row
+    count."""
     declared, inherited, drift, dups, zeros = registry_declarations(rows)
-    print("REGISTRY rows=%d declared=%d inherited=%d dup=%d zero=%d drift=%d"
-          % (len(rows), declared, inherited, len(dups), len(zeros),
-             len(drift)), flush=True)
+    missing = registry_absent(rows)
+    inherited -= len(missing)
+    print("REGISTRY rows=%d declared=%d inherited=%d missing=%d dup=%d"
+          " zero=%d drift=%d"
+          % (len(rows), declared, inherited, len(missing), len(dups),
+             len(zeros), len(drift)), flush=True)
+    for label, rel in missing:
+        print("E_RCA_MISSING_PATH label=%s path=%s" % (label, rel),
+              flush=True)
     for label, table, suite in drift:
         print("E_RCA_CRIT_DRIFT label=%s table=%d suite=%d"
               % (label, table, suite), flush=True)
@@ -8357,7 +8382,7 @@ def phase_registry(rows):
         print("E_RCA_DUP_LABEL label=%s" % label, flush=True)
     for label in zeros:
         print("E_RCA_ZERO_CRIT label=%s" % label, flush=True)
-    return not drift and not dups and not zeros
+    return not drift and not dups and not zeros and not missing
 
 
 def phase_suites(selected=None):
@@ -8412,6 +8437,20 @@ def _parse_only(args):
             rest.append(arg)
         i += 1
     return rest, only
+
+
+def _parse_registry_only(args):
+    """R3315 AC-RCA8: --registry-only grades the WHOLE table and starts no
+    suite, so a reader who runs one row can still ask whether the registry as
+    a whole is clean. Every other argument keeps its positional meaning."""
+    rest = []
+    flag = False
+    for arg in args:
+        if arg == "--registry-only":
+            flag = True
+        else:
+            rest.append(arg)
+    return rest, flag
 
 
 def _select_suites(spec):
@@ -8708,6 +8747,7 @@ def main(argv):
     except (AttributeError, ValueError):
         pass
     rest, only = _parse_only(argv[1:])
+    rest, registry_only = _parse_registry_only(rest)
     if len(rest) < 1:
         # R1836 AC-SL1 (pre-registered in state/queue/tech.md before
         # this code): with no evidence path the output goes to whoever
@@ -8721,6 +8761,29 @@ def main(argv):
         tee = Tee(rest[0])
         sys.stdout = tee
     t0 = time.time()
+    if registry_only and only is not None:
+        # R3315 AC-RCA8(b): the whole-table question and the one-row question
+        # are different questions, so the flags are refused together instead
+        # of one silently winning.
+        print("E_RCA_FLAG_CLASH --registry-only grades the whole table and "
+              "cannot be combined with --only=%s" % only, flush=True)
+        if tee is not None:
+            sys.stdout = tee.stdout
+            tee.close()
+        return 2
+    if registry_only:
+        # R3315 AC-RCA8(a): grade the whole table and start no suite. The
+        # sentence says what was NOT checked - this entry reads the registry
+        # source only, so it says nothing about the tree law or any suite.
+        reg_ok = phase_registry(SUITES)
+        print("REGISTRY-ONLY rows=%d criteria=%d suites_started=0"
+              " tree_law=not-run %s"
+              % (len(SUITES), sum(int(row[2]) for row in SUITES),
+                 "PASS" if reg_ok else "FAIL"), flush=True)
+        if tee is not None:
+            sys.stdout = tee.stdout
+            tee.close()
+        return 0 if reg_ok else 2
     selected = None
     if only is not None:
         # R3313 AC-RCA3: a bad selector stops here, before the law phase
