@@ -1,0 +1,14 @@
+Q1 rounds_in_record_since_R3257=7
+  R3257 hosts=['same-host:1,different-host:0,one-side:0,no-host:4,unknown:0'] expr=- cond=- lexical=-
+  R3258 hosts=['same-host:1,different-host:0,one-side:0,no-host:4,unknown:0,lexical:0'] expr=- cond=- lexical=['0/0']
+  R3259 hosts=- expr=- cond=- lexical=-
+  R3260 hosts=- expr=- cond=- lexical=-
+  R3261 hosts=- expr=['0'] cond=- lexical=-
+  R3262 hosts=- expr=- cond=['0'] lexical=-
+  R3263 hosts=- expr=- cond=- lexical=-
+Q1 distinct_hosts=['same-host:1,different-host:0,one-side:0,no-host:4,unknown:0', 'same-host:1,different-host:0,one-side:0,no-host:4,unknown:0,lexical:0'] distinct_expr=['0'] distinct_cond=['0']
+Q2 key_faces=['filing-checklist.html', 'lobby-protocol-map.html', 'merchant-onboard.html', 'money-path-demo.html', 'ship-checklist.html']
+  money-path-demo.html verdict=same-host write=['T[n]'] read=['T[n]'] expr=0 cond=0 lexical=0
+Q2 faces_with_a_reading=1 of 6 operable
+Q3 page_bytes=28959 banner_bytes=405
+Q3 criteria_now=21 expr_block_present=True cond_block_present=True

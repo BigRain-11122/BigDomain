@@ -16,6 +16,7 @@ header .sub{margin-top:8px;font-size:14px;opacity:.94}
 .count{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.5);border-radius:8px;padding:8px 14px;font-size:13px}
 .count b{font-size:20px;margin-right:6px}
 .kindshead{margin-top:14px;font-size:13px;opacity:.94}
+.freeze{margin-top:14px;background:rgba(255,255,255,.16);border:1px solid #ffd43b;border-radius:8px;padding:9px 13px;font-size:13px}
 .kc{display:inline-block;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:4px 10px;font-size:12px;margin:4px 6px 0 0}
 .kc b{font-size:15px;margin-right:5px}
 .legend{background:#eef2ff;border:1px solid #c7d2fe;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px}
@@ -143,6 +144,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   </div>
   <p class="note">「从未被直接调用」只按本面文本判：跨脚本、内联属性、第三方库包装或 bind 都认不出来；全程读文本，不执行 JS。</p>
   <p class="note">形态只按本面文本判：库包装、跨脚本声明、`window.NAME = …` 都认不出；「变量赋函数」与 `function` 同权不等于运行时等价——本判据只拒绝把两种声明并入一处，不推断 var 提升后的赋值顺序；全程读文本，不执行 JS。</p>
+  <p class="freeze" data-freeze="frozen-zero" data-freeze-expr="0" data-freeze-cond="0" data-freeze-lexical="0">零实例读数：表达式体箭头 0 处、条件体 0 处、词法 this 0 处——三档在活树上全为 0，只由私有世界点亮，0 不代表覆盖。自 R3263 起本档冻结：不再新增判据，除非活树真的出现这种写法，或这套读数抓到一次真缺陷。</p>
 </div></header>
 <div class="wrap">
 <h2>能动手的 6 张面（逐个点开）</h2>
@@ -244,7 +246,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p data-notice="advice">非投顾提示：本页与全部预览面不构成任何投资建议。</p>
   <p data-notice="mock">MOCK：本页列出的支付、账本、权益流程全部是页内模拟，不接真实资金通道。</p>
 </div>
-<footer>sources: state/start-here-faces.json e2670994d3f647ac / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
+<footer>sources: state/start-here-faces.json 512f89a8bf8eb087 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
 </div>
 </body>
 </html>

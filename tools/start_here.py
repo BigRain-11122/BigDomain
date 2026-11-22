@@ -875,6 +875,13 @@ def projection():
     expr_total = sum(rows[n]["hosts"]["expr_bodies"] for n in expr_faces)
     cond_faces = [n for n in key_faces if rows[n]["hosts"]["cond_unbal"]]
     cond_total = sum(rows[n]["hosts"]["cond_unbal"] for n in cond_faces)
+    lexical_total = host_lexical_calls
+    # R3263: the three readings this face added after R3257 have never lit on the
+    # live tree. The header banner states which of the two honest situations the
+    # reader is in, derived, never written by hand.
+    freeze_state = ("frozen-zero"
+                    if not (expr_total or cond_total or lexical_total)
+                    else "frozen-live")
     form_counts = {form: 0 for form in HANDLER_FORMS}
     for name in key_faces:
         for form, count in rows[name]["forms"]["forms"].items():
@@ -917,6 +924,8 @@ def projection():
         "expr_total": expr_total,
         "cond_faces": cond_faces,
         "cond_total": cond_total,
+        "lexical_total": lexical_total,
+        "freeze_state": freeze_state,
         "form_counts": form_counts,
         "form_calls": form_calls,
         "form_named": form_named,
@@ -1290,6 +1299,15 @@ def render(proj):
     cond_counts_html = ('  <span class="kc" data-cond-total="%d"><b>%d</b>%s</span>'
                         % (proj["cond_total"], proj["cond_total"],
                            esc(doc.get("cond_head", ""))))
+    freeze_fmt = doc.get("freeze_zero_fmt" if proj["freeze_state"] == "frozen-zero"
+                         else "freeze_live_fmt") or ""
+    freeze_html = ('  <p class="freeze" data-freeze="%s" data-freeze-expr="%d" '
+                   'data-freeze-cond="%d" data-freeze-lexical="%d">%s</p>'
+                   % (proj["freeze_state"], proj["expr_total"], proj["cond_total"],
+                      proj["lexical_total"],
+                      esc(freeze_fmt.format(expr=proj["expr_total"],
+                                            cond=proj["cond_total"],
+                                            lex=proj["lexical_total"]))))
     hosts_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
                    '  </div>\n  <p class="kindshead">%s</p>\n'
                    '  <div class="counts kinds">\n%s\n  </div>\n'
@@ -1384,6 +1402,8 @@ def render(proj):
         "border-radius:8px;padding:8px 14px;font-size:13px}\n"
         ".count b{font-size:20px;margin-right:6px}\n"
         ".kindshead{margin-top:14px;font-size:13px;opacity:.94}\n"
+        ".freeze{margin-top:14px;background:rgba(255,255,255,.16);border:1px solid #ffd43b;"
+        "border-radius:8px;padding:9px 13px;font-size:13px}\n"
         ".kc{display:inline-block;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.4);"
         "border-radius:6px;padding:4px 10px;font-size:12px;margin:4px 6px 0 0}\n"
         ".kc b{font-size:15px;margin-right:5px}\n"
@@ -1429,6 +1449,7 @@ def render(proj):
         "  <p class=\"kindshead\">%s</p>\n"
         "  <div class=\"counts kinds\">\n%s\n  </div>\n"
         "%s\n"
+        "%s\n"
         "</div></header>\n<div class=\"wrap\">\n"
         "<h2>%s</h2>\n<div class=\"legend\">\n%s\n</div>\n%s\n"
         "<h2>%s</h2>\n<div class=\"missing\">\n%s\n</div>\n"
@@ -1440,7 +1461,7 @@ def render(proj):
         esc(doc["h1"]), esc(sub),
         proj["faces_total"], esc(doc.get("count_faces", "")),
         len(proj["operable"]), esc(doc.get("count_operable", "")),
-        esc(doc.get("kind_counts_head", "")), kind_counts, keys_block,
+        esc(doc.get("kind_counts_head", "")), kind_counts, keys_block, freeze_html,
         esc(doc["h2_can"].format(operable=len(proj["operable"]))), legend_block, "\n".join(cards),
         esc(doc["h2_cannot"]), missing_block,
         esc(doc["h2_rule"]), notices,
@@ -2049,12 +2070,50 @@ def check():
     if "{n}" not in (proj["doc"].get("cond_fmt") or ""):
         failures.append("SH20 slot_missing:cond_fmt")
 
+    # AC-SH21 (R3263): the three readings added after R3257 have never lit on the live
+    # tree (R3261 measured zero expression arrows, R3262 zero conditional bodies), and
+    # two rounds deepened a table only private worlds can light. The header now states
+    # which situation the reader is in - derived from this round's reading, never
+    # written by hand - and the state word, the three counts and the sentence are all
+    # graded, so a page that lets a zero read as coverage reddens instead of reassuring.
+    for key in ("freeze_zero_fmt", "freeze_live_fmt"):
+        word = proj["doc"].get(key) or ""
+        if not word.strip():
+            failures.append("SH21 word_missing:%s" % key)
+            continue
+        for slot in ("{expr}", "{cond}", "{lex}"):
+            if slot not in word:
+                failures.append("SH21 slot_missing:%s:%s" % (key, slot))
+    got = re.search(r'data-freeze="([^"]+)" data-freeze-expr="(\d+)" '
+                    r'data-freeze-cond="(\d+)" data-freeze-lexical="(\d+)">([^<]*)<',
+                    text)
+    if not got:
+        failures.append("SH21 banner_missing")
+    else:
+        state_word, e_raw, c_raw, l_raw, said = got.groups()
+        if state_word != proj["freeze_state"]:
+            failures.append("SH21 state page=%s fresh=%s"
+                            % (state_word, proj["freeze_state"]))
+        fresh = (proj["expr_total"], proj["cond_total"], proj["lexical_total"])
+        if (int(e_raw), int(c_raw), int(l_raw)) != fresh:
+            failures.append("SH21 counts page=%s fresh=%s"
+                            % ((e_raw, c_raw, l_raw), fresh))
+        want_key = ("freeze_zero_fmt" if proj["freeze_state"] == "frozen-zero"
+                    else "freeze_live_fmt")
+        want = (proj["doc"].get(want_key) or "").format(
+            expr=proj["expr_total"], cond=proj["cond_total"],
+            lex=proj["lexical_total"])
+        if said != esc(want):
+            failures.append("SH21 sentence differs from the fresh derivation")
+        if proj["freeze_state"] == "frozen-zero" and fresh != (0, 0, 0):
+            failures.append("SH21 zero_state_with_counts")
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=20 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=21 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=20 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+    print("VERDICT PASS criteria=21 faces=%d operable=%d missing_ceo=%d external_refs=0 "
           "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
           "expr_bodies=%d forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
@@ -2074,7 +2133,8 @@ def check():
                       for form in HANDLER_FORMS)
              + " decl=%s" % ",".join("%s:%d" % (form, proj["named_decl_counts"][form])
                                      for form in DECL_FORMS)
-             + " cond_unbal=%d" % proj["cond_total"]))
+             + " cond_unbal=%d freeze=%s" % (proj["cond_total"],
+                                             proj["freeze_state"])))
 
     return 0
 
