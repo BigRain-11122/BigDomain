@@ -8437,6 +8437,9 @@ def phase_suites(selected=None):
     instead of silent until it returns. R3316 AC-RCA9/AC-RCA10 adds the
     runtime count reading: a green suite whose own fraction disagrees with
     the table cell stops the leg by name. Returns (green, rows, criteria)."""
+    # R3317 contract note: the triple IS the contract. Consumers must unpack
+    # all three; a bare truthiness test is the stale shape that read red in
+    # two suites after R3313 changed the return type.
     rows = SUITES if selected is None else [
         row for row in SUITES if row[0] in selected]
     green = 0

@@ -210,7 +210,12 @@ def ac_rsc5():
             sys.stdout = saved_stdout
         one_fail_named = captured.count("FAIL suite cap-fixture") == 1
         cap_named = "suite cap=1s" in captured
-        ok = (states is True and ran is False and one_fail_named
+        # R3313 changed the return contract from one boolean to the triple
+        # (green, rows, criteria); this arm must read the same fact the shipped
+        # main() reads, so a timeout reads as zero green over one row. A bare
+        # truth test on the tuple would pass for every outcome and is the exact
+        # staleness this arm caught in R3317.
+        ok = (states is True and ran == (0, 1, 3) and one_fail_named
               and cap_named)
         if not ok:
             print("  measured: summary_states_cap=%r ran=%r one_fail=%r "

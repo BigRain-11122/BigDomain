@@ -603,10 +603,12 @@ check('"%s"' % LABEL in runner_src and ", %d)" % EXPECTED_CRITERIA in runner_src
       "AC-HK7 %s registered with its criterion count (%d)"
       % (LABEL, EXPECTED_CRITERIA))
 
-# AC-HK8 - the battery leg asks the law BEFORE any suite runs.
+# AC-HK8 - the battery leg asks the law BEFORE any suite runs. R3317: the leg
+# now consumes a triple, so anchor on the CALL inside main() instead of the old
+# exact assignment literal; the property under test is ordering, not arity.
 main_at = runner_src.find("def main(argv):")
 law_row = runner_src.find("law_ok = phase_freeze_law()")
-suite_at = runner_src.find("suites_ok = phase_suites()")
+suite_at = runner_src.find("phase_suites(", max(main_at, 0))
 check("import one_off_round_scripts as _oor" in runner_src
       and main_at != -1 and law_row > main_at
       and suite_at != -1 and law_row < suite_at,
