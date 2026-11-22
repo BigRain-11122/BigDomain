@@ -1,0 +1,27 @@
+faces=44 operable=6 steps=4 excluded=2
+steps=filing-checklist.html,ship-checklist.html,merchant-onboard.html,lobby-protocol-map.html
+excluded=buyer-trial.html:screen,money-path-demo.html:orphan
+
+buyer-trial.html         kind=screen   NO KEY EXPRESSIONS
+filing-checklist.html    kind=persists decls=NS='bd-filing-checklist-v1'
+    write=NS                           -> LITERAL 'bd-filing-checklist-v1'  symbols[NS:lit='bd-filing-checklist-v1']
+    read =NS                           -> LITERAL 'bd-filing-checklist-v1'
+
+lobby-protocol-map.html  kind=persists decls=NS='bd-lobby-protocol-map-v1'
+    write=NS                           -> LITERAL 'bd-lobby-protocol-map-v1'  symbols[NS:lit='bd-lobby-protocol-map-v1']
+    read =NS                           -> LITERAL 'bd-lobby-protocol-map-v1'
+
+merchant-onboard.html    kind=persists decls=KEY='bd-merchant-onboard-v1'
+    write=KEY                          -> LITERAL 'bd-merchant-onboard-v1'  symbols[KEY:lit='bd-merchant-onboard-v1']
+    read =KEY                          -> LITERAL 'bd-merchant-onboard-v1'
+
+money-path-demo.html     kind=persists decls=NS='bd-money-path-demo-v1'
+    write=NS+""+this.getAttribute("")  -> runtime:this                  symbols[NS:lit='bd-money-path-demo-v1']
+    read =NS+""+kk                     -> runtime:kk
+
+ship-checklist.html      kind=persists decls=NS='bd-ship-checklist-v1'
+    write=NS                           -> LITERAL 'bd-ship-checklist-v1'  symbols[NS:lit='bd-ship-checklist-v1']
+    read =NS                           -> LITERAL 'bd-ship-checklist-v1'
+
+write-expression totals: literal=4 runtime=1 faces-without-keys=1
+step faces with an unresolvable write expression: none

@@ -128,6 +128,75 @@ def _key_symbols(expr):
     return sorted({tok for tok in IDENT.findall(bare) if tok not in KEYWORDS})
 
 
+# R3268: a step line told the reader that `NS` stays in this machine's browser, and
+# `NS` is a name in the script - a reader who opens devtools cannot search for it.
+# When a key expression is only string literals and names THIS file binds to a
+# literal, the value is knowable from these bytes alone and is what must be printed;
+# anything else (a call, a member access, a name with no literal binding) is a key
+# formed at runtime, and the page must say so rather than dressing a variable name up
+# as a searchable string.
+LIT_PART = re.compile(r"\s*\+\s*|'[^']*'|\"[^\"]*\"|[A-Za-z_$][\w$]*")
+DECL_STR = re.compile(r"(?:var|let|const)\s+([A-Za-z_$][\w$]*)\s*=\s*"
+                      r"(?:'([^']*)'|\"([^\"]*)\")")
+KEY_KINDS = ("literal", "runtime", "none")
+
+
+def _literal_decls(text):
+    """Names bound to a pure string literal in THIS file, one hop. A name bound
+    more than once to different values is left out: picking one would turn a
+    derivation into a guess about which declaration the page actually runs."""
+    seen = {}
+    for match in DECL_STR.finditer(text):
+        value = match.group(2) if match.group(2) is not None else match.group(3)
+        seen.setdefault(match.group(1), set()).add(value)
+    return {name: next(iter(values)) for name, values in seen.items()
+            if len(values) == 1}
+
+
+def resolve_key_expr(expr, table):
+    """The string a key expression evaluates to, or None when it needs the page.
+
+    Accepted: concatenation of string literals and names bound to a literal in the
+    same file. Refused: members, calls, indexes and unbound names - those become a
+    string only when the script runs.
+    """
+    parts, pos = [], 0
+    for match in LIT_PART.finditer(expr):
+        if match.start() != pos:
+            return None
+        pos = match.end()
+        token = match.group(0)
+        if token.strip() == "+":
+            continue
+        if token[0] in "'\"":
+            if len(token) < 2 or token[-1] != token[0]:
+                return None
+            parts.append(token[1:-1])
+            continue
+        if token in table:
+            parts.append(table[token])
+            continue
+        return None
+    if pos != len(expr):
+        return None
+    return "".join(parts)
+
+
+def key_naming(row):
+    """How a face names its key, as one of three closed kinds: `literal` carries the
+    string a reader can search for, `runtime` carries the expression that only
+    becomes a string when the page runs, `none` is a face with no named key."""
+    keys = row.get("keys")
+    if not keys or not keys["write"]:
+        return {"kind": "none", "value": None, "expr": None}
+    if keys["literal_all"]:
+        return {"kind": "literal",
+                "value": " , ".join(keys["literal"][expr]
+                                    for expr in keys["write"]),
+                "expr": None}
+    return {"kind": "runtime", "value": None, "expr": keys["runtime_exprs"][0]}
+
+
 def key_reading(text):
     """How a face keys its storage: which expressions it writes and reads, and the
     symbols those expressions rest on. Text only - no JS is ever executed."""
@@ -144,12 +213,19 @@ def key_reading(text):
     base_read = sorted({tok for expr in reads for tok in symbols[expr]})
     unresolved = sorted({tok for expr in symbols for tok in symbols[expr]
                          if tok not in declared})
+    table = _literal_decls(text)
+    literals = {expr: resolve_key_expr(expr, table) for expr in sorted(writes)}
+    runtime_exprs = sorted(expr for expr, value in literals.items()
+                           if value is None)
     return {
         "write": sorted(writes), "read": sorted(reads), "remove": sorted(removes),
         "base_write": base_write, "base_read": base_read,
         "expr_paired": bool(reads) and reads <= writes,
         "base_paired": set(base_read) <= set(base_write),
         "unresolved": unresolved,
+        "literal": literals,
+        "literal_all": bool(writes) and not runtime_exprs,
+        "runtime_exprs": runtime_exprs,
     }
 
 
@@ -1016,6 +1092,12 @@ def projection():
     named_total = sum(named_decl_counts.values())
     steps, steps_excluded = step_walk(rows, operable)
     step_keys = {name: list(rows[name]["keys"]["write"]) for name in steps}
+    step_key_names = {name: key_naming(rows[name]) for name in steps}
+    branch_key_names = {name: key_naming(rows[name])
+                        for name, _reason in steps_excluded}
+    key_name_counts = {kind: 0 for kind in KEY_KINDS}
+    for name in operable:
+        key_name_counts[key_naming(rows[name])["kind"]] += 1
     return {
         "rows": rows,
         "doc": doc,
@@ -1060,6 +1142,9 @@ def projection():
         "steps": steps,
         "steps_excluded": steps_excluded,
         "step_keys": step_keys,
+        "step_key_names": step_key_names,
+        "branch_key_names": branch_key_names,
+        "key_name_counts": key_name_counts,
         "data16": sha16(DATA),
     }
 
@@ -1067,6 +1152,17 @@ def projection():
 def esc(text):
     return (text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
             .replace('"', "&quot;"))
+
+
+def key_name_text(naming, doc):
+    """The phrase a step or branch sentence puts where the key name goes. One
+    function for the renderer and the checker, so the page cannot print one thing
+    while the criterion recomputes another."""
+    if naming["kind"] == "literal":
+        return (doc.get("key_literal_fmt") or "").format(value=naming["value"])
+    if naming["kind"] == "runtime":
+        return (doc.get("key_runtime_fmt") or "").format(expr=naming["expr"])
+    return doc.get("step_key_none") or ""
 
 
 def kind_tag(doc, kind):
@@ -1537,14 +1633,17 @@ def render(proj):
     if steps:
         for index, name in enumerate(steps, 1):
             keys = proj["step_keys"][name]
-            shown = " , ".join(keys) or (doc.get("step_key_none") or "")
+            naming = proj["step_key_names"][name]
             steps_html.append(
                 '  <p class="step" data-step="%d" data-step-face="%s" '
-                'data-step-ops="%d" data-step-key="%s">%s</p>'
+                'data-step-ops="%d" data-step-key="%s" '
+                'data-step-key-kind="%s" data-step-literal="%s">%s</p>'
                 % (index, esc(name), proj["rows"][name]["ops"],
-                   esc(" , ".join(keys)),
+                   esc(" , ".join(keys)), naming["kind"],
+                   esc(naming["value"] or ""),
                    esc((doc.get("step_fmt") or "").format(
-                       n=index, face=name, key=shown))))
+                       n=index, face=name,
+                       key=key_name_text(naming, doc)))))
     else:
         steps_html.append('  <p data-step-absent>%s</p>'
                           % esc(doc.get("step_absent") or ""))
@@ -1561,21 +1660,39 @@ def render(proj):
                esc((doc.get("step_excluded_fmt") or "").format(
                    main=len(steps), side=len(proj["steps_excluded"])))))
         for index, (name, reason) in enumerate(proj["steps_excluded"], 1):
+            naming = proj["branch_key_names"].get(name) or {"kind": "none",
+                                                            "value": None,
+                                                            "expr": None}
             steps_html.append(
                 '  <p class="branch" data-branch="%d" data-branch-face="%s" '
-                'data-branch-reason="%s">%s</p>'
-                % (index, esc(name), esc(reason),
+                'data-branch-reason="%s" data-branch-key-kind="%s" '
+                'data-branch-literal="%s">%s</p>'
+                % (index, esc(name), esc(reason), naming["kind"],
+                   esc(naming["value"] or ""),
                    esc((doc.get("branch_fmt") or "").format(
                        n=index, face=name,
-                       word=branch_words.get(reason) or ""))))
+                       word=branch_words.get(reason) or "",
+                       key=key_name_text(naming, doc)))))
     else:
         steps_html.append(
             '  <p class="branchhead" data-branch-count="0" '
             'data-branch-main="%d" data-branch-absent>%s</p>'
             % (len(steps), esc(doc.get("branch_absent") or "")))
+    key_counts = proj["key_name_counts"]
+    keynames_html = (
+        '  <p class="keynames" data-key-literal="%d" data-key-runtime="%d" '
+        'data-key-none="%d">%s</p>'
+        % (key_counts["literal"], key_counts["runtime"], key_counts["none"],
+           esc((doc.get("key_head_fmt") or "").format(
+               total=len(proj["operable"]), lit=key_counts["literal"],
+               run=key_counts["runtime"], none=key_counts["none"]))))
+    if not key_counts["literal"]:
+        keynames_html += ('\n  <p data-key-absent>%s</p>'
+                          % esc(doc.get("key_absent") or ""))
     steps_head = ('  <p class="kindshead">%s</p>\n'
                   % esc(doc.get("step_head") or ""))
-    steps_block = steps_head + ("\n".join(steps_html) if steps_html else "")
+    steps_block = (keynames_html + "\n" + steps_head
+                   + ("\n".join(steps_html) if steps_html else ""))
 
     if proj["missing"]:
         items = "\n".join(
@@ -2486,7 +2603,7 @@ def check():
     excluded = proj["steps_excluded"]
     rows_step = re.findall(
         r'data-step="(\d+)" data-step-face="([^"]+)" data-step-ops="(\d+)" '
-        r'data-step-key="([^"]*)">([^<]*)<', text)
+        r'data-step-key="([^"]*)"[^>]*>([^<]*)<', text)
     step_absent = re.findall(r'<p data-step-absent>', text)
     if not steps:
         if len(step_absent) != 1:
@@ -2519,9 +2636,13 @@ def check():
                 if key_raw != esc(" , ".join(keys)):
                     failures.append("SH24 keys:%s page=%s fresh=%s"
                                     % (name, key_raw, keys))
-                shown = " , ".join(keys) or (proj["doc"].get("step_key_none") or "")
+                # R3268: the sentence's key slot is no longer the raw expression
+                # (`NS`), it is what that expression resolves to in these bytes
+                # (or a named runtime sentence). Same one-derivation rule: the
+                # page and the criterion both call key_name_text().
+                naming = proj["step_key_names"][name]
                 want = (proj["doc"].get("step_fmt") or "").format(
-                    n=index, face=name, key=shown)
+                    n=index, face=name, key=key_name_text(naming, proj["doc"]))
                 if said != esc(want):
                     failures.append("SH24 sentence:%s differs from the fresh "
                                     "derivation" % name)
@@ -2573,7 +2694,7 @@ def check():
                         % (len(step_set), len(branch_set), len(proj["operable"])))
     branch_rows = re.findall(
         r'<p class="branch" data-branch="(\d+)" data-branch-face="([^"]+)" '
-        r'data-branch-reason="([^"]+)">([^<]*)<', text)
+        r'data-branch-reason="([^"]+)"[^>]*>([^<]*)<', text)
     if excluded:
         head = re.search(
             r'<p class="branchhead" data-step-excluded="([^"]*)" '
@@ -2623,8 +2744,12 @@ def check():
                 if name not in branch_set:
                     failures.append("SH25 not_a_branch:%s" % name)
                     continue
+                naming = proj["branch_key_names"].get(name) or {"kind": "none",
+                                                                "value": None,
+                                                                "expr": None}
                 want = (proj["doc"].get("branch_fmt") or "").format(
-                    n=index, face=name, word=branch_words.get(reason) or "")
+                    n=index, face=name, word=branch_words.get(reason) or "",
+                    key=key_name_text(naming, proj["doc"]))
                 if said != esc(want):
                     failures.append("SH25 sentence:%s differs from the fresh "
                                     "derivation" % name)
@@ -2635,12 +2760,111 @@ def check():
         if len(absent) != 1:
             failures.append("SH25 absent_line expected=1 got=%d" % len(absent))
 
+    # AC-SH26 (R3268): the walk told a reader that `NS` stays in this machine's
+    # browser - and `NS` is a name in the script, so a reader who opens devtools
+    # has nothing to search for. Four of the six operable faces bind their key to
+    # a literal in their own bytes, so the page can hand over a string that really
+    # is there; one forms its key at runtime and must say exactly that; one has no
+    # key. Three closed kinds, one counter each, and every row is graded against a
+    # FRESH resolution of that face's own bytes, never against the page itself.
+    for key in ("key_head", "key_head_fmt", "key_literal_fmt",
+                "key_runtime_fmt", "key_absent"):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH26 word_missing:%s" % key)
+    for slot in ("{total}", "{lit}", "{run}", "{none}"):
+        if slot not in (proj["doc"].get("key_head_fmt") or ""):
+            failures.append("SH26 slot_missing:key_head_fmt:%s" % slot)
+    if "{value}" not in (proj["doc"].get("key_literal_fmt") or ""):
+        failures.append("SH26 slot_missing:key_literal_fmt:{value}")
+    if "{expr}" not in (proj["doc"].get("key_runtime_fmt") or ""):
+        failures.append("SH26 slot_missing:key_runtime_fmt:{expr}")
+    if "{key}" not in (proj["doc"].get("branch_fmt") or ""):
+        failures.append("SH26 slot_missing:branch_fmt:{key}")
+    counts = proj["key_name_counts"]
+    head = re.search(
+        r'<p class="keynames" data-key-literal="(\d+)" data-key-runtime="(\d+)" '
+        r'data-key-none="(\d+)">([^<]*)<', text)
+    if not head:
+        failures.append("SH26 head_missing")
+    else:
+        lit_raw, run_raw, none_raw, said = head.groups()
+        got_counts = {"literal": int(lit_raw), "runtime": int(run_raw),
+                      "none": int(none_raw)}
+        for kind in KEY_KINDS:
+            if got_counts[kind] != counts[kind]:
+                failures.append("SH26 count:%s page=%d fresh=%d"
+                                % (kind, got_counts[kind], counts[kind]))
+        if sum(got_counts.values()) != len(proj["operable"]):
+            failures.append("SH26 accounting page=%d operable=%d"
+                            % (sum(got_counts.values()), len(proj["operable"])))
+        want = (proj["doc"].get("key_head_fmt") or "").format(
+            total=len(proj["operable"]), lit=counts["literal"],
+            run=counts["runtime"], none=counts["none"])
+        if said != esc(want):
+            failures.append("SH26 head_sentence differs from the fresh derivation")
+    key_absent_lines = re.findall(r'<p data-key-absent>', text)
+    if counts["literal"]:
+        if key_absent_lines:
+            failures.append("SH26 absent_line_on_literals")
+    elif len(key_absent_lines) != 1:
+        failures.append("SH26 absent_line expected=1 got=%d"
+                        % len(key_absent_lines))
+    fresh = {}
+    for name in proj["operable"]:
+        try:
+            with open(os.path.join(PREVIEW, name), encoding="utf-8",
+                      errors="replace") as handle:
+                raw_text = handle.read()
+        except OSError:
+            failures.append("SH26 face_unreadable:%s" % name)
+            continue
+        fresh[name] = key_naming({"keys": key_reading(raw_text)})
+    step_key_rows = re.findall(
+        r'<p class="step" data-step="\d+" data-step-face="([^"]+)"[^>]*'
+        r'data-step-key-kind="([^"]*)" data-step-literal="([^"]*)"[^>]*>'
+        r'([^<]*)<', text)
+    branch_key_rows = re.findall(
+        r'<p class="branch" data-branch="\d+" data-branch-face="([^"]+)"[^>]*'
+        r'data-branch-key-kind="([^"]*)" data-branch-literal="([^"]*)"[^>]*>'
+        r'([^<]*)<', text)
+    for label, rows_got, want_names in (
+            ("step", step_key_rows, steps),
+            ("branch", branch_key_rows,
+             [name for name, _reason in excluded])):
+        if len(rows_got) != len(want_names):
+            failures.append("SH26 %s_rows expected=%d got=%d"
+                            % (label, len(want_names), len(rows_got)))
+            continue
+        for name, kind_raw, literal_raw, said in rows_got:
+            if name not in fresh:
+                failures.append("SH26 not_operable:%s" % name)
+                continue
+            naming = fresh[name]
+            if kind_raw != naming["kind"]:
+                failures.append("SH26 %s_kind:%s page=%s fresh=%s"
+                                % (label, name, kind_raw, naming["kind"]))
+            if (literal_raw or None) != naming["value"]:
+                failures.append("SH26 %s_literal:%s page=%s fresh=%s"
+                                % (label, name, literal_raw, naming["value"]))
+            if naming["kind"] == "literal":
+                raw_exprs = proj["rows"][name]["keys"]["write"]
+                for expr in raw_exprs:
+                    if esc(expr) in said:
+                        failures.append("SH26 raw_expr_printed:%s=%s"
+                                        % (name, expr))
+            elif naming["kind"] == "runtime":
+                if esc(naming["expr"]) not in said:
+                    failures.append("SH26 runtime_expr_missing:%s" % name)
+            else:
+                if esc(proj["doc"].get("step_key_none") or "") not in said:
+                    failures.append("SH26 none_word_missing:%s" % name)
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=25 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=26 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=25 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+    print("VERDICT PASS criteria=26 faces=%d operable=%d missing_ceo=%d external_refs=0 "
           "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
           "expr_bodies=%d forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
@@ -2668,7 +2892,10 @@ def check():
              % (proj["net"]["state"], proj["net"]["sites"], proj["net"]["total"])
              + " steps=%d excluded=%d branches=%d"
              % (len(proj["steps"]), len(proj["steps_excluded"]),
-                len(proj["steps_excluded"]))))
+                len(proj["steps_excluded"]))
+             + " keyname=%s"
+             % ",".join("%s:%d" % (kind, proj["key_name_counts"][kind])
+                        for kind in KEY_KINDS)))
 
     return 0
 

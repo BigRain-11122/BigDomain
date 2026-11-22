@@ -1,0 +1,38 @@
+OK   C1-live-copy                       rc=0 expect=0 
+OK   C2-header-literal-count            rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 count:literal page=3 fresh=4
+OK   C3-header-sentence                 rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 head_sentence differs from the fresh derivation
+OK   C4-header-block-renamed            rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 head_missing
+OK   C5-step-kind-flipped               rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 step_kind:filing-checklist.html page=runtime fresh=literal
+OK   C6-step-literal-edited             rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 step_literal:ship-checklist.html page=bd-ship-checklist-v2 fresh=bd-ship-checklist-v1
+OK   C7-raw-expr-in-sentence            rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH24 sentence:filing-checklist.html differs from the fresh derivation
+OK   C8-branch-kind-flipped             rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 branch_kind:money-path-demo.html page=literal fresh=runtime
+OK   C9-runtime-expr-dropped            rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH25 sentence:money-path-demo.html differs from the fresh derivation
+OK   C10-header-runtime-count           rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 count:runtime page=0 fresh=1
+OK   C11-absent-on-literals             rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 absent_line_on_literals
+OK   C12-world-all-literal              rc=0 expect=0 
+OK   C13-world-undeclared-symbol        rc=0 expect=0 
+OK   C14-world-two-declarations         rc=0 expect=0 
+OK   C15-word-dropped                   rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH25 sentence:money-path-demo.html differs from the fresh derivation
+NEGCTL PASS cases=15 distinct=15
