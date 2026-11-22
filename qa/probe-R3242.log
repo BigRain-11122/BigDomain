@@ -1,0 +1,31 @@
+ROOT C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain
+VENDOR_DIRS ['__pycache__', '.venv', 'ygo-poc', 'node_modules']
+Q1 walk: read=186 refused_test_prefix=458 refused_vendor=455
+Q1 vendor root .venv        files=453
+          src/sandbox/lobby/.venv/Lib/site-packages/pip/__init__.py
+          src/sandbox/lobby/.venv/Lib/site-packages/pip/__main__.py
+          src/sandbox/lobby/.venv/Lib/site-packages/pip/__pip-runner__.py
+          src/sandbox/lobby/.venv/Lib/site-packages/pip/_internal/__init__.py
+          src/sandbox/lobby/.venv/Lib/site-packages/pip/_internal/build_env.py
+          src/sandbox/lobby/.venv/Lib/site-packages/pip/_internal/cache.py
+Q1 vendor root ygo-poc      files=2
+          src/sandbox/ygo-poc/data/toolchain/goroot/lib/hg/goreposum.py
+          src/sandbox/ygo-poc/data/toolchain/goroot/src/runtime/runtime-gdb.py
+Q1 mention census: files=455 unreadable=0 mentioning=0 cost=0.31s
+Q2 git ls-files src/sandbox rows=601 rc=0
+Q2 root .venv        files=453 tracked_ours=0
+Q2 root ygo-poc      files=2 tracked_ours=0
+Q2 sys.path sample (first 4): ['C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\tmp', 'C:\\Users\\sjs20\\AppData\\Local\\Programs\\Python\\Python314\\python314.zip', 'C:\\Users\\sjs20\\AppData\\Local\\Programs\\Python\\Python314\\DLLs', 'C:\\Users\\sjs20\\AppData\\Local\\Programs\\Python\\Python314\\Lib']
+Q2 root .venv        on_sys_path=2 ['C:\\Users\\sjs20\\AppData\\Roaming\\Python\\Python314\\site-packages', 'C:\\Users\\sjs20\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\site-packages']
+Q2 root ygo-poc      on_sys_path=0 []
+Q3 root .venv        parse_cost=1.17s doors=0 unparsed=0
+Q3 root ygo-poc      parse_cost=0.01s doors=0 unparsed=0
+Q3b proposed VENDOR_DIRS ['__pycache__', '.venv', 'node_modules']
+Q3b walk: read=188 (delta +2) vendor=911 test_prefix=2 cost=0.31s
+Q3b sites=4 (delta +0) unparsed=0 cost=0.71s
+          SITE src/sandbox/frontdoor.py:647
+          SITE src/sandbox/journey_demo.py:90
+          SITE src/sandbox/lobby/msgsec_stub.py:40
+          SITE src/sandbox/lobby/msgsec_stub.py:123
+Q3c ygo-poc file src/sandbox/ygo-poc/data/toolchain/goroot/lib/hg/goreposum.py tracked=False
+Q3c ygo-poc file src/sandbox/ygo-poc/data/toolchain/goroot/src/runtime/runtime-gdb.py tracked=False

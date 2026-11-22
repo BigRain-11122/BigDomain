@@ -485,6 +485,78 @@ def main():
            % ('src/sandbox/broken_gate.py' in bhtml, res25.get('AC-UGR14'),
               res25.get('AC-UGR8'), rc25))
 
+        # ---- B26/B27/B28: refusal by OWNERSHIP and the vendor mention census
+        # (R3242). Measured in qa/probe-R3242.log: of 455 refused vendor .py
+        # files, zero textually mention the gate (0.31 s to read all), and the
+        # two under ygo-poc are a bundled Go toolchain (data/toolchain/goroot,
+        # untracked), so the directory NAME decided nothing. B26: a mention in a
+        # vendor tree is counted and named, and is never a door. B27: the same
+        # door bytes are invisible under the old name-skip and read under the
+        # ownership rule, while a toolchain door stays refused. B28: the printed
+        # mention count is graded, so an unprinted count reddens AC-UGR13 while
+        # AC-UGR8 (which only sees read files) stays green.
+        mention_world = world_tree({
+            'src/sandbox/.venv/lib/vendor_mention.py':
+                'DOC = "SecGate builds the gate"\n',
+            'src/sandbox/plain.py': 'x = 1\n',
+        })
+        real_root = mod.ROOT
+        try:
+            mod.ROOT = mention_world
+            m_hits, _m_skip = mod.direct_call_sites()
+            m_census = mod.refused_census()
+        finally:
+            mod.ROOT = real_root
+            shutil.rmtree(mention_world, ignore_errors=True)
+        v_slot = m_census.get('vendor_dir') or {}
+        ok('AC-UGRB26',
+           m_hits == []
+           and v_slot.get('files') == 1
+           and v_slot.get('doors') == []
+           and v_slot.get('mentions') == ['src/sandbox/.venv/lib/vendor_mention.py'],
+           'vendor mention: hits=%s files=%s doors=%s mentions=%s (a mention is '
+           'not a construction)'
+           % (m_hits, v_slot.get('files'), v_slot.get('doors'),
+              v_slot.get('mentions')))
+
+        own_world = world_tree({
+            'src/sandbox/ygo-poc/mypoc_gate.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/ygo-poc/data/toolchain/goroot/tool_gate.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+        })
+        real_root = mod.ROOT
+        old_vendor_dirs = mod.VENDOR_DIRS
+        try:
+            mod.ROOT = own_world
+            new_hits, _new_skip = mod.direct_call_sites()
+            mod.VENDOR_DIRS = tuple(old_vendor_dirs) + ('ygo-poc',)
+            old_hits, _old_skip = mod.direct_call_sites()
+        finally:
+            mod.VENDOR_DIRS = old_vendor_dirs
+            mod.ROOT = real_root
+            shutil.rmtree(own_world, ignore_errors=True)
+        ok('AC-UGRB27',
+           new_hits == ['src/sandbox/ygo-poc/mypoc_gate.py:2']
+           and old_hits == [],
+           'ownership: project-local ygo-poc door read=%s under the shipped set, '
+           'read=%s under the old name-skip, and the toolchain door stayed refused'
+           % (new_hits, old_hits))
+
+        def b28(d):
+            slot = d['refused'].setdefault(
+                'vendor_dir', {'files': 0, 'doors': [], 'unparsed': [], 'mentions': []})
+            slot['mentions'] = ['src/sandbox/.venv/lib/ghost_vendor.py']
+
+        mutated28 = copy.deepcopy(data)
+        b28(mutated28)
+        r28, res28, _t28, _v28 = run_check(mod, mutated28)
+        ok('AC-UGRB28',
+           res28.get('AC-UGR13') is False and res28.get('AC-UGR8') is True,
+           'an unprinted vendor mention reddens AC-UGR13=%s (must be FAIL) while '
+           'AC-UGR8=%s stays PASS rc=%d'
+           % (res28.get('AC-UGR13'), res28.get('AC-UGR8'), r28))
+
         # ---- B17: the live tree must read the same site set as before the
         # reader changed (pure addition): three files, four constructions.
         live_hits, live_skipped = mod.direct_call_sites()
@@ -519,7 +591,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 26,
+    ok('AC-UGRB11', bool(row) and declared == 29,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"

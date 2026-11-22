@@ -49,7 +49,7 @@ CRITERIA = (
     ("AC-UGR10", "a --check run must not author the document it verifies: both artifacts keep their bytes and mtimes across a --check, so a stale document stays visibly stale instead of being silently refreshed into a pass (verified by an mtime control; measured red before R2768 when --check alone re-rendered)"),
     ("AC-UGR11", "re-rendering is an explicit act: --write re-renders before checking, and a bare run with no flags still renders, so no caller loses its previous behaviour"),
     ("AC-UGR12", "the site reader's own spelling laws are re-proved INSIDE --check on a fixed in-memory sample that never comes from disk (R3239): the sample must answer exactly six pinned coordinates - bare, attribute, attribute-assignment alias, import-as alias, literal-getattr alias and a construction sharing a def line - and zero hits for a prose-only source and for a non-literal getattr alias, so a reader degraded to name-only reddens this face instead of only the suite"),
-    ("AC-UGR13", "the walk's OTHER side is measured, printed and graded (R3240): the report must print, for each refusing rule, how many sources it refused and - for the test_ rule, which cannot be narrowed without drowning nine legal fixture doors - the NAME of every refused source that really constructs the gate; --check refuses when either printed count or any refused door file disagrees with a fresh reading, so a production door misnamed test_*.py reddens here instead of vanishing. The vendor rule is counted and never parsed (a class inside a vendor tree is not this module's class), and `data` left the skip set because it is not a non-source name - measured: zero .py under either data directory, so the live reading did not move"),
+    ("AC-UGR13", "the walk's OTHER side is measured, printed and graded (R3240): the report must print, for each refusing rule, how many sources it refused and - for the test_ rule, which cannot be narrowed without drowning nine legal fixture doors - the NAME of every refused source that really constructs the gate; --check refuses when either printed count or any refused door file disagrees with a fresh reading, so a production door misnamed test_*.py reddens here instead of vanishing. The vendor rule is counted and never parsed (a class inside a vendor tree is not this module's class), and `data` left the skip set because it is not a non-source name - measured: zero .py under either data directory, so the live reading did not move. R3242: refusal is by OWNERSHIP - the names are package-manager and bundled-toolchain roots, and `ygo-poc` left the set because a project directory name cannot decide whose code it holds (measured: its only two .py files sit under data/toolchain/goroot and are untracked, so `toolchain` refuses them now and a PoC script of ours beside them is read). The vendor side stays unparsed, but it is READ for manners: the printed mention count and every mentioning file are graded here too, so the face can no longer say 'doors=0' in place of 'never looked'"),
     ("AC-UGR14", "the OTHER side of the reader is graded too (R3241): a source that does not parse is dropped from the site set by direct_call_sites(), so a constructing file whose syntax breaks shrinks BOTH the measured set and the page that echoes it and AC-UGR8 stays green - measured in qa/probe-R3241.log, where a broken src/sandbox/frontdoor.py moved 4 sites in 3 files to 3 sites in 2 files and the whole check still read VERDICT PASS 11/11. The report must NAME every unparsed source (read side and the test_ refused side) on the face, and --check must REFUSE while any unparsed source exists: an unreadable production source is a defect rather than a design choice, so unlike the nine legal fixture doors of AC-UGR13 it cannot be made green by printing it. The vendor rule stays counted and never parsed"),
     ("AC-SGV1", "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"),
     ("AC-SGV2", "PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists"),
@@ -186,7 +186,15 @@ def _constructor_aliases(tree):
 
 
 TEST_PREFIX = "test_"
-VENDOR_DIRS = ("__pycache__", ".venv", "ygo-poc", "node_modules")
+# R3242: refusal is by OWNERSHIP, so the names below are package-manager and
+# bundled-toolchain roots, not project directory names. `ygo-poc` sat here until
+# R3242 and was removed: measured in qa/probe-R3242.log, its only two .py files
+# live under ygo-poc/data/toolchain/goroot (a bundled Go toolchain, untracked by
+# git), so the directory name said nothing about whose code it holds - and a PoC
+# script of OURS written beside them was invisible. `toolchain` and
+# `site-packages` are the roots that actually denote someone else's code.
+VENDOR_DIRS = ("__pycache__", ".venv", "node_modules", "site-packages", "toolchain")
+GATE_NAMES = ("SecGate", "MsgSecStub")
 
 
 def _sandbox_walk():
@@ -202,8 +210,14 @@ def _sandbox_walk():
         src/sandbox/test_gate_factory.py left the whole check VERDICT PASS. So
         the refused side is now measured and NAMED rather than ignored.
       * a directory that is not source at all (`__pycache__`, `.venv`,
-        `ygo-poc`, `node_modules`) - counted, never parsed: a class inside a
-        vendor tree is not this module's class.
+        `node_modules`, `site-packages`, `toolchain`) - counted, never parsed:
+        a class inside a vendor tree is not this module's class. Since R3242
+        its files are still READ for manners of the name (a substring census,
+        AC-UGR13), so "doors=0" on the face means "counted 455, mentioned 0"
+        rather than "never looked".
+
+    Both rules now carry the text they refused, because both are measured for
+    mentions; only the test_ side is additionally PARSED for doors.
 
     `data` sat in this skip set until R3240 and was removed: it is not a
     non-source NAME, it merely happened to hold no Python. Measured before the
@@ -225,7 +239,13 @@ def _sandbox_walk():
                         if not vname.endswith(".py"):
                             continue
                         rel = os.path.relpath(os.path.join(vbase, vname), ROOT)
-                        refused.append((rel.replace("\\", "/"), "vendor_dir", ""))
+                        try:
+                            with open(os.path.join(vbase, vname), "r",
+                                      encoding="utf-8", errors="replace") as fh:
+                                text = fh.read()
+                        except OSError:
+                            text = ""
+                        refused.append((rel.replace("\\", "/"), "vendor_dir", text))
         dirs[:] = [d for d in dirs if d not in VENDOR_DIRS]
         for name in sorted(files):
             if not name.endswith(".py"):
@@ -261,15 +281,22 @@ def refused_census(refused=None):
     The test_ rule IS parsed, because those files are ours and nine of them
     really construct the gate - the number is printed, and every door file is
     named, which is what lets a misnamed production door redden AC-UGR13.
+
+    R3242: the vendor side is also read for MANNERS of the name. A substring
+    census (`mentions`) is printed and graded, so a vendor tree that starts
+    carrying the gate name is visible on the face even though it is never
+    parsed - measured 0 of 455 files today, 0.31 s to read them all.
     """
     if refused is None:
         _read, refused = _sandbox_walk()
     out = {}
     for rel, rule, text in refused:
         slot = out.setdefault(rule, {"files": 0, "parsed": rule != "vendor_dir",
-                                     "doors": [], "unparsed": []})
+                                     "doors": [], "unparsed": [], "mentions": []})
         slot["files"] += 1
         if not slot["parsed"]:
+            if any(g in text for g in GATE_NAMES):
+                slot["mentions"].append(rel)
             continue
         hits, skipped = direct_call_sites(sources=[(rel, text)])
         if skipped:
@@ -279,6 +306,7 @@ def refused_census(refused=None):
     for slot in out.values():
         slot["doors"].sort()
         slot["unparsed"].sort()
+        slot["mentions"].sort()
     return out
 
 
@@ -466,14 +494,29 @@ def render_html(data):
                             ", ".join("<span class='mono'>%s</span>" % _esc(u)
                                       for u in unparsed_slot)))
         else:
-            tail = "counted and NOT parsed - a class inside a vendor tree is not this module's class"
+            mentions = slot.get("mentions") or []
+            tail = ("counted and NOT parsed - a class inside a vendor tree is not this "
+                    "module's class - but read for MANNERS of the name: <b>%d</b> of them "
+                    "textually mention the gate%s. A mention is not a construction and never "
+                    "enters the site set (R3242)"
+                    % (len(mentions),
+                       (": " + ", ".join("<span class='mono'>%s</span>" % _esc(m)
+                                         for m in mentions))
+                       if mentions else ""))
         refused_bits.append("<li>refused %s: %d sources - %s</li>" % (_esc(rule), files, tail))
     refused_html = ("<br>The walk refuses two kinds of source, and both are counted on this face "
                     "rather than left implicit (AC-UGR13, R3240):<ul>%s</ul>"
                     "A production file misnamed with the test_ prefix, or a door written under "
                     "<span class='mono'>data/</span> (which stopped being a skipped name at R3240 - it "
-                    "held no Python, measured), is therefore either read or NAMED here. Parsing the "
-                    "refused side costs about 1.5 s over 913 files, paid on every collect and --check. "
+                    "held no Python, measured), is therefore either read or NAMED here. Refusal is by "
+                    "OWNERSHIP (R3242): the skip names are package-manager and bundled-toolchain roots "
+                    "(<span class='mono'>__pycache__/.venv/node_modules/site-packages/toolchain</span>), "
+                    "and <span class='mono'>ygo-poc</span> left that set because a project directory "
+                    "name cannot decide whose code it holds - measured, its two .py files sit under "
+                    "<span class='mono'>ygo-poc/data/toolchain/goroot</span> and are refused by "
+                    "<span class='mono'>toolchain</span> now. Parsing the refused test_ side costs about "
+                    "1.5 s over 913 files and the vendor mention census costs 0.31 s over 455, both paid "
+                    "on every collect and --check. "
                     "A refused source that does not parse is counted and named above, and it reddens "
                     "--check by itself (AC-UGR14, R3241): a legal fixture door is a choice, an "
                     "unreadable file is not."
@@ -768,10 +811,22 @@ def check(data):
         doors = sorted(slot.get("doors") or [])
         counted = ("refused %s: %d sources" % (rule, files)) in html_text
         unnamed = [d for d in doors if d not in html_text]
+        # R3242: the vendor side is never parsed, so its census is the only
+        # thing that can be graded - the printed MENTION count and every
+        # mentioning file, against this fresh reading. An untouched page would
+        # otherwise keep reading "doors=0" while the vendor tree grew the name.
+        mentions = sorted(slot.get("mentions") or [])
+        mentions_counted = ("%d</b> of them textually mention the gate"
+                            % len(mentions)) in html_text
+        mentions_unnamed = [m for m in mentions if m not in html_text]
         if not counted or unnamed:
             ok13 = False
-        thirteen.append("%s files=%d doors=%d counted=%s unnamed=%d"
-                        % (rule, files, len(doors), counted, len(unnamed)))
+        if rule == "vendor_dir" and (not mentions_counted or mentions_unnamed):
+            ok13 = False
+        thirteen.append("%s files=%d doors=%d counted=%s unnamed=%d mentions=%d "
+                        "mentions_counted=%s mentions_unnamed=%d"
+                        % (rule, files, len(doors), counted, len(unnamed),
+                           len(mentions), mentions_counted, len(mentions_unnamed)))
     results.append(("AC-UGR13", ok13, " ".join(thirteen)))
 
     # AC-UGR14: an unparsed source is a DEFECT, not a design choice (R3241).

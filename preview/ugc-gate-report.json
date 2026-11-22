@@ -92,7 +92,7 @@
     },
     {
       "id": "AC-UGR13",
-      "text": "the walk's OTHER side is measured, printed and graded (R3240): the report must print, for each refusing rule, how many sources it refused and - for the test_ rule, which cannot be narrowed without drowning nine legal fixture doors - the NAME of every refused source that really constructs the gate; --check refuses when either printed count or any refused door file disagrees with a fresh reading, so a production door misnamed test_*.py reddens here instead of vanishing. The vendor rule is counted and never parsed (a class inside a vendor tree is not this module's class), and `data` left the skip set because it is not a non-source name - measured: zero .py under either data directory, so the live reading did not move"
+      "text": "the walk's OTHER side is measured, printed and graded (R3240): the report must print, for each refusing rule, how many sources it refused and - for the test_ rule, which cannot be narrowed without drowning nine legal fixture doors - the NAME of every refused source that really constructs the gate; --check refuses when either printed count or any refused door file disagrees with a fresh reading, so a production door misnamed test_*.py reddens here instead of vanishing. The vendor rule is counted and never parsed (a class inside a vendor tree is not this module's class), and `data` left the skip set because it is not a non-source name - measured: zero .py under either data directory, so the live reading did not move. R3242: refusal is by OWNERSHIP - the names are package-manager and bundled-toolchain roots, and `ygo-poc` left the set because a project directory name cannot decide whose code it holds (measured: its only two .py files sit under data/toolchain/goroot and are untracked, so `toolchain` refuses them now and a PoC script of ours beside them is read). The vendor side stays unparsed, but it is READ for manners: the printed mention count and every mentioning file are graded here too, so the face can no longer say 'doors=0' in place of 'never looked'"
     },
     {
       "id": "AC-UGR14",
@@ -174,12 +174,14 @@
         "src/sandbox/ugc/test_sec_batch_rowsroll.py"
       ],
       "files": 458,
+      "mentions": [],
       "parsed": true,
       "unparsed": []
     },
     "vendor_dir": {
       "doors": [],
       "files": 455,
+      "mentions": [],
       "parsed": false,
       "unparsed": []
     }
@@ -249,8 +251,8 @@
     }
   ],
   "sizes": {
-    "html": 15200,
-    "json": 10265
+    "html": 16440,
+    "json": 10860
   },
   "unparsed": [],
   "wordlist": {
