@@ -1,7 +1,7 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "f3a561b9858977ef"
+  "state/start-here-faces.json": "f77dd204fee313b1"
  },
  "faces_total": 44,
  "operable": [
@@ -53,6 +53,38 @@
  },
  "host_lexical": [],
  "host_lexical_calls": 0,
+ "form_counts": {
+  "simple": 4,
+  "call": 1,
+  "named": 2,
+  "attr": 0
+ },
+ "form_sites": 7,
+ "form_calls": {
+  "merchant-onboard.html": [
+   "$('reset')"
+  ]
+ },
+ "form_named": {
+  "lobby-protocol-map.html": [
+   [
+    "apply",
+    "called",
+    [
+     "q"
+    ]
+   ]
+  ],
+  "merchant-onboard.html": [
+   [
+    "onToggle",
+    "resolved",
+    [
+     "boxes[i]"
+    ]
+   ]
+  ]
+ },
  "missing_ceo_items": [
   "mchid",
   "settlement",
@@ -62,6 +94,6 @@
   "pubkey"
  ],
  "sizes": {
-  "html_bytes": 20699
+  "html_bytes": 24326
  }
 }

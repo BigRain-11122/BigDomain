@@ -333,6 +333,29 @@ TGT_ADDL = re.compile(r"([A-Za-z_$][\w$]*\s*(?:\[[^\]]*\])?)\s*\.\s*addEventList
 FUNC_KIND = "function"
 ARROW_KIND = "arrow"
 
+# A handler is not always a literal body on a literal element. Two live forms were
+# silent: a call-expression receiver ($('reset').addEventListener('click', function))
+# and a named callback (boxes[i].addEventListener('change', onToggle)). A named
+# callback supplies that element as `this` only when the face declares `function NAME(`
+# exactly once, binds the name to ONE target expression, and never calls it directly -
+# at a direct call `this` is not the element. All of it is text, never executed.
+RECV_ATOM = r"[A-Za-z_$][\w$]*(?:\s*\([^()]*\))?(?:\s*\[[^\]]*\])?"
+RECV_EXPR = RECV_ATOM + r"(?:\s*\.\s*" + RECV_ATOM + r")*"
+CALL_RECV = (r"[A-Za-z_$][\w$]*\s*\([^()]*\)(?:\s*\[[^\]]*\])?"
+             r"(?:\s*\.\s*" + RECV_ATOM + r")*")
+H_ADDL_CALL = re.compile(r"(" + CALL_RECV + r")\s*\.\s*addEventListener\s*\("
+                         r"\s*['\"][^'\"]*['\"]\s*,\s*function\s*\(")
+H_ADDL_NAME = re.compile(r"(" + RECV_EXPR + r")\s*\.\s*addEventListener\s*\("
+                         r"\s*['\"][^'\"]*['\"]\s*,\s*([A-Za-z_$][\w$]*)\s*\)")
+FUNC_DECL = re.compile(r"function\s+([A-Za-z_$][\w$]*)\s*\(")
+CALL_NAME = re.compile(r"([A-Za-z_$][\w$]*)\s*\(")
+H_SITE = re.compile(r"(" + RECV_EXPR + r")\s*\.\s*addEventListener\s*\("
+                    r"\s*['\"][^'\"]*['\"]\s*,\s*([^)]{0,64})")
+H_ONX_SITE = re.compile(r"(" + RECV_EXPR + r")\s*\.\s*(on[a-z]+)\s*=\s*([^;]{0,64})")
+ATTR_SITE = re.compile(r"<[^>]+\son(?:click|change|input|submit|keyup|keydown)\s*=")
+HANDLER_FORMS = ("simple", "call", "named", "attr")
+NAMED_REASONS = ("called", "nodecl", "twodecl", "twotarget", "nobody")
+
 
 def _body_span(text, frm):
     """The braces of the function literal starting at or after frm."""
@@ -350,7 +373,15 @@ def _body_span(text, frm):
     return None
 
 
-def _handler_spans(blanked):
+def _raw_slice(raw, blanked, start, end):
+    """The text at [start,end) from the RAW copy when one is given: a receiver such as
+    $('reset') must not be printed as $('') just because strings are blanked for
+    matching. Blanking preserves offsets, so the slice is exact."""
+    text = raw if raw is not None else blanked
+    return text[start:end].replace(" ", "")
+
+
+def _handler_spans(blanked, raw=None):
     """Every handler literal in the page: body start/end, the target it is assigned
     to, the form, and whether its body is a `function` or an arrow. Only literal
     forms with a brace body are recognised; anything else stays silence."""
@@ -358,15 +389,119 @@ def _handler_spans(blanked):
     for match in H_ASSIGN.finditer(blanked):
         got = _body_span(blanked, match.end())
         if got:
-            spans.append((got[0], got[1], match.group(1).replace(" ", ""),
+            spans.append((got[0], got[1],
+                          _raw_slice(raw, blanked, match.start(1), match.end(1)),
                           match.group(2), FUNC_KIND))
     for match in H_ADDL.finditer(blanked):
         got = _body_span(blanked, match.end())
         if got:
-            spans.append((got[0], got[1], match.group(1).replace(" ", ""),
+            spans.append((got[0], got[1],
+                          _raw_slice(raw, blanked, match.start(1), match.end(1)),
+                          "addEventListener", FUNC_KIND))
+    for match in H_ADDL_CALL.finditer(blanked):
+        got = _body_span(blanked, match.end())
+        if got:
+            spans.append((got[0], got[1],
+                          _raw_slice(raw, blanked, match.start(1), match.end(1)),
                           "addEventListener", FUNC_KIND))
     spans.extend(_arrow_spans(blanked))
+    named, _ = _named_spans(blanked, raw)
+    spans.extend(named)
     return spans
+
+
+def _named_report(blanked, raw=None):
+    """Per named callback bound as a listener: whether its declaration body can stand
+    for the binding target, or the closed-set reason it cannot."""
+    bindings = {}
+    for match in H_ADDL_NAME.finditer(blanked):
+        bindings.setdefault(match.group(2), []).append(
+            _raw_slice(raw, blanked, match.start(1), match.end(1)))
+    decls = {}
+    for match in FUNC_DECL.finditer(blanked):
+        decls.setdefault(match.group(1), []).append(match.end() - 1)
+    direct = set()
+    for match in CALL_NAME.finditer(blanked):
+        before = blanked[max(0, match.start() - 12):match.start()]
+        if not re.search(r"function\s+$", before):
+            direct.add(match.group(1))
+    out = {}
+    for name, targets in bindings.items():
+        inner = sorted(set(targets))
+        if name in direct:
+            out[name] = {"status": "called", "targets": inner}
+        elif not decls.get(name):
+            out[name] = {"status": "nodecl", "targets": inner}
+        elif len(decls[name]) > 1:
+            out[name] = {"status": "twodecl", "targets": inner}
+        elif len(inner) > 1:
+            out[name] = {"status": "twotarget", "targets": inner}
+        else:
+            out[name] = {"status": "resolved", "targets": inner}
+    return out
+
+
+def _named_spans(blanked, raw=None):
+    """Named callbacks resolved one hop, with the report that says why a name was not
+    resolved. A direct call anywhere in the same face disqualifies the name, because
+    `this` at that call is not the element it was bound to."""
+    spans = []
+    report = _named_report(blanked, raw)
+    decls = {}
+    for match in FUNC_DECL.finditer(blanked):
+        decls.setdefault(match.group(1), []).append(match.end() - 1)
+    for name, got in list(report.items()):
+        if got["status"] != "resolved":
+            continue
+        body = _body_span(blanked, decls[name][0])
+        if not body:
+            got["status"] = "nobody"
+            continue
+        spans.append((body[0], body[1], got["targets"][0], "named", FUNC_KIND))
+    return spans, report
+
+
+def _recv_form(recv):
+    """A receiver that starts with a call (`$('reset')`, `document.getElementById('x')`)
+    is a call expression; everything else RECV_EXPR accepts is an element expression."""
+    if re.match(r"^[A-Za-z_$][\w$]*\s*\(", (recv or "").strip()):
+        return "call"
+    return "simple"
+
+
+def handler_census(text):
+    """How each handler site in one face is BOUND: a simple element expression, a call
+    expression, a named callback, or an inline string attribute. Text only - a name in
+    the named bucket is resolved (or refused) by _named_report, not guessed."""
+    blanked = _blank_strings(text)
+    forms = {form: 0 for form in HANDLER_FORMS}
+    calls, names = [], []
+    for match in H_SITE.finditer(blanked):
+        recv = _raw_slice(text, blanked, match.start(1), match.end(1))
+        cb = match.group(2).strip()
+        if re.match(r"^[A-Za-z_$][\w$]*$", cb):
+            forms["named"] += 1
+            continue
+        form = _recv_form(recv)
+        forms[form] += 1
+        if form == "call":
+            calls.append(recv)
+    for match in H_ONX_SITE.finditer(blanked):
+        recv = _raw_slice(text, blanked, match.start(1), match.end(1))
+        cb = match.group(3).strip()
+        if cb.startswith("function") or "=>" in cb[:20]:
+            form = _recv_form(recv)
+            forms[form] += 1
+            if form == "call":
+                calls.append(recv)
+        elif re.match(r"^[A-Za-z_$][\w$]*$", cb):
+            forms["named"] += 1
+    forms["attr"] += len(ATTR_SITE.findall(text))
+    report = _named_report(blanked, text)
+    for name in sorted(report):
+        names.append((name, report[name]["status"], report[name]["targets"]))
+    return {"forms": forms, "calls": sorted(set(calls)), "named": names,
+            "sites": sum(forms.values())}
 
 
 def _arrow_target(head):
@@ -498,7 +633,7 @@ def host_reading(text, keys=None):
     Text only: two sides naming one expression is not proof of one node at runtime."""
     keys = keys or key_reading(text)
     blanked = _blank_strings(text)
-    spans = _handler_spans(blanked)
+    spans = _handler_spans(blanked, text)
     sides = _sides_pos(text, blanked)
     write, read = set(), set()
     w_bad = r_bad = w_lex = r_lex = 0
@@ -558,6 +693,7 @@ def scan_faces():
             row["tiers"] = tier_reading(text, row["keys"])
             row["attrs"] = attr_reading(text, row["keys"])
             row["hosts"] = host_reading(text, row["keys"])
+            row["forms"] = handler_census(text)
         rows[name] = row
     return rows
 
@@ -626,6 +762,14 @@ def projection():
     host_lexical = [n for n in key_faces
                     if rows[n]["hosts"]["lexical"]]
     host_lexical_calls = sum(rows[n]["hosts"]["lexical"] for n in host_lexical)
+    form_counts = {form: 0 for form in HANDLER_FORMS}
+    for name in key_faces:
+        for form, count in rows[name]["forms"]["forms"].items():
+            form_counts[form] += count
+    form_calls = [n for n in key_faces if rows[n]["forms"]["calls"]]
+    form_named = [n for n in key_faces if rows[n]["forms"]["named"]]
+    form_named_open = [n for n in form_named
+                       if any(got[1] != "resolved" for got in rows[n]["forms"]["named"])]
     return {
         "rows": rows,
         "doc": doc,
@@ -651,6 +795,11 @@ def projection():
         "host_unknown": host_unknown,
         "host_lexical": host_lexical,
         "host_lexical_calls": host_lexical_calls,
+        "form_counts": form_counts,
+        "form_calls": form_calls,
+        "form_named": form_named,
+        "form_named_open": form_named_open,
+        "form_sites": sum(form_counts.values()),
         "missing": missing_ceo_items(),
         "data16": sha16(DATA),
     }
@@ -724,6 +873,20 @@ def host_phrase(doc, hosts):
         lexical=hosts["lexical"])
 
 
+def form_word(doc, form):
+    return ((doc.get("form_tags") or {}).get(form) or form)
+
+
+def form_phrase(doc, forms):
+    """One face's handler bindings by form. A zero is printed as zero, not hidden."""
+    return (doc.get("forms_fmt") or "").format(**{form: forms[form]
+                                                  for form in HANDLER_FORMS})
+
+
+def named_reason(doc, status):
+    return ((doc.get("form_reasons") or {}).get(status) or status)
+
+
 def render(proj):
     doc = proj["doc"]
     faces = doc.get("faces") or {}
@@ -776,18 +939,26 @@ def render(proj):
                            hosts["lexical"], esc(host_phrase(doc, hosts))))
         else:
             hostline = ""
+        if "forms" in proj["rows"][name]:
+            forms = proj["rows"][name]["forms"]["forms"]
+            formline = ('    <p class="formline" data-forms="%s" data-forms-simple="%d" '
+                        'data-forms-call="%d" data-forms-named="%d" data-forms-attr="%d">%s</p>\n'
+                        % (esc(name), forms["simple"], forms["call"], forms["named"],
+                           forms["attr"], esc(form_phrase(doc, forms))))
+        else:
+            formline = ""
         cards.append(
             '  <article class="face" data-face="%s">\n'
             '    <h3><a href="%s">%s</a> <code>%s</code></h3>\n'
             '    <p class="kindline"><span class="kbadge" data-kind="%s">%s</span></p>\n'
-            '%s%s%s%s'
+            '%s%s%s%s%s'
             '    <p><b>%s</b>%s</p>\n'
             '    <p class="limit"><b>%s</b>%s</p>\n'
             '    <p><a class="go" href="%s">%s &rarr;</a></p>\n'
             '  </article>\n' % (
                 esc(name), esc(name), esc(label), esc(name),
                 esc(kind), esc(kind_tag(doc, kind)), keyline, tierline, attrline,
-                hostline,
+                hostline, formline,
                 esc(doc["can_tag"]), esc(can),
                 esc(doc["cannot_tag"]), esc(cannot),
                 esc(name), esc(doc["open_link"]),
@@ -965,10 +1136,44 @@ def render(proj):
                    '  </div>\n  <div class="legend hosts">\n%s\n  </div>\n  <p class="note">%s</p>'
                    % (esc(doc.get("hosts_head", "")), host_counts_html,
                       "\n".join(host_notes), esc(doc.get("host_note", ""))))
+    form_counts_html = "\n".join(
+        '  <span class="kc" data-form-count="%s"><b>%d</b>%s</span>'
+        % (form, proj["form_counts"][form], esc(form_word(doc, form)))
+        for form in HANDLER_FORMS
+    )
+    form_notes = []
+    for name in proj["form_calls"] or [None]:
+        if not name:
+            form_notes.append('  <p data-forms-call-absent>%s</p>'
+                              % esc(doc.get("form_calls_absent") or ""))
+            continue
+        for recv in proj["rows"][name]["forms"]["calls"]:
+            form_notes.append(
+                '  <p data-forms-call="%s" data-forms-recv="%s">%s</p>'
+                % (esc(name), esc(recv),
+                   esc((doc.get("form_calls_fmt") or "").format(recv=recv))))
+    for name in proj["form_named"] or [None]:
+        if not name:
+            form_notes.append('  <p data-forms-named-absent>%s</p>'
+                              % esc(doc.get("form_named_absent") or ""))
+            continue
+        for cb, status, targets in proj["rows"][name]["forms"]["named"]:
+            shown = " , ".join(targets) or doc.get("host_none", "")
+            form_notes.append(
+                '  <p data-forms-named="%s" data-forms-cb="%s" '
+                'data-forms-status="%s" data-forms-target="%s">%s</p>'
+                % (esc(name), esc(cb), esc(status), esc(shown),
+                   esc((doc.get("form_named_fmt") or "").format(
+                       cb=cb, status=named_reason(doc, status), target=shown))))
+    forms_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
+                   '  </div>\n  <div class="legend forms">\n%s\n  </div>\n  <p class="note">%s</p>'
+                   % (esc(doc.get("forms_head", "")), form_counts_html,
+                      "\n".join(form_notes), esc(doc.get("form_note", ""))))
     keys_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
-                  '  </div>\n  <div class="legend keys">\n%s\n  </div>\n%s\n%s\n%s'
+                  '  </div>\n  <div class="legend keys">\n%s\n  </div>\n%s\n%s\n%s\n%s'
                   % (esc(doc.get("keys_head", "")), key_counts_html,
-                     "\n".join(keys_notes), tiers_block, attrs_block, hosts_block))
+                     "\n".join(keys_notes), tiers_block, attrs_block, hosts_block,
+                     forms_block))
 
     if proj["missing"]:
         items = "\n".join(
@@ -1089,6 +1294,12 @@ def write():
         "host_counts": proj["host_counts"],
         "host_lexical": proj["host_lexical"],
         "host_lexical_calls": proj["host_lexical_calls"],
+        "form_counts": proj["form_counts"],
+        "form_sites": proj["form_sites"],
+        "form_calls": {name: proj["rows"][name]["forms"]["calls"]
+                       for name in proj["form_calls"]},
+        "form_named": {name: proj["rows"][name]["forms"]["named"]
+                       for name in proj["form_named"]},
         "missing_ceo_items": [row["id"] for row in proj["missing"]],
         "sizes": {"html_bytes": len(html.encode("utf-8"))},
     }
@@ -1457,13 +1668,79 @@ def check():
     if not (proj["doc"].get("host_count_tags") or {}).get("lexical"):
         failures.append("SH16 tag_missing:lexical")
 
+    # AC-SH17: how a handler is BOUND is counted per face (simple / call / named /
+    # attr), every call-expression receiver and every named callback is named with its
+    # target or a closed-set reason, and a face with no such site listed reddens.
+    for name in proj["key_faces"]:
+        got = re.search(r'data-forms="%s" data-forms-simple="(\d+)" '
+                        r'data-forms-call="(\d+)" data-forms-named="(\d+)" '
+                        r'data-forms-attr="(\d+)"' % re.escape(name), text)
+        fresh = proj["rows"][name]["forms"]["forms"]
+        want = (str(fresh["simple"]), str(fresh["call"]), str(fresh["named"]),
+                str(fresh["attr"]))
+        if not got:
+            failures.append("SH17 column_missing:%s" % name)
+        elif got.groups() != want:
+            failures.append("SH17 counts:%s page=%s fresh=%s"
+                            % (name, got.groups(), want))
+    for form in HANDLER_FORMS:
+        got = re.search(r'data-form-count="%s"><b>(\d+)</b>' % form, text)
+        if not got:
+            failures.append("SH17 total_missing:%s" % form)
+        elif int(got.group(1)) != proj["form_counts"][form]:
+            failures.append("SH17 total:%s page=%s fresh=%d"
+                            % (form, got.group(1), proj["form_counts"][form]))
+        if not (proj["doc"].get("form_tags") or {}).get(form):
+            failures.append("SH17 tag_missing:%s" % form)
+    if sum(proj["form_counts"].values()) != proj["form_sites"]:
+        failures.append("SH17 sum=%d sites=%d"
+                        % (sum(proj["form_counts"].values()), proj["form_sites"]))
+    listed_calls = {}
+    for name, recv in re.findall(r'data-forms-call="([^"]+)" '
+                                 r'data-forms-recv="([^"]+)"', text):
+        listed_calls.setdefault(name, set()).add(recv)
+    fresh_calls = {n: set(proj["rows"][n]["forms"]["calls"]) for n in proj["form_calls"]}
+    if listed_calls != fresh_calls:
+        failures.append("SH17 call_list page=%s fresh=%s"
+                        % (sorted(listed_calls), sorted(fresh_calls)))
+    if not proj["form_calls"] and "data-forms-call-absent" not in text:
+        failures.append("SH17 call_absent_missing")
+    for name in proj["form_calls"]:
+        if not proj["rows"][name]["forms"]["calls"]:
+            failures.append("SH17 clean_face_called:%s" % name)
+    listed_named = {}
+    for name, cb, status, target in re.findall(
+            r'data-forms-named="([^"]+)" data-forms-cb="([^"]+)" '
+            r'data-forms-status="([^"]+)" data-forms-target="([^"]*)"', text):
+        listed_named[(name, cb)] = (status, target)
+        if status not in NAMED_REASONS + ("resolved",):
+            failures.append("SH17 reason_open:%s" % status)
+    fresh_named = {}
+    for name in proj["form_named"]:
+        for cb, status, targets in proj["rows"][name]["forms"]["named"]:
+            fresh_named[(name, cb)] = (status, " , ".join(targets)
+                                       or proj["doc"].get("host_none", ""))
+    if listed_named != fresh_named:
+        failures.append("SH17 named_list page=%s fresh=%s"
+                        % (sorted(listed_named), sorted(fresh_named)))
+    if not proj["form_named"] and "data-forms-named-absent" not in text:
+        failures.append("SH17 named_absent_missing")
+    for name in proj["form_named"]:
+        if not proj["rows"][name]["forms"]["named"]:
+            failures.append("SH17 clean_face_listed:%s" % name)
+    for key in ("forms_head", "forms_fmt", "form_calls_fmt", "form_calls_absent",
+                "form_named_fmt", "form_named_absent", "form_note"):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH17 word_missing:%s" % key)
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=16 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=17 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=16 faces=%d operable=%d missing_ceo=%d external_refs=0 "
-          "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d"
+    print("VERDICT PASS criteria=17 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+          "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
+          "forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
              ",".join("%s:%d" % (kind, proj["kind_counts"][kind]) for kind in KINDS),
              ",".join("%s:%d" % (key, proj["key_counts"][key])
@@ -1475,7 +1752,9 @@ def check():
                       for verdict in ATTR_VERDICTS),
              ",".join("%s:%d" % (verdict, proj["host_counts"][verdict])
                       for verdict in HOST_VERDICTS),
-             len(proj["host_lexical"]), proj["host_lexical_calls"]))
+             len(proj["host_lexical"]), proj["host_lexical_calls"],
+             ",".join("%s:%d" % (form, proj["form_counts"][form])
+                      for form in HANDLER_FORMS)))
 
     return 0
 

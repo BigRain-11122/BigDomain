@@ -1,0 +1,17 @@
+storage faces=7  walk=0.0095s
+  filing-checklist.html      target=simple cb=function addEventListener recv='b' cb='function(){state[k]=b.'
+  lobby-protocol-map.html    target=simple cb=name     addEventListener recv='q' cb='apply'
+  lobby-session-trace.html   NO handler site
+  membership-face.html       target=simple cb=function addEventListener recv='c' cb='function(){var i=+c.da'
+  merchant-onboard.html      target=call   cb=function addEventListener recv="$('reset')" cb='function(){ ticks = {}'
+  merchant-onboard.html      target=simple cb=name     addEventListener recv='boxes[i]' cb='onToggle'
+  money-path-demo.html       target=simple cb=function onchange         recv='T[n]' cb='function(){localStorag'
+  ship-checklist.html        target=simple cb=function addEventListener recv='b' cb='function(){\n      stat'
+  ship-checklist.html        target=simple cb=function addEventListener recv='reset' cb='function(){\n    state='
+form totals (target/callback):
+  call/function      1
+  simple/function    5
+  simple/name        2
+Q2 one site: decls=['onToggle'] sites=[('boxes[i]', 'onToggle')]
+Q2 two targets: sites=[('boxes[i]', 'onToggle'), ("document.getElementById('x')", 'onToggle')]
+Q2 direct call present=True

@@ -1,0 +1,13 @@
+C1 private copy of the live page still PASS          PASS rc=0
+C2 an edited per-face simple count names that face   PASS rc=2
+C3 a dropped form column names the missing face      PASS rc=2
+C4 an edited page total reddens the total arm        PASS rc=2
+C5 a call receiver invented for a clean face is refused PASS rc=2
+C6 a dropped named row is refused                    PASS rc=2
+C7 a reason outside the closed set is refused        PASS rc=2
+C8 a private world writes and PASSes                 PASS rc=0
+C9 the private world reads simple=1 call=1 named=1   PASS page=(1, 1, 1, 0)
+C10 the resolved name is named with its target       PASS resolved row
+C11 the call receiver is printed verbatim            PASS receiver
+C12 a directly called named callback flips to called PASS rc=0
+NEGCTL PASS cases=12 failures=0
