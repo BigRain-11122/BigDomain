@@ -46,6 +46,7 @@ temp dir so tempfile.gettempdir() falls back to CWD (R684 triage
 verdict; qa/runner-triage-R684.log).
 """
 
+import collections
 import json
 import os
 import re
@@ -5997,7 +5998,7 @@ SUITES = [
     # (AC-RCA6 pinned in src/os/backlog.md as the R3314 PIN row BEFORE this
     # suite and this row existed.)
     ("os-runner-registry-face",
-     os.path.join("..", "os", "test_runner_registry_face.py"), 22),
+     os.path.join("..", "os", "test_runner_registry_face.py"), 25),
     # R2417: the abort face names the suite a body died on but never whether
     # that abort still matters - measured at R2403 over the real pile, the
     # aborted bodies had no way to be told apart from live debt. A body is now
@@ -8431,12 +8432,22 @@ def runtime_crit_drift(observations):
     return graded, ungraded, drift
 
 
+# R3318 AC-RCA11: the return shape is named where it is born. A namedtuple is
+# still a tuple, so every positional reader keeps working unchanged, while
+# _fields states the order once. R3313 changed bool -> triple and two readers
+# went stale because the shape existed only in the caller's unpack line; a
+# swapped order would have been silent even at length three.
+PhaseSuites = collections.namedtuple("PhaseSuites", "green rows criteria")
+
+
 def phase_suites(selected=None):
     """R3313 AC-RCA2/AC-RCA4: every selected suite announces itself BEFORE
     it runs, so a leg that needs minutes is observable while it moves
     instead of silent until it returns. R3316 AC-RCA9/AC-RCA10 adds the
     runtime count reading: a green suite whose own fraction disagrees with
-    the table cell stops the leg by name. Returns (green, rows, criteria)."""
+    the table cell stops the leg by name. R3318 AC-RCA11 names the return:
+    PhaseSuites(green, rows, criteria), a tuple whose _fields is the order
+    contract."""
     # R3317 contract note: the triple IS the contract. Consumers must unpack
     # all three; a bare truthiness test is the stale shape that read red in
     # two suites after R3313 changed the return type.
@@ -8479,7 +8490,7 @@ def phase_suites(selected=None):
          " overrides=%d"
          % (green, len(rows), total, SUITE_TIMEOUT_S,
             len(SUITE_TIMEOUT_OVERRIDES)))
-    return green, len(rows), total
+    return PhaseSuites(green, len(rows), total)
 
 
 def _parse_only(args):
@@ -8840,6 +8851,11 @@ def main(argv):
         # sentence says what was NOT checked - this entry reads the registry
         # source only, so it says nothing about the tree law or any suite.
         reg_ok = phase_registry(SUITES)
+        # R3318 board question three: no suite ran, so there is no runtime
+        # count to publish. The line says why it is absent instead of quoting
+        # numbers from an older log, which would read as a fresh measurement.
+        print("RUNTIME-CRIT skipped=registry-only reason=no-suite-executed",
+              flush=True)
         print("REGISTRY-ONLY rows=%d criteria=%d suites_started=0"
               " tree_law=not-run %s"
               % (len(SUITES), sum(int(row[2]) for row in SUITES),

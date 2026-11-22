@@ -34,7 +34,7 @@ sys.path.insert(0, BASE)
 
 import reconcile_all as RA  # noqa: E402
 
-EXPECTED_CRITERIA = 22
+EXPECTED_CRITERIA = 25
 RUNNER = os.path.join(SANDBOX, "reconcile_all.py")
 LABEL = "os-runner-registry-face"
 
@@ -264,6 +264,11 @@ def ac_rca8():
     check(code2 == 2 and "E_RCA_FLAG_CLASH" in text2 and not started2,
           "AC-RCA8(b) --registry-only with --only refused by name, zero "
           "suites started")
+    rt = [l for l in text.splitlines() if l.startswith("RUNTIME-CRIT ")]
+    check(len(rt) == 1 and "skipped=registry-only" in rt[0]
+          and "graded=" not in rt[0],
+          "AC-RCA8(c) --registry-only says the runtime count was skipped "
+          "instead of quoting an older one")
 
 
 def ac_rca9():
@@ -366,6 +371,22 @@ def ac_rca10():
           "AC-RCA10(d) main() counts the drift list in the green flag")
 
 
+def ac_rca11():
+    """R3318 AC-RCA11: the return shape is named where it is born, so a
+    swapped order reddens here instead of reading green at length three."""
+    ran, _drift, _out = _run_planted("print('SUITE PASS 3/3')\n", 3)
+    check(isinstance(ran, tuple) and type(ran) is RA.PhaseSuites
+          and ran._fields == ("green", "rows", "criteria")
+          and (ran.green, ran.rows, ran.criteria) == tuple(ran),
+          "AC-RCA11(a) the exit names its three fields in a fixed order")
+    green, rows, total = ran
+    check((green, rows, total) == (1, 1, 3)
+          and ran.green == green and ran.rows == rows
+          and ran.criteria == total,
+          "AC-RCA11(b) positional unpacking still answers the same three "
+          "values, so existing readers keep working")
+
+
 def main():
     print("runner_registry_face suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -379,6 +400,7 @@ def main():
     ac_rca8()
     ac_rca9()
     ac_rca10()
+    ac_rca11()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:
