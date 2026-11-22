@@ -3,7 +3,7 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-23 R3306 PRODUCT+ENGINEERING: the board asked whether a THIRD simultaneously moving edge costs a third pass, because MAX_PASSES=3 had never had its spare spent. Measured in two private copy trees: two edges (day + a reading width) need 2 passes and three edges (day + width + a newest qa/*.log) also need 2 - and the reason is a law rather than luck: the export face's own check grades the file it NAMES (a snapshot at export_ts), so a new evidence log reddens no face, and none of the four ring readers reads latest_evidence.",
+    "current": "2026-11-23 R3307 GROUP SCAN (content-addressed, read before any work): the ledger carried 0 @BigDomain lines so no dispatch was owed; decisions.md holds 438 rows against the stored baseline 438 with no new D- or C- token (143 live tokens inside the 147 baseline); the company orders head is unchanged; benchmarks_refreshed 2026-11-18 sits inside the seven-day gate; git status carried only the crawl lane's three modified files with no index.lock; the board head WAS pullable, so this is a work round; BigDomain-OSLoop remains registered, so nothing was registered.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
@@ -11,9 +11,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3306.log (1488B, 2026-11-23)",
     "latest_evidence": "qa/negctl-R3306.log (1488B, 2026-11-23)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3306] next window (<=48h): (0) MAIN — **收账门自己是红的，而且红在载体不在被测物**：活树跑 `tools/closeout_gate.py` 答 `E_CLG_CARRIER_LAYOUT carrier bytes=262804 gate=78500 margin=-184304 fold_needed=true indent_anomaly=380 log_items=380`（本轮加九行后 log_items=389、bytes=265861），所以每轮的 `CLOSEOUT-GATE PASS files=…` 其实已经拿不到。做法＝三问只读量：①`fold_needed`／`layout_ok`／`indent_anomaly` 各自的判据落在哪个函数，`log_items=N` 与 `layout_ok=false` 的因果是哪一条（条目数超水位，还是条目排版不合契约）；②R193 的 fold 守恒（分日汇总+近 30 轮原文保留+全文备份 `logs/`）今天能否直接复用：state log 的条目是纯字符串还是对象、fold 写入器是否还在盘上、fold 之后 `export_round` 的 `current`/`round_evidence` 的 qa 引用面会不会断；③做一次 fold 的代价与风险（动尾行会不会改 `docs/status-export.json` 与 `qa/*` 引用，matrix/census 计数会不会跳）。收口三选一＝①按实测做 fold 并让收账门回 PASS；②判为契约面缺陷（排版不合契约）就地修写入器；③判为「水位该改而非 log 该删」并写明理由与被推翻条件。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：tasks.md P-47 站行（零支付能力）、Docker 缺失、BigDomain-OSLoop LogonType=Interactive。",
-    "next_milestone_due": "2026-11-25T01:21:04+08:00",
-    "updated_at": "2026-11-23T01:21:04+08:00",
+    "next_milestone": "[R3307] next window (<=48h): (0) MAIN — **写者纪律与归档证明两件，都是本轮亲手摸到的缝，别再只记账**：①`E_SFOLD_ARCHIVE_COPY` 的红已定位到「单条 log 含内嵌换行 → 按行追加拆两行 → 行集比对看不见」，三问只读量：这个内嵌换行是**历史内容**（不该改写）还是**某写者误插**（`state_append` 是否允许写入带换行的 line，它的 shape gate 为何放行）？`append_archive` 是否应对内嵌换行做转义/分行标注，或 `archive_copy_ok` 应比较**拼接后的文本流**而非行集？收口三选一＝①改 `append_archive` 使之可逐字寻回（转义或显式分行标记），并让 `archive_copy_ok` 判同一事实；②改证明为流级比对（写明为何行集不是正确单位）；③判「归档按行是法、含换行条目是不可折叠对象」→ 让谓词在**折叠前**拒绝并具名，而不是写后才红。②同类第二问：**产出这次漂移的写者是谁**——`git log -p src/os/state.json` 找回把 4 空格+LF 写进来的那次提交（或在 `state/qa_replacements.jsonl` 之外找 appender 痕迹），判定是「一次性脚本」还是「某常驻写入器」，并把结论落成一条**写者面判据**（例如 `state_append` 之外无合法写入路径，或 pre-commit 拒非 canonical 载体）；③第三问：`state_io.layout` 与 `logs_toolkit.item_indent_caliber` 的**判据分歧**（前者任意统一缩进健康／后者只认 {2,16}）该由谁让路——先量两门各自被谁消费，再决定统一到哪一侧，禁同轮偷偷改。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：tasks.md P-47 站行（零支付能力）、Docker 缺失、BigDomain-OSLoop LogonType=Interactive、开轮即红的两套件 `src/os/test_closeout.py` 21/29 与 `src/os/test_face_sweep.py` 54/56。",
+    "next_milestone_due": "2026-11-25T01:32:10+08:00",
+    "updated_at": "2026-11-23T01:32:10+08:00",
     "heartbeat": {
       "tick": 3299,
       "state_tick": 3306,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-23 R3306 PRODUCT+ENGINEERING: the board asked whether a THIRD simultaneously moving edge costs a third pass, because MAX_PASSES=3 had never had its spare spent. Measured in two private copy trees: two edges (day + a reading width) need 2 passes and three edges (day + width + a newest qa/*.log) also need 2 - and the reason is a law rather than luck: the export face's own check grades the file it NAMES (a snapshot at export_ts), so a new evidence log reddens no face, and none of the four ring readers reads latest_evidence.",
-  "claims": {"claimed": 339, "captured": 94, "contradicted": 10, "uncaptured": 235, "historic": 7, "rows": 24, "present": true, "census_ts": "2026-11-23T01:21:04+08:00"},
+  "current": "2026-11-23 R3307 GROUP SCAN (content-addressed, read before any work): the ledger carried 0 @BigDomain lines so no dispatch was owed; decisions.md holds 438 rows against the stored baseline 438 with no new D- or C- token (143 live tokens inside the 147 baseline); the company orders head is unchanged; benchmarks_refreshed 2026-11-18 sits inside the seven-day gate; git status carried only the crawl lane's three modified files with no index.lock; the board head WAS pullable, so this is a work round; BigDomain-OSLoop remains registered, so nothing was registered.",
+  "claims": {"claimed": 298, "captured": 94, "contradicted": 10, "uncaptured": 194, "historic": 7, "rows": 24, "present": true, "census_ts": "2026-11-23T01:32:10+08:00"},
   "chain": {"present": true, "rows": 24, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-23 R3306 PRODUCT+ENGINEERING: the board asked whether a THIRD simultaneously moving edge costs a third pass, because MAX_PASSES=3 had never had its spare spent. Measured in two private copy trees: two edges (day + a reading width) need 2 passes and three edges (day + width + a newest qa/*.log) also need 2 - and the reason is a law rather than luck: the export face's own check grades the file it NAMES (a snapshot at export_ts), so a new evidence log reddens no face, and none of the four ring readers reads latest_evidence.",
-  "export_ts": "2026-11-23T01:21:04+08:00",
+  "do": "2026-11-23 R3307 GROUP SCAN (content-addressed, read before any work): the ledger carried 0 @BigDomain lines so no dispatch was owed; decisions.md holds 438 rows against the stored baseline 438 with no new D- or C- token (143 live tokens inside the 147 baseline); the company orders head is unchanged; benchmarks_refreshed 2026-11-18 sits inside the seven-day gate; git status carried only the crawl lane's three modified files with no index.lock; the board head WAS pullable, so this is a work round; BigDomain-OSLoop remains registered, so nothing was registered.",
+  "export_ts": "2026-11-23T01:32:10+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
   "latest_evidence": "qa/negctl-R3306.log (1488B, 2026-11-23)",
-  "next_milestone": "[R3306] next window (<=48h): (0) MAIN — **收账门自己是红的，而且红在载体不在被测物**：活树跑 `tools/closeout_gate.py` 答 `E_CLG_CARRIER_LAYOUT carrier bytes=262804 gate=78500 margin=-184304 fold_needed=true indent_anomaly=380 log_items=380`（本轮加九行后 log_items=389、bytes=265861），所以每轮的 `CLOSEOUT-GATE PASS files=…` 其实已经拿不到。做法＝三问只读量：①`fold_needed`／`layout_ok`／`indent_anomaly` 各自的判据落在哪个函数，`log_items=N` 与 `layout_ok=false` 的因果是哪一条（条目数超水位，还是条目排版不合契约）；②R193 的 fold 守恒（分日汇总+近 30 轮原文保留+全文备份 `logs/`）今天能否直接复用：state log 的条目是纯字符串还是对象、fold 写入器是否还在盘上、fold 之后 `export_round` 的 `current`/`round_evidence` 的 qa 引用面会不会断；③做一次 fold 的代价与风险（动尾行会不会改 `docs/status-export.json` 与 `qa/*` 引用，matrix/census 计数会不会跳）。收口三选一＝①按实测做 fold 并让收账门回 PASS；②判为契约面缺陷（排版不合契约）就地修写入器；③判为「水位该改而非 log 该删」并写明理由与被推翻条件。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：tasks.md P-47 站行（零支付能力）、Docker 缺失、BigDomain-OSLoop LogonType=Interactive。",
+  "next_milestone": "[R3307] next window (<=48h): (0) MAIN — **写者纪律与归档证明两件，都是本轮亲手摸到的缝，别再只记账**：①`E_SFOLD_ARCHIVE_COPY` 的红已定位到「单条 log 含内嵌换行 → 按行追加拆两行 → 行集比对看不见」，三问只读量：这个内嵌换行是**历史内容**（不该改写）还是**某写者误插**（`state_append` 是否允许写入带换行的 line，它的 shape gate 为何放行）？`append_archive` 是否应对内嵌换行做转义/分行标注，或 `archive_copy_ok` 应比较**拼接后的文本流**而非行集？收口三选一＝①改 `append_archive` 使之可逐字寻回（转义或显式分行标记），并让 `archive_copy_ok` 判同一事实；②改证明为流级比对（写明为何行集不是正确单位）；③判「归档按行是法、含换行条目是不可折叠对象」→ 让谓词在**折叠前**拒绝并具名，而不是写后才红。②同类第二问：**产出这次漂移的写者是谁**——`git log -p src/os/state.json` 找回把 4 空格+LF 写进来的那次提交（或在 `state/qa_replacements.jsonl` 之外找 appender 痕迹），判定是「一次性脚本」还是「某常驻写入器」，并把结论落成一条**写者面判据**（例如 `state_append` 之外无合法写入路径，或 pre-commit 拒非 canonical 载体）；③第三问：`state_io.layout` 与 `logs_toolkit.item_indent_caliber` 的**判据分歧**（前者任意统一缩进健康／后者只认 {2,16}）该由谁让路——先量两门各自被谁消费，再决定统一到哪一侧，禁同轮偷偷改。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：tasks.md P-47 站行（零支付能力）、Docker 缺失、BigDomain-OSLoop LogonType=Interactive、开轮即红的两套件 `src/os/test_closeout.py` 21/29 与 `src/os/test_face_sweep.py` 54/56。",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-16 commit]; later=html)",
@@ -167,8 +167,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 267644,
-  "next_milestone_due": "2026-11-25T01:21:04+08:00",
+  "state_bytes": 26480,
+  "next_milestone_due": "2026-11-25T01:32:10+08:00",
   "heartbeat": {
     "tick": 3299,
     "state_tick": 3306,
