@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-22 R3283 PRODUCT: the buyer path finally continues past the money. preview/buyer-trial.html is 22382B (20450B last round) and preview/buyer-trial.json is 6574B; the footer now carries a four-hop route block (membership-face / merchant-onboard / money-path-demo / start-here) with data-route-hops='4', and each hop prints its control class and its current size, both read from disk at write time. tools/buyer_trial.py gained ROUTE, project_route() (sizes and control counts read fresh; readonly derived from the control count, not a constant), render_route(), payload['route'], and criterion AC-BT7 (criteria 6 -> 7).",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/buyer-trial.html (22382B) + preview/buyer-trial.json (6574B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/buyer-trial.html (22382B) + preview/buyer-trial.json (6574B) [2026-11-22 mtime]",
+    "last_artifact": "preview/buyer-trial.html (22382B) + preview/buyer-trial.json (6574B) [2026-11-22 commit]",
+    "latest_artifact": "preview/buyer-trial.html (22382B) + preview/buyer-trial.json (6574B) [2026-11-22 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-trial.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3273.log (1280B, 2026-11-22)",
     "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3284] next window (<=48h): (0) MAIN — **本轮只补了「钱出现的那一跳」，可操作死端从 4 张降到 3 张，剩下三张仍无处可去**：`lobby-protocol-map.html`(1 控件) / `merchant-onboard.html`(9 控件) / `money-path-demo.html`(3 控件) 出链均为 0，其中 `merchant-onboard` 与 `money-path-demo` 现在只被 buyer-trial 的路线块「指进去」，走进去之后仍然断在里面。问：要不要把同一套「下一步」路线做成**一个生成器统一产出**（单一 `ROUTE` 闭集 + 每张可操作面各自声明它的下一跳），让四张可操作面互相接上，而不是只在 buyer-trial 上挂一块？做法＝先只读量三问：①这四张可操作面今天的出链与控件数逐张列（已知 0 出链、控件 1/9/3），彼此之间**语义上**该谁指向谁（逐条给理由，不猜）；②若做统一生成器，`buyer_trial.py` 里的 `ROUTE`/`project_route()`/`render_route()` 要不要抽成 `tools/buyer_route.py` 共享件，四张面各自渲染时调用；判据要不要从 AC-BT7 升为「每张可操作面都必须有一条在盘的下游」并给每张面一条拒绝臂；③代价（四张面各增多少字节、是否要重跑四套各自的 `--check`、负控臂数）。收口三选一＝①只给这三张各加一块与 buyer-trial 同构的路线块（不抽共享件）②抽 `tools/buyer_route.py` 统一产路线并把判据升为「可操作面必须有下游」③不动（承认它们是死端，页上写明）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true、删除侧时机词未建、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
-    "next_milestone_due": "2026-11-24T18:25:01+08:00",
-    "updated_at": "2026-11-22T18:25:01+08:00",
+    "next_milestone_due": "2026-11-24T18:26:52+08:00",
+    "updated_at": "2026-11-22T18:26:52+08:00",
     "heartbeat": {
       "tick": 3262,
       "state_tick": 3273,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-22 R3283 PRODUCT: the buyer path finally continues past the money. preview/buyer-trial.html is 22382B (20450B last round) and preview/buyer-trial.json is 6574B; the footer now carries a four-hop route block (membership-face / merchant-onboard / money-path-demo / start-here) with data-route-hops='4', and each hop prints its control class and its current size, both read from disk at write time. tools/buyer_trial.py gained ROUTE, project_route() (sizes and control counts read fresh; readonly derived from the control count, not a constant), render_route(), payload['route'], and criterion AC-BT7 (criteria 6 -> 7).",
-  "claims": {"claimed": 324, "captured": 94, "contradicted": 10, "uncaptured": 220, "historic": 7, "rows": 16, "present": true, "census_ts": "2026-11-22T18:25:01+08:00"},
+  "claims": {"claimed": 324, "captured": 94, "contradicted": 10, "uncaptured": 220, "historic": 7, "rows": 16, "present": true, "census_ts": "2026-11-22T18:26:52+08:00"},
   "chain": {"present": true, "rows": 16, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,8 +68,8 @@
     }
   ],
   "do": "2026-11-22 R3283 PRODUCT: the buyer path finally continues past the money. preview/buyer-trial.html is 22382B (20450B last round) and preview/buyer-trial.json is 6574B; the footer now carries a four-hop route block (membership-face / merchant-onboard / money-path-demo / start-here) with data-route-hops='4', and each hop prints its control class and its current size, both read from disk at write time. tools/buyer_trial.py gained ROUTE, project_route() (sizes and control counts read fresh; readonly derived from the control count, not a constant), render_route(), payload['route'], and criterion AC-BT7 (criteria 6 -> 7).",
-  "export_ts": "2026-11-22T18:25:01+08:00",
-  "latest_artifact": "preview/buyer-trial.html (22382B) + preview/buyer-trial.json (6574B) [2026-11-22 mtime]",
+  "export_ts": "2026-11-22T18:26:52+08:00",
+  "latest_artifact": "preview/buyer-trial.html (22382B) + preview/buyer-trial.json (6574B) [2026-11-22 commit]",
   "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
   "next_milestone": "[R3284] next window (<=48h): (0) MAIN — **本轮只补了「钱出现的那一跳」，可操作死端从 4 张降到 3 张，剩下三张仍无处可去**：`lobby-protocol-map.html`(1 控件) / `merchant-onboard.html`(9 控件) / `money-path-demo.html`(3 控件) 出链均为 0，其中 `merchant-onboard` 与 `money-path-demo` 现在只被 buyer-trial 的路线块「指进去」，走进去之后仍然断在里面。问：要不要把同一套「下一步」路线做成**一个生成器统一产出**（单一 `ROUTE` 闭集 + 每张可操作面各自声明它的下一跳），让四张可操作面互相接上，而不是只在 buyer-trial 上挂一块？做法＝先只读量三问：①这四张可操作面今天的出链与控件数逐张列（已知 0 出链、控件 1/9/3），彼此之间**语义上**该谁指向谁（逐条给理由，不猜）；②若做统一生成器，`buyer_trial.py` 里的 `ROUTE`/`project_route()`/`render_route()` 要不要抽成 `tools/buyer_route.py` 共享件，四张面各自渲染时调用；判据要不要从 AC-BT7 升为「每张可操作面都必须有一条在盘的下游」并给每张面一条拒绝臂；③代价（四张面各增多少字节、是否要重跑四套各自的 `--check`、负控臂数）。收口三选一＝①只给这三张各加一块与 buyer-trial 同构的路线块（不抽共享件）②抽 `tools/buyer_route.py` 统一产路线并把判据升为「可操作面必须有下游」③不动（承认它们是死端，页上写明）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true、删除侧时机词未建、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
   "outs": [
@@ -165,8 +165,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 153453,
-  "next_milestone_due": "2026-11-24T18:25:01+08:00",
+  "state_bytes": 153665,
+  "next_milestone_due": "2026-11-24T18:26:52+08:00",
   "heartbeat": {
     "tick": 3262,
     "state_tick": 3273,
