@@ -1,0 +1,21 @@
+R3269 PROBE - storage drawer per operable face (read-only, no JS)
+operable=6
+FACE buyer-trial.html kind=screen storage_words=- drawers=- other=-
+FACE filing-checklist.html kind=persists storage_words=localStorage drawers=localStorage other=-
+  DRAWER localStorage set=1 get=1 remove=0 top_level_set=0
+FACE lobby-protocol-map.html kind=persists storage_words=localStorage drawers=localStorage other=-
+  DRAWER localStorage set=1 get=1 remove=0 top_level_set=0
+FACE merchant-onboard.html kind=persists storage_words=localStorage drawers=localStorage other=-
+  DRAWER localStorage set=1 get=1 remove=0 top_level_set=0
+FACE money-path-demo.html kind=persists storage_words=localStorage drawers=localStorage other=-
+  DRAWER localStorage set=1 get=1 remove=0 top_level_set=0
+FACE ship-checklist.html kind=persists storage_words=localStorage drawers=localStorage other=-
+  DRAWER localStorage set=2 get=1 remove=0 top_level_set=0
+Q1 faces_with_storage_word=5 of 6 operable
+Q1 faces_using_two_or_more_drawers=0 -
+Q1 faces_whose_read_drawer_differs_from_write=0 -
+Q1 top_level_writes=0 -
+Q2 page_prints_drawer_word localStorage=0 sessionStorage=0 indexedDB=0
+Q2 page_mentions_click_before_key=0
+Q3 cost faces=45 seconds=0.0200 per_face=0.00045
+Q3 generator STORAGE regex already matches all three: True

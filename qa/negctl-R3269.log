@@ -1,0 +1,35 @@
+OK   C1-live-copy                       rc=0 expect=0 
+OK   C2-step-drawers-flipped            rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH27 step_drawers:filing-checklist.html page=['sessionStorage'] fresh=['localStorage']
+OK   C3-step-when-flipped               rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH27 step_when:filing-checklist.html page=on-open fresh=on-click
+OK   C4-sentence-drawer-edited          rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH24 sentence:filing-checklist.html differs from the fresh derivation
+OK   C5-when-word-removed               rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH24 sentence:filing-checklist.html differs from the fresh derivation
+OK   C6-drawer-on-nokey-branch          rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH25 sentence:buyer-trial.html differs from the fresh derivation
+OK   C7-on-open-word-on-a-click-face    rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH24 sentence:filing-checklist.html differs from the fresh derivation
+OK   C8-drawer-not-closed               rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH27 step_drawers:filing-checklist.html page=['webSQL'] fresh=['localStorage']
+OK   C9-branch-drawers-flipped          rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH27 branch_drawers:money-path-demo.html page=['sessionStorage'] fresh=['localStorage']
+OK   C10-word-dropped                   rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH27 word_missing:when_open
+OK   C11-slot-dropped                   rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH24 sentence:filing-checklist.html differs from the fresh derivation
+OK   C12-world-top-level-write          rc=0 expect=0 
+OK   C13-world-second-drawer            rc=0 expect=0 
+OK   C14-world-write-removed            rc=0 expect=0 
+NEGCTL PASS cases=14 distinct=14

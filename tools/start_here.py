@@ -50,6 +50,19 @@ HANDLER = re.compile(r"\b(addEventListener|onclick|oninput|onchange|onkeyup)\b",
 DOMWRITE = re.compile(r"\.(textContent|innerHTML|value)\s*=")
 KINDS = ("persists", "screen", "wires", "inert")
 
+# R3269: "browser storage" is three drawers, not one, and a key written at script
+# load is already there before the reader clicks anything. Both facts are read off
+# the same bytes, never authored.
+DRAWERS = ("localStorage", "sessionStorage", "indexedDB")
+DRAW = re.compile(r"\b(localStorage|sessionStorage|indexedDB)\b")
+# The receiver of a storage call: the dotted name just before `.setItem(`.
+RECV = re.compile(r"([A-Za-z_$][\w$]*(?:\s*\.\s*[A-Za-z_$][\w$]*)*)\s*$")
+SCRIPT_TAG = re.compile(r"<script\b[^>]*>", re.I)
+SCRIPT_END = re.compile(r"</script\s*>", re.I)
+DRAWER_WHENS = ("on-click", "on-open", "none")
+WHEN_WORDS = {"on-click": "when_click", "on-open": "when_open",
+              "none": "when_none"}
+
 # Pairing says WHICH symbols a key rests on; it cannot say WHERE the variable part of
 # the key comes from. A face that reads NS+':'+kk and writes NS+':'+this.getAttribute(..)
 # is an orphan by symbols yet takes both sides from the same DOM attribute. The source
@@ -195,6 +208,78 @@ def key_naming(row):
                                     for expr in keys["write"]),
                 "expr": None}
     return {"kind": "runtime", "value": None, "expr": keys["runtime_exprs"][0]}
+
+
+def _script_bodies(text):
+    """Every inline script body, so brace depth can be read inside a script only."""
+    bodies = []
+    pos = 0
+    while True:
+        match = SCRIPT_TAG.search(text, pos)
+        if not match:
+            return bodies
+        end = SCRIPT_END.search(text, match.end())
+        stop = end.start() if end else len(text)
+        bodies.append(text[match.end():stop])
+        pos = stop + 1
+
+
+def drawer_reading(text):
+    """R3269: WHICH browser storage drawer a face writes into, and WHEN that write
+    happens. Three drawers are named in the bytes; a write inside a function only
+    runs when something calls it, a write at script top level runs on load - so a
+    face whose setItem sits at brace depth 0 already holds its key before any click
+    and must never claim otherwise. Text only, no JS executed."""
+    calls = {drawer: {"setItem": 0, "getItem": 0, "removeItem": 0}
+             for drawer in DRAWERS}
+    on_open = 0
+    unnamed = 0
+    for body in _script_bodies(text):
+        for match in CALL.finditer(body):
+            head = RECV.search(body[:match.start()])
+            name = head.group(1).split(".")[-1].strip() if head else ""
+            if name not in DRAWERS:
+                unnamed += 1
+                continue
+            calls[name][match.group(1)] += 1
+            if match.group(1) == "setItem":
+                depth = (body.count("{", 0, match.start())
+                         - body.count("}", 0, match.start()))
+                if depth <= 0:
+                    on_open += 1
+    return {
+        "write": sorted(d for d in DRAWERS if calls[d]["setItem"]),
+        "read": sorted(d for d in DRAWERS if calls[d]["getItem"]),
+        "remove": sorted(d for d in DRAWERS if calls[d]["removeItem"]),
+        "on_open": on_open, "unnamed": unnamed,
+        "words": sorted(set(DRAW.findall(text))),
+        "calls": calls,
+    }
+
+
+def drawer_naming(row):
+    """Which drawer names a row may print, and the closed timing word. A face with
+    no storage write prints no drawer name at all, so a branch that keeps nothing
+    cannot borrow one from a word mentioned in its text."""
+    got = row.get("drawers") or {}
+    writes = list(got.get("write") or [])
+    if not writes:
+        return {"drawers": [], "when": "none"}
+    return {"drawers": writes,
+            "when": "on-open" if got.get("on_open") else "on-click"}
+
+
+def drawer_text(naming, doc):
+    """The phrase a step or branch sentence puts where the drawer goes. One function
+    for the page and the criterion, so neither can print its own version."""
+    if not naming["drawers"]:
+        return doc.get("drawer_none") or ""
+    fmt = doc.get("drawer_names_fmt") or "「{name}」"
+    return "、".join(fmt.format(name=name) for name in naming["drawers"])
+
+
+def when_text(naming, doc):
+    return doc.get(WHEN_WORDS[naming["when"]]) or ""
 
 
 def key_reading(text):
@@ -891,6 +976,7 @@ def scan_faces():
         row.update(classify(text))
         if row["storage"]:
             row["keys"] = key_reading(text)
+            row["drawers"] = drawer_reading(text)
             row["tiers"] = tier_reading(text, row["keys"])
             row["attrs"] = attr_reading(text, row["keys"])
             row["hosts"] = host_reading(text, row["keys"])
@@ -1098,6 +1184,12 @@ def projection():
     key_name_counts = {kind: 0 for kind in KEY_KINDS}
     for name in operable:
         key_name_counts[key_naming(rows[name])["kind"]] += 1
+    step_drawers = {name: drawer_naming(rows[name]) for name in steps}
+    branch_drawers = {name: drawer_naming(rows[name])
+                      for name, _reason in steps_excluded}
+    drawer_when_counts = {when: 0 for when in DRAWER_WHENS}
+    for name in operable:
+        drawer_when_counts[drawer_naming(rows[name])["when"]] += 1
     return {
         "rows": rows,
         "doc": doc,
@@ -1145,6 +1237,9 @@ def projection():
         "step_key_names": step_key_names,
         "branch_key_names": branch_key_names,
         "key_name_counts": key_name_counts,
+        "step_drawers": step_drawers,
+        "branch_drawers": branch_drawers,
+        "drawer_when_counts": drawer_when_counts,
         "data16": sha16(DATA),
     }
 
@@ -1403,7 +1498,8 @@ def render(proj):
         tier_notes.append(
             '  <p data-tier-cross="%s" data-tier-write="%s" data-tier-read="%s" '
             'data-tier-write-expr="%s" data-tier-read-expr="%s">%s</p>'
-            % (esc(name), esc(tiers["write_tier"]), esc(tiers["read_tier"]),
+            % (esc(name), esc(tiers["write_tier"] or ""),
+               esc(tiers["read_tier"] or ""),
                esc(writes), esc(reads),
                esc((doc.get("tier_cross_fmt") or "").format(
                    write=" , ".join(expr for expr, _ in tiers["writes"]) or doc.get("keys_none", ""),
@@ -1634,16 +1730,21 @@ def render(proj):
         for index, name in enumerate(steps, 1):
             keys = proj["step_keys"][name]
             naming = proj["step_key_names"][name]
+            drawn = proj["step_drawers"][name]
             steps_html.append(
                 '  <p class="step" data-step="%d" data-step-face="%s" '
                 'data-step-ops="%d" data-step-key="%s" '
-                'data-step-key-kind="%s" data-step-literal="%s">%s</p>'
+                'data-step-key-kind="%s" data-step-literal="%s" '
+                'data-step-drawers="%s" data-step-when="%s">%s</p>'
                 % (index, esc(name), proj["rows"][name]["ops"],
                    esc(" , ".join(keys)), naming["kind"],
                    esc(naming["value"] or ""),
+                   esc(",".join(drawn["drawers"])), esc(drawn["when"]),
                    esc((doc.get("step_fmt") or "").format(
                        n=index, face=name,
-                       key=key_name_text(naming, doc)))))
+                       key=key_name_text(naming, doc),
+                       drawer=drawer_text(drawn, doc),
+                       when=when_text(drawn, doc)))))
     else:
         steps_html.append('  <p data-step-absent>%s</p>'
                           % esc(doc.get("step_absent") or ""))
@@ -1663,16 +1764,22 @@ def render(proj):
             naming = proj["branch_key_names"].get(name) or {"kind": "none",
                                                             "value": None,
                                                             "expr": None}
+            drawn = proj["branch_drawers"].get(name) or {"drawers": [],
+                                                         "when": "none"}
             steps_html.append(
                 '  <p class="branch" data-branch="%d" data-branch-face="%s" '
                 'data-branch-reason="%s" data-branch-key-kind="%s" '
-                'data-branch-literal="%s">%s</p>'
+                'data-branch-literal="%s" data-branch-drawers="%s" '
+                'data-branch-when="%s">%s</p>'
                 % (index, esc(name), esc(reason), naming["kind"],
                    esc(naming["value"] or ""),
+                   esc(",".join(drawn["drawers"])), esc(drawn["when"]),
                    esc((doc.get("branch_fmt") or "").format(
                        n=index, face=name,
                        word=branch_words.get(reason) or "",
-                       key=key_name_text(naming, doc)))))
+                       key=key_name_text(naming, doc),
+                       drawer=drawer_text(drawn, doc),
+                       when=when_text(drawn, doc)))))
     else:
         steps_html.append(
             '  <p class="branchhead" data-branch-count="0" '
@@ -2054,7 +2161,10 @@ def check():
         got = re.search(r'data-tier-cross="%s" data-tier-write="([^"]*)" '
                         r'data-tier-read="([^"]*)" data-tier-write-expr="([^"]*)" '
                         r'data-tier-read-expr="([^"]*)"' % re.escape(name), text)
-        want = (tiers["write_tier"], tiers["read_tier"],
+        # A face that writes nothing has no write tier at all; the page prints the
+        # empty attribute (R3269 fixed a crash on exactly that shape), so the fresh
+        # side must coerce the same way instead of comparing None to ''.
+        want = (tiers["write_tier"] or "", tiers["read_tier"] or "",
                 esc(",".join(expr for expr, _ in tiers["writes"])),
                 esc(",".join(expr for expr, _ in tiers["reads"])))
         if not got or got.groups() != want:
@@ -2642,7 +2752,9 @@ def check():
                 # page and the criterion both call key_name_text().
                 naming = proj["step_key_names"][name]
                 want = (proj["doc"].get("step_fmt") or "").format(
-                    n=index, face=name, key=key_name_text(naming, proj["doc"]))
+                    n=index, face=name, key=key_name_text(naming, proj["doc"]),
+                    drawer=drawer_text(proj["step_drawers"][name], proj["doc"]),
+                    when=when_text(proj["step_drawers"][name], proj["doc"]))
                 if said != esc(want):
                     failures.append("SH24 sentence:%s differs from the fresh "
                                     "derivation" % name)
@@ -2747,9 +2859,13 @@ def check():
                 naming = proj["branch_key_names"].get(name) or {"kind": "none",
                                                                 "value": None,
                                                                 "expr": None}
+                drawn = proj["branch_drawers"].get(name) or {"drawers": [],
+                                                             "when": "none"}
                 want = (proj["doc"].get("branch_fmt") or "").format(
                     n=index, face=name, word=branch_words.get(reason) or "",
-                    key=key_name_text(naming, proj["doc"]))
+                    key=key_name_text(naming, proj["doc"]),
+                    drawer=drawer_text(drawn, proj["doc"]),
+                    when=when_text(drawn, proj["doc"]))
                 if said != esc(want):
                     failures.append("SH25 sentence:%s differs from the fresh "
                                     "derivation" % name)
@@ -2859,12 +2975,87 @@ def check():
                 if esc(proj["doc"].get("step_key_none") or "") not in said:
                     failures.append("SH26 none_word_missing:%s" % name)
 
+    # AC-SH27 (R3269): R3268 handed the reader a key string that can be searched,
+    # but never said WHICH browser storage drawer holds it, nor that the key only
+    # appears once the page has been used. Both are read off the same bytes: the
+    # drawer is the receiver of the setItem call, the timing is whether that call
+    # sits at script top level (already written on load) or inside a function.
+    # A face that writes nothing prints no drawer name at all.
+    for key in ("drawer_names_fmt", "drawer_none", "when_click", "when_open",
+                "when_none"):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH27 word_missing:%s" % key)
+    for template in ("step_fmt", "branch_fmt"):
+        for slot in ("{drawer}", "{when}"):
+            if slot not in (proj["doc"].get(template) or ""):
+                failures.append("SH27 slot_missing:%s:%s" % (template, slot))
+    fresh_draw = {}
+    for name in proj["operable"]:
+        try:
+            with open(os.path.join(PREVIEW, name), encoding="utf-8",
+                      errors="replace") as handle:
+                fresh_draw[name] = drawer_naming(
+                    {"drawers": drawer_reading(handle.read())})
+        except OSError:
+            failures.append("SH27 face_unreadable:%s" % name)
+    step_draw_rows = re.findall(
+        r'<p class="step" data-step="\d+" data-step-face="([^"]+)"[^>]*'
+        r'data-step-drawers="([^"]*)" data-step-when="([^"]*)"[^>]*>'
+        r'([^<]*)<', text)
+    branch_draw_rows = re.findall(
+        r'<p class="branch" data-branch="\d+" data-branch-face="([^"]+)"[^>]*'
+        r'data-branch-drawers="([^"]*)" data-branch-when="([^"]*)"[^>]*>'
+        r'([^<]*)<', text)
+    for label, rows_got, want_names in (
+            ("step", step_draw_rows, proj["steps"]),
+            ("branch", branch_draw_rows,
+             [name for name, _reason in proj["steps_excluded"]])):
+        if len(rows_got) != len(want_names):
+            failures.append("SH27 %s_rows expected=%d got=%d"
+                            % (label, len(want_names), len(rows_got)))
+            continue
+        for name, drawers_raw, when_raw, said in rows_got:
+            if name not in fresh_draw:
+                failures.append("SH27 not_operable:%s" % name)
+                continue
+            naming = fresh_draw[name]
+            page_drawers = [part for part in drawers_raw.split(",") if part]
+            if page_drawers != naming["drawers"]:
+                failures.append("SH27 %s_drawers:%s page=%s fresh=%s"
+                                % (label, name, page_drawers, naming["drawers"]))
+            if when_raw != naming["when"]:
+                failures.append("SH27 %s_when:%s page=%s fresh=%s"
+                                % (label, name, when_raw, naming["when"]))
+            for token in page_drawers:
+                if token not in DRAWERS:
+                    failures.append("SH27 drawer_not_closed:%s=%s" % (name, token))
+            if naming["drawers"]:
+                for token in naming["drawers"]:
+                    if esc(token) not in said:
+                        failures.append("SH27 drawer_not_printed:%s=%s"
+                                        % (name, token))
+            else:
+                for token in DRAWERS:
+                    if token in said:
+                        failures.append("SH27 drawer_on_nokey:%s=%s"
+                                        % (name, token))
+            want_word = esc(when_text(naming, proj["doc"]))
+            if want_word and want_word not in said:
+                failures.append("SH27 when_word_missing:%s=%s"
+                                % (name, naming["when"]))
+            other = {"on-click": "when_open", "on-open": "when_click"}.get(
+                naming["when"])
+            if other:
+                wrong = esc(proj["doc"].get(other) or "")
+                if wrong and wrong in said:
+                    failures.append("SH27 wrong_when_word:%s" % name)
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=26 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=27 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=26 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+    print("VERDICT PASS criteria=27 faces=%d operable=%d missing_ceo=%d external_refs=0 "
           "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
           "expr_bodies=%d forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
@@ -2895,7 +3086,10 @@ def check():
                 len(proj["steps_excluded"]))
              + " keyname=%s"
              % ",".join("%s:%d" % (kind, proj["key_name_counts"][kind])
-                        for kind in KEY_KINDS)))
+                        for kind in KEY_KINDS)
+             + " drawers=%s"
+             % ",".join("%s:%d" % (when, proj["drawer_when_counts"][when])
+                        for when in DRAWER_WHENS)))
 
     return 0
 
