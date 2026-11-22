@@ -104,6 +104,12 @@ FACES = [
      "tools/apimarket_face_freeze.py",
      "preview/apimarket-report-claims-demo.html", "state/apimarket-face-freeze.json",
      "\u62a5\u8868\u9762\u6f02\u79fb\u540e\u65e0\u4eba\u80fd\u91cd\u9020\uff0c\u5ba1\u8ba1\u5c31\u65ad\u5728\u8fd9\u5f20\u9875\u4e0a\u3002"),
+    # R3290: a frozen face that never says which schema its numbers came from
+    # lets a reader take a schema-4 snapshot for the current readings.
+    ("apimarket-schema-banner", "\u62a5\u8868\u9762 schema \u6a2a\u5e45 / 13 \u9762\u81ea\u8ff0\u7248\u672c",
+     "tools/apimarket_schema_banner.py",
+     "preview/apimarket-report-claims.html", "state/apimarket-schema-banner.json",
+     "\u9875\u9762\u4e0d\u8bf4\u660e\u53d6\u81ea\u54ea\u4e2a schema\uff0c\u8bfb\u8005\u4f1a\u628a\u8001\u5feb\u7167\u5f53\u6210\u5f53\u524d\u8bfb\u6570\u3002"),
     ("entry-index", "\u5165\u53e3\u9875\u5b9e\u7269\u53f0\u8d26 / index",
      "tools/deliverable_index.py",
      "preview/index.html", "preview/deliverable-index.json",

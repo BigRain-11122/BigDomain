@@ -1,0 +1,11 @@
+R3290 schema banner negative controls (private copies, live tree untouched)
+PASS clean-copy rc=0 hint=VERDICT PASS | VERDICT PASS criteria=6
+PASS declared-flip rc=2 hint=E_ASB2/3 | VERDICT FAIL
+PASS current-flip rc=2 hint=E_ASB2/3 | VERDICT FAIL
+PASS stale-token-flip rc=2 hint=E_ASB2/3 | VERDICT FAIL
+PASS sentence-char rc=2 hint=E_ASB2/3 | VERDICT FAIL
+PASS block-deleted rc=2 hint=E_ASB1 | VERDICT FAIL
+PASS block-duplicated rc=2 hint=E_ASB1 | VERDICT FAIL
+PASS injected-unfrozen rc=2 hint=E_ASB4 | VERDICT FAIL
+PASS report-schema-bump rc=2 hint=E_ASB2/3 | VERDICT FAIL
+ARMS 9/9
