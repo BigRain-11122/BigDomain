@@ -1,0 +1,443 @@
+{
+ "actionable_count": 7,
+ "dead_ends": [],
+ "declared_hops": [
+  "buyer-trial.html",
+  "journey-19.9.html",
+  "lobby-session-trace.html",
+  "membership-face.html",
+  "merchant-onboard.html",
+  "money-path-demo.html",
+  "start-here.html"
+ ],
+ "face_count": 45,
+ "faces": [
+  {
+   "bytes": 6834,
+   "controls": 0,
+   "face": "apimarket-monthly-faces.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 14444,
+   "controls": 0,
+   "face": "apimarket-report-activity.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 12414,
+   "controls": 0,
+   "face": "apimarket-report-attention.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 18121,
+   "controls": 0,
+   "face": "apimarket-report-buyerquestions.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 24167,
+   "controls": 0,
+   "face": "apimarket-report-buyers.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 45714,
+   "controls": 0,
+   "face": "apimarket-report-claims-demo.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 35699,
+   "controls": 0,
+   "face": "apimarket-report-claims.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 31202,
+   "controls": 0,
+   "face": "apimarket-report-csv.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 28317,
+   "controls": 0,
+   "face": "apimarket-report-demand.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 19841,
+   "controls": 0,
+   "face": "apimarket-report-dossiers.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 32761,
+   "controls": 0,
+   "face": "apimarket-report-duty.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 12414,
+   "controls": 0,
+   "face": "apimarket-report-json.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 38142,
+   "controls": 0,
+   "face": "apimarket-report-quality.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 31595,
+   "controls": 0,
+   "face": "apimarket-report-questions.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 25254,
+   "controls": 0,
+   "face": "apimarket-report-refunds.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 18894,
+   "controls": 0,
+   "face": "apimarket-report-selleranswers.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 11268,
+   "controls": 0,
+   "face": "apimarket-report-slowanswer.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 13915,
+   "controls": 0,
+   "face": "apimarket-report-workbench.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 36146,
+   "controls": 0,
+   "face": "apimarket-report.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 16421,
+   "controls": 0,
+   "face": "battery-shard-report.html",
+   "links": [
+    "index.html",
+    "ledger-reconcile-face.html",
+    "lobby-session-trace.html"
+   ],
+   "out": 3
+  },
+  {
+   "bytes": 22382,
+   "controls": 3,
+   "face": "buyer-trial.html",
+   "links": [
+    "membership-face.html",
+    "merchant-onboard.html",
+    "money-path-demo.html",
+    "start-here.html"
+   ],
+   "out": 4
+  },
+  {
+   "bytes": 8454,
+   "controls": 0,
+   "face": "ceo-blockers.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 7300,
+   "controls": 0,
+   "face": "city-face-report.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 5433,
+   "controls": 0,
+   "face": "core-loop-walkthrough.html",
+   "links": [
+    "index.html"
+   ],
+   "out": 1
+  },
+  {
+   "bytes": 7449,
+   "controls": 0,
+   "face": "face-sweep.html",
+   "links": [
+    "city-face-report.html",
+    "first-yuan-chain.html",
+    "index.html",
+    "ledger-business-report.html",
+    "lobby-ws-report.html",
+    "membership-benefit-report.html",
+    "membership-face.html",
+    "payment-gate-report.html",
+    "platform-live-report.html",
+    "ugc-gate-report.html"
+   ],
+   "out": 10
+  },
+  {
+   "bytes": 12893,
+   "controls": 21,
+   "face": "filing-checklist.html",
+   "links": [
+    "face-sweep.html",
+    "platform-live-report.html"
+   ],
+   "out": 2
+  },
+  {
+   "bytes": 3715,
+   "controls": 0,
+   "face": "first-yuan-chain.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 3911,
+   "controls": 0,
+   "face": "first-yuan.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 39634,
+   "controls": 2,
+   "face": "index.html",
+   "links": [
+    "apimarket-monthly-faces.html",
+    "apimarket-report-activity.html",
+    "apimarket-report-attention.html",
+    "apimarket-report-buyerquestions.html",
+    "apimarket-report-buyers.html",
+    "apimarket-report-claims-demo.html",
+    "apimarket-report-claims.html",
+    "apimarket-report-csv.html",
+    "apimarket-report-demand.html",
+    "apimarket-report-dossiers.html",
+    "apimarket-report-duty.html",
+    "apimarket-report-json.html",
+    "apimarket-report-quality.html",
+    "apimarket-report-questions.html",
+    "apimarket-report-refunds.html",
+    "apimarket-report-selleranswers.html",
+    "apimarket-report-slowanswer.html",
+    "apimarket-report-workbench.html",
+    "apimarket-report.html",
+    "battery-shard-report.html",
+    "buyer-trial.html",
+    "ceo-blockers.html",
+    "city-face-report.html",
+    "core-loop-walkthrough.html",
+    "face-sweep.html",
+    "filing-checklist.html",
+    "first-yuan-chain.html",
+    "first-yuan.html",
+    "journey-19.9.html",
+    "ledger-business-report.html",
+    "ledger-reconcile-face.html",
+    "live-sandbox.html",
+    "lobby-protocol-map.html",
+    "lobby-session-trace.html",
+    "lobby-ws-report.html",
+    "membership-benefit-report.html",
+    "membership-face.html",
+    "merchant-onboard.html",
+    "money-path-demo.html",
+    "payment-gate-report.html",
+    "platform-live-report.html",
+    "ship-checklist.html",
+    "start-here.html",
+    "ugc-gate-report.html"
+   ],
+   "out": 44
+  },
+  {
+   "bytes": 12873,
+   "controls": 0,
+   "face": "journey-19.9.html",
+   "links": [
+    "buyer-trial.html",
+    "merchant-onboard.html",
+    "money-path-demo.html",
+    "start-here.html"
+   ],
+   "out": 4
+  },
+  {
+   "bytes": 5276,
+   "controls": 0,
+   "face": "ledger-business-report.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 7963,
+   "controls": 0,
+   "face": "ledger-reconcile-face.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 5766,
+   "controls": 0,
+   "face": "live-sandbox.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 29032,
+   "controls": 1,
+   "face": "lobby-protocol-map.html",
+   "links": [
+    "buyer-trial.html",
+    "lobby-session-trace.html",
+    "merchant-onboard.html",
+    "start-here.html"
+   ],
+   "out": 4
+  },
+  {
+   "bytes": 8347,
+   "controls": 0,
+   "face": "lobby-session-trace.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 5952,
+   "controls": 0,
+   "face": "lobby-ws-report.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 10218,
+   "controls": 0,
+   "face": "membership-benefit-report.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 10881,
+   "controls": 0,
+   "face": "membership-face.html",
+   "links": [
+    "ceo-blockers.html",
+    "index.html",
+    "money-path-demo.html",
+    "payment-gate-report.html"
+   ],
+   "out": 4
+  },
+  {
+   "bytes": 22956,
+   "controls": 9,
+   "face": "merchant-onboard.html",
+   "links": [
+    "buyer-trial.html",
+    "journey-19.9.html",
+    "money-path-demo.html",
+    "start-here.html"
+   ],
+   "out": 4
+  },
+  {
+   "bytes": 13164,
+   "controls": 3,
+   "face": "money-path-demo.html",
+   "links": [
+    "buyer-trial.html",
+    "journey-19.9.html",
+    "merchant-onboard.html",
+    "start-here.html"
+   ],
+   "out": 4
+  },
+  {
+   "bytes": 6991,
+   "controls": 0,
+   "face": "payment-gate-report.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 7929,
+   "controls": 0,
+   "face": "platform-live-report.html",
+   "links": [],
+   "out": 0
+  },
+  {
+   "bytes": 9182,
+   "controls": 12,
+   "face": "ship-checklist.html",
+   "links": [
+    "ceo-blockers.html",
+    "face-sweep.html",
+    "lobby-ws-report.html",
+    "payment-gate-report.html",
+    "platform-live-report.html",
+    "ugc-gate-report.html"
+   ],
+   "out": 6
+  },
+  {
+   "bytes": 41366,
+   "controls": 0,
+   "face": "start-here.html",
+   "links": [
+    "buyer-trial.html",
+    "filing-checklist.html",
+    "lobby-protocol-map.html",
+    "merchant-onboard.html",
+    "money-path-demo.html",
+    "ship-checklist.html"
+   ],
+   "out": 6
+  },
+  {
+   "bytes": 28112,
+   "controls": 0,
+   "face": "ugc-gate-report.html",
+   "links": [],
+   "out": 0
+  }
+ ],
+ "law": "an operable face must link to at least one local html file on disk",
+ "missing_hops": [],
+ "readonly_count": 38
+}

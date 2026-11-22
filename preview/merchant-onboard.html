@@ -45,7 +45,7 @@ ul.rules li{margin-bottom:8px}
 footer{padding:0 32px 40px;color:var(--dim);font-size:12px;font-family:ui-monospace,Consolas,monospace}
 </style>
 </head>
-<body data-payload-sha256="8622a4d0405677734e1b5ee427c8d0a0968bcccd9393a61a5b5279fd247d02a1">
+<body data-payload-sha256="f63f550da762eea0b970c8305222aa73142cad951f454517f5c08cb88403ac00">
 <header>
   <h1>商户号接入自查单 <span class="sub">· 双击本地打开，零网络</span></h1>
   <div class="sub">清单与商品全部派生自 preview/payment-gate-report.json（sha256 前 16 位 971f4cabbbff0747）与 state/merchant-onboard-items.json（前 16 位 d209ae01e48ceac1）。8 项缺口按「谁负责 / 怎么验」逐项列出。</div>
@@ -90,6 +90,16 @@ footer{padding:0 32px 40px;color:var(--dim);font-size:12px;font-family:ui-monosp
     </div>
   </section>
 </main>
+<div class="route" data-onward-hops="4" style="border:1px solid rgba(128,128,128,.4);border-radius:10px;padding:12px 14px;margin:18px 0;font-size:13px;line-height:1.6">
+<h2 style="font-size:14px;margin:0 0 8px">下一步 · 本机还能走到哪（4 跳，尺寸与控件数在渲染时从盘上现读）</h2>
+<ol style="padding-left:18px;margin:0">
+<li>1. <a href="buyer-trial.html">buyer-trial.html</a> <span data-hop-bytes="22382" data-hop-controls="3" style="opacity:.7">&middot; 可操作 · 3 个控件 · 22382B</span> — 缺件先放着：自己点一遍 MOCK 下单与两本账配平（可操作）</li>
+<li>2. <a href="money-path-demo.html">money-path-demo.html</a> <span data-hop-bytes="13164" data-hop-controls="3" style="opacity:.7">&middot; 可操作 · 3 个控件 · 13164B</span> — 这笔钱在账本里怎么走（可操作）</li>
+<li>3. <a href="journey-19.9.html">journey-19.9.html</a> <span data-hop-bytes="12873" data-hop-controls="0" style="opacity:.7">&middot; 只读 · 0 个控件 · 12873B</span> — 这单买的是哪八步（只读判定表）</li>
+<li>4. <a href="start-here.html">start-here.html</a> <span data-hop-bytes="41366" data-hop-controls="0" style="opacity:.7">&middot; 只读 · 0 个控件 · 41366B</span> — 回到起点：本机今天能亲手做什么（只读）</li>
+</ol>
+<p class="small" data-onward-last="本机不接服务器时，这条路最远走到第 2 跳（money-path-demo.html，3 个控件）；再往后只有读数，没有可操作控件。" style="margin:8px 0 0;opacity:.75">本机不接服务器时，这条路最远走到第 2 跳（money-path-demo.html，3 个控件）；再往后只有读数，没有可操作控件。</p>
+</div>
 <footer>
   <div id="src"></div>
   <div>本页不联网、不扣款、不产生商户订单；勾选态只存本机 localStorage。清单是本机自述，不是验证。</div>
@@ -97,7 +107,7 @@ footer{padding:0 32px 40px;color:var(--dim);font-size:12px;font-family:ui-monosp
 <script id="payload" type="application/json">{
  "face": "merchant-onboard",
  "title": "商户号接入自查单",
- "generated_utc": "2026-11-22T03:22:31Z",
+ "generated_utc": "2026-11-22T10:47:25Z",
  "source": {
   "path": "preview/payment-gate-report.json",
   "sha256": "971f4cabbbff074702208a8d453a0c11cd0d5b7be6df69eca35569a39249217b"
@@ -231,6 +241,46 @@ footer{padding:0 32px 40px;color:var(--dim);font-size:12px;font-family:ui-monosp
  ],
  "secret_rule": "密钥面红线：本页只收名字与勾选。appkey / secret / 私钥只进 .env（不入 git），不在浏览器、不在聊天、不在这张单上出现。",
  "honest": "诚实边界：自述完成 ≠ 验证完成。6 项物理件由 CEO 下发，本页无法代为验证；标准通道真正开门还需要一条真实回调验签与一笔对公结算对账。零支付、零外网，买家仍付不了钱。",
+ "onward": {
+  "face": "merchant-onboard",
+  "hops": [
+   {
+    "href": "buyer-trial.html",
+    "label": "缺件先放着：自己点一遍 MOCK 下单与两本账配平（可操作）",
+    "bytes": 22382,
+    "controls": 3,
+    "readonly": false,
+    "exists": true
+   },
+   {
+    "href": "money-path-demo.html",
+    "label": "这笔钱在账本里怎么走（可操作）",
+    "bytes": 13164,
+    "controls": 3,
+    "readonly": false,
+    "exists": true
+   },
+   {
+    "href": "journey-19.9.html",
+    "label": "这单买的是哪八步（只读判定表）",
+    "bytes": 12873,
+    "controls": 0,
+    "readonly": true,
+    "exists": true
+   },
+   {
+    "href": "start-here.html",
+    "label": "回到起点：本机今天能亲手做什么（只读）",
+    "bytes": 41366,
+    "controls": 0,
+    "readonly": true,
+    "exists": true
+   }
+  ],
+  "count": 4,
+  "last_actionable": 2,
+  "last_sentence": "本机不接服务器时，这条路最远走到第 2 跳（money-path-demo.html，3 个控件）；再往后只有读数，没有可操作控件。"
+ },
  "counts": {
   "total": 8,
   "proven": 2,
@@ -263,9 +313,13 @@ footer{padding:0 32px 40px;color:var(--dim);font-size:12px;font-family:ui-monosp
   {
    "id": "AC-MO6",
    "text": "MOCK / AIGC / non-advice bands are permanent on the face"
+  },
+  {
+   "id": "AC-MO7",
+   "text": "the onward route is intact: every hop on disk, linked, measured fresh, at least one operable"
   }
  ],
- "payload_sha256": "8622a4d0405677734e1b5ee427c8d0a0968bcccd9393a61a5b5279fd247d02a1"
+ "payload_sha256": "f63f550da762eea0b970c8305222aa73142cad951f454517f5c08cb88403ac00"
 }</script>
 <script>
 (function(){

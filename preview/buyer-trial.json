@@ -46,7 +46,7 @@
   }
  ],
  "face": "buyer-trial",
- "generated_utc": "2026-11-22T10:33:56Z",
+ "generated_utc": "2026-11-22T10:47:26Z",
  "products": [
   {
    "blocked": false,
@@ -294,7 +294,7 @@
    "readonly": true
   },
   {
-   "bytes": 20402,
+   "bytes": 22956,
    "controls": 9,
    "href": "merchant-onboard.html",
    "label": "要真收钱还缺什么：商户号 / 服务器 / 域名 / 备案（可填）",

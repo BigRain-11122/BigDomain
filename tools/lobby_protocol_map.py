@@ -16,12 +16,19 @@ Usage:
     python tools/lobby_protocol_map.py --check    # read-only verdict
 
 Criteria AC-LPM1..AC-LPM6 were pinned in src/os/backlog.md BEFORE this file.
+AC-LPM7 (R3285) is the shared onward route: this page used to have out-degree
+zero, so a reader who reached the protocol dictionary had nowhere to go. The
+hop list is not typed here - it comes from tools/buyer_route.py, the one
+closure AC-JNY9/AC-MPD7/AC-BT7 already grade, and every hop's size and control
+count is measured at render time.
 """
 import argparse
 import json
 import os
 import re
 import sys
+
+import buyer_route
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPEC = os.path.join(ROOT, "docs", "spec", "lobby-websocket-spec.md")
@@ -159,6 +166,7 @@ def payload():
         "messages": messages,
         "file_refs": files,
         "field_paths": fields,
+        "onward": buyer_route.state("lobby-protocol-map"),
         "gate": "derived from the spec at render time; no message name is typed in the source",
     }
 
@@ -229,6 +237,7 @@ footer{margin-top:34px;color:#6b757e;font-size:12px}
 <table><thead><tr><th>\\u5224\\u636e</th><th>\\u539f\\u6587</th><th>\\u5176\\u70b9\\u540d\\u7684\\u6807\\u8bc6</th></tr></thead><tbody>%(rows)s</tbody></table>
 <h2>\\u88ab\\u5224\\u4e3a\\u6587\\u4ef6\\u5f15\\u7528 / \\u5b57\\u6bb5\\u8def\\u5f84\\u7684\\u6807\\u8bc6\\uff08\\u4e0d\\u8ba1\\u5165\\u6d88\\u606f\\uff09</h2>
 <table><thead><tr><th>\\u6807\\u8bc6</th><th>\\u7c7b\\u578b</th><th>\\u51fa\\u73b0\\u8282</th><th>\\u51fa\\u73b0</th></tr></thead><tbody>%(files)s</tbody></table>
+%(onward)s
 <footer>\\u7531 <code>python tools/lobby_protocol_map.py</code> \\u6d3e\\u751f \\u00b7 \\u5224\\u636e AC-LPM1..6 \\u00b7 <code>--check</code> \\u53ea\\u8bfb\\u6821\\u9a8c \\u00b7 \\u65ad\\u7f51\\u53ef\\u5f00</footer>
 </main>
 <script>
@@ -247,6 +256,7 @@ footer{margin-top:34px;color:#6b757e;font-size:12px}
         "file_ref_count": p["file_ref_count"],
         "excluded_count": p["file_ref_count"] + p["field_path_count"], "ns": NS,
         "unc": unc, "msgs": "".join(msgs), "rows": "".join(rows), "files": "".join(files),
+        "onward": buyer_route.render_block("lobby-protocol-map"),
     }
 
 
@@ -294,10 +304,16 @@ def check():
     src = open(os.path.abspath(__file__), encoding="utf-8").read()
     if any(ord(c) > 127 for c in src):
         fails.append("source is not pure ASCII")
+    # AC-LPM7: the onward route is graded by the one shared closure, not here.
+    landed_onward = None
+    if os.path.exists(JSON_OUT):
+        landed_onward = json.load(open(JSON_OUT, encoding="utf-8")).get("onward")
+    fails.extend(buyer_route.check("lobby-protocol-map", html, landed_onward))
     verdict = "PASS" if not fails else "FAIL"
-    print("LOBBY PROTOCOL MAP %s criteria=%d messages=%d uncovered=%d file_refs=%d html=%sB fails=%d"
+    print("LOBBY PROTOCOL MAP %s criteria=%d messages=%d uncovered=%d file_refs=%d route_hops=%d html=%sB fails=%d"
           % (verdict, p["criteria_rows"], p["message_count"], p["uncovered_count"],
-             p["file_ref_count"], os.path.getsize(HTML) if os.path.exists(HTML) else -1, len(fails)))
+             p["file_ref_count"], p["onward"]["count"],
+             os.path.getsize(HTML) if os.path.exists(HTML) else -1, len(fails)))
     for f in fails:
         print("  - " + f)
     return 0 if not fails else 2

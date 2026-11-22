@@ -1,0 +1,25 @@
+faces=45 actionable=7 dead_end=2
+  ACT buyer-trial.html             bytes=22382  controls=3   out=4   onward=no membership-face.html,merchant-onboard.html,money-path-demo.html,start-here.html
+  ACT filing-checklist.html        bytes=12893  controls=21  out=2   onward=no face-sweep.html,platform-live-report.html
+  ACT index.html                   bytes=39634  controls=2   out=44  onward=no apimarket-monthly-faces.html,apimarket-report-activity.html,apimarket-report-attention.html,apimarket-report-buyerquestions.html,apimarket-report-buyers.html,apimarket-report-claims-demo.html
+  ACT lobby-protocol-map.html      bytes=27260  controls=1   out=0   onward=no 
+  ACT merchant-onboard.html        bytes=20402  controls=9   out=0   onward=no 
+  ACT money-path-demo.html         bytes=13164  controls=3   out=4   onward=yes buyer-trial.html,journey-19.9.html,merchant-onboard.html,start-here.html
+  ACT ship-checklist.html          bytes=9182   controls=12  out=6   onward=no ceo-blockers.html,face-sweep.html,lobby-ws-report.html,payment-gate-report.html,platform-live-report.html,ugc-gate-report.html
+Q2 candidates for the two dead ends:
+  FACE lobby-protocol-map.html bytes=27260 controls=1 links=0
+  FACE merchant-onboard.html bytes=20402 controls=9 links=0
+Q2c hop facts (bytes/controls) for the semantic neighbours:
+  HOP lobby-session-trace.html     bytes=8347   controls=0   out=0   onward=no
+  HOP lobby-ws-report.html         bytes=5952   controls=0   out=0   onward=no
+  HOP journey-19.9.html            bytes=12873  controls=0   out=4   onward=yes
+  HOP money-path-demo.html         bytes=13164  controls=3   out=4   onward=yes
+  HOP buyer-trial.html             bytes=22382  controls=3   out=4   onward=no
+  HOP merchant-onboard.html        bytes=20402  controls=9   out=0   onward=no
+  HOP lobby-protocol-map.html      bytes=27260  controls=1   out=0   onward=no
+  HOP membership-face.html         bytes=10881  controls=0   out=4   onward=no
+  HOP start-here.html              bytes=41366  controls=0   out=6   onward=no
+Q3 cost: each route block prints 4 hop lines plus a header and a sentence.
+Q3c cycle check: a hop list naming its own face would be a self link.
+  ROUTE lobby-protocol-map -> lobby-session-trace.html,merchant-onboard.html,buyer-trial.html,start-here.html self=False
+  ROUTE merchant-onboard -> buyer-trial.html,money-path-demo.html,journey-19.9.html,start-here.html self=False

@@ -188,7 +188,7 @@
    {
     "href": "merchant-onboard.html",
     "label": "要真收钱还缺什么：商户号 / 服务器 / 域名 / 备案（可填）",
-    "bytes": 20402,
+    "bytes": 22956,
     "controls": 9,
     "readonly": false,
     "exists": true
@@ -215,7 +215,7 @@
   "last_sentence": "本机不接服务器时，这条路最远走到第 3 跳（buyer-trial.html，3 个控件）；再往后只有读数，没有可操作控件。"
  },
  "headline": "6 of 8 steps carry a declared PASS",
- "generated_utc": "2026-11-22T10:33:57Z",
+ "generated_utc": "2026-11-22T10:47:26Z",
  "sizes": {
   "html": 12873,
   "json": 7942

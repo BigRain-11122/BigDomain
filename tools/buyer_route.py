@@ -47,6 +47,18 @@ ROUTES = {
         ("money-path-demo.html", "这笔钱在账本里怎么走（可操作）"),
         ("start-here.html", "回到起点：本机今天能亲手做什么（只读）"),
     ],
+    "lobby-protocol-map": [
+        ("lobby-session-trace.html", "同一套大厅协议在一次会话里怎么走（只读）"),
+        ("merchant-onboard.html", "这套协议真要跑起来还缺什么：商户号 / 服务器 / 域名 / 备案（可填）"),
+        ("buyer-trial.html", "自己点一遍：MOCK 下单与两本账配平（可操作）"),
+        ("start-here.html", "回到起点：这台机器今天能亲手做什么（只读汇总）"),
+    ],
+    "merchant-onboard": [
+        ("buyer-trial.html", "缺件先放着：自己点一遍 MOCK 下单与两本账配平（可操作）"),
+        ("money-path-demo.html", "这笔钱在账本里怎么走（可操作）"),
+        ("journey-19.9.html", "这单买的是哪八步（只读判定表）"),
+        ("start-here.html", "回到起点：本机今天能亲手做什么（只读）"),
+    ],
 }
 
 

@@ -1,0 +1,21 @@
+FACE-ROUTE SCAN WROTE faces=2 actionable=1 readonly=1 dead_end=1 hops=7 json=603B
+FACE-ROUTE SCAN FAIL criteria=5 faces=2 actionable=1 readonly=1 dead_end=1 hops=7 fails=1
+  - AC-FRS2 operable face links nowhere: dead.html (controls=1)
+FACE-ROUTE SCAN WROTE faces=1 actionable=0 readonly=1 dead_end=0 hops=7 json=492B
+FACE-ROUTE SCAN FAIL criteria=5 faces=1 actionable=0 readonly=1 dead_end=0 hops=7 fails=1
+  - AC-FRS4 degenerate reading actionable=0 readonly=1
+FACE-ROUTE SCAN FAIL criteria=5 faces=2 actionable=1 readonly=1 dead_end=1 hops=7 fails=2
+  - AC-FRS3 actionable_count landed=2 fresh=1
+  - AC-FRS2 operable face links nowhere: dead.html (controls=1)
+PASS c1 clean-private-copy problems=0
+PASS c2 hop-not-linked ['merchant-onboard: hop not linked buyer-trial.html']
+PASS c3 measure-drifted ['merchant-onboard: hop measure drifted buyer-trial.html json=22383/3 disk=22382/3']
+PASS c4 last-sentence-absent ['merchant-onboard: page does not carry the fresh last-actionable sentence']
+PASS c5 json-count-short ['merchant-onboard: hop count json=3 fresh=4']
+PASS c6 page-count-wrong ['merchant-onboard: page does not print hop count 4']
+PASS c7 hop-file-missing ['lobby-protocol-map: hop file missing lobby-session-trace.html']
+PASS c8 all-readonly ["merchant-onboard: every hop is read-only, so 'next step' promises nothing"]
+PASS c9 scan-dead-end-refused rc=2
+PASS c10 scan-degenerate-refused rc=2
+PASS c11 scan-count-edited rc=2
+NEGCTL PASS cases=11 failed=0

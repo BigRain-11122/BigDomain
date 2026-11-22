@@ -24,7 +24,7 @@
     "face": "money-path-demo",
     "hops": [
       {
-        "bytes": 20402,
+        "bytes": 22956,
         "controls": 9,
         "exists": true,
         "href": "merchant-onboard.html",

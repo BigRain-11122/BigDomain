@@ -42,10 +42,15 @@
    "id": "AC-MO6",
    "pass_": true,
    "text": "MOCK / AIGC / non-advice bands are permanent on the face"
+  },
+  {
+   "id": "AC-MO7",
+   "pass_": true,
+   "text": "the onward route is intact: every hop on disk, linked, measured fresh, at least one operable"
   }
  ],
  "face": "merchant-onboard",
- "generated_utc": "2026-11-22T03:22:31Z",
+ "generated_utc": "2026-11-22T10:47:25Z",
  "honest": "诚实边界：自述完成 ≠ 验证完成。6 项物理件由 CEO 下发，本页无法代为验证；标准通道真正开门还需要一条真实回调验签与一笔对公结算对账。零支付、零外网，买家仍付不了钱。",
  "items": [
   {
@@ -125,11 +130,51 @@
   "path": "state/merchant-onboard-items.json",
   "sha256": "d209ae01e48ceac199ef5bfe80859cd4a3978c64f064cd73009a7f3ead9e2663"
  },
- "payload_sha256": "8622a4d0405677734e1b5ee427c8d0a0968bcccd9393a61a5b5279fd247d02a1",
+ "onward": {
+  "count": 4,
+  "face": "merchant-onboard",
+  "hops": [
+   {
+    "bytes": 22382,
+    "controls": 3,
+    "exists": true,
+    "href": "buyer-trial.html",
+    "label": "缺件先放着：自己点一遍 MOCK 下单与两本账配平（可操作）",
+    "readonly": false
+   },
+   {
+    "bytes": 13164,
+    "controls": 3,
+    "exists": true,
+    "href": "money-path-demo.html",
+    "label": "这笔钱在账本里怎么走（可操作）",
+    "readonly": false
+   },
+   {
+    "bytes": 12873,
+    "controls": 0,
+    "exists": true,
+    "href": "journey-19.9.html",
+    "label": "这单买的是哪八步（只读判定表）",
+    "readonly": true
+   },
+   {
+    "bytes": 41366,
+    "controls": 0,
+    "exists": true,
+    "href": "start-here.html",
+    "label": "回到起点：本机今天能亲手做什么（只读）",
+    "readonly": true
+   }
+  ],
+  "last_actionable": 2,
+  "last_sentence": "本机不接服务器时，这条路最远走到第 2 跳（money-path-demo.html，3 个控件）；再往后只有读数，没有可操作控件。"
+ },
+ "payload_sha256": "f63f550da762eea0b970c8305222aa73142cad951f454517f5c08cb88403ac00",
  "secret_rule": "密钥面红线：本页只收名字与勾选。appkey / secret / 私钥只进 .env（不入 git），不在浏览器、不在聊天、不在这张单上出现。",
  "sizes": {
-  "html_bytes": 20053,
-  "json_bytes": 6823
+  "html_bytes": 22956,
+  "json_bytes": 8037
  },
  "source": {
   "path": "preview/payment-gate-report.json",

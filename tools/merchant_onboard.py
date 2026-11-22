@@ -14,6 +14,10 @@ and --check refuses the face when either source drifts.
 
 Criteria AC-MO1..AC-MO6 are pre-registered in src/os/backlog.md (R3251 PIN line)
 before this file existed.
+AC-MO7 (R3285): this page had out-degree zero - an operator could tick every
+box and then had nowhere to go. The hop list lives in tools/buyer_route.py, the
+one closure AC-JNY9/AC-MPD7/AC-BT7 already grade, and each hop's size and
+control count is measured from disk at render time.
 """
 import argparse
 import hashlib
@@ -25,6 +29,8 @@ import re
 import sys
 from datetime import datetime, timezone
 
+import buyer_route
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCE = os.path.join(ROOT, "preview", "payment-gate-report.json")
 ITEMS = os.path.join(ROOT, "state", "merchant-onboard-items.json")
@@ -33,7 +39,7 @@ PREVIEW = os.path.join(ROOT, "preview")
 OUT_HTML = os.path.join(PREVIEW, "merchant-onboard.html")
 OUT_JSON = os.path.join(PREVIEW, "merchant-onboard.json")
 
-CANON_KEYS = ("face", "source", "items_source", "items", "standard_products", "bands", "secret_rule", "honest")
+CANON_KEYS = ("face", "source", "items_source", "items", "standard_products", "bands", "secret_rule", "honest", "onward")
 
 CRITERIA = [
     ("AC-MO1", "source sha256 recorded on the face equals the file on disk"),
@@ -42,6 +48,7 @@ CRITERIA = [
     ("AC-MO4", "only checkbox inputs exist and the secret rule is printed (no secret value field)"),
     ("AC-MO5", "proven + pending == total and the printed counts equal a fresh reading"),
     ("AC-MO6", "MOCK / AIGC / non-advice bands are permanent on the face"),
+    ("AC-MO7", "the onward route is intact: every hop on disk, linked, measured fresh, at least one operable"),
 ]
 
 
@@ -162,6 +169,7 @@ def payload_doc():
         "bands": data.get("bands", []),
         "secret_rule": data.get("secret_rule", ""),
         "honest": data.get("honest", ""),
+        "onward": buyer_route.state("merchant-onboard", PREVIEW),
         "counts": c,
         "criteria": [{"id": i, "text": t} for i, t in CRITERIA],
     }
@@ -254,6 +262,7 @@ footer{padding:0 32px 40px;color:var(--dim);font-size:12px;font-family:ui-monosp
     </div>
   </section>
 </main>
+__ONWARD__
 <footer>
   <div id="src"></div>
   <div>__FOOTER_LEDGER__</div>
@@ -461,6 +470,7 @@ def render_html(payload):
         ("__SELFTEST_HEAD__", html.escape(ui.get("selftest_head", ""))),
         ("__FOOTER_LEDGER__", html.escape(ui.get("footer_ledger", ""))),
         ("__PAYLOAD_SHA__", payload["payload_sha256"]),
+        ("__ONWARD__", buyer_route.render_block("merchant-onboard", PREVIEW)),
         ("__PAYLOAD__", blob),
     ]
     body = TEMPLATE
@@ -581,17 +591,21 @@ def check():
         if needle not in joined:
             failed.append("AC-MO6c band set lacks %s" % needle)
 
+    # AC-MO7: graded by the shared closure so every route-bearing face agrees.
+    failed.extend(buyer_route.check("merchant-onboard", page, landed.get("onward"), PREVIEW))
+
     if failed:
         print("merchant-onboard CHECK-MISMATCH failed=%d" % len(failed))
         for f in failed:
             print("  - " + f)
         return 2
     print(
-        "merchant-onboard VERDICT PASS criteria=6 items=%d ceo=%d proven=%d external_refs=0 html=%dB json=%dB"
+        "merchant-onboard VERDICT PASS criteria=7 items=%d ceo=%d proven=%d external_refs=0 route_hops=%d html=%dB json=%dB"
         % (
             c["total"],
             c["ceo"],
             c["proven"],
+            landed.get("onward", {}).get("count", -1),
             os.path.getsize(OUT_HTML),
             os.path.getsize(OUT_JSON),
         )

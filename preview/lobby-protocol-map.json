@@ -4,7 +4,7 @@
  "spec_bytes": 27523,
  "spec_lines": 149,
  "impl": "src/sandbox/lobby/server.py",
- "impl_bytes": 31142,
+ "impl_bytes": 31986,
  "section_count": 20,
  "criteria_rows": 32,
  "criteria_sandbox": 27,
@@ -857,7 +857,47 @@
    "implemented": false
   }
  ],
+ "onward": {
+  "face": "lobby-protocol-map",
+  "hops": [
+   {
+    "href": "lobby-session-trace.html",
+    "label": "同一套大厅协议在一次会话里怎么走（只读）",
+    "bytes": 8347,
+    "controls": 0,
+    "readonly": true,
+    "exists": true
+   },
+   {
+    "href": "merchant-onboard.html",
+    "label": "这套协议真要跑起来还缺什么：商户号 / 服务器 / 域名 / 备案（可填）",
+    "bytes": 22956,
+    "controls": 9,
+    "readonly": false,
+    "exists": true
+   },
+   {
+    "href": "buyer-trial.html",
+    "label": "自己点一遍：MOCK 下单与两本账配平（可操作）",
+    "bytes": 22382,
+    "controls": 3,
+    "readonly": false,
+    "exists": true
+   },
+   {
+    "href": "start-here.html",
+    "label": "回到起点：这台机器今天能亲手做什么（只读汇总）",
+    "bytes": 41366,
+    "controls": 0,
+    "readonly": true,
+    "exists": true
+   }
+  ],
+  "count": 4,
+  "last_actionable": 3,
+  "last_sentence": "本机不接服务器时，这条路最远走到第 3 跳（buyer-trial.html，3 个控件）；再往后只有读数，没有可操作控件。"
+ },
  "gate": "derived from the spec at render time; no message name is typed in the source",
- "html_bytes": 27260,
- "json_bytes": 26725
+ "html_bytes": 29032,
+ "json_bytes": 27851
 }
